@@ -1,5 +1,5 @@
 {
-  "name": "@acme/api",
+  "name": "@taiyo/api",
   "version": "0.1.0",
   "private": true,
   "main": "./index.ts",
@@ -12,17 +12,17 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@acme/auth": "^0.1.0",
-    "@acme/db": "^0.1.0",
+    "@taiyo/auth": "^0.1.0",
+    "@taiyo/db": "^0.1.0",
     "@trpc/client": "^10.37.1",
     "@trpc/server": "^10.37.1",
     "superjson": "1.13.1",
     "zod": "^3.22.1"
   },
   "devDependencies": {
-    "@acme/eslint-config": "^0.2.0",
-    "@acme/prettier-config": "^0.1.0",
-    "@acme/tsconfig": "^0.1.0",
+    "@taiyo/eslint-config": "^0.2.0",
+    "@taiyo/prettier-config": "^0.1.0",
+    "@taiyo/tsconfig": "^0.1.0",
     "eslint": "^8.47.0",
     "prettier": "^3.0.2",
     "typescript": "^5.1.6"
@@ -30,8 +30,8 @@
   "eslintConfig": {
     "root": true,
     "extends": [
-      "@acme/eslint-config/base"
+      "@taiyo/eslint-config/base"
     ]
   },
-  "prettier": "@acme/prettier-config"
+  "prettier": "@taiyo/prettier-config"
 }

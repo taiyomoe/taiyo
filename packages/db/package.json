@@ -1,5 +1,5 @@
 {
-  "name": "@acme/db",
+  "name": "@taiyo/db",
   "version": "0.1.0",
   "private": true,
   "main": "./index.ts",
@@ -17,9 +17,9 @@
     "drizzle-orm": "^0.28.2"
   },
   "devDependencies": {
-    "@acme/eslint-config": "^0.2.0",
-    "@acme/prettier-config": "^0.1.0",
-    "@acme/tsconfig": "^0.1.0",
+    "@taiyo/eslint-config": "^0.2.0",
+    "@taiyo/prettier-config": "^0.1.0",
+    "@taiyo/tsconfig": "^0.1.0",
     "dotenv-cli": "^7.2.1",
     "drizzle-kit": "^0.19.12",
     "eslint": "^8.47.0",
@@ -29,8 +29,8 @@
   "eslintConfig": {
     "root": true,
     "extends": [
-      "@acme/eslint-config/base"
+      "@taiyo/eslint-config/base"
     ]
   },
-  "prettier": "@acme/prettier-config"
+  "prettier": "@taiyo/prettier-config"
 }

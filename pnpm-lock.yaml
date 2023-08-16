@@ -8,7 +8,7 @@ importers:
 
   .:
     dependencies:
-      '@acme/prettier-config':
+      '@taiyo/prettier-config':
         specifier: ^0.1.0
         version: link:tooling/prettier
       '@manypkg/cli':
@@ -87,19 +87,19 @@ importers:
         specifier: 1.13.1
         version: 1.13.1
     devDependencies:
-      '@acme/api':
+      '@taiyo/api':
         specifier: ^0.1.0
         version: link:../../packages/api
-      '@acme/eslint-config':
+      '@taiyo/eslint-config':
         specifier: ^0.2.0
         version: link:../../tooling/eslint
-      '@acme/prettier-config':
+      '@taiyo/prettier-config':
         specifier: ^0.1.0
         version: link:../../tooling/prettier
-      '@acme/tailwind-config':
+      '@taiyo/tailwind-config':
         specifier: ^0.1.0
         version: link:../../tooling/tailwind
-      '@acme/tsconfig':
+      '@taiyo/tsconfig':
         specifier: ^0.1.0
         version: link:../../tooling/typescript
       '@babel/core':
@@ -135,13 +135,13 @@ importers:
 
   apps/nextjs:
     dependencies:
-      '@acme/api':
+      '@taiyo/api':
         specifier: ^0.1.0
         version: link:../../packages/api
-      '@acme/auth':
+      '@taiyo/auth':
         specifier: ^0.1.0
         version: link:../../packages/auth
-      '@acme/db':
+      '@taiyo/db':
         specifier: ^0.1.0
         version: link:../../packages/db
       '@t3-oss/env-nextjs':
@@ -184,16 +184,16 @@ importers:
         specifier: ^3.22.1
         version: 3.22.1
     devDependencies:
-      '@acme/eslint-config':
+      '@taiyo/eslint-config':
         specifier: ^0.2.0
         version: link:../../tooling/eslint
-      '@acme/prettier-config':
+      '@taiyo/prettier-config':
         specifier: ^0.1.0
         version: link:../../tooling/prettier
-      '@acme/tailwind-config':
+      '@taiyo/tailwind-config':
         specifier: ^0.1.0
         version: link:../../tooling/tailwind
-      '@acme/tsconfig':
+      '@taiyo/tsconfig':
         specifier: ^0.1.0
         version: link:../../tooling/typescript
       '@types/node':
@@ -223,10 +223,10 @@ importers:
 
   packages/api:
     dependencies:
-      '@acme/auth':
+      '@taiyo/auth':
         specifier: ^0.1.0
         version: link:../auth
-      '@acme/db':
+      '@taiyo/db':
         specifier: ^0.1.0
         version: link:../db
       '@trpc/client':
@@ -242,13 +242,13 @@ importers:
         specifier: ^3.22.1
         version: 3.22.1
     devDependencies:
-      '@acme/eslint-config':
+      '@taiyo/eslint-config':
         specifier: ^0.2.0
         version: link:../../tooling/eslint
-      '@acme/prettier-config':
+      '@taiyo/prettier-config':
         specifier: ^0.1.0
         version: link:../../tooling/prettier
-      '@acme/tsconfig':
+      '@taiyo/tsconfig':
         specifier: ^0.1.0
         version: link:../../tooling/typescript
       eslint:
@@ -263,7 +263,7 @@ importers:
 
   packages/auth:
     dependencies:
-      '@acme/db':
+      '@taiyo/db':
         specifier: ^0.1.0
         version: link:../db
       '@auth/core':
@@ -291,13 +291,13 @@ importers:
         specifier: ^3.22.1
         version: 3.22.1
     devDependencies:
-      '@acme/eslint-config':
+      '@taiyo/eslint-config':
         specifier: ^0.2.0
         version: link:../../tooling/eslint
-      '@acme/prettier-config':
+      '@taiyo/prettier-config':
         specifier: ^0.1.0
         version: link:../../tooling/prettier
-      '@acme/tsconfig':
+      '@taiyo/tsconfig':
         specifier: ^0.1.0
         version: link:../../tooling/typescript
       eslint:
@@ -319,13 +319,13 @@ importers:
         specifier: ^0.28.2
         version: 0.28.2(@planetscale/database@1.10.0)
     devDependencies:
-      '@acme/eslint-config':
+      '@taiyo/eslint-config':
         specifier: ^0.2.0
         version: link:../../tooling/eslint
-      '@acme/prettier-config':
+      '@taiyo/prettier-config':
         specifier: ^0.1.0
         version: link:../../tooling/prettier
-      '@acme/tsconfig':
+      '@taiyo/tsconfig':
         specifier: ^0.1.0
         version: link:../../tooling/typescript
       dotenv-cli:
@@ -377,10 +377,10 @@ importers:
         specifier: ^4.6.0
         version: 4.6.0(eslint@8.47.0)
     devDependencies:
-      '@acme/prettier-config':
+      '@taiyo/prettier-config':
         specifier: ^0.1.0
         version: link:../prettier
-      '@acme/tsconfig':
+      '@taiyo/tsconfig':
         specifier: ^0.1.0
         version: link:../typescript
       eslint:
@@ -402,7 +402,7 @@ importers:
         specifier: ^0.5.3
         version: 0.5.3(@ianvs/prettier-plugin-sort-imports@4.1.0)(prettier@3.0.2)
     devDependencies:
-      '@acme/tsconfig':
+      '@taiyo/tsconfig':
         specifier: ^0.1.0
         version: link:../typescript
       typescript:
@@ -421,13 +421,13 @@ importers:
         specifier: 3.3.2
         version: 3.3.2
     devDependencies:
-      '@acme/eslint-config':
+      '@taiyo/eslint-config':
         specifier: ^0.2.0
         version: link:../eslint
-      '@acme/prettier-config':
+      '@taiyo/prettier-config':
         specifier: ^0.1.0
         version: link:../prettier
-      '@acme/tsconfig':
+      '@taiyo/tsconfig':
         specifier: ^0.1.0
         version: link:../typescript
       eslint:
