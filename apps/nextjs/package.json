@@ -1,5 +1,5 @@
 {
-  "name": "@acme/nextjs",
+  "name": "@taiyo/nextjs",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -13,9 +13,9 @@
     "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
-    "@acme/api": "^0.1.0",
-    "@acme/auth": "^0.1.0",
-    "@acme/db": "^0.1.0",
+    "@taiyo/api": "^0.1.0",
+    "@taiyo/auth": "^0.1.0",
+    "@taiyo/db": "^0.1.0",
     "@t3-oss/env-nextjs": "^0.6.0",
     "@tanstack/react-query": "^4.32.6",
     "@tanstack/react-query-devtools": "^4.32.6",
@@ -31,10 +31,10 @@
     "zod": "^3.22.1"
   },
   "devDependencies": {
-    "@acme/eslint-config": "^0.2.0",
-    "@acme/prettier-config": "^0.1.0",
-    "@acme/tailwind-config": "^0.1.0",
-    "@acme/tsconfig": "^0.1.0",
+    "@taiyo/eslint-config": "^0.2.0",
+    "@taiyo/prettier-config": "^0.1.0",
+    "@taiyo/tailwind-config": "^0.1.0",
+    "@taiyo/tsconfig": "^0.1.0",
     "@types/node": "^18.17.5",
     "@types/react": "^18.2.20",
     "@types/react-dom": "^18.2.7",
@@ -47,10 +47,10 @@
   "eslintConfig": {
     "root": true,
     "extends": [
-      "@acme/eslint-config/base",
-      "@acme/eslint-config/nextjs",
-      "@acme/eslint-config/react"
+      "@taiyo/eslint-config/base",
+      "@taiyo/eslint-config/nextjs",
+      "@taiyo/eslint-config/react"
     ]
   },
-  "prettier": "@acme/prettier-config"
+  "prettier": "@taiyo/prettier-config"
 }
