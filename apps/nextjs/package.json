@@ -24,6 +24,7 @@
     "@trpc/next": "^10.37.1",
     "@trpc/react-query": "^10.37.1",
     "@trpc/server": "^10.37.1",
+    "@wits/next-themes": "^0.2.16",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "lucide-react": "^0.268.0",

@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { headers } from "next/headers";
+import { ServerThemeProvider } from "@wits/next-themes";
 
 import "~/styles/globals.css";
-
-import { headers } from "next/headers";
 
 import { TRPCReactProvider } from "./providers";
 
@@ -30,12 +30,14 @@ export const metadata: Metadata = {
 
 export default function Layout(props: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body className={["font-sans", fontSans.variable].join(" ")}>
-        <TRPCReactProvider headers={headers()}>
-          <main className="flex h-screen flex-col">{props.children}</main>
-        </TRPCReactProvider>
-      </body>
-    </html>
+    <ServerThemeProvider attribute="class">
+      <html lang="en">
+        <body className={["font-sans", fontSans.variable].join(" ")}>
+          <TRPCReactProvider headers={headers()}>
+            <main className="flex h-screen flex-col">{props.children}</main>
+          </TRPCReactProvider>
+        </body>
+      </html>
+    </ServerThemeProvider>
   );
 }
