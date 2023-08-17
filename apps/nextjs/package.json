@@ -2,6 +2,7 @@
   "name": "@taiyo/nextjs",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "pnpm@8.6.12",
   "scripts": {
     "build": "pnpm with-env next build",
     "clean": "git clean -xdf .next .turbo node_modules",
