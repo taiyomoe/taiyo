@@ -7,8 +7,8 @@ import {
   timestamp,
 } from "drizzle-orm/mysql-core";
 
-import { users } from "./auth";
 import { scans } from "./scans";
+import { users } from "./users";
 
 export const scanMembers = mysqlTable("scanMembers", {
   id: serial("id").primaryKey(),

@@ -1,15 +1,15 @@
 import { Client } from "@planetscale/database";
 import { drizzle } from "drizzle-orm/planetscale-serverless";
 
-import * as auth from "./schema/auth";
 import * as medias from "./schema/medias";
 import * as mediaTags from "./schema/mediaTags";
 import * as mediaTitles from "./schema/mediaTitles";
 import * as scanMembers from "./schema/scanMembers";
 import * as scans from "./schema/scans";
+import * as users from "./schema/users";
 
 export const schema = {
-  ...auth,
+  ...users,
   ...medias,
   ...mediaTags,
   ...mediaTitles,
