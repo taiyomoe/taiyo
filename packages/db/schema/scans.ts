@@ -25,6 +25,13 @@ export const scans = mysqlTable("scans", {
   // -----
   name: varchar("name", { length: 256 }).notNull(),
   description: text("description"),
+  // -----
+  website: varchar("website", { length: 256 }),
+  discord: varchar("discord", { length: 256 }),
+  twitter: varchar("twitter", { length: 256 }),
+  facebook: varchar("facebook", { length: 256 }),
+  instagram: varchar("instagram", { length: 256 }),
+  email: varchar("email", { length: 256 }),
 });
 
 export const scansRelations = relations(scans, ({ many }) => ({
