@@ -4,13 +4,13 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: #fff;
     --foreground: 0 0% 3.9%;
 
-    --card: 0 0% 100%;
+    --card: #fff;
     --card-foreground: 0 0% 3.9%;
 
-    --popover: 0 0% 100%;
+    --popover: #fff;
     --popover-foreground: 0 0% 3.9%;
 
     --primary: 0 0% 9%;
@@ -25,8 +25,8 @@
     --accent: 0 0% 96.1%;
     --accent-foreground: 0 0% 9%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive: #f31260; /* NextUI -- danger-500 */
+    --destructive-foreground: #920b3a; /* NextUI -- danger-700 */
 
     --border: 0 0% 89.8%;
     --input: 0 0% 89.8%;
@@ -57,8 +57,8 @@
     --accent: 0 0% 14.9%;
     --accent-foreground: 0 0% 98%;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive: #f31260; /* NextUI -- danger-500 */
+    --destructive-foreground: #920b3a; /* NextUI -- danger-700 */
 
     --border: 0 0% 14.9%;
     --input: 0 0% 14.9%;
