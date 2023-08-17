@@ -38,6 +38,20 @@ export const mediaChapters = mysqlTable("mediaChapters", {
   uploaderId: int("uploaderId").notNull(),
 });
 
+export const mediaChaptersComments = mysqlTable("mediaChaptersComments", {
+  id: serial("id").primaryKey(),
+  createdAt: timestamp("createdAt")
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  updatedAt: timestamp("updatedAt").onUpdateNow(),
+  deletedAt: timestamp("deletedAt"),
+  // -----
+  content: text("content").notNull(),
+  // -----
+  mediaChapterId: int("mediaChapterId").notNull(),
+  userId: int("userId").notNull(),
+});
+
 export const mediaChaptersRelations = relations(
   mediaChapters,
   ({ one, many }) => ({
@@ -48,6 +62,20 @@ export const mediaChaptersRelations = relations(
     }),
     uploader: one(users, {
       fields: [mediaChapters.uploaderId],
+      references: [users.id],
+    }),
+  }),
+);
+
+export const mediaChaptersCommentsRelations = relations(
+  mediaChaptersComments,
+  ({ one }) => ({
+    mediaChapter: one(mediaChapters, {
+      fields: [mediaChaptersComments.mediaChapterId],
+      references: [mediaChapters.id],
+    }),
+    user: one(users, {
+      fields: [mediaChaptersComments.userId],
       references: [users.id],
     }),
   }),
