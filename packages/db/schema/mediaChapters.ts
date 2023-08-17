@@ -1,0 +1,58 @@
+import { relations, sql } from "drizzle-orm";
+import {
+  int,
+  json,
+  mysqlEnum,
+  mysqlTable,
+  serial,
+  text,
+  timestamp,
+  varchar,
+} from "drizzle-orm/mysql-core";
+
+import { medias } from "./medias";
+import { scans } from "./scans";
+import { users } from "./users";
+
+export const mediaChapters = mysqlTable("mediaChapters", {
+  id: serial("id").primaryKey(),
+  createdAt: timestamp("createdAt")
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  updatedAt: timestamp("updatedAt").onUpdateNow(),
+  deletedAt: timestamp("deletedAt"),
+  // -----
+  title: text("title"),
+  number: varchar("number", { length: 256 }).notNull(),
+  volume: varchar("volume", { length: 256 }),
+  language: mysqlEnum("language", [
+    "ENGLISH",
+    "JAPANESE",
+    "SPANISH",
+    "PORTUGUESE",
+    "FRENCH",
+  ]),
+  pages: json("pages").$type<MediaChapterPage[]>().notNull(),
+  // -----
+  mediaId: int("mediaId").notNull(),
+  uploaderId: int("uploaderId").notNull(),
+});
+
+export const mediaChaptersRelations = relations(
+  mediaChapters,
+  ({ one, many }) => ({
+    scans: many(scans),
+    media: one(medias, {
+      fields: [mediaChapters.mediaId],
+      references: [medias.id],
+    }),
+    uploader: one(users, {
+      fields: [mediaChapters.uploaderId],
+      references: [users.id],
+    }),
+  }),
+);
+
+export type MediaChapterPage = {
+  id: string;
+}[];
