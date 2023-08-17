@@ -33,7 +33,7 @@ export default function Layout(props: { children: React.ReactNode }) {
     <html lang="en">
       <body className={["font-sans", fontSans.variable].join(" ")}>
         <TRPCReactProvider headers={headers()}>
-          {props.children}
+          <main className="flex h-screen flex-col">{props.children}</main>
         </TRPCReactProvider>
       </body>
     </html>
