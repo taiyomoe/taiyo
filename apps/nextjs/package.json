@@ -13,10 +13,10 @@
     "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
+    "@t3-oss/env-nextjs": "^0.6.0",
     "@taiyo/api": "^0.1.0",
     "@taiyo/auth": "^0.1.0",
     "@taiyo/db": "^0.1.0",
-    "@t3-oss/env-nextjs": "^0.6.0",
     "@tanstack/react-query": "^4.32.6",
     "@tanstack/react-query-devtools": "^4.32.6",
     "@tanstack/react-query-next-experimental": "5.0.0-alpha.80",
@@ -24,10 +24,15 @@
     "@trpc/next": "^10.37.1",
     "@trpc/react-query": "^10.37.1",
     "@trpc/server": "^10.37.1",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.0.0",
+    "lucide-react": "^0.268.0",
     "next": "^13.4.16",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "superjson": "1.13.1",
+    "tailwind-merge": "^1.14.0",
+    "tailwindcss-animate": "^1.0.6",
     "zod": "^3.22.1"
   },
   "devDependencies": {
