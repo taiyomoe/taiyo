@@ -1,5 +1,6 @@
 import { relations, sql } from "drizzle-orm";
 import {
+  boolean,
   int,
   json,
   mysqlEnum,
@@ -33,6 +34,8 @@ export const mediaChapters = mysqlTable("mediaChapters", {
     "FRENCH",
   ]),
   pages: json("pages").$type<MediaChapterPage[]>().notNull(),
+  // -----
+  isAdult: boolean("isAdult").default(false),
   // -----
   mediaId: int("mediaId").notNull(),
   uploaderId: int("uploaderId").notNull(),
