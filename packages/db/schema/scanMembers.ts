@@ -34,6 +34,9 @@ export const scanMembers = mysqlTable("scanMembers", {
       ]
     >()
     .notNull(),
+  permissions: json("permissions")
+    .$type<["UPLOAD", "EDIT", "DELETE"]>()
+    .notNull(),
   // -----
   userId: int("userId").notNull(),
 });
