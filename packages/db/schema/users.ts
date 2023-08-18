@@ -13,7 +13,7 @@ import {
 } from "drizzle-orm/pg-core";
 
 /**
- * Everything here is basically untouchable.
+ * Everything here (except for `userSettings`) is basically untouchable.
  * The Drizzle Adapter for NextAuth requires this exact schema to work.
  */
 
