@@ -1,11 +1,12 @@
 import type { AdapterAccount } from "@auth/core/adapters";
-import { relations, sql } from "drizzle-orm";
+import { relations } from "drizzle-orm";
 import {
   boolean,
   index,
   integer,
   pgTable,
   primaryKey,
+  text,
   timestamp,
   uuid,
   varchar,
@@ -24,12 +25,10 @@ export const users = pgTable(
     updatedAt: timestamp("updatedAt").defaultNow().notNull(),
     deletedAt: timestamp("deletedAt"),
     // -----
-    name: varchar("name", { length: 255 }),
-    email: varchar("email", { length: 255 }).notNull(),
-    emailVerified: timestamp("emailVerified", { mode: "date" }).default(
-      sql`CURRENT_TIMESTAMP(3)`,
-    ),
-    image: varchar("image", { length: 255 }),
+    name: text("name"),
+    email: text("email").notNull(),
+    emailVerified: timestamp("emailVerified", { mode: "date" }),
+    image: text("image"),
   },
   (user) => ({
     idIdx: index("id_idx").on(user.id),
@@ -56,7 +55,9 @@ export const userSettings = pgTable(
       enum: ["USER", "MODERATOR", "UPLOADER", "ADMIN"],
     }).default("USER"),
     // -----
-    userId: uuid("userId").notNull(),
+    userId: uuid("userId")
+      .references(() => users.id, { onDelete: "cascade" })
+      .notNull(),
   },
   (userSettings) => ({
     userIdIdx: index("userId_idx").on(userSettings.userId),
@@ -70,39 +71,34 @@ export const accounts = pgTable(
     updatedAt: timestamp("updatedAt").defaultNow().notNull(),
     deletedAt: timestamp("deletedAt"),
     // -----
-    type: varchar("type", { length: 255 })
-      .$type<AdapterAccount["type"]>()
-      .notNull(),
-    provider: varchar("provider", { length: 255 }).notNull(),
-    providerAccountId: varchar("providerAccountId", { length: 255 }).notNull(),
-    refresh_token: varchar("refresh_token", { length: 255 }),
-    access_token: varchar("access_token", { length: 255 }),
+    type: text("type").$type<AdapterAccount["type"]>().notNull(),
+    provider: text("provider").notNull(),
+    providerAccountId: text("providerAccountId").notNull(),
+    refresh_token: text("refresh_token"),
+    access_token: text("access_token"),
     expires_at: integer("expires_at"),
-    token_type: varchar("token_type", { length: 255 }),
-    scope: varchar("scope", { length: 255 }),
-    id_token: varchar("id_token", { length: 255 }),
-    session_state: varchar("session_state", { length: 255 }),
+    token_type: text("token_type"),
+    scope: text("scope"),
+    id_token: text("id_token"),
+    session_state: text("session_state"),
     // -----
-    userId: uuid("userId").notNull(),
+    userId: uuid("userId")
+      .references(() => users.id, { onDelete: "cascade" })
+      .notNull(),
   },
   (account) => ({
     compoundKey: primaryKey(account.provider, account.providerAccountId),
-    userIdIdx: index("userId_idx").on(account.userId),
   }),
 );
 
-export const sessions = pgTable(
-  "session",
-  {
-    sessionToken: uuid("sessionToken").notNull().primaryKey(),
-    expires: timestamp("expires", { mode: "date" }).notNull(),
-    // -----
-    userId: varchar("userId", { length: 255 }).notNull(),
-  },
-  (session) => ({
-    userIdIdx: index("userId_idx").on(session.userId),
-  }),
-);
+export const sessions = pgTable("session", {
+  sessionToken: text("sessionToken").notNull().primaryKey(),
+  expires: timestamp("expires", { mode: "date" }).notNull(),
+  // -----
+  userId: uuid("userId")
+    .references(() => users.id, { onDelete: "cascade" })
+    .notNull(),
+});
 
 export const verificationTokens = pgTable(
   "verificationToken",
@@ -122,22 +118,4 @@ export const usersRelations = relations(users, ({ one, many }) => ({
     fields: [users.id],
     references: [userSettings.userId],
   }),
-}));
-
-export const userSettingsRelations = relations(userSettings, ({ one }) => ({
-  user: one(users, {
-    fields: [userSettings.userId],
-    references: [users.id],
-  }),
-}));
-
-export const accountsRelations = relations(accounts, ({ one }) => ({
-  user: one(users, {
-    fields: [accounts.userId],
-    references: [users.id],
-  }),
-}));
-
-export const sessionsRelations = relations(sessions, ({ one }) => ({
-  user: one(users),
 }));

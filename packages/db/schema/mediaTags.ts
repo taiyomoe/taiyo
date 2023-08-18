@@ -1,4 +1,3 @@
-import { relations } from "drizzle-orm";
 import { pgTable, text, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
 
 import { medias } from "./medias";
@@ -19,17 +18,10 @@ export const mediaTags = pgTable("mediaTags", {
   updatedAt: timestamp("updatedAt").defaultNow().notNull(),
   deletedAt: timestamp("deletedAt"),
   // -----
-  mediaId: uuid("mediaId").notNull(),
-  tagId: uuid("tagId").notNull(),
+  mediaId: uuid("mediaId")
+    .references(() => medias.id, { onDelete: "cascade" })
+    .notNull(),
+  tagId: uuid("tagId")
+    .references(() => tags.id, { onDelete: "cascade" })
+    .notNull(),
 });
-
-export const mediaTagsRelations = relations(mediaTags, ({ one }) => ({
-  media: one(medias, {
-    fields: [mediaTags.mediaId],
-    references: [medias.id],
-  }),
-  tag: one(tags, {
-    fields: [mediaTags.tagId],
-    references: [tags.id],
-  }),
-}));

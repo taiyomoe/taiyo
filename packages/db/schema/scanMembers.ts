@@ -30,13 +30,11 @@ export const scanMembers = pgTable("scanMembers", {
     .array()
     .notNull(),
   // -----
-  userId: uuid("userId").notNull(),
+  userId: uuid("userId")
+    .references(() => users.id, { onDelete: "cascade" })
+    .notNull(),
 });
 
-export const scanMembersRelations = relations(scanMembers, ({ many, one }) => ({
+export const scanMembersRelations = relations(scanMembers, ({ many }) => ({
   scans: many(scans),
-  user: one(users, {
-    fields: [scanMembers.userId],
-    references: [users.id],
-  }),
 }));
