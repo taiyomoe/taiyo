@@ -1,37 +1,26 @@
-import { relations, sql } from "drizzle-orm";
-import {
-  int,
-  mysqlTable,
-  serial,
-  text,
-  timestamp,
-  varchar,
-} from "drizzle-orm/mysql-core";
+import { relations } from "drizzle-orm";
+import { pgTable, text, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
 
 import { medias } from "./medias";
 
-export const tags = mysqlTable("tags", {
-  id: serial("id").primaryKey(),
-  createdAt: timestamp("createdAt")
-    .default(sql`CURRENT_TIMESTAMP`)
-    .notNull(),
-  updatedAt: timestamp("updatedAt").onUpdateNow(),
+export const tags = pgTable("tags", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().notNull(),
   deletedAt: timestamp("deletedAt"),
   // -----
-  name: varchar("name", { length: 256 }).notNull().unique(),
+  name: varchar("name", { length: 255 }).notNull().unique(),
   description: text("description").notNull(),
 });
 
-export const mediaTags = mysqlTable("mediaTags", {
-  id: serial("id").primaryKey(),
-  createdAt: timestamp("createdAt")
-    .default(sql`CURRENT_TIMESTAMP`)
-    .notNull(),
-  updatedAt: timestamp("updatedAt").onUpdateNow(),
+export const mediaTags = pgTable("mediaTags", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().notNull(),
   deletedAt: timestamp("deletedAt"),
   // -----
-  mediaId: int("mediaId").notNull(),
-  tagId: int("tagId").notNull(),
+  mediaId: uuid("mediaId").notNull(),
+  tagId: uuid("tagId").notNull(),
 });
 
 export const mediaTagsRelations = relations(mediaTags, ({ one }) => ({

@@ -1,44 +1,36 @@
-import { relations, sql } from "drizzle-orm";
-import {
-  int,
-  json,
-  mysqlTable,
-  serial,
-  timestamp,
-} from "drizzle-orm/mysql-core";
+import { relations } from "drizzle-orm";
+import { pgTable, text, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
 
 import { scans } from "./scans";
 import { users } from "./users";
 
-export const scanMembers = mysqlTable("scanMembers", {
-  id: serial("id").primaryKey(),
-  createdAt: timestamp("createdAt")
-    .default(sql`CURRENT_TIMESTAMP`)
-    .notNull(),
-  updatedAt: timestamp("updatedAt").onUpdateNow(),
+export const scanMembers = pgTable("scanMembers", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().notNull(),
   deletedAt: timestamp("deletedAt"),
   // -----
-  roles: json("roles")
-    .$type<
-      [
-        "OWNER",
-        "ADMIN",
-        "TRANSLATOR",
-        "PROOFREADER",
-        "CLEANER",
-        "REDRAWER",
-        "TYPESETTER",
-        "QUALITY_CHECKER",
-        "RAW_PROVIDER",
-        "OTHER",
-      ]
-    >()
+  roles: text("roles", {
+    enum: [
+      "OWNER",
+      "ADMIN",
+      "TRANSLATOR",
+      "PROOFREADER",
+      "CLEANER",
+      "REDRAWER",
+      "TYPESETTER",
+      "QUALITY_CHECKER",
+      "RAW_PROVIDER",
+      "OTHER",
+    ],
+  })
+    .array()
     .notNull(),
-  permissions: json("permissions")
-    .$type<["UPLOAD", "EDIT", "DELETE"]>()
+  permissions: varchar("permissions", { enum: ["UPLOAD", "EDIT", "DELETE"] })
+    .array()
     .notNull(),
   // -----
-  userId: int("userId").notNull(),
+  userId: uuid("userId").notNull(),
 });
 
 export const scanMembersRelations = relations(scanMembers, ({ many, one }) => ({
