@@ -1,73 +1,66 @@
-import { relations, sql } from "drizzle-orm";
+import { relations } from "drizzle-orm";
 import {
   boolean,
-  mysqlEnum,
-  mysqlTable,
-  serial,
+  pgTable,
   text,
   timestamp,
+  uuid,
   varchar,
-} from "drizzle-orm/mysql-core";
+} from "drizzle-orm/pg-core";
 
+import { mediaChapters } from "./mediaChapters";
 import { mediaTags } from "./mediaTags";
 import { mediaTitles } from "./mediaTitles";
 
-export const medias = mysqlTable("medias", {
-  id: serial("id").primaryKey(),
-  createdAt: timestamp("createdAt")
-    .default(sql`CURRENT_TIMESTAMP`)
-    .notNull(),
-  updatedAt: timestamp("updatedAt").onUpdateNow(),
+export const medias = pgTable("medias", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().notNull(),
   deletedAt: timestamp("deletedAt"),
   // -----
   startDate: timestamp("startDate").notNull(),
   endDate: timestamp("endDate"),
   // -----
-  cover: varchar("cover", { length: 256 }).notNull(),
-  banner: varchar("banner", { length: 256 }),
-  trailer: varchar("trailer", { length: 256 }),
+  cover: varchar("cover", { length: 255 }).notNull(),
+  banner: varchar("banner", { length: 255 }),
+  trailer: varchar("trailer", { length: 255 }),
   // -----
   synopsis: text("synopsis"),
   isAdult: boolean("isAdult").default(false),
-  format: mysqlEnum("format", [
-    "TV",
-    "TV_SHORT",
-    "MOVIE",
-    "SPECIAL",
-    "OVA",
-    "ONA",
-  ]),
-  season: mysqlEnum("season", ["WINTER", "SPRING", "SUMMER", "FALL"]),
-  status: mysqlEnum("status", [
-    "FINISHED",
-    "RELEASING",
-    "NOT_YET_RELEASED",
-    "CANCELLED",
-    "HIATUS",
-  ]),
-  source: mysqlEnum("source", [
-    "ORIGINAL",
-    "MANGA",
-    "LIGHT_NOVEL",
-    "VISUAL_NOVEL",
-    "WEB_NOVEL",
-    "VIDEO_GAME",
-    "MANHWA",
-    "MANHUA",
-  ]),
-  demography: mysqlEnum("demography", ["SHOUNEN", "SHOUJO", "SEINEN", "JOSEI"]),
-  countryOfOrigin: mysqlEnum("countryOfOrigin", [
-    "JAPAN",
-    "KOREA",
-    "CHINA",
-    "USA",
-    "FRANCE",
-    "BRAZIL",
-  ]),
-  flag: mysqlEnum("flag", ["OK", "STAFF_ONLY", "VIP_ONLY"]),
+  format: varchar("format", {
+    enum: ["TV", "TV_SHORT", "MOVIE", "SPECIAL", "OVA", "ONA"],
+  }),
+  season: varchar("season", {
+    enum: ["WINTER", "SPRING", "SUMMER", "FALL"],
+  }),
+  status: varchar("status", {
+    enum: ["FINISHED", "RELEASING", "NOT_YET_RELEASED", "CANCELLED", "HIATUS"],
+  }),
+  source: varchar("source", {
+    enum: [
+      "ORIGINAL",
+      "MANGA",
+      "LIGHT_NOVEL",
+      "VISUAL_NOVEL",
+      "WEB_NOVEL",
+      "VIDEO_GAME",
+      "MANHWA",
+      "MANHUA",
+    ],
+  }),
+  demography: varchar("demography", {
+    enum: ["SHOUNEN", "SHOUJO", "SEINEN", "JOSEI"],
+  }),
+  countryOfOrigin: varchar("countryOfOrigin", {
+    enum: ["JAPAN", "KOREA", "CHINA", "USA", "FRANCE", "BRAZIL"],
+  }),
+  flag: varchar("flag", {
+    enum: ["OK", "STAFF_ONLY", "VIP_ONLY", "LOCKED"],
+  }),
 });
 
 export const mediasRelations = relations(medias, ({ many }) => ({
   tags: many(mediaTags),
   titles: many(mediaTitles),
+  chapters: many(mediaChapters),
 }));

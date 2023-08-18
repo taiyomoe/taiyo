@@ -9,11 +9,11 @@
     "clean": "rm -rf .turbo node_modules",
     "lint": "eslint .",
     "format": "prettier --check \"**/*.{mjs,ts,md,json}\"",
-    "push": "drizzle-kit push:mysql",
+    "push": "drizzle-kit push:pg",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@planetscale/database": "^1.10.0",
+    "@neondatabase/serverless": "^0.6.0",
     "drizzle-orm": "^0.28.2"
   },
   "devDependencies": {

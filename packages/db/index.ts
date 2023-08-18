@@ -1,5 +1,5 @@
-import { Client } from "@planetscale/database";
-import { drizzle } from "drizzle-orm/planetscale-serverless";
+import { neon, neonConfig } from "@neondatabase/serverless";
+import { drizzle } from "drizzle-orm/neon-http";
 
 import * as mediaChapters from "./schema/mediaChapters";
 import * as medias from "./schema/medias";
@@ -8,6 +8,8 @@ import * as mediaTitles from "./schema/mediaTitles";
 import * as scanMembers from "./schema/scanMembers";
 import * as scans from "./schema/scans";
 import * as users from "./schema/users";
+
+neonConfig.fetchConnectionCache = true;
 
 export const schema = {
   ...users,
@@ -21,9 +23,4 @@ export const schema = {
 
 export * from "drizzle-orm";
 
-export const db = drizzle(
-  new Client({
-    url: process.env.DATABASE_URL,
-  }).connection(),
-  { schema },
-);
+export const db = drizzle(neon(process.env.DRIZZLE_DATABASE_URL!), { schema });

@@ -1,59 +1,70 @@
-import { relations, sql } from "drizzle-orm";
+import { relations } from "drizzle-orm";
 import {
   boolean,
-  int,
+  index,
   json,
-  mysqlEnum,
-  mysqlTable,
-  serial,
+  pgTable,
   text,
   timestamp,
+  uuid,
   varchar,
-} from "drizzle-orm/mysql-core";
+} from "drizzle-orm/pg-core";
 
 import { medias } from "./medias";
 import { scans } from "./scans";
 import { users } from "./users";
 
-export const mediaChapters = mysqlTable("mediaChapters", {
-  id: serial("id").primaryKey(),
-  createdAt: timestamp("createdAt")
-    .default(sql`CURRENT_TIMESTAMP`)
-    .notNull(),
-  updatedAt: timestamp("updatedAt").onUpdateNow(),
-  deletedAt: timestamp("deletedAt"),
-  // -----
-  title: text("title"),
-  number: varchar("number", { length: 256 }).notNull(),
-  volume: varchar("volume", { length: 256 }),
-  language: mysqlEnum("language", [
-    "ENGLISH",
-    "JAPANESE",
-    "SPANISH",
-    "PORTUGUESE",
-    "FRENCH",
-  ]),
-  pages: json("pages").$type<MediaChapterPage[]>().notNull(),
-  // -----
-  isAdult: boolean("isAdult").default(false),
-  // -----
-  mediaId: int("mediaId").notNull(),
-  uploaderId: int("uploaderId").notNull(),
-});
+export const mediaChapters = pgTable(
+  "mediaChapters",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt").defaultNow().notNull(),
+    deletedAt: timestamp("deletedAt"),
+    // -----
+    title: text("title"),
+    number: varchar("number", { length: 255 }).notNull(),
+    volume: varchar("volume", { length: 255 }),
+    language: varchar("language", {
+      length: 255,
+      enum: ["ENGLISH", "JAPANESE", "SPANISH", "PORTUGUESE", "FRENCH"],
+    }),
+    pages: json("pages").$type<MediaChapterPages>().notNull(),
+    // -----
+    isSuggestive: boolean("isSuggestive").default(false),
+    isAdult: boolean("isAdult").default(false),
+    // -----
+    mediaId: uuid("mediaId").notNull(),
+    uploaderId: uuid("uploaderId").notNull(),
+  },
+  (mediaChapter) => ({
+    mediaIdIdx: index("mediaId_idx").on(mediaChapter.mediaId),
+  }),
+);
 
-export const mediaChaptersComments = mysqlTable("mediaChaptersComments", {
-  id: serial("id").primaryKey(),
-  createdAt: timestamp("createdAt")
-    .default(sql`CURRENT_TIMESTAMP`)
-    .notNull(),
-  updatedAt: timestamp("updatedAt").onUpdateNow(),
-  deletedAt: timestamp("deletedAt"),
-  // -----
-  content: text("content").notNull(),
-  // -----
-  mediaChapterId: int("mediaChapterId").notNull(),
-  userId: int("userId").notNull(),
-});
+export const mediaChapterComments = pgTable(
+  "mediaChapterComments",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt").defaultNow().notNull(),
+    deletedAt: timestamp("deletedAt"),
+    // -----
+    content: text("content").notNull(),
+    attachments: json("attachments")
+      .$type<MediaCommentAttachements>()
+      .notNull(),
+    // -----
+    parentCommentId: uuid("parentCommentId"),
+    mediaChapterId: uuid("mediaChapterId").notNull(),
+    userId: uuid("userId").notNull(),
+  },
+  (mediaChapterComment) => ({
+    mediaChapterIdIdx: index("mediaChapterId_idx").on(
+      mediaChapterComment.mediaChapterId,
+    ),
+  }),
+);
 
 export const mediaChaptersRelations = relations(
   mediaChapters,
@@ -70,20 +81,27 @@ export const mediaChaptersRelations = relations(
   }),
 );
 
-export const mediaChaptersCommentsRelations = relations(
-  mediaChaptersComments,
-  ({ one }) => ({
+export const mediaChapterCommentsRelations = relations(
+  mediaChapterComments,
+  ({ one, many }) => ({
+    replies: many(mediaChapterComments),
+    parentComment: one(mediaChapterComments, {
+      fields: [mediaChapterComments.parentCommentId],
+      references: [mediaChapterComments.id],
+    }),
     mediaChapter: one(mediaChapters, {
-      fields: [mediaChaptersComments.mediaChapterId],
+      fields: [mediaChapterComments.mediaChapterId],
       references: [mediaChapters.id],
     }),
     user: one(users, {
-      fields: [mediaChaptersComments.userId],
+      fields: [mediaChapterComments.userId],
       references: [users.id],
     }),
   }),
 );
 
-export type MediaChapterPage = {
-  id: string;
-}[];
+export type MediaChapterPage = { id: string };
+export type MediaChapterPages = MediaChapterPage[];
+
+export type MediaCommentAttachement = { id: string; extension: "png" | "gif" };
+export type MediaCommentAttachements = MediaCommentAttachement[];

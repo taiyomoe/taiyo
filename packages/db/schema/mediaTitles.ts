@@ -1,34 +1,20 @@
-import { relations, sql } from "drizzle-orm";
-import {
-  int,
-  mysqlEnum,
-  mysqlTable,
-  serial,
-  text,
-  timestamp,
-} from "drizzle-orm/mysql-core";
+import { relations } from "drizzle-orm";
+import { pgTable, text, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
 
 import { medias } from "./medias";
 
-export const mediaTitles = mysqlTable("mediaTitles", {
-  id: serial("id").primaryKey(),
-  createdAt: timestamp("createdAt")
-    .default(sql`CURRENT_TIMESTAMP`)
-    .notNull(),
-  updatedAt: timestamp("updatedAt").onUpdateNow(),
+export const mediaTitles = pgTable("mediaTitles", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().notNull(),
   deletedAt: timestamp("deletedAt"),
   // -----
   title: text("title").notNull(),
-  language: mysqlEnum("language", [
-    "ENGLISH",
-    "JAPANESE",
-    "NATIVE",
-    "ROMAJI",
-    "SPANISH",
-    "PORTUGUESE",
-  ]),
+  language: varchar("language", {
+    enum: ["ENGLISH", "JAPANESE", "NATIVE", "ROMAJI", "SPANISH", "PORTUGUESE"],
+  }),
   // -----
-  mediaId: int("mediaId").notNull(),
+  mediaId: uuid("mediaId").notNull(),
 });
 
 export const mediaTitlesRelations = relations(mediaTitles, ({ one }) => ({
