@@ -1,4 +1,3 @@
-import { relations } from "drizzle-orm";
 import { pgTable, text, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
 
 import { medias } from "./medias";
@@ -14,12 +13,7 @@ export const mediaTitles = pgTable("mediaTitles", {
     enum: ["ENGLISH", "JAPANESE", "NATIVE", "ROMAJI", "SPANISH", "PORTUGUESE"],
   }),
   // -----
-  mediaId: uuid("mediaId").notNull(),
+  mediaId: uuid("mediaId")
+    .references(() => medias.id, { onDelete: "cascade" })
+    .notNull(),
 });
-
-export const mediaTitlesRelations = relations(mediaTitles, ({ one }) => ({
-  media: one(medias, {
-    fields: [mediaTitles.mediaId],
-    references: [medias.id],
-  }),
-}));

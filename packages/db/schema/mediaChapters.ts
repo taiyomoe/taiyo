@@ -34,8 +34,12 @@ export const mediaChapters = pgTable(
     isSuggestive: boolean("isSuggestive").default(false),
     isAdult: boolean("isAdult").default(false),
     // -----
-    mediaId: uuid("mediaId").notNull(),
-    uploaderId: uuid("uploaderId").notNull(),
+    mediaId: uuid("mediaId")
+      .references(() => medias.id, { onDelete: "cascade" })
+      .notNull(),
+    userId: uuid("userId")
+      .references(() => users.id, { onDelete: "cascade" })
+      .notNull(),
   },
   (mediaChapter) => ({
     mediaIdIdx: index("mediaId_idx").on(mediaChapter.mediaId),
@@ -56,8 +60,12 @@ export const mediaChapterComments = pgTable(
       .notNull(),
     // -----
     parentCommentId: uuid("parentCommentId"),
-    mediaChapterId: uuid("mediaChapterId").notNull(),
-    userId: uuid("userId").notNull(),
+    mediaChapterId: uuid("mediaChapterId")
+      .references(() => mediaChapters.id, { onDelete: "cascade" })
+      .notNull(),
+    userId: uuid("userId")
+      .references(() => users.id, { onDelete: "cascade" })
+      .notNull(),
   },
   (mediaChapterComment) => ({
     mediaChapterIdIdx: index("mediaChapterId_idx").on(
@@ -66,20 +74,9 @@ export const mediaChapterComments = pgTable(
   }),
 );
 
-export const mediaChaptersRelations = relations(
-  mediaChapters,
-  ({ one, many }) => ({
-    scans: many(scans),
-    media: one(medias, {
-      fields: [mediaChapters.mediaId],
-      references: [medias.id],
-    }),
-    uploader: one(users, {
-      fields: [mediaChapters.uploaderId],
-      references: [users.id],
-    }),
-  }),
-);
+export const mediaChaptersRelations = relations(mediaChapters, ({ many }) => ({
+  scans: many(scans),
+}));
 
 export const mediaChapterCommentsRelations = relations(
   mediaChapterComments,
@@ -88,14 +85,6 @@ export const mediaChapterCommentsRelations = relations(
     parentComment: one(mediaChapterComments, {
       fields: [mediaChapterComments.parentCommentId],
       references: [mediaChapterComments.id],
-    }),
-    mediaChapter: one(mediaChapters, {
-      fields: [mediaChapterComments.mediaChapterId],
-      references: [mediaChapters.id],
-    }),
-    user: one(users, {
-      fields: [mediaChapterComments.userId],
-      references: [users.id],
     }),
   }),
 );
