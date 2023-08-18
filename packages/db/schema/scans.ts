@@ -20,7 +20,7 @@ export const scans = mysqlTable("scans", {
   startDate: timestamp("startDate").notNull(),
   endDate: timestamp("endDate"),
   // -----
-  cover: varchar("cover", { length: 256 }).notNull(),
+  logo: varchar("logo", { length: 256 }).notNull(),
   banner: varchar("banner", { length: 256 }),
   // -----
   name: varchar("name", { length: 256 }).notNull(),
