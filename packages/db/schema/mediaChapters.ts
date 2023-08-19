@@ -23,8 +23,8 @@ export const mediaChapters = pgTable(
     deletedAt: timestamp("deletedAt"),
     // -----
     title: text("title"),
-    number: varchar("number", { length: 255 }).notNull(),
-    volume: varchar("volume", { length: 255 }),
+    number: text("number").notNull(),
+    volume: text("volume"),
     language: varchar("language", {
       length: 255,
       enum: ["ENGLISH", "JAPANESE", "SPANISH", "PORTUGUESE", "FRENCH"],

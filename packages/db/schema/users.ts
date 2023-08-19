@@ -45,9 +45,9 @@ export const userSettings = pgTable(
     // -----
     birthDate: timestamp("birthDate", { mode: "date" }),
     gender: varchar("gender", { enum: ["MALE", "FEMALE", "OTHER"] }),
-    city: varchar("city", { length: 255 }),
-    country: varchar("country", { length: 255 }),
-    about: varchar("about", { length: 255 }),
+    city: text("city"),
+    country: text("country"),
+    about: text("about"),
     showSuggestiveContent: boolean("showSuggestiveContent").default(false),
     showAdultContent: boolean("showAdultContent").default(false),
     // -----
@@ -103,8 +103,8 @@ export const sessions = pgTable("session", {
 export const verificationTokens = pgTable(
   "verificationToken",
   {
-    identifier: varchar("identifier", { length: 255 }).notNull(),
-    token: varchar("token", { length: 255 }).notNull(),
+    identifier: text("identifier").notNull(),
+    token: text("token").notNull(),
     expires: timestamp("expires", { mode: "date" }).notNull(),
   },
   (vt) => ({

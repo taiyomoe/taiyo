@@ -8,7 +8,7 @@ export const tags = pgTable("tags", {
   updatedAt: timestamp("updatedAt").defaultNow().notNull(),
   deletedAt: timestamp("deletedAt"),
   // -----
-  name: varchar("name", { length: 255 }).notNull().unique(),
+  name: text("name").notNull().unique(),
   description: text("description").notNull(),
 });
 

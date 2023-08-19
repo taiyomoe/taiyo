@@ -1,6 +1,7 @@
 import { relations } from "drizzle-orm";
 import {
   boolean,
+  integer,
   pgTable,
   text,
   timestamp,
@@ -25,12 +26,13 @@ export const medias = pgTable("medias", {
   startDate: timestamp("startDate").notNull(),
   endDate: timestamp("endDate"),
   // -----
-  cover: varchar("cover", { length: 255 }).notNull(),
-  banner: varchar("banner", { length: 255 }),
-  trailer: varchar("trailer", { length: 255 }),
+  cover: text("cover").notNull(),
+  banner: text("banner"),
+  trailer: text("trailer"),
   // -----
   synopsis: text("synopsis"),
   isAdult: boolean("isAdult").default(false),
+  oneShot: boolean("oneShot").default(false),
   format: varchar("format", {
     enum: ["TV", "TV_SHORT", "MOVIE", "SPECIAL", "OVA", "ONA"],
   }),
