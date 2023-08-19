@@ -33,7 +33,9 @@ export const medias = pgTable("medias", {
   synopsis: text("synopsis"),
   isAdult: boolean("isAdult").default(false),
   oneShot: boolean("oneShot").default(false),
-  type: varchar("type", { enum: ["MANGA", "MANHWA", "MANHUA"] }),
+  type: varchar("type", {
+    enum: ["MANGA", "MANHWA", "MANHUA", "LIGHT_NOVEl", "OTHER"],
+  }),
   status: varchar("status", {
     enum: ["FINISHED", "RELEASING", "NOT_YET_RELEASED", "CANCELLED", "HIATUS"],
   }),

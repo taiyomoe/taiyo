@@ -1,4 +1,11 @@
-import { pgTable, text, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
+import {
+  boolean,
+  pgTable,
+  text,
+  timestamp,
+  uuid,
+  varchar,
+} from "drizzle-orm/pg-core";
 
 import { medias } from "./medias";
 
@@ -12,6 +19,7 @@ export const mediaTitles = pgTable("mediaTitles", {
   language: varchar("language", {
     enum: ["ENGLISH", "JAPANESE", "NATIVE", "ROMAJI", "SPANISH", "PORTUGUESE"],
   }),
+  isAcronym: boolean("acronym").default(false),
   // -----
   mediaId: uuid("mediaId")
     .references(() => medias.id, { onDelete: "cascade" })
