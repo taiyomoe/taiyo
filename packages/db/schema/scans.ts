@@ -12,18 +12,18 @@ export const scans = pgTable("scans", {
   startDate: timestamp("startDate").notNull(),
   endDate: timestamp("endDate"),
   // -----
-  logo: varchar("logo", { length: 255 }).notNull(),
-  banner: varchar("banner", { length: 255 }),
+  logo: text("logo").notNull(),
+  banner: text("banner"),
   // -----
-  name: varchar("name", { length: 255 }).notNull(),
+  name: text("name").notNull(),
   description: text("description"),
   // -----
-  website: varchar("website", { length: 255 }),
-  discord: varchar("discord", { length: 255 }),
-  twitter: varchar("twitter", { length: 255 }),
-  facebook: varchar("facebook", { length: 255 }),
-  instagram: varchar("instagram", { length: 255 }),
-  email: varchar("email", { length: 255 }),
+  website: text("website"),
+  discord: text("discord"),
+  twitter: text("twitter"),
+  facebook: text("facebook"),
+  instagram: text("instagram"),
+  email: text("email"),
 });
 
 export const scansRelations = relations(scans, ({ many }) => ({
