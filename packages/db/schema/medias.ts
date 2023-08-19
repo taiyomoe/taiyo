@@ -33,25 +33,17 @@ export const medias = pgTable("medias", {
   synopsis: text("synopsis"),
   isAdult: boolean("isAdult").default(false),
   oneShot: boolean("oneShot").default(false),
-  format: varchar("format", {
-    enum: ["TV", "TV_SHORT", "MOVIE", "SPECIAL", "OVA", "ONA"],
-  }),
-  season: varchar("season", {
-    enum: ["WINTER", "SPRING", "SUMMER", "FALL"],
-  }),
+  type: varchar("type", { enum: ["MANGA", "MANHWA", "MANHUA"] }),
   status: varchar("status", {
     enum: ["FINISHED", "RELEASING", "NOT_YET_RELEASED", "CANCELLED", "HIATUS"],
   }),
   source: varchar("source", {
     enum: [
       "ORIGINAL",
-      "MANGA",
       "LIGHT_NOVEL",
       "VISUAL_NOVEL",
       "WEB_NOVEL",
       "VIDEO_GAME",
-      "MANHWA",
-      "MANHUA",
     ],
   }),
   demography: varchar("demography", {
@@ -62,7 +54,7 @@ export const medias = pgTable("medias", {
   }),
   flag: varchar("flag", {
     enum: ["OK", "STAFF_ONLY", "VIP_ONLY", "LOCKED"],
-  }),
+  }).default("OK"),
 });
 
 export const mediasRelations = relations(medias, ({ many }) => ({
