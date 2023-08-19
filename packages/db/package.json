@@ -10,11 +10,14 @@
     "lint": "eslint .",
     "format": "prettier --check \"**/*.{mjs,ts,md,json}\"",
     "push": "drizzle-kit push:pg",
-    "typecheck": "tsc --noEmit"
+    "seed": "pnpm with-env tsx seed.ts",
+    "typecheck": "tsc --noEmit",
+    "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
     "@neondatabase/serverless": "^0.6.0",
-    "drizzle-orm": "^0.28.2"
+    "drizzle-orm": "^0.28.2",
+    "tsx": "^3.12.7"
   },
   "devDependencies": {
     "@taiyo/eslint-config": "^0.2.0",
