@@ -18,6 +18,10 @@ export const medias = pgTable("medias", {
   updatedAt: timestamp("updatedAt").defaultNow().notNull(),
   deletedAt: timestamp("deletedAt"),
   // -----
+  mdId: uuid("mdId"),
+  malId: integer("malId"),
+  alId: integer("alId"),
+  // -----
   startDate: timestamp("startDate").notNull(),
   endDate: timestamp("endDate"),
   // -----
