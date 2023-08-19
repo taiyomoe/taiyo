@@ -33,6 +33,7 @@ export const mediaChapters = pgTable(
     // -----
     isSuggestive: boolean("isSuggestive").default(false),
     isAdult: boolean("isAdult").default(false),
+    flag: varchar("flag", { enum: ["OK", "STAFF_ONLY", "VIP_ONLY", "LOCKED"] }),
     // -----
     mediaId: uuid("mediaId")
       .references(() => medias.id, { onDelete: "cascade" })
