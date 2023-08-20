@@ -17,7 +17,15 @@ export const mediaTitles = pgTable("mediaTitles", {
   // -----
   title: text("title").notNull(),
   language: varchar("language", {
-    enum: ["ENGLISH", "JAPANESE", "NATIVE", "ROMAJI", "SPANISH", "PORTUGUESE"],
+    enum: [
+      "ENGLISH",
+      "JAPANESE",
+      "KOREAN",
+      "ROMAJI",
+      "SPANISH",
+      "PORTUGUESE",
+      "FRENCH",
+    ],
   }),
   isAcronym: boolean("acronym").default(false),
   // -----
