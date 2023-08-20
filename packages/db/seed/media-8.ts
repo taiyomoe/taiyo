@@ -1,6 +1,7 @@
 import type { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 
 import { mediaChapters } from "../schema/mediaChapters";
+import { mediaCovers } from "../schema/mediaCovers";
 import { medias } from "../schema/medias";
 
 const execute = async (db: PostgresJsDatabase) => {
@@ -14,16 +15,19 @@ const execute = async (db: PostgresJsDatabase) => {
     startDate: new Date("2018-03-04"),
     endDate: new Date("2023-05-31"),
     // -----
-    cover: "632b30a0-2f3d-4f78-a0e7-46af89004265",
-    trailer: "JRXcbcEnqEs",
-    // -----
     synopsis:
       "In a world where awakened beings called “Hunters” must battle deadly monsters to protect humanity, Sung Jinwoo, nicknamed “the weakest hunter of all mankind,” finds himself in a constant struggle for survival. One day, after a brutal encounter in an overpowered dungeon wipes out his party and threatens to end his life, a mysterious System chooses him as its sole player: Jinwoo has been granted the rare opportunity to level up his abilities, possibly beyond any known limits. Follow Jinwoo’s journey as he takes on ever-stronger enemies, both human and monster, to discover the secrets deep within the dungeons and the ultimate extent of his powers.",
+    trailer: "JRXcbcEnqEs",
     type: "MANHWA",
     status: "FINISHED",
     source: "WEB_NOVEL",
     demography: "SHOUNEN",
     countryOfOrigin: "KOREA",
+  });
+
+  await db.insert(mediaCovers).values({
+    id: "632b30a0-2f3d-4f78-a0e7-46af89004265",
+    mediaId: "171ed718-cfdc-4e63-b99a-18a0b1d59eb5",
   });
 
   await db.insert(mediaChapters).values([

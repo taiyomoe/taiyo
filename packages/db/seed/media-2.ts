@@ -1,6 +1,7 @@
 import type { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 
 import { mediaChapters } from "../schema/mediaChapters";
+import { mediaCovers } from "../schema/mediaCovers";
 import { medias } from "../schema/medias";
 
 const execute = async (db: PostgresJsDatabase) => {
@@ -13,16 +14,20 @@ const execute = async (db: PostgresJsDatabase) => {
     // -----
     startDate: new Date("2018-03-05"),
     // -----
-    cover: "678dea1e-f1b1-479a-961f-ea8450820418",
-    trailer: "lSB3f2tiUqo",
-    // -----
     synopsis:
       "Although Yuji Itadori looks like your average teenager, his immense physical strength is something to behold! Every sports club wants him to join, but Itadori would rather hang out with the school outcasts in the Occult Research Club. One day, the club manages to get their hands on a sealed cursed object. Little do they know the terror they’ll unleash when they break the seal…",
+    trailer: "lSB3f2tiUqo",
     type: "MANGA",
     status: "RELEASING",
     source: "ORIGINAL",
     demography: "SHOUNEN",
     countryOfOrigin: "JAPAN",
+  });
+
+  await db.insert(mediaCovers).values({
+    id: "678dea1e-f1b1-479a-961f-ea8450820418",
+    volume: 23,
+    mediaId: "d9405929-e54e-4560-8305-d14e7c76bcc7",
   });
 
   await db.insert(mediaChapters).values([

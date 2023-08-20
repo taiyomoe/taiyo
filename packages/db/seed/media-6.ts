@@ -1,6 +1,7 @@
 import type { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 
 import { mediaChapters } from "../schema/mediaChapters";
+import { mediaCovers } from "../schema/mediaCovers";
 import { medias } from "../schema/medias";
 
 const execute = async (db: PostgresJsDatabase) => {
@@ -13,8 +14,6 @@ const execute = async (db: PostgresJsDatabase) => {
     // -----
     startDate: new Date("2017-11-25"),
     // -----
-    cover: "a5576be2-d8c8-425f-9466-21a575ca89a0",
-    // -----
     synopsis:
       "The story begins when the gods call a convention to decide whether to let humanity live or die, and settle on destroying humanity. But a lone valkyrie puts forward a suggestion to let the gods and humanity fight one last battle, as a last hope for humanity's continued survival. 13 gods will fight against 13 human champions in one-on-one battles to decide whether humanity lives or dies.",
     type: "MANGA",
@@ -22,6 +21,12 @@ const execute = async (db: PostgresJsDatabase) => {
     source: "ORIGINAL",
     demography: "SHOUNEN",
     countryOfOrigin: "JAPAN",
+  });
+
+  await db.insert(mediaCovers).values({
+    id: "a5576be2-d8c8-425f-9466-21a575ca89a0",
+    volume: 19,
+    mediaId: "22f9e6a3-c625-4b33-8526-20773d831fd8",
   });
 
   await db.insert(mediaChapters).values([

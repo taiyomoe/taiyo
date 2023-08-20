@@ -1,6 +1,7 @@
 import type { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 
 import { mediaChapters } from "../schema/mediaChapters";
+import { mediaCovers } from "../schema/mediaCovers";
 import { medias } from "../schema/medias";
 
 const execute = async (db: PostgresJsDatabase) => {
@@ -14,8 +15,6 @@ const execute = async (db: PostgresJsDatabase) => {
     startDate: new Date("1999-11-10"),
     endDate: new Date("2014-11-10"),
     // -----
-    cover: "6148c7af-3fcc-4b3a-a185-f0caa6983ab8",
-    // -----
     synopsis:
       "Before Naruto's birth, a great demon fox had attacked the Hidden Leaf Village. A man known as the 4th Hokage sealed the demon inside the newly born Naruto, causing him to unknowingly grow up detested by his fellow villagers. Despite his lack of talent in many areas of ninjutsu, Naruto strives for only one goal: to gain the title of Hokage, the strongest ninja in his village. Desiring the respect he never received, Naruto works towards his dream with fellow friends Sasuke and Sakura and mentor Kakashi as they go through many trials and battles that come with being a ninja.",
     type: "MANGA",
@@ -23,6 +22,12 @@ const execute = async (db: PostgresJsDatabase) => {
     source: "ORIGINAL",
     demography: "SHOUNEN",
     countryOfOrigin: "JAPAN",
+  });
+
+  await db.insert(mediaCovers).values({
+    id: "6148c7af-3fcc-4b3a-a185-f0caa6983ab8",
+    volume: 1,
+    mediaId: "d696e020-f234-44c4-9cba-8bb5359b156b",
   });
 
   await db.insert(mediaChapters).values([

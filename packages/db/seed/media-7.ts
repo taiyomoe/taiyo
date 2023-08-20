@@ -1,6 +1,7 @@
 import type { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 
 import { mediaChapters } from "../schema/mediaChapters";
+import { mediaCovers } from "../schema/mediaCovers";
 import { medias } from "../schema/medias";
 
 const execute = async (db: PostgresJsDatabase) => {
@@ -13,16 +14,20 @@ const execute = async (db: PostgresJsDatabase) => {
     // -----
     startDate: new Date("2012-06-14"),
     // -----
-    cover: "ccc90b04-2ab6-408f-b8ec-69aa2300d074",
-    trailer: "-Z0pey2j5To",
-    // -----
     synopsis:
       "In this new action-comedy, everything about a young man named Saitama screams \"AVERAGE,&rdquo; from his lifeless expression, to his bald head, to his unimpressive physique. However, this average-looking fellow doesn't have your average problem... He's actually a superhero that's looking for tough opponents! The problem is, every time he finds a promising candidate he beats the snot out of them in one punch. Can Saitama finally find an evil villain strong enough to challenge him? Follow Saitama through his hilarious romps as he searches for new bad guys to challenge!",
+    trailer: "-Z0pey2j5To",
     type: "MANGA",
     status: "RELEASING",
     source: "ORIGINAL",
     demography: "SHOUNEN",
     countryOfOrigin: "JAPAN",
+  });
+
+  await db.insert(mediaCovers).values({
+    id: "ccc90b04-2ab6-408f-b8ec-69aa2300d074",
+    volume: 28,
+    mediaId: "21bc3f0b-73ac-44b6-8955-ae5a0a50cf39",
   });
 
   await db.insert(mediaChapters).values([
