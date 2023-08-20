@@ -79,6 +79,7 @@ export const mediaChapterComments = pgTable(
 
 export const mediaChaptersRelations = relations(mediaChapters, ({ many }) => ({
   scans: many(scans),
+  comments: many(mediaChapterComments),
 }));
 
 export const mediaChapterCommentsRelations = relations(
