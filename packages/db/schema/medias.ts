@@ -55,10 +55,10 @@ export const medias = pgTable("medias", {
 });
 
 export const mediasRelations = relations(medias, ({ many }) => ({
+  covers: many(mediaCovers),
+  banners: many(mediaBanners),
   tags: many(mediaTags),
   titles: many(mediaTitles),
   chapters: many(mediaChapters),
-  covers: many(mediaCovers),
-  banners: many(mediaBanners),
   trackers: many(mediaTrackers),
 }));
