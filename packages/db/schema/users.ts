@@ -12,6 +12,8 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 
+import { roles } from "./roles";
+
 /**
  * Everything here (except for `userSettings`) is basically untouchable.
  * The Drizzle Adapter for NextAuth requires this exact schema to work.
@@ -29,6 +31,14 @@ export const users = pgTable(
     email: text("email").notNull(),
     emailVerified: timestamp("emailVerified", { mode: "date" }),
     image: text("image"),
+    // -----
+    roleId: uuid("roleId")
+      .references(() => roles.id)
+      /**
+       * This is the hard-coded default USER role ID, which is seeded in the database.
+       */
+      .default("7bf9872c-1c80-4e78-be71-6fa0d3dc88d1")
+      .notNull(),
   },
   (user) => ({
     idIdx: index("id_idx").on(user.id),
@@ -50,10 +60,6 @@ export const userSettings = pgTable(
     about: text("about"),
     showSuggestiveContent: boolean("showSuggestiveContent").default(false),
     showAdultContent: boolean("showAdultContent").default(false),
-    // -----
-    role: varchar("role", {
-      enum: ["USER", "MODERATOR", "UPLOADER", "ADMIN"],
-    }).default("USER"),
     // -----
     userId: uuid("userId")
       .references(() => users.id, { onDelete: "cascade" })
