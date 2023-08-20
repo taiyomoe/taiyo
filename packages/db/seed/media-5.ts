@@ -1,6 +1,7 @@
 import type { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 
 import { mediaChapters } from "../schema/mediaChapters";
+import { mediaCovers } from "../schema/mediaCovers";
 import { medias } from "../schema/medias";
 
 const execute = async (db: PostgresJsDatabase) => {
@@ -13,16 +14,20 @@ const execute = async (db: PostgresJsDatabase) => {
     // -----
     startDate: new Date("2014-07-07"),
     // -----
-    cover: "6cffe32e-7697-46c9-bc20-dd1e357a9ea2",
-    trailer: "zCZszbv4DCA",
-    // -----
     synopsis:
       "Middle school student Izuku Midoriya wants to be a hero more than anything, but he hasn’t got an ounce of power in him. With no chance of ever getting into the prestigious U.A. High School for budding heroes, his life is looking more and more like a dead end. Then an encounter with All Might, the greatest hero of them all, gives him a chance to change his destiny…",
+    trailer: "zCZszbv4DCA",
     type: "MANGA",
     status: "RELEASING",
     source: "ORIGINAL",
     demography: "SHOUNEN",
     countryOfOrigin: "JAPAN",
+  });
+
+  await db.insert(mediaCovers).values({
+    id: "6cffe32e-7697-46c9-bc20-dd1e357a9ea2",
+    volume: 36,
+    mediaId: "7d64e4f8-d955-4b59-a7c5-7ee2ddcad68b",
   });
 
   await db.insert(mediaChapters).values([

@@ -9,7 +9,9 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 
+import { mediaBanners } from "./mediaBanners";
 import { mediaChapters } from "./mediaChapters";
+import { mediaCovers } from "./mediaCovers";
 import { mediaTags } from "./mediaTags";
 import { mediaTitles } from "./mediaTitles";
 
@@ -26,13 +28,10 @@ export const medias = pgTable("medias", {
   startDate: timestamp("startDate").notNull(),
   endDate: timestamp("endDate"),
   // -----
-  cover: text("cover").notNull(),
-  banner: text("banner"),
-  trailer: text("trailer"),
-  // -----
   synopsis: text("synopsis"),
   isAdult: boolean("isAdult").default(false),
   oneShot: boolean("oneShot").default(false),
+  trailer: text("trailer"),
   type: varchar("type", {
     enum: ["MANGA", "MANHWA", "MANHUA", "LIGHT_NOVEl", "OTHER"],
   }),
@@ -63,4 +62,6 @@ export const mediasRelations = relations(medias, ({ many }) => ({
   tags: many(mediaTags),
   titles: many(mediaTitles),
   chapters: many(mediaChapters),
+  covers: many(mediaCovers),
+  banners: many(mediaBanners),
 }));

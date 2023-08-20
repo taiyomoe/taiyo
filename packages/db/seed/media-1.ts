@@ -1,6 +1,7 @@
 import type { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 
 import { mediaChapters } from "../schema/mediaChapters";
+import { mediaCovers } from "../schema/mediaCovers";
 import { medias } from "../schema/medias";
 
 const execute = async (db: PostgresJsDatabase) => {
@@ -13,16 +14,20 @@ const execute = async (db: PostgresJsDatabase) => {
     // -----
     startDate: new Date("2015-02-16"),
     // -----
-    cover: "e17face2-f49f-4152-b4e6-30ac9dedae1d",
-    trailer: "1E1ARfMXmic",
-    // -----
     synopsis:
       "Young Asta was born with no magic ability in a world where magic is everything. In order to prove his strength and keep a promise with his friend, Asta dreams of becoming the greatest mage in the land, the Wizard King!",
+    trailer: "1E1ARfMXmic",
     type: "MANGA",
     status: "RELEASING",
     source: "ORIGINAL",
     demography: "SHOUNEN",
     countryOfOrigin: "JAPAN",
+  });
+
+  await db.insert(mediaCovers).values({
+    id: "e17face2-f49f-4152-b4e6-30ac9dedae1d",
+    volume: 35,
+    mediaId: "95bf236c-87ca-42d3-b9a0-d17ad7a13b2c",
   });
 
   await db.insert(mediaChapters).values([

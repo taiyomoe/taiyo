@@ -1,6 +1,7 @@
 import type { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 
 import { mediaChapters } from "../schema/mediaChapters";
+import { mediaCovers } from "../schema/mediaCovers";
 import { medias } from "../schema/medias";
 
 const execute = async (db: PostgresJsDatabase) => {
@@ -12,8 +13,6 @@ const execute = async (db: PostgresJsDatabase) => {
     // -----
     startDate: new Date("2018-01-26"),
     // -----
-    cover: "d75dae86-643f-42cc-9a2c-8fc919b53536",
-    // -----
     synopsis:
       "The peak of martial arts is solitary and lonely. It is an endless pursuit for unattainable heights as well. In order to surpass the limits of martial arts, growth and the will to survive in adverse situations is necessary.\nOne day, Yang Kai, a disciple-on-trial (and floor sweeper) of the Lingxiao Martial Arts Sect discovered a Wordless Black Book. That marked the turn in his luck and the beginning of his martial arts journey.",
     type: "MANHUA",
@@ -21,6 +20,11 @@ const execute = async (db: PostgresJsDatabase) => {
     source: "WEB_NOVEL",
     demography: "SHOUNEN",
     countryOfOrigin: "CHINA",
+  });
+
+  await db.insert(mediaCovers).values({
+    id: "d75dae86-643f-42cc-9a2c-8fc919b53536",
+    mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
   });
 
   await db.insert(mediaChapters).values([

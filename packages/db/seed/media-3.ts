@@ -1,6 +1,7 @@
 import type { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 
 import { mediaChapters } from "../schema/mediaChapters";
+import { mediaCovers } from "../schema/mediaCovers";
 import { medias } from "../schema/medias";
 
 const execute = async (db: PostgresJsDatabase) => {
@@ -13,16 +14,20 @@ const execute = async (db: PostgresJsDatabase) => {
     // -----
     startDate: new Date("1997-07-22"),
     // -----
-    cover: "7b847d74-8556-4f95-a3eb-1ea04423b00a",
-    trailer: "-Sb4wxbHh-4",
-    // -----
     synopsis:
       'As a child, Monkey D. Luffy was inspired to become a pirate by listening to the tales of the buccaneer "Red-Haired" Shanks. But his life changed when Luffy accidentally ate the Gum-Gum Devil Fruit and gained the power to stretch like rubber...at the cost of never being able to swim again! Years later, still vowing to become the king of the pirates, Luffy sets out on his adventure...one guy alone in a rowboat, in search of the legendary "One Piece," said to be the greatest treasure in the world...',
+    trailer: "-Sb4wxbHh-4",
     type: "MANGA",
     status: "RELEASING",
     source: "ORIGINAL",
     demography: "SHOUNEN",
     countryOfOrigin: "JAPAN",
+  });
+
+  await db.insert(mediaCovers).values({
+    id: "7b847d74-8556-4f95-a3eb-1ea04423b00a",
+    volume: 106,
+    mediaId: "65ad0a5c-4861-4b59-b93e-90963590958e",
   });
 
   await db.insert(mediaChapters).values([
