@@ -10,7 +10,8 @@
     "lint": "eslint .",
     "format": "prettier --check \"**/*.{mjs,ts,md,json}\"",
     "push": "drizzle-kit push:pg",
-    "seed": "pnpm with-env tsx seed.ts",
+    "clear": "pnpm with-env tsx clear.ts",
+    "seed": "pnpm clear && pnpm push && pnpm with-env tsx seed.ts",
     "typecheck": "tsc --noEmit",
     "with-env": "dotenv -e ../../.env --"
   },
