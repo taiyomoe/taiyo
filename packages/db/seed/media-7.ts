@@ -3,14 +3,11 @@ import type { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 import { mediaChapters } from "../schema/mediaChapters";
 import { mediaCovers } from "../schema/mediaCovers";
 import { medias } from "../schema/medias";
+import { mediaTrackers } from "../schema/mediaTrackers";
 
 const execute = async (db: PostgresJsDatabase) => {
   await db.insert(medias).values({
     id: "21bc3f0b-73ac-44b6-8955-ae5a0a50cf39",
-    // -----
-    mdId: "d8a959f7-648e-4c8d-8f23-f1f3f8e129f3",
-    malId: 44347,
-    alId: 74347,
     // -----
     startDate: new Date("2012-06-14"),
     // -----
@@ -23,6 +20,24 @@ const execute = async (db: PostgresJsDatabase) => {
     demography: "SHOUNEN",
     countryOfOrigin: "JAPAN",
   });
+
+  await db.insert(mediaTrackers).values([
+    {
+      trackerMediaId: "d8a959f7-648e-4c8d-8f23-f1f3f8e129f3",
+      mediaId: "21bc3f0b-73ac-44b6-8955-ae5a0a50cf39",
+      trackerId: "6c61f739-1ca3-467b-9d08-b7a2e58efb21",
+    },
+    {
+      trackerMediaId: "74347",
+      mediaId: "21bc3f0b-73ac-44b6-8955-ae5a0a50cf39",
+      trackerId: "a4ffe426-9496-4167-ade3-b3789f81fb75",
+    },
+    {
+      trackerMediaId: "44347",
+      mediaId: "21bc3f0b-73ac-44b6-8955-ae5a0a50cf39",
+      trackerId: "a92f9633-074a-4385-8bcb-077e94c2441e",
+    },
+  ]);
 
   await db.insert(mediaCovers).values({
     id: "ccc90b04-2ab6-408f-b8ec-69aa2300d074",

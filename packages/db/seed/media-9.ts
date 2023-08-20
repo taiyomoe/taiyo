@@ -3,12 +3,11 @@ import type { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 import { mediaChapters } from "../schema/mediaChapters";
 import { mediaCovers } from "../schema/mediaCovers";
 import { medias } from "../schema/medias";
+import { mediaTrackers } from "../schema/mediaTrackers";
 
 const execute = async (db: PostgresJsDatabase) => {
   await db.insert(medias).values({
     id: "f0bc42eb-b2f7-4017-89f8-77c1834834b1",
-    // -----
-    mdId: "4ada20eb-085a-491a-8c49-477ab42014d7",
     // -----
     startDate: new Date("2018"),
     // -----
@@ -20,6 +19,14 @@ const execute = async (db: PostgresJsDatabase) => {
     demography: "SHOUNEN",
     countryOfOrigin: "USA",
   });
+
+  await db.insert(mediaTrackers).values([
+    {
+      trackerMediaId: "4ada20eb-085a-491a-8c49-477ab42014d7",
+      mediaId: "f0bc42eb-b2f7-4017-89f8-77c1834834b1",
+      trackerId: "6c61f739-1ca3-467b-9d08-b7a2e58efb21",
+    },
+  ]);
 
   await db.insert(mediaCovers).values({
     id: "0dfce762-b759-4bae-a528-e0b1f3a00dd9",

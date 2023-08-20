@@ -11,6 +11,7 @@ import media7 from "./seed/media-7";
 import media8 from "./seed/media-8";
 import media9 from "./seed/media-9";
 import media10 from "./seed/media-10";
+import trackers from "./seed/trackers";
 import user1 from "./seed/user-1";
 
 if (!process.env.DATABASE_URL) {
@@ -22,6 +23,7 @@ const db = drizzle(neon(process.env.DATABASE_URL!));
 async function seed() {
   console.log("Seeding database...");
 
+  await trackers.execute(db).then(() => console.log("Trackers seeded"));
   await user1.execute(db).then(() => console.log("User 1 seeded"));
   await media1.execute(db).then(() => console.log("Media 1 seeded"));
   await media2.execute(db).then(() => console.log("Media 2 seeded"));

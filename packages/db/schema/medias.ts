@@ -1,7 +1,6 @@
 import { relations } from "drizzle-orm";
 import {
   boolean,
-  integer,
   pgTable,
   text,
   timestamp,
@@ -14,16 +13,13 @@ import { mediaChapters } from "./mediaChapters";
 import { mediaCovers } from "./mediaCovers";
 import { mediaTags } from "./mediaTags";
 import { mediaTitles } from "./mediaTitles";
+import { mediaTrackers } from "./mediaTrackers";
 
 export const medias = pgTable("medias", {
   id: uuid("id").defaultRandom().primaryKey(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().notNull(),
   deletedAt: timestamp("deletedAt"),
-  // -----
-  mdId: uuid("mdId"),
-  malId: integer("malId"),
-  alId: integer("alId"),
   // -----
   startDate: timestamp("startDate").notNull(),
   endDate: timestamp("endDate"),
@@ -64,4 +60,5 @@ export const mediasRelations = relations(medias, ({ many }) => ({
   chapters: many(mediaChapters),
   covers: many(mediaCovers),
   banners: many(mediaBanners),
+  trackers: many(mediaTrackers),
 }));
