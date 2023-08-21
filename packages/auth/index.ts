@@ -33,6 +33,9 @@ export const {
       clientSecret: env.DISCORD_CLIENT_SECRET,
     }),
   ],
+  pages: {
+    signIn: "/auth/sign-in",
+  },
   callbacks: {
     session: ({ session, user }) => ({
       ...session,
