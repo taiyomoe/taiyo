@@ -2,6 +2,8 @@ import Image from "next/image";
 
 import { auth } from "@taiyo/auth";
 
+import { SignOut } from "~/components/auth/SignOut";
+
 export const runtime = "edge";
 
 export default async function HomePage() {
@@ -30,6 +32,9 @@ export default async function HomePage() {
         height={150}
         alt="profile picture"
       />
+      <SignOut className="mt-10">
+        <p>Deslogar</p>
+      </SignOut>
     </div>
   );
 }
