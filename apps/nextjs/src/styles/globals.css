@@ -7,13 +7,16 @@
     --background: #fff;
     --foreground: 0 0% 3.9%;
 
+    --background-accent: 0 100% 94%;
+    --foreground-accent: 0 0% 9%;
+
     --card: #fff;
     --card-foreground: 0 0% 3.9%;
 
     --popover: #fff;
     --popover-foreground: 0 0% 3.9%;
 
-    --primary: 0 0% 9%;
+    --primary: #ff4f4f;
     --primary-foreground: 0 0% 98%;
 
     --secondary: 0 0% 96.1%;
@@ -30,14 +33,17 @@
 
     --border: 0 0% 89.8%;
     --input: 0 0% 89.8%;
-    --ring: 0 0% 3.9%;
+    --ring: #ff4f4f;
 
     --radius: 0.5rem;
   }
 
   .dark {
-    --background: 0 0% 3.9%;
+    --background: 0 0% 4%;
     --foreground: 0 0% 98%;
+
+    --background-accent: 0 0% 12%;
+    --foreground-accent: 0 0% 94%;
 
     --card: 0 0% 3.9%;
     --card-foreground: 0 0% 98%;
@@ -45,7 +51,7 @@
     --popover: 0 0% 3.9%;
     --popover-foreground: 0 0% 98%;
 
-    --primary: 0 0% 98%;
+    --primary: #ff4f4f;
     --primary-foreground: 0 0% 9%;
 
     --secondary: 0 0% 14.9%;
@@ -60,9 +66,9 @@
     --destructive: #f31260; /* NextUI -- danger-500 */
     --destructive-foreground: #920b3a; /* NextUI -- danger-700 */
 
-    --border: 0 0% 14.9%;
+    --border: 0 0% 21%;
     --input: 0 0% 14.9%;
-    --ring: 0 0% 83.1%;
+    --ring: #ff4f4f;
   }
 }
 
