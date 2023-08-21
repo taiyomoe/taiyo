@@ -9,8 +9,6 @@ export const runtime = "edge";
 export default async function HomePage() {
   const session = await auth();
 
-  console.log(session);
-
   return (
     <div>
       <p className="text-4xl">Taiyō</p>
