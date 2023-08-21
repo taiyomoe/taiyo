@@ -5,6 +5,7 @@ import { ServerThemeProvider } from "@wits/next-themes";
 
 import "~/styles/globals.css";
 
+import { cn } from "~/utils/cn";
 import { TRPCReactProvider } from "./providers";
 
 const fontSans = Inter({
@@ -32,7 +33,9 @@ export default function Layout(props: { children: React.ReactNode }) {
   return (
     <ServerThemeProvider attribute="class">
       <html lang="en">
-        <body className={["font-sans", fontSans.variable].join(" ")}>
+        <body
+          className={cn(["font-sans", fontSans.variable].join(" "), "h-screen")}
+        >
           <TRPCReactProvider headers={headers()}>
             {props.children}
           </TRPCReactProvider>
