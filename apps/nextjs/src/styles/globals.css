@@ -39,13 +39,13 @@
   }
 
   .dark {
-    --background: 0 0% 4%;
+    --background: 0 0% 5%;
     --foreground: 0 0% 98%;
 
     --background-accent: 0 0% 12%;
     --foreground-accent: 0 0% 94%;
 
-    --card: 0 0% 3.9%;
+    --card: 0 0% 11%;
     --card-foreground: 0 0% 98%;
 
     --popover: 0 0% 3.9%;

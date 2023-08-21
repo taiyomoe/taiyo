@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 
 import { auth } from "@taiyo/auth";
 
-import { TaiyoLogo } from "~/components/logos/TaiyoLogo";
+import { CompanyLogo } from "~/components/ui/CompanyLogo";
 import { AuthCard } from "./_components/AuthCard";
 
 export default async function SignInPage() {
@@ -13,9 +13,9 @@ export default async function SignInPage() {
   }
 
   return (
-    <div className="flex h-full flex-col items-center justify-center gap-8">
+    <div className="flex w-full flex-col items-center gap-8">
       <div className="flex items-center gap-8">
-        <TaiyoLogo width={150} height={100} />
+        <CompanyLogo company="taiyo" width={150} height={100} />
         <p className="text-5xl font-bold">Taiyō</p>
       </div>
       <AuthCard />
