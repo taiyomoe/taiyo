@@ -4,7 +4,7 @@ import { GoogleButton } from "./GoogleButton";
 
 export const AuthCard = () => {
   return (
-    <div className="flex w-5/6 flex-col gap-8 rounded-md bg-card p-4 sm:mx-0 sm:w-1/2">
+    <div className="flex w-full max-w-[500px] flex-col gap-8 rounded-t-lg bg-card p-4 shadow-md sm:mx-0 sm:w-auto sm:min-w-[400px] sm:rounded-b-lg">
       <div className="flex flex-col gap-2">
         <Skeleton className="h-8 w-full" />
         <Skeleton className="h-8 w-full" />
