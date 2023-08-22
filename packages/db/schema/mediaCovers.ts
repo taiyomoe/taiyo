@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import { integer, pgTable, timestamp, uuid } from "drizzle-orm/pg-core";
 
 import { medias } from "./medias";
@@ -14,3 +15,10 @@ export const mediaCovers = pgTable("mediaCovers", {
     .references(() => medias.id, { onDelete: "cascade" })
     .notNull(),
 });
+
+export const mediaCoversRelations = relations(mediaCovers, ({ one }) => ({
+  media: one(medias, {
+    fields: [mediaCovers.mediaId],
+    references: [medias.id],
+  }),
+}));

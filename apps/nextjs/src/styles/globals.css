@@ -78,3 +78,7 @@
 .swiper-slide {
   width: auto !important;
 }
+
+.swiper.latestMedias:not(.swiper-initialized) .swiper-slide {
+  margin-right: 24px;
+}

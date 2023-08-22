@@ -11,7 +11,7 @@ const config = {
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
   images: {
-    domains: ["cdn.discordapp.com"],
+    domains: ["cdn.taiyo.moe", "cdn.discordapp.com"],
   },
   experimental: {
     serverActions: true,

@@ -4,6 +4,7 @@ import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import NextAuth from "next-auth";
 
 import { db } from "@taiyo/db";
+import { userSettings } from "@taiyo/db/schema/users";
 
 import { env } from "./env.mjs";
 
@@ -35,6 +36,11 @@ export const {
   ],
   pages: {
     signIn: "/auth/sign-in",
+  },
+  events: {
+    createUser: async (message) => {
+      await db.insert(userSettings).values({ userId: message.user.id });
+    },
   },
   callbacks: {
     session: ({ session, user }) => ({
