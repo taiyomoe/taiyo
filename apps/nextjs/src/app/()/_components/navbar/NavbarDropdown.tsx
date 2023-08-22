@@ -6,7 +6,7 @@ import { UserDropdown } from "./dropdowns/UserDropdown";
 export const NavbarDropdown = async () => {
   const session = await auth();
 
-  if (session.user) {
+  if (session?.user) {
     return <UserDropdown session={session} />;
   }
 
