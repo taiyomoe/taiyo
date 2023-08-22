@@ -14,6 +14,7 @@
     "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
+    "@radix-ui/react-dropdown-menu": "^2.0.5",
     "@t3-oss/env-nextjs": "^0.6.1",
     "@taiyo/api": "^0.1.0",
     "@taiyo/auth": "^0.1.0",
