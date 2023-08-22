@@ -1,3 +1,4 @@
+import type { InferModel } from "drizzle-orm";
 import { relations } from "drizzle-orm";
 import {
   boolean,
@@ -62,3 +63,6 @@ export const mediasRelations = relations(medias, ({ many }) => ({
   chapters: many(mediaChapters),
   trackers: many(mediaTrackers),
 }));
+
+export type Media = InferModel<typeof medias, "select">;
+export type Medias = Media[];

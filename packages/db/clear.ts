@@ -8,6 +8,7 @@ import { medias } from "./schema/medias";
 import { mediaTags, tags } from "./schema/mediaTags";
 import { mediaTitles } from "./schema/mediaTitles";
 import { mediaTrackers, trackers } from "./schema/mediaTrackers";
+import { roles } from "./schema/roles";
 import {
   accounts,
   sessions,
@@ -66,6 +67,10 @@ async function clear() {
     await db
       .delete(tags)
       .then(() => console.log("tags deleted"))
+      .catch(() => null);
+    await db
+      .delete(roles)
+      .then(() => console.log("roles deleted"))
       .catch(() => null);
     await db
       .delete(accounts)

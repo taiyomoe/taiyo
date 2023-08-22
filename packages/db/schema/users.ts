@@ -60,6 +60,9 @@ export const userSettings = pgTable(
     about: text("about"),
     showSuggestiveContent: boolean("showSuggestiveContent").default(false),
     showAdultContent: boolean("showAdultContent").default(false),
+    preferedTitles: varchar("preferedTitles", {
+      enum: ["ROMAJI", "ENGLISH", "NATIVE"],
+    }).default("ROMAJI"),
     // -----
     userId: uuid("userId")
       .references(() => users.id, { onDelete: "cascade" })
