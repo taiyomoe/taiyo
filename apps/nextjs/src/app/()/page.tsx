@@ -1,48 +1,19 @@
-import Image from "next/image";
-
-import { auth } from "@taiyo/auth";
-
-import { SignOut } from "~/components/auth/SignOut";
+import { LatestMedias } from "./_components/LatestMedias";
 import { LatestReleases } from "./_components/LatestReleases";
 import { MediaShowcase } from "./_components/MediaShowcase";
+import { TrendingMedias } from "./_components/TrendingMedias";
 
 export const runtime = "edge";
 
-export default async function HomePage() {
-  const session = await auth();
-
+export default function HomePage() {
   return (
-    <div className="flex flex-col gap-10">
+    <div className="flex flex-col gap-12">
       <MediaShowcase />
-      <div className="grid w-full grid-cols-1 gap-8 md:grid-cols-3">
-        <div className="col-span-1 md:col-span-2">
-          <LatestReleases />
-        </div>
-        <div className="col-span-1">
-          <p className="text-4xl">Taiyō</p>
-          <div className="mt-8 flex gap-4">
-            <p className="min-w-[100px]">Id</p>
-            <p>{session?.user.id}</p>
-          </div>
-          <div className="flex gap-4">
-            <p className="min-w-[100px]">Username</p>
-            <p>{session?.user.name}</p>
-          </div>
-          <div className="mb-10 flex gap-4">
-            <p className="min-w-[100px]">Email</p>
-            <p>{session?.user.email}</p>
-          </div>
-          <Image
-            src={session?.user?.image ?? ""}
-            width={150}
-            height={150}
-            alt="profile picture"
-          />
-          <SignOut className="mt-10">
-            <p>Deslogar</p>
-          </SignOut>
-        </div>
+      <div className="flex w-full flex-col gap-12 md:flex-row">
+        <LatestReleases />
+        <TrendingMedias />
       </div>
+      <LatestMedias />
     </div>
   );
 }
