@@ -75,10 +75,34 @@
   }
 }
 
-.swiper-slide {
-  width: auto !important;
+.swiper.trendingMedias .swiper-slide {
+  width: inherit !important;
+  height: inherit !important;
 }
 
+.swiper.latestMedias .swiper-slide {
+  width: auto !important;
+  height: auto !important;
+}
+
+.swiper.trendingMedias:not(.swiper-initialized) .swiper-slide,
 .swiper.latestMedias:not(.swiper-initialized) .swiper-slide {
   margin-right: 24px;
+}
+
+.swiper-pagination-bullet {
+  background-color: #383842 !important;
+  opacity: 0.8 !important;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+.swiper-pagination-bullet-active {
+  background-color: var(--primary) !important;
+}
+
+@media screen and (max-width: 768px) {
+  .swiper.trendingMedias .swiper-slide {
+    width: fit-content !important;
+    height: inherit !important;
+  }
 }
