@@ -1,5 +1,6 @@
 "use client";
 
+import { FreeMode, Mousewheel } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 import { Skeleton } from "~/components/ui/Skeleton";
@@ -19,12 +20,14 @@ export const SwipeableLatestMedias = () => {
       className="latestMedias w-full"
       slidesPerView="auto"
       spaceBetween={24}
-      wrapperClass="min-w-fit"
+      mousewheel={{
+        sensitivity: 0.2,
+      }}
+      freeMode
+      modules={[FreeMode, Mousewheel]}
     >
       {items.map((item, index) => (
-        <SwiperSlide key={index} className="w-fit">
-          {item}
-        </SwiperSlide>
+        <SwiperSlide key={index}>{item}</SwiperSlide>
       ))}
     </Swiper>
   );
