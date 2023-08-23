@@ -1,10 +1,10 @@
-import { Skeleton } from "~/components/ui/Skeleton";
+import { SwipeableTrendingMedias } from "./swiper/SwipeableTrendingMedias";
 
 export const TrendingMedias = () => {
   return (
-    <div className="flex h-auto min-w-[300px] flex-col gap-6">
+    <div className="flex min-w-[300px] flex-col gap-6">
       <p className="text-2xl font-medium">Em alta</p>
-      <Skeleton className="max-w-[350px] grow" />
+      <SwipeableTrendingMedias />
     </div>
   );
 };

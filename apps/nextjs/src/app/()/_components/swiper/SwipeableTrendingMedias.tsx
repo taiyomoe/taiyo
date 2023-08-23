@@ -1,43 +1,57 @@
 "use client";
 
-import { FreeMode, Mousewheel } from "swiper/modules";
+import { FreeMode, Mousewheel, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 import { Skeleton } from "~/components/ui/Skeleton";
 import { api } from "~/utils/api";
 
 import "swiper/css";
+import "swiper/css/pagination";
 
 import Link from "next/link";
 
+import { cn } from "~/utils/cn";
 import { buildCoverUrl } from "~/utils/urlBuilder";
 
-export const SwipeableLatestMedias = () => {
-  const { data: medias } = api.medias.getLatestMedias.useQuery();
+export const SwipeableTrendingMedias = () => {
+  const { data: medias, isFetching } = api.medias.getLatestMedias.useQuery();
+  const sizeClasses = "h-[400px] md:h-[498px] w-full md:w-[350px]";
 
   const renderSwiper = (items: JSX.Element[]) => (
     <Swiper
-      className="latestMedias h-[300px] w-full"
+      direction="horizontal"
       slidesPerView="auto"
+      className={cn(sizeClasses, "trendingMedias")}
       spaceBetween={24}
+      freeMode
+      breakpoints={{
+        // MD and up
+        768: {
+          direction: "vertical",
+          freeMode: false,
+          slidesPerView: 1,
+        },
+      }}
+      pagination={{
+        clickable: true,
+        dynamicBullets: true,
+      }}
       mousewheel={{
         sensitivity: 0.2,
       }}
-      freeMode
-      modules={[FreeMode, Mousewheel]}
+      modules={[Pagination, FreeMode, Mousewheel]}
     >
       {items.map((item, i) => (
-        <SwiperSlide key={i} className="w-fit md:w-auto">
-          {item}
-        </SwiperSlide>
+        <SwiperSlide key={i}>{item}</SwiperSlide>
       ))}
     </Swiper>
   );
 
-  if (!medias)
+  if (isFetching || !medias || medias.length === 0)
     return renderSwiper(
-      Array.from({ length: 10 }, (_, i) => (
-        <Skeleton key={i} className="h-[300px] w-[200px] rounded-lg" />
+      Array.from({ length: 20 }, (_, i) => (
+        <Skeleton key={i} className={cn(sizeClasses, "w-[280px] rounded-xl")} />
       )),
     );
 
@@ -57,7 +71,7 @@ export const SwipeableLatestMedias = () => {
           passHref
         >
           <img
-            className="block h-full rounded-lg object-cover"
+            className="block h-full w-full rounded-xl object-cover"
             src={coverUrl}
             alt="media's cover"
           />
