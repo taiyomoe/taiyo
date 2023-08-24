@@ -82,7 +82,6 @@
 
 .swiper.latestMedias .swiper-slide {
   width: auto !important;
-  height: auto !important;
 }
 
 .swiper.trendingMedias:not(.swiper-initialized) .swiper-slide,
