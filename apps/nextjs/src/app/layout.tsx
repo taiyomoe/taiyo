@@ -36,7 +36,7 @@ export default function Layout(props: { children: React.ReactNode }) {
         <body
           className={cn(
             ["font-sans", fontSans.variable].join(" "),
-            "scrollbar-thin scrollbar-thumb-card scrollbar-track-background h-screen",
+            "h-screen scrollbar-thin scrollbar-track-background scrollbar-thumb-card",
           )}
         >
           <TRPCReactProvider headers={headers()}>
