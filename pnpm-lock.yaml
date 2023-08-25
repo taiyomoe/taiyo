@@ -337,8 +337,8 @@ importers:
         specifier: ^0.6.0
         version: 0.6.0
       drizzle-orm:
-        specifier: ^0.28.2
-        version: 0.28.2(@neondatabase/serverless@0.6.0)
+        specifier: ^0.28.5
+        version: 0.28.5(@neondatabase/serverless@0.6.0)
       tsx:
         specifier: ^3.12.7
         version: 3.12.7
@@ -5774,8 +5774,8 @@ packages:
       - supports-color
     dev: true
 
-  /drizzle-orm@0.28.2(@neondatabase/serverless@0.6.0):
-    resolution: {integrity: sha512-QRyuzvpJr7GE6LpvZ/sg2nAKNg2if1uGGkgFTiXn4auuYId//vVJe6HBsDTktfKfcaDGzIYos+/f+PS5EkBmrg==}
+  /drizzle-orm@0.28.5(@neondatabase/serverless@0.6.0):
+    resolution: {integrity: sha512-6r6Iw4c38NAmW6TiKH3TUpGUQ1YdlEoLJOQptn8XPx3Z63+vFNKfAiANqrIiYZiMjKR9+NYAL219nFrmo1duXA==}
     peerDependencies:
       '@aws-sdk/client-rds-data': '>=3'
       '@cloudflare/workers-types': '>=3'
