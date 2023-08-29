@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "autoprefixer": "^10.4.15",
-    "postcss": "8.4.28",
+    "postcss": "8.4.29",
     "tailwind-scrollbar": "^3.0.5",
     "tailwindcss": "3.3.3",
     "tailwindcss-animate": "^1.0.7"
