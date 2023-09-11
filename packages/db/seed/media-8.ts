@@ -1,8 +1,10 @@
 import type { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 
+import { mediaBanners } from "../schema/mediaBanners";
 import { mediaChapters } from "../schema/mediaChapters";
 import { mediaCovers } from "../schema/mediaCovers";
 import { medias } from "../schema/medias";
+import { mediaTitles } from "../schema/mediaTitles";
 import { mediaTrackers } from "../schema/mediaTrackers";
 
 const execute = async (db: PostgresJsDatabase) => {
@@ -21,6 +23,16 @@ const execute = async (db: PostgresJsDatabase) => {
     demography: "SHOUNEN",
     countryOfOrigin: "KOREA",
   });
+
+  await db.insert(mediaTitles).values([
+    {
+      id: "93e4195b-7e40-4e36-8ac1-474b7dc5556f",
+      title: "Solo Leveling",
+      language: "ENGLISH",
+      isAcronym: false,
+      mediaId: "171ed718-cfdc-4e63-b99a-18a0b1d59eb5",
+    },
+  ]);
 
   await db.insert(mediaTrackers).values([
     {
@@ -42,6 +54,11 @@ const execute = async (db: PostgresJsDatabase) => {
 
   await db.insert(mediaCovers).values({
     id: "632b30a0-2f3d-4f78-a0e7-46af89004265",
+    mediaId: "171ed718-cfdc-4e63-b99a-18a0b1d59eb5",
+  });
+
+  await db.insert(mediaBanners).values({
+    id: "33d3b596-08a0-4c94-802c-c087bafe7886",
     mediaId: "171ed718-cfdc-4e63-b99a-18a0b1d59eb5",
   });
 

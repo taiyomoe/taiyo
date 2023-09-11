@@ -3,6 +3,7 @@ import type { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 import { mediaChapters } from "../schema/mediaChapters";
 import { mediaCovers } from "../schema/mediaCovers";
 import { medias } from "../schema/medias";
+import { mediaTitles } from "../schema/mediaTitles";
 import { mediaTrackers } from "../schema/mediaTrackers";
 
 const execute = async (db: PostgresJsDatabase) => {
@@ -19,6 +20,16 @@ const execute = async (db: PostgresJsDatabase) => {
     demography: "SHOUNEN",
     countryOfOrigin: "CHINA",
   });
+
+  await db.insert(mediaTitles).values([
+    {
+      id: "6b04f194-c563-4558-8b25-7a7403631df1",
+      title: "Martial Peak",
+      language: "ENGLISH",
+      isAcronym: false,
+      mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
+    },
+  ]);
 
   await db.insert(mediaTrackers).values([
     {
