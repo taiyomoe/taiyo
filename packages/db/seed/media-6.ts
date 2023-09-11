@@ -3,6 +3,7 @@ import type { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 import { mediaChapters } from "../schema/mediaChapters";
 import { mediaCovers } from "../schema/mediaCovers";
 import { medias } from "../schema/medias";
+import { mediaTitles } from "../schema/mediaTitles";
 import { mediaTrackers } from "../schema/mediaTrackers";
 
 const execute = async (db: PostgresJsDatabase) => {
@@ -19,6 +20,16 @@ const execute = async (db: PostgresJsDatabase) => {
     demography: "SHOUNEN",
     countryOfOrigin: "JAPAN",
   });
+
+  await db.insert(mediaTitles).values([
+    {
+      id: "b26dd673-fa93-41ff-bfd5-c78da7967a09",
+      title: "Record of Ragnarok",
+      language: "ENGLISH",
+      isAcronym: false,
+      mediaId: "22f9e6a3-c625-4b33-8526-20773d831fd8",
+    },
+  ]);
 
   await db.insert(mediaTrackers).values([
     {

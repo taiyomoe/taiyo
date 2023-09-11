@@ -3,6 +3,7 @@ import type { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 import { mediaChapters } from "../schema/mediaChapters";
 import { mediaCovers } from "../schema/mediaCovers";
 import { medias } from "../schema/medias";
+import { mediaTitles } from "../schema/mediaTitles";
 import { mediaTrackers } from "../schema/mediaTrackers";
 
 const execute = async (db: PostgresJsDatabase) => {
@@ -20,6 +21,16 @@ const execute = async (db: PostgresJsDatabase) => {
     demography: "SHOUNEN",
     countryOfOrigin: "JAPAN",
   });
+
+  await db.insert(mediaTitles).values([
+    {
+      id: "66b6e5cb-098e-4993-bbed-d84c61b08fc8",
+      title: "One Piece",
+      language: "ROMAJI",
+      isAcronym: false,
+      mediaId: "65ad0a5c-4861-4b59-b93e-90963590958e",
+    },
+  ]);
 
   await db.insert(mediaTrackers).values([
     {

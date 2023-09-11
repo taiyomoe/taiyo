@@ -3,6 +3,7 @@ import type { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 import { mediaChapters } from "../schema/mediaChapters";
 import { mediaCovers } from "../schema/mediaCovers";
 import { medias } from "../schema/medias";
+import { mediaTitles } from "../schema/mediaTitles";
 import { mediaTrackers } from "../schema/mediaTrackers";
 
 const execute = async (db: PostgresJsDatabase) => {
@@ -19,6 +20,16 @@ const execute = async (db: PostgresJsDatabase) => {
     demography: "SHOUNEN",
     countryOfOrigin: "USA",
   });
+
+  await db.insert(mediaTitles).values([
+    {
+      id: "02409e2c-6b14-49f8-afa1-ab5cb8bfd75b",
+      title: "The Beginning After The End",
+      language: "ENGLISH",
+      isAcronym: false,
+      mediaId: "f0bc42eb-b2f7-4017-89f8-77c1834834b1",
+    },
+  ]);
 
   await db.insert(mediaTrackers).values([
     {
