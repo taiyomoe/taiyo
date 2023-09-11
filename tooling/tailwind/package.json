@@ -16,18 +16,18 @@
   },
   "dependencies": {
     "autoprefixer": "^10.4.15",
-    "postcss": "8.4.28",
+    "postcss": "8.4.29",
     "tailwind-scrollbar": "^3.0.5",
     "tailwindcss": "3.3.3",
-    "tailwindcss-animate": "^1.0.6"
+    "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
     "@taiyo/eslint-config": "^0.2.0",
     "@taiyo/prettier-config": "^0.1.0",
     "@taiyo/tsconfig": "^0.1.0",
-    "eslint": "^8.47.0",
-    "prettier": "^3.0.2",
-    "typescript": "^5.1.6"
+    "eslint": "^8.49.0",
+    "prettier": "^3.0.3",
+    "typescript": "^5.2.2"
   },
   "eslintConfig": {
     "root": true,
