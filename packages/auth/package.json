@@ -12,7 +12,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@auth/core": "^0.12.0",
+    "@auth/core": "^0.14.0",
     "@auth/drizzle-adapter": "^0.3.2",
     "@t3-oss/env-nextjs": "^0.6.1",
     "@taiyo/db": "^0.1.0",
@@ -26,9 +26,9 @@
     "@taiyo/eslint-config": "^0.2.0",
     "@taiyo/prettier-config": "^0.1.0",
     "@taiyo/tsconfig": "^0.1.0",
-    "eslint": "^8.47.0",
-    "prettier": "^3.0.2",
-    "typescript": "^5.1.6"
+    "eslint": "^8.49.0",
+    "prettier": "^3.0.3",
+    "typescript": "^5.2.2"
   },
   "eslintConfig": {
     "root": true,
