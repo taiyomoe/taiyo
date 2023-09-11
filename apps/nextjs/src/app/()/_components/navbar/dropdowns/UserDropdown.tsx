@@ -11,12 +11,13 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/DropdownMenu";
 
-type Props = { session: Session };
+type Props = { session: Session; children: JSX.Element };
 
-export const UserDropdown = ({ session }: Props) => {
+export const UserDropdown = ({ session, children }: Props) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -28,15 +29,25 @@ export const UserDropdown = ({ session }: Props) => {
           alt="user's profile picture"
         />
       </DropdownMenuTrigger>
-      <DropdownMenuContent>
+      <DropdownMenuContent align="end" alignOffset={-16}>
         <DropdownMenuGroup>
           <DropdownMenuItem>
-            <User size={16} />
-            <Link href={"/profile/" + session.user.id}>Perfil</Link>
+            <Link href={"/profile/" + session.user.id} className="flex gap-2">
+              <User size={20} />
+              <p className="text-md font-medium">Perfil</p>
+            </Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
-            <SettingsIcon size={16} />
-            <Link href="/settings">Parâmetros</Link>
+            <Link href="/settings" className="flex gap-2">
+              <SettingsIcon size={20} />
+              <p className="text-md font-medium">Parâmetros</p>
+            </Link>
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
+        <DropdownMenuSeparator className="my-2" />
+        <DropdownMenuGroup>
+          <DropdownMenuItem className="hover:bg-destructive-foreground">
+            {children}
           </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>
