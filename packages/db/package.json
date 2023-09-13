@@ -18,7 +18,7 @@
   "dependencies": {
     "@neondatabase/serverless": "^0.6.0",
     "drizzle-orm": "^0.28.6",
-    "tsx": "^3.12.9"
+    "tsx": "^3.12.10"
   },
   "devDependencies": {
     "@taiyo/eslint-config": "^0.2.0",
