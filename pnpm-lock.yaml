@@ -340,8 +340,8 @@ importers:
         specifier: ^0.28.6
         version: 0.28.6(@neondatabase/serverless@0.6.0)
       tsx:
-        specifier: ^3.12.9
-        version: 3.12.9
+        specifier: ^3.12.10
+        version: 3.12.10
     devDependencies:
       '@taiyo/eslint-config':
         specifier: ^0.2.0
@@ -2085,32 +2085,24 @@ packages:
     resolution: {integrity: sha512-BDXFbYOJzT/NBEtp71cvsrGPwGAMGRB/349rwKuoxNSiKjPraNNnlK6MIIabViCjqZugu6j+xeMDlEkWdHHJSg==}
     dependencies:
       '@esbuild-kit/core-utils': 3.3.0
-      get-tsconfig: 4.6.2
+      get-tsconfig: 4.7.0
     dev: false
-
-  /@esbuild-kit/core-utils@3.2.2:
-    resolution: {integrity: sha512-Ub6LaRaAgF80dTSzUdXpFLM1pVDdmEVB9qb5iAzSpyDlX/mfJTFGOnZ516O05p5uWWteNviMKi4PAyEuRxI5gA==}
-    dependencies:
-      esbuild: 0.18.20
-      source-map-support: 0.5.21
-    dev: true
 
   /@esbuild-kit/core-utils@3.3.0:
     resolution: {integrity: sha512-jTtSvVpr5ygNXyPXf9IBbCrKQ0uckq6vWkcGfy1fEr9KjkKdnFn4kFAGjpqZDZim1wsTwh/Be+lhAUemEmxEYA==}
     dependencies:
       esbuild: 0.18.20
       source-map-support: 0.5.21
-    dev: false
 
   /@esbuild-kit/esm-loader@2.5.5:
     resolution: {integrity: sha512-Qwfvj/qoPbClxCRNuac1Du01r9gvNOT+pMYtJDapfB1eoGN1YlJ1BixLyL9WVENRx5RXgNLdfYdx/CuswlGhMw==}
     dependencies:
-      '@esbuild-kit/core-utils': 3.2.2
-      get-tsconfig: 4.6.2
+      '@esbuild-kit/core-utils': 3.3.0
+      get-tsconfig: 4.7.0
     dev: true
 
-  /@esbuild-kit/esm-loader@2.6.1:
-    resolution: {integrity: sha512-NJT43EF+rJ/KCU/9VlBWS9HByN1FvbWdNmtNxdZNLYcxwxF+MASIjRsH9/f6FRa3Eml+Fr8TNujB6uzNTAPZfQ==}
+  /@esbuild-kit/esm-loader@2.6.3:
+    resolution: {integrity: sha512-lUziJdacVDQrg65DwQ+OOQR9B1LQE2/pY77H+oVT0KQDLtsT2XfbHz7O+f0zUvexSWPKxMXa8h4RXT5PFAlv/g==}
     dependencies:
       '@esbuild-kit/core-utils': 3.3.0
       get-tsconfig: 4.7.0
@@ -7033,16 +7025,10 @@ packages:
       get-intrinsic: 1.2.1
     dev: false
 
-  /get-tsconfig@4.6.2:
-    resolution: {integrity: sha512-E5XrT4CbbXcXWy+1jChlZmrmCwd5KGx502kDCXJJ7y898TtWW9FwoG5HfOLVRKmlmDGkWN2HM9Ho+/Y8F0sJDg==}
-    dependencies:
-      resolve-pkg-maps: 1.0.0
-
   /get-tsconfig@4.7.0:
     resolution: {integrity: sha512-pmjiZ7xtB8URYm74PlGJozDNyhvsVLUcpBa8DZBG3bWHwaHa9bPiRpiSfovw+fjhwONSCWKRyk+JQHEGZmMrzw==}
     dependencies:
       resolve-pkg-maps: 1.0.0
-    dev: false
 
   /getenv@1.0.0:
     resolution: {integrity: sha512-7yetJWqbS9sbn0vIfliPsFgoXMKn/YMF+Wuiog97x+urnSRRRZ7xB+uVkwGKzRgq9CDFfMQnE9ruL5DHv9c6Xg==}
@@ -11126,13 +11112,13 @@ packages:
     resolution: {integrity: sha512-336iVw3rtn2BUK7ORdIAHTyxHGRIHVReokCR3XjbckJMK7ms8FysBfhLR8IXnAgy7T0PTPNBWKiH514FOW/WSg==}
     dev: false
 
-  /tsx@3.12.9:
-    resolution: {integrity: sha512-N9Cpuiy55IcemQ2kouH1ZqDvjUa31mkhIYmnJKnvDp0sLQrK9MUrRuN/XzW70iTk5a2kX2A63wLYWORwa34vug==}
+  /tsx@3.12.10:
+    resolution: {integrity: sha512-2+46h4xvUt1aLDNvk5YBT8Uzw+b7BolGbn7iSMucYqCXZiDc+1IMghLVdw8kKjING32JFOeO+Am9posvjkeclA==}
     hasBin: true
     dependencies:
       '@esbuild-kit/cjs-loader': 2.4.2
       '@esbuild-kit/core-utils': 3.3.0
-      '@esbuild-kit/esm-loader': 2.6.1
+      '@esbuild-kit/esm-loader': 2.6.3
     optionalDependencies:
       fsevents: 2.3.2
     dev: false
