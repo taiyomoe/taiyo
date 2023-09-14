@@ -22,6 +22,7 @@
   "dependencies": {
     "@manypkg/cli": "^0.21.0",
     "@taiyo/prettier-config": "^0.1.0",
+    "@turbo/gen": "^1.10.12",
     "prettier": "^3.0.3",
     "turbo": "^1.10.13",
     "typescript": "^5.2.2"
