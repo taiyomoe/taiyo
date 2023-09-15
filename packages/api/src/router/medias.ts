@@ -1,3 +1,7 @@
+import { z } from "zod";
+
+import type { MediaWithRelations } from "@taiyo/db/schema/medias";
+
 import { createTRPCRouter, publicProcedure } from "../trpc";
 
 export const mediasRouter = createTRPCRouter({
@@ -12,4 +16,22 @@ export const mediasRouter = createTRPCRouter({
 
     return result;
   }),
+  getMediaById: publicProcedure
+    .input(z.string())
+    .query(async ({ ctx, input: mediaId }) => {
+      const result = await ctx.db.query.medias.findFirst({
+        where: (m, { eq }) => eq(m.id, mediaId),
+        with: {
+          covers: {
+            limit: 1,
+          },
+          banners: {
+            limit: 1,
+          },
+          titles: true,
+        },
+      });
+
+      return result as MediaWithRelations;
+    }),
 });

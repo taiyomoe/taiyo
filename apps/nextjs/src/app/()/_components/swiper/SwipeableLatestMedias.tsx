@@ -10,7 +10,7 @@ import "swiper/css";
 
 import Link from "next/link";
 
-import { buildCoverUrl } from "~/utils/urlBuilder";
+import { MediaUtils } from "~/utils/MediaUtils";
 
 export const SwipeableLatestMedias = () => {
   const { data: medias } = api.medias.getLatestMedias.useQuery();
@@ -43,11 +43,9 @@ export const SwipeableLatestMedias = () => {
 
   return renderSwiper(
     medias.map((media, i) => {
-      const coverId = media.covers.at(0)?.id;
+      const coverUrl = MediaUtils.getCoverUrl(media);
 
-      if (!coverId) return <></>;
-
-      const coverUrl = buildCoverUrl(media.id, coverId);
+      if (!coverUrl) return <></>;
 
       return (
         <Link
