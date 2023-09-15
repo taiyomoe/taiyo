@@ -12,7 +12,7 @@ import "swiper/css/pagination";
 import Link from "next/link";
 
 import { cn } from "~/utils/cn";
-import { buildCoverUrl } from "~/utils/urlBuilder";
+import { MediaUtils } from "~/utils/MediaUtils";
 
 export const SwipeableTrendingMedias = () => {
   const { data: medias, isFetching } = api.medias.getLatestMedias.useQuery();
@@ -57,11 +57,9 @@ export const SwipeableTrendingMedias = () => {
 
   return renderSwiper(
     medias.map((media, i) => {
-      const coverId = media.covers.at(0)?.id;
+      const coverUrl = MediaUtils.getCoverUrl(media);
 
-      if (!coverId) return <></>;
-
-      const coverUrl = buildCoverUrl(media.id, coverId);
+      if (!coverUrl) return <></>;
 
       return (
         <Link

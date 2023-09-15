@@ -1,3 +1,4 @@
+import type { InferSelectModel } from "drizzle-orm";
 import { relations } from "drizzle-orm";
 import { integer, pgTable, timestamp, uuid } from "drizzle-orm/pg-core";
 
@@ -22,3 +23,6 @@ export const mediaCoversRelations = relations(mediaCovers, ({ one }) => ({
     references: [medias.id],
   }),
 }));
+
+export type MediaCover = InferSelectModel<typeof mediaCovers>;
+export type MediaCovers = MediaCover[];
