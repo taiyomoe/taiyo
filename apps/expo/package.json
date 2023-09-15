@@ -16,11 +16,11 @@
   },
   "dependencies": {
     "@expo/metro-config": "^0.10.7",
-    "@shopify/flash-list": "1.6.0",
+    "@shopify/flash-list": "1.6.1",
     "@tanstack/react-query": "^4.35.3",
-    "@trpc/client": "^10.38.2",
-    "@trpc/react-query": "^10.38.2",
-    "@trpc/server": "^10.38.2",
+    "@trpc/client": "^10.38.3",
+    "@trpc/react-query": "^10.38.3",
+    "@trpc/server": "^10.38.3",
     "expo": "^49.0.10",
     "expo-constants": "~15.0.0",
     "expo-linking": "~6.0.0",
@@ -37,7 +37,7 @@
     "superjson": "1.13.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.22.17",
+    "@babel/core": "^7.22.19",
     "@babel/preset-env": "^7.22.15",
     "@babel/runtime": "^7.22.15",
     "@expo/config-plugins": "^7.2.5",
