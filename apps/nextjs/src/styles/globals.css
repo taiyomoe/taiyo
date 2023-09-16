@@ -99,6 +99,7 @@
   background-color: var(--primary) !important;
 }
 
+/* BEFORE MD */
 @media screen and (max-width: 768px) {
   .swiper.trendingMedias .swiper-slide {
     width: fit-content !important;
