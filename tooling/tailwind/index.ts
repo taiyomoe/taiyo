@@ -71,6 +71,11 @@ export default {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
+      gridTemplateColumns: {
+        lgMediaLayout: "350px auto",
+        xlMediaLayout: "420px auto",
+        "2xlMediaLayout": "550px auto",
+      },
     },
   },
   plugins: [require("tailwindcss-animate"), require("tailwind-scrollbar")],
