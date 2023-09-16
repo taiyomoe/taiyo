@@ -8,8 +8,9 @@ type Props = { company: "taiyo" | "google" | "discord" } & Omit<
 
 export const CompanyLogo = ({
   company,
-  width = 150,
-  height = 150,
+  width,
+  height,
+  style,
   ...props
 }: Props) => {
   const getSource = (company: Props["company"]) => {
@@ -24,13 +25,17 @@ export const CompanyLogo = ({
   };
 
   return (
-    <div className="flex items-center justify-center" style={{ width, height }}>
+    <div className="flex items-center justify-center">
       <Image
         src={getSource(company)}
+        width={width ?? 0} // Set width explicitly
+        height={height ?? 0} // Set height explicitly
+        style={{
+          width: width ?? "auto",
+          height: height ?? "auto",
+          ...style,
+        }}
         alt="logo"
-        layout="responsive" // Set layout to responsive
-        width={width} // Set width explicitly
-        height={height} // Set height explicitly
         {...props}
       />
     </div>

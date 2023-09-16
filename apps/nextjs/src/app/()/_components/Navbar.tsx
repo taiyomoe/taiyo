@@ -9,7 +9,7 @@ export const Navbar = () => {
     <div className="sticky top-0 z-40 flex h-auto w-full flex-col bg-background">
       <nav className="flex h-[60px] items-center justify-between px-6">
         <Link href="/" className="flex items-center gap-2">
-          <CompanyLogo company="taiyo" width={35} height={35} />
+          <CompanyLogo company="taiyo" width={35} priority />
           <p className="text-xl font-semibold">Taiyō</p>
         </Link>
         <NavbarDropdown />
