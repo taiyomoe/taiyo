@@ -1,4 +1,5 @@
 import type {
+  MediaChapters,
   MediaWithBanners,
   MediaWithCovers,
   MediaWithTitles,
@@ -30,8 +31,28 @@ const getMainTitle = (media?: MediaWithTitles) => {
   return firstTitle.title;
 };
 
+const computeVolumes = (chapters: MediaChapters) => {
+  const volumes: Record<string, MediaChapters> = {};
+
+  for (const mediaChapter of chapters) {
+    const volume = mediaChapter.volume ?? "null";
+
+    if (!volumes[volume]) {
+      volumes[volume] = [];
+    }
+
+    volumes[volume]?.push(mediaChapter);
+  }
+
+  return Object.entries(volumes).map(([volume, chapters]) => ({
+    volume,
+    chapters,
+  }));
+};
+
 export const MediaUtils = {
   getCoverUrl,
   getBannerUrl,
   getMainTitle,
+  computeVolumes,
 };

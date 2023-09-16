@@ -1,10 +1,10 @@
 import type { MediaWithRelations } from "@taiyo/db";
 
 import { Tabs, TabsList, TabsTrigger } from "~/components/ui/Tabs";
-import { MediaLayoutChaptersTab } from "./tabs/MediaLayoutChaptersTab";
+import { MediaLayoutChaptersTab } from "./chapters/MediaLayoutChaptersTab";
 
 type Props = {
-  media: MediaWithRelations | undefined;
+  media: MediaWithRelations;
 };
 
 export const MediaLayoutTabs = ({ media }: Props) => {

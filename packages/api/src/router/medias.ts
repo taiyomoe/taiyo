@@ -29,6 +29,7 @@ export const mediasRouter = createTRPCRouter({
             limit: 1,
           },
           titles: true,
+          chapters: true,
         },
       });
 

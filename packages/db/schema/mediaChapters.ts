@@ -10,6 +10,10 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 
+import type {
+  MediaChapterPages,
+  MediaCommentAttachements,
+} from "../types/media.types";
 import { medias } from "./medias";
 import { scans } from "./scans";
 import { users } from "./users";
@@ -77,10 +81,17 @@ export const mediaChapterComments = pgTable(
   }),
 );
 
-export const mediaChaptersRelations = relations(mediaChapters, ({ many }) => ({
-  scans: many(scans),
-  comments: many(mediaChapterComments),
-}));
+export const mediaChaptersRelations = relations(
+  mediaChapters,
+  ({ one, many }) => ({
+    media: one(medias, {
+      fields: [mediaChapters.mediaId],
+      references: [medias.id],
+    }),
+    scans: many(scans),
+    comments: many(mediaChapterComments),
+  }),
+);
 
 export const mediaChapterCommentsRelations = relations(
   mediaChapterComments,
@@ -92,9 +103,3 @@ export const mediaChapterCommentsRelations = relations(
     }),
   }),
 );
-
-export type MediaChapterPage = { id: string };
-export type MediaChapterPages = MediaChapterPage[];
-
-export type MediaCommentAttachement = { id: string; extension: "png" | "gif" };
-export type MediaCommentAttachements = MediaCommentAttachement[];
