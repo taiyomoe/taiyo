@@ -4,17 +4,20 @@ import { FreeMode, Mousewheel } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 import { Skeleton } from "~/components/ui/Skeleton";
-import { api } from "~/utils/api";
 
 import "swiper/css";
 
 import Link from "next/link";
 
+import type { MediasWithCovers } from "@taiyo/db";
+
 import { MediaUtils } from "~/utils/MediaUtils";
 
-export const SwipeableLatestMedias = () => {
-  const { data: medias } = api.medias.getLatestMedias.useQuery();
+type Props = {
+  medias: MediasWithCovers;
+};
 
+export const SwipeableLatestMedias = ({ medias }: Props) => {
   const renderSwiper = (items: JSX.Element[]) => (
     <Swiper
       className="latestMedias h-[300px] w-full"

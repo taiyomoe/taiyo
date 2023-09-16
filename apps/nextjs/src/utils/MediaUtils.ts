@@ -2,7 +2,7 @@ import type {
   MediaWithBanners,
   MediaWithCovers,
   MediaWithTitles,
-} from "@taiyo/db/schema/medias";
+} from "@taiyo/db";
 
 const CDN_DOMAIN = "https://cdn.taiyo.moe";
 

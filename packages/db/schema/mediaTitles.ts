@@ -1,5 +1,4 @@
 import { relations } from "drizzle-orm";
-import type { InferSelectModel } from "drizzle-orm";
 import {
   boolean,
   pgTable,
@@ -42,6 +41,3 @@ export const mediaTitlesRelations = relations(mediaTitles, ({ one }) => ({
     references: [medias.id],
   }),
 }));
-
-export type MediaTitle = InferSelectModel<typeof mediaTitles>;
-export type MediaTitles = MediaTitle[];

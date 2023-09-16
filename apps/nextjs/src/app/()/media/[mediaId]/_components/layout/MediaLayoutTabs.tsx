@@ -1,4 +1,4 @@
-import type { MediaWithRelations } from "@taiyo/db/schema/medias";
+import type { MediaWithRelations } from "@taiyo/db";
 
 import { Tabs, TabsList, TabsTrigger } from "~/components/ui/Tabs";
 import { MediaLayoutChaptersTab } from "./tabs/MediaLayoutChaptersTab";
