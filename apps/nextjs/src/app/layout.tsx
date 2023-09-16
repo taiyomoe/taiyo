@@ -16,6 +16,7 @@ const fontSans = Inter({
 export const metadata: Metadata = {
   title: "Create T3 Turbo",
   description: "Simple monorepo with shared backend for web & mobile apps",
+  metadataBase: new URL("https://taiyo.moe/"),
   openGraph: {
     title: "Create T3 Turbo",
     description: "Simple monorepo with shared backend for web & mobile apps",
