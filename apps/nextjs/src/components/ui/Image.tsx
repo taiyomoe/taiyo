@@ -1,12 +1,14 @@
+"use client";
+
 import { useState } from "react";
-import type { ImageProps } from "next/image";
+import type { ImageProps as NextImageProps } from "next/image";
 import NextImage from "next/image";
 
 import type { SkeletonProps } from "./Skeleton";
 import { Skeleton } from "./Skeleton";
 
-type Props = Omit<ImageProps, "src"> & {
-  src: ImageProps["src"] | null | undefined;
+type Props = Omit<NextImageProps, "src"> & {
+  src: NextImageProps["src"] | null | undefined;
   skeletonProps?: SkeletonProps;
   classes?: { container?: string };
 };
