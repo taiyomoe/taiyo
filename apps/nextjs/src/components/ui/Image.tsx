@@ -38,6 +38,7 @@ export const Image = ({
         display: loaded ? "none" : "block",
         ...style,
       }}
+      classes={{ container: classes?.container }}
       {...skeletonProps}
     />
   );
