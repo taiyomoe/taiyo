@@ -9,7 +9,7 @@ import { Skeleton } from "./Skeleton";
 
 type Props = Omit<NextImageProps, "src"> & {
   src: NextImageProps["src"] | null | undefined;
-  skeletonProps?: SkeletonProps;
+  skeletonProps?: Omit<SkeletonProps, "className" | "style">;
   classes?: { container?: string };
 };
 
@@ -32,9 +32,8 @@ export const Image = ({
 
   const renderSkeleton = () => (
     <Skeleton
+      className={props.className}
       style={{
-        width: props.width,
-        height: props.height,
         display: loaded ? "none" : "block",
         ...style,
       }}
