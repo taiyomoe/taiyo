@@ -1,6 +1,4 @@
-"use client";
-
-import { api } from "~/utils/api";
+import { serverApi } from "~/utils/serverApi";
 import { MediaLayout } from "./_components/layout/MediaLayout";
 import { MediaLayoutActions } from "./_components/layout/MediaLayoutActions";
 import { MediaLayoutTabs } from "./_components/layout/MediaLayoutTabs";
@@ -9,8 +7,8 @@ type Props = {
   params: { mediaId: string };
 };
 
-const MediaPage = ({ params: { mediaId } }: Props) => {
-  const { data: media } = api.medias.getMediaById.useQuery(mediaId);
+const MediaPage = async ({ params: { mediaId } }: Props) => {
+  const media = await serverApi.medias.getMediaById(mediaId);
 
   return (
     <MediaLayout media={media}>
