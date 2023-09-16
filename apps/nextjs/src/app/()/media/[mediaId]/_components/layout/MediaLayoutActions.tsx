@@ -4,7 +4,7 @@ import { Skeleton } from "~/components/ui/Skeleton";
 import { MediaUtils } from "~/utils/MediaUtils";
 
 type Props = {
-  media: MediaWithRelations | undefined;
+  media: MediaWithRelations;
 };
 
 export const MediaLayoutActions = ({ media }: Props) => {

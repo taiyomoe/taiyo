@@ -5,7 +5,7 @@ import { Image } from "~/components/ui/Image";
 import { MediaUtils } from "~/utils/MediaUtils";
 
 type Props = {
-  media: MediaWithRelations | undefined;
+  media: MediaWithRelations;
   children: React.ReactNode;
 };
 
