@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import type { MediaWithRelations } from "@taiyo/db/schema/medias";
+import type { MediasWithCovers, MediaWithRelations } from "@taiyo/db";
 
 import { createTRPCRouter, publicProcedure } from "../trpc";
 
@@ -14,7 +14,7 @@ export const mediasRouter = createTRPCRouter({
       orderBy: (m, { desc }) => desc(m.createdAt),
     });
 
-    return result;
+    return result as MediasWithCovers;
   }),
   getMediaById: publicProcedure
     .input(z.string())

@@ -31,4 +31,6 @@ export const schema = {
 
 export * from "drizzle-orm";
 
+export * from "./types/media.types";
+
 export const db = drizzle(neon(process.env.DATABASE_URL!), { schema });

@@ -1,4 +1,4 @@
-import type { MediaWithRelations } from "@taiyo/db/schema/medias";
+import type { MediaWithRelations } from "@taiyo/db";
 
 import { MediaUtils } from "~/utils/MediaUtils";
 import { Image } from "../ui/Image";

@@ -4,18 +4,22 @@ import { FreeMode, Mousewheel, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 import { Skeleton } from "~/components/ui/Skeleton";
-import { api } from "~/utils/api";
 
 import "swiper/css";
 import "swiper/css/pagination";
 
 import Link from "next/link";
 
+import type { MediasWithCovers } from "@taiyo/db";
+
 import { cn } from "~/utils/cn";
 import { MediaUtils } from "~/utils/MediaUtils";
 
-export const SwipeableTrendingMedias = () => {
-  const { data: medias, isFetching } = api.medias.getLatestMedias.useQuery();
+type Props = {
+  medias: MediasWithCovers;
+};
+
+export const SwipeableTrendingMedias = ({ medias }: Props) => {
   const sizeClasses = "h-[400px] md:h-[498px] w-full md:w-[350px]";
 
   const renderSwiper = (items: JSX.Element[]) => (
@@ -48,7 +52,7 @@ export const SwipeableTrendingMedias = () => {
     </Swiper>
   );
 
-  if (isFetching || !medias || medias.length === 0)
+  if (!medias || medias.length === 0)
     return renderSwiper(
       Array.from({ length: 20 }, (_, i) => (
         <Skeleton key={i} className={cn(sizeClasses, "w-[280px] rounded-xl")} />

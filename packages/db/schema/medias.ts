@@ -1,4 +1,3 @@
-import type { InferSelectModel } from "drizzle-orm";
 import { relations } from "drizzle-orm";
 import {
   boolean,
@@ -9,13 +8,10 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 
-import type { MediaBanners } from "./mediaBanners";
 import { mediaBanners } from "./mediaBanners";
 import { mediaChapters } from "./mediaChapters";
-import type { MediaCovers } from "./mediaCovers";
 import { mediaCovers } from "./mediaCovers";
 import { mediaTags } from "./mediaTags";
-import type { MediaTitles } from "./mediaTitles";
 import { mediaTitles } from "./mediaTitles";
 import { mediaTrackers } from "./mediaTrackers";
 
@@ -66,15 +62,3 @@ export const mediasRelations = relations(medias, ({ many }) => ({
   chapters: many(mediaChapters),
   trackers: many(mediaTrackers),
 }));
-
-export type Media = InferSelectModel<typeof medias>;
-export type Medias = Media[];
-export type MediaWithCovers = Media & { covers: MediaCovers };
-export type MediaWithBanners = Media & { banners: MediaBanners };
-export type MediaWithTitles = Media & { titles: MediaTitles };
-
-export type MediaWithRelations = Media & {
-  covers: MediaCovers;
-  banners: MediaBanners;
-  titles: MediaTitles;
-};
