@@ -11,7 +11,7 @@ export const MediaLayoutTabs = ({ media }: Props) => {
   return (
     <div className="bg-emerald-900 bg-opacity-50">
       <Tabs defaultValue="chapters">
-        <div className="h-[48px]">
+        <div className="h-[54px] xl:h-[48px]">
           <TabsList>
             <TabsTrigger value="chapters">Capítulos</TabsTrigger>
             <TabsTrigger value="characters" disabled>

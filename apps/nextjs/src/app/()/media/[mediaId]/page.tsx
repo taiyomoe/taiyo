@@ -13,7 +13,7 @@ const MediaPage = async ({ params: { mediaId } }: Props) => {
   return (
     <MediaLayout media={media}>
       <MediaLayoutActions media={media} />
-      <div className="h-[208px] w-full bg-pink-900 bg-opacity-50 p-3">
+      <div className="h-[234px] w-full bg-pink-900 bg-opacity-50 p-3 xl:h-[208px]">
         <p className="max-h-full overflow-hidden overflow-ellipsis">
           {media?.synopsis}
         </p>

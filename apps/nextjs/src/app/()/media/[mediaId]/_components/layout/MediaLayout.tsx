@@ -18,19 +18,16 @@ export const MediaLayout = ({ media, children }: Props) => {
         src={bannerUrl}
         width={0}
         height={0}
-        style={{ width: "100%", height: "300px", objectFit: "cover" }}
+        className="h-[300px] w-full rounded-none object-cover xl:h-[400px]"
         alt="media's banner"
-        skeletonProps={{
-          className: "rounded-none",
-        }}
         classes={{
           container: "col-span-2 -z-50",
         }}
       />
-      <div className="col-span-2 -mt-36 flex h-fit w-full justify-center bg-amber-900 bg-opacity-50 lg:col-span-1">
+      <div className="col-span-2 -mt-28 flex h-fit w-full justify-center bg-amber-900 bg-opacity-50 lg:col-span-1 xl:-mt-36">
         <DisplayMediaCover media={media} />
       </div>
-      <div className="col-span-2 w-full bg-green-900 bg-opacity-50 lg:col-span-1 lg:-mt-36">
+      <div className="col-span-2 w-full bg-green-900 bg-opacity-50 lg:col-span-1 lg:-mt-28 xl:-mt-36">
         {children}
       </div>
     </main>
