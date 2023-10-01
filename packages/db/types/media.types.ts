@@ -25,6 +25,8 @@ export type MediaWithTitles = Media & { titles: MediaTitles };
 
 export type MediaChapter = InferSelectModel<typeof mediaChapters>;
 export type MediaChapters = MediaChapter[];
+export type MediaChapterGroup = MediaChapters;
+export type MediaChapterGroups = MediaChapters[];
 // export type MediaWithChapters = Media & { chapters: MediaChapters };
 
 export type MediaChapterPage = { id: string };
