@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { headers } from "next/headers";
-import { ServerThemeProvider } from "@wits/next-themes";
 
 import "~/styles/globals.css";
 
 import { cn } from "~/utils/cn";
-import { TRPCReactProvider } from "./providers";
+import { Providers } from "./providers";
 
 const fontSans = Inter({
   subsets: ["latin"],
@@ -32,19 +31,15 @@ export const metadata: Metadata = {
 
 export default function Layout(props: { children: React.ReactNode }) {
   return (
-    <ServerThemeProvider attribute="class">
-      <html lang="en">
-        <body
-          className={cn(
-            ["font-sans", fontSans.variable].join(" "),
-            "h-screen scrollbar-thin scrollbar-track-background scrollbar-thumb-card",
-          )}
-        >
-          <TRPCReactProvider headers={headers()}>
-            {props.children}
-          </TRPCReactProvider>
-        </body>
-      </html>
-    </ServerThemeProvider>
+    <html lang="en" suppressHydrationWarning>
+      <body
+        className={cn(
+          ["font-sans", fontSans.variable].join(" "),
+          "scrollbar-thin scrollbar-track-background scrollbar-thumb-card h-screen",
+        )}
+      >
+        <Providers headers={headers()}>{props.children}</Providers>
+      </body>
+    </html>
   );
 }

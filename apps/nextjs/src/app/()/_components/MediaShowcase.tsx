@@ -1,9 +1,7 @@
-import { Skeleton } from "~/components/ui/Skeleton";
+import { Skeleton } from "@nextui-org/skeleton";
 
 export const MediaShowcase = () => {
   return (
-    <div className="w-full">
-      <Skeleton className="h-[200px] w-full md:h-[500px]" />
-    </div>
+    <Skeleton className="h-[200px] rounded-2xl md:h-[300px] lg:h-[500px]" />
   );
 };

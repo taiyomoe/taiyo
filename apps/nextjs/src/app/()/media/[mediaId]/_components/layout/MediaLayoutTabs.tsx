@@ -1,6 +1,9 @@
+"use client";
+
+import { Tab, Tabs } from "@nextui-org/tabs";
+
 import type { MediaWithRelations } from "@taiyo/db";
 
-import { Tabs, TabsList, TabsTrigger } from "~/components/ui/Tabs";
 import { MediaLayoutChaptersTab } from "./chapters/MediaLayoutChaptersTab";
 
 type Props = {
@@ -9,20 +12,13 @@ type Props = {
 
 export const MediaLayoutTabs = ({ media }: Props) => {
   return (
-    <div className="bg-emerald-900 bg-opacity-50">
-      <Tabs defaultValue="chapters">
-        <div className="h-[54px] xl:h-[48px]">
-          <TabsList>
-            <TabsTrigger value="chapters">Capítulos</TabsTrigger>
-            <TabsTrigger value="characters" disabled>
-              Personagens
-            </TabsTrigger>
-            <TabsTrigger value="relations" disabled>
-              Relações
-            </TabsTrigger>
-          </TabsList>
-        </div>
-        <MediaLayoutChaptersTab media={media} />
+    <div className="bg-green-900 bg-opacity-50 px-3">
+      <Tabs defaultSelectedKey="chapters" className="h-[54px] py-2 xl:h-[48px]">
+        <Tab key="chapters" title="Capítulos">
+          <MediaLayoutChaptersTab media={media} />
+        </Tab>
+        <Tab key="characters" title="Personagens" disabled />
+        <Tab key="relations" title="Relações" disabled />
       </Tabs>
     </div>
   );

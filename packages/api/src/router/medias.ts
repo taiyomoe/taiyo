@@ -1,12 +1,13 @@
 import { z } from "zod";
 
+import { db } from "@taiyo/db";
 import type { MediasWithCovers, MediaWithRelations } from "@taiyo/db";
 
 import { createTRPCRouter, publicProcedure } from "../trpc";
 
 export const mediasRouter = createTRPCRouter({
-  getLatestMedias: publicProcedure.query(async ({ ctx }) => {
-    const result = await ctx.db.query.medias.findMany({
+  getLatestMedias: publicProcedure.query(async () => {
+    const result = await db.query.medias.findMany({
       with: {
         covers: true,
       },
@@ -18,8 +19,8 @@ export const mediasRouter = createTRPCRouter({
   }),
   getMediaById: publicProcedure
     .input(z.string())
-    .query(async ({ ctx, input: mediaId }) => {
-      const result = await ctx.db.query.medias.findFirst({
+    .query(async ({ input: mediaId }) => {
+      const result = await db.query.medias.findFirst({
         where: (m, { eq }) => eq(m.id, mediaId),
         with: {
           covers: {

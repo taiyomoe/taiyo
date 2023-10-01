@@ -7,20 +7,22 @@ import type {
 
 const CDN_DOMAIN = "https://cdn.taiyo.moe";
 
-const getCoverUrl = (media?: MediaWithCovers) => {
-  const firstCover = media?.covers.at(0);
+const getCoverUrl = (media: MediaWithCovers) => {
+  const firstCover = media.covers.at(0);
 
-  if (!firstCover || !media) return null;
-
-  return `${CDN_DOMAIN}/${media.id}/covers/${firstCover.id}.jpg`;
+  return `${CDN_DOMAIN}/${media.id}/covers/${firstCover?.id}.jpg`;
 };
 
-const getBannerUrl = (media?: MediaWithBanners) => {
-  const firstBanner = media?.banners.at(0);
+const getBannerOrCoverUrl = (media: MediaWithBanners | MediaWithCovers) => {
+  const firstBanner = "banners" in media ? media.banners.at(0) : null;
 
-  if (!firstBanner || !media) return null;
+  if (!firstBanner && "covers" in media) return getCoverUrl(media);
 
-  return `${CDN_DOMAIN}/${media.id}/banners/${firstBanner.id}.jpg`;
+  return `${CDN_DOMAIN}/${media.id}/banners/${firstBanner?.id}.jpg`;
+};
+
+const hasBanners = (media: MediaWithBanners) => {
+  return media.banners.length > 0;
 };
 
 const getMainTitle = (media?: MediaWithTitles) => {
@@ -52,7 +54,8 @@ const computeVolumes = (chapters: MediaChapters) => {
 
 export const MediaUtils = {
   getCoverUrl,
-  getBannerUrl,
+  getBannerOrCoverUrl,
+  hasBanners,
   getMainTitle,
   computeVolumes,
 };

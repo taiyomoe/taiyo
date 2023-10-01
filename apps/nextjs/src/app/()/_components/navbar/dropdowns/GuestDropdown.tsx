@@ -1,6 +1,6 @@
 "use client";
 
-import { Skeleton } from "~/components/ui/Skeleton";
+import { Skeleton } from "@nextui-org/skeleton";
 
 export const runtime = "edge";
 

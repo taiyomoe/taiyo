@@ -1,8 +1,11 @@
+"use client";
+
+import { Accordion, AccordionItem } from "@nextui-org/react";
+
 import type { MediaWithRelations } from "@taiyo/db";
 
-import { TabsContent } from "~/components/ui/Tabs";
 import { MediaUtils } from "~/utils/MediaUtils";
-import { DisplayMediaChapterVolume } from "./DisplayMediaChapterVolume";
+import { MediaChapterCard } from "./MediaChapterCard";
 
 type Props = {
   media: MediaWithRelations;
@@ -12,14 +15,17 @@ export const MediaLayoutChaptersTab = ({ media }: Props) => {
   const computedVolumes = MediaUtils.computeVolumes(media.chapters);
 
   return (
-    <TabsContent value="chapters">
+    <Accordion
+      selectionMode="multiple"
+      defaultExpandedKeys={computedVolumes.map(({ volume }) => volume)}
+    >
       {computedVolumes.map(({ volume, chapters }) => (
-        <DisplayMediaChapterVolume
-          key={volume}
-          volume={volume}
-          chapters={chapters}
-        />
+        <AccordionItem key={volume} title={`Volume ${volume}`}>
+          {chapters.map((chapter) => (
+            <MediaChapterCard key={chapter.id} chapter={chapter} />
+          ))}
+        </AccordionItem>
       ))}
-    </TabsContent>
+    </Accordion>
   );
 };
