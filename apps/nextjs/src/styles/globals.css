@@ -7,71 +7,28 @@
     --background: #f0f0f5;
     --foreground: 0 0% 3.9%;
 
-    --card: #fff;
-    --card-foreground: 0 0% 3.9%;
-
-    --popover: #fff;
-    --popover-foreground: 0 0% 3.9%;
+    --content1: #fff;
+    --content1-foreground: 0 0% 3.9%;
 
     --primary: #ff4f4f;
     --primary-foreground: 0 0% 98%;
 
     --secondary: #383842;
     --secondary-foreground: 0 0% 9%;
-
-    --muted: #383842;
-    --muted-foreground: 0 0% 45.1%;
-
-    --accent: #383842;
-    --accent-foreground: 0 0% 9%;
-
-    --destructive: #f31260; /* NextUI -- danger-500 */
-    --destructive-foreground: #920b3a; /* NextUI -- danger-700 */
-
-    --border: 0 0% 89.8%;
-    --input: #383842;
-    --ring: #ff4f4f;
-
-    --radius: 0.5rem;
   }
 
   .dark {
     --background: #16161a;
     --foreground: 0 0% 98%;
 
-    --card: #26262d;
-    --card-foreground: 0 0% 98%;
-
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 0 0% 98%;
+    --content1: #26262d;
+    --content1-foreground: 0 0% 98%;
 
     --primary: #ff4f4f;
     --primary-foreground: 0 0% 9%;
 
     --secondary: #383842;
     --secondary-foreground: 0 0% 98%;
-
-    --muted: #383842;
-    --muted-foreground: 0 0% 63.9%;
-
-    --accent: #383842;
-    --accent-foreground: 0 0% 98%;
-
-    --destructive: #f31260; /* NextUI -- danger-500 */
-    --destructive-foreground: #920b3a; /* NextUI -- danger-700 */
-
-    --border: 0 0% 21%;
-    --input: #383842;
-    --ring: #ff4f4f;
-  }
-}
-
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
   }
 }
 
@@ -105,4 +62,8 @@
     width: fit-content !important;
     height: inherit !important;
   }
+}
+
+.remove-maxWidth {
+  max-width: 100% !important;
 }

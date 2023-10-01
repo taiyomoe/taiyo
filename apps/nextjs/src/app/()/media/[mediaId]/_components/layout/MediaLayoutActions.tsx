@@ -1,6 +1,9 @@
+"use client";
+
+import { Skeleton } from "@nextui-org/skeleton";
+
 import type { MediaWithRelations } from "@taiyo/db";
 
-import { Skeleton } from "~/components/ui/Skeleton";
 import { MediaUtils } from "~/utils/MediaUtils";
 
 type Props = {
@@ -11,13 +14,14 @@ export const MediaLayoutActions = ({ media }: Props) => {
   const mainTitle = MediaUtils.getMainTitle(media);
 
   return (
-    <div className="grid h-28 grid-rows-2 bg-blue-900 bg-opacity-50 p-3 xl:h-36">
-      <p className="line-clamp-1 h-fit text-3xl font-bold">{mainTitle}</p>
-      <div className="grid w-full grid-cols-4 items-end gap-4 bg-yellow-900 bg-opacity-50">
-        <Skeleton className="col-span-3 h-[40px] hover:cursor-not-allowed xl:h-[50px]" />
-        <Skeleton className="col-span-1 h-[40px] hover:cursor-not-allowed xl:h-[50px]" />
-        <Skeleton className="col-span-2 h-[40px] hover:cursor-not-allowed xl:h-[50px]" />
-        <Skeleton className="col-span-1 h-[40px] hover:cursor-not-allowed xl:h-[50px]" />
+    <div className="grid h-28 grid-rows-2 p-3 xl:h-36">
+      <p className="line-clamp-1 h-fit w-fit text-3xl font-bold drop-shadow-lg">
+        {mainTitle}
+      </p>
+      <div className="flex w-full gap-4">
+        <Skeleton className="h-full w-1/4 rounded hover:cursor-not-allowed" />
+        <Skeleton className="h-full w-2/4 rounded hover:cursor-not-allowed" />
+        <Skeleton className="h-full w-full rounded hover:cursor-not-allowed" />
       </div>
     </div>
   );

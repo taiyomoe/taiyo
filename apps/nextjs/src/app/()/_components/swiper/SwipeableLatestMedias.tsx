@@ -3,11 +3,10 @@
 import { FreeMode, Mousewheel } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
-import { Skeleton } from "~/components/ui/Skeleton";
-
 import "swiper/css";
 
 import Link from "next/link";
+import { Skeleton } from "@nextui-org/skeleton";
 
 import type { MediasWithCovers } from "@taiyo/db";
 

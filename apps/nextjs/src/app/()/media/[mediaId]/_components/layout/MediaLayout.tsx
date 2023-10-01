@@ -1,7 +1,10 @@
+import NextImage from "next/image";
+import { Image } from "@nextui-org/image";
+
 import type { MediaWithRelations } from "@taiyo/db";
 
 import { DisplayMediaCover } from "~/components/media/DisplayMediaCover";
-import { Image } from "~/components/ui/Image";
+import { cn } from "~/utils/cn";
 import { MediaUtils } from "~/utils/MediaUtils";
 
 type Props = {
@@ -10,24 +13,30 @@ type Props = {
 };
 
 export const MediaLayout = ({ media, children }: Props) => {
-  const bannerUrl = MediaUtils.getBannerUrl(media);
+  const bannerUrl = MediaUtils.getBannerOrCoverUrl(media);
+  const hasBanners = MediaUtils.hasBanners(media);
 
   return (
-    <main className="lg:grid-cols-lgMediaLayout xl:grid-cols-xlMediaLayout 2xl:grid-cols-2xlMediaLayout grid h-full grid-cols-2">
+    <main className="grid h-full grid-cols-2 lg:grid-cols-lgMediaLayout xl:grid-cols-xlMediaLayout 2xl:grid-cols-2xlMediaLayout">
       <Image
+        as={NextImage}
         src={bannerUrl}
-        width={0}
-        height={0}
-        className="h-[300px] w-full rounded-none object-cover xl:h-[400px]"
-        alt="media's banner"
-        classes={{
-          container: "col-span-2 -z-50",
+        classNames={{
+          wrapper:
+            "remove-maxWidth col-span-2 w-full max-w-full -z-10 after:shadow-[0_-64px_48px_16px_inset_var(--background)]",
+          img: cn("object-cover h-[300px] xl:h-[400px] w-full rounded-none", {
+            "blur-md": !hasBanners,
+          }),
         }}
+        sizes="1"
+        height={0}
+        width={0}
+        alt="media's banner"
       />
-      <div className="col-span-2 -mt-28 flex h-fit w-full justify-center bg-amber-900 bg-opacity-50 lg:col-span-1 xl:-mt-36">
+      <div className="col-span-2 -mt-28 flex h-fit w-full justify-center lg:col-span-1 xl:-mt-36">
         <DisplayMediaCover media={media} />
       </div>
-      <div className="col-span-2 w-full bg-green-900 bg-opacity-50 lg:col-span-1 lg:-mt-28 xl:-mt-36">
+      <div className="col-span-2 w-full lg:col-span-1 lg:-mt-28 xl:-mt-36">
         {children}
       </div>
     </main>
