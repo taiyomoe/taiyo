@@ -1,4 +1,5 @@
 import type {
+  MediaChapterGroups,
   MediaChapters,
   MediaWithBanners,
   MediaWithCovers,
@@ -46,10 +47,27 @@ const computeVolumes = (chapters: MediaChapters) => {
     volumes[volume]?.push(mediaChapter);
   }
 
-  return Object.entries(volumes).map(([volume, chapters]) => ({
-    volume,
-    chapters,
-  }));
+  return Object.entries(volumes).map(([volume, chapters]) => {
+    const groups: MediaChapterGroups = [];
+    const groupsObject: Record<string, MediaChapters> = {};
+
+    for (const mediaChapter of chapters) {
+      if (!groupsObject[mediaChapter.number]) {
+        groupsObject[mediaChapter.number] = [];
+      }
+
+      groupsObject[mediaChapter.number]?.push(mediaChapter);
+    }
+
+    for (const [_, chapters] of Object.entries(groupsObject)) {
+      groups.push(chapters);
+    }
+
+    return {
+      volume,
+      groups,
+    };
+  });
 };
 
 export const MediaUtils = {

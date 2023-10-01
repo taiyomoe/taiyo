@@ -5,7 +5,7 @@ import { Accordion, AccordionItem } from "@nextui-org/react";
 import type { MediaWithRelations } from "@taiyo/db";
 
 import { MediaUtils } from "~/utils/MediaUtils";
-import { MediaChapterCard } from "./MediaChapterCard";
+import { MediaChapterGroupCard } from "./MediaChapterGroupCard";
 
 type Props = {
   media: MediaWithRelations;
@@ -13,17 +13,39 @@ type Props = {
 
 export const MediaLayoutChaptersTab = ({ media }: Props) => {
   const computedVolumes = MediaUtils.computeVolumes(media.chapters);
+  const chaptersNumbers = media.chapters.map((chapter) => chapter.number);
+
+  const volumeAccordionTitle = (volume: string) => `Volume ${volume}`;
+  const chapterAccordionTitle = (chapter: string) => `Capítulo ${chapter}`;
 
   return (
     <Accordion
       selectionMode="multiple"
       defaultExpandedKeys={computedVolumes.map(({ volume }) => volume)}
+      className="px-0"
     >
-      {computedVolumes.map(({ volume, chapters }) => (
-        <AccordionItem key={volume} title={`Volume ${volume}`}>
-          {chapters.map((chapter) => (
-            <MediaChapterCard key={chapter.id} chapter={chapter} />
-          ))}
+      {computedVolumes.map(({ volume, groups }) => (
+        <AccordionItem key={volume} title={volumeAccordionTitle(volume)}>
+          <Accordion
+            selectionMode="multiple"
+            defaultExpandedKeys={chaptersNumbers}
+            isCompact
+            className="px-0"
+          >
+            {groups.map((group, i) => {
+              const firstChapterNumber = group.at(0)?.number ?? "";
+
+              return (
+                <AccordionItem
+                  key={group.at(0)?.number}
+                  title={chapterAccordionTitle(firstChapterNumber)}
+                  isCompact
+                >
+                  <MediaChapterGroupCard key={i} group={group} />
+                </AccordionItem>
+              );
+            })}
+          </Accordion>
         </AccordionItem>
       ))}
     </Accordion>
