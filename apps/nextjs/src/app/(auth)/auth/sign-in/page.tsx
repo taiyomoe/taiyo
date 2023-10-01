@@ -5,6 +5,8 @@ import { auth } from "@taiyo/auth";
 import { CompanyLogo } from "~/components/ui/CompanyLogo";
 import { AuthCard } from "./_components/AuthCard";
 
+export const runtime = "edge";
+
 export default async function SignInPage() {
   const session = await auth();
 
