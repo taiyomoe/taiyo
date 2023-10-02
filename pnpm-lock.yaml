@@ -87,8 +87,8 @@ importers:
         specifier: ~3.22.1
         version: 3.22.1(react-native@0.72.5)(react@18.2.0)
       superjson:
-        specifier: 1.13.1
-        version: 1.13.1
+        specifier: 1.13.3
+        version: 1.13.3
     devDependencies:
       '@babel/core':
         specifier: ^7.23.0
@@ -199,8 +199,8 @@ importers:
         specifier: 18.2.0
         version: 18.2.0(react@18.2.0)
       superjson:
-        specifier: 1.13.1
-        version: 1.13.1
+        specifier: 1.13.3
+        version: 1.13.3
       swiper:
         specifier: ^10.2.0
         version: 10.2.0
@@ -266,8 +266,8 @@ importers:
         specifier: ^10.38.4
         version: 10.38.4
       superjson:
-        specifier: 1.13.1
-        version: 1.13.1
+        specifier: 1.13.3
+        version: 1.13.3
       zod:
         specifier: ^3.22.2
         version: 3.22.2
@@ -5376,7 +5376,7 @@ packages:
       '@tanstack/react-query': 4.35.3(react-dom@18.2.0)(react-native@0.72.5)(react@18.2.0)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
-      superjson: 1.13.1
+      superjson: 1.13.3
       use-sync-external-store: 1.2.0(react@18.2.0)
     dev: false
 
@@ -12763,8 +12763,8 @@ packages:
     resolution: {integrity: sha512-Mu7R0g4ig9TUuGSxJavny5Rv0egCEtpZRNMrZaYS1vxkiIxGiGUwoezU3LazIQ+KE04hTrTfNPgxU5gzi7F5Pw==}
     dev: false
 
-  /superjson@1.13.1:
-    resolution: {integrity: sha512-AVH2eknm9DEd3qvxM4Sq+LTCkSXE2ssfh1t11MHMXyYXFQyQ1HLgVvV+guLTsaQnJU3gnaVo34TohHPulY/wLg==}
+  /superjson@1.13.3:
+    resolution: {integrity: sha512-mJiVjfd2vokfDxsQPOwJ/PtanO87LhpYY88ubI5dUB1Ab58Txbyje3+jpm+/83R/fevaq/107NNhtYBLuoTrFg==}
     engines: {node: '>=10'}
     dependencies:
       copy-anything: 3.0.4
