@@ -17,7 +17,7 @@ export const MediaLayout = ({ media, children }: Props) => {
   const hasBanners = MediaUtils.hasBanners(media);
 
   return (
-    <main className="grid h-full grid-cols-2 lg:grid-cols-lgMediaLayout xl:grid-cols-xlMediaLayout 2xl:grid-cols-2xlMediaLayout">
+    <main className="lg:grid-cols-lgMediaLayout xl:grid-cols-xlMediaLayout 2xl:grid-cols-2xlMediaLayout grid h-full grid-cols-2">
       <Image
         as={NextImage}
         src={bannerUrl}
