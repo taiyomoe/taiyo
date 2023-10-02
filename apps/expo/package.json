@@ -46,7 +46,7 @@
     "@taiyo/prettier-config": "^0.1.0",
     "@taiyo/tailwind-config": "^0.1.0",
     "@taiyo/tsconfig": "^0.1.0",
-    "@types/babel__core": "^7.20.1",
+    "@types/babel__core": "^7.20.2",
     "@types/react": "^18.2.22",
     "eslint": "^8.49.0",
     "prettier": "^3.0.3",
