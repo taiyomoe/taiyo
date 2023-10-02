@@ -4,7 +4,7 @@ import { Accordion, AccordionItem } from "@nextui-org/react";
 
 import type { MediaWithRelations } from "@taiyo/db";
 
-import { MediaUtils } from "~/utils/MediaUtils";
+import { MediaChapterUtils } from "~/utils/MediaChapterUtils";
 import { MediaChapterGroupCard } from "./MediaChapterGroupCard";
 
 type Props = {
@@ -12,7 +12,7 @@ type Props = {
 };
 
 export const MediaLayoutChaptersTab = ({ media }: Props) => {
-  const computedVolumes = MediaUtils.computeVolumes(media.chapters);
+  const computedVolumes = MediaChapterUtils.computeVolumes(media.chapters);
   const chaptersNumbers = media.chapters.map((chapter) => chapter.number);
 
   const volumeAccordionTitle = (volume: string) => `Volume ${volume}`;

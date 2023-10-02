@@ -12,7 +12,7 @@ type Props = {
 
 export const MediaLayoutTabs = ({ media }: Props) => {
   return (
-    <div className="bg-green-900 bg-opacity-50 px-3">
+    <div className="px-3">
       <Tabs defaultSelectedKey="chapters" className="h-[54px] py-2 xl:h-[48px]">
         <Tab key="chapters" title="Capítulos">
           <MediaLayoutChaptersTab media={media} />
