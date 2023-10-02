@@ -2,6 +2,7 @@ import { z } from "zod";
 
 import { db } from "@taiyo/db";
 import type { MediasWithCovers, MediaWithRelations } from "@taiyo/db";
+import type { MediaChapterWithRelations } from "@taiyo/db/types/mediaChapter.types";
 
 import { createTRPCRouter, publicProcedure } from "../trpc";
 
@@ -35,5 +36,18 @@ export const mediasRouter = createTRPCRouter({
       });
 
       return result as MediaWithRelations;
+    }),
+  getMediaChapterById: publicProcedure
+    .input(z.string())
+    .query(async ({ input: chapterId }) => {
+      const result = await db.query.mediaChapters.findFirst({
+        where: (c, { eq }) => eq(c.id, chapterId),
+        with: {
+          media: true,
+          comments: true,
+        },
+      });
+
+      return result as MediaChapterWithRelations;
     }),
 });

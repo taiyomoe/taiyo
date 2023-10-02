@@ -1,10 +1,10 @@
 import type { InferSelectModel } from "drizzle-orm";
 
 import type { mediaBanners } from "../schema/mediaBanners";
-import type { mediaChapters } from "../schema/mediaChapters";
 import type { mediaCovers } from "../schema/mediaCovers";
 import type { medias } from "../schema/medias";
 import type { mediaTitles } from "../schema/mediaTitles";
+import type { MediaChapters } from "./mediaChapter.types";
 
 export type Media = InferSelectModel<typeof medias>;
 export type Medias = Media[];
@@ -22,12 +22,6 @@ export type MediasWithBanners = MediaWithBanners[];
 export type MediaTitle = InferSelectModel<typeof mediaTitles>;
 export type MediaTitles = MediaTitle[];
 export type MediaWithTitles = Media & { titles: MediaTitles };
-
-export type MediaChapter = InferSelectModel<typeof mediaChapters>;
-export type MediaChapters = MediaChapter[];
-export type MediaChapterGroup = MediaChapters;
-export type MediaChapterGroups = MediaChapters[];
-// export type MediaWithChapters = Media & { chapters: MediaChapters };
 
 export type MediaChapterPage = { id: string };
 export type MediaChapterPages = MediaChapterPage[];

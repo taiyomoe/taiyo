@@ -96,10 +96,14 @@ export const mediaChaptersRelations = relations(
 export const mediaChapterCommentsRelations = relations(
   mediaChapterComments,
   ({ one, many }) => ({
-    replies: many(mediaChapterComments),
+    chapter: one(mediaChapters, {
+      fields: [mediaChapterComments.mediaChapterId],
+      references: [mediaChapters.id],
+    }),
     parentComment: one(mediaChapterComments, {
       fields: [mediaChapterComments.parentCommentId],
       references: [mediaChapterComments.id],
     }),
+    replies: many(mediaChapterComments),
   }),
 );
