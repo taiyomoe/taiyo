@@ -44,7 +44,7 @@
     "@taiyo/prettier-config": "^0.1.0",
     "@taiyo/tailwind-config": "^0.1.0",
     "@taiyo/tsconfig": "^0.1.0",
-    "@types/node": "^18.17.19",
+    "@types/node": "^18.18.1",
     "@types/react": "^18.2.24",
     "@types/react-dom": "^18.2.8",
     "dotenv-cli": "^7.3.0",
