@@ -4,7 +4,7 @@ import type {
   MediaWithTitles,
 } from "@taiyo/db";
 
-const CDN_DOMAIN = "https://cdn.taiyo.moe";
+import { CDN_DOMAIN } from "./constants";
 
 const getCoverUrl = (media: MediaWithCovers) => {
   const firstCover = media.covers.at(0);

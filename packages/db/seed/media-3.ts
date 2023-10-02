@@ -130,6 +130,7 @@ const execute = async (db: PostgresJsDatabase) => {
     },
     {
       id: "4762167e-5290-480d-b1aa-b2c0a1b7632b",
+      title: "Title here",
       number: "1",
       volume: "1",
       language: "PORTUGUESE",

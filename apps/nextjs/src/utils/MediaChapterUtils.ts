@@ -1,21 +1,28 @@
 import type {
   MediaChapter,
   MediaChapterGroups,
+  MediaChapterPage,
   MediaChapters,
 } from "@taiyo/db";
 
-const getTitle = (chapter: MediaChapter) => {
-  return chapter.title ?? "Cap. " + chapter.number;
+import { CDN_DOMAIN } from "./constants";
+
+const getTitle = (mediaChapter: MediaChapter) => {
+  return mediaChapter.title ?? "Cap. " + mediaChapter.number;
 };
 
-const getUrl = (chapter: MediaChapter) => {
-  return `/media/${chapter.mediaId}/chapter/${chapter.id}`;
+const getUrl = (mediaChapter: MediaChapter) => {
+  return `/media/${mediaChapter.mediaId}/chapter/${mediaChapter.id}`;
 };
 
-const computeVolumes = (chapters: MediaChapters) => {
+const getPageUrl = (mediaChapter: MediaChapter, page: MediaChapterPage) => {
+  return `${CDN_DOMAIN}/${mediaChapter.mediaId}/${mediaChapter.id}/${page.id}.jpg`;
+};
+
+const computeVolumes = (mediaChapters: MediaChapters) => {
   const volumes: Record<string, MediaChapters> = {};
 
-  for (const mediaChapter of chapters) {
+  for (const mediaChapter of mediaChapters) {
     const volume = mediaChapter.volume ?? "null";
 
     if (!volumes[volume]) {
@@ -25,11 +32,11 @@ const computeVolumes = (chapters: MediaChapters) => {
     volumes[volume]?.push(mediaChapter);
   }
 
-  return Object.entries(volumes).map(([volume, chapters]) => {
+  return Object.entries(volumes).map(([volume, mediaChapters]) => {
     const groups: MediaChapterGroups = [];
     const groupsObject: Record<string, MediaChapters> = {};
 
-    for (const mediaChapter of chapters) {
+    for (const mediaChapter of mediaChapters) {
       if (!groupsObject[mediaChapter.number]) {
         groupsObject[mediaChapter.number] = [];
       }
@@ -37,8 +44,8 @@ const computeVolumes = (chapters: MediaChapters) => {
       groupsObject[mediaChapter.number]?.push(mediaChapter);
     }
 
-    for (const [_, chapters] of Object.entries(groupsObject)) {
-      groups.push(chapters);
+    for (const [_, chptrs] of Object.entries(groupsObject)) {
+      groups.push(chptrs);
     }
 
     return {
@@ -51,5 +58,6 @@ const computeVolumes = (chapters: MediaChapters) => {
 export const MediaChapterUtils = {
   getTitle,
   getUrl,
+  getPageUrl,
   computeVolumes,
 };
