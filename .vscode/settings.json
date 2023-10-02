@@ -8,7 +8,10 @@
     { "pattern": "packages/*/" },
     { "pattern": "tooling/*/" }
   ],
-  "tailwindCSS.experimental.configFile": "./tooling/tailwind/index.ts",
+  "tailwindCSS.experimental.configFile": {
+    "./apps/nextjs/tailwind.config.ts": "./apps/nextjs/**",
+    "./apps/expo/tailwind.config.ts": "./apps/expo/**"
+  },
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "typescript.tsdk": "node_modules/typescript/lib",
   "typescript.preferences.autoImportFileExcludePatterns": [
