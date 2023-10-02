@@ -37,9 +37,9 @@
     "superjson": "1.13.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.22.19",
-    "@babel/preset-env": "^7.22.15",
-    "@babel/runtime": "^7.22.15",
+    "@babel/core": "^7.23.0",
+    "@babel/preset-env": "^7.22.20",
+    "@babel/runtime": "^7.23.1",
     "@expo/config-plugins": "^7.2.5",
     "@taiyo/api": "^0.1.0",
     "@taiyo/eslint-config": "^0.2.0",
