@@ -1,6 +1,4 @@
 import type {
-  MediaChapterGroups,
-  MediaChapters,
   MediaWithBanners,
   MediaWithCovers,
   MediaWithTitles,
@@ -34,46 +32,9 @@ const getMainTitle = (media?: MediaWithTitles) => {
   return firstTitle.title;
 };
 
-const computeVolumes = (chapters: MediaChapters) => {
-  const volumes: Record<string, MediaChapters> = {};
-
-  for (const mediaChapter of chapters) {
-    const volume = mediaChapter.volume ?? "null";
-
-    if (!volumes[volume]) {
-      volumes[volume] = [];
-    }
-
-    volumes[volume]?.push(mediaChapter);
-  }
-
-  return Object.entries(volumes).map(([volume, chapters]) => {
-    const groups: MediaChapterGroups = [];
-    const groupsObject: Record<string, MediaChapters> = {};
-
-    for (const mediaChapter of chapters) {
-      if (!groupsObject[mediaChapter.number]) {
-        groupsObject[mediaChapter.number] = [];
-      }
-
-      groupsObject[mediaChapter.number]?.push(mediaChapter);
-    }
-
-    for (const [_, chapters] of Object.entries(groupsObject)) {
-      groups.push(chapters);
-    }
-
-    return {
-      volume,
-      groups,
-    };
-  });
-};
-
 export const MediaUtils = {
   getCoverUrl,
   getBannerOrCoverUrl,
   hasBanners,
   getMainTitle,
-  computeVolumes,
 };
