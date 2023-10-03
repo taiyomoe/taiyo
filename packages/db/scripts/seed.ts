@@ -1,19 +1,20 @@
 import { neon } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-http";
 
-import media1 from "./seed/media-1";
-import media2 from "./seed/media-2";
-import media3 from "./seed/media-3";
-import media4 from "./seed/media-4";
-import media5 from "./seed/media-5";
-import media6 from "./seed/media-6";
-import media7 from "./seed/media-7";
-import media8 from "./seed/media-8";
-import media9 from "./seed/media-9";
-import media10 from "./seed/media-10";
-import roles from "./seed/roles";
-import trackers from "./seed/trackers";
-import user1 from "./seed/user-1";
+import media1 from "../seed/media-1";
+import media2 from "../seed/media-2";
+import media3 from "../seed/media-3";
+import media4 from "../seed/media-4";
+import media5 from "../seed/media-5";
+import media6 from "../seed/media-6";
+import media7 from "../seed/media-7";
+import media8 from "../seed/media-8";
+import media9 from "../seed/media-9";
+import media10 from "../seed/media-10";
+import roles from "../seed/roles";
+import tags from "../seed/tags";
+import trackers from "../seed/trackers";
+import user1 from "../seed/user-1";
 
 if (!process.env.DATABASE_URL) {
   throw new Error("DATABASE_URL is not set");
@@ -28,6 +29,7 @@ async function seed() {
 
   await trackers.execute(db).then(() => console.log("Trackers seeded"));
   await roles.execute(db).then(() => console.log("Roles seeded"));
+  await tags.execute(db).then(() => console.log("Tags seeded"));
 
   if (process.env.NODE_ENV === "development") {
     await user1.execute(db).then(() => console.log("User 1 seeded"));
