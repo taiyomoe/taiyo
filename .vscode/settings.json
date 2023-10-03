@@ -9,6 +9,7 @@
     { "pattern": "tooling/*/" }
   ],
   "tailwindCSS.experimental.configFile": {
+    "./tooling/tailwind/index.ts": "./apps/nextjs/**",
     "./apps/nextjs/tailwind.config.ts": "./apps/nextjs/**",
     "./apps/expo/tailwind.config.ts": "./apps/expo/**"
   },

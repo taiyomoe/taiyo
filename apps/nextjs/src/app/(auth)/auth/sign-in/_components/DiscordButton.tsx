@@ -9,10 +9,15 @@ export const DiscordButton = (props: Props) => {
   return (
     <SignIn
       provider="discord"
-      className="flex w-full items-center gap-3 rounded-full bg-[#5865F2] px-6 py-2 font-semibold no-underline hover:bg-[#5865F2]/80"
+      classNames={{
+        form: "col-span-2 sm:col-span-1",
+        button:
+          "hover:bg-discord/80 text-medium w-full bg-discord font-medium text-discord-foreground",
+      }}
+      startContent={<CompanyLogo company="discord" height={28} />}
+      radius="full"
       {...props}
     >
-      <CompanyLogo company="discord" width={40} height={40} />
       <p className="w-full">Discord</p>
     </SignIn>
   );

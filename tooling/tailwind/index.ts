@@ -18,9 +18,6 @@ export default {
     },
     extend: {
       colors: {
-        border: "hsl(var(--border))",
-        input: "var(--input)",
-        ring: "var(--ring)",
         background: "var(--background)",
         foreground: "hsl(var(--foreground))",
         primary: {
@@ -31,25 +28,17 @@ export default {
           DEFAULT: "var(--secondary)",
           foreground: "hsl(var(--secondary-foreground))",
         },
-        destructive: {
-          DEFAULT: "var(--destructive)",
-          foreground: "var(--destructive-foreground)",
+        content1: {
+          DEFAULT: "var(--content1)",
+          foreground: "hsl(var(--content1-foreground))",
         },
-        muted: {
-          DEFAULT: "var(--muted)",
-          foreground: "hsl(var(--muted-foreground))",
+        discord: {
+          DEFAULT: "var(--discord)",
+          foreground: "var(--discord-foreground)",
         },
-        accent: {
-          DEFAULT: "var(--accent)",
-          foreground: "hsl(var(--accent-foreground))",
-        },
-        popover: {
-          DEFAULT: "hsl(var(--popover))",
-          foreground: "hsl(var(--popover-foreground))",
-        },
-        card: {
-          DEFAULT: "var(--card)",
-          foreground: "hsl(var(--card-foreground))",
+        google: {
+          DEFAULT: "var(--google)",
+          foreground: "var(--google-foreground)",
         },
       },
     },

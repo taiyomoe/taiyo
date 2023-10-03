@@ -10,11 +10,12 @@ export default {
   ],
   presets: [baseConfig],
   theme: {
-    gridTemplateColumns: {
-      mediaChapterCardLayout: "repeat(12, minmax(0, 1fr))",
-      lgMediaLayout: "350px auto",
-      xlMediaLayout: "420px auto",
-      "2xlMediaLayout": "550px auto",
+    extend: {
+      gridTemplateColumns: {
+        lgMediaLayout: "350px auto",
+        xlMediaLayout: "420px auto",
+        "2xlMediaLayout": "550px auto",
+      },
     },
   },
   plugins: [
