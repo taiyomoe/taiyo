@@ -12,6 +12,7 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 
+import { mediaChapters } from "./mediaChapters";
 import { roles } from "./roles";
 
 /**
@@ -127,6 +128,7 @@ export const usersRelations = relations(users, ({ one, many }) => ({
     fields: [users.id],
     references: [userSettings.userId],
   }),
+  uploadedChapters: many(mediaChapters),
 }));
 
 export const userSettingsRelations = relations(userSettings, ({ one }) => ({

@@ -2,7 +2,7 @@ import type {
   MediaChapter,
   MediaChapterGroups,
   MediaChapterPage,
-  MediaChapters,
+  MediaChapterWithUsers,
 } from "@taiyo/db";
 
 import { CDN_DOMAIN } from "./constants";
@@ -19,8 +19,8 @@ const getPageUrl = (mediaChapter: MediaChapter, page: MediaChapterPage) => {
   return `${CDN_DOMAIN}/${mediaChapter.mediaId}/${mediaChapter.id}/${page.id}.jpg`;
 };
 
-const computeVolumes = (mediaChapters: MediaChapters) => {
-  const volumes: Record<string, MediaChapters> = {};
+const computeVolumes = (mediaChapters: MediaChapterWithUsers) => {
+  const volumes: Record<string, MediaChapterWithUsers> = {};
 
   for (const mediaChapter of mediaChapters) {
     const volume = mediaChapter.volume ?? "null";
@@ -32,16 +32,16 @@ const computeVolumes = (mediaChapters: MediaChapters) => {
     volumes[volume]?.push(mediaChapter);
   }
 
-  return Object.entries(volumes).map(([volume, mediaChapters]) => {
+  return Object.entries(volumes).map(([volume, mediaChptrs]) => {
     const groups: MediaChapterGroups = [];
-    const groupsObject: Record<string, MediaChapters> = {};
+    const groupsObject: Record<string, MediaChapterWithUsers> = {};
 
-    for (const mediaChapter of mediaChapters) {
-      if (!groupsObject[mediaChapter.number]) {
-        groupsObject[mediaChapter.number] = [];
+    for (const mediaChptr of mediaChptrs) {
+      if (!groupsObject[mediaChptr.number]) {
+        groupsObject[mediaChptr.number] = [];
       }
 
-      groupsObject[mediaChapter.number]?.push(mediaChapter);
+      groupsObject[mediaChptr.number]?.push(mediaChptr);
     }
 
     for (const [_, chptrs] of Object.entries(groupsObject)) {

@@ -10,10 +10,8 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 
-import type {
-  MediaChapterPages,
-  MediaCommentAttachements,
-} from "../types/media.types";
+import type { MediaCommentAttachements } from "../types/media.types";
+import type { MediaChapterPages } from "../types/mediaChapter.types";
 import { medias } from "./medias";
 import { scans } from "./scans";
 import { users } from "./users";
@@ -87,6 +85,10 @@ export const mediaChaptersRelations = relations(
     media: one(medias, {
       fields: [mediaChapters.mediaId],
       references: [medias.id],
+    }),
+    user: one(users, {
+      fields: [mediaChapters.userId],
+      references: [users.id],
     }),
     scans: many(scans),
     comments: many(mediaChapterComments),
