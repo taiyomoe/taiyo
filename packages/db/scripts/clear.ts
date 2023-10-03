@@ -1,21 +1,21 @@
 import { neon } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-http";
 
-import { mediaBanners } from "./schema/mediaBanners";
-import { mediaChapterComments, mediaChapters } from "./schema/mediaChapters";
-import { mediaCovers } from "./schema/mediaCovers";
-import { medias } from "./schema/medias";
-import { mediaTags, tags } from "./schema/mediaTags";
-import { mediaTitles } from "./schema/mediaTitles";
-import { mediaTrackers, trackers } from "./schema/mediaTrackers";
-import { roles } from "./schema/roles";
+import { mediaBanners } from "../schema/mediaBanners";
+import { mediaChapterComments, mediaChapters } from "../schema/mediaChapters";
+import { mediaCovers } from "../schema/mediaCovers";
+import { medias } from "../schema/medias";
+import { mediaTags, tags } from "../schema/mediaTags";
+import { mediaTitles } from "../schema/mediaTitles";
+import { mediaTrackers, trackers } from "../schema/mediaTrackers";
+import { roles } from "../schema/roles";
 import {
   accounts,
   sessions,
   users,
   userSettings,
   verificationTokens,
-} from "./schema/users";
+} from "../schema/users";
 
 if (!process.env.DATABASE_URL) {
   throw new Error("DATABASE_URL is not set");
