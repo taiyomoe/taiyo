@@ -50,7 +50,7 @@ export default {
             },
             primary: {
               DEFAULT: "#ff4f4f",
-              foreground: "hsl(0 0% 9%)",
+              foreground: "hsl(0 0% 98%)",
             },
             secondary: {
               DEFAULT: "#383842",

@@ -1,4 +1,4 @@
-import ThemeSwitch from "./_components/ThemeSwitch";
+import ThemeSwitch from "../../../components/ui/ThemeSwitch";
 
 export const runtime = "edge";
 

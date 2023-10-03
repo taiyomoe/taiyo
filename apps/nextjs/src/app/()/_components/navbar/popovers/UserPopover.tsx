@@ -15,7 +15,7 @@ import type { Session } from "@taiyo/auth";
 
 type Props = { session: Session; children: JSX.Element };
 
-export const UserDropdown = ({ session, children }: Props) => {
+export const UserPopover = ({ session, children }: Props) => {
   return (
     <Dropdown>
       <DropdownTrigger>
