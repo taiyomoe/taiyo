@@ -31,7 +31,11 @@ export const mediasRouter = createTRPCRouter({
             limit: 1,
           },
           titles: true,
-          chapters: true,
+          chapters: {
+            with: {
+              user: true,
+            },
+          },
         },
       });
 
@@ -45,8 +49,11 @@ export const mediasRouter = createTRPCRouter({
         with: {
           media: true,
           comments: true,
+          user: true,
         },
       });
+
+      console.log(result);
 
       return result as MediaChapterWithRelations;
     }),

@@ -1,15 +1,16 @@
-import NextLink from "next/link";
+import Link from "next/link";
 import { Card, CardBody } from "@nextui-org/card";
 import { Skeleton } from "@nextui-org/skeleton";
 
-import type { MediaChapter } from "@taiyo/db";
+import type { MediaChapterWithUser } from "@taiyo/db";
 
 import { cn } from "~/utils/cn";
 import { MediaChapterUtils } from "~/utils/MediaChapterUtils";
+import { DisplayMediaChapterUploader } from "../../ui/DisplayMediaChapterUploader";
 import { MediaChapterCardPath } from "./MediaChapterCardPath";
 
 type Props = {
-  chapter: MediaChapter;
+  chapter: MediaChapterWithUser;
   order: "unique" | "first" | "middle" | "last";
 };
 
@@ -23,17 +24,17 @@ export const MediaChapterCard = ({ chapter, order }: Props) => {
           "rounded-t-none": order === "middle" || order === "last",
         })}
         radius="sm"
-        isPressable
-        as={NextLink}
-        href={MediaChapterUtils.getUrl(chapter)}
       >
         <CardBody className="p-3">
           <div className="grid-cols-mediaChapterCardLayout grid grid-rows-3 gap-1 md:grid-rows-2">
-            <div className="col-span-10 md:col-span-9">
-              <p className="truncate text-sm font-semibold">
+            <Link
+              className="col-span-10 md:col-span-9"
+              href={MediaChapterUtils.getUrl(chapter)}
+            >
+              <p className="w-full truncate text-sm font-semibold">
                 {MediaChapterUtils.getTitle(chapter)}
               </p>
-            </div>
+            </Link>
             {/* UPLOADED TIME */}
             <div className="col-span-2">
               <Skeleton className="h-full w-full rounded" />
@@ -48,7 +49,7 @@ export const MediaChapterCard = ({ chapter, order }: Props) => {
             </div>
             {/* UPLOADER */}
             <div className="col-span-8 md:col-span-2">
-              <Skeleton className="h-full w-full rounded" />
+              <DisplayMediaChapterUploader user={chapter.user} />
             </div>
             {/* COMMENTS */}
             <div className="col-span-4 md:col-span-1">
