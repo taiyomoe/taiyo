@@ -3,6 +3,7 @@ import type { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 import { mediaChapters } from "../schema/mediaChapters";
 import { mediaCovers } from "../schema/mediaCovers";
 import { medias } from "../schema/medias";
+import { mediaTags } from "../schema/mediaTags";
 import { mediaTitles } from "../schema/mediaTitles";
 import { mediaTrackers } from "../schema/mediaTrackers";
 
@@ -48,6 +49,49 @@ const execute = async (db: PostgresJsDatabase) => {
     id: "d75dae86-643f-42cc-9a2c-8fc919b53536",
     mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
   });
+
+  await db.insert(mediaTags).values([
+    {
+      id: "308cb63e-ca3d-48f2-ae28-f231d87e29ee",
+      tagId: "34b258e9-b746-4d72-aa38-7d77695cfe5b",
+      mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
+    },
+    {
+      id: "fd847029-7982-4d71-80d6-28a8f9b1a00d",
+      tagId: "037aa719-975d-4bdc-8abb-f0f694af1cad",
+      mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
+    },
+    {
+      id: "0b50cb37-472e-443a-925e-e4c2567a15b9",
+      tagId: "9f8204b0-49aa-4f16-9226-99b11856462c",
+      mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
+    },
+    {
+      id: "e881cfb4-7e92-403d-bb2f-56a2fb4b0d30",
+      tagId: "27249d9d-3f17-48b1-a141-9cb082dc4e4f",
+      mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
+    },
+    {
+      id: "dcb0b342-401e-4b0f-aac6-047252682c13",
+      tagId: "bc6ca93e-0632-40f4-bfb3-cf9ddf95ddb7",
+      mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
+    },
+    {
+      id: "5474526f-a71b-4b11-bd57-587974d2e959",
+      tagId: "8a96ca3d-d1f0-4759-8c4c-9a8a64e2d722",
+      mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
+    },
+    {
+      id: "5b6cc616-73fe-4ade-8542-d821b991d7c6",
+      tagId: "f9b88d05-cb71-4bd0-95c3-6dc083144771",
+      mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
+    },
+    {
+      id: "fd737053-4e25-4987-8065-a38580751b5a",
+      tagId: "ed3b7aa1-2f58-44de-b787-7044dd9e2767",
+      mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
+    },
+  ]);
 
   await db.insert(mediaChapters).values([
     {

@@ -3,6 +3,7 @@ import type { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 import { mediaChapters } from "../schema/mediaChapters";
 import { mediaCovers } from "../schema/mediaCovers";
 import { medias } from "../schema/medias";
+import { mediaTags } from "../schema/mediaTags";
 import { mediaTitles } from "../schema/mediaTitles";
 import { mediaTrackers } from "../schema/mediaTrackers";
 
@@ -55,6 +56,159 @@ const execute = async (db: PostgresJsDatabase) => {
     volume: 36,
     mediaId: "7d64e4f8-d955-4b59-a7c5-7ee2ddcad68b",
   });
+
+  await db.insert(mediaTags).values([
+    {
+      id: "dc63cdc0-5128-45ea-884d-be21d9024533",
+      tagId: "0ab840c3-92a1-4dc3-8a4d-f0970f72f7d3",
+      mediaId: "7d64e4f8-d955-4b59-a7c5-7ee2ddcad68b",
+    },
+    {
+      id: "c92f87ca-79df-4d0f-8c7a-1e1a0719a34b",
+      tagId: "9c113811-666b-4d03-b425-d3ea72e6ad30",
+      mediaId: "7d64e4f8-d955-4b59-a7c5-7ee2ddcad68b",
+    },
+    {
+      id: "498922b6-2651-4832-b959-184263ff3185",
+      tagId: "2fa13037-9340-48ec-845d-df66ab2c69a8",
+      mediaId: "7d64e4f8-d955-4b59-a7c5-7ee2ddcad68b",
+    },
+    {
+      id: "db7d4ecc-c8e3-4b17-9e70-4f126d8b312b",
+      tagId: "65236ec1-2a69-4404-9475-c37f17866ae7",
+      mediaId: "7d64e4f8-d955-4b59-a7c5-7ee2ddcad68b",
+    },
+    {
+      id: "ca58aade-708a-4be0-a860-ce46bcd8f70d",
+      tagId: "9f8204b0-49aa-4f16-9226-99b11856462c",
+      mediaId: "7d64e4f8-d955-4b59-a7c5-7ee2ddcad68b",
+    },
+    {
+      id: "8fa202f3-b2ec-4e45-b00e-45a589d8b27b",
+      tagId: "a3423a6c-e1a1-4989-8e9a-950e816f6676",
+      mediaId: "7d64e4f8-d955-4b59-a7c5-7ee2ddcad68b",
+    },
+    {
+      id: "40567ebb-7cc5-4952-8e49-4d3f75ea12ae",
+      tagId: "bbc02994-ce2a-451a-a7c3-ca9e6429e6c7",
+      mediaId: "7d64e4f8-d955-4b59-a7c5-7ee2ddcad68b",
+    },
+    {
+      id: "7bd218ff-7e85-4ddb-902e-4e8f5acf89ee",
+      tagId: "21e2c3ed-d3ec-4136-bfb8-e4de1b67df99",
+      mediaId: "7d64e4f8-d955-4b59-a7c5-7ee2ddcad68b",
+    },
+    {
+      id: "833422b9-9614-4a27-ae49-82d0b9518900",
+      tagId: "463b7c5e-dd67-401a-a1ae-bb30de0d0dbc",
+      mediaId: "7d64e4f8-d955-4b59-a7c5-7ee2ddcad68b",
+    },
+    {
+      id: "7f44f695-cc30-454d-a31b-78d68d6fca9d",
+      tagId: "5ded48f1-6d8f-4cfc-9de2-d3f4994bfe0e",
+      mediaId: "7d64e4f8-d955-4b59-a7c5-7ee2ddcad68b",
+    },
+    {
+      id: "47fc9485-cffd-48bc-94cb-0b5c8aad968a",
+      tagId: "09d0e77b-1884-44ba-859a-2492764b593d",
+      mediaId: "7d64e4f8-d955-4b59-a7c5-7ee2ddcad68b",
+    },
+    {
+      id: "2373a563-a7d6-4ad4-b1e2-6227292af022",
+      tagId: "60253c91-90bd-493a-895c-71d0b05d3dac",
+      mediaId: "7d64e4f8-d955-4b59-a7c5-7ee2ddcad68b",
+    },
+    {
+      id: "2679d8a6-1741-43a9-b106-05af3cde4a49",
+      tagId: "dd14785e-875a-4669-9558-112261c5b375",
+      mediaId: "7d64e4f8-d955-4b59-a7c5-7ee2ddcad68b",
+    },
+    {
+      id: "9036d2c8-4c0f-4949-bcff-f0f1c135fbaa",
+      tagId: "4f4c3811-52c4-4898-9f98-04bd3eb7ff2c",
+      mediaId: "7d64e4f8-d955-4b59-a7c5-7ee2ddcad68b",
+    },
+    {
+      id: "5d2950f4-abe6-4cea-9007-071b9c0396ef",
+      tagId: "7d25f081-4ed7-4cba-b024-e558dd9f18b7",
+      mediaId: "7d64e4f8-d955-4b59-a7c5-7ee2ddcad68b",
+    },
+    {
+      id: "5ab98d00-dc45-418b-8e66-1ddae4066174",
+      tagId: "b880a351-7f91-4acd-aeaf-92641da78488",
+      mediaId: "7d64e4f8-d955-4b59-a7c5-7ee2ddcad68b",
+    },
+    {
+      id: "d9191ce0-5234-429e-8580-d72386b2e91f",
+      tagId: "2e3a4b25-8e67-4525-a4ff-a10c02ccea4e",
+      mediaId: "7d64e4f8-d955-4b59-a7c5-7ee2ddcad68b",
+    },
+    {
+      id: "d34d743b-9e72-45c7-839c-464ad2f049f0",
+      tagId: "4fdf643b-e31a-443c-9bda-7ef4109729fa",
+      mediaId: "7d64e4f8-d955-4b59-a7c5-7ee2ddcad68b",
+    },
+    {
+      id: "90785ea7-4f5e-4f61-8b19-04b8b0b1d9c0",
+      tagId: "42ef051e-f38d-4dcb-a320-5a5b38a7caa7",
+      mediaId: "7d64e4f8-d955-4b59-a7c5-7ee2ddcad68b",
+    },
+    {
+      id: "ec6d786c-c0c0-40f9-bb56-8e515a99192a",
+      tagId: "96cc4bcb-0b07-4ffe-ba6c-f19ba5c2c8be",
+      mediaId: "7d64e4f8-d955-4b59-a7c5-7ee2ddcad68b",
+    },
+    {
+      id: "0f9c46b1-0e2f-474b-ae19-4e4dd3478ecf",
+      tagId: "ba283e52-3e38-45d3-8cf4-2d6cf39769d1",
+      mediaId: "7d64e4f8-d955-4b59-a7c5-7ee2ddcad68b",
+    },
+    {
+      id: "1729880b-3bbb-45f1-8704-b36078543a93",
+      tagId: "7e4e9852-8ccb-452f-9829-eda46cbb430b",
+      mediaId: "7d64e4f8-d955-4b59-a7c5-7ee2ddcad68b",
+    },
+    {
+      id: "7570321f-22d8-4caa-b48a-082721640bf6",
+      tagId: "eee9e445-03c4-40d3-a8cb-b951c56de5a1",
+      mediaId: "7d64e4f8-d955-4b59-a7c5-7ee2ddcad68b",
+    },
+    {
+      id: "0e634e20-4970-4b8a-b9fc-f38886b8b9cf",
+      tagId: "9f124a35-5c1d-45eb-9ad4-a5b1661f5c30",
+      mediaId: "7d64e4f8-d955-4b59-a7c5-7ee2ddcad68b",
+    },
+    {
+      id: "982dbcc0-6b13-44bd-8618-cc73080f7ca2",
+      tagId: "28a15122-8155-4bfe-878c-b0b22bd39c24",
+      mediaId: "7d64e4f8-d955-4b59-a7c5-7ee2ddcad68b",
+    },
+    {
+      id: "1c23a7c9-38d9-4aee-8c90-e370f9184b95",
+      tagId: "9122eaa6-ff81-4823-83a7-83f7e31d65c3",
+      mediaId: "7d64e4f8-d955-4b59-a7c5-7ee2ddcad68b",
+    },
+    {
+      id: "dd7d39f1-aef8-49c2-9de7-e98a8d2bf8f7",
+      tagId: "9574d54d-f9f8-4304-a4f3-a49438826cca",
+      mediaId: "7d64e4f8-d955-4b59-a7c5-7ee2ddcad68b",
+    },
+    {
+      id: "75afc9d1-cc5a-447d-b1aa-0befa51701b4",
+      tagId: "74769735-9fa2-4c69-911b-fe860c6aadaa",
+      mediaId: "7d64e4f8-d955-4b59-a7c5-7ee2ddcad68b",
+    },
+    {
+      id: "fa730ca5-7b1b-4055-8a90-01d5a7e2d01d",
+      tagId: "60eb42b2-2229-4f32-9479-219fdcb5f13b",
+      mediaId: "7d64e4f8-d955-4b59-a7c5-7ee2ddcad68b",
+    },
+    {
+      id: "0846e446-05cd-43b2-8624-1eab19b580c1",
+      tagId: "931147ee-28de-4c4f-bae8-10ae1b63b318",
+      mediaId: "7d64e4f8-d955-4b59-a7c5-7ee2ddcad68b",
+    },
+  ]);
 
   await db.insert(mediaChapters).values([
     {

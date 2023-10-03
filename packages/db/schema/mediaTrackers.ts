@@ -20,10 +20,10 @@ export const mediaTrackers = pgTable("mediaTrackers", {
   // -----
   trackerMediaId: text("trackerMediaId").notNull(),
   // -----
-  mediaId: uuid("mediaId")
-    .references(() => medias.id, { onDelete: "cascade" })
-    .notNull(),
   trackerId: uuid("trackerId")
     .references(() => trackers.id, { onDelete: "cascade" })
+    .notNull(),
+  mediaId: uuid("mediaId")
+    .references(() => medias.id, { onDelete: "cascade" })
     .notNull(),
 });
