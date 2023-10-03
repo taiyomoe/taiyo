@@ -1,3 +1,5 @@
+import { DateTime } from "luxon";
+
 import type {
   MediaChapter,
   MediaChapterGroups,
@@ -17,6 +19,12 @@ const getUrl = (mediaChapter: MediaChapter) => {
 
 const getPageUrl = (mediaChapter: MediaChapter, page: MediaChapterPage) => {
   return `${CDN_DOMAIN}/${mediaChapter.mediaId}/${mediaChapter.id}/${page.id}.jpg`;
+};
+
+const computeUploadedTime = (mediaChapter: MediaChapter) => {
+  const uploadedAt = DateTime.fromJSDate(mediaChapter.createdAt);
+
+  return uploadedAt.toRelative({ locale: "pt" });
 };
 
 const computeVolumes = (mediaChapters: MediaChapterWithUsers) => {
@@ -59,5 +67,6 @@ export const MediaChapterUtils = {
   getTitle,
   getUrl,
   getPageUrl,
+  computeUploadedTime,
   computeVolumes,
 };
