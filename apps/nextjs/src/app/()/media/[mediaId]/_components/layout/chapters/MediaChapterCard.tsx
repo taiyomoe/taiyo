@@ -29,7 +29,7 @@ export const MediaChapterCard = ({ chapter, order }: Props) => {
         radius="sm"
       >
         <CardBody className="p-3">
-          <div className="grid-cols-mediaChapterCardLayout grid grid-rows-3 gap-1 md:grid-rows-2">
+          <div className="grid grid-cols-12 grid-rows-3 gap-1 md:grid-rows-2">
             <Link
               className="order-1 col-span-10 md:col-span-9"
               href={MediaChapterUtils.getUrl(chapter)}
