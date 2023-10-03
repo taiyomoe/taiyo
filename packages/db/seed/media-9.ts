@@ -3,6 +3,7 @@ import type { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 import { mediaChapters } from "../schema/mediaChapters";
 import { mediaCovers } from "../schema/mediaCovers";
 import { medias } from "../schema/medias";
+import { mediaTags } from "../schema/mediaTags";
 import { mediaTitles } from "../schema/mediaTitles";
 import { mediaTrackers } from "../schema/mediaTrackers";
 
@@ -43,6 +44,20 @@ const execute = async (db: PostgresJsDatabase) => {
     id: "0dfce762-b759-4bae-a528-e0b1f3a00dd9",
     mediaId: "f0bc42eb-b2f7-4017-89f8-77c1834834b1",
   });
+
+  await db.insert(mediaTags).values([
+    {
+      id: "4a94265a-7ee8-4db2-9b14-9a163ad7835a",
+      tagId: "fd04f9f3-5087-4067-8c82-2c8d3105d1eb",
+      mediaId: "f0bc42eb-b2f7-4017-89f8-77c1834834b1",
+    },
+    {
+      id: "439ad039-b175-4704-bf31-635b4916d057",
+      isSpoiler: true,
+      tagId: "2e3a4b25-8e67-4525-a4ff-a10c02ccea4e",
+      mediaId: "f0bc42eb-b2f7-4017-89f8-77c1834834b1",
+    },
+  ]);
 
   await db.insert(mediaChapters).values([
     {

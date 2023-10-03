@@ -3,6 +3,7 @@ import type { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 import { mediaChapters } from "../schema/mediaChapters";
 import { mediaCovers } from "../schema/mediaCovers";
 import { medias } from "../schema/medias";
+import { mediaTags } from "../schema/mediaTags";
 import { mediaTitles } from "../schema/mediaTitles";
 import { mediaTrackers } from "../schema/mediaTrackers";
 
@@ -54,6 +55,84 @@ const execute = async (db: PostgresJsDatabase) => {
     volume: 19,
     mediaId: "22f9e6a3-c625-4b33-8526-20773d831fd8",
   });
+
+  await db.insert(mediaTags).values([
+    {
+      id: "a3056cd4-a0d9-48ba-9fa4-e9ce228e8162",
+      tagId: "c4a8b7d7-7a3c-4311-b76b-2be6a0041981",
+      mediaId: "22f9e6a3-c625-4b33-8526-20773d831fd8",
+    },
+    {
+      id: "ab506775-8d1c-4480-97d1-450ae5417e76",
+      tagId: "667e48b5-0ca7-4cca-b09e-f9dd0d30ec1e",
+      mediaId: "22f9e6a3-c625-4b33-8526-20773d831fd8",
+    },
+    {
+      id: "52c794c0-9cf3-4c31-8e40-85f2cffcdaa5",
+      tagId: "a3db7c6f-7fdb-43d6-b021-99723b7a1d37",
+      mediaId: "22f9e6a3-c625-4b33-8526-20773d831fd8",
+    },
+    {
+      id: "05972059-c4ff-471e-8a72-811f8fdde963",
+      tagId: "b24030e6-093b-453c-ba17-f69912dda5c3",
+      mediaId: "22f9e6a3-c625-4b33-8526-20773d831fd8",
+    },
+    {
+      id: "82e2b35c-2416-42cf-92ae-804a76964e0f",
+      tagId: "0b4d69ae-c2bd-404c-bc91-5f9b6cf08f62",
+      mediaId: "22f9e6a3-c625-4b33-8526-20773d831fd8",
+    },
+    {
+      id: "7cd00816-b4b9-43f9-a501-2406e355890d",
+      tagId: "34b258e9-b746-4d72-aa38-7d77695cfe5b",
+      mediaId: "22f9e6a3-c625-4b33-8526-20773d831fd8",
+    },
+    {
+      id: "f6f9e924-a9d9-4e84-aad5-5f53374f3949",
+      tagId: "9c113811-666b-4d03-b425-d3ea72e6ad30",
+      mediaId: "22f9e6a3-c625-4b33-8526-20773d831fd8",
+    },
+    {
+      id: "a5c1c84f-98be-4a0b-a62f-070914571031",
+      tagId: "e9326c71-a5ea-4ce9-afdd-fbeeb15f9b6c",
+      mediaId: "22f9e6a3-c625-4b33-8526-20773d831fd8",
+    },
+    {
+      id: "ef8278ae-20fc-44a7-815c-092c9c2462c0",
+      tagId: "5ded48f1-6d8f-4cfc-9de2-d3f4994bfe0e",
+      mediaId: "22f9e6a3-c625-4b33-8526-20773d831fd8",
+    },
+    {
+      id: "5f3b60d4-1b25-481a-b5b7-90e0cca62fc6",
+      tagId: "7d25f081-4ed7-4cba-b024-e558dd9f18b7",
+      mediaId: "22f9e6a3-c625-4b33-8526-20773d831fd8",
+    },
+    {
+      id: "3225ef1e-d974-496b-bcaa-4fd278dbefe3",
+      tagId: "75b470fc-5878-459d-89ac-e4b01a830d7b",
+      mediaId: "22f9e6a3-c625-4b33-8526-20773d831fd8",
+    },
+    {
+      id: "3125c595-d799-4ad7-b62e-1a0af6c59603",
+      tagId: "ee043a02-3008-47fa-a321-dec2c556c70c",
+      mediaId: "22f9e6a3-c625-4b33-8526-20773d831fd8",
+    },
+    {
+      id: "6bf17224-13c3-4371-9fcb-549f498fb67a",
+      tagId: "68c5d5de-4123-4e0a-813e-68513b95bcf8",
+      mediaId: "22f9e6a3-c625-4b33-8526-20773d831fd8",
+    },
+    {
+      id: "46047743-17c4-4bc8-9a99-fab4e59eaa8b",
+      tagId: "8d6b8b59-fda2-4a42-8120-a16219404d4e",
+      mediaId: "22f9e6a3-c625-4b33-8526-20773d831fd8",
+    },
+    {
+      id: "a44e35de-9f73-482f-bea6-0c837d15dd00",
+      tagId: "9f4a2006-918e-42be-8b84-8511b1a06aee",
+      mediaId: "22f9e6a3-c625-4b33-8526-20773d831fd8",
+    },
+  ]);
 
   await db.insert(mediaChapters).values([
     {

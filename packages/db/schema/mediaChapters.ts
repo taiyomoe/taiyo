@@ -39,11 +39,11 @@ export const mediaChapters = pgTable(
       enum: ["OK", "STAFF_ONLY", "VIP_ONLY", "LOCKED"],
     }).default("OK"),
     // -----
-    mediaId: uuid("mediaId")
-      .references(() => medias.id, { onDelete: "cascade" })
-      .notNull(),
     userId: uuid("userId")
       .references(() => users.id, { onDelete: "cascade" })
+      .notNull(),
+    mediaId: uuid("mediaId")
+      .references(() => medias.id, { onDelete: "cascade" })
       .notNull(),
   },
   (mediaChapter) => ({
