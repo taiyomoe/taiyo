@@ -10,7 +10,7 @@ type Props = {
 export const DisplayMediaChapterUploader = ({ user }: Props) => {
   return (
     <div className="flex w-full items-center gap-1 bg-green-100">
-      <UserIcon size={20} />
+      <UserIcon className="bg-red-100" size={20} />
       <Link
         className="hover:bg-content3 select-none rounded bg-blue-100 px-2 text-sm"
         href={`/users/${user.id}`}
