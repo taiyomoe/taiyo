@@ -4,9 +4,15 @@ import NextAuth from "next-auth";
 import type { DefaultSession } from "next-auth";
 
 import { db, eq } from "@taiyo/db";
-import type { Role } from "@taiyo/db";
 import { roles } from "@taiyo/db/schema/roles";
 import { users, userSettings } from "@taiyo/db/schema/users";
+import type {
+  Actions,
+  Permission,
+  RefinedPermission,
+  RefinedPermissions,
+  Resources,
+} from "@taiyo/db/types";
 
 import { env } from "./env.mjs";
 
@@ -25,7 +31,10 @@ declare module "next-auth" {
       /** The user's unique ID. */
       id: string;
       /** The user's current role and permissions. */
-      role: Pick<Role, "name" | "permissions">;
+      role: {
+        name: string;
+        permissions: RefinedPermissions;
+      };
     } & DefaultSession["user"];
   }
 }
@@ -60,10 +69,18 @@ export const {
         .limit(1);
 
       const firstResult = results.at(0)!;
+      const permissionToRefinedPermission = (
+        permission: Permission,
+      ): RefinedPermission => ({
+        resource: permission.split(":")[0] as Resources,
+        action: permission.split(":")[1] as Actions,
+      });
 
       session.user.role = {
         name: firstResult.name ?? "USER",
-        permissions: firstResult.permissions ?? [],
+        permissions: firstResult.permissions
+          ? firstResult.permissions.map(permissionToRefinedPermission)
+          : [],
       };
     },
     createUser: async (message) => {

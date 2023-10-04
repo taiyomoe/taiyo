@@ -1,62 +1,66 @@
 import type { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 
-import type { Permissions } from "../schema/roles";
-import { permissionsArray, roles } from "../schema/roles";
+import { roles } from "../schema/roles";
+import { permissionsArray } from "../types";
+import type { Permissions } from "../types";
 
 const execute = async (db: PostgresJsDatabase) => {
-  const moderatorPermissions: Permissions = [
-    "MEDIA_CHAPTER_COMMENT:UPDATE",
-    "MEDIA_CHAPTER_COMMENT:DELETE",
-  ];
+  const userPermissions: Permissions = ["mediaChapterComments:create"];
+  const moderatorPermissions: Permissions = userPermissions.concat([
+    "mediaChapterComments:update",
+    "mediaChapterComments:delete",
+  ]);
   const uploaderPermissions: Permissions = moderatorPermissions.concat([
-    "TAG:CREATE",
-    "TAG:UPDATE",
-    "TAG:DELETE",
+    "tags:create",
+    "tags:update",
+    "tags:delete",
     // -----
-    "MEDIA:CREATE",
-    "MEDIA:UPDATE",
+    "medias:create",
+    "medias:update",
     // -----
-    "MEDIA_COVER:CREATE",
-    "MEDIA_COVER:UPDATE",
-    "MEDIA_CHAPTER:CREATE",
+    "mediaCovers:create",
+    "mediaCovers:update",
+    "mediaCovers:delete",
     // -----
-    "MEDIA_BANNER:CREATE",
-    "MEDIA_BANNER:DELETE",
+    "mediaBanners:create",
+    "mediaBanners:update",
+    "mediaBanners:delete",
     // -----
-    "MEDIA_TAG:CREATE",
-    "MEDIA_TAG:DELETE",
+    "mediaTags:create",
+    "mediaTags:update",
+    "mediaTags:delete",
     // -----
-    "MEDIA_TITLE:CREATE",
-    "MEDIA_TITLE:UPDATE",
+    "mediaTitles:create",
+    "mediaTitles:update",
+    "mediaTitles:update",
     // -----
-    "MEDIA_CHAPTER:CREATE",
-    "MEDIA_CHAPTER:UPDATE",
-    "MEDIA_CHAPTER:DELETE",
+    "mediaChapters:create",
+    "mediaChapters:update",
+    "mediaChapters:delete",
     // -----
-    "MEDIA_TITLE:CREATE",
-    "MEDIA_TITLE:UPDATE",
-    "MEDIA_TITLE:DELETE",
-    // -----
-    "SCAN:CREATE",
-    "SCAN:UPDATE",
-    "SCAN:DELETE",
+    "scans:create",
+    "scans:update",
+    "scans:delete",
   ]);
 
   await db.insert(roles).values([
     {
       id: "7bf9872c-1c80-4e78-be71-6fa0d3dc88d1",
       name: "USER",
-      permissions: [],
+      permissions: userPermissions,
     },
     {
+      id: "be5ee7fe-5597-4b34-b7c4-567c1cec503b",
       name: "MODERATOR",
       permissions: moderatorPermissions,
     },
     {
+      id: "5edc0b23-2273-48e9-a0c4-0fd6f33705c6",
       name: "UPLOADER",
       permissions: uploaderPermissions,
     },
     {
+      id: "13800840-0931-41e3-9270-0555e42fae36",
       name: "ADMIN",
       permissions: Array.from(permissionsArray),
     },
