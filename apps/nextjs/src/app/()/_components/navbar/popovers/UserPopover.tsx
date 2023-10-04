@@ -3,10 +3,11 @@ import NextLink from "next/link";
 import { Button } from "@nextui-org/button";
 import { Divider } from "@nextui-org/divider";
 import { Popover, PopoverContent, PopoverTrigger } from "@nextui-org/popover";
-import { LinkIcon } from "lucide-react";
+import { GaugeIcon, LinkIcon } from "lucide-react";
 
 import type { Session } from "@taiyo/auth";
 
+import { SignedIn } from "~/app/()/media/[mediaId]/_components/utils/SignedIn";
 import { SignOut } from "~/components/auth/SignOut";
 import { NavbarPopoversCommonOptions } from "./NavbarPopoversCommonOptions";
 
@@ -36,6 +37,18 @@ export const UserPopover = ({ session }: Props) => {
           >
             Meu perfil
           </Button>
+          <SignedIn allowIfUserHasAtLeastOnePermission>
+            <Button
+              as={NextLink}
+              href={`/dashboard`}
+              className="text-medium justify-end gap-3 p-2 font-medium"
+              endContent={<GaugeIcon />}
+              variant="light"
+              color="warning"
+            >
+              Dashboard
+            </Button>
+          </SignedIn>
           <Divider />
           <NavbarPopoversCommonOptions />
           <Divider />
