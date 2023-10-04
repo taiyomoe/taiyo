@@ -53,8 +53,6 @@ export const mediasRouter = createTRPCRouter({
         },
       });
 
-      console.log(result);
-
       return result as MediaChapterWithRelations;
     }),
 });

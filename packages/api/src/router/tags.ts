@@ -1,4 +1,4 @@
-import { tags } from "@taiyo/db/schema/mediaTags";
+import { tags } from "@taiyo/db/schema/tags";
 import { insertTagSchema } from "@taiyo/db/types";
 
 import { createTRPCRouter, protectedProcedure } from "../trpc";

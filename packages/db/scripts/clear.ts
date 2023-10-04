@@ -2,13 +2,16 @@ import { neon } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-http";
 
 import { mediaBanners } from "../schema/mediaBanners";
-import { mediaChapterComments, mediaChapters } from "../schema/mediaChapters";
+import { mediaChapterComments } from "../schema/mediaChapterComments";
+import { mediaChapters } from "../schema/mediaChapters";
 import { mediaCovers } from "../schema/mediaCovers";
 import { medias } from "../schema/medias";
-import { mediaTags, tags } from "../schema/mediaTags";
+import { mediaTags } from "../schema/mediaTags";
 import { mediaTitles } from "../schema/mediaTitles";
-import { mediaTrackers, trackers } from "../schema/mediaTrackers";
+import { mediaTrackers } from "../schema/mediaTrackers";
 import { roles } from "../schema/roles";
+import { tags } from "../schema/tags";
+import { trackers } from "../schema/trackers";
 import {
   accounts,
   sessions,
