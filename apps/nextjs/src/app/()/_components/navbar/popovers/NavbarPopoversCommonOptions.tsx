@@ -5,11 +5,12 @@ import ThemeSwitch from "~/components/ui/ThemeSwitch";
 
 export const NavbarPopoversCommonOptions = () => {
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex w-full flex-col gap-2">
       <Button
         className="text-medium justify-normal gap-3 p-2 font-medium"
         startContent={<SettingsIcon />}
         variant="light"
+        isDisabled
       >
         Parâmetros
       </Button>

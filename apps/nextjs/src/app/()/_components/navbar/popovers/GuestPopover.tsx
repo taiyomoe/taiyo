@@ -15,7 +15,7 @@ export const GuestPopover = () => {
         </Button>
       </PopoverTrigger>
       <PopoverContent className="p-6">
-        <div className="flex flex-col gap-4 bg-opacity-50">
+        <div className="flex flex-col gap-4">
           <NavbarPopoversCommonOptions />
           <Divider />
           <div>

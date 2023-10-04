@@ -1,24 +1,21 @@
-"use client";
-
 import Image from "next/image";
-import Link from "next/link";
-import {
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownSection,
-  DropdownTrigger,
-} from "@nextui-org/react";
-import { SettingsIcon, User } from "lucide-react";
+import NextLink from "next/link";
+import { Button } from "@nextui-org/button";
+import { Divider } from "@nextui-org/divider";
+import { Popover, PopoverContent, PopoverTrigger } from "@nextui-org/popover";
+import { LinkIcon } from "lucide-react";
 
 import type { Session } from "@taiyo/auth";
 
-type Props = { session: Session; children: JSX.Element };
+import { SignOut } from "~/components/auth/SignOut";
+import { NavbarPopoversCommonOptions } from "./NavbarPopoversCommonOptions";
 
-export const UserPopover = ({ session, children }: Props) => {
+type Props = { session: Session };
+
+export const UserPopover = ({ session }: Props) => {
   return (
-    <Dropdown>
-      <DropdownTrigger>
+    <Popover placement="bottom-end">
+      <PopoverTrigger>
         <Image
           className="cursor-pointer rounded-full"
           src={session.user.image ?? "https://i.imgur.com/w7IkYwl.png"}
@@ -26,28 +23,31 @@ export const UserPopover = ({ session, children }: Props) => {
           height={40}
           alt="user's profile picture"
         />
-      </DropdownTrigger>
-      <DropdownMenu>
-        <DropdownSection>
-          <DropdownItem>
-            <Link href={"/profile/" + session.user.id} className="flex gap-2">
-              <User size={20} />
-              <p className="text-md font-medium">Perfil</p>
-            </Link>
-          </DropdownItem>
-          <DropdownItem>
-            <Link href="/settings" className="flex gap-2">
-              <SettingsIcon size={20} />
-              <p className="text-md font-medium">Parâmetros</p>
-            </Link>
-          </DropdownItem>
-        </DropdownSection>
-        <DropdownSection>
-          <DropdownItem className="hover:bg-danger-foreground">
-            {children}
-          </DropdownItem>
-        </DropdownSection>
-      </DropdownMenu>
-    </Dropdown>
+      </PopoverTrigger>
+      <PopoverContent className="p-6">
+        <div className="flex flex-col gap-4">
+          <Button
+            as={NextLink}
+            href={`/user/${session.user.id}`}
+            className="text-medium justify-end gap-3 p-2 font-medium"
+            endContent={<LinkIcon />}
+            variant="light"
+            isDisabled
+          >
+            Meu perfil
+          </Button>
+          <Divider />
+          <NavbarPopoversCommonOptions />
+          <Divider />
+          <SignOut
+            classNames={{ button: "min-w-[220px] font-medium text-medium" }}
+            variant="flat"
+            color="danger"
+          >
+            <p>Sair</p>
+          </SignOut>
+        </div>
+      </PopoverContent>
+    </Popover>
   );
 };
