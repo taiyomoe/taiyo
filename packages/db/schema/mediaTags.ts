@@ -18,6 +18,7 @@ export const tags = pgTable("tags", {
   // -----
   name: text("name").notNull().unique(),
   description: text("description").notNull(),
+  category: text("category").notNull(),
   // -----
   isAdult: boolean("isAdult").default(false).notNull(),
   // -----

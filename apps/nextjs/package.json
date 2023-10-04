@@ -27,6 +27,8 @@
     "@trpc/server": "^10.38.5",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
+    "drizzle-zod": "^0.5.1",
+    "formik": "^2.4.5",
     "framer-motion": "^10.16.4",
     "lucide-react": "^0.284.0",
     "luxon": "^3.4.3",
@@ -34,12 +36,14 @@
     "next-themes": "^0.2.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "sonner": "^1.0.3",
     "superjson": "1.13.3",
     "swiper": "^10.3.1",
     "tailwind-merge": "^1.14.0",
     "tailwind-scrollbar": "^3.0.5",
     "tailwind-variants": "^0.1.14",
-    "zod": "^3.22.3"
+    "zod": "^3.22.3",
+    "zod-formik-adapter": "^1.2.0"
   },
   "devDependencies": {
     "@taiyo/eslint-config": "^0.2.0",
