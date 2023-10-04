@@ -12,9 +12,9 @@ type Props = {
 export const SignIn = ({ provider, classNames, ...props }: Props) => {
   return (
     <form
+      className={classNames?.form}
       action={`/api/auth/signin/${provider}`}
       method="post"
-      className={classNames?.form}
     >
       <Button className={classNames?.button} {...props} type="submit" />
       <CSRF_experimental />
