@@ -40,10 +40,20 @@ const execute = async (db: PostgresJsDatabase) => {
     },
   ]);
 
-  await db.insert(mediaCovers).values({
-    id: "0dfce762-b759-4bae-a528-e0b1f3a00dd9",
-    mediaId: "f0bc42eb-b2f7-4017-89f8-77c1834834b1",
-  });
+  await db.insert(mediaCovers).values([
+    {
+      id: "239ff449-cb3b-46c8-b050-91223545e755",
+      mediaId: "f0bc42eb-b2f7-4017-89f8-77c1834834b1",
+    },
+    {
+      id: "9ac5b886-2fb1-4255-a089-c5ad34e95b5a",
+      mediaId: "f0bc42eb-b2f7-4017-89f8-77c1834834b1",
+    },
+    {
+      id: "0dfce762-b759-4bae-a528-e0b1f3a00dd9",
+      mediaId: "f0bc42eb-b2f7-4017-89f8-77c1834834b1",
+    },
+  ]);
 
   await db.insert(mediaTags).values([
     {

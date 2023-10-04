@@ -51,11 +51,38 @@ const execute = async (db: PostgresJsDatabase) => {
     },
   ]);
 
-  await db.insert(mediaCovers).values({
-    id: "6cffe32e-7697-46c9-bc20-dd1e357a9ea2",
-    volume: 36,
-    mediaId: "7d64e4f8-d955-4b59-a7c5-7ee2ddcad68b",
-  });
+  await db.insert(mediaCovers).values([
+    {
+      id: "d8401ce2-5937-43ee-83dd-0464847b04aa",
+      volume: 1,
+      mediaId: "7d64e4f8-d955-4b59-a7c5-7ee2ddcad68b",
+    },
+    {
+      id: "145c0faa-6072-4f28-8b11-65f687de6416",
+      volume: 2,
+      mediaId: "7d64e4f8-d955-4b59-a7c5-7ee2ddcad68b",
+    },
+    {
+      id: "7cfffe25-a9d5-4b2a-9805-edff50118978",
+      volume: 3,
+      mediaId: "7d64e4f8-d955-4b59-a7c5-7ee2ddcad68b",
+    },
+    {
+      id: "5c6eb27a-1a66-477a-ac01-d66abae1f6a4",
+      volume: 4,
+      mediaId: "7d64e4f8-d955-4b59-a7c5-7ee2ddcad68b",
+    },
+    {
+      id: "e29b4cd0-40a9-4c11-8c66-a70f3e28187b",
+      volume: 5,
+      mediaId: "7d64e4f8-d955-4b59-a7c5-7ee2ddcad68b",
+    },
+    {
+      id: "6cffe32e-7697-46c9-bc20-dd1e357a9ea2",
+      volume: 36,
+      mediaId: "7d64e4f8-d955-4b59-a7c5-7ee2ddcad68b",
+    },
+  ]);
 
   await db.insert(mediaTags).values([
     {
