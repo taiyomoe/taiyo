@@ -2,7 +2,7 @@ import type {
   MediaWithBanners,
   MediaWithCovers,
   MediaWithTitles,
-} from "@taiyo/db";
+} from "@taiyo/db/types";
 
 import { CDN_DOMAIN } from "./constants";
 

@@ -1,7 +1,7 @@
 import NextImage from "next/image";
 import { Image } from "@nextui-org/image";
 
-import type { MediaWithRelations } from "@taiyo/db";
+import type { MediaWithRelations } from "@taiyo/db/types";
 
 import { DisplayMediaCover } from "~/components/media/DisplayMediaCover";
 import { cn } from "~/utils/cn";

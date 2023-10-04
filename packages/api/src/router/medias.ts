@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 import { db } from "@taiyo/db";
-import type { MediasWithCovers, MediaWithRelations } from "@taiyo/db";
+import type { MediasWithCovers, MediaWithRelations } from "@taiyo/db/types";
 import type { MediaChapterWithRelations } from "@taiyo/db/types/mediaChapter.types";
 
 import { createTRPCRouter, publicProcedure } from "../trpc";

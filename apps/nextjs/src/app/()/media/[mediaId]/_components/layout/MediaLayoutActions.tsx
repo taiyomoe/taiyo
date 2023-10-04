@@ -2,7 +2,7 @@
 
 import { Skeleton } from "@nextui-org/skeleton";
 
-import type { MediaWithRelations } from "@taiyo/db";
+import type { MediaWithRelations } from "@taiyo/db/types";
 
 import { MediaUtils } from "~/utils/MediaUtils";
 

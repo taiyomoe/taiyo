@@ -1,8 +1,8 @@
 "use client";
 
-import { Accordion, AccordionItem } from "@nextui-org/react";
+import { Accordion, AccordionItem } from "@nextui-org/accordion";
 
-import type { MediaWithRelations } from "@taiyo/db";
+import type { MediaWithRelations } from "@taiyo/db/types";
 
 import { MediaChapterUtils } from "~/utils/MediaChapterUtils";
 import { MediaChapterGroupCard } from "./MediaChapterGroupCard";

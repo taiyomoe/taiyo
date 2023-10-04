@@ -1,4 +1,4 @@
-import type { MediaChapterGroup } from "@taiyo/db";
+import type { MediaChapterGroup } from "@taiyo/db/types";
 
 import { MediaChapterCard } from "./MediaChapterCard";
 

@@ -8,7 +8,7 @@ import "swiper/css";
 import Link from "next/link";
 import { Skeleton } from "@nextui-org/skeleton";
 
-import type { MediasWithCovers } from "@taiyo/db";
+import type { MediasWithCovers } from "@taiyo/db/types";
 
 import { MediaUtils } from "~/utils/MediaUtils";
 

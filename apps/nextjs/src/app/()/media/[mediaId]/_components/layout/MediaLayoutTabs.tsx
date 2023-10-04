@@ -2,7 +2,7 @@
 
 import { Tab, Tabs } from "@nextui-org/tabs";
 
-import type { MediaWithRelations } from "@taiyo/db";
+import type { MediaWithRelations } from "@taiyo/db/types";
 
 import { MediaLayoutChaptersTab } from "./chapters/MediaLayoutChaptersTab";
 

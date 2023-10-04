@@ -1,6 +1,6 @@
 import { ClockIcon } from "lucide-react";
 
-import type { MediaChapter } from "@taiyo/db";
+import type { MediaChapter } from "@taiyo/db/types";
 
 import { MediaChapterUtils } from "~/utils/MediaChapterUtils";
 
