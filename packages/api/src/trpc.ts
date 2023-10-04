@@ -6,13 +6,17 @@
  * tl;dr - this is where all the tRPC server stuff is created and plugged in.
  * The pieces you will need to use are documented accordingly near the end
  */
-import { initTRPC, TRPCError } from "@trpc/server";
+import { initTRPC } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
 
 import { auth } from "@taiyo/auth";
 import type { Session } from "@taiyo/auth";
 import { db } from "@taiyo/db";
+import type { Actions, Resources } from "@taiyo/db/types";
+
+import { withAuth } from "./middlewares/withAuth";
+import { withPermissions } from "./middlewares/withPermissions";
 
 /**
  * 1. CONTEXT
@@ -26,6 +30,11 @@ import { db } from "@taiyo/db";
 interface CreateContextOptions {
   session: Session | null;
 }
+
+export type Meta = {
+  resource?: Resources;
+  action?: Actions;
+};
 
 /**
  * This helper generates the "internals" for a tRPC context. If you need to use
@@ -68,19 +77,30 @@ export const createTRPCContext = async (opts: {
  * This is where the trpc api is initialized, connecting the context and
  * transformer
  */
-const t = initTRPC.context<typeof createTRPCContext>().create({
-  transformer: superjson,
-  errorFormatter({ shape, error }) {
-    return {
-      ...shape,
-      data: {
-        ...shape.data,
-        zodError:
-          error.cause instanceof ZodError ? error.cause.flatten() : null,
-      },
-    };
-  },
-});
+const t = initTRPC
+  .context<typeof createTRPCContext>()
+  .meta<Meta>()
+  .create({
+    transformer: superjson,
+    errorFormatter({ shape, error }) {
+      return {
+        ...shape,
+        data: {
+          ...shape.data,
+          zodError:
+            error.cause instanceof ZodError ? error.cause.flatten() : null,
+        },
+      };
+    },
+  });
+
+export type tRPCInit = typeof t;
+
+/**
+ * Reusable middlewares
+ */
+export const authMiddleware = withAuth(t);
+const permissionsMiddleware = withPermissions();
 
 /**
  * 3. ROUTER & PROCEDURE (THE IMPORTANT BIT)
@@ -105,25 +125,6 @@ export const createTRPCRouter = t.router;
 export const publicProcedure = t.procedure;
 
 /**
- * Reusable middleware that enforces users are logged in before running the
- * procedure
- */
-const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
-  if (!ctx.session?.user) {
-    throw new TRPCError({ code: "UNAUTHORIZED" });
-  }
-
-  console.log("here");
-
-  return next({
-    ctx: {
-      // infers the `session` as non-nullable
-      session: { ...ctx.session, user: ctx.session.user },
-    },
-  });
-});
-
-/**
  * Protected (authed) procedure
  *
  * If you want a query or mutation to ONLY be accessible to logged in users, use
@@ -132,4 +133,4 @@ const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
  *
  * @see https://trpc.io/docs/procedures
  */
-export const protectedProcedure = t.procedure.use(enforceUserIsAuthed);
+export const protectedProcedure = t.procedure.use(permissionsMiddleware);
