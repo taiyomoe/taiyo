@@ -1,9 +1,9 @@
-import { authRouter } from "./router/auth";
 import { mediasRouter } from "./router/medias";
+import { usersRouter } from "./router/users";
 import { createTRPCRouter } from "./trpc";
 
 export const appRouter = createTRPCRouter({
-  auth: authRouter,
+  users: usersRouter,
   medias: mediasRouter,
 });
 

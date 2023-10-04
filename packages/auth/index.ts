@@ -1,10 +1,12 @@
 import Discord from "@auth/core/providers/discord";
-import type { DefaultSession } from "@auth/core/types";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import NextAuth from "next-auth";
+import type { DefaultSession } from "next-auth";
 
-import { db } from "@taiyo/db";
-import { userSettings } from "@taiyo/db/schema/users";
+import { db, eq } from "@taiyo/db";
+import type { Role } from "@taiyo/db";
+import { roles } from "@taiyo/db/schema/roles";
+import { users, userSettings } from "@taiyo/db/schema/users";
 
 import { env } from "./env.mjs";
 
@@ -15,9 +17,15 @@ export const providers = ["discord"] as const;
 export type OAuthProviders = (typeof providers)[number];
 
 declare module "next-auth" {
+  /**
+   * Returned by `useSession`, `getSession` and received as a prop on the `SessionProvider` React Context
+   */
   interface Session {
     user: {
+      /** The user's unique ID. */
       id: string;
+      /** The user's current role and permissions. */
+      role: Pick<Role, "name" | "permissions">;
     } & DefaultSession["user"];
   }
 }
@@ -38,6 +46,26 @@ export const {
     signIn: "/auth/sign-in",
   },
   events: {
+    session: async ({ session }) => {
+      if (session.user.role) return;
+
+      const results = await db
+        .select({
+          name: roles.name,
+          permissions: roles.permissions,
+        })
+        .from(users)
+        .leftJoin(roles, eq(roles.id, users.roleId))
+        .where(eq(users.id, session.user.id))
+        .limit(1);
+
+      const firstResult = results.at(0)!;
+
+      session.user.role = {
+        name: firstResult.name ?? "USER",
+        permissions: firstResult.permissions ?? [],
+      };
+    },
     createUser: async (message) => {
       await db.insert(userSettings).values({ userId: message.user.id });
     },

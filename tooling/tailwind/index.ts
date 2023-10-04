@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import plugin from "tailwindcss/plugin";
 
 export default {
   darkMode: ["class"],
@@ -43,5 +44,11 @@ export default {
       },
     },
   },
-  plugins: [require("tailwind-scrollbar")],
+  plugins: [
+    require("tailwind-scrollbar"),
+    plugin(({ addVariant }) => {
+      addVariant("child", "& > *");
+      addVariant("child-hover", "& > *:hover");
+    }),
+  ],
 } satisfies Config;

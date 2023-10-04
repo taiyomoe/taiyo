@@ -213,6 +213,9 @@ importers:
       tailwind-scrollbar:
         specifier: ^3.0.5
         version: 3.0.5(tailwindcss@3.3.3)
+      tailwind-variants:
+        specifier: ^0.1.14
+        version: 0.1.14(tailwindcss@3.3.3)
       zod:
         specifier: ^3.22.3
         version: 3.22.3
