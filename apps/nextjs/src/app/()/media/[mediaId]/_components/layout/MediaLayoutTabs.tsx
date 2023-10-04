@@ -14,9 +14,16 @@ export const MediaLayoutTabs = ({ media }: Props) => {
   return (
     <div className="px-3">
       <Tabs
-        className="h-[54px] py-2 xl:h-[48px]"
+        classNames={{
+          base: "border-b-content3 h-[54px] border-b pt-2 xl:h-[48px] w-full",
+          tabList: "h-full p-0",
+          tab: "h-full",
+          tabContent: "text-medium",
+        }}
         defaultSelectedKey="chapters"
-        disabledKeys={["characters", "relations", "covers", "banners"]}
+        disabledKeys={["characters", "relations", "covers"]}
+        color="primary"
+        variant="underlined"
       >
         <Tab key="chapters" title="Capítulos">
           <MediaLayoutChaptersTab media={media} />
