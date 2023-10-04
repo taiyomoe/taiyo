@@ -1,6 +1,6 @@
 import type { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 
-import { trackers } from "../schema/mediaTrackers";
+import { trackers } from "../schema/trackers";
 
 const execute = async (db: PostgresJsDatabase) => {
   await db.insert(trackers).values([
