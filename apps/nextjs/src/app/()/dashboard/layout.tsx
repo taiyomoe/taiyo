@@ -9,7 +9,7 @@ export default function Layout({ children }: Props) {
   return (
     <div className="flex h-full w-full">
       <Sidebar content={<DashboardSidebarContent />} />
-      <div className="w-full p-4">{children}</div>
+      <div className="w-full p-6">{children}</div>
     </div>
   );
 }

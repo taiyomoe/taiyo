@@ -7,6 +7,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { ReactQueryStreamedHydration } from "@tanstack/react-query-next-experimental";
 import { loggerLink, unstable_httpBatchStreamLink } from "@trpc/client";
 import { ThemeProvider } from "next-themes";
+import { Toaster } from "sonner";
 import superjson from "superjson";
 
 import { env } from "~/env.mjs";
@@ -75,6 +76,7 @@ export const Providers = (props: ProviderProps) => {
     <TRPCReactProvider headers={props.headers}>
       <NextUIProvider>
         <ThemeProvider attribute="class" defaultTheme="dark">
+          <Toaster richColors />
           {props.children}
         </ThemeProvider>
       </NextUIProvider>
