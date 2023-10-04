@@ -1,7 +1,7 @@
 import type { InferSelectModel } from "drizzle-orm";
 import { createInsertSchema } from "drizzle-zod";
 
-import { tags } from "../schema/mediaTags";
+import { tags } from "../schema/tags";
 
 export type Tag = InferSelectModel<typeof tags>;
 

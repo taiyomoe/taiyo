@@ -1,9 +1,7 @@
 import type { InferSelectModel } from "drizzle-orm";
 
-import type {
-  mediaChapterComments,
-  mediaChapters,
-} from "../schema/mediaChapters";
+import type { mediaChapterComments } from "../schema/mediaChapterComments";
+import type { mediaChapters } from "../schema/mediaChapters";
 import type { Media } from "./media.types";
 import type { User } from "./user.types";
 

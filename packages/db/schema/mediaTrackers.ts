@@ -1,16 +1,8 @@
+import { relations } from "drizzle-orm";
 import { pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 
 import { medias } from "./medias";
-
-export const trackers = pgTable("trackers", {
-  id: uuid("id").defaultRandom().primaryKey(),
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().notNull(),
-  deletedAt: timestamp("deletedAt"),
-  // -----
-  name: text("name").notNull().unique(),
-  logo: text("logo").notNull(),
-});
+import { trackers } from "./trackers";
 
 export const mediaTrackers = pgTable("mediaTrackers", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -27,3 +19,14 @@ export const mediaTrackers = pgTable("mediaTrackers", {
     .references(() => medias.id, { onDelete: "cascade" })
     .notNull(),
 });
+
+export const mediaTrackersRelations = relations(mediaTrackers, ({ one }) => ({
+  tracker: one(trackers, {
+    fields: [mediaTrackers.trackerId],
+    references: [trackers.id],
+  }),
+  media: one(medias, {
+    fields: [mediaTrackers.mediaId],
+    references: [medias.id],
+  }),
+}));

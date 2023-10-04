@@ -1,6 +1,6 @@
 import type { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 
-import { tags } from "../schema/mediaTags";
+import { tags } from "../schema/tags";
 
 const execute = async (db: PostgresJsDatabase) => {
   await db.insert(tags).values([
