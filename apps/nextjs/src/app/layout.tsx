@@ -35,7 +35,7 @@ export default function Layout(props: { children: React.ReactNode }) {
       <body
         className={cn(
           ["font-sans", fontSans.variable].join(" "),
-          "h-screen scrollbar-thin scrollbar-track-background scrollbar-thumb-card",
+          "scrollbar-thumb-card h-screen scrollbar-thin scrollbar-track-background",
         )}
       >
         <Providers headers={headers()}>{props.children}</Providers>
