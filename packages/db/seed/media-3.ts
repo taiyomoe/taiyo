@@ -1,5 +1,6 @@
 import type { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 
+import { mediaBanners } from "../schema/mediaBanners";
 import { mediaChapters } from "../schema/mediaChapters";
 import { mediaCovers } from "../schema/mediaCovers";
 import { medias } from "../schema/medias";
@@ -83,6 +84,11 @@ const execute = async (db: PostgresJsDatabase) => {
       mediaId: "65ad0a5c-4861-4b59-b93e-90963590958e",
     },
   ]);
+
+  await db.insert(mediaBanners).values({
+    id: "f66780da-27a0-4578-843a-c1c25f95e331",
+    mediaId: "65ad0a5c-4861-4b59-b93e-90963590958e",
+  });
 
   await db.insert(mediaTags).values([
     {
