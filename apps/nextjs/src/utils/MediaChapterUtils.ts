@@ -5,7 +5,7 @@ import type {
   MediaChapterGroups,
   MediaChapterPage,
   MediaChapterWithUsers,
-} from "@taiyo/db";
+} from "@taiyo/db/types";
 
 import { CDN_DOMAIN } from "./constants";
 

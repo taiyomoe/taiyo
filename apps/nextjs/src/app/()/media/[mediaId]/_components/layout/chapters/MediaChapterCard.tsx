@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Card, CardBody } from "@nextui-org/card";
 import { Skeleton } from "@nextui-org/skeleton";
 
-import type { MediaChapterWithUser } from "@taiyo/db";
+import type { MediaChapterWithUser } from "@taiyo/db/types";
 
 import { cn } from "~/utils/cn";
 import { MediaChapterUtils } from "~/utils/MediaChapterUtils";
