@@ -143,7 +143,7 @@ importers:
         version: 2.1.13(@types/react@18.2.25)(framer-motion@10.16.4)(react-dom@18.2.0)(react@18.2.0)(tailwindcss@3.3.3)
       '@t3-oss/env-nextjs':
         specifier: ^0.6.1
-        version: 0.6.1(typescript@5.2.2)(zod@3.22.3)
+        version: 0.6.1(typescript@5.2.2)(zod@3.22.4)
       '@taiyo/api':
         specifier: ^0.1.0
         version: link:../../packages/api
@@ -182,7 +182,7 @@ importers:
         version: 2.0.0
       drizzle-zod:
         specifier: ^0.5.1
-        version: 0.5.1(drizzle-orm@0.28.6)(zod@3.22.3)
+        version: 0.5.1(drizzle-orm@0.28.6)(zod@3.22.4)
       formik:
         specifier: ^2.4.5
         version: 2.4.5(react@18.2.0)
@@ -226,11 +226,11 @@ importers:
         specifier: ^0.1.14
         version: 0.1.14(tailwindcss@3.3.3)
       zod:
-        specifier: ^3.22.3
-        version: 3.22.3
+        specifier: ^3.22.4
+        version: 3.22.4
       zod-formik-adapter:
         specifier: ^1.2.0
-        version: 1.2.0(formik@2.4.5)(zod@3.22.3)
+        version: 1.2.0(formik@2.4.5)(zod@3.22.4)
     devDependencies:
       '@taiyo/eslint-config':
         specifier: ^0.2.0
@@ -293,8 +293,8 @@ importers:
         specifier: 1.13.3
         version: 1.13.3
       zod:
-        specifier: ^3.22.3
-        version: 3.22.3
+        specifier: ^3.22.4
+        version: 3.22.4
     devDependencies:
       '@taiyo/eslint-config':
         specifier: ^0.2.0
@@ -325,7 +325,7 @@ importers:
         version: 0.3.3
       '@t3-oss/env-nextjs':
         specifier: ^0.6.1
-        version: 0.6.1(typescript@5.2.2)(zod@3.22.3)
+        version: 0.6.1(typescript@5.2.2)(zod@3.22.4)
       '@taiyo/db':
         specifier: ^0.1.0
         version: link:../db
@@ -342,8 +342,8 @@ importers:
         specifier: 18.2.0
         version: 18.2.0(react@18.2.0)
       zod:
-        specifier: ^3.22.3
-        version: 3.22.3
+        specifier: ^3.22.4
+        version: 3.22.4
     devDependencies:
       '@taiyo/eslint-config':
         specifier: ^0.2.0
@@ -5450,25 +5450,25 @@ packages:
       defer-to-connect: 1.1.3
     dev: false
 
-  /@t3-oss/env-core@0.6.1(typescript@5.2.2)(zod@3.22.3):
+  /@t3-oss/env-core@0.6.1(typescript@5.2.2)(zod@3.22.4):
     resolution: {integrity: sha512-KQD7qEDJtkWIWWmTVjNvk0wnHpkvAQ6CRbUxbWMFNG/fiosBQDQvtRpBNu6USxBscJCoC4z6y7P9MN52/mLOzw==}
     peerDependencies:
       typescript: '>=4.7.2'
       zod: ^3.0.0
     dependencies:
       typescript: 5.2.2
-      zod: 3.22.3
+      zod: 3.22.4
     dev: false
 
-  /@t3-oss/env-nextjs@0.6.1(typescript@5.2.2)(zod@3.22.3):
+  /@t3-oss/env-nextjs@0.6.1(typescript@5.2.2)(zod@3.22.4):
     resolution: {integrity: sha512-z1dIC++Vxj9kmzX5nSPfcrCSkszy3dTEPC4Ssx7Ap5AqR3c2Qa7S0xf8axn6coy7D/vCXDAAnHYnCMDhtcY3SQ==}
     peerDependencies:
       typescript: '>=4.7.2'
       zod: ^3.0.0
     dependencies:
-      '@t3-oss/env-core': 0.6.1(typescript@5.2.2)(zod@3.22.3)
+      '@t3-oss/env-core': 0.6.1(typescript@5.2.2)(zod@3.22.4)
       typescript: 5.2.2
-      zod: 3.22.3
+      zod: 3.22.4
     dev: false
 
   /@tanstack/match-sorter-utils@8.8.4:
@@ -7553,7 +7553,7 @@ packages:
       hanji: 0.0.5
       json-diff: 0.9.0
       minimatch: 7.4.6
-      zod: 3.22.3
+      zod: 3.22.4
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -7622,14 +7622,14 @@ packages:
     dependencies:
       '@neondatabase/serverless': 0.6.0
 
-  /drizzle-zod@0.5.1(drizzle-orm@0.28.6)(zod@3.22.3):
+  /drizzle-zod@0.5.1(drizzle-orm@0.28.6)(zod@3.22.4):
     resolution: {integrity: sha512-C/8bvzUH/zSnVfwdSibOgFjLhtDtbKYmkbPbUCq46QZyZCH6kODIMSOgZ8R7rVjoI+tCj3k06MRJMDqsIeoS4A==}
     peerDependencies:
       drizzle-orm: '>=0.23.13'
       zod: '*'
     dependencies:
       drizzle-orm: 0.28.6(@neondatabase/serverless@0.6.0)
-      zod: 3.22.3
+      zod: 3.22.4
     dev: false
 
   /duplexer3@0.1.5:
@@ -14090,15 +14090,15 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
 
-  /zod-formik-adapter@1.2.0(formik@2.4.5)(zod@3.22.3):
+  /zod-formik-adapter@1.2.0(formik@2.4.5)(zod@3.22.4):
     resolution: {integrity: sha512-62U+Mf8U05pvLsIMUTC1H6d4K5SmsrXM+YgiZhCpPin5GNhnVuXCGySmJCs0FHuTJCBy7Et5Z1i8KF5ffuLttg==}
     peerDependencies:
       formik: ^2.2.9
       zod: ^3.14.4
     dependencies:
       formik: 2.4.5(react@18.2.0)
-      zod: 3.22.3
+      zod: 3.22.4
     dev: false
 
-  /zod@3.22.3:
-    resolution: {integrity: sha512-EjIevzuJRiRPbVH4mGc8nApb/lVLKVpmUhAaR5R5doKGfAnGJ6Gr3CViAVjP+4FWSxCsybeWQdcgCtbX+7oZug==}
+  /zod@3.22.4:
+    resolution: {integrity: sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==}
