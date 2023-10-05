@@ -5,7 +5,7 @@ export const LatestMedias = async () => {
   const medias = await serverApi.medias.getLatestMedias();
 
   return (
-    <div className="flex h-full w-full flex-col gap-6">
+    <div className="flex w-full flex-col gap-6">
       <p className="text-2xl font-medium">Últimas obras adicionadas</p>
       <SwipeableLatestMedias medias={medias} />
     </div>
