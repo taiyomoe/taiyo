@@ -14,7 +14,7 @@ const getTitle = (mediaChapter: MediaChapter) => {
 };
 
 const getUrl = (mediaChapter: MediaChapter) => {
-  return `/media/${mediaChapter.mediaId}/chapter/${mediaChapter.id}`;
+  return `/chapter/${mediaChapter.id}`;
 };
 
 const getPageUrl = (mediaChapter: MediaChapter, page: MediaChapterPage) => {

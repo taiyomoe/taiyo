@@ -6,16 +6,15 @@ import { serverApi } from "~/utils/serverApi";
 export const runtime = "edge";
 
 type Props = {
-  params: { mediaId: string; chapterId: string };
+  params: { chapterId: string };
 };
 
-const MediaChapterPage = async ({ params: { mediaId, chapterId } }: Props) => {
+const MediaChapterPage = async ({ params: { chapterId } }: Props) => {
   const mediaChapter = await serverApi.medias.getMediaChapterById(chapterId);
   const { comments, pages } = mediaChapter;
 
   return (
     <div>
-      <p>mediaId: {mediaId}</p>
       <p>chapterId: {chapterId}</p>
       <p>comments: {comments.length}</p>
       <hr />
