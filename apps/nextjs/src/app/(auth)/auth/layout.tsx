@@ -1,7 +1,9 @@
-export default function Layout(props: { children: React.ReactNode }) {
+import type { LayoutProps } from "~/types";
+
+export default function Layout({ children }: LayoutProps) {
   return (
     <main className="flex h-screen flex-col items-center justify-center sm:py-12">
-      {props.children}
+      {children}
     </main>
   );
 }
