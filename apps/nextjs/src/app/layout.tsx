@@ -4,6 +4,7 @@ import { headers } from "next/headers";
 
 import "~/styles/globals.css";
 
+import type { LayoutProps } from "~/types";
 import { cn } from "~/utils/cn";
 import { Providers } from "./providers";
 
@@ -29,7 +30,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function Layout(props: { children: React.ReactNode }) {
+export default function Layout({ children }: LayoutProps) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body
@@ -38,7 +39,7 @@ export default function Layout(props: { children: React.ReactNode }) {
           "scrollbar-thumb-card h-screen scrollbar-thin scrollbar-track-background",
         )}
       >
-        <Providers headers={headers()}>{props.children}</Providers>
+        <Providers headers={headers()}>{children}</Providers>
       </body>
     </html>
   );

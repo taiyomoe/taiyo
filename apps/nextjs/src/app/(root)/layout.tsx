@@ -1,10 +1,10 @@
-import { Navbar } from "./_components/Navbar";
+import type { LayoutProps } from "~/types";
 
-export default function Layout(props: { children: React.ReactNode }) {
+export default function Layout({ children }: LayoutProps) {
   return (
     <div className="flex h-screen flex-col">
       <Navbar />
-      {props.children}
+      {children}
     </div>
   );
 }
