@@ -13,7 +13,7 @@ import {
   ChevronsUpDownIcon,
 } from "lucide-react";
 
-export const ReaderMediaChapterPageDropdown = () => {
+export const ReaderSettingsMediaChapterDropdown = () => {
   return (
     <div className="flex w-full gap-2">
       <Button
@@ -31,10 +31,7 @@ export const ReaderMediaChapterPageDropdown = () => {
             fullWidth
             endContent={<ChevronsUpDownIcon size={20} />}
           >
-            <div className="flex flex-col text-left">
-              <p>Página 3</p>
-              <p className="text-default-500 text-xs">1/20</p>
-            </div>
+            Capítulo 26
           </Button>
         </DropdownTrigger>
         <DropdownMenu>
