@@ -3,7 +3,7 @@ import type { LayoutProps } from "~/types";
 
 export default function Layout({ children }: LayoutProps) {
   return (
-    <div className="flex h-screen flex-col">
+    <div className="flex h-full flex-col">
       <Navbar />
       {children}
     </div>
