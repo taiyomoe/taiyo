@@ -1,7 +1,7 @@
 import type { ComponentProps } from "react";
 
+import { SignIn } from "~/components/auth/SignIn";
 import { CompanyLogo } from "~/components/ui/CompanyLogo";
-import { SignIn } from "../../../../../components/auth/SignIn";
 
 type Props = Omit<ComponentProps<typeof SignIn>, "provider">;
 
