@@ -1,11 +1,8 @@
 import { Sidebar } from "~/components/layout/Sidebar";
+import type { LayoutProps } from "~/types";
 import { DashboardSidebarContent } from "./_components/DashboardSidebarContent";
 
-type Props = {
-  children: React.ReactNode;
-};
-
-export default function Layout({ children }: Props) {
+export default function Layout({ children }: LayoutProps) {
   return (
     <div className="flex h-full w-full">
       <Sidebar content={<DashboardSidebarContent />} />

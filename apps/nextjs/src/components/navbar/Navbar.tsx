@@ -1,8 +1,8 @@
 import Link from "next/link";
 
 import { CompanyLogo } from "~/components/ui/CompanyLogo";
-import { NavbarBorder } from "./navbar/NavbarBorder";
-import { NavbarPopover } from "./navbar/NavbarPopover";
+import { NavbarBorder } from "./NavbarBorder";
+import { NavbarPopover } from "./NavbarPopover";
 
 export const Navbar = () => {
   return (
