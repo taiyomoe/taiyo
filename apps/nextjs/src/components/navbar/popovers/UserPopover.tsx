@@ -7,8 +7,8 @@ import { GaugeIcon, LinkIcon } from "lucide-react";
 
 import type { Session } from "@taiyo/auth";
 
-import { SignedIn } from "~/app/()/media/[mediaId]/_components/utils/SignedIn";
 import { SignOut } from "~/components/auth/SignOut";
+import { SignedIn } from "~/components/utils/SignedIn";
 import { NavbarPopoversCommonOptions } from "./NavbarPopoversCommonOptions";
 
 type Props = { session: Session };
