@@ -51,7 +51,7 @@
     "@taiyo/tailwind-config": "^0.1.0",
     "@taiyo/tsconfig": "^0.1.0",
     "@types/luxon": "^3.3.2",
-    "@types/node": "^18.18.3",
+    "@types/node": "^18.18.4",
     "@types/react": "^18.2.25",
     "@types/react-dom": "^18.2.10",
     "dotenv-cli": "^7.3.0",
