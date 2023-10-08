@@ -4,6 +4,7 @@ import { drizzle } from "drizzle-orm/neon-http";
 import * as mediaBanners from "./schema/mediaBanners";
 import * as mediaChapterComments from "./schema/mediaChapterComments";
 import * as mediaChapters from "./schema/mediaChapters";
+import * as mediaChapterScans from "./schema/mediaChapterScans";
 import * as mediaCovers from "./schema/mediaCovers";
 import * as medias from "./schema/medias";
 import * as mediaTags from "./schema/mediaTags";
@@ -29,6 +30,7 @@ export const schema = {
   ...mediaTags,
   ...mediaTitles,
   ...mediaChapters,
+  ...mediaChapterScans,
   ...mediaChapterComments,
   ...mediaTrackers,
   ...scans,

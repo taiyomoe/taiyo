@@ -12,9 +12,10 @@ import media8 from "../seed/media-8";
 import media9 from "../seed/media-9";
 import media10 from "../seed/media-10";
 import roles from "../seed/roles";
+import scans from "../seed/scans";
 import tags from "../seed/tags";
 import trackers from "../seed/trackers";
-import user1 from "../seed/user-1";
+import users from "../seed/users";
 
 if (!process.env.DATABASE_URL) {
   throw new Error("DATABASE_URL is not set");
@@ -32,7 +33,8 @@ async function seed() {
   await tags.execute(db).then(() => console.log("Tags seeded"));
 
   if (process.env.NODE_ENV === "development") {
-    await user1.execute(db).then(() => console.log("User 1 seeded"));
+    await users.execute(db).then(() => console.log("Users seeded"));
+    await scans.execute(db).then(() => console.log("Scans seeded"));
     await media1.execute(db).then(() => console.log("Media 1 seeded"));
     await media2.execute(db).then(() => console.log("Media 2 seeded"));
     await media3.execute(db).then(() => console.log("Media 3 seeded"));
