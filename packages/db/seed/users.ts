@@ -136,6 +136,13 @@ const execute = async (db: PostgresJsDatabase) => {
       name: "Araragi",
       email: "araragi@gmail.com",
     },
+
+    // Others
+    {
+      id: "db852a04-7406-4a6a-87f2-1b494e810a29",
+      name: "Calvo",
+      email: "calvo@gmail.com",
+    },
   ]);
 };
 
