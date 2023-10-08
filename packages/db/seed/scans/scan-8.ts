@@ -9,8 +9,7 @@ const execute = async (db: PostgresJsDatabase) => {
     name: "I Wish Scan",
     description: "É agora ou nunca.",
     // -----,
-    logo: "",
-    banner: "",
+    banner: "https://i.imgur.com/rdrUVCh.png",
     // -----,
     website: "http://iwishscan.blogspot.com/",
   });

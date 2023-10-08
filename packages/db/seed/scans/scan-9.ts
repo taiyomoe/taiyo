@@ -11,7 +11,6 @@ const execute = async (db: PostgresJsDatabase) => {
     description: "Tradução e Edição de mangás/manhwas com qualidade e rapidez!",
     // -----,
     logo: "https://i.imgur.com/3oHAciM.png",
-    banner: "",
     // -----,
     website: "https://neoxscan.net/",
     discord: "https://discord.com/invite/neoxscan",

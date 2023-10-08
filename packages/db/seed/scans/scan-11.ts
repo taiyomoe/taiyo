@@ -9,9 +9,6 @@ const execute = async (db: PostgresJsDatabase) => {
     // -----
     name: "Saturn Scan",
     // -----,
-    logo: "",
-    banner: "",
-    // -----,
     website: "http://saturnscans.blogspot.com/",
   });
 

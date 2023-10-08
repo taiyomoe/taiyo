@@ -13,7 +13,7 @@ export const scans = pgTable("scans", {
   name: text("name").notNull(),
   description: text("description"),
   // -----
-  logo: text("logo").notNull(),
+  logo: text("logo"),
   banner: text("banner"),
   // -----
   website: text("website"),

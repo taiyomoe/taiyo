@@ -9,9 +9,6 @@ const execute = async (db: PostgresJsDatabase) => {
     // -----
     name: "Kyodai Mangás",
     // -----,
-    logo: "",
-    banner: "",
-    // -----,
     discord: "https://discord.gg/9Mk8uz6aRK",
   });
 
