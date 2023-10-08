@@ -82,10 +82,6 @@ async function clear() {
       .then(() => console.log("scans deleted"))
       .catch(() => null);
     await db
-      .delete(roles)
-      .then(() => console.log("roles deleted"))
-      .catch(() => null);
-    await db
       .delete(accounts)
       .then(() => console.log("accounts deleted"))
       .catch(() => null);
@@ -103,7 +99,11 @@ async function clear() {
       .catch(() => null);
     await db
       .delete(users)
-      .then(() => console.log("users deleted\n"))
+      .then(() => console.log("users deleted"))
+      .catch(() => null);
+    await db
+      .delete(roles)
+      .then(() => console.log("roles deleted"))
       .catch(() => null);
   }
 }
