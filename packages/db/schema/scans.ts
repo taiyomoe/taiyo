@@ -21,6 +21,8 @@ export const scans = pgTable("scans", {
   twitter: text("twitter"),
   facebook: text("facebook"),
   instagram: text("instagram"),
+  telegram: text("telegram"),
+  youtube: text("youtube"),
   email: text("email"),
 });
 
