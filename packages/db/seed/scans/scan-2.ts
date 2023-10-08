@@ -9,8 +9,7 @@ const execute = async (db: PostgresJsDatabase) => {
     // -----
     name: "Gekkou",
     // -----,
-    logo: "",
-    banner: "",
+    logo: "https://i.imgur.com/TgPHaet.jpg",
     // -----,
     website: "https://gekkou.com.br/",
     discord: "http://discord.gg/WfYn3zU",

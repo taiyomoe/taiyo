@@ -10,9 +10,6 @@ const execute = async (db: PostgresJsDatabase) => {
     name: "Shin Sekai Scans",
     description: "É agora ou nunca.",
     // -----,
-    logo: "",
-    banner: "",
-    // -----,
     website: "https://shinsekaiscans.wordpress.com/",
     twitter: "https://twitter.com/ShinSekaiscans",
   });

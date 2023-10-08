@@ -11,8 +11,8 @@ const execute = async (db: PostgresJsDatabase) => {
     description:
       "Traduções, Revisões e Edições dos melhores conteúdos para vocês.",
     // -----,
-    logo: "",
-    banner: "",
+    logo: "https://i.imgur.com/scRpT3V.png",
+    banner: "https://i.imgur.com/wYek1z5.png",
     // -----,
     website: "https://saikaiscans.net/",
     discord: "https://discord.gg/cmQuwHB7rf",
