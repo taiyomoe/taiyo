@@ -1,12 +1,13 @@
 import type { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 
-import { mediaBanners } from "../schema/mediaBanners";
-import { mediaChapters } from "../schema/mediaChapters";
-import { mediaCovers } from "../schema/mediaCovers";
-import { medias } from "../schema/medias";
-import { mediaTags } from "../schema/mediaTags";
-import { mediaTitles } from "../schema/mediaTitles";
-import { mediaTrackers } from "../schema/mediaTrackers";
+import { mediaBanners } from "../../schema/mediaBanners";
+import { mediaChapters } from "../../schema/mediaChapters";
+import { mediaChapterScans } from "../../schema/mediaChapterScans";
+import { mediaCovers } from "../../schema/mediaCovers";
+import { medias } from "../../schema/medias";
+import { mediaTags } from "../../schema/mediaTags";
+import { mediaTitles } from "../../schema/mediaTitles";
+import { mediaTrackers } from "../../schema/mediaTrackers";
 
 const execute = async (db: PostgresJsDatabase) => {
   await db.insert(medias).values({
@@ -506,6 +507,109 @@ const execute = async (db: PostgresJsDatabase) => {
       ],
       mediaId: "21bc3f0b-73ac-44b6-8955-ae5a0a50cf39",
       userId: "2d947dd6-e2e9-48f4-a194-6b1657271646",
+    },
+  ]);
+
+  await db.insert(mediaChapterScans).values([
+    {
+      id: "dda4ab07-05b8-4e09-87c9-48ccd4890f85",
+      scanId: "a9f2139e-54fc-4524-8688-ed7b46920f5d",
+      mediaChapterId: "b2cfca53-c90c-4c42-a69f-a2dca025cca8",
+    },
+    {
+      id: "43074700-d9df-4780-8ae7-1649326e375f",
+      scanId: "2301e266-2162-4480-93bb-da510feafbbf",
+      mediaChapterId: "b2cfca53-c90c-4c42-a69f-a2dca025cca8",
+    },
+    {
+      id: "7df71244-e4fd-4581-b97d-7d1164c480af",
+      scanId: "a9f2139e-54fc-4524-8688-ed7b46920f5d",
+      mediaChapterId: "356711ba-45db-49b8-b4ac-cc03aa674bbd",
+    },
+    {
+      id: "68858900-a1af-47cf-a9c3-d08e32c65a16",
+      scanId: "2301e266-2162-4480-93bb-da510feafbbf",
+      mediaChapterId: "356711ba-45db-49b8-b4ac-cc03aa674bbd",
+    },
+    {
+      id: "088273c6-b4e8-4118-82d7-5586c8248808",
+      scanId: "a9f2139e-54fc-4524-8688-ed7b46920f5d",
+      mediaChapterId: "35c39110-f9f8-4d42-ac82-bc43716071e5",
+    },
+    {
+      id: "7c657be0-068b-4808-9c44-31a4c7d3535f",
+      scanId: "2301e266-2162-4480-93bb-da510feafbbf",
+      mediaChapterId: "35c39110-f9f8-4d42-ac82-bc43716071e5",
+    },
+    {
+      id: "3bcca4d0-3b01-4baa-977e-9770733772b2",
+      scanId: "a9f2139e-54fc-4524-8688-ed7b46920f5d",
+      mediaChapterId: "4163393f-4244-4c74-bf18-34b407d692d2",
+    },
+    {
+      id: "4ae208a7-f7f2-47e6-9704-85336d5ecea3",
+      scanId: "2301e266-2162-4480-93bb-da510feafbbf",
+      mediaChapterId: "4163393f-4244-4c74-bf18-34b407d692d2",
+    },
+    {
+      id: "054b6663-24c5-4f63-ba6b-fcba64ec2dae",
+      scanId: "a9f2139e-54fc-4524-8688-ed7b46920f5d",
+      mediaChapterId: "f36096b2-83ce-42c8-ad93-53c55772cc91",
+    },
+    {
+      id: "8fa1e66a-1023-47cc-b933-9142a0229d4a",
+      scanId: "2301e266-2162-4480-93bb-da510feafbbf",
+      mediaChapterId: "f36096b2-83ce-42c8-ad93-53c55772cc91",
+    },
+    {
+      id: "388739cf-718d-47de-98a9-7fe446bbb957",
+      scanId: "a9f2139e-54fc-4524-8688-ed7b46920f5d",
+      mediaChapterId: "428717ba-cea4-446c-ba38-f3ea7e7ff1cc",
+    },
+    {
+      id: "8a6a993a-0f35-46a6-86bb-4abe39db1f29",
+      scanId: "2301e266-2162-4480-93bb-da510feafbbf",
+      mediaChapterId: "428717ba-cea4-446c-ba38-f3ea7e7ff1cc",
+    },
+    {
+      id: "e2322c91-94df-49f9-9ace-aaf84f146827",
+      scanId: "a9f2139e-54fc-4524-8688-ed7b46920f5d",
+      mediaChapterId: "e22edd16-30b7-437e-9a38-38542f283e96",
+    },
+    {
+      id: "d82dc167-70e5-43a8-aba0-3f963dadd7c4",
+      scanId: "2301e266-2162-4480-93bb-da510feafbbf",
+      mediaChapterId: "e22edd16-30b7-437e-9a38-38542f283e96",
+    },
+    {
+      id: "c45dbe21-65b4-43a0-acc6-3ae5bd345eb2",
+      scanId: "a9f2139e-54fc-4524-8688-ed7b46920f5d",
+      mediaChapterId: "1916d95e-13f3-4e4b-b8e5-63af74935aca",
+    },
+    {
+      id: "1401e697-1985-4799-98e7-8d7558ba2ac6",
+      scanId: "2301e266-2162-4480-93bb-da510feafbbf",
+      mediaChapterId: "1916d95e-13f3-4e4b-b8e5-63af74935aca",
+    },
+    {
+      id: "26055747-69d2-4925-9870-ec1b68c83135",
+      scanId: "a9f2139e-54fc-4524-8688-ed7b46920f5d",
+      mediaChapterId: "558ddbab-24b6-4638-88d1-bd7588cf2393",
+    },
+    {
+      id: "8b4f56df-43ab-4e6f-a0af-e8d3bba6ff99",
+      scanId: "2301e266-2162-4480-93bb-da510feafbbf",
+      mediaChapterId: "558ddbab-24b6-4638-88d1-bd7588cf2393",
+    },
+    {
+      id: "0855f4f6-bdd8-464e-9d43-dd825718eb10",
+      scanId: "a9f2139e-54fc-4524-8688-ed7b46920f5d",
+      mediaChapterId: "aaacb6a4-20a3-4486-9c59-1825e94fc49e",
+    },
+    {
+      id: "6b766311-3bf6-47a4-9346-0be63600aaed",
+      scanId: "2301e266-2162-4480-93bb-da510feafbbf",
+      mediaChapterId: "aaacb6a4-20a3-4486-9c59-1825e94fc49e",
     },
   ]);
 };
