@@ -5,12 +5,6 @@ import { users } from "../schema/users";
 const execute = async (db: PostgresJsDatabase) => {
   await db.insert(users).values([
     {
-      id: "620d8198-abd3-4d84-9eee-e23de23c168c",
-      // -----
-      name: "rdx",
-      email: "rdx@gmail.com",
-    },
-    {
       id: "87b0282f-b2cf-4a72-bcee-cda470d25d81",
       // -----
       name: "Mel",
