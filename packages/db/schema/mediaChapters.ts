@@ -12,8 +12,8 @@ import {
 
 import type { MediaChapterPages } from "../types/mediaChapter.types";
 import { mediaChapterComments } from "./mediaChapterComments";
+import { mediaChapterScans } from "./mediaChapterScans";
 import { medias } from "./medias";
-import { scans } from "./scans";
 import { users } from "./users";
 
 export const mediaChapters = pgTable(
@@ -62,7 +62,7 @@ export const mediaChaptersRelations = relations(
       fields: [mediaChapters.userId],
       references: [users.id],
     }),
-    scans: many(scans),
+    scans: many(mediaChapterScans),
     comments: many(mediaChapterComments),
   }),
 );

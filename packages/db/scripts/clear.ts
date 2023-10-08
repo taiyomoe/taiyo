@@ -4,12 +4,14 @@ import { drizzle } from "drizzle-orm/neon-http";
 import { mediaBanners } from "../schema/mediaBanners";
 import { mediaChapterComments } from "../schema/mediaChapterComments";
 import { mediaChapters } from "../schema/mediaChapters";
+import { mediaChapterScans } from "../schema/mediaChapterScans";
 import { mediaCovers } from "../schema/mediaCovers";
 import { medias } from "../schema/medias";
 import { mediaTags } from "../schema/mediaTags";
 import { mediaTitles } from "../schema/mediaTitles";
 import { mediaTrackers } from "../schema/mediaTrackers";
 import { roles } from "../schema/roles";
+import { scans } from "../schema/scans";
 import { tags } from "../schema/tags";
 import { trackers } from "../schema/trackers";
 import {
@@ -31,6 +33,10 @@ const db = drizzle(neon(process.env.DATABASE_URL!));
 async function clear() {
   if (process.env.NODE_ENV === "development") {
     console.log("Clearing database...");
+    await db
+      .delete(mediaChapterScans)
+      .then(() => console.log("mediaChapterScans deleted"))
+      .catch(() => null);
     await db
       .delete(mediaChapterComments)
       .then(() => console.log("mediaChapterComments deleted"))
@@ -70,6 +76,10 @@ async function clear() {
     await db
       .delete(tags)
       .then(() => console.log("tags deleted"))
+      .catch(() => null);
+    await db
+      .delete(scans)
+      .then(() => console.log("scans deleted"))
       .catch(() => null);
     await db
       .delete(roles)
