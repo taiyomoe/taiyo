@@ -1,16 +1,16 @@
 import { neon } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-http";
 
-import media1 from "../seed/media-1";
-import media2 from "../seed/media-2";
-import media3 from "../seed/media-3";
-import media4 from "../seed/media-4";
-import media5 from "../seed/media-5";
-import media6 from "../seed/media-6";
-import media7 from "../seed/media-7";
-import media8 from "../seed/media-8";
-import media9 from "../seed/media-9";
-import media10 from "../seed/media-10";
+import media1 from "../seed/medias/media-1";
+import media2 from "../seed/medias/media-2";
+import media3 from "../seed/medias/media-3";
+import media4 from "../seed/medias/media-4";
+import media5 from "../seed/medias/media-5";
+import media6 from "../seed/medias/media-6";
+import media7 from "../seed/medias/media-7";
+import media8 from "../seed/medias/media-8";
+import media9 from "../seed/medias/media-9";
+import media10 from "../seed/medias/media-10";
 import roles from "../seed/roles";
 import scans from "../seed/scans";
 import tags from "../seed/tags";
