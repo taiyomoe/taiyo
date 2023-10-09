@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { Card, CardBody } from "@nextui-org/card";
-import { Skeleton } from "@nextui-org/skeleton";
 
 import type { MediaLimitedChapter } from "@taiyo/db/types";
 
+import { DisplayMediaChapterScans } from "~/components/ui/DisplayMediaChapterScans";
 import { cn } from "~/utils/cn";
 import { MediaChapterUtils } from "~/utils/MediaChapterUtils";
 import { DisplayMediaChapterUploader } from "../../../../../../../components/ui/DisplayMediaChapterUploader";
@@ -48,7 +48,7 @@ export const MediaChapterCard = ({ chapter, order }: Props) => {
             </div>
             {/* SCANS */}
             <div className="order-3 col-span-7 md:order-4">
-              <Skeleton className="h-full w-full rounded" />
+              <DisplayMediaChapterScans scans={chapter.scans} />
             </div>
             {/* UPLOADER */}
             <div className="order-5 col-span-6 md:col-span-2">

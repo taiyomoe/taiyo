@@ -8,15 +8,18 @@ import type { Scan, Scans } from "@taiyo/db/types/scan.types";
 type Props = {
   scans?: Scans | Pick<Scan, "id" | "name">[];
   size?: "sm" | "md";
+  orientation?: "horizontal" | "vertical";
 };
 
 const displayMediaChapterScans = tv({
   slots: {
-    container: "flex w-full items-center",
+    container: "flex w-full",
+    iconContainer: "flex items-center",
+    linkContainer: "flex gap-1",
     icon: "w-fit",
     skeleton: "grow",
     link: "hover:bg-content3",
-    text: "select-none px-2",
+    text: "select-none px-2 truncate",
   },
   variants: {
     size: {
@@ -29,34 +32,60 @@ const displayMediaChapterScans = tv({
       },
       md: {
         container: "gap-2",
+        iconContainer: "h-6",
         icon: "h-5",
         skeleton: "rounded-md h-6",
         link: "rounded-md",
         text: "text-md",
       },
     },
+    orientation: {
+      horizontal: {
+        linkContainer: "flex-row",
+      },
+      vertical: {
+        linkContainer: "flex-col",
+        link: "w-fit",
+      },
+    },
   },
   defaultVariants: {
     size: "sm",
+    orientation: "horizontal",
   },
 });
 
-export const DisplayMediaChapterScans = ({ scans, size }: Props) => {
-  const { container, icon, skeleton, link, text } = displayMediaChapterScans({
+export const DisplayMediaChapterScans = (props: Props) => {
+  const { scans, size, orientation } = props;
+  const {
+    container,
+    iconContainer,
+    linkContainer,
+    icon,
+    skeleton,
+    link,
+    text,
+  } = displayMediaChapterScans({
     size,
+    orientation,
   });
 
   return (
     <div className={container()}>
-      <UsersIcon className={icon()} />
+      <div className={iconContainer()}>
+        <UsersIcon className={icon()} />
+      </div>
       {!scans && <Skeleton className={skeleton()} />}
       {scans?.length === 0 && <p className={text()}>None</p>}
-      {scans?.length !== 0 &&
-        scans?.map((scan) => (
-          <Link key={scan.id} className={link()} href={`/scans/${scan.id}`}>
-            <p className={text()}>{scan.name}</p>
-          </Link>
-        ))}
+      {scans?.length !== 0 && (
+        <div className={linkContainer()}>
+          {scans?.map((scan) => (
+            <Link key={scan.id} className={link()} href={`/scans/${scan.id}`}>
+              <p className={text()}>{scan.name}</p>
+            </Link>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

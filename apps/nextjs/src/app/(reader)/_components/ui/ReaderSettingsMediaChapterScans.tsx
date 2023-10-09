@@ -8,5 +8,11 @@ import { DisplayMediaChapterScans } from "~/components/ui/DisplayMediaChapterSca
 export const ReaderSettingsMediaChapterScans = () => {
   const chapter = useAtomValue(mediaChapterAtom);
 
-  return <DisplayMediaChapterScans scans={chapter?.scans} size="md" />;
+  return (
+    <DisplayMediaChapterScans
+      scans={chapter?.scans}
+      orientation="vertical"
+      size="md"
+    />
+  );
 };
