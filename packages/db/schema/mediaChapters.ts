@@ -10,7 +10,7 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 
-import type { MediaChapterPages } from "../types/mediaChapter.types";
+import type { MediaChapterPage } from "../types/mediaChapter.types";
 import { mediaChapterComments } from "./mediaChapterComments";
 import { mediaChapterScans } from "./mediaChapterScans";
 import { medias } from "./medias";
@@ -31,7 +31,7 @@ export const mediaChapters = pgTable(
       length: 255,
       enum: ["ENGLISH", "JAPANESE", "SPANISH", "PORTUGUESE", "FRENCH"],
     }),
-    pages: json("pages").$type<MediaChapterPages>().notNull(),
+    pages: json("pages").$type<MediaChapterPage[]>().notNull(),
     // -----
     isSuggestive: boolean("isSuggestive").default(false),
     isAdult: boolean("isAdult").default(false),
