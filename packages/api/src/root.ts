@@ -1,3 +1,4 @@
+import { mediaChaptersRouter } from "./router/mediaChapters";
 import { mediasRouter } from "./router/medias";
 import { tagsRouter } from "./router/tags";
 import { usersRouter } from "./router/users";
@@ -7,6 +8,7 @@ export const appRouter = createTRPCRouter({
   tags: tagsRouter,
   users: usersRouter,
   medias: mediasRouter,
+  mediaChapters: mediaChaptersRouter,
 });
 
 // export type definition of API

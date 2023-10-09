@@ -28,3 +28,9 @@ export class InsuficientPermissionsError extends ApiError {
     super("UNAUTHORIZED", "INSUFICIENT_PERMISSIONS", cause);
   }
 }
+
+export class NotFoundError extends ApiError {
+  constructor(cause?: unknown) {
+    super("NOT_FOUND", "NOT_FOUND", cause);
+  }
+}
