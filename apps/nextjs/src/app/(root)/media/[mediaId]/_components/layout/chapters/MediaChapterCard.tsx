@@ -6,9 +6,9 @@ import type { MediaChapterWithUser } from "@taiyo/db/types";
 
 import { cn } from "~/utils/cn";
 import { MediaChapterUtils } from "~/utils/MediaChapterUtils";
+import { DisplayMediaChapterUploader } from "../../../../../../../components/ui/DisplayMediaChapterUploader";
 import { DisplayMediaChapterCommentsCount } from "../../ui/DisplayMediaChapterCommentsCount";
 import { DisplayMediaChapterUploadedTime } from "../../ui/DisplayMediaChapterUploadedTime";
-import { DisplayMediaChapterUploader } from "../../ui/DisplayMediaChapterUploader";
 import { DisplayMediaChapterViews } from "../../ui/DisplayMediaChapterViews";
 import { MediaChapterCardPath } from "./MediaChapterCardPath";
 
@@ -29,9 +29,9 @@ export const MediaChapterCard = ({ chapter, order }: Props) => {
         radius="sm"
       >
         <CardBody className="p-3">
-          <div className="grid grid-cols-12 grid-rows-3 gap-1 md:grid-rows-2">
+          <div className="grid grid-cols-10 grid-rows-3 gap-1 md:grid-rows-2">
             <Link
-              className="order-1 col-span-10 md:col-span-9"
+              className="order-1 col-span-8 md:col-span-7"
               href={MediaChapterUtils.getUrl(chapter)}
             >
               <p className="w-full truncate text-sm font-semibold">
@@ -47,11 +47,11 @@ export const MediaChapterCard = ({ chapter, order }: Props) => {
               <DisplayMediaChapterViews />
             </div>
             {/* SCANS */}
-            <div className="order-3 col-span-9 md:order-4">
+            <div className="order-3 col-span-7 md:order-4">
               <Skeleton className="h-full w-full rounded" />
             </div>
             {/* UPLOADER */}
-            <div className="order-5 col-span-8 md:col-span-2">
+            <div className="order-5 col-span-6 md:col-span-2">
               <DisplayMediaChapterUploader user={chapter.user} />
             </div>
             {/* COMMENTS */}
