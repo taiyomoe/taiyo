@@ -1,4 +1,5 @@
 import { nextui } from "@nextui-org/theme";
+import tailwindScrollbar from "tailwind-scrollbar";
 import type { Config } from "tailwindcss";
 
 import baseConfig from "@taiyo/tailwind-config";
@@ -19,7 +20,7 @@ export default {
     },
   },
   plugins: [
-    require("tailwind-scrollbar"),
+    tailwindScrollbar({ nocompatible: true }),
     nextui({
       addCommonColors: true,
       themes: {
