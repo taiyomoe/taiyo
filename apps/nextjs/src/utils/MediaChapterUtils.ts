@@ -3,6 +3,7 @@ import { DateTime } from "luxon";
 import type {
   MediaChapter,
   MediaChapterGroups,
+  MediaChapterLimited,
   MediaChapterPage,
   MediaChapterWithUsers,
 } from "@taiyo/db/types";
@@ -17,14 +18,17 @@ const getUrl = (mediaChapter: MediaChapter) => {
   return `/chapter/${mediaChapter.id}`;
 };
 
-const getPageUrl = (mediaChapter: MediaChapter, page: MediaChapterPage) => {
-  return `${CDN_DOMAIN}/${mediaChapter.mediaId}/${mediaChapter.id}/${page.id}.jpg`;
+const getPageUrl = (
+  mediaChapter: MediaChapterLimited,
+  page: MediaChapterPage,
+) => {
+  return `${CDN_DOMAIN}/${mediaChapter.media.id}/${mediaChapter.id}/${page.id}.jpg`;
 };
 
 const computeUploadedTime = (mediaChapter: MediaChapter) => {
   const uploadedAt = DateTime.fromJSDate(mediaChapter.createdAt);
 
-  return uploadedAt.toRelative({ locale: "pt" });
+  return uploadedAt.toRelative({ locale: "pt", style: "short" });
 };
 
 const computeVolumes = (mediaChapters: MediaChapterWithUsers) => {
