@@ -4,7 +4,7 @@ import { scans } from "../../schema/scans";
 
 const execute = async (db: PostgresJsDatabase) => {
   await db.insert(scans).values({
-    id: "601f0be8-cf7f-401b-a7b1-779a8b07d61e",
+    id: "b82802a5-c837-4426-bac5-93d80fdfedf7",
     // -----
     name: "OPEX",
     description: "De fã para fã: o maior site focado em One Piece do Brasil.",

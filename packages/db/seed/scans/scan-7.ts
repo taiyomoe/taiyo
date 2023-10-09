@@ -5,7 +5,7 @@ import { scans } from "../../schema/scans";
 
 const execute = async (db: PostgresJsDatabase) => {
   await db.insert(scans).values({
-    id: "580de6a0-e1e5-4e5f-b36c-5bd1e55adf20",
+    id: "a9f2139e-54fc-4524-8688-ed7b46920f5d",
     // -----
     name: "Shin Sekai Scans",
     description: "É agora ou nunca.",
