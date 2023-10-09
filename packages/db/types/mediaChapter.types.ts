@@ -20,8 +20,8 @@ export type MediaChapterPages = MediaChapterPage[];
 export type MediaChapterComment = InferSelectModel<typeof mediaChapterComments>;
 export type MediaChapterComments = MediaChapterComment[];
 
-export type MediaChapterGroup = MediaChapterWithUser[];
-export type MediaChapterGroups = MediaChapterGroup[];
+export type MediaCommentAttachement = { id: string; extension: "png" | "gif" };
+export type MediaCommentAttachements = MediaCommentAttachement[];
 
 export type MediaChapterWithUser = MediaChapter &
   Pick<MediaChapterRelations, "user">;

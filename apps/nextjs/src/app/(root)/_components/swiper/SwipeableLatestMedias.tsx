@@ -8,12 +8,12 @@ import "swiper/css";
 import Link from "next/link";
 import { Skeleton } from "@nextui-org/skeleton";
 
-import type { MediasWithCovers } from "@taiyo/db/types";
+import type { LatestMedia } from "@taiyo/db/types";
 
 import { MediaUtils } from "~/utils/MediaUtils";
 
 type Props = {
-  medias: MediasWithCovers;
+  medias: LatestMedia[];
 };
 
 export const SwipeableLatestMedias = ({ medias }: Props) => {

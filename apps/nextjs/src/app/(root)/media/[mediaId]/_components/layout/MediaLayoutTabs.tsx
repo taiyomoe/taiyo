@@ -2,12 +2,12 @@
 
 import { Tab, Tabs } from "@nextui-org/tabs";
 
-import type { MediaWithRelations } from "@taiyo/db/types";
+import type { MediaLimited } from "@taiyo/db/types";
 
 import { MediaLayoutChaptersTab } from "./chapters/MediaLayoutChaptersTab";
 
 type Props = {
-  media: MediaWithRelations;
+  media: MediaLimited;
 };
 
 export const MediaLayoutTabs = ({ media }: Props) => {

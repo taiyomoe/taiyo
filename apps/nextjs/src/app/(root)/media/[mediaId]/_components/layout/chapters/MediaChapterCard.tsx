@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Card, CardBody } from "@nextui-org/card";
 import { Skeleton } from "@nextui-org/skeleton";
 
-import type { MediaChapterWithUser } from "@taiyo/db/types";
+import type { MediaLimitedChapter } from "@taiyo/db/types";
 
 import { cn } from "~/utils/cn";
 import { MediaChapterUtils } from "~/utils/MediaChapterUtils";
@@ -13,7 +13,7 @@ import { DisplayMediaChapterViews } from "../../ui/DisplayMediaChapterViews";
 import { MediaChapterCardPath } from "./MediaChapterCardPath";
 
 type Props = {
-  chapter: MediaChapterWithUser;
+  chapter: MediaLimitedChapter;
   order: "unique" | "first" | "middle" | "last";
 };
 

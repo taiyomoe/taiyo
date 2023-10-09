@@ -2,13 +2,13 @@
 
 import { Accordion, AccordionItem } from "@nextui-org/accordion";
 
-import type { MediaWithRelations } from "@taiyo/db/types";
+import type { MediaLimited } from "@taiyo/db/types";
 
 import { MediaChapterUtils } from "~/utils/MediaChapterUtils";
 import { MediaChapterGroupCard } from "./MediaChapterGroupCard";
 
 type Props = {
-  media: MediaWithRelations;
+  media: MediaLimited;
 };
 
 export const MediaLayoutChaptersTab = ({ media }: Props) => {

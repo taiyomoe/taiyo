@@ -1,20 +1,19 @@
 import { DateTime } from "luxon";
 
 import type {
-  MediaChapter,
   MediaChapterGroups,
   MediaChapterLimited,
   MediaChapterPage,
-  MediaChapterWithUsers,
+  MediaLimitedChapter,
 } from "@taiyo/db/types";
 
 import { CDN_DOMAIN } from "./constants";
 
-const getTitle = (mediaChapter: MediaChapter) => {
+const getTitle = (mediaChapter: MediaLimitedChapter) => {
   return mediaChapter.title ?? "Cap. " + mediaChapter.number;
 };
 
-const getUrl = (mediaChapter: MediaChapter) => {
+const getUrl = (mediaChapter: MediaLimitedChapter) => {
   return `/chapter/${mediaChapter.id}`;
 };
 
@@ -25,14 +24,14 @@ const getPageUrl = (
   return `${CDN_DOMAIN}/${mediaChapter.media.id}/${mediaChapter.id}/${page.id}.jpg`;
 };
 
-const computeUploadedTime = (mediaChapter: MediaChapter) => {
+const computeUploadedTime = (mediaChapter: MediaLimitedChapter) => {
   const uploadedAt = DateTime.fromJSDate(mediaChapter.createdAt);
 
   return uploadedAt.toRelative({ locale: "pt", style: "short" });
 };
 
-const computeVolumes = (mediaChapters: MediaChapterWithUsers) => {
-  const volumes: Record<string, MediaChapterWithUsers> = {};
+const computeVolumes = (mediaChapters: MediaLimitedChapter[]) => {
+  const volumes: Record<string, MediaLimitedChapter[]> = {};
 
   for (const mediaChapter of mediaChapters) {
     const volume = mediaChapter.volume ?? "null";
@@ -46,7 +45,7 @@ const computeVolumes = (mediaChapters: MediaChapterWithUsers) => {
 
   return Object.entries(volumes).map(([volume, mediaChptrs]) => {
     const groups: MediaChapterGroups = [];
-    const groupsObject: Record<string, MediaChapterWithUsers> = {};
+    const groupsObject: Record<string, MediaLimitedChapter[]> = {};
 
     for (const mediaChptr of mediaChptrs) {
       if (!groupsObject[mediaChptr.number]) {
