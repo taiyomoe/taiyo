@@ -5,7 +5,7 @@ import { scans } from "../../schema/scans";
 
 const execute = async (db: PostgresJsDatabase) => {
   await db.insert(scans).values({
-    id: "b149fc0d-6abb-43c4-abaa-bc6b13ffb21c",
+    id: "d16c92aa-42eb-4901-b6a7-3deb4bf35e59",
     // -----
     name: "Neox Scans",
     description: "Tradução e Edição de mangás/manhwas com qualidade e rapidez!",
