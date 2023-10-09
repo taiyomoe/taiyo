@@ -52,8 +52,6 @@ export const mediasRouter = createTRPCRouter({
         where: (m, { eq }) => eq(m.id, mediaId),
       });
 
-      console.log(result);
-
       if (
         !result?.covers.at(0) ||
         !result.titles.at(0) ||
