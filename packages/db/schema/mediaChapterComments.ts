@@ -8,7 +8,7 @@ import {
   uuid,
 } from "drizzle-orm/pg-core";
 
-import type { MediaCommentAttachements } from "../types";
+import type { MediaCommentAttachement } from "../types";
 import { mediaChapters } from "./mediaChapters";
 import { users } from "./users";
 
@@ -22,7 +22,7 @@ export const mediaChapterComments = pgTable(
     // -----
     content: text("content").notNull(),
     attachments: json("attachments")
-      .$type<MediaCommentAttachements>()
+      .$type<MediaCommentAttachement[]>()
       .notNull(),
     // -----
     parentCommentId: uuid("parentCommentId"),
