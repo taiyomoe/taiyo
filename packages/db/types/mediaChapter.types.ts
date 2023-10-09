@@ -7,27 +7,10 @@ import type { Scan } from "./scan.types";
 import type { User } from "./user.types";
 
 export type MediaChapter = InferSelectModel<typeof mediaChapters>;
-export type MediaChapters = MediaChapter[];
-export type MediaChapterRelations = {
-  user: User;
-  media: Media;
-  comments: MediaChapterComments;
-};
+export type MediaChapterComment = InferSelectModel<typeof mediaChapterComments>;
 
 export type MediaChapterPage = { id: string };
-export type MediaChapterPages = MediaChapterPage[];
-
-export type MediaChapterComment = InferSelectModel<typeof mediaChapterComments>;
-export type MediaChapterComments = MediaChapterComment[];
-
 export type MediaCommentAttachement = { id: string; extension: "png" | "gif" };
-export type MediaCommentAttachements = MediaCommentAttachement[];
-
-export type MediaChapterWithUser = MediaChapter &
-  Pick<MediaChapterRelations, "user">;
-export type MediaChapterWithUsers = MediaChapterWithUser[];
-
-export type MediaChapterWithRelations = MediaChapter & MediaChapterRelations;
 
 export type MediaChapterLimited = {
   id: MediaChapter["id"];
@@ -53,5 +36,5 @@ export type MediaChapterLimited = {
     id: Scan["id"];
     name: Scan["name"];
   }[];
-  comments: MediaChapterComments;
+  comments: MediaChapterComment[];
 };
