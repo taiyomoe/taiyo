@@ -1,11 +1,11 @@
 import { ClockIcon } from "lucide-react";
 
-import type { MediaChapter } from "@taiyo/db/types";
+import type { MediaLimitedChapter } from "@taiyo/db/types";
 
 import { MediaChapterUtils } from "~/utils/MediaChapterUtils";
 
 type Props = {
-  chapter: MediaChapter;
+  chapter: MediaLimitedChapter;
 };
 
 export const DisplayMediaChapterUploadedTime = ({ chapter }: Props) => {

@@ -55,8 +55,6 @@ export const mediaChaptersRouter = createTRPCRouter({
         throw new NotFoundError();
       }
 
-      console.log(result.scans);
-
       const mediaChapterLimited: MediaChapterLimited = {
         id: chapterId,
         title: result.title,

@@ -1,11 +1,11 @@
 import NextImage from "next/image";
 import { Image } from "@nextui-org/image";
 
-import type { MediaWithCovers } from "@taiyo/db/types";
+import type { MediaLimited } from "@taiyo/db/types";
 
 import { MediaUtils } from "~/utils/MediaUtils";
 
-type Props = { media: MediaWithCovers };
+type Props = { media: MediaLimited };
 
 export const DisplayMediaCover = ({ media }: Props) => {
   const coverUrl = MediaUtils.getCoverUrl(media);

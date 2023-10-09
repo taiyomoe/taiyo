@@ -2,21 +2,17 @@
 
 import { Skeleton } from "@nextui-org/skeleton";
 
-import type { MediaWithRelations } from "@taiyo/db/types";
-
-import { MediaUtils } from "~/utils/MediaUtils";
+import type { MediaLimited } from "@taiyo/db/types";
 
 type Props = {
-  media: MediaWithRelations;
+  media: MediaLimited;
 };
 
 export const MediaLayoutActions = ({ media }: Props) => {
-  const mainTitle = MediaUtils.getMainTitle(media);
-
   return (
     <div className="grid h-28 grid-rows-2 p-3 xl:h-36">
       <p className="line-clamp-1 h-fit w-fit text-3xl font-bold drop-shadow-lg">
-        {mainTitle}
+        {media.title}
       </p>
       <div className="flex w-full gap-4">
         <Skeleton className="h-full w-1/4 rounded hover:cursor-not-allowed" />

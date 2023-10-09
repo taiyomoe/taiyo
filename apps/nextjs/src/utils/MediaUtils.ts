@@ -1,40 +1,14 @@
-import type {
-  MediaWithBanners,
-  MediaWithCovers,
-  MediaWithTitles,
-} from "@taiyo/db/types";
+import type { LatestMedia, MediaLimited } from "@taiyo/db/types";
 
 import { CDN_DOMAIN } from "./constants";
 
-const getCoverUrl = (media: MediaWithCovers) => {
-  const firstCover = media.covers.at(0);
+const getCoverUrl = (media: MediaLimited | LatestMedia) =>
+  `${CDN_DOMAIN}/${media.id}/covers/${media.coverId}.jpg`;
 
-  return `${CDN_DOMAIN}/${media.id}/covers/${firstCover?.id}.jpg`;
-};
-
-const getBannerOrCoverUrl = (media: MediaWithBanners | MediaWithCovers) => {
-  const firstBanner = "banners" in media ? media.banners.at(0) : null;
-
-  if (!firstBanner && "covers" in media) return getCoverUrl(media);
-
-  return `${CDN_DOMAIN}/${media.id}/banners/${firstBanner?.id}.jpg`;
-};
-
-const hasBanners = (media: MediaWithBanners) => {
-  return media.banners.length > 0;
-};
-
-const getMainTitle = (media?: MediaWithTitles) => {
-  const firstTitle = media?.titles.at(0);
-
-  if (!firstTitle || !media) return null;
-
-  return firstTitle.title;
-};
+const getBannerOrCoverUrl = (media: MediaLimited) =>
+  `${CDN_DOMAIN}/${media.id}/banners/${media.bannerId}.jpg`;
 
 export const MediaUtils = {
   getCoverUrl,
   getBannerOrCoverUrl,
-  hasBanners,
-  getMainTitle,
 };
