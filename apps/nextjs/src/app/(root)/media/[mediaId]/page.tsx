@@ -12,7 +12,7 @@ type Props = {
 };
 
 const MediaPage = async ({ params: { mediaId } }: Props) => {
-  const media = await serverApi.medias.getMediaById(mediaId);
+  const media = await serverApi.medias.getById(mediaId);
 
   return (
     <MediaLayout media={media}>
