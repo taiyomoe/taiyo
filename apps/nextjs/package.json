@@ -30,6 +30,7 @@
     "drizzle-zod": "^0.5.1",
     "formik": "^2.4.5",
     "framer-motion": "^10.16.4",
+    "jotai": "^2.4.3",
     "lucide-react": "^0.284.0",
     "luxon": "^3.4.3",
     "next": "^13.5.4",
