@@ -12,12 +12,19 @@ export type MediaChapterComment = InferSelectModel<typeof mediaChapterComments>;
 export type MediaChapterPage = { id: string };
 export type MediaCommentAttachement = { id: string; extension: "png" | "gif" };
 
+type MediaChapterLimitedBase = {
+  number: MediaChapter["number"];
+  title: MediaChapter["title"];
+};
+
 export type MediaChapterLimited = {
   id: MediaChapter["id"];
   title: MediaChapter["title"];
   number: MediaChapter["number"];
   volume: MediaChapter["volume"];
   pages: MediaChapter["pages"];
+  previousChapter: MediaChapterLimitedBase;
+  nextChapter: MediaChapterLimitedBase;
   // ----- RELATIONS
   user: {
     id: User["id"];
@@ -27,10 +34,7 @@ export type MediaChapterLimited = {
     id: Media["id"];
     type: Media["type"];
     title: MediaTitle["title"];
-    chapters: {
-      number: MediaChapter["number"];
-      title: MediaChapter["title"];
-    }[];
+    chapters: MediaChapterLimitedBase[];
   };
   scans: {
     id: Scan["id"];

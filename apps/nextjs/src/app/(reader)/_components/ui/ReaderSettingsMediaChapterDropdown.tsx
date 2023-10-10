@@ -21,7 +21,7 @@ import { mediaChapterAtom } from "~/atoms/mediaChapter.atoms";
 const readerSettingsMediaChapterDropdown = tv({
   slots: {
     container: "flex w-full gap-2",
-    navigationButton: "h-full",
+    navigationButton: "h-auto",
     triggerButton: "h-full justify-between py-2 pr-2",
     skeleton: "h-9 w-full rounded-lg",
     dropdownBase: "",
@@ -56,7 +56,7 @@ export const ReaderSettingsMediaChapterDropdown = () => {
       <Button
         className={navigationButton()}
         startContent={<ChevronLeftIcon size={20} />}
-        isDisabled={!chapter}
+        isDisabled={!chapter?.previousChapter}
         radius="sm"
         size="sm"
         isIconOnly
@@ -67,16 +67,25 @@ export const ReaderSettingsMediaChapterDropdown = () => {
           <DropdownTrigger>
             <Button
               className={triggerButton()}
+              endContent={<ChevronsUpDownIcon size={20} />}
               radius="sm"
               fullWidth
-              endContent={<ChevronsUpDownIcon size={20} />}
             >
-              Capítulo 26
+              Capítulo {chapter.number}
             </Button>
           </DropdownTrigger>
-          <DropdownMenu className={dropdownMenu()}>
-            {chapter.media.chapters.map((_, i) => (
-              <DropdownItem key={i}>Capítulo {i + 1}</DropdownItem>
+          <DropdownMenu
+            className={dropdownMenu()}
+            disabledKeys={[`chapter-${chapter.number}`]}
+            aria-label="Capítulos"
+          >
+            {chapter.media.chapters.map((_) => (
+              <DropdownItem
+                key={`chapter-${_.number}`}
+                textValue={`Capítulo ${_.number}`}
+              >
+                Capítulo {_.number}
+              </DropdownItem>
             ))}
           </DropdownMenu>
         </Dropdown>
@@ -84,7 +93,7 @@ export const ReaderSettingsMediaChapterDropdown = () => {
       <Button
         className={navigationButton()}
         startContent={<ChevronRightIcon size={20} />}
-        isDisabled={!chapter}
+        isDisabled={!chapter?.nextChapter}
         radius="sm"
         size="sm"
         isIconOnly
