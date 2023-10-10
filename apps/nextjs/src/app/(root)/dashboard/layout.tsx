@@ -5,7 +5,7 @@ import { DashboardSidebarContent } from "./_components/DashboardSidebarContent";
 export default function Layout({ children }: LayoutProps) {
   return (
     <div className="flex h-full w-full">
-      <Sidebar content={<DashboardSidebarContent />} />
+      <Sidebar title="Dashboard" content={<DashboardSidebarContent />} />
       <div className="w-full p-6">{children}</div>
     </div>
   );
