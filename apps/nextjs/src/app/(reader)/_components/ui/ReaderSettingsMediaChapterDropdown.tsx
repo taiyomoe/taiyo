@@ -9,19 +9,16 @@ import {
 } from "@nextui-org/dropdown";
 import { Skeleton } from "@nextui-org/react";
 import { useAtomValue } from "jotai";
-import {
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  ChevronsUpDownIcon,
-} from "lucide-react";
+import { ChevronsUpDownIcon } from "lucide-react";
 import { tv } from "tailwind-variants";
 
 import { mediaChapterAtom } from "~/atoms/mediaChapter.atoms";
+import { BackButton } from "~/components/generics/buttons/BackButton";
+import { ForwardButton } from "~/components/generics/buttons/ForwardButton";
 
 const readerSettingsMediaChapterDropdown = tv({
   slots: {
     container: "flex w-full gap-2",
-    navigationButton: "h-auto",
     triggerButton: "h-full justify-between py-2 pr-2",
     skeleton: "h-9 w-full rounded-lg",
     dropdownBase: "",
@@ -40,27 +37,14 @@ const readerSettingsMediaChapterDropdown = tv({
 
 export const ReaderSettingsMediaChapterDropdown = () => {
   const chapter = useAtomValue(mediaChapterAtom);
-  const {
-    container,
-    navigationButton,
-    triggerButton,
-    skeleton,
-    dropdownBase,
-    dropdownMenu,
-  } = readerSettingsMediaChapterDropdown({
-    scollable: false,
-  });
+  const { container, triggerButton, skeleton, dropdownBase, dropdownMenu } =
+    readerSettingsMediaChapterDropdown({
+      scollable: false,
+    });
 
   return (
     <div className={container()}>
-      <Button
-        className={navigationButton()}
-        startContent={<ChevronLeftIcon size={20} />}
-        isDisabled={!chapter?.previousChapter}
-        radius="sm"
-        size="sm"
-        isIconOnly
-      />
+      <BackButton isDisabled={!chapter?.previousChapter} />
       {!chapter && <Skeleton className={skeleton()} />}
       {chapter && (
         <Dropdown classNames={{ base: dropdownBase() }}>
@@ -90,14 +74,7 @@ export const ReaderSettingsMediaChapterDropdown = () => {
           </DropdownMenu>
         </Dropdown>
       )}
-      <Button
-        className={navigationButton()}
-        startContent={<ChevronRightIcon size={20} />}
-        isDisabled={!chapter?.nextChapter}
-        radius="sm"
-        size="sm"
-        isIconOnly
-      />
+      <ForwardButton isDisabled={!chapter?.nextChapter} />
     </div>
   );
 };
