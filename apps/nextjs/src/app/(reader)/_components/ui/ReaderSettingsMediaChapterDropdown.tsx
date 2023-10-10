@@ -44,7 +44,7 @@ export const ReaderSettingsMediaChapterDropdown = () => {
 
   return (
     <div className={container()}>
-      <BackButton isDisabled={!chapter?.previousChapter} />
+      <BackButton onPress={() => null} isDisabled={!chapter?.previousChapter} />
       {!chapter && <Skeleton className={skeleton()} />}
       {chapter && (
         <Dropdown classNames={{ base: dropdownBase() }}>
@@ -74,7 +74,7 @@ export const ReaderSettingsMediaChapterDropdown = () => {
           </DropdownMenu>
         </Dropdown>
       )}
-      <ForwardButton isDisabled={!chapter?.nextChapter} />
+      <ForwardButton onPress={() => null} isDisabled={!chapter?.nextChapter} />
     </div>
   );
 };

@@ -61,6 +61,8 @@ export const mediaChaptersRouter = createTRPCRouter({
         number: result.number,
         volume: result.volume,
         pages: result.pages,
+        previousChapter: null,
+        nextChapter: null,
         // ----- RELATIONS
         user: {
           id: result.userId,
