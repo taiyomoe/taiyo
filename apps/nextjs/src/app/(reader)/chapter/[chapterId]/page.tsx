@@ -1,8 +1,6 @@
-import Link from "next/link";
-
-import { MediaChapterUtils } from "~/utils/MediaChapterUtils";
 import { serverApi } from "~/utils/serverApi";
 import { PopulateAtoms } from "../../_components/PopulateAtoms";
+import { DisplayMediaChapterPage } from "./_components/DisplayMediaChapterPage";
 
 export const runtime = "edge";
 
@@ -13,12 +11,12 @@ type Props = {
 export default async function MediaChapterPage(props: Props) {
   const { chapterId } = props.params;
   const mediaChapter = await serverApi.mediaChapters.getById(chapterId);
-  const { comments, pages } = mediaChapter;
 
   return (
-    <div>
+    <>
       <PopulateAtoms mediaChapter={mediaChapter} />
-      <p>chapterId: {chapterId}</p>
+      <DisplayMediaChapterPage mediaChapter={mediaChapter} />
+      {/* <p>chapterId: {chapterId}</p>
       <p>comments: {comments.length}</p>
       <hr />
       {pages.map((page, i) => (
@@ -31,7 +29,7 @@ export default async function MediaChapterPage(props: Props) {
             link
           </Link>
         </p>
-      ))}
-    </div>
+      ))} */}
+    </>
   );
 }

@@ -42,3 +42,9 @@ export type MediaChapterLimited = {
   }[];
   comments: MediaChapterComment[];
 };
+
+export type MediaChapterNavigation = {
+  previousPage: number | null;
+  currentPage: number;
+  nextPage: number | null;
+};

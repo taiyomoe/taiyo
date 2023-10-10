@@ -3,6 +3,7 @@ import { DateTime } from "luxon";
 import type {
   MediaChapterGroups,
   MediaChapterLimited,
+  MediaChapterNavigation,
   MediaChapterPage,
   MediaLimitedChapter,
 } from "@taiyo/db/types";
@@ -17,11 +18,44 @@ const getUrl = (mediaChapter: MediaLimitedChapter) => {
   return `/chapter/${mediaChapter.id}`;
 };
 
+const getNavigation = (
+  mediaChapter: MediaChapterLimited,
+  currentPage: number,
+): MediaChapterNavigation => ({
+  previousPage: currentPage === 1 ? null : currentPage - 1,
+  currentPage,
+  nextPage: currentPage === mediaChapter.pages.length ? null : currentPage + 1,
+});
+
 const getPageUrl = (
   mediaChapter: MediaChapterLimited,
   page: MediaChapterPage,
 ) => {
   return `${CDN_DOMAIN}/${mediaChapter.media.id}/${mediaChapter.id}/${page.id}.jpg`;
+};
+
+const getCurrentPage = (
+  media: MediaChapterLimited,
+  navigation: MediaChapterNavigation | null,
+) => {
+  if (!navigation) {
+    return;
+  }
+
+  return media.pages.at(navigation.currentPage - 1);
+};
+
+const getCurrentPageUrl = (
+  mediaChapter: MediaChapterLimited,
+  navigation: MediaChapterNavigation | null,
+) => {
+  const currentPage = getCurrentPage(mediaChapter, navigation);
+
+  if (!currentPage) {
+    return;
+  }
+
+  return getPageUrl(mediaChapter, currentPage);
 };
 
 const computeUploadedTime = (mediaChapter: MediaLimitedChapter) => {
@@ -66,10 +100,36 @@ const computeVolumes = (mediaChapters: MediaLimitedChapter[]) => {
   });
 };
 
+const parseUrl = (pathname: string) => {
+  const splitted = pathname.split("/");
+  const currentPage = splitted[3];
+
+  if (
+    !currentPage ||
+    splitted.length !== 4 || // if url has more parts than expected
+    Number.isNaN(Number(currentPage)) || // if it's NaN
+    parseInt(currentPage) !== parseFloat(currentPage) // if it's a float
+  ) {
+    return {
+      rawPathname: pathname,
+      currentPageNumber: null,
+    };
+  }
+
+  return {
+    rawPathname: splitted.slice(0, 3).join("/"),
+    currentPageNumber: parseInt(currentPage),
+  };
+};
+
 export const MediaChapterUtils = {
   getTitle,
   getUrl,
+  getNavigation,
   getPageUrl,
+  getCurrentPage,
+  getCurrentPageUrl,
   computeUploadedTime,
   computeVolumes,
+  parseUrl,
 };
