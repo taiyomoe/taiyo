@@ -1,6 +1,9 @@
 import { atom } from "jotai";
 
-import type { MediaChapterLimited } from "@taiyo/db/types";
+import type {
+  MediaChapterLimited,
+  MediaChapterNavigation,
+} from "@taiyo/db/types";
 
 export const mediaChapterAtom = atom<MediaChapterLimited | null>(null);
 
@@ -9,3 +12,7 @@ export const mediaChapterTitleAtom = atom((get) => {
 
   return mediaChapter?.title ?? mediaChapter?.media.title ?? null;
 });
+
+export const mediaChapterNavigationAtom = atom<MediaChapterNavigation | null>(
+  null,
+);

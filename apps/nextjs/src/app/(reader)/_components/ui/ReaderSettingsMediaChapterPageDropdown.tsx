@@ -16,12 +16,15 @@ import {
 } from "lucide-react";
 import { tv } from "tailwind-variants";
 
-import { mediaChapterAtom } from "~/atoms/mediaChapter.atoms";
+import {
+  mediaChapterAtom,
+  mediaChapterNavigationAtom,
+} from "~/atoms/mediaChapter.atoms";
 
 const readerSettingsMediaChapterPageDropdown = tv({
   slots: {
     container: "flex w-full gap-2",
-    navigationButton: "h-full",
+    navigationButton: "h-auto",
     triggerButton: "h-full justify-between py-2 pr-2",
     skeleton: "h-[52px] w-full rounded-lg",
     dropdownBase: "",
@@ -42,6 +45,8 @@ const readerSettingsMediaChapterPageDropdown = tv({
 
 export const ReaderSettingsMediaChapterPageDropdown = () => {
   const chapter = useAtomValue(mediaChapterAtom);
+  const chapterNavigation = useAtomValue(mediaChapterNavigationAtom);
+
   const {
     container,
     navigationButton,
@@ -55,43 +60,55 @@ export const ReaderSettingsMediaChapterPageDropdown = () => {
     scollable: (chapter && chapter.pages.length > 9) ?? false,
   });
 
+  if (!chapter || !chapterNavigation) {
+    return <Skeleton className={skeleton()} />;
+  }
+
   return (
     <div className={container()}>
       <Button
         className={navigationButton()}
         startContent={<ChevronLeftIcon size={20} />}
-        isDisabled={!chapter}
+        // onPress={() => handlePageChange("back")}
+        isDisabled={!chapterNavigation.previousPage}
         radius="sm"
         size="sm"
         isIconOnly
       />
-      {!chapter && <Skeleton className={skeleton()} />}
-      {chapter && (
-        <Dropdown classNames={{ base: dropdownBase() }}>
-          <DropdownTrigger>
-            <Button
-              className={triggerButton()}
-              radius="sm"
-              fullWidth
-              endContent={<ChevronsUpDownIcon size={20} />}
-            >
-              <div className={textContainer()}>
-                <p>Página 3</p>
-                <p className={textDescription()}>1/20</p>
-              </div>
-            </Button>
-          </DropdownTrigger>
-          <DropdownMenu className={dropdownMenu()}>
-            {chapter.pages.map((_, i) => (
-              <DropdownItem key={i}>Página {i + 1}</DropdownItem>
-            ))}
-          </DropdownMenu>
-        </Dropdown>
-      )}
+      <Dropdown classNames={{ base: dropdownBase() }}>
+        <DropdownTrigger>
+          <Button
+            className={triggerButton()}
+            radius="sm"
+            fullWidth
+            endContent={<ChevronsUpDownIcon size={20} />}
+          >
+            <div className={textContainer()}>
+              <p>Página {chapterNavigation.currentPage}</p>
+              <p className={textDescription()}>
+                {chapterNavigation.currentPage}/{chapter.pages.length}
+              </p>
+            </div>
+          </Button>
+        </DropdownTrigger>
+        <DropdownMenu
+          className={dropdownMenu()}
+          disabledKeys={[`page-${chapterNavigation.currentPage - 1}`]}
+          selectionMode="single"
+          aria-label="Páginas"
+        >
+          {chapter.pages.map((_, i) => (
+            <DropdownItem key={"page-" + i} textValue={`Página ${i + 1}`}>
+              Página {i + 1}
+            </DropdownItem>
+          ))}
+        </DropdownMenu>
+      </Dropdown>
       <Button
         className={navigationButton()}
         startContent={<ChevronRightIcon size={20} />}
-        isDisabled={!chapter}
+        // onPress={() => handlePageChange("next")}
+        isDisabled={!chapterNavigation.nextPage}
         radius="sm"
         size="sm"
         isIconOnly
