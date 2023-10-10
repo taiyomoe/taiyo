@@ -9,22 +9,19 @@ import {
 } from "@nextui-org/dropdown";
 import { Skeleton } from "@nextui-org/react";
 import { useAtomValue } from "jotai";
-import {
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  ChevronsUpDownIcon,
-} from "lucide-react";
+import { ChevronsUpDownIcon } from "lucide-react";
 import { tv } from "tailwind-variants";
 
 import {
   mediaChapterAtom,
   mediaChapterNavigationAtom,
 } from "~/atoms/mediaChapter.atoms";
+import { BackButton } from "~/components/generics/buttons/BackButton";
+import { ForwardButton } from "~/components/generics/buttons/ForwardButton";
 
 const readerSettingsMediaChapterPageDropdown = tv({
   slots: {
     container: "flex w-full gap-2",
-    navigationButton: "h-auto",
     triggerButton: "h-full justify-between py-2 pr-2",
     skeleton: "h-[52px] w-full rounded-lg",
     dropdownBase: "",
@@ -49,7 +46,6 @@ export const ReaderSettingsMediaChapterPageDropdown = () => {
 
   const {
     container,
-    navigationButton,
     triggerButton,
     skeleton,
     dropdownBase,
@@ -66,15 +62,7 @@ export const ReaderSettingsMediaChapterPageDropdown = () => {
 
   return (
     <div className={container()}>
-      <Button
-        className={navigationButton()}
-        startContent={<ChevronLeftIcon size={20} />}
-        // onPress={() => handlePageChange("back")}
-        isDisabled={!chapterNavigation.previousPage}
-        radius="sm"
-        size="sm"
-        isIconOnly
-      />
+      <BackButton isDisabled={!chapterNavigation.previousPage} />
       <Dropdown classNames={{ base: dropdownBase() }}>
         <DropdownTrigger>
           <Button
@@ -104,15 +92,7 @@ export const ReaderSettingsMediaChapterPageDropdown = () => {
           ))}
         </DropdownMenu>
       </Dropdown>
-      <Button
-        className={navigationButton()}
-        startContent={<ChevronRightIcon size={20} />}
-        // onPress={() => handlePageChange("next")}
-        isDisabled={!chapterNavigation.nextPage}
-        radius="sm"
-        size="sm"
-        isIconOnly
-      />
+      <ForwardButton isDisabled={!chapterNavigation.nextPage} />
     </div>
   );
 };
