@@ -12,10 +12,11 @@ import { PanelBottomOpenIcon } from "lucide-react";
 import { FloatingActionButton } from "~/components/generics/buttons/FloatingActionButton";
 
 type Props = {
+  title: string;
   content: JSX.Element;
 };
 
-export const Sidebar = ({ content }: Props) => {
+export const Sidebar = ({ title, content }: Props) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   return (
@@ -30,7 +31,7 @@ export const Sidebar = ({ content }: Props) => {
         isOpen={isOpen}
       >
         <ModalContent>
-          <ModalHeader>Dashboard</ModalHeader>
+          <ModalHeader>{title}</ModalHeader>
           <ModalBody className="pb-6">{content}</ModalBody>
         </ModalContent>
       </Modal>
