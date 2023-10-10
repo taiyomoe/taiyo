@@ -23,8 +23,8 @@ export type MediaChapterLimited = {
   number: MediaChapter["number"];
   volume: MediaChapter["volume"];
   pages: MediaChapter["pages"];
-  previousChapter: MediaChapterLimitedBase;
-  nextChapter: MediaChapterLimitedBase;
+  previousChapter: MediaChapterLimitedBase | null;
+  nextChapter: MediaChapterLimitedBase | null;
   // ----- RELATIONS
   user: {
     id: User["id"];

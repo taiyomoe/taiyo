@@ -15,7 +15,7 @@ export default async function MediaChapterPage(props: Props) {
   return (
     <>
       <PopulateAtoms mediaChapter={mediaChapter} />
-      <DisplayMediaChapterPage mediaChapter={mediaChapter} />
+      <DisplayMediaChapterPage />
     </>
   );
 }
