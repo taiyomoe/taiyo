@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@nextui-org/button";
 import {
   Modal,
   ModalBody,
@@ -9,6 +8,8 @@ import {
   useDisclosure,
 } from "@nextui-org/modal";
 import { PanelBottomOpenIcon } from "lucide-react";
+
+import { FloatingActionButton } from "~/components/generics/buttons/FloatingActionButton";
 
 type Props = {
   content: JSX.Element;
@@ -33,15 +34,7 @@ export const Sidebar = ({ content }: Props) => {
           <ModalBody className="pb-6">{content}</ModalBody>
         </ModalContent>
       </Modal>
-      <Button
-        className="fixed bottom-6 right-6 sm:hidden"
-        startContent={<PanelBottomOpenIcon />}
-        onPress={onOpen}
-        color="primary"
-        radius="full"
-        size="lg"
-        isIconOnly
-      />
+      <FloatingActionButton icon={<PanelBottomOpenIcon />} onPress={onOpen} />
     </>
   );
 };
