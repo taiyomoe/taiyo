@@ -1,5 +1,6 @@
 "use client";
 
+import type { Key } from "react";
 import { Button } from "@nextui-org/button";
 import {
   Dropdown,
@@ -8,16 +9,12 @@ import {
   DropdownTrigger,
 } from "@nextui-org/dropdown";
 import { Skeleton } from "@nextui-org/react";
-import { useAtomValue } from "jotai";
 import { ChevronsUpDownIcon } from "lucide-react";
 import { tv } from "tailwind-variants";
 
-import {
-  mediaChapterAtom,
-  mediaChapterNavigationAtom,
-} from "~/atoms/mediaChapter.atoms";
 import { BackButton } from "~/components/generics/buttons/BackButton";
 import { ForwardButton } from "~/components/generics/buttons/ForwardButton";
+import { useChapterNavigation } from "~/hooks/useChapterNavigation";
 
 const readerSettingsMediaChapterPageDropdown = tv({
   slots: {
@@ -41,8 +38,15 @@ const readerSettingsMediaChapterPageDropdown = tv({
 });
 
 export const ReaderSettingsMediaChapterPageDropdown = () => {
-  const chapter = useAtomValue(mediaChapterAtom);
-  const chapterNavigation = useAtomValue(mediaChapterNavigationAtom);
+  const {
+    chapter,
+    currentPage,
+    hasPreviousPage,
+    hasNextPage,
+    goBack,
+    goForward,
+    goTo,
+  } = useChapterNavigation();
 
   const {
     container,
@@ -56,13 +60,13 @@ export const ReaderSettingsMediaChapterPageDropdown = () => {
     scollable: (chapter && chapter.pages.length > 9) ?? false,
   });
 
-  if (!chapter || !chapterNavigation) {
+  if (!chapter || !currentPage) {
     return <Skeleton className={skeleton()} />;
   }
 
   return (
     <div className={container()}>
-      <BackButton isDisabled={!chapterNavigation.previousPage} />
+      <BackButton onPress={goBack} isDisabled={!hasPreviousPage} />
       <Dropdown classNames={{ base: dropdownBase() }}>
         <DropdownTrigger>
           <Button
@@ -72,27 +76,32 @@ export const ReaderSettingsMediaChapterPageDropdown = () => {
             endContent={<ChevronsUpDownIcon size={20} />}
           >
             <div className={textContainer()}>
-              <p>Página {chapterNavigation.currentPage}</p>
+              <p>Página {currentPage}</p>
               <p className={textDescription()}>
-                {chapterNavigation.currentPage}/{chapter.pages.length}
+                {currentPage}/{chapter.pages.length}
               </p>
             </div>
           </Button>
         </DropdownTrigger>
         <DropdownMenu
           className={dropdownMenu()}
-          disabledKeys={[`page-${chapterNavigation.currentPage - 1}`]}
+          disabledKeys={[`page-${currentPage}`]}
           selectionMode="single"
           aria-label="Páginas"
+          onSelectionChange={(keys) => {
+            (keys as Set<Key>).forEach((key) => {
+              goTo(parseInt(key.toString().replace("page-", "")));
+            });
+          }}
         >
           {chapter.pages.map((_, i) => (
-            <DropdownItem key={"page-" + i} textValue={`Página ${i + 1}`}>
+            <DropdownItem key={"page-" + (i + 1)} textValue={`Página ${i + 1}`}>
               Página {i + 1}
             </DropdownItem>
           ))}
         </DropdownMenu>
       </Dropdown>
-      <ForwardButton isDisabled={!chapterNavigation.nextPage} />
+      <ForwardButton onPress={goForward} isDisabled={!hasNextPage} />
     </div>
   );
 };

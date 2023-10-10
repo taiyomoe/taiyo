@@ -38,22 +38,20 @@ const getCurrentPage = (
   media: MediaChapterLimited,
   navigation: MediaChapterNavigation | null,
 ) => {
-  if (!navigation) {
-    return;
-  }
+  if (!navigation) return;
 
   return media.pages.at(navigation.currentPage - 1);
 };
 
 const getCurrentPageUrl = (
-  mediaChapter: MediaChapterLimited,
+  mediaChapter: MediaChapterLimited | null,
   navigation: MediaChapterNavigation | null,
 ) => {
+  if (!mediaChapter) return;
+
   const currentPage = getCurrentPage(mediaChapter, navigation);
 
-  if (!currentPage) {
-    return;
-  }
+  if (!currentPage) return;
 
   return getPageUrl(mediaChapter, currentPage);
 };
