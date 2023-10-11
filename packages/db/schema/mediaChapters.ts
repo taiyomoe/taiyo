@@ -4,6 +4,7 @@ import {
   index,
   json,
   pgTable,
+  real,
   text,
   timestamp,
   uuid,
@@ -25,7 +26,7 @@ export const mediaChapters = pgTable(
     deletedAt: timestamp("deletedAt"),
     // -----
     title: text("title"),
-    number: text("number").notNull(),
+    number: real("number").notNull(),
     volume: text("volume"),
     language: varchar("language", {
       length: 255,

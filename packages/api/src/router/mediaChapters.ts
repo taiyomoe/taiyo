@@ -32,6 +32,7 @@ export const mediaChaptersRouter = createTRPCRouter({
               },
               chapters: {
                 columns: {
+                  id: true,
                   number: true,
                   title: true,
                 },
@@ -55,14 +56,23 @@ export const mediaChaptersRouter = createTRPCRouter({
         throw new NotFoundError();
       }
 
+      const sortedMediaChapters = result.media.chapters.sort(
+        (a, b) => a.number - b.number,
+      );
+      const currentMediaChapterIndex = sortedMediaChapters.findIndex(
+        (c) => c.id === chapterId,
+      );
+
       const mediaChapterLimited: MediaChapterLimited = {
         id: chapterId,
         title: result.title,
         number: result.number,
         volume: result.volume,
         pages: result.pages,
-        previousChapter: null,
-        nextChapter: null,
+        previousChapter:
+          sortedMediaChapters.at(currentMediaChapterIndex - 1) ?? null,
+        nextChapter:
+          sortedMediaChapters.at(currentMediaChapterIndex + 1) ?? null,
         // ----- RELATIONS
         user: {
           id: result.userId,
@@ -72,7 +82,7 @@ export const mediaChaptersRouter = createTRPCRouter({
           id: result.mediaId,
           type: result.media.type,
           title: result.media.titles.at(0)!.title,
-          chapters: result.media.chapters,
+          chapters: sortedMediaChapters,
         },
         scans: result.scans.map((mediaChapterScan) => ({
           id: mediaChapterScan.scanId,
