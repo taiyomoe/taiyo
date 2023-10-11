@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { Button } from "@nextui-org/button";
 import {
   Dropdown,
@@ -15,6 +16,7 @@ import { tv } from "tailwind-variants";
 import { mediaChapterAtom } from "~/atoms/mediaChapter.atoms";
 import { BackButton } from "~/components/generics/buttons/BackButton";
 import { ForwardButton } from "~/components/generics/buttons/ForwardButton";
+import { MediaChapterUtils } from "~/utils/MediaChapterUtils";
 
 const readerSettingsMediaChapterDropdown = tv({
   slots: {
@@ -44,7 +46,15 @@ export const ReaderSettingsMediaChapterDropdown = () => {
 
   return (
     <div className={container()}>
-      <BackButton onPress={() => null} isDisabled={!chapter?.previousChapter} />
+      <BackButton
+        as={Link}
+        href={
+          chapter?.previousChapter
+            ? MediaChapterUtils.getUrl(chapter?.previousChapter)
+            : ""
+        }
+        isDisabled={!chapter?.previousChapter}
+      />
       {!chapter && <Skeleton className={skeleton()} />}
       {chapter && (
         <Dropdown classNames={{ base: dropdownBase() }}>
@@ -65,6 +75,9 @@ export const ReaderSettingsMediaChapterDropdown = () => {
           >
             {chapter.media.chapters.map((_) => (
               <DropdownItem
+                as={Link}
+                // @ts-expect-error type error from NextUI
+                href={MediaChapterUtils.getUrl(_)}
                 key={`chapter-${_.number}`}
                 textValue={`Capítulo ${_.number}`}
               >
@@ -74,7 +87,15 @@ export const ReaderSettingsMediaChapterDropdown = () => {
           </DropdownMenu>
         </Dropdown>
       )}
-      <ForwardButton onPress={() => null} isDisabled={!chapter?.nextChapter} />
+      <ForwardButton
+        as={Link}
+        href={
+          chapter?.nextChapter
+            ? MediaChapterUtils.getUrl(chapter?.nextChapter)
+            : ""
+        }
+        isDisabled={!chapter?.nextChapter}
+      />
     </div>
   );
 };

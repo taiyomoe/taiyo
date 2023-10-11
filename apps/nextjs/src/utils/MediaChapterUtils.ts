@@ -3,6 +3,7 @@ import { DateTime } from "luxon";
 import type {
   MediaChapterGroups,
   MediaChapterLimited,
+  MediaChapterLimitedBase,
   MediaChapterNavigation,
   MediaChapterPage,
   MediaLimitedChapter,
@@ -14,7 +15,9 @@ const getTitle = (mediaChapter: MediaLimitedChapter) => {
   return mediaChapter.title ?? "Cap. " + mediaChapter.number;
 };
 
-const getUrl = (mediaChapter: MediaLimitedChapter) => {
+const getUrl = (
+  mediaChapter: MediaLimitedChapter | MediaChapterLimitedBase,
+) => {
   return `/chapter/${mediaChapter.id}/1`;
 };
 
