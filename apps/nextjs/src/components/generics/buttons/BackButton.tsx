@@ -2,21 +2,15 @@ import type { ButtonProps } from "@nextui-org/button";
 import { Button } from "@nextui-org/button";
 import { ChevronLeftIcon } from "lucide-react";
 
-type Props = {
-  onPress: () => void;
-  isDisabled: ButtonProps["isDisabled"];
-};
-
-export const BackButton = ({ onPress, isDisabled }: Props) => {
+export const BackButton = (props: ButtonProps) => {
   return (
     <Button
       className="h-auto"
-      startContent={<ChevronLeftIcon size={20} />}
-      onPress={onPress}
-      isDisabled={isDisabled}
+      startContent={<ChevronLeftIcon className="h-5 w-5 focus:outline-none" />}
       radius="sm"
       size="sm"
       isIconOnly
+      {...props}
     />
   );
 };

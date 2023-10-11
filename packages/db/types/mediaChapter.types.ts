@@ -12,7 +12,7 @@ export type MediaChapterComment = InferSelectModel<typeof mediaChapterComments>;
 export type MediaChapterPage = { id: string };
 export type MediaCommentAttachement = { id: string; extension: "png" | "gif" };
 
-type MediaChapterLimitedBase = {
+export type MediaChapterLimitedBase = {
   id: MediaChapter["id"];
   number: MediaChapter["number"];
   title: MediaChapter["title"];
