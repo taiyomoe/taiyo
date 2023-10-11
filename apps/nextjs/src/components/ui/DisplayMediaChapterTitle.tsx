@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { Skeleton } from "@nextui-org/skeleton";
 import { useAtomValue } from "jotai";
 
@@ -11,10 +12,21 @@ type Props = {
 };
 
 export const DisplayMediaChapterTitle = ({ className }: Props) => {
-  const title = useAtomValue(mediaChapterTitleAtom);
+  const { id, title, isMediaTitle } = useAtomValue(mediaChapterTitleAtom);
 
-  if (!title) {
+  if (!id || !title) {
     return <Skeleton className="h-8 w-full rounded-lg" />;
+  }
+
+  if (isMediaTitle) {
+    return (
+      <Link
+        href={`media/${id}`}
+        className={cn("truncate underline-offset-2 hover:underline", className)}
+      >
+        {title}
+      </Link>
+    );
   }
 
   return <p className={cn("truncate", className)}>{title}</p>;
