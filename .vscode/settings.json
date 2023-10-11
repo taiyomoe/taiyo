@@ -8,10 +8,12 @@
     { "pattern": "packages/*/" },
     { "pattern": "tooling/*/" }
   ],
+  "tailwindCSS.experimental.classRegex": [
+    ["tv\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"]
+  ],
   "tailwindCSS.experimental.configFile": {
-    "./tooling/tailwind/index.ts": "./apps/nextjs/**",
-    "./apps/nextjs/tailwind.config.ts": "./apps/nextjs/**",
-    "./apps/expo/tailwind.config.ts": "./apps/expo/**"
+    "apps/nextjs/tailwind.config.ts": "apps/nextjs/**",
+    "apps/expo/tailwind.config.ts": "apps/expo/**"
   },
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "typescript.tsdk": "node_modules/typescript/lib",

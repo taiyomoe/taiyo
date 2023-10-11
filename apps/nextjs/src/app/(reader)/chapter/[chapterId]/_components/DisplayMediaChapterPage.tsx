@@ -3,11 +3,24 @@
 import type { KeyboardEventHandler } from "react";
 import { useRef } from "react";
 import Image from "next/image";
+import { tv } from "tailwind-variants";
 
 import { useChapterNavigation } from "~/hooks/useChapterNavigation";
 import { useKeyPress } from "~/hooks/useKeyPress";
+import { ReaderSidebarOpenButton } from "./ReaderSidebarOpenButton";
+
+const displayMediaChapterPage = tv({
+  slots: {
+    container: "relative flex h-[calc(100%-61px)]",
+    leftButton:
+      "z-10 h-full w-1/2 hover:cursor-pointer focus-visible:outline-none",
+    rightButton: "z-10 h-full w-1/2 focus-visible:outline-none",
+  },
+});
 
 export const DisplayMediaChapterPage = () => {
+  const { container, leftButton, rightButton } = displayMediaChapterPage();
+
   const { currentPageUrl, goBack, goForward } = useChapterNavigation();
   const backButtonRef = useRef<HTMLButtonElement>(null);
   const forwardButtonRef = useRef<HTMLButtonElement>(null);
@@ -25,12 +38,9 @@ export const DisplayMediaChapterPage = () => {
   useKeyPress("ArrowRight", handleKeyPress);
 
   return (
-    <div className="relative flex h-[calc(100%-61px)] bg-pink-800">
-      <button
-        ref={backButtonRef}
-        className="z-10 h-full w-1/2 bg-blue-800 bg-opacity-50 hover:cursor-pointer focus-visible:outline-none"
-        onClick={goBack}
-      />
+    <div className={container()}>
+      <ReaderSidebarOpenButton side="left" />
+      <button ref={backButtonRef} className={leftButton()} onClick={goBack} />
       {currentPageUrl && (
         <Image
           src={currentPageUrl}
@@ -44,9 +54,10 @@ export const DisplayMediaChapterPage = () => {
       )}
       <button
         ref={forwardButtonRef}
-        className="z-10 h-full w-1/2 bg-green-800 bg-opacity-50 focus-visible:outline-none"
+        className={rightButton()}
         onClick={goForward}
       />
+      <ReaderSidebarOpenButton side="right" />
     </div>
   );
 };
