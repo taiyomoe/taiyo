@@ -1,17 +1,18 @@
 "use client";
 
+import type { KeyboardEventHandler } from "react";
 import { useRef } from "react";
 import Image from "next/image";
-import { useKeyPress } from "@uidotdev/usehooks";
 
 import { useChapterNavigation } from "~/hooks/useChapterNavigation";
+import { useKeyPress } from "~/hooks/useKeyPress";
 
 export const DisplayMediaChapterPage = () => {
   const { currentPageUrl, goBack, goForward } = useChapterNavigation();
   const backButtonRef = useRef<HTMLButtonElement>(null);
   const forwardButtonRef = useRef<HTMLButtonElement>(null);
 
-  const handleKeyPress = (e: KeyboardEvent) => {
+  const handleKeyPress: KeyboardEventHandler = (e) => {
     if (e.key === "ArrowLeft") {
       backButtonRef.current?.click();
       return;
