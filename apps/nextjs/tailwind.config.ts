@@ -12,6 +12,9 @@ export default {
   presets: [baseConfig],
   theme: {
     extend: {
+      boxShadow: {
+        intense: "0 30px 200px 105px #000",
+      },
       gridTemplateColumns: {
         lgMediaLayout: "350px auto",
         xlMediaLayout: "420px auto",
