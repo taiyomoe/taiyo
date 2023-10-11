@@ -23,6 +23,7 @@ export const DisplayMediaChapterPage = () => {
           style={{
             objectFit: "contain",
           }}
+          priority
           fill
         />
       )}
