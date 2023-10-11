@@ -13,6 +13,7 @@ export type MediaChapterPage = { id: string };
 export type MediaCommentAttachement = { id: string; extension: "png" | "gif" };
 
 type MediaChapterLimitedBase = {
+  id: MediaChapter["id"];
   number: MediaChapter["number"];
   title: MediaChapter["title"];
 };
