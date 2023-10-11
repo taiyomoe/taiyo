@@ -16,7 +16,7 @@ export const MediaLayoutChaptersTab = ({ media }: Props) => {
   const chaptersNumbers = media.chapters.map((chapter) => chapter.number);
 
   const volumeAccordionTitle = (volume: string) => `Volume ${volume}`;
-  const chapterAccordionTitle = (chapter: string) => `Capítulo ${chapter}`;
+  const chapterAccordionTitle = (chapter: number) => `Capítulo ${chapter}`;
 
   return (
     <Accordion
@@ -33,7 +33,7 @@ export const MediaLayoutChaptersTab = ({ media }: Props) => {
             className="px-0"
           >
             {groups.map((group, i) => {
-              const firstChapterNumber = group.at(0)?.number ?? "";
+              const firstChapterNumber = group.at(0)?.number ?? 0;
 
               return (
                 <AccordionItem

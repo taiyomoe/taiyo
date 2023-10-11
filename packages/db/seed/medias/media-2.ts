@@ -252,7 +252,7 @@ const execute = async (db: PostgresJsDatabase) => {
   await db.insert(mediaChapters).values([
     {
       id: "b3f20050-8bf7-435e-b27b-64da7c888b06",
-      number: "0",
+      number: 0,
       volume: "1",
       language: "PORTUGUESE",
       pages: [
@@ -316,7 +316,7 @@ const execute = async (db: PostgresJsDatabase) => {
     },
     {
       id: "425f0866-917d-45c6-9774-df41e58bf0e0",
-      number: "1",
+      number: 1,
       volume: "1",
       language: "PORTUGUESE",
       pages: [
@@ -347,7 +347,7 @@ const execute = async (db: PostgresJsDatabase) => {
     },
     {
       id: "1381c258-799e-4682-8e30-c4a0d543c6c8",
-      number: "2",
+      number: 2,
       volume: "1",
       language: "PORTUGUESE",
       pages: [
@@ -384,7 +384,7 @@ const execute = async (db: PostgresJsDatabase) => {
     },
     {
       id: "a46e690c-dafa-48df-a16a-07b67fa68659",
-      number: "3",
+      number: 3,
       volume: "1",
       language: "PORTUGUESE",
       pages: [
@@ -418,7 +418,7 @@ const execute = async (db: PostgresJsDatabase) => {
     },
     {
       id: "a11e58db-b1fa-4560-843b-670460f6b30d",
-      number: "4",
+      number: 4,
       volume: "1",
       language: "PORTUGUESE",
       pages: [
@@ -449,7 +449,7 @@ const execute = async (db: PostgresJsDatabase) => {
     },
     {
       id: "a608e041-6cc9-441f-8e8f-66380606c56c",
-      number: "5",
+      number: 5,
       volume: "1",
       language: "PORTUGUESE",
       pages: [
@@ -480,7 +480,7 @@ const execute = async (db: PostgresJsDatabase) => {
     },
     {
       id: "a3a7ddcd-9164-40fa-9f19-6fac582498e4",
-      number: "6",
+      number: 6,
       volume: "1",
       language: "PORTUGUESE",
       pages: [
@@ -510,7 +510,7 @@ const execute = async (db: PostgresJsDatabase) => {
     },
     {
       id: "1471814d-f9e0-4ee6-a9c5-a31d1b541684",
-      number: "7",
+      number: 7,
       volume: "1",
       language: "PORTUGUESE",
       pages: [
@@ -540,7 +540,7 @@ const execute = async (db: PostgresJsDatabase) => {
     },
     {
       id: "1681f340-7e46-43d6-a32a-607939c9fb65",
-      number: "8",
+      number: 8,
       volume: "1",
       language: "PORTUGUESE",
       pages: [
@@ -570,7 +570,7 @@ const execute = async (db: PostgresJsDatabase) => {
     },
     {
       id: "fcab7fbe-f1f1-4204-bd84-2e1df114006f",
-      number: "9",
+      number: 9,
       volume: "1",
       language: "PORTUGUESE",
       pages: [
