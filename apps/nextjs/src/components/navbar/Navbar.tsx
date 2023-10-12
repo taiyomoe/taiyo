@@ -3,6 +3,7 @@ import Link from "next/link";
 import { CompanyLogo } from "~/components/ui/CompanyLogo";
 import { NavbarBorder } from "./NavbarBorder";
 import { NavbarPopover } from "./NavbarPopover";
+import { ReaderSidebarOpenButton } from "./ReaderSidebarOpenButton";
 
 export const Navbar = () => {
   return (
@@ -12,7 +13,10 @@ export const Navbar = () => {
           <CompanyLogo company="taiyo" width={35} priority />
           <p className="text-xl font-semibold">Taiyō</p>
         </Link>
-        <NavbarPopover />
+        <div className="flex gap-4">
+          <NavbarPopover />
+          <ReaderSidebarOpenButton />
+        </div>
       </nav>
       <NavbarBorder />
     </div>

@@ -4,13 +4,14 @@ import { useAtom, useAtomValue } from "jotai";
 import { tv } from "tailwind-variants";
 
 import {
+  readerSidebarOpenModeAtom,
   readerSidebarSideAtom,
   readerSidebarStateAtom,
 } from "~/atoms/readerSettings.atoms";
 import { SidebarIcon } from "~/components/icons/SidebarIcon";
 import type { ReaderSettings } from "~/types/readerSettings.types";
 
-const readerSidebarOpenButton = tv({
+const readerSidebarOpenOverlay = tv({
   slots: {
     button:
       "group absolute z-20 flex select-none flex-col items-center bg-opacity-50 p-8 text-neutral-300 opacity-0 transition-all hover:cursor-pointer hover:opacity-100",
@@ -36,18 +37,19 @@ type Props = {
   side: ReaderSettings["sidebarSide"];
 };
 
-export const ReaderSidebarOpenButton = ({ side }: Props) => {
+export const ReaderSidebarOpenOverlay = ({ side }: Props) => {
+  const readerSidebarOpenMode = useAtomValue(readerSidebarOpenModeAtom);
+  const readerSidebarSide = useAtomValue(readerSidebarSideAtom);
   const [readerSidebarState, setReaderSidebarState] = useAtom(
     readerSidebarStateAtom,
   );
-  const readerSidebarSide = useAtomValue(readerSidebarSideAtom);
 
-  const { button, accent, text } = readerSidebarOpenButton({
+  const { button, accent, text } = readerSidebarOpenOverlay({
     hide: readerSidebarState === "show",
     side: readerSidebarSide,
   });
 
-  if (readerSidebarSide !== side) {
+  if (readerSidebarOpenMode === "button" || readerSidebarSide !== side) {
     return null;
   }
 

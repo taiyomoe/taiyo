@@ -7,7 +7,7 @@ import { tv } from "tailwind-variants";
 
 import { useChapterNavigation } from "~/hooks/useChapterNavigation";
 import { useKeyPress } from "~/hooks/useKeyPress";
-import { ReaderSidebarOpenButton } from "./ReaderSidebarOpenButton";
+import { ReaderSidebarOpenOverlay } from "./ReaderSidebarOpenOverlay";
 
 const displayMediaChapterPage = tv({
   slots: {
@@ -39,7 +39,7 @@ export const DisplayMediaChapterPage = () => {
 
   return (
     <div className={container()}>
-      <ReaderSidebarOpenButton side="left" />
+      <ReaderSidebarOpenOverlay side="left" />
       <button ref={backButtonRef} className={leftButton()} onClick={goBack} />
       {currentPageUrl && (
         <Image
@@ -57,7 +57,7 @@ export const DisplayMediaChapterPage = () => {
         className={rightButton()}
         onClick={goForward}
       />
-      <ReaderSidebarOpenButton side="right" />
+      <ReaderSidebarOpenOverlay side="right" />
     </div>
   );
 };
