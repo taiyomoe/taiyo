@@ -10,8 +10,8 @@ type Props = {
 
 export const MediaLayoutActions = ({ media }: Props) => {
   return (
-    <div className="grid h-28 grid-rows-2 p-3 xl:h-36">
-      <p className="line-clamp-1 h-fit w-fit text-3xl font-bold [text-shadow:_0_3px_0_rgb(0_0_0_/_40%)]">
+    <div className="grid h-28 grid-rows-2 gap-2 p-3 xl:h-36">
+      <p className="line-clamp-1 h-fit w-fit text-4xl font-bold [text-shadow:_0_3px_0_rgb(0_0_0_/_40%)]">
         {media.title}
       </p>
       <div className="flex w-full gap-4">

@@ -40,7 +40,7 @@ export const MediaLayoutChaptersTab = ({ media }: Props) => {
               <AccordionItem
                 key={`group-${group.number}`}
                 title={chapterAccordionTitle(group.number)}
-                isCompact
+                  classNames={{ title: "text-sm" }}
               >
                 <MediaChapterGroupCard key={i} group={group} />
               </AccordionItem>
