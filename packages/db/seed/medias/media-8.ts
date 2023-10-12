@@ -411,7 +411,7 @@ const execute = async (db: PostgresJsDatabase) => {
     {
       id: "8695daba-b7e1-4fe6-a79c-4c8c49336a2b",
       number: 7,
-      volume: "1",
+      volume: "2",
       language: "PORTUGUESE",
       pages: [
         { id: "95c4ea75-8c06-4021-88f4-29f138a34e5f" },
@@ -444,7 +444,7 @@ const execute = async (db: PostgresJsDatabase) => {
     {
       id: "23f65c36-66eb-4407-97bb-66cb51ea15a5",
       number: 8,
-      volume: "1",
+      volume: "2",
       language: "PORTUGUESE",
       pages: [
         { id: "1f19fa33-1ec4-4a02-8d63-c7be1276fbf5" },
@@ -468,7 +468,6 @@ const execute = async (db: PostgresJsDatabase) => {
     {
       id: "86ee60d2-7ba7-4ec6-bd04-1407962c8624",
       number: 9,
-      volume: "1",
       language: "PORTUGUESE",
       pages: [
         { id: "3636ebbe-93d3-4b95-978d-ebc762645196" },

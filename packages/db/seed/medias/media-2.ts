@@ -541,7 +541,6 @@ const execute = async (db: PostgresJsDatabase) => {
     {
       id: "1681f340-7e46-43d6-a32a-607939c9fb65",
       number: 8,
-      volume: "1",
       language: "PORTUGUESE",
       pages: [
         { id: "7baeda76-0d7d-4156-b3a9-1118e275e6bd" },
@@ -571,7 +570,6 @@ const execute = async (db: PostgresJsDatabase) => {
     {
       id: "fcab7fbe-f1f1-4204-bd84-2e1df114006f",
       number: 9,
-      volume: "1",
       language: "PORTUGUESE",
       pages: [
         { id: "0aa834e7-2406-4679-ab79-3b1fab2c1094" },
