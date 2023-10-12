@@ -15,7 +15,7 @@ export const MediaChapterGroupCard = ({ group }: Props) => {
   };
 
   return (
-    <div className="p-1">
+    <div className="mb-3 p-1">
       {group.chapters.map((chapter, i) => (
         <MediaChapterCard
           key={i}

@@ -19,6 +19,7 @@ export const MediaLayoutTabs = ({ media }: Props) => {
           tabList: "h-full p-0",
           tab: "h-full",
           tabContent: "text-medium",
+          panel: "p-0 mt-8",
         }}
         defaultSelectedKey="chapters"
         disabledKeys={["characters", "relations", "covers", "banners"]}
