@@ -13,38 +13,38 @@ type Props = {
 
 export const MediaLayoutChaptersTab = ({ media }: Props) => {
   const computedVolumes = MediaChapterUtils.computeVolumes(media.chapters);
-  const chaptersNumbers = media.chapters.map((chapter) => chapter.number);
+  const volumeKeys = computedVolumes.map(({ volume }) => `volume-${volume}`);
+  const groupKeys = media.chapters.map((chapter) => `group-${chapter.number}`);
 
   const volumeAccordionTitle = (volume: string) => `Volume ${volume}`;
   const chapterAccordionTitle = (chapter: number) => `Capítulo ${chapter}`;
 
   return (
     <Accordion
-      selectionMode="multiple"
-      defaultExpandedKeys={computedVolumes.map(({ volume }) => volume)}
       className="px-0"
+      selectionMode="multiple"
+      defaultExpandedKeys={volumeKeys}
     >
       {computedVolumes.map(({ volume, groups }) => (
-        <AccordionItem key={volume} title={volumeAccordionTitle(volume)}>
+        <AccordionItem
+          key={`volume-${volume}`}
+          title={volumeAccordionTitle(volume)}
+        >
           <Accordion
-            selectionMode="multiple"
-            defaultExpandedKeys={chaptersNumbers}
-            isCompact
             className="px-0"
+            selectionMode="multiple"
+            defaultExpandedKeys={groupKeys}
+            isCompact
           >
-            {groups.map((group, i) => {
-              const firstChapterNumber = group.at(0)?.number ?? 0;
-
-              return (
-                <AccordionItem
-                  key={group.at(0)?.number}
-                  title={chapterAccordionTitle(firstChapterNumber)}
-                  isCompact
-                >
-                  <MediaChapterGroupCard key={i} group={group} />
-                </AccordionItem>
-              );
-            })}
+            {groups.map((group, i) => (
+              <AccordionItem
+                key={`group-${group.number}`}
+                title={chapterAccordionTitle(group.number)}
+                isCompact
+              >
+                <MediaChapterGroupCard key={i} group={group} />
+              </AccordionItem>
+            ))}
           </Accordion>
         </AccordionItem>
       ))}

@@ -36,7 +36,10 @@ export type MediaLimitedChapter = {
   }[];
 };
 
-export type MediaChapterGroup = MediaLimitedChapter[];
+export type MediaChapterGroup = {
+  number: MediaChapter["number"];
+  chapters: MediaLimitedChapter[];
+};
 export type MediaChapterGroups = MediaChapterGroup[];
 
 export type MediaLimited = {
