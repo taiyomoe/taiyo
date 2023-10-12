@@ -34,7 +34,7 @@
     "react-native-gesture-handler": "^2.13.2",
     "react-native-safe-area-context": "4.7.2",
     "react-native-screens": "~3.25.0",
-    "superjson": "1.13.3"
+    "superjson": "2.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.23.2",
