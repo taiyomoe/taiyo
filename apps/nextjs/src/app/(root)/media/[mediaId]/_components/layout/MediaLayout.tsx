@@ -23,9 +23,12 @@ export const MediaLayout = ({ media, children }: Props) => {
         classNames={{
           wrapper:
             "remove-maxWidth col-span-2 w-full max-w-full -z-10 after:shadow-[0_-64px_48px_16px_inset_var(--background)]",
-          img: cn("object-cover h-[300px] xl:h-[400px] w-full rounded-none", {
-            "blur-md": !media.bannerId,
-          }),
+          img: cn(
+            "object-cover h-[300px] xl:h-[400px] w-full rounded-none blur-xs",
+            {
+              "blur-md": !media.bannerId,
+            },
+          ),
         }}
         sizes="1"
         height={0}
