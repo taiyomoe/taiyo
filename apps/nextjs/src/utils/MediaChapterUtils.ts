@@ -91,7 +91,10 @@ const computeVolumes = (mediaChapters: MediaLimitedChapter[]) => {
     }
 
     for (const [_, chptrs] of Object.entries(groupsObject)) {
-      groups.push(chptrs);
+      groups.push({
+        number: chptrs[0]!.number,
+        chapters: chptrs,
+      });
     }
 
     return {
