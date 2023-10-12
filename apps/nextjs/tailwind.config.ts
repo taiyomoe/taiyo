@@ -12,10 +12,15 @@ export default {
   presets: [baseConfig],
   theme: {
     extend: {
+      blur: {
+        xs: "3px",
+      },
       boxShadow: {
         intense: "0 30px 200px 105px #000",
       },
       gridTemplateColumns: {
+        smChapterLayout: "auto 50px 70px",
+        mdChapterLayout: "auto 130px 70px",
         lgMediaLayout: "350px auto",
         xlMediaLayout: "420px auto",
         "2xlMediaLayout": "550px auto",
