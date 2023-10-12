@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { Card, CardBody } from "@nextui-org/card";
+import { tv } from "tailwind-variants";
 
 import type { MediaLimitedChapter } from "@taiyo/db/types";
 
 import { DisplayMediaChapterScans } from "~/components/ui/DisplayMediaChapterScans";
-import { cn } from "~/utils/cn";
 import { MediaChapterUtils } from "~/utils/MediaChapterUtils";
 import { DisplayMediaChapterUploader } from "../../../../../../../components/ui/DisplayMediaChapterUploader";
 import { DisplayMediaChapterCommentsCount } from "../../ui/DisplayMediaChapterCommentsCount";
@@ -17,45 +17,84 @@ type Props = {
   order: "unique" | "first" | "middle" | "last";
 };
 
+const mediaChapterCard = tv({
+  slots: {
+    container: "flex w-full gap-2",
+    card: "w-full",
+    cardBody: "p-3",
+    contentWrapper:
+      "grid grid-cols-smChapterLayout md:grid-cols-mdChapterLayout grid-rows-3 gap-1 md:grid-rows-2",
+    chapterLink: "order-1 col-span-2 md:col-span-1",
+    chapterTitle: "w-full truncate text-sm font-semibold",
+    chapterUploadedTime: "order-6 md:order-2 col-span-2 md:col-span-1",
+    chapterViews: "order-4 md:order-3",
+    chapterScans: "order-3 md:order-4 col-span-2 md:col-span-1",
+    chapterUploader: "order-5",
+    chapterComments: "order-2 md:order-6",
+  },
+  variants: {
+    order: {
+      unique: {},
+      first: {
+        card: "rounded-b-none",
+      },
+      middle: {
+        card: "rounded-t-none",
+      },
+      last: {
+        card: "rounded-t-none",
+      },
+    },
+  },
+});
+
 export const MediaChapterCard = ({ chapter, order }: Props) => {
+  const {
+    container,
+    card,
+    cardBody,
+    contentWrapper,
+    chapterLink,
+    chapterTitle,
+    chapterUploadedTime,
+    chapterViews,
+    chapterScans,
+    chapterUploader,
+    chapterComments,
+  } = mediaChapterCard({ order });
+
   return (
-    <div className="flex w-full gap-2">
+    <div className={container()}>
       <MediaChapterCardPath order={order} />
-      <Card
-        className={cn("w-full", {
-          "rounded-b-none": order === "first",
-          "rounded-t-none": order === "middle" || order === "last",
-        })}
-        radius="sm"
-      >
-        <CardBody className="p-3">
-          <div className="grid grid-cols-10 grid-rows-3 gap-1 md:grid-rows-2">
+      <Card className={card()} radius="sm">
+        <CardBody className={cardBody()}>
+          <div className={contentWrapper()}>
             <Link
-              className="order-1 col-span-8 md:col-span-7"
+              className={chapterLink()}
               href={MediaChapterUtils.getUrl(chapter)}
             >
-              <p className="w-full truncate text-sm font-semibold">
+              <p className={chapterTitle()}>
                 {MediaChapterUtils.getTitle(chapter)}
               </p>
             </Link>
             {/* UPLOADED TIME */}
-            <div className="order-6 col-span-4 md:order-2 md:col-span-2">
+            <div className={chapterUploadedTime()}>
               <DisplayMediaChapterUploadedTime chapter={chapter} />
             </div>
             {/* VIEWS */}
-            <div className="order-4 col-span-3 md:order-3 md:col-span-1">
+            <div className={chapterViews()}>
               <DisplayMediaChapterViews />
             </div>
             {/* SCANS */}
-            <div className="order-3 col-span-7 md:order-4">
+            <div className={chapterScans()}>
               <DisplayMediaChapterScans scans={chapter.scans} />
             </div>
             {/* UPLOADER */}
-            <div className="order-5 col-span-6 md:col-span-2">
+            <div className={chapterUploader()}>
               <DisplayMediaChapterUploader user={chapter.user} />
             </div>
             {/* COMMENTS */}
-            <div className="order-2 col-span-2 md:order-6 md:col-span-1">
+            <div className={chapterComments()}>
               <DisplayMediaChapterCommentsCount />
             </div>
           </div>
