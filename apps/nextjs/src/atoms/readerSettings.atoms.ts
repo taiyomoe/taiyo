@@ -9,3 +9,7 @@ export const readerSidebarStateAtom = atomWithStorage<
 export const readerSidebarSideAtom = atomWithStorage<
   ReaderSettings["sidebarSide"]
 >("readerSidebarSide", "right");
+
+export const readerSidebarOpenModeAtom = atomWithStorage<
+  ReaderSettings["sidebarOpenMode"]
+>("readerSidebarOpenMode", "button");

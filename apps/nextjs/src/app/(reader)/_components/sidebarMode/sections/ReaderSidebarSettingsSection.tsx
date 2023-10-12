@@ -1,10 +1,11 @@
 import { tv } from "tailwind-variants";
 
+import { ReaderSidebarSettingsOpenMode } from "../ui/ReaderSidebarSettingsOpenMode";
 import { ReaderSidebarSettingsSide } from "../ui/ReaderSidebarSettingsSide";
 
 const readerSidebarSettingsSection = tv({
   slots: {
-    container: "flex flex-col gap-2",
+    container: "flex flex-col gap-6",
   },
 });
 
@@ -13,6 +14,7 @@ export const ReaderSidebarSettingsSection = () => {
   return (
     <div className={container()}>
       <ReaderSidebarSettingsSide />
+      <ReaderSidebarSettingsOpenMode />
     </div>
   );
 };

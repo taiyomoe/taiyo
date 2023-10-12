@@ -10,7 +10,7 @@ import type { ReaderSettings } from "~/types/readerSettings.types";
 
 const readerSidebarSettingsSide = tv({
   slots: {
-    container: "flex items-center gap-4",
+    container: "flex flex-col gap-2",
     text: "text-md",
     leftButton: "justify-start gap-3 pl-3",
     rightButton: "justify-end gap-3 pr-3",
@@ -30,7 +30,7 @@ export const ReaderSidebarSettingsSide = () => {
 
   return (
     <div className={container()}>
-      <p className={text()}>Sidebar</p>
+      <p className={text()}>Lado da sidebar</p>
       <ButtonGroup fullWidth radius="sm">
         <Button
           className={leftButton()}
@@ -39,7 +39,7 @@ export const ReaderSidebarSettingsSide = () => {
           onPress={() => handlePress("left")}
           radius="sm"
         >
-          Left
+          Esquerda
         </Button>
         <Button
           className={rightButton()}
@@ -48,7 +48,7 @@ export const ReaderSidebarSettingsSide = () => {
           variant={readerSidebarSide === "right" ? "faded" : "solid"}
           radius="sm"
         >
-          Right
+          Direita
         </Button>
       </ButtonGroup>
     </div>
