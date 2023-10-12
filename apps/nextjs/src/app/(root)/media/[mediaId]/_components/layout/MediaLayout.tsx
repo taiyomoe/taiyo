@@ -34,6 +34,7 @@ export const MediaLayout = ({ media, children }: Props) => {
         height={0}
         width={0}
         alt="media's banner"
+        priority
       />
       <div className="col-span-2 -mt-28 flex h-fit w-full justify-center lg:col-span-1 xl:-mt-36">
         <DisplayMediaCover media={media} />
