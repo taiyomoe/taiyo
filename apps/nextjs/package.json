@@ -18,6 +18,7 @@
     "@taiyo/api": "^0.1.0",
     "@taiyo/auth": "^0.1.0",
     "@taiyo/db": "^0.1.0",
+    "@taiyo/utils": "^0.1.0",
     "@tanstack/react-query": "^4.36.1",
     "@tanstack/react-query-devtools": "^4.36.1",
     "@tanstack/react-query-next-experimental": "5.0.0-alpha.80",

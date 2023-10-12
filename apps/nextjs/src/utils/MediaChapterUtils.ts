@@ -8,8 +8,7 @@ import type {
   MediaChapterPage,
   MediaLimitedChapter,
 } from "@taiyo/db/types";
-
-import { CDN_DOMAIN } from "./constants";
+import { CDN_DOMAIN } from "@taiyo/utils";
 
 const getTitle = (mediaChapter: MediaLimitedChapter) => {
   return mediaChapter.title ?? "Cap. " + mediaChapter.number;

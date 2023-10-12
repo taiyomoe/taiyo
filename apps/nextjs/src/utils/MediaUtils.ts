@@ -1,6 +1,5 @@
 import type { LatestMedia, MediaLimited } from "@taiyo/db/types";
-
-import { CDN_DOMAIN } from "./constants";
+import { CDN_DOMAIN } from "@taiyo/utils";
 
 const getCoverUrl = (media: MediaLimited | LatestMedia) =>
   `${CDN_DOMAIN}/${media.id}/covers/${media.coverId}.jpg`;
