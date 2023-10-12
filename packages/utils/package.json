@@ -1,0 +1,29 @@
+{
+  "name": "@taiyo/utils",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "license": "MIT",
+  "scripts": {
+    "clean": "rm -rf .turbo node_modules",
+    "lint": "eslint .",
+    "format": "prettier --check \"**/*.{mjs,ts,md,json}\"",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@taiyo/eslint-config": "0.2.0",
+    "@taiyo/prettier-config": "^0.1.0",
+    "@taiyo/tsconfig": "^0.1.0",
+    "eslint": "^8.51.0",
+    "typescript": "^5.2.2"
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": [
+      "@taiyo/eslint-config/base"
+    ]
+  },
+  "prettier": "@taiyo/prettier-config"
+}
