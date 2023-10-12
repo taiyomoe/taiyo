@@ -11,7 +11,7 @@ export const mediaChapterTitleAtom = atom((get) => {
   const mediaChapter = get(mediaChapterAtom);
 
   return {
-    id: mediaChapter?.id ?? null,
+    id: mediaChapter?.media.id ?? null,
     title: mediaChapter?.title ?? mediaChapter?.media.title ?? null,
     isMediaTitle: mediaChapter?.title !== undefined,
   };

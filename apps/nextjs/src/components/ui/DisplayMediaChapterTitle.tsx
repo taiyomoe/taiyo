@@ -21,8 +21,8 @@ export const DisplayMediaChapterTitle = ({ className }: Props) => {
   if (isMediaTitle) {
     return (
       <Link
-        href={`media/${id}`}
         className={cn("truncate underline-offset-2 hover:underline", className)}
+        href={`/media/${id}`}
       >
         {title}
       </Link>
