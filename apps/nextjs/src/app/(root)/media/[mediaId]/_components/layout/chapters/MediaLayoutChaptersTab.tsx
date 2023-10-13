@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Accordion, AccordionItem } from "@nextui-org/accordion";
 import { Divider } from "@nextui-org/divider";
 
@@ -26,11 +26,12 @@ export const MediaLayoutChaptersTab = ({ media }: Props) => {
   const [selectedGroupKeys, setSelectedGroupKeys] = useState(
     new Set(groupKeys),
   );
+  const groupKeysRef = useRef(groupKeys);
 
   const volumeAccordionTitle = (volume: string) => `Volume ${volume}`;
   const chapterAccordionTitle = (chapter: number) => `Capítulo ${chapter}`;
 
-  const collapseVolumes = () => {
+  const collapseAll = () => {
     setSelectedVolumeKeys(new Set());
     setSelectedGroupKeys(new Set());
   };
@@ -38,31 +39,32 @@ export const MediaLayoutChaptersTab = ({ media }: Props) => {
     setSelectedVolumeKeys(new Set(volumeKeys));
   };
 
-  if (
-    Array.from(selectedVolumeKeys).some((key) => !volumeKeys.includes(key)) ||
-    Array.from(selectedVolumeKeys).length !== volumeKeys.length
-  ) {
+  if (Array.from(selectedVolumeKeys).some((key) => !volumeKeys.includes(key))) {
     setSelectedVolumeKeys(new Set(volumeKeys));
   }
 
-  if (
-    Array.from(selectedGroupKeys).some((key) => !groupKeys.includes(key)) ||
-    Array.from(selectedGroupKeys).length !== groupKeys.length
-  ) {
+  if (Array.from(selectedGroupKeys).some((key) => !groupKeys.includes(key))) {
+    setSelectedGroupKeys(new Set(groupKeys));
+  }
+
+  if (groupKeysRef.current.length !== groupKeys.length) {
+    groupKeysRef.current = groupKeys;
+    setSelectedVolumeKeys(new Set(volumeKeys));
     setSelectedGroupKeys(new Set(groupKeys));
   }
 
   return (
     <div className="flex flex-col gap-2">
       <MediaChaptersTabActions
-        collapseVolumes={collapseVolumes}
+        collapseAll={collapseAll}
         expandVolumes={expandVolumes}
       />
       <Accordion
         className="px-0"
         selectionMode="multiple"
         selectedKeys={selectedVolumeKeys}
-        defaultExpandedKeys={volumeKeys}
+        expandedKeys={selectedVolumeKeys}
+        defaultExpandedKeys={selectedVolumeKeys}
         // @ts-expect-error -- NextUI wrong types
         onSelectionChange={setSelectedVolumeKeys}
       >
@@ -75,7 +77,8 @@ export const MediaLayoutChaptersTab = ({ media }: Props) => {
               className="px-0"
               selectionMode="multiple"
               selectedKeys={selectedGroupKeys}
-              defaultExpandedKeys={groupKeys}
+              expandedKeys={selectedGroupKeys}
+              defaultExpandedKeys={selectedGroupKeys}
               // @ts-expect-error -- NextUI wrong types
               onSelectionChange={setSelectedGroupKeys}
               isCompact

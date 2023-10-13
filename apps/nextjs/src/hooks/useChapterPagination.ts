@@ -25,7 +25,7 @@ export const useChapterPagination = () => {
   };
 
   const handlePerPageChange = (newPerPage: string) => {
-    router.push(`?page=${page}&per_page=${newPerPage}`, {
+    router.push(`?page=${DEFAULT_MEDIA_PAGE}&per_page=${newPerPage}`, {
       scroll: false,
     });
   };

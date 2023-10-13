@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import { Button } from "@nextui-org/button";
 import {
@@ -9,6 +7,7 @@ import {
   DropdownTrigger,
 } from "@nextui-org/dropdown";
 import { Pagination } from "@nextui-org/pagination";
+import type { Selection } from "@nextui-org/react";
 import { ChevronDownIcon } from "lucide-react";
 import { tv } from "tailwind-variants";
 
@@ -36,6 +35,14 @@ export const MediaChaptersTabPagination = ({ totalPages }: Props) => {
     useChapterPagination();
   const [selectedKeys, setSelectedKeys] = useState(new Set([perPage]));
 
+  const handleSelectionChange = (keys: Selection) => {
+    const newPerPage = Array.from(keys).join(", ").replaceAll("_", " ");
+
+    // @ts-expect-error -- NextUI wrong types
+    setSelectedKeys(keys);
+    handlePerPageChange(newPerPage);
+  };
+
   return (
     <div className={container()}>
       <Dropdown classNames={{ base: dropdownBase() }} radius="sm">
@@ -53,22 +60,20 @@ export const MediaChaptersTabPagination = ({ totalPages }: Props) => {
           selectionMode="single"
           disallowEmptySelection
           selectedKeys={selectedKeys}
-          onSelectionChange={(keys) => {
-            const newPerPage = Array.from(keys).join(", ").replaceAll("_", " ");
-
-            // @ts-expect-error -- NextUI wrong types
-            setSelectedKeys(keys);
-            handlePerPageChange(newPerPage);
-          }}
+          onSelectionChange={handleSelectionChange}
+          aria-label="Capítulos por página"
         >
           {pages.map((option) => (
-            <DropdownItem key={option}>{option} caps.</DropdownItem>
+            <DropdownItem key={option} textValue={`${option} caps.`}>
+              {option} caps.
+            </DropdownItem>
           ))}
         </DropdownMenu>
       </Dropdown>
       <Pagination
         total={totalPages}
         initialPage={page}
+        page={page}
         onChange={handlePageChange}
         color="primary"
         radius="sm"

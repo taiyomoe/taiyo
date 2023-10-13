@@ -3,19 +3,19 @@ import { Button } from "@nextui-org/button";
 import { PencilIcon } from "lucide-react";
 
 type Props = {
-  collapseVolumes: () => void;
+  collapseAll: () => void;
   expandVolumes: () => void;
 };
 
 export const MediaChaptersTabActions = ({
-  collapseVolumes,
+  collapseAll,
   expandVolumes,
 }: Props) => {
   const [expanded, setExpanded] = useState(true);
 
   const handleExpandedButtonPress = () => {
     if (expanded) {
-      collapseVolumes();
+      collapseAll();
       setExpanded(false);
     } else {
       expandVolumes();
