@@ -1,5 +1,7 @@
 import { ScrollShadow } from "@nextui-org/scroll-shadow";
 
+import { mediaPaginationSchema } from "@taiyo/utils";
+
 import { serverApi } from "~/utils/serverApi";
 import { MediaLayout } from "./_components/layout/MediaLayout";
 import { MediaLayoutActions } from "./_components/layout/MediaLayoutActions";
@@ -9,10 +11,20 @@ export const runtime = "edge";
 
 type Props = {
   params: { mediaId: string };
+  searchParams: Record<string, string | string[] | undefined>;
 };
 
-const MediaPage = async ({ params: { mediaId } }: Props) => {
-  const media = await serverApi.medias.getById(mediaId);
+const MediaPage = async ({ params: { mediaId }, searchParams }: Props) => {
+  const pagination = mediaPaginationSchema.parse({
+    page: searchParams.page,
+    perPage: searchParams.per_page,
+  });
+
+  const media = await serverApi.medias.getById({
+    id: mediaId,
+    page: pagination.page,
+    perPage: pagination.perPage,
+  });
 
   return (
     <MediaLayout media={media}>

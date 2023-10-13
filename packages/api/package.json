@@ -14,6 +14,7 @@
   "dependencies": {
     "@taiyo/auth": "^0.1.0",
     "@taiyo/db": "^0.1.0",
+    "@taiyo/utils": "^0.1.0",
     "@trpc/client": "^10.40.0",
     "@trpc/server": "^10.40.0",
     "accesscontrol": "^2.2.1",

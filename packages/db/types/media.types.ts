@@ -51,4 +51,6 @@ export type MediaLimited = {
   coverId: MediaCover["id"];
   bannerId: MediaBanner["id"] | null;
   chapters: MediaLimitedChapter[];
+  // -----
+  totalPages: number;
 };
