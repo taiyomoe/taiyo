@@ -38,6 +38,20 @@ export const MediaLayoutChaptersTab = ({ media }: Props) => {
     setSelectedVolumeKeys(new Set(volumeKeys));
   };
 
+  if (
+    Array.from(selectedVolumeKeys).some((key) => !volumeKeys.includes(key)) ||
+    Array.from(selectedVolumeKeys).length !== volumeKeys.length
+  ) {
+    setSelectedVolumeKeys(new Set(volumeKeys));
+  }
+
+  if (
+    Array.from(selectedGroupKeys).some((key) => !groupKeys.includes(key)) ||
+    Array.from(selectedGroupKeys).length !== groupKeys.length
+  ) {
+    setSelectedGroupKeys(new Set(groupKeys));
+  }
+
   return (
     <div className="flex flex-col gap-2">
       <MediaChaptersTabActions
@@ -80,7 +94,7 @@ export const MediaLayoutChaptersTab = ({ media }: Props) => {
         ))}
       </Accordion>
       <Divider className="my-4" />
-      <MediaChaptersTabPagination />
+      <MediaChaptersTabPagination totalPages={media.totalPages} />
     </div>
   );
 };

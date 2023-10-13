@@ -414,6 +414,10 @@ importers:
         version: 5.2.2
 
   packages/utils:
+    dependencies:
+      zod:
+        specifier: ^3.22.4
+        version: 3.22.4
     devDependencies:
       '@taiyo/eslint-config':
         specifier: 0.2.0
