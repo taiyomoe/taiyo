@@ -1,5 +1,6 @@
 import { tv } from "tailwind-variants";
 
+import { ReaderSidebarSettingsNavbarMode } from "../ui/ReaderSidebarSettingsNavbarMode";
 import { ReaderSidebarSettingsOpenMode } from "../ui/ReaderSidebarSettingsOpenMode";
 import { ReaderSidebarSettingsSide } from "../ui/ReaderSidebarSettingsSide";
 
@@ -15,6 +16,7 @@ export const ReaderSidebarSettingsSection = () => {
     <div className={container()}>
       <ReaderSidebarSettingsSide />
       <ReaderSidebarSettingsOpenMode />
+      <ReaderSidebarSettingsNavbarMode />
     </div>
   );
 };
