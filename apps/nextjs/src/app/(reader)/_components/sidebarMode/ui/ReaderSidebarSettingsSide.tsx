@@ -35,8 +35,8 @@ export const ReaderSidebarSettingsSide = () => {
         <Button
           className={leftButton()}
           startContent={<PanelLeftOpenIcon size={20} />}
-          variant={readerSidebarSide === "left" ? "faded" : "solid"}
           onPress={() => handlePress("left")}
+          color={readerSidebarSide === "left" ? "primary" : "default"}
           radius="sm"
         >
           Esquerda
@@ -45,7 +45,7 @@ export const ReaderSidebarSettingsSide = () => {
           className={rightButton()}
           endContent={<PanelRightOpenIcon size={20} />}
           onPress={() => handlePress("right")}
-          variant={readerSidebarSide === "right" ? "faded" : "solid"}
+          color={readerSidebarSide === "right" ? "primary" : "default"}
           radius="sm"
         >
           Direita

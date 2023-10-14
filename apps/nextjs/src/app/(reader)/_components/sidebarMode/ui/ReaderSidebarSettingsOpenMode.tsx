@@ -43,7 +43,7 @@ export const ReaderSidebarSettingsOpenMode = () => {
           startContent={
             <SidebarIcon action="open" side={readerSidebarSide} size={20} />
           }
-          variant={readerSidebarOpenMode === "button" ? "faded" : "solid"}
+          color={readerSidebarOpenMode === "button" ? "primary" : "default"}
           onPress={() => handlePress("button")}
           radius="sm"
         >
@@ -53,7 +53,7 @@ export const ReaderSidebarSettingsOpenMode = () => {
           className={rightButton()}
           endContent={<MousePointer2Icon size={20} />}
           onPress={() => handlePress("hover")}
-          variant={readerSidebarOpenMode === "hover" ? "faded" : "solid"}
+          color={readerSidebarOpenMode === "hover" ? "primary" : "default"}
           radius="sm"
         >
           Foco
