@@ -2,11 +2,11 @@
 
 import type { KeyboardEventHandler } from "react";
 import { useRef } from "react";
-import Image from "next/image";
 import { tv } from "tailwind-variants";
 
 import { useChapterNavigation } from "~/hooks/useChapterNavigation";
 import { useKeyPress } from "~/hooks/useKeyPress";
+import { DisplayMediaChapterImages } from "./DisplayMediaChapterImages";
 
 const displayMediaChapterPage = tv({
   slots: {
@@ -21,7 +21,7 @@ const displayMediaChapterPage = tv({
 export const DisplayMediaChapterPage = () => {
   const { container, leftButton, rightButton } = displayMediaChapterPage();
 
-  const { currentPageUrl, goBack, goForward } = useChapterNavigation();
+  const { goBack, goForward } = useChapterNavigation();
   const backButtonRef = useRef<HTMLButtonElement>(null);
   const forwardButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -40,58 +40,11 @@ export const DisplayMediaChapterPage = () => {
   return (
     <div className={container()}>
       <button ref={backButtonRef} className={leftButton()} onClick={goBack} />
-      {currentPageUrl && (
-        <div className="relative flex h-full w-full flex-col">
-          <Image
-            src={currentPageUrl}
-            alt="image"
-            style={{
-              objectFit: "contain",
-              width: "100%",
-            }}
-            priority
-            sizes="1"
-            width={0}
-            height={0}
-          />
-          <Image
-            src={currentPageUrl}
-            alt="image"
-            style={{
-              objectFit: "contain",
-              width: "100%",
-            }}
-            priority
-            sizes="1"
-            width={0}
-            height={0}
-          />
-          <Image
-            src={currentPageUrl}
-            alt="image"
-            style={{
-              objectFit: "contain",
-              width: "100%",
-            }}
-            priority
-            sizes="1"
-            width={0}
-            height={0}
-          />
-          <Image
-            src={currentPageUrl}
-            alt="image"
-            style={{
-              objectFit: "contain",
-              width: "100%",
-            }}
-            priority
-            sizes="1"
-            width={0}
-            height={0}
-          />
+      <div className="relative min-h-[calc(100%-60px)] w-full">
+        <div className="flex h-full items-center overflow-x-auto">
+          <DisplayMediaChapterImages />
         </div>
-      )}
+      </div>
       <button
         ref={forwardButtonRef}
         className={rightButton()}
