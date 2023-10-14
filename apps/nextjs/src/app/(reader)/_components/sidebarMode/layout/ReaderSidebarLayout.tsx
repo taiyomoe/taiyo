@@ -17,9 +17,9 @@ import { ReaderSidebarTitle } from "../ui/ReaderSidebarTitle";
 
 const readerSidebarLayout = tv({
   slots: {
-    container: "transition-all",
+    container: "transition-all z-30",
     contentWrapper:
-      "bg-content1 min-w-[300px] sticky right-[unset] width-[unset] flex flex-col gap-2 px-4 overflow-x-hidden overflow-y-auto top-0 z-30 max-h-screen h-full",
+      "bg-content1 min-w-[300px] sticky right-[unset] width-[unset] flex flex-col gap-2 p-4 pt-0 overflow-x-hidden overflow-y-auto top-0 max-h-screen h-full",
   },
   variants: {
     side: {
@@ -46,7 +46,7 @@ export const ReaderSidebarLayout = () => {
   return (
     <div className={container()} aria-expanded={readerSidebarState === "show"}>
       <div className={contentWrapper()}>
-        <div className="flex h-[60px] items-center">
+        <div className="flex min-h-[60px] items-center">
           <ReaderSidebarTitle />
         </div>
         <div className="flex flex-col gap-2">
