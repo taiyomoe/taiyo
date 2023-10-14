@@ -7,14 +7,14 @@ import { tv } from "tailwind-variants";
 
 import { useChapterNavigation } from "~/hooks/useChapterNavigation";
 import { useKeyPress } from "~/hooks/useKeyPress";
-import { ReaderSidebarOpenOverlay } from "./ReaderSidebarOpenOverlay";
 
 const displayMediaChapterPage = tv({
   slots: {
-    container: "relative flex h-[calc(100%-61px)]",
+    container: "relative flex row pt-[60px] grid-in-chapter",
     leftButton:
-      "z-10 h-full w-1/2 hover:cursor-pointer focus-visible:outline-none",
-    rightButton: "z-10 h-full w-1/2 focus-visible:outline-none",
+      "absolute bg-red-700 bg-opacity-50 z-10 h-[calc(100%-60px)] w-1/2 hover:cursor-pointer focus-visible:outline-none",
+    rightButton:
+      "absolute bg-blue-700 bg-opacity-50 right-0 z-10 h-[calc(100%-60px)] w-1/2 focus-visible:outline-none",
   },
 });
 
@@ -39,25 +39,64 @@ export const DisplayMediaChapterPage = () => {
 
   return (
     <div className={container()}>
-      <ReaderSidebarOpenOverlay side="left" />
       <button ref={backButtonRef} className={leftButton()} onClick={goBack} />
       {currentPageUrl && (
-        <Image
-          src={currentPageUrl}
-          alt="image"
-          style={{
-            objectFit: "contain",
-          }}
-          priority
-          fill
-        />
+        <div className="relative flex h-full w-full flex-col">
+          <Image
+            src={currentPageUrl}
+            alt="image"
+            style={{
+              objectFit: "contain",
+              width: "100%",
+            }}
+            priority
+            sizes="1"
+            width={0}
+            height={0}
+          />
+          <Image
+            src={currentPageUrl}
+            alt="image"
+            style={{
+              objectFit: "contain",
+              width: "100%",
+            }}
+            priority
+            sizes="1"
+            width={0}
+            height={0}
+          />
+          <Image
+            src={currentPageUrl}
+            alt="image"
+            style={{
+              objectFit: "contain",
+              width: "100%",
+            }}
+            priority
+            sizes="1"
+            width={0}
+            height={0}
+          />
+          <Image
+            src={currentPageUrl}
+            alt="image"
+            style={{
+              objectFit: "contain",
+              width: "100%",
+            }}
+            priority
+            sizes="1"
+            width={0}
+            height={0}
+          />
+        </div>
       )}
       <button
         ref={forwardButtonRef}
         className={rightButton()}
         onClick={goForward}
       />
-      <ReaderSidebarOpenOverlay side="right" />
     </div>
   );
 };

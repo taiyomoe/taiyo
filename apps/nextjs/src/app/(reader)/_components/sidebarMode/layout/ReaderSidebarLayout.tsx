@@ -8,7 +8,6 @@ import {
   readerSidebarSideAtom,
   readerSidebarStateAtom,
 } from "~/atoms/readerSettings.atoms";
-import type { ReaderSettings } from "~/types/readerSettings.types";
 import { ReaderSidebarSettingsSection } from "../sections/ReaderSidebarSettingsSection";
 import { ReaderSidebarUploadersSection } from "../sections/ReaderSidebarUploadersSection";
 import { ReaderSettingsMediaChapterDropdown } from "../ui/ReaderSettingsMediaChapterDropdown";
@@ -16,37 +15,33 @@ import { ReaderSettingsMediaChapterPageDropdown } from "../ui/ReaderSettingsMedi
 import { ReaderSettingsMediaChapterReportModal } from "../ui/ReaderSettingsMediaChapterReportModal";
 import { ReaderSidebarTitle } from "../ui/ReaderSidebarTitle";
 
-type Props = {
-  side: ReaderSettings["sidebarSide"];
-};
-
 const readerSidebarLayout = tv({
   slots: {
-    container:
-      "duration-250 hidden min-h-full w-[300px] bg-content1 px-4 transition-all md:block",
-    contentWrapper: "fixed flex w-[268px] flex-col gap-2",
+    container: "transition-all",
+    contentWrapper:
+      "bg-content1 min-w-[300px] sticky right-[unset] width-[unset] flex flex-col gap-2 px-4 overflow-x-hidden overflow-y-auto top-0 z-30 max-h-screen h-full",
   },
   variants: {
     side: {
       left: {
-        container: "border-r-divider border-r ml-[-300px] aria-expanded:ml-0",
+        container:
+          "border-r-divider border-r ml-[-300px] aria-expanded:ml-0 grid-in-leftSidebar",
       },
       right: {
-        container: "border-l-divider border-l mr-[-300px] aria-expanded:mr-0",
+        container:
+          "border-l-divider border-l mr-[-300px] aria-expanded:mr-0 grid-in-rightSidebar",
       },
     },
   },
 });
 
-export const ReaderSidebarLayout = ({ side }: Props) => {
+export const ReaderSidebarLayout = () => {
   const readerSidebarState = useAtomValue(readerSidebarStateAtom);
   const readerSidebarSide = useAtomValue(readerSidebarSideAtom);
 
   const { container, contentWrapper } = readerSidebarLayout({
     side: readerSidebarSide,
   });
-
-  if (readerSidebarSide !== side) return null;
 
   return (
     <div className={container()} aria-expanded={readerSidebarState === "show"}>

@@ -18,17 +18,22 @@ export default {
       boxShadow: {
         intense: "12px 25px 100px 62px #000",
       },
+      gridTemplateAreas: {
+        mediaChapter: ["leftSidebar chapter rightSidebar"],
+      },
       gridTemplateColumns: {
         smChapterLayout: "auto 50px 70px",
         mdChapterLayout: "auto 130px 70px",
         lgMediaLayout: "350px auto",
         xlMediaLayout: "420px auto",
         "2xlMediaLayout": "550px auto",
+        mediaChapter: "min-content auto min-content",
       },
     },
   },
   plugins: [
     tailwindScrollbar({ nocompatible: true }),
+    require("@savvywombat/tailwindcss-grid-areas"),
     nextui({
       addCommonColors: true,
       themes: {

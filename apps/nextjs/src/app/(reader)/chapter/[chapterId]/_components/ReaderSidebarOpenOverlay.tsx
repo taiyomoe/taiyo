@@ -9,12 +9,12 @@ import {
   readerSidebarStateAtom,
 } from "~/atoms/readerSettings.atoms";
 import { SidebarIcon } from "~/components/icons/SidebarIcon";
-import type { ReaderSettings } from "~/types/readerSettings.types";
 
 const readerSidebarOpenOverlay = tv({
   slots: {
+    container: "fixed top-20 z-[15]",
     button:
-      "group absolute z-20 flex select-none flex-col items-center bg-opacity-50 p-8 text-neutral-300 opacity-0 transition-all hover:cursor-pointer hover:opacity-100",
+      "group flex select-none flex-col items-center bg-opacity-50 p-8 text-neutral-300 opacity-0 transition-all hover:cursor-pointer hover:opacity-100",
     accent: "group-hover:shadow-intense",
     text: "text-large mb-2 font-medium",
   },
@@ -25,39 +25,45 @@ const readerSidebarOpenOverlay = tv({
       },
     },
     side: {
-      left: {},
+      left: {
+        container: "left-0",
+      },
       right: {
-        button: "right-0",
+        container: "right-4",
       },
     },
   },
 });
 
-type Props = {
-  side: ReaderSettings["sidebarSide"];
-};
-
-export const ReaderSidebarOpenOverlay = ({ side }: Props) => {
+export const ReaderSidebarOpenOverlay = () => {
   const readerSidebarOpenMode = useAtomValue(readerSidebarOpenModeAtom);
   const readerSidebarSide = useAtomValue(readerSidebarSideAtom);
   const [readerSidebarState, setReaderSidebarState] = useAtom(
     readerSidebarStateAtom,
   );
 
-  const { button, accent, text } = readerSidebarOpenOverlay({
+  const { container, button, accent, text } = readerSidebarOpenOverlay({
     hide: readerSidebarState === "show",
     side: readerSidebarSide,
   });
 
-  if (readerSidebarOpenMode === "button" || readerSidebarSide !== side) {
+  if (readerSidebarOpenMode === "button") {
     return null;
   }
 
+  console.log("readerSidebarOpenMode", readerSidebarOpenMode);
+  console.log("readerSidebarSide", readerSidebarSide);
+
   return (
-    <button className={button()} onClick={() => setReaderSidebarState("show")}>
-      <span className={accent()} />
-      <p className={text()}>Abrir sidebar</p>
-      <SidebarIcon action="open" side={readerSidebarSide} size={32} />
-    </button>
+    <div className={container()}>
+      <button
+        className={button()}
+        onClick={() => setReaderSidebarState("show")}
+      >
+        <span className={accent()} />
+        <p className={text()}>Abrir sidebar</p>
+        <SidebarIcon action="open" side={readerSidebarSide} size={32} />
+      </button>
+    </div>
   );
 };
