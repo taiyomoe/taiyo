@@ -16,7 +16,7 @@ export default {
         xs: "3px",
       },
       boxShadow: {
-        intense: "0 30px 200px 105px #000",
+        intense: "12px 25px 100px 62px #000",
       },
       gridTemplateColumns: {
         smChapterLayout: "auto 50px 70px",
