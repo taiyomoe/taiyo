@@ -36,7 +36,7 @@ export default function Layout({ children }: LayoutProps) {
       <body
         className={cn(
           ["font-sans", fontSans.variable].join(" "),
-          "scrollbar-thumb-card h-screen scrollbar-thin scrollbar-track-background",
+          "scrollbar-thumb-card h-full min-h-screen scrollbar-thin scrollbar-track-background",
         )}
       >
         <Providers headers={headers()}>{children}</Providers>
