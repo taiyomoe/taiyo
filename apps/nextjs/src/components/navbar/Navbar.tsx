@@ -1,20 +1,74 @@
+"use client";
+
 import Link from "next/link";
+import { tv } from "tailwind-variants";
 
 import { CompanyLogo } from "~/components/ui/CompanyLogo";
+import { useChapterNavbar } from "~/hooks/useChapterNavbar";
 import { NavbarBorder } from "./NavbarBorder";
-import { NavbarPopover } from "./NavbarPopover";
 import { ReaderSidebarOpenButton } from "./ReaderSidebarOpenButton";
 
-export const Navbar = () => {
+const navbar = tv({
+  slots: {
+    container:
+      "w-auto bg-background flex flex-col h-[60px] justify-center max-h-[60px] z-20 transition-all",
+    contentWrapper:
+      "items-center px-6 flex grow justify-between transition-all",
+    brandContainer: "flex items-center gap-2",
+    brandText: "text-xl font-semibold",
+    endContentContainer: "flex gap-4",
+  },
+  variants: {
+    sidebarSide: {
+      left: {
+        container: "pl-[300px]",
+      },
+      right: {
+        container: "pr-[300px]",
+      },
+    },
+    mode: {
+      hover: {},
+      sticky: {
+        container: "sticky top-0",
+      },
+    },
+    expand: {
+      true: {
+        container: "p-0",
+      },
+    },
+  },
+});
+
+type Props = {
+  popover: JSX.Element;
+};
+
+export const Navbar = ({ popover }: Props) => {
+  const { mode, sidebarSide, expand } = useChapterNavbar();
+
+  const {
+    container,
+    contentWrapper,
+    brandContainer,
+    brandText,
+    endContentContainer,
+  } = navbar({
+    sidebarSide,
+    mode,
+    expand,
+  });
+
   return (
-    <div className="sticky top-0 z-40 flex h-auto w-full flex-col bg-background">
-      <nav className="flex h-[60px] items-center justify-between px-6">
-        <Link href="/" className="flex items-center gap-2">
+    <div className={container()}>
+      <nav className={contentWrapper()}>
+        <Link href="/" className={brandContainer()}>
           <CompanyLogo company="taiyo" width={35} priority />
-          <p className="text-xl font-semibold">Taiyō</p>
+          <p className={brandText()}>Taiyō</p>
         </Link>
-        <div className="flex gap-4">
-          <NavbarPopover />
+        <div className={endContentContainer()}>
+          {popover}
           <ReaderSidebarOpenButton />
         </div>
       </nav>

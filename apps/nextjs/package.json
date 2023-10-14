@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@nextui-org/react": "^2.1.13",
+    "@savvywombat/tailwindcss-grid-areas": "^3.1.0",
     "@t3-oss/env-nextjs": "^0.7.0",
     "@taiyo/api": "^0.1.0",
     "@taiyo/auth": "^0.1.0",
