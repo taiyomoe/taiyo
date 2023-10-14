@@ -12,9 +12,9 @@ const displayMediaChapterPage = tv({
   slots: {
     container: "relative flex row pt-[60px] grid-in-chapter",
     leftButton:
-      "absolute bg-red-700 bg-opacity-50 z-10 h-[calc(100%-60px)] w-1/2 hover:cursor-pointer focus-visible:outline-none",
+      "absolute z-10 h-[calc(100%-60px)] w-1/2 hover:cursor-pointer focus-visible:outline-none",
     rightButton:
-      "absolute bg-blue-700 bg-opacity-50 right-0 z-10 h-[calc(100%-60px)] w-1/2 focus-visible:outline-none",
+      "absolute right-0 z-10 h-[calc(100%-60px)] w-1/2 focus-visible:outline-none",
   },
 });
 
