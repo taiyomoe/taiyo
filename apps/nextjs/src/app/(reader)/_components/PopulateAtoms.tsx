@@ -41,13 +41,5 @@ export const PopulateAtoms = ({ mediaChapter }: Props) => {
     setMediaChapterNavigation,
   ]);
 
-  return (
-    <div className="flex items-center gap-4">
-      {/* <p>Set loading</p>
-      <ButtonGroup>
-        <Button onPress={() => setMediaChapter(null)}>True</Button>
-        <Button onPress={() => setMediaChapter(mediaChapter)}>False</Button>
-      </ButtonGroup> */}
-    </div>
-  );
+  return null;
 };
