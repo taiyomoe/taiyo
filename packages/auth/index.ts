@@ -4,15 +4,9 @@ import NextAuth from "next-auth";
 import type { DefaultSession } from "next-auth";
 
 import { db, eq } from "@taiyo/db";
-import { roles } from "@taiyo/db/schema/roles";
 import { users, userSettings } from "@taiyo/db/schema/users";
-import type {
-  Actions,
-  Permission,
-  RefinedPermission,
-  RefinedPermissions,
-  Resources,
-} from "@taiyo/db/types";
+import { PermissionUtils } from "@taiyo/utils";
+import type { RefinedPermission } from "@taiyo/utils";
 
 import { env } from "./env.mjs";
 
@@ -33,7 +27,7 @@ declare module "next-auth" {
       /** The user's current role and permissions. */
       role: {
         name: string;
-        permissions: RefinedPermissions;
+        permissions: RefinedPermission[];
       };
     } & DefaultSession["user"];
   }
@@ -60,27 +54,19 @@ export const {
 
       const results = await db
         .select({
-          name: roles.name,
-          permissions: roles.permissions,
+          role: users.role,
         })
         .from(users)
-        .leftJoin(roles, eq(roles.id, users.roleId))
         .where(eq(users.id, session.user.id))
         .limit(1);
 
       const firstResult = results.at(0)!;
-      const permissionToRefinedPermission = (
-        permission: Permission,
-      ): RefinedPermission => ({
-        resource: permission.split(":")[0] as Resources,
-        action: permission.split(":")[1] as Actions,
-      });
+      const permissions = PermissionUtils.getRolePermissions(firstResult.role);
+      const refinedPermissions = PermissionUtils.refinePermissions(permissions);
 
       session.user.role = {
-        name: firstResult.name ?? "USER",
-        permissions: firstResult.permissions
-          ? firstResult.permissions.map(permissionToRefinedPermission)
-          : [],
+        name: firstResult.role,
+        permissions: refinedPermissions,
       };
     },
     createUser: async (message) => {

@@ -10,7 +10,6 @@ import * as medias from "./schema/medias";
 import * as mediaTags from "./schema/mediaTags";
 import * as mediaTitles from "./schema/mediaTitles";
 import * as mediaTrackers from "./schema/mediaTrackers";
-import * as roles from "./schema/roles";
 import * as scanMembers from "./schema/scanMembers";
 import * as scans from "./schema/scans";
 import * as tags from "./schema/tags";
@@ -20,7 +19,6 @@ import * as users from "./schema/users";
 neonConfig.fetchConnectionCache = true;
 
 export const schema = {
-  ...roles,
   ...users,
   ...tags,
   ...trackers,

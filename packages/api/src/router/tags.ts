@@ -10,7 +10,10 @@ export const tagsRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const result = await ctx.db
         .insert(tags)
-        .values([input])
+        .values({
+          ...input,
+          creatorId: ctx.session.user.id,
+        })
         .returning()
         .execute();
 

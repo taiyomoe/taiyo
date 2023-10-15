@@ -12,8 +12,9 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 
+import { RolesEnum, RoleUtils } from "@taiyo/utils";
+
 import { mediaChapters } from "./mediaChapters";
-import { roles } from "./roles";
 
 /**
  * Everything here (except for `userSettings`) is basically untouchable.
@@ -32,13 +33,8 @@ export const users = pgTable(
     email: text("email").notNull(),
     emailVerified: timestamp("emailVerified", { mode: "date" }),
     image: text("image"),
-    // -----
-    roleId: uuid("roleId")
-      .references(() => roles.id)
-      /**
-       * This is the hard-coded default USER role ID, which is seeded in the database.
-       */
-      .default("7bf9872c-1c80-4e78-be71-6fa0d3dc88d1")
+    role: varchar("role", { enum: RoleUtils.getAvailableRoles() })
+      .default(RolesEnum.USER)
       .notNull(),
   },
   (user) => ({

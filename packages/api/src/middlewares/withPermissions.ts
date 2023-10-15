@@ -1,14 +1,14 @@
 import { AccessControl } from "accesscontrol";
 
-import type { Actions, Resources } from "@taiyo/db/types";
+import type { Actions, Resources } from "@taiyo/utils";
 
 import { InsuficientPermissionsError, InternalServerError } from "../errors";
 import { authMiddleware } from "../trpc";
 
 type Grant = {
-  resource: Resources;
-  action: `${Actions}:any`;
   role: string;
+  resource: Resources;
+  action: `${Actions}:${"any" | "own"}`;
 };
 
 export const withPermissions = () =>
@@ -18,17 +18,17 @@ export const withPermissions = () =>
     }
 
     const { resource, action } = meta;
-    const user = ctx.session?.user;
-    const role = user?.role;
+    const { role } = ctx.session.user;
     const grants: Grant[] = [];
 
     for (const permission of role.permissions) {
-      const { resource: permissionResource, action: permissionAction } =
-        permission;
+      const permissionResource = permission.resource;
+      const permissionAction = permission.action;
+      const permissionPosession = permission.posession ?? "any";
 
       grants.push({
         resource: permissionResource,
-        action: `${permissionAction}:any`,
+        action: `${permissionAction}:${permissionPosession}`,
         role: role.name,
       });
     }
@@ -38,7 +38,7 @@ export const withPermissions = () =>
       role: role.name,
       resource,
       action,
-      possession: "any",
+      possession: "own",
     });
 
     if (!requiredPermission.granted) {

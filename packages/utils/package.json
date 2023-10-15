@@ -12,6 +12,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@taiyo/db": "^0.1.0",
     "zod": "^3.22.4"
   },
   "devDependencies": {
