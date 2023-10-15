@@ -384,9 +384,6 @@ importers:
       '@neondatabase/serverless':
         specifier: ^0.6.0
         version: 0.6.0
-      '@taiyo/utils':
-        specifier: ^0.1.0
-        version: link:../utils
       drizzle-orm:
         specifier: ^0.28.6
         version: 0.28.6(@neondatabase/serverless@0.6.0)

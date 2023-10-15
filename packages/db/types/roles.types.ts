@@ -12,3 +12,6 @@ export enum RolesEnum {
   UPLOADER = "UPLOADER",
   ADMIN = "ADMIN",
 }
+
+export const getAvailableRoles = () =>
+  ["USER", "MODERATOR", "UPLOADER_INTERN", "UPLOADER", "ADMIN"] as const;

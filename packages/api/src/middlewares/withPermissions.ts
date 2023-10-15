@@ -1,6 +1,6 @@
 import { AccessControl } from "accesscontrol";
 
-import type { Actions, Resources } from "@taiyo/utils";
+import type { Actions, Resources } from "@taiyo/db/types";
 
 import { InsuficientPermissionsError, InternalServerError } from "../errors";
 import { authMiddleware } from "../trpc";

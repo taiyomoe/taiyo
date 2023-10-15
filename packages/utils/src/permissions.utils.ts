@@ -6,8 +6,8 @@ import type {
   Resources,
   ResourcesWithoutPossession,
   ResourcesWithPossession,
-} from "./types/permissions.types";
-import type { Roles } from "./types/roles.types";
+  Roles,
+} from "@taiyo/db/types";
 
 const getPermissions = (): Permission[] => {
   const permissions: Permission[] = [];
@@ -122,28 +122,29 @@ const getResourcesWithoutPosession = (): ResourcesWithoutPossession[] => [
   "scanMembers",
 ];
 
-const refinePermissions = (permissions: Permission[]): RefinedPermission[] => {
-  return permissions.map((permission) => {
-    const [resource, action, posession] = permission.split(":") as [
-      Resources,
-      Actions,
-      Posession | undefined,
-    ];
+const refinePermission = (permission: Permission): RefinedPermission => {
+  const [resource, action, posession] = permission.split(":") as [
+    Resources,
+    Actions,
+    Posession | undefined,
+  ];
 
-    if (posession) {
-      return {
-        resource,
-        action,
-        posession,
-      };
-    }
-
+  if (posession) {
     return {
       resource,
       action,
+      posession,
     };
-  });
+  }
+
+  return {
+    resource,
+    action,
+  };
 };
+
+const refinePermissions = (permissions: Permission[]): RefinedPermission[] =>
+  permissions.map(refinePermission);
 
 export const PermissionUtils = {
   getPermissions,
@@ -155,5 +156,6 @@ export const PermissionUtils = {
   getRolePermissions,
   getResourcesWithPosession,
   getResourcesWithoutPosession,
+  refinePermission,
   refinePermissions,
 };

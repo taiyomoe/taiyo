@@ -3,6 +3,11 @@
   "compilerOptions": {
     "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
   },
-  "include": ["*.ts", "src"],
+  "include": [
+    "*.ts",
+    "src",
+    "../types/src/permissions.types.ts",
+    "../types/src/roles.types.ts"
+  ],
   "exclude": ["node_modules"]
 }

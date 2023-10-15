@@ -5,8 +5,8 @@ import type { DefaultSession } from "next-auth";
 
 import { db, eq } from "@taiyo/db";
 import { users, userSettings } from "@taiyo/db/schema/users";
+import type { RefinedPermission } from "@taiyo/db/types";
 import { PermissionUtils } from "@taiyo/utils";
-import type { RefinedPermission } from "@taiyo/utils";
 
 import { env } from "./env.mjs";
 

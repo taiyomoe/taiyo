@@ -12,8 +12,7 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 
-import { RolesEnum, RoleUtils } from "@taiyo/utils";
-
+import { getAvailableRoles, RolesEnum } from "../types";
 import { mediaChapters } from "./mediaChapters";
 
 /**
@@ -33,7 +32,7 @@ export const users = pgTable(
     email: text("email").notNull(),
     emailVerified: timestamp("emailVerified", { mode: "date" }),
     image: text("image"),
-    role: varchar("role", { enum: RoleUtils.getAvailableRoles() })
+    role: varchar("role", { enum: getAvailableRoles() })
       .default(RolesEnum.USER)
       .notNull(),
   },
