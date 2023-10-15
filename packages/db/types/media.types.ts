@@ -26,7 +26,7 @@ export type MediaLimitedChapter = {
   number: MediaChapter["number"];
   volume: MediaChapter["volume"];
   // ----- RELATIONS
-  user: {
+  uploader: {
     id: User["id"];
     name: User["name"];
   };

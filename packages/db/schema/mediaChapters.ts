@@ -40,9 +40,9 @@ export const mediaChapters = pgTable(
       enum: ["OK", "STAFF_ONLY", "VIP_ONLY", "LOCKED"],
     }).default("OK"),
     // -----
-    mediaId: uuid("mediaId").references(() => medias.id, {
-      onDelete: "cascade",
-    }),
+    mediaId: uuid("mediaId")
+      .references(() => medias.id, { onDelete: "cascade" })
+      .notNull(),
     uploaderId: uuid("uploaderId")
       .references(() => users.id, { onDelete: "cascade" })
       .notNull(),

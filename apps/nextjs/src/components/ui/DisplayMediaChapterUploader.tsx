@@ -6,7 +6,7 @@ import { tv } from "tailwind-variants";
 import type { User } from "@taiyo/db/types/user.types";
 
 type Props = {
-  user?: User | Pick<User, "id" | "name">;
+  uploader?: User | Pick<User, "id" | "name">;
   size?: "sm" | "md";
 };
 
@@ -38,7 +38,7 @@ const displayMediaChapterUploader = tv({
   },
 });
 
-export const DisplayMediaChapterUploader = ({ user, size }: Props) => {
+export const DisplayMediaChapterUploader = ({ uploader, size }: Props) => {
   const { container, icon, skeleton, link } = displayMediaChapterUploader({
     size,
   });
@@ -46,10 +46,10 @@ export const DisplayMediaChapterUploader = ({ user, size }: Props) => {
   return (
     <div className={container()}>
       <UserIcon className={icon()} />
-      {!user && <Skeleton className={skeleton()} />}
-      {user && (
-        <Link className={link()} href={`/users/${user.id}`}>
-          <p>{user.name}</p>
+      {!uploader && <Skeleton className={skeleton()} />}
+      {uploader && (
+        <Link className={link()} href={`/users/${uploader.id}`}>
+          <p>{uploader.name}</p>
         </Link>
       )}
     </div>
