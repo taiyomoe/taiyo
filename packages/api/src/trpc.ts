@@ -13,7 +13,7 @@ import { ZodError } from "zod";
 import { auth } from "@taiyo/auth";
 import type { Session } from "@taiyo/auth";
 import { db } from "@taiyo/db";
-import type { Actions, Resources } from "@taiyo/utils";
+import type { Actions, Resources } from "@taiyo/db/types";
 
 import { withAuth } from "./middlewares/withAuth";
 import { withPermissions } from "./middlewares/withPermissions";
