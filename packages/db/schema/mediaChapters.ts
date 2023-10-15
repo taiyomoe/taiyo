@@ -40,12 +40,15 @@ export const mediaChapters = pgTable(
       enum: ["OK", "STAFF_ONLY", "VIP_ONLY", "LOCKED"],
     }).default("OK"),
     // -----
-    userId: uuid("userId")
+    mediaId: uuid("mediaId").references(() => medias.id, {
+      onDelete: "cascade",
+    }),
+    uploaderId: uuid("uploaderId")
       .references(() => users.id, { onDelete: "cascade" })
       .notNull(),
-    mediaId: uuid("mediaId")
-      .references(() => medias.id, { onDelete: "cascade" })
-      .notNull(),
+    deleterId: uuid("deleterId").references(() => users.id, {
+      onDelete: "cascade",
+    }),
   },
   (mediaChapter) => ({
     mediaIdIdx: index("mediaId_idx").on(mediaChapter.mediaId),
@@ -59,8 +62,12 @@ export const mediaChaptersRelations = relations(
       fields: [mediaChapters.mediaId],
       references: [medias.id],
     }),
-    user: one(users, {
-      fields: [mediaChapters.userId],
+    uploader: one(users, {
+      fields: [mediaChapters.uploaderId],
+      references: [users.id],
+    }),
+    deleter: one(users, {
+      fields: [mediaChapters.deletedAt],
       references: [users.id],
     }),
     scans: many(mediaChapterScans),

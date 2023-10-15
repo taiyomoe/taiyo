@@ -15,6 +15,8 @@ const execute = async (db: PostgresJsDatabase) => {
     discord: "http://discord.gg/WfYn3zU",
     facebook: "https://www.facebook.com/gekkouscan",
     telegram: "https://t.me/gekkouscans",
+    // -----
+    creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
   });
 
   await db.insert(scanMembers).values([

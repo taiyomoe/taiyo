@@ -21,6 +21,8 @@ const execute = async (db: PostgresJsDatabase) => {
     source: "WEB_NOVEL",
     demography: "SHOUNEN",
     countryOfOrigin: "CHINA",
+    // -----
+    creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
   });
 
   await db.insert(mediaTitles).values([
@@ -30,6 +32,7 @@ const execute = async (db: PostgresJsDatabase) => {
       language: "ENGLISH",
       isAcronym: false,
       mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
   ]);
 
@@ -37,11 +40,13 @@ const execute = async (db: PostgresJsDatabase) => {
     {
       trackerMediaId: "b1461071-bfbb-43e7-a5b6-a7ba5904649f",
       mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
       trackerId: "6c61f739-1ca3-467b-9d08-b7a2e58efb21",
     },
     {
       trackerMediaId: "104494",
       mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
       trackerId: "a4ffe426-9496-4167-ade3-b3789f81fb75",
     },
   ]);
@@ -50,22 +55,27 @@ const execute = async (db: PostgresJsDatabase) => {
     {
       id: "5633a19d-7ec9-4ffd-9d93-57eb03458ce6",
       mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
+      uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "3a88f93e-07de-4430-9e53-ddabab07676f",
       mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
+      uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "516cfad2-601d-4bd7-b624-1efe26e48d6b",
       mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
+      uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "73984890-d892-412e-8529-d416cc8be525",
       mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
+      uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "d75dae86-643f-42cc-9a2c-8fc919b53536",
       mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
+      uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
   ]);
 
@@ -74,41 +84,49 @@ const execute = async (db: PostgresJsDatabase) => {
       id: "308cb63e-ca3d-48f2-ae28-f231d87e29ee",
       tagId: "34b258e9-b746-4d72-aa38-7d77695cfe5b",
       mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "fd847029-7982-4d71-80d6-28a8f9b1a00d",
       tagId: "037aa719-975d-4bdc-8abb-f0f694af1cad",
       mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "0b50cb37-472e-443a-925e-e4c2567a15b9",
       tagId: "9f8204b0-49aa-4f16-9226-99b11856462c",
       mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "e881cfb4-7e92-403d-bb2f-56a2fb4b0d30",
       tagId: "27249d9d-3f17-48b1-a141-9cb082dc4e4f",
       mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "dcb0b342-401e-4b0f-aac6-047252682c13",
       tagId: "bc6ca93e-0632-40f4-bfb3-cf9ddf95ddb7",
       mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "5474526f-a71b-4b11-bd57-587974d2e959",
       tagId: "8a96ca3d-d1f0-4759-8c4c-9a8a64e2d722",
       mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "5b6cc616-73fe-4ade-8542-d821b991d7c6",
       tagId: "f9b88d05-cb71-4bd0-95c3-6dc083144771",
       mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "fd737053-4e25-4987-8065-a38580751b5a",
       tagId: "ed3b7aa1-2f58-44de-b787-7044dd9e2767",
       mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
   ]);
 
@@ -140,7 +158,7 @@ const execute = async (db: PostgresJsDatabase) => {
         { id: "3b473db4-a5dd-4eec-91a6-67233e2323af" },
       ],
       mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
-      userId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+      uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "abcded63-ded5-44d3-aef7-fa368d653347",
@@ -161,7 +179,7 @@ const execute = async (db: PostgresJsDatabase) => {
         { id: "e03df8fe-ebc4-4f00-9d39-53e282606b6d" },
       ],
       mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
-      userId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+      uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "c6206040-95a8-4802-b12b-c631ef7e859d",
@@ -183,7 +201,7 @@ const execute = async (db: PostgresJsDatabase) => {
         { id: "706a4565-924b-4e1d-93b6-063248666fbe" },
       ],
       mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
-      userId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+      uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "bd5f1cac-95b1-4f68-a314-144898e5cc07",
@@ -204,7 +222,7 @@ const execute = async (db: PostgresJsDatabase) => {
         { id: "48b3092d-83a0-4e91-b758-e0b6ad1cc0ce" },
       ],
       mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
-      userId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+      uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "69884783-18c4-48c8-9320-c00cef8cb873",
@@ -225,7 +243,7 @@ const execute = async (db: PostgresJsDatabase) => {
         { id: "8443c1aa-e125-421d-bff7-81ff02b9c42c" },
       ],
       mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
-      userId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+      uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "6d54a98a-43c4-4821-bb4d-0ce48e99c8f7",
@@ -245,7 +263,7 @@ const execute = async (db: PostgresJsDatabase) => {
         { id: "f4e9063d-c01c-4122-b7fb-9c250d76618b" },
       ],
       mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
-      userId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+      uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "cd19eaa8-aaa9-4565-b1e1-59bccee18c30",
@@ -265,7 +283,7 @@ const execute = async (db: PostgresJsDatabase) => {
         { id: "ccf87ca9-68b7-419e-909b-a2e58f10b1a0" },
       ],
       mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
-      userId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+      uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "90b25b8e-572e-42ab-b30a-3075180bbe6c",
@@ -285,7 +303,7 @@ const execute = async (db: PostgresJsDatabase) => {
         { id: "57c094a5-190b-4a23-a49d-552c9f70f5d2" },
       ],
       mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
-      userId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+      uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "6eca2c2e-d63b-4250-a13d-86009fee5b4f",
@@ -305,7 +323,7 @@ const execute = async (db: PostgresJsDatabase) => {
         { id: "8bae5ce8-fb60-4cdd-be85-28b48e2eef6c" },
       ],
       mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
-      userId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+      uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "ff8a9509-2b26-43c3-9701-e71cadaacbb2",
@@ -327,7 +345,7 @@ const execute = async (db: PostgresJsDatabase) => {
         { id: "eb1023bc-583f-44c3-b92c-174914368a25" },
       ],
       mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
-      userId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+      uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
   ]);
 
@@ -336,51 +354,61 @@ const execute = async (db: PostgresJsDatabase) => {
       id: "27ff2a84-84cf-4b49-8a7e-2283571b15c3",
       scanId: "642f18b8-df9b-4b13-a4dc-93bba10393df",
       mediaChapterId: "89b0b209-3653-4780-9cbf-90a35803c38a",
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "26cdb711-ae23-49bf-a0c1-bf2a6a48d8e9",
       scanId: "642f18b8-df9b-4b13-a4dc-93bba10393df",
       mediaChapterId: "abcded63-ded5-44d3-aef7-fa368d653347",
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "570ad881-e10f-4370-b928-389dfbb980d7",
       scanId: "642f18b8-df9b-4b13-a4dc-93bba10393df",
       mediaChapterId: "c6206040-95a8-4802-b12b-c631ef7e859d",
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "d7a9c065-1529-48e6-b371-1e6478a90c01",
       scanId: "642f18b8-df9b-4b13-a4dc-93bba10393df",
       mediaChapterId: "bd5f1cac-95b1-4f68-a314-144898e5cc07",
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "5d23d145-fed0-4be0-bd3f-29a769fbcb5f",
       scanId: "642f18b8-df9b-4b13-a4dc-93bba10393df",
       mediaChapterId: "69884783-18c4-48c8-9320-c00cef8cb873",
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "1759b36f-df8b-4edf-b5d5-f9c2f45602f2",
       scanId: "642f18b8-df9b-4b13-a4dc-93bba10393df",
       mediaChapterId: "6d54a98a-43c4-4821-bb4d-0ce48e99c8f7",
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "3da50405-7c89-4ba2-80fd-7e6324fd8fe2",
       scanId: "642f18b8-df9b-4b13-a4dc-93bba10393df",
       mediaChapterId: "cd19eaa8-aaa9-4565-b1e1-59bccee18c30",
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "e6963d46-902f-4d0e-8053-e393f7fca661",
       scanId: "642f18b8-df9b-4b13-a4dc-93bba10393df",
       mediaChapterId: "90b25b8e-572e-42ab-b30a-3075180bbe6c",
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "ec517e09-4213-4b61-b207-a2516028fa75",
       scanId: "642f18b8-df9b-4b13-a4dc-93bba10393df",
       mediaChapterId: "6eca2c2e-d63b-4250-a13d-86009fee5b4f",
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "d4484306-1955-4a0e-90a8-c5239b488117",
       scanId: "642f18b8-df9b-4b13-a4dc-93bba10393df",
       mediaChapterId: "ff8a9509-2b26-43c3-9701-e71cadaacbb2",
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
   ]);
 };

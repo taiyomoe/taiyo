@@ -15,6 +15,8 @@ const execute = async (db: PostgresJsDatabase) => {
     website: "https://animaregia.net/",
     discord: "https://discord.gg/T7XXzNN",
     email: "animaregia@live.com",
+    // -----
+    creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
   });
 
   await db.insert(scanMembers).values([

@@ -11,7 +11,6 @@ import media7 from "../seed/medias/media-7";
 import media8 from "../seed/medias/media-8";
 import media9 from "../seed/medias/media-9";
 import media10 from "../seed/medias/media-10";
-import roles from "../seed/roles";
 import scan1 from "../seed/scans/scan-1";
 import scan2 from "../seed/scans/scan-2";
 import scan3 from "../seed/scans/scan-3";
@@ -38,13 +37,14 @@ const db = drizzle(neon(process.env.DATABASE_URL!));
 async function seed() {
   console.log("Seeding database.....");
 
+  if (process.env.NODE_ENV === "development") {
+    await users.execute(db).then(() => console.log("Users seeded"));
+  }
+
   await trackers.execute(db).then(() => console.log("Trackers seeded"));
-  await roles.execute(db).then(() => console.log("Roles seeded"));
   await tags.execute(db).then(() => console.log("Tags seeded"));
 
   if (process.env.NODE_ENV === "development") {
-    await users.execute(db).then(() => console.log("Users seeded"));
-
     // Scans
     await scan1.execute(db).then(() => console.log("Scan 1 seeded"));
     await scan2.execute(db).then(() => console.log("Scan 2 seeded"));

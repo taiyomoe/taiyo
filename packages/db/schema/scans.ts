@@ -3,6 +3,7 @@ import { pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 
 import { mediaChapterScans } from "./mediaChapterScans";
 import { scanMembers } from "./scanMembers";
+import { users } from "./users";
 
 export const scans = pgTable("scans", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -24,9 +25,24 @@ export const scans = pgTable("scans", {
   telegram: text("telegram"),
   youtube: text("youtube"),
   email: text("email"),
+  // -----
+  creatorId: uuid("creatorId")
+    .references(() => users.id, { onDelete: "cascade" })
+    .notNull(),
+  deleterId: uuid("deleterId").references(() => users.id, {
+    onDelete: "cascade",
+  }),
 });
 
-export const scansRelations = relations(scans, ({ many }) => ({
+export const scansRelations = relations(scans, ({ one, many }) => ({
+  creator: one(users, {
+    fields: [scans.creatorId],
+    references: [users.id],
+  }),
+  deleter: one(users, {
+    fields: [scans.deleterId],
+    references: [users.id],
+  }),
   members: many(scanMembers),
   chapters: many(mediaChapterScans),
 }));

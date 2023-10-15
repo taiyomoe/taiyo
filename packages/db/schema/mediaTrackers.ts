@@ -3,6 +3,7 @@ import { pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 
 import { medias } from "./medias";
 import { trackers } from "./trackers";
+import { users } from "./users";
 
 export const mediaTrackers = pgTable("mediaTrackers", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -18,6 +19,12 @@ export const mediaTrackers = pgTable("mediaTrackers", {
   mediaId: uuid("mediaId")
     .references(() => medias.id, { onDelete: "cascade" })
     .notNull(),
+  creatorId: uuid("creatorId")
+    .references(() => users.id, { onDelete: "cascade" })
+    .notNull(),
+  deleterId: uuid("deleterId").references(() => users.id, {
+    onDelete: "cascade",
+  }),
 });
 
 export const mediaTrackersRelations = relations(mediaTrackers, ({ one }) => ({
@@ -28,5 +35,13 @@ export const mediaTrackersRelations = relations(mediaTrackers, ({ one }) => ({
   media: one(medias, {
     fields: [mediaTrackers.mediaId],
     references: [medias.id],
+  }),
+  creator: one(users, {
+    fields: [mediaTrackers.creatorId],
+    references: [users.id],
+  }),
+  deleter: one(users, {
+    fields: [mediaTrackers.deleterId],
+    references: [users.id],
   }),
 }));

@@ -19,6 +19,8 @@ const execute = async (db: PostgresJsDatabase) => {
     facebook: "https://www.facebook.com/saikaiscan/",
     instagram: "https://www.instagram.com/saikaioficial/",
     youtube: "https://www.youtube.com/saikai",
+    // -----
+    creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
   });
 
   await db.insert(scanMembers).values([

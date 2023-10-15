@@ -15,6 +15,8 @@ const execute = async (db: PostgresJsDatabase) => {
     website: "https://neoxscan.net/",
     discord: "https://discord.com/invite/neoxscan",
     facebook: "https://www.facebook.com/NeoxScanlator/",
+    // -----
+    creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
   });
 
   await db.insert(scanMembers).values([
