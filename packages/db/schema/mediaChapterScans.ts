@@ -9,6 +9,7 @@ import {
 
 import { mediaChapters } from "./mediaChapters";
 import { scans } from "./scans";
+import { users } from "./users";
 
 export const mediaChapterScans = pgTable(
   "mediaChapterScans",
@@ -24,6 +25,12 @@ export const mediaChapterScans = pgTable(
     mediaChapterId: uuid("mediaChapterId")
       .references(() => mediaChapters.id, { onDelete: "cascade" })
       .notNull(),
+    creatorId: uuid("creatorId")
+      .references(() => users.id, { onDelete: "cascade" })
+      .notNull(),
+    deleterId: uuid("deleterId").references(() => users.id, {
+      onDelete: "cascade",
+    }),
   },
   (t) => ({
     pk: primaryKey(t.id, t.scanId, t.mediaChapterId),
@@ -41,6 +48,14 @@ export const mediaChapterScansRelations = relations(
     chapter: one(mediaChapters, {
       fields: [mediaChapterScans.mediaChapterId],
       references: [mediaChapters.id],
+    }),
+    creator: one(users, {
+      fields: [mediaChapterScans.creatorId],
+      references: [users.id],
+    }),
+    deleter: one(users, {
+      fields: [mediaChapterScans.deleterId],
+      references: [users.id],
     }),
   }),
 );

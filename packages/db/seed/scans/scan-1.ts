@@ -17,6 +17,8 @@ const execute = async (db: PostgresJsDatabase) => {
     website: "https://dropescan.com",
     discord: "https://discord.com/invite/drope-100-jesus-487352833834876931",
     facebook: "https://www.facebook.com/DROPEscanlator",
+    // -----
+    creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
   });
 
   await db.insert(scanMembers).values([

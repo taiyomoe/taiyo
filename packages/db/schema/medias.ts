@@ -14,6 +14,7 @@ import { mediaCovers } from "./mediaCovers";
 import { mediaTags } from "./mediaTags";
 import { mediaTitles } from "./mediaTitles";
 import { mediaTrackers } from "./mediaTrackers";
+import { users } from "./users";
 
 export const medias = pgTable("medias", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -52,9 +53,24 @@ export const medias = pgTable("medias", {
   flag: varchar("flag", {
     enum: ["OK", "STAFF_ONLY", "VIP_ONLY", "LOCKED"],
   }).default("OK"),
+  // -----
+  creatorId: uuid("creatorId")
+    .references(() => users.id, { onDelete: "cascade" })
+    .notNull(),
+  deleterId: uuid("deleterId").references(() => users.id, {
+    onDelete: "cascade",
+  }),
 });
 
-export const mediasRelations = relations(medias, ({ many }) => ({
+export const mediasRelations = relations(medias, ({ one, many }) => ({
+  creator: one(users, {
+    fields: [medias.creatorId],
+    references: [users.id],
+  }),
+  deleter: one(users, {
+    fields: [medias.deleterId],
+    references: [users.id],
+  }),
   covers: many(mediaCovers),
   banners: many(mediaBanners),
   tags: many(mediaTags),

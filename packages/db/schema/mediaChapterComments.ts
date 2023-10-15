@@ -32,6 +32,9 @@ export const mediaChapterComments = pgTable(
     userId: uuid("userId")
       .references(() => users.id, { onDelete: "cascade" })
       .notNull(),
+    deleterId: uuid("deleterId").references(() => users.id, {
+      onDelete: "cascade",
+    }),
   },
   (mediaChapterComment) => ({
     mediaChapterIdIdx: index("mediaChapterId_idx").on(
@@ -50,6 +53,14 @@ export const mediaChapterCommentsRelations = relations(
     parentComment: one(mediaChapterComments, {
       fields: [mediaChapterComments.parentCommentId],
       references: [mediaChapterComments.id],
+    }),
+    creator: one(users, {
+      fields: [mediaChapterComments.userId],
+      references: [users.id],
+    }),
+    deleter: one(users, {
+      fields: [mediaChapterComments.deleterId],
+      references: [users.id],
     }),
     replies: many(mediaChapterComments),
   }),

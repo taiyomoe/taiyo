@@ -9,6 +9,7 @@ import {
 } from "drizzle-orm/pg-core";
 
 import { mediaTags } from "./mediaTags";
+import { users } from "./users";
 
 export const tags = pgTable("tags", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -23,8 +24,22 @@ export const tags = pgTable("tags", {
   isAdult: boolean("isAdult").default(false).notNull(),
   // -----
   alId: integer("alId").notNull(),
+  creatorId: uuid("creatorId")
+    .references(() => users.id, { onDelete: "cascade" })
+    .notNull(),
+  deleterId: uuid("deleterId").references(() => users.id, {
+    onDelete: "cascade",
+  }),
 });
 
-export const tagsRelations = relations(tags, ({ many }) => ({
+export const tagsRelations = relations(tags, ({ one, many }) => ({
+  creator: one(users, {
+    fields: [tags.creatorId],
+    references: [users.id],
+  }),
+  deleter: one(users, {
+    fields: [tags.deleterId],
+    references: [users.id],
+  }),
   mediaTags: many(mediaTags),
 }));

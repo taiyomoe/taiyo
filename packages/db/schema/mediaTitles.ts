@@ -9,6 +9,7 @@ import {
 } from "drizzle-orm/pg-core";
 
 import { medias } from "./medias";
+import { users } from "./users";
 
 export const mediaTitles = pgTable("mediaTitles", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -33,11 +34,25 @@ export const mediaTitles = pgTable("mediaTitles", {
   mediaId: uuid("mediaId")
     .references(() => medias.id, { onDelete: "cascade" })
     .notNull(),
+  creatorId: uuid("creatorId")
+    .references(() => users.id, { onDelete: "cascade" })
+    .notNull(),
+  deleterId: uuid("deleterId").references(() => users.id, {
+    onDelete: "cascade",
+  }),
 });
 
 export const mediaTitlesRelations = relations(mediaTitles, ({ one }) => ({
   media: one(medias, {
     fields: [mediaTitles.mediaId],
     references: [medias.id],
+  }),
+  creator: one(users, {
+    fields: [mediaTitles.creatorId],
+    references: [users.id],
+  }),
+  deleter: one(users, {
+    fields: [mediaTitles.deleterId],
+    references: [users.id],
   }),
 }));

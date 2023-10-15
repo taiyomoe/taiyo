@@ -8,6 +8,8 @@ const execute = async (db: PostgresJsDatabase) => {
     id: "21064fcc-fa19-4ab8-b5fc-315f5e46b3e2",
     // -----
     name: "Kousen Scans",
+    // -----
+    creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
   });
 
   await db.insert(scanMembers).values([

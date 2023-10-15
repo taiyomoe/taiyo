@@ -10,7 +10,6 @@ import { medias } from "../schema/medias";
 import { mediaTags } from "../schema/mediaTags";
 import { mediaTitles } from "../schema/mediaTitles";
 import { mediaTrackers } from "../schema/mediaTrackers";
-import { roles } from "../schema/roles";
 import { scans } from "../schema/scans";
 import { tags } from "../schema/tags";
 import { trackers } from "../schema/trackers";
@@ -100,10 +99,6 @@ async function clear() {
     await db
       .delete(users)
       .then(() => console.log("users deleted"))
-      .catch(() => null);
-    await db
-      .delete(roles)
-      .then(() => console.log("roles deleted"))
       .catch(() => null);
   }
 }

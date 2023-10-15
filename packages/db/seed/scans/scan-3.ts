@@ -15,6 +15,8 @@ const execute = async (db: PostgresJsDatabase) => {
     website: "https://onepieceex.net",
     twitter: "https://twitter.com/onepieceex",
     instagram: "https://www.instagram.com/mister27opex",
+    // -----
+    creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
   });
 };
 

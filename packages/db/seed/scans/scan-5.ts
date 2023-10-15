@@ -10,6 +10,8 @@ const execute = async (db: PostgresJsDatabase) => {
     name: "Kyodai Mangás",
     // -----,
     discord: "https://discord.gg/9Mk8uz6aRK",
+    // -----
+    creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
   });
 
   await db.insert(scanMembers).values([

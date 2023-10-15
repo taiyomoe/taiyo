@@ -12,6 +12,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Technical",
       isAdult: false,
       alId: 206,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "c2c41b9a-a420-4ade-b12b-662534c2b215",
@@ -21,6 +22,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Technical",
       isAdult: false,
       alId: 710,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "7f08a861-225c-4904-9698-5957b8679d02",
@@ -29,6 +31,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Setting-Time",
       isAdult: false,
       alId: 156,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "ae16d8bd-ca3a-472d-8c9b-9a2c2f3306c7",
@@ -37,6 +40,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Arts",
       isAdult: false,
       alId: 548,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "149d6e37-a956-4d9a-be37-8e2c7be7aa71",
@@ -46,6 +50,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Other",
       isAdult: false,
       alId: 1052,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "c3d35744-e1f1-4271-9cda-716cc5d633bd",
@@ -55,6 +60,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Technical",
       isAdult: false,
       alId: 505,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "31e683fc-b3fc-431d-acc2-3fcd3ffc531f",
@@ -63,6 +69,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Setting-Universe",
       isAdult: false,
       alId: 147,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "81723b0c-abb9-4bf8-a3df-93595cd0652e",
@@ -72,6 +79,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Romance",
       isAdult: false,
       alId: 138,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "fd177072-0b90-4b4e-8f75-cdf0f086c429",
@@ -81,6 +89,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 488,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "7a47cb53-564e-4301-9f9d-1d75759ea8d3",
@@ -89,6 +98,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 334,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "e2e7a81f-f615-465a-9745-81dd304c672d",
@@ -97,6 +107,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Slice of Life",
       isAdult: false,
       alId: 909,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "4d23370f-8b66-40f6-a820-76f5de9d0e36",
@@ -105,6 +116,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Sexual Content",
       isAdult: true,
       alId: 279,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "ccdf6d79-33d9-45ff-85c2-36a7b6d6bfbf",
@@ -113,6 +125,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Game-Sport",
       isAdult: false,
       alId: 167,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "037aa719-975d-4bdc-8abb-f0f694af1cad",
@@ -121,6 +134,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Fantasy",
       isAdult: false,
       alId: 1291,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "97f82590-e106-484e-b8e1-99f349bbe0ce",
@@ -129,6 +143,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 191,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "b547a1fc-c3ae-4906-b8ca-bc95a5241bb7",
@@ -137,6 +152,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Setting-Universe",
       isAdult: false,
       alId: 146,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "50e34242-860f-49c3-9d21-96bd55ab06b0",
@@ -145,6 +161,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Game-Sport",
       isAdult: false,
       alId: 314,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "72944469-ea52-4a1a-a227-84d00b6d9968",
@@ -153,6 +170,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 240,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "a133f23e-393b-4def-b796-c03e06edefe5",
@@ -161,6 +179,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Sexual Content",
       isAdult: true,
       alId: 652,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "ed3b7aa1-2f58-44de-b787-7044dd9e2767",
@@ -170,6 +189,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Setting-Time",
       isAdult: false,
       alId: 490,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "b160ece4-8ec5-480e-8834-0cc66df74c0f",
@@ -178,6 +198,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Sexual Content",
       isAdult: true,
       alId: 185,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "60e3861c-feb2-4093-ad2d-04df57811f30",
@@ -187,6 +208,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 1068,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "9f124a35-5c1d-45eb-9ad4-a5b1661f5c30",
@@ -195,6 +217,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Other",
       isAdult: false,
       alId: 433,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "0675c848-9e8a-4c48-bd65-c08e24bfe87f",
@@ -204,6 +227,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Technical",
       isAdult: false,
       alId: 471,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "297e53a6-403d-4972-8a40-b000046b1e51",
@@ -213,6 +237,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 1304,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "21e2c3ed-d3ec-4136-bfb8-e4de1b67df99",
@@ -222,6 +247,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Main Cast",
       isAdult: false,
       alId: 104,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "a2e58533-bb1e-4ad7-8a60-e413dc5c359a",
@@ -231,6 +257,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Action",
       isAdult: false,
       alId: 251,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "8b1eaa19-c721-4415-9d4e-e5b969f60533",
@@ -240,6 +267,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Sexual Content",
       isAdult: true,
       alId: 629,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "cca9ee43-389d-4259-a877-5a685f773917",
@@ -249,6 +277,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 517,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "dc77174b-596d-4b9a-bdca-d8ff33517c95",
@@ -258,6 +287,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 622,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "aa4a5dbc-a85e-407c-862e-e3fbea2de8c8",
@@ -266,6 +296,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Sexual Content",
       isAdult: true,
       alId: 315,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "d74aea96-dc5d-4e06-aa93-d14821b9cfd2",
@@ -274,6 +305,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Sexual Content",
       isAdult: true,
       alId: 651,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "8d6b8b59-fda2-4a42-8120-a16219404d4e",
@@ -283,6 +315,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Other-Organisations",
       isAdult: false,
       alId: 322,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "920e34a1-a8a9-4de2-837c-23f51685139e",
@@ -292,6 +325,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Other",
       isAdult: false,
       alId: 623,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "05b9f5a3-e9bc-45bf-84c9-aacde85864fb",
@@ -301,6 +335,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Game-Sport",
       isAdult: false,
       alId: 264,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "cb3accc3-c5b5-41fe-a01a-113bdd1af127",
@@ -310,6 +345,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Setting-Universe",
       isAdult: false,
       alId: 364,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "e0575165-e788-4285-a6a0-d9b18131ad31",
@@ -319,6 +355,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Other",
       isAdult: false,
       alId: 519,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "b06ea327-8007-4d09-a28f-de2507e69457",
@@ -327,6 +364,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Other-Vehicle",
       isAdult: false,
       alId: 355,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "95c056d5-e909-4ff2-b7a5-4c9e8faf1d98",
@@ -335,6 +373,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Game-Sport",
       isAdult: false,
       alId: 235,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "8695f5ab-05ce-4bd1-b88d-fc15649a50fa",
@@ -343,6 +382,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Arts-Music",
       isAdult: false,
       alId: 110,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "f9a35950-166a-445f-ab9c-aab94ef3fa62",
@@ -351,6 +391,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Setting-Scene",
       isAdult: false,
       alId: 161,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "1a84bb0a-52b3-4777-8e96-1fc4141c0c57",
@@ -359,6 +400,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Game-Sport",
       isAdult: false,
       alId: 149,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "322dfc01-7542-4756-b243-27cdc094eb0d",
@@ -367,6 +409,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Game-Sport",
       isAdult: false,
       alId: 192,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "71fd65f1-d17b-41b7-9823-4dfb43e59497",
@@ -376,6 +419,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Action",
       isAdult: false,
       alId: 101,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "674fc8cd-a2fd-4aa5-b4f6-9b37cfee0fe0",
@@ -385,6 +429,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Other",
       isAdult: false,
       alId: 239,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "60eb42b2-2229-4f32-9479-219fdcb5f13b",
@@ -394,6 +439,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Romance",
       isAdult: false,
       alId: 294,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "756fa358-8e86-433b-b920-2077abc0698c",
@@ -403,6 +449,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Sexual Content",
       isAdult: true,
       alId: 309,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "b3d65fa4-d9c8-4582-877f-30d2e0795327",
@@ -412,6 +459,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Other",
       isAdult: false,
       alId: 639,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "19410c00-3e84-4f26-97b8-d55607c9de50",
@@ -421,6 +469,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Fantasy",
       isAdult: false,
       alId: 154,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "9bbc038d-fb32-46fc-afa8-6b7b5f89de18",
@@ -429,6 +478,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Sexual Content",
       isAdult: true,
       alId: 246,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "b29792a7-ab7d-4adc-89a1-fcd22c818c7f",
@@ -437,6 +487,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Sexual Content",
       isAdult: true,
       alId: 126,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "2b08d06c-d189-45a8-a78b-eb5c7164d264",
@@ -445,6 +496,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Game-Sport",
       isAdult: false,
       alId: 169,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "cfd9e6be-d461-4526-a7d5-122dc6b33e68",
@@ -454,6 +506,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Romance",
       isAdult: false,
       alId: 75,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "7dcd14d4-511f-4121-a145-cdc313d4c2a8",
@@ -463,6 +516,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Drama",
       isAdult: false,
       alId: 171,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "06676a77-bde9-4f21-99ba-fd489287ea86",
@@ -471,6 +525,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 812,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "13d0e780-9527-4f13-85c0-fd75822f6927",
@@ -479,6 +534,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Arts",
       isAdult: false,
       alId: 204,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "3dd8b8ba-4852-4c27-9690-fc55e0935db9",
@@ -488,6 +544,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Other",
       isAdult: false,
       alId: 870,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "a83ca957-42f6-443f-bf0f-a8b1d57d8035",
@@ -496,6 +553,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Game-Card & Board Game",
       isAdult: false,
       alId: 178,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "09e5a2ea-f2c6-4129-ae34-f92e6bb6c1a3",
@@ -504,6 +562,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Other-Vehicle",
       isAdult: false,
       alId: 10,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "b4b608bb-c8c4-4add-8163-ee6724da4e25",
@@ -513,6 +572,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 632,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "6425342b-00f4-4f3f-934e-3e81249ecb59",
@@ -522,6 +582,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Technical",
       isAdult: false,
       alId: 90,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "9f4a2006-918e-42be-8b84-8511b1a06aee",
@@ -530,6 +591,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Game-Sport",
       isAdult: false,
       alId: 646,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "2f904446-be91-432a-81ab-94281557a127",
@@ -539,6 +601,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Other",
       isAdult: false,
       alId: 324,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "60b3add5-d3e5-41aa-846f-156d7a00a6f7",
@@ -548,6 +611,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 774,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "5e16e1cc-646c-430e-966a-bd8ed9cf9980",
@@ -557,6 +621,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 267,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "b02f5ec3-a899-46cc-9605-932e8782ec46",
@@ -565,6 +630,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Setting-Scene",
       isAdult: false,
       alId: 476,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "e9c7f6f3-3dba-4cae-9977-c593240cf85c",
@@ -573,6 +639,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Arts",
       isAdult: false,
       alId: 227,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "d578daa5-c2b2-4ece-9e66-22fa59501524",
@@ -582,6 +649,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 1342,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "08f84403-078e-4596-82a0-88435a7c3367",
@@ -590,6 +658,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Setting-Scene",
       isAdult: false,
       alId: 404,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "09d0e77b-1884-44ba-859a-2492764b593d",
@@ -599,6 +668,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Drama",
       isAdult: false,
       alId: 102,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "61437ab2-3448-4973-80f9-c8f79d933359",
@@ -608,6 +678,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Drama",
       isAdult: false,
       alId: 456,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "9c60694b-4353-4e22-9a71-9b395b7a936e",
@@ -617,6 +688,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Other",
       isAdult: false,
       alId: 636,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "d67598c0-c7e1-4f18-acb1-f4f3fb4133d8",
@@ -626,6 +698,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 328,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "60253c91-90bd-493a-895c-71d0b05d3dac",
@@ -635,6 +708,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Other",
       isAdult: false,
       alId: 648,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "78848146-7c0f-427d-8cc9-e6213b3169ae",
@@ -644,6 +718,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 186,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "9a0b9cbc-5637-44e7-ab82-830cb8310084",
@@ -653,6 +728,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Other",
       isAdult: false,
       alId: 158,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "4dec160b-4038-48de-88b2-cf468852de18",
@@ -662,6 +738,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Other-Organisations",
       isAdult: false,
       alId: 586,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "5ded48f1-6d8f-4cfc-9de2-d3f4994bfe0e",
@@ -671,6 +748,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Fantasy",
       isAdult: false,
       alId: 326,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "911f9769-0002-4e29-a95a-3854525fb718",
@@ -680,6 +758,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Sexual Content",
       isAdult: true,
       alId: 1273,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "793a8ff9-a00c-4b2a-ba46-de827d184af0",
@@ -688,6 +767,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Sexual Content",
       isAdult: true,
       alId: 135,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "dc65320b-d79d-44fe-a4a3-8c98fa4e3631",
@@ -697,6 +777,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Slice of Life",
       isAdult: false,
       alId: 1063,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "337db017-a10b-43f8-b161-6ebe8722d471",
@@ -706,6 +787,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Slice of Life",
       isAdult: false,
       alId: 92,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "ab268a2b-f3e9-409c-b6d4-db012bcea9dc",
@@ -715,6 +797,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Sci-Fi",
       isAdult: false,
       alId: 108,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "b615e583-2b1a-4394-b674-69d47786f25e",
@@ -724,6 +807,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 801,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "44daa02d-40c4-4c72-b3b6-120303ad3dc9",
@@ -732,6 +816,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Game-Sport",
       isAdult: false,
       alId: 151,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "88912031-5590-49a2-a361-fc9d204a962b",
@@ -740,6 +825,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Arts-Music",
       isAdult: false,
       alId: 209,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "a3db7c6f-7fdb-43d6-b021-99723b7a1d37",
@@ -749,6 +835,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Other",
       isAdult: false,
       alId: 615,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "8f596e9e-4687-46ca-90d7-f16a64f9373b",
@@ -758,6 +845,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Sexual Content",
       isAdult: true,
       alId: 1234,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "b72ee8b0-87c3-403f-bcba-bbbd8f60a1eb",
@@ -767,6 +855,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Sexual Content",
       isAdult: true,
       alId: 129,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "5d3cd0a9-7e96-4b2c-bc2f-d9c9e3eabcde",
@@ -776,6 +865,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 395,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "ff3714a9-9137-4982-aebe-afffa04c731d",
@@ -784,6 +874,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 15,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "a7c24da5-b615-4234-9992-c7b532e85f4b",
@@ -793,6 +884,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Other",
       isAdult: false,
       alId: 654,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "b979f7c1-6e95-4491-8539-6c5baab19ed1",
@@ -801,6 +893,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Setting-Scene",
       isAdult: false,
       alId: 1453,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "19189cfd-78a9-48e7-8297-05e8804f5d8e",
@@ -809,6 +902,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 694,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "9e74ed04-44d7-4083-9a53-c4c6ddac1e71",
@@ -817,6 +911,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Sexual Content",
       isAdult: true,
       alId: 1038,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "fdc5e343-952e-4492-97a7-719492959ffc",
@@ -826,6 +921,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 704,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "354e1711-759c-4e5f-afb9-b6d2c2763855",
@@ -835,6 +931,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 1219,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "82565fe5-650f-4fd4-958e-33ba006d63d3",
@@ -843,6 +940,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 536,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "262bbf2a-67f0-4863-aa4f-a9a4cb0bf462",
@@ -852,6 +950,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 224,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "cca67991-755c-4938-a09e-bd250219f457",
@@ -861,6 +960,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Arts",
       isAdult: false,
       alId: 118,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "ba283e52-3e38-45d3-8cf4-2d6cf39769d1",
@@ -870,6 +970,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Other",
       isAdult: false,
       alId: 489,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "836827db-e0f9-44fb-a8a9-126f44ad757c",
@@ -879,6 +980,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 658,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "6d04bae6-79d2-45c3-b6c1-7a486bd0a106",
@@ -887,6 +989,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Setting-Scene",
       isAdult: false,
       alId: 604,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "889c2c35-75b1-4e06-9d4c-d26f831e32dd",
@@ -896,6 +999,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Setting-Time",
       isAdult: false,
       alId: 217,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "85da3bf5-c97d-4c42-bfcf-51dbd9247cba",
@@ -905,6 +1009,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Game",
       isAdult: false,
       alId: 792,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "f640c2ab-dbea-448a-9a94-3a6b9f779f1e",
@@ -913,6 +1018,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Other",
       isAdult: false,
       alId: 248,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "91ec7ccd-b780-41a1-874d-4f7e9246a571",
@@ -921,6 +1027,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Other",
       isAdult: false,
       alId: 140,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "8a96ca3d-d1f0-4759-8c4c-9a8a64e2d722",
@@ -929,6 +1036,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 598,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "a3423a6c-e1a1-4989-8e9a-950e816f6676",
@@ -938,6 +1046,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Main Cast",
       isAdult: false,
       alId: 105,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "5ad12dd0-6c72-4140-bf20-9d1807913db7",
@@ -947,6 +1056,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Other",
       isAdult: false,
       alId: 342,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "10806acf-728b-49ee-8e47-63a115d5e471",
@@ -956,6 +1066,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Technical",
       isAdult: false,
       alId: 193,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "bdab63bf-dd4e-4d3d-8bc8-ffcdc6185653",
@@ -965,6 +1076,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Other",
       isAdult: false,
       alId: 482,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "76e664e3-bb0d-4469-b409-a66854e1f2a1",
@@ -974,6 +1086,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Action",
       isAdult: false,
       alId: 310,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "041af259-9d16-4d61-82ad-500b3f407741",
@@ -983,6 +1096,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Sexual Content",
       isAdult: true,
       alId: 901,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "070d158a-1bf3-4101-95ba-40008fcdbb61",
@@ -991,6 +1105,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Sexual Content",
       isAdult: true,
       alId: 130,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "00646e06-e520-4548-ae67-3ec461afd12e",
@@ -999,6 +1114,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 1455,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "a09dd9ce-697e-4056-a6c4-392b9d0c5d0d",
@@ -1008,6 +1124,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Fantasy",
       isAdult: false,
       alId: 400,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "814d7f95-806d-47ec-9879-9a656244ff6d",
@@ -1016,6 +1133,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Slice of Life",
       isAdult: false,
       alId: 87,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "dac9db4d-64e7-4918-bcee-5f88c205908e",
@@ -1024,6 +1142,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Arts",
       isAdult: false,
       alId: 410,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "98711f14-65c4-4b7c-8ba5-7638eae49fc5",
@@ -1033,6 +1152,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Sexual Content",
       isAdult: true,
       alId: 631,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "05d350ef-78e9-49c8-84a7-542804a8871c",
@@ -1041,6 +1161,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Sexual Content",
       isAdult: true,
       alId: 134,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "d36fa388-cb50-43d3-858b-2bef4f7e9079",
@@ -1050,6 +1171,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Romance",
       isAdult: false,
       alId: 23,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "68c5d5de-4123-4e0a-813e-68513b95bcf8",
@@ -1058,6 +1180,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Main Cast",
       isAdult: false,
       alId: 98,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "60f63d42-5dc4-4b6e-a821-0245ce9541c0",
@@ -1067,6 +1190,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 1456,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "fd0f8bb5-0b89-4f1b-a582-d002515cf622",
@@ -1076,6 +1200,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Sexual Content",
       isAdult: true,
       alId: 1146,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "fbd4555b-fc94-409f-967a-86608d5f0aad",
@@ -1084,6 +1209,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Game-Sport",
       isAdult: false,
       alId: 1132,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "0833eaf0-4252-4544-94a0-d0c2500eb803",
@@ -1093,6 +1219,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Other-Organisations",
       isAdult: false,
       alId: 613,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "6dee9523-1ce5-4ee8-8f29-282ce89497b4",
@@ -1101,6 +1228,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Game-Sport",
       isAdult: false,
       alId: 212,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "6eca572a-5905-484f-8cdb-8e13924942b6",
@@ -1110,6 +1238,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Game-Sport",
       isAdult: false,
       alId: 170,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "2bc6faf5-79c3-45c4-a81d-5bd7eddf8020",
@@ -1118,6 +1247,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Technical",
       isAdult: false,
       alId: 242,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "627fea90-4c3d-4ac0-862d-83f7521bd5ba",
@@ -1127,6 +1257,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Sexual Content",
       isAdult: true,
       alId: 136,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "a4496d97-0384-4cda-95d5-2a5d9542d959",
@@ -1135,6 +1266,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Arts",
       isAdult: false,
       alId: 142,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "badcce4c-c922-4520-b5c1-d2d1cc4f0b0a",
@@ -1144,6 +1276,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Game-Sport",
       isAdult: false,
       alId: 148,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "91a599ae-c957-4c16-baa8-f325873d2f37",
@@ -1153,6 +1286,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Setting-Scene",
       isAdult: false,
       alId: 198,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "b3dab39f-a1c7-4f0f-8541-3417d3eac0e0",
@@ -1162,6 +1296,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Other",
       isAdult: false,
       alId: 1277,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "96cc4bcb-0b07-4ffe-ba6c-f19ba5c2c8be",
@@ -1171,6 +1306,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Action",
       isAdult: false,
       alId: 226,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "d1eefb4f-ccd0-4c8b-b297-a9d45258d209",
@@ -1179,6 +1315,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Technical",
       isAdult: false,
       alId: 89,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "4bce9f59-9d10-4925-9649-99e4d2bd009d",
@@ -1187,6 +1324,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Technical",
       isAdult: false,
       alId: 207,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "03ee014c-f05e-41b7-b20e-7a2af49d4eb0",
@@ -1195,6 +1333,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Sexual Content",
       isAdult: true,
       alId: 188,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "5ed6d1b8-0fb6-4581-8016-a4f0104bcc02",
@@ -1203,6 +1342,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Other",
       isAdult: false,
       alId: 91,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "22d0b252-acd2-46ac-a345-b2fbf603406b",
@@ -1211,6 +1351,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Other-Organisations",
       isAdult: false,
       alId: 106,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "f28368c3-f9db-47be-b4c1-7366ae2582b9",
@@ -1220,6 +1361,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Other",
       isAdult: false,
       alId: 77,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "26112761-46a9-4436-867c-72bca379451f",
@@ -1228,6 +1370,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 220,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "3a6e8844-7094-4b7e-9fe0-21d7fe67f017",
@@ -1236,6 +1379,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Game-Card & Board Game",
       isAdult: false,
       alId: 443,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "b2c161c2-a9a9-4151-9004-257446ae22a3",
@@ -1245,6 +1389,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 480,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "c4a8b7d7-7a3c-4311-b76b-2be6a0041981",
@@ -1254,6 +1399,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 253,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "ef2ba9ee-08be-4f55-9dcf-ca3c44ed2a88",
@@ -1262,6 +1408,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Game-Sport",
       isAdult: false,
       alId: 532,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "7d25f081-4ed7-4cba-b024-e558dd9f18b7",
@@ -1270,6 +1417,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Other",
       isAdult: false,
       alId: 94,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "8e80b41b-c286-46e2-a639-a594dfcd984b",
@@ -1279,6 +1427,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Sexual Content",
       isAdult: true,
       alId: 830,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "eee9e445-03c4-40d3-a8cb-b951c56de5a1",
@@ -1287,6 +1436,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Action",
       isAdult: false,
       alId: 157,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "faf3d945-22a3-4913-9884-2b68fd0f13f0",
@@ -1296,6 +1446,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 356,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "23fb4b58-60d8-417b-948f-692aae2c30b0",
@@ -1304,6 +1455,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Game-Sport",
       isAdult: false,
       alId: 1396,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "3795e40c-e768-4bfe-9119-2e9503d4cde1",
@@ -1312,6 +1464,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Sexual Content",
       isAdult: true,
       alId: 317,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "8c4ad2b2-eb36-46b4-b711-ccb57876baf9",
@@ -1321,6 +1474,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Fantasy",
       isAdult: false,
       alId: 99,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "42ef051e-f38d-4dcb-a320-5a5b38a7caa7",
@@ -1330,6 +1484,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Romance",
       isAdult: false,
       alId: 1045,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "047ccbec-0a04-43e3-9c12-4c2e33548f0c",
@@ -1339,6 +1494,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 282,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "0b4d69ae-c2bd-404c-bc91-5f9b6cf08f62",
@@ -1348,6 +1504,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Setting-Time",
       isAdult: false,
       alId: 25,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "4eda1d2b-ee4a-44a2-8d20-ea7e7f36dfd0",
@@ -1356,6 +1513,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 1379,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "74fafd39-4adc-4f4d-8c9b-fab2694f8a6a",
@@ -1365,6 +1523,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Sexual Content",
       isAdult: true,
       alId: 181,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "89da7c3f-1cbd-48c6-8008-e00cb46a4627",
@@ -1374,6 +1533,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Sexual Content",
       isAdult: true,
       alId: 1367,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "0e6569ac-8a35-4367-8545-f419863cd6c5",
@@ -1382,6 +1542,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Game-Sport",
       isAdult: false,
       alId: 228,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "8ad7e4fa-8607-4b0c-9aee-5927716233ba",
@@ -1390,6 +1551,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 115,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "9c4ef165-c3ec-4c2d-b18b-84b4f886633b",
@@ -1399,6 +1561,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Sexual Content",
       isAdult: true,
       alId: 128,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "cabc8c49-9651-4d20-98c6-85826860caa1",
@@ -1408,6 +1571,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Sexual Content",
       isAdult: true,
       alId: 1102,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "6a51c149-c868-4f18-80ac-5286cd1a7b6d",
@@ -1417,6 +1581,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Sexual Content",
       isAdult: true,
       alId: 359,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "b9f1400e-7bba-4f49-81d4-71bdef5290f2",
@@ -1426,6 +1591,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Fantasy",
       isAdult: false,
       alId: 244,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "132c592a-aab1-44cb-b8b2-a8a924e2f6ab",
@@ -1435,6 +1601,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Slice of Life",
       isAdult: false,
       alId: 81,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "3f7a4458-679a-40e9-a3cf-b27270d3d104",
@@ -1443,6 +1610,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Demographic",
       isAdult: false,
       alId: 27,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "05ac7259-949b-4a06-9e77-acbbd521e816",
@@ -1451,6 +1619,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Game-Sport",
       isAdult: false,
       alId: 1105,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "18876aa0-17a9-4321-ab88-756c41b8e578",
@@ -1459,6 +1628,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Fantasy",
       isAdult: false,
       alId: 276,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "64b7347d-3bd2-4fce-843e-3ceb27adf52c",
@@ -1467,6 +1637,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Game-Card & Board Game",
       isAdult: false,
       alId: 182,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "fe15b053-8850-4056-aa33-c15387176c99",
@@ -1475,6 +1646,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 254,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "ec7132e7-ccbe-4495-bfa9-d23c41daf5de",
@@ -1483,6 +1655,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Demographic",
       isAdult: false,
       alId: 28,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "85399d48-cb61-458a-9fa7-347a886ed289",
@@ -1492,6 +1665,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 779,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "58832892-f41c-4f14-abfe-cb2819ce6bf3",
@@ -1500,6 +1674,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Game-Sport",
       isAdult: false,
       alId: 437,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "93888430-facf-4e8b-b97c-84f4741ca6a3",
@@ -1508,6 +1683,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Sexual Content",
       isAdult: true,
       alId: 650,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "67a5e9c2-b328-4f55-b42c-c3566cdb4d69",
@@ -1517,6 +1693,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Setting-Scene",
       isAdult: false,
       alId: 516,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "831adf41-fe45-4421-9c90-12812f56349e",
@@ -1525,6 +1702,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Sexual Content",
       isAdult: true,
       alId: 137,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "dca8f478-60d2-4525-9a39-0280871624e5",
@@ -1534,6 +1712,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Other",
       isAdult: false,
       alId: 483,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "2703e2c6-cb63-49d7-b129-b7a1281f1fb9",
@@ -1543,6 +1722,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Other",
       isAdult: false,
       alId: 466,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "c1de014c-e140-4aef-93f8-755bc102afe1",
@@ -1552,6 +1732,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Romance",
       isAdult: false,
       alId: 139,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "0224bbf1-621f-45ec-931f-ae0ba7aa98c8",
@@ -1560,6 +1741,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Other-Organisations",
       isAdult: false,
       alId: 107,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "27249d9d-3f17-48b1-a141-9cb082dc4e4f",
@@ -1568,6 +1750,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Fantasy",
       isAdult: false,
       alId: 29,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "6fd3cebd-91fb-4dc9-9b3f-e5500a5595f8",
@@ -1576,6 +1759,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Game-Card & Board Game",
       isAdult: false,
       alId: 117,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "fd6e240d-2a6f-4e88-bb8f-c56483f136da",
@@ -1584,6 +1768,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 249,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "c93a41b4-512b-4338-b4b4-50aff069db91",
@@ -1592,6 +1777,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Arts",
       isAdult: false,
       alId: 1140,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "36f13871-04be-4fc6-9259-6c564df2f24f",
@@ -1601,6 +1787,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Romance",
       isAdult: false,
       alId: 123,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "9f8204b0-49aa-4f16-9226-99b11856462c",
@@ -1609,6 +1796,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Main Cast",
       isAdult: false,
       alId: 82,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "5e5af974-367a-43a9-8154-1c9a5d11a270",
@@ -1617,6 +1805,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Other",
       isAdult: false,
       alId: 1433,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "4b1c3069-4292-405d-9bf0-49c84ff08fea",
@@ -1625,6 +1814,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Action",
       isAdult: false,
       alId: 30,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "ac61e7db-54e0-4831-b437-9631d4fb53c1",
@@ -1634,6 +1824,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Sexual Content",
       isAdult: true,
       alId: 999,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "7ab8b017-7f4c-4059-b30c-083bf094e1c0",
@@ -1643,6 +1834,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Sexual Content",
       isAdult: true,
       alId: 131,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "1c33b6a1-b141-4b67-b759-276b5cd456da",
@@ -1652,6 +1844,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Other",
       isAdult: false,
       alId: 659,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "74769735-9fa2-4c69-911b-fe860c6aadaa",
@@ -1661,6 +1854,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Other",
       isAdult: false,
       alId: 365,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "6c506bcb-6712-4abd-9801-f2ad71cba8ae",
@@ -1670,6 +1864,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 558,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "0cf8b107-8786-4340-ba35-bcdcbefb651a",
@@ -1679,6 +1874,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Other",
       isAdult: false,
       alId: 144,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "b21f40af-47bb-405d-b0a2-e0fc983cb5ff",
@@ -1687,6 +1883,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Sexual Content",
       isAdult: true,
       alId: 187,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "f3d4489d-2357-4826-9383-213c95f9e571",
@@ -1696,6 +1893,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Other-Organisations",
       isAdult: false,
       alId: 34,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "cef0a367-9880-4a54-ac1f-6501aafddd06",
@@ -1705,6 +1903,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Romance",
       isAdult: false,
       alId: 1361,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "04e225f9-84c0-4042-b7d8-cfc6458b4f9c",
@@ -1714,6 +1913,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 1090,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "a9f9dbd4-8b6b-47e7-8e8c-d83d1228dd96",
@@ -1723,6 +1923,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 259,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "35c795ed-822a-46d6-8bda-09208f4e1006",
@@ -1731,6 +1932,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Other-Vehicle",
       isAdult: false,
       alId: 176,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "5119b44c-0c85-48cc-b52c-db4af841b6a5",
@@ -1739,6 +1941,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Other-Vehicle",
       isAdult: false,
       alId: 173,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "1bcf3b7a-d940-428a-a03d-224569113cdc",
@@ -1748,6 +1951,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Arts-Music",
       isAdult: false,
       alId: 265,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "667e48b5-0ca7-4cca-b09e-f9dd0d30ec1e",
@@ -1757,6 +1961,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Fantasy",
       isAdult: false,
       alId: 208,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "eda84229-2269-4e17-8938-f1460e099848",
@@ -1766,6 +1971,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Sexual Content",
       isAdult: true,
       alId: 125,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "85e0b4be-7aa4-48ff-8e75-286698231efa",
@@ -1775,6 +1981,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Fantasy",
       isAdult: false,
       alId: 1243,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "96283d82-10e1-44d2-afa0-a6f7b7dcb251",
@@ -1784,6 +1991,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 113,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "282e18ba-f609-449f-81f3-873769d02c92",
@@ -1793,6 +2001,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Sexual Content",
       isAdult: true,
       alId: 124,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "8e0020d2-6b14-4e0a-aefe-df9cc560b17a",
@@ -1802,6 +2011,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Sexual Content",
       isAdult: true,
       alId: 280,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "b0bf912e-1539-4eca-bf7a-0eb59db58390",
@@ -1811,6 +2021,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Sexual Content",
       isAdult: true,
       alId: 316,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "a4a1b84b-0dd6-42ac-9076-161e3e29be5a",
@@ -1820,6 +2031,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 255,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "de63089d-a0a3-4833-9c32-aba54124678d",
@@ -1828,6 +2040,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Technical",
       isAdult: false,
       alId: 341,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "9058cf04-6045-4026-a863-a53cd81e94a3",
@@ -1836,6 +2049,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Other",
       isAdult: false,
       alId: 327,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "1c1b4739-ca7c-406f-a183-cb233eed60e4",
@@ -1845,6 +2059,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Technical",
       isAdult: false,
       alId: 1337,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "ba3c8bbb-10c7-4cf2-a98d-d39fe58e11d4",
@@ -1854,6 +2069,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 100,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "a49d4a90-4263-428a-a723-e3666e14d501",
@@ -1862,6 +2078,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 614,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "2927890a-f0b5-4f8f-83b3-a7b151868961",
@@ -1870,6 +2087,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 653,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "13f3163d-1899-495b-ae95-b16053ff9c32",
@@ -1879,6 +2097,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 593,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "67acb49f-62a9-448b-b021-67ab87e011cf",
@@ -1888,6 +2107,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 780,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "2e2132bb-daa5-471f-b269-5e3f44e82525",
@@ -1897,6 +2117,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Setting-Universe",
       isAdult: true,
       alId: 533,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "0ffe4ff1-3659-4022-97be-9d5052d207b9",
@@ -1905,6 +2126,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 1382,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "e2fbe4ea-dc1a-4d74-a13b-af4cc0d0e051",
@@ -1913,6 +2135,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Other",
       isAdult: false,
       alId: 97,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "b8f9191c-8e07-41b6-a042-77e3e5eb6f26",
@@ -1922,6 +2145,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Setting-Scene",
       isAdult: false,
       alId: 262,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "2d30f328-63b6-44ea-9266-dd8c46e964c3",
@@ -1931,6 +2155,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Other",
       isAdult: false,
       alId: 874,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "daf2e6a5-852b-4c1c-84bd-7f51b5c82cf3",
@@ -1939,6 +2164,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Game-Sport",
       isAdult: false,
       alId: 949,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "303e9a7a-e121-4912-9160-f4ab34659583",
@@ -1948,6 +2174,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Comedy",
       isAdult: false,
       alId: 39,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "8a47ea2e-a7d2-46bb-afc6-e60560d11e27",
@@ -1957,6 +2184,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Other",
       isAdult: false,
       alId: 391,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "5c604fa4-883e-4a47-a631-b5e78e080213",
@@ -1965,6 +2193,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Arts",
       isAdult: false,
       alId: 195,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "890d2ee2-e49c-451d-bbac-c099480ef85a",
@@ -1974,6 +2203,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 201,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "5db93de9-f6a0-45d4-bb89-d576f211499f",
@@ -1982,6 +2212,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Game-Card & Board Game",
       isAdult: false,
       alId: 183,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "560e2373-7440-4799-966a-f6ba6ac19d14",
@@ -1991,6 +2222,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Other-Organisations",
       isAdult: false,
       alId: 40,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "4fdf643b-e31a-443c-9bda-7ef4109729fa",
@@ -2000,6 +2232,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Other",
       isAdult: false,
       alId: 103,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "690e5c8e-2e2d-48c0-995c-c0843d40682b",
@@ -2009,6 +2242,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Setting-Universe",
       isAdult: false,
       alId: 93,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "4c5d5617-6755-4b76-9a61-d6d2521f4008",
@@ -2018,6 +2252,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Technical",
       isAdult: false,
       alId: 215,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "96ef3983-240b-4b20-adb4-47d88e20fb39",
@@ -2026,6 +2261,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Sexual Content",
       isAdult: true,
       alId: 397,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "e9326c71-a5ea-4ce9-afdd-fbeeb15f9b6c",
@@ -2035,6 +2271,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Main Cast",
       isAdult: false,
       alId: 109,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "f627e0c5-b034-4b21-a229-a96edb4c57aa",
@@ -2044,6 +2281,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Main Cast",
       isAdult: false,
       alId: 446,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "d05e50ae-1008-4ecc-88ad-778a6f65befe",
@@ -2052,6 +2290,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Main Cast",
       isAdult: false,
       alId: 86,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "4f4c3811-52c4-4898-9f98-04bd3eb7ff2c",
@@ -2060,6 +2299,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Main Cast",
       isAdult: false,
       alId: 88,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "2fa13037-9340-48ec-845d-df66ab2c69a8",
@@ -2068,6 +2308,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Main Cast",
       isAdult: false,
       alId: 1228,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "40e5890f-3292-464f-8542-1585e2349336",
@@ -2076,6 +2317,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Setting-Scene",
       isAdult: false,
       alId: 1427,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "05722337-32f7-4668-8354-78f3e8261ac0",
@@ -2084,6 +2326,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Sexual Content",
       isAdult: true,
       alId: 190,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "37352cb4-437a-4784-b71f-c901c93f4232",
@@ -2092,6 +2335,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Sexual Content",
       isAdult: true,
       alId: 127,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "e7bfb7dd-bc6e-4a14-8493-712a8eddc033",
@@ -2101,6 +2345,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Technical",
       isAdult: false,
       alId: 325,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "836d2f70-cc0c-48c8-821c-bdd5bcf231b3",
@@ -2110,6 +2355,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Arts",
       isAdult: false,
       alId: 481,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "a162c0b8-34b8-4ab1-b645-c779130cb241",
@@ -2118,6 +2364,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Sexual Content",
       isAdult: true,
       alId: 155,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "ad4f376e-3558-4965-9f77-545a59e4bf6a",
@@ -2127,6 +2374,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Sci-Fi-Mecha",
       isAdult: false,
       alId: 160,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "06f4cba6-d757-44d5-8f43-64a1e4e91552",
@@ -2136,6 +2384,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Drama",
       isAdult: false,
       alId: 311,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "fd04f9f3-5087-4067-8c82-2c8d3105d1eb",
@@ -2145,6 +2394,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Other",
       isAdult: false,
       alId: 243,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "aec4ffc9-039a-4d40-9510-a35cd5b2b346",
@@ -2154,6 +2404,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Other",
       isAdult: false,
       alId: 1091,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "2e3a4b25-8e67-4525-a4ff-a10c02ccea4e",
@@ -2163,6 +2414,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Drama",
       isAdult: false,
       alId: 252,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "4ac0db50-34be-47f4-9031-3f0e4644cb43",
@@ -2171,6 +2423,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Sexual Content",
       isAdult: true,
       alId: 845,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "9574d54d-f9f8-4304-a4f3-a49438826cca",
@@ -2179,6 +2432,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 175,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "57c0673d-eaff-4b0c-b401-81bb240c39c3",
@@ -2188,6 +2442,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Technical",
       isAdult: false,
       alId: 683,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "955a6761-266e-45cb-881c-028116b22460",
@@ -2196,6 +2451,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Game-Sport",
       isAdult: false,
       alId: 221,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "8e6403ce-62d9-40aa-a67f-ac15f7408ee0",
@@ -2204,6 +2460,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Setting-Scene",
       isAdult: false,
       alId: 250,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "4f9ac2af-4703-4902-898e-4211c72e1269",
@@ -2213,6 +2470,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Sexual Content",
       isAdult: true,
       alId: 723,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "ee043a02-3008-47fa-a321-dec2c556c70c",
@@ -2222,6 +2480,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 291,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "5145ccda-5f09-4e7f-b574-1b49d736d2db",
@@ -2231,6 +2490,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Comedy",
       isAdult: false,
       alId: 80,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "0ce1ed4d-756d-4115-a2d4-211a8f8da6f2",
@@ -2239,6 +2499,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Sexual Content",
       isAdult: true,
       alId: 387,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "bbc02994-ce2a-451a-a7c3-ca9e6429e6c7",
@@ -2248,6 +2509,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Setting-Scene",
       isAdult: false,
       alId: 46,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "25e061fc-f926-459e-b004-d72c33728799",
@@ -2256,6 +2518,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Setting-Scene",
       isAdult: false,
       alId: 84,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "c697298b-f4c8-4108-9a03-356aca997fe3",
@@ -2265,6 +2528,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Sexual Content",
       isAdult: true,
       alId: 1039,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "884a88e1-96e4-44a6-8704-f48a49e88b0f",
@@ -2274,6 +2538,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Game-Sport",
       isAdult: false,
       alId: 811,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "34b258e9-b746-4d72-aa38-7d77695cfe5b",
@@ -2282,6 +2547,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Demographic",
       isAdult: false,
       alId: 50,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "65d44cdf-b86a-4371-a2df-e66ed45adcd7",
@@ -2291,6 +2557,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Sexual Content",
       isAdult: true,
       alId: 133,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "f781604f-8694-45fd-9bbc-b7b77585884b",
@@ -2300,6 +2567,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Fantasy",
       isAdult: false,
       alId: 772,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "1d25d32f-93e1-4a23-9f95-b40080da682c",
@@ -2309,6 +2577,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Other-Vehicle",
       isAdult: false,
       alId: 305,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "d76114bb-8cf2-4a9d-8ff4-35f6cf0bf268",
@@ -2317,6 +2586,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Game-Card & Board Game",
       isAdult: false,
       alId: 121,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "bc939ca8-c356-4abe-b601-cba6b7e7e9f2",
@@ -2325,6 +2595,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Demographic",
       isAdult: false,
       alId: 53,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "65236ec1-2a69-4404-9475-c37f17866ae7",
@@ -2333,6 +2604,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Demographic",
       isAdult: false,
       alId: 56,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "b37d84ee-96dd-4a17-a900-8cb3743872a4",
@@ -2341,6 +2613,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 468,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "d5818b7b-4b5b-43e6-aff3-a240c9781451",
@@ -2350,6 +2623,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Game-Sport",
       isAdult: false,
       alId: 809,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "35bb64df-daee-46ea-8658-7d2d39252dfc",
@@ -2358,6 +2632,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 499,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "bc6ca93e-0632-40f4-bfb3-cf9ddf95ddb7",
@@ -2367,6 +2642,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Comedy",
       isAdult: false,
       alId: 83,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "fca998c9-575c-474c-b124-a2ac31198b39",
@@ -2375,6 +2651,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Other",
       isAdult: false,
       alId: 247,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "6d0a9554-d2af-4f34-9a68-c6cd54d49e92",
@@ -2384,6 +2661,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Other",
       isAdult: false,
       alId: 386,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "623c9ca3-356d-44b8-96c6-cbee568409b1",
@@ -2392,6 +2670,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Setting-Universe",
       isAdult: false,
       alId: 63,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "d01e775a-f18c-4a00-938d-1413a51363ef",
@@ -2401,6 +2680,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Sci-Fi",
       isAdult: false,
       alId: 162,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "093acb1b-8f51-4903-998f-88708e1e6223",
@@ -2409,6 +2689,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Action",
       isAdult: false,
       alId: 1292,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "136a727f-0d17-4da1-a73e-a0add65972d3",
@@ -2418,6 +2699,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Sexual Content",
       isAdult: true,
       alId: 1235,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "afbd7058-cb9c-4fab-81d4-c5d521e9a5c8",
@@ -2427,6 +2709,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Fantasy",
       isAdult: false,
       alId: 95,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "6a4db19f-7959-48b5-9a63-577154729edd",
@@ -2436,6 +2719,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Technical",
       isAdult: false,
       alId: 323,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "4d2e764c-ac0f-4b47-8e87-b86c4b07c029",
@@ -2445,6 +2729,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 665,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "6a5e4d27-0ab8-4111-ac2f-130ee14623b1",
@@ -2454,6 +2739,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Drama",
       isAdult: false,
       alId: 1046,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "1e37119c-cd65-4c17-8207-607d30a14cbc",
@@ -2463,6 +2749,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Sexual Content",
       isAdult: true,
       alId: 360,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "4c728390-1237-4156-95f9-868a7a70669a",
@@ -2471,6 +2758,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Game-Sport",
       isAdult: false,
       alId: 1080,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "9c113811-666b-4d03-b425-d3ea72e6ad30",
@@ -2480,6 +2768,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Fantasy",
       isAdult: false,
       alId: 66,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "0608a4e0-d22a-4d17-a18c-d40fbfa10185",
@@ -2489,6 +2778,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Sci-Fi-Mecha",
       isAdult: false,
       alId: 159,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "0ab840c3-92a1-4dc3-8a4d-f0970f72f7d3",
@@ -2498,6 +2788,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Fantasy",
       isAdult: false,
       alId: 172,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "273a708b-ccf7-4ac6-b7ab-e8013555b8dd",
@@ -2506,6 +2797,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Game-Sport",
       isAdult: false,
       alId: 678,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "f9b88d05-cb71-4bd0-95c3-6dc083144771",
@@ -2515,6 +2807,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Comedy",
       isAdult: false,
       alId: 281,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "b24030e6-093b-453c-ba17-f69912dda5c3",
@@ -2524,6 +2817,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Other",
       isAdult: false,
       alId: 143,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "87e36b08-5634-49bc-af7a-b3006ef229ce",
@@ -2532,6 +2826,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Sexual Content",
       isAdult: true,
       alId: 630,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "5a9f9a7f-5ca8-4831-8855-ab15e499e2ac",
@@ -2540,6 +2835,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Game-Sport",
       isAdult: false,
       alId: 150,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "9c514532-d944-41dd-9058-3f5aac0e643b",
@@ -2548,6 +2844,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Action",
       isAdult: false,
       alId: 43,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "77c804bd-05e1-4e80-9a6d-d449eedec0dd",
@@ -2557,6 +2854,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Game-Sport",
       isAdult: false,
       alId: 120,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "20deed5c-65a2-43ca-a9a9-ed3ec3ebd886",
@@ -2566,6 +2864,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Other-Vehicle",
       isAdult: false,
       alId: 174,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "65518485-ea00-4691-bec5-2d12ba4b54dc",
@@ -2574,6 +2873,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 335,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "079bae80-2452-479e-9c04-1104f584ba40",
@@ -2582,6 +2882,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 165,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "7c4fe5c5-fc5a-4473-82fa-eb1b1ae98c25",
@@ -2591,6 +2892,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Romance",
       isAdult: false,
       alId: 649,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "87b093fe-6eb2-440b-ad6f-cd68d73d8b80",
@@ -2599,6 +2901,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Game-Sport",
       isAdult: false,
       alId: 194,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "3834b1ce-8e15-4900-803a-35a00a99aada",
@@ -2608,6 +2911,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Sexual Content",
       isAdult: true,
       alId: 189,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "463b7c5e-dd67-401a-a1ae-bb30de0d0dbc",
@@ -2617,6 +2921,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Other",
       isAdult: false,
       alId: 285,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "2b29bd80-0808-4b66-aec3-4c41acbed6bb",
@@ -2625,6 +2930,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Sexual Content",
       isAdult: true,
       alId: 132,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "a927b42f-75b3-4000-a2b6-afa16e60fa4e",
@@ -2634,6 +2940,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Sci-Fi",
       isAdult: false,
       alId: 96,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "5952eed9-433d-4aeb-89e7-75c31f86db69",
@@ -2642,6 +2949,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Setting-Time",
       isAdult: false,
       alId: 153,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "b50abcf2-3fae-48df-a98d-9e240bc6c54a",
@@ -2651,6 +2959,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Sci-Fi",
       isAdult: false,
       alId: 513,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "28a15122-8155-4bfe-878c-b0b22bd39c24",
@@ -2660,6 +2969,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 931,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "0c62df0d-3b2f-470d-8ab1-98e969898f32",
@@ -2669,6 +2979,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Other",
       isAdult: false,
       alId: 1121,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "b880a351-7f91-4acd-aeaf-92641da78488",
@@ -2677,6 +2988,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Drama",
       isAdult: false,
       alId: 85,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "800dc45a-9378-4df5-9e48-81eaad24f8b4",
@@ -2685,6 +2997,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Other-Vehicle",
       isAdult: false,
       alId: 122,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "931147ee-28de-4c4f-bae8-10ae1b63b318",
@@ -2694,6 +3007,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 1165,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "eed7e244-4455-45e6-90a1-b38816866caa",
@@ -2703,6 +3017,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Other",
       isAdult: false,
       alId: 1310,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "73f5c265-4f39-469c-807d-55d915e842d7",
@@ -2711,6 +3026,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Other-Organisations",
       isAdult: false,
       alId: 214,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "a0b270c6-9aa5-42db-9ff4-99ad8ba3a654",
@@ -2720,6 +3036,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 164,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "1ed2aec1-feb2-4c06-a2fd-06071d406c95",
@@ -2729,6 +3046,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 494,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "7e4e9852-8ccb-452f-9829-eda46cbb430b",
@@ -2737,6 +3055,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Setting-Scene",
       isAdult: false,
       alId: 595,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "a4d4f0a2-a63f-4c10-ad08-f32a3a089f6d",
@@ -2746,6 +3065,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Setting-Universe",
       isAdult: false,
       alId: 321,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "26f46f72-fe8c-429a-a39a-c9dcbf781d24",
@@ -2754,6 +3074,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 74,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "ed2f0310-eb74-4c10-82f3-da594bcebaab",
@@ -2762,6 +3083,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Game",
       isAdult: false,
       alId: 308,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "ffb41a95-c65f-4ce0-acf6-d55672ee00bc",
@@ -2771,6 +3093,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 618,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "3e2cf32b-2b7c-49aa-b879-f7ac7c7a8f28",
@@ -2780,6 +3103,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 857,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "bde9e39e-06e3-4ad7-a2c5-ba00cf5d5406",
@@ -2789,6 +3113,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Sexual Content",
       isAdult: true,
       alId: 380,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "72348457-f476-4497-9012-8fd40dbebbe1",
@@ -2797,6 +3122,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Setting-Universe",
       isAdult: false,
       alId: 112,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "61b22b80-451e-418d-843a-834f1c3d9e34",
@@ -2805,6 +3131,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Game-Sport",
       isAdult: false,
       alId: 116,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "c22f34d4-f6ac-4295-b0f9-62a06b0be4e8",
@@ -2814,6 +3141,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Sexual Content",
       isAdult: true,
       alId: 624,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "0555c257-0d07-4d28-a717-fddaa8a5c148",
@@ -2823,6 +3151,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Sexual Content",
       isAdult: true,
       alId: 318,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "0d89f546-3250-4a69-b785-94a0855010cb",
@@ -2832,6 +3161,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 1047,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "dd14785e-875a-4669-9558-112261c5b375",
@@ -2840,6 +3170,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Other",
       isAdult: false,
       alId: 111,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "03f83aff-e84b-4bd4-9fdc-546121a749a2",
@@ -2848,6 +3179,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Sexual Content",
       isAdult: true,
       alId: 180,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "47189c0d-2f8b-4af9-9ff1-4911a226d47f",
@@ -2856,6 +3188,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 534,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "faf333bd-9900-447d-ab5f-56288470fc92",
@@ -2864,6 +3197,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 179,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "c914b0b0-bc6e-45fe-bdcf-007158e93eb6",
@@ -2872,6 +3206,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Setting-Scene",
       isAdult: false,
       alId: 145,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "75b470fc-5878-459d-89ac-e4b01a830d7b",
@@ -2880,6 +3215,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Game-Sport",
       isAdult: false,
       alId: 231,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "cae2f872-a121-4663-ad22-b046ae5ec3cd",
@@ -2888,6 +3224,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Arts",
       isAdult: false,
       alId: 394,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "3900b5c9-d9a8-4cc5-b9b0-8720b2917406",
@@ -2897,6 +3234,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Fantasy",
       isAdult: false,
       alId: 303,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "9122eaa6-ff81-4823-83a7-83f7e31d65c3",
@@ -2905,6 +3243,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Other-Organisations",
       isAdult: false,
       alId: 199,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "81d75c8a-6f5b-4699-ac01-cbd41f6a92cf",
@@ -2914,6 +3253,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 163,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "95f58351-36d1-49b8-a18e-77daa8ef539f",
@@ -2923,6 +3263,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Fantasy",
       isAdult: false,
       alId: 233,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "e02acdc9-a5a3-4006-861e-38c1b6838f2e",
@@ -2932,6 +3273,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Theme-Romance",
       isAdult: false,
       alId: 76,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "9859a8b9-9ed1-49be-97f3-3d572d914d06",
@@ -2941,6 +3283,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Cast-Traits",
       isAdult: false,
       alId: 152,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
     {
       id: "83248ff1-97b7-4f64-a704-2dde2fe6a4b5",
@@ -2950,6 +3293,7 @@ const execute = async (db: PostgresJsDatabase) => {
       category: "Sexual Content",
       isAdult: true,
       alId: 1446,
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
   ]);
 };
