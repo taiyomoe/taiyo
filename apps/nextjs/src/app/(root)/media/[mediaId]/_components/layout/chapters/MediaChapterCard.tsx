@@ -91,7 +91,7 @@ export const MediaChapterCard = ({ chapter, order }: Props) => {
             </div>
             {/* UPLOADER */}
             <div className={chapterUploader()}>
-              <DisplayMediaChapterUploader user={chapter.user} />
+              <DisplayMediaChapterUploader uploader={chapter.uploader} />
             </div>
             {/* COMMENTS */}
             <div className={chapterComments()}>

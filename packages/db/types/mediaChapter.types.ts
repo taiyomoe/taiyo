@@ -27,7 +27,7 @@ export type MediaChapterLimited = {
   previousChapter: MediaChapterLimitedBase | null;
   nextChapter: MediaChapterLimitedBase | null;
   // ----- RELATIONS
-  user: {
+  uploader: {
     id: User["id"];
     name: User["name"];
   };

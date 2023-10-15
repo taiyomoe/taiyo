@@ -60,10 +60,10 @@ export const mediasRouter = createTRPCRouter({
           title: true,
           number: true,
           volume: true,
-          userId: true,
+          uploaderId: true,
         },
         with: {
-          user: {
+          uploader: {
             columns: { name: true },
           },
           scans: {
@@ -108,9 +108,9 @@ export const mediasRouter = createTRPCRouter({
           number: c.number,
           volume: c.volume,
           // ----- RELATIONS
-          user: {
-            id: c.userId,
-            name: c.user.name,
+          uploader: {
+            id: c.uploaderId,
+            name: c.uploader.name,
           },
           scans: c.scans.map((s) => ({
             id: s.scanId,

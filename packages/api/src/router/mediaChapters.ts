@@ -16,11 +16,11 @@ export const mediaChaptersRouter = createTRPCRouter({
           number: true,
           volume: true,
           pages: true,
-          userId: true,
+          uploaderId: true,
           mediaId: true,
         },
         with: {
-          user: {
+          uploader: {
             columns: { name: true },
           },
           media: {
@@ -52,7 +52,7 @@ export const mediaChaptersRouter = createTRPCRouter({
         where: (c, { eq }) => eq(c.id, chapterId),
       });
 
-      if (!result?.user.name || !result.media.titles.at(0)) {
+      if (!result?.uploader.name || !result.media.titles.at(0)) {
         throw new NotFoundError();
       }
 
@@ -74,9 +74,9 @@ export const mediaChaptersRouter = createTRPCRouter({
         nextChapter:
           sortedMediaChapters.at(currentMediaChapterIndex + 1) ?? null,
         // ----- RELATIONS
-        user: {
-          id: result.userId,
-          name: result.user.name,
+        uploader: {
+          id: result.uploaderId,
+          name: result.uploader.name,
         },
         media: {
           id: result.mediaId,
