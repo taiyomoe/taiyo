@@ -51,9 +51,6 @@ export const ReaderSidebarOpenOverlay = () => {
     return null;
   }
 
-  console.log("readerSidebarOpenMode", readerSidebarOpenMode);
-  console.log("readerSidebarSide", readerSidebarSide);
-
   return (
     <div className={container()}>
       <button
