@@ -51,7 +51,7 @@ export const ReaderSettingsMediaChapterDropdown = () => {
         href={
           chapter?.previousChapter
             ? MediaChapterUtils.getUrl(chapter?.previousChapter)
-            : ""
+            : "https://google.com/"
         }
         isDisabled={!chapter?.previousChapter}
       />
@@ -92,7 +92,7 @@ export const ReaderSettingsMediaChapterDropdown = () => {
         href={
           chapter?.nextChapter
             ? MediaChapterUtils.getUrl(chapter?.nextChapter)
-            : ""
+            : "https://google.com/"
         }
         isDisabled={!chapter?.nextChapter}
       />
