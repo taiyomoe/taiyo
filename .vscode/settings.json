@@ -12,8 +12,7 @@
     ["tv\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"]
   ],
   "tailwindCSS.experimental.configFile": {
-    "apps/nextjs/tailwind.config.ts": "apps/nextjs/**",
-    "apps/expo/tailwind.config.ts": "apps/expo/**"
+    "apps/nextjs/tailwind.config.ts": "apps/nextjs/**"
   },
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "typescript.tsdk": "node_modules/typescript/lib",
