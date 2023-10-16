@@ -10,7 +10,11 @@ export function useKeyPress(
     eventOptions?: Record<string, unknown>;
   } = {},
 ) {
-  const { event = "keydown", target = window ?? null, eventOptions } = options;
+  const {
+    event = "keydown",
+    target = typeof window !== "undefined" ? window : null,
+    eventOptions,
+  } = options;
 
   const onListen = experimental_useEffectEvent(
     (target: Element | Window, event: keyof WindowEventMap) => {
@@ -37,6 +41,10 @@ export function useKeyPress(
   );
 
   useEffect(() => {
+    if (!target) {
+      return;
+    }
+
     return onListen(target, event);
   }, [target, event, onListen]);
 }
