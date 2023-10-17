@@ -1,0 +1,94 @@
+import { z } from "zod";
+
+import { type MediaChapterLimited } from "~/lib/types";
+import { NotFoundError } from "../errors";
+import { createTRPCRouter, publicProcedure } from "../trpc";
+
+export const mediaChaptersRouter = createTRPCRouter({
+  getById: publicProcedure
+    .input(z.string())
+    .query(async ({ ctx, input: chapterId }) => {
+      const result = await ctx.db.query.mediaChapters.findFirst({
+        columns: {
+          title: true,
+          number: true,
+          volume: true,
+          pages: true,
+          uploaderId: true,
+          mediaId: true,
+        },
+        with: {
+          uploader: {
+            columns: { name: true },
+          },
+          media: {
+            columns: { type: true },
+            with: {
+              titles: {
+                columns: { title: true },
+                limit: 1,
+              },
+              chapters: {
+                columns: {
+                  id: true,
+                  number: true,
+                  title: true,
+                },
+              },
+            },
+          },
+          scans: {
+            columns: { scanId: true },
+            with: {
+              scan: {
+                columns: { name: true },
+              },
+            },
+          },
+          comments: true,
+        },
+        where: (c, { eq }) => eq(c.id, chapterId),
+      });
+
+      if (!result?.uploader.name || !result.media.titles.at(0)) {
+        throw new NotFoundError();
+      }
+
+      const sortedMediaChapters = result.media.chapters.sort(
+        (a, b) => a.number - b.number,
+      );
+      const currentMediaChapterIndex = sortedMediaChapters.findIndex(
+        (c) => c.id === chapterId,
+      );
+
+      const mediaChapterLimited: MediaChapterLimited = {
+        id: chapterId,
+        title: result.title,
+        number: result.number,
+        volume: result.volume,
+        pages: result.pages,
+        previousChapter:
+          sortedMediaChapters.at(currentMediaChapterIndex - 1) ?? null,
+        nextChapter:
+          sortedMediaChapters.at(currentMediaChapterIndex + 1) ?? null,
+        // ----- RELATIONS
+        uploader: {
+          id: result.uploaderId,
+          name: result.uploader.name,
+        },
+        media: {
+          id: result.mediaId,
+          type: result.media.type,
+          title: result.media.titles.at(0)!.title,
+          chapters: sortedMediaChapters,
+        },
+        scans: result.scans.map((mediaChapterScan) => ({
+          id: mediaChapterScan.scanId,
+          name: mediaChapterScan.scan.name,
+        })),
+        comments: result.comments,
+      };
+
+      return mediaChapterLimited;
+    }),
+});

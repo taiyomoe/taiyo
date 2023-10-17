@@ -1,0 +1,416 @@
+import type { PostgresJsDatabase } from "drizzle-orm/postgres-js";
+
+import { mediaChapters } from "~/lib/db/schema/mediaChapters";
+import { mediaChapterScans } from "~/lib/db/schema/mediaChapterScans";
+import { mediaCovers } from "~/lib/db/schema/mediaCovers";
+import { medias } from "~/lib/db/schema/medias";
+import { mediaTags } from "~/lib/db/schema/mediaTags";
+import { mediaTitles } from "~/lib/db/schema/mediaTitles";
+import { mediaTrackers } from "~/lib/db/schema/mediaTrackers";
+
+const execute = async (db: PostgresJsDatabase) => {
+  await db.insert(medias).values({
+    id: "6804cf61-f7ad-410e-87ba-27683ef05403",
+    // -----
+    startDate: new Date("2018-01-26"),
+    // -----
+    synopsis:
+      "The peak of martial arts is solitary and lonely. It is an endless pursuit for unattainable heights as well. In order to surpass the limits of martial arts, growth and the will to survive in adverse situations is necessary.\nOne day, Yang Kai, a disciple-on-trial (and floor sweeper) of the Lingxiao Martial Arts Sect discovered a Wordless Black Book. That marked the turn in his luck and the beginning of his martial arts journey.",
+    type: "MANHUA",
+    status: "RELEASING",
+    source: "WEB_NOVEL",
+    demography: "SHOUNEN",
+    countryOfOrigin: "CHINA",
+    // -----
+    creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+  });
+
+  await db.insert(mediaTitles).values([
+    {
+      id: "6b04f194-c563-4558-8b25-7a7403631df1",
+      title: "Martial Peak",
+      language: "ENGLISH",
+      isAcronym: false,
+      mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+    },
+  ]);
+
+  await db.insert(mediaTrackers).values([
+    {
+      trackerMediaId: "b1461071-bfbb-43e7-a5b6-a7ba5904649f",
+      mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+      trackerId: "6c61f739-1ca3-467b-9d08-b7a2e58efb21",
+    },
+    {
+      trackerMediaId: "104494",
+      mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+      trackerId: "a4ffe426-9496-4167-ade3-b3789f81fb75",
+    },
+  ]);
+
+  await db.insert(mediaCovers).values([
+    {
+      id: "5633a19d-7ec9-4ffd-9d93-57eb03458ce6",
+      mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
+      uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+    },
+    {
+      id: "3a88f93e-07de-4430-9e53-ddabab07676f",
+      mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
+      uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+    },
+    {
+      id: "516cfad2-601d-4bd7-b624-1efe26e48d6b",
+      mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
+      uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+    },
+    {
+      id: "73984890-d892-412e-8529-d416cc8be525",
+      mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
+      uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+    },
+    {
+      id: "d75dae86-643f-42cc-9a2c-8fc919b53536",
+      mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
+      uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+    },
+  ]);
+
+  await db.insert(mediaTags).values([
+    {
+      id: "308cb63e-ca3d-48f2-ae28-f231d87e29ee",
+      tagId: "34b258e9-b746-4d72-aa38-7d77695cfe5b",
+      mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+    },
+    {
+      id: "fd847029-7982-4d71-80d6-28a8f9b1a00d",
+      tagId: "037aa719-975d-4bdc-8abb-f0f694af1cad",
+      mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+    },
+    {
+      id: "0b50cb37-472e-443a-925e-e4c2567a15b9",
+      tagId: "9f8204b0-49aa-4f16-9226-99b11856462c",
+      mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+    },
+    {
+      id: "e881cfb4-7e92-403d-bb2f-56a2fb4b0d30",
+      tagId: "27249d9d-3f17-48b1-a141-9cb082dc4e4f",
+      mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+    },
+    {
+      id: "dcb0b342-401e-4b0f-aac6-047252682c13",
+      tagId: "bc6ca93e-0632-40f4-bfb3-cf9ddf95ddb7",
+      mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+    },
+    {
+      id: "5474526f-a71b-4b11-bd57-587974d2e959",
+      tagId: "8a96ca3d-d1f0-4759-8c4c-9a8a64e2d722",
+      mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+    },
+    {
+      id: "5b6cc616-73fe-4ade-8542-d821b991d7c6",
+      tagId: "f9b88d05-cb71-4bd0-95c3-6dc083144771",
+      mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+    },
+    {
+      id: "fd737053-4e25-4987-8065-a38580751b5a",
+      tagId: "ed3b7aa1-2f58-44de-b787-7044dd9e2767",
+      mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+    },
+  ]);
+
+  await db.insert(mediaChapters).values([
+    {
+      id: "89b0b209-3653-4780-9cbf-90a35803c38a",
+      number: 0,
+      volume: "1",
+      language: "PORTUGUESE",
+      pages: [
+        { id: "6a5de5df-57e9-44d7-b9b4-ea5b62bf2dcd" },
+        { id: "3026ff99-ce0a-440a-92a3-cf670cbd405b" },
+        { id: "65c3c35c-0fbd-4b1d-a44a-ec1fee3070b0" },
+        { id: "65703260-548e-478f-89f0-441223781adf" },
+        { id: "10ec348e-6c3b-4d4a-bd70-8beb707260cf" },
+        { id: "3b251f37-bddb-41cf-87db-e2965b380b63" },
+        { id: "576de7da-24d0-41d0-97ca-c71163745fdf" },
+        { id: "87910d49-1041-4a9d-9a79-1fa43930b1e6" },
+        { id: "ceb4e04f-b2f6-43e3-96e2-88fe894d5f58" },
+        { id: "df2a0917-d7d3-4016-972c-ebaad1d8cbeb" },
+        { id: "d2776fab-6dac-44c6-9444-a8462d7c5501" },
+        { id: "01da1a3b-c1e6-4e74-8461-0a6fe10d8500" },
+        { id: "4e05ea78-a907-41b0-a264-6dc9f8365daf" },
+        { id: "df4889d2-f31c-4e3f-a6c1-60ffdeae4647" },
+        { id: "6961418c-59dd-479b-a997-e1675c187724" },
+        { id: "b1f01dbf-d225-42d7-bef6-4652a2deaa12" },
+        { id: "04dfec0c-d2ce-4273-85b8-0323968ec126" },
+        { id: "75aebbac-9cdd-41d6-96fb-6ef643170f5c" },
+        { id: "3b473db4-a5dd-4eec-91a6-67233e2323af" },
+      ],
+      mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
+      uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+    },
+    {
+      id: "abcded63-ded5-44d3-aef7-fa368d653347",
+      number: 1,
+      volume: "1",
+      language: "PORTUGUESE",
+      pages: [
+        { id: "83489960-7d1c-4f2e-99a2-4671f00f21e7" },
+        { id: "b564adb8-ed9e-478a-b390-244bc98505ba" },
+        { id: "cf0e1054-caeb-4fe1-9b0d-d822472336f1" },
+        { id: "0b4dcf69-8641-4bf7-a776-5a9c462f608b" },
+        { id: "15e43f5d-a06a-410e-97af-81f1da0f4745" },
+        { id: "d64e2661-1f1f-42dd-8798-bf4ef2c5abe4" },
+        { id: "a23ec635-8e1c-40aa-ba0e-5cff131fde53" },
+        { id: "5db299c7-223e-48c2-ab65-8073e85473ab" },
+        { id: "96c19d6f-d131-41b1-b414-0c899798d6b7" },
+        { id: "caab45e2-e8f7-4b6d-a06e-e41ad0ad7e89" },
+        { id: "e03df8fe-ebc4-4f00-9d39-53e282606b6d" },
+      ],
+      mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
+      uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+    },
+    {
+      id: "c6206040-95a8-4802-b12b-c631ef7e859d",
+      number: 2,
+      volume: "1",
+      language: "PORTUGUESE",
+      pages: [
+        { id: "6ae4f628-9fe7-46f5-b90b-e9cf25db5ede" },
+        { id: "49f951b8-e323-4221-a04c-3507f0bedec8" },
+        { id: "3777e49d-b0dd-4b2a-a0cf-da3c25d60ed5" },
+        { id: "aba411d6-7c1b-40df-aff9-a67f87729958" },
+        { id: "3420b908-1705-4748-a258-4dbbad7a3a20" },
+        { id: "0117bde7-f29c-4d57-a2d3-54d1dc996bf5" },
+        { id: "476b82f7-0915-4e1c-b859-edba1a3a55e1" },
+        { id: "435a87d4-c121-44ce-992c-11db009caf27" },
+        { id: "17b82c21-ce42-4808-b184-e14cde6a6489" },
+        { id: "55b15f75-4326-4429-9dd2-06463f28cabb" },
+        { id: "62faca4d-64a2-481a-8e35-c5b261d02be0" },
+        { id: "706a4565-924b-4e1d-93b6-063248666fbe" },
+      ],
+      mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
+      uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+    },
+    {
+      id: "bd5f1cac-95b1-4f68-a314-144898e5cc07",
+      number: 3,
+      volume: "1",
+      language: "PORTUGUESE",
+      pages: [
+        { id: "62a7f2bc-705a-4b41-a698-e39bfe8d30f2" },
+        { id: "97ccc92a-c364-4149-94a6-8658d1b98974" },
+        { id: "381dbdf6-e45b-4afb-9fb7-1be34296292c" },
+        { id: "8530b444-e1f1-4180-a307-58ba3a976b09" },
+        { id: "2ccd2302-9b53-4912-a4ff-de47c7406ef3" },
+        { id: "83886784-961e-4a53-a643-aa17ad92000a" },
+        { id: "9a0bda00-c339-4ca3-be69-d3e4afc4a40e" },
+        { id: "f8277f2e-5599-43a1-93bc-137e9e2752eb" },
+        { id: "3c429fe0-9326-4457-ada2-e030ea29ac92" },
+        { id: "b52a8a5d-aa19-428f-8ea3-335f33229a6b" },
+        { id: "48b3092d-83a0-4e91-b758-e0b6ad1cc0ce" },
+      ],
+      mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
+      uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+    },
+    {
+      id: "69884783-18c4-48c8-9320-c00cef8cb873",
+      number: 4,
+      volume: "1",
+      language: "PORTUGUESE",
+      pages: [
+        { id: "45ad731a-6c77-43c1-b727-fe87a0f83ca0" },
+        { id: "c7d493e7-60a5-4f33-bbe3-b81801834b63" },
+        { id: "5082ece2-c7f5-4051-a5a8-ed18b0a81627" },
+        { id: "fd4be86c-4dbe-47cc-bf8d-668f90511c6e" },
+        { id: "be87371a-9ef3-4d8f-bfc9-043fb5869b93" },
+        { id: "b36d3fd9-e4c9-4a73-a8b7-8d6d4ef114cb" },
+        { id: "091648bc-cce0-4488-923e-eb01b1853a7f" },
+        { id: "fc466068-9268-49ca-bac2-43267cf491dc" },
+        { id: "ed5dc8d2-ab15-48a6-972c-2eee042454b7" },
+        { id: "111f103d-3b1b-4b01-8191-49dfd8d89764" },
+        { id: "8443c1aa-e125-421d-bff7-81ff02b9c42c" },
+      ],
+      mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
+      uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+    },
+    {
+      id: "6d54a98a-43c4-4821-bb4d-0ce48e99c8f7",
+      number: 5,
+      volume: "1",
+      language: "PORTUGUESE",
+      pages: [
+        { id: "846557fd-a50f-4a84-a7f9-d9bf94ca7be7" },
+        { id: "5e2429f4-7021-422c-984d-0b0533a32950" },
+        { id: "4666a298-4b63-4632-b1d7-4787c615c0f7" },
+        { id: "741bdb3d-00df-4ea4-b9e0-e8d84f9defff" },
+        { id: "07f00ad0-36bf-49b9-a87d-2b1eb831f0f1" },
+        { id: "2dfc6850-323e-4a3e-8eb3-552ada5602dc" },
+        { id: "47351843-f574-456f-a7a1-32decaec4788" },
+        { id: "fc82d017-a44e-43e0-9e11-758223cf1207" },
+        { id: "15f5c35d-2e49-49ec-a81b-5feeeca1653f" },
+        { id: "f4e9063d-c01c-4122-b7fb-9c250d76618b" },
+      ],
+      mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
+      uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+    },
+    {
+      id: "cd19eaa8-aaa9-4565-b1e1-59bccee18c30",
+      number: 6,
+      volume: "1",
+      language: "PORTUGUESE",
+      pages: [
+        { id: "c17177b2-dc2a-4a6d-a409-38c4ec2ad122" },
+        { id: "95aab20a-cb01-454c-81b3-54e7ee0f51fb" },
+        { id: "fa808d51-6fc5-48d4-aa54-9c74b8787777" },
+        { id: "03c2c270-e8c9-4035-99f0-cea25cb56d17" },
+        { id: "ee60e010-207e-4aaf-b5fb-9c932620b52e" },
+        { id: "797976ae-0f6f-4939-bdd1-9dcd00959003" },
+        { id: "1a04e4e3-6328-4c3f-a3b3-0a875214d67a" },
+        { id: "829054f4-fa9a-4d87-8065-727802f1e002" },
+        { id: "3201eda0-a4e5-4c10-ad09-7f3083e92209" },
+        { id: "ccf87ca9-68b7-419e-909b-a2e58f10b1a0" },
+      ],
+      mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
+      uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+    },
+    {
+      id: "90b25b8e-572e-42ab-b30a-3075180bbe6c",
+      number: 7,
+      volume: "1",
+      language: "PORTUGUESE",
+      pages: [
+        { id: "65743a1a-8f14-42de-bb14-836d92b65ecd" },
+        { id: "002ebe17-2980-40d5-bd90-03e24a53ecc8" },
+        { id: "8076dc03-16bd-4646-830e-6beb881ee5e9" },
+        { id: "aee68ced-eaeb-45d2-8c7a-c2204fecc7d6" },
+        { id: "ad104208-481f-409f-b014-6ac8793176d1" },
+        { id: "6fee478d-3e47-485e-a59a-0d05aa09704b" },
+        { id: "01afbb80-36e8-4074-a6af-e6a9e8d2a1c5" },
+        { id: "5feeb902-cb5a-4a88-aa6a-ec3216ed9dcb" },
+        { id: "2ef3d545-b420-426e-a495-e218e2f8ef1f" },
+        { id: "57c094a5-190b-4a23-a49d-552c9f70f5d2" },
+      ],
+      mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
+      uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+    },
+    {
+      id: "6eca2c2e-d63b-4250-a13d-86009fee5b4f",
+      number: 8,
+      volume: "1",
+      language: "PORTUGUESE",
+      pages: [
+        { id: "85c25878-b023-4e29-af44-ae180a67dfb1" },
+        { id: "448fa844-da73-4597-90e9-5e469e57bf03" },
+        { id: "9b814b21-8c86-49a2-bdd2-a4f4087aa3c3" },
+        { id: "e3848914-7ea0-4e4d-9dd1-8377c74fbd76" },
+        { id: "760f3651-b712-417d-b419-3d4a1986fe99" },
+        { id: "1171d46c-9049-460d-b7ef-5b5078542fa4" },
+        { id: "b8ac29bf-c174-4d38-b363-c2beed9508a3" },
+        { id: "13a61a8c-677d-47d2-8526-b9d13dd607a6" },
+        { id: "25c44d13-71f3-495f-b863-cfa6143345ef" },
+        { id: "8bae5ce8-fb60-4cdd-be85-28b48e2eef6c" },
+      ],
+      mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
+      uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+    },
+    {
+      id: "ff8a9509-2b26-43c3-9701-e71cadaacbb2",
+      number: 9,
+      volume: "1",
+      language: "PORTUGUESE",
+      pages: [
+        { id: "24b89c10-5fc6-4b63-bd98-714405a1fa53" },
+        { id: "bbfa8ed0-3dd6-4821-a61a-3bab465d2586" },
+        { id: "4a865081-39b1-4bcf-90bc-f888c56618d6" },
+        { id: "da94f252-4395-4139-ad57-84b04b39f352" },
+        { id: "2360c209-32f0-4384-8ef7-0a5e444cbd1b" },
+        { id: "766a5bf2-7ac1-464e-b266-7e978de085d1" },
+        { id: "ee226ed2-bba8-4d18-9097-e2d65c2ec3a0" },
+        { id: "d17ed3cb-f366-45c3-a94a-b4e2da7f68f8" },
+        { id: "fca21ef2-84ec-4505-bfdc-51761512c888" },
+        { id: "3eac407a-fea2-43bf-a4d5-72a77b7a1074" },
+        { id: "f9c517c5-42fd-4749-8ee1-87a0ebc93925" },
+        { id: "eb1023bc-583f-44c3-b92c-174914368a25" },
+      ],
+      mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
+      uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+    },
+  ]);
+
+  await db.insert(mediaChapterScans).values([
+    {
+      id: "27ff2a84-84cf-4b49-8a7e-2283571b15c3",
+      scanId: "642f18b8-df9b-4b13-a4dc-93bba10393df",
+      mediaChapterId: "89b0b209-3653-4780-9cbf-90a35803c38a",
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+    },
+    {
+      id: "26cdb711-ae23-49bf-a0c1-bf2a6a48d8e9",
+      scanId: "642f18b8-df9b-4b13-a4dc-93bba10393df",
+      mediaChapterId: "abcded63-ded5-44d3-aef7-fa368d653347",
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+    },
+    {
+      id: "570ad881-e10f-4370-b928-389dfbb980d7",
+      scanId: "642f18b8-df9b-4b13-a4dc-93bba10393df",
+      mediaChapterId: "c6206040-95a8-4802-b12b-c631ef7e859d",
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+    },
+    {
+      id: "d7a9c065-1529-48e6-b371-1e6478a90c01",
+      scanId: "642f18b8-df9b-4b13-a4dc-93bba10393df",
+      mediaChapterId: "bd5f1cac-95b1-4f68-a314-144898e5cc07",
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+    },
+    {
+      id: "5d23d145-fed0-4be0-bd3f-29a769fbcb5f",
+      scanId: "642f18b8-df9b-4b13-a4dc-93bba10393df",
+      mediaChapterId: "69884783-18c4-48c8-9320-c00cef8cb873",
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+    },
+    {
+      id: "1759b36f-df8b-4edf-b5d5-f9c2f45602f2",
+      scanId: "642f18b8-df9b-4b13-a4dc-93bba10393df",
+      mediaChapterId: "6d54a98a-43c4-4821-bb4d-0ce48e99c8f7",
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+    },
+    {
+      id: "3da50405-7c89-4ba2-80fd-7e6324fd8fe2",
+      scanId: "642f18b8-df9b-4b13-a4dc-93bba10393df",
+      mediaChapterId: "cd19eaa8-aaa9-4565-b1e1-59bccee18c30",
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+    },
+    {
+      id: "e6963d46-902f-4d0e-8053-e393f7fca661",
+      scanId: "642f18b8-df9b-4b13-a4dc-93bba10393df",
+      mediaChapterId: "90b25b8e-572e-42ab-b30a-3075180bbe6c",
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+    },
+    {
+      id: "ec517e09-4213-4b61-b207-a2516028fa75",
+      scanId: "642f18b8-df9b-4b13-a4dc-93bba10393df",
+      mediaChapterId: "6eca2c2e-d63b-4250-a13d-86009fee5b4f",
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+    },
+    {
+      id: "d4484306-1955-4a0e-90a8-c5239b488117",
+      scanId: "642f18b8-df9b-4b13-a4dc-93bba10393df",
+      mediaChapterId: "ff8a9509-2b26-43c3-9701-e71cadaacbb2",
+      creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+    },
+  ]);
+};
+
+export default { execute };
