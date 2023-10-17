@@ -3,9 +3,9 @@
 import { useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { loggerLink, unstable_httpBatchStreamLink } from "@trpc/client";
-import { api } from "./client";
 
-import {transformer, getUrl} from "./utils"
+import { api } from "./client";
+import { getUrl, transformer } from "./utils";
 
 export function TRPCReactProvider(props: {
   children: React.ReactNode;
