@@ -1,5 +1,4 @@
-import type { MediaChapterGroup } from "@taiyo/db/types";
-
+import { type MediaChapterGroup } from "~/lib/types";
 import { MediaChapterCard } from "./MediaChapterCard";
 
 type Props = {

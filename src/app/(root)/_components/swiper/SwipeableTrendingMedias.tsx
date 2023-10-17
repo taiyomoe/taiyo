@@ -9,8 +9,7 @@ import "swiper/css/pagination";
 import Link from "next/link";
 import { Skeleton } from "@nextui-org/skeleton";
 
-import type { LatestMedia } from "@taiyo/db/types";
-
+import { type LatestMedia } from "~/lib/types";
 import { cn } from "~/utils/cn";
 import { MediaUtils } from "~/utils/MediaUtils";
 
