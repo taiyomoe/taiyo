@@ -12,9 +12,9 @@ import { initTRPC } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
 
+import { getServerAuthSession } from "~/lib/auth/utils";
 import { db } from "~/lib/db";
 import { type Actions, type Resources } from "~/lib/types";
-import { getServerAuthSession } from "~/lib/auth/utils";
 import { withAuth } from "./middlewares/withAuth";
 import { withPermissions } from "./middlewares/withPermissions";
 
@@ -78,21 +78,21 @@ export const createTRPCContext = async (opts: { req: NextRequest }) => {
  */
 
 const t = initTRPC
-.context<typeof createTRPCContext>()
-.meta<Meta>()
-.create({
-  transformer: superjson,
-  errorFormatter({ shape, error }) {
-    return {
-      ...shape,
-      data: {
-        ...shape.data,
-        zodError:
-          error.cause instanceof ZodError ? error.cause.flatten() : null,
-      },
-    };
-  },
-});
+  .context<typeof createTRPCContext>()
+  .meta<Meta>()
+  .create({
+    transformer: superjson,
+    errorFormatter({ shape, error }) {
+      return {
+        ...shape,
+        data: {
+          ...shape.data,
+          zodError:
+            error.cause instanceof ZodError ? error.cause.flatten() : null,
+        },
+      };
+    },
+  });
 
 export type tRPCInit = typeof t;
 
@@ -108,7 +108,6 @@ const permissionsMiddleware = withPermissions();
  * These are the pieces you use to build your tRPC API. You should import these a lot in the
  * "/src/server/api/routers" directory.
  */
-
 
 /**
  * This is how you create new routers and sub-routers in your tRPC API.
