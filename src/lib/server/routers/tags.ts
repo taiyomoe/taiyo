@@ -1,7 +1,6 @@
-
 import { tags } from "~/lib/db/schema/tags";
-import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { insertTagSchema } from "~/lib/types";
+import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const tagsRouter = createTRPCRouter({
   add: protectedProcedure

@@ -7,7 +7,7 @@ export const NavbarPopoversCommonOptions = () => {
   return (
     <div className="flex w-full flex-col gap-2">
       <Button
-        className="text-medium justify-normal gap-3 p-2 font-medium"
+        className="justify-normal gap-3 p-2 text-medium font-medium"
         startContent={<SettingsIcon />}
         variant="light"
         isDisabled
@@ -15,7 +15,7 @@ export const NavbarPopoversCommonOptions = () => {
         Parâmetros
       </Button>
       <Button
-        className="text-medium disabled justify-normal gap-3 p-2 font-medium"
+        className="disabled justify-normal gap-3 p-2 text-medium font-medium"
         startContent={<FlagIcon />}
         variant="light"
         isDisabled
@@ -25,7 +25,7 @@ export const NavbarPopoversCommonOptions = () => {
       <div className="flex justify-between">
         <div className="flex gap-3 p-2">
           <SunMoonIcon />
-          <p className="text-medium select-none font-medium">Tema</p>
+          <p className="select-none text-medium font-medium">Tema</p>
         </div>
         <ThemeSwitch />
       </div>

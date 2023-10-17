@@ -7,8 +7,8 @@
  * need to use are documented accordingly near the end.
  */
 
-import { initTRPC } from "@trpc/server";
 import { type NextRequest } from "next/server";
+import { initTRPC } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
 
@@ -34,7 +34,6 @@ export type Meta = {
   resource?: Resources;
   action?: Actions;
 };
-
 
 /**
  * This helper generates the "internals" for a tRPC context. If you need to use it, you can export

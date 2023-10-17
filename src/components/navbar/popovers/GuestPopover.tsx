@@ -22,7 +22,7 @@ export const GuestPopover = () => {
             <Button
               as={NextLink}
               href="/auth/sign-in"
-              className="text-medium z-10 min-w-[220px] font-medium text-primary-foreground"
+              className="z-10 min-w-[220px] text-medium font-medium text-primary-foreground"
               color="primary"
             >
               Logar

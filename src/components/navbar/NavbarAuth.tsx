@@ -1,4 +1,4 @@
-import { getServerAuthSession } from "~/lib/auth/utils";
+import { getServerAuthSession } from "~/lib/auth";
 import { Navbar } from "./Navbar";
 import { GuestPopover } from "./popovers/GuestPopover";
 import { UserPopover } from "./popovers/UserPopover";

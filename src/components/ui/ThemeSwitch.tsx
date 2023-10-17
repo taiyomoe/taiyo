@@ -39,7 +39,7 @@ const ThemeSwitch = () => {
     <Dropdown>
       <DropdownTrigger>
         <Button
-          className="text-small px-3"
+          className="px-3 text-small"
           variant="solid"
           startContent={renderButtonIcon()}
         >

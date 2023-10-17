@@ -1,4 +1,4 @@
-import { getServerAuthSession } from "~/lib/auth/utils";
+import { getServerAuthSession } from "~/lib/auth";
 import { type Permission } from "~/lib/types";
 import { PermissionUtils } from "~/lib/utils/permissions.utils";
 
