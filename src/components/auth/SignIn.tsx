@@ -1,11 +1,8 @@
 import type { ButtonProps } from "@nextui-org/button";
 import { Button } from "@nextui-org/button";
 
-import type { OAuthProviders } from "@taiyo/auth";
-import { CSRF_experimental } from "@taiyo/auth";
-
 type Props = {
-  provider: OAuthProviders;
+  provider: "discord" | "google";
   classNames?: { button?: string; form?: string };
 } & Omit<ButtonProps, "className">;
 
@@ -17,7 +14,6 @@ export const SignIn = ({ provider, classNames, ...props }: Props) => {
       method="post"
     >
       <Button className={classNames?.button} {...props} type="submit" />
-      <CSRF_experimental />
     </form>
   );
 };
