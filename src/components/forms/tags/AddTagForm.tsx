@@ -5,8 +5,8 @@ import { toast } from "sonner";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 
 import { Form } from "~/components/generics/form/Form";
-import { type InsertTag } from "~/lib/types";
-import { api } from "~/utils/api";
+import { api } from "~/lib/trpc/client";
+import { insertTagSchema, type InsertTag } from "~/lib/types";
 import { AddTagFormFields } from "./AddTagFormFields";
 
 const initialValues: InsertTag = {

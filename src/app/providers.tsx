@@ -3,11 +3,12 @@
 import { NextUIProvider } from "@nextui-org/react";
 import { ThemeProvider } from "next-themes";
 import { Toaster } from "sonner";
-import {} from "@taiyo/api"
+
+import { TRPCReactProvider } from "~/lib/trpc/Provider";
 
 type ProviderProps = {
   children: React.ReactNode;
-  headers?: Headers;
+  headers: Headers;
 };
 
 export const Providers = (props: ProviderProps) => {

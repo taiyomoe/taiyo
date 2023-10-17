@@ -1,6 +1,6 @@
-import { auth } from "@taiyo/auth";
-import type { Permission } from "@taiyo/db/types";
-import { PermissionUtils } from "@taiyo/utils";
+import { getServerAuthSession } from "~/lib/auth/utils";
+import { type Permission } from "~/lib/types";
+import { PermissionUtils } from "~/lib/utils/permissions.utils";
 
 type Props = {
   allowIfUserHasAtLeastOnePermission?: boolean;
@@ -15,15 +15,20 @@ export const SignedIn = async ({
   anyPermissions,
   children,
 }: Props) => {
-  const { user } = await auth();
+  const session = await getServerAuthSession();
 
-  if (allowIfUserHasAtLeastOnePermission && user.role.permissions.length === 0)
+  if (!session) return null;
+
+  if (
+    allowIfUserHasAtLeastOnePermission &&
+    session.user.role.permissions.length === 0
+  )
     return null;
 
   if (
     requiredPermissions &&
     !requiredPermissions.every((permission) =>
-      user.role.permissions.includes(
+      session.user.role.permissions.includes(
         PermissionUtils.refinePermission(permission),
       ),
     )
@@ -33,7 +38,7 @@ export const SignedIn = async ({
   if (
     anyPermissions &&
     !anyPermissions.some((permission) =>
-      user.role.permissions.includes(
+      session.user.role.permissions.includes(
         PermissionUtils.refinePermission(permission),
       ),
     )

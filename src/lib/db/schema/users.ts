@@ -1,4 +1,3 @@
-import type { AdapterAccount } from "@auth/core/adapters";
 import { relations } from "drizzle-orm";
 import {
   boolean,
@@ -11,6 +10,7 @@ import {
   uuid,
   varchar,
 } from "drizzle-orm/pg-core";
+import { type AdapterAccount } from "next-auth/adapters";
 
 import { RolesEnum } from "../../types";
 import { mediaChapters } from "./mediaChapters";
