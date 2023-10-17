@@ -2,8 +2,7 @@
 
 import { Tab, Tabs } from "@nextui-org/tabs";
 
-import type { MediaLimited } from "@taiyo/db/types";
-
+import { type MediaLimited } from "~/lib/types";
 import { MediaLayoutChaptersTab } from "./chapters/MediaLayoutChaptersTab";
 
 type Props = {

@@ -1,9 +1,8 @@
 import NextImage from "next/image";
 import { Image } from "@nextui-org/image";
 
-import type { MediaLimited } from "@taiyo/db/types";
-
 import { DisplayMediaCover } from "~/components/media/DisplayMediaCover";
+import { type MediaLimited } from "~/lib/types";
 import { cn } from "~/utils/cn";
 import { MediaUtils } from "~/utils/MediaUtils";
 
@@ -16,7 +15,7 @@ export const MediaLayout = ({ media, children }: Props) => {
   const bannerUrl = MediaUtils.getBannerOrCoverUrl(media);
 
   return (
-    <main className="lg:grid-cols-lgMediaLayout xl:grid-cols-xlMediaLayout 2xl:grid-cols-2xlMediaLayout grid h-full grid-cols-2">
+    <main className="grid h-full grid-cols-2 lg:grid-cols-lgMediaLayout xl:grid-cols-xlMediaLayout 2xl:grid-cols-2xlMediaLayout">
       <Image
         as={NextImage}
         src={bannerUrl}

@@ -2,9 +2,8 @@ import Link from "next/link";
 import { Card, CardBody } from "@nextui-org/card";
 import { tv } from "tailwind-variants";
 
-import type { MediaLimitedChapter } from "@taiyo/db/types";
-
 import { DisplayMediaChapterScans } from "~/components/ui/DisplayMediaChapterScans";
+import { type MediaLimitedChapter } from "~/lib/types";
 import { MediaChapterUtils } from "~/utils/MediaChapterUtils";
 import { DisplayMediaChapterUploader } from "../../../../../../../components/ui/DisplayMediaChapterUploader";
 import { DisplayMediaChapterCommentsCount } from "../../ui/DisplayMediaChapterCommentsCount";
