@@ -8,28 +8,20 @@ export const mediaChaptersRouter = createTRPCRouter({
   getById: publicProcedure
     .input(z.string())
     .query(async ({ ctx, input: chapterId }) => {
-      const result = await ctx.db.query.mediaChapters.findFirst({
-        columns: {
+      const result = await ctx.db.mediaChapter.findFirst({
+        select: {
           title: true,
           number: true,
           volume: true,
           pages: true,
-          uploaderId: true,
           mediaId: true,
-        },
-        with: {
-          uploader: {
-            columns: { name: true },
-          },
+          uploader: { select: { id: true, name: true } },
           media: {
-            columns: { type: true },
-            with: {
-              titles: {
-                columns: { title: true },
-                limit: 1,
-              },
+            select: {
+              type: true,
+              titles: { select: { title: true }, take: 1 },
               chapters: {
-                columns: {
+                select: {
                   id: true,
                   number: true,
                   title: true,
@@ -37,17 +29,10 @@ export const mediaChaptersRouter = createTRPCRouter({
               },
             },
           },
-          scans: {
-            columns: { scanId: true },
-            with: {
-              scan: {
-                columns: { name: true },
-              },
-            },
-          },
+          scans: { select: { id: true, name: true } },
           comments: true,
         },
-        where: (c, { eq }) => eq(c.id, chapterId),
+        where: { id: chapterId },
       });
 
       if (!result?.uploader.name || !result.media.titles.at(0)) {
@@ -73,7 +58,7 @@ export const mediaChaptersRouter = createTRPCRouter({
           sortedMediaChapters.at(currentMediaChapterIndex + 1) ?? null,
         // ----- RELATIONS
         uploader: {
-          id: result.uploaderId,
+          id: result.uploader.id,
           name: result.uploader.name,
         },
         media: {
@@ -82,9 +67,9 @@ export const mediaChaptersRouter = createTRPCRouter({
           title: result.media.titles.at(0)!.title,
           chapters: sortedMediaChapters,
         },
-        scans: result.scans.map((mediaChapterScan) => ({
-          id: mediaChapterScan.scanId,
-          name: mediaChapterScan.scan.name,
+        scans: result.scans.map((s) => ({
+          id: s.id,
+          name: s.name,
         })),
         comments: result.comments,
       };

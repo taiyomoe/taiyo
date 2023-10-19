@@ -1,13 +1,11 @@
-import type { InferSelectModel } from "drizzle-orm";
-
-import type { mediaChapterComments } from "~/lib/db/schema/mediaChapterComments";
-import type { mediaChapters } from "~/lib/db/schema/mediaChapters";
-import type { Media, MediaTitle } from "./media.types";
-import type { Scan } from "./scan.types";
-import type { User } from "./user.types";
-
-export type MediaChapter = InferSelectModel<typeof mediaChapters>;
-export type MediaChapterComment = InferSelectModel<typeof mediaChapterComments>;
+import type {
+  Media,
+  MediaChapter,
+  MediaChapterComment,
+  MediaTitle,
+  Scan,
+  User,
+} from "@prisma/client";
 
 export type MediaChapterPage = { id: string };
 export type MediaCommentAttachement = { id: string; extension: "png" | "gif" };

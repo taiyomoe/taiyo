@@ -1,9 +1,8 @@
 import Link from "next/link";
 import { Skeleton } from "@nextui-org/skeleton";
+import { type Scan } from "@prisma/client";
 import { UsersIcon } from "lucide-react";
 import { tv } from "tailwind-variants";
-
-import { type Scan } from "~/lib/types/scan.types";
 
 type Props = {
   scans?: Scan[] | Pick<Scan, "id" | "name">[];

@@ -33,6 +33,7 @@ const config = {
     "import/no-anonymous-default-export": "off",
     "@next/next/no-img-element": "off",
   },
+  ignorePatterns: ["**/*/prisma/index.ts"],
 };
 
 module.exports = config;

@@ -20,16 +20,18 @@
     "paths": {
       "~/*": ["./src/*"]
     },
-    "plugins": [{ "name": "next" }]
+    "plugins": [{ "name": "next" }],
+    "typeRoots": ["./node_modules/@types", "./src/lib/types/global.d.ts"]
   },
   "include": [
     ".eslintrc.cjs",
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
     "**/*.cjs",
     "**/*.mjs",
-    ".next/types/**/*.ts"
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "next-env.d.ts",
+    "./src/**/*.d.ts"
   ],
   "exclude": ["node_modules"]
 }
