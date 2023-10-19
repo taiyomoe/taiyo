@@ -6,8 +6,6 @@ import { MediaLayout } from "./_components/layout/MediaLayout";
 import { MediaLayoutActions } from "./_components/layout/MediaLayoutActions";
 import { MediaLayoutTabs } from "./_components/layout/MediaLayoutTabs";
 
-export const runtime = "edge";
-
 type Props = {
   params: { mediaId: string };
   searchParams: Record<string, string | string[] | undefined>;

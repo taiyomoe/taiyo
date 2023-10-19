@@ -3,8 +3,6 @@ import { LatestReleases } from "./_components/LatestReleases";
 import { MediaShowcase } from "./_components/MediaShowcase";
 import { TrendingMedias } from "./_components/TrendingMedias";
 
-export const runtime = "edge";
-
 export default function HomePage() {
   return (
     <main className="flex h-full flex-col p-6">

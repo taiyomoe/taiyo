@@ -4,8 +4,6 @@ import { CompanyLogo } from "~/components/ui/CompanyLogo";
 import { getServerAuthSession } from "~/lib/auth/utils";
 import { AuthCard } from "./_components/AuthCard";
 
-export const runtime = "edge";
-
 export default async function SignInPage() {
   const session = await getServerAuthSession();
 
