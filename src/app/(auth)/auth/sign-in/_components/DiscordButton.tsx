@@ -1,24 +1,19 @@
-import type { ComponentProps } from "react";
+"use client";
 
-import { SignIn } from "~/components/auth/SignIn";
+import { Button } from "@nextui-org/button";
+import { signIn } from "next-auth/react";
+
 import { CompanyLogo } from "~/components/ui/CompanyLogo";
 
-type Props = Omit<ComponentProps<typeof SignIn>, "provider">;
-
-export const DiscordButton = (props: Props) => {
+export const DiscordButton = () => {
   return (
-    <SignIn
-      provider="discord"
-      classNames={{
-        form: "col-span-2 sm:col-span-1",
-        button:
-          "hover:bg-discord/80 text-medium w-full bg-discord font-medium text-discord-foreground",
-      }}
+    <Button
+      className="hover:bg-discord/80 w-full bg-discord text-medium font-medium text-discord-foreground"
       startContent={<CompanyLogo company="discord" height={28} />}
+      onClick={() => signIn("discord")}
       radius="full"
-      {...props}
     >
       <p className="w-full">Discord</p>
-    </SignIn>
+    </Button>
   );
 };
