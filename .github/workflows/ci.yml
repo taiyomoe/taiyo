@@ -7,12 +7,6 @@ on:
     branches: ["main"]
   merge_group:
 
-# You can leverage Vercel Remote Caching with Turbo to speed up your builds
-# @link https://turborepo.org/docs/core-concepts/remote-caching#remote-caching-on-vercel-builds
-env:
-  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-  TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
-
 jobs:
   build-lint:
     runs-on: ubuntu-latest
@@ -21,34 +15,13 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2.4.0
-
       - name: Setup Node 18
         uses: actions/setup-node@v3
         with:
           node-version: 18
 
-      - name: Get pnpm store directory
-        id: pnpm-cache
-        run: |
-          echo "pnpm_cache_dir=$(pnpm store path)" >> $GITHUB_OUTPUT
+      - name: Install deps
+        run: npm install
 
-      - name: Setup pnpm cache
-        uses: actions/cache@v3
-        with:
-          path: ${{ steps.pnpm-cache.outputs.pnpm_cache_dir }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
-
-      - name: Install deps (with cache)
-        run: pnpm install
-
-      - name: Build, lint and type-check
-        run: pnpm turbo build lint format typecheck
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-
-      - name: Check workspaces
-        run: pnpm manypkg check
+      - name: Lint and build
+        run: npm run lint && npm run build
