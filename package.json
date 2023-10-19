@@ -12,6 +12,7 @@
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
     "db:clear": "npm run with-env tsx src/lib/db/scripts/clear.ts",
+    "db:seed": "npm run db:clear && npm run db:push --force-reset && npm run with-env tsx src/lib/db/scripts/seed.ts",
     "with-env": "dotenv --"
   },
   "dependencies": {
