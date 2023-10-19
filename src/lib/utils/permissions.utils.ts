@@ -1,3 +1,5 @@
+import type { Roles } from "@prisma/client";
+
 import type {
   Actions,
   Permission,
@@ -6,7 +8,6 @@ import type {
   Resources,
   ResourcesWithoutPossession,
   ResourcesWithPossession,
-  Roles,
 } from "~/lib/types";
 
 const getPermissions = (): Permission[] => {
