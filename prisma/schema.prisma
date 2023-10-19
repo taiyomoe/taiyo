@@ -384,7 +384,7 @@ enum Flag {
 
 enum MediaType {
     MANGA
-    MANWHA
+    MANHWA
     MANHUA
     LIGHT_NOVEL
     OTHER
