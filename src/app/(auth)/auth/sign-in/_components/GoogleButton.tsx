@@ -1,25 +1,20 @@
-import type { ComponentProps } from "react";
+"use client";
 
-import { SignIn } from "~/components/auth/SignIn";
+import { Button } from "@nextui-org/button";
+import { signIn } from "next-auth/react";
+
 import { CompanyLogo } from "~/components/ui/CompanyLogo";
 
-type Props = Omit<ComponentProps<typeof SignIn>, "provider">;
-
-export const GoogleButton = (props: Props) => {
+export const GoogleButton = () => {
   return (
-    <SignIn
-      provider="discord"
-      classNames={{
-        form: "col-span-2 sm:col-span-1",
-        button:
-          "hover:bg-google/80 text-medium w-full bg-google font-medium text-google-foreground",
-      }}
+    <Button
+      className="hover:bg-google/80 w-full bg-google text-medium font-medium text-google-foreground"
       startContent={<CompanyLogo company="google" height={28} />}
+      onClick={() => signIn("google")}
       radius="full"
       isDisabled
-      {...props}
     >
       <p className="w-full">Google</p>
-    </SignIn>
+    </Button>
   );
 };
