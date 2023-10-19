@@ -6,7 +6,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@nextui-org/popover";
 import { GaugeIcon, LinkIcon } from "lucide-react";
 import { type Session } from "next-auth";
 
-import { SignOut } from "~/components/auth/SignOut";
+import { SignOutButton } from "~/components/auth/SignOutButton";
 import { SignedIn } from "~/components/utils/SignedIn";
 import { NavbarPopoversCommonOptions } from "./NavbarPopoversCommonOptions";
 
@@ -51,13 +51,7 @@ export const UserPopover = ({ session }: Props) => {
           <Divider />
           <NavbarPopoversCommonOptions />
           <Divider />
-          <SignOut
-            classNames={{ button: "min-w-[220px] font-medium text-medium" }}
-            variant="flat"
-            color="danger"
-          >
-            <p>Sair</p>
-          </SignOut>
+          <SignOutButton />
         </div>
       </PopoverContent>
     </Popover>
