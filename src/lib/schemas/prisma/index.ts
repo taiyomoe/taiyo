@@ -104,7 +104,7 @@ export const FlagSchema = z.enum(['OK','STAFF_ONLY','VIP_ONLY','LOCKED']);
 
 export type FlagType = `${z.infer<typeof FlagSchema>}`
 
-export const MediaTypeSchema = z.enum(['MANGA','MANWHA','MANHUA','LIGHT_NOVEL','OTHER']);
+export const MediaTypeSchema = z.enum(['MANGA','MANHWA','MANHUA','LIGHT_NOVEL','OTHER']);
 
 export type MediaTypeType = `${z.infer<typeof MediaTypeSchema>}`
 
