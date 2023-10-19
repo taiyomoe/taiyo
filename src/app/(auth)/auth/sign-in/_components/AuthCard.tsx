@@ -31,7 +31,7 @@ export const AuthCard = () => {
 
           <div className="grid grid-cols-2 gap-4">
             <DiscordButton />
-            <GoogleButton disabled />
+            <GoogleButton />
           </div>
         </div>
       </CardBody>
