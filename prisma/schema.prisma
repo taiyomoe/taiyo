@@ -5,6 +5,10 @@ generator client {
     provider = "prisma-client-js"
 }
 
+generator dbml {
+    provider = "prisma-dbml-generator"
+}
+
 datasource db {
     provider = "postgresql"
     // NOTE: When using mysql or sqlserver, uncomment the @db.Text annotations in model Account below
@@ -239,6 +243,7 @@ model MediaChapter {
     contentRating ContentRating         @default(NORMAL)
     flag          Flag                  @default(OK)
 
+    scans    Scan[]
     comments MediaChapterComment[]
 
     media   Media  @relation(fields: [mediaId], references: [id], onDelete: Cascade)
@@ -313,7 +318,8 @@ model Scan {
     youtube   String?
     email     String?
 
-    members ScanMember[]
+    chapters MediaChapter[]
+    members  ScanMember[]
 
     creator   User    @relation(fields: [creatorId], references: [id])
     creatorId String
