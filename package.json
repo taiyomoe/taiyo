@@ -9,12 +9,10 @@
     "dev": "next dev",
     "lint": "next lint",
     "start": "next start",
-    "clean": "git clean -xdf node_modules",
-    "clean:workspaces": "turbo clean",
-    "db:push": "pnpm -F db push",
-    "db:seed": "pnpm -F db seed",
-    "db:studio": "pnpm -F db studio",
-    "db:dbml": "pnpm -F db dbml"
+    "db:push": "prisma db push",
+    "db:studio": "prisma studio",
+    "db:clear": "npm run with-env tsx src/lib/db/scripts/clear.ts",
+    "with-env": "dotenv --"
   },
   "dependencies": {
     "@neondatabase/serverless": "^0.6.0",
@@ -59,6 +57,7 @@
     "@typescript-eslint/eslint-plugin": "^6.8.0",
     "@typescript-eslint/parser": "^6.8.0",
     "autoprefixer": "^10.4.16",
+    "dotenv-cli": "^7.3.0",
     "drizzle-dbml-generator": "^0.4.0",
     "drizzle-kit": "^0.19.13",
     "eslint": "^8.51.0",
@@ -68,6 +67,7 @@
     "prettier-plugin-tailwindcss": "^0.5.6",
     "prisma": "^5.4.2",
     "tailwindcss": "^3.3.3",
+    "tsx": "^3.14.0",
     "typescript": "^5.2.2"
   }
 }
