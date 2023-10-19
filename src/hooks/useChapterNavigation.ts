@@ -17,7 +17,7 @@ export const useChapterNavigation = () => {
 
   const [pageNumber, setPageNumber] = useState(initialPageNumber);
   const currentPageUrl = useMemo(
-    () => MediaChapterUtils.getCurrentPageUrl(chapter, navigation),
+    () => MediaChapterUtils.getCurrentPageUrl(chapter, navigation) ?? null,
     [chapter, navigation],
   );
 

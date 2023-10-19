@@ -1,5 +1,4 @@
-import { tags } from "~/lib/db/schema/tags";
-import { insertTagSchema } from "~/lib/types";
+import { insertTagSchema } from "~/lib/schemas";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const tagsRouter = createTRPCRouter({
@@ -7,15 +6,13 @@ export const tagsRouter = createTRPCRouter({
     .meta({ resource: "tags", action: "create" })
     .input(insertTagSchema)
     .mutation(async ({ ctx, input }) => {
-      const result = await ctx.db
-        .insert(tags)
-        .values({
+      const result = await ctx.db.tag.create({
+        data: {
           ...input,
           creatorId: ctx.session.user.id,
-        })
-        .returning()
-        .execute();
+        },
+      });
 
-      return result.at(0)!;
+      return result;
     }),
 });

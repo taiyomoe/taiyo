@@ -5,6 +5,20 @@ generator client {
     provider = "prisma-client-js"
 }
 
+generator json {
+    provider = "prisma-json-types-generator"
+}
+
+generator zod {
+    provider = "zod-prisma-types"
+    output   = "../src/lib/schemas/prisma"
+
+    createInputTypes       = false
+    addInputTypeValidation = false
+    addIncludeType         = false
+    addSelectType          = false
+}
+
 datasource db {
     provider = "postgresql"
     // NOTE: When using mysql or sqlserver, uncomment the @db.Text annotations in model Account below
@@ -235,7 +249,8 @@ model MediaChapter {
     number        Int
     volume        Int?
     language      MediaChapterLanguages
-    pages         Json
+    /// [MediaChapterPage]
+    pages         Json[]
     contentRating ContentRating         @default(NORMAL)
     flag          Flag                  @default(OK)
 
@@ -257,6 +272,7 @@ model MediaChapterComment {
     deletedAt DateTime?
 
     content     String
+    /// [MediaCommentAttachement]
     attachments Json[]
 
     replies MediaChapterComment[] @relation("ParentComment")

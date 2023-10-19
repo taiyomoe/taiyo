@@ -5,8 +5,6 @@ import {
   DEFAULT_MEDIA_PER_PAGE,
   MEDIA_PER_PAGE_CHOICES,
 } from "~/lib/constants";
-import { eq, sql } from "~/lib/db";
-import { mediaChapters } from "~/lib/db/schema/mediaChapters";
 import { type LatestMedia, type MediaLimited } from "~/lib/types";
 import { NotFoundError } from "../errors";
 import { createTRPCRouter, publicProcedure } from "../trpc";
@@ -30,66 +28,33 @@ export const mediasRouter = createTRPCRouter({
     )
     .query(async ({ ctx, input }) => {
       const { id: mediaId, page, perPage } = input;
-      const result = await ctx.db.query.medias.findFirst({
-        columns: { synopsis: true },
-        with: {
-          covers: {
-            columns: { id: true },
-            limit: 1,
-          },
-          banners: {
-            columns: { id: true },
-            limit: 1,
-          },
-          titles: {
-            columns: { title: true },
-            limit: 1,
-          },
-        },
-        where: (m, { eq }) => eq(m.id, mediaId),
-      });
-      /**
-       * Only top-level offsets are available in relational queries yet.
-       * In order to get pagination working, we have to do a separate query.
-       */
-      const chaptersResult = await ctx.db.query.mediaChapters.findMany({
-        columns: {
-          id: true,
-          createdAt: true,
-          title: true,
-          number: true,
-          volume: true,
-          uploaderId: true,
-        },
-        with: {
-          uploader: {
-            columns: { name: true },
-          },
-          scans: {
-            columns: { scanId: true },
-            with: {
-              scan: {
-                columns: { name: true },
-              },
+      const result = await ctx.db.media.findFirst({
+        select: {
+          _count: { select: { chapters: true } },
+          synopsis: true,
+          covers: { select: { id: true }, take: 1 },
+          banners: { select: { id: true }, take: 1 },
+          titles: { select: { title: true }, take: 1 },
+          chapters: {
+            select: {
+              id: true,
+              createdAt: true,
+              title: true,
+              number: true,
+              volume: true,
+              uploader: { select: { id: true, name: true } },
+              scans: { select: { id: true, name: true } },
             },
+            orderBy: { number: "asc" },
+            take: perPage,
+            skip: (page - 1) * perPage,
+            where: { mediaId },
           },
         },
-        orderBy: (c, { asc }) => asc(c.number),
-        limit: perPage,
-        offset: (page - 1) * perPage,
-        where: (c, { eq }) => eq(c.mediaId, mediaId),
+        where: { id: mediaId },
       });
-      /**
-       * Counting in relational queries is not yet supported by Drizzle.
-       * So as per the recommendation of the author, we have to do a separate query.
-       */
-      const countResult = await ctx.db
-        .select({ count: sql<number>`COUNT(*)` })
-        .from(mediaChapters)
-        .where(eq(mediaChapters.mediaId, mediaId))
-        .execute();
 
-      if (!result?.covers.at(0) || !result.titles.at(0) || !countResult.at(0)) {
+      if (!result?.covers.at(0) || !result.titles.at(0)) {
         throw new NotFoundError();
       }
 
@@ -100,7 +65,7 @@ export const mediasRouter = createTRPCRouter({
         coverId: result.covers.at(0)!.id,
         bannerId: result.banners.at(0)?.id ?? null,
         title: result.titles.at(0)!.title,
-        chapters: chaptersResult.map((c) => ({
+        chapters: result.chapters.map((c) => ({
           id: c.id,
           createdAt: c.createdAt,
           title: c.title,
@@ -108,31 +73,28 @@ export const mediasRouter = createTRPCRouter({
           volume: c.volume,
           // ----- RELATIONS
           uploader: {
-            id: c.uploaderId,
+            id: c.uploader.id,
             name: c.uploader.name,
           },
           scans: c.scans.map((s) => ({
-            id: s.scanId,
-            name: s.scan.name,
+            id: s.id,
+            name: s.name,
           })),
         })),
         // ----- OTHERS
-        totalPages: Math.ceil(countResult.at(0)!.count / perPage) || 1,
+        totalPages: Math.ceil(result._count.chapters / perPage) || 1,
       };
 
       return mediaLimited;
     }),
   getLatestMedias: publicProcedure.query(async ({ ctx }) => {
-    const result = await ctx.db.query.medias.findMany({
-      columns: { id: true },
-      with: {
-        covers: {
-          columns: { id: true },
-          limit: 1,
-        },
+    const result = await ctx.db.media.findMany({
+      select: {
+        id: true,
+        covers: { select: { id: true }, take: 1 },
       },
-      limit: 20,
-      orderBy: (m, { desc }) => desc(m.createdAt),
+      orderBy: { createdAt: "desc" },
+      take: 20,
     });
 
     const latestMedias: LatestMedia[] = result.map((m) => ({

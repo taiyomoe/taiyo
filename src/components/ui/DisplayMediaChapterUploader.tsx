@@ -1,9 +1,8 @@
 import Link from "next/link";
 import { Skeleton } from "@nextui-org/skeleton";
+import { type User } from "@prisma/client";
 import { UserIcon } from "lucide-react";
 import { tv } from "tailwind-variants";
-
-import { type User } from "~/lib/types";
 
 type Props = {
   uploader?: User | Pick<User, "id" | "name">;

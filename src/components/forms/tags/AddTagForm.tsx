@@ -5,22 +5,22 @@ import { toast } from "sonner";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 
 import { Form } from "~/components/generics/form/Form";
+import { insertTagSchema, type InsertTagSchema } from "~/lib/schemas";
 import { api } from "~/lib/trpc/client";
-import { insertTagSchema, type InsertTag } from "~/lib/types";
 import { AddTagFormFields } from "./AddTagFormFields";
 
-const initialValues: InsertTag = {
+const initialValues: InsertTagSchema = {
   name: "",
   description: "",
   category: "",
-  isAdult: false,
+  contentRating: "NORMAL",
   alId: 0,
 };
 
 export const AddTagForm = () => {
   const { mutate } = api.tags.add.useMutation();
 
-  const handleSubmit: FormikConfig<InsertTag>["onSubmit"] = (
+  const handleSubmit: FormikConfig<InsertTagSchema>["onSubmit"] = (
     values,
     { resetForm },
   ) => {
