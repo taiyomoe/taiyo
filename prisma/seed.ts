@@ -1,29 +1,32 @@
-import { db } from "../";
-import media1 from "../seed/medias/media-1";
-import media2 from "../seed/medias/media-2";
-import media3 from "../seed/medias/media-3";
-import media4 from "../seed/medias/media-4";
-import media5 from "../seed/medias/media-5";
-import media6 from "../seed/medias/media-6";
-import media7 from "../seed/medias/media-7";
-import media8 from "../seed/medias/media-8";
-import media9 from "../seed/medias/media-9";
-import media10 from "../seed/medias/media-10";
-import scan1 from "../seed/scans/scan-1";
-import scan2 from "../seed/scans/scan-2";
-import scan3 from "../seed/scans/scan-3";
-import scan4 from "../seed/scans/scan-4";
-import scan5 from "../seed/scans/scan-5";
-import scan6 from "../seed/scans/scan-6";
-import scan7 from "../seed/scans/scan-7";
-import scan8 from "../seed/scans/scan-8";
-import scan9 from "../seed/scans/scan-9";
-import scan10 from "../seed/scans/scan-10";
-import scan11 from "../seed/scans/scan-11";
-import tags from "../seed/tags";
-import users from "../seed/users";
+import { PrismaClient } from "@prisma/client";
 
-async function seed() {
+import media1 from "./seeds/medias/media-1";
+import media2 from "./seeds/medias/media-2";
+import media3 from "./seeds/medias/media-3";
+import media4 from "./seeds/medias/media-4";
+import media5 from "./seeds/medias/media-5";
+import media6 from "./seeds/medias/media-6";
+import media7 from "./seeds/medias/media-7";
+import media8 from "./seeds/medias/media-8";
+import media9 from "./seeds/medias/media-9";
+import media10 from "./seeds/medias/media-10";
+import scan1 from "./seeds/scans/scan-1";
+import scan2 from "./seeds/scans/scan-2";
+import scan3 from "./seeds/scans/scan-3";
+import scan4 from "./seeds/scans/scan-4";
+import scan5 from "./seeds/scans/scan-5";
+import scan6 from "./seeds/scans/scan-6";
+import scan7 from "./seeds/scans/scan-7";
+import scan8 from "./seeds/scans/scan-8";
+import scan9 from "./seeds/scans/scan-9";
+import scan10 from "./seeds/scans/scan-10";
+import scan11 from "./seeds/scans/scan-11";
+import tags from "./seeds/tags";
+import users from "./seeds/users";
+
+const db = new PrismaClient();
+
+async function main() {
   console.log("Seeding database.....");
 
   if (process.env.NODE_ENV === "development") {
@@ -60,11 +63,12 @@ async function seed() {
   }
 }
 
-seed()
-  .catch((e) => {
-    console.error(e);
-    process.exit(1);
+main()
+  .then(async () => {
+    await db.$disconnect();
   })
-  .finally(() => {
-    void db.$disconnect();
+  .catch(async (e) => {
+    console.error(e);
+    await db.$disconnect();
+    process.exit(1);
   });
