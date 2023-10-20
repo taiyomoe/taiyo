@@ -33,6 +33,7 @@ export const mediaChaptersRouter = createTRPCRouter({
           comments: true,
         },
         where: { id: chapterId },
+        cacheStrategy: { ttl: 60 },
       });
 
       if (!result?.uploader.name || !result.media.titles.at(0)) {

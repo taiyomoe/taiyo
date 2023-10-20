@@ -13,7 +13,7 @@ import superjson from "superjson";
 import { ZodError } from "zod";
 
 import { getServerAuthSession } from "~/lib/auth/utils";
-import { db } from "~/lib/db";
+import { db } from "~/lib/server/db";
 import { type Actions, type Resources } from "~/lib/types";
 import { withAuth } from "./middlewares/withAuth";
 import { withPermissions } from "./middlewares/withPermissions";

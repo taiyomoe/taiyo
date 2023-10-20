@@ -3,8 +3,8 @@ import { type Roles } from "@prisma/client";
 import { type DefaultSession, type NextAuthOptions } from "next-auth";
 import DiscordProvider from "next-auth/providers/discord";
 
-import { db } from "~/lib/db";
 import { env } from "~/lib/env.mjs";
+import { db } from "~/lib/server/db";
 import { type RefinedPermission } from "~/lib/types";
 import { PermissionUtils } from "../utils/permissions.utils";
 
