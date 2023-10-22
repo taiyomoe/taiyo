@@ -10,11 +10,11 @@ import { DisplayMediaChapterImages } from "./DisplayMediaChapterImages";
 
 const displayMediaChapterPage = tv({
   slots: {
-    container: "relative flex row pt-[60px] grid-in-chapter",
+    container: "relative flex row pt-[var(--navbar-height)] grid-in-chapter",
     leftButton:
-      "absolute z-10 h-[calc(100%-60px)] w-1/2 hover:cursor-pointer focus-visible:outline-none",
+      "absolute z-10 h-[calc(100%-var(--navbar-height))] w-1/2 hover:cursor-pointer focus-visible:outline-none",
     rightButton:
-      "absolute right-0 z-10 h-[calc(100%-60px)] w-1/2 focus-visible:outline-none",
+      "absolute right-0 z-10 h-[calc(100%-var(--navbar-height))] w-1/2 focus-visible:outline-none",
   },
 });
 
@@ -40,7 +40,7 @@ export const DisplayMediaChapterPage = () => {
   return (
     <div className={container()}>
       <button ref={backButtonRef} className={leftButton()} onClick={goBack} />
-      <div className="relative min-h-[calc(100%-60px)] w-full">
+      <div className="relative min-h-[calc(100%-var(--navbar-height))] w-full">
         <div className="flex h-full items-center overflow-x-auto">
           <DisplayMediaChapterImages />
         </div>

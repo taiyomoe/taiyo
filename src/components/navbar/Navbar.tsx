@@ -11,7 +11,7 @@ import { ReaderSidebarOpenButton } from "./ReaderSidebarOpenButton";
 const navbar = tv({
   slots: {
     container:
-      "w-auto bg-background flex flex-col h-[60px] justify-center max-h-[60px] z-20 transition-all",
+      "w-auto bg-background flex flex-col h-[var(--navbar-height)] justify-center max-h-[var(--navbar-height)] z-20 transition-all",
     contentWrapper: "items-center px-6 flex grow justify-between",
     brandContainer: "flex items-center gap-2",
     brandText: "text-xl font-semibold",

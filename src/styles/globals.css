@@ -21,6 +21,8 @@
 
     --google: white;
     --google-foreground: dark;
+
+    --navbar-height: 60px;
   }
 
   .dark {

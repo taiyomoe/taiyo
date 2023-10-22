@@ -46,7 +46,7 @@ export const ReaderSidebarLayout = () => {
   return (
     <div className={container()} aria-expanded={readerSidebarState === "show"}>
       <div className={contentWrapper()}>
-        <div className="flex min-h-[60px] items-center">
+        <div className="flex min-h-[var(--navbar-height)] items-center">
           <ReaderSidebarTitle />
         </div>
         <div className="flex flex-col gap-2">
