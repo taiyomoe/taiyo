@@ -8,7 +8,7 @@ export default function Layout({ children }: LayoutProps) {
     <div className="flex grow flex-col">
       <NavbarAuth />
       <ReaderSidebarOpenOverlay />
-      <div className="-mt-[60px] grid h-full min-h-screen w-full grid-cols-mediaChapter overflow-x-clip grid-areas-mediaChapter">
+      <div className="-mt-[var(--navbar-height)] grid h-full min-h-screen w-full grid-cols-mediaChapter overflow-x-clip grid-areas-mediaChapter">
         {children}
         <ReaderSidebarLayout />
       </div>
