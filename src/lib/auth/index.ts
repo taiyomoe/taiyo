@@ -67,7 +67,9 @@ export const authOptions: NextAuthOptions = {
         id: user.id,
         role: {
           name: user.role,
-          permissions: PermissionUtils.getRolePermissions(user.role),
+          permissions: PermissionUtils.refinePermissions(
+            PermissionUtils.getRolePermissions(user.role),
+          ),
         },
       },
     }),
