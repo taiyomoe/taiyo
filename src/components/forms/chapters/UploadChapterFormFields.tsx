@@ -1,19 +1,21 @@
 "use client";
 
 import { Button } from "@nextui-org/button";
-import { useFormikContext } from "formik";
+
+// import { useFormikContext } from "formik";
 
 import { InputFormField } from "~/components/generics/form/InputFormField";
-import { ImageDropzone } from "~/components/ui/ImageDropzone";
+import { ImageDropzone } from "~/components/ui/images/ImageDropzone";
 
 export const UploadChapterFormFields = () => {
-  const { isSubmitting, isValid, dirty } = useFormikContext();
+  // const { isSubmitting, isValid, dirty } = useFormikContext();
 
-  const shouldDisableButton = isSubmitting || !(isValid && dirty);
+  // const shouldDisableButton = isSubmitting || !(isValid && dirty);
 
   return (
     <div className="flex flex-col items-end gap-8">
       <div className="flex w-full flex-col gap-6">
+        <InputFormField name="id" label="ID do capítulo" isDisabled />
         <InputFormField name="mediaId" label="ID da obra" />
         <InputFormField name="title" label="Título" />
         <div className="flex w-full gap-6">
@@ -38,8 +40,8 @@ export const UploadChapterFormFields = () => {
         color="primary"
         type="submit"
         className="w-fit font-medium"
-        isDisabled={shouldDisableButton}
-        isLoading={isSubmitting}
+        // isDisabled={shouldDisableButton}
+        // isLoading={isSubmitting}
       >
         Adicionar
       </Button>

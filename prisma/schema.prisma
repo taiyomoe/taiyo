@@ -52,6 +52,7 @@ model User {
     createdTags           Tag[]
     createdScans          Scan[]
     scanMembers           ScanMember[]
+    uploadSessions        UploadSession[]
 
     @@index([id])
 }
@@ -305,6 +306,21 @@ model Tag {
     deleterId String?
 }
 
+model UploadSession {
+    id        String    @id @default(uuid())
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    deletedAt DateTime?
+
+    status UploadSessionStatus @default(UPLOADING)
+
+    user   User   @relation(fields: [userId], references: [id])
+    userId String
+
+    mediaId        String
+    mediaChapterId String
+}
+
 // ---- SCANS
 model Scan {
     id        String    @id @default(uuid())
@@ -461,4 +477,11 @@ enum ScanMemberPermissions {
     UPLOAD
     EDIT
     DELETE
+}
+
+enum UploadSessionStatus {
+    UPLOADING
+    PROCESSING
+    FINISHED
+    FAILED
 }

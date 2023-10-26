@@ -9,25 +9,39 @@ import {
   insertMediaChapterSchema,
   type InsertMediaChapterSchema,
 } from "~/lib/schemas/mediaChapter.schemas";
+import { api } from "~/lib/trpc/client";
 import { UploadChapterFormFields } from "./UploadChapterFormFields";
 
-const initialValues: InsertMediaChapterSchema = {
-  title: "",
-  number: 0,
-  volume: 0,
-  language: "PORTUGUESE",
-  pages: [],
-  contentRating: "NORMAL",
-  flag: "OK",
-  mediaId: "",
-  scansIds: [],
-};
-
 export const UploadChapterForm = () => {
-  const handleSubmit: FormikConfig<InsertMediaChapterSchema>["onSubmit"] =
-    () => {
-      toast.loading("Uploading...");
-    };
+  const initialValues: InsertMediaChapterSchema = {
+    id: crypto.randomUUID(),
+    title: "",
+    number: 0,
+    volume: 0,
+    language: "PORTUGUESE",
+    pages: [],
+    contentRating: "NORMAL",
+    flag: "OK",
+    mediaId: "",
+    scansIds: [],
+  };
+
+  const { mutate } = api.mediaChapters.startUploadSession.useMutation();
+
+  const handleSubmit: FormikConfig<InsertMediaChapterSchema>["onSubmit"] = ({
+    mediaId,
+  }) => {
+    toast.loading("Uploading...");
+
+    mutate(
+      { mediaId, mediaChapterId: initialValues.id },
+      {
+        onSuccess: (res) => {
+          console.log("res", res);
+        },
+      },
+    );
+  };
 
   return (
     <Form
