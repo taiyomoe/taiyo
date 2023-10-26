@@ -3,6 +3,7 @@ import { z } from "zod";
 import { MediaChapterSchema } from "./prisma";
 
 export const insertMediaChapterSchema = MediaChapterSchema.pick({
+  id: true,
   title: true,
   number: true,
   volume: true,

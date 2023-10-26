@@ -10,18 +10,25 @@ import {
 import { PanelBottomOpenIcon } from "lucide-react";
 
 import { FloatingActionButton } from "~/components/generics/buttons/FloatingActionButton";
+import { cn } from "~/utils/cn";
 
 type Props = {
   title: string;
   content: JSX.Element;
+  className?: string;
 };
 
-export const Sidebar = ({ title, content }: Props) => {
+export const Sidebar = ({ title, content, className }: Props) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   return (
     <>
-      <div className="hidden h-full min-w-[200px] max-w-[200px] rounded-tr-lg bg-content1 sm:block">
+      <div
+        className={cn(
+          "hidden h-full min-w-[200px] max-w-[200px] rounded-tr-lg bg-content1 sm:block",
+          className,
+        )}
+      >
         {content}
       </div>
       <Modal

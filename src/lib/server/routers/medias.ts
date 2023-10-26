@@ -52,7 +52,6 @@ export const mediasRouter = createTRPCRouter({
           },
         },
         where: { id: mediaId },
-        cacheStrategy: { ttl: 60 },
       });
 
       if (!result?.covers.at(0) || !result.titles.at(0)) {
@@ -96,7 +95,6 @@ export const mediasRouter = createTRPCRouter({
       },
       orderBy: { createdAt: "desc" },
       take: 20,
-      cacheStrategy: { ttl: 600 },
     });
 
     const latestMedias: LatestMedia[] = result.map((m) => ({

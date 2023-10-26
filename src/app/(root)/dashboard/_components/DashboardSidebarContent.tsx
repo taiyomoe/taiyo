@@ -5,9 +5,13 @@ import { tv } from "tailwind-variants";
 
 import { DashboardSidebarCRUDButtons } from "./DashboardSidebarCRUDButtons";
 
+type Props = {
+  className?: string;
+};
+
 const sidebarContent = tv({
   slots: {
-    container: "flex flex-col gap-4",
+    container: "flex flex-col gap-4 max-w-[inherit]",
     categorytitle:
       "uppercase text-small text-default-300 font-semibold select-none",
     categoryIndicator: "text-default-300",
@@ -16,14 +20,14 @@ const sidebarContent = tv({
   },
 });
 
-export const DashboardSidebarContent = () => {
+export const DashboardSidebarContent = ({ className }: Props) => {
   const { container, categorytitle, categoryIndicator, categoryContent } =
     sidebarContent();
 
   return (
     <Accordion
       defaultExpandedKeys={["medias", "mediaChapters", "tags"]}
-      className={container()}
+      className={container({ className })}
       selectionMode="multiple"
       showDivider={false}
       variant="light"
