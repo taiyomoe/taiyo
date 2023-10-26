@@ -9,7 +9,7 @@ type Props = {
 export const FloatingActionButton = ({ icon, onPress }: Props) => {
   return (
     <Button
-      className="fixed bottom-6 right-6 sm:hidden"
+      className="fixed bottom-6 right-6 z-40 shadow-large sm:hidden"
       startContent={icon}
       onPress={onPress}
       color="primary"
