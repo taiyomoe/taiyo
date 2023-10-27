@@ -35,7 +35,7 @@ export const env = createEnv({
    * `NEXT_PUBLIC_`.
    */
   client: {
-    // NEXT_PUBLIC_CLIENTVAR: z.string(),
+    NEXT_PUBLIC_IO_URL: z.string().url(),
   },
 
   /**
@@ -55,6 +55,8 @@ export const env = createEnv({
     // Encryption
     ENCRYPTION_KEY: process.env.ENCRYPTION_KEY,
     ENCRYPTION_IV: process.env.ENCRYPTION_IV,
+    // image-orchestrator API
+    NEXT_PUBLIC_IO_URL: process.env.NEXT_PUBLIC_IO_URL,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
