@@ -1,9 +1,12 @@
 import { useCallback } from "react";
 import { tv } from "@nextui-org/react";
-import { useAtom } from "jotai";
+import { useAtom, useSetAtom } from "jotai";
 import { useDropzone, type DropzoneProps } from "react-dropzone";
 
-import { selectedImagesAtom } from "~/atoms/imageCompression.atoms";
+import {
+  needsCompressionAtom,
+  selectedImagesAtom,
+} from "~/atoms/imageCompression.atoms";
 import { ImageSelection } from "./ImageSelection";
 import { ImageShowcase } from "./ImageShowcase";
 
@@ -25,6 +28,7 @@ const imageDropzone = tv({
 
 export const ImageDropzone = () => {
   const [selectedImages, setSelectedImages] = useAtom(selectedImagesAtom);
+  const setNeedsCompression = useSetAtom(needsCompressionAtom);
 
   const shouldDisableDropzone = selectedImages.length !== 0;
   const { container, label, contentWrapper } = imageDropzone({
@@ -36,8 +40,12 @@ export const ImageDropzone = () => {
       setSelectedImages(
         acceptedFiles.map((f) => ({ file: f, status: "pending" })),
       );
+
+      if (acceptedFiles.some((f) => f.type !== "image/jpeg")) {
+        setNeedsCompression(true);
+      }
     },
-    [setSelectedImages],
+    [setNeedsCompression, setSelectedImages],
   );
 
   const { getRootProps, getInputProps, acceptedFiles } = useDropzone({

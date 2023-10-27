@@ -1,55 +1,19 @@
 "use client";
 
-import { useCallback, useState } from "react";
 import { Button } from "@nextui-org/button";
 import { useFormikContext } from "formik";
-import { useAtom } from "jotai";
-import { toast } from "sonner";
 
-import { selectedImagesAtom } from "~/atoms/imageCompression.atoms";
 import { InputFormField } from "~/components/generics/form/InputFormField";
 import { ImageDropzone } from "~/components/ui/images/ImageDropzone";
-import { ImageUtils } from "~/lib/utils/image.utils";
+import { useChapterImageCompression } from "~/hooks/useChapterImageCompression";
 
 export const UploadChapterFormFields = () => {
   const { isSubmitting, isValid, dirty } = useFormikContext();
-  const [selectedImages, setSelectedImages] = useAtom(selectedImagesAtom);
-  const [compressed, setCompressed] = useState(false);
+  const { needsCompression, handleCompressImages } =
+    useChapterImageCompression();
 
-  const shouldDisableButton = isSubmitting || !(isValid && dirty);
-
-  const handleCompressImages = useCallback(() => {
-    setCompressed((prev) => !prev);
-
-    const promise = () =>
-      Promise.all(
-        selectedImages.map(async (img) => {
-          setSelectedImages((prev) =>
-            prev.map((i) =>
-              i.file.name === img.file.name
-                ? { file: img.file, status: "compressing" }
-                : i,
-            ),
-          );
-
-          const result = await ImageUtils.compress(img.file);
-
-          setSelectedImages((prev) =>
-            prev.map((i) =>
-              i.file.name === img.file.name
-                ? { file: result, status: "compressed" }
-                : i,
-            ),
-          );
-        }),
-      );
-
-    toast.promise(promise, {
-      loading: "Compressing images...",
-      success: "Images compressed!",
-      error: "Error while compressing images",
-    });
-  }, [selectedImages, setSelectedImages]);
+  const shouldDisableButton =
+    needsCompression || isSubmitting || !(isValid && dirty);
 
   return (
     <div className="flex flex-col gap-8">
@@ -80,7 +44,7 @@ export const UploadChapterFormFields = () => {
           className="w-fit font-medium"
           variant="flat"
           onClick={handleCompressImages}
-          isDisabled={compressed}
+          isDisabled={!needsCompression}
         >
           Comprimir
         </Button>

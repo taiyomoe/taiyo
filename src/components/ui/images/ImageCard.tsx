@@ -18,7 +18,7 @@ const imageCard = tv({
     lowerContentContainer: "flex grow flex-col justify-end gap-1",
     fileNameText: "line-clamp-1 h-fit text-ellipsis",
     filePositionText: "px-2",
-    fileSizeText: "w-fit rounded-lg px-2 py-1 bg-warning-200",
+    fileSizeText: "w-fit rounded-lg px-2 py-1",
     fileTypeText: "w-fit rounded-lg px-2 py-1",
   },
   variants: {
@@ -28,9 +28,7 @@ const imageCard = tv({
         container: "opacity-10",
         spinner: "block",
       },
-      compressed: {
-        fileSizeText: "bg-success-200",
-      },
+      compressed: {},
     },
     isJpeg: {
       true: {
