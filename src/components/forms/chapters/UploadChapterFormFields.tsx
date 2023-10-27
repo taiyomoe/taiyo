@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { Button } from "@nextui-org/button";
 import { useFormikContext } from "formik";
 import { useAtom } from "jotai";
@@ -14,10 +14,13 @@ import { ImageUtils } from "~/lib/utils/image.utils";
 export const UploadChapterFormFields = () => {
   const { isSubmitting, isValid, dirty } = useFormikContext();
   const [selectedImages, setSelectedImages] = useAtom(selectedImagesAtom);
+  const [compressed, setCompressed] = useState(false);
 
   const shouldDisableButton = isSubmitting || !(isValid && dirty);
 
   const handleCompressImages = useCallback(() => {
+    setCompressed((prev) => !prev);
+
     const promise = () =>
       Promise.all(
         selectedImages.map(async (img) => {
@@ -79,6 +82,7 @@ export const UploadChapterFormFields = () => {
           className="w-fit font-medium"
           variant="flat"
           onClick={handleCompressImages}
+          isDisabled={compressed}
         >
           Comprimir
         </Button>
