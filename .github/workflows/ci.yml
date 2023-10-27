@@ -8,14 +8,9 @@ on:
   merge_group:
 
 env:
-  DATABASE_URL: ${{ secrets.DATABASE_URL }}
-  DIRECT_DATABASE_URL: ${{ secrets.DATABASE_URL }}
-  NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
-  NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
-  DISCORD_CLIENT_ID: ${{ secrets.DISCORD_CLIENT_ID }}
-  DISCORD_CLIENT_SECRET: ${{ secrets.DISCORD_CLIENT_SECRET }}
   NODE_ENV: "production"
   NPM_CONFIG_PRODUCTION: "false"
+  SKIP_ENV_VALIDATION: "true"
 
 jobs:
   build-lint:
