@@ -52,3 +52,5 @@ export type SelectedImage = {
   file: File;
   status: "pending" | "compressing" | "compressed";
 };
+
+export type SuccessfulUploadResponse = { pages: string[] };

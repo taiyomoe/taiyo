@@ -1,15 +1,13 @@
 "use client";
 
-import type { FormikConfig } from "formik";
-import { toast } from "sonner";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 
 import { Form } from "~/components/generics/form/Form";
+import { useChapterUpload } from "~/hooks/useChapterUpload";
 import {
   insertMediaChapterSchema,
   type InsertMediaChapterSchema,
 } from "~/lib/schemas/mediaChapter.schemas";
-import { api } from "~/lib/trpc/client";
 import { UploadChapterFormFields } from "./UploadChapterFormFields";
 
 const initialValues: InsertMediaChapterSchema = {
@@ -26,22 +24,7 @@ const initialValues: InsertMediaChapterSchema = {
 };
 
 export const UploadChapterForm = () => {
-  const { mutate } = api.mediaChapters.startUploadSession.useMutation();
-
-  const handleSubmit: FormikConfig<InsertMediaChapterSchema>["onSubmit"] = ({
-    mediaId,
-  }) => {
-    toast.loading("Uploading...");
-
-    mutate(
-      { mediaId, mediaChapterId: initialValues.id },
-      {
-        onSuccess: (res) => {
-          console.log("res", res);
-        },
-      },
-    );
-  };
+  const { handleSubmit } = useChapterUpload(initialValues);
 
   return (
     <Form

@@ -1,6 +1,7 @@
 import { DateTime } from "luxon";
 
 import { CDN_DOMAIN } from "~/lib/constants";
+import { env } from "~/lib/env.mjs";
 import type {
   MediaChapterGroups,
   MediaChapterLimited,
@@ -19,6 +20,8 @@ const getUrl = (
 ) => {
   return `/chapter/${mediaChapter.id}/1`;
 };
+
+const getUploadEndpoint = () => env.NEXT_PUBLIC_IO_URL + "/upload";
 
 const getNavigation = (
   mediaChapter: MediaChapterLimited,
@@ -128,6 +131,7 @@ const parseUrl = (pathname: string) => {
 export const MediaChapterUtils = {
   getTitle,
   getUrl,
+  getUploadEndpoint,
   getNavigation,
   getPageUrl,
   getCurrentPage,
