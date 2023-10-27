@@ -16,7 +16,7 @@ export const Providers = (props: ProviderProps) => {
     <TRPCReactProvider headers={props.headers}>
       <NextUIProvider>
         <ThemeProvider attribute="class" defaultTheme="dark">
-          <Toaster richColors />
+          <Toaster richColors closeButton />
           {props.children}
         </ThemeProvider>
       </NextUIProvider>

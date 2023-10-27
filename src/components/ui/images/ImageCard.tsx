@@ -1,48 +1,46 @@
-import { tv } from "@nextui-org/react";
-import { GripHorizontalIcon } from "lucide-react";
+import { Spinner } from "@nextui-org/react";
 import prettyBytes from "pretty-bytes";
 
+import { type SelectedImage } from "~/lib/types";
+import { cn } from "~/utils/cn";
+
 type Props = {
-  file: File;
-};
+  position: string;
+} & SelectedImage;
 
-const imageCard = tv({
-  slots: {
-    container: "relative flex gap-2 rounded-medium max-w-full",
-    image: "object-cover w-[100px] md:w-[150px] h-[150px] rounded-l-medium",
-    contentWrapper: "p-2 flex grow flex-col justify-between",
-    iconContainer: "items-center p-2 hidden sm:flex",
-    fileNameText: "line-clamp-1 h-fit text-ellipsis",
-    fileDetailsContainer: "flex flex-col gap-1",
-  },
-});
-
-export const ImageCard = ({ file }: Props) => {
-  const {
-    container,
-    image,
-    iconContainer,
-    contentWrapper,
-    fileNameText,
-    fileDetailsContainer,
-  } = imageCard();
-
+export const ImageCard = ({ file, status, position }: Props) => {
   return (
-    <div className={container()}>
+    <div
+      className={cn(
+        "relative flex max-w-full gap-2 rounded-medium bg-default-200",
+        { "opacity-10": status === "compressing" },
+      )}
+    >
+      <Spinner
+        className={cn(
+          "absolute left-[calc(50%-20px)] top-[calc(50%-20px)] hidden",
+          {
+            block: status === "compressing",
+          },
+        )}
+        size="lg"
+      />
       <img
-        className={image()}
+        className="h-[150px] w-[100px] rounded-l-medium object-cover md:w-[150px]"
         src={URL.createObjectURL(file)}
         alt={`image preview`}
       />
-      <div className={contentWrapper()}>
-        <p className={fileNameText()}>{file.name}</p>
-        <div className={fileDetailsContainer()}>
-          <p>Tamanho: {prettyBytes(file.size)}</p>
-          <p>Extensão: {file.type}</p>
+      <div className="flex grow flex-col gap-2 p-2">
+        <div className="flex justify-between gap-2">
+          <p className="line-clamp-1 h-fit text-ellipsis">{file.name}</p>
+          <p className="px-2">{position}</p>
         </div>
-      </div>
-      <div className={iconContainer()}>
-        <GripHorizontalIcon size={32} />
+        <div className="flex grow justify-between">
+          <div className="flex flex-col justify-end gap-1">
+            <p>Tamanho: {prettyBytes(file.size)}</p>
+            <p>Extensão: {file.type}</p>
+          </div>
+        </div>
       </div>
     </div>
   );

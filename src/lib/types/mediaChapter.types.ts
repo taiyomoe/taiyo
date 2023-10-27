@@ -47,3 +47,8 @@ export type MediaChapterNavigation = {
   currentPage: number;
   nextPage: number | null;
 };
+
+export type SelectedImage = {
+  file: File;
+  status: "pending" | "compressing" | "compressed";
+};

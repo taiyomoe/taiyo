@@ -41,6 +41,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-dropzone": "^14.2.3",
+    "react-image-file-resizer": "^0.4.8",
     "sonner": "^1.0.3",
     "superjson": "^2.2.0",
     "swiper": "^11.0.3",

@@ -1,38 +1,21 @@
-"use client";
+import { useAtomValue } from "jotai";
 
-import { useState } from "react";
-import { tv } from "@nextui-org/react";
-import { Reorder } from "framer-motion";
-
+import { selectedImagesAtom } from "~/atoms/imageCompression.atoms";
 import { ImageCard } from "./ImageCard";
 
-type Props = {
-  images: File[];
-};
-
-const imageShowcase = tv({
-  slots: {
-    reorderGroup: "flex flex-col gap-2",
-    reorderItem: "bg-default-200 rounded-medium",
-  },
-});
-
-export const ImageShowcase = ({ images }: Props) => {
-  const { reorderGroup, reorderItem } = imageShowcase();
-  const [items, setItems] = useState(images);
+export const ImageShowcase = () => {
+  const selectedImages = useAtomValue(selectedImagesAtom);
 
   return (
-    <Reorder.Group
-      className={reorderGroup()}
-      values={items}
-      onReorder={setItems}
-      axis="y"
-    >
-      {items.map((item) => (
-        <Reorder.Item className={reorderItem()} key={item.name} value={item}>
-          <ImageCard file={item} />
-        </Reorder.Item>
+    <div className="flex flex-col gap-2">
+      {selectedImages.map(({ file, status }, i) => (
+        <ImageCard
+          key={file.name}
+          file={file}
+          status={status}
+          position={`${i + 1}/${selectedImages.length}`}
+        />
       ))}
-    </Reorder.Group>
+    </div>
   );
 };
