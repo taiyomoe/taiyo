@@ -33,8 +33,6 @@ export const ImageDropzone = () => {
 
   const onDrop: DropzoneProps["onDrop"] = useCallback(
     (acceptedFiles: File[]) => {
-      console.log("acceptedFiles", acceptedFiles);
-
       setSelectedImages(
         acceptedFiles.map((f) => ({ file: f, status: "pending" })),
       );

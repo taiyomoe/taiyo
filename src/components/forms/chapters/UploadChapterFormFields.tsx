@@ -51,8 +51,6 @@ export const UploadChapterFormFields = () => {
     });
   }, [selectedImages, setSelectedImages]);
 
-  console.log("selectedImages", selectedImages);
-
   return (
     <div className="flex flex-col gap-8">
       <div className="flex w-full flex-col gap-6">
