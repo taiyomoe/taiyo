@@ -1,11 +1,39 @@
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
+import { insertMediaChapterSchema } from "~/lib/schemas/mediaChapter.schemas";
 import { type MediaChapterLimited } from "~/lib/types";
 import { EncryptionUtils } from "~/lib/utils/encryption.utils";
 import { NotFoundError } from "../errors";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const mediaChaptersRouter = createTRPCRouter({
+  create: protectedProcedure
+    .meta({ resource: "mediaChapters", action: "create" })
+    .input(insertMediaChapterSchema)
+    .mutation(async ({ ctx, input: { pages, scansIds, ...input } }) => {
+      const scans = await ctx.db.scan.findMany({
+        where: { id: { in: scansIds } },
+      });
+
+      if (scans.length !== scansIds.length) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Uma ou várias scans não existem.",
+        });
+      }
+
+      const result = await ctx.db.mediaChapter.create({
+        data: {
+          ...input,
+          pages: pages.map((page) => ({ id: page })),
+          uploaderId: ctx.session.user.id,
+        },
+      });
+
+      return result;
+    }),
+
   getById: publicProcedure
     .input(z.string())
     .query(async ({ ctx, input: chapterId }) => {

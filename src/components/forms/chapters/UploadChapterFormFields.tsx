@@ -1,9 +1,14 @@
 "use client";
 
+import { Badge } from "@nextui-org/badge";
 import { Button } from "@nextui-org/button";
+import { Tooltip } from "@nextui-org/react";
+import { ContentRating, Flag, MediaChapterLanguages } from "@prisma/client";
 import { useFormikContext } from "formik";
+import { AlertCircleIcon } from "lucide-react";
 
 import { InputFormField } from "~/components/generics/form/InputFormField";
+import { SelectFormField } from "~/components/generics/form/SelectFormField";
 import { ImageDropzone } from "~/components/ui/images/ImageDropzone";
 import { useChapterImageCompression } from "~/hooks/useChapterImageCompression";
 
@@ -19,8 +24,41 @@ export const UploadChapterFormFields = () => {
     <div className="flex flex-col gap-8">
       <div className="flex w-full flex-col gap-6">
         <InputFormField name="id" label="ID do capítulo" isDisabled />
-        <InputFormField name="mediaId" label="ID da obra" />
+        <Tooltip content="Temporário">
+          <Badge
+            isOneChar
+            content={<AlertCircleIcon />}
+            color="warning"
+            size="lg"
+            placement="top-right"
+            className="right-1"
+          >
+            <InputFormField
+              name="mediaId"
+              label="ID da obra"
+              className="w-full"
+            />
+          </Badge>
+        </Tooltip>
         <InputFormField name="title" label="Título" />
+        <Tooltip content="Temporário">
+          <Badge
+            isOneChar
+            content={<AlertCircleIcon />}
+            color="warning"
+            size="lg"
+            placement="top-right"
+            className="right-1 top-7"
+          >
+            <InputFormField
+              name="scansIds"
+              label="IDs das scans"
+              labelPlacement="outside"
+              className="w-full"
+              placeholder="Separe os IDs por uma vírgula"
+            />
+          </Badge>
+        </Tooltip>
         <div className="flex w-full gap-6">
           <InputFormField
             name="number"
@@ -37,6 +75,32 @@ export const UploadChapterFormFields = () => {
             className="w-full"
           />
         </div>
+      </div>
+      <div className="flex w-full gap-6">
+        <SelectFormField
+          name="contentRating"
+          label="Classificação do conteúdo"
+          labelPlacement="outside"
+          className="w-full"
+          items={ContentRating}
+          isDisabled
+        />
+        <SelectFormField
+          name="flag"
+          label="Flag"
+          labelPlacement="outside"
+          className="w-full"
+          items={Flag}
+          isDisabled
+        />
+        <SelectFormField
+          name="language"
+          label="Idioma"
+          labelPlacement="outside"
+          className="w-full"
+          items={MediaChapterLanguages}
+          isDisabled
+        />
       </div>
       <ImageDropzone />
       <div className="flex justify-end gap-6">
