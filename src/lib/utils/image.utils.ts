@@ -1,3 +1,5 @@
+import { extname } from "path";
+
 const convert = async (source: File) => {
   const image = await createImageBitmap(source);
 
@@ -24,7 +26,7 @@ const convert = async (source: File) => {
 
   image.close();
 
-  return new File([result], source.name, {
+  return new File([result], source.name.replace(extname(source.name), ".jpg"), {
     lastModified: Date.now(),
     type: "image/jpeg",
   });
