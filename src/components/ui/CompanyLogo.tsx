@@ -25,7 +25,7 @@ export const CompanyLogo = ({
   };
 
   return (
-    <div className="flex items-center justify-center">
+    <div className="flex select-none items-center justify-center">
       <Image
         src={getSource(company)}
         width={width ?? 0} // Set width explicitly
