@@ -58,8 +58,8 @@ export const ImageDropzone = () => {
       <p className={label()}>Imagens</p>
       <div {...getRootProps({ className: contentWrapper() })}>
         <input {...getInputProps()} disabled={acceptedFiles.length !== 0} />
-        {acceptedFiles.length === 0 && <ImageSelection />}
-        {acceptedFiles.length > 0 && <ImageShowcase />}
+        {selectedImages.length === 0 && <ImageSelection />}
+        {selectedImages.length > 0 && <ImageShowcase />}
       </div>
     </section>
   );

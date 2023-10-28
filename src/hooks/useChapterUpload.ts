@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { type FormikConfig } from "formik";
-import { useAtomValue } from "jotai";
+import { useAtom } from "jotai";
 import { toast } from "sonner";
 
 import { selectedImagesAtom } from "~/atoms/imageCompression.atoms";
@@ -10,7 +10,7 @@ import { type SuccessfulUploadResponse } from "~/lib/types";
 import { MediaChapterUtils } from "~/utils/MediaChapterUtils";
 
 export const useChapterUpload = (initialValues: InsertMediaChapterSchema) => {
-  const selectedImages = useAtomValue(selectedImagesAtom);
+  const [selectedImages, setSelectedImages] = useAtom(selectedImagesAtom);
 
   const { mutateAsync: startUploadSession } =
     api.mediaChapters.startUploadSession.useMutation();
@@ -43,9 +43,10 @@ export const useChapterUpload = (initialValues: InsertMediaChapterSchema) => {
     },
   });
 
-  const handleSubmit: FormikConfig<InsertMediaChapterSchema>["onSubmit"] = ({
-    mediaId,
-  }) => {
+  const handleSubmit: FormikConfig<InsertMediaChapterSchema>["onSubmit"] = (
+    { mediaId },
+    { resetForm, setSubmitting },
+  ) => {
     const upload = async () => {
       const authToken = await startUploadSession({
         mediaId,
@@ -59,12 +60,18 @@ export const useChapterUpload = (initialValues: InsertMediaChapterSchema) => {
           `https://cdn.taiyo.moe/${initialValues.mediaId}/${initialValues.id}/${x}.png`,
         );
       });
+
+      resetForm();
+      setSelectedImages([]);
     };
 
     toast.promise(upload, {
       loading: "Upando o capítulo...",
       success: "Capítulo upado!",
       error: "Ocorreu um erro ao upar o capítulo.",
+      finally: () => {
+        setSubmitting(false);
+      },
     });
   };
 
