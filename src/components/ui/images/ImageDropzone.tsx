@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { tv } from "@nextui-org/react";
 import { useAtom, useSetAtom } from "jotai";
 import { useDropzone, type DropzoneProps } from "react-dropzone";
@@ -52,6 +52,13 @@ export const ImageDropzone = () => {
     onDrop,
     disabled: shouldDisableDropzone,
   });
+
+  useEffect(() => {
+    return () => {
+      setSelectedImages([]);
+      setNeedsCompression(false);
+    };
+  }, [setSelectedImages, setNeedsCompression]);
 
   return (
     <section className={container()}>
