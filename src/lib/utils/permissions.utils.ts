@@ -147,6 +147,19 @@ const refinePermission = (permission: Permission): RefinedPermission => {
 const refinePermissions = (permissions: Permission[]): RefinedPermission[] =>
   permissions.map(refinePermission);
 
+// const unrefinePermissions = (
+//   refinedPermissions: RefinedPermission[],
+// ): Permission[] =>
+//   refinedPermissions.map(
+//     (rp) =>
+//       `${rp.resource}:${rp.action}${
+//         rp.posession ? `:${rp.posession}` : ""
+//       }` as Permission,
+//   );
+
+const canAccessDashboard = (permissions: Permission[]) =>
+  permissions.filter((p) => !getUserPermissions().includes(p)).length !== 0;
+
 export const PermissionUtils = {
   getPermissions,
   getUserPermissions,
@@ -159,4 +172,5 @@ export const PermissionUtils = {
   getResourcesWithoutPosession,
   refinePermission,
   refinePermissions,
+  canAccessDashboard,
 };

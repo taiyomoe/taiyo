@@ -1,11 +1,15 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import { type Roles } from "@prisma/client";
-import { type DefaultSession, type NextAuthOptions } from "next-auth";
+import { type User } from "@prisma/client";
+import {
+  type AdapterUser,
+  type DefaultSession,
+  type NextAuthOptions,
+} from "next-auth";
 import DiscordProvider from "next-auth/providers/discord";
 
 import { env } from "~/lib/env.mjs";
 import { db } from "~/lib/server/db";
-import { type RefinedPermission } from "~/lib/types";
+import { type Permission, type RefinedPermission } from "~/lib/types";
 import { PermissionUtils } from "../utils/permissions.utils";
 
 /**
@@ -15,11 +19,12 @@ import { PermissionUtils } from "../utils/permissions.utils";
  * @see https://next-auth.js.org/getting-started/typescript#module-augmentation
  */
 declare module "next-auth" {
+  type AdapterUser = User;
+
   interface Session extends DefaultSession {
     user: {
+      /** The user's ID */
       id: string;
-      // ...other properties
-      // role: UserRole;
       /** The user's current role and permissions. */
       role: {
         name: string;
@@ -27,10 +32,15 @@ declare module "next-auth" {
       };
     } & DefaultSession["user"];
   }
+}
 
-  interface User {
+declare module "next-auth/jwt" {
+  interface JWT {
     /** The user's current role */
-    role: Roles;
+    role: {
+      name: string;
+      permissions: Permission[];
+    };
   }
 }
 
@@ -59,18 +69,28 @@ export const authOptions: NextAuthOptions = {
   pages: {
     signIn: "/auth/sign-in",
   },
+  session: { strategy: "jwt" },
   callbacks: {
-    session: ({ session, user }) => ({
+    jwt: ({ user, token }) => {
+      if (!user || !("role" in user)) {
+        return token;
+      }
+
+      const adapterUser = user as AdapterUser;
+
+      token.role = {
+        name: adapterUser.role,
+        permissions: PermissionUtils.getRolePermissions(adapterUser.role),
+      };
+
+      return token;
+    },
+    session: ({ session, token }) => ({
       ...session,
       user: {
         ...session.user,
-        id: user.id,
-        role: {
-          name: user.role,
-          permissions: PermissionUtils.refinePermissions(
-            PermissionUtils.getRolePermissions(user.role),
-          ),
-        },
+        id: token.sub,
+        role: token.role,
       },
     }),
   },
