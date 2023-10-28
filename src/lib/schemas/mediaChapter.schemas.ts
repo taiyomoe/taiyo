@@ -16,7 +16,17 @@ export const insertMediaChapterSchema = z.object({
   contentRating: ContentRatingSchema,
   flag: FlagSchema,
   mediaId: z.string().uuid(),
-  scansIds: z.array(z.string().uuid()),
+  /**
+   * This takes a comma-separated list (raw string) of scan IDs.
+   * The string is split into an array and then each string is trimmed.
+   */
+  scansIds: z.preprocess(
+    (val) =>
+      String(val ?? "")
+        .split(",")
+        .filter((x) => x.length > 0),
+    z.array(z.string().trim().uuid()),
+  ),
 });
 
 export type InsertMediaChapterSchema = typeof insertMediaChapterSchema._type;

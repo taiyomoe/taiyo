@@ -1,4 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
+import { TRPCClientError } from "@trpc/client";
 import { type FormikConfig } from "formik";
 import { useAtom } from "jotai";
 import { toast } from "sonner";
@@ -37,29 +38,24 @@ export const useChapterUpload = (initialValues: InsertMediaChapterSchema) => {
 
       const data = (await response.json()) as SuccessfulUploadResponse;
 
-      console.log("data", data);
-
       return data;
     },
   });
+  const { mutateAsync: createChapter } = api.mediaChapters.create.useMutation();
 
   const handleSubmit: FormikConfig<InsertMediaChapterSchema>["onSubmit"] = (
-    { mediaId },
+    values,
     { resetForm, setSubmitting },
   ) => {
     const upload = async () => {
       const authToken = await startUploadSession({
-        mediaId,
+        mediaId: values.mediaId,
         mediaChapterId: initialValues.id,
       });
 
       const { pages } = await uploadImages({ authToken });
 
-      pages.forEach((x) => {
-        console.log(
-          `https://cdn.taiyo.moe/${initialValues.mediaId}/${initialValues.id}/${x}.png`,
-        );
-      });
+      await createChapter({ ...values, pages });
 
       resetForm();
       setSelectedImages([]);
@@ -68,7 +64,10 @@ export const useChapterUpload = (initialValues: InsertMediaChapterSchema) => {
     toast.promise(upload, {
       loading: "Upando o capítulo...",
       success: "Capítulo upado!",
-      error: "Ocorreu um erro ao upar o capítulo.",
+      error: (err) =>
+        err instanceof TRPCClientError
+          ? err.message
+          : "Erro ao upar o capítulo",
       finally: () => {
         setSubmitting(false);
       },
