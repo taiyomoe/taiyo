@@ -1,22 +1,63 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { withAuth } from "next-auth/middleware";
 
+import { PermissionUtils } from "./lib/utils/permissions.utils";
 import { MediaChapterUtils } from "./utils/MediaChapterUtils";
 
-// This function can be marked `async` if using `await` inside
-export function middleware(request: NextRequest) {
-  const parsedUrl = MediaChapterUtils.parseUrl(request.nextUrl.pathname);
+const chapterMiddleware = (req: NextRequest) => {
+  const parsedUrl = MediaChapterUtils.parseUrl(req.nextUrl.pathname);
 
   if (!parsedUrl.currentPageNumber) {
     return NextResponse.redirect(
-      new URL(parsedUrl.rawPathname + "/1", request.url),
+      new URL(parsedUrl.rawPathname + "/1", req.url),
     );
   }
 
   return NextResponse.next();
-}
+};
+
+export default withAuth(
+  (req: NextRequest) => {
+    const pathname = req.nextUrl.pathname;
+
+    if (pathname.startsWith("/chapter/")) {
+      return chapterMiddleware(req);
+    }
+
+    return NextResponse.next();
+  },
+  {
+    callbacks: {
+      authorized: ({ req, token }) => {
+        const pathname = req.nextUrl.pathname;
+
+        if (pathname.startsWith("/chapter/")) {
+          return true;
+        }
+
+        if (!token) {
+          return false;
+        }
+
+        switch (true) {
+          case pathname === "/dashboard":
+            return PermissionUtils.canAccessDashboard(token.role.permissions);
+          case pathname === "/dashboard/medias/add":
+            return token.role.permissions.includes("medias:create");
+          case pathname === "/dashboard/chapters/upload":
+            return token.role.permissions.includes("mediaChapters:create");
+          case pathname === "/dashboard/tags/add":
+            return token.role.permissions.includes("tags:create");
+          default:
+            return false;
+        }
+      },
+    },
+  },
+);
 
 // See "Matching Paths" below to learn more
 export const config = {
-  matcher: "/chapter/:path*",
+  matcher: ["/chapter/:path*", "/dashboard/:path*"],
 };
