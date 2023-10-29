@@ -26,7 +26,7 @@ export const DashboardSidebarContent = ({ className }: Props) => {
 
   return (
     <Accordion
-      defaultExpandedKeys={["medias", "mediaChapters", "tags"]}
+      defaultExpandedKeys={["medias", "mediaChapters", "tags", "scans"]}
       className={container({ className })}
       selectionMode="multiple"
       showDivider={false}
@@ -66,16 +66,6 @@ export const DashboardSidebarContent = ({ className }: Props) => {
             label: "Upar",
             href: "/dashboard/chapters/upload",
           }}
-          update={{
-            label: "Editar",
-            href: "/dashboard/chapters/edit",
-            isDisabled: true,
-          }}
-          del={{
-            label: "Deletar",
-            href: "/dashboard/chapters/delete",
-            isDisabled: true,
-          }}
         />
       </AccordionItem>
 
@@ -94,15 +84,23 @@ export const DashboardSidebarContent = ({ className }: Props) => {
             label: "Adicionar",
             href: "/dashboard/tags/add",
           }}
-          update={{
-            label: "Editar",
-            href: "/dashboard/tags/edit",
-            isDisabled: true,
-          }}
-          del={{
-            label: "Deletar",
-            href: "/dashboard/tags/delete",
-            isDisabled: true,
+        />
+      </AccordionItem>
+
+      {/* SCANS */}
+      <AccordionItem
+        classNames={{
+          title: categorytitle(),
+          indicator: categoryIndicator(),
+          content: categoryContent(),
+        }}
+        title="— Scans"
+        key="scans"
+      >
+        <DashboardSidebarCRUDButtons
+          create={{
+            label: "Adicionar",
+            href: "/dashboard/scans/add",
           }}
         />
       </AccordionItem>
