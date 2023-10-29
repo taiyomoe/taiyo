@@ -49,6 +49,8 @@ export default withAuth(
             return token.role.permissions.includes("mediaChapters:create");
           case pathname === "/dashboard/tags/add":
             return token.role.permissions.includes("tags:create");
+          case pathname === "/dashboard/scans/add":
+            return token.role.permissions.includes("scans:create");
           default:
             return false;
         }
