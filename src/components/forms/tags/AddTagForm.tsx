@@ -37,12 +37,12 @@ export const AddTagForm = () => {
   };
 
   return (
-    <Form
+    <Form.Component
       initialValues={initialValues}
       validationSchema={toFormikValidationSchema(insertTagSchema)}
       onSubmit={handleSubmit}
     >
       <AddTagFormFields />
-    </Form>
+    </Form.Component>
   );
 };

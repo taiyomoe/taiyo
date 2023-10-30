@@ -7,6 +7,7 @@ import { ContentRating, Flag, MediaChapterLanguages } from "@prisma/client";
 import { useFormikContext } from "formik";
 import { AlertCircleIcon } from "lucide-react";
 
+import { Form } from "~/components/generics/form/Form";
 import { InputFormField } from "~/components/generics/form/InputFormField";
 import { SelectFormField } from "~/components/generics/form/SelectFormField";
 import { ImageDropzone } from "~/components/ui/images/ImageDropzone";
@@ -21,8 +22,8 @@ export const UploadChapterFormFields = () => {
     needsCompression || isSubmitting || !(isValid && dirty);
 
   return (
-    <div className="flex flex-col gap-8">
-      <div className="flex w-full flex-col gap-6">
+    <Form.Layout>
+      <Form.Category>
         <InputFormField name="id" label="ID do capítulo" isDisabled />
         <Tooltip content="Temporário">
           <Badge
@@ -59,7 +60,9 @@ export const UploadChapterFormFields = () => {
             />
           </Badge>
         </Tooltip>
-        <div className="flex w-full gap-6">
+      </Form.Category>
+      <Form.Category title="Detalhes">
+        <Form.Row>
           <InputFormField
             name="number"
             label="Número"
@@ -74,36 +77,38 @@ export const UploadChapterFormFields = () => {
             placeholder="Ex: 1"
             className="w-full"
           />
-        </div>
-      </div>
-      <div className="flex w-full gap-6">
-        <SelectFormField
-          name="contentRating"
-          label="Classificação do conteúdo"
-          labelPlacement="outside"
-          className="w-full"
-          items={ContentRating}
-          isDisabled
-        />
-        <SelectFormField
-          name="flag"
-          label="Flag"
-          labelPlacement="outside"
-          className="w-full"
-          items={Flag}
-          isDisabled
-        />
-        <SelectFormField
-          name="language"
-          label="Idioma"
-          labelPlacement="outside"
-          className="w-full"
-          items={MediaChapterLanguages}
-          isDisabled
-        />
-      </div>
-      <ImageDropzone />
-      <div className="flex justify-end gap-6">
+        </Form.Row>
+        <Form.Row>
+          <SelectFormField
+            name="contentRating"
+            label="Classificação do conteúdo"
+            labelPlacement="outside"
+            className="w-full"
+            items={ContentRating}
+            isDisabled
+          />
+          <SelectFormField
+            name="flag"
+            label="Flag"
+            labelPlacement="outside"
+            className="w-full"
+            items={Flag}
+            isDisabled
+          />
+          <SelectFormField
+            name="language"
+            label="Idioma"
+            labelPlacement="outside"
+            className="w-full"
+            items={MediaChapterLanguages}
+            isDisabled
+          />
+        </Form.Row>
+      </Form.Category>
+      <Form.Category title="Imagens">
+        <ImageDropzone />
+      </Form.Category>
+      <Form.Actions>
         <Button
           className="w-fit font-medium"
           variant="flat"
@@ -121,7 +126,7 @@ export const UploadChapterFormFields = () => {
         >
           Adicionar
         </Button>
-      </div>
-    </div>
+      </Form.Actions>
+    </Form.Layout>
   );
 };

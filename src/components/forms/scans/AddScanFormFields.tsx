@@ -1,8 +1,7 @@
-"use client";
-
 import { Button } from "@nextui-org/button";
 import { useFormikContext } from "formik";
 
+import { Form } from "~/components/generics/form/Form";
 import { InputFormField } from "~/components/generics/form/InputFormField";
 import { TextAreaFormField } from "~/components/generics/form/TextAreaFormField";
 
@@ -12,8 +11,8 @@ export const AddScanFormFields = () => {
   const shouldDisableButton = isSubmitting || !(isValid && dirty);
 
   return (
-    <div className="flex flex-col items-end gap-8">
-      <div className="flex w-full flex-col gap-6">
+    <Form.Layout>
+      <Form.Category>
         <InputFormField name="name" label="Nome" />
         <TextAreaFormField
           name="description"
@@ -21,80 +20,98 @@ export const AddScanFormFields = () => {
           labelPlacement="outside"
           placeholder="Detalhes sobre a tag"
         />
-        <div className="flex gap-6 md:flex-row">
+      </Form.Category>
+      <Form.Category title="Redes sociais">
+        <Form.Row>
           <InputFormField
             name="website"
             label="Website"
             labelPlacement="outside"
-            placeholder="Sports"
+            placeholder="https://animaregia.net/"
             className="w-full"
           />
           <InputFormField
             name="discord"
             label="Discord"
             labelPlacement="outside"
-            placeholder="Sports"
+            placeholder="https://discord.gg/T7XXzNN"
             className="w-full"
           />
-        </div>
-        <div className="flex gap-6 md:flex-row">
+        </Form.Row>
+        <Form.Row>
           <InputFormField
             name="twitter"
             label="Twitter"
             labelPlacement="outside"
-            placeholder="Sports"
+            placeholder="https://twitter.com/onepieceex"
             className="w-full"
           />
           <InputFormField
             name="facebook"
             label="Facebook"
             labelPlacement="outside"
-            placeholder="Sports"
+            placeholder="https://www.facebook.com/DROPEscanlator"
             className="w-full"
           />
-        </div>
-        <div className="flex gap-6 md:flex-row">
+        </Form.Row>
+        <Form.Row>
           <InputFormField
             name="instagram"
             label="Instagram"
             labelPlacement="outside"
-            placeholder="Sports"
+            placeholder="https://www.instagram.com/saikaioficial"
             className="w-full"
           />
           <InputFormField
             name="Telegram"
             label="Telegram"
             labelPlacement="outside"
-            placeholder="Sports"
+            placeholder="https://t.me/gekkouscans"
             className="w-full"
           />
-        </div>
-        <div className="flex gap-6 md:flex-row">
+        </Form.Row>
+        <Form.Row>
           <InputFormField
             name="youtube"
             label="YouTube"
             labelPlacement="outside"
-            placeholder="Sports"
+            placeholder="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
             className="w-full"
           />
           <InputFormField
             name="email"
             label="Email"
             labelPlacement="outside"
-            placeholder="Sports"
+            placeholder="animaregia@live.com"
             className="w-full"
           />
-        </div>
-      </div>
-      <Button
-        color="primary"
-        type="submit"
-        className="w-fit font-medium"
-        isDisabled={shouldDisableButton}
-        isLoading={isSubmitting}
-      >
-        Adicionar
-      </Button>
-    </div>
+        </Form.Row>
+      </Form.Category>
+      <Form.Category title="Imagens">
+        <InputFormField
+          name="logo"
+          label="Logo"
+          placeholder="https://i.imgur.com/rSDmlHq.png"
+          className="w-full"
+        />
+        <InputFormField
+          name="banner"
+          label="Banner"
+          placeholder="https://i.imgur.com/13N7kAY.jpg"
+          className="w-full"
+        />
+      </Form.Category>
+      <Form.Actions>
+        <Button
+          color="primary"
+          type="submit"
+          className="w-fit font-medium"
+          isDisabled={shouldDisableButton}
+          isLoading={isSubmitting}
+        >
+          Adicionar
+        </Button>
+      </Form.Actions>
+    </Form.Layout>
   );
 };

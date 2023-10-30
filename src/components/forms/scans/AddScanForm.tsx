@@ -47,12 +47,12 @@ export const AddScanForm = () => {
   };
 
   return (
-    <Form
+    <Form.Component
       initialValues={initialValues}
       validationSchema={toFormikValidationSchema(insertScanSchema)}
       onSubmit={handleSubmit}
     >
       <AddScanFormFields />
-    </Form>
+    </Form.Component>
   );
 };

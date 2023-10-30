@@ -28,12 +28,12 @@ export const UploadChapterForm = () => {
   const { handleSubmit } = useChapterUpload(initialValues);
 
   return (
-    <Form
+    <Form.Component
       initialValues={initialValues}
       validationSchema={toFormikValidationSchema(insertMediaChapterSchema)}
       onSubmit={handleSubmit}
     >
       <UploadChapterFormFields />
-    </Form>
+    </Form.Component>
   );
 };
