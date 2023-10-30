@@ -9,7 +9,7 @@ import DiscordProvider from "next-auth/providers/discord";
 
 import { env } from "~/lib/env.mjs";
 import { db } from "~/lib/server/db";
-import { type Permission, type RefinedPermission } from "~/lib/types";
+import { type Permission } from "~/lib/types";
 import { PermissionUtils } from "../utils/permissions.utils";
 
 /**
@@ -28,7 +28,7 @@ declare module "next-auth" {
       /** The user's current role and permissions. */
       role: {
         name: string;
-        permissions: RefinedPermission[];
+        permissions: Permission[];
       };
     } & DefaultSession["user"];
   }

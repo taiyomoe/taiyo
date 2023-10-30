@@ -1,11 +1,7 @@
 import type { Roles } from "@prisma/client";
 
 import type {
-  Actions,
   Permission,
-  Posession,
-  RefinedPermission,
-  Resources,
   ResourcesWithoutPossession,
   ResourcesWithPossession,
 } from "~/lib/types";
@@ -123,40 +119,6 @@ const getResourcesWithoutPosession = (): ResourcesWithoutPossession[] => [
   "scanMembers",
 ];
 
-const refinePermission = (permission: Permission): RefinedPermission => {
-  const [resource, action, posession] = permission.split(":") as [
-    Resources,
-    Actions,
-    Posession | undefined,
-  ];
-
-  if (posession) {
-    return {
-      resource,
-      action,
-      posession,
-    };
-  }
-
-  return {
-    resource,
-    action,
-  };
-};
-
-const refinePermissions = (permissions: Permission[]): RefinedPermission[] =>
-  permissions.map(refinePermission);
-
-// const unrefinePermissions = (
-//   refinedPermissions: RefinedPermission[],
-// ): Permission[] =>
-//   refinedPermissions.map(
-//     (rp) =>
-//       `${rp.resource}:${rp.action}${
-//         rp.posession ? `:${rp.posession}` : ""
-//       }` as Permission,
-//   );
-
 const canAccessDashboard = (permissions: Permission[]) =>
   permissions.filter((p) => !getUserPermissions().includes(p)).length !== 0;
 
@@ -170,7 +132,5 @@ export const PermissionUtils = {
   getRolePermissions,
   getResourcesWithPosession,
   getResourcesWithoutPosession,
-  refinePermission,
-  refinePermissions,
   canAccessDashboard,
 };

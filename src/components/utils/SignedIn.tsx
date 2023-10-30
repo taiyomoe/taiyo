@@ -1,6 +1,5 @@
 import { getServerAuthSession } from "~/lib/auth/utils";
 import { type Permission } from "~/lib/types";
-import { PermissionUtils } from "~/lib/utils/permissions.utils";
 
 type Props = {
   allowIfUserHasAtLeastOnePermission?: boolean;
@@ -28,9 +27,7 @@ export const SignedIn = async ({
   if (
     requiredPermissions &&
     !requiredPermissions.every((permission) =>
-      session.user.role.permissions.includes(
-        PermissionUtils.refinePermission(permission),
-      ),
+      session.user.role.permissions.includes(permission),
     )
   )
     return null;
@@ -38,9 +35,7 @@ export const SignedIn = async ({
   if (
     anyPermissions &&
     !anyPermissions.some((permission) =>
-      session.user.role.permissions.includes(
-        PermissionUtils.refinePermission(permission),
-      ),
+      session.user.role.permissions.includes(permission),
     )
   )
     return null;

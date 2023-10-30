@@ -22,9 +22,3 @@ export type Permission =
   | `${Resources}:create`
   | `${ResourcesWithoutPossession}:${ActionsWithoutCreate}`
   | `${ResourcesWithPossession}:${ActionsWithoutCreate}:${Posession}`;
-
-export type RefinedPermission = {
-  resource: Resources;
-  action: Actions;
-  posession?: Posession;
-};
