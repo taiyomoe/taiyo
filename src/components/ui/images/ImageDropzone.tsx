@@ -12,15 +12,13 @@ import { ImageShowcase } from "./ImageShowcase";
 
 const imageDropzone = tv({
   slots: {
-    container: "flex w-full flex-col",
-    label: "pb-[6px] text-small font-medium",
-    contentWrapper:
-      "min-h-unit-24 w-full rounded-medium border border-dashed border-default-300 bg-default-100 p-3",
+    container:
+      "min-h-unit-24 w-full rounded-medium border border-dashed border-default-300 bg-default-100 p-3 transition-all !duration-150",
   },
   variants: {
     disabled: {
       false: {
-        container: "hover:cursor-pointer",
+        container: "hover:cursor-pointer hover:bg-default-200",
       },
     },
   },
@@ -31,9 +29,7 @@ export const ImageDropzone = () => {
   const setNeedsCompression = useSetAtom(needsCompressionAtom);
 
   const shouldDisableDropzone = selectedImages.length !== 0;
-  const { container, label, contentWrapper } = imageDropzone({
-    disabled: shouldDisableDropzone,
-  });
+  const { container } = imageDropzone({ disabled: shouldDisableDropzone });
 
   const onDrop: DropzoneProps["onDrop"] = useCallback(
     (acceptedFiles: File[]) => {
@@ -61,13 +57,10 @@ export const ImageDropzone = () => {
   }, [setSelectedImages, setNeedsCompression]);
 
   return (
-    <section className={container()}>
-      <p className={label()}>Imagens</p>
-      <div {...getRootProps({ className: contentWrapper() })}>
-        <input {...getInputProps()} disabled={acceptedFiles.length !== 0} />
-        {selectedImages.length === 0 && <ImageSelection />}
-        {selectedImages.length > 0 && <ImageShowcase />}
-      </div>
+    <section {...getRootProps({ className: container() })}>
+      <input {...getInputProps()} disabled={acceptedFiles.length !== 0} />
+      {selectedImages.length === 0 && <ImageSelection />}
+      {selectedImages.length > 0 && <ImageShowcase />}
     </section>
   );
 };
