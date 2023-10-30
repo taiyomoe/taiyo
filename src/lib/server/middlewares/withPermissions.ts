@@ -1,6 +1,6 @@
 import { AccessControl } from "accesscontrol";
 
-import { type Actions, type Resources } from "~/lib/types";
+import { type Actions, type Posession, type Resources } from "~/lib/types";
 import { InsuficientPermissionsError, InternalServerError } from "../errors";
 import { authMiddleware } from "../trpc";
 
@@ -21,13 +21,12 @@ export const withPermissions = () =>
     const grants: Grant[] = [];
 
     for (const permission of role.permissions) {
-      const permissionResource = permission.resource;
-      const permissionAction = permission.action;
-      const permissionPosession = permission.posession ?? "any";
+      const [permResource, permAction, permPosession = "any"] =
+        permission.split(":");
 
       grants.push({
-        resource: permissionResource,
-        action: `${permissionAction}:${permissionPosession}`,
+        resource: permResource as Resources,
+        action: `${permAction as Actions}:${permPosession as Posession}`,
         role: role.name,
       });
     }
