@@ -34,11 +34,7 @@ export const UploadChapterFormFields = () => {
             placement="top-right"
             className="right-1"
           >
-            <InputFormField
-              name="mediaId"
-              label="ID da obra"
-              className="w-full"
-            />
+            <InputFormField name="mediaId" label="ID da obra" />
           </Badge>
         </Tooltip>
         <InputFormField name="title" label="Título" />
@@ -55,7 +51,6 @@ export const UploadChapterFormFields = () => {
               name="scansIds"
               label="IDs das scans"
               labelPlacement="outside"
-              className="w-full"
               placeholder="Separe os IDs por uma vírgula"
             />
           </Badge>
@@ -68,14 +63,12 @@ export const UploadChapterFormFields = () => {
             label="Número"
             labelPlacement="outside"
             placeholder="Ex: 1"
-            className="w-full"
           />
           <InputFormField
             name="volume"
             label="Volume"
             labelPlacement="outside"
             placeholder="Ex: 1"
-            className="w-full"
           />
         </Form.Row>
         <Form.Row>
@@ -83,7 +76,6 @@ export const UploadChapterFormFields = () => {
             name="contentRating"
             label="Classificação do conteúdo"
             labelPlacement="outside"
-            className="w-full"
             items={ContentRating}
             isDisabled
           />
@@ -91,7 +83,6 @@ export const UploadChapterFormFields = () => {
             name="flag"
             label="Flag"
             labelPlacement="outside"
-            className="w-full"
             items={Flag}
             isDisabled
           />
@@ -99,7 +90,6 @@ export const UploadChapterFormFields = () => {
             name="language"
             label="Idioma"
             labelPlacement="outside"
-            className="w-full"
             items={MediaChapterLanguages}
             isDisabled
           />

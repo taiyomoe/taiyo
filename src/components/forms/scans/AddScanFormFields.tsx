@@ -28,14 +28,12 @@ export const AddScanFormFields = () => {
             label="Website"
             labelPlacement="outside"
             placeholder="https://animaregia.net/"
-            className="w-full"
           />
           <InputFormField
             name="discord"
             label="Discord"
             labelPlacement="outside"
             placeholder="https://discord.gg/T7XXzNN"
-            className="w-full"
           />
         </Form.Row>
         <Form.Row>
@@ -44,14 +42,12 @@ export const AddScanFormFields = () => {
             label="Twitter"
             labelPlacement="outside"
             placeholder="https://twitter.com/onepieceex"
-            className="w-full"
           />
           <InputFormField
             name="facebook"
             label="Facebook"
             labelPlacement="outside"
             placeholder="https://www.facebook.com/DROPEscanlator"
-            className="w-full"
           />
         </Form.Row>
         <Form.Row>
@@ -60,14 +56,12 @@ export const AddScanFormFields = () => {
             label="Instagram"
             labelPlacement="outside"
             placeholder="https://www.instagram.com/saikaioficial"
-            className="w-full"
           />
           <InputFormField
             name="Telegram"
             label="Telegram"
             labelPlacement="outside"
             placeholder="https://t.me/gekkouscans"
-            className="w-full"
           />
         </Form.Row>
         <Form.Row>
@@ -76,14 +70,12 @@ export const AddScanFormFields = () => {
             label="YouTube"
             labelPlacement="outside"
             placeholder="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-            className="w-full"
           />
           <InputFormField
             name="email"
             label="Email"
             labelPlacement="outside"
             placeholder="animaregia@live.com"
-            className="w-full"
           />
         </Form.Row>
       </Form.Category>
@@ -92,13 +84,11 @@ export const AddScanFormFields = () => {
           name="logo"
           label="Logo"
           placeholder="https://i.imgur.com/rSDmlHq.png"
-          className="w-full"
         />
         <InputFormField
           name="banner"
           label="Banner"
           placeholder="https://i.imgur.com/13N7kAY.jpg"
-          className="w-full"
         />
       </Form.Category>
       <Form.Actions>

@@ -16,7 +16,7 @@ type Props<T> = {
 
 const select = tv({
   slots: {
-    container: "flex items-end gap-6",
+    container: "flex items-end gap-6 w-full",
     label: "",
   },
   variants: {

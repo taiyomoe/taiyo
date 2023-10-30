@@ -23,13 +23,14 @@ export const AddTagFormFields = () => {
           labelPlacement="outside"
           placeholder="Detalhes sobre a tag"
         />
+      </Form.Category>
+      <Form.Category title="Detalhes">
         <Form.Row>
           <InputFormField
             name="category"
             label="Categoria"
             labelPlacement="outside"
             placeholder="Sports"
-            className="w-full"
           />
           <div className="flex gap-6">
             <InputFormField
