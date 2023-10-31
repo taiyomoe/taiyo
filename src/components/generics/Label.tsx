@@ -15,7 +15,7 @@ export type LabelProps = Omit<Props, "children">;
 
 const labelVariants = tv({
   slots: {
-    container: "flex",
+    container: "flex min-w-fit",
     base: "block text-small font-medium text-foreground pb-1.5 will-change-auto origin-top-left transition-all !duration-200 !ease-out motion-reduce:transition-none",
   },
   variants: {
