@@ -1,5 +1,3 @@
-"use client";
-
 import { Button } from "@nextui-org/button";
 import { useFormikContext } from "formik";
 
