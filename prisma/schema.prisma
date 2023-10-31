@@ -226,8 +226,8 @@ model MediaTracker {
     updatedAt DateTime  @updatedAt
     deletedAt DateTime?
 
-    tracker        MediaTrackers
-    trackerMediaId String
+    tracker    Trackers
+    externalId String
 
     media   Media  @relation(fields: [mediaId], references: [id], onDelete: Cascade)
     mediaId String
@@ -454,7 +454,7 @@ enum MediaChapterLanguages {
     FRENCH
 }
 
-enum MediaTrackers {
+enum Trackers {
     MANGADEX
     MYANIMELIST
     ANILIST
