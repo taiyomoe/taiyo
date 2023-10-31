@@ -18,7 +18,6 @@ export const AddTagFormFields = () => {
         <TextAreaFormField
           name="description"
           label="Descrição"
-          labelPlacement="outside"
           placeholder="Detalhes sobre a tag"
         />
       </Form.Category>
@@ -39,12 +38,7 @@ export const AddTagFormFields = () => {
               placeholder="Ex: 1234"
               className="w-full min-w-[100px] sm:w-fit"
             />
-            <SwitchFormField
-              name="isAdult"
-              label="Adulto"
-              labelPlacement="outside"
-              size="lg"
-            />
+            <SwitchFormField name="isAdult" label="Adulto" size="lg" />
           </div>
         </Form.Row>
       </Form.Category>

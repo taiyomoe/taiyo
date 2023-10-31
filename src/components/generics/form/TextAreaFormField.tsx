@@ -43,7 +43,7 @@ export const TextAreaFormField = ({
   rightContent,
   className,
   classNames,
-  labelPlacement,
+  labelPlacement = "outside",
   displayValidationError,
   ...rest
 }: Props) => {

@@ -17,7 +17,6 @@ export const AddScanFormFields = () => {
         <TextAreaFormField
           name="description"
           label="Descrição"
-          labelPlacement="outside"
           placeholder="Detalhes sobre a tag"
         />
       </Form.Category>
