@@ -56,7 +56,7 @@ export const SelectFormField = <T extends Record<string, unknown>>({
 
   const shouldDisplayError = touched && !!error && !initialTouched;
   const shouldIgnoreErrorMessage = !!displayValidationError === false;
-  const labelPlacement = rest.labelPlacement ?? "outside-left";
+  const labelPlacement = rest.labelPlacement ?? "outside";
   const { container, label } = select({
     labelPlacement,
     shouldDisplayError:

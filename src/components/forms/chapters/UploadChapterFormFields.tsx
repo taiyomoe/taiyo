@@ -73,21 +73,13 @@ export const UploadChapterFormFields = () => {
           <SelectFormField
             name="contentRating"
             label="Classificação do conteúdo"
-            labelPlacement="outside"
             items={ContentRating}
             isDisabled
           />
-          <SelectFormField
-            name="flag"
-            label="Flag"
-            labelPlacement="outside"
-            items={Flag}
-            isDisabled
-          />
+          <SelectFormField name="flag" label="Flag" items={Flag} isDisabled />
           <SelectFormField
             name="language"
             label="Idioma"
-            labelPlacement="outside"
             items={MediaChapterLanguages}
             isDisabled
           />

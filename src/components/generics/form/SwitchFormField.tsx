@@ -19,7 +19,7 @@ type Props = {
 export const SwitchFormField = ({
   name,
   label,
-  labelPlacement,
+  labelPlacement = "outside",
   className,
   shouldBeUnique,
   onChange,
