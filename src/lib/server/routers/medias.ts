@@ -5,11 +5,45 @@ import {
   DEFAULT_MEDIA_PER_PAGE,
   MEDIA_PER_PAGE_CHOICES,
 } from "~/lib/constants";
+import { insertMediaSchema } from "~/lib/schemas";
 import { type LatestMedia, type MediaLimited } from "~/lib/types";
 import { NotFoundError } from "../errors";
-import { createTRPCRouter, publicProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const mediasRouter = createTRPCRouter({
+  add: protectedProcedure
+    .meta({
+      resource: "medias",
+      action: "create",
+    })
+    .input(insertMediaSchema)
+    .mutation(async ({ ctx, input }) => {
+      const result = await ctx.db.media.create({
+        data: {
+          ...input,
+          titles: {
+            create: input.titles.map((t) => ({
+              ...t,
+              creatorId: ctx.session.user.id,
+            })),
+          },
+          tags: {
+            create: input.tags.map((t) => ({
+              ...t,
+              creatorId: ctx.session.user.id,
+            })),
+          },
+          trackers: {
+            create: input.trackers.map((t) => ({
+              ...t,
+              creatorId: ctx.session.user.id,
+            })),
+          },
+        },
+      });
+
+      return result;
+    }),
   getById: publicProcedure
     .input(
       z.object({
