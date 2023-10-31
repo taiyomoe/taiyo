@@ -1,8 +1,6 @@
-"use client";
-
 import { Badge } from "@nextui-org/badge";
 import { Button } from "@nextui-org/button";
-import { Tooltip } from "@nextui-org/react";
+import { Tooltip } from "@nextui-org/tooltip";
 import { ContentRating, Flag, MediaChapterLanguages } from "@prisma/client";
 import { useFormikContext } from "formik";
 import { AlertCircleIcon } from "lucide-react";
