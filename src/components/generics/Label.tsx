@@ -4,7 +4,7 @@ import { tv } from "tailwind-variants";
 import { cn } from "~/utils/cn";
 
 type Props = {
-  label: string;
+  label?: string;
   labelPlacement?: InputProps["labelPlacement"];
   className?: string;
   id?: string;
@@ -19,6 +19,11 @@ const labelVariants = tv({
     base: "block text-small font-medium text-foreground pb-1.5 will-change-auto origin-top-left transition-all !duration-200 !ease-out motion-reduce:transition-none",
   },
   variants: {
+    hide: {
+      true: {
+        base: "hidden",
+      },
+    },
     labelPlacement: {
       inside: {},
       outside: {
@@ -39,11 +44,14 @@ export const Label = ({
   id,
   children,
 }: Props) => {
-  const { container, base } = labelVariants();
+  const { container, base } = labelVariants({
+    hide: label === undefined,
+    labelPlacement,
+  });
 
   return (
-    <div className={cn(container({ labelPlacement }), className)}>
-      <label className={base({ labelPlacement })} htmlFor={id}>
+    <div className={cn(container(), className)}>
+      <label className={base()} htmlFor={id}>
         {label}
       </label>
       {children}

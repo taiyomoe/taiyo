@@ -15,6 +15,7 @@ import { InputFormField } from "~/components/generics/form/InputFormField";
 import { SelectFormField } from "~/components/generics/form/SelectFormField";
 import { SwitchFormField } from "~/components/generics/form/SwitchFormField";
 import { TextAreaFormField } from "~/components/generics/form/TextAreaFormField";
+import { MediaTitlesFormCategory } from "./MediaTitlesFormCategory";
 
 export const AddMediaFormFields = () => {
   const { isSubmitting, isValid, dirty } = useFormikContext();
@@ -70,7 +71,7 @@ export const AddMediaFormFields = () => {
           <SwitchFormField name="oneShot" label="One Shot" size="lg" />
         </Form.Row>
       </Form.Category>
-      <Form.Category title="Títulos">a</Form.Category>
+      <MediaTitlesFormCategory />
       <Form.Category title="Tags">a</Form.Category>
       <Form.Category title="Trackers">a</Form.Category>
       <Form.Category title="Covers">a</Form.Category>
