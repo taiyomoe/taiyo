@@ -9,7 +9,7 @@ type Props = {
   children: React.ReactNode;
 };
 
-type CategoryProps = { title?: string } & Props;
+type CategoryProps = { title?: string; actions?: React.ReactNode } & Props;
 
 const Component = <T extends FormikValues>({
   children,
@@ -28,9 +28,12 @@ const Layout = ({ children }: Props) => (
   <div className="flex flex-col gap-10">{children}</div>
 );
 
-const Category = ({ title, children }: CategoryProps) => (
+const Category = ({ title, actions, children }: CategoryProps) => (
   <div className="flex flex-col gap-4">
-    {title && <h2 className="text-2xl font-semibold">{title}</h2>}
+    <div className="flex justify-between">
+      {title && <h2 className="text-2xl font-semibold">{title}</h2>}
+      <div className="flex items-center gap-2">{actions}</div>
+    </div>
     <div className="flex flex-col gap-6">{children}</div>
   </div>
 );

@@ -10,7 +10,6 @@ import type { LabelProps } from "../Label";
 
 type Props = {
   name: string;
-  label: string;
   shouldBeUnique?: boolean;
   onChange?: (value: boolean) => void;
 } & Partial<SwitchProps> &
