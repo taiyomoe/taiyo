@@ -12,7 +12,7 @@ export const NavbarPopoversCommonOptions = () => {
         variant="light"
         isDisabled
       >
-        Parâmetros
+        Configurações
       </Button>
       <Button
         className="disabled justify-normal gap-3 p-2 text-medium font-medium"
@@ -20,7 +20,7 @@ export const NavbarPopoversCommonOptions = () => {
         variant="light"
         isDisabled
       >
-        Língua
+        Linguagem
       </Button>
       <div className="flex justify-between">
         <div className="flex gap-3 p-2">

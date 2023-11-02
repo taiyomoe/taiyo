@@ -25,7 +25,7 @@ export const GuestPopover = () => {
               className="z-10 min-w-[220px] text-medium font-medium text-primary-foreground"
               color="primary"
             >
-              Logar
+              Login
             </Button>
             <Button
               className="absolute inset-x-0 z-0 mx-4 p-0 opacity-30 blur-lg saturate-150 filter"
