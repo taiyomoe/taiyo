@@ -24,7 +24,11 @@ const initialValues: InsertMediaSchema = {
   flag: "OK",
   titles: [{ title: "", isAcronym: false, language: "ENGLISH" }],
   tags: [],
-  trackers: [],
+  trackers: [
+    { tracker: "MANGADEX", trackerMediaId: "" },
+    { tracker: "ANILIST", trackerMediaId: "" },
+    { tracker: "MYANIMELIST", trackerMediaId: "" },
+  ],
 };
 
 export const AddMediaForm = () => {

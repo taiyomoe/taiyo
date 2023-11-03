@@ -46,6 +46,10 @@ const Row = ({ children }: Props) => (
   <div className="flex flex-col gap-6 md:flex-row">{children}</div>
 );
 
+const Col = ({ children }: Props) => (
+  <div className="flex flex-col gap-6">{children}</div>
+);
+
 /**
  * These components allow me to not mess up the different
  * gaps between the different form components.
@@ -56,4 +60,5 @@ export const Form = {
   Category,
   Actions,
   Row,
+  Col,
 };

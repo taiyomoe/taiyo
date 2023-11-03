@@ -23,6 +23,10 @@ export const insertMediaSchema = MediaSchema.pick({
   flag: true,
 }).merge(
   z.object({
+    trackers: MediaTrackerSchema.pick({
+      tracker: true,
+      trackerMediaId: true,
+    }).array(),
     titles: MediaTitleSchema.pick({
       title: true,
       language: true,
@@ -33,10 +37,6 @@ export const insertMediaSchema = MediaSchema.pick({
     tags: MediaTagSchema.pick({
       isSpoiler: true,
       tagId: true,
-    }).array(),
-    trackers: MediaTrackerSchema.pick({
-      tracker: true,
-      trackerMediaId: true,
     }).array(),
   }),
 );
