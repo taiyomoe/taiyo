@@ -37,19 +37,19 @@ const execute = async (db: PrismaClient) => {
     data: [
       {
         tracker: "MANGADEX",
-        trackerMediaId: "d8a959f7-648e-4c8d-8f23-f1f3f8e129f3",
+        externalId: "d8a959f7-648e-4c8d-8f23-f1f3f8e129f3",
         mediaId: "21bc3f0b-73ac-44b6-8955-ae5a0a50cf39",
         creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
       },
       {
         tracker: "ANILIST",
-        trackerMediaId: "74347",
+        externalId: "74347",
         mediaId: "21bc3f0b-73ac-44b6-8955-ae5a0a50cf39",
         creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
       },
       {
         tracker: "MYANIMELIST",
-        trackerMediaId: "44347",
+        externalId: "44347",
         mediaId: "21bc3f0b-73ac-44b6-8955-ae5a0a50cf39",
         creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
       },

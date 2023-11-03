@@ -70,7 +70,7 @@ export const MediaTitleScalarFieldEnumSchema = z.enum(['id','createdAt','updated
 
 export const MediaTagScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','isSpoiler','tagId','mediaId','creatorId','deleterId']);
 
-export const MediaTrackerScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','tracker','trackerMediaId','mediaId','creatorId','deleterId']);
+export const MediaTrackerScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','tracker','externalId','mediaId','creatorId','deleterId']);
 
 export const MediaChapterScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','title','number','volume','language','pages','contentRating','flag','mediaId','uploaderId','deleterId']);
 
@@ -134,9 +134,9 @@ export const MediaChapterLanguagesSchema = z.enum(['ENGLISH','JAPANESE','SPANISH
 
 export type MediaChapterLanguagesType = `${z.infer<typeof MediaChapterLanguagesSchema>}`
 
-export const MediaTrackersSchema = z.enum(['MANGADEX','MYANIMELIST','ANILIST']);
+export const TrackersSchema = z.enum(['MANGADEX','MYANIMELIST','ANILIST']);
 
-export type MediaTrackersType = `${z.infer<typeof MediaTrackersSchema>}`
+export type TrackersType = `${z.infer<typeof TrackersSchema>}`
 
 export const ScanMemberRolesSchema = z.enum(['OWNER','ADMIN','TRANSLATOR','PROOFREADER','CLEANER','REDRAWER','TYPESETTER','QUALITY_CHECKER','RAW_PROVIDER','OTHER']);
 
@@ -345,12 +345,12 @@ export type MediaTag = z.infer<typeof MediaTagSchema>
 /////////////////////////////////////////
 
 export const MediaTrackerSchema = z.object({
-  tracker: MediaTrackersSchema,
+  tracker: TrackersSchema,
   id: z.string().uuid(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
   deletedAt: z.coerce.date().nullable(),
-  trackerMediaId: z.string(),
+  externalId: z.string(),
   mediaId: z.string(),
   creatorId: z.string(),
   deleterId: z.string().nullable(),
