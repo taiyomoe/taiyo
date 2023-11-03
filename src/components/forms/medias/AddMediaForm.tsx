@@ -25,9 +25,9 @@ const initialValues: InsertMediaSchema = {
   titles: [{ title: "", isAcronym: false, language: "ENGLISH" }],
   tags: [],
   trackers: [
-    { tracker: "MANGADEX", trackerMediaId: "" },
-    { tracker: "ANILIST", trackerMediaId: "" },
-    { tracker: "MYANIMELIST", trackerMediaId: "" },
+    { tracker: "MANGADEX", externalId: "" },
+    { tracker: "ANILIST", externalId: "" },
+    { tracker: "MYANIMELIST", externalId: "" },
   ],
 };
 

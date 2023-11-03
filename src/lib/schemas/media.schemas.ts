@@ -25,7 +25,7 @@ export const insertMediaSchema = MediaSchema.pick({
   z.object({
     trackers: MediaTrackerSchema.pick({
       tracker: true,
-      trackerMediaId: true,
+      externalId: true,
     }).array(),
     titles: MediaTitleSchema.pick({
       title: true,

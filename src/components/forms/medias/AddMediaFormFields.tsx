@@ -38,7 +38,7 @@ export const AddMediaFormFields = () => {
       <Form.Category title="Trackers">
         <Form.Row>
           <InputFormField
-            name="trackers[0].trackerMediaId"
+            name="trackers[0].externalId"
             label="ID na MangaDex"
             labelPlacement="outside"
             placeholder="a1c7c817-4e59-43b7-9365-09675a149a6f"
@@ -55,14 +55,14 @@ export const AddMediaFormFields = () => {
             }
           />
           <InputFormField
-            name="trackers[1].trackerMediaId"
+            name="trackers[1].externalId"
             label="ID na AniList"
             labelPlacement="outside"
             placeholder="30013"
             className="md:w-fit"
           />
           <InputFormField
-            name="trackers[3].trackerMediaId"
+            name="trackers[3].externalId"
             label="ID no MyAnimeList"
             labelPlacement="outside"
             placeholder="13"
