@@ -9,12 +9,16 @@ import {
   MediaType,
 } from "@prisma/client";
 import { useFormikContext } from "formik";
+import { HardDriveDownloadIcon } from "lucide-react";
 
 import { Form } from "~/components/generics/form/Form";
 import { InputFormField } from "~/components/generics/form/InputFormField";
 import { SelectFormField } from "~/components/generics/form/SelectFormField";
 import { SwitchFormField } from "~/components/generics/form/SwitchFormField";
 import { TextAreaFormField } from "~/components/generics/form/TextAreaFormField";
+import { MediaBannersFormCategory } from "./MediaBannersFormCategory";
+import { MediaCoversFormCategory } from "./MediaCoversFormCategory";
+import { MediaTagsFormCategory } from "./MediaTagsFormCategory";
 import { MediaTitlesFormCategory } from "./MediaTitlesFormCategory";
 
 export const AddMediaFormFields = () => {
@@ -30,6 +34,41 @@ export const AddMediaFormFields = () => {
           label="Sinopse"
           placeholder="Sinopse da obra"
         />
+      </Form.Category>
+      <Form.Category title="Trackers">
+        <Form.Row>
+          <InputFormField
+            name="trackers[0].trackerMediaId"
+            label="ID na MangaDex"
+            labelPlacement="outside"
+            placeholder="a1c7c817-4e59-43b7-9365-09675a149a6f"
+            className="md:w-2/3"
+            classNames={{ inputWrapper: "pr-0" }}
+            endContent={
+              <Button
+                className="rounded-l-none"
+                color="primary"
+                startContent={<HardDriveDownloadIcon size={20} />}
+                isIconOnly
+                isDisabled
+              />
+            }
+          />
+          <InputFormField
+            name="trackers[1].trackerMediaId"
+            label="ID na AniList"
+            labelPlacement="outside"
+            placeholder="30013"
+            className="md:w-fit"
+          />
+          <InputFormField
+            name="trackers[3].trackerMediaId"
+            label="ID no MyAnimeList"
+            labelPlacement="outside"
+            placeholder="13"
+            className="md:w-fit"
+          />
+        </Form.Row>
       </Form.Category>
       <Form.Category title="Detalhes">
         <Form.Row>
@@ -72,11 +111,9 @@ export const AddMediaFormFields = () => {
         </Form.Row>
       </Form.Category>
       <MediaTitlesFormCategory />
-      <Form.Category title="Tags">a</Form.Category>
-      <Form.Category title="Trackers">a</Form.Category>
-      <Form.Category title="Covers">a</Form.Category>
-      <Form.Category title="Banners">a</Form.Category>
-      <Form.Category title="Títulos">a</Form.Category>
+      <MediaTagsFormCategory />
+      <MediaCoversFormCategory />
+      <MediaBannersFormCategory />
       <Form.Actions>
         <Button
           color="primary"

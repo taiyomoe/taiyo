@@ -10,6 +10,8 @@ import {
 import { ImageSelection } from "./ImageSelection";
 import { ImageShowcase } from "./ImageShowcase";
 
+type Props = { compact?: boolean };
+
 const imageDropzone = tv({
   slots: {
     container:
@@ -24,7 +26,7 @@ const imageDropzone = tv({
   },
 });
 
-export const ImageDropzone = () => {
+export const ImageDropzone = ({ compact }: Props) => {
   const [selectedImages, setSelectedImages] = useAtom(selectedImagesAtom);
   const setNeedsCompression = useSetAtom(needsCompressionAtom);
 
@@ -59,7 +61,7 @@ export const ImageDropzone = () => {
   return (
     <section {...getRootProps({ className: container() })}>
       <input {...getInputProps()} disabled={acceptedFiles.length !== 0} />
-      {selectedImages.length === 0 && <ImageSelection />}
+      {selectedImages.length === 0 && <ImageSelection compact={compact} />}
       {selectedImages.length > 0 && <ImageShowcase />}
     </section>
   );
