@@ -33,7 +33,11 @@ export const insertMediaSchema = MediaSchema.pick({
       isAcronym: true,
     })
       .array()
-      .min(1),
+      .min(1)
+      .refine((titles) => titles.every((x) => x.title.length > 0))
+      .refine(
+        (x) => new Set<string>(...x.map((x) => x.title)).size === x.length,
+      ),
     tags: MediaTagSchema.pick({
       isSpoiler: true,
       tagId: true,
