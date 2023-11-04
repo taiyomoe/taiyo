@@ -25,12 +25,12 @@ export const UploadChapterFormFields = () => {
         <InputFormField name="id" label="ID do capítulo" isDisabled />
         <Tooltip content="Temporário">
           <Badge
-            isOneChar
+            className="right-1"
+            placement="top-right"
             content={<AlertCircleIcon />}
             color="warning"
             size="lg"
-            placement="top-right"
-            className="right-1"
+            isOneChar
           >
             <InputFormField name="mediaId" label="ID da obra" />
           </Badge>
@@ -38,12 +38,12 @@ export const UploadChapterFormFields = () => {
         <InputFormField name="title" label="Título" />
         <Tooltip content="Temporário">
           <Badge
-            isOneChar
+            className="right-1 top-7"
+            placement="top-right"
             content={<AlertCircleIcon />}
             color="warning"
             size="lg"
-            placement="top-right"
-            className="right-1 top-7"
+            isOneChar
           >
             <InputFormField
               name="scansIds"
