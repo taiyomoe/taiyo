@@ -35,6 +35,11 @@ const select = tv({
         inputWrapper: "border-danger group-data-[hover=true]:border-danger-200",
       },
     },
+    hideLabel: {
+      true: {
+        container: "h-fit",
+      },
+    },
   },
 });
 
@@ -61,6 +66,7 @@ export const SelectFormField = <T extends Record<string, unknown>>({
     labelPlacement,
     shouldDisplayError:
       rest.variant === "bordered" ? shouldDisplayError : false,
+    hideLabel: rest.label === undefined,
   });
 
   return (
