@@ -9,12 +9,11 @@ import { Form } from "~/components/generics/form/Form";
 import { InputFormField } from "~/components/generics/form/InputFormField";
 import { SelectFormField } from "~/components/generics/form/SelectFormField";
 import { ImageDropzone } from "~/components/ui/images/ImageDropzone";
-import { useChapterImageCompression } from "~/hooks/useChapterImageCompression";
+import { useImageCompression } from "~/hooks/useImageCompression";
 
 export const UploadChapterFormFields = () => {
   const { isSubmitting, isValid, dirty } = useFormikContext();
-  const { needsCompression, handleCompressImages } =
-    useChapterImageCompression();
+  const { needsCompression, handleCompressImages } = useImageCompression();
 
   const shouldDisableButton =
     needsCompression || isSubmitting || !(isValid && dirty);
