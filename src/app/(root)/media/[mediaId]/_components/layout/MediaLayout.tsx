@@ -3,8 +3,8 @@ import { Image } from "@nextui-org/image";
 
 import { DisplayMediaCover } from "~/components/media/DisplayMediaCover";
 import type { MediaLimited } from "~/lib/types";
-import { cn } from "~/utils/cn";
-import { MediaUtils } from "~/utils/MediaUtils";
+import { cn } from "~/lib/utils/cn";
+import { MediaUtils } from "~/lib/utils/media.utils";
 
 type Props = {
   media: MediaLimited;

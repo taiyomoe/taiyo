@@ -8,7 +8,7 @@ import { selectedImagesAtom } from "~/atoms/imageCompression.atoms";
 import type { InsertMediaChapterSchema } from "~/lib/schemas/mediaChapter.schemas";
 import { api } from "~/lib/trpc/client";
 import type { SuccessfulUploadResponse } from "~/lib/types";
-import { MediaChapterUtils } from "~/utils/MediaChapterUtils";
+import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils";
 
 export const useChapterUpload = (initialValues: InsertMediaChapterSchema) => {
   const [selectedImages, setSelectedImages] = useAtom(selectedImagesAtom);

@@ -16,7 +16,7 @@ import { tv } from "tailwind-variants";
 import { mediaChapterAtom } from "~/atoms/mediaChapter.atoms";
 import { BackButton } from "~/components/generics/buttons/BackButton";
 import { ForwardButton } from "~/components/generics/buttons/ForwardButton";
-import { MediaChapterUtils } from "~/utils/MediaChapterUtils";
+import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils";
 
 const readerSettingsMediaChapterDropdown = tv({
   slots: {
