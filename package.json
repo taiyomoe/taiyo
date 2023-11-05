@@ -32,7 +32,7 @@
     "accesscontrol": "^2.2.1",
     "formik": "^2.4.5",
     "framer-motion": "^10.16.4",
-    "jotai": "^2.5.0",
+    "jotai": "^2.5.1",
     "lucide-react": "^0.292.0",
     "luxon": "^3.4.3",
     "next": "^13.5.6",
