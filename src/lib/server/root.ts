@@ -1,9 +1,8 @@
-import { mediaChaptersRouter } from "./routers/mediaChapters";
-import { mediasRouter } from "./routers/medias";
+import { mediaChaptersRouter } from "./routers/mediaChapters.router";
+import { mediasRouter } from "./routers/medias.router";
 import { scansRouter } from "./routers/scans.router";
-import { tagsRouter } from "./routers/tags";
+import { tagsRouter } from "./routers/tags.router";
 import { uploadsRouter } from "./routers/uploads.router";
-import { usersRouter } from "./routers/users";
 import { createTRPCRouter } from "./trpc";
 
 /**
@@ -12,7 +11,6 @@ import { createTRPCRouter } from "./trpc";
  * All routers added in /api/routers should be manually added here.
  */
 export const appRouter = createTRPCRouter({
-  users: usersRouter,
   tags: tagsRouter,
   medias: mediasRouter,
   mediaChapters: mediaChaptersRouter,
