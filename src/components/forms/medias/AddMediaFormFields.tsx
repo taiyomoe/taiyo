@@ -16,6 +16,7 @@ import { SelectFormField } from "~/components/generics/form/SelectFormField";
 import { SwitchFormField } from "~/components/generics/form/SwitchFormField";
 import { TextAreaFormField } from "~/components/generics/form/TextAreaFormField";
 import { useImageCompression } from "~/hooks/useImageCompression";
+
 import { MediaBannersFormCategory } from "./MediaBannersFormCategory";
 import { MediaCoversFormCategory } from "./MediaCoversFormCategory";
 import { MediaTagsFormCategory } from "./MediaTagsFormCategory";

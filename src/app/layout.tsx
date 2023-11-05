@@ -6,6 +6,7 @@ import "~/styles/globals.css";
 
 import type { LayoutProps } from "~/types";
 import { cn } from "~/utils/cn";
+
 import { Providers } from "./providers";
 
 const fontSans = Inter({

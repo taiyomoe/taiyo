@@ -10,6 +10,7 @@ import DiscordProvider from "next-auth/providers/discord";
 import { env } from "~/lib/env.mjs";
 import { db } from "~/lib/server/db";
 import { type Permission } from "~/lib/types";
+
 import { PermissionUtils } from "../utils/permissions.utils";
 
 /**

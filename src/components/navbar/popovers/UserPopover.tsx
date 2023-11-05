@@ -8,6 +8,7 @@ import { type Session } from "next-auth";
 
 import { SignOutButton } from "~/components/auth/SignOutButton";
 import { SignedIn } from "~/components/utils/SignedIn";
+
 import { NavbarPopoversCommonOptions } from "./NavbarPopoversCommonOptions";
 
 type Props = { session: Session };

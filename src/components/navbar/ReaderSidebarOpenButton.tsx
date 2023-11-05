@@ -8,6 +8,7 @@ import {
   readerSidebarSideAtom,
   readerSidebarStateAtom,
 } from "~/atoms/readerSettings.atoms";
+
 import { SidebarIcon } from "../icons/SidebarIcon";
 
 export const ReaderSidebarOpenButton = () => {
