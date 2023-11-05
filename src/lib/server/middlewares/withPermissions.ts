@@ -1,15 +1,9 @@
 import { AccessControl } from "accesscontrol";
 
-import type { Actions, Posession, Resources } from "~/lib/types";
+import type { Actions, Grant, Posession, Resources } from "~/lib/types";
 
 import { InsuficientPermissionsError, InternalServerError } from "../errors";
 import { authMiddleware } from "../trpc";
-
-type Grant = {
-  role: string;
-  resource: Resources;
-  action: `${Actions}:${"any" | "own"}`;
-};
 
 export const withPermissions = () =>
   authMiddleware.unstable_pipe(async ({ ctx, meta, next }) => {

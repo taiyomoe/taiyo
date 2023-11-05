@@ -1,3 +1,4 @@
+export * from "./common.types";
 export * from "./media.types";
 export * from "./mediaChapter.types";
 export * from "./upload.types";
