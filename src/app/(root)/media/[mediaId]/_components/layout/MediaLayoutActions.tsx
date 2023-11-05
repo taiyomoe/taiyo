@@ -1,6 +1,6 @@
 import { Skeleton } from "@nextui-org/skeleton";
 
-import { type MediaLimited } from "~/lib/types";
+import type { MediaLimited } from "~/lib/types";
 
 type Props = {
   media: MediaLimited;

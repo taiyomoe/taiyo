@@ -4,10 +4,8 @@ import { toFormikValidationSchema } from "zod-formik-adapter";
 
 import { Form } from "~/components/generics/form/Form";
 import { useChapterUpload } from "~/hooks/useChapterUpload";
-import {
-  insertMediaChapterSchema,
-  type InsertMediaChapterSchema,
-} from "~/lib/schemas/mediaChapter.schemas";
+import { insertMediaChapterSchema } from "~/lib/schemas/mediaChapter.schemas";
+import type { InsertMediaChapterSchema } from "~/lib/schemas/mediaChapter.schemas";
 
 import { UploadChapterFormFields } from "./UploadChapterFormFields";
 

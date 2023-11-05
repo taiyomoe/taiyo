@@ -5,7 +5,7 @@ import {
   unstable_httpBatchStreamLink,
 } from "@trpc/client";
 
-import { type AppRouter } from "~/lib/server/root";
+import type { AppRouter } from "~/lib/server/root";
 
 import { getUrl, transformer } from "./utils";
 

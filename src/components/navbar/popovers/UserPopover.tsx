@@ -4,7 +4,7 @@ import { Button } from "@nextui-org/button";
 import { Divider } from "@nextui-org/divider";
 import { Popover, PopoverContent, PopoverTrigger } from "@nextui-org/popover";
 import { GaugeIcon, LinkIcon } from "lucide-react";
-import { type Session } from "next-auth";
+import type { Session } from "next-auth";
 
 import { SignOutButton } from "~/components/auth/SignOutButton";
 import { SignedIn } from "~/components/utils/SignedIn";

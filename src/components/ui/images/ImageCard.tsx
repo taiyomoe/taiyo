@@ -1,7 +1,7 @@
 import { Spinner, tv } from "@nextui-org/react";
 import prettyBytes from "pretty-bytes";
 
-import { type SelectedImage } from "~/lib/types";
+import type { SelectedImage } from "~/lib/types";
 
 type Props = {
   position: string;

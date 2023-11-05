@@ -1,4 +1,4 @@
-import { type Trackers } from "@prisma/client";
+import type { Trackers } from "@prisma/client";
 import { z } from "zod";
 
 import {
@@ -7,7 +7,7 @@ import {
   MEDIA_PER_PAGE_CHOICES,
 } from "~/lib/constants";
 import { insertMediaSchema } from "~/lib/schemas";
-import { type LatestMedia, type MediaLimited } from "~/lib/types";
+import type { LatestMedia, MediaLimited } from "~/lib/types";
 
 import { NotFoundError } from "../errors";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";

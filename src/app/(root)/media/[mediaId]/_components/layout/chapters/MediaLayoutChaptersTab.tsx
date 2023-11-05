@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import { Accordion, AccordionItem } from "@nextui-org/accordion";
 import { Divider } from "@nextui-org/divider";
 
-import { type MediaLimited } from "~/lib/types";
+import type { MediaLimited } from "~/lib/types";
 import { MediaChapterUtils } from "~/utils/MediaChapterUtils";
 
 import { MediaChapterGroupCard } from "./MediaChapterGroupCard";
