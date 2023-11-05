@@ -20,7 +20,7 @@ const readerSidebarLayout = tv({
   slots: {
     container: "transition-all z-30",
     contentWrapper:
-      "bg-content1 min-w-[300px] sticky right-[unset] width-[unset] flex flex-col gap-2 p-4 pt-0 overflow-x-hidden overflow-y-auto top-0 max-h-screen h-full",
+      "bg-content1 w-[300px] max-w-[300px] sticky right-[unset] width-[unset] flex flex-col gap-2 p-4 pt-0 overflow-x-hidden overflow-y-auto top-0 max-h-screen h-full",
   },
   variants: {
     side: {
