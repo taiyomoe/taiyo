@@ -1,8 +1,11 @@
 import { TRPCError } from "@trpc/server";
-import { z } from "zod";
 
-import { insertMediaChapterSchema } from "~/lib/schemas/mediaChapter.schemas";
-import { type MediaChapterLimited } from "~/lib/types";
+import {
+  getMediaChapterByIdSchema,
+  insertMediaChapterSchema,
+} from "~/lib/schemas/mediaChapter.schemas";
+import type { MediaChapterLimited } from "~/lib/types";
+
 import { NotFoundError } from "../errors";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
@@ -34,7 +37,7 @@ export const mediaChaptersRouter = createTRPCRouter({
     }),
 
   getById: publicProcedure
-    .input(z.string())
+    .input(getMediaChapterByIdSchema)
     .query(async ({ ctx, input: chapterId }) => {
       const result = await ctx.db.mediaChapter.findFirst({
         select: {

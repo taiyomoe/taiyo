@@ -6,7 +6,7 @@ import { PanelLeftOpenIcon, PanelRightOpenIcon } from "lucide-react";
 import { tv } from "tailwind-variants";
 
 import { readerSidebarSideAtom } from "~/atoms/readerSettings.atoms";
-import type { ReaderSettings } from "~/types/readerSettings.types";
+import type { ReaderSettings } from "~/lib/types";
 
 const readerSidebarSettingsSide = tv({
   slots: {

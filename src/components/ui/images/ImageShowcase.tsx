@@ -1,7 +1,8 @@
-import { type UploadSessionType } from "@prisma/client";
+import type { UploadSessionType } from "@prisma/client";
 import { useAtomValue } from "jotai";
 
 import { selectedImagesAtom } from "~/atoms/imageCompression.atoms";
+
 import { ImageCard } from "./ImageCard";
 
 type Props = { type: UploadSessionType };

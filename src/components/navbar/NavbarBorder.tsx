@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-import { cn } from "~/utils/cn";
+import { cn } from "~/lib/utils/cn";
 
 export const NavbarBorder = () => {
   const [opacity, setOpacity] = useState(0);

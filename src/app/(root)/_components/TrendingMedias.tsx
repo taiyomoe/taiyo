@@ -1,4 +1,5 @@
 import { api } from "~/lib/trpc/server";
+
 import { SwipeableTrendingMedias } from "./swiper/SwipeableTrendingMedias";
 
 export const TrendingMedias = async () => {

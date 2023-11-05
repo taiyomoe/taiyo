@@ -7,14 +7,15 @@
  * need to use are documented accordingly near the end.
  */
 
-import { type NextRequest } from "next/server";
+import type { NextRequest } from "next/server";
 import { initTRPC } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
 
 import { getServerAuthSession } from "~/lib/auth/utils";
 import { db } from "~/lib/server/db";
-import { type Actions, type Resources } from "~/lib/types";
+import type { Actions, Resources } from "~/lib/types";
+
 import { withAuth } from "./middlewares/withAuth";
 import { withPermissions } from "./middlewares/withPermissions";
 
@@ -26,9 +27,9 @@ import { withPermissions } from "./middlewares/withPermissions";
  * These allow you to access things when processing a request, like the database, the session, etc.
  */
 
-interface CreateContextOptions {
+type CreateContextOptions = {
   headers: Headers;
-}
+};
 
 export type Meta = {
   resource?: Resources;

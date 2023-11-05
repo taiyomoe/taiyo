@@ -1,13 +1,8 @@
-import { type Trackers } from "@prisma/client";
-import { z } from "zod";
+import type { Trackers } from "@prisma/client";
 
-import {
-  DEFAULT_MEDIA_PAGE,
-  DEFAULT_MEDIA_PER_PAGE,
-  MEDIA_PER_PAGE_CHOICES,
-} from "~/lib/constants";
-import { insertMediaSchema } from "~/lib/schemas";
-import { type LatestMedia, type MediaLimited } from "~/lib/types";
+import { getMediaByIdSchema, insertMediaSchema } from "~/lib/schemas";
+import type { LatestMedia, MediaLimited } from "~/lib/types";
+
 import { NotFoundError } from "../errors";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
@@ -82,21 +77,7 @@ export const mediasRouter = createTRPCRouter({
     ),
 
   getById: publicProcedure
-    .input(
-      z.object({
-        id: z.string(),
-        page: z.number().optional().default(DEFAULT_MEDIA_PAGE),
-        perPage: z
-          .number()
-          .optional()
-          .default(DEFAULT_MEDIA_PER_PAGE)
-          .refine((x) => MEDIA_PER_PAGE_CHOICES.includes(x), {
-            message: `perPage must be one of ${MEDIA_PER_PAGE_CHOICES.join(
-              ", ",
-            )}`,
-          }),
-      }),
-    )
+    .input(getMediaByIdSchema)
     .query(async ({ ctx, input }) => {
       const { id: mediaId, page, perPage } = input;
       const result = await ctx.db.media.findFirst({

@@ -1,11 +1,12 @@
 import { TRPCClientError } from "@trpc/client";
-import { type FormikConfig } from "formik";
+import type { FormikConfig } from "formik";
 import { useSetAtom } from "jotai";
 import { toast } from "sonner";
 
 import { selectedImagesAtom } from "~/atoms/imageCompression.atoms";
-import { type InsertMediaSchema } from "~/lib/schemas";
+import type { InsertMediaSchema } from "~/lib/schemas";
 import { api } from "~/lib/trpc/client";
+
 import { useUpload } from "./useUpload";
 
 export const useMediaCreation = () => {

@@ -1,9 +1,9 @@
-import { type UploadSessionType } from "@prisma/client";
+import type { UploadSessionType } from "@prisma/client";
 import { useAtom } from "jotai";
 
 import { selectedImagesAtom } from "~/atoms/imageCompression.atoms";
-import { type SuccessfulUploadResponse } from "~/lib/types";
-import { MediaChapterUtils } from "~/utils/MediaChapterUtils";
+import type { SuccessfulUploadResponse } from "~/lib/types";
+import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils";
 
 export const useUpload = () => {
   const [selectedImages] = useAtom(selectedImagesAtom);

@@ -1,19 +1,12 @@
-import { z } from "zod";
-
-import { UploadSessionTypeSchema } from "~/lib/schemas/prisma";
+import { startUploadSessionSchema } from "~/lib/schemas/upload.schemas";
 import { EncryptionUtils } from "~/lib/utils/encryption.utils";
+
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const uploadsRouter = createTRPCRouter({
   startUploadSession: protectedProcedure
     .meta({ resource: "mediaChapters", action: "create" })
-    .input(
-      z.object({
-        type: UploadSessionTypeSchema,
-        mediaId: z.string().uuid(),
-        mediaChapterId: z.string().uuid().optional(),
-      }),
-    )
+    .input(startUploadSessionSchema)
     .mutation(async ({ ctx, input }) => {
       const uploadSession = await ctx.db.uploadSession.create({
         data: {
