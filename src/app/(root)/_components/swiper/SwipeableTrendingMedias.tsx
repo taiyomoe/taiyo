@@ -1,82 +1,65 @@
 "use client";
 
+import { Image } from "@nextui-org/image";
 import { FreeMode, Mousewheel, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 import "swiper/css";
 import "swiper/css/pagination";
 
+import NextImage from "next/image";
 import Link from "next/link";
-import { Skeleton } from "@nextui-org/skeleton";
 
 import type { LatestMedia } from "~/lib/types";
-import { cn } from "~/lib/utils/cn";
 import { MediaUtils } from "~/lib/utils/media.utils";
 
 type Props = {
   medias: LatestMedia[];
 };
 
-export const SwipeableTrendingMedias = ({ medias }: Props) => {
-  const sizeClasses = "h-[400px] md:h-[498px] w-full md:w-[350px]";
-
-  const renderSwiper = (items: JSX.Element[]) => (
-    <Swiper
-      direction="horizontal"
-      slidesPerView="auto"
-      className={cn(sizeClasses, "trendingMedias")}
-      spaceBetween={24}
-      freeMode
-      breakpoints={{
-        // MD and up
-        768: {
-          direction: "vertical",
-          freeMode: false,
-          slidesPerView: 1,
-        },
-      }}
-      pagination={{
-        clickable: true,
-        dynamicBullets: true,
-      }}
-      mousewheel={{
-        sensitivity: 0.2,
-      }}
-      modules={[Pagination, FreeMode, Mousewheel]}
-    >
-      {items.map((item, i) => (
-        <SwiperSlide key={i}>{item}</SwiperSlide>
-      ))}
-    </Swiper>
-  );
-
-  if (!medias || medias.length === 0)
-    return renderSwiper(
-      Array.from({ length: 20 }, (_, i) => (
-        <Skeleton key={i} className={cn(sizeClasses, "w-[280px] rounded-xl")} />
-      )),
-    );
-
-  return renderSwiper(
-    medias.map((media, i) => {
-      const coverUrl = MediaUtils.getCoverUrl(media);
-
-      if (!coverUrl) return <></>;
-
-      return (
+export const SwipeableTrendingMedias = ({ medias }: Props) => (
+  <Swiper
+    direction="horizontal"
+    slidesPerView="auto"
+    className="trendingMedias h-[400px] w-full md:h-[498px] md:w-[350px]"
+    spaceBetween={24}
+    freeMode
+    breakpoints={{
+      // MD and up
+      768: {
+        direction: "vertical",
+        freeMode: false,
+        slidesPerView: 1,
+      },
+    }}
+    pagination={{
+      clickable: true,
+      dynamicBullets: true,
+    }}
+    mousewheel={{
+      sensitivity: 0.2,
+    }}
+    modules={[Pagination, FreeMode, Mousewheel]}
+  >
+    {medias.map((media, i) => (
+      <SwiperSlide key={i}>
         <Link
           key={i}
           href={`/media/${media.id}`}
-          className="h-full hover:cursor-pointer hover:opacity-75"
+          className="relative hover:cursor-pointer"
           passHref
         >
-          <img
-            className="block h-full w-full rounded-xl object-cover"
-            src={coverUrl}
+          <Image
+            as={NextImage}
+            src={MediaUtils.getCoverUrl(media)}
+            className="max-h-[400px] min-h-[400px] w-[280px] object-cover md:max-h-[498px] md:min-h-[498px] md:w-[350px]"
+            width={350}
+            height={0}
             alt="media's cover"
+            isZoomed
           />
         </Link>
-      );
-    }),
-  );
-};
+      </SwiperSlide>
+    ))}
+  </Swiper>
+);
