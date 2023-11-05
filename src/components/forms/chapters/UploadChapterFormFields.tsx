@@ -9,12 +9,11 @@ import { Form } from "~/components/generics/form/Form";
 import { InputFormField } from "~/components/generics/form/InputFormField";
 import { SelectFormField } from "~/components/generics/form/SelectFormField";
 import { ImageDropzone } from "~/components/ui/images/ImageDropzone";
-import { useChapterImageCompression } from "~/hooks/useChapterImageCompression";
+import { useImageCompression } from "~/hooks/useImageCompression";
 
 export const UploadChapterFormFields = () => {
   const { isSubmitting, isValid, dirty } = useFormikContext();
-  const { needsCompression, handleCompressImages } =
-    useChapterImageCompression();
+  const { needsCompression, handleCompressImages } = useImageCompression();
 
   const shouldDisableButton =
     needsCompression || isSubmitting || !(isValid && dirty);
@@ -25,12 +24,12 @@ export const UploadChapterFormFields = () => {
         <InputFormField name="id" label="ID do capítulo" isDisabled />
         <Tooltip content="Temporário">
           <Badge
-            isOneChar
+            className="right-1"
+            placement="top-right"
             content={<AlertCircleIcon />}
             color="warning"
             size="lg"
-            placement="top-right"
-            className="right-1"
+            isOneChar
           >
             <InputFormField name="mediaId" label="ID da obra" />
           </Badge>
@@ -38,12 +37,12 @@ export const UploadChapterFormFields = () => {
         <InputFormField name="title" label="Título" />
         <Tooltip content="Temporário">
           <Badge
-            isOneChar
+            className="right-1 top-7"
+            placement="top-right"
             content={<AlertCircleIcon />}
             color="warning"
             size="lg"
-            placement="top-right"
-            className="right-1 top-7"
+            isOneChar
           >
             <InputFormField
               name="scansIds"
@@ -86,7 +85,7 @@ export const UploadChapterFormFields = () => {
         </Form.Row>
       </Form.Category>
       <Form.Category title="Imagens">
-        <ImageDropzone />
+        <ImageDropzone type="CHAPTER" />
       </Form.Category>
       <Form.Actions>
         <Button

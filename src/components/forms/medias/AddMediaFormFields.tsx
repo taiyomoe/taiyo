@@ -9,67 +9,42 @@ import {
   MediaType,
 } from "@prisma/client";
 import { useFormikContext } from "formik";
-import { HardDriveDownloadIcon } from "lucide-react";
 
 import { Form } from "~/components/generics/form/Form";
 import { InputFormField } from "~/components/generics/form/InputFormField";
 import { SelectFormField } from "~/components/generics/form/SelectFormField";
 import { SwitchFormField } from "~/components/generics/form/SwitchFormField";
 import { TextAreaFormField } from "~/components/generics/form/TextAreaFormField";
+import { useImageCompression } from "~/hooks/useImageCompression";
 import { MediaBannersFormCategory } from "./MediaBannersFormCategory";
 import { MediaCoversFormCategory } from "./MediaCoversFormCategory";
 import { MediaTagsFormCategory } from "./MediaTagsFormCategory";
 import { MediaTitlesFormCategory } from "./MediaTitlesFormCategory";
+import { MediaTrackersFormCategory } from "./MediaTrackersFormFields";
 
 export const AddMediaFormFields = () => {
-  const { isSubmitting, isValid, dirty } = useFormikContext();
+  const { values, errors, isSubmitting, isValid, dirty } = useFormikContext();
+  const { needsCompression, handleCompressImages } = useImageCompression();
 
-  const shouldDisableButton = isSubmitting || !(isValid && dirty);
+  const shouldDisableButton =
+    needsCompression || isSubmitting || !(isValid && dirty);
+
+  console.log("values", values);
+  console.log("errors", errors);
 
   return (
     <Form.Layout>
       <Form.Category>
+        <InputFormField name="id" label="ID da obra" isDisabled />
         <TextAreaFormField
           name="synopsis"
           label="Sinopse"
-          placeholder="Sinopse da obra"
+          placeholder={
+            'Gol D. Roger, a man referred to as the "Pirate King," is set to be executed by the World Government. But just before his...'
+          }
         />
       </Form.Category>
-      <Form.Category title="Trackers">
-        <Form.Row>
-          <InputFormField
-            name="trackers[0].externalId"
-            label="ID na MangaDex"
-            labelPlacement="outside"
-            placeholder="a1c7c817-4e59-43b7-9365-09675a149a6f"
-            className="md:w-2/3"
-            classNames={{ inputWrapper: "pr-0" }}
-            endContent={
-              <Button
-                className="rounded-l-none"
-                color="primary"
-                startContent={<HardDriveDownloadIcon size={20} />}
-                isIconOnly
-                isDisabled
-              />
-            }
-          />
-          <InputFormField
-            name="trackers[1].externalId"
-            label="ID na AniList"
-            labelPlacement="outside"
-            placeholder="30013"
-            className="md:w-fit"
-          />
-          <InputFormField
-            name="trackers[3].externalId"
-            label="ID no MyAnimeList"
-            labelPlacement="outside"
-            placeholder="13"
-            className="md:w-fit"
-          />
-        </Form.Row>
-      </Form.Category>
+      <MediaTrackersFormCategory />
       <Form.Category title="Detalhes">
         <Form.Row>
           <InputFormField
@@ -115,6 +90,14 @@ export const AddMediaFormFields = () => {
       <MediaCoversFormCategory />
       <MediaBannersFormCategory />
       <Form.Actions>
+        <Button
+          className="w-fit font-medium"
+          variant="flat"
+          onClick={handleCompressImages}
+          isDisabled={!needsCompression}
+        >
+          Comprimir
+        </Button>
         <Button
           color="primary"
           type="submit"

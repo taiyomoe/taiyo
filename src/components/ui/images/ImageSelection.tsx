@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { tv } from "@nextui-org/react";
 
-type Props = { compact?: boolean };
+type Props = { isCompact?: boolean };
 
 const imageSelection = tv({
   slots: {
@@ -10,7 +10,7 @@ const imageSelection = tv({
     contentWrapper: "text-center",
   },
   variants: {
-    compact: {
+    isCompact: {
       true: {
         container: "my-12",
         illustration: "hidden",
@@ -19,9 +19,9 @@ const imageSelection = tv({
   },
 });
 
-export const ImageSelection = ({ compact }: Props) => {
+export const ImageSelection = ({ isCompact }: Props) => {
   const { container, illustration, contentWrapper } = imageSelection({
-    compact,
+    isCompact,
   });
 
   return (
