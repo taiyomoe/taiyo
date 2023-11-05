@@ -145,7 +145,7 @@ model Media {
     trackers MediaTracker[]
     chapters MediaChapter[]
 
-    creator   User?   @relation(fields: [creatorId], references: [id])
+    creator   User    @relation(fields: [creatorId], references: [id])
     creatorId String
     deleterId String?
 }
@@ -313,12 +313,13 @@ model UploadSession {
     deletedAt DateTime?
 
     status UploadSessionStatus @default(UPLOADING)
+    type   UploadSessionType
 
     user   User   @relation(fields: [userId], references: [id])
     userId String
 
     mediaId        String
-    mediaChapterId String
+    mediaChapterId String?
 }
 
 // ---- SCANS
@@ -484,4 +485,10 @@ enum UploadSessionStatus {
     PROCESSING
     FINISHED
     FAILED
+}
+
+enum UploadSessionType {
+    COVER
+    BANNER
+    CHAPTER
 }

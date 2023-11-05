@@ -9,17 +9,17 @@ export const MediaCoversFormCategory = () => {
   return (
     <Form.Category title="Covers">
       <Form.Row>
-        <ImageDropzone compact />
+        <ImageDropzone type="COVER" isCompact />
         <div className="md:w-1/3">
           <Form.Col>
             <InputFormField
-              name="volume"
+              name="cover.volume"
               label="Volume"
               labelPlacement="outside"
               placeholder="Ex: 69"
             />
             <SelectFormField
-              name="contentRating"
+              name="cover.contentRating"
               label="Classificação"
               labelPlacement="outside"
               items={ContentRating}

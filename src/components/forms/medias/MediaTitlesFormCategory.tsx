@@ -49,6 +49,7 @@ export const MediaTitlesFormCategory = () => {
             name={`titles[${index}].language`}
             items={MediaTitleLanguages}
             className="md:w-1/3"
+            aria-label="Linguagem do título"
           />
           <SwitchFormField name={`titles[${index}].isAcronym`} size="lg" />
           <Button

@@ -78,7 +78,7 @@ export const MediaChapterCommentScalarFieldEnumSchema = z.enum(['id','createdAt'
 
 export const TagScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','name','description','category','contentRating','alId','creatorId','deleterId']);
 
-export const UploadSessionScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','status','userId','mediaId','mediaChapterId']);
+export const UploadSessionScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','status','type','userId','mediaId','mediaChapterId']);
 
 export const ScanScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','name','description','logo','banner','website','discord','twitter','facebook','instagram','telegram','youtube','email','creatorId','deleterId']);
 
@@ -149,6 +149,10 @@ export type ScanMemberPermissionsType = `${z.infer<typeof ScanMemberPermissionsS
 export const UploadSessionStatusSchema = z.enum(['UPLOADING','PROCESSING','FINISHED','FAILED']);
 
 export type UploadSessionStatusType = `${z.infer<typeof UploadSessionStatusSchema>}`
+
+export const UploadSessionTypeSchema = z.enum(['COVER','BANNER','CHAPTER']);
+
+export type UploadSessionTypeType = `${z.infer<typeof UploadSessionTypeSchema>}`
 
 /////////////////////////////////////////
 // MODELS
@@ -432,13 +436,14 @@ export type Tag = z.infer<typeof TagSchema>
 
 export const UploadSessionSchema = z.object({
   status: UploadSessionStatusSchema,
+  type: UploadSessionTypeSchema,
   id: z.string().uuid(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
   deletedAt: z.coerce.date().nullable(),
   userId: z.string(),
   mediaId: z.string(),
-  mediaChapterId: z.string(),
+  mediaChapterId: z.string().nullable(),
 })
 
 export type UploadSession = z.infer<typeof UploadSessionSchema>

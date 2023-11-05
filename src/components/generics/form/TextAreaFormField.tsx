@@ -19,7 +19,7 @@ const textArea = tv({
     label: "",
     mainWrapper: "w-full",
     inputWrapper: "p-3",
-    base: "h-[76px]",
+    base: "h-[76px] p-0",
   },
   variants: {
     labelPlacement: {
