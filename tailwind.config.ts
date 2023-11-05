@@ -1,6 +1,6 @@
 import { nextui } from "@nextui-org/theme";
 import tailwindScrollbar from "tailwind-scrollbar";
-import { type Config } from "tailwindcss";
+import type { Config } from "tailwindcss";
 import { fontFamily } from "tailwindcss/defaultTheme";
 import plugin from "tailwindcss/plugin";
 

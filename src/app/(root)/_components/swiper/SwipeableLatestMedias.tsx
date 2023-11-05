@@ -8,7 +8,7 @@ import "swiper/css";
 import Link from "next/link";
 import { Skeleton } from "@nextui-org/skeleton";
 
-import { type LatestMedia } from "~/lib/types";
+import type { LatestMedia } from "~/lib/types";
 import { MediaUtils } from "~/utils/MediaUtils";
 
 type Props = {

@@ -3,7 +3,7 @@ import { Card, CardBody } from "@nextui-org/card";
 import { tv } from "tailwind-variants";
 
 import { DisplayMediaChapterScans } from "~/components/ui/DisplayMediaChapterScans";
-import { type MediaLimitedChapter } from "~/lib/types";
+import type { MediaLimitedChapter } from "~/lib/types";
 import { MediaChapterUtils } from "~/utils/MediaChapterUtils";
 
 import { DisplayMediaChapterUploader } from "../../../../../../../components/ui/DisplayMediaChapterUploader";

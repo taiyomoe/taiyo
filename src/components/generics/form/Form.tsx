@@ -1,9 +1,5 @@
-import {
-  Formik,
-  Form as FormikForm,
-  type FormikConfig,
-  type FormikValues,
-} from "formik";
+import { Formik, Form as FormikForm } from "formik";
+import type { FormikConfig, FormikValues } from "formik";
 
 import { cn } from "~/utils/cn";
 

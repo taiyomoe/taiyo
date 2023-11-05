@@ -2,7 +2,7 @@ import NextImage from "next/image";
 import { Image } from "@nextui-org/image";
 
 import { DisplayMediaCover } from "~/components/media/DisplayMediaCover";
-import { type MediaLimited } from "~/lib/types";
+import type { MediaLimited } from "~/lib/types";
 import { cn } from "~/utils/cn";
 import { MediaUtils } from "~/utils/MediaUtils";
 

@@ -5,7 +5,8 @@ import { toast } from "sonner";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 
 import { Form } from "~/components/generics/form/Form";
-import { insertTagSchema, type InsertTagSchema } from "~/lib/schemas";
+import { insertTagSchema } from "~/lib/schemas";
+import type { InsertTagSchema } from "~/lib/schemas";
 import { api } from "~/lib/trpc/client";
 
 import { AddTagFormFields } from "./AddTagFormFields";

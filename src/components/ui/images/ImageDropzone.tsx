@@ -1,14 +1,15 @@
 import { useCallback, useEffect } from "react";
 import { tv } from "@nextui-org/react";
-import { type UploadSessionType } from "@prisma/client";
+import type { UploadSessionType } from "@prisma/client";
 import { useAtom, useSetAtom } from "jotai";
-import { useDropzone, type DropzoneProps } from "react-dropzone";
+import { useDropzone } from "react-dropzone";
+import type { DropzoneProps } from "react-dropzone";
 
 import {
   needsCompressionAtom,
   selectedImagesAtom,
 } from "~/atoms/imageCompression.atoms";
-import { type SelectedImage } from "~/lib/types";
+import type { SelectedImage } from "~/lib/types";
 
 import { ImageSelection } from "./ImageSelection";
 import { ImageShowcase } from "./ImageShowcase";

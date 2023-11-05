@@ -1,5 +1,5 @@
 import { CDN_DOMAIN } from "~/lib/constants";
-import { type LatestMedia, type MediaLimited } from "~/lib/types";
+import type { LatestMedia, MediaLimited } from "~/lib/types";
 
 const getCoverUrl = (media: MediaLimited | LatestMedia) =>
   `${CDN_DOMAIN}/${media.id}/covers/${media.coverId}.jpg`;
