@@ -10,7 +10,7 @@ import {
   readerSidebarSideAtom,
 } from "~/atoms/readerSettings.atoms";
 import { SidebarIcon } from "~/components/icons/SidebarIcon";
-import type { ReaderSettings } from "~/types/readerSettings.types";
+import type { ReaderSettings } from "~/lib/types";
 
 const readerSidebarSettingsOpenMode = tv({
   slots: {

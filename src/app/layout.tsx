@@ -4,7 +4,7 @@ import { headers } from "next/headers";
 
 import "~/styles/globals.css";
 
-import type { LayoutProps } from "~/types";
+import type { LayoutProps } from "~/lib/types";
 import { cn } from "~/utils/cn";
 
 import { Providers } from "./providers";

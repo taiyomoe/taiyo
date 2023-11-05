@@ -1,5 +1,5 @@
 import { Sidebar } from "~/components/layout/Sidebar";
-import type { LayoutProps } from "~/types";
+import type { LayoutProps } from "~/lib/types";
 
 import { DashboardSidebarContent } from "./_components/DashboardSidebarContent";
 
