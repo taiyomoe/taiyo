@@ -1,12 +1,13 @@
 "use client";
 
+import { Image } from "@nextui-org/image";
 import { FreeMode, Mousewheel } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 import "swiper/css";
 
+import NextImage from "next/image";
 import Link from "next/link";
-import { Skeleton } from "@nextui-org/skeleton";
 
 import type { LatestMedia } from "~/lib/types";
 import { MediaUtils } from "~/lib/utils/media.utils";
@@ -15,53 +16,36 @@ type Props = {
   medias: LatestMedia[];
 };
 
-export const SwipeableLatestMedias = ({ medias }: Props) => {
-  const renderSwiper = (items: JSX.Element[]) => (
-    <Swiper
-      className="latestMedias h-[300px] w-full"
-      slidesPerView="auto"
-      spaceBetween={24}
-      mousewheel={{
-        sensitivity: 0.2,
-      }}
-      freeMode
-      modules={[FreeMode, Mousewheel]}
-    >
-      {items.map((item, i) => (
-        <SwiperSlide key={i} className="w-fit md:w-auto">
-          {item}
-        </SwiperSlide>
-      ))}
-    </Swiper>
-  );
-
-  if (!medias)
-    return renderSwiper(
-      Array.from({ length: 10 }, (_, i) => (
-        <Skeleton key={i} className="h-[300px] w-[200px] rounded-lg" />
-      )),
-    );
-
-  return renderSwiper(
-    medias.map((media, i) => {
-      const coverUrl = MediaUtils.getCoverUrl(media);
-
-      if (!coverUrl) return <></>;
-
-      return (
+export const SwipeableLatestMedias = ({ medias }: Props) => (
+  <Swiper
+    className="latestMedias h-[300px]"
+    slidesPerView="auto"
+    spaceBetween={24}
+    mousewheel={{
+      sensitivity: 0.2,
+    }}
+    freeMode
+    modules={[FreeMode, Mousewheel]}
+  >
+    {medias.map((media, i) => (
+      <SwiperSlide key={i} className="!w-fit md:!w-auto">
         <Link
           key={i}
           href={`/media/${media.id}`}
-          className="h-full hover:cursor-pointer hover:opacity-75"
+          className="relative hover:cursor-pointer"
           passHref
         >
-          <img
-            className="block h-full rounded-lg object-cover"
-            src={coverUrl}
+          <Image
+            as={NextImage}
+            src={MediaUtils.getCoverUrl(media)}
+            className="max-h-[300px] min-h-[300px] object-cover"
+            height={300}
+            width={220}
             alt="media's cover"
+            isZoomed
           />
         </Link>
-      );
-    }),
-  );
-};
+      </SwiperSlide>
+    ))}
+  </Swiper>
+);
