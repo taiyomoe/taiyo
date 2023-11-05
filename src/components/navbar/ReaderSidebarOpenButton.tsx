@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { Button } from "@nextui-org/button";
 import { useAtom, useAtomValue } from "jotai";
 
@@ -12,13 +13,18 @@ import {
 import { SidebarIcon } from "../icons/SidebarIcon";
 
 export const ReaderSidebarOpenButton = () => {
+  const pathname = usePathname();
   const readerSidebarOpenMode = useAtomValue(readerSidebarOpenModeAtom);
   const readerSidebarSide = useAtomValue(readerSidebarSideAtom);
   const [readerSidebarState, setReaderSidebarState] = useAtom(
     readerSidebarStateAtom,
   );
 
-  if (readerSidebarOpenMode === "hover" || readerSidebarState === "show") {
+  if (
+    !pathname.includes("/chapter/") ||
+    readerSidebarOpenMode === "hover" ||
+    readerSidebarState === "show"
+  ) {
     return null;
   }
 
