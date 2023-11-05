@@ -40,7 +40,7 @@ export const SwipeableLatestMedias = ({ medias }: Props) => (
             src={MediaUtils.getCoverUrl(media)}
             className="max-h-[300px] min-h-[300px] object-cover"
             height={300}
-            width={220}
+            width={210}
             alt="media's cover"
             isZoomed
           />
