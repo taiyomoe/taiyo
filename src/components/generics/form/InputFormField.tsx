@@ -61,6 +61,7 @@ export const InputFormField = ({
       <Input
         {...field}
         {...rest}
+        value={(field.value as string) ?? ""}
         labelPlacement={labelPlacement}
         color={shouldDisplayError ? "danger" : "default"}
         classNames={{

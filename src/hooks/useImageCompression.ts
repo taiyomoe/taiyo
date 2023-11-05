@@ -8,7 +8,7 @@ import {
 } from "~/atoms/imageCompression.atoms";
 import { ImageUtils } from "~/lib/utils/image.utils";
 
-export const useChapterImageCompression = () => {
+export const useImageCompression = () => {
   const [selectedImages, setSelectedImages] = useAtom(selectedImagesAtom);
   const [needsCompression, setNeedsCompression] = useAtom(needsCompressionAtom);
 
@@ -21,7 +21,7 @@ export const useChapterImageCompression = () => {
             setSelectedImages((prev) =>
               prev.map((i) =>
                 i.file.name === img.file.name
-                  ? { file: img.file, status: "compressing" }
+                  ? { ...i, status: "compressing" }
                   : i,
               ),
             );
@@ -31,12 +31,12 @@ export const useChapterImageCompression = () => {
             setSelectedImages((prev) =>
               prev.map((i) =>
                 i.file.name === img.file.name
-                  ? { file: result, status: "compressed" }
+                  ? { ...i, file: result, status: "compressed" }
                   : i,
               ),
             );
           }),
-      ).then(() => {
+      ).finally(() => {
         setNeedsCompression(false);
       });
 

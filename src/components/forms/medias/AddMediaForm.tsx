@@ -1,54 +1,38 @@
 "use client";
 
-import type { FormikConfig } from "formik";
-import { toast } from "sonner";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 
 import { Form } from "~/components/generics/form/Form";
+import { useMediaCreation } from "~/hooks/useMediaCreation";
 import { insertMediaSchema, type InsertMediaSchema } from "~/lib/schemas";
-import { api } from "~/lib/trpc/client";
 import { AddMediaFormFields } from "./AddMediaFormFields";
 
 const initialValues: InsertMediaSchema = {
-  id: "",
-  startDate: null,
-  endDate: null,
-  synopsis: "",
+  id: crypto.randomUUID(),
+  synopsis: "Gol D. Roger...",
   contentRating: "NORMAL",
-  oneShot: false,
+  oneShot: true,
   type: "MANGA",
   status: "RELEASING",
   source: "ORIGINAL",
   demography: "SHOUNEN",
   countryOfOrigin: "JAPAN",
   flag: "OK",
-  titles: [{ title: "", isAcronym: false, language: "ENGLISH" }],
-  tags: [],
-  trackers: [
-    { tracker: "MANGADEX", externalId: "" },
-    { tracker: "ANILIST", externalId: "" },
-    { tracker: "MYANIMELIST", externalId: "" },
-  ],
+  titles: [{ title: "Teste", isAcronym: false, language: "ENGLISH" }],
+  // tags: [],
+  cover: {
+    id: "",
+    volume: null,
+    contentRating: "NORMAL",
+  },
+  banner: {
+    id: "",
+    contentRating: "NORMAL",
+  },
 };
 
 export const AddMediaForm = () => {
-  const { mutate } = api.medias.add.useMutation();
-
-  const handleSubmit: FormikConfig<InsertMediaSchema>["onSubmit"] = (
-    values,
-    { resetForm },
-  ) => {
-    mutate(values, {
-      onSuccess: () => {
-        toast.success("Obra adicionada com sucesso!");
-        resetForm();
-      },
-      onError: (error) => {
-        toast.error("Ocorreu um erro inesperado ao adicionar a obra.");
-        console.log(error);
-      },
-    });
-  };
+  const { handleSubmit } = useMediaCreation();
 
   return (
     <Form.Component

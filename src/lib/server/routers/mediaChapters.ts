@@ -3,7 +3,6 @@ import { z } from "zod";
 
 import { insertMediaChapterSchema } from "~/lib/schemas/mediaChapter.schemas";
 import { type MediaChapterLimited } from "~/lib/types";
-import { EncryptionUtils } from "~/lib/utils/encryption.utils";
 import { NotFoundError } from "../errors";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
@@ -104,29 +103,5 @@ export const mediaChaptersRouter = createTRPCRouter({
       };
 
       return mediaChapterLimited;
-    }),
-
-  startUploadSession: protectedProcedure
-    .meta({ resource: "mediaChapters", action: "create" })
-    .input(
-      z.object({
-        mediaId: z.string().uuid(),
-        mediaChapterId: z.string().uuid(),
-      }),
-    )
-    .mutation(async ({ ctx, input }) => {
-      const uploadSession = await ctx.db.uploadSession.create({
-        data: {
-          userId: ctx.session.user.id,
-          mediaId: input.mediaId,
-          mediaChapterId: input.mediaChapterId,
-        },
-      });
-
-      const toEncrypt = {
-        uploadSessionId: uploadSession.id,
-      };
-
-      return EncryptionUtils.encrypt(JSON.stringify(toEncrypt));
     }),
 });
