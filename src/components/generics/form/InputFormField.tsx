@@ -5,7 +5,7 @@ import type { InputProps } from "@nextui-org/input";
 import { useField } from "formik";
 import { tv } from "tailwind-variants";
 
-import { cn } from "~/utils/cn";
+import { cn } from "~/lib/utils/cn";
 
 type Props = {
   name: string;

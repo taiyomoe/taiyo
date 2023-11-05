@@ -9,7 +9,7 @@ import Link from "next/link";
 import { Skeleton } from "@nextui-org/skeleton";
 
 import type { LatestMedia } from "~/lib/types";
-import { MediaUtils } from "~/utils/MediaUtils";
+import { MediaUtils } from "~/lib/utils/media.utils";
 
 type Props = {
   medias: LatestMedia[];
