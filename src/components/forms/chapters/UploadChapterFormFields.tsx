@@ -85,7 +85,7 @@ export const UploadChapterFormFields = () => {
         </Form.Row>
       </Form.Category>
       <Form.Category title="Imagens">
-        <ImageDropzone />
+        <ImageDropzone type="CHAPTER" />
       </Form.Category>
       <Form.Actions>
         <Button

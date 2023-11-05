@@ -4,6 +4,7 @@ import type {
   MediaChapterComment,
   MediaTitle,
   Scan,
+  UploadSessionType,
   User,
 } from "@prisma/client";
 
@@ -49,8 +50,7 @@ export type MediaChapterNavigation = {
 };
 
 export type SelectedImage = {
+  type: UploadSessionType;
   file: File;
   status: "pending" | "compressing" | "compressed";
 };
-
-export type SuccessfulUploadResponse = { pages: string[] };

@@ -8,6 +8,7 @@ import {
   needsCompressionAtom,
   selectedImagesAtom,
 } from "~/atoms/imageCompression.atoms";
+import { type SelectedImage } from "~/lib/types";
 import { ImageSelection } from "./ImageSelection";
 import { ImageShowcase } from "./ImageShowcase";
 
@@ -31,8 +32,10 @@ const imageDropzone = tv({
 });
 
 export const ImageDropzone = ({ type, isCompact }: Props) => {
-  const [selectedImages, setSelectedImages] = useAtom(selectedImagesAtom);
+  const [selectedImagesAtomValue, setSelectedImages] =
+    useAtom(selectedImagesAtom);
   const setNeedsCompression = useSetAtom(needsCompressionAtom);
+  const selectedImages = selectedImagesAtomValue.filter((x) => x.type === type);
 
   const shouldDisableDropzone = selectedImages.length !== 0;
   const { container } = imageDropzone({ disabled: shouldDisableDropzone });
@@ -40,7 +43,11 @@ export const ImageDropzone = ({ type, isCompact }: Props) => {
   const onDrop: DropzoneProps["onDrop"] = useCallback(
     (acceptedFiles: File[]) => {
       setSelectedImages(
-        acceptedFiles.map((f) => ({ type, file: f, status: "pending" })),
+        (prev) =>
+          [
+            ...prev,
+            ...acceptedFiles.map((f) => ({ type, file: f, status: "pending" })),
+          ] as SelectedImage[],
       );
 
       if (acceptedFiles.some((f) => f.type !== "image/jpeg")) {
@@ -66,7 +73,7 @@ export const ImageDropzone = ({ type, isCompact }: Props) => {
     <section {...getRootProps({ className: container() })}>
       <input {...getInputProps()} disabled={acceptedFiles.length !== 0} />
       {selectedImages.length === 0 && <ImageSelection isCompact={isCompact} />}
-      {selectedImages.length > 0 && <ImageShowcase />}
+      {selectedImages.length > 0 && <ImageShowcase type={type} />}
     </section>
   );
 };

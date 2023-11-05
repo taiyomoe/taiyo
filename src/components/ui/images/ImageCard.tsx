@@ -5,7 +5,7 @@ import { type SelectedImage } from "~/lib/types";
 
 type Props = {
   position: string;
-} & SelectedImage;
+} & Omit<SelectedImage, "type">;
 
 const imageCard = tv({
   slots: {

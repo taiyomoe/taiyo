@@ -8,9 +8,9 @@ export const MediaBannersFormCategory = () => {
   return (
     <Form.Category title="Banners">
       <Form.Row>
-        <ImageDropzone compact />
+        <ImageDropzone type="BANNER" isCompact />
         <SelectFormField
-          name="contentRating"
+          name="banner.contentRating"
           label="Classificação"
           labelPlacement="outside"
           items={ContentRating}
