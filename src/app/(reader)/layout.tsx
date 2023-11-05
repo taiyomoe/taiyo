@@ -1,5 +1,6 @@
 import { NavbarAuth } from "~/components/navbar/NavbarAuth";
 import type { LayoutProps } from "~/types";
+
 import { ReaderSidebarLayout } from "./_components/sidebarMode/layout/ReaderSidebarLayout";
 import { ReaderSidebarOpenOverlay } from "./chapter/[chapterId]/_components/ReaderSidebarOpenOverlay";
 

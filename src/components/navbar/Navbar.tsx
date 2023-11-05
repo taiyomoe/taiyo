@@ -5,6 +5,7 @@ import { tv } from "tailwind-variants";
 
 import { CompanyLogo } from "~/components/ui/CompanyLogo";
 import { useChapterNavbar } from "~/hooks/useChapterNavbar";
+
 import { NavbarBorder } from "./NavbarBorder";
 import { ReaderSidebarOpenButton } from "./ReaderSidebarOpenButton";
 

@@ -1,5 +1,6 @@
 import { Sidebar } from "~/components/layout/Sidebar";
 import type { LayoutProps } from "~/types";
+
 import { DashboardSidebarContent } from "./_components/DashboardSidebarContent";
 
 export default function Layout({ children }: LayoutProps) {

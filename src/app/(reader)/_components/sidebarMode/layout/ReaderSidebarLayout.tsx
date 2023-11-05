@@ -8,6 +8,7 @@ import {
   readerSidebarSideAtom,
   readerSidebarStateAtom,
 } from "~/atoms/readerSettings.atoms";
+
 import { ReaderSidebarSettingsSection } from "../sections/ReaderSidebarSettingsSection";
 import { ReaderSidebarUploadersSection } from "../sections/ReaderSidebarUploadersSection";
 import { ReaderSettingsMediaChapterDropdown } from "../ui/ReaderSettingsMediaChapterDropdown";

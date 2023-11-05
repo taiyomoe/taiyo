@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 
 import { CompanyLogo } from "~/components/ui/CompanyLogo";
 import { getServerAuthSession } from "~/lib/auth/utils";
+
 import { AuthCard } from "./_components/AuthCard";
 
 export default async function SignInPage() {

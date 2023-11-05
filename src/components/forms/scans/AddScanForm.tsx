@@ -7,6 +7,7 @@ import { Form } from "~/components/generics/form/Form";
 import { insertScanSchema, type InsertScanSchema } from "~/lib/schemas";
 import { api } from "~/lib/trpc/client";
 import { type FormSubmit } from "~/lib/types";
+
 import { AddScanFormFields } from "./AddScanFormFields";
 
 const initialValues: InsertScanSchema = {
