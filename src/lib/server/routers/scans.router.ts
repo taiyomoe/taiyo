@@ -1,4 +1,5 @@
 import { insertScanSchema } from "~/lib/schemas";
+
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const scansRouter = createTRPCRouter({

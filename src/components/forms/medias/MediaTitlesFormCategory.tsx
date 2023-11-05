@@ -7,7 +7,7 @@ import { Form } from "~/components/generics/form/Form";
 import { InputFormField } from "~/components/generics/form/InputFormField";
 import { SelectFormField } from "~/components/generics/form/SelectFormField";
 import { SwitchFormField } from "~/components/generics/form/SwitchFormField";
-import { type InsertMediaSchema } from "~/lib/schemas";
+import type { InsertMediaSchema } from "~/lib/schemas";
 
 export const MediaTitlesFormCategory = () => {
   const [{ value }, {}, { setValue }] = useField<InsertMediaSchema["titles"]>({

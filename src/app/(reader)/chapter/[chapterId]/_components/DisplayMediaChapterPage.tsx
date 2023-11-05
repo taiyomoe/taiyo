@@ -6,6 +6,7 @@ import { tv } from "tailwind-variants";
 
 import { useChapterNavigation } from "~/hooks/useChapterNavigation";
 import { useKeyPress } from "~/hooks/useKeyPress";
+
 import { DisplayMediaChapterImages } from "./DisplayMediaChapterImages";
 
 const displayMediaChapterPage = tv({

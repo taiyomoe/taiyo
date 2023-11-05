@@ -8,6 +8,7 @@
     "build": "next build",
     "dev": "next dev",
     "lint": "next lint",
+    "format": "prettier --write .",
     "start": "next start",
     "db:push": "prisma db push",
     "db:studio": "prisma studio",

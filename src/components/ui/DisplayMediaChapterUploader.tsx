@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Skeleton } from "@nextui-org/skeleton";
-import { type User } from "@prisma/client";
+import type { User } from "@prisma/client";
 import { UserIcon } from "lucide-react";
 import { tv } from "tailwind-variants";
 

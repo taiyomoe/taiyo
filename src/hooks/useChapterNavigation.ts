@@ -6,7 +6,7 @@ import {
   mediaChapterAtom,
   mediaChapterNavigationAtom,
 } from "~/atoms/mediaChapter.atoms";
-import { MediaChapterUtils } from "~/utils/MediaChapterUtils";
+import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils";
 
 export const useChapterNavigation = () => {
   const pathname = usePathname();

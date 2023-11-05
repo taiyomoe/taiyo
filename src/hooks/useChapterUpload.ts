@@ -1,14 +1,14 @@
 import { useMutation } from "@tanstack/react-query";
 import { TRPCClientError } from "@trpc/client";
-import { type FormikConfig } from "formik";
+import type { FormikConfig } from "formik";
 import { useAtom } from "jotai";
 import { toast } from "sonner";
 
 import { selectedImagesAtom } from "~/atoms/imageCompression.atoms";
-import { type InsertMediaChapterSchema } from "~/lib/schemas/mediaChapter.schemas";
+import type { InsertMediaChapterSchema } from "~/lib/schemas/mediaChapter.schemas";
 import { api } from "~/lib/trpc/client";
-import { type SuccessfulUploadResponse } from "~/lib/types";
-import { MediaChapterUtils } from "~/utils/MediaChapterUtils";
+import type { SuccessfulUploadResponse } from "~/lib/types";
+import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils";
 
 export const useChapterUpload = (initialValues: InsertMediaChapterSchema) => {
   const [selectedImages, setSelectedImages] = useAtom(selectedImagesAtom);

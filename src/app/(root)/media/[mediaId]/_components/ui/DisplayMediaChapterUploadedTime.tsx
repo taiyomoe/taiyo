@@ -1,7 +1,7 @@
 import { ClockIcon } from "lucide-react";
 
-import { type MediaLimitedChapter } from "~/lib/types";
-import { MediaChapterUtils } from "~/utils/MediaChapterUtils";
+import type { MediaLimitedChapter } from "~/lib/types";
+import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils";
 
 type Props = {
   chapter: MediaLimitedChapter;

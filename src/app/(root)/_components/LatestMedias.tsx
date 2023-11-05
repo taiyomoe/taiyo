@@ -1,4 +1,5 @@
 import { api } from "~/lib/trpc/server";
+
 import { SwipeableLatestMedias } from "./swiper/SwipeableLatestMedias";
 
 export const LatestMedias = async () => {

@@ -1,4 +1,4 @@
-import { cn } from "~/utils/cn";
+import { cn } from "~/lib/utils/cn";
 
 type Props = {
   order: "unique" | "first" | "middle" | "last";

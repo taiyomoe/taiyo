@@ -10,7 +10,7 @@ import {
 import { PanelBottomOpenIcon } from "lucide-react";
 
 import { FloatingActionButton } from "~/components/generics/buttons/FloatingActionButton";
-import { cn } from "~/utils/cn";
+import { cn } from "~/lib/utils/cn";
 
 type Props = {
   title: string;
