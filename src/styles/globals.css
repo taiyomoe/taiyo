@@ -73,7 +73,3 @@
     height: inherit !important;
   }
 }
-
-.remove-maxWidth {
-  max-width: 100% !important;
-}
