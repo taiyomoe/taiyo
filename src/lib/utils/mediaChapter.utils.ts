@@ -40,12 +40,12 @@ const getPageUrl = (
 };
 
 const getCurrentPage = (
-  media: MediaChapterLimited,
+  mediaChapter: MediaChapterLimited,
   navigation: MediaChapterNavigation | null,
 ) => {
   if (!navigation) return;
 
-  return media.pages.at(navigation.currentPage - 1);
+  return mediaChapter.pages.at(navigation.currentPage - 1);
 };
 
 const getCurrentPageUrl = (
