@@ -54,3 +54,5 @@ export type SelectedImage = {
   file: File;
   status: "pending" | "compressing" | "compressed";
 };
+
+export type ReaderImage = { number: number; url: string };

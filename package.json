@@ -33,6 +33,7 @@
     "formik": "^2.4.5",
     "framer-motion": "^10.16.4",
     "jotai": "^2.5.1",
+    "lodash-es": "^4.17.21",
     "lucide-react": "^0.292.0",
     "luxon": "^3.4.3",
     "next": "^13.5.6",
@@ -54,6 +55,7 @@
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "^4.1.1",
     "@types/eslint": "^8.44.7",
+    "@types/lodash-es": "^4.17.10",
     "@types/luxon": "^3.3.3",
     "@types/node": "^20.8.9",
     "@types/react": "^18.2.36",
