@@ -1,13 +1,11 @@
 import { DateTime } from "luxon";
 
-import { CDN_DOMAIN } from "~/lib/constants";
 import { env } from "~/lib/env.mjs";
 import type {
   MediaChapterGroups,
   MediaChapterLimited,
   MediaChapterLimitedBase,
   MediaChapterNavigation,
-  MediaChapterPage,
   MediaLimitedChapter,
 } from "~/lib/types";
 
@@ -31,35 +29,6 @@ const getNavigation = (
   currentPage,
   nextPage: currentPage === mediaChapter.pages.length ? null : currentPage + 1,
 });
-
-const getPageUrl = (
-  mediaChapter: MediaChapterLimited,
-  page: MediaChapterPage,
-) => {
-  return `${CDN_DOMAIN}/${mediaChapter.media.id}/${mediaChapter.id}/${page.id}.jpg`;
-};
-
-const getCurrentPage = (
-  mediaChapter: MediaChapterLimited,
-  navigation: MediaChapterNavigation | null,
-) => {
-  if (!navigation) return;
-
-  return mediaChapter.pages.at(navigation.currentPage - 1);
-};
-
-const getCurrentPageUrl = (
-  mediaChapter: MediaChapterLimited | null,
-  navigation: MediaChapterNavigation | null,
-) => {
-  if (!mediaChapter) return;
-
-  const currentPage = getCurrentPage(mediaChapter, navigation);
-
-  if (!currentPage) return;
-
-  return getPageUrl(mediaChapter, currentPage);
-};
 
 const computeUploadedTime = (mediaChapter: MediaLimitedChapter) => {
   const uploadedAt = DateTime.fromJSDate(mediaChapter.createdAt);
@@ -133,9 +102,6 @@ export const MediaChapterUtils = {
   getUrl,
   getUploadEndpoint,
   getNavigation,
-  getPageUrl,
-  getCurrentPage,
-  getCurrentPageUrl,
   computeUploadedTime,
   computeVolumes,
   parseUrl,
