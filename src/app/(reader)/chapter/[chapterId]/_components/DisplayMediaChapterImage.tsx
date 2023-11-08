@@ -1,11 +1,13 @@
 import Image from "next/image";
 
 type Props = {
-  url: string;
+  blob: Blob;
   hide: boolean;
 };
 
-export const DisplayMediaChapterImage = ({ url, hide }: Props) => {
+export const DisplayMediaChapterImage = ({ blob, hide }: Props) => {
+  const url = URL.createObjectURL(blob);
+
   return (
     <Image
       src={url}
@@ -19,6 +21,7 @@ export const DisplayMediaChapterImage = ({ url, hide }: Props) => {
       width={0}
       height={0}
       alt="image"
+      unoptimized
     />
   );
 };
