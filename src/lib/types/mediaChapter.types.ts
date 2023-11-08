@@ -56,3 +56,4 @@ export type SelectedImage = {
 };
 
 export type ReaderImage = { number: number; url: string };
+export type ReaderBlob = ReaderImage & { blob: Blob };
