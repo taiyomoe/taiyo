@@ -22,6 +22,25 @@ export default {
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
       },
+      spacing: {
+        navbar: "var(--navbar-height)",
+        reader: "var(--reader-height)",
+        readerSidebar: "var(--reader-sidebar-width)",
+      },
+      maxHeight: {
+        navbar: "var(--navbar-height)",
+        reader: "var(--reader-height)",
+      },
+      minHeight: {
+        navbar: "var(--navbar-height)",
+        reader: "var(--reader-height)",
+      },
+      maxWidth: {
+        readerSidebar: "var(--reader-sidebar-width)",
+      },
+      minWidth: {
+        readerSidebar: "var(--reader-sidebar-width)",
+      },
       blur: {
         xs: "3px",
       },
