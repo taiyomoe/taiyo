@@ -23,13 +23,13 @@ export default {
         sans: ["var(--font-sans)", ...fontFamily.sans],
       },
       maxHeight: {
-        reader: "calc(100vh - var(--navbar-height))px",
+        reader: "calc(100vh - var(--navbar-height))",
       },
       minHeight: {
-        reader: "calc(100vh - var(--navbar-height))px",
+        reader: "calc(100vh - var(--navbar-height))",
       },
       height: {
-        reader: "calc(100vh - var(--navbar-height))px",
+        reader: "calc(100vh - var(--navbar-height))",
       },
       blur: {
         xs: "3px",
