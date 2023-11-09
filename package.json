@@ -43,7 +43,7 @@
     "react-dom": "18.2.0",
     "react-dropzone": "^14.2.3",
     "sonner": "^1.2.0",
-    "superjson": "^2.2.0",
+    "superjson": "^2.2.1",
     "swiper": "^11.0.3",
     "tailwind-merge": "^2.0.0",
     "tailwind-scrollbar": "^3.0.5",
