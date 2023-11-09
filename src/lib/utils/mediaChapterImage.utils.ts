@@ -21,7 +21,7 @@ const getImagesChunk = (
   mediaChapter: MediaChapterLimited,
   navigation: MediaChapterNavigation,
 ) => {
-  const images: ReaderImage[] = [];
+  const images: Omit<ReaderImage, "blobUrl">[] = [];
 
   for (
     let i = navigation.currentPage - boundary;
@@ -49,7 +49,7 @@ const mergeImages = (
 ) => {
   const newChunk = getImagesChunk(mediaChapter, navigation);
   const imageNumbers = images.map((image) => image.number);
-  const newImages = cloneDeep(images);
+  const newImages: Omit<ReaderImage, "blobUrl">[] = cloneDeep(images);
 
   for (const image of newChunk) {
     if (!imageNumbers.includes(image.number)) {

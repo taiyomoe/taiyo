@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { usePathname } from "next/navigation";
 import { useAtom, useAtomValue } from "jotai";
 
@@ -6,9 +6,7 @@ import {
   mediaChapterAtom,
   mediaChapterNavigationAtom,
 } from "~/atoms/mediaChapter.atoms";
-import type { ReaderImage } from "~/lib/types";
 import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils";
-import { MediaChapterImageUtils } from "~/lib/utils/mediaChapterImage.utils";
 
 export const useChapterNavigation = () => {
   const pathname = usePathname();
@@ -17,7 +15,6 @@ export const useChapterNavigation = () => {
   const chapter = useAtomValue(mediaChapterAtom);
   const [navigation, setNavigation] = useAtom(mediaChapterNavigationAtom);
   const [pageNumber, setPageNumber] = useState(initialPageNumber);
-  const [images, setImages] = useState<ReaderImage[]>([]);
 
   const hasPreviousPage = !!navigation?.previousPage;
   const hasNextPage = !!navigation?.nextPage;
@@ -34,9 +31,9 @@ export const useChapterNavigation = () => {
       window.history.pushState({}, "", `${rawPathname}/${newPageNumber}`);
       setPageNumber(newPageNumber);
       setNavigation(newNavigation);
-      setImages((prev) =>
-        MediaChapterImageUtils.mergeImages(chapter, newNavigation, prev),
-      );
+      // setImages((prev) =>
+      //   MediaChapterImageUtils.mergeImages(chapter, newNavigation, prev),
+      // );
     },
     [chapter, rawPathname, setNavigation],
   );
@@ -65,18 +62,9 @@ export const useChapterNavigation = () => {
     goTo(1);
   }
 
-  useEffect(() => {
-    if (chapter && navigation) {
-      setImages((prev) =>
-        MediaChapterImageUtils.mergeImages(chapter, navigation, prev),
-      );
-    }
-  }, [chapter, images.length, navigation]);
-
   return {
     chapter,
     navigation,
-    images,
     currentPage: navigation?.currentPage ?? null,
     hasPreviousPage,
     hasNextPage,
