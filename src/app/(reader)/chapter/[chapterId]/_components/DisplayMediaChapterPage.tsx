@@ -10,14 +10,16 @@ import { useChapterNavigation } from "~/hooks/useChapterNavigation";
 import { useKeyPress } from "~/hooks/useKeyPress";
 
 import { DisplayMediaChapterImages } from "./DisplayMediaChapterImages";
+import { DisplayMediaChapterPageActions } from "./DisplayMediaChapterPageActions";
 
 const displayMediaChapterPage = tv({
   slots: {
-    container: "relative flex row mt-[var(--navbar-height)] grid-in-chapter",
+    container:
+      "relative flex flex-col mt-[var(--navbar-height)] grid-in-chapter",
     leftButton:
       "absolute z-10 w-1/2 hover:cursor-pointer focus-visible:outline-none",
     rightButton: "absolute right-0 z-10 w-1/2 focus-visible:outline-none",
-    imagesWrapper: "relative w-full flex items-center justify-center",
+    imagesWrapper: "relative w-full flex flex-row items-center justify-center",
   },
   variants: {
     pageMode: {
@@ -58,15 +60,16 @@ export const DisplayMediaChapterPage = () => {
 
   return (
     <div className={container()}>
-      <button ref={backButtonRef} className={leftButton()} onClick={goBack} />
       <div className={imagesWrapper()}>
+        <button ref={backButtonRef} className={leftButton()} onClick={goBack} />
         <DisplayMediaChapterImages />
+        <button
+          ref={forwardButtonRef}
+          className={rightButton()}
+          onClick={goForward}
+        />
       </div>
-      <button
-        ref={forwardButtonRef}
-        className={rightButton()}
-        onClick={goForward}
-      />
+      <DisplayMediaChapterPageActions />
     </div>
   );
 };
