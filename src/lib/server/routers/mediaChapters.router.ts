@@ -6,7 +6,6 @@ import {
 } from "~/lib/schemas/mediaChapter.schemas";
 import type { MediaChapterLimited } from "~/lib/types";
 
-import { NotFoundError } from "../errors";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const mediaChaptersRouter = createTRPCRouter({
@@ -67,7 +66,7 @@ export const mediaChaptersRouter = createTRPCRouter({
       });
 
       if (!result?.uploader.name || !result.media.titles.at(0)) {
-        throw new NotFoundError();
+        return null;
       }
 
       const sortedMediaChapters = result.media.chapters.sort(

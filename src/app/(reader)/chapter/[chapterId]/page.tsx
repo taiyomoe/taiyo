@@ -1,3 +1,5 @@
+import { notFound } from "next/navigation";
+
 import { api } from "~/lib/trpc/server";
 
 import { PopulateAtoms } from "../../_components/PopulateAtoms";
@@ -10,6 +12,10 @@ type Props = {
 export default async function MediaChapterPage(props: Props) {
   const { chapterId } = props.params;
   const mediaChapter = await api.mediaChapters.getById.query(chapterId);
+
+  if (!mediaChapter) {
+    return notFound();
+  }
 
   return (
     <>
