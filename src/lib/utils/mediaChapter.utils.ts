@@ -86,7 +86,7 @@ const parseUrl = (pathname: string) => {
     parseInt(currentPage) !== parseFloat(currentPage) // if it's a float
   ) {
     return {
-      rawPathname: pathname,
+      rawPathname: splitted.slice(0, 3).join("/"),
       currentPageNumber: null,
     };
   }
