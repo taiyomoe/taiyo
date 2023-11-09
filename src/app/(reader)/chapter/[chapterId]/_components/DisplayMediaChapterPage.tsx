@@ -41,7 +41,7 @@ export const DisplayMediaChapterPage = () => {
   return (
     <div className={container()}>
       <button ref={backButtonRef} className={leftButton()} onClick={goBack} />
-      <div className="relative min-h-[calc(100%-var(--navbar-height))] w-full">
+      <div className="relative max-h-[calc(100vh-var(--navbar-height))] min-h-[calc(100vh-var(--navbar-height))] w-full">
         <div className="flex h-full items-center overflow-x-auto">
           <DisplayMediaChapterImages />
         </div>

@@ -55,5 +55,4 @@ export type SelectedImage = {
   status: "pending" | "compressing" | "compressed";
 };
 
-export type ReaderImage = { number: number; url: string };
-export type ReaderBlob = ReaderImage & { blob: Blob };
+export type ReaderImage = { number: number; url: string; blobUrl: string };
