@@ -5,13 +5,14 @@ import { tv } from "tailwind-variants";
 
 import { CompanyLogo } from "~/components/ui/CompanyLogo";
 import { useChapterNavbar } from "~/hooks/useChapterNavbar";
+
 import { NavbarBorder } from "./NavbarBorder";
 import { ReaderSidebarOpenButton } from "./ReaderSidebarOpenButton";
 
 const navbar = tv({
   slots: {
     container:
-      "w-auto bg-background flex flex-col h-[var(--navbar-height)] justify-center max-h-[var(--navbar-height)] z-20 transition-all",
+      "w-auto bg-background flex flex-col h-navbar justify-center max-h-navbar z-20 transition-all",
     contentWrapper: "items-center px-6 flex grow justify-between",
     brandContainer: "flex items-center gap-2",
     brandText: "text-xl font-semibold",
@@ -20,10 +21,10 @@ const navbar = tv({
   variants: {
     sidebarSide: {
       left: {
-        container: "pl-[300px]",
+        container: "pl-readerSidebar",
       },
       right: {
-        container: "pr-[300px]",
+        container: "pr-readerSidebar",
       },
     },
     mode: {
@@ -34,7 +35,7 @@ const navbar = tv({
     },
     expand: {
       true: {
-        container: "p-0",
+        container: "!p-0",
       },
     },
   },

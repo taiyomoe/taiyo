@@ -1,7 +1,7 @@
 import type { InputProps } from "@nextui-org/react";
 import { tv } from "tailwind-variants";
 
-import { cn } from "~/utils/cn";
+import { cn } from "~/lib/utils/cn";
 
 type Props = {
   label?: string;

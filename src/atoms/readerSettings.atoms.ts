@@ -1,6 +1,6 @@
 import { atomWithStorage } from "jotai/utils";
 
-import type { ReaderSettings } from "~/types/readerSettings.types";
+import type { ReaderSettings } from "~/lib/types";
 
 export const readerSidebarStateAtom = atomWithStorage<
   ReaderSettings["sidebarState"]
@@ -17,3 +17,8 @@ export const readerSidebarOpenModeAtom = atomWithStorage<
 export const readerNavbarModeAtom = atomWithStorage<
   ReaderSettings["navbarMode"]
 >("readerNavbarMode", "sticky");
+
+export const readerPageModeAtom = atomWithStorage<ReaderSettings["pageMode"]>(
+  "readerPageMode",
+  "single",
+);

@@ -1,53 +1,103 @@
-import { useMemo, useState } from "react";
-import { usePathname } from "next/navigation";
+import { useCallback, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import { useAtom, useAtomValue } from "jotai";
 
 import {
   mediaChapterAtom,
   mediaChapterNavigationAtom,
 } from "~/atoms/mediaChapter.atoms";
-import { MediaChapterUtils } from "~/utils/MediaChapterUtils";
+import { MediaUtils } from "~/lib/utils/media.utils";
+import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils";
 
 export const useChapterNavigation = () => {
+  const router = useRouter();
   const pathname = usePathname();
   const { rawPathname, currentPageNumber: initialPageNumber } =
     MediaChapterUtils.parseUrl(pathname);
   const chapter = useAtomValue(mediaChapterAtom);
   const [navigation, setNavigation] = useAtom(mediaChapterNavigationAtom);
-
   const [pageNumber, setPageNumber] = useState(initialPageNumber);
-  const currentPageUrl = useMemo(
-    () => MediaChapterUtils.getCurrentPageUrl(chapter, navigation) ?? null,
-    [chapter, navigation],
-  );
 
   const hasPreviousPage = !!navigation?.previousPage;
   const hasNextPage = !!navigation?.nextPage;
 
-  const goTo = (newPageNumber: number) => {
-    if (!chapter) return;
+  const goTo = useCallback(
+    (newPageNumber: number) => {
+      if (!chapter) return;
 
-    window.history.pushState({}, "", `${rawPathname}/${newPageNumber}`);
-    setPageNumber(newPageNumber);
-    setNavigation(MediaChapterUtils.getNavigation(chapter, newPageNumber)!);
-  };
+      const newNavigation = MediaChapterUtils.getNavigation(
+        chapter,
+        newPageNumber,
+      )!;
 
-  const goBack = () => {
-    if (!navigation?.previousPage || !pageNumber) {
+      window.history.pushState({}, "", `${rawPathname}/${newPageNumber}`);
+      setPageNumber(newPageNumber);
+      setNavigation(newNavigation);
+      // setImages((prev) =>
+      //   MediaChapterImageUtils.mergeImages(chapter, newNavigation, prev),
+      // );
+    },
+    [chapter, rawPathname, setNavigation],
+  );
+
+  const goBack = useCallback(() => {
+    if (!chapter || !navigation || !pageNumber) {
       return;
     }
 
-    goTo(navigation.previousPage);
-  };
+    /**
+     * Go to the previous page, if there is one.
+     */
+    if (navigation.previousPage) {
+      return goTo(navigation.previousPage);
+    }
 
-  const goForward = () => {
-    if (!navigation?.nextPage || !pageNumber) {
+    /**
+     * If there is no previous page but here is a previous chapter,
+     * then we should go to the previous chapter.
+     */
+    if (chapter.previousChapter) {
+      return router.push(MediaChapterUtils.getUrl(chapter.previousChapter));
+    }
+
+    /**
+     * If there is no previous page and no previous chapter,
+     * then we should return to the media page.
+     */
+    return router.push(MediaUtils.getUrl(chapter.media));
+  }, [chapter, goTo, navigation, pageNumber, router]);
+
+  const goForward = useCallback(() => {
+    if (!chapter || !navigation || !pageNumber) {
       return;
     }
 
-    goTo(navigation.nextPage);
-  };
+    /**
+     * Go to the next page, if there is one.
+     */
+    if (navigation.nextPage) {
+      return goTo(navigation.nextPage);
+    }
 
+    /**
+     * If there is no next page but here is a next chapter,
+     * then we should go to the next chapter.
+     */
+    if (chapter.nextChapter) {
+      return router.push(MediaChapterUtils.getUrl(chapter.nextChapter));
+    }
+
+    /**
+     * If there is no next page and no next chapter,
+     * then we should return to the media page.
+     */
+    return router.push(MediaUtils.getUrl(chapter.media));
+  }, [chapter, goTo, navigation, pageNumber, router]);
+
+  /**
+   * If the page number in the URL is invalid (either negative or too high),
+   * go to the first page.
+   */
   if (
     pageNumber &&
     chapter &&
@@ -58,7 +108,7 @@ export const useChapterNavigation = () => {
 
   return {
     chapter,
-    currentPageUrl,
+    navigation,
     currentPage: navigation?.currentPage ?? null,
     hasPreviousPage,
     hasNextPage,

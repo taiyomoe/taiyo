@@ -23,6 +23,8 @@
     --google-foreground: dark;
 
     --navbar-height: 60px;
+    --reader-height: calc(100vh - var(--navbar-height));
+    --reader-sidebar-width: 300px;
   }
 
   .dark {
@@ -51,10 +53,6 @@
   height: inherit !important;
 }
 
-.swiper.latestMedias .swiper-slide {
-  width: auto !important;
-}
-
 .swiper.trendingMedias:not(.swiper-initialized) .swiper-slide,
 .swiper.latestMedias:not(.swiper-initialized) .swiper-slide {
   margin-right: 24px;
@@ -76,8 +74,4 @@
     width: fit-content !important;
     height: inherit !important;
   }
-}
-
-.remove-maxWidth {
-  max-width: 100% !important;
 }

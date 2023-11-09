@@ -1,8 +1,8 @@
 import NextImage from "next/image";
 import { Image } from "@nextui-org/image";
 
-import { type MediaLimited } from "~/lib/types";
-import { MediaUtils } from "~/utils/MediaUtils";
+import type { MediaLimited } from "~/lib/types";
+import { MediaUtils } from "~/lib/utils/media.utils";
 
 type Props = { media: MediaLimited };
 

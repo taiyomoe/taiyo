@@ -1,16 +1,23 @@
 import { useCallback, useEffect } from "react";
 import { tv } from "@nextui-org/react";
+import type { UploadSessionType } from "@prisma/client";
 import { useAtom, useSetAtom } from "jotai";
-import { useDropzone, type DropzoneProps } from "react-dropzone";
+import { useDropzone } from "react-dropzone";
+import type { DropzoneProps } from "react-dropzone";
 
 import {
   needsCompressionAtom,
   selectedImagesAtom,
 } from "~/atoms/imageCompression.atoms";
+import type { SelectedImage } from "~/lib/types";
+
 import { ImageSelection } from "./ImageSelection";
 import { ImageShowcase } from "./ImageShowcase";
 
-type Props = { compact?: boolean };
+type Props = {
+  type: UploadSessionType;
+  isCompact?: boolean;
+};
 
 const imageDropzone = tv({
   slots: {
@@ -26,9 +33,11 @@ const imageDropzone = tv({
   },
 });
 
-export const ImageDropzone = ({ compact }: Props) => {
-  const [selectedImages, setSelectedImages] = useAtom(selectedImagesAtom);
+export const ImageDropzone = ({ type, isCompact }: Props) => {
+  const [selectedImagesAtomValue, setSelectedImages] =
+    useAtom(selectedImagesAtom);
   const setNeedsCompression = useSetAtom(needsCompressionAtom);
+  const selectedImages = selectedImagesAtomValue.filter((x) => x.type === type);
 
   const shouldDisableDropzone = selectedImages.length !== 0;
   const { container } = imageDropzone({ disabled: shouldDisableDropzone });
@@ -36,14 +45,18 @@ export const ImageDropzone = ({ compact }: Props) => {
   const onDrop: DropzoneProps["onDrop"] = useCallback(
     (acceptedFiles: File[]) => {
       setSelectedImages(
-        acceptedFiles.map((f) => ({ file: f, status: "pending" })),
+        (prev) =>
+          [
+            ...prev,
+            ...acceptedFiles.map((f) => ({ type, file: f, status: "pending" })),
+          ] as SelectedImage[],
       );
 
       if (acceptedFiles.some((f) => f.type !== "image/jpeg")) {
         setNeedsCompression(true);
       }
     },
-    [setNeedsCompression, setSelectedImages],
+    [setNeedsCompression, setSelectedImages, type],
   );
 
   const { getRootProps, getInputProps, acceptedFiles } = useDropzone({
@@ -61,8 +74,8 @@ export const ImageDropzone = ({ compact }: Props) => {
   return (
     <section {...getRootProps({ className: container() })}>
       <input {...getInputProps()} disabled={acceptedFiles.length !== 0} />
-      {selectedImages.length === 0 && <ImageSelection compact={compact} />}
-      {selectedImages.length > 0 && <ImageShowcase />}
+      {selectedImages.length === 0 && <ImageSelection isCompact={isCompact} />}
+      {selectedImages.length > 0 && <ImageShowcase type={type} />}
     </section>
   );
 };

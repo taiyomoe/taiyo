@@ -1,9 +1,7 @@
-import {
-  Formik,
-  Form as FormikForm,
-  type FormikConfig,
-  type FormikValues,
-} from "formik";
+import { Formik, Form as FormikForm } from "formik";
+import type { FormikConfig, FormikValues } from "formik";
+
+import { cn } from "~/lib/utils/cn";
 
 type Props = {
   children: React.ReactNode;
@@ -30,7 +28,7 @@ const Layout = ({ children }: Props) => (
 
 const Category = ({ title, actions, children }: CategoryProps) => (
   <div className="flex flex-col gap-4">
-    <div className="flex justify-between">
+    <div className={cn("flex justify-between", { hidden: !title && !actions })}>
       {title && <h2 className="text-2xl font-semibold">{title}</h2>}
       <div className="flex items-center gap-2">{actions}</div>
     </div>

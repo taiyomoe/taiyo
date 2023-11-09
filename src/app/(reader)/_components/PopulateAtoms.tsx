@@ -8,8 +8,8 @@ import {
   mediaChapterAtom,
   mediaChapterNavigationAtom,
 } from "~/atoms/mediaChapter.atoms";
-import { type MediaChapterLimited } from "~/lib/types";
-import { MediaChapterUtils } from "~/utils/MediaChapterUtils";
+import type { MediaChapterLimited } from "~/lib/types";
+import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils";
 
 type Props = {
   mediaChapter: MediaChapterLimited;

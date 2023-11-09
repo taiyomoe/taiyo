@@ -1,65 +1,83 @@
-import { z } from "zod";
+import type { Trackers } from "@prisma/client";
 
-import {
-  DEFAULT_MEDIA_PAGE,
-  DEFAULT_MEDIA_PER_PAGE,
-  MEDIA_PER_PAGE_CHOICES,
-} from "~/lib/constants";
-import { insertMediaSchema } from "~/lib/schemas";
-import { type LatestMedia, type MediaLimited } from "~/lib/types";
+import { getMediaByIdSchema, insertMediaSchema } from "~/lib/schemas";
+import type { LatestMedia, MediaLimited } from "~/lib/types";
+
 import { NotFoundError } from "../errors";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const mediasRouter = createTRPCRouter({
-  add: protectedProcedure
+  create: protectedProcedure
     .meta({
       resource: "medias",
       action: "create",
     })
     .input(insertMediaSchema)
-    .mutation(async ({ ctx, input }) => {
-      const result = await ctx.db.media.create({
-        data: {
-          ...input,
-          titles: {
-            create: input.titles.map((t) => ({
-              ...t,
-              creatorId: ctx.session.user.id,
-            })),
-          },
-          tags: {
-            create: input.tags.map((t) => ({
-              ...t,
-              creatorId: ctx.session.user.id,
-            })),
-          },
-          trackers: {
-            create: input.trackers.map((t) => ({
-              ...t,
-              creatorId: ctx.session.user.id,
-            })),
-          },
-        },
-      });
+    .mutation(
+      async ({
+        ctx,
+        input: { cover, banner, mdTracker, alTracker, malTracker, ...input },
+      }) => {
+        /**
+         * Before creating the media, we need to create the trackers array.
+         * It would be too much of a hassle to create it in the creating object.
+         */
+        const trackers = [];
 
-      return result;
-    }),
+        if (mdTracker) {
+          trackers.push({
+            tracker: "MANGADEX" as Trackers,
+            externalId: mdTracker,
+            creatorId: ctx.session.user.id,
+          });
+        }
+
+        if (alTracker) {
+          trackers.push({
+            tracker: "ANILIST" as Trackers,
+            externalId: alTracker.toString(),
+            creatorId: ctx.session.user.id,
+          });
+        }
+
+        if (malTracker) {
+          trackers.push({
+            tracker: "MYANIMELIST" as Trackers,
+            externalId: malTracker.toString(),
+            creatorId: ctx.session.user.id,
+          });
+        }
+
+        const result = await ctx.db.media.create({
+          data: {
+            ...input,
+            titles: {
+              createMany: {
+                data: input.titles.map((t) => ({
+                  ...t,
+                  creatorId: ctx.session.user.id,
+                })),
+              },
+            },
+            trackers: { createMany: { data: trackers } },
+            covers: {
+              create: { ...cover, uploaderId: ctx.session.user.id },
+            },
+            banners: {
+              create: banner.id
+                ? { ...banner, uploaderId: ctx.session.user.id }
+                : undefined,
+            },
+            creatorId: ctx.session.user.id,
+          },
+        });
+
+        return result;
+      },
+    ),
+
   getById: publicProcedure
-    .input(
-      z.object({
-        id: z.string(),
-        page: z.number().optional().default(DEFAULT_MEDIA_PAGE),
-        perPage: z
-          .number()
-          .optional()
-          .default(DEFAULT_MEDIA_PER_PAGE)
-          .refine((x) => MEDIA_PER_PAGE_CHOICES.includes(x), {
-            message: `perPage must be one of ${MEDIA_PER_PAGE_CHOICES.join(
-              ", ",
-            )}`,
-          }),
-      }),
-    )
+    .input(getMediaByIdSchema)
     .query(async ({ ctx, input }) => {
       const { id: mediaId, page, perPage } = input;
       const result = await ctx.db.media.findFirst({

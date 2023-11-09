@@ -1,6 +1,6 @@
 import { nextui } from "@nextui-org/theme";
 import tailwindScrollbar from "tailwind-scrollbar";
-import { type Config } from "tailwindcss";
+import type { Config } from "tailwindcss";
 import { fontFamily } from "tailwindcss/defaultTheme";
 import plugin from "tailwindcss/plugin";
 
@@ -21,6 +21,25 @@ export default {
     extend: {
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
+      },
+      spacing: {
+        navbar: "var(--navbar-height)",
+        reader: "var(--reader-height)",
+        readerSidebar: "var(--reader-sidebar-width)",
+      },
+      maxHeight: {
+        navbar: "var(--navbar-height)",
+        reader: "var(--reader-height)",
+      },
+      minHeight: {
+        navbar: "var(--navbar-height)",
+        reader: "var(--reader-height)",
+      },
+      maxWidth: {
+        readerSidebar: "var(--reader-sidebar-width)",
+      },
+      minWidth: {
+        readerSidebar: "var(--reader-sidebar-width)",
       },
       blur: {
         xs: "3px",

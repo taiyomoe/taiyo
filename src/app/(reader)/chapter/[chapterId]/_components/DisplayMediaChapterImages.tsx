@@ -1,30 +1,30 @@
-import Image from "next/image";
-import { Skeleton } from "@nextui-org/skeleton";
+import { Spinner } from "@nextui-org/react";
 
+import { useChapterImages } from "~/hooks/useChapterImages";
 import { useChapterNavigation } from "~/hooks/useChapterNavigation";
 
-export const DisplayMediaChapterImages = () => {
-  const { currentPageUrl } = useChapterNavigation();
+import { DisplayMediaChapterImage } from "./DisplayMediaChapterImage";
 
-  if (!currentPageUrl) {
-    return <Skeleton className="h-full w-full" />;
-  }
+export const DisplayMediaChapterImages = () => {
+  const { currentPage } = useChapterNavigation();
+  const { images, pageMode } = useChapterImages();
+
+  const currentImage = images.find((img) => img.number === currentPage);
 
   return (
-    <div className="mx-auto flex h-full">
-      <Image
-        src={currentPageUrl}
-        className="h-full w-full object-contain"
-        style={{
-          objectFit: "contain",
-          width: "100%",
-        }}
-        sizes="1"
-        width={0}
-        height={0}
-        alt="image"
-        priority
-      />
+    <div className="mx-auto flex h-full flex-col items-center justify-center">
+      {(images.length === 0 || !currentImage) && (
+        <Spinner size="lg" className="justify-self-center" />
+      )}
+      {images.map((img) => (
+        <DisplayMediaChapterImage
+          key={img.url}
+          url={img.blobUrl}
+          hide={
+            pageMode === "single" ? currentImage?.number !== img.number : false
+          }
+        />
+      ))}
     </div>
   );
 };

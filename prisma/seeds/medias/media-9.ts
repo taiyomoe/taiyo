@@ -36,7 +36,7 @@ const execute = async (db: PrismaClient) => {
     data: [
       {
         tracker: "MANGADEX",
-        trackerMediaId: "4ada20eb-085a-491a-8c49-477ab42014d7",
+        externalId: "4ada20eb-085a-491a-8c49-477ab42014d7",
         mediaId: "f0bc42eb-b2f7-4017-89f8-77c1834834b1",
         creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
       },

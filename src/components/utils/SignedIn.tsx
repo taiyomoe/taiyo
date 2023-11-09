@@ -1,5 +1,5 @@
 import { getServerAuthSession } from "~/lib/auth/utils";
-import { type Permission } from "~/lib/types";
+import type { Permission } from "~/lib/types";
 
 type Props = {
   allowIfUserHasAtLeastOnePermission?: boolean;

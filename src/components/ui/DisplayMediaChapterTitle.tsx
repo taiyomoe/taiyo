@@ -5,7 +5,7 @@ import { Skeleton } from "@nextui-org/skeleton";
 import { useAtomValue } from "jotai";
 
 import { mediaChapterTitleAtom } from "~/atoms/mediaChapter.atoms";
-import { cn } from "~/utils/cn";
+import { cn } from "~/lib/utils/cn";
 
 type Props = {
   className: string;

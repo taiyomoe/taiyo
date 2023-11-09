@@ -29,4 +29,6 @@ export const insertMediaChapterSchema = z.object({
   ),
 });
 
+export const getMediaChapterByIdSchema = z.string();
+
 export type InsertMediaChapterSchema = typeof insertMediaChapterSchema._type;
