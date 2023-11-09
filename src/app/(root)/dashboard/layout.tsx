@@ -5,13 +5,13 @@ import { DashboardSidebarContent } from "./_components/DashboardSidebarContent";
 
 export default function Layout({ children }: LayoutProps) {
   return (
-    <div className="flex h-full min-h-reader w-full">
+    <div className="min-h-reader flex h-full w-full">
       <Sidebar
-        className="h-[100vh-calc(--navbar-height)]"
+        className="h-reader"
         title="Dashboard"
         content={<DashboardSidebarContent className="fixed -mt-[1px]" />}
       />
-      <div className="w-full p-6">{children}</div>
+      <div className="p-6 w-full">{children}</div>
     </div>
   );
 }

@@ -21,7 +21,7 @@ const readerSidebarLayout = tv({
   slots: {
     container: "transition-all z-30",
     contentWrapper:
-      "bg-content1 w-[300px] max-w-[300px] right-[unset] width-[unset] flex flex-col gap-2 p-4 pt-0 overflow-x-hidden overflow-y-auto top-0 max-h-screen h-full",
+      "bg-content1 w-[calc(var(--reader-sidebar-width)-1px)] max-w-[calc(var(--reader-sidebar-width)-1px)] right-[unset] width-[unset] flex flex-col gap-2 p-4 pt-0 overflow-x-hidden overflow-y-auto top-0 max-h-screen h-full sticky",
   },
   variants: {
     isMobile: {
@@ -35,11 +35,11 @@ const readerSidebarLayout = tv({
     side: {
       left: {
         container:
-          "border-r-divider border-r ml-[-300px] aria-expanded:ml-0 grid-in-leftSidebar",
+          "border-r-divider border-r -ml-readerSidebar aria-expanded:ml-0 grid-in-leftSidebar",
       },
       right: {
         container:
-          "border-l-divider border-l mr-[-300px] aria-expanded:mr-0 grid-in-rightSidebar",
+          "border-l-divider border-l -mr-readerSidebar aria-expanded:mr-0 grid-in-rightSidebar",
       },
     },
   },
@@ -61,13 +61,13 @@ export const ReaderSidebarLayout = () => {
         <div className="flex min-h-[var(--navbar-height)] items-center">
           <ReaderSidebarTitle />
         </div>
-        <div className="flex flex-col gap-2">
+        <div className="gap-2 flex flex-col">
           <ReaderSettingsMediaChapterPageDropdown />
           <ReaderSettingsMediaChapterDropdown />
           <ReaderSettingsMediaChapterReportModal />
         </div>
         <Divider className="my-4" />
-        <ReaderSidebarUploadersSection className="flex flex-col gap-2" />
+        <ReaderSidebarUploadersSection className="gap-2 flex flex-col" />
         <Divider className="my-4" />
         <ReaderSidebarSettingsSection />
       </div>
