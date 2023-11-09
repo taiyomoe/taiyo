@@ -61,13 +61,13 @@ export const ReaderSidebarLayout = () => {
         <div className="flex min-h-[var(--navbar-height)] items-center">
           <ReaderSidebarTitle />
         </div>
-        <div className="gap-2 flex flex-col">
+        <div className="flex flex-col gap-2">
           <ReaderSettingsMediaChapterPageDropdown />
           <ReaderSettingsMediaChapterDropdown />
           <ReaderSettingsMediaChapterReportModal />
         </div>
         <Divider className="my-4" />
-        <ReaderSidebarUploadersSection className="gap-2 flex flex-col" />
+        <ReaderSidebarUploadersSection className="flex flex-col gap-2" />
         <Divider className="my-4" />
         <ReaderSidebarSettingsSection />
       </div>
