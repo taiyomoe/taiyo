@@ -2,6 +2,7 @@ import { tv } from "tailwind-variants";
 
 import { ReaderSidebarSettingsNavbarMode } from "../ui/ReaderSidebarSettingsNavbarMode";
 import { ReaderSidebarSettingsOpenMode } from "../ui/ReaderSidebarSettingsOpenMode";
+import { ReaderSidebarSettingsPageMode } from "../ui/ReaderSidebarSettingsPageMode";
 import { ReaderSidebarSettingsSide } from "../ui/ReaderSidebarSettingsSide";
 
 const readerSidebarSettingsSection = tv({
@@ -17,6 +18,7 @@ export const ReaderSidebarSettingsSection = () => {
       <ReaderSidebarSettingsSide />
       <ReaderSidebarSettingsOpenMode />
       <ReaderSidebarSettingsNavbarMode />
+      <ReaderSidebarSettingsPageMode />
     </div>
   );
 };

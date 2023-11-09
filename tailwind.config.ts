@@ -22,6 +22,15 @@ export default {
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
       },
+      maxHeight: {
+        reader: "calc(100vh - var(--navbar-height))px",
+      },
+      minHeight: {
+        reader: "calc(100vh - var(--navbar-height))px",
+      },
+      height: {
+        reader: "calc(100vh - var(--navbar-height))px",
+      },
       blur: {
         xs: "3px",
       },

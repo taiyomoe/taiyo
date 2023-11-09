@@ -1,5 +1,7 @@
 import { useRef, useState } from "react";
+import { useAtomValue } from "jotai";
 
+import { readerPageModeAtom } from "~/atoms/readerSettings.atoms";
 import type { ReaderImage } from "~/lib/types";
 import { MediaChapterImageUtils } from "~/lib/utils/mediaChapterImage.utils";
 
@@ -11,6 +13,7 @@ export const useChapterImages = () => {
   const previousCurrentPage = useRef<number | undefined>(
     navigation?.currentPage,
   );
+  const pageMode = useAtomValue(readerPageModeAtom);
 
   const loadImage = async (url: string) => {
     const image = await fetch(url).then((res) => res.blob());
@@ -27,21 +30,32 @@ export const useChapterImages = () => {
 
     previousCurrentPage.current = navigation.currentPage;
 
-    const mergedImages = MediaChapterImageUtils.mergeImages(
-      chapter,
-      navigation,
-      images,
-    );
+    if (pageMode === "single") {
+      const mergedImages = MediaChapterImageUtils.mergeImages(
+        chapter,
+        navigation,
+        images,
+      );
 
-    void Promise.all(
-      mergedImages
-        .filter((x) => !images.some((y) => y.number === x.number))
-        .map(async (image) => ({
+      void Promise.all(
+        mergedImages
+          .filter((x) => !images.some((y) => y.number === x.number))
+          .map(async (image) => ({
+            ...image,
+            blobUrl: await loadImage(image.url),
+          })),
+      ).then((newImages) => setImages([...images, ...newImages]));
+    }
+
+    if (pageMode === "longstrip" && images.length === 0) {
+      void Promise.all(
+        MediaChapterImageUtils.getImages(chapter).map(async (image) => ({
           ...image,
           blobUrl: await loadImage(image.url),
         })),
-    ).then((newImages) => setImages([...images, ...newImages]));
+      ).then(setImages);
+    }
   }
 
-  return { images };
+  return { images, pageMode };
 };
