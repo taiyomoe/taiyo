@@ -2,8 +2,8 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { withAuth } from "next-auth/middleware";
 
+import { MediaChapterUtils } from "./lib/utils/mediaChapter.utils";
 import { PermissionUtils } from "./lib/utils/permissions.utils";
-import { MediaChapterUtils } from "./utils/MediaChapterUtils";
 
 const chapterMiddleware = (req: NextRequest) => {
   const parsedUrl = MediaChapterUtils.parseUrl(req.nextUrl.pathname);

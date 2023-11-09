@@ -1,20 +1,20 @@
 import { useMutation } from "@tanstack/react-query";
 import { TRPCClientError } from "@trpc/client";
-import { type FormikConfig } from "formik";
+import type { FormikConfig } from "formik";
 import { useAtom } from "jotai";
 import { toast } from "sonner";
 
 import { selectedImagesAtom } from "~/atoms/imageCompression.atoms";
-import { type InsertMediaChapterSchema } from "~/lib/schemas/mediaChapter.schemas";
+import type { InsertMediaChapterSchema } from "~/lib/schemas/mediaChapter.schemas";
 import { api } from "~/lib/trpc/client";
-import { type SuccessfulUploadResponse } from "~/lib/types";
-import { MediaChapterUtils } from "~/utils/MediaChapterUtils";
+import type { SuccessfulUploadResponse } from "~/lib/types";
+import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils";
 
 export const useChapterUpload = (initialValues: InsertMediaChapterSchema) => {
   const [selectedImages, setSelectedImages] = useAtom(selectedImagesAtom);
 
   const { mutateAsync: startUploadSession } =
-    api.mediaChapters.startUploadSession.useMutation();
+    api.uploads.startUploadSession.useMutation();
   const { mutateAsync: uploadImages } = useMutation<
     SuccessfulUploadResponse,
     unknown,
@@ -23,6 +23,7 @@ export const useChapterUpload = (initialValues: InsertMediaChapterSchema) => {
     mutationKey: ["uploadImages", initialValues.id],
     mutationFn: async ({ authToken }) => {
       const formData = new FormData();
+      formData.append("type", "CHAPTER");
 
       selectedImages.forEach((img) => {
         formData.append("file", img.file);
@@ -49,6 +50,7 @@ export const useChapterUpload = (initialValues: InsertMediaChapterSchema) => {
   ) => {
     const upload = async () => {
       const authToken = await startUploadSession({
+        type: "CHAPTER",
         mediaId: values.mediaId,
         mediaChapterId: initialValues.id,
       });
@@ -67,7 +69,7 @@ export const useChapterUpload = (initialValues: InsertMediaChapterSchema) => {
       error: (err) =>
         err instanceof TRPCClientError
           ? err.message
-          : "Erro ao upar o capítulo",
+          : "Ocorreu um erro ao upar o capítulo",
       finally: () => {
         setSubmitting(false);
       },

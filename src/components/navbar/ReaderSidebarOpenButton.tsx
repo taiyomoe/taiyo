@@ -8,16 +8,23 @@ import {
   readerSidebarSideAtom,
   readerSidebarStateAtom,
 } from "~/atoms/readerSettings.atoms";
+import { useChapterNavigation } from "~/hooks/useChapterNavigation";
+
 import { SidebarIcon } from "../icons/SidebarIcon";
 
 export const ReaderSidebarOpenButton = () => {
+  const { chapter } = useChapterNavigation();
   const readerSidebarOpenMode = useAtomValue(readerSidebarOpenModeAtom);
   const readerSidebarSide = useAtomValue(readerSidebarSideAtom);
   const [readerSidebarState, setReaderSidebarState] = useAtom(
     readerSidebarStateAtom,
   );
 
-  if (readerSidebarOpenMode === "hover" || readerSidebarState === "show") {
+  if (
+    !chapter ||
+    readerSidebarOpenMode === "hover" ||
+    readerSidebarState === "show"
+  ) {
     return null;
   }
 

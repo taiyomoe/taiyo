@@ -7,15 +7,21 @@ import {
   readerSidebarStateAtom,
 } from "~/atoms/readerSettings.atoms";
 
+import { useDevice } from "./useDevice";
+
 export const useChapterNavbar = () => {
   const readerSidebarSide = useAtomValue(readerSidebarSideAtom);
   const readerSidebarState = useAtomValue(readerSidebarStateAtom);
   const readerNavbarMode = useAtomValue(readerNavbarModeAtom);
   const pathname = usePathname();
+  const { isMobile } = useDevice();
 
   return {
     mode: readerNavbarMode,
     sidebarSide: readerSidebarSide,
-    expand: readerSidebarState === "hide" || !pathname.includes("/chapter/"),
+    expand:
+      isMobile ||
+      readerSidebarState === "hide" ||
+      !pathname.includes("/chapter/"),
   };
 };

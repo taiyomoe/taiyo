@@ -1,10 +1,11 @@
 import { TRPCError } from "@trpc/server";
-import { z } from "zod";
 
-import { insertMediaChapterSchema } from "~/lib/schemas/mediaChapter.schemas";
-import { type MediaChapterLimited } from "~/lib/types";
-import { EncryptionUtils } from "~/lib/utils/encryption.utils";
-import { NotFoundError } from "../errors";
+import {
+  getMediaChapterByIdSchema,
+  insertMediaChapterSchema,
+} from "~/lib/schemas/mediaChapter.schemas";
+import type { MediaChapterLimited } from "~/lib/types";
+
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const mediaChaptersRouter = createTRPCRouter({
@@ -35,7 +36,7 @@ export const mediaChaptersRouter = createTRPCRouter({
     }),
 
   getById: publicProcedure
-    .input(z.string())
+    .input(getMediaChapterByIdSchema)
     .query(async ({ ctx, input: chapterId }) => {
       const result = await ctx.db.mediaChapter.findFirst({
         select: {
@@ -65,7 +66,7 @@ export const mediaChaptersRouter = createTRPCRouter({
       });
 
       if (!result?.uploader.name || !result.media.titles.at(0)) {
-        throw new NotFoundError();
+        return null;
       }
 
       const sortedMediaChapters = result.media.chapters.sort(
@@ -104,29 +105,5 @@ export const mediaChaptersRouter = createTRPCRouter({
       };
 
       return mediaChapterLimited;
-    }),
-
-  startUploadSession: protectedProcedure
-    .meta({ resource: "mediaChapters", action: "create" })
-    .input(
-      z.object({
-        mediaId: z.string().uuid(),
-        mediaChapterId: z.string().uuid(),
-      }),
-    )
-    .mutation(async ({ ctx, input }) => {
-      const uploadSession = await ctx.db.uploadSession.create({
-        data: {
-          userId: ctx.session.user.id,
-          mediaId: input.mediaId,
-          mediaChapterId: input.mediaChapterId,
-        },
-      });
-
-      const toEncrypt = {
-        uploadSessionId: uploadSession.id,
-      };
-
-      return EncryptionUtils.encrypt(JSON.stringify(toEncrypt));
     }),
 });

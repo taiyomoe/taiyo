@@ -5,7 +5,7 @@ import type { TextAreaProps } from "@nextui-org/react";
 import { useField } from "formik";
 import { tv } from "tailwind-variants";
 
-import { cn } from "~/utils/cn";
+import { cn } from "~/lib/utils/cn";
 
 type Props = {
   name: string;
@@ -19,7 +19,7 @@ const textArea = tv({
     label: "",
     mainWrapper: "w-full",
     inputWrapper: "p-3",
-    base: "h-[76px]",
+    base: "h-[76px] p-0",
   },
   variants: {
     labelPlacement: {

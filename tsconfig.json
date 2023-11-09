@@ -21,7 +21,7 @@
       "~/*": ["./src/*"]
     },
     "plugins": [{ "name": "next" }],
-    "typeRoots": ["./node_modules/@types", "./src/lib/types/global.d.ts"]
+    "typeRoots": ["./node_modules/@types", "./src/lib/types"]
   },
   "include": [
     ".eslintrc.cjs",

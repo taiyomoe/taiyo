@@ -22,3 +22,9 @@ export type Permission =
   | `${Resources}:create`
   | `${ResourcesWithoutPossession}:${ActionsWithoutCreate}`
   | `${ResourcesWithPossession}:${ActionsWithoutCreate}:${Posession}`;
+
+export type Grant = {
+  role: string;
+  resource: Resources;
+  action: `${Actions}:${"any" | "own"}`;
+};

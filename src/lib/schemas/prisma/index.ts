@@ -70,7 +70,7 @@ export const MediaTitleScalarFieldEnumSchema = z.enum(['id','createdAt','updated
 
 export const MediaTagScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','isSpoiler','tagId','mediaId','creatorId','deleterId']);
 
-export const MediaTrackerScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','tracker','trackerMediaId','mediaId','creatorId','deleterId']);
+export const MediaTrackerScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','tracker','externalId','mediaId','creatorId','deleterId']);
 
 export const MediaChapterScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','title','number','volume','language','pages','contentRating','flag','mediaId','uploaderId','deleterId']);
 
@@ -78,7 +78,7 @@ export const MediaChapterCommentScalarFieldEnumSchema = z.enum(['id','createdAt'
 
 export const TagScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','name','description','category','contentRating','alId','creatorId','deleterId']);
 
-export const UploadSessionScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','status','userId','mediaId','mediaChapterId']);
+export const UploadSessionScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','status','type','userId','mediaId','mediaChapterId']);
 
 export const ScanScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','name','description','logo','banner','website','discord','twitter','facebook','instagram','telegram','youtube','email','creatorId','deleterId']);
 
@@ -134,9 +134,9 @@ export const MediaChapterLanguagesSchema = z.enum(['ENGLISH','JAPANESE','SPANISH
 
 export type MediaChapterLanguagesType = `${z.infer<typeof MediaChapterLanguagesSchema>}`
 
-export const MediaTrackersSchema = z.enum(['MANGADEX','MYANIMELIST','ANILIST']);
+export const TrackersSchema = z.enum(['MANGADEX','MYANIMELIST','ANILIST']);
 
-export type MediaTrackersType = `${z.infer<typeof MediaTrackersSchema>}`
+export type TrackersType = `${z.infer<typeof TrackersSchema>}`
 
 export const ScanMemberRolesSchema = z.enum(['OWNER','ADMIN','TRANSLATOR','PROOFREADER','CLEANER','REDRAWER','TYPESETTER','QUALITY_CHECKER','RAW_PROVIDER','OTHER']);
 
@@ -149,6 +149,10 @@ export type ScanMemberPermissionsType = `${z.infer<typeof ScanMemberPermissionsS
 export const UploadSessionStatusSchema = z.enum(['UPLOADING','PROCESSING','FINISHED','FAILED']);
 
 export type UploadSessionStatusType = `${z.infer<typeof UploadSessionStatusSchema>}`
+
+export const UploadSessionTypeSchema = z.enum(['COVER','BANNER','CHAPTER']);
+
+export type UploadSessionTypeType = `${z.infer<typeof UploadSessionTypeSchema>}`
 
 /////////////////////////////////////////
 // MODELS
@@ -345,12 +349,12 @@ export type MediaTag = z.infer<typeof MediaTagSchema>
 /////////////////////////////////////////
 
 export const MediaTrackerSchema = z.object({
-  tracker: MediaTrackersSchema,
+  tracker: TrackersSchema,
   id: z.string().uuid(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
   deletedAt: z.coerce.date().nullable(),
-  trackerMediaId: z.string(),
+  externalId: z.string(),
   mediaId: z.string(),
   creatorId: z.string(),
   deleterId: z.string().nullable(),
@@ -432,13 +436,14 @@ export type Tag = z.infer<typeof TagSchema>
 
 export const UploadSessionSchema = z.object({
   status: UploadSessionStatusSchema,
+  type: UploadSessionTypeSchema,
   id: z.string().uuid(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
   deletedAt: z.coerce.date().nullable(),
   userId: z.string(),
   mediaId: z.string(),
-  mediaChapterId: z.string(),
+  mediaChapterId: z.string().nullable(),
 })
 
 export type UploadSession = z.infer<typeof UploadSessionSchema>

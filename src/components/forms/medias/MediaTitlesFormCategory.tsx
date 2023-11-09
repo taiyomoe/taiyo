@@ -1,11 +1,13 @@
 import { Button } from "@nextui-org/button";
+import { MediaTitleLanguages } from "@prisma/client";
 import { useField } from "formik";
 import { PlusIcon, TrashIcon } from "lucide-react";
 
 import { Form } from "~/components/generics/form/Form";
 import { InputFormField } from "~/components/generics/form/InputFormField";
+import { SelectFormField } from "~/components/generics/form/SelectFormField";
 import { SwitchFormField } from "~/components/generics/form/SwitchFormField";
-import { type InsertMediaSchema } from "~/lib/schemas";
+import type { InsertMediaSchema } from "~/lib/schemas";
 
 export const MediaTitlesFormCategory = () => {
   const [{ value }, {}, { setValue }] = useField<InsertMediaSchema["titles"]>({
@@ -43,6 +45,12 @@ export const MediaTitlesFormCategory = () => {
       {value.map((_, index) => (
         <div key={index} className="flex items-center gap-2">
           <InputFormField name={`titles[${index}].title`} />
+          <SelectFormField
+            name={`titles[${index}].language`}
+            items={MediaTitleLanguages}
+            className="md:w-1/3"
+            aria-label="Linguagem do título"
+          />
           <SwitchFormField name={`titles[${index}].isAcronym`} size="lg" />
           <Button
             onPress={() => void handleRemoveTitle(index)}
