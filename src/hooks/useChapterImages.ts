@@ -24,7 +24,8 @@ export const useChapterImages = () => {
   if (
     chapter &&
     navigation &&
-    navigation.currentPage !== previousCurrentPage.current
+    (navigation.currentPage !== previousCurrentPage.current ||
+      images.length === 0)
   ) {
     previousCurrentPage.current = navigation.currentPage;
 
