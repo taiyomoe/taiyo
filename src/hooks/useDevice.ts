@@ -1,4 +1,4 @@
-import { useWindowSize } from "./useWindowSize";
+import { useWindowSize } from "usehooks-ts";
 
 export const useDevice = () => {
   const { width } = useWindowSize();
