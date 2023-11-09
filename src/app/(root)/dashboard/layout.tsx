@@ -5,7 +5,7 @@ import { DashboardSidebarContent } from "./_components/DashboardSidebarContent";
 
 export default function Layout({ children }: LayoutProps) {
   return (
-    <div className="min-h-reader flex h-full w-full">
+    <div className="flex h-full min-h-reader w-full">
       <Sidebar
         className="h-[100vh-calc(--navbar-height)]"
         title="Dashboard"
