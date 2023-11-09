@@ -22,14 +22,24 @@ export default {
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
       },
+      spacing: {
+        navbar: "var(--navbar-height)",
+        reader: "var(--reader-height)",
+        readerSidebar: "var(--reader-sidebar-width)",
+      },
       maxHeight: {
-        reader: "calc(100vh - var(--navbar-height))",
+        navbar: "var(--navbar-height)",
+        reader: "var(--reader-height)",
       },
       minHeight: {
-        reader: "calc(100vh - var(--navbar-height))",
+        navbar: "var(--navbar-height)",
+        reader: "var(--reader-height)",
       },
-      height: {
-        reader: "calc(100vh - var(--navbar-height))",
+      maxWidth: {
+        readerSidebar: "var(--reader-sidebar-width)",
+      },
+      minWidth: {
+        readerSidebar: "var(--reader-sidebar-width)",
       },
       blur: {
         xs: "3px",
