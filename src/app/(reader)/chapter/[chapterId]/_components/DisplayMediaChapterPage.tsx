@@ -47,8 +47,7 @@ export const DisplayMediaChapterPage = () => {
 
   const handleKeyPress: KeyboardEventHandler = (e) => {
     if (e.key === "ArrowLeft") {
-      backButtonRef.current?.click();
-      return;
+      return backButtonRef.current?.click();
     }
 
     forwardButtonRef.current?.click();
