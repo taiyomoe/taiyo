@@ -7,17 +7,22 @@ import { DisplayMediaChapterImage } from "./DisplayMediaChapterImage";
 
 export const DisplayMediaChapterImages = () => {
   const { currentPage } = useChapterNavigation();
-  const { images } = useChapterImages();
+  const { images, pageMode } = useChapterImages();
+
   const currentImage = images.find((img) => img.number === currentPage);
 
   return (
-    <div className="mx-auto flex h-full items-center">
-      {(images.length === 0 || !currentImage) && <Spinner size="lg" />}
+    <div className="mx-auto flex h-full flex-col items-center justify-center">
+      {(images.length === 0 || !currentImage) && (
+        <Spinner size="lg" className="justify-self-center" />
+      )}
       {images.map((img) => (
         <DisplayMediaChapterImage
           key={img.url}
           url={img.blobUrl}
-          hide={currentImage?.number !== img.number}
+          hide={
+            pageMode === "single" ? currentImage?.number !== img.number : false
+          }
         />
       ))}
     </div>

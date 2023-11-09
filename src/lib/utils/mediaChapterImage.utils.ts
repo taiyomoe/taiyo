@@ -17,6 +17,17 @@ const getImageUrl = (
   return `${CDN_DOMAIN}/${mediaChapter.media.id}/${mediaChapter.id}/${page.id}.jpg`;
 };
 
+const getImages = (mediaChapter: MediaChapterLimited) => {
+  const images: Omit<ReaderImage, "blobUrl">[] = mediaChapter.pages.map(
+    (page, index) => ({
+      number: index + 1,
+      url: getImageUrl(mediaChapter, page),
+    }),
+  );
+
+  return images;
+};
+
 const getImagesChunk = (
   mediaChapter: MediaChapterLimited,
   navigation: MediaChapterNavigation,
@@ -62,6 +73,7 @@ const mergeImages = (
 
 export const MediaChapterImageUtils = {
   getImageUrl,
+  getImages,
   getImagesChunk,
   mergeImages,
 };

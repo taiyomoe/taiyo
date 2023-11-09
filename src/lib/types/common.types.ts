@@ -5,4 +5,5 @@ export type ReaderSettings = {
   sidebarSide: "left" | "right";
   sidebarOpenMode: "button" | "hover";
   navbarMode: "sticky" | "hover";
+  pageMode: "single" | "longstrip";
 };
