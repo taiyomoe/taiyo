@@ -26,8 +26,6 @@ export const useChapterImages = () => {
     navigation &&
     navigation.currentPage !== previousCurrentPage.current
   ) {
-    console.log("inside condition");
-
     previousCurrentPage.current = navigation.currentPage;
 
     if (pageMode === "single") {
