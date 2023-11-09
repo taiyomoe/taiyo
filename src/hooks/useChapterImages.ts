@@ -1,6 +1,7 @@
-import { useRef, useState } from "react";
-import { useAtomValue } from "jotai";
+import { useEffect, useRef, useState } from "react";
+import { useAtomValue, useSetAtom } from "jotai";
 
+import { mediaChapterAtom } from "~/atoms/mediaChapter.atoms";
 import { readerPageModeAtom } from "~/atoms/readerSettings.atoms";
 import type { ReaderImage } from "~/lib/types";
 import { MediaChapterImageUtils } from "~/lib/utils/mediaChapterImage.utils";
@@ -13,7 +14,9 @@ export const useChapterImages = () => {
   const previousCurrentPage = useRef<number | undefined>(
     navigation?.currentPage,
   );
+
   const pageMode = useAtomValue(readerPageModeAtom);
+  const setChapter = useSetAtom(mediaChapterAtom);
 
   const loadImage = async (url: string) => {
     const image = await fetch(url).then((res) => res.blob());
@@ -55,6 +58,12 @@ export const useChapterImages = () => {
       ).then(setImages);
     }
   }
+
+  useEffect(() => {
+    return () => {
+      setChapter(null);
+    };
+  }, [setChapter]);
 
   return { images, pageMode };
 };
