@@ -5,7 +5,22 @@ import "./src/lib/env.mjs";
 const config = {
   reactStrictMode: true,
   images: {
-    domains: ["cdn.taiyo.moe", "cdn.discordapp.com"],
+    minimumCacheTTL: 300,
+    domains: ["cdn.discordapp.com"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "cdn.taiyo.moe",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "pub-5836e59af07c42f5a76a222d3bd93bb0.r2.dev",
+        port: "",
+        pathname: "/**",
+      },
+    ],
   },
   experimental: {
     serverActions: true,

@@ -20,7 +20,7 @@ import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils";
 
 const readerSettingsMediaChapterDropdown = tv({
   slots: {
-    container: "flex w-full gap-2",
+    container: "flex w-full gap-2 md:max-w-readerSidebar",
     triggerButton: "h-full justify-between py-2 pr-2",
     skeleton: "h-9 w-full rounded-lg",
     dropdownBase: "",
