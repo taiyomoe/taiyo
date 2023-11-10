@@ -139,6 +139,7 @@ export const mediasRouter = createTRPCRouter({
 
       return mediaLimited;
     }),
+
   getLatestMedias: publicProcedure.query(async ({ ctx }) => {
     const result = await ctx.db.media.findMany({
       select: {
