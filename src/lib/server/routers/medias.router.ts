@@ -87,6 +87,7 @@ export const mediasRouter = createTRPCRouter({
           covers: { select: { id: true }, take: 1 },
           banners: { select: { id: true }, take: 1 },
           titles: { select: { title: true }, take: 1 },
+          trackers: { select: { tracker: true, externalId: true } },
           chapters: {
             select: {
               id: true,
@@ -117,6 +118,7 @@ export const mediasRouter = createTRPCRouter({
         coverId: result.covers.at(0)!.id,
         bannerId: result.banners.at(0)?.id ?? null,
         title: result.titles.at(0)!.title,
+        trackers: result.trackers,
         chapters: result.chapters.map((c) => ({
           id: c.id,
           createdAt: c.createdAt,
