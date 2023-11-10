@@ -1,15 +1,13 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { Accordion, AccordionItem } from "@nextui-org/accordion";
-import { Divider } from "@nextui-org/divider";
+import { useState } from "react";
+import Image from "next/image";
 
 import type { MediaLimited } from "~/lib/types";
 import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils";
 
-import { MediaChapterGroupCard } from "./MediaChapterGroupCard";
 import { MediaChaptersTabActions } from "./MediaChaptersTabActions";
-import { MediaChaptersTabPagination } from "./MediaChaptersTabPagination";
+import { MediaChapterVolumes } from "./MediaChapterVolumes";
 
 type Props = {
   media: MediaLimited;
@@ -18,86 +16,39 @@ type Props = {
 export const MediaLayoutChaptersTab = ({ media }: Props) => {
   const computedVolumes = MediaChapterUtils.computeVolumes(media.chapters);
   const volumeKeys = computedVolumes.map(({ volume }) => `volume-${volume}`);
-  const groupKeys = media.chapters.map((chapter) => `group-${chapter.number}`);
 
-  const [selectedVolumeKeys, setSelectedVolumeKeys] = useState(
-    new Set(volumeKeys),
-  );
-  const [selectedGroupKeys, setSelectedGroupKeys] = useState(
-    new Set(groupKeys),
-  );
-  const groupKeysRef = useRef(groupKeys);
+  const [selectedKeys, setSelectedKeys] = useState(new Set(volumeKeys));
 
-  const volumeAccordionTitle = (volume: string) => `Volume ${volume}`;
-  const chapterAccordionTitle = (chapter: number) => `Capítulo ${chapter}`;
-
-  const collapseAll = () => {
-    setSelectedVolumeKeys(new Set());
-    setSelectedGroupKeys(new Set());
-  };
-  const expandVolumes = () => {
-    setSelectedVolumeKeys(new Set(volumeKeys));
-  };
-
-  if (Array.from(selectedVolumeKeys).some((key) => !volumeKeys.includes(key))) {
-    setSelectedVolumeKeys(new Set(volumeKeys));
-  }
-
-  if (Array.from(selectedGroupKeys).some((key) => !groupKeys.includes(key))) {
-    setSelectedGroupKeys(new Set(groupKeys));
-  }
-
-  if (groupKeysRef.current.length !== groupKeys.length) {
-    groupKeysRef.current = groupKeys;
-    setSelectedVolumeKeys(new Set(volumeKeys));
-    setSelectedGroupKeys(new Set(groupKeys));
+  if (Array.from(selectedKeys).some((key) => !volumeKeys.includes(key))) {
+    setSelectedKeys(new Set(volumeKeys));
   }
 
   return (
     <div className="flex flex-col gap-2">
       <MediaChaptersTabActions
-        collapseAll={collapseAll}
-        expandVolumes={expandVolumes}
+        volumeKeys={volumeKeys}
+        setSelectedKeys={setSelectedKeys}
       />
-      <Accordion
-        className="px-0"
-        selectionMode="multiple"
-        selectedKeys={selectedVolumeKeys}
-        expandedKeys={selectedVolumeKeys}
-        defaultExpandedKeys={selectedVolumeKeys}
-        // @ts-expect-error -- NextUI wrong types
-        onSelectionChange={setSelectedVolumeKeys}
-      >
-        {computedVolumes.map(({ volume, groups }) => (
-          <AccordionItem
-            key={`volume-${volume}`}
-            title={volumeAccordionTitle(volume)}
-          >
-            <Accordion
-              className="px-0"
-              selectionMode="multiple"
-              selectedKeys={selectedGroupKeys}
-              expandedKeys={selectedGroupKeys}
-              defaultExpandedKeys={selectedGroupKeys}
-              // @ts-expect-error -- NextUI wrong types
-              onSelectionChange={setSelectedGroupKeys}
-              isCompact
-            >
-              {groups.map((group, i) => (
-                <AccordionItem
-                  key={`group-${group.number}`}
-                  title={chapterAccordionTitle(group.number)}
-                  classNames={{ title: "text-sm" }}
-                >
-                  <MediaChapterGroupCard key={i} group={group} />
-                </AccordionItem>
-              ))}
-            </Accordion>
-          </AccordionItem>
-        ))}
-      </Accordion>
-      <Divider className="my-4" />
-      <MediaChaptersTabPagination totalPages={media.totalPages} />
+      {media.chapters.length > 0 && (
+        <MediaChapterVolumes
+          media={media}
+          selectedKeys={selectedKeys}
+          setSelectedKeys={setSelectedKeys}
+        />
+      )}
+      {media.chapters.length === 0 && (
+        <div className="flex flex-col items-center gap-12 py-16">
+          <Image
+            src="/illustrations/taken.svg"
+            width={0}
+            height={0}
+            sizes="1"
+            className="h-[40vh] w-auto"
+            alt="alien taken by aliens"
+          />
+          <p className="text-2xl font-semibold">Sem capítulos no momento</p>
+        </div>
+      )}
     </div>
   );
 };

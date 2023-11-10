@@ -3,15 +3,22 @@ import { Button } from "@nextui-org/button";
 import { PencilIcon } from "lucide-react";
 
 type Props = {
-  collapseAll: () => void;
-  expandVolumes: () => void;
+  volumeKeys: string[];
+  setSelectedKeys: (keys: Set<string>) => void;
 };
 
 export const MediaChaptersTabActions = ({
-  collapseAll,
-  expandVolumes,
+  volumeKeys,
+  setSelectedKeys,
 }: Props) => {
   const [expanded, setExpanded] = useState(true);
+
+  const collapseAll = () => {
+    setSelectedKeys(new Set());
+  };
+  const expandVolumes = () => {
+    setSelectedKeys(new Set(volumeKeys));
+  };
 
   const handleExpandedButtonPress = () => {
     if (expanded) {
@@ -34,6 +41,7 @@ export const MediaChaptersTabActions = ({
       <Button
         className="w-[70px]"
         onPress={handleExpandedButtonPress}
+        isDisabled={volumeKeys.length === 0}
         size="sm"
       >
         {expanded ? "Recolher" : "Expandir"}
