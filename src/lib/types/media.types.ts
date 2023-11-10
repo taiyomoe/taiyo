@@ -4,6 +4,7 @@ import type {
   MediaChapter,
   MediaCover,
   MediaTitle,
+  MediaTracker,
   Scan,
   User,
 } from "@prisma/client";
@@ -45,6 +46,7 @@ export type MediaLimited = {
   title: MediaTitle["title"];
   coverId: MediaCover["id"];
   bannerId: MediaBanner["id"] | null;
+  trackers: Pick<MediaTracker, "tracker" | "externalId">[];
   chapters: MediaLimitedChapter[];
   // -----
   totalPages: number;
