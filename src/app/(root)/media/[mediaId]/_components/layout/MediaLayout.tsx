@@ -6,6 +6,8 @@ import type { MediaLimited } from "~/lib/types";
 import { cn } from "~/lib/utils/cn";
 import { MediaUtils } from "~/lib/utils/media.utils";
 
+import { MediaLayoutInformation } from "./MediaLayoutInformation";
+
 type Props = {
   media: MediaLimited;
   children: React.ReactNode;
@@ -35,8 +37,9 @@ export const MediaLayout = ({ media, children }: Props) => {
         alt="media's banner"
         priority
       />
-      <div className="col-span-2 -mt-28 flex h-fit w-full justify-center lg:col-span-1 xl:-mt-36">
+      <div className="col-span-2 -mt-28 flex h-fit w-full flex-col items-center justify-center gap-8 lg:col-span-1 xl:-mt-36">
         <DisplayMediaCover media={media} />
+        <MediaLayoutInformation media={media} />
       </div>
       <div className="z-10 col-span-2 w-full lg:col-span-1 lg:-mt-28 xl:-mt-36">
         {children}
