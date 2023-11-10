@@ -46,6 +46,7 @@ export const CompanyLogo = ({
           height: height ?? "auto",
           ...style,
         }}
+        sizes="1"
         alt="logo"
         {...props}
       />
