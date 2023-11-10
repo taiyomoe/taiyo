@@ -1,16 +1,15 @@
 import { useRouter, useSearchParams } from "next/navigation";
 
-import { DEFAULT_MEDIA_PAGE, DEFAULT_MEDIA_PER_PAGE } from "~/lib/constants";
+import { DEFAULT_MEDIA_PAGE } from "~/lib/constants";
 import { mediaPaginationSchema } from "~/lib/schemas";
 
 export const useChapterPagination = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // TODO - somehow zod's .default() is not working
   const { page, perPage } = mediaPaginationSchema.parse({
-    page: searchParams.get("page") ?? DEFAULT_MEDIA_PAGE,
-    perPage: searchParams.get("per_page") ?? DEFAULT_MEDIA_PER_PAGE,
+    page: searchParams.get("page"),
+    perPage: searchParams.get("per_page"),
   });
 
   const handlePageChange = (newPage: number) => {

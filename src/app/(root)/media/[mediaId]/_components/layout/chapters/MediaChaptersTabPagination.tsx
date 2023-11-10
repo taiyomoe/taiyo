@@ -12,13 +12,12 @@ import { ChevronDownIcon } from "lucide-react";
 import { tv } from "tailwind-variants";
 
 import { useChapterPagination } from "~/hooks/useChapterPagination";
+import { MEDIA_PER_PAGE_CHOICES } from "~/lib/constants";
 
-const pages = [5, 10, 20, 30];
 const mediaChaptersTabPagination = tv({
   slots: {
     container: "flex justify-end gap-4",
-    dropdownBase: "min-w-fit",
-    dropdownMenu: "w-fit",
+    dropdownContent: "min-w-fit",
     triggerButton: "h-9 w-fit min-w-fit justify-between px-2",
   },
 });
@@ -28,7 +27,7 @@ type Props = {
 };
 
 export const MediaChaptersTabPagination = ({ totalPages }: Props) => {
-  const { container, dropdownBase, dropdownMenu, triggerButton } =
+  const { container, dropdownContent, triggerButton } =
     mediaChaptersTabPagination();
 
   const { page, perPage, handlePageChange, handlePerPageChange } =
@@ -45,7 +44,7 @@ export const MediaChaptersTabPagination = ({ totalPages }: Props) => {
 
   return (
     <div className={container()}>
-      <Dropdown classNames={{ base: dropdownBase() }} radius="sm">
+      <Dropdown classNames={{ content: dropdownContent() }} radius="sm">
         <DropdownTrigger>
           <Button
             className={triggerButton()}
@@ -56,14 +55,13 @@ export const MediaChaptersTabPagination = ({ totalPages }: Props) => {
           </Button>
         </DropdownTrigger>
         <DropdownMenu
-          className={dropdownMenu()}
           selectionMode="single"
           disallowEmptySelection
           selectedKeys={selectedKeys}
           onSelectionChange={handleSelectionChange}
           aria-label="Capítulos por página"
         >
-          {pages.map((option) => (
+          {MEDIA_PER_PAGE_CHOICES.map((option) => (
             <DropdownItem key={option} textValue={`${option} caps.`}>
               {option} caps.
             </DropdownItem>
