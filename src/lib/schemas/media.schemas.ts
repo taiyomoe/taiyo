@@ -65,8 +65,11 @@ export const getMediaByIdSchema = z.object({
 });
 
 export const mediaPaginationSchema = z.object({
-  page: z.coerce.number().default(DEFAULT_MEDIA_PAGE),
-  perPage: z.coerce.number().default(DEFAULT_MEDIA_PER_PAGE),
+  page: z.coerce.number().catch(DEFAULT_MEDIA_PAGE),
+  perPage: z.coerce
+    .number()
+    .refine((x) => MEDIA_PER_PAGE_CHOICES.includes(x))
+    .catch(DEFAULT_MEDIA_PER_PAGE),
 });
 
 export type InsertMediaSchema = typeof insertMediaSchema._type;
