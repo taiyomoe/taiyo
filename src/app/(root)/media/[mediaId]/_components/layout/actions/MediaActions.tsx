@@ -6,7 +6,7 @@ type Props = {
   media: MediaLimited;
 };
 
-export const MediaLayoutActions = ({ media }: Props) => {
+export const MediaActions = ({ media }: Props) => {
   return (
     <div className="grid h-28 grid-rows-2 gap-2 p-3 xl:h-36">
       <p className="line-clamp-1 h-[44px] w-fit text-4xl font-bold [text-shadow:_0_3px_0_rgb(0_0_0_/_40%)]">

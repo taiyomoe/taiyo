@@ -3,8 +3,8 @@ import { ScrollShadow } from "@nextui-org/scroll-shadow";
 import { mediaPaginationSchema } from "~/lib/schemas";
 import { api } from "~/lib/trpc/server";
 
+import { MediaActions } from "./_components/layout/actions/MediaActions";
 import { MediaLayout } from "./_components/layout/MediaLayout";
-import { MediaLayoutActions } from "./_components/layout/MediaLayoutActions";
 import { MediaLayoutTabs } from "./_components/layout/MediaLayoutTabs";
 
 type Props = {
@@ -26,7 +26,7 @@ const MediaPage = async ({ params: { mediaId }, searchParams }: Props) => {
 
   return (
     <MediaLayout media={media}>
-      <MediaLayoutActions media={media} />
+      <MediaActions media={media} />
       <ScrollShadow className="h-[234px] w-full p-3 xl:h-[208px]" hideScrollBar>
         <p>{media?.synopsis}</p>
       </ScrollShadow>

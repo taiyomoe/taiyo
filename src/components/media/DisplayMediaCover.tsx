@@ -14,6 +14,7 @@ export const DisplayMediaCover = ({ media }: Props) => {
       as={NextImage}
       classNames={{
         img: "object-cover w-[300px] h-[400px]",
+        wrapper: "sticky top-[calc(var(--navbar-height)+36px)]",
       }}
       sizes="1"
       width={300}
