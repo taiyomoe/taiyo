@@ -1,27 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
-
+import { useScrollOpacity } from "~/hooks/useScrollOpacity";
 import { cn } from "~/lib/utils/cn";
 
 export const NavbarBorder = () => {
-  const [opacity, setOpacity] = useState(0);
-
-  const handleScroll = () => {
-    const currentScrollPos = window.scrollY;
-
-    if (currentScrollPos < 100) {
-      setOpacity(currentScrollPos / 100);
-    } else {
-      setOpacity(1);
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-
-    return () => window.removeEventListener("scroll", handleScroll);
-  });
+  const { opacity } = useScrollOpacity({ min: 0, max: 100 });
 
   return <span className={cn("h-[1px] bg-primary")} style={{ opacity }} />;
 };

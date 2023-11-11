@@ -8,7 +8,7 @@ type Props = { media: MediaLimited };
 
 const mediaLayoutInformation = tv({
   slots: {
-    container: "items-start w-[300px]",
+    container: "items-start w-[300px] hidden",
     categoryWrapper: "flex flex-col gap-2 justify-start",
     categoryTitle: "font-semibold text-lg",
     categoryContent: "flex flex-wrap gap-2",

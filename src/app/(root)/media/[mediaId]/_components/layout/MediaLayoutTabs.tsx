@@ -22,10 +22,11 @@ export const MediaLayoutTabs = ({ media }: Props) => {
           panel: "p-0 mt-8",
         }}
         defaultSelectedKey="chapters"
-        disabledKeys={["characters", "relations", "covers", "banners"]}
+        disabledKeys={["info", "characters", "relations", "covers", "banners"]}
         color="primary"
         variant="underlined"
       >
+        <Tab key="info" title="Informações" />
         <Tab key="chapters" title="Capítulos">
           <MediaLayoutChaptersTab media={media} />
         </Tab>

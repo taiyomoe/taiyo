@@ -6,7 +6,7 @@ import type { MediaLimited } from "~/lib/types";
 import { cn } from "~/lib/utils/cn";
 import { MediaUtils } from "~/lib/utils/media.utils";
 
-import { MediaLayoutInformation } from "./MediaLayoutInformation";
+import { MediaLayoutTitle } from "./MediaLayoutTitle";
 
 type Props = {
   media: MediaLimited;
@@ -37,9 +37,11 @@ export const MediaLayout = ({ media, children }: Props) => {
         alt="media's banner"
         priority
       />
-      <div className="col-span-2 -mt-28 flex h-fit w-full flex-col items-center justify-center gap-8 lg:col-span-1 xl:-mt-36">
-        <DisplayMediaCover media={media} />
-        <MediaLayoutInformation media={media} />
+      <div className="col-span-2 -mt-28 w-full px-0 md:px-6 lg:col-span-1 xl:-mt-36">
+        <div className="sticky top-[calc(var(--navbar-height)+36px)] flex flex-col items-center gap-8">
+          <DisplayMediaCover media={media} />
+          <MediaLayoutTitle media={media} />
+        </div>
       </div>
       <div className="z-10 col-span-2 w-full lg:col-span-1 lg:-mt-28 xl:-mt-36">
         {children}
