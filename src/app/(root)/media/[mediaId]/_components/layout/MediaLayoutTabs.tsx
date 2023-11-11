@@ -4,7 +4,7 @@ import { Tab, Tabs } from "@nextui-org/tabs";
 
 import type { MediaLimited } from "~/lib/types";
 
-import { MediaLayoutChaptersTab } from "./chapters/MediaLayoutChaptersTab";
+import { MediaLayoutChaptersTab } from "../tabs/chapters/MediaLayoutChaptersTab";
 
 type Props = {
   media: MediaLimited;
