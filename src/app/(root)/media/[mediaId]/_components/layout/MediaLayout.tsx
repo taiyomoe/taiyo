@@ -18,15 +18,15 @@ export const MediaLayout = ({ media, children }: Props) => {
   const coverUrl = MediaUtils.getCoverUrl(media);
 
   return (
-    <main className="grid h-full grid-cols-2 lg:grid-cols-lgMediaLayout xl:grid-cols-xlMediaLayout 2xl:grid-cols-2xlMediaLayout">
+    <main className="h-full">
       <Image
         as={NextImage}
         src={bannerUrl}
         classNames={{
           wrapper:
-            "!max-w-full col-span-2 w-full z-0 after:shadow-[0_-64px_48px_16px_inset_var(--background)]",
+            "!max-w-full w-full z-0 after:shadow-[0_-64px_48px_16px_inset_var(--background)]",
           img: cn(
-            "object-cover h-[300px] xl:h-[400px] w-full rounded-none blur-xs",
+            "object-cover h-[300px] lg:h-[320px] xl:h-[400px] 2xl:h-[550px] w-full rounded-none blur-xs",
             {
               "blur-md": bannerUrl === coverUrl,
             },
@@ -37,14 +37,14 @@ export const MediaLayout = ({ media, children }: Props) => {
         alt="media's banner"
         priority
       />
-      <div className="col-span-2 -mt-28 w-full px-0 md:px-6 lg:col-span-1 xl:-mt-36">
-        <div className="sticky top-[calc(var(--navbar-height)+36px)] flex flex-col items-center gap-8">
+      <div className="-mt-28 flex flex-col gap-6 px-6 md:flex-row xl:-mt-36">
+        <section className="z-10 flex h-fit flex-col items-center gap-8 md:sticky md:top-[calc(var(--navbar-height)+36px)]">
           <DisplayMediaCover media={media} />
           <MediaLayoutTitle media={media} />
-        </div>
-      </div>
-      <div className="z-10 col-span-2 w-full lg:col-span-1 lg:-mt-28 xl:-mt-36">
-        {children}
+        </section>
+        <section className="z-10 flex flex-col md:max-w-[calc(100vw-(250px+80px))] lg:max-w-[calc(100vw-(300px+80px))]">
+          {children}
+        </section>
       </div>
     </main>
   );

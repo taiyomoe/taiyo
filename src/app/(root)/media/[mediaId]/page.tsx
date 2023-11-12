@@ -27,7 +27,7 @@ const MediaPage = async ({ params: { mediaId }, searchParams }: Props) => {
   return (
     <MediaLayout media={media}>
       <MediaActions media={media} />
-      <ScrollShadow className="h-[234px] w-full p-3 xl:h-[208px]" hideScrollBar>
+      <ScrollShadow className="h-[184px] py-3 lg:h-[234px]" hideScrollBar>
         <p>{media?.synopsis}</p>
       </ScrollShadow>
       <MediaLayoutTabs media={media} />

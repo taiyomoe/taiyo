@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState } from "react";
 
 type Props = {
@@ -29,6 +31,10 @@ export const useScrollOpacity = ({ min, max }: Props) => {
 
     return () => window.removeEventListener("scroll", handleScroll);
   });
+
+  if (!window) {
+    return { opacity: 0 };
+  }
 
   return { opacity };
 };
