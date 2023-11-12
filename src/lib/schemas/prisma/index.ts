@@ -16,32 +16,38 @@ export const transformJsonNull = (v?: NullableJsonInput) => {
   return v;
 };
 
-export const JsonValue: z.ZodType<Prisma.JsonValue> = z.union([
-  z.string(),
-  z.number(),
-  z.boolean(),
-  z.lazy(() => z.array(JsonValue)),
-  z.lazy(() => z.record(JsonValue)),
-]);
+export const JsonValueSchema: z.ZodType<Prisma.JsonValue> = z.lazy(() =>
+  z.union([
+    z.string(),
+    z.number(),
+    z.boolean(),
+    z.literal(null),
+    z.record(z.lazy(() => JsonValueSchema.optional())),
+    z.array(z.lazy(() => JsonValueSchema)),
+  ])
+);
 
-export type JsonValueType = z.infer<typeof JsonValue>;
+export type JsonValueType = z.infer<typeof JsonValueSchema>;
 
 export const NullableJsonValue = z
-  .union([JsonValue, z.literal('DbNull'), z.literal('JsonNull')])
+  .union([JsonValueSchema, z.literal('DbNull'), z.literal('JsonNull')])
   .nullable()
   .transform((v) => transformJsonNull(v));
 
 export type NullableJsonValueType = z.infer<typeof NullableJsonValue>;
 
-export const InputJsonValue: z.ZodType<Prisma.InputJsonValue> = z.union([
-  z.string(),
-  z.number(),
-  z.boolean(),
-  z.lazy(() => z.array(InputJsonValue.nullable())),
-  z.lazy(() => z.record(InputJsonValue.nullable())),
-]);
+export const InputJsonValueSchema: z.ZodType<Prisma.InputJsonValue> = z.lazy(() =>
+  z.union([
+    z.string(),
+    z.number(),
+    z.boolean(),
+    z.object({ toJSON: z.function(z.tuple([]), z.any()) }),
+    z.record(z.lazy(() => z.union([InputJsonValueSchema, z.literal(null)]))),
+    z.array(z.lazy(() => z.union([InputJsonValueSchema, z.literal(null)]))),
+  ])
+);
 
-export type InputJsonValueType = z.infer<typeof InputJsonValue>;
+export type InputJsonValueType = z.infer<typeof InputJsonValueSchema>;
 
 
 /////////////////////////////////////////
@@ -380,7 +386,7 @@ export const MediaChapterSchema = z.object({
   /**
    * [MediaChapterPage]
    */
-  pages: InputJsonValue.array(),
+  pages: JsonValueSchema.array().nullable(),
   mediaId: z.string(),
   uploaderId: z.string(),
   deleterId: z.string().nullable(),
@@ -401,7 +407,7 @@ export const MediaChapterCommentSchema = z.object({
   /**
    * [MediaCommentAttachement]
    */
-  attachments: InputJsonValue.array(),
+  attachments: JsonValueSchema.array().nullable(),
   parentId: z.string().nullable(),
   mediaChapterId: z.string(),
   userId: z.string(),
