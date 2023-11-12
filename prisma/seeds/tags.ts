@@ -1,4 +1,4 @@
-import { type PrismaClient } from "@prisma/client";
+import type { PrismaClient } from "@prisma/client";
 
 const execute = async (db: PrismaClient) => {
   await db.tag.createMany({
