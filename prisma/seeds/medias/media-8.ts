@@ -26,7 +26,7 @@ const execute = async (db: PrismaClient) => {
       {
         id: "93e4195b-7e40-4e36-8ac1-474b7dc5556f",
         title: "Solo Leveling",
-        language: "ENGLISH",
+        language: "en",
         isAcronym: false,
         mediaId: "171ed718-cfdc-4e63-b99a-18a0b1d59eb5",
         creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -260,7 +260,7 @@ const execute = async (db: PrismaClient) => {
         id: "a78db038-7a71-4e4d-8078-132363b704ac",
         number: 0,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "9e114008-7d39-4a28-9f2a-394fc6e298ce" },
           { id: "9e408515-105d-41e4-ad6a-7e4ded3654e5" },
@@ -284,7 +284,7 @@ const execute = async (db: PrismaClient) => {
         id: "d6cc6181-08c0-470a-92f7-58c1f2b3dee8",
         number: 1,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "65410a33-f9a2-40f1-888c-27197a3056a7" },
           { id: "f2fab641-e61b-4020-bfc1-49899ac74161" },
@@ -316,7 +316,7 @@ const execute = async (db: PrismaClient) => {
         id: "935c0106-8886-4769-9565-ca3f4a24c91d",
         number: 2,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "ad348dbd-a4f6-4850-bae5-adbe3fec8e61" },
           { id: "c07d545d-f9d7-4a8b-aff5-9d0f7ae3de5b" },
@@ -340,7 +340,7 @@ const execute = async (db: PrismaClient) => {
         id: "26ffc746-31fb-4bb6-bb64-5a4ff5f2b0fb",
         number: 3,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "1ae6adeb-1a5f-4164-be80-a74344365764" },
           { id: "d75f78c2-0637-46e8-b62a-d100e199d699" },
@@ -368,7 +368,7 @@ const execute = async (db: PrismaClient) => {
         id: "27b363f4-5db5-4b4a-9ad7-9236e8edebff",
         number: 4,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "093fbb53-4a22-47b2-ac94-c29b1fe0124e" },
           { id: "4eed073d-3e24-434f-a40e-cab80eb8ea5f" },
@@ -397,7 +397,7 @@ const execute = async (db: PrismaClient) => {
         id: "fba438af-7ad9-4e0a-ba58-787ef3fa6554",
         number: 5,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "a1210881-598c-4d8f-99d0-dd64bc5f1fa3" },
           { id: "dae2770f-38c8-46ef-b39d-e420d16f862f" },
@@ -423,7 +423,7 @@ const execute = async (db: PrismaClient) => {
         id: "6cafe3bb-3d85-4539-8108-152c42a71c5d",
         number: 6,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "51624ddd-a4fe-42af-9bcf-4b6a94c69732" },
           { id: "e09172fc-bfd7-46a0-8be7-6257ce233300" },
@@ -453,7 +453,7 @@ const execute = async (db: PrismaClient) => {
         id: "8695daba-b7e1-4fe6-a79c-4c8c49336a2b",
         number: 7,
         volume: 2,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "95c4ea75-8c06-4021-88f4-29f138a34e5f" },
           { id: "b7055a79-b9b5-43b6-a565-a214bbfe4028" },
@@ -486,7 +486,7 @@ const execute = async (db: PrismaClient) => {
         id: "23f65c36-66eb-4407-97bb-66cb51ea15a5",
         number: 8,
         volume: 2,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "1f19fa33-1ec4-4a02-8d63-c7be1276fbf5" },
           { id: "328cd3dc-0b68-4b50-8656-ab71485bd97d" },
@@ -509,7 +509,7 @@ const execute = async (db: PrismaClient) => {
       {
         id: "86ee60d2-7ba7-4ec6-bd04-1407962c8624",
         number: 9,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "3636ebbe-93d3-4b95-978d-ebc762645196" },
           { id: "b4658478-07fd-471f-9962-696fbea1a79b" },

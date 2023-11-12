@@ -25,7 +25,7 @@ const execute = async (db: PrismaClient) => {
       {
         id: "d225668d-d0b3-4a96-9ad9-18f2e721f795",
         title: "One Punch-Man",
-        language: "ENGLISH",
+        language: "en",
         isAcronym: false,
         mediaId: "21bc3f0b-73ac-44b6-8955-ae5a0a50cf39",
         creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -260,7 +260,7 @@ const execute = async (db: PrismaClient) => {
         id: "b2cfca53-c90c-4c42-a69f-a2dca025cca8",
         number: 0,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "72f9b16a-cb63-46f6-9d88-a02bd53d6013" },
           { id: "5c1a3470-2998-4057-8ded-2f9fba2a385c" },
@@ -290,7 +290,7 @@ const execute = async (db: PrismaClient) => {
         id: "356711ba-45db-49b8-b4ac-cc03aa674bbd",
         number: 1,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "46f9c377-e8ff-4efc-b0d2-faad8dcd663d" },
           { id: "ba430fe2-98c4-4aa8-8924-4b5ff05a5d8b" },
@@ -321,7 +321,7 @@ const execute = async (db: PrismaClient) => {
         id: "35c39110-f9f8-4d42-ac82-bc43716071e5",
         number: 2,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "e106ebce-572c-4ebc-b535-f01b9c7a1182" },
           { id: "5fff6316-68a5-497a-ba6c-1d09aee2a179" },
@@ -351,7 +351,7 @@ const execute = async (db: PrismaClient) => {
         id: "4163393f-4244-4c74-bf18-34b407d692d2",
         number: 3,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "93e55a30-bf45-45f5-9918-9c779d206b33" },
           { id: "c4233e03-4308-4ced-86b8-36015753425e" },
@@ -376,7 +376,7 @@ const execute = async (db: PrismaClient) => {
         id: "f36096b2-83ce-42c8-ad93-53c55772cc91",
         number: 4,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "bd8cda06-d7c7-40bc-ab16-c1a0afdf7391" },
           { id: "9431f47c-ac40-45ff-b34a-b1b5d0a81700" },
@@ -405,7 +405,7 @@ const execute = async (db: PrismaClient) => {
         id: "428717ba-cea4-446c-ba38-f3ea7e7ff1cc",
         number: 5,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "9e2d989f-c978-447e-adc3-3e86563ed08d" },
           { id: "2dcdf2de-88fe-4383-bcdf-27d37c778a9e" },
@@ -433,7 +433,7 @@ const execute = async (db: PrismaClient) => {
         id: "e22edd16-30b7-437e-9a38-38542f283e96",
         number: 6,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "f52e7a4e-d28b-4334-92a1-1883d7ee1dc5" },
           { id: "95f78214-3f74-4b6c-9ddf-7a96179555b6" },
@@ -462,7 +462,7 @@ const execute = async (db: PrismaClient) => {
         id: "1916d95e-13f3-4e4b-b8e5-63af74935aca",
         number: 7,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "5438b0cb-b3b5-4587-9c92-21a17c9374dc" },
           { id: "28ce5bbf-4d74-47c0-b1ac-fbb053f7200e" },
@@ -492,7 +492,7 @@ const execute = async (db: PrismaClient) => {
         id: "558ddbab-24b6-4638-88d1-bd7588cf2393",
         number: 8,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "805bbcb5-db96-4e08-8751-fa301fdee449" },
           { id: "da8c1da8-27fa-4f7c-93e0-cb4ec83c2f57" },
@@ -522,7 +522,7 @@ const execute = async (db: PrismaClient) => {
         id: "aaacb6a4-20a3-4486-9c59-1825e94fc49e",
         number: 9,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "d276c693-988a-4ece-b22a-5e08569385d7" },
           { id: "e54f97f1-e0d7-409c-b70b-7c7790e25c87" },

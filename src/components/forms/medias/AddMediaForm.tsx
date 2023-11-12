@@ -20,7 +20,7 @@ const initialValues: InsertMediaSchema = {
   demography: "SHOUNEN",
   countryOfOrigin: "JAPAN",
   flag: "OK",
-  titles: [{ title: "Teste", isAcronym: false, language: "ENGLISH" }],
+  titles: [{ title: "Teste", isAcronym: false, language: "en" }],
   // tags: [],
   cover: {
     id: "",

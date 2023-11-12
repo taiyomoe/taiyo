@@ -25,7 +25,7 @@ const execute = async (db: PrismaClient) => {
       {
         id: "6d162d42-2a0b-424f-ac50-9bef28da33b5",
         title: "Black Clover",
-        language: "ENGLISH",
+        language: "en",
         isAcronym: false,
         mediaId: "95bf236c-87ca-42d3-b9a0-d17ad7a13b2c",
         creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -224,7 +224,7 @@ const execute = async (db: PrismaClient) => {
         id: "d1eafcb1-f35d-4dd4-9b41-9bc357b73fdc",
         number: 1,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "1a5515e2-d55f-41db-9fb5-22b28f9f59c1" },
           { id: "c98376ca-3cb5-49cf-94be-3405a98ad739" },
@@ -287,7 +287,7 @@ const execute = async (db: PrismaClient) => {
         id: "154ecf13-e4c5-4056-b3dc-cb4b870144ca",
         number: 2,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "eaf7ce83-30ca-4821-ab58-e33862f3f27a" },
           { id: "fdff4275-ac0d-4ea0-9d70-b1a1424cd961" },
@@ -316,7 +316,7 @@ const execute = async (db: PrismaClient) => {
         id: "6478fc84-63cc-4da4-8fc1-40ca232e7f97",
         number: 3,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "05dc99b4-7418-4e4a-8465-7468db44368d" },
           { id: "bd03a8f3-c585-43d8-9256-d4accc846c10" },
@@ -352,7 +352,7 @@ const execute = async (db: PrismaClient) => {
         id: "4db23979-cd28-4e4b-8b2d-dd33aa9ce2c1",
         number: 4,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "e048e354-87eb-4819-81d1-79fd8766b60c" },
           { id: "237f83b1-9711-48c5-b8c2-d737603244df" },
@@ -385,7 +385,7 @@ const execute = async (db: PrismaClient) => {
         id: "b5926713-535d-474f-a5d4-11d4e47811bf",
         number: 5,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "293811f7-61f1-4b79-bd2d-889723504371" },
           { id: "97a1e0d5-8223-4b62-bf31-20b29be99bf7" },
@@ -415,7 +415,7 @@ const execute = async (db: PrismaClient) => {
         id: "06343348-48f9-4600-ab62-8a117a325631",
         number: 6,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "91428e65-2936-4717-b574-c4cc03fe6400" },
           { id: "c2682968-86a5-4bdf-ba26-af9a61456a08" },
@@ -445,7 +445,7 @@ const execute = async (db: PrismaClient) => {
         id: "230f49e7-4842-408d-a1d4-65b618805c28",
         number: 7,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "afb5eabe-2a30-45cf-b2dc-d889e241dee3" },
           { id: "91a1bee1-6e60-46d1-b940-9f78533e6fd6" },
@@ -474,7 +474,7 @@ const execute = async (db: PrismaClient) => {
         id: "fd7379b8-3f14-41e7-9b48-e71fec63c0ab",
         number: 8,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "aaa0707a-5232-4ba7-a720-e1918d722e44" },
           { id: "e2b7c02f-a0c5-4182-82b2-15873df47493" },
@@ -502,7 +502,7 @@ const execute = async (db: PrismaClient) => {
         id: "cd1843f9-df9f-4c75-8dc6-f89c76cae6d4",
         number: 9,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "5fbe4e96-5ee5-4640-8864-74cadb4b224b" },
           { id: "81db36ab-86be-45f2-a0f4-d471c3573169" },
@@ -532,7 +532,7 @@ const execute = async (db: PrismaClient) => {
         id: "d8c505a2-d3fa-4c93-9c02-185066d7dac3",
         number: 10,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "1a728d8f-bad4-4308-b47d-f352073e43bf" },
           { id: "561e6f47-f3aa-4c9f-b57a-7c2883cac92f" },

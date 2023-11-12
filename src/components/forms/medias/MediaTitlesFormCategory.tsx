@@ -1,5 +1,5 @@
 import { Button } from "@nextui-org/button";
-import { MediaTitleLanguages } from "@prisma/client";
+import { Languages } from "@prisma/client";
 import { useField } from "formik";
 import { PlusIcon, TrashIcon } from "lucide-react";
 
@@ -15,10 +15,7 @@ export const MediaTitlesFormCategory = () => {
   });
 
   const handleAddTitle = async () => {
-    await setValue([
-      ...value,
-      { title: "", isAcronym: false, language: "ENGLISH" },
-    ]);
+    await setValue([...value, { title: "", isAcronym: false, language: "en" }]);
   };
 
   const handleRemoveTitle = async (index: number) => {
@@ -47,7 +44,7 @@ export const MediaTitlesFormCategory = () => {
           <InputFormField name={`titles[${index}].title`} />
           <SelectFormField
             name={`titles[${index}].language`}
-            items={MediaTitleLanguages}
+            items={Languages}
             className="md:w-1/3"
             aria-label="Linguagem do título"
           />

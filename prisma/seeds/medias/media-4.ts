@@ -25,7 +25,7 @@ const execute = async (db: PrismaClient) => {
       {
         id: "dfcbb111-8176-4d1b-a9ec-a1883aa3d3ca",
         title: "Naruto",
-        language: "ENGLISH",
+        language: "en",
         isAcronym: false,
         mediaId: "d696e020-f234-44c4-9cba-8bb5359b156b",
         creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -248,7 +248,7 @@ const execute = async (db: PrismaClient) => {
         id: "eeecfe08-1813-4267-a51f-32463b2c4d5f",
         number: 0,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "b958f74b-8850-4526-a9e3-75b72f9a9807" },
           { id: "8d0e6745-6e03-4bd0-b32a-516089532bed" },
@@ -310,7 +310,7 @@ const execute = async (db: PrismaClient) => {
         id: "7f12a84d-4a43-430c-aaca-c3b4eba0a8af",
         number: 1,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "a2a3b77d-108b-4660-b772-196e90f929b3" },
           { id: "86cc6fa5-1b2f-4de8-9f24-09d53cbaea92" },
@@ -343,7 +343,7 @@ const execute = async (db: PrismaClient) => {
         id: "99ddad2d-f566-4fa7-9da7-c9be91d432ef",
         number: 2,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "78fccff8-c00f-4e17-8f31-dba2aca8276a" },
           { id: "c32eeb3e-4125-4e2d-9784-b3a17d8a62e0" },
@@ -377,7 +377,7 @@ const execute = async (db: PrismaClient) => {
         id: "9bf674bb-9bdd-46e4-9be5-c98581e4ffae",
         number: 3,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "fb95f3aa-8702-45e5-8593-4c1f6a69f7cf" },
           { id: "6df4170e-cba2-4cdb-95b4-de739e385858" },
@@ -406,7 +406,7 @@ const execute = async (db: PrismaClient) => {
         id: "1ff589b6-fb23-46ed-be01-9f0048e37b27",
         number: 4,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "e09ae63e-8d38-44fe-8d6b-69ccf90333c6" },
           { id: "27543bd4-4f89-4672-b8dd-ed97ee6560fb" },
@@ -435,7 +435,7 @@ const execute = async (db: PrismaClient) => {
         id: "6a146382-5a6a-40f9-b1bf-8f7b86722eda",
         number: 5,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "7c6a5038-98f6-4184-9b22-27c952af291c" },
           { id: "0e5f4143-f536-4b97-a885-58a3f385badd" },
@@ -464,7 +464,7 @@ const execute = async (db: PrismaClient) => {
         id: "382ebe6c-9995-4763-8c70-7e219172c17b",
         number: 6,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "06d58f25-7978-42d4-8be2-6e231046053a" },
           { id: "9fbfb50d-38f8-470b-b28f-7b4a80c89aba" },
@@ -491,7 +491,7 @@ const execute = async (db: PrismaClient) => {
         id: "89dd80a3-a138-4b42-b929-8231dd0cec91",
         number: 7,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "7f393d7a-387a-4bb3-b4bc-37c15bea0403" },
           { id: "11749ffe-5ef6-4a33-8765-a56696dab0d2" },
@@ -519,7 +519,7 @@ const execute = async (db: PrismaClient) => {
         id: "7ec3e583-b14f-4486-bc6c-a6fd000a2d0e",
         number: 8,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "103dcb68-a6c6-440a-9cfb-f9b8e974168c" },
           { id: "abf2dd3b-f635-4b62-ac60-620154759ffd" },
@@ -549,7 +549,7 @@ const execute = async (db: PrismaClient) => {
         id: "d8f0ec3d-7d95-4e93-a86c-bcb15193f373",
         number: 9,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "55f8b867-9a0c-4ada-89b9-655ad69ef922" },
           { id: "5bd1bb9b-0d17-4043-b968-c85646d4ed56" },
