@@ -9,7 +9,7 @@ type Props = {
   size?: "sm" | "md";
 };
 
-const displayMediaChapterUploader = tv({
+const mediaChapterUploader = tv({
   slots: {
     container: "flex w-full items-center",
     icon: "w-fit",
@@ -20,7 +20,7 @@ const displayMediaChapterUploader = tv({
     size: {
       sm: {
         container: "gap-1",
-        icon: "h-4 md:h-5", // intentional md:h-5
+        icon: "h-4 md:h-5",
         skeleton: "rounded",
         link: "text-sm rounded",
       },
@@ -37,8 +37,8 @@ const displayMediaChapterUploader = tv({
   },
 });
 
-export const DisplayMediaChapterUploader = ({ uploader, size }: Props) => {
-  const { container, icon, skeleton, link } = displayMediaChapterUploader({
+export const MediaChapterUploader = ({ uploader, size }: Props) => {
+  const { container, icon, skeleton, link } = mediaChapterUploader({
     size,
   });
 

@@ -7,7 +7,7 @@ type Props = {
   chapter: MediaLimitedChapter;
 };
 
-export const DisplayMediaChapterUploadedTime = ({ chapter }: Props) => {
+export const MediaChapterCardUploadedTime = ({ chapter }: Props) => {
   return (
     <div className="flex w-full items-center justify-end gap-1 md:justify-start">
       <ClockIcon className="h-4 w-fit md:h-5" />

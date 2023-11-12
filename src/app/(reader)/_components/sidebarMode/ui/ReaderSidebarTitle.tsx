@@ -9,7 +9,7 @@ import {
   readerSidebarStateAtom,
 } from "~/atoms/readerSettings.atoms";
 import { SidebarIcon } from "~/components/icons/SidebarIcon";
-import { DisplayMediaChapterTitle } from "~/components/ui/DisplayMediaChapterTitle";
+import { MediaChapterTitle } from "~/components/ui/MediaChapterTitle";
 
 const readerSidebarTitle = tv({
   slots: {
@@ -39,7 +39,7 @@ export const ReaderSidebarTitle = () => {
 
   return (
     <div className={container()}>
-      <DisplayMediaChapterTitle className={text()} />
+      <MediaChapterTitle className={text()} />
       <Button
         startContent={
           <SidebarIcon action="close" side={readerSidebarSide} size={20} />

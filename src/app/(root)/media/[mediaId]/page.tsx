@@ -3,8 +3,8 @@ import { ScrollShadow } from "@nextui-org/scroll-shadow";
 import { mediaPaginationSchema } from "~/lib/schemas";
 import { api } from "~/lib/trpc/server";
 
-import { MediaActions } from "./_components/layout/actions/MediaActions";
 import { MediaLayout } from "./_components/layout/MediaLayout";
+import { MediaLayoutActions } from "./_components/layout/MediaLayoutActions";
 import { MediaLayoutTabs } from "./_components/layout/MediaLayoutTabs";
 
 type Props = {
@@ -12,7 +12,9 @@ type Props = {
   searchParams: Record<string, string | string[] | undefined>;
 };
 
-const MediaPage = async ({ params: { mediaId }, searchParams }: Props) => {
+export default async function Page({ params, searchParams }: Props) {
+  const { mediaId } = params;
+
   const pagination = mediaPaginationSchema.parse({
     page: searchParams.page,
     perPage: searchParams.per_page,
@@ -26,13 +28,11 @@ const MediaPage = async ({ params: { mediaId }, searchParams }: Props) => {
 
   return (
     <MediaLayout media={media}>
-      <MediaActions media={media} />
+      <MediaLayoutActions media={media} />
       <ScrollShadow className="h-[184px] py-3 lg:h-[202px]" hideScrollBar>
         <p>{media?.synopsis}</p>
       </ScrollShadow>
       <MediaLayoutTabs media={media} />
     </MediaLayout>
   );
-};
-
-export default MediaPage;
+}

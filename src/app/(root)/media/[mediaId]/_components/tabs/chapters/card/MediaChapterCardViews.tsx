@@ -1,6 +1,6 @@
 import { EyeIcon } from "lucide-react";
 
-export const DisplayMediaChapterViews = () => {
+export const MediaChapterCardViews = () => {
   return (
     <div className="flex w-full items-center justify-end gap-1 md:justify-start">
       <EyeIcon className="h-4 w-fit md:h-5" />

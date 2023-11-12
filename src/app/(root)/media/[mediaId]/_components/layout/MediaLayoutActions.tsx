@@ -6,7 +6,7 @@ type Props = {
   media: MediaLimited;
 };
 
-export const MediaActions = ({ media }: Props) => {
+export const MediaLayoutActions = ({ media }: Props) => {
   return (
     <div className="flex h-28 flex-col gap-2 py-3 xl:h-36">
       <div className="h-full">

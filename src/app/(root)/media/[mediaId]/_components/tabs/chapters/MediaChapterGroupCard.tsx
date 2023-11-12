@@ -1,6 +1,6 @@
 import type { MediaChapterGroup } from "~/lib/types";
 
-import { MediaChapterCard } from "./MediaChapterCard";
+import { MediaChapterCard } from "./card/MediaChapterCard";
 
 type Props = {
   group: MediaChapterGroup;

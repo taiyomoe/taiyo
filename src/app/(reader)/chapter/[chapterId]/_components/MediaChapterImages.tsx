@@ -3,9 +3,9 @@ import { Spinner } from "@nextui-org/react";
 import { useChapterImages } from "~/hooks/useChapterImages";
 import { useChapterNavigation } from "~/hooks/useChapterNavigation";
 
-import { DisplayMediaChapterImage } from "./DisplayMediaChapterImage";
+import { MediaChapterImage } from "./MediaChapterImage";
 
-export const DisplayMediaChapterImages = () => {
+export const MediaChapterImages = () => {
   const { currentPage } = useChapterNavigation();
   const { images, pageMode } = useChapterImages();
 
@@ -17,7 +17,7 @@ export const DisplayMediaChapterImages = () => {
         <Spinner size="lg" className="justify-self-center" />
       )}
       {images.map((img) => (
-        <DisplayMediaChapterImage
+        <MediaChapterImage
           key={img.url}
           url={img.blobUrl}
           hide={

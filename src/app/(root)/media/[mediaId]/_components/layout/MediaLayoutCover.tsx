@@ -4,9 +4,11 @@ import { Image } from "@nextui-org/image";
 import type { MediaLimited } from "~/lib/types";
 import { MediaUtils } from "~/lib/utils/media.utils";
 
-type Props = { media: MediaLimited };
+type Props = {
+  media: MediaLimited;
+};
 
-export const DisplayMediaCover = ({ media }: Props) => {
+export const MediaLayoutCover = ({ media }: Props) => {
   const coverUrl = MediaUtils.getCoverUrl(media);
 
   return (

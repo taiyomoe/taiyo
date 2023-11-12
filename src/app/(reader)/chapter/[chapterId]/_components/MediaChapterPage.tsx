@@ -9,10 +9,10 @@ import { readerPageModeAtom } from "~/atoms/readerSettings.atoms";
 import { useChapterNavigation } from "~/hooks/useChapterNavigation";
 import { useKeyPress } from "~/hooks/useKeyPress";
 
-import { DisplayMediaChapterImages } from "./DisplayMediaChapterImages";
-import { DisplayMediaChapterPageActions } from "./DisplayMediaChapterPageActions";
+import { MediaChapterImages } from "./MediaChapterImages";
+import { MediaChapterPageActions } from "./MediaChapterPageActions";
 
-const displayMediaChapterPage = tv({
+const mediaChapterPage = tv({
   slots: {
     container:
       "relative flex flex-col mt-[var(--navbar-height)] grid-in-chapter",
@@ -37,7 +37,7 @@ const displayMediaChapterPage = tv({
   },
 });
 
-export const DisplayMediaChapterPage = () => {
+export const MediaChapterPage = () => {
   const { goBack, goForward } = useChapterNavigation();
   const backButtonRef = useRef<HTMLButtonElement>(null);
   const forwardButtonRef = useRef<HTMLButtonElement>(null);
@@ -45,7 +45,7 @@ export const DisplayMediaChapterPage = () => {
   const pageMode = useAtomValue(readerPageModeAtom);
 
   const { container, leftButton, rightButton, imagesWrapper } =
-    displayMediaChapterPage({ pageMode });
+    mediaChapterPage({ pageMode });
 
   const handleKeyPress: KeyboardEventHandler = (e) => {
     if (e.key === "ArrowLeft") {
@@ -62,14 +62,14 @@ export const DisplayMediaChapterPage = () => {
     <div className={container()}>
       <div className={imagesWrapper()}>
         <button ref={backButtonRef} className={leftButton()} onClick={goBack} />
-        <DisplayMediaChapterImages />
+        <MediaChapterImages />
         <button
           ref={forwardButtonRef}
           className={rightButton()}
           onClick={goForward}
         />
       </div>
-      <DisplayMediaChapterPageActions />
+      <MediaChapterPageActions />
     </div>
   );
 };
