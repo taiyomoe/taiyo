@@ -25,7 +25,7 @@ const execute = async (db: PrismaClient) => {
       {
         id: "8c993bff-10d5-4e95-8f69-91d9cc9db867",
         title: "Jujutsu Kaisen",
-        language: "ROMAJI",
+        language: "ja_ro",
         isAcronym: false,
         mediaId: "d9405929-e54e-4560-8305-d14e7c76bcc7",
         creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -302,7 +302,7 @@ const execute = async (db: PrismaClient) => {
         id: "b3f20050-8bf7-435e-b27b-64da7c888b06",
         number: 0,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "29227912-82d3-43df-8697-0457801e418a" },
           { id: "107d5f2f-6d24-4e10-9bd1-92cf17639615" },
@@ -366,7 +366,7 @@ const execute = async (db: PrismaClient) => {
         id: "425f0866-917d-45c6-9774-df41e58bf0e0",
         number: 1,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "d8ed4585-8951-455a-993b-c83474ec5156" },
           { id: "883f7996-0e6b-43ae-9c95-96a1a5ccebd8" },
@@ -397,7 +397,7 @@ const execute = async (db: PrismaClient) => {
         id: "1381c258-799e-4682-8e30-c4a0d543c6c8",
         number: 2,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "b48cbf3b-bca5-4dd4-b86a-9c36b54c8a5e" },
           { id: "1ddca0ee-8fc3-4e99-834d-b974e4931f06" },
@@ -434,7 +434,7 @@ const execute = async (db: PrismaClient) => {
         id: "a46e690c-dafa-48df-a16a-07b67fa68659",
         number: 3,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "1c7091f0-9ca6-4e48-b2b8-c7b1e426da4e" },
           { id: "150f2ce2-b01d-4e44-bbaa-00e89141d4b7" },
@@ -468,7 +468,7 @@ const execute = async (db: PrismaClient) => {
         id: "a11e58db-b1fa-4560-843b-670460f6b30d",
         number: 4,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "0afdb91c-b3cf-4cce-a4f5-5d078258b999" },
           { id: "f6d21ae2-ae67-427e-a907-745225e39a36" },
@@ -499,7 +499,7 @@ const execute = async (db: PrismaClient) => {
         id: "a608e041-6cc9-441f-8e8f-66380606c56c",
         number: 5,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "745b8684-5e2c-4487-819e-2eca8fdcdda1" },
           { id: "20be9a3d-43ae-49d6-921d-9b8023870055" },
@@ -530,7 +530,7 @@ const execute = async (db: PrismaClient) => {
         id: "a3a7ddcd-9164-40fa-9f19-6fac582498e4",
         number: 6,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "67441363-3d0c-4159-b690-f12b6b35570b" },
           { id: "807dcaac-f319-4775-a5ad-5b6875d66c03" },
@@ -560,7 +560,7 @@ const execute = async (db: PrismaClient) => {
         id: "1471814d-f9e0-4ee6-a9c5-a31d1b541684",
         number: 7,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "3a967092-4a7c-494d-85ae-126ce1d805c8" },
           { id: "1020ea34-a4e1-4d5a-a8ad-46023d2e7d41" },
@@ -589,7 +589,7 @@ const execute = async (db: PrismaClient) => {
       {
         id: "1681f340-7e46-43d6-a32a-607939c9fb65",
         number: 8,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "7baeda76-0d7d-4156-b3a9-1118e275e6bd" },
           { id: "ad86b8ec-f252-425d-ba7d-0f79a778c98d" },
@@ -618,7 +618,7 @@ const execute = async (db: PrismaClient) => {
       {
         id: "fcab7fbe-f1f1-4204-bd84-2e1df114006f",
         number: 9,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "0aa834e7-2406-4679-ab79-3b1fab2c1094" },
           { id: "51c93228-535b-44c3-a565-641d07013aa2" },

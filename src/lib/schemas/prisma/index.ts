@@ -132,14 +132,6 @@ export const MediaCountryOfOriginSchema = z.enum(['JAPAN','KOREA','CHINA','USA',
 
 export type MediaCountryOfOriginType = `${z.infer<typeof MediaCountryOfOriginSchema>}`
 
-export const MediaTitleLanguagesSchema = z.enum(['ENGLISH','JAPANESE','KOREAN','ROMAJI','SPANISH','PORTUGUESE','FRENCH','NATIVE']);
-
-export type MediaTitleLanguagesType = `${z.infer<typeof MediaTitleLanguagesSchema>}`
-
-export const MediaChapterLanguagesSchema = z.enum(['ENGLISH','JAPANESE','SPANISH','PORTUGUESE','FRENCH']);
-
-export type MediaChapterLanguagesType = `${z.infer<typeof MediaChapterLanguagesSchema>}`
-
 export const TrackersSchema = z.enum(['MANGADEX','MYANIMELIST','ANILIST']);
 
 export type TrackersType = `${z.infer<typeof TrackersSchema>}`
@@ -159,6 +151,10 @@ export type UploadSessionStatusType = `${z.infer<typeof UploadSessionStatusSchem
 export const UploadSessionTypeSchema = z.enum(['COVER','BANNER','CHAPTER']);
 
 export type UploadSessionTypeType = `${z.infer<typeof UploadSessionTypeSchema>}`
+
+export const LanguagesSchema = z.enum(['ab','aa','af','ak','sq','am','ar','an','hy','as','av','ae','ay','az','bm','ba','eu','be','bn','bi','bs','br','bg','my','ca','ch','ce','ny','cu','cv','kw','co','cr','hr','cs','da','dv','nl','dz','en','eo','et','ee','fo','fj','fi','fr','fy','ff','gd','gl','lg','ka','de','el','kl','gn','gu','ht','ha','he','hz','hi','ho','hu','is','io','ig','id','ia','ie','iu','ik','ga','it','jv','kn','kr','ks','kk','km','ki','rw','ky','kv','kg','kj','ku','lo','la','lv','li','ln','lt','lu','lb','mk','mg','ms','ml','mt','gv','mi','mr','mh','mn','na','nv','nd','nr','ng','ne','no','nb','nn','ii','oc','oj','or','om','os','pi','ps','fa','pl','pa','qu','ro','rm','rn','ru','se','sm','sg','sa','sc','sr','sn','sd','si','sk','sl','so','st','su','sw','ss','sv','tl','ty','tg','ta','tt','te','th','bo','ti','to','ts','tn','tr','tk','tw','ug','uk','ur','uz','ve','vi','vo','wa','cy','wo','xh','yi','yo','za','zu','es','es_la','pt_br','pt_pt','ja','ja_ro','ko','ko_ro','zh','zh_hk']);
+
+export type LanguagesType = `${z.infer<typeof LanguagesSchema>}`
 
 /////////////////////////////////////////
 // MODELS
@@ -188,7 +184,7 @@ export type User = z.infer<typeof UserSchema>
 export const UserSettingSchema = z.object({
   gender: GendersSchema,
   contentRating: ContentRatingSchema,
-  preferredTitleLanguage: MediaTitleLanguagesSchema,
+  preferredTitleLanguage: LanguagesSchema,
   id: z.string().uuid(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
@@ -318,7 +314,7 @@ export type MediaBanner = z.infer<typeof MediaBannerSchema>
 /////////////////////////////////////////
 
 export const MediaTitleSchema = z.object({
-  language: MediaTitleLanguagesSchema,
+  language: LanguagesSchema,
   id: z.string().uuid(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
@@ -373,7 +369,7 @@ export type MediaTracker = z.infer<typeof MediaTrackerSchema>
 /////////////////////////////////////////
 
 export const MediaChapterSchema = z.object({
-  language: MediaChapterLanguagesSchema,
+  language: LanguagesSchema,
   contentRating: ContentRatingSchema,
   flag: FlagSchema,
   id: z.string().uuid(),

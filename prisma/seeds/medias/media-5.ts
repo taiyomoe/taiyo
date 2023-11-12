@@ -25,7 +25,7 @@ const execute = async (db: PrismaClient) => {
       {
         id: "ba8fc957-f0d7-44bb-b0aa-efd36184c575",
         title: "Boku no Hero Academia",
-        language: "ROMAJI",
+        language: "ja_ro",
         isAcronym: false,
         mediaId: "7d64e4f8-d955-4b59-a7c5-7ee2ddcad68b",
         creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -296,7 +296,7 @@ const execute = async (db: PrismaClient) => {
         id: "4b31f537-0b93-423d-9a52-8283bf6db5b7",
         number: 1,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "9b84b2b8-efb4-40fb-9b57-f628c6dc4727" },
           { id: "8087d5cf-2d0a-4951-a1a0-46c17aa7de49" },
@@ -359,7 +359,7 @@ const execute = async (db: PrismaClient) => {
         id: "2397d097-7c5b-4449-bde1-da2ba627521c",
         number: 2,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "20b8f1c9-1503-40e0-a281-cddcffc75fe5" },
           { id: "29974ced-373d-4b3b-8afd-beee658efea7" },
@@ -389,7 +389,7 @@ const execute = async (db: PrismaClient) => {
         id: "b1ede5f2-cdbd-408a-b631-986a8a7832f2",
         number: 3,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "8846bdbe-40b9-4e99-a5a4-fe3a8d21842e" },
           { id: "03b2f714-548a-41fe-ab6f-22a8a6ea6425" },
@@ -425,7 +425,7 @@ const execute = async (db: PrismaClient) => {
         id: "961e39d7-1c09-4c76-ba76-b0c213b06c93",
         number: 4,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "00457e69-6bd5-4251-9506-207ea6324da0" },
           { id: "9a3cfe85-21b1-4a54-95cc-5f826d186ac0" },
@@ -458,7 +458,7 @@ const execute = async (db: PrismaClient) => {
         id: "ef73a310-c475-47a0-9d79-deee554c161b",
         number: 5,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "6e001325-c079-4da9-b553-02c40e9f84cb" },
           { id: "2e4abf16-8c1f-4481-bb88-dc96838f0890" },
@@ -488,7 +488,7 @@ const execute = async (db: PrismaClient) => {
         id: "45d8a770-71ff-43c3-bf5d-fe3f73bafc66",
         number: 6,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "2dfd3283-5e44-4423-8c14-9926fed5f09f" },
           { id: "e4f6f2c7-7f45-46a8-8d28-923dd94a3587" },
@@ -518,7 +518,7 @@ const execute = async (db: PrismaClient) => {
         id: "34aa1338-fb96-491e-a970-329768ad0989",
         number: 7,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "10d677e5-9018-4a5f-a3dc-8410922e7be3" },
           { id: "3fd0a7cc-82ca-4cff-9d53-a5ef095d832b" },
@@ -548,7 +548,7 @@ const execute = async (db: PrismaClient) => {
         id: "387f7f87-aa2f-4c41-8ca8-6298466fb0a1",
         number: 8,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "c7eb347f-e4ca-4976-a250-e7b4960badd7" },
           { id: "931512e1-7013-4b1b-8121-6c9507c36203" },
@@ -577,7 +577,7 @@ const execute = async (db: PrismaClient) => {
         id: "96842b24-97b9-4afd-a93e-0787e861c71d",
         number: 9,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "32079c06-4314-4156-be68-b85e174bb007" },
           { id: "d52191c2-304b-46e6-811d-ddc4614de609" },
@@ -605,7 +605,7 @@ const execute = async (db: PrismaClient) => {
         id: "84dbf28a-0f8f-41c3-b20f-2dd0a3b22255",
         number: 10,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "fbd4f084-3176-4dab-9299-bfbff01e4209" },
           { id: "09714c2e-7fd7-4bfc-ae3d-17829672c2b6" },

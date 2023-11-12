@@ -25,7 +25,7 @@ const execute = async (db: PrismaClient) => {
       {
         id: "66b6e5cb-098e-4993-bbed-d84c61b08fc8",
         title: "One Piece",
-        language: "ROMAJI",
+        language: "ja_ro",
         isAcronym: false,
         mediaId: "65ad0a5c-4861-4b59-b93e-90963590958e",
         creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -512,7 +512,7 @@ const execute = async (db: PrismaClient) => {
         id: "910d2723-7a4a-4feb-9702-a46ec2703a70",
         number: 1,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "38f8c241-a034-4e31-9add-1ea662e3e29f" },
           { id: "7451c489-668e-4b76-aecf-c51bdd99502b" },
@@ -584,7 +584,7 @@ const execute = async (db: PrismaClient) => {
         title: "Title here",
         number: 1,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "38f8c241-a034-4e31-9add-1ea662e3e29f" },
           { id: "7451c489-668e-4b76-aecf-c51bdd99502b" },
@@ -655,7 +655,7 @@ const execute = async (db: PrismaClient) => {
         id: "ab31fddb-9520-4366-80c2-ab497d9cef96",
         number: 2,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "21d17910-c681-4715-996a-cff477120647" },
           { id: "b0f5a95e-73de-461b-9a18-e5ccae73d088" },
@@ -690,7 +690,7 @@ const execute = async (db: PrismaClient) => {
         id: "78ce6765-d29f-4ae4-bf90-1e7f864d4d8a",
         number: 3,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "41f7ec50-6a67-4fbb-9496-8573398bc7fc" },
           { id: "b02680db-45c6-40ec-8d3c-8356cbced064" },
@@ -721,7 +721,7 @@ const execute = async (db: PrismaClient) => {
         id: "c80863e6-4c2b-4814-8f97-53385e950b65",
         number: 4,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "7c6784a3-cbcd-4cf1-bacc-78774e04d6de" },
           { id: "d8448964-11e1-4743-9cf5-76f7283ac52b" },
@@ -752,7 +752,7 @@ const execute = async (db: PrismaClient) => {
         id: "d2323cdb-fdfd-455f-b559-8fb24e3c3b21",
         number: 5,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "6a27e163-d03f-4a49-9a25-e0a5574ac440" },
           { id: "4681d1fb-a8b7-4a1b-a2d2-312b8e6452d4" },
@@ -783,7 +783,7 @@ const execute = async (db: PrismaClient) => {
         id: "9bf82850-6930-4f66-bdfb-b8e4e6e84540",
         number: 6,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "cc66af48-3b0e-4a84-a567-3f7dff50f1e4" },
           { id: "eac18f6d-7d41-4eaf-8622-dd0d331f6666" },
@@ -816,7 +816,7 @@ const execute = async (db: PrismaClient) => {
         id: "84165008-0067-4373-b734-60fcec07c5d2",
         number: 7,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "ea464f1a-75aa-4fab-a178-21ff1b0e046b" },
           { id: "6b48308a-55de-47ae-8b6d-e7aa4f59839b" },
@@ -850,7 +850,7 @@ const execute = async (db: PrismaClient) => {
         id: "ee5506cf-a811-40c5-9ae9-fc58f76c06b4",
         number: 8,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "5cc8c0ad-4727-4c04-b8d1-a4c3cff07d30" },
           { id: "ec9c5278-0749-4e03-80d6-25e1992a005d" },
@@ -880,7 +880,7 @@ const execute = async (db: PrismaClient) => {
         id: "a5d0f55b-2c5d-4810-8aa0-43d3ca8e5e83",
         number: 9,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "d3595504-d7d0-4068-8e1b-1a64de50287a" },
           { id: "91fa509c-c9d9-4a94-84e4-5fac76cf4a58" },
@@ -919,7 +919,7 @@ const execute = async (db: PrismaClient) => {
         id: "92f28411-1d29-4afc-a05e-203dd21d548d",
         number: 10,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "5795f333-3594-404f-a5f1-56e23dc12f74" },
           { id: "022d90a4-a2a5-4ef3-8691-0e019ff3bf84" },

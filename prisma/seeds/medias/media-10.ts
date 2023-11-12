@@ -24,7 +24,7 @@ const execute = async (db: PrismaClient) => {
       {
         id: "6b04f194-c563-4558-8b25-7a7403631df1",
         title: "Martial Peak",
-        language: "ENGLISH",
+        language: "en",
         isAcronym: false,
         mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
         creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -138,7 +138,7 @@ const execute = async (db: PrismaClient) => {
         id: "89b0b209-3653-4780-9cbf-90a35803c38a",
         number: 0,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "6a5de5df-57e9-44d7-b9b4-ea5b62bf2dcd" },
           { id: "3026ff99-ce0a-440a-92a3-cf670cbd405b" },
@@ -167,7 +167,7 @@ const execute = async (db: PrismaClient) => {
         id: "abcded63-ded5-44d3-aef7-fa368d653347",
         number: 1,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "83489960-7d1c-4f2e-99a2-4671f00f21e7" },
           { id: "b564adb8-ed9e-478a-b390-244bc98505ba" },
@@ -188,7 +188,7 @@ const execute = async (db: PrismaClient) => {
         id: "c6206040-95a8-4802-b12b-c631ef7e859d",
         number: 2,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "6ae4f628-9fe7-46f5-b90b-e9cf25db5ede" },
           { id: "49f951b8-e323-4221-a04c-3507f0bedec8" },
@@ -210,7 +210,7 @@ const execute = async (db: PrismaClient) => {
         id: "bd5f1cac-95b1-4f68-a314-144898e5cc07",
         number: 3,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "62a7f2bc-705a-4b41-a698-e39bfe8d30f2" },
           { id: "97ccc92a-c364-4149-94a6-8658d1b98974" },
@@ -231,7 +231,7 @@ const execute = async (db: PrismaClient) => {
         id: "69884783-18c4-48c8-9320-c00cef8cb873",
         number: 4,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "45ad731a-6c77-43c1-b727-fe87a0f83ca0" },
           { id: "c7d493e7-60a5-4f33-bbe3-b81801834b63" },
@@ -252,7 +252,7 @@ const execute = async (db: PrismaClient) => {
         id: "6d54a98a-43c4-4821-bb4d-0ce48e99c8f7",
         number: 5,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "846557fd-a50f-4a84-a7f9-d9bf94ca7be7" },
           { id: "5e2429f4-7021-422c-984d-0b0533a32950" },
@@ -272,7 +272,7 @@ const execute = async (db: PrismaClient) => {
         id: "cd19eaa8-aaa9-4565-b1e1-59bccee18c30",
         number: 6,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "c17177b2-dc2a-4a6d-a409-38c4ec2ad122" },
           { id: "95aab20a-cb01-454c-81b3-54e7ee0f51fb" },
@@ -292,7 +292,7 @@ const execute = async (db: PrismaClient) => {
         id: "90b25b8e-572e-42ab-b30a-3075180bbe6c",
         number: 7,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "65743a1a-8f14-42de-bb14-836d92b65ecd" },
           { id: "002ebe17-2980-40d5-bd90-03e24a53ecc8" },
@@ -312,7 +312,7 @@ const execute = async (db: PrismaClient) => {
         id: "6eca2c2e-d63b-4250-a13d-86009fee5b4f",
         number: 8,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "85c25878-b023-4e29-af44-ae180a67dfb1" },
           { id: "448fa844-da73-4597-90e9-5e469e57bf03" },
@@ -332,7 +332,7 @@ const execute = async (db: PrismaClient) => {
         id: "ff8a9509-2b26-43c3-9701-e71cadaacbb2",
         number: 9,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "24b89c10-5fc6-4b63-bd98-714405a1fa53" },
           { id: "bbfa8ed0-3dd6-4821-a61a-3bab465d2586" },
