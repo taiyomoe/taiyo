@@ -10,7 +10,7 @@ type Props = {
   orientation?: "horizontal" | "vertical";
 };
 
-const displayMediaChapterScans = tv({
+const mediaChapterScans = tv({
   slots: {
     container: "flex w-full",
     iconContainer: "flex items-center",
@@ -54,7 +54,7 @@ const displayMediaChapterScans = tv({
   },
 });
 
-export const DisplayMediaChapterScans = (props: Props) => {
+export const MediaChapterScans = (props: Props) => {
   const { scans, size, orientation } = props;
   const {
     container,
@@ -64,7 +64,7 @@ export const DisplayMediaChapterScans = (props: Props) => {
     skeleton,
     link,
     text,
-  } = displayMediaChapterScans({
+  } = mediaChapterScans({
     size,
     orientation,
   });

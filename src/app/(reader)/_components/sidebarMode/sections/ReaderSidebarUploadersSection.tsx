@@ -3,8 +3,8 @@
 import { useAtomValue } from "jotai";
 
 import { mediaChapterAtom } from "~/atoms/mediaChapter.atoms";
-import { DisplayMediaChapterScans } from "~/components/ui/DisplayMediaChapterScans";
-import { DisplayMediaChapterUploader } from "~/components/ui/DisplayMediaChapterUploader";
+import { MediaChapterScans } from "~/components/ui/MediaChapterScans";
+import { MediaChapterUploader } from "~/components/ui/MediaChapterUploader";
 
 type Props = {
   className: string;
@@ -17,8 +17,8 @@ export const ReaderSidebarUploadersSection = ({ className }: Props) => {
     <div className={className}>
       <p className="text-md font-medium">Upado por</p>
       <div className="flex flex-col gap-2">
-        <DisplayMediaChapterUploader uploader={chapter?.uploader} size="md" />
-        <DisplayMediaChapterScans
+        <MediaChapterUploader uploader={chapter?.uploader} size="md" />
+        <MediaChapterScans
           scans={chapter?.scans}
           orientation="vertical"
           size="md"

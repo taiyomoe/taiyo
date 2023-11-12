@@ -4,16 +4,16 @@ import { useAtomValue } from "jotai";
 import { ReaderSettingsMediaChapterDropdown } from "~/app/(reader)/_components/sidebarMode/ui/ReaderSettingsMediaChapterDropdown";
 import { readerPageModeAtom } from "~/atoms/readerSettings.atoms";
 
-const displayMediaChapterPageActions = tv({
+const mediaChapterPageActions = tv({
   slots: {
     container: "flex mt-4 p-6 justify-center",
   },
 });
 
-export const DisplayMediaChapterPageActions = () => {
+export const MediaChapterPageActions = () => {
   const pageMode = useAtomValue(readerPageModeAtom);
 
-  const { container } = displayMediaChapterPageActions();
+  const { container } = mediaChapterPageActions();
 
   if (pageMode === "single") {
     return null;

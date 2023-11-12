@@ -8,7 +8,7 @@ type Props = {
   hide: boolean;
 };
 
-const displayMediaChapterImage = tv({
+const mediaChapterImage = tv({
   slots: {
     image: "object-contain",
   },
@@ -24,10 +24,10 @@ const displayMediaChapterImage = tv({
   },
 });
 
-export const DisplayMediaChapterImage = ({ url, hide }: Props) => {
+export const MediaChapterImage = ({ url, hide }: Props) => {
   const pageMode = useAtomValue(readerPageModeAtom);
 
-  const { image } = displayMediaChapterImage({ hide, pageMode });
+  const { image } = mediaChapterImage({ hide, pageMode });
 
   return <img src={url} className={image()} alt="image" />;
 };

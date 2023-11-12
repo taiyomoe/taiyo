@@ -2,15 +2,15 @@ import Link from "next/link";
 import { Card, CardBody } from "@nextui-org/card";
 import { tv } from "tailwind-variants";
 
-import { DisplayMediaChapterScans } from "~/components/ui/DisplayMediaChapterScans";
+import { MediaChapterScans } from "~/components/ui/MediaChapterScans";
 import type { MediaLimitedChapter } from "~/lib/types";
 import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils";
 
-import { DisplayMediaChapterUploader } from "../../../../../../../components/ui/DisplayMediaChapterUploader";
-import { DisplayMediaChapterCommentsCount } from "../../ui/DisplayMediaChapterCommentsCount";
-import { DisplayMediaChapterUploadedTime } from "../../ui/DisplayMediaChapterUploadedTime";
-import { DisplayMediaChapterViews } from "../../ui/DisplayMediaChapterViews";
+import { MediaChapterUploader } from "../../../../../../../../components/ui/MediaChapterUploader";
+import { MediaChapterCardCommentsCount } from "./MediaChapterCardCommentsCount";
 import { MediaChapterCardPath } from "./MediaChapterCardPath";
+import { MediaChapterCardUploadedTime } from "./MediaChapterCardUploadedTime";
+import { MediaChapterCardViews } from "./MediaChapterCardViews";
 
 type Props = {
   chapter: MediaLimitedChapter;
@@ -79,23 +79,23 @@ export const MediaChapterCard = ({ chapter, order }: Props) => {
             </Link>
             {/* UPLOADED TIME */}
             <div className={chapterUploadedTime()}>
-              <DisplayMediaChapterUploadedTime chapter={chapter} />
+              <MediaChapterCardUploadedTime chapter={chapter} />
             </div>
             {/* VIEWS */}
             <div className={chapterViews()}>
-              <DisplayMediaChapterViews />
+              <MediaChapterCardViews />
             </div>
             {/* SCANS */}
             <div className={chapterScans()}>
-              <DisplayMediaChapterScans scans={chapter.scans} />
+              <MediaChapterScans scans={chapter.scans} />
             </div>
             {/* UPLOADER */}
             <div className={chapterUploader()}>
-              <DisplayMediaChapterUploader uploader={chapter.uploader} />
+              <MediaChapterUploader uploader={chapter.uploader} />
             </div>
             {/* COMMENTS */}
             <div className={chapterComments()}>
-              <DisplayMediaChapterCommentsCount />
+              <MediaChapterCardCommentsCount />
             </div>
           </div>
         </CardBody>

@@ -11,7 +11,7 @@ type Props = {
   className: string;
 };
 
-export const DisplayMediaChapterTitle = ({ className }: Props) => {
+export const MediaChapterTitle = ({ className }: Props) => {
   const { id, title, isMediaTitle } = useAtomValue(mediaChapterTitleAtom);
 
   if (!id || !title) {
