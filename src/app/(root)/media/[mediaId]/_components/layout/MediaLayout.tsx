@@ -42,7 +42,7 @@ export const MediaLayout = ({ media, children }: Props) => {
           <DisplayMediaCover media={media} />
           <MediaLayoutTitle media={media} />
         </section>
-        <section className="z-10 flex flex-col md:max-w-[calc(100vw-(250px+80px))] lg:max-w-[calc(100vw-(300px+80px))]">
+        <section className="z-10 flex flex-col md:w-[calc(100vw-(250px+80px))] lg:w-[calc(100vw-(300px+80px))]">
           {children}
         </section>
       </div>
