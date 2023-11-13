@@ -86,7 +86,7 @@ export const mediasRouter = createTRPCRouter({
           synopsis: true,
           covers: { select: { id: true }, take: 1 },
           banners: { select: { id: true }, take: 1 },
-          titles: { select: { title: true }, take: 1 },
+          titles: { select: { title: true, language: true } },
           trackers: { select: { tracker: true, externalId: true } },
           chapters: {
             select: {
@@ -111,13 +111,19 @@ export const mediasRouter = createTRPCRouter({
         throw new NotFoundError();
       }
 
+      // sort the titles by language so that the first titles are the english ones, then japanese ones, then japanese romaji ones
+      const mainTitle = result.titles
+        .sort((a, b) => (a.language > b.language ? 1 : -1))
+        .at(0)!.title;
+
       const mediaLimited: MediaLimited = {
         id: mediaId,
         synopsis: result.synopsis,
         // ----- RELATIONS
         coverId: result.covers.at(0)!.id,
         bannerId: result.banners.at(0)?.id ?? null,
-        title: result.titles.at(0)!.title,
+        mainTitle,
+        titles: result.titles,
         trackers: result.trackers,
         chapters: result.chapters.map((c) => ({
           id: c.id,

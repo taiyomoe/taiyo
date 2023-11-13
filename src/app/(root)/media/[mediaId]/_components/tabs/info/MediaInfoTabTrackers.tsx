@@ -1,4 +1,5 @@
-import { Link, tv } from "@nextui-org/react";
+import { Link } from "@nextui-org/link";
+import { tv } from "@nextui-org/react";
 
 import { CompanyLogo } from "~/components/ui/CompanyLogo";
 import type { MediaLimited } from "~/lib/types";
@@ -6,18 +7,18 @@ import { TrackerUtils } from "~/lib/utils/tracker.utils";
 
 type Props = { media: MediaLimited };
 
-const mediaLayoutInformation = tv({
+const mediaInfoTabTrackers = tv({
   slots: {
-    container: "items-start w-[300px] hidden",
+    container: "items-start",
     categoryWrapper: "flex flex-col gap-2 justify-start",
     categoryTitle: "font-semibold text-lg",
     categoryContent: "flex flex-wrap gap-2",
   },
 });
 
-export const MediaLayoutInformation = ({ media }: Props) => {
+export const MediaInfoTabTrackers = ({ media }: Props) => {
   const { container, categoryWrapper, categoryTitle, categoryContent } =
-    mediaLayoutInformation();
+    mediaInfoTabTrackers();
 
   return (
     <div className={container()}>
@@ -29,7 +30,7 @@ export const MediaLayoutInformation = ({ media }: Props) => {
               <Link
                 key={item.tracker}
                 href={TrackerUtils.getTrackerUrl(item)}
-                className="flex gap-1 rounded-md bg-default-200 px-2 py-1.5 text-sm text-foreground"
+                className="flex select-none gap-1 rounded-md bg-default-200 px-2 py-1.5 text-sm text-foreground"
               >
                 <CompanyLogo
                   company={item.tracker}
