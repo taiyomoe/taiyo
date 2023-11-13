@@ -66,7 +66,7 @@ export const SessionScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt'
 
 export const VerificationTokenScalarFieldEnumSchema = z.enum(['identifier','token','expires']);
 
-export const MediaScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','startDate','endDate','synopsis','contentRating','oneShot','trailer','type','status','source','demography','countryOfOrigin','flag','creatorId','deleterId']);
+export const MediaScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','startDate','endDate','synopsis','contentRating','oneShot','trailer','type','status','source','demography','countryOfOrigin','genres','flag','creatorId','deleterId']);
 
 export const MediaCoverScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','volume','contentRating','mediaId','uploaderId','deleterId']);
 
@@ -131,6 +131,10 @@ export type MediaDemographyType = `${z.infer<typeof MediaDemographySchema>}`
 export const MediaCountryOfOriginSchema = z.enum(['JAPAN','KOREA','CHINA','USA','FRANCE','BRAZIL']);
 
 export type MediaCountryOfOriginType = `${z.infer<typeof MediaCountryOfOriginSchema>}`
+
+export const MediaGenresSchema = z.enum(['ACTION','ADVENTURE','COMEDY','DRAMA','ECCHI','FANTASY','HENTAI','HORROR','MAHOU_SHOUJO','MECHA','MUSIC','MYSTERY','PSYCHOLOGICAL','ROMANCE','SCI_FI','SLICE_OF_LIFE','SPORTS','SUPERNATURAL','THRILLER']);
+
+export type MediaGenresType = `${z.infer<typeof MediaGenresSchema>}`
 
 export const TrackersSchema = z.enum(['MANGADEX','MYANIMELIST','ANILIST']);
 
@@ -258,6 +262,7 @@ export const MediaSchema = z.object({
   source: MediaSourceSchema,
   demography: MediaDemographySchema,
   countryOfOrigin: MediaCountryOfOriginSchema,
+  genres: MediaGenresSchema.array(),
   flag: FlagSchema,
   id: z.string().uuid(),
   createdAt: z.coerce.date(),

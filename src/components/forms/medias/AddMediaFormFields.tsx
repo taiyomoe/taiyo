@@ -85,6 +85,13 @@ export const AddMediaFormFields = () => {
           <SelectFormField name="flag" label="Flag" items={Flag} />
           <SwitchFormField name="oneShot" label="One Shot" size="lg" />
         </Form.Row>
+        <InputFormField
+          name="genres"
+          label="Gêneros — WIP"
+          labelPlacement="outside"
+          placeholder="ACTION, COMEDY, THRILLER"
+          isDisabled
+        />
       </Form.Category>
       <MediaTitlesFormCategory />
       <MediaTagsFormCategory />
