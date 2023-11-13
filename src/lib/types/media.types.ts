@@ -43,7 +43,8 @@ export type MediaLimited = {
   // -----
   synopsis: Media["synopsis"];
   // -----
-  title: MediaTitle["title"];
+  mainTitle: MediaTitle["title"];
+  titles: Pick<MediaTitle, "title" | "language">[];
   coverId: MediaCover["id"];
   bannerId: MediaBanner["id"] | null;
   trackers: Pick<MediaTracker, "tracker" | "externalId">[];

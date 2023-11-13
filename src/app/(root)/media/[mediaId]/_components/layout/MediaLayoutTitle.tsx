@@ -20,7 +20,7 @@ export const MediaLayoutTitle = ({ media }: Props) => {
       style={{ opacity }}
       onClick={handleClick}
     >
-      {media.title}
+      {media.mainTitle}
     </h2>
   );
 };

@@ -11,7 +11,7 @@ export const MediaLayoutActions = ({ media }: Props) => {
     <div className="flex h-28 flex-col gap-2 py-3 xl:h-36">
       <div className="h-full">
         <p className="line-clamp-1 h-[44px] text-center text-2xl font-bold [text-shadow:_0_3px_0_rgb(0_0_0_/_40%)] md:text-left md:text-4xl">
-          {media.title}
+          {media.mainTitle}
         </p>
       </div>
       <div className="flex h-full gap-4">

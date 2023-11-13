@@ -5,6 +5,7 @@ import { Tab, Tabs } from "@nextui-org/tabs";
 import type { MediaLimited } from "~/lib/types";
 
 import { MediaLayoutChaptersTab } from "../tabs/chapters/MediaLayoutChaptersTab";
+import { MediaLayoutInfoTab } from "../tabs/info/MediaLayoutInfoTab";
 
 type Props = {
   media: MediaLimited;
@@ -14,18 +15,20 @@ export const MediaLayoutTabs = ({ media }: Props) => {
   return (
     <Tabs
       classNames={{
-        base: "border-b-content3 h-[54px] border-b pt-2 xl:h-[48px] w-full",
+        base: "border-b-content3 h-[54px] border-b pt-2 w-full",
         tabList: "h-full p-0",
         tab: "h-full max-w-fit",
         tabContent: "text-medium",
         panel: "p-0 mt-8",
       }}
       defaultSelectedKey="chapters"
-      disabledKeys={["info", "characters", "relations", "covers", "banners"]}
+      disabledKeys={["characters", "relations", "covers", "banners"]}
       color="primary"
       variant="underlined"
     >
-      <Tab key="info" title="Informações" />
+      <Tab key="info" title="Informações">
+        <MediaLayoutInfoTab media={media} />
+      </Tab>
       <Tab key="chapters" title="Capítulos">
         <MediaLayoutChaptersTab media={media} />
       </Tab>
