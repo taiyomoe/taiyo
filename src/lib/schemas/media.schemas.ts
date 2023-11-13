@@ -17,6 +17,7 @@ export const insertMediaSchema = MediaSchema.pick({
   source: true,
   demography: true,
   countryOfOrigin: true,
+  genres: true,
   flag: true,
 }).merge(
   z.object({

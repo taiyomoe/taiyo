@@ -14,6 +14,14 @@ const execute = async (db: PrismaClient) => {
       source: "WEB_NOVEL",
       demography: "SHOUNEN",
       countryOfOrigin: "CHINA",
+      genres: [
+        "ACTION",
+        "ADVENTURE",
+        "ECCHI",
+        "FANTASY",
+        "ROMANCE",
+        "SUPERNATURAL",
+      ],
       // -----
       creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },

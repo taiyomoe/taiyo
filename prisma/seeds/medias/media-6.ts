@@ -14,6 +14,7 @@ const execute = async (db: PrismaClient) => {
       source: "ORIGINAL",
       demography: "SHOUNEN",
       countryOfOrigin: "JAPAN",
+      genres: ["ACTION", "DRAMA", "FANTASY", "SUPERNATURAL"],
       // -----
       creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },

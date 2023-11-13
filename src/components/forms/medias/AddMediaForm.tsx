@@ -20,6 +20,7 @@ const initialValues: InsertMediaSchema = {
   demography: "SHOUNEN",
   countryOfOrigin: "JAPAN",
   flag: "OK",
+  genres: [],
   titles: [{ title: "Teste", isAcronym: false, language: "en" }],
   // tags: [],
   cover: {
