@@ -29,6 +29,30 @@ const execute = async (db: PrismaClient) => {
         mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
         creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
       },
+      {
+        id: "20c294c1-9738-417b-993e-6a70517ca1aa",
+        title: "The Pinnacle of Martial Arts",
+        language: "en",
+        isAcronym: false,
+        mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
+        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+      },
+      {
+        id: "f787939f-f187-45cf-887b-5bc606f0aeb5",
+        title: "무련전봉",
+        language: "ko",
+        isAcronym: false,
+        mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
+        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+      },
+      {
+        id: "631a15d0-0484-42bb-9aa9-bf2db4ba5d2f",
+        title: "MP",
+        language: "en",
+        isAcronym: true,
+        mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
+        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+      },
     ],
   });
 

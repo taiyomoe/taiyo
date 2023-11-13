@@ -30,6 +30,22 @@ const execute = async (db: PrismaClient) => {
         mediaId: "d696e020-f234-44c4-9cba-8bb5359b156b",
         creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
       },
+      {
+        id: "86d466de-7a38-4348-a573-6e97f2278c6a",
+        title: "ナルト",
+        language: "ja",
+        isAcronym: false,
+        mediaId: "d696e020-f234-44c4-9cba-8bb5359b156b",
+        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+      },
+      {
+        id: "c34e3c12-fef6-42d9-b6d4-d92a8198ade5",
+        title: "나루토",
+        language: "ko",
+        isAcronym: false,
+        mediaId: "d696e020-f234-44c4-9cba-8bb5359b156b",
+        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+      },
     ],
   });
 
