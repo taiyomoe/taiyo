@@ -29,7 +29,10 @@ export default async function Page({ params, searchParams }: Props) {
   return (
     <MediaLayout media={media}>
       <MediaLayoutActions media={media} />
-      <ScrollShadow className="h-[184px] py-3 lg:h-[202px]" hideScrollBar>
+      <ScrollShadow
+        className="h-[184px] py-3 lg:h-[234px] xl:h-[202px]"
+        hideScrollBar
+      >
         <p>{media?.synopsis}</p>
       </ScrollShadow>
       <MediaLayoutTabs media={media} />
