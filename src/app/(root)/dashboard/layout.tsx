@@ -5,11 +5,10 @@ import { DashboardSidebarContent } from "./_components/DashboardSidebarContent";
 
 export default function Layout({ children }: LayoutProps) {
   return (
-    <div className="flex h-full min-h-reader w-full">
+    <div className="flex h-full min-h-screen w-full">
       <Sidebar
-        className="h-reader"
         title="Dashboard"
-        content={<DashboardSidebarContent className="fixed -mt-[1px]" />}
+        content={<DashboardSidebarContent className="sticky top-navbar" />}
       />
       <div className="w-full p-6">{children}</div>
     </div>
