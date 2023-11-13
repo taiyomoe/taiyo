@@ -23,10 +23,34 @@ const execute = async (db: PrismaClient) => {
   await db.mediaTitle.createMany({
     data: [
       {
+        id: "528c3990-ea70-42bb-8f1a-8c27f881f673",
+        title: "ワンピース",
+        language: "ja",
+        isAcronym: false,
+        mediaId: "65ad0a5c-4861-4b59-b93e-90963590958e",
+        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+      },
+      {
         id: "66b6e5cb-098e-4993-bbed-d84c61b08fc8",
         title: "One Piece",
         language: "ja_ro",
         isAcronym: false,
+        mediaId: "65ad0a5c-4861-4b59-b93e-90963590958e",
+        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+      },
+      {
+        id: "9dc55cc8-db9c-4b6d-9227-60c0fdd6f9c6",
+        title: "원피스",
+        language: "ko",
+        isAcronym: false,
+        mediaId: "65ad0a5c-4861-4b59-b93e-90963590958e",
+        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+      },
+      {
+        id: "0a05924f-a9e5-456e-b430-5d2d249bcf0b",
+        title: "OP",
+        language: "en",
+        isAcronym: true,
         mediaId: "65ad0a5c-4861-4b59-b93e-90963590958e",
         creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
       },
