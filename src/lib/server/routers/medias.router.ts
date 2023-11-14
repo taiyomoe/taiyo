@@ -86,7 +86,7 @@ export const mediasRouter = createTRPCRouter({
           synopsis: true,
           covers: { select: { id: true }, take: 1 },
           banners: { select: { id: true }, take: 1 },
-          titles: { select: { title: true, language: true } },
+          titles: { select: { title: true, language: true, isAcronym: true } },
           trackers: { select: { tracker: true, externalId: true } },
           chapters: {
             select: {
