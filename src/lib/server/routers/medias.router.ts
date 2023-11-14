@@ -84,6 +84,7 @@ export const mediasRouter = createTRPCRouter({
         select: {
           _count: { select: { chapters: true } },
           synopsis: true,
+          genres: true,
           covers: { select: { id: true }, take: 1 },
           banners: { select: { id: true }, take: 1 },
           titles: { select: { title: true, language: true, isAcronym: true } },
@@ -119,6 +120,7 @@ export const mediasRouter = createTRPCRouter({
       const mediaLimited: MediaLimited = {
         id: mediaId,
         synopsis: result.synopsis,
+        genres: result.genres,
         // ----- RELATIONS
         coverId: result.covers.at(0)!.id,
         bannerId: result.banners.at(0)?.id ?? null,

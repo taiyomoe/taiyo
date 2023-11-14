@@ -1,3 +1,4 @@
+import { MediaInfoTabGenres } from "~/app/(root)/media/[mediaId]/_components/tabs/info/MediaInfoTabGenres";
 import type { MediaLimited } from "~/lib/types";
 
 import { MediaInfoTabTitles } from "./MediaInfoTabTitles";
@@ -12,6 +13,7 @@ export const MediaLayoutInfoTab = ({ media }: Props) => {
     <div className="mb-8 flex flex-col gap-8">
       <MediaInfoTabTrackers media={media} />
       <MediaInfoTabTitles media={media} />
+      <MediaInfoTabGenres media={media} />
     </div>
   );
 };
