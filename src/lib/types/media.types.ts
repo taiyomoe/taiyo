@@ -42,6 +42,7 @@ export type MediaLimited = {
   id: Media["id"];
   // -----
   synopsis: Media["synopsis"];
+  genres: Media["genres"];
   // -----
   mainTitle: MediaTitle["title"];
   titles: Pick<MediaTitle, "title" | "language" | "isAcronym">[];

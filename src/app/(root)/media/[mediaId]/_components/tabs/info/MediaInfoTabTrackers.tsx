@@ -5,7 +5,9 @@ import { CompanyLogo } from "~/components/ui/CompanyLogo";
 import type { MediaLimited } from "~/lib/types";
 import { TrackerUtils } from "~/lib/utils/tracker.utils";
 
-type Props = { media: MediaLimited };
+type Props = {
+  media: MediaLimited;
+};
 
 export const MediaInfoTabTrackers = ({ media }: Props) => (
   <div className="items-start">
