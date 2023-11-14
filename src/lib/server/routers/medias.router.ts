@@ -88,6 +88,9 @@ export const mediasRouter = createTRPCRouter({
           covers: { select: { id: true }, take: 1 },
           banners: { select: { id: true }, take: 1 },
           titles: { select: { title: true, language: true, isAcronym: true } },
+          tags: {
+            select: { isSpoiler: true, tag: { select: { name: true } } },
+          },
           trackers: { select: { tracker: true, externalId: true } },
           chapters: {
             select: {
@@ -126,6 +129,10 @@ export const mediasRouter = createTRPCRouter({
         bannerId: result.banners.at(0)?.id ?? null,
         mainTitle,
         titles: result.titles,
+        tags: result.tags.map((t) => ({
+          isSpoiler: t.isSpoiler,
+          name: t.tag.name,
+        })),
         trackers: result.trackers,
         chapters: result.chapters.map((c) => ({
           id: c.id,
