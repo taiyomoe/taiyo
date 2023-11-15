@@ -1,10 +1,5 @@
 import { z } from "zod";
 
-import {
-  DEFAULT_MEDIA_PAGE,
-  DEFAULT_MEDIA_PER_PAGE,
-  MEDIA_PER_PAGE_CHOICES,
-} from "../constants";
 import { ContentRatingSchema, MediaSchema, MediaTitleSchema } from "./prisma";
 
 export const insertMediaSchema = MediaSchema.pick({
@@ -53,24 +48,6 @@ export const insertMediaSchema = MediaSchema.pick({
   }),
 );
 
-export const getMediaByIdSchema = z.object({
-  id: z.string(),
-  page: z.number().optional().default(DEFAULT_MEDIA_PAGE),
-  perPage: z
-    .number()
-    .optional()
-    .default(DEFAULT_MEDIA_PER_PAGE)
-    .refine((x) => MEDIA_PER_PAGE_CHOICES.includes(x), {
-      message: `perPage must be one of ${MEDIA_PER_PAGE_CHOICES.join(", ")}`,
-    }),
-});
-
-export const mediaPaginationSchema = z.object({
-  page: z.coerce.number().catch(DEFAULT_MEDIA_PAGE),
-  perPage: z.coerce
-    .number()
-    .refine((x) => MEDIA_PER_PAGE_CHOICES.includes(x))
-    .catch(DEFAULT_MEDIA_PER_PAGE),
-});
+export const getMediaByIdSchema = z.string();
 
 export type InsertMediaSchema = typeof insertMediaSchema._type;

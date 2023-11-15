@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { Spinner } from "@nextui-org/spinner";
 
@@ -17,26 +17,41 @@ type Props = {
 };
 
 export const MediaLayoutChaptersTab = ({ media }: Props) => {
+  const [selectedKeys, setSelectedKeys] = useState(new Set<string>());
+
   const { tab, page, perPage } = useMediaNavigation();
-  const { data: chaptersPagination } = api.mediaChapters.getByMediaId.useQuery(
+  const {
+    data: chaptersPagination,
+    isLoading,
+    isFetching,
+    isSuccess,
+  } = api.mediaChapters.getByMediaId.useQuery(
     {
       mediaId: media.id,
       page,
       perPage,
     },
-    { enabled: tab === "chapters" },
+    {
+      initialData: { chapters: [], totalPages: 0 },
+      enabled: tab === "chapters",
+    },
   );
 
-  const computedVolumes = MediaChapterUtils.computeVolumes(media.chapters);
-  const volumeKeys = computedVolumes.map(({ volume }) => `volume-${volume}`);
+  const volumeKeys = useMemo(
+    () =>
+      MediaChapterUtils.computeVolumes(chaptersPagination.chapters).map(
+        ({ volume }) => `volume-${volume}`,
+      ),
+    [chaptersPagination],
+  );
 
-  const [selectedKeys, setSelectedKeys] = useState(new Set(volumeKeys));
+  useEffect(() => {
+    if (isSuccess) {
+      setSelectedKeys(new Set(volumeKeys));
+    }
+  }, [isSuccess, volumeKeys]);
 
-  if (Array.from(selectedKeys).some((key) => !volumeKeys.includes(key))) {
-    setSelectedKeys(new Set(volumeKeys));
-  }
-
-  if (!chaptersPagination) {
+  if (isLoading || isFetching) {
     return (
       <div className="my-32 flex justify-center">
         <Spinner size="lg" />

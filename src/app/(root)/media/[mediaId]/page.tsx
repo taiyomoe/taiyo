@@ -1,6 +1,5 @@
 import { ScrollShadow } from "@nextui-org/scroll-shadow";
 
-import { mediaPaginationSchema } from "~/lib/schemas";
 import { api } from "~/lib/trpc/server";
 
 import { MediaLayout } from "./_components/layout/MediaLayout";
@@ -9,22 +8,12 @@ import { MediaLayoutTabs } from "./_components/layout/MediaLayoutTabs";
 
 type Props = {
   params: { mediaId: string };
-  searchParams: Record<string, string | string[] | undefined>;
 };
 
-export default async function Page({ params, searchParams }: Props) {
+export default async function Page({ params }: Props) {
   const { mediaId } = params;
 
-  const pagination = mediaPaginationSchema.parse({
-    page: searchParams.page,
-    perPage: searchParams.per_page,
-  });
-
-  const media = await api.medias.getById.query({
-    id: mediaId,
-    page: pagination.page,
-    perPage: pagination.perPage,
-  });
+  const media = await api.medias.getById.query(mediaId);
 
   return (
     <MediaLayout media={media}>

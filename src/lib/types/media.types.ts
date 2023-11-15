@@ -58,9 +58,6 @@ export type MediaLimited = {
   bannerId: MediaBanner["id"] | null;
   tags: Array<Pick<MediaTag, "isSpoiler"> & Pick<Tag, "name">>;
   trackers: Pick<MediaTracker, "tracker" | "externalId">[];
-  chapters: MediaLimitedChapter[];
-  // -----
-  totalPages: number;
 };
 
 export type MediaTabs = "info" | "chapters";
