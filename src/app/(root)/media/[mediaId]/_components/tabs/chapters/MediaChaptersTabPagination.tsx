@@ -11,8 +11,12 @@ import type { Selection } from "@nextui-org/react";
 import { ChevronDownIcon } from "lucide-react";
 import { tv } from "tailwind-variants";
 
-import { useChapterPagination } from "~/hooks/useChapterPagination";
+import { useMediaNavigation } from "~/hooks/useMediaNavigation";
 import { MEDIA_PER_PAGE_CHOICES } from "~/lib/constants";
+
+type Props = {
+  totalPages: number;
+};
 
 const mediaChaptersTabPagination = tv({
   slots: {
@@ -22,16 +26,11 @@ const mediaChaptersTabPagination = tv({
   },
 });
 
-type Props = {
-  totalPages: number;
-};
-
 export const MediaChaptersTabPagination = ({ totalPages }: Props) => {
   const { container, dropdownContent, triggerButton } =
     mediaChaptersTabPagination();
 
-  const { page, perPage, handlePageChange, handlePerPageChange } =
-    useChapterPagination();
+  const { page, perPage, setPage, handlePerPageChange } = useMediaNavigation();
   const [selectedKeys, setSelectedKeys] = useState(new Set([perPage]));
 
   const handleSelectionChange = (keys: Selection) => {
@@ -39,7 +38,7 @@ export const MediaChaptersTabPagination = ({ totalPages }: Props) => {
 
     // @ts-expect-error -- NextUI wrong types
     setSelectedKeys(keys);
-    handlePerPageChange(newPerPage);
+    void handlePerPageChange(parseInt(newPerPage));
   };
 
   return (
@@ -72,7 +71,7 @@ export const MediaChaptersTabPagination = ({ totalPages }: Props) => {
         total={totalPages}
         initialPage={page}
         page={page}
-        onChange={handlePageChange}
+        onChange={setPage}
         color="primary"
         radius="sm"
       />

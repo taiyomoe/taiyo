@@ -2,7 +2,10 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { Spinner } from "@nextui-org/spinner";
 
+import { useMediaNavigation } from "~/hooks/useMediaNavigation";
+import { api } from "~/lib/trpc/client";
 import type { MediaLimited } from "~/lib/types";
 import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils";
 
@@ -14,6 +17,16 @@ type Props = {
 };
 
 export const MediaLayoutChaptersTab = ({ media }: Props) => {
+  const { tab, page, perPage } = useMediaNavigation();
+  const { data: chaptersPagination } = api.mediaChapters.getByMediaId.useQuery(
+    {
+      mediaId: media.id,
+      page,
+      perPage,
+    },
+    { enabled: tab === "chapters" },
+  );
+
   const computedVolumes = MediaChapterUtils.computeVolumes(media.chapters);
   const volumeKeys = computedVolumes.map(({ volume }) => `volume-${volume}`);
 
@@ -23,32 +36,41 @@ export const MediaLayoutChaptersTab = ({ media }: Props) => {
     setSelectedKeys(new Set(volumeKeys));
   }
 
+  if (!chaptersPagination) {
+    return (
+      <div className="my-32 flex justify-center">
+        <Spinner size="lg" />
+      </div>
+    );
+  }
+
+  if (chaptersPagination.chapters.length === 0) {
+    return (
+      <div className="flex flex-col items-center gap-12 py-16">
+        <Image
+          src="/illustrations/taken.svg"
+          width={0}
+          height={0}
+          sizes="1"
+          className="h-[40vh] w-auto"
+          alt="alien taken by aliens"
+        />
+        <p className="text-2xl font-semibold">Sem capítulos no momento</p>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col gap-2">
       <MediaChaptersTabActions
         volumeKeys={volumeKeys}
         setSelectedKeys={setSelectedKeys}
       />
-      {media.chapters.length > 0 && (
-        <MediaChapterVolumes
-          media={media}
-          selectedKeys={selectedKeys}
-          setSelectedKeys={setSelectedKeys}
-        />
-      )}
-      {media.chapters.length === 0 && (
-        <div className="flex flex-col items-center gap-12 py-16">
-          <Image
-            src="/illustrations/taken.svg"
-            width={0}
-            height={0}
-            sizes="1"
-            className="h-[40vh] w-auto"
-            alt="alien taken by aliens"
-          />
-          <p className="text-2xl font-semibold">Sem capítulos no momento</p>
-        </div>
-      )}
+      <MediaChapterVolumes
+        chaptersPagination={chaptersPagination}
+        selectedKeys={selectedKeys}
+        setSelectedKeys={setSelectedKeys}
+      />
     </div>
   );
 };
