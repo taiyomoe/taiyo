@@ -74,6 +74,7 @@ export const MediaChaptersTabPagination = ({ totalPages }: Props) => {
         onChange={setPage}
         color="primary"
         radius="sm"
+        isDisabled={totalPages === 1}
       />
     </div>
   );

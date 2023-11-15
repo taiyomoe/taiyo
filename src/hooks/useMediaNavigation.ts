@@ -7,7 +7,7 @@ import {
   useQueryState,
 } from "next-usequerystate";
 
-import { DEFAULT_MEDIA_PAGE } from "~/lib/constants";
+import { DEFAULT_MEDIA_PAGE, DEFAULT_MEDIA_PER_PAGE } from "~/lib/constants";
 import type { MediaTabs } from "~/lib/types";
 
 export const useMediaNavigation = () => {
@@ -21,7 +21,7 @@ export const useMediaNavigation = () => {
   );
   const [perPage, setPerPage] = useQueryState(
     "perPage",
-    parseAsInteger.withDefault(5),
+    parseAsInteger.withDefault(DEFAULT_MEDIA_PER_PAGE),
   );
 
   const handlePerPageChange = useCallback(
