@@ -145,10 +145,7 @@ export const mediasRouter = createTRPCRouter({
             id: c.uploader.id,
             name: c.uploader.name,
           },
-          scans: c.scans.map((s) => ({
-            id: s.id,
-            name: s.name,
-          })),
+          scans: c.scans,
         })),
         // ----- OTHERS
         totalPages: Math.ceil(result._count.chapters / perPage) || 1,

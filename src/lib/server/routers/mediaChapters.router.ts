@@ -2,6 +2,7 @@ import { TRPCError } from "@trpc/server";
 
 import {
   getMediaChapterByIdSchema,
+  getMediaChaptersByMediaIdSchema,
   insertMediaChapterSchema,
 } from "~/lib/schemas/mediaChapter.schemas";
 import type { MediaChapterLimited } from "~/lib/types";
@@ -105,5 +106,49 @@ export const mediaChaptersRouter = createTRPCRouter({
       };
 
       return mediaChapterLimited;
+    }),
+
+  getByMediaId: publicProcedure
+    .input(getMediaChaptersByMediaIdSchema)
+    .query(async ({ ctx, input: { mediaId, page, perPage } }) => {
+      const result = await ctx.db.mediaChapter.findMany({
+        select: {
+          id: true,
+          createdAt: true,
+          title: true,
+          number: true,
+          volume: true,
+          uploader: { select: { id: true, name: true } },
+          scans: { select: { id: true, name: true } },
+        },
+
+        where: { mediaId },
+        orderBy: { number: "desc" },
+        skip: (page - 1) * perPage,
+        take: perPage,
+      });
+      const chaptersCount = await ctx.db.mediaChapter.count({
+        where: { mediaId },
+      });
+
+      const mediaLimitedChapterPagination = {
+        chapters: result.map((c) => ({
+          id: c.id,
+          createdAt: c.createdAt,
+          title: c.title,
+          number: c.number,
+          volume: c.volume,
+          // ----- RELATIONS
+          uploader: {
+            id: c.uploader.id,
+            name: c.uploader.name,
+          },
+          scans: c.scans,
+        })),
+        // ----- OTHERS
+        totalPages: Math.ceil(chaptersCount / perPage) || 1,
+      };
+
+      return mediaLimitedChapterPagination;
     }),
 });

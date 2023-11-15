@@ -34,6 +34,12 @@ export type MediaLimitedChapter = {
   }[];
 };
 
+export type MediaLimitedChapterPagination = {
+  chapters: MediaLimitedChapter[];
+  // -----
+  totalPages: number;
+};
+
 export type MediaChapterGroup = {
   number: MediaChapter["number"];
   chapters: MediaLimitedChapter[];
@@ -56,3 +62,5 @@ export type MediaLimited = {
   // -----
   totalPages: number;
 };
+
+export type MediaTabs = "info" | "chapters";

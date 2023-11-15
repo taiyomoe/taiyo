@@ -1,8 +1,11 @@
 "use client";
 
+import type { Key } from "react";
+import { useCallback } from "react";
 import { Tab, Tabs } from "@nextui-org/tabs";
 
-import type { MediaLimited } from "~/lib/types";
+import { useMediaNavigation } from "~/hooks/useMediaNavigation";
+import type { MediaLimited, MediaTabs } from "~/lib/types";
 
 import { MediaLayoutChaptersTab } from "../tabs/chapters/MediaLayoutChaptersTab";
 import { MediaLayoutInfoTab } from "../tabs/info/MediaLayoutInfoTab";
@@ -12,6 +15,15 @@ type Props = {
 };
 
 export const MediaLayoutTabs = ({ media }: Props) => {
+  const { tab, setTab } = useMediaNavigation();
+
+  const handleSelectionChange = useCallback(
+    async (key: Key) => {
+      await setTab(key.toString() as MediaTabs);
+    },
+    [setTab],
+  );
+
   return (
     <Tabs
       classNames={{
@@ -21,8 +33,9 @@ export const MediaLayoutTabs = ({ media }: Props) => {
         tabContent: "text-medium",
         panel: "p-0 mt-8",
       }}
-      defaultSelectedKey="chapters"
+      defaultSelectedKey={tab}
       disabledKeys={["characters", "relations", "covers", "banners"]}
+      onSelectionChange={handleSelectionChange}
       color="primary"
       variant="underlined"
     >

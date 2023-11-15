@@ -1,23 +1,24 @@
 import { Accordion, AccordionItem, Divider } from "@nextui-org/react";
 
-import type { MediaLimited } from "~/lib/types";
+import type { MediaLimitedChapterPagination } from "~/lib/types";
 import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils";
 
 import { MediaChapterGroupCard } from "./MediaChapterGroupCard";
 import { MediaChaptersTabPagination } from "./MediaChaptersTabPagination";
 
 type Props = {
-  media: MediaLimited;
+  chaptersPagination: MediaLimitedChapterPagination;
   selectedKeys: Set<string>;
   setSelectedKeys: (keys: Set<string>) => void;
 };
 
 export const MediaChapterVolumes = ({
-  media,
+  chaptersPagination,
   selectedKeys,
   setSelectedKeys,
 }: Props) => {
-  const computedVolumes = MediaChapterUtils.computeVolumes(media.chapters);
+  const { chapters, totalPages } = chaptersPagination;
+  const computedVolumes = MediaChapterUtils.computeVolumes(chapters);
 
   return (
     <div>
@@ -48,7 +49,7 @@ export const MediaChapterVolumes = ({
         ))}
       </Accordion>
       <Divider className="my-4" />
-      <MediaChaptersTabPagination totalPages={media.totalPages} />
+      <MediaChaptersTabPagination totalPages={totalPages} />
     </div>
   );
 };
