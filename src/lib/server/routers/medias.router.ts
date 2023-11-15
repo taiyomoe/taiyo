@@ -78,11 +78,9 @@ export const mediasRouter = createTRPCRouter({
 
   getById: publicProcedure
     .input(getMediaByIdSchema)
-    .query(async ({ ctx, input }) => {
-      const { id: mediaId, page, perPage } = input;
+    .query(async ({ ctx, input: mediaId }) => {
       const result = await ctx.db.media.findFirst({
         select: {
-          _count: { select: { chapters: true } },
           synopsis: true,
           genres: true,
           covers: { select: { id: true }, take: 1 },
@@ -92,21 +90,6 @@ export const mediasRouter = createTRPCRouter({
             select: { isSpoiler: true, tag: { select: { name: true } } },
           },
           trackers: { select: { tracker: true, externalId: true } },
-          chapters: {
-            select: {
-              id: true,
-              createdAt: true,
-              title: true,
-              number: true,
-              volume: true,
-              uploader: { select: { id: true, name: true } },
-              scans: { select: { id: true, name: true } },
-            },
-            orderBy: { number: "asc" },
-            take: perPage,
-            skip: (page - 1) * perPage,
-            where: { mediaId },
-          },
         },
         where: { id: mediaId },
       });
@@ -134,21 +117,6 @@ export const mediasRouter = createTRPCRouter({
           name: t.tag.name,
         })),
         trackers: result.trackers,
-        chapters: result.chapters.map((c) => ({
-          id: c.id,
-          createdAt: c.createdAt,
-          title: c.title,
-          number: c.number,
-          volume: c.volume,
-          // ----- RELATIONS
-          uploader: {
-            id: c.uploader.id,
-            name: c.uploader.name,
-          },
-          scans: c.scans,
-        })),
-        // ----- OTHERS
-        totalPages: Math.ceil(result._count.chapters / perPage) || 1,
       };
 
       return mediaLimited;
