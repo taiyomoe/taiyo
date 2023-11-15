@@ -70,7 +70,7 @@ const computeVolumes = (mediaChapters: MediaLimitedChapter[]) => {
 
     return {
       volume,
-      groups,
+      groups: groups.sort((a, b) => b.number - a.number),
     };
   });
 };
