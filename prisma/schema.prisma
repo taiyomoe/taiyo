@@ -63,7 +63,7 @@ model UserSetting {
     updatedAt DateTime @updatedAt
 
     birthDate              DateTime?
-    gender                 Genders
+    gender                 Genders       @default(NOT_SPECIFIED)
     city                   String?
     country                String?
     about                  String?
@@ -193,6 +193,7 @@ model MediaTitle {
     title     String
     language  Languages
     isAcronym Boolean   @default(false)
+    priority  Int
 
     media   Media  @relation(fields: [mediaId], references: [id], onDelete: Cascade)
     mediaId String
@@ -200,6 +201,8 @@ model MediaTitle {
     creator   User    @relation(fields: [creatorId], references: [id])
     creatorId String
     deleterId String?
+
+    @@unique([mediaId, language, priority], name: "MediaTitlePriority")
 }
 
 model MediaTag {
@@ -381,6 +384,7 @@ enum Genders {
     MALE
     FEMALE
     OTHER
+    NOT_SPECIFIED
 }
 
 enum ContentRating {

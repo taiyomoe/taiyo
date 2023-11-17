@@ -1,7 +1,9 @@
 import type { Trackers } from "@prisma/client";
 
+import { DEFAULT_PREFERRED_TITLES } from "~/lib/constants";
 import { getMediaByIdSchema, insertMediaSchema } from "~/lib/schemas";
 import type { LatestMedia, MediaLimited } from "~/lib/types";
+import { MediaUtils } from "~/lib/utils/media.utils";
 
 import { NotFoundError } from "../errors";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
@@ -85,7 +87,14 @@ export const mediasRouter = createTRPCRouter({
           genres: true,
           covers: { select: { id: true }, take: 1 },
           banners: { select: { id: true }, take: 1 },
-          titles: { select: { title: true, language: true, isAcronym: true } },
+          titles: {
+            select: {
+              title: true,
+              language: true,
+              isAcronym: true,
+              priority: true,
+            },
+          },
           tags: {
             select: { isSpoiler: true, tag: { select: { name: true } } },
           },
@@ -98,11 +107,6 @@ export const mediasRouter = createTRPCRouter({
         throw new NotFoundError();
       }
 
-      // sort the titles by language so that the first titles are the english ones, then japanese ones, then japanese romaji ones
-      const mainTitle = result.titles
-        .sort((a, b) => (a.language > b.language ? 1 : -1))
-        .at(0)!.title;
-
       const mediaLimited: MediaLimited = {
         id: mediaId,
         synopsis: result.synopsis,
@@ -110,7 +114,10 @@ export const mediasRouter = createTRPCRouter({
         // ----- RELATIONS
         coverId: result.covers.at(0)!.id,
         bannerId: result.banners.at(0)?.id ?? null,
-        mainTitle,
+        mainTitle: MediaUtils.getMainTitle(
+          result.titles,
+          ctx.session?.user.preferredTitles ?? DEFAULT_PREFERRED_TITLES,
+        ),
         titles: result.titles,
         tags: result.tags.map((t) => ({
           isSpoiler: t.isSpoiler,
