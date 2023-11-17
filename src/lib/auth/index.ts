@@ -103,14 +103,11 @@ export const authOptions: NextAuthOptions = {
   },
   events: {
     createUser: async ({ user }) => {
-      console.log("\n\n===========================");
-      console.log("Creating user settings for new user");
       await db.userSetting.create({
         data: {
           userId: user.id,
         },
       });
-      console.log("===========================\n\n");
     },
   },
 };
