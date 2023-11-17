@@ -4,8 +4,8 @@ import { toFormikValidationSchema } from "zod-formik-adapter";
 
 import { Form } from "~/components/generics/form/Form";
 import { useMediaCreation } from "~/hooks/useMediaCreation";
-import { insertMediaSchema } from "~/lib/schemas";
 import type { InsertMediaSchema } from "~/lib/schemas";
+import { insertMediaSchema } from "~/lib/schemas";
 
 import { AddMediaFormFields } from "./AddMediaFormFields";
 
@@ -21,7 +21,7 @@ const initialValues: InsertMediaSchema = {
   countryOfOrigin: "JAPAN",
   flag: "OK",
   genres: [],
-  titles: [{ title: "Teste", isAcronym: false, language: "en" }],
+  titles: [{ title: "Teste", language: "en", isAcronym: false, priority: 1 }],
   // tags: [],
   cover: {
     id: "",

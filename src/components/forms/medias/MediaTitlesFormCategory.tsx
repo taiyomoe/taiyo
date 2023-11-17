@@ -15,7 +15,10 @@ export const MediaTitlesFormCategory = () => {
   });
 
   const handleAddTitle = async () => {
-    await setValue([...value, { title: "", isAcronym: false, language: "en" }]);
+    await setValue([
+      ...value,
+      { title: "", language: "en", isAcronym: false, priority: 1 },
+    ]);
   };
 
   const handleRemoveTitle = async (index: number) => {
@@ -45,8 +48,13 @@ export const MediaTitlesFormCategory = () => {
           <SelectFormField
             name={`titles[${index}].language`}
             items={Languages}
-            className="md:w-1/3"
+            className="md:w-fit md:min-w-[100px]"
             aria-label="Linguagem do título"
+          />
+          <InputFormField
+            name={`titles[${index}].priority`}
+            className="md:w-fit md:min-w-[100px]"
+            type="number"
           />
           <SwitchFormField name={`titles[${index}].isAcronym`} size="lg" />
           <Button

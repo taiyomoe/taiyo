@@ -23,7 +23,7 @@ export const MediaChapterVolumes = ({
   return (
     <div>
       <Accordion
-        className={"px-0"}
+        className="space-y-4 px-0"
         selectionMode="multiple"
         selectedKeys={selectedKeys}
         expandedKeys={selectedKeys}
@@ -34,7 +34,7 @@ export const MediaChapterVolumes = ({
         {computedVolumes.map(({ volume, groups }) => (
           <AccordionItem
             key={`volume-${volume}`}
-            title={`Volume ${volume}`}
+            title={volume === "null" ? "Sem volume" : `Volume ${volume}`}
             classNames={{
               content: "flex flex-col gap-8",
             }}

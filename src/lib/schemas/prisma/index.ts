@@ -72,7 +72,7 @@ export const MediaCoverScalarFieldEnumSchema = z.enum(['id','createdAt','updated
 
 export const MediaBannerScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','contentRating','mediaId','uploaderId','deleterId']);
 
-export const MediaTitleScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','title','language','isAcronym','mediaId','creatorId','deleterId']);
+export const MediaTitleScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','title','language','isAcronym','priority','mediaId','creatorId','deleterId']);
 
 export const MediaTagScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','isSpoiler','tagId','mediaId','creatorId','deleterId']);
 
@@ -100,7 +100,7 @@ export const RolesSchema = z.enum(['USER','MODERATOR','UPLOADER_INTERN','UPLOADE
 
 export type RolesType = `${z.infer<typeof RolesSchema>}`
 
-export const GendersSchema = z.enum(['MALE','FEMALE','OTHER']);
+export const GendersSchema = z.enum(['MALE','FEMALE','OTHER','NOT_SPECIFIED']);
 
 export type GendersType = `${z.infer<typeof GendersSchema>}`
 
@@ -326,6 +326,7 @@ export const MediaTitleSchema = z.object({
   deletedAt: z.coerce.date().nullable(),
   title: z.string(),
   isAcronym: z.boolean(),
+  priority: z.number().int(),
   mediaId: z.string(),
   creatorId: z.string(),
   deleterId: z.string().nullable(),
