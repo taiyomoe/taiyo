@@ -14,8 +14,6 @@ export const MediaLayoutTitle = ({ media }: Props) => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
-  console.log(media);
-
   return (
     <h2
       className="line-clamp-2 hidden text-2xl font-semibold transition-all hover:cursor-pointer hover:underline md:block"

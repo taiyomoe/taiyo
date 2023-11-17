@@ -24,14 +24,11 @@ import { MediaTitlesFormCategory } from "./MediaTitlesFormCategory";
 import { MediaTrackersFormCategory } from "./MediaTrackersFormFields";
 
 export const AddMediaFormFields = () => {
-  const { values, errors, isSubmitting, isValid, dirty } = useFormikContext();
+  const { isSubmitting, isValid, dirty } = useFormikContext();
   const { needsCompression, handleCompressImages } = useImageCompression();
 
   const shouldDisableButton =
     needsCompression || isSubmitting || !(isValid && dirty);
-
-  console.log("values", values);
-  console.log("errors", errors);
 
   return (
     <Form.Layout>
