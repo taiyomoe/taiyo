@@ -11,7 +11,7 @@ import { AddMediaFormFields } from "./AddMediaFormFields";
 
 const initialValues: InsertMediaSchema = {
   id: crypto.randomUUID(),
-  synopsis: "Gol D. Roger...",
+  synopsis: "",
   contentRating: "NORMAL",
   oneShot: true,
   type: "MANGA",
@@ -21,7 +21,15 @@ const initialValues: InsertMediaSchema = {
   countryOfOrigin: "JAPAN",
   flag: "OK",
   genres: [],
-  titles: [{ title: "Teste", language: "en", isAcronym: false, priority: 1 }],
+  titles: [
+    {
+      title: "",
+      language: "en",
+      priority: 1,
+      isAcronym: false,
+      isMainTitle: true,
+    },
+  ],
   // tags: [],
   cover: {
     id: "",

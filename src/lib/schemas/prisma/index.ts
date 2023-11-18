@@ -68,11 +68,11 @@ export const VerificationTokenScalarFieldEnumSchema = z.enum(['identifier','toke
 
 export const MediaScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','startDate','endDate','synopsis','contentRating','oneShot','trailer','type','status','source','demography','countryOfOrigin','genres','flag','creatorId','deleterId']);
 
-export const MediaCoverScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','volume','contentRating','mediaId','uploaderId','deleterId']);
+export const MediaCoverScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','volume','contentRating','isMainCover','mediaId','uploaderId','deleterId']);
 
 export const MediaBannerScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','contentRating','mediaId','uploaderId','deleterId']);
 
-export const MediaTitleScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','title','language','isAcronym','priority','mediaId','creatorId','deleterId']);
+export const MediaTitleScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','title','language','priority','isAcronym','isMainTitle','mediaId','creatorId','deleterId']);
 
 export const MediaTagScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','isSpoiler','tagId','mediaId','creatorId','deleterId']);
 
@@ -188,7 +188,7 @@ export type User = z.infer<typeof UserSchema>
 export const UserSettingSchema = z.object({
   gender: GendersSchema,
   contentRating: ContentRatingSchema,
-  preferredTitleLanguage: LanguagesSchema,
+  preferredTitleLanguage: LanguagesSchema.nullable(),
   id: z.string().uuid(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
@@ -290,6 +290,7 @@ export const MediaCoverSchema = z.object({
   updatedAt: z.coerce.date(),
   deletedAt: z.coerce.date().nullable(),
   volume: z.number().int().nullable(),
+  isMainCover: z.boolean(),
   mediaId: z.string(),
   uploaderId: z.string(),
   deleterId: z.string().nullable(),
@@ -325,8 +326,9 @@ export const MediaTitleSchema = z.object({
   updatedAt: z.coerce.date(),
   deletedAt: z.coerce.date().nullable(),
   title: z.string(),
-  isAcronym: z.boolean(),
   priority: z.number().int(),
+  isAcronym: z.boolean(),
+  isMainTitle: z.boolean(),
   mediaId: z.string(),
   creatorId: z.string(),
   deleterId: z.string().nullable(),

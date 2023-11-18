@@ -1,6 +1,5 @@
 import type { Trackers } from "@prisma/client";
 
-import { DEFAULT_PREFERRED_TITLES } from "~/lib/constants";
 import { getMediaByIdSchema, insertMediaSchema } from "~/lib/schemas";
 import type { LatestMedia, MediaLimited } from "~/lib/types";
 import { MediaUtils } from "~/lib/utils/media.utils";
@@ -20,6 +19,10 @@ export const mediasRouter = createTRPCRouter({
         ctx,
         input: { cover, banner, mdTracker, alTracker, malTracker, ...input },
       }) => {
+        if (input.titles.filter((t) => t.isMainTitle).length !== 1) {
+          throw new Error("You must provide 1 main title.");
+        }
+
         /**
          * Before creating the media, we need to create the trackers array.
          * It would be too much of a hassle to create it in the creating object.
@@ -63,7 +66,11 @@ export const mediasRouter = createTRPCRouter({
             },
             trackers: { createMany: { data: trackers } },
             covers: {
-              create: { ...cover, uploaderId: ctx.session.user.id },
+              create: {
+                ...cover,
+                isMainCover: true,
+                uploaderId: ctx.session.user.id,
+              },
             },
             banners: {
               create: banner.id
@@ -85,14 +92,19 @@ export const mediasRouter = createTRPCRouter({
         select: {
           synopsis: true,
           genres: true,
-          covers: { select: { id: true }, take: 1 },
+          covers: {
+            select: { id: true },
+            where: { isMainCover: true },
+            take: 1,
+          },
           banners: { select: { id: true }, take: 1 },
           titles: {
             select: {
               title: true,
               language: true,
-              isAcronym: true,
               priority: true,
+              isAcronym: true,
+              isMainTitle: true,
             },
           },
           tags: {
@@ -116,7 +128,7 @@ export const mediasRouter = createTRPCRouter({
         bannerId: result.banners.at(0)?.id ?? null,
         mainTitle: MediaUtils.getMainTitle(
           result.titles,
-          ctx.session?.user.preferredTitles ?? DEFAULT_PREFERRED_TITLES,
+          ctx.session?.user.preferredTitles ?? null,
         ),
         titles: result.titles,
         tags: result.tags.map((t) => ({
@@ -133,7 +145,11 @@ export const mediasRouter = createTRPCRouter({
     const result = await ctx.db.media.findMany({
       select: {
         id: true,
-        covers: { select: { id: true }, take: 1 },
+        covers: {
+          select: { id: true },
+          where: { isMainCover: true },
+          take: 1,
+        },
       },
       orderBy: { createdAt: "desc" },
       take: 20,

@@ -20,8 +20,12 @@ const getBannerOrCoverUrl = (media: MediaLimited) => {
 
 const getMainTitle = (
   titles: MediaLimited["titles"],
-  preferredTitles: Languages,
+  preferredTitles: Languages | null,
 ) => {
+  if (preferredTitles === null) {
+    return titles.find((t) => t.isMainTitle)!.title;
+  }
+
   const customSort = (
     a: (typeof titles)[number],
     b: (typeof titles)[number],

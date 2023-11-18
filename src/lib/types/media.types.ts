@@ -53,7 +53,10 @@ export type MediaLimited = {
   genres: Media["genres"];
   // -----
   mainTitle: MediaTitle["title"];
-  titles: Pick<MediaTitle, "title" | "language" | "isAcronym" | "priority">[];
+  titles: Pick<
+    MediaTitle,
+    "title" | "language" | "priority" | "isAcronym" | "isMainTitle"
+  >[];
   coverId: MediaCover["id"];
   bannerId: MediaBanner["id"] | null;
   tags: Array<Pick<MediaTag, "isSpoiler"> & Pick<Tag, "name">>;
