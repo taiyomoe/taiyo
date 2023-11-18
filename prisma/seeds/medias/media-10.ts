@@ -33,7 +33,7 @@ const execute = async (db: PrismaClient) => {
         id: "6b04f194-c563-4558-8b25-7a7403631df1",
         title: "Martial Peak",
         language: "en",
-        isAcronym: false,
+        isMainTitle: true,
         priority: 3,
         mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
         creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -42,7 +42,6 @@ const execute = async (db: PrismaClient) => {
         id: "20c294c1-9738-417b-993e-6a70517ca1aa",
         title: "The Pinnacle of Martial Arts",
         language: "en",
-        isAcronym: false,
         priority: 2,
         mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
         creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -51,7 +50,6 @@ const execute = async (db: PrismaClient) => {
         id: "f787939f-f187-45cf-887b-5bc606f0aeb5",
         title: "무련전봉",
         language: "ko",
-        isAcronym: false,
         priority: 1,
         mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
         creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -89,6 +87,7 @@ const execute = async (db: PrismaClient) => {
     data: [
       {
         id: "5633a19d-7ec9-4ffd-9d93-57eb03458ce6",
+        isMainCover: true,
         mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
         uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
       },

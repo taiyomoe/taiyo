@@ -17,7 +17,13 @@ export const MediaTitlesFormCategory = () => {
   const handleAddTitle = async () => {
     await setValue([
       ...value,
-      { title: "", language: "en", isAcronym: false, priority: 1 },
+      {
+        title: "",
+        language: "en",
+        priority: 1,
+        isAcronym: false,
+        isMainTitle: false,
+      },
     ]);
   };
 
@@ -29,7 +35,9 @@ export const MediaTitlesFormCategory = () => {
 
   const categoryActions = (
     <>
-      <p className="text-xs font-semibold uppercase">ACRÔNIMO</p>
+      <p className="text-xs font-semibold uppercase">Prioridade</p>
+      <p className="text-xs font-semibold uppercase">Acrônimo</p>
+      <p className="text-xs font-semibold uppercase">Título principal</p>
       <Button
         startContent={<PlusIcon size={20} />}
         onPress={handleAddTitle}
@@ -57,6 +65,7 @@ export const MediaTitlesFormCategory = () => {
             type="number"
           />
           <SwitchFormField name={`titles[${index}].isAcronym`} size="lg" />
+          <SwitchFormField name={`titles[${index}].isMainTitle`} size="lg" />
           <Button
             onPress={() => void handleRemoveTitle(index)}
             startContent={<TrashIcon size={20} />}

@@ -28,7 +28,7 @@ declare module "next-auth" {
         permissions: Permission[];
       };
       /** The user's preferred titles language. */
-      preferredTitles: Languages;
+      preferredTitles: Languages | null;
     } & DefaultSession["user"];
   }
 }
@@ -41,7 +41,7 @@ declare module "next-auth/jwt" {
       permissions: Permission[];
     };
     /** The user's preferred titles language. */
-    preferredTitles: Languages;
+    preferredTitles: Languages | null;
   }
 }
 
@@ -87,7 +87,7 @@ export const authOptions: NextAuthOptions = {
         permissions: PermissionUtils.getRolePermissions(adapterUser.role),
       };
 
-      token.preferredTitles = userSettings?.preferredTitleLanguage ?? "en";
+      token.preferredTitles = userSettings?.preferredTitleLanguage ?? null;
 
       return token;
     },

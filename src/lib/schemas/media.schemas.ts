@@ -24,8 +24,9 @@ export const insertMediaSchema = MediaSchema.pick({
     titles: MediaTitleSchema.pick({
       title: true,
       language: true,
-      isAcronym: true,
       priority: true,
+      isAcronym: true,
+      isMainTitle: true,
     })
       .array()
       .min(1)

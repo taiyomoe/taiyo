@@ -68,7 +68,7 @@ model UserSetting {
     country                String?
     about                  String?
     contentRating          ContentRating @default(NSFL)
-    preferredTitleLanguage Languages     @default(en)
+    preferredTitleLanguage Languages?
 
     user   User   @relation(fields: [userId], references: [id])
     userId String @unique
@@ -159,6 +159,7 @@ model MediaCover {
 
     volume        Int?
     contentRating ContentRating @default(NORMAL)
+    isMainCover   Boolean       @default(false)
 
     media   Media  @relation(fields: [mediaId], references: [id], onDelete: Cascade)
     mediaId String
@@ -190,10 +191,11 @@ model MediaTitle {
     updatedAt DateTime  @updatedAt
     deletedAt DateTime?
 
-    title     String
-    language  Languages
-    isAcronym Boolean   @default(false)
-    priority  Int
+    title       String
+    language    Languages
+    priority    Int
+    isAcronym   Boolean   @default(false)
+    isMainTitle Boolean   @default(false)
 
     media   Media  @relation(fields: [mediaId], references: [id], onDelete: Cascade)
     mediaId String
