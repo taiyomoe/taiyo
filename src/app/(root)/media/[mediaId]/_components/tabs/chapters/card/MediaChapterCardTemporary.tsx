@@ -20,12 +20,12 @@ const mediaChapterCardTemporary = tv({
     container: "flex w-full gap-2",
     card: "w-full",
     cardBody: "p-3",
-    contentWrapper: "grid grid-cols-4 grid-rows-2 gap-1",
+    contentWrapper: "grid grid-cols-5 grid-rows-2 gap-1",
     chapterLink: "col-span-3",
     chapterTitle: "w-full truncate text-sm font-semibold",
-    chapterUploadedTime: "col-span-1",
+    chapterUploadedTime: "col-span-2",
     chapterScans: "col-span-3",
-    chapterUploader: "col-span-1",
+    chapterUploader: "col-span-2",
   },
   variants: {
     order: {
