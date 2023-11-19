@@ -1,6 +1,5 @@
 import type { Trackers } from "@prisma/client";
 
-import { Tags } from "~/lib/constants";
 import { getMediaByIdSchema, insertMediaSchema } from "~/lib/schemas";
 import type { LatestMedia, MediaLimited } from "~/lib/types";
 import { MediaUtils } from "~/lib/utils/media.utils";
@@ -118,10 +117,7 @@ export const mediasRouter = createTRPCRouter({
         id: mediaId,
         synopsis: result.synopsis,
         genres: result.genres,
-        tags: result.tags.map((t) => ({
-          name: Tags[t.key].name,
-          isSpoiler: t.isSpoiler,
-        })),
+        tags: result.tags,
         // ----- RELATIONS
         coverId: result.covers.at(0)!.id,
         bannerId: result.banners.at(0)?.id ?? null,

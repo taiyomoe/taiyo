@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { TagKeys } from "~/lib/constants";
+import { TAG_KEYS } from "~/lib/i18n/tags";
 
 import { ContentRatingSchema, MediaSchema, MediaTitleSchema } from "./prisma";
 
@@ -21,7 +21,7 @@ export const insertMediaSchema = MediaSchema.pick({
   endDate: z.coerce.date().optional(),
   tags: z.array(
     z.object({
-      key: z.enum(TagKeys),
+      key: z.enum(TAG_KEYS),
       isSpoiler: z.boolean(),
     }),
   ),
