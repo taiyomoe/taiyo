@@ -1,6 +1,6 @@
 import type { MediaChapterGroup } from "~/lib/types";
 
-import { MediaChapterCard } from "./card/MediaChapterCard";
+import { MediaChapterCardTemporary } from "./card/MediaChapterCardTemporary";
 
 type Props = {
   group: MediaChapterGroup;
@@ -17,7 +17,7 @@ export const MediaChapterGroupCard = ({ group }: Props) => {
   return (
     <div>
       {group.chapters.map((chapter, i) => (
-        <MediaChapterCard
+        <MediaChapterCardTemporary
           key={i}
           chapter={chapter}
           order={computeChapterOrder(i)}
