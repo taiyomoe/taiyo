@@ -6,6 +6,7 @@ import {
   insertMediaChapterSchema,
 } from "~/lib/schemas/mediaChapter.schemas";
 import type { MediaChapterLimited } from "~/lib/types";
+import { MediaUtils } from "~/lib/utils/media.utils";
 
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
@@ -50,7 +51,15 @@ export const mediaChaptersRouter = createTRPCRouter({
           media: {
             select: {
               type: true,
-              titles: { select: { title: true }, take: 1 },
+              titles: {
+                select: {
+                  title: true,
+                  language: true,
+                  priority: true,
+                  isAcronym: true,
+                  isMainTitle: true,
+                },
+              },
               chapters: {
                 select: {
                   id: true,
@@ -76,6 +85,10 @@ export const mediaChaptersRouter = createTRPCRouter({
       const currentMediaChapterIndex = sortedMediaChapters.findIndex(
         (c) => c.id === chapterId,
       );
+      const mediaTitle = MediaUtils.getMainTitle(
+        result.media.titles,
+        ctx.session?.user.preferredTitles ?? null,
+      );
 
       const mediaChapterLimited: MediaChapterLimited = {
         id: chapterId,
@@ -95,7 +108,7 @@ export const mediaChaptersRouter = createTRPCRouter({
         media: {
           id: result.mediaId,
           type: result.media.type,
-          title: result.media.titles.at(0)!.title,
+          title: mediaTitle,
           chapters: sortedMediaChapters,
         },
         scans: result.scans.map((s) => ({
