@@ -13,7 +13,7 @@ export const MediaLayout = ({ media, children }: Props) => {
   return (
     <main className="h-full">
       <MediaLayoutBanner media={media} />
-      <div className="-mt-28 flex flex-col gap-6 px-6 md:flex-row xl:-mt-36">
+      <div className="px-bodyPadding pb-bodyPadding -mt-28 flex flex-col gap-6 md:flex-row xl:-mt-36">
         <section className="z-10 flex h-fit flex-col items-center gap-8 md:sticky md:top-[calc(var(--navbar-height)+36px)]">
           <MediaLayoutCover media={media} />
           <MediaLayoutTitle media={media} />

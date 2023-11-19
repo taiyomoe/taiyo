@@ -13,7 +13,7 @@ const navbar = tv({
   slots: {
     container:
       "w-auto bg-background flex flex-col h-navbar justify-center max-h-navbar z-20 transition-all",
-    contentWrapper: "items-center px-6 flex grow justify-between",
+    contentWrapper: "items-center px-bodyPadding flex grow justify-between",
     brandContainer: "flex items-center gap-2",
     brandText: "text-xl font-semibold",
     endContentContainer: "flex gap-4",
