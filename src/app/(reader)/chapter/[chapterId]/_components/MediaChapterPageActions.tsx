@@ -6,7 +6,7 @@ import { readerPageModeAtom } from "~/atoms/readerSettings.atoms";
 
 const mediaChapterPageActions = tv({
   slots: {
-    container: "flex mt-4 p-6 justify-center",
+    container: "flex mt-4 p-bodyPadding justify-center",
   },
 });
 

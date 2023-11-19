@@ -10,7 +10,7 @@ export default function Layout({ children }: LayoutProps) {
         title="Dashboard"
         content={<DashboardSidebarContent className="sticky top-navbar" />}
       />
-      <div className="w-full p-6">{children}</div>
+      <div className="p-bodyPadding w-full">{children}</div>
     </div>
   );
 }

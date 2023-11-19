@@ -9,8 +9,6 @@ type Props = {
 
 export const useScrollOpacity = ({ min, max }: Props) => {
   const computeOpacity = () => {
-    if (typeof window === "undefined") return 1;
-
     const currentScrollPos = window.scrollY;
 
     if (currentScrollPos < min) {
@@ -29,12 +27,14 @@ export const useScrollOpacity = ({ min, max }: Props) => {
   };
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
-
     window.addEventListener("scroll", handleScroll);
 
     return () => window.removeEventListener("scroll", handleScroll);
   });
+
+  if (typeof window === "undefined") {
+    return { opacity: 1 };
+  }
 
   return { opacity };
 };
