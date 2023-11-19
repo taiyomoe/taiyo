@@ -126,7 +126,7 @@ export const mediasRouter = createTRPCRouter({
           ctx.session?.user.preferredTitles ?? null,
         ),
         titles: result.titles,
-        trackers: result.trackers,
+        trackers: result.trackers.filter((t) => t.tracker !== "MANGADEX"),
       };
 
       return mediaLimited;
