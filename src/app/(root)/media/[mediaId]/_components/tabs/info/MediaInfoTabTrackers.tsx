@@ -12,7 +12,7 @@ type Props = {
 export const MediaInfoTabTrackers = ({ media }: Props) => (
   <div className="items-start">
     {media.trackers.length > 0 && (
-      <Category title="Sites externos">
+      <Category title="Trackers">
         <div className="flex flex-wrap gap-2">
           {media.trackers.map((item) => (
             <Link
