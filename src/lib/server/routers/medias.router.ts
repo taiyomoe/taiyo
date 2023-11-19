@@ -1,5 +1,6 @@
 import type { Trackers } from "@prisma/client";
 
+import { Tags } from "~/lib/constants";
 import { getMediaByIdSchema, insertMediaSchema } from "~/lib/schemas";
 import type { LatestMedia, MediaLimited } from "~/lib/types";
 import { MediaUtils } from "~/lib/utils/media.utils";
@@ -19,10 +20,6 @@ export const mediasRouter = createTRPCRouter({
         ctx,
         input: { cover, banner, mdTracker, alTracker, malTracker, ...input },
       }) => {
-        if (input.titles.filter((t) => t.isMainTitle).length !== 1) {
-          throw new Error("You must provide 1 main title.");
-        }
-
         /**
          * Before creating the media, we need to create the trackers array.
          * It would be too much of a hassle to create it in the creating object.
@@ -92,6 +89,7 @@ export const mediasRouter = createTRPCRouter({
         select: {
           synopsis: true,
           genres: true,
+          tags: true,
           covers: {
             select: { id: true },
             where: { isMainCover: true },
@@ -107,9 +105,6 @@ export const mediasRouter = createTRPCRouter({
               isMainTitle: true,
             },
           },
-          tags: {
-            select: { isSpoiler: true, tag: { select: { name: true } } },
-          },
           trackers: { select: { tracker: true, externalId: true } },
         },
         where: { id: mediaId },
@@ -123,6 +118,10 @@ export const mediasRouter = createTRPCRouter({
         id: mediaId,
         synopsis: result.synopsis,
         genres: result.genres,
+        tags: result.tags.map((t) => ({
+          name: Tags[t.key].name,
+          isSpoiler: t.isSpoiler,
+        })),
         // ----- RELATIONS
         coverId: result.covers.at(0)!.id,
         bannerId: result.banners.at(0)?.id ?? null,
@@ -131,10 +130,6 @@ export const mediasRouter = createTRPCRouter({
           ctx.session?.user.preferredTitles ?? null,
         ),
         titles: result.titles,
-        tags: result.tags.map((t) => ({
-          isSpoiler: t.isSpoiler,
-          name: t.tag.name,
-        })),
         trackers: result.trackers,
       };
 

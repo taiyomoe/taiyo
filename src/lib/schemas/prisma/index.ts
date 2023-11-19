@@ -66,7 +66,7 @@ export const SessionScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt'
 
 export const VerificationTokenScalarFieldEnumSchema = z.enum(['identifier','token','expires']);
 
-export const MediaScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','startDate','endDate','synopsis','contentRating','oneShot','trailer','type','status','source','demography','countryOfOrigin','genres','flag','creatorId','deleterId']);
+export const MediaScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','startDate','endDate','synopsis','contentRating','oneShot','trailer','type','status','source','demography','countryOfOrigin','genres','tags','flag','creatorId','deleterId']);
 
 export const MediaCoverScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','volume','contentRating','isMainCover','mediaId','uploaderId','deleterId']);
 
@@ -74,15 +74,11 @@ export const MediaBannerScalarFieldEnumSchema = z.enum(['id','createdAt','update
 
 export const MediaTitleScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','title','language','priority','isAcronym','isMainTitle','mediaId','creatorId','deleterId']);
 
-export const MediaTagScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','isSpoiler','tagId','mediaId','creatorId','deleterId']);
-
 export const MediaTrackerScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','tracker','externalId','mediaId','creatorId','deleterId']);
 
 export const MediaChapterScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','title','number','volume','language','pages','contentRating','flag','mediaId','uploaderId','deleterId']);
 
 export const MediaChapterCommentScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','content','attachments','parentId','mediaChapterId','userId','deleterId']);
-
-export const TagScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','name','description','category','contentRating','alId','creatorId','deleterId']);
 
 export const UploadSessionScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','status','type','userId','mediaId','mediaChapterId']);
 
@@ -273,6 +269,10 @@ export const MediaSchema = z.object({
   synopsis: z.string().nullable(),
   oneShot: z.boolean(),
   trailer: z.string().nullable(),
+  /**
+   * [MediaTag]
+   */
+  tags: JsonValueSchema.array().nullable(),
   creatorId: z.string(),
   deleterId: z.string().nullable(),
 })
@@ -335,24 +335,6 @@ export const MediaTitleSchema = z.object({
 })
 
 export type MediaTitle = z.infer<typeof MediaTitleSchema>
-
-/////////////////////////////////////////
-// MEDIA TAG SCHEMA
-/////////////////////////////////////////
-
-export const MediaTagSchema = z.object({
-  id: z.string().uuid(),
-  createdAt: z.coerce.date(),
-  updatedAt: z.coerce.date(),
-  deletedAt: z.coerce.date().nullable(),
-  isSpoiler: z.boolean(),
-  tagId: z.string(),
-  mediaId: z.string(),
-  creatorId: z.string(),
-  deleterId: z.string().nullable(),
-})
-
-export type MediaTag = z.infer<typeof MediaTagSchema>
 
 /////////////////////////////////////////
 // MEDIA TRACKER SCHEMA
@@ -419,26 +401,6 @@ export const MediaChapterCommentSchema = z.object({
 })
 
 export type MediaChapterComment = z.infer<typeof MediaChapterCommentSchema>
-
-/////////////////////////////////////////
-// TAG SCHEMA
-/////////////////////////////////////////
-
-export const TagSchema = z.object({
-  contentRating: ContentRatingSchema,
-  id: z.string().uuid(),
-  createdAt: z.coerce.date(),
-  updatedAt: z.coerce.date(),
-  deletedAt: z.coerce.date().nullable(),
-  name: z.string(),
-  description: z.string().nullable(),
-  category: z.string(),
-  alId: z.number().int(),
-  creatorId: z.string(),
-  deleterId: z.string().nullable(),
-})
-
-export type Tag = z.infer<typeof TagSchema>
 
 /////////////////////////////////////////
 // UPLOAD SESSION SCHEMA

@@ -1,8 +1,6 @@
 export type Resources =
-  | "tags"
   | "trackers"
   | "medias"
-  | "mediaTags"
   | "mediaTitles"
   | "mediaBanners"
   | "mediaCovers"

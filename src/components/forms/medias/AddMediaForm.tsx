@@ -30,7 +30,7 @@ const initialValues: InsertMediaSchema = {
       isMainTitle: true,
     },
   ],
-  // tags: [],
+  tags: [],
   cover: {
     id: "",
     volume: null,
