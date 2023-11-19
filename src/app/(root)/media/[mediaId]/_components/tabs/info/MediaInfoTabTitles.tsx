@@ -12,7 +12,7 @@ type Props = {
 export const MediaInfoTabTitles = ({ media }: Props) => (
   <div className="col-span-2 items-start lg:col-span-1">
     {media.titles.length > 0 && (
-      <Category title="Título alternativos">
+      <Category title="Títulos alternativos">
         <List>
           {media.titles.map((item) => (
             <div key={item.title} className="flex items-center gap-2">
