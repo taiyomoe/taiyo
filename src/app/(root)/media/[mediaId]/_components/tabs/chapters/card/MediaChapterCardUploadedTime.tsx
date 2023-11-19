@@ -9,7 +9,7 @@ type Props = {
 
 export const MediaChapterCardUploadedTime = ({ chapter }: Props) => {
   return (
-    <div className="flex w-full items-center justify-end gap-1 md:justify-start">
+    <div className="flex w-full items-center justify-end gap-1">
       <ClockIcon className="h-4 w-fit md:h-5" />
       <p className="select-none rounded px-1 text-sm md:px-2">
         {MediaChapterUtils.computeUploadedTime(chapter)}

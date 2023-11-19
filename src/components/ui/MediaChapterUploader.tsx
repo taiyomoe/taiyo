@@ -5,6 +5,7 @@ import { UserIcon } from "lucide-react";
 import { tv } from "tailwind-variants";
 
 type Props = {
+  className?: string;
   uploader?: User | Pick<User, "id" | "name">;
   size?: "sm" | "md";
 };
@@ -37,13 +38,13 @@ const mediaChapterUploader = tv({
   },
 });
 
-export const MediaChapterUploader = ({ uploader, size }: Props) => {
+export const MediaChapterUploader = ({ uploader, size, className }: Props) => {
   const { container, icon, skeleton, link } = mediaChapterUploader({
     size,
   });
 
   return (
-    <div className={container()}>
+    <div className={container({ className })}>
       <UserIcon className={icon()} />
       {!uploader && <Skeleton className={skeleton()} />}
       {uploader && (
