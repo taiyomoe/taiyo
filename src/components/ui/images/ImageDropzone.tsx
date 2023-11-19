@@ -2,8 +2,8 @@ import { useCallback, useEffect } from "react";
 import { tv } from "@nextui-org/react";
 import type { UploadSessionType } from "@prisma/client";
 import { useAtom, useSetAtom } from "jotai";
-import { useDropzone } from "react-dropzone";
 import type { DropzoneProps } from "react-dropzone";
+import { useDropzone } from "react-dropzone";
 
 import {
   needsCompressionAtom,
@@ -61,6 +61,7 @@ export const ImageDropzone = ({ type, isCompact }: Props) => {
 
   const { getRootProps, getInputProps, acceptedFiles } = useDropzone({
     onDrop,
+    maxFiles: type === "CHAPTER" ? Infinity : 1,
     disabled: shouldDisableDropzone,
   });
 
