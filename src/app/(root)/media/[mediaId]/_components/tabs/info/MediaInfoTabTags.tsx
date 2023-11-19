@@ -1,4 +1,5 @@
 import { Category } from "~/components/generics/Category";
+import { TAGS_PT } from "~/lib/i18n/tags";
 import type { MediaLimited } from "~/lib/types";
 
 type Props = {
@@ -12,10 +13,10 @@ export const MediaInfoTabTags = ({ media }: Props) => (
         <div className="flex flex-wrap gap-2">
           {media.tags.map((item) => (
             <div
-              key={item.name}
+              key={item.key}
               className="flex select-none gap-1 rounded-md bg-default-200 px-2 py-1.5 text-sm text-foreground"
             >
-              <p>{item.name}</p>
+              <p>{TAGS_PT[item.key].name}</p>
             </div>
           ))}
         </div>

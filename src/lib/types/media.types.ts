@@ -49,7 +49,7 @@ export type MediaLimited = {
   // -----
   synopsis: Media["synopsis"];
   genres: Media["genres"];
-  tags: { name: string; isSpoiler: boolean }[];
+  tags: PrismaJson.MediaTag[];
   // -----
   mainTitle: MediaTitle["title"];
   titles: Pick<
