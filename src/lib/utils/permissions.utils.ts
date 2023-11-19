@@ -40,17 +40,9 @@ const getModeratorPermissions = (): Permission[] => [
 
 const getUploaderInternPermissions = () =>
   getUserPermissions().concat([
-    "tags:create",
-    "tags:update:own",
-    "tags:delete:own",
-    // -----
     "medias:create",
     "medias:update:own",
     "medias:delete:own",
-    // -----
-    "mediaTags:create",
-    "mediaTags:update:own",
-    "mediaTags:delete:own",
     // -----
     "mediaTitles:create",
     "mediaTitles:update:own",
@@ -103,10 +95,8 @@ const getRolePermissions = (role: Roles) => {
 };
 
 const getResourcesWithPosession = (): ResourcesWithPossession[] => [
-  "tags",
   "trackers",
   "medias",
-  "mediaTags",
   "mediaTitles",
   "mediaBanners",
   "mediaCovers",

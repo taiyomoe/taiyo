@@ -3,11 +3,9 @@ import type {
   MediaBanner,
   MediaChapter,
   MediaCover,
-  MediaTag,
   MediaTitle,
   MediaTracker,
   Scan,
-  Tag,
   User,
 } from "@prisma/client";
 
@@ -51,6 +49,7 @@ export type MediaLimited = {
   // -----
   synopsis: Media["synopsis"];
   genres: Media["genres"];
+  tags: { name: string; isSpoiler: boolean }[];
   // -----
   mainTitle: MediaTitle["title"];
   titles: Pick<
@@ -59,7 +58,6 @@ export type MediaLimited = {
   >[];
   coverId: MediaCover["id"];
   bannerId: MediaBanner["id"] | null;
-  tags: Array<Pick<MediaTag, "isSpoiler"> & Pick<Tag, "name">>;
   trackers: Pick<MediaTracker, "tracker" | "externalId">[];
 };
 

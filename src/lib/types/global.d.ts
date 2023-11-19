@@ -1,6 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+import type { Tags } from "~/lib/constants";
 
-namespace PrismaJson {
-  type MediaChapterPage = { id: string };
-  type MediaCommentAttachement = { id: string; extension: "png" | "gif" };
+declare global {
+  namespace PrismaJson {
+    type MediaChapterPage = { id: string };
+    type MediaCommentAttachement = { id: string; extension: "png" | "gif" };
+    type MediaTag = { key: keyof typeof Tags; isSpoiler: boolean };
+  }
 }

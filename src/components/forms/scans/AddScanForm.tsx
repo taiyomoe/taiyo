@@ -43,7 +43,7 @@ export const AddScanForm = () => {
       },
       error: (error) => {
         console.log(error);
-        return "Ocorreu um erro inesperado ao adicionar a tag.";
+        return "Ocorreu um erro inesperado ao adicionar a scan.";
       },
     });
   };
