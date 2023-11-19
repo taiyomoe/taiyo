@@ -1,4 +1,5 @@
 import { Category } from "~/components/generics/Category";
+import { GENRES_PT } from "~/lib/i18n/genres";
 import type { MediaLimited } from "~/lib/types";
 
 type Props = {
@@ -15,7 +16,7 @@ export const MediaInfoTabGenres = ({ media }: Props) => (
               key={item}
               className="flex select-none gap-1 rounded-md bg-default-200 px-2 py-1.5 text-sm text-foreground"
             >
-              <p>{item}</p>
+              <p>{GENRES_PT[item]}</p>
             </div>
           ))}
         </div>
