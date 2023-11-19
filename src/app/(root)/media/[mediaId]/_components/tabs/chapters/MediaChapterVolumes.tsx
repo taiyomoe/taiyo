@@ -36,7 +36,7 @@ export const MediaChapterVolumes = ({
             key={`volume-${volume}`}
             title={volume === "null" ? "Sem volume" : `Volume ${volume}`}
             classNames={{
-              content: "flex flex-col gap-8",
+              content: "flex flex-col gap-4",
             }}
           >
             {groups.map((group, i) => (
