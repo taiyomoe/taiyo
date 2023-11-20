@@ -1,10 +1,12 @@
 import type { ImageProps } from "next/image";
 import Image from "next/image";
+import type { Trackers } from "@prisma/client";
 
-type Props = { company: "taiyo" | "google" | "discord" } & Omit<
-  ImageProps,
-  "src" | "alt"
->;
+type Props = {
+  company:
+    | ("taiyo" | "google" | "discord" | "mangadex" | "anilist" | "myanimelist")
+    | Trackers;
+} & Omit<ImageProps, "src" | "alt">;
 
 export const CompanyLogo = ({
   company,
@@ -21,6 +23,15 @@ export const CompanyLogo = ({
         return "https://asset.brandfetch.io/id6O2oGzv-/idvNIQR3p7.svg";
       case "discord":
         return "https://asset.brandfetch.io/idM8Hlme1a/idyxkTGPf-.svg";
+      case "mangadex":
+      case "MANGADEX":
+        return "https://asset.brandfetch.io/id7o_ziJpI/idm0qVYoeU.svg";
+      case "anilist":
+      case "ANILIST":
+        return "https://asset.brandfetch.io/idbDHw7927/id_dJHPhxa.png";
+      case "myanimelist":
+      case "MYANIMELIST":
+        return "https://asset.brandfetch.io/idi7gXxt9X/id4f3UV7P7.jpeg";
     }
   };
 
@@ -35,6 +46,7 @@ export const CompanyLogo = ({
           height: height ?? "auto",
           ...style,
         }}
+        sizes="1"
         alt="logo"
         {...props}
       />

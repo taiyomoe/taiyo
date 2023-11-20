@@ -25,7 +25,7 @@ export const Sidebar = ({ title, content, className }: Props) => {
     <>
       <div
         className={cn(
-          "hidden h-full min-w-[200px] max-w-[200px] rounded-tr-lg bg-content1 sm:block",
+          "hidden min-h-screen min-w-[200px] max-w-[200px] rounded-tr-lg bg-content1 sm:block",
           className,
         )}
       >

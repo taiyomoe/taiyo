@@ -2,9 +2,11 @@ import { TRPCError } from "@trpc/server";
 
 import {
   getMediaChapterByIdSchema,
+  getMediaChaptersByMediaIdSchema,
   insertMediaChapterSchema,
 } from "~/lib/schemas/mediaChapter.schemas";
 import type { MediaChapterLimited } from "~/lib/types";
+import { MediaUtils } from "~/lib/utils/media.utils";
 
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
@@ -49,7 +51,15 @@ export const mediaChaptersRouter = createTRPCRouter({
           media: {
             select: {
               type: true,
-              titles: { select: { title: true }, take: 1 },
+              titles: {
+                select: {
+                  title: true,
+                  language: true,
+                  priority: true,
+                  isAcronym: true,
+                  isMainTitle: true,
+                },
+              },
               chapters: {
                 select: {
                   id: true,
@@ -75,6 +85,10 @@ export const mediaChaptersRouter = createTRPCRouter({
       const currentMediaChapterIndex = sortedMediaChapters.findIndex(
         (c) => c.id === chapterId,
       );
+      const mediaTitle = MediaUtils.getMainTitle(
+        result.media.titles,
+        ctx.session?.user.preferredTitles ?? null,
+      );
 
       const mediaChapterLimited: MediaChapterLimited = {
         id: chapterId,
@@ -94,7 +108,7 @@ export const mediaChaptersRouter = createTRPCRouter({
         media: {
           id: result.mediaId,
           type: result.media.type,
-          title: result.media.titles.at(0)!.title,
+          title: mediaTitle,
           chapters: sortedMediaChapters,
         },
         scans: result.scans.map((s) => ({
@@ -105,5 +119,49 @@ export const mediaChaptersRouter = createTRPCRouter({
       };
 
       return mediaChapterLimited;
+    }),
+
+  getByMediaId: publicProcedure
+    .input(getMediaChaptersByMediaIdSchema)
+    .query(async ({ ctx, input: { mediaId, page, perPage } }) => {
+      const result = await ctx.db.mediaChapter.findMany({
+        select: {
+          id: true,
+          createdAt: true,
+          title: true,
+          number: true,
+          volume: true,
+          uploader: { select: { id: true, name: true } },
+          scans: { select: { id: true, name: true } },
+        },
+
+        where: { mediaId },
+        orderBy: { number: "desc" },
+        skip: (page - 1) * perPage,
+        take: perPage,
+      });
+      const chaptersCount = await ctx.db.mediaChapter.count({
+        where: { mediaId },
+      });
+
+      const mediaLimitedChapterPagination = {
+        chapters: result.map((c) => ({
+          id: c.id,
+          createdAt: c.createdAt,
+          title: c.title,
+          number: c.number,
+          volume: c.volume,
+          // ----- RELATIONS
+          uploader: {
+            id: c.uploader.id,
+            name: c.uploader.name,
+          },
+          scans: c.scans,
+        })),
+        // ----- OTHERS
+        totalPages: Math.ceil(chaptersCount / perPage) || 1,
+      };
+
+      return mediaLimitedChapterPagination;
     }),
 });

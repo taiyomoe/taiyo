@@ -49,30 +49,36 @@ const computeVolumes = (mediaChapters: MediaLimitedChapter[]) => {
     volumes[volume]?.push(mediaChapter);
   }
 
-  return Object.entries(volumes).map(([volume, mediaChptrs]) => {
-    const groups: MediaChapterGroups = [];
-    const groupsObject: Record<string, MediaLimitedChapter[]> = {};
+  return Object.entries(volumes)
+    .sort((a, b) => {
+      if (a[0] === "null" || b[0] === "null") return -1;
 
-    for (const mediaChptr of mediaChptrs) {
-      if (!groupsObject[mediaChptr.number]) {
-        groupsObject[mediaChptr.number] = [];
+      return Number(b[0]) - Number(a[0]);
+    })
+    .map(([volume, mediaChptrs]) => {
+      const groups: MediaChapterGroups = [];
+      const groupsObject: Record<string, MediaLimitedChapter[]> = {};
+
+      for (const mediaChptr of mediaChptrs) {
+        if (!groupsObject[mediaChptr.number]) {
+          groupsObject[mediaChptr.number] = [];
+        }
+
+        groupsObject[mediaChptr.number]?.push(mediaChptr);
       }
 
-      groupsObject[mediaChptr.number]?.push(mediaChptr);
-    }
+      for (const chptrs of Object.values(groupsObject)) {
+        groups.push({
+          number: chptrs[0]!.number,
+          chapters: chptrs,
+        });
+      }
 
-    for (const chptrs of Object.values(groupsObject)) {
-      groups.push({
-        number: chptrs[0]!.number,
-        chapters: chptrs,
-      });
-    }
-
-    return {
-      volume,
-      groups,
-    };
-  });
+      return {
+        volume,
+        groups: groups.sort((a, b) => b.number - a.number),
+      };
+    });
 };
 
 const parseUrl = (pathname: string) => {

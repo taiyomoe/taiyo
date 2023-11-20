@@ -1,5 +1,5 @@
 import { Button } from "@nextui-org/button";
-import { MediaTitleLanguages } from "@prisma/client";
+import { Languages } from "@prisma/client";
 import { useField } from "formik";
 import { PlusIcon, TrashIcon } from "lucide-react";
 
@@ -17,7 +17,13 @@ export const MediaTitlesFormCategory = () => {
   const handleAddTitle = async () => {
     await setValue([
       ...value,
-      { title: "", isAcronym: false, language: "ENGLISH" },
+      {
+        title: "",
+        language: "en",
+        priority: 1,
+        isAcronym: false,
+        isMainTitle: false,
+      },
     ]);
   };
 
@@ -29,7 +35,9 @@ export const MediaTitlesFormCategory = () => {
 
   const categoryActions = (
     <>
-      <p className="text-xs font-semibold uppercase">ACRÔNIMO</p>
+      <p className="text-xs font-semibold uppercase">Prioridade</p>
+      <p className="text-xs font-semibold uppercase">Acrônimo</p>
+      <p className="text-xs font-semibold uppercase">Título principal</p>
       <Button
         startContent={<PlusIcon size={20} />}
         onPress={handleAddTitle}
@@ -47,11 +55,17 @@ export const MediaTitlesFormCategory = () => {
           <InputFormField name={`titles[${index}].title`} />
           <SelectFormField
             name={`titles[${index}].language`}
-            items={MediaTitleLanguages}
-            className="md:w-1/3"
+            items={Languages}
+            className="md:w-fit md:min-w-[100px]"
             aria-label="Linguagem do título"
           />
+          <InputFormField
+            name={`titles[${index}].priority`}
+            className="md:w-fit md:min-w-[100px]"
+            type="number"
+          />
           <SwitchFormField name={`titles[${index}].isAcronym`} size="lg" />
+          <SwitchFormField name={`titles[${index}].isMainTitle`} size="lg" />
           <Button
             onPress={() => void handleRemoveTitle(index)}
             startContent={<TrashIcon size={20} />}

@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 import { withAuth } from "next-auth/middleware";
 
 import { MediaChapterUtils } from "./lib/utils/mediaChapter.utils";
@@ -47,8 +47,6 @@ export default withAuth(
             return token.role.permissions.includes("medias:create");
           case pathname === "/dashboard/chapters/upload":
             return token.role.permissions.includes("mediaChapters:create");
-          case pathname === "/dashboard/tags/add":
-            return token.role.permissions.includes("tags:create");
           case pathname === "/dashboard/scans/add":
             return token.role.permissions.includes("scans:create");
           default:

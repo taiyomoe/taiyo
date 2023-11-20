@@ -4,8 +4,8 @@ import { toast } from "sonner";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 
 import { Form } from "~/components/generics/form/Form";
-import { insertScanSchema } from "~/lib/schemas";
 import type { InsertScanSchema } from "~/lib/schemas";
+import { insertScanSchema } from "~/lib/schemas";
 import { api } from "~/lib/trpc/client";
 import type { FormSubmit } from "~/lib/types";
 
@@ -41,9 +41,9 @@ export const AddScanForm = () => {
         resetForm();
         return "Scan adicionada com sucesso!";
       },
-      error: (err) => {
-        console.log(err);
-        return "Ocorreu um erro inesperado ao adicionar a tag.";
+      error: (error) => {
+        console.log(error);
+        return "Ocorreu um erro inesperado ao adicionar a scan.";
       },
     });
   };

@@ -1,10 +1,7 @@
 import { z } from "zod";
 
-import {
-  DEFAULT_MEDIA_PAGE,
-  DEFAULT_MEDIA_PER_PAGE,
-  MEDIA_PER_PAGE_CHOICES,
-} from "../constants";
+import { TAG_KEYS } from "~/lib/i18n/tags";
+
 import { ContentRatingSchema, MediaSchema, MediaTitleSchema } from "./prisma";
 
 export const insertMediaSchema = MediaSchema.pick({
@@ -17,56 +14,50 @@ export const insertMediaSchema = MediaSchema.pick({
   source: true,
   demography: true,
   countryOfOrigin: true,
+  genres: true,
   flag: true,
-}).merge(
-  z.object({
-    startDate: z.coerce.date().optional(),
-    endDate: z.coerce.date().optional(),
-    mdTracker: z.string().uuid().optional(),
-    alTracker: z.coerce.number().positive().min(30000).optional(),
-    malTracker: z.coerce.number().positive().min(1).optional(),
-    titles: MediaTitleSchema.pick({
-      title: true,
-      language: true,
-      isAcronym: true,
-    })
-      .array()
-      .min(1)
-      .refine(
-        (titles) => titles.every((x) => x.title.length > 0),
-        "Must be > 0",
-      )
-      .refine(
-        (x) => new Set<string>([...x.map((x) => x.title)]).size === x.length,
-        "Must be unique",
-      ),
-    cover: z.object({
-      id: z.string().uuid().optional(),
-      volume: z.coerce.number().positive().nullable(),
-      contentRating: ContentRatingSchema,
+}).extend({
+  startDate: z.coerce.date().optional(),
+  endDate: z.coerce.date().optional(),
+  tags: z.array(
+    z.object({
+      key: z.enum(TAG_KEYS),
+      isSpoiler: z.boolean(),
     }),
-    banner: z.object({
-      id: z.string().uuid().optional(),
-      contentRating: ContentRatingSchema,
-    }),
+  ),
+  mdTracker: z.string().uuid().optional(),
+  alTracker: z.coerce.number().positive().min(30000).optional(),
+  malTracker: z.coerce.number().positive().min(1).optional(),
+  titles: MediaTitleSchema.pick({
+    title: true,
+    language: true,
+    priority: true,
+    isAcronym: true,
+    isMainTitle: true,
+  })
+    .array()
+    .min(1)
+    .refine((t) => t.every((x) => x.title.length > 0), "Must be > 0")
+    .refine(
+      (t) => new Set<string>([...t.map((x) => x.title)]).size === t.length,
+      "Must be unique",
+    )
+    .refine((t) => t.some((x) => x.isMainTitle), "Must have a main title")
+    .refine(
+      (t) => t.filter((x) => x.isMainTitle).length !== 1,
+      "Must have only 1 main title",
+    ),
+  cover: z.object({
+    id: z.string().uuid().optional(),
+    volume: z.coerce.number().positive().nullable(),
+    contentRating: ContentRatingSchema,
   }),
-);
-
-export const getMediaByIdSchema = z.object({
-  id: z.string(),
-  page: z.number().optional().default(DEFAULT_MEDIA_PAGE),
-  perPage: z
-    .number()
-    .optional()
-    .default(DEFAULT_MEDIA_PER_PAGE)
-    .refine((x) => MEDIA_PER_PAGE_CHOICES.includes(x), {
-      message: `perPage must be one of ${MEDIA_PER_PAGE_CHOICES.join(", ")}`,
-    }),
+  banner: z.object({
+    id: z.string().uuid().optional(),
+    contentRating: ContentRatingSchema,
+  }),
 });
 
-export const mediaPaginationSchema = z.object({
-  page: z.coerce.number().default(DEFAULT_MEDIA_PAGE),
-  perPage: z.coerce.number().default(DEFAULT_MEDIA_PER_PAGE),
-});
+export const getMediaByIdSchema = z.string();
 
 export type InsertMediaSchema = typeof insertMediaSchema._type;
