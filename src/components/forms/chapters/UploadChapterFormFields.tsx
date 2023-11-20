@@ -1,7 +1,7 @@
 import { Badge } from "@nextui-org/badge";
 import { Button } from "@nextui-org/button";
 import { Tooltip } from "@nextui-org/tooltip";
-import { ContentRating, Flag, MediaChapterLanguages } from "@prisma/client";
+import { ContentRating, Flag, Languages } from "@prisma/client";
 import { useFormikContext } from "formik";
 import { AlertCircleIcon } from "lucide-react";
 
@@ -79,7 +79,7 @@ export const UploadChapterFormFields = () => {
           <SelectFormField
             name="language"
             label="Idioma"
-            items={MediaChapterLanguages}
+            items={Languages}
             isDisabled
           />
         </Form.Row>

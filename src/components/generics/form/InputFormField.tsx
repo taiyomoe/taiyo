@@ -16,7 +16,7 @@ type Props = {
 const input = tv({
   slots: {
     container: "flex items-end gap-6 w-full",
-    label: "",
+    label: "z-0",
     mainWrapper: "w-full",
     inputWrapper: "p-3",
     base: "h-4",

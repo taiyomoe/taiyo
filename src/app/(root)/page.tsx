@@ -5,7 +5,7 @@ import { TrendingMedias } from "./_components/TrendingMedias";
 
 export default function HomePage() {
   return (
-    <main className="flex h-full flex-col p-6">
+    <main className="p-bodyPadding flex h-full flex-col">
       <div className="flex flex-col gap-12">
         <MediaShowcase />
         <div className="flex w-full flex-col gap-12 md:flex-row">

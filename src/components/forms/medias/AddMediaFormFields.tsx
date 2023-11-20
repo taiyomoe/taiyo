@@ -24,14 +24,11 @@ import { MediaTitlesFormCategory } from "./MediaTitlesFormCategory";
 import { MediaTrackersFormCategory } from "./MediaTrackersFormFields";
 
 export const AddMediaFormFields = () => {
-  const { values, errors, isSubmitting, isValid, dirty } = useFormikContext();
+  const { isSubmitting, isValid, dirty } = useFormikContext();
   const { needsCompression, handleCompressImages } = useImageCompression();
 
   const shouldDisableButton =
     needsCompression || isSubmitting || !(isValid && dirty);
-
-  console.log("values", values);
-  console.log("errors", errors);
 
   return (
     <Form.Layout>
@@ -85,6 +82,13 @@ export const AddMediaFormFields = () => {
           <SelectFormField name="flag" label="Flag" items={Flag} />
           <SwitchFormField name="oneShot" label="One Shot" size="lg" />
         </Form.Row>
+        <InputFormField
+          name="genres"
+          label="Gêneros — WIP"
+          labelPlacement="outside"
+          placeholder="ACTION, COMEDY, THRILLER"
+          isDisabled
+        />
       </Form.Category>
       <MediaTitlesFormCategory />
       <MediaTagsFormCategory />

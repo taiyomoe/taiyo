@@ -2,6 +2,7 @@ import type { Trackers } from "@prisma/client";
 
 import { getMediaByIdSchema, insertMediaSchema } from "~/lib/schemas";
 import type { LatestMedia, MediaLimited } from "~/lib/types";
+import { MediaUtils } from "~/lib/utils/media.utils";
 
 import { NotFoundError } from "../errors";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
@@ -61,7 +62,11 @@ export const mediasRouter = createTRPCRouter({
             },
             trackers: { createMany: { data: trackers } },
             covers: {
-              create: { ...cover, uploaderId: ctx.session.user.id },
+              create: {
+                ...cover,
+                isMainCover: true,
+                uploaderId: ctx.session.user.id,
+              },
             },
             banners: {
               create: banner.id
@@ -78,30 +83,28 @@ export const mediasRouter = createTRPCRouter({
 
   getById: publicProcedure
     .input(getMediaByIdSchema)
-    .query(async ({ ctx, input }) => {
-      const { id: mediaId, page, perPage } = input;
+    .query(async ({ ctx, input: mediaId }) => {
       const result = await ctx.db.media.findFirst({
         select: {
-          _count: { select: { chapters: true } },
           synopsis: true,
-          covers: { select: { id: true }, take: 1 },
-          banners: { select: { id: true }, take: 1 },
-          titles: { select: { title: true }, take: 1 },
-          chapters: {
-            select: {
-              id: true,
-              createdAt: true,
-              title: true,
-              number: true,
-              volume: true,
-              uploader: { select: { id: true, name: true } },
-              scans: { select: { id: true, name: true } },
-            },
-            orderBy: { number: "asc" },
-            take: perPage,
-            skip: (page - 1) * perPage,
-            where: { mediaId },
+          genres: true,
+          tags: true,
+          covers: {
+            select: { id: true },
+            where: { isMainCover: true },
+            take: 1,
           },
+          banners: { select: { id: true }, take: 1 },
+          titles: {
+            select: {
+              title: true,
+              language: true,
+              priority: true,
+              isAcronym: true,
+              isMainTitle: true,
+            },
+          },
+          trackers: { select: { tracker: true, externalId: true } },
         },
         where: { id: mediaId },
       });
@@ -113,37 +116,31 @@ export const mediasRouter = createTRPCRouter({
       const mediaLimited: MediaLimited = {
         id: mediaId,
         synopsis: result.synopsis,
+        genres: result.genres,
+        tags: result.tags,
         // ----- RELATIONS
         coverId: result.covers.at(0)!.id,
         bannerId: result.banners.at(0)?.id ?? null,
-        title: result.titles.at(0)!.title,
-        chapters: result.chapters.map((c) => ({
-          id: c.id,
-          createdAt: c.createdAt,
-          title: c.title,
-          number: c.number,
-          volume: c.volume,
-          // ----- RELATIONS
-          uploader: {
-            id: c.uploader.id,
-            name: c.uploader.name,
-          },
-          scans: c.scans.map((s) => ({
-            id: s.id,
-            name: s.name,
-          })),
-        })),
-        // ----- OTHERS
-        totalPages: Math.ceil(result._count.chapters / perPage) || 1,
+        mainTitle: MediaUtils.getMainTitle(
+          result.titles,
+          ctx.session?.user.preferredTitles ?? null,
+        ),
+        titles: result.titles,
+        trackers: result.trackers.filter((t) => t.tracker !== "MANGADEX"),
       };
 
       return mediaLimited;
     }),
+
   getLatestMedias: publicProcedure.query(async ({ ctx }) => {
     const result = await ctx.db.media.findMany({
       select: {
         id: true,
-        covers: { select: { id: true }, take: 1 },
+        covers: {
+          select: { id: true },
+          where: { isMainCover: true },
+          take: 1,
+        },
       },
       orderBy: { createdAt: "desc" },
       take: 20,
