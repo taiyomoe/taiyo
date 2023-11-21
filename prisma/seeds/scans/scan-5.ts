@@ -1,6 +1,6 @@
-import type { PrismaClient } from "@prisma/client";
+import { db } from "~/lib/server/db";
 
-const execute = async (db: PrismaClient) => {
+const execute = async () => {
   await db.scan.create({
     data: {
       id: "6c6a8a30-701c-44de-bcab-3e567587870f",
