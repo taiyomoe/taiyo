@@ -27,6 +27,8 @@ export const env = createEnv({
     // Encryption
     ENCRYPTION_KEY: z.string(),
     ENCRYPTION_IV: z.string(),
+    // Meilisearch
+    MEILISEARCH_ADMIN_KEY: z.string(),
   },
 
   /**
@@ -36,6 +38,8 @@ export const env = createEnv({
    */
   client: {
     NEXT_PUBLIC_IO_URL: z.string().url(),
+    NEXT_PUBLIC_MEILISEARCH_URL: z.string().url(),
+    NEXT_PUBLIC_MEILISEARCH_PUBLIC_KEY: z.string(),
   },
 
   /**
@@ -57,7 +61,13 @@ export const env = createEnv({
     ENCRYPTION_IV: process.env.ENCRYPTION_IV,
     // image-orchestrator API
     NEXT_PUBLIC_IO_URL: process.env.NEXT_PUBLIC_IO_URL,
+    // Meilisearch
+    MEILISEARCH_ADMIN_KEY: process.env.MEILISEARCH_ADMIN_KEY,
+    NEXT_PUBLIC_MEILISEARCH_URL: process.env.NEXT_PUBLIC_MEILISEARCH_URL,
+    NEXT_PUBLIC_MEILISEARCH_PUBLIC_KEY:
+      process.env.NEXT_PUBLIC_MEILISEARCH_PUBLIC_KEY,
   },
+
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
    * useful for Docker builds.

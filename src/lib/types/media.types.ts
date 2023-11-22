@@ -61,4 +61,13 @@ export type MediaLimited = {
   trackers: Pick<MediaTracker, "tracker" | "externalId">[];
 };
 
+export type SearchedMedia = {
+  id: Media["id"];
+  // -----
+  synopsis: Media["synopsis"];
+  // -----
+  title: MediaTitle["title"];
+  coverId: MediaCover["id"];
+};
+
 export type MediaTabs = "info" | "chapters";

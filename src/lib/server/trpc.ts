@@ -14,6 +14,7 @@ import { ZodError } from "zod";
 
 import { getServerAuthSession } from "~/lib/auth/utils";
 import { db } from "~/lib/server/db";
+import { meilisearch, meilisearchIndexes } from "~/lib/server/meilisearch";
 import type { Actions, Resources } from "~/lib/types";
 
 import { withAuth } from "./middlewares/withAuth";
@@ -53,6 +54,8 @@ export const createInnerTRPCContext = async (opts: CreateContextOptions) => {
     session,
     headers: opts.headers,
     db,
+    meilisearch,
+    indexes: meilisearchIndexes,
   };
 };
 
