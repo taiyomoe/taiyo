@@ -10,6 +10,7 @@ import media7 from "./seeds/medias/media-7";
 import media8 from "./seeds/medias/media-8";
 import media9 from "./seeds/medias/media-9";
 import media10 from "./seeds/medias/media-10";
+import meilisearch from "./seeds/meilisearch.seed";
 import scan1 from "./seeds/scans/scan-1";
 import scan2 from "./seeds/scans/scan-2";
 import scan3 from "./seeds/scans/scan-3";
@@ -26,12 +27,20 @@ import users from "./seeds/users";
 const db = new PrismaClient();
 
 async function main() {
-  console.log("Seeding database...");
-
   if (process.env.NODE_ENV === "production") {
     console.error("Cannot run seed in production");
     process.exit(1);
   }
+
+  if (
+    !process.env.NEXT_PUBLIC_MEILISEARCH_URL ||
+    !process.env.MEILISEARCH_ADMIN_KEY
+  ) {
+    console.error("Missing MeiliSearch URL or admin key");
+    process.exit(1);
+  }
+
+  console.log("Seeding database...");
 
   // Users
   await users.execute().then(() => console.log("Users seeded"));
@@ -60,6 +69,9 @@ async function main() {
   await scan9.execute().then(() => console.log("Scan 9 seeded"));
   await scan10.execute().then(() => console.log("Scan 10 seeded"));
   await scan11.execute().then(() => console.log("Scan 11 seeded"));
+
+  // Meilisearch
+  await meilisearch.execute().then(() => console.log("Meilisearch reindexed"));
 }
 
 main()

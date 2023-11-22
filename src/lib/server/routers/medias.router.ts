@@ -1,7 +1,11 @@
 import type { Trackers } from "@prisma/client";
 
-import { getMediaByIdSchema, insertMediaSchema } from "~/lib/schemas";
-import type { LatestMedia, MediaLimited } from "~/lib/types";
+import {
+  getMediaByIdSchema,
+  insertMediaSchema,
+  searchMediaSchema,
+} from "~/lib/schemas";
+import type { LatestMedia, MediaLimited, SearchedMedia } from "~/lib/types";
 import { MediaUtils } from "~/lib/utils/media.utils";
 
 import { NotFoundError } from "../errors";
@@ -153,4 +157,21 @@ export const mediasRouter = createTRPCRouter({
 
     return latestMedias;
   }),
+
+  search: publicProcedure
+    .input(searchMediaSchema)
+    .mutation(async ({ ctx, input: { title } }) => {
+      const results = await ctx.indexes.medias.search(title);
+      const searchedMedias: SearchedMedia[] = results.hits.map((h) => ({
+        id: h.id,
+        synopsis: h.synopsis ? h.synopsis.slice(0, 100) + "..." : null,
+        title: MediaUtils.getMainTitle(
+          h.titles,
+          ctx.session?.user.preferredTitles ?? null,
+        ),
+        coverId: h.mainCoverId,
+      }));
+
+      return searchedMedias;
+    }),
 });
