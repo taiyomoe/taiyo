@@ -16,7 +16,7 @@ export const MediaSearch = () => {
   const popoverRef = useRef(null);
 
   const list = useAsyncList<SearchedMedia>({
-    async load({ filterText }) {
+    load: async ({ filterText }) => {
       if (!filterText) return { items: [] };
 
       const data = await mutateAsync({ title: filterText });
