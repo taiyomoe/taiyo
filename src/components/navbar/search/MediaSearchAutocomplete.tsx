@@ -48,7 +48,7 @@ export const MediaSearchAutocomplete = () => {
       startContent={<SearchIcon className="text-default-500" />}
       aria-label="search media"
       radius="full"
-      className="md:w-[400px]"
+      className="md:w-[350px] lg:w-[400px]"
     >
       {(item) => (
         <AutocompleteItem
