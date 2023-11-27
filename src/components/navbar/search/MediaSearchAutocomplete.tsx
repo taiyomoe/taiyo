@@ -27,6 +27,7 @@ export const MediaSearchAutocomplete = () => {
     <Autocomplete<SearchedMedia>
       inputProps={{
         classNames: {
+          input: "text-base",
           inputWrapper: "h-[40px]",
         },
       }}
@@ -42,7 +43,7 @@ export const MediaSearchAutocomplete = () => {
       inputValue={list.filterText}
       isLoading={list.isLoading}
       items={list.items}
-      placeholder="Procure..."
+      placeholder="Pesquisar..."
       // eslint-disable-next-line @typescript-eslint/unbound-method
       onInputChange={list.setFilterText}
       startContent={<SearchIcon className="text-default-500" />}
