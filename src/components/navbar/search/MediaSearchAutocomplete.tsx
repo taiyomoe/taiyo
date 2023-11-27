@@ -1,6 +1,3 @@
-"use client";
-
-import { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Autocomplete, AutocompleteItem } from "@nextui-org/autocomplete";
@@ -11,9 +8,8 @@ import { api } from "~/lib/trpc/client";
 import type { SearchedMedia } from "~/lib/types";
 import { MediaUtils } from "~/lib/utils/media.utils";
 
-export const MediaSearch = () => {
+export const MediaSearchAutocomplete = () => {
   const { mutateAsync } = api.medias.search.useMutation();
-  const popoverRef = useRef(null);
 
   const list = useAsyncList<SearchedMedia>({
     load: async ({ filterText }) => {
@@ -41,11 +37,7 @@ export const MediaSearch = () => {
         },
       }}
       popoverProps={{
-        ref: popoverRef,
-        placement: "bottom-end",
-        style: {
-          width: "400px",
-        },
+        placement: "bottom",
       }}
       inputValue={list.filterText}
       isLoading={list.isLoading}
@@ -53,9 +45,10 @@ export const MediaSearch = () => {
       placeholder="Procure..."
       // eslint-disable-next-line @typescript-eslint/unbound-method
       onInputChange={list.setFilterText}
-      startContent={<SearchIcon />}
+      startContent={<SearchIcon className="text-default-500" />}
       aria-label="search media"
       radius="full"
+      className="md:w-[400px]"
     >
       {(item) => (
         <AutocompleteItem
