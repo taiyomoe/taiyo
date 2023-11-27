@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { tv } from "tailwind-variants";
 
-import { MediaSearch } from "~/components/navbar/MediaSearch";
+import { MediaSearch } from "~/components/navbar/search/MediaSearch";
 import { CompanyLogo } from "~/components/ui/CompanyLogo";
 import { useChapterNavbar } from "~/hooks/useChapterNavbar";
 
