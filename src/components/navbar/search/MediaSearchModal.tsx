@@ -24,10 +24,10 @@ export const MediaSearchModal = () => {
         className="border-0 bg-transparent"
         isOpen={isOpen}
         onOpenChange={onOpenChange}
-        placement="center"
+        placement="top"
         hideCloseButton
       >
-        <ModalContent className="m-0 p-4 shadow-none">
+        <ModalContent className="m-4 p-4 shadow-none">
           <ModalBody className="p-0">
             <MediaSearchAutocomplete />
           </ModalBody>
