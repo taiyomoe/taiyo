@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Autocomplete, AutocompleteItem } from "@nextui-org/autocomplete";
@@ -12,6 +13,7 @@ import { MediaUtils } from "~/lib/utils/media.utils";
 
 export const MediaSearch = () => {
   const { mutateAsync } = api.medias.search.useMutation();
+  const popoverRef = useRef(null);
 
   const list = useAsyncList<SearchedMedia>({
     async load({ filterText }) {
@@ -27,7 +29,6 @@ export const MediaSearch = () => {
 
   return (
     <Autocomplete<SearchedMedia>
-      classNames={{}}
       inputProps={{
         classNames: {
           inputWrapper: "h-[40px]",
@@ -40,8 +41,11 @@ export const MediaSearch = () => {
         },
       }}
       popoverProps={{
+        ref: popoverRef,
         placement: "bottom-end",
-        className: "w-[400px]",
+        style: {
+          width: "400px",
+        },
       }}
       inputValue={list.filterText}
       isLoading={list.isLoading}
@@ -50,6 +54,7 @@ export const MediaSearch = () => {
       // eslint-disable-next-line @typescript-eslint/unbound-method
       onInputChange={list.setFilterText}
       startContent={<SearchIcon />}
+      aria-label="search media"
       radius="full"
     >
       {(item) => (
@@ -61,6 +66,7 @@ export const MediaSearch = () => {
             base: "p-0",
             title: "flex gap-2 h-[80px] text-ellipsis",
           }}
+          textValue={item.title}
         >
           <Image
             src={MediaUtils.getCoverUrl({
