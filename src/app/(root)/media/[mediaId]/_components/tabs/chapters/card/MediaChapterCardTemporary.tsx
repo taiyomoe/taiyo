@@ -28,6 +28,11 @@ const mediaChapterCardTemporary = tv({
     chapterUploader: "col-span-2",
   },
   variants: {
+    completed: {
+      false: {
+        cardBody: "border-l-2 border-primary rounded-md",
+      },
+    },
     order: {
       unique: {},
       first: {
@@ -44,42 +49,35 @@ const mediaChapterCardTemporary = tv({
 });
 
 export const MediaChapterCardTemporary = ({ chapter, order }: Props) => {
-  const {
-    container,
-    card,
-    cardBody,
-    contentWrapper,
-    chapterLink,
-    chapterTitle,
-    chapterUploadedTime,
-    chapterScans,
-    chapterUploader,
-  } = mediaChapterCardTemporary({ order });
+  const slots = mediaChapterCardTemporary({
+    completed: chapter.completed ?? false,
+    order,
+  });
 
   return (
-    <div className={container()}>
+    <div className={slots.container()}>
       <MediaChapterCardPath order={order} />
-      <Card className={card()} radius="sm">
-        <CardBody className={cardBody()}>
-          <div className={contentWrapper()}>
+      <Card className={slots.card()} radius="sm">
+        <CardBody className={slots.cardBody()}>
+          <div className={slots.contentWrapper()}>
             <Link
-              className={chapterLink()}
+              className={slots.chapterLink()}
               href={MediaChapterUtils.getUrl(chapter)}
             >
-              <p className={chapterTitle()}>
+              <p className={slots.chapterTitle()}>
                 {MediaChapterUtils.getTitle(chapter)}
               </p>
             </Link>
             {/* UPLOADED TIME */}
-            <div className={chapterUploadedTime()}>
+            <div className={slots.chapterUploadedTime()}>
               <MediaChapterCardUploadedTime chapter={chapter} />
             </div>
             {/* SCANS */}
-            <div className={chapterScans()}>
+            <div className={slots.chapterScans()}>
               <MediaChapterScans scans={chapter.scans} />
             </div>
             {/* UPLOADER */}
-            <div className={chapterUploader()}>
+            <div className={slots.chapterUploader()}>
               <MediaChapterUploader
                 className="justify-end"
                 uploader={chapter.uploader}
