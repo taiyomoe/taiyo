@@ -5,5 +5,6 @@ declare global {
     type MediaChapterPage = { id: string };
     type MediaCommentAttachement = { id: string; extension: "png" | "gif" };
     type MediaTag = { key: keyof typeof TAGS_PT; isSpoiler: boolean };
+    type UserHistoryChapter = { updatedAt: string; progress: number };
   }
 }
