@@ -94,8 +94,8 @@ model UserLibrary {
 }
 
 model UserHistory {
-    /// [UserHistoryChapter]
-    chapters Json[]
+    /// [UserHistoryProgression]
+    progression Json[]
 
     media   Media  @relation(fields: [mediaId], references: [id])
     mediaId String
