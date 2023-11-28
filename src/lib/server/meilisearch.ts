@@ -10,7 +10,8 @@ const globalForMeilisearch = globalThis as unknown as {
 export const meilisearch =
   globalForMeilisearch.meilisearch ??
   new MeiliSearch({
-    host: process.env.NEXT_PUBLIC_MEILISEARCH_URL!,
+    // This hard-coded URL is needed so that MeiliSearch stops complaining when the app is building
+    host: process.env.NEXT_PUBLIC_MEILISEARCH_URL! ?? "http://localhost:7700",
     apiKey: process.env.MEILISEARCH_ADMIN_KEY!,
   });
 
