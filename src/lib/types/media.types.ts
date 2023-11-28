@@ -21,6 +21,8 @@ export type MediaLimitedChapter = {
   title: MediaChapter["title"];
   number: MediaChapter["number"];
   volume: MediaChapter["volume"];
+  // ----- USER PROGRESSION
+  completed: boolean | null;
   // ----- RELATIONS
   uploader: {
     id: User["id"];
