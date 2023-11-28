@@ -1,15 +1,11 @@
 import type { Languages } from "@prisma/client";
 
 import { CDN_DOMAIN } from "~/lib/constants";
-import type {
-  LatestMedia,
-  MediaChapterLimited,
-  MediaLimited,
-} from "~/lib/types";
+import type { MediaLimited } from "~/lib/types";
 
-const getUrl = (media: MediaChapterLimited["media"]) => `/media/${media.id}`;
+const getUrl = (media: { id: string }) => `/media/${media.id}`;
 
-const getCoverUrl = (media: MediaLimited | LatestMedia) =>
+const getCoverUrl = (media: { id: string; coverId: string }) =>
   `${CDN_DOMAIN}/${media.id}/covers/${media.coverId}.jpg`;
 
 const getBannerOrCoverUrl = (media: MediaLimited) => {

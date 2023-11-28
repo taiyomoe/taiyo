@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { tv } from "tailwind-variants";
 
+import { MediaSearch } from "~/components/navbar/search/MediaSearch";
 import { CompanyLogo } from "~/components/ui/CompanyLogo";
 import { useChapterNavbar } from "~/hooks/useChapterNavbar";
 
@@ -68,6 +69,7 @@ export const Navbar = ({ popover }: Props) => {
           <p className={brandText()}>Taiyō</p>
         </Link>
         <div className={endContentContainer()}>
+          <MediaSearch />
           {popover}
           <ReaderSidebarOpenButton />
         </div>

@@ -60,4 +60,8 @@ export const insertMediaSchema = MediaSchema.pick({
 
 export const getMediaByIdSchema = z.string();
 
+export const searchMediaSchema = z.object({
+  title: z.string().min(1),
+});
+
 export type InsertMediaSchema = typeof insertMediaSchema._type;
