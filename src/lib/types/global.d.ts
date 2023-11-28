@@ -7,8 +7,8 @@ declare global {
     type MediaTag = { key: keyof typeof TAGS_PT; isSpoiler: boolean };
     type UserLibraryEntry = { updatedAt: string; mediaId: string };
     type UserHistoryProgression = {
-      id: string;
       updatedAt: string;
+      chapterId: string;
       pageId: string;
     };
   }
