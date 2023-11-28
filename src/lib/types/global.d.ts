@@ -10,6 +10,7 @@ declare global {
       updatedAt: string;
       chapterId: string;
       pageId: string;
+      completed: boolean;
     };
   }
 }

@@ -33,7 +33,6 @@ export const historyRouter = createTRPCRouter({
         where: { mediaId_userId },
       });
       const progression = historyEntry?.progression ?? [];
-
       const entryIndex = progression.findIndex(
         (p) => p.chapterId === input.chapterId,
       );
@@ -46,6 +45,7 @@ export const historyRouter = createTRPCRouter({
         updatedAt: new Date().toISOString(),
         chapterId: input.chapterId,
         pageId: input.pageId,
+        completed: chapter.pages.at(-1)?.id === input.pageId,
       });
 
       await ctx.db.userHistory.upsert({
