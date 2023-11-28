@@ -2,12 +2,14 @@ import { Spinner } from "@nextui-org/react";
 
 import { useChapterImages } from "~/hooks/useChapterImages";
 import { useChapterNavigation } from "~/hooks/useChapterNavigation";
+import { useChapterProgression } from "~/hooks/useChapterProgression";
 
 import { MediaChapterImage } from "./MediaChapterImage";
 
 export const MediaChapterImages = () => {
   const { currentPage } = useChapterNavigation();
   const { images, pageMode } = useChapterImages();
+  useChapterProgression();
 
   const currentImage = images.find((img) => img.number === currentPage);
 
