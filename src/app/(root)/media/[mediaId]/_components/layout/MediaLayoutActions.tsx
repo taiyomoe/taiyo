@@ -1,3 +1,4 @@
+import { AddToUserLibraryButton } from "~/components/library/AddToUserLibraryButton";
 import type { MediaLimited } from "~/lib/types";
 
 type Props = {
@@ -10,6 +11,9 @@ export const MediaLayoutActions = ({ media }: Props) => {
       <p className="line-clamp-1 text-center text-2xl font-bold drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] md:text-left md:text-4xl xl:text-5xl">
         {media.mainTitle}
       </p>
+      <div>
+        <AddToUserLibraryButton media={media} />
+      </div>
     </div>
   );
 };
