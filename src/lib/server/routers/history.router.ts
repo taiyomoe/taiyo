@@ -19,9 +19,13 @@ export const historyRouter = createTRPCRouter({
         throw new Error("Chapter not found");
       }
 
+      if (!input.pageId && input.completed === undefined) {
+        throw new Error("Missing pageId or completed");
+      }
+
       const page = chapter.pages.find((p) => p.id === input.pageId);
 
-      if (!page) {
+      if (!page && input.completed === undefined) {
         throw new Error("Page not found");
       }
 
@@ -44,8 +48,8 @@ export const historyRouter = createTRPCRouter({
       progression.push({
         updatedAt: new Date().toISOString(),
         chapterId: input.chapterId,
-        pageId: input.pageId,
-        completed: chapter.pages.at(-1)?.id === input.pageId,
+        pageId: input.pageId ?? null,
+        completed: input.completed ?? chapter.pages.at(-1)?.id === input.pageId,
       });
 
       await ctx.db.userHistory.upsert({
