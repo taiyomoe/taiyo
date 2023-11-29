@@ -26,6 +26,7 @@
     --navbar-height: 60px;
     --reader-height: calc(100vh - var(--navbar-height));
     --reader-sidebar-width: 300px;
+    --library-sidebar-width: 300px;
   }
 
   .dark {
