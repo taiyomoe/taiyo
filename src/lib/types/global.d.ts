@@ -9,7 +9,7 @@ declare global {
     type UserHistoryProgression = {
       updatedAt: string;
       chapterId: string;
-      pageId: string;
+      pageId: string | null;
       completed: boolean;
     };
   }
