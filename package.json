@@ -35,7 +35,7 @@
     "framer-motion": "^10.16.5",
     "jotai": "^2.6.0",
     "lodash-es": "^4.17.21",
-    "lucide-react": "^0.293.0",
+    "lucide-react": "^0.294.0",
     "luxon": "^3.4.4",
     "meilisearch": "^0.36.0",
     "next": "^13.5.6",
