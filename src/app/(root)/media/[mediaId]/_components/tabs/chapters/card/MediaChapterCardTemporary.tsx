@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Card, CardBody } from "@nextui-org/card";
+import { useSession } from "next-auth/react";
 import { tv } from "tailwind-variants";
 
 import { MediaChapterCardProgressionButton } from "~/app/(root)/media/[mediaId]/_components/tabs/chapters/card/MediaChapterCardProgressionButton";
@@ -31,6 +32,7 @@ const mediaChapterCardTemporary = tv({
   },
   variants: {
     completed: {
+      null: {},
       true: {
         cardBody: "pl-[calc(0.75rem+2px)]",
       },
@@ -55,7 +57,11 @@ const mediaChapterCardTemporary = tv({
 
 export const MediaChapterCardTemporary = ({ chapter, order }: Props) => {
   const [completed, setCompleted] = useState(chapter.completed ?? false);
-  const slots = mediaChapterCardTemporary({ completed, order });
+  const { data: session } = useSession();
+  const slots = mediaChapterCardTemporary({
+    completed: session ? completed : "null",
+    order,
+  });
 
   return (
     <div className={slots.container()}>

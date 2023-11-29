@@ -1,5 +1,7 @@
+import type { Dispatch, SetStateAction } from "react";
 import { tv } from "@nextui-org/react";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
+import { useSession } from "next-auth/react";
 
 import { api } from "~/lib/trpc/client";
 import type { MediaLimitedChapter } from "~/lib/types";
@@ -7,7 +9,7 @@ import type { MediaLimitedChapter } from "~/lib/types";
 type Props = {
   chapter: MediaLimitedChapter;
   completed: boolean;
-  setCompleted: (completed: boolean) => void;
+  setCompleted: Dispatch<SetStateAction<boolean>>;
 };
 
 const mediaChapterCardProgressionButton = tv({
@@ -30,6 +32,7 @@ export const MediaChapterCardProgressionButton = (props: Props) => {
   const { mutate } = api.history.updateProgression.useMutation();
   const Icon = completed ? EyeOffIcon : EyeIcon;
   const divTitle = completed ? "Marcar como não lido" : "Marcar como lido";
+  const { data: session } = useSession();
 
   const handleClick = () => {
     mutate({
@@ -39,6 +42,8 @@ export const MediaChapterCardProgressionButton = (props: Props) => {
 
     setCompleted(!completed);
   };
+
+  if (!session) return null;
 
   return (
     <div className={slots.container()} onClick={handleClick} title={divTitle}>
