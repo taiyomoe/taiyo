@@ -60,7 +60,7 @@ export const UserScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','n
 
 export const UserSettingScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','birthDate','gender','city','country','about','contentRating','preferredTitleLanguage','userId']);
 
-export const UserLibraryScalarFieldEnumSchema = z.enum(['reading','reReading','planToRead','completed','onHold','dropped','userId']);
+export const UserLibraryScalarFieldEnumSchema = z.enum(['reading','rereading','planToRead','completed','onHold','dropped','userId']);
 
 export const UserHistoryScalarFieldEnumSchema = z.enum(['progression','mediaId','userId']);
 
@@ -214,7 +214,7 @@ export const UserLibrarySchema = z.object({
   /**
    * [UserLibraryEntry]
    */
-  reReading: JsonValueSchema.array().nullable(),
+  rereading: JsonValueSchema.array().nullable(),
   /**
    * [UserLibraryEntry]
    */

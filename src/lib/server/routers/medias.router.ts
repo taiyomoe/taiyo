@@ -5,6 +5,7 @@ import {
   insertMediaSchema,
   searchMediaSchema,
 } from "~/lib/schemas";
+import { LibrariesService } from "~/lib/services/libraries.service";
 import type { LatestMedia, MediaLimited, SearchedMedia } from "~/lib/types";
 import { MediaUtils } from "~/lib/utils/media.utils";
 
@@ -117,11 +118,19 @@ export const mediasRouter = createTRPCRouter({
         throw new NotFoundError();
       }
 
+      const mediaStatusFromUserLibrary =
+        await LibrariesService.getMediaStatusFromUserLibrary(
+          ctx.session?.user.id,
+          mediaId,
+        );
+
       const mediaLimited: MediaLimited = {
         id: mediaId,
         synopsis: result.synopsis,
         genres: result.genres,
         tags: result.tags,
+        // ----- USER LIBRARY
+        userLibraryStatus: mediaStatusFromUserLibrary,
         // ----- RELATIONS
         coverId: result.covers.at(0)!.id,
         bannerId: result.banners.at(0)?.id ?? null,
