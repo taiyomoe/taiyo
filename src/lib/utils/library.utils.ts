@@ -1,22 +1,25 @@
 import type { UserLibrary } from "@prisma/client";
 
-const getStatusKeys = () => [
-  "reading",
-  "rereading",
-  "completed",
-  "onHold",
-  "dropped",
-  "planToRead",
-  "delete",
-];
+import type { MediaLibraryStatus } from "~/lib/types";
+import type { LibraryState } from "~/stores";
 
-const getStatuses = (userLibrary: UserLibrary) => ({
-  reading: userLibrary.reading,
-  rereading: userLibrary.rereading,
-  completed: userLibrary.completed,
-  onHold: userLibrary.onHold,
-  dropped: userLibrary.dropped,
-  planToRead: userLibrary.planToRead,
+const getStatusKeys = () =>
+  [
+    "reading",
+    "rereading",
+    "completed",
+    "onHold",
+    "dropped",
+    "planToRead",
+  ] as MediaLibraryStatus[];
+
+const getStatuses = <T extends UserLibrary | LibraryState>(userLibrary: T) => ({
+  reading: userLibrary.reading as T["reading"],
+  rereading: userLibrary.rereading as T["rereading"],
+  completed: userLibrary.completed as T["completed"],
+  onHold: userLibrary.onHold as T["onHold"],
+  dropped: userLibrary.dropped as T["dropped"],
+  planToRead: userLibrary.planToRead as T["planToRead"],
 });
 
 const getStatusLabel = (input: string | null) => {
@@ -40,8 +43,48 @@ const getStatusLabel = (input: string | null) => {
   }
 };
 
+const getEntry = <T extends UserLibrary | LibraryState>(
+  userLibrary: T,
+  mediaId: string,
+) => {
+  const statusKeys = getStatusKeys();
+
+  for (const status of statusKeys) {
+    const media = userLibrary[status].find((entry) =>
+      "id" in entry ? entry.id === mediaId : entry.mediaId === mediaId,
+    );
+
+    if (media)
+      return { ...media, status } as T[typeof status][number] & {
+        status: typeof status;
+      };
+  }
+};
+
+const deleteEntry = (
+  userLibrary: UserLibrary | LibraryState,
+  mediaId: string,
+) => {
+  [
+    userLibrary.reading,
+    userLibrary.rereading,
+    userLibrary.planToRead,
+    userLibrary.completed,
+    userLibrary.onHold,
+    userLibrary.dropped,
+  ].forEach((list) => {
+    const index = list.findIndex((m) =>
+      "id" in m ? m.id === mediaId : m.mediaId === mediaId,
+    );
+
+    if (index !== -1) list.splice(index, 1);
+  });
+};
+
 export const LibraryUtils = {
   getStatusKeys,
   getStatuses,
   getStatusLabel,
+  getEntry,
+  deleteEntry,
 };

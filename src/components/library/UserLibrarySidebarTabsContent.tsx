@@ -1,6 +1,8 @@
+import { useEffect } from "react";
 import NextImage from "next/image";
 import Link from "next/link";
 import { Image } from "@nextui-org/image";
+import { Spinner } from "@nextui-org/react";
 import { useSession } from "next-auth/react";
 
 import { UserLibrarySidebarDeleteButton } from "~/components/library/UserLibrarySidebarDeleteButton";
@@ -8,12 +10,14 @@ import { UserLibrarySidebarStatusSelect } from "~/components/library/UserLibrary
 import { api } from "~/lib/trpc/client";
 import type { MediaLibraryStatus } from "~/lib/types";
 import { MediaUtils } from "~/lib/utils/media.utils";
+import { useLibraryStore } from "~/stores";
 
 type Props = {
   status: MediaLibraryStatus;
 };
 
 export const UserLibrarySidebarTabsContent = ({ status }: Props) => {
+  const { populate } = useLibraryStore();
   const { data: session } = useSession();
   const { data, isLoading } = api.libary.getLibrary.useQuery(
     {
@@ -23,7 +27,19 @@ export const UserLibrarySidebarTabsContent = ({ status }: Props) => {
     { refetchOnMount: false },
   );
 
-  if (isLoading || !data) return <div>Carregando...</div>;
+  useEffect(() => {
+    if (data) {
+      populate(status, data);
+    }
+  }, [data, populate, status]);
+
+  if (isLoading || !data) {
+    return (
+      <div className="mt-8 flex w-full justify-center">
+        <Spinner />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-2">

@@ -11,17 +11,20 @@ import { TrashIcon } from "lucide-react";
 
 import { api } from "~/lib/trpc/client";
 import type { UserLibraryMedia } from "~/lib/types";
+import { useLibraryStore } from "~/stores";
 
 type Props = {
   media: UserLibraryMedia;
 };
 
 export const UserLibrarySidebarDeleteButton = ({ media }: Props) => {
+  const { updateEntry } = useLibraryStore();
   const { mutate } = api.libary.updateLibrary.useMutation();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const handleDelete = () => {
     mutate({ mediaId: media.id, status: "delete" });
+    updateEntry(media.id, "delete");
     onOpenChange();
   };
 
