@@ -5,3 +5,10 @@ export type MediaLibraryStatus =
   | "onHold"
   | "dropped"
   | "planToRead";
+
+export type UserLibraryMedia = {
+  id: string;
+  updatedAt: Date;
+  coverId: string;
+  mainTitle: string;
+};
