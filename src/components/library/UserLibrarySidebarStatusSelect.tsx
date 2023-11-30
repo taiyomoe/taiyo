@@ -2,13 +2,13 @@ import type { Selection } from "@nextui-org/react";
 import { Select, SelectItem } from "@nextui-org/select";
 
 import { api } from "~/lib/trpc/client";
-import type { MediaLibraryStatus, UserLibraryMedia } from "~/lib/types";
+import type { UserLibraryMedia, UserLibraryStatus } from "~/lib/types";
 import { LibraryUtils } from "~/lib/utils/library.utils";
 import { SelectUtils } from "~/lib/utils/select.utils";
 import { useLibraryStore } from "~/stores";
 
 type Props = {
-  status: MediaLibraryStatus;
+  status: UserLibraryStatus;
   media: UserLibraryMedia;
 };
 
@@ -19,7 +19,7 @@ export const UserLibrarySidebarStatusSelect = ({ status, media }: Props) => {
   const handleSelectionChange = (selection: Selection) => {
     const selectedKey = SelectUtils.getSelectedKey(
       selection,
-    ) as MediaLibraryStatus;
+    ) as UserLibraryStatus;
 
     mutate({ mediaId: media.id, status: selectedKey });
     updateEntry(media.id, selectedKey);

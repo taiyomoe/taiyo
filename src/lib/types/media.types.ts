@@ -9,7 +9,7 @@ import type {
   User,
 } from "@prisma/client";
 
-import type { MediaLibraryStatus } from "~/lib/types/library.types";
+import type { UserLibraryStatus } from "~/lib/types/library.types";
 
 export type LatestMedia = {
   id: Media["id"];
@@ -55,7 +55,7 @@ export type MediaLimited = {
   genres: Media["genres"];
   tags: PrismaJson.MediaTag[];
   // -----
-  userLibraryStatus: MediaLibraryStatus | null;
+  userLibraryStatus: UserLibraryStatus | null;
   // -----
   mainTitle: MediaTitle["title"];
   titles: Pick<

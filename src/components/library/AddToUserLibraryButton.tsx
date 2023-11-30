@@ -7,7 +7,7 @@ import type { Selection } from "@nextui-org/react";
 import { useSession } from "next-auth/react";
 
 import { UserLibraryStatusSelect } from "~/components/library/UserLibraryStatusSelect";
-import type { MediaLibraryStatus, MediaLimited } from "~/lib/types";
+import type { MediaLimited, UserLibraryStatusWithDelete } from "~/lib/types";
 import { LibraryUtils } from "~/lib/utils/library.utils";
 
 type Props = {
@@ -23,9 +23,8 @@ export const AddToUserLibraryButton = ({ media }: Props) => {
   if (!session) return null;
 
   const selectionToValue = (selection: Selection) =>
-    (selection as Set<Selection>).values().next().value as
-      | MediaLibraryStatus
-      | "delete";
+    (selection as Set<Selection>).values().next()
+      .value as UserLibraryStatusWithDelete;
 
   return (
     <Popover placement="bottom" showArrow title="Biblioteca">

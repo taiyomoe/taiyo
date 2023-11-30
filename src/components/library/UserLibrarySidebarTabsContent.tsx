@@ -8,12 +8,12 @@ import { useSession } from "next-auth/react";
 import { UserLibrarySidebarDeleteButton } from "~/components/library/UserLibrarySidebarDeleteButton";
 import { UserLibrarySidebarStatusSelect } from "~/components/library/UserLibrarySidebarStatusSelect";
 import { api } from "~/lib/trpc/client";
-import type { MediaLibraryStatus } from "~/lib/types";
+import type { UserLibraryStatus } from "~/lib/types";
 import { MediaUtils } from "~/lib/utils/media.utils";
 import { useLibraryStore } from "~/stores";
 
 type Props = {
-  status: MediaLibraryStatus;
+  status: UserLibraryStatus;
 };
 
 export const UserLibrarySidebarTabsContent = ({ status }: Props) => {
