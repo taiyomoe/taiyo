@@ -41,6 +41,20 @@ export const UserLibrarySidebarTabsContent = ({ status }: Props) => {
     );
   }
 
+  if (data.length === 0) {
+    return (
+      <div className="mt-12 flex w-full select-none flex-col items-center justify-center gap-6">
+        <Image
+          src="/illustrations/no_data.svg"
+          width={150}
+          height={150}
+          alt="empty"
+        />
+        <p className="text-lg font-medium">Nenhuma obra encontrada</p>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col gap-2">
       {data.map((media) => (
