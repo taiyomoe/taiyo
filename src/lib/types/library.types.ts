@@ -1,10 +1,12 @@
-export type MediaLibraryStatus =
+export type UserLibraryStatus =
   | "reading"
   | "rereading"
   | "completed"
   | "onHold"
   | "dropped"
   | "planToRead";
+
+export type UserLibraryStatusWithDelete = UserLibraryStatus | "delete";
 
 export type UserLibraryMedia = {
   id: string;

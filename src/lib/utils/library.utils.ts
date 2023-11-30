@@ -1,6 +1,6 @@
 import type { UserLibrary } from "@prisma/client";
 
-import type { MediaLibraryStatus } from "~/lib/types";
+import type { UserLibraryStatus } from "~/lib/types";
 import type { LibraryState } from "~/stores";
 
 const getStatusKeys = () =>
@@ -11,7 +11,7 @@ const getStatusKeys = () =>
     "onHold",
     "dropped",
     "planToRead",
-  ] as MediaLibraryStatus[];
+  ] as UserLibraryStatus[];
 
 const getStatuses = <T extends UserLibrary | LibraryState>(userLibrary: T) => ({
   reading: userLibrary.reading as T["reading"],

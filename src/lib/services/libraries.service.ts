@@ -1,5 +1,5 @@
 import { db } from "~/lib/server/db";
-import type { MediaLibraryStatus } from "~/lib/types";
+import type { UserLibraryStatus } from "~/lib/types";
 import { LibraryUtils } from "~/lib/utils/library.utils";
 
 const getUserLibrary = async (userId: string | undefined) => {
@@ -30,7 +30,7 @@ const getMediaStatusFromUserLibrary = async (
 
   for (const [status, libraryEntries] of Object.entries(statusKeys)) {
     const media = libraryEntries.find((entry) => entry.mediaId === mediaId);
-    if (media) return status as MediaLibraryStatus;
+    if (media) return status as UserLibraryStatus;
   }
 
   return null;

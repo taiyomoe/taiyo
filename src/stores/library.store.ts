@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-import type { MediaLibraryStatus, UserLibraryMedia } from "~/lib/types";
+import type { UserLibraryMedia, UserLibraryStatus } from "~/lib/types";
 import { LibraryUtils } from "~/lib/utils/library.utils";
 
 export type LibraryState = {
@@ -11,11 +11,11 @@ export type LibraryState = {
   dropped: UserLibraryMedia[];
   planToRead: UserLibraryMedia[];
 
-  populate: (status: MediaLibraryStatus, entries: UserLibraryMedia[]) => void;
+  populate: (status: UserLibraryStatus, entries: UserLibraryMedia[]) => void;
 
   updateEntry: (
     mediaId: string,
-    newStatus: MediaLibraryStatus | "delete",
+    newStatus: UserLibraryStatus | "delete",
   ) => void;
 };
 

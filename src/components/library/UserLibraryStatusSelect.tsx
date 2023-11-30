@@ -5,9 +5,10 @@ import type { SetStateAction } from "jotai";
 
 import { api } from "~/lib/trpc/client";
 import type {
-  MediaLibraryStatus,
   MediaLimited,
   UserLibraryMedia,
+  UserLibraryStatus,
+  UserLibraryStatusWithDelete,
 } from "~/lib/types";
 import { LibraryUtils } from "~/lib/utils/library.utils";
 import { SelectUtils } from "~/lib/utils/select.utils";
@@ -24,7 +25,7 @@ export const UserLibraryStatusSelect = (props: Props) => {
 
   const handleSelectionChange = (selection: Selection) => {
     const selectedKey = SelectUtils.getSelectedKey(selection) as
-      | MediaLibraryStatus
+      | UserLibraryStatus
       | "delete";
 
     mutate({ mediaId: media.id, status: selectedKey });
@@ -32,7 +33,7 @@ export const UserLibraryStatusSelect = (props: Props) => {
   };
 
   return (
-    <Select<MediaLibraryStatus>
+    <Select<UserLibraryStatus>
       classNames={{
         trigger: "h-10",
         label: "text-small font-bold",
@@ -47,15 +48,17 @@ export const UserLibraryStatusSelect = (props: Props) => {
       onSelectionChange={handleSelectionChange}
       selectionMode="single"
     >
-      {LibraryUtils.getStatusKeys().map((status) => (
-        <SelectItem
-          key={status}
-          value={status}
-          color={status === "delete" ? "danger" : "default"}
-        >
-          {LibraryUtils.getStatusLabel(status)}
-        </SelectItem>
-      ))}
+      {(LibraryUtils.getStatusKeys() as UserLibraryStatusWithDelete[])
+        .concat(["delete"])
+        .map((status) => (
+          <SelectItem
+            key={status}
+            value={status}
+            color={status === "delete" ? "danger" : "default"}
+          >
+            {LibraryUtils.getStatusLabel(status)}
+          </SelectItem>
+        ))}
     </Select>
   );
 };
