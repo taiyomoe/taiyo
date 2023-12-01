@@ -9,6 +9,8 @@ import type {
   User,
 } from "@prisma/client";
 
+import type { UserLibraryStatus } from "~/lib/types/library.types";
+
 export type LatestMedia = {
   id: Media["id"];
   coverId: MediaCover["id"];
@@ -21,6 +23,8 @@ export type MediaLimitedChapter = {
   title: MediaChapter["title"];
   number: MediaChapter["number"];
   volume: MediaChapter["volume"];
+  // ----- USER PROGRESSION
+  completed: boolean | null;
   // ----- RELATIONS
   uploader: {
     id: User["id"];
@@ -50,6 +54,8 @@ export type MediaLimited = {
   synopsis: Media["synopsis"];
   genres: Media["genres"];
   tags: PrismaJson.MediaTag[];
+  // -----
+  userLibrary: { status: UserLibraryStatus; updatedAt: string } | null;
   // -----
   mainTitle: MediaTitle["title"];
   titles: Pick<

@@ -1,7 +1,10 @@
+import { useState } from "react";
 import Link from "next/link";
 import { Card, CardBody } from "@nextui-org/card";
+import { useSession } from "next-auth/react";
 import { tv } from "tailwind-variants";
 
+import { MediaChapterCardProgressionButton } from "~/app/(root)/media/[mediaId]/_components/tabs/chapters/card/MediaChapterCardProgressionButton";
 import { MediaChapterScans } from "~/components/ui/MediaChapterScans";
 import { MediaChapterUploader } from "~/components/ui/MediaChapterUploader";
 import type { MediaLimitedChapter } from "~/lib/types";
@@ -21,13 +24,22 @@ const mediaChapterCardTemporary = tv({
     card: "w-full",
     cardBody: "p-3",
     contentWrapper: "grid grid-cols-5 grid-rows-2 gap-1",
-    chapterLink: "col-span-3",
-    chapterTitle: "w-full truncate text-sm font-semibold",
-    chapterUploadedTime: "col-span-2",
-    chapterScans: "col-span-3",
-    chapterUploader: "col-span-2",
+    titleWrapper: "flex gap-3 col-span-3",
+    title: "w-full truncate text-sm font-semibold",
+    uploadedTime: "col-span-2",
+    scans: "col-span-3",
+    uploader: "col-span-2",
   },
   variants: {
+    completed: {
+      null: {},
+      true: {
+        cardBody: "pl-[calc(0.75rem+2px)]",
+      },
+      false: {
+        cardBody: "border-l-2 border-primary rounded-md",
+      },
+    },
     order: {
       unique: {},
       first: {
@@ -44,42 +56,41 @@ const mediaChapterCardTemporary = tv({
 });
 
 export const MediaChapterCardTemporary = ({ chapter, order }: Props) => {
-  const {
-    container,
-    card,
-    cardBody,
-    contentWrapper,
-    chapterLink,
-    chapterTitle,
-    chapterUploadedTime,
-    chapterScans,
-    chapterUploader,
-  } = mediaChapterCardTemporary({ order });
+  const [completed, setCompleted] = useState(chapter.completed ?? false);
+  const { data: session } = useSession();
+  const slots = mediaChapterCardTemporary({
+    completed: session ? completed : "null",
+    order,
+  });
 
   return (
-    <div className={container()}>
+    <div className={slots.container()}>
       <MediaChapterCardPath order={order} />
-      <Card className={card()} radius="sm">
-        <CardBody className={cardBody()}>
-          <div className={contentWrapper()}>
-            <Link
-              className={chapterLink()}
-              href={MediaChapterUtils.getUrl(chapter)}
-            >
-              <p className={chapterTitle()}>
-                {MediaChapterUtils.getTitle(chapter)}
-              </p>
-            </Link>
+      <Card className={slots.card()} radius="sm">
+        <CardBody className={slots.cardBody()}>
+          <div className={slots.contentWrapper()}>
+            <div className={slots.titleWrapper()}>
+              <MediaChapterCardProgressionButton
+                chapter={chapter}
+                completed={completed}
+                setCompleted={setCompleted}
+              />
+              <Link href={MediaChapterUtils.getUrl(chapter)}>
+                <p className={slots.title()}>
+                  {MediaChapterUtils.getTitle(chapter)}
+                </p>
+              </Link>
+            </div>
             {/* UPLOADED TIME */}
-            <div className={chapterUploadedTime()}>
+            <div className={slots.uploadedTime()}>
               <MediaChapterCardUploadedTime chapter={chapter} />
             </div>
             {/* SCANS */}
-            <div className={chapterScans()}>
+            <div className={slots.scans()}>
               <MediaChapterScans scans={chapter.scans} />
             </div>
             {/* UPLOADER */}
-            <div className={chapterUploader()}>
+            <div className={slots.uploader()}>
               <MediaChapterUploader
                 className="justify-end"
                 uploader={chapter.uploader}

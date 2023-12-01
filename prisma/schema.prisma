@@ -36,10 +36,13 @@ model User {
     emailVerified DateTime?
     image         String?
     role          Roles     @default(USER)
+    points        Int       @default(0)
 
     accounts Account[]
     sessions Session[]
     settings UserSetting?
+    library  UserLibrary?
+    history  UserHistory[]
 
     createdMedias         Media[]
     uploadedMediaCovers   MediaCover[]
@@ -70,6 +73,37 @@ model UserSetting {
 
     user   User   @relation(fields: [userId], references: [id])
     userId String @unique
+}
+
+model UserLibrary {
+    /// [UserLibraryEntry]
+    reading    Json[] @default([])
+    /// [UserLibraryEntry]
+    rereading  Json[] @default([])
+    /// [UserLibraryEntry]
+    planToRead Json[] @default([])
+    /// [UserLibraryEntry]
+    completed  Json[] @default([])
+    /// [UserLibraryEntry]
+    onHold     Json[] @default([])
+    /// [UserLibraryEntry]
+    dropped    Json[] @default([])
+
+    user   User   @relation(fields: [userId], references: [id])
+    userId String @unique
+}
+
+model UserHistory {
+    /// [UserHistoryProgression]
+    progression Json[]
+
+    media   Media  @relation(fields: [mediaId], references: [id])
+    mediaId String
+
+    user   User   @relation(fields: [userId], references: [id])
+    userId String
+
+    @@unique([mediaId, userId])
 }
 
 model Account {
@@ -144,6 +178,7 @@ model Media {
     titles   MediaTitle[]
     trackers MediaTracker[]
     chapters MediaChapter[]
+    history  UserHistory[]
 
     creator   User    @relation(fields: [creatorId], references: [id])
     creatorId String

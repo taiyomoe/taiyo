@@ -1,3 +1,6 @@
+import { libraryRouter } from "~/lib/server/routers/library.router";
+
+import { historyRouter } from "./routers/history.router";
 import { mediaChaptersRouter } from "./routers/mediaChapters.router";
 import { mediasRouter } from "./routers/medias.router";
 import { scansRouter } from "./routers/scans.router";
@@ -12,6 +15,8 @@ import { createTRPCRouter } from "./trpc";
 export const appRouter = createTRPCRouter({
   medias: mediasRouter,
   mediaChapters: mediaChaptersRouter,
+  history: historyRouter,
+  libary: libraryRouter,
   scans: scansRouter,
   uploads: uploadsRouter,
 });
