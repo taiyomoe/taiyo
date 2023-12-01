@@ -17,7 +17,7 @@ type Props = {
 };
 
 export const UserLibrarySidebarTabsContent = ({ status }: Props) => {
-  const { addEntries } = useLibraryStore();
+  const { addEntries, ...libraryStore } = useLibraryStore();
   const { data: session } = useSession();
   const { data, isLoading } = api.libary.getLibrary.useQuery(
     {
@@ -57,7 +57,7 @@ export const UserLibrarySidebarTabsContent = ({ status }: Props) => {
 
   return (
     <div className="flex flex-col gap-2">
-      {data.map((media) => (
+      {libraryStore[status].map((media) => (
         <div key={media.id} className="relative flex h-[80px] gap-2">
           <Image
             as={NextImage}

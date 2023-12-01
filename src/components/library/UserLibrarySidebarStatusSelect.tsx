@@ -22,7 +22,7 @@ export const UserLibrarySidebarStatusSelect = ({ status, media }: Props) => {
     ) as UserLibraryStatus;
 
     mutate({ mediaId: media.id, status: selectedKey });
-    updateEntry(media.id, selectedKey);
+    updateEntry(media, selectedKey);
   };
 
   return (
