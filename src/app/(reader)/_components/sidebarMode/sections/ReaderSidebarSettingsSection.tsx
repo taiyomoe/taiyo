@@ -13,6 +13,7 @@ const readerSidebarSettingsSection = tv({
 
 export const ReaderSidebarSettingsSection = () => {
   const { container } = readerSidebarSettingsSection();
+
   return (
     <div className={container()}>
       <ReaderSidebarSettingsSide />

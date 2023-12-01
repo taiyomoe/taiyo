@@ -6,7 +6,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@nextui-org/popover";
 import { useSession } from "next-auth/react";
 
 import { UserLibraryStatusSelect } from "~/components/library/UserLibraryStatusSelect";
-import type { MediaLimited, UserLibraryMediaWithStatus } from "~/lib/types";
+import type { MediaLimited, UserLibraryMedia } from "~/lib/types";
 import { LibraryUtils } from "~/lib/utils/library.utils";
 import { useLibraryStore } from "~/stores";
 
@@ -16,7 +16,7 @@ type Props = {
 
 export const AddToUserLibraryButton = ({ media }: Props) => {
   const { updateEntry } = useLibraryStore();
-  const [entry, setEntry] = useState<UserLibraryMediaWithStatus | null>(null);
+  const [entry, setEntry] = useState<UserLibraryMedia | null>(null);
   const { data: session } = useSession();
 
   useEffect(() => {
@@ -42,11 +42,14 @@ export const AddToUserLibraryButton = ({ media }: Props) => {
           color="primary"
           radius="sm"
         >
-          {LibraryUtils.getStatusLabel(entry?.status)}
+          {LibraryUtils.getStatusLabel(entry?.libraryStatus)}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[250px] px-4 py-3">
-        <UserLibraryStatusSelect media={media} currentStatus={entry?.status} />
+        <UserLibraryStatusSelect
+          media={media}
+          currentStatus={entry?.libraryStatus}
+        />
       </PopoverContent>
     </Popover>
   );

@@ -10,8 +10,9 @@ export const UserLibrarySidebarTitle = () => {
     <div className="flex items-center justify-between">
       <p className="text-xl font-semibold">Biblioteca</p>
       <Button
-        startContent={<SidebarIcon action="close" side="right" />}
-        onClick={toggleSidebar}
+        startContent={<SidebarIcon action="close" side="right" size={20} />}
+        onPress={toggleSidebar}
+        size="sm"
         isIconOnly
       />
     </div>

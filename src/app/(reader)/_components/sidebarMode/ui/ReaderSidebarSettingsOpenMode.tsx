@@ -2,17 +2,12 @@
 
 import { useEffect } from "react";
 import { Button, ButtonGroup } from "@nextui-org/button";
-import { useAtom, useAtomValue } from "jotai";
 import { MousePointer2Icon } from "lucide-react";
 import { tv } from "tailwind-variants";
 
-import {
-  readerSidebarOpenModeAtom,
-  readerSidebarSideAtom,
-} from "~/atoms/readerSettings.atoms";
 import { SidebarIcon } from "~/components/icons/SidebarIcon";
 import { useDevice } from "~/hooks/useDevice";
-import type { ReaderSettings } from "~/lib/types";
+import { useReaderStore } from "~/stores";
 
 const readerSidebarSettingsOpenMode = tv({
   slots: {
@@ -24,24 +19,17 @@ const readerSidebarSettingsOpenMode = tv({
 });
 
 export const ReaderSidebarSettingsOpenMode = () => {
+  const { settings, updateSettings } = useReaderStore();
+  const { isMobile } = useDevice();
+
   const { container, text, leftButton, rightButton } =
     readerSidebarSettingsOpenMode();
 
-  const { isMobile } = useDevice();
-  const readerSidebarSide = useAtomValue(readerSidebarSideAtom);
-  const [readerSidebarOpenMode, setReaderSidebarOpenMode] = useAtom(
-    readerSidebarOpenModeAtom,
-  );
-
-  const handlePress = (side: ReaderSettings["sidebarOpenMode"]) => {
-    setReaderSidebarOpenMode(side);
-  };
-
   useEffect(() => {
-    if (isMobile) {
-      setReaderSidebarOpenMode("button");
+    if (isMobile && settings.sidebar.openMode === "hover") {
+      updateSettings("sidebar.openMode", "button");
     }
-  }, [isMobile, setReaderSidebarOpenMode]);
+  }, [isMobile, settings.sidebar.openMode, updateSettings]);
 
   return (
     <div className={container()}>
@@ -50,10 +38,10 @@ export const ReaderSidebarSettingsOpenMode = () => {
         <Button
           className={leftButton()}
           startContent={
-            <SidebarIcon action="open" side={readerSidebarSide} size={20} />
+            <SidebarIcon action="open" side={settings.sidebar.side} size={20} />
           }
-          color={readerSidebarOpenMode === "button" ? "primary" : "default"}
-          onPress={() => handlePress("button")}
+          color={settings.sidebar.openMode === "button" ? "primary" : "default"}
+          onPress={() => updateSettings("sidebar.openMode", "button")}
           isDisabled={isMobile}
           radius="sm"
         >
@@ -62,8 +50,8 @@ export const ReaderSidebarSettingsOpenMode = () => {
         <Button
           className={rightButton()}
           endContent={<MousePointer2Icon size={20} />}
-          onPress={() => handlePress("hover")}
-          color={readerSidebarOpenMode === "hover" ? "primary" : "default"}
+          onPress={() => updateSettings("sidebar.openMode", "hover")}
+          color={settings.sidebar.openMode === "hover" ? "primary" : "default"}
           isDisabled={isMobile}
           radius="sm"
         >

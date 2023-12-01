@@ -32,6 +32,9 @@ export const UserLibrarySidebarStatusSelect = ({ status, media }: Props) => {
       }}
       variant="bordered"
       selectedKeys={new Set([status])}
+      disabledKeys={
+        media.mediaStatus !== "FINISHED" ? new Set(["completed"]) : new Set()
+      }
       onSelectionChange={handleSelectionChange}
       aria-label="Status selection"
     >

@@ -15,6 +15,7 @@ import { tv } from "tailwind-variants";
 import { BackButton } from "~/components/generics/buttons/BackButton";
 import { ForwardButton } from "~/components/generics/buttons/ForwardButton";
 import { useChapterNavigation } from "~/hooks/useChapterNavigation";
+import { useReaderStore } from "~/stores";
 
 const readerSettingsMediaChapterPageDropdown = tv({
   slots: {
@@ -38,54 +39,40 @@ const readerSettingsMediaChapterPageDropdown = tv({
 });
 
 export const ReaderSettingsMediaChapterPageDropdown = () => {
-  const {
-    chapter,
-    currentPage,
-    hasPreviousPage,
-    hasNextPage,
-    goBack,
-    goForward,
-    goTo,
-  } = useChapterNavigation();
+  const { chapter, currentPageNumber, hasPreviousPage, hasNextPage } =
+    useReaderStore();
+  const { goBack, goForward, goTo } = useChapterNavigation();
 
-  const {
-    container,
-    triggerButton,
-    skeleton,
-    dropdownBase,
-    dropdownMenu,
-    textContainer,
-    textDescription,
-  } = readerSettingsMediaChapterPageDropdown({
+  const slots = readerSettingsMediaChapterPageDropdown({
     scollable: (chapter && chapter.pages.length > 9) ?? false,
   });
 
-  if (!chapter || !currentPage) {
-    return <Skeleton className={skeleton()} />;
+  if (!chapter || !currentPageNumber) {
+    return <Skeleton className={slots.skeleton()} />;
   }
 
   return (
-    <div className={container()}>
+    <div className={slots.container()}>
       <BackButton onPress={goBack} isDisabled={!hasPreviousPage} />
-      <Dropdown classNames={{ base: dropdownBase() }}>
+      <Dropdown classNames={{ base: slots.dropdownBase() }}>
         <DropdownTrigger>
           <Button
-            className={triggerButton()}
+            className={slots.triggerButton()}
             radius="sm"
             fullWidth
             endContent={<ChevronsUpDownIcon size={20} />}
           >
-            <div className={textContainer()}>
-              <p>Página {currentPage}</p>
-              <p className={textDescription()}>
-                {currentPage}/{chapter.pages.length}
+            <div className={slots.textContainer()}>
+              <p>Página {currentPageNumber}</p>
+              <p className={slots.textDescription()}>
+                {currentPageNumber}/{chapter.pages.length}
               </p>
             </div>
           </Button>
         </DropdownTrigger>
         <DropdownMenu
-          className={dropdownMenu()}
-          disabledKeys={[`page-${currentPage}`]}
+          className={slots.dropdownMenu()}
+          disabledKeys={[`page-${currentPageNumber}`]}
           selectionMode="single"
           aria-label="Páginas"
           onSelectionChange={(keys) => {

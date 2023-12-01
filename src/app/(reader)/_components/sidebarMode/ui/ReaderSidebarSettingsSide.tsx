@@ -1,12 +1,10 @@
 "use client";
 
 import { Button, ButtonGroup } from "@nextui-org/button";
-import { useAtom } from "jotai";
 import { PanelLeftOpenIcon, PanelRightOpenIcon } from "lucide-react";
 import { tv } from "tailwind-variants";
 
-import { readerSidebarSideAtom } from "~/atoms/readerSettings.atoms";
-import type { ReaderSettings } from "~/lib/types";
+import { useReaderStore } from "~/stores";
 
 const readerSidebarSettingsSide = tv({
   slots: {
@@ -18,15 +16,10 @@ const readerSidebarSettingsSide = tv({
 });
 
 export const ReaderSidebarSettingsSide = () => {
+  const { settings, updateSettings } = useReaderStore();
+
   const { container, text, leftButton, rightButton } =
     readerSidebarSettingsSide();
-  const [readerSidebarSide, setReaderSidebarSide] = useAtom(
-    readerSidebarSideAtom,
-  );
-
-  const handlePress = (side: ReaderSettings["sidebarSide"]) => {
-    setReaderSidebarSide(side);
-  };
 
   return (
     <div className={container()}>
@@ -35,8 +28,8 @@ export const ReaderSidebarSettingsSide = () => {
         <Button
           className={leftButton()}
           startContent={<PanelLeftOpenIcon size={20} />}
-          onPress={() => handlePress("left")}
-          color={readerSidebarSide === "left" ? "primary" : "default"}
+          onPress={() => updateSettings("sidebar.side", "left")}
+          color={settings.sidebar.side === "left" ? "primary" : "default"}
           radius="sm"
         >
           Esquerda
@@ -44,8 +37,8 @@ export const ReaderSidebarSettingsSide = () => {
         <Button
           className={rightButton()}
           endContent={<PanelRightOpenIcon size={20} />}
-          onPress={() => handlePress("right")}
-          color={readerSidebarSide === "right" ? "primary" : "default"}
+          onPress={() => updateSettings("sidebar.side", "right")}
+          color={settings.sidebar.side === "right" ? "primary" : "default"}
           radius="sm"
         >
           Direita
