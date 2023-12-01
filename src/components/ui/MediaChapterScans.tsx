@@ -56,31 +56,24 @@ const mediaChapterScans = tv({
 
 export const MediaChapterScans = (props: Props) => {
   const { scans, size, orientation } = props;
-  const {
-    container,
-    iconContainer,
-    linkContainer,
-    icon,
-    skeleton,
-    link,
-    text,
-  } = mediaChapterScans({
-    size,
-    orientation,
-  });
+  const slots = mediaChapterScans({ size, orientation });
 
   return (
-    <div className={container()}>
-      <div className={iconContainer()}>
-        <UsersIcon className={icon()} />
+    <div className={slots.container()}>
+      <div className={slots.iconContainer()}>
+        <UsersIcon className={slots.icon()} />
       </div>
-      {!scans && <Skeleton className={skeleton()} />}
-      {scans?.length === 0 && <p className={text()}>None</p>}
-      {scans?.length !== 0 && (
-        <div className={linkContainer()}>
+      {scans === undefined && <Skeleton className={slots.skeleton()} />}
+      {scans && scans.length === 0 && <p className={slots.text()}>None</p>}
+      {scans && scans.length !== 0 && (
+        <div className={slots.linkContainer()}>
           {scans?.map((scan) => (
-            <Link key={scan.id} className={link()} href={`/scans/${scan.id}`}>
-              <p className={text()}>{scan.name}</p>
+            <Link
+              key={scan.id}
+              className={slots.link()}
+              href={`/scans/${scan.id}`}
+            >
+              <p className={slots.text()}>{scan.name}</p>
             </Link>
           ))}
         </div>
