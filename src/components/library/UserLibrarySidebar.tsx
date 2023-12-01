@@ -32,7 +32,10 @@ export const UserLibrarySidebar = () => {
   const slots = userLibrarySidebar({ isMobile });
   const containerRef = useRef(null);
 
-  useOnClickOutside(containerRef, toggleSidebar);
+  useOnClickOutside(
+    containerRef,
+    () => sidebarState === "show" && toggleSidebar(),
+  );
 
   return (
     <div
