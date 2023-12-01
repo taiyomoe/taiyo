@@ -1,18 +1,16 @@
 import { useEffect } from "react";
 import { useSession } from "next-auth/react";
 
-import { useChapterNavigation } from "~/hooks/useChapterNavigation";
 import { api } from "~/lib/trpc/client";
 import { useReaderStore } from "~/stores";
 
 export const useChapterProgression = () => {
-  const { chapter } = useReaderStore();
-  const { currentPage } = useChapterNavigation();
+  const { chapter, currentPageNumber } = useReaderStore();
   const { mutate } = api.history.updateProgression.useMutation();
   const { status } = useSession();
 
   useEffect(() => {
-    const currentPageId = chapter?.pages[(currentPage ?? 0) - 1]?.id;
+    const currentPageId = chapter?.pages[(currentPageNumber ?? 0) - 1]?.id;
 
     if (!currentPageId || status !== "authenticated") return;
 
@@ -20,5 +18,5 @@ export const useChapterProgression = () => {
       chapterId: chapter.id,
       pageId: currentPageId,
     });
-  }, [chapter?.id, chapter?.pages, currentPage, mutate, status]);
+  }, [chapter?.id, chapter?.pages, currentPageNumber, mutate, status]);
 };

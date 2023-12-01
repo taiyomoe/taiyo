@@ -27,10 +27,9 @@ export type ReaderState = {
   chapter: MediaChapterLimited | null;
   navigation: MediaChapterNavigation | null;
 
-  currentPage: {
-    number: number;
-    url: string;
-  } | null;
+  currentPageNumber: number | null;
+  hasPreviousPage: boolean;
+  hasNextPage: boolean;
 
   updateSettings: (
     key: InferNestedPaths<ReaderSettings>,
@@ -41,6 +40,7 @@ export type ReaderState = {
     chapter: MediaChapterLimited,
     initialPageNumber: number | null,
   ) => void;
+  updateNavigation: (newPageNumber: number) => void;
   unload: () => void;
 };
 
@@ -60,11 +60,13 @@ export const useReaderStore = create<ReaderState>((set) => ({
   chapter: null,
   navigation: null,
 
-  currentPage: null,
+  currentPageNumber: null,
+  hasPreviousPage: false,
+  hasNextPage: false,
 
   updateSettings: (key, newValue) => {
     set((state) => {
-      const newSettings = { ...state.settings };
+      const newSettings = structuredClone(state.settings);
 
       _.set(newSettings, key, newValue);
 
@@ -84,7 +86,28 @@ export const useReaderStore = create<ReaderState>((set) => ({
       ...state,
       chapter,
       navigation,
+      currentPageNumber: initialPageNumber,
+      hasPreviousPage: !!navigation?.previousPage,
+      hasNextPage: !!navigation?.nextPage,
     }));
+  },
+  updateNavigation: (newPageNumber) => {
+    set((state) => {
+      if (!state.chapter) {
+        return state;
+      }
+
+      const newNavigation = MediaChapterUtils.getNavigation(
+        state.chapter,
+        newPageNumber,
+      )!;
+
+      return {
+        ...state,
+        navigation: newNavigation,
+        currentPageNumber: newNavigation.currentPage,
+      };
+    });
   },
   unload: () => set((state) => ({ ...state, chapter: null, navigation: null })),
 }));
