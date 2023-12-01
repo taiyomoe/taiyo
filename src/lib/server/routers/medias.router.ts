@@ -92,6 +92,7 @@ export const mediasRouter = createTRPCRouter({
       const result = await ctx.db.media.findFirst({
         select: {
           synopsis: true,
+          status: true,
           genres: true,
           tags: true,
           covers: {
@@ -126,6 +127,7 @@ export const mediasRouter = createTRPCRouter({
       const mediaLimited: MediaLimited = {
         id: mediaId,
         synopsis: result.synopsis,
+        status: result.status,
         genres: result.genres,
         tags: result.tags,
         // ----- USER LIBRARY

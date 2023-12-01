@@ -52,6 +52,7 @@ export type MediaLimited = {
   id: Media["id"];
   // -----
   synopsis: Media["synopsis"];
+  status: Media["status"];
   genres: Media["genres"];
   tags: PrismaJson.MediaTag[];
   // -----
