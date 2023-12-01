@@ -13,11 +13,8 @@ export type UserLibraryStatusWithDelete = UserLibraryStatus | "delete";
 export type UserLibraryMedia = {
   id: string;
   updatedAt: Date;
-  status: Media["status"];
   coverId: string;
   mainTitle: string;
-};
-
-export type UserLibraryMediaWithStatus = UserLibraryMedia & {
+  mediaStatus: Media["status"];
   libraryStatus: UserLibraryStatus;
 };
