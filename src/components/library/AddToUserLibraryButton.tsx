@@ -42,11 +42,14 @@ export const AddToUserLibraryButton = ({ media }: Props) => {
           color="primary"
           radius="sm"
         >
-          {LibraryUtils.getStatusLabel(entry?.status)}
+          {LibraryUtils.getStatusLabel(entry?.libraryStatus)}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[250px] px-4 py-3">
-        <UserLibraryStatusSelect media={media} currentStatus={entry?.status} />
+        <UserLibraryStatusSelect
+          media={media}
+          currentStatus={entry?.libraryStatus}
+        />
       </PopoverContent>
     </Popover>
   );
