@@ -22,6 +22,7 @@
     --google: white;
     --google-foreground: dark;
 
+    --body-padding: 24px;
     --navbar-height: 60px;
     --reader-height: calc(100vh - var(--navbar-height));
     --reader-sidebar-width: 300px;

@@ -6,11 +6,10 @@ import { UserPopover } from "./popovers/UserPopover";
 
 export const NavbarAuth = async () => {
   const session = await getServerAuthSession();
-  const popover = session?.user ? (
-    <UserPopover session={session} />
-  ) : (
-    <GuestPopover />
-  );
 
-  return <Navbar popover={popover} />;
+  if (session?.user) {
+    return <Navbar popover={<UserPopover session={session} />} />;
+  }
+
+  return <Navbar popover={<GuestPopover />} />;
 };

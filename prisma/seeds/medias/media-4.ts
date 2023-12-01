@@ -1,6 +1,6 @@
-import { type PrismaClient } from "@prisma/client";
+import { db } from "~/lib/server/db";
 
-const execute = async (db: PrismaClient) => {
+const execute = async () => {
   await db.media.create({
     data: {
       id: "d696e020-f234-44c4-9cba-8bb5359b156b",
@@ -15,6 +15,34 @@ const execute = async (db: PrismaClient) => {
       source: "ORIGINAL",
       demography: "SHOUNEN",
       countryOfOrigin: "JAPAN",
+      genres: ["ACTION", "ADVENTURE", "SUPERNATURAL"],
+      tags: [
+        { key: "SHOUNEN", isSpoiler: false },
+        { key: "NINJA", isSpoiler: false },
+        { key: "COMING_OF_AGE", isSpoiler: false },
+        { key: "REVENGE", isSpoiler: true },
+        { key: "SUPER_POWER", isSpoiler: false },
+        { key: "MALE_PROTAGONIST", isSpoiler: false },
+        { key: "MARTIAL_ARTS", isSpoiler: false },
+        { key: "TRAGEDY", isSpoiler: false },
+        { key: "FOUND_FAMILY", isSpoiler: false },
+        { key: "WAR", isSpoiler: true },
+        { key: "TIME_SKIP", isSpoiler: false },
+        { key: "KAIJU", isSpoiler: true },
+        { key: "CULTIVATION", isSpoiler: false },
+        { key: "PHILOSOPHY", isSpoiler: false },
+        { key: "MAGIC", isSpoiler: false },
+        { key: "NECROMANCY", isSpoiler: true },
+        { key: "ORPHAN", isSpoiler: false },
+        { key: "LOVE_TRIANGLE", isSpoiler: false },
+        { key: "HENSHIN", isSpoiler: false },
+        { key: "ANACHRONISM", isSpoiler: false },
+        { key: "ESPIONAGE", isSpoiler: false },
+        { key: "ALIENS", isSpoiler: true },
+        { key: "DEMONS", isSpoiler: false },
+        { key: "ANIMALS", isSpoiler: false },
+        { key: "TRAVEL", isSpoiler: false },
+      ],
       // -----
       creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
@@ -25,8 +53,25 @@ const execute = async (db: PrismaClient) => {
       {
         id: "dfcbb111-8176-4d1b-a9ec-a1883aa3d3ca",
         title: "Naruto",
-        language: "ENGLISH",
-        isAcronym: false,
+        language: "en",
+        isMainTitle: true,
+        priority: 1,
+        mediaId: "d696e020-f234-44c4-9cba-8bb5359b156b",
+        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+      },
+      {
+        id: "86d466de-7a38-4348-a573-6e97f2278c6a",
+        title: "ナルト",
+        language: "ja",
+        priority: 1,
+        mediaId: "d696e020-f234-44c4-9cba-8bb5359b156b",
+        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+      },
+      {
+        id: "c34e3c12-fef6-42d9-b6d4-d92a8198ade5",
+        title: "나루토",
+        language: "ko",
+        priority: 1,
         mediaId: "d696e020-f234-44c4-9cba-8bb5359b156b",
         creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
       },
@@ -73,6 +118,7 @@ const execute = async (db: PrismaClient) => {
       {
         id: "64cfc197-2223-4051-a71e-737fbc6eca6f",
         volume: 2,
+        isMainCover: true,
         mediaId: "d696e020-f234-44c4-9cba-8bb5359b156b",
         uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
       },
@@ -87,168 +133,13 @@ const execute = async (db: PrismaClient) => {
     },
   });
 
-  await db.mediaTag.createMany({
-    data: [
-      {
-        id: "959e9128-c902-46c6-974e-1b3ade2a7c15",
-        tagId: "65236ec1-2a69-4404-9475-c37f17866ae7",
-        mediaId: "d696e020-f234-44c4-9cba-8bb5359b156b",
-        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
-      },
-      {
-        id: "b210f488-9c3e-459f-a9c0-b2326ebd9a31",
-        tagId: "a4a1b84b-0dd6-42ac-9076-161e3e29be5a",
-        mediaId: "d696e020-f234-44c4-9cba-8bb5359b156b",
-        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
-      },
-      {
-        id: "f2e4b62e-6864-428c-90fa-98206f25962c",
-        tagId: "09d0e77b-1884-44ba-859a-2492764b593d",
-        mediaId: "d696e020-f234-44c4-9cba-8bb5359b156b",
-        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
-      },
-      {
-        id: "b84c8e7c-87cc-4cb7-9c59-ecbaadca0619",
-        tagId: "2e3a4b25-8e67-4525-a4ff-a10c02ccea4e",
-        mediaId: "d696e020-f234-44c4-9cba-8bb5359b156b",
-        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
-      },
-      {
-        id: "f4f61889-494c-473b-9054-34a71a9e18aa",
-        tagId: "9c113811-666b-4d03-b425-d3ea72e6ad30",
-        mediaId: "d696e020-f234-44c4-9cba-8bb5359b156b",
-        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
-      },
-      {
-        id: "be144542-f10b-4595-b6dc-d9c508872ca2",
-        tagId: "9f8204b0-49aa-4f16-9226-99b11856462c",
-        mediaId: "d696e020-f234-44c4-9cba-8bb5359b156b",
-        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
-      },
-      {
-        id: "cf9fb4e7-5b6b-42f1-b2c3-361b6c1fdaa1",
-        tagId: "4b1c3069-4292-405d-9bf0-49c84ff08fea",
-        mediaId: "d696e020-f234-44c4-9cba-8bb5359b156b",
-        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
-      },
-      {
-        id: "45b82a3e-3b87-4da8-a971-396c4ba3b011",
-        tagId: "b880a351-7f91-4acd-aeaf-92641da78488",
-        mediaId: "d696e020-f234-44c4-9cba-8bb5359b156b",
-        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
-      },
-      {
-        id: "00432f58-af35-4f08-84fb-ff35fae54da1",
-        tagId: "b3dab39f-a1c7-4f0f-8541-3417d3eac0e0",
-        mediaId: "d696e020-f234-44c4-9cba-8bb5359b156b",
-        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
-      },
-      {
-        id: "c68fbbd1-ca43-417a-bb5b-21bc611f1c53",
-        tagId: "dd14785e-875a-4669-9558-112261c5b375",
-        mediaId: "d696e020-f234-44c4-9cba-8bb5359b156b",
-        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
-      },
-      {
-        id: "939395cf-8c8a-4dae-bbd5-dc0821d7b52b",
-        tagId: "5952eed9-433d-4aeb-89e7-75c31f86db69",
-        mediaId: "d696e020-f234-44c4-9cba-8bb5359b156b",
-        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
-      },
-      {
-        id: "050b0cbc-3ce2-4c71-a8b7-49ff548f970c",
-        tagId: "8a47ea2e-a7d2-46bb-afc6-e60560d11e27",
-        mediaId: "d696e020-f234-44c4-9cba-8bb5359b156b",
-        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
-      },
-      {
-        id: "59c4a5e0-d049-49d4-b1cb-31bb56b86a74",
-        tagId: "18876aa0-17a9-4321-ab88-756c41b8e578",
-        mediaId: "d696e020-f234-44c4-9cba-8bb5359b156b",
-        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
-      },
-      {
-        id: "4209f46a-f8aa-4851-8cee-c78d6be12e5e",
-        tagId: "5ded48f1-6d8f-4cfc-9de2-d3f4994bfe0e",
-        mediaId: "d696e020-f234-44c4-9cba-8bb5359b156b",
-        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
-      },
-      {
-        id: "1dab7cb0-5257-4dfe-9949-ae71f3cb5735",
-        tagId: "27249d9d-3f17-48b1-a141-9cb082dc4e4f",
-        mediaId: "d696e020-f234-44c4-9cba-8bb5359b156b",
-        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
-      },
-      {
-        id: "54ec29f8-725d-48be-9285-4660d2d286b2",
-        tagId: "85e0b4be-7aa4-48ff-8e75-286698231efa",
-        mediaId: "d696e020-f234-44c4-9cba-8bb5359b156b",
-        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
-      },
-      {
-        id: "e4eadd3e-5af2-40ec-9d00-e84299808139",
-        tagId: "0ffe4ff1-3659-4022-97be-9d5052d207b9",
-        mediaId: "d696e020-f234-44c4-9cba-8bb5359b156b",
-        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
-      },
-      {
-        id: "d91e208f-2d3e-4ebe-91de-f5666c62f476",
-        tagId: "c1de014c-e140-4aef-93f8-755bc102afe1",
-        mediaId: "d696e020-f234-44c4-9cba-8bb5359b156b",
-        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
-      },
-      {
-        id: "2eea3a1f-fe8e-46c2-88ad-3c0af4ab6b03",
-        tagId: "8c4ad2b2-eb36-46b4-b711-ccb57876baf9",
-        mediaId: "d696e020-f234-44c4-9cba-8bb5359b156b",
-        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
-      },
-      {
-        id: "4b07423f-e62a-4df8-82b5-abfb385ae48f",
-        tagId: "ed3b7aa1-2f58-44de-b787-7044dd9e2767",
-        mediaId: "d696e020-f234-44c4-9cba-8bb5359b156b",
-        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
-      },
-      {
-        id: "27fdc793-9cf0-442a-afc3-62204f057479",
-        tagId: "76e664e3-bb0d-4469-b409-a66854e1f2a1",
-        mediaId: "d696e020-f234-44c4-9cba-8bb5359b156b",
-        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
-      },
-      {
-        id: "77c32e27-7269-4fae-8ab3-3bc28f0d9c9b",
-        tagId: "97f82590-e106-484e-b8e1-99f349bbe0ce",
-        mediaId: "d696e020-f234-44c4-9cba-8bb5359b156b",
-        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
-      },
-      {
-        id: "50637bc3-3539-4fba-8ee1-a0bb27e84d8f",
-        tagId: "ff3714a9-9137-4982-aebe-afffa04c731d",
-        mediaId: "d696e020-f234-44c4-9cba-8bb5359b156b",
-        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
-      },
-      {
-        id: "7cf1113c-b19a-4ffa-b151-8cb2bd3661cf",
-        tagId: "9f124a35-5c1d-45eb-9ad4-a5b1661f5c30",
-        mediaId: "d696e020-f234-44c4-9cba-8bb5359b156b",
-        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
-      },
-      {
-        id: "a6a9874a-b257-459b-9b87-3be29a129d10",
-        tagId: "eed7e244-4455-45e6-90a1-b38816866caa",
-        mediaId: "d696e020-f234-44c4-9cba-8bb5359b156b",
-        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
-      },
-    ],
-  });
-
   await db.mediaChapter.createMany({
     data: [
       {
         id: "eeecfe08-1813-4267-a51f-32463b2c4d5f",
         number: 0,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "b958f74b-8850-4526-a9e3-75b72f9a9807" },
           { id: "8d0e6745-6e03-4bd0-b32a-516089532bed" },
@@ -310,7 +201,7 @@ const execute = async (db: PrismaClient) => {
         id: "7f12a84d-4a43-430c-aaca-c3b4eba0a8af",
         number: 1,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "a2a3b77d-108b-4660-b772-196e90f929b3" },
           { id: "86cc6fa5-1b2f-4de8-9f24-09d53cbaea92" },
@@ -343,7 +234,7 @@ const execute = async (db: PrismaClient) => {
         id: "99ddad2d-f566-4fa7-9da7-c9be91d432ef",
         number: 2,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "78fccff8-c00f-4e17-8f31-dba2aca8276a" },
           { id: "c32eeb3e-4125-4e2d-9784-b3a17d8a62e0" },
@@ -377,7 +268,7 @@ const execute = async (db: PrismaClient) => {
         id: "9bf674bb-9bdd-46e4-9be5-c98581e4ffae",
         number: 3,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "fb95f3aa-8702-45e5-8593-4c1f6a69f7cf" },
           { id: "6df4170e-cba2-4cdb-95b4-de739e385858" },
@@ -406,7 +297,7 @@ const execute = async (db: PrismaClient) => {
         id: "1ff589b6-fb23-46ed-be01-9f0048e37b27",
         number: 4,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "e09ae63e-8d38-44fe-8d6b-69ccf90333c6" },
           { id: "27543bd4-4f89-4672-b8dd-ed97ee6560fb" },
@@ -435,7 +326,7 @@ const execute = async (db: PrismaClient) => {
         id: "6a146382-5a6a-40f9-b1bf-8f7b86722eda",
         number: 5,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "7c6a5038-98f6-4184-9b22-27c952af291c" },
           { id: "0e5f4143-f536-4b97-a885-58a3f385badd" },
@@ -464,7 +355,7 @@ const execute = async (db: PrismaClient) => {
         id: "382ebe6c-9995-4763-8c70-7e219172c17b",
         number: 6,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "06d58f25-7978-42d4-8be2-6e231046053a" },
           { id: "9fbfb50d-38f8-470b-b28f-7b4a80c89aba" },
@@ -491,7 +382,7 @@ const execute = async (db: PrismaClient) => {
         id: "89dd80a3-a138-4b42-b929-8231dd0cec91",
         number: 7,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "7f393d7a-387a-4bb3-b4bc-37c15bea0403" },
           { id: "11749ffe-5ef6-4a33-8765-a56696dab0d2" },
@@ -519,7 +410,7 @@ const execute = async (db: PrismaClient) => {
         id: "7ec3e583-b14f-4486-bc6c-a6fd000a2d0e",
         number: 8,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "103dcb68-a6c6-440a-9cfb-f9b8e974168c" },
           { id: "abf2dd3b-f635-4b62-ac60-620154759ffd" },
@@ -549,7 +440,7 @@ const execute = async (db: PrismaClient) => {
         id: "d8f0ec3d-7d95-4e93-a86c-bcb15193f373",
         number: 9,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "55f8b867-9a0c-4ada-89b9-655ad69ef922" },
           { id: "5bd1bb9b-0d17-4043-b968-c85646d4ed56" },

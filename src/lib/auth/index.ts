@@ -1,5 +1,5 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import type { User } from "@prisma/client";
+import type { Languages, User } from "@prisma/client";
 import type { AdapterUser, DefaultSession, NextAuthOptions } from "next-auth";
 import DiscordProvider from "next-auth/providers/discord";
 
@@ -27,6 +27,8 @@ declare module "next-auth" {
         name: string;
         permissions: Permission[];
       };
+      /** The user's preferred titles language. */
+      preferredTitles: Languages | null;
     } & DefaultSession["user"];
   }
 }
@@ -38,6 +40,8 @@ declare module "next-auth/jwt" {
       name: string;
       permissions: Permission[];
     };
+    /** The user's preferred titles language. */
+    preferredTitles: Languages | null;
   }
 }
 
@@ -68,17 +72,22 @@ export const authOptions: NextAuthOptions = {
   },
   session: { strategy: "jwt" },
   callbacks: {
-    jwt: ({ user, token }) => {
+    jwt: async ({ user, token }) => {
       if (!user || !("role" in user)) {
         return token;
       }
 
       const adapterUser = user as AdapterUser;
+      const userSettings = await db.userSetting.findFirst({
+        where: { userId: adapterUser.id },
+      });
 
       token.role = {
         name: adapterUser.role,
         permissions: PermissionUtils.getRolePermissions(adapterUser.role),
       };
+
+      token.preferredTitles = userSettings?.preferredTitleLanguage ?? null;
 
       return token;
     },
@@ -88,7 +97,17 @@ export const authOptions: NextAuthOptions = {
         ...session.user,
         id: token.sub,
         role: token.role,
+        preferredTitles: token.preferredTitles,
       },
     }),
+  },
+  events: {
+    createUser: async ({ user }) => {
+      await db.userSetting.create({
+        data: {
+          userId: user.id,
+        },
+      });
+    },
   },
 };

@@ -4,6 +4,7 @@ import type {
   MediaChapter,
   MediaCover,
   MediaTitle,
+  MediaTracker,
   Scan,
   User,
 } from "@prisma/client";
@@ -31,6 +32,12 @@ export type MediaLimitedChapter = {
   }[];
 };
 
+export type MediaLimitedChapterPagination = {
+  chapters: MediaLimitedChapter[];
+  // -----
+  totalPages: number;
+};
+
 export type MediaChapterGroup = {
   number: MediaChapter["number"];
   chapters: MediaLimitedChapter[];
@@ -41,11 +48,26 @@ export type MediaLimited = {
   id: Media["id"];
   // -----
   synopsis: Media["synopsis"];
+  genres: Media["genres"];
+  tags: PrismaJson.MediaTag[];
+  // -----
+  mainTitle: MediaTitle["title"];
+  titles: Pick<
+    MediaTitle,
+    "title" | "language" | "priority" | "isAcronym" | "isMainTitle"
+  >[];
+  coverId: MediaCover["id"];
+  bannerId: MediaBanner["id"] | null;
+  trackers: Pick<MediaTracker, "tracker" | "externalId">[];
+};
+
+export type SearchedMedia = {
+  id: Media["id"];
+  // -----
+  synopsis: Media["synopsis"];
   // -----
   title: MediaTitle["title"];
   coverId: MediaCover["id"];
-  bannerId: MediaBanner["id"] | null;
-  chapters: MediaLimitedChapter[];
-  // -----
-  totalPages: number;
 };
+
+export type MediaTabs = "info" | "chapters";
