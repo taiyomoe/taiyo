@@ -18,7 +18,7 @@ const getUserLibrary = async (userId: string | undefined) => {
   return userLibrary;
 };
 
-const getMediaStatusFromUserLibrary = async (
+const getUserLibraryMedia = async (
   userId: string | undefined,
   mediaId: string,
 ) => {
@@ -30,7 +30,7 @@ const getMediaStatusFromUserLibrary = async (
 
   for (const [status, libraryEntries] of Object.entries(statusKeys)) {
     const media = libraryEntries.find((entry) => entry.mediaId === mediaId);
-    if (media) return status as UserLibraryStatus;
+    if (media) return { ...media, status: status as UserLibraryStatus };
   }
 
   return null;
@@ -38,5 +38,5 @@ const getMediaStatusFromUserLibrary = async (
 
 export const LibrariesService = {
   getUserLibrary,
-  getMediaStatusFromUserLibrary,
+  getUserLibraryMedia,
 };

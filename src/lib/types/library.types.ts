@@ -14,3 +14,7 @@ export type UserLibraryMedia = {
   coverId: string;
   mainTitle: string;
 };
+
+export type UserLibraryMediaWithStatus = UserLibraryMedia & {
+  status: UserLibraryStatus;
+};

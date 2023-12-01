@@ -1,10 +1,9 @@
 import { tv } from "@nextui-org/react";
-import { useAtomValue } from "jotai";
 
-import { userLibarySidebarStateAtom } from "~/atoms/userLibrary.atoms";
 import { UserLibrarySidebarTabs } from "~/components/library/UserLibrarySidebarTabs";
 import { UserLibrarySidebarTitle } from "~/components/library/UserLibrarySidebarTitle";
 import { useDevice } from "~/hooks/useDevice";
+import { useLibraryStore } from "~/stores";
 
 const userLibrarySidebar = tv({
   slots: {
@@ -26,7 +25,7 @@ const userLibrarySidebar = tv({
 });
 
 export const UserLibrarySidebar = () => {
-  const sidebarState = useAtomValue(userLibarySidebarStateAtom);
+  const { sidebarState } = useLibraryStore();
   const { isMobile } = useDevice();
   const slots = userLibrarySidebar({ isMobile });
 

@@ -55,7 +55,7 @@ export type MediaLimited = {
   genres: Media["genres"];
   tags: PrismaJson.MediaTag[];
   // -----
-  userLibraryStatus: UserLibraryStatus | null;
+  userLibrary: { status: UserLibraryStatus; updatedAt: string } | null;
   // -----
   mainTitle: MediaTitle["title"];
   titles: Pick<

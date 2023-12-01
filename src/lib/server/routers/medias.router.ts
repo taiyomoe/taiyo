@@ -118,11 +118,10 @@ export const mediasRouter = createTRPCRouter({
         throw new NotFoundError();
       }
 
-      const mediaStatusFromUserLibrary =
-        await LibrariesService.getMediaStatusFromUserLibrary(
-          ctx.session?.user.id,
-          mediaId,
-        );
+      const userLibraryMedia = await LibrariesService.getUserLibraryMedia(
+        ctx.session?.user.id,
+        mediaId,
+      );
 
       const mediaLimited: MediaLimited = {
         id: mediaId,
@@ -130,7 +129,12 @@ export const mediasRouter = createTRPCRouter({
         genres: result.genres,
         tags: result.tags,
         // ----- USER LIBRARY
-        userLibraryStatus: mediaStatusFromUserLibrary,
+        userLibrary: userLibraryMedia
+          ? {
+              status: userLibraryMedia.status,
+              updatedAt: userLibraryMedia.updatedAt,
+            }
+          : null,
         // ----- RELATIONS
         coverId: result.covers.at(0)!.id,
         bannerId: result.banners.at(0)?.id ?? null,
