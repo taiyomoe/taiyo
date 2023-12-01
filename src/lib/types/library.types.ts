@@ -19,5 +19,5 @@ export type UserLibraryMedia = {
 };
 
 export type UserLibraryMediaWithStatus = UserLibraryMedia & {
-  status: UserLibraryStatus;
+  libraryStatus: UserLibraryStatus;
 };
