@@ -55,9 +55,7 @@ const getEntry = <T extends UserLibrary | LibraryState>(
     );
 
     if (media)
-      return { ...media, status } as T[typeof status][number] & {
-        status: typeof status;
-      };
+      return { ...media, libraryStatus: status } as T[typeof status][number];
   }
 };
 

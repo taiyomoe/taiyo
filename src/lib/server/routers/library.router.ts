@@ -63,12 +63,13 @@ export const libraryRouter = createTRPCRouter({
         updatedAt: new Date(
           library.find((m) => m.mediaId === media.id)!.updatedAt,
         ),
-        status: media.status,
         coverId: media.covers.at(0)?.id ?? "",
         mainTitle: MediaUtils.getMainTitle(
           media.titles,
           ctx.session?.user.preferredTitles ?? null,
         ),
+        mediaStatus: media.status,
+        libraryStatus: input.status,
       }));
 
       return libraryMedias;
