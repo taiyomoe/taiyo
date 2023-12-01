@@ -22,7 +22,7 @@ const getStatuses = <T extends UserLibrary | LibraryState>(userLibrary: T) => ({
   planToRead: userLibrary.planToRead as T["planToRead"],
 });
 
-const getStatusLabel = (input: string | null) => {
+const getStatusLabel = (input?: string | null) => {
   switch (input) {
     case "reading":
       return "Lendo";

@@ -1,9 +1,17 @@
 import { create } from "zustand";
 
-import type { UserLibraryMedia, UserLibraryStatus } from "~/lib/types";
+import type {
+  MediaLimited,
+  UserLibraryMedia,
+  UserLibraryMediaWithStatus,
+  UserLibraryStatus,
+} from "~/lib/types";
 import { LibraryUtils } from "~/lib/utils/library.utils";
 
 export type LibraryState = {
+  sidebarState: "show" | "hide";
+  toggleSidebar: () => void;
+
   reading: UserLibraryMedia[];
   rereading: UserLibraryMedia[];
   completed: UserLibraryMedia[];
@@ -11,15 +19,23 @@ export type LibraryState = {
   dropped: UserLibraryMedia[];
   planToRead: UserLibraryMedia[];
 
-  populate: (status: UserLibraryStatus, entries: UserLibraryMedia[]) => void;
-
+  addEntries: (status: UserLibraryStatus, entries: UserLibraryMedia[]) => void;
+  getEntry: (mediaId: string) => UserLibraryMediaWithStatus | undefined;
   updateEntry: (
-    mediaId: string,
+    media: MediaLimited,
     newStatus: UserLibraryStatus | "delete",
   ) => void;
 };
 
-export const useLibraryStore = create<LibraryState>((set) => ({
+export const useLibraryStore = create<LibraryState>((set, get) => ({
+  sidebarState: "hide",
+  toggleSidebar: () => {
+    set((state) => ({
+      ...state,
+      sidebarState: state.sidebarState === "show" ? "hide" : "show",
+    }));
+  },
+
   reading: [],
   rereading: [],
   completed: [],
@@ -27,25 +43,25 @@ export const useLibraryStore = create<LibraryState>((set) => ({
   dropped: [],
   planToRead: [],
 
-  populate: (status, entries) => {
-    set((state) => {
-      const newState = { ...state };
-      newState[status] = entries;
-
-      return newState;
-    });
+  addEntries: (status, entries) => {
+    set((state) => ({
+      ...state,
+      [status]: entries,
+    }));
   },
-
-  updateEntry: (mediaId, newStatus) => {
+  getEntry: (mediaId) => LibraryUtils.getEntry(get(), mediaId),
+  updateEntry: (media, newStatus) => {
     set((state) => {
       const newState = { ...state };
-      const entry = LibraryUtils.getEntry(newState, mediaId)!;
+      const entry = LibraryUtils.getEntry(newState, media.id)!;
 
-      LibraryUtils.deleteEntry(newState, mediaId);
+      LibraryUtils.deleteEntry(newState, media.id);
 
       if (newStatus !== "delete") {
         newState[newStatus].push({
-          ...entry,
+          id: (entry ?? media).id,
+          coverId: (entry ?? media).coverId,
+          mainTitle: (entry ?? media).mainTitle,
           updatedAt: new Date(),
         });
       }

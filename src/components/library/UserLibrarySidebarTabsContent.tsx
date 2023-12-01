@@ -17,7 +17,7 @@ type Props = {
 };
 
 export const UserLibrarySidebarTabsContent = ({ status }: Props) => {
-  const { populate } = useLibraryStore();
+  const { addEntries } = useLibraryStore();
   const { data: session } = useSession();
   const { data, isLoading } = api.libary.getLibrary.useQuery(
     {
@@ -29,9 +29,9 @@ export const UserLibrarySidebarTabsContent = ({ status }: Props) => {
 
   useEffect(() => {
     if (data) {
-      populate(status, data);
+      addEntries(status, data);
     }
-  }, [data, populate, status]);
+  }, [data, addEntries, status]);
 
   if (isLoading || !data) {
     return (

@@ -1,26 +1,23 @@
-import type { Dispatch } from "react";
 import type { Selection } from "@nextui-org/react";
 import { Select, SelectItem } from "@nextui-org/select";
-import type { SetStateAction } from "jotai";
 
 import { api } from "~/lib/trpc/client";
 import type {
   MediaLimited,
-  UserLibraryMedia,
   UserLibraryStatus,
   UserLibraryStatusWithDelete,
 } from "~/lib/types";
 import { LibraryUtils } from "~/lib/utils/library.utils";
 import { SelectUtils } from "~/lib/utils/select.utils";
+import { useLibraryStore } from "~/stores";
 
 type Props = {
-  media: MediaLimited | UserLibraryMedia;
-  currentStatus: Selection;
-  setCurrentStatus: Dispatch<SetStateAction<Selection>>;
+  media: MediaLimited;
+  currentStatus?: UserLibraryStatus;
 };
 
-export const UserLibraryStatusSelect = (props: Props) => {
-  const { media, currentStatus, setCurrentStatus } = props;
+export const UserLibraryStatusSelect = ({ media, currentStatus }: Props) => {
+  const { updateEntry } = useLibraryStore();
   const { mutate } = api.libary.updateLibrary.useMutation();
 
   const handleSelectionChange = (selection: Selection) => {
@@ -29,7 +26,7 @@ export const UserLibraryStatusSelect = (props: Props) => {
       | "delete";
 
     mutate({ mediaId: media.id, status: selectedKey });
-    setCurrentStatus(selectedKey === "delete" ? new Set([]) : selection);
+    updateEntry(media, selectedKey);
   };
 
   return (
@@ -44,7 +41,7 @@ export const UserLibraryStatusSelect = (props: Props) => {
       labelPlacement="outside"
       placeholder="Selecione uma opção"
       variant="bordered"
-      selectedKeys={currentStatus}
+      selectedKeys={currentStatus ? new Set([currentStatus]) : new Set()}
       onSelectionChange={handleSelectionChange}
       selectionMode="single"
     >
