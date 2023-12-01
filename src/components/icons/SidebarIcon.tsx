@@ -6,11 +6,11 @@ import {
   PanelRightOpenIcon,
 } from "lucide-react";
 
-import type { ReaderSettings } from "~/lib/types";
+import type { ReaderSettings } from "~/stores";
 
 type Props = {
   action: "open" | "close";
-  side: ReaderSettings["sidebarSide"];
+  side: ReaderSettings["sidebar"]["side"];
 } & LucideProps;
 
 export const SidebarIcon = ({ action, side, ...rest }: Props) => {

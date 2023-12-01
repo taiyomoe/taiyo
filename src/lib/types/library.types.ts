@@ -1,3 +1,5 @@
+import type { Media } from "@prisma/client";
+
 export type UserLibraryStatus =
   | "reading"
   | "rereading"
@@ -13,8 +15,6 @@ export type UserLibraryMedia = {
   updatedAt: Date;
   coverId: string;
   mainTitle: string;
-};
-
-export type UserLibraryMediaWithStatus = UserLibraryMedia & {
-  status: UserLibraryStatus;
+  mediaStatus: Media["status"];
+  libraryStatus: UserLibraryStatus;
 };

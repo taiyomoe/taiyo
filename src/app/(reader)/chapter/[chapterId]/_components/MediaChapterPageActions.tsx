@@ -1,8 +1,7 @@
 import { tv } from "@nextui-org/react";
-import { useAtomValue } from "jotai";
 
 import { ReaderSettingsMediaChapterDropdown } from "~/app/(reader)/_components/sidebarMode/ui/ReaderSettingsMediaChapterDropdown";
-import { readerPageModeAtom } from "~/atoms/readerSettings.atoms";
+import { useReaderStore } from "~/stores";
 
 const mediaChapterPageActions = tv({
   slots: {
@@ -11,7 +10,7 @@ const mediaChapterPageActions = tv({
 });
 
 export const MediaChapterPageActions = () => {
-  const pageMode = useAtomValue(readerPageModeAtom);
+  const pageMode = useReaderStore((state) => state.settings.pageMode);
 
   const { container } = mediaChapterPageActions();
 

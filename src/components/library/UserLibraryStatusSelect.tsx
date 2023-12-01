@@ -42,11 +42,14 @@ export const UserLibraryStatusSelect = ({ media, currentStatus }: Props) => {
       placeholder="Selecione uma opção"
       variant="bordered"
       selectedKeys={currentStatus ? new Set([currentStatus]) : new Set()}
+      disabledKeys={
+        media.status !== "FINISHED" ? new Set(["completed"]) : new Set()
+      }
       onSelectionChange={handleSelectionChange}
       selectionMode="single"
     >
       {(LibraryUtils.getStatusKeys() as UserLibraryStatusWithDelete[])
-        .concat(["delete"])
+        .concat(currentStatus ? ["delete"] : [])
         .map((status) => (
           <SelectItem
             key={status}

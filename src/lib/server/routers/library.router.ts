@@ -1,4 +1,5 @@
 import { getLibrarySchema, updateLibrarySchema } from "~/lib/schemas";
+import { MediaService } from "~/lib/services";
 import type { UserLibraryMedia } from "~/lib/types";
 import { MediaUtils } from "~/lib/utils/media.utils";
 
@@ -34,6 +35,7 @@ export const libraryRouter = createTRPCRouter({
       const medias = await ctx.db.media.findMany({
         select: {
           id: true,
+          status: true,
           covers: {
             select: { id: true },
             where: { isMainCover: true },
@@ -66,6 +68,8 @@ export const libraryRouter = createTRPCRouter({
           media.titles,
           ctx.session?.user.preferredTitles ?? null,
         ),
+        mediaStatus: media.status,
+        libraryStatus: input.status,
       }));
 
       return libraryMedias;
@@ -104,6 +108,14 @@ export const libraryRouter = createTRPCRouter({
           mediaId: input.mediaId,
           updatedAt: new Date().toISOString(),
         });
+      }
+
+      const status = await MediaService.getStatus(input.mediaId);
+
+      if (input.status === "completed" && status !== "FINISHED") {
+        throw new Error(
+          "Cannot mark as completed a media that is not finished",
+        );
       }
 
       await ctx.db.userLibrary.update({

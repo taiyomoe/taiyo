@@ -42,19 +42,20 @@ const ThemeSwitch = () => {
           className="px-3 text-small"
           variant="solid"
           startContent={renderButtonIcon()}
+          isDisabled
         >
           {renderButtonContent()}
         </Button>
       </DropdownTrigger>
-      <DropdownMenu selectionMode="single">
+      <DropdownMenu selectionMode="single" aria-label="Theme options">
         <DropdownItem value="system" onPress={() => setTheme("system")}>
-          System
+          Sistema
         </DropdownItem>
         <DropdownItem value="dark" onPress={() => setTheme("dark")}>
-          Dark
+          Escuro
         </DropdownItem>
         <DropdownItem value="light" onPress={() => setTheme("light")}>
-          Light
+          Branco
         </DropdownItem>
       </DropdownMenu>
     </Dropdown>

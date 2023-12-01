@@ -1,69 +1,72 @@
-import { useEffect, useRef, useState } from "react";
-import { useAtomValue, useSetAtom } from "jotai";
+import { useRef, useState } from "react";
 
-import { mediaChapterAtom } from "~/atoms/mediaChapter.atoms";
-import { readerPageModeAtom } from "~/atoms/readerSettings.atoms";
 import type { ReaderImage } from "~/lib/types";
 import { MediaChapterImageUtils } from "~/lib/utils/mediaChapterImage.utils";
-
-import { useChapterNavigation } from "./useChapterNavigation";
+import { useReaderStore } from "~/stores";
 
 export const useChapterImages = () => {
-  const { chapter, navigation } = useChapterNavigation();
+  const { chapter, navigation, settings } = useReaderStore();
   const [images, setImages] = useState<ReaderImage[]>([]);
   const previousCurrentPage = useRef<number | undefined>(
     navigation?.currentPage,
   );
-
-  const pageMode = useAtomValue(readerPageModeAtom);
-  const setChapter = useSetAtom(mediaChapterAtom);
+  const [currentlyLoading, setCurrentlyLoading] = useState<string[]>([]);
+  const [fetchedLongstrip, setFetchedLongstrip] = useState(false);
 
   const loadImage = async (url: string) => {
+    setCurrentlyLoading((prev) => [...prev, url]);
     const image = await fetch(url).then((res) => res.blob());
 
     return URL.createObjectURL(image);
   };
 
+  // Load images when the chapter or the current page changes in single page mode
   if (
     chapter &&
     navigation &&
+    settings.pageMode === "single" &&
     (navigation.currentPage !== previousCurrentPage.current ||
       images.length === 0)
   ) {
     previousCurrentPage.current = navigation.currentPage;
 
-    if (pageMode === "single") {
-      const mergedImages = MediaChapterImageUtils.mergeImages(
-        chapter,
-        navigation,
-        images,
-      );
+    const mergedImages = MediaChapterImageUtils.mergeImages(
+      chapter,
+      navigation,
+      images,
+    );
 
-      void Promise.all(
-        mergedImages
-          .filter((x) => !images.some((y) => y.number === x.number))
-          .map(async (image) => ({
-            ...image,
-            blobUrl: await loadImage(image.url),
-          })),
-      ).then((newImages) => setImages([...images, ...newImages]));
-    }
-
-    if (pageMode === "longstrip" && images.length === 0) {
-      void Promise.all(
-        MediaChapterImageUtils.getImages(chapter).map(async (image) => ({
+    void Promise.all(
+      mergedImages
+        .filter((x) => !images.some((y) => y.number === x.number))
+        .filter((x) => !currentlyLoading.includes(x.url))
+        .map(async (image) => ({
           ...image,
           blobUrl: await loadImage(image.url),
         })),
-      ).then(setImages);
-    }
+    ).then((newImages) => setImages([...images, ...newImages]));
   }
 
-  useEffect(() => {
-    return () => {
-      setChapter(null);
-    };
-  }, [setChapter]);
+  // Load all images on longstrip mode
+  if (
+    chapter &&
+    settings.pageMode === "longstrip" &&
+    fetchedLongstrip === false
+  ) {
+    void Promise.all(
+      MediaChapterImageUtils.getImages(chapter)
+        .filter((x) => !images.some((y) => y.number === x.number))
+        .filter((x) => !currentlyLoading.includes(x.url))
+        .map(async (image) => ({
+          ...image,
+          blobUrl: await loadImage(image.url),
+        })),
+    )
+      .then((newImages) => setImages([...images, ...newImages]))
+      .finally(() => {
+        setFetchedLongstrip(true);
+      });
+  }
 
-  return { images, pageMode };
+  return { images };
 };

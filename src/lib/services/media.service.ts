@@ -1,3 +1,5 @@
+import type { MediaStatus } from "@prisma/client";
+
 import { db } from "~/lib/server/db";
 import type { MediasIndexItem } from "~/lib/types/meilisearch.types";
 
@@ -49,6 +51,24 @@ const getIndexItem = async (mediaId: string): Promise<MediasIndexItem> => {
   };
 };
 
-export const MediasService = {
+/**
+ * Gets the status of a media.
+ * Used to check wether or not a user can complete a media.
+ */
+const getStatus = async (mediaId: string): Promise<MediaStatus> => {
+  const result = await db.media.findUnique({
+    select: { status: true },
+    where: { id: mediaId },
+  });
+
+  if (!result) {
+    throw new Error(`Media ${mediaId} not found`);
+  }
+
+  return result.status;
+};
+
+export const MediaService = {
   getIndexItem,
+  getStatus,
 };

@@ -34,10 +34,10 @@ const mediaChapterCardTemporary = tv({
     completed: {
       null: {},
       true: {
-        cardBody: "pl-[calc(0.75rem+2px)]",
+        card: "pl-[calc(0.75rem+2px)]",
       },
       false: {
-        cardBody: "border-l-2 border-primary rounded-md",
+        card: "border-l-2 border-primary rounded-md",
       },
     },
     order: {
