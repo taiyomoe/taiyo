@@ -22,7 +22,7 @@ export type LibraryState = {
   addEntries: (status: UserLibraryStatus, entries: UserLibraryMedia[]) => void;
   getEntry: (mediaId: string) => UserLibraryMediaWithStatus | undefined;
   updateEntry: (
-    media: MediaLimited,
+    media: MediaLimited | UserLibraryMedia,
     newStatus: UserLibraryStatus | "delete",
   ) => void;
 };

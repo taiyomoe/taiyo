@@ -24,7 +24,7 @@ export const UserLibrarySidebarDeleteButton = ({ media }: Props) => {
 
   const handleDelete = () => {
     mutate({ mediaId: media.id, status: "delete" });
-    updateEntry(media.id, "delete");
+    updateEntry(media, "delete");
     onOpenChange();
   };
 
