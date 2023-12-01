@@ -1,4 +1,6 @@
+import { useRef } from "react";
 import { tv } from "@nextui-org/react";
+import { useOnClickOutside } from "usehooks-ts";
 
 import { UserLibrarySidebarTabs } from "~/components/library/UserLibrarySidebarTabs";
 import { UserLibrarySidebarTitle } from "~/components/library/UserLibrarySidebarTitle";
@@ -25,12 +27,19 @@ const userLibrarySidebar = tv({
 });
 
 export const UserLibrarySidebar = () => {
-  const { sidebarState } = useLibraryStore();
+  const { sidebarState, toggleSidebar } = useLibraryStore();
   const { isMobile } = useDevice();
   const slots = userLibrarySidebar({ isMobile });
+  const containerRef = useRef(null);
+
+  useOnClickOutside(containerRef, toggleSidebar);
 
   return (
-    <div className={slots.container()} aria-expanded={sidebarState === "show"}>
+    <div
+      className={slots.container()}
+      aria-expanded={sidebarState === "show"}
+      ref={containerRef}
+    >
       <div className={slots.contentWrapper()}>
         <UserLibrarySidebarTitle />
         <div className="flex flex-col gap-2">
