@@ -1,22 +1,15 @@
-import { useEffect, useRef, useState } from "react";
-import { useSetAtom } from "jotai";
+import { useRef, useState } from "react";
 
-import { mediaChapterAtom } from "~/atoms/mediaChapter.atoms";
 import type { ReaderImage } from "~/lib/types";
 import { MediaChapterImageUtils } from "~/lib/utils/mediaChapterImage.utils";
 import { useReaderStore } from "~/stores";
 
-import { useChapterNavigation } from "./useChapterNavigation";
-
 export const useChapterImages = () => {
-  const { chapter, settings } = useReaderStore();
-  const { navigation } = useChapterNavigation();
+  const { chapter, navigation, settings } = useReaderStore();
   const [images, setImages] = useState<ReaderImage[]>([]);
   const previousCurrentPage = useRef<number | undefined>(
     navigation?.currentPage,
   );
-
-  const setChapter = useSetAtom(mediaChapterAtom);
 
   const loadImage = async (url: string) => {
     const image = await fetch(url).then((res) => res.blob());
@@ -58,12 +51,6 @@ export const useChapterImages = () => {
       ).then(setImages);
     }
   }
-
-  useEffect(() => {
-    return () => {
-      setChapter(null);
-    };
-  }, [setChapter]);
 
   return { images };
 };

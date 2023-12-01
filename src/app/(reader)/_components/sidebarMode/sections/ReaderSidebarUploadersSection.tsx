@@ -1,17 +1,15 @@
 "use client";
 
-import { useAtomValue } from "jotai";
-
-import { mediaChapterAtom } from "~/atoms/mediaChapter.atoms";
 import { MediaChapterScans } from "~/components/ui/MediaChapterScans";
 import { MediaChapterUploader } from "~/components/ui/MediaChapterUploader";
+import { useReaderStore } from "~/stores";
 
 type Props = {
   className: string;
 };
 
 export const ReaderSidebarUploadersSection = ({ className }: Props) => {
-  const chapter = useAtomValue(mediaChapterAtom);
+  const { chapter } = useReaderStore();
 
   return (
     <div className={className}>

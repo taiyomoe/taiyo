@@ -39,15 +39,15 @@ const readerSettingsMediaChapterPageDropdown = tv({
 });
 
 export const ReaderSettingsMediaChapterPageDropdown = () => {
-  const { chapter } = useReaderStore();
-  const { currentPage, hasPreviousPage, hasNextPage, goBack, goForward, goTo } =
-    useChapterNavigation();
+  const { chapter, currentPageNumber, hasPreviousPage, hasNextPage } =
+    useReaderStore();
+  const { goBack, goForward, goTo } = useChapterNavigation();
 
   const slots = readerSettingsMediaChapterPageDropdown({
     scollable: (chapter && chapter.pages.length > 9) ?? false,
   });
 
-  if (!chapter || !currentPage) {
+  if (!chapter || !currentPageNumber) {
     return <Skeleton className={slots.skeleton()} />;
   }
 
@@ -63,16 +63,16 @@ export const ReaderSettingsMediaChapterPageDropdown = () => {
             endContent={<ChevronsUpDownIcon size={20} />}
           >
             <div className={slots.textContainer()}>
-              <p>Página {currentPage}</p>
+              <p>Página {currentPageNumber}</p>
               <p className={slots.textDescription()}>
-                {currentPage}/{chapter.pages.length}
+                {currentPageNumber}/{chapter.pages.length}
               </p>
             </div>
           </Button>
         </DropdownTrigger>
         <DropdownMenu
           className={slots.dropdownMenu()}
-          disabledKeys={[`page-${currentPage}`]}
+          disabledKeys={[`page-${currentPageNumber}`]}
           selectionMode="single"
           aria-label="Páginas"
           onSelectionChange={(keys) => {
