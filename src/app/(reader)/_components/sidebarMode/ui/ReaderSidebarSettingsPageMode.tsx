@@ -37,7 +37,7 @@ export const ReaderSidebarSettingsPageMode = () => {
         <Button
           className={rightButton()}
           endContent={<ScrollTextIcon size={20} />}
-          onPress={() => updateSettings("pageMode", "single")}
+          onPress={() => updateSettings("pageMode", "longstrip")}
           color={settings.pageMode === "longstrip" ? "primary" : "default"}
           radius="sm"
         >
