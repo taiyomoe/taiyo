@@ -2,12 +2,11 @@
 
 import type { KeyboardEventHandler } from "react";
 import { useRef } from "react";
-import { useAtomValue } from "jotai";
 import { tv } from "tailwind-variants";
 
-import { readerPageModeAtom } from "~/atoms/readerSettings.atoms";
 import { useChapterNavigation } from "~/hooks/useChapterNavigation";
 import { useKeyPress } from "~/hooks/useKeyPress";
+import { useReaderStore } from "~/stores";
 
 import { MediaChapterImages } from "./MediaChapterImages";
 import { MediaChapterPageActions } from "./MediaChapterPageActions";
@@ -42,7 +41,7 @@ export const MediaChapterPage = () => {
   const backButtonRef = useRef<HTMLButtonElement>(null);
   const forwardButtonRef = useRef<HTMLButtonElement>(null);
 
-  const pageMode = useAtomValue(readerPageModeAtom);
+  const pageMode = useReaderStore((state) => state.settings.pageMode);
 
   const { container, leftButton, rightButton, imagesWrapper } =
     mediaChapterPage({ pageMode });

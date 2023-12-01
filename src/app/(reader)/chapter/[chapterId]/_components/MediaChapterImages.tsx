@@ -3,15 +3,19 @@ import { Spinner } from "@nextui-org/react";
 import { useChapterImages } from "~/hooks/useChapterImages";
 import { useChapterNavigation } from "~/hooks/useChapterNavigation";
 import { useChapterProgression } from "~/hooks/useChapterProgression";
+import { useReaderStore } from "~/stores";
 
 import { MediaChapterImage } from "./MediaChapterImage";
 
 export const MediaChapterImages = () => {
+  const { pageMode } = useReaderStore((state) => state.settings);
   const { currentPage } = useChapterNavigation();
-  const { images, pageMode } = useChapterImages();
+  const { images } = useChapterImages();
   useChapterProgression();
 
   const currentImage = images.find((img) => img.number === currentPage);
+
+  console.log("images", images);
 
   return (
     <div className="mx-auto flex h-full flex-col items-center justify-center">

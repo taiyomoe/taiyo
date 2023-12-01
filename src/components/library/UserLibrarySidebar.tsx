@@ -10,7 +10,7 @@ import { useLibraryStore } from "~/stores";
 const userLibrarySidebar = tv({
   slots: {
     container:
-      "transition-all z-30 top-0 right-0 border-l-divider border-l -mr-readerSidebar aria-expanded:mr-0",
+      "transition-all z-40 top-0 right-0 border-l-divider border-l -mr-readerSidebar aria-expanded:mr-0",
     contentWrapper:
       "bg-content1 w-[calc(var(--library-sidebar-width)-1px)] max-w-[calc(var(--library-sidebar-width)-1px)] right-[unset] width-[unset] flex flex-col gap-4 p-4 overflow-x-hidden overflow-y-auto top-0 max-h-screen h-screen sticky",
   },

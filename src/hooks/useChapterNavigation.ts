@@ -1,22 +1,20 @@
 import { useCallback, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { useAtom, useAtomValue } from "jotai";
+import { useAtom } from "jotai";
 
-import {
-  mediaChapterAtom,
-  mediaChapterNavigationAtom,
-} from "~/atoms/mediaChapter.atoms";
+import { mediaChapterNavigationAtom } from "~/atoms/mediaChapter.atoms";
 import { MediaUtils } from "~/lib/utils/media.utils";
 import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils";
+import { useReaderStore } from "~/stores";
 
 export const useChapterNavigation = () => {
   const router = useRouter();
   const pathname = usePathname();
   const { rawPathname, currentPageNumber: initialPageNumber } =
     MediaChapterUtils.parseUrl(pathname);
-  const chapter = useAtomValue(mediaChapterAtom);
   const [navigation, setNavigation] = useAtom(mediaChapterNavigationAtom);
   const [pageNumber, setPageNumber] = useState(initialPageNumber);
+  const { chapter } = useReaderStore();
 
   const hasPreviousPage = !!navigation?.previousPage;
   const hasNextPage = !!navigation?.nextPage;
@@ -107,7 +105,6 @@ export const useChapterNavigation = () => {
   }
 
   return {
-    chapter,
     navigation,
     currentPage: navigation?.currentPage ?? null,
     hasPreviousPage,
