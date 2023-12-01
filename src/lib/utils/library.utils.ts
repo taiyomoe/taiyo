@@ -29,7 +29,7 @@ const getStatusLabel = (input?: string | null) => {
     case "rereading":
       return "Relendo";
     case "completed":
-      return "Completado";
+      return "Completo";
     case "onHold":
       return "Pausado";
     case "dropped":
