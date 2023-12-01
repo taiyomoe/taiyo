@@ -14,7 +14,7 @@ const initialValues: InsertMediaChapterSchema = {
   title: "Teste",
   number: 0,
   volume: 0,
-  language: "PORTUGUESE",
+  language: "pt_br",
   pages: [],
   contentRating: "NORMAL",
   flag: "OK",

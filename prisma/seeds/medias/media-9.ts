@@ -1,6 +1,6 @@
-import { type PrismaClient } from "@prisma/client";
+import { db } from "~/lib/server/db";
 
-const execute = async (db: PrismaClient) => {
+const execute = async () => {
   await db.media.create({
     data: {
       id: "f0bc42eb-b2f7-4017-89f8-77c1834834b1",
@@ -14,6 +14,11 @@ const execute = async (db: PrismaClient) => {
       source: "WEB_NOVEL",
       demography: "SHOUNEN",
       countryOfOrigin: "USA",
+      genres: ["ACTION", "ADVENTURE", "FANTASY", "SUPERNATURAL"],
+      tags: [
+        { key: "REINCARNATION", isSpoiler: false },
+        { key: "REVENGE", isSpoiler: true },
+      ],
       // -----
       creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
@@ -24,8 +29,58 @@ const execute = async (db: PrismaClient) => {
       {
         id: "02409e2c-6b14-49f8-afa1-ab5cb8bfd75b",
         title: "The Beginning After The End",
-        language: "ENGLISH",
-        isAcronym: false,
+        language: "en",
+        isMainTitle: true,
+        priority: 2,
+        mediaId: "f0bc42eb-b2f7-4017-89f8-77c1834834b1",
+        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+      },
+      {
+        id: "cd722ab8-1b9f-430d-9ac1-98baccc505f9",
+        title: "El comienzo después del fin",
+        language: "es",
+        priority: 1,
+        mediaId: "f0bc42eb-b2f7-4017-89f8-77c1834834b1",
+        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+      },
+      {
+        id: "be912840-ccaa-464f-9097-5b52b772a1e2",
+        title: "最強の王様、二度目の人生は何をする？",
+        language: "ja",
+        priority: 1,
+        mediaId: "f0bc42eb-b2f7-4017-89f8-77c1834834b1",
+        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+      },
+      {
+        id: "f4704711-97b1-42b1-8f3c-4289a1471bd4",
+        title: "끝이 아닌 시작",
+        language: "ko",
+        priority: 1,
+        mediaId: "f0bc42eb-b2f7-4017-89f8-77c1834834b1",
+        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+      },
+      {
+        id: "749986a6-6997-4402-b2a0-63ff8cbb2b49",
+        title: "O começo depois do fim",
+        language: "pt_br",
+        priority: 2,
+        mediaId: "f0bc42eb-b2f7-4017-89f8-77c1834834b1",
+        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+      },
+      {
+        id: "030e6e1e-a69d-425a-b189-7c11acdf0972",
+        title: "O começo após o final",
+        language: "pt_br",
+        priority: 1,
+        mediaId: "f0bc42eb-b2f7-4017-89f8-77c1834834b1",
+        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+      },
+      {
+        id: "6395e361-d791-4ae4-95e7-41095a65b529",
+        title: "TBATE",
+        language: "en",
+        isAcronym: true,
+        priority: 1,
         mediaId: "f0bc42eb-b2f7-4017-89f8-77c1834834b1",
         creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
       },
@@ -57,26 +112,9 @@ const execute = async (db: PrismaClient) => {
       },
       {
         id: "0dfce762-b759-4bae-a528-e0b1f3a00dd9",
+        isMainCover: true,
         mediaId: "f0bc42eb-b2f7-4017-89f8-77c1834834b1",
         uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
-      },
-    ],
-  });
-
-  await db.mediaTag.createMany({
-    data: [
-      {
-        id: "4a94265a-7ee8-4db2-9b14-9a163ad7835a",
-        tagId: "fd04f9f3-5087-4067-8c82-2c8d3105d1eb",
-        mediaId: "f0bc42eb-b2f7-4017-89f8-77c1834834b1",
-        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
-      },
-      {
-        id: "439ad039-b175-4704-bf31-635b4916d057",
-        isSpoiler: true,
-        tagId: "2e3a4b25-8e67-4525-a4ff-a10c02ccea4e",
-        mediaId: "f0bc42eb-b2f7-4017-89f8-77c1834834b1",
-        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
       },
     ],
   });
@@ -87,7 +125,7 @@ const execute = async (db: PrismaClient) => {
         id: "c767d5bc-5e90-478b-9aa5-02d59a404199",
         number: 0,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "0e1b4e46-2cae-49b1-8bd4-6ed4b275f9c1" },
           { id: "8f8d38fb-0702-442a-a7d3-65ce0023454c" },
@@ -142,7 +180,7 @@ const execute = async (db: PrismaClient) => {
         id: "12b4285a-ac0f-44d6-a07c-28fcbfb97a95",
         number: 1,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "518ed9e6-7f1b-45e1-af8a-b9ea6ab165d4" },
           { id: "7a4ca55e-3c7b-4c71-a213-848006edda8c" },
@@ -169,7 +207,7 @@ const execute = async (db: PrismaClient) => {
         id: "29fb9c93-42d7-4660-8c76-ddf6a3a9c92b",
         number: 2,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "ade90733-ed7e-44aa-a888-a900e4e2b3c0" },
           { id: "83680480-20fc-47f2-9e60-064cfa8c5dec" },
@@ -234,7 +272,7 @@ const execute = async (db: PrismaClient) => {
         id: "57afc965-ab41-46c1-8632-34513597961f",
         number: 3,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "1ca7ca68-c6fa-461b-a65e-581e1aa25c2a" },
           { id: "d46bb47a-82bc-470d-a3fe-0e44912dc231" },
@@ -277,7 +315,7 @@ const execute = async (db: PrismaClient) => {
         id: "14dbd09a-2bfa-4e0e-adc6-fc483ae43900",
         number: 4,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "28c90b96-f7bb-4855-9bf4-ac2658625774" },
           { id: "f33a9c95-8a38-4092-b35c-7a3eec9b5da0" },
@@ -312,7 +350,7 @@ const execute = async (db: PrismaClient) => {
         id: "c6a2fa04-45a2-4214-a371-170505c113e2",
         number: 5,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "aaf1b718-9592-4d48-a7d6-a12635784f22" },
           { id: "cd886d3d-01fe-4d20-bc60-8daf7ccf6feb" },
@@ -351,7 +389,7 @@ const execute = async (db: PrismaClient) => {
         id: "c9bd98ec-3c5c-49a7-a140-91c2bc29ed73",
         number: 6,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "d08e9989-fe5b-441a-8387-833fec2518ba" },
           { id: "efd9146f-5f34-43d4-8c57-d04c0454f13c" },
@@ -386,7 +424,7 @@ const execute = async (db: PrismaClient) => {
         id: "d31ec738-32c9-4acd-9586-3d4c4d141bb9",
         number: 7,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "0eda9c66-f0a1-42b3-9635-7d6f32d4ff00" },
           { id: "38f74b07-5aa0-4d93-b57d-5020e037e830" },
@@ -419,7 +457,7 @@ const execute = async (db: PrismaClient) => {
         id: "828aef3e-bf91-4fb6-bbea-2475fcb6c71a",
         number: 8,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "834fb27a-7128-4457-8160-644e6954f601" },
           { id: "df9635b9-081a-482b-a29c-4e08b4a22f05" },
@@ -444,7 +482,7 @@ const execute = async (db: PrismaClient) => {
         id: "b6c43ec3-5cc2-4b40-964d-57e154782a40",
         number: 9,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "0d929afa-898d-4ce8-bbf2-f0fe1f0bd208" },
           { id: "52d87eaa-97c4-4db1-bd18-dfede3aa763e" },

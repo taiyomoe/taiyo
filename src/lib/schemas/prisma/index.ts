@@ -16,32 +16,38 @@ export const transformJsonNull = (v?: NullableJsonInput) => {
   return v;
 };
 
-export const JsonValue: z.ZodType<Prisma.JsonValue> = z.union([
-  z.string(),
-  z.number(),
-  z.boolean(),
-  z.lazy(() => z.array(JsonValue)),
-  z.lazy(() => z.record(JsonValue)),
-]);
+export const JsonValueSchema: z.ZodType<Prisma.JsonValue> = z.lazy(() =>
+  z.union([
+    z.string(),
+    z.number(),
+    z.boolean(),
+    z.literal(null),
+    z.record(z.lazy(() => JsonValueSchema.optional())),
+    z.array(z.lazy(() => JsonValueSchema)),
+  ])
+);
 
-export type JsonValueType = z.infer<typeof JsonValue>;
+export type JsonValueType = z.infer<typeof JsonValueSchema>;
 
 export const NullableJsonValue = z
-  .union([JsonValue, z.literal('DbNull'), z.literal('JsonNull')])
+  .union([JsonValueSchema, z.literal('DbNull'), z.literal('JsonNull')])
   .nullable()
   .transform((v) => transformJsonNull(v));
 
 export type NullableJsonValueType = z.infer<typeof NullableJsonValue>;
 
-export const InputJsonValue: z.ZodType<Prisma.InputJsonValue> = z.union([
-  z.string(),
-  z.number(),
-  z.boolean(),
-  z.lazy(() => z.array(InputJsonValue.nullable())),
-  z.lazy(() => z.record(InputJsonValue.nullable())),
-]);
+export const InputJsonValueSchema: z.ZodType<Prisma.InputJsonValue> = z.lazy(() =>
+  z.union([
+    z.string(),
+    z.number(),
+    z.boolean(),
+    z.object({ toJSON: z.function(z.tuple([]), z.any()) }),
+    z.record(z.lazy(() => z.union([InputJsonValueSchema, z.literal(null)]))),
+    z.array(z.lazy(() => z.union([InputJsonValueSchema, z.literal(null)]))),
+  ])
+);
 
-export type InputJsonValueType = z.infer<typeof InputJsonValue>;
+export type InputJsonValueType = z.infer<typeof InputJsonValueSchema>;
 
 
 /////////////////////////////////////////
@@ -60,23 +66,19 @@ export const SessionScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt'
 
 export const VerificationTokenScalarFieldEnumSchema = z.enum(['identifier','token','expires']);
 
-export const MediaScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','startDate','endDate','synopsis','contentRating','oneShot','trailer','type','status','source','demography','countryOfOrigin','flag','creatorId','deleterId']);
+export const MediaScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','startDate','endDate','synopsis','contentRating','oneShot','trailer','type','status','source','demography','countryOfOrigin','genres','tags','flag','creatorId','deleterId']);
 
-export const MediaCoverScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','volume','contentRating','mediaId','uploaderId','deleterId']);
+export const MediaCoverScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','volume','contentRating','isMainCover','mediaId','uploaderId','deleterId']);
 
 export const MediaBannerScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','contentRating','mediaId','uploaderId','deleterId']);
 
-export const MediaTitleScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','title','language','isAcronym','mediaId','creatorId','deleterId']);
-
-export const MediaTagScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','isSpoiler','tagId','mediaId','creatorId','deleterId']);
+export const MediaTitleScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','title','language','priority','isAcronym','isMainTitle','mediaId','creatorId','deleterId']);
 
 export const MediaTrackerScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','tracker','externalId','mediaId','creatorId','deleterId']);
 
 export const MediaChapterScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','title','number','volume','language','pages','contentRating','flag','mediaId','uploaderId','deleterId']);
 
 export const MediaChapterCommentScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','content','attachments','parentId','mediaChapterId','userId','deleterId']);
-
-export const TagScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','name','description','category','contentRating','alId','creatorId','deleterId']);
 
 export const UploadSessionScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','status','type','userId','mediaId','mediaChapterId']);
 
@@ -94,7 +96,7 @@ export const RolesSchema = z.enum(['USER','MODERATOR','UPLOADER_INTERN','UPLOADE
 
 export type RolesType = `${z.infer<typeof RolesSchema>}`
 
-export const GendersSchema = z.enum(['MALE','FEMALE','OTHER']);
+export const GendersSchema = z.enum(['MALE','FEMALE','OTHER','NOT_SPECIFIED']);
 
 export type GendersType = `${z.infer<typeof GendersSchema>}`
 
@@ -126,13 +128,9 @@ export const MediaCountryOfOriginSchema = z.enum(['JAPAN','KOREA','CHINA','USA',
 
 export type MediaCountryOfOriginType = `${z.infer<typeof MediaCountryOfOriginSchema>}`
 
-export const MediaTitleLanguagesSchema = z.enum(['ENGLISH','JAPANESE','KOREAN','ROMAJI','SPANISH','PORTUGUESE','FRENCH','NATIVE']);
+export const MediaGenresSchema = z.enum(['ACTION','ADVENTURE','COMEDY','DRAMA','ECCHI','FANTASY','HENTAI','HORROR','MAHOU_SHOUJO','MECHA','MUSIC','MYSTERY','PSYCHOLOGICAL','ROMANCE','SCI_FI','SLICE_OF_LIFE','SPORTS','SUPERNATURAL','THRILLER']);
 
-export type MediaTitleLanguagesType = `${z.infer<typeof MediaTitleLanguagesSchema>}`
-
-export const MediaChapterLanguagesSchema = z.enum(['ENGLISH','JAPANESE','SPANISH','PORTUGUESE','FRENCH']);
-
-export type MediaChapterLanguagesType = `${z.infer<typeof MediaChapterLanguagesSchema>}`
+export type MediaGenresType = `${z.infer<typeof MediaGenresSchema>}`
 
 export const TrackersSchema = z.enum(['MANGADEX','MYANIMELIST','ANILIST']);
 
@@ -153,6 +151,10 @@ export type UploadSessionStatusType = `${z.infer<typeof UploadSessionStatusSchem
 export const UploadSessionTypeSchema = z.enum(['COVER','BANNER','CHAPTER']);
 
 export type UploadSessionTypeType = `${z.infer<typeof UploadSessionTypeSchema>}`
+
+export const LanguagesSchema = z.enum(['ab','aa','af','ak','sq','am','ar','an','hy','as','av','ae','ay','az','bm','ba','eu','be','bn','bi','bs','br','bg','my','ca','ch','ce','ny','cu','cv','kw','co','cr','hr','cs','da','dv','nl','dz','en','eo','et','ee','fo','fj','fi','fr','fy','ff','gd','gl','lg','ka','de','el','kl','gn','gu','ht','ha','he','hz','hi','ho','hu','is','io','ig','id','ia','ie','iu','ik','ga','it','jv','kn','kr','ks','kk','km','ki','rw','ky','kv','kg','kj','ku','lo','la','lv','li','ln','lt','lu','lb','mk','mg','ms','ml','mt','gv','mi','mr','mh','mn','na','nv','nd','nr','ng','ne','no','nb','nn','ii','oc','oj','or','om','os','pi','ps','fa','pl','pa','qu','ro','rm','rn','ru','se','sm','sg','sa','sc','sr','sn','sd','si','sk','sl','so','st','su','sw','ss','sv','tl','ty','tg','ta','tt','te','th','bo','ti','to','ts','tn','tr','tk','tw','ug','uk','ur','uz','ve','vi','vo','wa','cy','wo','xh','yi','yo','za','zu','es','es_la','pt_br','pt_pt','ja','ja_ro','ko','ko_ro','zh','zh_hk']);
+
+export type LanguagesType = `${z.infer<typeof LanguagesSchema>}`
 
 /////////////////////////////////////////
 // MODELS
@@ -182,7 +184,7 @@ export type User = z.infer<typeof UserSchema>
 export const UserSettingSchema = z.object({
   gender: GendersSchema,
   contentRating: ContentRatingSchema,
-  preferredTitleLanguage: MediaTitleLanguagesSchema,
+  preferredTitleLanguage: LanguagesSchema.nullable(),
   id: z.string().uuid(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
@@ -256,6 +258,7 @@ export const MediaSchema = z.object({
   source: MediaSourceSchema,
   demography: MediaDemographySchema,
   countryOfOrigin: MediaCountryOfOriginSchema,
+  genres: MediaGenresSchema.array(),
   flag: FlagSchema,
   id: z.string().uuid(),
   createdAt: z.coerce.date(),
@@ -266,6 +269,10 @@ export const MediaSchema = z.object({
   synopsis: z.string().nullable(),
   oneShot: z.boolean(),
   trailer: z.string().nullable(),
+  /**
+   * [MediaTag]
+   */
+  tags: JsonValueSchema.array().nullable(),
   creatorId: z.string(),
   deleterId: z.string().nullable(),
 })
@@ -283,6 +290,7 @@ export const MediaCoverSchema = z.object({
   updatedAt: z.coerce.date(),
   deletedAt: z.coerce.date().nullable(),
   volume: z.number().int().nullable(),
+  isMainCover: z.boolean(),
   mediaId: z.string(),
   uploaderId: z.string(),
   deleterId: z.string().nullable(),
@@ -312,37 +320,21 @@ export type MediaBanner = z.infer<typeof MediaBannerSchema>
 /////////////////////////////////////////
 
 export const MediaTitleSchema = z.object({
-  language: MediaTitleLanguagesSchema,
+  language: LanguagesSchema,
   id: z.string().uuid(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
   deletedAt: z.coerce.date().nullable(),
   title: z.string(),
+  priority: z.number().int(),
   isAcronym: z.boolean(),
+  isMainTitle: z.boolean(),
   mediaId: z.string(),
   creatorId: z.string(),
   deleterId: z.string().nullable(),
 })
 
 export type MediaTitle = z.infer<typeof MediaTitleSchema>
-
-/////////////////////////////////////////
-// MEDIA TAG SCHEMA
-/////////////////////////////////////////
-
-export const MediaTagSchema = z.object({
-  id: z.string().uuid(),
-  createdAt: z.coerce.date(),
-  updatedAt: z.coerce.date(),
-  deletedAt: z.coerce.date().nullable(),
-  isSpoiler: z.boolean(),
-  tagId: z.string(),
-  mediaId: z.string(),
-  creatorId: z.string(),
-  deleterId: z.string().nullable(),
-})
-
-export type MediaTag = z.infer<typeof MediaTagSchema>
 
 /////////////////////////////////////////
 // MEDIA TRACKER SCHEMA
@@ -367,7 +359,7 @@ export type MediaTracker = z.infer<typeof MediaTrackerSchema>
 /////////////////////////////////////////
 
 export const MediaChapterSchema = z.object({
-  language: MediaChapterLanguagesSchema,
+  language: LanguagesSchema,
   contentRating: ContentRatingSchema,
   flag: FlagSchema,
   id: z.string().uuid(),
@@ -380,7 +372,7 @@ export const MediaChapterSchema = z.object({
   /**
    * [MediaChapterPage]
    */
-  pages: InputJsonValue.array(),
+  pages: JsonValueSchema.array().nullable(),
   mediaId: z.string(),
   uploaderId: z.string(),
   deleterId: z.string().nullable(),
@@ -401,7 +393,7 @@ export const MediaChapterCommentSchema = z.object({
   /**
    * [MediaCommentAttachement]
    */
-  attachments: InputJsonValue.array(),
+  attachments: JsonValueSchema.array().nullable(),
   parentId: z.string().nullable(),
   mediaChapterId: z.string(),
   userId: z.string(),
@@ -409,26 +401,6 @@ export const MediaChapterCommentSchema = z.object({
 })
 
 export type MediaChapterComment = z.infer<typeof MediaChapterCommentSchema>
-
-/////////////////////////////////////////
-// TAG SCHEMA
-/////////////////////////////////////////
-
-export const TagSchema = z.object({
-  contentRating: ContentRatingSchema,
-  id: z.string().uuid(),
-  createdAt: z.coerce.date(),
-  updatedAt: z.coerce.date(),
-  deletedAt: z.coerce.date().nullable(),
-  name: z.string(),
-  description: z.string().nullable(),
-  category: z.string(),
-  alId: z.number().int(),
-  creatorId: z.string(),
-  deleterId: z.string().nullable(),
-})
-
-export type Tag = z.infer<typeof TagSchema>
 
 /////////////////////////////////////////
 // UPLOAD SESSION SCHEMA

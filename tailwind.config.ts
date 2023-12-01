@@ -23,6 +23,7 @@ export default {
         sans: ["var(--font-sans)", ...fontFamily.sans],
       },
       spacing: {
+        bodyPadding: "var(--body-padding)",
         navbar: "var(--navbar-height)",
         reader: "var(--reader-height)",
         readerSidebar: "var(--reader-sidebar-width)",

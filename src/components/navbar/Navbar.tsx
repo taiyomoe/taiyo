@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { tv } from "tailwind-variants";
 
+import { MediaSearch } from "~/components/navbar/search/MediaSearch";
 import { CompanyLogo } from "~/components/ui/CompanyLogo";
 import { useChapterNavbar } from "~/hooks/useChapterNavbar";
 
@@ -13,7 +14,7 @@ const navbar = tv({
   slots: {
     container:
       "w-auto bg-background flex flex-col h-navbar justify-center max-h-navbar z-20 transition-all",
-    contentWrapper: "items-center px-6 flex grow justify-between",
+    contentWrapper: "items-center px-bodyPadding flex grow justify-between",
     brandContainer: "flex items-center gap-2",
     brandText: "text-xl font-semibold",
     endContentContainer: "flex gap-4",
@@ -68,6 +69,7 @@ export const Navbar = ({ popover }: Props) => {
           <p className={brandText()}>Taiyō</p>
         </Link>
         <div className={endContentContainer()}>
+          <MediaSearch />
           {popover}
           <ReaderSidebarOpenButton />
         </div>

@@ -1,6 +1,6 @@
-import { type PrismaClient } from "@prisma/client";
+import { db } from "~/lib/server/db";
 
-const execute = async (db: PrismaClient) => {
+const execute = async () => {
   await db.media.create({
     data: {
       id: "21bc3f0b-73ac-44b6-8955-ae5a0a50cf39",
@@ -15,6 +15,33 @@ const execute = async (db: PrismaClient) => {
       source: "ORIGINAL",
       demography: "SHOUNEN",
       countryOfOrigin: "JAPAN",
+      genres: ["ACTION", "COMEDY", "SCI_FI", "SUPERNATURAL"],
+      tags: [
+        { key: "SUPERHERO", isSpoiler: false },
+        { key: "SUPER_POWER", isSpoiler: false },
+        { key: "PARODY", isSpoiler: false },
+        { key: "SURREAL_COMEDY", isSpoiler: false },
+        { key: "KAIJU", isSpoiler: false },
+        { key: "SATIRE", isSpoiler: false },
+        { key: "URBAN_FANTASY", isSpoiler: false },
+        { key: "MALE_PROTAGONIST", isSpoiler: false },
+        { key: "PRIMARILY_ADULT_CAST", isSpoiler: false },
+        { key: "META", isSpoiler: false },
+        { key: "SLAPSTICK", isSpoiler: false },
+        { key: "ENSEMBLE_CAST", isSpoiler: true },
+        { key: "SEINEN", isSpoiler: false },
+        { key: "COSMIC_HORROR", isSpoiler: true },
+        { key: "GODS", isSpoiler: true },
+        { key: "CYBORG", isSpoiler: false },
+        { key: "PHILOSOPHY", isSpoiler: false },
+        { key: "SWORDPLAY", isSpoiler: false },
+        { key: "MARTIAL_ARTS", isSpoiler: false },
+        { key: "GORE", isSpoiler: false },
+        { key: "ALIENS", isSpoiler: false },
+        { key: "TIME_MANIPULATION", isSpoiler: true },
+        { key: "NUDITY", isSpoiler: false },
+        { key: "URBAN", isSpoiler: false },
+      ],
       // -----
       creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
@@ -24,9 +51,59 @@ const execute = async (db: PrismaClient) => {
     data: [
       {
         id: "d225668d-d0b3-4a96-9ad9-18f2e721f795",
-        title: "One Punch-Man",
-        language: "ENGLISH",
-        isAcronym: false,
+        title: "One Punch Man",
+        language: "en",
+        isMainTitle: true,
+        priority: 3,
+        mediaId: "21bc3f0b-73ac-44b6-8955-ae5a0a50cf39",
+        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+      },
+      {
+        id: "8132a213-9e8a-4e9e-8faa-5b77614f9fc5",
+        title: "One-Punch Man",
+        language: "en",
+        priority: 2,
+        mediaId: "21bc3f0b-73ac-44b6-8955-ae5a0a50cf39",
+        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+      },
+      {
+        id: "2641b9ba-2aa2-4eee-8eb1-43f33ccdba60",
+        title: "El hombre de un solo golpe",
+        language: "es",
+        priority: 1,
+        mediaId: "21bc3f0b-73ac-44b6-8955-ae5a0a50cf39",
+        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+      },
+      {
+        id: "33619a2a-fc44-4b7d-b391-c2740a6620d9",
+        title: "ワンパンマン",
+        language: "ja",
+        priority: 1,
+        mediaId: "21bc3f0b-73ac-44b6-8955-ae5a0a50cf39",
+        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+      },
+      {
+        id: "ee6463f3-5ec4-48ba-acbc-fe61cdb44b8d",
+        title: "Wanpanman",
+        language: "ja_ro",
+        priority: 1,
+        mediaId: "21bc3f0b-73ac-44b6-8955-ae5a0a50cf39",
+        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+      },
+      {
+        id: "85ba78d2-13c7-4eba-9fc8-7bdd79bf78c4",
+        title: "원펀맨",
+        language: "ko",
+        priority: 1,
+        mediaId: "21bc3f0b-73ac-44b6-8955-ae5a0a50cf39",
+        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+      },
+      {
+        id: "ac505ca8-b9eb-4ecb-906c-0f6f81fc9f01",
+        title: "OPM",
+        language: "en",
+        isAcronym: true,
+        priority: 1,
         mediaId: "21bc3f0b-73ac-44b6-8955-ae5a0a50cf39",
         creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
       },
@@ -91,6 +168,7 @@ const execute = async (db: PrismaClient) => {
       {
         id: "ccc90b04-2ab6-408f-b8ec-69aa2300d074",
         volume: 28,
+        isMainCover: true,
         mediaId: "21bc3f0b-73ac-44b6-8955-ae5a0a50cf39",
         uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
       },
@@ -105,162 +183,13 @@ const execute = async (db: PrismaClient) => {
     },
   });
 
-  await db.mediaTag.createMany({
-    data: [
-      {
-        id: "3f9baf96-dcff-4132-a58c-9d492e56a30f",
-        tagId: "0ab840c3-92a1-4dc3-8a4d-f0970f72f7d3",
-        mediaId: "21bc3f0b-73ac-44b6-8955-ae5a0a50cf39",
-        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
-      },
-      {
-        id: "66916b56-2738-4bf8-ada1-554daa54158b",
-        tagId: "9c113811-666b-4d03-b425-d3ea72e6ad30",
-        mediaId: "21bc3f0b-73ac-44b6-8955-ae5a0a50cf39",
-        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
-      },
-      {
-        id: "641b93c6-adcd-41cb-994b-23a7b5e06c51",
-        tagId: "303e9a7a-e121-4912-9160-f4ab34659583",
-        mediaId: "21bc3f0b-73ac-44b6-8955-ae5a0a50cf39",
-        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
-      },
-      {
-        id: "4f152fd5-3a6c-44bf-8ebd-08b9e138b809",
-        tagId: "f9b88d05-cb71-4bd0-95c3-6dc083144771",
-        mediaId: "21bc3f0b-73ac-44b6-8955-ae5a0a50cf39",
-        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
-      },
-      {
-        id: "1361ef2e-ff4f-4f91-9d2e-20a133138bbf",
-        tagId: "18876aa0-17a9-4321-ab88-756c41b8e578",
-        mediaId: "21bc3f0b-73ac-44b6-8955-ae5a0a50cf39",
-        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
-      },
-      {
-        id: "e8c08787-a175-401f-a052-7ec0060781ea",
-        tagId: "5145ccda-5f09-4e7f-b574-1b49d736d2db",
-        mediaId: "21bc3f0b-73ac-44b6-8955-ae5a0a50cf39",
-        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
-      },
-      {
-        id: "84539f1b-724e-45a9-9079-e112063ab377",
-        tagId: "a4d4f0a2-a63f-4c10-ad08-f32a3a089f6d",
-        mediaId: "21bc3f0b-73ac-44b6-8955-ae5a0a50cf39",
-        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
-      },
-      {
-        id: "cb50735c-d07b-465d-805e-3113a5539386",
-        tagId: "9f8204b0-49aa-4f16-9226-99b11856462c",
-        mediaId: "21bc3f0b-73ac-44b6-8955-ae5a0a50cf39",
-        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
-      },
-      {
-        id: "c905599f-ff3c-4c2c-a2f1-1f02b5d5975b",
-        tagId: "e9326c71-a5ea-4ce9-afdd-fbeeb15f9b6c",
-        mediaId: "21bc3f0b-73ac-44b6-8955-ae5a0a50cf39",
-        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
-      },
-      {
-        id: "6163d57c-1b02-4169-a180-d6180cf476fb",
-        tagId: "0cf8b107-8786-4340-ba35-bcdcbefb651a",
-        mediaId: "21bc3f0b-73ac-44b6-8955-ae5a0a50cf39",
-        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
-      },
-      {
-        id: "043f7b8f-3995-4db2-87c1-8d9425b3ffad",
-        tagId: "bc6ca93e-0632-40f4-bfb3-cf9ddf95ddb7",
-        mediaId: "21bc3f0b-73ac-44b6-8955-ae5a0a50cf39",
-        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
-      },
-      {
-        id: "34db5ea6-ffaa-47ff-b000-998d4cd2763c",
-        tagId: "a3423a6c-e1a1-4989-8e9a-950e816f6676",
-        mediaId: "21bc3f0b-73ac-44b6-8955-ae5a0a50cf39",
-        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
-      },
-      {
-        id: "83a6109c-82ce-4715-8d51-6de6ec8dc2e3",
-        tagId: "9c60694b-4353-4e22-9a71-9b395b7a936e",
-        mediaId: "21bc3f0b-73ac-44b6-8955-ae5a0a50cf39",
-        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
-      },
-      {
-        id: "4ae5eefe-6a3c-47fd-b102-22f83ebd7cee",
-        tagId: "34b258e9-b746-4d72-aa38-7d77695cfe5b",
-        mediaId: "21bc3f0b-73ac-44b6-8955-ae5a0a50cf39",
-        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
-      },
-      {
-        id: "968e2584-d48c-4092-a65e-b3a0c10e8d16",
-        tagId: "c4a8b7d7-7a3c-4311-b76b-2be6a0041981",
-        mediaId: "21bc3f0b-73ac-44b6-8955-ae5a0a50cf39",
-        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
-      },
-      {
-        id: "b131fdb7-2122-4566-b962-e7da3cf04696",
-        tagId: "b615e583-2b1a-4394-b674-69d47786f25e",
-        mediaId: "21bc3f0b-73ac-44b6-8955-ae5a0a50cf39",
-        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
-      },
-      {
-        id: "04fdf476-5068-4df1-854a-bf8937f4b651",
-        tagId: "8a47ea2e-a7d2-46bb-afc6-e60560d11e27",
-        mediaId: "21bc3f0b-73ac-44b6-8955-ae5a0a50cf39",
-        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
-      },
-      {
-        id: "61c569fe-f7fe-40a7-bab2-dc08ff622b9a",
-        tagId: "9c514532-d944-41dd-9058-3f5aac0e643b",
-        mediaId: "21bc3f0b-73ac-44b6-8955-ae5a0a50cf39",
-        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
-      },
-      {
-        id: "bd953152-d0a6-4f2b-be23-a05ce8337834",
-        tagId: "4b1c3069-4292-405d-9bf0-49c84ff08fea",
-        mediaId: "21bc3f0b-73ac-44b6-8955-ae5a0a50cf39",
-        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
-      },
-      {
-        id: "84635e6e-6600-40af-b06a-ef424ee6a519",
-        tagId: "7d25f081-4ed7-4cba-b024-e558dd9f18b7",
-        mediaId: "21bc3f0b-73ac-44b6-8955-ae5a0a50cf39",
-        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
-      },
-      {
-        id: "4a01616a-fa68-43f2-aacc-8e7eceee3258",
-        tagId: "97f82590-e106-484e-b8e1-99f349bbe0ce",
-        mediaId: "21bc3f0b-73ac-44b6-8955-ae5a0a50cf39",
-        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
-      },
-      {
-        id: "62edba1d-60e6-4b69-96ba-801acd4d3b0d",
-        tagId: "a927b42f-75b3-4000-a2b6-afa16e60fa4e",
-        mediaId: "21bc3f0b-73ac-44b6-8955-ae5a0a50cf39",
-        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
-      },
-      {
-        id: "f41715b2-5430-4edf-8355-83ba7d9d9669",
-        tagId: "ba3c8bbb-10c7-4cf2-a98d-d39fe58e11d4",
-        mediaId: "21bc3f0b-73ac-44b6-8955-ae5a0a50cf39",
-        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
-      },
-      {
-        id: "665ab51c-c6cb-471a-b689-0c95dbf6ce0d",
-        tagId: "7e4e9852-8ccb-452f-9829-eda46cbb430b",
-        mediaId: "21bc3f0b-73ac-44b6-8955-ae5a0a50cf39",
-        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
-      },
-    ],
-  });
-
   await db.mediaChapter.createMany({
     data: [
       {
         id: "b2cfca53-c90c-4c42-a69f-a2dca025cca8",
         number: 0,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "72f9b16a-cb63-46f6-9d88-a02bd53d6013" },
           { id: "5c1a3470-2998-4057-8ded-2f9fba2a385c" },
@@ -290,7 +219,7 @@ const execute = async (db: PrismaClient) => {
         id: "356711ba-45db-49b8-b4ac-cc03aa674bbd",
         number: 1,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "46f9c377-e8ff-4efc-b0d2-faad8dcd663d" },
           { id: "ba430fe2-98c4-4aa8-8924-4b5ff05a5d8b" },
@@ -321,7 +250,7 @@ const execute = async (db: PrismaClient) => {
         id: "35c39110-f9f8-4d42-ac82-bc43716071e5",
         number: 2,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "e106ebce-572c-4ebc-b535-f01b9c7a1182" },
           { id: "5fff6316-68a5-497a-ba6c-1d09aee2a179" },
@@ -351,7 +280,7 @@ const execute = async (db: PrismaClient) => {
         id: "4163393f-4244-4c74-bf18-34b407d692d2",
         number: 3,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "93e55a30-bf45-45f5-9918-9c779d206b33" },
           { id: "c4233e03-4308-4ced-86b8-36015753425e" },
@@ -376,7 +305,7 @@ const execute = async (db: PrismaClient) => {
         id: "f36096b2-83ce-42c8-ad93-53c55772cc91",
         number: 4,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "bd8cda06-d7c7-40bc-ab16-c1a0afdf7391" },
           { id: "9431f47c-ac40-45ff-b34a-b1b5d0a81700" },
@@ -405,7 +334,7 @@ const execute = async (db: PrismaClient) => {
         id: "428717ba-cea4-446c-ba38-f3ea7e7ff1cc",
         number: 5,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "9e2d989f-c978-447e-adc3-3e86563ed08d" },
           { id: "2dcdf2de-88fe-4383-bcdf-27d37c778a9e" },
@@ -433,7 +362,7 @@ const execute = async (db: PrismaClient) => {
         id: "e22edd16-30b7-437e-9a38-38542f283e96",
         number: 6,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "f52e7a4e-d28b-4334-92a1-1883d7ee1dc5" },
           { id: "95f78214-3f74-4b6c-9ddf-7a96179555b6" },
@@ -462,7 +391,7 @@ const execute = async (db: PrismaClient) => {
         id: "1916d95e-13f3-4e4b-b8e5-63af74935aca",
         number: 7,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "5438b0cb-b3b5-4587-9c92-21a17c9374dc" },
           { id: "28ce5bbf-4d74-47c0-b1ac-fbb053f7200e" },
@@ -492,7 +421,7 @@ const execute = async (db: PrismaClient) => {
         id: "558ddbab-24b6-4638-88d1-bd7588cf2393",
         number: 8,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "805bbcb5-db96-4e08-8751-fa301fdee449" },
           { id: "da8c1da8-27fa-4f7c-93e0-cb4ec83c2f57" },
@@ -522,7 +451,7 @@ const execute = async (db: PrismaClient) => {
         id: "aaacb6a4-20a3-4486-9c59-1825e94fc49e",
         number: 9,
         volume: 1,
-        language: "PORTUGUESE",
+        language: "pt_br",
         pages: [
           { id: "d276c693-988a-4ece-b22a-5e08569385d7" },
           { id: "e54f97f1-e0d7-409c-b70b-7c7790e25c87" },

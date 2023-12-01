@@ -1,10 +1,8 @@
-import NextImage from "next/image";
-import { Image } from "@nextui-org/image";
-
-import { DisplayMediaCover } from "~/components/media/DisplayMediaCover";
 import type { MediaLimited } from "~/lib/types";
-import { cn } from "~/lib/utils/cn";
-import { MediaUtils } from "~/lib/utils/media.utils";
+
+import { MediaLayoutBanner } from "./MediaLayoutBanner";
+import { MediaLayoutCover } from "./MediaLayoutCover";
+import { MediaLayoutTitle } from "./MediaLayoutTitle";
 
 type Props = {
   media: MediaLimited;
@@ -12,34 +10,17 @@ type Props = {
 };
 
 export const MediaLayout = ({ media, children }: Props) => {
-  const bannerUrl = MediaUtils.getBannerOrCoverUrl(media);
-  const coverUrl = MediaUtils.getCoverUrl(media);
-
   return (
-    <main className="grid h-full grid-cols-2 lg:grid-cols-lgMediaLayout xl:grid-cols-xlMediaLayout 2xl:grid-cols-2xlMediaLayout">
-      <Image
-        as={NextImage}
-        src={bannerUrl}
-        classNames={{
-          wrapper:
-            "!max-w-full col-span-2 w-full z-0 after:shadow-[0_-64px_48px_16px_inset_var(--background)]",
-          img: cn(
-            "object-cover h-[300px] xl:h-[400px] w-full rounded-none blur-xs",
-            {
-              "blur-md": bannerUrl === coverUrl,
-            },
-          ),
-        }}
-        height={400}
-        width={1200}
-        alt="media's banner"
-        priority
-      />
-      <div className="col-span-2 -mt-28 flex h-fit w-full justify-center lg:col-span-1 xl:-mt-36">
-        <DisplayMediaCover media={media} />
-      </div>
-      <div className="z-10 col-span-2 w-full lg:col-span-1 lg:-mt-28 xl:-mt-36">
-        {children}
+    <main className="h-full">
+      <MediaLayoutBanner media={media} />
+      <div className="px-bodyPadding pb-bodyPadding gap-bodyPadding -mt-28 flex flex-col md:flex-row xl:-mt-36">
+        <section className="z-10 flex h-fit flex-col items-center gap-8 md:sticky md:top-[calc(var(--navbar-height)+36px)]">
+          <MediaLayoutCover media={media} />
+          <MediaLayoutTitle media={media} />
+        </section>
+        <section className="z-10 flex flex-col md:w-[calc(100vw-(258px+calc(var(--body-padding)*3)))] lg:w-[calc(100vw-(308px+calc(var(--body-padding)*3)))]">
+          {children}
+        </section>
       </div>
     </main>
   );

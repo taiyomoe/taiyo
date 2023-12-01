@@ -4,14 +4,14 @@ import { toFormikValidationSchema } from "zod-formik-adapter";
 
 import { Form } from "~/components/generics/form/Form";
 import { useMediaCreation } from "~/hooks/useMediaCreation";
-import { insertMediaSchema } from "~/lib/schemas";
 import type { InsertMediaSchema } from "~/lib/schemas";
+import { insertMediaSchema } from "~/lib/schemas";
 
 import { AddMediaFormFields } from "./AddMediaFormFields";
 
 const initialValues: InsertMediaSchema = {
   id: crypto.randomUUID(),
-  synopsis: "Gol D. Roger...",
+  synopsis: "",
   contentRating: "NORMAL",
   oneShot: true,
   type: "MANGA",
@@ -20,8 +20,17 @@ const initialValues: InsertMediaSchema = {
   demography: "SHOUNEN",
   countryOfOrigin: "JAPAN",
   flag: "OK",
-  titles: [{ title: "Teste", isAcronym: false, language: "ENGLISH" }],
-  // tags: [],
+  genres: [],
+  titles: [
+    {
+      title: "",
+      language: "en",
+      priority: 1,
+      isAcronym: false,
+      isMainTitle: true,
+    },
+  ],
+  tags: [],
   cover: {
     id: "",
     volume: null,

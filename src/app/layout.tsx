@@ -4,6 +4,7 @@ import { headers } from "next/headers";
 
 import "~/styles/globals.css";
 
+import { siteConfig } from "~/lib/config";
 import type { LayoutProps } from "~/lib/types";
 import { cn } from "~/lib/utils/cn";
 
@@ -15,20 +16,23 @@ const fontSans = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Create T3 Turbo",
-  description: "Simple monorepo with shared backend for web & mobile apps",
-  metadataBase: new URL("https://taiyo.moe/"),
-  openGraph: {
-    title: "Create T3 Turbo",
-    description: "Simple monorepo with shared backend for web & mobile apps",
-    url: "https://create-t3-turbo.vercel.app",
-    siteName: "Create T3 Turbo",
+  title: siteConfig.name,
+  description: siteConfig.description,
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon-32x32.png",
+    apple: "/apple-touch-icon.png",
   },
-  twitter: {
-    card: "summary_large_image",
-    site: "@jullerino",
-    creator: "@jullerino",
-  },
+  manifest: "/manifest.json",
+  twitter: siteConfig.twitter,
+  openGraph: siteConfig.openGraph,
+  authors: [
+    {
+      name: "rdx",
+      url: "https://rdx.dev",
+    },
+  ],
+  creator: "rdx",
 };
 
 export default function Layout({ children }: LayoutProps) {
