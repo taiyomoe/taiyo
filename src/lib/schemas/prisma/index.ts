@@ -56,9 +56,13 @@ export type InputJsonValueType = z.infer<typeof InputJsonValueSchema>;
 
 export const TransactionIsolationLevelSchema = z.enum(['ReadUncommitted','ReadCommitted','RepeatableRead','Serializable']);
 
-export const UserScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','name','email','emailVerified','image','role']);
+export const UserScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','name','email','emailVerified','image','role','points']);
 
 export const UserSettingScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','birthDate','gender','city','country','about','contentRating','preferredTitleLanguage','userId']);
+
+export const UserLibraryScalarFieldEnumSchema = z.enum(['reading','rereading','planToRead','completed','onHold','dropped','userId']);
+
+export const UserHistoryScalarFieldEnumSchema = z.enum(['progression','mediaId','userId']);
 
 export const AccountScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','type','refresh_token','access_token','expires_at','token_type','scope','id_token','session_state','provider','providerAccountId','userId']);
 
@@ -173,6 +177,7 @@ export const UserSchema = z.object({
   email: z.string().nullable(),
   emailVerified: z.coerce.date().nullable(),
   image: z.string().nullable(),
+  points: z.number().int(),
 })
 
 export type User = z.infer<typeof UserSchema>
@@ -196,6 +201,55 @@ export const UserSettingSchema = z.object({
 })
 
 export type UserSetting = z.infer<typeof UserSettingSchema>
+
+/////////////////////////////////////////
+// USER LIBRARY SCHEMA
+/////////////////////////////////////////
+
+export const UserLibrarySchema = z.object({
+  /**
+   * [UserLibraryEntry]
+   */
+  reading: JsonValueSchema.array().nullable(),
+  /**
+   * [UserLibraryEntry]
+   */
+  rereading: JsonValueSchema.array().nullable(),
+  /**
+   * [UserLibraryEntry]
+   */
+  planToRead: JsonValueSchema.array().nullable(),
+  /**
+   * [UserLibraryEntry]
+   */
+  completed: JsonValueSchema.array().nullable(),
+  /**
+   * [UserLibraryEntry]
+   */
+  onHold: JsonValueSchema.array().nullable(),
+  /**
+   * [UserLibraryEntry]
+   */
+  dropped: JsonValueSchema.array().nullable(),
+  userId: z.string(),
+})
+
+export type UserLibrary = z.infer<typeof UserLibrarySchema>
+
+/////////////////////////////////////////
+// USER HISTORY SCHEMA
+/////////////////////////////////////////
+
+export const UserHistorySchema = z.object({
+  /**
+   * [UserHistoryProgression]
+   */
+  progression: JsonValueSchema.array().nullable(),
+  mediaId: z.string(),
+  userId: z.string(),
+})
+
+export type UserHistory = z.infer<typeof UserHistorySchema>
 
 /////////////////////////////////////////
 // ACCOUNT SCHEMA

@@ -30,6 +30,8 @@ const getUserPermissions = (): Permission[] => [
   "mediaChapterComments:create",
   "mediaChapterComments:update:own",
   "mediaChapterComments:delete:own",
+  "history:update:own",
+  "library:update:own",
 ];
 
 const getModeratorPermissions = (): Permission[] => [
@@ -102,6 +104,8 @@ const getResourcesWithPosession = (): ResourcesWithPossession[] => [
   "mediaCovers",
   "mediaChapters",
   "mediaChapterComments",
+  "history",
+  "library",
   "scans",
 ];
 
