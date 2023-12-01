@@ -1,5 +1,5 @@
 import { getLibrarySchema, updateLibrarySchema } from "~/lib/schemas";
-import { MediasService } from "~/lib/services/medias.service";
+import { MediaService } from "~/lib/services";
 import type { UserLibraryMedia } from "~/lib/types";
 import { MediaUtils } from "~/lib/utils/media.utils";
 
@@ -109,7 +109,7 @@ export const libraryRouter = createTRPCRouter({
         });
       }
 
-      const status = await MediasService.getStatus(input.mediaId);
+      const status = await MediaService.getStatus(input.mediaId);
 
       if (input.status === "completed" && status !== "FINISHED") {
         throw new Error(

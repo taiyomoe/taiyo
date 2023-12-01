@@ -51,6 +51,10 @@ const getIndexItem = async (mediaId: string): Promise<MediasIndexItem> => {
   };
 };
 
+/**
+ * Gets the status of a media.
+ * Used to check wether or not a user can complete a media.
+ */
 const getStatus = async (mediaId: string): Promise<MediaStatus> => {
   const result = await db.media.findUnique({
     select: { status: true },
@@ -64,7 +68,7 @@ const getStatus = async (mediaId: string): Promise<MediaStatus> => {
   return result.status;
 };
 
-export const MediasService = {
+export const MediaService = {
   getIndexItem,
   getStatus,
 };
