@@ -1,21 +1,21 @@
 import { useEffect, useRef, useState } from "react";
-import { useAtomValue, useSetAtom } from "jotai";
+import { useSetAtom } from "jotai";
 
 import { mediaChapterAtom } from "~/atoms/mediaChapter.atoms";
-import { readerPageModeAtom } from "~/atoms/readerSettings.atoms";
 import type { ReaderImage } from "~/lib/types";
 import { MediaChapterImageUtils } from "~/lib/utils/mediaChapterImage.utils";
+import { useReaderStore } from "~/stores";
 
 import { useChapterNavigation } from "./useChapterNavigation";
 
 export const useChapterImages = () => {
-  const { chapter, navigation } = useChapterNavigation();
+  const { chapter, settings } = useReaderStore();
+  const { navigation } = useChapterNavigation();
   const [images, setImages] = useState<ReaderImage[]>([]);
   const previousCurrentPage = useRef<number | undefined>(
     navigation?.currentPage,
   );
 
-  const pageMode = useAtomValue(readerPageModeAtom);
   const setChapter = useSetAtom(mediaChapterAtom);
 
   const loadImage = async (url: string) => {
@@ -32,7 +32,7 @@ export const useChapterImages = () => {
   ) {
     previousCurrentPage.current = navigation.currentPage;
 
-    if (pageMode === "single") {
+    if (settings.pageMode === "single") {
       const mergedImages = MediaChapterImageUtils.mergeImages(
         chapter,
         navigation,
@@ -49,7 +49,7 @@ export const useChapterImages = () => {
       ).then((newImages) => setImages([...images, ...newImages]));
     }
 
-    if (pageMode === "longstrip" && images.length === 0) {
+    if (settings.pageMode === "longstrip") {
       void Promise.all(
         MediaChapterImageUtils.getImages(chapter).map(async (image) => ({
           ...image,
@@ -65,5 +65,5 @@ export const useChapterImages = () => {
     };
   }, [setChapter]);
 
-  return { images, pageMode };
+  return { images };
 };

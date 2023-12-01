@@ -1,12 +1,10 @@
 "use client";
 
 import { Button, ButtonGroup } from "@nextui-org/button";
-import { useAtom } from "jotai";
 import { FileIcon, ScrollTextIcon } from "lucide-react";
 import { tv } from "tailwind-variants";
 
-import { readerPageModeAtom } from "~/atoms/readerSettings.atoms";
-import type { ReaderSettings } from "~/lib/types";
+import { useReaderStore } from "~/stores";
 
 const readerSidebarSettingsOpenMode = tv({
   slots: {
@@ -18,15 +16,10 @@ const readerSidebarSettingsOpenMode = tv({
 });
 
 export const ReaderSidebarSettingsPageMode = () => {
+  const { settings, updateSettings } = useReaderStore();
+
   const { container, text, leftButton, rightButton } =
     readerSidebarSettingsOpenMode();
-
-  const [readerSidebarPageMode, setReaderPageModeAtom] =
-    useAtom(readerPageModeAtom);
-
-  const handlePress = (pageMode: ReaderSettings["pageMode"]) => {
-    setReaderPageModeAtom(pageMode);
-  };
 
   return (
     <div className={container()}>
@@ -35,8 +28,8 @@ export const ReaderSidebarSettingsPageMode = () => {
         <Button
           className={leftButton()}
           startContent={<FileIcon size={20} />}
-          color={readerSidebarPageMode === "single" ? "primary" : "default"}
-          onPress={() => handlePress("single")}
+          color={settings.pageMode === "single" ? "primary" : "default"}
+          onPress={() => updateSettings("pageMode", "single")}
           radius="sm"
         >
           Única
@@ -44,8 +37,8 @@ export const ReaderSidebarSettingsPageMode = () => {
         <Button
           className={rightButton()}
           endContent={<ScrollTextIcon size={20} />}
-          onPress={() => handlePress("longstrip")}
-          color={readerSidebarPageMode === "longstrip" ? "primary" : "default"}
+          onPress={() => updateSettings("pageMode", "single")}
+          color={settings.pageMode === "longstrip" ? "primary" : "default"}
           radius="sm"
         >
           Cascata

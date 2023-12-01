@@ -3,9 +3,11 @@ import { useSession } from "next-auth/react";
 
 import { useChapterNavigation } from "~/hooks/useChapterNavigation";
 import { api } from "~/lib/trpc/client";
+import { useReaderStore } from "~/stores";
 
 export const useChapterProgression = () => {
-  const { chapter, currentPage } = useChapterNavigation();
+  const { chapter } = useReaderStore();
+  const { currentPage } = useChapterNavigation();
   const { mutate } = api.history.updateProgression.useMutation();
   const { status } = useSession();
 

@@ -1,15 +1,11 @@
 "use client";
 
 import { Button } from "@nextui-org/button";
-import { useAtom, useAtomValue } from "jotai";
 import { tv } from "tailwind-variants";
 
-import {
-  readerSidebarSideAtom,
-  readerSidebarStateAtom,
-} from "~/atoms/readerSettings.atoms";
 import { SidebarIcon } from "~/components/icons/SidebarIcon";
 import { MediaChapterTitle } from "~/components/ui/MediaChapterTitle";
+import { useReaderStore } from "~/stores";
 
 const readerSidebarTitle = tv({
   slots: {
@@ -30,23 +26,25 @@ const readerSidebarTitle = tv({
 });
 
 export const ReaderSidebarTitle = () => {
-  const [readerSidebarState, setReaderSidebarState] = useAtom(
-    readerSidebarStateAtom,
-  );
-  const readerSidebarSide = useAtomValue(readerSidebarSideAtom);
+  const { settings, updateSettings } = useReaderStore();
 
-  const { container, text } = readerSidebarTitle({ side: readerSidebarSide });
+  const slots = readerSidebarTitle({ side: settings.sidebar.side });
+
+  const handlePress = () => {
+    updateSettings(
+      "sidebar.state",
+      settings.sidebar.state === "show" ? "hide" : "show",
+    );
+  };
 
   return (
-    <div className={container()}>
-      <MediaChapterTitle className={text()} />
+    <div className={slots.container()}>
+      <MediaChapterTitle className={slots.text()} />
       <Button
         startContent={
-          <SidebarIcon action="close" side={readerSidebarSide} size={20} />
+          <SidebarIcon action="close" side={settings.sidebar.side} size={20} />
         }
-        onPress={() =>
-          setReaderSidebarState(readerSidebarState === "show" ? "hide" : "show")
-        }
+        onPress={handlePress}
         size="sm"
         isIconOnly
       />
