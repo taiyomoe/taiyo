@@ -45,6 +45,8 @@ export default withAuth(
             return PermissionUtils.canAccessDashboard(token.role.permissions);
           case pathname === "/dashboard/medias/add":
             return token.role.permissions.includes("medias:create");
+          case pathname === "/dashboard/medias/import":
+            return token.role.permissions.includes("medias:create");
           case pathname === "/dashboard/chapters/upload":
             return token.role.permissions.includes("mediaChapters:create");
           case pathname === "/dashboard/scans/add":
