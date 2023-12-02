@@ -37,5 +37,5 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 
-# meilisearch
-/data.ms
+# docker
+/data
