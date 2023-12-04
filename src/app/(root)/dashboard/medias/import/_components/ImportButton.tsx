@@ -11,8 +11,8 @@ import { importMediaSchema } from "~/lib/schemas";
 import { api } from "~/lib/trpc/client";
 
 const initialValues: ImportMediaSchema = {
-  mdId: "304ceac3-8cdb-4fe7-acf7-2b6ff7a60613",
-  synopsis: "azertyu",
+  mdId: "",
+  synopsis: "",
 };
 
 export const ImportButton = () => {
