@@ -5,6 +5,7 @@ import { headers } from "next/headers";
 import "~/styles/globals.css";
 
 import { siteConfig } from "~/lib/config";
+import { env } from "~/lib/env.mjs";
 import type { LayoutProps } from "~/lib/types";
 import { cn } from "~/lib/utils/cn";
 
@@ -26,6 +27,7 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
   twitter: siteConfig.twitter,
   openGraph: siteConfig.openGraph,
+  metadataBase: new URL(env.NEXTAUTH_URL),
   authors: [
     {
       name: "rdx",
