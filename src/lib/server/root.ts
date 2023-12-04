@@ -1,4 +1,5 @@
 import { libraryRouter } from "~/lib/server/routers/library.router";
+import { mdRouter } from "~/lib/server/routers/md.router";
 
 import { historyRouter } from "./routers/history.router";
 import { mediaChaptersRouter } from "./routers/mediaChapters.router";
@@ -19,6 +20,7 @@ export const appRouter = createTRPCRouter({
   libary: libraryRouter,
   scans: scansRouter,
   uploads: uploadsRouter,
+  md: mdRouter,
 });
 
 // export type definition of API
