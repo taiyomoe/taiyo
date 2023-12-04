@@ -48,6 +48,9 @@ export const env = createEnv({
     DISCORD_CLIENT_ID: z.string(),
     DISCORD_CLIENT_SECRET: z.string(),
 
+    // image-orchestrator API
+    IO_ADMIN_KEY: z.string(),
+
     // Encryption
     ENCRYPTION_KEY: z.string(),
     ENCRYPTION_IV: z.string(),
@@ -67,6 +70,9 @@ export const env = createEnv({
    * `NEXT_PUBLIC_`.
    */
   client: {
+    // CDN
+    NEXT_PUBLIC_CDN_URL: z.string().url(),
+
     // image-orchestrator API
     NEXT_PUBLIC_IO_URL: z.string().url(),
 
@@ -104,7 +110,11 @@ export const env = createEnv({
     ENCRYPTION_KEY: process.env.ENCRYPTION_KEY,
     ENCRYPTION_IV: process.env.ENCRYPTION_IV,
 
+    // CDN
+    NEXT_PUBLIC_CDN_URL: process.env.NEXT_PUBLIC_CDN_URL,
+
     // image-orchestrator API
+    IO_ADMIN_KEY: process.env.IO_ADMIN_KEY,
     NEXT_PUBLIC_IO_URL: process.env.NEXT_PUBLIC_IO_URL,
 
     // Meilisearch

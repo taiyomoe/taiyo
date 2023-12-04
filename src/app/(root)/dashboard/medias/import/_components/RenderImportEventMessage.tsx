@@ -12,10 +12,6 @@ export const RenderImportEventMessage = () => {
     (_, i) => messages.filter((message) => message.step === i + 1).pop()!,
   );
 
-  console.log("messages", messages);
-  console.log("highestStep", highestStep);
-  console.log("messagesWithLatestSteps", messagesWithLatestSteps);
-
   return (
     <div className="flex flex-col gap-4">
       {messagesWithLatestSteps.map((message, i) => (
