@@ -9,7 +9,6 @@ import { LibraryService } from "~/lib/services";
 import type { LatestMedia, MediaLimited, SearchedMedia } from "~/lib/types";
 import { MediaUtils } from "~/lib/utils/media.utils";
 
-import { NotFoundError } from "../errors";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const mediasRouter = createTRPCRouter({
@@ -116,7 +115,7 @@ export const mediasRouter = createTRPCRouter({
       });
 
       if (!result?.covers.at(0) || !result.titles.at(0)) {
-        throw new NotFoundError();
+        return null;
       }
 
       const userLibraryMedia = await LibraryService.getUserLibraryMedia(
