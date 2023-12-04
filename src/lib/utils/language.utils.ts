@@ -3,7 +3,7 @@ import type { Languages } from "@prisma/client";
 const languageCodeToCountryCode = (languageCode: Languages) => {
   switch (languageCode) {
     case "ab":
-      return "";
+      return "ru";
     case "aa":
       return "";
     case "af":
@@ -15,7 +15,7 @@ const languageCodeToCountryCode = (languageCode: Languages) => {
     case "am":
       return "";
     case "ar":
-      return "";
+      return "sa";
     case "an":
       return "";
     case "hy":
@@ -71,7 +71,7 @@ const languageCodeToCountryCode = (languageCode: Languages) => {
     case "hr":
       return "";
     case "cs":
-      return "";
+      return "cz";
     case "da":
       return "";
     case "dv":
@@ -109,7 +109,7 @@ const languageCodeToCountryCode = (languageCode: Languages) => {
     case "ka":
       return "";
     case "de":
-      return "";
+      return "de";
     case "el":
       return "";
     case "kl":
@@ -127,7 +127,7 @@ const languageCodeToCountryCode = (languageCode: Languages) => {
     case "hz":
       return "";
     case "hi":
-      return "";
+      return "in";
     case "ho":
       return "";
     case "hu":
@@ -161,7 +161,7 @@ const languageCodeToCountryCode = (languageCode: Languages) => {
     case "ks":
       return "";
     case "kk":
-      return "";
+      return "kz";
     case "km":
       return "";
     case "ki":
@@ -189,7 +189,7 @@ const languageCodeToCountryCode = (languageCode: Languages) => {
     case "ln":
       return "";
     case "lt":
-      return "";
+      return "lt";
     case "lu":
       return "";
     case "lb":
@@ -213,7 +213,7 @@ const languageCodeToCountryCode = (languageCode: Languages) => {
     case "mh":
       return "";
     case "mn":
-      return "";
+      return "mn";
     case "na":
       return "";
     case "nv":
@@ -225,7 +225,7 @@ const languageCodeToCountryCode = (languageCode: Languages) => {
     case "ng":
       return "";
     case "ne":
-      return "";
+      return "np";
     case "no":
       return "";
     case "nb":
@@ -249,9 +249,9 @@ const languageCodeToCountryCode = (languageCode: Languages) => {
     case "ps":
       return "";
     case "fa":
-      return "";
+      return "ir";
     case "pl":
-      return "";
+      return "pl";
     case "pa":
       return "";
     case "qu":
@@ -263,7 +263,7 @@ const languageCodeToCountryCode = (languageCode: Languages) => {
     case "rn":
       return "";
     case "ru":
-      return "";
+      return "ru";
     case "se":
       return "";
     case "sm":
@@ -297,7 +297,7 @@ const languageCodeToCountryCode = (languageCode: Languages) => {
     case "ss":
       return "";
     case "sv":
-      return "";
+      return "se";
     case "tl":
       return "";
     case "ty":
@@ -323,7 +323,7 @@ const languageCodeToCountryCode = (languageCode: Languages) => {
     case "tn":
       return "";
     case "tr":
-      return "";
+      return "tr";
     case "tk":
       return "";
     case "tw":
@@ -331,21 +331,21 @@ const languageCodeToCountryCode = (languageCode: Languages) => {
     case "ug":
       return "";
     case "uk":
-      return "";
+      return "ua";
     case "ur":
       return "";
     case "uz":
       return "";
     case "ve":
-      return "";
+      return "za";
     case "vi":
-      return "";
+      return "vn";
     case "vo":
-      return "";
+      return "de";
     case "wa":
       return "";
     case "cy":
-      return "";
+      return "gb-wls";
     case "wo":
       return "";
     case "xh":
@@ -357,7 +357,7 @@ const languageCodeToCountryCode = (languageCode: Languages) => {
     case "za":
       return "";
     case "zu":
-      return "";
+      return "ls";
 
     case "es":
       return "es";

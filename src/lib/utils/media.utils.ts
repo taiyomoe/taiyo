@@ -56,10 +56,49 @@ const getMainTitle = (
   return titles.sort(customSort).at(0)!.title;
 };
 
+const sortTitles = (titles: MediaLimited["titles"]) => {
+  const inputOrder = [
+    "en",
+    "pt_br",
+    "ja_ro",
+    "ko_ro",
+    "zh_ro",
+    "ja",
+    "ko",
+    "zh",
+    "de",
+  ];
+  const customSort = (
+    a: (typeof titles)[number],
+    b: (typeof titles)[number],
+  ) => {
+    const langAIndex = inputOrder.indexOf(a.language);
+    const langBIndex = inputOrder.indexOf(b.language);
+
+    if (langAIndex === -1 && langBIndex !== -1) {
+      return 1;
+    } else if (langAIndex !== -1 && langBIndex === -1) {
+      return -1;
+    } else if (langAIndex === -1 && langBIndex === -1) {
+      return 0;
+    }
+
+    if (langAIndex !== langBIndex) {
+      return langAIndex - langBIndex;
+    } else {
+      // If languages are the same, sort by priority
+      return b.priority - a.priority;
+    }
+  };
+
+  return titles.sort(customSort);
+};
+
 export const MediaUtils = {
   getUrl,
   getCoverUrl,
   getBannerOrCoverUrl,
   getMainTitle,
   getUploadEndpoint: () => `${env.NEXT_PUBLIC_IO_URL}/upload/url`,
+  sortTitles,
 };
