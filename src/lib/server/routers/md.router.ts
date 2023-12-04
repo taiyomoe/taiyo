@@ -1,7 +1,12 @@
+import type { MediaCover } from "@prisma/client";
 import { Manga } from "mangadex-full-api";
 
+import { env } from "~/lib/env.mjs";
 import { importMediaSchema } from "~/lib/schemas";
+import { MediaService } from "~/lib/services";
 import { pusherServer } from "~/lib/soketi/server";
+import { MdUtils } from "~/lib/utils/md.utils";
+import { MediaUtils } from "~/lib/utils/media.utils";
 
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
@@ -10,7 +15,7 @@ export const mdRouter = createTRPCRouter({
     .meta({ resource: "medias", action: "create" })
     .input(importMediaSchema)
     .mutation(async ({ ctx, input }) => {
-      const media = await ctx.db.media.findFirst({
+      const existingMedia = await ctx.db.media.findFirst({
         where: {
           trackers: {
             some: {
@@ -20,7 +25,7 @@ export const mdRouter = createTRPCRouter({
         },
       });
 
-      if (media) {
+      if (existingMedia) {
         throw new Error("Uma obra com esse ID da MangaDex já existe.");
       }
 
@@ -31,7 +36,8 @@ export const mdRouter = createTRPCRouter({
       });
 
       const manga = await Manga.get(input.mdId);
-      console.log("manga", manga);
+      const covers = await manga.getCovers();
+      const mainCover = await manga.mainCover.resolve();
 
       void pusherServer.triggerBatch([
         {
@@ -53,5 +59,112 @@ export const mdRouter = createTRPCRouter({
           },
         },
       ]);
+
+      // End date, trailer, type "manga default", source
+      const { genres, tags, isOneShot } = MdUtils.getGenresAndTags(manga);
+      const titles = MdUtils.getTitles(manga);
+      const trackers = MdUtils.getTrackers(manga);
+
+      const media = await ctx.db.media.create({
+        data: {
+          startDate: new Date(Date.parse(manga.year.toString())),
+          // -----
+          synopsis: input.synopsis,
+          contentRating: MdUtils.getContentRating(manga),
+          oneShot: isOneShot,
+          type: MdUtils.getType(manga),
+          status: MdUtils.getStatus(manga),
+          source: "LIGHT_NOVEL",
+          demography: MdUtils.getDemography(manga),
+          countryOfOrigin: MdUtils.getCountryOfOrigin(manga),
+          genres,
+          tags: tags.map((key) => ({ key, isSpoiler: false })),
+          // -----
+          titles: {
+            create: titles.map((title) => ({
+              ...title,
+              creatorId: ctx.session.user.id,
+            })),
+          },
+          trackers: {
+            create: trackers.map((tracker) => ({
+              ...tracker,
+              creatorId: ctx.session.user.id,
+            })),
+          },
+          // -----
+          creatorId: ctx.session.user.id,
+        },
+      });
+
+      void pusherServer.trigger("importChannel", "importEvent", {
+        step: 2,
+        content: "Obra criada",
+        type: "success",
+      });
+
+      for (const [i, cover] of covers.entries()) {
+        void pusherServer.trigger("importChannel", "importEvent", {
+          step: 3,
+          content: `Upando a cover ${i + 1}/${covers.length}...`,
+          type: "ongoing",
+        });
+
+        const response = await fetch(MediaUtils.getUploadEndpoint(), {
+          method: "POST",
+          headers: {
+            Authorization: env.IO_ADMIN_KEY,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId: ctx.session.user.id,
+            mediaId: media.id,
+            type: "COVER",
+            url: cover.imageSource,
+          }),
+        });
+
+        const uploadCover = (await response.json()) as MediaCover;
+
+        await ctx.db.mediaCover.update({
+          data: {
+            volume: isNaN(parseFloat(cover.volume))
+              ? null
+              : parseFloat(cover.volume),
+            isMainCover: mainCover.id === cover.id,
+          },
+          where: { id: uploadCover.id },
+        });
+      }
+
+      void pusherServer.triggerBatch([
+        {
+          channel: "importChannel",
+          name: "importEvent",
+          data: {
+            step: 3,
+            content: "Covers upadas",
+            type: "success",
+          },
+        },
+        {
+          channel: "importChannel",
+          name: "importEvent",
+          data: {
+            step: 4,
+            content: "Reindexando a busca...",
+            type: "ongoing",
+          },
+        },
+      ]);
+
+      const indexItem = await MediaService.getIndexItem(media.id);
+      await ctx.indexes.medias.updateDocuments([indexItem]);
+
+      void pusherServer.trigger("importChannel", "importEvent", {
+        step: 4,
+        content: "Busca reindexada",
+        type: "success",
+      });
     }),
 });

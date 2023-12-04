@@ -693,4 +693,5 @@ enum Languages {
 
     zh // Chinese
     zh_hk // Chinese (Hong Kong)
+    zh_ro // Chinese (romanized)
 }

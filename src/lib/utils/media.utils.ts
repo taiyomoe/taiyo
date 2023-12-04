@@ -1,17 +1,17 @@
 import type { Languages } from "@prisma/client";
 
-import { CDN_DOMAIN } from "~/lib/constants";
+import { env } from "~/lib/env.mjs";
 import type { MediaLimited } from "~/lib/types";
 
 const getUrl = (media: { id: string }) => `/media/${media.id}`;
 
 const getCoverUrl = (media: { id: string; coverId: string }) =>
-  `${CDN_DOMAIN}/${media.id}/covers/${media.coverId}.jpg`;
+  `${env.NEXT_PUBLIC_CDN_URL}/medias/${media.id}/covers/${media.coverId}.jpg`;
 
 const getBannerOrCoverUrl = (media: MediaLimited) => {
   if (!media.bannerId) return getCoverUrl(media);
 
-  return `${CDN_DOMAIN}/${media.id}/banners/${media.bannerId}.jpg`;
+  return `${env.NEXT_PUBLIC_CDN_URL}/medias/${media.id}/banners/${media.bannerId}.jpg`;
 };
 
 const getMainTitle = (
@@ -61,4 +61,5 @@ export const MediaUtils = {
   getCoverUrl,
   getBannerOrCoverUrl,
   getMainTitle,
+  getUploadEndpoint: () => `${env.NEXT_PUBLIC_IO_URL}/upload/url`,
 };

@@ -12,7 +12,7 @@ const stepperItem = tv({
     container: "flex gap-6",
     number:
       "flex flex-col items-center bg-content3 rounded-full !w-12 !h-12 text-2xl font-semibold flex justify-center items-center",
-    title: "text-3xl font-bold",
+    title: "text-3xl font-bold mt-1.5",
     content: "flex flex-col gap-6 w-full",
   },
 });
