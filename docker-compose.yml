@@ -24,3 +24,14 @@ services:
       - "$MEILISEARCH_PORT:7700"
     volumes:
       - "./data/meilisearch:/data.ms"
+
+  soketi:
+    container_name: soketi
+    image: "quay.io/soketi/soketi:1.4-16-debian"
+    restart: always
+    environment:
+      - SOKETI_DEFAULT_APP_ID=$SOKETI_APP_ID
+      - SOKETI_DEFAULT_APP_KEY=$NEXT_PUBLIC_SOKETI_APP_KEY
+      - SOKETI_DEFAULT_APP_SECRET=$SOKETI_APP_SECRET
+    ports:
+      - "$NEXT_PUBLIC_SOKETI_PORT:6001"

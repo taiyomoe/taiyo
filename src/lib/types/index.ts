@@ -5,3 +5,4 @@ export * from "./media.types";
 export * from "./mediaChapter.types";
 export * from "./permissions.types";
 export * from "./upload.types";
+export * from "./md.types";

@@ -66,6 +66,8 @@ export const searchMediaSchema = z.object({
 
 export const importMediaSchema = z.object({
   mdId: z.string().uuid(),
+  synopsis: z.string().min(1),
 });
 
 export type InsertMediaSchema = typeof insertMediaSchema._type;
+export type ImportMediaSchema = typeof importMediaSchema._type;
