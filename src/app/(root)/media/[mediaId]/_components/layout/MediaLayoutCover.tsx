@@ -2,14 +2,14 @@ import NextImage from "next/image";
 import { Image } from "@nextui-org/image";
 
 import type { MediaLimited } from "~/lib/types";
-import { MediaUtils } from "~/lib/utils/media.utils";
+import { MediaCoverUtils } from "~/lib/utils/mediaCover.utils";
 
 type Props = {
   media: MediaLimited;
 };
 
 export const MediaLayoutCover = ({ media }: Props) => {
-  const coverUrl = MediaUtils.getCoverUrl(media);
+  const coverUrl = MediaCoverUtils.getUrl(media);
 
   return (
     <Image

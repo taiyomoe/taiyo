@@ -10,6 +10,7 @@ import { UserLibrarySidebarStatusSelect } from "~/components/library/UserLibrary
 import { api } from "~/lib/trpc/client";
 import type { UserLibraryStatus } from "~/lib/types";
 import { MediaUtils } from "~/lib/utils/media.utils";
+import { MediaCoverUtils } from "~/lib/utils/mediaCover.utils";
 import { useLibraryStore } from "~/stores";
 
 type Props = {
@@ -61,7 +62,7 @@ export const UserLibrarySidebarTabsContent = ({ status }: Props) => {
         <div key={media.id} className="relative flex h-[80px] gap-2">
           <Image
             as={NextImage}
-            src={MediaUtils.getCoverUrl(media)}
+            src={MediaCoverUtils.getUrl(media)}
             className="object-fit h-full min-w-[60px] rounded-small"
             width={60}
             height={80}
