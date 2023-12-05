@@ -1,7 +1,10 @@
 import { z } from "zod";
 
 import { TAG_KEYS } from "~/lib/i18n/tags";
-import { insertMediaTitleSchema, updateMediaTitleSchema } from "~/lib/schemas";
+import {
+  insertMediaTitleSchema,
+  updateMediaTitleSchema,
+} from "~/lib/schemas/mediaTitle.schemas";
 
 import { MediaSchema } from "./prisma";
 
