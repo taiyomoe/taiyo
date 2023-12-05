@@ -90,15 +90,10 @@ export const mediasRouter = createTRPCRouter({
         (t) => !input.titles.some((it) => it.id === t.id),
       );
 
-      console.log("\n\n");
-      console.log("titlesToDelete", titlesToDelete);
-
-      await ctx.db.mediaTitle.softDeleteMany({
+      await ctx.db.mediaTitle.updateMany({
+        data: { deletedAt: new Date() },
         where: { id: { in: titlesToDelete.map((t) => t.id) } },
       });
-
-      console.log("inside update");
-      console.log("input", input);
     }),
 
   getById: publicProcedure

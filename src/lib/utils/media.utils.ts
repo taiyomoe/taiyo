@@ -2,14 +2,12 @@ import type { Languages } from "@prisma/client";
 
 import { env } from "~/lib/env.mjs";
 import type { MediaLimited } from "~/lib/types";
+import { MediaCoverUtils } from "~/lib/utils/mediaCover.utils";
 
 const getUrl = (media: { id: string }) => `/media/${media.id}`;
 
-const getCoverUrl = (media: { id: string; coverId: string }) =>
-  `${env.NEXT_PUBLIC_CDN_URL}/medias/${media.id}/covers/${media.coverId}.jpg`;
-
 const getBannerOrCoverUrl = (media: MediaLimited) => {
-  if (!media.bannerId) return getCoverUrl(media);
+  if (!media.bannerId) return MediaCoverUtils.getUrl(media);
 
   return `${env.NEXT_PUBLIC_CDN_URL}/medias/${media.id}/banners/${media.bannerId}.jpg`;
 };
@@ -96,7 +94,6 @@ const sortTitles = (titles: MediaLimited["titles"]) => {
 
 export const MediaUtils = {
   getUrl,
-  getCoverUrl,
   getBannerOrCoverUrl,
   getMainTitle,
   getUploadEndpoint: () => `${env.NEXT_PUBLIC_IO_URL}/upload/url`,
