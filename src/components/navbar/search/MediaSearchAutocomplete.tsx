@@ -9,7 +9,7 @@ import { SearchIcon } from "lucide-react";
 
 import { api } from "~/lib/trpc/client";
 import type { SearchedMedia } from "~/lib/types";
-import { MediaUtils } from "~/lib/utils/media.utils";
+import { MediaCoverUtils } from "~/lib/utils/mediaCover.utils";
 
 type Props = {
   itemsHrefPrefix: string;
@@ -72,7 +72,7 @@ export const MediaSearchAutocomplete = (props: Props) => {
           textValue={item.title}
         >
           <Image
-            src={MediaUtils.getCoverUrl({
+            src={MediaCoverUtils.getUrl({
               id: item.id,
               coverId: item.coverId,
             })}
