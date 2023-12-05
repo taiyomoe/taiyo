@@ -1,5 +1,8 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import type { AutocompleteProps } from "@nextui-org/autocomplete";
 import { Autocomplete, AutocompleteItem } from "@nextui-org/autocomplete";
 import { useAsyncList } from "@react-stately/data";
 import { SearchIcon } from "lucide-react";
@@ -8,7 +11,12 @@ import { api } from "~/lib/trpc/client";
 import type { SearchedMedia } from "~/lib/types";
 import { MediaUtils } from "~/lib/utils/media.utils";
 
-export const MediaSearchAutocomplete = () => {
+type Props = {
+  itemsHrefPrefix: string;
+} & Omit<AutocompleteProps<SearchedMedia>, "children">;
+
+export const MediaSearchAutocomplete = (props: Props) => {
+  const { itemsHrefPrefix, ...rest } = props;
   const { mutateAsync } = api.medias.search.useMutation();
 
   const list = useAsyncList<SearchedMedia>({
@@ -50,12 +58,13 @@ export const MediaSearchAutocomplete = () => {
       aria-label="search media"
       radius="full"
       className="md:w-[350px] lg:w-[400px]"
+      {...rest}
     >
       {(item) => (
         <AutocompleteItem
           key={item.id}
           as={Link}
-          href={MediaUtils.getUrl(item)}
+          href={`${itemsHrefPrefix}/${item.id}`}
           classNames={{
             base: "p-0",
             title: "flex gap-2 h-[80px] text-ellipsis",
