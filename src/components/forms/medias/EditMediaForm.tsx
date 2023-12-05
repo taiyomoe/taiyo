@@ -39,8 +39,6 @@ export const EditMediaForm = ({ initialValues }: Props) => {
         setSubmitting(false);
       },
     });
-
-    console.log("delta", delta);
   };
 
   return (
