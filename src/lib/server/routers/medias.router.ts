@@ -4,6 +4,7 @@ import {
   getMediaByIdSchema,
   insertMediaSchema,
   searchMediaSchema,
+  updateMediaSchema,
 } from "~/lib/schemas";
 import { LibraryService } from "~/lib/services";
 import type { LatestMedia, MediaLimited, SearchedMedia } from "~/lib/types";
@@ -21,7 +22,7 @@ export const mediasRouter = createTRPCRouter({
     .mutation(
       async ({
         ctx,
-        input: { cover, banner, mdTracker, alTracker, malTracker, ...input },
+        input: { mdTracker, alTracker, malTracker, ...input },
       }) => {
         /**
          * Before creating the media, we need to create the trackers array.
@@ -65,18 +66,6 @@ export const mediasRouter = createTRPCRouter({
               },
             },
             trackers: { createMany: { data: trackers } },
-            covers: {
-              create: {
-                ...cover,
-                isMainCover: true,
-                uploaderId: ctx.session.user.id,
-              },
-            },
-            banners: {
-              create: banner.id
-                ? { ...banner, uploaderId: ctx.session.user.id }
-                : undefined,
-            },
             creatorId: ctx.session.user.id,
           },
         });
@@ -84,6 +73,33 @@ export const mediasRouter = createTRPCRouter({
         return result;
       },
     ),
+
+  update: protectedProcedure
+    .meta({
+      resource: "medias",
+      action: "create",
+    })
+    .input(updateMediaSchema)
+    .mutation(async ({ ctx, input }) => {
+      const titles = await ctx.db.mediaTitle.findMany({
+        where: { mediaId: input.id, deletedAt: null },
+      });
+
+      // first we need to delete the titles that are not in the input
+      const titlesToDelete = titles.filter(
+        (t) => !input.titles.some((it) => it.id === t.id),
+      );
+
+      console.log("\n\n");
+      console.log("titlesToDelete", titlesToDelete);
+
+      await ctx.db.mediaTitle.softDeleteMany({
+        where: { id: { in: titlesToDelete.map((t) => t.id) } },
+      });
+
+      console.log("inside update");
+      console.log("input", input);
+    }),
 
   getById: publicProcedure
     .input(getMediaByIdSchema)
@@ -96,10 +112,14 @@ export const mediasRouter = createTRPCRouter({
           tags: true,
           covers: {
             select: { id: true },
-            where: { isMainCover: true },
+            where: { isMainCover: true, deletedAt: null },
             take: 1,
           },
-          banners: { select: { id: true }, take: 1 },
+          banners: {
+            select: { id: true },
+            take: 1,
+            where: { deletedAt: null },
+          },
           titles: {
             select: {
               title: true,
@@ -108,10 +128,11 @@ export const mediasRouter = createTRPCRouter({
               isAcronym: true,
               isMainTitle: true,
             },
+            where: { deletedAt: null },
           },
           trackers: { select: { tracker: true, externalId: true } },
         },
-        where: { id: mediaId },
+        where: { id: mediaId, deletedAt: null },
       });
 
       if (!result?.covers.at(0) || !result.titles.at(0)) {

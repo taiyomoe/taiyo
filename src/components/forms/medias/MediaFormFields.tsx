@@ -15,20 +15,19 @@ import { InputFormField } from "~/components/generics/form/InputFormField";
 import { SelectFormField } from "~/components/generics/form/SelectFormField";
 import { SwitchFormField } from "~/components/generics/form/SwitchFormField";
 import { TextAreaFormField } from "~/components/generics/form/TextAreaFormField";
-import { useImageCompression } from "~/hooks/useImageCompression";
 
-import { MediaBannersFormCategory } from "./MediaBannersFormCategory";
-import { MediaCoversFormCategory } from "./MediaCoversFormCategory";
 import { MediaTagsFormCategory } from "./MediaTagsFormCategory";
 import { MediaTitlesFormCategory } from "./MediaTitlesFormCategory";
 import { MediaTrackersFormCategory } from "./MediaTrackersFormFields";
 
-export const AddMediaFormFields = () => {
-  const { isSubmitting, isValid, dirty } = useFormikContext();
-  const { needsCompression, handleCompressImages } = useImageCompression();
+type Props = {
+  action: "create" | "update";
+};
 
-  const shouldDisableButton =
-    needsCompression || isSubmitting || !(isValid && dirty);
+export const MediaFormFields = ({ action }: Props) => {
+  const { isSubmitting, isValid, dirty } = useFormikContext();
+  const shouldDisableButton = isSubmitting || !(isValid && dirty);
+  const buttonText = action === "create" ? "Adicionar" : "Salvar";
 
   return (
     <Form.Layout>
@@ -37,9 +36,7 @@ export const AddMediaFormFields = () => {
         <TextAreaFormField
           name="synopsis"
           label="Sinopse"
-          placeholder={
-            'Gol D. Roger, a man referred to as the "Pirate King," is set to be executed by the World Government. But just before his...'
-          }
+          placeholder='Gol D. Roger, a man referred to as the "Pirate King," is set to be executed by the World Government. But just before his...'
         />
       </Form.Category>
       <MediaTrackersFormCategory />
@@ -50,12 +47,14 @@ export const AddMediaFormFields = () => {
             label="Data de início"
             labelPlacement="outside"
             placeholder="Ex: 2021-01-01"
+            type="date"
           />
           <InputFormField
             name="endDate"
             label="Data de término"
             labelPlacement="outside"
             placeholder="Ex: 2021-01-01"
+            type="date"
           />
         </Form.Row>
         <Form.Row>
@@ -92,17 +91,7 @@ export const AddMediaFormFields = () => {
       </Form.Category>
       <MediaTitlesFormCategory />
       <MediaTagsFormCategory />
-      <MediaCoversFormCategory />
-      <MediaBannersFormCategory />
       <Form.Actions>
-        <Button
-          className="w-fit font-medium"
-          variant="flat"
-          onClick={handleCompressImages}
-          isDisabled={!needsCompression}
-        >
-          Comprimir
-        </Button>
         <Button
           color="primary"
           type="submit"
@@ -110,7 +99,7 @@ export const AddMediaFormFields = () => {
           isDisabled={shouldDisableButton}
           isLoading={isSubmitting}
         >
-          Adicionar
+          {buttonText}
         </Button>
       </Form.Actions>
     </Form.Layout>
