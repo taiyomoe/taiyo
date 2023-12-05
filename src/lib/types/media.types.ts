@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import type {
   Media,
   MediaBanner,
@@ -78,3 +79,17 @@ export type SearchedMedia = {
 };
 
 export type MediaTabs = "info" | "chapters";
+export type MediaEditTabs = "info" | "covers" | "banners" | "stats";
+
+const mediaWithRelations = Prisma.validator<Prisma.MediaDefaultArgs>()({
+  include: {
+    covers: true,
+    banners: true,
+    titles: true,
+    trackers: true,
+    creator: true,
+  },
+});
+export type MediaWithRelations = Prisma.MediaGetPayload<
+  typeof mediaWithRelations
+>;

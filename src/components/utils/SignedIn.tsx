@@ -15,6 +15,7 @@ export const SignedIn = async (props: Props) => {
 
   // Not signed in
   if (!session) return null;
+  console.log(session.user.role.permissions);
 
   // No required role
   if (requiredRole && session.user.role.name !== requiredRole) return null;
