@@ -94,6 +94,20 @@ export const mediasRouter = createTRPCRouter({
         data: { deletedAt: new Date() },
         where: { id: { in: titlesToDelete.map((t) => t.id) } },
       });
+
+      // then we need to update the titles that are in the input
+      const titlesToUpdate = input.titles.filter((t) => t.id !== null);
+
+      await ctx.db.mediaTitle.updateMany({
+        data: titlesToUpdate.map((t) => ({
+          title: t.title,
+          language: t.language,
+          priority: t.priority,
+          isAcronym: t.isAcronym,
+          isMainTitle: t.isMainTitle,
+        })),
+        where: { id: { in: titlesToUpdate.map((t) => t.id) } },
+      });
     }),
 
   getById: publicProcedure
