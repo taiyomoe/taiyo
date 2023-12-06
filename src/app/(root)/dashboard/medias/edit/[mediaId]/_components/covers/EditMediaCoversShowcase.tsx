@@ -82,7 +82,13 @@ export const EditMediaCoversShowcase = ({ media }: Props) => {
         </div>
       </div>
       <Card>
-        <CardBody className="flex flex-row gap-4 overflow-x-scroll scrollbar-thin scrollbar-track-content1 scrollbar-thumb-primary">
+        <CardBody className="flex flex-row gap-4 overflow-x-auto scrollbar-thin scrollbar-track-content1 scrollbar-thumb-primary">
+          {currentVolume.covers.map((c) => (
+            <EditMediaCover key={c.id} media={media} cover={c} />
+          ))}
+          {currentVolume.covers.map((c) => (
+            <EditMediaCover key={c.id} media={media} cover={c} />
+          ))}
           {currentVolume.covers.map((c) => (
             <EditMediaCover key={c.id} media={media} cover={c} />
           ))}
