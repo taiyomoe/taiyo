@@ -69,7 +69,7 @@ export const EditMediaCover = ({ media, cover }: Props) => {
   };
 
   return (
-    <div>
+    <>
       <Image
         className="rounded-small transition-all hover:cursor-pointer hover:opacity-80"
         src={MediaCoverUtils.getUrl({ id: media.id, coverId: cover.id })}
@@ -115,6 +115,6 @@ export const EditMediaCover = ({ media, cover }: Props) => {
           </ModalContent>
         </Form.Component>
       </Modal>
-    </div>
+    </>
   );
 };
