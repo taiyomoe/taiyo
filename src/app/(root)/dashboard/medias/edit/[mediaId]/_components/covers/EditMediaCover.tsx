@@ -1,5 +1,6 @@
-import Image from "next/image";
+import NextImage from "next/image";
 import { Button } from "@nextui-org/button";
+import { Image } from "@nextui-org/image";
 import {
   Modal,
   ModalBody,
@@ -75,7 +76,8 @@ export const EditMediaCover = ({ media, cover }: Props) => {
   return (
     <>
       <Image
-        className="rounded-small transition-all hover:cursor-pointer hover:opacity-80"
+        as={NextImage}
+        className="h-[300px] min-w-[210px] rounded-small object-cover transition-all hover:cursor-pointer hover:opacity-80"
         src={MediaCoverUtils.getUrl({ id: media.id, coverId: cover.id })}
         onClick={onOpen}
         height={300}
@@ -90,8 +92,9 @@ export const EditMediaCover = ({ media, cover }: Props) => {
         >
           <ModalContent>
             <ModalHeader>Modificar cover</ModalHeader>
-            <ModalBody className="relative flex-row">
+            <ModalBody className="flex-row">
               <Image
+                as={NextImage}
                 src={MediaCoverUtils.getUrl({
                   id: media.id,
                   coverId: cover.id,
@@ -106,6 +109,7 @@ export const EditMediaCover = ({ media, cover }: Props) => {
                   name="contentRating"
                   label="Classificação"
                   labelPlacement="outside"
+                  variant="faded"
                   items={ContentRating}
                 />
                 <Form.Row>
@@ -114,6 +118,7 @@ export const EditMediaCover = ({ media, cover }: Props) => {
                     label="Volume"
                     type="number"
                     labelPlacement="outside"
+                    variant="faded"
                     fullWidth
                   />
                   <Tooltip
