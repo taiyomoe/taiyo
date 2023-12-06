@@ -8,6 +8,8 @@ import {
   ModalHeader,
   useDisclosure,
 } from "@nextui-org/modal";
+import { Tooltip } from "@nextui-org/tooltip";
+import { ContentRating } from "@prisma/client";
 import type { MediaCover } from "@prisma/client";
 import type { FormikConfig } from "formik";
 import { useSetAtom } from "jotai";
@@ -18,6 +20,8 @@ import { mediaCoversEditAtom } from "~/atoms/mediaEdit.atoms";
 import { SubmitButton } from "~/components/generics/buttons/SubmitButton";
 import { Form } from "~/components/generics/form/Form";
 import { InputFormField } from "~/components/generics/form/InputFormField";
+import { SelectFormField } from "~/components/generics/form/SelectFormField";
+import { SwitchFormField } from "~/components/generics/form/SwitchFormField";
 import type { UpdateMediaCoverSchema } from "~/lib/schemas";
 import { updateMediaCoverSchema } from "~/lib/schemas";
 import { api } from "~/lib/trpc/client";
@@ -68,6 +72,8 @@ export const EditMediaCover = ({ media, cover }: Props) => {
     });
   };
 
+  console.log("initialValues", initialValues);
+
   return (
     <>
       <Image
@@ -86,30 +92,51 @@ export const EditMediaCover = ({ media, cover }: Props) => {
         >
           <ModalContent>
             <ModalHeader>Modificar cover</ModalHeader>
-            <ModalBody className="flex-row">
+            <ModalBody className="relative flex-row">
               <Image
                 src={MediaCoverUtils.getUrl({
                   id: media.id,
                   coverId: cover.id,
                 })}
-                className="rounded-small"
+                className="h-[160px] min-w-[110px] rounded-small object-cover"
                 height={160}
-                width={120}
+                width={110}
                 alt="cover"
               />
               <Form.Col>
-                <InputFormField
-                  name="volume"
-                  label="Volume"
-                  type="number"
+                <SelectFormField
+                  name="contentRating"
+                  label="Classificação"
                   labelPlacement="outside"
-                  color="danger"
-                  fullWidth
+                  items={ContentRating}
                 />
+                <Form.Row>
+                  <InputFormField
+                    name="volume"
+                    label="Volume"
+                    type="number"
+                    labelPlacement="outside"
+                    fullWidth
+                  />
+                  <Tooltip
+                    content="Para trocar de cover principal, em vez de desativar a opção nesta cover, ative-a na nova cover."
+                    isDisabled={initialValues.isMainCover === false}
+                    color="warning"
+                  >
+                    <div className="min-w-fit">
+                      <SwitchFormField
+                        name="isMainCover"
+                        label="Cover principal"
+                        labelPlacement="outside"
+                        isDisabled={initialValues.isMainCover}
+                      />
+                    </div>
+                  </Tooltip>
+                </Form.Row>
               </Form.Col>
             </ModalBody>
             <ModalFooter>
-              <Button onClick={onOpenChange}>Close</Button>
+              <Button onClick={onOpenChange}>Fechar</Button>
               <SubmitButton>Salvar</SubmitButton>
             </ModalFooter>
           </ModalContent>

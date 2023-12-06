@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo } from "react";
+import { useCallback } from "react";
 import { Switch } from "@nextui-org/switch";
 import type { SwitchProps } from "@nextui-org/switch";
 import { useField } from "formik";
@@ -20,7 +20,6 @@ export const SwitchFormField = ({
   label,
   labelPlacement = "outside",
   className,
-  shouldBeUnique,
   onChange,
   ...rest
 }: Props) => {
@@ -28,12 +27,6 @@ export const SwitchFormField = ({
   const [{ value, ...field }, {}, { setValue }] = useField<boolean>({
     name,
   });
-
-  const shouldDisable = useMemo(() => {
-    if (!shouldBeUnique) return false;
-
-    return value;
-  }, [shouldBeUnique, value]);
 
   const handleChange = useCallback(() => {
     void setValue(!value);
@@ -49,7 +42,6 @@ export const SwitchFormField = ({
         {...field}
         {...rest}
         isSelected={value}
-        isDisabled={shouldDisable}
         onChange={handleChange}
         className="h-[40px]"
         classNames={{
