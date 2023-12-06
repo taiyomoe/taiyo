@@ -13,8 +13,11 @@
     --secondary: #383842;
     --secondary-foreground: 0 0% 9%;
 
-    --content1: #fff;
+    --content1: #ececee; /* zinc-100 + 3% darker */
     --content1-foreground: 0 0% 3.9%;
+
+    --content2: #dfdfe2; /* zinc-100 + 8% darker */
+    --content2-foreground: 0 0% 3.9%;
 
     --discord: #5865f2;
     --discord-foreground: white;
@@ -39,8 +42,11 @@
     --secondary: #383842;
     --secondary-foreground: 0 0% 98%;
 
-    --content1: #26262d;
+    --content1: #27272a; /* zinc-800 */
     --content1-foreground: 0 0% 98%;
+
+    --content2: #37373b; /* zinc-800 + 8% brighter */
+    --content2-foreground: 0 0% 98%;
 
     --discord: #5865f2;
     --discord-foreground: white;
