@@ -72,8 +72,6 @@ export const EditMediaCover = ({ media, cover }: Props) => {
     });
   };
 
-  console.log("initialValues", initialValues);
-
   return (
     <>
       <Image
