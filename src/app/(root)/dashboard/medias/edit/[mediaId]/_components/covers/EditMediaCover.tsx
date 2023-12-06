@@ -10,9 +10,11 @@ import {
 } from "@nextui-org/modal";
 import type { MediaCover } from "@prisma/client";
 import type { FormikConfig } from "formik";
+import { useSetAtom } from "jotai";
 import { toast } from "sonner";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 
+import { mediaCoversEditAtom } from "~/atoms/mediaEdit.atoms";
 import { SubmitButton } from "~/components/generics/buttons/SubmitButton";
 import { Form } from "~/components/generics/form/Form";
 import { InputFormField } from "~/components/generics/form/InputFormField";
@@ -29,6 +31,7 @@ type Props = {
 };
 
 export const EditMediaCover = ({ media, cover }: Props) => {
+  const setMediaCoversEdit = useSetAtom(mediaCoversEditAtom);
   const { mutateAsync } = api.mediaCovers.update.useMutation();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const initialValues: UpdateMediaCoverSchema = {
@@ -50,7 +53,14 @@ export const EditMediaCover = ({ media, cover }: Props) => {
 
     toast.promise(mutateAsync(payload), {
       loading: "Salvando alterações...",
-      success: "Alterações salvas com sucesso!",
+      success: () => {
+        setMediaCoversEdit((prev) =>
+          MediaCoverUtils.computeVolumesUpdate(prev, values),
+        );
+        onOpen();
+
+        return "Alterações salvas com sucesso!";
+      },
       error: "Não foi possível salvar as alterações.",
       finally: () => {
         setSubmitting(false);
@@ -76,7 +86,7 @@ export const EditMediaCover = ({ media, cover }: Props) => {
         >
           <ModalContent>
             <ModalHeader>Modificar cover</ModalHeader>
-            <ModalBody>
+            <ModalBody className="flex-row">
               <Image
                 src={MediaCoverUtils.getUrl({
                   id: media.id,
@@ -87,7 +97,16 @@ export const EditMediaCover = ({ media, cover }: Props) => {
                 width={120}
                 alt="cover"
               />
-              <InputFormField name="volume" type="number" />
+              <Form.Col>
+                <InputFormField
+                  name="volume"
+                  label="Volume"
+                  type="number"
+                  labelPlacement="outside"
+                  color="danger"
+                  fullWidth
+                />
+              </Form.Col>
             </ModalBody>
             <ModalFooter>
               <Button onClick={onOpenChange}>Close</Button>

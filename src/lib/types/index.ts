@@ -2,6 +2,7 @@ export * from "./common.types";
 export * from "./form.types";
 export * from "./library.types";
 export * from "./media.types";
+export * from "./mediaCover.types";
 export * from "./mediaChapter.types";
 export * from "./permissions.types";
 export * from "./upload.types";
