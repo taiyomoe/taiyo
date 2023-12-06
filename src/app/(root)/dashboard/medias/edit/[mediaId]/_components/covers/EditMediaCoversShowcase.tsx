@@ -1,10 +1,11 @@
-import { useMemo, useState } from "react";
-import Image from "next/image";
+import { useEffect, useMemo, useState } from "react";
 import { Card, CardBody } from "@nextui-org/card";
 import type { Selection } from "@nextui-org/react";
 import { Select, SelectItem } from "@nextui-org/select";
+import { useAtom } from "jotai";
 
 import { EditMediaCover } from "~/app/(root)/dashboard/medias/edit/[mediaId]/_components/covers/EditMediaCover";
+import { mediaCoversEditAtom } from "~/atoms/mediaEdit.atoms";
 import type { MediaWithRelations } from "~/lib/types";
 import { MediaCoverUtils } from "~/lib/utils/mediaCover.utils";
 import { SelectUtils } from "~/lib/utils/select.utils";
@@ -14,18 +15,29 @@ type Props = {
 };
 
 export const EditMediaCoversShowcase = ({ media }: Props) => {
-  const lowestVolume = MediaCoverUtils.getLowestVolume(media);
-  const volumes = MediaCoverUtils.getVolumes(media);
+  const lowestVolumeNumber = MediaCoverUtils.getLowestVolumeNumber(media);
+  const [volumes, setVolumes] = useAtom(mediaCoversEditAtom);
   const [values, setValues] = useState<Selection>(
-    new Set([lowestVolume?.toString() ?? ""]),
+    new Set([lowestVolumeNumber?.toString() ?? ""]),
   );
   const currentVolume = useMemo(() => {
-    return volumes.find(
-      (v) => v.number === Number(SelectUtils.getSelectedKey(values)),
-    );
-  }, [values, volumes]);
+    const selectedVolumeNum = Number(SelectUtils.getSelectedKey(values));
+    const selectedVolume = volumes.find((v) => v.number === selectedVolumeNum);
 
-  if (lowestVolume === undefined || !currentVolume) return <div>no covers</div>;
+    if (selectedVolume) return selectedVolume;
+
+    const lowestVolumeNum = MediaCoverUtils.getLowestVolumeNumber(media);
+    setValues(new Set([lowestVolumeNum?.toString() ?? ""]));
+
+    return volumes.find((v) => v.number === lowestVolumeNum);
+  }, [media, values, volumes]);
+
+  useEffect(() => {
+    setVolumes(MediaCoverUtils.computeVolumes(media));
+  }, [media, setVolumes]);
+
+  if (lowestVolumeNumber === undefined || !currentVolume)
+    return <div>no covers</div>;
 
   return (
     <div className="flex flex-col gap-6">
@@ -73,16 +85,6 @@ export const EditMediaCoversShowcase = ({ media }: Props) => {
         <CardBody className="flex flex-row gap-4 overflow-x-scroll scrollbar-thin scrollbar-track-content1 scrollbar-thumb-primary">
           {currentVolume.covers.map((c) => (
             <EditMediaCover key={c.id} media={media} cover={c} />
-          ))}
-          {currentVolume.covers.map((c) => (
-            <Image
-              key={c.id}
-              src={MediaCoverUtils.getUrl({ id: media.id, coverId: c.id })}
-              alt="cover"
-              className="rounded-small object-cover"
-              width={210}
-              height={300}
-            />
           ))}
         </CardBody>
       </Card>

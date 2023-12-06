@@ -45,7 +45,7 @@ const Row = ({ children }: Props) => (
 );
 
 const Col = ({ children }: Props) => (
-  <div className="flex flex-col gap-6">{children}</div>
+  <div className="flex w-full flex-col gap-6">{children}</div>
 );
 
 /**
