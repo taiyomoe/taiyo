@@ -21,6 +21,8 @@ export const EditMediaCoversShowcase = ({ media }: Props) => {
     new Set([lowestVolumeNumber?.toString() ?? ""]),
   );
   const currentVolume = useMemo(() => {
+    if (!volumes.length) return;
+
     const selectedVolumeNum = Number(SelectUtils.getSelectedKey(values));
     const selectedVolume = volumes.find((v) => v.number === selectedVolumeNum);
 
@@ -83,12 +85,6 @@ export const EditMediaCoversShowcase = ({ media }: Props) => {
       </div>
       <Card>
         <CardBody className="flex flex-row gap-4 overflow-x-auto scrollbar-thin scrollbar-track-content1 scrollbar-thumb-primary">
-          {currentVolume.covers.map((c) => (
-            <EditMediaCover key={c.id} media={media} cover={c} />
-          ))}
-          {currentVolume.covers.map((c) => (
-            <EditMediaCover key={c.id} media={media} cover={c} />
-          ))}
           {currentVolume.covers.map((c) => (
             <EditMediaCover key={c.id} media={media} cover={c} />
           ))}
