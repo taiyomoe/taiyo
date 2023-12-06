@@ -15,7 +15,7 @@ type Props = {
 };
 
 export const EditMediaCoversShowcase = ({ media }: Props) => {
-  const lowestVolumeNumber = MediaCoverUtils.getLowestVolumeNumber(media);
+  const lowestVolumeNumber = MediaCoverUtils.getLowestVolumeNumber({ media });
   const [volumes, setVolumes] = useAtom(mediaCoversEditAtom);
   const [values, setValues] = useState<Selection>(
     new Set([lowestVolumeNumber?.toString() ?? ""]),
@@ -28,11 +28,11 @@ export const EditMediaCoversShowcase = ({ media }: Props) => {
 
     if (selectedVolume) return selectedVolume;
 
-    const lowestVolumeNum = MediaCoverUtils.getLowestVolumeNumber(media);
+    const lowestVolumeNum = MediaCoverUtils.getLowestVolumeNumber({ volumes });
     setValues(new Set([lowestVolumeNum?.toString() ?? ""]));
 
     return volumes.find((v) => v.number === lowestVolumeNum);
-  }, [media, values, volumes]);
+  }, [values, volumes]);
 
   useEffect(() => {
     setVolumes(MediaCoverUtils.computeVolumes(media));
