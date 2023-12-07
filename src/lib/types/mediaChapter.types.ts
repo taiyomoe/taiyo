@@ -52,7 +52,6 @@ export type MediaChapterNavigation = {
 export type SelectedImage = {
   type: UploadSessionType;
   file: File;
-  status: "pending" | "compressing" | "compressed";
 };
 
 export type ReaderImage = { number: number; url: string; blobUrl: string };

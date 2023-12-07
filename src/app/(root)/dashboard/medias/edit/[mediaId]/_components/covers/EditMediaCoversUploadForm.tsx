@@ -13,16 +13,17 @@ import type { UploadMediaCoverSchema } from "~/lib/schemas";
 export const EditMediaCoversUploadForm = () => {
   const { setValues } = useFormikContext<UploadMediaCoverSchema>();
 
-  const onDrop = () => {
-    void setValues((prev) => [
-      ...prev,
-      {
-        contentRating: "NORMAL",
-        volume: prev.length + 1,
-        isMainCover: false,
-        language: "ja",
-      },
-    ]);
+  const onDrop = async (filesLength: number) => {
+    await setValues((prev) =>
+      prev.concat(
+        Array.from({ length: filesLength }).map((_, i) => ({
+          contentRating: "NORMAL",
+          volume: prev.length + i + 1,
+          isMainCover: false,
+          language: "ja",
+        })),
+      ),
+    );
   };
 
   const handleSwitchChange = useCallback(

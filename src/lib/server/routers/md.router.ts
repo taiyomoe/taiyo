@@ -1,10 +1,11 @@
-import type { MediaCover } from "@prisma/client";
+import { TRPCError } from "@trpc/server";
 import { Manga } from "mangadex-full-api";
 
 import { env } from "~/lib/env.mjs";
 import { importMediaSchema } from "~/lib/schemas";
 import { MediaService } from "~/lib/services";
 import { pusherServer } from "~/lib/soketi/server";
+import type { UploadResponse } from "~/lib/types";
 import { MdUtils } from "~/lib/utils/md.utils";
 import { MediaUtils } from "~/lib/utils/media.utils";
 
@@ -124,17 +125,27 @@ export const mdRouter = createTRPCRouter({
           }),
         });
 
-        const uploadCover = (await response.json()) as MediaCover;
+        const uploadCover = (await response.json()) as UploadResponse;
 
-        await ctx.db.mediaCover.update({
+        if ("error" in uploadCover) {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message:
+              "Ocorreu um erro inesperado ao upar a cover número " + (i + 1),
+          });
+        }
+
+        await ctx.db.mediaCover.create({
           data: {
+            id: uploadCover.files[0]!,
             volume: isNaN(parseFloat(cover.volume))
               ? null
               : parseFloat(cover.volume),
             isMainCover: mainCover.id === cover.id,
             language: MdUtils.getLanguage(cover.locale),
+            mediaId: media.id,
+            uploaderId: ctx.session.user.id,
           },
-          where: { id: uploadCover.id },
         });
       }
 

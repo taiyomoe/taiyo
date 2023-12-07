@@ -1,1 +1,3 @@
-export type SuccessfulUploadResponse = { pages: string[] };
+export type UploadResponse =
+  | { error: string[]; errorCode: string }
+  | { files: string[] };

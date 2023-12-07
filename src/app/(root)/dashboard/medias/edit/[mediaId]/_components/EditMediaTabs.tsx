@@ -32,7 +32,7 @@ export const EditMediaTabs = ({ media }: Props) => (
     </Tab>
     <Tab key="covers" title="Covers" className="mt-0 flex flex-col gap-16">
       <EditMediaCoversShowcase media={media} />
-      <EditMediaCoversUpload />
+      <EditMediaCoversUpload mediaId={media.id} />
     </Tab>
     <Tab key="banners" title="Banners">
       <EditMediaBannersTab media={media} />

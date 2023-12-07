@@ -27,7 +27,6 @@ export const ImportButton = () => {
         toast.success("Obra importada com sucesso.");
       },
       onError: (err) => {
-        console.error(err);
         toast.error(err.message);
       },
       onSettled: () => {

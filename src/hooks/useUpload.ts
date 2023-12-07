@@ -1,12 +1,12 @@
 import type { UploadSessionType } from "@prisma/client";
-import { useAtom } from "jotai";
+import { useAtomValue } from "jotai";
 
 import { selectedImagesAtom } from "~/atoms/imageCompression.atoms";
-import type { SuccessfulUploadResponse } from "~/lib/types";
+import type { UploadResponse } from "~/lib/types";
 import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils";
 
 export const useUpload = () => {
-  const [selectedImages] = useAtom(selectedImagesAtom);
+  const selectedImages = useAtomValue(selectedImagesAtom);
 
   const upload = async (authToken: string, type: UploadSessionType) => {
     const formData = new FormData();
@@ -25,9 +25,13 @@ export const useUpload = () => {
       body: formData,
     });
 
-    const data = (await response.json()) as SuccessfulUploadResponse;
+    const data = (await response.json()) as UploadResponse;
 
-    return data.pages;
+    if ("error" in data) {
+      throw new Error(data.error[0]);
+    }
+
+    return data.files;
   };
 
   return { upload };
