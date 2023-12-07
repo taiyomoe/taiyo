@@ -132,6 +132,7 @@ export const mdRouter = createTRPCRouter({
               ? null
               : parseFloat(cover.volume),
             isMainCover: mainCover.id === cover.id,
+            language: MdUtils.getLanguage(cover.locale),
           },
           where: { id: uploadCover.id },
         });
