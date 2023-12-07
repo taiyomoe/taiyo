@@ -1,3 +1,4 @@
+import type { MediaCover } from "@prisma/client";
 import { cloneDeep } from "lodash-es";
 
 import { env } from "~/lib/env.mjs";
@@ -37,6 +38,31 @@ const computeVolumes = (media: MediaWithRelations) => {
     }));
 
   return volumes;
+};
+
+const computeVolumesAddition = (
+  volumes: MediaCoverVolume[],
+  newCovers: MediaCover[],
+) => {
+  const newVolumes = cloneDeep(volumes);
+
+  newCovers.forEach((cover) => {
+    const newVolumeIndex = newVolumes.findIndex(
+      (v) => v.number === cover.volume,
+    );
+
+    if (newVolumeIndex === -1) {
+      newVolumes.push({
+        number: cover.volume!,
+        covers: [cover],
+      });
+    } else {
+      const newVolume = newVolumes[newVolumeIndex]!;
+      newVolume.covers.push(cover);
+    }
+  });
+
+  return newVolumes.sort((a, b) => a.number - b.number);
 };
 
 const computeVolumesUpdate = (
@@ -93,5 +119,6 @@ export const MediaCoverUtils = {
   getUrl,
   getLowestVolumeNumber,
   computeVolumes,
+  computeVolumesAddition,
   computeVolumesUpdate,
 };

@@ -30,11 +30,7 @@ export const EditMediaCoverDeleteButton = ({ toggleModal }: Props) => {
 
         return "Cover apagada com sucesso!";
       },
-      error: (err) => {
-        console.log(err);
-
-        return "Erro ao apagar a cover.";
-      },
+      error: "Erro ao apagar a cover.",
     });
   };
 

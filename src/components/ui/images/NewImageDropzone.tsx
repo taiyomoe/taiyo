@@ -11,7 +11,9 @@ import {
   needsCompressionAtom,
   selectedImagesAtom,
 } from "~/atoms/imageCompression.atoms";
+import { SubmitButton } from "~/components/generics/buttons/SubmitButton";
 import type { SelectedImage } from "~/lib/types";
+import { ImageUtils } from "~/lib/utils/image.utils";
 
 import { ImageSelection } from "./ImageSelection";
 
@@ -19,7 +21,7 @@ type Props = {
   title: string;
   type: UploadSessionType;
   isCompact?: boolean;
-  onDrop: () => void;
+  onDrop: (filesLength: number) => void;
   children(options: { selectedImages: SelectedImage[] }): React.ReactNode;
 };
 
@@ -50,21 +52,33 @@ export const NewImageDropzone = (props: Props) => {
 
   const { container } = imageDropzone({ disabled: shouldDisableClick });
 
+  // eslint-disable-next-line @typescript-eslint/no-misused-promises
   const handleDrop: DropzoneProps["onDrop"] = useCallback(
-    (acceptedFiles: File[]) => {
-      setSelectedImages(
-        (prev) =>
-          [
-            ...prev,
-            ...acceptedFiles.map((f) => ({ type, file: f, status: "pending" })),
-          ] as SelectedImage[],
-      );
-
+    async (acceptedFiles: File[]) => {
       if (acceptedFiles.some((f) => f.type !== "image/jpeg")) {
         setNeedsCompression(true);
       }
 
-      onDrop();
+      const compressedFiles = await Promise.all(
+        acceptedFiles.map(async (file) => {
+          if (file.type === "image/jpeg") {
+            return file;
+          }
+
+          return await ImageUtils.convert(file);
+        }),
+      );
+
+      setSelectedImages((prev) => [
+        ...prev,
+        ...compressedFiles.map((file) => ({
+          file,
+          type,
+        })),
+      ]);
+      setNeedsCompression(false);
+
+      onDrop(acceptedFiles.length);
     },
     [onDrop, setNeedsCompression, setSelectedImages, type],
   );
@@ -118,14 +132,7 @@ export const NewImageDropzone = (props: Props) => {
         </CardBody>
       </Card>
       <div className="flex justify-end">
-        <Button
-          className="font-medium"
-          color="primary"
-          isDisabled={shouldDisableUploadButton}
-          type="submit"
-        >
-          Upar
-        </Button>
+        <SubmitButton isDisabled={shouldDisableUploadButton}>Upar</SubmitButton>
       </div>
     </div>
   );
