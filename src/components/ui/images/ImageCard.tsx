@@ -1,11 +1,10 @@
 import { Spinner, tv } from "@nextui-org/react";
 import prettyBytes from "pretty-bytes";
 
-import type { SelectedImage } from "~/lib/types";
-
 type Props = {
+  file: File;
   position: string;
-} & Omit<SelectedImage, "type">;
+};
 
 const imageCard = tv({
   slots: {
@@ -22,14 +21,6 @@ const imageCard = tv({
     fileTypeText: "w-fit rounded-lg px-2 py-1",
   },
   variants: {
-    status: {
-      pending: {},
-      compressing: {
-        container: "opacity-10",
-        spinner: "block",
-      },
-      compressed: {},
-    },
     isJpeg: {
       true: {
         fileTypeText: "bg-success-200",
@@ -41,7 +32,7 @@ const imageCard = tv({
   },
 });
 
-export const ImageCard = ({ file, status, position }: Props) => {
+export const ImageCard = ({ file, position }: Props) => {
   const {
     container,
     spinner,
@@ -54,7 +45,6 @@ export const ImageCard = ({ file, status, position }: Props) => {
     fileSizeText,
     fileTypeText,
   } = imageCard({
-    status,
     isJpeg: file.type === "image/jpeg",
   });
 

@@ -4,7 +4,6 @@ import type {
   MediaChapterComment,
   MediaTitle,
   Scan,
-  UploadSessionType,
   User,
 } from "@prisma/client";
 
@@ -47,11 +46,6 @@ export type MediaChapterNavigation = {
   previousPage: number | null;
   currentPage: number;
   nextPage: number | null;
-};
-
-export type SelectedImage = {
-  type: UploadSessionType;
-  file: File;
 };
 
 export type ReaderImage = { number: number; url: string; blobUrl: string };

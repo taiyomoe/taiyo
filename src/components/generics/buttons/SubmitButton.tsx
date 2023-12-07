@@ -1,16 +1,23 @@
 import type { ButtonProps } from "@nextui-org/button";
 import { Button } from "@nextui-org/button";
 import { useFormikContext } from "formik";
-import { useAtomValue } from "jotai";
 
-import { needsCompressionAtom } from "~/atoms/imageCompression.atoms";
+import { useImageStore } from "~/stores";
 
 export const SubmitButton = ({ isDisabled, children }: ButtonProps) => {
-  const needsCompression = useAtomValue(needsCompressionAtom);
+  const { isCompressing } = useImageStore();
   const { isSubmitting, isValid, dirty } = useFormikContext();
 
   const shouldDisableButton =
-    isSubmitting || !(isValid && dirty) || needsCompression || isDisabled;
+    isSubmitting || !(isValid && dirty) || isCompressing || isDisabled;
+
+  if (isCompressing) {
+    return (
+      <Button className="w-fit font-medium" isLoading color="primary">
+        Comprimindo
+      </Button>
+    );
+  }
 
   return (
     <Button

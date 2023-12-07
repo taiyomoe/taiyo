@@ -1,17 +1,17 @@
 import { useMutation } from "@tanstack/react-query";
 import { TRPCClientError } from "@trpc/client";
 import type { FormikConfig } from "formik";
-import { useAtom } from "jotai";
 import { toast } from "sonner";
 
-import { selectedImagesAtom } from "~/atoms/imageCompression.atoms";
 import type { InsertMediaChapterSchema } from "~/lib/schemas/mediaChapter.schemas";
 import { api } from "~/lib/trpc/client";
-import type { SuccessfulUploadResponse } from "~/lib/types";
+import type { SuccessfulUploadResponse, UploadResponse } from "~/lib/types";
 import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils";
+import { useImageStore } from "~/stores";
 
 export const useChapterUpload = (initialValues: InsertMediaChapterSchema) => {
-  const [selectedImages, setSelectedImages] = useAtom(selectedImagesAtom);
+  const { getImages, reset } = useImageStore();
+  const selectedImage = getImages("CHAPTER");
 
   const { mutateAsync: startUploadSession } =
     api.uploads.startUploadSession.useMutation();
@@ -25,8 +25,8 @@ export const useChapterUpload = (initialValues: InsertMediaChapterSchema) => {
       const formData = new FormData();
       formData.append("type", "CHAPTER");
 
-      selectedImages.forEach((img) => {
-        formData.append("file", img.file);
+      selectedImage.forEach((file) => {
+        formData.append("file", file);
       });
 
       const response = await fetch(MediaChapterUtils.getUploadEndpoint(), {
@@ -37,7 +37,11 @@ export const useChapterUpload = (initialValues: InsertMediaChapterSchema) => {
         body: formData,
       });
 
-      const data = (await response.json()) as SuccessfulUploadResponse;
+      const data = (await response.json()) as UploadResponse;
+
+      if ("error" in data) {
+        throw new Error(data.error[0]);
+      }
 
       return data;
     },
@@ -55,12 +59,12 @@ export const useChapterUpload = (initialValues: InsertMediaChapterSchema) => {
         mediaChapterId: initialValues.id,
       });
 
-      const { pages } = await uploadImages({ authToken });
+      const { files: filesId } = await uploadImages({ authToken });
 
-      await createChapter({ ...values, pages });
+      await createChapter({ ...values, pages: filesId });
 
       resetForm();
-      setSelectedImages([]);
+      reset("CHAPTER");
     };
 
     toast.promise(upload, {

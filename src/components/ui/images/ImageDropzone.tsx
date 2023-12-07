@@ -1,22 +1,22 @@
-import { useCallback, useEffect } from "react";
+import { useCallback } from "react";
+import { Button } from "@nextui-org/button";
+import { Card, CardBody } from "@nextui-org/card";
 import { tv } from "@nextui-org/react";
 import type { UploadSessionType } from "@prisma/client";
-import { useAtom, useSetAtom } from "jotai";
 import type { DropzoneProps } from "react-dropzone";
 import { useDropzone } from "react-dropzone";
 
-import {
-  needsCompressionAtom,
-  selectedImagesAtom,
-} from "~/atoms/imageCompression.atoms";
-import type { SelectedImage } from "~/lib/types";
+import { SubmitButton } from "~/components/generics/buttons/SubmitButton";
+import { useImageStore } from "~/stores";
 
 import { ImageSelection } from "./ImageSelection";
-import { ImageShowcase } from "./ImageShowcase";
 
 type Props = {
+  title: string;
   type: UploadSessionType;
   isCompact?: boolean;
+  onDrop: (filesLength: number) => void;
+  children(options: { selectedImages: File[] }): React.ReactNode;
 };
 
 const imageDropzone = tv({
@@ -33,50 +33,69 @@ const imageDropzone = tv({
   },
 });
 
-export const ImageDropzone = ({ type, isCompact }: Props) => {
-  const [selectedImagesAtomValue, setSelectedImages] =
-    useAtom(selectedImagesAtom);
-  const setNeedsCompression = useSetAtom(needsCompressionAtom);
-  const selectedImages = selectedImagesAtomValue.filter((x) => x.type === type);
+export const ImageDropzone = (props: Props) => {
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const { title, type, isCompact, onDrop, children } = props;
+  const { getImages, load } = useImageStore();
+  const selectedImages = getImages(type);
 
-  const shouldDisableDropzone = selectedImages.length !== 0;
-  const { container } = imageDropzone({ disabled: shouldDisableDropzone });
+  const shouldDisableUploadButton = selectedImages.length === 0;
+  const shouldDisableClick = selectedImages.length !== 0;
 
-  const onDrop: DropzoneProps["onDrop"] = useCallback(
+  const { container } = imageDropzone({ disabled: shouldDisableClick });
+
+  const handleDrop: DropzoneProps["onDrop"] = useCallback(
     (acceptedFiles: File[]) => {
-      setSelectedImages(
-        (prev) =>
-          [
-            ...prev,
-            ...acceptedFiles.map((f) => ({ type, file: f, status: "pending" })),
-          ] as SelectedImage[],
-      );
-
-      if (acceptedFiles.some((f) => f.type !== "image/jpeg")) {
-        setNeedsCompression(true);
-      }
+      void onDrop(acceptedFiles.length);
+      void load(type, acceptedFiles);
     },
-    [setNeedsCompression, setSelectedImages, type],
+    [load, onDrop, type],
   );
 
-  const { getRootProps, getInputProps, acceptedFiles } = useDropzone({
-    onDrop,
-    maxFiles: type === "CHAPTER" ? Infinity : 1,
-    disabled: shouldDisableDropzone,
+  const { getRootProps, getInputProps, acceptedFiles, open } = useDropzone({
+    onDrop: handleDrop,
+    maxFiles: Infinity,
+    noClick: shouldDisableClick,
+    accept: {
+      "image/jpeg": [".jpg", ".jpeg"],
+      "image/png": [".png"],
+    },
+    validator: (file) => {
+      if (selectedImages.some((f) => f.size === file.size)) {
+        return {
+          code: "file-already-selected",
+          message: `O arquivo ${file.name} já foi selecionado.`,
+        };
+      }
+
+      return null;
+    },
   });
 
-  useEffect(() => {
-    return () => {
-      setSelectedImages([]);
-      setNeedsCompression(false);
-    };
-  }, [setSelectedImages, setNeedsCompression]);
-
   return (
-    <section {...getRootProps({ className: container() })}>
-      <input {...getInputProps()} disabled={acceptedFiles.length !== 0} />
-      {selectedImages.length === 0 && <ImageSelection isCompact={isCompact} />}
-      {selectedImages.length > 0 && <ImageShowcase type={type} />}
-    </section>
+    <div className="flex flex-col gap-6">
+      <div className="flex flex-col justify-between gap-2 md:flex-row md:items-center">
+        <h3 className="line-clamp-1 text-2xl font-medium">{title}</h3>
+        <div className="flex gap-2">
+          <Button className="font-medium" onClick={open} color="primary">
+            Selecionar
+          </Button>
+        </div>
+      </div>
+      <Card className="rounded-medium">
+        <CardBody className="p-0">
+          <section {...getRootProps({ className: container() })}>
+            <input {...getInputProps()} disabled={acceptedFiles.length !== 0} />
+            {selectedImages.length === 0 && (
+              <ImageSelection isCompact={isCompact} />
+            )}
+            {selectedImages.length > 0 && children({ selectedImages })}
+          </section>
+        </CardBody>
+      </Card>
+      <div className="flex justify-end">
+        <SubmitButton isDisabled={shouldDisableUploadButton}>Upar</SubmitButton>
+      </div>
+    </div>
   );
 };

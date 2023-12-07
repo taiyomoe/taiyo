@@ -4,7 +4,6 @@ import { toast } from "sonner";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 
 import { EditMediaCoversUploadForm } from "~/app/(root)/dashboard/medias/edit/[mediaId]/_components/covers/EditMediaCoversUploadForm";
-import { selectedImagesAtom } from "~/atoms/imageCompression.atoms";
 import { mediaCoversEditAtom } from "~/atoms/mediaEdit.atoms";
 import { Form } from "~/components/generics/form/Form";
 import { useUpload } from "~/hooks/useUpload";
@@ -12,6 +11,7 @@ import { uploadMediaCoverSchema } from "~/lib/schemas";
 import type { UploadMediaCoverSchema } from "~/lib/schemas";
 import { api } from "~/lib/trpc/client";
 import { MediaCoverUtils } from "~/lib/utils/mediaCover.utils";
+import { useImageStore } from "~/stores";
 
 const initialValues: UploadMediaCoverSchema = [];
 
@@ -23,8 +23,8 @@ export const EditMediaCoversUpload = ({ mediaId }: Props) => {
   const { mutateAsync: startUploadSession } =
     api.uploads.startUploadSession.useMutation();
   const { mutateAsync: createCovers } = api.mediaCovers.create.useMutation();
-  const setSelectedImages = useSetAtom(selectedImagesAtom);
   const setMediaCoversEdit = useSetAtom(mediaCoversEditAtom);
+  const { reset } = useImageStore();
   const { upload } = useUpload();
 
   const handleSubmit: FormikConfig<UploadMediaCoverSchema>["onSubmit"] = (
@@ -49,7 +49,7 @@ export const EditMediaCoversUpload = ({ mediaId }: Props) => {
       loading: "Upando a(s) cover(s)...",
       success: (newCovers) => {
         resetForm();
-        setSelectedImages([]);
+        reset("COVER");
         setMediaCoversEdit((prev) =>
           MediaCoverUtils.computeVolumesAddition(prev, newCovers),
         );

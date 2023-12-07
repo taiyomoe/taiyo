@@ -1,3 +1,5 @@
 export type UploadResponse =
   | { error: string[]; errorCode: string }
-  | { files: string[] };
+  | SuccessfulUploadResponse;
+
+export type SuccessfulUploadResponse = { files: string[] };
