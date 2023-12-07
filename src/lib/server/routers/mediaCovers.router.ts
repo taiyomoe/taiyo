@@ -1,6 +1,9 @@
 import { TRPCError } from "@trpc/server";
 
-import { updateMediaCoverSchema } from "~/lib/schemas/mediaCover.schemas";
+import {
+  deleteMediaCoverSchema,
+  updateMediaCoverSchema,
+} from "~/lib/schemas/mediaCover.schemas";
 import { MediaService } from "~/lib/services";
 
 import { createTRPCRouter, protectedProcedure } from "../trpc";
@@ -46,5 +49,31 @@ export const mediaCoversRouter = createTRPCRouter({
         const indexItem = await MediaService.getIndexItem(cover.mediaId);
         await ctx.indexes.medias.updateDocuments([indexItem]);
       }
+    }),
+
+  delete: protectedProcedure
+    .meta({ resource: "mediaCovers", action: "delete" })
+    .input(deleteMediaCoverSchema)
+    .mutation(async ({ ctx, input }) => {
+      const cover = await ctx.db.mediaCover.findUnique({
+        where: { id: input.id },
+      });
+
+      if (!cover) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Media cover not found",
+        });
+      }
+
+      if (cover.isMainCover) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message:
+            "You cannot delete the main cover. If you want to delete it, set another cover as the main one first.",
+        });
+      }
+
+      await ctx.db.mediaCover.delete({ where: { id: input.id } });
     }),
 });

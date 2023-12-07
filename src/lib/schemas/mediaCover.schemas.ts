@@ -16,5 +16,10 @@ export const updateMediaCoverSchema = MediaCoverSchema.pick({
   .partial()
   .required({ id: true });
 
+export const deleteMediaCoverSchema = MediaCoverSchema.pick({
+  id: true,
+});
+
 export type UploadMediaCoverSchema = typeof uploadMediaCoverSchema._type;
 export type UpdateMediaCoverSchema = typeof updateMediaCoverSchema._type;
+export type DeleteMediaCoverSchema = typeof deleteMediaCoverSchema._type;

@@ -17,6 +17,7 @@ import { useSetAtom } from "jotai";
 import { toast } from "sonner";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 
+import { EditMediaCoverDeleteButton } from "~/app/(root)/dashboard/medias/edit/[mediaId]/_components/covers/EditMediaCoverDeleteButton";
 import { mediaCoversEditAtom } from "~/atoms/mediaEdit.atoms";
 import { SubmitButton } from "~/components/generics/buttons/SubmitButton";
 import { Form } from "~/components/generics/form/Form";
@@ -139,6 +140,7 @@ export const EditMediaCover = ({ media, cover }: Props) => {
               </Form.Col>
             </ModalBody>
             <ModalFooter>
+              <EditMediaCoverDeleteButton toggleModal={onOpen} />
               <Button onClick={onOpenChange}>Fechar</Button>
               <SubmitButton>Salvar</SubmitButton>
             </ModalFooter>
