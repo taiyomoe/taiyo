@@ -194,10 +194,12 @@ export const mediasRouter = createTRPCRouter({
       take: 20,
     });
 
-    const latestMedias: LatestMedia[] = result.map((m) => ({
-      id: m.id,
-      coverId: m.covers.at(0)!.id,
-    }));
+    const latestMedias: LatestMedia[] = result
+      .filter((m) => m.covers.length)
+      .map((m) => ({
+        id: m.id,
+        coverId: m.covers.at(0)!.id,
+      }));
 
     return latestMedias;
   }),
