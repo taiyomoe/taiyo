@@ -74,6 +74,9 @@ export const mediaCoversRouter = createTRPCRouter({
         });
       }
 
-      await ctx.db.mediaCover.delete({ where: { id: input.id } });
+      await ctx.db.mediaCover.update({
+        data: { deletedAt: new Date(), deleterId: ctx.session.user.id },
+        where: { id: input.id },
+      });
     }),
 });
