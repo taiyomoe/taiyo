@@ -2,10 +2,10 @@
 
 import { Tab, Tabs } from "@nextui-org/tabs";
 
+import { UpdateMediaCoversShowcase } from "~/components/forms/mediaCovers/UpdateMediaCoversShowcase";
+import { UploadMediaCoversForm } from "~/components/forms/mediaCovers/UploadMediaCoversForm";
 import type { MediaWithRelations } from "~/lib/types";
 
-import { EditMediaCoversShowcase } from "./covers/EditMediaCoversShowcase";
-import { EditMediaCoversUpload } from "./covers/EditMediaCoversUpload";
 import { EditMediaBannersTab } from "./tabs/EditMediaBannersTab";
 import { EditMediaInfoTab } from "./tabs/EditMediaInfoTab";
 import { EditMediaStatsTab } from "./tabs/EditMediaStatsTab";
@@ -31,8 +31,8 @@ export const EditMediaTabs = ({ media }: Props) => (
       <EditMediaInfoTab media={media} />
     </Tab>
     <Tab key="covers" title="Covers" className="mt-0 flex flex-col gap-16">
-      <EditMediaCoversShowcase media={media} />
-      <EditMediaCoversUpload mediaId={media.id} />
+      <UpdateMediaCoversShowcase media={media} />
+      <UploadMediaCoversForm mediaId={media.id} />
     </Tab>
     <Tab key="banners" title="Banners">
       <EditMediaBannersTab media={media} />

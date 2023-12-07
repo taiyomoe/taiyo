@@ -4,17 +4,18 @@ import type { Selection } from "@nextui-org/react";
 import { Select, SelectItem } from "@nextui-org/select";
 import { useAtom } from "jotai";
 
-import { EditMediaCover } from "~/app/(root)/dashboard/medias/edit/[mediaId]/_components/covers/EditMediaCover";
 import { mediaCoversEditAtom } from "~/atoms/mediaEdit.atoms";
 import type { MediaWithRelations } from "~/lib/types";
 import { MediaCoverUtils } from "~/lib/utils/mediaCover.utils";
 import { SelectUtils } from "~/lib/utils/select.utils";
 
+import { UpdateMediaCoverForm } from "./UpdateMediaCoverForm";
+
 type Props = {
   media: MediaWithRelations;
 };
 
-export const EditMediaCoversShowcase = ({ media }: Props) => {
+export const UpdateMediaCoversShowcase = ({ media }: Props) => {
   const lowestVolumeNumber = MediaCoverUtils.getLowestVolumeNumber({ media });
   const [volumes, setVolumes] = useAtom(mediaCoversEditAtom);
   const [values, setValues] = useState<Selection>(
@@ -86,7 +87,7 @@ export const EditMediaCoversShowcase = ({ media }: Props) => {
       <Card>
         <CardBody className="flex flex-row gap-4 overflow-x-auto scrollbar-thin scrollbar-track-content1 scrollbar-thumb-primary">
           {currentVolume.covers.map((c) => (
-            <EditMediaCover key={c.id} media={media} cover={c} />
+            <UpdateMediaCoverForm key={c.id} media={media} cover={c} />
           ))}
         </CardBody>
       </Card>

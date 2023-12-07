@@ -3,7 +3,6 @@ import { useSetAtom } from "jotai";
 import { toast } from "sonner";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 
-import { EditMediaCoversUploadForm } from "~/app/(root)/dashboard/medias/edit/[mediaId]/_components/covers/EditMediaCoversUploadForm";
 import { mediaCoversEditAtom } from "~/atoms/mediaEdit.atoms";
 import { Form } from "~/components/generics/form/Form";
 import { useUpload } from "~/hooks/useUpload";
@@ -13,13 +12,15 @@ import { api } from "~/lib/trpc/client";
 import { MediaCoverUtils } from "~/lib/utils/mediaCover.utils";
 import { useImageStore } from "~/stores";
 
+import { UploadMediaCoversFormFields } from "./UploadMediaCoversFormFields";
+
 const initialValues: UploadMediaCoverSchema = [];
 
 type Props = {
   mediaId: string;
 };
 
-export const EditMediaCoversUpload = ({ mediaId }: Props) => {
+export const UploadMediaCoversForm = ({ mediaId }: Props) => {
   const { mutateAsync: startUploadSession } =
     api.uploads.startUploadSession.useMutation();
   const { mutateAsync: createCovers } = api.mediaCovers.create.useMutation();
@@ -66,7 +67,7 @@ export const EditMediaCoversUpload = ({ mediaId }: Props) => {
       initialValues={initialValues}
       onSubmit={handleSubmit}
     >
-      <EditMediaCoversUploadForm />
+      <UploadMediaCoversFormFields />
     </Form.Component>
   );
 };
