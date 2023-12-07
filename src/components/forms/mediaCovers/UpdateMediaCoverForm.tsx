@@ -10,7 +10,7 @@ import {
   useDisclosure,
 } from "@nextui-org/modal";
 import { Tooltip } from "@nextui-org/tooltip";
-import { ContentRating } from "@prisma/client";
+import { ContentRating, Languages } from "@prisma/client";
 import type { MediaCover } from "@prisma/client";
 import type { FormikConfig } from "formik";
 import { useSetAtom } from "jotai";
@@ -46,6 +46,7 @@ export const UpdateMediaCoverForm = ({ media, cover }: Props) => {
     volume: cover.volume,
     contentRating: cover.contentRating,
     isMainCover: cover.isMainCover,
+    language: cover.language,
   };
 
   const handleSubmit: FormikConfig<UpdateMediaCoverSchema>["onSubmit"] = (
@@ -107,21 +108,13 @@ export const UpdateMediaCoverForm = ({ media, cover }: Props) => {
                 alt="cover"
               />
               <Form.Col>
-                <SelectFormField
-                  name="contentRating"
-                  label="Classificação"
-                  labelPlacement="outside"
-                  variant="faded"
-                  items={ContentRating}
-                />
                 <Form.Row>
-                  <InputFormField
-                    name="volume"
-                    label="Volume"
-                    type="number"
+                  <SelectFormField
+                    name="contentRating"
+                    label="Classificação"
                     labelPlacement="outside"
                     variant="faded"
-                    fullWidth
+                    items={ContentRating}
                   />
                   <Tooltip
                     content="Para trocar de cover principal, em vez de desativar a opção nesta cover, ative-a na nova cover."
@@ -137,6 +130,23 @@ export const UpdateMediaCoverForm = ({ media, cover }: Props) => {
                       />
                     </div>
                   </Tooltip>
+                </Form.Row>
+                <Form.Row>
+                  <InputFormField
+                    name="volume"
+                    label="Volume"
+                    type="number"
+                    labelPlacement="outside"
+                    variant="faded"
+                    fullWidth
+                  />
+                  <SelectFormField
+                    name="language"
+                    label="Idioma"
+                    labelPlacement="outside"
+                    variant="faded"
+                    items={Languages}
+                  />
                 </Form.Row>
               </Form.Col>
             </ModalBody>
