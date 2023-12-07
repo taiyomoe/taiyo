@@ -11,7 +11,7 @@ type Props = {
   toggleModal: () => void;
 };
 
-export const EditMediaCoverDeleteButton = ({ toggleModal }: Props) => {
+export const UpdateMediaCoverDeleteButton = ({ toggleModal }: Props) => {
   const { initialValues, values } = useFormikContext<UpdateMediaCoverSchema>();
   const setMediaCoversEdit = useSetAtom(mediaCoversEditAtom);
   const { mutateAsync } = api.mediaCovers.delete.useMutation();

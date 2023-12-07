@@ -17,7 +17,6 @@ import { useSetAtom } from "jotai";
 import { toast } from "sonner";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 
-import { EditMediaCoverDeleteButton } from "~/app/(root)/dashboard/medias/edit/[mediaId]/_components/covers/EditMediaCoverDeleteButton";
 import { mediaCoversEditAtom } from "~/atoms/mediaEdit.atoms";
 import { SubmitButton } from "~/components/generics/buttons/SubmitButton";
 import { Form } from "~/components/generics/form/Form";
@@ -31,12 +30,14 @@ import type { MediaWithRelations } from "~/lib/types";
 import { MediaCoverUtils } from "~/lib/utils/mediaCover.utils";
 import { ObjectUtils } from "~/lib/utils/object.utils";
 
+import { UpdateMediaCoverDeleteButton } from "./UpdateMediaCoverDeleteButton";
+
 type Props = {
   media: MediaWithRelations;
   cover: MediaCover;
 };
 
-export const EditMediaCover = ({ media, cover }: Props) => {
+export const UpdateMediaCoverForm = ({ media, cover }: Props) => {
   const setMediaCoversEdit = useSetAtom(mediaCoversEditAtom);
   const { mutateAsync } = api.mediaCovers.update.useMutation();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -140,7 +141,7 @@ export const EditMediaCover = ({ media, cover }: Props) => {
               </Form.Col>
             </ModalBody>
             <ModalFooter>
-              <EditMediaCoverDeleteButton toggleModal={onOpen} />
+              <UpdateMediaCoverDeleteButton toggleModal={onOpen} />
               <Button onClick={onOpenChange}>Fechar</Button>
               <SubmitButton>Salvar</SubmitButton>
             </ModalFooter>

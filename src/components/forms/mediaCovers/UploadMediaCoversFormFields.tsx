@@ -10,7 +10,7 @@ import { List } from "~/components/generics/List";
 import { ImageDropzone } from "~/components/ui/images/ImageDropzone";
 import type { UploadMediaCoverSchema } from "~/lib/schemas";
 
-export const EditMediaCoversUploadForm = () => {
+export const UploadMediaCoversFormFields = () => {
   const { setValues } = useFormikContext<UploadMediaCoverSchema>();
 
   const handleDrop = async (filesLength: number) => {
