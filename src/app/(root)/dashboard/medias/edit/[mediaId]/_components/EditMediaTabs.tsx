@@ -30,9 +30,9 @@ export const EditMediaTabs = ({ media }: Props) => (
     <Tab key="info" title="Informações">
       <EditMediaInfoTab media={media} />
     </Tab>
-    <Tab key="covers" title="Covers" className="mt-0 flex flex-col gap-10">
+    <Tab key="covers" title="Covers" className="mt-0 flex flex-col gap-16">
       <EditMediaCoversShowcase media={media} />
-      <EditMediaCoversUpload media={media} />
+      <EditMediaCoversUpload />
     </Tab>
     <Tab key="banners" title="Banners">
       <EditMediaBannersTab media={media} />

@@ -12,7 +12,7 @@ type Props = {
   name: string;
   shouldBeUnique?: boolean;
   onChange?: (value: boolean) => void;
-} & Partial<SwitchProps> &
+} & Partial<Omit<SwitchProps, "onChange">> &
   LabelProps;
 
 export const SwitchFormField = ({
