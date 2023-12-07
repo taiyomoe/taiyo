@@ -7,13 +7,13 @@ import { InputFormField } from "~/components/generics/form/InputFormField";
 import { SelectFormField } from "~/components/generics/form/SelectFormField";
 import { SwitchFormField } from "~/components/generics/form/SwitchFormField";
 import { List } from "~/components/generics/List";
-import { NewImageDropzone } from "~/components/ui/images/NewImageDropzone";
+import { ImageDropzone } from "~/components/ui/images/ImageDropzone";
 import type { UploadMediaCoverSchema } from "~/lib/schemas";
 
 export const EditMediaCoversUploadForm = () => {
   const { setValues } = useFormikContext<UploadMediaCoverSchema>();
 
-  const onDrop = async (filesLength: number) => {
+  const handleDrop = async (filesLength: number) => {
     await setValues((prev) =>
       prev.concat(
         Array.from({ length: filesLength }).map((_, i) => ({
@@ -39,10 +39,10 @@ export const EditMediaCoversUploadForm = () => {
   );
 
   return (
-    <NewImageDropzone title="Upar covers" type="COVER" onDrop={onDrop}>
+    <ImageDropzone title="Upar covers" type="COVER" onDrop={handleDrop}>
       {({ selectedImages }) => (
         <List className="gap-4">
-          {selectedImages.map(({ file }, i) => (
+          {selectedImages.map((file, i) => (
             <div key={i} className="flex gap-2">
               <img
                 className="h-[300px] w-[210px] rounded-medium object-cover"
@@ -88,6 +88,6 @@ export const EditMediaCoversUploadForm = () => {
           ))}
         </List>
       )}
-    </NewImageDropzone>
+    </ImageDropzone>
   );
 };
