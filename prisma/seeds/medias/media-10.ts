@@ -126,26 +126,31 @@ const execute = async () => {
       {
         id: "5633a19d-7ec9-4ffd-9d93-57eb03458ce6",
         isMainCover: true,
+        language: "zh",
         mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
         uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
       },
       {
         id: "3a88f93e-07de-4430-9e53-ddabab07676f",
+        language: "zh",
         mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
         uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
       },
       {
         id: "516cfad2-601d-4bd7-b624-1efe26e48d6b",
+        language: "zh",
         mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
         uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
       },
       {
         id: "73984890-d892-412e-8529-d416cc8be525",
+        language: "zh",
         mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
         uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
       },
       {
         id: "d75dae86-643f-42cc-9a2c-8fc919b53536",
+        language: "zh",
         mediaId: "6804cf61-f7ad-410e-87ba-27683ef05403",
         uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
       },
