@@ -1,10 +1,7 @@
 import { z } from "zod";
 
 import { TAG_KEYS } from "~/lib/i18n/tags";
-import {
-  insertMediaTitleSchema,
-  updateMediaTitleSchema,
-} from "~/lib/schemas/mediaTitle.schemas";
+import { createMediaTitlesSchema } from "~/lib/schemas/mediaTitle.schemas";
 
 import { MediaSchema } from "./prisma";
 
@@ -32,15 +29,13 @@ export const insertMediaSchema = MediaSchema.pick({
   mdTracker: z.string().uuid().optional(),
   alTracker: z.coerce.number().positive().min(30000).optional(),
   malTracker: z.coerce.number().positive().min(1).optional(),
-  titles: insertMediaTitleSchema,
+  titles: createMediaTitlesSchema,
 });
 
 export const updateMediaSchema = insertMediaSchema
   .partial()
   .required({ id: true })
-  .extend({
-    titles: updateMediaTitleSchema,
-  });
+  .omit({ titles: true });
 
 export const getMediaByIdSchema = z.string();
 

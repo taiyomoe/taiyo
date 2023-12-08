@@ -55,6 +55,14 @@ export const mediaCoversRouter = createTRPCRouter({
     .meta({ resource: "mediaCovers", action: "update" })
     .input(updateMediaCoverSchema)
     .mutation(async ({ ctx, input }) => {
+      if (input.isMainCover === false) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message:
+            "You cannot remove the main cover. If you want to remove it, set another cover as the main one.",
+        });
+      }
+
       const cover = await ctx.db.mediaCover.findUnique({
         where: { id: input.id },
       });
@@ -63,14 +71,6 @@ export const mediaCoversRouter = createTRPCRouter({
         throw new TRPCError({
           code: "NOT_FOUND",
           message: "Media cover not found",
-        });
-      }
-
-      if (input.isMainCover === false) {
-        throw new TRPCError({
-          code: "BAD_REQUEST",
-          message:
-            "You cannot remove the main cover. If you want to remove it, set another cover as the main one.",
         });
       }
 
