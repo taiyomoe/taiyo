@@ -68,8 +68,6 @@ export const UpdateMediaTitlesForm = ({ title }: Props) => {
       },
       finally: () => setSubmitting(false),
     });
-
-    console.log("submit");
   };
 
   return (
@@ -91,7 +89,7 @@ export const UpdateMediaTitlesForm = ({ title }: Props) => {
           <ModalContent>
             <ModalHeader>Modificar título</ModalHeader>
             <ModalBody>
-              <UpdateMediaTitlesFormFields action="update" />
+              <UpdateMediaTitlesFormFields />
             </ModalBody>
             <ModalFooter>
               <UpdateMediaTitleDeleteButton toggleModal={onOpen} />
