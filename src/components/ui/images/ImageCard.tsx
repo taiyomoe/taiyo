@@ -1,4 +1,4 @@
-import { Spinner, tv } from "@nextui-org/react";
+import { tv } from "@nextui-org/react";
 import prettyBytes from "pretty-bytes";
 
 type Props = {
@@ -9,7 +9,6 @@ type Props = {
 const imageCard = tv({
   slots: {
     container: "relative flex max-w-full rounded-medium bg-default-200",
-    spinner: "absolute left-[calc(50%-20px)] top-[calc(50%-20px)] hidden",
     imagePreview:
       "h-[150px] w-[100px] rounded-l-medium object-cover md:w-[150px]",
     contentContainer: "flex grow flex-col gap-2 p-2",
@@ -33,37 +32,25 @@ const imageCard = tv({
 });
 
 export const ImageCard = ({ file, position }: Props) => {
-  const {
-    container,
-    spinner,
-    imagePreview,
-    contentContainer,
-    upperContentContainer,
-    lowerContentContainer,
-    fileNameText,
-    filePositionText,
-    fileSizeText,
-    fileTypeText,
-  } = imageCard({
-    isJpeg: file.type === "image/jpeg",
-  });
+  const slots = imageCard({ isJpeg: file.type === "image/jpeg" });
 
   return (
-    <div className={container()}>
-      <Spinner className={spinner()} size="lg" />
+    <div className={slots.container()}>
       <img
-        className={imagePreview()}
+        className={slots.imagePreview()}
         src={URL.createObjectURL(file)}
         alt={`image preview`}
       />
-      <div className={contentContainer()}>
-        <div className={upperContentContainer()}>
-          <p className={fileNameText()}>{file.name}</p>
-          <p className={filePositionText()}>{position}</p>
+      <div className={slots.contentContainer()}>
+        <div className={slots.upperContentContainer()}>
+          <p className={slots.fileNameText()}>{file.name}</p>
+          <p className={slots.filePositionText()}>{position}</p>
         </div>
-        <div className={lowerContentContainer()}>
-          <p className={fileSizeText()}>Tamanho: {prettyBytes(file.size)}</p>
-          <p className={fileTypeText()}>Extensão: {file.type}</p>
+        <div className={slots.lowerContentContainer()}>
+          <p className={slots.fileSizeText()}>
+            Tamanho: {prettyBytes(file.size)}
+          </p>
+          <p className={slots.fileTypeText()}>Extensão: {file.type}</p>
         </div>
       </div>
     </div>

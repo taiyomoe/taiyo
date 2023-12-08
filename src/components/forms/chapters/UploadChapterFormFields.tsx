@@ -3,17 +3,13 @@ import { Tooltip } from "@nextui-org/tooltip";
 import { ContentRating, Flag, Languages } from "@prisma/client";
 import { AlertCircleIcon } from "lucide-react";
 
-import { SubmitButton } from "~/components/generics/buttons/SubmitButton";
 import { Form } from "~/components/generics/form/Form";
 import { InputFormField } from "~/components/generics/form/InputFormField";
 import { SelectFormField } from "~/components/generics/form/SelectFormField";
+import { ImageCard } from "~/components/ui/images/ImageCard";
 import { ImageDropzone } from "~/components/ui/images/ImageDropzone";
 
 export const UploadChapterFormFields = () => {
-  const handleDrop = (filesLength: number) => {
-    console.log("Dropped files", filesLength);
-  };
-
   return (
     <Form.Layout>
       <Form.Category>
@@ -80,14 +76,19 @@ export const UploadChapterFormFields = () => {
           />
         </Form.Row>
       </Form.Category>
-      <Form.Category title="Imagens">
-        <ImageDropzone title="Páginas" type="CHAPTER" onDrop={handleDrop}>
-          {({}) => <p>azert</p>}
-        </ImageDropzone>
-      </Form.Category>
-      <Form.Actions>
-        <SubmitButton>Adicionar</SubmitButton>
-      </Form.Actions>
+      <ImageDropzone title="Páginas" type="CHAPTER" isCompact>
+        {({ selectedImages }) => (
+          <div className="flex flex-col gap-3">
+            {selectedImages.map((f, i) => (
+              <ImageCard
+                key={i}
+                file={f}
+                position={`${i + 1}/${selectedImages.length}`}
+              />
+            ))}
+          </div>
+        )}
+      </ImageDropzone>
     </Form.Layout>
   );
 };
