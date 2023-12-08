@@ -1,10 +1,63 @@
 import { TRPCError } from "@trpc/server";
 
-import { updateMediaTitleSchema } from "~/lib/schemas";
+import { createMediaTitleSchema, updateMediaTitleSchema } from "~/lib/schemas";
 
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const mediaTitlesRouter = createTRPCRouter({
+  create: protectedProcedure
+    .meta({ resource: "mediaTitles", action: "create" })
+    .input(createMediaTitleSchema)
+    .mutation(async ({ ctx, input }) => {
+      const titles = await ctx.db.mediaTitle.findMany({
+        where: { mediaId: input.mediaId },
+      });
+
+      if (
+        titles.some(
+          (t) =>
+            t.title.toLowerCase() === input.title.toLowerCase() &&
+            t.language === input.language,
+        )
+      ) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "A title with the same language already exists.",
+        });
+      }
+
+      if (
+        titles.some(
+          (t) => t.language === input.language && t.priority === input.priority,
+        )
+      ) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message:
+            "A title with the same language and priority already exists.",
+        });
+      }
+
+      const createdTitle = await ctx.db.mediaTitle.create({
+        data: {
+          ...input,
+          creatorId: ctx.session.user.id,
+        },
+      });
+
+      if (input.isMainTitle) {
+        await ctx.db.mediaTitle.updateMany({
+          data: { isMainTitle: false },
+          where: {
+            id: { not: createdTitle.id },
+            mediaId: input.mediaId,
+          },
+        });
+      }
+
+      return createdTitle;
+    }),
+
   update: protectedProcedure
     .meta({ resource: "mediaTitles", action: "update" })
     .input(updateMediaTitleSchema)
@@ -36,7 +89,7 @@ export const mediaTitlesRouter = createTRPCRouter({
       if (
         titles.some(
           (t) =>
-            t.title === title.title &&
+            t.title.toLowerCase() === title.title.toLowerCase() &&
             t.language === title.language &&
             t.id !== input.id,
         )

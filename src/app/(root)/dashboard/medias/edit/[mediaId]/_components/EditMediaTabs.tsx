@@ -41,7 +41,7 @@ export const EditMediaTabs = ({ media }: Props) => {
         <EditMediaInfoTab media={media} />
       </Tab>
       <Tab key="titles" title="Títulos">
-        <UpdateMediaTitlesShowcase />
+        <UpdateMediaTitlesShowcase mediaId={media.id} />
       </Tab>
       <Tab key="covers" title="Covers" className="mt-0 flex flex-col gap-16">
         <UpdateMediaCoversShowcase media={media} />

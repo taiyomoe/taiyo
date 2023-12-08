@@ -1,19 +1,27 @@
 import { useMemo } from "react";
 import { Chip } from "@nextui-org/react";
 
+import { UpdateMediaTitleCreateButton } from "~/components/forms/mediaTitles/update/UpdateMediaTitleCreateButton";
 import { UpdateMediaTitlesForm } from "~/components/forms/mediaTitles/update/UpdateMediaTitlesForm";
 import { Form } from "~/components/generics/form/Form";
 import { List } from "~/components/generics/List";
 import { MediaTitleUtils } from "~/lib/utils/mediaTitles.utils";
 import { useMediaUpdateStore } from "~/stores";
 
-export const UpdateMediaTitlesShowcase = () => {
+type Props = {
+  mediaId: string;
+};
+
+export const UpdateMediaTitlesShowcase = ({ mediaId }: Props) => {
   const { titles } = useMediaUpdateStore();
 
   const sortedTitles = useMemo(() => MediaTitleUtils.sort(titles), [titles]);
 
   return (
-    <Form.Category title="Títulos ativos">
+    <Form.Category
+      title="Títulos ativos"
+      actions={<UpdateMediaTitleCreateButton mediaId={mediaId} />}
+    >
       <List>
         {sortedTitles.map((title) => (
           <div key={title.id} className="flex w-full justify-between">

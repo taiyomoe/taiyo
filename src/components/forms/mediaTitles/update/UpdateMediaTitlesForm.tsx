@@ -14,8 +14,8 @@ import { FileEditIcon } from "lucide-react";
 import { toast } from "sonner";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 
+import { MediaTitlesFormFields } from "~/components/forms/mediaTitles/MediaTitlesFormFields";
 import { UpdateMediaTitleDeleteButton } from "~/components/forms/mediaTitles/update/UpdateMediaTitleDeleteButton";
-import { UpdateMediaTitlesFormFields } from "~/components/forms/mediaTitles/update/UpdateMediaTitlesFormFields";
 import { SubmitButton } from "~/components/generics/buttons/SubmitButton";
 import { Form } from "~/components/generics/form/Form";
 import type { UpdateMediaTitleSchema } from "~/lib/schemas";
@@ -93,7 +93,7 @@ export const UpdateMediaTitlesForm = ({ title }: Props) => {
           <ModalContent>
             <ModalHeader>Modificar título</ModalHeader>
             <ModalBody>
-              <UpdateMediaTitlesFormFields />
+              <MediaTitlesFormFields initialValues={initalValues} />
             </ModalBody>
             <ModalFooter>
               <UpdateMediaTitleDeleteButton toggleModal={onOpen} />
