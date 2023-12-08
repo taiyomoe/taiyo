@@ -4,6 +4,6 @@ type Props = {
   media: MediaWithRelations;
 };
 
-export const EditMediaBannersTab = ({ media }: Props) => {
+export const UpdateMediaBannersTab = ({ media }: Props) => {
   return <div>{JSON.stringify(media.banners)}</div>;
 };

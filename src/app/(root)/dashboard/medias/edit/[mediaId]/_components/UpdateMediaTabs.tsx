@@ -9,15 +9,15 @@ import { UpdateMediaTitlesShowcase } from "~/components/forms/mediaTitles/update
 import type { MediaWithRelations } from "~/lib/types";
 import { useMediaUpdateStore } from "~/stores";
 
-import { EditMediaBannersTab } from "./tabs/EditMediaBannersTab";
-import { EditMediaInfoTab } from "./tabs/EditMediaInfoTab";
-import { EditMediaStatsTab } from "./tabs/EditMediaStatsTab";
+import { UpdateMediaBannersTab } from "./tabs/UpdateMediaBannersTab";
+import { UpdateMediaInfoTab } from "./tabs/UpdateMediaInfoTab";
+import { UpdateMediaStatsTab } from "./tabs/UpdateMediaStatsTab";
 
 type Props = {
   media: MediaWithRelations;
 };
 
-export const EditMediaTabs = ({ media }: Props) => {
+export const UpdateMediaTabs = ({ media }: Props) => {
   const { load } = useMediaUpdateStore();
 
   useEffect(() => {
@@ -38,7 +38,7 @@ export const EditMediaTabs = ({ media }: Props) => {
       aria-label="Options"
     >
       <Tab key="info" title="Informações">
-        <EditMediaInfoTab media={media} />
+        <UpdateMediaInfoTab media={media} />
       </Tab>
       <Tab key="titles" title="Títulos">
         <UpdateMediaTitlesShowcase mediaId={media.id} />
@@ -48,10 +48,10 @@ export const EditMediaTabs = ({ media }: Props) => {
         <UploadMediaCoversForm mediaId={media.id} />
       </Tab>
       <Tab key="banners" title="Banners">
-        <EditMediaBannersTab media={media} />
+        <UpdateMediaBannersTab media={media} />
       </Tab>
       <Tab key="stats" title="Estatísticas">
-        <EditMediaStatsTab media={media} />
+        <UpdateMediaStatsTab media={media} />
       </Tab>
     </Tabs>
   );
