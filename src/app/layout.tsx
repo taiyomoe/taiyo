@@ -27,7 +27,11 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
   twitter: siteConfig.twitter,
   openGraph: siteConfig.openGraph,
-  metadataBase: new URL(env.NEXTAUTH_URL),
+  metadataBase: new URL(
+    process.env.SKIP_ENV_VALIDATION
+      ? "http://localhost:3000"
+      : env.NEXTAUTH_URL,
+  ),
   authors: [
     {
       name: "rdx",
