@@ -1,6 +1,6 @@
 import { Chip } from "@nextui-org/react";
 
-import { UpdateMediaTitlesForm } from "~/components/forms/mediaTitles/UpdateMediaTitlesForm";
+import { UpdateMediaTitlesForm } from "~/components/forms/mediaTitles/update/UpdateMediaTitlesForm";
 import { Form } from "~/components/generics/form/Form";
 import { List } from "~/components/generics/List";
 import type { MediaWithRelations } from "~/lib/types";
