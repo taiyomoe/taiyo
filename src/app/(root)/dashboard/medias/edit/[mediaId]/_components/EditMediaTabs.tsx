@@ -4,7 +4,7 @@ import { Tab, Tabs } from "@nextui-org/tabs";
 
 import { UpdateMediaCoversShowcase } from "~/components/forms/mediaCovers/UpdateMediaCoversShowcase";
 import { UploadMediaCoversForm } from "~/components/forms/mediaCovers/UploadMediaCoversForm";
-import { UpdateMediaTitlesShowcase } from "~/components/forms/mediaTitles/UpdateMediaTitlesShowcase";
+import { UpdateMediaTitlesShowcase } from "~/components/forms/mediaTitles/update/UpdateMediaTitlesShowcase";
 import type { MediaWithRelations } from "~/lib/types";
 
 import { EditMediaBannersTab } from "./tabs/EditMediaBannersTab";
