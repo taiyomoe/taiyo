@@ -1,4 +1,3 @@
-import { Button } from "@nextui-org/button";
 import {
   ContentRating,
   Flag,
@@ -8,8 +7,8 @@ import {
   MediaStatus,
   MediaType,
 } from "@prisma/client";
-import { useFormikContext } from "formik";
 
+import { SubmitButton } from "~/components/generics/buttons/SubmitButton";
 import { Form } from "~/components/generics/form/Form";
 import { InputFormField } from "~/components/generics/form/InputFormField";
 import { SelectFormField } from "~/components/generics/form/SelectFormField";
@@ -25,8 +24,6 @@ type Props = {
 };
 
 export const MediaFormFields = ({ action }: Props) => {
-  const { isSubmitting, isValid, dirty } = useFormikContext();
-  const shouldDisableButton = isSubmitting || !(isValid && dirty);
   const buttonText = action === "create" ? "Adicionar" : "Salvar";
 
   return (
@@ -89,18 +86,10 @@ export const MediaFormFields = ({ action }: Props) => {
           isDisabled
         />
       </Form.Category>
-      <MediaTitlesFormCategory />
+      {action === "create" && <MediaTitlesFormCategory />}
       <MediaTagsFormCategory />
       <Form.Actions>
-        <Button
-          color="primary"
-          type="submit"
-          className="w-fit font-medium"
-          isDisabled={shouldDisableButton}
-          isLoading={isSubmitting}
-        >
-          {buttonText}
-        </Button>
+        <SubmitButton>{buttonText}</SubmitButton>
       </Form.Actions>
     </Form.Layout>
   );

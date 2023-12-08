@@ -1,4 +1,5 @@
 import type { Trackers } from "@prisma/client";
+import { TRPCError } from "@trpc/server";
 
 import {
   getMediaByIdSchema,
@@ -81,32 +82,21 @@ export const mediasRouter = createTRPCRouter({
     })
     .input(updateMediaSchema)
     .mutation(async ({ ctx, input }) => {
-      const titles = await ctx.db.mediaTitle.findMany({
-        where: { mediaId: input.id, deletedAt: null },
+      const media = await ctx.db.media.findUnique({
+        select: { id: true },
+        where: { id: input.id },
       });
 
-      // first we need to delete the titles that are not in the input
-      const titlesToDelete = titles.filter(
-        (t) => !input.titles.some((it) => it.id === t.id),
-      );
+      if (!media) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Media not found",
+        });
+      }
 
-      await ctx.db.mediaTitle.updateMany({
-        data: { deletedAt: new Date() },
-        where: { id: { in: titlesToDelete.map((t) => t.id) } },
-      });
-
-      // then we need to update the titles that are in the input
-      const titlesToUpdate = input.titles.filter((t) => t.id !== null);
-
-      await ctx.db.mediaTitle.updateMany({
-        data: titlesToUpdate.map((t) => ({
-          title: t.title,
-          language: t.language,
-          priority: t.priority,
-          isAcronym: t.isAcronym,
-          isMainTitle: t.isMainTitle,
-        })),
-        where: { id: { in: titlesToUpdate.map((t) => t.id) } },
+      await ctx.db.media.update({
+        where: { id: input.id },
+        data: input,
       });
     }),
 

@@ -55,8 +55,8 @@ export const UpdateMediaCoverForm = ({ media, cover }: Props) => {
   ) => {
     const delta = ObjectUtils.deepDifference(values, initialValues);
     const payload = {
-      ...delta,
       id: values.id,
+      ...delta,
     };
 
     toast.promise(mutateAsync(payload), {

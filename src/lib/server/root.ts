@@ -1,10 +1,10 @@
-import { libraryRouter } from "~/lib/server/routers/library.router";
-import { mdRouter } from "~/lib/server/routers/md.router";
-import { mediaCoversRouter } from "~/lib/server/routers/mediaCovers.router";
-
 import { historyRouter } from "./routers/history.router";
+import { libraryRouter } from "./routers/library.router";
+import { mdRouter } from "./routers/md.router";
 import { mediaChaptersRouter } from "./routers/mediaChapters.router";
+import { mediaCoversRouter } from "./routers/mediaCovers.router";
 import { mediasRouter } from "./routers/medias.router";
+import { mediaTitlesRouter } from "./routers/mediaTitles.router";
 import { scansRouter } from "./routers/scans.router";
 import { uploadsRouter } from "./routers/uploads.router";
 import { createTRPCRouter } from "./trpc";
@@ -17,6 +17,7 @@ import { createTRPCRouter } from "./trpc";
 export const appRouter = createTRPCRouter({
   medias: mediasRouter,
   mediaCovers: mediaCoversRouter,
+  mediaTitles: mediaTitlesRouter,
   mediaChapters: mediaChaptersRouter,
   history: historyRouter,
   libary: libraryRouter,
