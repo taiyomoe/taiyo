@@ -1,6 +1,7 @@
 import { TRPCError } from "@trpc/server";
 
 import { createMediaTitleSchema, updateMediaTitleSchema } from "~/lib/schemas";
+import { MediaService } from "~/lib/services";
 
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
@@ -54,6 +55,9 @@ export const mediaTitlesRouter = createTRPCRouter({
           },
         });
       }
+
+      const indexItem = await MediaService.getIndexItem(input.mediaId);
+      await ctx.indexes.medias.updateDocuments([indexItem]);
 
       return createdTitle;
     }),
@@ -114,6 +118,9 @@ export const mediaTitlesRouter = createTRPCRouter({
           },
         });
       }
+
+      const indexItem = await MediaService.getIndexItem(title.mediaId);
+      await ctx.indexes.medias.updateDocuments([indexItem]);
     }),
 
   delete: protectedProcedure
@@ -143,5 +150,8 @@ export const mediaTitlesRouter = createTRPCRouter({
         data: { deletedAt: new Date(), deleterId: ctx.session.user.id },
         where: { id: input.id },
       });
+
+      const indexItem = await MediaService.getIndexItem(title.mediaId);
+      await ctx.indexes.medias.updateDocuments([indexItem]);
     }),
 });
