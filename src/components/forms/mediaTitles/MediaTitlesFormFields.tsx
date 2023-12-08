@@ -1,27 +1,44 @@
 import { Tooltip } from "@nextui-org/tooltip";
 import { Languages } from "@prisma/client";
-import { useFormikContext } from "formik";
 
 import { Form } from "~/components/generics/form/Form";
 import { InputFormField } from "~/components/generics/form/InputFormField";
 import { SelectFormField } from "~/components/generics/form/SelectFormField";
 import { SwitchFormField } from "~/components/generics/form/SwitchFormField";
-import type { UpdateMediaTitleSchema } from "~/lib/schemas";
+import type {
+  CreateMediaTitleSchema,
+  UpdateMediaTitleSchema,
+} from "~/lib/schemas";
 
-export const UpdateMediaTitlesFormFields = () => {
-  const { initialValues } = useFormikContext<UpdateMediaTitleSchema>();
+type Props = {
+  initialValues: CreateMediaTitleSchema | UpdateMediaTitleSchema;
+  mode?: "standalone" | "array";
+  index?: number;
+};
+
+export const MediaTitlesFormFields = (props: Props) => {
+  const { initialValues, mode, index } = props;
+
+  const getFieldName = (name: string) => {
+    if (mode === "array") {
+      return `titles[${index}].${name}`;
+    }
+
+    return name;
+  };
 
   return (
     <Form.Col>
       <InputFormField
-        name="title"
+        name={getFieldName("title")}
         label="Título"
         labelPlacement="outside"
+        placeholder="Shingeki no Kyojin"
         variant="faded"
       />
       <Form.Row>
         <SelectFormField
-          name="language"
+          name={getFieldName("language")}
           label="Idioma"
           labelPlacement="outside"
           variant="faded"
@@ -34,7 +51,7 @@ export const UpdateMediaTitlesFormFields = () => {
         >
           <div className="min-w-fit">
             <SwitchFormField
-              name="isMainTitle"
+              name={getFieldName("isMainTitle")}
               label="Título principal"
               labelPlacement="outside"
               isDisabled={initialValues.isMainTitle}
@@ -44,14 +61,14 @@ export const UpdateMediaTitlesFormFields = () => {
       </Form.Row>
       <Form.Row>
         <InputFormField
-          name="priority"
+          name={getFieldName("priority")}
           label="Prioridade"
           type="number"
           labelPlacement="outside"
           variant="faded"
         />
         <SwitchFormField
-          name="isAcronym"
+          name={getFieldName("isAcronym")}
           label="Acrônimo"
           labelPlacement="outside"
         />
