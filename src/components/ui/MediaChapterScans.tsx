@@ -64,7 +64,7 @@ export const MediaChapterScans = (props: Props) => {
         <UsersIcon className={slots.icon()} />
       </div>
       {scans === undefined && <Skeleton className={slots.skeleton()} />}
-      {scans && scans.length === 0 && <p className={slots.text()}>None</p>}
+      {scans && scans.length === 0 && <p className={slots.text()}>Sem scans</p>}
       {scans && scans.length !== 0 && (
         <div className={slots.linkContainer()}>
           {scans?.map((scan) => (
