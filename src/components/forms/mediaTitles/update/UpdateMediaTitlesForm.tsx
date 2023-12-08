@@ -21,17 +21,19 @@ import { Form } from "~/components/generics/form/Form";
 import type { UpdateMediaTitleSchema } from "~/lib/schemas";
 import { updateMediaTitleSchema } from "~/lib/schemas";
 import { api } from "~/lib/trpc/client";
-import type { FormSubmit, MediaWithRelations } from "~/lib/types";
+import type { FormSubmit } from "~/lib/types";
 import { ObjectUtils } from "~/lib/utils/object.utils";
+import { useMediaUpdateStore } from "~/stores";
 
 type Props = {
-  media: MediaWithRelations;
   title: MediaTitle;
 };
 
 export const UpdateMediaTitlesForm = ({ title }: Props) => {
   const { mutateAsync } = api.mediaTitles.update.useMutation();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { updateTitle } = useMediaUpdateStore();
+
   const initalValues: UpdateMediaTitleSchema = pick(
     title,
     "id",
@@ -55,7 +57,9 @@ export const UpdateMediaTitlesForm = ({ title }: Props) => {
     toast.promise(mutateAsync(payload), {
       loading: "Salvando alterações...",
       success: () => {
+        updateTitle(payload);
         onOpen();
+        onOpenChange();
 
         return "Alterações salvas com sucesso!";
       },

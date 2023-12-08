@@ -1,11 +1,8 @@
 import { notFound } from "next/navigation";
-import { Tab, Tabs } from "@nextui-org/tabs";
 
-import { EditMediaTabs } from "~/app/(root)/dashboard/medias/edit/[mediaId]/_components/EditMediaTabs";
 import { db } from "~/lib/server/db";
 
-import { EditMediaInfoTab } from "./_components/tabs/EditMediaInfoTab";
-import { EditMediaStatsTab } from "./_components/tabs/EditMediaStatsTab";
+import { EditMediaTabs } from "./_components/EditMediaTabs";
 
 type Props = {
   params: { mediaId: string };
