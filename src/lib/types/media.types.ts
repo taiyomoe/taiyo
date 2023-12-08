@@ -79,7 +79,6 @@ export type SearchedMedia = {
 };
 
 export type MediaTabs = "info" | "chapters";
-export type MediaEditTabs = "info" | "covers" | "banners" | "stats";
 
 const mediaWithRelations = Prisma.validator<Prisma.MediaDefaultArgs>()({
   include: {

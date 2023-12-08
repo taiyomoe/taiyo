@@ -16,7 +16,7 @@ type Props = {
   initialValues: UpdateMediaSchema;
 };
 
-export const EditMediaForm = ({ initialValues }: Props) => {
+export const UpdateMediaForm = ({ initialValues }: Props) => {
   const { mutateAsync } = api.medias.update.useMutation();
   const handleSubmit: FormikConfig<UpdateMediaSchema>["onSubmit"] = (
     values,
@@ -26,7 +26,6 @@ export const EditMediaForm = ({ initialValues }: Props) => {
     const payload = {
       ...delta,
       id: values.id,
-      titles: values.titles,
       tags: values.tags,
       genres: values.genres,
     };

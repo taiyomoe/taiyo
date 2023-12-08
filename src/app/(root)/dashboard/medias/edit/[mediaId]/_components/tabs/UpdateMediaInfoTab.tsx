@@ -1,4 +1,4 @@
-import { EditMediaForm } from "~/components/forms/medias/EditMediaForm";
+import { UpdateMediaForm } from "~/components/forms/medias/UpdateMediaForm";
 import type { UpdateMediaSchema } from "~/lib/schemas";
 import type { MediaWithRelations } from "~/lib/types";
 
@@ -6,7 +6,7 @@ type Props = {
   media: MediaWithRelations;
 };
 
-export const EditMediaInfoTab = ({ media }: Props) => {
+export const UpdateMediaInfoTab = ({ media }: Props) => {
   const mdTracker = media.trackers.find((t) => t.tracker === "MANGADEX")
     ?.externalId;
   const alTracker = media.trackers.find((t) => t.tracker === "ANILIST");
@@ -26,12 +26,11 @@ export const EditMediaInfoTab = ({ media }: Props) => {
     countryOfOrigin: media.countryOfOrigin,
     flag: media.flag,
     genres: media.genres,
-    titles: media.titles,
     tags: media.tags,
     mdTracker: mdTracker ?? "",
     alTracker: alTracker ? Number.parseInt(alTracker.externalId) : 0,
     malTracker: malTracker ? Number.parseInt(malTracker.externalId) : 0,
   };
 
-  return <EditMediaForm initialValues={initialValues} />;
+  return <UpdateMediaForm initialValues={initialValues} />;
 };

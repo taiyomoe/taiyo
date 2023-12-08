@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 
 import { db } from "~/lib/server/db";
 
-import { EditMediaTabs } from "./_components/EditMediaTabs";
+import { UpdateMediaTabs } from "./_components/UpdateMediaTabs";
 
 type Props = {
   params: { mediaId: string };
@@ -24,5 +24,5 @@ export default async function Page({ params }: Props) {
     return notFound();
   }
 
-  return <EditMediaTabs media={media} />;
+  return <UpdateMediaTabs media={media} />;
 }

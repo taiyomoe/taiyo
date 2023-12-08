@@ -4,6 +4,6 @@ type Props = {
   media: MediaWithRelations;
 };
 
-export const EditMediaStatsTab = ({ media }: Props) => {
+export const UpdateMediaStatsTab = ({}: Props) => {
   return <div>Stats</div>;
 };
