@@ -7,6 +7,7 @@ import type { DropzoneProps } from "react-dropzone";
 import { useDropzone } from "react-dropzone";
 
 import { SubmitButton } from "~/components/generics/buttons/SubmitButton";
+import { Form } from "~/components/generics/form/Form";
 import { useImageStore } from "~/stores";
 
 import { ImageSelection } from "./ImageSelection";
@@ -15,7 +16,7 @@ type Props = {
   title: string;
   type: UploadSessionType;
   isCompact?: boolean;
-  onDrop: (filesLength: number) => void;
+  onDrop?: (filesLength: number) => void;
   children(options: { selectedImages: File[] }): React.ReactNode;
 };
 
@@ -30,6 +31,12 @@ const imageDropzone = tv({
         container: "hover:cursor-pointer hover:bg-default-200",
       },
     },
+    compact: {
+      true: {
+        container:
+          "max-h-[498px] overflow-y-auto scrollbar-track-content2 scrollbar-thumb-primary scrollbar-thin",
+      },
+    },
   },
 });
 
@@ -42,11 +49,14 @@ export const ImageDropzone = (props: Props) => {
   const shouldDisableUploadButton = selectedImages.length === 0;
   const shouldDisableClick = selectedImages.length !== 0;
 
-  const { container } = imageDropzone({ disabled: shouldDisableClick });
+  const { container } = imageDropzone({
+    disabled: shouldDisableClick,
+    compact: selectedImages.length !== 0 && isCompact,
+  });
 
   const handleDrop: DropzoneProps["onDrop"] = useCallback(
     (acceptedFiles: File[]) => {
-      void onDrop(acceptedFiles.length);
+      void onDrop?.(acceptedFiles.length);
       void load(type, acceptedFiles);
     },
     [load, onDrop, type],
@@ -73,29 +83,31 @@ export const ImageDropzone = (props: Props) => {
   });
 
   return (
-    <div className="flex flex-col gap-6">
-      <div className="flex flex-col justify-between gap-2 md:flex-row md:items-center">
-        <h3 className="line-clamp-1 text-2xl font-medium">{title}</h3>
-        <div className="flex gap-2">
+    <>
+      <Form.Category
+        title={title}
+        actions={
           <Button className="font-medium" onClick={open} color="primary">
             Selecionar
           </Button>
-        </div>
-      </div>
-      <Card className="rounded-medium">
-        <CardBody className="p-0">
-          <section {...getRootProps({ className: container() })}>
-            <input {...getInputProps()} disabled={acceptedFiles.length !== 0} />
-            {selectedImages.length === 0 && (
-              <ImageSelection isCompact={isCompact} />
-            )}
-            {selectedImages.length > 0 && children({ selectedImages })}
-          </section>
-        </CardBody>
-      </Card>
-      <div className="flex justify-end">
+        }
+      >
+        <Card className="h-full rounded-medium">
+          <CardBody className="p-0">
+            <section {...getRootProps({ className: container() })}>
+              <input
+                {...getInputProps()}
+                disabled={acceptedFiles.length !== 0}
+              />
+              {selectedImages.length === 0 && <ImageSelection />}
+              {selectedImages.length > 0 && children({ selectedImages })}
+            </section>
+          </CardBody>
+        </Card>
+      </Form.Category>
+      <Form.Actions>
         <SubmitButton isDisabled={shouldDisableUploadButton}>Upar</SubmitButton>
-      </div>
-    </div>
+      </Form.Actions>
+    </>
   );
 };
