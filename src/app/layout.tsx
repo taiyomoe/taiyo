@@ -5,7 +5,7 @@ import { headers } from "next/headers";
 import "~/styles/globals.css";
 
 import { siteConfig } from "~/lib/config";
-import { env } from "~/lib/env.mjs";
+import { getBaseUrl } from "~/lib/trpc/utils";
 import type { LayoutProps } from "~/lib/types";
 import { cn } from "~/lib/utils/cn";
 
@@ -27,11 +27,7 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
   twitter: siteConfig.twitter,
   openGraph: siteConfig.openGraph,
-  metadataBase: new URL(
-    process.env.SKIP_ENV_VALIDATION
-      ? "http://localhost:3000"
-      : env.NEXTAUTH_URL,
-  ),
+  metadataBase: new URL(getBaseUrl()),
   authors: [
     {
       name: "rdx",
