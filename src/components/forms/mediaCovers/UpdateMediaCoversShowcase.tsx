@@ -1,13 +1,12 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Card, CardBody } from "@nextui-org/card";
 import type { Selection } from "@nextui-org/react";
 import { Select, SelectItem } from "@nextui-org/select";
-import { useAtom } from "jotai";
 
-import { mediaCoversEditAtom } from "~/atoms/mediaEdit.atoms";
 import type { MediaWithRelations } from "~/lib/types";
 import { MediaCoverUtils } from "~/lib/utils/mediaCover.utils";
 import { SelectUtils } from "~/lib/utils/select.utils";
+import { useMediaUpdateStore } from "~/stores";
 
 import { UpdateMediaCoverForm } from "./UpdateMediaCoverForm";
 
@@ -16,11 +15,17 @@ type Props = {
 };
 
 export const UpdateMediaCoversShowcase = ({ media }: Props) => {
+  const { covers } = useMediaUpdateStore();
+  const volumes = useMemo(
+    () => MediaCoverUtils.computeVolumes(covers),
+    [covers],
+  );
+
   const lowestVolumeNumber = MediaCoverUtils.getLowestVolumeNumber({ media });
-  const [volumes, setVolumes] = useAtom(mediaCoversEditAtom);
   const [values, setValues] = useState<Selection>(
     new Set([lowestVolumeNumber?.toString() ?? ""]),
   );
+
   const currentVolume = useMemo(() => {
     if (!volumes.length) return;
 
@@ -35,12 +40,9 @@ export const UpdateMediaCoversShowcase = ({ media }: Props) => {
     return volumes.find((v) => v.number === lowestVolumeNum);
   }, [values, volumes]);
 
-  useEffect(() => {
-    setVolumes(MediaCoverUtils.computeVolumes(media));
-  }, [media, setVolumes]);
-
-  if (lowestVolumeNumber === undefined || !currentVolume)
+  if (lowestVolumeNumber === undefined || !currentVolume) {
     return <div>no covers</div>;
+  }
 
   return (
     <div className="flex flex-col gap-6">

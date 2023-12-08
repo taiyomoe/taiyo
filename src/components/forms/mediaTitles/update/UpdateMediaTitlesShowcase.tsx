@@ -1,17 +1,16 @@
+import { useMemo } from "react";
 import { Chip } from "@nextui-org/react";
 
 import { UpdateMediaTitlesForm } from "~/components/forms/mediaTitles/update/UpdateMediaTitlesForm";
 import { Form } from "~/components/generics/form/Form";
 import { List } from "~/components/generics/List";
-import type { MediaWithRelations } from "~/lib/types";
 import { MediaTitleUtils } from "~/lib/utils/mediaTitles.utils";
+import { useMediaUpdateStore } from "~/stores";
 
-type Props = {
-  media: MediaWithRelations;
-};
+export const UpdateMediaTitlesShowcase = () => {
+  const { titles } = useMediaUpdateStore();
 
-export const UpdateMediaTitlesShowcase = ({ media }: Props) => {
-  const sortedTitles = MediaTitleUtils.sort(media.titles);
+  const sortedTitles = useMemo(() => MediaTitleUtils.sort(titles), [titles]);
 
   return (
     <Form.Category title="Títulos ativos">
@@ -39,7 +38,7 @@ export const UpdateMediaTitlesShowcase = ({ media }: Props) => {
               <Chip classNames={{ content: "px-1.5" }} size="sm">
                 {title.language}
               </Chip>
-              <UpdateMediaTitlesForm media={media} title={title} />
+              <UpdateMediaTitlesForm title={title} />
             </div>
           </div>
         ))}

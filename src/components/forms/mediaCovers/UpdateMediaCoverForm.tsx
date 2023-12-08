@@ -13,11 +13,9 @@ import { Tooltip } from "@nextui-org/tooltip";
 import { ContentRating, Languages } from "@prisma/client";
 import type { MediaCover } from "@prisma/client";
 import type { FormikConfig } from "formik";
-import { useSetAtom } from "jotai";
 import { toast } from "sonner";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 
-import { mediaCoversEditAtom } from "~/atoms/mediaEdit.atoms";
 import { SubmitButton } from "~/components/generics/buttons/SubmitButton";
 import { Form } from "~/components/generics/form/Form";
 import { InputFormField } from "~/components/generics/form/InputFormField";
@@ -29,6 +27,7 @@ import { api } from "~/lib/trpc/client";
 import type { MediaWithRelations } from "~/lib/types";
 import { MediaCoverUtils } from "~/lib/utils/mediaCover.utils";
 import { ObjectUtils } from "~/lib/utils/object.utils";
+import { useMediaUpdateStore } from "~/stores";
 
 import { UpdateMediaCoverDeleteButton } from "./UpdateMediaCoverDeleteButton";
 
@@ -38,7 +37,7 @@ type Props = {
 };
 
 export const UpdateMediaCoverForm = ({ media, cover }: Props) => {
-  const setMediaCoversEdit = useSetAtom(mediaCoversEditAtom);
+  const { updateCover } = useMediaUpdateStore();
   const { mutateAsync } = api.mediaCovers.update.useMutation();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const initialValues: UpdateMediaCoverSchema = {
@@ -62,10 +61,8 @@ export const UpdateMediaCoverForm = ({ media, cover }: Props) => {
     toast.promise(mutateAsync(payload), {
       loading: "Salvando alterações...",
       success: () => {
-        setMediaCoversEdit((prev) =>
-          MediaCoverUtils.computeVolumesUpdate(prev, values),
-        );
-        onOpen();
+        updateCover(payload);
+        onOpenChange();
 
         return "Alterações salvas com sucesso!";
       },
