@@ -1,7 +1,10 @@
-import type { MediaStatus } from "@prisma/client";
+import type { Languages, MediaStatus } from "@prisma/client";
+import { TRPCError } from "@trpc/server";
 
 import { db } from "~/lib/server/db";
+import type { FeaturedMedia, LatestMedia } from "~/lib/types";
 import type { MediasIndexItem } from "~/lib/types/meilisearch.types";
+import { MediaUtils } from "~/lib/utils/media.utils";
 
 /**
  * Gets the titles and main cover of a media.
@@ -36,11 +39,17 @@ const getIndexItem = async (mediaId: string): Promise<MediasIndexItem> => {
   });
 
   if (!result) {
-    throw new Error(`Media ${mediaId} not found`);
+    throw new TRPCError({
+      code: "NOT_FOUND",
+      message: `Media '${mediaId}' not found`,
+    });
   }
 
   if (!result.covers.length) {
-    throw new Error(`Media ${mediaId} has no main cover`);
+    throw new TRPCError({
+      code: "INTERNAL_SERVER_ERROR",
+      message: `Media '${mediaId}' has no main cover`,
+    });
   }
 
   return {
@@ -62,13 +71,107 @@ const getStatus = async (mediaId: string): Promise<MediaStatus> => {
   });
 
   if (!result) {
-    throw new Error(`Media ${mediaId} not found`);
+    throw new TRPCError({
+      code: "NOT_FOUND",
+      message: `Media '${mediaId}' not found`,
+    });
   }
 
   return result.status;
 };
 
+/**
+ * Gets the latest medias.
+ * Used to populate the homepage.
+ */
+const getLatestMedias = async () => {
+  const result = await db.media.findMany({
+    select: {
+      id: true,
+      covers: {
+        select: { id: true },
+        where: { isMainCover: true },
+        take: 1,
+      },
+    },
+    where: { deletedAt: null },
+    orderBy: { createdAt: "desc" },
+    take: 15,
+  });
+
+  if (result.some((m) => !m.covers.length)) {
+    throw new TRPCError({
+      code: "INTERNAL_SERVER_ERROR",
+      message: "Some medias have no main cover",
+    });
+  }
+
+  const latestMedias: LatestMedia[] = result
+    .filter((m) => m.covers.length)
+    .map((m) => ({
+      id: m.id,
+      coverId: m.covers.at(0)!.id,
+    }));
+
+  return latestMedias;
+};
+
+/**
+ * Gets the featured medias.
+ * Used to populate the homepage.
+ */
+const getFeaturedMedias = async (
+  preferredTitles: Languages | null | undefined,
+) => {
+  const banners = await db.$queryRaw<
+    { id: string; mediaId: string }[]
+  >`SELECT "id", "mediaId" FROM "MediaBanner" WHERE "deletedAt" IS NULL ORDER BY RANDOM() LIMIT 15;`;
+  const result = await db.media.findMany({
+    select: {
+      id: true,
+      covers: {
+        select: { id: true },
+        where: { isMainCover: true },
+        take: 1,
+      },
+      titles: {
+        select: {
+          title: true,
+          language: true,
+          priority: true,
+          isAcronym: true,
+          isMainTitle: true,
+        },
+        where: { deletedAt: null },
+      },
+    },
+    where: {
+      banners: { some: { id: { in: banners.map((b) => b.id) } } },
+      deletedAt: null,
+    },
+    take: 15,
+  });
+
+  if (result.some((m) => !m.covers.length)) {
+    throw new TRPCError({
+      code: "INTERNAL_SERVER_ERROR",
+      message: "Some medias have no main cover",
+    });
+  }
+
+  const featuredMedias: FeaturedMedia[] = result.map((m) => ({
+    id: m.id,
+    coverId: m.covers.at(0)!.id,
+    bannerId: banners.find((b) => b.mediaId === m.id)!.id,
+    mainTitle: MediaUtils.getMainTitle(m.titles, preferredTitles),
+  }));
+
+  return featuredMedias;
+};
+
 export const MediaService = {
   getIndexItem,
   getStatus,
+  getLatestMedias,
+  getFeaturedMedias,
 };

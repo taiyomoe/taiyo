@@ -17,9 +17,9 @@ const getBannerOrCoverUrl = (media: MediaLimited) => {
 
 const getMainTitle = (
   titles: MediaLimited["titles"],
-  preferredTitles: Languages | null,
+  preferredTitles: Languages | null | undefined,
 ) => {
-  if (preferredTitles === null) {
+  if (!preferredTitles) {
     return titles.find((t) => t.isMainTitle)!.title;
   }
 

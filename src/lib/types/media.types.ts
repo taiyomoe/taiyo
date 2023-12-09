@@ -17,6 +17,13 @@ export type LatestMedia = {
   coverId: MediaCover["id"];
 };
 
+export type FeaturedMedia = {
+  id: Media["id"];
+  coverId: MediaCover["id"];
+  bannerId: MediaBanner["id"];
+  mainTitle: MediaTitle["title"];
+};
+
 // Used to display media chapter cards
 export type MediaLimitedChapter = {
   id: MediaChapter["id"];
