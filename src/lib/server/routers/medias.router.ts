@@ -7,8 +7,8 @@ import {
   searchMediaSchema,
   updateMediaSchema,
 } from "~/lib/schemas";
-import { LibraryService } from "~/lib/services";
-import type { LatestMedia, MediaLimited, SearchedMedia } from "~/lib/types";
+import { LibraryService, MediaService } from "~/lib/services";
+import type { MediaLimited, SearchedMedia } from "~/lib/types";
 import { MediaUtils } from "~/lib/utils/media.utils";
 
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
@@ -161,7 +161,7 @@ export const mediasRouter = createTRPCRouter({
         bannerId: result.banners.at(0)?.id ?? null,
         mainTitle: MediaUtils.getMainTitle(
           result.titles,
-          ctx.session?.user.preferredTitles ?? null,
+          ctx.session?.user.preferredTitles,
         ),
         titles: result.titles,
         trackers: result.trackers.filter((t) => t.tracker !== "MANGADEX"),
@@ -170,28 +170,16 @@ export const mediasRouter = createTRPCRouter({
       return mediaLimited;
     }),
 
-  getLatestMedias: publicProcedure.query(async ({ ctx }) => {
-    const result = await ctx.db.media.findMany({
-      select: {
-        id: true,
-        covers: {
-          select: { id: true },
-          where: { isMainCover: true },
-          take: 1,
-        },
-      },
-      orderBy: { createdAt: "desc" },
-      take: 20,
-    });
+  getHomePage: publicProcedure.query(async ({ ctx }) => {
+    const latestMedias = await MediaService.getLatestMedias();
+    const featuredMedias = await MediaService.getFeaturedMedias(
+      ctx.session?.user.preferredTitles,
+    );
 
-    const latestMedias: LatestMedia[] = result
-      .filter((m) => m.covers.length)
-      .map((m) => ({
-        id: m.id,
-        coverId: m.covers.at(0)!.id,
-      }));
-
-    return latestMedias;
+    return {
+      latestMedias,
+      featuredMedias,
+    };
   }),
 
   search: publicProcedure

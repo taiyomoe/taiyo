@@ -61,6 +61,7 @@
   height: inherit !important;
 }
 
+.swiper.featuredMedias:not(.swiper-initialized) .swiper-slide,
 .swiper.trendingMedias:not(.swiper-initialized) .swiper-slide,
 .swiper.latestMedias:not(.swiper-initialized) .swiper-slide {
   margin-right: 24px;
