@@ -129,6 +129,7 @@ const getFeaturedMedias = async (
   const result = await db.media.findMany({
     select: {
       id: true,
+      synopsis: true,
       covers: {
         select: { id: true },
         where: { isMainCover: true },
@@ -161,6 +162,7 @@ const getFeaturedMedias = async (
 
   const featuredMedias: FeaturedMedia[] = result.map((m) => ({
     id: m.id,
+    synopsis: m.synopsis,
     coverId: m.covers.at(0)!.id,
     bannerId: banners.find((b) => b.mediaId === m.id)!.id,
     mainTitle: MediaUtils.getMainTitle(m.titles, preferredTitles),

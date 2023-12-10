@@ -56,6 +56,10 @@
   }
 }
 
+.swiper {
+  max-width: 100% !important;
+}
+
 .swiper.trendingMedias .swiper-slide {
   width: inherit !important;
   height: inherit !important;

@@ -19,6 +19,7 @@ export type LatestMedia = {
 
 export type FeaturedMedia = {
   id: Media["id"];
+  synopsis: Media["synopsis"];
   coverId: MediaCover["id"];
   bannerId: MediaBanner["id"];
   mainTitle: MediaTitle["title"];
