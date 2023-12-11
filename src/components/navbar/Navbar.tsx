@@ -59,7 +59,7 @@ export const Navbar = ({ popover }: Props) => {
         <Link href="/" className={slots.brandContainer()}>
           <CompanyLogo company="taiyo" width={35} priority />
           <p className={slots.brandText()}>Taiyō</p>
-          <Chip color="danger" size="sm">
+          <Chip color="primary" size="sm">
             ALPHA
           </Chip>
         </Link>
