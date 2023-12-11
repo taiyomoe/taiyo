@@ -22,7 +22,11 @@ export const MediaImage = (props: Props) => (
         props.classNames?.width,
         props.classNames?.wrapper,
       ),
-      img: cn("object-cover", props.classNames?.height, props.classNames?.img),
+      img: cn(
+        "w-full object-cover",
+        props.classNames?.height,
+        props.classNames?.img,
+      ),
     }}
     height={props.maxHeight}
     width={props.maxWidth}
