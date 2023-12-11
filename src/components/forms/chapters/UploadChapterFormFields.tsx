@@ -6,6 +6,7 @@ import { AlertCircleIcon } from "lucide-react";
 import { Form } from "~/components/generics/form/Form";
 import { InputFormField } from "~/components/generics/form/InputFormField";
 import { SelectFormField } from "~/components/generics/form/SelectFormField";
+import { ScansSearchAutocomplete } from "~/components/scans/ScansSearchAutocomplete";
 import { ImageCard } from "~/components/ui/images/ImageCard";
 import { ImageDropzone } from "~/components/ui/images/ImageDropzone";
 
@@ -27,23 +28,7 @@ export const UploadChapterFormFields = () => {
           </Badge>
         </Tooltip>
         <InputFormField name="title" label="Título" />
-        <Tooltip content="Temporário">
-          <Badge
-            className="right-1 top-7"
-            placement="top-right"
-            content={<AlertCircleIcon />}
-            color="warning"
-            size="lg"
-            isOneChar
-          >
-            <InputFormField
-              name="scansIds"
-              label="IDs das scans"
-              labelPlacement="outside"
-              placeholder="Separe os IDs por uma vírgula"
-            />
-          </Badge>
-        </Tooltip>
+        <ScansSearchAutocomplete />
       </Form.Category>
       <Form.Category title="Detalhes">
         <Form.Row>

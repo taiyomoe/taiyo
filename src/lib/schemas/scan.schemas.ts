@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 import { ScanSchema } from "./prisma";
 
 export const insertScanSchema = ScanSchema.pick({
@@ -16,5 +18,7 @@ export const insertScanSchema = ScanSchema.pick({
 })
   .partial()
   .required({ name: true });
+
+export const searchScanSchema = z.string().min(1);
 
 export type InsertScanSchema = typeof insertScanSchema._type;
