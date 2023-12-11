@@ -14,12 +14,12 @@ export const mediaChaptersRouter = createTRPCRouter({
   create: protectedProcedure
     .meta({ resource: "mediaChapters", action: "create" })
     .input(insertMediaChapterSchema)
-    .mutation(async ({ ctx, input: { pages, scansIds, ...input } }) => {
+    .mutation(async ({ ctx, input: { pages, scanIds, ...input } }) => {
       const scans = await ctx.db.scan.findMany({
-        where: { id: { in: scansIds } },
+        where: { id: { in: scanIds } },
       });
 
-      if (scans.length !== scansIds.length) {
+      if (scans.length !== scanIds.length) {
         throw new TRPCError({
           code: "BAD_REQUEST",
           message: "Uma ou várias scans não existem.",

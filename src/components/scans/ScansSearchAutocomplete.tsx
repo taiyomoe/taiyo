@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Autocomplete, AutocompleteItem } from "@nextui-org/autocomplete";
 import { Chip } from "@nextui-org/chip";
+import { tv } from "@nextui-org/react";
 import { useAsyncList } from "@react-stately/data";
 import type { Key } from "@react-types/shared";
 import { useFormikContext } from "formik";
@@ -9,10 +10,20 @@ import type { InsertMediaChapterSchema } from "~/lib/schemas";
 import { api } from "~/lib/trpc/client";
 import type { ScansIndexItem } from "~/lib/types";
 
+const scansSearchAutocomplete = tv({
+  slots: {
+    container: "flex flex-col gap-4",
+    chipsContainer: "flex flex-wrap gap-2",
+    label: "z-0",
+  },
+});
+
 export const ScansSearchAutocomplete = () => {
   const { setFieldValue } = useFormikContext<InsertMediaChapterSchema>();
   const { mutateAsync } = api.scans.search.useMutation();
   const [selectedItems, setSelectedItems] = useState<ScansIndexItem[]>([]);
+
+  const { container, chipsContainer, label } = scansSearchAutocomplete();
 
   const list = useAsyncList<ScansIndexItem>({
     load: async ({ filterText }) => {
@@ -31,7 +42,7 @@ export const ScansSearchAutocomplete = () => {
       const newSelectedItems = prev.filter((item) => item.id !== key);
 
       void setFieldValue(
-        "scansIds",
+        "scanIds",
         newSelectedItems.map((item) => item.id),
       );
       return newSelectedItems;
@@ -49,7 +60,7 @@ export const ScansSearchAutocomplete = () => {
       const newSelectedItems = [...prev, item];
 
       void setFieldValue(
-        "scansIds",
+        "scanIds",
         newSelectedItems.map((item) => item.id),
       );
       return newSelectedItems;
@@ -59,8 +70,11 @@ export const ScansSearchAutocomplete = () => {
   };
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className={container()}>
       <Autocomplete<ScansIndexItem>
+        inputProps={{
+          classNames: { label: label() },
+        }}
         inputValue={list.filterText}
         isLoading={list.isLoading}
         items={list.items}
@@ -75,7 +89,7 @@ export const ScansSearchAutocomplete = () => {
           <AutocompleteItem key={item.id}>{item.name}</AutocompleteItem>
         )}
       </Autocomplete>
-      <div className="flex flex-wrap gap-2">
+      <div className={chipsContainer()}>
         {selectedItems.map((item) => (
           <Chip key={item.id} onClose={handleClose(item.id)}>
             {item.name}
