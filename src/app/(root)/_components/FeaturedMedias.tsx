@@ -6,6 +6,5 @@ type Props = {
 };
 
 export const FeaturedMedias = ({ featuredMedias }: Props) => (
-  // <Skeleton className="h-[200px] rounded-2xl md:h-[300px] lg:h-[500px]" />
   <SwipeableFeaturedMedias medias={featuredMedias} />
 );
