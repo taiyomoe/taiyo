@@ -1,4 +1,4 @@
-import { insertScanSchema } from "~/lib/schemas";
+import { insertScanSchema, searchScanSchema } from "~/lib/schemas";
 
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
@@ -15,5 +15,13 @@ export const scansRouter = createTRPCRouter({
       });
 
       return result;
+    }),
+
+  search: protectedProcedure
+    .meta({ resource: "scans", action: "create" })
+    .input(searchScanSchema)
+    .mutation(async ({ ctx, input }) => {
+      const results = await ctx.indexes.scans.search(input);
+      return results.hits;
     }),
 });

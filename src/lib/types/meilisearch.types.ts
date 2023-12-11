@@ -1,4 +1,4 @@
-import type { Media, MediaCover, MediaTitle } from "@prisma/client";
+import type { Media, MediaCover, MediaTitle, Scan } from "@prisma/client";
 
 export type MediasIndexItem = {
   id: Media["id"];
@@ -8,4 +8,9 @@ export type MediasIndexItem = {
     "title" | "language" | "priority" | "isAcronym" | "isMainTitle"
   >[];
   mainCoverId: MediaCover["id"];
+};
+
+export type ScansIndexItem = {
+  id: Scan["id"];
+  name: Scan["name"];
 };

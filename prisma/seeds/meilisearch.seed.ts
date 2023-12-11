@@ -1,6 +1,7 @@
 import { db } from "~/lib/server/db";
 import { meilisearch, meilisearchIndexes } from "~/lib/server/meilisearch";
 import { MediaService } from "~/lib/services";
+import { ScanService } from "~/lib/services/scan.service";
 
 const execute = async () => {
   // Medias
@@ -13,6 +14,19 @@ const execute = async () => {
   );
 
   await meilisearchIndexes.medias.updateDocuments(medias);
+
+  // Scans
+  await meilisearch.deleteIndexIfExists("scans");
+  await meilisearch.createIndex("scans", { primaryKey: "id" });
+  await meilisearchIndexes.scans.deleteAllDocuments();
+
+  const scans = await Promise.all(
+    (await db.scan.findMany()).map(({ id }) => ScanService.getIndexItem(id)),
+  );
+
+  await meilisearchIndexes.scans.updateDocuments(scans);
 };
 
 export default { execute };
+
+void execute();

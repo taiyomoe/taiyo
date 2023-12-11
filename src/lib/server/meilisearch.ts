@@ -1,7 +1,7 @@
 import type { Meilisearch } from "meilisearch";
 import MeiliSearch from "meilisearch";
 
-import type { MediasIndexItem } from "~/lib/types/meilisearch.types";
+import type { MediasIndexItem, ScansIndexItem } from "~/lib/types";
 
 const globalForMeilisearch = globalThis as unknown as {
   meilisearch: Meilisearch | undefined;
@@ -17,6 +17,7 @@ export const meilisearch =
 
 export const meilisearchIndexes = {
   medias: meilisearch.index<MediasIndexItem>("medias"),
+  scans: meilisearch.index<ScansIndexItem>("scans"),
 };
 
 if (process.env.NODE_ENV !== "production")
