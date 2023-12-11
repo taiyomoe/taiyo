@@ -8,17 +8,17 @@ export const scansRouter = createTRPCRouter({
     .meta({ resource: "scans", action: "create" })
     .input(insertScanSchema)
     .mutation(async ({ ctx, input }) => {
-      const result = await ctx.db.scan.create({
+      const createdScan = await ctx.db.scan.create({
         data: {
           ...input,
           creatorId: ctx.session.user.id,
         },
       });
 
-      const indexItem = await ScanService.getIndexItem(result.id);
+      const indexItem = await ScanService.getIndexItem(createdScan.id);
       await ctx.indexes.scans.updateDocuments([indexItem]);
 
-      return result;
+      return createdScan;
     }),
 
   search: protectedProcedure
