@@ -50,7 +50,7 @@ export const useChapterUpload = (initialValues: InsertMediaChapterSchema) => {
 
   const handleSubmit: FormikConfig<InsertMediaChapterSchema>["onSubmit"] = (
     values,
-    { resetForm, setSubmitting },
+    { resetForm, setFieldValue, setSubmitting },
   ) => {
     const upload = async () => {
       const authToken = await startUploadSession({
@@ -64,6 +64,12 @@ export const useChapterUpload = (initialValues: InsertMediaChapterSchema) => {
       await createChapter({ ...values, pages: filesId });
 
       resetForm();
+
+      void setFieldValue("id", crypto.randomUUID());
+      void setFieldValue("mediaId", values.mediaId);
+      void setFieldValue("number", values.number + 1);
+      void setFieldValue("scanIds", values.scanIds);
+
       reset("CHAPTER");
     };
 
