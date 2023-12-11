@@ -1,7 +1,7 @@
 "use client";
 
 import { Image } from "@nextui-org/image";
-import { Mousewheel } from "swiper/modules";
+import { Autoplay, Mousewheel } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 import "swiper/css";
@@ -26,10 +26,10 @@ export const SwipeableFeaturedMedias = ({ medias }: Props) => (
     mousewheel={{
       sensitivity: 0.2,
     }}
-    modules={[Mousewheel]}
-    // autoplay={{
-    //   delay: 5000,
-    // }}
+    modules={[Autoplay, Mousewheel]}
+    autoplay={{
+      delay: 5000,
+    }}
   >
     {medias.map((media, i) => (
       <SwiperSlide key={i}>
