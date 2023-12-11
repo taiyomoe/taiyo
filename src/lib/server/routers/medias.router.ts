@@ -75,15 +75,15 @@ export const mediasRouter = createTRPCRouter({
           },
         });
 
+        const indexItem = await MediaService.getIndexItem(result.id);
+        await ctx.indexes.medias.updateDocuments([indexItem]);
+
         return result;
       },
     ),
 
   update: protectedProcedure
-    .meta({
-      resource: "medias",
-      action: "create",
-    })
+    .meta({ resource: "medias", action: "update" })
     .input(updateMediaSchema)
     .mutation(async ({ ctx, input }) => {
       const media = await ctx.db.media.findUnique({
@@ -102,6 +102,9 @@ export const mediasRouter = createTRPCRouter({
         where: { id: input.id },
         data: input,
       });
+
+      const indexItem = await MediaService.getIndexItem(input.id);
+      await ctx.indexes.medias.updateDocuments([indexItem]);
     }),
 
   getById: publicProcedure

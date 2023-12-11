@@ -1,9 +1,10 @@
 import { insertScanSchema, searchScanSchema } from "~/lib/schemas";
+import { ScanService } from "~/lib/services/scan.service";
 
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const scansRouter = createTRPCRouter({
-  add: protectedProcedure
+  create: protectedProcedure
     .meta({ resource: "scans", action: "create" })
     .input(insertScanSchema)
     .mutation(async ({ ctx, input }) => {
@@ -13,6 +14,9 @@ export const scansRouter = createTRPCRouter({
           creatorId: ctx.session.user.id,
         },
       });
+
+      const indexItem = await ScanService.getIndexItem(result.id);
+      await ctx.indexes.scans.updateDocuments([indexItem]);
 
       return result;
     }),
