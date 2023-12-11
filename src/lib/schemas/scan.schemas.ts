@@ -13,6 +13,8 @@ export const insertScanSchema = ScanSchema.pick({
   telegram: true,
   youtube: true,
   email: true,
-});
+})
+  .partial()
+  .required({ name: true });
 
 export type InsertScanSchema = typeof insertScanSchema._type;
