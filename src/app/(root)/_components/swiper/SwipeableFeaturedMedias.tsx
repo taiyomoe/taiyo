@@ -1,15 +1,14 @@
 "use client";
 
-import { Image } from "@nextui-org/image";
 import { Autoplay, Mousewheel } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 import "swiper/css";
 import "swiper/css/pagination";
 
-import NextImage from "next/image";
 import Link from "next/link";
 
+import { MediaImage } from "~/components/generics/images/MediaImage";
 import type { FeaturedMedia } from "~/lib/types";
 import { MediaBannerUtils } from "~/lib/utils/mediaBanner.utils";
 import { MediaCoverUtils } from "~/lib/utils/mediaCover.utils";
@@ -39,27 +38,28 @@ export const SwipeableFeaturedMedias = ({ medias }: Props) => (
           className="hover:cursor-pointer"
           passHref
         >
-          <Image
-            as={NextImage}
+          <MediaImage
             src={MediaBannerUtils.getUrl(media)}
             classNames={{
-              wrapper: "!max-w-full w-full z-0",
-              img: "max-h-[200px] min-h-[200px] w-full object-cover sm:max-h-[250px] sm:min-h-[250px] md:max-h-[300px] md:min-h-[300px] lg:max-h-[350px] lg:min-h-[350px] blur-sm brightness-75",
+              height:
+                "max-h-[200px] min-h-[200px] sm:max-h-[250px] sm:min-h-[250px] md:max-h-[300px] md:min-h-[300px] lg:max-h-[350px] lg:min-h-[350px]",
+              width: "w-full",
+              img: "blur-sm brightness-75",
             }}
-            height={350}
-            width={1200}
+            maxHeight={350}
+            maxWidth={1200}
             alt="media's banner"
           />
           <div className="relative z-10 -mt-[200px] flex h-full gap-6 p-4 sm:-mt-[250px] md:-mt-[300px] lg:-mt-[350px]">
-            <Image
-              as={NextImage}
+            <MediaImage
               src={MediaCoverUtils.getUrl(media)}
               classNames={{
-                wrapper: "!max-w-full",
-                img: "min-h-full max-h-full w-full min-w-[120px] sm:min-w-[160px] md:min-w-[200px] lg:min-w-[230px] object-cover",
+                height: "min-h-full max-h-full",
+                width:
+                  "min-w-[120px] sm:min-w-[160px] md:min-w-[200px] lg:min-w-[230px]",
               }}
-              height={350}
-              width={240}
+              maxHeight={350}
+              maxWidth={230}
               alt="media's cover"
             />
             <div className="flex flex-col gap-4 py-4">
