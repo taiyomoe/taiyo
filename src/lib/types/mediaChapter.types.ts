@@ -2,6 +2,7 @@ import type {
   Media,
   MediaChapter,
   MediaChapterComment,
+  MediaCover,
   MediaTitle,
   Scan,
   User,
@@ -9,6 +10,27 @@ import type {
 
 export type MediaChapterPage = { id: string };
 export type MediaCommentAttachement = { id: string; extension: "png" | "gif" };
+
+export type LatestRelease = {
+  id: MediaChapter["id"];
+  createdAt: MediaChapter["createdAt"];
+  number: MediaChapter["number"];
+  volume: MediaChapter["volume"];
+  title: MediaChapter["title"];
+  media: {
+    id: Media["id"];
+    coverId: MediaCover["id"];
+    mainTitle: MediaTitle["title"];
+  };
+  uploader: {
+    id: User["id"];
+    name: User["name"];
+  };
+  scans: {
+    id: Scan["id"];
+    name: Scan["name"];
+  }[];
+};
 
 export type MediaChapterLimitedBase = {
   id: MediaChapter["id"];

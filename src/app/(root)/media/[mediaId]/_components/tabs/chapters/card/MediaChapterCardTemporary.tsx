@@ -10,8 +10,8 @@ import { MediaChapterUploader } from "~/components/ui/MediaChapterUploader";
 import type { MediaLimitedChapter } from "~/lib/types";
 import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils";
 
+import { MediaChapterCardUploadedTime } from "../../../../../../../../components/ui/MediaChapterUploadedTime";
 import { MediaChapterCardPath } from "./MediaChapterCardPath";
-import { MediaChapterCardUploadedTime } from "./MediaChapterCardUploadedTime";
 
 type Props = {
   chapter: MediaLimitedChapter;

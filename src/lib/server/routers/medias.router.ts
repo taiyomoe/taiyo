@@ -7,7 +7,11 @@ import {
   searchMediaSchema,
   updateMediaSchema,
 } from "~/lib/schemas";
-import { LibraryService, MediaService } from "~/lib/services";
+import {
+  LibraryService,
+  MediaChapterService,
+  MediaService,
+} from "~/lib/services";
 import type { MediaLimited, SearchedMedia } from "~/lib/types";
 import { MediaUtils } from "~/lib/utils/media.utils";
 
@@ -171,14 +175,17 @@ export const mediasRouter = createTRPCRouter({
     }),
 
   getHomePage: publicProcedure.query(async ({ ctx }) => {
+    const preferredTitles = ctx.session?.user.preferredTitles;
     const latestMedias = await MediaService.getLatestMedias();
-    const featuredMedias = await MediaService.getFeaturedMedias(
-      ctx.session?.user.preferredTitles,
-    );
+    const featuredMedias =
+      await MediaService.getFeaturedMedias(preferredTitles);
+    const latestReleases =
+      await MediaChapterService.getLatestReleases(preferredTitles);
 
     return {
       latestMedias,
       featuredMedias,
+      latestReleases,
     };
   }),
 
