@@ -30,6 +30,9 @@ export const mediaChaptersRouter = createTRPCRouter({
         data: {
           ...input,
           pages: pages.map((page) => ({ id: page })),
+          scans: {
+            connect: scanIds.map((scanId) => ({ id: scanId })),
+          },
           uploaderId: ctx.session.user.id,
         },
       });
