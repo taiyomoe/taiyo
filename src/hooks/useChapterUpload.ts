@@ -68,6 +68,7 @@ export const useChapterUpload = (initialValues: InsertMediaChapterSchema) => {
       void setFieldValue("id", crypto.randomUUID());
       void setFieldValue("mediaId", values.mediaId);
       void setFieldValue("number", values.number + 1);
+      void setFieldValue("volume", values.volume);
       void setFieldValue("scanIds", values.scanIds);
 
       reset("CHAPTER");
