@@ -27,7 +27,7 @@ services:
 
   soketi:
     container_name: soketi
-    image: "quay.io/soketi/soketi:1.4-16-debian"
+    image: "quay.io/soketi/soketi:1.6-16-debian"
     restart: always
     environment:
       - SOKETI_DEFAULT_APP_ID=$SOKETI_APP_ID
