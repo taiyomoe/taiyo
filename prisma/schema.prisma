@@ -22,7 +22,7 @@ generator zod {
 datasource db {
     provider  = "postgresql"
     url       = env("DATABASE_URL")
-    directUrl = env("DIRECT_DATABASE_URL")
+    directUrl = env("DATABASE_URL")
 }
 
 // ----- USERS
@@ -194,6 +194,7 @@ model MediaCover {
     volume        Int?
     contentRating ContentRating @default(NORMAL)
     isMainCover   Boolean       @default(false)
+    language      Languages
 
     media   Media  @relation(fields: [mediaId], references: [id], onDelete: Cascade)
     mediaId String
@@ -693,4 +694,5 @@ enum Languages {
 
     zh // Chinese
     zh_hk // Chinese (Hong Kong)
+    zh_ro // Chinese (romanized)
 }

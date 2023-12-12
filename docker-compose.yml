@@ -1,0 +1,37 @@
+version: "3.8"
+services:
+  postgres:
+    container_name: postgres
+    image: "postgres:16-alpine"
+    restart: always
+    environment:
+      - POSTGRES_USER=$DATABASE_USERNAME
+      - POSTGRES_PASSWORD=$DATABASE_PASSWORD
+      - POSTGRES_DB=$DATABASE_NAME
+    ports:
+      - "$DATABASE_PORT:5432"
+    volumes:
+      - "./data/postgres:/var/lib/postgresql/data"
+
+  meilisearch:
+    container_name: meilisearch
+    image: "getmeili/meilisearch:v1.5"
+    restart: always
+    environment:
+      - MEILI_MASTER_KEY=$MEILISEARCH_MASTER_KEY
+      - MEILI_ENV=$NODE_ENV
+    ports:
+      - "$MEILISEARCH_PORT:7700"
+    volumes:
+      - "./data/meilisearch:/data.ms"
+
+  soketi:
+    container_name: soketi
+    image: "quay.io/soketi/soketi:1.4-16-debian"
+    restart: always
+    environment:
+      - SOKETI_DEFAULT_APP_ID=$SOKETI_APP_ID
+      - SOKETI_DEFAULT_APP_KEY=$NEXT_PUBLIC_SOKETI_APP_KEY
+      - SOKETI_DEFAULT_APP_SECRET=$SOKETI_APP_SECRET
+    ports:
+      - "$NEXT_PUBLIC_SOKETI_PORT:6001"

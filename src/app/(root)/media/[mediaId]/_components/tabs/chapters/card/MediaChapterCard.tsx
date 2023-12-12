@@ -6,10 +6,10 @@ import { MediaChapterScans } from "~/components/ui/MediaChapterScans";
 import type { MediaLimitedChapter } from "~/lib/types";
 import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils";
 
+import { MediaChapterCardUploadedTime } from "../../../../../../../../components/ui/MediaChapterUploadedTime";
 import { MediaChapterUploader } from "../../../../../../../../components/ui/MediaChapterUploader";
 import { MediaChapterCardCommentsCount } from "./MediaChapterCardCommentsCount";
 import { MediaChapterCardPath } from "./MediaChapterCardPath";
-import { MediaChapterCardUploadedTime } from "./MediaChapterCardUploadedTime";
 import { MediaChapterCardViews } from "./MediaChapterCardViews";
 
 type Props = {

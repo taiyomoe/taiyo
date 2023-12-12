@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import type {
   Media,
   MediaBanner,
@@ -14,6 +15,14 @@ import type { UserLibraryStatus } from "~/lib/types/library.types";
 export type LatestMedia = {
   id: Media["id"];
   coverId: MediaCover["id"];
+};
+
+export type FeaturedMedia = {
+  id: Media["id"];
+  synopsis: Media["synopsis"];
+  coverId: MediaCover["id"];
+  bannerId: MediaBanner["id"];
+  mainTitle: MediaTitle["title"];
 };
 
 // Used to display media chapter cards
@@ -78,3 +87,16 @@ export type SearchedMedia = {
 };
 
 export type MediaTabs = "info" | "chapters";
+
+const mediaWithRelations = Prisma.validator<Prisma.MediaDefaultArgs>()({
+  include: {
+    covers: true,
+    banners: true,
+    titles: true,
+    trackers: true,
+    creator: true,
+  },
+});
+export type MediaWithRelations = Prisma.MediaGetPayload<
+  typeof mediaWithRelations
+>;

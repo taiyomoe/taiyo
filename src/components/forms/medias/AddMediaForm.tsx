@@ -7,10 +7,12 @@ import { useMediaCreation } from "~/hooks/useMediaCreation";
 import type { InsertMediaSchema } from "~/lib/schemas";
 import { insertMediaSchema } from "~/lib/schemas";
 
-import { AddMediaFormFields } from "./AddMediaFormFields";
+import { MediaFormFields } from "./MediaFormFields";
 
 const initialValues: InsertMediaSchema = {
   id: crypto.randomUUID(),
+  startDate: null,
+  endDate: null,
   synopsis: "",
   contentRating: "NORMAL",
   oneShot: true,
@@ -31,15 +33,6 @@ const initialValues: InsertMediaSchema = {
     },
   ],
   tags: [],
-  cover: {
-    id: "",
-    volume: null,
-    contentRating: "NORMAL",
-  },
-  banner: {
-    id: "",
-    contentRating: "NORMAL",
-  },
 };
 
 export const AddMediaForm = () => {
@@ -51,7 +44,7 @@ export const AddMediaForm = () => {
       validationSchema={toFormikValidationSchema(insertMediaSchema)}
       onSubmit={handleSubmit}
     >
-      <AddMediaFormFields />
+      <MediaFormFields action="create" />
     </Form.Component>
   );
 };

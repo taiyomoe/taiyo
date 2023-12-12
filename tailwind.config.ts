@@ -103,7 +103,11 @@ export default {
             background: "#f0f0f5",
             foreground: "hsl(0 0% 3.9%)",
             content1: {
-              DEFAULT: "#fff",
+              DEFAULT: "#ececee",
+              foreground: "hsl(0 0% 3.9%)",
+            },
+            content2: {
+              DEFAULT: "#dfdfe2",
               foreground: "hsl(0 0% 3.9%)",
             },
             primary: {
@@ -121,7 +125,11 @@ export default {
             background: "#16161a",
             foreground: "hsl(0 0% 98%)",
             content1: {
-              DEFAULT: "#26262d",
+              DEFAULT: "#2d2d30",
+              foreground: "hsl(0 0% 98%)",
+            },
+            content2: {
+              DEFAULT: "#37373b",
               foreground: "hsl(0 0% 98%)",
             },
             primary: {

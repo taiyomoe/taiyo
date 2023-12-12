@@ -11,16 +11,15 @@ import { UploadChapterFormFields } from "./UploadChapterFormFields";
 
 const initialValues: InsertMediaChapterSchema = {
   id: crypto.randomUUID(),
-  title: "Teste",
+  title: "",
   number: 0,
   volume: 0,
   language: "pt_br",
   pages: [],
   contentRating: "NORMAL",
   flag: "OK",
-  mediaId: "95bf236c-87ca-42d3-b9a0-d17ad7a13b2c",
-  // @ts-expect-error — the schema produces an array but we do have to pass a string
-  scansIds: "",
+  mediaId: "",
+  scanIds: [],
 };
 
 export const UploadChapterForm = () => {

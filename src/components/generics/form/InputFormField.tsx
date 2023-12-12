@@ -6,6 +6,7 @@ import { useField } from "formik";
 import { tv } from "tailwind-variants";
 
 import { cn } from "~/lib/utils/cn";
+import { DateUtils } from "~/lib/utils/date.utils";
 
 type Props = {
   name: string;
@@ -56,12 +57,19 @@ export const InputFormField = ({
       rest.variant === "bordered" ? shouldDisplayError : false,
   });
 
+  const rawValue = field.value as string | undefined;
+  const value = rawValue
+    ? rest.type === "date"
+      ? DateUtils.formatToInputValue(new Date(rawValue))
+      : rawValue
+    : "";
+
   return (
     <div className={cn(container(), className)}>
       <Input
         {...field}
         {...rest}
-        value={(field.value as string) ?? ""}
+        value={value}
         labelPlacement={labelPlacement}
         color={shouldDisplayError ? "danger" : "default"}
         classNames={{
