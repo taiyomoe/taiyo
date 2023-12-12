@@ -438,7 +438,7 @@ const getTrackers = (manga: Manga) => {
 
   if (manga.links.mal) {
     trackers.push({
-      externalId: manga.links.kt.split("/").pop()!,
+      externalId: manga.links.mal.split("/").pop()!,
       tracker: "MYANIMELIST",
     });
   }

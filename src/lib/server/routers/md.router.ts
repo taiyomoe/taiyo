@@ -130,8 +130,9 @@ export const mdRouter = createTRPCRouter({
         if ("error" in uploadCover) {
           throw new TRPCError({
             code: "INTERNAL_SERVER_ERROR",
-            message:
-              "Ocorreu um erro inesperado ao upar a cover número " + (i + 1),
+            message: `Ocorreu um erro ao upar a cover ${i + 1}/${
+              covers.length
+            }.`,
           });
         }
 
