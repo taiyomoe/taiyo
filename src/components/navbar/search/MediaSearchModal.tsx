@@ -29,7 +29,7 @@ export const MediaSearchModal = () => {
       >
         <ModalContent className="m-4 p-4 shadow-none">
           <ModalBody className="p-0">
-            <MediaSearchAutocomplete />
+            <MediaSearchAutocomplete itemsHrefPrefix="/media" />
           </ModalBody>
         </ModalContent>
       </Modal>

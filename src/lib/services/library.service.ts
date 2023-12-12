@@ -11,9 +11,7 @@ const getUserLibrary = async (userId: string | undefined) => {
     },
   });
 
-  if (!userLibrary) {
-    throw new Error(`User ${userId} has no library. This should not happen.`);
-  }
+  if (!userLibrary) return null;
 
   return userLibrary;
 };

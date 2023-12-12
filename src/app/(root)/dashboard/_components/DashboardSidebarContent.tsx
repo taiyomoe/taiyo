@@ -45,8 +45,19 @@ export const DashboardSidebarContent = ({ className }: Props) => {
       >
         <DashboardSidebarCRUDButtons
           create={{
+            label: "Importar",
+            href: "/dashboard/medias/import",
+          }}
+        />
+        <DashboardSidebarCRUDButtons
+          create={{
             label: "Adicionar",
             href: "/dashboard/medias/add",
+            isDisabled: true,
+          }}
+          update={{
+            label: "Modificar",
+            href: "/dashboard/medias/edit",
           }}
         />
       </AccordionItem>

@@ -1,22 +1,18 @@
-import { Skeleton } from "@nextui-org/skeleton";
+import type { LatestRelease } from "~/lib/types";
 
 import { ReleaseCard } from "./ReleaseCard";
 
-export const LatestReleases = () => {
-  return (
-    <div className="flex grow flex-col gap-6">
-      <div className="flex justify-between">
-        <p className="text-2xl font-medium">Lançamentos</p>
-        <Skeleton className="w-32 rounded" />
-      </div>
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-        <ReleaseCard />
-        <ReleaseCard />
-        <ReleaseCard />
-        <ReleaseCard />
-        <ReleaseCard />
-        <ReleaseCard />
-      </div>
-    </div>
-  );
+type Props = {
+  latestReleases: LatestRelease[];
 };
+
+export const LatestReleases = ({ latestReleases }: Props) => (
+  <div className="flex grow flex-col gap-6">
+    <p className="text-2xl font-medium">Lançamentos</p>
+    <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+      {latestReleases.map((release) => (
+        <ReleaseCard key={release.id} release={release} />
+      ))}
+    </div>
+  </div>
+);

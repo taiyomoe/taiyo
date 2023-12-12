@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { VariantProps } from "@nextui-org/react";
 import { Skeleton } from "@nextui-org/skeleton";
 import type { Scan } from "@prisma/client";
 import { UsersIcon } from "lucide-react";
@@ -6,9 +7,7 @@ import { tv } from "tailwind-variants";
 
 type Props = {
   scans?: Scan[] | Pick<Scan, "id" | "name">[];
-  size?: "sm" | "md";
-  orientation?: "horizontal" | "vertical";
-};
+} & VariantProps<typeof mediaChapterScans>;
 
 const mediaChapterScans = tv({
   slots: {
@@ -40,11 +39,17 @@ const mediaChapterScans = tv({
     },
     orientation: {
       horizontal: {
-        linkContainer: "flex-row",
+        linkContainer: "flex-row overflow-x-scroll scrollbar-none",
       },
       vertical: {
         linkContainer: "flex-col",
         link: "w-fit",
+      },
+    },
+    isCompact: {
+      true: {
+        linkContainer: "max-w-[150px]",
+        text: "truncate",
       },
     },
   },
@@ -55,8 +60,12 @@ const mediaChapterScans = tv({
 });
 
 export const MediaChapterScans = (props: Props) => {
-  const { scans, size, orientation } = props;
+  const { scans, size, orientation, isCompact } = props;
   const slots = mediaChapterScans({ size, orientation });
+
+  const scansToDisplay = isCompact ? scans?.slice(0, 1) : scans;
+  const otherScansCount =
+    scans && scansToDisplay ? scans.length - scansToDisplay.length : 0;
 
   return (
     <div className={slots.container()}>
@@ -64,10 +73,10 @@ export const MediaChapterScans = (props: Props) => {
         <UsersIcon className={slots.icon()} />
       </div>
       {scans === undefined && <Skeleton className={slots.skeleton()} />}
-      {scans && scans.length === 0 && <p className={slots.text()}>None</p>}
+      {scans && scans.length === 0 && <p className={slots.text()}>Sem scans</p>}
       {scans && scans.length !== 0 && (
         <div className={slots.linkContainer()}>
-          {scans?.map((scan) => (
+          {scansToDisplay?.map((scan) => (
             <Link
               key={scan.id}
               className={slots.link()}
@@ -76,6 +85,9 @@ export const MediaChapterScans = (props: Props) => {
               <p className={slots.text()}>{scan.name}</p>
             </Link>
           ))}
+          {isCompact && otherScansCount !== 0 && (
+            <p className={slots.text()}>+{otherScansCount}</p>
+          )}
         </div>
       )}
     </div>

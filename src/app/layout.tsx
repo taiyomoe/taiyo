@@ -5,6 +5,7 @@ import { headers } from "next/headers";
 import "~/styles/globals.css";
 
 import { siteConfig } from "~/lib/config";
+import { getBaseUrl } from "~/lib/trpc/utils";
 import type { LayoutProps } from "~/lib/types";
 import { cn } from "~/lib/utils/cn";
 
@@ -26,6 +27,7 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
   twitter: siteConfig.twitter,
   openGraph: siteConfig.openGraph,
+  metadataBase: new URL(getBaseUrl()),
   authors: [
     {
       name: "rdx",
@@ -41,7 +43,7 @@ export default function Layout({ children }: LayoutProps) {
       <body
         className={cn(
           ["font-sans", fontSans.variable].join(" "),
-          "h-full min-h-screen bg-background scrollbar-thin scrollbar-track-background scrollbar-thumb-primary",
+          "h-full min-h-screen bg-background scrollbar-thin scrollbar-track-content1 scrollbar-thumb-primary",
         )}
       >
         <Providers headers={headers()}>{children}</Providers>

@@ -2,7 +2,7 @@
   "name": "taiyo",
   "private": true,
   "engines": {
-    "node": ">=18.19.0"
+    "node": "20.5.1"
   },
   "scripts": {
     "build": "next build",
@@ -16,7 +16,7 @@
     "postinstall": "prisma generate"
   },
   "prisma": {
-    "seed": "cross-env PRISMA_SEED=1 ts-node ./prisma/seed.ts"
+    "seed": "cross-env PRISMA_SEED=1 tsx ./prisma/seed.ts"
   },
   "dependencies": {
     "@next-auth/prisma-adapter": "^1.0.7",
@@ -31,18 +31,22 @@
     "@trpc/react-query": "^10.44.1",
     "@trpc/server": "^10.44.1",
     "accesscontrol": "^2.2.1",
+    "encoding": "^0.1.13",
     "formik": "^2.4.5",
     "framer-motion": "^10.16.15",
     "jotai": "^2.6.0",
     "lodash-es": "^4.17.21",
     "lucide-react": "^0.294.0",
     "luxon": "^3.4.4",
+    "mangadex-full-api": "^5.12.1",
     "meilisearch": "^0.36.0",
     "next": "^13.5.6",
     "next-auth": "^4.24.5",
     "next-themes": "^0.2.1",
     "next-usequerystate": "^1.13.1",
     "pretty-bytes": "^6.1.1",
+    "pusher": "^5.2.0",
+    "pusher-js": "^8.4.0-rc2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-dropzone": "^14.2.3",
@@ -59,6 +63,7 @@
   },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "^4.1.1",
+    "@total-typescript/ts-reset": "^0.5.1",
     "@types/eslint": "^8.44.8",
     "@types/lodash-es": "^4.17.12",
     "@types/luxon": "^3.3.7",
@@ -77,7 +82,7 @@
     "prisma": "^5.7.0",
     "prisma-json-types-generator": "^3.0.3",
     "tailwindcss": "^3.3.6",
-    "ts-node": "^10.9.1",
+    "tsx": "^4.6.1",
     "typescript": "^5.3.3"
   }
 }

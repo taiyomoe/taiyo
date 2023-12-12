@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { Chip } from "@nextui-org/react";
 import { tv } from "tailwind-variants";
 
 import { UserLibrary } from "~/components/library/UserLibrary";
@@ -16,7 +17,7 @@ const navbar = tv({
     container:
       "w-auto bg-background flex flex-col h-navbar justify-center max-h-navbar z-20 transition-all",
     contentWrapper: "items-center px-bodyPadding flex grow justify-between",
-    brandContainer: "flex items-center gap-2",
+    brandContainer: "flex items-center gap-2 select-none",
     brandText: "text-xl font-semibold",
     endContentContainer: "flex gap-4",
   },
@@ -50,26 +51,19 @@ type Props = {
 export const Navbar = ({ popover }: Props) => {
   const { mode, sidebarSide, expand } = useChapterNavbar();
 
-  const {
-    container,
-    contentWrapper,
-    brandContainer,
-    brandText,
-    endContentContainer,
-  } = navbar({
-    sidebarSide,
-    mode,
-    expand,
-  });
+  const slots = navbar({ sidebarSide, mode, expand });
 
   return (
-    <div className={container()}>
-      <nav className={contentWrapper()}>
-        <Link href="/" className={brandContainer()}>
+    <div className={slots.container()}>
+      <nav className={slots.contentWrapper()}>
+        <Link href="/" className={slots.brandContainer()}>
           <CompanyLogo company="taiyo" width={35} priority />
-          <p className={brandText()}>Taiyō</p>
+          <p className={slots.brandText()}>Taiyō</p>
+          <Chip color="primary" size="sm">
+            ALPHA
+          </Chip>
         </Link>
-        <div className={endContentContainer()}>
+        <div className={slots.endContentContainer()}>
           <MediaSearch />
           <UserLibrary />
           {popover}

@@ -27,23 +27,26 @@ const initialValues: InsertScanSchema = {
 };
 
 export const AddScanForm = () => {
-  const { mutateAsync } = api.scans.add.useMutation();
+  const { mutateAsync } = api.scans.create.useMutation();
 
   const handleSubmit: FormSubmit<InsertScanSchema> = (
     values,
-    { resetForm },
+    { resetForm, setSubmitting },
   ) => {
-    const promsie = () => mutateAsync(values);
-
-    toast.promise(promsie, {
+    toast.promise(mutateAsync(values), {
       loading: "Adicionando scan...",
       success: () => {
         resetForm();
+
         return "Scan adicionada com sucesso!";
       },
       error: (error) => {
         console.log(error);
+
         return "Ocorreu um erro inesperado ao adicionar a scan.";
+      },
+      finally: () => {
+        setSubmitting(false);
       },
     });
   };

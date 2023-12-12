@@ -4,7 +4,6 @@ import { env } from "~/lib/env.mjs";
 import type {
   MediaChapterGroups,
   MediaChapterLimited,
-  MediaChapterLimitedBase,
   MediaChapterNavigation,
   MediaLimitedChapter,
 } from "~/lib/types";
@@ -13,9 +12,7 @@ const getTitle = (mediaChapter: MediaLimitedChapter) => {
   return mediaChapter.title ?? "Cap. " + mediaChapter.number;
 };
 
-const getUrl = (
-  mediaChapter: MediaLimitedChapter | MediaChapterLimitedBase,
-) => {
+const getUrl = (mediaChapter: { id: string }) => {
   return `/chapter/${mediaChapter.id}/1`;
 };
 
@@ -30,7 +27,7 @@ const getNavigation = (
   nextPage: currentPage === mediaChapter.pages.length ? null : currentPage + 1,
 });
 
-const computeUploadedTime = (mediaChapter: MediaLimitedChapter) => {
+const computeUploadedTime = (mediaChapter: { createdAt: Date }) => {
   const uploadedAt = DateTime.fromJSDate(mediaChapter.createdAt);
 
   return uploadedAt.toRelative({ locale: "pt", style: "short" });
