@@ -1,14 +1,10 @@
 "use client";
 
 import { Divider } from "@nextui-org/divider";
-import { useAtomValue } from "jotai";
 import { tv } from "tailwind-variants";
 
-import {
-  readerSidebarSideAtom,
-  readerSidebarStateAtom,
-} from "~/atoms/readerSettings.atoms";
 import { useDevice } from "~/hooks/useDevice";
+import { useReaderStore } from "~/stores";
 
 import { ReaderSidebarSettingsSection } from "../sections/ReaderSidebarSettingsSection";
 import { ReaderSidebarUploadersSection } from "../sections/ReaderSidebarUploadersSection";
@@ -46,18 +42,14 @@ const readerSidebarLayout = tv({
 });
 
 export const ReaderSidebarLayout = () => {
+  const { state, side } = useReaderStore((state) => state.settings.sidebar);
   const { isMobile } = useDevice();
-  const readerSidebarState = useAtomValue(readerSidebarStateAtom);
-  const readerSidebarSide = useAtomValue(readerSidebarSideAtom);
 
-  const { container, contentWrapper } = readerSidebarLayout({
-    isMobile,
-    side: readerSidebarSide,
-  });
+  const slots = readerSidebarLayout({ isMobile, side });
 
   return (
-    <div className={container()} aria-expanded={readerSidebarState === "show"}>
-      <div className={contentWrapper()}>
+    <div className={slots.container()} aria-expanded={state === "show"}>
+      <div className={slots.contentWrapper()}>
         <div className="flex min-h-[var(--navbar-height)] items-center">
           <ReaderSidebarTitle />
         </div>

@@ -5,5 +5,9 @@ import { useDevice } from "~/hooks/useDevice";
 export const MediaSearch = () => {
   const { isMobile } = useDevice();
 
-  return isMobile ? <MediaSearchModal /> : <MediaSearchAutocomplete />;
+  if (isMobile) {
+    return <MediaSearchModal />;
+  }
+
+  return <MediaSearchAutocomplete itemsHrefPrefix={"/media"} />;
 };

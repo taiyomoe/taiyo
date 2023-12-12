@@ -2,14 +2,10 @@
 
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { useSetAtom } from "jotai";
 
-import {
-  mediaChapterAtom,
-  mediaChapterNavigationAtom,
-} from "~/atoms/mediaChapter.atoms";
 import type { MediaChapterLimited } from "~/lib/types";
 import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils";
+import { useReaderStore } from "~/stores";
 
 type Props = {
   mediaChapter: MediaChapterLimited;
@@ -19,26 +15,15 @@ export const PopulateAtoms = ({ mediaChapter }: Props) => {
   const pathname = usePathname();
   const { currentPageNumber } = MediaChapterUtils.parseUrl(pathname);
 
-  const setMediaChapter = useSetAtom(mediaChapterAtom);
-  const setMediaChapterNavigation = useSetAtom(mediaChapterNavigationAtom);
+  const { load, unload } = useReaderStore();
 
   useEffect(() => {
-    setMediaChapter(mediaChapter);
+    load(mediaChapter, currentPageNumber);
 
-    if (currentPageNumber) {
-      const mediaChapterNavigation = MediaChapterUtils.getNavigation(
-        mediaChapter,
-        currentPageNumber,
-      );
-
-      setMediaChapterNavigation(mediaChapterNavigation);
-    }
-  }, [
-    currentPageNumber,
-    mediaChapter,
-    setMediaChapter,
-    setMediaChapterNavigation,
-  ]);
+    return () => {
+      unload();
+    };
+  }, [load, mediaChapter, currentPageNumber, unload]);
 
   return null;
 };

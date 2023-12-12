@@ -2,14 +2,35 @@ import type {
   Media,
   MediaChapter,
   MediaChapterComment,
+  MediaCover,
   MediaTitle,
   Scan,
-  UploadSessionType,
   User,
 } from "@prisma/client";
 
 export type MediaChapterPage = { id: string };
 export type MediaCommentAttachement = { id: string; extension: "png" | "gif" };
+
+export type LatestRelease = {
+  id: MediaChapter["id"];
+  createdAt: MediaChapter["createdAt"];
+  number: MediaChapter["number"];
+  volume: MediaChapter["volume"];
+  title: MediaChapter["title"];
+  media: {
+    id: Media["id"];
+    coverId: MediaCover["id"];
+    mainTitle: MediaTitle["title"];
+  };
+  uploader: {
+    id: User["id"];
+    name: User["name"];
+  };
+  scans: {
+    id: Scan["id"];
+    name: Scan["name"];
+  }[];
+};
 
 export type MediaChapterLimitedBase = {
   id: MediaChapter["id"];
@@ -47,12 +68,6 @@ export type MediaChapterNavigation = {
   previousPage: number | null;
   currentPage: number;
   nextPage: number | null;
-};
-
-export type SelectedImage = {
-  type: UploadSessionType;
-  file: File;
-  status: "pending" | "compressing" | "compressed";
 };
 
 export type ReaderImage = { number: number; url: string; blobUrl: string };

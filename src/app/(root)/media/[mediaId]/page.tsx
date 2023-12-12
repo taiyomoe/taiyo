@@ -1,3 +1,4 @@
+import { notFound } from "next/navigation";
 import { ScrollShadow } from "@nextui-org/scroll-shadow";
 
 import { api } from "~/lib/trpc/server";
@@ -14,6 +15,10 @@ export default async function Page({ params }: Props) {
   const { mediaId } = params;
 
   const media = await api.medias.getById.query(mediaId);
+
+  if (!media) {
+    return notFound();
+  }
 
   return (
     <MediaLayout media={media}>

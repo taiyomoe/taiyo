@@ -106,12 +106,14 @@ const execute = async () => {
       {
         id: "6148c7af-3fcc-4b3a-a185-f0caa6983ab8",
         volume: 1,
+        language: "ja",
         mediaId: "d696e020-f234-44c4-9cba-8bb5359b156b",
         uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
       },
       {
         id: "9b11ff1d-8d89-4afd-b21c-6e404f3a9f40",
         volume: 1,
+        language: "ja",
         mediaId: "d696e020-f234-44c4-9cba-8bb5359b156b",
         uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
       },
@@ -119,6 +121,7 @@ const execute = async () => {
         id: "64cfc197-2223-4051-a71e-737fbc6eca6f",
         volume: 2,
         isMainCover: true,
+        language: "ja",
         mediaId: "d696e020-f234-44c4-9cba-8bb5359b156b",
         uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
       },

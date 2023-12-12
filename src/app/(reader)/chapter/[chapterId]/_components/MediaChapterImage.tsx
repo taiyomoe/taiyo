@@ -1,7 +1,6 @@
 import { tv } from "@nextui-org/react";
-import { useAtomValue } from "jotai";
 
-import { readerPageModeAtom } from "~/atoms/readerSettings.atoms";
+import { useReaderStore } from "~/stores";
 
 type Props = {
   url: string;
@@ -25,7 +24,7 @@ const mediaChapterImage = tv({
 });
 
 export const MediaChapterImage = ({ url, hide }: Props) => {
-  const pageMode = useAtomValue(readerPageModeAtom);
+  const pageMode = useReaderStore(({ settings }) => settings.pageMode);
 
   const { image } = mediaChapterImage({ hide, pageMode });
 

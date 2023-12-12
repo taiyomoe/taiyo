@@ -23,12 +23,6 @@
     "plugins": [{ "name": "next" }],
     "typeRoots": ["./node_modules/@types", "./src/lib/types"]
   },
-  "ts-node": {
-    "require": ["tsconfig-paths/register"],
-    "compilerOptions": {
-      "module": "CommonJS"
-    }
-  },
   "include": [
     ".eslintrc.cjs",
     "**/*.cjs",
