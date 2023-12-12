@@ -1,23 +1,16 @@
 import { Badge } from "@nextui-org/badge";
-import { Button } from "@nextui-org/button";
 import { Tooltip } from "@nextui-org/tooltip";
 import { ContentRating, Flag, Languages } from "@prisma/client";
-import { useFormikContext } from "formik";
 import { AlertCircleIcon } from "lucide-react";
 
 import { Form } from "~/components/generics/form/Form";
 import { InputFormField } from "~/components/generics/form/InputFormField";
 import { SelectFormField } from "~/components/generics/form/SelectFormField";
+import { ScansSearchAutocomplete } from "~/components/scans/ScansSearchAutocomplete";
+import { ImageCard } from "~/components/ui/images/ImageCard";
 import { ImageDropzone } from "~/components/ui/images/ImageDropzone";
-import { useImageCompression } from "~/hooks/useImageCompression";
 
 export const UploadChapterFormFields = () => {
-  const { isSubmitting, isValid, dirty } = useFormikContext();
-  const { needsCompression, handleCompressImages } = useImageCompression();
-
-  const shouldDisableButton =
-    needsCompression || isSubmitting || !(isValid && dirty);
-
   return (
     <Form.Layout>
       <Form.Category>
@@ -35,23 +28,7 @@ export const UploadChapterFormFields = () => {
           </Badge>
         </Tooltip>
         <InputFormField name="title" label="Título" />
-        <Tooltip content="Temporário">
-          <Badge
-            className="right-1 top-7"
-            placement="top-right"
-            content={<AlertCircleIcon />}
-            color="warning"
-            size="lg"
-            isOneChar
-          >
-            <InputFormField
-              name="scansIds"
-              label="IDs das scans"
-              labelPlacement="outside"
-              placeholder="Separe os IDs por uma vírgula"
-            />
-          </Badge>
-        </Tooltip>
+        <ScansSearchAutocomplete />
       </Form.Category>
       <Form.Category title="Detalhes">
         <Form.Row>
@@ -60,12 +37,14 @@ export const UploadChapterFormFields = () => {
             label="Número"
             labelPlacement="outside"
             placeholder="Ex: 1"
+            type="number"
           />
           <InputFormField
             name="volume"
             label="Volume"
             labelPlacement="outside"
             placeholder="Ex: 1"
+            type="number"
           />
         </Form.Row>
         <Form.Row>
@@ -84,28 +63,19 @@ export const UploadChapterFormFields = () => {
           />
         </Form.Row>
       </Form.Category>
-      <Form.Category title="Imagens">
-        <ImageDropzone type="CHAPTER" />
-      </Form.Category>
-      <Form.Actions>
-        <Button
-          className="w-fit font-medium"
-          variant="flat"
-          onClick={handleCompressImages}
-          isDisabled={!needsCompression}
-        >
-          Comprimir
-        </Button>
-        <Button
-          color="primary"
-          type="submit"
-          className="w-fit font-medium"
-          isDisabled={shouldDisableButton}
-          isLoading={isSubmitting}
-        >
-          Adicionar
-        </Button>
-      </Form.Actions>
+      <ImageDropzone title="Páginas" type="CHAPTER" isCompact>
+        {({ selectedImages }) => (
+          <div className="flex flex-col gap-3">
+            {selectedImages.map((f, i) => (
+              <ImageCard
+                key={i}
+                file={f}
+                position={`${i + 1}/${selectedImages.length}`}
+              />
+            ))}
+          </div>
+        )}
+      </ImageDropzone>
     </Form.Layout>
   );
 };

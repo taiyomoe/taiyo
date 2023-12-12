@@ -14,12 +14,12 @@ export const mediaChaptersRouter = createTRPCRouter({
   create: protectedProcedure
     .meta({ resource: "mediaChapters", action: "create" })
     .input(insertMediaChapterSchema)
-    .mutation(async ({ ctx, input: { pages, scansIds, ...input } }) => {
+    .mutation(async ({ ctx, input: { pages, scanIds, ...input } }) => {
       const scans = await ctx.db.scan.findMany({
-        where: { id: { in: scansIds } },
+        where: { id: { in: scanIds } },
       });
 
-      if (scans.length !== scansIds.length) {
+      if (scans.length !== scanIds.length) {
         throw new TRPCError({
           code: "BAD_REQUEST",
           message: "Uma ou várias scans não existem.",
@@ -143,6 +143,12 @@ export const mediaChaptersRouter = createTRPCRouter({
       const chaptersCount = await ctx.db.mediaChapter.count({
         where: { mediaId },
       });
+      const { progression } = ctx.session
+        ? (await ctx.db.userHistory.findFirst({
+            select: { progression: true },
+            where: { userId: ctx.session?.user.id, mediaId },
+          })) ?? { progression: [] }
+        : { progression: [] };
 
       const mediaLimitedChapterPagination = {
         chapters: result.map((c) => ({
@@ -151,6 +157,9 @@ export const mediaChaptersRouter = createTRPCRouter({
           title: c.title,
           number: c.number,
           volume: c.volume,
+          // ----- USER PROGRESSION
+          completed:
+            progression.find((p) => p.chapterId === c.id)?.completed ?? null,
           // ----- RELATIONS
           uploader: {
             id: c.uploader.id,

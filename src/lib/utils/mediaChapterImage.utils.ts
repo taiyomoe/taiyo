@@ -1,6 +1,7 @@
 import { cloneDeep } from "lodash-es";
 
-import { CDN_DOMAIN, PRELOAD_PAGES_COUNT } from "~/lib/constants";
+import { PRELOAD_PAGES_COUNT } from "~/lib/constants";
+import { env } from "~/lib/env.mjs";
 import type {
   MediaChapterLimited,
   MediaChapterNavigation,
@@ -14,7 +15,7 @@ const getImageUrl = (
   mediaChapter: MediaChapterLimited,
   page: MediaChapterPage,
 ) => {
-  return `${CDN_DOMAIN}/${mediaChapter.media.id}/${mediaChapter.id}/${page.id}.jpg`;
+  return `${env.NEXT_PUBLIC_CDN_URL}/medias/${mediaChapter.media.id}/chapters/${mediaChapter.id}/${page.id}.jpg`;
 };
 
 const getImages = (mediaChapter: MediaChapterLimited) => {

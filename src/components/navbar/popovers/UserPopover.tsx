@@ -37,7 +37,7 @@ export const UserPopover = ({ session }: Props) => {
           >
             Meu perfil
           </Button>
-          <SignedIn allowIfUserHasAtLeastOnePermission>
+          <SignedIn requiredRole="ADMIN">
             <Button
               as={NextLink}
               href={`/dashboard`}

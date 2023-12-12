@@ -9,14 +9,13 @@ import {
   DropdownTrigger,
 } from "@nextui-org/dropdown";
 import { Skeleton } from "@nextui-org/react";
-import { useAtomValue } from "jotai";
 import { ChevronsUpDownIcon } from "lucide-react";
 import { tv } from "tailwind-variants";
 
-import { mediaChapterAtom } from "~/atoms/mediaChapter.atoms";
 import { BackButton } from "~/components/generics/buttons/BackButton";
 import { ForwardButton } from "~/components/generics/buttons/ForwardButton";
 import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils";
+import { useReaderStore } from "~/stores";
 
 const readerSettingsMediaChapterDropdown = tv({
   slots: {
@@ -38,29 +37,30 @@ const readerSettingsMediaChapterDropdown = tv({
 });
 
 export const ReaderSettingsMediaChapterDropdown = () => {
-  const chapter = useAtomValue(mediaChapterAtom);
-  const { container, triggerButton, skeleton, dropdownBase, dropdownMenu } =
-    readerSettingsMediaChapterDropdown({
-      scollable: false,
-    });
+  const { chapter } = useReaderStore();
+  const slots = readerSettingsMediaChapterDropdown({ scollable: false });
+
+  const backButtonUrl = chapter?.previousChapter
+    ? MediaChapterUtils.getUrl(chapter?.previousChapter)
+    : "https://google.com/";
+
+  const forwardButtonUrl = chapter?.nextChapter
+    ? MediaChapterUtils.getUrl(chapter?.nextChapter)
+    : "https://google.com/";
 
   return (
-    <div className={container()}>
+    <div className={slots.container()}>
       <BackButton
         as={Link}
-        href={
-          chapter?.previousChapter
-            ? MediaChapterUtils.getUrl(chapter?.previousChapter)
-            : "https://google.com/"
-        }
+        href={backButtonUrl}
         isDisabled={!chapter?.previousChapter}
       />
-      {!chapter && <Skeleton className={skeleton()} />}
+      {!chapter && <Skeleton className={slots.skeleton()} />}
       {chapter && (
-        <Dropdown classNames={{ base: dropdownBase() }}>
+        <Dropdown classNames={{ base: slots.dropdownBase() }}>
           <DropdownTrigger>
             <Button
-              className={triggerButton()}
+              className={slots.triggerButton()}
               endContent={<ChevronsUpDownIcon size={20} />}
               radius="sm"
               fullWidth
@@ -69,7 +69,7 @@ export const ReaderSettingsMediaChapterDropdown = () => {
             </Button>
           </DropdownTrigger>
           <DropdownMenu
-            className={dropdownMenu()}
+            className={slots.dropdownMenu()}
             disabledKeys={[`chapter-${chapter.number}`]}
             aria-label="Capítulos"
           >
@@ -88,11 +88,7 @@ export const ReaderSettingsMediaChapterDropdown = () => {
       )}
       <ForwardButton
         as={Link}
-        href={
-          chapter?.nextChapter
-            ? MediaChapterUtils.getUrl(chapter?.nextChapter)
-            : "https://google.com/"
-        }
+        href={forwardButtonUrl}
         isDisabled={!chapter?.nextChapter}
       />
     </div>

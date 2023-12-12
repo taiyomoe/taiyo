@@ -56,9 +56,13 @@ export type InputJsonValueType = z.infer<typeof InputJsonValueSchema>;
 
 export const TransactionIsolationLevelSchema = z.enum(['ReadUncommitted','ReadCommitted','RepeatableRead','Serializable']);
 
-export const UserScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','name','email','emailVerified','image','role']);
+export const UserScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','name','email','emailVerified','image','role','points']);
 
 export const UserSettingScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','birthDate','gender','city','country','about','contentRating','preferredTitleLanguage','userId']);
+
+export const UserLibraryScalarFieldEnumSchema = z.enum(['reading','rereading','planToRead','completed','onHold','dropped','userId']);
+
+export const UserHistoryScalarFieldEnumSchema = z.enum(['progression','mediaId','userId']);
 
 export const AccountScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','type','refresh_token','access_token','expires_at','token_type','scope','id_token','session_state','provider','providerAccountId','userId']);
 
@@ -68,7 +72,7 @@ export const VerificationTokenScalarFieldEnumSchema = z.enum(['identifier','toke
 
 export const MediaScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','startDate','endDate','synopsis','contentRating','oneShot','trailer','type','status','source','demography','countryOfOrigin','genres','tags','flag','creatorId','deleterId']);
 
-export const MediaCoverScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','volume','contentRating','isMainCover','mediaId','uploaderId','deleterId']);
+export const MediaCoverScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','volume','contentRating','isMainCover','language','mediaId','uploaderId','deleterId']);
 
 export const MediaBannerScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','contentRating','mediaId','uploaderId','deleterId']);
 
@@ -152,7 +156,7 @@ export const UploadSessionTypeSchema = z.enum(['COVER','BANNER','CHAPTER']);
 
 export type UploadSessionTypeType = `${z.infer<typeof UploadSessionTypeSchema>}`
 
-export const LanguagesSchema = z.enum(['ab','aa','af','ak','sq','am','ar','an','hy','as','av','ae','ay','az','bm','ba','eu','be','bn','bi','bs','br','bg','my','ca','ch','ce','ny','cu','cv','kw','co','cr','hr','cs','da','dv','nl','dz','en','eo','et','ee','fo','fj','fi','fr','fy','ff','gd','gl','lg','ka','de','el','kl','gn','gu','ht','ha','he','hz','hi','ho','hu','is','io','ig','id','ia','ie','iu','ik','ga','it','jv','kn','kr','ks','kk','km','ki','rw','ky','kv','kg','kj','ku','lo','la','lv','li','ln','lt','lu','lb','mk','mg','ms','ml','mt','gv','mi','mr','mh','mn','na','nv','nd','nr','ng','ne','no','nb','nn','ii','oc','oj','or','om','os','pi','ps','fa','pl','pa','qu','ro','rm','rn','ru','se','sm','sg','sa','sc','sr','sn','sd','si','sk','sl','so','st','su','sw','ss','sv','tl','ty','tg','ta','tt','te','th','bo','ti','to','ts','tn','tr','tk','tw','ug','uk','ur','uz','ve','vi','vo','wa','cy','wo','xh','yi','yo','za','zu','es','es_la','pt_br','pt_pt','ja','ja_ro','ko','ko_ro','zh','zh_hk']);
+export const LanguagesSchema = z.enum(['ab','aa','af','ak','sq','am','ar','an','hy','as','av','ae','ay','az','bm','ba','eu','be','bn','bi','bs','br','bg','my','ca','ch','ce','ny','cu','cv','kw','co','cr','hr','cs','da','dv','nl','dz','en','eo','et','ee','fo','fj','fi','fr','fy','ff','gd','gl','lg','ka','de','el','kl','gn','gu','ht','ha','he','hz','hi','ho','hu','is','io','ig','id','ia','ie','iu','ik','ga','it','jv','kn','kr','ks','kk','km','ki','rw','ky','kv','kg','kj','ku','lo','la','lv','li','ln','lt','lu','lb','mk','mg','ms','ml','mt','gv','mi','mr','mh','mn','na','nv','nd','nr','ng','ne','no','nb','nn','ii','oc','oj','or','om','os','pi','ps','fa','pl','pa','qu','ro','rm','rn','ru','se','sm','sg','sa','sc','sr','sn','sd','si','sk','sl','so','st','su','sw','ss','sv','tl','ty','tg','ta','tt','te','th','bo','ti','to','ts','tn','tr','tk','tw','ug','uk','ur','uz','ve','vi','vo','wa','cy','wo','xh','yi','yo','za','zu','es','es_la','pt_br','pt_pt','ja','ja_ro','ko','ko_ro','zh','zh_hk','zh_ro']);
 
 export type LanguagesType = `${z.infer<typeof LanguagesSchema>}`
 
@@ -173,6 +177,7 @@ export const UserSchema = z.object({
   email: z.string().nullable(),
   emailVerified: z.coerce.date().nullable(),
   image: z.string().nullable(),
+  points: z.number().int(),
 })
 
 export type User = z.infer<typeof UserSchema>
@@ -196,6 +201,55 @@ export const UserSettingSchema = z.object({
 })
 
 export type UserSetting = z.infer<typeof UserSettingSchema>
+
+/////////////////////////////////////////
+// USER LIBRARY SCHEMA
+/////////////////////////////////////////
+
+export const UserLibrarySchema = z.object({
+  /**
+   * [UserLibraryEntry]
+   */
+  reading: JsonValueSchema.array().nullable(),
+  /**
+   * [UserLibraryEntry]
+   */
+  rereading: JsonValueSchema.array().nullable(),
+  /**
+   * [UserLibraryEntry]
+   */
+  planToRead: JsonValueSchema.array().nullable(),
+  /**
+   * [UserLibraryEntry]
+   */
+  completed: JsonValueSchema.array().nullable(),
+  /**
+   * [UserLibraryEntry]
+   */
+  onHold: JsonValueSchema.array().nullable(),
+  /**
+   * [UserLibraryEntry]
+   */
+  dropped: JsonValueSchema.array().nullable(),
+  userId: z.string(),
+})
+
+export type UserLibrary = z.infer<typeof UserLibrarySchema>
+
+/////////////////////////////////////////
+// USER HISTORY SCHEMA
+/////////////////////////////////////////
+
+export const UserHistorySchema = z.object({
+  /**
+   * [UserHistoryProgression]
+   */
+  progression: JsonValueSchema.array().nullable(),
+  mediaId: z.string(),
+  userId: z.string(),
+})
+
+export type UserHistory = z.infer<typeof UserHistorySchema>
 
 /////////////////////////////////////////
 // ACCOUNT SCHEMA
@@ -285,6 +339,7 @@ export type Media = z.infer<typeof MediaSchema>
 
 export const MediaCoverSchema = z.object({
   contentRating: ContentRatingSchema,
+  language: LanguagesSchema,
   id: z.string().uuid(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),

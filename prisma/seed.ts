@@ -1,5 +1,3 @@
-import { PrismaClient } from "@prisma/client";
-
 import media1 from "./seeds/medias/media-1";
 import media2 from "./seeds/medias/media-2";
 import media3 from "./seeds/medias/media-3";
@@ -23,8 +21,6 @@ import scan9 from "./seeds/scans/scan-9";
 import scan10 from "./seeds/scans/scan-10";
 import scan11 from "./seeds/scans/scan-11";
 import users from "./seeds/users";
-
-const db = new PrismaClient();
 
 async function main() {
   if (process.env.NODE_ENV === "production") {
@@ -74,12 +70,7 @@ async function main() {
   await meilisearch.execute().then(() => console.log("Meilisearch reindexed"));
 }
 
-main()
-  .then(async () => {
-    await db.$disconnect();
-  })
-  .catch(async (e) => {
-    console.error(e);
-    await db.$disconnect();
-    process.exit(1);
-  });
+main().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});

@@ -1,14 +1,9 @@
 "use client";
 
-import { useAtom, useAtomValue } from "jotai";
 import { tv } from "tailwind-variants";
 
-import {
-  readerSidebarOpenModeAtom,
-  readerSidebarSideAtom,
-  readerSidebarStateAtom,
-} from "~/atoms/readerSettings.atoms";
 import { SidebarIcon } from "~/components/icons/SidebarIcon";
+import { useReaderStore } from "~/stores";
 
 const readerSidebarOpenOverlay = tv({
   slots: {
@@ -36,18 +31,14 @@ const readerSidebarOpenOverlay = tv({
 });
 
 export const ReaderSidebarOpenOverlay = () => {
-  const readerSidebarOpenMode = useAtomValue(readerSidebarOpenModeAtom);
-  const readerSidebarSide = useAtomValue(readerSidebarSideAtom);
-  const [readerSidebarState, setReaderSidebarState] = useAtom(
-    readerSidebarStateAtom,
-  );
+  const { settings, updateSettings } = useReaderStore();
 
   const { container, button, accent, text } = readerSidebarOpenOverlay({
-    hide: readerSidebarState === "show",
-    side: readerSidebarSide,
+    hide: settings.sidebar.state === "show",
+    side: settings.sidebar.side,
   });
 
-  if (readerSidebarOpenMode === "button") {
+  if (settings.sidebar.openMode === "button") {
     return null;
   }
 
@@ -55,11 +46,11 @@ export const ReaderSidebarOpenOverlay = () => {
     <div className={container()}>
       <button
         className={button()}
-        onClick={() => setReaderSidebarState("show")}
+        onClick={() => updateSettings("sidebar.state", "show")}
       >
         <span className={accent()} />
         <p className={text()}>Abrir sidebar</p>
-        <SidebarIcon action="open" side={readerSidebarSide} size={32} />
+        <SidebarIcon action="open" side={settings.sidebar.side} size={32} />
       </button>
     </div>
   );

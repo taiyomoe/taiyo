@@ -23,7 +23,7 @@ export const NavbarPopoversCommonOptions = () => {
         Linguagem
       </Button>
       <div className="flex justify-between">
-        <div className="flex gap-3 p-2">
+        <div className="flex gap-3 p-2 opacity-disabled">
           <SunMoonIcon />
           <p className="select-none text-medium font-medium">Tema</p>
         </div>

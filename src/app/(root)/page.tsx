@@ -1,18 +1,23 @@
+import { api } from "~/lib/trpc/server";
+
+import { FeaturedMedias } from "./_components/FeaturedMedias";
 import { LatestMedias } from "./_components/LatestMedias";
 import { LatestReleases } from "./_components/LatestReleases";
-import { MediaShowcase } from "./_components/MediaShowcase";
 import { TrendingMedias } from "./_components/TrendingMedias";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const { latestMedias, featuredMedias, latestReleases } =
+    await api.medias.getHomePage.query();
+
   return (
-    <main className="p-bodyPadding flex h-full flex-col">
+    <main className="flex h-full flex-col p-bodyPadding">
       <div className="flex flex-col gap-12">
-        <MediaShowcase />
+        <FeaturedMedias featuredMedias={featuredMedias} />
         <div className="flex w-full flex-col gap-12 md:flex-row">
-          <LatestReleases />
-          <TrendingMedias />
+          <LatestReleases latestReleases={latestReleases} />
+          <TrendingMedias trendingMedias={latestMedias} />
         </div>
-        <LatestMedias />
+        <LatestMedias latestMedias={latestMedias} />
       </div>
     </main>
   );

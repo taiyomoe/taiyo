@@ -1,15 +1,17 @@
 import { Spinner } from "@nextui-org/react";
 
 import { useChapterImages } from "~/hooks/useChapterImages";
-import { useChapterNavigation } from "~/hooks/useChapterNavigation";
+import { useChapterProgression } from "~/hooks/useChapterProgression";
+import { useReaderStore } from "~/stores";
 
 import { MediaChapterImage } from "./MediaChapterImage";
 
 export const MediaChapterImages = () => {
-  const { currentPage } = useChapterNavigation();
-  const { images, pageMode } = useChapterImages();
+  const { settings, currentPageNumber } = useReaderStore();
+  const { images } = useChapterImages();
+  useChapterProgression();
 
-  const currentImage = images.find((img) => img.number === currentPage);
+  const currentImage = images.find((img) => img.number === currentPageNumber);
 
   return (
     <div className="mx-auto flex h-full flex-col items-center justify-center">
@@ -21,7 +23,9 @@ export const MediaChapterImages = () => {
           key={img.url}
           url={img.blobUrl}
           hide={
-            pageMode === "single" ? currentImage?.number !== img.number : false
+            settings.pageMode === "single"
+              ? currentImage?.number !== img.number
+              : false
           }
         />
       ))}

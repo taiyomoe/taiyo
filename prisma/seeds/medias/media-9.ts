@@ -102,17 +102,20 @@ const execute = async () => {
     data: [
       {
         id: "239ff449-cb3b-46c8-b050-91223545e755",
+        language: "en",
         mediaId: "f0bc42eb-b2f7-4017-89f8-77c1834834b1",
         uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
       },
       {
         id: "9ac5b886-2fb1-4255-a089-c5ad34e95b5a",
+        language: "en",
         mediaId: "f0bc42eb-b2f7-4017-89f8-77c1834834b1",
         uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
       },
       {
         id: "0dfce762-b759-4bae-a528-e0b1f3a00dd9",
         isMainCover: true,
+        language: "en",
         mediaId: "f0bc42eb-b2f7-4017-89f8-77c1834834b1",
         uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
       },

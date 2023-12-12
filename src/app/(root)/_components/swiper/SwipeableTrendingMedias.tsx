@@ -11,7 +11,7 @@ import NextImage from "next/image";
 import Link from "next/link";
 
 import type { LatestMedia } from "~/lib/types";
-import { MediaUtils } from "~/lib/utils/media.utils";
+import { MediaCoverUtils } from "~/lib/utils/mediaCover.utils";
 
 type Props = {
   medias: LatestMedia[];
@@ -51,7 +51,7 @@ export const SwipeableTrendingMedias = ({ medias }: Props) => (
         >
           <Image
             as={NextImage}
-            src={MediaUtils.getCoverUrl(media)}
+            src={MediaCoverUtils.getUrl(media)}
             className="max-h-[400px] min-h-[400px] w-[280px] object-cover md:max-h-[498px] md:min-h-[498px] md:w-[350px]"
             width={350}
             height={0}
