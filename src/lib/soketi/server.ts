@@ -8,4 +8,5 @@ export const pusherServer = new PusherServer({
   appId: env.SOKETI_APP_ID,
   key: env.NEXT_PUBLIC_SOKETI_APP_KEY,
   secret: env.SOKETI_APP_SECRET,
+  useTLS: true,
 });
