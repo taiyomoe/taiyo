@@ -314,7 +314,7 @@ model UploadSession {
     updatedAt DateTime  @updatedAt
     deletedAt DateTime?
 
-    status UploadSessionStatus @default(UPLOADING)
+    status UploadSessionStatus @default(PROCESSING)
     type   UploadSessionType
 
     user   User   @relation(fields: [userId], references: [id])
