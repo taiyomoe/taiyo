@@ -1,20 +1,16 @@
 import { TRPCClientError } from "@trpc/client";
 import type { FormikConfig } from "formik";
-import { useSetAtom } from "jotai";
 import { toast } from "sonner";
 
-import { selectedImagesAtom } from "~/atoms/imageCompression.atoms";
 import type { InsertMediaSchema } from "~/lib/schemas";
 import { api } from "~/lib/trpc/client";
 
-import { useUpload } from "./useUpload";
-
 export const useMediaCreation = () => {
-  const setSelectedImages = useSetAtom(selectedImagesAtom);
-  const { upload } = useUpload();
+  // const setSelectedImages = useSetAtom(selectedImagesAtom);
+  // const { upload } = useUpload();
 
-  const { mutateAsync: startUploadSession } =
-    api.uploads.startUploadSession.useMutation();
+  // const { mutateAsync: startUploadSession } =
+  //   api.uploads.startUploadSession.useMutation();
   const { mutateAsync: createMedia } = api.medias.create.useMutation();
 
   const handleSubmit: FormikConfig<InsertMediaSchema>["onSubmit"] = (
@@ -25,34 +21,30 @@ export const useMediaCreation = () => {
       /**
        * Upload the cover
        */
-      const coverAuthToken = await startUploadSession({
-        type: "COVER",
-        mediaId: values.id,
-      });
-      const [coverId] = await upload(coverAuthToken, "COVER");
+      // const coverAuthToken = await startUploadSession({
+      //   type: "COVER",
+      //   mediaId: values.id,
+      // });
+      // const [coverId] = await upload(coverAuthToken, "COVER");
 
-      if (!coverId) {
-        throw new Error("Ocorreu um erro ao upar a cover.");
-      }
+      // if (!coverId) {
+      //   throw new Error("Ocorreu um erro ao upar a cover.");
+      // }
 
       /**
        * Upload the banner
        * No need to check if it exists, since it's optional
        */
-      const bannerAuthToken = await startUploadSession({
-        type: "BANNER",
-        mediaId: values.id,
-      });
-      const [bannerId] = await upload(bannerAuthToken, "BANNER");
+      // const bannerAuthToken = await startUploadSession({
+      //   type: "BANNER",
+      //   mediaId: values.id,
+      // });
+      // const [bannerId] = await upload(bannerAuthToken, "BANNER");
 
-      await createMedia({
-        ...values,
-        cover: { ...values.cover, id: coverId },
-        banner: { ...values.banner, id: bannerId },
-      });
+      await createMedia(values);
 
       resetForm();
-      setSelectedImages([]);
+      // setSelectedImages([]);
 
       // TODO: Redirect to the media page
     };

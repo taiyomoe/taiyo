@@ -2,32 +2,31 @@
 
 import Link from "next/link";
 import { Skeleton } from "@nextui-org/skeleton";
-import { useAtomValue } from "jotai";
 
-import { mediaChapterTitleAtom } from "~/atoms/mediaChapter.atoms";
 import { cn } from "~/lib/utils/cn";
+import { useReaderStore } from "~/stores";
 
 type Props = {
   className: string;
 };
 
 export const MediaChapterTitle = ({ className }: Props) => {
-  const { id, title, isMediaTitle } = useAtomValue(mediaChapterTitleAtom);
+  const { chapter } = useReaderStore();
 
-  if (!id || !title) {
+  if (!chapter) {
     return <Skeleton className="h-8 w-full rounded-lg" />;
   }
 
-  if (isMediaTitle) {
+  if (!chapter.title) {
     return (
       <Link
         className={cn("truncate underline-offset-2 hover:underline", className)}
-        href={`/media/${id}`}
+        href={`/media/${chapter.media.id}`}
       >
-        {title}
+        {chapter.media.title}
       </Link>
     );
   }
 
-  return <p className={cn("truncate", className)}>{title}</p>;
+  return <p className={cn("truncate", className)}>{chapter.title}</p>;
 };

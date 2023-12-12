@@ -11,13 +11,11 @@ const config = {
       {
         protocol: "https",
         hostname: "cdn.taiyo.moe",
-        port: "",
         pathname: "/**",
       },
       {
         protocol: "https",
-        hostname: "pub-5836e59af07c42f5a76a222d3bd93bb0.r2.dev",
-        port: "",
+        hostname: "pub-**.r2.dev",
         pathname: "/**",
       },
     ],

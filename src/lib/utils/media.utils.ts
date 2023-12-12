@@ -1,24 +1,25 @@
-import type { Languages } from "@prisma/client";
+import type { Languages, UploadSessionType } from "@prisma/client";
 
-import { CDN_DOMAIN } from "~/lib/constants";
+import { env } from "~/lib/env.mjs";
 import type { MediaLimited } from "~/lib/types";
+import { MediaCoverUtils } from "~/lib/utils/mediaCover.utils";
 
 const getUrl = (media: { id: string }) => `/media/${media.id}`;
 
-const getCoverUrl = (media: { id: string; coverId: string }) =>
-  `${CDN_DOMAIN}/${media.id}/covers/${media.coverId}.jpg`;
+const getUploadUrl = (type: UploadSessionType) =>
+  `${env.NEXT_PUBLIC_IO_URL}/upload/${type.toLowerCase()}`;
 
 const getBannerOrCoverUrl = (media: MediaLimited) => {
-  if (!media.bannerId) return getCoverUrl(media);
+  if (!media.bannerId) return MediaCoverUtils.getUrl(media);
 
-  return `${CDN_DOMAIN}/${media.id}/banners/${media.bannerId}.jpg`;
+  return `${env.NEXT_PUBLIC_CDN_URL}/medias/${media.id}/banners/${media.bannerId}.jpg`;
 };
 
 const getMainTitle = (
   titles: MediaLimited["titles"],
-  preferredTitles: Languages | null,
+  preferredTitles: Languages | null | undefined,
 ) => {
-  if (preferredTitles === null) {
+  if (!preferredTitles) {
     return titles.find((t) => t.isMainTitle)!.title;
   }
 
@@ -58,7 +59,8 @@ const getMainTitle = (
 
 export const MediaUtils = {
   getUrl,
-  getCoverUrl,
+  getUploadUrl,
   getBannerOrCoverUrl,
   getMainTitle,
+  getUploadEndpoint: () => `${env.NEXT_PUBLIC_IO_URL}/upload/url`,
 };

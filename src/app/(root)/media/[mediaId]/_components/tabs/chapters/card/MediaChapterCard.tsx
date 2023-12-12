@@ -6,10 +6,10 @@ import { MediaChapterScans } from "~/components/ui/MediaChapterScans";
 import type { MediaLimitedChapter } from "~/lib/types";
 import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils";
 
+import { MediaChapterCardUploadedTime } from "../../../../../../../../components/ui/MediaChapterUploadedTime";
 import { MediaChapterUploader } from "../../../../../../../../components/ui/MediaChapterUploader";
 import { MediaChapterCardCommentsCount } from "./MediaChapterCardCommentsCount";
 import { MediaChapterCardPath } from "./MediaChapterCardPath";
-import { MediaChapterCardUploadedTime } from "./MediaChapterCardUploadedTime";
 import { MediaChapterCardViews } from "./MediaChapterCardViews";
 
 type Props = {
@@ -49,52 +49,40 @@ const mediaChapterCard = tv({
 });
 
 export const MediaChapterCard = ({ chapter, order }: Props) => {
-  const {
-    container,
-    card,
-    cardBody,
-    contentWrapper,
-    chapterLink,
-    chapterTitle,
-    chapterUploadedTime,
-    chapterViews,
-    chapterScans,
-    chapterUploader,
-    chapterComments,
-  } = mediaChapterCard({ order });
+  const slots = mediaChapterCard({ order });
 
   return (
-    <div className={container()}>
+    <div className={slots.container()}>
       <MediaChapterCardPath order={order} />
-      <Card className={card()} radius="sm">
-        <CardBody className={cardBody()}>
-          <div className={contentWrapper()}>
+      <Card className={slots.card()} radius="sm">
+        <CardBody className={slots.cardBody()}>
+          <div className={slots.contentWrapper()}>
             <Link
-              className={chapterLink()}
+              className={slots.chapterLink()}
               href={MediaChapterUtils.getUrl(chapter)}
             >
-              <p className={chapterTitle()}>
+              <p className={slots.chapterTitle()}>
                 {MediaChapterUtils.getTitle(chapter)}
               </p>
             </Link>
             {/* UPLOADED TIME */}
-            <div className={chapterUploadedTime()}>
+            <div className={slots.chapterUploadedTime()}>
               <MediaChapterCardUploadedTime chapter={chapter} />
             </div>
             {/* VIEWS */}
-            <div className={chapterViews()}>
+            <div className={slots.chapterViews()}>
               <MediaChapterCardViews />
             </div>
             {/* SCANS */}
-            <div className={chapterScans()}>
+            <div className={slots.chapterScans()}>
               <MediaChapterScans scans={chapter.scans} />
             </div>
             {/* UPLOADER */}
-            <div className={chapterUploader()}>
+            <div className={slots.chapterUploader()}>
               <MediaChapterUploader uploader={chapter.uploader} />
             </div>
             {/* COMMENTS */}
-            <div className={chapterComments()}>
+            <div className={slots.chapterComments()}>
               <MediaChapterCardCommentsCount />
             </div>
           </div>

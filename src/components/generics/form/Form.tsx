@@ -1,23 +1,32 @@
 import { Formik, Form as FormikForm } from "formik";
-import type { FormikConfig, FormikValues } from "formik";
+import type { FormikConfig, FormikProps, FormikValues } from "formik";
 
 import { cn } from "~/lib/utils/cn";
+
+type FormProps<T extends FormikValues> = {
+  children: React.ReactNode | ((props: FormikProps<T>) => React.ReactNode);
+};
 
 type Props = {
   children: React.ReactNode;
 };
 
-type CategoryProps = { title?: string; actions?: React.ReactNode } & Props;
+type CategoryProps = {
+  title?: string;
+  actions?: React.ReactNode;
+} & Props;
 
 const Component = <T extends FormikValues>({
   children,
   ...rest
-}: Props & FormikConfig<T>) => {
+}: FormProps<T> & FormikConfig<T>) => {
   return (
     <Formik<T> {...rest}>
-      <FormikForm noValidate className="flex flex-col gap-4">
-        {children}
-      </FormikForm>
+      {(options) => (
+        <FormikForm noValidate className="flex flex-col gap-4">
+          {typeof children === "function" ? children(options) : children}
+        </FormikForm>
+      )}
     </Formik>
   );
 };
@@ -45,7 +54,7 @@ const Row = ({ children }: Props) => (
 );
 
 const Col = ({ children }: Props) => (
-  <div className="flex flex-col gap-6">{children}</div>
+  <div className="flex w-full flex-col gap-6">{children}</div>
 );
 
 /**

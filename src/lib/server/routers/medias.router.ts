@@ -1,14 +1,20 @@
 import type { Trackers } from "@prisma/client";
+import { TRPCError } from "@trpc/server";
 
 import {
   getMediaByIdSchema,
   insertMediaSchema,
   searchMediaSchema,
+  updateMediaSchema,
 } from "~/lib/schemas";
-import type { LatestMedia, MediaLimited, SearchedMedia } from "~/lib/types";
+import {
+  LibraryService,
+  MediaChapterService,
+  MediaService,
+} from "~/lib/services";
+import type { MediaLimited, SearchedMedia } from "~/lib/types";
 import { MediaUtils } from "~/lib/utils/media.utils";
 
-import { NotFoundError } from "../errors";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const mediasRouter = createTRPCRouter({
@@ -21,7 +27,7 @@ export const mediasRouter = createTRPCRouter({
     .mutation(
       async ({
         ctx,
-        input: { cover, banner, mdTracker, alTracker, malTracker, ...input },
+        input: { mdTracker, alTracker, malTracker, ...input },
       }) => {
         /**
          * Before creating the media, we need to create the trackers array.
@@ -65,25 +71,41 @@ export const mediasRouter = createTRPCRouter({
               },
             },
             trackers: { createMany: { data: trackers } },
-            covers: {
-              create: {
-                ...cover,
-                isMainCover: true,
-                uploaderId: ctx.session.user.id,
-              },
-            },
-            banners: {
-              create: banner.id
-                ? { ...banner, uploaderId: ctx.session.user.id }
-                : undefined,
-            },
             creatorId: ctx.session.user.id,
           },
         });
 
+        const indexItem = await MediaService.getIndexItem(result.id);
+        await ctx.indexes.medias.updateDocuments([indexItem]);
+
         return result;
       },
     ),
+
+  update: protectedProcedure
+    .meta({ resource: "medias", action: "update" })
+    .input(updateMediaSchema)
+    .mutation(async ({ ctx, input }) => {
+      const media = await ctx.db.media.findUnique({
+        select: { id: true },
+        where: { id: input.id },
+      });
+
+      if (!media) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Media not found",
+        });
+      }
+
+      await ctx.db.media.update({
+        where: { id: input.id },
+        data: input,
+      });
+
+      const indexItem = await MediaService.getIndexItem(input.id);
+      await ctx.indexes.medias.updateDocuments([indexItem]);
+    }),
 
   getById: publicProcedure
     .input(getMediaByIdSchema)
@@ -91,14 +113,19 @@ export const mediasRouter = createTRPCRouter({
       const result = await ctx.db.media.findFirst({
         select: {
           synopsis: true,
+          status: true,
           genres: true,
           tags: true,
           covers: {
             select: { id: true },
-            where: { isMainCover: true },
+            where: { isMainCover: true, deletedAt: null },
             take: 1,
           },
-          banners: { select: { id: true }, take: 1 },
+          banners: {
+            select: { id: true },
+            take: 1,
+            where: { deletedAt: null },
+          },
           titles: {
             select: {
               title: true,
@@ -107,27 +134,41 @@ export const mediasRouter = createTRPCRouter({
               isAcronym: true,
               isMainTitle: true,
             },
+            where: { deletedAt: null },
           },
           trackers: { select: { tracker: true, externalId: true } },
         },
-        where: { id: mediaId },
+        where: { id: mediaId, deletedAt: null },
       });
 
       if (!result?.covers.at(0) || !result.titles.at(0)) {
-        throw new NotFoundError();
+        return null;
       }
+
+      const userLibraryMedia = await LibraryService.getUserLibraryMedia(
+        ctx.session?.user.id,
+        mediaId,
+      );
 
       const mediaLimited: MediaLimited = {
         id: mediaId,
         synopsis: result.synopsis,
+        status: result.status,
         genres: result.genres,
         tags: result.tags,
+        // ----- USER LIBRARY
+        userLibrary: userLibraryMedia
+          ? {
+              status: userLibraryMedia.status,
+              updatedAt: userLibraryMedia.updatedAt,
+            }
+          : null,
         // ----- RELATIONS
         coverId: result.covers.at(0)!.id,
         bannerId: result.banners.at(0)?.id ?? null,
         mainTitle: MediaUtils.getMainTitle(
           result.titles,
-          ctx.session?.user.preferredTitles ?? null,
+          ctx.session?.user.preferredTitles,
         ),
         titles: result.titles,
         trackers: result.trackers.filter((t) => t.tracker !== "MANGADEX"),
@@ -136,26 +177,19 @@ export const mediasRouter = createTRPCRouter({
       return mediaLimited;
     }),
 
-  getLatestMedias: publicProcedure.query(async ({ ctx }) => {
-    const result = await ctx.db.media.findMany({
-      select: {
-        id: true,
-        covers: {
-          select: { id: true },
-          where: { isMainCover: true },
-          take: 1,
-        },
-      },
-      orderBy: { createdAt: "desc" },
-      take: 20,
-    });
+  getHomePage: publicProcedure.query(async ({ ctx }) => {
+    const preferredTitles = ctx.session?.user.preferredTitles;
+    const latestMedias = await MediaService.getLatestMedias();
+    const featuredMedias =
+      await MediaService.getFeaturedMedias(preferredTitles);
+    const latestReleases =
+      await MediaChapterService.getLatestReleases(preferredTitles);
 
-    const latestMedias: LatestMedia[] = result.map((m) => ({
-      id: m.id,
-      coverId: m.covers.at(0)!.id,
-    }));
-
-    return latestMedias;
+    return {
+      latestMedias,
+      featuredMedias,
+      latestReleases,
+    };
   }),
 
   search: publicProcedure

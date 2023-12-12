@@ -108,6 +108,12 @@ export const authOptions: NextAuthOptions = {
           userId: user.id,
         },
       });
+
+      await db.userLibrary.create({
+        data: {
+          userId: user.id,
+        },
+      });
     },
   },
 };

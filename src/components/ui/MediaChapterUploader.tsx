@@ -39,16 +39,14 @@ const mediaChapterUploader = tv({
 });
 
 export const MediaChapterUploader = ({ uploader, size, className }: Props) => {
-  const { container, icon, skeleton, link } = mediaChapterUploader({
-    size,
-  });
+  const slots = mediaChapterUploader({ size });
 
   return (
-    <div className={container({ className })}>
-      <UserIcon className={icon()} />
-      {!uploader && <Skeleton className={skeleton()} />}
+    <div className={slots.container({ className })}>
+      <UserIcon className={slots.icon()} />
+      {!uploader && <Skeleton className={slots.skeleton()} />}
       {uploader && (
-        <Link className={link()} href={`/users/${uploader.id}`}>
+        <Link className={slots.link()} href={`/users/${uploader.id}`}>
           <p>{uploader.name}</p>
         </Link>
       )}
