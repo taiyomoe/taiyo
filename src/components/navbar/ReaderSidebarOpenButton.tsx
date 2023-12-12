@@ -1,37 +1,26 @@
 "use client";
 
 import { Button } from "@nextui-org/button";
-import { useAtom, useAtomValue } from "jotai";
 
-import {
-  readerSidebarOpenModeAtom,
-  readerSidebarSideAtom,
-  readerSidebarStateAtom,
-} from "~/atoms/readerSettings.atoms";
-import { useChapterNavigation } from "~/hooks/useChapterNavigation";
+import { useReaderStore } from "~/stores";
 
 import { SidebarIcon } from "../icons/SidebarIcon";
 
 export const ReaderSidebarOpenButton = () => {
-  const { chapter } = useChapterNavigation();
-  const readerSidebarOpenMode = useAtomValue(readerSidebarOpenModeAtom);
-  const readerSidebarSide = useAtomValue(readerSidebarSideAtom);
-  const [readerSidebarState, setReaderSidebarState] = useAtom(
-    readerSidebarStateAtom,
-  );
+  const { settings, updateSettings, chapter } = useReaderStore();
 
   if (
     !chapter ||
-    readerSidebarOpenMode === "hover" ||
-    readerSidebarState === "show"
+    settings.sidebar.openMode === "hover" ||
+    settings.sidebar.state === "show"
   ) {
     return null;
   }
 
   return (
     <Button
-      startContent={<SidebarIcon action="open" side={readerSidebarSide} />}
-      onPress={() => setReaderSidebarState("show")}
+      startContent={<SidebarIcon action="open" side={settings.sidebar.side} />}
+      onPress={() => updateSettings("sidebar.state", "show")}
       isIconOnly
     />
   );

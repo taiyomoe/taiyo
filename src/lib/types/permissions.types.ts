@@ -6,6 +6,8 @@ export type Resources =
   | "mediaCovers"
   | "mediaChapters"
   | "mediaChapterComments"
+  | "history"
+  | "library"
   | "scans"
   | "scanMembers";
 
