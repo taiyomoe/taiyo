@@ -5,12 +5,11 @@ import { toFormikValidationSchema } from "zod-formik-adapter";
 import { Form } from "~/components/generics/form/Form";
 import { useChapterUpload } from "~/hooks/useChapterUpload";
 import { insertMediaChapterSchema } from "~/lib/schemas/mediaChapter.schemas";
-import type { InsertMediaChapterSchema } from "~/lib/schemas/mediaChapter.schemas";
+import type { InsertMediaChapterFormSchema } from "~/lib/schemas/mediaChapter.schemas";
 
 import { UploadChapterFormFields } from "./UploadChapterFormFields";
 
-const initialValues: InsertMediaChapterSchema = {
-  id: crypto.randomUUID(),
+const initialValues: InsertMediaChapterFormSchema = {
   title: "",
   number: 0,
   volume: 0,
@@ -23,7 +22,7 @@ const initialValues: InsertMediaChapterSchema = {
 };
 
 export const UploadChapterForm = () => {
-  const { handleSubmit } = useChapterUpload(initialValues);
+  const { handleSubmit } = useChapterUpload();
 
   return (
     <Form.Component
