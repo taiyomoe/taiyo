@@ -30,12 +30,12 @@ export const UploadMediaCoversForm = ({ mediaId }: Props) => {
     { resetForm },
   ) => {
     const handleUpload = async () => {
-      const usToken = await startUploadSession({
+      const { authToken } = await startUploadSession({
         type: "COVER",
         mediaId,
       });
 
-      const coversId = await upload(usToken, "COVER");
+      const coversId = await upload(authToken, "COVER");
 
       return await createCovers({
         mediaId,

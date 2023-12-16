@@ -6,7 +6,7 @@ import { useAsyncList } from "@react-stately/data";
 import type { Key } from "@react-types/shared";
 import { useFormikContext } from "formik";
 
-import type { InsertMediaChapterSchema } from "~/lib/schemas";
+import type { InsertMediaChapterFormSchema } from "~/lib/schemas";
 import { api } from "~/lib/trpc/client";
 import type { ScansIndexItem } from "~/lib/types";
 
@@ -19,7 +19,7 @@ const scansSearchAutocomplete = tv({
 });
 
 export const ScansSearchAutocomplete = () => {
-  const { setFieldValue } = useFormikContext<InsertMediaChapterSchema>();
+  const { setFieldValue } = useFormikContext<InsertMediaChapterFormSchema>();
   const { mutateAsync } = api.scans.search.useMutation();
   const [selectedItems, setSelectedItems] = useState<ScansIndexItem[]>([]);
 
