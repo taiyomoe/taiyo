@@ -8,12 +8,13 @@ export const uploadsRouter = createTRPCRouter({
     .meta({ resource: "mediaChapters", action: "create" })
     .input(startUploadSessionSchema)
     .mutation(async ({ ctx, input }) => {
+      const mediaChapterId = crypto.randomUUID();
       const uploadSession = await ctx.db.uploadSession.create({
         data: {
           type: input.type,
           userId: ctx.session.user.id,
           mediaId: input.mediaId,
-          mediaChapterId: input.mediaChapterId,
+          mediaChapterId,
         },
       });
 
@@ -21,6 +22,9 @@ export const uploadsRouter = createTRPCRouter({
         uploadSessionId: uploadSession.id,
       };
 
-      return EncryptionUtils.encrypt(JSON.stringify(toEncrypt));
+      return {
+        mediaChapterId,
+        authToken: EncryptionUtils.encrypt(JSON.stringify(toEncrypt)),
+      };
     }),
 });

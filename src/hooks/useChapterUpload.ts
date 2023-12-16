@@ -3,13 +3,13 @@ import { TRPCClientError } from "@trpc/client";
 import type { FormikConfig } from "formik";
 import { toast } from "sonner";
 
-import type { InsertMediaChapterSchema } from "~/lib/schemas/mediaChapter.schemas";
+import type { InsertMediaChapterFormSchema } from "~/lib/schemas/mediaChapter.schemas";
 import { api } from "~/lib/trpc/client";
 import type { SuccessfulUploadResponse, UploadResponse } from "~/lib/types";
 import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils";
 import { useImageStore } from "~/stores";
 
-export const useChapterUpload = (initialValues: InsertMediaChapterSchema) => {
+export const useChapterUpload = () => {
   const { getImages, reset } = useImageStore();
   const selectedImage = getImages("CHAPTER");
 
@@ -20,7 +20,7 @@ export const useChapterUpload = (initialValues: InsertMediaChapterSchema) => {
     unknown,
     { authToken: string }
   >({
-    mutationKey: ["uploadImages", initialValues.id],
+    mutationKey: ["uploadImages"],
     mutationFn: async ({ authToken }) => {
       const formData = new FormData();
       formData.append("type", "CHAPTER");
@@ -48,24 +48,22 @@ export const useChapterUpload = (initialValues: InsertMediaChapterSchema) => {
   });
   const { mutateAsync: createChapter } = api.mediaChapters.create.useMutation();
 
-  const handleSubmit: FormikConfig<InsertMediaChapterSchema>["onSubmit"] = (
+  const handleSubmit: FormikConfig<InsertMediaChapterFormSchema>["onSubmit"] = (
     values,
     { resetForm, setFieldValue, setSubmitting },
   ) => {
     const upload = async () => {
-      const authToken = await startUploadSession({
+      const { mediaChapterId, authToken } = await startUploadSession({
         type: "CHAPTER",
         mediaId: values.mediaId,
-        mediaChapterId: initialValues.id,
       });
 
       const { files: filesId } = await uploadImages({ authToken });
 
-      await createChapter({ ...values, pages: filesId });
+      await createChapter({ ...values, id: mediaChapterId, pages: filesId });
 
       resetForm();
 
-      void setFieldValue("id", crypto.randomUUID());
       void setFieldValue("mediaId", values.mediaId);
       void setFieldValue("number", values.number + 1);
       void setFieldValue("volume", values.volume);
