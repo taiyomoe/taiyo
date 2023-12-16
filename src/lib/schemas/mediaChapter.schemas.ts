@@ -21,6 +21,10 @@ export const insertMediaChapterSchema = z.object({
   scanIds: z.string().uuid().array(),
 });
 
+export const insertMediaChapterFormSchema = insertMediaChapterSchema.omit({
+  id: true,
+});
+
 export const getMediaChapterByIdSchema = z.string();
 
 export const getMediaChaptersByMediaIdSchema = z.object({
@@ -35,4 +39,5 @@ export const getMediaChaptersByMediaIdSchema = z.object({
     }),
 });
 
-export type InsertMediaChapterSchema = typeof insertMediaChapterSchema._type;
+export type InsertMediaChapterFormSchema =
+  typeof insertMediaChapterFormSchema._type;
