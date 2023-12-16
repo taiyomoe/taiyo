@@ -27,7 +27,7 @@ export const SwipeableFeaturedMedias = ({ medias }: Props) => (
     }}
     modules={[Autoplay, Mousewheel]}
     autoplay={{
-      delay: 5000,
+      delay: 10000,
     }}
   >
     {medias.map((media, i) => (
@@ -44,7 +44,7 @@ export const SwipeableFeaturedMedias = ({ medias }: Props) => (
               height:
                 "max-h-[200px] min-h-[200px] sm:max-h-[250px] sm:min-h-[250px] md:max-h-[300px] md:min-h-[300px] lg:max-h-[350px] lg:min-h-[350px]",
               width: "w-full",
-              img: "blur-sm brightness-75",
+              img: "blur-sm brightness-50",
             }}
             maxHeight={350}
             maxWidth={1200}
