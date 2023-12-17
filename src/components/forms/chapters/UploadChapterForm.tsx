@@ -10,7 +10,7 @@ import type { InsertMediaChapterFormSchema } from "~/lib/schemas/mediaChapter.sc
 import { UploadChapterFormFields } from "./UploadChapterFormFields";
 
 const initialValues: InsertMediaChapterFormSchema = {
-  title: "",
+  title: null,
   number: 0,
   volume: 0,
   language: "pt_br",

@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
+import type { Selection } from "@nextui-org/react";
 import { Spinner } from "@nextui-org/spinner";
 
 import { useMediaNavigation } from "~/hooks/useMediaNavigation";
@@ -17,13 +18,14 @@ type Props = {
 };
 
 export const MediaLayoutChaptersTab = ({ media }: Props) => {
-  const [selectedKeys, setSelectedKeys] = useState(new Set<string>());
+  const [selectedKeys, setSelectedKeys] = useState<Selection>(
+    new Set<string>(),
+  );
 
   const { tab, page, perPage } = useMediaNavigation();
   const {
     data: chaptersPagination,
-    isLoading,
-    isFetching,
+    isInitialLoading,
     isSuccess,
   } = api.mediaChapters.getByMediaId.useQuery(
     {
@@ -31,15 +33,12 @@ export const MediaLayoutChaptersTab = ({ media }: Props) => {
       page,
       perPage,
     },
-    {
-      initialData: { chapters: [], totalPages: 0 },
-      enabled: tab === "chapters",
-    },
+    { enabled: tab === "chapters" },
   );
 
   const volumeKeys = useMemo(
     () =>
-      MediaChapterUtils.computeVolumes(chaptersPagination.chapters).map(
+      MediaChapterUtils.computeVolumes(chaptersPagination?.chapters ?? []).map(
         ({ volume }) => `volume-${volume}`,
       ),
     [chaptersPagination],
@@ -51,7 +50,7 @@ export const MediaLayoutChaptersTab = ({ media }: Props) => {
     }
   }, [isSuccess, volumeKeys]);
 
-  if (isLoading || isFetching) {
+  if (isInitialLoading || !chaptersPagination) {
     return (
       <div className="my-32 flex justify-center">
         <Spinner size="lg" />
@@ -74,6 +73,8 @@ export const MediaLayoutChaptersTab = ({ media }: Props) => {
       </div>
     );
   }
+
+  console.log("date", chaptersPagination);
 
   return (
     <div className="flex flex-col gap-2">

@@ -17,16 +17,12 @@ export const MediaChapterTitle = ({ className }: Props) => {
     return <Skeleton className="h-8 w-full rounded-lg" />;
   }
 
-  if (!chapter.title) {
-    return (
-      <Link
-        className={cn("truncate underline-offset-2 hover:underline", className)}
-        href={`/media/${chapter.media.id}`}
-      >
-        {chapter.media.title}
-      </Link>
-    );
-  }
-
-  return <p className={cn("truncate", className)}>{chapter.title}</p>;
+  return (
+    <Link
+      className={cn("truncate underline-offset-2 hover:underline", className)}
+      href={`/media/${chapter.media.id}`}
+    >
+      {chapter.title ?? chapter.media.title}
+    </Link>
+  );
 };

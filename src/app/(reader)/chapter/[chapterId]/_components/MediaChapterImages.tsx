@@ -18,17 +18,19 @@ export const MediaChapterImages = () => {
       {(images.length === 0 || !currentImage) && (
         <Spinner size="lg" className="justify-self-center" />
       )}
-      {images.map((img) => (
-        <MediaChapterImage
-          key={img.url}
-          url={img.blobUrl}
-          hide={
-            settings.pageMode === "single"
-              ? currentImage?.number !== img.number
-              : false
-          }
-        />
-      ))}
+      {images
+        .sort((a, b) => a.number - b.number)
+        .map((img) => (
+          <MediaChapterImage
+            key={img.url}
+            url={img.blobUrl}
+            hide={
+              settings.pageMode === "single"
+                ? currentImage?.number !== img.number
+                : false
+            }
+          />
+        ))}
     </div>
   );
 };

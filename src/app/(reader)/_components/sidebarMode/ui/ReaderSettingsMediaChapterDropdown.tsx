@@ -22,23 +22,15 @@ const readerSettingsMediaChapterDropdown = tv({
     container: "flex w-full gap-2 md:max-w-readerSidebar",
     triggerButton: "h-full justify-between py-2 pr-2",
     skeleton: "h-9 w-full rounded-lg",
-    dropdownBase: "",
-    dropdownMenu: "",
-  },
-  variants: {
-    scollable: {
-      true: {
-        dropdownBase: "rounded-r-none p-0",
-        dropdownMenu:
-          "scrollbar-track-content3 scrollbar-thumb-rounded-md max-h-[300px] overflow-y-scroll p-2 scrollbar-thin scrollbar-thumb-primary",
-      },
-    },
+    dropdownBase: "rounded-r-none p-0",
+    dropdownMenu:
+      "scrollbar-track-content3 scrollbar-thumb-rounded-none max-h-[300px] overflow-y-scroll p-2 scrollbar-thin scrollbar-thumb-primary",
   },
 });
 
 export const ReaderSettingsMediaChapterDropdown = () => {
   const { chapter } = useReaderStore();
-  const slots = readerSettingsMediaChapterDropdown({ scollable: false });
+  const slots = readerSettingsMediaChapterDropdown();
 
   const backButtonUrl = chapter?.previousChapter
     ? MediaChapterUtils.getUrl(chapter?.previousChapter)
@@ -57,7 +49,7 @@ export const ReaderSettingsMediaChapterDropdown = () => {
       />
       {!chapter && <Skeleton className={slots.skeleton()} />}
       {chapter && (
-        <Dropdown classNames={{ base: slots.dropdownBase() }}>
+        <Dropdown classNames={{ content: slots.dropdownBase() }}>
           <DropdownTrigger>
             <Button
               className={slots.triggerButton()}
