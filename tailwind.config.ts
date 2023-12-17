@@ -57,9 +57,6 @@ export default {
       gridTemplateColumns: {
         smChapterLayout: "auto 50px 70px",
         mdChapterLayout: "auto 130px 70px",
-        lgMediaLayout: "350px auto",
-        xlMediaLayout: "420px auto",
-        "2xlMediaLayout": "550px auto",
         mediaChapter: "min-content auto min-content",
       },
       colors: {
