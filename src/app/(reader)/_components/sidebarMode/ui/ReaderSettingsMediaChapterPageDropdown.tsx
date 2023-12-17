@@ -22,19 +22,11 @@ const readerSettingsMediaChapterPageDropdown = tv({
     container: "flex w-full gap-2",
     triggerButton: "h-full justify-between py-2 pr-2",
     skeleton: "h-[52px] w-full rounded-lg",
-    dropdownBase: "",
-    dropdownMenu: "",
+    dropdownBase: "rounded-r-none p-0",
+    dropdownMenu:
+      "scrollbar-track-content3 scrollbar-thumb-rounded-none max-h-[300px] overflow-y-scroll p-2 scrollbar-thin scrollbar-thumb-primary",
     textContainer: "flex flex-col text-left",
     textDescription: "text-default-500 text-xs",
-  },
-  variants: {
-    scollable: {
-      true: {
-        dropdownBase: "rounded-r-none p-0",
-        dropdownMenu:
-          "scrollbar-track-content3 scrollbar-thumb-rounded-md max-h-[300px] overflow-y-scroll p-2 scrollbar-thin scrollbar-thumb-primary",
-      },
-    },
   },
 });
 
@@ -43,9 +35,7 @@ export const ReaderSettingsMediaChapterPageDropdown = () => {
     useReaderStore();
   const { goBack, goForward, goTo } = useChapterNavigation();
 
-  const slots = readerSettingsMediaChapterPageDropdown({
-    scollable: (chapter && chapter.pages.length > 9) ?? false,
-  });
+  const slots = readerSettingsMediaChapterPageDropdown();
 
   if (!chapter || !currentPageNumber) {
     return <Skeleton className={slots.skeleton()} />;
@@ -54,7 +44,7 @@ export const ReaderSettingsMediaChapterPageDropdown = () => {
   return (
     <div className={slots.container()}>
       <BackButton onPress={goBack} isDisabled={!hasPreviousPage} />
-      <Dropdown classNames={{ base: slots.dropdownBase() }}>
+      <Dropdown classNames={{ content: slots.dropdownBase() }}>
         <DropdownTrigger>
           <Button
             className={slots.triggerButton()}
