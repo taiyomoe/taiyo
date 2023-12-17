@@ -14,7 +14,7 @@ export const useChapterImages = () => {
   const [imagesToLoad, setImagesToLoad] = useState<
     Omit<ReaderImage, "blobUrl">[]
   >([]);
-  const deboucedImagesToLoad = useDebounce(imagesToLoad, 200);
+  const deboucedImagesToLoad = useDebounce(imagesToLoad, 300);
 
   const loadImageBlob = async (url: string) => {
     const image = await fetch(url).then((res) => res.blob());
@@ -71,11 +71,16 @@ export const useChapterImages = () => {
       console.log("loadedImages", newImages);
 
       setImages((prev) => [...prev, ...newImages]);
-      setImagesToLoad((prev) =>
-        prev.filter((x) => !newImages.some((y) => y.number === x.number)),
-      );
+      setImagesToLoad([]);
     });
   }, [deboucedImagesToLoad]);
+
+  useEffect(() => {
+    return () => {
+      setImages([]);
+      setImagesToLoad([]);
+    };
+  }, []);
 
   return { images };
 };

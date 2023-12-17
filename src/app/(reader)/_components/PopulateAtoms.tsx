@@ -18,7 +18,7 @@ export const PopulateAtoms = ({ mediaChapter }: Props) => {
   const { load, unload } = useReaderStore();
 
   useEffect(() => {
-    load(mediaChapter, currentPageNumber);
+    load(mediaChapter, currentPageNumber, mediaChapter.media.type);
 
     return () => {
       unload();

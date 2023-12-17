@@ -1,3 +1,4 @@
+import type { MediaType } from "@prisma/client";
 import _ from "lodash-es";
 import { create } from "zustand";
 
@@ -39,12 +40,13 @@ export type ReaderState = {
   load: (
     chapter: MediaChapterLimited,
     initialPageNumber: number | null,
+    mediaType: MediaType,
   ) => void;
   updateNavigation: (newPageNumber: number) => void;
   unload: () => void;
 };
 
-export const useReaderStore = create<ReaderState>((set) => ({
+export const useReaderStore = create<ReaderState>((set, get) => ({
   settings: {
     sidebar: {
       state: "hide",
@@ -77,7 +79,7 @@ export const useReaderStore = create<ReaderState>((set) => ({
     });
   },
 
-  load: (chapter, initialPageNumber) => {
+  load: (chapter, initialPageNumber, mediaType) => {
     const navigation = initialPageNumber
       ? MediaChapterUtils.getNavigation(chapter, initialPageNumber)
       : null;
@@ -90,6 +92,11 @@ export const useReaderStore = create<ReaderState>((set) => ({
       hasPreviousPage: !!navigation?.previousPage,
       hasNextPage: !!navigation?.nextPage,
     }));
+
+    get().updateSettings(
+      "pageMode",
+      mediaType === "MANHWA" ? "longstrip" : "single",
+    );
   },
   updateNavigation: (newPageNumber) => {
     set((state) => {

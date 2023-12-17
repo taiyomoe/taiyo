@@ -22,7 +22,7 @@ export const MediaLayoutBanner = ({ media }: Props) => {
         wrapper:
           "!max-w-full w-full z-0 after:shadow-[0_-64px_48px_16px_inset_var(--background)]",
         img: cn(
-          "object-cover h-[300px] lg:h-[320px] xl:h-[400px] 2xl:h-[550px] w-full rounded-none blur-xs",
+          "object-cover h-[300px] lg:h-[320px] xl:h-[400px] w-full rounded-none blur-xs brightness-50",
           {
             "blur-md": bannerUrl === coverUrl,
           },

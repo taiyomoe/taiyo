@@ -21,11 +21,13 @@ export const SwipeableLatestMedias = ({ medias }: Props) => (
     className="latestMedias h-[300px]"
     slidesPerView="auto"
     spaceBetween={24}
-    mousewheel={{
-      sensitivity: 0.2,
-    }}
     modules={[FreeMode, Mousewheel]}
-    freeMode
+    mousewheel={{
+      sensitivity: 0.5,
+    }}
+    freeMode={{
+      enabled: false,
+    }}
   >
     {medias.map((media, i) => (
       <SwiperSlide key={i} className="!w-fit md:!w-auto">
