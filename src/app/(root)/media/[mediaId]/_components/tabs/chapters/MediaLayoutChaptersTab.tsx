@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
+import type { Selection } from "@nextui-org/react";
 import { Spinner } from "@nextui-org/spinner";
 
 import { useMediaNavigation } from "~/hooks/useMediaNavigation";
@@ -17,7 +18,9 @@ type Props = {
 };
 
 export const MediaLayoutChaptersTab = ({ media }: Props) => {
-  const [selectedKeys, setSelectedKeys] = useState(new Set<string>());
+  const [selectedKeys, setSelectedKeys] = useState<Selection>(
+    new Set<string>(),
+  );
 
   const { tab, page, perPage } = useMediaNavigation();
   const {

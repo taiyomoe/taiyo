@@ -1,3 +1,4 @@
+import type { Selection } from "@nextui-org/react";
 import { Accordion, AccordionItem, Divider } from "@nextui-org/react";
 
 import type { MediaLimitedChapterPagination } from "~/lib/types";
@@ -8,8 +9,8 @@ import { MediaChaptersTabPagination } from "./MediaChaptersTabPagination";
 
 type Props = {
   chaptersPagination: MediaLimitedChapterPagination;
-  selectedKeys: Set<string>;
-  setSelectedKeys: (keys: Set<string>) => void;
+  selectedKeys: Selection;
+  setSelectedKeys: (keys: Selection) => void;
 };
 
 export const MediaChapterVolumes = ({
@@ -28,7 +29,6 @@ export const MediaChapterVolumes = ({
         selectedKeys={selectedKeys}
         expandedKeys={selectedKeys}
         defaultExpandedKeys={selectedKeys}
-        // @ts-expect-error -- NextUI wrong types
         onSelectionChange={setSelectedKeys}
       >
         {computedVolumes.map(({ volume, groups }) => (
