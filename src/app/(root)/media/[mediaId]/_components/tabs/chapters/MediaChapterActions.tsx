@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Button } from "@nextui-org/react";
 import { PencilIcon } from "lucide-react";
 import { useSession } from "next-auth/react";
@@ -19,6 +20,8 @@ export const MediaChapterActions = ({ chapter }: Props) => {
   return (
     <div className="flex flex-col">
       <Button
+        as={Link}
+        href={`/dashboard/chapters/edit/${chapter.id}`}
         startContent={<PencilIcon size={18} />}
         size="sm"
         variant="light"

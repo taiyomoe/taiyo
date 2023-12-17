@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import type {
   Media,
   MediaChapter,
@@ -71,3 +72,13 @@ export type MediaChapterNavigation = {
 };
 
 export type ReaderImage = { number: number; url: string; blobUrl: string };
+
+const mediaChapterWithRelations =
+  Prisma.validator<Prisma.MediaChapterDefaultArgs>()({
+    include: {
+      scans: true,
+    },
+  });
+export type MediaChapterWithRelations = Prisma.MediaChapterGetPayload<
+  typeof mediaChapterWithRelations
+>;
