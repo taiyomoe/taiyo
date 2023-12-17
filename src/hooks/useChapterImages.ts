@@ -71,11 +71,16 @@ export const useChapterImages = () => {
       console.log("loadedImages", newImages);
 
       setImages((prev) => [...prev, ...newImages]);
-      setImagesToLoad((prev) =>
-        prev.filter((x) => !newImages.some((y) => y.number === x.number)),
-      );
+      setImagesToLoad([]);
     });
   }, [deboucedImagesToLoad]);
+
+  useEffect(() => {
+    return () => {
+      setImages([]);
+      setImagesToLoad([]);
+    };
+  }, []);
 
   return { images };
 };
