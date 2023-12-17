@@ -1,4 +1,5 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useDebounce } from "usehooks-ts";
 
 import type { ReaderImage } from "~/lib/types";
 import { MediaChapterImageUtils } from "~/lib/utils/mediaChapterImage.utils";
@@ -10,11 +11,12 @@ export const useChapterImages = () => {
   const previousCurrentPage = useRef<number | undefined>(
     navigation?.currentPage,
   );
-  const [currentlyLoading, setCurrentlyLoading] = useState<string[]>([]);
-  const [fetchedLongstrip, setFetchedLongstrip] = useState(false);
+  const [imagesToLoad, setImagesToLoad] = useState<
+    Omit<ReaderImage, "blobUrl">[]
+  >([]);
+  const deboucedImagesToLoad = useDebounce(imagesToLoad, 200);
 
-  const loadImage = async (url: string) => {
-    setCurrentlyLoading((prev) => [...prev, url]);
+  const loadImageBlob = async (url: string) => {
     const image = await fetch(url).then((res) => res.blob());
 
     return URL.createObjectURL(image);
@@ -26,7 +28,7 @@ export const useChapterImages = () => {
     navigation &&
     settings.pageMode === "single" &&
     (navigation.currentPage !== previousCurrentPage.current ||
-      images.length === 0)
+      (images.length === 0 && imagesToLoad.length === 0))
   ) {
     previousCurrentPage.current = navigation.currentPage;
 
@@ -35,38 +37,45 @@ export const useChapterImages = () => {
       navigation,
       images,
     );
+    const newImages = mergedImages
+      .filter((x) => !images.some((y) => y.number === x.number))
+      .filter((x) => !imagesToLoad.some((y) => y.number === x.number));
 
-    void Promise.all(
-      mergedImages
-        .filter((x) => !images.some((y) => y.number === x.number))
-        .filter((x) => !currentlyLoading.includes(x.url))
-        .map(async (image) => ({
-          ...image,
-          blobUrl: await loadImage(image.url),
-        })),
-    ).then((newImages) => setImages([...images, ...newImages]));
+    if (newImages.length > 0) {
+      setImagesToLoad((prev) => [...prev, ...newImages]);
+    }
   }
 
   // Load all images on longstrip mode
-  if (
-    chapter &&
-    settings.pageMode === "longstrip" &&
-    fetchedLongstrip === false
-  ) {
-    void Promise.all(
-      MediaChapterImageUtils.getImages(chapter)
-        .filter((x) => !images.some((y) => y.number === x.number))
-        .filter((x) => !currentlyLoading.includes(x.url))
-        .map(async (image) => ({
-          ...image,
-          blobUrl: await loadImage(image.url),
-        })),
-    )
-      .then((newImages) => setImages([...images, ...newImages]))
-      .finally(() => {
-        setFetchedLongstrip(true);
-      });
+  if (chapter && settings.pageMode === "longstrip") {
+    const newImages = MediaChapterImageUtils.getImages(chapter)
+      .filter((x) => !images.some((y) => y.number === x.number))
+      .filter((x) => !imagesToLoad.some((y) => y.number === x.number));
+
+    if (newImages.length > 0) {
+      setImagesToLoad((prev) => [...prev, ...newImages]);
+    }
   }
+
+  useEffect(() => {
+    if (deboucedImagesToLoad.length === 0) {
+      return;
+    }
+
+    void Promise.all(
+      deboucedImagesToLoad.map(async (image) => ({
+        ...image,
+        blobUrl: await loadImageBlob(image.url),
+      })),
+    ).then((newImages) => {
+      console.log("loadedImages", newImages);
+
+      setImages((prev) => [...prev, ...newImages]);
+      setImagesToLoad((prev) =>
+        prev.filter((x) => !newImages.some((y) => y.number === x.number)),
+      );
+    });
+  }, [deboucedImagesToLoad]);
 
   return { images };
 };
