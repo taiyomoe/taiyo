@@ -1,4 +1,5 @@
 import { Spinner } from "@nextui-org/react";
+import { sortedUniqBy } from "lodash-es";
 
 import { useChapterImages } from "~/hooks/useChapterImages";
 import { useChapterProgression } from "~/hooks/useChapterProgression";
@@ -18,7 +19,7 @@ export const MediaChapterImages = () => {
       {(images.length === 0 || !currentImage) && (
         <Spinner size="lg" className="justify-self-center" />
       )}
-      {images
+      {sortedUniqBy(images, (img) => img.number)
         .sort((a, b) => a.number - b.number)
         .map((img) => (
           <MediaChapterImage
