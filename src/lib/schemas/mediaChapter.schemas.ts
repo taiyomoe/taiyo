@@ -10,9 +10,9 @@ import { ContentRatingSchema, FlagSchema, LanguagesSchema } from "./prisma";
 
 export const insertMediaChapterSchema = z.object({
   id: z.string().uuid(),
-  title: z.string().optional(),
+  title: z.string().nullable(),
   number: z.coerce.number().min(0).default(0),
-  volume: z.coerce.number().min(0).optional(),
+  volume: z.coerce.number().min(0).nullable(),
   language: LanguagesSchema,
   pages: z.array(z.string().uuid()),
   contentRating: ContentRatingSchema,
@@ -24,6 +24,14 @@ export const insertMediaChapterSchema = z.object({
 export const insertMediaChapterFormSchema = insertMediaChapterSchema.omit({
   id: true,
 });
+
+export const updateMediaChapterSchema = insertMediaChapterSchema
+  .partial()
+  .required({ id: true, scanIds: true })
+  .omit({
+    pages: true,
+    mediaId: true,
+  });
 
 export const getMediaChapterByIdSchema = z.string();
 
@@ -41,3 +49,4 @@ export const getMediaChaptersByMediaIdSchema = z.object({
 
 export type InsertMediaChapterFormSchema =
   typeof insertMediaChapterFormSchema._type;
+export type UpdateMediaChapterSchema = typeof updateMediaChapterSchema._type;

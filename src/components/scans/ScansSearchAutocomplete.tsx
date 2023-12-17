@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Autocomplete, AutocompleteItem } from "@nextui-org/autocomplete";
 import { Chip } from "@nextui-org/chip";
 import { tv } from "@nextui-org/react";
+import type { Scan } from "@prisma/client";
 import { useAsyncList } from "@react-stately/data";
 import type { Key } from "@react-types/shared";
 import { useFormikContext } from "formik";
@@ -18,10 +19,19 @@ const scansSearchAutocomplete = tv({
   },
 });
 
-export const ScansSearchAutocomplete = () => {
-  const { setFieldValue } = useFormikContext<InsertMediaChapterFormSchema>();
+type Props = {
+  scans?: Scan[];
+};
+
+export const ScansSearchAutocomplete = ({ scans }: Props) => {
+  const { values, setFieldValue } =
+    useFormikContext<InsertMediaChapterFormSchema>();
   const { mutateAsync } = api.scans.search.useMutation();
-  const [selectedItems, setSelectedItems] = useState<ScansIndexItem[]>([]);
+  const [selectedItems, setSelectedItems] = useState<ScansIndexItem[]>(
+    values.scanIds
+      .map((id) => scans?.find((scan) => scan.id === id))
+      .filter(Boolean),
+  );
 
   const { container, chipsContainer, label } = scansSearchAutocomplete();
 
@@ -41,33 +51,36 @@ export const ScansSearchAutocomplete = () => {
     setSelectedItems((prev) => {
       const newSelectedItems = prev.filter((item) => item.id !== key);
 
-      void setFieldValue(
-        "scanIds",
-        newSelectedItems.map((item) => item.id),
-      );
       return newSelectedItems;
     });
   };
 
-  const handleSelectionChange = (key: Key) => {
-    const item = list.getItem(key);
+  const handleSelectionChange = useCallback(
+    (key: Key) => {
+      const item = list.getItem(key);
 
-    if (!item) return;
+      if (!item) return;
 
-    setSelectedItems((prev) => {
-      if (prev.some((prevItem) => prevItem.id === item.id)) return prev;
+      setSelectedItems((prev) => {
+        if (prev.some((prevItem) => prevItem.id === item.id)) return prev;
 
-      const newSelectedItems = [...prev, item];
+        const newSelectedItems = [...prev, item];
 
-      void setFieldValue(
-        "scanIds",
-        newSelectedItems.map((item) => item.id),
-      );
-      return newSelectedItems;
-    });
-    list.setFilterText("");
-    list.removeSelectedItems();
-  };
+        return newSelectedItems;
+      });
+
+      list.setFilterText("");
+      list.removeSelectedItems();
+    },
+    [list],
+  );
+
+  useEffect(() => {
+    void setFieldValue(
+      "scanIds",
+      selectedItems.map((item) => item.id),
+    );
+  }, [selectedItems, setFieldValue]);
 
   return (
     <div className={container()}>

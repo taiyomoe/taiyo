@@ -5,6 +5,7 @@ import {
   getMediaChapterByIdSchema,
   getMediaChaptersByMediaIdSchema,
   insertMediaChapterSchema,
+  updateMediaChapterSchema,
 } from "~/lib/schemas/mediaChapter.schemas";
 import type { MediaChapterLimited } from "~/lib/types";
 import { MediaUtils } from "~/lib/utils/media.utils";
@@ -37,6 +38,48 @@ export const mediaChaptersRouter = createTRPCRouter({
           },
           uploaderId: ctx.session.user.id,
         },
+      });
+
+      return result;
+    }),
+
+  update: protectedProcedure
+    .meta({ resource: "mediaChapters", action: "update" })
+    .input(updateMediaChapterSchema)
+    .mutation(async ({ ctx, input: { scanIds, ...input } }) => {
+      const mediaChapter = await ctx.db.mediaChapter.findUnique({
+        include: { scans: true },
+        where: { id: input.id, deletedAt: null },
+      });
+
+      if (!mediaChapter) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Media chapter not found",
+        });
+      }
+
+      const scans = await ctx.db.scan.findMany({
+        where: { id: { in: scanIds } },
+      });
+
+      if (scans.length !== scanIds.length) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Uma ou várias scans não existem.",
+        });
+      }
+
+      const result = await ctx.db.mediaChapter.update({
+        data: {
+          ...input,
+          title: input.title === "" ? null : input.title,
+          scans: {
+            disconnect: mediaChapter.scans.map((s) => ({ id: s.id })),
+            connect: scanIds.map((scanId) => ({ id: scanId })),
+          },
+        },
+        where: { id: input.id },
       });
 
       return result;

@@ -77,6 +77,11 @@ export const DashboardSidebarContent = ({ className }: Props) => {
             label: "Upar",
             href: "/dashboard/chapters/upload",
           }}
+          update={{
+            label: "Modificar",
+            href: "/dashboard/chapters/edit",
+            isDisabled: true,
+          }}
         />
       </AccordionItem>
 
