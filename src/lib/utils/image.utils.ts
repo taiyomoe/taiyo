@@ -32,6 +32,11 @@ const convert = async (source: File) => {
   });
 };
 
+const sortByFileName = (files: File[]) => {
+  return files.sort((a, b) => a.name.charCodeAt(0) - b.name.charCodeAt(0));
+};
+
 export const ImageUtils = {
   convert,
+  sortByFileName,
 };

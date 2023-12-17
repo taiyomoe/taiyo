@@ -29,9 +29,13 @@ export const useImageStore = create<ImageStore>((set, get) => ({
     set({ isCompressing: true });
 
     const files = await Promise.all(rawFiles.map(ImageUtils.convert));
+    ImageUtils.sortByFileName(files);
 
     set((prev) => ({
-      images: { ...prev.images, [type]: files },
+      images: {
+        ...prev.images,
+        [type]: files,
+      },
       isCompressing: false,
     }));
   },

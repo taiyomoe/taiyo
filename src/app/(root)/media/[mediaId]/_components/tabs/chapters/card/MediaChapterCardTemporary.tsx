@@ -4,14 +4,15 @@ import { Card, CardBody } from "@nextui-org/card";
 import { useSession } from "next-auth/react";
 import { tv } from "tailwind-variants";
 
-import { MediaChapterCardProgressionButton } from "~/app/(root)/media/[mediaId]/_components/tabs/chapters/card/MediaChapterCardProgressionButton";
 import { MediaChapterScans } from "~/components/ui/MediaChapterScans";
+import { MediaChapterCardUploadedTime } from "~/components/ui/MediaChapterUploadedTime";
 import { MediaChapterUploader } from "~/components/ui/MediaChapterUploader";
 import type { MediaLimitedChapter } from "~/lib/types";
 import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils";
 
-import { MediaChapterCardUploadedTime } from "../../../../../../../../components/ui/MediaChapterUploadedTime";
+import { MediaChapterActions } from "../MediaChapterActions";
 import { MediaChapterCardPath } from "./MediaChapterCardPath";
+import { MediaChapterCardProgressionButton } from "./MediaChapterCardProgressionButton";
 
 type Props = {
   chapter: MediaLimitedChapter;
@@ -34,7 +35,7 @@ const mediaChapterCardTemporary = tv({
     completed: {
       null: {},
       true: {
-        card: "pl-[calc(0.75rem+2px)]",
+        card: "pl-[2px]",
       },
       false: {
         card: "border-l-2 border-primary rounded-md",
@@ -99,6 +100,7 @@ export const MediaChapterCardTemporary = ({ chapter, order }: Props) => {
           </div>
         </CardBody>
       </Card>
+      <MediaChapterActions chapter={chapter} />
     </div>
   );
 };
