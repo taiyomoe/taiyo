@@ -1,5 +1,6 @@
 import { TRPCError } from "@trpc/server";
 
+import { idSchema } from "~/lib/schemas";
 import {
   getMediaChapterByIdSchema,
   getMediaChaptersByMediaIdSchema,
@@ -175,5 +176,26 @@ export const mediaChaptersRouter = createTRPCRouter({
       };
 
       return mediaLimitedChapterPagination;
+    }),
+
+  delete: protectedProcedure
+    .meta({ resource: "mediaChapters", action: "delete" })
+    .input(idSchema)
+    .mutation(async ({ ctx, input }) => {
+      const mediaChapter = await ctx.db.mediaChapter.findUnique({
+        where: { id: input, deletedAt: null },
+      });
+
+      if (!mediaChapter) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Media chapter not found",
+        });
+      }
+
+      await ctx.db.mediaChapter.update({
+        data: { deletedAt: new Date(), deleterId: ctx.session.user.id },
+        where: { id: input },
+      });
     }),
 });
