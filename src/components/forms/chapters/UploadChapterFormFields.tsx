@@ -1,11 +1,9 @@
-import { Badge } from "@nextui-org/badge";
-import { Tooltip } from "@nextui-org/tooltip";
 import { ContentRating, Flag, Languages } from "@prisma/client";
-import { AlertCircleIcon } from "lucide-react";
 
 import { Form } from "~/components/generics/form/Form";
 import { InputFormField } from "~/components/generics/form/InputFormField";
 import { SelectFormField } from "~/components/generics/form/SelectFormField";
+import { MediasSearchAutocomplete } from "~/components/medias/MediasSearchAutocomplete";
 import { ScansSearchAutocomplete } from "~/components/scans/ScansSearchAutocomplete";
 import { ImageCard } from "~/components/ui/images/ImageCard";
 import { ImageDropzone } from "~/components/ui/images/ImageDropzone";
@@ -14,19 +12,7 @@ export const UploadChapterFormFields = () => {
   return (
     <Form.Layout>
       <Form.Category>
-        <InputFormField name="id" label="ID do capítulo" isDisabled />
-        <Tooltip content="Temporário">
-          <Badge
-            className="right-1"
-            placement="top-right"
-            content={<AlertCircleIcon />}
-            color="warning"
-            size="lg"
-            isOneChar
-          >
-            <InputFormField name="mediaId" label="ID da obra" />
-          </Badge>
-        </Tooltip>
+        <MediasSearchAutocomplete />
         <InputFormField name="title" label="Título" />
         <ScansSearchAutocomplete />
       </Form.Category>
