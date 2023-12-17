@@ -28,5 +28,3 @@ const execute = async () => {
 };
 
 export default { execute };
-
-void execute();
