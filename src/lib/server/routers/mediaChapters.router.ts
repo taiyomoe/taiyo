@@ -29,6 +29,7 @@ export const mediaChaptersRouter = createTRPCRouter({
       const result = await ctx.db.mediaChapter.create({
         data: {
           ...input,
+          title: input.title === "" ? null : input.title,
           pages: pages.map((page) => ({ id: page })),
           scans: {
             connect: scanIds.map((scanId) => ({ id: scanId })),
