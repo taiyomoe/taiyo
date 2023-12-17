@@ -23,7 +23,7 @@
     --discord-foreground: white;
 
     --google: white;
-    --google-foreground: dark;
+    --google-foreground: #000;
 
     --body-padding: 24px;
     --navbar-height: 60px;
@@ -47,12 +47,6 @@
 
     --content2: #37373b; /* zinc-800 + 8% brighter */
     --content2-foreground: 0 0% 98%;
-
-    --discord: #5865f2;
-    --discord-foreground: white;
-
-    --google: white;
-    --google-foreground: dark;
   }
 }
 

@@ -10,9 +10,11 @@ export const AuthCard = () => {
     <Card className="mx-4 w-full max-w-[500px]">
       <CardBody className="w-full gap-8">
         <div className="flex flex-col gap-2">
-          <Input placeholder="Email" isDisabled />
-          <Input placeholder="Senha" isDisabled />
-          <Button isDisabled>Logar</Button>
+          <Input placeholder="Email" isDisabled variant="bordered" />
+          <Input placeholder="Senha" isDisabled variant="bordered" />
+          <Button className="mt-2" isDisabled>
+            Logar
+          </Button>
         </div>
         <div className="flex flex-col gap-4">
           <div className="relative">
