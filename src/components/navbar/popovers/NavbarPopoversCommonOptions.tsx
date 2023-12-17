@@ -39,6 +39,7 @@ export const NavbarPopoversCommonOptions = () => {
           className="hover:bg-discord/70 mt-4 w-full gap-4 bg-discord text-medium font-medium text-discord-foreground"
           startContent={<CompanyLogo company="discord" height={28} />}
           radius="full"
+          target="_blank"
         >
           <p className="w-full">Discord</p>
         </Button>

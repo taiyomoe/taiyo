@@ -14,7 +14,7 @@ export const useChapterImages = () => {
   const [imagesToLoad, setImagesToLoad] = useState<
     Omit<ReaderImage, "blobUrl">[]
   >([]);
-  const deboucedImagesToLoad = useDebounce(imagesToLoad, 300);
+  const deboucedImagesToLoad = useDebounce(imagesToLoad, 250);
 
   const loadImageBlob = async (url: string) => {
     const image = await fetch(url).then((res) => res.blob());
