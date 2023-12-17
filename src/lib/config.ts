@@ -21,6 +21,9 @@ export const siteConfig = {
       alt: "Taiyō banner",
     },
   },
+  discord: {
+    url: "https://discord.gg/RYbnyeWcM2",
+  },
   openGraph: {
     type: "website",
     locale: "pt_BR",
