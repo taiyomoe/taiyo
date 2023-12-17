@@ -1,7 +1,10 @@
+import Link from "next/link";
 import { Button } from "@nextui-org/button";
 import { FlagIcon, SettingsIcon, SunMoonIcon } from "lucide-react";
 
+import { CompanyLogo } from "~/components/ui/CompanyLogo";
 import ThemeSwitch from "~/components/ui/ThemeSwitch";
+import { siteConfig } from "~/lib/config";
 
 export const NavbarPopoversCommonOptions = () => {
   return (
@@ -28,6 +31,17 @@ export const NavbarPopoversCommonOptions = () => {
           <p className="select-none text-medium font-medium">Tema</p>
         </div>
         <ThemeSwitch />
+      </div>
+      <div className="flex">
+        <Button
+          as={Link}
+          href={siteConfig.discord.url}
+          className="hover:bg-discord/70 mt-4 w-full gap-4 bg-discord text-medium font-medium text-discord-foreground"
+          startContent={<CompanyLogo company="discord" height={28} />}
+          radius="full"
+        >
+          <p className="w-full">Discord</p>
+        </Button>
       </div>
     </div>
   );
