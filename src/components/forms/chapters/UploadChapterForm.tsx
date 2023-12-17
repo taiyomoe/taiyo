@@ -4,7 +4,7 @@ import { toFormikValidationSchema } from "zod-formik-adapter";
 
 import { Form } from "~/components/generics/form/Form";
 import { useChapterUpload } from "~/hooks/useChapterUpload";
-import { insertMediaChapterSchema } from "~/lib/schemas/mediaChapter.schemas";
+import { insertMediaChapterFormSchema } from "~/lib/schemas/mediaChapter.schemas";
 import type { InsertMediaChapterFormSchema } from "~/lib/schemas/mediaChapter.schemas";
 
 import { UploadChapterFormFields } from "./UploadChapterFormFields";
@@ -27,7 +27,7 @@ export const UploadChapterForm = () => {
   return (
     <Form.Component
       initialValues={initialValues}
-      validationSchema={toFormikValidationSchema(insertMediaChapterSchema)}
+      validationSchema={toFormikValidationSchema(insertMediaChapterFormSchema)}
       onSubmit={handleSubmit}
     >
       <UploadChapterFormFields />
