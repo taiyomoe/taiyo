@@ -44,7 +44,7 @@ export const SwipeableLatestMedias = ({ medias }: Props) => (
             height={300}
             width={210}
             alt="media's cover"
-            // isZoomed
+            isZoomed
           />
         </Link>
       </SwiperSlide>
