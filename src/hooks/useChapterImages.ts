@@ -37,12 +37,16 @@ export const useChapterImages = () => {
       navigation,
       images,
     );
-    const newImages = mergedImages
-      .filter((x) => !images.some((y) => y.number === x.number))
-      .filter((x) => !imagesToLoad.some((y) => y.number === x.number));
+
+    const newImages = mergedImages.filter(
+      (x) => !images.some((y) => y.number === x.number),
+    );
 
     if (newImages.length > 0) {
-      setImagesToLoad((prev) => [...prev, ...newImages]);
+      setImagesToLoad((prev) => [
+        ...prev,
+        ...newImages.filter((x) => !prev.some((y) => y.number === x.number)),
+      ]);
     }
   }
 
