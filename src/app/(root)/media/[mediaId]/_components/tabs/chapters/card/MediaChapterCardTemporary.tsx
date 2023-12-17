@@ -35,7 +35,7 @@ const mediaChapterCardTemporary = tv({
     completed: {
       null: {},
       true: {
-        card: "pl-[calc(0.75rem+2px)]",
+        card: "pl-[2px]",
       },
       false: {
         card: "border-l-2 border-primary rounded-md",
