@@ -75,7 +75,7 @@ export const mediaChaptersRouter = createTRPCRouter({
           scans: { select: { id: true, name: true } },
           comments: true,
         },
-        where: { id: chapterId },
+        where: { id: chapterId, deletedAt: null },
       });
 
       if (!result?.uploader.name || !result.media.titles.at(0)) {
@@ -137,14 +137,13 @@ export const mediaChaptersRouter = createTRPCRouter({
           uploader: { select: { id: true, name: true } },
           scans: { select: { id: true, name: true } },
         },
-
-        where: { mediaId },
+        where: { mediaId, deletedAt: null },
         orderBy: { number: "desc" },
         skip: (page - 1) * perPage,
         take: perPage,
       });
       const chaptersCount = await ctx.db.mediaChapter.count({
-        where: { mediaId },
+        where: { mediaId, deletedAt: null },
       });
       const { progression } = ctx.session
         ? (await ctx.db.userHistory.findFirst({
