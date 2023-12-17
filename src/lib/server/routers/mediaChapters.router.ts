@@ -107,6 +107,7 @@ export const mediaChaptersRouter = createTRPCRouter({
                   isAcronym: true,
                   isMainTitle: true,
                 },
+                where: { deletedAt: null },
               },
               chapters: {
                 select: {
@@ -114,6 +115,7 @@ export const mediaChaptersRouter = createTRPCRouter({
                   number: true,
                   title: true,
                 },
+                where: { deletedAt: null },
               },
             },
           },
