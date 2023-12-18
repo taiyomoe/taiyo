@@ -72,9 +72,13 @@ export const useChapterImages = () => {
         blobUrl: await loadImageBlob(image.url),
       })),
     ).then((newImages) => {
-      console.log("loadedImages", newImages);
+      setImages((prev) => {
+        const filteredNewImages = newImages.filter(
+          (x) => !prev.some((y) => y.number === x.number),
+        );
 
-      setImages((prev) => [...prev, ...newImages]);
+        return [...prev, ...filteredNewImages];
+      });
       setImagesToLoad([]);
     });
   }, [deboucedImagesToLoad]);
