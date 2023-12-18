@@ -8,6 +8,7 @@ import { UserLibrary } from "~/components/library/UserLibrary";
 import { MediaSearch } from "~/components/navbar/search/MediaSearch";
 import { CompanyLogo } from "~/components/ui/CompanyLogo";
 import { useChapterNavbar } from "~/hooks/useChapterNavbar";
+import { useDevice } from "~/hooks/useDevice";
 
 import { NavbarBorder } from "./NavbarBorder";
 import { ReaderSidebarOpenButton } from "./ReaderSidebarOpenButton";
@@ -50,6 +51,7 @@ type Props = {
 
 export const Navbar = ({ popover }: Props) => {
   const { mode, sidebarSide, expand } = useChapterNavbar();
+  const { isAboveTablet } = useDevice();
 
   const slots = navbar({ sidebarSide, mode, expand });
 
@@ -58,10 +60,14 @@ export const Navbar = ({ popover }: Props) => {
       <nav className={slots.contentWrapper()}>
         <Link href="/" className={slots.brandContainer()}>
           <CompanyLogo company="taiyo" width={35} priority />
-          <p className={slots.brandText()}>Taiyō</p>
-          <Chip color="primary" size="sm">
-            ALPHA
-          </Chip>
+          {isAboveTablet && (
+            <>
+              <p className={slots.brandText()}>Taiyō</p>
+              <Chip color="primary" size="sm">
+                ALPHA
+              </Chip>
+            </>
+          )}
         </Link>
         <div className={slots.endContentContainer()}>
           <MediaSearch />
