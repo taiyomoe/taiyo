@@ -74,8 +74,6 @@ export const MediaLayoutChaptersTab = ({ media }: Props) => {
     );
   }
 
-  console.log("date", chaptersPagination);
-
   return (
     <div className="flex flex-col gap-2">
       <MediaChaptersTabActions
