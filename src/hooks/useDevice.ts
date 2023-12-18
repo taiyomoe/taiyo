@@ -9,11 +9,21 @@ export const useDevice = () => {
   const isDesktop = width >= 1024 && width < 1280;
   const isWideScreen = width >= 1280;
 
+  const isAboveMobile = width >= 640;
+  const isAboveTablet = width >= 768;
+  const isAboveLaptop = width >= 1024;
+  const isAboveDesktop = width >= 1280;
+
   return {
     isMobile,
     isTablet,
     isLaptop,
     isDesktop,
     isWideScreen,
+
+    isAboveMobile,
+    isAboveTablet,
+    isAboveLaptop,
+    isAboveDesktop,
   };
 };
