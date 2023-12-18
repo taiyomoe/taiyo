@@ -4,7 +4,6 @@ import { PencilIcon } from "lucide-react";
 import { useSession } from "next-auth/react";
 
 import { UpdateMediaChapterDeleteButton } from "~/components/forms/chapters/UpdateMediaChapterDeleteButton";
-import { SignedIn } from "~/components/utils/SignedIn";
 import type { MediaLimitedChapter } from "~/lib/types";
 
 type Props = {
@@ -23,20 +22,16 @@ export const MediaChapterActions = ({ chapter }: Props) => {
 
   return (
     <div className="flex flex-col">
-      <SignedIn requiredPermissions={["mediaChapters:update:own"]}>
-        <Button
-          as={Link}
-          href={`/dashboard/chapters/edit/${chapter.id}`}
-          startContent={<PencilIcon size={18} />}
-          size="sm"
-          variant="light"
-          color="warning"
-          isIconOnly
-        />
-      </SignedIn>
-      <SignedIn requiredPermissions={["mediaChapters:delete:own"]}>
-        <UpdateMediaChapterDeleteButton chapter={chapter} />
-      </SignedIn>
+      <Button
+        as={Link}
+        href={`/dashboard/chapters/edit/${chapter.id}`}
+        startContent={<PencilIcon size={18} />}
+        size="sm"
+        variant="light"
+        color="warning"
+        isIconOnly
+      />
+      <UpdateMediaChapterDeleteButton chapter={chapter} />
     </div>
   );
 };
