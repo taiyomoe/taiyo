@@ -13,10 +13,7 @@ type Props = {
 export const MediaChapterActions = ({ chapter }: Props) => {
   const { data: session } = useSession();
 
-  if (
-    !session?.user.role.permissions.includes("mediaChapters:update:own") &&
-    !session?.user.role.permissions.includes("mediaChapters:delete:own")
-  ) {
+  if (session?.user.role.name !== "ADMIN") {
     return;
   }
 
