@@ -113,6 +113,8 @@ export const useReaderStore = create<ReaderState>((set, get) => ({
         ...state,
         navigation: newNavigation,
         currentPageNumber: newNavigation.currentPage,
+        hasPreviousPage: !!newNavigation.previousPage,
+        hasNextPage: !!newNavigation.nextPage,
       };
     });
   },
@@ -184,8 +186,6 @@ export const useReaderStore = create<ReaderState>((set, get) => ({
       void get()
         .loadImage(url)
         .then((blobUrl) => {
-          console.log("Loaded image", number);
-
           set((state) => {
             if (state.images.some((x) => x.number === number)) {
               return {
