@@ -22,7 +22,7 @@ const readerSidebarLayout = tv({
   variants: {
     isMobile: {
       true: {
-        container: "fixed shadow-xl right-0",
+        container: "fixed shadow-xl",
       },
       false: {
         container: "sticky",
@@ -39,6 +39,18 @@ const readerSidebarLayout = tv({
       },
     },
   },
+  compoundVariants: [
+    {
+      isMobile: true,
+      side: "left",
+      className: { container: "left-0" },
+    },
+    {
+      isMobile: true,
+      side: "right",
+      className: { container: "right-0" },
+    },
+  ],
 });
 
 export const ReaderSidebarLayout = () => {
