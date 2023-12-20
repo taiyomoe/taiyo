@@ -40,6 +40,7 @@ const getLatestReleases = async (
         },
       },
     },
+    where: { deletedAt: null },
   });
 
   const latestReleases: LatestRelease[] = result.map((c) => ({
