@@ -14,7 +14,7 @@ export const MediaChapterCardUploadedTime = ({ chapter, className }: Props) => {
     <div
       className={cn("flex w-full items-center justify-end gap-1", className)}
     >
-      <ClockIcon className="h-4 w-fit md:h-5" />
+      <ClockIcon className="h-4 w-auto md:h-5" />
       <p className="select-none rounded px-1 text-sm md:px-2">
         {MediaChapterUtils.computeUploadedTime(chapter)}
       </p>

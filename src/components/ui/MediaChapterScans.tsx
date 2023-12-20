@@ -14,7 +14,7 @@ const mediaChapterScans = tv({
     container: "flex w-full",
     iconContainer: "flex items-center",
     linkContainer: "flex gap-1",
-    icon: "w-fit",
+    icon: "w-auto",
     skeleton: "grow",
     link: "hover:bg-content3",
     text: "select-none px-2 truncate",
