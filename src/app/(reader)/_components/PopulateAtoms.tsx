@@ -23,7 +23,8 @@ export const PopulateAtoms = ({ mediaChapter }: Props) => {
     return () => {
       unload();
     };
-  }, [load, mediaChapter, currentPageNumber, unload]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [load, unload]);
 
   return null;
 };

@@ -24,6 +24,7 @@ export const UploadChapterFormFields = () => {
             labelPlacement="outside"
             placeholder="Ex: 1"
             type="number"
+            className="chapter-number"
           />
           <InputFormField
             name="volume"
@@ -31,6 +32,7 @@ export const UploadChapterFormFields = () => {
             labelPlacement="outside"
             placeholder="Ex: 1"
             type="number"
+            className="chapter-volume"
           />
         </Form.Row>
         <Form.Row>
