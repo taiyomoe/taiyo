@@ -71,7 +71,7 @@ export type MediaChapterNavigation = {
   nextPage: number | null;
 };
 
-export type ReaderImage = { number: number; url: string; blobUrl: string };
+export type ReaderImage = { number: number; blobUrl: string };
 
 const mediaChapterWithRelations =
   Prisma.validator<Prisma.MediaChapterDefaultArgs>()({
