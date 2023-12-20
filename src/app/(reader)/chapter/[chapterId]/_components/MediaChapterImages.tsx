@@ -1,14 +1,12 @@
 import { Spinner } from "@nextui-org/react";
 
-import { useChapterImages } from "~/hooks/useChapterImages";
 import { useChapterProgression } from "~/hooks/useChapterProgression";
 import { useReaderStore } from "~/stores";
 
 import { MediaChapterImage } from "./MediaChapterImage";
 
 export const MediaChapterImages = () => {
-  const { settings, currentPageNumber } = useReaderStore();
-  const { images } = useChapterImages();
+  const { settings, currentPageNumber, images } = useReaderStore();
   useChapterProgression();
 
   const currentImage = images.find((img) => img.number === currentPageNumber);
@@ -22,7 +20,7 @@ export const MediaChapterImages = () => {
         .sort((a, b) => a.number - b.number)
         .map((img) => (
           <MediaChapterImage
-            key={img.url}
+            key={img.blobUrl}
             url={img.blobUrl}
             hide={
               settings.pageMode === "single"
