@@ -40,8 +40,8 @@ export const ReaderSidebarSettingsOpenMode = () => {
           startContent={
             <SidebarIcon action="open" side={settings.sidebar.side} size={20} />
           }
-          color={settings.sidebar.openMode === "button" ? "primary" : "default"}
           onPress={() => updateSettings("sidebar.openMode", "button")}
+          color={settings.sidebar.openMode === "button" ? "primary" : "default"}
           isDisabled={isMobile}
           radius="sm"
         >

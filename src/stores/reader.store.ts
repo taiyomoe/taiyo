@@ -17,10 +17,12 @@ export type ReaderSettings = {
     side: "left" | "right";
     openMode: "button" | "hover";
   };
-  navbar: {
-    mode: "sticky" | "hover";
+  navbarMode: "fixed" | "sticky" | "hover";
+  page: {
+    mode: "single" | "longstrip";
+    height: "fit" | "full";
+    width: "fit" | "full";
   };
-  pageMode: "single" | "longstrip";
 };
 
 export type ReaderState = {
@@ -62,10 +64,12 @@ export const useReaderStore = create<ReaderState>((set, get) => ({
       side: "right",
       openMode: "button",
     },
-    navbar: {
-      mode: "sticky",
+    navbarMode: "hover",
+    page: {
+      mode: "single",
+      height: "fit",
+      width: "fit",
     },
-    pageMode: "single",
   },
 
   chapter: null,
@@ -80,7 +84,7 @@ export const useReaderStore = create<ReaderState>((set, get) => ({
 
   updateSettings: (key, newValue) => {
     // Load all images on longstrip mode
-    if (key === "pageMode" && newValue === "longstrip") {
+    if (key === "page.mode" && newValue === "longstrip") {
       void get().loadAllImages();
     }
 
@@ -162,7 +166,7 @@ export const useReaderStore = create<ReaderState>((set, get) => ({
   updateImages: (newPageNumber) => {
     const { settings, chapter, loadingImages, images } = get();
 
-    if (settings.pageMode === "longstrip" || !chapter) {
+    if (settings.page.mode === "longstrip" || !chapter) {
       return;
     }
 
@@ -221,8 +225,8 @@ export const useReaderStore = create<ReaderState>((set, get) => ({
       images: [],
     }));
 
-    if (mediaType === "MANHWA" && settings.pageMode !== "longstrip") {
-      updateSettings("pageMode", "longstrip");
+    if (mediaType === "MANHWA" && settings.page.mode !== "longstrip") {
+      updateSettings("page.mode", "longstrip");
     } else {
       updateImages(initialPageNumber ?? 1);
     }

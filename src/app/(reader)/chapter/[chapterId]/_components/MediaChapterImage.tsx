@@ -8,25 +8,33 @@ type Props = {
 };
 
 const mediaChapterImage = tv({
-  slots: {
-    image: "object-contain",
-  },
+  base: "my-auto select-none",
   variants: {
     hide: {
-      true: { image: "hidden" },
-      false: { image: "block" },
+      true: "hidden",
+      false: "block",
     },
-    pageMode: {
-      single: { image: "h-full w-full" },
-      longstrip: { image: "h-full w-auto" },
+    mode: {
+      single: "mx-auto",
+      longstrip: "h-full w-auto",
+    },
+    height: {
+      fit: "max-h-full",
+      full: "",
+    },
+    width: {
+      fit: "max-w-full object-contain",
+      full: "max-w-[unset]",
     },
   },
 });
 
 export const MediaChapterImage = ({ url, hide }: Props) => {
-  const pageMode = useReaderStore(({ settings }) => settings.pageMode);
+  const { mode, height, width } = useReaderStore(
+    ({ settings }) => settings.page,
+  );
 
-  const { image } = mediaChapterImage({ hide, pageMode });
+  const base = mediaChapterImage({ hide, mode, height, width });
 
-  return <img src={url} className={image()} alt="image" />;
+  return <img src={url} className={base} alt="image" />;
 };

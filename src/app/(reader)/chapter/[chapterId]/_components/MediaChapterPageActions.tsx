@@ -10,7 +10,7 @@ const mediaChapterPageActions = tv({
 });
 
 export const MediaChapterPageActions = () => {
-  const pageMode = useReaderStore((state) => state.settings.pageMode);
+  const pageMode = useReaderStore((state) => state.settings.page.mode);
 
   const { container } = mediaChapterPageActions();
 

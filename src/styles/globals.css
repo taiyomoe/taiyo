@@ -50,6 +50,12 @@
   }
 }
 
+@layer base {
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
 .swiper {
   max-width: 100% !important;
 }
