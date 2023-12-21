@@ -10,7 +10,7 @@ export const NavbarBorder = () => {
 
   return (
     <span
-      className={cn("h-[1px] bg-primary transition-all")}
+      className={cn("h-[1px] bg-primary transition-all group-hover:top-0")}
       style={{ opacity }}
     />
   );
