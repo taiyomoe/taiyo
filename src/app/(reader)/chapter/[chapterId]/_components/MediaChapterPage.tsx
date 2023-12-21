@@ -13,7 +13,7 @@ import { MediaChapterPageActions } from "./MediaChapterPageActions";
 
 const mediaChapterPage = tv({
   slots: {
-    container: "grid-in-chapter min-w-0 relative",
+    container: "grid-in-chapter min-w-0 relative h-fit min-h-full",
     navigationButton:
       "absolute z-10 w-1/2 hover:cursor-pointer focus-visible:outline-none",
     imagesWrapper: "overflow-x-auto flex items-center h-full",

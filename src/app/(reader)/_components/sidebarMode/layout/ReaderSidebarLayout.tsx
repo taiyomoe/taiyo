@@ -16,7 +16,7 @@ import { ReaderSidebarHeader } from "../ui/ReaderSidebarHeader";
 const readerSidebarLayout = tv({
   slots: {
     container:
-      "transition-all z-30 h-[calc(100%+var(--navbar-height))] -mt-navbar",
+      "bg-content1 transition-all z-30 h-[calc(100%+var(--navbar-height))] -mt-navbar",
     contentWrapper:
       "bg-content1 w-[calc(var(--reader-sidebar-width)-1px)] max-w-[calc(var(--reader-sidebar-width)-1px)] right-[unset] width-[unset] flex flex-col gap-2 p-4 pt-0 overflow-x-hidden overflow-y-auto top-0 max-h-screen h-full sticky scrollbar-thin scrollbar-track-content2 scrollbar-thumb-content3",
   },
