@@ -1,38 +1,43 @@
 import { Button, ButtonGroup } from "@nextui-org/button";
-import { PanelTopIcon, PanelTopInactiveIcon } from "lucide-react";
 import { tv } from "tailwind-variants";
+
+import { useReaderStore } from "~/stores";
 
 const readerSidebarSettingsNavbarMode = tv({
   slots: {
     container: "flex flex-col gap-2",
     text: "text-md",
-    leftButton: "justify-start gap-3 pl-3",
-    rightButton: "justify-end gap-3 pr-3",
+    button: "justify-center gap-3",
   },
 });
 
 export const ReaderSidebarSettingsNavbarMode = () => {
-  const { container, text, leftButton, rightButton } =
-    readerSidebarSettingsNavbarMode();
+  const { settings, updateSettings } = useReaderStore();
+
+  const { container, text, button } = readerSidebarSettingsNavbarMode();
 
   return (
     <div className={container()}>
       <p className={text()}>Modo da navbar</p>
-      <ButtonGroup fullWidth radius="sm">
+      <ButtonGroup fullWidth radius="sm" color="primary">
         <Button
-          className={leftButton()}
-          startContent={<PanelTopIcon size={20} />}
-          color="primary"
-          radius="sm"
-          isDisabled
+          className={button()}
+          onPress={() => updateSettings("navbarMode", "fixed")}
+          color={settings.navbarMode === "fixed" ? "primary" : "default"}
+        >
+          Fixa
+        </Button>
+        <Button
+          className={button()}
+          onPress={() => updateSettings("navbarMode", "sticky")}
+          color={settings.navbarMode === "sticky" ? "primary" : "default"}
         >
           Sempre
         </Button>
         <Button
-          className={rightButton()}
-          endContent={<PanelTopInactiveIcon size={20} />}
-          radius="sm"
-          isDisabled
+          className={button()}
+          onPress={() => updateSettings("navbarMode", "hover")}
+          color={settings.navbarMode === "hover" ? "primary" : "default"}
         >
           Foco
         </Button>

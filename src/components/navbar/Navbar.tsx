@@ -16,8 +16,9 @@ import { ReaderSidebarOpenButton } from "./ReaderSidebarOpenButton";
 const navbar = tv({
   slots: {
     container:
-      "w-auto bg-background flex flex-col h-navbar justify-center max-h-navbar z-20 transition-all",
-    contentWrapper: "items-center px-bodyPadding flex grow justify-between",
+      "h-navbar max-h-navbar w-full flex flex-col justify-center z-20 group child:relative",
+    contentWrapper:
+      "items-center px-bodyPadding flex grow justify-between bg-background transition-all",
     brandContainer: "flex items-center gap-2 select-none",
     brandText: "text-xl font-semibold",
     endContentContainer: "flex gap-4",
@@ -32,9 +33,13 @@ const navbar = tv({
       },
     },
     mode: {
-      hover: {},
+      fixed: {},
       sticky: {
         container: "sticky top-0",
+      },
+      hover: {
+        container: "fixed top-0 child:-top-navbar",
+        contentWrapper: "group-hover:top-0",
       },
     },
     expand: {
@@ -52,6 +57,8 @@ type Props = {
 export const Navbar = ({ popover }: Props) => {
   const { mode, sidebarSide, expand } = useChapterNavbar();
   const { isAboveTablet } = useDevice();
+
+  console.log("navbar", mode, sidebarSide, expand);
 
   const slots = navbar({ sidebarSide, mode, expand });
 

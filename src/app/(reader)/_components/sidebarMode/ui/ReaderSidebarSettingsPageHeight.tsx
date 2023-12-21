@@ -6,7 +6,7 @@ import { tv } from "tailwind-variants";
 
 import { useReaderStore } from "~/stores";
 
-const readerSidebarSettingsPageMode = tv({
+const readerSidebarSettingsPageHeight = tv({
   slots: {
     container: "flex flex-col gap-2 items-end",
     text: "text-md",
@@ -15,33 +15,33 @@ const readerSidebarSettingsPageMode = tv({
   },
 });
 
-export const ReaderSidebarSettingsPageMode = () => {
+export const ReaderSidebarSettingsPageHeight = () => {
   const { settings, updateSettings } = useReaderStore();
 
   const { container, text, leftButton, rightButton } =
-    readerSidebarSettingsPageMode();
+    readerSidebarSettingsPageHeight();
 
   return (
     <div className={container()}>
-      <p className={text()}>Páginas</p>
+      <p className={text()}>Altura das páginas</p>
       <ButtonGroup fullWidth radius="sm">
         <Button
           className={leftButton()}
           startContent={<FileIcon size={20} />}
-          onPress={() => updateSettings("page.mode", "single")}
-          color={settings.page.mode === "single" ? "primary" : "default"}
+          onPress={() => updateSettings("page.height", "fit")}
+          color={settings.page.height === "fit" ? "primary" : "default"}
           radius="sm"
         >
-          Única
+          Limitada
         </Button>
         <Button
           className={rightButton()}
           endContent={<ScrollTextIcon size={20} />}
-          onPress={() => updateSettings("page.mode", "longstrip")}
-          color={settings.page.mode === "longstrip" ? "primary" : "default"}
+          onPress={() => updateSettings("page.height", "full")}
+          color={settings.page.height === "full" ? "primary" : "default"}
           radius="sm"
         >
-          Cascata
+          Livre
         </Button>
       </ButtonGroup>
     </div>

@@ -23,7 +23,7 @@ export const MediaChapterImages = () => {
             key={img.blobUrl}
             url={img.blobUrl}
             hide={
-              settings.pageMode === "single"
+              settings.page.mode === "single"
                 ? currentImage?.number !== img.number
                 : false
             }
