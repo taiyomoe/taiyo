@@ -1,14 +1,15 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Chip } from "@nextui-org/react";
 import { tv } from "tailwind-variants";
 
 import { UserLibrary } from "~/components/library/UserLibrary";
 import { MediaSearch } from "~/components/navbar/search/MediaSearch";
 import { CompanyLogo } from "~/components/ui/CompanyLogo";
-import { useChapterNavbar } from "~/hooks/useChapterNavbar";
 import { useDevice } from "~/hooks/useDevice";
+import { useReaderStore } from "~/stores";
 
 import { NavbarBorder } from "./NavbarBorder";
 import { ReaderSidebarOpenButton } from "./ReaderSidebarOpenButton";
@@ -24,6 +25,12 @@ const navbar = tv({
     endContentContainer: "flex gap-4",
   },
   variants: {
+    sidebarState: {
+      show: {},
+      hide: {
+        container: "!p-0",
+      },
+    },
     sidebarSide: {
       left: {
         container: "pl-readerSidebar",
@@ -42,11 +49,6 @@ const navbar = tv({
         contentWrapper: "group-hover:top-0",
       },
     },
-    expand: {
-      true: {
-        container: "!p-0",
-      },
-    },
   },
 });
 
@@ -55,12 +57,15 @@ type Props = {
 };
 
 export const Navbar = ({ popover }: Props) => {
-  const { mode, sidebarSide, expand } = useChapterNavbar();
+  const { sidebar, navbarMode } = useReaderStore((state) => state.settings);
+  const pathname = usePathname();
   const { isAboveTablet } = useDevice();
 
-  console.log("navbar", mode, sidebarSide, expand);
-
-  const slots = navbar({ sidebarSide, mode, expand });
+  const slots = navbar({
+    sidebarState: pathname.includes("/chapter/") ? sidebar.state : "hide",
+    sidebarSide: sidebar.side,
+    mode: pathname.includes("/chapter/") ? navbarMode : "sticky",
+  });
 
   return (
     <div className={slots.container()}>
