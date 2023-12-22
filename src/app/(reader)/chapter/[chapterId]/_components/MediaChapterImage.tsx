@@ -56,10 +56,17 @@ const mediaChapterImage = tv({
 export const MediaChapterImage = ({ url, hide }: Props) => {
   const {
     navbarMode,
-    page: { mode, height, width },
+    page: { mode, height, width, brightness },
   } = useReaderStore(({ settings }) => settings);
 
   const base = mediaChapterImage({ hide, navbarMode, mode, height, width });
 
-  return <img src={url} className={base} alt="image" />;
+  return (
+    <img
+      src={url}
+      className={base}
+      alt="image"
+      style={{ filter: `brightness(${brightness / 100})` }}
+    />
+  );
 };

@@ -1,5 +1,6 @@
 import { tv } from "tailwind-variants";
 
+import { ReaderSidebarSettingsBrightness } from "../ui/ReaderSidebarSettingsBrightness";
 import { ReaderSidebarSettingsNavbarMode } from "../ui/ReaderSidebarSettingsNavbarMode";
 import { ReaderSidebarSettingsOpenMode } from "../ui/ReaderSidebarSettingsOpenMode";
 import { ReaderSidebarSettingsPageHeight } from "../ui/ReaderSidebarSettingsPageHeight";
@@ -24,6 +25,7 @@ export const ReaderSidebarSettingsSection = () => {
       <ReaderSidebarSettingsPageMode />
       <ReaderSidebarSettingsPageHeight />
       <ReaderSidebarSettingsPageWidth />
+      <ReaderSidebarSettingsBrightness />
     </div>
   );
 };

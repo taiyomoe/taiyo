@@ -22,6 +22,7 @@ export type ReaderSettings = {
     mode: "single" | "longstrip";
     height: "fit" | "full";
     width: "fit" | "full";
+    brightness: number;
   };
 };
 
@@ -69,6 +70,7 @@ export const useReaderStore = create<ReaderState>((set, get) => ({
       mode: "single",
       height: "fit",
       width: "fit",
+      brightness: 100,
     },
   },
 
