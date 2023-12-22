@@ -67,6 +67,7 @@ export const ImageDropzone = (props: Props) => {
     maxFiles: Infinity,
     noClick: shouldDisableClick,
     accept: {
+      "image/webp": [".webp"],
       "image/jpeg": [".jpg", ".jpeg"],
       "image/png": [".png"],
     },
