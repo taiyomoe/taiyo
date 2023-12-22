@@ -13,13 +13,19 @@ import { MediaChapterPageActions } from "./MediaChapterPageActions";
 
 const mediaChapterPage = tv({
   slots: {
-    container: "grid-in-chapter min-w-0 relative h-fit min-h-full",
+    container:
+      "grid-in-chapter min-w-0 relative h-fit flex flex-col min-h-full",
     navigationButton:
       "absolute z-10 w-1/2 hover:cursor-pointer focus-visible:outline-none",
-    imagesWrapper: "overflow-x-auto flex items-center h-full",
+    imagesWrapper: "overflow-x-auto flex items-center h-full m-auto",
   },
   variants: {
-    pageMode: {
+    navbarMode: {
+      fixed: {},
+      sticky: {},
+      hover: {},
+    },
+    mode: {
       single: {
         navigationButton: "h-full",
         imagesWrapper: "h-full",
@@ -29,16 +35,40 @@ const mediaChapterPage = tv({
         imagesWrapper: "h-full",
       },
     },
+    width: {
+      fit: {},
+      full: {},
+    },
   },
+  compoundVariants: [
+    {
+      mode: "single",
+      width: "full",
+      className: {
+        container:
+          "overflow-x-auto scrollbar-thin scrollbar-track-content1 scrollbar-thumb-primary",
+      },
+    },
+    {
+      mode: "single",
+      navbarMode: "hover",
+      className: {
+        container: "min-h-screen",
+      },
+    },
+  ],
 });
 
 export const MediaChapterPage = () => {
-  const pageMode = useReaderStore((state) => state.settings.page.mode);
+  const {
+    navbarMode,
+    page: { mode, width },
+  } = useReaderStore((state) => state.settings);
   // const { goBack, goForward } = useChapterNavigation();
   const backButtonRef = useRef<HTMLButtonElement>(null);
   const forwardButtonRef = useRef<HTMLButtonElement>(null);
 
-  const slots = mediaChapterPage({ pageMode });
+  const slots = mediaChapterPage({ navbarMode, mode, width });
 
   const handleKeyPress: KeyboardEventHandler = (e) => {
     if (e.key === "ArrowLeft") {

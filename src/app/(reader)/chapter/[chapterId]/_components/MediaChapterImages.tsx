@@ -14,7 +14,7 @@ export const MediaChapterImages = () => {
   return (
     <div className="mx-auto flex h-full flex-col items-center justify-center">
       {(images.length === 0 || !currentImage) && (
-        <Spinner size="lg" className="justify-self-center" />
+        <Spinner size="lg" className="m-4 justify-self-center" />
       )}
       {images
         .sort((a, b) => a.number - b.number)

@@ -14,27 +14,52 @@ const mediaChapterImage = tv({
       true: "hidden",
       false: "block",
     },
+    navbarMode: {
+      fixed: {},
+      sticky: {},
+      hover: {},
+    },
     mode: {
       single: "mx-auto",
       longstrip: "h-full w-auto",
     },
     height: {
-      fit: "max-h-full",
+      fit: "",
       full: "",
     },
     width: {
       fit: "max-w-full object-contain",
-      full: "max-w-[unset]",
+      full: "",
     },
   },
+  compoundVariants: [
+    {
+      navbarMode: ["fixed", "sticky"],
+      mode: "single",
+      height: "fit",
+      className: "max-h-reader",
+    },
+    {
+      navbarMode: ["hover"],
+      mode: "single",
+      height: "fit",
+      className: "max-h-screen",
+    },
+    {
+      mode: "single",
+      width: "full",
+      className: "max-w-[unset]",
+    },
+  ],
 });
 
 export const MediaChapterImage = ({ url, hide }: Props) => {
-  const { mode, height, width } = useReaderStore(
-    ({ settings }) => settings.page,
-  );
+  const {
+    navbarMode,
+    page: { mode, height, width },
+  } = useReaderStore(({ settings }) => settings);
 
-  const base = mediaChapterImage({ hide, mode, height, width });
+  const base = mediaChapterImage({ hide, navbarMode, mode, height, width });
 
   return <img src={url} className={base} alt="image" />;
 };
