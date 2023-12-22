@@ -21,6 +21,9 @@ export const ReaderSidebarSettingsPageHeight = () => {
   const { container, text, leftButton, rightButton } =
     readerSidebarSettingsPageHeight();
 
+  const isPageHeightFit =
+    settings.page.mode !== "longstrip" && settings.page.height === "fit";
+
   return (
     <div className={container()}>
       <p className={text()}>Altura das páginas</p>
@@ -29,7 +32,8 @@ export const ReaderSidebarSettingsPageHeight = () => {
           className={leftButton()}
           startContent={<FileIcon size={20} />}
           onPress={() => updateSettings("page.height", "fit")}
-          color={settings.page.height === "fit" ? "primary" : "default"}
+          color={isPageHeightFit ? "primary" : "default"}
+          isDisabled={settings.page.mode === "longstrip"}
           radius="sm"
         >
           Limitada
@@ -38,7 +42,8 @@ export const ReaderSidebarSettingsPageHeight = () => {
           className={rightButton()}
           endContent={<ScrollTextIcon size={20} />}
           onPress={() => updateSettings("page.height", "full")}
-          color={settings.page.height === "full" ? "primary" : "default"}
+          color={isPageHeightFit ? "default" : "primary"}
+          isDisabled={settings.page.mode === "longstrip"}
           radius="sm"
         >
           Livre

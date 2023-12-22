@@ -21,6 +21,9 @@ export const ReaderSidebarSettingsPageWidth = () => {
   const { container, text, leftButton, rightButton } =
     readerSidebarSettingsPageWidth();
 
+  const isPageWidthFull =
+    settings.page.mode !== "longstrip" && settings.page.width === "full";
+
   return (
     <div className={container()}>
       <p className={text()}>Largura das páginas</p>
@@ -29,7 +32,8 @@ export const ReaderSidebarSettingsPageWidth = () => {
           className={leftButton()}
           startContent={<FileIcon size={20} />}
           onPress={() => updateSettings("page.width", "fit")}
-          color={settings.page.width === "fit" ? "primary" : "default"}
+          color={isPageWidthFull ? "default" : "primary"}
+          isDisabled={settings.page.mode === "longstrip"}
           radius="sm"
         >
           Limitada
@@ -38,7 +42,8 @@ export const ReaderSidebarSettingsPageWidth = () => {
           className={rightButton()}
           endContent={<ScrollTextIcon size={20} />}
           onPress={() => updateSettings("page.width", "full")}
-          color={settings.page.width === "full" ? "primary" : "default"}
+          color={isPageWidthFull ? "primary" : "default"}
+          isDisabled={settings.page.mode === "longstrip"}
           radius="sm"
         >
           Livre
