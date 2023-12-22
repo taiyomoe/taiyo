@@ -8,7 +8,7 @@ import { useReaderStore } from "~/stores";
 
 const readerSidebarSettingsPageHeight = tv({
   slots: {
-    container: "flex flex-col gap-2 items-end",
+    container: "flex flex-col gap-2",
     text: "text-md",
     leftButton: "justify-start gap-3 pl-3",
     rightButton: "justify-end gap-3 pr-3",
