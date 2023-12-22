@@ -6,10 +6,10 @@ import { ReaderSidebarOpenOverlay } from "./chapter/[chapterId]/_components/Read
 
 export default function Layout({ children }: LayoutProps) {
   return (
-    <div className="flex grow flex-col">
+    <div className="flex min-h-screen grow flex-col">
       <NavbarAuth />
       <ReaderSidebarOpenOverlay />
-      <div className="grid h-full min-h-reader w-full grid-cols-mediaChapter overflow-x-clip grid-areas-mediaChapter">
+      <div className="grid h-full min-h-reader w-full grow grid-cols-mediaChapter overflow-x-clip grid-areas-mediaChapter">
         {children}
         <ReaderSidebarLayout />
       </div>
