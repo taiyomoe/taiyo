@@ -10,7 +10,7 @@ type Props = {
   className: string;
 };
 
-export const MediaChapterTitle = ({ className }: Props) => {
+export const ReaderSidebarMediaTitle = ({ className }: Props) => {
   const { chapter } = useReaderStore();
 
   if (!chapter) {

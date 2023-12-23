@@ -11,7 +11,7 @@ import { ReaderSidebarUploadersSection } from "../sections/ReaderSidebarUploader
 import { ReaderSettingsMediaChapterDropdown } from "../ui/ReaderSettingsMediaChapterDropdown";
 import { ReaderSettingsMediaChapterPageDropdown } from "../ui/ReaderSettingsMediaChapterPageDropdown";
 import { ReaderSettingsMediaChapterReportModal } from "../ui/ReaderSettingsMediaChapterReportModal";
-import { ReaderSidebarTitle } from "../ui/ReaderSidebarTitle";
+import { ReaderSidebarHeader } from "../ui/ReaderSidebarHeader";
 
 const readerSidebarLayout = tv({
   slots: {
@@ -51,7 +51,7 @@ export const ReaderSidebarLayout = () => {
     <div className={slots.container()} aria-expanded={state === "show"}>
       <div className={slots.contentWrapper()}>
         <div className="flex min-h-[var(--navbar-height)] items-center">
-          <ReaderSidebarTitle />
+          <ReaderSidebarHeader />
         </div>
         <div className="flex flex-col gap-2">
           <ReaderSettingsMediaChapterPageDropdown />
