@@ -15,7 +15,7 @@ export const MediaLayoutCover = ({ media }: Props) => {
     <Image
       as={NextImage}
       classNames={{
-        img: "h-[350px] min-w-[250px] w-[250px] lg:h-[430px] lg:min-w-[300px] object-fill",
+        img: "cover-url h-[350px] min-w-[250px] w-[250px] lg:h-[430px] lg:min-w-[300px] object-fill",
       }}
       width={300}
       height={400}
