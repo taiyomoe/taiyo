@@ -4,10 +4,11 @@ import { Button } from "@nextui-org/button";
 import { tv } from "tailwind-variants";
 
 import { SidebarIcon } from "~/components/icons/SidebarIcon";
-import { MediaChapterTitle } from "~/components/ui/MediaChapterTitle";
 import { useReaderStore } from "~/stores";
 
-const readerSidebarTitle = tv({
+import { ReaderSidebarMediaTitle } from "../ui/ReaderSidebarMediaTitle";
+
+const readerSidebarHeader = tv({
   slots: {
     container: "flex w-full items-center gap-2",
     text: "text-lg font-semibold",
@@ -25,10 +26,10 @@ const readerSidebarTitle = tv({
   },
 });
 
-export const ReaderSidebarTitle = () => {
+export const ReaderSidebarHeader = () => {
   const { settings, updateSettings } = useReaderStore();
 
-  const slots = readerSidebarTitle({ side: settings.sidebar.side });
+  const slots = readerSidebarHeader({ side: settings.sidebar.side });
 
   const handlePress = () => {
     updateSettings(
@@ -39,7 +40,7 @@ export const ReaderSidebarTitle = () => {
 
   return (
     <div className={slots.container()}>
-      <MediaChapterTitle className={slots.text()} />
+      <ReaderSidebarMediaTitle className={slots.text()} />
       <Button
         startContent={
           <SidebarIcon action="close" side={settings.sidebar.side} size={20} />
