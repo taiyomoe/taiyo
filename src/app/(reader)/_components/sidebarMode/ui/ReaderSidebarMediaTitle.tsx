@@ -10,7 +10,7 @@ type Props = {
   className: string;
 };
 
-export const MediaChapterTitle = ({ className }: Props) => {
+export const ReaderSidebarMediaTitle = ({ className }: Props) => {
   const { chapter } = useReaderStore();
 
   if (!chapter) {
@@ -19,10 +19,13 @@ export const MediaChapterTitle = ({ className }: Props) => {
 
   return (
     <Link
-      className={cn("truncate underline-offset-2 hover:underline", className)}
+      className={cn(
+        "media-title truncate underline-offset-2 hover:underline",
+        className,
+      )}
       href={`/media/${chapter.media.id}`}
     >
-      {chapter.title ?? chapter.media.title}
+      {chapter.media.title}
     </Link>
   );
 };
