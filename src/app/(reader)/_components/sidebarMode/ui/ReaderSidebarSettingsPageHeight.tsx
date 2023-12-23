@@ -1,7 +1,7 @@
 "use client";
 
 import { Button, ButtonGroup } from "@nextui-org/button";
-import { FileIcon, ScrollTextIcon } from "lucide-react";
+import { FoldVerticalIcon, UnfoldVerticalIcon } from "lucide-react";
 import { tv } from "tailwind-variants";
 
 import { useReaderStore } from "~/stores";
@@ -30,7 +30,7 @@ export const ReaderSidebarSettingsPageHeight = () => {
       <ButtonGroup fullWidth radius="sm">
         <Button
           className={leftButton()}
-          startContent={<FileIcon size={20} />}
+          startContent={<FoldVerticalIcon size={20} />}
           onPress={() => updateSettings("page.height", "fit")}
           color={isPageHeightFit ? "primary" : "default"}
           isDisabled={settings.page.mode === "longstrip"}
@@ -40,7 +40,7 @@ export const ReaderSidebarSettingsPageHeight = () => {
         </Button>
         <Button
           className={rightButton()}
-          endContent={<ScrollTextIcon size={20} />}
+          endContent={<UnfoldVerticalIcon size={20} />}
           onPress={() => updateSettings("page.height", "full")}
           color={isPageHeightFit ? "default" : "primary"}
           isDisabled={settings.page.mode === "longstrip"}
