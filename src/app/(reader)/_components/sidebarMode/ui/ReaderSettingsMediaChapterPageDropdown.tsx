@@ -26,7 +26,7 @@ const readerSettingsMediaChapterPageDropdown = tv({
     dropdownMenu:
       "scrollbar-track-content3 scrollbar-thumb-rounded-none max-h-[300px] overflow-y-scroll p-2 scrollbar-thin scrollbar-thumb-primary",
     textContainer: "flex flex-col text-left",
-    textDescription: "pagination text-default-500 text-xs",
+    textDescription: "chapter-currentPage text-default-500 text-xs",
   },
 });
 

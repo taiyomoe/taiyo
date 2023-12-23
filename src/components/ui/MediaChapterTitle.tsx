@@ -20,7 +20,7 @@ export const MediaChapterTitle = ({ className }: Props) => {
   return (
     <Link
       className={cn(
-        "media-name truncate underline-offset-2 hover:underline",
+        "media-title truncate underline-offset-2 hover:underline",
         className,
       )}
       href={`/media/${chapter.media.id}`}
