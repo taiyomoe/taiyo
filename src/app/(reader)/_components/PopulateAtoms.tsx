@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 
 import type { MediaChapterLimited } from "~/lib/types";
@@ -14,17 +14,17 @@ type Props = {
 export const PopulateAtoms = ({ mediaChapter }: Props) => {
   const pathname = usePathname();
   const { currentPageNumber } = MediaChapterUtils.parseUrl(pathname);
+  const loaded = useRef(false);
 
-  const { load, unload } = useReaderStore();
+  const { load } = useReaderStore();
 
   useEffect(() => {
-    load(mediaChapter, currentPageNumber, mediaChapter.media.type);
-
-    return () => {
-      unload();
-    };
+    if (!loaded.current) {
+      load(mediaChapter, currentPageNumber);
+      loaded.current = true;
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [load, unload]);
+  }, []);
 
   return null;
 };
