@@ -1,7 +1,7 @@
 import { NavbarAuth } from "~/components/navbar/NavbarAuth";
 import type { LayoutProps } from "~/lib/types";
 
-import { ReaderSidebarLayout } from "./_components/sidebarMode/layout/ReaderSidebarLayout";
+import { ReaderSidebarLayout } from "./_components/readerSidebar/layout/ReaderSidebarLayout";
 import { ReaderSidebarOpenOverlay } from "./chapter/[chapterId]/_components/ReaderSidebarOpenOverlay";
 
 export default function Layout({ children }: LayoutProps) {
