@@ -4,7 +4,7 @@ import { Divider } from "@nextui-org/divider";
 import { tv } from "tailwind-variants";
 
 import { useDevice } from "~/hooks/useDevice";
-import { useReaderStore } from "~/stores";
+import { useReaderSettingsStore } from "~/stores";
 
 import { ReaderSidebarSettingsSection } from "../sections/ReaderSidebarSettingsSection";
 import { ReaderSidebarUploadersSection } from "../sections/ReaderSidebarUploadersSection";
@@ -55,7 +55,7 @@ const readerSidebarLayout = tv({
 });
 
 export const ReaderSidebarLayout = () => {
-  const { state, side } = useReaderStore((state) => state.settings.sidebar);
+  const { state, side } = useReaderSettingsStore((state) => state.sidebar);
   const { isMobile } = useDevice();
 
   const slots = readerSidebarLayout({ isMobile, side });

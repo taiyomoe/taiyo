@@ -9,7 +9,7 @@ import { UserLibrary } from "~/components/library/UserLibrary";
 import { MediaSearch } from "~/components/navbar/search/MediaSearch";
 import { CompanyLogo } from "~/components/ui/CompanyLogo";
 import { useDevice } from "~/hooks/useDevice";
-import { useReaderStore } from "~/stores";
+import { useReaderSettingsStore } from "~/stores";
 
 import { NavbarBorder } from "./NavbarBorder";
 import { ReaderSidebarOpenButton } from "./ReaderSidebarOpenButton";
@@ -57,7 +57,7 @@ type Props = {
 };
 
 export const Navbar = ({ popover }: Props) => {
-  const { sidebar, navbarMode } = useReaderStore((state) => state.settings);
+  const { sidebar, navbarMode } = useReaderSettingsStore();
   const pathname = usePathname();
   const { isAboveTablet } = useDevice();
 

@@ -3,17 +3,17 @@ import { Button } from "@nextui-org/react";
 import { throttle } from "lodash-es";
 import { ChevronsUp } from "lucide-react";
 
-import { useReaderStore } from "~/stores";
+import { useReaderSettingsStore } from "~/stores";
 
 export const MediaChapterPageOverlayScrollButton = () => {
-  const { settings, updateSettings } = useReaderStore();
+  const { page, update } = useReaderSettingsStore();
 
   const handlePress = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   useEffect(() => {
-    if (settings.page.overlay === "hide") {
+    if (page.overlay === "hide") {
       return;
     }
 
@@ -23,9 +23,7 @@ export const MediaChapterPageOverlayScrollButton = () => {
           // wait 500 ms
           await new Promise((resolve) => setTimeout(resolve, 200));
 
-          console.log("hide overlay");
-
-          updateSettings("page.overlay", "hide");
+          update("page.overlay", "hide");
         };
 
         void execute();
@@ -37,7 +35,7 @@ export const MediaChapterPageOverlayScrollButton = () => {
     window.addEventListener("scroll", onScroll);
 
     return () => window.removeEventListener("scroll", onScroll);
-  }, [settings.page.overlay, updateSettings]);
+  }, [page.overlay, update]);
 
   return (
     <Button

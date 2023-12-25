@@ -4,7 +4,7 @@ import { Button, ButtonGroup } from "@nextui-org/button";
 import { FoldHorizontalIcon, UnfoldHorizontalIcon } from "lucide-react";
 import { tv } from "tailwind-variants";
 
-import { useReaderStore } from "~/stores";
+import { useReaderSettingsStore } from "~/stores";
 
 const readerSidebarSettingsPageWidth = tv({
   slots: {
@@ -16,13 +16,10 @@ const readerSidebarSettingsPageWidth = tv({
 });
 
 export const ReaderSidebarSettingsPageWidth = () => {
-  const { settings, updateSettings } = useReaderStore();
+  const { page, update } = useReaderSettingsStore();
 
   const { container, text, leftButton, rightButton } =
     readerSidebarSettingsPageWidth();
-
-  const isPageWidthFull =
-    settings.page.mode !== "longstrip" && settings.page.width === "full";
 
   return (
     <div className={container()}>
@@ -31,9 +28,9 @@ export const ReaderSidebarSettingsPageWidth = () => {
         <Button
           className={leftButton()}
           startContent={<FoldHorizontalIcon size={20} />}
-          onPress={() => updateSettings("page.width", "fit")}
-          color={isPageWidthFull ? "default" : "primary"}
-          isDisabled={settings.page.mode === "longstrip"}
+          onPress={() => update("page.width", "fit", true)}
+          color={page.width === "fit" ? "primary" : "default"}
+          isDisabled={page.mode === "longstrip"}
           radius="sm"
         >
           Limitada
@@ -41,9 +38,9 @@ export const ReaderSidebarSettingsPageWidth = () => {
         <Button
           className={rightButton()}
           endContent={<UnfoldHorizontalIcon size={20} />}
-          onPress={() => updateSettings("page.width", "full")}
-          color={isPageWidthFull ? "primary" : "default"}
-          isDisabled={settings.page.mode === "longstrip"}
+          onPress={() => update("page.width", "full", true)}
+          color={page.width === "full" ? "primary" : "default"}
+          isDisabled={page.mode === "longstrip"}
           radius="sm"
         >
           Livre

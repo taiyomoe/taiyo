@@ -1,20 +1,16 @@
-import _, { omit } from "lodash-es";
+import { omit } from "lodash-es";
 import { create } from "zustand";
 
 import type {
-  InferNestedPaths,
-  InferNestedValues,
   MediaChapterLimited,
   MediaChapterNavigation,
   ReaderImage,
-  ReaderSettings,
 } from "~/lib/types";
 import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils";
 import { MediaChapterImageUtils } from "~/lib/utils/mediaChapterImage.utils";
+import { useReaderSettingsStore } from "~/stores";
 
 type State = {
-  settings: ReaderSettings;
-
   chapter: MediaChapterLimited | null;
   navigation: MediaChapterNavigation | null;
 
@@ -25,13 +21,10 @@ type State = {
   loadedImages: string[];
   images: Record<string, ReaderImage[]>;
 };
+// h-navbar max-h-navbar w-full flex flex-col justify-center z-20 group child:relative !p-0 pr-readerSidebar fixed top-0 child:-top-navbar
+// h-navbar max-h-navbar w-full flex flex-col justify-center z-20 group child:relative pr-readerSidebar fixed top-0 child:-top-navbar
 
 type Actions = {
-  updateSettings: (
-    key: InferNestedPaths<ReaderSettings>,
-    newValue: InferNestedValues<ReaderSettings>,
-  ) => void;
-
   updateNavigation: (newPageNumber: number) => void;
 
   getImages: () => ReaderImage[];
@@ -50,22 +43,6 @@ type Actions = {
 };
 
 export const useReaderStore = create<State & Actions>((set, get) => ({
-  settings: {
-    sidebar: {
-      state: "hide",
-      side: "right",
-      openMode: "button",
-    },
-    navbarMode: "hover",
-    page: {
-      mode: "single",
-      overlay: "hide",
-      height: "fit",
-      width: "fit",
-      brightness: 100,
-    },
-  },
-
   chapter: null,
   navigation: null,
 
@@ -75,38 +52,6 @@ export const useReaderStore = create<State & Actions>((set, get) => ({
 
   loadedImages: [],
   images: {},
-
-  updateSettings: (key, newValue) => {
-    // Load all images on longstrip mode
-    if (key === "page.mode" && newValue === "longstrip") {
-      void get().loadAllImages();
-    }
-
-    set((state) => {
-      const newSettings = structuredClone(state.settings);
-
-      _.set(newSettings, key, newValue);
-
-      // If the user is trying to open the sidebar while the page overlay is open, close the overlay
-      if (key === "sidebar.state" && newValue === "show") {
-        _.set(newSettings, "page.overlay", "hide");
-      }
-
-      // If the user is trying to open the page overlay while the sidebar is open, stop him
-      if (
-        key === "page.overlay" &&
-        newValue === "show" &&
-        state.settings.sidebar.state === "show"
-      ) {
-        return state;
-      }
-
-      return {
-        ...state,
-        settings: newSettings,
-      };
-    });
-  },
 
   updateNavigation: (newPageNumber) => {
     get().updateImages(newPageNumber);
@@ -213,8 +158,9 @@ export const useReaderStore = create<State & Actions>((set, get) => ({
    * Of course, it will not load images that are already loaded.
    */
   updateImages: (newPageNumber) => {
-    const { settings, chapter, loadedImages, images, loadImageBatch } = get();
+    const { chapter, loadedImages, images, loadImageBatch } = get();
     const chapterImages = images[chapter?.id ?? ""];
+    const settings = useReaderSettingsStore.getState();
 
     if (settings.page.mode === "longstrip" || !chapter || !chapterImages) {
       return;
@@ -232,7 +178,8 @@ export const useReaderStore = create<State & Actions>((set, get) => ({
   },
 
   load: (chapter, initialPageNumber) => {
-    const { settings, updateSettings, updateNavigation } = get();
+    const { updateNavigation } = get();
+    const settings = useReaderSettingsStore.getState();
     const navigation = initialPageNumber
       ? MediaChapterUtils.getNavigation(chapter, initialPageNumber)
       : null;
@@ -250,9 +197,14 @@ export const useReaderStore = create<State & Actions>((set, get) => ({
         : { ...state.images, [chapter.id]: [] },
     }));
 
-    if (chapter.media.type === "MANHWA" && settings.page.mode !== "longstrip") {
-      updateSettings("page.mode", "longstrip");
-    } else {
+    settings.update("sidebar.state", "hide");
+    settings.update("page.overlay", "hide");
+
+    if (chapter.media.type === "MANHWA") {
+      settings.update("page.mode", "longstrip");
+    }
+
+    if (settings.page.mode !== "longstrip") {
       updateNavigation(initialPageNumber ?? 1);
     }
   },

@@ -4,7 +4,7 @@ import { Button, ButtonGroup } from "@nextui-org/button";
 import { PanelLeftOpenIcon, PanelRightOpenIcon } from "lucide-react";
 import { tv } from "tailwind-variants";
 
-import { useReaderStore } from "~/stores";
+import { useReaderSettingsStore } from "~/stores";
 
 const readerSidebarSettingsSide = tv({
   slots: {
@@ -16,7 +16,7 @@ const readerSidebarSettingsSide = tv({
 });
 
 export const ReaderSidebarSettingsSide = () => {
-  const { settings, updateSettings } = useReaderStore();
+  const { sidebar, update } = useReaderSettingsStore();
 
   const { container, text, leftButton, rightButton } =
     readerSidebarSettingsSide();
@@ -28,8 +28,8 @@ export const ReaderSidebarSettingsSide = () => {
         <Button
           className={leftButton()}
           startContent={<PanelLeftOpenIcon size={20} />}
-          onPress={() => updateSettings("sidebar.side", "left")}
-          color={settings.sidebar.side === "left" ? "primary" : "default"}
+          onPress={() => update("sidebar.side", "left", true)}
+          color={sidebar.side === "left" ? "primary" : "default"}
           radius="sm"
         >
           Esquerda
@@ -37,8 +37,8 @@ export const ReaderSidebarSettingsSide = () => {
         <Button
           className={rightButton()}
           endContent={<PanelRightOpenIcon size={20} />}
-          onPress={() => updateSettings("sidebar.side", "right")}
-          color={settings.sidebar.side === "right" ? "primary" : "default"}
+          onPress={() => update("sidebar.side", "right", true)}
+          color={sidebar.side === "right" ? "primary" : "default"}
           radius="sm"
         >
           Direita

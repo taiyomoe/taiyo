@@ -1,12 +1,13 @@
 import { Spinner } from "@nextui-org/react";
 
 import { useChapterProgression } from "~/hooks/useChapterProgression";
-import { useReaderStore } from "~/stores";
+import { useReaderSettingsStore, useReaderStore } from "~/stores";
 
 import { MediaChapterImage } from "./MediaChapterImage";
 
 export const MediaChapterImages = () => {
-  const { settings, currentPageNumber, getImages } = useReaderStore();
+  const { currentPageNumber, getImages } = useReaderStore();
+  const { page } = useReaderSettingsStore();
   const images = getImages();
   const currentImage = images.find((img) => img.number === currentPageNumber);
 
@@ -29,7 +30,7 @@ export const MediaChapterImages = () => {
             key={img.blobUrl}
             url={img.blobUrl}
             hide={
-              settings.page.mode === "single"
+              page.mode === "single"
                 ? currentImage?.number !== img.number
                 : false
             }

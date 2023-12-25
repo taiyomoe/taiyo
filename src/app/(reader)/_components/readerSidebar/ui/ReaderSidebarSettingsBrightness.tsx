@@ -1,10 +1,9 @@
 "use client";
 
-import type { SliderValue } from "@nextui-org/slider";
 import { Slider } from "@nextui-org/slider";
 import { tv } from "tailwind-variants";
 
-import { useReaderStore } from "~/stores";
+import { useReaderSettingsStore } from "~/stores";
 
 const readerSidebarSettingsBrightness = tv({
   slots: {
@@ -16,21 +15,17 @@ const readerSidebarSettingsBrightness = tv({
 });
 
 export const ReaderSidebarSettingsBrightness = () => {
-  const { settings, updateSettings } = useReaderStore();
+  const { page, update } = useReaderSettingsStore();
 
   const { container, text } = readerSidebarSettingsBrightness();
-
-  const handleChange = (value: SliderValue) => {
-    updateSettings("page.brightness", Number(value));
-  };
 
   return (
     <div className={container()}>
       <p className={text()}>Brilho</p>
       <Slider
         className="max-w-md"
-        onChange={handleChange}
-        defaultValue={settings.page.brightness}
+        onChange={(v) => update("page.brightness", Number(v), true)}
+        defaultValue={page.brightness}
         maxValue={100}
         minValue={0}
         size="sm"

@@ -4,15 +4,13 @@ import { MediaChapterPageOverlayScrollButton } from "~/app/(reader)/_components/
 import { ReaderSidebarOpenButton } from "~/components/navbar/ReaderSidebarOpenButton";
 import { useDevice } from "~/hooks/useDevice";
 import { MediaUtils } from "~/lib/utils/media.utils";
-import { useReaderStore } from "~/stores";
+import { useReaderSettingsStore, useReaderStore } from "~/stores";
 
 import { ReaderSettingsMediaChapterDropdown } from "./readerSidebar/ui/ReaderSettingsMediaChapterDropdown";
 
 export const MediaChapterPageOverlay = () => {
-  const {
-    settings: { page },
-    chapter,
-  } = useReaderStore();
+  const { page } = useReaderSettingsStore();
+  const { chapter } = useReaderStore();
   const { isAboveTablet } = useDevice();
 
   if (page.mode === "single" || isAboveTablet || !chapter) {

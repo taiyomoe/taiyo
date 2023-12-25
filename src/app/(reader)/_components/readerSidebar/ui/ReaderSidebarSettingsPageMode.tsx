@@ -4,7 +4,8 @@ import { Button, ButtonGroup } from "@nextui-org/button";
 import { FileIcon, ScrollTextIcon } from "lucide-react";
 import { tv } from "tailwind-variants";
 
-import { useReaderStore } from "~/stores";
+import type { ReaderSettings } from "~/lib/types";
+import { useReaderSettingsStore } from "~/stores";
 
 const readerSidebarSettingsPageMode = tv({
   slots: {
@@ -16,10 +17,24 @@ const readerSidebarSettingsPageMode = tv({
 });
 
 export const ReaderSidebarSettingsPageMode = () => {
-  const { settings, updateSettings } = useReaderStore();
+  const { page, update, reset } = useReaderSettingsStore();
 
   const { container, text, leftButton, rightButton } =
     readerSidebarSettingsPageMode();
+
+  const handlePress = (mode: ReaderSettings["page"]["mode"]) => () => {
+    if (mode === "single") {
+      update("page.mode", "single", true);
+      reset("page.height");
+      reset("page.width");
+
+      return;
+    }
+
+    update("page.mode", "longstrip", true);
+    update("page.height", "full");
+    update("page.width", "fit");
+  };
 
   return (
     <div className={container()}>
@@ -28,8 +43,8 @@ export const ReaderSidebarSettingsPageMode = () => {
         <Button
           className={leftButton()}
           startContent={<FileIcon size={20} />}
-          onPress={() => updateSettings("page.mode", "single")}
-          color={settings.page.mode === "single" ? "primary" : "default"}
+          onPress={handlePress("single")}
+          color={page.mode === "single" ? "primary" : "default"}
           radius="sm"
         >
           Única
@@ -37,8 +52,8 @@ export const ReaderSidebarSettingsPageMode = () => {
         <Button
           className={rightButton()}
           endContent={<ScrollTextIcon size={20} />}
-          onPress={() => updateSettings("page.mode", "longstrip")}
-          color={settings.page.mode === "longstrip" ? "primary" : "default"}
+          onPress={handlePress("longstrip")}
+          color={page.mode === "longstrip" ? "primary" : "default"}
           radius="sm"
         >
           Cascata
