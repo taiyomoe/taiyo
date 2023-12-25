@@ -65,7 +65,12 @@ export const useChapterUpload = () => {
       resetForm();
 
       void setFieldValue("mediaId", values.mediaId);
-      void setFieldValue("number", values.number + 1);
+      void setFieldValue(
+        "number",
+        Number.isInteger(values.number)
+          ? values.number + 1
+          : values.number + 0.5,
+      );
       void setFieldValue("volume", values.volume);
       void setFieldValue("scanIds", values.scanIds);
 

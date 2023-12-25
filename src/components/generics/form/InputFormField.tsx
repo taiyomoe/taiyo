@@ -58,11 +58,12 @@ export const InputFormField = ({
   });
 
   const rawValue = field.value as string | undefined;
-  const value = rawValue
-    ? rest.type === "date"
-      ? DateUtils.formatToInputValue(new Date(rawValue))
-      : rawValue
-    : "";
+  const value =
+    rawValue !== undefined
+      ? rest.type === "date"
+        ? DateUtils.formatToInputValue(new Date(rawValue))
+        : rawValue
+      : "";
 
   return (
     <div className={cn(container(), className)}>
