@@ -21,6 +21,7 @@ export const useChapterNavigation = () => {
       window.history.pushState({}, "", `${rawPathname}/${newPageNumber}`);
       setPageNumber(newPageNumber);
       updateNavigation(newPageNumber);
+      window.scrollTo(0, 0);
     },
     [chapter, rawPathname, updateNavigation],
   );
