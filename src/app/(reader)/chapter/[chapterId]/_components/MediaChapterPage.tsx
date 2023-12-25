@@ -8,7 +8,7 @@ import { MediaChapterPageOverlay } from "~/app/(reader)/_components/MediaChapter
 import { useChapterNavigation } from "~/hooks/useChapterNavigation";
 import { useDevice } from "~/hooks/useDevice";
 import { useKeyPress } from "~/hooks/useKeyPress";
-import { useReaderStore } from "~/stores";
+import { useReaderSettingsStore } from "~/stores";
 
 import { MediaChapterImages } from "./MediaChapterImages";
 
@@ -63,12 +63,10 @@ const mediaChapterPage = tv({
 export const MediaChapterPage = () => {
   const { isAboveTablet } = useDevice();
   const {
-    settings: {
-      navbarMode,
-      page: { mode, overlay, width },
-    },
-    updateSettings,
-  } = useReaderStore();
+    navbarMode,
+    page: { mode, overlay, width },
+    update,
+  } = useReaderSettingsStore();
   const { goBack, goForward } = useChapterNavigation();
 
   const slots = mediaChapterPage({ navbarMode, mode, width });
@@ -91,27 +89,19 @@ export const MediaChapterPage = () => {
       const windowWidth = window.innerWidth;
       const screenSide = clickX < windowWidth / 2 ? "left" : "right";
 
-      console.log(e.pageY);
-
       if (!isAboveTablet && mode === "longstrip") {
-        updateSettings("page.overlay", overlay === "show" ? "hide" : "show");
+        update("page.overlay", overlay === "show" ? "hide" : "show");
 
-        console.log("show menu");
-        // show menu
         return;
       }
 
       if (screenSide === "left") {
-        console.log("go back");
-
         return goBack();
       }
 
-      console.log("go forward");
-
       goForward();
     },
-    [goBack, goForward, isAboveTablet, mode, overlay, updateSettings],
+    [goBack, goForward, isAboveTablet, mode, overlay, update],
   );
 
   useKeyPress("ArrowLeft", handleKeyPress);

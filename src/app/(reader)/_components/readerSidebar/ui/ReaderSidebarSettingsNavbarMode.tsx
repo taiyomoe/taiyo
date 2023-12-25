@@ -1,7 +1,8 @@
 import { Button, ButtonGroup } from "@nextui-org/button";
 import { tv } from "tailwind-variants";
 
-import { useReaderStore } from "~/stores";
+import { useDevice } from "~/hooks/useDevice";
+import { useReaderSettingsStore } from "~/stores";
 
 const readerSidebarSettingsNavbarMode = tv({
   slots: {
@@ -12,7 +13,8 @@ const readerSidebarSettingsNavbarMode = tv({
 });
 
 export const ReaderSidebarSettingsNavbarMode = () => {
-  const { settings, updateSettings } = useReaderStore();
+  const { navbarMode, update } = useReaderSettingsStore();
+  const { isAboveTablet } = useDevice();
 
   const { container, text, button } = readerSidebarSettingsNavbarMode();
 
@@ -22,22 +24,23 @@ export const ReaderSidebarSettingsNavbarMode = () => {
       <ButtonGroup fullWidth radius="sm" color="primary">
         <Button
           className={button()}
-          onPress={() => updateSettings("navbarMode", "fixed")}
-          color={settings.navbarMode === "fixed" ? "primary" : "default"}
+          onPress={() => update("navbarMode", "fixed", true)}
+          color={navbarMode === "fixed" ? "primary" : "default"}
         >
           Fixa
         </Button>
         <Button
           className={button()}
-          onPress={() => updateSettings("navbarMode", "sticky")}
-          color={settings.navbarMode === "sticky" ? "primary" : "default"}
+          onPress={() => update("navbarMode", "sticky", true)}
+          color={navbarMode === "sticky" ? "primary" : "default"}
         >
           Sempre
         </Button>
         <Button
           className={button()}
-          onPress={() => updateSettings("navbarMode", "hover")}
-          color={settings.navbarMode === "hover" ? "primary" : "default"}
+          onPress={() => update("navbarMode", "hover", true)}
+          color={navbarMode === "hover" ? "primary" : "default"}
+          isDisabled={!isAboveTablet}
         >
           Foco
         </Button>

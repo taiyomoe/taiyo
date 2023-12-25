@@ -3,7 +3,7 @@
 import { tv } from "tailwind-variants";
 
 import { SidebarIcon } from "~/components/icons/SidebarIcon";
-import { useReaderStore } from "~/stores";
+import { useReaderSettingsStore } from "~/stores";
 
 const readerSidebarOpenOverlay = tv({
   slots: {
@@ -31,14 +31,14 @@ const readerSidebarOpenOverlay = tv({
 });
 
 export const ReaderSidebarOpenOverlay = () => {
-  const { settings, updateSettings } = useReaderStore();
+  const { sidebar, update } = useReaderSettingsStore();
 
   const { container, button, accent, text } = readerSidebarOpenOverlay({
-    hide: settings.sidebar.state === "show",
-    side: settings.sidebar.side,
+    hide: sidebar.state === "show",
+    side: sidebar.side,
   });
 
-  if (settings.sidebar.openMode === "button") {
+  if (sidebar.openMode === "button") {
     return null;
   }
 
@@ -46,11 +46,11 @@ export const ReaderSidebarOpenOverlay = () => {
     <div className={container()}>
       <button
         className={button()}
-        onClick={() => updateSettings("sidebar.state", "show")}
+        onClick={() => update("sidebar.state", "show")}
       >
         <span className={accent()} />
         <p className={text()}>Abrir sidebar</p>
-        <SidebarIcon action="open" side={settings.sidebar.side} size={32} />
+        <SidebarIcon action="open" side={sidebar.side} size={32} />
       </button>
     </div>
   );

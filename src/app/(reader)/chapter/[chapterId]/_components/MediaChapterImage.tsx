@@ -1,6 +1,6 @@
 import { tv } from "@nextui-org/react";
 
-import { useReaderStore } from "~/stores";
+import { useReaderSettingsStore } from "~/stores";
 
 type Props = {
   url: string;
@@ -57,7 +57,7 @@ export const MediaChapterImage = ({ url, hide }: Props) => {
   const {
     navbarMode,
     page: { mode, height, width, brightness },
-  } = useReaderStore(({ settings }) => settings);
+  } = useReaderSettingsStore();
 
   const base = mediaChapterImage({ hide, navbarMode, mode, height, width });
 
