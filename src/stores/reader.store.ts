@@ -59,6 +59,7 @@ export const useReaderStore = create<State & Actions>((set, get) => ({
     navbarMode: "hover",
     page: {
       mode: "single",
+      overlay: "hide",
       height: "fit",
       width: "fit",
       brightness: 100,
@@ -85,6 +86,20 @@ export const useReaderStore = create<State & Actions>((set, get) => ({
       const newSettings = structuredClone(state.settings);
 
       _.set(newSettings, key, newValue);
+
+      // If the user is trying to open the sidebar while the page overlay is open, close the overlay
+      if (key === "sidebar.state" && newValue === "show") {
+        _.set(newSettings, "page.overlay", "hide");
+      }
+
+      // If the user is trying to open the page overlay while the sidebar is open, stop him
+      if (
+        key === "page.overlay" &&
+        newValue === "show" &&
+        state.settings.sidebar.state === "show"
+      ) {
+        return state;
+      }
 
       return {
         ...state,

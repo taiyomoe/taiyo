@@ -1,15 +1,16 @@
 "use client";
 
-import type { KeyboardEventHandler } from "react";
-import { useRef } from "react";
+import type { KeyboardEventHandler, MouseEventHandler } from "react";
+import { useCallback } from "react";
 import { tv } from "tailwind-variants";
 
-// import { useChapterNavigation } from "~/hooks/useChapterNavigation";
+import { MediaChapterPageOverlay } from "~/app/(reader)/_components/MediaChapterPageOverlay";
+import { useChapterNavigation } from "~/hooks/useChapterNavigation";
+import { useDevice } from "~/hooks/useDevice";
 import { useKeyPress } from "~/hooks/useKeyPress";
 import { useReaderStore } from "~/stores";
 
 import { MediaChapterImages } from "./MediaChapterImages";
-import { MediaChapterPageActions } from "./MediaChapterPageActions";
 
 const mediaChapterPage = tv({
   slots: {
@@ -60,45 +61,68 @@ const mediaChapterPage = tv({
 });
 
 export const MediaChapterPage = () => {
+  const { isAboveTablet } = useDevice();
   const {
-    navbarMode,
-    page: { mode, width },
-  } = useReaderStore((state) => state.settings);
-  // const { goBack, goForward } = useChapterNavigation();
-  const backButtonRef = useRef<HTMLButtonElement>(null);
-  const forwardButtonRef = useRef<HTMLButtonElement>(null);
+    settings: {
+      navbarMode,
+      page: { mode, overlay, width },
+    },
+    updateSettings,
+  } = useReaderStore();
+  const { goBack, goForward } = useChapterNavigation();
 
   const slots = mediaChapterPage({ navbarMode, mode, width });
 
   const handleKeyPress: KeyboardEventHandler = (e) => {
-    if (e.key === "ArrowLeft") {
-      return backButtonRef.current?.click();
+    if (mode === "longstrip") {
+      return;
     }
 
-    forwardButtonRef.current?.click();
+    if (e.key === "ArrowLeft") {
+      return goBack();
+    }
+
+    goForward();
   };
+
+  const handleContainerClick: MouseEventHandler<HTMLDivElement> = useCallback(
+    (e) => {
+      const clickX = e.clientX;
+      const windowWidth = window.innerWidth;
+      const screenSide = clickX < windowWidth / 2 ? "left" : "right";
+
+      console.log(e.pageY);
+
+      if (!isAboveTablet && mode === "longstrip") {
+        updateSettings("page.overlay", overlay === "show" ? "hide" : "show");
+
+        console.log("show menu");
+        // show menu
+        return;
+      }
+
+      if (screenSide === "left") {
+        console.log("go back");
+
+        return goBack();
+      }
+
+      console.log("go forward");
+
+      goForward();
+    },
+    [goBack, goForward, isAboveTablet, mode, overlay, updateSettings],
+  );
 
   useKeyPress("ArrowLeft", handleKeyPress);
   useKeyPress("ArrowRight", handleKeyPress);
 
   return (
-    <div className={slots.container()}>
+    <div className={slots.container()} onClick={handleContainerClick}>
+      <MediaChapterPageOverlay />
       <div className={slots.imagesWrapper()}>
-        {/* <button
-          className={slots.navigationButton({ className: "left-0" })}
-          style={{ WebkitTapHighlightColor: "transparent" }}
-          ref={backButtonRef}
-          onClick={goBack}
-        /> */}
         <MediaChapterImages />
-        {/* <button
-          className={slots.navigationButton({ className: "right-0" })}
-          style={{ WebkitTapHighlightColor: "transparent" }}
-          ref={forwardButtonRef}
-          onClick={goForward}
-        /> */}
       </div>
-      <MediaChapterPageActions />
     </div>
   );
 };

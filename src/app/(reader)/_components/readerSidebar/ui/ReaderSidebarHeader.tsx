@@ -6,7 +6,7 @@ import { tv } from "tailwind-variants";
 import { SidebarIcon } from "~/components/icons/SidebarIcon";
 import { useReaderStore } from "~/stores";
 
-import { ReaderSidebarMediaTitle } from "../ui/ReaderSidebarMediaTitle";
+import { ReaderSidebarMediaTitle } from "./ReaderSidebarMediaTitle";
 
 const readerSidebarHeader = tv({
   slots: {

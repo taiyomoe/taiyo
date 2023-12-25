@@ -81,6 +81,7 @@ export type ReaderSettings = {
   navbarMode: "fixed" | "sticky" | "hover";
   page: {
     mode: "single" | "longstrip";
+    overlay: "show" | "hide";
     height: "fit" | "full";
     width: "fit" | "full";
     brightness: number;
