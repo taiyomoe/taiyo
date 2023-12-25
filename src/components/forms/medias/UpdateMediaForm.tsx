@@ -6,7 +6,7 @@ import { toFormikValidationSchema } from "zod-formik-adapter";
 
 import { Form } from "~/components/generics/form/Form";
 import type { UpdateMediaSchema } from "~/lib/schemas";
-import { insertMediaSchema } from "~/lib/schemas";
+import { updateMediaSchema } from "~/lib/schemas";
 import { api } from "~/lib/trpc/client";
 import { ObjectUtils } from "~/lib/utils/object.utils";
 
@@ -20,7 +20,7 @@ export const UpdateMediaForm = ({ initialValues }: Props) => {
   const { mutateAsync } = api.medias.update.useMutation();
   const handleSubmit: FormikConfig<UpdateMediaSchema>["onSubmit"] = (
     values,
-    { setSubmitting },
+    helpers,
   ) => {
     const delta = ObjectUtils.deepDifference(values, initialValues);
     const payload = {
@@ -32,10 +32,14 @@ export const UpdateMediaForm = ({ initialValues }: Props) => {
 
     toast.promise(mutateAsync(payload), {
       loading: "Salvando alterações...",
-      success: "Alterações salvas com sucesso!",
+      success: () => {
+        helpers.resetForm({ values });
+
+        return "Alterações salvas com sucesso!";
+      },
       error: "Não foi possível salvar as alterações.",
       finally: () => {
-        setSubmitting(false);
+        helpers.setSubmitting(false);
       },
     });
   };
@@ -43,7 +47,7 @@ export const UpdateMediaForm = ({ initialValues }: Props) => {
   return (
     <Form.Component
       initialValues={initialValues}
-      validationSchema={toFormikValidationSchema(insertMediaSchema)}
+      validationSchema={toFormikValidationSchema(updateMediaSchema)}
       onSubmit={handleSubmit}
     >
       <MediaFormFields action="update" />
