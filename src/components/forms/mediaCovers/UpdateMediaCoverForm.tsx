@@ -50,7 +50,7 @@ export const UpdateMediaCoverForm = ({ media, cover }: Props) => {
 
   const handleSubmit: FormikConfig<UpdateMediaCoverSchema>["onSubmit"] = (
     values,
-    { setSubmitting },
+    helpers,
   ) => {
     const delta = ObjectUtils.deepDifference(values, initialValues);
     const payload = {
@@ -63,12 +63,13 @@ export const UpdateMediaCoverForm = ({ media, cover }: Props) => {
       success: () => {
         updateCover(payload);
         onOpenChange();
+        helpers.resetForm({ values });
 
         return "Alterações salvas com sucesso!";
       },
       error: "Não foi possível salvar as alterações.",
       finally: () => {
-        setSubmitting(false);
+        helpers.setSubmitting(false);
       },
     });
   };

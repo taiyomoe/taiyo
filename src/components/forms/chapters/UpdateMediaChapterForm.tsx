@@ -43,11 +43,14 @@ export const UpdateMediaChapterForm = ({ chapter }: Props) => {
 
     toast.promise(mutateAsync(payload), {
       loading: "Salvando alterações...",
-      success: "Alterações salvas com sucesso!",
+      success: () => {
+        helpers.resetForm({ values });
+
+        return "Alterações salvas com sucesso!";
+      },
       error: "Não foi possível salvar as alterações.",
       finally: () => {
         helpers.setSubmitting(false);
-        helpers.resetForm({ values });
       },
     });
   };
