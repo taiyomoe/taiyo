@@ -7,6 +7,7 @@ import type {
   ReaderSettings,
 } from "~/lib/types";
 import { usePersistentReaderSettingsStore } from "~/stores/persistentReaderSettings.store";
+import { useReaderStore } from "~/stores/reader.store";
 
 type Actions = {
   update: (
@@ -52,6 +53,10 @@ export const useReaderSettingsStore = create<ReaderSettings & Actions>(
           state.sidebar.state === "show"
         ) {
           return state;
+        }
+
+        if (key === "page.mode" && newValue === "longstrip") {
+          useReaderStore.getState().loadAllImages();
         }
 
         if (persistent) {
