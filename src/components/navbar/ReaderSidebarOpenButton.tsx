@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { Button } from "@nextui-org/button";
 
 import { useReaderSettingsStore, useReaderStore } from "~/stores";
@@ -7,10 +8,16 @@ import { useReaderSettingsStore, useReaderStore } from "~/stores";
 import { SidebarIcon } from "../icons/SidebarIcon";
 
 export const ReaderSidebarOpenButton = () => {
+  const pathname = usePathname();
   const { chapter } = useReaderStore();
   const { sidebar, update } = useReaderSettingsStore();
 
-  if (!chapter || sidebar.openMode === "hover" || sidebar.state === "show") {
+  if (
+    !pathname.includes("/chapter/") ||
+    !chapter ||
+    sidebar.openMode === "hover" ||
+    sidebar.state === "show"
+  ) {
     return null;
   }
 
