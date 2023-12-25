@@ -21,8 +21,6 @@ type State = {
   loadedImages: string[];
   images: Record<string, ReaderImage[]>;
 };
-// h-navbar max-h-navbar w-full flex flex-col justify-center z-20 group child:relative !p-0 pr-readerSidebar fixed top-0 child:-top-navbar
-// h-navbar max-h-navbar w-full flex flex-col justify-center z-20 group child:relative pr-readerSidebar fixed top-0 child:-top-navbar
 
 type Actions = {
   updateNavigation: (newPageNumber: number) => void;
