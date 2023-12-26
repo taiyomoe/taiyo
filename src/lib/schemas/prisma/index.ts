@@ -422,8 +422,8 @@ export const MediaChapterSchema = z.object({
   updatedAt: z.coerce.date(),
   deletedAt: z.coerce.date().nullable(),
   title: z.string().nullable(),
-  number: z.number().int(),
-  volume: z.number().int().nullable(),
+  number: z.number(),
+  volume: z.number().nullable(),
   /**
    * [MediaChapterPage]
    */

@@ -266,8 +266,8 @@ model MediaChapter {
     deletedAt DateTime?
 
     title         String?
-    number        Int
-    volume        Int?
+    number        Float
+    volume        Float?
     language      Languages
     /// [MediaChapterPage]
     pages         Json[]
