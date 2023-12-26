@@ -7,7 +7,7 @@
     --background: #f0f0f5;
     --foreground: 0 0% 3.9%;
 
-    --primary: #ff4f4f;
+    --primary: 0 100% 65.49%;
     --primary-foreground: 0 0% 98%;
 
     --secondary: #383842;
@@ -35,12 +35,6 @@
   .dark {
     --background: #16161a;
     --foreground: 0 0% 98%;
-
-    --primary: #ff4f4f;
-    --primary-foreground: 0 0% 98%;
-
-    --secondary: #383842;
-    --secondary-foreground: 0 0% 98%;
 
     --content1: #27272a; /* zinc-800 */
     --content1-foreground: 0 0% 98%;
