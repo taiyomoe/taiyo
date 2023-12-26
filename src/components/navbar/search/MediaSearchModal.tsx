@@ -2,6 +2,7 @@ import {
   Modal,
   ModalBody,
   ModalContent,
+  ModalHeader,
   useDisclosure,
 } from "@nextui-org/modal";
 import { Button } from "@nextui-org/react";
@@ -17,7 +18,7 @@ export const MediaSearchModal = () => {
       <Button
         className="bg-transparent"
         startContent={<SearchIcon />}
-        onPress={onOpen}
+        onClick={onOpen}
         isIconOnly
       />
       <Modal
@@ -28,8 +29,15 @@ export const MediaSearchModal = () => {
         hideCloseButton
       >
         <ModalContent className="m-4 p-4 shadow-none">
+          <ModalHeader className="drop-shadow-accent justify-center px-0 text-center text-4xl font-bold">
+            Pesquisar
+          </ModalHeader>
           <ModalBody className="p-0">
-            <MediaSearchAutocomplete itemsHrefPrefix="/media" />
+            <MediaSearchAutocomplete
+              itemsHrefPrefix="/media"
+              className="w-full"
+              allowsCustomValue
+            />
           </ModalBody>
         </ModalContent>
       </Modal>
