@@ -83,7 +83,9 @@ export const env = createEnv({
     // Soketi
     NEXT_PUBLIC_SOKETI_HOST: z.string(),
     NEXT_PUBLIC_SOKETI_PORT: z.coerce.number(),
-    NEXT_PUBLIC_SOKETI_APP_KEY: z.string(),
+    NEXT_PUBLIC_SOKETI_APP_KEY: z
+      .string()
+      .transform((v) => (process.env.SKIP_ENV_VALIDATION ? v ?? "" : v)), // just so it doesn't throw an error at build time
   },
 
   /**
