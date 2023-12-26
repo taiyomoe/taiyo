@@ -34,6 +34,7 @@ COPY package-lock.json .
 COPY prisma/ .
 
 RUN npm i
+RUN npm run db:migrate deploy
 
 COPY . .
 
