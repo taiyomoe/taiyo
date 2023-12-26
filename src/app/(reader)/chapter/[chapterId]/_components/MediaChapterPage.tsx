@@ -89,7 +89,11 @@ export const MediaChapterPage = () => {
       const windowWidth = window.innerWidth;
       const screenSide = clickX < windowWidth / 2 ? "left" : "right";
 
-      if (!isAboveTablet && mode === "longstrip") {
+      if (mode === "longstrip") {
+        return;
+      }
+
+      if (!isAboveTablet) {
         update("page.overlay", overlay === "show" ? "hide" : "show");
 
         return;
