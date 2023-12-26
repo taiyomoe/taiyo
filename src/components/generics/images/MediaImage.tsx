@@ -10,26 +10,24 @@ type Props = {
   maxWidth: number
   src: string
   alt: string
+  isZoomed?: boolean
 }
 
-export const MediaImage = (props: Props) => (
-  <Image
-    as={NextImage}
-    src={props.src}
-    classNames={{
-      wrapper: cn(
-        "!max-w-full z-0",
-        props.classNames?.width,
-        props.classNames?.wrapper,
-      ),
-      img: cn(
-        "w-full object-cover",
-        props.classNames?.height,
-        props.classNames?.img,
-      ),
-    }}
-    height={props.maxHeight}
-    width={props.maxWidth}
-    alt={props.alt}
-  />
-)
+export const MediaImage = (props: Props) => {
+  const { src, classNames, maxHeight, maxWidth, ...rest } = props
+
+  return (
+    <Image
+      as={NextImage}
+      src={src}
+      classNames={{
+        wrapper: cn("!max-w-full z-0", classNames?.width, classNames?.wrapper),
+        img: cn("w-full object-cover", classNames?.height, classNames?.img),
+        zoomedWrapper: classNames?.height,
+      }}
+      height={maxHeight}
+      width={maxWidth}
+      {...rest}
+    />
+  )
+}
