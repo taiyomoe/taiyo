@@ -23,7 +23,7 @@ services:
     ports:
       - "$MEILISEARCH_PORT:7700"
     volumes:
-      - "./data/meilisearch:/data.ms"
+      - "./data/meilisearch:/meili_data"
 
   soketi:
     container_name: soketi
