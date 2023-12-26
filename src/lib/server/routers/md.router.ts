@@ -139,7 +139,7 @@ export const mdRouter = createTRPCRouter({
         await ctx.db.mediaCover.create({
           data: {
             id: uploadCover.files[0]!,
-            volume: isNaN(parseFloat(cover.volume))
+            volume: Number.isNaN(parseFloat(cover.volume))
               ? null
               : parseFloat(cover.volume),
             isMainCover: mainCover.id === cover.id,

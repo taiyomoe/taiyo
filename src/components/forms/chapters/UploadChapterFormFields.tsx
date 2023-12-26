@@ -56,7 +56,7 @@ export const UploadChapterFormFields = () => {
           <div className="flex flex-col gap-3">
             {selectedImages.map((f, i) => (
               <ImageCard
-                key={i}
+                key={f.name}
                 file={f}
                 position={`${i + 1}/${selectedImages.length}`}
               />

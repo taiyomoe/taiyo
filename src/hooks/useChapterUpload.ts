@@ -25,9 +25,9 @@ export const useChapterUpload = () => {
       const formData = new FormData()
       formData.append("type", "CHAPTER")
 
-      selectedImage.forEach((file) => {
+      for (const file of selectedImage) {
         formData.append("file", file)
-      })
+      }
 
       const response = await fetch(MediaChapterUtils.getUploadEndpoint(), {
         method: "POST",

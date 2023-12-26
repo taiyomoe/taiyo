@@ -24,18 +24,22 @@ const sort = <T extends MediaLimited["titles"] | MediaTitle[]>(titles: T) => {
 
     if (langAIndex === -1 && langBIndex !== -1) {
       return 1
-    } else if (langAIndex !== -1 && langBIndex === -1) {
+    }
+
+    if (langAIndex !== -1 && langBIndex === -1) {
       return -1
-    } else if (langAIndex === -1 && langBIndex === -1) {
+    }
+
+    if (langAIndex === -1 && langBIndex === -1) {
       return 0
     }
 
     if (langAIndex !== langBIndex) {
       return langAIndex - langBIndex
-    } else {
-      // If languages are the same, sort by priority
-      return b.priority - a.priority
     }
+
+    // If languages are the same, sort by priority
+    return b.priority - a.priority
   }
 
   return titles.sort(customSort) as T

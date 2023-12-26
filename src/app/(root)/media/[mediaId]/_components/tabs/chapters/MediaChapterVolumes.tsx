@@ -39,10 +39,10 @@ export const MediaChapterVolumes = ({
               content: "flex flex-col gap-4",
             }}
           >
-            {groups.map((group, i) => (
+            {groups.map((group) => (
               <div key={group.number} className="flex flex-col gap-1">
                 <h3 className="text-sm">Capítulo {group.number}</h3>
-                <MediaChapterGroupCard key={i} group={group} />
+                <MediaChapterGroupCard key={group.number} group={group} />
               </div>
             ))}
           </AccordionItem>

@@ -41,10 +41,9 @@ export const SwipeableTrendingMedias = ({ medias }: Props) => (
     }}
     modules={[Pagination, FreeMode, Mousewheel]}
   >
-    {medias.map((media, i) => (
-      <SwiperSlide key={i}>
+    {medias.map((media) => (
+      <SwiperSlide key={media.id}>
         <Link
-          key={i}
           href={`/media/${media.id}`}
           className="relative hover:cursor-pointer"
           passHref

@@ -9,16 +9,17 @@ type Props = {
 export const MediaChapterGroupCard = ({ group }: Props) => {
   const computeChapterOrder = (chapterIndex: number) => {
     if (group.chapters.length === 1) return "unique"
-    else if (chapterIndex === 0) return "first"
-    else if (chapterIndex === group.chapters.length - 1) return "last"
-    else return "middle"
+    if (chapterIndex === 0) return "first"
+    if (chapterIndex === group.chapters.length - 1) return "last"
+
+    return "middle"
   }
 
   return (
     <div>
       {group.chapters.map((chapter, i) => (
         <MediaChapterCardTemporary
-          key={i}
+          key={chapter.id}
           chapter={chapter}
           order={computeChapterOrder(i)}
         />

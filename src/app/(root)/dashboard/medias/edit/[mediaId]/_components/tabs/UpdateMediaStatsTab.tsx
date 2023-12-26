@@ -4,6 +4,11 @@ type Props = {
   media: MediaWithRelations
 }
 
-export const UpdateMediaStatsTab = ({}: Props) => {
-  return <div>Stats</div>
+export const UpdateMediaStatsTab = ({ media }: Props) => {
+  return (
+    <div>
+      <p>Stats</p>
+      {JSON.stringify(media)}
+    </div>
+  )
 }

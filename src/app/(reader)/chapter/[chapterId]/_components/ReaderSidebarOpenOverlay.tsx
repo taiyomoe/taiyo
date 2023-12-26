@@ -47,6 +47,7 @@ export const ReaderSidebarOpenOverlay = () => {
       <button
         className={button()}
         onClick={() => update("sidebar.state", "show")}
+        type="button"
       >
         <span className={accent()} />
         <p className={text()}>Abrir sidebar</p>

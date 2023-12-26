@@ -71,6 +71,7 @@ export const MediaChapterPageOverlay = () => {
     }
   })
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: when the navbar mode changes, we want to recompute the top container top
   useEffect(() => {
     computeTopContainerTop(window.scrollY)
   }, [computeTopContainerTop, navbarMode])

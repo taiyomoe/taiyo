@@ -30,7 +30,7 @@ export const GuestPopover = () => {
             <Button
               className="absolute inset-x-0 z-0 mx-4 p-0 opacity-30 blur-lg saturate-150 filter"
               color="primary"
-            ></Button>
+            />
           </div>
         </div>
       </PopoverContent>
