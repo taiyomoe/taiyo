@@ -13,7 +13,7 @@ type Props = {
 const mediaChapterUploader = tv({
   slots: {
     container: "flex w-full items-center",
-    icon: "w-fit",
+    icon: "w-auto",
     skeleton: "grow",
     link: "hover:bg-content3 select-none px-2",
   },

@@ -1,13 +1,12 @@
 "use client";
 
-import { useEffect } from "react";
 import { Button, ButtonGroup } from "@nextui-org/button";
 import { MousePointer2Icon } from "lucide-react";
 import { tv } from "tailwind-variants";
 
 import { SidebarIcon } from "~/components/icons/SidebarIcon";
 import { useDevice } from "~/hooks/useDevice";
-import { useReaderStore } from "~/stores";
+import { useReaderSettingsStore } from "~/stores";
 
 const readerSidebarSettingsOpenMode = tv({
   slots: {
@@ -19,17 +18,11 @@ const readerSidebarSettingsOpenMode = tv({
 });
 
 export const ReaderSidebarSettingsOpenMode = () => {
-  const { settings, updateSettings } = useReaderStore();
-  const { isMobile } = useDevice();
+  const { sidebar, update } = useReaderSettingsStore();
+  const { isAboveTablet } = useDevice();
 
   const { container, text, leftButton, rightButton } =
     readerSidebarSettingsOpenMode();
-
-  useEffect(() => {
-    if (isMobile && settings.sidebar.openMode === "hover") {
-      updateSettings("sidebar.openMode", "button");
-    }
-  }, [isMobile, settings.sidebar.openMode, updateSettings]);
 
   return (
     <div className={container()}>
@@ -38,11 +31,11 @@ export const ReaderSidebarSettingsOpenMode = () => {
         <Button
           className={leftButton()}
           startContent={
-            <SidebarIcon action="open" side={settings.sidebar.side} size={20} />
+            <SidebarIcon action="open" side={sidebar.side} size={20} />
           }
-          color={settings.sidebar.openMode === "button" ? "primary" : "default"}
-          onPress={() => updateSettings("sidebar.openMode", "button")}
-          isDisabled={isMobile}
+          onPress={() => update("sidebar.openMode", "button", true)}
+          color={sidebar.openMode === "button" ? "primary" : "default"}
+          isDisabled={!isAboveTablet}
           radius="sm"
         >
           Botão
@@ -50,9 +43,9 @@ export const ReaderSidebarSettingsOpenMode = () => {
         <Button
           className={rightButton()}
           endContent={<MousePointer2Icon size={20} />}
-          onPress={() => updateSettings("sidebar.openMode", "hover")}
-          color={settings.sidebar.openMode === "hover" ? "primary" : "default"}
-          isDisabled={isMobile}
+          onPress={() => update("sidebar.openMode", "hover", true)}
+          color={sidebar.openMode === "hover" ? "primary" : "default"}
+          isDisabled={!isAboveTablet}
           radius="sm"
         >
           Foco

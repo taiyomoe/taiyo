@@ -6,7 +6,7 @@ const NotFound = () => {
   return (
     <div className="flex h-screen select-none flex-col">
       <NavbarAuth />
-      <div className="flex grow flex-col items-center justify-center gap-16">
+      <div className="mx-bodyPadding flex grow flex-col items-center justify-center gap-16">
         <Image
           src="/illustrations/not_found.svg"
           width={0}

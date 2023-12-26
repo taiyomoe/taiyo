@@ -46,7 +46,7 @@ export const UpdateMediaTitlesForm = ({ title }: Props) => {
 
   const handleSubmit: FormSubmit<UpdateMediaTitleSchema> = (
     values,
-    { setSubmitting },
+    helpers,
   ) => {
     const delta = ObjectUtils.deepDifference(values, initalValues);
     const payload = {
@@ -60,6 +60,7 @@ export const UpdateMediaTitlesForm = ({ title }: Props) => {
         updateTitle(payload);
         onOpen();
         onOpenChange();
+        helpers.resetForm({ values });
 
         return "Alterações salvas com sucesso!";
       },
@@ -70,7 +71,9 @@ export const UpdateMediaTitlesForm = ({ title }: Props) => {
 
         return "Ocorreu um erro inesperado ao salvar as alterações.";
       },
-      finally: () => setSubmitting(false),
+      finally: () => {
+        helpers.setSubmitting(false);
+      },
     });
   };
 

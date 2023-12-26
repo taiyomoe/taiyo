@@ -50,7 +50,7 @@ export const useChapterUpload = () => {
 
   const handleSubmit: FormikConfig<InsertMediaChapterFormSchema>["onSubmit"] = (
     values,
-    { resetForm, setFieldValue, setSubmitting },
+    helpers,
   ) => {
     const upload = async () => {
       const { mediaChapterId, authToken } = await startUploadSession({
@@ -61,26 +61,31 @@ export const useChapterUpload = () => {
       const { files: filesId } = await uploadImages({ authToken });
 
       await createChapter({ ...values, id: mediaChapterId, pages: filesId });
-
-      resetForm();
-
-      void setFieldValue("mediaId", values.mediaId);
-      void setFieldValue("number", values.number + 1);
-      void setFieldValue("volume", values.volume);
-      void setFieldValue("scanIds", values.scanIds);
-
-      reset("CHAPTER");
     };
 
     toast.promise(upload, {
       loading: "Upando o capítulo...",
-      success: "Capítulo upado!",
+      success: () => {
+        const newNumberValue = Number.isInteger(values.number)
+          ? values.number + 1
+          : values.number + 0.5;
+
+        helpers.resetForm();
+        void helpers.setFieldValue("mediaId", values.mediaId);
+        void helpers.setFieldValue("number", newNumberValue);
+        void helpers.setFieldValue("volume", values.volume);
+        void helpers.setFieldValue("scanIds", values.scanIds);
+
+        reset("CHAPTER");
+
+        return "Capítulo upado!";
+      },
       error: (err) =>
         err instanceof TRPCClientError
           ? err.message
           : "Ocorreu um erro ao upar o capítulo",
       finally: () => {
-        setSubmitting(false);
+        helpers.setSubmitting(false);
       },
     });
   };

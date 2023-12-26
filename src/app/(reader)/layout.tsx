@@ -1,15 +1,15 @@
 import { NavbarAuth } from "~/components/navbar/NavbarAuth";
 import type { LayoutProps } from "~/lib/types";
 
-import { ReaderSidebarLayout } from "./_components/sidebarMode/layout/ReaderSidebarLayout";
+import { ReaderSidebarLayout } from "./_components/readerSidebar/layout/ReaderSidebarLayout";
 import { ReaderSidebarOpenOverlay } from "./chapter/[chapterId]/_components/ReaderSidebarOpenOverlay";
 
 export default function Layout({ children }: LayoutProps) {
   return (
-    <div className="flex grow flex-col">
+    <div className="flex min-h-screen grow flex-col">
       <NavbarAuth />
       <ReaderSidebarOpenOverlay />
-      <div className="-mt-[var(--navbar-height)] grid h-full min-h-screen w-full grid-cols-mediaChapter overflow-x-clip grid-areas-mediaChapter">
+      <div className="grid h-full min-h-reader w-full grow grid-cols-mediaChapter overflow-x-clip grid-areas-mediaChapter">
         {children}
         <ReaderSidebarLayout />
       </div>

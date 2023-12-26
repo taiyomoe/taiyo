@@ -4,9 +4,9 @@ import { Button } from "@nextui-org/button";
 import { tv } from "tailwind-variants";
 
 import { SidebarIcon } from "~/components/icons/SidebarIcon";
-import { useReaderStore } from "~/stores";
+import { useReaderSettingsStore } from "~/stores";
 
-import { ReaderSidebarMediaTitle } from "../ui/ReaderSidebarMediaTitle";
+import { ReaderSidebarMediaTitle } from "./ReaderSidebarMediaTitle";
 
 const readerSidebarHeader = tv({
   slots: {
@@ -27,15 +27,12 @@ const readerSidebarHeader = tv({
 });
 
 export const ReaderSidebarHeader = () => {
-  const { settings, updateSettings } = useReaderStore();
+  const { sidebar, update } = useReaderSettingsStore();
 
-  const slots = readerSidebarHeader({ side: settings.sidebar.side });
+  const slots = readerSidebarHeader({ side: sidebar.side });
 
   const handlePress = () => {
-    updateSettings(
-      "sidebar.state",
-      settings.sidebar.state === "show" ? "hide" : "show",
-    );
+    update("sidebar.state", sidebar.state === "show" ? "hide" : "show");
   };
 
   return (
@@ -43,7 +40,7 @@ export const ReaderSidebarHeader = () => {
       <ReaderSidebarMediaTitle className={slots.text()} />
       <Button
         startContent={
-          <SidebarIcon action="close" side={settings.sidebar.side} size={20} />
+          <SidebarIcon action="close" side={sidebar.side} size={20} />
         }
         onPress={handlePress}
         size="sm"

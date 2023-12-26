@@ -3,10 +3,10 @@ import { LibraryIcon } from "lucide-react";
 import { useSession } from "next-auth/react";
 
 import { UserLibrarySidebar } from "~/components/library/UserLibrarySidebar";
-import { useLibraryStore, useReaderStore } from "~/stores";
+import { useLibraryStore, useReaderSettingsStore } from "~/stores";
 
 export const UserLibrary = () => {
-  const { settings, updateSettings } = useReaderStore();
+  const { sidebar, update } = useReaderSettingsStore();
   const { toggleSidebar } = useLibraryStore();
   const { data: session } = useSession();
 
@@ -15,8 +15,8 @@ export const UserLibrary = () => {
   const handlePress = () => {
     toggleSidebar();
 
-    if (settings.sidebar.state === "show") {
-      updateSettings("sidebar.state", "hide");
+    if (sidebar.state === "show") {
+      update("sidebar.state", "hide");
     }
   };
 

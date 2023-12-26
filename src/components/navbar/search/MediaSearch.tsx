@@ -3,11 +3,11 @@ import { MediaSearchModal } from "~/components/navbar/search/MediaSearchModal";
 import { useDevice } from "~/hooks/useDevice";
 
 export const MediaSearch = () => {
-  const { isMobile } = useDevice();
+  const { isAboveLaptop } = useDevice();
 
-  if (isMobile) {
-    return <MediaSearchModal />;
+  if (isAboveLaptop) {
+    return <MediaSearchAutocomplete itemsHrefPrefix={"/media"} />;
   }
 
-  return <MediaSearchAutocomplete itemsHrefPrefix={"/media"} />;
+  return <MediaSearchModal />;
 };
