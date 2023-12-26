@@ -1,22 +1,36 @@
-import { useEffect } from "react";
 import { useSession } from "next-auth/react";
 
 import { api } from "~/lib/trpc/client";
 import { useReaderStore } from "~/stores";
 
 export const useChapterProgression = () => {
-  const { chapter, currentPageNumber } = useReaderStore();
+  const { chapter } = useReaderStore();
   const { mutate } = api.history.updateProgression.useMutation();
   const { status } = useSession();
 
-  useEffect(() => {
-    const currentPageId = chapter?.pages[(currentPageNumber ?? 0) - 1]?.id;
+  const onPageUpdate = (newCurrentPageNumber: number) => {
+    if (status !== "authenticated" || !chapter) return;
 
-    if (!currentPageId || status !== "authenticated") return;
+    const newCurrentPageId = chapter.pages[(newCurrentPageNumber ?? 0) - 1]?.id;
 
     mutate({
       chapterId: chapter.id,
-      pageId: currentPageId,
+      pageId: newCurrentPageId,
+      completed: newCurrentPageNumber === chapter.pages.length,
     });
-  }, [chapter?.id, chapter?.pages, currentPageNumber, mutate, status]);
+  };
+
+  const onNextChapter = () => {
+    if (status !== "authenticated" || !chapter) return;
+
+    mutate({
+      chapterId: chapter.id,
+      completed: true,
+    });
+  };
+
+  return {
+    onPageUpdate,
+    onNextChapter,
+  };
 };

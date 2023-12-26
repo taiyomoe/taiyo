@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 
+import { useChapterProgression } from "~/hooks/useChapterProgression";
 import { MediaUtils } from "~/lib/utils/media.utils";
 import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils";
 import { useReaderStore } from "~/stores";
@@ -12,6 +13,7 @@ export const useChapterNavigation = () => {
     MediaChapterUtils.parseUrl(pathname);
 
   const { chapter, navigation, updateNavigation } = useReaderStore();
+  const { onPageUpdate, onNextChapter } = useChapterProgression();
   const [pageNumber, setPageNumber] = useState(initialPageNumber);
 
   const goTo = useCallback(
@@ -21,9 +23,10 @@ export const useChapterNavigation = () => {
       window.history.pushState({}, "", `${rawPathname}/${newPageNumber}`);
       setPageNumber(newPageNumber);
       updateNavigation(newPageNumber);
+      onPageUpdate(newPageNumber);
       window.scrollTo(0, 0);
     },
-    [chapter, rawPathname, updateNavigation],
+    [chapter, rawPathname, updateNavigation, onPageUpdate],
   );
 
   const goBack = useCallback(() => {
@@ -31,15 +34,13 @@ export const useChapterNavigation = () => {
       return;
     }
 
-    /**
-     * Go to the previous page, if there is one.
-     */
+    // Go to the previous page, if there is one.
     if (navigation.previousPage) {
       return goTo(navigation.previousPage);
     }
 
     /**
-     * If there is no previous page but here is a previous chapter,
+     * If there's no previous page but there's a previous chapter,
      * then we should go to the previous chapter.
      */
     if (chapter.previousChapter) {
@@ -58,18 +59,17 @@ export const useChapterNavigation = () => {
       return;
     }
 
-    /**
-     * Go to the next page, if there is one.
-     */
+    // Go to the next page, if there is one.
     if (navigation.nextPage) {
       return goTo(navigation.nextPage);
     }
 
     /**
-     * If there is no next page but here is a next chapter,
+     * If there's no next page but there's a next chapter,
      * then we should go to the next chapter.
      */
     if (chapter.nextChapter) {
+      onNextChapter();
       return router.push(MediaChapterUtils.getUrl(chapter.nextChapter));
     }
 
@@ -78,7 +78,7 @@ export const useChapterNavigation = () => {
      * then we should return to the media page.
      */
     return router.push(MediaUtils.getUrl(chapter.media));
-  }, [chapter, goTo, navigation, pageNumber, router]);
+  }, [chapter, goTo, navigation, onNextChapter, pageNumber, router]);
 
   /**
    * If the page number in the URL is invalid (either negative or too high),
