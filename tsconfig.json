@@ -24,7 +24,6 @@
     "typeRoots": ["./node_modules/@types", "./src/lib/types"]
   },
   "include": [
-    ".eslintrc.cjs",
     "**/*.cjs",
     "**/*.mjs",
     "**/*.ts",
