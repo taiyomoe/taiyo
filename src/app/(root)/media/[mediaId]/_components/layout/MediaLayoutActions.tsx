@@ -6,6 +6,8 @@ import { AddToUserLibraryButton } from "~/components/library/AddToUserLibraryBut
 import { SignedIn } from "~/components/utils/SignedIn"
 import type { MediaLimited } from "~/lib/types"
 
+import { MediaChapterUploadPageButton } from "../ui/MediaChapterUploadPageButton"
+
 type Props = {
   media: MediaLimited
 }
@@ -27,6 +29,9 @@ export const MediaLayoutActions = ({ media }: Props) => {
             radius="sm"
             isIconOnly
           />
+        </SignedIn>
+        <SignedIn requiredPermissions={["mediaChapters:create"]}>
+          <MediaChapterUploadPageButton media={media} />
         </SignedIn>
       </div>
     </div>
