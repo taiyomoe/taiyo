@@ -29,10 +29,9 @@ export const SwipeableLatestMedias = ({ medias }: Props) => (
       enabled: false,
     }}
   >
-    {medias.map((media, i) => (
-      <SwiperSlide key={i} className="!w-fit md:!w-auto">
+    {medias.map((media) => (
+      <SwiperSlide key={media.id} className="!w-fit md:!w-auto">
         <Link
-          key={i}
           href={`/media/${media.id}`}
           className="relative hover:cursor-pointer"
           passHref

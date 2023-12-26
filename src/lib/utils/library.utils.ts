@@ -63,20 +63,20 @@ const deleteEntry = (
   userLibrary: UserLibrary | LibraryState,
   mediaId: string,
 ) => {
-  ;[
+  for (const list of [
     userLibrary.reading,
     userLibrary.rereading,
     userLibrary.planToRead,
     userLibrary.completed,
     userLibrary.onHold,
     userLibrary.dropped,
-  ].forEach((list) => {
+  ]) {
     const index = list.findIndex((m) =>
       "id" in m ? m.id === mediaId : m.mediaId === mediaId,
     )
 
     if (index !== -1) list.splice(index, 1)
-  })
+  }
 }
 
 export const LibraryUtils = {

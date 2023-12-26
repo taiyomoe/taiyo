@@ -43,7 +43,7 @@ export const UploadMediaCoversFormFields = () => {
       {({ selectedImages }) => (
         <List className="gap-4">
           {selectedImages.map((file, i) => (
-            <div key={i} className="flex gap-2">
+            <div key={file.name} className="flex gap-2">
               <img
                 className="h-[300px] w-[210px] rounded-medium object-cover"
                 src={URL.createObjectURL(file)}

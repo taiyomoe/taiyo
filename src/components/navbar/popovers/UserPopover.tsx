@@ -40,7 +40,7 @@ export const UserPopover = ({ session }: Props) => {
           <SignedIn requiredRole="ADMIN">
             <Button
               as={NextLink}
-              href={`/dashboard`}
+              href={"/dashboard"}
               className="justify-end gap-3 p-2 text-medium font-medium"
               endContent={<GaugeIcon />}
               variant="light"

@@ -111,7 +111,7 @@ const getGenresAndTags = (manga: Manga) => {
   let isOneShot = false
 
   // Tags list as of December 4th, 2023
-  manga.tags.forEach((tag) => {
+  for (const tag of manga.tags) {
     switch (tag.name) {
       case "4-Koma":
         tags.push("FOUR_KOMA")
@@ -272,6 +272,8 @@ const getGenresAndTags = (manga: Manga) => {
       // case "Official Colored":
       case "Oneshot":
         isOneShot = true
+        break
+
       case "Philosophical":
         tags.push("PHILOSOPHY")
         break
@@ -373,7 +375,7 @@ const getGenresAndTags = (manga: Manga) => {
         tags.push("ZOMBIE")
         break
     }
-  })
+  }
 
   return { genres, tags, isOneShot }
 }
@@ -389,15 +391,15 @@ const getTitles = (manga: Manga) => {
     isMainTitle: true,
   })
 
-  manga.localizedAltTitles.forEach((title) => {
-    title.availableLocales.forEach((l) => {
+  for (const title of manga.localizedAltTitles) {
+    for (const l of title.availableLocales) {
       rawTitles.push({
         title: title.data[l]!,
         language: getLanguage(l),
         isMainTitle: false,
       })
-    })
-  })
+    }
+  }
 
   for (const title of rawTitles) {
     const titlesWithSameLanguage = rawTitles.filter(

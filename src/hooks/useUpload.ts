@@ -10,9 +10,9 @@ export const useUpload = () => {
   const upload = async (authToken: string, type: UploadSessionType) => {
     const formData = new FormData()
 
-    getImages(type).forEach((file) => {
+    for (const file of getImages(type)) {
       formData.append("file", file)
-    })
+    }
 
     const response = await fetch(MediaChapterUtils.getUploadEndpoint(), {
       method: "POST",

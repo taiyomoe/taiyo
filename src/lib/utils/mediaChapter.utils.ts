@@ -9,14 +9,14 @@ import type {
 } from "~/lib/types"
 
 const getTitle = (mediaChapter: MediaLimitedChapter) => {
-  return mediaChapter.title ?? "Cap. " + mediaChapter.number
+  return mediaChapter.title ?? `Cap. ${mediaChapter.number}`
 }
 
 const getUrl = (mediaChapter: { id: string }) => {
   return `/chapter/${mediaChapter.id}/1`
 }
 
-const getUploadEndpoint = () => env.NEXT_PUBLIC_IO_URL + "/upload"
+const getUploadEndpoint = () => `${env.NEXT_PUBLIC_IO_URL}/upload`
 
 const getNavigation = (
   mediaChapter: MediaChapterLimited,

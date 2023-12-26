@@ -66,13 +66,13 @@ export const ReaderSettingsMediaChapterPageDropdown = () => {
           selectionMode="single"
           aria-label="Páginas"
           onSelectionChange={(keys) => {
-            ;(keys as Set<Key>).forEach((key) => {
+            for (const key of keys as Set<Key>) {
               goTo(parseInt(key.toString().replace("page-", "")))
-            })
+            }
           }}
         >
           {chapter.pages.map((_, i) => (
-            <DropdownItem key={"page-" + (i + 1)} textValue={`Página ${i + 1}`}>
+            <DropdownItem key={`page-${i}${1}`} textValue={`Página ${i + 1}`}>
               Página {i + 1}
             </DropdownItem>
           ))}

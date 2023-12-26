@@ -30,10 +30,9 @@ export const SwipeableFeaturedMedias = ({ medias }: Props) => (
       delay: 10000,
     }}
   >
-    {medias.map((media, i) => (
-      <SwiperSlide key={i}>
+    {medias.map((media) => (
+      <SwiperSlide key={media.id}>
         <Link
-          key={i}
           href={`/media/${media.id}`}
           className="hover:cursor-pointer"
           passHref

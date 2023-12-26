@@ -39,7 +39,7 @@ export const ImageCard = ({ file, position }: Props) => {
       <img
         className={slots.imagePreview()}
         src={URL.createObjectURL(file)}
-        alt={`image preview`}
+        alt="uploaded media preview"
       />
       <div className={slots.contentContainer()}>
         <div className={slots.upperContentContainer()}>

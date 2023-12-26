@@ -10,6 +10,7 @@ import { SwitchFormField } from "~/components/generics/form/SwitchFormField"
 import type { InsertMediaSchema } from "~/lib/schemas"
 
 export const MediaTitlesFormCategory = () => {
+  // biome-ignore lint/correctness/noEmptyPattern: we need to destructure the array
   const [{ value }, {}, { setValue }] = useField<InsertMediaSchema["titles"]>({
     name: "titles",
   })
@@ -50,24 +51,24 @@ export const MediaTitlesFormCategory = () => {
 
   return (
     <Form.Category title="Títulos" actions={categoryActions}>
-      {value.map((_, index) => (
-        <div key={index} className="flex items-center gap-2">
-          <InputFormField name={`titles[${index}].title`} />
+      {value.map((_, i) => (
+        <div key={_.title} className="flex items-center gap-2">
+          <InputFormField name={`titles[${i}].title`} />
           <SelectFormField
-            name={`titles[${index}].language`}
+            name={`titles[${i}].language`}
             items={Languages}
             className="md:w-fit md:min-w-[100px]"
             aria-label="Linguagem do título"
           />
           <InputFormField
-            name={`titles[${index}].priority`}
+            name={`titles[${i}].priority`}
             className="md:w-fit md:min-w-[100px]"
             type="number"
           />
-          <SwitchFormField name={`titles[${index}].isAcronym`} size="lg" />
-          <SwitchFormField name={`titles[${index}].isMainTitle`} size="lg" />
+          <SwitchFormField name={`titles[${i}].isAcronym`} size="lg" />
+          <SwitchFormField name={`titles[${i}].isMainTitle`} size="lg" />
           <Button
-            onPress={() => void handleRemoveTitle(index)}
+            onPress={() => void handleRemoveTitle(i)}
             startContent={<TrashIcon size={20} />}
             isDisabled={value.length === 1}
             color="danger"

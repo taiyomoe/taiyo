@@ -65,7 +65,7 @@ export const MediaChapterImage = ({ url, hide }: Props) => {
     <img
       src={url}
       className={base}
-      alt="image"
+      alt="chapter's page"
       style={{ filter: `brightness(${brightness / 100})` }}
     />
   )

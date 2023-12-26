@@ -197,7 +197,7 @@ export const mediasRouter = createTRPCRouter({
       const results = await ctx.indexes.medias.search(title)
       const searchedMedias: SearchedMedia[] = results.hits.map((h) => ({
         id: h.id,
-        synopsis: h.synopsis ? h.synopsis.slice(0, 100) + "..." : null,
+        synopsis: h.synopsis ? `${h.synopsis.slice(0, 100)}...` : null,
         title: MediaUtils.getMainTitle(
           h.titles,
           ctx.session?.user.preferredTitles ?? null,

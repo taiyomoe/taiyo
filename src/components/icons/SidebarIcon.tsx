@@ -16,9 +16,12 @@ type Props = {
 export const SidebarIcon = ({ action, side, ...rest }: Props) => {
   if (action === "open" && side === "left")
     return <PanelLeftOpenIcon {...rest} />
-  else if (action === "open" && side === "right")
+
+  if (action === "open" && side === "right")
     return <PanelRightOpenIcon {...rest} />
-  else if (action === "close" && side === "left")
+
+  if (action === "close" && side === "left")
     return <PanelLeftCloseIcon {...rest} />
-  else return <PanelRightCloseIcon {...rest} />
+
+  return <PanelRightCloseIcon {...rest} />
 }

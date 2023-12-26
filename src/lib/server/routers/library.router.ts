@@ -88,18 +88,19 @@ export const libraryRouter = createTRPCRouter({
       if (!library) {
         throw new Error("Library not found. This should never happen.")
       }
+
       // Remove the media from all lists
-      ;[
+      for (const list of [
         library.reading,
         library.rereading,
         library.planToRead,
         library.completed,
         library.onHold,
         library.dropped,
-      ].forEach((list) => {
+      ]) {
         const index = list.findIndex((m) => m.mediaId === input.mediaId)
         if (index !== -1) list.splice(index, 1)
-      })
+      }
 
       // Add the media to the correct list
       if (input.status !== "delete") {

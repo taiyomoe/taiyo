@@ -14,8 +14,8 @@ export const RenderImportEventMessage = () => {
 
   return (
     <div className="flex flex-col gap-4">
-      {messagesWithLatestSteps.map((message, i) => (
-        <div key={i} className="flex gap-2">
+      {messagesWithLatestSteps.map((message) => (
+        <div key={message.content} className="flex gap-2">
           {message.type === "ongoing" && (
             <Spinner size="sm" className="min-w-[24px]" />
           )}

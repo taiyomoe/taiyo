@@ -15,11 +15,13 @@ export const useScrollOpacity = ({ min, max }: Props) => {
 
     if (currentScrollPos < min) {
       return 0
-    } else if (currentScrollPos < max) {
-      return (currentScrollPos - min) / (max - min)
-    } else {
-      return 1
     }
+
+    if (currentScrollPos < max) {
+      return (currentScrollPos - min) / (max - min)
+    }
+
+    return 1
   }
 
   const [opacity, setOpacity] = useState(computeOpacity())
