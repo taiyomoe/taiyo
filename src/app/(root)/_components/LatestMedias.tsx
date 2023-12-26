@@ -1,6 +1,6 @@
 import type { LatestMedia } from "~/lib/types"
 
-import { SwipeableLatestMedias } from "./swiper/SwipeableLatestMedias"
+import { SwipeableLatestMedias } from "./swipers/SwipeableLatestMedias"
 
 type Props = {
   latestMedias: LatestMedia[]
