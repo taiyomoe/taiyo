@@ -2,12 +2,16 @@ import { Autocomplete, AutocompleteItem } from "@nextui-org/autocomplete"
 import { useAsyncList } from "@react-stately/data"
 import type { Key } from "@react-types/shared"
 import { useFormikContext } from "formik"
+import { parseAsString, useQueryState } from "next-usequerystate"
+import { useEffect } from "react"
+import { z } from "zod"
 
 import type { InsertMediaChapterFormSchema } from "~/lib/schemas"
 import { api } from "~/lib/trpc/client"
 import type { SearchedMedia } from "~/lib/types"
 
 export const MediasSearchAutocomplete = () => {
+  const [mediaId] = useQueryState("mediaId", parseAsString.withDefault(""))
   const { setFieldValue } = useFormikContext<InsertMediaChapterFormSchema>()
   const { mutateAsync } = api.medias.search.useMutation()
 
@@ -16,6 +20,17 @@ export const MediasSearchAutocomplete = () => {
       if (!filterText) return { items: [] }
 
       const data = await mutateAsync({ title: filterText })
+
+      // This is a hack to make the autocomplete work with the mediaId query param
+      if (z.string().uuid().safeParse(filterText).success && data.length > 0) {
+        void setFieldValue("mediaId", filterText)
+
+        return {
+          items: data,
+          filterText: data.at(0)?.title ?? "",
+          selectedKeys: [filterText],
+        }
+      }
 
       return {
         items: data,
@@ -33,6 +48,11 @@ export const MediasSearchAutocomplete = () => {
     list.removeSelectedItems()
   }
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: this should only run when mediaId changes
+  useEffect(() => {
+    list.setFilterText(mediaId)
+  }, [mediaId])
+
   return (
     <Autocomplete<SearchedMedia>
       inputProps={{
@@ -49,6 +69,7 @@ export const MediasSearchAutocomplete = () => {
       placeholder="Pesquisar..."
       label="Obra"
       labelPlacement="outside-left"
+      isDisabled={!!mediaId}
       fullWidth
     >
       {(item) => (
