@@ -13,6 +13,7 @@
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
     "db:seed": "prisma db push --force-reset && prisma generate && prisma db seed",
+    "db:migrate": "prisma migrate",
     "postinstall": "prisma generate"
   },
   "prisma": {
@@ -51,7 +52,7 @@
     "react-dom": "18.2.0",
     "react-dropzone": "^14.2.3",
     "sharp": "^0.33.1",
-    "sonner": "^1.3.0",
+    "sonner": "^1.3.1",
     "superjson": "^2.2.1",
     "swiper": "^11.0.5",
     "tailwind-merge": "^2.2.0",
