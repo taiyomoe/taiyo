@@ -5,7 +5,7 @@ import { loggerLink, unstable_httpBatchStreamLink } from "@trpc/client"
 import { useState } from "react"
 
 import { api } from "./client"
-import { getUrl, transformer } from "./utils"
+import { getUrl, transformer } from "./shared"
 
 export function TRPCReactProvider(props: {
   children: React.ReactNode

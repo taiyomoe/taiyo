@@ -6,7 +6,6 @@ const config = {
   reactStrictMode: true,
   images: {
     minimumCacheTTL: 300,
-    domains: ["cdn.discordapp.com", "asset.brandfetch.io", "flagcdn.com"],
     remotePatterns: [
       {
         protocol: "https",
@@ -18,10 +17,22 @@ const config = {
         hostname: "pub-**.r2.dev",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "cdn.discordapp.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "asset.brandfetch.io",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "flagcdn.com",
+        pathname: "/**",
+      },
     ],
-  },
-  experimental: {
-    serverActions: true,
   },
 }
 
