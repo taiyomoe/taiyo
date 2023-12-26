@@ -63,10 +63,10 @@ export const SwipeableFeaturedMedias = ({ medias }: Props) => (
               alt="media's cover"
             />
             <div className="flex flex-col gap-4 py-4">
-              <p className="line-clamp-1 pb-1 text-3xl font-bold drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] md:text-left md:text-4xl xl:text-5xl">
+              <p className="drop-shadow-accent line-clamp-1 pb-1 text-3xl font-bold md:text-left md:text-4xl xl:text-5xl">
                 {media.mainTitle}
               </p>
-              <p className="line-clamp-2 italic text-neutral-300 drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">
+              <p className="drop-shadow-accent line-clamp-2 italic text-neutral-300">
                 {media.synopsis}
               </p>
             </div>

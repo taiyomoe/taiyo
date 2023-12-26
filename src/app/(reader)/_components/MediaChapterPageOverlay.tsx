@@ -20,7 +20,7 @@ const mediaChapterPageOverlay = tv({
     bottomContainer:
       "bottom-0 -mb-[100px] flex justify-end gap-4 py-3 data-[show=true]:mb-0",
     title:
-      "line-clamp-1 text-center text-2xl font-semibold drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] hover:underline",
+      "line-clamp-1 text-center text-2xl font-semibold drop-shadow-accent hover:underline",
   },
   variants: {
     navbarMode: {

@@ -51,6 +51,9 @@ export default {
       boxShadow: {
         intense: "12px 25px 100px 62px #000",
       },
+      dropShadow: {
+        accent: "0 1.2px 1.2px rgba(0,0,0,0.8)",
+      },
       gridTemplateAreas: {
         mediaChapter: ["leftSidebar chapter rightSidebar"],
       },
