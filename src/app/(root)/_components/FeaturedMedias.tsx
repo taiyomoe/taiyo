@@ -1,4 +1,4 @@
-import { SwipeableFeaturedMedias } from "~/app/(root)/_components/swiper/SwipeableFeaturedMedias"
+import { SwipeableFeaturedMedias } from "~/app/(root)/_components/swipers/SwipeableFeaturedMedias"
 import type { FeaturedMedia } from "~/lib/types"
 
 type Props = {
