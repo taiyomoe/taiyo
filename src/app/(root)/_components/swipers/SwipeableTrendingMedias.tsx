@@ -31,7 +31,7 @@ export const SwipeableTrendingMedias = ({ medias }: Props) => {
 
   return (
     <div className="overflow-hidden" ref={emblaRef}>
-      <div className="flex flex-col max-h-[498px]">
+      <div className="flex flex-row md:flex-col max-h-[400px] md:max-h-[498px]">
         {medias.map((media, i) => (
           <Link
             key={media.id}
