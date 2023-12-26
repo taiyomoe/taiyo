@@ -1,6 +1,6 @@
 import { tv } from "@nextui-org/react";
 
-import { useReaderStore } from "~/stores";
+import { useReaderSettingsStore } from "~/stores";
 
 type Props = {
   url: string;
@@ -8,25 +8,65 @@ type Props = {
 };
 
 const mediaChapterImage = tv({
-  slots: {
-    image: "object-contain",
-  },
+  base: "my-auto select-none",
   variants: {
     hide: {
-      true: { image: "hidden" },
-      false: { image: "block" },
+      true: "hidden",
+      false: "block",
     },
-    pageMode: {
-      single: { image: "h-full w-full" },
-      longstrip: { image: "h-full w-auto" },
+    navbarMode: {
+      fixed: {},
+      sticky: {},
+      hover: {},
+    },
+    mode: {
+      single: "mx-auto",
+      longstrip: "h-full w-auto",
+    },
+    height: {
+      fit: "",
+      full: "",
+    },
+    width: {
+      fit: "max-w-full object-contain",
+      full: "",
     },
   },
+  compoundVariants: [
+    {
+      navbarMode: ["fixed", "sticky"],
+      mode: "single",
+      height: "fit",
+      className: "max-h-reader",
+    },
+    {
+      navbarMode: ["hover"],
+      mode: "single",
+      height: "fit",
+      className: "max-h-screen",
+    },
+    {
+      mode: "single",
+      width: "full",
+      className: "max-w-[unset]",
+    },
+  ],
 });
 
 export const MediaChapterImage = ({ url, hide }: Props) => {
-  const pageMode = useReaderStore(({ settings }) => settings.pageMode);
+  const {
+    navbarMode,
+    page: { mode, height, width, brightness },
+  } = useReaderSettingsStore();
 
-  const { image } = mediaChapterImage({ hide, pageMode });
+  const base = mediaChapterImage({ hide, navbarMode, mode, height, width });
 
-  return <img src={url} className={image()} alt="image" />;
+  return (
+    <img
+      src={url}
+      className={base}
+      alt="image"
+      style={{ filter: `brightness(${brightness / 100})` }}
+    />
+  );
 };

@@ -8,5 +8,10 @@ export const NavbarBorder = () => {
   const { opacity } = useScrollOpacity({ min: 0, max: 100 });
   useBodyPadding();
 
-  return <span className={cn("h-[1px] bg-primary")} style={{ opacity }} />;
+  return (
+    <span
+      className={cn("h-[1px] bg-primary transition-all group-hover:top-0")}
+      style={{ opacity }}
+    />
+  );
 };

@@ -72,6 +72,21 @@ export type MediaChapterNavigation = {
 };
 
 export type ReaderImage = { number: number; blobUrl: string };
+export type ReaderSettings = {
+  sidebar: {
+    state: "show" | "hide";
+    side: "left" | "right";
+    openMode: "button" | "hover";
+  };
+  navbarMode: "fixed" | "sticky" | "hover";
+  page: {
+    mode: "single" | "longstrip";
+    overlay: "show" | "hide";
+    height: "fit" | "full";
+    width: "fit" | "full";
+    brightness: number;
+  };
+};
 
 const mediaChapterWithRelations =
   Prisma.validator<Prisma.MediaChapterDefaultArgs>()({

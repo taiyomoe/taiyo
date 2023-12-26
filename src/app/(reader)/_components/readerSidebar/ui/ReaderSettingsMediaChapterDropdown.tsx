@@ -14,6 +14,7 @@ import { tv } from "tailwind-variants";
 
 import { BackButton } from "~/components/generics/buttons/BackButton";
 import { ForwardButton } from "~/components/generics/buttons/ForwardButton";
+import { useChapterProgression } from "~/hooks/useChapterProgression";
 import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils";
 import { useReaderStore } from "~/stores";
 
@@ -31,6 +32,7 @@ const readerSettingsMediaChapterDropdown = tv({
 export const ReaderSettingsMediaChapterDropdown = () => {
   const { chapter } = useReaderStore();
   const slots = readerSettingsMediaChapterDropdown();
+  const { onNextChapter } = useChapterProgression();
 
   const backButtonUrl = chapter?.previousChapter
     ? MediaChapterUtils.getUrl(chapter?.previousChapter)
@@ -82,6 +84,7 @@ export const ReaderSettingsMediaChapterDropdown = () => {
         as={Link}
         href={forwardButtonUrl}
         isDisabled={!chapter?.nextChapter}
+        onPress={() => onNextChapter()}
       />
     </div>
   );

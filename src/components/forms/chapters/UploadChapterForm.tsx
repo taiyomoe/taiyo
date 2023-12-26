@@ -12,7 +12,7 @@ import { UploadChapterFormFields } from "./UploadChapterFormFields";
 const initialValues: InsertMediaChapterFormSchema = {
   title: null,
   number: 0,
-  volume: 0,
+  volume: null,
   language: "pt_br",
   pages: [],
   contentRating: "NORMAL",
