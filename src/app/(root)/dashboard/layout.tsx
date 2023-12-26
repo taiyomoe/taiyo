@@ -1,7 +1,7 @@
-import { Sidebar } from "~/components/layout/Sidebar";
-import type { LayoutProps } from "~/lib/types";
+import { Sidebar } from "~/components/layout/Sidebar"
+import type { LayoutProps } from "~/lib/types"
 
-import { DashboardSidebarContent } from "./_components/DashboardSidebarContent";
+import { DashboardSidebarContent } from "./_components/DashboardSidebarContent"
 
 export default function Layout({ children }: LayoutProps) {
   return (
@@ -12,5 +12,5 @@ export default function Layout({ children }: LayoutProps) {
       />
       <div className="w-full overflow-auto p-bodyPadding">{children}</div>
     </div>
-  );
+  )
 }

@@ -1,4 +1,4 @@
-import type { $Enums } from "@prisma/client";
+import type { $Enums } from "@prisma/client"
 
 export const GENRES_PT: Record<$Enums.MediaGenres, string> = {
   ACTION: "Ação",
@@ -20,4 +20,4 @@ export const GENRES_PT: Record<$Enums.MediaGenres, string> = {
   SPORTS: "Esportes",
   SUPERNATURAL: "Sobrenatural",
   THRILLER: "Thriller",
-};
+}

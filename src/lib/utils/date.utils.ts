@@ -1,13 +1,13 @@
-import { DateTime } from "luxon";
+import { DateTime } from "luxon"
 
 const formatToInputValue = (input: Date) => {
-  const dt = DateTime.fromJSDate(input);
+  const dt = DateTime.fromJSDate(input)
 
-  if (!dt.isValid) return "";
+  if (!dt.isValid) return ""
 
-  return dt.toISODate();
-};
+  return dt.toISODate()
+}
 
 export const DateUtils = {
   formatToInputValue,
-};
+}

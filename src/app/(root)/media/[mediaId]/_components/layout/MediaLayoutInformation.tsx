@@ -1,10 +1,10 @@
-import { Link, tv } from "@nextui-org/react";
+import { Link, tv } from "@nextui-org/react"
 
-import { CompanyLogo } from "~/components/ui/CompanyLogo";
-import type { MediaLimited } from "~/lib/types";
-import { TrackerUtils } from "~/lib/utils/tracker.utils";
+import { CompanyLogo } from "~/components/ui/CompanyLogo"
+import type { MediaLimited } from "~/lib/types"
+import { TrackerUtils } from "~/lib/utils/tracker.utils"
 
-type Props = { media: MediaLimited };
+type Props = { media: MediaLimited }
 
 const mediaLayoutInformation = tv({
   slots: {
@@ -13,11 +13,11 @@ const mediaLayoutInformation = tv({
     categoryTitle: "font-semibold text-lg",
     categoryContent: "flex flex-wrap gap-2",
   },
-});
+})
 
 export const MediaLayoutInformation = ({ media }: Props) => {
   const { container, categoryWrapper, categoryTitle, categoryContent } =
-    mediaLayoutInformation();
+    mediaLayoutInformation()
 
   return (
     <div className={container()}>
@@ -43,5 +43,5 @@ export const MediaLayoutInformation = ({ media }: Props) => {
         </div>
       )}
     </div>
-  );
-};
+  )
+}

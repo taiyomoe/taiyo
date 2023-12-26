@@ -1,32 +1,32 @@
-import type { Trackers } from "@prisma/client";
+import type { Trackers } from "@prisma/client"
 
-import type { MediaLimited } from "../types";
+import type { MediaLimited } from "../types"
 
 const getTrackerLabel = (tracker: Trackers) => {
   switch (tracker) {
     case "MANGADEX":
-      return "MangaDex";
+      return "MangaDex"
     case "ANILIST":
-      return "AniList";
+      return "AniList"
     case "MYANIMELIST":
-      return "MyAnimeList";
+      return "MyAnimeList"
   }
-};
+}
 
 const getTrackerUrl = (tracker: MediaLimited["trackers"][number]) => {
   switch (tracker.tracker) {
     case "MANGADEX":
-      return `https://mangadex.org/title/${tracker.externalId}`;
+      return `https://mangadex.org/title/${tracker.externalId}`
     case "ANILIST":
-      return `https://anilist.co/manga/${tracker.externalId}`;
+      return `https://anilist.co/manga/${tracker.externalId}`
     case "MYANIMELIST":
-      return `https://myanimelist.net/manga/${tracker.externalId}`;
+      return `https://myanimelist.net/manga/${tracker.externalId}`
     default:
-      return "";
+      return ""
   }
-};
+}
 
 export const TrackerUtils = {
   getTrackerLabel,
   getTrackerUrl,
-};
+}

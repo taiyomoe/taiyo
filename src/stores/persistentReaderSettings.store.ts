@@ -1,19 +1,19 @@
-import _ from "lodash-es";
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import _ from "lodash-es"
+import { create } from "zustand"
+import { persist } from "zustand/middleware"
 
 import type {
   InferNestedPaths,
   InferNestedValues,
   ReaderSettings,
-} from "~/lib/types";
+} from "~/lib/types"
 
 type Actions = {
   update: (
     key: InferNestedPaths<ReaderSettings>,
     newValue: InferNestedValues<ReaderSettings>,
-  ) => void;
-};
+  ) => void
+}
 
 export const usePersistentReaderSettingsStore = create<
   ReaderSettings & Actions
@@ -36,19 +36,19 @@ export const usePersistentReaderSettingsStore = create<
 
       update: (key, newValue) => {
         set((state) => {
-          const newSettings = structuredClone(_.omit(state, "update"));
+          const newSettings = structuredClone(_.omit(state, "update"))
 
-          _.set(newSettings, key, newValue);
+          _.set(newSettings, key, newValue)
 
           return {
             ...state,
             ...newSettings,
-          };
-        });
+          }
+        })
       },
     }),
     {
       name: "reader-settings",
     },
   ),
-);
+)

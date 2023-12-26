@@ -1,20 +1,20 @@
-"use client";
+"use client"
 
-import Link from "next/link";
-import { Skeleton } from "@nextui-org/skeleton";
+import { Skeleton } from "@nextui-org/skeleton"
+import Link from "next/link"
 
-import { cn } from "~/lib/utils/cn";
-import { useReaderStore } from "~/stores";
+import { cn } from "~/lib/utils/cn"
+import { useReaderStore } from "~/stores"
 
 type Props = {
-  className: string;
-};
+  className: string
+}
 
 export const ReaderSidebarMediaTitle = ({ className }: Props) => {
-  const { chapter } = useReaderStore();
+  const { chapter } = useReaderStore()
 
   if (!chapter) {
-    return <Skeleton className="h-8 w-full rounded-lg" />;
+    return <Skeleton className="h-8 w-full rounded-lg" />
   }
 
   return (
@@ -27,5 +27,5 @@ export const ReaderSidebarMediaTitle = ({ className }: Props) => {
     >
       {chapter.media.title}
     </Link>
-  );
-};
+  )
+}

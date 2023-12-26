@@ -1,8 +1,8 @@
-import { Button, ButtonGroup } from "@nextui-org/button";
-import { tv } from "tailwind-variants";
+import { Button, ButtonGroup } from "@nextui-org/button"
+import { tv } from "tailwind-variants"
 
-import { useDevice } from "~/hooks/useDevice";
-import { useReaderSettingsStore } from "~/stores";
+import { useDevice } from "~/hooks/useDevice"
+import { useReaderSettingsStore } from "~/stores"
 
 const readerSidebarSettingsNavbarMode = tv({
   slots: {
@@ -10,13 +10,13 @@ const readerSidebarSettingsNavbarMode = tv({
     text: "text-md",
     button: "justify-center gap-3",
   },
-});
+})
 
 export const ReaderSidebarSettingsNavbarMode = () => {
-  const { navbarMode, update } = useReaderSettingsStore();
-  const { isAboveTablet } = useDevice();
+  const { navbarMode, update } = useReaderSettingsStore()
+  const { isAboveTablet } = useDevice()
 
-  const { container, text, button } = readerSidebarSettingsNavbarMode();
+  const { container, text, button } = readerSidebarSettingsNavbarMode()
 
   return (
     <div className={container()}>
@@ -46,5 +46,5 @@ export const ReaderSidebarSettingsNavbarMode = () => {
         </Button>
       </ButtonGroup>
     </div>
-  );
-};
+  )
+}

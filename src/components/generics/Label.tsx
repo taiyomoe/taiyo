@@ -1,17 +1,17 @@
-import type { InputProps } from "@nextui-org/react";
-import { tv } from "tailwind-variants";
+import type { InputProps } from "@nextui-org/react"
+import { tv } from "tailwind-variants"
 
-import { cn } from "~/lib/utils/cn";
+import { cn } from "~/lib/utils/cn"
 
 type Props = {
-  label?: string;
-  labelPlacement?: InputProps["labelPlacement"];
-  className?: string;
-  id?: string;
-  children: React.ReactNode;
-};
+  label?: string
+  labelPlacement?: InputProps["labelPlacement"]
+  className?: string
+  id?: string
+  children: React.ReactNode
+}
 
-export type LabelProps = Omit<Props, "children">;
+export type LabelProps = Omit<Props, "children">
 
 const labelVariants = tv({
   slots: {
@@ -35,7 +35,7 @@ const labelVariants = tv({
       },
     },
   },
-});
+})
 
 export const Label = ({
   label,
@@ -47,7 +47,7 @@ export const Label = ({
   const { container, base } = labelVariants({
     hide: label === undefined,
     labelPlacement,
-  });
+  })
 
   return (
     <div className={cn(container(), className)}>
@@ -56,5 +56,5 @@ export const Label = ({
       </label>
       {children}
     </div>
-  );
-};
+  )
+}

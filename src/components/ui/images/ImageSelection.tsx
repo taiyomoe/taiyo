@@ -1,7 +1,7 @@
-import Image from "next/image";
-import { tv } from "@nextui-org/react";
+import { tv } from "@nextui-org/react"
+import Image from "next/image"
 
-type Props = { isCompact?: boolean };
+type Props = { isCompact?: boolean }
 
 const imageSelection = tv({
   slots: {
@@ -17,12 +17,12 @@ const imageSelection = tv({
       },
     },
   },
-});
+})
 
 export const ImageSelection = ({ isCompact }: Props) => {
   const { container, illustration, contentWrapper } = imageSelection({
     isCompact,
-  });
+  })
 
   return (
     <div className={container()}>
@@ -39,5 +39,5 @@ export const ImageSelection = ({ isCompact }: Props) => {
         <p>Arreste-as nesta zona ou clique para selecioná-las.</p>
       </div>
     </div>
-  );
-};
+  )
+}

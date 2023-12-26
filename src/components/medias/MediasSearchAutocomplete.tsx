@@ -1,37 +1,37 @@
-import { Autocomplete, AutocompleteItem } from "@nextui-org/autocomplete";
-import { useAsyncList } from "@react-stately/data";
-import type { Key } from "@react-types/shared";
-import { useFormikContext } from "formik";
+import { Autocomplete, AutocompleteItem } from "@nextui-org/autocomplete"
+import { useAsyncList } from "@react-stately/data"
+import type { Key } from "@react-types/shared"
+import { useFormikContext } from "formik"
 
-import type { InsertMediaChapterFormSchema } from "~/lib/schemas";
-import { api } from "~/lib/trpc/client";
-import type { SearchedMedia } from "~/lib/types";
+import type { InsertMediaChapterFormSchema } from "~/lib/schemas"
+import { api } from "~/lib/trpc/client"
+import type { SearchedMedia } from "~/lib/types"
 
 export const MediasSearchAutocomplete = () => {
-  const { setFieldValue } = useFormikContext<InsertMediaChapterFormSchema>();
-  const { mutateAsync } = api.medias.search.useMutation();
+  const { setFieldValue } = useFormikContext<InsertMediaChapterFormSchema>()
+  const { mutateAsync } = api.medias.search.useMutation()
 
   const list = useAsyncList<SearchedMedia>({
     load: async ({ filterText }) => {
-      if (!filterText) return { items: [] };
+      if (!filterText) return { items: [] }
 
-      const data = await mutateAsync({ title: filterText });
+      const data = await mutateAsync({ title: filterText })
 
       return {
         items: data,
-      };
+      }
     },
-  });
+  })
 
   const handleSelectionChange = (key: Key) => {
-    const item = list.getItem(key);
+    const item = list.getItem(key)
 
-    if (!item) return;
+    if (!item) return
 
-    void setFieldValue("mediaId", item.id);
-    list.setFilterText(item.title);
-    list.removeSelectedItems();
-  };
+    void setFieldValue("mediaId", item.id)
+    list.setFilterText(item.title)
+    list.removeSelectedItems()
+  }
 
   return (
     <Autocomplete<SearchedMedia>
@@ -44,7 +44,6 @@ export const MediasSearchAutocomplete = () => {
       inputValue={list.filterText}
       isLoading={list.isLoading}
       items={list.items}
-      // eslint-disable-next-line @typescript-eslint/unbound-method
       onInputChange={list.setFilterText}
       onSelectionChange={handleSelectionChange}
       placeholder="Pesquisar..."
@@ -56,5 +55,5 @@ export const MediasSearchAutocomplete = () => {
         <AutocompleteItem key={item.id}>{item.title}</AutocompleteItem>
       )}
     </Autocomplete>
-  );
-};
+  )
+}

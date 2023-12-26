@@ -1,4 +1,4 @@
-import { MessageSquareIcon } from "lucide-react";
+import { MessageSquareIcon } from "lucide-react"
 
 export const MediaChapterCardCommentsCount = () => {
   return (
@@ -6,5 +6,5 @@ export const MediaChapterCardCommentsCount = () => {
       <MessageSquareIcon className="h-4 w-fit md:h-5" />
       <p className="select-none rounded px-1 text-sm">X</p>
     </div>
-  );
-};
+  )
+}

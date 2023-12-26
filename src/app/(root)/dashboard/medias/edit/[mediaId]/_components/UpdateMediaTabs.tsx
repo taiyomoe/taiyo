@@ -1,28 +1,28 @@
-"use client";
+"use client"
 
-import { useEffect } from "react";
-import { Tab, Tabs } from "@nextui-org/tabs";
+import { Tab, Tabs } from "@nextui-org/tabs"
+import { useEffect } from "react"
 
-import { UpdateMediaCoversShowcase } from "~/components/forms/mediaCovers/UpdateMediaCoversShowcase";
-import { UploadMediaCoversForm } from "~/components/forms/mediaCovers/UploadMediaCoversForm";
-import { UpdateMediaTitlesShowcase } from "~/components/forms/mediaTitles/update/UpdateMediaTitlesShowcase";
-import type { MediaWithRelations } from "~/lib/types";
-import { useMediaUpdateStore } from "~/stores";
+import { UpdateMediaCoversShowcase } from "~/components/forms/mediaCovers/UpdateMediaCoversShowcase"
+import { UploadMediaCoversForm } from "~/components/forms/mediaCovers/UploadMediaCoversForm"
+import { UpdateMediaTitlesShowcase } from "~/components/forms/mediaTitles/update/UpdateMediaTitlesShowcase"
+import type { MediaWithRelations } from "~/lib/types"
+import { useMediaUpdateStore } from "~/stores"
 
-import { UpdateMediaBannersTab } from "./tabs/UpdateMediaBannersTab";
-import { UpdateMediaInfoTab } from "./tabs/UpdateMediaInfoTab";
-import { UpdateMediaStatsTab } from "./tabs/UpdateMediaStatsTab";
+import { UpdateMediaBannersTab } from "./tabs/UpdateMediaBannersTab"
+import { UpdateMediaInfoTab } from "./tabs/UpdateMediaInfoTab"
+import { UpdateMediaStatsTab } from "./tabs/UpdateMediaStatsTab"
 
 type Props = {
-  media: MediaWithRelations;
-};
+  media: MediaWithRelations
+}
 
 export const UpdateMediaTabs = ({ media }: Props) => {
-  const { load } = useMediaUpdateStore();
+  const { load } = useMediaUpdateStore()
 
   useEffect(() => {
-    load(media);
-  }, [load, media]);
+    load(media)
+  }, [load, media])
 
   return (
     <Tabs
@@ -54,5 +54,5 @@ export const UpdateMediaTabs = ({ media }: Props) => {
         <UpdateMediaStatsTab media={media} />
       </Tab>
     </Tabs>
-  );
-};
+  )
+}

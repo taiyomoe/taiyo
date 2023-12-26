@@ -1,16 +1,16 @@
-import NextImage from "next/image";
-import { Image } from "@nextui-org/image";
-import type { SlotsToClasses } from "@nextui-org/react";
+import { Image } from "@nextui-org/image"
+import type { SlotsToClasses } from "@nextui-org/react"
+import NextImage from "next/image"
 
-import { cn } from "~/lib/utils/cn";
+import { cn } from "~/lib/utils/cn"
 
 type Props = {
-  classNames: SlotsToClasses<"height" | "width" | "wrapper" | "img">;
-  maxHeight: number;
-  maxWidth: number;
-  src: string;
-  alt: string;
-};
+  classNames: SlotsToClasses<"height" | "width" | "wrapper" | "img">
+  maxHeight: number
+  maxWidth: number
+  src: string
+  alt: string
+}
 
 export const MediaImage = (props: Props) => (
   <Image
@@ -32,4 +32,4 @@ export const MediaImage = (props: Props) => (
     width={props.maxWidth}
     alt={props.alt}
   />
-);
+)

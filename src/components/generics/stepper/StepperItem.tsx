@@ -1,11 +1,11 @@
-import { tv } from "@nextui-org/react";
+import { tv } from "@nextui-org/react"
 
 type Props = {
-  number: number;
-  title: string;
-  content?: React.ReactNode;
-  children?: React.ReactNode;
-};
+  number: number
+  title: string
+  content?: React.ReactNode
+  children?: React.ReactNode
+}
 
 const stepperItem = tv({
   slots: {
@@ -15,11 +15,11 @@ const stepperItem = tv({
     title: "text-3xl font-bold mt-1.5",
     content: "flex flex-col gap-6 w-full",
   },
-});
+})
 
 export const StepperItem = (props: Props) => {
-  const { number, title, content, children } = props;
-  const slots = stepperItem();
+  const { number, title, content, children } = props
+  const slots = stepperItem()
 
   return (
     <div className={slots.container()}>
@@ -31,5 +31,5 @@ export const StepperItem = (props: Props) => {
         {content ?? children}
       </div>
     </div>
-  );
-};
+  )
+}

@@ -1,6 +1,6 @@
-import Image from "next/image";
+import Image from "next/image"
 
-import { NavbarAuth } from "~/components/navbar/NavbarAuth";
+import { NavbarAuth } from "~/components/navbar/NavbarAuth"
 
 const NotFound = () => {
   return (
@@ -20,7 +20,7 @@ const NotFound = () => {
         </p>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default NotFound;
+export default NotFound

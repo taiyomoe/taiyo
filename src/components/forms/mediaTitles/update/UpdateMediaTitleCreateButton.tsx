@@ -1,4 +1,4 @@
-import { Button } from "@nextui-org/button";
+import { Button } from "@nextui-org/button"
 import {
   Modal,
   ModalBody,
@@ -6,29 +6,29 @@ import {
   ModalFooter,
   ModalHeader,
   useDisclosure,
-} from "@nextui-org/modal";
-import { TRPCClientError } from "@trpc/client";
-import { PlusIcon } from "lucide-react";
-import { toast } from "sonner";
-import { toFormikValidationSchema } from "zod-formik-adapter";
+} from "@nextui-org/modal"
+import { TRPCClientError } from "@trpc/client"
+import { PlusIcon } from "lucide-react"
+import { toast } from "sonner"
+import { toFormikValidationSchema } from "zod-formik-adapter"
 
-import { MediaTitlesFormFields } from "~/components/forms/mediaTitles/MediaTitlesFormFields";
-import { SubmitButton } from "~/components/generics/buttons/SubmitButton";
-import { Form } from "~/components/generics/form/Form";
-import type { CreateMediaTitleSchema } from "~/lib/schemas";
-import { createMediaTitleSchema } from "~/lib/schemas";
-import { api } from "~/lib/trpc/client";
-import type { FormSubmit } from "~/lib/types";
-import { useMediaUpdateStore } from "~/stores";
+import { MediaTitlesFormFields } from "~/components/forms/mediaTitles/MediaTitlesFormFields"
+import { SubmitButton } from "~/components/generics/buttons/SubmitButton"
+import { Form } from "~/components/generics/form/Form"
+import type { CreateMediaTitleSchema } from "~/lib/schemas"
+import { createMediaTitleSchema } from "~/lib/schemas"
+import { api } from "~/lib/trpc/client"
+import type { FormSubmit } from "~/lib/types"
+import { useMediaUpdateStore } from "~/stores"
 
 type Props = {
-  mediaId: string;
-};
+  mediaId: string
+}
 
 export const UpdateMediaTitleCreateButton = ({ mediaId }: Props) => {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const { mutateAsync } = api.mediaTitles.create.useMutation();
-  const { addTitle } = useMediaUpdateStore();
+  const { isOpen, onOpen, onOpenChange } = useDisclosure()
+  const { mutateAsync } = api.mediaTitles.create.useMutation()
+  const { addTitle } = useMediaUpdateStore()
 
   const initialValues: CreateMediaTitleSchema = {
     title: "",
@@ -37,31 +37,31 @@ export const UpdateMediaTitleCreateButton = ({ mediaId }: Props) => {
     isMainTitle: false,
     isAcronym: false,
     mediaId,
-  };
+  }
 
   const handleSubmit: FormSubmit<CreateMediaTitleSchema> = (values, helper) => {
-    const { setSubmitting } = helper;
+    const { setSubmitting } = helper
 
     toast.promise(mutateAsync(values), {
       loading: "Criando título...",
       success: (createdTitle) => {
-        onOpenChange();
-        addTitle(createdTitle);
+        onOpenChange()
+        addTitle(createdTitle)
 
-        return "Título criado com sucesso.";
+        return "Título criado com sucesso."
       },
       error: (err) => {
         if (err instanceof TRPCClientError) {
-          return err.message;
+          return err.message
         }
 
-        return "Ocorreu um erro inesperado ao criar o título.";
+        return "Ocorreu um erro inesperado ao criar o título."
       },
       finally: () => {
-        setSubmitting(false);
+        setSubmitting(false)
       },
-    });
-  };
+    })
+  }
 
   return (
     <>
@@ -92,5 +92,5 @@ export const UpdateMediaTitleCreateButton = ({ mediaId }: Props) => {
         </Form.Component>
       </Modal>
     </>
-  );
-};
+  )
+}

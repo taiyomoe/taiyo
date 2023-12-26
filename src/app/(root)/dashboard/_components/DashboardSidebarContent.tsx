@@ -1,13 +1,13 @@
-"use client";
+"use client"
 
-import { Accordion, AccordionItem } from "@nextui-org/accordion";
-import { tv } from "tailwind-variants";
+import { Accordion, AccordionItem } from "@nextui-org/accordion"
+import { tv } from "tailwind-variants"
 
-import { DashboardSidebarCRUDButtons } from "./DashboardSidebarCRUDButtons";
+import { DashboardSidebarCRUDButtons } from "./DashboardSidebarCRUDButtons"
 
 type Props = {
-  className?: string;
-};
+  className?: string
+}
 
 const sidebarContent = tv({
   slots: {
@@ -18,11 +18,11 @@ const sidebarContent = tv({
     categoryContent: "ml-4 mr-2",
     categoryItemButton: "text-md justify-end gap-4 px-2 font-medium w-full",
   },
-});
+})
 
 export const DashboardSidebarContent = ({ className }: Props) => {
   const { container, categorytitle, categoryIndicator, categoryContent } =
-    sidebarContent();
+    sidebarContent()
 
   return (
     <Accordion
@@ -103,5 +103,5 @@ export const DashboardSidebarContent = ({ className }: Props) => {
         />
       </AccordionItem>
     </Accordion>
-  );
-};
+  )
+}

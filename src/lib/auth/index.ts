@@ -1,13 +1,13 @@
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import type { Languages, User } from "@prisma/client";
-import type { AdapterUser, DefaultSession, NextAuthOptions } from "next-auth";
-import DiscordProvider from "next-auth/providers/discord";
+import { PrismaAdapter } from "@next-auth/prisma-adapter"
+import type { Languages, User } from "@prisma/client"
+import type { AdapterUser, DefaultSession, NextAuthOptions } from "next-auth"
+import DiscordProvider from "next-auth/providers/discord"
 
-import { env } from "~/lib/env.mjs";
-import { db } from "~/lib/server/db";
-import type { Permission } from "~/lib/types";
+import { env } from "~/lib/env.mjs"
+import { db } from "~/lib/server/db"
+import type { Permission } from "~/lib/types"
 
-import { PermissionUtils } from "../utils/permissions.utils";
+import { PermissionUtils } from "../utils/permissions.utils"
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -16,20 +16,20 @@ import { PermissionUtils } from "../utils/permissions.utils";
  * @see https://next-auth.js.org/getting-started/typescript#module-augmentation
  */
 declare module "next-auth" {
-  type AdapterUser = User;
+  type AdapterUser = User
 
   interface Session extends DefaultSession {
     user: {
       /** The user's ID */
-      id: string;
+      id: string
       /** The user's current role and permissions. */
       role: {
-        name: string;
-        permissions: Permission[];
-      };
+        name: string
+        permissions: Permission[]
+      }
       /** The user's preferred titles language. */
-      preferredTitles: Languages | null;
-    } & DefaultSession["user"];
+      preferredTitles: Languages | null
+    } & DefaultSession["user"]
   }
 }
 
@@ -37,11 +37,11 @@ declare module "next-auth/jwt" {
   interface JWT {
     /** The user's current role */
     role: {
-      name: string;
-      permissions: Permission[];
-    };
+      name: string
+      permissions: Permission[]
+    }
     /** The user's preferred titles language. */
-    preferredTitles: Languages | null;
+    preferredTitles: Languages | null
   }
 }
 
@@ -74,22 +74,22 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     jwt: async ({ user, token }) => {
       if (!user || !("role" in user)) {
-        return token;
+        return token
       }
 
-      const adapterUser = user as AdapterUser;
+      const adapterUser = user as AdapterUser
       const userSettings = await db.userSetting.findFirst({
         where: { userId: adapterUser.id },
-      });
+      })
 
       token.role = {
         name: adapterUser.role,
         permissions: PermissionUtils.getRolePermissions(adapterUser.role),
-      };
+      }
 
-      token.preferredTitles = userSettings?.preferredTitleLanguage ?? null;
+      token.preferredTitles = userSettings?.preferredTitleLanguage ?? null
 
-      return token;
+      return token
     },
     session: ({ session, token }) => ({
       ...session,
@@ -107,13 +107,13 @@ export const authOptions: NextAuthOptions = {
         data: {
           userId: user.id,
         },
-      });
+      })
 
       await db.userLibrary.create({
         data: {
           userId: user.id,
         },
-      });
+      })
     },
   },
-};
+}

@@ -1,14 +1,14 @@
-import Link from "next/link";
-import { Skeleton } from "@nextui-org/skeleton";
-import type { User } from "@prisma/client";
-import { UserIcon } from "lucide-react";
-import { tv } from "tailwind-variants";
+import { Skeleton } from "@nextui-org/skeleton"
+import type { User } from "@prisma/client"
+import { UserIcon } from "lucide-react"
+import Link from "next/link"
+import { tv } from "tailwind-variants"
 
 type Props = {
-  className?: string;
-  uploader?: User | Pick<User, "id" | "name">;
-  size?: "sm" | "md";
-};
+  className?: string
+  uploader?: User | Pick<User, "id" | "name">
+  size?: "sm" | "md"
+}
 
 const mediaChapterUploader = tv({
   slots: {
@@ -36,10 +36,10 @@ const mediaChapterUploader = tv({
   defaultVariants: {
     size: "sm",
   },
-});
+})
 
 export const MediaChapterUploader = ({ uploader, size, className }: Props) => {
-  const slots = mediaChapterUploader({ size });
+  const slots = mediaChapterUploader({ size })
 
   return (
     <div className={slots.container({ className })}>
@@ -51,5 +51,5 @@ export const MediaChapterUploader = ({ uploader, size, className }: Props) => {
         </Link>
       )}
     </div>
-  );
-};
+  )
+}

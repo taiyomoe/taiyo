@@ -1,4 +1,4 @@
-export * from "./tags.pt";
+export * from "./tags.pt"
 
 export const TAG_KEYS = [
   "ACHROMATIC",
@@ -345,4 +345,4 @@ export const TAG_KEYS = [
   "YURI",
   "ZOMBIE",
   "ZOOPHILIA",
-] as const;
+] as const

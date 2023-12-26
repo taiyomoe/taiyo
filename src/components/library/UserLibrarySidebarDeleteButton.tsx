@@ -1,4 +1,4 @@
-import { Button } from "@nextui-org/button";
+import { Button } from "@nextui-org/button"
 import {
   Modal,
   ModalBody,
@@ -6,27 +6,27 @@ import {
   ModalFooter,
   ModalHeader,
   useDisclosure,
-} from "@nextui-org/modal";
-import { TrashIcon } from "lucide-react";
+} from "@nextui-org/modal"
+import { TrashIcon } from "lucide-react"
 
-import { api } from "~/lib/trpc/client";
-import type { UserLibraryMedia } from "~/lib/types";
-import { useLibraryStore } from "~/stores";
+import { api } from "~/lib/trpc/client"
+import type { UserLibraryMedia } from "~/lib/types"
+import { useLibraryStore } from "~/stores"
 
 type Props = {
-  media: UserLibraryMedia;
-};
+  media: UserLibraryMedia
+}
 
 export const UserLibrarySidebarDeleteButton = ({ media }: Props) => {
-  const { updateEntry } = useLibraryStore();
-  const { mutate } = api.libary.updateLibrary.useMutation();
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { updateEntry } = useLibraryStore()
+  const { mutate } = api.libary.updateLibrary.useMutation()
+  const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
   const handleDelete = () => {
-    mutate({ mediaId: media.id, status: "delete" });
-    updateEntry(media, "delete");
-    onOpenChange();
-  };
+    mutate({ mediaId: media.id, status: "delete" })
+    updateEntry(media, "delete")
+    onOpenChange()
+  }
 
   return (
     <>
@@ -62,5 +62,5 @@ export const UserLibrarySidebarDeleteButton = ({ media }: Props) => {
         </ModalContent>
       </Modal>
     </>
-  );
-};
+  )
+}

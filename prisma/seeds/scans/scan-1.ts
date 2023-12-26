@@ -1,4 +1,4 @@
-import { db } from "~/lib/server/db";
+import { db } from "~/lib/server/db"
 
 const execute = async () => {
   await db.scan.create({
@@ -32,7 +32,7 @@ const execute = async () => {
         ],
       },
     },
-  });
+  })
 
   await db.scanMember.createMany({
     data: [
@@ -69,7 +69,7 @@ const execute = async () => {
         userId: "709e7044-bc20-4241-abc3-eef6fd5b88a3",
       },
     ],
-  });
-};
+  })
+}
 
-export default { execute };
+export default { execute }

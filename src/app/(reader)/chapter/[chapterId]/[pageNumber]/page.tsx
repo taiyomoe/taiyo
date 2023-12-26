@@ -1,20 +1,20 @@
-import { notFound } from "next/navigation";
+import { notFound } from "next/navigation"
 
-import { PopulateAtoms } from "~/app/(reader)/_components/PopulateAtoms";
-import { api } from "~/lib/trpc/server";
+import { PopulateAtoms } from "~/app/(reader)/_components/PopulateAtoms"
+import { api } from "~/lib/trpc/server"
 
-import { MediaChapterPage } from "../_components/MediaChapterPage";
+import { MediaChapterPage } from "../_components/MediaChapterPage"
 
 type Props = {
-  params: { chapterId: string };
-};
+  params: { chapterId: string }
+}
 
 export default async function Page(props: Props) {
-  const { chapterId } = props.params;
-  const mediaChapter = await api.mediaChapters.getById.query(chapterId);
+  const { chapterId } = props.params
+  const mediaChapter = await api.mediaChapters.getById.query(chapterId)
 
   if (!mediaChapter) {
-    return notFound();
+    return notFound()
   }
 
   return (
@@ -22,5 +22,5 @@ export default async function Page(props: Props) {
       <PopulateAtoms mediaChapter={mediaChapter} />
       <MediaChapterPage />
     </>
-  );
+  )
 }

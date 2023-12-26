@@ -1,10 +1,10 @@
-"use client";
+"use client"
 
-import { Button, ButtonGroup } from "@nextui-org/button";
-import { FoldHorizontalIcon, UnfoldHorizontalIcon } from "lucide-react";
-import { tv } from "tailwind-variants";
+import { Button, ButtonGroup } from "@nextui-org/button"
+import { FoldHorizontalIcon, UnfoldHorizontalIcon } from "lucide-react"
+import { tv } from "tailwind-variants"
 
-import { useReaderSettingsStore } from "~/stores";
+import { useReaderSettingsStore } from "~/stores"
 
 const readerSidebarSettingsPageWidth = tv({
   slots: {
@@ -13,13 +13,13 @@ const readerSidebarSettingsPageWidth = tv({
     leftButton: "justify-start gap-3 pl-3",
     rightButton: "justify-end gap-3 pr-3",
   },
-});
+})
 
 export const ReaderSidebarSettingsPageWidth = () => {
-  const { page, update } = useReaderSettingsStore();
+  const { page, update } = useReaderSettingsStore()
 
   const { container, text, leftButton, rightButton } =
-    readerSidebarSettingsPageWidth();
+    readerSidebarSettingsPageWidth()
 
   return (
     <div className={container()}>
@@ -47,5 +47,5 @@ export const ReaderSidebarSettingsPageWidth = () => {
         </Button>
       </ButtonGroup>
     </div>
-  );
-};
+  )
+}

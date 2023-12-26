@@ -1,12 +1,12 @@
-import type { ImageProps } from "next/image";
-import Image from "next/image";
-import type { Trackers } from "@prisma/client";
+import type { Trackers } from "@prisma/client"
+import type { ImageProps } from "next/image"
+import Image from "next/image"
 
 type Props = {
   company:
     | ("taiyo" | "google" | "discord" | "mangadex" | "anilist" | "myanimelist")
-    | Trackers;
-} & Omit<ImageProps, "src" | "alt">;
+    | Trackers
+} & Omit<ImageProps, "src" | "alt">
 
 export const CompanyLogo = ({
   company,
@@ -18,22 +18,22 @@ export const CompanyLogo = ({
   const getSource = (company: Props["company"]) => {
     switch (company) {
       case "taiyo":
-        return "/logo-red.svg";
+        return "/logo-red.svg"
       case "google":
-        return "https://asset.brandfetch.io/id6O2oGzv-/idvNIQR3p7.svg";
+        return "https://asset.brandfetch.io/id6O2oGzv-/idvNIQR3p7.svg"
       case "discord":
-        return "https://asset.brandfetch.io/idM8Hlme1a/idyxkTGPf-.svg";
+        return "https://asset.brandfetch.io/idM8Hlme1a/idyxkTGPf-.svg"
       case "mangadex":
       case "MANGADEX":
-        return "https://asset.brandfetch.io/id7o_ziJpI/idm0qVYoeU.svg";
+        return "https://asset.brandfetch.io/id7o_ziJpI/idm0qVYoeU.svg"
       case "anilist":
       case "ANILIST":
-        return "https://asset.brandfetch.io/idbDHw7927/id_dJHPhxa.png";
+        return "https://asset.brandfetch.io/idbDHw7927/id_dJHPhxa.png"
       case "myanimelist":
       case "MYANIMELIST":
-        return "https://asset.brandfetch.io/idi7gXxt9X/id4f3UV7P7.jpeg";
+        return "https://asset.brandfetch.io/idi7gXxt9X/id4f3UV7P7.jpeg"
     }
-  };
+  }
 
   return (
     <div className="flex select-none items-center justify-center">
@@ -51,5 +51,5 @@ export const CompanyLogo = ({
         {...props}
       />
     </div>
-  );
-};
+  )
+}

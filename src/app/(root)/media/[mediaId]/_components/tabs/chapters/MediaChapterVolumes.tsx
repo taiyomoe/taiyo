@@ -1,25 +1,25 @@
-import type { Selection } from "@nextui-org/react";
-import { Accordion, AccordionItem, Divider } from "@nextui-org/react";
+import type { Selection } from "@nextui-org/react"
+import { Accordion, AccordionItem, Divider } from "@nextui-org/react"
 
-import type { MediaLimitedChapterPagination } from "~/lib/types";
-import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils";
+import type { MediaLimitedChapterPagination } from "~/lib/types"
+import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils"
 
-import { MediaChapterGroupCard } from "./MediaChapterGroupCard";
-import { MediaChaptersTabPagination } from "./MediaChaptersTabPagination";
+import { MediaChapterGroupCard } from "./MediaChapterGroupCard"
+import { MediaChaptersTabPagination } from "./MediaChaptersTabPagination"
 
 type Props = {
-  chaptersPagination: MediaLimitedChapterPagination;
-  selectedKeys: Selection;
-  setSelectedKeys: (keys: Selection) => void;
-};
+  chaptersPagination: MediaLimitedChapterPagination
+  selectedKeys: Selection
+  setSelectedKeys: (keys: Selection) => void
+}
 
 export const MediaChapterVolumes = ({
   chaptersPagination,
   selectedKeys,
   setSelectedKeys,
 }: Props) => {
-  const { chapters, totalPages } = chaptersPagination;
-  const computedVolumes = MediaChapterUtils.computeVolumes(chapters);
+  const { chapters, totalPages } = chaptersPagination
+  const computedVolumes = MediaChapterUtils.computeVolumes(chapters)
 
   return (
     <div>
@@ -51,5 +51,5 @@ export const MediaChapterVolumes = ({
       <Divider className="my-4" />
       <MediaChaptersTabPagination totalPages={totalPages} />
     </div>
-  );
-};
+  )
+}

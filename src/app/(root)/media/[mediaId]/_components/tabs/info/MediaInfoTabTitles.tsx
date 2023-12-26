@@ -1,19 +1,19 @@
-import { Chip } from "@nextui-org/chip";
+import { Chip } from "@nextui-org/chip"
 
-import { Category } from "~/components/generics/Category";
-import { List } from "~/components/generics/List";
-import { CountryFlag } from "~/components/ui/CountryFlag";
-import type { MediaLimited } from "~/lib/types";
-import { MediaTitleUtils } from "~/lib/utils/mediaTitles.utils";
+import { Category } from "~/components/generics/Category"
+import { List } from "~/components/generics/List"
+import { CountryFlag } from "~/components/ui/CountryFlag"
+import type { MediaLimited } from "~/lib/types"
+import { MediaTitleUtils } from "~/lib/utils/mediaTitles.utils"
 
 type Props = {
-  media: MediaLimited;
-};
+  media: MediaLimited
+}
 
 export const MediaInfoTabTitles = ({ media }: Props) => {
   const sortedTitles = MediaTitleUtils.sort(media.titles).filter(
     (x) => !x.isMainTitle,
-  );
+  )
 
   return (
     <div className="col-span-2 items-start lg:col-span-1">
@@ -44,5 +44,5 @@ export const MediaInfoTabTitles = ({ media }: Props) => {
         </Category>
       )}
     </div>
-  );
-};
+  )
+}

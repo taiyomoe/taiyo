@@ -1,18 +1,18 @@
-import NextImage from "next/image";
-import Link from "next/link";
-import { Image } from "@nextui-org/image";
+import { Image } from "@nextui-org/image"
+import NextImage from "next/image"
+import Link from "next/link"
 
-import { MediaChapterScans } from "~/components/ui/MediaChapterScans";
-import { MediaChapterCardUploadedTime } from "~/components/ui/MediaChapterUploadedTime";
-import { MediaChapterUploader } from "~/components/ui/MediaChapterUploader";
-import type { LatestRelease } from "~/lib/types";
-import { MediaUtils } from "~/lib/utils/media.utils";
-import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils";
-import { MediaCoverUtils } from "~/lib/utils/mediaCover.utils";
+import { MediaChapterScans } from "~/components/ui/MediaChapterScans"
+import { MediaChapterCardUploadedTime } from "~/components/ui/MediaChapterUploadedTime"
+import { MediaChapterUploader } from "~/components/ui/MediaChapterUploader"
+import type { LatestRelease } from "~/lib/types"
+import { MediaUtils } from "~/lib/utils/media.utils"
+import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils"
+import { MediaCoverUtils } from "~/lib/utils/mediaCover.utils"
 
 type Props = {
-  release: LatestRelease;
-};
+  release: LatestRelease
+}
 
 export const ReleaseCard = ({ release }: Props) => {
   return (
@@ -56,5 +56,5 @@ export const ReleaseCard = ({ release }: Props) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

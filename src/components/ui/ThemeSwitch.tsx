@@ -1,39 +1,39 @@
-"use client";
+"use client"
 
-import { Button } from "@nextui-org/button";
+import { Button } from "@nextui-org/button"
 import {
   Dropdown,
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
-} from "@nextui-org/dropdown";
-import { ComputerIcon, MoonIcon, SunIcon } from "lucide-react";
-import { useTheme } from "next-themes";
+} from "@nextui-org/dropdown"
+import { ComputerIcon, MoonIcon, SunIcon } from "lucide-react"
+import { useTheme } from "next-themes"
 
 const ThemeSwitch = () => {
-  const { theme, setTheme } = useTheme();
+  const { theme, setTheme } = useTheme()
 
   const renderButtonIcon = () => {
     switch (theme) {
       case "system":
-        return <ComputerIcon size={16} />;
+        return <ComputerIcon size={16} />
       case "dark":
-        return <MoonIcon size={16} />;
+        return <MoonIcon size={16} />
       case "light":
-        return <SunIcon size={16} />;
+        return <SunIcon size={16} />
     }
-  };
+  }
 
   const renderButtonContent = () => {
     switch (theme) {
       case "system":
-        return "Sistema";
+        return "Sistema"
       case "dark":
-        return "Escuro";
+        return "Escuro"
       case "light":
-        return "Branco";
+        return "Branco"
     }
-  };
+  }
 
   return (
     <Dropdown>
@@ -59,7 +59,7 @@ const ThemeSwitch = () => {
         </DropdownItem>
       </DropdownMenu>
     </Dropdown>
-  );
-};
+  )
+}
 
-export default ThemeSwitch;
+export default ThemeSwitch

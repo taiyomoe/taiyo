@@ -1,5 +1,5 @@
 // Importing env files here to validate on build
-import "./src/lib/env.mjs";
+import "./src/lib/env.mjs"
 
 /** @type {import("next").NextConfig} */
 const config = {
@@ -23,6 +23,6 @@ const config = {
   experimental: {
     serverActions: true,
   },
-};
+}
 
-export default config;
+export default config

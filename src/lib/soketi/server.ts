@@ -1,6 +1,6 @@
-import PusherServer from "pusher";
+import PusherServer from "pusher"
 
-import { env } from "~/lib/env.mjs";
+import { env } from "~/lib/env.mjs"
 
 export const pusherServer = new PusherServer({
   host: env.NEXT_PUBLIC_SOKETI_HOST,
@@ -12,4 +12,4 @@ export const pusherServer = new PusherServer({
   key: env.NEXT_PUBLIC_SOKETI_APP_KEY,
   secret: env.SOKETI_APP_SECRET,
   useTLS: env.NODE_ENV === "production",
-});
+})

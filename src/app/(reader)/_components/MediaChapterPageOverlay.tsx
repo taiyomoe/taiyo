@@ -1,15 +1,15 @@
-import { useCallback, useEffect, useState } from "react";
-import Link from "next/link";
-import { tv } from "@nextui-org/react";
+import { tv } from "@nextui-org/react"
+import Link from "next/link"
+import { useCallback, useEffect, useState } from "react"
 
-import { MediaChapterPageOverlayScrollButton } from "~/app/(reader)/_components/readerSidebar/MediaChapterPageOverlayScrollButton";
-import { ReaderSidebarOpenButton } from "~/components/navbar/ReaderSidebarOpenButton";
-import { useDevice } from "~/hooks/useDevice";
-import { cn } from "~/lib/utils/cn";
-import { MediaUtils } from "~/lib/utils/media.utils";
-import { useReaderSettingsStore, useReaderStore } from "~/stores";
+import { MediaChapterPageOverlayScrollButton } from "~/app/(reader)/_components/readerSidebar/MediaChapterPageOverlayScrollButton"
+import { ReaderSidebarOpenButton } from "~/components/navbar/ReaderSidebarOpenButton"
+import { useDevice } from "~/hooks/useDevice"
+import { cn } from "~/lib/utils/cn"
+import { MediaUtils } from "~/lib/utils/media.utils"
+import { useReaderSettingsStore, useReaderStore } from "~/stores"
 
-import { ReaderSettingsMediaChapterDropdown } from "./readerSidebar/ui/ReaderSettingsMediaChapterDropdown";
+import { ReaderSettingsMediaChapterDropdown } from "./readerSidebar/ui/ReaderSettingsMediaChapterDropdown"
 
 const mediaChapterPageOverlay = tv({
   slots: {
@@ -31,52 +31,52 @@ const mediaChapterPageOverlay = tv({
       hover: {},
     },
   },
-});
+})
 
 export const MediaChapterPageOverlay = () => {
-  const { page, navbarMode } = useReaderSettingsStore();
-  const { chapter } = useReaderStore();
-  const { isAboveTablet } = useDevice();
+  const { page, navbarMode } = useReaderSettingsStore()
+  const { chapter } = useReaderStore()
+  const { isAboveTablet } = useDevice()
   const [topContainerTop, setTopContainerTop] = useState<number | undefined>(
     navbarMode === "fixed" ? 60 : undefined,
-  );
+  )
 
-  const slots = mediaChapterPageOverlay({ navbarMode });
+  const slots = mediaChapterPageOverlay({ navbarMode })
 
   const computeTopContainerTop = useCallback(
     (yPosition: number) => {
       if (yPosition <= 60) {
-        setTopContainerTop(60 - yPosition);
+        setTopContainerTop(60 - yPosition)
       } else if (topContainerTop !== undefined) {
-        setTopContainerTop(undefined);
+        setTopContainerTop(undefined)
       }
     },
     [topContainerTop],
-  );
+  )
 
   useEffect(() => {
     const handleScroll = () => {
       if (navbarMode !== "fixed") {
-        return;
+        return
       }
 
-      const scrollY = window.scrollY;
-      computeTopContainerTop(scrollY);
-    };
+      const scrollY = window.scrollY
+      computeTopContainerTop(scrollY)
+    }
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll)
 
     return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  });
+      window.removeEventListener("scroll", handleScroll)
+    }
+  })
 
   useEffect(() => {
-    computeTopContainerTop(window.scrollY);
-  }, [computeTopContainerTop, navbarMode]);
+    computeTopContainerTop(window.scrollY)
+  }, [computeTopContainerTop, navbarMode])
 
   if (page.mode === "single" || isAboveTablet || !chapter) {
-    return null;
+    return null
   }
 
   return (
@@ -99,5 +99,5 @@ export const MediaChapterPageOverlay = () => {
         <ReaderSidebarOpenButton />
       </div>
     </>
-  );
-};
+  )
+}

@@ -1,13 +1,13 @@
-import type { MediaLimited } from "~/lib/types";
+import type { MediaLimited } from "~/lib/types"
 
-import { MediaLayoutBanner } from "./MediaLayoutBanner";
-import { MediaLayoutCover } from "./MediaLayoutCover";
-import { MediaLayoutTitle } from "./MediaLayoutTitle";
+import { MediaLayoutBanner } from "./MediaLayoutBanner"
+import { MediaLayoutCover } from "./MediaLayoutCover"
+import { MediaLayoutTitle } from "./MediaLayoutTitle"
 
 type Props = {
-  media: MediaLimited;
-  children: React.ReactNode;
-};
+  media: MediaLimited
+  children: React.ReactNode
+}
 
 export const MediaLayout = ({ media, children }: Props) => {
   return (
@@ -23,5 +23,5 @@ export const MediaLayout = ({ media, children }: Props) => {
         </section>
       </div>
     </main>
-  );
-};
+  )
+}

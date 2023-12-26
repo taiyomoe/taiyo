@@ -1,18 +1,18 @@
-"use client";
+"use client"
 
-import type { SelectProps } from "@nextui-org/select";
-import { Select, SelectItem } from "@nextui-org/select";
-import { useField } from "formik";
-import { tv } from "tailwind-variants";
+import type { SelectProps } from "@nextui-org/select"
+import { Select, SelectItem } from "@nextui-org/select"
+import { useField } from "formik"
+import { tv } from "tailwind-variants"
 
-import { ObjectUtils } from "~/lib/utils/object.utils";
+import { ObjectUtils } from "~/lib/utils/object.utils"
 
 type Props<T> = {
-  name: string;
-  rightContent?: React.ReactNode;
-  displayValidationError?: boolean;
-  items: T;
-} & Omit<SelectProps, "items" | "children">;
+  name: string
+  rightContent?: React.ReactNode
+  displayValidationError?: boolean
+  items: T
+} & Omit<SelectProps, "items" | "children">
 
 const select = tv({
   slots: {
@@ -41,7 +41,7 @@ const select = tv({
       },
     },
   },
-});
+})
 
 export const SelectFormField = <T extends Record<string, unknown>>({
   name,
@@ -54,20 +54,20 @@ export const SelectFormField = <T extends Record<string, unknown>>({
 }: Props<T>) => {
   const [field, { error, touched, initialTouched }] = useField<string>({
     name,
-  });
+  })
   const itemsArray = ObjectUtils.arrayToSelectItems(
     ObjectUtils.enumToArray(items),
-  );
+  )
 
-  const shouldDisplayError = touched && !!error && !initialTouched;
-  const shouldIgnoreErrorMessage = !!displayValidationError === false;
-  const labelPlacement = rest.labelPlacement ?? "outside";
+  const shouldDisplayError = touched && !!error && !initialTouched
+  const shouldIgnoreErrorMessage = !!displayValidationError === false
+  const labelPlacement = rest.labelPlacement ?? "outside"
   const { container, label } = select({
     labelPlacement,
     shouldDisplayError:
       rest.variant === "bordered" ? shouldDisplayError : false,
     hideLabel: rest.label === undefined,
-  });
+  })
 
   return (
     <div className={container({ className })}>
@@ -95,5 +95,5 @@ export const SelectFormField = <T extends Record<string, unknown>>({
       </Select>
       {rightContent}
     </div>
-  );
-};
+  )
+}

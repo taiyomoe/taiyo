@@ -1,4 +1,4 @@
-import { db } from "~/lib/server/db";
+import { db } from "~/lib/server/db"
 
 const execute = async () => {
   await db.scan.create({
@@ -32,7 +32,7 @@ const execute = async () => {
         ],
       },
     },
-  });
-};
+  })
+}
 
-export default { execute };
+export default { execute }

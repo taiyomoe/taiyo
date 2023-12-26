@@ -1,11 +1,11 @@
-import { tv } from "@nextui-org/react";
+import { tv } from "@nextui-org/react"
 
-import { useReaderSettingsStore } from "~/stores";
+import { useReaderSettingsStore } from "~/stores"
 
 type Props = {
-  url: string;
-  hide: boolean;
-};
+  url: string
+  hide: boolean
+}
 
 const mediaChapterImage = tv({
   base: "my-auto select-none",
@@ -51,15 +51,15 @@ const mediaChapterImage = tv({
       className: "max-w-[unset]",
     },
   ],
-});
+})
 
 export const MediaChapterImage = ({ url, hide }: Props) => {
   const {
     navbarMode,
     page: { mode, height, width, brightness },
-  } = useReaderSettingsStore();
+  } = useReaderSettingsStore()
 
-  const base = mediaChapterImage({ hide, navbarMode, mode, height, width });
+  const base = mediaChapterImage({ hide, navbarMode, mode, height, width })
 
   return (
     <img
@@ -68,5 +68,5 @@ export const MediaChapterImage = ({ url, hide }: Props) => {
       alt="image"
       style={{ filter: `brightness(${brightness / 100})` }}
     />
-  );
-};
+  )
+}

@@ -1,21 +1,21 @@
-"use client";
+"use client"
 
-import { Autoplay, Mousewheel } from "swiper/modules";
-import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, Mousewheel } from "swiper/modules"
+import { Swiper, SwiperSlide } from "swiper/react"
 
-import "swiper/css";
-import "swiper/css/pagination";
+import "swiper/css"
+import "swiper/css/pagination"
 
-import Link from "next/link";
+import Link from "next/link"
 
-import { MediaImage } from "~/components/generics/images/MediaImage";
-import type { FeaturedMedia } from "~/lib/types";
-import { MediaBannerUtils } from "~/lib/utils/mediaBanner.utils";
-import { MediaCoverUtils } from "~/lib/utils/mediaCover.utils";
+import { MediaImage } from "~/components/generics/images/MediaImage"
+import type { FeaturedMedia } from "~/lib/types"
+import { MediaBannerUtils } from "~/lib/utils/mediaBanner.utils"
+import { MediaCoverUtils } from "~/lib/utils/mediaCover.utils"
 
 type Props = {
-  medias: FeaturedMedia[];
-};
+  medias: FeaturedMedia[]
+}
 
 export const SwipeableFeaturedMedias = ({ medias }: Props) => (
   <Swiper
@@ -75,4 +75,4 @@ export const SwipeableFeaturedMedias = ({ medias }: Props) => (
       </SwiperSlide>
     ))}
   </Swiper>
-);
+)

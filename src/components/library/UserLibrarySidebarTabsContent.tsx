@@ -1,45 +1,45 @@
-import { useEffect } from "react";
-import NextImage from "next/image";
-import Link from "next/link";
-import { Image } from "@nextui-org/image";
-import { Spinner } from "@nextui-org/react";
-import { useSession } from "next-auth/react";
+import { Image } from "@nextui-org/image"
+import { Spinner } from "@nextui-org/react"
+import { useSession } from "next-auth/react"
+import NextImage from "next/image"
+import Link from "next/link"
+import { useEffect } from "react"
 
-import { UserLibrarySidebarDeleteButton } from "~/components/library/UserLibrarySidebarDeleteButton";
-import { UserLibrarySidebarStatusSelect } from "~/components/library/UserLibrarySidebarStatusSelect";
-import { api } from "~/lib/trpc/client";
-import type { UserLibraryStatus } from "~/lib/types";
-import { MediaUtils } from "~/lib/utils/media.utils";
-import { MediaCoverUtils } from "~/lib/utils/mediaCover.utils";
-import { useLibraryStore } from "~/stores";
+import { UserLibrarySidebarDeleteButton } from "~/components/library/UserLibrarySidebarDeleteButton"
+import { UserLibrarySidebarStatusSelect } from "~/components/library/UserLibrarySidebarStatusSelect"
+import { api } from "~/lib/trpc/client"
+import type { UserLibraryStatus } from "~/lib/types"
+import { MediaUtils } from "~/lib/utils/media.utils"
+import { MediaCoverUtils } from "~/lib/utils/mediaCover.utils"
+import { useLibraryStore } from "~/stores"
 
 type Props = {
-  status: UserLibraryStatus;
-};
+  status: UserLibraryStatus
+}
 
 export const UserLibrarySidebarTabsContent = ({ status }: Props) => {
-  const { addEntries, ...libraryStore } = useLibraryStore();
-  const { data: session } = useSession();
+  const { addEntries, ...libraryStore } = useLibraryStore()
+  const { data: session } = useSession()
   const { data, isLoading } = api.libary.getLibrary.useQuery(
     {
       status,
       userId: session!.user.id,
     },
     { refetchOnMount: false },
-  );
+  )
 
   useEffect(() => {
     if (data) {
-      addEntries(status, data);
+      addEntries(status, data)
     }
-  }, [data, addEntries, status]);
+  }, [data, addEntries, status])
 
   if (isLoading || !data) {
     return (
       <div className="mt-8 flex w-full justify-center">
         <Spinner />
       </div>
-    );
+    )
   }
 
   if (data.length === 0) {
@@ -53,7 +53,7 @@ export const UserLibrarySidebarTabsContent = ({ status }: Props) => {
         />
         <p className="text-lg font-medium">Nenhuma obra encontrada</p>
       </div>
-    );
+    )
   }
 
   return (
@@ -83,5 +83,5 @@ export const UserLibrarySidebarTabsContent = ({ status }: Props) => {
         </div>
       ))}
     </div>
-  );
-};
+  )
+}

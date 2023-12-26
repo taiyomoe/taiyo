@@ -1,4 +1,4 @@
-import type { LayoutProps } from "~/lib/types";
+import type { LayoutProps } from "~/lib/types"
 
 export default function Layout({ children }: LayoutProps) {
   return (
@@ -6,5 +6,5 @@ export default function Layout({ children }: LayoutProps) {
       <p className="text-4xl font-semibold">Modificar capítulo</p>
       {children}
     </div>
-  );
+  )
 }

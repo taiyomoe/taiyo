@@ -1,35 +1,35 @@
-"use client";
+"use client"
 
-import Image from "next/image";
-import Link from "next/link";
-import type { AutocompleteProps } from "@nextui-org/autocomplete";
-import { Autocomplete, AutocompleteItem } from "@nextui-org/autocomplete";
-import { useAsyncList } from "@react-stately/data";
-import { SearchIcon } from "lucide-react";
+import type { AutocompleteProps } from "@nextui-org/autocomplete"
+import { Autocomplete, AutocompleteItem } from "@nextui-org/autocomplete"
+import { useAsyncList } from "@react-stately/data"
+import { SearchIcon } from "lucide-react"
+import Image from "next/image"
+import Link from "next/link"
 
-import { api } from "~/lib/trpc/client";
-import type { SearchedMedia } from "~/lib/types";
-import { MediaCoverUtils } from "~/lib/utils/mediaCover.utils";
+import { api } from "~/lib/trpc/client"
+import type { SearchedMedia } from "~/lib/types"
+import { MediaCoverUtils } from "~/lib/utils/mediaCover.utils"
 
 type Props = {
-  itemsHrefPrefix: string;
-} & Omit<AutocompleteProps<SearchedMedia>, "children">;
+  itemsHrefPrefix: string
+} & Omit<AutocompleteProps<SearchedMedia>, "children">
 
 export const MediaSearchAutocomplete = (props: Props) => {
-  const { itemsHrefPrefix, ...rest } = props;
-  const { mutateAsync } = api.medias.search.useMutation();
+  const { itemsHrefPrefix, ...rest } = props
+  const { mutateAsync } = api.medias.search.useMutation()
 
   const list = useAsyncList<SearchedMedia>({
     load: async ({ filterText }) => {
-      if (!filterText) return { items: [] };
+      if (!filterText) return { items: [] }
 
-      const data = await mutateAsync({ title: filterText });
+      const data = await mutateAsync({ title: filterText })
 
       return {
         items: data,
-      };
+      }
     },
-  });
+  })
 
   return (
     <Autocomplete<SearchedMedia>
@@ -52,7 +52,6 @@ export const MediaSearchAutocomplete = (props: Props) => {
       isLoading={list.isLoading}
       items={list.items}
       placeholder="Pesquisar..."
-      // eslint-disable-next-line @typescript-eslint/unbound-method
       onInputChange={list.setFilterText}
       startContent={<SearchIcon className="text-default-500" />}
       aria-label="search media"
@@ -90,5 +89,5 @@ export const MediaSearchAutocomplete = (props: Props) => {
         </AutocompleteItem>
       )}
     </Autocomplete>
-  );
-};
+  )
+}

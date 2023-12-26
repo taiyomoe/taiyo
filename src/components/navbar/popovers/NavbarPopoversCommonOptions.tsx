@@ -1,10 +1,10 @@
-import Link from "next/link";
-import { Button } from "@nextui-org/button";
-import { FlagIcon, SettingsIcon, SunMoonIcon } from "lucide-react";
+import { Button } from "@nextui-org/button"
+import { FlagIcon, SettingsIcon, SunMoonIcon } from "lucide-react"
+import Link from "next/link"
 
-import { CompanyLogo } from "~/components/ui/CompanyLogo";
-import ThemeSwitch from "~/components/ui/ThemeSwitch";
-import { siteConfig } from "~/lib/config";
+import { CompanyLogo } from "~/components/ui/CompanyLogo"
+import ThemeSwitch from "~/components/ui/ThemeSwitch"
+import { siteConfig } from "~/lib/config"
 
 export const NavbarPopoversCommonOptions = () => {
   return (
@@ -45,5 +45,5 @@ export const NavbarPopoversCommonOptions = () => {
         </Button>
       </div>
     </div>
-  );
-};
+  )
+}

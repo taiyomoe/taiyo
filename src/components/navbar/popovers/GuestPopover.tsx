@@ -1,10 +1,10 @@
-import NextLink from "next/link";
-import { Button } from "@nextui-org/button";
-import { Divider } from "@nextui-org/divider";
-import { Popover, PopoverContent, PopoverTrigger } from "@nextui-org/popover";
-import { UserIcon } from "lucide-react";
+import { Button } from "@nextui-org/button"
+import { Divider } from "@nextui-org/divider"
+import { Popover, PopoverContent, PopoverTrigger } from "@nextui-org/popover"
+import { UserIcon } from "lucide-react"
+import NextLink from "next/link"
 
-import { NavbarPopoversCommonOptions } from "./NavbarPopoversCommonOptions";
+import { NavbarPopoversCommonOptions } from "./NavbarPopoversCommonOptions"
 
 export const GuestPopover = () => {
   return (
@@ -35,5 +35,5 @@ export const GuestPopover = () => {
         </div>
       </PopoverContent>
     </Popover>
-  );
-};
+  )
+}

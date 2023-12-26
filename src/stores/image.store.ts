@@ -1,17 +1,17 @@
-import type { UploadSessionType } from "@prisma/client";
-import { create } from "zustand";
+import type { UploadSessionType } from "@prisma/client"
+import { create } from "zustand"
 
-import { ImageUtils } from "~/lib/utils/image.utils";
+import { ImageUtils } from "~/lib/utils/image.utils"
 
 export type ImageStore = {
-  images: { [key in UploadSessionType]: File[] };
+  images: { [key in UploadSessionType]: File[] }
 
-  isCompressing: boolean;
+  isCompressing: boolean
 
-  getImages: (type: UploadSessionType) => File[];
-  load: (type: UploadSessionType, rawFiles: File[]) => Promise<void>;
-  reset: (type: UploadSessionType) => void;
-};
+  getImages: (type: UploadSessionType) => File[]
+  load: (type: UploadSessionType, rawFiles: File[]) => Promise<void>
+  reset: (type: UploadSessionType) => void
+}
 
 export const useImageStore = create<ImageStore>((set, get) => ({
   images: {
@@ -23,13 +23,13 @@ export const useImageStore = create<ImageStore>((set, get) => ({
   isCompressing: false,
 
   getImages: (type) => {
-    return get().images[type];
+    return get().images[type]
   },
   load: async (type, rawFiles) => {
-    set({ isCompressing: true });
+    set({ isCompressing: true })
 
-    const files = await Promise.all(rawFiles.map(ImageUtils.convert));
-    ImageUtils.sortByFileName(files);
+    const files = await Promise.all(rawFiles.map(ImageUtils.convert))
+    ImageUtils.sortByFileName(files)
 
     set((prev) => ({
       images: {
@@ -37,9 +37,9 @@ export const useImageStore = create<ImageStore>((set, get) => ({
         [type]: files,
       },
       isCompressing: false,
-    }));
+    }))
   },
   reset: (type) => {
-    set((prev) => ({ images: { ...prev.images, [type]: [] } }));
+    set((prev) => ({ images: { ...prev.images, [type]: [] } }))
   },
-}));
+}))

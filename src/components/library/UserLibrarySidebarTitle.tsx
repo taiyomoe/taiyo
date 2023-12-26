@@ -1,10 +1,10 @@
-import { Button } from "@nextui-org/button";
+import { Button } from "@nextui-org/button"
 
-import { SidebarIcon } from "~/components/icons/SidebarIcon";
-import { useLibraryStore } from "~/stores";
+import { SidebarIcon } from "~/components/icons/SidebarIcon"
+import { useLibraryStore } from "~/stores"
 
 export const UserLibrarySidebarTitle = () => {
-  const { toggleSidebar } = useLibraryStore();
+  const { toggleSidebar } = useLibraryStore()
 
   return (
     <div className="flex items-center justify-between">
@@ -16,5 +16,5 @@ export const UserLibrarySidebarTitle = () => {
         isIconOnly
       />
     </div>
-  );
-};
+  )
+}

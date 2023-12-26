@@ -1,13 +1,13 @@
-"use client";
+"use client"
 
-import { toFormikValidationSchema } from "zod-formik-adapter";
+import { toFormikValidationSchema } from "zod-formik-adapter"
 
-import { Form } from "~/components/generics/form/Form";
-import { useChapterUpload } from "~/hooks/useChapterUpload";
-import { insertMediaChapterFormSchema } from "~/lib/schemas/mediaChapter.schemas";
-import type { InsertMediaChapterFormSchema } from "~/lib/schemas/mediaChapter.schemas";
+import { Form } from "~/components/generics/form/Form"
+import { useChapterUpload } from "~/hooks/useChapterUpload"
+import { insertMediaChapterFormSchema } from "~/lib/schemas/mediaChapter.schemas"
+import type { InsertMediaChapterFormSchema } from "~/lib/schemas/mediaChapter.schemas"
 
-import { UploadChapterFormFields } from "./UploadChapterFormFields";
+import { UploadChapterFormFields } from "./UploadChapterFormFields"
 
 const initialValues: InsertMediaChapterFormSchema = {
   title: null,
@@ -19,10 +19,10 @@ const initialValues: InsertMediaChapterFormSchema = {
   flag: "OK",
   mediaId: "",
   scanIds: [],
-};
+}
 
 export const UploadChapterForm = () => {
-  const { handleSubmit } = useChapterUpload();
+  const { handleSubmit } = useChapterUpload()
 
   return (
     <Form.Component
@@ -32,5 +32,5 @@ export const UploadChapterForm = () => {
     >
       <UploadChapterFormFields />
     </Form.Component>
-  );
-};
+  )
+}

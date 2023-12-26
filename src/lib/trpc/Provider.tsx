@@ -1,22 +1,22 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { loggerLink, unstable_httpBatchStreamLink } from "@trpc/client";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { loggerLink, unstable_httpBatchStreamLink } from "@trpc/client"
+import { useState } from "react"
 
-import { api } from "./client";
-import { getUrl, transformer } from "./utils";
+import { api } from "./client"
+import { getUrl, transformer } from "./utils"
 
 export function TRPCReactProvider(props: {
-  children: React.ReactNode;
-  headers: Headers;
+  children: React.ReactNode
+  headers: Headers
 }) {
   const [queryClient] = useState(
     () =>
       new QueryClient({
         defaultOptions: { queries: { refetchOnWindowFocus: false } },
       }),
-  );
+  )
 
   const [trpcClient] = useState(() =>
     api.createClient({
@@ -30,14 +30,14 @@ export function TRPCReactProvider(props: {
         unstable_httpBatchStreamLink({
           url: getUrl(),
           headers() {
-            const heads = new Map(props.headers);
-            heads.set("x-trpc-source", "react");
-            return Object.fromEntries(heads);
+            const heads = new Map(props.headers)
+            heads.set("x-trpc-source", "react")
+            return Object.fromEntries(heads)
           },
         }),
       ],
     }),
-  );
+  )
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -45,5 +45,5 @@ export function TRPCReactProvider(props: {
         {props.children}
       </api.Provider>
     </QueryClientProvider>
-  );
+  )
 }

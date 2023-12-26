@@ -1,14 +1,14 @@
-import Link from "next/link";
-import { Button } from "@nextui-org/react";
-import { FileEditIcon } from "lucide-react";
+import { Button } from "@nextui-org/react"
+import { FileEditIcon } from "lucide-react"
+import Link from "next/link"
 
-import { AddToUserLibraryButton } from "~/components/library/AddToUserLibraryButton";
-import { SignedIn } from "~/components/utils/SignedIn";
-import type { MediaLimited } from "~/lib/types";
+import { AddToUserLibraryButton } from "~/components/library/AddToUserLibraryButton"
+import { SignedIn } from "~/components/utils/SignedIn"
+import type { MediaLimited } from "~/lib/types"
 
 type Props = {
-  media: MediaLimited;
-};
+  media: MediaLimited
+}
 
 export const MediaLayoutActions = ({ media }: Props) => {
   return (
@@ -30,5 +30,5 @@ export const MediaLayoutActions = ({ media }: Props) => {
         </SignedIn>
       </div>
     </div>
-  );
-};
+  )
+}
