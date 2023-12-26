@@ -1,10 +1,10 @@
-import type { LatestRelease } from "~/lib/types";
+import type { LatestRelease } from "~/lib/types"
 
-import { ReleaseCard } from "./ReleaseCard";
+import { ReleaseCard } from "./ReleaseCard"
 
 type Props = {
-  latestReleases: LatestRelease[];
-};
+  latestReleases: LatestRelease[]
+}
 
 export const LatestReleases = ({ latestReleases }: Props) => (
   <div className="flex grow flex-col gap-6">
@@ -15,4 +15,4 @@ export const LatestReleases = ({ latestReleases }: Props) => (
       ))}
     </div>
   </div>
-);
+)

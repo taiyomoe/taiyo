@@ -1,13 +1,13 @@
-import { Link } from "@nextui-org/link";
+import { Link } from "@nextui-org/link"
 
-import { Category } from "~/components/generics/Category";
-import { CompanyLogo } from "~/components/ui/CompanyLogo";
-import type { MediaLimited } from "~/lib/types";
-import { TrackerUtils } from "~/lib/utils/tracker.utils";
+import { Category } from "~/components/generics/Category"
+import { CompanyLogo } from "~/components/ui/CompanyLogo"
+import type { MediaLimited } from "~/lib/types"
+import { TrackerUtils } from "~/lib/utils/tracker.utils"
 
 type Props = {
-  media: MediaLimited;
-};
+  media: MediaLimited
+}
 
 export const MediaInfoTabTrackers = ({ media }: Props) => (
   <div className="items-start">
@@ -32,4 +32,4 @@ export const MediaInfoTabTrackers = ({ media }: Props) => (
       </Category>
     )}
   </div>
-);
+)

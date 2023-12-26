@@ -1,33 +1,33 @@
-import type { Selection } from "@nextui-org/react";
-import { Select, SelectItem } from "@nextui-org/select";
+import type { Selection } from "@nextui-org/react"
+import { Select, SelectItem } from "@nextui-org/select"
 
-import { api } from "~/lib/trpc/client";
+import { api } from "~/lib/trpc/client"
 import type {
   MediaLimited,
   UserLibraryStatus,
   UserLibraryStatusWithDelete,
-} from "~/lib/types";
-import { LibraryUtils } from "~/lib/utils/library.utils";
-import { SelectUtils } from "~/lib/utils/select.utils";
-import { useLibraryStore } from "~/stores";
+} from "~/lib/types"
+import { LibraryUtils } from "~/lib/utils/library.utils"
+import { SelectUtils } from "~/lib/utils/select.utils"
+import { useLibraryStore } from "~/stores"
 
 type Props = {
-  media: MediaLimited;
-  currentStatus?: UserLibraryStatus;
-};
+  media: MediaLimited
+  currentStatus?: UserLibraryStatus
+}
 
 export const UserLibraryStatusSelect = ({ media, currentStatus }: Props) => {
-  const { updateEntry } = useLibraryStore();
-  const { mutate } = api.libary.updateLibrary.useMutation();
+  const { updateEntry } = useLibraryStore()
+  const { mutate } = api.libary.updateLibrary.useMutation()
 
   const handleSelectionChange = (selection: Selection) => {
     const selectedKey = SelectUtils.getSelectedKey(selection) as
       | UserLibraryStatus
-      | "delete";
+      | "delete"
 
-    mutate({ mediaId: media.id, status: selectedKey });
-    updateEntry(media, selectedKey);
-  };
+    mutate({ mediaId: media.id, status: selectedKey })
+    updateEntry(media, selectedKey)
+  }
 
   return (
     <Select<UserLibraryStatus>
@@ -60,5 +60,5 @@ export const UserLibraryStatusSelect = ({ media, currentStatus }: Props) => {
           </SelectItem>
         ))}
     </Select>
-  );
-};
+  )
+}

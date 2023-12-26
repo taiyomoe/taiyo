@@ -1,40 +1,40 @@
-"use client";
+"use client"
 
-import { useEffect, useState } from "react";
+import { useEffect, useState } from "react"
 
 type Props = {
-  min: number;
-  max: number;
-};
+  min: number
+  max: number
+}
 
 export const useScrollOpacity = ({ min, max }: Props) => {
   const computeOpacity = () => {
-    if (typeof window === "undefined") return 0;
+    if (typeof window === "undefined") return 0
 
-    const currentScrollPos = window.scrollY;
+    const currentScrollPos = window.scrollY
 
     if (currentScrollPos < min) {
-      return 0;
+      return 0
     } else if (currentScrollPos < max) {
-      return (currentScrollPos - min) / (max - min);
+      return (currentScrollPos - min) / (max - min)
     } else {
-      return 1;
+      return 1
     }
-  };
+  }
 
-  const [opacity, setOpacity] = useState(computeOpacity());
+  const [opacity, setOpacity] = useState(computeOpacity())
 
   const handleScroll = () => {
-    setOpacity(computeOpacity());
-  };
+    setOpacity(computeOpacity())
+  }
 
   useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll)
 
-    return () => window.removeEventListener("scroll", handleScroll);
-  });
+    return () => window.removeEventListener("scroll", handleScroll)
+  })
 
-  if (typeof window === "undefined") return { opacity: 0 };
+  if (typeof window === "undefined") return { opacity: 0 }
 
-  return { opacity };
-};
+  return { opacity }
+}

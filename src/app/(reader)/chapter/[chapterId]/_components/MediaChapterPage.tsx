@@ -1,16 +1,16 @@
-"use client";
+"use client"
 
-import type { KeyboardEventHandler, MouseEventHandler } from "react";
-import { useCallback } from "react";
-import { tv } from "tailwind-variants";
+import type { KeyboardEventHandler, MouseEventHandler } from "react"
+import { useCallback } from "react"
+import { tv } from "tailwind-variants"
 
-import { MediaChapterPageOverlay } from "~/app/(reader)/_components/MediaChapterPageOverlay";
-import { useChapterNavigation } from "~/hooks/useChapterNavigation";
-import { useDevice } from "~/hooks/useDevice";
-import { useKeyPress } from "~/hooks/useKeyPress";
-import { useReaderSettingsStore } from "~/stores";
+import { MediaChapterPageOverlay } from "~/app/(reader)/_components/MediaChapterPageOverlay"
+import { useChapterNavigation } from "~/hooks/useChapterNavigation"
+import { useDevice } from "~/hooks/useDevice"
+import { useKeyPress } from "~/hooks/useKeyPress"
+import { useReaderSettingsStore } from "~/stores"
 
-import { MediaChapterImages } from "./MediaChapterImages";
+import { MediaChapterImages } from "./MediaChapterImages"
 
 const mediaChapterPage = tv({
   slots: {
@@ -58,58 +58,58 @@ const mediaChapterPage = tv({
       },
     },
   ],
-});
+})
 
 export const MediaChapterPage = () => {
-  const { isAboveTablet } = useDevice();
+  const { isAboveTablet } = useDevice()
   const {
     navbarMode,
     page: { mode, overlay, width },
     update,
-  } = useReaderSettingsStore();
-  const { goBack, goForward } = useChapterNavigation();
+  } = useReaderSettingsStore()
+  const { goBack, goForward } = useChapterNavigation()
 
-  const slots = mediaChapterPage({ navbarMode, mode, width });
+  const slots = mediaChapterPage({ navbarMode, mode, width })
 
   const handleKeyPress: KeyboardEventHandler = (e) => {
     if (mode === "longstrip") {
-      return;
+      return
     }
 
     if (e.key === "ArrowLeft") {
-      return goBack();
+      return goBack()
     }
 
-    goForward();
-  };
+    goForward()
+  }
 
   const handleContainerClick: MouseEventHandler<HTMLDivElement> = useCallback(
     (e) => {
-      const clickX = e.clientX;
-      const windowWidth = window.innerWidth;
-      const screenSide = clickX < windowWidth / 2 ? "left" : "right";
+      const clickX = e.clientX
+      const windowWidth = window.innerWidth
+      const screenSide = clickX < windowWidth / 2 ? "left" : "right"
 
       if (mode === "longstrip") {
-        return;
+        return
       }
 
       if (!isAboveTablet) {
-        update("page.overlay", overlay === "show" ? "hide" : "show");
+        update("page.overlay", overlay === "show" ? "hide" : "show")
 
-        return;
+        return
       }
 
       if (screenSide === "left") {
-        return goBack();
+        return goBack()
       }
 
-      goForward();
+      goForward()
     },
     [goBack, goForward, isAboveTablet, mode, overlay, update],
-  );
+  )
 
-  useKeyPress("ArrowLeft", handleKeyPress);
-  useKeyPress("ArrowRight", handleKeyPress);
+  useKeyPress("ArrowLeft", handleKeyPress)
+  useKeyPress("ArrowRight", handleKeyPress)
 
   return (
     <div className={slots.container()} onClick={handleContainerClick}>
@@ -118,5 +118,5 @@ export const MediaChapterPage = () => {
         <MediaChapterImages />
       </div>
     </div>
-  );
-};
+  )
+}

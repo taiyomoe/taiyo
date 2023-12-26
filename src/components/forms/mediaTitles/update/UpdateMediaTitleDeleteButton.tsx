@@ -1,32 +1,32 @@
-import { Button } from "@nextui-org/react";
-import { useFormikContext } from "formik";
-import { toast } from "sonner";
+import { Button } from "@nextui-org/react"
+import { useFormikContext } from "formik"
+import { toast } from "sonner"
 
-import type { UpdateMediaCoverSchema } from "~/lib/schemas";
-import { api } from "~/lib/trpc/client";
-import { useMediaUpdateStore } from "~/stores";
+import type { UpdateMediaCoverSchema } from "~/lib/schemas"
+import { api } from "~/lib/trpc/client"
+import { useMediaUpdateStore } from "~/stores"
 
 type Props = {
-  toggleModal: () => void;
-};
+  toggleModal: () => void
+}
 
 export const UpdateMediaTitleDeleteButton = ({ toggleModal }: Props) => {
-  const { initialValues, values } = useFormikContext<UpdateMediaCoverSchema>();
-  const { del } = useMediaUpdateStore();
-  const { mutateAsync } = api.mediaTitles.delete.useMutation();
+  const { initialValues, values } = useFormikContext<UpdateMediaCoverSchema>()
+  const { del } = useMediaUpdateStore()
+  const { mutateAsync } = api.mediaTitles.delete.useMutation()
 
   const handlePress = () => {
     toast.promise(mutateAsync({ id: values.id }), {
       loading: "Apagando o título...",
       success: () => {
-        del("title", values.id);
-        toggleModal();
+        del("title", values.id)
+        toggleModal()
 
-        return "Título apagado com sucesso!";
+        return "Título apagado com sucesso!"
       },
       error: "Erro ao apagar o título.",
-    });
-  };
+    })
+  }
 
   return (
     <Button
@@ -37,5 +37,5 @@ export const UpdateMediaTitleDeleteButton = ({ toggleModal }: Props) => {
     >
       Apagar
     </Button>
-  );
-};
+  )
+}

@@ -1,6 +1,6 @@
-import PusherClient from "pusher-js";
+import PusherClient from "pusher-js"
 
-import { env } from "~/lib/env.mjs";
+import { env } from "~/lib/env.mjs"
 
 export const pusherClient = new PusherClient(env.NEXT_PUBLIC_SOKETI_APP_KEY, {
   wsHost: env.NEXT_PUBLIC_SOKETI_HOST,
@@ -8,4 +8,4 @@ export const pusherClient = new PusherClient(env.NEXT_PUBLIC_SOKETI_APP_KEY, {
   forceTLS: false,
   enabledTransports: ["ws"],
   cluster: "local",
-});
+})

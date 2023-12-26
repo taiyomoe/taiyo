@@ -1,9 +1,9 @@
-import { TRPCError } from "@trpc/server";
+import { TRPCError } from "@trpc/server"
 
-import { createMediaTitleSchema, updateMediaTitleSchema } from "~/lib/schemas";
-import { MediaService } from "~/lib/services";
+import { createMediaTitleSchema, updateMediaTitleSchema } from "~/lib/schemas"
+import { MediaService } from "~/lib/services"
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure } from "../trpc"
 
 export const mediaTitlesRouter = createTRPCRouter({
   create: protectedProcedure
@@ -12,7 +12,7 @@ export const mediaTitlesRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const titles = await ctx.db.mediaTitle.findMany({
         where: { mediaId: input.mediaId },
-      });
+      })
 
       if (
         titles.some(
@@ -24,7 +24,7 @@ export const mediaTitlesRouter = createTRPCRouter({
         throw new TRPCError({
           code: "BAD_REQUEST",
           message: "A title with the same language already exists.",
-        });
+        })
       }
 
       if (
@@ -36,7 +36,7 @@ export const mediaTitlesRouter = createTRPCRouter({
           code: "BAD_REQUEST",
           message:
             "A title with the same language and priority already exists.",
-        });
+        })
       }
 
       const createdTitle = await ctx.db.mediaTitle.create({
@@ -44,7 +44,7 @@ export const mediaTitlesRouter = createTRPCRouter({
           ...input,
           creatorId: ctx.session.user.id,
         },
-      });
+      })
 
       if (input.isMainTitle) {
         await ctx.db.mediaTitle.updateMany({
@@ -53,13 +53,13 @@ export const mediaTitlesRouter = createTRPCRouter({
             id: { not: createdTitle.id },
             mediaId: input.mediaId,
           },
-        });
+        })
       }
 
-      const indexItem = await MediaService.getIndexItem(input.mediaId);
-      await ctx.indexes.medias.updateDocuments([indexItem]);
+      const indexItem = await MediaService.getIndexItem(input.mediaId)
+      await ctx.indexes.medias.updateDocuments([indexItem])
 
-      return createdTitle;
+      return createdTitle
     }),
 
   update: protectedProcedure
@@ -71,23 +71,23 @@ export const mediaTitlesRouter = createTRPCRouter({
           code: "BAD_REQUEST",
           message:
             "You cannot remove the main title. If you want to remove it, set another title as the main one.",
-        });
+        })
       }
 
       const title = await ctx.db.mediaTitle.findUnique({
         where: { id: input.id },
-      });
+      })
 
       if (!title) {
         throw new TRPCError({
           code: "NOT_FOUND",
           message: "Media title not found",
-        });
+        })
       }
 
       const titles = await ctx.db.mediaTitle.findMany({
         where: { mediaId: title.mediaId },
-      });
+      })
 
       // If there is already a title with the same language and title
       if (
@@ -101,13 +101,13 @@ export const mediaTitlesRouter = createTRPCRouter({
         throw new TRPCError({
           code: "BAD_REQUEST",
           message: "A title with the same language already exists.",
-        });
+        })
       }
 
       await ctx.db.mediaTitle.update({
         data: input,
         where: { id: input.id },
-      });
+      })
 
       if (input.isMainTitle) {
         await ctx.db.mediaTitle.updateMany({
@@ -116,11 +116,11 @@ export const mediaTitlesRouter = createTRPCRouter({
             id: { not: input.id },
             mediaId: title.mediaId,
           },
-        });
+        })
       }
 
-      const indexItem = await MediaService.getIndexItem(title.mediaId);
-      await ctx.indexes.medias.updateDocuments([indexItem]);
+      const indexItem = await MediaService.getIndexItem(title.mediaId)
+      await ctx.indexes.medias.updateDocuments([indexItem])
     }),
 
   delete: protectedProcedure
@@ -129,13 +129,13 @@ export const mediaTitlesRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const title = await ctx.db.mediaTitle.findUnique({
         where: { id: input.id },
-      });
+      })
 
       if (!title) {
         throw new TRPCError({
           code: "NOT_FOUND",
           message: "Media title not found",
-        });
+        })
       }
 
       if (title.isMainTitle) {
@@ -143,15 +143,15 @@ export const mediaTitlesRouter = createTRPCRouter({
           code: "BAD_REQUEST",
           message:
             "You cannot remove the main title. If you want to remove it, set another title as the main one first.",
-        });
+        })
       }
 
       await ctx.db.mediaTitle.update({
         data: { deletedAt: new Date(), deleterId: ctx.session.user.id },
         where: { id: input.id },
-      });
+      })
 
-      const indexItem = await MediaService.getIndexItem(title.mediaId);
-      await ctx.indexes.medias.updateDocuments([indexItem]);
+      const indexItem = await MediaService.getIndexItem(title.mediaId)
+      await ctx.indexes.medias.updateDocuments([indexItem])
     }),
-});
+})

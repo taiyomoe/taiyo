@@ -1,14 +1,14 @@
-import { startUploadSessionSchema } from "~/lib/schemas";
-import { EncryptionUtils } from "~/lib/utils/encryption.utils";
+import { startUploadSessionSchema } from "~/lib/schemas"
+import { EncryptionUtils } from "~/lib/utils/encryption.utils"
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure } from "../trpc"
 
 export const uploadsRouter = createTRPCRouter({
   startUploadSession: protectedProcedure
     .meta({ resource: "mediaChapters", action: "create" })
     .input(startUploadSessionSchema)
     .mutation(async ({ ctx, input }) => {
-      const mediaChapterId = crypto.randomUUID();
+      const mediaChapterId = crypto.randomUUID()
       const uploadSession = await ctx.db.uploadSession.create({
         data: {
           type: input.type,
@@ -16,15 +16,15 @@ export const uploadsRouter = createTRPCRouter({
           mediaId: input.mediaId,
           mediaChapterId,
         },
-      });
+      })
 
       const toEncrypt = {
         uploadSessionId: uploadSession.id,
-      };
+      }
 
       return {
         mediaChapterId,
         authToken: EncryptionUtils.encrypt(JSON.stringify(toEncrypt)),
-      };
+      }
     }),
-});
+})

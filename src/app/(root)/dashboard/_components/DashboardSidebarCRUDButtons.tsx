@@ -1,34 +1,34 @@
-import NextLink from "next/link";
-import { Button } from "@nextui-org/button";
-import { PencilIcon, PlusIcon, Trash2Icon } from "lucide-react";
-import { tv } from "tailwind-variants";
+import { Button } from "@nextui-org/button"
+import { PencilIcon, PlusIcon, Trash2Icon } from "lucide-react"
+import NextLink from "next/link"
+import { tv } from "tailwind-variants"
 
 type Props = {
   create: {
-    label: string;
-    href: string;
-    isDisabled?: boolean;
-  };
+    label: string
+    href: string
+    isDisabled?: boolean
+  }
   update?: {
-    label: string;
-    href: string;
-    isDisabled?: boolean;
-  };
+    label: string
+    href: string
+    isDisabled?: boolean
+  }
   del?: {
-    label: string;
-    href: string;
-    isDisabled?: boolean;
-  };
-};
+    label: string
+    href: string
+    isDisabled?: boolean
+  }
+}
 
 const sidebarCrudButton = tv({
   slots: {
     base: "text-md justify-end gap-4 px-2 font-medium w-full",
   },
-});
+})
 
 export const DashboardSidebarCRUDButtons = ({ create, update, del }: Props) => {
-  const { base } = sidebarCrudButton();
+  const { base } = sidebarCrudButton()
 
   return (
     <>
@@ -67,5 +67,5 @@ export const DashboardSidebarCRUDButtons = ({ create, update, del }: Props) => {
         </Button>
       )}
     </>
-  );
-};
+  )
+}

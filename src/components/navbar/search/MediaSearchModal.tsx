@@ -4,14 +4,14 @@ import {
   ModalContent,
   ModalHeader,
   useDisclosure,
-} from "@nextui-org/modal";
-import { Button } from "@nextui-org/react";
-import { SearchIcon } from "lucide-react";
+} from "@nextui-org/modal"
+import { Button } from "@nextui-org/react"
+import { SearchIcon } from "lucide-react"
 
-import { MediaSearchAutocomplete } from "~/components/navbar/search/MediaSearchAutocomplete";
+import { MediaSearchAutocomplete } from "~/components/navbar/search/MediaSearchAutocomplete"
 
 export const MediaSearchModal = () => {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
   return (
     <>
@@ -42,5 +42,5 @@ export const MediaSearchModal = () => {
         </ModalContent>
       </Modal>
     </>
-  );
-};
+  )
+}

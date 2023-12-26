@@ -1,29 +1,29 @@
-import type { FormikConfig } from "formik";
-import { toast } from "sonner";
-import { toFormikValidationSchema } from "zod-formik-adapter";
+import type { FormikConfig } from "formik"
+import { toast } from "sonner"
+import { toFormikValidationSchema } from "zod-formik-adapter"
 
-import { Form } from "~/components/generics/form/Form";
-import { useUpload } from "~/hooks/useUpload";
-import { uploadMediaCoverSchema } from "~/lib/schemas";
-import type { UploadMediaCoverSchema } from "~/lib/schemas";
-import { api } from "~/lib/trpc/client";
-import { useImageStore, useMediaUpdateStore } from "~/stores";
+import { Form } from "~/components/generics/form/Form"
+import { useUpload } from "~/hooks/useUpload"
+import { uploadMediaCoverSchema } from "~/lib/schemas"
+import type { UploadMediaCoverSchema } from "~/lib/schemas"
+import { api } from "~/lib/trpc/client"
+import { useImageStore, useMediaUpdateStore } from "~/stores"
 
-import { UploadMediaCoversFormFields } from "./UploadMediaCoversFormFields";
+import { UploadMediaCoversFormFields } from "./UploadMediaCoversFormFields"
 
-const initialValues: UploadMediaCoverSchema = [];
+const initialValues: UploadMediaCoverSchema = []
 
 type Props = {
-  mediaId: string;
-};
+  mediaId: string
+}
 
 export const UploadMediaCoversForm = ({ mediaId }: Props) => {
   const { mutateAsync: startUploadSession } =
-    api.uploads.startUploadSession.useMutation();
-  const { mutateAsync: createCovers } = api.mediaCovers.create.useMutation();
-  const { addCover } = useMediaUpdateStore();
-  const { reset } = useImageStore();
-  const { upload } = useUpload();
+    api.uploads.startUploadSession.useMutation()
+  const { mutateAsync: createCovers } = api.mediaCovers.create.useMutation()
+  const { addCover } = useMediaUpdateStore()
+  const { reset } = useImageStore()
+  const { upload } = useUpload()
 
   const handleSubmit: FormikConfig<UploadMediaCoverSchema>["onSubmit"] = (
     values,
@@ -33,28 +33,28 @@ export const UploadMediaCoversForm = ({ mediaId }: Props) => {
       const { authToken } = await startUploadSession({
         type: "COVER",
         mediaId,
-      });
+      })
 
-      const coversId = await upload(authToken, "COVER");
+      const coversId = await upload(authToken, "COVER")
 
       return await createCovers({
         mediaId,
         covers: values.map((x, i) => ({ ...x, id: coversId[i]! })),
-      });
-    };
+      })
+    }
 
     toast.promise(handleUpload(), {
       loading: "Upando a(s) cover(s)...",
       success: (newCovers) => {
-        resetForm();
-        reset("COVER");
-        addCover(newCovers);
+        resetForm()
+        reset("COVER")
+        addCover(newCovers)
 
-        return "Cover(s) upada(s) com sucesso!";
+        return "Cover(s) upada(s) com sucesso!"
       },
       error: "Ocorreu um erro ao upar a(s) cover(s).",
-    });
-  };
+    })
+  }
 
   return (
     <Form.Component
@@ -64,5 +64,5 @@ export const UploadMediaCoversForm = ({ mediaId }: Props) => {
     >
       <UploadMediaCoversFormFields />
     </Form.Component>
-  );
-};
+  )
+}

@@ -1,16 +1,16 @@
-import type { Media, MediaCover, MediaTitle, Scan } from "@prisma/client";
+import type { Media, MediaCover, MediaTitle, Scan } from "@prisma/client"
 
 export type MediasIndexItem = {
-  id: Media["id"];
-  synopsis: Media["synopsis"];
+  id: Media["id"]
+  synopsis: Media["synopsis"]
   titles: Pick<
     MediaTitle,
     "title" | "language" | "priority" | "isAcronym" | "isMainTitle"
-  >[];
-  mainCoverId: MediaCover["id"];
-};
+  >[]
+  mainCoverId: MediaCover["id"]
+}
 
 export type ScansIndexItem = {
-  id: Scan["id"];
-  name: Scan["name"];
-};
+  id: Scan["id"]
+  name: Scan["name"]
+}

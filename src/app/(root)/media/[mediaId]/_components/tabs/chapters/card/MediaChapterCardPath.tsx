@@ -1,8 +1,8 @@
-import { cn } from "~/lib/utils/cn";
+import { cn } from "~/lib/utils/cn"
 
 type Props = {
-  order: "unique" | "first" | "middle" | "last";
-};
+  order: "unique" | "first" | "middle" | "last"
+}
 
 export const MediaChapterCardPath = ({ order }: Props) => {
   return (
@@ -27,5 +27,5 @@ export const MediaChapterCardPath = ({ order }: Props) => {
         <span className="mt-5 h-[4px] w-[10px] rounded rounded-l-none bg-content3" />
       </div>
     </div>
-  );
-};
+  )
+}

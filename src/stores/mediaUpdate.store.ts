@@ -1,26 +1,26 @@
-import type { MediaCover, MediaTitle } from "@prisma/client";
-import { create } from "zustand";
+import type { MediaCover, MediaTitle } from "@prisma/client"
+import { create } from "zustand"
 
 import type {
   UpdateMediaCoverSchema,
   UpdateMediaTitleSchema,
-} from "~/lib/schemas";
-import type { MediaWithRelations } from "~/lib/types";
+} from "~/lib/schemas"
+import type { MediaWithRelations } from "~/lib/types"
 
 export type MediaUpdateState = {
-  titles: MediaTitle[];
-  covers: MediaCover[];
+  titles: MediaTitle[]
+  covers: MediaCover[]
 
-  load: (media: MediaWithRelations) => void;
+  load: (media: MediaWithRelations) => void
 
-  addTitle: (payload: MediaTitle) => void;
-  updateTitle: (payload: UpdateMediaTitleSchema) => void;
+  addTitle: (payload: MediaTitle) => void
+  updateTitle: (payload: UpdateMediaTitleSchema) => void
 
-  addCover: (payload: MediaCover[]) => void;
-  updateCover: (payload: UpdateMediaCoverSchema) => void;
+  addCover: (payload: MediaCover[]) => void
+  updateCover: (payload: UpdateMediaCoverSchema) => void
 
-  del: (type: "title" | "cover", id: string) => void;
-};
+  del: (type: "title" | "cover", id: string) => void
+}
 
 export const useMediaUpdateStore = create<MediaUpdateState>((set) => ({
   titles: [],
@@ -30,7 +30,7 @@ export const useMediaUpdateStore = create<MediaUpdateState>((set) => ({
     set({
       titles: media.titles,
       covers: media.covers,
-    });
+    })
   },
 
   addTitle: (payload) => {
@@ -42,7 +42,7 @@ export const useMediaUpdateStore = create<MediaUpdateState>((set) => ({
         })),
         payload,
       ],
-    }));
+    }))
   },
   updateTitle: (payload) => {
     set((state) => ({
@@ -51,15 +51,15 @@ export const useMediaUpdateStore = create<MediaUpdateState>((set) => ({
           return {
             ...title,
             ...payload,
-          };
+          }
         }
 
         return {
           ...title,
           isMainTitle: payload.isMainTitle ? false : title.isMainTitle,
-        };
+        }
       }),
-    }));
+    }))
   },
 
   addCover: (payload) => {
@@ -73,7 +73,7 @@ export const useMediaUpdateStore = create<MediaUpdateState>((set) => ({
         })),
         ...payload,
       ],
-    }));
+    }))
   },
   updateCover: (payload) => {
     set((state) => ({
@@ -82,22 +82,22 @@ export const useMediaUpdateStore = create<MediaUpdateState>((set) => ({
           return {
             ...cover,
             ...payload,
-          };
+          }
         }
 
         return {
           ...cover,
           isMainCover: payload.isMainCover ? false : cover.isMainCover,
-        };
+        }
       }),
-    }));
+    }))
   },
 
   del: (type, id) => {
     if (type === "title") {
-      set((prev) => ({ titles: prev.titles.filter((t) => t.id !== id) }));
+      set((prev) => ({ titles: prev.titles.filter((t) => t.id !== id) }))
     } else {
-      set((prev) => ({ covers: prev.covers.filter((c) => c.id !== id) }));
+      set((prev) => ({ covers: prev.covers.filter((c) => c.id !== id) }))
     }
   },
-}));
+}))

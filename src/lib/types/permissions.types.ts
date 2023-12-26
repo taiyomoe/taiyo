@@ -9,22 +9,22 @@ export type Resources =
   | "history"
   | "library"
   | "scans"
-  | "scanMembers";
+  | "scanMembers"
 
-export type Posession = "any" | "own";
-export type ResourcesWithPossession = Exclude<Resources, "scanMembers">;
-export type ResourcesWithoutPossession = Extract<Resources, "scanMembers">;
+export type Posession = "any" | "own"
+export type ResourcesWithPossession = Exclude<Resources, "scanMembers">
+export type ResourcesWithoutPossession = Extract<Resources, "scanMembers">
 
-export type Actions = "create" | "update" | "delete"; // read is omitted
-type ActionsWithoutCreate = Exclude<Actions, "create">;
+export type Actions = "create" | "update" | "delete" // read is omitted
+type ActionsWithoutCreate = Exclude<Actions, "create">
 
 export type Permission =
   | `${Resources}:create`
   | `${ResourcesWithoutPossession}:${ActionsWithoutCreate}`
-  | `${ResourcesWithPossession}:${ActionsWithoutCreate}:${Posession}`;
+  | `${ResourcesWithPossession}:${ActionsWithoutCreate}:${Posession}`
 
 export type Grant = {
-  role: string;
-  resource: Resources;
-  action: `${Actions}:${"any" | "own"}`;
-};
+  role: string
+  resource: Resources
+  action: `${Actions}:${"any" | "own"}`
+}

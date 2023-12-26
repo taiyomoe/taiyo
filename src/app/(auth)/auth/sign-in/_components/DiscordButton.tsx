@@ -1,9 +1,9 @@
-"use client";
+"use client"
 
-import { Button } from "@nextui-org/button";
-import { signIn } from "next-auth/react";
+import { Button } from "@nextui-org/button"
+import { signIn } from "next-auth/react"
 
-import { CompanyLogo } from "~/components/ui/CompanyLogo";
+import { CompanyLogo } from "~/components/ui/CompanyLogo"
 
 export const DiscordButton = () => {
   return (
@@ -15,5 +15,5 @@ export const DiscordButton = () => {
     >
       <p className="w-full">Discord</p>
     </Button>
-  );
-};
+  )
+}

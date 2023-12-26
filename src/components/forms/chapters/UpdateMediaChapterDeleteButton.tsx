@@ -1,4 +1,4 @@
-import { Button } from "@nextui-org/button";
+import { Button } from "@nextui-org/button"
 import {
   Modal,
   ModalBody,
@@ -6,40 +6,40 @@ import {
   ModalFooter,
   ModalHeader,
   useDisclosure,
-} from "@nextui-org/modal";
-import { TrashIcon } from "lucide-react";
-import { toast } from "sonner";
+} from "@nextui-org/modal"
+import { TrashIcon } from "lucide-react"
+import { toast } from "sonner"
 
-import { api } from "~/lib/trpc/client";
-import type { MediaLimitedChapter } from "~/lib/types";
+import { api } from "~/lib/trpc/client"
+import type { MediaLimitedChapter } from "~/lib/types"
 
 type Props = {
-  chapter: MediaLimitedChapter;
-};
+  chapter: MediaLimitedChapter
+}
 
 export const UpdateMediaChapterDeleteButton = ({ chapter }: Props) => {
-  const { mutateAsync } = api.mediaChapters.delete.useMutation();
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { mutateAsync } = api.mediaChapters.delete.useMutation()
+  const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
-  const apiUtils = api.useUtils();
+  const apiUtils = api.useUtils()
 
   const handleDelete = () => {
     toast.promise(mutateAsync(chapter.id), {
       loading: "Apagando o capítulo...",
       success: () => {
-        onOpenChange();
+        onOpenChange()
         // deleteChapter(chapter.id);
-        void apiUtils.mediaChapters.getByMediaId.invalidate();
+        void apiUtils.mediaChapters.getByMediaId.invalidate()
 
-        return "Capítulo apagado com sucesso!";
+        return "Capítulo apagado com sucesso!"
       },
       error: (err) => {
-        console.log(err);
+        console.log(err)
 
-        return "Erro ao apagar o capítulo.";
+        return "Erro ao apagar o capítulo."
       },
-    });
-  };
+    })
+  }
 
   return (
     <>
@@ -80,5 +80,5 @@ export const UpdateMediaChapterDeleteButton = ({ chapter }: Props) => {
         </ModalContent>
       </Modal>
     </>
-  );
-};
+  )
+}

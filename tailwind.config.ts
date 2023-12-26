@@ -1,10 +1,10 @@
-import { nextui } from "@nextui-org/theme";
-import tailwindScrollbar from "tailwind-scrollbar";
-import type { Config } from "tailwindcss";
-import { fontFamily } from "tailwindcss/defaultTheme";
-import plugin from "tailwindcss/plugin";
+import { nextui } from "@nextui-org/theme"
+import tailwindScrollbar from "tailwind-scrollbar"
+import type { Config } from "tailwindcss"
+import { fontFamily } from "tailwindcss/defaultTheme"
+import plugin from "tailwindcss/plugin"
 
-export default {
+export default ({
   darkMode: ["class"],
   content: [
     "./src/**/*.{ts,tsx}",
@@ -91,8 +91,8 @@ export default {
   plugins: [
     tailwindScrollbar({ nocompatible: true }),
     plugin(({ addVariant }) => {
-      addVariant("child", "& > *");
-      addVariant("child-hover", "& > *:hover");
+      addVariant("child", "& > *")
+      addVariant("child-hover", "& > *:hover")
     }),
     require("@savvywombat/tailwindcss-grid-areas"),
     nextui({
@@ -145,4 +145,4 @@ export default {
       },
     }),
   ],
-} satisfies Config;
+} satisfies Config)

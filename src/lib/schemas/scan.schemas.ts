@@ -1,6 +1,6 @@
-import { z } from "zod";
+import { z } from "zod"
 
-import { ScanSchema } from "./prisma";
+import { ScanSchema } from "./prisma"
 
 export const insertScanSchema = ScanSchema.pick({
   name: true,
@@ -17,8 +17,8 @@ export const insertScanSchema = ScanSchema.pick({
   email: true,
 })
   .partial()
-  .required({ name: true });
+  .required({ name: true })
 
-export const searchScanSchema = z.string().min(1);
+export const searchScanSchema = z.string().min(1)
 
-export type InsertScanSchema = typeof insertScanSchema._type;
+export type InsertScanSchema = typeof insertScanSchema._type

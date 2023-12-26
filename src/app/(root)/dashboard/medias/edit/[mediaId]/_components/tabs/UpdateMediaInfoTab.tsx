@@ -1,16 +1,17 @@
-import { UpdateMediaForm } from "~/components/forms/medias/UpdateMediaForm";
-import type { UpdateMediaSchema } from "~/lib/schemas";
-import type { MediaWithRelations } from "~/lib/types";
+import { UpdateMediaForm } from "~/components/forms/medias/UpdateMediaForm"
+import type { UpdateMediaSchema } from "~/lib/schemas"
+import type { MediaWithRelations } from "~/lib/types"
 
 type Props = {
-  media: MediaWithRelations;
-};
+  media: MediaWithRelations
+}
 
 export const UpdateMediaInfoTab = ({ media }: Props) => {
-  const mdTracker = media.trackers.find((t) => t.tracker === "MANGADEX")
-    ?.externalId;
-  const alTracker = media.trackers.find((t) => t.tracker === "ANILIST");
-  const malTracker = media.trackers.find((t) => t.tracker === "MYANIMELIST");
+  const mdTracker = media.trackers.find(
+    (t) => t.tracker === "MANGADEX",
+  )?.externalId
+  const alTracker = media.trackers.find((t) => t.tracker === "ANILIST")
+  const malTracker = media.trackers.find((t) => t.tracker === "MYANIMELIST")
 
   const initialValues: UpdateMediaSchema = {
     id: media.id,
@@ -30,7 +31,7 @@ export const UpdateMediaInfoTab = ({ media }: Props) => {
     mdTracker: mdTracker ?? "",
     alTracker: alTracker ? Number.parseInt(alTracker.externalId) : 0,
     malTracker: malTracker ? Number.parseInt(malTracker.externalId) : 0,
-  };
+  }
 
-  return <UpdateMediaForm initialValues={initialValues} />;
-};
+  return <UpdateMediaForm initialValues={initialValues} />
+}

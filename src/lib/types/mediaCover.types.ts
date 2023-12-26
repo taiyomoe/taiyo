@@ -1,6 +1,6 @@
-import type { MediaCover } from "@prisma/client";
+import type { MediaCover } from "@prisma/client"
 
 export type MediaCoverVolume = {
-  number: number;
-  covers: MediaCover[];
-};
+  number: number
+  covers: MediaCover[]
+}

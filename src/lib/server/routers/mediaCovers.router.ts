@@ -1,13 +1,13 @@
-import { TRPCError } from "@trpc/server";
+import { TRPCError } from "@trpc/server"
 
 import {
   createMediaCoversSchema,
   deleteMediaCoverSchema,
   updateMediaCoverSchema,
-} from "~/lib/schemas/mediaCover.schemas";
-import { MediaService } from "~/lib/services";
+} from "~/lib/schemas/mediaCover.schemas"
+import { MediaService } from "~/lib/services"
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure } from "../trpc"
 
 export const mediaCoversRouter = createTRPCRouter({
   create: protectedProcedure
@@ -18,7 +18,7 @@ export const mediaCoversRouter = createTRPCRouter({
         throw new TRPCError({
           code: "BAD_REQUEST",
           message: "You must provide at least one cover.",
-        });
+        })
       }
 
       await ctx.db.mediaCover.createMany({
@@ -27,7 +27,7 @@ export const mediaCoversRouter = createTRPCRouter({
           mediaId,
           uploaderId: ctx.session.user.id,
         })),
-      });
+      })
 
       // If there's a main cover, set it as the main cover
       if (covers.some((c) => c.isMainCover)) {
@@ -37,18 +37,18 @@ export const mediaCoversRouter = createTRPCRouter({
             mediaId,
             id: { notIn: covers.map((c) => c.id) },
           },
-        });
+        })
 
-        const indexItem = await MediaService.getIndexItem(mediaId);
-        await ctx.indexes.medias.updateDocuments([indexItem]);
+        const indexItem = await MediaService.getIndexItem(mediaId)
+        await ctx.indexes.medias.updateDocuments([indexItem])
       }
 
       const createdCovers = await ctx.db.mediaCover.findMany({
         where: { mediaId, id: { in: covers.map((c) => c.id) } },
         orderBy: { createdAt: "asc" },
-      });
+      })
 
-      return createdCovers;
+      return createdCovers
     }),
 
   update: protectedProcedure
@@ -60,24 +60,24 @@ export const mediaCoversRouter = createTRPCRouter({
           code: "BAD_REQUEST",
           message:
             "You cannot remove the main cover. If you want to remove it, set another cover as the main one.",
-        });
+        })
       }
 
       const cover = await ctx.db.mediaCover.findUnique({
         where: { id: input.id },
-      });
+      })
 
       if (!cover) {
         throw new TRPCError({
           code: "NOT_FOUND",
           message: "Media cover not found",
-        });
+        })
       }
 
       const updatedCover = await ctx.db.mediaCover.update({
         data: input,
         where: { id: input.id },
-      });
+      })
 
       if (input.isMainCover) {
         await ctx.db.mediaCover.updateMany({
@@ -86,10 +86,10 @@ export const mediaCoversRouter = createTRPCRouter({
             mediaId: updatedCover.mediaId,
             id: { not: input.id },
           },
-        });
+        })
 
-        const indexItem = await MediaService.getIndexItem(cover.mediaId);
-        await ctx.indexes.medias.updateDocuments([indexItem]);
+        const indexItem = await MediaService.getIndexItem(cover.mediaId)
+        await ctx.indexes.medias.updateDocuments([indexItem])
       }
     }),
 
@@ -99,13 +99,13 @@ export const mediaCoversRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const cover = await ctx.db.mediaCover.findUnique({
         where: { id: input.id },
-      });
+      })
 
       if (!cover) {
         throw new TRPCError({
           code: "NOT_FOUND",
           message: "Media cover not found",
-        });
+        })
       }
 
       if (cover.isMainCover) {
@@ -113,12 +113,12 @@ export const mediaCoversRouter = createTRPCRouter({
           code: "BAD_REQUEST",
           message:
             "You cannot delete the main cover. If you want to delete it, set another cover as the main one first.",
-        });
+        })
       }
 
       await ctx.db.mediaCover.update({
         data: { deletedAt: new Date(), deleterId: ctx.session.user.id },
         where: { id: input.id },
-      });
+      })
     }),
-});
+})

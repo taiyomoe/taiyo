@@ -1,11 +1,11 @@
-"use client";
+"use client"
 
-import { Button, ButtonGroup } from "@nextui-org/button";
-import { FileIcon, ScrollTextIcon } from "lucide-react";
-import { tv } from "tailwind-variants";
+import { Button, ButtonGroup } from "@nextui-org/button"
+import { FileIcon, ScrollTextIcon } from "lucide-react"
+import { tv } from "tailwind-variants"
 
-import type { ReaderSettings } from "~/lib/types";
-import { useReaderSettingsStore } from "~/stores";
+import type { ReaderSettings } from "~/lib/types"
+import { useReaderSettingsStore } from "~/stores"
 
 const readerSidebarSettingsPageMode = tv({
   slots: {
@@ -14,27 +14,27 @@ const readerSidebarSettingsPageMode = tv({
     leftButton: "justify-start gap-3 pl-3",
     rightButton: "justify-end gap-3 pr-3",
   },
-});
+})
 
 export const ReaderSidebarSettingsPageMode = () => {
-  const { page, update, reset } = useReaderSettingsStore();
+  const { page, update, reset } = useReaderSettingsStore()
 
   const { container, text, leftButton, rightButton } =
-    readerSidebarSettingsPageMode();
+    readerSidebarSettingsPageMode()
 
   const handlePress = (mode: ReaderSettings["page"]["mode"]) => () => {
     if (mode === "single") {
-      update("page.mode", "single", true);
-      reset("page.height");
-      reset("page.width");
+      update("page.mode", "single", true)
+      reset("page.height")
+      reset("page.width")
 
-      return;
+      return
     }
 
-    update("page.mode", "longstrip", true);
-    update("page.height", "full");
-    update("page.width", "fit");
-  };
+    update("page.mode", "longstrip", true)
+    update("page.height", "full")
+    update("page.width", "fit")
+  }
 
   return (
     <div className={container()}>
@@ -60,5 +60,5 @@ export const ReaderSidebarSettingsPageMode = () => {
         </Button>
       </ButtonGroup>
     </div>
-  );
-};
+  )
+}

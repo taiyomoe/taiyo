@@ -1,18 +1,18 @@
-import { Button } from "@nextui-org/button";
-import { Languages } from "@prisma/client";
-import { useField } from "formik";
-import { PlusIcon, TrashIcon } from "lucide-react";
+import { Button } from "@nextui-org/button"
+import { Languages } from "@prisma/client"
+import { useField } from "formik"
+import { PlusIcon, TrashIcon } from "lucide-react"
 
-import { Form } from "~/components/generics/form/Form";
-import { InputFormField } from "~/components/generics/form/InputFormField";
-import { SelectFormField } from "~/components/generics/form/SelectFormField";
-import { SwitchFormField } from "~/components/generics/form/SwitchFormField";
-import type { InsertMediaSchema } from "~/lib/schemas";
+import { Form } from "~/components/generics/form/Form"
+import { InputFormField } from "~/components/generics/form/InputFormField"
+import { SelectFormField } from "~/components/generics/form/SelectFormField"
+import { SwitchFormField } from "~/components/generics/form/SwitchFormField"
+import type { InsertMediaSchema } from "~/lib/schemas"
 
 export const MediaTitlesFormCategory = () => {
   const [{ value }, {}, { setValue }] = useField<InsertMediaSchema["titles"]>({
     name: "titles",
-  });
+  })
 
   const handleAddTitle = async () => {
     await setValue([
@@ -24,14 +24,14 @@ export const MediaTitlesFormCategory = () => {
         isAcronym: false,
         isMainTitle: false,
       },
-    ]);
-  };
+    ])
+  }
 
   const handleRemoveTitle = async (index: number) => {
-    const newTitles = [...value];
-    newTitles.splice(index, 1);
-    await setValue(newTitles, false);
-  };
+    const newTitles = [...value]
+    newTitles.splice(index, 1)
+    await setValue(newTitles, false)
+  }
 
   const categoryActions = (
     <>
@@ -46,7 +46,7 @@ export const MediaTitlesFormCategory = () => {
         isIconOnly
       />
     </>
-  );
+  )
 
   return (
     <Form.Category title="Títulos" actions={categoryActions}>
@@ -77,5 +77,5 @@ export const MediaTitlesFormCategory = () => {
         </div>
       ))}
     </Form.Category>
-  );
-};
+  )
+}

@@ -1,11 +1,11 @@
-import { useRef } from "react";
-import { tv } from "@nextui-org/react";
-import { useOnClickOutside } from "usehooks-ts";
+import { tv } from "@nextui-org/react"
+import { useRef } from "react"
+import { useOnClickOutside } from "usehooks-ts"
 
-import { UserLibrarySidebarTabs } from "~/components/library/UserLibrarySidebarTabs";
-import { UserLibrarySidebarTitle } from "~/components/library/UserLibrarySidebarTitle";
-import { useDevice } from "~/hooks/useDevice";
-import { useLibraryStore } from "~/stores";
+import { UserLibrarySidebarTabs } from "~/components/library/UserLibrarySidebarTabs"
+import { UserLibrarySidebarTitle } from "~/components/library/UserLibrarySidebarTitle"
+import { useDevice } from "~/hooks/useDevice"
+import { useLibraryStore } from "~/stores"
 
 const userLibrarySidebar = tv({
   slots: {
@@ -24,18 +24,18 @@ const userLibrarySidebar = tv({
       },
     },
   },
-});
+})
 
 export const UserLibrarySidebar = () => {
-  const { sidebarState, toggleSidebar } = useLibraryStore();
-  const { isMobile } = useDevice();
-  const slots = userLibrarySidebar({ isMobile });
-  const containerRef = useRef(null);
+  const { sidebarState, toggleSidebar } = useLibraryStore()
+  const { isMobile } = useDevice()
+  const slots = userLibrarySidebar({ isMobile })
+  const containerRef = useRef(null)
 
   useOnClickOutside(
     containerRef,
     () => sidebarState === "show" && toggleSidebar(),
-  );
+  )
 
   return (
     <div
@@ -50,5 +50,5 @@ export const UserLibrarySidebar = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

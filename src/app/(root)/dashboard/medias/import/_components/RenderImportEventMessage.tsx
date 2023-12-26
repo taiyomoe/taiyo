@@ -1,16 +1,16 @@
-import { Spinner } from "@nextui-org/react";
-import { useAtomValue } from "jotai";
-import { CheckIcon } from "lucide-react";
+import { Spinner } from "@nextui-org/react"
+import { useAtomValue } from "jotai"
+import { CheckIcon } from "lucide-react"
 
-import { importEventMessages } from "~/atoms/wsEvents.atoms";
+import { importEventMessages } from "~/atoms/wsEvents.atoms"
 
 export const RenderImportEventMessage = () => {
-  const messages = useAtomValue(importEventMessages);
-  const highestStep = Math.max(...messages.map((message) => message.step));
+  const messages = useAtomValue(importEventMessages)
+  const highestStep = Math.max(...messages.map((message) => message.step))
   const messagesWithLatestSteps = Array.from(
     { length: highestStep },
     (_, i) => messages.filter((message) => message.step === i + 1).pop()!,
-  );
+  )
 
   return (
     <div className="flex flex-col gap-4">
@@ -25,5 +25,5 @@ export const RenderImportEventMessage = () => {
         </div>
       ))}
     </div>
-  );
-};
+  )
+}

@@ -1,12 +1,12 @@
-import { z } from "zod";
+import { z } from "zod"
 
 import {
   DEFAULT_MEDIA_PAGE,
   DEFAULT_MEDIA_PER_PAGE,
   MEDIA_PER_PAGE_CHOICES,
-} from "~/lib/constants";
+} from "~/lib/constants"
 
-import { ContentRatingSchema, FlagSchema, LanguagesSchema } from "./prisma";
+import { ContentRatingSchema, FlagSchema, LanguagesSchema } from "./prisma"
 
 export const insertMediaChapterSchema = z.object({
   id: z.string().uuid(),
@@ -19,11 +19,11 @@ export const insertMediaChapterSchema = z.object({
   flag: FlagSchema,
   mediaId: z.string().uuid(),
   scanIds: z.string().uuid().array(),
-});
+})
 
 export const insertMediaChapterFormSchema = insertMediaChapterSchema.omit({
   id: true,
-});
+})
 
 export const updateMediaChapterSchema = insertMediaChapterSchema
   .partial()
@@ -31,9 +31,9 @@ export const updateMediaChapterSchema = insertMediaChapterSchema
   .omit({
     pages: true,
     mediaId: true,
-  });
+  })
 
-export const getMediaChapterByIdSchema = z.string();
+export const getMediaChapterByIdSchema = z.string()
 
 export const getMediaChaptersByMediaIdSchema = z.object({
   mediaId: z.string(),
@@ -45,8 +45,8 @@ export const getMediaChaptersByMediaIdSchema = z.object({
     .refine((x) => MEDIA_PER_PAGE_CHOICES.includes(x), {
       message: `perPage must be one of ${MEDIA_PER_PAGE_CHOICES.join(", ")}`,
     }),
-});
+})
 
 export type InsertMediaChapterFormSchema =
-  typeof insertMediaChapterFormSchema._type;
-export type UpdateMediaChapterSchema = typeof updateMediaChapterSchema._type;
+  typeof insertMediaChapterFormSchema._type
+export type UpdateMediaChapterSchema = typeof updateMediaChapterSchema._type

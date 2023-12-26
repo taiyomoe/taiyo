@@ -6,25 +6,25 @@ import {
   MediaSource,
   MediaStatus,
   MediaType,
-} from "@prisma/client";
+} from "@prisma/client"
 
-import { SubmitButton } from "~/components/generics/buttons/SubmitButton";
-import { Form } from "~/components/generics/form/Form";
-import { InputFormField } from "~/components/generics/form/InputFormField";
-import { SelectFormField } from "~/components/generics/form/SelectFormField";
-import { SwitchFormField } from "~/components/generics/form/SwitchFormField";
-import { TextAreaFormField } from "~/components/generics/form/TextAreaFormField";
+import { SubmitButton } from "~/components/generics/buttons/SubmitButton"
+import { Form } from "~/components/generics/form/Form"
+import { InputFormField } from "~/components/generics/form/InputFormField"
+import { SelectFormField } from "~/components/generics/form/SelectFormField"
+import { SwitchFormField } from "~/components/generics/form/SwitchFormField"
+import { TextAreaFormField } from "~/components/generics/form/TextAreaFormField"
 
-import { MediaTagsFormCategory } from "./MediaTagsFormCategory";
-import { MediaTitlesFormCategory } from "./MediaTitlesFormCategory";
-import { MediaTrackersFormCategory } from "./MediaTrackersFormFields";
+import { MediaTagsFormCategory } from "./MediaTagsFormCategory"
+import { MediaTitlesFormCategory } from "./MediaTitlesFormCategory"
+import { MediaTrackersFormCategory } from "./MediaTrackersFormFields"
 
 type Props = {
-  action: "create" | "update";
-};
+  action: "create" | "update"
+}
 
 export const MediaFormFields = ({ action }: Props) => {
-  const buttonText = action === "create" ? "Adicionar" : "Salvar";
+  const buttonText = action === "create" ? "Adicionar" : "Salvar"
 
   return (
     <Form.Layout>
@@ -92,5 +92,5 @@ export const MediaFormFields = ({ action }: Props) => {
         <SubmitButton>{buttonText}</SubmitButton>
       </Form.Actions>
     </Form.Layout>
-  );
-};
+  )
+}

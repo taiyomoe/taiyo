@@ -1,21 +1,21 @@
-"use client";
+"use client"
 
-import { Image } from "@nextui-org/image";
-import { FreeMode, Mousewheel, Pagination } from "swiper/modules";
-import { Swiper, SwiperSlide } from "swiper/react";
+import { Image } from "@nextui-org/image"
+import { FreeMode, Mousewheel, Pagination } from "swiper/modules"
+import { Swiper, SwiperSlide } from "swiper/react"
 
-import "swiper/css";
-import "swiper/css/pagination";
+import "swiper/css"
+import "swiper/css/pagination"
 
-import NextImage from "next/image";
-import Link from "next/link";
+import NextImage from "next/image"
+import Link from "next/link"
 
-import type { LatestMedia } from "~/lib/types";
-import { MediaCoverUtils } from "~/lib/utils/mediaCover.utils";
+import type { LatestMedia } from "~/lib/types"
+import { MediaCoverUtils } from "~/lib/utils/mediaCover.utils"
 
 type Props = {
-  medias: LatestMedia[];
-};
+  medias: LatestMedia[]
+}
 
 export const SwipeableTrendingMedias = ({ medias }: Props) => (
   <Swiper
@@ -62,4 +62,4 @@ export const SwipeableTrendingMedias = ({ medias }: Props) => (
       </SwiperSlide>
     ))}
   </Swiper>
-);
+)

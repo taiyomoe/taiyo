@@ -1,41 +1,41 @@
-import { useEffect } from "react";
-import { Button } from "@nextui-org/react";
-import { throttle } from "lodash-es";
-import { ChevronsUp } from "lucide-react";
+import { Button } from "@nextui-org/react"
+import { throttle } from "lodash-es"
+import { ChevronsUp } from "lucide-react"
+import { useEffect } from "react"
 
-import { useReaderSettingsStore } from "~/stores";
+import { useReaderSettingsStore } from "~/stores"
 
 export const MediaChapterPageOverlayScrollButton = () => {
-  const { page, update } = useReaderSettingsStore();
+  const { page, update } = useReaderSettingsStore()
 
   const handlePress = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
+    window.scrollTo({ top: 0, behavior: "smooth" })
+  }
 
   useEffect(() => {
     if (page.overlay === "hide") {
-      return;
+      return
     }
 
     const onScroll = throttle(
       () => {
         const execute = async () => {
           // wait 500 ms
-          await new Promise((resolve) => setTimeout(resolve, 200));
+          await new Promise((resolve) => setTimeout(resolve, 200))
 
-          update("page.overlay", "hide");
-        };
+          update("page.overlay", "hide")
+        }
 
-        void execute();
+        void execute()
       },
       1000,
       { trailing: false },
-    );
+    )
 
-    window.addEventListener("scroll", onScroll);
+    window.addEventListener("scroll", onScroll)
 
-    return () => window.removeEventListener("scroll", onScroll);
-  }, [page.overlay, update]);
+    return () => window.removeEventListener("scroll", onScroll)
+  }, [page.overlay, update])
 
   return (
     <Button
@@ -45,5 +45,5 @@ export const MediaChapterPageOverlayScrollButton = () => {
       isDisabled={window.scrollY < 100}
       isIconOnly
     />
-  );
-};
+  )
+}

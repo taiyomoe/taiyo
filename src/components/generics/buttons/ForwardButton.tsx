@@ -1,6 +1,6 @@
-import type { ButtonProps } from "@nextui-org/button";
-import { Button } from "@nextui-org/button";
-import { ChevronRightIcon } from "lucide-react";
+import type { ButtonProps } from "@nextui-org/button"
+import { Button } from "@nextui-org/button"
+import { ChevronRightIcon } from "lucide-react"
 
 export const ForwardButton = (props: ButtonProps) => {
   return (
@@ -12,5 +12,5 @@ export const ForwardButton = (props: ButtonProps) => {
       isIconOnly
       {...props}
     />
-  );
-};
+  )
+}

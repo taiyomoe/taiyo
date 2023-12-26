@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import {
   Modal,
@@ -6,20 +6,20 @@ import {
   ModalContent,
   ModalHeader,
   useDisclosure,
-} from "@nextui-org/modal";
-import { PanelBottomOpenIcon } from "lucide-react";
+} from "@nextui-org/modal"
+import { PanelBottomOpenIcon } from "lucide-react"
 
-import { FloatingActionButton } from "~/components/generics/buttons/FloatingActionButton";
-import { cn } from "~/lib/utils/cn";
+import { FloatingActionButton } from "~/components/generics/buttons/FloatingActionButton"
+import { cn } from "~/lib/utils/cn"
 
 type Props = {
-  title: string;
-  content: JSX.Element;
-  className?: string;
-};
+  title: string
+  content: JSX.Element
+  className?: string
+}
 
 export const Sidebar = ({ title, content, className }: Props) => {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
   return (
     <>
@@ -44,5 +44,5 @@ export const Sidebar = ({ title, content, className }: Props) => {
       </Modal>
       <FloatingActionButton icon={<PanelBottomOpenIcon />} onPress={onOpen} />
     </>
-  );
-};
+  )
+}

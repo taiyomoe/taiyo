@@ -1,18 +1,18 @@
-"use client";
+"use client"
 
-import { useCallback } from "react";
+import { useCallback } from "react"
 
-import { useScrollOpacity } from "~/hooks/useScrollOpacity";
-import type { MediaLimited } from "~/lib/types";
+import { useScrollOpacity } from "~/hooks/useScrollOpacity"
+import type { MediaLimited } from "~/lib/types"
 
-type Props = { media: MediaLimited };
+type Props = { media: MediaLimited }
 
 export const MediaLayoutTitle = ({ media }: Props) => {
-  const { opacity } = useScrollOpacity({ min: 300, max: 450 });
+  const { opacity } = useScrollOpacity({ min: 300, max: 450 })
 
   const handleClick = useCallback(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }, []);
+    window.scrollTo({ top: 0, behavior: "smooth" })
+  }, [])
 
   return (
     <h2
@@ -22,5 +22,5 @@ export const MediaLayoutTitle = ({ media }: Props) => {
     >
       {media.mainTitle}
     </h2>
-  );
-};
+  )
+}

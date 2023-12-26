@@ -1,17 +1,17 @@
-"use client";
+"use client"
 
-import { Divider } from "@nextui-org/divider";
-import { tv } from "tailwind-variants";
+import { Divider } from "@nextui-org/divider"
+import { tv } from "tailwind-variants"
 
-import { useDevice } from "~/hooks/useDevice";
-import { useReaderSettingsStore } from "~/stores";
+import { useDevice } from "~/hooks/useDevice"
+import { useReaderSettingsStore } from "~/stores"
 
-import { ReaderSidebarSettingsSection } from "../sections/ReaderSidebarSettingsSection";
-import { ReaderSidebarUploadersSection } from "../sections/ReaderSidebarUploadersSection";
-import { ReaderSettingsMediaChapterDropdown } from "../ui/ReaderSettingsMediaChapterDropdown";
-import { ReaderSettingsMediaChapterPageDropdown } from "../ui/ReaderSettingsMediaChapterPageDropdown";
-import { ReaderSettingsMediaChapterReportModal } from "../ui/ReaderSettingsMediaChapterReportModal";
-import { ReaderSidebarHeader } from "../ui/ReaderSidebarHeader";
+import { ReaderSidebarSettingsSection } from "../sections/ReaderSidebarSettingsSection"
+import { ReaderSidebarUploadersSection } from "../sections/ReaderSidebarUploadersSection"
+import { ReaderSettingsMediaChapterDropdown } from "../ui/ReaderSettingsMediaChapterDropdown"
+import { ReaderSettingsMediaChapterPageDropdown } from "../ui/ReaderSettingsMediaChapterPageDropdown"
+import { ReaderSettingsMediaChapterReportModal } from "../ui/ReaderSettingsMediaChapterReportModal"
+import { ReaderSidebarHeader } from "../ui/ReaderSidebarHeader"
 
 const readerSidebarLayout = tv({
   slots: {
@@ -52,13 +52,13 @@ const readerSidebarLayout = tv({
       className: { container: "right-0" },
     },
   ],
-});
+})
 
 export const ReaderSidebarLayout = () => {
-  const { state, side } = useReaderSettingsStore((state) => state.sidebar);
-  const { isMobile } = useDevice();
+  const { state, side } = useReaderSettingsStore((state) => state.sidebar)
+  const { isMobile } = useDevice()
 
-  const slots = readerSidebarLayout({ isMobile, side });
+  const slots = readerSidebarLayout({ isMobile, side })
 
   return (
     <div className={slots.container()} aria-expanded={state === "show"}>
@@ -77,5 +77,5 @@ export const ReaderSidebarLayout = () => {
         <ReaderSidebarSettingsSection />
       </div>
     </div>
-  );
-};
+  )
+}

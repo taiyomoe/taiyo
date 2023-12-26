@@ -1,17 +1,17 @@
-"use client";
+"use client"
 
-import { Textarea } from "@nextui-org/react";
-import type { TextAreaProps } from "@nextui-org/react";
-import { useField } from "formik";
-import { tv } from "tailwind-variants";
+import { Textarea } from "@nextui-org/react"
+import type { TextAreaProps } from "@nextui-org/react"
+import { useField } from "formik"
+import { tv } from "tailwind-variants"
 
-import { cn } from "~/lib/utils/cn";
+import { cn } from "~/lib/utils/cn"
 
 type Props = {
-  name: string;
-  rightContent?: React.ReactNode;
-  displayValidationError?: boolean;
-} & TextAreaProps;
+  name: string
+  rightContent?: React.ReactNode
+  displayValidationError?: boolean
+} & TextAreaProps
 
 const textArea = tv({
   slots: {
@@ -36,7 +36,7 @@ const textArea = tv({
       },
     },
   },
-});
+})
 
 export const TextAreaFormField = ({
   name,
@@ -47,10 +47,10 @@ export const TextAreaFormField = ({
   displayValidationError,
   ...rest
 }: Props) => {
-  const [field, { error, touched, initialTouched }] = useField({ name });
-  const shouldDisplayError = touched && !!error && !initialTouched;
-  const shouldIgnoreErrorMessage = !!displayValidationError === false;
-  const { container, label, mainWrapper, inputWrapper, base } = textArea();
+  const [field, { error, touched, initialTouched }] = useField({ name })
+  const shouldDisplayError = touched && !!error && !initialTouched
+  const shouldIgnoreErrorMessage = !!displayValidationError === false
+  const { container, label, mainWrapper, inputWrapper, base } = textArea()
 
   return (
     <div className={cn(container(), className)}>
@@ -82,5 +82,5 @@ export const TextAreaFormField = ({
       />
       {rightContent}
     </div>
-  );
-};
+  )
+}

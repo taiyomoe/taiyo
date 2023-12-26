@@ -1,17 +1,17 @@
-import { useCallback } from "react";
-import { ContentRating, Languages } from "@prisma/client";
-import { useFormikContext } from "formik";
+import { ContentRating, Languages } from "@prisma/client"
+import { useFormikContext } from "formik"
+import { useCallback } from "react"
 
-import { Form } from "~/components/generics/form/Form";
-import { InputFormField } from "~/components/generics/form/InputFormField";
-import { SelectFormField } from "~/components/generics/form/SelectFormField";
-import { SwitchFormField } from "~/components/generics/form/SwitchFormField";
-import { List } from "~/components/generics/List";
-import { ImageDropzone } from "~/components/ui/images/ImageDropzone";
-import type { UploadMediaCoverSchema } from "~/lib/schemas";
+import { List } from "~/components/generics/List"
+import { Form } from "~/components/generics/form/Form"
+import { InputFormField } from "~/components/generics/form/InputFormField"
+import { SelectFormField } from "~/components/generics/form/SelectFormField"
+import { SwitchFormField } from "~/components/generics/form/SwitchFormField"
+import { ImageDropzone } from "~/components/ui/images/ImageDropzone"
+import type { UploadMediaCoverSchema } from "~/lib/schemas"
 
 export const UploadMediaCoversFormFields = () => {
-  const { setValues } = useFormikContext<UploadMediaCoverSchema>();
+  const { setValues } = useFormikContext<UploadMediaCoverSchema>()
 
   const handleDrop = async (filesLength: number) => {
     await setValues((prev) =>
@@ -23,8 +23,8 @@ export const UploadMediaCoversFormFields = () => {
           language: "ja",
         })),
       ),
-    );
-  };
+    )
+  }
 
   const handleSwitchChange = useCallback(
     (imageIndex: number) => (newValue: boolean) => {
@@ -33,10 +33,10 @@ export const UploadMediaCoversFormFields = () => {
           ...x,
           isMainCover: newValue ? i === imageIndex : false,
         })),
-      );
+      )
     },
     [setValues],
-  );
+  )
 
   return (
     <ImageDropzone title="Upar covers" type="COVER" onDrop={handleDrop}>
@@ -89,5 +89,5 @@ export const UploadMediaCoversFormFields = () => {
         </List>
       )}
     </ImageDropzone>
-  );
-};
+  )
+}

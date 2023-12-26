@@ -1,20 +1,20 @@
-import { Formik, Form as FormikForm } from "formik";
-import type { FormikConfig, FormikProps, FormikValues } from "formik";
+import { Form as FormikForm, Formik } from "formik"
+import type { FormikConfig, FormikProps, FormikValues } from "formik"
 
-import { cn } from "~/lib/utils/cn";
+import { cn } from "~/lib/utils/cn"
 
 type FormProps<T extends FormikValues> = {
-  children: React.ReactNode | ((props: FormikProps<T>) => React.ReactNode);
-};
+  children: React.ReactNode | ((props: FormikProps<T>) => React.ReactNode)
+}
 
 type Props = {
-  children: React.ReactNode;
-};
+  children: React.ReactNode
+}
 
 type CategoryProps = {
-  title?: string;
-  actions?: React.ReactNode;
-} & Props;
+  title?: string
+  actions?: React.ReactNode
+} & Props
 
 const Component = <T extends FormikValues>({
   children,
@@ -28,12 +28,12 @@ const Component = <T extends FormikValues>({
         </FormikForm>
       )}
     </Formik>
-  );
-};
+  )
+}
 
 const Layout = ({ children }: Props) => (
   <div className="flex flex-col gap-10">{children}</div>
-);
+)
 
 const Category = ({ title, actions, children }: CategoryProps) => (
   <div className="flex flex-col gap-4">
@@ -43,19 +43,19 @@ const Category = ({ title, actions, children }: CategoryProps) => (
     </div>
     <div className="flex flex-col gap-6">{children}</div>
   </div>
-);
+)
 
 const Actions = ({ children }: Props) => (
   <div className="flex justify-end gap-6">{children}</div>
-);
+)
 
 const Row = ({ children }: Props) => (
   <div className="flex flex-col gap-6 md:flex-row">{children}</div>
-);
+)
 
 const Col = ({ children }: Props) => (
   <div className="flex w-full flex-col gap-6">{children}</div>
-);
+)
 
 /**
  * These components allow me to not mess up the different
@@ -68,4 +68,4 @@ export const Form = {
   Actions,
   Row,
   Col,
-};
+}

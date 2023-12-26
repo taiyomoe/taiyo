@@ -1,9 +1,9 @@
-import type { MediaWithRelations } from "~/lib/types";
+import type { MediaWithRelations } from "~/lib/types"
 
 type Props = {
-  media: MediaWithRelations;
-};
+  media: MediaWithRelations
+}
 
 export const UpdateMediaStatsTab = ({}: Props) => {
-  return <div>Stats</div>;
-};
+  return <div>Stats</div>
+}

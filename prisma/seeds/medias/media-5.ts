@@ -1,4 +1,4 @@
-import { db } from "~/lib/server/db";
+import { db } from "~/lib/server/db"
 
 const execute = async () => {
   await db.media.create({
@@ -51,7 +51,7 @@ const execute = async () => {
       // -----
       creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
-  });
+  })
 
   await db.mediaTitle.createMany({
     data: [
@@ -115,7 +115,7 @@ const execute = async () => {
         creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
       },
     ],
-  });
+  })
 
   await db.mediaTracker.createMany({
     data: [
@@ -138,7 +138,7 @@ const execute = async () => {
         creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
       },
     ],
-  });
+  })
 
   await db.mediaCover.createMany({
     data: [
@@ -186,7 +186,7 @@ const execute = async () => {
         uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
       },
     ],
-  });
+  })
 
   await db.mediaBanner.create({
     data: {
@@ -194,7 +194,7 @@ const execute = async () => {
       mediaId: "7d64e4f8-d955-4b59-a7c5-7ee2ddcad68b",
       uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
-  });
+  })
 
   await db.mediaChapter.createMany({
     data: [
@@ -540,7 +540,7 @@ const execute = async () => {
         uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
       },
     ],
-  });
-};
+  })
+}
 
-export default { execute };
+export default { execute }
