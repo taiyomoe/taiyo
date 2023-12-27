@@ -7,7 +7,6 @@ import { tv } from "tailwind-variants"
 import { MediaChapterPageOverlay } from "~/app/(reader)/_components/MediaChapterPageOverlay"
 import { useChapterNavigation } from "~/hooks/useChapterNavigation"
 import { useDevice } from "~/hooks/useDevice"
-import { useKeyPress } from "~/hooks/useKeyPress"
 import { useReaderSettingsStore } from "~/stores"
 
 import { MediaChapterImages } from "./MediaChapterImages"
@@ -15,27 +14,10 @@ import { MediaChapterImages } from "./MediaChapterImages"
 const mediaChapterPage = tv({
   slots: {
     container:
-      "grid-in-chapter min-w-0 relative h-fit flex flex-col min-h-full",
-    navigationButton:
-      "absolute z-10 w-1/2 hover:cursor-pointer focus-visible:outline-none",
+      "grid-in-chapter min-w-0 relative flex flex-col h-fit min-h-[calc(100dvh-var(--navbar-height))]",
     imagesWrapper: "overflow-x-auto flex items-center h-full m-auto",
   },
   variants: {
-    navbarMode: {
-      fixed: {},
-      sticky: {},
-      hover: {},
-    },
-    mode: {
-      single: {
-        navigationButton: "h-full",
-        imagesWrapper: "h-full",
-      },
-      longstrip: {
-        navigationButton: "hidden",
-        imagesWrapper: "h-full",
-      },
-    },
     width: {
       fit: {},
       full: {},
@@ -50,26 +32,18 @@ const mediaChapterPage = tv({
           "overflow-x-auto scrollbar-thin scrollbar-track-content1 scrollbar-thumb-primary",
       },
     },
-    {
-      mode: "single",
-      navbarMode: "hover",
-      className: {
-        container: "min-h-screen",
-      },
-    },
   ],
 })
 
 export const MediaChapterPage = () => {
   const { isAboveTablet } = useDevice()
   const {
-    navbarMode,
     page: { mode, overlay, width },
     update,
   } = useReaderSettingsStore()
   const { goBack, goForward } = useChapterNavigation()
 
-  const slots = mediaChapterPage({ navbarMode, mode, width })
+  const slots = mediaChapterPage({ width })
 
   const handleKeyPress: KeyboardEventHandler = (e) => {
     if (mode === "longstrip") {

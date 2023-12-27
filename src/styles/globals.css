@@ -27,7 +27,7 @@
 
     --body-padding: 24px;
     --navbar-height: 60px;
-    --reader-height: calc(100vh - var(--navbar-height));
+    --reader-height: calc(100dvh - var(--navbar-height));
     --reader-sidebar-width: 300px;
     --library-sidebar-width: 300px;
   }
