@@ -80,7 +80,9 @@ export const MediaChapterPage = () => {
       return goBack()
     }
 
-    goForward()
+    if (e.key === "ArrowRight") {
+      return goForward()
+    }
   }
 
   const handleContainerClick: MouseEventHandler<HTMLDivElement> = useCallback(
@@ -89,13 +91,13 @@ export const MediaChapterPage = () => {
       const windowWidth = window.innerWidth
       const screenSide = clickX < windowWidth / 2 ? "left" : "right"
 
-      if (mode === "longstrip") {
+      // If it's on longstrip mode, on mobile
+      if (mode === "longstrip" && !isAboveTablet) {
+        update("page.overlay", overlay === "show" ? "hide" : "show")
         return
       }
 
-      if (!isAboveTablet) {
-        update("page.overlay", overlay === "show" ? "hide" : "show")
-
+      if (mode === "longstrip") {
         return
       }
 
@@ -108,11 +110,12 @@ export const MediaChapterPage = () => {
     [goBack, goForward, isAboveTablet, mode, overlay, update],
   )
 
-  useKeyPress("ArrowLeft", handleKeyPress)
-  useKeyPress("ArrowRight", handleKeyPress)
-
   return (
-    <div className={slots.container()} onClick={handleContainerClick}>
+    <div
+      className={slots.container()}
+      onClick={handleContainerClick}
+      onKeyDown={handleKeyPress}
+    >
       <MediaChapterPageOverlay />
       <div className={slots.imagesWrapper()}>
         <MediaChapterImages />
