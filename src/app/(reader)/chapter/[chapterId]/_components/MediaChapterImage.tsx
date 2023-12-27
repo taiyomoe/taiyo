@@ -15,9 +15,9 @@ const mediaChapterImage = tv({
       false: "block",
     },
     navbarMode: {
-      fixed: {},
-      sticky: {},
-      hover: {},
+      fixed: "",
+      sticky: "",
+      hover: "",
     },
     mode: {
       single: "mx-auto",
@@ -43,7 +43,7 @@ const mediaChapterImage = tv({
       navbarMode: ["hover"],
       mode: "single",
       height: "fit",
-      className: "max-h-screen",
+      className: "max-h-dvh",
     },
     {
       mode: "single",

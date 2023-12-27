@@ -3,7 +3,7 @@
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
     "quickfix.biome": "explicit",
-    "source.organizeImports.biome": true
+    "source.organizeImports.biome": "explicit"
   },
   "tailwindCSS.experimental.classRegex": [
     [

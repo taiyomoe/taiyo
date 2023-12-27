@@ -4,7 +4,7 @@ import { NavbarAuth } from "~/components/navbar/NavbarAuth"
 
 const NotFound = () => {
   return (
-    <div className="flex h-screen select-none flex-col">
+    <div className="flex h-dvh select-none flex-col">
       <NavbarAuth />
       <div className="mx-bodyPadding flex grow flex-col items-center justify-center gap-16">
         <Image
