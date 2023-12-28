@@ -44,9 +44,10 @@ export const useBulkChapterUpload = () => {
 
         currentlyOngoing += 1
 
-        console.log("process", chapterNumber)
-
-        void process(chapterNumber)
+        void process(chapterNumber).catch((err) => {
+          console.error(err)
+          toast.error(`Ocorreu um erro ao upar o capítulo${chapterNumber}`)
+        })
       }
 
       await until(() => currentlyOngoing === 0)
