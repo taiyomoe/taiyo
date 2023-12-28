@@ -4,21 +4,12 @@ import NextLink from "next/link"
 import { tv } from "tailwind-variants"
 
 type Props = {
-  create: {
+  items: {
     label: string
     href: string
+    type: "create" | "update" | "del"
     isDisabled?: boolean
-  }
-  update?: {
-    label: string
-    href: string
-    isDisabled?: boolean
-  }
-  del?: {
-    label: string
-    href: string
-    isDisabled?: boolean
-  }
+  }[]
 }
 
 const sidebarCrudButton = tv({
@@ -27,45 +18,31 @@ const sidebarCrudButton = tv({
   },
 })
 
-export const DashboardSidebarCRUDButtons = ({ create, update, del }: Props) => {
+export const DashboardSidebarCRUDButtons = ({ items }: Props) => {
   const { base } = sidebarCrudButton()
 
   return (
     <>
-      <Button
-        as={NextLink}
-        endContent={<PlusIcon className="text-success" />}
-        href={create.href}
-        className={base()}
-        variant="light"
-        isDisabled={create.isDisabled}
-      >
-        {create.label}
-      </Button>
-      {update && (
+      {items.map(({ label, href, type, isDisabled }) => (
         <Button
           as={NextLink}
-          endContent={<PencilIcon className="text-warning" />}
-          href={update.href}
+          endContent={
+            type === "create" ? (
+              <PlusIcon className="text-success" />
+            ) : type === "update" ? (
+              <PencilIcon className="text-warning" />
+            ) : (
+              <Trash2Icon className="text-danger" />
+            )
+          }
+          href={href}
           className={base()}
           variant="light"
-          isDisabled={update.isDisabled}
+          isDisabled={isDisabled}
         >
-          {update.label}
+          {label}
         </Button>
-      )}
-      {del && (
-        <Button
-          as={NextLink}
-          endContent={<Trash2Icon className="text-danger" />}
-          href={del.href}
-          className={base()}
-          variant="light"
-          isDisabled={del.isDisabled}
-        >
-          {del.label}
-        </Button>
-      )}
+      ))}
     </>
   )
 }
