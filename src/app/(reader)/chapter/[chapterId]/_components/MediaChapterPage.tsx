@@ -33,8 +33,6 @@ export const MediaChapterPage = () => {
   const base = mediaChapterPage({ width })
 
   const handleKeyPress: KeyboardEventHandler = (e) => {
-    console.log("key pressed", e.key)
-
     if (mode === "longstrip") {
       return
     }
@@ -78,6 +76,8 @@ export const MediaChapterPage = () => {
       className={base}
       onClick={handleContainerClick}
       onKeyDown={handleKeyPress}
+      // biome-ignore lint/a11y/noNoninteractiveTabindex: needed in order to fire the onKeyDown event
+      tabIndex={0}
       data-navbar-mode={navbarMode}
     >
       <MediaChapterPageOverlay />
