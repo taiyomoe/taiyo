@@ -9,6 +9,7 @@ import { useChapterNavigation } from "~/hooks/useChapterNavigation"
 import { useDevice } from "~/hooks/useDevice"
 import { useReaderSettingsStore } from "~/stores"
 
+import { ReaderSettingsMediaChapterDropdown } from "~/app/(reader)/_components/readerSidebar/ui/ReaderSettingsMediaChapterDropdown"
 import { MediaChapterImages } from "./MediaChapterImages"
 
 const mediaChapterPage = tv({
@@ -82,6 +83,11 @@ export const MediaChapterPage = () => {
     >
       <MediaChapterPageOverlay />
       <MediaChapterImages />
+      {mode === "longstrip" && (
+        <div className="p-bodyPadding flex justify-center">
+          <ReaderSettingsMediaChapterDropdown />
+        </div>
+      )}
     </div>
   )
 }
