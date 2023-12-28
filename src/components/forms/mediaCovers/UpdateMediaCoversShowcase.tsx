@@ -1,47 +1,47 @@
-import { useMemo, useState } from "react";
-import { Card, CardBody } from "@nextui-org/card";
-import type { Selection } from "@nextui-org/react";
-import { Select, SelectItem } from "@nextui-org/select";
+import { Card, CardBody } from "@nextui-org/card"
+import type { Selection } from "@nextui-org/react"
+import { Select, SelectItem } from "@nextui-org/select"
+import { useMemo, useState } from "react"
 
-import type { MediaWithRelations } from "~/lib/types";
-import { MediaCoverUtils } from "~/lib/utils/mediaCover.utils";
-import { SelectUtils } from "~/lib/utils/select.utils";
-import { useMediaUpdateStore } from "~/stores";
+import type { MediaWithRelations } from "~/lib/types"
+import { MediaCoverUtils } from "~/lib/utils/mediaCover.utils"
+import { SelectUtils } from "~/lib/utils/select.utils"
+import { useMediaUpdateStore } from "~/stores"
 
-import { UpdateMediaCoverForm } from "./UpdateMediaCoverForm";
+import { UpdateMediaCoverForm } from "./UpdateMediaCoverForm"
 
 type Props = {
-  media: MediaWithRelations;
-};
+  media: MediaWithRelations
+}
 
 export const UpdateMediaCoversShowcase = ({ media }: Props) => {
-  const { covers } = useMediaUpdateStore();
+  const { covers } = useMediaUpdateStore()
   const volumes = useMemo(
     () => MediaCoverUtils.computeVolumes(covers),
     [covers],
-  );
+  )
 
-  const lowestVolumeNumber = MediaCoverUtils.getLowestVolumeNumber({ media });
+  const lowestVolumeNumber = MediaCoverUtils.getLowestVolumeNumber({ media })
   const [values, setValues] = useState<Selection>(
     new Set([lowestVolumeNumber?.toString() ?? ""]),
-  );
+  )
 
   const currentVolume = useMemo(() => {
-    if (!volumes.length) return;
+    if (!volumes.length) return
 
-    const selectedVolumeNum = Number(SelectUtils.getSelectedKey(values));
-    const selectedVolume = volumes.find((v) => v.number === selectedVolumeNum);
+    const selectedVolumeNum = Number(SelectUtils.getSelectedKey(values))
+    const selectedVolume = volumes.find((v) => v.number === selectedVolumeNum)
 
-    if (selectedVolume) return selectedVolume;
+    if (selectedVolume) return selectedVolume
 
-    const lowestVolumeNum = MediaCoverUtils.getLowestVolumeNumber({ volumes });
-    setValues(new Set([lowestVolumeNum?.toString() ?? ""]));
+    const lowestVolumeNum = MediaCoverUtils.getLowestVolumeNumber({ volumes })
+    setValues(new Set([lowestVolumeNum?.toString() ?? ""]))
 
-    return volumes.find((v) => v.number === lowestVolumeNum);
-  }, [values, volumes]);
+    return volumes.find((v) => v.number === lowestVolumeNum)
+  }, [values, volumes])
 
   if (lowestVolumeNumber === undefined || !currentVolume) {
-    return <div>no covers</div>;
+    return <div>no covers</div>
   }
 
   return (
@@ -94,5 +94,5 @@ export const UpdateMediaCoversShowcase = ({ media }: Props) => {
         </CardBody>
       </Card>
     </div>
-  );
-};
+  )
+}

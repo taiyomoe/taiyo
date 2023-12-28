@@ -1,23 +1,23 @@
-import { notFound } from "next/navigation";
-import { ScrollShadow } from "@nextui-org/scroll-shadow";
+import { ScrollShadow } from "@nextui-org/scroll-shadow"
+import { notFound } from "next/navigation"
 
-import { api } from "~/lib/trpc/server";
+import { api } from "~/lib/trpc/server"
 
-import { MediaLayout } from "./_components/layout/MediaLayout";
-import { MediaLayoutActions } from "./_components/layout/MediaLayoutActions";
-import { MediaLayoutTabs } from "./_components/layout/MediaLayoutTabs";
+import { MediaLayout } from "./_components/layout/MediaLayout"
+import { MediaLayoutActions } from "./_components/layout/MediaLayoutActions"
+import { MediaLayoutTabs } from "./_components/layout/MediaLayoutTabs"
 
 type Props = {
-  params: { mediaId: string };
-};
+  params: { mediaId: string }
+}
 
 export default async function Page({ params }: Props) {
-  const { mediaId } = params;
+  const { mediaId } = params
 
-  const media = await api.medias.getById.query(mediaId);
+  const media = await api.medias.getById.query(mediaId)
 
   if (!media) {
-    return notFound();
+    return notFound()
   }
 
   return (
@@ -31,5 +31,5 @@ export default async function Page({ params }: Props) {
       </ScrollShadow>
       <MediaLayoutTabs media={media} />
     </MediaLayout>
-  );
+  )
 }

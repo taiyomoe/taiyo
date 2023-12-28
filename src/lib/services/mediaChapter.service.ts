@@ -1,8 +1,8 @@
-import type { Languages } from "@prisma/client";
+import type { Languages } from "@prisma/client"
 
-import { db } from "~/lib/server/db";
-import type { LatestRelease } from "~/lib/types";
-import { MediaUtils } from "~/lib/utils/media.utils";
+import { db } from "~/lib/server/db"
+import type { LatestRelease } from "~/lib/types"
+import { MediaUtils } from "~/lib/utils/media.utils"
 
 const getLatestReleases = async (
   preferredTitles: Languages | null | undefined,
@@ -41,7 +41,7 @@ const getLatestReleases = async (
       },
     },
     where: { deletedAt: null },
-  });
+  })
 
   const latestReleases: LatestRelease[] = result.map((c) => ({
     id: c.id,
@@ -56,11 +56,11 @@ const getLatestReleases = async (
       coverId: c.media.covers.at(0)!.id,
       mainTitle: MediaUtils.getMainTitle(c.media.titles, preferredTitles),
     },
-  }));
+  }))
 
-  return latestReleases;
-};
+  return latestReleases
+}
 
 export const MediaChapterService = {
   getLatestReleases,
-};
+}

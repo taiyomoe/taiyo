@@ -1,14 +1,14 @@
-import type { UploadSessionType } from "@prisma/client";
+import type { UploadSessionType } from "@prisma/client"
 
-import { useImageStore } from "~/stores";
+import { useImageStore } from "~/stores"
 
-import { ImageCard } from "./ImageCard";
+import { ImageCard } from "./ImageCard"
 
-type Props = { type: UploadSessionType };
+type Props = { type: UploadSessionType }
 
 export const ImageShowcase = ({ type }: Props) => {
-  const { getImages } = useImageStore();
-  const selectedImages = getImages(type);
+  const { getImages } = useImageStore()
+  const selectedImages = getImages(type)
 
   return (
     <div className="flex flex-col gap-2">
@@ -20,5 +20,5 @@ export const ImageShowcase = ({ type }: Props) => {
         />
       ))}
     </div>
-  );
-};
+  )
+}

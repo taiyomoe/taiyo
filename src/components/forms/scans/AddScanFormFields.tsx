@@ -1,14 +1,14 @@
-import { Button } from "@nextui-org/button";
-import { useFormikContext } from "formik";
+import { Button } from "@nextui-org/button"
+import { useFormikContext } from "formik"
 
-import { Form } from "~/components/generics/form/Form";
-import { InputFormField } from "~/components/generics/form/InputFormField";
-import { TextAreaFormField } from "~/components/generics/form/TextAreaFormField";
+import { Form } from "~/components/generics/form/Form"
+import { InputFormField } from "~/components/generics/form/InputFormField"
+import { TextAreaFormField } from "~/components/generics/form/TextAreaFormField"
 
 export const AddScanFormFields = () => {
-  const { isSubmitting, isValid, dirty } = useFormikContext();
+  const { isSubmitting, isValid, dirty } = useFormikContext()
 
-  const shouldDisableButton = isSubmitting || !(isValid && dirty);
+  const shouldDisableButton = isSubmitting || !(isValid && dirty)
 
   return (
     <Form.Layout>
@@ -102,5 +102,5 @@ export const AddScanFormFields = () => {
         </Button>
       </Form.Actions>
     </Form.Layout>
-  );
-};
+  )
+}

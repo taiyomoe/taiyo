@@ -1,12 +1,12 @@
-import { ContentRating, Flag, Languages } from "@prisma/client";
+import { ContentRating, Flag, Languages } from "@prisma/client"
 
-import { Form } from "~/components/generics/form/Form";
-import { InputFormField } from "~/components/generics/form/InputFormField";
-import { SelectFormField } from "~/components/generics/form/SelectFormField";
-import { MediasSearchAutocomplete } from "~/components/medias/MediasSearchAutocomplete";
-import { ScansSearchAutocomplete } from "~/components/scans/ScansSearchAutocomplete";
-import { ImageCard } from "~/components/ui/images/ImageCard";
-import { ImageDropzone } from "~/components/ui/images/ImageDropzone";
+import { Form } from "~/components/generics/form/Form"
+import { InputFormField } from "~/components/generics/form/InputFormField"
+import { SelectFormField } from "~/components/generics/form/SelectFormField"
+import { MediasSearchAutocomplete } from "~/components/medias/MediasSearchAutocomplete"
+import { ScansSearchAutocomplete } from "~/components/scans/ScansSearchAutocomplete"
+import { ImageCard } from "~/components/ui/upload/ImageCard"
+import { ImageDropzone } from "~/components/ui/upload/ImageDropzone"
 
 export const UploadChapterFormFields = () => {
   return (
@@ -56,7 +56,7 @@ export const UploadChapterFormFields = () => {
           <div className="flex flex-col gap-3">
             {selectedImages.map((f, i) => (
               <ImageCard
-                key={i}
+                key={f.name}
                 file={f}
                 position={`${i + 1}/${selectedImages.length}`}
               />
@@ -65,5 +65,5 @@ export const UploadChapterFormFields = () => {
         )}
       </ImageDropzone>
     </Form.Layout>
-  );
-};
+  )
+}

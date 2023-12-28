@@ -1,13 +1,13 @@
-import { historyRouter } from "./routers/history.router";
-import { libraryRouter } from "./routers/library.router";
-import { mdRouter } from "./routers/md.router";
-import { mediaChaptersRouter } from "./routers/mediaChapters.router";
-import { mediaCoversRouter } from "./routers/mediaCovers.router";
-import { mediasRouter } from "./routers/medias.router";
-import { mediaTitlesRouter } from "./routers/mediaTitles.router";
-import { scansRouter } from "./routers/scans.router";
-import { uploadsRouter } from "./routers/uploads.router";
-import { createTRPCRouter } from "./trpc";
+import { historyRouter } from "./routers/history.router"
+import { libraryRouter } from "./routers/library.router"
+import { mdRouter } from "./routers/md.router"
+import { mediaChaptersRouter } from "./routers/mediaChapters.router"
+import { mediaCoversRouter } from "./routers/mediaCovers.router"
+import { mediaTitlesRouter } from "./routers/mediaTitles.router"
+import { mediasRouter } from "./routers/medias.router"
+import { scansRouter } from "./routers/scans.router"
+import { uploadsRouter } from "./routers/uploads.router"
+import { createTRPCRouter } from "./trpc"
 
 /**
  * This is the primary router for your server.
@@ -24,7 +24,7 @@ export const appRouter = createTRPCRouter({
   scans: scansRouter,
   uploads: uploadsRouter,
   md: mdRouter,
-});
+})
 
 // export type definition of API
-export type AppRouter = typeof appRouter;
+export type AppRouter = typeof appRouter

@@ -1,10 +1,10 @@
-"use client";
+"use client"
 
-import { Button, ButtonGroup } from "@nextui-org/button";
-import { PanelLeftOpenIcon, PanelRightOpenIcon } from "lucide-react";
-import { tv } from "tailwind-variants";
+import { Button, ButtonGroup } from "@nextui-org/button"
+import { PanelLeftOpenIcon, PanelRightOpenIcon } from "lucide-react"
+import { tv } from "tailwind-variants"
 
-import { useReaderSettingsStore } from "~/stores";
+import { useReaderSettingsStore } from "~/stores"
 
 const readerSidebarSettingsSide = tv({
   slots: {
@@ -13,13 +13,13 @@ const readerSidebarSettingsSide = tv({
     leftButton: "justify-start gap-3 pl-3",
     rightButton: "justify-end gap-3 pr-3",
   },
-});
+})
 
 export const ReaderSidebarSettingsSide = () => {
-  const { sidebar, update } = useReaderSettingsStore();
+  const { sidebar, update } = useReaderSettingsStore()
 
   const { container, text, leftButton, rightButton } =
-    readerSidebarSettingsSide();
+    readerSidebarSettingsSide()
 
   return (
     <div className={container()}>
@@ -45,5 +45,5 @@ export const ReaderSidebarSettingsSide = () => {
         </Button>
       </ButtonGroup>
     </div>
-  );
-};
+  )
+}

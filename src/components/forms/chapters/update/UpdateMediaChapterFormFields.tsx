@@ -1,15 +1,15 @@
-import type { Scan } from "@prisma/client";
-import { ContentRating, Flag, Languages } from "@prisma/client";
+import type { Scan } from "@prisma/client"
+import { ContentRating, Flag, Languages } from "@prisma/client"
 
-import { SubmitButton } from "~/components/generics/buttons/SubmitButton";
-import { Form } from "~/components/generics/form/Form";
-import { InputFormField } from "~/components/generics/form/InputFormField";
-import { SelectFormField } from "~/components/generics/form/SelectFormField";
-import { ScansSearchAutocomplete } from "~/components/scans/ScansSearchAutocomplete";
+import { SubmitButton } from "~/components/generics/buttons/SubmitButton"
+import { Form } from "~/components/generics/form/Form"
+import { InputFormField } from "~/components/generics/form/InputFormField"
+import { SelectFormField } from "~/components/generics/form/SelectFormField"
+import { ScansSearchAutocomplete } from "~/components/scans/ScansSearchAutocomplete"
 
 type Props = {
-  scans: Scan[];
-};
+  scans: Scan[]
+}
 
 export const UpdateMediaChapterFormFields = ({ scans }: Props) => {
   return (
@@ -57,5 +57,5 @@ export const UpdateMediaChapterFormFields = ({ scans }: Props) => {
         <SubmitButton>Salvar</SubmitButton>
       </Form.Actions>
     </Form.Layout>
-  );
-};
+  )
+}

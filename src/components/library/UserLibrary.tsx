@@ -1,24 +1,24 @@
-import { Button } from "@nextui-org/react";
-import { LibraryIcon } from "lucide-react";
-import { useSession } from "next-auth/react";
+import { Button } from "@nextui-org/react"
+import { LibraryIcon } from "lucide-react"
+import { useSession } from "next-auth/react"
 
-import { UserLibrarySidebar } from "~/components/library/UserLibrarySidebar";
-import { useLibraryStore, useReaderSettingsStore } from "~/stores";
+import { UserLibrarySidebar } from "~/components/library/UserLibrarySidebar"
+import { useLibraryStore, useReaderSettingsStore } from "~/stores"
 
 export const UserLibrary = () => {
-  const { sidebar, update } = useReaderSettingsStore();
-  const { toggleSidebar } = useLibraryStore();
-  const { data: session } = useSession();
+  const { sidebar, update } = useReaderSettingsStore()
+  const { toggleSidebar } = useLibraryStore()
+  const { data: session } = useSession()
 
-  if (!session) return null;
+  if (!session) return null
 
   const handlePress = () => {
-    toggleSidebar();
+    toggleSidebar()
 
     if (sidebar.state === "show") {
-      update("sidebar.state", "hide");
+      update("sidebar.state", "hide")
     }
-  };
+  }
 
   return (
     <div>
@@ -30,5 +30,5 @@ export const UserLibrary = () => {
       />
       <UserLibrarySidebar />
     </div>
-  );
-};
+  )
+}

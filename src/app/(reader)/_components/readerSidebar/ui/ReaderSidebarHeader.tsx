@@ -1,12 +1,12 @@
-"use client";
+"use client"
 
-import { Button } from "@nextui-org/button";
-import { tv } from "tailwind-variants";
+import { Button } from "@nextui-org/button"
+import { tv } from "tailwind-variants"
 
-import { SidebarIcon } from "~/components/icons/SidebarIcon";
-import { useReaderSettingsStore } from "~/stores";
+import { SidebarIcon } from "~/components/icons/SidebarIcon"
+import { useReaderSettingsStore } from "~/stores"
 
-import { ReaderSidebarMediaTitle } from "./ReaderSidebarMediaTitle";
+import { ReaderSidebarMediaTitle } from "./ReaderSidebarMediaTitle"
 
 const readerSidebarHeader = tv({
   slots: {
@@ -24,16 +24,16 @@ const readerSidebarHeader = tv({
       },
     },
   },
-});
+})
 
 export const ReaderSidebarHeader = () => {
-  const { sidebar, update } = useReaderSettingsStore();
+  const { sidebar, update } = useReaderSettingsStore()
 
-  const slots = readerSidebarHeader({ side: sidebar.side });
+  const slots = readerSidebarHeader({ side: sidebar.side })
 
   const handlePress = () => {
-    update("sidebar.state", sidebar.state === "show" ? "hide" : "show");
-  };
+    update("sidebar.state", sidebar.state === "show" ? "hide" : "show")
+  }
 
   return (
     <div className={slots.container()}>
@@ -47,5 +47,5 @@ export const ReaderSidebarHeader = () => {
         isIconOnly
       />
     </div>
-  );
-};
+  )
+}

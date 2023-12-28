@@ -1,28 +1,28 @@
-"use client";
+"use client"
 
-import { Button, ButtonGroup } from "@nextui-org/button";
-import { MousePointer2Icon } from "lucide-react";
-import { tv } from "tailwind-variants";
+import { Button, ButtonGroup } from "@nextui-org/button"
+import { MousePointer2Icon } from "lucide-react"
+import { tv } from "tailwind-variants"
 
-import { SidebarIcon } from "~/components/icons/SidebarIcon";
-import { useDevice } from "~/hooks/useDevice";
-import { useReaderSettingsStore } from "~/stores";
+import { SidebarIcon } from "~/components/icons/SidebarIcon"
+import { useDevice } from "~/hooks/useDevice"
+import { useReaderSettingsStore } from "~/stores"
 
 const readerSidebarSettingsOpenMode = tv({
   slots: {
-    container: "flex flex-col gap-2 items-end",
+    container: "hidden md:flex flex-col gap-2 items-end",
     text: "text-md",
     leftButton: "justify-start gap-3 pl-3",
     rightButton: "justify-end gap-3 pr-3",
   },
-});
+})
 
 export const ReaderSidebarSettingsOpenMode = () => {
-  const { sidebar, update } = useReaderSettingsStore();
-  const { isAboveTablet } = useDevice();
+  const { sidebar, update } = useReaderSettingsStore()
+  const { isAboveTablet } = useDevice()
 
   const { container, text, leftButton, rightButton } =
-    readerSidebarSettingsOpenMode();
+    readerSidebarSettingsOpenMode()
 
   return (
     <div className={container()}>
@@ -52,5 +52,5 @@ export const ReaderSidebarSettingsOpenMode = () => {
         </Button>
       </ButtonGroup>
     </div>
-  );
-};
+  )
+}

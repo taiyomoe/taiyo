@@ -1,19 +1,19 @@
-"use client";
+"use client"
 
-import { useCallback } from "react";
-import { Switch } from "@nextui-org/switch";
-import type { SwitchProps } from "@nextui-org/switch";
-import { useField } from "formik";
+import { Switch } from "@nextui-org/switch"
+import type { SwitchProps } from "@nextui-org/switch"
+import { useField } from "formik"
+import { useCallback } from "react"
 
-import { Label } from "../Label";
-import type { LabelProps } from "../Label";
+import { Label } from "../Label"
+import type { LabelProps } from "../Label"
 
 type Props = {
-  name: string;
-  shouldBeUnique?: boolean;
-  onChange?: (value: boolean) => void;
+  name: string
+  shouldBeUnique?: boolean
+  onChange?: (value: boolean) => void
 } & Partial<Omit<SwitchProps, "onChange">> &
-  LabelProps;
+  LabelProps
 
 export const SwitchFormField = ({
   name,
@@ -23,18 +23,18 @@ export const SwitchFormField = ({
   onChange,
   ...rest
 }: Props) => {
-  // eslint-disable-next-line no-empty-pattern
+  // biome-ignore lint/correctness/noEmptyPattern: we need to destructure the array
   const [{ value, ...field }, {}, { setValue }] = useField<boolean>({
     name,
-  });
+  })
 
   const handleChange = useCallback(() => {
-    void setValue(!value);
+    void setValue(!value)
 
     if (onChange) {
-      onChange(!value);
+      onChange(!value)
     }
-  }, [onChange, setValue, value]);
+  }, [onChange, setValue, value])
 
   return (
     <Label label={label} labelPlacement={labelPlacement} className={className}>
@@ -49,5 +49,5 @@ export const SwitchFormField = ({
         }}
       />
     </Label>
-  );
-};
+  )
+}

@@ -1,6 +1,6 @@
-import { updateProgressionSchema } from "~/lib/schemas";
+import { updateProgressionSchema } from "~/lib/schemas"
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure } from "../trpc"
 
 export const historyRouter = createTRPCRouter({
   updateProgression: protectedProcedure
@@ -13,36 +13,36 @@ export const historyRouter = createTRPCRouter({
       const chapter = await ctx.db.mediaChapter.findUnique({
         select: { mediaId: true, pages: true },
         where: { id: input.chapterId },
-      });
+      })
 
       if (!chapter) {
-        throw new Error("Chapter not found");
+        throw new Error("Chapter not found")
       }
 
       if (!input.pageId && input.completed === undefined) {
-        throw new Error("Missing pageId or completed");
+        throw new Error("Missing pageId or completed")
       }
 
-      const page = chapter.pages.find((p) => p.id === input.pageId);
+      const page = chapter.pages.find((p) => p.id === input.pageId)
 
       if (!page && input.completed === undefined) {
-        throw new Error("Page not found");
+        throw new Error("Page not found")
       }
 
       const mediaId_userId = {
         mediaId: chapter.mediaId,
         userId: ctx.session.user.id,
-      };
+      }
       const historyEntry = await ctx.db.userHistory.findUnique({
         where: { mediaId_userId },
-      });
-      const progression = historyEntry?.progression ?? [];
+      })
+      const progression = historyEntry?.progression ?? []
       const entryIndex = progression.findIndex(
         (p) => p.chapterId === input.chapterId,
-      );
+      )
 
       if (entryIndex >= 0) {
-        progression.splice(entryIndex, 1);
+        progression.splice(entryIndex, 1)
       }
 
       progression.push({
@@ -50,7 +50,7 @@ export const historyRouter = createTRPCRouter({
         chapterId: input.chapterId,
         pageId: input.pageId ?? null,
         completed: input.completed ?? chapter.pages.at(-1)?.id === input.pageId,
-      });
+      })
 
       await ctx.db.userHistory.upsert({
         where: { mediaId_userId },
@@ -64,6 +64,6 @@ export const historyRouter = createTRPCRouter({
           userId: ctx.session.user.id,
           progression,
         },
-      });
+      })
     }),
-});
+})

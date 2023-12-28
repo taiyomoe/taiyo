@@ -1,391 +1,391 @@
-import type { Languages } from "@prisma/client";
+import type { Languages } from "@prisma/client"
 
 const languageCodeToCountryCode = (languageCode: Languages) => {
   switch (languageCode) {
     case "ab":
-      return "ru";
+      return "ru"
     case "aa":
-      return "";
+      return ""
     case "af":
-      return "";
+      return ""
     case "ak":
-      return "";
+      return ""
     case "sq":
-      return "";
+      return ""
     case "am":
-      return "";
+      return ""
     case "ar":
-      return "sa";
+      return "sa"
     case "an":
-      return "";
+      return ""
     case "hy":
-      return "";
+      return ""
     case "as":
-      return "";
+      return ""
     case "av":
-      return "";
+      return ""
     case "ae":
-      return "";
+      return ""
     case "ay":
-      return "";
+      return ""
     case "az":
-      return "";
+      return ""
     case "bm":
-      return "";
+      return ""
     case "ba":
-      return "";
+      return ""
     case "eu":
-      return "";
+      return ""
     case "be":
-      return "";
+      return ""
     case "bn":
-      return "";
+      return ""
     case "bi":
-      return "";
+      return ""
     case "bs":
-      return "";
+      return ""
     case "br":
-      return "";
+      return ""
     case "bg":
-      return "";
+      return ""
     case "my":
-      return "";
+      return ""
     case "ca":
-      return "";
+      return ""
     case "ch":
-      return "";
+      return ""
     case "ce":
-      return "";
+      return ""
     case "ny":
-      return "";
+      return ""
     case "cu":
-      return "";
+      return ""
     case "cv":
-      return "";
+      return ""
     case "kw":
-      return "";
+      return ""
     case "co":
-      return "";
+      return ""
     case "cr":
-      return "";
+      return ""
     case "hr":
-      return "";
+      return ""
     case "cs":
-      return "cz";
+      return "cz"
     case "da":
-      return "";
+      return ""
     case "dv":
-      return "";
+      return ""
     case "nl":
-      return "";
+      return ""
     case "dz":
-      return "";
+      return ""
     case "en":
-      return "us";
+      return "us"
     case "eo":
-      return "";
+      return ""
     case "et":
-      return "";
+      return ""
     case "ee":
-      return "";
+      return ""
     case "fo":
-      return "";
+      return ""
     case "fj":
-      return "";
+      return ""
     case "fi":
-      return "";
+      return ""
     case "fr":
-      return "fr";
+      return "fr"
     case "fy":
-      return "";
+      return ""
     case "ff":
-      return "";
+      return ""
     case "gd":
-      return "";
+      return ""
     case "gl":
-      return "";
+      return ""
     case "lg":
-      return "";
+      return ""
     case "ka":
-      return "";
+      return ""
     case "de":
-      return "de";
+      return "de"
     case "el":
-      return "";
+      return ""
     case "kl":
-      return "";
+      return ""
     case "gn":
-      return "";
+      return ""
     case "gu":
-      return "";
+      return ""
     case "ht":
-      return "";
+      return ""
     case "ha":
-      return "";
+      return ""
     case "he":
-      return "";
+      return ""
     case "hz":
-      return "";
+      return ""
     case "hi":
-      return "in";
+      return "in"
     case "ho":
-      return "";
+      return ""
     case "hu":
-      return "";
+      return ""
     case "is":
-      return "";
+      return ""
     case "io":
-      return "";
+      return ""
     case "ig":
-      return "";
+      return ""
     case "id":
-      return "";
+      return ""
     case "ia":
-      return "";
+      return ""
     case "ie":
-      return "";
+      return ""
     case "iu":
-      return "";
+      return ""
     case "ik":
-      return "";
+      return ""
     case "ga":
-      return "";
+      return ""
     case "it":
-      return "";
+      return ""
     case "jv":
-      return "";
+      return ""
     case "kn":
-      return "";
+      return ""
     case "kr":
-      return "";
+      return ""
     case "ks":
-      return "";
+      return ""
     case "kk":
-      return "kz";
+      return "kz"
     case "km":
-      return "";
+      return ""
     case "ki":
-      return "";
+      return ""
     case "rw":
-      return "";
+      return ""
     case "ky":
-      return "";
+      return ""
     case "kv":
-      return "";
+      return ""
     case "kg":
-      return "";
+      return ""
     case "kj":
-      return "";
+      return ""
     case "ku":
-      return "";
+      return ""
     case "lo":
-      return "";
+      return ""
     case "la":
-      return "";
+      return ""
     case "lv":
-      return "";
+      return ""
     case "li":
-      return "";
+      return ""
     case "ln":
-      return "";
+      return ""
     case "lt":
-      return "lt";
+      return "lt"
     case "lu":
-      return "";
+      return ""
     case "lb":
-      return "";
+      return ""
     case "mk":
-      return "";
+      return ""
     case "mg":
-      return "";
+      return ""
     case "ms":
-      return "";
+      return ""
     case "ml":
-      return "";
+      return ""
     case "mt":
-      return "";
+      return ""
     case "gv":
-      return "";
+      return ""
     case "mi":
-      return "";
+      return ""
     case "mr":
-      return "";
+      return ""
     case "mh":
-      return "";
+      return ""
     case "mn":
-      return "mn";
+      return "mn"
     case "na":
-      return "";
+      return ""
     case "nv":
-      return "";
+      return ""
     case "nd":
-      return "";
+      return ""
     case "nr":
-      return "";
+      return ""
     case "ng":
-      return "";
+      return ""
     case "ne":
-      return "np";
+      return "np"
     case "no":
-      return "";
+      return ""
     case "nb":
-      return "";
+      return ""
     case "nn":
-      return "";
+      return ""
     case "ii":
-      return "";
+      return ""
     case "oc":
-      return "";
+      return ""
     case "oj":
-      return "";
+      return ""
     case "or":
-      return "";
+      return ""
     case "om":
-      return "";
+      return ""
     case "os":
-      return "";
+      return ""
     case "pi":
-      return "";
+      return ""
     case "ps":
-      return "";
+      return ""
     case "fa":
-      return "ir";
+      return "ir"
     case "pl":
-      return "pl";
+      return "pl"
     case "pa":
-      return "";
+      return ""
     case "qu":
-      return "";
+      return ""
     case "ro":
-      return "";
+      return ""
     case "rm":
-      return "";
+      return ""
     case "rn":
-      return "";
+      return ""
     case "ru":
-      return "ru";
+      return "ru"
     case "se":
-      return "";
+      return ""
     case "sm":
-      return "";
+      return ""
     case "sg":
-      return "";
+      return ""
     case "sa":
-      return "";
+      return ""
     case "sc":
-      return "";
+      return ""
     case "sr":
-      return "";
+      return ""
     case "sn":
-      return "";
+      return ""
     case "sd":
-      return "";
+      return ""
     case "si":
-      return "";
+      return ""
     case "sk":
-      return "";
+      return ""
     case "sl":
-      return "";
+      return ""
     case "so":
-      return "";
+      return ""
     case "st":
-      return "";
+      return ""
     case "su":
-      return "";
+      return ""
     case "sw":
-      return "";
+      return ""
     case "ss":
-      return "";
+      return ""
     case "sv":
-      return "se";
+      return "se"
     case "tl":
-      return "";
+      return ""
     case "ty":
-      return "";
+      return ""
     case "tg":
-      return "";
+      return ""
     case "ta":
-      return "";
+      return ""
     case "tt":
-      return "";
+      return ""
     case "te":
-      return "";
+      return ""
     case "th":
-      return "";
+      return ""
     case "bo":
-      return "";
+      return ""
     case "ti":
-      return "";
+      return ""
     case "to":
-      return "";
+      return ""
     case "ts":
-      return "";
+      return ""
     case "tn":
-      return "";
+      return ""
     case "tr":
-      return "tr";
+      return "tr"
     case "tk":
-      return "";
+      return ""
     case "tw":
-      return "";
+      return ""
     case "ug":
-      return "";
+      return ""
     case "uk":
-      return "ua";
+      return "ua"
     case "ur":
-      return "";
+      return ""
     case "uz":
-      return "";
+      return ""
     case "ve":
-      return "za";
+      return "za"
     case "vi":
-      return "vn";
+      return "vn"
     case "vo":
-      return "de";
+      return "de"
     case "wa":
-      return "";
+      return ""
     case "cy":
-      return "gb-wls";
+      return "gb-wls"
     case "wo":
-      return "";
+      return ""
     case "xh":
-      return "";
+      return ""
     case "yi":
-      return "";
+      return ""
     case "yo":
-      return "";
+      return ""
     case "za":
-      return "";
+      return ""
     case "zu":
-      return "ls";
+      return "ls"
 
     case "es":
-      return "es";
+      return "es"
     case "es_la":
-      return "mx";
+      return "mx"
 
     case "pt_br":
-      return "br";
+      return "br"
     case "pt_pt":
-      return "pt";
+      return "pt"
 
     case "ja":
-      return "jp";
+      return "jp"
     case "ja_ro":
-      return "jp";
+      return "jp"
 
     case "ko":
-      return "kr";
+      return "kr"
     case "ko_ro":
-      return "kr";
+      return "kr"
 
     case "zh":
-      return "cn";
+      return "cn"
     case "zh_hk":
-      return "cn";
+      return "cn"
   }
-};
+}
 
 export const LanguageUtils = {
   languageCodeToCountryCode,
-};
+}

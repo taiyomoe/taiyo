@@ -1,13 +1,13 @@
-"use client";
+"use client"
 
-import { Accordion, AccordionItem } from "@nextui-org/accordion";
-import { tv } from "tailwind-variants";
+import { Accordion, AccordionItem } from "@nextui-org/accordion"
+import { tv } from "tailwind-variants"
 
-import { DashboardSidebarCRUDButtons } from "./DashboardSidebarCRUDButtons";
+import { DashboardSidebarCRUDButtons } from "./DashboardSidebarCRUDButtons"
 
 type Props = {
-  className?: string;
-};
+  className?: string
+}
 
 const sidebarContent = tv({
   slots: {
@@ -15,14 +15,12 @@ const sidebarContent = tv({
     categorytitle:
       "uppercase text-small text-default-300 font-semibold select-none",
     categoryIndicator: "text-default-300",
-    categoryContent: "ml-4 mr-2",
     categoryItemButton: "text-md justify-end gap-4 px-2 font-medium w-full",
   },
-});
+})
 
 export const DashboardSidebarContent = ({ className }: Props) => {
-  const { container, categorytitle, categoryIndicator, categoryContent } =
-    sidebarContent();
+  const { container, categorytitle, categoryIndicator } = sidebarContent()
 
   return (
     <Accordion
@@ -38,27 +36,29 @@ export const DashboardSidebarContent = ({ className }: Props) => {
         classNames={{
           title: categorytitle(),
           indicator: categoryIndicator(),
-          content: categoryContent(),
         }}
         title="— Obras"
         key="medias"
       >
         <DashboardSidebarCRUDButtons
-          create={{
-            label: "Importar",
-            href: "/dashboard/medias/import",
-          }}
-        />
-        <DashboardSidebarCRUDButtons
-          create={{
-            label: "Adicionar",
-            href: "/dashboard/medias/add",
-            isDisabled: true,
-          }}
-          update={{
-            label: "Modificar",
-            href: "/dashboard/medias/edit",
-          }}
+          items={[
+            {
+              label: "Importar",
+              href: "/dashboard/medias/import",
+              type: "create",
+            },
+            {
+              label: "Adicionar",
+              href: "/dashboard/medias/add",
+              type: "create",
+              isDisabled: true,
+            },
+            {
+              label: "Modificar",
+              href: "/dashboard/medias/edit",
+              type: "update",
+            },
+          ]}
         />
       </AccordionItem>
 
@@ -67,21 +67,29 @@ export const DashboardSidebarContent = ({ className }: Props) => {
         classNames={{
           title: categorytitle(),
           indicator: categoryIndicator(),
-          content: categoryContent(),
         }}
         title="— Capítulos"
         key="mediaChapters"
       >
         <DashboardSidebarCRUDButtons
-          create={{
-            label: "Upar",
-            href: "/dashboard/chapters/upload",
-          }}
-          update={{
-            label: "Modificar",
-            href: "/dashboard/chapters/edit",
-            isDisabled: true,
-          }}
+          items={[
+            {
+              label: "Upar em massa",
+              href: "/dashboard/chapters/bulk-upload",
+              type: "create",
+            },
+            {
+              label: "Adicionar",
+              href: "/dashboard/chapters/add",
+              type: "create",
+            },
+            {
+              label: "Modificar",
+              href: "/dashboard/chapters/edit",
+              type: "update",
+              isDisabled: true,
+            },
+          ]}
         />
       </AccordionItem>
 
@@ -90,18 +98,20 @@ export const DashboardSidebarContent = ({ className }: Props) => {
         classNames={{
           title: categorytitle(),
           indicator: categoryIndicator(),
-          content: categoryContent(),
         }}
         title="— Scans"
         key="scans"
       >
         <DashboardSidebarCRUDButtons
-          create={{
-            label: "Adicionar",
-            href: "/dashboard/scans/add",
-          }}
+          items={[
+            {
+              label: "Adicionar",
+              href: "/dashboard/scans/add",
+              type: "create",
+            },
+          ]}
         />
       </AccordionItem>
     </Accordion>
-  );
-};
+  )
+}

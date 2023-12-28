@@ -1,21 +1,21 @@
-"use client";
+"use client"
 
-import type { Key } from "react";
-import { Button } from "@nextui-org/button";
+import { Button } from "@nextui-org/button"
 import {
   Dropdown,
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
-} from "@nextui-org/dropdown";
-import { Skeleton } from "@nextui-org/react";
-import { ChevronsUpDownIcon } from "lucide-react";
-import { tv } from "tailwind-variants";
+} from "@nextui-org/dropdown"
+import { Skeleton } from "@nextui-org/react"
+import { ChevronsUpDownIcon } from "lucide-react"
+import type { Key } from "react"
+import { tv } from "tailwind-variants"
 
-import { BackButton } from "~/components/generics/buttons/BackButton";
-import { ForwardButton } from "~/components/generics/buttons/ForwardButton";
-import { useChapterNavigation } from "~/hooks/useChapterNavigation";
-import { useReaderStore } from "~/stores";
+import { BackButton } from "~/components/generics/buttons/BackButton"
+import { ForwardButton } from "~/components/generics/buttons/ForwardButton"
+import { useChapterNavigation } from "~/hooks/useChapterNavigation"
+import { useReaderStore } from "~/stores"
 
 const readerSettingsMediaChapterPageDropdown = tv({
   slots: {
@@ -28,17 +28,17 @@ const readerSettingsMediaChapterPageDropdown = tv({
     textContainer: "flex flex-col text-left",
     textDescription: "chapter-currentPage text-default-500 text-xs",
   },
-});
+})
 
 export const ReaderSettingsMediaChapterPageDropdown = () => {
   const { chapter, currentPageNumber, hasPreviousPage, hasNextPage } =
-    useReaderStore();
-  const { goBack, goForward, goTo } = useChapterNavigation();
+    useReaderStore()
+  const { goBack, goForward, goTo } = useChapterNavigation()
 
-  const slots = readerSettingsMediaChapterPageDropdown();
+  const slots = readerSettingsMediaChapterPageDropdown()
 
   if (!chapter || !currentPageNumber) {
-    return <Skeleton className={slots.skeleton()} />;
+    return <Skeleton className={slots.skeleton()} />
   }
 
   return (
@@ -66,13 +66,13 @@ export const ReaderSettingsMediaChapterPageDropdown = () => {
           selectionMode="single"
           aria-label="Páginas"
           onSelectionChange={(keys) => {
-            (keys as Set<Key>).forEach((key) => {
-              goTo(parseInt(key.toString().replace("page-", "")));
-            });
+            for (const key of keys as Set<Key>) {
+              goTo(parseInt(key.toString().replace("page-", "")))
+            }
           }}
         >
           {chapter.pages.map((_, i) => (
-            <DropdownItem key={"page-" + (i + 1)} textValue={`Página ${i + 1}`}>
+            <DropdownItem key={`page-${i}${1}`} textValue={`Página ${i + 1}`}>
               Página {i + 1}
             </DropdownItem>
           ))}
@@ -80,5 +80,5 @@ export const ReaderSettingsMediaChapterPageDropdown = () => {
       </Dropdown>
       <ForwardButton onPress={goForward} isDisabled={!hasNextPage} />
     </div>
-  );
-};
+  )
+}

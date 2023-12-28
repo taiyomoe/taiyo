@@ -1,23 +1,23 @@
-import { useState } from "react";
-import Link from "next/link";
-import { Card, CardBody } from "@nextui-org/card";
-import { useSession } from "next-auth/react";
-import { tv } from "tailwind-variants";
+import { Card, CardBody } from "@nextui-org/card"
+import { useSession } from "next-auth/react"
+import Link from "next/link"
+import { useState } from "react"
+import { tv } from "tailwind-variants"
 
-import { MediaChapterScans } from "~/components/ui/MediaChapterScans";
-import { MediaChapterCardUploadedTime } from "~/components/ui/MediaChapterUploadedTime";
-import { MediaChapterUploader } from "~/components/ui/MediaChapterUploader";
-import type { MediaLimitedChapter } from "~/lib/types";
-import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils";
+import { MediaChapterScans } from "~/components/ui/MediaChapterScans"
+import { MediaChapterCardUploadedTime } from "~/components/ui/MediaChapterUploadedTime"
+import { MediaChapterUploader } from "~/components/ui/MediaChapterUploader"
+import type { MediaLimitedChapter } from "~/lib/types"
+import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils"
 
-import { MediaChapterActions } from "../MediaChapterActions";
-import { MediaChapterCardPath } from "./MediaChapterCardPath";
-import { MediaChapterCardProgressionButton } from "./MediaChapterCardProgressionButton";
+import { MediaChapterActions } from "../MediaChapterActions"
+import { MediaChapterCardPath } from "./MediaChapterCardPath"
+import { MediaChapterCardProgressionButton } from "./MediaChapterCardProgressionButton"
 
 type Props = {
-  chapter: MediaLimitedChapter;
-  order: "unique" | "first" | "middle" | "last";
-};
+  chapter: MediaLimitedChapter
+  order: "unique" | "first" | "middle" | "last"
+}
 
 const mediaChapterCardTemporary = tv({
   slots: {
@@ -54,15 +54,15 @@ const mediaChapterCardTemporary = tv({
       },
     },
   },
-});
+})
 
 export const MediaChapterCardTemporary = ({ chapter, order }: Props) => {
-  const [completed, setCompleted] = useState(chapter.completed ?? false);
-  const { data: session } = useSession();
+  const [completed, setCompleted] = useState(chapter.completed ?? false)
+  const { data: session } = useSession()
   const slots = mediaChapterCardTemporary({
     completed: session ? completed : "null",
     order,
-  });
+  })
 
   return (
     <div className={slots.container()}>
@@ -102,5 +102,5 @@ export const MediaChapterCardTemporary = ({ chapter, order }: Props) => {
       </Card>
       <MediaChapterActions chapter={chapter} />
     </div>
-  );
-};
+  )
+}

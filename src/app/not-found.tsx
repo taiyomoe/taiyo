@@ -1,10 +1,10 @@
-import Image from "next/image";
+import Image from "next/image"
 
-import { NavbarAuth } from "~/components/navbar/NavbarAuth";
+import { NavbarAuth } from "~/components/navbar/NavbarAuth"
 
 const NotFound = () => {
   return (
-    <div className="flex h-screen select-none flex-col">
+    <div className="flex h-dvh select-none flex-col">
       <NavbarAuth />
       <div className="mx-bodyPadding flex grow flex-col items-center justify-center gap-16">
         <Image
@@ -20,7 +20,7 @@ const NotFound = () => {
         </p>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default NotFound;
+export default NotFound

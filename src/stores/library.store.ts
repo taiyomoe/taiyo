@@ -1,30 +1,30 @@
-import { create } from "zustand";
+import { create } from "zustand"
 
 import type {
   MediaLimited,
   UserLibraryMedia,
   UserLibraryStatus,
-} from "~/lib/types";
-import { LibraryUtils } from "~/lib/utils/library.utils";
+} from "~/lib/types"
+import { LibraryUtils } from "~/lib/utils/library.utils"
 
 export type LibraryState = {
-  sidebarState: "show" | "hide";
-  toggleSidebar: () => void;
+  sidebarState: "show" | "hide"
+  toggleSidebar: () => void
 
-  reading: UserLibraryMedia[];
-  rereading: UserLibraryMedia[];
-  completed: UserLibraryMedia[];
-  onHold: UserLibraryMedia[];
-  dropped: UserLibraryMedia[];
-  planToRead: UserLibraryMedia[];
+  reading: UserLibraryMedia[]
+  rereading: UserLibraryMedia[]
+  completed: UserLibraryMedia[]
+  onHold: UserLibraryMedia[]
+  dropped: UserLibraryMedia[]
+  planToRead: UserLibraryMedia[]
 
-  addEntries: (status: UserLibraryStatus, entries: UserLibraryMedia[]) => void;
-  getEntry: (mediaId: string) => UserLibraryMedia | undefined;
+  addEntries: (status: UserLibraryStatus, entries: UserLibraryMedia[]) => void
+  getEntry: (mediaId: string) => UserLibraryMedia | undefined
   updateEntry: (
     media: MediaLimited | UserLibraryMedia,
     newStatus: UserLibraryStatus | "delete",
-  ) => void;
-};
+  ) => void
+}
 
 export const useLibraryStore = create<LibraryState>((set, get) => ({
   sidebarState: "hide",
@@ -32,7 +32,7 @@ export const useLibraryStore = create<LibraryState>((set, get) => ({
     set((state) => ({
       ...state,
       sidebarState: state.sidebarState === "show" ? "hide" : "show",
-    }));
+    }))
   },
 
   reading: [],
@@ -46,15 +46,15 @@ export const useLibraryStore = create<LibraryState>((set, get) => ({
     set((state) => ({
       ...state,
       [status]: entries,
-    }));
+    }))
   },
   getEntry: (mediaId) => LibraryUtils.getEntry(get(), mediaId),
   updateEntry: (media, newStatus) => {
     set((state) => {
-      const newState = { ...state };
-      const entry = LibraryUtils.getEntry(newState, media.id)!;
+      const newState = { ...state }
+      const entry = LibraryUtils.getEntry(newState, media.id)!
 
-      LibraryUtils.deleteEntry(newState, media.id);
+      LibraryUtils.deleteEntry(newState, media.id)
 
       if (newStatus !== "delete") {
         newState[newStatus].push({
@@ -68,10 +68,10 @@ export const useLibraryStore = create<LibraryState>((set, get) => ({
               ? media.status
               : media.mediaStatus,
           libraryStatus: newStatus,
-        });
+        })
       }
 
-      return newState;
-    });
+      return newState
+    })
   },
-}));
+}))

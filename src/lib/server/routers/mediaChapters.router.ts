@@ -1,16 +1,16 @@
-import { TRPCError } from "@trpc/server";
+import { TRPCError } from "@trpc/server"
 
-import { idSchema } from "~/lib/schemas";
+import { idSchema } from "~/lib/schemas"
 import {
   getMediaChapterByIdSchema,
   getMediaChaptersByMediaIdSchema,
   insertMediaChapterSchema,
   updateMediaChapterSchema,
-} from "~/lib/schemas/mediaChapter.schemas";
-import type { MediaChapterLimited } from "~/lib/types";
-import { MediaUtils } from "~/lib/utils/media.utils";
+} from "~/lib/schemas/mediaChapter.schemas"
+import type { MediaChapterLimited } from "~/lib/types"
+import { MediaUtils } from "~/lib/utils/media.utils"
 
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 
 export const mediaChaptersRouter = createTRPCRouter({
   create: protectedProcedure
@@ -19,13 +19,13 @@ export const mediaChaptersRouter = createTRPCRouter({
     .mutation(async ({ ctx, input: { pages, scanIds, ...input } }) => {
       const scans = await ctx.db.scan.findMany({
         where: { id: { in: scanIds } },
-      });
+      })
 
       if (scans.length !== scanIds.length) {
         throw new TRPCError({
           code: "BAD_REQUEST",
           message: "Uma ou várias scans não existem.",
-        });
+        })
       }
 
       const result = await ctx.db.mediaChapter.create({
@@ -38,9 +38,9 @@ export const mediaChaptersRouter = createTRPCRouter({
           },
           uploaderId: ctx.session.user.id,
         },
-      });
+      })
 
-      return result;
+      return result
     }),
 
   update: protectedProcedure
@@ -50,24 +50,24 @@ export const mediaChaptersRouter = createTRPCRouter({
       const mediaChapter = await ctx.db.mediaChapter.findUnique({
         include: { scans: true },
         where: { id: input.id, deletedAt: null },
-      });
+      })
 
       if (!mediaChapter) {
         throw new TRPCError({
           code: "NOT_FOUND",
           message: "Media chapter not found",
-        });
+        })
       }
 
       const scans = await ctx.db.scan.findMany({
         where: { id: { in: scanIds } },
-      });
+      })
 
       if (scans.length !== scanIds.length) {
         throw new TRPCError({
           code: "BAD_REQUEST",
           message: "Uma ou várias scans não existem.",
-        });
+        })
       }
 
       const result = await ctx.db.mediaChapter.update({
@@ -80,9 +80,9 @@ export const mediaChaptersRouter = createTRPCRouter({
           },
         },
         where: { id: input.id },
-      });
+      })
 
-      return result;
+      return result
     }),
 
   getById: publicProcedure
@@ -123,22 +123,22 @@ export const mediaChaptersRouter = createTRPCRouter({
           comments: true,
         },
         where: { id: chapterId, deletedAt: null },
-      });
+      })
 
       if (!result?.uploader.name || !result.media.titles.at(0)) {
-        return null;
+        return null
       }
 
       const sortedMediaChapters = result.media.chapters.sort(
         (a, b) => a.number - b.number,
-      );
+      )
       const currentMediaChapterIndex = sortedMediaChapters.findIndex(
         (c) => c.id === chapterId,
-      );
+      )
       const mediaTitle = MediaUtils.getMainTitle(
         result.media.titles,
         ctx.session?.user.preferredTitles ?? null,
-      );
+      )
 
       const mediaChapterLimited: MediaChapterLimited = {
         id: chapterId,
@@ -166,9 +166,9 @@ export const mediaChaptersRouter = createTRPCRouter({
           name: s.name,
         })),
         comments: result.comments,
-      };
+      }
 
-      return mediaChapterLimited;
+      return mediaChapterLimited
     }),
 
   getByMediaId: publicProcedure
@@ -188,16 +188,16 @@ export const mediaChaptersRouter = createTRPCRouter({
         orderBy: { number: "desc" },
         skip: (page - 1) * perPage,
         take: perPage,
-      });
+      })
       const chaptersCount = await ctx.db.mediaChapter.count({
         where: { mediaId, deletedAt: null },
-      });
+      })
       const { progression } = ctx.session
         ? (await ctx.db.userHistory.findFirst({
             select: { progression: true },
             where: { userId: ctx.session?.user.id, mediaId },
           })) ?? { progression: [] }
-        : { progression: [] };
+        : { progression: [] }
 
       const mediaLimitedChapterPagination = {
         chapters: result.map((c) => ({
@@ -218,9 +218,9 @@ export const mediaChaptersRouter = createTRPCRouter({
         })),
         // ----- OTHERS
         totalPages: Math.ceil(chaptersCount / perPage) || 1,
-      };
+      }
 
-      return mediaLimitedChapterPagination;
+      return mediaLimitedChapterPagination
     }),
 
   delete: protectedProcedure
@@ -229,18 +229,18 @@ export const mediaChaptersRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const mediaChapter = await ctx.db.mediaChapter.findUnique({
         where: { id: input, deletedAt: null },
-      });
+      })
 
       if (!mediaChapter) {
         throw new TRPCError({
           code: "NOT_FOUND",
           message: "Media chapter not found",
-        });
+        })
       }
 
       await ctx.db.mediaChapter.update({
         data: { deletedAt: new Date(), deleterId: ctx.session.user.id },
         where: { id: input },
-      });
+      })
     }),
-});
+})

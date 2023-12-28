@@ -1,33 +1,33 @@
-import { useState } from "react";
-import { Button } from "@nextui-org/button";
+import { Button } from "@nextui-org/button"
+import { useState } from "react"
 
 type Props = {
-  volumeKeys: string[];
-  setSelectedKeys: (keys: Set<string>) => void;
-};
+  volumeKeys: string[]
+  setSelectedKeys: (keys: Set<string>) => void
+}
 
 export const MediaChaptersTabActions = ({
   volumeKeys,
   setSelectedKeys,
 }: Props) => {
-  const [expanded, setExpanded] = useState(true);
+  const [expanded, setExpanded] = useState(true)
 
   const collapseAll = () => {
-    setSelectedKeys(new Set());
-  };
+    setSelectedKeys(new Set())
+  }
   const expandVolumes = () => {
-    setSelectedKeys(new Set(volumeKeys));
-  };
+    setSelectedKeys(new Set(volumeKeys))
+  }
 
   const handleExpandedButtonPress = () => {
     if (expanded) {
-      collapseAll();
-      setExpanded(false);
+      collapseAll()
+      setExpanded(false)
     } else {
-      expandVolumes();
-      setExpanded(true);
+      expandVolumes()
+      setExpanded(true)
     }
-  };
+  }
 
   return (
     <div className="flex justify-end gap-2">
@@ -40,5 +40,5 @@ export const MediaChaptersTabActions = ({
         {expanded ? "Recolher" : "Expandir"}
       </Button>
     </div>
-  );
-};
+  )
+}

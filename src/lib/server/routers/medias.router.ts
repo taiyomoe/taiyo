@@ -1,21 +1,21 @@
-import type { Trackers } from "@prisma/client";
-import { TRPCError } from "@trpc/server";
+import type { Trackers } from "@prisma/client"
+import { TRPCError } from "@trpc/server"
 
 import {
   getMediaByIdSchema,
   insertMediaSchema,
   searchMediaSchema,
   updateMediaSchema,
-} from "~/lib/schemas";
+} from "~/lib/schemas"
 import {
   LibraryService,
   MediaChapterService,
   MediaService,
-} from "~/lib/services";
-import type { MediaLimited, SearchedMedia } from "~/lib/types";
-import { MediaUtils } from "~/lib/utils/media.utils";
+} from "~/lib/services"
+import type { MediaLimited, SearchedMedia } from "~/lib/types"
+import { MediaUtils } from "~/lib/utils/media.utils"
 
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 
 export const mediasRouter = createTRPCRouter({
   create: protectedProcedure
@@ -33,14 +33,14 @@ export const mediasRouter = createTRPCRouter({
          * Before creating the media, we need to create the trackers array.
          * It would be too much of a hassle to create it in the creating object.
          */
-        const trackers = [];
+        const trackers = []
 
         if (mdTracker) {
           trackers.push({
             tracker: "MANGADEX" as Trackers,
             externalId: mdTracker,
             creatorId: ctx.session.user.id,
-          });
+          })
         }
 
         if (alTracker) {
@@ -48,7 +48,7 @@ export const mediasRouter = createTRPCRouter({
             tracker: "ANILIST" as Trackers,
             externalId: alTracker.toString(),
             creatorId: ctx.session.user.id,
-          });
+          })
         }
 
         if (malTracker) {
@@ -56,7 +56,7 @@ export const mediasRouter = createTRPCRouter({
             tracker: "MYANIMELIST" as Trackers,
             externalId: malTracker.toString(),
             creatorId: ctx.session.user.id,
-          });
+          })
         }
 
         const result = await ctx.db.media.create({
@@ -73,12 +73,12 @@ export const mediasRouter = createTRPCRouter({
             trackers: { createMany: { data: trackers } },
             creatorId: ctx.session.user.id,
           },
-        });
+        })
 
-        const indexItem = await MediaService.getIndexItem(result.id);
-        await ctx.indexes.medias.updateDocuments([indexItem]);
+        const indexItem = await MediaService.getIndexItem(result.id)
+        await ctx.indexes.medias.updateDocuments([indexItem])
 
-        return result;
+        return result
       },
     ),
 
@@ -89,22 +89,22 @@ export const mediasRouter = createTRPCRouter({
       const media = await ctx.db.media.findUnique({
         select: { id: true },
         where: { id: input.id },
-      });
+      })
 
       if (!media) {
         throw new TRPCError({
           code: "NOT_FOUND",
           message: "Media not found",
-        });
+        })
       }
 
       await ctx.db.media.update({
         where: { id: input.id },
         data: input,
-      });
+      })
 
-      const indexItem = await MediaService.getIndexItem(input.id);
-      await ctx.indexes.medias.updateDocuments([indexItem]);
+      const indexItem = await MediaService.getIndexItem(input.id)
+      await ctx.indexes.medias.updateDocuments([indexItem])
     }),
 
   getById: publicProcedure
@@ -139,16 +139,16 @@ export const mediasRouter = createTRPCRouter({
           trackers: { select: { tracker: true, externalId: true } },
         },
         where: { id: mediaId, deletedAt: null },
-      });
+      })
 
       if (!result?.covers.at(0) || !result.titles.at(0)) {
-        return null;
+        return null
       }
 
       const userLibraryMedia = await LibraryService.getUserLibraryMedia(
         ctx.session?.user.id,
         mediaId,
-      );
+      )
 
       const mediaLimited: MediaLimited = {
         id: mediaId,
@@ -172,40 +172,39 @@ export const mediasRouter = createTRPCRouter({
         ),
         titles: result.titles,
         trackers: result.trackers.filter((t) => t.tracker !== "MANGADEX"),
-      };
+      }
 
-      return mediaLimited;
+      return mediaLimited
     }),
 
   getHomePage: publicProcedure.query(async ({ ctx }) => {
-    const preferredTitles = ctx.session?.user.preferredTitles;
-    const latestMedias = await MediaService.getLatestMedias();
-    const featuredMedias =
-      await MediaService.getFeaturedMedias(preferredTitles);
+    const preferredTitles = ctx.session?.user.preferredTitles
+    const latestMedias = await MediaService.getLatestMedias()
+    const featuredMedias = await MediaService.getFeaturedMedias(preferredTitles)
     const latestReleases =
-      await MediaChapterService.getLatestReleases(preferredTitles);
+      await MediaChapterService.getLatestReleases(preferredTitles)
 
     return {
       latestMedias,
       featuredMedias,
       latestReleases,
-    };
+    }
   }),
 
   search: publicProcedure
     .input(searchMediaSchema)
     .mutation(async ({ ctx, input: { title } }) => {
-      const results = await ctx.indexes.medias.search(title);
+      const results = await ctx.indexes.medias.search(title)
       const searchedMedias: SearchedMedia[] = results.hits.map((h) => ({
         id: h.id,
-        synopsis: h.synopsis ? h.synopsis.slice(0, 100) + "..." : null,
+        synopsis: h.synopsis ? `${h.synopsis.slice(0, 100)}...` : null,
         title: MediaUtils.getMainTitle(
           h.titles,
           ctx.session?.user.preferredTitles ?? null,
         ),
         coverId: h.mainCoverId,
-      }));
+      }))
 
-      return searchedMedias;
+      return searchedMedias
     }),
-});
+})

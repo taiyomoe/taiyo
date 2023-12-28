@@ -1,10 +1,10 @@
-import { nextui } from "@nextui-org/theme";
-import tailwindScrollbar from "tailwind-scrollbar";
-import type { Config } from "tailwindcss";
-import { fontFamily } from "tailwindcss/defaultTheme";
-import plugin from "tailwindcss/plugin";
+import { nextui } from "@nextui-org/theme"
+import tailwindScrollbar from "tailwind-scrollbar"
+import type { Config } from "tailwindcss"
+import { fontFamily } from "tailwindcss/defaultTheme"
+import plugin from "tailwindcss/plugin"
 
-export default {
+export default ({
   darkMode: ["class"],
   content: [
     "./src/**/*.{ts,tsx}",
@@ -51,6 +51,9 @@ export default {
       boxShadow: {
         intense: "12px 25px 100px 62px #000",
       },
+      dropShadow: {
+        accent: "0 1.2px 1.2px rgba(0,0,0,0.8)",
+      },
       gridTemplateAreas: {
         mediaChapter: ["leftSidebar chapter rightSidebar"],
       },
@@ -63,7 +66,7 @@ export default {
         background: "var(--background)",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "var(--primary)",
+          DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
         },
         secondary: {
@@ -88,8 +91,8 @@ export default {
   plugins: [
     tailwindScrollbar({ nocompatible: true }),
     plugin(({ addVariant }) => {
-      addVariant("child", "& > *");
-      addVariant("child-hover", "& > *:hover");
+      addVariant("child", "& > *")
+      addVariant("child-hover", "& > *:hover")
     }),
     require("@savvywombat/tailwindcss-grid-areas"),
     nextui({
@@ -108,7 +111,7 @@ export default {
               foreground: "hsl(0 0% 3.9%)",
             },
             primary: {
-              DEFAULT: "#ff4f4f",
+              DEFAULT: "hsl(0 100% 65.49%)",
               foreground: "hsl(0 0% 98%)",
             },
             secondary: {
@@ -130,7 +133,7 @@ export default {
               foreground: "hsl(0 0% 98%)",
             },
             primary: {
-              DEFAULT: "#ff4f4f",
+              DEFAULT: "hsl(0 100% 65.49%)",
               foreground: "hsl(0 0% 98%)",
             },
             secondary: {
@@ -142,4 +145,4 @@ export default {
       },
     }),
   ],
-} satisfies Config;
+} satisfies Config)

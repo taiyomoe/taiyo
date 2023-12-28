@@ -1,4 +1,4 @@
-import { db } from "~/lib/server/db";
+import { db } from "~/lib/server/db"
 
 const execute = async () => {
   await db.user.createMany({
@@ -143,7 +143,7 @@ const execute = async () => {
         email: "calvo@gmail.com",
       },
     ],
-  });
-};
+  })
+}
 
-export default { execute };
+export default { execute }

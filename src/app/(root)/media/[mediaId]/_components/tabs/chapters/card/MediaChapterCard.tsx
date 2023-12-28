@@ -1,21 +1,21 @@
-import Link from "next/link";
-import { Card, CardBody } from "@nextui-org/card";
-import { tv } from "tailwind-variants";
+import { Card, CardBody } from "@nextui-org/card"
+import Link from "next/link"
+import { tv } from "tailwind-variants"
 
-import { MediaChapterScans } from "~/components/ui/MediaChapterScans";
-import type { MediaLimitedChapter } from "~/lib/types";
-import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils";
+import { MediaChapterScans } from "~/components/ui/MediaChapterScans"
+import type { MediaLimitedChapter } from "~/lib/types"
+import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils"
 
-import { MediaChapterCardUploadedTime } from "../../../../../../../../components/ui/MediaChapterUploadedTime";
-import { MediaChapterUploader } from "../../../../../../../../components/ui/MediaChapterUploader";
-import { MediaChapterCardCommentsCount } from "./MediaChapterCardCommentsCount";
-import { MediaChapterCardPath } from "./MediaChapterCardPath";
-import { MediaChapterCardViews } from "./MediaChapterCardViews";
+import { MediaChapterCardUploadedTime } from "../../../../../../../../components/ui/MediaChapterUploadedTime"
+import { MediaChapterUploader } from "../../../../../../../../components/ui/MediaChapterUploader"
+import { MediaChapterCardCommentsCount } from "./MediaChapterCardCommentsCount"
+import { MediaChapterCardPath } from "./MediaChapterCardPath"
+import { MediaChapterCardViews } from "./MediaChapterCardViews"
 
 type Props = {
-  chapter: MediaLimitedChapter;
-  order: "unique" | "first" | "middle" | "last";
-};
+  chapter: MediaLimitedChapter
+  order: "unique" | "first" | "middle" | "last"
+}
 
 const mediaChapterCard = tv({
   slots: {
@@ -46,10 +46,10 @@ const mediaChapterCard = tv({
       },
     },
   },
-});
+})
 
 export const MediaChapterCard = ({ chapter, order }: Props) => {
-  const slots = mediaChapterCard({ order });
+  const slots = mediaChapterCard({ order })
 
   return (
     <div className={slots.container()}>
@@ -89,5 +89,5 @@ export const MediaChapterCard = ({ chapter, order }: Props) => {
         </CardBody>
       </Card>
     </div>
-  );
-};
+  )
+}

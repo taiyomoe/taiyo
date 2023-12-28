@@ -1,22 +1,22 @@
-"use client";
+"use client"
 
-import Link from "next/link";
-import { Button } from "@nextui-org/button";
+import { Button } from "@nextui-org/button"
 import {
   Dropdown,
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
-} from "@nextui-org/dropdown";
-import { Skeleton } from "@nextui-org/react";
-import { ChevronsUpDownIcon } from "lucide-react";
-import { tv } from "tailwind-variants";
+} from "@nextui-org/dropdown"
+import { Skeleton } from "@nextui-org/react"
+import { ChevronsUpDownIcon } from "lucide-react"
+import Link from "next/link"
+import { tv } from "tailwind-variants"
 
-import { BackButton } from "~/components/generics/buttons/BackButton";
-import { ForwardButton } from "~/components/generics/buttons/ForwardButton";
-import { useChapterProgression } from "~/hooks/useChapterProgression";
-import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils";
-import { useReaderStore } from "~/stores";
+import { BackButton } from "~/components/generics/buttons/BackButton"
+import { ForwardButton } from "~/components/generics/buttons/ForwardButton"
+import { useChapterProgression } from "~/hooks/useChapterProgression"
+import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils"
+import { useReaderStore } from "~/stores"
 
 const readerSettingsMediaChapterDropdown = tv({
   slots: {
@@ -27,20 +27,20 @@ const readerSettingsMediaChapterDropdown = tv({
     dropdownMenu:
       "scrollbar-track-content3 scrollbar-thumb-rounded-none max-h-[300px] overflow-y-scroll p-2 scrollbar-thin scrollbar-thumb-primary",
   },
-});
+})
 
 export const ReaderSettingsMediaChapterDropdown = () => {
-  const { chapter } = useReaderStore();
-  const slots = readerSettingsMediaChapterDropdown();
-  const { onNextChapter } = useChapterProgression();
+  const { chapter } = useReaderStore()
+  const slots = readerSettingsMediaChapterDropdown()
+  const { onNextChapter } = useChapterProgression()
 
   const backButtonUrl = chapter?.previousChapter
     ? MediaChapterUtils.getUrl(chapter?.previousChapter)
-    : "https://google.com/";
+    : "https://google.com/"
 
   const forwardButtonUrl = chapter?.nextChapter
     ? MediaChapterUtils.getUrl(chapter?.nextChapter)
-    : "https://google.com/";
+    : "https://google.com/"
 
   return (
     <div className={slots.container()}>
@@ -87,5 +87,5 @@ export const ReaderSettingsMediaChapterDropdown = () => {
         onPress={() => onNextChapter()}
       />
     </div>
-  );
-};
+  )
+}

@@ -1,9 +1,9 @@
-import { z } from "zod";
+import { z } from "zod"
 
-import { TAG_KEYS } from "~/lib/i18n/tags";
-import { createMediaTitlesSchema } from "~/lib/schemas/mediaTitle.schemas";
+import { TAG_KEYS } from "~/lib/i18n/tags"
+import { createMediaTitlesSchema } from "~/lib/schemas/mediaTitle.schemas"
 
-import { MediaSchema } from "./prisma";
+import { MediaSchema } from "./prisma"
 
 export const insertMediaSchema = MediaSchema.pick({
   id: true,
@@ -30,24 +30,24 @@ export const insertMediaSchema = MediaSchema.pick({
   alTracker: z.coerce.number().positive().min(30000).optional(),
   malTracker: z.coerce.number().positive().min(1).optional(),
   titles: createMediaTitlesSchema,
-});
+})
 
 export const updateMediaSchema = insertMediaSchema
   .partial()
   .required({ id: true })
-  .omit({ titles: true });
+  .omit({ titles: true })
 
-export const getMediaByIdSchema = z.string();
+export const getMediaByIdSchema = z.string()
 
 export const searchMediaSchema = z.object({
   title: z.string().min(1),
-});
+})
 
 export const importMediaSchema = z.object({
   mdId: z.string().uuid(),
   synopsis: z.string().min(1),
-});
+})
 
-export type InsertMediaSchema = typeof insertMediaSchema._type;
-export type UpdateMediaSchema = Required<typeof updateMediaSchema._type>;
-export type ImportMediaSchema = typeof importMediaSchema._type;
+export type InsertMediaSchema = typeof insertMediaSchema._type
+export type UpdateMediaSchema = Required<typeof updateMediaSchema._type>
+export type ImportMediaSchema = typeof importMediaSchema._type

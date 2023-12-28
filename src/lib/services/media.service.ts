@@ -1,10 +1,10 @@
-import type { Languages, MediaStatus } from "@prisma/client";
-import { TRPCError } from "@trpc/server";
+import type { Languages, MediaStatus } from "@prisma/client"
+import { TRPCError } from "@trpc/server"
 
-import { db } from "~/lib/server/db";
-import type { FeaturedMedia, LatestMedia } from "~/lib/types";
-import type { MediasIndexItem } from "~/lib/types/meilisearch.types";
-import { MediaUtils } from "~/lib/utils/media.utils";
+import { db } from "~/lib/server/db"
+import type { FeaturedMedia, LatestMedia } from "~/lib/types"
+import type { MediasIndexItem } from "~/lib/types/meilisearch.types"
+import { MediaUtils } from "~/lib/utils/media.utils"
 
 /**
  * Gets the titles and main cover of a media.
@@ -36,20 +36,20 @@ const getIndexItem = async (mediaId: string): Promise<MediasIndexItem> => {
     where: {
       id: mediaId,
     },
-  });
+  })
 
   if (!result) {
     throw new TRPCError({
       code: "NOT_FOUND",
       message: `Media '${mediaId}' not found`,
-    });
+    })
   }
 
   if (!result.covers.length) {
     throw new TRPCError({
       code: "INTERNAL_SERVER_ERROR",
       message: `Media '${mediaId}' has no main cover`,
-    });
+    })
   }
 
   return {
@@ -57,8 +57,8 @@ const getIndexItem = async (mediaId: string): Promise<MediasIndexItem> => {
     synopsis: result.synopsis,
     titles: result.titles,
     mainCoverId: result.covers[0]!.id,
-  };
-};
+  }
+}
 
 /**
  * Gets the status of a media.
@@ -68,17 +68,17 @@ const getStatus = async (mediaId: string): Promise<MediaStatus> => {
   const result = await db.media.findUnique({
     select: { status: true },
     where: { id: mediaId },
-  });
+  })
 
   if (!result) {
     throw new TRPCError({
       code: "NOT_FOUND",
       message: `Media '${mediaId}' not found`,
-    });
+    })
   }
 
-  return result.status;
-};
+  return result.status
+}
 
 /**
  * Gets the latest medias.
@@ -97,13 +97,13 @@ const getLatestMedias = async () => {
     where: { deletedAt: null },
     orderBy: { createdAt: "desc" },
     take: 15,
-  });
+  })
 
   if (result.some((m) => !m.covers.length)) {
     throw new TRPCError({
       code: "INTERNAL_SERVER_ERROR",
       message: "Some medias have no main cover",
-    });
+    })
   }
 
   const latestMedias: LatestMedia[] = result
@@ -111,10 +111,10 @@ const getLatestMedias = async () => {
     .map((m) => ({
       id: m.id,
       coverId: m.covers.at(0)!.id,
-    }));
+    }))
 
-  return latestMedias;
-};
+  return latestMedias
+}
 
 /**
  * Gets the featured medias.
@@ -125,7 +125,7 @@ const getFeaturedMedias = async (
 ) => {
   const banners = await db.$queryRaw<
     { id: string; mediaId: string }[]
-  >`SELECT "id", "mediaId" FROM "MediaBanner" WHERE "deletedAt" IS NULL ORDER BY RANDOM() LIMIT 15;`;
+  >`SELECT "id", "mediaId" FROM "MediaBanner" WHERE "deletedAt" IS NULL ORDER BY RANDOM() LIMIT 15;`
   const result = await db.media.findMany({
     select: {
       id: true,
@@ -151,13 +151,13 @@ const getFeaturedMedias = async (
       deletedAt: null,
     },
     take: 15,
-  });
+  })
 
   if (result.some((m) => !m.covers.length)) {
     throw new TRPCError({
       code: "INTERNAL_SERVER_ERROR",
       message: "Some medias have no main cover",
-    });
+    })
   }
 
   const featuredMedias: FeaturedMedia[] = result.map((m) => ({
@@ -166,14 +166,14 @@ const getFeaturedMedias = async (
     coverId: m.covers.at(0)!.id,
     bannerId: banners.find((b) => b.mediaId === m.id)!.id,
     mainTitle: MediaUtils.getMainTitle(m.titles, preferredTitles),
-  }));
+  }))
 
-  return featuredMedias;
-};
+  return featuredMedias
+}
 
 export const MediaService = {
   getIndexItem,
   getStatus,
   getLatestMedias,
   getFeaturedMedias,
-};
+}

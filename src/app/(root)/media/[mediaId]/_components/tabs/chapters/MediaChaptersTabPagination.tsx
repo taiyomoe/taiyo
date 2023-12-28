@@ -1,22 +1,22 @@
-import { useState } from "react";
-import { Button } from "@nextui-org/button";
+import { Button } from "@nextui-org/button"
 import {
   Dropdown,
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
-} from "@nextui-org/dropdown";
-import { Pagination } from "@nextui-org/pagination";
-import type { Selection } from "@nextui-org/react";
-import { ChevronDownIcon } from "lucide-react";
-import { tv } from "tailwind-variants";
+} from "@nextui-org/dropdown"
+import { Pagination } from "@nextui-org/pagination"
+import type { Selection } from "@nextui-org/react"
+import { ChevronDownIcon } from "lucide-react"
+import { useState } from "react"
+import { tv } from "tailwind-variants"
 
-import { useMediaNavigation } from "~/hooks/useMediaNavigation";
-import { MEDIA_PER_PAGE_CHOICES } from "~/lib/constants";
+import { useMediaNavigation } from "~/hooks/useMediaNavigation"
+import { MEDIA_PER_PAGE_CHOICES } from "~/lib/constants"
 
 type Props = {
-  totalPages: number;
-};
+  totalPages: number
+}
 
 const mediaChaptersTabPagination = tv({
   slots: {
@@ -24,22 +24,22 @@ const mediaChaptersTabPagination = tv({
     dropdownContent: "min-w-fit",
     triggerButton: "h-9 w-fit min-w-fit justify-between px-2",
   },
-});
+})
 
 export const MediaChaptersTabPagination = ({ totalPages }: Props) => {
   const { container, dropdownContent, triggerButton } =
-    mediaChaptersTabPagination();
+    mediaChaptersTabPagination()
 
-  const { page, perPage, setPage, handlePerPageChange } = useMediaNavigation();
-  const [selectedKeys, setSelectedKeys] = useState(new Set([perPage]));
+  const { page, perPage, setPage, handlePerPageChange } = useMediaNavigation()
+  const [selectedKeys, setSelectedKeys] = useState(new Set([perPage]))
 
   const handleSelectionChange = (keys: Selection) => {
-    const newPerPage = Array.from(keys).join(", ").replaceAll("_", " ");
+    const newPerPage = Array.from(keys).join(", ").replaceAll("_", " ")
 
     // @ts-expect-error -- NextUI wrong types
-    setSelectedKeys(keys);
-    void handlePerPageChange(parseInt(newPerPage));
-  };
+    setSelectedKeys(keys)
+    void handlePerPageChange(parseInt(newPerPage))
+  }
 
   return (
     <div className={container()}>
@@ -77,5 +77,5 @@ export const MediaChaptersTabPagination = ({ totalPages }: Props) => {
         isDisabled={totalPages === 1}
       />
     </div>
-  );
-};
+  )
+}

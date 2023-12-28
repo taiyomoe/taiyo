@@ -1,16 +1,16 @@
-"use client";
+"use client"
 
-import { NextUIProvider } from "@nextui-org/react";
-import { SessionProvider } from "next-auth/react";
-import { ThemeProvider } from "next-themes";
-import { Toaster } from "sonner";
+import { NextUIProvider } from "@nextui-org/react"
+import { SessionProvider } from "next-auth/react"
+import { ThemeProvider } from "next-themes"
+import { Toaster } from "sonner"
 
-import { TRPCReactProvider } from "~/lib/trpc/Provider";
+import { TRPCReactProvider } from "~/lib/trpc/Provider"
 
 type ProviderProps = {
-  children: React.ReactNode;
-  headers: Headers;
-};
+  children: React.ReactNode
+  headers: Headers
+}
 
 export const Providers = (props: ProviderProps) => {
   return (
@@ -31,5 +31,5 @@ export const Providers = (props: ProviderProps) => {
         </NextUIProvider>
       </TRPCReactProvider>
     </SessionProvider>
-  );
-};
+  )
+}

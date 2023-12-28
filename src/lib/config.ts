@@ -1,9 +1,9 @@
-import type { Metadata } from "next";
+import type { Metadata } from "next"
 
 type SiteConfig = Record<string, unknown> & {
-  twitter: Metadata["twitter"];
-  openGraph: Metadata["openGraph"];
-};
+  twitter: Metadata["twitter"]
+  openGraph: Metadata["openGraph"]
+}
 
 export const siteConfig = {
   name: "Taiyō",
@@ -38,4 +38,4 @@ export const siteConfig = {
       alt: "Taiyō banner",
     },
   },
-} satisfies SiteConfig;
+} satisfies SiteConfig

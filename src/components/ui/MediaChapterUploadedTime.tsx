@@ -1,13 +1,13 @@
-import { ClockIcon } from "lucide-react";
+import { ClockIcon } from "lucide-react"
 
-import type { LatestRelease, MediaLimitedChapter } from "~/lib/types";
-import { cn } from "~/lib/utils/cn";
-import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils";
+import type { LatestRelease, MediaLimitedChapter } from "~/lib/types"
+import { cn } from "~/lib/utils/cn"
+import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils"
 
 type Props = {
-  chapter: MediaLimitedChapter | LatestRelease;
-  className?: string;
-};
+  chapter: MediaLimitedChapter | LatestRelease
+  className?: string
+}
 
 export const MediaChapterCardUploadedTime = ({ chapter, className }: Props) => {
   return (
@@ -19,5 +19,5 @@ export const MediaChapterCardUploadedTime = ({ chapter, className }: Props) => {
         {MediaChapterUtils.computeUploadedTime(chapter)}
       </p>
     </div>
-  );
-};
+  )
+}

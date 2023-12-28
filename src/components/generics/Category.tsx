@@ -1,10 +1,10 @@
-import { tv } from "@nextui-org/react";
+import { tv } from "@nextui-org/react"
 
 type Props = {
-  title: string;
-  size?: "lg";
-  children: React.ReactNode;
-};
+  title: string
+  size?: "lg"
+  children: React.ReactNode
+}
 
 const category = tv({
   slots: {
@@ -21,15 +21,15 @@ const category = tv({
   defaultVariants: {
     size: "lg",
   },
-});
+})
 
 export const Category = ({ title, size, children }: Props) => {
-  const { container, title: titleClass } = category({ size });
+  const { container, title: titleClass } = category({ size })
 
   return (
     <div className={container()}>
       <h3 className={titleClass()}>{title}</h3>
       {children}
     </div>
-  );
-};
+  )
+}

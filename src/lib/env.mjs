@@ -1,5 +1,5 @@
-import { createEnv } from "@t3-oss/env-nextjs";
-import { z } from "zod";
+import { createEnv } from "@t3-oss/env-nextjs"
+import { z } from "zod"
 
 /**
  * Checks if the app is running in development mode.
@@ -7,7 +7,7 @@ import { z } from "zod";
  */
 const isDev = process.env.NODE_ENV
   ? process.env.NODE_ENV === "development"
-  : true;
+  : true
 
 /**
  * Makes a schema optional if not in development mode.
@@ -16,8 +16,8 @@ const isDev = process.env.NODE_ENV
  * @returns
  */
 const onlyDev = (schema) => {
-  return isDev ? schema : schema.optional();
-};
+  return isDev ? schema : schema.optional()
+}
 
 export const env = createEnv({
   /**
@@ -142,4 +142,4 @@ export const env = createEnv({
    * `SOME_VAR: z.string()` and `SOME_VAR=''` will throw an error.
    */
   emptyStringAsUndefined: true,
-});
+})

@@ -1,1 +1,1 @@
-export * from "./genres.pt";
+export * from "./genres.pt"
