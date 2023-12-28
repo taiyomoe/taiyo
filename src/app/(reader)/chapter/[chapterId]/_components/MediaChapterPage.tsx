@@ -12,40 +12,29 @@ import { useReaderSettingsStore } from "~/stores"
 import { MediaChapterImages } from "./MediaChapterImages"
 
 const mediaChapterPage = tv({
-  slots: {
-    container:
-      "grid-in-chapter min-w-0 relative flex flex-col h-fit min-h-[calc(100dvh-var(--navbar-height))]",
-    imagesWrapper: "overflow-x-auto flex items-center h-full m-auto",
-  },
+  base: "grid-in-chapter min-w-0 relative flex flex-col h-fit min-h-[calc(100dvh-var(--navbar-height))] data-[navbar-mode=hover]:min-h-dvh",
   variants: {
     width: {
-      fit: {},
-      full: {},
+      fit: "",
+      full: "overflow-x-auto scrollbar-thin scrollbar-track-content1 scrollbar-thumb-primary",
     },
   },
-  compoundVariants: [
-    {
-      mode: "single",
-      width: "full",
-      className: {
-        container:
-          "overflow-x-auto scrollbar-thin scrollbar-track-content1 scrollbar-thumb-primary",
-      },
-    },
-  ],
 })
 
 export const MediaChapterPage = () => {
   const { isAboveTablet } = useDevice()
   const {
+    navbarMode,
     page: { mode, overlay, width },
     update,
   } = useReaderSettingsStore()
   const { goBack, goForward } = useChapterNavigation()
 
-  const slots = mediaChapterPage({ width })
+  const base = mediaChapterPage({ width })
 
   const handleKeyPress: KeyboardEventHandler = (e) => {
+    console.log("key pressed", e.key)
+
     if (mode === "longstrip") {
       return
     }
@@ -86,14 +75,13 @@ export const MediaChapterPage = () => {
 
   return (
     <div
-      className={slots.container()}
+      className={base}
       onClick={handleContainerClick}
       onKeyDown={handleKeyPress}
+      data-navbar-mode={navbarMode}
     >
       <MediaChapterPageOverlay />
-      <div className={slots.imagesWrapper()}>
-        <MediaChapterImages />
-      </div>
+      <MediaChapterImages />
     </div>
   )
 }

@@ -8,7 +8,7 @@ type Props = {
 }
 
 const mediaChapterImage = tv({
-  base: "my-auto select-none",
+  base: "select-none",
   variants: {
     hide: {
       true: "hidden",
@@ -20,8 +20,8 @@ const mediaChapterImage = tv({
       hover: "",
     },
     mode: {
-      single: "mx-auto",
-      longstrip: "h-full w-auto",
+      single: "m-auto",
+      longstrip: "h-[unset] w-auto",
     },
     height: {
       fit: "",
@@ -49,6 +49,11 @@ const mediaChapterImage = tv({
       mode: "single",
       width: "full",
       className: "max-w-[unset]",
+    },
+    {
+      height: "fit",
+      width: "full",
+      className: "max-h-[calc(var(--reader-height)-8px)]",
     },
   ],
 })
