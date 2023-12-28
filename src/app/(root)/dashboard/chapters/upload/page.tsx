@@ -1,4 +1,4 @@
-import { UploadChapterForm } from "~/components/forms/chapters/UploadChapterForm"
+import { UploadChapterForm } from "~/components/forms/chapters/upload/UploadChapterForm"
 
 export default function Page() {
   return <UploadChapterForm />
