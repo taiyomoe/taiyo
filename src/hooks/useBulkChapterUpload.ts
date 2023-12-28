@@ -23,15 +23,13 @@ export const useBulkChapterUpload = () => {
       let currentlyOngoing = 0
 
       const process = async (chapterNumber: number) => {
-        await compress(chapterNumber)
-
-        const [_, files] = folders.find(([n]) => n === chapterNumber)!
+        const compressedFiles = await compress(chapterNumber)
 
         toggleStatus(chapterNumber, "uploading")
 
         await upload(
           { mediaId: values.mediaId, number: chapterNumber },
-          files,
+          compressedFiles,
         )()
 
         toggleStatus(chapterNumber, "uploaded")
@@ -47,6 +45,7 @@ export const useBulkChapterUpload = () => {
         void process(chapterNumber).catch((err) => {
           console.error(err)
           toast.error(`Ocorreu um erro ao upar o capítulo${chapterNumber}`)
+          currentlyOngoing -= 1
         })
       }
 

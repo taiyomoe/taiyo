@@ -10,7 +10,7 @@ type ImageFolderStore = {
   uploaded: number[]
 
   // getImages: (type: UploadSessionType) => File[]
-  compress: (chapterNumber: number) => Promise<void>
+  compress: (chapterNumber: number) => Promise<File[]>
 
   load: (folders: ImageFolder[]) => void
   toggleStatus: (
@@ -44,6 +44,8 @@ export const useImageFolderStore = create<ImageFolderStore>((set, get) => ({
         return f
       }),
     }))
+
+    return files
   },
 
   load: (folders) => {
