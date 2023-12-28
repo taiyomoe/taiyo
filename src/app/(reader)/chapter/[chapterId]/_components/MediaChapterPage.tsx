@@ -5,11 +5,11 @@ import { useCallback } from "react"
 import { tv } from "tailwind-variants"
 
 import { MediaChapterPageOverlay } from "~/app/(reader)/_components/MediaChapterPageOverlay"
+import { ReaderSettingsMediaChapterDropdown } from "~/app/(reader)/_components/readerSidebar/ui/ReaderSettingsMediaChapterDropdown"
 import { useChapterNavigation } from "~/hooks/useChapterNavigation"
 import { useDevice } from "~/hooks/useDevice"
 import { useReaderSettingsStore } from "~/stores"
 
-import { ReaderSettingsMediaChapterDropdown } from "~/app/(reader)/_components/readerSidebar/ui/ReaderSettingsMediaChapterDropdown"
 import { MediaChapterImages } from "./MediaChapterImages"
 
 const mediaChapterPage = tv({
