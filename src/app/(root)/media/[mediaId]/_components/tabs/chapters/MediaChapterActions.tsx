@@ -3,7 +3,7 @@ import { PencilIcon } from "lucide-react"
 import { useSession } from "next-auth/react"
 import Link from "next/link"
 
-import { UpdateMediaChapterDeleteButton } from "~/components/forms/chapters/UpdateMediaChapterDeleteButton"
+import { UpdateMediaChapterDeleteButton } from "~/components/forms/chapters/update/UpdateMediaChapterDeleteButton"
 import type { MediaLimitedChapter } from "~/lib/types"
 
 type Props = {

@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation"
 
-import { UpdateMediaChapterForm } from "~/components/forms/chapters/UpdateMediaChapterForm"
+import { UpdateMediaChapterForm } from "~/components/forms/chapters/update/UpdateMediaChapterForm"
 import { db } from "~/lib/server/db"
 
 type Props = {
