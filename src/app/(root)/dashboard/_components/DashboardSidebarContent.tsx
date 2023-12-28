@@ -41,21 +41,24 @@ export const DashboardSidebarContent = ({ className }: Props) => {
         key="medias"
       >
         <DashboardSidebarCRUDButtons
-          create={{
-            label: "Importar",
-            href: "/dashboard/medias/import",
-          }}
-        />
-        <DashboardSidebarCRUDButtons
-          create={{
-            label: "Adicionar",
-            href: "/dashboard/medias/add",
-            isDisabled: true,
-          }}
-          update={{
-            label: "Modificar",
-            href: "/dashboard/medias/edit",
-          }}
+          items={[
+            {
+              label: "Importar",
+              href: "/dashboard/medias/import",
+              type: "create",
+            },
+            {
+              label: "Adicionar",
+              href: "/dashboard/medias/add",
+              type: "create",
+              isDisabled: true,
+            },
+            {
+              label: "Modificar",
+              href: "/dashboard/medias/edit",
+              type: "update",
+            },
+          ]}
         />
       </AccordionItem>
 
@@ -69,21 +72,24 @@ export const DashboardSidebarContent = ({ className }: Props) => {
         key="mediaChapters"
       >
         <DashboardSidebarCRUDButtons
-          create={{
-            label: "Upar em massa",
-            href: "/dashboard/chapters/bulk-upload",
-          }}
-        />
-        <DashboardSidebarCRUDButtons
-          create={{
-            label: "Upar",
-            href: "/dashboard/chapters/upload",
-          }}
-          update={{
-            label: "Modificar",
-            href: "/dashboard/chapters/edit",
-            isDisabled: true,
-          }}
+          items={[
+            {
+              label: "Upar em massa",
+              href: "/dashboard/chapters/bulk-upload",
+              type: "create",
+            },
+            {
+              label: "Adicionar",
+              href: "/dashboard/chapters/add",
+              type: "create",
+            },
+            {
+              label: "Modificar",
+              href: "/dashboard/chapters/edit",
+              type: "update",
+              isDisabled: true,
+            },
+          ]}
         />
       </AccordionItem>
 
@@ -97,10 +103,13 @@ export const DashboardSidebarContent = ({ className }: Props) => {
         key="scans"
       >
         <DashboardSidebarCRUDButtons
-          create={{
-            label: "Adicionar",
-            href: "/dashboard/scans/add",
-          }}
+          items={[
+            {
+              label: "Adicionar",
+              href: "/dashboard/scans/add",
+              type: "create",
+            },
+          ]}
         />
       </AccordionItem>
     </Accordion>
