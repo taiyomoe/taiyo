@@ -13,7 +13,7 @@ import { ReaderSettingsMediaChapterDropdown } from "~/app/(reader)/_components/r
 import { MediaChapterImages } from "./MediaChapterImages"
 
 const mediaChapterPage = tv({
-  base: "grid-in-chapter min-w-0 relative flex flex-col h-fit min-h-[calc(100dvh-var(--navbar-height))] data-[navbar-mode=hover]:min-h-dvh",
+  base: "grid-in-chapter min-w-0 outline-none relative flex flex-col h-fit min-h-[calc(100dvh-var(--navbar-height))] data-[navbar-mode=hover]:min-h-dvh",
   variants: {
     width: {
       fit: "",
