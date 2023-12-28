@@ -6,7 +6,7 @@ import { useImageStore } from "~/stores"
 
 export const SubmitButton = ({ isDisabled, children }: ButtonProps) => {
   const { isCompressing } = useImageStore()
-  const { isSubmitting, isValid, dirty } = useFormikContext()
+  const { isSubmitting, isValid, dirty, errors } = useFormikContext()
 
   const shouldDisableButton =
     isSubmitting || !(isValid && dirty) || isCompressing || isDisabled
