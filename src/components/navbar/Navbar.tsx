@@ -1,18 +1,18 @@
-"use client";
+"use client"
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Chip } from "@nextui-org/react";
-import { tv } from "tailwind-variants";
+import { Chip } from "@nextui-org/react"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { tv } from "tailwind-variants"
 
-import { UserLibrary } from "~/components/library/UserLibrary";
-import { MediaSearch } from "~/components/navbar/search/MediaSearch";
-import { CompanyLogo } from "~/components/ui/CompanyLogo";
-import { useDevice } from "~/hooks/useDevice";
-import { useReaderSettingsStore } from "~/stores";
+import { UserLibrary } from "~/components/library/UserLibrary"
+import { MediaSearch } from "~/components/navbar/search/MediaSearch"
+import { CompanyLogo } from "~/components/ui/CompanyLogo"
+import { useDevice } from "~/hooks/useDevice"
+import { useReaderSettingsStore } from "~/stores"
 
-import { NavbarBorder } from "./NavbarBorder";
-import { ReaderSidebarOpenButton } from "./ReaderSidebarOpenButton";
+import { NavbarBorder } from "./NavbarBorder"
+import { ReaderSidebarOpenButton } from "./ReaderSidebarOpenButton"
 
 const navbar = tv({
   slots: {
@@ -50,22 +50,22 @@ const navbar = tv({
       },
     },
   },
-});
+})
 
 type Props = {
-  popover: JSX.Element;
-};
+  popover: JSX.Element
+}
 
 export const Navbar = ({ popover }: Props) => {
-  const { sidebar, navbarMode } = useReaderSettingsStore();
-  const pathname = usePathname();
-  const { isAboveTablet } = useDevice();
+  const { sidebar, navbarMode } = useReaderSettingsStore()
+  const pathname = usePathname()
+  const { isAboveTablet } = useDevice()
 
   const slots = navbar({
     sidebarState: pathname.includes("/chapter/") ? sidebar.state : "hide",
     sidebarSide: sidebar.side,
     mode: pathname.includes("/chapter/") ? navbarMode : "sticky",
-  });
+  })
 
   return (
     <div className={slots.container()}>
@@ -90,5 +90,5 @@ export const Navbar = ({ popover }: Props) => {
       </nav>
       <NavbarBorder />
     </div>
-  );
-};
+  )
+}

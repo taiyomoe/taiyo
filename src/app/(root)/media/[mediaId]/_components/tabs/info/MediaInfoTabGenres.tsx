@@ -1,10 +1,10 @@
-import { Category } from "~/components/generics/Category";
-import { GENRES_PT } from "~/lib/i18n/genres";
-import type { MediaLimited } from "~/lib/types";
+import { Category } from "~/components/generics/Category"
+import { GENRES_PT } from "~/lib/i18n/genres"
+import type { MediaLimited } from "~/lib/types"
 
 type Props = {
-  media: MediaLimited;
-};
+  media: MediaLimited
+}
 
 export const MediaInfoTabGenres = ({ media }: Props) => (
   <div className="items-start">
@@ -23,4 +23,4 @@ export const MediaInfoTabGenres = ({ media }: Props) => (
       </Category>
     )}
   </div>
-);
+)

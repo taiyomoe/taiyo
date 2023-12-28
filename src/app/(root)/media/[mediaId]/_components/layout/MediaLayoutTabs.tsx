@@ -1,28 +1,28 @@
-"use client";
+"use client"
 
-import type { Key } from "react";
-import { useCallback } from "react";
-import { Tab, Tabs } from "@nextui-org/tabs";
+import { Tab, Tabs } from "@nextui-org/tabs"
+import type { Key } from "react"
+import { useCallback } from "react"
 
-import { useMediaNavigation } from "~/hooks/useMediaNavigation";
-import type { MediaLimited, MediaTabs } from "~/lib/types";
+import { useMediaNavigation } from "~/hooks/useMediaNavigation"
+import type { MediaLimited, MediaTabs } from "~/lib/types"
 
-import { MediaLayoutChaptersTab } from "../tabs/chapters/MediaLayoutChaptersTab";
-import { MediaLayoutInfoTab } from "../tabs/info/MediaLayoutInfoTab";
+import { MediaLayoutChaptersTab } from "../tabs/chapters/MediaLayoutChaptersTab"
+import { MediaLayoutInfoTab } from "../tabs/info/MediaLayoutInfoTab"
 
 type Props = {
-  media: MediaLimited;
-};
+  media: MediaLimited
+}
 
 export const MediaLayoutTabs = ({ media }: Props) => {
-  const { tab, setTab } = useMediaNavigation();
+  const { tab, setTab } = useMediaNavigation()
 
   const handleSelectionChange = useCallback(
     async (key: Key) => {
-      await setTab(key.toString() as MediaTabs);
+      await setTab(key.toString() as MediaTabs)
     },
     [setTab],
-  );
+  )
 
   return (
     <Tabs
@@ -50,5 +50,5 @@ export const MediaLayoutTabs = ({ media }: Props) => {
       <Tab key="covers" title="Covers" />
       <Tab key="banners" title="Banners" />
     </Tabs>
-  );
-};
+  )
+}

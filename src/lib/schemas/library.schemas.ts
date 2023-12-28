@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from "zod"
 
 const statusSchema = z.enum([
   "reading",
@@ -7,7 +7,7 @@ const statusSchema = z.enum([
   "onHold",
   "dropped",
   "planToRead",
-]);
+])
 const statusSchemaWithDelete = z.enum([
   "reading",
   "rereading",
@@ -16,15 +16,15 @@ const statusSchemaWithDelete = z.enum([
   "dropped",
   "planToRead",
   "delete",
-]);
+])
 
 export const updateLibrarySchema = z.object({
   mediaId: z.string().uuid(),
   status: statusSchemaWithDelete,
-});
+})
 
 export const getLibrarySchema = z.object({
   userId: z.string().uuid(),
   status: statusSchema,
   page: z.number().int().positive().default(1),
-});
+})

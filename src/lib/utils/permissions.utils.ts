@@ -1,30 +1,30 @@
-import type { Roles } from "@prisma/client";
+import type { Roles } from "@prisma/client"
 
 import type {
   Permission,
-  ResourcesWithoutPossession,
   ResourcesWithPossession,
-} from "~/lib/types";
+  ResourcesWithoutPossession,
+} from "~/lib/types"
 
 const getPermissions = (): Permission[] => {
-  const permissions: Permission[] = [];
+  const permissions: Permission[] = []
 
   for (const resource of getResourcesWithPosession()) {
-    permissions.push(`${resource}:create`);
-    permissions.push(`${resource}:update:any`);
-    permissions.push(`${resource}:delete:any`);
-    permissions.push(`${resource}:update:own`);
-    permissions.push(`${resource}:delete:own`);
+    permissions.push(`${resource}:create`)
+    permissions.push(`${resource}:update:any`)
+    permissions.push(`${resource}:delete:any`)
+    permissions.push(`${resource}:update:own`)
+    permissions.push(`${resource}:delete:own`)
   }
 
   for (const resource of getResourcesWithoutPosession()) {
-    permissions.push(`${resource}:create`);
-    permissions.push(`${resource}:update`);
-    permissions.push(`${resource}:delete`);
+    permissions.push(`${resource}:create`)
+    permissions.push(`${resource}:update`)
+    permissions.push(`${resource}:delete`)
   }
 
-  return permissions;
-};
+  return permissions
+}
 
 const getUserPermissions = (): Permission[] => [
   "mediaChapterComments:create",
@@ -32,13 +32,13 @@ const getUserPermissions = (): Permission[] => [
   "mediaChapterComments:delete:own",
   "history:update:own",
   "library:update:own",
-];
+]
 
 const getModeratorPermissions = (): Permission[] => [
   "mediaChapterComments:create",
   "mediaChapterComments:update:any",
   "mediaChapterComments:delete:any",
-];
+]
 
 const getUploaderInternPermissions = () =>
   getUserPermissions().concat([
@@ -65,7 +65,7 @@ const getUploaderInternPermissions = () =>
     "scans:create",
     "scans:update:own",
     "scans:delete:own",
-  ]);
+  ])
 
 /**
  * This returns the same permissions as `getUploaderInternPermissions()` but with
@@ -76,25 +76,25 @@ const getUploaderPermissions = () =>
     permission.includes("own")
       ? (permission.replace("own", "any") as Permission)
       : permission,
-  );
+  )
 
 const getAdminPermissions = () =>
-  getPermissions().filter((permission) => !permission.includes("own"));
+  getPermissions().filter((permission) => !permission.includes("own"))
 
 const getRolePermissions = (role: Roles) => {
   switch (role) {
     case "USER":
-      return getUserPermissions();
+      return getUserPermissions()
     case "MODERATOR":
-      return getModeratorPermissions();
+      return getModeratorPermissions()
     case "UPLOADER_INTERN":
-      return getUploaderInternPermissions();
+      return getUploaderInternPermissions()
     case "UPLOADER":
-      return getUploaderPermissions();
+      return getUploaderPermissions()
     case "ADMIN":
-      return getAdminPermissions();
+      return getAdminPermissions()
   }
-};
+}
 
 const getResourcesWithPosession = (): ResourcesWithPossession[] => [
   "trackers",
@@ -107,14 +107,14 @@ const getResourcesWithPosession = (): ResourcesWithPossession[] => [
   "history",
   "library",
   "scans",
-];
+]
 
 const getResourcesWithoutPosession = (): ResourcesWithoutPossession[] => [
   "scanMembers",
-];
+]
 
 const canAccessDashboard = (permissions: Permission[]) =>
-  permissions.filter((p) => !getUserPermissions().includes(p)).length !== 0;
+  permissions.filter((p) => !getUserPermissions().includes(p)).length !== 0
 
 export const PermissionUtils = {
   getPermissions,
@@ -127,4 +127,4 @@ export const PermissionUtils = {
   getResourcesWithPosession,
   getResourcesWithoutPosession,
   canAccessDashboard,
-};
+}

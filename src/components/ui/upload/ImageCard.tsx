@@ -1,10 +1,10 @@
-import { tv } from "@nextui-org/react";
-import prettyBytes from "pretty-bytes";
+import { tv } from "@nextui-org/react"
+import prettyBytes from "pretty-bytes"
 
 type Props = {
-  file: File;
-  position: string;
-};
+  file: File
+  position: string
+}
 
 const imageCard = tv({
   slots: {
@@ -29,17 +29,17 @@ const imageCard = tv({
       },
     },
   },
-});
+})
 
 export const ImageCard = ({ file, position }: Props) => {
-  const slots = imageCard({ isJpeg: file.type === "image/jpeg" });
+  const slots = imageCard({ isJpeg: file.type === "image/jpeg" })
 
   return (
     <div className={slots.container()}>
       <img
         className={slots.imagePreview()}
         src={URL.createObjectURL(file)}
-        alt={`image preview`}
+        alt="uploaded media preview"
       />
       <div className={slots.contentContainer()}>
         <div className={slots.upperContentContainer()}>
@@ -54,5 +54,5 @@ export const ImageCard = ({ file, position }: Props) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

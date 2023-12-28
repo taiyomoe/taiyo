@@ -1,15 +1,15 @@
-import NextImage from "next/image";
-import { Image } from "@nextui-org/image";
+import { Image } from "@nextui-org/image"
+import NextImage from "next/image"
 
-import type { MediaLimited } from "~/lib/types";
-import { MediaCoverUtils } from "~/lib/utils/mediaCover.utils";
+import type { MediaLimited } from "~/lib/types"
+import { MediaCoverUtils } from "~/lib/utils/mediaCover.utils"
 
 type Props = {
-  media: MediaLimited;
-};
+  media: MediaLimited
+}
 
 export const MediaLayoutCover = ({ media }: Props) => {
-  const coverUrl = MediaCoverUtils.getUrl(media);
+  const coverUrl = MediaCoverUtils.getUrl(media)
 
   return (
     <Image
@@ -24,5 +24,5 @@ export const MediaLayoutCover = ({ media }: Props) => {
       priority
       isBlurred
     />
-  );
-};
+  )
+}

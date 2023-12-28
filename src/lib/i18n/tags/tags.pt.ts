@@ -2278,4 +2278,4 @@ export const TAGS_PT = {
       "Apresenta uma personagem que tem uma atração sexual por animais não-humanos.",
     category: "Conteúdo sexual",
   },
-};
+}

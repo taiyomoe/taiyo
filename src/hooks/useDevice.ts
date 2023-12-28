@@ -1,18 +1,18 @@
-import { useWindowSize } from "usehooks-ts";
+import { useWindowSize } from "usehooks-ts"
 
 export const useDevice = () => {
-  const { width } = useWindowSize();
+  const { width } = useWindowSize()
 
-  const isMobile = width < 640;
-  const isTablet = width >= 640 && width < 768;
-  const isLaptop = width >= 768 && width < 1024;
-  const isDesktop = width >= 1024 && width < 1280;
-  const isWideScreen = width >= 1280;
+  const isMobile = width < 640
+  const isTablet = width >= 640 && width < 768
+  const isLaptop = width >= 768 && width < 1024
+  const isDesktop = width >= 1024 && width < 1280
+  const isWideScreen = width >= 1280
 
-  const isAboveMobile = width >= 640;
-  const isAboveTablet = width >= 768;
-  const isAboveLaptop = width >= 1024;
-  const isAboveDesktop = width >= 1280;
+  const isAboveMobile = width >= 640
+  const isAboveTablet = width >= 768
+  const isAboveLaptop = width >= 1024
+  const isAboveDesktop = width >= 1280
 
   return {
     isMobile,
@@ -25,5 +25,5 @@ export const useDevice = () => {
     isAboveTablet,
     isAboveLaptop,
     isAboveDesktop,
-  };
-};
+  }
+}

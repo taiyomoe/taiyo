@@ -1,4 +1,4 @@
-import type { Media } from "@prisma/client";
+import type { Media } from "@prisma/client"
 
 export type UserLibraryStatus =
   | "reading"
@@ -6,15 +6,15 @@ export type UserLibraryStatus =
   | "completed"
   | "onHold"
   | "dropped"
-  | "planToRead";
+  | "planToRead"
 
-export type UserLibraryStatusWithDelete = UserLibraryStatus | "delete";
+export type UserLibraryStatusWithDelete = UserLibraryStatus | "delete"
 
 export type UserLibraryMedia = {
-  id: string;
-  updatedAt: Date;
-  coverId: string;
-  mainTitle: string;
-  mediaStatus: Media["status"];
-  libraryStatus: UserLibraryStatus;
-};
+  id: string
+  updatedAt: Date
+  coverId: string
+  mainTitle: string
+  mediaStatus: Media["status"]
+  libraryStatus: UserLibraryStatus
+}

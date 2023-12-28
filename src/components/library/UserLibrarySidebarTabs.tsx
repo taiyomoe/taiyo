@@ -1,7 +1,7 @@
-import { Tab, Tabs } from "@nextui-org/react";
+import { Tab, Tabs } from "@nextui-org/react"
 
-import { UserLibrarySidebarTabsContent } from "~/components/library/UserLibrarySidebarTabsContent";
-import { LibraryUtils } from "~/lib/utils/library.utils";
+import { UserLibrarySidebarTabsContent } from "~/components/library/UserLibrarySidebarTabsContent"
+import { LibraryUtils } from "~/lib/utils/library.utils"
 
 export const UserLibrarySidebarTabs = () => {
   return (
@@ -32,5 +32,5 @@ export const UserLibrarySidebarTabs = () => {
         <UserLibrarySidebarTabsContent status="planToRead" />
       </Tab>
     </Tabs>
-  );
-};
+  )
+}

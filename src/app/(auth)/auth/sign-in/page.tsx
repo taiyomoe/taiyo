@@ -1,16 +1,16 @@
-import Link from "next/link";
-import { redirect } from "next/navigation";
+import Link from "next/link"
+import { redirect } from "next/navigation"
 
-import { CompanyLogo } from "~/components/ui/CompanyLogo";
-import { getServerAuthSession } from "~/lib/auth/utils";
+import { CompanyLogo } from "~/components/ui/CompanyLogo"
+import { getServerAuthSession } from "~/lib/auth/utils"
 
-import { AuthCard } from "./_components/AuthCard";
+import { AuthCard } from "./_components/AuthCard"
 
 export default async function SignInPage() {
-  const session = await getServerAuthSession();
+  const session = await getServerAuthSession()
 
   if (session) {
-    redirect("/");
+    redirect("/")
   }
 
   return (
@@ -21,5 +21,5 @@ export default async function SignInPage() {
       </Link>
       <AuthCard />
     </div>
-  );
+  )
 }

@@ -1,31 +1,31 @@
-import { Tooltip } from "@nextui-org/tooltip";
-import { Languages } from "@prisma/client";
+import { Tooltip } from "@nextui-org/tooltip"
+import { Languages } from "@prisma/client"
 
-import { Form } from "~/components/generics/form/Form";
-import { InputFormField } from "~/components/generics/form/InputFormField";
-import { SelectFormField } from "~/components/generics/form/SelectFormField";
-import { SwitchFormField } from "~/components/generics/form/SwitchFormField";
+import { Form } from "~/components/generics/form/Form"
+import { InputFormField } from "~/components/generics/form/InputFormField"
+import { SelectFormField } from "~/components/generics/form/SelectFormField"
+import { SwitchFormField } from "~/components/generics/form/SwitchFormField"
 import type {
   CreateMediaTitleSchema,
   UpdateMediaTitleSchema,
-} from "~/lib/schemas";
+} from "~/lib/schemas"
 
 type Props = {
-  initialValues: CreateMediaTitleSchema | UpdateMediaTitleSchema;
-  mode?: "standalone" | "array";
-  index?: number;
-};
+  initialValues: CreateMediaTitleSchema | UpdateMediaTitleSchema
+  mode?: "standalone" | "array"
+  index?: number
+}
 
 export const MediaTitlesFormFields = (props: Props) => {
-  const { initialValues, mode, index } = props;
+  const { initialValues, mode, index } = props
 
   const getFieldName = (name: string) => {
     if (mode === "array") {
-      return `titles[${index}].${name}`;
+      return `titles[${index}].${name}`
     }
 
-    return name;
-  };
+    return name
+  }
 
   return (
     <Form.Col>
@@ -74,5 +74,5 @@ export const MediaTitlesFormFields = (props: Props) => {
         />
       </Form.Row>
     </Form.Col>
-  );
-};
+  )
+}

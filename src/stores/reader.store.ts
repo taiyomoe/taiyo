@@ -1,44 +1,41 @@
-import { omit } from "lodash-es";
-import { create } from "zustand";
+import { omit } from "lodash-es"
+import { create } from "zustand"
 
 import type {
   MediaChapterLimited,
   MediaChapterNavigation,
   ReaderImage,
-} from "~/lib/types";
-import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils";
-import { MediaChapterImageUtils } from "~/lib/utils/mediaChapterImage.utils";
-import { useReaderSettingsStore } from "~/stores";
+} from "~/lib/types"
+import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils"
+import { MediaChapterImageUtils } from "~/lib/utils/mediaChapterImage.utils"
+import { useReaderSettingsStore } from "~/stores"
 
 type State = {
-  chapter: MediaChapterLimited | null;
-  navigation: MediaChapterNavigation | null;
+  chapter: MediaChapterLimited | null
+  navigation: MediaChapterNavigation | null
 
-  currentPageNumber: number | null;
-  hasPreviousPage: boolean;
-  hasNextPage: boolean;
+  currentPageNumber: number | null
+  hasPreviousPage: boolean
+  hasNextPage: boolean
 
-  loadedImages: string[];
-  images: Record<string, ReaderImage[]>;
-};
+  loadedImages: string[]
+  images: Record<string, ReaderImage[]>
+}
 
 type Actions = {
-  updateNavigation: (newPageNumber: number) => void;
+  updateNavigation: (newPageNumber: number) => void
 
-  getImages: () => ReaderImage[];
-  loadImage: (url: string) => Promise<string>;
+  getImages: () => ReaderImage[]
+  loadImage: (url: string) => Promise<string>
   loadImageBatch: (
     images: { number: number; url: string }[],
     chapterId: string,
-  ) => void;
-  loadAllImages: () => void;
-  updateImages: (newPageNumber: number) => void;
+  ) => void
+  loadAllImages: () => void
+  updateImages: (newPageNumber: number) => void
 
-  load: (
-    chapter: MediaChapterLimited,
-    initialPageNumber: number | null,
-  ) => void;
-};
+  load: (chapter: MediaChapterLimited, initialPageNumber: number | null) => void
+}
 
 export const useReaderStore = create<State & Actions>((set, get) => ({
   chapter: null,
@@ -52,17 +49,17 @@ export const useReaderStore = create<State & Actions>((set, get) => ({
   images: {},
 
   updateNavigation: (newPageNumber) => {
-    get().updateImages(newPageNumber);
+    get().updateImages(newPageNumber)
 
     set((state) => {
       if (!state.chapter) {
-        return state;
+        return state
       }
 
       const newNavigation = MediaChapterUtils.getNavigation(
         state.chapter,
         newPageNumber,
-      )!;
+      )!
 
       return {
         ...state,
@@ -70,8 +67,8 @@ export const useReaderStore = create<State & Actions>((set, get) => ({
         currentPageNumber: newNavigation.currentPage,
         hasPreviousPage: !!newNavigation.previousPage,
         hasNextPage: !!newNavigation.nextPage,
-      };
-    });
+      }
+    })
   },
 
   /**
@@ -80,9 +77,9 @@ export const useReaderStore = create<State & Actions>((set, get) => ({
    * @returns chapter images or empty array if chapter is not loaded
    */
   getImages: () => {
-    const { chapter, images } = get();
+    const { chapter, images } = get()
 
-    return images[chapter?.id ?? ""] ?? [];
+    return images[chapter?.id ?? ""] ?? []
   },
 
   /**
@@ -92,9 +89,9 @@ export const useReaderStore = create<State & Actions>((set, get) => ({
    * @returns image blob url
    */
   loadImage: async (url) => {
-    const image = await fetch(url).then((res) => res.blob());
+    const image = await fetch(url).then((res) => res.blob())
 
-    return URL.createObjectURL(image);
+    return URL.createObjectURL(image)
   },
 
   /**
@@ -107,7 +104,7 @@ export const useReaderStore = create<State & Actions>((set, get) => ({
     set((state) => ({
       ...state,
       loadedImages: state.loadedImages.concat(images.map((x) => x.url)),
-    }));
+    }))
 
     void Promise.all(
       images.map(async (image) => ({
@@ -124,8 +121,8 @@ export const useReaderStore = create<State & Actions>((set, get) => ({
             newImages.map((x) => omit(x, "url")),
           ),
         },
-      }));
-    });
+      }))
+    })
   },
 
   /**
@@ -134,19 +131,19 @@ export const useReaderStore = create<State & Actions>((set, get) => ({
    * This will not load images that are already loaded.
    */
   loadAllImages: () => {
-    const { chapter, loadedImages, images, loadImageBatch } = get();
-    const chapterImages = images[chapter?.id ?? ""];
+    const { chapter, loadedImages, images, loadImageBatch } = get()
+    const chapterImages = images[chapter?.id ?? ""]
 
     if (!chapter || !chapterImages) {
-      return;
+      return
     }
 
-    const allImages = MediaChapterImageUtils.getAllImages(chapter);
+    const allImages = MediaChapterImageUtils.getAllImages(chapter)
     const newImages = allImages
       .filter((x) => !chapterImages.some((y) => y.number === x.number))
-      .filter((x) => !loadedImages.includes(x.url));
+      .filter((x) => !loadedImages.includes(x.url))
 
-    loadImageBatch(newImages, chapter.id);
+    loadImageBatch(newImages, chapter.id)
   },
 
   /**
@@ -156,31 +153,31 @@ export const useReaderStore = create<State & Actions>((set, get) => ({
    * Of course, it will not load images that are already loaded.
    */
   updateImages: (newPageNumber) => {
-    const { chapter, loadedImages, images, loadImageBatch } = get();
-    const chapterImages = images[chapter?.id ?? ""];
-    const settings = useReaderSettingsStore.getState();
+    const { chapter, loadedImages, images, loadImageBatch } = get()
+    const chapterImages = images[chapter?.id ?? ""]
+    const settings = useReaderSettingsStore.getState()
 
     if (settings.page.mode === "longstrip" || !chapter || !chapterImages) {
-      return;
+      return
     }
 
     const imagesChunk = MediaChapterImageUtils.getImagesChunk(
       chapter,
       newPageNumber,
-    );
+    )
     const newImages = imagesChunk
       .filter((x) => !chapterImages.some((y) => y.number === x.number))
-      .filter((x) => !loadedImages.includes(x.url));
+      .filter((x) => !loadedImages.includes(x.url))
 
-    loadImageBatch(newImages, chapter.id);
+    loadImageBatch(newImages, chapter.id)
   },
 
   load: (chapter, initialPageNumber) => {
-    const { updateNavigation } = get();
-    const settings = useReaderSettingsStore.getState();
+    const { updateNavigation } = get()
+    const settings = useReaderSettingsStore.getState()
     const navigation = initialPageNumber
       ? MediaChapterUtils.getNavigation(chapter, initialPageNumber)
-      : null;
+      : null
 
     set((state) => ({
       ...state,
@@ -193,17 +190,17 @@ export const useReaderStore = create<State & Actions>((set, get) => ({
       images: state.images[chapter.id]
         ? state.images
         : { ...state.images, [chapter.id]: [] },
-    }));
+    }))
 
-    settings.update("sidebar.state", "hide");
-    settings.update("page.overlay", "hide");
+    settings.update("sidebar.state", "hide")
+    settings.update("page.overlay", "hide")
 
     if (chapter.media.type === "MANHWA") {
-      settings.update("page.mode", "longstrip");
+      settings.update("page.mode", "longstrip")
     }
 
     if (settings.page.mode !== "longstrip") {
-      updateNavigation(initialPageNumber ?? 1);
+      updateNavigation(initialPageNumber ?? 1)
     }
   },
-}));
+}))

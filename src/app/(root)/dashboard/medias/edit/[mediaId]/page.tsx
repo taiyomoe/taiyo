@@ -1,12 +1,12 @@
-import { notFound } from "next/navigation";
+import { notFound } from "next/navigation"
 
-import { db } from "~/lib/server/db";
+import { db } from "~/lib/server/db"
 
-import { UpdateMediaTabs } from "./_components/UpdateMediaTabs";
+import { UpdateMediaTabs } from "./_components/UpdateMediaTabs"
 
 type Props = {
-  params: { mediaId: string };
-};
+  params: { mediaId: string }
+}
 
 export default async function Page({ params }: Props) {
   const media = await db.media.findFirst({
@@ -18,11 +18,11 @@ export default async function Page({ params }: Props) {
       creator: true,
     },
     where: { id: params.mediaId, deletedAt: null },
-  });
+  })
 
   if (!media) {
-    return notFound();
+    return notFound()
   }
 
-  return <UpdateMediaTabs media={media} />;
+  return <UpdateMediaTabs media={media} />
 }

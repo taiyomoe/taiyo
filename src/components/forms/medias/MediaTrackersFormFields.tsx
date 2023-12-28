@@ -1,8 +1,8 @@
-import { Button } from "@nextui-org/button";
-import { HardDriveDownloadIcon } from "lucide-react";
+import { Button } from "@nextui-org/button"
+import { HardDriveDownloadIcon } from "lucide-react"
 
-import { Form } from "~/components/generics/form/Form";
-import { InputFormField } from "~/components/generics/form/InputFormField";
+import { Form } from "~/components/generics/form/Form"
+import { InputFormField } from "~/components/generics/form/InputFormField"
 
 export const MediaTrackersFormCategory = () => {
   return (
@@ -41,5 +41,5 @@ export const MediaTrackersFormCategory = () => {
         />
       </Form.Row>
     </Form.Category>
-  );
-};
+  )
+}

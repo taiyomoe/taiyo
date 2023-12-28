@@ -1,18 +1,18 @@
-import NextImage from "next/image";
-import { Image } from "@nextui-org/image";
+import { Image } from "@nextui-org/image"
+import NextImage from "next/image"
 
-import type { MediaLimited } from "~/lib/types";
-import { cn } from "~/lib/utils/cn";
-import { MediaUtils } from "~/lib/utils/media.utils";
-import { MediaCoverUtils } from "~/lib/utils/mediaCover.utils";
+import type { MediaLimited } from "~/lib/types"
+import { cn } from "~/lib/utils/cn"
+import { MediaUtils } from "~/lib/utils/media.utils"
+import { MediaCoverUtils } from "~/lib/utils/mediaCover.utils"
 
 type Props = {
-  media: MediaLimited;
-};
+  media: MediaLimited
+}
 
 export const MediaLayoutBanner = ({ media }: Props) => {
-  const bannerUrl = MediaUtils.getBannerOrCoverUrl(media);
-  const coverUrl = MediaCoverUtils.getUrl(media);
+  const bannerUrl = MediaUtils.getBannerOrCoverUrl(media)
+  const coverUrl = MediaCoverUtils.getUrl(media)
 
   return (
     <Image
@@ -33,5 +33,5 @@ export const MediaLayoutBanner = ({ media }: Props) => {
       alt="media's banner"
       priority
     />
-  );
-};
+  )
+}

@@ -1,15 +1,15 @@
-"use client";
+"use client"
 
-import { toast } from "sonner";
-import { toFormikValidationSchema } from "zod-formik-adapter";
+import { toast } from "sonner"
+import { toFormikValidationSchema } from "zod-formik-adapter"
 
-import { Form } from "~/components/generics/form/Form";
-import type { InsertScanSchema } from "~/lib/schemas";
-import { insertScanSchema } from "~/lib/schemas";
-import { api } from "~/lib/trpc/client";
-import type { FormSubmit } from "~/lib/types";
+import { Form } from "~/components/generics/form/Form"
+import type { InsertScanSchema } from "~/lib/schemas"
+import { insertScanSchema } from "~/lib/schemas"
+import { api } from "~/lib/trpc/client"
+import type { FormSubmit } from "~/lib/types"
 
-import { AddScanFormFields } from "./AddScanFormFields";
+import { AddScanFormFields } from "./AddScanFormFields"
 
 const initialValues: InsertScanSchema = {
   name: "",
@@ -24,10 +24,10 @@ const initialValues: InsertScanSchema = {
   telegram: "",
   youtube: "",
   email: "",
-};
+}
 
 export const AddScanForm = () => {
-  const { mutateAsync } = api.scans.create.useMutation();
+  const { mutateAsync } = api.scans.create.useMutation()
 
   const handleSubmit: FormSubmit<InsertScanSchema> = (
     values,
@@ -36,20 +36,20 @@ export const AddScanForm = () => {
     toast.promise(mutateAsync(values), {
       loading: "Adicionando scan...",
       success: () => {
-        resetForm();
+        resetForm()
 
-        return "Scan adicionada com sucesso!";
+        return "Scan adicionada com sucesso!"
       },
       error: (error) => {
-        console.log(error);
+        console.log(error)
 
-        return "Ocorreu um erro inesperado ao adicionar a scan.";
+        return "Ocorreu um erro inesperado ao adicionar a scan."
       },
       finally: () => {
-        setSubmitting(false);
+        setSubmitting(false)
       },
-    });
-  };
+    })
+  }
 
   return (
     <Form.Component
@@ -59,5 +59,5 @@ export const AddScanForm = () => {
     >
       <AddScanFormFields />
     </Form.Component>
-  );
-};
+  )
+}

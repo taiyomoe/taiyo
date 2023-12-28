@@ -1,4 +1,4 @@
-import { Button } from "@nextui-org/button";
+import { Button } from "@nextui-org/button"
 import {
   Modal,
   ModalBody,
@@ -6,33 +6,33 @@ import {
   ModalFooter,
   ModalHeader,
   useDisclosure,
-} from "@nextui-org/modal";
-import type { MediaTitle } from "@prisma/client";
-import { TRPCClientError } from "@trpc/client";
-import { pick } from "lodash-es";
-import { FileEditIcon } from "lucide-react";
-import { toast } from "sonner";
-import { toFormikValidationSchema } from "zod-formik-adapter";
+} from "@nextui-org/modal"
+import type { MediaTitle } from "@prisma/client"
+import { TRPCClientError } from "@trpc/client"
+import { pick } from "lodash-es"
+import { FileEditIcon } from "lucide-react"
+import { toast } from "sonner"
+import { toFormikValidationSchema } from "zod-formik-adapter"
 
-import { MediaTitlesFormFields } from "~/components/forms/mediaTitles/MediaTitlesFormFields";
-import { UpdateMediaTitleDeleteButton } from "~/components/forms/mediaTitles/update/UpdateMediaTitleDeleteButton";
-import { SubmitButton } from "~/components/generics/buttons/SubmitButton";
-import { Form } from "~/components/generics/form/Form";
-import type { UpdateMediaTitleSchema } from "~/lib/schemas";
-import { updateMediaTitleSchema } from "~/lib/schemas";
-import { api } from "~/lib/trpc/client";
-import type { FormSubmit } from "~/lib/types";
-import { ObjectUtils } from "~/lib/utils/object.utils";
-import { useMediaUpdateStore } from "~/stores";
+import { MediaTitlesFormFields } from "~/components/forms/mediaTitles/MediaTitlesFormFields"
+import { UpdateMediaTitleDeleteButton } from "~/components/forms/mediaTitles/update/UpdateMediaTitleDeleteButton"
+import { SubmitButton } from "~/components/generics/buttons/SubmitButton"
+import { Form } from "~/components/generics/form/Form"
+import type { UpdateMediaTitleSchema } from "~/lib/schemas"
+import { updateMediaTitleSchema } from "~/lib/schemas"
+import { api } from "~/lib/trpc/client"
+import type { FormSubmit } from "~/lib/types"
+import { ObjectUtils } from "~/lib/utils/object.utils"
+import { useMediaUpdateStore } from "~/stores"
 
 type Props = {
-  title: MediaTitle;
-};
+  title: MediaTitle
+}
 
 export const UpdateMediaTitlesForm = ({ title }: Props) => {
-  const { mutateAsync } = api.mediaTitles.update.useMutation();
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const { updateTitle } = useMediaUpdateStore();
+  const { mutateAsync } = api.mediaTitles.update.useMutation()
+  const { isOpen, onOpen, onOpenChange } = useDisclosure()
+  const { updateTitle } = useMediaUpdateStore()
 
   const initalValues: UpdateMediaTitleSchema = pick(
     title,
@@ -42,40 +42,40 @@ export const UpdateMediaTitlesForm = ({ title }: Props) => {
     "priority",
     "isMainTitle",
     "isAcronym",
-  );
+  )
 
   const handleSubmit: FormSubmit<UpdateMediaTitleSchema> = (
     values,
     helpers,
   ) => {
-    const delta = ObjectUtils.deepDifference(values, initalValues);
+    const delta = ObjectUtils.deepDifference(values, initalValues)
     const payload = {
       id: values.id,
       ...delta,
-    };
+    }
 
     toast.promise(mutateAsync(payload), {
       loading: "Salvando alterações...",
       success: () => {
-        updateTitle(payload);
-        onOpen();
-        onOpenChange();
-        helpers.resetForm({ values });
+        updateTitle(payload)
+        onOpen()
+        onOpenChange()
+        helpers.resetForm({ values })
 
-        return "Alterações salvas com sucesso!";
+        return "Alterações salvas com sucesso!"
       },
       error: (err) => {
         if (err instanceof TRPCClientError) {
-          return err.message;
+          return err.message
         }
 
-        return "Ocorreu um erro inesperado ao salvar as alterações.";
+        return "Ocorreu um erro inesperado ao salvar as alterações."
       },
       finally: () => {
-        helpers.setSubmitting(false);
+        helpers.setSubmitting(false)
       },
-    });
-  };
+    })
+  }
 
   return (
     <>
@@ -107,5 +107,5 @@ export const UpdateMediaTitlesForm = ({ title }: Props) => {
         </Form.Component>
       </Modal>
     </>
-  );
-};
+  )
+}

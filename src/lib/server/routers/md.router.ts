@@ -1,15 +1,15 @@
-import { TRPCError } from "@trpc/server";
-import { Manga } from "mangadex-full-api";
+import { TRPCError } from "@trpc/server"
+import { Manga } from "mangadex-full-api"
 
-import { env } from "~/lib/env.mjs";
-import { importMediaSchema } from "~/lib/schemas";
-import { MediaService } from "~/lib/services";
-import { pusherServer } from "~/lib/soketi/server";
-import type { UploadResponse } from "~/lib/types";
-import { MdUtils } from "~/lib/utils/md.utils";
-import { MediaUtils } from "~/lib/utils/media.utils";
+import { env } from "~/lib/env.mjs"
+import { importMediaSchema } from "~/lib/schemas"
+import { MediaService } from "~/lib/services"
+import { pusherServer } from "~/lib/soketi/server"
+import type { UploadResponse } from "~/lib/types"
+import { MdUtils } from "~/lib/utils/md.utils"
+import { MediaUtils } from "~/lib/utils/media.utils"
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure } from "../trpc"
 
 export const mdRouter = createTRPCRouter({
   import: protectedProcedure
@@ -24,21 +24,21 @@ export const mdRouter = createTRPCRouter({
             },
           },
         },
-      });
+      })
 
       if (existingMedia) {
-        throw new Error("Uma obra com esse ID da MangaDex já existe.");
+        throw new Error("Uma obra com esse ID da MangaDex já existe.")
       }
 
       void pusherServer.trigger("importChannel", "importEvent", {
         step: 1,
         content: "Recuperando as informações da obra...",
         type: "ongoing",
-      });
+      })
 
-      const manga = await Manga.get(input.mdId);
-      const covers = await manga.getCovers();
-      const mainCover = await manga.mainCover.resolve();
+      const manga = await Manga.get(input.mdId)
+      const covers = await manga.getCovers()
+      const mainCover = await manga.mainCover.resolve()
 
       void pusherServer.triggerBatch([
         {
@@ -59,12 +59,12 @@ export const mdRouter = createTRPCRouter({
             type: "ongoing",
           },
         },
-      ]);
+      ])
 
       // End date, trailer, type "manga default", source
-      const { genres, tags, isOneShot } = MdUtils.getGenresAndTags(manga);
-      const titles = MdUtils.getTitles(manga);
-      const trackers = MdUtils.getTrackers(manga);
+      const { genres, tags, isOneShot } = MdUtils.getGenresAndTags(manga)
+      const titles = MdUtils.getTitles(manga)
+      const trackers = MdUtils.getTrackers(manga)
 
       const media = await ctx.db.media.create({
         data: {
@@ -96,20 +96,20 @@ export const mdRouter = createTRPCRouter({
           // -----
           creatorId: ctx.session.user.id,
         },
-      });
+      })
 
       void pusherServer.trigger("importChannel", "importEvent", {
         step: 2,
         content: "Obra criada",
         type: "success",
-      });
+      })
 
       for (const [i, cover] of covers.entries()) {
         void pusherServer.trigger("importChannel", "importEvent", {
           step: 3,
           content: `Upando a cover ${i + 1}/${covers.length}...`,
           type: "ongoing",
-        });
+        })
 
         const response = await fetch(MediaUtils.getUploadEndpoint(), {
           method: "POST",
@@ -123,9 +123,9 @@ export const mdRouter = createTRPCRouter({
             type: "COVER",
             url: cover.imageSource,
           }),
-        });
+        })
 
-        const uploadCover = (await response.json()) as UploadResponse;
+        const uploadCover = (await response.json()) as UploadResponse
 
         if ("error" in uploadCover) {
           throw new TRPCError({
@@ -133,13 +133,13 @@ export const mdRouter = createTRPCRouter({
             message: `Ocorreu um erro ao upar a cover ${i + 1}/${
               covers.length
             }.`,
-          });
+          })
         }
 
         await ctx.db.mediaCover.create({
           data: {
             id: uploadCover.files[0]!,
-            volume: isNaN(parseFloat(cover.volume))
+            volume: Number.isNaN(parseFloat(cover.volume))
               ? null
               : parseFloat(cover.volume),
             isMainCover: mainCover.id === cover.id,
@@ -147,7 +147,7 @@ export const mdRouter = createTRPCRouter({
             mediaId: media.id,
             uploaderId: ctx.session.user.id,
           },
-        });
+        })
       }
 
       void pusherServer.triggerBatch([
@@ -169,15 +169,15 @@ export const mdRouter = createTRPCRouter({
             type: "ongoing",
           },
         },
-      ]);
+      ])
 
-      const indexItem = await MediaService.getIndexItem(media.id);
-      await ctx.indexes.medias.updateDocuments([indexItem]);
+      const indexItem = await MediaService.getIndexItem(media.id)
+      await ctx.indexes.medias.updateDocuments([indexItem])
 
       void pusherServer.trigger("importChannel", "importEvent", {
         step: 4,
         content: "Busca reindexada",
         type: "success",
-      });
+      })
     }),
-});
+})

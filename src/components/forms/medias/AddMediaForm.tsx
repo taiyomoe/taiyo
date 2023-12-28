@@ -1,13 +1,13 @@
-"use client";
+"use client"
 
-import { toFormikValidationSchema } from "zod-formik-adapter";
+import { toFormikValidationSchema } from "zod-formik-adapter"
 
-import { Form } from "~/components/generics/form/Form";
-import { useMediaCreation } from "~/hooks/useMediaCreation";
-import type { InsertMediaSchema } from "~/lib/schemas";
-import { insertMediaSchema } from "~/lib/schemas";
+import { Form } from "~/components/generics/form/Form"
+import { useMediaCreation } from "~/hooks/useMediaCreation"
+import type { InsertMediaSchema } from "~/lib/schemas"
+import { insertMediaSchema } from "~/lib/schemas"
 
-import { MediaFormFields } from "./MediaFormFields";
+import { MediaFormFields } from "./MediaFormFields"
 
 const initialValues: InsertMediaSchema = {
   id: crypto.randomUUID(),
@@ -33,10 +33,10 @@ const initialValues: InsertMediaSchema = {
     },
   ],
   tags: [],
-};
+}
 
 export const AddMediaForm = () => {
-  const { handleSubmit } = useMediaCreation();
+  const { handleSubmit } = useMediaCreation()
 
   return (
     <Form.Component
@@ -46,5 +46,5 @@ export const AddMediaForm = () => {
     >
       <MediaFormFields action="create" />
     </Form.Component>
-  );
-};
+  )
+}

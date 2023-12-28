@@ -1,122 +1,93 @@
-"use client";
+"use client"
 
-import type { KeyboardEventHandler, MouseEventHandler } from "react";
-import { useCallback } from "react";
-import { tv } from "tailwind-variants";
+import type { KeyboardEventHandler, MouseEventHandler } from "react"
+import { useCallback } from "react"
+import { tv } from "tailwind-variants"
 
-import { MediaChapterPageOverlay } from "~/app/(reader)/_components/MediaChapterPageOverlay";
-import { useChapterNavigation } from "~/hooks/useChapterNavigation";
-import { useDevice } from "~/hooks/useDevice";
-import { useKeyPress } from "~/hooks/useKeyPress";
-import { useReaderSettingsStore } from "~/stores";
+import { MediaChapterPageOverlay } from "~/app/(reader)/_components/MediaChapterPageOverlay"
+import { ReaderSettingsMediaChapterDropdown } from "~/app/(reader)/_components/readerSidebar/ui/ReaderSettingsMediaChapterDropdown"
+import { useChapterNavigation } from "~/hooks/useChapterNavigation"
+import { useDevice } from "~/hooks/useDevice"
+import { useReaderSettingsStore } from "~/stores"
 
-import { MediaChapterImages } from "./MediaChapterImages";
+import { MediaChapterImages } from "./MediaChapterImages"
 
 const mediaChapterPage = tv({
-  slots: {
-    container:
-      "grid-in-chapter min-w-0 relative h-fit flex flex-col min-h-full",
-    navigationButton:
-      "absolute z-10 w-1/2 hover:cursor-pointer focus-visible:outline-none",
-    imagesWrapper: "overflow-x-auto flex items-center h-full m-auto",
-  },
+  base: "grid-in-chapter min-w-0 outline-none relative flex flex-col h-fit min-h-[calc(100dvh-var(--navbar-height))] data-[navbar-mode=hover]:min-h-dvh",
   variants: {
-    navbarMode: {
-      fixed: {},
-      sticky: {},
-      hover: {},
-    },
-    mode: {
-      single: {
-        navigationButton: "h-full",
-        imagesWrapper: "h-full",
-      },
-      longstrip: {
-        navigationButton: "hidden",
-        imagesWrapper: "h-full",
-      },
-    },
     width: {
-      fit: {},
-      full: {},
+      fit: "",
+      full: "overflow-x-auto scrollbar-thin scrollbar-track-content1 scrollbar-thumb-primary",
     },
   },
-  compoundVariants: [
-    {
-      mode: "single",
-      width: "full",
-      className: {
-        container:
-          "overflow-x-auto scrollbar-thin scrollbar-track-content1 scrollbar-thumb-primary",
-      },
-    },
-    {
-      mode: "single",
-      navbarMode: "hover",
-      className: {
-        container: "min-h-screen",
-      },
-    },
-  ],
-});
+})
 
 export const MediaChapterPage = () => {
-  const { isAboveTablet } = useDevice();
+  const { isAboveTablet } = useDevice()
   const {
     navbarMode,
     page: { mode, overlay, width },
     update,
-  } = useReaderSettingsStore();
-  const { goBack, goForward } = useChapterNavigation();
+  } = useReaderSettingsStore()
+  const { goBack, goForward } = useChapterNavigation()
 
-  const slots = mediaChapterPage({ navbarMode, mode, width });
+  const base = mediaChapterPage({ width })
 
   const handleKeyPress: KeyboardEventHandler = (e) => {
     if (mode === "longstrip") {
-      return;
+      return
     }
 
     if (e.key === "ArrowLeft") {
-      return goBack();
+      return goBack()
     }
 
-    goForward();
-  };
+    if (e.key === "ArrowRight") {
+      return goForward()
+    }
+  }
 
   const handleContainerClick: MouseEventHandler<HTMLDivElement> = useCallback(
     (e) => {
-      const clickX = e.clientX;
-      const windowWidth = window.innerWidth;
-      const screenSide = clickX < windowWidth / 2 ? "left" : "right";
+      const clickX = e.clientX
+      const windowWidth = window.innerWidth
+      const screenSide = clickX < windowWidth / 2 ? "left" : "right"
 
-      if (mode === "longstrip") {
-        return;
+      // If it's on longstrip mode, on mobile
+      if (mode === "longstrip" && !isAboveTablet) {
+        update("page.overlay", overlay === "show" ? "hide" : "show")
+        return
       }
 
-      if (!isAboveTablet) {
-        update("page.overlay", overlay === "show" ? "hide" : "show");
-
-        return;
+      if (mode === "longstrip") {
+        return
       }
 
       if (screenSide === "left") {
-        return goBack();
+        return goBack()
       }
 
-      goForward();
+      goForward()
     },
     [goBack, goForward, isAboveTablet, mode, overlay, update],
-  );
-
-  useKeyPress("ArrowLeft", handleKeyPress);
-  useKeyPress("ArrowRight", handleKeyPress);
+  )
 
   return (
-    <div className={slots.container()} onClick={handleContainerClick}>
+    <div
+      className={base}
+      onClick={handleContainerClick}
+      onKeyDown={handleKeyPress}
+      // biome-ignore lint/a11y/noNoninteractiveTabindex: needed in order to fire the onKeyDown event
+      tabIndex={0}
+      data-navbar-mode={navbarMode}
+    >
       <MediaChapterPageOverlay />
-      <div className={slots.imagesWrapper()}>
-        <MediaChapterImages />
-      </div>
+      <MediaChapterImages />
+      {mode === "longstrip" && (
+        <div className="p-bodyPadding flex justify-center">
+          <ReaderSettingsMediaChapterDropdown />
+        </div>
+      )}
     </div>
-  );
-};
+  )
+}

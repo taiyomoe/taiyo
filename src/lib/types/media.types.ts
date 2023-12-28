@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client"
 import type {
   Media,
   MediaBanner,
@@ -8,85 +8,85 @@ import type {
   MediaTracker,
   Scan,
   User,
-} from "@prisma/client";
+} from "@prisma/client"
 
-import type { UserLibraryStatus } from "~/lib/types/library.types";
+import type { UserLibraryStatus } from "~/lib/types/library.types"
 
 export type LatestMedia = {
-  id: Media["id"];
-  coverId: MediaCover["id"];
-};
+  id: Media["id"]
+  coverId: MediaCover["id"]
+}
 
 export type FeaturedMedia = {
-  id: Media["id"];
-  synopsis: Media["synopsis"];
-  coverId: MediaCover["id"];
-  bannerId: MediaBanner["id"];
-  mainTitle: MediaTitle["title"];
-};
+  id: Media["id"]
+  synopsis: Media["synopsis"]
+  coverId: MediaCover["id"]
+  bannerId: MediaBanner["id"]
+  mainTitle: MediaTitle["title"]
+}
 
 // Used to display media chapter cards
 export type MediaLimitedChapter = {
-  id: MediaChapter["id"];
-  createdAt: MediaChapter["createdAt"];
-  title: MediaChapter["title"];
-  number: MediaChapter["number"];
-  volume: MediaChapter["volume"];
+  id: MediaChapter["id"]
+  createdAt: MediaChapter["createdAt"]
+  title: MediaChapter["title"]
+  number: MediaChapter["number"]
+  volume: MediaChapter["volume"]
   // ----- USER PROGRESSION
-  completed: boolean | null;
+  completed: boolean | null
   // ----- RELATIONS
   uploader: {
-    id: User["id"];
-    name: User["name"];
-  };
+    id: User["id"]
+    name: User["name"]
+  }
   scans: {
-    id: Scan["id"];
-    name: Scan["name"];
-  }[];
-};
+    id: Scan["id"]
+    name: Scan["name"]
+  }[]
+}
 
 export type MediaLimitedChapterPagination = {
-  chapters: MediaLimitedChapter[];
+  chapters: MediaLimitedChapter[]
   // -----
-  totalPages: number;
-};
+  totalPages: number
+}
 
 export type MediaChapterGroup = {
-  number: MediaChapter["number"];
-  chapters: MediaLimitedChapter[];
-};
-export type MediaChapterGroups = MediaChapterGroup[];
+  number: MediaChapter["number"]
+  chapters: MediaLimitedChapter[]
+}
+export type MediaChapterGroups = MediaChapterGroup[]
 
 export type MediaLimited = {
-  id: Media["id"];
+  id: Media["id"]
   // -----
-  synopsis: Media["synopsis"];
-  status: Media["status"];
-  genres: Media["genres"];
-  tags: PrismaJson.MediaTag[];
+  synopsis: Media["synopsis"]
+  status: Media["status"]
+  genres: Media["genres"]
+  tags: PrismaJson.MediaTag[]
   // -----
-  userLibrary: { status: UserLibraryStatus; updatedAt: string } | null;
+  userLibrary: { status: UserLibraryStatus; updatedAt: string } | null
   // -----
-  mainTitle: MediaTitle["title"];
+  mainTitle: MediaTitle["title"]
   titles: Pick<
     MediaTitle,
     "title" | "language" | "priority" | "isAcronym" | "isMainTitle"
-  >[];
-  coverId: MediaCover["id"];
-  bannerId: MediaBanner["id"] | null;
-  trackers: Pick<MediaTracker, "tracker" | "externalId">[];
-};
+  >[]
+  coverId: MediaCover["id"]
+  bannerId: MediaBanner["id"] | null
+  trackers: Pick<MediaTracker, "tracker" | "externalId">[]
+}
 
 export type SearchedMedia = {
-  id: Media["id"];
+  id: Media["id"]
   // -----
-  synopsis: Media["synopsis"];
+  synopsis: Media["synopsis"]
   // -----
-  title: MediaTitle["title"];
-  coverId: MediaCover["id"];
-};
+  title: MediaTitle["title"]
+  coverId: MediaCover["id"]
+}
 
-export type MediaTabs = "info" | "chapters";
+export type MediaTabs = "info" | "chapters"
 
 const mediaWithRelations = Prisma.validator<Prisma.MediaDefaultArgs>()({
   include: {
@@ -96,7 +96,7 @@ const mediaWithRelations = Prisma.validator<Prisma.MediaDefaultArgs>()({
     trackers: true,
     creator: true,
   },
-});
+})
 export type MediaWithRelations = Prisma.MediaGetPayload<
   typeof mediaWithRelations
->;
+>

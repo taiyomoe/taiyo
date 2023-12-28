@@ -1,20 +1,20 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import { headers } from "next/headers";
+import type { Metadata } from "next"
+import { Inter } from "next/font/google"
+import { headers } from "next/headers"
 
-import "~/styles/globals.css";
+import "~/styles/globals.css"
 
-import { siteConfig } from "~/lib/config";
-import { getBaseUrl } from "~/lib/trpc/utils";
-import type { LayoutProps } from "~/lib/types";
-import { cn } from "~/lib/utils/cn";
+import { siteConfig } from "~/lib/config"
+import { getBaseUrl } from "~/lib/trpc/shared"
+import type { LayoutProps } from "~/lib/types"
+import { cn } from "~/lib/utils/cn"
 
-import { Providers } from "./providers";
+import { Providers } from "./providers"
 
 const fontSans = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
-});
+})
 
 export const metadata: Metadata = {
   title: siteConfig.name,
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     },
   ],
   creator: "rdx",
-};
+}
 
 export default function Layout({ children }: LayoutProps) {
   return (
@@ -43,11 +43,11 @@ export default function Layout({ children }: LayoutProps) {
       <body
         className={cn(
           ["font-sans", fontSans.variable].join(" "),
-          "h-full min-h-screen bg-background scrollbar-thin scrollbar-track-content1 scrollbar-thumb-primary",
+          "h-full min-h-dvh bg-background scrollbar-thin scrollbar-track-content1 scrollbar-thumb-primary",
         )}
       >
         <Providers headers={headers()}>{children}</Providers>
       </body>
     </html>
-  );
+  )
 }

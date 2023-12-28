@@ -1,48 +1,48 @@
-"use client";
+"use client"
 
-import type { FormikConfig } from "formik";
-import { toast } from "sonner";
-import { toFormikValidationSchema } from "zod-formik-adapter";
+import type { FormikConfig } from "formik"
+import { toast } from "sonner"
+import { toFormikValidationSchema } from "zod-formik-adapter"
 
-import { Form } from "~/components/generics/form/Form";
-import type { UpdateMediaSchema } from "~/lib/schemas";
-import { updateMediaSchema } from "~/lib/schemas";
-import { api } from "~/lib/trpc/client";
-import { ObjectUtils } from "~/lib/utils/object.utils";
+import { Form } from "~/components/generics/form/Form"
+import type { UpdateMediaSchema } from "~/lib/schemas"
+import { updateMediaSchema } from "~/lib/schemas"
+import { api } from "~/lib/trpc/client"
+import { ObjectUtils } from "~/lib/utils/object.utils"
 
-import { MediaFormFields } from "./MediaFormFields";
+import { MediaFormFields } from "./MediaFormFields"
 
 type Props = {
-  initialValues: UpdateMediaSchema;
-};
+  initialValues: UpdateMediaSchema
+}
 
 export const UpdateMediaForm = ({ initialValues }: Props) => {
-  const { mutateAsync } = api.medias.update.useMutation();
+  const { mutateAsync } = api.medias.update.useMutation()
   const handleSubmit: FormikConfig<UpdateMediaSchema>["onSubmit"] = (
     values,
     helpers,
   ) => {
-    const delta = ObjectUtils.deepDifference(values, initialValues);
+    const delta = ObjectUtils.deepDifference(values, initialValues)
     const payload = {
       ...delta,
       id: values.id,
       tags: values.tags,
       genres: values.genres,
-    };
+    }
 
     toast.promise(mutateAsync(payload), {
       loading: "Salvando alterações...",
       success: () => {
-        helpers.resetForm({ values });
+        helpers.resetForm({ values })
 
-        return "Alterações salvas com sucesso!";
+        return "Alterações salvas com sucesso!"
       },
       error: "Não foi possível salvar as alterações.",
       finally: () => {
-        helpers.setSubmitting(false);
+        helpers.setSubmitting(false)
       },
-    });
-  };
+    })
+  }
 
   return (
     <Form.Component
@@ -52,5 +52,5 @@ export const UpdateMediaForm = ({ initialValues }: Props) => {
     >
       <MediaFormFields action="update" />
     </Form.Component>
-  );
-};
+  )
+}

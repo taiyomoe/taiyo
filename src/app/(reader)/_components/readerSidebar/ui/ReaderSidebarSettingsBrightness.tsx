@@ -1,9 +1,9 @@
-"use client";
+"use client"
 
-import { Slider } from "@nextui-org/slider";
-import { tv } from "tailwind-variants";
+import { Slider } from "@nextui-org/slider"
+import { tv } from "tailwind-variants"
 
-import { useReaderSettingsStore } from "~/stores";
+import { useReaderSettingsStore } from "~/stores"
 
 const readerSidebarSettingsBrightness = tv({
   slots: {
@@ -12,12 +12,12 @@ const readerSidebarSettingsBrightness = tv({
     leftButton: "justify-start gap-3 pl-3",
     rightButton: "justify-end gap-3 pr-3",
   },
-});
+})
 
 export const ReaderSidebarSettingsBrightness = () => {
-  const { page, update } = useReaderSettingsStore();
+  const { page, update } = useReaderSettingsStore()
 
-  const { container, text } = readerSidebarSettingsBrightness();
+  const { container, text } = readerSidebarSettingsBrightness()
 
   return (
     <div className={container()}>
@@ -32,5 +32,5 @@ export const ReaderSidebarSettingsBrightness = () => {
         aria-label="Brightness"
       />
     </div>
-  );
-};
+  )
+}

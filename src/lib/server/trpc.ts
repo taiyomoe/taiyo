@@ -7,18 +7,18 @@
  * need to use are documented accordingly near the end.
  */
 
-import type { NextRequest } from "next/server";
-import { initTRPC } from "@trpc/server";
-import superjson from "superjson";
-import { ZodError } from "zod";
+import { initTRPC } from "@trpc/server"
+import type { NextRequest } from "next/server"
+import superjson from "superjson"
+import { ZodError } from "zod"
 
-import { getServerAuthSession } from "~/lib/auth/utils";
-import { db } from "~/lib/server/db";
-import { meilisearch, meilisearchIndexes } from "~/lib/server/meilisearch";
-import type { Actions, Resources } from "~/lib/types";
+import { getServerAuthSession } from "~/lib/auth/utils"
+import { db } from "~/lib/server/db"
+import { meilisearch, meilisearchIndexes } from "~/lib/server/meilisearch"
+import type { Actions, Resources } from "~/lib/types"
 
-import { withAuth } from "./middlewares/withAuth";
-import { withPermissions } from "./middlewares/withPermissions";
+import { withAuth } from "./middlewares/withAuth"
+import { withPermissions } from "./middlewares/withPermissions"
 
 /**
  * 1. CONTEXT
@@ -26,52 +26,28 @@ import { withPermissions } from "./middlewares/withPermissions";
  * This section defines the "contexts" that are available in the backend API.
  *
  * These allow you to access things when processing a request, like the database, the session, etc.
+ *
+ * This helper generates the "internals" for a tRPC context. The API handler and RSC clients each
+ * wrap this and provides the required context.
+ *
+ * @see https://trpc.io/docs/server/context
  */
-
-type CreateContextOptions = {
-  headers: Headers;
-};
-
 export type Meta = {
-  resource?: Resources;
-  action?: Actions;
-};
+  resource?: Resources
+  action?: Actions
+}
 
-/**
- * This helper generates the "internals" for a tRPC context. If you need to use it, you can export
- * it from here.
- *
- * Examples of things you may need it for:
- * - testing, so we don't have to mock Next.js' req/res
- * - tRPC's `createSSGHelpers`, where we don't have req/res
- *
- * @see https://create.t3.gg/en/usage/trpc#-serverapitrpcts
- */
-export const createInnerTRPCContext = async (opts: CreateContextOptions) => {
-  const session = await getServerAuthSession();
+export const createTRPCContext = async (opts: { headers: Headers }) => {
+  const session = await getServerAuthSession()
 
   return {
-    session,
-    headers: opts.headers,
     db,
+    session,
     meilisearch,
     indexes: meilisearchIndexes,
-  };
-};
-
-/**
- * This is the actual context you will use in your router. It will be used to process every request
- * that goes through your tRPC endpoint.
- *
- * @see https://trpc.io/docs/context
- */
-export const createTRPCContext = async (opts: { req: NextRequest }) => {
-  // Fetch stuff that depends on the request
-
-  return await createInnerTRPCContext({
-    headers: opts.req.headers,
-  });
-};
+    ...opts,
+  }
+}
 
 /**
  * 2. INITIALIZATION
@@ -80,7 +56,6 @@ export const createTRPCContext = async (opts: { req: NextRequest }) => {
  * ZodErrors so that you get typesafety on the frontend if your procedure fails due to validation
  * errors on the backend.
  */
-
 const t = initTRPC
   .context<typeof createTRPCContext>()
   .meta<Meta>()
@@ -94,17 +69,17 @@ const t = initTRPC
           zodError:
             error.cause instanceof ZodError ? error.cause.flatten() : null,
         },
-      };
+      }
     },
-  });
+  })
 
-export type tRPCInit = typeof t;
+export type tRPCInit = typeof t
 
 /**
  * Reusable middlewares
  */
-export const authMiddleware = withAuth(t);
-const permissionsMiddleware = withPermissions();
+export const authMiddleware = withAuth(t)
+const permissionsMiddleware = withPermissions()
 
 /**
  * 3. ROUTER & PROCEDURE (THE IMPORTANT BIT)
@@ -118,7 +93,7 @@ const permissionsMiddleware = withPermissions();
  *
  * @see https://trpc.io/docs/router
  */
-export const createTRPCRouter = t.router;
+export const createTRPCRouter = t.router
 
 /**
  * Public (unauthenticated) procedure
@@ -127,7 +102,7 @@ export const createTRPCRouter = t.router;
  * guarantee that a user querying is authorized, but you can still access user session data if they
  * are logged in.
  */
-export const publicProcedure = t.procedure;
+export const publicProcedure = t.procedure
 
 /**
  * Protected (authenticated) procedure
@@ -137,4 +112,4 @@ export const publicProcedure = t.procedure;
  *
  * @see https://trpc.io/docs/procedures
  */
-export const protectedProcedure = t.procedure.use(permissionsMiddleware);
+export const protectedProcedure = t.procedure.use(permissionsMiddleware)

@@ -1,9 +1,9 @@
-"use client";
+"use client"
 
-import { tv } from "tailwind-variants";
+import { tv } from "tailwind-variants"
 
-import { SidebarIcon } from "~/components/icons/SidebarIcon";
-import { useReaderSettingsStore } from "~/stores";
+import { SidebarIcon } from "~/components/icons/SidebarIcon"
+import { useReaderSettingsStore } from "~/stores"
 
 const readerSidebarOpenOverlay = tv({
   slots: {
@@ -28,18 +28,18 @@ const readerSidebarOpenOverlay = tv({
       },
     },
   },
-});
+})
 
 export const ReaderSidebarOpenOverlay = () => {
-  const { sidebar, update } = useReaderSettingsStore();
+  const { sidebar, update } = useReaderSettingsStore()
 
   const { container, button, accent, text } = readerSidebarOpenOverlay({
     hide: sidebar.state === "show",
     side: sidebar.side,
-  });
+  })
 
   if (sidebar.openMode === "button") {
-    return null;
+    return null
   }
 
   return (
@@ -47,11 +47,12 @@ export const ReaderSidebarOpenOverlay = () => {
       <button
         className={button()}
         onClick={() => update("sidebar.state", "show")}
+        type="button"
       >
         <span className={accent()} />
         <p className={text()}>Abrir sidebar</p>
         <SidebarIcon action="open" side={sidebar.side} size={32} />
       </button>
     </div>
-  );
-};
+  )
+}

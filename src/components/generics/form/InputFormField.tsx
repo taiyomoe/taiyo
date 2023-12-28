@@ -1,18 +1,18 @@
-"use client";
+"use client"
 
-import { Input } from "@nextui-org/input";
-import type { InputProps } from "@nextui-org/input";
-import { useField } from "formik";
-import { tv } from "tailwind-variants";
+import { Input } from "@nextui-org/input"
+import type { InputProps } from "@nextui-org/input"
+import { useField } from "formik"
+import { tv } from "tailwind-variants"
 
-import { cn } from "~/lib/utils/cn";
-import { DateUtils } from "~/lib/utils/date.utils";
+import { cn } from "~/lib/utils/cn"
+import { DateUtils } from "~/lib/utils/date.utils"
 
 type Props = {
-  name: string;
-  rightContent?: React.ReactNode;
-  displayValidationError?: boolean;
-} & InputProps;
+  name: string
+  rightContent?: React.ReactNode
+  displayValidationError?: boolean
+} & InputProps
 
 const input = tv({
   slots: {
@@ -37,7 +37,7 @@ const input = tv({
       },
     },
   },
-});
+})
 
 export const InputFormField = ({
   name,
@@ -47,23 +47,23 @@ export const InputFormField = ({
   displayValidationError,
   ...rest
 }: Props) => {
-  const [field, { error, touched, initialTouched }] = useField({ name });
-  const shouldDisplayError = touched && !!error && !initialTouched;
-  const shouldIgnoreErrorMessage = !!displayValidationError === false;
-  const labelPlacement = rest.labelPlacement ?? "outside-left";
+  const [field, { error, touched, initialTouched }] = useField({ name })
+  const shouldDisplayError = touched && !!error && !initialTouched
+  const shouldIgnoreErrorMessage = !!displayValidationError === false
+  const labelPlacement = rest.labelPlacement ?? "outside-left"
   const { container, label, mainWrapper, inputWrapper, base } = input({
     labelPlacement,
     shouldDisplayError:
       rest.variant === "bordered" ? shouldDisplayError : false,
-  });
+  })
 
-  const rawValue = field.value as string | undefined;
+  const rawValue = field.value as string | undefined
   const value =
     rawValue !== undefined && rawValue !== null
       ? rest.type === "date"
         ? DateUtils.formatToInputValue(new Date(rawValue))
         : rawValue
-      : "";
+      : ""
 
   return (
     <div className={cn(container(), className)}>
@@ -86,5 +86,5 @@ export const InputFormField = ({
       />
       {rightContent}
     </div>
-  );
-};
+  )
+}

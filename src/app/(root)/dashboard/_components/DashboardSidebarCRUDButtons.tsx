@@ -1,71 +1,48 @@
-import NextLink from "next/link";
-import { Button } from "@nextui-org/button";
-import { PencilIcon, PlusIcon, Trash2Icon } from "lucide-react";
-import { tv } from "tailwind-variants";
+import { Button } from "@nextui-org/button"
+import { PencilIcon, PlusIcon, Trash2Icon } from "lucide-react"
+import NextLink from "next/link"
+import { tv } from "tailwind-variants"
 
 type Props = {
-  create: {
-    label: string;
-    href: string;
-    isDisabled?: boolean;
-  };
-  update?: {
-    label: string;
-    href: string;
-    isDisabled?: boolean;
-  };
-  del?: {
-    label: string;
-    href: string;
-    isDisabled?: boolean;
-  };
-};
+  items: {
+    label: string
+    href: string
+    type: "create" | "update" | "del"
+    isDisabled?: boolean
+  }[]
+}
 
 const sidebarCrudButton = tv({
   slots: {
     base: "text-md justify-end gap-4 px-2 font-medium w-full",
   },
-});
+})
 
-export const DashboardSidebarCRUDButtons = ({ create, update, del }: Props) => {
-  const { base } = sidebarCrudButton();
+export const DashboardSidebarCRUDButtons = ({ items }: Props) => {
+  const { base } = sidebarCrudButton()
 
   return (
     <>
-      <Button
-        as={NextLink}
-        endContent={<PlusIcon className="text-success" />}
-        href={create.href}
-        className={base()}
-        variant="light"
-        isDisabled={create.isDisabled}
-      >
-        {create.label}
-      </Button>
-      {update && (
+      {items.map(({ label, href, type, isDisabled }) => (
         <Button
           as={NextLink}
-          endContent={<PencilIcon className="text-warning" />}
-          href={update.href}
+          endContent={
+            type === "create" ? (
+              <PlusIcon className="text-success" />
+            ) : type === "update" ? (
+              <PencilIcon className="text-warning" />
+            ) : (
+              <Trash2Icon className="text-danger" />
+            )
+          }
+          href={href}
           className={base()}
           variant="light"
-          isDisabled={update.isDisabled}
+          isDisabled={isDisabled}
         >
-          {update.label}
+          {label}
         </Button>
-      )}
-      {del && (
-        <Button
-          as={NextLink}
-          endContent={<Trash2Icon className="text-danger" />}
-          href={del.href}
-          className={base()}
-          variant="light"
-          isDisabled={del.isDisabled}
-        >
-          {del.label}
-        </Button>
-      )}
+      ))}
     </>
-  );
-};
+  )
+}

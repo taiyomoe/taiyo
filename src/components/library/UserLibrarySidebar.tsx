@@ -1,18 +1,18 @@
-import { useRef } from "react";
-import { tv } from "@nextui-org/react";
-import { useOnClickOutside } from "usehooks-ts";
+import { tv } from "@nextui-org/react"
+import { useRef } from "react"
+import { useOnClickOutside } from "usehooks-ts"
 
-import { UserLibrarySidebarTabs } from "~/components/library/UserLibrarySidebarTabs";
-import { UserLibrarySidebarTitle } from "~/components/library/UserLibrarySidebarTitle";
-import { useDevice } from "~/hooks/useDevice";
-import { useLibraryStore } from "~/stores";
+import { UserLibrarySidebarTabs } from "~/components/library/UserLibrarySidebarTabs"
+import { UserLibrarySidebarTitle } from "~/components/library/UserLibrarySidebarTitle"
+import { useDevice } from "~/hooks/useDevice"
+import { useLibraryStore } from "~/stores"
 
 const userLibrarySidebar = tv({
   slots: {
     container:
       "transition-all z-40 top-0 right-0 border-l-divider border-l -mr-readerSidebar aria-expanded:mr-0",
     contentWrapper:
-      "bg-content1 w-[calc(var(--library-sidebar-width)-1px)] max-w-[calc(var(--library-sidebar-width)-1px)] right-[unset] width-[unset] flex flex-col gap-4 p-4 overflow-x-hidden overflow-y-auto top-0 max-h-screen h-screen sticky",
+      "bg-content1 w-[calc(var(--library-sidebar-width)-1px)] max-w-[calc(var(--library-sidebar-width)-1px)] right-[unset] width-[unset] flex flex-col gap-4 p-4 overflow-x-hidden overflow-y-auto top-0 max-h-dvh h-dvh sticky",
   },
   variants: {
     isMobile: {
@@ -24,18 +24,18 @@ const userLibrarySidebar = tv({
       },
     },
   },
-});
+})
 
 export const UserLibrarySidebar = () => {
-  const { sidebarState, toggleSidebar } = useLibraryStore();
-  const { isMobile } = useDevice();
-  const slots = userLibrarySidebar({ isMobile });
-  const containerRef = useRef(null);
+  const { sidebarState, toggleSidebar } = useLibraryStore()
+  const { isMobile } = useDevice()
+  const slots = userLibrarySidebar({ isMobile })
+  const containerRef = useRef(null)
 
   useOnClickOutside(
     containerRef,
     () => sidebarState === "show" && toggleSidebar(),
-  );
+  )
 
   return (
     <div
@@ -50,5 +50,5 @@ export const UserLibrarySidebar = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

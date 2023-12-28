@@ -1,21 +1,21 @@
-import { useMemo } from "react";
-import { Chip } from "@nextui-org/react";
+import { Chip } from "@nextui-org/react"
+import { useMemo } from "react"
 
-import { UpdateMediaTitleCreateButton } from "~/components/forms/mediaTitles/update/UpdateMediaTitleCreateButton";
-import { UpdateMediaTitlesForm } from "~/components/forms/mediaTitles/update/UpdateMediaTitlesForm";
-import { Form } from "~/components/generics/form/Form";
-import { List } from "~/components/generics/List";
-import { MediaTitleUtils } from "~/lib/utils/mediaTitles.utils";
-import { useMediaUpdateStore } from "~/stores";
+import { UpdateMediaTitleCreateButton } from "~/components/forms/mediaTitles/update/UpdateMediaTitleCreateButton"
+import { UpdateMediaTitlesForm } from "~/components/forms/mediaTitles/update/UpdateMediaTitlesForm"
+import { List } from "~/components/generics/List"
+import { Form } from "~/components/generics/form/Form"
+import { MediaTitleUtils } from "~/lib/utils/mediaTitles.utils"
+import { useMediaUpdateStore } from "~/stores"
 
 type Props = {
-  mediaId: string;
-};
+  mediaId: string
+}
 
 export const UpdateMediaTitlesShowcase = ({ mediaId }: Props) => {
-  const { titles } = useMediaUpdateStore();
+  const { titles } = useMediaUpdateStore()
 
-  const sortedTitles = useMemo(() => MediaTitleUtils.sort(titles), [titles]);
+  const sortedTitles = useMemo(() => MediaTitleUtils.sort(titles), [titles])
 
   return (
     <Form.Category
@@ -52,5 +52,5 @@ export const UpdateMediaTitlesShowcase = ({ mediaId }: Props) => {
         ))}
       </List>
     </Form.Category>
-  );
-};
+  )
+}

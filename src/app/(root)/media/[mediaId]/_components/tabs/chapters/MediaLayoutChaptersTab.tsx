@@ -1,28 +1,26 @@
-"use client";
+"use client"
 
-import { useEffect, useMemo, useState } from "react";
-import Image from "next/image";
-import type { Selection } from "@nextui-org/react";
-import { Spinner } from "@nextui-org/spinner";
+import type { Selection } from "@nextui-org/react"
+import { Spinner } from "@nextui-org/spinner"
+import Image from "next/image"
+import { useEffect, useMemo, useState } from "react"
 
-import { useMediaNavigation } from "~/hooks/useMediaNavigation";
-import { api } from "~/lib/trpc/client";
-import type { MediaLimited } from "~/lib/types";
-import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils";
+import { useMediaNavigation } from "~/hooks/useMediaNavigation"
+import { api } from "~/lib/trpc/client"
+import type { MediaLimited } from "~/lib/types"
+import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils"
 
-import { MediaChaptersTabActions } from "./MediaChaptersTabActions";
-import { MediaChapterVolumes } from "./MediaChapterVolumes";
+import { MediaChapterVolumes } from "./MediaChapterVolumes"
+import { MediaChaptersTabActions } from "./MediaChaptersTabActions"
 
 type Props = {
-  media: MediaLimited;
-};
+  media: MediaLimited
+}
 
 export const MediaLayoutChaptersTab = ({ media }: Props) => {
-  const [selectedKeys, setSelectedKeys] = useState<Selection>(
-    new Set<string>(),
-  );
+  const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set<string>())
 
-  const { tab, page, perPage } = useMediaNavigation();
+  const { tab, page, perPage } = useMediaNavigation()
   const {
     data: chaptersPagination,
     isInitialLoading,
@@ -34,7 +32,7 @@ export const MediaLayoutChaptersTab = ({ media }: Props) => {
       perPage,
     },
     { enabled: tab === "chapters" },
-  );
+  )
 
   const volumeKeys = useMemo(
     () =>
@@ -42,20 +40,20 @@ export const MediaLayoutChaptersTab = ({ media }: Props) => {
         ({ volume }) => `volume-${volume}`,
       ),
     [chaptersPagination],
-  );
+  )
 
   useEffect(() => {
     if (isSuccess) {
-      setSelectedKeys(new Set(volumeKeys));
+      setSelectedKeys(new Set(volumeKeys))
     }
-  }, [isSuccess, volumeKeys]);
+  }, [isSuccess, volumeKeys])
 
   if (isInitialLoading || !chaptersPagination) {
     return (
       <div className="my-32 flex justify-center">
         <Spinner size="lg" />
       </div>
-    );
+    )
   }
 
   if (chaptersPagination.chapters.length === 0) {
@@ -71,7 +69,7 @@ export const MediaLayoutChaptersTab = ({ media }: Props) => {
         />
         <p className="text-2xl font-semibold">Sem capítulos no momento</p>
       </div>
-    );
+    )
   }
 
   return (
@@ -86,5 +84,5 @@ export const MediaLayoutChaptersTab = ({ media }: Props) => {
         setSelectedKeys={setSelectedKeys}
       />
     </div>
-  );
-};
+  )
+}

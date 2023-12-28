@@ -1,15 +1,15 @@
-"use client";
+"use client"
 
-import { MediaChapterScans } from "~/components/ui/MediaChapterScans";
-import { MediaChapterUploader } from "~/components/ui/MediaChapterUploader";
-import { useReaderStore } from "~/stores";
+import { MediaChapterScans } from "~/components/ui/MediaChapterScans"
+import { MediaChapterUploader } from "~/components/ui/MediaChapterUploader"
+import { useReaderStore } from "~/stores"
 
 type Props = {
-  className: string;
-};
+  className: string
+}
 
 export const ReaderSidebarUploadersSection = ({ className }: Props) => {
-  const { chapter } = useReaderStore();
+  const { chapter } = useReaderStore()
 
   return (
     <div className={className}>
@@ -23,5 +23,5 @@ export const ReaderSidebarUploadersSection = ({ className }: Props) => {
         />
       </div>
     </div>
-  );
-};
+  )
+}

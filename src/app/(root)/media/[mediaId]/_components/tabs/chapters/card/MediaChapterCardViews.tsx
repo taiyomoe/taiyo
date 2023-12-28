@@ -1,4 +1,4 @@
-import { EyeIcon } from "lucide-react";
+import { EyeIcon } from "lucide-react"
 
 export const MediaChapterCardViews = () => {
   return (
@@ -6,5 +6,5 @@ export const MediaChapterCardViews = () => {
       <EyeIcon className="h-4 w-fit md:h-5" />
       <p className="select-none rounded px-1 text-sm">N/A</p>
     </div>
-  );
-};
+  )
+}

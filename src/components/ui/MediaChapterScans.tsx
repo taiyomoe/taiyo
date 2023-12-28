@@ -1,13 +1,13 @@
-import Link from "next/link";
-import type { VariantProps } from "@nextui-org/react";
-import { Skeleton } from "@nextui-org/skeleton";
-import type { Scan } from "@prisma/client";
-import { UsersIcon } from "lucide-react";
-import { tv } from "tailwind-variants";
+import type { VariantProps } from "@nextui-org/react"
+import { Skeleton } from "@nextui-org/skeleton"
+import type { Scan } from "@prisma/client"
+import { UsersIcon } from "lucide-react"
+import Link from "next/link"
+import { tv } from "tailwind-variants"
 
 type Props = {
-  scans?: Scan[] | Pick<Scan, "id" | "name">[];
-} & VariantProps<typeof mediaChapterScans>;
+  scans?: Scan[] | Pick<Scan, "id" | "name">[]
+} & VariantProps<typeof mediaChapterScans>
 
 const mediaChapterScans = tv({
   slots: {
@@ -57,15 +57,15 @@ const mediaChapterScans = tv({
     size: "sm",
     orientation: "horizontal",
   },
-});
+})
 
 export const MediaChapterScans = (props: Props) => {
-  const { scans, size, orientation, isCompact } = props;
-  const slots = mediaChapterScans({ size, orientation });
+  const { scans, size, orientation, isCompact } = props
+  const slots = mediaChapterScans({ size, orientation })
 
-  const scansToDisplay = isCompact ? scans?.slice(0, 1) : scans;
+  const scansToDisplay = isCompact ? scans?.slice(0, 1) : scans
   const otherScansCount =
-    scans && scansToDisplay ? scans.length - scansToDisplay.length : 0;
+    scans && scansToDisplay ? scans.length - scansToDisplay.length : 0
 
   return (
     <div className={slots.container()}>
@@ -91,5 +91,5 @@ export const MediaChapterScans = (props: Props) => {
         </div>
       )}
     </div>
-  );
-};
+  )
+}

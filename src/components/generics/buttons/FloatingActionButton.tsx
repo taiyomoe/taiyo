@@ -1,10 +1,10 @@
-import type { ButtonProps } from "@nextui-org/button";
-import { Button } from "@nextui-org/button";
+import type { ButtonProps } from "@nextui-org/button"
+import { Button } from "@nextui-org/button"
 
 type Props = {
-  icon: ButtonProps["startContent"];
-  onPress: ButtonProps["onPress"];
-};
+  icon: ButtonProps["startContent"]
+  onPress: ButtonProps["onPress"]
+}
 
 export const FloatingActionButton = ({ icon, onPress }: Props) => {
   return (
@@ -17,5 +17,5 @@ export const FloatingActionButton = ({ icon, onPress }: Props) => {
       size="lg"
       isIconOnly
     />
-  );
-};
+  )
+}
