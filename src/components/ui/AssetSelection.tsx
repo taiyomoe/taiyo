@@ -1,7 +1,10 @@
 import { tv } from "@nextui-org/react"
 import Image from "next/image"
 
-type Props = { isCompact?: boolean }
+type Props = {
+  type: "image" | "folder"
+  isCompact?: boolean
+}
 
 const imageSelection = tv({
   slots: {
@@ -19,15 +22,20 @@ const imageSelection = tv({
   },
 })
 
-export const ImageSelection = ({ isCompact }: Props) => {
+export const AssetSelection = ({ type, isCompact }: Props) => {
   const { container, illustration, contentWrapper } = imageSelection({
     isCompact,
   })
 
+  const illustrationSrc =
+    type === "image"
+      ? "/illustrations/asset_selection.svg"
+      : "/illustrations/folder_selection.svg"
+
   return (
     <div className={container()}>
       <Image
-        src="/illustrations/asset_selection.svg"
+        src={illustrationSrc}
         width={0}
         height={0}
         sizes="1"
@@ -35,8 +43,17 @@ export const ImageSelection = ({ isCompact }: Props) => {
         alt="asset selection"
       />
       <div className={contentWrapper()}>
-        <p>Nenhuma imagem selecionada.</p>
-        <p>Arreste-as nesta zona ou clique para selecioná-las.</p>
+        {type === "image" ? (
+          <>
+            <p>Nenhuma imagem selecionada.</p>
+            <p>Arreste-as nesta zona ou clique para selecioná-las.</p>
+          </>
+        ) : (
+          <>
+            <p>Nenhuma pasta selecionada.</p>
+            <p>Clique para selecioná-la.</p>
+          </>
+        )}
       </div>
     </div>
   )

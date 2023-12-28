@@ -15,14 +15,12 @@ const sidebarContent = tv({
     categorytitle:
       "uppercase text-small text-default-300 font-semibold select-none",
     categoryIndicator: "text-default-300",
-    categoryContent: "ml-4 mr-2",
     categoryItemButton: "text-md justify-end gap-4 px-2 font-medium w-full",
   },
 })
 
 export const DashboardSidebarContent = ({ className }: Props) => {
-  const { container, categorytitle, categoryIndicator, categoryContent } =
-    sidebarContent()
+  const { container, categorytitle, categoryIndicator } = sidebarContent()
 
   return (
     <Accordion
@@ -38,7 +36,6 @@ export const DashboardSidebarContent = ({ className }: Props) => {
         classNames={{
           title: categorytitle(),
           indicator: categoryIndicator(),
-          content: categoryContent(),
         }}
         title="— Obras"
         key="medias"
@@ -67,11 +64,16 @@ export const DashboardSidebarContent = ({ className }: Props) => {
         classNames={{
           title: categorytitle(),
           indicator: categoryIndicator(),
-          content: categoryContent(),
         }}
         title="— Capítulos"
         key="mediaChapters"
       >
+        <DashboardSidebarCRUDButtons
+          create={{
+            label: "Upar em massa",
+            href: "/dashboard/chapters/bulk-upload",
+          }}
+        />
         <DashboardSidebarCRUDButtons
           create={{
             label: "Upar",
@@ -90,7 +92,6 @@ export const DashboardSidebarContent = ({ className }: Props) => {
         classNames={{
           title: categorytitle(),
           indicator: categoryIndicator(),
-          content: categoryContent(),
         }}
         title="— Scans"
         key="scans"

@@ -8,9 +8,8 @@ import { useDropzone } from "react-dropzone"
 
 import { SubmitButton } from "~/components/generics/buttons/SubmitButton"
 import { Form } from "~/components/generics/form/Form"
+import { AssetSelection } from "~/components/ui/AssetSelection"
 import { useImageStore } from "~/stores"
-
-import { ImageSelection } from "./ImageSelection"
 
 type Props = {
   title: string
@@ -99,7 +98,7 @@ export const ImageDropzone = (props: Props) => {
                 {...getInputProps()}
                 disabled={acceptedFiles.length !== 0}
               />
-              {selectedImages.length === 0 && <ImageSelection />}
+              {selectedImages.length === 0 && <AssetSelection type="image" />}
               {selectedImages.length > 0 && children({ selectedImages })}
             </section>
           </CardBody>

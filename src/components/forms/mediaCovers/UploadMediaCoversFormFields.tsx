@@ -7,7 +7,7 @@ import { Form } from "~/components/generics/form/Form"
 import { InputFormField } from "~/components/generics/form/InputFormField"
 import { SelectFormField } from "~/components/generics/form/SelectFormField"
 import { SwitchFormField } from "~/components/generics/form/SwitchFormField"
-import { ImageDropzone } from "~/components/ui/images/ImageDropzone"
+import { ImageDropzone } from "~/components/ui/upload/ImageDropzone"
 import type { UploadMediaCoverSchema } from "~/lib/schemas"
 
 export const UploadMediaCoversFormFields = () => {

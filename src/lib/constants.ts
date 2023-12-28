@@ -3,3 +3,10 @@ export const DEFAULT_MEDIA_PER_PAGE = 30
 export const MEDIA_PER_PAGE_CHOICES = [5, 10, 20, 30, 50]
 
 export const PRELOAD_PAGES_COUNT = 5
+
+export const ALLOWED_MIME_TYPES = [
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "image/gif",
+]

@@ -5,8 +5,8 @@ import { InputFormField } from "~/components/generics/form/InputFormField"
 import { SelectFormField } from "~/components/generics/form/SelectFormField"
 import { MediasSearchAutocomplete } from "~/components/medias/MediasSearchAutocomplete"
 import { ScansSearchAutocomplete } from "~/components/scans/ScansSearchAutocomplete"
-import { ImageCard } from "~/components/ui/images/ImageCard"
-import { ImageDropzone } from "~/components/ui/images/ImageDropzone"
+import { ImageCard } from "~/components/ui/upload/ImageCard"
+import { ImageDropzone } from "~/components/ui/upload/ImageDropzone"
 
 export const UploadChapterFormFields = () => {
   return (
