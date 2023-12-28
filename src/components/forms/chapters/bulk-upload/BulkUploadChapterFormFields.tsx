@@ -1,3 +1,4 @@
+import { BulkUploadErrors } from "~/components/forms/chapters/bulk-upload/BulkUploadErrors"
 import { UploadStatusLegend } from "~/components/forms/chapters/bulk-upload/UploadStatusLegend"
 import { Form } from "~/components/generics/form/Form"
 import { InputFormField } from "~/components/generics/form/InputFormField"
@@ -12,7 +13,15 @@ export const BulkUploadChapterFormFields = () => {
         <MediasSearchAutocomplete />
         <InputFormField name="concurrent" label="Limite" type="number" />
       </Form.Category>
-      <FolderDropzone title="Capítulos" endContent={<UploadStatusLegend />}>
+      <FolderDropzone
+        title="Capítulos"
+        endContent={
+          <>
+            <UploadStatusLegend />
+            <BulkUploadErrors />
+          </>
+        }
+      >
         {({ selectedFolders }) => (
           <div className="flex flex-col gap-3">
             {selectedFolders
