@@ -10,7 +10,7 @@ import { useReaderSettingsStore } from "~/stores"
 
 const readerSidebarSettingsOpenMode = tv({
   slots: {
-    container: "flex flex-col gap-2 items-end",
+    container: "hidden md:flex flex-col gap-2 items-end",
     text: "text-md",
     leftButton: "justify-start gap-3 pl-3",
     rightButton: "justify-end gap-3 pr-3",
