@@ -25,7 +25,7 @@ type Props = {
 const folderDropzone = tv({
   slots: {
     container:
-      "min-h-unit-24 w-full rounded-medium border border-dashed border-default-300 bg-default-100 p-3 transition-all !duration-150",
+      "w-full rounded-medium border border-dashed border-default-300 bg-default-100 p-3 transition-all !duration-150",
   },
   variants: {
     disabled: {
