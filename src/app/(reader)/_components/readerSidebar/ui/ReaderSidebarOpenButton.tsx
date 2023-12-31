@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation"
 
 import { useReaderSettingsStore, useReaderStore } from "~/stores"
 
-import { SidebarIcon } from "../icons/SidebarIcon"
+import { SidebarIcon } from "../../../../../components/icons/SidebarIcon"
 
 export const ReaderSidebarOpenButton = () => {
   const pathname = usePathname()
