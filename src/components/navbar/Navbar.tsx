@@ -59,7 +59,7 @@ type Props = {
 export const Navbar = ({ popover }: Props) => {
   const { sidebar, navbarMode } = useReaderSettingsStore()
   const pathname = usePathname()
-  const { isAboveTablet } = useDevice()
+  const device = useDevice()
 
   const slots = navbar({
     sidebarState: pathname.includes("/chapter/") ? sidebar.state : "hide",
@@ -72,7 +72,7 @@ export const Navbar = ({ popover }: Props) => {
       <nav className={slots.contentWrapper()}>
         <Link href="/" className={slots.brandContainer()}>
           <CompanyLogo company="taiyo" width={35} priority />
-          {isAboveTablet && (
+          {device?.isAboveTablet && (
             <>
               <p className={slots.brandText()}>Taiyō</p>
               <Chip color="primary" size="sm">

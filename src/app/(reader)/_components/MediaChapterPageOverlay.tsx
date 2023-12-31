@@ -36,7 +36,7 @@ const mediaChapterPageOverlay = tv({
 export const MediaChapterPageOverlay = () => {
   const { page, navbarMode } = useReaderSettingsStore()
   const { chapter } = useReaderStore()
-  const { isAboveTablet } = useDevice()
+  const device = useDevice()
   const [topContainerTop, setTopContainerTop] = useState<number | undefined>(
     navbarMode === "fixed" ? 60 : undefined,
   )
@@ -76,7 +76,7 @@ export const MediaChapterPageOverlay = () => {
     computeTopContainerTop(window.scrollY)
   }, [computeTopContainerTop, navbarMode])
 
-  if (page.mode === "single" || isAboveTablet || !chapter) {
+  if (page.mode === "single" || device?.isAboveTablet || !chapter) {
     return null
   }
 

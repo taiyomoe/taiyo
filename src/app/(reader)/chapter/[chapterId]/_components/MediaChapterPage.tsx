@@ -23,7 +23,7 @@ const mediaChapterPage = tv({
 })
 
 export const MediaChapterPage = () => {
-  const { isAboveTablet } = useDevice()
+  const device = useDevice()
   const {
     navbarMode,
     page: { mode, overlay, width },
@@ -54,7 +54,7 @@ export const MediaChapterPage = () => {
       const screenSide = clickX < windowWidth / 2 ? "left" : "right"
 
       // If it's on longstrip mode, on mobile
-      if (mode === "longstrip" && !isAboveTablet) {
+      if (mode === "longstrip" && !device?.isAboveTablet) {
         update("page.overlay", overlay === "show" ? "hide" : "show")
         return
       }
@@ -69,7 +69,7 @@ export const MediaChapterPage = () => {
 
       goForward()
     },
-    [goBack, goForward, isAboveTablet, mode, overlay, update],
+    [goBack, goForward, device?.isAboveTablet, mode, overlay, update],
   )
 
   return (
