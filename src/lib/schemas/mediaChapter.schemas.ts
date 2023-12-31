@@ -23,6 +23,7 @@ export const insertMediaChapterSchema = z.object({
 
 export const insertMediaChapterFormSchema = insertMediaChapterSchema.omit({
   id: true,
+  pages: true,
 })
 
 export const updateMediaChapterSchema = insertMediaChapterSchema
