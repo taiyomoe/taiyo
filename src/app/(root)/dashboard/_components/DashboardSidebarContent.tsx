@@ -80,7 +80,7 @@ export const DashboardSidebarContent = ({ className }: Props) => {
             },
             {
               label: "Adicionar",
-              href: "/dashboard/chapters/add",
+              href: "/dashboard/chapters/upload",
               type: "create",
             },
             {
