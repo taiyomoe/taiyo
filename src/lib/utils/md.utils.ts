@@ -393,6 +393,12 @@ const getTitles = (manga: Manga) => {
 
   for (const title of manga.localizedAltTitles) {
     for (const l of title.availableLocales) {
+      const alreadyExists = rawTitles.some(
+        (t) => t.title === title.data[l]! && t.language === getLanguage(l),
+      )
+
+      if (alreadyExists) continue
+
       rawTitles.push({
         title: title.data[l]!,
         language: getLanguage(l),
