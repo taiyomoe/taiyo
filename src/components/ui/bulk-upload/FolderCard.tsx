@@ -25,7 +25,12 @@ export const FolderCard = ({ folder, position }: Props) => {
       case uploaded.includes(chapterNumber):
         return <CheckIcon className="text-success" size={20} />
       default:
-        return <HourglassIcon className="text-warning" size={20} />
+        return (
+          <RefreshCwIcon
+            className="text-blue-400 animate-spin-medium"
+            size={20}
+          />
+        )
     }
   }, [compressing, uploading, uploaded, chapterNumber])
 
