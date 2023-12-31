@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation"
 import { tv } from "tailwind-variants"
 
 import { UserLibrary } from "~/components/library/UserLibrary"
+import { NavbarDashboardButton } from "~/components/navbar/NavbarDashboardButton"
 import { MediaSearch } from "~/components/navbar/search/MediaSearch"
 import { CompanyLogo } from "~/components/ui/CompanyLogo"
 import { useDevice } from "~/hooks/useDevice"
@@ -80,6 +81,7 @@ export const Navbar = ({ popover }: Props) => {
         <div className={slots.endContentContainer()}>
           <MediaSearch />
           <UserLibrary />
+          <NavbarDashboardButton />
           {popover}
           <ReaderSidebarOpenButton />
         </div>
