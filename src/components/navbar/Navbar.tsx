@@ -17,7 +17,7 @@ import { ReaderSidebarOpenButton } from "./ReaderSidebarOpenButton"
 const navbar = tv({
   slots: {
     container:
-      "h-navbar max-h-navbar w-full flex flex-col justify-center z-20 group child:relative",
+      "h-navbar max-h-navbar w-full flex flex-col justify-center z-20 group child:relative p-0 md:p-[unset] data-[sidebar-state=hide]:!p-0 data-[sidebar-side=left]:pl-readerSidebar data-[sidebar-side=right]:pr-readerSidebar",
     contentWrapper:
       "items-center px-bodyPadding flex grow justify-between bg-background transition-all",
     brandContainer: "flex items-center gap-2 select-none",
@@ -25,20 +25,6 @@ const navbar = tv({
     endContentContainer: "flex gap-4",
   },
   variants: {
-    sidebarState: {
-      show: {},
-      hide: {
-        container: "!p-0",
-      },
-    },
-    sidebarSide: {
-      left: {
-        container: "pl-readerSidebar",
-      },
-      right: {
-        container: "pr-readerSidebar",
-      },
-    },
     mode: {
       fixed: {},
       sticky: {
@@ -62,13 +48,23 @@ export const Navbar = ({ popover }: Props) => {
   const device = useDevice()
 
   const slots = navbar({
-    sidebarState: pathname.includes("/chapter/") ? sidebar.state : "hide",
-    sidebarSide: sidebar.side,
     mode: pathname.includes("/chapter/") ? navbarMode : "sticky",
   })
 
   return (
-    <div className={slots.container()}>
+    <div
+      className={slots.container()}
+      data-sidebar-state={
+        pathname.includes("/chapter/") && device?.isAboveTablet
+          ? sidebar.state
+          : undefined
+      }
+      data-sidebar-side={
+        pathname.includes("/chapter/") && device?.isAboveTablet
+          ? sidebar.side
+          : undefined
+      }
+    >
       <nav className={slots.contentWrapper()}>
         <Link href="/" className={slots.brandContainer()}>
           <CompanyLogo company="taiyo" width={35} priority />

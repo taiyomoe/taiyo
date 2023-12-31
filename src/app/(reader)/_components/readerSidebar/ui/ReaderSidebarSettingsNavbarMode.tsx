@@ -40,7 +40,7 @@ export const ReaderSidebarSettingsNavbarMode = () => {
           className={button()}
           onPress={() => update("navbarMode", "hover", true)}
           color={navbarMode === "hover" ? "primary" : "default"}
-          isDisabled={device?.isAboveTablet}
+          isDisabled={!device?.isAboveTablet}
         >
           Foco
         </Button>
