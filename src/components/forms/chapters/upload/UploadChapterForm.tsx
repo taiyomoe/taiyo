@@ -14,7 +14,6 @@ const initialValues: InsertMediaChapterFormSchema = {
   number: 0,
   volume: null,
   language: "pt_br",
-  pages: [],
   contentRating: "NORMAL",
   flag: "OK",
   mediaId: "",
