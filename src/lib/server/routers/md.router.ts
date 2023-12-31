@@ -107,6 +107,12 @@ export const mdRouter = createTRPCRouter({
       })
 
       for (const [i, cover] of covers.entries()) {
+        const coverLanguage = MdUtils.getLanguage(cover.locale)
+
+        if (!coverLanguage) {
+          continue
+        }
+
         void pusherServer.trigger("importChannel", "importEvent", {
           step: 3,
           content: `Upando a cover ${i + 1}/${covers.length}...`,
@@ -145,7 +151,7 @@ export const mdRouter = createTRPCRouter({
               ? null
               : parseFloat(cover.volume),
             isMainCover: mainCover.id === cover.id,
-            language: MdUtils.getLanguage(cover.locale),
+            language: coverLanguage,
             mediaId: media.id,
             uploaderId: ctx.session.user.id,
           },
