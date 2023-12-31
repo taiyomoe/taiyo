@@ -14,7 +14,7 @@ type Props = {
 }
 
 export const SwipeableTrendingMedias = ({ medias }: Props) => {
-  const { isAboveTablet } = useDevice()
+  const device = useDevice()
   const [emblaRef] = useEmblaCarousel({
     dragFree: true,
     axis: "x",
@@ -39,8 +39,8 @@ export const SwipeableTrendingMedias = ({ medias }: Props) => {
             className={cn(
               "relative hover:cursor-pointer min-h-[400px] max-h-[400px] md:min-h-[498px] md:max-h-[498px]",
               {
-                "mr-6": !isAboveTablet && i !== medias.length - 1,
-                "mb-6": isAboveTablet && i !== medias.length - 1,
+                "mr-6": !device?.isAboveTablet && i !== medias.length - 1,
+                "mb-6": device?.isAboveTablet && i !== medias.length - 1,
               },
             )}
           >

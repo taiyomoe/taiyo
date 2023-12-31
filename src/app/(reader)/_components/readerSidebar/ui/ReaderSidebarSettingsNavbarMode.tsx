@@ -14,7 +14,7 @@ const readerSidebarSettingsNavbarMode = tv({
 
 export const ReaderSidebarSettingsNavbarMode = () => {
   const { navbarMode, update } = useReaderSettingsStore()
-  const { isAboveTablet } = useDevice()
+  const device = useDevice()
 
   const { container, text, button } = readerSidebarSettingsNavbarMode()
 
@@ -40,7 +40,7 @@ export const ReaderSidebarSettingsNavbarMode = () => {
           className={button()}
           onPress={() => update("navbarMode", "hover", true)}
           color={navbarMode === "hover" ? "primary" : "default"}
-          isDisabled={!isAboveTablet}
+          isDisabled={device?.isAboveTablet}
         >
           Foco
         </Button>
