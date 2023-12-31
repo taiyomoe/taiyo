@@ -1,4 +1,4 @@
-import type {
+import {
   ContentRating,
   Languages,
   MediaCountryOfOrigin,
@@ -84,7 +84,7 @@ const getCountryOfOrigin = (manga: Manga): MediaCountryOfOrigin => {
   }
 }
 
-const getLanguage = (input: string): Languages => {
+const getLanguage = (input: string) => {
   switch (input) {
     case "ja-ro":
       return "ja_ro"
@@ -100,8 +100,13 @@ const getLanguage = (input: string): Languages => {
       return "pt_br"
     case "es-la":
       return "es_la"
-    default:
-      return input as Languages
+    default: {
+      if (input in Languages) {
+        return input as Languages
+      }
+
+      return null
+    }
   }
 }
 
@@ -396,12 +401,13 @@ const getTitles = (manga: Manga) => {
       const alreadyExists = rawTitles.some(
         (t) => t.title === title.data[l]! && t.language === getLanguage(l),
       )
+      const language = getLanguage(l)
 
-      if (alreadyExists) continue
+      if (alreadyExists || !language) continue
 
       rawTitles.push({
         title: title.data[l]!,
-        language: getLanguage(l),
+        language,
         isMainTitle: false,
       })
     }

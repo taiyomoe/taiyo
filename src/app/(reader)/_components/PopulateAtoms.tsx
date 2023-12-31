@@ -2,6 +2,7 @@
 
 import { usePathname } from "next/navigation"
 import { useEffect, useRef } from "react"
+import { useWindowSize } from "usehooks-ts"
 
 import { useDevice } from "~/hooks/useDevice"
 import type { MediaChapterLimited } from "~/lib/types"
@@ -15,7 +16,7 @@ type Props = {
 export const PopulateAtoms = ({ mediaChapter }: Props) => {
   const readerSettings = useReaderSettingsStore()
   const { load } = useReaderStore()
-  const { isAboveTablet } = useDevice()
+  const device = useDevice()
   const pathname = usePathname()
   const loaded = useRef(false)
 
@@ -30,7 +31,7 @@ export const PopulateAtoms = ({ mediaChapter }: Props) => {
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: we only want to run this effect when the viewport changes
   useEffect(() => {
-    if (isAboveTablet) return
+    if (!device || device.isAboveTablet) return
 
     if (readerSettings.sidebar.openMode === "hover") {
       readerSettings.update("sidebar.openMode", "button")
@@ -39,7 +40,7 @@ export const PopulateAtoms = ({ mediaChapter }: Props) => {
     if (readerSettings.navbarMode === "hover") {
       readerSettings.update("navbarMode", "sticky")
     }
-  }, [isAboveTablet])
+  }, [device?.isAboveTablet])
 
   return null
 }

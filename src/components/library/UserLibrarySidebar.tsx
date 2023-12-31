@@ -28,8 +28,8 @@ const userLibrarySidebar = tv({
 
 export const UserLibrarySidebar = () => {
   const { sidebarState, toggleSidebar } = useLibraryStore()
-  const { isMobile } = useDevice()
-  const slots = userLibrarySidebar({ isMobile })
+  const device = useDevice()
+  const slots = userLibrarySidebar({ isMobile: device?.isMobile })
   const containerRef = useRef(null)
 
   useOnClickOutside(
