@@ -5,19 +5,20 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { tv } from "tailwind-variants"
 
-import { UserLibrary } from "~/components/library/UserLibrary"
+import { ReaderSidebarOpenButton } from "~/app/(reader)/_components/readerSidebar/ui/ReaderSidebarOpenButton"
 import { MediaSearch } from "~/components/navbar/search/MediaSearch"
 import { CompanyLogo } from "~/components/ui/CompanyLogo"
 import { useDevice } from "~/hooks/useDevice"
 import { useReaderSettingsStore } from "~/stores"
 
 import { NavbarBorder } from "./NavbarBorder"
-import { ReaderSidebarOpenButton } from "./ReaderSidebarOpenButton"
+import { NavbarDashboardButton } from "./buttons/NavbarDashboardButton"
+import { NavbarUserLibraryButton } from "./buttons/NavbarUserLibraryButton"
 
 const navbar = tv({
   slots: {
     container:
-      "h-navbar max-h-navbar w-full flex flex-col justify-center z-20 group child:relative",
+      "h-navbar max-h-navbar w-full flex flex-col justify-center z-20 group child:relative p-0 md:p-[unset] data-[sidebar-state=hide]:!p-0 data-[sidebar-side=left]:pl-readerSidebar data-[sidebar-side=right]:pr-readerSidebar",
     contentWrapper:
       "items-center px-bodyPadding flex grow justify-between bg-background transition-all",
     brandContainer: "flex items-center gap-2 select-none",
@@ -25,20 +26,6 @@ const navbar = tv({
     endContentContainer: "flex gap-4",
   },
   variants: {
-    sidebarState: {
-      show: {},
-      hide: {
-        container: "!p-0",
-      },
-    },
-    sidebarSide: {
-      left: {
-        container: "pl-readerSidebar",
-      },
-      right: {
-        container: "pr-readerSidebar",
-      },
-    },
     mode: {
       fixed: {},
       sticky: {
@@ -59,20 +46,30 @@ type Props = {
 export const Navbar = ({ popover }: Props) => {
   const { sidebar, navbarMode } = useReaderSettingsStore()
   const pathname = usePathname()
-  const { isAboveTablet } = useDevice()
+  const device = useDevice()
 
   const slots = navbar({
-    sidebarState: pathname.includes("/chapter/") ? sidebar.state : "hide",
-    sidebarSide: sidebar.side,
     mode: pathname.includes("/chapter/") ? navbarMode : "sticky",
   })
 
   return (
-    <div className={slots.container()}>
+    <div
+      className={slots.container()}
+      data-sidebar-state={
+        pathname.includes("/chapter/") && device?.isAboveTablet
+          ? sidebar.state
+          : undefined
+      }
+      data-sidebar-side={
+        pathname.includes("/chapter/") && device?.isAboveTablet
+          ? sidebar.side
+          : undefined
+      }
+    >
       <nav className={slots.contentWrapper()}>
         <Link href="/" className={slots.brandContainer()}>
           <CompanyLogo company="taiyo" width={35} priority />
-          {isAboveTablet && (
+          {device?.isAboveTablet && (
             <>
               <p className={slots.brandText()}>Taiyō</p>
               <Chip color="primary" size="sm">
@@ -83,7 +80,8 @@ export const Navbar = ({ popover }: Props) => {
         </Link>
         <div className={slots.endContentContainer()}>
           <MediaSearch />
-          <UserLibrary />
+          <NavbarUserLibraryButton />
+          <NavbarDashboardButton />
           {popover}
           <ReaderSidebarOpenButton />
         </div>

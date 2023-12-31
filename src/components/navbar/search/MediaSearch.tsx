@@ -3,9 +3,9 @@ import { MediaSearchModal } from "~/components/navbar/search/MediaSearchModal"
 import { useDevice } from "~/hooks/useDevice"
 
 export const MediaSearch = () => {
-  const { isAboveLaptop } = useDevice()
+  const device = useDevice()
 
-  if (isAboveLaptop) {
+  if (device?.isAboveTablet) {
     return <MediaSearchAutocomplete itemsHrefPrefix={"/media"} />
   }
 

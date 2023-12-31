@@ -1,6 +1,7 @@
 import { Card, CardBody } from "@nextui-org/card"
 import { Spinner } from "@nextui-org/react"
 import { CheckIcon, HourglassIcon, RefreshCwIcon } from "lucide-react"
+import prettyBytes from "pretty-bytes"
 import { useMemo } from "react"
 import { ImageFolder } from "~/lib/types"
 import { useImageFolderStore } from "~/stores"
@@ -13,11 +14,17 @@ type Props = {
 export const FolderCard = ({ folder, position }: Props) => {
   const [chapterNumber, files] = folder
   const { compressing, uploading, uploaded } = useImageFolderStore()
+  const totalBytes = files.map((f) => f.size).reduce((a, b) => a + b, 0)
 
   const computeStatusIcon = useMemo(() => {
     switch (true) {
       case compressing.includes(chapterNumber):
-        return <RefreshCwIcon className="text-blue-400" size={20} />
+        return (
+          <RefreshCwIcon
+            className="text-blue-400 animate-spin-medium"
+            size={20}
+          />
+        )
       case uploading.includes(chapterNumber):
         return <Spinner size="sm" />
       case uploaded.includes(chapterNumber):
@@ -36,7 +43,7 @@ export const FolderCard = ({ folder, position }: Props) => {
             <p>
               Capítulo {chapterNumber}{" "}
               <span className="text-sm text-default-500">
-                ({files.length} imagens)
+                ({files.length} imagens, {prettyBytes(totalBytes)})
               </span>
             </p>
           </div>

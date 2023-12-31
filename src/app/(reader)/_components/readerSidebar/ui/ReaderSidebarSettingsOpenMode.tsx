@@ -19,7 +19,7 @@ const readerSidebarSettingsOpenMode = tv({
 
 export const ReaderSidebarSettingsOpenMode = () => {
   const { sidebar, update } = useReaderSettingsStore()
-  const { isAboveTablet } = useDevice()
+  const device = useDevice()
 
   const { container, text, leftButton, rightButton } =
     readerSidebarSettingsOpenMode()
@@ -35,7 +35,7 @@ export const ReaderSidebarSettingsOpenMode = () => {
           }
           onPress={() => update("sidebar.openMode", "button", true)}
           color={sidebar.openMode === "button" ? "primary" : "default"}
-          isDisabled={!isAboveTablet}
+          isDisabled={!device?.isAboveTablet}
           radius="sm"
         >
           Botão
@@ -45,7 +45,7 @@ export const ReaderSidebarSettingsOpenMode = () => {
           endContent={<MousePointer2Icon size={20} />}
           onPress={() => update("sidebar.openMode", "hover", true)}
           color={sidebar.openMode === "hover" ? "primary" : "default"}
-          isDisabled={!isAboveTablet}
+          isDisabled={!device?.isAboveTablet}
           radius="sm"
         >
           Foco
