@@ -62,6 +62,9 @@ export default ({
         mdChapterLayout: "auto 130px 70px",
         mediaChapter: "min-content auto min-content",
       },
+      animation: {
+        "spin-medium": "spin 2s linear infinite",
+      },
       colors: {
         background: "var(--background)",
         foreground: "hsl(var(--foreground))",
