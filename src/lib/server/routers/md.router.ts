@@ -68,7 +68,9 @@ export const mdRouter = createTRPCRouter({
 
       const media = await ctx.db.media.create({
         data: {
-          startDate: new Date(Date.parse(manga.year.toString())),
+          startDate: manga.year
+            ? new Date(Date.parse(manga.year.toString()))
+            : null,
           // -----
           synopsis: input.synopsis,
           contentRating: MdUtils.getContentRating(manga),
