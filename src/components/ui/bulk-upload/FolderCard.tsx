@@ -19,18 +19,18 @@ export const FolderCard = ({ folder, position }: Props) => {
   const computeStatusIcon = useMemo(() => {
     switch (true) {
       case compressing.includes(chapterNumber):
-        return <RefreshCwIcon className="text-blue-400" size={20} />
-      case uploading.includes(chapterNumber):
-        return <Spinner size="sm" />
-      case uploaded.includes(chapterNumber):
-        return <CheckIcon className="text-success" size={20} />
-      default:
         return (
           <RefreshCwIcon
             className="text-blue-400 animate-spin-medium"
             size={20}
           />
         )
+      case uploading.includes(chapterNumber):
+        return <Spinner size="sm" />
+      case uploaded.includes(chapterNumber):
+        return <CheckIcon className="text-success" size={20} />
+      default:
+        return <HourglassIcon className="text-warning" size={20} />
     }
   }, [compressing, uploading, uploaded, chapterNumber])
 
