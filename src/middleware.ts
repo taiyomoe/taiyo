@@ -47,7 +47,7 @@ export default withAuth(
             return token.role.permissions.includes("medias:create")
           case pathname.startsWith("/dashboard/medias/edit"):
             return token.role.permissions.includes("medias:update:any")
-          case pathname === "/dashboard/chapters/add":
+          case pathname.startsWith("/dashboard/chapters/upload"):
             return token.role.permissions.includes("mediaChapters:create")
           case pathname === "/dashboard/chapters/bulk-upload":
             return token.role.permissions.includes("mediaChapters:create")
