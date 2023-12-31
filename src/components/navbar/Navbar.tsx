@@ -5,15 +5,15 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { tv } from "tailwind-variants"
 
-import { UserLibrary } from "~/components/library/UserLibrary"
-import { NavbarDashboardButton } from "~/components/navbar/NavbarDashboardButton"
+import { ReaderSidebarOpenButton } from "~/app/(reader)/_components/readerSidebar/ui/ReaderSidebarOpenButton"
 import { MediaSearch } from "~/components/navbar/search/MediaSearch"
 import { CompanyLogo } from "~/components/ui/CompanyLogo"
 import { useDevice } from "~/hooks/useDevice"
 import { useReaderSettingsStore } from "~/stores"
 
 import { NavbarBorder } from "./NavbarBorder"
-import { ReaderSidebarOpenButton } from "./ReaderSidebarOpenButton"
+import { NavbarDashboardButton } from "./buttons/NavbarDashboardButton"
+import { NavbarUserLibraryButton } from "./buttons/NavbarUserLibraryButton"
 
 const navbar = tv({
   slots: {
@@ -80,7 +80,7 @@ export const Navbar = ({ popover }: Props) => {
         </Link>
         <div className={slots.endContentContainer()}>
           <MediaSearch />
-          <UserLibrary />
+          <NavbarUserLibraryButton />
           <NavbarDashboardButton />
           {popover}
           <ReaderSidebarOpenButton />

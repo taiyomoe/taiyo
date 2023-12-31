@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react"
 import { UserLibrarySidebar } from "~/components/library/UserLibrarySidebar"
 import { useLibraryStore, useReaderSettingsStore } from "~/stores"
 
-export const UserLibrary = () => {
+export const NavbarUserLibraryButton = () => {
   const { sidebar, update } = useReaderSettingsStore()
   const { toggleSidebar } = useLibraryStore()
   const { data: session } = useSession()
