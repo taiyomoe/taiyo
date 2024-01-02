@@ -6,17 +6,20 @@ import { useAsyncList } from "@react-stately/data"
 import { SearchIcon } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
+import { useCallback } from "react"
+import { SearchedMediaCard } from "~/components/navbar/search/SearchedMediaCard"
 
 import { api } from "~/lib/trpc/client"
 import type { SearchedMedia } from "~/lib/types"
 import { MediaCoverUtils } from "~/lib/utils/mediaCover.utils"
 
 type Props = {
-  itemsHrefPrefix: string
-} & Omit<AutocompleteProps<SearchedMedia>, "children">
+  href?: (mediaId: string) => string
+  onSelectionChange?: (media: SearchedMedia) => void
+} & Omit<AutocompleteProps<SearchedMedia>, "onSelectionChange" | "children">
 
 export const MediaSearchAutocomplete = (props: Props) => {
-  const { itemsHrefPrefix, ...rest } = props
+  const { href, onSelectionChange, ...rest } = props
   const { mutateAsync } = api.medias.search.useMutation()
 
   const list = useAsyncList<SearchedMedia>({
@@ -31,10 +34,20 @@ export const MediaSearchAutocomplete = (props: Props) => {
     },
   })
 
+  const handleSelectionChange = useCallback(
+    (key: string | number) => {
+      if (onSelectionChange) {
+        onSelectionChange(list.getItem(key))
+      }
+    },
+    [onSelectionChange, list.getItem],
+  )
+
   return (
     <Autocomplete<SearchedMedia>
       inputProps={{
         classNames: {
+          base: "w-full",
           input: "text-base",
           inputWrapper: "h-[40px]",
         },
@@ -53,6 +66,7 @@ export const MediaSearchAutocomplete = (props: Props) => {
       items={list.items}
       placeholder="Pesquisar..."
       onInputChange={list.setFilterText}
+      onSelectionChange={handleSelectionChange}
       startContent={<SearchIcon className="text-default-500" />}
       aria-label="search media"
       radius="full"
@@ -62,30 +76,15 @@ export const MediaSearchAutocomplete = (props: Props) => {
       {(item) => (
         <AutocompleteItem
           key={item.id}
-          as={Link}
-          href={`${itemsHrefPrefix}/${item.id}`}
+          as={href ? Link : undefined}
+          href={href ? href(item.id) : undefined}
           classNames={{
             base: "p-0",
             title: "flex gap-2 h-[80px] text-ellipsis",
           }}
           textValue={item.title}
         >
-          <Image
-            src={MediaCoverUtils.getUrl({
-              id: item.id,
-              coverId: item.coverId,
-            })}
-            className="h-full min-w-[60px] rounded-small object-fill"
-            width={60}
-            height={80}
-            alt="media's cover"
-          />
-          <div className="h-full gap-1">
-            <h3 className="line-clamp-1 text-lg font-semibold">{item.title}</h3>
-            <p className="line-clamp-2 text-clip text-default-500">
-              {item.synopsis}
-            </p>
-          </div>
+          <SearchedMediaCard media={item} />
         </AutocompleteItem>
       )}
     </Autocomplete>

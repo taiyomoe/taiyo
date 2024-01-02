@@ -2,6 +2,7 @@ import { TRPCError } from "@trpc/server"
 
 import { idSchema } from "~/lib/schemas"
 import {
+  bulkUpdateMediaChapterVolumesSchema,
   getMediaChapterByIdSchema,
   getMediaChaptersByMediaIdSchema,
   insertMediaChapterSchema,
@@ -83,6 +84,30 @@ export const mediaChaptersRouter = createTRPCRouter({
       })
 
       return result
+    }),
+
+  updateVolumes: protectedProcedure
+    .meta({ resource: "mediaChapters", action: "update" })
+    .input(bulkUpdateMediaChapterVolumesSchema)
+    .mutation(async ({ ctx, input }) => {
+      const chapterIds = input.flatMap((c) => c.ids)
+      const chapters = await ctx.db.mediaChapter.findMany({
+        where: { id: { in: chapterIds } },
+      })
+
+      if (chapters.length !== chapterIds.length) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Um ou vários capítulos não existem.",
+        })
+      }
+
+      for (const volume of input) {
+        await ctx.db.mediaChapter.updateMany({
+          data: { volume: volume.volume },
+          where: { id: { in: volume.ids } },
+        })
+      }
     }),
 
   getById: publicProcedure
