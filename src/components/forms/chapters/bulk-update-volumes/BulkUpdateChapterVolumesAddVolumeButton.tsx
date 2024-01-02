@@ -9,8 +9,6 @@ export const BulkUpdateChapterVolumesAddVolumeButton = () => {
     useFormikContext<BulkUpdateMediaChapterVolumesSchema>()
 
   const handlePress = useCallback(() => {
-    const volumesCount = values.length
-
     const highestVolume = values.reduce(
       (acc, curr) => Math.max(acc, curr.volume),
       0,

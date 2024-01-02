@@ -12,6 +12,7 @@ import {
 import { FormSubmit } from "~/lib/types"
 import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils"
 
+import { usePathname, useRouter } from "next/navigation"
 import { api } from "~/lib/trpc/client"
 import { BulkUpdateChapterVolumesFormFields } from "./BulkUpdateChapterVolumesFormFields"
 
@@ -21,6 +22,8 @@ type Props = {
 
 export const BulkUpdateChapterVolumesForm = ({ chapters }: Props) => {
   const { mutateAsync } = api.mediaChapters.updateVolumes.useMutation()
+  const router = useRouter()
+  const pathname = usePathname()
 
   const initialValues: BulkUpdateMediaChapterVolumesSchema = [
     { volume: 1, ids: [] },
@@ -52,6 +55,8 @@ export const BulkUpdateChapterVolumesForm = ({ chapters }: Props) => {
       success: "Capítulos atualizados com sucesso.",
       error: "Erro ao atualizar capítulos.",
     })
+
+    router.push(pathname.replace("/volumes", "/scans"))
   }
 
   return (
