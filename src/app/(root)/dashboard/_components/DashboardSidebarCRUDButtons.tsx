@@ -25,6 +25,7 @@ export const DashboardSidebarCRUDButtons = ({ items }: Props) => {
     <>
       {items.map(({ label, href, type, isDisabled }) => (
         <Button
+          key={href}
           as={NextLink}
           endContent={
             type === "create" ? (

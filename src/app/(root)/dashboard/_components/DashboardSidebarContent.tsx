@@ -24,7 +24,12 @@ export const DashboardSidebarContent = ({ className }: Props) => {
 
   return (
     <Accordion
-      defaultExpandedKeys={["medias", "mediaChapters", "scans"]}
+      defaultExpandedKeys={[
+        "medias",
+        "bulkMediaChapters",
+        "mediaChapters",
+        "scans",
+      ]}
       className={container({ className })}
       selectionMode="multiple"
       showDivider={false}
@@ -68,18 +73,38 @@ export const DashboardSidebarContent = ({ className }: Props) => {
           title: categorytitle(),
           indicator: categoryIndicator(),
         }}
+        title="— Capítulos (bulk)"
+        key="bulkMediaChapters"
+      >
+        <DashboardSidebarCRUDButtons
+          items={[
+            {
+              label: "Upar",
+              href: "/dashboard/chapters/bulk-upload",
+              type: "create",
+            },
+            {
+              label: "Modificar",
+              href: "/dashboard/chapters/bulk-edit",
+              type: "update",
+            },
+          ]}
+        />
+      </AccordionItem>
+
+      {/* MEDIA CHAPTERS */}
+      <AccordionItem
+        classNames={{
+          title: categorytitle(),
+          indicator: categoryIndicator(),
+        }}
         title="— Capítulos"
         key="mediaChapters"
       >
         <DashboardSidebarCRUDButtons
           items={[
             {
-              label: "Upar em massa",
-              href: "/dashboard/chapters/bulk-upload",
-              type: "create",
-            },
-            {
-              label: "Adicionar",
+              label: "Upar",
               href: "/dashboard/chapters/upload",
               type: "create",
             },
