@@ -4,7 +4,7 @@ import { PlusIcon } from "lucide-react"
 import { useCallback } from "react"
 import { BulkUpdateMediaChapterVolumesSchema } from "~/lib/schemas"
 
-export const BulkUpdateChapterVolumesAddVolumeButton = () => {
+export const BulkUpdateChapterVolumesAddButton = () => {
   const { values, setValues } =
     useFormikContext<BulkUpdateMediaChapterVolumesSchema>()
 

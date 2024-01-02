@@ -7,7 +7,7 @@ import { RangeFormField } from "~/components/generics/inputs/RangeFormField"
 
 import { useFormikContext } from "formik"
 import { BulkUpdateMediaChapterVolumesSchema } from "~/lib/schemas"
-import { BulkUpdateChapterVolumesAddVolumeButton } from "./BulkUpdateChapterVolumesAddVolumeButton"
+import { BulkUpdateChapterVolumesAddButton } from "./BulkUpdateChapterVolumesAddButton"
 
 type Props = {
   chapters: MediaChapter[]
@@ -31,7 +31,7 @@ export const BulkUpdateChapterVolumesFormFields = ({ chapters }: Props) => {
       </Accordion>
       <Form.Category
         title="Volumes"
-        actions={<BulkUpdateChapterVolumesAddVolumeButton />}
+        actions={<BulkUpdateChapterVolumesAddButton />}
       >
         <Form.Col>
           {values
