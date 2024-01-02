@@ -2,16 +2,12 @@
 
 import { Button } from "@nextui-org/react"
 import Link from "next/link"
-import { useCallback, useState } from "react"
+import { useState } from "react"
 import { MediaSearchAutocomplete } from "~/components/navbar/search/MediaSearchAutocomplete"
 import { SearchedMedia } from "~/lib/types"
 
 export default function Page() {
-  const [mediaId, setMediaId] = useState<string | null>(null)
-
-  const handleSelectionChange = useCallback((media: SearchedMedia) => {
-    setMediaId(media.id)
-  }, [])
+  const [media, setMedia] = useState<SearchedMedia | null>(null)
 
   return (
     <div className="flex flex-col gap-12">
@@ -19,14 +15,14 @@ export default function Page() {
       <div className="flex flex-col gap-8">
         <MediaSearchAutocomplete
           className="w-full"
-          onSelectionChange={handleSelectionChange}
+          onSelectionChange={setMedia}
         />
-        {mediaId && (
+        {media && (
           <div className="flex gap-4">
-            <Button as={Link} href={`bulk-edit/${mediaId}/volumes`}>
+            <Button as={Link} href={`bulk-edit/${media.id}/volumes`}>
               Volumes
             </Button>
-            <Button as={Link} href={`bulk-edit/${mediaId}/scans`}>
+            <Button as={Link} href={`bulk-edit/${media.id}/scans`}>
               Scans
             </Button>
           </div>
