@@ -1,7 +1,7 @@
 "use client"
 
 import { MediaChapter } from "@prisma/client"
-import { usePathname, useRouter } from "next/navigation"
+import { TRPCClientError } from "@trpc/client"
 import { toast } from "sonner"
 import { toFormikValidationSchema } from "zod-formik-adapter"
 
@@ -14,7 +14,6 @@ import { api } from "~/lib/trpc/client"
 import { FormSubmit } from "~/lib/types"
 import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils"
 
-import { TRPCClientError } from "@trpc/client"
 import { BulkUpdateChapterVolumesFormFields } from "./BulkUpdateChapterVolumesFormFields"
 
 type Props = {
@@ -23,8 +22,6 @@ type Props = {
 
 export const BulkUpdateChapterVolumesForm = ({ chapters }: Props) => {
   const { mutateAsync } = api.mediaChapters.updateVolumes.useMutation()
-  const router = useRouter()
-  const pathname = usePathname()
 
   const initialValues: BulkUpdateMediaChapterVolumesSchema = [
     { volume: 1, ids: [] },
@@ -52,11 +49,7 @@ export const BulkUpdateChapterVolumesForm = ({ chapters }: Props) => {
 
     toast.promise(mutateAsync(values), {
       loading: "Atualizando capítulos...",
-      success: () => {
-        router.push(pathname.replace("/volumes", "/scans"))
-
-        return "Capítulos atualizados com sucesso."
-      },
+      success: "Capítulos atualizados com sucesso.",
       error: (error) => {
         if (error instanceof TRPCClientError) {
           return error.message
