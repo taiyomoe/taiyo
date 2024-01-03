@@ -1,20 +1,26 @@
 import { Accordion, AccordionItem, Divider } from "@nextui-org/react"
 import { MediaChapter } from "@prisma/client"
+import { useFormikContext } from "formik"
+import { useCallback } from "react"
+
+import { FormAddButton } from "~/components/generics/buttons/FormAddButton"
 import { SubmitButton } from "~/components/generics/buttons/SubmitButton"
 import { Form } from "~/components/generics/form/Form"
 import { RangeFormField } from "~/components/generics/inputs/RangeFormField"
-
-import { useFormikContext } from "formik"
 import { ScansFormField } from "~/components/generics/inputs/ScansFormField"
 import { BulkUpdateMediaChapterScansSchema } from "~/lib/schemas"
-import { BulkUpdateChapterScansAddButton } from "./BulkUpdateChapterScansAddButton"
 
 type Props = {
   chapters: MediaChapter[]
 }
 
 export const BulkUpdateChapterScansFormFields = ({ chapters }: Props) => {
-  const { values } = useFormikContext<BulkUpdateMediaChapterScansSchema>()
+  const { values, setValues } =
+    useFormikContext<BulkUpdateMediaChapterScansSchema>()
+
+  const handlePress = useCallback(() => {
+    setValues((prev) => [...prev, { scanIds: [], ids: [] }])
+  }, [setValues])
 
   return (
     <Form.Layout>
@@ -31,7 +37,7 @@ export const BulkUpdateChapterScansFormFields = ({ chapters }: Props) => {
       </Accordion>
       <Form.Category
         title="Scans"
-        actions={<BulkUpdateChapterScansAddButton />}
+        actions={<FormAddButton onPress={handlePress} />}
       >
         <Form.Col>
           {values.map((_, i) => (

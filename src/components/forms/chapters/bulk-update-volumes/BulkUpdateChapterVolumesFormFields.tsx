@@ -1,20 +1,31 @@
 import { Accordion, AccordionItem } from "@nextui-org/react"
 import { MediaChapter } from "@prisma/client"
+import { useFormikContext } from "formik"
+import { useCallback } from "react"
+
+import { FormAddButton } from "~/components/generics/buttons/FormAddButton"
 import { SubmitButton } from "~/components/generics/buttons/SubmitButton"
 import { Form } from "~/components/generics/form/Form"
 import { InputFormField } from "~/components/generics/form/InputFormField"
 import { RangeFormField } from "~/components/generics/inputs/RangeFormField"
-
-import { useFormikContext } from "formik"
 import { BulkUpdateMediaChapterVolumesSchema } from "~/lib/schemas"
-import { BulkUpdateChapterVolumesAddButton } from "./BulkUpdateChapterVolumesAddButton"
 
 type Props = {
   chapters: MediaChapter[]
 }
 
 export const BulkUpdateChapterVolumesFormFields = ({ chapters }: Props) => {
-  const { values } = useFormikContext<BulkUpdateMediaChapterVolumesSchema>()
+  const { values, setValues } =
+    useFormikContext<BulkUpdateMediaChapterVolumesSchema>()
+
+  const handlePress = useCallback(() => {
+    const highestVolume = values.reduce(
+      (acc, curr) => Math.max(acc, curr.volume),
+      0,
+    )
+
+    setValues((prev) => [...prev, { volume: highestVolume + 1, ids: [] }])
+  }, [values, setValues])
 
   return (
     <Form.Layout>
@@ -31,7 +42,7 @@ export const BulkUpdateChapterVolumesFormFields = ({ chapters }: Props) => {
       </Accordion>
       <Form.Category
         title="Volumes"
-        actions={<BulkUpdateChapterVolumesAddButton />}
+        actions={<FormAddButton onPress={handlePress} />}
       >
         <Form.Col>
           {values
