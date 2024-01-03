@@ -2,7 +2,7 @@ import { Accordion, AccordionItem } from "@nextui-org/accordion"
 import { Divider } from "@nextui-org/divider"
 import { MediaChapter } from "@prisma/client"
 import { useFormikContext } from "formik"
-import { useCallback } from "react"
+import { Fragment, useCallback } from "react"
 
 import { FormAddButton } from "~/components/generics/buttons/FormAddButton"
 import { FormDeleteButton } from "~/components/generics/buttons/FormDeleteButton"
@@ -57,8 +57,8 @@ export const BulkUpdateChapterVolumesFormFields = ({ chapters }: Props) => {
           {values
             .sort((a, b) => b.volume - a.volume)
             .map((_, i) => (
-              <>
-                <Form.Row key={_.volume} className="items-start">
+              <Fragment key={_.volume}>
+                <Form.Row className="items-start">
                   <InputFormField
                     name={`[${i}].volume`}
                     label="Volume"
@@ -72,7 +72,7 @@ export const BulkUpdateChapterVolumesFormFields = ({ chapters }: Props) => {
                   />
                 </Form.Row>
                 {i < values.length - 1 && <Divider />}
-              </>
+              </Fragment>
             ))}
         </Form.Col>
       </Form.Category>

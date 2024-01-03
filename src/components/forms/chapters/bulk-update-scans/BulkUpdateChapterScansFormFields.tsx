@@ -2,7 +2,7 @@ import { Accordion, AccordionItem } from "@nextui-org/accordion"
 import { Divider } from "@nextui-org/divider"
 import { MediaChapter } from "@prisma/client"
 import { useFormikContext } from "formik"
-import { useCallback, useEffect } from "react"
+import { Fragment, useCallback, useEffect } from "react"
 
 import { FormAddButton } from "~/components/generics/buttons/FormAddButton"
 import { FormDeleteButton } from "~/components/generics/buttons/FormDeleteButton"
@@ -50,9 +50,9 @@ export const BulkUpdateChapterScansFormFields = ({ chapters }: Props) => {
       >
         <Form.Col>
           {values.map((_, i) => (
-            <>
-              {/* biome-ignore lint/suspicious/noArrayIndexKey: we have nothing better to use as a key here */}
-              <Form.Row key={i} className="items-start">
+            // biome-ignore lint/suspicious/noArrayIndexKey: we have nothing better to use as a key here
+            <Fragment key={i}>
+              <Form.Row className="items-start">
                 <ScansFormField name={`[${i}].scanIds`} />
                 <div className="w-full md:max-w-lg">
                   <RangeFormField name={`[${i}].ids`} chapters={chapters} />
@@ -60,7 +60,7 @@ export const BulkUpdateChapterScansFormFields = ({ chapters }: Props) => {
                 <FormDeleteButton className="mt-7" onPress={handleDelete(i)} />
               </Form.Row>
               {i < values.length - 1 && <Divider />}
-            </>
+            </Fragment>
           ))}
         </Form.Col>
       </Form.Category>
