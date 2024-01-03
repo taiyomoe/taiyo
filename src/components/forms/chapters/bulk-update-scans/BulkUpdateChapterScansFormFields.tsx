@@ -1,9 +1,11 @@
-import { Accordion, AccordionItem, Divider } from "@nextui-org/react"
+import { Accordion, AccordionItem } from "@nextui-org/accordion"
+import { Divider } from "@nextui-org/divider"
 import { MediaChapter } from "@prisma/client"
 import { useFormikContext } from "formik"
-import { useCallback } from "react"
+import { useCallback, useEffect } from "react"
 
 import { FormAddButton } from "~/components/generics/buttons/FormAddButton"
+import { FormDeleteButton } from "~/components/generics/buttons/FormDeleteButton"
 import { SubmitButton } from "~/components/generics/buttons/SubmitButton"
 import { Form } from "~/components/generics/form/Form"
 import { RangeFormField } from "~/components/generics/inputs/RangeFormField"
@@ -15,12 +17,19 @@ type Props = {
 }
 
 export const BulkUpdateChapterScansFormFields = ({ chapters }: Props) => {
-  const { values, setValues } =
+  const { values, setValues, setErrors } =
     useFormikContext<BulkUpdateMediaChapterScansSchema>()
 
-  const handlePress = useCallback(() => {
+  const handleAdd = useCallback(() => {
     setValues((prev) => [...prev, { scanIds: [], ids: [] }])
   }, [setValues])
+
+  const handleDelete = useCallback(
+    (index: number) => () => {
+      setValues((prev) => prev.filter((_, i) => i !== index))
+    },
+    [setValues],
+  )
 
   return (
     <Form.Layout>
@@ -37,7 +46,7 @@ export const BulkUpdateChapterScansFormFields = ({ chapters }: Props) => {
       </Accordion>
       <Form.Category
         title="Scans"
-        actions={<FormAddButton onPress={handlePress} />}
+        actions={<FormAddButton onPress={handleAdd} />}
       >
         <Form.Col>
           {values.map((_, i) => (
@@ -48,6 +57,7 @@ export const BulkUpdateChapterScansFormFields = ({ chapters }: Props) => {
                 <div className="w-full md:max-w-lg">
                   <RangeFormField name={`[${i}].ids`} chapters={chapters} />
                 </div>
+                <FormDeleteButton className="mt-7" onPress={handleDelete(i)} />
               </Form.Row>
               {i < values.length - 1 && <Divider />}
             </>

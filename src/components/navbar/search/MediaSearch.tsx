@@ -6,7 +6,7 @@ export const MediaSearch = () => {
   const device = useDevice()
 
   if (device?.isAboveTablet) {
-    return <MediaSearchAutocomplete itemsHrefPrefix={"/media"} />
+    return <MediaSearchAutocomplete href={(mediaId) => `/media/${mediaId}`} />
   }
 
   return <MediaSearchModal />
