@@ -41,6 +41,13 @@ export const bulkUpdateMediaChapterVolumesSchema = z.array(
   }),
 )
 
+export const bulkUpdateMediaChapterScansSchema = z.array(
+  z.object({
+    scanIds: z.string().uuid().array(),
+    ids: z.string().uuid().array(),
+  }),
+)
+
 export const getMediaChapterByIdSchema = z.string()
 
 export const getMediaChaptersByMediaIdSchema = z.object({
@@ -60,3 +67,5 @@ export type InsertMediaChapterFormSchema =
 export type UpdateMediaChapterSchema = typeof updateMediaChapterSchema._type
 export type BulkUpdateMediaChapterVolumesSchema =
   typeof bulkUpdateMediaChapterVolumesSchema._type
+export type BulkUpdateMediaChapterScansSchema =
+  typeof bulkUpdateMediaChapterScansSchema._type

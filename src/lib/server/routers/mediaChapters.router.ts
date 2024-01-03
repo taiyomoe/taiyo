@@ -2,6 +2,7 @@ import { TRPCError } from "@trpc/server"
 
 import { idSchema } from "~/lib/schemas"
 import {
+  bulkUpdateMediaChapterScansSchema,
   bulkUpdateMediaChapterVolumesSchema,
   getMediaChapterByIdSchema,
   getMediaChaptersByMediaIdSchema,
@@ -75,10 +76,7 @@ export const mediaChaptersRouter = createTRPCRouter({
         data: {
           ...input,
           title: input.title === "" ? null : input.title,
-          scans: {
-            disconnect: mediaChapter.scans.map((s) => ({ id: s.id })),
-            connect: scanIds.map((scanId) => ({ id: scanId })),
-          },
+          scans: { set: scanIds.map((scanId) => ({ id: scanId })) },
         },
         where: { id: input.id },
       })
@@ -102,12 +100,59 @@ export const mediaChaptersRouter = createTRPCRouter({
         })
       }
 
-      for (const volume of input) {
+      for (const chapters of input) {
         await ctx.db.mediaChapter.updateMany({
-          data: { volume: volume.volume },
-          where: { id: { in: volume.ids } },
+          data: { volume: chapters.volume },
+          where: { id: { in: chapters.ids } },
         })
       }
+    }),
+
+  updateScans: protectedProcedure
+    .meta({ resource: "mediaChapters", action: "update" })
+    .input(bulkUpdateMediaChapterScansSchema)
+    .mutation(async ({ ctx, input }) => {
+      const chapterIds = input.flatMap((c) => c.ids)
+      const chapters = await ctx.db.mediaChapter.findMany({
+        where: { id: { in: chapterIds } },
+      })
+
+      if (chapters.length !== chapterIds.length) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Um ou vários capítulos não existem.",
+        })
+      }
+
+      const scanIds = input.flatMap((c) => c.scanIds)
+      const scans = await ctx.db.scan.findMany({
+        where: { id: { in: input.flatMap((c) => c.scanIds) } },
+      })
+
+      if (scans.length !== scanIds.length) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Uma ou várias scans não existem.",
+        })
+      }
+
+      const mutations = []
+      for (const chapters of input) {
+        for (const chapterId of chapters.ids) {
+          mutations.push(
+            ctx.db.mediaChapter.update({
+              data: {
+                scans: {
+                  set: chapters.scanIds.map((scanId) => ({ id: scanId })),
+                },
+              },
+              where: { id: chapterId },
+            }),
+          )
+        }
+      }
+
+      await ctx.db.$transaction(mutations)
     }),
 
   getById: publicProcedure

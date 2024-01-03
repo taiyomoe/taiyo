@@ -5,7 +5,7 @@ import { SubmitButton } from "~/components/generics/buttons/SubmitButton"
 import { Form } from "~/components/generics/form/Form"
 import { InputFormField } from "~/components/generics/form/InputFormField"
 import { SelectFormField } from "~/components/generics/form/SelectFormField"
-import { ScansSearchAutocomplete } from "~/components/scans/ScansSearchAutocomplete"
+import { ScansFormField } from "~/components/generics/inputs/ScansFormField"
 
 type Props = {
   scans: Scan[]
@@ -17,7 +17,7 @@ export const UpdateMediaChapterFormFields = ({ scans }: Props) => {
       <Form.Category>
         <InputFormField name="id" label="ID" isDisabled />
         <InputFormField name="title" label="Título" />
-        <ScansSearchAutocomplete scans={scans} />
+        <ScansFormField scans={scans} />
       </Form.Category>
       <Form.Category title="Detalhes">
         <Form.Row>
