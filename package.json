@@ -32,7 +32,7 @@
     "embla-carousel-react": "^8.0.0-rc17",
     "encoding": "^0.1.13",
     "formik": "^2.4.5",
-    "framer-motion": "^10.17.0",
+    "framer-motion": "^10.17.4",
     "jotai": "^2.6.1",
     "lodash-es": "^4.17.21",
     "lucide-react": "^0.303.0",
