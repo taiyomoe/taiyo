@@ -1,7 +1,6 @@
 "use client"
 
 import { MediaChapter } from "@prisma/client"
-import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { toFormikValidationSchema } from "zod-formik-adapter"
 
@@ -22,7 +21,6 @@ type Props = {
 
 export const BulkUpdateChapterScansForm = ({ chapters }: Props) => {
   const { mutateAsync } = api.mediaChapters.updateScans.useMutation()
-  const router = useRouter()
 
   const initialValues: BulkUpdateMediaChapterScansSchema = [
     { scanIds: [], ids: [] },
