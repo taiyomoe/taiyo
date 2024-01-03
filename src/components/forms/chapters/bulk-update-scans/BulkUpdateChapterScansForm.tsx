@@ -1,6 +1,7 @@
 "use client"
 
 import { MediaChapter } from "@prisma/client"
+import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { toFormikValidationSchema } from "zod-formik-adapter"
 
@@ -9,10 +10,9 @@ import {
   BulkUpdateMediaChapterScansSchema,
   bulkUpdateMediaChapterScansSchema,
 } from "~/lib/schemas"
+import { api } from "~/lib/trpc/client"
 import { FormSubmit } from "~/lib/types"
 
-import { useRouter } from "next/navigation"
-import { api } from "~/lib/trpc/client"
 import { BulkUpdateChapterScansFormFields } from "./BulkUpdateChapterScansFormFields"
 
 type Props = {
