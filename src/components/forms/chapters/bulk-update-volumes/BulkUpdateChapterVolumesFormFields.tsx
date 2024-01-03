@@ -55,7 +55,7 @@ export const BulkUpdateChapterVolumesFormFields = ({ chapters }: Props) => {
       >
         <Form.Col>
           {values
-            .sort((a, b) => b.volume - a.volume)
+            .sort((a, b) => a.volume - b.volume)
             .map((_, i) => (
               <Fragment key={_.volume}>
                 <Form.Row className="items-start">
