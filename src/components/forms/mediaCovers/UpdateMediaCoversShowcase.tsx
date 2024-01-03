@@ -17,7 +17,7 @@ type Props = {
 export const UpdateMediaCoversShowcase = ({ media }: Props) => {
   const { covers } = useMediaUpdateStore()
   const volumes = useMemo(
-    () => MediaCoverUtils.computeVolumeGroups(covers),
+    () => MediaCoverUtils.computeVolumes(covers),
     [covers],
   )
 
