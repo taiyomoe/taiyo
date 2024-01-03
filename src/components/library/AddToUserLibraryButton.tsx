@@ -19,11 +19,12 @@ export const AddToUserLibraryButton = ({ media }: Props) => {
   const [entry, setEntry] = useState<UserLibraryMedia | null>(null)
   const { data: session } = useSession()
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: we want this to run only once
   useEffect(() => {
     if (media.userLibrary && !entry) {
       updateEntry(media, media.userLibrary.status)
     }
-  })
+  }, [])
 
   if (!session) return null
 

@@ -3,8 +3,8 @@ import { ContentRating, Flag, Languages } from "@prisma/client"
 import { Form } from "~/components/generics/form/Form"
 import { InputFormField } from "~/components/generics/form/InputFormField"
 import { SelectFormField } from "~/components/generics/form/SelectFormField"
+import { ScansFormField } from "~/components/generics/inputs/ScansFormField"
 import { MediasSearchAutocomplete } from "~/components/medias/MediasSearchAutocomplete"
-import { ScansSearchAutocomplete } from "~/components/scans/ScansSearchAutocomplete"
 import { ImageCard } from "~/components/ui/upload/ImageCard"
 import { ImageDropzone } from "~/components/ui/upload/ImageDropzone"
 
@@ -14,7 +14,7 @@ export const UploadChapterFormFields = () => {
       <Form.Category>
         <MediasSearchAutocomplete />
         <InputFormField name="title" label="Título" />
-        <ScansSearchAutocomplete />
+        <ScansFormField />
       </Form.Category>
       <Form.Category title="Detalhes">
         <Form.Row>

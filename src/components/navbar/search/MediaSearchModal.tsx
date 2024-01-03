@@ -34,7 +34,7 @@ export const MediaSearchModal = () => {
           </ModalHeader>
           <ModalBody className="p-0">
             <MediaSearchAutocomplete
-              itemsHrefPrefix="/media"
+              href={(mediaId) => `/media/${mediaId}`}
               className="w-full"
               allowsCustomValue
             />

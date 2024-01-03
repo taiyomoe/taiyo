@@ -41,20 +41,31 @@ export default withAuth(
         switch (true) {
           case pathname === "/dashboard":
             return PermissionUtils.canAccessDashboard(token.role.permissions)
+
+          // Medias
           case pathname === "/dashboard/medias/import":
             return token.role.permissions.includes("medias:create")
           case pathname === "/dashboard/medias/add":
             return token.role.permissions.includes("medias:create")
           case pathname.startsWith("/dashboard/medias/edit"):
             return token.role.permissions.includes("medias:update:any")
-          case pathname.startsWith("/dashboard/chapters/upload"):
-            return token.role.permissions.includes("mediaChapters:create")
+
+          // Bulk chapters
           case pathname === "/dashboard/chapters/bulk-upload":
+            return token.role.permissions.includes("mediaChapters:create")
+          case pathname.startsWith("/dashboard/chapters/bulk-edit"):
+            return token.role.permissions.includes("mediaChapters:update:any")
+
+          // Chapters
+          case pathname.startsWith("/dashboard/chapters/upload"):
             return token.role.permissions.includes("mediaChapters:create")
           case pathname.startsWith("/dashboard/chapters/edit"):
             return token.role.permissions.includes("mediaChapters:update:any")
+
+          // Scans
           case pathname === "/dashboard/scans/add":
             return token.role.permissions.includes("scans:create")
+
           default:
             return false
         }
