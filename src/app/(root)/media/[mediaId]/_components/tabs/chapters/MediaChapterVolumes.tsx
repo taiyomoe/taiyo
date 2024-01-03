@@ -19,7 +19,7 @@ export const MediaChapterVolumes = ({
   setSelectedKeys,
 }: Props) => {
   const { chapters, totalPages } = chaptersPagination
-  const computedVolumes = MediaChapterUtils.computeVolumes(chapters)
+  const computedVolumes = MediaChapterUtils.computeVolumeGroups(chapters)
 
   return (
     <div>

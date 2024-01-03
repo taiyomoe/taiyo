@@ -62,7 +62,7 @@ export const InputFormField = ({
     rawValue !== undefined && rawValue !== null
       ? rest.type === "date"
         ? DateUtils.formatToInputValue(new Date(rawValue))
-        : rawValue
+        : rawValue.toString()
       : ""
 
   return (

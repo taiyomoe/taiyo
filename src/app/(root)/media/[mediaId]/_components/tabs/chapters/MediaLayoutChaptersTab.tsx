@@ -36,9 +36,9 @@ export const MediaLayoutChaptersTab = ({ media }: Props) => {
 
   const volumeKeys = useMemo(
     () =>
-      MediaChapterUtils.computeVolumes(chaptersPagination?.chapters ?? []).map(
-        ({ volume }) => `volume-${volume}`,
-      ),
+      MediaChapterUtils.computeVolumeGroups(
+        chaptersPagination?.chapters ?? [],
+      ).map(({ volume }) => `volume-${volume}`),
     [chaptersPagination],
   )
 

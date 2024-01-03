@@ -1,6 +1,8 @@
+import { MediaChapter } from "@prisma/client"
 import { DateTime } from "luxon"
 
 import { env } from "~/lib/env.mjs"
+import { BulkUpdateMediaChapterVolumesSchema } from "~/lib/schemas"
 import type {
   MediaChapterGroups,
   MediaChapterLimited,
@@ -27,13 +29,44 @@ const getNavigation = (
   nextPage: currentPage === mediaChapter.pages.length ? null : currentPage + 1,
 })
 
+const getVolumes = (mediaChapters: { volume: number | null }[]) => {
+  const volumes = mediaChapters
+    .map((c) => c.volume)
+    .filter((v) => v !== null) as number[]
+
+  return [...new Set(volumes)].sort((a, b) => b - a)
+}
+
+const getDuplicatedChapters = (
+  input: BulkUpdateMediaChapterVolumesSchema,
+  mediaChapters: MediaChapter[],
+) => {
+  const duplicated: number[] = []
+
+  for (const volume of input) {
+    for (const id of volume.ids) {
+      if (input.some((v) => v !== volume && v.ids.includes(id))) {
+        duplicated.push(mediaChapters.find((c) => c.id === id)!.number)
+      }
+    }
+  }
+
+  duplicated.sort()
+
+  return duplicated
+}
+
+const getFromRange = (mediaChapters: MediaChapter[], range: number[]) => {
+  return mediaChapters.filter((c) => range.includes(c.number)).map((c) => c.id)
+}
+
 const computeUploadedTime = (mediaChapter: { createdAt: Date }) => {
   const uploadedAt = DateTime.fromJSDate(mediaChapter.createdAt)
 
   return uploadedAt.toRelative({ locale: "pt", style: "short" })
 }
 
-const computeVolumes = (mediaChapters: MediaLimitedChapter[]) => {
+const computeVolumeGroups = (mediaChapters: MediaLimitedChapter[]) => {
   const volumes: Record<string, MediaLimitedChapter[]> = {}
 
   for (const mediaChapter of mediaChapters) {
@@ -105,7 +138,10 @@ export const MediaChapterUtils = {
   getUrl,
   getUploadEndpoint,
   getNavigation,
+  getVolumes,
+  getDuplicatedChapters,
+  getFromRange,
   computeUploadedTime,
-  computeVolumes,
+  computeVolumeGroups,
   parseUrl,
 }

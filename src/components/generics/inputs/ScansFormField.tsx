@@ -7,33 +7,32 @@ import type { Key } from "@react-types/shared"
 import { useFormikContext } from "formik"
 import { useCallback, useEffect, useState } from "react"
 
-import type { InsertMediaChapterFormSchema } from "~/lib/schemas"
 import { api } from "~/lib/trpc/client"
 import type { ScansIndexItem } from "~/lib/types"
 
-const scansSearchAutocomplete = tv({
+const scansFormField = tv({
   slots: {
-    container: "flex flex-col gap-4",
+    container: "flex flex-col gap-4 w-full",
     chipsContainer: "flex flex-wrap gap-2",
     label: "z-0",
   },
 })
 
 type Props = {
+  name?: string
   scans?: Scan[]
 }
 
-export const ScansSearchAutocomplete = ({ scans }: Props) => {
-  const { values, setFieldValue } =
-    useFormikContext<InsertMediaChapterFormSchema>()
+export const ScansFormField = ({ name = "scanIds", scans }: Props) => {
+  const { values, setFieldValue } = useFormikContext<{ scanIds: string[] }>()
   const { mutateAsync } = api.scans.search.useMutation()
   const [selectedItems, setSelectedItems] = useState<ScansIndexItem[]>(
     values.scanIds
-      .map((id) => scans?.find((scan) => scan.id === id))
-      .filter(Boolean),
+      ?.map((id) => scans?.find((scan) => scan.id === id))
+      .filter(Boolean) ?? [],
   )
 
-  const { container, chipsContainer, label } = scansSearchAutocomplete()
+  const { container, chipsContainer, label } = scansFormField()
 
   const list = useAsyncList<ScansIndexItem>({
     load: async ({ filterText }) => {
@@ -77,10 +76,10 @@ export const ScansSearchAutocomplete = ({ scans }: Props) => {
 
   useEffect(() => {
     void setFieldValue(
-      "scanIds",
+      name,
       selectedItems.map((item) => item.id),
     )
-  }, [selectedItems, setFieldValue])
+  }, [name, selectedItems, setFieldValue])
 
   return (
     <div className={container()}>
