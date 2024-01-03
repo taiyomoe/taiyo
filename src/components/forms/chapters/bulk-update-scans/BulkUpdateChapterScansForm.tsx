@@ -13,6 +13,7 @@ import {
 import { api } from "~/lib/trpc/client"
 import { FormSubmit } from "~/lib/types"
 
+import { TRPCClientError } from "@trpc/client"
 import { BulkUpdateChapterScansFormFields } from "./BulkUpdateChapterScansFormFields"
 
 type Props = {
@@ -25,21 +26,22 @@ export const BulkUpdateChapterScansForm = ({ chapters }: Props) => {
 
   const initialValues: BulkUpdateMediaChapterScansSchema = [
     { scanIds: [], ids: [] },
-    { scanIds: [], ids: [] },
   ]
 
   const handleSubmit: FormSubmit<BulkUpdateMediaChapterScansSchema> = async (
     values,
   ) => {
-    console.log(values)
-
     toast.promise(mutateAsync(values), {
       loading: "Atualizando capítulos...",
       success: "Capítulos atualizados com sucesso.",
-      error: "Erro ao atualizar capítulos.",
-    })
+      error: (err) => {
+        if (err instanceof TRPCClientError) {
+          return err.message
+        }
 
-    router.push("/dashboard/chapters/bulk-edit")
+        return "Erro ao atualizar capítulos."
+      },
+    })
   }
 
   return (

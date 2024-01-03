@@ -14,6 +14,7 @@ import { api } from "~/lib/trpc/client"
 import { FormSubmit } from "~/lib/types"
 import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils"
 
+import { TRPCClientError } from "@trpc/client"
 import { BulkUpdateChapterVolumesFormFields } from "./BulkUpdateChapterVolumesFormFields"
 
 type Props = {
@@ -27,7 +28,6 @@ export const BulkUpdateChapterVolumesForm = ({ chapters }: Props) => {
 
   const initialValues: BulkUpdateMediaChapterVolumesSchema = [
     { volume: 1, ids: [] },
-    { volume: 2, ids: [] },
   ]
 
   const handleSubmit: FormSubmit<BulkUpdateMediaChapterVolumesSchema> = async (
@@ -52,11 +52,19 @@ export const BulkUpdateChapterVolumesForm = ({ chapters }: Props) => {
 
     toast.promise(mutateAsync(values), {
       loading: "Atualizando capítulos...",
-      success: "Capítulos atualizados com sucesso.",
-      error: "Erro ao atualizar capítulos.",
-    })
+      success: () => {
+        router.push(pathname.replace("/volumes", "/scans"))
 
-    router.push(pathname.replace("/volumes", "/scans"))
+        return "Capítulos atualizados com sucesso."
+      },
+      error: (error) => {
+        if (error instanceof TRPCClientError) {
+          return error.message
+        }
+
+        return "Erro ao atualizar capítulos."
+      },
+    })
   }
 
   return (

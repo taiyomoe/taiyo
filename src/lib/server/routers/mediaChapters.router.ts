@@ -88,7 +88,7 @@ export const mediaChaptersRouter = createTRPCRouter({
     .meta({ resource: "mediaChapters", action: "update" })
     .input(bulkUpdateMediaChapterVolumesSchema)
     .mutation(async ({ ctx, input }) => {
-      const chapterIds = input.flatMap((c) => c.ids)
+      const chapterIds = [...new Set(input.flatMap((c) => c.ids))]
       const chapters = await ctx.db.mediaChapter.findMany({
         where: { id: { in: chapterIds } },
       })
@@ -112,7 +112,7 @@ export const mediaChaptersRouter = createTRPCRouter({
     .meta({ resource: "mediaChapters", action: "update" })
     .input(bulkUpdateMediaChapterScansSchema)
     .mutation(async ({ ctx, input }) => {
-      const chapterIds = input.flatMap((c) => c.ids)
+      const chapterIds = [...new Set(input.flatMap((c) => c.ids))]
       const chapters = await ctx.db.mediaChapter.findMany({
         where: { id: { in: chapterIds } },
       })
@@ -124,9 +124,9 @@ export const mediaChaptersRouter = createTRPCRouter({
         })
       }
 
-      const scanIds = input.flatMap((c) => c.scanIds)
+      const scanIds = [...new Set(input.flatMap((c) => c.scanIds))]
       const scans = await ctx.db.scan.findMany({
-        where: { id: { in: input.flatMap((c) => c.scanIds) } },
+        where: { id: { in: scanIds } },
       })
 
       if (scans.length !== scanIds.length) {
@@ -136,14 +136,34 @@ export const mediaChaptersRouter = createTRPCRouter({
         })
       }
 
+      if (
+        (input.some((c) => c.scanIds.length === 0) &&
+          input.some((c) => c.ids.length === 0)) ||
+        input.some((c) => c.ids.length === 0)
+      ) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Você tem que selecionar pelo menos 1 capítulo.",
+        })
+      }
+
       const mutations = []
+      for (const chapterId of chapterIds) {
+        mutations.push(
+          ctx.db.mediaChapter.update({
+            data: { scans: { set: [] } },
+            where: { id: chapterId },
+          }),
+        )
+      }
+
       for (const chapters of input) {
         for (const chapterId of chapters.ids) {
           mutations.push(
             ctx.db.mediaChapter.update({
               data: {
                 scans: {
-                  set: chapters.scanIds.map((scanId) => ({ id: scanId })),
+                  connect: chapters.scanIds.map((scanId) => ({ id: scanId })),
                 },
               },
               where: { id: chapterId },
