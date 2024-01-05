@@ -1,7 +1,6 @@
-import { Image } from "@nextui-org/image"
-import NextImage from "next/image"
 import Link from "next/link"
 
+import { MediaImage } from "~/components/generics/images/MediaImage"
 import { MediaChapterScans } from "~/components/ui/MediaChapterScans"
 import { MediaChapterCardUploadedTime } from "~/components/ui/MediaChapterUploadedTime"
 import { MediaChapterUploader } from "~/components/ui/MediaChapterUploader"
@@ -17,15 +16,18 @@ type Props = {
 export const ReleaseCard = ({ release }: Props) => {
   return (
     <div className="flex gap-2">
-      <Link href={MediaChapterUtils.getUrl(release)}>
-        <Image
-          as={NextImage}
+      <Link href={MediaUtils.getUrl(release.media)}>
+        <MediaImage
           src={MediaCoverUtils.getUrl(release.media)}
-          className="max-h-[150px] min-h-[150px] min-w-[100px] object-cover"
-          height={150}
-          width={100}
-          radius="md"
+          classNames={{
+            height: "min-h-[150px] h-[150px]",
+            width: "min-w-[105px] w-[105px]",
+          }}
+          maxHeight={150}
+          maxWidth={105}
           alt="media's cover"
+          radius="sm"
+          isZoomed
         />
       </Link>
       <div className="flex grow flex-col justify-between py-1">
