@@ -41,7 +41,7 @@ export const AddScanForm = () => {
         return "Scan adicionada com sucesso!"
       },
       error: (error) => {
-        console.log(error)
+        console.error(error)
 
         return "Ocorreu um erro inesperado ao adicionar a scan."
       },

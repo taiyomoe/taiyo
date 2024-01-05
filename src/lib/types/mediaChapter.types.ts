@@ -97,3 +97,5 @@ const mediaChapterWithRelations =
 export type MediaChapterWithRelations = Prisma.MediaChapterGetPayload<
   typeof mediaChapterWithRelations
 >
+
+export type MediaChapterWithScans = MediaChapter & { scanIds: string[] }
