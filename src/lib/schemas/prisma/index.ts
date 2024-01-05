@@ -1,5 +1,5 @@
-import { Prisma } from "@prisma/client"
-import { z } from "zod"
+import { Prisma } from '@prisma/client';
+import { z } from 'zod';
 
 /////////////////////////////////////////
 // HELPER FUNCTIONS
@@ -8,19 +8,13 @@ import { z } from "zod"
 // JSON
 //------------------------------------------------------
 
-export type NullableJsonInput =
-  | Prisma.JsonValue
-  | null
-  | "JsonNull"
-  | "DbNull"
-  | Prisma.NullTypes.DbNull
-  | Prisma.NullTypes.JsonNull
+export type NullableJsonInput = Prisma.JsonValue | null | 'JsonNull' | 'DbNull' | Prisma.NullTypes.DbNull | Prisma.NullTypes.JsonNull;
 
 export const transformJsonNull = (v?: NullableJsonInput) => {
-  if (!v || v === "DbNull") return Prisma.DbNull
-  if (v === "JsonNull") return Prisma.JsonNull
-  return v
-}
+  if (!v || v === 'DbNull') return Prisma.DbNull;
+  if (v === 'JsonNull') return Prisma.JsonNull;
+  return v;
+};
 
 export const JsonValueSchema: z.ZodType<Prisma.JsonValue> = z.lazy(() =>
   z.union([
@@ -30,610 +24,139 @@ export const JsonValueSchema: z.ZodType<Prisma.JsonValue> = z.lazy(() =>
     z.literal(null),
     z.record(z.lazy(() => JsonValueSchema.optional())),
     z.array(z.lazy(() => JsonValueSchema)),
-  ]),
-)
+  ])
+);
 
-export type JsonValueType = z.infer<typeof JsonValueSchema>
+export type JsonValueType = z.infer<typeof JsonValueSchema>;
 
 export const NullableJsonValue = z
-  .union([JsonValueSchema, z.literal("DbNull"), z.literal("JsonNull")])
+  .union([JsonValueSchema, z.literal('DbNull'), z.literal('JsonNull')])
   .nullable()
-  .transform((v) => transformJsonNull(v))
+  .transform((v) => transformJsonNull(v));
 
-export type NullableJsonValueType = z.infer<typeof NullableJsonValue>
+export type NullableJsonValueType = z.infer<typeof NullableJsonValue>;
 
-export const InputJsonValueSchema: z.ZodType<Prisma.InputJsonValue> = z.lazy(
-  () =>
-    z.union([
-      z.string(),
-      z.number(),
-      z.boolean(),
-      z.object({ toJSON: z.function(z.tuple([]), z.any()) }),
-      z.record(z.lazy(() => z.union([InputJsonValueSchema, z.literal(null)]))),
-      z.array(z.lazy(() => z.union([InputJsonValueSchema, z.literal(null)]))),
-    ]),
-)
+export const InputJsonValueSchema: z.ZodType<Prisma.InputJsonValue> = z.lazy(() =>
+  z.union([
+    z.string(),
+    z.number(),
+    z.boolean(),
+    z.object({ toJSON: z.function(z.tuple([]), z.any()) }),
+    z.record(z.lazy(() => z.union([InputJsonValueSchema, z.literal(null)]))),
+    z.array(z.lazy(() => z.union([InputJsonValueSchema, z.literal(null)]))),
+  ])
+);
 
-export type InputJsonValueType = z.infer<typeof InputJsonValueSchema>
+export type InputJsonValueType = z.infer<typeof InputJsonValueSchema>;
+
 
 /////////////////////////////////////////
 // ENUMS
 /////////////////////////////////////////
 
-export const TransactionIsolationLevelSchema = z.enum([
-  "ReadUncommitted",
-  "ReadCommitted",
-  "RepeatableRead",
-  "Serializable",
-])
+export const TransactionIsolationLevelSchema = z.enum(['ReadUncommitted','ReadCommitted','RepeatableRead','Serializable']);
 
-export const UserScalarFieldEnumSchema = z.enum([
-  "id",
-  "createdAt",
-  "updatedAt",
-  "name",
-  "email",
-  "emailVerified",
-  "image",
-  "role",
-  "points",
-])
+export const UserScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','name','email','emailVerified','image','role','points']);
 
-export const UserSettingScalarFieldEnumSchema = z.enum([
-  "id",
-  "createdAt",
-  "updatedAt",
-  "birthDate",
-  "gender",
-  "city",
-  "country",
-  "about",
-  "contentRating",
-  "preferredTitleLanguage",
-  "userId",
-])
+export const UserSettingScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','birthDate','gender','city','country','about','contentRating','preferredTitleLanguage','userId']);
 
-export const UserLibraryScalarFieldEnumSchema = z.enum([
-  "reading",
-  "rereading",
-  "planToRead",
-  "completed",
-  "onHold",
-  "dropped",
-  "userId",
-])
+export const UserLibraryScalarFieldEnumSchema = z.enum(['reading','rereading','planToRead','completed','onHold','dropped','userId']);
 
-export const UserHistoryScalarFieldEnumSchema = z.enum([
-  "progression",
-  "mediaId",
-  "userId",
-])
+export const UserHistoryScalarFieldEnumSchema = z.enum(['progression','mediaId','userId']);
 
-export const AccountScalarFieldEnumSchema = z.enum([
-  "id",
-  "createdAt",
-  "updatedAt",
-  "type",
-  "refresh_token",
-  "access_token",
-  "expires_at",
-  "token_type",
-  "scope",
-  "id_token",
-  "session_state",
-  "provider",
-  "providerAccountId",
-  "userId",
-])
+export const AccountScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','type','refresh_token','access_token','expires_at','token_type','scope','id_token','session_state','provider','providerAccountId','userId']);
 
-export const SessionScalarFieldEnumSchema = z.enum([
-  "id",
-  "createdAt",
-  "updatedAt",
-  "sessionToken",
-  "expires",
-  "userId",
-])
+export const SessionScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','sessionToken','expires','userId']);
 
-export const VerificationTokenScalarFieldEnumSchema = z.enum([
-  "identifier",
-  "token",
-  "expires",
-])
+export const VerificationTokenScalarFieldEnumSchema = z.enum(['identifier','token','expires']);
 
-export const MediaScalarFieldEnumSchema = z.enum([
-  "id",
-  "createdAt",
-  "updatedAt",
-  "deletedAt",
-  "startDate",
-  "endDate",
-  "synopsis",
-  "contentRating",
-  "oneShot",
-  "trailer",
-  "type",
-  "status",
-  "source",
-  "demography",
-  "countryOfOrigin",
-  "genres",
-  "tags",
-  "flag",
-  "creatorId",
-  "deleterId",
-])
+export const MediaScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','startDate','endDate','synopsis','contentRating','oneShot','trailer','type','status','source','demography','countryOfOrigin','genres','tags','flag','creatorId','deleterId']);
 
-export const MediaCoverScalarFieldEnumSchema = z.enum([
-  "id",
-  "createdAt",
-  "updatedAt",
-  "deletedAt",
-  "volume",
-  "contentRating",
-  "isMainCover",
-  "language",
-  "mediaId",
-  "uploaderId",
-  "deleterId",
-])
+export const MediaCoverScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','volume','contentRating','isMainCover','language','mediaId','uploaderId','deleterId']);
 
-export const MediaBannerScalarFieldEnumSchema = z.enum([
-  "id",
-  "createdAt",
-  "updatedAt",
-  "deletedAt",
-  "contentRating",
-  "mediaId",
-  "uploaderId",
-  "deleterId",
-])
+export const MediaBannerScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','contentRating','mediaId','uploaderId','deleterId']);
 
-export const MediaTitleScalarFieldEnumSchema = z.enum([
-  "id",
-  "createdAt",
-  "updatedAt",
-  "deletedAt",
-  "title",
-  "language",
-  "priority",
-  "isAcronym",
-  "isMainTitle",
-  "mediaId",
-  "creatorId",
-  "deleterId",
-])
+export const MediaTitleScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','title','language','priority','isAcronym','isMainTitle','mediaId','creatorId','deleterId']);
 
-export const MediaTrackerScalarFieldEnumSchema = z.enum([
-  "id",
-  "createdAt",
-  "updatedAt",
-  "deletedAt",
-  "tracker",
-  "externalId",
-  "mediaId",
-  "creatorId",
-  "deleterId",
-])
+export const MediaTrackerScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','tracker','externalId','mediaId','creatorId','deleterId']);
 
-export const MediaChapterScalarFieldEnumSchema = z.enum([
-  "id",
-  "createdAt",
-  "updatedAt",
-  "deletedAt",
-  "title",
-  "number",
-  "volume",
-  "language",
-  "pages",
-  "contentRating",
-  "flag",
-  "mediaId",
-  "uploaderId",
-  "deleterId",
-])
+export const MediaChapterScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','title','number','volume','language','pages','contentRating','flag','mediaId','uploaderId','deleterId']);
 
-export const MediaChapterCommentScalarFieldEnumSchema = z.enum([
-  "id",
-  "createdAt",
-  "updatedAt",
-  "deletedAt",
-  "content",
-  "attachments",
-  "parentId",
-  "mediaChapterId",
-  "userId",
-  "deleterId",
-])
+export const MediaChapterCommentScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','content','attachments','parentId','mediaChapterId','userId','deleterId']);
 
-export const UploadSessionScalarFieldEnumSchema = z.enum([
-  "id",
-  "createdAt",
-  "updatedAt",
-  "deletedAt",
-  "status",
-  "type",
-  "userId",
-  "mediaId",
-  "mediaChapterId",
-])
+export const UploadSessionScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','status','type','userId','mediaId','mediaChapterId']);
 
-export const ScanScalarFieldEnumSchema = z.enum([
-  "id",
-  "createdAt",
-  "updatedAt",
-  "deletedAt",
-  "name",
-  "description",
-  "logo",
-  "banner",
-  "website",
-  "discord",
-  "twitter",
-  "facebook",
-  "instagram",
-  "telegram",
-  "youtube",
-  "email",
-  "creatorId",
-  "deleterId",
-])
+export const ScanScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','name','description','logo','banner','website','discord','twitter','facebook','instagram','telegram','youtube','email','creatorId','deleterId']);
 
-export const ScanMemberScalarFieldEnumSchema = z.enum([
-  "id",
-  "createdAt",
-  "updatedAt",
-  "deletedAt",
-  "roles",
-  "permissions",
-  "userId",
-])
+export const ScanMemberScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','roles','permissions','userId']);
 
-export const SortOrderSchema = z.enum(["asc", "desc"])
+export const SortOrderSchema = z.enum(['asc','desc']);
 
-export const QueryModeSchema = z.enum(["default", "insensitive"])
+export const QueryModeSchema = z.enum(['default','insensitive']);
 
-export const NullsOrderSchema = z.enum(["first", "last"])
+export const NullsOrderSchema = z.enum(['first','last']);
 
-export const RolesSchema = z.enum([
-  "USER",
-  "MODERATOR",
-  "UPLOADER_INTERN",
-  "UPLOADER",
-  "ADMIN",
-])
+export const RolesSchema = z.enum(['USER','MODERATOR','UPLOADER_INTERN','UPLOADER','ADMIN']);
 
 export type RolesType = `${z.infer<typeof RolesSchema>}`
 
-export const GendersSchema = z.enum([
-  "MALE",
-  "FEMALE",
-  "OTHER",
-  "NOT_SPECIFIED",
-])
+export const GendersSchema = z.enum(['MALE','FEMALE','OTHER','NOT_SPECIFIED']);
 
 export type GendersType = `${z.infer<typeof GendersSchema>}`
 
-export const ContentRatingSchema = z.enum([
-  "NORMAL",
-  "SUGGESTIVE",
-  "NSFW",
-  "NSFL",
-])
+export const ContentRatingSchema = z.enum(['NORMAL','SUGGESTIVE','NSFW','NSFL']);
 
 export type ContentRatingType = `${z.infer<typeof ContentRatingSchema>}`
 
-export const FlagSchema = z.enum(["OK", "STAFF_ONLY", "VIP_ONLY", "LOCKED"])
+export const FlagSchema = z.enum(['OK','STAFF_ONLY','VIP_ONLY','LOCKED']);
 
 export type FlagType = `${z.infer<typeof FlagSchema>}`
 
-export const MediaTypeSchema = z.enum([
-  "MANGA",
-  "MANHWA",
-  "MANHUA",
-  "LIGHT_NOVEL",
-  "OTHER",
-])
+export const MediaTypeSchema = z.enum(['MANGA','MANHWA','MANHUA','LIGHT_NOVEL','OTHER']);
 
 export type MediaTypeType = `${z.infer<typeof MediaTypeSchema>}`
 
-export const MediaStatusSchema = z.enum([
-  "RELEASING",
-  "FINISHED",
-  "NOT_YET_RELEASED",
-  "CANCELLED",
-  "HIATUS",
-])
+export const MediaStatusSchema = z.enum(['RELEASING','FINISHED','NOT_YET_RELEASED','CANCELLED','HIATUS']);
 
 export type MediaStatusType = `${z.infer<typeof MediaStatusSchema>}`
 
-export const MediaSourceSchema = z.enum([
-  "ORIGINAL",
-  "LIGHT_NOVEL",
-  "VISUAL_NOVEL",
-  "WEB_NOVEL",
-  "VIDEO_GAME",
-])
+export const MediaSourceSchema = z.enum(['ORIGINAL','LIGHT_NOVEL','VISUAL_NOVEL','WEB_NOVEL','VIDEO_GAME']);
 
 export type MediaSourceType = `${z.infer<typeof MediaSourceSchema>}`
 
-export const MediaDemographySchema = z.enum([
-  "SHOUNEN",
-  "SHOUJO",
-  "SEINEN",
-  "JOSEI",
-])
+export const MediaDemographySchema = z.enum(['SHOUNEN','SHOUJO','SEINEN','JOSEI']);
 
 export type MediaDemographyType = `${z.infer<typeof MediaDemographySchema>}`
 
-export const MediaCountryOfOriginSchema = z.enum([
-  "JAPAN",
-  "KOREA",
-  "CHINA",
-  "USA",
-  "FRANCE",
-  "BRAZIL",
-])
+export const MediaCountryOfOriginSchema = z.enum(['JAPAN','KOREA','CHINA','USA','FRANCE','BRAZIL']);
 
-export type MediaCountryOfOriginType = `${z.infer<
-  typeof MediaCountryOfOriginSchema
->}`
+export type MediaCountryOfOriginType = `${z.infer<typeof MediaCountryOfOriginSchema>}`
 
-export const MediaGenresSchema = z.enum([
-  "ACTION",
-  "ADVENTURE",
-  "COMEDY",
-  "DRAMA",
-  "ECCHI",
-  "FANTASY",
-  "HENTAI",
-  "HORROR",
-  "MAHOU_SHOUJO",
-  "MECHA",
-  "MUSIC",
-  "MYSTERY",
-  "PSYCHOLOGICAL",
-  "ROMANCE",
-  "SCI_FI",
-  "SLICE_OF_LIFE",
-  "SPORTS",
-  "SUPERNATURAL",
-  "THRILLER",
-])
+export const MediaGenresSchema = z.enum(['ACTION','ADVENTURE','COMEDY','DRAMA','ECCHI','FANTASY','HENTAI','HORROR','MAHOU_SHOUJO','MECHA','MUSIC','MYSTERY','PSYCHOLOGICAL','ROMANCE','SCI_FI','SLICE_OF_LIFE','SPORTS','SUPERNATURAL','THRILLER']);
 
 export type MediaGenresType = `${z.infer<typeof MediaGenresSchema>}`
 
-export const TrackersSchema = z.enum(["MANGADEX", "MYANIMELIST", "ANILIST"])
+export const TrackersSchema = z.enum(['MANGADEX','MYANIMELIST','ANILIST']);
 
 export type TrackersType = `${z.infer<typeof TrackersSchema>}`
 
-export const ScanMemberRolesSchema = z.enum([
-  "OWNER",
-  "ADMIN",
-  "TRANSLATOR",
-  "PROOFREADER",
-  "CLEANER",
-  "REDRAWER",
-  "TYPESETTER",
-  "QUALITY_CHECKER",
-  "RAW_PROVIDER",
-  "OTHER",
-])
+export const ScanMemberRolesSchema = z.enum(['OWNER','ADMIN','TRANSLATOR','PROOFREADER','CLEANER','REDRAWER','TYPESETTER','QUALITY_CHECKER','RAW_PROVIDER','OTHER']);
 
 export type ScanMemberRolesType = `${z.infer<typeof ScanMemberRolesSchema>}`
 
-export const ScanMemberPermissionsSchema = z.enum(["UPLOAD", "EDIT", "DELETE"])
+export const ScanMemberPermissionsSchema = z.enum(['UPLOAD','EDIT','DELETE']);
 
-export type ScanMemberPermissionsType = `${z.infer<
-  typeof ScanMemberPermissionsSchema
->}`
+export type ScanMemberPermissionsType = `${z.infer<typeof ScanMemberPermissionsSchema>}`
 
-export const UploadSessionStatusSchema = z.enum([
-  "UPLOADING",
-  "PROCESSING",
-  "FINISHED",
-  "FAILED",
-])
+export const UploadSessionStatusSchema = z.enum(['UPLOADING','PROCESSING','FINISHED','FAILED']);
 
-export type UploadSessionStatusType = `${z.infer<
-  typeof UploadSessionStatusSchema
->}`
+export type UploadSessionStatusType = `${z.infer<typeof UploadSessionStatusSchema>}`
 
-export const UploadSessionTypeSchema = z.enum(["COVER", "BANNER", "CHAPTER"])
+export const UploadSessionTypeSchema = z.enum(['COVER','BANNER','CHAPTER']);
 
 export type UploadSessionTypeType = `${z.infer<typeof UploadSessionTypeSchema>}`
 
-export const LanguagesSchema = z.enum([
-  "ab",
-  "aa",
-  "af",
-  "ak",
-  "sq",
-  "am",
-  "ar",
-  "an",
-  "hy",
-  "as",
-  "av",
-  "ae",
-  "ay",
-  "az",
-  "bm",
-  "ba",
-  "eu",
-  "be",
-  "bn",
-  "bi",
-  "bs",
-  "br",
-  "bg",
-  "my",
-  "ca",
-  "ch",
-  "ce",
-  "ny",
-  "cu",
-  "cv",
-  "kw",
-  "co",
-  "cr",
-  "hr",
-  "cs",
-  "da",
-  "dv",
-  "nl",
-  "dz",
-  "en",
-  "eo",
-  "et",
-  "ee",
-  "fo",
-  "fj",
-  "fi",
-  "fr",
-  "fy",
-  "ff",
-  "gd",
-  "gl",
-  "lg",
-  "ka",
-  "de",
-  "el",
-  "kl",
-  "gn",
-  "gu",
-  "ht",
-  "ha",
-  "he",
-  "hz",
-  "hi",
-  "ho",
-  "hu",
-  "is",
-  "io",
-  "ig",
-  "id",
-  "ia",
-  "ie",
-  "iu",
-  "ik",
-  "ga",
-  "it",
-  "jv",
-  "kn",
-  "kr",
-  "ks",
-  "kk",
-  "km",
-  "ki",
-  "rw",
-  "ky",
-  "kv",
-  "kg",
-  "kj",
-  "ku",
-  "lo",
-  "la",
-  "lv",
-  "li",
-  "ln",
-  "lt",
-  "lu",
-  "lb",
-  "mk",
-  "mg",
-  "ms",
-  "ml",
-  "mt",
-  "gv",
-  "mi",
-  "mr",
-  "mh",
-  "mn",
-  "na",
-  "nv",
-  "nd",
-  "nr",
-  "ng",
-  "ne",
-  "no",
-  "nb",
-  "nn",
-  "ii",
-  "oc",
-  "oj",
-  "or",
-  "om",
-  "os",
-  "pi",
-  "ps",
-  "fa",
-  "pl",
-  "pa",
-  "qu",
-  "ro",
-  "rm",
-  "rn",
-  "ru",
-  "se",
-  "sm",
-  "sg",
-  "sa",
-  "sc",
-  "sr",
-  "sn",
-  "sd",
-  "si",
-  "sk",
-  "sl",
-  "so",
-  "st",
-  "su",
-  "sw",
-  "ss",
-  "sv",
-  "tl",
-  "ty",
-  "tg",
-  "ta",
-  "tt",
-  "te",
-  "th",
-  "bo",
-  "ti",
-  "to",
-  "ts",
-  "tn",
-  "tr",
-  "tk",
-  "tw",
-  "ug",
-  "uk",
-  "ur",
-  "uz",
-  "ve",
-  "vi",
-  "vo",
-  "wa",
-  "cy",
-  "wo",
-  "xh",
-  "yi",
-  "yo",
-  "za",
-  "zu",
-  "es",
-  "es_la",
-  "pt_br",
-  "pt_pt",
-  "ja",
-  "ja_ro",
-  "ko",
-  "ko_ro",
-  "zh",
-  "zh_hk",
-  "zh_ro",
-])
+export const LanguagesSchema = z.enum(['ab','aa','af','ak','sq','am','ar','an','hy','as','av','ae','ay','az','bm','ba','eu','be','bn','bi','bs','br','bg','my','ca','ch','ce','ny','cu','cv','kw','co','cr','hr','cs','da','dv','nl','dz','en','eo','et','ee','fo','fj','fi','fr','fy','ff','gd','gl','lg','ka','de','el','kl','gn','gu','ht','ha','he','hz','hi','ho','hu','is','io','ig','id','ia','ie','iu','ik','ga','it','jv','kn','kr','ks','kk','km','ki','rw','ky','kv','kg','kj','ku','lo','la','lv','li','ln','lt','lu','lb','mk','mg','ms','ml','mt','gv','mi','mr','mh','mn','na','nv','nd','nr','ng','ne','no','nb','nn','ii','oc','oj','or','om','os','pi','ps','fa','pl','pa','qu','ro','rm','rn','ru','se','sm','sg','sa','sc','sr','sn','sd','si','sk','sl','so','st','su','sw','ss','sv','tl','ty','tg','ta','tt','te','th','bo','ti','to','ts','tn','tr','tk','tw','ug','uk','ur','uz','ve','vi','vo','wa','cy','wo','xh','yi','yo','za','zu','es','es_la','pt_br','pt_pt','ja','ja_ro','ko','ko_ro','zh','zh_hk','zh_ro']);
 
 export type LanguagesType = `${z.infer<typeof LanguagesSchema>}`
 
