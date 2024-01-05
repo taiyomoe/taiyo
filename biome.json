@@ -5,7 +5,8 @@
   },
   "formatter": {
     "enabled": true,
-    "indentStyle": "space"
+    "indentStyle": "space",
+    "ignore": ["./src/lib/schemas/prisma/index.ts"]
   },
   "linter": {
     "enabled": true,
