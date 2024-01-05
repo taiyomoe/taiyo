@@ -1,6 +1,7 @@
 "use client"
 
-import { MediaChapter } from "@prisma/client"
+import { Accordion, AccordionItem } from "@nextui-org/accordion"
+import { TRPCClientError } from "@trpc/client"
 import { toast } from "sonner"
 import { toFormikValidationSchema } from "zod-formik-adapter"
 
@@ -10,28 +11,48 @@ import {
   bulkUpdateMediaChapterScansSchema,
 } from "~/lib/schemas"
 import { api } from "~/lib/trpc/client"
-import { FormSubmit } from "~/lib/types"
+import { FormSubmit, MediaChapterWithScans } from "~/lib/types"
 
-import { TRPCClientError } from "@trpc/client"
+import { useParams } from "next/navigation"
+import { useState } from "react"
+import { BulkUpdateActions } from "~/app/(root)/dashboard/chapters/bulk-edit/_components/BulkUpdateActions"
 import { BulkUpdateChapterScansFormFields } from "./BulkUpdateChapterScansFormFields"
 
 type Props = {
-  chapters: MediaChapter[]
+  chapters: MediaChapterWithScans[]
 }
 
-export const BulkUpdateChapterScansForm = ({ chapters }: Props) => {
+export const BulkUpdateChapterScansForm = (props: Props) => {
+  const { chapters: initialChapters } = props
+  const [chapters, setChapters] = useState(initialChapters)
+  const { mediaId } = useParams<{ mediaId: string }>()
   const { mutateAsync } = api.mediaChapters.updateScans.useMutation()
-
   const initialValues: BulkUpdateMediaChapterScansSchema = [
     { scanIds: [], ids: [] },
   ]
 
   const handleSubmit: FormSubmit<BulkUpdateMediaChapterScansSchema> = async (
     values,
+    helpers,
   ) => {
     toast.promise(mutateAsync(values), {
       loading: "Atualizando capítulos...",
-      success: "Capítulos atualizados com sucesso.",
+      success: () => {
+        setChapters((prev) =>
+          prev.map((c) => {
+            const newScans = values.find((v) => v.ids.includes(c.id))?.scanIds
+
+            if (!newScans?.length) {
+              return { ...c, scans: [] }
+            }
+
+            return { ...c, scanIds: newScans }
+          }),
+        )
+        helpers.resetForm()
+
+        return "Capítulos atualizados com sucesso."
+      },
       error: (err) => {
         if (err instanceof TRPCClientError) {
           return err.message
@@ -50,6 +71,18 @@ export const BulkUpdateChapterScansForm = ({ chapters }: Props) => {
       )}
       onSubmit={handleSubmit}
     >
+      <BulkUpdateActions mediaId={mediaId} />
+      <Accordion>
+        <AccordionItem title="Capítulos">
+          {chapters.map((c) => c.number).join(", ")}
+        </AccordionItem>
+        <AccordionItem title="Capítulos sem scans">
+          {chapters
+            .filter((c) => c.scanIds.length === 0)
+            .map((c) => c.number)
+            .join(", ")}
+        </AccordionItem>
+      </Accordion>
       <BulkUpdateChapterScansFormFields chapters={chapters} />
     </Form.Component>
   )

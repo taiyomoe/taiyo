@@ -29,8 +29,8 @@ export const useBulkChapterUpload = () => {
       let currentlyOngoing = 0
 
       const handleError =
-        (message: string, chapterNumber: number) => (err: unknown) => {
-          console.error(err)
+        (message: string, chapterNumber: number) => (error: unknown) => {
+          console.error(error)
 
           toast.error(`Ocorreu um erro ao upar o capítulo ${chapterNumber}.`)
           tempErrors.push({ message, chapterNumber })

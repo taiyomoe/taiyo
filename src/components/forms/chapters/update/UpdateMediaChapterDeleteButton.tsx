@@ -33,8 +33,8 @@ export const UpdateMediaChapterDeleteButton = ({ chapter }: Props) => {
 
         return "Capítulo apagado com sucesso!"
       },
-      error: (err) => {
-        console.log(err)
+      error: (error) => {
+        console.error(error)
 
         return "Erro ao apagar o capítulo."
       },
