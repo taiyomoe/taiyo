@@ -1,6 +1,6 @@
 "use client"
 
-import type { KeyboardEventHandler, MouseEventHandler } from "react"
+import type { KeyboardEventHandler, MouseEvent } from "react"
 import { useCallback } from "react"
 import { tv } from "tailwind-variants"
 
@@ -47,8 +47,10 @@ export const MediaChapterPage = () => {
     }
   }
 
-  const handleContainerClick: MouseEventHandler<HTMLDivElement> = useCallback(
-    (e) => {
+  const handleContainerClick = useCallback(
+    (side: "left" | "right") => (e: MouseEvent<HTMLDivElement>) => {
+      e.preventDefault()
+
       const clickX = e.clientX
       const windowWidth = window.innerWidth
       const screenSide = clickX < windowWidth / 2 ? "left" : "right"
@@ -63,7 +65,7 @@ export const MediaChapterPage = () => {
         return
       }
 
-      if (screenSide === "left") {
+      if (screenSide === "left" || side === "right") {
         return goBack()
       }
 
@@ -75,7 +77,8 @@ export const MediaChapterPage = () => {
   return (
     <div
       className={base}
-      onClick={handleContainerClick}
+      onClick={handleContainerClick("left")}
+      onContextMenu={handleContainerClick("right")}
       onKeyDown={handleKeyPress}
       // biome-ignore lint/a11y/noNoninteractiveTabindex: needed in order to fire the onKeyDown event
       tabIndex={0}
