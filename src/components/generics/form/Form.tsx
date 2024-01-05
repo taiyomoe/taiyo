@@ -4,6 +4,7 @@ import type { FormikConfig, FormikProps, FormikValues } from "formik"
 import { cn } from "~/lib/utils/cn"
 
 type FormProps<T extends FormikValues> = {
+  className?: string
   children: React.ReactNode | ((props: FormikProps<T>) => React.ReactNode)
 }
 
@@ -18,13 +19,17 @@ type CategoryProps = {
 } & Props
 
 const Component = <T extends FormikValues>({
+  className,
   children,
   ...rest
 }: FormProps<T> & FormikConfig<T>) => {
   return (
     <Formik<T> {...rest}>
       {(options) => (
-        <FormikForm noValidate className="flex flex-col gap-4">
+        <FormikForm
+          noValidate
+          className={cn("flex flex-col gap-10", className)}
+        >
           {typeof children === "function" ? children(options) : children}
         </FormikForm>
       )}

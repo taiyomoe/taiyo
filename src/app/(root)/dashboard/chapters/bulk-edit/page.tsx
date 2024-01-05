@@ -1,10 +1,10 @@
 "use client"
 
-import { Button } from "@nextui-org/react"
-import Link from "next/link"
 import { useState } from "react"
 import { MediaSearchAutocomplete } from "~/components/navbar/search/MediaSearchAutocomplete"
 import { SearchedMedia } from "~/lib/types"
+
+import { BulkUpdateActions } from "./_components/BulkUpdateActions"
 
 export default function Page() {
   const [media, setMedia] = useState<SearchedMedia | null>(null)
@@ -17,16 +17,7 @@ export default function Page() {
           className="w-full"
           onSelectionChange={setMedia}
         />
-        {media && (
-          <div className="flex gap-4">
-            <Button as={Link} href={`bulk-edit/${media.id}/volumes`}>
-              Volumes
-            </Button>
-            <Button as={Link} href={`bulk-edit/${media.id}/scans`}>
-              Scans
-            </Button>
-          </div>
-        )}
+        {media && <BulkUpdateActions mediaId={media.id} />}
       </div>
     </div>
   )

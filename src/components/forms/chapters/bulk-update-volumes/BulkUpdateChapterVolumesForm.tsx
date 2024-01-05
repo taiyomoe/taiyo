@@ -1,7 +1,10 @@
 "use client"
 
+import { Accordion, AccordionItem } from "@nextui-org/accordion"
 import { MediaChapter } from "@prisma/client"
 import { TRPCClientError } from "@trpc/client"
+import { AlertTriangleIcon } from "lucide-react"
+import { useState } from "react"
 import { toast } from "sonner"
 import { toFormikValidationSchema } from "zod-formik-adapter"
 
@@ -20,9 +23,10 @@ type Props = {
   chapters: MediaChapter[]
 }
 
-export const BulkUpdateChapterVolumesForm = ({ chapters }: Props) => {
+export const BulkUpdateChapterVolumesForm = (props: Props) => {
+  const { chapters: initialChapters } = props
+  const [chapters, setChapters] = useState(initialChapters)
   const { mutateAsync } = api.mediaChapters.updateVolumes.useMutation()
-
   const initialValues: BulkUpdateMediaChapterVolumesSchema = [
     { volume: 1, ids: [] },
   ]
@@ -49,7 +53,24 @@ export const BulkUpdateChapterVolumesForm = ({ chapters }: Props) => {
 
     toast.promise(mutateAsync(values), {
       loading: "Atualizando capítulos...",
-      success: "Capítulos atualizados com sucesso.",
+      success: () => {
+        setChapters((prev) =>
+          prev.map((c) => {
+            const newVolume = Number(
+              values.find((v) => v.ids.includes(c.id))?.volume,
+            )
+
+            if (Number.isNaN(newVolume)) {
+              return c
+            }
+
+            return { ...c, volume: newVolume === -1 ? null : newVolume }
+          }),
+        )
+        helpers.resetForm({ values })
+
+        return "Capítulos atualizados com sucesso."
+      },
       error: (error) => {
         if (error instanceof TRPCClientError) {
           return error.message
@@ -68,6 +89,21 @@ export const BulkUpdateChapterVolumesForm = ({ chapters }: Props) => {
       )}
       onSubmit={handleSubmit}
     >
+      <Accordion>
+        <AccordionItem title="Capítulos">
+          {chapters.map((c) => c.number).join(", ")}
+        </AccordionItem>
+        <AccordionItem title="Capítulos sem volume">
+          {chapters
+            .filter((c) => c.volume === null)
+            .map((c) => c.number)
+            .join(", ")}
+        </AccordionItem>
+      </Accordion>
+      <div className="flex gap-2 items-center">
+        <AlertTriangleIcon className="text-warning" />
+        <p>Use -1 para remover o volume de um capítulo.</p>
+      </div>
       <BulkUpdateChapterVolumesFormFields chapters={chapters} />
     </Form.Component>
   )
