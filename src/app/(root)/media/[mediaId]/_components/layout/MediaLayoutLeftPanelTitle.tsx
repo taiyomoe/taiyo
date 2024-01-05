@@ -7,7 +7,7 @@ import type { MediaLimited } from "~/lib/types"
 
 type Props = { media: MediaLimited }
 
-export const MediaLayoutTitle = ({ media }: Props) => {
+export const MediaLayoutLeftPanelTitle = ({ media }: Props) => {
   const { opacity } = useScrollOpacity({ min: 300, max: 450 })
 
   const handleClick = useCallback(() => {

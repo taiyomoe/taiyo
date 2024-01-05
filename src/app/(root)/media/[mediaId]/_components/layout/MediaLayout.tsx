@@ -1,8 +1,7 @@
 import type { MediaLimited } from "~/lib/types"
 
 import { MediaLayoutBanner } from "./MediaLayoutBanner"
-import { MediaLayoutCover } from "./MediaLayoutCover"
-import { MediaLayoutTitle } from "./MediaLayoutTitle"
+import { MediaLayoutLeftPanel } from "./MediaLayoutLeftPanel"
 
 type Props = {
   media: MediaLimited
@@ -14,10 +13,7 @@ export const MediaLayout = ({ media, children }: Props) => {
     <main className="h-full">
       <MediaLayoutBanner media={media} />
       <div className="px-bodyPadding pb-bodyPadding gap-bodyPadding -mt-28 flex flex-col md:flex-row xl:-mt-36">
-        <section className="z-10 flex h-fit flex-col items-center gap-8 md:sticky md:top-[calc(var(--navbar-height)+36px)]">
-          <MediaLayoutCover media={media} />
-          <MediaLayoutTitle media={media} />
-        </section>
+        <MediaLayoutLeftPanel media={media} />
         <section className="z-10 flex flex-col md:w-[calc(100vw-(258px+calc(var(--body-padding)*3)))] lg:w-[calc(100vw-(308px+calc(var(--body-padding)*3)))]">
           {children}
         </section>

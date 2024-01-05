@@ -1,5 +1,5 @@
 import { Image } from "@nextui-org/image"
-import type { SlotsToClasses } from "@nextui-org/react"
+import type { ImageProps, SlotsToClasses } from "@nextui-org/react"
 import NextImage from "next/image"
 
 import { cn } from "~/lib/utils/cn"
@@ -8,10 +8,8 @@ type Props = {
   classNames: SlotsToClasses<"height" | "width" | "wrapper" | "img">
   maxHeight: number
   maxWidth: number
-  src: string
   alt: string
-  isZoomed?: boolean
-}
+} & Omit<ImageProps, "classNames">
 
 export const MediaImage = (props: Props) => {
   const { src, classNames, maxHeight, maxWidth, ...rest } = props
