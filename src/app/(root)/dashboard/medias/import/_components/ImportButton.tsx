@@ -40,6 +40,7 @@ export const ImportButton = () => {
       initialValues={initialValues}
       validationSchema={toFormikValidationSchema(importMediaSchema)}
       onSubmit={handleSubmit}
+      className="gap-4"
     >
       <div className="flex gap-4">
         <InputFormField

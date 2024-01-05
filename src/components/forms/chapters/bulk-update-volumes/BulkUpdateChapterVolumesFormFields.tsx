@@ -1,4 +1,3 @@
-import { Accordion, AccordionItem } from "@nextui-org/accordion"
 import { Divider } from "@nextui-org/divider"
 import { MediaChapter } from "@prisma/client"
 import { useFormikContext } from "formik"
@@ -38,17 +37,6 @@ export const BulkUpdateChapterVolumesFormFields = ({ chapters }: Props) => {
 
   return (
     <Form.Layout>
-      <Accordion>
-        <AccordionItem title="Capítulos">
-          {chapters.map((c) => c.number).join(", ")}
-        </AccordionItem>
-        <AccordionItem title="Capítulos sem volume">
-          {chapters
-            .filter((c) => c.volume === null)
-            .map((c) => c.number)
-            .join(", ")}
-        </AccordionItem>
-      </Accordion>
       <Form.Category
         title="Volumes"
         actions={<FormAddButton onPress={handleAdd} />}
@@ -63,6 +51,7 @@ export const BulkUpdateChapterVolumesFormFields = ({ chapters }: Props) => {
                     name={`[${i}].volume`}
                     label="Volume"
                     labelPlacement="outside"
+                    placeholder="3"
                     className="min-w-[100px] w-[100px]"
                   />
                   <RangeFormField name={`[${i}].ids`} chapters={chapters} />

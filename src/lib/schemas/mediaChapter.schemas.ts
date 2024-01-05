@@ -37,14 +37,14 @@ export const updateMediaChapterSchema = insertMediaChapterSchema
 export const bulkUpdateMediaChapterVolumesSchema = z.array(
   z.object({
     volume: z.coerce.number().min(-1),
-    ids: z.string().uuid().array(),
+    ids: z.string().uuid().array().min(1),
   }),
 )
 
 export const bulkUpdateMediaChapterScansSchema = z.array(
   z.object({
     scanIds: z.string().uuid().array(),
-    ids: z.string().uuid().array(),
+    ids: z.string().uuid().array().min(1),
   }),
 )
 
