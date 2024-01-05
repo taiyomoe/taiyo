@@ -76,7 +76,7 @@ export const mdRouter = createTRPCRouter({
           contentRating: MdUtils.getContentRating(manga),
           oneShot: isOneShot,
           type: MdUtils.getType(manga),
-          status: MdUtils.getStatus(manga),
+          status: "RELEASING",
           source: "LIGHT_NOVEL",
           demography: MdUtils.getDemography(manga),
           countryOfOrigin: MdUtils.getCountryOfOrigin(manga),
