@@ -1,7 +1,7 @@
 import type { Languages } from "@prisma/client"
 
 import { db } from "~/lib/server/db"
-import type { LatestRelease } from "~/lib/types"
+import type { LatestRelease, MediaChaptersUploadersStats } from "~/lib/types"
 import { MediaUtils } from "~/lib/utils/media.utils"
 
 const getLatestReleases = async (
@@ -61,6 +61,29 @@ const getLatestReleases = async (
   return latestReleases
 }
 
+const getUploaderStats = async () => {
+  const result = await db.$queryRaw<MediaChaptersUploadersStats>`
+    SELECT 
+      DATE_TRUNC('day', c."createdAt") as "date",
+      COUNT(*) as "chaptersCount",
+      u."name" as "userName"
+    FROM
+      "MediaChapter" c
+    JOIN
+      "User" u ON c."uploaderId" = u."id"
+    GROUP BY 
+      "date", c."uploaderId", u."name"
+    ORDER BY 
+      "date", c."uploaderId";
+  `
+
+  return result.map((r) => ({
+    ...r,
+    chaptersCount: Number(r.chaptersCount),
+  }))
+}
+
 export const MediaChapterService = {
   getLatestReleases,
+  getUploaderStats,
 }

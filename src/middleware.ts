@@ -57,6 +57,8 @@ export default withAuth(
             return token.role.permissions.includes("mediaChapters:update:any")
 
           // Chapters
+          case pathname === "/dashboard/chapters/stats":
+            return token.role.permissions.includes("mediaChapters:delete:any")
           case pathname.startsWith("/dashboard/chapters/upload"):
             return token.role.permissions.includes("mediaChapters:create")
           case pathname.startsWith("/dashboard/chapters/edit"):
