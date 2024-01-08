@@ -4,22 +4,27 @@ import Chart from "react-apexcharts"
 
 import { DateRangeDropdown } from "~/components/stats/DateRangeDropdown"
 import { DateRangeKey } from "~/lib/types"
+import { ColorUtils } from "~/lib/utils/color.utils"
 import { DateUtils } from "~/lib/utils/date.utils"
 
 type Props = {
+  id: string
   title: string
   series: ApexAxisChartSeries
 }
 
-export const DateChart = ({ title, series }: Props) => {
-  const handleChange = useCallback((key: DateRangeKey) => {
-    ApexCharts.exec(
-      "uploaded-chapters-stats",
-      "zoomX",
-      DateUtils.getDateFromRange("from", key),
-      DateUtils.getDateFromRange("to", key),
-    )
-  }, [])
+export const DateChart = ({ id, title, series }: Props) => {
+  const handleChange = useCallback(
+    (key: DateRangeKey) => {
+      ApexCharts.exec(
+        id,
+        "zoomX",
+        DateUtils.getDateFromRange("from", key),
+        DateUtils.getDateFromRange("to", key),
+      )
+    },
+    [id],
+  )
 
   return (
     <div className="flex flex-col gap-6">
@@ -29,9 +34,9 @@ export const DateChart = ({ title, series }: Props) => {
       </div>
       <Chart
         options={{
-          colors: ["#ff4f4f"],
+          colors: ["#ff4f4f", ...ColorUtils.generate(series.length - 1)],
           chart: {
-            id: "uploaded-chapters-stats",
+            id,
             locales: [require("apexcharts/dist/locales/pt-br.json")],
             defaultLocale: "pt-br",
             toolbar: {

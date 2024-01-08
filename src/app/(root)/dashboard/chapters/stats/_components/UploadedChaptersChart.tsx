@@ -33,5 +33,11 @@ export const UploadedChaptersChart = ({ data }: Props) => {
     [data],
   )
 
-  return <DateChart title="Capítulos upados" series={[{ data: chapters }]} />
+  return (
+    <DateChart
+      id="uploaded-chapters-stats"
+      title="Capítulos upados"
+      series={[{ data: chapters }]}
+    />
+  )
 }
