@@ -36,7 +36,7 @@
     "framer-motion": "^10.17.12",
     "jotai": "^2.6.1",
     "lodash-es": "^4.17.21",
-    "lucide-react": "^0.308.0",
+    "lucide-react": "^0.309.0",
     "luxon": "^3.4.4",
     "mangadex-full-api": "^5.12.1",
     "meilisearch": "^0.36.0",
