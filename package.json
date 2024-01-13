@@ -21,7 +21,7 @@
     "@prisma/client": "^5.8.0",
     "@react-stately/data": "^3.11.0",
     "@savvywombat/tailwindcss-grid-areas": "^3.1.0",
-    "@t3-oss/env-nextjs": "^0.7.1",
+    "@t3-oss/env-nextjs": "^0.7.3",
     "@tanstack/react-query": "^4.36.1",
     "@trpc/client": "^10.45.0",
     "@trpc/next": "^10.45.0",
