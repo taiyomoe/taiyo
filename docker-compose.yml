@@ -15,7 +15,7 @@ services:
 
   meilisearch:
     container_name: meilisearch
-    image: "getmeili/meilisearch:v1.5"
+    image: "getmeili/meilisearch:v1.6"
     restart: always
     environment:
       - MEILI_MASTER_KEY=$MEILISEARCH_MASTER_KEY
