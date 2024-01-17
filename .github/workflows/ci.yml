@@ -30,7 +30,7 @@ jobs:
         run: npm ci
 
       - name: Use Next.js build cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           # See here for caching with `yarn` https://github.com/actions/cache/blob/main/examples.md#node---yarn or you can leverage caching with actions/setup-node https://github.com/actions/setup-node
           path: |
