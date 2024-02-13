@@ -1,6 +1,6 @@
 # Taiyō
 
-<img src="https://cdn.taiyo.moe/banner-red.png" />
+![Taiyō's banner](https://cdn.taiyo.moe/assets/banner-red.png)
 
 ## git-flow
 
