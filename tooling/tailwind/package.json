@@ -18,7 +18,7 @@
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
-    "@taiyomoe/tsconfig": "workspace:^0.1.0",
+    "@taiyomoe/tsconfig": "workspace:^",
     "typescript": "^5.3.3"
   }
 }

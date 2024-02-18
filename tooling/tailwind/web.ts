@@ -1,7 +1,7 @@
 import type { Config } from "tailwindcss"
 import base from "./base"
 
-export default ({
+export default {
   presets: [base],
   content: [
     ...base.content,
@@ -55,4 +55,4 @@ export default ({
     },
   },
   plugins: [],
-} satisfies Config)
+} satisfies Config
