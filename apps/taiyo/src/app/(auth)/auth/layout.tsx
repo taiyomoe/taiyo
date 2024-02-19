@@ -1,4 +1,4 @@
-import type { LayoutProps } from "@taiyomoe/types"
+import { LayoutProps } from "~/lib/types"
 
 export default function Layout({ children }: LayoutProps) {
   return (
