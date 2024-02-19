@@ -2,7 +2,7 @@ import { TRPCClientError } from "@trpc/client"
 import type { FormikConfig } from "formik"
 import { toast } from "sonner"
 
-import type { InsertMediaSchema } from "~/lib/schemas"
+import type { InsertMediaSchema } from "@taiyomoe/schemas"
 import { api } from "~/lib/trpc/client"
 
 export const useMediaCreation = () => {

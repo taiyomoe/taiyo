@@ -3,7 +3,7 @@ import type { FormikConfig } from "formik"
 import { toast } from "sonner"
 import { useRawChapterUpload } from "~/hooks/useRawChapterUpload"
 
-import type { InsertMediaChapterFormSchema } from "~/lib/schemas/mediaChapter.schemas"
+import type { InsertMediaChapterFormSchema } from "@taiyomoe/schemas"
 import { useImageStore } from "~/stores"
 
 export const useChapterUpload = () => {

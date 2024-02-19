@@ -19,6 +19,7 @@
     "@t3-oss/env-nextjs": "^0.8.0",
     "@taiyomoe/constants": "workspace:^0.1.0",
     "@taiyomoe/db": "workspace:^0.1.0",
+    "@taiyomoe/schemas": "workspace:^0.1.0",
     "@taiyomoe/utils": "workspace:^0.1.0",
     "@tanstack/react-query": "^4.36.1",
     "@trpc/client": "^10.45.1",
@@ -57,7 +58,6 @@
     "tailwind-merge": "^2.2.1",
     "tailwind-scrollbar": "^3.1.0",
     "usehooks-ts": "^2.14.0",
-    "zod": "^3.22.4",
     "zod-formik-adapter": "^1.2.0",
     "zustand": "^4.5.1"
   },

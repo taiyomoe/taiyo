@@ -1,9 +1,9 @@
+import { BulkUploadMediaChapters } from "@taiyomoe/schemas"
 import { FormikConfig } from "formik"
 import { atom, useSetAtom } from "jotai"
 import { useEffect } from "react"
 import { toast } from "sonner"
 import { useRawChapterUpload } from "~/hooks/useRawChapterUpload"
-import { BulkUploadMediaChapters } from "~/lib/schemas"
 import { ImageError } from "~/lib/types"
 import { useImageFolderStore } from "~/stores"
 

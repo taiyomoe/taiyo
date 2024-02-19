@@ -1,10 +1,10 @@
-import { TRPCError } from "@trpc/server"
-
 import {
   createMediaCoversSchema,
   deleteMediaCoverSchema,
   updateMediaCoverSchema,
-} from "~/lib/schemas/mediaCover.schemas"
+} from "@taiyomoe/schemas"
+import { TRPCError } from "@trpc/server"
+
 import { MediaService } from "~/lib/services"
 
 import { createTRPCRouter, protectedProcedure } from "../trpc"

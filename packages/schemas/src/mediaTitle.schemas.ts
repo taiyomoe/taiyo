@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-import { MediaTitleSchema } from "~/lib/schemas/prisma"
+import { MediaTitleSchema } from "./prisma"
 
 const isEachTitleUnique = (t: { title: string; language: string }[]) =>
   new Set<string>([...t.map((x) => `${x.language}-${x.title}`)]).size ===

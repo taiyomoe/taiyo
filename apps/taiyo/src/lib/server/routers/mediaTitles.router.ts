@@ -1,6 +1,9 @@
+import {
+  createMediaTitleSchema,
+  updateMediaTitleSchema,
+} from "@taiyomoe/schemas"
 import { TRPCError } from "@trpc/server"
 
-import { createMediaTitleSchema, updateMediaTitleSchema } from "~/lib/schemas"
 import { MediaService } from "~/lib/services"
 
 import { createTRPCRouter, protectedProcedure } from "../trpc"

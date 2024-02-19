@@ -1,8 +1,7 @@
+import { TAG_KEYS } from "@taiyomoe/types"
 import { z } from "zod"
 
-import { TAG_KEYS } from "~/lib/i18n/tags"
-import { createMediaTitlesSchema } from "~/lib/schemas/mediaTitle.schemas"
-
+import { createMediaTitlesSchema } from "./mediaTitle.schemas"
 import { MediaSchema } from "./prisma"
 
 export const insertMediaSchema = MediaSchema.pick({

@@ -2,10 +2,10 @@
 
 import { toFormikValidationSchema } from "zod-formik-adapter"
 
+import { insertMediaChapterFormSchema } from "@taiyomoe/schemas"
+import type { InsertMediaChapterFormSchema } from "@taiyomoe/schemas"
 import { Form } from "~/components/generics/form/Form"
 import { useChapterUpload } from "~/hooks/useChapterUpload"
-import { insertMediaChapterFormSchema } from "~/lib/schemas/mediaChapter.schemas"
-import type { InsertMediaChapterFormSchema } from "~/lib/schemas/mediaChapter.schemas"
 
 import { UploadChapterFormFields } from "./UploadChapterFormFields"
 

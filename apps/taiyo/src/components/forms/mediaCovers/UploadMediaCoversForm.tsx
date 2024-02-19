@@ -2,10 +2,10 @@ import type { FormikConfig } from "formik"
 import { toast } from "sonner"
 import { toFormikValidationSchema } from "zod-formik-adapter"
 
+import { uploadMediaCoverSchema } from "@taiyomoe/schemas"
+import type { UploadMediaCoverSchema } from "@taiyomoe/schemas"
 import { Form } from "~/components/generics/form/Form"
 import { useUpload } from "~/hooks/useUpload"
-import { uploadMediaCoverSchema } from "~/lib/schemas"
-import type { UploadMediaCoverSchema } from "~/lib/schemas"
 import { api } from "~/lib/trpc/client"
 import { useImageStore, useMediaUpdateStore } from "~/stores"
 

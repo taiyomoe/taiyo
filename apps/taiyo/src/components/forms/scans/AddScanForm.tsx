@@ -3,9 +3,9 @@
 import { toast } from "sonner"
 import { toFormikValidationSchema } from "zod-formik-adapter"
 
+import type { InsertScanSchema } from "@taiyomoe/schemas"
+import { insertScanSchema } from "@taiyomoe/schemas"
 import { Form } from "~/components/generics/form/Form"
-import type { InsertScanSchema } from "~/lib/schemas"
-import { insertScanSchema } from "~/lib/schemas"
 import { api } from "~/lib/trpc/client"
 import type { FormSubmit } from "~/lib/types"
 

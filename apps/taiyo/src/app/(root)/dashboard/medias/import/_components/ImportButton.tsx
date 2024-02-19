@@ -1,3 +1,5 @@
+import type { ImportMediaSchema } from "@taiyomoe/schemas"
+import { importMediaSchema } from "@taiyomoe/schemas"
 import type { FormikConfig } from "formik"
 import { toast } from "sonner"
 import { toFormikValidationSchema } from "zod-formik-adapter"
@@ -6,8 +8,6 @@ import { SubmitButton } from "~/components/generics/buttons/SubmitButton"
 import { Form } from "~/components/generics/form/Form"
 import { InputFormField } from "~/components/generics/form/InputFormField"
 import { TextAreaFormField } from "~/components/generics/form/TextAreaFormField"
-import type { ImportMediaSchema } from "~/lib/schemas"
-import { importMediaSchema } from "~/lib/schemas"
 import { api } from "~/lib/trpc/client"
 
 const initialValues: ImportMediaSchema = {

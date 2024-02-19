@@ -1,4 +1,4 @@
-import { updateProgressionSchema } from "~/lib/schemas"
+import { updateProgressionSchema } from "@taiyomoe/schemas"
 
 import { createTRPCRouter, protectedProcedure } from "../trpc"
 

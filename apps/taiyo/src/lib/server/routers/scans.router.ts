@@ -1,4 +1,4 @@
-import { insertScanSchema, searchScanSchema } from "~/lib/schemas"
+import { insertScanSchema, searchScanSchema } from "@taiyomoe/schemas"
 import { ScanService } from "~/lib/services/scan.service"
 
 import { createTRPCRouter, protectedProcedure } from "../trpc"

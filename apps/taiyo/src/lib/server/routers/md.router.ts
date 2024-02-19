@@ -1,8 +1,8 @@
+import { importMediaSchema } from "@taiyomoe/schemas"
 import { TRPCError } from "@trpc/server"
 import { Manga } from "mangadex-full-api"
 
 import { env } from "~/lib/env.mjs"
-import { importMediaSchema } from "~/lib/schemas"
 import { MediaService } from "~/lib/services"
 import { pusherServer } from "~/lib/soketi/server"
 import type { UploadResponse } from "~/lib/types"

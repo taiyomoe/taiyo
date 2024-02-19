@@ -1,5 +1,6 @@
+import { getLibrarySchema, updateLibrarySchema } from "@taiyomoe/schemas"
 import type { UserLibraryMedia } from "@taiyomoe/types"
-import { getLibrarySchema, updateLibrarySchema } from "~/lib/schemas"
+
 import { MediaService } from "~/lib/services"
 import { MediaUtils } from "~/lib/utils/media.utils"
 

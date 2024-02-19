@@ -4,9 +4,9 @@ import type { FormikConfig } from "formik"
 import { toast } from "sonner"
 import { toFormikValidationSchema } from "zod-formik-adapter"
 
+import type { UpdateMediaSchema } from "@taiyomoe/schemas"
+import { updateMediaSchema } from "@taiyomoe/schemas"
 import { Form } from "~/components/generics/form/Form"
-import type { UpdateMediaSchema } from "~/lib/schemas"
-import { updateMediaSchema } from "~/lib/schemas"
 import { api } from "~/lib/trpc/client"
 import { ObjectUtils } from "~/lib/utils/object.utils"
 

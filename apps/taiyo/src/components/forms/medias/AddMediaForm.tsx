@@ -2,10 +2,10 @@
 
 import { toFormikValidationSchema } from "zod-formik-adapter"
 
+import type { InsertMediaSchema } from "@taiyomoe/schemas"
+import { insertMediaSchema } from "@taiyomoe/schemas"
 import { Form } from "~/components/generics/form/Form"
 import { useMediaCreation } from "~/hooks/useMediaCreation"
-import type { InsertMediaSchema } from "~/lib/schemas"
-import { insertMediaSchema } from "~/lib/schemas"
 
 import { MediaFormFields } from "./MediaFormFields"
 

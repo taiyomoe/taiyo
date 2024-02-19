@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-import { MediaCoverSchema } from "~/lib/schemas/prisma"
+import { MediaCoverSchema } from "./prisma"
 
 const mediaCoverSchema = MediaCoverSchema.pick({
   volume: true,

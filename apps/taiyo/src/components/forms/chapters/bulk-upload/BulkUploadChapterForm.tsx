@@ -1,11 +1,14 @@
 "use client"
 
+import {
+  BulkUploadMediaChapters,
+  bulkUploadMediaChapters,
+} from "@taiyomoe/schemas"
 import { toFormikValidationSchema } from "zod-formik-adapter"
 
 import { Form } from "~/components/generics/form/Form"
-
 import { useBulkChapterUpload } from "~/hooks/useBulkChapterUpload"
-import { BulkUploadMediaChapters, bulkUploadMediaChapters } from "~/lib/schemas"
+
 import { BulkUploadChapterFormFields } from "./BulkUploadChapterFormFields"
 
 const initialValues: BulkUploadMediaChapters = {

@@ -1,13 +1,13 @@
 import type { Trackers } from "@prisma/client"
-import { TRPCError } from "@trpc/server"
-
-import type { MediaLimited, SearchedMedia } from "@taiyomoe/types"
 import {
   getMediaByIdSchema,
   insertMediaSchema,
   searchMediaSchema,
   updateMediaSchema,
-} from "~/lib/schemas"
+} from "@taiyomoe/schemas"
+import type { MediaLimited, SearchedMedia } from "@taiyomoe/types"
+import { TRPCError } from "@trpc/server"
+
 import {
   LibraryService,
   MediaChapterService,

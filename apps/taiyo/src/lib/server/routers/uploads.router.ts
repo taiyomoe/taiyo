@@ -1,4 +1,4 @@
-import { startUploadSessionSchema } from "~/lib/schemas"
+import { startUploadSessionSchema } from "@taiyomoe/schemas"
 import { EncryptionUtils } from "~/lib/utils/encryption.utils"
 
 import { createTRPCRouter, protectedProcedure } from "../trpc"

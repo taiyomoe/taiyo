@@ -1,5 +1,5 @@
+import { InsertMediaChapterFormSchema } from "@taiyomoe/schemas"
 import { useMutation } from "@tanstack/react-query"
-import { InsertMediaChapterFormSchema } from "~/lib/schemas"
 
 import { api } from "~/lib/trpc/client"
 import { SuccessfulUploadResponse, UploadResponse } from "~/lib/types"

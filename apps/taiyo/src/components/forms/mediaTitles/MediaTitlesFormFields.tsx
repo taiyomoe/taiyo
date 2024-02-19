@@ -1,14 +1,14 @@
 import { Tooltip } from "@nextui-org/tooltip"
 import { Languages } from "@prisma/client"
 
+import type {
+  CreateMediaTitleSchema,
+  UpdateMediaTitleSchema,
+} from "@taiyomoe/schemas"
 import { Form } from "~/components/generics/form/Form"
 import { InputFormField } from "~/components/generics/form/InputFormField"
 import { SelectFormField } from "~/components/generics/form/SelectFormField"
 import { SwitchFormField } from "~/components/generics/form/SwitchFormField"
-import type {
-  CreateMediaTitleSchema,
-  UpdateMediaTitleSchema,
-} from "~/lib/schemas"
 
 type Props = {
   initialValues: CreateMediaTitleSchema | UpdateMediaTitleSchema

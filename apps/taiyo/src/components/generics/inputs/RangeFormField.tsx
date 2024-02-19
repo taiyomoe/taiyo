@@ -1,5 +1,6 @@
 import { Input } from "@nextui-org/input"
 import { MediaChapter } from "@prisma/client"
+import { BulkUpdateMediaChapterVolumesSchema } from "@taiyomoe/schemas"
 import { useField } from "formik"
 import {
   ChangeEventHandler,
@@ -9,7 +10,6 @@ import {
   useState,
 } from "react"
 import { RangeValues } from "~/components/ui/RangeValues"
-import { BulkUpdateMediaChapterVolumesSchema } from "~/lib/schemas"
 import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils"
 import { NumberUtils } from "~/lib/utils/number.utils"
 

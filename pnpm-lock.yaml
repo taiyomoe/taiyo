@@ -47,6 +47,9 @@ importers:
       '@taiyomoe/db':
         specifier: workspace:^0.1.0
         version: link:../../packages/db
+      '@taiyomoe/schemas':
+        specifier: workspace:^0.1.0
+        version: link:../../packages/schemas
       '@taiyomoe/utils':
         specifier: workspace:^0.1.0
         version: link:../../packages/utils
@@ -161,9 +164,6 @@ importers:
       usehooks-ts:
         specifier: ^2.14.0
         version: 2.14.0(react@18.2.0)
-      zod:
-        specifier: ^3.22.4
-        version: 3.22.4
       zod-formik-adapter:
         specifier: ^1.2.0
         version: 1.2.0(formik@2.4.5)(zod@3.22.4)
@@ -254,6 +254,22 @@ importers:
         specifier: ^0.5.1
         version: 0.5.1
 
+  packages/schemas:
+    dependencies:
+      '@taiyomoe/constants':
+        specifier: workspace:^
+        version: link:../constants
+      '@taiyomoe/types':
+        specifier: workspace:^
+        version: link:../types
+      zod:
+        specifier: ^3.22.4
+        version: 3.22.4
+    devDependencies:
+      '@taiyomoe/tsconfig':
+        specifier: workspace:^0.1.0
+        version: link:../../tooling/typescript
+
   packages/services:
     dependencies:
       '@taiyomoe/db':
@@ -282,6 +298,9 @@ importers:
       '@taiyomoe/constants':
         specifier: workspace:^0.1.0
         version: link:../constants
+      '@taiyomoe/schemas':
+        specifier: workspace:^
+        version: link:../schemas
     devDependencies:
       '@taiyomoe/tsconfig':
         specifier: workspace:^0.1.0

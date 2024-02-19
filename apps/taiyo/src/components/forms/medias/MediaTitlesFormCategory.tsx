@@ -3,11 +3,11 @@ import { Languages } from "@prisma/client"
 import { useField } from "formik"
 import { PlusIcon, TrashIcon } from "lucide-react"
 
+import type { InsertMediaSchema } from "@taiyomoe/schemas"
 import { Form } from "~/components/generics/form/Form"
 import { InputFormField } from "~/components/generics/form/InputFormField"
 import { SelectFormField } from "~/components/generics/form/SelectFormField"
 import { SwitchFormField } from "~/components/generics/form/SwitchFormField"
-import type { InsertMediaSchema } from "~/lib/schemas"
 
 export const MediaTitlesFormCategory = () => {
   // biome-ignore lint/correctness/noEmptyPattern: we need to destructure the array

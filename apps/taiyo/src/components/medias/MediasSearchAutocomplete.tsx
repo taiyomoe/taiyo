@@ -6,8 +6,8 @@ import { parseAsString, useQueryState } from "next-usequerystate"
 import { useEffect } from "react"
 import { z } from "zod"
 
+import type { InsertMediaChapterFormSchema } from "@taiyomoe/schemas"
 import type { SearchedMedia } from "@taiyomoe/types"
-import type { InsertMediaChapterFormSchema } from "~/lib/schemas"
 import { api } from "~/lib/trpc/client"
 
 export const MediasSearchAutocomplete = () => {

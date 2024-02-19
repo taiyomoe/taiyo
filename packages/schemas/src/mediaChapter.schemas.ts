@@ -4,7 +4,7 @@ import {
   DEFAULT_MEDIA_PAGE,
   DEFAULT_MEDIA_PER_PAGE,
   MEDIA_PER_PAGE_CHOICES,
-} from "~/lib/constants"
+} from "@taiyomoe/constants"
 
 import { ContentRatingSchema, FlagSchema, LanguagesSchema } from "./prisma"
 
