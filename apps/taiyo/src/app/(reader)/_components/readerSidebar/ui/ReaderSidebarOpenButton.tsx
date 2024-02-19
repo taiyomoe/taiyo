@@ -2,7 +2,6 @@
 
 import { Button } from "@nextui-org/button"
 import { usePathname } from "next/navigation"
-
 import { useReaderSettingsStore, useReaderStore } from "~/stores"
 
 import { SidebarIcon } from "../../../../../components/icons/SidebarIcon"

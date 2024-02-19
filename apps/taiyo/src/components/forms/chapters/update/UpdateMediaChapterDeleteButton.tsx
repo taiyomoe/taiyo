@@ -7,10 +7,9 @@ import {
   ModalHeader,
   useDisclosure,
 } from "@nextui-org/modal"
+import type { MediaLimitedChapter } from "@taiyomoe/types"
 import { TrashIcon } from "lucide-react"
 import { toast } from "sonner"
-
-import type { MediaLimitedChapter } from "@taiyomoe/types"
 import { api } from "~/lib/trpc/client"
 
 type Props = {

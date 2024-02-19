@@ -10,7 +10,6 @@ import type { Selection } from "@nextui-org/react"
 import { ChevronDownIcon } from "lucide-react"
 import { useState } from "react"
 import { tv } from "tailwind-variants"
-
 import { useMediaNavigation } from "~/hooks/useMediaNavigation"
 import { MEDIA_PER_PAGE_CHOICES } from "~/lib/constants"
 

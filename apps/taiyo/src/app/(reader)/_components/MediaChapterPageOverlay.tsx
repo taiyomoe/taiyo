@@ -1,12 +1,10 @@
 import { tv } from "@nextui-org/react"
 import Link from "next/link"
 import { useCallback, useEffect, useState } from "react"
-
 import { useDevice } from "~/hooks/useDevice"
 import { cn } from "~/lib/utils/cn"
 import { MediaUtils } from "~/lib/utils/media.utils"
 import { useReaderSettingsStore, useReaderStore } from "~/stores"
-
 import { MediaChapterPageOverlayScrollButton } from "./MediaChapterPageOverlayScrollButton"
 import { ReaderSettingsMediaChapterDropdown } from "./readerSidebar/ui/ReaderSettingsMediaChapterDropdown"
 import { ReaderSidebarOpenButton } from "./readerSidebar/ui/ReaderSidebarOpenButton"

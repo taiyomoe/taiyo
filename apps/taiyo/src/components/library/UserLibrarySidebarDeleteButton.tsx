@@ -7,9 +7,8 @@ import {
   ModalHeader,
   useDisclosure,
 } from "@nextui-org/modal"
-import { TrashIcon } from "lucide-react"
-
 import type { UserLibraryMedia } from "@taiyomoe/types"
+import { TrashIcon } from "lucide-react"
 import { api } from "~/lib/trpc/client"
 import { useLibraryStore } from "~/stores"
 

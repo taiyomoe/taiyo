@@ -8,7 +8,6 @@ import {
   useDisclosure,
 } from "@nextui-org/modal"
 import { PanelBottomOpenIcon } from "lucide-react"
-
 import { FloatingActionButton } from "~/components/generics/buttons/FloatingActionButton"
 import { cn } from "~/lib/utils/cn"
 

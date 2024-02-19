@@ -1,8 +1,6 @@
 import { notFound } from "next/navigation"
-
 import { PopulateAtoms } from "~/app/(reader)/_components/PopulateAtoms"
 import { api } from "~/lib/trpc/server"
-
 import { MediaChapterPage } from "../_components/MediaChapterPage"
 
 type Props = {

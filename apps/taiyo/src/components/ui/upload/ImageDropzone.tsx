@@ -5,7 +5,6 @@ import type { UploadSessionType } from "@prisma/client"
 import { useCallback } from "react"
 import type { DropzoneProps } from "react-dropzone"
 import { useDropzone } from "react-dropzone"
-
 import { SubmitButton } from "~/components/generics/buttons/SubmitButton"
 import { Form } from "~/components/generics/form/Form"
 import { AssetSelection } from "~/components/ui/AssetSelection"

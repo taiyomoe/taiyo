@@ -1,5 +1,4 @@
 import type { Session } from "next-auth"
-
 import { GuestPopover } from "./popovers/GuestPopover"
 import { UserPopover } from "./popovers/UserPopover"
 

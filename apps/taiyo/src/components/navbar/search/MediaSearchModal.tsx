@@ -7,7 +7,6 @@ import {
 } from "@nextui-org/modal"
 import { Button } from "@nextui-org/react"
 import { SearchIcon } from "lucide-react"
-
 import { MediaSearchAutocomplete } from "~/components/navbar/search/MediaSearchAutocomplete"
 
 export const MediaSearchModal = () => {

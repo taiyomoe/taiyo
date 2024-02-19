@@ -1,5 +1,4 @@
 import type { Roles } from "@prisma/client"
-
 import type {
   Permission,
   ResourcesWithPossession,

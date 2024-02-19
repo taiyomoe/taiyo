@@ -1,6 +1,5 @@
 import type { UploadSessionType } from "@prisma/client"
 import { create } from "zustand"
-
 import { ImageUtils } from "~/lib/utils/image.utils"
 
 export type ImageStore = {

@@ -1,5 +1,4 @@
 import { Link } from "@nextui-org/link"
-
 import type { MediaLimited } from "@taiyomoe/types"
 import { Category } from "~/components/generics/Category"
 import { CompanyLogo } from "~/components/ui/CompanyLogo"

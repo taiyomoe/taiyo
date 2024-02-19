@@ -1,5 +1,4 @@
 import { Link, tv } from "@nextui-org/react"
-
 import type { MediaLimited } from "@taiyomoe/types"
 import { CompanyLogo } from "~/components/ui/CompanyLogo"
 import { TrackerUtils } from "~/lib/utils/tracker.utils"

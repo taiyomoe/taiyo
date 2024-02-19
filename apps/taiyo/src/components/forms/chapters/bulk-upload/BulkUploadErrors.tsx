@@ -1,6 +1,5 @@
 import { useAtomValue } from "jotai"
 import { Form } from "~/components/generics/form/Form"
-
 import { bulkChapterUploadErrorsAtom } from "~/hooks/useBulkChapterUpload"
 
 export const BulkUploadErrors = () => {
@@ -15,8 +14,7 @@ export const BulkUploadErrors = () => {
       <div className="flex flex-col">
         {errors.map((err) => (
           <div className="flex gap-2">
-            <p>Capítulo {err.chapterNumber}</p>—
-            <p>{err.message}</p>
+            <p>Capítulo {err.chapterNumber}</p>—<p>{err.message}</p>
           </div>
         ))}
       </div>

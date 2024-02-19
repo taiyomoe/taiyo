@@ -1,5 +1,4 @@
 import { ContentRating, Flag, Languages } from "@prisma/client"
-
 import { Form } from "~/components/generics/form/Form"
 import { InputFormField } from "~/components/generics/form/InputFormField"
 import { SelectFormField } from "~/components/generics/form/SelectFormField"

@@ -1,6 +1,5 @@
 import type { Selection } from "@nextui-org/react"
 import { Select, SelectItem } from "@nextui-org/select"
-
 import type { UserLibraryMedia, UserLibraryStatus } from "@taiyomoe/types"
 import { api } from "~/lib/trpc/client"
 import { LibraryUtils } from "~/lib/utils/library.utils"

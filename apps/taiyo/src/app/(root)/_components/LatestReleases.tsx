@@ -1,5 +1,4 @@
 import type { LatestRelease } from "@taiyomoe/types"
-
 import { ReleaseCard } from "./ReleaseCard"
 
 type Props = {

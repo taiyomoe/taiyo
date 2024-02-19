@@ -1,5 +1,4 @@
 import { Button } from "@nextui-org/button"
-
 import { SidebarIcon } from "~/components/icons/SidebarIcon"
 import { useLibraryStore } from "~/stores"
 

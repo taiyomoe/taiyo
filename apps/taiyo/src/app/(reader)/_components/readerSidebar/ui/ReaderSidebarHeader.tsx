@@ -2,10 +2,8 @@
 
 import { Button } from "@nextui-org/button"
 import { tv } from "tailwind-variants"
-
 import { SidebarIcon } from "~/components/icons/SidebarIcon"
 import { useReaderSettingsStore } from "~/stores"
-
 import { ReaderSidebarMediaTitle } from "./ReaderSidebarMediaTitle"
 
 const readerSidebarHeader = tv({

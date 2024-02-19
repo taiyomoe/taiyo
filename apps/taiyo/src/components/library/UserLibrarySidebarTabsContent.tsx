@@ -1,11 +1,10 @@
 import { Image } from "@nextui-org/image"
 import { Spinner } from "@nextui-org/react"
+import type { UserLibraryStatus } from "@taiyomoe/types"
 import { useSession } from "next-auth/react"
 import NextImage from "next/image"
 import Link from "next/link"
 import { useEffect } from "react"
-
-import type { UserLibraryStatus } from "@taiyomoe/types"
 import { UserLibrarySidebarDeleteButton } from "~/components/library/UserLibrarySidebarDeleteButton"
 import { UserLibrarySidebarStatusSelect } from "~/components/library/UserLibrarySidebarStatusSelect"
 import { api } from "~/lib/trpc/client"

@@ -1,5 +1,4 @@
 import { TRPCError } from "@trpc/server"
-
 import type { tRPCInit } from "../trpc"
 
 export const withAuth = (t: tRPCInit) =>

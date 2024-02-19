@@ -4,7 +4,6 @@ import {
   updateMediaCoverSchema,
 } from "@taiyomoe/schemas"
 import { TRPCError } from "@trpc/server"
-
 import { MediaService } from "~/lib/services"
 
 import { createTRPCRouter, protectedProcedure } from "../trpc"

@@ -1,13 +1,12 @@
 import { Autocomplete, AutocompleteItem } from "@nextui-org/autocomplete"
 import { useAsyncList } from "@react-stately/data"
 import type { Key } from "@react-types/shared"
+import type { InsertMediaChapterFormSchema } from "@taiyomoe/schemas"
+import type { SearchedMedia } from "@taiyomoe/types"
 import { useFormikContext } from "formik"
 import { parseAsString, useQueryState } from "next-usequerystate"
 import { useEffect } from "react"
 import { z } from "zod"
-
-import type { InsertMediaChapterFormSchema } from "@taiyomoe/schemas"
-import type { SearchedMedia } from "@taiyomoe/types"
 import { api } from "~/lib/trpc/client"
 
 export const MediasSearchAutocomplete = () => {

@@ -2,7 +2,6 @@ import { Button } from "@nextui-org/react"
 import { throttle } from "lodash-es"
 import { ChevronsUp } from "lucide-react"
 import { useEffect } from "react"
-
 import { useReaderSettingsStore } from "~/stores"
 
 export const MediaChapterPageOverlayScrollButton = () => {

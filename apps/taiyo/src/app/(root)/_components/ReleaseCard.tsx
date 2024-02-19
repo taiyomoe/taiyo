@@ -1,6 +1,5 @@
-import Link from "next/link"
-
 import type { LatestRelease } from "@taiyomoe/types"
+import Link from "next/link"
 import { MediaImage } from "~/components/generics/images/MediaImage"
 import { MediaChapterScans } from "~/components/ui/MediaChapterScans"
 import { MediaChapterCardUploadedTime } from "~/components/ui/MediaChapterUploadedTime"

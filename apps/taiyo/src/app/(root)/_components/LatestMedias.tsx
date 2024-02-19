@@ -1,5 +1,4 @@
 import type { LatestMedia } from "@taiyomoe/types"
-
 import { SwipeableLatestMedias } from "./swipers/SwipeableLatestMedias"
 
 type Props = {

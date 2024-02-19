@@ -1,5 +1,4 @@
 import { Chip } from "@nextui-org/chip"
-
 import type { MediaLimited } from "@taiyomoe/types"
 import { Category } from "~/components/generics/Category"
 import { List } from "~/components/generics/List"

@@ -1,6 +1,5 @@
 import type { LayoutProps } from "@taiyomoe/types"
 import { Sidebar } from "~/components/layout/Sidebar"
-
 import { DashboardSidebarContent } from "./_components/DashboardSidebarContent"
 
 export default function Layout({ children }: LayoutProps) {

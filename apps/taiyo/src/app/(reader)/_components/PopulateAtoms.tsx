@@ -1,10 +1,9 @@
 "use client"
 
+import type { MediaChapterLimited } from "@taiyomoe/types"
 import { usePathname } from "next/navigation"
 import { useEffect, useRef } from "react"
 import { useWindowSize } from "usehooks-ts"
-
-import type { MediaChapterLimited } from "@taiyomoe/types"
 import { useDevice } from "~/hooks/useDevice"
 import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils"
 import { useReaderSettingsStore, useReaderStore } from "~/stores"

@@ -1,15 +1,13 @@
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import { headers } from "next/headers"
-
-import "~/styles/globals.css"
-
-import type { LayoutProps } from "@taiyomoe/types"
 import { siteConfig } from "~/lib/config"
 import { getBaseUrl } from "~/lib/trpc/shared"
+import { LayoutProps } from "~/lib/types"
 import { cn } from "~/lib/utils/cn"
-
 import { Providers } from "./providers"
+
+import "~/styles/globals.css"
 
 const fontSans = Inter({
   subsets: ["latin"],

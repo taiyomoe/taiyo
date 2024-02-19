@@ -4,7 +4,6 @@ import { Switch } from "@nextui-org/switch"
 import type { SwitchProps } from "@nextui-org/switch"
 import { useField } from "formik"
 import { useCallback } from "react"
-
 import { Label } from "../Label"
 import type { LabelProps } from "../Label"
 

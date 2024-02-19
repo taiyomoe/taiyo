@@ -3,7 +3,6 @@ import { Divider } from "@nextui-org/divider"
 import { Popover, PopoverContent, PopoverTrigger } from "@nextui-org/popover"
 import { UserIcon } from "lucide-react"
 import NextLink from "next/link"
-
 import { NavbarPopoversCommonOptions } from "./NavbarPopoversCommonOptions"
 
 export const GuestPopover = () => {

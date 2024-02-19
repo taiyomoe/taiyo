@@ -1,10 +1,9 @@
-import { z } from "zod"
-
 import {
   DEFAULT_MEDIA_PAGE,
   DEFAULT_MEDIA_PER_PAGE,
   MEDIA_PER_PAGE_CHOICES,
 } from "@taiyomoe/constants"
+import { z } from "zod"
 
 import { ContentRatingSchema, FlagSchema, LanguagesSchema } from "./prisma"
 

@@ -1,15 +1,13 @@
 "use client"
 
+import type { UpdateMediaSchema } from "@taiyomoe/schemas"
+import { updateMediaSchema } from "@taiyomoe/schemas"
 import type { FormikConfig } from "formik"
 import { toast } from "sonner"
 import { toFormikValidationSchema } from "zod-formik-adapter"
-
-import type { UpdateMediaSchema } from "@taiyomoe/schemas"
-import { updateMediaSchema } from "@taiyomoe/schemas"
 import { Form } from "~/components/generics/form/Form"
 import { api } from "~/lib/trpc/client"
 import { ObjectUtils } from "~/lib/utils/object.utils"
-
 import { MediaFormFields } from "./MediaFormFields"
 
 type Props = {

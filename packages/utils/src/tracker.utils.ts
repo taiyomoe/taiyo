@@ -1,5 +1,4 @@
 import type { Trackers } from "@prisma/client"
-
 import type { MediaLimited } from "../../../apps/taiyo/src/lib/types"
 
 const getTrackerLabel = (tracker: Trackers) => {

@@ -1,15 +1,13 @@
 import { Card, CardBody } from "@nextui-org/card"
+import type { MediaLimitedChapter } from "@taiyomoe/types"
 import { useSession } from "next-auth/react"
 import Link from "next/link"
 import { useState } from "react"
 import { tv } from "tailwind-variants"
-
-import type { MediaLimitedChapter } from "@taiyomoe/types"
 import { MediaChapterScans } from "~/components/ui/MediaChapterScans"
 import { MediaChapterCardUploadedTime } from "~/components/ui/MediaChapterUploadedTime"
 import { MediaChapterUploader } from "~/components/ui/MediaChapterUploader"
 import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils"
-
 import { MediaChapterActions } from "../MediaChapterActions"
 import { MediaChapterCardPath } from "./MediaChapterCardPath"
 import { MediaChapterCardProgressionButton } from "./MediaChapterCardProgressionButton"

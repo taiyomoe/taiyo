@@ -7,7 +7,6 @@ import type {
   MediaLimitedChapter,
 } from "@taiyomoe/types"
 import { DateTime } from "luxon"
-
 import { env } from "../env"
 
 const getTitle = (mediaChapter: MediaLimitedChapter) => {

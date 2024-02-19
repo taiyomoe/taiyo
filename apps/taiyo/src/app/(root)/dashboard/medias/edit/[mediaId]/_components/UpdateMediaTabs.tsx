@@ -1,14 +1,12 @@
 "use client"
 
 import { Tab, Tabs } from "@nextui-org/tabs"
-import { useEffect } from "react"
-
 import type { MediaWithRelations } from "@taiyomoe/types"
+import { useEffect } from "react"
 import { UpdateMediaCoversShowcase } from "~/components/forms/mediaCovers/UpdateMediaCoversShowcase"
 import { UploadMediaCoversForm } from "~/components/forms/mediaCovers/UploadMediaCoversForm"
 import { UpdateMediaTitlesShowcase } from "~/components/forms/mediaTitles/update/UpdateMediaTitlesShowcase"
 import { useMediaUpdateStore } from "~/stores"
-
 import { UpdateMediaBannersTab } from "./tabs/UpdateMediaBannersTab"
 import { UpdateMediaInfoTab } from "./tabs/UpdateMediaInfoTab"
 import { UpdateMediaStatsTab } from "./tabs/UpdateMediaStatsTab"

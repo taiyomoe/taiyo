@@ -2,7 +2,6 @@
 
 import { Skeleton } from "@nextui-org/skeleton"
 import Link from "next/link"
-
 import { cn } from "~/lib/utils/cn"
 import { useReaderStore } from "~/stores"
 

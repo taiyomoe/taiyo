@@ -1,8 +1,6 @@
 import { Spinner } from "@nextui-org/react"
-
 import { useChapterProgression } from "~/hooks/useChapterProgression"
 import { useReaderSettingsStore, useReaderStore } from "~/stores"
-
 import { MediaChapterImage } from "./MediaChapterImage"
 
 export const MediaChapterImages = () => {

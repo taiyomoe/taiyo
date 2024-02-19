@@ -1,9 +1,8 @@
 import { Button } from "@nextui-org/react"
+import type { MediaLimitedChapter } from "@taiyomoe/types"
 import { PencilIcon } from "lucide-react"
 import { useSession } from "next-auth/react"
 import Link from "next/link"
-
-import type { MediaLimitedChapter } from "@taiyomoe/types"
 import { UpdateMediaChapterDeleteButton } from "~/components/forms/chapters/update/UpdateMediaChapterDeleteButton"
 
 type Props = {

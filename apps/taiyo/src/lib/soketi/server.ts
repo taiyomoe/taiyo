@@ -1,5 +1,4 @@
 import PusherServer from "pusher"
-
 import { env } from "~/lib/env.mjs"
 
 export const pusherServer = new PusherServer({

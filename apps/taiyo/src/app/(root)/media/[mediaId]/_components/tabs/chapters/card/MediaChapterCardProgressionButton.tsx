@@ -1,9 +1,8 @@
 import { tv } from "@nextui-org/react"
+import type { MediaLimitedChapter } from "@taiyomoe/types"
 import { EyeIcon, EyeOffIcon } from "lucide-react"
 import { useSession } from "next-auth/react"
 import type { Dispatch, SetStateAction } from "react"
-
-import type { MediaLimitedChapter } from "@taiyomoe/types"
 import { api } from "~/lib/trpc/client"
 
 type Props = {

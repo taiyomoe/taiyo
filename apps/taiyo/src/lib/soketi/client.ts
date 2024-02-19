@@ -1,5 +1,4 @@
 import PusherClient from "pusher-js"
-
 import { env } from "~/lib/env.mjs"
 
 export const pusherClient = new PusherClient(

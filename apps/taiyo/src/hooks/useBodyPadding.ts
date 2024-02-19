@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect } from "react"
-
 import { useDevice } from "~/hooks/useDevice"
 
 export const useBodyPadding = () => {

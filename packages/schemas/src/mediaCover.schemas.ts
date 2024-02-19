@@ -1,5 +1,4 @@
 import { z } from "zod"
-
 import { MediaCoverSchema } from "./prisma"
 
 const mediaCoverSchema = MediaCoverSchema.pick({

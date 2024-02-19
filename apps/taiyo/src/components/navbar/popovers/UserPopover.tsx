@@ -5,10 +5,8 @@ import { GaugeIcon, LinkIcon } from "lucide-react"
 import type { Session } from "next-auth"
 import Image from "next/image"
 import NextLink from "next/link"
-
 import { SignOutButton } from "~/components/auth/SignOutButton"
 import { SignedIn } from "~/components/utils/SignedIn"
-
 import { NavbarPopoversCommonOptions } from "./NavbarPopoversCommonOptions"
 
 type Props = { session: Session }

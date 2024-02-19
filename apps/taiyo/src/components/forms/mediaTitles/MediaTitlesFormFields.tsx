@@ -1,6 +1,5 @@
 import { Tooltip } from "@nextui-org/tooltip"
 import { Languages } from "@prisma/client"
-
 import type {
   CreateMediaTitleSchema,
   UpdateMediaTitleSchema,

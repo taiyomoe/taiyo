@@ -1,7 +1,6 @@
 import { tv } from "@nextui-org/react"
 import { useRef } from "react"
 import { useOnClickOutside } from "usehooks-ts"
-
 import { UserLibrarySidebarTabs } from "~/components/library/UserLibrarySidebarTabs"
 import { UserLibrarySidebarTitle } from "~/components/library/UserLibrarySidebarTitle"
 import { useDevice } from "~/hooks/useDevice"

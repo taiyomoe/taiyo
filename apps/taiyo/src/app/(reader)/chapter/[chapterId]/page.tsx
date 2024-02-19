@@ -1,5 +1,4 @@
 import { notFound } from "next/navigation"
-
 import { api } from "~/lib/trpc/server"
 
 import { PopulateAtoms } from "../../_components/PopulateAtoms"

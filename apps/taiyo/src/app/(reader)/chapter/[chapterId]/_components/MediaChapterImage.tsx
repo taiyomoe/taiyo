@@ -1,5 +1,4 @@
 import { tv } from "@nextui-org/react"
-
 import { useReaderSettingsStore } from "~/stores"
 
 type Props = {

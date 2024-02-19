@@ -1,5 +1,4 @@
 import type { MediaLimited } from "@taiyomoe/types"
-
 import { MediaInfoTabGenres } from "./MediaInfoTabGenres"
 import { MediaInfoTabTags } from "./MediaInfoTabTags"
 import { MediaInfoTabTitles } from "./MediaInfoTabTitles"

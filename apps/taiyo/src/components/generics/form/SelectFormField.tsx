@@ -4,7 +4,6 @@ import type { SelectProps } from "@nextui-org/select"
 import { Select, SelectItem } from "@nextui-org/select"
 import { useField } from "formik"
 import { tv } from "tailwind-variants"
-
 import { ObjectUtils } from "~/lib/utils/object.utils"
 
 type Props<T> = {

@@ -1,12 +1,11 @@
-import _ from "lodash-es"
-import { create } from "zustand"
-import { persist } from "zustand/middleware"
-
 import type {
   InferNestedPaths,
   InferNestedValues,
   ReaderSettings,
 } from "@taiyomoe/types"
+import _ from "lodash-es"
+import { create } from "zustand"
+import { persist } from "zustand/middleware"
 
 type Actions = {
   update: (

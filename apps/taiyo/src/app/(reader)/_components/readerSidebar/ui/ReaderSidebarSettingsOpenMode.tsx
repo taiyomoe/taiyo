@@ -3,7 +3,6 @@
 import { Button, ButtonGroup } from "@nextui-org/button"
 import { MousePointer2Icon } from "lucide-react"
 import { tv } from "tailwind-variants"
-
 import { SidebarIcon } from "~/components/icons/SidebarIcon"
 import { useDevice } from "~/hooks/useDevice"
 import { useReaderSettingsStore } from "~/stores"

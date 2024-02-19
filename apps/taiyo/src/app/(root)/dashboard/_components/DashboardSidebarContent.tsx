@@ -2,7 +2,6 @@
 
 import { Accordion, AccordionItem } from "@nextui-org/accordion"
 import { tv } from "tailwind-variants"
-
 import { DashboardSidebarCRUDButtons } from "./DashboardSidebarCRUDButtons"
 
 type Props = {

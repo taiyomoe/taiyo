@@ -1,5 +1,4 @@
 import { MediaChapterService } from "~/lib/services"
-
 import { ChapterUploadersChart } from "./_components/ChapterUploadersChart"
 import { UploadedChaptersChart } from "./_components/UploadedChaptersChart"
 

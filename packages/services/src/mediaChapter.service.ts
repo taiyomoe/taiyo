@@ -1,5 +1,4 @@
 import type { Languages } from "@prisma/client"
-
 import { db } from "@taiyomoe/db"
 import type {
   LatestRelease,

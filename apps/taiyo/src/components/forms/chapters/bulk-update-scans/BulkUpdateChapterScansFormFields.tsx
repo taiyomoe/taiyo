@@ -3,7 +3,6 @@ import { BulkUpdateMediaChapterScansSchema } from "@taiyomoe/schemas"
 import { MediaChapterWithScans } from "@taiyomoe/types"
 import { useFormikContext } from "formik"
 import { Fragment, useCallback } from "react"
-
 import { FormAddButton } from "~/components/generics/buttons/FormAddButton"
 import { FormDeleteButton } from "~/components/generics/buttons/FormDeleteButton"
 import { SubmitButton } from "~/components/generics/buttons/SubmitButton"

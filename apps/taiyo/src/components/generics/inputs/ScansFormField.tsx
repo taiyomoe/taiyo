@@ -4,10 +4,9 @@ import { tv } from "@nextui-org/react"
 import type { Scan } from "@prisma/client"
 import { useAsyncList } from "@react-stately/data"
 import type { Key } from "@react-types/shared"
+import type { ScansIndexItem } from "@taiyomoe/types"
 import { useFormikContext } from "formik"
 import { useCallback, useEffect, useState } from "react"
-
-import type { ScansIndexItem } from "@taiyomoe/types"
 import { api } from "~/lib/trpc/client"
 
 const scansFormField = tv({

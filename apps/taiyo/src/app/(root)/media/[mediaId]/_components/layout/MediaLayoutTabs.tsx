@@ -1,12 +1,10 @@
 "use client"
 
 import { Tab, Tabs } from "@nextui-org/tabs"
+import type { MediaLimited, MediaTabs } from "@taiyomoe/types"
 import type { Key } from "react"
 import { useCallback } from "react"
-
-import type { MediaLimited, MediaTabs } from "@taiyomoe/types"
 import { useMediaNavigation } from "~/hooks/useMediaNavigation"
-
 import { MediaLayoutChaptersTab } from "../tabs/chapters/MediaLayoutChaptersTab"
 import { MediaLayoutInfoTab } from "../tabs/info/MediaLayoutInfoTab"
 

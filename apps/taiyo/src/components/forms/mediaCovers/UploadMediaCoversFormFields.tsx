@@ -1,8 +1,7 @@
 import { ContentRating, Languages } from "@prisma/client"
+import type { UploadMediaCoverSchema } from "@taiyomoe/schemas"
 import { useFormikContext } from "formik"
 import { useCallback } from "react"
-
-import type { UploadMediaCoverSchema } from "@taiyomoe/schemas"
 import { List } from "~/components/generics/List"
 import { Form } from "~/components/generics/form/Form"
 import { InputFormField } from "~/components/generics/form/InputFormField"

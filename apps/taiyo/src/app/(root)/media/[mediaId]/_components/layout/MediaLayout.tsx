@@ -1,5 +1,4 @@
 import type { MediaLimited } from "@taiyomoe/types"
-
 import { MediaLayoutBanner } from "./MediaLayoutBanner"
 import { MediaLayoutLeftPanel } from "./MediaLayoutLeftPanel"
 

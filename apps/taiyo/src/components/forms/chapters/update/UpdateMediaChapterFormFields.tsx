@@ -1,6 +1,5 @@
 import type { Scan } from "@prisma/client"
 import { ContentRating, Flag, Languages } from "@prisma/client"
-
 import { SubmitButton } from "~/components/generics/buttons/SubmitButton"
 import { Form } from "~/components/generics/form/Form"
 import { InputFormField } from "~/components/generics/form/InputFormField"

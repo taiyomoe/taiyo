@@ -1,9 +1,8 @@
 import { Button } from "@nextui-org/button"
 import { Languages } from "@prisma/client"
+import type { InsertMediaSchema } from "@taiyomoe/schemas"
 import { useField } from "formik"
 import { PlusIcon, TrashIcon } from "lucide-react"
-
-import type { InsertMediaSchema } from "@taiyomoe/schemas"
 import { Form } from "~/components/generics/form/Form"
 import { InputFormField } from "~/components/generics/form/InputFormField"
 import { SelectFormField } from "~/components/generics/form/SelectFormField"

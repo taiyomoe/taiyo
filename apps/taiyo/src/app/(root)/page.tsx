@@ -1,5 +1,4 @@
 import { api } from "~/lib/trpc/server"
-
 import { FeaturedMedias } from "./_components/FeaturedMedias"
 import { LatestMedias } from "./_components/LatestMedias"
 import { LatestReleases } from "./_components/LatestReleases"

@@ -1,10 +1,9 @@
-import { create } from "zustand"
-
 import type {
   MediaLimited,
   UserLibraryMedia,
   UserLibraryStatus,
 } from "@taiyomoe/types"
+import { create } from "zustand"
 import { LibraryUtils } from "~/lib/utils/library.utils"
 
 export type LibraryState = {

@@ -1,6 +1,5 @@
 import { Button, ButtonGroup } from "@nextui-org/button"
 import { tv } from "tailwind-variants"
-
 import { useDevice } from "~/hooks/useDevice"
 import { useReaderSettingsStore } from "~/stores"
 

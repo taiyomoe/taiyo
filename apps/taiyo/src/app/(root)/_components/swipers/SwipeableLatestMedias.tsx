@@ -1,13 +1,11 @@
 "use client"
 
 import { Image } from "@nextui-org/image"
+import type { LatestMedia } from "@taiyomoe/types"
 import useEmblaCarousel from "embla-carousel-react"
-
 import NextImage from "next/image"
 import Link from "next/link"
 import { MediaImage } from "~/components/generics/images/MediaImage"
-
-import type { LatestMedia } from "@taiyomoe/types"
 import { cn } from "~/lib/utils/cn"
 import { MediaCoverUtils } from "~/lib/utils/mediaCover.utils"
 

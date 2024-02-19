@@ -1,7 +1,6 @@
 import { Button } from "@nextui-org/button"
 import { Card, CardBody } from "@nextui-org/card"
 import { Input } from "@nextui-org/input"
-
 import { DiscordButton } from "./DiscordButton"
 import { GoogleButton } from "./GoogleButton"
 

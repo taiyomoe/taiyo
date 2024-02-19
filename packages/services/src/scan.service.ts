@@ -1,6 +1,5 @@
-import { TRPCError } from "@trpc/server"
-
 import type { ScansIndexItem } from "@taiyomoe/types"
+import { TRPCError } from "@trpc/server"
 import { db } from "~/lib/server/db"
 
 /**

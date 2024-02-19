@@ -11,14 +11,13 @@ import {
 import { Tooltip } from "@nextui-org/tooltip"
 import { ContentRating, Languages } from "@prisma/client"
 import type { MediaCover } from "@prisma/client"
+import type { UpdateMediaCoverSchema } from "@taiyomoe/schemas"
+import { updateMediaCoverSchema } from "@taiyomoe/schemas"
+import type { MediaWithRelations } from "@taiyomoe/types"
 import type { FormikConfig } from "formik"
 import NextImage from "next/image"
 import { toast } from "sonner"
 import { toFormikValidationSchema } from "zod-formik-adapter"
-
-import type { UpdateMediaCoverSchema } from "@taiyomoe/schemas"
-import { updateMediaCoverSchema } from "@taiyomoe/schemas"
-import type { MediaWithRelations } from "@taiyomoe/types"
 import { SubmitButton } from "~/components/generics/buttons/SubmitButton"
 import { Form } from "~/components/generics/form/Form"
 import { InputFormField } from "~/components/generics/form/InputFormField"
@@ -28,7 +27,6 @@ import { api } from "~/lib/trpc/client"
 import { MediaCoverUtils } from "~/lib/utils/mediaCover.utils"
 import { ObjectUtils } from "~/lib/utils/object.utils"
 import { useMediaUpdateStore } from "~/stores"
-
 import { UpdateMediaCoverDeleteButton } from "./UpdateMediaCoverDeleteButton"
 
 type Props = {

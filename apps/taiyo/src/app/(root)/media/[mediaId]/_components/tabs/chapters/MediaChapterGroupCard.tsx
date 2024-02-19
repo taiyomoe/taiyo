@@ -1,5 +1,4 @@
 import type { MediaChapterGroup } from "@taiyomoe/types"
-
 import { MediaChapterCardTemporary } from "./card/MediaChapterCardTemporary"
 
 type Props = {

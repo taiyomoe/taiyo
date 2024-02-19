@@ -1,5 +1,4 @@
 import type { MediaCover } from "@prisma/client"
-
 import type { MediaCoverVolume, MediaWithRelations } from "@taiyomoe/types"
 import { env } from "../env"
 

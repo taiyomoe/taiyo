@@ -1,5 +1,4 @@
 import { z } from "zod"
-
 import { ScanSchema } from "./prisma"
 
 export const insertScanSchema = ScanSchema.pick({

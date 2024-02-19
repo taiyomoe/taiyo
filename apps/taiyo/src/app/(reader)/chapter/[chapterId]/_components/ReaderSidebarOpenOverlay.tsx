@@ -1,7 +1,6 @@
 "use client"
 
 import { tv } from "tailwind-variants"
-
 import { SidebarIcon } from "~/components/icons/SidebarIcon"
 import { useReaderSettingsStore } from "~/stores"
 

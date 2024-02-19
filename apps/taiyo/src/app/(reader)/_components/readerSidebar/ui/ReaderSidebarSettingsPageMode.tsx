@@ -1,10 +1,9 @@
 "use client"
 
 import { Button, ButtonGroup } from "@nextui-org/button"
+import type { ReaderSettings } from "@taiyomoe/types"
 import { FileIcon, ScrollTextIcon } from "lucide-react"
 import { tv } from "tailwind-variants"
-
-import type { ReaderSettings } from "@taiyomoe/types"
 import { useReaderSettingsStore } from "~/stores"
 
 const readerSidebarSettingsPageMode = tv({

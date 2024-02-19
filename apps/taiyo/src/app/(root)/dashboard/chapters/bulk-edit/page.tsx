@@ -3,7 +3,6 @@
 import { SearchedMedia } from "@taiyomoe/types"
 import { useState } from "react"
 import { MediaSearchAutocomplete } from "~/components/navbar/search/MediaSearchAutocomplete"
-
 import { BulkUpdateActions } from "./_components/BulkUpdateActions"
 
 export default function Page() {

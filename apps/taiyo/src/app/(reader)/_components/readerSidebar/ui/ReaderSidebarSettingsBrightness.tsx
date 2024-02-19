@@ -2,7 +2,6 @@
 
 import { Slider } from "@nextui-org/slider"
 import { tv } from "tailwind-variants"
-
 import { useReaderSettingsStore } from "~/stores"
 
 const readerSidebarSettingsBrightness = tv({

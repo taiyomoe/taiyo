@@ -1,6 +1,5 @@
 import { ScrollShadow } from "@nextui-org/scroll-shadow"
 import { notFound } from "next/navigation"
-
 import { api } from "~/lib/trpc/server"
 
 import { MediaLayout } from "./_components/layout/MediaLayout"
