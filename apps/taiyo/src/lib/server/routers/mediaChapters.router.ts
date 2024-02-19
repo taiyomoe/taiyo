@@ -1,5 +1,6 @@
 import { TRPCError } from "@trpc/server"
 
+import type { MediaChapterLimited } from "@taiyomoe/types"
 import { idSchema } from "~/lib/schemas"
 import {
   bulkUpdateMediaChapterScansSchema,
@@ -9,7 +10,6 @@ import {
   insertMediaChapterSchema,
   updateMediaChapterSchema,
 } from "~/lib/schemas/mediaChapter.schemas"
-import type { MediaChapterLimited } from "~/lib/types"
 import { MediaUtils } from "~/lib/utils/media.utils"
 
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"

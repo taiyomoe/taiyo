@@ -1,7 +1,7 @@
 import type { MediaCover } from "@prisma/client"
 
-import { env } from "~/lib/env.mjs"
-import type { MediaCoverVolume, MediaWithRelations } from "~/lib/types"
+import type { MediaCoverVolume, MediaWithRelations } from "@taiyomoe/types"
+import { env } from "../env"
 
 const getUrl = (media: { id: string; coverId: string }) =>
   `${env.NEXT_PUBLIC_CDN_URL}/medias/${media.id}/covers/${media.coverId}.jpg`

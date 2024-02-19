@@ -10,7 +10,7 @@ import type {
   User,
 } from "@prisma/client"
 
-import type { UserLibraryStatus } from "~/lib/types/library.types"
+import type { UserLibraryStatus } from "."
 
 export type LatestMedia = {
   id: Media["id"]

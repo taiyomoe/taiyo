@@ -1,6 +1,6 @@
 import { ClockIcon } from "lucide-react"
 
-import type { LatestRelease, MediaLimitedChapter } from "~/lib/types"
+import type { LatestRelease, MediaLimitedChapter } from "@taiyomoe/types"
 import { cn } from "~/lib/utils/cn"
 import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils"
 

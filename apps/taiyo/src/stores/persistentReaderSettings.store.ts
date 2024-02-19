@@ -6,7 +6,7 @@ import type {
   InferNestedPaths,
   InferNestedValues,
   ReaderSettings,
-} from "~/lib/types"
+} from "@taiyomoe/types"
 
 type Actions = {
   update: (

@@ -1,4 +1,4 @@
-import type { LatestMedia } from "~/lib/types"
+import type { LatestMedia } from "@taiyomoe/types"
 
 import { SwipeableTrendingMedias } from "./swipers/SwipeableTrendingMedias"
 

@@ -1,8 +1,8 @@
 import { Link } from "@nextui-org/link"
 
+import type { MediaLimited } from "@taiyomoe/types"
 import { Category } from "~/components/generics/Category"
 import { CompanyLogo } from "~/components/ui/CompanyLogo"
-import type { MediaLimited } from "~/lib/types"
 import { TrackerUtils } from "~/lib/utils/tracker.utils"
 
 type Props = {

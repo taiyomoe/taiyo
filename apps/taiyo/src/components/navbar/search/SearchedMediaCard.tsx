@@ -1,5 +1,5 @@
+import { SearchedMedia } from "@taiyomoe/types"
 import Image from "next/image"
-import { SearchedMedia } from "~/lib/types"
 import { MediaCoverUtils } from "~/lib/utils/mediaCover.utils"
 
 type Props = {

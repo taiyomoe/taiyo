@@ -1,6 +1,6 @@
 import type { MediaTitle } from "@prisma/client"
 
-import type { MediaLimited } from "~/lib/types"
+import type { MediaLimited } from "@taiyomoe/types"
 
 const sort = <T extends MediaLimited["titles"] | MediaTitle[]>(titles: T) => {
   const inputOrder = [

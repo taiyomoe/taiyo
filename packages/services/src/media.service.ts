@@ -1,9 +1,9 @@
 import type { Languages, MediaStatus } from "@prisma/client"
 import { TRPCError } from "@trpc/server"
 
+import type { FeaturedMedia, LatestMedia } from "@taiyomoe/types"
+import type { MediasIndexItem } from "@taiyomoe/types/meilisearch.types"
 import { db } from "~/lib/server/db"
-import type { FeaturedMedia, LatestMedia } from "~/lib/types"
-import type { MediasIndexItem } from "~/lib/types/meilisearch.types"
 import { MediaUtils } from "~/lib/utils/media.utils"
 
 /**

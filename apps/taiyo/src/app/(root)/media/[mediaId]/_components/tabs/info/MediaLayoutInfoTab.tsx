@@ -1,4 +1,4 @@
-import type { MediaLimited } from "~/lib/types"
+import type { MediaLimited } from "@taiyomoe/types"
 
 import { MediaInfoTabGenres } from "./MediaInfoTabGenres"
 import { MediaInfoTabTags } from "./MediaInfoTabTags"

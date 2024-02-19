@@ -2,8 +2,8 @@
 
 import { useCallback } from "react"
 
+import type { MediaLimited } from "@taiyomoe/types"
 import { useScrollOpacity } from "~/hooks/useScrollOpacity"
-import type { MediaLimited } from "~/lib/types"
 
 type Props = { media: MediaLimited }
 

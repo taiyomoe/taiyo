@@ -1,6 +1,6 @@
+import type { MediaWithRelations } from "@taiyomoe/types"
 import { UpdateMediaForm } from "~/components/forms/medias/UpdateMediaForm"
 import type { UpdateMediaSchema } from "~/lib/schemas"
-import type { MediaWithRelations } from "~/lib/types"
 
 type Props = {
   media: MediaWithRelations

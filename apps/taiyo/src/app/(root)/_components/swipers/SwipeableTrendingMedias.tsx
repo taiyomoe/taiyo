@@ -3,9 +3,9 @@
 import useEmblaCarousel from "embla-carousel-react"
 import Link from "next/link"
 
+import type { LatestMedia } from "@taiyomoe/types"
 import { MediaImage } from "~/components/generics/images/MediaImage"
 import { useDevice } from "~/hooks/useDevice"
-import type { LatestMedia } from "~/lib/types"
 import { cn } from "~/lib/utils/cn"
 import { MediaCoverUtils } from "~/lib/utils/mediaCover.utils"
 

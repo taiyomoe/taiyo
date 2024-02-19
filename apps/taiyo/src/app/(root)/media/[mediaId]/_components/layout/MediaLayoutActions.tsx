@@ -2,9 +2,9 @@ import { Button } from "@nextui-org/react"
 import { FileEditIcon } from "lucide-react"
 import Link from "next/link"
 
+import type { MediaLimited } from "@taiyomoe/types"
 import { AddToUserLibraryButton } from "~/components/library/AddToUserLibraryButton"
 import { SignedIn } from "~/components/utils/SignedIn"
-import type { MediaLimited } from "~/lib/types"
 
 import { MediaChapterUploadPageButton } from "../ui/MediaChapterUploadPageButton"
 

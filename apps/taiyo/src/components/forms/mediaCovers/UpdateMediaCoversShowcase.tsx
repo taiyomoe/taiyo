@@ -3,7 +3,7 @@ import type { Selection } from "@nextui-org/react"
 import { Select, SelectItem } from "@nextui-org/select"
 import { useMemo, useState } from "react"
 
-import type { MediaWithRelations } from "~/lib/types"
+import type { MediaWithRelations } from "@taiyomoe/types"
 import { MediaCoverUtils } from "~/lib/utils/mediaCover.utils"
 import { SelectUtils } from "~/lib/utils/select.utils"
 import { useMediaUpdateStore } from "~/stores"

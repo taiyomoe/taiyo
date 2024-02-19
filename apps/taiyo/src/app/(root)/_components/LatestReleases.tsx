@@ -1,4 +1,4 @@
-import type { LatestRelease } from "~/lib/types"
+import type { LatestRelease } from "@taiyomoe/types"
 
 import { ReleaseCard } from "./ReleaseCard"
 

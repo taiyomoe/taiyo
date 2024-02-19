@@ -1,5 +1,5 @@
+import { DateRangeKey } from "@taiyomoe/types"
 import { DateTime } from "luxon"
-import { DateRangeKey } from "~/lib/types"
 
 const formatToInputValue = (input: Date) => {
   const dt = DateTime.fromJSDate(input)

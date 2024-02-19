@@ -1,7 +1,7 @@
 import type { Meilisearch } from "meilisearch"
 import MeiliSearch from "meilisearch"
 
-import type { MediasIndexItem, ScansIndexItem } from "~/lib/types"
+import type { MediasIndexItem, ScansIndexItem } from "@taiyomoe/types"
 
 const globalForMeilisearch = globalThis as unknown as {
   meilisearch: Meilisearch | undefined

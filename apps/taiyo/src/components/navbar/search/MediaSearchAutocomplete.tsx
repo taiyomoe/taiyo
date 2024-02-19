@@ -9,8 +9,8 @@ import Link from "next/link"
 import { useCallback } from "react"
 import { SearchedMediaCard } from "~/components/navbar/search/SearchedMediaCard"
 
+import type { SearchedMedia } from "@taiyomoe/types"
 import { api } from "~/lib/trpc/client"
-import type { SearchedMedia } from "~/lib/types"
 import { MediaCoverUtils } from "~/lib/utils/mediaCover.utils"
 
 type Props = {

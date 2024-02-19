@@ -2,8 +2,8 @@
 
 import { useMemo } from "react"
 
+import { MediaChaptersUploadersStats } from "@taiyomoe/types"
 import { DateChart } from "~/components/charts/DateChart"
-import { MediaChaptersUploadersStats } from "~/lib/types"
 
 type Props = {
   data: MediaChaptersUploadersStats

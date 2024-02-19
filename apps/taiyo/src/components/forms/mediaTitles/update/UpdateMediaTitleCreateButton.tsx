@@ -12,13 +12,13 @@ import { PlusIcon } from "lucide-react"
 import { toast } from "sonner"
 import { toFormikValidationSchema } from "zod-formik-adapter"
 
+import type { FormSubmit } from "@taiyomoe/types"
 import { MediaTitlesFormFields } from "~/components/forms/mediaTitles/MediaTitlesFormFields"
 import { SubmitButton } from "~/components/generics/buttons/SubmitButton"
 import { Form } from "~/components/generics/form/Form"
 import type { CreateMediaTitleSchema } from "~/lib/schemas"
 import { createMediaTitleSchema } from "~/lib/schemas"
 import { api } from "~/lib/trpc/client"
-import type { FormSubmit } from "~/lib/types"
 import { useMediaUpdateStore } from "~/stores"
 
 type Props = {

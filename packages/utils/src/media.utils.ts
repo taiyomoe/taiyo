@@ -1,8 +1,8 @@
 import type { Languages, UploadSessionType } from "@prisma/client"
+import type { MediaLimited } from "@taiyomoe/types"
 
-import { env } from "~/lib/env.mjs"
-import type { MediaLimited } from "~/lib/types"
-import { MediaCoverUtils } from "~/lib/utils/mediaCover.utils"
+import { env } from "../env"
+import { MediaCoverUtils } from "./mediaCover.utils"
 
 const getUrl = (media: { id: string }) => `/media/${media.id}`
 

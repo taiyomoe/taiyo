@@ -1,4 +1,4 @@
-import type { MediaChapterGroup } from "~/lib/types"
+import type { MediaChapterGroup } from "@taiyomoe/types"
 
 import { MediaChapterCardTemporary } from "./card/MediaChapterCardTemporary"
 

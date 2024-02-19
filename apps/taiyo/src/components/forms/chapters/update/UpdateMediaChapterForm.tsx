@@ -4,11 +4,11 @@ import type { FormikConfig } from "formik"
 import { toast } from "sonner"
 import { toFormikValidationSchema } from "zod-formik-adapter"
 
+import type { MediaChapterWithRelations } from "@taiyomoe/types"
 import { Form } from "~/components/generics/form/Form"
 import type { UpdateMediaChapterSchema } from "~/lib/schemas"
 import { updateMediaChapterSchema } from "~/lib/schemas"
 import { api } from "~/lib/trpc/client"
-import type { MediaChapterWithRelations } from "~/lib/types"
 import { ObjectUtils } from "~/lib/utils/object.utils"
 
 import { UpdateMediaChapterFormFields } from "./UpdateMediaChapterFormFields"

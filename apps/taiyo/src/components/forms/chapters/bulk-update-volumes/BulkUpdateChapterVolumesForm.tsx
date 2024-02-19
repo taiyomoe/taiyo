@@ -9,6 +9,7 @@ import { useState } from "react"
 import { toast } from "sonner"
 import { toFormikValidationSchema } from "zod-formik-adapter"
 
+import { FormSubmit } from "@taiyomoe/types"
 import { BulkUpdateActions } from "~/app/(root)/dashboard/chapters/bulk-edit/_components/BulkUpdateActions"
 import { Form } from "~/components/generics/form/Form"
 import {
@@ -16,7 +17,6 @@ import {
   bulkUpdateMediaChapterVolumesSchema,
 } from "~/lib/schemas"
 import { api } from "~/lib/trpc/client"
-import { FormSubmit } from "~/lib/types"
 import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils"
 
 import { BulkUpdateChapterVolumesFormFields } from "./BulkUpdateChapterVolumesFormFields"

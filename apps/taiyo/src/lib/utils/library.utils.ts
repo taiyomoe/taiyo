@@ -1,6 +1,5 @@
 import type { UserLibrary } from "@prisma/client"
-
-import type { UserLibraryStatus } from "~/lib/types"
+import type { UserLibraryStatus } from "@taiyomoe/types"
 import type { LibraryState } from "~/stores"
 
 const getStatusKeys = () =>

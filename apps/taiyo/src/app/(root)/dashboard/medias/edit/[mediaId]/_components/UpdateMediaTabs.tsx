@@ -3,10 +3,10 @@
 import { Tab, Tabs } from "@nextui-org/tabs"
 import { useEffect } from "react"
 
+import type { MediaWithRelations } from "@taiyomoe/types"
 import { UpdateMediaCoversShowcase } from "~/components/forms/mediaCovers/UpdateMediaCoversShowcase"
 import { UploadMediaCoversForm } from "~/components/forms/mediaCovers/UploadMediaCoversForm"
 import { UpdateMediaTitlesShowcase } from "~/components/forms/mediaTitles/update/UpdateMediaTitlesShowcase"
-import type { MediaWithRelations } from "~/lib/types"
 import { useMediaUpdateStore } from "~/stores"
 
 import { UpdateMediaBannersTab } from "./tabs/UpdateMediaBannersTab"

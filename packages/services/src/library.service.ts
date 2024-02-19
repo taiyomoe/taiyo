@@ -1,5 +1,5 @@
+import type { UserLibraryStatus } from "@taiyomoe/types"
 import { db } from "~/lib/server/db"
-import type { UserLibraryStatus } from "~/lib/types"
 import { LibraryUtils } from "~/lib/utils/library.utils"
 
 const getUserLibrary = async (userId: string | undefined) => {

@@ -1,7 +1,7 @@
 import type { Roles } from "@prisma/client"
 
+import type { Permission } from "@taiyomoe/types"
 import { getServerAuthSession } from "~/lib/auth/utils"
-import type { Permission } from "~/lib/types"
 
 type Props = {
   requiredRole?: Roles

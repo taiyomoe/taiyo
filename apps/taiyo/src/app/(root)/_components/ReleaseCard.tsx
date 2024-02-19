@@ -1,10 +1,10 @@
 import Link from "next/link"
 
+import type { LatestRelease } from "@taiyomoe/types"
 import { MediaImage } from "~/components/generics/images/MediaImage"
 import { MediaChapterScans } from "~/components/ui/MediaChapterScans"
 import { MediaChapterCardUploadedTime } from "~/components/ui/MediaChapterUploadedTime"
 import { MediaChapterUploader } from "~/components/ui/MediaChapterUploader"
-import type { LatestRelease } from "~/lib/types"
 import { MediaUtils } from "~/lib/utils/media.utils"
 import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils"
 import { MediaCoverUtils } from "~/lib/utils/mediaCover.utils"

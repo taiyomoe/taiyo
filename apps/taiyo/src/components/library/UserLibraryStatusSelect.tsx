@@ -1,12 +1,12 @@
 import type { Selection } from "@nextui-org/react"
 import { Select, SelectItem } from "@nextui-org/select"
 
-import { api } from "~/lib/trpc/client"
 import type {
   MediaLimited,
   UserLibraryStatus,
   UserLibraryStatusWithDelete,
-} from "~/lib/types"
+} from "@taiyomoe/types"
+import { api } from "~/lib/trpc/client"
 import { LibraryUtils } from "~/lib/utils/library.utils"
 import { SelectUtils } from "~/lib/utils/select.utils"
 import { useLibraryStore } from "~/stores"

@@ -4,7 +4,7 @@ import type {
   MediaLimited,
   UserLibraryMedia,
   UserLibraryStatus,
-} from "~/lib/types"
+} from "@taiyomoe/types"
 import { LibraryUtils } from "~/lib/utils/library.utils"
 
 export type LibraryState = {

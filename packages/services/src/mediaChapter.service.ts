@@ -1,7 +1,10 @@
 import type { Languages } from "@prisma/client"
 
-import { db } from "~/lib/server/db"
-import type { LatestRelease, MediaChaptersUploadersStats } from "~/lib/types"
+import { db } from "@taiyomoe/db"
+import type {
+  LatestRelease,
+  MediaChaptersUploadersStats,
+} from "@taiyomoe/types"
 import { MediaUtils } from "~/lib/utils/media.utils"
 
 const getLatestReleases = async (

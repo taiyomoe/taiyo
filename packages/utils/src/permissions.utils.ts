@@ -4,7 +4,7 @@ import type {
   Permission,
   ResourcesWithPossession,
   ResourcesWithoutPossession,
-} from "~/lib/types"
+} from "@taiyomoe/types"
 
 const getPermissions = (): Permission[] => {
   const permissions: Permission[] = []

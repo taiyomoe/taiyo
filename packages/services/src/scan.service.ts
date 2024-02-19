@@ -1,7 +1,7 @@
 import { TRPCError } from "@trpc/server"
 
+import type { ScansIndexItem } from "@taiyomoe/types"
 import { db } from "~/lib/server/db"
-import type { ScansIndexItem } from "~/lib/types"
 
 /**
  * Gets the name of a scan.

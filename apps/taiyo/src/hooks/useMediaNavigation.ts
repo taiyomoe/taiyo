@@ -7,8 +7,8 @@ import {
 } from "next-usequerystate"
 import { useCallback } from "react"
 
+import type { MediaTabs } from "@taiyomoe/types"
 import { DEFAULT_MEDIA_PAGE, DEFAULT_MEDIA_PER_PAGE } from "~/lib/constants"
-import type { MediaTabs } from "~/lib/types"
 
 export const useMediaNavigation = () => {
   const [tab, setTab] = useQueryState(

@@ -6,7 +6,7 @@ import {
   PanelRightOpenIcon,
 } from "lucide-react"
 
-import type { ReaderSettings } from "~/lib/types"
+import type { ReaderSettings } from "@taiyomoe/types"
 
 type Props = {
   action: "open" | "close"

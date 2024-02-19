@@ -2,8 +2,8 @@ import { Card, CardBody } from "@nextui-org/card"
 import Link from "next/link"
 import { tv } from "tailwind-variants"
 
+import type { MediaLimitedChapter } from "@taiyomoe/types"
 import { MediaChapterScans } from "~/components/ui/MediaChapterScans"
-import type { MediaLimitedChapter } from "~/lib/types"
 import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils"
 
 import { MediaChapterCardUploadedTime } from "../../../../../../../../components/ui/MediaChapterUploadedTime"

@@ -5,7 +5,7 @@ import type {
   InferNestedPaths,
   InferNestedValues,
   ReaderSettings,
-} from "~/lib/types"
+} from "@taiyomoe/types"
 import { usePersistentReaderSettingsStore } from "~/stores/persistentReaderSettings.store"
 import { useReaderStore } from "~/stores/reader.store"
 

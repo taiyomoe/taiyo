@@ -1,0 +1,27 @@
+{
+  "name": "@taiyomoe/db",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "license": "MIT",
+  "scripts": {
+    "clean": "rm -rf .turbo node_modules",
+    "typecheck": "tsc --noEmit",
+    "with-env": "dotenv -e ../../.env --",
+    "postinstall": "prisma generate"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.9.1"
+  },
+  "devDependencies": {
+    "@taiyomoe/tsconfig": "workspace:^0.1.0",
+    "dotenv-cli": "^7.3.0",
+    "prisma": "^5.9.1",
+    "prisma-json-types-generator": "^3.0.4",
+    "typescript": "^5.3.3",
+    "zod-prisma-types": "^3.1.6"
+  }
+}

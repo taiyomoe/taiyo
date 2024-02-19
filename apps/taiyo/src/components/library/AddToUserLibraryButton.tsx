@@ -5,8 +5,8 @@ import { Popover, PopoverContent, PopoverTrigger } from "@nextui-org/popover"
 import { useSession } from "next-auth/react"
 import { useEffect, useState } from "react"
 
+import type { MediaLimited, UserLibraryMedia } from "@taiyomoe/types"
 import { UserLibraryStatusSelect } from "~/components/library/UserLibraryStatusSelect"
-import type { MediaLimited, UserLibraryMedia } from "~/lib/types"
 import { LibraryUtils } from "~/lib/utils/library.utils"
 import { useLibraryStore } from "~/stores"
 

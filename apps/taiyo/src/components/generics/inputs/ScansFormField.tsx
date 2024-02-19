@@ -7,8 +7,8 @@ import type { Key } from "@react-types/shared"
 import { useFormikContext } from "formik"
 import { useCallback, useEffect, useState } from "react"
 
+import type { ScansIndexItem } from "@taiyomoe/types"
 import { api } from "~/lib/trpc/client"
-import type { ScansIndexItem } from "~/lib/types"
 
 const scansFormField = tv({
   slots: {

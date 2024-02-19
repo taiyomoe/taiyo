@@ -4,9 +4,9 @@ import { headers } from "next/headers"
 
 import "~/styles/globals.css"
 
+import type { LayoutProps } from "@taiyomoe/types"
 import { siteConfig } from "~/lib/config"
 import { getBaseUrl } from "~/lib/trpc/shared"
-import type { LayoutProps } from "~/lib/types"
 import { cn } from "~/lib/utils/cn"
 
 import { Providers } from "./providers"

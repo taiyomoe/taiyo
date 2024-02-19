@@ -1,5 +1,5 @@
+import { MediaLimited } from "@taiyomoe/types"
 import { MediaImage } from "~/components/generics/images/MediaImage"
-import { MediaLimited } from "~/lib/types"
 import { MediaCoverUtils } from "~/lib/utils/mediaCover.utils"
 import { MediaLayoutLeftPanelTitle } from "./MediaLayoutLeftPanelTitle"
 

@@ -5,9 +5,9 @@ import { Spinner } from "@nextui-org/spinner"
 import Image from "next/image"
 import { useEffect, useMemo, useState } from "react"
 
+import type { MediaLimited } from "@taiyomoe/types"
 import { useMediaNavigation } from "~/hooks/useMediaNavigation"
 import { api } from "~/lib/trpc/client"
-import type { MediaLimited } from "~/lib/types"
 import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils"
 
 import { MediaChapterVolumes } from "./MediaChapterVolumes"

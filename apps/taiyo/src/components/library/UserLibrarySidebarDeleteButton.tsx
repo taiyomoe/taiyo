@@ -9,8 +9,8 @@ import {
 } from "@nextui-org/modal"
 import { TrashIcon } from "lucide-react"
 
+import type { UserLibraryMedia } from "@taiyomoe/types"
 import { api } from "~/lib/trpc/client"
-import type { UserLibraryMedia } from "~/lib/types"
 import { useLibraryStore } from "~/stores"
 
 type Props = {

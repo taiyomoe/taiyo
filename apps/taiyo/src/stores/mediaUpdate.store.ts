@@ -1,11 +1,11 @@
 import type { MediaCover, MediaTitle } from "@prisma/client"
 import { create } from "zustand"
 
+import type { MediaWithRelations } from "@taiyomoe/types"
 import type {
   UpdateMediaCoverSchema,
   UpdateMediaTitleSchema,
 } from "~/lib/schemas"
-import type { MediaWithRelations } from "~/lib/types"
 
 export type MediaUpdateState = {
   titles: MediaTitle[]

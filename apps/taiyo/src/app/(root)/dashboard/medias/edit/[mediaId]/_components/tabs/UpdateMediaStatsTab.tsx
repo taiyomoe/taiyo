@@ -1,4 +1,4 @@
-import type { MediaWithRelations } from "~/lib/types"
+import type { MediaWithRelations } from "@taiyomoe/types"
 
 type Props = {
   media: MediaWithRelations

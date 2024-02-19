@@ -3,9 +3,9 @@ import type { Languages, User } from "@prisma/client"
 import type { AdapterUser, DefaultSession, NextAuthOptions } from "next-auth"
 import DiscordProvider from "next-auth/providers/discord"
 
+import type { Permission } from "@taiyomoe/types"
 import { env } from "~/lib/env.mjs"
 import { db } from "~/lib/server/db"
-import type { Permission } from "~/lib/types"
 
 import { PermissionUtils } from "../utils/permissions.utils"
 

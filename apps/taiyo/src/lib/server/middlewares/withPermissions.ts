@@ -1,6 +1,6 @@
 import { AccessControl } from "accesscontrol"
 
-import type { Actions, Grant, Posession, Resources } from "~/lib/types"
+import type { Actions, Grant, Posession, Resources } from "@taiyomoe/types"
 
 import { InsuficientPermissionsError, InternalServerError } from "../errors"
 import { authMiddleware } from "../trpc"

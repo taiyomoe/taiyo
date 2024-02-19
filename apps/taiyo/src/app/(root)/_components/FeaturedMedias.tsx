@@ -1,4 +1,4 @@
-import type { FeaturedMedia } from "~/lib/types"
+import type { FeaturedMedia } from "@taiyomoe/types"
 
 import { SwipeableFeaturedMedias } from "./swipers/SwipeableFeaturedMedias"
 

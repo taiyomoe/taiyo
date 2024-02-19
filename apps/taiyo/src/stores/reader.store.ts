@@ -5,7 +5,7 @@ import type {
   MediaChapterLimited,
   MediaChapterNavigation,
   ReaderImage,
-} from "~/lib/types"
+} from "@taiyomoe/types"
 import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils"
 import { MediaChapterImageUtils } from "~/lib/utils/mediaChapterImage.utils"
 import { useReaderSettingsStore } from "~/stores"

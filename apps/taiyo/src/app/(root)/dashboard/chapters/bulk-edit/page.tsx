@@ -1,8 +1,8 @@
 "use client"
 
+import { SearchedMedia } from "@taiyomoe/types"
 import { useState } from "react"
 import { MediaSearchAutocomplete } from "~/components/navbar/search/MediaSearchAutocomplete"
-import { SearchedMedia } from "~/lib/types"
 
 import { BulkUpdateActions } from "./_components/BulkUpdateActions"
 

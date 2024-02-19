@@ -1,6 +1,6 @@
+import type { UserLibraryMedia } from "@taiyomoe/types"
 import { getLibrarySchema, updateLibrarySchema } from "~/lib/schemas"
 import { MediaService } from "~/lib/services"
-import type { UserLibraryMedia } from "~/lib/types"
 import { MediaUtils } from "~/lib/utils/media.utils"
 
 import { createTRPCRouter, protectedProcedure } from "../trpc"

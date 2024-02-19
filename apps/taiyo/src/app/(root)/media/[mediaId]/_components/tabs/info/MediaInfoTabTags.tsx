@@ -1,6 +1,6 @@
+import type { MediaLimited } from "@taiyomoe/types"
 import { Category } from "~/components/generics/Category"
 import { TAGS_PT } from "~/lib/i18n/tags"
-import type { MediaLimited } from "~/lib/types"
 
 type Props = {
   media: MediaLimited

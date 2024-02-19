@@ -4,7 +4,7 @@ import { Button, ButtonGroup } from "@nextui-org/button"
 import { FileIcon, ScrollTextIcon } from "lucide-react"
 import { tv } from "tailwind-variants"
 
-import type { ReaderSettings } from "~/lib/types"
+import type { ReaderSettings } from "@taiyomoe/types"
 import { useReaderSettingsStore } from "~/stores"
 
 const readerSidebarSettingsPageMode = tv({

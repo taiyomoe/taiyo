@@ -1,7 +1,7 @@
 import { Image } from "@nextui-org/image"
 import NextImage from "next/image"
 
-import type { MediaLimited } from "~/lib/types"
+import type { MediaLimited } from "@taiyomoe/types"
 import { MediaCoverUtils } from "~/lib/utils/mediaCover.utils"
 
 type Props = {
