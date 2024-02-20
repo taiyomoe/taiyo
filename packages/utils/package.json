@@ -15,7 +15,7 @@
   "dependencies": {
     "@prisma/client": "^5.9.1",
     "@taiyomoe/constants": "workspace:^0.1.0",
-    "@taiyomoe/schemas": "workspace:^"
+    "@taiyomoe/schemas": "workspace:^0.1.0"
   },
   "devDependencies": {
     "@taiyomoe/tsconfig": "workspace:^0.1.0",

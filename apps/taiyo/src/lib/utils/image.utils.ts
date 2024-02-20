@@ -1,6 +1,6 @@
 import { extname } from "path"
-import { ImageFolder, InvalidFile } from "@taiyomoe/types"
-import { ALLOWED_MIME_TYPES } from "~/lib/constants"
+import { ALLOWED_MIME_TYPES } from "@taiyomoe/constants"
+import { ImageFolder, InvalidFile } from "~/lib/types"
 
 const convert = async (source: File) => {
   const image = await createImageBitmap(source)

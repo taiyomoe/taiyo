@@ -1,29 +1,6 @@
-import type {
-  MediaLimited,
-  UserLibraryMedia,
-  UserLibraryStatus,
-} from "@taiyomoe/types"
+import { LibraryState } from "@taiyomoe/types"
+import { LibraryUtils } from "@taiyomoe/utils"
 import { create } from "zustand"
-import { LibraryUtils } from "~/lib/utils/library.utils"
-
-export type LibraryState = {
-  sidebarState: "show" | "hide"
-  toggleSidebar: () => void
-
-  reading: UserLibraryMedia[]
-  rereading: UserLibraryMedia[]
-  completed: UserLibraryMedia[]
-  onHold: UserLibraryMedia[]
-  dropped: UserLibraryMedia[]
-  planToRead: UserLibraryMedia[]
-
-  addEntries: (status: UserLibraryStatus, entries: UserLibraryMedia[]) => void
-  getEntry: (mediaId: string) => UserLibraryMedia | undefined
-  updateEntry: (
-    media: MediaLimited | UserLibraryMedia,
-    newStatus: UserLibraryStatus | "delete",
-  ) => void
-}
 
 export const useLibraryStore = create<LibraryState>((set, get) => ({
   sidebarState: "hide",

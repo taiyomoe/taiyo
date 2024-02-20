@@ -4,13 +4,13 @@ import type { AutocompleteProps } from "@nextui-org/autocomplete"
 import { Autocomplete, AutocompleteItem } from "@nextui-org/autocomplete"
 import { useAsyncList } from "@react-stately/data"
 import type { SearchedMedia } from "@taiyomoe/types"
+import { MediaCoverUtils } from "@taiyomoe/utils"
 import { SearchIcon } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useCallback } from "react"
 import { SearchedMediaCard } from "~/components/navbar/search/SearchedMediaCard"
 import { api } from "~/lib/trpc/client"
-import { MediaCoverUtils } from "~/lib/utils/mediaCover.utils"
 
 type Props = {
   href?: (mediaId: string) => string

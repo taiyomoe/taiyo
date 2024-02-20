@@ -3,8 +3,8 @@ import {
   deleteMediaCoverSchema,
   updateMediaCoverSchema,
 } from "@taiyomoe/schemas"
+import { MediaService } from "@taiyomoe/services"
 import { TRPCError } from "@trpc/server"
-import { MediaService } from "~/lib/services"
 
 import { createTRPCRouter, protectedProcedure } from "../trpc"
 

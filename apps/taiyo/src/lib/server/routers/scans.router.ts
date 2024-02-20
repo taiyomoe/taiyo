@@ -1,5 +1,5 @@
 import { insertScanSchema, searchScanSchema } from "@taiyomoe/schemas"
-import { ScanService } from "~/lib/services/scan.service"
+import { ScanService } from "@taiyomoe/services"
 import { createTRPCRouter, protectedProcedure } from "../trpc"
 
 export const scansRouter = createTRPCRouter({

@@ -8,8 +8,8 @@ import {
   updateMediaChapterSchema,
 } from "@taiyomoe/schemas"
 import type { MediaChapterLimited } from "@taiyomoe/types"
+import { MediaUtils } from "@taiyomoe/utils"
 import { TRPCError } from "@trpc/server"
-import { MediaUtils } from "~/lib/utils/media.utils"
 
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 

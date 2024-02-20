@@ -1,21 +1,16 @@
 import { nextui } from "@nextui-org/theme"
+import baseConfig from "@taiyomoe/tailwind-config/web"
 import tailwindScrollbar from "tailwind-scrollbar"
 import type { Config } from "tailwindcss"
-import { fontFamily } from "tailwindcss/defaultTheme"
 import plugin from "tailwindcss/plugin"
-import baseConfig from "@taiyomoe/tailwind-config/web"
 
-export default ({
-  content: [...baseConfig.content, "../../packages/ui/**/*.{ts,tsx}"],
+export default {
   presets: [baseConfig],
-  theme: {
-    extend: {
-      fontFamily: {
-        sans: ["var(--font-geist-sans)", ...fontFamily.sans],
-        mono: ["var(--font-geist-mono)", ...fontFamily.mono],
-      },
-    },
-  },
+  content: [
+    ...baseConfig.content,
+    "./src/**/*.tsx",
+    "../../node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
+  ],
   plugins: [
     tailwindScrollbar({ nocompatible: true }),
     plugin(({ addVariant }) => {
@@ -73,4 +68,4 @@ export default ({
       },
     }),
   ],
-} satisfies Config)
+} satisfies Config

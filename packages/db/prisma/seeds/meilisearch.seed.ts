@@ -1,7 +1,7 @@
+import { MediaService } from "@taiyomoe/services"
+import { ScanService } from "@taiyomoe/services"
 import { db } from "~/lib/server/db"
 import { meilisearch, meilisearchIndexes } from "~/lib/server/meilisearch"
-import { MediaService } from "~/lib/services"
-import { ScanService } from "~/lib/services/scan.service"
 
 const execute = async () => {
   // Medias

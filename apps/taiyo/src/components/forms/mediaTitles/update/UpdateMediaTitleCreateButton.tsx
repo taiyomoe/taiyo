@@ -9,7 +9,6 @@ import {
 } from "@nextui-org/modal"
 import type { CreateMediaTitleSchema } from "@taiyomoe/schemas"
 import { createMediaTitleSchema } from "@taiyomoe/schemas"
-import type { FormSubmit } from "@taiyomoe/types"
 import { TRPCClientError } from "@trpc/client"
 import { PlusIcon } from "lucide-react"
 import { toast } from "sonner"
@@ -18,6 +17,7 @@ import { MediaTitlesFormFields } from "~/components/forms/mediaTitles/MediaTitle
 import { SubmitButton } from "~/components/generics/buttons/SubmitButton"
 import { Form } from "~/components/generics/form/Form"
 import { api } from "~/lib/trpc/client"
+import { FormSubmit } from "~/lib/types"
 import { useMediaUpdateStore } from "~/stores"
 
 type Props = {

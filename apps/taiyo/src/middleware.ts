@@ -1,8 +1,7 @@
+import { MediaChapterUtils, PermissionUtils } from "@taiyomoe/utils"
 import { withAuth } from "next-auth/middleware"
 import type { NextRequest } from "next/server"
 import { NextResponse } from "next/server"
-import { MediaChapterUtils } from "./lib/utils/mediaChapter.utils"
-import { PermissionUtils } from "./lib/utils/permissions.utils"
 
 const chapterMiddleware = (req: NextRequest) => {
   const parsedUrl = MediaChapterUtils.parseUrl(req.nextUrl.pathname)

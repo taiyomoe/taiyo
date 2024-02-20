@@ -1,6 +1,6 @@
 import { MediaLimited } from "@taiyomoe/types"
+import { MediaCoverUtils } from "@taiyomoe/utils"
 import { MediaImage } from "~/components/generics/images/MediaImage"
-import { MediaCoverUtils } from "~/lib/utils/mediaCover.utils"
 import { MediaLayoutLeftPanelTitle } from "./MediaLayoutLeftPanelTitle"
 
 type Props = {

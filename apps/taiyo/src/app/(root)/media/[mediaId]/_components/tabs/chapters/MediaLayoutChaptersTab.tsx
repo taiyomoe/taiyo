@@ -3,11 +3,11 @@
 import type { Selection } from "@nextui-org/react"
 import { Spinner } from "@nextui-org/spinner"
 import type { MediaLimited } from "@taiyomoe/types"
+import { MediaChapterUtils } from "@taiyomoe/utils"
 import Image from "next/image"
 import { useEffect, useMemo, useState } from "react"
 import { useMediaNavigation } from "~/hooks/useMediaNavigation"
 import { api } from "~/lib/trpc/client"
-import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils"
 import { MediaChapterVolumes } from "./MediaChapterVolumes"
 import { MediaChaptersTabActions } from "./MediaChaptersTabActions"
 

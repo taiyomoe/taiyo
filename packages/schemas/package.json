@@ -16,8 +16,8 @@
     "@taiyomoe/tsconfig": "workspace:^0.1.0"
   },
   "dependencies": {
-    "@taiyomoe/constants": "workspace:^",
-    "@taiyomoe/types": "workspace:^",
+    "@taiyomoe/constants": "workspace:^0.1.0",
+    "@taiyomoe/types": "workspace:^0.1.0",
     "zod": "^3.22.4"
   }
 }

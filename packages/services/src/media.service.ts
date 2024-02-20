@@ -1,9 +1,12 @@
 import type { Languages, MediaStatus } from "@prisma/client"
-import type { FeaturedMedia, LatestMedia } from "@taiyomoe/types"
-import type { MediasIndexItem } from "@taiyomoe/types/meilisearch.types"
+import { db } from "@taiyomoe/db"
+import type {
+  FeaturedMedia,
+  LatestMedia,
+  MediasIndexItem,
+} from "@taiyomoe/types"
+import { MediaUtils } from "@taiyomoe/utils"
 import { TRPCError } from "@trpc/server"
-import { db } from "~/lib/server/db"
-import { MediaUtils } from "~/lib/utils/media.utils"
 
 /**
  * Gets the titles and main cover of a media.

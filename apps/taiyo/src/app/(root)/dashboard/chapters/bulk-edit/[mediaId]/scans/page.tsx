@@ -1,7 +1,7 @@
+import { MediaChapterService } from "@taiyomoe/services"
 import { notFound } from "next/navigation"
 import { BulkUpdateChapterScansForm } from "~/components/forms/chapters/bulk-update-scans/BulkUpdateChapterScansForm"
 import { db } from "~/lib/server/db"
-import { MediaChapterService } from "~/lib/services"
 
 type Props = {
   params: { mediaId: string }

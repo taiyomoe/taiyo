@@ -1,6 +1,6 @@
+import { db } from "@taiyomoe/db"
 import type { UserLibraryStatus } from "@taiyomoe/types"
-import { db } from "~/lib/server/db"
-import { LibraryUtils } from "~/lib/utils/library.utils"
+import { LibraryUtils } from "@taiyomoe/utils"
 
 const getUserLibrary = async (userId: string | undefined) => {
   if (!userId) return null

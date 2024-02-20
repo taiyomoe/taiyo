@@ -2,12 +2,12 @@
 
 import { Image } from "@nextui-org/image"
 import type { LatestMedia } from "@taiyomoe/types"
+import { MediaCoverUtils } from "@taiyomoe/utils"
 import useEmblaCarousel from "embla-carousel-react"
 import NextImage from "next/image"
 import Link from "next/link"
 import { MediaImage } from "~/components/generics/images/MediaImage"
 import { cn } from "~/lib/utils/cn"
-import { MediaCoverUtils } from "~/lib/utils/mediaCover.utils"
 
 type Props = {
   medias: LatestMedia[]

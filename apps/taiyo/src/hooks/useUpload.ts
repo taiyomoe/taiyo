@@ -1,6 +1,6 @@
 import type { UploadSessionType } from "@prisma/client"
+import { MediaChapterUtils } from "@taiyomoe/utils"
 import type { UploadResponse } from "~/lib/types"
-import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils"
 import { useImageStore } from "~/stores"
 
 export const useUpload = () => {

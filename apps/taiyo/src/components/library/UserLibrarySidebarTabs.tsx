@@ -1,6 +1,6 @@
 import { Tab, Tabs } from "@nextui-org/react"
+import { LibraryUtils } from "@taiyomoe/utils"
 import { UserLibrarySidebarTabsContent } from "~/components/library/UserLibrarySidebarTabsContent"
-import { LibraryUtils } from "~/lib/utils/library.utils"
 
 export const UserLibrarySidebarTabs = () => {
   return (

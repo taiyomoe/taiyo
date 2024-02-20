@@ -1,4 +1,4 @@
-import { MediaChapterService } from "~/lib/services"
+import { MediaChapterService } from "@taiyomoe/services"
 import { ChapterUploadersChart } from "./_components/ChapterUploadersChart"
 import { UploadedChaptersChart } from "./_components/UploadedChaptersChart"
 

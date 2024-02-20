@@ -13,7 +13,9 @@
     "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
-    "@taiyomoe/db": "workspace:^0.1.0"
+    "@taiyomoe/db": "workspace:^0.1.0",
+    "@taiyomoe/types": "workspace:^0.1.0",
+    "@taiyomoe/utils": "workspace:^0.1.0"
   },
   "devDependencies": {
     "@taiyomoe/tsconfig": "workspace:^0.1.0"

@@ -20,6 +20,7 @@
     "@taiyomoe/constants": "workspace:^0.1.0",
     "@taiyomoe/db": "workspace:^0.1.0",
     "@taiyomoe/schemas": "workspace:^0.1.0",
+    "@taiyomoe/services": "workspace:^",
     "@taiyomoe/utils": "workspace:^0.1.0",
     "@tanstack/react-query": "^4.36.1",
     "@trpc/client": "^10.45.1",

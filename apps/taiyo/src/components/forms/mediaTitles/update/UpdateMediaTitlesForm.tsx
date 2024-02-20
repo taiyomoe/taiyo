@@ -10,7 +10,6 @@ import {
 import type { MediaTitle } from "@prisma/client"
 import type { UpdateMediaTitleSchema } from "@taiyomoe/schemas"
 import { updateMediaTitleSchema } from "@taiyomoe/schemas"
-import type { FormSubmit } from "@taiyomoe/types"
 import { TRPCClientError } from "@trpc/client"
 import { pick } from "lodash-es"
 import { FileEditIcon } from "lucide-react"
@@ -21,6 +20,7 @@ import { UpdateMediaTitleDeleteButton } from "~/components/forms/mediaTitles/upd
 import { SubmitButton } from "~/components/generics/buttons/SubmitButton"
 import { Form } from "~/components/generics/form/Form"
 import { api } from "~/lib/trpc/client"
+import { FormSubmit } from "~/lib/types"
 import { ObjectUtils } from "~/lib/utils/object.utils"
 import { useMediaUpdateStore } from "~/stores"
 

@@ -1,7 +1,7 @@
 import type { LatestRelease, MediaLimitedChapter } from "@taiyomoe/types"
+import { MediaChapterUtils } from "@taiyomoe/utils"
 import { ClockIcon } from "lucide-react"
 import { cn } from "~/lib/utils/cn"
-import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils"
 
 type Props = {
   chapter: MediaLimitedChapter | LatestRelease

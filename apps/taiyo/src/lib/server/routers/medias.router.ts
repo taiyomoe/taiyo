@@ -5,14 +5,14 @@ import {
   searchMediaSchema,
   updateMediaSchema,
 } from "@taiyomoe/schemas"
-import type { MediaLimited, SearchedMedia } from "@taiyomoe/types"
-import { TRPCError } from "@trpc/server"
 import {
   LibraryService,
   MediaChapterService,
   MediaService,
-} from "~/lib/services"
-import { MediaUtils } from "~/lib/utils/media.utils"
+} from "@taiyomoe/services"
+import type { MediaLimited, SearchedMedia } from "@taiyomoe/types"
+import { MediaUtils } from "@taiyomoe/utils"
+import { TRPCError } from "@trpc/server"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 
 export const mediasRouter = createTRPCRouter({

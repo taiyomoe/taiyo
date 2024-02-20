@@ -1,9 +1,9 @@
 import { Image } from "@nextui-org/image"
 import type { MediaLimited } from "@taiyomoe/types"
+import { MediaUtils } from "@taiyomoe/utils"
+import { MediaCoverUtils } from "@taiyomoe/utils"
 import NextImage from "next/image"
 import { cn } from "~/lib/utils/cn"
-import { MediaUtils } from "~/lib/utils/media.utils"
-import { MediaCoverUtils } from "~/lib/utils/mediaCover.utils"
 
 type Props = {
   media: MediaLimited

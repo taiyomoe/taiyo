@@ -2,6 +2,7 @@
 
 import { Button } from "@nextui-org/react"
 import type { FeaturedMedia } from "@taiyomoe/types"
+import { MediaBannerUtils, MediaCoverUtils } from "@taiyomoe/utils"
 import Autoplay from "embla-carousel-autoplay"
 import useEmblaCarousel from "embla-carousel-react"
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react"
@@ -9,8 +10,6 @@ import Link from "next/link"
 import { useCallback } from "react"
 import { MediaImage } from "~/components/generics/images/MediaImage"
 import { cn } from "~/lib/utils/cn"
-import { MediaBannerUtils } from "~/lib/utils/mediaBanner.utils"
-import { MediaCoverUtils } from "~/lib/utils/mediaCover.utils"
 
 type Props = {
   medias: FeaturedMedia[]

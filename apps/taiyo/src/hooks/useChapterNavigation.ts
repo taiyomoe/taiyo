@@ -1,8 +1,8 @@
+import { MediaUtils } from "@taiyomoe/utils"
+import { MediaChapterUtils } from "@taiyomoe/utils"
 import { usePathname, useRouter } from "next/navigation"
 import { useCallback, useState } from "react"
 import { useChapterProgression } from "~/hooks/useChapterProgression"
-import { MediaUtils } from "~/lib/utils/media.utils"
-import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils"
 import { useReaderStore } from "~/stores"
 
 export const useChapterNavigation = () => {

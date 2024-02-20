@@ -1,8 +1,8 @@
 import { InsertMediaChapterFormSchema } from "@taiyomoe/schemas"
+import { MediaChapterUtils } from "@taiyomoe/utils"
 import { useMutation } from "@tanstack/react-query"
 import { api } from "~/lib/trpc/client"
 import { SuccessfulUploadResponse, UploadResponse } from "~/lib/types"
-import { MediaChapterUtils } from "~/lib/utils/mediaChapter.utils"
 
 export const useRawChapterUpload = () => {
   const { mutateAsync: startUploadSession } =

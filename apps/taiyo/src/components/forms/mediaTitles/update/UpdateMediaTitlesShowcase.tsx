@@ -1,10 +1,10 @@
 import { Chip } from "@nextui-org/react"
+import { MediaTitleUtils } from "@taiyomoe/utils"
 import { useMemo } from "react"
 import { UpdateMediaTitleCreateButton } from "~/components/forms/mediaTitles/update/UpdateMediaTitleCreateButton"
 import { UpdateMediaTitlesForm } from "~/components/forms/mediaTitles/update/UpdateMediaTitlesForm"
 import { List } from "~/components/generics/List"
 import { Form } from "~/components/generics/form/Form"
-import { MediaTitleUtils } from "~/lib/utils/mediaTitles.utils"
 import { useMediaUpdateStore } from "~/stores"
 
 type Props = {

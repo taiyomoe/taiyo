@@ -4,7 +4,7 @@ import type {
   LatestRelease,
   MediaChaptersUploadersStats,
 } from "@taiyomoe/types"
-import { MediaUtils } from "~/lib/utils/media.utils"
+import { MediaUtils } from "@taiyomoe/utils"
 
 const getLatestReleases = async (
   preferredTitles: Languages | null | undefined,
