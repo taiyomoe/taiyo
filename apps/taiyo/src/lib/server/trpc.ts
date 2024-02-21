@@ -7,13 +7,13 @@
  * need to use are documented accordingly near the end.
  */
 
+import { db } from "@taiyomoe/db"
+import { meilisearch, meilisearchIndexes } from "@taiyomoe/meilisearch"
 import type { Actions, Resources } from "@taiyomoe/types"
 import { initTRPC } from "@trpc/server"
 import superjson from "superjson"
 import { ZodError } from "zod"
 import { getServerAuthSession } from "~/lib/auth/utils"
-import { db } from "~/lib/server/db"
-import { meilisearch, meilisearchIndexes } from "~/lib/server/meilisearch"
 import { withAuth } from "./middlewares/withAuth"
 import { withPermissions } from "./middlewares/withPermissions"
 

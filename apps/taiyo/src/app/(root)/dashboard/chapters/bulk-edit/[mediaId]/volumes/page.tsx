@@ -1,6 +1,6 @@
+import { db } from "@taiyomoe/db"
 import { notFound } from "next/navigation"
 import { BulkUpdateChapterVolumesForm } from "~/components/forms/chapters/bulk-update-volumes/BulkUpdateChapterVolumesForm"
-import { db } from "~/lib/server/db"
 
 type Props = {
   params: { mediaId: string }

@@ -1,24 +1,23 @@
 {
-  "name": "@taiyomoe/tailwind-config",
+  "name": "@taiyomoe/meilisearch",
   "version": "0.1.0",
   "private": true,
   "type": "module",
   "exports": {
-    "./base": "./base.ts"
+    ".": "./src/index.ts",
+    "./utils": "./src/utils/index.ts"
   },
   "license": "MIT",
   "scripts": {
     "clean": "rm -rf .turbo node_modules",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
-    "autoprefixer": "^10.4.17",
-    "postcss": "^8.4.35",
-    "tailwindcss": "^3.4.1",
-    "tailwindcss-animate": "^1.0.7"
+    "meilisearch": "^0.37.0"
   },
   "devDependencies": {
     "@taiyomoe/tsconfig": "workspace:^0.1.0",
-    "typescript": "^5.3.3"
+    "@taiyomoe/types": "workspace:^0.1.0"
   }
 }

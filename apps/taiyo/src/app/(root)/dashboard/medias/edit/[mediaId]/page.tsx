@@ -1,5 +1,5 @@
+import { db } from "@taiyomoe/db"
 import { notFound } from "next/navigation"
-import { db } from "~/lib/server/db"
 
 import { UpdateMediaTabs } from "./_components/UpdateMediaTabs"
 

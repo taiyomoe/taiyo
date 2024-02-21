@@ -1,11 +1,11 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter"
 import type { Languages, User } from "@prisma/client"
+import { db } from "@taiyomoe/db"
 import type { Permission } from "@taiyomoe/types"
 import { PermissionUtils } from "@taiyomoe/utils"
 import type { AdapterUser, DefaultSession, NextAuthOptions } from "next-auth"
 import DiscordProvider from "next-auth/providers/discord"
 import { env } from "~/lib/env.mjs"
-import { db } from "~/lib/server/db"
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`

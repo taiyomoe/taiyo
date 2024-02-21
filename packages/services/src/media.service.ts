@@ -1,66 +1,8 @@
 import type { Languages, MediaStatus } from "@prisma/client"
 import { db } from "@taiyomoe/db"
-import type {
-  FeaturedMedia,
-  LatestMedia,
-  MediasIndexItem,
-} from "@taiyomoe/types"
+import type { FeaturedMedia, LatestMedia } from "@taiyomoe/types"
 import { MediaUtils } from "@taiyomoe/utils"
 import { TRPCError } from "@trpc/server"
-
-/**
- * Gets the titles and main cover of a media.
- * This is used to populate the Meilisearch titles index.
- */
-const getIndexItem = async (mediaId: string): Promise<MediasIndexItem> => {
-  const result = await db.media.findUnique({
-    select: {
-      id: true,
-      synopsis: true,
-      titles: {
-        select: {
-          title: true,
-          language: true,
-          priority: true,
-          isAcronym: true,
-          isMainTitle: true,
-        },
-      },
-      covers: {
-        select: {
-          id: true,
-        },
-        where: {
-          isMainCover: true,
-        },
-      },
-    },
-    where: {
-      id: mediaId,
-    },
-  })
-
-  if (!result) {
-    throw new TRPCError({
-      code: "NOT_FOUND",
-      message: `Media '${mediaId}' not found`,
-    })
-  }
-
-  if (!result.covers.length) {
-    throw new TRPCError({
-      code: "INTERNAL_SERVER_ERROR",
-      message: `Media '${mediaId}' has no main cover`,
-    })
-  }
-
-  return {
-    id: result.id,
-    synopsis: result.synopsis,
-    titles: result.titles,
-    mainCoverId: result.covers[0]!.id,
-  }
-}
 
 /**
  * Gets the status of a media.
@@ -174,7 +116,6 @@ const getFeaturedMedias = async (
 }
 
 export const MediaService = {
-  getIndexItem,
   getStatus,
   getLatestMedias,
   getFeaturedMedias,
