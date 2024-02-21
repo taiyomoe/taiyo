@@ -19,7 +19,7 @@
     "@t3-oss/env-nextjs": "^0.8.0",
     "@taiyomoe/constants": "workspace:^0.1.0",
     "@taiyomoe/db": "workspace:^0.1.0",
-    "@taiyomoe/meilisearch": "workspace:^",
+    "@taiyomoe/meilisearch": "workspace:^0.1.0",
     "@taiyomoe/schemas": "workspace:^0.1.0",
     "@taiyomoe/services": "workspace:^0.1.0",
     "@taiyomoe/utils": "workspace:^0.1.0",

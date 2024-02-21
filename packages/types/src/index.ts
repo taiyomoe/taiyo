@@ -5,5 +5,3 @@ export * from "./mediaChapter.types"
 export * from "./mediaCover.types"
 export * from "./meilisearch.types"
 export * from "./permissions.types"
-
-export * from "./tags"

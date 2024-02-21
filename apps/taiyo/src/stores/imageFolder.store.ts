@@ -1,5 +1,5 @@
-import { ImageFolder } from "@taiyomoe/types"
 import { create } from "zustand"
+import { ImageFolder } from "~/lib/types"
 import { ImageUtils } from "~/lib/utils/image.utils"
 
 type ImageFolderStore = {

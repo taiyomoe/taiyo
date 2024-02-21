@@ -1,4 +1,4 @@
-import { TAG_KEYS } from "@taiyomoe/types"
+import { TAG_KEYS } from "@taiyomoe/constants"
 import { z } from "zod"
 import { createMediaTitlesSchema } from "./mediaTitle.schemas"
 import { MediaSchema } from "./prisma"

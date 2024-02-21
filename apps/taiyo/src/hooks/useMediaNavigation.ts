@@ -1,5 +1,6 @@
 "use client"
 
+import { DEFAULT_MEDIA_PAGE, DEFAULT_MEDIA_PER_PAGE } from "@taiyomoe/constants"
 import type { MediaTabs } from "@taiyomoe/types"
 import {
   parseAsInteger,
@@ -7,7 +8,6 @@ import {
   useQueryState,
 } from "next-usequerystate"
 import { useCallback } from "react"
-import { DEFAULT_MEDIA_PAGE, DEFAULT_MEDIA_PER_PAGE } from "~/lib/constants"
 
 export const useMediaNavigation = () => {
   const [tab, setTab] = useQueryState(

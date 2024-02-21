@@ -1,6 +1,6 @@
 import type { Languages } from "@prisma/client"
+import { LanguageUtils } from "@taiyomoe/utils"
 import Image from "next/image"
-import { LanguageUtils } from "~/lib/utils/language.utils"
 
 type Props = {
   language: Languages

@@ -5,6 +5,7 @@ import {
 import { MediaService } from "@taiyomoe/services"
 import { TRPCError } from "@trpc/server"
 
+import { getMediaIndexItem } from "@taiyomoe/meilisearch/utils"
 import { createTRPCRouter, protectedProcedure } from "../trpc"
 
 export const mediaTitlesRouter = createTRPCRouter({
@@ -58,7 +59,7 @@ export const mediaTitlesRouter = createTRPCRouter({
         })
       }
 
-      const indexItem = await MediaService.getIndexItem(input.mediaId)
+      const indexItem = await getMediaIndexItem(ctx.db, input.mediaId)
       await ctx.indexes.medias.updateDocuments([indexItem])
 
       return createdTitle
@@ -121,7 +122,7 @@ export const mediaTitlesRouter = createTRPCRouter({
         })
       }
 
-      const indexItem = await MediaService.getIndexItem(title.mediaId)
+      const indexItem = await getMediaIndexItem(ctx.db, title.mediaId)
       await ctx.indexes.medias.updateDocuments([indexItem])
     }),
 
@@ -153,7 +154,7 @@ export const mediaTitlesRouter = createTRPCRouter({
         where: { id: input.id },
       })
 
-      const indexItem = await MediaService.getIndexItem(title.mediaId)
+      const indexItem = await getMediaIndexItem(ctx.db, title.mediaId)
       await ctx.indexes.medias.updateDocuments([indexItem])
     }),
 })

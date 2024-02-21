@@ -1,10 +1,7 @@
-import type {
-  InferNestedPaths,
-  InferNestedValues,
-  ReaderSettings,
-} from "@taiyomoe/types"
+import type { ReaderSettings } from "@taiyomoe/types"
 import _ from "lodash-es"
 import { create } from "zustand"
+import { InferNestedPaths, InferNestedValues } from "~/lib/types"
 import { usePersistentReaderSettingsStore } from "~/stores/persistentReaderSettings.store"
 import { useReaderStore } from "~/stores/reader.store"
 

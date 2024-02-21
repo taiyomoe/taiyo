@@ -1,7 +1,7 @@
 import { Link, tv } from "@nextui-org/react"
 import type { MediaLimited } from "@taiyomoe/types"
+import { TrackerUtils } from "@taiyomoe/utils"
 import { CompanyLogo } from "~/components/ui/CompanyLogo"
-import { TrackerUtils } from "~/lib/utils/tracker.utils"
 
 type Props = { media: MediaLimited }
 

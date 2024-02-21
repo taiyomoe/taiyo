@@ -1,5 +1,5 @@
+import { getScanIndexItem } from "@taiyomoe/meilisearch/utils"
 import { insertScanSchema, searchScanSchema } from "@taiyomoe/schemas"
-import { ScanService } from "@taiyomoe/services"
 import { createTRPCRouter, protectedProcedure } from "../trpc"
 
 export const scansRouter = createTRPCRouter({
@@ -14,7 +14,7 @@ export const scansRouter = createTRPCRouter({
         },
       })
 
-      const indexItem = await ScanService.getIndexItem(createdScan.id)
+      const indexItem = await getScanIndexItem(ctx.db, createdScan.id)
       await ctx.indexes.scans.updateDocuments([indexItem])
 
       return createdScan

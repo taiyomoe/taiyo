@@ -10,3 +10,5 @@ export const ALLOWED_MIME_TYPES = [
   "image/webp",
   "image/gif",
 ]
+
+export * from "./tags"

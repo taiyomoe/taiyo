@@ -1,7 +1,10 @@
 {
   "extends": "@taiyomoe/tsconfig/base.json",
   "compilerOptions": {
-    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
+    "composite": true,
+    "declaration": true,
+    "skipLibCheck": true,
+    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
   },
   "include": ["src"],
   "exclude": ["node_modules"]

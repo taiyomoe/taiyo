@@ -5,5 +5,8 @@
   "types": "./src/index.d.ts",
   "devDependencies": {
     "@total-typescript/ts-reset": "^0.5.1"
+  },
+  "dependencies": {
+    "@taiyomoe/constants": "workspace:^0.1.0"
   }
 }

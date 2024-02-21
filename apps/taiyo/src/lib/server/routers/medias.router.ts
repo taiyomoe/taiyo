@@ -1,4 +1,5 @@
 import type { Trackers } from "@prisma/client"
+import { getMediaIndexItem } from "@taiyomoe/meilisearch/utils"
 import {
   getMediaByIdSchema,
   insertMediaSchema,
@@ -73,7 +74,7 @@ export const mediasRouter = createTRPCRouter({
           },
         })
 
-        const indexItem = await MediaService.getIndexItem(result.id)
+        const indexItem = await getMediaIndexItem(ctx.db, result.id)
         await ctx.indexes.medias.updateDocuments([indexItem])
 
         return result
@@ -101,7 +102,7 @@ export const mediasRouter = createTRPCRouter({
         data: input,
       })
 
-      const indexItem = await MediaService.getIndexItem(input.id)
+      const indexItem = await getMediaIndexItem(ctx.db, input.id)
       await ctx.indexes.medias.updateDocuments([indexItem])
     }),
 

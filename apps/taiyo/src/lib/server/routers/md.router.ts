@@ -1,3 +1,4 @@
+import { getMediaIndexItem } from "@taiyomoe/meilisearch/utils"
 import { importMediaSchema } from "@taiyomoe/schemas"
 import { MediaService } from "@taiyomoe/services"
 import { MediaUtils } from "@taiyomoe/utils"
@@ -177,7 +178,7 @@ export const mdRouter = createTRPCRouter({
         },
       ])
 
-      const indexItem = await MediaService.getIndexItem(media.id)
+      const indexItem = await getMediaIndexItem(ctx.db, media.id)
       await ctx.indexes.medias.updateDocuments([indexItem])
 
       void pusherServer.trigger("importChannel", "importEvent", {
