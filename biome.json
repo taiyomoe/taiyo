@@ -5,8 +5,7 @@
   },
   "formatter": {
     "enabled": true,
-    "indentStyle": "space",
-    "ignore": ["./src/lib/schemas/prisma/index.ts"]
+    "indentStyle": "space"
   },
   "linter": {
     "enabled": true,
@@ -24,5 +23,13 @@
     "formatter": {
       "semicolons": "asNeeded"
     }
+  },
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
+  },
+  "files": {
+    "ignore": ["./packages/schemas/src/prisma/index.ts"]
   }
 }

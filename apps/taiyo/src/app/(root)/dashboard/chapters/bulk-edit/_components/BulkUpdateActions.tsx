@@ -13,14 +13,20 @@ export const BulkUpdateActions = ({ mediaId }: Props) => {
     <div className="flex gap-4">
       <Button
         as={Link}
-        href={pathname.includes("/scans") ? "volumes" : `bulk-edit/${mediaId}/volumes`}
+        href={
+          pathname.includes("/scans")
+            ? "volumes"
+            : `bulk-edit/${mediaId}/volumes`
+        }
         isDisabled={pathname.endsWith("/volumes")}
       >
         Volumes
       </Button>
       <Button
         as={Link}
-        href={pathname.includes("/volumes") ? "scans" : `bulk-edit/${mediaId}/scans`}
+        href={
+          pathname.includes("/volumes") ? "scans" : `bulk-edit/${mediaId}/scans`
+        }
         isDisabled={pathname.endsWith("/scans")}
       >
         Scans
