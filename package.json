@@ -30,7 +30,7 @@
     "accesscontrol": "^2.2.1",
     "apexcharts": "^3.46.0",
     "embla-carousel-autoplay": "^8.0.0-rc19",
-    "embla-carousel-react": "^8.0.0-rc19",
+    "embla-carousel-react": "^8.0.0-rc23",
     "encoding": "^0.1.13",
     "formik": "^2.4.5",
     "framer-motion": "^11.0.5",
