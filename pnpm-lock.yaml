@@ -255,11 +255,10 @@ importers:
         version: 3.1.6
 
   packages/global-types:
-    dependencies:
+    devDependencies:
       '@taiyomoe/constants':
         specifier: workspace:^0.1.0
         version: link:../constants
-    devDependencies:
       '@total-typescript/ts-reset':
         specifier: ^0.5.1
         version: 0.5.1
@@ -337,6 +336,8 @@ importers:
       '@taiyomoe/types':
         specifier: workspace:^0.1.0
         version: link:../types
+
+  tooling/github: {}
 
   tooling/tailwind:
     dependencies:

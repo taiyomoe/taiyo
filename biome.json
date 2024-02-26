@@ -12,7 +12,8 @@
     "rules": {
       "recommended": true,
       "style": {
-        "noNonNullAssertion": "off"
+        "noNonNullAssertion": "off",
+        "useEnumInitializers": "off"
       },
       "a11y": {
         "useKeyWithClickEvents": "off"
