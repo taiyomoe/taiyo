@@ -26,9 +26,6 @@ importers:
 
   apps/taiyo:
     dependencies:
-      '@next-auth/prisma-adapter':
-        specifier: ^1.0.7
-        version: 1.0.7(@prisma/client@5.10.2)(next-auth@4.24.6)
       '@nextui-org/react':
         specifier: ^2.2.9
         version: 2.2.9(@types/react@18.2.57)(framer-motion@11.0.5)(react-dom@18.2.0)(react@18.2.0)(tailwind-variants@0.2.0)(tailwindcss@3.4.1)
@@ -41,6 +38,9 @@ importers:
       '@t3-oss/env-nextjs':
         specifier: ^0.8.0
         version: 0.8.0(typescript@5.3.3)(zod@3.22.4)
+      '@taiyomoe/auth':
+        specifier: workspace:^0.1.0
+        version: link:../../packages/auth
       '@taiyomoe/constants':
         specifier: workspace:^0.1.0
         version: link:../../packages/constants
@@ -116,9 +116,6 @@ importers:
       next:
         specifier: ^14.1.0
         version: 14.1.0(react-dom@18.2.0)(react@18.2.0)
-      next-auth:
-        specifier: ^4.24.6
-        version: 4.24.6(next@14.1.0)(react-dom@18.2.0)(react@18.2.0)
       next-themes:
         specifier: ^0.2.1
         version: 0.2.1(next@14.1.0)(react-dom@18.2.0)(react@18.2.0)
@@ -213,6 +210,34 @@ importers:
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
+
+  packages/auth:
+    dependencies:
+      '@next-auth/prisma-adapter':
+        specifier: ^1.0.7
+        version: 1.0.7(@prisma/client@5.10.2)(next-auth@4.24.6)
+      '@t3-oss/env-nextjs':
+        specifier: ^0.8.0
+        version: 0.8.0(typescript@5.3.3)(zod@3.22.4)
+      '@taiyomoe/db':
+        specifier: workspace:^
+        version: link:../db
+      '@taiyomoe/utils':
+        specifier: workspace:^
+        version: link:../utils
+      next-auth:
+        specifier: ^4.24.6
+        version: 4.24.6(next@14.1.0)(react-dom@18.2.0)(react@18.2.0)
+      zod:
+        specifier: ^3.22.4
+        version: 3.22.4
+    devDependencies:
+      '@taiyomoe/tsconfig':
+        specifier: workspace:^0.1.0
+        version: link:../../tooling/typescript
+      '@taiyomoe/types':
+        specifier: workspace:^0.1.0
+        version: link:../types
 
   packages/constants:
     devDependencies:
