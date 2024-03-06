@@ -9,7 +9,7 @@ import {
   Trackers,
 } from "@prisma/client"
 import type { Manga } from "mangadex-full-api"
-import type { TAG_KEYS } from "~/lib/i18n/tags"
+import type { TAG_KEYS } from "./i18n"
 
 const getContentRating = (manga: Manga): ContentRating => {
   switch (manga.contentRating) {

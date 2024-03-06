@@ -1,5 +1,5 @@
 import { startUploadSessionSchema } from "@taiyomoe/schemas"
-import { EncryptionUtils } from "~/lib/utils/encryption.utils"
+import { EncryptionUtils } from "@taiyomoe/utils"
 import { createTRPCRouter, protectedProcedure } from "../trpc"
 
 export const uploadsRouter = createTRPCRouter({

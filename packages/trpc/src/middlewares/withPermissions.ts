@@ -1,13 +1,16 @@
 import type { Actions, Grant, Posession, Resources } from "@taiyomoe/types"
 import { AccessControl } from "accesscontrol"
 
-import { InsuficientPermissionsError, InternalServerError } from "../errors"
+import { TRPCError } from "@trpc/server"
 import { authMiddleware } from "../trpc"
 
 export const withPermissions = () =>
   authMiddleware.unstable_pipe(async ({ ctx, meta, next }) => {
     if (!meta?.resource || !meta.action) {
-      throw new InternalServerError("Please provide a resource and an action.")
+      throw new TRPCError({
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Please provide a resource and an action.",
+      })
     }
 
     const { resource, action } = meta
@@ -34,7 +37,10 @@ export const withPermissions = () =>
     })
 
     if (!requiredPermission.granted) {
-      throw new InsuficientPermissionsError("You don't have permission.")
+      throw new TRPCError({
+        code: "FORBIDDEN",
+        message: "You don't have permission.",
+      })
     }
 
     return next({ ctx })

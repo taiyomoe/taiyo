@@ -49,9 +49,8 @@ export const createTRPCContext = async (opts: { headers: Headers }) => {
 /**
  * 2. INITIALIZATION
  *
- * This is where the tRPC API is initialized, connecting the context and transformer. We also parse
- * ZodErrors so that you get typesafety on the frontend if your procedure fails due to validation
- * errors on the backend.
+ * This is where the trpc api is initialized, connecting the context and
+ * transformer
  */
 const t = initTRPC
   .context<typeof createTRPCContext>()
@@ -79,25 +78,30 @@ export const authMiddleware = withAuth(t)
 const permissionsMiddleware = withPermissions()
 
 /**
+ * Create a server-side caller
+ * @see https://trpc.io/docs/server/server-side-calls
+ */
+export const createCallerFactory = t.createCallerFactory
+
+/**
  * 3. ROUTER & PROCEDURE (THE IMPORTANT BIT)
  *
- * These are the pieces you use to build your tRPC API. You should import these a lot in the
- * "/src/server/api/routers" directory.
+ * These are the pieces you use to build your tRPC API. You should import these
+ * a lot in the /src/server/api/routers folder
  */
 
 /**
- * This is how you create new routers and sub-routers in your tRPC API.
- *
+ * This is how you create new routers and subrouters in your tRPC API
  * @see https://trpc.io/docs/router
  */
 export const createTRPCRouter = t.router
 
 /**
- * Public (unauthenticated) procedure
+ * Public (unauthed) procedure
  *
- * This is the base piece you use to build new queries and mutations on your tRPC API. It does not
- * guarantee that a user querying is authorized, but you can still access user session data if they
- * are logged in.
+ * This is the base piece you use to build new queries and mutations on your
+ * tRPC API. It does not guarantee that a user querying is authorized, but you
+ * can still access user session data if they are logged in
  */
 export const publicProcedure = t.procedure
 

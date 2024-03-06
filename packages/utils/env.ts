@@ -6,6 +6,10 @@ export const env = createEnv({
     NEXT_PUBLIC_CDN_URL: z.string().url(),
     NEXT_PUBLIC_IO_URL: z.string().url(),
   },
+  server: {
+    ENCRYPTION_KEY: z.string(),
+    ENCRYPTION_IV: z.string(),
+  },
   experimental__runtimeEnv: {
     NEXT_PUBLIC_CDN_URL: process.env.NEXT_PUBLIC_CDN_URL,
     NEXT_PUBLIC_IO_URL: process.env.NEXT_PUBLIC_IO_URL,

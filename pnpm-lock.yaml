@@ -71,9 +71,6 @@ importers:
       '@trpc/react-query':
         specifier: ^10.45.1
         version: 10.45.1(@tanstack/react-query@4.36.1)(@trpc/client@10.45.1)(@trpc/server@10.45.1)(react-dom@18.2.0)(react@18.2.0)
-      '@trpc/server':
-        specifier: ^10.45.1
-        version: 10.45.1
       accesscontrol:
         specifier: ^2.2.1
         version: 2.2.1
@@ -110,9 +107,6 @@ importers:
       luxon:
         specifier: ^3.4.4
         version: 3.4.4
-      mangadex-full-api:
-        specifier: ^5.12.1
-        version: 5.12.1
       next:
         specifier: ^14.1.0
         version: 14.1.0(react-dom@18.2.0)(react@18.2.0)
@@ -152,9 +146,6 @@ importers:
       sonner:
         specifier: ^1.4.0
         version: 1.4.0(react-dom@18.2.0)(react@18.2.0)
-      superjson:
-        specifier: ^2.2.1
-        version: 2.2.1
       tailwind-merge:
         specifier: ^2.2.1
         version: 2.2.1
@@ -220,10 +211,10 @@ importers:
         specifier: ^0.8.0
         version: 0.8.0(typescript@5.3.3)(zod@3.22.4)
       '@taiyomoe/db':
-        specifier: workspace:^
+        specifier: workspace:^0.1.0
         version: link:../db
       '@taiyomoe/utils':
-        specifier: workspace:^
+        specifier: workspace:^0.1.0
         version: link:../utils
       next-auth:
         specifier: ^4.24.6
@@ -333,6 +324,49 @@ importers:
         specifier: workspace:^0.1.0
         version: link:../../tooling/typescript
 
+  packages/trpc:
+    dependencies:
+      '@t3-oss/env-nextjs':
+        specifier: ^0.8.0
+        version: 0.8.0(typescript@5.3.3)(zod@3.22.4)
+      '@taiyomoe/auth':
+        specifier: workspace:^0.1.0
+        version: link:../auth
+      '@taiyomoe/db':
+        specifier: workspace:^0.1.0
+        version: link:../db
+      '@taiyomoe/meilisearch':
+        specifier: workspace:^0.1.0
+        version: link:../meilisearch
+      '@taiyomoe/schemas':
+        specifier: workspace:^0.1.0
+        version: link:../schemas
+      '@taiyomoe/services':
+        specifier: workspace:^
+        version: link:../services
+      '@taiyomoe/utils':
+        specifier: workspace:^
+        version: link:../utils
+      '@trpc/server':
+        specifier: ^10.45.1
+        version: 10.45.1
+      mangadex-full-api:
+        specifier: ^5.12.1
+        version: 5.12.1
+      superjson:
+        specifier: ^2.2.1
+        version: 2.2.1
+      zod:
+        specifier: ^3.22.4
+        version: 3.22.4
+    devDependencies:
+      '@taiyomoe/tsconfig':
+        specifier: workspace:^0.1.0
+        version: link:../../tooling/typescript
+      '@taiyomoe/types':
+        specifier: workspace:^0.1.0
+        version: link:../types
+
   packages/types:
     dependencies:
       '@prisma/client':
@@ -348,12 +382,18 @@ importers:
       '@prisma/client':
         specifier: ^5.9.1
         version: 5.10.2(prisma@5.10.2)
+      '@t3-oss/env-nextjs':
+        specifier: ^0.8.0
+        version: 0.8.0(typescript@5.3.3)(zod@3.22.4)
       '@taiyomoe/constants':
         specifier: workspace:^0.1.0
         version: link:../constants
       '@taiyomoe/schemas':
         specifier: workspace:^0.1.0
         version: link:../schemas
+      mangadex-full-api:
+        specifier: ^5.12.1
+        version: 5.12.1
     devDependencies:
       '@taiyomoe/tsconfig':
         specifier: workspace:^0.1.0

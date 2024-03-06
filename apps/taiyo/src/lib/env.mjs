@@ -48,13 +48,6 @@ export const env = createEnv({
     DISCORD_CLIENT_ID: z.string(),
     DISCORD_CLIENT_SECRET: z.string(),
 
-    // image-orchestrator API
-    IO_ADMIN_KEY: z.string(),
-
-    // Encryption
-    ENCRYPTION_KEY: z.string(),
-    ENCRYPTION_IV: z.string(),
-
     // Meilisearch
     MEILISEARCH_MASTER_KEY: onlyDev(z.string()),
     MEILISEARCH_ADMIN_KEY: z.string(),

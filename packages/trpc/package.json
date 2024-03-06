@@ -1,11 +1,10 @@
 {
-  "name": "@taiyomoe/utils",
+  "name": "@taiyomoe/trpc",
   "version": "0.1.0",
   "private": true,
   "type": "module",
   "exports": {
-    ".": "./src/index.ts",
-    "./i18n": "./src/i18n/index.ts"
+    ".": "./src/index.ts"
   },
   "license": "MIT",
   "scripts": {
@@ -14,11 +13,17 @@
     "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
-    "@prisma/client": "^5.9.1",
     "@t3-oss/env-nextjs": "^0.8.0",
-    "@taiyomoe/constants": "workspace:^0.1.0",
+    "@taiyomoe/auth": "workspace:^0.1.0",
+    "@taiyomoe/db": "workspace:^0.1.0",
+    "@taiyomoe/meilisearch": "workspace:^0.1.0",
     "@taiyomoe/schemas": "workspace:^0.1.0",
-    "mangadex-full-api": "^5.12.1"
+    "@taiyomoe/services": "workspace:^0.1.0",
+    "@taiyomoe/utils": "workspace:^0.1.0",
+    "@trpc/server": "^10.45.1",
+    "mangadex-full-api": "^5.12.1",
+    "superjson": "^2.2.1",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@taiyomoe/tsconfig": "workspace:^0.1.0",
