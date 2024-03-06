@@ -8,8 +8,8 @@ import {
   MediaType,
   Trackers,
 } from "@prisma/client"
+import { TAG_KEYS } from "@taiyomoe/constants"
 import type { Manga } from "mangadex-full-api"
-import type { TAG_KEYS } from "./i18n"
 
 const getContentRating = (manga: Manga): ContentRating => {
   switch (manga.contentRating) {

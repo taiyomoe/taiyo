@@ -4,7 +4,7 @@ declare global {
   namespace PrismaJson {
     type MediaChapterPage = { id: string }
     type MediaCommentAttachement = { id: string; extension: "png" | "gif" }
-    type MediaTag = { key: keyof typeof TAG_KEYS; isSpoiler: boolean }
+    type MediaTag = { key: (typeof TAG_KEYS)[number]; isSpoiler: boolean }
     type UserLibraryEntry = { mediaId: string; updatedAt: string }
     type UserHistoryProgression = {
       updatedAt: string

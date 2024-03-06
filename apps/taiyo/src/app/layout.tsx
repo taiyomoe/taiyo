@@ -1,10 +1,9 @@
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
-import { headers } from "next/headers"
 import { siteConfig } from "~/lib/config"
-import { getBaseUrl } from "~/lib/trpc/shared"
 import { LayoutProps } from "~/lib/types"
 import { cn } from "~/lib/utils/cn"
+import { getBaseUrl } from "~/trpc/shared"
 import { Providers } from "./providers"
 
 import "~/styles/globals.css"
@@ -44,7 +43,7 @@ export default function Layout({ children }: LayoutProps) {
           "h-full min-h-dvh bg-background scrollbar-thin scrollbar-track-content1 scrollbar-thumb-primary",
         )}
       >
-        <Providers headers={headers()}>{children}</Providers>
+        <Providers>{children}</Providers>
       </body>
     </html>
   )
