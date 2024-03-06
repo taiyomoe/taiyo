@@ -12,7 +12,8 @@
     "rules": {
       "recommended": true,
       "style": {
-        "noNonNullAssertion": "off"
+        "noNonNullAssertion": "off",
+        "useEnumInitializers": "off"
       },
       "a11y": {
         "useKeyWithClickEvents": "off"
@@ -23,5 +24,13 @@
     "formatter": {
       "semicolons": "asNeeded"
     }
+  },
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
+  },
+  "files": {
+    "ignore": ["./packages/schemas/src/prisma/index.ts"]
   }
 }

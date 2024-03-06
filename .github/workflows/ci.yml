@@ -7,40 +7,38 @@ on:
     branches: ["main"]
   merge_group:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
 env:
-  NODE_ENV: "production"
-  NPM_CONFIG_PRODUCTION: false
-  SKIP_ENV_VALIDATION: true
+  FORCE_COLOR: 3
+  TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
 
 jobs:
-  build:
+  check:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Node 18
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-          cache: "npm"
+      - name: Setup
+        uses: ./tooling/github/setup
 
-      - name: Install deps
-        run: npm ci
+      - name: Copy env
+        shell: bash
+        run: cp .env.development.example .env
 
-      - name: Use Next.js build cache
-        uses: actions/cache@v3
-        with:
-          # See here for caching with `yarn` https://github.com/actions/cache/blob/main/examples.md#node---yarn or you can leverage caching with actions/setup-node https://github.com/actions/setup-node
-          path: |
-            ~/.npm
-            ${{ github.workspace }}/.next/cache
-          # Generate a new cache whenever packages or source files change.
-          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx') }}
-          # If source files changed but packages didn't, rebuild from a prior cache.
-          restore-keys: |
-            ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
+      - name: Check
+        run: pnpm check:ws
 
-      - name: Build
-        run: npm run build
+  typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup
+        uses: ./tooling/github/setup
+
+      - name: Typecheck
+        run: pnpm typecheck

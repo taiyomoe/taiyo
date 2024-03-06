@@ -1,0 +1,698 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+generator json {
+    provider = "prisma-json-types-generator"
+}
+
+generator zod {
+    provider = "zod-prisma-types"
+    output   = "../../../schemas/src/prisma"
+
+    createInputTypes       = false
+    addInputTypeValidation = false
+    addIncludeType         = false
+    addSelectType          = false
+}
+
+datasource db {
+    provider  = "postgresql"
+    url       = env("DATABASE_URL")
+    directUrl = env("DATABASE_URL")
+}
+
+// ----- USERS
+model User {
+    id        String   @id @default(uuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    name          String?
+    email         String?   @unique
+    emailVerified DateTime?
+    image         String?
+    role          Roles     @default(USER)
+    points        Int       @default(0)
+
+    accounts Account[]
+    sessions Session[]
+    settings UserSetting?
+    library  UserLibrary?
+    history  UserHistory[]
+
+    createdMedias         Media[]
+    uploadedMediaCovers   MediaCover[]
+    uploadedMediaBanners  MediaBanner[]
+    createdMediaTitles    MediaTitle[]
+    createdMediaTrackers  MediaTracker[]
+    uploadedMediaChapters MediaChapter[]
+    mediaChapterComments  MediaChapterComment[]
+    createdScans          Scan[]
+    scanMembers           ScanMember[]
+    uploadSessions        UploadSession[]
+
+    @@index([id])
+}
+
+model UserSetting {
+    id        String   @id @default(uuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    birthDate              DateTime?
+    gender                 Genders       @default(NOT_SPECIFIED)
+    city                   String?
+    country                String?
+    about                  String?
+    contentRating          ContentRating @default(NSFL)
+    preferredTitleLanguage Languages?
+
+    user   User   @relation(fields: [userId], references: [id])
+    userId String @unique
+}
+
+model UserLibrary {
+    /// [UserLibraryEntry]
+    reading    Json[] @default([])
+    /// [UserLibraryEntry]
+    rereading  Json[] @default([])
+    /// [UserLibraryEntry]
+    planToRead Json[] @default([])
+    /// [UserLibraryEntry]
+    completed  Json[] @default([])
+    /// [UserLibraryEntry]
+    onHold     Json[] @default([])
+    /// [UserLibraryEntry]
+    dropped    Json[] @default([])
+
+    user   User   @relation(fields: [userId], references: [id])
+    userId String @unique
+}
+
+model UserHistory {
+    /// [UserHistoryProgression]
+    progression Json[]
+
+    media   Media  @relation(fields: [mediaId], references: [id])
+    mediaId String
+
+    user   User   @relation(fields: [userId], references: [id])
+    userId String
+
+    @@unique([mediaId, userId])
+}
+
+model Account {
+    id        String   @id @default(uuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    type          String
+    refresh_token String?
+    access_token  String?
+    expires_at    Int?
+    token_type    String?
+    scope         String?
+    id_token      String?
+    session_state String?
+
+    provider          String
+    providerAccountId String
+
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId String
+
+    @@unique([provider, providerAccountId])
+}
+
+model Session {
+    id        String   @id @default(uuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    sessionToken String   @unique
+    expires      DateTime
+
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId String
+}
+
+model VerificationToken {
+    identifier String
+    token      String   @unique
+    expires    DateTime
+
+    @@unique([identifier, token])
+}
+
+// ----- MEDIAS
+model Media {
+    id        String    @id @default(uuid())
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    deletedAt DateTime?
+
+    startDate DateTime?
+    endDate   DateTime?
+
+    synopsis        String?
+    contentRating   ContentRating        @default(NORMAL)
+    oneShot         Boolean              @default(false)
+    trailer         String?
+    type            MediaType
+    status          MediaStatus
+    source          MediaSource
+    demography      MediaDemography
+    countryOfOrigin MediaCountryOfOrigin
+    genres          MediaGenres[]
+    /// [MediaTag]
+    tags            Json[]
+    flag            Flag                 @default(OK)
+
+    covers   MediaCover[]
+    banners  MediaBanner[]
+    titles   MediaTitle[]
+    trackers MediaTracker[]
+    chapters MediaChapter[]
+    history  UserHistory[]
+
+    creator   User    @relation(fields: [creatorId], references: [id])
+    creatorId String
+    deleterId String?
+}
+
+model MediaCover {
+    id        String    @id @default(uuid())
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    deletedAt DateTime?
+
+    volume        Int?
+    contentRating ContentRating @default(NORMAL)
+    isMainCover   Boolean       @default(false)
+    language      Languages
+
+    media   Media  @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+    mediaId String
+
+    uploader   User    @relation(fields: [uploaderId], references: [id])
+    uploaderId String
+    deleterId  String?
+}
+
+model MediaBanner {
+    id        String    @id @default(uuid())
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    deletedAt DateTime?
+
+    contentRating ContentRating @default(NORMAL)
+
+    media   Media  @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+    mediaId String
+
+    uploader   User    @relation(fields: [uploaderId], references: [id])
+    uploaderId String
+    deleterId  String?
+}
+
+model MediaTitle {
+    id        String    @id @default(uuid())
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    deletedAt DateTime?
+
+    title       String
+    language    Languages
+    priority    Int
+    isAcronym   Boolean   @default(false)
+    isMainTitle Boolean   @default(false)
+
+    media   Media  @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+    mediaId String
+
+    creator   User    @relation(fields: [creatorId], references: [id])
+    creatorId String
+    deleterId String?
+
+    @@unique([mediaId, language, priority], name: "MediaTitlePriority")
+}
+
+model MediaTracker {
+    id        String    @id @default(uuid())
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    deletedAt DateTime?
+
+    tracker    Trackers
+    externalId String
+
+    media   Media  @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+    mediaId String
+
+    creator   User    @relation(fields: [creatorId], references: [id])
+    creatorId String
+    deleterId String?
+}
+
+model MediaChapter {
+    id        String    @id @default(uuid())
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    deletedAt DateTime?
+
+    title         String?
+    number        Float
+    volume        Float?
+    language      Languages
+    /// [MediaChapterPage]
+    pages         Json[]
+    contentRating ContentRating @default(NORMAL)
+    flag          Flag          @default(OK)
+
+    scans    Scan[]
+    comments MediaChapterComment[]
+
+    media   Media  @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+    mediaId String
+
+    uploader   User    @relation(fields: [uploaderId], references: [id])
+    uploaderId String
+    deleterId  String?
+}
+
+model MediaChapterComment {
+    id        String    @id @default(uuid())
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    deletedAt DateTime?
+
+    content     String
+    /// [MediaCommentAttachement]
+    attachments Json[]
+
+    replies MediaChapterComment[] @relation("ParentComment")
+
+    parent   MediaChapterComment? @relation("ParentComment", fields: [parentId], references: [id], onDelete: Cascade)
+    parentId String?
+
+    mediaChapter   MediaChapter @relation(fields: [mediaChapterId], references: [id], onDelete: Cascade)
+    mediaChapterId String
+
+    user      User    @relation(fields: [userId], references: [id])
+    userId    String
+    deleterId String?
+}
+
+model UploadSession {
+    id        String    @id @default(uuid())
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    deletedAt DateTime?
+
+    status UploadSessionStatus @default(PROCESSING)
+    type   UploadSessionType
+
+    user   User   @relation(fields: [userId], references: [id])
+    userId String
+
+    mediaId        String
+    mediaChapterId String?
+}
+
+// ---- SCANS
+model Scan {
+    id        String    @id @default(uuid())
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    deletedAt DateTime?
+
+    name        String
+    description String?
+
+    logo   String?
+    banner String?
+
+    website   String?
+    discord   String?
+    twitter   String?
+    facebook  String?
+    instagram String?
+    telegram  String?
+    youtube   String?
+    email     String?
+
+    chapters MediaChapter[]
+    members  ScanMember[]
+
+    creator   User    @relation(fields: [creatorId], references: [id])
+    creatorId String
+    deleterId String?
+}
+
+model ScanMember {
+    id        String    @id @default(uuid())
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    deletedAt DateTime?
+
+    roles       ScanMemberRoles[]
+    permissions ScanMemberPermissions[]
+
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId String
+
+    scans Scan[]
+}
+
+// ----- ENUMS
+enum Roles {
+    USER
+    MODERATOR
+    UPLOADER_INTERN
+    UPLOADER
+    ADMIN
+}
+
+enum Genders {
+    MALE
+    FEMALE
+    OTHER
+    NOT_SPECIFIED
+}
+
+enum ContentRating {
+    NORMAL
+    SUGGESTIVE
+    NSFW
+    NSFL
+}
+
+enum Flag {
+    OK
+    STAFF_ONLY
+    VIP_ONLY
+    LOCKED
+}
+
+enum MediaType {
+    MANGA
+    MANHWA
+    MANHUA
+    LIGHT_NOVEL
+    OTHER
+}
+
+enum MediaStatus {
+    RELEASING
+    FINISHED
+    NOT_YET_RELEASED
+    CANCELLED
+    HIATUS
+}
+
+enum MediaSource {
+    ORIGINAL
+    LIGHT_NOVEL
+    VISUAL_NOVEL
+    WEB_NOVEL
+    VIDEO_GAME
+}
+
+enum MediaDemography {
+    SHOUNEN
+    SHOUJO
+    SEINEN
+    JOSEI
+}
+
+enum MediaCountryOfOrigin {
+    JAPAN
+    KOREA
+    CHINA
+    USA
+    FRANCE
+    BRAZIL
+}
+
+enum MediaGenres {
+    ACTION
+    ADVENTURE
+    COMEDY
+    DRAMA
+    ECCHI
+    FANTASY
+    HENTAI
+    HORROR
+    MAHOU_SHOUJO
+    MECHA
+    MUSIC
+    MYSTERY
+    PSYCHOLOGICAL
+    ROMANCE
+    SCI_FI
+    SLICE_OF_LIFE
+    SPORTS
+    SUPERNATURAL
+    THRILLER
+}
+
+enum Trackers {
+    MANGADEX
+    MYANIMELIST
+    ANILIST
+}
+
+enum ScanMemberRoles {
+    OWNER
+    ADMIN
+    TRANSLATOR
+    PROOFREADER
+    CLEANER
+    REDRAWER
+    TYPESETTER
+    QUALITY_CHECKER
+    RAW_PROVIDER
+    OTHER
+}
+
+enum ScanMemberPermissions {
+    UPLOAD
+    EDIT
+    DELETE
+}
+
+enum UploadSessionStatus {
+    UPLOADING
+    PROCESSING
+    FINISHED
+    FAILED
+}
+
+enum UploadSessionType {
+    COVER
+    BANNER
+    CHAPTER
+}
+
+// ISO 639-1
+enum Languages {
+    ab // Abkhazian
+    aa // Afar
+    af // Afrikaans
+    ak // Akan
+    sq // Albanian
+    am // Amharic
+    ar // Arabic
+    an // Aragonese
+    hy // Armenian
+    as // Assamese
+    av // Avar
+    ae // Avestan
+    ay // Aymara
+    az // Azerbaijani
+    bm // Bambara
+    ba // Bashkir
+    eu // Basque
+    be // Belarusian
+    bn // Bengali
+    bi // Bislama
+    bs // Bosnian
+    br // Breton
+    bg // Bulgarian
+    my // Burmese
+    ca // Catalan
+    ch // Chamorro
+    ce // Chechen
+    ny // Chichewa
+    cu // Church Slavonic
+    cv // Chuvash
+    kw // Cornish
+    co // Corsican
+    cr // Cree
+    hr // Croatian
+    cs // Czech
+    da // Danish
+    dv // Dhivehi
+    nl // Dutch
+    dz // Dzongkha
+    en // English
+    eo // Esperanto
+    et // Estonian
+    ee // Ewe
+    fo // Faroese
+    fj // Fijian
+    fi // Finnish
+    fr // French
+    fy // West Frisian
+    ff // Fulah
+    gd // Scottish Gaelic|Gaelic
+    gl // Galician
+    lg // Ganda
+    ka // Georgian
+    de // German
+    el // Greek
+    kl // Greenlandic
+    gn // Guarani
+    gu // Gujarati
+    ht // Haitian Creole
+    ha // Hausa
+    he // Hebrew
+    hz // Herero
+    hi // Hindi
+    ho // Hiri Motu
+    hu // Hungarian
+    is // Icelandic
+    io // Ido (language)|Ido
+    ig // Igbo
+    id // Indonesian
+    ia // Interlingua
+    ie // Interlingue
+    iu // Inuktitut
+    ik // Inupiaq
+    ga // Irish
+    it // Italian
+    jv // Javanese
+    kn // Kannada
+    kr // Kanuri
+    ks // Kashmiri
+    kk // Kazakh
+    km // Central Khmer
+    ki // Gikuyu
+    rw // Kinyarwanda
+    ky // Kirghiz
+    kv // Komi
+    kg // Kongo
+    kj // Kuanyama
+    ku // Kurdish
+    lo // Lao
+    la // Latin
+    lv // Latvian
+    li // Limburgan
+    ln // Lingala
+    lt // Lithuanian
+    lu // Luba-Katanga
+    lb // Luxembourgish
+    mk // Macedonian
+    mg // Malagasy
+    ms // Malay
+    ml // Malayalam
+    mt // Maltese
+    gv // Manx
+    mi // Māori
+    mr // Marathi
+    mh // Marshallese
+    mn // Mongolian
+    na // Nauru
+    nv // Navajo
+    nd // North Ndebele
+    nr // South Ndebele
+    ng // Ndonga
+    ne // Nepali
+    no // Norwegian
+    nb // Norwegian Bokmål
+    nn // Norwegian Nynorsk
+    ii // Sichuan Yi
+    oc // Occitan
+    oj // Ojibwa
+    or // Oriya
+    om // Oromo
+    os // Ossetian
+    pi // Pali
+    ps // Pashto
+    fa // Persian
+    pl // Polish
+    pa // Punjabi
+    qu // Quechua
+    ro // Romanian
+    rm // Romansh
+    rn // Rundi
+    ru // Russian
+    se // Northern Sami
+    sm // Samoan
+    sg // Sango
+    sa // Sanskrit
+    sc // Sardinian
+    sr // Serbian
+    sn // Shona
+    sd // Sindhi
+    si // Sinhala
+    sk // Slovak
+    sl // Slovene
+    so // Somali
+    st // Sotho
+    su // Sundanese
+    sw // Swahili
+    ss // Swazi
+    sv // Swedish
+    tl // Tagalog
+    ty // Tahitian
+    tg // Tajik
+    ta // Tamil
+    tt // Tatar
+    te // Telugu
+    th // Thai
+    bo // Tibetan
+    ti // Tigrinya
+    to // Tongan
+    ts // Tsonga
+    tn // Tswana
+    tr // Turkish
+    tk // Turkmen
+    tw // Twi
+    ug // Uighur
+    uk // Ukrainian
+    ur // Urdu
+    uz // Uzbek
+    ve // Venda
+    vi // Vietnamese
+    vo // Volapük
+    wa // Walloon
+    cy // Welsh
+    wo // Wolof
+    xh // Xhosa
+    yi // Yiddish
+    yo // Yoruba
+    za // Zhuang
+    zu // Zulu
+
+    es // Castilian Spanish
+    es_la // Latin American Spanish
+
+    pt_br // Brazilian Portuguese
+    pt_pt // European Portuguese
+
+    ja // Japanese
+    ja_ro // Japanese (romanized)
+
+    ko // Korean
+    ko_ro // Korean (romanized)
+
+    zh // Chinese
+    zh_hk // Chinese (Hong Kong)
+    zh_ro // Chinese (romanized)
+}
