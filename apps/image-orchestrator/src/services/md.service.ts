@@ -43,7 +43,7 @@ export class MdService {
 
     const manga = await Manga.get(mdId)
     const covers = await manga.getCovers()
-    const mainCover = await manga.mainCover.resolve()
+    const _mainCover = await manga.mainCover.resolve()
 
     console.log("manga", manga)
 
@@ -108,7 +108,7 @@ export class MdService {
         continue
       }
 
-      const uploaded = await this.coversService.uploadFromUrl(media.id, cover.imageSource, {
+      const _uploaded = await this.coversService.uploadFromUrl(media.id, cover.imageSource, {
         onDownload: () => {
           this.eventEmitter.emit(this.importEventKey, {
             step: 3,
