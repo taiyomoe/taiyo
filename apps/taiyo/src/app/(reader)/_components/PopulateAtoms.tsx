@@ -4,7 +4,6 @@ import type { MediaChapterLimited } from "@taiyomoe/types"
 import { MediaChapterUtils } from "@taiyomoe/utils"
 import { usePathname } from "next/navigation"
 import { useEffect, useRef } from "react"
-import { useWindowSize } from "usehooks-ts"
 import { useDevice } from "~/hooks/useDevice"
 import { useReaderSettingsStore, useReaderStore } from "~/stores"
 
