@@ -2,7 +2,6 @@ import {
   createMediaTitleSchema,
   updateMediaTitleSchema,
 } from "@taiyomoe/schemas"
-import { MediaService } from "@taiyomoe/services"
 import { TRPCError } from "@trpc/server"
 
 import { getMediaIndexItem } from "@taiyomoe/meilisearch/utils"

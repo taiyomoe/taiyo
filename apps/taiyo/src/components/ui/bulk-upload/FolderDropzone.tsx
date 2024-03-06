@@ -9,7 +9,6 @@ import { InvalidFilesModal } from "~/components/ui/bulk-upload/InvalidFilesModal
 import { ImageFolder, InvalidFile } from "~/lib/types"
 import { ImageUtils } from "~/lib/utils/image.utils"
 import { useImageFolderStore } from "~/stores"
-import { InvalidFilesShowcase } from "./InvalidFilesShowcase"
 
 type Props = {
   title: string

@@ -1,8 +1,11 @@
-import type { ReaderSettings } from "@taiyomoe/types"
+import type {
+  InferNestedPaths,
+  InferNestedValues,
+  ReaderSettings,
+} from "@taiyomoe/types"
 import _ from "lodash-es"
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
-import { InferNestedPaths, InferNestedValues } from "~/lib/types"
 
 type Actions = {
   update: (

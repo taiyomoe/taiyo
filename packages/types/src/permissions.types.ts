@@ -28,3 +28,9 @@ export type Grant = {
   resource: Resources
   action: `${Actions}:${"any" | "own"}`
 }
+
+export type ForgedPermission = [
+  Resources | Resources[],
+  Actions | Actions[],
+  Posession?,
+]

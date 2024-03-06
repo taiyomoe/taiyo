@@ -2,7 +2,6 @@
 
 import { Divider } from "@nextui-org/divider"
 import { tv } from "tailwind-variants"
-import { useDevice } from "~/hooks/useDevice"
 import { useReaderSettingsStore } from "~/stores"
 import { ReaderSidebarSettingsSection } from "../sections/ReaderSidebarSettingsSection"
 import { ReaderSidebarUploadersSection } from "../sections/ReaderSidebarUploadersSection"

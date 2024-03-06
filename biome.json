@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.4.1/schema.json",
+  "$schema": "https://biomejs.dev/schemas/1.5.3/schema.json",
   "organizeImports": {
     "enabled": true
   },
@@ -17,6 +17,12 @@
       },
       "a11y": {
         "useKeyWithClickEvents": "off"
+      },
+      "correctness": {
+        "noUnusedVariables": "error"
+      },
+      "nursery": {
+        "noUnusedImports": "error"
       }
     }
   },
@@ -32,5 +38,18 @@
   },
   "files": {
     "ignore": ["./packages/schemas/src/prisma/index.ts"]
-  }
+  },
+  "overrides": [
+    {
+      "include": ["./apps/image-orchestrator/**/*.ts"],
+      "formatter": {
+        "lineWidth": 100
+      },
+      "javascript": {
+        "parser": {
+          "unsafeParameterDecoratorsEnabled": true
+        }
+      }
+    }
+  ]
 }

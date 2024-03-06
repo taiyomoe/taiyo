@@ -1,5 +1,3 @@
-export type LayoutProps = { children: React.ReactNode }
-
 export type InferNestedPaths<T, Prefix extends string = ""> = {
   [K in keyof T]: T[K] extends object
     ? InferNestedPaths<T[K], `${Prefix & string}${K & string}.`>
