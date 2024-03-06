@@ -3,6 +3,7 @@
   "compilerOptions": {
     "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
     "experimentalDecorators": true,
+    "strictPropertyInitialization": false,
     "paths": {
       "~/*": ["./src/*"]
     },
