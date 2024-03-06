@@ -305,10 +305,10 @@ importers:
         specifier: ^20.11.24
         version: 20.11.24
       '@types/react':
-        specifier: ^18.2.57
+        specifier: ^18.2.63
         version: 18.2.63
       '@types/react-dom':
-        specifier: ^18.2.19
+        specifier: ^18.2.20
         version: 18.2.20
       autoprefixer:
         specifier: ^10.4.17
