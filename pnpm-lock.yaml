@@ -112,7 +112,7 @@ importers:
         specifier: ^1.4.11
         version: 1.4.11
       '@types/node':
-        specifier: ^20.11.19
+        specifier: ^20.11.24
         version: 20.11.24
       '@types/supertest':
         specifier: ^6.0.0
@@ -302,7 +302,7 @@ importers:
         specifier: ^3.4.2
         version: 3.4.2
       '@types/node':
-        specifier: ^20.11.19
+        specifier: ^20.11.24
         version: 20.11.24
       '@types/react':
         specifier: ^18.2.57
