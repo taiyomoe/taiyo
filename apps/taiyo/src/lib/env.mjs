@@ -51,10 +51,6 @@ export const env = createEnv({
     // Meilisearch
     MEILISEARCH_MASTER_KEY: onlyDev(z.string()),
     MEILISEARCH_ADMIN_KEY: z.string(),
-
-    // Soketi
-    SOKETI_APP_ID: z.string(),
-    SOKETI_APP_SECRET: z.string(),
   },
 
   /**
@@ -72,11 +68,6 @@ export const env = createEnv({
     // Meilisearch
     NEXT_PUBLIC_MEILISEARCH_URL: z.string().url(),
     NEXT_PUBLIC_MEILISEARCH_PUBLIC_KEY: z.string(),
-
-    // Soketi
-    NEXT_PUBLIC_SOKETI_HOST: z.string(),
-    NEXT_PUBLIC_SOKETI_PORT: z.coerce.number(),
-    NEXT_PUBLIC_SOKETI_APP_KEY: z.string(),
   },
 
   /**
@@ -116,13 +107,6 @@ export const env = createEnv({
     NEXT_PUBLIC_MEILISEARCH_URL: process.env.NEXT_PUBLIC_MEILISEARCH_URL,
     NEXT_PUBLIC_MEILISEARCH_PUBLIC_KEY:
       process.env.NEXT_PUBLIC_MEILISEARCH_PUBLIC_KEY,
-
-    // Soketi
-    SOKETI_APP_ID: process.env.SOKETI_APP_ID,
-    SOKETI_APP_SECRET: process.env.SOKETI_APP_SECRET,
-    NEXT_PUBLIC_SOKETI_HOST: process.env.NEXT_PUBLIC_SOKETI_HOST,
-    NEXT_PUBLIC_SOKETI_PORT: process.env.NEXT_PUBLIC_SOKETI_PORT,
-    NEXT_PUBLIC_SOKETI_APP_KEY: process.env.NEXT_PUBLIC_SOKETI_APP_KEY,
   },
 
   /**

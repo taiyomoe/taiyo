@@ -56,6 +56,9 @@ importers:
       '@taiyomoe/services':
         specifier: workspace:^0.1.0
         version: link:../../packages/services
+      '@taiyomoe/soketi':
+        specifier: workspace:^0.1.0
+        version: link:../../packages/soketi
       '@taiyomoe/utils':
         specifier: workspace:^0.1.0
         version: link:../../packages/utils
@@ -71,9 +74,6 @@ importers:
       '@trpc/react-query':
         specifier: ^10.45.1
         version: 10.45.1(@tanstack/react-query@4.36.1)(@trpc/client@10.45.1)(@trpc/server@10.45.1)(react-dom@18.2.0)(react@18.2.0)
-      accesscontrol:
-        specifier: ^2.2.1
-        version: 2.2.1
       apexcharts:
         specifier: ^3.46.0
         version: 3.46.0
@@ -122,12 +122,6 @@ importers:
       pretty-bytes:
         specifier: ^6.1.1
         version: 6.1.1
-      pusher:
-        specifier: ^5.2.0
-        version: 5.2.0(encoding@0.1.13)
-      pusher-js:
-        specifier: ^8.4.0-rc2
-        version: 8.4.0-rc2
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -324,6 +318,25 @@ importers:
         specifier: workspace:^0.1.0
         version: link:../../tooling/typescript
 
+  packages/soketi:
+    dependencies:
+      '@t3-oss/env-nextjs':
+        specifier: ^0.8.0
+        version: 0.8.0(typescript@5.3.3)(zod@3.22.4)
+      pusher:
+        specifier: ^5.2.0
+        version: 5.2.0
+      pusher-js:
+        specifier: ^8.4.0-rc2
+        version: 8.4.0-rc2
+    devDependencies:
+      '@taiyomoe/tsconfig':
+        specifier: workspace:^0.1.0
+        version: link:../../tooling/typescript
+      '@taiyomoe/types':
+        specifier: workspace:^0.1.0
+        version: link:../types
+
   packages/trpc:
     dependencies:
       '@t3-oss/env-nextjs':
@@ -342,14 +355,20 @@ importers:
         specifier: workspace:^0.1.0
         version: link:../schemas
       '@taiyomoe/services':
-        specifier: workspace:^
+        specifier: workspace:^0.1.0
         version: link:../services
+      '@taiyomoe/soketi':
+        specifier: workspace:^0.1.0
+        version: link:../soketi
       '@taiyomoe/utils':
-        specifier: workspace:^
+        specifier: workspace:^0.1.0
         version: link:../utils
       '@trpc/server':
         specifier: ^10.45.1
         version: 10.45.1
+      accesscontrol:
+        specifier: ^2.2.1
+        version: 2.2.1
       mangadex-full-api:
         specifier: ^5.12.1
         version: 5.12.1
@@ -4159,7 +4178,7 @@ packages:
   /cross-fetch@3.1.8:
     resolution: {integrity: sha512-cvA+JwZoU0Xq+h6WkMvAUqPEYy92Obet6UdKLfW60qn99ftItKjB5T+BkyWOFWe2pUyfQ+IJHmpOTznqk1M6Kg==}
     dependencies:
-      node-fetch: 2.7.0(encoding@0.1.13)
+      node-fetch: 2.7.0
     transitivePeerDependencies:
       - encoding
     dev: false
@@ -5269,7 +5288,7 @@ packages:
       lower-case: 1.1.4
     dev: true
 
-  /node-fetch@2.7.0(encoding@0.1.13):
+  /node-fetch@2.7.0:
     resolution: {integrity: sha512-c4FRfUm/dbcWZ7U+1Wq0AwCyFL+3nt2bEw05wfxSz+DWpWsitgmSgYmy2dQdWyKC1694ELPqMs/YzUSNozLt8A==}
     engines: {node: 4.x || >=6.0.0}
     peerDependencies:
@@ -5278,7 +5297,6 @@ packages:
       encoding:
         optional: true
     dependencies:
-      encoding: 0.1.13
       whatwg-url: 5.0.0
     dev: false
 
@@ -5642,14 +5660,14 @@ packages:
       tweetnacl: 1.0.3
     dev: false
 
-  /pusher@5.2.0(encoding@0.1.13):
+  /pusher@5.2.0:
     resolution: {integrity: sha512-F6LNiZyJsIkoHLz+YurjKZ1HH8V1/cMggn4k97kihjP3uTvm0P4mZzSFeHOWIy+PlJ2VInJBhUFJBYLsFR5cjg==}
     engines: {node: '>= 4.0.0'}
     dependencies:
       '@types/node-fetch': 2.6.11
       abort-controller: 3.0.0
       is-base64: 1.1.0
-      node-fetch: 2.7.0(encoding@0.1.13)
+      node-fetch: 2.7.0
       tweetnacl: 1.0.3
       tweetnacl-util: 0.15.1
     transitivePeerDependencies:
