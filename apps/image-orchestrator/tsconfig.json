@@ -1,0 +1,12 @@
+{
+  "extends": "@taiyomoe/tsconfig/base.json",
+  "compilerOptions": {
+    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
+    "experimentalDecorators": true,
+    "paths": {
+      "~/*": ["./src/*"]
+    },
+  },
+  "include": ["."],
+  "exclude": ["node_modules"]
+}
