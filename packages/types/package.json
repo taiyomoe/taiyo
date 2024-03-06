@@ -1,0 +1,22 @@
+{
+  "name": "@taiyomoe/types",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./global": "./src/global.d.ts"
+  },
+  "license": "MIT",
+  "scripts": {
+    "clean": "rm -rf .turbo node_modules",
+    "typecheck": "tsc --noEmit",
+    "with-env": "dotenv -e ../../.env --"
+  },
+  "devDependencies": {
+    "@taiyomoe/tsconfig": "workspace:^0.1.0"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.9.1"
+  }
+}

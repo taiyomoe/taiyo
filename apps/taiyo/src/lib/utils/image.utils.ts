@@ -1,0 +1,96 @@
+import { extname } from "path"
+import { ALLOWED_MIME_TYPES } from "@taiyomoe/constants"
+import { ImageFolder, InvalidFile } from "~/lib/types"
+
+const convert = async (source: File) => {
+  const image = await createImageBitmap(source)
+
+  const canvas = document.createElement("canvas")
+  canvas.width = image.width
+  canvas.height = image.height
+
+  const context = canvas.getContext("2d")!
+  context.drawImage(image, 0, 0)
+
+  const result: Blob = await new Promise((resolve, reject) => {
+    canvas.toBlob(
+      (blob) => {
+        if (blob != null) {
+          resolve(blob)
+        } else {
+          reject(new Error("Failed to convert file"))
+        }
+      },
+      "image/jpeg",
+      0.85,
+    )
+  })
+
+  image.close()
+
+  return new File([result], source.name.replace(extname(source.name), ".jpg"), {
+    lastModified: Date.now(),
+    type: "image/jpeg",
+  })
+}
+
+const sortByFileName = (files: File[]) => {
+  return files.sort((a, b) => a.name.charCodeAt(0) - b.name.charCodeAt(0))
+}
+
+const computeRelativePaths = (files: FileList) => {
+  const invalidFiles: InvalidFile[] = []
+  const chapters: ImageFolder[] = []
+
+  for (const entry of files) {
+    const [chapterNumber, fileName] = entry.webkitRelativePath
+      .split("/")
+      .slice(-2)
+
+    if (fileName === ".DS_Store") {
+      continue
+    }
+
+    if (!ALLOWED_MIME_TYPES.includes(entry.type)) {
+      invalidFiles.push({
+        reason: "mimeType",
+        path: entry.webkitRelativePath,
+      })
+
+      continue
+    }
+
+    if (!chapterNumber || Number.isNaN(Number.parseFloat(chapterNumber))) {
+      invalidFiles.push({
+        reason: "chapterNumber",
+        path: entry.webkitRelativePath,
+      })
+
+      continue
+    }
+
+    const parsedChapterNumber = Number.parseFloat(chapterNumber)
+    const chapterIndex = chapters.findIndex(
+      ([chapNum]) => chapNum === parsedChapterNumber,
+    )
+
+    if (chapterIndex === -1) {
+      chapters.push([parsedChapterNumber, [entry]])
+
+      continue
+    }
+
+    chapters.at(chapterIndex)?.[1].push(entry)
+  }
+
+  return {
+    invalidFiles,
+    chapters,
+  }
+}
+
+export const ImageUtils = {
+  convert,
+  sortByFileName,
+  computeRelativePaths,
+}
