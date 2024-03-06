@@ -117,3 +117,4 @@ export const authOptions: NextAuthOptions = {
 }
 
 export const handler = nextAuth(authOptions)
+export * from "./utils"
