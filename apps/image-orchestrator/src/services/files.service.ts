@@ -1,30 +1,13 @@
 import { randomUUID } from "crypto"
-import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3"
-import {
-  BadRequestException,
-  Injectable,
-  InternalServerErrorException,
-  OnModuleInit,
-} from "@nestjs/common"
+import { BadRequestException, Injectable, InternalServerErrorException } from "@nestjs/common"
+import { PutObjectCommand, client } from "@taiyomoe/s3"
 import { fromBuffer } from "file-type"
 import { parallel, tryit } from "radash"
 import sharp from "sharp"
 
 @Injectable()
-export class FilesService implements OnModuleInit {
-  #client: S3Client
+export class FilesService {
   #PARALLEL_UPLOADS = 10
-
-  async onModuleInit() {
-    this.#client = new S3Client({
-      region: "auto",
-      endpoint: `https://${process.env.S3_ACCOUNT_ID}.r2.cloudflarestorage.com`,
-      credentials: {
-        accessKeyId: process.env.S3_ACCESS_KEY_ID!,
-        secretAccessKey: process.env.S3_SECRET_ACCESS_KEY!,
-      },
-    })
-  }
 
   async #parse(file: Express.Multer.File | ArrayBuffer) {
     const parsed = await fromBuffer(file instanceof ArrayBuffer ? file : file.buffer)
@@ -55,7 +38,7 @@ export class FilesService implements OnModuleInit {
       Body: await this.#compressImage(file, extension),
     })
 
-    await this.#client.send(command)
+    await client.send(command)
 
     return { id, extension }
   }

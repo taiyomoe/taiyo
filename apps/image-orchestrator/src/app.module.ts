@@ -3,11 +3,9 @@ import { ConfigModule } from "@nestjs/config"
 import { APP_GUARD, APP_INTERCEPTOR, APP_PIPE } from "@nestjs/core"
 import { EventEmitterModule } from "@nestjs/event-emitter"
 import { ZodValidationPipe } from "nestjs-zod"
-
 import { PermissionsGuard } from "~/guards"
 import { TransformInterceptor } from "~/interceptors"
 import { MediasModule } from "~/routes/medias/medias.module"
-
 import { AppController } from "./app.controller"
 import { AppService } from "./app.service"
 import { BannersModule } from "./routes/banners/banners.module"

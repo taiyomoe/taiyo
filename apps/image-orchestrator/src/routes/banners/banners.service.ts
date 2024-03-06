@@ -1,8 +1,6 @@
 import { Injectable } from "@nestjs/common"
-
 import { FilesService, PrismaService } from "~/services"
 import { UploadedFile } from "~/types"
-
 import { UploadBannerDto } from "./dto/upload-banner.dto"
 
 @Injectable()

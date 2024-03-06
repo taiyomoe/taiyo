@@ -1,5 +1,4 @@
 import { Reflector } from "@nestjs/core"
+import { ForgedPermission } from "@taiyomoe/types"
 
-import { Permission } from "~/types/permissions.types"
-
-export const Permissions = Reflector.createDecorator<Permission[]>()
+export const Permissions = Reflector.createDecorator<ForgedPermission[]>()

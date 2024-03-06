@@ -9,7 +9,6 @@ import {
 } from "@prisma/client"
 import { createZodDto } from "nestjs-zod"
 import { z } from "nestjs-zod/z"
-
 import { mediaGenresSchema } from "~/schemas"
 
 const mediaSchema = z.object({

@@ -1,12 +1,10 @@
 import { Injectable, NotFoundException, UnprocessableEntityException } from "@nestjs/common"
 import { EventEmitter2 } from "@nestjs/event-emitter"
+import { MdUtils } from "@taiyomoe/utils"
 import { Manga } from "mangadex-full-api"
-
 import { CoversService } from "~/routes/covers/covers.service"
 import { ImportMediaDto } from "~/routes/medias/dto/import-media.dto"
 import { MediasService } from "~/routes/medias/medias.service"
-import { MdUtils } from "~/utils"
-
 import { PrismaService } from "./prisma.service"
 
 @Injectable()
@@ -80,13 +78,13 @@ export class MdService {
         genres,
         tags: tags.map((key) => ({ key, isSpoiler: false })),
         // -----
-        MediaTitle: {
+        titles: {
           create: titles.map((title) => ({
             ...title,
             creatorId,
           })),
         },
-        MediaTracker: {
+        trackers: {
           create: trackers.map((tracker) => ({
             ...tracker,
             creatorId,

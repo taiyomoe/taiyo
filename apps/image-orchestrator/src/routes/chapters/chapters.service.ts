@@ -1,9 +1,7 @@
-import { Injectable } from "@nestjs/common"
-
-import { UploadedResource } from "~/types"
-
 import { randomUUID } from "crypto"
+import { Injectable } from "@nestjs/common"
 import { FilesService, PrismaService } from "~/services"
+import { UploadedResource } from "~/types"
 import { UploadChapterDto } from "./dto/upload-chapter.dto"
 
 @Injectable()

@@ -1,5 +1,4 @@
 import { NotFoundException } from "@nestjs/common"
-
 import { PrismaService } from "~/services"
 
 export class MediasService {

@@ -1,8 +1,6 @@
 import { Module } from "@nestjs/common"
-
-import { FilesService, MdService, PrismaService } from "~/services"
-
 import { CoversModule } from "~/routes/covers/covers.module"
+import { FilesService, MdService, PrismaService } from "~/services"
 import { MediasController } from "./medias.controller"
 import { MediasService } from "./medias.service"
 
