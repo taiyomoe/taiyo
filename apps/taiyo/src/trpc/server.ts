@@ -1,7 +1,6 @@
+import { createCaller, createTRPCContext } from "@taiyomoe/trpc"
 import { headers } from "next/headers"
 import { cache } from "react"
-
-import { createCaller, createTRPCContext } from "@taiyomoe/trpc"
 
 /**
  * This wraps the `createTRPCContext` helper and provides the required context for the tRPC API when
