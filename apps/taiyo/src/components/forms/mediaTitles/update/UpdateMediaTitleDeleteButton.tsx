@@ -2,8 +2,8 @@ import { Button } from "@nextui-org/react"
 import type { UpdateMediaCoverSchema } from "@taiyomoe/schemas"
 import { useFormikContext } from "formik"
 import { toast } from "sonner"
-import { api } from "~/lib/trpc/client"
 import { useMediaUpdateStore } from "~/stores"
+import { api } from "~/trpc/react"
 
 type Props = {
   toggleModal: () => void

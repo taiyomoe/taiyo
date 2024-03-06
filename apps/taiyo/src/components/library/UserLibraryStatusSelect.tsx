@@ -6,9 +6,9 @@ import type {
   UserLibraryStatusWithDelete,
 } from "@taiyomoe/types"
 import { LibraryUtils } from "@taiyomoe/utils"
-import { api } from "~/lib/trpc/client"
 import { SelectUtils } from "~/lib/utils/select.utils"
 import { useLibraryStore } from "~/stores"
+import { api } from "~/trpc/react"
 
 type Props = {
   media: MediaLimited

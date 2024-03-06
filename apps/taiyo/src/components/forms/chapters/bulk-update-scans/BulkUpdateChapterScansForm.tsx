@@ -13,8 +13,8 @@ import { toast } from "sonner"
 import { toFormikValidationSchema } from "zod-formik-adapter"
 import { BulkUpdateActions } from "~/app/(root)/dashboard/chapters/bulk-edit/_components/BulkUpdateActions"
 import { Form } from "~/components/generics/form/Form"
-import { api } from "~/lib/trpc/client"
 import { FormSubmit } from "~/lib/types"
+import { api } from "~/trpc/react"
 import { BulkUpdateChapterScansFormFields } from "./BulkUpdateChapterScansFormFields"
 
 type Props = {

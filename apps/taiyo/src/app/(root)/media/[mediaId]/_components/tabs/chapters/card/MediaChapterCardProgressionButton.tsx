@@ -3,7 +3,7 @@ import type { MediaLimitedChapter } from "@taiyomoe/types"
 import { EyeIcon, EyeOffIcon } from "lucide-react"
 import { useSession } from "next-auth/react"
 import type { Dispatch, SetStateAction } from "react"
-import { api } from "~/lib/trpc/client"
+import { api } from "~/trpc/react"
 
 type Props = {
   chapter: MediaLimitedChapter

@@ -2,7 +2,7 @@ import type { InsertMediaSchema } from "@taiyomoe/schemas"
 import { TRPCClientError } from "@trpc/client"
 import type { FormikConfig } from "formik"
 import { toast } from "sonner"
-import { api } from "~/lib/trpc/client"
+import { api } from "~/trpc/react"
 
 export const useMediaCreation = () => {
   const { mutateAsync: createMedia } = api.medias.create.useMutation()

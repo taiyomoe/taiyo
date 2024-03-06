@@ -9,8 +9,8 @@ import Link from "next/link"
 import { useEffect } from "react"
 import { UserLibrarySidebarDeleteButton } from "~/components/library/UserLibrarySidebarDeleteButton"
 import { UserLibrarySidebarStatusSelect } from "~/components/library/UserLibrarySidebarStatusSelect"
-import { api } from "~/lib/trpc/client"
 import { useLibraryStore } from "~/stores"
+import { api } from "~/trpc/react"
 
 type Props = {
   status: UserLibraryStatus

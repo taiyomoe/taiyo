@@ -19,10 +19,10 @@ import { MediaTitlesFormFields } from "~/components/forms/mediaTitles/MediaTitle
 import { UpdateMediaTitleDeleteButton } from "~/components/forms/mediaTitles/update/UpdateMediaTitleDeleteButton"
 import { SubmitButton } from "~/components/generics/buttons/SubmitButton"
 import { Form } from "~/components/generics/form/Form"
-import { api } from "~/lib/trpc/client"
 import { FormSubmit } from "~/lib/types"
 import { ObjectUtils } from "~/lib/utils/object.utils"
 import { useMediaUpdateStore } from "~/stores"
+import { api } from "~/trpc/react"
 
 type Props = {
   title: MediaTitle

@@ -6,8 +6,8 @@ import type { FormikConfig } from "formik"
 import { toast } from "sonner"
 import { toFormikValidationSchema } from "zod-formik-adapter"
 import { Form } from "~/components/generics/form/Form"
-import { api } from "~/lib/trpc/client"
 import { ObjectUtils } from "~/lib/utils/object.utils"
+import { api } from "~/trpc/react"
 import { MediaFormFields } from "./MediaFormFields"
 
 type Props = {

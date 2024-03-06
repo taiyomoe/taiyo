@@ -7,7 +7,7 @@ import { MediaChapterUtils } from "@taiyomoe/utils"
 import Image from "next/image"
 import { useEffect, useMemo, useState } from "react"
 import { useMediaNavigation } from "~/hooks/useMediaNavigation"
-import { api } from "~/lib/trpc/client"
+import { api } from "~/trpc/react"
 import { MediaChapterVolumes } from "./MediaChapterVolumes"
 import { MediaChaptersTabActions } from "./MediaChaptersTabActions"
 

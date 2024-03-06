@@ -7,7 +7,7 @@ import { SubmitButton } from "~/components/generics/buttons/SubmitButton"
 import { Form } from "~/components/generics/form/Form"
 import { InputFormField } from "~/components/generics/form/InputFormField"
 import { TextAreaFormField } from "~/components/generics/form/TextAreaFormField"
-import { api } from "~/lib/trpc/client"
+import { api } from "~/trpc/react"
 
 const initialValues: ImportMediaSchema = {
   mdId: "",

@@ -10,7 +10,7 @@ import {
 import type { MediaLimitedChapter } from "@taiyomoe/types"
 import { TrashIcon } from "lucide-react"
 import { toast } from "sonner"
-import { api } from "~/lib/trpc/client"
+import { api } from "~/trpc/react"
 
 type Props = {
   chapter: MediaLimitedChapter

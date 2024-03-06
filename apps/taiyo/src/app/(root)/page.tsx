@@ -1,4 +1,4 @@
-import { api } from "~/lib/trpc/server"
+import { api } from "~/trpc/server"
 import { FeaturedMedias } from "./_components/FeaturedMedias"
 import { LatestMedias } from "./_components/LatestMedias"
 import { LatestReleases } from "./_components/LatestReleases"
@@ -6,7 +6,7 @@ import { TrendingMedias } from "./_components/TrendingMedias"
 
 export default async function HomePage() {
   const { latestMedias, featuredMedias, latestReleases } =
-    await api.medias.getHomePage.query()
+    await api.medias.getHomePage()
 
   return (
     <main className="flex h-full flex-col p-bodyPadding">

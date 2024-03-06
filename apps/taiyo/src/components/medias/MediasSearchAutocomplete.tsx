@@ -7,7 +7,7 @@ import { useFormikContext } from "formik"
 import { parseAsString, useQueryState } from "next-usequerystate"
 import { useEffect } from "react"
 import { z } from "zod"
-import { api } from "~/lib/trpc/client"
+import { api } from "~/trpc/react"
 
 export const MediasSearchAutocomplete = () => {
   const [mediaId] = useQueryState("mediaId", parseAsString.withDefault(""))

@@ -10,7 +10,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { useCallback } from "react"
 import { SearchedMediaCard } from "~/components/navbar/search/SearchedMediaCard"
-import { api } from "~/lib/trpc/client"
+import { api } from "~/trpc/react"
 
 type Props = {
   href?: (mediaId: string) => string

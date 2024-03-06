@@ -24,9 +24,9 @@ import { Form } from "~/components/generics/form/Form"
 import { InputFormField } from "~/components/generics/form/InputFormField"
 import { SelectFormField } from "~/components/generics/form/SelectFormField"
 import { SwitchFormField } from "~/components/generics/form/SwitchFormField"
-import { api } from "~/lib/trpc/client"
 import { ObjectUtils } from "~/lib/utils/object.utils"
 import { useMediaUpdateStore } from "~/stores"
+import { api } from "~/trpc/react"
 import { UpdateMediaCoverDeleteButton } from "./UpdateMediaCoverDeleteButton"
 
 type Props = {
