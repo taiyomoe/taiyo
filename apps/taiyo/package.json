@@ -31,7 +31,7 @@
     "@trpc/server": "11.0.0-next-beta.294",
     "apexcharts": "^3.46.0",
     "dotenv-cli": "^7.3.0",
-    "embla-carousel-autoplay": "^8.0.0-rc19",
+    "embla-carousel-autoplay": "^8.0.0",
     "embla-carousel-react": "^8.0.0-rc19",
     "encoding": "^0.1.13",
     "formik": "^2.4.5",
