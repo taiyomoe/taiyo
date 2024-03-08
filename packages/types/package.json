@@ -17,6 +17,6 @@
     "@taiyomoe/tsconfig": "workspace:^0.1.0"
   },
   "dependencies": {
-    "@prisma/client": "^5.9.1"
+    "@prisma/client": "^5.10.2"
   }
 }
