@@ -13,7 +13,7 @@ importers:
         version: 1.5.3
       '@turbo/gen':
         specifier: ^1.12.5
-        version: 1.12.5(@types/node@20.11.25)(typescript@5.3.3)
+        version: 1.12.5(@types/node@20.11.25)(typescript@5.4.2)
       '@types/global-types':
         specifier: workspace:^0.1.0
         version: link:packages/global-types
@@ -21,8 +21,8 @@ importers:
         specifier: ^1.12.5
         version: 1.12.5
       typescript:
-        specifier: ^5.3.3
-        version: 5.3.3
+        specifier: ^5.4.2
+        version: 5.4.2
 
   apps/image-orchestrator:
     dependencies:
@@ -92,7 +92,7 @@ importers:
         version: 10.3.2
       '@nestjs/schematics':
         specifier: ^10.1.1
-        version: 10.1.1(chokidar@3.6.0)(typescript@5.3.3)
+        version: 10.1.1(typescript@5.4.2)
       '@nestjs/testing':
         specifier: ^10.3.3
         version: 10.3.3(@nestjs/common@10.3.3)(@nestjs/core@10.3.3)(@nestjs/platform-express@10.3.3)
@@ -128,19 +128,19 @@ importers:
         version: 6.3.4
       ts-jest:
         specifier: ^29.1.2
-        version: 29.1.2(@babel/core@7.24.0)(jest@29.7.0)(typescript@5.3.3)
+        version: 29.1.2(@babel/core@7.24.0)(jest@29.7.0)(typescript@5.4.2)
       ts-loader:
         specifier: ^9.5.1
-        version: 9.5.1(typescript@5.3.3)(webpack@5.90.3)
+        version: 9.5.1(typescript@5.4.2)(webpack@5.90.3)
       ts-node:
         specifier: ^10.9.1
-        version: 10.9.2(@types/node@20.11.25)(typescript@5.3.3)
+        version: 10.9.2(@types/node@20.11.25)(typescript@5.4.2)
       tsconfig-paths:
         specifier: ^4.2.0
         version: 4.2.0
       typescript:
-        specifier: ^5.3.3
-        version: 5.3.3
+        specifier: ^5.4.2
+        version: 5.4.2
 
   apps/taiyo:
     dependencies:
@@ -155,7 +155,7 @@ importers:
         version: 4.0.0(tailwindcss@3.4.1)
       '@t3-oss/env-nextjs':
         specifier: ^0.8.0
-        version: 0.8.0(typescript@5.3.3)(zod@3.22.4)
+        version: 0.8.0(typescript@5.4.2)(zod@3.22.4)
       '@taiyomoe/auth':
         specifier: workspace:^0.1.0
         version: link:../../packages/auth
@@ -320,8 +320,8 @@ importers:
         specifier: ^3.4.1
         version: 3.4.1
       typescript:
-        specifier: ^5.3.3
-        version: 5.3.3
+        specifier: ^5.4.2
+        version: 5.4.2
 
   packages/auth:
     dependencies:
@@ -330,7 +330,7 @@ importers:
         version: 1.0.7(@prisma/client@5.10.2)(next-auth@4.24.7)
       '@t3-oss/env-nextjs':
         specifier: ^0.8.0
-        version: 0.8.0(typescript@5.3.3)(zod@3.22.4)
+        version: 0.8.0(typescript@5.4.2)(zod@3.22.4)
       '@taiyomoe/db':
         specifier: workspace:^0.1.0
         version: link:../db
@@ -380,13 +380,13 @@ importers:
         version: 5.10.2
       prisma-json-types-generator:
         specifier: ^3.0.4
-        version: 3.0.4(prisma@5.10.2)(typescript@5.3.3)
+        version: 3.0.4(prisma@5.10.2)(typescript@5.4.2)
       tsx:
         specifier: ^4.7.1
         version: 4.7.1
       typescript:
-        specifier: ^5.3.3
-        version: 5.3.3
+        specifier: ^5.4.2
+        version: 5.4.2
       zod-prisma-types:
         specifier: ^3.1.6
         version: 3.1.6
@@ -420,7 +420,7 @@ importers:
         version: 3.525.0
       '@t3-oss/env-nextjs':
         specifier: ^0.8.0
-        version: 0.8.0(typescript@5.3.3)(zod@3.22.4)
+        version: 0.8.0(typescript@5.4.2)(zod@3.22.4)
       zod:
         specifier: ^3.22.4
         version: 3.22.4
@@ -465,7 +465,7 @@ importers:
     dependencies:
       '@t3-oss/env-nextjs':
         specifier: ^0.8.0
-        version: 0.8.0(typescript@5.3.3)(zod@3.22.4)
+        version: 0.8.0(typescript@5.4.2)(zod@3.22.4)
       pusher:
         specifier: ^5.2.0
         version: 5.2.0
@@ -484,7 +484,7 @@ importers:
     dependencies:
       '@t3-oss/env-nextjs':
         specifier: ^0.8.0
-        version: 0.8.0(typescript@5.3.3)(zod@3.22.4)
+        version: 0.8.0(typescript@5.4.2)(zod@3.22.4)
       '@taiyomoe/auth':
         specifier: workspace:^0.1.0
         version: link:../auth
@@ -546,7 +546,7 @@ importers:
         version: 5.10.2(prisma@5.10.2)
       '@t3-oss/env-nextjs':
         specifier: ^0.8.0
-        version: 0.8.0(typescript@5.3.3)(zod@3.22.4)
+        version: 0.8.0(typescript@5.4.2)(zod@3.22.4)
       '@taiyomoe/constants':
         specifier: workspace:^0.1.0
         version: link:../constants
@@ -585,8 +585,8 @@ importers:
         specifier: workspace:^0.1.0
         version: link:../typescript
       typescript:
-        specifier: ^5.3.3
-        version: 5.3.3
+        specifier: ^5.4.2
+        version: 5.4.2
 
   tooling/typescript: {}
 
@@ -2658,6 +2658,21 @@ packages:
       jsonc-parser: 3.2.1
       pluralize: 8.0.0
       typescript: 5.3.3
+    transitivePeerDependencies:
+      - chokidar
+    dev: true
+
+  /@nestjs/schematics@10.1.1(typescript@5.4.2):
+    resolution: {integrity: sha512-o4lfCnEeIkfJhGBbLZxTuVWcGuqDCFwg5OrvpgRUBM7vI/vONvKKiB5riVNpO+JqXoH0I42NNeDb0m4V5RREig==}
+    peerDependencies:
+      typescript: '>=4.8.2'
+    dependencies:
+      '@angular-devkit/core': 17.1.2(chokidar@3.6.0)
+      '@angular-devkit/schematics': 17.1.2(chokidar@3.6.0)
+      comment-json: 4.2.3
+      jsonc-parser: 3.2.1
+      pluralize: 8.0.0
+      typescript: 5.4.2
     transitivePeerDependencies:
       - chokidar
     dev: true
@@ -5605,7 +5620,7 @@ packages:
       tslib: 2.6.2
     dev: false
 
-  /@t3-oss/env-core@0.8.0(typescript@5.3.3)(zod@3.22.4):
+  /@t3-oss/env-core@0.8.0(typescript@5.4.2)(zod@3.22.4):
     resolution: {integrity: sha512-Tc1pg0KH/tJeI0Z1s/Isp1VsGDj1N03ZAYFV8GjWgMxytF/ve0Dv+opjmTapHICRv8qiB1Y/fsTjkWNMpKPRCQ==}
     peerDependencies:
       typescript: '>=5.0.0'
@@ -5614,11 +5629,11 @@ packages:
       typescript:
         optional: true
     dependencies:
-      typescript: 5.3.3
+      typescript: 5.4.2
       zod: 3.22.4
     dev: false
 
-  /@t3-oss/env-nextjs@0.8.0(typescript@5.3.3)(zod@3.22.4):
+  /@t3-oss/env-nextjs@0.8.0(typescript@5.4.2)(zod@3.22.4):
     resolution: {integrity: sha512-bJyoE8of4QmqZN7a49iLJAbUq4graScb9ezXzvnuIVr9JP43C093vmy55hT1uZL533CwiPz8zo1INwyAS6qnHw==}
     peerDependencies:
       typescript: '>=5.0.0'
@@ -5627,8 +5642,8 @@ packages:
       typescript:
         optional: true
     dependencies:
-      '@t3-oss/env-core': 0.8.0(typescript@5.3.3)(zod@3.22.4)
-      typescript: 5.3.3
+      '@t3-oss/env-core': 0.8.0(typescript@5.4.2)(zod@3.22.4)
+      typescript: 5.4.2
       zod: 3.22.4
     dev: false
 
@@ -5701,7 +5716,7 @@ packages:
     resolution: {integrity: sha512-vxhUy4J8lyeyinH7Azl1pdd43GJhZH/tP2weN8TntQblOY+A0XbT8DJk1/oCPuOOyg/Ja757rG0CgHcWC8OfMA==}
     dev: true
 
-  /@turbo/gen@1.12.5(@types/node@20.11.25)(typescript@5.3.3):
+  /@turbo/gen@1.12.5(@types/node@20.11.25)(typescript@5.4.2):
     resolution: {integrity: sha512-sEF/iryAcWYqONXcrAyWREUVPA4eba22hxU1yx4b9+Rs9SUNFkM54cDaXEAtzbh/iji428aQpnuxi+SUT7m9zw==}
     hasBin: true
     dependencies:
@@ -5713,7 +5728,7 @@ packages:
       minimatch: 9.0.3
       node-plop: 0.26.3
       proxy-agent: 6.4.0
-      ts-node: 10.9.2(@types/node@20.11.25)(typescript@5.3.3)
+      ts-node: 10.9.2(@types/node@20.11.25)(typescript@5.4.2)
       update-check: 1.5.4
       validate-npm-package-name: 5.0.0
     transitivePeerDependencies:
@@ -8390,7 +8405,7 @@ packages:
       pretty-format: 29.7.0
       slash: 3.0.0
       strip-json-comments: 3.1.1
-      ts-node: 10.9.2(@types/node@20.11.25)(typescript@5.3.3)
+      ts-node: 10.9.2(@types/node@20.11.25)(typescript@5.4.2)
     transitivePeerDependencies:
       - babel-plugin-macros
       - supports-color
@@ -9705,7 +9720,7 @@ packages:
     resolution: {integrity: sha512-WuxUnVtlWL1OfZFQFuqvnvs6MiAGk9UNsBostyBOB0Is9wb5uRESevA6rnl/rkksXaGX3GzZhPup5d6Vp1nFew==}
     dev: false
 
-  /prisma-json-types-generator@3.0.4(prisma@5.10.2)(typescript@5.3.3):
+  /prisma-json-types-generator@3.0.4(prisma@5.10.2)(typescript@5.4.2):
     resolution: {integrity: sha512-W53OpjBdGZxCsYv7MlUX69d7TPA9lEsQbDf9ddF0J93FX5EvaIRDMexdFPe0KTxiuquGvZTDJgeNXb3gIqEhJw==}
     engines: {node: '>=14.0'}
     hasBin: true
@@ -9716,7 +9731,7 @@ packages:
       '@prisma/generator-helper': 5.9.1
       prisma: 5.10.2
       tslib: 2.6.2
-      typescript: 5.3.3
+      typescript: 5.4.2
     dev: true
 
   /prisma@5.10.2:
@@ -10903,7 +10918,7 @@ packages:
   /ts-interface-checker@0.1.13:
     resolution: {integrity: sha512-Y/arvbn+rrz3JCKl9C4kVNfTfSm2/mEp5FSz5EsZSANGPSlQrpRI5M4PKF+mJnE52jOO90PnPSc3Ur3bTQw0gA==}
 
-  /ts-jest@29.1.2(@babel/core@7.24.0)(jest@29.7.0)(typescript@5.3.3):
+  /ts-jest@29.1.2(@babel/core@7.24.0)(jest@29.7.0)(typescript@5.4.2):
     resolution: {integrity: sha512-br6GJoH/WUX4pu7FbZXuWGKGNDuU7b8Uj77g/Sp7puZV6EXzuByl6JrECvm0MzVzSTkSHWTihsXt+5XYER5b+g==}
     engines: {node: ^16.10.0 || ^18.0.0 || >=20.0.0}
     hasBin: true
@@ -10933,11 +10948,11 @@ packages:
       lodash.memoize: 4.1.2
       make-error: 1.3.6
       semver: 7.6.0
-      typescript: 5.3.3
+      typescript: 5.4.2
       yargs-parser: 21.1.1
     dev: true
 
-  /ts-loader@9.5.1(typescript@5.3.3)(webpack@5.90.3):
+  /ts-loader@9.5.1(typescript@5.4.2)(webpack@5.90.3):
     resolution: {integrity: sha512-rNH3sK9kGZcH9dYzC7CewQm4NtxJTjSEVRJ2DyBZR7f8/wcta+iV44UPCXc5+nzDzivKtlzV6c9P4e+oFhDLYg==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
@@ -10949,11 +10964,11 @@ packages:
       micromatch: 4.0.5
       semver: 7.6.0
       source-map: 0.7.4
-      typescript: 5.3.3
+      typescript: 5.4.2
       webpack: 5.90.3
     dev: true
 
-  /ts-node@10.9.2(@types/node@20.11.25)(typescript@5.3.3):
+  /ts-node@10.9.2(@types/node@20.11.25)(typescript@5.4.2):
     resolution: {integrity: sha512-f0FFpIdcHgn8zcPSbf1dRevwt047YMnaiJM3u2w2RewrB+fob/zePZcrOyQoLMMO7aBIddLcQIEK5dYjkLnGrQ==}
     hasBin: true
     peerDependencies:
@@ -10979,7 +10994,7 @@ packages:
       create-require: 1.1.1
       diff: 4.0.2
       make-error: 1.3.6
-      typescript: 5.3.3
+      typescript: 5.4.2
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
     dev: true
@@ -11109,6 +11124,12 @@ packages:
 
   /typescript@5.3.3:
     resolution: {integrity: sha512-pXWcraxM0uxAS+tN0AG/BF2TyqmHO014Z070UsJ+pFvYuRSq8KH8DmWpnbXe0pEPDHXZV3FcAbJkijJ5oNEnWw==}
+    engines: {node: '>=14.17'}
+    hasBin: true
+    dev: true
+
+  /typescript@5.4.2:
+    resolution: {integrity: sha512-+2/g0Fds1ERlP6JsakQQDXjZdZMM+rqpamFZJEKh4kwTIn3iDkgKtby0CeNd5ATNZ4Ry1ax15TMx0W2V+miizQ==}
     engines: {node: '>=14.17'}
     hasBin: true
 
