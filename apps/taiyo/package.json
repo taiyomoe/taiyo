@@ -57,7 +57,7 @@
     "usehooks-ts": "^2.15.0",
     "zod": "^3.22.4",
     "zod-formik-adapter": "^1.2.0",
-    "zustand": "^4.5.1"
+    "zustand": "^4.5.2"
   },
   "devDependencies": {
     "@biomejs/biome": "1.5.3",
