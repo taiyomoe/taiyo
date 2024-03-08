@@ -196,8 +196,8 @@ importers:
         specifier: 11.0.0-next-beta.316
         version: 11.0.0-next-beta.316
       apexcharts:
-        specifier: ^3.46.0
-        version: 3.46.0
+        specifier: ^3.47.0
+        version: 3.47.0
       dotenv-cli:
         specifier: ^7.4.0
         version: 7.4.0
@@ -248,7 +248,7 @@ importers:
         version: 18.2.0
       react-apexcharts:
         specifier: ^1.4.1
-        version: 1.4.1(apexcharts@3.46.0)(react@18.2.0)
+        version: 1.4.1(apexcharts@3.47.0)(react@18.2.0)
       react-dom:
         specifier: 18.2.0
         version: 18.2.0(react@18.2.0)
@@ -6288,8 +6288,8 @@ packages:
       normalize-path: 3.0.0
       picomatch: 2.3.1
 
-  /apexcharts@3.46.0:
-    resolution: {integrity: sha512-ELAY6vj8JQD7QLktKasTzwm9Wt0qxqfQSo+3QWS7G7I774iK8HCkG1toGsqJH0mkK6PtYBtnSIe66uUcwoCw1w==}
+  /apexcharts@3.47.0:
+    resolution: {integrity: sha512-s/fgNCA69b8lJdhI3R7Z+/Df47RPplLyHwuvttecR+aaZ3/Pm6wHYPiAGjqDNbVsMGXhuA9mcOpIYU5ZWeSdeg==}
     dependencies:
       '@yr/monotone-cubic-spline': 1.0.3
       svg.draggable.js: 2.2.2
@@ -9875,13 +9875,13 @@ packages:
       strip-json-comments: 2.0.1
     dev: true
 
-  /react-apexcharts@1.4.1(apexcharts@3.46.0)(react@18.2.0):
+  /react-apexcharts@1.4.1(apexcharts@3.47.0)(react@18.2.0):
     resolution: {integrity: sha512-G14nVaD64Bnbgy8tYxkjuXEUp/7h30Q0U33xc3AwtGFijJB9nHqOt1a6eG0WBn055RgRg+NwqbKGtqPxy15d0Q==}
     peerDependencies:
       apexcharts: ^3.41.0
       react: '>=0.13'
     dependencies:
-      apexcharts: 3.46.0
+      apexcharts: 3.47.0
       prop-types: 15.8.1
       react: 18.2.0
     dev: false
