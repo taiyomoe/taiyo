@@ -72,8 +72,8 @@ importers:
         specifier: ^3.0.0
         version: 3.0.0(@nestjs/common@10.3.3)(@nestjs/core@10.3.3)(@nestjs/swagger@7.3.0)(zod@3.22.4)
       radash:
-        specifier: ^11.0.0
-        version: 11.0.0
+        specifier: ^12.1.0
+        version: 12.1.0
       reflect-metadata:
         specifier: ^0.1.13
         version: 0.1.14
@@ -9818,8 +9818,8 @@ packages:
   /queue-microtask@1.2.3:
     resolution: {integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==}
 
-  /radash@11.0.0:
-    resolution: {integrity: sha512-CRWxTFTDff0IELGJ/zz58yY4BDgyI14qSM5OLNKbCItJrff7m7dXbVF0kWYVCXQtPb3SXIVhXvAImH6eT7VLSg==}
+  /radash@12.1.0:
+    resolution: {integrity: sha512-b0Zcf09AhqKS83btmUeYBS8tFK7XL2e3RvLmZcm0sTdF1/UUlHSsjXdCcWNxe7yfmAlPve5ym0DmKGtTzP6kVQ==}
     engines: {node: '>=14.18.0'}
     dev: false
 
