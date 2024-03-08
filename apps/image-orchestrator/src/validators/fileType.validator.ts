@@ -1,5 +1,5 @@
 import { FileValidator } from "@nestjs/common"
-import { MimeType, fromBuffer } from "file-type"
+import { MimeType, fileTypeFromBuffer } from "file-type"
 
 export class FileTypeValidator extends FileValidator<MimeType[]> {
   /**
@@ -7,7 +7,7 @@ export class FileTypeValidator extends FileValidator<MimeType[]> {
    * @param file the file from the request object
    */
   async isValid(file: Express.Multer.File) {
-    const parsed = await fromBuffer(file.buffer)
+    const parsed = await fileTypeFromBuffer(file.buffer)
 
     if (!parsed) return false
 

@@ -53,8 +53,8 @@ export class BannersController {
   ) {
     const media = await this.mediasService.getById(dto.mediaId)
 
-    const uploadedBanner = await this.bannersService.upload(media.id, [file])
-    const banner = await this.bannersService.insert(dto, uploadedBanner, uploader.id)
+    const [uploadedFile] = await this.bannersService.upload(media.id, [file!])
+    const banner = await this.bannersService.insert(dto, uploadedFile!, uploader.id)
 
     return banner
   }

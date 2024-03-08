@@ -53,8 +53,8 @@ export class CoversController {
   ) {
     const media = await this.mediasService.getById(dto.mediaId)
 
-    const uploadedCover = await this.coversService.upload(media.id, [file])
-    const cover = await this.coversService.insert(dto, uploadedCover, uploader.id)
+    const [uploadedFile] = await this.coversService.upload(media.id, [file!])
+    const cover = await this.coversService.insert(dto, uploadedFile!, uploader.id)
 
     return cover
   }

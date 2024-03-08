@@ -1,5 +1,6 @@
 import type { Roles } from "@prisma/client"
 import type {
+  ForgedPermission,
   Permission,
   ResourcesWithPossession,
   ResourcesWithoutPossession,
@@ -115,7 +116,10 @@ const getResourcesWithoutPosession = (): ResourcesWithoutPossession[] => [
 const canAccessDashboard = (permissions: Permission[]) =>
   permissions.filter((p) => !getUserPermissions().includes(p)).length !== 0
 
-const hasPermission = (ownedPerms: string[], requiredPerms: Permission[]) => {
+const hasPermission = (
+  ownedPerms: string[],
+  requiredPerms: ForgedPermission[],
+) => {
   const requiredResources = requiredPerms.map((p) =>
     typeof p[0] === "string" ? [p[0]] : p[0],
   )

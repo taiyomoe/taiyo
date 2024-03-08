@@ -1,7 +1,7 @@
 import { randomUUID } from "crypto"
 import { BadRequestException, Injectable, InternalServerErrorException } from "@nestjs/common"
 import { PutObjectCommand, client } from "@taiyomoe/s3"
-import { fromBuffer } from "file-type"
+import { fileTypeFromBuffer } from "file-type"
 import { parallel, tryit } from "radash"
 import sharp from "sharp"
 
@@ -10,7 +10,7 @@ export class FilesService {
   #PARALLEL_UPLOADS = 10
 
   async #parse(file: Express.Multer.File | ArrayBuffer) {
-    const parsed = await fromBuffer(file instanceof ArrayBuffer ? file : file.buffer)
+    const parsed = await fileTypeFromBuffer(file instanceof ArrayBuffer ? file : file.buffer)
 
     if (!parsed) throw new BadRequestException("There is at least one invalid file.")
 

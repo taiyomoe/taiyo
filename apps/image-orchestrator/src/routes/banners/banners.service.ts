@@ -22,8 +22,8 @@ export class BannersService {
     return result
   }
 
-  async upload(mediaId: string, files: Express.Multer.File[]): Promise<UploadedFile> {
-    const [uploaded] = await this.filesService.uploadFiles(`medias/${mediaId}/banners`, files)
+  async upload(mediaId: string, files: Express.Multer.File[]) {
+    const uploaded = await this.filesService.uploadFiles(`medias/${mediaId}/banners`, files)
 
     return uploaded
   }

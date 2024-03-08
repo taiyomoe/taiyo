@@ -1,5 +1,8 @@
 import { Injectable, NotFoundException, UnprocessableEntityException } from "@nestjs/common"
 import { EventEmitter2 } from "@nestjs/event-emitter"
+import { db } from "@taiyomoe/db"
+import { meilisearchIndexes } from "@taiyomoe/meilisearch"
+import { getMediaIndexItem } from "@taiyomoe/meilisearch/utils"
 import { MdUtils } from "@taiyomoe/utils"
 import { Manga } from "mangadex-full-api"
 import { CoversService } from "~/routes/covers/covers.service"
@@ -125,7 +128,16 @@ export class MdService {
         },
       })
 
-      console.log("coverFile", cover.imageSource.split("/").pop()!)
+      await db.mediaCover.create({
+        data: {
+          id: _uploaded.id,
+          volume: Number.isNaN(cover.volume) ? null : parseFloat(cover.volume),
+          isMainCover: _mainCover.id === cover.id,
+          language: coverLanguage,
+          mediaId: media.id,
+          uploaderId: creatorId,
+        },
+      })
     }
 
     this.eventEmitter.emit(this.importEventKey, {
@@ -139,6 +151,9 @@ export class MdService {
       content: "Reindexando a busca...",
       type: "ongoing",
     })
+
+    const indexItem = await getMediaIndexItem(db, media.id)
+    await meilisearchIndexes.medias.updateDocuments([indexItem])
 
     this.eventEmitter.emit(this.importEventKey, {
       step: 4,

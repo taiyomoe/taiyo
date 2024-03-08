@@ -18,7 +18,7 @@ export class ChaptersService {
         id: res.id,
         pages: res.files,
         language: "pt_br",
-        Scan: { connect: scanIds.map((id) => ({ id })) },
+        scans: { connect: scanIds.map((id) => ({ id })) },
         uploaderId,
       },
     })
