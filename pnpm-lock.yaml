@@ -217,7 +217,7 @@ importers:
         specifier: ^11.0.8
         version: 11.0.8(react-dom@18.2.0)(react@18.2.0)
       jotai:
-        specifier: ^2.6.5
+        specifier: ^2.7.0
         version: 2.7.0(@types/react@18.2.64)(react@18.2.0)
       lodash-es:
         specifier: ^4.17.21
