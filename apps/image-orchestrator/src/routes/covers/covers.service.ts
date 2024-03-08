@@ -25,7 +25,7 @@ export class CoversService {
   async upload(mediaId: string, files: Express.Multer.File[]): Promise<UploadedFile> {
     const [uploaded] = await this.filesService.uploadFiles(`medias/${mediaId}/covers`, files)
 
-    return uploaded
+    return uploaded!
   }
 
   async uploadFromUrl(
@@ -41,6 +41,6 @@ export class CoversService {
 
     const [uploaded] = await this.filesService.uploadFiles(`medias/${mediaId}/covers`, [file])
 
-    return uploaded
+    return uploaded!
   }
 }
