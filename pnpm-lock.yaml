@@ -360,7 +360,7 @@ importers:
   packages/db:
     dependencies:
       '@prisma/client':
-        specifier: ^5.9.1
+        specifier: ^5.10.2
         version: 5.10.2(prisma@5.10.2)
     devDependencies:
       '@taiyomoe/meilisearch':
@@ -376,7 +376,7 @@ importers:
         specifier: ^7.3.0
         version: 7.3.0
       prisma:
-        specifier: ^5.9.1
+        specifier: ^5.10.2
         version: 5.10.2
       prisma-json-types-generator:
         specifier: ^3.0.4
@@ -532,7 +532,7 @@ importers:
   packages/types:
     dependencies:
       '@prisma/client':
-        specifier: ^5.9.1
+        specifier: ^5.10.2
         version: 5.10.2(prisma@5.10.2)
     devDependencies:
       '@taiyomoe/tsconfig':
@@ -542,7 +542,7 @@ importers:
   packages/utils:
     dependencies:
       '@prisma/client':
-        specifier: ^5.9.1
+        specifier: ^5.10.2
         version: 5.10.2(prisma@5.10.2)
       '@t3-oss/env-nextjs':
         specifier: ^0.8.0
