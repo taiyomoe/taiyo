@@ -29,7 +29,7 @@
     "mangadex-full-api": "^5.12.1",
     "nestjs-zod": "^3.0.0",
     "radash": "^12.1.0",
-    "reflect-metadata": "^0.1.13",
+    "reflect-metadata": "^0.2.1",
     "rxjs": "^7.8.1",
     "sharp": "^0.33.2",
     "zod": "^3.22.4"
