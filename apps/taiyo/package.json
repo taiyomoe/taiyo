@@ -30,7 +30,7 @@
     "@trpc/react-query": "11.0.0-next-beta.316",
     "@trpc/server": "11.0.0-next-beta.316",
     "apexcharts": "^3.47.0",
-    "dotenv-cli": "^7.4.0",
+    "dotenv-cli": "^7.4.1",
     "embla-carousel-autoplay": "^8.0.0",
     "embla-carousel-react": "^8.0.0",
     "encoding": "^0.1.13",
