@@ -6,7 +6,6 @@
     "build": "nest build",
     "clean": "git clean -xdf dist .turbo node_modules",
     "start": "node dist/main",
-    "dev": "nest start --watch",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",

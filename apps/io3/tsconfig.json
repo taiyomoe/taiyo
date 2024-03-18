@@ -1,0 +1,15 @@
+{
+  "extends": "@taiyomoe/tsconfig/base.json",
+  "compilerOptions": {
+    "module": "ESNext",
+    "target": "ESNext",
+    "strict": true,
+    "moduleResolution": "Bundler",
+    "esModuleInterop": true,
+    "paths": {
+        "~/*": ["./src/*"]
+    },
+  },
+  "include": ["."],
+  "exclude": ["node_modules"]
+}

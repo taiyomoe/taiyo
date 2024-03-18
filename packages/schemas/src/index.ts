@@ -1,3 +1,4 @@
+export * from "./auth.schemas"
 export * from "./history.schemas"
 export * from "./library.schemas"
 export * from "./media.schemas"
