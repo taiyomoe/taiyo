@@ -153,18 +153,36 @@ importers:
       '@elysiajs/swagger':
         specifier: ^1.0.2
         version: 1.0.2(elysia@1.0.4)
+      '@t3-oss/env-core':
+        specifier: ^0.9.2
+        version: 0.9.2(typescript@5.4.2)(zod@3.22.4)
       '@taiyomoe/db':
-        specifier: workspace:^
+        specifier: workspace:^0.1.0
         version: link:../../packages/db
-      '@taiyomoe/schemas':
+      '@taiyomoe/s3':
         specifier: workspace:^
+        version: link:../../packages/s3
+      '@taiyomoe/schemas':
+        specifier: workspace:^0.1.0
         version: link:../../packages/schemas
       '@taiyomoe/utils':
-        specifier: workspace:^
+        specifier: workspace:^0.1.0
         version: link:../../packages/utils
       elysia:
         specifier: ^1.0.2
         version: 1.0.4(@sinclair/typebox@0.32.15)(typescript@5.4.2)
+      file-type:
+        specifier: ^19.0.0
+        version: 19.0.0
+      radash:
+        specifier: ^12.1.0
+        version: 12.1.0
+      sharp:
+        specifier: ^0.33.2
+        version: 0.33.2
+      zod:
+        specifier: ^3.22.4
+        version: 3.22.4
     devDependencies:
       '@taiyomoe/tsconfig':
         specifier: workspace:^0.1.0

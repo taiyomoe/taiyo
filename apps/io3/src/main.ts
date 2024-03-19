@@ -2,7 +2,7 @@ import "@bogeychan/elysia-polyfills/node/index.js"
 
 import { cors } from "@elysiajs/cors"
 import { swagger } from "@elysiajs/swagger"
-import { Elysia } from "elysia"
+import { Elysia, ValidationError } from "elysia"
 import { coversController } from "./controllers/covers.controller"
 
 const app = new Elysia({ prefix: "/v3" })
@@ -13,16 +13,20 @@ const app = new Elysia({ prefix: "/v3" })
     const meta = Array.isArray(response) ? [response.at(1)] : []
 
     return new Response(JSON.stringify({ data, meta }), {
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
     })
   })
   .onError(({ error }) => {
-    return new Response(JSON.stringify({ error: error.message }), {
-      headers: {
-        "Content-Type": "application/json",
-      },
+    console.log("error", error)
+
+    if (error instanceof ValidationError) {
+      return new Response(JSON.stringify({ errors: error.all }), {
+        headers: { "Content-Type": "application/json" },
+      })
+    }
+
+    return new Response(JSON.stringify({ errors: [error.message] }), {
+      headers: { "Content-Type": "application/json" },
     })
   })
   .use(coversController)

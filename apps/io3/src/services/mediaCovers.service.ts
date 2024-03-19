@@ -1,0 +1,35 @@
+import { db } from "@taiyomoe/db"
+import { omit } from "radash"
+import { CreateCoverInput } from "~/schemas"
+import { FilesService } from "~/services/files.service"
+import { UploadedFile } from "~/types"
+
+const insert = async (
+  input: CreateCoverInput,
+  file: UploadedFile,
+  uploaderId: string,
+) => {
+  const result = await db.mediaCover.create({
+    data: {
+      ...omit(input, ["file"]),
+      id: file.id,
+      uploaderId,
+    },
+  })
+
+  return result
+}
+
+const upload = async (mediaId: string, files: File[]) => {
+  const uploaded = await FilesService.uploadFiles(
+    `medias/${mediaId}/covers`,
+    files,
+  )
+
+  return uploaded
+}
+
+export const MediaCoversService = {
+  insert,
+  upload,
+}
