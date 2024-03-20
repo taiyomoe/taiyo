@@ -1,30 +1,30 @@
 import { Elysia } from "elysia"
 import { authMiddleware } from "~/middlewares/auth.middleware"
-import { CreateCoverInput } from "~/schemas"
-import { MediaCoversService, MediasService } from "~/services"
+import { CreateBannerInput } from "~/schemas"
+import { MediaBannersService, MediasService } from "~/services"
 import { fileTypeValidator } from "~/validators/fileType.validator"
 
 const upload = new Elysia()
-  .use(authMiddleware([["mediaCovers", "create"]]))
+  .use(authMiddleware([["mediaBanners", "create"]]))
   .post(
     "/upload",
     async ({ body, session }) => {
       const media = await MediasService.getById(body.mediaId)
-      const [uploadedFile] = await MediaCoversService.upload(media.id, [
+      const [uploadedFile] = await MediaBannersService.upload(media.id, [
         body.file,
       ])
-      const cover = await MediaCoversService.insert(
+      const banner = await MediaBannersService.insert(
         body,
         uploadedFile!,
         session.user.id,
       )
 
-      return cover
+      return banner
     },
     {
       beforeHandle: fileTypeValidator,
-      body: CreateCoverInput,
+      body: CreateBannerInput,
     },
   )
 
-export const coversController = new Elysia({ prefix: "/covers" }).use(upload)
+export const bannersController = new Elysia({ prefix: "/banners" }).use(upload)
