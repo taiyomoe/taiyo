@@ -2,7 +2,7 @@ import { ContentRating, Flag } from "@taiyomoe/db"
 import { type Static, t } from "elysia"
 import { DEFAULT_MIME_TYPES } from "~/utils/constants"
 
-export const CreateChapterInput = t.Object({
+export const UploadChapterInput = t.Object({
   title: t.Optional(t.String()),
   number: t.Numeric({ minimum: 0 }),
   volume: t.Optional(t.Numeric({ minimum: 0 })),
@@ -13,4 +13,4 @@ export const CreateChapterInput = t.Object({
   files: t.Files({ maxItems: 100, maxSize: "10m", type: DEFAULT_MIME_TYPES }),
 })
 
-export type CreateChapterInput = Static<typeof CreateChapterInput>
+export type UploadChapterInput = Static<typeof UploadChapterInput>
