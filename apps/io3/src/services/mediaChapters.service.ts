@@ -1,12 +1,12 @@
 import { randomUUID } from "crypto"
 import { db } from "@taiyomoe/db"
 import { omit } from "radash"
-import type { CreateChapterInput } from "~/schemas"
+import type { UploadChapterInput } from "~/schemas"
 import type { UploadedResource } from "~/types"
 import { FilesService } from "./files.service"
 
 const insert = async (
-  input: CreateChapterInput,
+  input: UploadChapterInput,
   resource: UploadedResource,
   uploaderId: string,
 ) => {
