@@ -3,6 +3,7 @@ import "@bogeychan/elysia-polyfills/node/index.js"
 import { cors } from "@elysiajs/cors"
 import { swagger } from "@elysiajs/swagger"
 import { Elysia, ValidationError } from "elysia"
+import { chaptersController } from "~/controllers/chapters.controller"
 import { bannersController } from "./controllers/banners.controller"
 import { coversController } from "./controllers/covers.controller"
 
@@ -30,6 +31,7 @@ const app = new Elysia({ prefix: "/v3" })
       headers: { "Content-Type": "application/json" },
     })
   })
+  .use(chaptersController)
   .use(bannersController)
   .use(coversController)
   .listen(4000)

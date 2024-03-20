@@ -1,5 +1,5 @@
 import { ContentRating, Languages } from "@taiyomoe/db"
-import { Static, t } from "elysia"
+import { type Static, t } from "elysia"
 import { DEFAULT_MIME_TYPES } from "~/utils/constants"
 
 export const CreateCoverInput = t.Object({
