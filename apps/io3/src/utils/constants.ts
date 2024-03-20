@@ -1,4 +1,4 @@
-import { MimeType } from "file-type"
+import type { MimeType } from "file-type"
 
 export const DEFAULT_MIME_TYPES: MimeType[] = [
   "image/png",

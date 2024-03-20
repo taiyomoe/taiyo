@@ -1,5 +1,5 @@
 import { sessionSchema } from "@taiyomoe/schemas"
-import { ForgedPermission } from "@taiyomoe/types"
+import type { ForgedPermission } from "@taiyomoe/types"
 import { PermissionUtils } from "@taiyomoe/utils"
 import { Elysia } from "elysia"
 
