@@ -1,5 +1,5 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter"
-import { Languages, User, db } from "@taiyomoe/db"
+import { type Languages, type User, db } from "@taiyomoe/db"
 import type { Permission } from "@taiyomoe/types"
 import { PermissionUtils } from "@taiyomoe/utils"
 import type { AdapterUser, DefaultSession, NextAuthOptions } from "next-auth"

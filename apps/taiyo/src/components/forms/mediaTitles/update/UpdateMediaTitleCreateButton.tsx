@@ -16,7 +16,7 @@ import { toFormikValidationSchema } from "zod-formik-adapter"
 import { MediaTitlesFormFields } from "~/components/forms/mediaTitles/MediaTitlesFormFields"
 import { SubmitButton } from "~/components/generics/buttons/SubmitButton"
 import { Form } from "~/components/generics/form/Form"
-import { FormSubmit } from "~/lib/types"
+import type { FormSubmit } from "~/lib/types"
 import { useMediaUpdateStore } from "~/stores"
 import { api } from "~/trpc/react"
 

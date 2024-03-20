@@ -1,5 +1,5 @@
 import { AlertTriangleIcon } from "lucide-react"
-import { InvalidFile } from "~/lib/types"
+import type { InvalidFile } from "~/lib/types"
 
 type Props = {
   title: string

@@ -1,4 +1,4 @@
-import { SearchedMedia } from "@taiyomoe/types"
+import type { SearchedMedia } from "@taiyomoe/types"
 import { MediaCoverUtils } from "@taiyomoe/utils"
 import Image from "next/image"
 

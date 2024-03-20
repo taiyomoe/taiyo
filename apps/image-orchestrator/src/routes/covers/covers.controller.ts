@@ -10,10 +10,10 @@ import {
 import { FilesInterceptor } from "@nestjs/platform-express"
 import { ApiBody, ApiConsumes, ApiCookieAuth, ApiTags } from "@nestjs/swagger"
 import { ApiResponse, Permissions, User } from "~/decorators"
-import { MediasService } from "~/routes/medias/medias.service"
-import { SessionUser } from "~/schemas"
+import type { MediasService } from "~/routes/medias/medias.service"
+import type { SessionUser } from "~/schemas"
 import { FileTypeValidator } from "~/validators/fileType.validator"
-import { CoversService } from "./covers.service"
+import type { CoversService } from "./covers.service"
 import { MediaCoverDto } from "./dto/media-cover.dto"
 import { UploadCoverDto } from "./dto/upload-cover.dto"
 

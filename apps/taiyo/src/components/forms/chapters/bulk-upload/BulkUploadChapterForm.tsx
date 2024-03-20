@@ -1,7 +1,7 @@
 "use client"
 
 import {
-  BulkUploadMediaChapters,
+  type BulkUploadMediaChapters,
   bulkUploadMediaChapters,
 } from "@taiyomoe/schemas"
 import { toFormikValidationSchema } from "zod-formik-adapter"

@@ -1,6 +1,6 @@
 import { appRouter, createTRPCContext } from "@taiyomoe/trpc"
 import { fetchRequestHandler } from "@trpc/server/adapters/fetch"
-import { type NextRequest } from "next/server"
+import type { NextRequest } from "next/server"
 import { env } from "~/lib/env.mjs"
 
 /**

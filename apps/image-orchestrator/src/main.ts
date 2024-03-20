@@ -1,5 +1,5 @@
 import { NestFactory } from "@nestjs/core"
-import { ExpressAdapter, NestExpressApplication } from "@nestjs/platform-express"
+import { ExpressAdapter, type NestExpressApplication } from "@nestjs/platform-express"
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger"
 import { patchNestJsSwagger } from "nestjs-zod"
 import { AppModule } from "./app.module"

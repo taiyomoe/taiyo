@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.5.3/schema.json",
+  "$schema": "https://biomejs.dev/schemas/1.6.1/schema.json",
   "organizeImports": {
     "enabled": true
   },
@@ -13,16 +13,15 @@
       "recommended": true,
       "style": {
         "noNonNullAssertion": "off",
+        "useNodejsImportProtocol": "off",
         "useEnumInitializers": "off"
       },
       "a11y": {
         "useKeyWithClickEvents": "off"
       },
       "correctness": {
+        "noUnusedImports": "error",
         "noUnusedVariables": "error"
-      },
-      "nursery": {
-        "noUnusedImports": "error"
       }
     }
   },

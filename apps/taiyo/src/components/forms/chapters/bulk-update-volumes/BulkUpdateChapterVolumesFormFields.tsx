@@ -1,6 +1,6 @@
 import { Divider } from "@nextui-org/divider"
-import { MediaChapter } from "@prisma/client"
-import { BulkUpdateMediaChapterVolumesSchema } from "@taiyomoe/schemas"
+import type { MediaChapter } from "@prisma/client"
+import type { BulkUpdateMediaChapterVolumesSchema } from "@taiyomoe/schemas"
 import { useFormikContext } from "formik"
 import { Fragment, useCallback } from "react"
 import { FormAddButton } from "~/components/generics/buttons/FormAddButton"

@@ -4,7 +4,7 @@
     "composite": true,
     "declaration": true,
     "skipLibCheck": true,
-    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
+    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
   },
   "include": ["src"],
   "exclude": ["node_modules"]

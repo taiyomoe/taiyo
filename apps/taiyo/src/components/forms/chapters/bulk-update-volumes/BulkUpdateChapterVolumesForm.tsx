@@ -1,9 +1,9 @@
 "use client"
 
 import { Accordion, AccordionItem } from "@nextui-org/accordion"
-import { MediaChapter } from "@prisma/client"
+import type { MediaChapter } from "@prisma/client"
 import {
-  BulkUpdateMediaChapterVolumesSchema,
+  type BulkUpdateMediaChapterVolumesSchema,
   bulkUpdateMediaChapterVolumesSchema,
 } from "@taiyomoe/schemas"
 import { MediaChapterUtils } from "@taiyomoe/utils"
@@ -15,7 +15,7 @@ import { toast } from "sonner"
 import { toFormikValidationSchema } from "zod-formik-adapter"
 import { BulkUpdateActions } from "~/app/(root)/dashboard/chapters/bulk-edit/_components/BulkUpdateActions"
 import { Form } from "~/components/generics/form/Form"
-import { FormSubmit } from "~/lib/types"
+import type { FormSubmit } from "~/lib/types"
 import { api } from "~/trpc/react"
 import { BulkUpdateChapterVolumesFormFields } from "./BulkUpdateChapterVolumesFormFields"
 
