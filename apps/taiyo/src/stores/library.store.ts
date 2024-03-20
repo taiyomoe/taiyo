@@ -1,4 +1,4 @@
-import { LibraryState } from "@taiyomoe/types"
+import type { LibraryState } from "@taiyomoe/types"
 import { LibraryUtils } from "@taiyomoe/utils"
 import { create } from "zustand"
 

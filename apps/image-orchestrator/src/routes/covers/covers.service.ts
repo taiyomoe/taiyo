@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common"
-import { FilesService, PrismaService } from "~/services"
-import { UploadedFile } from "~/types"
-import { UploadCoverDto } from "./dto/upload-cover.dto"
+import type { FilesService, PrismaService } from "~/services"
+import type { UploadedFile } from "~/types"
+import type { UploadCoverDto } from "./dto/upload-cover.dto"
 
 @Injectable()
 export class CoversService {

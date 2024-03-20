@@ -5,8 +5,8 @@ import {
   DropdownMenu,
   DropdownTrigger,
 } from "@nextui-org/dropdown"
-import { Selection } from "@nextui-org/react"
-import { DateRangeKey } from "@taiyomoe/types"
+import type { Selection } from "@nextui-org/react"
+import type { DateRangeKey } from "@taiyomoe/types"
 import { DATERANGES_PT } from "@taiyomoe/utils/i18n"
 import { useCallback, useMemo, useState } from "react"
 import { SelectUtils } from "~/lib/utils/select.utils"

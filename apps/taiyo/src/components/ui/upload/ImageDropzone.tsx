@@ -61,7 +61,7 @@ export const ImageDropzone = (props: Props) => {
 
   const { getRootProps, getInputProps, acceptedFiles, open } = useDropzone({
     onDrop: handleDrop,
-    maxFiles: Infinity,
+    maxFiles: Number.POSITIVE_INFINITY,
     noClick: shouldDisableClick,
     accept: {
       "image/webp": [".webp"],

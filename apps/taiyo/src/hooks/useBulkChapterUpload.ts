@@ -1,10 +1,10 @@
-import { BulkUploadMediaChapters } from "@taiyomoe/schemas"
-import { FormikConfig } from "formik"
+import type { BulkUploadMediaChapters } from "@taiyomoe/schemas"
+import type { FormikConfig } from "formik"
 import { atom, useSetAtom } from "jotai"
 import { useEffect } from "react"
 import { toast } from "sonner"
 import { useRawChapterUpload } from "~/hooks/useRawChapterUpload"
-import { ImageError } from "~/lib/types"
+import type { ImageError } from "~/lib/types"
 import { useImageFolderStore } from "~/stores"
 
 async function until(conditionFunction: () => boolean): Promise<void> {
@@ -78,7 +78,7 @@ export const useBulkChapterUpload = () => {
 
       if (tempErrors.length) {
         toast.warning("Upload terminado. Alguns capítulos não foram upados.", {
-          duration: Infinity,
+          duration: Number.POSITIVE_INFINITY,
         })
         setBulkChapterUploadErrors(tempErrors)
       } else {

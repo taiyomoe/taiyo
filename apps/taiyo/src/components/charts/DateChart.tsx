@@ -1,5 +1,5 @@
 import { semanticColors } from "@nextui-org/react"
-import { DateRangeKey } from "@taiyomoe/types"
+import type { DateRangeKey } from "@taiyomoe/types"
 import { useCallback } from "react"
 import Chart from "react-apexcharts"
 import { DateRangeDropdown } from "~/components/stats/DateRangeDropdown"

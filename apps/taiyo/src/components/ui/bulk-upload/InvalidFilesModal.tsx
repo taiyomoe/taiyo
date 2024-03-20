@@ -9,7 +9,7 @@ import {
 } from "@nextui-org/modal"
 import { useCallback, useEffect } from "react"
 import { InvalidFilesShowcase } from "~/components/ui/bulk-upload/InvalidFilesShowcase"
-import { InvalidFile } from "~/lib/types"
+import type { InvalidFile } from "~/lib/types"
 
 type Props = {
   files: InvalidFile[]

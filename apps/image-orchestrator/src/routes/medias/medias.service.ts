@@ -1,5 +1,5 @@
 import { NotFoundException } from "@nestjs/common"
-import { PrismaService } from "~/services"
+import type { PrismaService } from "~/services"
 
 export class MediasService {
   constructor(private prisma: PrismaService) {}

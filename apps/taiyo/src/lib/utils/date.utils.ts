@@ -1,4 +1,4 @@
-import { DateRangeKey } from "@taiyomoe/types"
+import type { DateRangeKey } from "@taiyomoe/types"
 import { DateTime } from "luxon"
 
 const formatToInputValue = (input: Date) => {

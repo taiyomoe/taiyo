@@ -1,5 +1,5 @@
 import { NavbarAuth } from "~/components/navbar/NavbarAuth"
-import { LayoutProps } from "~/lib/types"
+import type { LayoutProps } from "~/lib/types"
 
 export default function Layout({ children }: LayoutProps) {
   return (

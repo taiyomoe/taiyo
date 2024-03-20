@@ -1,11 +1,11 @@
 import { Input } from "@nextui-org/input"
-import { MediaChapter } from "@prisma/client"
-import { BulkUpdateMediaChapterVolumesSchema } from "@taiyomoe/schemas"
+import type { MediaChapter } from "@prisma/client"
+import type { BulkUpdateMediaChapterVolumesSchema } from "@taiyomoe/schemas"
 import { MediaChapterUtils } from "@taiyomoe/utils"
 import { useField } from "formik"
 import {
-  ChangeEventHandler,
-  FocusEventHandler,
+  type ChangeEventHandler,
+  type FocusEventHandler,
   useCallback,
   useMemo,
   useState,

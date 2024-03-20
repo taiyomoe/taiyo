@@ -66,7 +66,7 @@ export const ReaderSettingsMediaChapterPageDropdown = () => {
           aria-label="Páginas"
           onSelectionChange={(keys) => {
             for (const key of keys as Set<Key>) {
-              goTo(parseInt(key.toString().replace("page-", "")))
+              goTo(Number.parseInt(key.toString().replace("page-", "")))
             }
           }}
         >

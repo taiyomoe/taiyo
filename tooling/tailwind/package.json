@@ -13,12 +13,12 @@
   },
   "dependencies": {
     "autoprefixer": "^10.4.18",
-    "postcss": "^8.4.36",
+    "postcss": "^8.4.37",
     "tailwindcss": "^3.4.1",
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
     "@taiyomoe/tsconfig": "workspace:^0.1.0",
-    "typescript": "^5.4.2"
+    "typescript": "^5.4.3"
   }
 }

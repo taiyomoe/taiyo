@@ -1,4 +1,4 @@
-import { InvalidFile } from "~/lib/types"
+import type { InvalidFile } from "~/lib/types"
 import { InvalidFilesCategory } from "./InvalidFilesCategory"
 
 type Props = {

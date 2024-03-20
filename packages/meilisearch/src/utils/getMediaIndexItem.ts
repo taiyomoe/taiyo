@@ -1,5 +1,5 @@
-import { PrismaClient } from "@prisma/client"
-import { MediasIndexItem } from "@taiyomoe/types"
+import type { PrismaClient } from "@prisma/client"
+import type { MediasIndexItem } from "@taiyomoe/types"
 import { TRPCError } from "@trpc/server"
 
 /**
