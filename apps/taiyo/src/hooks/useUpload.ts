@@ -1,5 +1,5 @@
 import type { UploadSessionType } from "@prisma/client"
-import { UploadResponse } from "@taiyomoe/types"
+import type { UploadResponse } from "@taiyomoe/types"
 import { MediaChapterUtils } from "@taiyomoe/utils"
 import { useImageStore } from "~/stores"
 

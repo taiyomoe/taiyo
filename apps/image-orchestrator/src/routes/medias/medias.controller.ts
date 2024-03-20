@@ -1,10 +1,10 @@
 import { Controller, Query, Sse } from "@nestjs/common"
-import { EventEmitter2 } from "@nestjs/event-emitter"
+import type { EventEmitter2 } from "@nestjs/event-emitter"
 import { ApiBody, ApiCookieAuth, ApiTags } from "@nestjs/swagger"
 import { fromEvent, map } from "rxjs"
 import { ApiResponse, Permissions, User } from "~/decorators"
-import { SessionUser } from "~/schemas"
-import { MdService } from "~/services"
+import type { SessionUser } from "~/schemas"
+import type { MdService } from "~/services"
 import { ImportMediaDto } from "./dto/import-media.dto"
 import { MediaDto } from "./dto/media.dto"
 

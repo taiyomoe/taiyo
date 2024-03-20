@@ -1,5 +1,5 @@
 import { FileValidator } from "@nestjs/common"
-import { MimeType, fileTypeFromBuffer } from "file-type"
+import { type MimeType, fileTypeFromBuffer } from "file-type"
 
 export class FileTypeValidator extends FileValidator<MimeType[]> {
   /**

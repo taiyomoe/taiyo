@@ -1,5 +1,5 @@
-import { MediaChapter } from "@prisma/client"
-import { BulkUpdateMediaChapterVolumesSchema } from "@taiyomoe/schemas"
+import type { MediaChapter } from "@prisma/client"
+import type { BulkUpdateMediaChapterVolumesSchema } from "@taiyomoe/schemas"
 import type {
   MediaChapterGroups,
   MediaChapterLimited,
@@ -118,7 +118,7 @@ const parseUrl = (pathname: string) => {
     !currentPage ||
     splitted.length !== 4 || // if url has more parts than expected
     Number.isNaN(Number(currentPage)) || // if it's NaN
-    parseInt(currentPage) !== parseFloat(currentPage) // if it's a float
+    Number.parseInt(currentPage) !== Number.parseFloat(currentPage) // if it's a float
   ) {
     return {
       rawPathname: splitted.slice(0, 3).join("/"),
@@ -128,7 +128,7 @@ const parseUrl = (pathname: string) => {
 
   return {
     rawPathname: splitted.slice(0, 3).join("/"),
-    currentPageNumber: parseInt(currentPage),
+    currentPageNumber: Number.parseInt(currentPage),
   }
 }
 

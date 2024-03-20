@@ -1,5 +1,5 @@
 import type { Trackers } from "@prisma/client"
-import { MediaLimited } from "@taiyomoe/types"
+import type { MediaLimited } from "@taiyomoe/types"
 
 const getTrackerLabel = (tracker: Trackers) => {
   switch (tracker) {

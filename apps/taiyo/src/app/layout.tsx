@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import { siteConfig } from "~/lib/config"
-import { LayoutProps } from "~/lib/types"
+import type { LayoutProps } from "~/lib/types"
 import { cn } from "~/lib/utils/cn"
 import { getBaseUrl } from "~/trpc/shared"
 import { Providers } from "./providers"

@@ -1,14 +1,14 @@
 import { Injectable, NotFoundException, UnprocessableEntityException } from "@nestjs/common"
-import { EventEmitter2 } from "@nestjs/event-emitter"
+import type { EventEmitter2 } from "@nestjs/event-emitter"
 import { db } from "@taiyomoe/db"
 import { meilisearchIndexes } from "@taiyomoe/meilisearch"
 import { getMediaIndexItem } from "@taiyomoe/meilisearch/utils"
 import { MdUtils } from "@taiyomoe/utils"
 import { Manga } from "mangadex-full-api"
-import { CoversService } from "~/routes/covers/covers.service"
-import { ImportMediaDto } from "~/routes/medias/dto/import-media.dto"
-import { MediasService } from "~/routes/medias/medias.service"
-import { PrismaService } from "./prisma.service"
+import type { CoversService } from "~/routes/covers/covers.service"
+import type { ImportMediaDto } from "~/routes/medias/dto/import-media.dto"
+import type { MediasService } from "~/routes/medias/medias.service"
+import type { PrismaService } from "./prisma.service"
 
 @Injectable()
 export class MdService {
@@ -131,7 +131,7 @@ export class MdService {
       await db.mediaCover.create({
         data: {
           id: _uploaded.id,
-          volume: Number.isNaN(cover.volume) ? null : parseFloat(cover.volume),
+          volume: Number.isNaN(cover.volume) ? null : Number.parseFloat(cover.volume),
           isMainCover: _mainCover.id === cover.id,
           language: coverLanguage,
           mediaId: media.id,

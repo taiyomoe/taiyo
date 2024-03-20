@@ -1,4 +1,4 @@
-import { randomUUID } from "crypto"
+import { randomUUID } from "node:crypto"
 import { BadRequestException, Injectable, InternalServerErrorException } from "@nestjs/common"
 import { PutObjectCommand, client } from "@taiyomoe/s3"
 import { fileTypeFromBuffer } from "file-type"

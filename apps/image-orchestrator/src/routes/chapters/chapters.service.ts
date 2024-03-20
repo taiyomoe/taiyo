@@ -1,8 +1,8 @@
-import { randomUUID } from "crypto"
+import { randomUUID } from "node:crypto"
 import { Injectable } from "@nestjs/common"
-import { FilesService, PrismaService } from "~/services"
-import { UploadedResource } from "~/types"
-import { UploadChapterDto } from "./dto/upload-chapter.dto"
+import type { FilesService, PrismaService } from "~/services"
+import type { UploadedResource } from "~/types"
+import type { UploadChapterDto } from "./dto/upload-chapter.dto"
 
 @Injectable()
 export class ChaptersService {

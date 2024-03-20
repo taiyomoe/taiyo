@@ -1,7 +1,7 @@
 import { getMediaIndexItem } from "@taiyomoe/meilisearch/utils"
 import { importMediaSchema } from "@taiyomoe/schemas"
 import { pusherServer } from "@taiyomoe/soketi/server"
-import { UploadResponse } from "@taiyomoe/types"
+import type { UploadResponse } from "@taiyomoe/types"
 import { MediaUtils } from "@taiyomoe/utils"
 import { MdUtils } from "@taiyomoe/utils"
 import { TRPCError } from "@trpc/server"
@@ -145,9 +145,9 @@ export const mdRouter = createTRPCRouter({
         await ctx.db.mediaCover.create({
           data: {
             id: uploadCover.files[0]!,
-            volume: Number.isNaN(parseFloat(cover.volume))
+            volume: Number.isNaN(Number.parseFloat(cover.volume))
               ? null
-              : parseFloat(cover.volume),
+              : Number.parseFloat(cover.volume),
             isMainCover: mainCover.id === cover.id,
             language: coverLanguage,
             mediaId: media.id,

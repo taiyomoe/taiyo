@@ -37,7 +37,7 @@ export const MediaChaptersTabPagination = ({ totalPages }: Props) => {
 
     // @ts-expect-error -- NextUI wrong types
     setSelectedKeys(keys)
-    void handlePerPageChange(parseInt(newPerPage))
+    void handlePerPageChange(Number.parseInt(newPerPage))
   }
 
   return (

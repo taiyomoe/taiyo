@@ -1,4 +1,4 @@
-import { Type, applyDecorators } from "@nestjs/common"
+import { type Type, applyDecorators } from "@nestjs/common"
 import { ApiCreatedResponse, ApiExtraModels, getSchemaPath } from "@nestjs/swagger"
 import { ApiResponseDto } from "~/dto"
 

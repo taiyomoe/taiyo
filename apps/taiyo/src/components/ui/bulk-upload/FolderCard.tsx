@@ -3,7 +3,7 @@ import { Spinner } from "@nextui-org/react"
 import { CheckIcon, HourglassIcon, RefreshCwIcon } from "lucide-react"
 import prettyBytes from "pretty-bytes"
 import { useMemo } from "react"
-import { ImageFolder } from "~/lib/types"
+import type { ImageFolder } from "~/lib/types"
 import { useImageFolderStore } from "~/stores"
 
 type Props = {

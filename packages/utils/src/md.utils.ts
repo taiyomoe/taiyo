@@ -1,14 +1,14 @@
 import {
-  ContentRating,
+  type ContentRating,
   Languages,
-  MediaCountryOfOrigin,
-  MediaDemography,
-  MediaGenres,
-  MediaStatus,
-  MediaType,
-  Trackers,
+  type MediaCountryOfOrigin,
+  type MediaDemography,
+  type MediaGenres,
+  type MediaStatus,
+  type MediaType,
+  type Trackers,
 } from "@prisma/client"
-import { TAG_KEYS } from "@taiyomoe/constants"
+import type { TAG_KEYS } from "@taiyomoe/constants"
 import type { Manga } from "mangadex-full-api"
 
 const getContentRating = (manga: Manga): ContentRating => {
