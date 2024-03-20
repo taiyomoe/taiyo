@@ -1,4 +1,4 @@
-import { randomUUID } from "node:crypto"
+import { randomUUID } from "crypto"
 import { Injectable } from "@nestjs/common"
 import type { FilesService, PrismaService } from "~/services"
 import type { UploadedResource } from "~/types"

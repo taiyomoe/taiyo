@@ -13,6 +13,7 @@
       "recommended": true,
       "style": {
         "noNonNullAssertion": "off",
+        "useNodejsImportProtocol": "off",
         "useEnumInitializers": "off"
       },
       "a11y": {
