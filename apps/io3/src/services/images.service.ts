@@ -1,6 +1,6 @@
 import sharp from "sharp"
 
-const compress = async (file: File, extension: string) => {
+const compress = async (file: File | Blob, extension: string) => {
   const buffer = new Uint8Array(await file.arrayBuffer())
 
   if (extension === "gif") {

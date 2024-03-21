@@ -14,7 +14,7 @@ import { PARALLEL_UPLOADS } from "~/utils/constants"
  * @param file input file.
  * @returns parsed file type and extension.
  */
-const parse = async (file: File) => {
+const parse = async (file: File | Blob) => {
   const parsed = await fileTypeFromBlob(file)
 
   if (!parsed) {
@@ -28,7 +28,7 @@ const parse = async (file: File) => {
   }
 }
 
-const upload = (baseKey: string) => async (file: File) => {
+const upload = (baseKey: string) => async (file: File | Blob) => {
   const { id, mimeType, extension } = await parse(file)
   const command = new PutObjectCommand({
     Bucket: env.S3_BUCKET_NAME,
@@ -42,7 +42,7 @@ const upload = (baseKey: string) => async (file: File) => {
   return { id, extension }
 }
 
-const uploadFiles = async (key: string, files: File[]) => {
+const uploadFiles = async (key: string, files: File[] | Blob[]) => {
   const [err, uploaded] = await tryit(parallel)(
     PARALLEL_UPLOADS,
     files,
