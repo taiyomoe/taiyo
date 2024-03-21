@@ -1,57 +1,63 @@
 import { randomUUID } from "crypto"
-import { BadRequestException, Injectable, InternalServerErrorException } from "@nestjs/common"
 import { PutObjectCommand, client } from "@taiyomoe/s3"
-import { fileTypeFromBuffer } from "file-type"
+import { fileTypeFromBlob } from "file-type"
 import { parallel, tryit } from "radash"
-import sharp from "sharp"
+import { env } from "~/env"
+import { ImagesService } from "~/services/images.service"
+import { PARALLEL_UPLOADS } from "~/utils/constants"
 
-@Injectable()
-export class FilesService {
-  #PARALLEL_UPLOADS = 10
+/**
+ * Every file is converted to a JPEG file, except for GIF files.
+ *
+ * This function parses file type and returns the DESIRED file type and extension to use.
+ *
+ * @param file input file.
+ * @returns parsed file type and extension.
+ */
+const parse = async (file: File | Blob) => {
+  const parsed = await fileTypeFromBlob(file)
 
-  async #parse(file: Express.Multer.File | ArrayBuffer) {
-    const parsed = await fileTypeFromBuffer(file instanceof ArrayBuffer ? file : file.buffer)
-
-    if (!parsed) throw new BadRequestException("There is at least one invalid file.")
-
-    return {
-      id: randomUUID(),
-      mimeType: ["image/jpeg", "image/gif"].includes(parsed.mime) ? parsed.mime : "image/jpeg",
-      extension: ["jpg", "gif"].includes(parsed.ext) ? parsed.ext : "jpg",
-    }
+  if (!parsed) {
+    throw new Error("Failed to parse the file type.")
   }
 
-  async #compressImage(file: Express.Multer.File | ArrayBuffer, extension: string) {
-    const buffer = file instanceof ArrayBuffer ? new Uint8Array(file) : file.buffer
+  return {
+    id: randomUUID(),
+    mimeType: parsed.mime === "image/gif" ? "image/gif" : "image/jpeg",
+    extension: parsed.ext === "gif" ? "gif" : "jpg",
+  }
+}
 
-    if (extension === "gif") return buffer
+const upload = (baseKey: string) => async (file: File | Blob) => {
+  const { id, mimeType, extension } = await parse(file)
+  const command = new PutObjectCommand({
+    Bucket: env.S3_BUCKET_NAME,
+    Key: `${baseKey}/${id}.${extension}`,
+    ContentType: mimeType,
+    Body: await ImagesService.compress(file, extension),
+  })
 
-    return await sharp(buffer).jpeg({ progressive: true, quality: 85 }).toBuffer()
+  await client.send(command)
+
+  return { id, extension }
+}
+
+const uploadFiles = async (key: string, files: File[] | Blob[]) => {
+  const [err, uploaded] = await tryit(parallel)(
+    PARALLEL_UPLOADS,
+    files,
+    upload(key),
+  )
+
+  if (err) {
+    console.error("Error uploading files.", err)
+
+    throw new Error("Failed to upload files.")
   }
 
-  #upload = (baseKey: string) => async (file: Express.Multer.File | ArrayBuffer) => {
-    const { id, mimeType, extension } = await this.#parse(file)
-    const command = new PutObjectCommand({
-      Bucket: process.env.S3_BUCKET_NAME,
-      Key: `${baseKey}/${id}.${extension}`,
-      ContentType: mimeType,
-      Body: await this.#compressImage(file, extension),
-    })
+  return uploaded
+}
 
-    await client.send(command)
-
-    return { id, extension }
-  }
-
-  async uploadFiles(key: string, files: Express.Multer.File[] | ArrayBuffer[]) {
-    const [err, uploaded] = await tryit(parallel)(this.#PARALLEL_UPLOADS, files, this.#upload(key))
-
-    if (err) {
-      console.error("Error uploading files.", err)
-
-      throw new InternalServerErrorException()
-    }
-
-    return uploaded
-  }
+export const FilesService = {
+  uploadFiles,
 }

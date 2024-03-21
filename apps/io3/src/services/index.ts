@@ -1,6 +1,0 @@
-export * from "./files.service"
-export * from "./images.service"
-export * from "./mediaBanners.service"
-export * from "./mediaChapters.service"
-export * from "./mediaCovers.service"
-export * from "./medias.service"

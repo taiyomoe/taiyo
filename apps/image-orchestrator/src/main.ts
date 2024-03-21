@@ -1,27 +1,44 @@
-import { NestFactory } from "@nestjs/core"
-import { ExpressAdapter, type NestExpressApplication } from "@nestjs/platform-express"
-import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger"
-import { patchNestJsSwagger } from "nestjs-zod"
-import { AppModule } from "./app.module"
+// import "@bogeychan/elysia-polyfills/node/index.js"
 
-patchNestJsSwagger()
+import { cors } from "@elysiajs/cors"
+import Stream from "@elysiajs/stream"
+import { swagger } from "@elysiajs/swagger"
+import { Elysia, ValidationError } from "elysia"
+import { chaptersController } from "~/controllers/chapters.controller"
+import { mediasController } from "~/controllers/medias.controller"
+import { bannersController } from "./controllers/banners.controller"
+import { coversController } from "./controllers/covers.controller"
 
-async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule, new ExpressAdapter(), {
-    snapshot: true,
+const app = new Elysia({ prefix: "/v3" })
+  .use(cors())
+  .use(swagger())
+  .mapResponse(({ response }) => {
+    if (response && response instanceof Stream) {
+      return
+    }
+
+    const data = (Array.isArray(response) ? response?.at(0) : response) || null
+    const meta = Array.isArray(response) ? [response.at(1)] : []
+
+    return new Response(JSON.stringify({ data, meta }), {
+      headers: { "Content-Type": "application/json" },
+    })
   })
+  .onError(({ error }) => {
+    if (error instanceof ValidationError) {
+      return new Response(JSON.stringify({ errors: error.all }), {
+        headers: { "Content-Type": "application/json" },
+      })
+    }
 
-  // Swagger config
-  const config = new DocumentBuilder()
-    .setTitle("image-orchestrator")
-    .setDescription("Image manipulation API for Taiyō.")
-    .setVersion("2.0")
-    .addCookieAuth("next-auth.session-token")
-    .build()
-  const document = SwaggerModule.createDocument(app, config)
-  SwaggerModule.setup("api", app, document)
+    return new Response(JSON.stringify({ errors: [error.message] }), {
+      headers: { "Content-Type": "application/json" },
+    })
+  })
+  .use(mediasController)
+  .use(chaptersController)
+  .use(bannersController)
+  .use(coversController)
+  .listen(4000)
 
-  await app.listen(4000, "0.0.0.0")
-}
-
-bootstrap()
+console.log(`Listening on http://localhost:${app.server!.port}`)

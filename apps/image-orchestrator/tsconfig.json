@@ -1,13 +1,15 @@
 {
   "extends": "@taiyomoe/tsconfig/base.json",
   "compilerOptions": {
-    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
-    "experimentalDecorators": true,
-    "strictPropertyInitialization": false,
+    "module": "ESNext",
+    "target": "ESNext",
+    "strict": true,
+    "moduleResolution": "Bundler",
+    "esModuleInterop": true,
     "paths": {
       "~/*": ["./src/*"]
     }
   },
-  "include": ["."],
+  "include": ["src"],
   "exclude": ["node_modules"]
 }
