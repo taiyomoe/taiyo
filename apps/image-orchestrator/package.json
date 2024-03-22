@@ -15,7 +15,6 @@
     "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
-    "@bogeychan/elysia-polyfills": "^0.6.4",
     "@elysiajs/cors": "^1.0.2",
     "@elysiajs/stream": "^1.0.2",
     "@elysiajs/swagger": "^1.0.3",

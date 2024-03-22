@@ -1,5 +1,3 @@
-// import "@bogeychan/elysia-polyfills/node/index.js"
-
 import { cors } from "@elysiajs/cors"
 import Stream from "@elysiajs/stream"
 import { swagger } from "@elysiajs/swagger"
