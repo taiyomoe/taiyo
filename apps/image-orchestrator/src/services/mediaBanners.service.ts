@@ -1,7 +1,7 @@
 import { db } from "@taiyomoe/db"
 import { omit } from "radash"
-import type { UploadBannerInput } from "~/schemas"
-import type { UploadedFile } from "~/types"
+import type { UploadBannerInput } from "../schemas"
+import type { UploadedFile } from "../types"
 import { FilesService } from "./files.service"
 
 const insert = async (

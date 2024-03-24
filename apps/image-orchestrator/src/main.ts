@@ -2,11 +2,11 @@ import { cors } from "@elysiajs/cors"
 import Stream from "@elysiajs/stream"
 import { swagger } from "@elysiajs/swagger"
 import { Elysia } from "elysia"
-import { chaptersController } from "~/controllers/chapters.controller"
-import { mediasController } from "~/controllers/medias.controller"
-import * as customErrors from "~/utils/errors"
 import { bannersController } from "./controllers/banners.controller"
+import { chaptersController } from "./controllers/chapters.controller"
 import { coversController } from "./controllers/covers.controller"
+import { mediasController } from "./controllers/medias.controller"
+import * as customErrors from "./utils/errors"
 
 const buildResponse = (obj: Record<string, unknown>, status = 200) =>
   new Response(JSON.stringify(obj), {
@@ -50,3 +50,5 @@ const app = new Elysia({ prefix: "/v3" })
   .listen(4000)
 
 console.log(`Listening on http://localhost:${app.server!.port}`)
+
+export type App = typeof app

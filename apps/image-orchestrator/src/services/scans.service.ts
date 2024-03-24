@@ -1,5 +1,5 @@
 import { db } from "@taiyomoe/db"
-import { ScansNotFoundError } from "~/utils/errors"
+import { ScansNotFoundError } from "../utils/errors"
 
 const getByIds = async (ids: string[]) => {
   const result = await db.scan.findMany({

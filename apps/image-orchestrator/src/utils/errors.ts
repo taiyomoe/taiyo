@@ -1,4 +1,4 @@
-import { DEFAULT_MIME_TYPES } from "~/utils/constants"
+import { DEFAULT_MIME_TYPES } from "../utils/constants"
 
 class HttpError extends Error {
   status: number

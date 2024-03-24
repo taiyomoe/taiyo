@@ -1,6 +1,6 @@
 import { fileTypeFromBlob } from "file-type"
-import { DEFAULT_MIME_TYPES } from "~/utils/constants"
-import { InvalidFilesError } from "~/utils/errors"
+import { DEFAULT_MIME_TYPES } from "../utils/constants"
+import { InvalidFilesError } from "../utils/errors"
 
 export const fileTypeValidator = async ({
   body,

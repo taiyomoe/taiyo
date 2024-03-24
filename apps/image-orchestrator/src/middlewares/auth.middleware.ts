@@ -2,7 +2,7 @@ import { sessionSchema } from "@taiyomoe/schemas"
 import type { ForgedPermission } from "@taiyomoe/types"
 import { PermissionUtils } from "@taiyomoe/utils"
 import { Elysia } from "elysia"
-import { UnauthorizedError } from "~/utils/errors"
+import { UnauthorizedError } from "../utils/errors"
 
 export const authMiddleware = (perms: ForgedPermission[] = []) =>
   new Elysia({ name: "Middleware.Auth" }).derive(

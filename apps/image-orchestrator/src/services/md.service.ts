@@ -4,11 +4,11 @@ import { meilisearchIndexes } from "@taiyomoe/meilisearch"
 import { getMediaIndexItem } from "@taiyomoe/meilisearch/utils"
 import { MdUtils } from "@taiyomoe/utils"
 import { Manga } from "mangadex-full-api"
-import type { ImportMediaInput } from "~/schemas"
+import type { ImportMediaInput } from "../schemas"
 import {
   DuplicatedMediaTrackerError,
   MediaTrackerNotFoundError,
-} from "~/utils/errors"
+} from "../utils/errors"
 import { MediaCoversService } from "./mediaCovers.service"
 import { MediasService } from "./medias.service"
 

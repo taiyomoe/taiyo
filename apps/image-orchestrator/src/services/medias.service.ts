@@ -1,5 +1,5 @@
 import { db } from "@taiyomoe/db"
-import { MediaNotFoundError } from "~/utils/errors"
+import { MediaNotFoundError } from "../utils/errors"
 
 const getById = async (id: string) => {
   const result = await db.media.findUnique({ where: { id } })

@@ -1,9 +1,9 @@
 import { Elysia } from "elysia"
-import { authMiddleware } from "~/middlewares/auth.middleware"
-import { UploadChapterInput } from "~/schemas"
-import { MediaChaptersService, MediasService } from "~/services"
-import { ScansService } from "~/services/scans.service"
-import { fileTypeValidator } from "~/validators/fileType.validator"
+import { authMiddleware } from "../middlewares/auth.middleware"
+import { UploadChapterInput } from "../schemas"
+import { MediaChaptersService, MediasService } from "../services"
+import { ScansService } from "../services/scans.service"
+import { fileTypeValidator } from "../validators/fileType.validator"
 
 const upload = new Elysia()
   .use(authMiddleware([["mediaChapters", "create"]]))

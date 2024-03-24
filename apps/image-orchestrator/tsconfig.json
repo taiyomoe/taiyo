@@ -6,9 +6,9 @@
     "strict": true,
     "moduleResolution": "Bundler",
     "esModuleInterop": true,
-    "paths": {
-      "~/*": ["./src/*"]
-    }
+    "composite": true,
+    "declaration": true,
+    "skipLibCheck": true
   },
   "include": ["src"],
   "exclude": ["node_modules"]

@@ -1,6 +1,6 @@
 import { ContentRating } from "@taiyomoe/db"
 import { type Static, t } from "elysia"
-import { DEFAULT_MIME_TYPES } from "~/utils/constants"
+import { DEFAULT_MIME_TYPES } from "../utils/constants"
 
 export const UploadBannerInput = t.Object({
   contentRating: t.Enum(ContentRating),

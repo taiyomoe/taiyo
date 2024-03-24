@@ -2,9 +2,9 @@ import { randomUUID } from "crypto"
 import { PutObjectCommand, client } from "@taiyomoe/s3"
 import { fileTypeFromBlob } from "file-type"
 import { parallel, tryit } from "radash"
-import { env } from "~/env"
-import { ImagesService } from "~/services/images.service"
-import { PARALLEL_UPLOADS } from "~/utils/constants"
+import { env } from "../env"
+import { ImagesService } from "../services/images.service"
+import { PARALLEL_UPLOADS } from "../utils/constants"
 
 /**
  * Every file is converted to a JPEG file, except for GIF files.
