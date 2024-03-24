@@ -1,19 +1,18 @@
-import { Injectable, NotFoundException } from "@nestjs/common"
-import type { PrismaService } from "./prisma.service"
+import { db } from "@taiyomoe/db"
+import { ScansNotFoundError } from "~/utils/errors"
 
-@Injectable()
-export class ScansService {
-  constructor(private prisma: PrismaService) {}
+const getByIds = async (ids: string[]) => {
+  const result = await db.scan.findMany({
+    where: { id: { in: ids } },
+  })
 
-  async getByIds(ids: string[]) {
-    const result = await this.prisma.scan.findMany({
-      where: { id: { in: ids } },
-    })
-
-    if (result.length !== ids.length) {
-      throw new NotFoundException("One or more scans were not found.")
-    }
-
-    return result
+  if (result.length !== ids.length) {
+    throw new ScansNotFoundError()
   }
+
+  return result
+}
+
+export const ScansService = {
+  getByIds,
 }

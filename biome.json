@@ -41,9 +41,6 @@
   "overrides": [
     {
       "include": ["./apps/image-orchestrator/**/*.ts"],
-      "formatter": {
-        "lineWidth": 100
-      },
       "javascript": {
         "parser": {
           "unsafeParameterDecoratorsEnabled": true

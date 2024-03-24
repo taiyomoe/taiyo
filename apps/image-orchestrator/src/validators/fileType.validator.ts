@@ -1,26 +1,29 @@
-import { FileValidator } from "@nestjs/common"
-import { type MimeType, fileTypeFromBuffer } from "file-type"
+import { fileTypeFromBlob } from "file-type"
+import { DEFAULT_MIME_TYPES } from "~/utils/constants"
+import { InvalidFilesError } from "~/utils/errors"
 
-export class FileTypeValidator extends FileValidator<MimeType[]> {
-  /**
-   * Indicates if this file should be considered valid, according to the options passed in the constructor.
-   * @param file the file from the request object
-   */
-  async isValid(file: Express.Multer.File) {
-    const parsed = await fileTypeFromBuffer(file.buffer)
+export const fileTypeValidator = async ({
+  body,
+}: { body: { file?: File; files?: File[] } }) => {
+  const files = body.file ? [body.file] : body.files
 
-    if (!parsed) return false
-
-    return this.validationOptions.includes(parsed.mime)
+  if (!files || files.length === 0) {
+    throw new Error("No file found in the request")
   }
 
-  /**
-   * Builds an error message in case the validation fails.
-   * @param file the file from the request object
-   */
-  buildErrorMessage(file: Express.Multer.File) {
-    return `The file type of '${
-      file.originalname
-    }' is invalid. Allowed types: ${this.validationOptions.join(", ")}.`
+  const validated = await Promise.all(
+    files.map(async (file) => {
+      const parsed = await fileTypeFromBlob(file)
+
+      if (!parsed) return false
+
+      return DEFAULT_MIME_TYPES.includes(parsed.mime)
+    }),
+  )
+
+  if (validated.some((v) => !v)) {
+    const invalidFiles = files.filter((_, i) => !validated[i])
+
+    throw new InvalidFilesError(invalidFiles)
   }
 }
