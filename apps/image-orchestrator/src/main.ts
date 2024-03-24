@@ -1,15 +1,23 @@
 import { cors } from "@elysiajs/cors"
 import Stream from "@elysiajs/stream"
 import { swagger } from "@elysiajs/swagger"
-import { Elysia, ValidationError } from "elysia"
+import { Elysia } from "elysia"
 import { chaptersController } from "~/controllers/chapters.controller"
 import { mediasController } from "~/controllers/medias.controller"
+import * as customErrors from "~/utils/errors"
 import { bannersController } from "./controllers/banners.controller"
 import { coversController } from "./controllers/covers.controller"
+
+const buildResponse = (obj: Record<string, unknown>, status = 200) =>
+  new Response(JSON.stringify(obj), {
+    headers: { "Content-Type": "application/json" },
+    status,
+  })
 
 const app = new Elysia({ prefix: "/v3" })
   .use(cors())
   .use(swagger())
+  .error({ ...customErrors })
   .mapResponse(({ response }) => {
     if (response && response instanceof Stream) {
       return
@@ -18,20 +26,22 @@ const app = new Elysia({ prefix: "/v3" })
     const data = (Array.isArray(response) ? response?.at(0) : response) || null
     const meta = Array.isArray(response) ? [response.at(1)] : []
 
-    return new Response(JSON.stringify({ data, meta }), {
-      headers: { "Content-Type": "application/json" },
-    })
+    return buildResponse({ data, meta })
   })
-  .onError(({ error }) => {
-    if (error instanceof ValidationError) {
-      return new Response(JSON.stringify({ errors: error.all }), {
-        headers: { "Content-Type": "application/json" },
-      })
+  .onError(({ error, code }) => {
+    switch (code) {
+      case "UnauthorizedError":
+      case "MediaNotFoundError":
+      case "MediaTrackerNotFoundError":
+      case "ScansNotFoundError":
+      case "DuplicatedMediaTrackerError":
+      case "InvalidFilesError":
+        return buildResponse({ errors: [error.message] }, error.status)
+      case "VALIDATION":
+        return buildResponse({ errors: error.all }, 422)
+      default:
+        return buildResponse({ errors: [error.message] }, 500)
     }
-
-    return new Response(JSON.stringify({ errors: [error.message] }), {
-      headers: { "Content-Type": "application/json" },
-    })
   })
   .use(mediasController)
   .use(chaptersController)

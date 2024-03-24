@@ -1,4 +1,5 @@
 import { db } from "@taiyomoe/db"
+import { ScansNotFoundError } from "~/utils/errors"
 
 const getByIds = async (ids: string[]) => {
   const result = await db.scan.findMany({
@@ -6,7 +7,7 @@ const getByIds = async (ids: string[]) => {
   })
 
   if (result.length !== ids.length) {
-    throw new Error("One or more scans were not found.")
+    throw new ScansNotFoundError()
   }
 
   return result

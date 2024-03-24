@@ -1,5 +1,6 @@
 import { fileTypeFromBlob } from "file-type"
 import { DEFAULT_MIME_TYPES } from "~/utils/constants"
+import { InvalidFilesError } from "~/utils/errors"
 
 export const fileTypeValidator = async ({
   body,
@@ -12,8 +13,6 @@ export const fileTypeValidator = async ({
 
   const validated = await Promise.all(
     files.map(async (file) => {
-      console.log("inside fileTypeValidator", file.name, file.stream())
-
       const parsed = await fileTypeFromBlob(file)
 
       if (!parsed) return false
@@ -23,15 +22,8 @@ export const fileTypeValidator = async ({
   )
 
   if (validated.some((v) => !v)) {
-    const errors = files
-      .filter((_, i) => !validated[i])
-      .map(
-        (f) =>
-          `The file type of '${
-            f.name
-          }' is invalid. Allowed types: ${DEFAULT_MIME_TYPES.join(", ")}.`,
-      )
+    const invalidFiles = files.filter((_, i) => !validated[i])
 
-    throw new Error(errors.join())
+    throw new InvalidFilesError(invalidFiles)
   }
 }

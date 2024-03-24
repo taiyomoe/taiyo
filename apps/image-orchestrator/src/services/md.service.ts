@@ -5,6 +5,10 @@ import { getMediaIndexItem } from "@taiyomoe/meilisearch/utils"
 import { MdUtils } from "@taiyomoe/utils"
 import { Manga } from "mangadex-full-api"
 import type { ImportMediaInput } from "~/schemas"
+import {
+  DuplicatedMediaTrackerError,
+  MediaTrackerNotFoundError,
+} from "~/utils/errors"
 import { MediaCoversService } from "./mediaCovers.service"
 import { MediasService } from "./medias.service"
 
@@ -12,7 +16,7 @@ const getById = async (id: string) => {
   const result = await db.mediaTracker.findUnique({ where: { id } })
 
   if (!result) {
-    throw new Error("Media tracker not found.")
+    throw new MediaTrackerNotFoundError()
   }
 
   return await MediasService.getById(result.mediaId)
@@ -26,7 +30,7 @@ const importFn = async (
   const existingMedia = await getById(mdId).catch(() => null)
 
   if (existingMedia) {
-    throw new Error("Uma obra com esse ID da MangaDex já existe.")
+    throw new DuplicatedMediaTrackerError()
   }
 
   stream.send({
@@ -37,9 +41,7 @@ const importFn = async (
 
   const manga = await Manga.get(mdId)
   const covers = await manga.getCovers()
-  const _mainCover = await manga.mainCover.resolve()
-
-  console.log("manga", manga)
+  const mainCover = await manga.mainCover.resolve()
 
   stream.send({
     step: 1,
@@ -131,7 +133,7 @@ const importFn = async (
         volume: Number.isNaN(cover.volume)
           ? null
           : Number.parseFloat(cover.volume),
-        isMainCover: _mainCover.id === cover.id,
+        isMainCover: mainCover.id === cover.id,
         language: coverLanguage,
         mediaId: media.id,
         uploaderId: creatorId,
