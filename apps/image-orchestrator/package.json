@@ -28,7 +28,7 @@
     "file-type": "^19.0.0",
     "mangadex-full-api": "^5.12.1",
     "radash": "^12.1.0",
-    "sharp": "^0.33.2",
+    "sharp": "^0.33.3",
     "zod": "^3.22.4"
   },
   "devDependencies": {
