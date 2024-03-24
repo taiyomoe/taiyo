@@ -65,6 +65,8 @@ export const MediasSearchAutocomplete = () => {
       items={list.items}
       onInputChange={list.setFilterText}
       onSelectionChange={handleSelectionChange}
+      // @ts-expect-error see https://github.com/nextui-org/nextui/issues/2074#issuecomment-1880250267
+      onKeyDown={(e) => e.continuePropagation()}
       placeholder="Pesquisar..."
       label="Obra"
       labelPlacement="outside-left"
