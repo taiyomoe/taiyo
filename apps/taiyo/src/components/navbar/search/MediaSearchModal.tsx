@@ -8,14 +8,19 @@ import {
 import { Button } from "@nextui-org/react"
 import { SearchIcon } from "lucide-react"
 import { MediaSearchAutocomplete } from "~/components/navbar/search/MediaSearchAutocomplete"
+import { cn } from "~/lib/utils/cn"
 
-export const MediaSearchModal = () => {
+type Props = {
+  className?: string
+}
+
+export const MediaSearchModal = ({ className }: Props) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
   return (
     <>
       <Button
-        className="bg-transparent"
+        className={cn(className, "bg-transparent")}
         startContent={<SearchIcon />}
         onClick={onOpen}
         isIconOnly

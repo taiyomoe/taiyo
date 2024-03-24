@@ -8,6 +8,7 @@ import { SearchIcon } from "lucide-react"
 import Link from "next/link"
 import { useCallback } from "react"
 import { SearchedMediaCard } from "~/components/navbar/search/SearchedMediaCard"
+import { cn } from "~/lib/utils/cn"
 import { api } from "~/trpc/react"
 
 type Props = {
@@ -16,7 +17,7 @@ type Props = {
 } & Omit<AutocompleteProps<SearchedMedia>, "onSelectionChange" | "children">
 
 export const MediaSearchAutocomplete = (props: Props) => {
-  const { href, onSelectionChange, ...rest } = props
+  const { href, onSelectionChange, className, ...rest } = props
   const { mutateAsync } = api.medias.search.useMutation()
 
   const list = useAsyncList<SearchedMedia>({
@@ -67,7 +68,7 @@ export const MediaSearchAutocomplete = (props: Props) => {
       startContent={<SearchIcon className="text-default-500" />}
       aria-label="search media"
       radius="full"
-      className="md:w-[350px] lg:w-[400px]"
+      className={cn(className, "md:w-[350px] lg:w-[400px]")}
       {...rest}
     >
       {(item) => (
