@@ -19,9 +19,6 @@ const navbar = tv({
       "h-navbar max-h-navbar w-full flex flex-col justify-center z-20 group child:relative p-0 md:p-[unset] data-[sidebar-state=hide]:!p-0 data-[sidebar-side=left]:pl-readerSidebar data-[sidebar-side=right]:pr-readerSidebar",
     contentWrapper:
       "items-center px-bodyPadding flex grow justify-between bg-background transition-all",
-    brandContainer: "flex items-center gap-2 select-none",
-    brandText: "text-xl font-semibold",
-    endContentContainer: "flex gap-4",
   },
   variants: {
     mode: {
@@ -65,18 +62,23 @@ export const Navbar = ({ popover }: Props) => {
       }
     >
       <nav className={slots.contentWrapper()}>
-        <Link href="/" className={slots.brandContainer()}>
+        <Link
+          href="/"
+          className="flex md:hidden items-center gap-2 select-none"
+        >
           <CompanyLogo company="taiyo" width={35} priority />
-          {device?.isAboveTablet && (
-            <>
-              <p className={slots.brandText()}>Taiyō</p>
-              <Chip color="primary" size="sm">
-                ALPHA
-              </Chip>
-            </>
-          )}
         </Link>
-        <div className={slots.endContentContainer()}>
+        <Link
+          href="/"
+          className="hidden md:flex items-center gap-3 select-none"
+        >
+          <CompanyLogo company="taiyo" width={35} priority />
+          <p className="text-xl font-semibold">Taiyō</p>
+          <Chip color="primary" size="sm">
+            ALPHA
+          </Chip>
+        </Link>
+        <div className="flex gap-4">
           <MediaSearch />
           <NavbarUserLibraryButton />
           <NavbarDashboardButton />
