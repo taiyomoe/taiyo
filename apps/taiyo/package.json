@@ -12,7 +12,7 @@
     "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
-    "@elysiajs/eden": "^1.0.5",
+    "@elysiajs/eden": "^1.0.6",
     "@nextui-org/react": "^2.2.10",
     "@react-stately/data": "^3.11.2",
     "@savvywombat/tailwindcss-grid-areas": "^4.0.0",
