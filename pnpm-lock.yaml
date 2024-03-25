@@ -88,8 +88,8 @@ importers:
   apps/taiyo:
     dependencies:
       '@elysiajs/eden':
-        specifier: ^1.0.6
-        version: 1.0.6(elysia@1.0.7)
+        specifier: ^1.0.7
+        version: 1.0.7(elysia@1.0.7)
       '@nextui-org/react':
         specifier: ^2.2.10
         version: 2.2.10(@types/react@18.2.70)(framer-motion@11.0.20)(react-dom@18.2.0)(react@18.2.0)(tailwind-variants@0.2.1)(tailwindcss@3.4.1)
@@ -1293,8 +1293,8 @@ packages:
       elysia: 1.0.7(@sinclair/typebox@0.32.19)(typescript@5.4.3)
     dev: false
 
-  /@elysiajs/eden@1.0.6(elysia@1.0.7):
-    resolution: {integrity: sha512-+0JwVj70pdSyC4+95YtUP9QZbR4XfCDNJbvdyWUYjEhFi7QE+j12Xdy1dat5ysX0XDImInhddL6w7tFimRrpxw==}
+  /@elysiajs/eden@1.0.7(elysia@1.0.7):
+    resolution: {integrity: sha512-0vqVP/D9eFPX0mwOMClNq6bX1paJbWhlstKRsryERglBKrMhgO83iGPlE+1IlqqQ5h6/QEuiq8I1q9jEl1YdIQ==}
     peerDependencies:
       elysia: '>= 1.0.2'
     dependencies:
