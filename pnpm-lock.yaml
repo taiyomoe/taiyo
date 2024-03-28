@@ -88,8 +88,8 @@ importers:
   apps/taiyo:
     dependencies:
       '@elysiajs/eden':
-        specifier: ^1.0.7
-        version: 1.0.7(elysia@1.0.9)
+        specifier: ^1.0.8
+        version: 1.0.8(elysia@1.0.9)
       '@hookform/resolvers':
         specifier: ^3.3.4
         version: 3.3.4(react-hook-form@7.51.2)
@@ -163,7 +163,7 @@ importers:
         specifier: ^2.4.5
         version: 2.4.5(react@18.2.0)
       framer-motion:
-        specifier: ^11.0.22
+        specifier: ^11.0.23
         version: 11.0.23(react-dom@18.2.0)(react@18.2.0)
       jotai:
         specifier: ^2.7.1
@@ -1345,8 +1345,8 @@ packages:
       elysia: 1.0.9(@sinclair/typebox@0.32.20)(typescript@5.4.3)
     dev: false
 
-  /@elysiajs/eden@1.0.7(elysia@1.0.9):
-    resolution: {integrity: sha512-0vqVP/D9eFPX0mwOMClNq6bX1paJbWhlstKRsryERglBKrMhgO83iGPlE+1IlqqQ5h6/QEuiq8I1q9jEl1YdIQ==}
+  /@elysiajs/eden@1.0.8(elysia@1.0.9):
+    resolution: {integrity: sha512-kFnEscEuUONBYL9zkdwwswIGYpigELHF4OZM0KicX3HjmSilrS21pEwptSkiXwjcYhgft5ujp+WPyJ8adACAIA==}
     peerDependencies:
       elysia: '>= 1.0.2'
     dependencies:
