@@ -2,7 +2,7 @@ import type { ButtonProps } from "@nextui-org/button"
 import { Button } from "@nextui-org/button"
 import { useFormState } from "react-hook-form"
 
-export const NewSubmitButton = ({ isDisabled, children }: ButtonProps) => {
+export const SubmitButton = ({ isDisabled, children }: ButtonProps) => {
   const { isSubmitting, isValid, isDirty } = useFormState()
 
   const shouldDisableButton =

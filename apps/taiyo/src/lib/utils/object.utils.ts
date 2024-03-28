@@ -8,6 +8,10 @@ const arrayToSelectItems = <T extends string>(arr: T[]) => {
   return arr.map((item) => ({ label: item, value: item }))
 }
 
+const enumToSelectItems = <T extends string>(obj: Record<T, unknown>) => {
+  return arrayToSelectItems(enumToArray(obj))
+}
+
 const deepDifference = <T extends Record<string, unknown>>(
   object: T,
   base: T,
@@ -38,5 +42,6 @@ const deepDifference = <T extends Record<string, unknown>>(
 export const ObjectUtils = {
   enumToArray,
   arrayToSelectItems,
+  enumToSelectItems,
   deepDifference,
 }

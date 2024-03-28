@@ -1,5 +1,15 @@
+import {
+  ContentRating,
+  Flag,
+  MediaCountryOfOrigin,
+  MediaDemography,
+  MediaSource,
+  MediaStatus,
+  MediaType,
+} from "@taiyomoe/db"
 import { InputField } from "~/components/generics/newForm/input-field"
 import { Form } from "~/components/generics/newForm/new-form"
+import { SelectField } from "~/components/generics/newForm/select-field"
 
 export const MediaFormDetailsCategory = () => (
   <Form.Category title="Detalhes">
@@ -20,30 +30,28 @@ export const MediaFormDetailsCategory = () => (
       />
     </Form.Row>
     <Form.Row>
-      <p>Filler</p>
-      {/* <SelectFormField name="type" label="Tipo" items={MediaType} />
-      <SelectFormField
+      <SelectField name="type" label="Tipo" items={MediaType} />
+      <SelectField
         name="demography"
         label="Demografia"
         items={MediaDemography}
       />
-      <SelectFormField name="source" label="Source" items={MediaSource} />
-      <SelectFormField name="status" label="Status" items={MediaStatus} /> */}
+      <SelectField name="source" label="Fonte" items={MediaSource} />
+      <SelectField name="status" label="Status" items={MediaStatus} />
     </Form.Row>
     <Form.Row>
-      <p>Filler</p>
-      {/* <SelectFormField
+      <SelectField
         name="countryOfOrigin"
         label="Origem"
         items={MediaCountryOfOrigin}
       />
-      <SelectFormField
+      <SelectField
         name="contentRating"
         label="Classificação"
         items={ContentRating}
       />
-      <SelectFormField name="flag" label="Flag" items={Flag} />
-      <SwitchFormField name="oneShot" label="One Shot" size="lg" /> */}
+      <SelectField name="flag" label="Flag" items={Flag} />
+      {/* <SwitchFormField name="oneShot" label="One Shot" size="lg" /> */}
     </Form.Row>
     <InputField
       name="genres"

@@ -1,4 +1,6 @@
-import { NewSubmitButton } from "~/components/generics/buttons/new-submit-button"
+import { MediaFormTagsCategory } from "~/components/forms/medias/categories/media-form-tags-category"
+import { MediaFormTitlesCategory } from "~/components/forms/medias/categories/media-form-titles-category"
+import { SubmitButton } from "~/components/generics/buttons/new-submit-button"
 import { InputField } from "~/components/generics/newForm/input-field"
 import { Form } from "~/components/generics/newForm/new-form"
 import { TextAreaField } from "~/components/generics/newForm/textarea-field"
@@ -24,10 +26,10 @@ export const MediaFormFields = ({ action }: Props) => {
       </Form.Category>
       <MediaFormTrackersCategory />
       <MediaFormDetailsCategory />
-      {/* {action === "create" && <MediaTitlesFormCategory />}
-      <MediaTagsFormCategory /> */}
+      {action === "create" && <MediaFormTitlesCategory />}
+      <MediaFormTagsCategory />
       <Form.Actions>
-        <NewSubmitButton>{buttonText}</NewSubmitButton>
+        <SubmitButton>{buttonText}</SubmitButton>
       </Form.Actions>
     </Form.Layout>
   )
