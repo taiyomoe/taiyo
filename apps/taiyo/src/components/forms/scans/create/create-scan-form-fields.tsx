@@ -1,33 +1,24 @@
 import { Button } from "@nextui-org/button"
-import { useFormikContext } from "formik"
-import { Form } from "~/components/generics/form/Form"
-import { InputFormField } from "~/components/generics/form/InputFormField"
-import { TextAreaFormField } from "~/components/generics/form/TextAreaFormField"
+import { InputField } from "~/components/generics/newForm/input-field"
+import { Form } from "~/components/generics/newForm/new-form"
+import { TextAreaField } from "~/components/generics/newForm/textarea-field"
 
-export const AddScanFormFields = () => {
-  const { isSubmitting, isValid, dirty } = useFormikContext()
-
-  const shouldDisableButton = isSubmitting || !(isValid && dirty)
-
+export const CreateScanFormFields = () => {
   return (
     <Form.Layout>
       <Form.Category>
-        <InputFormField name="name" label="Nome" />
-        <TextAreaFormField
-          name="description"
-          label="Descrição"
-          placeholder="Detalhes sobre a tag"
-        />
+        <InputField name="name" label="Nome" />
+        <TextAreaField name="description" label="Description" />
       </Form.Category>
       <Form.Category title="Redes sociais">
         <Form.Row>
-          <InputFormField
+          <InputField
             name="website"
             label="Website"
             labelPlacement="outside"
             placeholder="https://animaregia.net/"
           />
-          <InputFormField
+          <InputField
             name="discord"
             label="Discord"
             labelPlacement="outside"
@@ -35,13 +26,13 @@ export const AddScanFormFields = () => {
           />
         </Form.Row>
         <Form.Row>
-          <InputFormField
+          <InputField
             name="twitter"
             label="Twitter"
             labelPlacement="outside"
             placeholder="https://twitter.com/onepieceex"
           />
-          <InputFormField
+          <InputField
             name="facebook"
             label="Facebook"
             labelPlacement="outside"
@@ -49,27 +40,27 @@ export const AddScanFormFields = () => {
           />
         </Form.Row>
         <Form.Row>
-          <InputFormField
+          <InputField
             name="instagram"
             label="Instagram"
             labelPlacement="outside"
             placeholder="https://www.instagram.com/saikaioficial"
           />
-          <InputFormField
-            name="Telegram"
+          <InputField
+            name="telegram"
             label="Telegram"
             labelPlacement="outside"
             placeholder="https://t.me/gekkouscans"
           />
         </Form.Row>
         <Form.Row>
-          <InputFormField
+          <InputField
             name="youtube"
             label="YouTube"
             labelPlacement="outside"
             placeholder="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
           />
-          <InputFormField
+          <InputField
             name="email"
             label="Email"
             labelPlacement="outside"
@@ -78,25 +69,19 @@ export const AddScanFormFields = () => {
         </Form.Row>
       </Form.Category>
       <Form.Category title="Imagens">
-        <InputFormField
+        <InputField
           name="logo"
           label="Logo"
           placeholder="https://i.imgur.com/rSDmlHq.png"
         />
-        <InputFormField
+        <InputField
           name="banner"
           label="Banner"
           placeholder="https://i.imgur.com/13N7kAY.jpg"
         />
       </Form.Category>
       <Form.Actions>
-        <Button
-          color="primary"
-          type="submit"
-          className="w-fit font-medium"
-          isDisabled={shouldDisableButton}
-          isLoading={isSubmitting}
-        >
+        <Button color="primary" type="submit" className="w-fit font-medium">
           Adicionar
         </Button>
       </Form.Actions>
