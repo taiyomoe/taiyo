@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { type UpdateMediaInput, updateMediaSchema } from "@taiyomoe/schemas"
+import { omit } from "lodash-es"
 import { type SubmitHandler, useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { Form } from "~/components/generics/newForm/new-form"
@@ -18,7 +19,7 @@ export const UpdateMediaForm = ({ initialValues }: Props) => {
   const methods = useForm<UpdateMediaInput>({
     resolver: zodResolver(updateMediaSchema),
     mode: "onTouched",
-    defaultValues: initialValues,
+    defaultValues: omit(initialValues, ["tags"]),
   })
 
   const handleSubmit: SubmitHandler<UpdateMediaInput> = (values) => {

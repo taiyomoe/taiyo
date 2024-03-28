@@ -10,6 +10,7 @@ import {
 import { InputField } from "~/components/generics/newForm/input-field"
 import { Form } from "~/components/generics/newForm/new-form"
 import { SelectField } from "~/components/generics/newForm/select-field"
+import { SwitchField } from "~/components/generics/newForm/switch-field"
 
 export const MediaFormDetailsCategory = () => (
   <Form.Category title="Detalhes">
@@ -51,7 +52,7 @@ export const MediaFormDetailsCategory = () => (
         items={ContentRating}
       />
       <SelectField name="flag" label="Flag" items={Flag} />
-      {/* <SwitchFormField name="oneShot" label="One Shot" size="lg" /> */}
+      <SwitchField name="oneShot" label="One Shot" size="lg" />
     </Form.Row>
     <InputField
       name="genres"

@@ -23,13 +23,6 @@ export const MediaFormTrackersCategory = () => (
           labelPlacement="outside"
           placeholder="13"
         />
-        <InputField
-          name="kitsuTracker"
-          label="ID no Kitsu"
-          labelPlacement="outside"
-          placeholder="13"
-          isDisabled
-        />
       </Form.Row>
     </Form.Col>
   </Form.Category>

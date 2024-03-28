@@ -4,7 +4,6 @@ import { useFormState } from "react-hook-form"
 
 export const SubmitButton = ({ isDisabled, children }: ButtonProps) => {
   const { isSubmitting, isValid, isDirty } = useFormState()
-
   const shouldDisableButton =
     isSubmitting || !(isValid && isDirty) || isDisabled
 
