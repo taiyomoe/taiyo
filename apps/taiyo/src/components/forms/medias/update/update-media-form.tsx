@@ -1,25 +1,27 @@
 "use client"
 
-import type { UpdateMediaSchema } from "@taiyomoe/schemas"
-import { updateMediaSchema } from "@taiyomoe/schemas"
-import type { FormikConfig } from "formik"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { type UpdateMediaInput, updateMediaSchema } from "@taiyomoe/schemas"
+import { type SubmitHandler, useForm } from "react-hook-form"
 import { toast } from "sonner"
-import { toFormikValidationSchema } from "zod-formik-adapter"
-import { Form } from "~/components/generics/form/Form"
+import { Form } from "~/components/generics/newForm/new-form"
 import { ObjectUtils } from "~/lib/utils/object.utils"
 import { api } from "~/trpc/react"
-import { MediaFormFields } from "./MediaFormFields"
+import { MediaFormFields } from "../media-form-fields"
 
 type Props = {
-  initialValues: UpdateMediaSchema
+  initialValues: UpdateMediaInput
 }
 
 export const UpdateMediaForm = ({ initialValues }: Props) => {
   const { mutateAsync } = api.medias.update.useMutation()
-  const handleSubmit: FormikConfig<UpdateMediaSchema>["onSubmit"] = (
-    values,
-    helpers,
-  ) => {
+  const methods = useForm<UpdateMediaInput>({
+    resolver: zodResolver(updateMediaSchema),
+    mode: "onTouched",
+    defaultValues: initialValues,
+  })
+
+  const handleSubmit: SubmitHandler<UpdateMediaInput> = (values) => {
     const delta = ObjectUtils.deepDifference(values, initialValues)
     const payload = {
       ...delta,
@@ -31,23 +33,16 @@ export const UpdateMediaForm = ({ initialValues }: Props) => {
     toast.promise(mutateAsync(payload), {
       loading: "Salvando alterações...",
       success: () => {
-        helpers.resetForm({ values })
+        methods.reset(values)
 
         return "Alterações salvas com sucesso!"
       },
       error: "Não foi possível salvar as alterações.",
-      finally: () => {
-        helpers.setSubmitting(false)
-      },
     })
   }
 
   return (
-    <Form.Component
-      initialValues={initialValues}
-      validationSchema={toFormikValidationSchema(updateMediaSchema)}
-      onSubmit={handleSubmit}
-    >
+    <Form.Component onSubmit={handleSubmit} {...methods}>
       <MediaFormFields action="update" />
     </Form.Component>
   )
