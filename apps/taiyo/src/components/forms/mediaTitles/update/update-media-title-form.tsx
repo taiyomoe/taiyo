@@ -1,3 +1,4 @@
+import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "@nextui-org/button"
 import {
   Modal,
@@ -8,18 +9,19 @@ import {
   useDisclosure,
 } from "@nextui-org/modal"
 import type { MediaTitle } from "@prisma/client"
-import type { UpdateMediaTitleSchema } from "@taiyomoe/schemas"
-import { updateMediaTitleSchema } from "@taiyomoe/schemas"
+import {
+  type UpdateMediaTitleInput,
+  updateMediaTitleSchema,
+} from "@taiyomoe/schemas"
 import { TRPCClientError } from "@trpc/client"
 import { pick } from "lodash-es"
 import { FileEditIcon } from "lucide-react"
+import { type SubmitHandler, useForm } from "react-hook-form"
 import { toast } from "sonner"
-import { toFormikValidationSchema } from "zod-formik-adapter"
 import { DeleteMediaTitleButton } from "~/components/forms/mediaTitles/delete-media-title-button"
 import { MediaTitleFormFields } from "~/components/forms/mediaTitles/media-title-form-fields"
-import { SubmitButton } from "~/components/generics/buttons/SubmitButton"
-import { Form } from "~/components/generics/form/Form"
-import type { FormSubmit } from "~/lib/types"
+import { SubmitButton } from "~/components/generics/buttons/new-submit-button"
+import { Form } from "~/components/generics/newForm/new-form"
 import { ObjectUtils } from "~/lib/utils/object.utils"
 import { useMediaUpdateStore } from "~/stores"
 import { api } from "~/trpc/react"
@@ -30,10 +32,7 @@ type Props = {
 
 export const UpdateMediaTitleForm = ({ title }: Props) => {
   const { mutateAsync } = api.mediaTitles.update.useMutation()
-  const { isOpen, onOpen, onOpenChange } = useDisclosure()
-  const { updateTitle } = useMediaUpdateStore()
-
-  const initalValues: UpdateMediaTitleSchema = pick(
+  const initialValues = pick(
     title,
     "id",
     "title",
@@ -42,12 +41,16 @@ export const UpdateMediaTitleForm = ({ title }: Props) => {
     "isMainTitle",
     "isAcronym",
   )
+  const methods = useForm<UpdateMediaTitleInput>({
+    resolver: zodResolver(updateMediaTitleSchema),
+    mode: "onTouched",
+    defaultValues: initialValues,
+  })
+  const { isOpen, onOpen, onOpenChange } = useDisclosure()
+  const { updateTitle } = useMediaUpdateStore()
 
-  const handleSubmit: FormSubmit<UpdateMediaTitleSchema> = (
-    values,
-    helpers,
-  ) => {
-    const delta = ObjectUtils.deepDifference(values, initalValues)
+  const handleSubmit: SubmitHandler<UpdateMediaTitleInput> = (values) => {
+    const delta = ObjectUtils.deepDifference(values, initialValues)
     const payload = {
       id: values.id,
       ...delta,
@@ -59,7 +62,7 @@ export const UpdateMediaTitleForm = ({ title }: Props) => {
         updateTitle(payload)
         onOpen()
         onOpenChange()
-        helpers.resetForm({ values })
+        methods.reset(values)
 
         return "Alterações salvas com sucesso!"
       },
@@ -69,9 +72,6 @@ export const UpdateMediaTitleForm = ({ title }: Props) => {
         }
 
         return "Ocorreu um erro inesperado ao salvar as alterações."
-      },
-      finally: () => {
-        helpers.setSubmitting(false)
       },
     })
   }
@@ -87,15 +87,11 @@ export const UpdateMediaTitleForm = ({ title }: Props) => {
         isIconOnly
       />
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-        <Form.Component
-          initialValues={initalValues}
-          validationSchema={toFormikValidationSchema(updateMediaTitleSchema)}
-          onSubmit={handleSubmit}
-        >
+        <Form.Component {...methods} onSubmit={handleSubmit}>
           <ModalContent>
             <ModalHeader>Modificar título</ModalHeader>
             <ModalBody>
-              <MediaTitleFormFields initialValues={initalValues} />
+              <MediaTitleFormFields />
             </ModalBody>
             <ModalFooter>
               <DeleteMediaTitleButton toggleModal={onOpen} />

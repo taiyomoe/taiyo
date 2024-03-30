@@ -1,43 +1,27 @@
 import { Tooltip } from "@nextui-org/tooltip"
 import { Languages } from "@prisma/client"
-import type {
-  CreateMediaTitleSchema,
-  UpdateMediaTitleSchema,
-} from "@taiyomoe/schemas"
-import { Form } from "~/components/generics/form/Form"
-import { InputFormField } from "~/components/generics/form/InputFormField"
-import { SelectFormField } from "~/components/generics/form/SelectFormField"
-import { SwitchFormField } from "~/components/generics/form/SwitchFormField"
+import type { UpdateMediaTitleInput } from "@taiyomoe/schemas"
+import { useFormState } from "react-hook-form"
+import { InputField } from "~/components/generics/newForm/input-field"
+import { Form } from "~/components/generics/newForm/new-form"
+import { SelectField } from "~/components/generics/newForm/select-field"
+import { SwitchField } from "~/components/generics/newForm/switch-field"
 
-type Props = {
-  initialValues: CreateMediaTitleSchema | UpdateMediaTitleSchema
-  mode?: "standalone" | "array"
-  index?: number
-}
-
-export const MediaTitleFormFields = (props: Props) => {
-  const { initialValues, mode, index } = props
-
-  const getFieldName = (name: string) => {
-    if (mode === "array") {
-      return `titles[${index}].${name}`
-    }
-
-    return name
-  }
+export const MediaTitleFormFields = () => {
+  const { defaultValues } = useFormState<UpdateMediaTitleInput>()
 
   return (
     <Form.Col>
-      <InputFormField
-        name={getFieldName("title")}
+      <InputField
+        name="title"
         label="Título"
         labelPlacement="outside"
         placeholder="Shingeki no Kyojin"
         variant="faded"
       />
       <Form.Row>
-        <SelectFormField
-          name={getFieldName("language")}
+        <SelectField
+          name="language"
           label="Idioma"
           labelPlacement="outside"
           variant="faded"
@@ -45,29 +29,29 @@ export const MediaTitleFormFields = (props: Props) => {
         />
         <Tooltip
           content="Para trocar de título principal, em vez de desativar esta opção aqui, ative-a no novo título."
-          isDisabled={initialValues.isMainTitle === false}
+          isDisabled={!defaultValues?.isMainTitle}
           color="warning"
         >
           <div className="min-w-fit">
-            <SwitchFormField
-              name={getFieldName("isMainTitle")}
+            <SwitchField
+              name="isMainTitle"
               label="Título principal"
               labelPlacement="outside"
-              isDisabled={initialValues.isMainTitle}
+              isDisabled={defaultValues?.isMainTitle}
             />
           </div>
         </Tooltip>
       </Form.Row>
       <Form.Row>
-        <InputFormField
-          name={getFieldName("priority")}
+        <InputField
+          name="priority"
           label="Prioridade"
           type="number"
           labelPlacement="outside"
           variant="faded"
         />
-        <SwitchFormField
-          name={getFieldName("isAcronym")}
+        <SwitchField
+          name="isAcronym"
           label="Acrônimo"
           labelPlacement="outside"
         />

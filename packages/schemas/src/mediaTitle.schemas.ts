@@ -32,4 +32,4 @@ export const updateMediaTitleSchema = mediaTitleSchema
 
 export type CreateMediaTitleSchema = typeof createMediaTitleSchema._type
 export type CreateMediaTitlesSchema = typeof createMediaTitlesSchema._type
-export type UpdateMediaTitleSchema = typeof updateMediaTitleSchema._type
+export type UpdateMediaTitleInput = typeof updateMediaTitleSchema._type
