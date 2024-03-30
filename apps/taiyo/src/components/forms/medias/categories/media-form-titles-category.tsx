@@ -1,14 +1,11 @@
 import { Button } from "@nextui-org/button"
-import { Languages } from "@prisma/client"
 import type { InsertMediaSchema } from "@taiyomoe/schemas"
 import { useField } from "formik"
 import { PlusIcon, TrashIcon } from "lucide-react"
 import { Form } from "~/components/generics/form/Form"
-import { InputFormField } from "~/components/generics/form/InputFormField"
-import { SelectFormField } from "~/components/generics/form/SelectFormField"
-import { SwitchFormField } from "~/components/generics/form/SwitchFormField"
+import { InputField } from "~/components/generics/newForm/input-field"
 
-export const MediaTitlesFormCategory = () => {
+export const MediaFormTitlesCategory = () => {
   // biome-ignore lint/correctness/noEmptyPattern: we need to destructure the array
   const [{ value }, {}, { setValue }] = useField<InsertMediaSchema["titles"]>({
     name: "titles",
@@ -52,8 +49,8 @@ export const MediaTitlesFormCategory = () => {
     <Form.Category title="Títulos" actions={categoryActions}>
       {value.map((_, i) => (
         <div key={_.title} className="flex items-center gap-2">
-          <InputFormField name={`titles[${i}].title`} />
-          <SelectFormField
+          <InputField name={`titles[${i}].title`} />
+          {/* <SelectFormField
             name={`titles[${i}].language`}
             items={Languages}
             className="md:w-fit md:min-w-[100px]"
@@ -65,7 +62,7 @@ export const MediaTitlesFormCategory = () => {
             type="number"
           />
           <SwitchFormField name={`titles[${i}].isAcronym`} size="lg" />
-          <SwitchFormField name={`titles[${i}].isMainTitle`} size="lg" />
+          <SwitchFormField name={`titles[${i}].isMainTitle`} size="lg" /> */}
           <Button
             onPress={() => void handleRemoveTitle(i)}
             startContent={<TrashIcon size={20} />}

@@ -47,5 +47,5 @@ export const importMediaSchema = z.object({
 })
 
 export type InsertMediaSchema = typeof insertMediaSchema._type
-export type UpdateMediaSchema = Required<typeof updateMediaSchema._type>
+export type UpdateMediaInput = Required<typeof updateMediaSchema._type>
 export type ImportMediaSchema = typeof importMediaSchema._type

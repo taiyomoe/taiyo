@@ -61,7 +61,10 @@ export default {
     },
   },
   plugins: [
-    tailwindScrollbar({ nocompatible: true }),
+    tailwindScrollbar({
+      nocompatible: true,
+      preferredStrategy: "pseudoelements",
+    }),
     plugin(({ addVariant }) => {
       addVariant("child", "& > *")
       addVariant("child-hover", "& > *:hover")

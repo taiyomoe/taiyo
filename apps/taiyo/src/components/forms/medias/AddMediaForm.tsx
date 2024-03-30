@@ -5,7 +5,7 @@ import { insertMediaSchema } from "@taiyomoe/schemas"
 import { toFormikValidationSchema } from "zod-formik-adapter"
 import { Form } from "~/components/generics/form/Form"
 import { useMediaCreation } from "~/hooks/useMediaCreation"
-import { MediaFormFields } from "./MediaFormFields"
+import { MediaFormFields } from "./media-form-fields"
 
 const initialValues: InsertMediaSchema = {
   id: crypto.randomUUID(),

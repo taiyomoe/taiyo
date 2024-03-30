@@ -1,6 +1,6 @@
-import type { UpdateMediaSchema } from "@taiyomoe/schemas"
+import type { UpdateMediaInput } from "@taiyomoe/schemas"
 import type { MediaWithRelations } from "@taiyomoe/types"
-import { UpdateMediaForm } from "~/components/forms/medias/UpdateMediaForm"
+import { UpdateMediaForm } from "~/components/forms/medias/update/update-media-form"
 
 type Props = {
   media: MediaWithRelations
@@ -13,7 +13,7 @@ export const UpdateMediaInfoTab = ({ media }: Props) => {
   const alTracker = media.trackers.find((t) => t.tracker === "ANILIST")
   const malTracker = media.trackers.find((t) => t.tracker === "MYANIMELIST")
 
-  const initialValues: UpdateMediaSchema = {
+  const initialValues: UpdateMediaInput = {
     id: media.id,
     startDate: media.startDate,
     endDate: media.endDate,
