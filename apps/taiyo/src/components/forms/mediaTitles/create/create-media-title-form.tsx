@@ -1,3 +1,4 @@
+import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "@nextui-org/button"
 import {
   Modal,
@@ -7,16 +8,15 @@ import {
   ModalHeader,
   useDisclosure,
 } from "@nextui-org/modal"
-import type { CreateMediaTitleSchema } from "@taiyomoe/schemas"
+import type { CreateMediaTitleInput } from "@taiyomoe/schemas"
 import { createMediaTitleSchema } from "@taiyomoe/schemas"
 import { TRPCClientError } from "@trpc/client"
 import { PlusIcon } from "lucide-react"
+import { type SubmitHandler, useForm } from "react-hook-form"
 import { toast } from "sonner"
-import { toFormikValidationSchema } from "zod-formik-adapter"
 import { MediaTitleFormFields } from "~/components/forms/mediaTitles/media-title-form-fields"
-import { SubmitButton } from "~/components/generics/buttons/SubmitButton"
-import { Form } from "~/components/generics/form/Form"
-import type { FormSubmit } from "~/lib/types"
+import { SubmitButton } from "~/components/generics/buttons/new-submit-button"
+import { Form } from "~/components/generics/newForm/new-form"
 import { useMediaUpdateStore } from "~/stores"
 import { api } from "~/trpc/react"
 
@@ -25,11 +25,8 @@ type Props = {
 }
 
 export const CreateMediaTitleForm = ({ mediaId }: Props) => {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure()
   const { mutateAsync } = api.mediaTitles.create.useMutation()
-  const { addTitle } = useMediaUpdateStore()
-
-  const initialValues: CreateMediaTitleSchema = {
+  const initialValues: CreateMediaTitleInput = {
     title: "",
     language: "ja",
     priority: 1,
@@ -37,10 +34,15 @@ export const CreateMediaTitleForm = ({ mediaId }: Props) => {
     isAcronym: false,
     mediaId,
   }
+  const methods = useForm<CreateMediaTitleInput>({
+    resolver: zodResolver(createMediaTitleSchema),
+    defaultValues: initialValues,
+    mode: "onTouched",
+  })
+  const { isOpen, onOpen, onOpenChange } = useDisclosure()
+  const { addTitle } = useMediaUpdateStore()
 
-  const handleSubmit: FormSubmit<CreateMediaTitleSchema> = (values, helper) => {
-    const { setSubmitting } = helper
-
+  const handleSubmit: SubmitHandler<CreateMediaTitleInput> = (values) => {
     toast.promise(mutateAsync(values), {
       loading: "Criando título...",
       success: (createdTitle) => {
@@ -56,9 +58,6 @@ export const CreateMediaTitleForm = ({ mediaId }: Props) => {
 
         return "Ocorreu um erro inesperado ao criar o título."
       },
-      finally: () => {
-        setSubmitting(false)
-      },
     })
   }
 
@@ -73,15 +72,11 @@ export const CreateMediaTitleForm = ({ mediaId }: Props) => {
         isIconOnly
       />
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-        <Form.Component
-          initialValues={initialValues}
-          validationSchema={toFormikValidationSchema(createMediaTitleSchema)}
-          onSubmit={handleSubmit}
-        >
+        <Form.Component {...methods} onSubmit={handleSubmit}>
           <ModalContent>
             <ModalHeader>Criar título</ModalHeader>
             <ModalBody>
-              <MediaTitleFormFields initialValues={initialValues} />
+              <MediaTitleFormFields />
             </ModalBody>
             <ModalFooter>
               <Button onClick={onOpenChange}>Fechar</Button>

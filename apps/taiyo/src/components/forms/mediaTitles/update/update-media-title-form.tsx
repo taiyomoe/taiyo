@@ -43,8 +43,8 @@ export const UpdateMediaTitleForm = ({ title }: Props) => {
   )
   const methods = useForm<UpdateMediaTitleInput>({
     resolver: zodResolver(updateMediaTitleSchema),
-    mode: "onTouched",
     defaultValues: initialValues,
+    mode: "onTouched",
   })
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
   const { updateTitle } = useMediaUpdateStore()
