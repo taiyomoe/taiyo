@@ -4,8 +4,8 @@ import { useMemo } from "react"
 import { List } from "~/components/generics/List"
 import { Form } from "~/components/generics/form/Form"
 import { useMediaUpdateStore } from "~/stores"
-import { CreateMediaTitlesForm } from "../create/create-media-title-form"
-import { UpdateMediaTitlesForm } from "./update-media-title-form"
+import { CreateMediaTitleForm } from "../create/create-media-title-form"
+import { UpdateMediaTitleForm } from "./update-media-title-form"
 
 type Props = {
   mediaId: string
@@ -19,7 +19,7 @@ export const UpdateMediaTitlesShowcase = ({ mediaId }: Props) => {
   return (
     <Form.Category
       title="Títulos ativos"
-      actions={<CreateMediaTitlesForm mediaId={mediaId} />}
+      actions={<CreateMediaTitleForm mediaId={mediaId} />}
     >
       <List>
         {sortedTitles.map((title) => (
@@ -45,7 +45,7 @@ export const UpdateMediaTitlesShowcase = ({ mediaId }: Props) => {
               <Chip classNames={{ content: "px-1.5" }} size="sm">
                 {title.language}
               </Chip>
-              <UpdateMediaTitlesForm title={title} />
+              <UpdateMediaTitleForm title={title} />
             </div>
           </div>
         ))}

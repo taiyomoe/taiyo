@@ -9,7 +9,7 @@ type Props = {
   toggleModal: () => void
 }
 
-export const DeleteMediaTitlesButton = ({ toggleModal }: Props) => {
+export const DeleteMediaTitleButton = ({ toggleModal }: Props) => {
   const { initialValues, values } = useFormikContext<UpdateMediaCoverSchema>()
   const { del } = useMediaUpdateStore()
   const { mutateAsync } = api.mediaTitles.delete.useMutation()

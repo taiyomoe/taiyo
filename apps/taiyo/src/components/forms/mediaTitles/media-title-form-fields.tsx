@@ -15,7 +15,7 @@ type Props = {
   index?: number
 }
 
-export const MediaTitlesFormFields = (props: Props) => {
+export const MediaTitleFormFields = (props: Props) => {
   const { initialValues, mode, index } = props
 
   const getFieldName = (name: string) => {

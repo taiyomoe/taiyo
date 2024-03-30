@@ -15,8 +15,8 @@ import { pick } from "lodash-es"
 import { FileEditIcon } from "lucide-react"
 import { toast } from "sonner"
 import { toFormikValidationSchema } from "zod-formik-adapter"
-import { DeleteMediaTitlesButton } from "~/components/forms/mediaTitles/delete-media-title-button"
-import { MediaTitlesFormFields } from "~/components/forms/mediaTitles/media-title-form-fields"
+import { DeleteMediaTitleButton } from "~/components/forms/mediaTitles/delete-media-title-button"
+import { MediaTitleFormFields } from "~/components/forms/mediaTitles/media-title-form-fields"
 import { SubmitButton } from "~/components/generics/buttons/SubmitButton"
 import { Form } from "~/components/generics/form/Form"
 import type { FormSubmit } from "~/lib/types"
@@ -28,7 +28,7 @@ type Props = {
   title: MediaTitle
 }
 
-export const UpdateMediaTitlesForm = ({ title }: Props) => {
+export const UpdateMediaTitleForm = ({ title }: Props) => {
   const { mutateAsync } = api.mediaTitles.update.useMutation()
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
   const { updateTitle } = useMediaUpdateStore()
@@ -95,10 +95,10 @@ export const UpdateMediaTitlesForm = ({ title }: Props) => {
           <ModalContent>
             <ModalHeader>Modificar título</ModalHeader>
             <ModalBody>
-              <MediaTitlesFormFields initialValues={initalValues} />
+              <MediaTitleFormFields initialValues={initalValues} />
             </ModalBody>
             <ModalFooter>
-              <DeleteMediaTitlesButton toggleModal={onOpen} />
+              <DeleteMediaTitleButton toggleModal={onOpen} />
               <Button onClick={onOpenChange}>Fechar</Button>
               <SubmitButton>Salvar</SubmitButton>
             </ModalFooter>
