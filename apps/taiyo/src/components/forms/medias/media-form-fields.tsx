@@ -1,4 +1,3 @@
-import { MediaFormTagsCategory } from "~/components/forms/medias/categories/media-form-tags-category"
 import { MediaFormTitlesCategory } from "~/components/forms/medias/categories/media-form-titles-category"
 import { SubmitButton } from "~/components/generics/buttons/new-submit-button"
 import { InputField } from "~/components/generics/newForm/input-field"
@@ -27,7 +26,6 @@ export const MediaFormFields = ({ action }: Props) => {
       <MediaFormTrackersCategory />
       <MediaFormDetailsCategory />
       {action === "create" && <MediaFormTitlesCategory />}
-      <MediaFormTagsCategory />
       <Form.Actions>
         <SubmitButton>{buttonText}</SubmitButton>
       </Form.Actions>

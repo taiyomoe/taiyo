@@ -7,10 +7,12 @@ import {
   MediaStatus,
   MediaType,
 } from "@taiyomoe/db"
+import { GenresField } from "~/components/generics/newForm/genres-field"
 import { InputField } from "~/components/generics/newForm/input-field"
 import { Form } from "~/components/generics/newForm/new-form"
 import { SelectField } from "~/components/generics/newForm/select-field"
 import { SwitchField } from "~/components/generics/newForm/switch-field"
+import { TagsField } from "~/components/generics/newForm/tags-field"
 
 export const MediaFormDetailsCategory = () => (
   <Form.Category title="Detalhes">
@@ -54,12 +56,7 @@ export const MediaFormDetailsCategory = () => (
       <SelectField name="flag" label="Flag" items={Flag} />
       <SwitchField name="oneShot" label="One Shot" size="lg" />
     </Form.Row>
-    <InputField
-      name="genres"
-      label="Gêneros — WIP"
-      labelPlacement="outside"
-      placeholder="ACTION, COMEDY, THRILLER"
-      isDisabled
-    />
+    <GenresField />
+    <TagsField />
   </Form.Category>
 )

@@ -4,8 +4,7 @@ import { useCallback, useState } from "react"
 import { useFormContext } from "react-hook-form"
 import { Label, type LabelProps } from "~/components/generics/Label"
 
-type Props = { name: string } & Omit<SwitchProps, "onChange"> &
-  Pick<LabelProps, "label" | "labelPlacement" | "className">
+type Props = { name: string } & Omit<SwitchProps, "onChange"> & LabelProps
 
 export const SwitchField = ({
   name,
