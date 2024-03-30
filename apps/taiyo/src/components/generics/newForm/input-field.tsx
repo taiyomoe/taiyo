@@ -16,7 +16,7 @@ export const InputField = ({ name, ...rest }: Props) => {
   return (
     <Input
       color={errorMessage ? "danger" : "default"}
-      defaultValue={defaultValues?.[name]}
+      defaultValue={defaultValues?.[name] ?? ""}
       errorMessage={errorMessage}
       {...register(name)}
       {...rest}
