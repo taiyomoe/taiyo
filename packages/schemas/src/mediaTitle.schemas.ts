@@ -30,6 +30,5 @@ export const updateMediaTitleSchema = mediaTitleSchema
   .extend({ id: z.string().uuid() })
   .refine((t) => (t.title ? t.title.length > 0 : true), "Must be > 0")
 
-export type CreateMediaTitleSchema = typeof createMediaTitleSchema._type
-export type CreateMediaTitlesSchema = typeof createMediaTitlesSchema._type
-export type UpdateMediaTitleSchema = typeof updateMediaTitleSchema._type
+export type CreateMediaTitleInput = typeof createMediaTitleSchema._type
+export type UpdateMediaTitleInput = typeof updateMediaTitleSchema._type

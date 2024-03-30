@@ -1,6 +1,6 @@
 import { Button } from "@nextui-org/react"
-import type { UpdateMediaCoverSchema } from "@taiyomoe/schemas"
-import { useFormikContext } from "formik"
+import type { UpdateMediaTitleInput } from "@taiyomoe/schemas"
+import { useFormContext } from "react-hook-form"
 import { toast } from "sonner"
 import { useMediaUpdateStore } from "~/stores"
 import { api } from "~/trpc/react"
@@ -9,16 +9,21 @@ type Props = {
   toggleModal: () => void
 }
 
-export const UpdateMediaTitleDeleteButton = ({ toggleModal }: Props) => {
-  const { initialValues, values } = useFormikContext<UpdateMediaCoverSchema>()
+export const DeleteMediaTitleButton = ({ toggleModal }: Props) => {
+  const {
+    getValues,
+    formState: { defaultValues },
+  } = useFormContext<UpdateMediaTitleInput>()
   const { del } = useMediaUpdateStore()
   const { mutateAsync } = api.mediaTitles.delete.useMutation()
 
   const handlePress = () => {
-    toast.promise(mutateAsync({ id: values.id }), {
+    const id = getValues("id")
+
+    toast.promise(mutateAsync({ id }), {
       loading: "Apagando o título...",
       success: () => {
-        del("title", values.id)
+        del("title", id)
         toggleModal()
 
         return "Título apagado com sucesso!"
@@ -30,7 +35,7 @@ export const UpdateMediaTitleDeleteButton = ({ toggleModal }: Props) => {
   return (
     <Button
       onPress={handlePress}
-      isDisabled={initialValues.isMainCover}
+      isDisabled={defaultValues?.isMainTitle}
       variant="light"
       color="danger"
     >
