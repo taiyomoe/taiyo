@@ -15,8 +15,8 @@ import { pick } from "lodash-es"
 import { FileEditIcon } from "lucide-react"
 import { toast } from "sonner"
 import { toFormikValidationSchema } from "zod-formik-adapter"
-import { MediaTitlesFormFields } from "~/components/forms/mediaTitles/MediaTitlesFormFields"
-import { UpdateMediaTitleDeleteButton } from "~/components/forms/mediaTitles/update/UpdateMediaTitleDeleteButton"
+import { DeleteMediaTitlesButton } from "~/components/forms/mediaTitles/delete-media-title-button"
+import { MediaTitlesFormFields } from "~/components/forms/mediaTitles/media-title-form-fields"
 import { SubmitButton } from "~/components/generics/buttons/SubmitButton"
 import { Form } from "~/components/generics/form/Form"
 import type { FormSubmit } from "~/lib/types"
@@ -98,7 +98,7 @@ export const UpdateMediaTitlesForm = ({ title }: Props) => {
               <MediaTitlesFormFields initialValues={initalValues} />
             </ModalBody>
             <ModalFooter>
-              <UpdateMediaTitleDeleteButton toggleModal={onOpen} />
+              <DeleteMediaTitlesButton toggleModal={onOpen} />
               <Button onClick={onOpenChange}>Fechar</Button>
               <SubmitButton>Salvar</SubmitButton>
             </ModalFooter>

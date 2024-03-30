@@ -1,11 +1,11 @@
 import { Chip } from "@nextui-org/react"
 import { MediaTitleUtils } from "@taiyomoe/utils"
 import { useMemo } from "react"
-import { UpdateMediaTitleCreateButton } from "~/components/forms/mediaTitles/update/UpdateMediaTitleCreateButton"
-import { UpdateMediaTitlesForm } from "~/components/forms/mediaTitles/update/UpdateMediaTitlesForm"
 import { List } from "~/components/generics/List"
 import { Form } from "~/components/generics/form/Form"
 import { useMediaUpdateStore } from "~/stores"
+import { CreateMediaTitlesForm } from "../create/create-media-title-form"
+import { UpdateMediaTitlesForm } from "./update-media-title-form"
 
 type Props = {
   mediaId: string
@@ -19,7 +19,7 @@ export const UpdateMediaTitlesShowcase = ({ mediaId }: Props) => {
   return (
     <Form.Category
       title="Títulos ativos"
-      actions={<UpdateMediaTitleCreateButton mediaId={mediaId} />}
+      actions={<CreateMediaTitlesForm mediaId={mediaId} />}
     >
       <List>
         {sortedTitles.map((title) => (

@@ -13,7 +13,7 @@ import { TRPCClientError } from "@trpc/client"
 import { PlusIcon } from "lucide-react"
 import { toast } from "sonner"
 import { toFormikValidationSchema } from "zod-formik-adapter"
-import { MediaTitlesFormFields } from "~/components/forms/mediaTitles/MediaTitlesFormFields"
+import { MediaTitlesFormFields } from "~/components/forms/mediaTitles/media-title-form-fields"
 import { SubmitButton } from "~/components/generics/buttons/SubmitButton"
 import { Form } from "~/components/generics/form/Form"
 import type { FormSubmit } from "~/lib/types"
@@ -24,7 +24,7 @@ type Props = {
   mediaId: string
 }
 
-export const UpdateMediaTitleCreateButton = ({ mediaId }: Props) => {
+export const CreateMediaTitlesForm = ({ mediaId }: Props) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
   const { mutateAsync } = api.mediaTitles.create.useMutation()
   const { addTitle } = useMediaUpdateStore()
