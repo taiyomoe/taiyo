@@ -1,3 +1,4 @@
+import { TAG_KEYS } from "@taiyomoe/constants"
 import {
   ContentRating,
   MediaCountryOfOrigin,
@@ -8,7 +9,6 @@ import {
   MediaType,
 } from "@taiyomoe/db"
 import { type Static, t } from "elysia"
-import { TAG_KEYS } from "../../../../packages/constants/src/tags"
 import { DEFAULT_MIME_TYPES } from "../utils/constants"
 
 export const CreateMediaInput = t.Object({
