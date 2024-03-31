@@ -1,4 +1,4 @@
-import { db } from "@taiyomoe/db"
+import { type Prisma, db } from "@taiyomoe/db"
 import { omit } from "radash"
 import type { UploadCoverInput } from "../schemas"
 import { FilesService } from "../services/files.service"
@@ -13,6 +13,25 @@ const insert = async (
     data: {
       ...omit(input, ["file"]),
       id: file.id,
+      uploaderId,
+    },
+  })
+
+  return result
+}
+
+const insertLimited = async (
+  file: UploadedFile,
+  mediaId: string,
+  uploaderId: string,
+  client: Prisma.TransactionClient,
+) => {
+  const result = await client.mediaCover.create({
+    data: {
+      id: file.id,
+      language: "ja",
+      isMainCover: true,
+      mediaId,
       uploaderId,
     },
   })
@@ -50,6 +69,7 @@ const uploadFromUrl = async (
 
 export const MediaCoversService = {
   insert,
+  insertLimited,
   upload,
   uploadFromUrl,
 }
