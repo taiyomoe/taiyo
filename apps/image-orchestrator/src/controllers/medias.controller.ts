@@ -2,7 +2,7 @@ import { Stream } from "@elysiajs/stream"
 import { db } from "@taiyomoe/db"
 import { Elysia } from "elysia"
 import { authMiddleware } from "../middlewares/auth.middleware"
-import { CreateMediaInput, ImportMediaInput } from "../schemas"
+import { createMediaSchema, importMediaSchema } from "../schemas"
 import {
   MdService,
   MediaCoversService,
@@ -33,7 +33,7 @@ const create = new Elysia().use(authMiddleware([["medias", "create"]])).post(
 
     return media
   },
-  { body: CreateMediaInput },
+  { body: createMediaSchema },
 )
 
 const importRoute = new Elysia()
@@ -46,7 +46,7 @@ const importRoute = new Elysia()
 
         stream.close()
       }),
-    { query: ImportMediaInput },
+    { query: importMediaSchema },
   )
 
 export const mediasController = new Elysia({ prefix: "/medias" })

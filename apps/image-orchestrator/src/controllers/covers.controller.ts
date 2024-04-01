@@ -1,6 +1,6 @@
 import { Elysia } from "elysia"
 import { authMiddleware } from "../middlewares/auth.middleware"
-import { UploadCoverInput } from "../schemas"
+import { uploadCoverSchema } from "../schemas"
 import { MediaCoversService, MediasService } from "../services"
 import { fileTypeValidator } from "../validators/fileType.validator"
 
@@ -23,7 +23,7 @@ const upload = new Elysia()
     },
     {
       beforeHandle: fileTypeValidator,
-      body: UploadCoverInput,
+      body: uploadCoverSchema,
     },
   )
 
