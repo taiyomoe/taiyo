@@ -3,12 +3,12 @@ import type { CreateMediaInput } from "../schemas"
 import { DuplicatedMediaTrackerError } from "../utils/errors"
 
 const hasTrackers = async (
-  trackers: Pick<CreateMediaInput, "mdId" | "alId" | "malId">,
+  trackers: Pick<CreateMediaInput, "mdTracker" | "alTracker" | "malTracker">,
 ) => {
   const array = [
-    trackers.mdId,
-    trackers.alId?.toString(),
-    trackers.malId?.toString(),
+    trackers.mdTracker,
+    trackers.alTracker?.toString(),
+    trackers.malTracker?.toString(),
   ].filter(Boolean)
   const media = await db.media.findFirst({
     select: { id: true, trackers: true },

@@ -1,6 +1,7 @@
 import { TAG_KEYS } from "@taiyomoe/constants"
 import {
   ContentRating,
+  Flag,
   MediaCountryOfOrigin,
   MediaDemography,
   MediaGenres,
@@ -11,7 +12,7 @@ import {
 import { type Static, t } from "elysia"
 import { DEFAULT_MIME_TYPES } from "../utils/constants"
 
-export const CreateMediaInput = t.Object({
+export const createMediaSchema = t.Object({
   synopsis: t.String(),
   contentRating: t.Enum(ContentRating),
   oneShot: t.BooleanString(),
@@ -20,6 +21,7 @@ export const CreateMediaInput = t.Object({
   source: t.Enum(MediaSource),
   demography: t.Enum(MediaDemography),
   countryOfOrigin: t.Enum(MediaCountryOfOrigin),
+  flag: t.Enum(Flag),
   genres: t.Array(t.Enum(MediaGenres)),
   tags: t.Array(
     t.ObjectString({
@@ -28,15 +30,15 @@ export const CreateMediaInput = t.Object({
     }),
   ),
   mainTitle: t.String({ minLength: 2 }),
-  mdId: t.Optional(t.String({ format: "uuid" })),
-  alId: t.Optional(t.Numeric({ minimum: 30000 })),
-  malId: t.Optional(t.Numeric({ minimum: 1 })),
+  mdTracker: t.Optional(t.String({ format: "uuid" })),
+  alTracker: t.Optional(t.Numeric({ minimum: 30000 })),
+  malTracker: t.Optional(t.Numeric({ minimum: 1 })),
   cover: t.File({ maxSize: "10m", type: DEFAULT_MIME_TYPES }),
 })
 
-export const ImportMediaInput = t.Object({
+export const importMediaSchema = t.Object({
   mdId: t.String({ format: "uuid" }),
 })
 
-export type CreateMediaInput = Static<typeof CreateMediaInput>
-export type ImportMediaInput = Static<typeof ImportMediaInput>
+export type CreateMediaInput = Static<typeof createMediaSchema>
+export type ImportMediaInput = Static<typeof importMediaSchema>

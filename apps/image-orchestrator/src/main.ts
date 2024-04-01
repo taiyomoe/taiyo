@@ -14,7 +14,7 @@ const buildResponse = (obj: Record<string, unknown>, status = 200) =>
     status,
   })
 
-const app = new Elysia({ prefix: "/v3" })
+export const app = new Elysia({ prefix: "/v3" })
   .use(cors())
   .use(swagger())
   .error({ ...customErrors })
@@ -50,5 +50,3 @@ const app = new Elysia({ prefix: "/v3" })
   .listen(4000)
 
 console.log(`Listening on http://localhost:${app.server!.port}`)
-
-export type App = typeof app
