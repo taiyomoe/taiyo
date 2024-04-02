@@ -1,25 +1,27 @@
 "use client"
 
 import type { InputProps } from "@nextui-org/input"
-import { useFormContext } from "react-hook-form"
+import { Controller } from "react-hook-form"
 import { Input } from "~/components/generics/input"
 
 type Props = { name: string } & InputProps
 
-export const InputField = ({ name, ...rest }: Props) => {
-  const {
-    register,
-    formState: { errors, defaultValues },
-  } = useFormContext()
-  const errorMessage = errors[name]?.message?.toString()
+export const InputField = ({ name, labelPlacement, ...rest }: Props) => (
+  <Controller
+    name={name}
+    render={({ field, formState: { errors, defaultValues } }) => {
+      const errorMessage = errors[name]?.message?.toString()
 
-  return (
-    <Input
-      color={errorMessage ? "danger" : "default"}
-      defaultValue={defaultValues?.[name] ?? ""}
-      errorMessage={errorMessage}
-      {...register(name)}
-      {...rest}
-    />
-  )
-}
+      return (
+        <Input
+          color={errorMessage ? "danger" : "default"}
+          defaultValue={defaultValues?.[name] ?? ""}
+          labelPlacement={labelPlacement ?? "outside-left"}
+          errorMessage={errorMessage}
+          {...field}
+          {...rest}
+        />
+      )
+    }}
+  />
+)
