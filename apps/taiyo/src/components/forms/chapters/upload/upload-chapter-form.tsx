@@ -1,32 +1,35 @@
 "use client"
 
-import { insertMediaChapterFormSchema } from "@taiyomoe/schemas"
-import type { InsertMediaChapterFormSchema } from "@taiyomoe/schemas"
-import { toFormikValidationSchema } from "zod-formik-adapter"
-import { Form } from "~/components/generics/form/Form"
-import { useChapterUpload } from "~/hooks/useChapterUpload"
+import { typeboxResolver } from "@hookform/resolvers/typebox"
+import {
+  type UploadChapterInput,
+  uploadChapterSchema,
+} from "@taiyomoe/image-orchestrator"
+import { type SubmitHandler, useForm } from "react-hook-form"
+import { Form } from "~/components/generics/newForm/new-form"
 import { UploadChapterFormFields } from "./upload-chapter-form-fields"
 
-const initialValues: InsertMediaChapterFormSchema = {
-  title: null,
-  number: 0,
-  volume: null,
-  language: "pt_br",
-  contentRating: "NORMAL",
-  flag: "OK",
-  mediaId: "",
-  scanIds: [],
-}
-
 export const UploadChapterForm = () => {
-  const { handleSubmit } = useChapterUpload()
+  const methods = useForm<UploadChapterInput>({
+    resolver: typeboxResolver(uploadChapterSchema),
+    mode: "onTouched",
+    defaultValues: {
+      title: "",
+      number: 0,
+      volume: undefined,
+      contentRating: "NORMAL",
+      flag: "OK",
+      mediaId: "",
+      files: [],
+    },
+  })
+
+  const handleSubmit: SubmitHandler<UploadChapterInput> = async (values) => {
+    console.log("values", values)
+  }
 
   return (
-    <Form.Component
-      initialValues={initialValues}
-      validationSchema={toFormikValidationSchema(insertMediaChapterFormSchema)}
-      onSubmit={handleSubmit}
-    >
+    <Form.Component {...methods} onSubmit={handleSubmit}>
       <UploadChapterFormFields />
     </Form.Component>
   )

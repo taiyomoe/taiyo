@@ -1,48 +1,48 @@
 import { ContentRating, Flag, Languages } from "@prisma/client"
+import { ChapterFormImagesCategory } from "~/components/forms/chapters/upload/categories/chapter-form-images-category"
+import { SubmitButton } from "~/components/generics/buttons/new-submit-button"
 import { Form } from "~/components/generics/form/Form"
-import { InputFormField } from "~/components/generics/form/InputFormField"
-import { SelectFormField } from "~/components/generics/form/SelectFormField"
-import { ScansFormField } from "~/components/generics/inputs/ScansFormField"
-import { MediasSearchAutocomplete } from "~/components/medias/MediasSearchAutocomplete"
-import { ImageCard } from "~/components/ui/upload/ImageCard"
-import { ImageDropzone } from "~/components/ui/upload/ImageDropzone"
+import { InputField } from "~/components/generics/newForm/input-field"
+import { SelectField } from "~/components/generics/newForm/select-field"
 
 export const UploadChapterFormFields = () => {
   return (
     <Form.Layout>
       <Form.Category>
-        <MediasSearchAutocomplete />
-        <InputFormField name="title" label="Título" />
-        <ScansFormField />
+        {/* <MediasSearchAutocomplete /> */}
+        <InputField name="title" label="Título" isRequired />
+        {/* <ScansFormField /> */}
       </Form.Category>
       <Form.Category title="Detalhes">
         <Form.Row>
-          <InputFormField
+          <InputField
             name="number"
             label="Número"
             labelPlacement="outside"
             placeholder="Ex: 1"
             type="number"
             className="chapter-number"
+            isRequired
           />
-          <InputFormField
+          <InputField
             name="volume"
             label="Volume"
             labelPlacement="outside"
             placeholder="Ex: 1"
             type="number"
             className="chapter-volume"
+            isRequired
           />
         </Form.Row>
         <Form.Row>
-          <SelectFormField
+          <SelectField
             name="contentRating"
             label="Classificação do conteúdo"
             items={ContentRating}
             isDisabled
           />
-          <SelectFormField name="flag" label="Flag" items={Flag} isDisabled />
-          <SelectFormField
+          <SelectField name="flag" label="Flag" items={Flag} isDisabled />
+          <SelectField
             name="language"
             label="Idioma"
             items={Languages}
@@ -50,19 +50,10 @@ export const UploadChapterFormFields = () => {
           />
         </Form.Row>
       </Form.Category>
-      <ImageDropzone title="Páginas" type="CHAPTER" isCompact>
-        {({ selectedImages }) => (
-          <div className="flex flex-col gap-3">
-            {selectedImages.map((f, i) => (
-              <ImageCard
-                key={f.name}
-                file={f}
-                position={`${i + 1}/${selectedImages.length}`}
-              />
-            ))}
-          </div>
-        )}
-      </ImageDropzone>
+      <ChapterFormImagesCategory />
+      <Form.Actions>
+        <SubmitButton>Salvar</SubmitButton>
+      </Form.Actions>
     </Form.Layout>
   )
 }
