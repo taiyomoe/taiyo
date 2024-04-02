@@ -7,7 +7,7 @@ import { fileTypeValidator } from "../validators/fileType.validator"
 const upload = new Elysia()
   .use(authMiddleware([["mediaChapters", "create"]]))
   .post(
-    "/upload",
+    "/",
     async ({ body, session }) => {
       const media = await MediasService.getById(body.mediaId)
 
