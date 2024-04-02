@@ -15,7 +15,7 @@ const buildResponse = (obj: Record<string, unknown>, status = 200) =>
   })
 
 export const app = new Elysia({ prefix: "/v3" })
-  .use(cors())
+  .use(cors({ origin: true, allowedHeaders: ["Content-Type"] }))
   .use(swagger())
   .error({ ...customErrors })
   .mapResponse(({ response }) => {
