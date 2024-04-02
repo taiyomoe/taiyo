@@ -1,7 +1,7 @@
 import type { Trackers } from "@taiyomoe/db"
 import { DEFAULT_MIME_TYPES } from "../utils/constants"
 
-class HttpError extends Error {
+export class HttpError extends Error {
   status: number
   constructor(status: number, message: string) {
     super(message)

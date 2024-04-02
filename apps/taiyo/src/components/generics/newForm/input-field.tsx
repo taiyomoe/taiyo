@@ -9,19 +9,18 @@ type Props = { name: string } & InputProps
 export const InputField = ({ name, labelPlacement, ...rest }: Props) => (
   <Controller
     name={name}
-    render={({ field, formState: { errors, defaultValues } }) => {
-      const errorMessage = errors[name]?.message?.toString()
-
-      return (
-        <Input
-          color={errorMessage ? "danger" : "default"}
-          defaultValue={defaultValues?.[name] ?? ""}
-          labelPlacement={labelPlacement ?? "outside-left"}
-          errorMessage={errorMessage}
-          {...field}
-          {...rest}
-        />
-      )
-    }}
+    render={({
+      field: { value, ...field },
+      fieldState: { invalid, error },
+    }) => (
+      <Input
+        labelPlacement={labelPlacement ?? "outside-left"}
+        errorMessage={error?.message}
+        isInvalid={invalid}
+        value={value ?? ""}
+        {...field}
+        {...rest}
+      />
+    )}
   />
 )

@@ -7,9 +7,7 @@ type Props = {
 }
 
 export const UpdateMediaInfoTab = ({ media }: Props) => {
-  const mdTracker = media.trackers.find(
-    (t) => t.tracker === "MANGADEX",
-  )?.externalId
+  const mdTracker = media.trackers.find((t) => t.tracker === "MANGADEX")
   const alTracker = media.trackers.find((t) => t.tracker === "ANILIST")
   const malTracker = media.trackers.find((t) => t.tracker === "MYANIMELIST")
 
@@ -28,9 +26,9 @@ export const UpdateMediaInfoTab = ({ media }: Props) => {
     flag: media.flag,
     genres: media.genres,
     tags: media.tags,
-    mdTracker: mdTracker ?? "",
-    alTracker: alTracker ? Number.parseInt(alTracker.externalId) : 0,
-    malTracker: malTracker ? Number.parseInt(malTracker.externalId) : 0,
+    mdId: mdTracker?.externalId ?? "",
+    alId: alTracker ? Number.parseInt(alTracker.externalId) : 0,
+    malId: malTracker ? Number.parseInt(malTracker.externalId) : 0,
   }
 
   return <UpdateMediaForm initialValues={initialValues} />

@@ -27,9 +27,9 @@ export const updateMediaSchema = z
     endDate: z.coerce.date().nullable(),
     genres: MediaGenresSchema.array(),
     tags: z.object({ key: z.enum(TAG_KEYS), isSpoiler: z.boolean() }).array(),
-    mdId z.string().uuid().optional(),
-    alTracker: z.coerce.number().positive().min(30000).optional(),
-    malTracker: z.coerce.number().positive().min(1).optional(),
+    mdId: z.string().uuid().optional(),
+    alId: z.coerce.number().positive().min(30000).optional(),
+    malId: z.coerce.number().positive().min(1).optional(),
   })
   .partial()
   .required({ id: true })
