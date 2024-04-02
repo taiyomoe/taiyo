@@ -3,13 +3,14 @@ import { ChapterFormImagesCategory } from "~/components/forms/chapters/upload/ca
 import { SubmitButton } from "~/components/generics/buttons/new-submit-button"
 import { Form } from "~/components/generics/form/Form"
 import { InputField } from "~/components/generics/newForm/input-field"
+import { MediasField } from "~/components/generics/newForm/medias-field"
 import { SelectField } from "~/components/generics/newForm/select-field"
 
 export const UploadChapterFormFields = () => {
   return (
     <Form.Layout>
       <Form.Category>
-        {/* <MediasSearchAutocomplete /> */}
+        <MediasField />
         <InputField name="title" label="Título" isRequired />
         {/* <ScansFormField /> */}
       </Form.Category>

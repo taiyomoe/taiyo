@@ -2,15 +2,15 @@ import { Autocomplete, AutocompleteItem } from "@nextui-org/autocomplete"
 import { useAsyncList } from "@react-stately/data"
 import type { Key } from "@react-types/shared"
 import type { SearchedMedia } from "@taiyomoe/types"
-import { useFormikContext } from "formik"
 import { parseAsString, useQueryState } from "next-usequerystate"
 import { useEffect } from "react"
+import { useFormContext } from "react-hook-form"
 import { z } from "zod"
 import { api } from "~/trpc/react"
 
-export const MediasSearchAutocomplete = () => {
+export const MediasField = () => {
   const [mediaId] = useQueryState("mediaId", parseAsString.withDefault(""))
-  const { setFieldValue } = useFormikContext()
+  const { setValue } = useFormContext()
   const { mutateAsync } = api.medias.search.useMutation()
 
   const list = useAsyncList<SearchedMedia>({
@@ -21,7 +21,7 @@ export const MediasSearchAutocomplete = () => {
 
       // This is a hack to make the autocomplete work with the mediaId query param
       if (z.string().uuid().safeParse(filterText).success && data.length > 0) {
-        void setFieldValue("mediaId", filterText)
+        setValue("mediaId", filterText)
 
         return {
           items: data,
@@ -41,7 +41,7 @@ export const MediasSearchAutocomplete = () => {
 
     if (!item) return
 
-    void setFieldValue("mediaId", item.id)
+    setValue("mediaId", item.id)
     list.setFilterText(item.title)
     list.removeSelectedItems()
   }

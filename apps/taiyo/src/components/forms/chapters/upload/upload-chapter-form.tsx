@@ -19,8 +19,6 @@ export const UploadChapterForm = () => {
       volume: undefined,
       contentRating: "NORMAL",
       flag: "OK",
-      mediaId: "",
-      files: [],
     },
   })
 

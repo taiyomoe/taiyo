@@ -10,7 +10,7 @@ import { ContentRatingSchema, FlagSchema, LanguagesSchema } from "./prisma"
 export const updateMediaChapterSchema = z.object({
   id: z.string().uuid(),
   title: z.string().nullish(),
-  number: z.coerce.number().min(0).nullable(),
+  number: z.coerce.number().min(0).optional(),
   volume: z.coerce.number().min(0).nullable(),
   language: LanguagesSchema.optional(),
   contentRating: ContentRatingSchema.optional(),
