@@ -5,7 +5,7 @@ import type { InsertMediaChapterFormSchema } from "@taiyomoe/schemas"
 import { toFormikValidationSchema } from "zod-formik-adapter"
 import { Form } from "~/components/generics/form/Form"
 import { useChapterUpload } from "~/hooks/useChapterUpload"
-import { UploadChapterFormFields } from "./UploadChapterFormFields"
+import { UploadChapterFormFields } from "./upload-chapter-form-fields"
 
 const initialValues: InsertMediaChapterFormSchema = {
   title: null,
