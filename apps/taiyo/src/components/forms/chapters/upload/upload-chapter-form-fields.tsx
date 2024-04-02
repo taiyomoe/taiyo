@@ -33,7 +33,6 @@ export const UploadChapterFormFields = () => {
             placeholder="Ex: 1"
             type="number"
             className="chapter-volume"
-            isRequired
           />
         </Form.Row>
         <Form.Row>

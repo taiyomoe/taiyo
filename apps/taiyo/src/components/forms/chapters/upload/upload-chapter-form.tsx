@@ -6,7 +6,9 @@ import {
   uploadChapterSchema,
 } from "@taiyomoe/image-orchestrator"
 import { type SubmitHandler, useForm } from "react-hook-form"
+import { toast } from "sonner"
 import { Form } from "~/components/generics/newForm/new-form"
+import { handleErrors, ioApi } from "~/eden/client"
 import { UploadChapterFormFields } from "./upload-chapter-form-fields"
 
 export const UploadChapterForm = () => {
@@ -19,11 +21,33 @@ export const UploadChapterForm = () => {
       volume: undefined,
       contentRating: "NORMAL",
       flag: "OK",
+      language: "pt_br",
     },
   })
 
   const handleSubmit: SubmitHandler<UploadChapterInput> = async (values) => {
     console.log("values", values)
+
+    toast.promise(ioApi.chapters.upload(values), {
+      loading: "Upando o capítulo...",
+      error: handleErrors("Ocorreu um erro inesperado ao upar o capítulo"),
+      success: () => {
+        const coercedNumber = Number(values.number)
+        const newNumber = Number.isInteger(Number(coercedNumber))
+          ? coercedNumber + 1
+          : coercedNumber + 0.5
+
+        methods.reset({
+          ...values,
+          mediaId: values.mediaId,
+          number: newNumber,
+          volume: values.volume,
+          scanIds: values.scanIds,
+        })
+
+        return "Capítulo upado!"
+      },
+    })
   }
 
   return (
