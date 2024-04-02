@@ -21,7 +21,7 @@ export const MediasField = () => {
 
       // This is a hack to make the autocomplete work with the mediaId query param
       if (z.string().uuid().safeParse(filterText).success && data.length > 0) {
-        setValue("mediaId", filterText)
+        setValue("mediaId", filterText, { shouldValidate: true })
 
         return {
           items: data,
@@ -41,7 +41,7 @@ export const MediasField = () => {
 
     if (!item) return
 
-    setValue("mediaId", item.id)
+    setValue("mediaId", item.id, { shouldValidate: true })
     list.setFilterText(item.title)
     list.removeSelectedItems()
   }

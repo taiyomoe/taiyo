@@ -12,11 +12,9 @@ export const ChapterFormImagesCategory = () => {
   const { getRootProps, getInputProps, open, acceptedFiles } = useDropzone({
     accept: DEFAULT_MIME_TYPES,
     onDrop: (files) => {
-      setValue("files", files)
+      setValue("files", files, { shouldValidate: true })
     },
   })
-
-  console.log("acceptedFiles", acceptedFiles)
 
   return (
     <Form.Category

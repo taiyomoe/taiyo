@@ -7,6 +7,7 @@ type Props = {
   labelPlacement?: InputProps["labelPlacement"]
   className?: string
   id?: string
+  isRequired?: boolean
   children: React.ReactNode
 }
 
@@ -33,6 +34,9 @@ const labelVariants = tv({
         base: "min-w-[100px] mr-6",
       },
     },
+    isRequired: {
+      true: "after:content-['*'] after:text-danger after:ml-0.5",
+    },
   },
 })
 
@@ -41,11 +45,13 @@ export const Label = ({
   labelPlacement = "outside",
   className,
   id,
+  isRequired,
   children,
 }: Props) => {
   const { container, base } = labelVariants({
     hide: label === undefined,
     labelPlacement,
+    isRequired,
   })
 
   return (

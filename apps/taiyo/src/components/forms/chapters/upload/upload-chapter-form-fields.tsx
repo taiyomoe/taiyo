@@ -4,6 +4,7 @@ import { SubmitButton } from "~/components/generics/buttons/new-submit-button"
 import { Form } from "~/components/generics/form/Form"
 import { InputField } from "~/components/generics/newForm/input-field"
 import { MediasField } from "~/components/generics/newForm/medias-field"
+import { ScansField } from "~/components/generics/newForm/scans-field"
 import { SelectField } from "~/components/generics/newForm/select-field"
 
 export const UploadChapterFormFields = () => {
@@ -12,7 +13,7 @@ export const UploadChapterFormFields = () => {
       <Form.Category>
         <MediasField />
         <InputField name="title" label="Título" isRequired />
-        {/* <ScansFormField /> */}
+        <ScansField />
       </Form.Category>
       <Form.Category title="Detalhes">
         <Form.Row>

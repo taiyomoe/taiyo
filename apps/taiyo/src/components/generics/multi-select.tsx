@@ -14,7 +14,9 @@ import Select, {
   type OptionProps,
   type InputProps,
   type ValueContainerProps,
+  type GroupBase,
 } from "react-select"
+import SelectAsync, { type AsyncProps } from "react-select/async"
 import type { SelectItem } from "~/lib/types"
 import { cn } from "~/lib/utils/cn"
 
@@ -117,6 +119,35 @@ export const MultiSelect = <T extends SelectItem>(
   return (
     <Select
       isMulti
+      menuPlacement="auto"
+      noOptionsMessage={() => "Nenhum resultado encontrado"}
+      closeMenuOnSelect={false}
+      components={{
+        Control,
+        Input,
+        ClearIndicator,
+        DropdownIndicator,
+        IndicatorSeparator,
+        ValueContainer,
+        MultiValue,
+        MultiValueLabel,
+        MultiValueRemove,
+        Menu,
+        MenuList,
+        Option,
+      }}
+      {...props}
+    />
+  )
+}
+
+export const MultiSelectAsync = <T extends SelectItem>(
+  props: AsyncProps<T, true, GroupBase<T>>,
+) => {
+  return (
+    <SelectAsync
+      isMulti
+      cacheOptions
       menuPlacement="auto"
       noOptionsMessage={() => "Nenhum resultado encontrado"}
       closeMenuOnSelect={false}
