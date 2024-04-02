@@ -1,8 +1,6 @@
-import type { Trackers } from "@prisma/client"
 import { getMediaIndexItem } from "@taiyomoe/meilisearch/utils"
 import {
   getMediaByIdSchema,
-  insertMediaSchema,
   searchMediaSchema,
   updateMediaSchema,
 } from "@taiyomoe/schemas"
@@ -17,70 +15,6 @@ import { TRPCError } from "@trpc/server"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 
 export const mediasRouter = createTRPCRouter({
-  create: protectedProcedure
-    .meta({
-      resource: "medias",
-      action: "create",
-    })
-    .input(insertMediaSchema)
-    .mutation(
-      async ({
-        ctx,
-        input: { mdTracker, alTracker, malTracker, ...input },
-      }) => {
-        /**
-         * Before creating the media, we need to create the trackers array.
-         * It would be too much of a hassle to create it in the creating object.
-         */
-        const trackers = []
-
-        if (mdTracker) {
-          trackers.push({
-            tracker: "MANGADEX" as Trackers,
-            externalId: mdTracker,
-            creatorId: ctx.session.user.id,
-          })
-        }
-
-        if (alTracker) {
-          trackers.push({
-            tracker: "ANILIST" as Trackers,
-            externalId: alTracker.toString(),
-            creatorId: ctx.session.user.id,
-          })
-        }
-
-        if (malTracker) {
-          trackers.push({
-            tracker: "MYANIMELIST" as Trackers,
-            externalId: malTracker.toString(),
-            creatorId: ctx.session.user.id,
-          })
-        }
-
-        const result = await ctx.db.media.create({
-          data: {
-            ...input,
-            titles: {
-              createMany: {
-                data: input.titles.map((t) => ({
-                  ...t,
-                  creatorId: ctx.session.user.id,
-                })),
-              },
-            },
-            trackers: { createMany: { data: trackers } },
-            creatorId: ctx.session.user.id,
-          },
-        })
-
-        const indexItem = await getMediaIndexItem(ctx.db, result.id)
-        await ctx.indexes.medias.updateDocuments([indexItem])
-
-        return result
-      },
-    ),
-
   update: protectedProcedure
     .meta({ resource: "medias", action: "update" })
     .input(updateMediaSchema)
