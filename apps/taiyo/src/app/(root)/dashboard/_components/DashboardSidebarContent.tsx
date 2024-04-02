@@ -55,7 +55,6 @@ export const DashboardSidebarContent = ({ className }: Props) => {
               label: "Adicionar",
               href: "/dashboard/medias/add",
               type: "create",
-              isDisabled: true,
             },
             {
               label: "Modificar",
