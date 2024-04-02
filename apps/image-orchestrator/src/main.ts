@@ -40,9 +40,6 @@ export const app = new Elysia({ prefix: "/v3" })
       case "VALIDATION":
         return buildResponse({ errors: error.all }, 422)
       default:
-        console.log("code", code)
-        console.error(error)
-
         return buildResponse(
           { errors: ["An unexpected error occured. Please try again later"] },
           500,

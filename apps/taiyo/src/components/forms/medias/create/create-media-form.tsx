@@ -39,8 +39,6 @@ export const CreateMediaForm = () => {
   })
 
   const handleSubmit: SubmitHandler<CreateMediaInput> = async (values) => {
-    console.log("values", values)
-
     toast.promise(ioApi.medias.create(values), {
       loading: "Criando a obra...",
       error: handleErrors("Ocorreu um erro inesperado ao criar a obra"),
