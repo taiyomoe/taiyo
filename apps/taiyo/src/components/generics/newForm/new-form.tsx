@@ -1,4 +1,4 @@
-import { DevTool } from "@hookform/devtools"
+import dynamic from "next/dynamic"
 import {
   type FieldValues,
   FormProvider,
@@ -6,6 +6,11 @@ import {
   type SubmitHandler,
 } from "react-hook-form"
 import { cn } from "~/lib/utils/cn"
+
+const DevTool: React.ElementType = dynamic(
+  () => import("@hookform/devtools").then((module) => module.DevTool),
+  { ssr: false },
+)
 
 type Props = { className?: string; children: React.ReactNode }
 type CategoryProps = { title?: string; actions?: React.ReactNode } & Props
