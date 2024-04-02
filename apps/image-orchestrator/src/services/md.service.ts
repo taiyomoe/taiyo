@@ -30,7 +30,7 @@ const importFn = async (
   const existingMedia = await getById(mdId).catch(() => null)
 
   if (existingMedia) {
-    throw new DuplicatedMediaTrackerError()
+    throw new DuplicatedMediaTrackerError(existingMedia.id, "MANGADEX")
   }
 
   stream.send({

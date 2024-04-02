@@ -16,7 +16,4 @@ export const Input = extendVariants(BaseInput, {
       },
     },
   },
-  defaultVariants: {
-    labelPlacement: "outside-left",
-  },
 })

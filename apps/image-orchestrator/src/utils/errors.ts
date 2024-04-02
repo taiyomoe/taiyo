@@ -1,6 +1,7 @@
+import type { Trackers } from "@taiyomoe/db"
 import { DEFAULT_MIME_TYPES } from "../utils/constants"
 
-class HttpError extends Error {
+export class HttpError extends Error {
   status: number
   constructor(status: number, message: string) {
     super(message)
@@ -33,8 +34,11 @@ export class ScansNotFoundError extends HttpError {
 }
 
 export class DuplicatedMediaTrackerError extends HttpError {
-  constructor() {
-    super(409, "A media with this MangaDex ID already exists")
+  constructor(mediaId: string, tracker: Trackers) {
+    super(
+      409,
+      `A media (${mediaId}) with the same ${tracker} ID already exists`,
+    )
   }
 }
 

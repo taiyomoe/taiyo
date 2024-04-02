@@ -14,8 +14,8 @@ const buildResponse = (obj: Record<string, unknown>, status = 200) =>
     status,
   })
 
-const app = new Elysia({ prefix: "/v3" })
-  .use(cors())
+export const app = new Elysia({ prefix: "/v3" })
+  .use(cors({ origin: true, allowedHeaders: ["Content-Type"] }))
   .use(swagger())
   .error({ ...customErrors })
   .mapResponse(({ response }) => {
@@ -40,7 +40,13 @@ const app = new Elysia({ prefix: "/v3" })
       case "VALIDATION":
         return buildResponse({ errors: error.all }, 422)
       default:
-        return buildResponse({ errors: [error.message] }, 500)
+        console.log("code", code)
+        console.error(error)
+
+        return buildResponse(
+          { errors: ["An unexpected error occured. Please try again later"] },
+          500,
+        )
     }
   })
   .use(mediasController)
@@ -50,5 +56,3 @@ const app = new Elysia({ prefix: "/v3" })
   .listen(4000)
 
 console.log(`Listening on http://localhost:${app.server!.port}`)
-
-export type App = typeof app

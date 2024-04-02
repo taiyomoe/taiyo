@@ -1,5 +1,5 @@
-import { AddMediaForm } from "~/components/forms/medias/AddMediaForm"
+import { CreateMediaForm } from "~/components/forms/medias/create/create-media-form"
 
 export default function Page() {
-  return <AddMediaForm />
+  return <CreateMediaForm />
 }

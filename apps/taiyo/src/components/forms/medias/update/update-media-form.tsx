@@ -7,7 +7,7 @@ import { toast } from "sonner"
 import { Form } from "~/components/generics/newForm/new-form"
 import { ObjectUtils } from "~/lib/utils/object.utils"
 import { api } from "~/trpc/react"
-import { MediaFormFields } from "../media-form-fields"
+import { UpdateMediaFormFields } from "./update-media-form-fields"
 
 type Props = {
   initialValues: UpdateMediaInput
@@ -17,8 +17,8 @@ export const UpdateMediaForm = ({ initialValues }: Props) => {
   const { mutateAsync } = api.medias.update.useMutation()
   const methods = useForm<UpdateMediaInput>({
     resolver: zodResolver(updateMediaSchema),
-    mode: "onTouched",
     defaultValues: initialValues,
+    mode: "onTouched",
   })
 
   const handleSubmit: SubmitHandler<UpdateMediaInput> = (values) => {
@@ -43,7 +43,7 @@ export const UpdateMediaForm = ({ initialValues }: Props) => {
 
   return (
     <Form.Component onSubmit={handleSubmit} {...methods}>
-      <MediaFormFields action="update" />
+      <UpdateMediaFormFields />
     </Form.Component>
   )
 }
