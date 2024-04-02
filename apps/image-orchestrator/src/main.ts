@@ -40,7 +40,10 @@ export const app = new Elysia({ prefix: "/v3" })
       case "VALIDATION":
         return buildResponse({ errors: error.all }, 422)
       default:
-        return buildResponse({ errors: [error.message] }, 500)
+        return buildResponse(
+          { errors: ["An unexpected error occured. Please try again later"] },
+          500,
+        )
     }
   })
   .use(mediasController)
