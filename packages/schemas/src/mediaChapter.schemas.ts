@@ -7,31 +7,16 @@ import { z } from "zod"
 
 import { ContentRatingSchema, FlagSchema, LanguagesSchema } from "./prisma"
 
-export const insertMediaChapterSchema = z.object({
+export const updateMediaChapterSchema = z.object({
   id: z.string().uuid(),
-  title: z.string().nullable(),
-  number: z.coerce.number().min(0).default(0),
-  volume: z.coerce.number().min(0).nullable(),
-  language: LanguagesSchema,
-  pages: z.array(z.string().uuid()),
-  contentRating: ContentRatingSchema,
-  flag: FlagSchema,
-  mediaId: z.string().uuid(),
+  title: z.string().nullish(),
+  number: z.coerce.number().min(0).optional(),
+  volume: z.coerce.number().min(0).nullish(),
+  language: LanguagesSchema.optional(),
+  contentRating: ContentRatingSchema.optional(),
+  flag: FlagSchema.optional(),
   scanIds: z.string().uuid().array(),
 })
-
-export const insertMediaChapterFormSchema = insertMediaChapterSchema.omit({
-  id: true,
-  pages: true,
-})
-
-export const updateMediaChapterSchema = insertMediaChapterSchema
-  .partial()
-  .required({ id: true, scanIds: true })
-  .omit({
-    pages: true,
-    mediaId: true,
-  })
 
 export const bulkUpdateMediaChapterVolumesSchema = z.array(
   z.object({
@@ -61,8 +46,6 @@ export const getMediaChaptersByMediaIdSchema = z.object({
     }),
 })
 
-export type InsertMediaChapterFormSchema =
-  typeof insertMediaChapterFormSchema._type
 export type UpdateMediaChapterSchema = typeof updateMediaChapterSchema._type
 export type BulkUpdateMediaChapterVolumesSchema =
   typeof bulkUpdateMediaChapterVolumesSchema._type

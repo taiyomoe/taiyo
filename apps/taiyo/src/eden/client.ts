@@ -1,4 +1,4 @@
-import type { Media } from "@taiyomoe/db"
+import type { Media, MediaChapter } from "@taiyomoe/db"
 import { HttpError } from "@taiyomoe/image-orchestrator"
 
 export const handleErrors = (defaultMessage: string) => (err: unknown) => {
@@ -67,5 +67,8 @@ const createClient =
 export const ioApi = {
   medias: {
     create: createClient<Media>("medias"),
+  },
+  chapters: {
+    upload: createClient<MediaChapter>("chapters"),
   },
 }

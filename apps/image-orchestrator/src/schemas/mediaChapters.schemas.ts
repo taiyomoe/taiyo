@@ -1,4 +1,4 @@
-import { ContentRating, Flag } from "@taiyomoe/db"
+import { ContentRating, Flag, Languages } from "@taiyomoe/db"
 import { type Static, t } from "elysia"
 import { DEFAULT_MIME_TYPES } from "../utils/constants"
 
@@ -8,6 +8,7 @@ export const uploadChapterSchema = t.Object({
   volume: t.Optional(t.Numeric({ minimum: 0 })),
   contentRating: t.Enum(ContentRating),
   flag: t.Enum(Flag),
+  language: t.Enum(Languages),
   mediaId: t.String({ format: "uuid" }),
   scanIds: t.Array(t.String({ format: "uuid" }), { uniqueItems: true }),
   files: t.Files({ maxItems: 100, maxSize: "10m", type: DEFAULT_MIME_TYPES }),

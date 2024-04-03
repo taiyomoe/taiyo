@@ -4,7 +4,6 @@ import {
   getMediaChapterByIdSchema,
   getMediaChaptersByMediaIdSchema,
   idSchema,
-  insertMediaChapterSchema,
   updateMediaChapterSchema,
 } from "@taiyomoe/schemas"
 import type { MediaChapterLimited } from "@taiyomoe/types"
@@ -14,36 +13,6 @@ import { TRPCError } from "@trpc/server"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 
 export const mediaChaptersRouter = createTRPCRouter({
-  create: protectedProcedure
-    .meta({ resource: "mediaChapters", action: "create" })
-    .input(insertMediaChapterSchema)
-    .mutation(async ({ ctx, input: { pages, scanIds, ...input } }) => {
-      const scans = await ctx.db.scan.findMany({
-        where: { id: { in: scanIds } },
-      })
-
-      if (scans.length !== scanIds.length) {
-        throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: "Uma ou várias scans não existem.",
-        })
-      }
-
-      const result = await ctx.db.mediaChapter.create({
-        data: {
-          ...input,
-          title: input.title === "" ? null : input.title,
-          pages: pages.map((page) => ({ id: page })),
-          scans: {
-            connect: scanIds.map((scanId) => ({ id: scanId })),
-          },
-          uploaderId: ctx.session.user.id,
-        },
-      })
-
-      return result
-    }),
-
   update: protectedProcedure
     .meta({ resource: "mediaChapters", action: "update" })
     .input(updateMediaChapterSchema)

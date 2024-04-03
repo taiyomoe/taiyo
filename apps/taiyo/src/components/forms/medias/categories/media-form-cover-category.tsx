@@ -3,19 +3,15 @@ import { useDropzone } from "react-dropzone"
 import { useFormContext } from "react-hook-form"
 import { Form } from "~/components/generics/newForm/new-form"
 import { cn } from "~/lib/utils/cn"
+import { DEFAULT_MIME_TYPES } from "~/lib/utils/constants"
 
 export const MediaFormCoverCategory = () => {
   const { setValue } = useFormContext()
   const { getRootProps, getInputProps, acceptedFiles } = useDropzone({
-    onDrop: (files) => {
-      setValue("cover", files[0])
-    },
+    accept: DEFAULT_MIME_TYPES,
     maxFiles: 1,
-    accept: {
-      "image/webp": [".webp"],
-      "image/jpeg": [".jpg", ".jpeg"],
-      "image/png": [".png"],
-      "image/gif": [".gif"],
+    onDrop: (files) => {
+      setValue("cover", files[0], { shouldValidate: true, shouldDirty: true })
     },
   })
 
@@ -26,7 +22,7 @@ export const MediaFormCoverCategory = () => {
           <section
             {...getRootProps({
               className: cn(
-                "h-[300px] min-w-[200px] max-w-[200px] w-full rounded-medium bg-default-100 transition-background !duration-150 hover:cursor-pointer hover:bg-default-200 flex flex-col text-center justify-center gap-6",
+                "h-[300px] min-w-[200px] max-w-[200px] w-full rounded-medium bg-default-100 transition-background !duration-150 flex flex-col text-center justify-center gap-6",
                 {
                   "p-3 border border-dashed border-default":
                     acceptedFiles.length === 0,
