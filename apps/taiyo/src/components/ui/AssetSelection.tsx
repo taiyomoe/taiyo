@@ -8,8 +8,9 @@ type Props = {
 
 const imageSelection = tv({
   slots: {
-    container: "my-8 flex w-full flex-col items-center justify-center gap-16",
-    illustration: "h-auto w-2/4",
+    container:
+      "my-8 flex w-full flex-col items-center justify-center gap-16 xl:flex-row xl:gap-24",
+    illustration: "h-auto w-2/4 max-w-80 xl:max-w-96",
     contentWrapper: "text-center",
   },
   variants: {
