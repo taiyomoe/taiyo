@@ -14,7 +14,7 @@ type Props = {
 
 const sidebarCrudButton = tv({
   slots: {
-    base: "text-md justify-end gap-4 px-2 font-medium w-full",
+    base: "w-full justify-end gap-4 px-2 font-medium text-md",
   },
 })
 

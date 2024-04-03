@@ -9,7 +9,7 @@ import { ReaderSidebarMediaTitle } from "./ReaderSidebarMediaTitle"
 const readerSidebarHeader = tv({
   slots: {
     container: "flex w-full items-center gap-2",
-    text: "text-lg font-semibold",
+    text: "font-semibold text-lg",
     icon: "",
   },
   variants: {

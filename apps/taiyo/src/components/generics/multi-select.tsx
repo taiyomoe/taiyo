@@ -28,7 +28,7 @@ export type MultiSelectProps<T> = Omit<
 const Control = <T,>(props: ControlProps<T, true>) => (
   <components.Control
     {...props}
-    className="!bg-default-100 hover:!bg-default-200 !transition-background !motion-reduce:transition-none !duration-150 !rounded-medium !border-none !ring-0 hover:!cursor-text !min-h-10"
+    className="!bg-default-100 hover:!bg-default-200 !transition-background !duration-150 !rounded-medium !border-none !ring-0 hover:!cursor-text !min-h-10 !motion-reduce:transition-none"
   />
 )
 
@@ -42,14 +42,14 @@ const Input = <T,>(props: InputProps<T, true>) => (
 const ClearIndicator = <T,>(props: ClearIndicatorProps<T, true>) => (
   <components.ClearIndicator
     {...props}
-    className="hover:cursor-pointer !text-default-400 child:hover:!text-default-600"
+    className="!text-default-400 child:hover:!text-default-600 hover:cursor-pointer"
   />
 )
 
 const DropdownIndicator = <T,>(props: DropdownIndicatorProps<T, true>) => (
   <components.DropdownIndicator
     {...props}
-    className="hover:cursor-pointer !text-default-400 child:hover:!text-default-600"
+    className="!text-default-400 child:hover:!text-default-600 hover:cursor-pointer"
   />
 )
 
@@ -107,7 +107,7 @@ const MenuList = <T,>(props: MenuListProps<T, true>) => (
 const Option = <T,>(props: OptionProps<T, true>) => (
   <components.Option
     {...props}
-    className={cn("text-small font-normal truncate rounded-medium", {
+    className={cn("truncate rounded-medium font-normal text-small", {
       "!bg-default": props.isFocused,
     })}
   />

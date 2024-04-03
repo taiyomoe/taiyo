@@ -37,7 +37,7 @@ export const AddToUserLibraryButton = ({ media }: Props) => {
     <Popover placement="bottom" showArrow title="Biblioteca">
       <PopoverTrigger>
         <Button
-          className="text-md h-[38px] w-full font-medium md:w-auto"
+          className="h-[38px] w-full font-medium text-md md:w-auto"
           color="primary"
           radius="sm"
         >

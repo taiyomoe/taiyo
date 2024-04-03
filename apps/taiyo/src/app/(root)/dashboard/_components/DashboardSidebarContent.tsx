@@ -10,11 +10,11 @@ type Props = {
 
 const sidebarContent = tv({
   slots: {
-    container: "flex flex-col gap-4 max-w-[inherit]",
+    container: "flex max-w-[inherit] flex-col gap-4",
     categorytitle:
-      "uppercase text-small text-default-300 font-semibold select-none",
+      "select-none font-semibold text-default-300 text-small uppercase",
     categoryIndicator: "text-default-300",
-    categoryItemButton: "text-md justify-end gap-4 px-2 font-medium w-full",
+    categoryItemButton: "w-full justify-end gap-4 px-2 font-medium text-md",
   },
 })
 

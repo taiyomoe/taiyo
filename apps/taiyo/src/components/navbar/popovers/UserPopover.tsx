@@ -28,7 +28,7 @@ export const UserPopover = ({ session }: Props) => {
           <Button
             as={NextLink}
             href={`/user/${session.user.id}`}
-            className="justify-end gap-3 p-2 text-medium font-medium"
+            className="justify-end gap-3 p-2 font-medium text-medium"
             endContent={<LinkIcon />}
             variant="light"
             isDisabled
@@ -39,7 +39,7 @@ export const UserPopover = ({ session }: Props) => {
             <Button
               as={NextLink}
               href={"/dashboard"}
-              className="justify-end gap-3 p-2 text-medium font-medium"
+              className="justify-end gap-3 p-2 font-medium text-medium"
               endContent={<GaugeIcon />}
               variant="light"
               color="warning"

@@ -7,7 +7,7 @@ import { CompanyLogo } from "~/components/ui/CompanyLogo"
 export const GoogleButton = () => {
   return (
     <Button
-      className="hover:bg-google/80 w-full bg-google text-medium font-medium text-google-foreground"
+      className="w-full bg-google font-medium text-google-foreground text-medium hover:bg-google/80"
       startContent={<CompanyLogo company="google" height={28} />}
       onClick={() => signIn("google")}
       radius="full"

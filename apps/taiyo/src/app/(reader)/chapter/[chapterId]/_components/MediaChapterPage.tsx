@@ -11,11 +11,11 @@ import { useReaderSettingsStore } from "~/stores"
 import { MediaChapterImages } from "./MediaChapterImages"
 
 const mediaChapterPage = tv({
-  base: "grid-in-chapter min-w-0 outline-none relative flex flex-col h-fit min-h-[calc(100dvh-var(--navbar-height))] data-[navbar-mode=hover]:min-h-dvh",
+  base: "grid-in-chapter relative flex h-fit min-h-[calc(100dvh-var(--navbar-height))] min-w-0 flex-col outline-none data-[navbar-mode=hover]:min-h-dvh",
   variants: {
     width: {
       fit: "",
-      full: "overflow-x-auto scrollbar-thin scrollbar-track-content1 scrollbar-thumb-primary",
+      full: "scrollbar-thin scrollbar-track-content1 scrollbar-thumb-primary overflow-x-auto",
     },
   },
 })
@@ -85,7 +85,7 @@ export const MediaChapterPage = () => {
       <MediaChapterPageOverlay />
       <MediaChapterImages />
       {mode === "longstrip" && (
-        <div className="p-bodyPadding flex justify-center">
+        <div className="flex justify-center p-bodyPadding">
           <ReaderSettingsMediaChapterDropdown />
         </div>
       )}

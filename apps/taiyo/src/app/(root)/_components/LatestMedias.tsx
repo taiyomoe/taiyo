@@ -7,7 +7,7 @@ type Props = {
 
 export const LatestMedias = ({ latestMedias }: Props) => (
   <div className="flex w-full flex-col gap-6">
-    <p className="text-2xl font-medium">Últimas obras adicionadas</p>
+    <p className="font-medium text-2xl">Últimas obras adicionadas</p>
     <SwipeableLatestMedias medias={latestMedias} />
   </div>
 )

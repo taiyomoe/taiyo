@@ -21,7 +21,7 @@ type Props = {
 const imageDropzone = tv({
   slots: {
     container:
-      "min-h-unit-24 w-full rounded-medium border border-dashed border-default-300 bg-default-100 p-3 transition-all !duration-150",
+      "!duration-150 min-h-unit-24 w-full rounded-medium border border-default-300 border-dashed bg-default-100 p-3 transition-all",
   },
   variants: {
     disabled: {
@@ -32,7 +32,7 @@ const imageDropzone = tv({
     compact: {
       true: {
         container:
-          "max-h-[498px] overflow-y-auto scrollbar-track-content2 scrollbar-thumb-primary scrollbar-thin",
+          "scrollbar-track-content2 scrollbar-thumb-primary scrollbar-thin max-h-[498px] overflow-y-auto",
       },
     },
   },

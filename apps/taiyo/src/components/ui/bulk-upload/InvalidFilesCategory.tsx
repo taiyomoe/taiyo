@@ -7,14 +7,14 @@ type Props = {
 }
 
 export const InvalidFilesCategory = ({ title, files }: Props) => (
-  <div className="flex gap-2 flex-col">
-    <div className="flex gap-2 items-center">
+  <div className="flex flex-col gap-2">
+    <div className="flex items-center gap-2">
       <AlertTriangleIcon className="text-warning" size={20} />
       <h3 className="font-medium">{title}</h3>
     </div>
-    <div className="flex flex-col overflow-x-auto scrollbar-thin scrollbar-track-content2">
+    <div className="scrollbar-thin scrollbar-track-content2 flex flex-col overflow-x-auto">
       {files.map((file) => (
-        <p key={file.path} className="text-sm text-default-500 text-nowrap">
+        <p key={file.path} className="text-nowrap text-default-500 text-sm">
           {file.path}
         </p>
       ))}

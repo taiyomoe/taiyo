@@ -21,7 +21,7 @@ export const FolderCard = ({ folder, position }: Props) => {
       case compressing.includes(chapterNumber):
         return (
           <RefreshCwIcon
-            className="text-blue-400 animate-spin-medium"
+            className="animate-spin-medium text-blue-400"
             size={20}
           />
         )
@@ -38,11 +38,11 @@ export const FolderCard = ({ folder, position }: Props) => {
     <Card className="bg-content2">
       <CardBody>
         <div className="flex justify-between">
-          <div className="flex gap-4 items-center">
+          <div className="flex items-center gap-4">
             {computeStatusIcon}
             <p>
               Capítulo {chapterNumber}{" "}
-              <span className="text-sm text-default-500">
+              <span className="text-default-500 text-sm">
                 ({files.length} imagens, {prettyBytes(totalBytes)})
               </span>
             </p>

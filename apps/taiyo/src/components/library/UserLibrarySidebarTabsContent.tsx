@@ -50,7 +50,7 @@ export const UserLibrarySidebarTabsContent = ({ status }: Props) => {
           height={150}
           alt="empty"
         />
-        <p className="text-lg font-medium">Nenhuma obra encontrada</p>
+        <p className="font-medium text-lg">Nenhuma obra encontrada</p>
       </div>
     )
   }
@@ -62,14 +62,14 @@ export const UserLibrarySidebarTabsContent = ({ status }: Props) => {
           <Image
             as={NextImage}
             src={MediaCoverUtils.getUrl(media)}
-            className="object-fit h-full min-w-[60px] rounded-small"
+            className="h-full min-w-[60px] rounded-small object-fit"
             width={60}
             height={80}
             alt="media's cover"
           />
           <div className="flex grow flex-col justify-between gap-1">
             <Link
-              className="line-clamp-1 text-lg font-medium hover:underline"
+              className="line-clamp-1 font-medium text-lg hover:underline"
               href={MediaUtils.getUrl(media)}
             >
               {media.mainTitle}

@@ -10,7 +10,7 @@ const readerSidebarOpenOverlay = tv({
     button:
       "group flex select-none flex-col items-center p-8 text-neutral-300 opacity-0 transition-all hover:cursor-pointer hover:opacity-100",
     accent: "group-hover:shadow-intense",
-    text: "text-large mb-2 font-medium",
+    text: "mb-2 font-medium text-large",
   },
   variants: {
     hide: {

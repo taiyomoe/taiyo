@@ -22,7 +22,7 @@ export const SwipeableLatestMedias = ({ medias }: Props) => {
             key={media.id}
             href={`/media/${media.id}`}
             className={cn(
-              "relative hover:cursor-pointer w-fit min-h-[300px] max-h-[300px]",
+              "relative max-h-[300px] min-h-[300px] w-fit hover:cursor-pointer",
               {
                 "mr-6": i !== medias.length - 1,
               },

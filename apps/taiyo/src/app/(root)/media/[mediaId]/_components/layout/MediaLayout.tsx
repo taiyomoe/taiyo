@@ -11,9 +11,9 @@ export const MediaLayout = ({ media, children }: Props) => {
   return (
     <main className="h-full">
       <MediaLayoutBanner media={media} />
-      <div className="px-bodyPadding pb-bodyPadding gap-bodyPadding -mt-28 flex flex-col md:flex-row xl:-mt-36">
+      <div className="-mt-28 xl:-mt-36 flex flex-col gap-bodyPadding px-bodyPadding pb-bodyPadding md:flex-row">
         <MediaLayoutLeftPanel media={media} />
-        <section className="z-10 flex flex-col md:w-[calc(100vw-(258px+calc(var(--body-padding)*3)))] lg:w-[calc(100vw-(308px+calc(var(--body-padding)*3)))]">
+        <section className="z-10 flex flex-col lg:w-[calc(100vw-(308px+calc(var(--body-padding)*3)))] md:w-[calc(100vw-(258px+calc(var(--body-padding)*3)))]">
           {children}
         </section>
       </div>

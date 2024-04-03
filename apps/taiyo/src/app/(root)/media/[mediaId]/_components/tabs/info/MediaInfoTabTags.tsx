@@ -14,7 +14,7 @@ export const MediaInfoTabTags = ({ media }: Props) => (
           {media.tags.map((item) => (
             <div
               key={item.key}
-              className="flex select-none gap-1 rounded-md bg-default-200 px-2 py-1.5 text-sm text-foreground"
+              className="flex select-none gap-1 rounded-md bg-default-200 px-2 py-1.5 text-foreground text-sm"
             >
               <p>{TAGS_PT[item.key].name}</p>
             </div>

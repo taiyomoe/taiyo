@@ -13,7 +13,7 @@ export const ReaderSidebarUploadersSection = ({ className }: Props) => {
 
   return (
     <div className={className}>
-      <p className="text-md font-medium">Upado por</p>
+      <p className="font-medium text-md">Upado por</p>
       <div className="flex flex-col gap-2">
         <MediaChapterUploader uploader={chapter?.uploader} size="md" />
         <MediaChapterScans

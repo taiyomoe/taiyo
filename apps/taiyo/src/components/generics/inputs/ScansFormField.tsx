@@ -11,7 +11,7 @@ import { api } from "~/trpc/react"
 
 const scansFormField = tv({
   slots: {
-    container: "flex flex-col gap-4 w-full",
+    container: "flex w-full flex-col gap-4",
     chipsContainer: "flex flex-wrap gap-2",
     label: "z-0",
   },

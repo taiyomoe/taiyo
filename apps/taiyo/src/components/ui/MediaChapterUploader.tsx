@@ -15,7 +15,7 @@ const mediaChapterUploader = tv({
     container: "flex w-full items-center",
     icon: "w-auto",
     skeleton: "grow",
-    link: "hover:bg-content3 select-none px-2",
+    link: "select-none px-2 hover:bg-content3",
   },
   variants: {
     size: {
@@ -23,13 +23,13 @@ const mediaChapterUploader = tv({
         container: "gap-1",
         icon: "h-4 md:h-5",
         skeleton: "rounded",
-        link: "text-sm rounded",
+        link: "rounded text-sm",
       },
       md: {
         container: "gap-2",
         icon: "h-5",
-        skeleton: "rounded-md h-6",
-        link: "text-md rounded-md",
+        skeleton: "h-6 rounded-md",
+        link: "rounded-md text-md",
       },
     },
   },

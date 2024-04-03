@@ -33,7 +33,7 @@ export const MediaSearchModal = ({ className }: Props) => {
         hideCloseButton
       >
         <ModalContent className="m-4 p-4 shadow-none">
-          <ModalHeader className="drop-shadow-accent justify-center px-0 text-center text-4xl font-bold">
+          <ModalHeader className="justify-center px-0 text-center font-bold text-4xl drop-shadow-accent">
             Pesquisar
           </ModalHeader>
           <ModalBody className="p-0">

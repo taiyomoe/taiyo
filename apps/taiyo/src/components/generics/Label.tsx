@@ -16,7 +16,7 @@ export type LabelProps = Omit<Props, "children">
 const labelVariants = tv({
   slots: {
     container: "flex min-w-fit",
-    base: "block text-small text-foreground pb-1.5 will-change-auto origin-top-left transition-all !duration-200 !ease-out motion-reduce:transition-none",
+    base: "!duration-200 !ease-out block origin-top-left pb-1.5 text-foreground text-small transition-all will-change-auto motion-reduce:transition-none",
   },
   variants: {
     hide: {
@@ -31,11 +31,11 @@ const labelVariants = tv({
       },
       "outside-left": {
         container: "items-center",
-        base: "min-w-[100px] mr-6",
+        base: "mr-6 min-w-[100px]",
       },
     },
     isRequired: {
-      true: "after:content-['*'] after:text-danger after:ml-0.5",
+      true: "after:ml-0.5 after:text-danger after:content-['*']",
     },
   },
 })

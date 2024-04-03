@@ -51,7 +51,7 @@ export const BulkUpdateChapterVolumesFormFields = ({ chapters }: Props) => {
                     label="Volume"
                     labelPlacement="outside"
                     placeholder="3"
-                    className="min-w-[100px] w-[100px]"
+                    className="w-[100px] min-w-[100px]"
                   />
                   <RangeFormField name={`[${i}].ids`} chapters={chapters} />
                   <FormDeleteButton

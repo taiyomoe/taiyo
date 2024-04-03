@@ -12,13 +12,13 @@ import { ReaderSidebarOpenButton } from "./readerSidebar/ui/ReaderSidebarOpenBut
 const mediaChapterPageOverlay = tv({
   slots: {
     container:
-      "fixed z-10 w-full px-bodyPadding bg-black bg-opacity-60 transition-all invisible data-[show=true]:visible",
+      "invisible fixed z-10 w-full bg-black bg-opacity-60 px-bodyPadding transition-all data-[show=true]:visible",
     topContainer:
-      "top-0 -mt-[100px] h-[100px] space-y-4 py-2 data-[show=true]:mt-0",
+      "-mt-[100px] top-0 h-[100px] space-y-4 py-2 data-[show=true]:mt-0",
     bottomContainer:
-      "bottom-0 -mb-[100px] flex justify-end gap-4 py-3 data-[show=true]:mb-0",
+      "-mb-[100px] bottom-0 flex justify-end gap-4 py-3 data-[show=true]:mb-0",
     title:
-      "line-clamp-1 text-center text-2xl font-semibold drop-shadow-accent hover:underline",
+      "line-clamp-1 text-center font-semibold text-2xl drop-shadow-accent hover:underline",
   },
   variants: {
     navbarMode: {

@@ -23,8 +23,8 @@ const mediaChapterCardTemporary = tv({
     card: "w-full",
     cardBody: "p-3",
     contentWrapper: "grid grid-cols-5 grid-rows-2 gap-1",
-    titleWrapper: "flex gap-3 col-span-3",
-    title: "text-sm font-semibold line-clamp-1",
+    titleWrapper: "col-span-3 flex gap-3",
+    title: "line-clamp-1 font-semibold text-sm",
     uploadedTime: "col-span-2 truncate",
     scans: "col-span-3",
     uploader: "col-span-2",
@@ -36,7 +36,7 @@ const mediaChapterCardTemporary = tv({
         card: "pl-[2px]",
       },
       false: {
-        card: "border-l-2 border-primary rounded-md",
+        card: "rounded-md border-primary border-l-2",
       },
     },
     order: {

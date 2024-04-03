@@ -11,7 +11,7 @@ export const MediaLayoutLeftPanel = ({ media }: Props) => {
   const coverUrl = MediaCoverUtils.getUrl(media)
 
   return (
-    <section className="z-10 flex h-fit flex-col items-center gap-8 md:sticky md:top-[calc(var(--navbar-height)+36px)] w-[250px] lg:w-[300px]">
+    <section className="z-10 flex h-fit w-[250px] flex-col items-center gap-8 md:sticky md:top-[calc(var(--navbar-height)+36px)] lg:w-[300px]">
       <MediaImage
         src={coverUrl}
         classNames={{
