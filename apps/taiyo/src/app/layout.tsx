@@ -39,8 +39,8 @@ export default function Layout({ children }: LayoutProps) {
     <html lang="en" suppressHydrationWarning>
       <body
         className={cn(
-          ["font-sans", fontSans.variable].join(" "),
-          "h-full min-h-dvh bg-background scrollbar-thin scrollbar-track-content1 scrollbar-thumb-primary",
+          ["font-sans", fontSans.variable].join(""),
+          "scrollbar-thin scrollbar-track-content1 scrollbar-thumb-primary h-full min-h-dvh bg-background",
         )}
       >
         <Providers>{children}</Providers>

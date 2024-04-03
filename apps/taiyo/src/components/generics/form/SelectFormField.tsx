@@ -15,7 +15,7 @@ type Props<T> = {
 
 const select = tv({
   slots: {
-    container: "flex items-end gap-6 w-full",
+    container: "flex w-full items-end gap-6",
     label: "z-0",
   },
   variants: {
@@ -25,7 +25,7 @@ const select = tv({
         container: "h-[66px]",
       },
       "outside-left": {
-        label: "min-w-[100px] mr-6",
+        label: "mr-6 min-w-[100px]",
       },
     },
     shouldDisplayError: {

@@ -65,7 +65,7 @@ export const MediaLayoutChaptersTab = ({ media }: Props) => {
           className="h-[40vh] w-auto"
           alt="alien taken by aliens"
         />
-        <p className="text-2xl font-semibold">Sem capítulos no momento</p>
+        <p className="font-semibold text-2xl">Sem capítulos no momento</p>
       </div>
     )
   }

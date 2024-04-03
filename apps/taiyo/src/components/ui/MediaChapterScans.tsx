@@ -17,7 +17,7 @@ const mediaChapterScans = tv({
     icon: "w-auto",
     skeleton: "grow",
     link: "hover:bg-content3",
-    text: "select-none px-2 truncate",
+    text: "select-none truncate px-2",
   },
   variants: {
     size: {
@@ -32,14 +32,14 @@ const mediaChapterScans = tv({
         container: "gap-2",
         iconContainer: "h-6",
         icon: "h-5",
-        skeleton: "rounded-md h-6",
+        skeleton: "h-6 rounded-md",
         link: "rounded-md",
         text: "text-md",
       },
     },
     orientation: {
       horizontal: {
-        linkContainer: "flex-row overflow-x-scroll scrollbar-none",
+        linkContainer: "scrollbar-none flex-row overflow-x-scroll",
       },
       vertical: {
         linkContainer: "flex-col",

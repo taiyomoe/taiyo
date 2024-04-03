@@ -21,9 +21,9 @@ export const AuthCard = () => {
               className="absolute inset-0 flex items-center"
               aria-hidden="true"
             >
-              <div className="w-full border-t border-content1-foreground/20" />
+              <div className="w-full border-content1-foreground/20 border-t" />
             </div>
-            <div className="relative flex justify-center text-sm font-medium leading-6">
+            <div className="relative flex justify-center font-medium text-sm leading-6">
               <span className="select-none bg-content1 px-6 text-content1-foreground/40">
                 Ou continue com
               </span>

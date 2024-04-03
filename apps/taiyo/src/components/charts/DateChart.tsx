@@ -27,8 +27,8 @@ export const DateChart = ({ id, title, series }: Props) => {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-medium">{title}</h2>
+      <div className="flex items-center justify-between">
+        <h2 className="font-medium text-2xl">{title}</h2>
         <DateRangeDropdown onChange={handleChange} />
       </div>
       <Chart

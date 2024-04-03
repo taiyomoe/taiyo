@@ -30,13 +30,13 @@ export const SwipeableTrendingMedias = ({ medias }: Props) => {
 
   return (
     <div className="overflow-hidden" ref={emblaRef}>
-      <div className="flex flex-row md:flex-col max-h-[400px] md:max-h-[498px]">
+      <div className="flex max-h-[400px] flex-row md:max-h-[498px] md:flex-col">
         {medias.map((media, i) => (
           <Link
             key={media.id}
             href={`/media/${media.id}`}
             className={cn(
-              "relative hover:cursor-pointer min-h-[400px] max-h-[400px] md:min-h-[498px] md:max-h-[498px]",
+              "relative max-h-[400px] min-h-[400px] md:max-h-[498px] md:min-h-[498px] hover:cursor-pointer",
               {
                 "mr-6": !device?.isAboveTablet && i !== medias.length - 1,
                 "mb-6": device?.isAboveTablet && i !== medias.length - 1,

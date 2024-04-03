@@ -15,7 +15,7 @@ export const MediaLayoutLeftPanelTitle = ({ media }: Props) => {
 
   return (
     <h2
-      className="line-clamp-2 hidden text-center text-2xl font-semibold transition-all hover:cursor-pointer hover:underline md:block"
+      className="line-clamp-2 hidden text-center font-semibold text-2xl transition-all md:block hover:cursor-pointer hover:underline"
       style={{ opacity }}
       onClick={handleClick}
     >

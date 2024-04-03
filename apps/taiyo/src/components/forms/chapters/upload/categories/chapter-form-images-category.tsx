@@ -29,7 +29,7 @@ export const ChapterFormImagesCategory = () => {
       <Card className="h-full rounded-medium">
         <CardBody
           as="section"
-          className="max-h-[498px] scrollbar-track-content2 scrollbar-thumb-primary scrollbar-thin border-dashed border-default data-[selected=false]:border rounded-medium data-[selected=true]:rounded-r-none transition-background !duration-150 data-[selected=false]:hover:cursor-pointer data-[selected=false]:hover:bg-default-200 data-[selected=true]:gap-3"
+          className="scrollbar-track-content2 scrollbar-thumb-primary scrollbar-thin !duration-150 max-h-[498px] rounded-medium border-default border-dashed transition-background data-[selected=false]:hover:cursor-pointer data-[selected=true]:gap-3 data-[selected=true]:rounded-r-none data-[selected=false]:border data-[selected=false]:hover:bg-default-200"
           data-selected={selectedFiles.length !== 0}
           {...getRootProps()}
         >

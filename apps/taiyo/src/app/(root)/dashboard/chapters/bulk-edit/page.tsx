@@ -10,7 +10,7 @@ export default function Page() {
 
   return (
     <div className="flex flex-col gap-12">
-      <p className="text-4xl font-semibold">Modificar capítulos em massa</p>
+      <p className="font-semibold text-4xl">Modificar capítulos em massa</p>
       <div className="flex flex-col gap-8">
         <MediaSearchAutocomplete
           className="w-full"

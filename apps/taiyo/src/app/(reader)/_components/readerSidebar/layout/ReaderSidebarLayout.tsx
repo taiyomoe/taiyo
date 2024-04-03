@@ -13,19 +13,19 @@ import { ReaderSidebarHeader } from "../ui/ReaderSidebarHeader"
 const readerSidebarLayout = tv({
   slots: {
     container:
-      "bg-content1 transition-all z-30 h-full -mt-navbar fixed shadow-xl md:sticky md:shadow-none data-[navbar-mode=hover]:mt-0  data-[page-mode=longstrip]:h-[calc(100%+var(--navbar-height))]",
+      "-mt-navbar fixed z-30 h-full bg-content1 shadow-xl transition-all md:sticky data-[navbar-mode=hover]:mt-0 data-[page-mode=longstrip]:h-[calc(100%+var(--navbar-height))] md:shadow-none",
     contentWrapper:
-      "bg-content1 w-[calc(var(--reader-sidebar-width)-1px)] max-w-[calc(var(--reader-sidebar-width)-1px)] right-[unset] width-[unset] flex flex-col gap-2 p-4 pt-0 overflow-x-hidden overflow-y-auto top-0 max-h-dvh sticky scrollbar-thin scrollbar-track-content2 scrollbar-thumb-content3",
+      "width-[unset] scrollbar-thin scrollbar-track-content2 scrollbar-thumb-content3 sticky top-0 right-[unset] flex max-h-dvh w-[calc(var(--reader-sidebar-width)-1px)] max-w-[calc(var(--reader-sidebar-width)-1px)] flex-col gap-2 overflow-y-auto overflow-x-hidden bg-content1 p-4 pt-0",
   },
   variants: {
     side: {
       left: {
         container:
-          "border-r-divider border-r -ml-readerSidebar aria-expanded:ml-0 grid-in-leftSidebar left-0 md:left-[unset]",
+          "-ml-readerSidebar grid-in-leftSidebar left-0 border-r border-r-divider md:left-[unset] aria-expanded:ml-0",
       },
       right: {
         container:
-          "border-l-divider border-l -mr-readerSidebar aria-expanded:mr-0 grid-in-rightSidebar right-0 md:right-[unset]",
+          "-mr-readerSidebar grid-in-rightSidebar right-0 border-l border-l-divider md:right-[unset] aria-expanded:mr-0",
       },
     },
   },

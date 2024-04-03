@@ -24,7 +24,7 @@ const readerSettingsMediaChapterDropdown = tv({
     skeleton: "h-9 w-full rounded-lg",
     dropdownBase: "rounded-r-none p-0",
     dropdownMenu:
-      "scrollbar-track-content3 scrollbar-thumb-rounded-none max-h-[300px] overflow-y-scroll p-2 scrollbar-thin scrollbar-thumb-primary",
+      "scrollbar-track-content3 scrollbar-thumb-rounded-none scrollbar-thin scrollbar-thumb-primary max-h-[300px] overflow-y-scroll p-2",
   },
 })
 

@@ -14,7 +14,7 @@ export const MediaInfoTabGenres = ({ media }: Props) => (
           {media.genres.map((item) => (
             <div
               key={item}
-              className="flex select-none gap-1 rounded-md bg-default-200 px-2 py-1.5 text-sm text-foreground"
+              className="flex select-none gap-1 rounded-md bg-default-200 px-2 py-1.5 text-foreground text-sm"
             >
               <p>{GENRES_PT[item]}</p>
             </div>

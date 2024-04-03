@@ -16,9 +16,9 @@ import { NavbarUserLibraryButton } from "./buttons/NavbarUserLibraryButton"
 const navbar = tv({
   slots: {
     container:
-      "h-navbar max-h-navbar w-full flex flex-col justify-center z-20 group child:relative p-0 md:p-[unset] data-[sidebar-state=hide]:!p-0 data-[sidebar-side=left]:pl-readerSidebar data-[sidebar-side=right]:pr-readerSidebar",
+      "group data-[sidebar-state=hide]:!p-0 z-20 flex h-navbar max-h-navbar w-full flex-col justify-center p-0 child:relative md:p-[unset] data-[sidebar-side=right]:pr-readerSidebar data-[sidebar-side=left]:pl-readerSidebar",
     contentWrapper:
-      "items-center px-bodyPadding flex grow justify-between bg-background transition-all",
+      "flex grow items-center justify-between bg-background px-bodyPadding transition-all",
   },
   variants: {
     mode: {
@@ -27,7 +27,7 @@ const navbar = tv({
         container: "sticky top-0",
       },
       hover: {
-        container: "fixed top-0 child:-top-navbar",
+        container: "child:-top-navbar fixed top-0",
         contentWrapper: "group-hover:top-0",
       },
     },
@@ -64,16 +64,16 @@ export const Navbar = ({ popover }: Props) => {
       <nav className={slots.contentWrapper()}>
         <Link
           href="/"
-          className="flex md:hidden items-center gap-2 select-none"
+          className="flex select-none items-center gap-2 md:hidden"
         >
           <CompanyLogo company="taiyo" width={35} priority />
         </Link>
         <Link
           href="/"
-          className="hidden md:flex items-center gap-3 select-none"
+          className="hidden select-none items-center gap-3 md:flex"
         >
           <CompanyLogo company="taiyo" width={35} priority />
-          <p className="text-xl font-semibold">Taiyō</p>
+          <p className="font-semibold text-xl">Taiyō</p>
           <Chip color="primary" size="sm">
             ALPHA
           </Chip>

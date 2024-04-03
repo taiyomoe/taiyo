@@ -102,7 +102,7 @@ export const BulkUpdateChapterVolumesForm = (props: Props) => {
             .join(", ")}
         </AccordionItem>
       </Accordion>
-      <div className="flex gap-2 items-center">
+      <div className="flex items-center gap-2">
         <AlertTriangleIcon className="text-warning" />
         <p>Use -1 para remover o volume de um capítulo.</p>
       </div>

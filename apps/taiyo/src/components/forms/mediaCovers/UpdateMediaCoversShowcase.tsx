@@ -45,7 +45,7 @@ export const UpdateMediaCoversShowcase = ({ media }: Props) => {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col justify-between gap-2 md:flex-row md:items-center">
-        <h3 className="line-clamp-1 text-2xl font-medium">Covers por volume</h3>
+        <h3 className="line-clamp-1 font-medium text-2xl">Covers por volume</h3>
         <div className="flex gap-2">
           <Select
             classNames={{
@@ -85,7 +85,7 @@ export const UpdateMediaCoversShowcase = ({ media }: Props) => {
         </div>
       </div>
       <Card>
-        <CardBody className="flex flex-row gap-4 overflow-x-auto scrollbar-thin scrollbar-track-content1 scrollbar-thumb-primary">
+        <CardBody className="scrollbar-thin scrollbar-track-content1 scrollbar-thumb-primary flex flex-row gap-4 overflow-x-auto">
           {currentVolume.covers.map((c) => (
             <UpdateMediaCoverForm key={c.id} media={media} cover={c} />
           ))}

@@ -17,14 +17,14 @@ export const MediaFormCoverCategory = () => {
 
   return (
     <Form.Category title="Cover">
-      <Card className="h-full rounded-medium w-fit">
+      <Card className="h-full w-fit rounded-medium">
         <CardBody className="p-0">
           <section
             {...getRootProps({
               className: cn(
-                "h-[300px] min-w-[200px] max-w-[200px] w-full rounded-medium bg-default-100 transition-background !duration-150 flex flex-col text-center justify-center gap-6",
+                "!duration-150 flex h-[300px] w-full min-w-[200px] max-w-[200px] flex-col justify-center gap-6 rounded-medium bg-default-100 text-center transition-background",
                 {
-                  "p-3 border border-dashed border-default":
+                  "border border-default border-dashed p-3":
                     acceptedFiles.length === 0,
                 },
               ),
@@ -39,7 +39,7 @@ export const MediaFormCoverCategory = () => {
             )}
             {acceptedFiles.length !== 0 && (
               <img
-                className="object-cover h-full w-full rounded-medium"
+                className="h-full w-full rounded-medium object-cover"
                 src={URL.createObjectURL(acceptedFiles[0]!)}
                 alt="uploaded media preview"
               />

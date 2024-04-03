@@ -19,7 +19,7 @@ export const SearchedMediaCard = ({ media }: Props) => (
       alt="media's cover"
     />
     <div className="h-full gap-1">
-      <h3 className="line-clamp-1 text-lg font-semibold">{media.title}</h3>
+      <h3 className="line-clamp-1 font-semibold text-lg">{media.title}</h3>
       <p className="line-clamp-2 text-clip text-default-500">
         {media.synopsis}
       </p>

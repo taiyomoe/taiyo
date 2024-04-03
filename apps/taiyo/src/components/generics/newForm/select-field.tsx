@@ -19,7 +19,7 @@ const select = tv({
       inside: {},
       outside: {},
       "outside-left": {
-        label: "min-w-[100px] mr-6",
+        label: "mr-6 min-w-[100px]",
       },
     },
   },

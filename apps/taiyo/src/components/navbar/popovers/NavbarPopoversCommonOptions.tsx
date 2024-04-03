@@ -9,7 +9,7 @@ export const NavbarPopoversCommonOptions = () => {
   return (
     <div className="flex w-full flex-col gap-2">
       <Button
-        className="justify-normal gap-3 p-2 text-medium font-medium"
+        className="justify-normal gap-3 p-2 font-medium text-medium"
         startContent={<SettingsIcon />}
         variant="light"
         isDisabled
@@ -17,7 +17,7 @@ export const NavbarPopoversCommonOptions = () => {
         Configurações
       </Button>
       <Button
-        className="disabled justify-normal gap-3 p-2 text-medium font-medium"
+        className="disabled justify-normal gap-3 p-2 font-medium text-medium"
         startContent={<FlagIcon />}
         variant="light"
         isDisabled
@@ -27,7 +27,7 @@ export const NavbarPopoversCommonOptions = () => {
       <div className="flex justify-between">
         <div className="flex gap-3 p-2 opacity-disabled">
           <SunMoonIcon />
-          <p className="select-none text-medium font-medium">Tema</p>
+          <p className="select-none font-medium text-medium">Tema</p>
         </div>
         <ThemeSwitch />
       </div>
@@ -35,7 +35,7 @@ export const NavbarPopoversCommonOptions = () => {
         <Button
           as={Link}
           href={siteConfig.discord.url}
-          className="hover:bg-discord/70 mt-4 w-full gap-4 bg-discord text-medium font-medium text-discord-foreground"
+          className="mt-4 w-full gap-4 bg-discord font-medium text-discord-foreground text-medium hover:bg-discord/70"
           startContent={<CompanyLogo company="discord" height={28} />}
           radius="full"
           target="_blank"

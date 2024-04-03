@@ -14,7 +14,7 @@ const NotFound = () => {
           className="h-[45vh] w-auto"
           alt="no data illustration"
         />
-        <p className="text-center text-2xl font-medium">
+        <p className="text-center font-medium text-2xl">
           Página não encontrada
         </p>
       </div>

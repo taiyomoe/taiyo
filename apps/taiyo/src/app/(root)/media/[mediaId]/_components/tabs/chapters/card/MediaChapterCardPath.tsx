@@ -18,7 +18,7 @@ export const MediaChapterCardPath = ({ order }: Props) => {
         />
         <span
           className={cn("h-full w-full rounded bg-content3", {
-            "rounded-b-none rounded-t-none": order === "first",
+            "rounded-t-none rounded-b-none": order === "first",
             hidden: order === "last" || order === "unique",
           })}
         />

@@ -14,7 +14,7 @@ type Props = {
 
 const textArea = tv({
   slots: {
-    container: "flex items-end gap-6 w-full",
+    container: "flex w-full items-end gap-6",
     label: "",
     mainWrapper: "w-full",
     inputWrapper: "p-3",
@@ -25,7 +25,7 @@ const textArea = tv({
       inside: {},
       outside: {},
       "outside-left": {
-        label: "min-w-[100px] mr-6",
+        label: "mr-6 min-w-[100px]",
       },
     },
     shouldDisplayError: {

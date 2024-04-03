@@ -37,7 +37,7 @@ export const SwipeableFeaturedMedias = ({ medias }: Props) => {
               key={media.id}
               href={`/media/${media.id}`}
               className={cn(
-                "hover:cursor-pointer flex-[0_0_100%] min-w-0 max-h-[200px] min-h-[200px] sm:max-h-[250px] sm:min-h-[250px] md:max-h-[300px] md:min-h-[300px] lg:max-h-[350px] lg:min-h-[350px] z-0",
+                "z-0 max-h-[200px] min-h-[200px] min-w-0 flex-[0_0_100%] lg:max-h-[350px] md:max-h-[300px] sm:max-h-[250px] lg:min-h-[350px] md:min-h-[300px] sm:min-h-[250px] hover:cursor-pointer",
                 { "mr-6": i !== medias.length - 1 },
               )}
             >
@@ -53,7 +53,7 @@ export const SwipeableFeaturedMedias = ({ medias }: Props) => {
                 maxWidth={1200}
                 alt="media's banner"
               />
-              <div className="relative z-10 flex h-full gap-6 p-4 -mt-[200px] sm:-mt-[250px] md:-mt-[300px] lg:-mt-[350px]">
+              <div className="-mt-[200px] sm:-mt-[250px] md:-mt-[300px] lg:-mt-[350px] relative z-10 flex h-full gap-6 p-4">
                 <MediaImage
                   src={MediaCoverUtils.getUrl(media)}
                   classNames={{
@@ -69,10 +69,10 @@ export const SwipeableFeaturedMedias = ({ medias }: Props) => {
                 />
                 <div className="flex flex-col justify-between py-4">
                   <div className="flex flex-col gap-4">
-                    <p className="drop-shadow-accent line-clamp-1 pb-1 text-3xl font-bold md:text-left md:text-4xl xl:text-5xl hover:opacity-70 transition-all">
+                    <p className="line-clamp-1 pb-1 font-bold text-3xl drop-shadow-accent transition-all md:text-left md:text-4xl xl:text-5xl hover:opacity-70">
                       {media.mainTitle}
                     </p>
-                    <p className="drop-shadow-accent line-clamp-2 italic text-neutral-300">
+                    <p className="line-clamp-2 text-neutral-300 italic drop-shadow-accent">
                       {media.synopsis}
                     </p>
                   </div>
@@ -82,7 +82,7 @@ export const SwipeableFeaturedMedias = ({ medias }: Props) => {
           ))}
         </div>
       </div>
-      <div className="flex justify-end gap-4 relative bottom-[56px] right-4">
+      <div className="relative right-4 bottom-[56px] flex justify-end gap-4">
         <Button
           className="embla__prev z-10 data-[hover]:bg-primary/30"
           startContent={<ChevronLeftIcon />}
