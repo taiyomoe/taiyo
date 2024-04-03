@@ -22,12 +22,11 @@ export const UploadChapterForm = () => {
       contentRating: "NORMAL",
       flag: "OK",
       language: "pt_br",
+      files: [],
     },
   })
 
-  const handleSubmit: SubmitHandler<UploadChapterInput> = async (values) => {
-    console.log("values", values)
-
+  const handleSubmit: SubmitHandler<UploadChapterInput> = async (values) =>
     toast.promise(ioApi.chapters.upload(values), {
       loading: "Upando o capítulo...",
       error: handleErrors("Ocorreu um erro inesperado ao upar o capítulo"),
@@ -39,16 +38,13 @@ export const UploadChapterForm = () => {
 
         methods.reset({
           ...values,
-          mediaId: values.mediaId,
           number: newNumber,
-          volume: values.volume,
-          scanIds: values.scanIds,
+          files: [],
         })
 
         return "Capítulo upado!"
       },
     })
-  }
 
   return (
     <Form.Component {...methods} onSubmit={handleSubmit}>
