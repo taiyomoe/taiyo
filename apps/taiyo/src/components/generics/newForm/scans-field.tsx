@@ -22,12 +22,10 @@ export const ScansField = () => {
     <Label label="Scans" isRequired>
       <MultiSelectAsync
         onChange={(values) => {
-          console.log("values", values)
-
           setValue(
             "scanIds",
             values.map((v) => v.value),
-            { shouldValidate: true },
+            { shouldValidate: true, shouldDirty: true },
           )
         }}
         loadOptions={loadOptions}

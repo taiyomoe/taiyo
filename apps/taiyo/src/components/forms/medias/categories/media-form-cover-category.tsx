@@ -11,7 +11,7 @@ export const MediaFormCoverCategory = () => {
     accept: DEFAULT_MIME_TYPES,
     maxFiles: 1,
     onDrop: (files) => {
-      setValue("cover", files[0], { shouldValidate: true })
+      setValue("cover", files[0], { shouldValidate: true, shouldDirty: true })
     },
   })
 
