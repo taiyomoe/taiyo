@@ -1,4 +1,3 @@
-import type { InsertMediaChapterFormSchema } from "@taiyomoe/schemas"
 import type { SuccessfulUploadResponse, UploadResponse } from "@taiyomoe/types"
 import { MediaChapterUtils } from "@taiyomoe/utils"
 import { useMutation } from "@tanstack/react-query"
@@ -38,43 +37,13 @@ export const useRawChapterUpload = () => {
       return data
     },
   })
-  const { mutateAsync: createChapter } = api.mediaChapters.create.useMutation()
 
   const upload =
-    (
-      values:
-        | InsertMediaChapterFormSchema
-        | { mediaId: string; number: number },
-      files: File[],
-    ) =>
-    async () => {
-      const { mediaChapterId, authToken } = await startUploadSession({
-        type: "CHAPTER",
-        mediaId: values.mediaId,
-      })
-
-      const { files: filesId } = await uploadImages({
-        authToken,
-        files,
-      })
-
-      await createChapter({
-        title: null,
-        volume: null,
-        contentRating: "NORMAL",
-        language: "pt_br",
-        scanIds: [],
-        flag: "OK",
-        id: mediaChapterId,
-        pages: filesId,
-        ...values,
-      })
-    }
+    (_: { mediaId: string; number: number }, __: File[]) => async () => {}
 
   return {
     startUploadSession,
     uploadImages,
-    createChapter,
     upload,
   }
 }

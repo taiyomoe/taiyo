@@ -11,7 +11,7 @@ export const updateMediaChapterSchema = z.object({
   id: z.string().uuid(),
   title: z.string().nullish(),
   number: z.coerce.number().min(0).optional(),
-  volume: z.coerce.number().min(0).nullable(),
+  volume: z.coerce.number().min(0).nullish(),
   language: LanguagesSchema.optional(),
   contentRating: ContentRatingSchema.optional(),
   flag: FlagSchema.optional(),
