@@ -91,8 +91,8 @@ importers:
   apps/taiyo:
     dependencies:
       '@elysiajs/eden':
-        specifier: ^1.0.8
-        version: 1.0.8(elysia@1.0.11)
+        specifier: ^1.0.11
+        version: 1.0.11(elysia@1.0.11)
       '@hookform/resolvers':
         specifier: ^3.3.4
         version: 3.3.4(react-hook-form@7.51.2)
@@ -1345,8 +1345,8 @@ packages:
       elysia: 1.0.11(@sinclair/typebox@0.32.20)(typescript@5.4.3)
     dev: false
 
-  /@elysiajs/eden@1.0.8(elysia@1.0.11):
-    resolution: {integrity: sha512-kFnEscEuUONBYL9zkdwwswIGYpigELHF4OZM0KicX3HjmSilrS21pEwptSkiXwjcYhgft5ujp+WPyJ8adACAIA==}
+  /@elysiajs/eden@1.0.11(elysia@1.0.11):
+    resolution: {integrity: sha512-zmGQOxncR/7p5Q9SJbpmbpSg8NhzAd+hPVTHY5UNoiOtkWV5Xyv9NP6CX6Qqrb4BM0ntb4lZMIBIAgmysIyF4g==}
     peerDependencies:
       elysia: '>= 1.0.2'
     dependencies:
