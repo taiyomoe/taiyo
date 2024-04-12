@@ -40,7 +40,7 @@
     "framer-motion": "^11.0.28",
     "jotai": "^2.8.0",
     "lodash-es": "^4.17.21",
-    "lucide-react": "^0.367.0",
+    "lucide-react": "^0.368.0",
     "luxon": "^3.4.4",
     "next": "^14.2.0",
     "next-themes": "^0.3.0",
