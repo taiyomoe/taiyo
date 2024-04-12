@@ -95,7 +95,7 @@ importers:
         version: 1.0.11(elysia@1.0.13)
       '@hookform/resolvers':
         specifier: ^3.3.4
-        version: 3.3.4(react-hook-form@7.51.2)
+        version: 3.3.4(react-hook-form@7.51.3)
       '@nextui-org/react':
         specifier: ^2.2.10
         version: 2.2.10(@types/react@18.2.77)(framer-motion@11.0.28)(react-dom@18.2.0)(react@18.2.0)(tailwind-variants@0.2.1)(tailwindcss@3.4.3)
@@ -208,8 +208,8 @@ importers:
         specifier: ^14.2.3
         version: 14.2.3(react@18.2.0)
       react-hook-form:
-        specifier: ^7.51.2
-        version: 7.51.2(react@18.2.0)
+        specifier: ^7.51.3
+        version: 7.51.3(react@18.2.0)
       react-select:
         specifier: ^5.8.0
         version: 5.8.0(@types/react@18.2.77)(react-dom@18.2.0)(react@18.2.0)
@@ -1773,12 +1773,12 @@ packages:
       - '@types/react'
     dev: true
 
-  /@hookform/resolvers@3.3.4(react-hook-form@7.51.2):
+  /@hookform/resolvers@3.3.4(react-hook-form@7.51.3):
     resolution: {integrity: sha512-o5cgpGOuJYrd+iMKvkttOclgwRW86EsWJZZRC23prf0uU2i48Htq4PuT73AVb9ionFyZrwYEITuOFGF+BydEtQ==}
     peerDependencies:
       react-hook-form: ^7.0.0
     dependencies:
-      react-hook-form: 7.51.2(react@18.2.0)
+      react-hook-form: 7.51.3(react@18.2.0)
     dev: false
 
   /@img/sharp-darwin-arm64@0.33.3:
@@ -7284,8 +7284,8 @@ packages:
     resolution: {integrity: sha512-suNP+J1VU1MWFKcyt7RtjiSWUjvidmQSlqu+eHslq+342xCbGTYmC0mEhPCOHxlW0CywylOC1u2DFAT+bv4dBw==}
     dev: false
 
-  /react-hook-form@7.51.2(react@18.2.0):
-    resolution: {integrity: sha512-y++lwaWjtzDt/XNnyGDQy6goHskFualmDlf+jzEZvjvz6KWDf7EboL7pUvRCzPTJd0EOPpdekYaQLEvvG6m6HA==}
+  /react-hook-form@7.51.3(react@18.2.0):
+    resolution: {integrity: sha512-cvJ/wbHdhYx8aviSWh28w9ImjmVsb5Y05n1+FW786vEZQJV5STNM0pW6ujS+oiBecb0ARBxJFyAnXj9+GHXACQ==}
     engines: {node: '>=12.22.0'}
     peerDependencies:
       react: ^16.8.0 || ^17 || ^18
