@@ -1,4 +1,4 @@
-import { Button } from "@nextui-org/react"
+import { Button } from "@nextui-org/button"
 import { UploadIcon } from "lucide-react"
 import Link from "next/link"
 

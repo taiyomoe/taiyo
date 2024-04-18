@@ -1,4 +1,4 @@
-import { Button } from "@nextui-org/react"
+import { Button } from "@nextui-org/button"
 import type { UpdateMediaTitleInput } from "@taiyomoe/schemas"
 import { useFormContext } from "react-hook-form"
 import { toast } from "sonner"

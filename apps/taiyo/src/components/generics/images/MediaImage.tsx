@@ -1,5 +1,5 @@
-import { Image } from "@nextui-org/image"
-import type { ImageProps, SlotsToClasses } from "@nextui-org/react"
+import { Image, type ImageProps } from "@nextui-org/image"
+import type { SlotsToClasses } from "@nextui-org/react"
 import NextImage from "next/image"
 import { cn } from "~/lib/utils/cn"
 

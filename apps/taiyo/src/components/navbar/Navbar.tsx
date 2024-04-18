@@ -1,6 +1,6 @@
 "use client"
 
-import { Chip } from "@nextui-org/react"
+import { Chip } from "@nextui-org/chip"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { tv } from "tailwind-variants"

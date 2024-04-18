@@ -1,4 +1,4 @@
-import { Button } from "@nextui-org/react"
+import { Button } from "@nextui-org/button"
 import type { MediaLimitedChapter } from "@taiyomoe/types"
 import { PencilIcon } from "lucide-react"
 import { useSession } from "next-auth/react"

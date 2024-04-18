@@ -1,6 +1,6 @@
 "use client"
 
-import { Button } from "@nextui-org/react"
+import { Button } from "@nextui-org/button"
 import type { FeaturedMedia } from "@taiyomoe/types"
 import { MediaBannerUtils, MediaCoverUtils } from "@taiyomoe/utils"
 import Autoplay from "embla-carousel-autoplay"

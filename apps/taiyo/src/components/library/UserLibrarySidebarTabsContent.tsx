@@ -1,5 +1,5 @@
 import { Image } from "@nextui-org/image"
-import { Spinner } from "@nextui-org/react"
+import { Spinner } from "@nextui-org/spinner"
 import type { UserLibraryStatus } from "@taiyomoe/types"
 import { MediaUtils } from "@taiyomoe/utils"
 import { MediaCoverUtils } from "@taiyomoe/utils"

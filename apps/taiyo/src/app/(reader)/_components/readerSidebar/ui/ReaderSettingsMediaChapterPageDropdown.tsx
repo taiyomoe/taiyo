@@ -7,7 +7,7 @@ import {
   DropdownMenu,
   DropdownTrigger,
 } from "@nextui-org/dropdown"
-import { Skeleton } from "@nextui-org/react"
+import { Skeleton } from "@nextui-org/skeleton"
 import { ChevronsUpDownIcon } from "lucide-react"
 import type { Key } from "react"
 import { tv } from "tailwind-variants"
