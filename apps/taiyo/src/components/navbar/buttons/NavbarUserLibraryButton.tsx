@@ -1,4 +1,4 @@
-import { Button } from "@nextui-org/react"
+import { Button } from "@nextui-org/button"
 import { LibraryIcon } from "lucide-react"
 import { useSession } from "next-auth/react"
 import { UserLibrarySidebar } from "~/components/library/UserLibrarySidebar"

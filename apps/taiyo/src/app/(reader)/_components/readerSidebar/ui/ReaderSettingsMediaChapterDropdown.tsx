@@ -7,7 +7,7 @@ import {
   DropdownMenu,
   DropdownTrigger,
 } from "@nextui-org/dropdown"
-import { Skeleton } from "@nextui-org/react"
+import { Skeleton } from "@nextui-org/skeleton"
 import { MediaChapterUtils } from "@taiyomoe/utils"
 import { ChevronsUpDownIcon } from "lucide-react"
 import Link from "next/link"

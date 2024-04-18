@@ -1,4 +1,4 @@
-import type { InputProps } from "@nextui-org/react"
+import type { InputProps } from "@nextui-org/input"
 import { tv } from "tailwind-variants"
 import { cn } from "~/lib/utils/cn"
 

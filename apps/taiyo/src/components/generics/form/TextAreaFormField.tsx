@@ -1,7 +1,7 @@
 "use client"
 
-import { Textarea } from "@nextui-org/react"
-import type { TextAreaProps } from "@nextui-org/react"
+import { Textarea } from "@nextui-org/input"
+import type { TextAreaProps } from "@nextui-org/input"
 import { useField } from "formik"
 import { tv } from "tailwind-variants"
 import { cn } from "~/lib/utils/cn"

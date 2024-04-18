@@ -1,5 +1,5 @@
 import { Card, CardBody } from "@nextui-org/card"
-import { Spinner } from "@nextui-org/react"
+import { Spinner } from "@nextui-org/spinner"
 import { CheckIcon, HourglassIcon, RefreshCwIcon } from "lucide-react"
 import prettyBytes from "pretty-bytes"
 import { useMemo } from "react"

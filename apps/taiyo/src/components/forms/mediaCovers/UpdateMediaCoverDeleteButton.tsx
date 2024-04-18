@@ -1,4 +1,4 @@
-import { Button } from "@nextui-org/react"
+import { Button } from "@nextui-org/button"
 import type { UpdateMediaCoverSchema } from "@taiyomoe/schemas"
 import { useFormikContext } from "formik"
 import { toast } from "sonner"
