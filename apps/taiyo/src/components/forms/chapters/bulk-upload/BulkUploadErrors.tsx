@@ -13,7 +13,7 @@ export const BulkUploadErrors = () => {
     <Form.Category title="Erros">
       <div className="flex flex-col">
         {errors.map((err) => (
-          <div className="flex gap-2">
+          <div key={err.chapterNumber} className="flex gap-2">
             <p>Capítulo {err.chapterNumber}</p>—<p>{err.message}</p>
           </div>
         ))}
