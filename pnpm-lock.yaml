@@ -181,7 +181,7 @@ importers:
         specifier: ^3.4.4
         version: 3.4.4
       next:
-        specifier: ^14.2.1
+        specifier: ^14.2.2
         version: 14.2.2(react-dom@18.2.0)(react@18.2.0)
       next-themes:
         specifier: ^0.3.0
