@@ -17,7 +17,7 @@
     "@nextui-org/react": "^2.3.5",
     "@react-stately/data": "^3.11.2",
     "@savvywombat/tailwindcss-grid-areas": "^4.0.0",
-    "@t3-oss/env-nextjs": "^0.9.2",
+    "@t3-oss/env-nextjs": "^0.10.0",
     "@taiyomoe/auth": "workspace:^0.1.0",
     "@taiyomoe/constants": "workspace:^0.1.0",
     "@taiyomoe/db": "workspace:^0.1.0",
