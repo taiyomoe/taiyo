@@ -33,8 +33,8 @@ importers:
         specifier: ^1.0.2
         version: 1.0.2(elysia@1.0.14(@sinclair/typebox@0.32.20)(openapi-types@12.1.3)(typescript@5.4.5))
       '@elysiajs/swagger':
-        specifier: ^1.0.3
-        version: 1.0.3(elysia@1.0.14(@sinclair/typebox@0.32.20)(openapi-types@12.1.3)(typescript@5.4.5))
+        specifier: ^1.0.4
+        version: 1.0.4(elysia@1.0.14(@sinclair/typebox@0.32.20)(openapi-types@12.1.3)(typescript@5.4.5))
       '@t3-oss/env-core':
         specifier: ^0.10.0
         version: 0.10.0(typescript@5.4.5)(zod@3.22.5)
@@ -836,8 +836,8 @@ packages:
     peerDependencies:
       elysia: '>= 1.0.2'
 
-  '@elysiajs/swagger@1.0.3':
-    resolution: {integrity: sha512-l9JEs2JXE797r1TyOg4/faYS4E2uavm1g3keH45kPtnCkWkesNR6G5HSf2WSQXLaJGYfQJpnUbRbgyk5hsvkJg==}
+  '@elysiajs/swagger@1.0.4':
+    resolution: {integrity: sha512-gwdwKNYSbOwSwd0RKztLT1kBISPg+KR7c7niCeH5cV1vFg3LtqN79/czBFIdV8L3qWFX4+S/tPZFHxikHLXIyA==}
     peerDependencies:
       elysia: '>= 1.0.2'
 
@@ -5088,7 +5088,7 @@ snapshots:
       elysia: 1.0.14(@sinclair/typebox@0.32.20)(openapi-types@12.1.3)(typescript@5.4.5)
       nanoid: 5.0.7
 
-  '@elysiajs/swagger@1.0.3(elysia@1.0.14(@sinclair/typebox@0.32.20)(openapi-types@12.1.3)(typescript@5.4.5))':
+  '@elysiajs/swagger@1.0.4(elysia@1.0.14(@sinclair/typebox@0.32.20)(openapi-types@12.1.3)(typescript@5.4.5))':
     dependencies:
       elysia: 1.0.14(@sinclair/typebox@0.32.20)(openapi-types@12.1.3)(typescript@5.4.5)
       lodash.clonedeep: 4.5.0
