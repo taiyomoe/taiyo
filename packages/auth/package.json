@@ -18,7 +18,7 @@
     "@taiyomoe/db": "workspace:^0.1.0",
     "@taiyomoe/utils": "workspace:^0.1.0",
     "next-auth": "^4.24.7",
-    "zod": "^3.23.3"
+    "zod": "^3.23.4"
   },
   "devDependencies": {
     "@taiyomoe/tsconfig": "workspace:^0.1.0",
