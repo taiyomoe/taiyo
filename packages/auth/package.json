@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@next-auth/prisma-adapter": "^1.0.7",
-    "@t3-oss/env-nextjs": "^0.10.0",
+    "@t3-oss/env-nextjs": "^0.10.1",
     "@taiyomoe/db": "workspace:^0.1.0",
     "@taiyomoe/utils": "workspace:^0.1.0",
     "next-auth": "^4.24.7",

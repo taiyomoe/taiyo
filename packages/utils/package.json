@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@prisma/client": "^5.12.1",
-    "@t3-oss/env-nextjs": "^0.10.0",
+    "@t3-oss/env-nextjs": "^0.10.1",
     "@taiyomoe/constants": "workspace:^0.1.0",
     "@taiyomoe/schemas": "workspace:^0.1.0",
     "mangadex-full-api": "^5.12.1"
