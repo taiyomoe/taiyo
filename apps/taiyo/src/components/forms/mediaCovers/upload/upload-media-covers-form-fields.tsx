@@ -26,8 +26,6 @@ export const UploadMediaCoversFormFields = () => {
           file,
         })),
       )
-
-      console.log("dropped files", files)
     },
   })
   const { onClick, ...rootProps } = getRootProps()
