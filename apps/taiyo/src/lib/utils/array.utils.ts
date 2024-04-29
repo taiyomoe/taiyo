@@ -1,3 +1,9 @@
+/**
+ * THIS FILE WILL BE DELETED AS SOON AS POSSIBLE.
+ *
+ * See this issue: https://github.com/rayepps/radash/pull/289#issuecomment-2082623523
+ */
+
 type WorkItemResult<K> = {
   index: number
   result: K
