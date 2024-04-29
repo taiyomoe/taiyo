@@ -55,6 +55,19 @@
           "unsafeParameterDecoratorsEnabled": true
         }
       }
+    },
+    {
+      "include": ["./apps/taiyo/src/lib/utils/array.utils.ts"],
+      "linter": {
+        "rules": {
+          "complexity": {
+            "noBannedTypes": "off"
+          },
+          "suspicious": {
+            "noExplicitAny": "off"
+          }
+        }
+      }
     }
   ]
 }
