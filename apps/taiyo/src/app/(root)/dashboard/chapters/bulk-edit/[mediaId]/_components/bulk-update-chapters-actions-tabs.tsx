@@ -7,7 +7,7 @@ import { bulkEditChaptersActiveTabAtom } from "~/atoms/bulkEditChapters.atoms"
 import { BulkUpdateChapterScansForm } from "~/components/forms/chapters/bulk-update-scans/BulkUpdateChapterScansForm"
 import { BulkUpdateChapterVolumesForm } from "~/components/forms/chapters/bulk-update-volumes/BulkUpdateChapterVolumesForm"
 import { useDevice } from "~/hooks/useDevice"
-import { BulkUpdateChaptersActionsTabsButtons } from "./BulkUpdateChaptersActionsTabsButtons"
+import { BulkUpdateChaptersActionsTabsButtons } from "./bulk-update-chapters-actions-tabs-buttons"
 
 type Props = {
   chapters: MediaChapterWithScans[]

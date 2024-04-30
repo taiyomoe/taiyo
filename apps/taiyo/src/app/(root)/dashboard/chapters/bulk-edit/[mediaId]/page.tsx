@@ -1,6 +1,6 @@
 import { db } from "@taiyomoe/db"
 import { notFound } from "next/navigation"
-import { BulkUpdateChaptersActionsTabs } from "./_components/BulkUpdateChaptersActionsTabs"
+import { BulkUpdateChaptersActionsTabs } from "./_components/bulk-update-chapters-actions-tabs"
 
 type Props = {
   params: { mediaId: string }
