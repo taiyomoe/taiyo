@@ -14,10 +14,6 @@ export const useDevice = () => {
   const isDesktop = isAboveLaptop && !isAboveDesktop
   const isWideScreen = isAboveDesktop
 
-  if (!width) {
-    return null
-  }
-
   return {
     isMobile,
     isTablet,

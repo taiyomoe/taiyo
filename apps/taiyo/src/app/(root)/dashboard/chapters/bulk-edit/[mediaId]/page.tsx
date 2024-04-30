@@ -1,6 +1,6 @@
 import { db } from "@taiyomoe/db"
 import { notFound } from "next/navigation"
-import { BulkUpdateChapterVolumesForm } from "~/components/forms/chapters/bulk-update-volumes/BulkUpdateChapterVolumesForm"
+import { BulkUpdateChaptersActionsTabs } from "./_components/BulkUpdateChaptersActionsTabs"
 
 type Props = {
   params: { mediaId: string }
@@ -17,9 +17,19 @@ export default async function Page({ params }: Props) {
   }
 
   const chapters = await db.mediaChapter.findMany({
+    include: { scans: { select: { id: true } } },
     where: { mediaId: params.mediaId, deletedAt: null },
     orderBy: { number: "asc" },
   })
 
-  return <BulkUpdateChapterVolumesForm chapters={chapters} />
+  console.log("chapters", chapters)
+
+  return (
+    <BulkUpdateChaptersActionsTabs
+      chapters={chapters.map((c) => ({
+        ...c,
+        scanIds: c.scans.flatMap((s) => s.id),
+      }))}
+    />
+  )
 }
