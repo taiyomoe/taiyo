@@ -1,7 +1,6 @@
 version: "3.8"
 services:
   postgres:
-    container_name: postgres
     image: "postgres:16-alpine"
     restart: always
     environment:
@@ -14,7 +13,6 @@ services:
       - "./data/postgres:/var/lib/postgresql/data"
 
   meilisearch:
-    container_name: meilisearch
     image: "getmeili/meilisearch:v1.7"
     restart: always
     environment:
@@ -26,7 +24,6 @@ services:
       - "./data/meilisearch:/meili_data"
 
   soketi:
-    container_name: soketi
     image: "quay.io/soketi/soketi:1.6-16-debian"
     restart: always
     environment:
@@ -35,3 +32,16 @@ services:
       - SOKETI_DEFAULT_APP_SECRET=$SOKETI_APP_SECRET
     ports:
       - "$NEXT_PUBLIC_SOKETI_PORT:6001"
+
+  minio:
+    image: minio/minio
+    restart: always
+    command: server --console-address ":9001" /data
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: masoud
+      MINIO_ROOT_PASSWORD: Strong#Pass#2022
+    volumes:
+      - "./data/minio:/data"
