@@ -30,7 +30,7 @@
     "mangadex-full-api": "^5.12.1",
     "radash": "^12.1.0",
     "sharp": "^0.33.3",
-    "zod": "^3.23.5"
+    "zod": "^3.23.6"
   },
   "devDependencies": {
     "@taiyomoe/tsconfig": "workspace:^0.1.0",
