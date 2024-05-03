@@ -8,7 +8,6 @@ import {
 } from "@taiyomoe/schemas"
 import { MediaChapterUtils } from "@taiyomoe/utils"
 import { TRPCClientError } from "@trpc/client"
-import { AlertTriangleIcon } from "lucide-react"
 import { useState } from "react"
 import { type SubmitHandler, useForm } from "react-hook-form"
 import { toast } from "sonner"
@@ -81,10 +80,6 @@ export const BulkUpdateChaptersVolumesForm = (props: Props) => {
 
   return (
     <Form.Component onSubmit={handleSubmit} {...methods}>
-      <div className="flex items-center gap-2">
-        <AlertTriangleIcon className="text-warning" />
-        <p>Use -1 para remover o volume de um capítulo.</p>
-      </div>
       <BulkUpdateChaptersVolumesFormFields chapters={chapters} />
     </Form.Component>
   )
