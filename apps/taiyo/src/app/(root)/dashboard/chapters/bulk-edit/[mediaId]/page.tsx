@@ -22,8 +22,6 @@ export default async function Page({ params }: Props) {
     orderBy: { number: "asc" },
   })
 
-  console.log("chapters", chapters)
-
   return (
     <BulkUpdateChaptersActionsTabs
       chapters={chapters.map((c) => ({

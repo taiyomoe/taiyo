@@ -32,7 +32,6 @@ export const UploadMediaCoversForm = ({ mediaId }: Props) => {
           toast.promise(ioApi.covers.upload({ ...cover, mediaId }), {
             loading: `Upando a capa ${i + 1}/${values.covers.length}...`,
             success: ({ data }) => {
-              console.log("data", data)
               addCover([data])
               resolve(null)
 
