@@ -1,6 +1,5 @@
 import { Accordion, AccordionItem } from "@nextui-org/accordion"
 import type { MediaChapterWithScans } from "@taiyomoe/types"
-import { unique } from "radash"
 import { useMemo } from "react"
 
 type Props = {
@@ -10,7 +9,7 @@ type Props = {
 
 export const BulkUpdateChaptersSummary = ({ type, chapters }: Props) => {
   const allChapters = useMemo(
-    () => unique(chapters, (c) => c.number).join(", "),
+    () => [...new Set(chapters.map((c) => c.number))].join(", "),
     [chapters],
   )
   const chaptersWithoutType = useMemo(() => {
@@ -29,7 +28,7 @@ export const BulkUpdateChaptersSummary = ({ type, chapters }: Props) => {
     <Accordion>
       <AccordionItem title="Capítulos">{allChapters}</AccordionItem>
       <AccordionItem title="Capítulos sem volume">
-        {chaptersWithoutType}
+        {chaptersWithoutType.length ? chaptersWithoutType : "Nenhum."}
       </AccordionItem>
     </Accordion>
   )
