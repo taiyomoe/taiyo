@@ -5,7 +5,7 @@ import type { MediaChapterWithScans } from "@taiyomoe/types"
 import { useAtomValue } from "jotai"
 import { bulkEditChaptersActiveTabAtom } from "~/atoms/bulkEditChapters.atoms"
 import { BulkUpdateChapterScansForm } from "~/components/forms/chapters/bulk-update-scans/BulkUpdateChapterScansForm"
-import { BulkUpdateChapterVolumesForm } from "~/components/forms/chapters/bulk-update-volumes/BulkUpdateChapterVolumesForm"
+import { BulkUpdateChaptersVolumesForm } from "~/components/forms/chapters/bulk-update-volumes/bulk-update-chapters-volumes-form"
 import { useDevice } from "~/hooks/useDevice"
 import { BulkUpdateChaptersActionsTabsButtons } from "./bulk-update-chapters-actions-tabs-buttons"
 
@@ -27,7 +27,7 @@ export const BulkUpdateChaptersActionsTabs = ({ chapters }: Props) => {
       <Divider orientation="vertical" className="h-auto" />
       <div className="flex w-full flex-col gap-4">
         {activeTab === "volumes" && (
-          <BulkUpdateChapterVolumesForm chapters={chapters} />
+          <BulkUpdateChaptersVolumesForm chapters={chapters} />
         )}
         {activeTab === "scans" && (
           <BulkUpdateChapterScansForm chapters={chapters} />

@@ -1,37 +1,38 @@
 "use client"
 
+import { zodResolver } from "@hookform/resolvers/zod"
 import { Accordion, AccordionItem } from "@nextui-org/accordion"
 import type { MediaChapter } from "@prisma/client"
 import {
-  type BulkUpdateMediaChapterVolumesSchema,
-  bulkUpdateMediaChapterVolumesSchema,
+  type BulkUpdateChaptersVolumesSchema,
+  bulkUpdateChaptersVolumesSchema,
 } from "@taiyomoe/schemas"
 import { MediaChapterUtils } from "@taiyomoe/utils"
 import { TRPCClientError } from "@trpc/client"
 import { AlertTriangleIcon } from "lucide-react"
 import { useState } from "react"
+import { type SubmitHandler, useForm } from "react-hook-form"
 import { toast } from "sonner"
-import { toFormikValidationSchema } from "zod-formik-adapter"
-import { Form } from "~/components/generics/form/Form"
-import type { FormSubmit } from "~/lib/types"
+import { Form } from "~/components/generics/newForm/new-form"
 import { api } from "~/trpc/react"
-import { BulkUpdateChapterVolumesFormFields } from "./BulkUpdateChapterVolumesFormFields"
+import { BulkUpdateChaptersVolumesFormFields } from "./bulk-update-chapters-volumes-form-fields"
 
 type Props = {
   chapters: MediaChapter[]
 }
 
-export const BulkUpdateChapterVolumesForm = (props: Props) => {
+export const BulkUpdateChaptersVolumesForm = (props: Props) => {
   const { chapters: initialChapters } = props
   const [chapters, setChapters] = useState(initialChapters)
   const { mutateAsync } = api.mediaChapters.updateVolumes.useMutation()
-  const initialValues: BulkUpdateMediaChapterVolumesSchema = [
-    { volume: 1, ids: [] },
-  ]
+  const methods = useForm<BulkUpdateChaptersVolumesSchema>({
+    resolver: zodResolver(bulkUpdateChaptersVolumesSchema),
+    mode: "onTouched",
+    defaultValues: { volumes: [{ number: 1, ids: [] }] },
+  })
 
-  const handleSubmit: FormSubmit<BulkUpdateMediaChapterVolumesSchema> = async (
+  const handleSubmit: SubmitHandler<BulkUpdateChaptersVolumesSchema> = async (
     values,
-    helpers,
   ) => {
     const duplicatedChapters = MediaChapterUtils.getDuplicatedChapters(
       values,
@@ -43,7 +44,7 @@ export const BulkUpdateChapterVolumesForm = (props: Props) => {
         ", ",
       )}`
 
-      helpers.setErrors([{ ids: errorMessage }])
+      methods.setError("volumes", { message: errorMessage })
       toast.error(errorMessage, { duration: 10000 })
 
       return
@@ -55,7 +56,7 @@ export const BulkUpdateChapterVolumesForm = (props: Props) => {
         setChapters((prev) =>
           prev.map((c) => {
             const newVolume = Number(
-              values.find((v) => v.ids.includes(c.id))?.volume,
+              values.volumes.find((v) => v.ids.includes(c.id))?.number,
             )
 
             if (Number.isNaN(newVolume)) {
@@ -65,7 +66,7 @@ export const BulkUpdateChapterVolumesForm = (props: Props) => {
             return { ...c, volume: newVolume === -1 ? null : newVolume }
           }),
         )
-        helpers.resetForm({ values })
+        methods.reset({ volumes: [{ number: 1, ids: [] }] })
 
         return "Capítulos atualizados com sucesso."
       },
@@ -80,13 +81,7 @@ export const BulkUpdateChapterVolumesForm = (props: Props) => {
   }
 
   return (
-    <Form.Component
-      initialValues={initialValues}
-      validationSchema={toFormikValidationSchema(
-        bulkUpdateMediaChapterVolumesSchema,
-      )}
-      onSubmit={handleSubmit}
-    >
+    <Form.Component onSubmit={handleSubmit} {...methods}>
       <Accordion>
         <AccordionItem title="Capítulos">
           {chapters.map((c) => c.number).join(", ")}
@@ -102,7 +97,7 @@ export const BulkUpdateChapterVolumesForm = (props: Props) => {
         <AlertTriangleIcon className="text-warning" />
         <p>Use -1 para remover o volume de um capítulo.</p>
       </div>
-      <BulkUpdateChapterVolumesFormFields chapters={chapters} />
+      <BulkUpdateChaptersVolumesFormFields chapters={chapters} />
     </Form.Component>
   )
 }
