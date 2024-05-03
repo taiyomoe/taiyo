@@ -7,6 +7,11 @@ export const SubmitButton = ({ isDisabled, children }: ButtonProps) => {
   const shouldDisableButton =
     isSubmitting || !(isValid && isDirty) || isDisabled
 
+  // console.log("isSubmitting", isSubmitting)
+  // console.log("isValid", isValid)
+  // console.log("isDirty", isDirty)
+  // console.log("isDisabled", isDisabled)
+
   return (
     <Button
       className="w-fit font-medium"

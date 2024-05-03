@@ -11,15 +11,17 @@ import { useMemo, useState } from "react"
 import { useFormContext } from "react-hook-form"
 import type { SelectableProps } from "react-selectable-box"
 import { RangeSelectionCanvas } from "~/components/generics/range/range-selection-canvas"
+import { cn } from "~/lib/utils/cn"
 import { NumberUtils } from "~/lib/utils/number.utils"
 
 type Props = {
   name: string
+  className?: string
   matcher: (value: number) => string | undefined
   availableNumbers: number[]
 }
 
-export const RangeField = ({ name, matcher, ...rest }: Props) => {
+export const RangeField = ({ name, className, matcher, ...rest }: Props) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
   const { setValue: setFieldValue } = useFormContext()
   const [value, setValue] = useState<number[]>([])
@@ -37,12 +39,12 @@ export const RangeField = ({ name, matcher, ...rest }: Props) => {
     setValue(result)
 
     const matches = result.map(matcher).filter(Boolean)
-    setFieldValue(name, matches)
+    setFieldValue(name, matches, { shouldValidate: true, shouldDirty: true })
   }
 
   return (
     <>
-      <Button className="w-full" onPress={onOpen}>
+      <Button className={cn("w-full", className)} onPress={onOpen}>
         {buttonText}
       </Button>
       <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="3xl">

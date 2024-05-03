@@ -49,22 +49,23 @@ export const BulkUpdateChaptersVolumesFormFields = ({ chapters }: Props) => {
         <Form.Col>
           {sort(fields, (f) => f.number ?? -1).map((_, i) => (
             <Fragment key={_.number}>
-              <Form.Row className="items-end">
+              <Form.Row className="flex-row flex-wrap items-end md:flex-nowrap">
                 <InputField
                   name={`volumes.${i}.number`}
                   label="Volume"
                   labelPlacement="outside"
                   placeholder="3"
-                  className="w-[100px] min-w-[100px]"
+                  className="order-1 w-[calc(100%-3.5rem)] md:w-[100px] md:min-w-[100px]"
                 />
                 <RangeField
                   name={`volumes.${i}.ids`}
+                  className="order-3 md:order-2"
                   matcher={handleMatch}
                   availableNumbers={availableNumbers}
                 />
                 <FormDeleteButton
                   name="volumes"
-                  className="mb-1"
+                  className="order-2 mb-1 md:order-3"
                   onPress={() => remove(i)}
                 />
               </Form.Row>

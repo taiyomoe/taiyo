@@ -21,7 +21,7 @@ type Props = {
 export const RangeFormField = ({ name, chapters }: Props) => {
   // biome-ignore lint/correctness/noEmptyPattern: we need to destructure the array
   const [field, {}, { setValue: setFieldValue }] = useField<
-    BulkUpdateChaptersVolumesSchema[number]["ids"]
+    BulkUpdateChaptersVolumesSchema["volumes"][number]["ids"]
   >({ name })
   const initialValue = useMemo(
     () =>

@@ -1,7 +1,6 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Accordion, AccordionItem } from "@nextui-org/accordion"
 import type { MediaChapter } from "@prisma/client"
 import {
   type BulkUpdateChaptersVolumesSchema,
@@ -82,17 +81,6 @@ export const BulkUpdateChaptersVolumesForm = (props: Props) => {
 
   return (
     <Form.Component onSubmit={handleSubmit} {...methods}>
-      <Accordion>
-        <AccordionItem title="Capítulos">
-          {chapters.map((c) => c.number).join(", ")}
-        </AccordionItem>
-        <AccordionItem title="Capítulos sem volume">
-          {chapters
-            .filter((c) => c.volume === null)
-            .map((c) => c.number)
-            .join(", ")}
-        </AccordionItem>
-      </Accordion>
       <div className="flex items-center gap-2">
         <AlertTriangleIcon className="text-warning" />
         <p>Use -1 para remover o volume de um capítulo.</p>

@@ -42,9 +42,9 @@ const getDuplicatedChapters = (
 ) => {
   const duplicated: number[] = []
 
-  for (const volume of input) {
+  for (const volume of input.volumes) {
     for (const id of volume.ids) {
-      if (input.some((v) => v !== volume && v.ids.includes(id))) {
+      if (input.volumes.some((v) => v !== volume && v.ids.includes(id))) {
         duplicated.push(mediaChapters.find((c) => c.id === id)!.number)
       }
     }
