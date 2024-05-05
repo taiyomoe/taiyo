@@ -34,7 +34,7 @@
     "apexcharts": "^3.49.0",
     "dotenv-cli": "^7.4.1",
     "embla-carousel-autoplay": "^8.0.4",
-    "embla-carousel-react": "^8.0.2",
+    "embla-carousel-react": "^8.0.4",
     "encoding": "^0.1.13",
     "formik": "^2.4.6",
     "framer-motion": "^11.1.7",
