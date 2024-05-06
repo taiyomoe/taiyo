@@ -27,7 +27,7 @@
     "@taiyomoe/soketi": "workspace:^0.1.0",
     "@taiyomoe/trpc": "workspace:^0.1.0",
     "@taiyomoe/utils": "workspace:^0.1.0",
-    "@tanstack/react-query": "^5.34.2",
+    "@tanstack/react-query": "^5.35.1",
     "@trpc/client": "11.0.0-rc.364",
     "@trpc/react-query": "11.0.0-rc.364",
     "@trpc/server": "11.0.0-rc.364",
