@@ -21,7 +21,7 @@
     "@taiyomoe/services": "workspace:^0.1.0",
     "@taiyomoe/soketi": "workspace:^0.1.0",
     "@taiyomoe/utils": "workspace:^0.1.0",
-    "@trpc/server": "11.0.0-rc.364",
+    "@trpc/server": "11.0.0-rc.366",
     "accesscontrol": "^2.2.1",
     "mangadex-full-api": "^5.12.1",
     "superjson": "^2.2.1",
