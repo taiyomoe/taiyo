@@ -13,7 +13,7 @@ services:
       - "./data/postgres:/var/lib/postgresql/data"
 
   meilisearch:
-    image: "getmeili/meilisearch:v1.7"
+    image: "getmeili/meilisearch:v1.8"
     restart: always
     environment:
       - MEILI_MASTER_KEY=$MEILISEARCH_MASTER_KEY
