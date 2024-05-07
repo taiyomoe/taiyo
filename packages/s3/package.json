@@ -15,7 +15,7 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.569.0",
     "@t3-oss/env-nextjs": "^0.10.1",
-    "zod": "^3.23.6"
+    "zod": "^3.23.7"
   },
   "devDependencies": {
     "@taiyomoe/tsconfig": "workspace:^0.1.0"
