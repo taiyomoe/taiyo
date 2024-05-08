@@ -12,7 +12,7 @@
     "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
-    "@elysiajs/eden": "^1.0.12",
+    "@elysiajs/eden": "^1.0.13",
     "@hookform/resolvers": "^3.3.4",
     "@nextui-org/react": "^2.3.6",
     "@react-stately/data": "^3.11.3",
