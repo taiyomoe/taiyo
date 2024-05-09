@@ -27,12 +27,14 @@ export const bulkUpdateChaptersVolumesSchema = z.object({
     .array(),
 })
 
-export const bulkUpdateMediaChapterScansSchema = z.array(
-  z.object({
-    scanIds: z.string().uuid().array(),
-    ids: z.string().uuid().array().min(1),
-  }),
-)
+export const bulkUpdateChaptersScansSchema = z.object({
+  scans: z
+    .object({
+      scanIds: z.string().uuid().array(),
+      ids: z.string().uuid().array().min(1),
+    })
+    .array(),
+})
 
 export const getMediaChapterByIdSchema = z.string()
 
@@ -51,5 +53,5 @@ export const getMediaChaptersByMediaIdSchema = z.object({
 export type UpdateMediaChapterSchema = typeof updateMediaChapterSchema._type
 export type BulkUpdateChaptersVolumesSchema =
   typeof bulkUpdateChaptersVolumesSchema._type
-export type BulkUpdateMediaChapterScansSchema =
-  typeof bulkUpdateMediaChapterScansSchema._type
+export type BulkUpdateChaptersScansSchema =
+  typeof bulkUpdateChaptersScansSchema._type

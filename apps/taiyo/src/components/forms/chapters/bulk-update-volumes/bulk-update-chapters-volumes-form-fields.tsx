@@ -51,7 +51,7 @@ export const BulkUpdateChaptersVolumesFormFields = ({ chapters }: Props) => {
       >
         <Form.Col>
           {sort(fields, (f) => f.number ?? -1).map((_, i) => (
-            <Fragment key={_.number}>
+            <Fragment key={_.id}>
               <Form.Row className="flex-row flex-wrap items-end md:flex-nowrap">
                 <InputField
                   name={`volumes.${i}.number`}
@@ -71,6 +71,7 @@ export const BulkUpdateChaptersVolumesFormFields = ({ chapters }: Props) => {
                       className="font-semibold text-warning-400"
                     />
                   )}
+                  enableOverlap
                 />
                 <FormDeleteButton
                   name="volumes"

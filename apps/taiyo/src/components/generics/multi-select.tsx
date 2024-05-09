@@ -15,15 +15,20 @@ import Select, {
   type InputProps,
   type ValueContainerProps,
   type GroupBase,
+  type ContainerProps,
 } from "react-select"
 import SelectAsync, { type AsyncProps } from "react-select/async"
 import type { SelectItem } from "~/lib/types"
 import { cn } from "~/lib/utils/cn"
 
-export type MultiSelectProps<T> = Omit<
+export type MultiSelectProps<T extends SelectItem = SelectItem> = Omit<
   SelectProps<T, true>,
   "isMulti" | "menuPlacement" | "noOptionsMessage" | "components"
 >
+
+const SelectContainer = <T,>(props: ContainerProps<T, true>) => (
+  <components.SelectContainer {...props} className="min-w-52" />
+)
 
 const Control = <T,>(props: ControlProps<T, true>) => (
   <components.Control
@@ -123,6 +128,7 @@ export const MultiSelect = <T extends SelectItem>(
       noOptionsMessage={() => "Nenhum resultado encontrado"}
       closeMenuOnSelect={false}
       components={{
+        SelectContainer,
         Control,
         Input,
         ClearIndicator,
@@ -152,6 +158,7 @@ export const MultiSelectAsync = <T extends SelectItem>(
       noOptionsMessage={() => "Nenhum resultado encontrado"}
       closeMenuOnSelect={false}
       components={{
+        SelectContainer,
         Control,
         Input,
         ClearIndicator,

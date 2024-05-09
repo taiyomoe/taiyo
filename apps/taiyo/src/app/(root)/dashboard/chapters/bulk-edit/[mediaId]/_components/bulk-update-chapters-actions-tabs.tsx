@@ -4,7 +4,7 @@ import { Divider } from "@nextui-org/divider"
 import type { MediaChapterWithScans } from "@taiyomoe/types"
 import { useAtomValue } from "jotai"
 import { bulkEditChaptersActiveTabAtom } from "~/atoms/bulkEditChapters.atoms"
-import { BulkUpdateChapterScansForm } from "~/components/forms/chapters/bulk-update-scans/BulkUpdateChapterScansForm"
+import { BulkUpdateChaptersScansForm } from "~/components/forms/chapters/bulk-update-scans/bulk-update-chapters-scans-form"
 import { BulkUpdateChaptersVolumesForm } from "~/components/forms/chapters/bulk-update-volumes/bulk-update-chapters-volumes-form"
 import { BulkUpdateChaptersActionsTabsButtons } from "./bulk-update-chapters-actions-tabs-buttons"
 import { BulkUpdateChaptersSummary } from "./bulk-update-chapters-summary"
@@ -27,7 +27,7 @@ export const BulkUpdateChaptersActionsTabs = ({ chapters }: Props) => {
           <BulkUpdateChaptersVolumesForm chapters={chapters} />
         )}
         {activeTab === "scans" && (
-          <BulkUpdateChapterScansForm chapters={chapters} />
+          <BulkUpdateChaptersScansForm chapters={chapters} />
         )}
       </div>
     </div>

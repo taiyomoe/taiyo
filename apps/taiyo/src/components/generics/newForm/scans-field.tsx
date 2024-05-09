@@ -1,9 +1,15 @@
 import { useFormContext } from "react-hook-form"
-import { Label } from "~/components/generics/Label"
-import { MultiSelectAsync } from "~/components/generics/multi-select"
+import { Label } from "~/components/generics/label"
+import {
+  MultiSelectAsync,
+  type MultiSelectProps,
+} from "~/components/generics/multi-select"
+import { cn } from "~/lib/utils/cn"
 import { api } from "~/trpc/react"
 
-export const ScansField = () => {
+type Props = { name: string } & MultiSelectProps
+
+export const ScansField = ({ name, className, ...rest }: Props) => {
   const { setValue } = useFormContext()
   const { mutateAsync } = api.scans.search.useMutation()
 
@@ -18,17 +24,20 @@ export const ScansField = () => {
     }))
   }
 
+  const handleChange: MultiSelectProps["onChange"] = (values) => {
+    setValue(
+      name,
+      values.map((v) => v.value),
+      { shouldValidate: true, shouldDirty: true },
+    )
+  }
+
   return (
-    <Label label="Scans" isRequired>
+    <Label label="Scans" className={cn("grow", className)} isRequired>
       <MultiSelectAsync
-        onChange={(values) => {
-          setValue(
-            "scanIds",
-            values.map((v) => v.value),
-            { shouldValidate: true, shouldDirty: true },
-          )
-        }}
+        onChange={handleChange}
         loadOptions={loadOptions}
+        {...rest}
       />
     </Label>
   )
