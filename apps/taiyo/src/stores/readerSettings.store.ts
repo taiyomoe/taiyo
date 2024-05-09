@@ -38,8 +38,6 @@ export const useReaderSettingsStore = create<ReaderSettings & Actions>(
       set((state) => {
         const newSettings = structuredClone(_.omit(state, "update", "reset"))
 
-        console.log("Updating", key, "to", newValue)
-
         _.set(newSettings, key, newValue)
 
         // If the user is trying to open the sidebar while the page overlay is open, close the overlay
@@ -61,8 +59,6 @@ export const useReaderSettingsStore = create<ReaderSettings & Actions>(
         }
 
         if (persistent) {
-          console.log("Updating persistent settings", key, "to", newValue)
-
           usePersistentReaderSettingsStore.getState().update(key, newValue)
         }
 
