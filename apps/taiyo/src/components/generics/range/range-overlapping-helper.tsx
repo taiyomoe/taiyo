@@ -1,14 +1,15 @@
 import { TriangleAlertIcon } from "lucide-react"
-import { objectify } from "radash"
-import { useEffect, useMemo, useRef } from "react"
+import { mapValues, objectify } from "radash"
+import { type ReactNode, useEffect, useMemo, useRef } from "react"
 import { useFormContext } from "react-hook-form"
+import { DisplayTextList } from "~/components/utils/display-text-list"
 import type { RangeItem } from "~/lib/types"
 import { FormUtils } from "~/lib/utils/form.utils"
 
 type Props = {
   name: string
   items: RangeItem[]
-  renderMessage?: (items: RangeItem[]) => string
+  renderMessage?: (items: RangeItem[]) => ReactNode
 }
 
 export const RangeOverlappingHelper = ({
@@ -18,17 +19,19 @@ export const RangeOverlappingHelper = ({
 }: Props) => {
   const { watch, clearErrors, setError } = useFormContext()
   const fieldsValues = watch()
-  const { overlappingKeys, overlappingItems } = useMemo(() => {
-    const fields = FormUtils.getOverlappingValues(fieldsValues, name)
-    const uniqueValues = [...new Set(Object.values(fields).flat())]
+  const { overlappingFields, overlappingKeys, overlappingItems } =
+    useMemo(() => {
+      const fields = FormUtils.getOverlappingValues(fieldsValues, name)
+      const uniqueValues = [...new Set(Object.values(fields).flat())]
+      const findItems = (arr: unknown[]) =>
+        arr.map((v) => items.find((i) => i.value === v)).filter(Boolean)
 
-    return {
-      overlappingKeys: Object.keys(fields),
-      overlappingItems: uniqueValues
-        .map((v) => items.find((i) => i.value === v))
-        .filter(Boolean),
-    }
-  }, [fieldsValues, name, items])
+      return {
+        overlappingFields: mapValues(fields, findItems),
+        overlappingKeys: Object.keys(fields),
+        overlappingItems: findItems(uniqueValues),
+      }
+    }, [fieldsValues, name, items])
   const prevOverlappingKeys = useRef<string[]>([])
 
   /**
@@ -49,8 +52,12 @@ export const RangeOverlappingHelper = ({
       clearErrors("root")
     }
 
-    // console.log("Setting errors", overlappingKeys)
-
+    /**
+     * Weird hack to get the errors dynamically in the RangeField component.
+     *
+     * Somehow settings the errors individually doesn't work.
+     * I noticed that the button color of the currently opened RangeField wasn't changing when the error was set.
+     */
     setError("root", {
       types: objectify(
         overlappingKeys,
@@ -59,17 +66,9 @@ export const RangeOverlappingHelper = ({
       ),
       message: "Overlapping items",
     })
-
-    // for (const key of overlappingKeys) {
-    //   console.log("Setting error", key)
-
-    //   setError(key, { message: "Overlapping items" })
-    // }
-    // setError("volumes.0.ids", { message: "Overlapping items" })
-    // setError("volumes.1.ids", { message: "Overlapping items" })
   }, [clearErrors, setError, overlappingKeys])
 
-  if (!overlappingItems.length) return null
+  if (!overlappingItems.length || !overlappingKeys.includes(name)) return null
 
   return (
     <div className="rounded-r-small border-warning-400 border-l-4 bg-warning-50 p-4">
