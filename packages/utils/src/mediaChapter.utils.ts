@@ -37,14 +37,14 @@ const getVolumes = (mediaChapters: { volume: number | null }[]) => {
 }
 
 const getDuplicatedChapters = (
-  input: BulkUpdateChaptersVolumesSchema,
+  input: BulkUpdateChaptersVolumesSchema["volumes"],
   mediaChapters: MediaChapter[],
 ) => {
   const duplicated: number[] = []
 
-  for (const volume of input.volumes) {
+  for (const volume of input) {
     for (const id of volume.ids) {
-      if (input.volumes.some((v) => v !== volume && v.ids.includes(id))) {
+      if (input.some((v) => v !== volume && v.ids.includes(id))) {
         duplicated.push(mediaChapters.find((c) => c.id === id)!.number)
       }
     }

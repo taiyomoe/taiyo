@@ -1,11 +1,9 @@
 import { useSelectable } from "react-selectable-box"
+import type { RangeItem } from "~/lib/types"
 
-type Props = {
-  value: number
-  isDisabled: boolean
-}
+type Props = { isDisabled: boolean } & RangeItem
 
-export const RangeSelectionItem = ({ value, isDisabled }: Props) => {
+export const RangeSelectionItem = ({ label, value, isDisabled }: Props) => {
   const { setNodeRef, isSelected, isAdding, isRemoving } = useSelectable({
     value,
     disabled: isDisabled,
@@ -20,7 +18,7 @@ export const RangeSelectionItem = ({ value, isDisabled }: Props) => {
       data-removing={isRemoving}
       data-disabled={isDisabled}
     >
-      {value}
+      {label}
     </span>
   )
 }

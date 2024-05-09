@@ -10,6 +10,7 @@ import { SubmitButton } from "~/components/generics/buttons/new-submit-button"
 import { InputField } from "~/components/generics/newForm/input-field"
 import { Form } from "~/components/generics/newForm/new-form"
 import { RangeField } from "~/components/generics/newForm/range-field"
+import type { RangeItem } from "~/lib/types"
 
 type Props = {
   chapters: MediaChapter[]
@@ -20,25 +21,26 @@ export const BulkUpdateChaptersVolumesFormFields = ({ chapters }: Props) => {
     useFieldArray<BulkUpdateChaptersVolumesSchema>({
       name: "volumes",
     })
-  const availableNumbers = useMemo(
-    () => [...new Set(chapters.map((c) => c.number))],
-    [chapters],
-  )
+  const availableItems = useMemo(() => {
+    const uniqueItems: RangeItem[] = []
+
+    for (const chapter of chapters) {
+      if (uniqueItems.find((i) => i.value === chapter.id)) continue
+
+      uniqueItems.push({
+        label: chapter.number,
+        value: chapter.id,
+      })
+    }
+
+    return uniqueItems
+  }, [chapters])
 
   const handleAdd = useCallback(() => {
     const highestNumber = max(fields, (f) => f.number ?? -1)!.number ?? 0
 
     append({ number: highestNumber + 1, ids: [] })
   }, [append, fields])
-
-  const handleMatch = useCallback(
-    (value: number) => {
-      const chapter = chapters.find((c) => c.number === value)
-
-      return chapter?.id
-    },
-    [chapters.find],
-  )
 
   return (
     <Form.Layout>
@@ -60,8 +62,12 @@ export const BulkUpdateChaptersVolumesFormFields = ({ chapters }: Props) => {
                 <RangeField
                   name={`volumes.${i}.ids`}
                   className="order-3 md:order-2"
-                  matcher={handleMatch}
-                  availableNumbers={availableNumbers}
+                  items={availableItems}
+                  renderOverlapMessage={(values) =>
+                    `Os capítulos seguintes foram selecionados mais de uma vez: ${values
+                      .map((v) => v.label)
+                      .join(", ")}`
+                  }
                 />
                 <FormDeleteButton
                   name="volumes"

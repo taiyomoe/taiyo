@@ -1,7 +1,7 @@
 import parseRange from "parse-numeric-range"
 
-const compressRange = (numbers: number[]) => {
-  const sortedNumbers = [...new Set(numbers)].sort((a, b) => a - b)
+const compressRange = (input: number[]) => {
+  const sortedNumbers = [...new Set(input)].sort((a, b) => a - b)
   const ranges: string[] = []
 
   for (let i = 0; i < sortedNumbers.length; i++) {

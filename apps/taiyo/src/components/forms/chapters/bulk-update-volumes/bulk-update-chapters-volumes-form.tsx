@@ -33,7 +33,7 @@ export const BulkUpdateChaptersVolumesForm = (props: Props) => {
     values,
   ) => {
     const duplicatedChapters = MediaChapterUtils.getDuplicatedChapters(
-      values,
+      values.volumes,
       chapters,
     )
 
