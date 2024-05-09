@@ -50,6 +50,8 @@ export const RangeOverlappingHelper = ({
 
     if (overlappingKeys.length === 0) {
       clearErrors("root")
+
+      return
     }
 
     /**
