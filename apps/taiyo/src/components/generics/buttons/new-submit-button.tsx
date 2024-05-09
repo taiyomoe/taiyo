@@ -3,9 +3,12 @@ import { Button } from "@nextui-org/button"
 import { useFormState } from "react-hook-form"
 
 export const SubmitButton = ({ isDisabled, children }: ButtonProps) => {
-  const { isSubmitting, isValid, isDirty } = useFormState()
+  const { isSubmitting, isValid, isDirty, errors } = useFormState()
   const shouldDisableButton =
-    isSubmitting || !(isValid && isDirty) || isDisabled
+    isSubmitting ||
+    !(isValid && isDirty) ||
+    isDisabled ||
+    Object.keys(errors).length !== 0
 
   return (
     <Button

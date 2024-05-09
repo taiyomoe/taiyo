@@ -7,11 +7,9 @@ import {
 } from "@taiyomoe/schemas"
 import type { MediaChapterWithScans } from "@taiyomoe/types"
 import { TRPCClientError } from "@trpc/client"
-import { useParams } from "next/navigation"
 import { useState } from "react"
 import { toast } from "sonner"
 import { toFormikValidationSchema } from "zod-formik-adapter"
-import { BulkUpdateActions } from "~/app/(root)/dashboard/chapters/bulk-edit/_components/BulkUpdateActions"
 import { Form } from "~/components/generics/form/Form"
 import type { FormSubmit } from "~/lib/types"
 import { api } from "~/trpc/react"
@@ -24,7 +22,6 @@ type Props = {
 export const BulkUpdateChapterScansForm = (props: Props) => {
   const { chapters: initialChapters } = props
   const [chapters, setChapters] = useState(initialChapters)
-  const { mediaId } = useParams<{ mediaId: string }>()
   const { mutateAsync } = api.mediaChapters.updateScans.useMutation()
   const initialValues: BulkUpdateMediaChapterScansSchema = [
     { scanIds: [], ids: [] },
@@ -70,7 +67,6 @@ export const BulkUpdateChapterScansForm = (props: Props) => {
       )}
       onSubmit={handleSubmit}
     >
-      <BulkUpdateActions mediaId={mediaId} />
       <Accordion>
         <AccordionItem title="Capítulos">
           {chapters.map((c) => c.number).join(", ")}

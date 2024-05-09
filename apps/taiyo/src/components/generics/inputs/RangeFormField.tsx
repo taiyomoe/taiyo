@@ -1,6 +1,6 @@
 import { Input } from "@nextui-org/input"
 import type { MediaChapter } from "@prisma/client"
-import type { BulkUpdateMediaChapterVolumesSchema } from "@taiyomoe/schemas"
+import type { BulkUpdateChaptersVolumesSchema } from "@taiyomoe/schemas"
 import { MediaChapterUtils } from "@taiyomoe/utils"
 import { useField } from "formik"
 import {
@@ -21,7 +21,7 @@ type Props = {
 export const RangeFormField = ({ name, chapters }: Props) => {
   // biome-ignore lint/correctness/noEmptyPattern: we need to destructure the array
   const [field, {}, { setValue: setFieldValue }] = useField<
-    BulkUpdateMediaChapterVolumesSchema[number]["ids"]
+    BulkUpdateChaptersVolumesSchema["volumes"][number]["ids"]
   >({ name })
   const initialValue = useMemo(
     () =>

@@ -195,6 +195,9 @@ importers:
       pretty-bytes:
         specifier: ^6.1.1
         version: 6.1.1
+      radash:
+        specifier: ^12.1.0
+        version: 12.1.0
       react:
         specifier: 18.3.1
         version: 18.3.1
@@ -213,6 +216,9 @@ importers:
       react-select:
         specifier: ^5.8.0
         version: 5.8.0(@types/react@18.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react-selectable-box:
+        specifier: ^1.9.0
+        version: 1.9.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       sharp:
         specifier: ^0.33.3
         version: 0.33.3
@@ -3897,6 +3903,12 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
       react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+
+  react-selectable-box@1.9.0:
+    resolution: {integrity: sha512-qaMP7rEgD8ucSZo2fhFen+IxLr8gbCcUtqB5SESGV2yhkrhCs/Ln7zkuq/V7dvA5FpLo9+yWA8zd6dfU6ti56g==}
+    peerDependencies:
+      react: '>=16.8.0'
+      react-dom: '>=16.8.0'
 
   react-simple-animate@3.5.2:
     resolution: {integrity: sha512-xLE65euP920QMTOmv5haPlml+hmOPDkbIr5WeF7ADIXWBYt5kW/vwpNfWg8EKMab8aeDxIZ6QjffVh8v2dUyhg==}
@@ -9089,6 +9101,11 @@ snapshots:
       use-isomorphic-layout-effect: 1.1.2(@types/react@18.3.1)(react@18.3.1)
     transitivePeerDependencies:
       - '@types/react'
+
+  react-selectable-box@1.9.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+    dependencies:
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
 
   react-simple-animate@3.5.2(react-dom@18.3.1(react@18.3.1)):
     dependencies:

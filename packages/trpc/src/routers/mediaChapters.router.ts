@@ -1,6 +1,6 @@
 import {
+  bulkUpdateChaptersVolumesSchema,
   bulkUpdateMediaChapterScansSchema,
-  bulkUpdateMediaChapterVolumesSchema,
   getMediaChapterByIdSchema,
   getMediaChaptersByMediaIdSchema,
   idSchema,
@@ -54,8 +54,8 @@ export const mediaChaptersRouter = createTRPCRouter({
 
   updateVolumes: protectedProcedure
     .meta({ resource: "mediaChapters", action: "update" })
-    .input(bulkUpdateMediaChapterVolumesSchema)
-    .mutation(async ({ ctx, input }) => {
+    .input(bulkUpdateChaptersVolumesSchema)
+    .mutation(async ({ ctx, input: { volumes: input } }) => {
       const chapterIds = [...new Set(input.flatMap((c) => c.ids))]
       const chapters = await ctx.db.mediaChapter.findMany({
         where: { id: { in: chapterIds } },
@@ -68,10 +68,10 @@ export const mediaChaptersRouter = createTRPCRouter({
         })
       }
 
-      for (const chapters of input) {
+      for (const chptrs of input) {
         await ctx.db.mediaChapter.updateMany({
-          data: { volume: chapters.volume },
-          where: { id: { in: chapters.ids } },
+          data: { volume: chptrs.number },
+          where: { id: { in: chptrs.ids } },
         })
       }
     }),
