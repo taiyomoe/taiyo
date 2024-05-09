@@ -10,6 +10,7 @@ import { SubmitButton } from "~/components/generics/buttons/new-submit-button"
 import { InputField } from "~/components/generics/newForm/input-field"
 import { Form } from "~/components/generics/newForm/new-form"
 import { RangeField } from "~/components/generics/newForm/range-field"
+import { DisplayTextList } from "~/components/utils/display-text-list"
 import type { RangeItem } from "~/lib/types"
 
 type Props = {
@@ -63,11 +64,13 @@ export const BulkUpdateChaptersVolumesFormFields = ({ chapters }: Props) => {
                   name={`volumes.${i}.ids`}
                   className="order-3 md:order-2"
                   items={availableItems}
-                  renderOverlapMessage={(values) =>
-                    `Os capítulos seguintes foram selecionados mais de uma vez: ${values
-                      .map((v) => v.label)
-                      .join(", ")}`
-                  }
+                  renderOverlapMessage={(values) => (
+                    <DisplayTextList
+                      prefix="Os capítulos seguintes foram selecionados mais de uma vez: "
+                      items={values}
+                      className="font-semibold text-warning-400"
+                    />
+                  )}
                 />
                 <FormDeleteButton
                   name="volumes"

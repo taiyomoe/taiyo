@@ -75,12 +75,13 @@ export const RangeOverlappingHelper = ({
       <div className="flex">
         <TriangleAlertIcon className="text-warning-400" />
         <div className="ml-3">
-          {!!renderMessage && renderMessage(overlappingItems)}
+          {!!renderMessage && renderMessage(overlappingFields[name]!)}
           {!renderMessage && (
-            <p>
-              Os números seguintes foram selecionados mais de uma vez:{" "}
-              {overlappingItems.map((v) => v.label).join(", ")}
-            </p>
+            <DisplayTextList
+              prefix="Os números seguintes foram selecionados mais de uma vez: "
+              items={overlappingFields[name]!}
+              className="font-semibold text-warning-400"
+            />
           )}
         </div>
       </div>

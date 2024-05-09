@@ -7,7 +7,7 @@ import {
   ModalHeader,
   useDisclosure,
 } from "@nextui-org/modal"
-import { useMemo } from "react"
+import { type ReactNode, useMemo } from "react"
 import { useFormContext, useFormState } from "react-hook-form"
 import type { SelectableProps } from "react-selectable-box"
 import { RangeOverlappingHelper } from "~/components/generics/range/range-overlapping-helper"
@@ -21,7 +21,7 @@ type Props = {
   className?: string
   items: RangeItem[]
   enableOverlap?: boolean
-  renderOverlapMessage?: (items: RangeItem[]) => string
+  renderOverlapMessage?: (items: RangeItem[]) => ReactNode
 }
 
 export const RangeField = ({
