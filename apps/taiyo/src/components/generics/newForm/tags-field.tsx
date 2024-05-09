@@ -1,6 +1,6 @@
 import { TAGS_PT } from "@taiyomoe/utils/i18n"
 import { Controller } from "react-hook-form"
-import { Label } from "~/components/generics/Label"
+import { Label } from "~/components/generics/label"
 import { MultiSelect } from "~/components/generics/multi-select"
 import type { SelectItem } from "~/lib/types"
 

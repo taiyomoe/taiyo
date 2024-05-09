@@ -2,7 +2,7 @@ import { Switch, type SwitchProps } from "@nextui-org/switch"
 import { omit } from "lodash-es"
 import { useCallback, useState } from "react"
 import { useFormContext } from "react-hook-form"
-import { Label, type LabelProps } from "~/components/generics/Label"
+import { Label, type LabelProps } from "~/components/generics/label"
 
 type Props = { name: string } & Omit<SwitchProps, "onChange"> & LabelProps
 
