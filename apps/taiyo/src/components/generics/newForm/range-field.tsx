@@ -34,7 +34,7 @@ export const RangeField = ({
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
   const { getValues, setValue: setFieldValue } = useFormContext()
   const { errors } = useFormState()
-  const value = getValues(name)
+  const value: string[] = getValues(name)
   // @ts-expect-error - This is a weird hack to get the error of the field DYNAMICALLY. Using regular errors doesn't work for some reason
   const hasError = errors.root?.types?.[name] ?? false
   const buttonText = useMemo(() => {
@@ -47,8 +47,12 @@ export const RangeField = ({
     return `Range selecionada: ${NumberUtils.compressRange(labels)}`
   }, [value, items])
 
-  const handleSelection: SelectableProps<RangeValue>["onEnd"] = (selected) => {
-    setFieldValue(name, selected, { shouldDirty: true, shouldValidate: true })
+  const handleSelection: SelectableProps<RangeValue>["onEnd"] = (
+    _,
+    { added, removed },
+  ) => {
+    const newValues = value.concat(added).filter((v) => !removed.includes(v))
+    setFieldValue(name, newValues, { shouldDirty: true, shouldValidate: true })
   }
 
   return (
@@ -75,7 +79,6 @@ export const RangeField = ({
             <RangeSelectionCanvas
               onEnd={handleSelection}
               value={value}
-              disabledValues={[]}
               items={items}
             />
           </ModalBody>
