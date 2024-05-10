@@ -13,7 +13,7 @@ export const UploadChapterFormFields = () => {
       <Form.Category>
         <MediasField />
         <InputField name="title" label="Título" isRequired />
-        <ScansField />
+        <ScansField name="scanIds" />
       </Form.Category>
       <Form.Category title="Detalhes">
         <Form.Row>

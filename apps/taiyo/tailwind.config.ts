@@ -33,10 +33,12 @@ export default {
       maxWidth: {
         readerSidebar: "var(--reader-sidebar-width)",
         librarySidebar: "var(--library-sidebar-width)",
+        "2/4": "50%",
       },
       minWidth: {
         readerSidebar: "var(--reader-sidebar-width)",
         librarySidebar: "var(--library-sidebar-width)",
+        "2/4": "50%",
       },
       blur: {
         xs: "3px",

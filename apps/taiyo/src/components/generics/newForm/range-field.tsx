@@ -28,7 +28,7 @@ export const RangeField = ({
   name,
   className,
   items,
-  enableOverlap = true,
+  enableOverlap = false,
   renderOverlapMessage,
 }: Props) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()

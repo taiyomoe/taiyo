@@ -4,8 +4,8 @@ import type { BulkUpdateChaptersVolumesSchema } from "@taiyomoe/schemas"
 import { max, sort } from "radash"
 import { Fragment, useCallback, useMemo } from "react"
 import { useFieldArray } from "react-hook-form"
-import { FormAddButton } from "~/components/generics/buttons/FormAddButton"
-import { FormDeleteButton } from "~/components/generics/buttons/FormDeleteButton"
+import { FormAddButton } from "~/components/generics/buttons/form-add-button"
+import { FormDeleteButton } from "~/components/generics/buttons/form-delete-button"
 import { SubmitButton } from "~/components/generics/buttons/new-submit-button"
 import { InputField } from "~/components/generics/newForm/input-field"
 import { Form } from "~/components/generics/newForm/new-form"
@@ -51,7 +51,7 @@ export const BulkUpdateChaptersVolumesFormFields = ({ chapters }: Props) => {
       >
         <Form.Col>
           {sort(fields, (f) => f.number ?? -1).map((_, i) => (
-            <Fragment key={_.number}>
+            <Fragment key={_.id}>
               <Form.Row className="flex-row flex-wrap items-end md:flex-nowrap">
                 <InputField
                   name={`volumes.${i}.number`}
@@ -71,6 +71,7 @@ export const BulkUpdateChaptersVolumesFormFields = ({ chapters }: Props) => {
                       className="font-semibold text-warning-400"
                     />
                   )}
+                  enableOverlap
                 />
                 <FormDeleteButton
                   name="volumes"
