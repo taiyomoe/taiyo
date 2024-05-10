@@ -8,26 +8,26 @@ import {
   useDisclosure,
 } from "@nextui-org/modal"
 import { useCallback, useEffect } from "react"
-import { InvalidFilesShowcase } from "~/components/ui/bulk-upload/InvalidFilesShowcase"
+import { BulkUploadInvalidFilesShowcase } from "~/components/ui/bulk-upload/bulk-upload-invalid-files-showcase"
 import type { InvalidFile } from "~/lib/types"
 
 type Props = {
   files: InvalidFile[]
-  reset: () => void
+  onDismiss: () => void
 }
 
-export const InvalidFilesModal = ({ files, reset }: Props) => {
+export const BulkUploadInvalidFilesModal = ({ files, onDismiss }: Props) => {
   const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure()
 
   const handleClose = useCallback(() => {
     onClose()
-    reset()
-  }, [onClose, reset])
+    onDismiss()
+  }, [onClose, onDismiss])
 
   const handleDismiss = useCallback(() => {
     onOpenChange()
-    reset()
-  }, [onOpenChange, reset])
+    onDismiss()
+  }, [onOpenChange, onDismiss])
 
   useEffect(() => {
     if (files.length) {
@@ -36,21 +36,16 @@ export const InvalidFilesModal = ({ files, reset }: Props) => {
   }, [files, onOpen])
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onOpenChange={handleDismiss}
-      scrollBehavior="inside"
-      // size="xl"
-    >
+    <Modal isOpen={isOpen} onOpenChange={handleDismiss} scrollBehavior="inside">
       <ModalContent>
         <ModalHeader className="flex flex-col gap-1">
           Ficheiros inválidos
         </ModalHeader>
         <ModalBody className="scrollbar-thin scrollbar-track-content2">
-          <InvalidFilesShowcase files={files} />
+          <BulkUploadInvalidFilesShowcase files={files} />
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" variant="light" onPress={handleClose}>
+          <Button onPress={handleClose} variant="light">
             Fechar
           </Button>
         </ModalFooter>
