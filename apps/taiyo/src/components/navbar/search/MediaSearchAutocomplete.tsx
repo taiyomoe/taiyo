@@ -36,7 +36,7 @@ export const MediaSearchAutocomplete = (props: Props) => {
   const handleSelectionChange = useCallback(
     (key: Key | null) => {
       if (!key) return
-      
+
       if (onSelectionChange) {
         onSelectionChange(list.getItem(key))
       }
