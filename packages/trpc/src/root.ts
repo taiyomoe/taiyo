@@ -6,7 +6,6 @@ import { mediaCoversRouter } from "./routers/mediaCovers.router"
 import { mediaTitlesRouter } from "./routers/mediaTitles.router"
 import { mediasRouter } from "./routers/medias.router"
 import { scansRouter } from "./routers/scans.router"
-import { uploadsRouter } from "./routers/uploads.router"
 import { createTRPCRouter } from "./trpc"
 
 /**
@@ -22,7 +21,6 @@ export const appRouter = createTRPCRouter({
   history: historyRouter,
   libary: libraryRouter,
   scans: scansRouter,
-  uploads: uploadsRouter,
   md: mdRouter,
 })
 
