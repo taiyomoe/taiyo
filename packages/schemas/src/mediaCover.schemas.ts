@@ -8,7 +8,7 @@ export const updateCoverSchema = MediaCoverSchema.pick({
   isMainCover: true,
   language: true,
 })
-  .extend({ volume: z.coerce.number().int().nullable() })
+  .extend({ volume: z.coerce.number().int().min(1).nullable() })
   .partial()
   .required({ id: true })
 
