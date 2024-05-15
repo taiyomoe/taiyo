@@ -1,8 +1,5 @@
 import { Card, CardBody } from "@nextui-org/card"
-import {
-  UploadChapterState,
-  type UploadChaptersInput,
-} from "@taiyomoe/image-orchestrator"
+import type { UploadChaptersInput } from "@taiyomoe/image-orchestrator"
 import { useCallback, useState } from "react"
 import { FileTrigger, type FileTriggerProps } from "react-aria-components"
 import { useFieldArray } from "react-hook-form"
@@ -34,7 +31,6 @@ export const BulkUploadChaptersImagesCategory = () => {
           language: "pt_br",
           scanIds: [],
           files,
-          state: UploadChapterState.PENDING,
         })
       }
 
@@ -69,6 +65,7 @@ export const BulkUploadChaptersImagesCategory = () => {
               key={chapter.id}
               chapter={chapter}
               position={`${i + 1}/${fields.length}`}
+              index={i}
             />
           ))}
         </div>

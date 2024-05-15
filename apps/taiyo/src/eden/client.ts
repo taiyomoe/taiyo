@@ -1,13 +1,8 @@
 import type { Media, MediaChapter, MediaCover } from "@taiyomoe/db"
 import { HttpError } from "@taiyomoe/image-orchestrator"
 
-export const handleErrors = (defaultMessage: string) => (err: unknown) => {
-  if (err instanceof HttpError) {
-    return err.message
-  }
-
-  return defaultMessage
-}
+export const handleErrors = (defaultMessage: string) => (err: unknown) =>
+  err instanceof HttpError ? err.message : defaultMessage
 
 const transformValue = (value: unknown): File | string => {
   if (value instanceof File) {
@@ -56,9 +51,16 @@ const createClient =
     }
 
     if (body && typeof body === "object" && "errors" in body) {
-      const { errors } = body as Record<"errors", string[]>
+      const { errors } = body as Record<
+        "errors",
+        string[] | Record<string, unknown>[]
+      >
+      const firstError = errors[0]!
 
-      throw new HttpError(res.status, errors[0]!)
+      // If the error is a string, we can most likely show it to the user.
+      if (typeof firstError === "string") {
+        throw new HttpError(res.status, firstError)
+      }
     }
 
     throw new Error("Unknown error")

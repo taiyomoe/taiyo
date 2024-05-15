@@ -16,7 +16,7 @@ const insert = async (
       id: resource.id,
       pages: resource.files,
       language: "pt_br",
-      scans: { connect: input.scanIds.map((id) => ({ id })) },
+      scans: { connect: (input.scanIds ?? []).map((id) => ({ id })) },
       uploaderId,
     },
   })

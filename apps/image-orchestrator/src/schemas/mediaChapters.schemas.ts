@@ -16,17 +16,14 @@ export const uploadChapterSchema = t.Object({
   flag: t.Enum(Flag),
   language: t.Enum(Languages),
   mediaId: t.String({ format: "uuid" }),
-  scanIds: t.Array(t.String({ format: "uuid" }), { uniqueItems: true }),
+  scanIds: t.Optional(
+    t.Array(t.String({ format: "uuid" }), { uniqueItems: true }),
+  ),
   files: t.Files({ maxItems: 100, maxSize: "10m", type: DEFAULT_MIME_TYPES }),
 })
 
 export const uploadChaptersSchema = t.Object({
-  chapters: t.Array(
-    t.Intersect([
-      t.Omit(uploadChapterSchema, ["mediaId"]),
-      t.Object({ state: t.Enum(UploadChapterState) }),
-    ]),
-  ),
+  chapters: t.Array(t.Omit(uploadChapterSchema, ["mediaId"])),
   mediaId: t.String({ format: "uuid" }),
   concurrent: t.Numeric({ minimum: 1 }),
 })

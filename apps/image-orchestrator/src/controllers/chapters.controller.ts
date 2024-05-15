@@ -11,7 +11,7 @@ const upload = new Elysia()
     async ({ body, session }) => {
       const media = await MediasService.getById(body.mediaId)
 
-      await ScansService.getByIds(body.scanIds)
+      await ScansService.getByIds(body.scanIds ?? [])
 
       const uploadedChapter = await MediaChaptersService.upload(
         media.id,
