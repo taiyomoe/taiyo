@@ -3,7 +3,7 @@
 import { Tab, Tabs } from "@nextui-org/tabs"
 import type { MediaWithRelations } from "@taiyomoe/types"
 import { useEffect } from "react"
-import { UpdateMediaCoversShowcase } from "~/components/forms/mediaCovers/UpdateMediaCoversShowcase"
+import { UpdateCoverShowcase } from "~/components/forms/mediaCovers/update/update-cover-showcase"
 import { UploadMediaCoversForm } from "~/components/forms/mediaCovers/upload/upload-media-covers-form"
 import { UpdateMediaTitlesShowcase } from "~/components/forms/mediaTitles/update/update-media-titles-showcase"
 import { useMediaUpdateStore } from "~/stores"
@@ -42,7 +42,7 @@ export const UpdateMediaTabs = ({ media }: Props) => {
         <UpdateMediaTitlesShowcase mediaId={media.id} />
       </Tab>
       <Tab key="covers" title="Covers" className="mt-0 flex flex-col gap-16">
-        <UpdateMediaCoversShowcase media={media} />
+        <UpdateCoverShowcase media={media} />
         <UploadMediaCoversForm mediaId={media.id} />
       </Tab>
       <Tab key="banners" title="Banners">

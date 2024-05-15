@@ -27,14 +27,14 @@ import { SwitchFormField } from "~/components/generics/form/SwitchFormField"
 import { ObjectUtils } from "~/lib/utils/object.utils"
 import { useMediaUpdateStore } from "~/stores"
 import { api } from "~/trpc/react"
-import { UpdateMediaCoverDeleteButton } from "./UpdateMediaCoverDeleteButton"
+import { UpdateMediaCoverDeleteButton } from "./update-cover-delete-button"
 
 type Props = {
   media: MediaWithRelations
   cover: MediaCover
 }
 
-export const UpdateMediaCoverForm = ({ media, cover }: Props) => {
+export const UpdateCoverForm = ({ media, cover }: Props) => {
   const { updateCover } = useMediaUpdateStore()
   const { mutateAsync } = api.mediaCovers.update.useMutation()
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
