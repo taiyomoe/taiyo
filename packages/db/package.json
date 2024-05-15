@@ -12,6 +12,7 @@
     "typecheck": "tsc --noEmit",
     "with-env": "dotenv -e ../../.env --",
     "seed": "pnpm with-env prisma db push --force-reset && prisma generate && prisma db seed",
+    "db": "pnpm with-env prisma",
     "postinstall": "prisma generate"
   },
   "prisma": {
