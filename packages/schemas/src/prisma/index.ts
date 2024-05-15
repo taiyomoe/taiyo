@@ -84,8 +84,6 @@ export const MediaChapterScalarFieldEnumSchema = z.enum(['id','createdAt','updat
 
 export const MediaChapterCommentScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','content','attachments','parentId','mediaChapterId','userId','deleterId']);
 
-export const UploadSessionScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','status','type','userId','mediaId','mediaChapterId']);
-
 export const ScanScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','name','description','logo','banner','website','discord','twitter','facebook','instagram','telegram','youtube','email','creatorId','deleterId']);
 
 export const ScanMemberScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','roles','permissions','userId']);
@@ -147,14 +145,6 @@ export type ScanMemberRolesType = `${z.infer<typeof ScanMemberRolesSchema>}`
 export const ScanMemberPermissionsSchema = z.enum(['UPLOAD','EDIT','DELETE']);
 
 export type ScanMemberPermissionsType = `${z.infer<typeof ScanMemberPermissionsSchema>}`
-
-export const UploadSessionStatusSchema = z.enum(['UPLOADING','PROCESSING','FINISHED','FAILED']);
-
-export type UploadSessionStatusType = `${z.infer<typeof UploadSessionStatusSchema>}`
-
-export const UploadSessionTypeSchema = z.enum(['COVER','BANNER','CHAPTER']);
-
-export type UploadSessionTypeType = `${z.infer<typeof UploadSessionTypeSchema>}`
 
 export const LanguagesSchema = z.enum(['ab','aa','af','ak','sq','am','ar','an','hy','as','av','ae','ay','az','bm','ba','eu','be','bn','bi','bs','br','bg','my','ca','ch','ce','ny','cu','cv','kw','co','cr','hr','cs','da','dv','nl','dz','en','eo','et','ee','fo','fj','fi','fr','fy','ff','gd','gl','lg','ka','de','el','kl','gn','gu','ht','ha','he','hz','hi','ho','hu','is','io','ig','id','ia','ie','iu','ik','ga','it','jv','kn','kr','ks','kk','km','ki','rw','ky','kv','kg','kj','ku','lo','la','lv','li','ln','lt','lu','lb','mk','mg','ms','ml','mt','gv','mi','mr','mh','mn','na','nv','nd','nr','ng','ne','no','nb','nn','ii','oc','oj','or','om','os','pi','ps','fa','pl','pa','qu','ro','rm','rn','ru','se','sm','sg','sa','sc','sr','sn','sd','si','sk','sl','so','st','su','sw','ss','sv','tl','ty','tg','ta','tt','te','th','bo','ti','to','ts','tn','tr','tk','tw','ug','uk','ur','uz','ve','vi','vo','wa','cy','wo','xh','yi','yo','za','zu','es','es_la','pt_br','pt_pt','ja','ja_ro','ko','ko_ro','zh','zh_hk','zh_ro']);
 
@@ -456,24 +446,6 @@ export const MediaChapterCommentSchema = z.object({
 })
 
 export type MediaChapterComment = z.infer<typeof MediaChapterCommentSchema>
-
-/////////////////////////////////////////
-// UPLOAD SESSION SCHEMA
-/////////////////////////////////////////
-
-export const UploadSessionSchema = z.object({
-  status: UploadSessionStatusSchema,
-  type: UploadSessionTypeSchema,
-  id: z.string().uuid(),
-  createdAt: z.coerce.date(),
-  updatedAt: z.coerce.date(),
-  deletedAt: z.coerce.date().nullable(),
-  userId: z.string(),
-  mediaId: z.string(),
-  mediaChapterId: z.string().nullable(),
-})
-
-export type UploadSession = z.infer<typeof UploadSessionSchema>
 
 /////////////////////////////////////////
 // SCAN SCHEMA

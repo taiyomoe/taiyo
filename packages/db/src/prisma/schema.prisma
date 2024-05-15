@@ -53,7 +53,6 @@ model User {
     mediaChapterComments  MediaChapterComment[]
     createdScans          Scan[]
     scanMembers           ScanMember[]
-    uploadSessions        UploadSession[]
 
     @@index([id])
 }
@@ -308,22 +307,6 @@ model MediaChapterComment {
     deleterId String?
 }
 
-model UploadSession {
-    id        String    @id @default(uuid())
-    createdAt DateTime  @default(now())
-    updatedAt DateTime  @updatedAt
-    deletedAt DateTime?
-
-    status UploadSessionStatus @default(PROCESSING)
-    type   UploadSessionType
-
-    user   User   @relation(fields: [userId], references: [id])
-    userId String
-
-    mediaId        String
-    mediaChapterId String?
-}
-
 // ---- SCANS
 model Scan {
     id        String    @id @default(uuid())
@@ -484,19 +467,6 @@ enum ScanMemberPermissions {
     UPLOAD
     EDIT
     DELETE
-}
-
-enum UploadSessionStatus {
-    UPLOADING
-    PROCESSING
-    FINISHED
-    FAILED
-}
-
-enum UploadSessionType {
-    COVER
-    BANNER
-    CHAPTER
 }
 
 // ISO 639-1

@@ -4,7 +4,7 @@ import { useDropzone } from "react-dropzone"
 import { useFormContext } from "react-hook-form"
 import { Form } from "~/components/generics/newForm/new-form"
 import { AssetSelection } from "~/components/ui/AssetSelection"
-import { ImageCard } from "~/components/ui/upload/ImageCard"
+import { ImageCard } from "~/components/ui/upload/image-card"
 import { DEFAULT_MIME_TYPES } from "~/lib/utils/constants"
 
 export const ChapterFormImagesCategory = () => {

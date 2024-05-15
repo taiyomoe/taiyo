@@ -54,7 +54,9 @@ export const ScansFormField = ({ name = "scanIds", scans }: Props) => {
   }
 
   const handleSelectionChange = useCallback(
-    (key: Key) => {
+    (key: Key | null) => {
+      if (!key) return
+
       const item = list.getItem(key)
 
       if (!item) return

@@ -36,7 +36,9 @@ export const MediasSearchAutocomplete = () => {
     },
   })
 
-  const handleSelectionChange = (key: Key) => {
+  const handleSelectionChange = (key: Key | null) => {
+    if (!key) return
+
     const item = list.getItem(key)
 
     if (!item) return

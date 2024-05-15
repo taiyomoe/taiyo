@@ -28,15 +28,6 @@ async function main() {
     process.exit(1)
   }
 
-  console.log(
-    "process.env.NEXT_PUBLIC_MEILISEARCH_URL",
-    process.env.NEXT_PUBLIC_MEILISEARCH_URL,
-  )
-  console.log(
-    "process.env.MEILISEARCH_ADMIN_KEY",
-    process.env.MEILISEARCH_ADMIN_KEY,
-  )
-
   if (
     !process.env.NEXT_PUBLIC_MEILISEARCH_URL ||
     !process.env.MEILISEARCH_ADMIN_KEY

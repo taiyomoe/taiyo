@@ -3,6 +3,7 @@
 import type { AutocompleteProps } from "@nextui-org/autocomplete"
 import { Autocomplete, AutocompleteItem } from "@nextui-org/autocomplete"
 import { useAsyncList } from "@react-stately/data"
+import type { Key } from "@react-types/shared"
 import type { SearchedMedia } from "@taiyomoe/types"
 import { SearchIcon } from "lucide-react"
 import Link from "next/link"
@@ -33,7 +34,9 @@ export const MediaSearchAutocomplete = (props: Props) => {
   })
 
   const handleSelectionChange = useCallback(
-    (key: string | number) => {
+    (key: Key | null) => {
+      if (!key) return
+
       if (onSelectionChange) {
         onSelectionChange(list.getItem(key))
       }
