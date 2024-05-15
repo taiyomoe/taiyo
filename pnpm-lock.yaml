@@ -376,8 +376,8 @@ importers:
   packages/meilisearch:
     dependencies:
       meilisearch:
-        specifier: ^0.39.0
-        version: 0.39.0(encoding@0.1.13)
+        specifier: ^0.40.0
+        version: 0.40.0(encoding@0.1.13)
     devDependencies:
       '@taiyomoe/tsconfig':
         specifier: workspace:^0.1.0
@@ -3585,8 +3585,8 @@ packages:
     resolution: {integrity: sha512-YxkAzHCd9webTo6W7pUlwXEMq+g3PUmgP0IPKFs8no9T5WcenE4VxtvoIAAPiDYa6bgHRljGnCNq28Yhl2c0dA==}
     engines: {node: '>=12.0.0'}
 
-  meilisearch@0.39.0:
-    resolution: {integrity: sha512-nNf/HOqQ/wSxaSYKyIsE8thMPciLyIpEDIp0ZbJxkOZ/tETDNfaBNbY+Eq/wbTR9O769QSiQFf5OhssfGyOzbA==}
+  meilisearch@0.40.0:
+    resolution: {integrity: sha512-BoRhQMr2mBFLEeCfsvPluksGb01IaOiWvV3Deu3iEY+yYJ4jdGTu+IQi5FCjKlNQ7/TMWSN2XUToSgvH1tj0BQ==}
 
   memoize-one@6.0.0:
     resolution: {integrity: sha512-rkpe71W0N0c0Xz6QD0eJETuWAJGnJ9afsl1srmwPrI+yBCkge5EycXXbYRyvL29zZVUWQCY7InPRCv3GDXuZNw==}
@@ -8991,7 +8991,7 @@ snapshots:
 
   mangadex-full-api@5.12.1: {}
 
-  meilisearch@0.39.0(encoding@0.1.13):
+  meilisearch@0.40.0(encoding@0.1.13):
     dependencies:
       cross-fetch: 3.1.8(encoding@0.1.13)
     transitivePeerDependencies:
