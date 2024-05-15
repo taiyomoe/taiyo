@@ -1,18 +1,19 @@
+import { z } from "zod"
 import { MediaCoverSchema } from "./prisma"
 
-export const updateMediaCoverSchema = MediaCoverSchema.pick({
+export const updateCoverSchema = MediaCoverSchema.pick({
   id: true,
   volume: true,
   contentRating: true,
   isMainCover: true,
   language: true,
 })
+  .extend({ volume: z.coerce.number().int().nullable() })
   .partial()
   .required({ id: true })
 
-export const deleteMediaCoverSchema = MediaCoverSchema.pick({
+export const deleteCoverSchema = MediaCoverSchema.pick({
   id: true,
 })
 
-export type UpdateMediaCoverSchema = typeof updateMediaCoverSchema._type
-export type DeleteMediaCoverSchema = typeof deleteMediaCoverSchema._type
+export type UpdateCoverInput = typeof updateCoverSchema._type

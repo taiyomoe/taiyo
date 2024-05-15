@@ -1,3 +1,4 @@
+import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "@nextui-org/button"
 import { Image } from "@nextui-org/image"
 import {
@@ -8,26 +9,23 @@ import {
   ModalHeader,
   useDisclosure,
 } from "@nextui-org/modal"
-import { Tooltip } from "@nextui-org/tooltip"
-import { ContentRating, Languages } from "@prisma/client"
 import type { MediaCover } from "@prisma/client"
-import type { UpdateMediaCoverSchema } from "@taiyomoe/schemas"
-import { updateMediaCoverSchema } from "@taiyomoe/schemas"
+import type { UpdateCoverInput } from "@taiyomoe/schemas"
+import { updateCoverSchema } from "@taiyomoe/schemas"
 import type { MediaWithRelations } from "@taiyomoe/types"
 import { MediaCoverUtils } from "@taiyomoe/utils"
-import type { FormikConfig } from "formik"
 import NextImage from "next/image"
+import { pick } from "radash"
+import { type SubmitHandler, useForm } from "react-hook-form"
 import { toast } from "sonner"
-import { toFormikValidationSchema } from "zod-formik-adapter"
-import { SubmitButton } from "~/components/generics/buttons/SubmitButton"
-import { Form } from "~/components/generics/form/Form"
-import { InputFormField } from "~/components/generics/form/InputFormField"
-import { SelectFormField } from "~/components/generics/form/SelectFormField"
-import { SwitchFormField } from "~/components/generics/form/SwitchFormField"
+import { DeleteCoverButton } from "~/components/forms/mediaCovers/delete-cover-button"
+import { SubmitButton } from "~/components/generics/buttons/new-submit-button"
+import { MediaImage } from "~/components/generics/images/MediaImage"
+import { Form } from "~/components/generics/newForm/new-form"
 import { ObjectUtils } from "~/lib/utils/object.utils"
 import { useMediaUpdateStore } from "~/stores"
 import { api } from "~/trpc/react"
-import { UpdateMediaCoverDeleteButton } from "./update-cover-delete-button"
+import { UpdateCoverFormFields } from "./update-cover-form-fields"
 
 type Props = {
   media: MediaWithRelations
@@ -35,21 +33,23 @@ type Props = {
 }
 
 export const UpdateCoverForm = ({ media, cover }: Props) => {
-  const { updateCover } = useMediaUpdateStore()
   const { mutateAsync } = api.mediaCovers.update.useMutation()
+  const initialValues = pick(cover, [
+    "id",
+    "volume",
+    "contentRating",
+    "isMainCover",
+    "language",
+  ])
+  const methods = useForm<UpdateCoverInput>({
+    resolver: zodResolver(updateCoverSchema),
+    defaultValues: initialValues,
+    mode: "onTouched",
+  })
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
-  const initialValues: UpdateMediaCoverSchema = {
-    id: cover.id,
-    volume: cover.volume,
-    contentRating: cover.contentRating,
-    isMainCover: cover.isMainCover,
-    language: cover.language,
-  }
+  const { updateCover } = useMediaUpdateStore()
 
-  const handleSubmit: FormikConfig<UpdateMediaCoverSchema>["onSubmit"] = (
-    values,
-    helpers,
-  ) => {
+  const handleSubmit: SubmitHandler<UpdateCoverInput> = (values) => {
     const delta = ObjectUtils.deepDifference(values, initialValues)
     const payload = {
       id: values.id,
@@ -61,14 +61,11 @@ export const UpdateCoverForm = ({ media, cover }: Props) => {
       success: () => {
         updateCover(payload)
         onOpenChange()
-        helpers.resetForm({ values })
+        methods.reset(values)
 
         return "Alterações salvas com sucesso!"
       },
       error: "Não foi possível salvar as alterações.",
-      finally: () => {
-        helpers.setSubmitting(false)
-      },
     })
   }
 
@@ -84,70 +81,28 @@ export const UpdateCoverForm = ({ media, cover }: Props) => {
         alt="cover"
       />
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-        <Form.Component
-          initialValues={initialValues}
-          onSubmit={handleSubmit}
-          validationSchema={toFormikValidationSchema(updateMediaCoverSchema)}
-        >
+        <Form.Component {...methods} onSubmit={handleSubmit}>
           <ModalContent>
-            <ModalHeader>Modificar cover</ModalHeader>
+            <ModalHeader>Modificar covar</ModalHeader>
             <ModalBody className="flex-row">
-              <Image
-                as={NextImage}
+              <MediaImage
                 src={MediaCoverUtils.getUrl({
                   id: media.id,
                   coverId: cover.id,
                 })}
-                className="h-[160px] min-w-[110px] rounded-small object-cover"
-                height={160}
-                width={110}
-                alt="cover"
+                classNames={{
+                  height: "min-h-[160px] h-[160px]",
+                  width: "min-w-[110px] w-[110px]",
+                }}
+                maxHeight={160}
+                maxWidth={110}
+                alt="media's cover"
+                radius="sm"
               />
-              <Form.Col>
-                <Form.Row>
-                  <SelectFormField
-                    name="contentRating"
-                    label="Classificação"
-                    labelPlacement="outside"
-                    variant="faded"
-                    items={ContentRating}
-                  />
-                  <Tooltip
-                    content="Para trocar de cover principal, em vez de desativar a opção nesta cover, ative-a na nova cover."
-                    isDisabled={initialValues.isMainCover === false}
-                    color="warning"
-                  >
-                    <div className="min-w-fit">
-                      <SwitchFormField
-                        name="isMainCover"
-                        label="Cover principal"
-                        labelPlacement="outside"
-                        isDisabled={initialValues.isMainCover}
-                      />
-                    </div>
-                  </Tooltip>
-                </Form.Row>
-                <Form.Row>
-                  <InputFormField
-                    name="volume"
-                    label="Volume"
-                    type="number"
-                    labelPlacement="outside"
-                    variant="faded"
-                    fullWidth
-                  />
-                  <SelectFormField
-                    name="language"
-                    label="Idioma"
-                    labelPlacement="outside"
-                    variant="faded"
-                    items={Languages}
-                  />
-                </Form.Row>
-              </Form.Col>
+              <UpdateCoverFormFields isMainCover={initialValues.isMainCover} />
             </ModalBody>
             <ModalFooter>
-              <UpdateMediaCoverDeleteButton toggleModal={onOpen} />
+              <DeleteCoverButton toggleModal={onOpen} />
               <Button onClick={onOpenChange}>Fechar</Button>
               <SubmitButton>Salvar</SubmitButton>
             </ModalFooter>

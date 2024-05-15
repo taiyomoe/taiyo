@@ -1,7 +1,4 @@
-import {
-  deleteMediaCoverSchema,
-  updateMediaCoverSchema,
-} from "@taiyomoe/schemas"
+import { deleteCoverSchema, updateCoverSchema } from "@taiyomoe/schemas"
 import { TRPCError } from "@trpc/server"
 
 import { getMediaIndexItem } from "@taiyomoe/meilisearch/utils"
@@ -10,7 +7,7 @@ import { createTRPCRouter, protectedProcedure } from "../trpc"
 export const mediaCoversRouter = createTRPCRouter({
   update: protectedProcedure
     .meta({ resource: "mediaCovers", action: "update" })
-    .input(updateMediaCoverSchema)
+    .input(updateCoverSchema)
     .mutation(async ({ ctx, input }) => {
       if (input.isMainCover === false) {
         throw new TRPCError({
@@ -52,7 +49,7 @@ export const mediaCoversRouter = createTRPCRouter({
 
   delete: protectedProcedure
     .meta({ resource: "mediaCovers", action: "delete" })
-    .input(deleteMediaCoverSchema)
+    .input(deleteCoverSchema)
     .mutation(async ({ ctx, input }) => {
       const cover = await ctx.db.mediaCover.findUnique({
         where: { id: input.id },
