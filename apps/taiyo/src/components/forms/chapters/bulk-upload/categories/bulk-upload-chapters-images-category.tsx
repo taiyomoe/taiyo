@@ -8,7 +8,7 @@ import { AssetSelection } from "~/components/ui/AssetSelection"
 import { BulkUploadChapterCard } from "~/components/ui/bulk-upload/bulk-upload-chapter-card"
 import { BulkUploadInvalidFilesModal } from "~/components/ui/bulk-upload/bulk-upload-invalid-files-modal"
 import type { InvalidFile } from "~/lib/types"
-import { ImageUtils } from "~/lib/utils/image.utils"
+import { FileUtils } from "~/lib/utils/file.utils"
 
 export const BulkUploadChaptersImagesCategory = () => {
   const { fields, append } = useFieldArray<UploadChaptersInput>({
@@ -21,7 +21,7 @@ export const BulkUploadChaptersImagesCategory = () => {
       if (!fileList) return
 
       const { invalidFiles, chapters } =
-        ImageUtils.computeRelativePaths(fileList)
+        FileUtils.computeRelativePaths(fileList)
 
       for (const [number, files] of chapters) {
         append({
