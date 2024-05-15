@@ -1,6 +1,6 @@
 import { Button } from "@nextui-org/button"
-import type { UpdateMediaCoverSchema } from "@taiyomoe/schemas"
-import { useFormikContext } from "formik"
+import type { UpdateCoverInput } from "@taiyomoe/schemas"
+import { useFormContext } from "react-hook-form"
 import { toast } from "sonner"
 import { useMediaUpdateStore } from "~/stores"
 import { api } from "~/trpc/react"
@@ -9,16 +9,21 @@ type Props = {
   toggleModal: () => void
 }
 
-export const UpdateMediaCoverDeleteButton = ({ toggleModal }: Props) => {
-  const { initialValues, values } = useFormikContext<UpdateMediaCoverSchema>()
-  const { del } = useMediaUpdateStore()
+export const DeleteCoverButton = ({ toggleModal }: Props) => {
+  const {
+    getValues,
+    formState: { defaultValues },
+  } = useFormContext<UpdateCoverInput>()
   const { mutateAsync } = api.mediaCovers.delete.useMutation()
+  const { del } = useMediaUpdateStore()
 
   const handlePress = () => {
-    toast.promise(mutateAsync({ id: values.id }), {
+    const id = getValues("id")
+
+    toast.promise(mutateAsync({ id }), {
       loading: "Apagando a cover...",
       success: () => {
-        del("cover", values.id)
+        del("cover", id)
         toggleModal()
 
         return "Cover apagada com sucesso!"
@@ -30,7 +35,7 @@ export const UpdateMediaCoverDeleteButton = ({ toggleModal }: Props) => {
   return (
     <Button
       onPress={handlePress}
-      isDisabled={initialValues.isMainCover}
+      isDisabled={defaultValues?.isMainCover}
       variant="light"
       color="danger"
     >

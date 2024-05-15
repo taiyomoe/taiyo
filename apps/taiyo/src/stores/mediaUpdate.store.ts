@@ -1,8 +1,5 @@
 import type { MediaCover, MediaTitle } from "@prisma/client"
-import type {
-  UpdateMediaCoverSchema,
-  UpdateMediaTitleInput,
-} from "@taiyomoe/schemas"
+import type { UpdateCoverInput, UpdateMediaTitleInput } from "@taiyomoe/schemas"
 import type { MediaWithRelations } from "@taiyomoe/types"
 import { create } from "zustand"
 
@@ -16,7 +13,7 @@ export type MediaUpdateState = {
   updateTitle: (payload: UpdateMediaTitleInput) => void
 
   addCover: (payload: MediaCover[]) => void
-  updateCover: (payload: UpdateMediaCoverSchema) => void
+  updateCover: (payload: UpdateCoverInput) => void
 
   del: (type: "title" | "cover", id: string) => void
 }

@@ -6,13 +6,13 @@ import { MediaCoverUtils } from "@taiyomoe/utils"
 import { useMemo, useState } from "react"
 import { SelectUtils } from "~/lib/utils/select.utils"
 import { useMediaUpdateStore } from "~/stores"
-import { UpdateMediaCoverForm } from "./UpdateMediaCoverForm"
+import { UpdateCoverForm } from "./update-cover-form"
 
 type Props = {
   media: MediaWithRelations
 }
 
-export const UpdateMediaCoversShowcase = ({ media }: Props) => {
+export const UpdateCoverShowcase = ({ media }: Props) => {
   const { covers } = useMediaUpdateStore()
   const volumes = useMemo(
     () => MediaCoverUtils.computeVolumes(covers),
@@ -87,7 +87,7 @@ export const UpdateMediaCoversShowcase = ({ media }: Props) => {
       <Card>
         <CardBody className="scrollbar-thin scrollbar-track-content1 scrollbar-thumb-primary flex flex-row gap-4 overflow-x-auto">
           {currentVolume.covers.map((c) => (
-            <UpdateMediaCoverForm key={c.id} media={media} cover={c} />
+            <UpdateCoverForm key={c.id} media={media} cover={c} />
           ))}
         </CardBody>
       </Card>
