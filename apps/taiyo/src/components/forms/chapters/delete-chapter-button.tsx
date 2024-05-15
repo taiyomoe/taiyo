@@ -16,7 +16,7 @@ type Props = {
   chapter: MediaLimitedChapter
 }
 
-export const UpdateMediaChapterDeleteButton = ({ chapter }: Props) => {
+export const DeleteChapterButton = ({ chapter }: Props) => {
   const { mutateAsync } = api.mediaChapters.delete.useMutation()
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
 

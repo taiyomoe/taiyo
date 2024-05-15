@@ -3,7 +3,7 @@ import type { MediaLimitedChapter } from "@taiyomoe/types"
 import { PencilIcon } from "lucide-react"
 import { useSession } from "next-auth/react"
 import Link from "next/link"
-import { UpdateMediaChapterDeleteButton } from "~/components/forms/chapters/update/UpdateMediaChapterDeleteButton"
+import { DeleteChapterButton } from "~/components/forms/chapters/delete-chapter-button"
 
 type Props = {
   chapter: MediaLimitedChapter
@@ -27,7 +27,7 @@ export const MediaChapterActions = ({ chapter }: Props) => {
         color="warning"
         isIconOnly
       />
-      <UpdateMediaChapterDeleteButton chapter={chapter} />
+      <DeleteChapterButton chapter={chapter} />
     </div>
   )
 }
