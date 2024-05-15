@@ -1,5 +1,4 @@
 import {
-  createMediaCoversSchema,
   deleteMediaCoverSchema,
   updateMediaCoverSchema,
 } from "@taiyomoe/schemas"
@@ -9,47 +8,6 @@ import { getMediaIndexItem } from "@taiyomoe/meilisearch/utils"
 import { createTRPCRouter, protectedProcedure } from "../trpc"
 
 export const mediaCoversRouter = createTRPCRouter({
-  create: protectedProcedure
-    .meta({ resource: "mediaCovers", action: "create" })
-    .input(createMediaCoversSchema)
-    .mutation(async ({ ctx, input: { mediaId, covers } }) => {
-      if (covers.length === 0) {
-        throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: "You must provide at least one cover.",
-        })
-      }
-
-      await ctx.db.mediaCover.createMany({
-        data: covers.map((c) => ({
-          ...c,
-          mediaId,
-          uploaderId: ctx.session.user.id,
-        })),
-      })
-
-      // If there's a main cover, set it as the main cover
-      if (covers.some((c) => c.isMainCover)) {
-        await ctx.db.mediaCover.updateMany({
-          data: { isMainCover: false },
-          where: {
-            mediaId,
-            id: { notIn: covers.map((c) => c.id) },
-          },
-        })
-
-        const indexItem = await getMediaIndexItem(ctx.db, mediaId)
-        await ctx.indexes.medias.updateDocuments([indexItem])
-      }
-
-      const createdCovers = await ctx.db.mediaCover.findMany({
-        where: { mediaId, id: { in: covers.map((c) => c.id) } },
-        orderBy: { createdAt: "asc" },
-      })
-
-      return createdCovers
-    }),
-
   update: protectedProcedure
     .meta({ resource: "mediaCovers", action: "update" })
     .input(updateMediaCoverSchema)
