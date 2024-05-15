@@ -1,6 +1,6 @@
 import { db } from "@taiyomoe/db"
 import { notFound } from "next/navigation"
-import { UpdateMediaChapterForm } from "~/components/forms/chapters/update/UpdateMediaChapterForm"
+import { UpdateChapterForm } from "~/components/forms/chapters/update/update-chapter-form"
 
 type Props = {
   params: { chapterId: string }
@@ -16,5 +16,5 @@ export default async function Page({ params }: Props) {
     return notFound()
   }
 
-  return <UpdateMediaChapterForm chapter={chapter} />
+  return <UpdateChapterForm chapter={chapter} />
 }
