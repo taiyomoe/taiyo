@@ -110,17 +110,24 @@ const importFn = async (
       media.id,
       cover.imageSource,
       {
-        onDownload: () => {
+        onDownloadStart: () => {
           stream.send({
             step: 3,
             content: `Baixando a cover ${i + 1}/${covers.length}...`,
             type: "ongoing",
           })
         },
-        onUpload: () => {
+        onUploadStart: () => {
           stream.send({
             step: 3,
             content: `Upando a cover ${i + 1}/${covers.length}...`,
+            type: "ongoing",
+          })
+        },
+        onUploadEnd: () => {
+          stream.send({
+            step: 3,
+            content: `Cover ${i + 1}/${covers.length} upada`,
             type: "success",
           })
         },

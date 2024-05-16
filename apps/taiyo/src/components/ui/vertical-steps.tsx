@@ -1,6 +1,7 @@
 "use client"
 
 import type { ButtonProps } from "@nextui-org/button"
+import { Spinner } from "@nextui-org/spinner"
 import { useControlledState } from "@react-stately/utils"
 import { LazyMotion, domAnimation, m } from "framer-motion"
 import type { ComponentProps } from "react"
@@ -11,6 +12,7 @@ export type VerticalStepProps = {
   className?: string
   description?: React.ReactNode
   title?: React.ReactNode
+  shouldLoad?: boolean
 }
 
 export interface VerticalStepsProps
@@ -37,12 +39,6 @@ export interface VerticalStepsProps
    * @default 0
    */
   defaultStep?: number
-  /**
-   * Whether to hide the progress bars.
-   *
-   * @default false
-   */
-  hideProgressBars?: boolean
   /**
    * The custom class for the steps wrapper.
    */
@@ -92,7 +88,6 @@ const VerticalSteps = React.forwardRef<HTMLButtonElement, VerticalStepsProps>(
       defaultStep = 0,
       onStepChange,
       currentStep: currentStepProp,
-      hideProgressBars = false,
       stepClassName,
       className,
       ...props
@@ -162,6 +157,7 @@ const VerticalSteps = React.forwardRef<HTMLButtonElement, VerticalStepsProps>(
       <nav aria-label="Progress">
         <ol className={cn("flex flex-col gap-y-8", colors, className)}>
           {steps?.map((step, stepIdx) => {
+            const shouldLoad = step.shouldLoad ?? true
             const status =
               currentStep === stepIdx
                 ? "active"
@@ -215,25 +211,26 @@ const VerticalSteps = React.forwardRef<HTMLButtonElement, VerticalStepsProps>(
                             }}
                           >
                             <div className="flex items-center justify-center">
-                              {status === "complete" ? (
+                              {status === "active" && shouldLoad && (
+                                <Spinner size="sm" color="warning" />
+                              )}
+                              {status === "complete" && (
                                 <CheckIcon className="h-6 w-6 text-[var(--active-fg-color)]" />
-                              ) : (
+                              )}
+                              {((status === "active" && !shouldLoad) ||
+                                status === "inactive") && (
                                 <span>{stepIdx + 1}</span>
                               )}
                             </div>
                           </m.div>
                         </div>
                       </LazyMotion>
-                      {stepIdx < steps.length - 1 && !hideProgressBars && (
+                      {stepIdx < steps.length - 1 && (
                         <div
                           aria-hidden="true"
                           className={cn(
-                            "pointer-events-none absolute top-10 left-3 flex h-[calc(80%_+_4px)] items-center px-1",
+                            "pointer-events-none absolute top-10 left-3 flex h-[calc(100%-14px)] items-center px-1",
                           )}
-                          style={{
-                            // @ts-ignore
-                            "--idx": stepIdx,
-                          }}
                         >
                           <div
                             className={cn(
@@ -256,7 +253,7 @@ const VerticalSteps = React.forwardRef<HTMLButtonElement, VerticalStepsProps>(
                       </div>
                       <div
                         className={cn(
-                          "text-default-600 text-tiny transition-[color,opacity] duration-300 lg:text-small group-active:opacity-70",
+                          "space-y-1 text-default-600 transition-[color,opacity] duration-300 group-active:opacity-70",
                           { "text-default-500": status === "inactive" },
                         )}
                       >

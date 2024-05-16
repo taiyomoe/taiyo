@@ -6,35 +6,39 @@ import {
 import { useSetAtom } from "jotai"
 import { type SubmitHandler, useForm } from "react-hook-form"
 import { toast } from "sonner"
-import { importMediaEventMessagesAtom } from "~/atoms/wsEvents.atoms"
+import {
+  importMediaCurrentStepAtom,
+  importMediaMessagesAtom,
+} from "~/atoms/importMedia.atoms"
 import { SubmitButton } from "~/components/generics/buttons/new-submit-button"
 import { InputField } from "~/components/generics/newForm/input-field"
 import { Form } from "~/components/generics/newForm/new-form"
 import { ioApi } from "~/eden/client"
 
-type Props = {
-  onSubmit: () => void
-}
-
-export const ImportMediaForm = ({ onSubmit }: Props) => {
-  const setMessages = useSetAtom(importMediaEventMessagesAtom)
+export const ImportMediaForm = () => {
   const methods = useForm<ImportMediaInput>({
     resolver: typeboxResolver(importMediaSchema),
     defaultValues: { mdId: "" },
     mode: "onTouched",
   })
+  const setCurrentStep = useSetAtom(importMediaCurrentStepAtom)
+  const setMessages = useSetAtom(importMediaMessagesAtom)
 
   const handleSubmit: SubmitHandler<ImportMediaInput> = async (values) => {
     await ioApi.medias.import(values, {
       onMessage: (msg) => {
-        console.log("msg", msg)
-        setMessages((prev) => prev.concat(msg))
+        setMessages((prev) => ({
+          ...prev,
+          [msg.step]: (prev[msg.step] ?? []).concat(msg),
+        }))
+        setCurrentStep(msg.step)
       },
       onOpen: () => {
-        onSubmit()
+        setCurrentStep(1)
       },
       onClose: () => {
         toast.success("Obra importada com sucesso.")
+        setCurrentStep(5)
       },
       onError: () => {
         toast.error("Erro ao importar a obra.")
