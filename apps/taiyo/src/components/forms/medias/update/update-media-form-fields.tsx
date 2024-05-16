@@ -1,6 +1,6 @@
 import { SubmitButton } from "~/components/generics/buttons/submit-button"
+import { Form } from "~/components/generics/form/form"
 import { InputField } from "~/components/generics/form/input-field"
-import { Form } from "~/components/generics/form/new-form"
 import { TextAreaField } from "~/components/generics/form/textarea-field"
 import { MediaFormDetailsCategory } from "../categories/media-form-details-category"
 import { MediaFormTrackersCategory } from "../categories/media-form-trackers-category"

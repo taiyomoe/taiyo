@@ -16,7 +16,7 @@ import { type SubmitHandler, useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { MediaTitleFormFields } from "~/components/forms/mediaTitles/media-title-form-fields"
 import { SubmitButton } from "~/components/generics/buttons/submit-button"
-import { Form } from "~/components/generics/form/new-form"
+import { Form } from "~/components/generics/form/form"
 import { useMediaUpdateStore } from "~/stores"
 import { api } from "~/trpc/react"
 

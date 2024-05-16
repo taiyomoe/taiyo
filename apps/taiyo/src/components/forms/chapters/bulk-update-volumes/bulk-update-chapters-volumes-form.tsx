@@ -11,7 +11,7 @@ import { TRPCClientError } from "@trpc/client"
 import { useState } from "react"
 import { type SubmitHandler, useForm } from "react-hook-form"
 import { toast } from "sonner"
-import { Form } from "~/components/generics/form/new-form"
+import { Form } from "~/components/generics/form/form"
 import { api } from "~/trpc/react"
 import { BulkUpdateChaptersVolumesFormFields } from "./bulk-update-chapters-volumes-form-fields"
 

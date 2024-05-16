@@ -1,7 +1,7 @@
 import { Tooltip } from "@nextui-org/tooltip"
 import { ContentRating, Languages } from "@taiyomoe/db"
+import { Form } from "~/components/generics/form/form"
 import { InputField } from "~/components/generics/form/input-field"
-import { Form } from "~/components/generics/form/new-form"
 import { SelectField } from "~/components/generics/form/select-field"
 import { SwitchField } from "~/components/generics/form/switch-field"
 

@@ -7,9 +7,9 @@ import {
   MediaStatus,
   MediaType,
 } from "@taiyomoe/db"
+import { Form } from "~/components/generics/form/form"
 import { GenresField } from "~/components/generics/form/genres-field"
 import { InputField } from "~/components/generics/form/input-field"
-import { Form } from "~/components/generics/form/new-form"
 import { SelectField } from "~/components/generics/form/select-field"
 import { SwitchField } from "~/components/generics/form/switch-field"
 import { TagsField } from "~/components/generics/form/tags-field"

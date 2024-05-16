@@ -1,7 +1,7 @@
 import { ContentRating, Flag, Languages } from "@prisma/client"
 import { ChapterFormImagesCategory } from "~/components/forms/chapters/upload/categories/chapter-form-images-category"
 import { SubmitButton } from "~/components/generics/buttons/submit-button"
-import { Form } from "~/components/generics/form/Form"
+import { Form } from "~/components/generics/form/form"
 import { InputField } from "~/components/generics/form/input-field"
 import { MediasField } from "~/components/generics/form/medias-field"
 import { ScansField } from "~/components/generics/form/scans-field"
