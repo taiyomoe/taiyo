@@ -75,11 +75,9 @@ const createSseClient =
       onMessage,
       onOpen,
       onClose,
-      onError,
     }: {
       onMessage: (message: TMessage) => void
       onOpen?: () => void
-      onError?: () => void
       onClose?: () => void
     },
   ) => {
@@ -94,24 +92,16 @@ const createSseClient =
     }
 
     source.onopen = () => {
-      console.log("open")
-
       onOpen?.()
     }
 
-    source.onerror = (event) => {
-      console.log("close", source.readyState)
+    source.onerror = () => {
       source.close()
-      console.log("close", source.readyState)
 
       if (source.readyState === EventSource.CLOSED) {
         onClose?.()
         return
       }
-
-      console.log("event", event)
-
-      onError?.()
     }
   }
 

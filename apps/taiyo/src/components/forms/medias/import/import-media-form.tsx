@@ -40,9 +40,6 @@ export const ImportMediaForm = () => {
         toast.success("Obra importada com sucesso.")
         setCurrentStep(5)
       },
-      onError: () => {
-        toast.error("Erro ao importar a obra.")
-      },
     })
   }
 
