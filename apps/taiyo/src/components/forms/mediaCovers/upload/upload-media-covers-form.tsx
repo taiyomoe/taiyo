@@ -5,7 +5,7 @@ import {
 } from "@taiyomoe/image-orchestrator"
 import { type SubmitHandler, useForm } from "react-hook-form"
 import { toast } from "sonner"
-import { Form } from "~/components/generics/newForm/new-form"
+import { Form } from "~/components/generics/form/new-form"
 import { ioApi } from "~/eden/client"
 import { parallel } from "~/lib/utils/array.utils"
 import { useMediaUpdateStore } from "~/stores"

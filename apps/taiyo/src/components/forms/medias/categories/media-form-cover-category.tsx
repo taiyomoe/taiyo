@@ -1,7 +1,7 @@
 import { Card, CardBody } from "@nextui-org/card"
 import { useDropzone } from "react-dropzone"
 import { useFormContext } from "react-hook-form"
-import { Form } from "~/components/generics/newForm/new-form"
+import { Form } from "~/components/generics/form/new-form"
 import { cn } from "~/lib/utils/cn"
 import { DEFAULT_MIME_TYPES } from "~/lib/utils/constants"
 

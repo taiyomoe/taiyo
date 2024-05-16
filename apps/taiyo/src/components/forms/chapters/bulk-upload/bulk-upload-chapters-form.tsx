@@ -12,7 +12,7 @@ import { parallel, sleep } from "radash"
 import { type SubmitHandler, useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { bulkUploadChaptersStateAtoms } from "~/atoms/bulkUploadChapters.atoms"
-import { Form } from "~/components/generics/newForm/new-form"
+import { Form } from "~/components/generics/form/new-form"
 import { handleErrors, ioApi } from "~/eden/client"
 import { BulkUploadChaptersFormFields } from "./bulk-upload-chapters-form-fields"
 

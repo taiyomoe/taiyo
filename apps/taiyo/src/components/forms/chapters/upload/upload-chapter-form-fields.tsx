@@ -1,11 +1,11 @@
 import { ContentRating, Flag, Languages } from "@prisma/client"
 import { ChapterFormImagesCategory } from "~/components/forms/chapters/upload/categories/chapter-form-images-category"
-import { SubmitButton } from "~/components/generics/buttons/new-submit-button"
+import { SubmitButton } from "~/components/generics/buttons/submit-button"
 import { Form } from "~/components/generics/form/Form"
-import { InputField } from "~/components/generics/newForm/input-field"
-import { MediasField } from "~/components/generics/newForm/medias-field"
-import { ScansField } from "~/components/generics/newForm/scans-field"
-import { SelectField } from "~/components/generics/newForm/select-field"
+import { InputField } from "~/components/generics/form/input-field"
+import { MediasField } from "~/components/generics/form/medias-field"
+import { ScansField } from "~/components/generics/form/scans-field"
+import { SelectField } from "~/components/generics/form/select-field"
 
 export const UploadChapterFormFields = () => {
   return (

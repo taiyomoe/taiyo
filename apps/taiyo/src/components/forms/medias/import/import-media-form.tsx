@@ -10,9 +10,9 @@ import {
   importMediaCurrentStepAtom,
   importMediaMessagesAtom,
 } from "~/atoms/importMedia.atoms"
-import { SubmitButton } from "~/components/generics/buttons/new-submit-button"
-import { InputField } from "~/components/generics/newForm/input-field"
-import { Form } from "~/components/generics/newForm/new-form"
+import { SubmitButton } from "~/components/generics/buttons/submit-button"
+import { InputField } from "~/components/generics/form/input-field"
+import { Form } from "~/components/generics/form/new-form"
 import { ioApi } from "~/eden/client"
 
 export const ImportMediaForm = () => {
