@@ -25,8 +25,6 @@ export const ScansField = ({ name, className, ...rest }: Props) => {
   }
 
   const handleChange: MultiSelectProps["onChange"] = (values) => {
-    console.log("handleChange", values)
-
     setValue(
       name,
       values.map((v) => v.value),
