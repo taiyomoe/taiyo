@@ -1,15 +1,19 @@
+"use client"
+
 import { Spinner } from "@nextui-org/spinner"
 import { useAtomValue } from "jotai"
 import { CheckIcon } from "lucide-react"
-import { importEventMessages } from "~/atoms/wsEvents.atoms"
+import { importMediaEventMessagesAtom } from "~/atoms/wsEvents.atoms"
 
-export const RenderImportEventMessage = () => {
-  const messages = useAtomValue(importEventMessages)
+export const RenderImportMediaEventMessage = () => {
+  const messages = useAtomValue(importMediaEventMessagesAtom)
   const highestStep = Math.max(...messages.map((message) => message.step))
   const messagesWithLatestSteps = Array.from(
     { length: highestStep },
     (_, i) => messages.filter((message) => message.step === i + 1).pop()!,
   )
+
+  console.log("messages", messages)
 
   return (
     <div className="flex flex-col gap-4">
@@ -20,7 +24,7 @@ export const RenderImportEventMessage = () => {
           )}
           {message.type === "success" && <CheckIcon className="text-success" />}
           {message.type === "error" && <Spinner />}
-          <p>{message.content}</p>
+          <p className="text-base">{message.content}</p>
         </div>
       ))}
     </div>

@@ -11,7 +11,7 @@ const stepperItem = tv({
   slots: {
     container: "flex gap-6",
     number:
-      "!w-12 !h-12 flex flex flex-col items-center items-center justify-center rounded-full bg-content3 font-semibold text-2xl",
+      "!w-12 !h-12 flex flex-col items-center justify-center rounded-full bg-content3 font-semibold text-2xl",
     title: "mt-1.5 font-bold text-3xl",
     content: "flex w-full flex-col gap-6",
   },

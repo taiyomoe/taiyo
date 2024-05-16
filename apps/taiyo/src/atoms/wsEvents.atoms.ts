@@ -1,4 +1,4 @@
-import type { ImportEventMessage } from "@taiyomoe/types"
+import type { ImportMediaEventMessage } from "@taiyomoe/types"
 import { atom } from "jotai"
 
-export const importEventMessages = atom<ImportEventMessage[]>([])
+export const importMediaEventMessagesAtom = atom<ImportMediaEventMessage[]>([])
