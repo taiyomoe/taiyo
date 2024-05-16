@@ -71,11 +71,7 @@ const createSseClient =
   <TMessage>(path: string) =>
   async (
     data: Record<string, string>,
-    {
-      onMessage,
-      onOpen,
-      onClose,
-    }: {
+    callbacks: {
       onMessage: (message: TMessage) => void
       onOpen?: () => void
       onClose?: () => void
@@ -88,18 +84,18 @@ const createSseClient =
     )
 
     source.onmessage = (event) => {
-      onMessage(JSON.parse(event.data) as TMessage)
+      callbacks.onMessage(JSON.parse(event.data) as TMessage)
     }
 
     source.onopen = () => {
-      onOpen?.()
+      callbacks.onOpen?.()
     }
 
     source.onerror = () => {
       source.close()
 
       if (source.readyState === EventSource.CLOSED) {
-        onClose?.()
+        callbacks.onClose?.()
         return
       }
     }
