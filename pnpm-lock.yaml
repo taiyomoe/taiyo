@@ -159,9 +159,6 @@ importers:
       encoding:
         specifier: ^0.1.13
         version: 0.1.13
-      formik:
-        specifier: ^2.4.6
-        version: 2.4.6(react@18.3.1)
       framer-motion:
         specifier: ^11.2.2
         version: 11.2.2(@emotion/is-prop-valid@1.2.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -240,9 +237,6 @@ importers:
       zod:
         specifier: ^3.23.8
         version: 3.23.8
-      zod-formik-adapter:
-        specifier: ^1.3.0
-        version: 1.3.0(formik@2.4.6(react@18.3.1))(zod@3.23.8)
       zustand:
         specifier: ^4.5.2
         version: 4.5.2(@types/react@18.3.2)(react@18.3.1)
@@ -250,9 +244,6 @@ importers:
       '@biomejs/biome':
         specifier: 1.7.3
         version: 1.7.3
-      '@hookform/devtools':
-        specifier: ^4.3.1
-        version: 4.3.1(@types/react@18.3.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@taiyomoe/image-orchestrator':
         specifier: workspace:^
         version: link:../image-orchestrator
@@ -860,16 +851,6 @@ packages:
   '@emotion/sheet@1.2.2':
     resolution: {integrity: sha512-0QBtGvaqtWi+nx6doRwDdBIzhNdZrXUppvTM4dtZZWEGTXL/XE/yJxLMGlDT1Gt+UHH5IX1n+jkXyytE/av7OA==}
 
-  '@emotion/styled@11.11.5':
-    resolution: {integrity: sha512-/ZjjnaNKvuMPxcIiUkf/9SHoG4Q196DRl1w82hQ3WCsjo1IUR8uaGWrC6a87CrYAW0Kb/pK7hk8BnLgLRi9KoQ==}
-    peerDependencies:
-      '@emotion/react': ^11.0.0-rc.0
-      '@types/react': '*'
-      react: '>=16.8.0'
-    peerDependenciesMeta:
-      '@types/react':
-        optional: true
-
   '@emotion/unitless@0.8.1':
     resolution: {integrity: sha512-KOEGMu6dmJZtpadb476IsZBclKvILjopjUii3V+7MnXIQCYh8W3NgNcgwo21n9LXZX6EDIKvqfjYxXebDwxKmQ==}
 
@@ -1045,12 +1026,6 @@ packages:
 
   '@formatjs/intl-localematcher@0.5.4':
     resolution: {integrity: sha512-zTwEpWOzZ2CiKcB93BLngUX59hQkuZjT2+SAQEscSm52peDW/getsawMcWF1rGRpMCX6D7nSJA3CzJ8gn13N/g==}
-
-  '@hookform/devtools@4.3.1':
-    resolution: {integrity: sha512-CrWxEoHQZaOXJZVQ8KBgOuAa8p2LI8M0DAN5GTRTmdCieRwFVjVDEmuTAVazWVRRkpEQSgSt3KYp7VmmqXdEnw==}
-    peerDependencies:
-      react: ^16.8.0 || ^17 || ^18
-      react-dom: ^16.8.0 || ^17 || ^18
 
   '@hookform/resolvers@3.4.0':
     resolution: {integrity: sha512-+oAqK3okmoEDnvUkJ3N/mvNMeeMv5Apgy1jkoRmlaaAF4vBgcJs9tHvtXU7VE4DvPosvAUUkPOaNFunzt1dbgA==}
@@ -2620,9 +2595,6 @@ packages:
   '@types/glob@7.2.0':
     resolution: {integrity: sha512-ZUxbzKl0IfJILTS6t7ip5fQQM/J3TJYubDm3nMbgubNNYS62eXeUpoLUC8/7fJNiFYHTrGPQn7hspDUzIHX3UA==}
 
-  '@types/hoist-non-react-statics@3.3.5':
-    resolution: {integrity: sha512-SbcrWzkKBw2cdwRTwQAswfpB9g9LJWfjtUeW/jvNwbhC8cpmmNYVePa+ncbUe0rGTQ7G3Ff6mYUN2VMfLVr+Sg==}
-
   '@types/inquirer@6.5.0':
     resolution: {integrity: sha512-rjaYQ9b9y/VFGOpqBEXRavc3jh0a+e6evAbI31tMda8VlPaSy0AZJfXsvmIe3wklc7W6C3zCSfleuMXR7NOyXw==}
 
@@ -2968,10 +2940,6 @@ packages:
     resolution: {integrity: sha512-LOHxIOaPYdHlJRtCQfDIVZtfw/ufM8+rVj649RIHzcm/vGwQRXFt6OPqIFWsm2XEMrNIEtWR64sY1LEKD2vAOA==}
     engines: {node: '>=4.0.0'}
 
-  deepmerge@2.2.1:
-    resolution: {integrity: sha512-R9hc1Xa/NOBi9WRVUWg19rl1UB7Tt4kuPd+thNJgFZoxXsTz7ncaPaeIm+40oSGuP33DfMb4sZt1QIGiJzC4EA==}
-    engines: {node: '>=0.10.0'}
-
   deepmerge@4.3.1:
     resolution: {integrity: sha512-3sUqbMEc77XqpdNO7FRyRog+eW3ph+GYCbj+rK+uYyRMuwsVy0rMiVtPn+QJlKFvWP/1PYpapqYn0Me2knFn+A==}
     engines: {node: '>=0.10.0'}
@@ -2986,10 +2954,6 @@ packages:
   del@5.1.0:
     resolution: {integrity: sha512-wH9xOVHnczo9jN2IW68BabcecVPxacIA3g/7z6vhSU/4stOKQzeCRK0yD0A24WiAAUJmmVpWqrERcTxnLo3AnA==}
     engines: {node: '>=8'}
-
-  dequal@2.0.3:
-    resolution: {integrity: sha512-0je+qPKHEMohvfRTCEo3CrPG6cAzAYgmzKyxRiYSSDkS6eGJdyVJm7WaYA5ECaAD9wLB2T4EEeymA5aFVcYXCA==}
-    engines: {node: '>=6'}
 
   detect-libc@2.0.3:
     resolution: {integrity: sha512-bwy0MGW55bG41VqxxypOsdSdGqLwXPI/focwgTYCFMbdUiBAxLg9CFzG08sz2aqzknwiX7Hkl0bQENjg8iLByw==}
@@ -3167,11 +3131,6 @@ packages:
   foreground-child@3.1.1:
     resolution: {integrity: sha512-TMKDUnIte6bfb5nWv7V/caI169OHgvwjb7V4WkeUvbQQdjr5rWKqHFiKWb/fcOwB+CzBT+qbWjvj+DVwRskpIg==}
     engines: {node: '>=14'}
-
-  formik@2.4.6:
-    resolution: {integrity: sha512-A+2EI7U7aG296q2TLGvNapDNTZp1khVt5Vk0Q/fyfSROss0V/V6+txt2aJnwEos44IxTCW/LYAi/zgWzlevj+g==}
-    peerDependencies:
-      react: '>=16.8.0'
 
   fraction.js@4.3.7:
     resolution: {integrity: sha512-ZsDfxO51wGAXREY55a7la9LScWpwv9RxIrYABrlvOFBlH/ShPnrtsXeuUIfXKKOVicNxQ+o8JTbJvjS4M89yew==}
@@ -3451,11 +3410,6 @@ packages:
 
   lines-and-columns@1.2.4:
     resolution: {integrity: sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==}
-
-  little-state-machine@4.8.0:
-    resolution: {integrity: sha512-xfi5+iDxTLhu0hbnNubUs+qoQQqxhtEZeObP5ELjUlHnl74bbasY7mOonsGQrAouyrbag3ebNLSse5xX1T7buQ==}
-    peerDependencies:
-      react: ^16.8.0 || ^17 || ^18
 
   lodash-es@4.17.21:
     resolution: {integrity: sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==}
@@ -3909,9 +3863,6 @@ packages:
     peerDependencies:
       react: '>= 16.8 || 18.0.0'
 
-  react-fast-compare@2.0.4:
-    resolution: {integrity: sha512-suNP+J1VU1MWFKcyt7RtjiSWUjvidmQSlqu+eHslq+342xCbGTYmC0mEhPCOHxlW0CywylOC1u2DFAT+bv4dBw==}
-
   react-hook-form@7.51.4:
     resolution: {integrity: sha512-V14i8SEkh+V1gs6YtD0hdHYnoL4tp/HX/A45wWQN15CYr9bFRmmRdYStSO5L65lCCZRF+kYiSKhm9alqbcdiVA==}
     engines: {node: '>=12.22.0'}
@@ -3952,11 +3903,6 @@ packages:
     peerDependencies:
       react: '>=16.8.0'
       react-dom: '>=16.8.0'
-
-  react-simple-animate@3.5.2:
-    resolution: {integrity: sha512-xLE65euP920QMTOmv5haPlml+hmOPDkbIr5WeF7ADIXWBYt5kW/vwpNfWg8EKMab8aeDxIZ6QjffVh8v2dUyhg==}
-    peerDependencies:
-      react-dom: ^16.8.0 || ^17 || ^18
 
   react-stately@3.31.0:
     resolution: {integrity: sha512-G6y7t6qpP3LU4mLM2RlRTgdW5eiZrR2yB0XZbLo8qVplazxyRzlDJRBdE8OBTpw2SO1q5Auub3NOTH3vH0qCHg==}
@@ -4280,9 +4226,6 @@ packages:
   through@2.3.8:
     resolution: {integrity: sha512-w89qg7PI8wAdvX60bMDP+bFoD5Dvhm9oLheFp5O4a2QF0cSBGsBX4qZmadPMvVqlLJBBci+WqGGOAPvcDeNSVg==}
 
-  tiny-warning@1.0.3:
-    resolution: {integrity: sha512-lBN9zLN/oAf68o3zNXYrdCt1kP8WsiGW8Oo2ka41b2IM5JL/S1CTyX1rW0mb/zSuJun0ZUrDxx4sqvYS2FWzPA==}
-
   tinycolor2@1.6.0:
     resolution: {integrity: sha512-XPaBkWQJdsf3pLKJV9p4qN/S+fm2Oj8AIPo1BTUhg5oxkvm9+SVEGFdhyOz7tTdUTfvxMiAs4sp6/eZO2Ew+pw==}
 
@@ -4424,12 +4367,6 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
 
-  use-deep-compare-effect@1.8.1:
-    resolution: {integrity: sha512-kbeNVZ9Zkc0RFGpfMN3MNfaKNvcLNyxOAAd9O4CBZ+kCBXXscn9s/4I+8ytUER4RDpEYs5+O6Rs4PqiZ+rHr5Q==}
-    engines: {node: '>=10', npm: '>=6'}
-    peerDependencies:
-      react: '>=16.13'
-
   use-isomorphic-layout-effect@1.1.2:
     resolution: {integrity: sha512-49L8yCO3iGT/ZF9QttjwLF/ZD9Iwto5LnH5LmEdk/6cFmXddqi2ulF0edxTwjj+7mqvpVVGQWvbXZdn32wRSHA==}
     peerDependencies:
@@ -4534,12 +4471,6 @@ packages:
   yn@3.1.1:
     resolution: {integrity: sha512-Ux4ygGWsu2c7isFWe8Yu1YluJmqVhxqK2cLXNQA5AcC3QfbGNpM7fu0Y8b/z16pXLnFxZYvWhd3fhBY9DLmC6Q==}
     engines: {node: '>=6'}
-
-  zod-formik-adapter@1.3.0:
-    resolution: {integrity: sha512-qWsVwRYqpRod5BL35pRXHD6UOugiyaEyLPO04rCN/uKTCFCR+VElPEG26+3wNrxGP7y5XmJM+4/0MrABnRYZrw==}
-    peerDependencies:
-      formik: ^2.2.9
-      zod: ^3.22.4
 
   zod-prisma-types@3.1.6:
     resolution: {integrity: sha512-ySaG91RraTm4J19zfvuX6S3OxhDMlK4dTfYWM4rS+4AlEGqDqGu5BbIn2trjTDt8OiCMBHoIjZmRXPKQCyNApA==}
@@ -5202,6 +5133,7 @@ snapshots:
   '@emotion/is-prop-valid@1.2.2':
     dependencies:
       '@emotion/memoize': 0.8.1
+    optional: true
 
   '@emotion/memoize@0.8.1': {}
 
@@ -5228,19 +5160,6 @@ snapshots:
       csstype: 3.1.3
 
   '@emotion/sheet@1.2.2': {}
-
-  '@emotion/styled@11.11.5(@emotion/react@11.11.4(@types/react@18.3.2)(react@18.3.1))(@types/react@18.3.2)(react@18.3.1)':
-    dependencies:
-      '@babel/runtime': 7.24.5
-      '@emotion/babel-plugin': 11.11.0
-      '@emotion/is-prop-valid': 1.2.2
-      '@emotion/react': 11.11.4(@types/react@18.3.2)(react@18.3.1)
-      '@emotion/serialize': 1.1.4
-      '@emotion/use-insertion-effect-with-fallbacks': 1.0.1(react@18.3.1)
-      '@emotion/utils': 1.2.1
-      react: 18.3.1
-    optionalDependencies:
-      '@types/react': 18.3.2
 
   '@emotion/unitless@0.8.1': {}
 
@@ -5355,21 +5274,6 @@ snapshots:
   '@formatjs/intl-localematcher@0.5.4':
     dependencies:
       tslib: 2.6.2
-
-  '@hookform/devtools@4.3.1(@types/react@18.3.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
-    dependencies:
-      '@emotion/react': 11.11.4(@types/react@18.3.2)(react@18.3.1)
-      '@emotion/styled': 11.11.5(@emotion/react@11.11.4(@types/react@18.3.2)(react@18.3.1))(@types/react@18.3.2)(react@18.3.1)
-      '@types/lodash': 4.17.1
-      little-state-machine: 4.8.0(react@18.3.1)
-      lodash: 4.17.21
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
-      react-simple-animate: 3.5.2(react-dom@18.3.1(react@18.3.1))
-      use-deep-compare-effect: 1.8.1(react@18.3.1)
-      uuid: 8.3.2
-    transitivePeerDependencies:
-      - '@types/react'
 
   '@hookform/resolvers@3.4.0(react-hook-form@7.51.4(react@18.3.1))':
     dependencies:
@@ -7955,11 +7859,6 @@ snapshots:
       '@types/minimatch': 5.1.2
       '@types/node': 20.12.12
 
-  '@types/hoist-non-react-statics@3.3.5':
-    dependencies:
-      '@types/react': 18.3.2
-      hoist-non-react-statics: 3.3.2
-
   '@types/inquirer@6.5.0':
     dependencies:
       '@types/through': 0.0.33
@@ -8306,8 +8205,6 @@ snapshots:
 
   deep-extend@0.6.0: {}
 
-  deepmerge@2.2.1: {}
-
   deepmerge@4.3.1: {}
 
   defaults@1.0.4:
@@ -8330,8 +8227,6 @@ snapshots:
       p-map: 3.0.0
       rimraf: 3.0.2
       slash: 3.0.0
-
-  dequal@2.0.3: {}
 
   detect-libc@2.0.3: {}
 
@@ -8524,18 +8419,6 @@ snapshots:
     dependencies:
       cross-spawn: 7.0.3
       signal-exit: 4.1.0
-
-  formik@2.4.6(react@18.3.1):
-    dependencies:
-      '@types/hoist-non-react-statics': 3.3.5
-      deepmerge: 2.2.1
-      hoist-non-react-statics: 3.3.2
-      lodash: 4.17.21
-      lodash-es: 4.17.21
-      react: 18.3.1
-      react-fast-compare: 2.0.4
-      tiny-warning: 1.0.3
-      tslib: 2.6.2
 
   fraction.js@4.3.7: {}
 
@@ -8828,10 +8711,6 @@ snapshots:
   lilconfig@3.1.1: {}
 
   lines-and-columns@1.2.4: {}
-
-  little-state-machine@4.8.0(react@18.3.1):
-    dependencies:
-      react: 18.3.1
 
   lodash-es@4.17.21: {}
 
@@ -9339,8 +9218,6 @@ snapshots:
       prop-types: 15.8.1
       react: 18.3.1
 
-  react-fast-compare@2.0.4: {}
-
   react-hook-form@7.51.4(react@18.3.1):
     dependencies:
       react: 18.3.1
@@ -9385,10 +9262,6 @@ snapshots:
   react-selectable-box@1.9.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
       react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
-
-  react-simple-animate@3.5.2(react-dom@18.3.1(react@18.3.1)):
-    dependencies:
       react-dom: 18.3.1(react@18.3.1)
 
   react-stately@3.31.0(react@18.3.1):
@@ -9766,8 +9639,6 @@ snapshots:
 
   through@2.3.8: {}
 
-  tiny-warning@1.0.3: {}
-
   tinycolor2@1.6.0: {}
 
   tinygradient@1.1.5:
@@ -9894,12 +9765,6 @@ snapshots:
     dependencies:
       react: 18.3.1
 
-  use-deep-compare-effect@1.8.1(react@18.3.1):
-    dependencies:
-      '@babel/runtime': 7.24.5
-      dequal: 2.0.3
-      react: 18.3.1
-
   use-isomorphic-layout-effect@1.1.2(@types/react@18.3.2)(react@18.3.1):
     dependencies:
       react: 18.3.1
@@ -9984,11 +9849,6 @@ snapshots:
   yaml@2.4.2: {}
 
   yn@3.1.1: {}
-
-  zod-formik-adapter@1.3.0(formik@2.4.6(react@18.3.1))(zod@3.23.8):
-    dependencies:
-      formik: 2.4.6(react@18.3.1)
-      zod: 3.23.8
 
   zod-prisma-types@3.1.6:
     dependencies:
