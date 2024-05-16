@@ -5,7 +5,7 @@ import type { CreateScanInput } from "@taiyomoe/schemas"
 import { createScanSchema } from "@taiyomoe/schemas"
 import { type SubmitHandler, useForm } from "react-hook-form"
 import { toast } from "sonner"
-import { Form } from "~/components/generics/newForm/new-form"
+import { Form } from "~/components/generics/form/form"
 import { api } from "~/trpc/react"
 import { CreateScanFormFields } from "./create-scan-form-fields"
 

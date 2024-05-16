@@ -12,7 +12,7 @@ type Props = { name: string; items: Record<string, unknown> } & Omit<
 
 const select = tv({
   slots: {
-    label: "",
+    label: "z-0",
   },
   variants: {
     labelPlacement: {

@@ -1,5 +1,5 @@
-import { InputField } from "~/components/generics/newForm/input-field"
-import { Form } from "~/components/generics/newForm/new-form"
+import { Form } from "~/components/generics/form/form"
+import { InputField } from "~/components/generics/form/input-field"
 
 export const MediaFormTrackersCategory = () => (
   <Form.Category title="Trackers">

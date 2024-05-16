@@ -1,6 +1,5 @@
 import { historyRouter } from "./routers/history.router"
 import { libraryRouter } from "./routers/library.router"
-import { mdRouter } from "./routers/md.router"
 import { mediaChaptersRouter } from "./routers/mediaChapters.router"
 import { mediaCoversRouter } from "./routers/mediaCovers.router"
 import { mediaTitlesRouter } from "./routers/mediaTitles.router"
@@ -21,7 +20,6 @@ export const appRouter = createTRPCRouter({
   history: historyRouter,
   libary: libraryRouter,
   scans: scansRouter,
-  md: mdRouter,
 })
 
 // export type definition of API

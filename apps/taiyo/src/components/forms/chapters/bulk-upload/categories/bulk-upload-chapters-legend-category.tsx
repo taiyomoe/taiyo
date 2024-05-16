@@ -1,6 +1,6 @@
 import { Spinner } from "@nextui-org/spinner"
 import { CheckIcon, HourglassIcon } from "lucide-react"
-import { Form } from "~/components/generics/form/Form"
+import { Form } from "~/components/generics/form/form"
 
 export const BulkUploadChaptersLegendCategory = () => (
   <Form.Category title="Legenda">

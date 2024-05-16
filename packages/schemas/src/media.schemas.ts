@@ -40,10 +40,4 @@ export const searchMediaSchema = z.object({
   title: z.string().min(1),
 })
 
-export const importMediaSchema = z.object({
-  mdId: z.string().uuid(),
-  synopsis: z.string().min(1),
-})
-
 export type UpdateMediaInput = Required<typeof updateMediaSchema._type>
-export type ImportMediaSchema = typeof importMediaSchema._type

@@ -7,12 +7,12 @@ import {
   MediaStatus,
   MediaType,
 } from "@taiyomoe/db"
-import { GenresField } from "~/components/generics/newForm/genres-field"
-import { InputField } from "~/components/generics/newForm/input-field"
-import { Form } from "~/components/generics/newForm/new-form"
-import { SelectField } from "~/components/generics/newForm/select-field"
-import { SwitchField } from "~/components/generics/newForm/switch-field"
-import { TagsField } from "~/components/generics/newForm/tags-field"
+import { Form } from "~/components/generics/form/form"
+import { GenresField } from "~/components/generics/form/genres-field"
+import { InputField } from "~/components/generics/form/input-field"
+import { SelectField } from "~/components/generics/form/select-field"
+import { SwitchField } from "~/components/generics/form/switch-field"
+import { TagsField } from "~/components/generics/form/tags-field"
 
 export const MediaFormDetailsCategory = () => (
   <Form.Category title="Detalhes">

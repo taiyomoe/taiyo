@@ -1,7 +1,7 @@
-import { SubmitButton } from "~/components/generics/buttons/new-submit-button"
-import { InputField } from "~/components/generics/newForm/input-field"
-import { Form } from "~/components/generics/newForm/new-form"
-import { TextAreaField } from "~/components/generics/newForm/textarea-field"
+import { SubmitButton } from "~/components/generics/buttons/submit-button"
+import { Form } from "~/components/generics/form/form"
+import { InputField } from "~/components/generics/form/input-field"
+import { TextAreaField } from "~/components/generics/form/textarea-field"
 import { MediaFormDetailsCategory } from "../categories/media-form-details-category"
 import { MediaFormTrackersCategory } from "../categories/media-form-trackers-category"
 

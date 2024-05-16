@@ -51,18 +51,24 @@ const upload = async (mediaId: string, files: File[]) => {
 const uploadFromUrl = async (
   mediaId: string,
   url: string,
-  options: { onDownload?: () => void; onUpload?: () => void },
+  callbacks: {
+    onDownloadStart?: () => void
+    onUploadStart?: () => void
+    onUploadEnd?: () => void
+  },
 ): Promise<UploadedFile> => {
-  options.onDownload?.()
+  callbacks.onDownloadStart?.()
 
   const file = await fetch(url).then((res) => res.blob())
 
-  options.onUpload?.()
+  callbacks.onUploadStart?.()
 
   const [uploaded] = await FilesService.uploadFiles(
     `medias/${mediaId}/covers`,
     [file],
   )
+
+  callbacks.onUploadEnd?.()
 
   return uploaded!
 }

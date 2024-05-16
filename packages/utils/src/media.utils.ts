@@ -66,5 +66,4 @@ export const MediaUtils = {
   getUrl,
   getBannerOrCoverUrl,
   getMainTitle,
-  getUploadEndpoint: () => `${env.NEXT_PUBLIC_IO_URL}/upload/url`,
 }

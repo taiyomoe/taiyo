@@ -1,5 +1,6 @@
 import type { Media, MediaChapter, MediaCover } from "@taiyomoe/db"
 import { HttpError } from "@taiyomoe/image-orchestrator"
+import type { ImportMediaEventMessage } from "@taiyomoe/types"
 
 export const handleErrors = (defaultMessage: string) => (err: unknown) =>
   err instanceof HttpError ? err.message : defaultMessage
@@ -66,9 +67,44 @@ const createClient =
     throw new Error("Unknown error")
   }
 
+const createSseClient =
+  <TMessage>(path: string) =>
+  async (
+    data: Record<string, string>,
+    callbacks: {
+      onMessage: (message: TMessage) => void
+      onOpen?: () => void
+      onClose?: () => void
+    },
+  ) => {
+    const searchParams = new URLSearchParams(data).toString()
+    const source = new EventSource(
+      `http://localhost:4000/v3/${path}?${searchParams}`,
+      { withCredentials: true },
+    )
+
+    source.onmessage = (event) => {
+      callbacks.onMessage(JSON.parse(event.data) as TMessage)
+    }
+
+    source.onopen = () => {
+      callbacks.onOpen?.()
+    }
+
+    source.onerror = () => {
+      source.close()
+
+      if (source.readyState === EventSource.CLOSED) {
+        callbacks.onClose?.()
+        return
+      }
+    }
+  }
+
 export const ioApi = {
   medias: {
     create: createClient<Media>("medias"),
+    import: createSseClient<ImportMediaEventMessage>("medias/import"),
   },
   covers: {
     upload: createClient<MediaCover>("covers"),

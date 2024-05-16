@@ -1,7 +1,7 @@
 import { Button } from "@nextui-org/button"
-import { InputField } from "~/components/generics/newForm/input-field"
-import { Form } from "~/components/generics/newForm/new-form"
-import { TextAreaField } from "~/components/generics/newForm/textarea-field"
+import { Form } from "~/components/generics/form/form"
+import { InputField } from "~/components/generics/form/input-field"
+import { TextAreaField } from "~/components/generics/form/textarea-field"
 
 export const CreateScanFormFields = () => {
   return (
