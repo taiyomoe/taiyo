@@ -9,8 +9,7 @@
   "license": "MIT",
   "scripts": {
     "clean": "rm -rf .turbo node_modules",
-    "typecheck": "tsc --noEmit",
-    "with-env": "dotenv -e ../../.env --"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@taiyomoe/auth": "workspace:^0.1.0",

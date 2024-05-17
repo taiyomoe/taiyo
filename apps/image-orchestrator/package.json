@@ -8,11 +8,10 @@
     ".": "./src/exports.ts"
   },
   "scripts": {
+    "dev": "bun --watch run ./src/main.ts",
+    "start": "infisical run -- bun ./src/main.ts",
     "clean": "rm -rf .turbo node_modules",
-    "dev": "pnpm with-env bun --watch run ./src/main.ts",
-    "start": "pnpm with-env bun ./src/main.ts",
-    "typecheck": "tsc --noEmit",
-    "with-env": "dotenv -e ../../.env --"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@elysiajs/cors": "^1.0.2",

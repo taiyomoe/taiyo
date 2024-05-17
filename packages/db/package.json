@@ -10,14 +10,13 @@
   "scripts": {
     "clean": "rm -rf .turbo node_modules",
     "typecheck": "tsc --noEmit",
-    "with-env": "dotenv -e ../../.env --",
-    "seed": "pnpm with-env prisma db push --force-reset && prisma generate && prisma db seed",
-    "db": "pnpm with-env prisma",
+    "seed": "infisical run -- prisma db push --force-reset && prisma generate && prisma db seed",
+    "db": "infisical run -- prisma",
     "postinstall": "prisma generate"
   },
   "prisma": {
     "schema": "./src/prisma/schema.prisma",
-    "seed": "cross-env PRISMA_SEED=1 pnpm with-env tsx ./src/prisma/seed.ts"
+    "seed": "cross-env PRISMA_SEED=1 infisical run -- tsx ./src/prisma/seed.ts"
   },
   "dependencies": {
     "@prisma/client": "^5.14.0"
@@ -26,7 +25,6 @@
     "@taiyomoe/meilisearch": "workspace:^0.1.0",
     "@taiyomoe/tsconfig": "workspace:^0.1.0",
     "cross-env": "^7.0.3",
-    "dotenv-cli": "^7.4.2",
     "prisma": "^5.14.0",
     "prisma-json-types-generator": "^3.0.4",
     "tsx": "^4.10.3",
