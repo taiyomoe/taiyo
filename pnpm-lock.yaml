@@ -424,9 +424,6 @@ importers:
 
   packages/trpc:
     dependencies:
-      '@t3-oss/env-nextjs':
-        specifier: ^0.10.1
-        version: 0.10.1(typescript@5.4.5)(zod@3.23.8)
       '@taiyomoe/auth':
         specifier: workspace:^0.1.0
         version: link:../auth
@@ -451,15 +448,9 @@ importers:
       accesscontrol:
         specifier: ^2.2.1
         version: 2.2.1
-      mangadex-full-api:
-        specifier: ^5.12.1
-        version: 5.12.1
       superjson:
         specifier: ^2.2.1
         version: 2.2.1
-      zod:
-        specifier: ^3.23.8
-        version: 3.23.8
     devDependencies:
       '@taiyomoe/tsconfig':
         specifier: workspace:^0.1.0

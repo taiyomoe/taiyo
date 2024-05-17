@@ -94,7 +94,6 @@ export const env = createEnv({
     NEXT_PUBLIC_CDN_URL: process.env.NEXT_PUBLIC_CDN_URL,
 
     // image-orchestrator API
-    IO_ADMIN_KEY: process.env.IO_ADMIN_KEY,
     NEXT_PUBLIC_IO_URL: process.env.NEXT_PUBLIC_IO_URL,
 
     // Meilisearch
