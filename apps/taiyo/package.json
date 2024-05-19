@@ -4,9 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "infisical run -- next build",
+    "build": "next build",
     "dev": "next dev",
-    "start": "infisical run -- next start",
+    "start": "next start",
     "clean": "git clean -xdf .next .turbo node_modules",
     "typecheck": "tsc --noEmit"
   },
