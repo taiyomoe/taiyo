@@ -9,7 +9,7 @@
   },
   "scripts": {
     "dev": "bun --watch run ./src/main.ts",
-    "start": "infisical run -- bun ./src/main.ts",
+    "start": "bun ./src/main.ts",
     "clean": "rm -rf .turbo node_modules",
     "typecheck": "tsc --noEmit"
   },
