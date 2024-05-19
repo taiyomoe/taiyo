@@ -39,6 +39,8 @@ export const app = new Elysia({ prefix: "/v3" })
         return buildResponse({ errors: [error.message] }, error.status)
       case "VALIDATION":
         return buildResponse({ errors: error.all }, 422)
+      case "NOT_FOUND":
+        return buildResponse({ errors: ["Resource not found"] }, 404)
       default:
         return buildResponse(
           { errors: ["An unexpected error occured. Please try again later"] },
