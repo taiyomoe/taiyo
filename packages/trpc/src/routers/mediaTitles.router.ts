@@ -1,6 +1,7 @@
 import {
-  createMediaTitleSchema,
-  updateMediaTitleSchema,
+  createTitleSchema,
+  idSchema,
+  updateTitleSchema,
 } from "@taiyomoe/schemas"
 import { TRPCError } from "@trpc/server"
 
@@ -10,7 +11,7 @@ import { createTRPCRouter, protectedProcedure } from "../trpc"
 export const mediaTitlesRouter = createTRPCRouter({
   create: protectedProcedure
     .meta({ resource: "mediaTitles", action: "create" })
-    .input(createMediaTitleSchema)
+    .input(createTitleSchema)
     .mutation(async ({ ctx, input }) => {
       const titles = await ctx.db.mediaTitle.findMany({
         where: { mediaId: input.mediaId },
@@ -66,7 +67,7 @@ export const mediaTitlesRouter = createTRPCRouter({
 
   update: protectedProcedure
     .meta({ resource: "mediaTitles", action: "update" })
-    .input(updateMediaTitleSchema)
+    .input(updateTitleSchema)
     .mutation(async ({ ctx, input }) => {
       if (input.isMainTitle === false) {
         throw new TRPCError({
@@ -127,10 +128,10 @@ export const mediaTitlesRouter = createTRPCRouter({
 
   delete: protectedProcedure
     .meta({ resource: "mediaTitles", action: "delete" })
-    .input(updateMediaTitleSchema)
+    .input(idSchema)
     .mutation(async ({ ctx, input }) => {
       const title = await ctx.db.mediaTitle.findUnique({
-        where: { id: input.id },
+        where: { id: input },
       })
 
       if (!title) {
@@ -150,7 +151,7 @@ export const mediaTitlesRouter = createTRPCRouter({
 
       await ctx.db.mediaTitle.update({
         data: { deletedAt: new Date(), deleterId: ctx.session.user.id },
-        where: { id: input.id },
+        where: { id: input },
       })
 
       const indexItem = await getMediaIndexItem(ctx.db, title.mediaId)

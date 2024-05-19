@@ -1,6 +1,6 @@
 import { getMediaIndexItem } from "@taiyomoe/meilisearch/utils"
 import {
-  getMediaByIdSchema,
+  idSchema,
   searchMediaSchema,
   updateMediaSchema,
 } from "@taiyomoe/schemas"
@@ -41,7 +41,7 @@ export const mediasRouter = createTRPCRouter({
     }),
 
   getById: publicProcedure
-    .input(getMediaByIdSchema)
+    .input(idSchema)
     .query(async ({ ctx, input: mediaId }) => {
       const result = await ctx.db.media.findFirst({
         select: {

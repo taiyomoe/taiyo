@@ -1,10 +1,9 @@
 import {
   bulkUpdateChaptersScansSchema,
   bulkUpdateChaptersVolumesSchema,
-  getMediaChapterByIdSchema,
   getMediaChaptersByMediaIdSchema,
   idSchema,
-  updateMediaChapterSchema,
+  updateChapterSchema,
 } from "@taiyomoe/schemas"
 import type { MediaChapterLimited } from "@taiyomoe/types"
 import { MediaUtils } from "@taiyomoe/utils"
@@ -15,7 +14,7 @@ import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 export const mediaChaptersRouter = createTRPCRouter({
   update: protectedProcedure
     .meta({ resource: "mediaChapters", action: "update" })
-    .input(updateMediaChapterSchema)
+    .input(updateChapterSchema)
     .mutation(async ({ ctx, input: { scanIds, ...input } }) => {
       const mediaChapter = await ctx.db.mediaChapter.findUnique({
         include: { scans: true },
@@ -144,7 +143,7 @@ export const mediaChaptersRouter = createTRPCRouter({
     }),
 
   getById: publicProcedure
-    .input(getMediaChapterByIdSchema)
+    .input(idSchema)
     .query(async ({ ctx, input: chapterId }) => {
       const result = await ctx.db.mediaChapter.findFirst({
         select: {

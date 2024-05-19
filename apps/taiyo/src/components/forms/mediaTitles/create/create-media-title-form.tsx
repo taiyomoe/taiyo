@@ -8,8 +8,8 @@ import {
   ModalHeader,
   useDisclosure,
 } from "@nextui-org/modal"
-import type { CreateMediaTitleInput } from "@taiyomoe/schemas"
-import { createMediaTitleSchema } from "@taiyomoe/schemas"
+import type { CreateTitleInput } from "@taiyomoe/schemas"
+import { createTitleSchema } from "@taiyomoe/schemas"
 import { TRPCClientError } from "@trpc/client"
 import { PlusIcon } from "lucide-react"
 import { type SubmitHandler, useForm } from "react-hook-form"
@@ -26,7 +26,7 @@ type Props = {
 
 export const CreateMediaTitleForm = ({ mediaId }: Props) => {
   const { mutateAsync } = api.mediaTitles.create.useMutation()
-  const initialValues: CreateMediaTitleInput = {
+  const initialValues: CreateTitleInput = {
     title: "",
     language: "ja",
     priority: 1,
@@ -34,15 +34,15 @@ export const CreateMediaTitleForm = ({ mediaId }: Props) => {
     isAcronym: false,
     mediaId,
   }
-  const methods = useForm<CreateMediaTitleInput>({
-    resolver: zodResolver(createMediaTitleSchema),
+  const methods = useForm<CreateTitleInput>({
+    resolver: zodResolver(createTitleSchema),
     defaultValues: initialValues,
     mode: "onTouched",
   })
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
   const { addTitle } = useMediaUpdateStore()
 
-  const handleSubmit: SubmitHandler<CreateMediaTitleInput> = (values) => {
+  const handleSubmit: SubmitHandler<CreateTitleInput> = (values) => {
     toast.promise(mutateAsync(values), {
       loading: "Criando título...",
       success: (createdTitle) => {
