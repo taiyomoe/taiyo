@@ -20,6 +20,7 @@
     "@taiyomoe/auth": "workspace:^0.1.0",
     "@taiyomoe/constants": "workspace:^0.1.0",
     "@taiyomoe/db": "workspace:^0.1.0",
+    "@taiyomoe/image-orchestrator": "workspace:^",
     "@taiyomoe/meilisearch": "workspace:^0.1.0",
     "@taiyomoe/schemas": "workspace:^0.1.0",
     "@taiyomoe/services": "workspace:^0.1.0",
@@ -63,7 +64,6 @@
   },
   "devDependencies": {
     "@biomejs/biome": "1.7.3",
-    "@taiyomoe/image-orchestrator": "workspace:^",
     "@taiyomoe/tailwind-config": "workspace:^0.1.0",
     "@taiyomoe/types": "workspace:^0.1.0",
     "@types/luxon": "^3.4.2",

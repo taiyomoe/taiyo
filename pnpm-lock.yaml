@@ -117,6 +117,9 @@ importers:
       '@taiyomoe/db':
         specifier: workspace:^0.1.0
         version: link:../../packages/db
+      '@taiyomoe/image-orchestrator':
+        specifier: workspace:^
+        version: link:../image-orchestrator
       '@taiyomoe/meilisearch':
         specifier: workspace:^0.1.0
         version: link:../../packages/meilisearch
@@ -241,9 +244,6 @@ importers:
       '@biomejs/biome':
         specifier: 1.7.3
         version: 1.7.3
-      '@taiyomoe/image-orchestrator':
-        specifier: workspace:^
-        version: link:../image-orchestrator
       '@taiyomoe/tailwind-config':
         specifier: workspace:^0.1.0
         version: link:../../tooling/tailwind
