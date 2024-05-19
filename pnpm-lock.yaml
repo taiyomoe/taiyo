@@ -129,6 +129,9 @@ importers:
       '@taiyomoe/trpc':
         specifier: workspace:^0.1.0
         version: link:../../packages/trpc
+      '@taiyomoe/tsconfig':
+        specifier: workspace:^0.1.0
+        version: link:../../tooling/typescript
       '@taiyomoe/utils':
         specifier: workspace:^0.1.0
         version: link:../../packages/utils
@@ -244,9 +247,6 @@ importers:
       '@taiyomoe/tailwind-config':
         specifier: workspace:^0.1.0
         version: link:../../tooling/tailwind
-      '@taiyomoe/tsconfig':
-        specifier: workspace:^0.1.0
-        version: link:../../tooling/typescript
       '@taiyomoe/types':
         specifier: workspace:^0.1.0
         version: link:../../packages/types
