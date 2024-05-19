@@ -314,6 +314,9 @@ importers:
       '@prisma/client':
         specifier: ^5.14.0
         version: 5.14.0(prisma@5.14.0)
+      prisma-json-types-generator:
+        specifier: ^3.0.4
+        version: 3.0.4(prisma@5.14.0)(typescript@5.4.5)
     devDependencies:
       '@taiyomoe/meilisearch':
         specifier: workspace:^0.1.0
@@ -327,9 +330,6 @@ importers:
       prisma:
         specifier: ^5.14.0
         version: 5.14.0
-      prisma-json-types-generator:
-        specifier: ^3.0.4
-        version: 3.0.4(prisma@5.14.0)(typescript@5.4.5)
       tsx:
         specifier: ^4.10.5
         version: 4.10.5
