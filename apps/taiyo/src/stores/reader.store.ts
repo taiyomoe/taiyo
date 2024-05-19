@@ -4,7 +4,7 @@ import type {
   ReaderImage,
 } from "@taiyomoe/types"
 import { MediaChapterImageUtils, MediaChapterUtils } from "@taiyomoe/utils"
-import { omit } from "lodash-es"
+import { omit } from "radash"
 import { create } from "zustand"
 import { useReaderSettingsStore } from "~/stores"
 
@@ -116,7 +116,7 @@ export const useReaderStore = create<State & Actions>((set, get) => ({
         images: {
           ...state.images,
           [chapterId]: state.images[chapterId]!.concat(
-            newImages.map((x) => omit(x, "url")),
+            newImages.map((x) => omit(x, ["url"])),
           ),
         },
       }))

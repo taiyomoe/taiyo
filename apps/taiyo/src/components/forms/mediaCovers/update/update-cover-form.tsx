@@ -13,7 +13,7 @@ import type { MediaCover } from "@prisma/client"
 import type { UpdateCoverInput } from "@taiyomoe/schemas"
 import { updateCoverSchema } from "@taiyomoe/schemas"
 import type { MediaWithRelations } from "@taiyomoe/types"
-import { MediaCoverUtils } from "@taiyomoe/utils"
+import { MediaCoverUtils, ObjectUtils } from "@taiyomoe/utils"
 import NextImage from "next/image"
 import { pick } from "radash"
 import { type SubmitHandler, useForm } from "react-hook-form"
@@ -22,7 +22,6 @@ import { DeleteCoverButton } from "~/components/forms/mediaCovers/delete-cover-b
 import { SubmitButton } from "~/components/generics/buttons/submit-button"
 import { Form } from "~/components/generics/form/form"
 import { MediaImage } from "~/components/generics/images/MediaImage"
-import { ObjectUtils } from "~/lib/utils/object.utils"
 import { useMediaUpdateStore } from "~/stores"
 import { api } from "~/trpc/react"
 import { UpdateCoverFormFields } from "./update-cover-form-fields"
@@ -50,7 +49,7 @@ export const UpdateCoverForm = ({ media, cover }: Props) => {
   const { updateCover } = useMediaUpdateStore()
 
   const handleSubmit: SubmitHandler<UpdateCoverInput> = (values) => {
-    const delta = ObjectUtils.deepDifference(values, initialValues)
+    const delta = ObjectUtils.deepDiff(values, initialValues)
     const payload = {
       id: values.id,
       ...delta,
