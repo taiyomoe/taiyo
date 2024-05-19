@@ -2,10 +2,10 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { type UpdateMediaInput, updateMediaSchema } from "@taiyomoe/schemas"
+import { ObjectUtils } from "@taiyomoe/utils"
 import { type SubmitHandler, useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { Form } from "~/components/generics/form/form"
-import { ObjectUtils } from "~/lib/utils/object.utils"
 import { api } from "~/trpc/react"
 import { UpdateMediaFormFields } from "./update-media-form-fields"
 
@@ -22,7 +22,7 @@ export const UpdateMediaForm = ({ initialValues }: Props) => {
   })
 
   const handleSubmit: SubmitHandler<UpdateMediaInput> = (values) => {
-    const delta = ObjectUtils.deepDifference(values, initialValues)
+    const delta = ObjectUtils.deepDiff(values, initialValues)
     const payload = {
       ...delta,
       id: values.id,

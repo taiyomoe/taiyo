@@ -1,5 +1,5 @@
 import { Divider } from "@nextui-org/divider"
-import type { BulkUpdateChaptersScansSchema } from "@taiyomoe/schemas"
+import type { BulkUpdateChaptersScansInput } from "@taiyomoe/schemas"
 import type { MediaChapterWithScans } from "@taiyomoe/types"
 import { Fragment, useMemo } from "react"
 import { useFieldArray } from "react-hook-form"
@@ -17,7 +17,7 @@ type Props = {
 
 export const BulkUpdateChaptersScansFormFields = ({ chapters }: Props) => {
   const { fields, append, remove } =
-    useFieldArray<BulkUpdateChaptersScansSchema>({
+    useFieldArray<BulkUpdateChaptersScansInput>({
       name: "scans",
     })
   const availableItems = useMemo(() => {

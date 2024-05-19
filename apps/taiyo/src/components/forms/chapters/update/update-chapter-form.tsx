@@ -1,14 +1,14 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import type { UpdateMediaChapterSchema } from "@taiyomoe/schemas"
-import { updateMediaChapterSchema } from "@taiyomoe/schemas"
+import type { UpdateChapterInput } from "@taiyomoe/schemas"
+import { updateChapterSchema } from "@taiyomoe/schemas"
 import type { MediaChapterWithRelations } from "@taiyomoe/types"
+import { ObjectUtils } from "@taiyomoe/utils"
 import { pick } from "radash"
 import { type SubmitHandler, useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { Form } from "~/components/generics/form/form"
-import { ObjectUtils } from "~/lib/utils/object.utils"
 import { api } from "~/trpc/react"
 import { UpdateChapterFormFields } from "./update-chapter-form-fields"
 
@@ -30,14 +30,14 @@ export const UpdateChapterForm = ({ chapter }: Props) => {
     ]),
     scanIds: chapter.scans.map((s) => s.id),
   }
-  const methods = useForm<UpdateMediaChapterSchema>({
-    resolver: zodResolver(updateMediaChapterSchema),
+  const methods = useForm<UpdateChapterInput>({
+    resolver: zodResolver(updateChapterSchema),
     defaultValues: initialValues,
     mode: "onTouched",
   })
 
-  const handleSubmit: SubmitHandler<UpdateMediaChapterSchema> = (values) => {
-    const delta = ObjectUtils.deepDifference(values, initialValues)
+  const handleSubmit: SubmitHandler<UpdateChapterInput> = (values) => {
+    const delta = ObjectUtils.deepDiff(values, initialValues)
     const payload = {
       id: values.id,
       ...delta,

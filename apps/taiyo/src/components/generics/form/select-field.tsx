@@ -3,7 +3,7 @@
 import { tv } from "@nextui-org/react"
 import { Select, SelectItem, type SelectProps } from "@nextui-org/select"
 import { useFormContext } from "react-hook-form"
-import { ObjectUtils } from "~/lib/utils/object.utils"
+import { SelectUtils } from "~/lib/utils/select.utils"
 
 type Props = { name: string; items: Record<string, unknown> } & Omit<
   SelectProps,
@@ -37,7 +37,7 @@ export const SelectField = ({
     formState: { errors, defaultValues },
   } = useFormContext()
   const errorMessage = errors[name]?.message?.toString()
-  const itemsArray = ObjectUtils.enumToSelectItems(items)
+  const itemsArray = SelectUtils.enumToItems(items)
   const slots = select({ labelPlacement })
 
   return (

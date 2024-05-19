@@ -9,20 +9,17 @@ import {
   useDisclosure,
 } from "@nextui-org/modal"
 import type { MediaTitle } from "@prisma/client"
-import {
-  type UpdateMediaTitleInput,
-  updateMediaTitleSchema,
-} from "@taiyomoe/schemas"
+import { type UpdateTitleInput, updateTitleSchema } from "@taiyomoe/schemas"
+import { ObjectUtils } from "@taiyomoe/utils"
 import { TRPCClientError } from "@trpc/client"
-import { pick } from "lodash-es"
 import { FileEditIcon } from "lucide-react"
+import { pick } from "radash"
 import { type SubmitHandler, useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { DeleteMediaTitleButton } from "~/components/forms/mediaTitles/delete-media-title-button"
 import { MediaTitleFormFields } from "~/components/forms/mediaTitles/media-title-form-fields"
 import { SubmitButton } from "~/components/generics/buttons/submit-button"
 import { Form } from "~/components/generics/form/form"
-import { ObjectUtils } from "~/lib/utils/object.utils"
 import { useMediaUpdateStore } from "~/stores"
 import { api } from "~/trpc/react"
 
@@ -32,25 +29,24 @@ type Props = {
 
 export const UpdateMediaTitleForm = ({ title }: Props) => {
   const { mutateAsync } = api.mediaTitles.update.useMutation()
-  const initialValues = pick(
-    title,
+  const initialValues = pick(title, [
     "id",
     "title",
     "language",
     "priority",
     "isMainTitle",
     "isAcronym",
-  )
-  const methods = useForm<UpdateMediaTitleInput>({
-    resolver: zodResolver(updateMediaTitleSchema),
+  ])
+  const methods = useForm<UpdateTitleInput>({
+    resolver: zodResolver(updateTitleSchema),
     defaultValues: initialValues,
     mode: "onTouched",
   })
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
   const { updateTitle } = useMediaUpdateStore()
 
-  const handleSubmit: SubmitHandler<UpdateMediaTitleInput> = (values) => {
-    const delta = ObjectUtils.deepDifference(values, initialValues)
+  const handleSubmit: SubmitHandler<UpdateTitleInput> = (values) => {
+    const delta = ObjectUtils.deepDiff(values, initialValues)
     const payload = {
       id: values.id,
       ...delta,

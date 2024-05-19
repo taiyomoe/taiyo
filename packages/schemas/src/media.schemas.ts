@@ -34,8 +34,6 @@ export const updateMediaSchema = z
   .partial()
   .required({ id: true })
 
-export const getMediaByIdSchema = z.string()
-
 export const searchMediaSchema = z.object({
   title: z.string().min(1),
 })

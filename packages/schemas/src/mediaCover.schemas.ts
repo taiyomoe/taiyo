@@ -12,8 +12,4 @@ export const updateCoverSchema = MediaCoverSchema.pick({
   .partial()
   .required({ id: true })
 
-export const deleteCoverSchema = MediaCoverSchema.pick({
-  id: true,
-})
-
 export type UpdateCoverInput = typeof updateCoverSchema._type

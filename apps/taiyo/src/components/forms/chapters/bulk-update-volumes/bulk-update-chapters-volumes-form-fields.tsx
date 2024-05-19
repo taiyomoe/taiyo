@@ -1,6 +1,6 @@
 import { Divider } from "@nextui-org/divider"
 import type { MediaChapter } from "@prisma/client"
-import type { BulkUpdateChaptersVolumesSchema } from "@taiyomoe/schemas"
+import type { BulkUpdateChaptersVolumesInput } from "@taiyomoe/schemas"
 import { max, sort } from "radash"
 import { Fragment, useCallback, useMemo } from "react"
 import { useFieldArray } from "react-hook-form"
@@ -19,7 +19,7 @@ type Props = {
 
 export const BulkUpdateChaptersVolumesFormFields = ({ chapters }: Props) => {
   const { fields, append, remove } =
-    useFieldArray<BulkUpdateChaptersVolumesSchema>({
+    useFieldArray<BulkUpdateChaptersVolumesInput>({
       name: "volumes",
     })
   const availableItems = useMemo(() => {

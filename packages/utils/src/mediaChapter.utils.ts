@@ -1,5 +1,5 @@
 import type { MediaChapter } from "@prisma/client"
-import type { BulkUpdateChaptersVolumesSchema } from "@taiyomoe/schemas"
+import type { BulkUpdateChaptersVolumesInput } from "@taiyomoe/schemas"
 import type {
   MediaChapterGroups,
   MediaChapterLimited,
@@ -37,7 +37,7 @@ const getVolumes = (mediaChapters: { volume: number | null }[]) => {
 }
 
 const getDuplicatedChapters = (
-  input: BulkUpdateChaptersVolumesSchema["volumes"],
+  input: BulkUpdateChaptersVolumesInput["volumes"],
   mediaChapters: MediaChapter[],
 ) => {
   const duplicated: number[] = []

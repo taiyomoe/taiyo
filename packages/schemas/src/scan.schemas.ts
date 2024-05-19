@@ -20,6 +20,4 @@ export const createScanSchema = z.object({
   email: z.string().email().optional(),
 })
 
-export const searchScanSchema = z.string().min(1)
-
 export type CreateScanInput = typeof createScanSchema._type

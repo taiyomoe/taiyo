@@ -7,7 +7,7 @@ import { z } from "zod"
 
 import { ContentRatingSchema, FlagSchema, LanguagesSchema } from "./prisma"
 
-export const updateMediaChapterSchema = z.object({
+export const updateChapterSchema = z.object({
   id: z.string().uuid(),
   title: z.string().nullish(),
   number: z.coerce.number().min(0).optional(),
@@ -36,8 +36,6 @@ export const bulkUpdateChaptersScansSchema = z.object({
     .array(),
 })
 
-export const getMediaChapterByIdSchema = z.string()
-
 export const getMediaChaptersByMediaIdSchema = z.object({
   mediaId: z.string(),
   page: z.number().optional().default(DEFAULT_MEDIA_PAGE),
@@ -50,8 +48,8 @@ export const getMediaChaptersByMediaIdSchema = z.object({
     }),
 })
 
-export type UpdateMediaChapterSchema = typeof updateMediaChapterSchema._type
-export type BulkUpdateChaptersVolumesSchema =
+export type UpdateChapterInput = typeof updateChapterSchema._type
+export type BulkUpdateChaptersVolumesInput =
   typeof bulkUpdateChaptersVolumesSchema._type
-export type BulkUpdateChaptersScansSchema =
+export type BulkUpdateChaptersScansInput =
   typeof bulkUpdateChaptersScansSchema._type

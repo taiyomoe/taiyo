@@ -1,4 +1,4 @@
-import { omit } from "lodash-es"
+import { omit } from "radash"
 import Select, {
   components,
   type ControlProps,
@@ -66,6 +66,7 @@ const MultiValue = <T,>(props: MultiValueProps<T, true>) => (
   <components.MultiValue
     {...props}
     innerProps={{
+      // @ts-expect-error `css` is in fact a prop
       ...omit(props.innerProps, ["css"]),
       className:
         "!bg-default-400 !rounded-md px-1.5 py-0.5 !m-0 flex gap-2 items-center",
@@ -80,6 +81,7 @@ const ValueContainer = <T,>(props: ValueContainerProps<T, true>) => (
 const MultiValueLabel = <T,>(props: MultiValueGenericProps<T, true>) => (
   <components.MultiValueLabel
     {...props}
+    // @ts-expect-error `css` is in fact a prop
     innerProps={{ ...omit(props.innerProps, ["css"]), className: "text-small" }}
   />
 )
@@ -88,6 +90,7 @@ const MultiValueRemove = <T,>(props: MultiValueRemoveProps<T, true>) => (
   <components.MultiValueRemove
     {...props}
     innerProps={{
+      // @ts-expect-error `css` is in fact a prop
       ...omit(props.innerProps, ["css"]),
       className:
         "hover:bg-default-600 rounded-full size-4 transition-colors child:hover:text-default-200 child:transition-colors flex items-center justify-center",

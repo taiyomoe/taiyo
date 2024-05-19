@@ -3,7 +3,7 @@ import type {
   InferNestedValues,
   ReaderSettings,
 } from "@taiyomoe/types"
-import _ from "lodash-es"
+import { set as objSet, omit } from "radash"
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
 
@@ -35,9 +35,9 @@ export const usePersistentReaderSettingsStore = create<
 
       update: (key, newValue) => {
         set((state) => {
-          const newSettings = structuredClone(_.omit(state, "update"))
+          const newSettings = structuredClone(omit(state, ["update"]))
 
-          _.set(newSettings, key, newValue)
+          objSet(newSettings, key, newValue)
 
           return {
             ...state,

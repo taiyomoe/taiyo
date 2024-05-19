@@ -1,13 +1,7 @@
 import { z } from "zod"
 import { MediaTitleSchema } from "./prisma"
 
-const isEachTitleUnique = (t: { title: string; language: string }[]) =>
-  new Set<string>([...t.map((x) => `${x.language}-${x.title}`)]).size ===
-  t.length
-const hasOnlyOneMainTitle = (t: { isMainTitle: boolean }[]) =>
-  t.filter((x) => x.isMainTitle).length === 1
-
-const mediaTitleSchema = MediaTitleSchema.pick({
+const titleSchema = MediaTitleSchema.pick({
   title: true,
   language: true,
   priority: true,
@@ -15,20 +9,14 @@ const mediaTitleSchema = MediaTitleSchema.pick({
   isMainTitle: true,
 })
 
-export const createMediaTitleSchema = mediaTitleSchema
+export const createTitleSchema = titleSchema
   .extend({ mediaId: z.string().uuid() })
   .refine((t) => t.title.length > 0, "Must be > 0")
 
-export const createMediaTitlesSchema = mediaTitleSchema
-  .array()
-  .min(1)
-  .refine(isEachTitleUnique, "Must be unique")
-  .refine(hasOnlyOneMainTitle, "Must have one and only one main title")
-
-export const updateMediaTitleSchema = mediaTitleSchema
+export const updateTitleSchema = titleSchema
   .partial()
   .extend({ id: z.string().uuid() })
   .refine((t) => (t.title ? t.title.length > 0 : true), "Must be > 0")
 
-export type CreateMediaTitleInput = typeof createMediaTitleSchema._type
-export type UpdateMediaTitleInput = typeof updateMediaTitleSchema._type
+export type CreateTitleInput = typeof createTitleSchema._type
+export type UpdateTitleInput = typeof updateTitleSchema._type
