@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import type { MediaChapter } from "@prisma/client"
 import {
-  type BulkUpdateChaptersVolumesSchema,
+  type BulkUpdateChaptersVolumesInput,
   bulkUpdateChaptersVolumesSchema,
 } from "@taiyomoe/schemas"
 import { MediaChapterUtils } from "@taiyomoe/utils"
@@ -23,13 +23,13 @@ export const BulkUpdateChaptersVolumesForm = (props: Props) => {
   const { chapters: initialChapters } = props
   const [chapters, setChapters] = useState(initialChapters)
   const { mutateAsync } = api.mediaChapters.updateVolumes.useMutation()
-  const methods = useForm<BulkUpdateChaptersVolumesSchema>({
+  const methods = useForm<BulkUpdateChaptersVolumesInput>({
     resolver: zodResolver(bulkUpdateChaptersVolumesSchema),
     mode: "onTouched",
     defaultValues: { volumes: [{ number: 1, ids: [] }] },
   })
 
-  const handleSubmit: SubmitHandler<BulkUpdateChaptersVolumesSchema> = async (
+  const handleSubmit: SubmitHandler<BulkUpdateChaptersVolumesInput> = async (
     values,
   ) => {
     const duplicatedChapters = MediaChapterUtils.getDuplicatedChapters(

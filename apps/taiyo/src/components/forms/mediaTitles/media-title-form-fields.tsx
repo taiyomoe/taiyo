@@ -1,6 +1,6 @@
 import { Tooltip } from "@nextui-org/tooltip"
 import { Languages } from "@prisma/client"
-import type { UpdateMediaTitleInput } from "@taiyomoe/schemas"
+import type { UpdateTitleInput } from "@taiyomoe/schemas"
 import { useFormState } from "react-hook-form"
 import { Form } from "~/components/generics/form/form"
 import { InputField } from "~/components/generics/form/input-field"
@@ -8,7 +8,7 @@ import { SelectField } from "~/components/generics/form/select-field"
 import { SwitchField } from "~/components/generics/form/switch-field"
 
 export const MediaTitleFormFields = () => {
-  const { defaultValues } = useFormState<UpdateMediaTitleInput>()
+  const { defaultValues } = useFormState<UpdateTitleInput>()
 
   return (
     <Form.Col>

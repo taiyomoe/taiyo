@@ -9,10 +9,7 @@ import {
   useDisclosure,
 } from "@nextui-org/modal"
 import type { MediaTitle } from "@prisma/client"
-import {
-  type UpdateMediaTitleInput,
-  updateMediaTitleSchema,
-} from "@taiyomoe/schemas"
+import { type UpdateTitleInput, updateTitleSchema } from "@taiyomoe/schemas"
 import { TRPCClientError } from "@trpc/client"
 import { pick } from "lodash-es"
 import { FileEditIcon } from "lucide-react"
@@ -41,15 +38,15 @@ export const UpdateMediaTitleForm = ({ title }: Props) => {
     "isMainTitle",
     "isAcronym",
   )
-  const methods = useForm<UpdateMediaTitleInput>({
-    resolver: zodResolver(updateMediaTitleSchema),
+  const methods = useForm<UpdateTitleInput>({
+    resolver: zodResolver(updateTitleSchema),
     defaultValues: initialValues,
     mode: "onTouched",
   })
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
   const { updateTitle } = useMediaUpdateStore()
 
-  const handleSubmit: SubmitHandler<UpdateMediaTitleInput> = (values) => {
+  const handleSubmit: SubmitHandler<UpdateTitleInput> = (values) => {
     const delta = ObjectUtils.deepDifference(values, initialValues)
     const payload = {
       id: values.id,

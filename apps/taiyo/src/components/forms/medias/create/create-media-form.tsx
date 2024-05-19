@@ -3,7 +3,7 @@
 import { typeboxResolver } from "@hookform/resolvers/typebox"
 import {
   type CreateMediaInput,
-  createMediaSchema,
+  createTitleSchema,
 } from "@taiyomoe/image-orchestrator"
 import { useRouter } from "next/navigation"
 import { type SubmitHandler, useForm } from "react-hook-form"
@@ -15,7 +15,7 @@ import { CreateMediaFormFields } from "./create-media-form-fields"
 export const CreateMediaForm = () => {
   const router = useRouter()
   const methods = useForm<CreateMediaInput>({
-    resolver: typeboxResolver(createMediaSchema),
+    resolver: typeboxResolver(createTitleSchema),
     mode: "onTouched",
     defaultValues: {
       startDate: undefined,

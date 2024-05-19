@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import {
-  type BulkUpdateChaptersScansSchema,
+  type BulkUpdateChaptersScansInput,
   bulkUpdateChaptersScansSchema,
 } from "@taiyomoe/schemas"
 import type { MediaChapterWithScans } from "@taiyomoe/types"
@@ -22,13 +22,13 @@ export const BulkUpdateChaptersScansForm = (props: Props) => {
   const { chapters: initialChapters } = props
   const [chapters, setChapters] = useState(initialChapters)
   const { mutateAsync } = api.mediaChapters.updateScans.useMutation()
-  const methods = useForm<BulkUpdateChaptersScansSchema>({
+  const methods = useForm<BulkUpdateChaptersScansInput>({
     resolver: zodResolver(bulkUpdateChaptersScansSchema),
     mode: "onTouched",
     defaultValues: { scans: [{ scanIds: [], ids: [] }] },
   })
 
-  const handleSubmit: SubmitHandler<BulkUpdateChaptersScansSchema> = async (
+  const handleSubmit: SubmitHandler<BulkUpdateChaptersScansInput> = async (
     values,
   ) => {
     toast.promise(mutateAsync(values), {

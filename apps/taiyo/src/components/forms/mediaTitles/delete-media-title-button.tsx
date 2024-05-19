@@ -1,5 +1,5 @@
 import { Button } from "@nextui-org/button"
-import type { UpdateMediaTitleInput } from "@taiyomoe/schemas"
+import type { UpdateTitleInput } from "@taiyomoe/schemas"
 import { useFormContext } from "react-hook-form"
 import { toast } from "sonner"
 import { useMediaUpdateStore } from "~/stores"
@@ -13,14 +13,14 @@ export const DeleteMediaTitleButton = ({ toggleModal }: Props) => {
   const {
     getValues,
     formState: { defaultValues },
-  } = useFormContext<UpdateMediaTitleInput>()
+  } = useFormContext<UpdateTitleInput>()
   const { mutateAsync } = api.mediaTitles.delete.useMutation()
   const { del } = useMediaUpdateStore()
 
   const handlePress = () => {
     const id = getValues("id")
 
-    toast.promise(mutateAsync({ id }), {
+    toast.promise(mutateAsync(id), {
       loading: "Apagando o título...",
       success: () => {
         del("title", id)

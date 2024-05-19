@@ -20,7 +20,7 @@ export const DeleteCoverButton = ({ toggleModal }: Props) => {
   const handlePress = () => {
     const id = getValues("id")
 
-    toast.promise(mutateAsync({ id }), {
+    toast.promise(mutateAsync(id), {
       loading: "Apagando a cover...",
       success: () => {
         del("cover", id)
