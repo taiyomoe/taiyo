@@ -52,6 +52,7 @@ export const app = new Elysia({ prefix: "/v3" })
   .use(chaptersController)
   .use(bannersController)
   .use(coversController)
+  .get("/healthcheck", () => "OK")
   .listen(4000)
 
 console.log(`Listening on http://localhost:${app.server!.port}`)
