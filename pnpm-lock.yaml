@@ -129,6 +129,9 @@ importers:
       '@taiyomoe/services':
         specifier: workspace:^0.1.0
         version: link:../../packages/services
+      '@taiyomoe/tailwind-config':
+        specifier: workspace:^0.1.0
+        version: link:../../tooling/tailwind
       '@taiyomoe/trpc':
         specifier: workspace:^0.1.0
         version: link:../../packages/trpc
@@ -244,9 +247,6 @@ importers:
       '@biomejs/biome':
         specifier: 1.7.3
         version: 1.7.3
-      '@taiyomoe/tailwind-config':
-        specifier: workspace:^0.1.0
-        version: link:../../tooling/tailwind
       '@taiyomoe/types':
         specifier: workspace:^0.1.0
         version: link:../../packages/types
