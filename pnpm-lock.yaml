@@ -317,6 +317,9 @@ importers:
       prisma-json-types-generator:
         specifier: ^3.0.4
         version: 3.0.4(prisma@5.14.0)(typescript@5.4.5)
+      zod-prisma-types:
+        specifier: ^3.1.6
+        version: 3.1.6
     devDependencies:
       '@taiyomoe/meilisearch':
         specifier: workspace:^0.1.0
@@ -336,9 +339,6 @@ importers:
       typescript:
         specifier: ^5.4.5
         version: 5.4.5
-      zod-prisma-types:
-        specifier: ^3.1.6
-        version: 3.1.6
 
   packages/global-types:
     devDependencies:
