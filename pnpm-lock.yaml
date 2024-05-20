@@ -157,8 +157,8 @@ importers:
         specifier: ^3.49.1
         version: 3.49.1
       embla-carousel-autoplay:
-        specifier: ^8.1.2
-        version: 8.1.2(embla-carousel@8.1.3)
+        specifier: ^8.1.3
+        version: 8.1.3(embla-carousel@8.1.3)
       embla-carousel-react:
         specifier: ^8.1.3
         version: 8.1.3(react@18.3.1)
@@ -2982,10 +2982,10 @@ packages:
       typescript:
         optional: true
 
-  embla-carousel-autoplay@8.1.2:
-    resolution: {integrity: sha512-MwiM0cvizyg27tbIilywAF9U84cOV48CiDylu/UEIFd6lvM9XYN38dxwWavVxVuE8Af7s0bbP61s7WLLA6KT7Q==}
+  embla-carousel-autoplay@8.1.3:
+    resolution: {integrity: sha512-nMPuOZ+f3yp/RzUEYDOWjO7EkhdNHfdxEoRxfwqIvTGdSQ04LAFAnMLiLWSetAXzB1bP30L391mZb9keZXRcWQ==}
     peerDependencies:
-      embla-carousel: 8.1.2
+      embla-carousel: 8.1.3
 
   embla-carousel-react@8.1.3:
     resolution: {integrity: sha512-YrezDPgxPDKa+OKMhSrwuPEU2OgF5147vFW473EWT3bx9DETV3W/RyWTxq0/2pf3M4VXkjqFNbS/W1xM8lTaVg==}
@@ -8231,7 +8231,7 @@ snapshots:
       openapi-types: 12.1.3
       typescript: 5.4.5
 
-  embla-carousel-autoplay@8.1.2(embla-carousel@8.1.3):
+  embla-carousel-autoplay@8.1.3(embla-carousel@8.1.3):
     dependencies:
       embla-carousel: 8.1.3
 
