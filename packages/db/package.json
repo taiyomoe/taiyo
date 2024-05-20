@@ -10,13 +10,13 @@
   "scripts": {
     "clean": "rm -rf .turbo node_modules",
     "typecheck": "tsc --noEmit",
-    "seed": "infisical run -- prisma db push --force-reset && prisma generate && prisma db seed",
-    "db": "infisical run -- prisma",
+    "seed": "prisma db push --force-reset && prisma generate && prisma db seed",
+    "db": "prisma",
     "postinstall": "prisma generate"
   },
   "prisma": {
     "schema": "./src/prisma/schema.prisma",
-    "seed": "cross-env PRISMA_SEED=1 infisical run -- tsx ./src/prisma/seed.ts"
+    "seed": "cross-env PRISMA_SEED=1 tsx ./src/prisma/seed.ts"
   },
   "dependencies": {
     "@prisma/client": "^5.14.0",
