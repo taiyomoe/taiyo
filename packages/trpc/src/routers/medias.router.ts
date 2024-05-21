@@ -1,15 +1,11 @@
 import { getMediaIndexItem } from "@taiyomoe/meilisearch/utils"
-import {
-  idSchema,
-  searchMediaSchema,
-  updateMediaSchema,
-} from "@taiyomoe/schemas"
+import { idSchema, updateMediaSchema } from "@taiyomoe/schemas"
 import {
   LibraryService,
   MediaChapterService,
   MediaService,
 } from "@taiyomoe/services"
-import type { MediaLimited, SearchedMedia } from "@taiyomoe/types"
+import type { MediaLimited } from "@taiyomoe/types"
 import { MediaUtils } from "@taiyomoe/utils"
 import { TRPCError } from "@trpc/server"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
@@ -123,21 +119,4 @@ export const mediasRouter = createTRPCRouter({
       latestReleases,
     }
   }),
-
-  search: publicProcedure
-    .input(searchMediaSchema)
-    .mutation(async ({ ctx, input: { title } }) => {
-      const results = await ctx.indexes.medias.search(title)
-      const searchedMedias: SearchedMedia[] = results.hits.map((h) => ({
-        id: h.id,
-        synopsis: h.synopsis ? `${h.synopsis.slice(0, 100)}...` : null,
-        title: MediaUtils.getMainTitle(
-          h.titles,
-          ctx.session?.user.preferredTitles ?? null,
-        ),
-        coverId: h.mainCoverId,
-      }))
-
-      return searchedMedias
-    }),
 })
