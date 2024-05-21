@@ -100,8 +100,8 @@ importers:
         specifier: ^2.3.6
         version: 2.3.6(@types/react@18.3.2)(framer-motion@11.2.4(@emotion/is-prop-valid@1.2.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tailwind-variants@0.1.20(tailwindcss@3.4.3(ts-node@10.9.2(@types/node@20.12.12)(typescript@5.4.5))))(tailwindcss@3.4.3(ts-node@10.9.2(@types/node@20.12.12)(typescript@5.4.5)))
       '@react-stately/data':
-        specifier: ^3.11.3
-        version: 3.11.3(react@18.3.1)
+        specifier: ^3.11.4
+        version: 3.11.4(react@18.3.1)
       '@savvywombat/tailwindcss-grid-areas':
         specifier: ^4.0.0
         version: 4.0.0(tailwindcss@3.4.3(ts-node@10.9.2(@types/node@20.12.12)(typescript@5.4.5)))
@@ -2029,8 +2029,8 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
 
-  '@react-stately/data@3.11.3':
-    resolution: {integrity: sha512-iyg27s3uUquxvX5AXckAgOPszG6uX7fCOIg0D/GJXxdFxLv1gFSupIeIJhM+kXufPgpaLiugaQxoYlO5y65shA==}
+  '@react-stately/data@3.11.4':
+    resolution: {integrity: sha512-PbnUQxeE6AznSuEWYnRmrYQ9t5z1Asx98Jtrl96EeA6Iapt9kOjTN9ySqCxtPxMKleb1NIqG3+uHU3veIqmLsg==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
 
@@ -2254,6 +2254,11 @@ packages:
 
   '@react-types/shared@3.23.0':
     resolution: {integrity: sha512-GQm/iPiii3ikcaMNR4WdVkJ4w0mKtV3mLqeSfSqzdqbPr6vONkqXbh3RhPlPmAJs1b4QHnexd/wZQP3U9DHOwQ==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
+
+  '@react-types/shared@3.23.1':
+    resolution: {integrity: sha512-5d+3HbFDxGZjhbMBeFHRQhexMFt4pUce3okyRtUVKbbedQFUrtXSBg9VszgF2RTeQDKDkMCIQDtz5ccP/Lk1gw==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
 
@@ -6481,7 +6486,7 @@ snapshots:
       '@react-stately/calendar': 3.4.1(react@18.3.1)
       '@react-types/button': 3.9.3(react@18.3.1)
       '@react-types/calendar': 3.4.1(react@18.3.1)
-      '@react-types/shared': 3.21.0(react@18.3.1)
+      '@react-types/shared': 3.23.0(react@18.3.1)
       '@swc/helpers': 0.5.11
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
@@ -7008,7 +7013,7 @@ snapshots:
       '@react-stately/utils': 3.10.0(react@18.3.1)
       '@react-types/calendar': 3.4.1(react@18.3.1)
       '@react-types/datepicker': 3.7.3(react@18.3.1)
-      '@react-types/shared': 3.21.0(react@18.3.1)
+      '@react-types/shared': 3.23.0(react@18.3.1)
       '@swc/helpers': 0.5.11
       react: 18.3.1
 
@@ -7063,9 +7068,9 @@ snapshots:
       '@swc/helpers': 0.5.11
       react: 18.3.1
 
-  '@react-stately/data@3.11.3(react@18.3.1)':
+  '@react-stately/data@3.11.4(react@18.3.1)':
     dependencies:
-      '@react-types/shared': 3.23.0(react@18.3.1)
+      '@react-types/shared': 3.23.1(react@18.3.1)
       '@swc/helpers': 0.5.11
       react: 18.3.1
 
@@ -7257,7 +7262,7 @@ snapshots:
   '@react-types/calendar@3.4.1(react@18.3.1)':
     dependencies:
       '@internationalized/date': 3.5.3
-      '@react-types/shared': 3.21.0(react@18.3.1)
+      '@react-types/shared': 3.23.0(react@18.3.1)
       react: 18.3.1
 
   '@react-types/calendar@3.4.5(react@18.3.1)':
@@ -7363,6 +7368,10 @@ snapshots:
       react: 18.3.1
 
   '@react-types/shared@3.23.0(react@18.3.1)':
+    dependencies:
+      react: 18.3.1
+
+  '@react-types/shared@3.23.1(react@18.3.1)':
     dependencies:
       react: 18.3.1
 
@@ -9222,7 +9231,7 @@ snapshots:
       '@react-stately/checkbox': 3.6.4(react@18.3.1)
       '@react-stately/collections': 3.10.6(react@18.3.1)
       '@react-stately/combobox': 3.8.3(react@18.3.1)
-      '@react-stately/data': 3.11.3(react@18.3.1)
+      '@react-stately/data': 3.11.4(react@18.3.1)
       '@react-stately/datepicker': 3.9.3(react@18.3.1)
       '@react-stately/dnd': 3.3.0(react@18.3.1)
       '@react-stately/form': 3.0.2(react@18.3.1)
