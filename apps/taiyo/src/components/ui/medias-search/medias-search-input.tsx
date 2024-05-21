@@ -1,4 +1,4 @@
-import { Kbd } from "@nextui-org/react"
+import { Kbd } from "@nextui-org/kbd"
 import { CommandInput } from "cmdk"
 import { SearchIcon } from "lucide-react"
 

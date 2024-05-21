@@ -1,4 +1,4 @@
-import { Spinner } from "@nextui-org/react"
+import { Spinner } from "@nextui-org/spinner"
 import { UploadChapterState } from "@taiyomoe/image-orchestrator"
 import { CheckIcon, HourglassIcon } from "lucide-react"
 
