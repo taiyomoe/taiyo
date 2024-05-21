@@ -36,7 +36,7 @@
     "embla-carousel-autoplay": "^8.1.3",
     "embla-carousel-react": "^8.1.3",
     "encoding": "^0.1.13",
-    "framer-motion": "^11.2.4",
+    "framer-motion": "^11.2.5",
     "jotai": "^2.8.0",
     "lucide-react": "^0.378.0",
     "luxon": "^3.4.4",
