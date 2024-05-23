@@ -16,15 +16,12 @@ export const MediasSearchMenu = () => {
   const [results, setResults] = useState<MediasIndexItem[]>([])
 
   const handleSearch = debounce({ delay: 250 }, async (value: string) => {
-    console.log("value", value)
     const query = await meiliClient.client.search([
       { query: value, indexName: "medias" },
     ])
     const hits = query.results
       .flatMap((r) => r as SearchResponse<MediasIndexItem>)
       .flatMap((r) => r.hits)
-
-    console.log("hits", hits, query)
 
     setResults(hits)
   })
