@@ -5,7 +5,11 @@ import { Command } from "cmdk"
 import { useHits } from "react-instantsearch"
 import { MediasSearchResultsItem } from "./medias-search-results-item"
 
-export const MediasSearchResults = () => {
+type Props = {
+  toggleModal: () => void
+}
+
+export const MediasSearchResults = (props: Props) => {
   const { data: session } = useSession()
   const { hits } = useHits<MediasIndexItem>()
 
@@ -20,20 +24,12 @@ export const MediasSearchResults = () => {
       {hits.length === 0 && <Command.Empty>No results found.</Command.Empty>}
       <Command.List>
         <ScrollShadow className="scrollbar-none mt-2 flex h-[300px] w-full grow flex-col gap-1.5">
-          {/* {items
-            .filter((item) => activeFilters.includes(item.type))
-            .map((item) => (
-              <MediasSearchResultsItem
-                key={item.id}
-                item={item}
-                preferredTitles={session?.user.preferredTitles}
-              />
-            ))} */}
           {hits.map((hit) => (
             <MediasSearchResultsItem
               key={hit.id}
               item={hit}
               preferredTitles={session?.user.preferredTitles}
+              {...props}
             />
           ))}
         </ScrollShadow>

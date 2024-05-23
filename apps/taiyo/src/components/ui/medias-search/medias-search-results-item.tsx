@@ -8,9 +8,11 @@ import { MediaImage } from "~/components/generics/images/MediaImage"
 type Props = {
   item: MediasIndexItem
   preferredTitles: Languages | null | undefined
+  toggleModal: () => void
 }
 
-export const MediasSearchResultsItem = ({ item, preferredTitles }: Props) => {
+export const MediasSearchResultsItem = (props: Props) => {
+  const { item, preferredTitles, toggleModal } = props
   const title = MediaUtils.getMainTitle(item.titles, preferredTitles)
 
   return (
@@ -18,6 +20,7 @@ export const MediasSearchResultsItem = ({ item, preferredTitles }: Props) => {
       <Link
         className="group flex w-full gap-2 rounded-small bg-content3 p-1.5 transition-background duration-200 hover:bg-content4"
         href={MediaUtils.getUrl(item)}
+        onClick={toggleModal}
       >
         <MediaImage
           src={MediaCoverUtils.getUrl({

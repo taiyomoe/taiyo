@@ -36,7 +36,7 @@ export const MediasSearchMenu = () => {
               <div className="flex w-full flex-col gap-4 p-3 sm:flex-row">
                 <MediasSearchTypes />
                 <Command.Separator className="w-px bg-content4" alwaysRender />
-                <MediasSearchResults />
+                <MediasSearchResults toggleModal={toggle} />
               </div>
             </Command>
           </InstantSearch>
