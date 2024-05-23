@@ -9,6 +9,7 @@ const execute = async () => {
   // Medias
   await meilisearch.deleteIndexIfExists("medias")
   await meilisearch.createIndex("medias", { primaryKey: "id" })
+  await meilisearchIndexes.medias.updateFilterableAttributes(["type"])
   await meilisearchIndexes.medias.deleteAllDocuments()
 
   const medias = await Promise.all(
