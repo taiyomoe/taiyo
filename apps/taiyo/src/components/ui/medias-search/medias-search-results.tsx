@@ -31,7 +31,7 @@ export const MediasSearchResults = () => {
             ))} */}
           {hits.map((hit) => (
             <MediasSearchResultsItem
-              key={hit.objectID}
+              key={hit.id}
               item={hit}
               preferredTitles={session?.user.preferredTitles}
             />
