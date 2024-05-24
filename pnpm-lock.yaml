@@ -318,8 +318,8 @@ importers:
         specifier: ^3.0.4
         version: 3.0.4(prisma@5.14.0)(typescript@5.4.5)
       zod-prisma-types:
-        specifier: ^3.1.6
-        version: 3.1.6
+        specifier: ^3.1.8
+        version: 3.1.8
     devDependencies:
       '@taiyomoe/meilisearch':
         specifier: workspace:^0.1.0
@@ -1740,9 +1740,6 @@ packages:
       prisma:
         optional: true
 
-  '@prisma/debug@5.13.0':
-    resolution: {integrity: sha512-699iqlEvzyCj9ETrXhs8o8wQc/eVW+FigSsHpiskSFydhjVuwTJEfj/nIYqTaWFYuxiWQRfm3r01meuW97SZaQ==}
-
   '@prisma/debug@5.14.0':
     resolution: {integrity: sha512-iq56qBZuFfX3fCxoxT8gBX33lQzomBU0qIUaEj1RebsKVz1ob/BVH1XSBwwwvRVtZEV1b7Fxx2eVu34Ge/mg3w==}
 
@@ -1758,8 +1755,8 @@ packages:
   '@prisma/fetch-engine@5.14.0':
     resolution: {integrity: sha512-VrheA9y9DMURK5vu8OJoOgQpxOhas3qF0IBHJ8G/0X44k82kc8E0w98HCn2nhnbOOMwbWsJWXfLC2/F8n5u0gQ==}
 
-  '@prisma/generator-helper@5.13.0':
-    resolution: {integrity: sha512-i+53beJ0dxkDrkHdsXxmeMf+eVhyhOIpL0SdBga8vwe0qHPrAIJ/lpuT/Hj0y5awTmq40qiUEmhXwCEuM/Z17w==}
+  '@prisma/generator-helper@5.14.0':
+    resolution: {integrity: sha512-xVc71cmTnPZ0lnSs4FAY6Ta72vFJ3webrQwKMQ2ujr6hDG1VPIEf820T1TOS3ZZQd/OKigNKXnq3co8biz9/qw==}
 
   '@prisma/generator-helper@5.9.1':
     resolution: {integrity: sha512-WMdEUPpPYxUGruRQM6e6IVTWXFjt1hHdF/m2TO7pWxhPo7/ZeoTOF9fH8JsvVSV78DYLOQkx9osjFLXZu447Kw==}
@@ -4825,8 +4822,8 @@ packages:
     resolution: {integrity: sha512-Ux4ygGWsu2c7isFWe8Yu1YluJmqVhxqK2cLXNQA5AcC3QfbGNpM7fu0Y8b/z16pXLnFxZYvWhd3fhBY9DLmC6Q==}
     engines: {node: '>=6'}
 
-  zod-prisma-types@3.1.6:
-    resolution: {integrity: sha512-ySaG91RraTm4J19zfvuX6S3OxhDMlK4dTfYWM4rS+4AlEGqDqGu5BbIn2trjTDt8OiCMBHoIjZmRXPKQCyNApA==}
+  zod-prisma-types@3.1.8:
+    resolution: {integrity: sha512-5oe0ays3ur4u2GtuUqlhgCraKBcsuMaMI8o7VMV4YAnFeOuVid7K2zGvjI19V0ue9PeNF2ICyVREQVohaQm5dw==}
     hasBin: true
 
   zod@3.23.8:
@@ -6815,8 +6812,6 @@ snapshots:
     optionalDependencies:
       prisma: 5.14.0
 
-  '@prisma/debug@5.13.0': {}
-
   '@prisma/debug@5.14.0': {}
 
   '@prisma/debug@5.9.1': {}
@@ -6836,9 +6831,9 @@ snapshots:
       '@prisma/engines-version': 5.14.0-25.e9771e62de70f79a5e1c604a2d7c8e2a0a874b48
       '@prisma/get-platform': 5.14.0
 
-  '@prisma/generator-helper@5.13.0':
+  '@prisma/generator-helper@5.14.0':
     dependencies:
-      '@prisma/debug': 5.13.0
+      '@prisma/debug': 5.14.0
 
   '@prisma/generator-helper@5.9.1':
     dependencies:
@@ -10866,9 +10861,9 @@ snapshots:
 
   yn@3.1.1: {}
 
-  zod-prisma-types@3.1.6:
+  zod-prisma-types@3.1.8:
     dependencies:
-      '@prisma/generator-helper': 5.13.0
+      '@prisma/generator-helper': 5.14.0
       code-block-writer: 12.0.0
       lodash: 4.17.21
       zod: 3.23.8
