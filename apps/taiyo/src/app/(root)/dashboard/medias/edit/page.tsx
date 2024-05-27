@@ -1,4 +1,4 @@
-import { MediasSearchAutocomplete } from "~/components/ui/medias-search/medias-search-autocomplete"
+import { MediasSearchAutocomplete } from "~/components/ui/medias-search/autocomplete/medias-search-autocomplete"
 
 export default function Page() {
   return (

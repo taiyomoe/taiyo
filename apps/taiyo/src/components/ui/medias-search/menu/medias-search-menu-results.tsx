@@ -3,7 +3,7 @@ import { useSession } from "@taiyomoe/auth/client"
 import type { MediasIndexItem } from "@taiyomoe/types"
 import { Command } from "cmdk"
 import { useHits } from "react-instantsearch"
-import { MediasSearchResultsItem } from "./medias-search-results-item"
+import { MediasSearchResultsItem } from "./medias-search-menu-results-item"
 
 type Props = {
   toggleModal: () => void

@@ -9,7 +9,7 @@ import { z } from "zod"
 import {
   MediasSearchAutocomplete,
   type MediasSearchAutocompleteProps,
-} from "~/components/ui/medias-search/medias-search-autocomplete"
+} from "~/components/ui/medias-search/autocomplete/medias-search-autocomplete"
 import { meiliClient } from "~/meiliClient"
 
 type Props = { name: string } & MediasSearchAutocompleteProps

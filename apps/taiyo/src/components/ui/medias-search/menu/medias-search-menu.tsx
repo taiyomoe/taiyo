@@ -2,11 +2,11 @@ import { Modal, ModalContent } from "@nextui-org/modal"
 import { Command } from "cmdk"
 import { InstantSearchNext } from "react-instantsearch-nextjs"
 import { useToggle } from "usehooks-ts"
-import { MediasSearchResults } from "~/components/ui/medias-search/medias-search-results"
+import { MediasSearchResults } from "~/components/ui/medias-search/menu/medias-search-menu-results"
 import { meiliClient } from "~/meiliClient"
-import { MediasSearchButton } from "./medias-search-button"
-import { MediasSearchInput } from "./medias-search-input"
-import { MediasSearchTypes } from "./medias-search-types"
+import { MediasSearchButton } from "./medias-search-menu-button"
+import { MediasSearchInput } from "./medias-search-menu-input"
+import { MediasSearchTypes } from "./medias-search-menu-types"
 
 export const MediasSearchMenu = () => {
   const [isToggled, toggle] = useToggle(false)
