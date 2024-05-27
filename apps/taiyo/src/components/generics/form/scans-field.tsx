@@ -1,3 +1,5 @@
+import type { AlgoliaSearchResponse } from "@meilisearch/instant-meilisearch"
+import type { ScansIndexItem } from "@taiyomoe/types"
 import { useFormContext } from "react-hook-form"
 import { Label } from "~/components/generics/label"
 import {
@@ -5,20 +7,23 @@ import {
   type MultiSelectProps,
 } from "~/components/generics/multi-select"
 import { cn } from "~/lib/utils/cn"
-import { api } from "~/trpc/react"
+import { meiliClient } from "~/meiliClient"
 
 type Props = { name: string } & MultiSelectProps
 
 export const ScansField = ({ name, className, ...rest }: Props) => {
   const { setValue } = useFormContext()
-  const { mutateAsync } = api.scans.search.useMutation()
 
   const loadOptions = async (inputValue: string) => {
     if (!inputValue) return []
 
-    const data = await mutateAsync(inputValue)
+    const searched = await meiliClient.search([
+      { query: inputValue, indexName: "scans" },
+    ])
+    const results = searched.results as AlgoliaSearchResponse<ScansIndexItem>[]
+    const items = results.flatMap((result) => result.hits)
 
-    return data.map((item) => ({
+    return items.map((item) => ({
       label: item.name,
       value: item.id,
     }))
