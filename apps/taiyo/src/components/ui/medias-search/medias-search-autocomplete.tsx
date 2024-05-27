@@ -49,9 +49,14 @@ const MediasSearchAutocompleteComponent = (props: Props) => {
 
   return (
     <Autocomplete<MediasIndexItem>
+      inputProps={{
+        classNames: { mainWrapper: "w-full", label: "z-0 min-w-[100px] mr-6" },
+      }}
       items={hits}
       value={query}
       onInputChange={refine}
+      labelPlacement="outside-left"
+      placeholder="Pesquisar..."
       aria-label="Search for a media"
       onSelectionChange={handleSelectionChange}
       {...rest}
@@ -83,3 +88,4 @@ const MediasSearchAutocompleteWrapper = (props: Props) => (
 )
 
 export const MediasSearchAutocomplete = MediasSearchAutocompleteWrapper
+export type MediasSearchAutocompleteProps = Props

@@ -16,6 +16,7 @@ export const UploadChapterForm = () => {
     resolver: typeboxResolver(uploadChapterSchema),
     mode: "onTouched",
     defaultValues: {
+      mediaId: "",
       title: "",
       number: 0,
       volume: undefined,
