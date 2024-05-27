@@ -1,85 +1,70 @@
-import { Autocomplete, AutocompleteItem } from "@nextui-org/autocomplete"
-import { useAsyncList } from "@react-stately/data"
-import type { Key } from "@react-types/shared"
-import type { SearchedMedia } from "@taiyomoe/types"
+import type { AlgoliaSearchResponse } from "@meilisearch/instant-meilisearch"
+import { useSession } from "@taiyomoe/auth/client"
+import type { MediasIndexItem } from "@taiyomoe/types"
+import { MediaUtils } from "@taiyomoe/utils"
 import { parseAsString, useQueryState } from "next-usequerystate"
-import { useEffect } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import { useFormContext } from "react-hook-form"
 import { z } from "zod"
-import { api } from "~/trpc/react"
+import {
+  MediasSearchAutocomplete,
+  type MediasSearchAutocompleteProps,
+} from "~/components/ui/medias-search/medias-search-autocomplete"
+import { meiliClient } from "~/meiliClient"
 
-export const MediasField = () => {
-  const [mediaId] = useQueryState("mediaId", parseAsString.withDefault(""))
+type Props = { name: string } & MediasSearchAutocompleteProps
+
+export const MediasField = ({ name, ...rest }: Props) => {
+  const [mediaId] = useQueryState(name, parseAsString.withDefault(""))
   const { setValue } = useFormContext()
-  const { mutateAsync } = api.medias.search.useMutation()
+  const [media, setMedia] = useState<MediasIndexItem>()
+  const { data: session } = useSession()
+  const placeholderText = useMemo(() => {
+    if (!media) return "Pesquisar..."
 
-  const list = useAsyncList<SearchedMedia>({
-    load: async ({ filterText }) => {
-      if (!filterText) return { items: [] }
+    return MediaUtils.getMainTitle(media.titles, session?.user.preferredTitles)
+  }, [media, session])
 
-      const data = await mutateAsync({ title: filterText })
-
-      // This is a hack to make the autocomplete work with the mediaId query param
-      if (z.string().uuid().safeParse(filterText).success && data.length > 0) {
-        setValue("mediaId", filterText, {
-          shouldValidate: true,
-          shouldDirty: true,
-        })
-
-        return {
-          items: data,
-          filterText: data.at(0)?.title ?? "",
-          selectedKeys: [filterText],
-        }
-      }
-
-      return {
-        items: data,
-      }
+  const handleSelectionChange = useCallback(
+    (item: { id: string }) => {
+      setValue(name, item.id, { shouldValidate: true, shouldDirty: true })
     },
-  })
+    [setValue, name],
+  )
 
-  const handleSelectionChange = (key: Key | null) => {
-    if (!key) return
+  const searchMedia = useCallback(
+    async (mediaId: string) => {
+      const searched = await meiliClient.search([
+        { indexName: "medias", query: mediaId },
+      ])
+      const results =
+        searched.results as AlgoliaSearchResponse<MediasIndexItem>[]
+      const media = results.at(0)?.hits.at(0)
 
-    const item = list.getItem(key)
+      if (!media) {
+        return
+      }
 
-    if (!item) return
+      handleSelectionChange({ id: mediaId })
+      setMedia(media)
+    },
+    [handleSelectionChange],
+  )
 
-    setValue("mediaId", item.id, { shouldValidate: true, shouldDirty: true })
-    list.setFilterText(item.title)
-    list.removeSelectedItems()
-  }
-
-  // biome-ignore lint/correctness/useExhaustiveDependencies: this should only run when mediaId changes
   useEffect(() => {
-    list.setFilterText(mediaId)
-  }, [mediaId])
+    if (mediaId && z.string().uuid().safeParse(mediaId).success) {
+      searchMedia(mediaId)
+    }
+  }, [searchMedia, mediaId])
 
   return (
-    <Autocomplete<SearchedMedia>
-      inputProps={{
-        classNames: {
-          mainWrapper: "w-full",
-          label: "z-0 min-w-[100px] mr-6",
-        },
-      }}
-      inputValue={list.filterText}
-      isLoading={list.isLoading}
-      items={list.items}
-      onInputChange={list.setFilterText}
-      onSelectionChange={handleSelectionChange}
-      // @ts-expect-error see https://github.com/nextui-org/nextui/issues/2074#issuecomment-1880250267
-      onKeyDown={(e) => e.continuePropagation()}
-      placeholder="Pesquisar..."
+    <MediasSearchAutocomplete
       label="Obra"
-      labelPlacement="outside-left"
-      isDisabled={!!mediaId}
-      fullWidth
-    >
-      {(item) => (
-        <AutocompleteItem key={item.id}>{item.title}</AutocompleteItem>
-      )}
-    </Autocomplete>
+      onSelectionChange={handleSelectionChange}
+      value={mediaId}
+      placeholder={placeholderText}
+      isDisabled={!!media}
+      {...rest}
+    />
   )
 }

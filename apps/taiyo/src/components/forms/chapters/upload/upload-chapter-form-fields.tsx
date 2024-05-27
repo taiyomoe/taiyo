@@ -11,8 +11,8 @@ export const UploadChapterFormFields = () => {
   return (
     <Form.Layout>
       <Form.Category>
-        <MediasField />
-        <InputField name="title" label="Título" isRequired />
+        <MediasField name="mediaId" isRequired />
+        <InputField name="title" label="Título" />
         <ScansField name="scanIds" />
       </Form.Category>
       <Form.Category title="Detalhes">
