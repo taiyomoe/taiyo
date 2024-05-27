@@ -1,5 +1,5 @@
 import { getScanIndexItem } from "@taiyomoe/meilisearch/utils"
-import { createScanSchema, nameSchema } from "@taiyomoe/schemas"
+import { createScanSchema } from "@taiyomoe/schemas"
 import { createTRPCRouter, protectedProcedure } from "../trpc"
 
 export const scansRouter = createTRPCRouter({
@@ -18,13 +18,5 @@ export const scansRouter = createTRPCRouter({
       await ctx.indexes.scans.updateDocuments([indexItem])
 
       return createdScan
-    }),
-
-  search: protectedProcedure
-    .meta({ resource: "scans", action: "create" })
-    .input(nameSchema)
-    .mutation(async ({ ctx, input }) => {
-      const results = await ctx.indexes.scans.search(input)
-      return results.hits
     }),
 })

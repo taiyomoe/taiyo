@@ -1,12 +1,10 @@
-"use client"
-
-import { MediaSearchAutocomplete } from "~/components/navbar/search/MediaSearchAutocomplete"
+import { MediasSearchAutocomplete } from "~/components/ui/medias-search/autocomplete/medias-search-autocomplete"
 
 export default function Page() {
   return (
-    <MediaSearchAutocomplete
-      className="w-full"
-      href={(mediaId) => `edit/${mediaId}`}
+    <MediasSearchAutocomplete
+      href="edit/"
+      itemProps={{ hideSelectedIcon: true }}
     />
   )
 }

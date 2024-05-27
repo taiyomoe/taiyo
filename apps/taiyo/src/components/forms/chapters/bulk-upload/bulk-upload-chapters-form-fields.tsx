@@ -9,7 +9,7 @@ export const BulkUploadChaptersFormFields = () => {
   return (
     <Form.Layout>
       <Form.Category>
-        <MediasField />
+        <MediasField name="mediaId" isRequired />
         <InputField name="concurrent" label="Limite" type="number" />
       </Form.Category>
       <BulkUploadChaptersImagesCategory />

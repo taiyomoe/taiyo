@@ -14,6 +14,7 @@ export const getMediaIndexItem = async (
     select: {
       id: true,
       synopsis: true,
+      type: true,
       titles: {
         select: {
           title: true,
@@ -24,12 +25,8 @@ export const getMediaIndexItem = async (
         },
       },
       covers: {
-        select: {
-          id: true,
-        },
-        where: {
-          isMainCover: true,
-        },
+        select: { id: true },
+        where: { isMainCover: true },
       },
     },
     where: {
@@ -54,6 +51,7 @@ export const getMediaIndexItem = async (
   return {
     id: result.id,
     synopsis: result.synopsis,
+    type: result.type,
     titles: result.titles,
     mainCoverId: result.covers[0]!.id,
   }

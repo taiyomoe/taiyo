@@ -1,5 +1,6 @@
+import { Accordion, AccordionItem } from "@nextui-org/accordion"
+import { Divider } from "@nextui-org/divider"
 import type { Selection } from "@nextui-org/react"
-import { Accordion, AccordionItem, Divider } from "@nextui-org/react"
 import type { MediaLimitedChapterPagination } from "@taiyomoe/types"
 import { MediaChapterUtils } from "@taiyomoe/utils"
 import { MediaChapterGroupCard } from "./MediaChapterGroupCard"

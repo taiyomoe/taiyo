@@ -34,8 +34,4 @@ export const updateMediaSchema = z
   .partial()
   .required({ id: true })
 
-export const searchMediaSchema = z.object({
-  title: z.string().min(1),
-})
-
 export type UpdateMediaInput = Required<typeof updateMediaSchema._type>

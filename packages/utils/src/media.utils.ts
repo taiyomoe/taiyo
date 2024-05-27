@@ -1,4 +1,4 @@
-import type { Languages } from "@prisma/client"
+import type { Languages, MediaTitle } from "@prisma/client"
 import type { MediaLimited } from "@taiyomoe/types"
 import { env } from "../env"
 import { MediaCoverUtils } from "./mediaCover.utils"
@@ -12,7 +12,7 @@ const getBannerOrCoverUrl = (media: MediaLimited) => {
 }
 
 const getMainTitle = (
-  titles: MediaLimited["titles"],
+  titles: Pick<MediaTitle, "title" | "language" | "priority" | "isMainTitle">[],
   preferredTitles: Languages | null | undefined,
 ) => {
   if (!preferredTitles) {

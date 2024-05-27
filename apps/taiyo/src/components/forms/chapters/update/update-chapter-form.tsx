@@ -44,9 +44,6 @@ export const UpdateChapterForm = ({ chapter }: Props) => {
       scanIds: values.scanIds,
     }
 
-    console.log("values", values)
-    console.log("payload", payload)
-
     toast.promise(mutateAsync(payload), {
       loading: "Salvando alterações...",
       success: () => {

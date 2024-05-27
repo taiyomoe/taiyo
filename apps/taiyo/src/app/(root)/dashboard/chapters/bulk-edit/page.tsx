@@ -1,15 +1,10 @@
-"use client"
-
-import type { SearchedMedia } from "@taiyomoe/types"
-import { useRouter } from "next/navigation"
-import { MediaSearchAutocomplete } from "~/components/navbar/search/MediaSearchAutocomplete"
+import { MediasSearchAutocomplete } from "~/components/ui/medias-search/autocomplete/medias-search-autocomplete"
 
 export default function Page() {
-  const router = useRouter()
-
-  const handleSelectionChange = (media: SearchedMedia) => {
-    router.push(`/dashboard/chapters/bulk-edit/${media.id}`)
-  }
-
-  return <MediaSearchAutocomplete onSelectionChange={handleSelectionChange} />
+  return (
+    <MediasSearchAutocomplete
+      href="/dashboard/chapters/bulk-edit/"
+      itemProps={{ hideSelectedIcon: true }}
+    />
+  )
 }

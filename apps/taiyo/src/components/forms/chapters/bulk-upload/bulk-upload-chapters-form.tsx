@@ -8,7 +8,7 @@ import {
   uploadChaptersSchema,
 } from "@taiyomoe/image-orchestrator"
 import { useSetAtom } from "jotai"
-import { parallel, sleep } from "radash"
+import { parallel } from "radash"
 import { type SubmitHandler, useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { bulkUploadChaptersStateAtoms } from "~/atoms/bulkUploadChapters.atoms"
@@ -54,9 +54,6 @@ export const BulkUploadChaptersForm = () => {
           return `Capítulo ${position} upado com sucesso!`
         },
       })
-
-      console.log(`Uploading chapter ${chapter.number}`)
-      await sleep(1000)
     })
 
   return (

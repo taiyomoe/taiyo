@@ -200,27 +200,27 @@ export const UserLibrarySchema = z.object({
   /**
    * [UserLibraryEntry]
    */
-  reading: JsonValueSchema.array().nullable(),
+  reading: JsonValueSchema.array(),
   /**
    * [UserLibraryEntry]
    */
-  rereading: JsonValueSchema.array().nullable(),
+  rereading: JsonValueSchema.array(),
   /**
    * [UserLibraryEntry]
    */
-  planToRead: JsonValueSchema.array().nullable(),
+  planToRead: JsonValueSchema.array(),
   /**
    * [UserLibraryEntry]
    */
-  completed: JsonValueSchema.array().nullable(),
+  completed: JsonValueSchema.array(),
   /**
    * [UserLibraryEntry]
    */
-  onHold: JsonValueSchema.array().nullable(),
+  onHold: JsonValueSchema.array(),
   /**
    * [UserLibraryEntry]
    */
-  dropped: JsonValueSchema.array().nullable(),
+  dropped: JsonValueSchema.array(),
   userId: z.string(),
 })
 
@@ -234,7 +234,7 @@ export const UserHistorySchema = z.object({
   /**
    * [UserHistoryProgression]
    */
-  progression: JsonValueSchema.array().nullable(),
+  progression: JsonValueSchema.array(),
   mediaId: z.string(),
   userId: z.string(),
 })
@@ -316,7 +316,7 @@ export const MediaSchema = z.object({
   /**
    * [MediaTag]
    */
-  tags: JsonValueSchema.array().nullable(),
+  tags: JsonValueSchema.array(),
   creatorId: z.string(),
   deleterId: z.string().nullable(),
 })
@@ -417,7 +417,7 @@ export const MediaChapterSchema = z.object({
   /**
    * [MediaChapterPage]
    */
-  pages: JsonValueSchema.array().nullable(),
+  pages: JsonValueSchema.array(),
   mediaId: z.string(),
   uploaderId: z.string(),
   deleterId: z.string().nullable(),
@@ -438,7 +438,7 @@ export const MediaChapterCommentSchema = z.object({
   /**
    * [MediaCommentAttachement]
    */
-  attachments: JsonValueSchema.array().nullable(),
+  attachments: JsonValueSchema.array(),
   parentId: z.string().nullable(),
   mediaChapterId: z.string(),
   userId: z.string(),

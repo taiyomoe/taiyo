@@ -5,8 +5,8 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { tv } from "tailwind-variants"
 import { ReaderSidebarOpenButton } from "~/app/(reader)/_components/readerSidebar/ui/ReaderSidebarOpenButton"
-import { MediaSearch } from "~/components/navbar/search/MediaSearch"
 import { CompanyLogo } from "~/components/ui/CompanyLogo"
+import { MediasSearchMenu } from "~/components/ui/medias-search/menu/medias-search-menu"
 import { useDevice } from "~/hooks/useDevice"
 import { useReaderSettingsStore } from "~/stores"
 import { NavbarBorder } from "./NavbarBorder"
@@ -79,7 +79,7 @@ export const Navbar = ({ popover }: Props) => {
           </Chip>
         </Link>
         <div className="flex gap-4">
-          <MediaSearch />
+          <MediasSearchMenu />
           <NavbarUserLibraryButton />
           <NavbarDashboardButton />
           {popover}
