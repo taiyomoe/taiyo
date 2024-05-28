@@ -1,7 +1,7 @@
 import { Button } from "@nextui-org/button"
+import { useSession } from "@taiyomoe/auth/client"
 import type { MediaLimitedChapter } from "@taiyomoe/types"
 import { PencilIcon } from "lucide-react"
-import { useSession } from "next-auth/react"
 import Link from "next/link"
 import { DeleteChapterButton } from "~/components/forms/chapters/delete-chapter-button"
 

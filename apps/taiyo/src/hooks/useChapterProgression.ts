@@ -1,4 +1,4 @@
-import { useSession } from "next-auth/react"
+import { useSession } from "@taiyomoe/auth/client"
 import { useReaderStore } from "~/stores"
 import { api } from "~/trpc/react"
 

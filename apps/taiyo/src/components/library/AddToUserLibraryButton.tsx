@@ -2,9 +2,9 @@
 
 import { Button } from "@nextui-org/button"
 import { Popover, PopoverContent, PopoverTrigger } from "@nextui-org/popover"
+import { useSession } from "@taiyomoe/auth/client"
 import type { MediaLimited, UserLibraryMedia } from "@taiyomoe/types"
 import { LibraryUtils } from "@taiyomoe/utils"
-import { useSession } from "next-auth/react"
 import { useEffect, useState } from "react"
 import { UserLibraryStatusSelect } from "~/components/library/UserLibraryStatusSelect"
 import { useLibraryStore } from "~/stores"

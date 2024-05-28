@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "@nextui-org/button"
-import { signOut } from "next-auth/react"
+import { signOut } from "@taiyomoe/auth/client"
 
 export const SignOutButton = () => {
   return (
