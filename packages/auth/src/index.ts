@@ -27,7 +27,6 @@ declare module "next-auth" {
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(db),
-
   providers: [
     Discord({
       clientId: env.DISCORD_CLIENT_ID,
