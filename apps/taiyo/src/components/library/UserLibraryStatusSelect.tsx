@@ -29,7 +29,7 @@ export const UserLibraryStatusSelect = ({ media, currentStatus }: Props) => {
   }
 
   return (
-    <Select<UserLibraryStatus>
+    <Select
       classNames={{
         trigger: "h-10",
         label: "text-small font-bold",
