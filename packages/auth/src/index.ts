@@ -39,8 +39,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
   session: { strategy: "jwt" },
   callbacks: {
     jwt: async ({ user, token }) => {
-      console.log("JWT callback", user, token)
-
       if (!user || !("role" in user)) {
         return token
       }
@@ -71,7 +69,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
   },
   events: {
     createUser: async ({ user }) => {
-      console.log("Creating user", user)
+      if (!user.id) return
 
       await db.userSetting.create({ data: { userId: user.id } })
       await db.userLibrary.create({ data: { userId: user.id } })
