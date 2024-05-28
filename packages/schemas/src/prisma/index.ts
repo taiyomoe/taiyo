@@ -58,7 +58,7 @@ export const TransactionIsolationLevelSchema = z.enum(['ReadUncommitted','ReadCo
 
 export const UserScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','name','email','emailVerified','image','role','points']);
 
-export const UserSettingScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','birthDate','gender','city','country','about','contentRating','preferredTitleLanguage','userId']);
+export const UserSettingScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','birthDate','gender','city','country','about','contentRating','preferredTitles','userId']);
 
 export const UserLibraryScalarFieldEnumSchema = z.enum(['reading','rereading','planToRead','completed','onHold','dropped','userId']);
 
@@ -66,7 +66,7 @@ export const UserHistoryScalarFieldEnumSchema = z.enum(['progression','mediaId',
 
 export const AccountScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','type','refresh_token','access_token','expires_at','token_type','scope','id_token','session_state','provider','providerAccountId','userId']);
 
-export const SessionScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','sessionToken','expires','userId']);
+export const SessionScalarFieldEnumSchema = z.enum(['createdAt','updatedAt','sessionToken','expires','userId']);
 
 export const VerificationTokenScalarFieldEnumSchema = z.enum(['identifier','token','expires']);
 
@@ -164,7 +164,7 @@ export const UserSchema = z.object({
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
   name: z.string().nullable(),
-  email: z.string().nullable(),
+  email: z.string(),
   emailVerified: z.coerce.date().nullable(),
   image: z.string().nullable(),
   points: z.number().int(),
@@ -179,7 +179,7 @@ export type User = z.infer<typeof UserSchema>
 export const UserSettingSchema = z.object({
   gender: GendersSchema,
   contentRating: ContentRatingSchema,
-  preferredTitleLanguage: LanguagesSchema.nullable(),
+  preferredTitles: LanguagesSchema,
   id: z.string().uuid(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
@@ -269,7 +269,6 @@ export type Account = z.infer<typeof AccountSchema>
 /////////////////////////////////////////
 
 export const SessionSchema = z.object({
-  id: z.string().uuid(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
   sessionToken: z.string(),

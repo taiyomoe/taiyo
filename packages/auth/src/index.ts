@@ -2,7 +2,7 @@ import { PrismaAdapter } from "@auth/prisma-adapter"
 import { type Languages, type User, db } from "@taiyomoe/db"
 import type { Permission } from "@taiyomoe/types"
 import { PermissionUtils } from "@taiyomoe/utils"
-import NextAuth, { type AdapterUser, type DefaultSession } from "next-auth"
+import NextAuth, { type DefaultSession } from "next-auth"
 import Discord from "next-auth/providers/discord"
 import { env } from "../env"
 
@@ -13,8 +13,6 @@ import { env } from "../env"
  * @see https://authjs.dev/getting-started/typescript#module-augmentation
  */
 declare module "next-auth" {
-  type AdapterUser = User
-
   /**
    * Returned by `auth`, `useSession`, `getSession` and received as a prop on the `SessionProvider` React Context
    */
@@ -22,7 +20,7 @@ declare module "next-auth" {
     user: DefaultSession["user"] & {
       id: string
       role: { name: string; permissions: Permission[] }
-      preferredTitles: Languages | null
+      preferredTitles: Languages
     }
   }
 }
@@ -36,36 +34,27 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     }),
   ],
   pages: { signIn: "/auth/sign-in" },
-  session: { strategy: "jwt" },
   callbacks: {
-    jwt: async ({ user, token }) => {
-      if (!user || !("role" in user)) {
-        return token
-      }
-
-      const adapterUser = user as AdapterUser
-      const userSettings = await db.userSetting.findFirst({
-        where: { userId: adapterUser.id },
+    session: async ({ session, user: adapterUser }) => {
+      const user = adapterUser as User
+      const settings = await db.userSetting.findUnique({
+        where: { userId: user.id },
       })
-
-      token.role = {
-        name: adapterUser.role,
-        permissions: PermissionUtils.getRolePermissions(adapterUser.role),
+      const role = {
+        name: user.role,
+        permissions: PermissionUtils.getRolePermissions(user.role),
       }
 
-      token.preferredTitles = userSettings?.preferredTitleLanguage ?? null
-
-      return token
+      return {
+        ...session,
+        user: {
+          id: user.id,
+          image: user.image,
+          role,
+          preferredTitles: settings!.preferredTitles,
+        },
+      }
     },
-    session: ({ session, token }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        id: token.sub,
-        role: token.role,
-        preferredTitles: token.preferredTitles,
-      },
-    }),
   },
   events: {
     createUser: async ({ user }) => {

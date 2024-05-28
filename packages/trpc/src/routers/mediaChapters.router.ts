@@ -194,7 +194,7 @@ export const mediaChaptersRouter = createTRPCRouter({
       )
       const mediaTitle = MediaUtils.getMainTitle(
         result.media.titles,
-        ctx.session?.user.preferredTitles ?? null,
+        ctx.session?.user.preferredTitles,
       )
 
       const mediaChapterLimited: MediaChapterLimited = {
