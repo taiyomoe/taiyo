@@ -74,6 +74,12 @@ export default {
     require("@savvywombat/tailwindcss-grid-areas"),
     nextui({
       addCommonColors: true,
+      layout: {
+        radius: {
+          medium: "0.4rem",
+          large: "0.6rem",
+        },
+      },
       themes: {
         light: {
           colors: {
