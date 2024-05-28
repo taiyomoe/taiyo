@@ -1,5 +1,6 @@
 "use client"
 
+import { ScrollShadow } from "@nextui-org/react"
 import type { LatestMedia } from "@taiyomoe/types"
 import { MediaCoverUtils } from "@taiyomoe/utils"
 import useEmblaCarousel from "embla-carousel-react"
@@ -26,13 +27,17 @@ export const TrendingMediasCarousel = ({ medias }: Props) => {
   })
 
   return (
-    <div className="overflow-hidden" ref={emblaRef}>
+    <ScrollShadow
+      className="scrollbar-none"
+      orientation="horizontal"
+      ref={emblaRef}
+    >
       <div className="flex max-h-[400px] flex-row md:max-h-[498px] md:flex-col">
         {medias.map((media) => (
           <Link
             key={media.id}
             href={`/media/${media.id}`}
-            className="relative mr-6 max-h-[400px] min-h-[400px] last:mr-0 lg:mr-0 lg:mb-6 md:max-h-[498px] md:min-h-[498px] hover:cursor-pointer"
+            className="relative mr-6 max-h-[400px] min-h-[400px] last:mr-0 md:mr-0 md:mb-6 md:max-h-[498px] md:min-h-[498px] hover:cursor-pointer"
           >
             <MediaImage
               src={MediaCoverUtils.getUrl(media)}
@@ -42,12 +47,12 @@ export const TrendingMediasCarousel = ({ medias }: Props) => {
               }}
               maxHeight={498}
               maxWidth={350}
-              isZoomed
               alt="media's cover"
+              isZoomed
             />
           </Link>
         ))}
       </div>
-    </div>
+    </ScrollShadow>
   )
 }

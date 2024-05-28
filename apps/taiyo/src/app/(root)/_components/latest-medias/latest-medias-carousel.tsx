@@ -17,9 +17,9 @@ export const LatestMediasCarousel = ({ medias }: Props) => {
 
   return (
     <ScrollShadow
-      ref={emblaRef}
-      orientation="horizontal"
       className="scrollbar-none"
+      orientation="horizontal"
+      ref={emblaRef}
     >
       <div className="flex">
         {medias.map((media, i) => (
