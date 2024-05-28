@@ -6,9 +6,7 @@ import type {
 } from "@taiyomoe/types"
 import { MediaUtils } from "@taiyomoe/utils"
 
-const getLatestReleases = async (
-  preferredTitles: Languages | null | undefined,
-) => {
+const getLatestReleases = async (preferredTitles: Languages = "ja_ro") => {
   const result = await db.mediaChapter.findMany({
     take: 6,
     orderBy: { createdAt: "desc" },

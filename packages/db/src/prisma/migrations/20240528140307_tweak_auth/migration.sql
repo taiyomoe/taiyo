@@ -24,3 +24,12 @@ ALTER TABLE "VerificationToken" ADD CONSTRAINT "VerificationToken_pkey" PRIMARY 
 
 -- AlterTable
 ALTER TABLE "UserSetting" RENAME COLUMN "preferredTitleLanguage" TO "preferredTitles";
+
+-- AlterTable
+ALTER TABLE "UserSetting" ALTER COLUMN "preferredTitles" SET DEFAULT 'ja_ro';
+
+-- Update
+UPDATE "UserSetting" SET "preferredTitles" = 'ja_ro' WHERE "preferredTitles" IS NULL;
+
+-- AlterTable
+ALTER TABLE "UserSetting" ALTER COLUMN "preferredTitles" SET NOT NULL;

@@ -20,7 +20,7 @@ declare module "next-auth" {
     user: DefaultSession["user"] & {
       id: string
       role: { name: string; permissions: Permission[] }
-      preferredTitles: Languages | null
+      preferredTitles: Languages
     }
   }
 }
@@ -51,7 +51,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           id: user.id,
           image: user.image,
           role,
-          preferredTitles: settings?.preferredTitleLanguage ?? null,
+          preferredTitles: settings!.preferredTitles,
         },
       }
     },

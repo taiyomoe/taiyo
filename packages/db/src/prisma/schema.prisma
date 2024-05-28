@@ -68,7 +68,7 @@ model UserSetting {
     country         String?
     about           String?
     contentRating   ContentRating @default(NSFL)
-    preferredTitles Languages?
+    preferredTitles Languages     @default(ja_ro)
 
     user   User   @relation(fields: [userId], references: [id])
     userId String @unique
