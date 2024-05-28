@@ -9,6 +9,7 @@
 
 import { auth } from "@taiyomoe/auth"
 import { db } from "@taiyomoe/db"
+import { dragonflyClient } from "@taiyomoe/dragonfly"
 import { meilisearch, meilisearchIndexes } from "@taiyomoe/meilisearch"
 import type { Actions, Resources } from "@taiyomoe/types"
 import { initTRPC } from "@trpc/server"
@@ -42,6 +43,7 @@ export const createTRPCContext = async (opts: { headers: Headers }) => {
     session,
     meilisearch,
     indexes: meilisearchIndexes,
+    cache: dragonflyClient,
     ...opts,
   }
 }
