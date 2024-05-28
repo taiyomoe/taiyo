@@ -21,3 +21,12 @@ services:
       - "$MEILISEARCH_PORT:7700"
     volumes:
       - "./data/meilisearch:/meili_data"
+
+  dragonfly:
+    image: 'docker.dragonflydb.io/dragonflydb/dragonfly'
+    ulimits:
+      memlock: -1
+    ports:
+      - "$DRAGONFLY_PORT:6379"
+    volumes:
+      - "./data/dragonfly:/data"
