@@ -1,7 +1,7 @@
 "use client"
 
 import { NextUIProvider } from "@nextui-org/react"
-import { SessionProvider } from "next-auth/react"
+import { SessionProvider } from "@taiyomoe/auth/client"
 import { ThemeProvider } from "next-themes"
 import { useRouter } from "next/navigation"
 import { Toaster } from "sonner"

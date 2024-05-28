@@ -1,7 +1,7 @@
 import { Card, CardBody } from "@nextui-org/card"
+import { useSession } from "@taiyomoe/auth/client"
 import type { MediaLimitedChapter } from "@taiyomoe/types"
 import { MediaChapterUtils } from "@taiyomoe/utils"
-import { useSession } from "next-auth/react"
 import Link from "next/link"
 import { useState } from "react"
 import { tv } from "tailwind-variants"

@@ -1,5 +1,5 @@
 import type { Roles } from "@prisma/client"
-import { getServerAuthSession } from "@taiyomoe/auth"
+import { auth } from "@taiyomoe/auth"
 import type { Permission } from "@taiyomoe/types"
 
 type Props = {
@@ -10,7 +10,7 @@ type Props = {
 
 export const SignedIn = async (props: Props) => {
   const { requiredRole, requiredPermissions, children } = props
-  const session = await getServerAuthSession()
+  const session = await auth()
 
   // Not signed in
   if (!session) return null

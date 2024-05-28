@@ -1,11 +1,11 @@
-import { getServerAuthSession } from "@taiyomoe/auth"
+import { auth } from "@taiyomoe/auth"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 import { CompanyLogo } from "~/components/ui/CompanyLogo"
 import { AuthCard } from "./_components/AuthCard"
 
 export default async function SignInPage() {
-  const session = await getServerAuthSession()
+  const session = await auth()
 
   if (session) {
     redirect("/")

@@ -1,6 +1,6 @@
 import { Button } from "@nextui-org/button"
+import { useSession } from "@taiyomoe/auth/client"
 import { GaugeIcon } from "lucide-react"
-import { useSession } from "next-auth/react"
 import Link from "next/link"
 
 export const NavbarDashboardButton = () => {

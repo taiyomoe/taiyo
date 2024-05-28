@@ -1,7 +1,7 @@
 import { tv } from "@nextui-org/react"
+import { useSession } from "@taiyomoe/auth/client"
 import type { MediaLimitedChapter } from "@taiyomoe/types"
 import { EyeIcon, EyeOffIcon } from "lucide-react"
-import { useSession } from "next-auth/react"
 import type { Dispatch, SetStateAction } from "react"
 import { api } from "~/trpc/react"
 

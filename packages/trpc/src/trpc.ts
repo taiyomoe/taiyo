@@ -7,7 +7,7 @@
  * need to use are documented accordingly near the end.
  */
 
-import { getServerAuthSession } from "@taiyomoe/auth"
+import { auth } from "@taiyomoe/auth"
 import { db } from "@taiyomoe/db"
 import { meilisearch, meilisearchIndexes } from "@taiyomoe/meilisearch"
 import type { Actions, Resources } from "@taiyomoe/types"
@@ -35,7 +35,7 @@ export type Meta = {
 }
 
 export const createTRPCContext = async (opts: { headers: Headers }) => {
-  const session = await getServerAuthSession()
+  const session = await auth()
 
   return {
     db,
