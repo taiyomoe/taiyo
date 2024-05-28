@@ -21,3 +21,6 @@ ALTER TABLE "User" ALTER COLUMN "email" SET NOT NULL;
 
 -- AlterTable
 ALTER TABLE "VerificationToken" ADD CONSTRAINT "VerificationToken_pkey" PRIMARY KEY ("identifier", "token");
+
+-- AlterTable
+ALTER TABLE "UserSetting" RENAME COLUMN "preferredTitleLanguage" TO "preferredTitles";

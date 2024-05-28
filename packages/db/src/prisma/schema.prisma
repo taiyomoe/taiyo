@@ -62,13 +62,13 @@ model UserSetting {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    birthDate              DateTime?
-    gender                 Genders       @default(NOT_SPECIFIED)
-    city                   String?
-    country                String?
-    about                  String?
-    contentRating          ContentRating @default(NSFL)
-    preferredTitleLanguage Languages?
+    birthDate       DateTime?
+    gender          Genders       @default(NOT_SPECIFIED)
+    city            String?
+    country         String?
+    about           String?
+    contentRating   ContentRating @default(NSFL)
+    preferredTitles Languages?
 
     user   User   @relation(fields: [userId], references: [id])
     userId String @unique
