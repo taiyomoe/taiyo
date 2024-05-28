@@ -446,6 +446,9 @@ importers:
       '@taiyomoe/db':
         specifier: workspace:^0.1.0
         version: link:../db
+      '@taiyomoe/dragonfly':
+        specifier: workspace:^0.1.0
+        version: link:../dragonfly
       '@taiyomoe/meilisearch':
         specifier: workspace:^0.1.0
         version: link:../meilisearch
