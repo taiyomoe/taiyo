@@ -108,13 +108,11 @@ export const mediasRouter = createTRPCRouter({
 
   getHomePage: publicProcedure.query(async ({ ctx }) => {
     const preferredTitles = ctx.session?.user.preferredTitles
-    const latestMedias = await MediaService.getLatestMedias()
     const featuredMedias = await MediaService.getFeaturedMedias(preferredTitles)
     const latestReleases =
       await MediaChapterService.getLatestReleases(preferredTitles)
 
     return {
-      latestMedias,
       featuredMedias,
       latestReleases,
     }

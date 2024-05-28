@@ -1,8 +1,8 @@
 import { api } from "~/trpc/server"
 import { FeaturedMedias } from "./_components/FeaturedMedias"
-import { LatestMedias } from "./_components/LatestMedias"
 import { LatestReleases } from "./_components/LatestReleases"
 import { TrendingMedias } from "./_components/TrendingMedias"
+import { LatestMediasCategory } from "./_components/latest-medias/latest-medias-category"
 
 export default async function HomePage() {
   const { latestMedias, featuredMedias, latestReleases } =
@@ -16,7 +16,7 @@ export default async function HomePage() {
           <LatestReleases latestReleases={latestReleases} />
           <TrendingMedias trendingMedias={latestMedias} />
         </div>
-        <LatestMedias latestMedias={latestMedias} />
+        <LatestMediasCategory />
       </div>
     </main>
   )
