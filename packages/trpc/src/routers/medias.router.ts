@@ -1,10 +1,6 @@
 import { getMediaIndexItem } from "@taiyomoe/meilisearch/utils"
 import { idSchema, updateMediaSchema } from "@taiyomoe/schemas"
-import {
-  LibraryService,
-  MediaChapterService,
-  MediaService,
-} from "@taiyomoe/services"
+import { LibraryService } from "@taiyomoe/services"
 import type { MediaLimited } from "@taiyomoe/types"
 import { MediaUtils } from "@taiyomoe/utils"
 import { TRPCError } from "@trpc/server"
@@ -105,18 +101,4 @@ export const mediasRouter = createTRPCRouter({
 
       return mediaLimited
     }),
-
-  getHomePage: publicProcedure.query(async ({ ctx }) => {
-    const preferredTitles = ctx.session?.user.preferredTitles
-    const latestMedias = await MediaService.getLatestMedias()
-    const featuredMedias = await MediaService.getFeaturedMedias(preferredTitles)
-    const latestReleases =
-      await MediaChapterService.getLatestReleases(preferredTitles)
-
-    return {
-      latestMedias,
-      featuredMedias,
-      latestReleases,
-    }
-  }),
 })
