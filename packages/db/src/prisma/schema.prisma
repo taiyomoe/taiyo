@@ -32,7 +32,7 @@ model User {
     updatedAt DateTime @updatedAt
 
     name          String?
-    email         String?   @unique
+    email         String    @unique
     emailVerified DateTime?
     image         String?
     role          Roles     @default(USER)
@@ -129,7 +129,6 @@ model Account {
 }
 
 model Session {
-    id        String   @id @default(uuid())
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
@@ -142,10 +141,10 @@ model Session {
 
 model VerificationToken {
     identifier String
-    token      String   @unique
+    token      String
     expires    DateTime
 
-    @@unique([identifier, token])
+    @@id([identifier, token])
 }
 
 // ----- MEDIAS
