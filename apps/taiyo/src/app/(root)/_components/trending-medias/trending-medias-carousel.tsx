@@ -10,7 +10,7 @@ type Props = {
   medias: LatestMedia[]
 }
 
-export const SwipeableTrendingMedias = ({ medias }: Props) => {
+export const TrendingMediasCarousel = ({ medias }: Props) => {
   const [emblaRef] = useEmblaCarousel({
     dragFree: true,
     axis: "x",

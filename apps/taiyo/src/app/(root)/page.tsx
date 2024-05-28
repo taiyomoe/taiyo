@@ -1,20 +1,16 @@
-import { api } from "~/trpc/server"
-import { FeaturedMedias } from "./_components/FeaturedMedias"
-import { LatestReleases } from "./_components/LatestReleases"
-import { TrendingMedias } from "./_components/TrendingMedias"
+import { FeaturedMediasCategory } from "./_components/featured-medias/featured-medias-category"
 import { LatestMediasCategory } from "./_components/latest-medias/latest-medias-category"
+import { LatestReleasesCategory } from "./_components/latest-releases/latest-releases-category"
+import { TrendingMediasCategory } from "./_components/trending-medias/trending-medias-category"
 
 export default async function HomePage() {
-  const { latestMedias, featuredMedias, latestReleases } =
-    await api.medias.getHomePage()
-
   return (
     <main className="flex h-full flex-col p-bodyPadding">
       <div className="flex flex-col gap-12">
-        <FeaturedMedias featuredMedias={featuredMedias} />
+        <FeaturedMediasCategory />
         <div className="flex w-full flex-col gap-12 md:flex-row">
-          <LatestReleases latestReleases={latestReleases} />
-          <TrendingMedias trendingMedias={latestMedias} />
+          <LatestReleasesCategory />
+          <TrendingMediasCategory />
         </div>
         <LatestMediasCategory />
       </div>

@@ -15,7 +15,7 @@ type Props = {
   medias: FeaturedMedia[]
 }
 
-export const SwipeableFeaturedMedias = ({ medias }: Props) => {
+export const FeaturedMediasCarousel = ({ medias }: Props) => {
   const [emblaRef, emblaApi] = useEmblaCarousel({}, [
     Autoplay({ delay: 10000 }),
   ])
