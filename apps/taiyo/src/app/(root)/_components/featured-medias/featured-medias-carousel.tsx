@@ -24,7 +24,7 @@ export const FeaturedMediasCarousel = ({ medias }: Props) => {
           <Link
             key={media.id}
             href={`/media/${media.id}`}
-            className="z-0 mr-6 max-h-[200px] min-h-[200px] min-w-0 flex-[0_0_100%] last:mr-0 lg:max-h-[350px] md:max-h-[300px] sm:max-h-[250px] lg:min-h-[350px] md:min-h-[300px] sm:min-h-[250px] hover:cursor-pointer"
+            className="mr-6 max-h-[200px] min-h-[200px] min-w-0 flex-[0_0_100%] last:mr-0 lg:max-h-[350px] md:max-h-[300px] sm:max-h-[250px] lg:min-h-[350px] md:min-h-[300px] sm:min-h-[250px] hover:cursor-pointer"
           >
             <MediaImage
               src={MediaBannerUtils.getUrl(media)}
@@ -42,7 +42,7 @@ export const FeaturedMediasCarousel = ({ medias }: Props) => {
               <MediaImage
                 src={MediaCoverUtils.getUrl(media)}
                 classNames={{
-                  wrapper: "h-full",
+                  wrapper: "h-full z-10",
                   height: "h-full",
                   width:
                     "min-w-[120px] sm:min-w-[160px] md:min-w-[190px] lg:min-w-[230px]",
@@ -62,6 +62,7 @@ export const FeaturedMediasCarousel = ({ medias }: Props) => {
                   </p>
                 </div>
               </div>
+              <span className="absolute bottom-0 left-0 z-0 h-24 w-full [background:linear-gradient(to_bottom,transparent,rgb(22_22_26/1))]" />
             </div>
           </Link>
         ))}
@@ -70,7 +71,6 @@ export const FeaturedMediasCarousel = ({ medias }: Props) => {
         onPrev={() => emblaApi?.scrollPrev()}
         onNext={() => emblaApi?.scrollNext()}
       />
-      <div className="-bottom-4 absolute left-0 h-20 w-full bg-gradient-to-t from-background to-transparent" />
     </div>
   )
 }
