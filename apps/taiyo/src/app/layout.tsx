@@ -8,10 +8,7 @@ import { Providers } from "./providers"
 
 import "~/styles/globals.css"
 
-const fontSans = Inter({
-  subsets: ["latin"],
-  variable: "--font-sans",
-})
+const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   title: siteConfig.name,
@@ -39,8 +36,8 @@ export default function Layout({ children }: LayoutProps) {
     <html lang="en" suppressHydrationWarning>
       <body
         className={cn(
-          ["font-sans", fontSans.variable].join(""),
           "scrollbar-thin scrollbar-track-content1 scrollbar-thumb-primary h-full min-h-dvh bg-background",
+          inter.className,
         )}
       >
         <Providers>{children}</Providers>
