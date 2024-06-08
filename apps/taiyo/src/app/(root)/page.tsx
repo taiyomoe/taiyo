@@ -9,7 +9,7 @@ export default async function Page() {
     <main className="flex h-full flex-col gap-12">
       <FeaturedMediasCategory />
       <div className="flex flex-col gap-12 p-bodyPadding pt-0">
-        <div className="-mt-12 absolute right-0 z-0 h-[350px] w-full lg:max-w-[900px] md:max-w-[600px] xl:max-w-[1100px]">
+        <div className="-mt-12 absolute right-0 z-0 h-[350px] w-full 2xl:max-w-[1200px] lg:max-w-[900px] md:max-w-[600px] xl:max-w-[1100px]">
           <DashedGridPattern />
         </div>
         <div className="z-0 flex w-full flex-col gap-12 md:flex-row">
