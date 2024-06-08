@@ -28,7 +28,7 @@ export const TrendingMediasCarousel = ({ medias }: Props) => {
 
   return (
     <ScrollShadow
-      className="scrollbar-none"
+      className="scrollbar-none overflow-hidden"
       orientation="horizontal"
       ref={emblaRef}
     >

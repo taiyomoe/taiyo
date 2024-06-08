@@ -42,6 +42,18 @@
     --content2: #37373b; /* zinc-800 + 8% brighter */
     --content2-foreground: 0 0% 98%;
   }
+
+  @screen md {
+    :root {
+      --body-padding: 32px;
+    }
+  }
+
+  @screen lg {
+    :root {
+      --body-padding: 48px;
+    }
+  }
 }
 
 .apexcharts-toolbar svg {
