@@ -8,7 +8,6 @@
     ".": "./src/exports.ts"
   },
   "scripts": {
-    "build": "mkdir -p ./dist && bun build --target=node ./src/main.ts > ./dist/index.js",
     "dev": "bun --watch run ./src/main.ts",
     "start": "bun ./src/main.ts",
     "clean": "rm -rf .turbo node_modules",
