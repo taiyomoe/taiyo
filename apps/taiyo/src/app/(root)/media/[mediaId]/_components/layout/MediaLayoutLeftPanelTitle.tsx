@@ -7,7 +7,7 @@ import { useScrollOpacity } from "~/hooks/useScrollOpacity"
 type Props = { media: MediaLimited }
 
 export const MediaLayoutLeftPanelTitle = ({ media }: Props) => {
-  const { opacity } = useScrollOpacity({ min: 300, max: 450 })
+  const opacity = useScrollOpacity({ min: 300, max: 450 })
 
   const handleClick = useCallback(() => {
     window.scrollTo({ top: 0, behavior: "smooth" })
