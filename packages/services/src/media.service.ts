@@ -64,7 +64,7 @@ const getLatest = async () => {
  * Gets the featured medias.
  * Used to populate the homepage.
  */
-const getFeatured = async (preferredTitles: Languages = "ja_ro") => {
+const getFeatured = async (preferredTitles: Languages = "en") => {
   const banners = await db.$queryRaw<
     { id: string; mediaId: string }[]
   >`SELECT "id", "mediaId" FROM "MediaBanner" WHERE "deletedAt" IS NULL ORDER BY RANDOM() LIMIT 15;`

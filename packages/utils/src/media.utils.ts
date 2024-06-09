@@ -13,7 +13,7 @@ const getBannerOrCoverUrl = (media: MediaLimited) => {
 
 const getMainTitle = (
   titles: Pick<MediaTitle, "title" | "language" | "priority" | "isMainTitle">[],
-  preferredTitles: Languages = "ja_ro",
+  preferredTitles: Languages = "en",
 ) => {
   if (!preferredTitles) {
     return titles.find((t) => t.isMainTitle)!.title
