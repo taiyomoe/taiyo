@@ -14,12 +14,6 @@ const buildResponse = (obj: Record<string, unknown>, status = 200) =>
     status,
   })
 
-export default {
-  async fetch(request: Request) {
-    return await app.handle(request)
-  },
-}
-
 export const app = new Elysia({ prefix: "/v3" })
   .use(cors({ origin: true, allowedHeaders: ["Content-Type"] }))
   .use(swagger())
