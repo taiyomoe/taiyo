@@ -1,5 +1,5 @@
-import type { Languages, MediaStatus } from "@prisma/client"
-import { db } from "@taiyomoe/db"
+import { type Languages, type MediaStatus, db } from "@taiyomoe/db"
+import { cacheClient } from "@taiyomoe/cache"
 import type { FeaturedMedia, LatestMedia } from "@taiyomoe/types"
 import { MediaUtils } from "@taiyomoe/utils"
 import { TRPCError } from "@trpc/server"
@@ -29,6 +29,13 @@ const getStatus = async (mediaId: string): Promise<MediaStatus> => {
  * Used to populate the homepage.
  */
 const getLatest = async () => {
+  const cacheController = cacheClient.medias.latest
+  const cached = await cacheController.get()
+
+  if (cached) {
+    return cached
+  }
+
   const result = await db.media.findMany({
     select: {
       id: true,
@@ -57,6 +64,8 @@ const getLatest = async () => {
       coverId: m.covers.at(0)!.id,
     }))
 
+  void cacheController.set(latestMedias)
+
   return latestMedias
 }
 
@@ -65,6 +74,13 @@ const getLatest = async () => {
  * Used to populate the homepage.
  */
 const getFeatured = async (preferredTitles: Languages = "en") => {
+  const cacheController = cacheClient.medias.featured(preferredTitles)
+  const cached = await cacheController.get()
+
+  if (cached) {
+    return cached
+  }
+
   const banners = await db.$queryRaw<
     { id: string; mediaId: string }[]
   >`SELECT "id", "mediaId" FROM "MediaBanner" WHERE "deletedAt" IS NULL ORDER BY RANDOM() LIMIT 15;`
@@ -109,6 +125,8 @@ const getFeatured = async (preferredTitles: Languages = "en") => {
     bannerId: banners.find((b) => b.mediaId === m.id)!.id,
     mainTitle: MediaUtils.getMainTitle(m.titles, preferredTitles),
   }))
+
+  void cacheController.set(featuredMedias)
 
   return featuredMedias
 }
