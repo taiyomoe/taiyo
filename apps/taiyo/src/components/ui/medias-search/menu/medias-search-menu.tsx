@@ -24,7 +24,7 @@ export const MediasSearchMenu = () => {
           backdrop: "bg-black/80",
         }}
         onClose={toggle}
-        placement="top-center"
+        placement="center"
       >
         <ModalContent>
           <InstantSearch searchClient={meiliClient} indexName="medias">
