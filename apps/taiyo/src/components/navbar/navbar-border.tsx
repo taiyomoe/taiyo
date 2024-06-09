@@ -1,5 +1,3 @@
-"use client"
-
 import { useScrollOpacity } from "~/hooks/useScrollOpacity"
 import { cn } from "~/lib/utils/cn"
 

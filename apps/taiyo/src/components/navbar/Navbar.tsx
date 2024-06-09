@@ -1,17 +1,21 @@
 "use client"
 
 import { Chip } from "@nextui-org/chip"
+import { useSession } from "@taiyomoe/auth/client"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { tv } from "tailwind-variants"
 import { ReaderSidebarOpenButton } from "~/app/(reader)/_components/readerSidebar/ui/ReaderSidebarOpenButton"
 import { CompanyLogo } from "~/components/ui/CompanyLogo"
 import { MediasSearchMenu } from "~/components/ui/medias-search/menu/medias-search-menu"
+import { SignedIn } from "~/components/utils/signed-in/client"
 import { useDevice } from "~/hooks/useDevice"
 import { useReaderSettingsStore } from "~/stores"
-import { NavbarBorder } from "./NavbarBorder"
-import { NavbarDashboardButton } from "./buttons/NavbarDashboardButton"
-import { NavbarUserLibraryButton } from "./buttons/NavbarUserLibraryButton"
+import { NavbarDashboardButton } from "./buttons/navbar-dashboard-button"
+import { NavbarUserLibraryButton } from "./buttons/navbar-user-library-button"
+import { NavbarBorder } from "./navbar-border"
+import { NavbarGuestPopover } from "./popovers/navbar-guest-popover"
+import { NavbarUserPopover } from "./popovers/navbar-user-popover"
 
 const navbar = tv({
   slots: {
@@ -34,14 +38,11 @@ const navbar = tv({
   },
 })
 
-type Props = {
-  popover: JSX.Element
-}
-
-export const Navbar = ({ popover }: Props) => {
+export const Navbar = () => {
   const { sidebar, navbarMode } = useReaderSettingsStore()
   const pathname = usePathname()
   const device = useDevice()
+  const { data: session } = useSession()
 
   const slots = navbar({
     mode: pathname.includes("/chapter/") ? navbarMode : "sticky",
@@ -81,8 +82,11 @@ export const Navbar = ({ popover }: Props) => {
         <div className="flex gap-4">
           <MediasSearchMenu />
           <NavbarUserLibraryButton />
-          <NavbarDashboardButton />
-          {popover}
+          <SignedIn requiredRole="ADMIN">
+            <NavbarDashboardButton />
+          </SignedIn>
+          {session && <NavbarUserPopover session={session} />}
+          {!session && <NavbarGuestPopover />}
           <ReaderSidebarOpenButton />
         </div>
       </nav>
