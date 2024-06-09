@@ -1,4 +1,4 @@
-import { Navbar } from "~/components/navbar/navbar"
+import { Navbar } from "~/components/navbar/Navbar"
 import type { LayoutProps } from "~/lib/types"
 import { ReaderSidebarLayout } from "./_components/readerSidebar/layout/ReaderSidebarLayout"
 import { ReaderSidebarOpenOverlay } from "./chapter/[chapterId]/_components/ReaderSidebarOpenOverlay"

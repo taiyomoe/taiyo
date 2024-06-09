@@ -1,5 +1,5 @@
 import Image from "next/image"
-import { Navbar } from "~/components/navbar/navbar"
+import { Navbar } from "~/components/navbar/Navbar"
 
 export default function NotFound() {
   return (
