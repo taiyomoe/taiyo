@@ -1,4 +1,4 @@
-import { Navbar } from "~/components/navbar/Navbar"
+import { Navbar } from "~/components/navbar/navbar"
 import type { LayoutProps } from "~/lib/types"
 
 export default function Layout({ children }: LayoutProps) {
