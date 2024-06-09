@@ -3,35 +3,33 @@ import type { MediaLimited } from "@taiyomoe/types"
 import { FileEditIcon } from "lucide-react"
 import Link from "next/link"
 import { AddToUserLibraryButton } from "~/components/library/AddToUserLibraryButton"
-import { SignedIn } from "~/components/utils/SignedIn"
+import { SignedIn } from "~/components/utils/signed-in/server"
 import { MediaChapterUploadPageButton } from "../ui/MediaChapterUploadPageButton"
 
 type Props = {
   media: MediaLimited
 }
 
-export const MediaLayoutActions = ({ media }: Props) => {
-  return (
-    <div className="flex h-28 flex-col justify-end gap-2 py-3 xl:h-36">
-      <p className="media-title line-clamp-1 pb-1 text-center font-bold text-2xl drop-shadow-accent md:text-left md:text-4xl xl:text-5xl">
-        {media.mainTitle}
-      </p>
-      <div className="flex gap-4">
-        <AddToUserLibraryButton media={media} />
-        <SignedIn requiredPermissions={["medias:update:any"]}>
-          <Button
-            as={Link}
-            href={`/dashboard/medias/edit/${media.id}`}
-            startContent={<FileEditIcon className="h-6 w-6" />}
-            color="warning"
-            radius="sm"
-            isIconOnly
-          />
-        </SignedIn>
-        <SignedIn requiredPermissions={["mediaChapters:create"]}>
-          <MediaChapterUploadPageButton media={media} />
-        </SignedIn>
-      </div>
+export const MediaLayoutActions = ({ media }: Props) => (
+  <div className="flex h-28 flex-col justify-end gap-2 py-3 xl:h-36">
+    <p className="media-title line-clamp-1 pb-1 text-center font-bold text-2xl drop-shadow-accent md:text-left md:text-4xl xl:text-5xl">
+      {media.mainTitle}
+    </p>
+    <div className="flex gap-4">
+      <AddToUserLibraryButton media={media} />
+      <SignedIn requiredPermissions={["medias:update:any"]}>
+        <Button
+          as={Link}
+          href={`/dashboard/medias/edit/${media.id}`}
+          startContent={<FileEditIcon className="h-6 w-6" />}
+          color="warning"
+          radius="sm"
+          isIconOnly
+        />
+      </SignedIn>
+      <SignedIn requiredPermissions={["mediaChapters:create"]}>
+        <MediaChapterUploadPageButton media={media} />
+      </SignedIn>
     </div>
-  )
-}
+  </div>
+)

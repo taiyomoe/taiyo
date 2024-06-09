@@ -18,16 +18,22 @@ export default {
       spacing: {
         bodyPadding: "var(--body-padding)",
         navbar: "var(--navbar-height)",
+        mediasBanner: "var(--medias-banner-height)",
+        mediasBannerContent: "var(--medias-banner-content-height)",
         reader: "var(--reader-height)",
         readerSidebar: "var(--reader-sidebar-width)",
         librarySidebar: "var(--library-sidebar-width)",
       },
       maxHeight: {
         navbar: "var(--navbar-height)",
+        mediasBanner: "var(--medias-banner-height)",
+        mediasBannerContent: "var(--medias-banner-content-height)",
         reader: "var(--reader-height)",
       },
       minHeight: {
         navbar: "var(--navbar-height)",
+        mediasBanner: "var(--medias-banner-height)",
+        mediasBannerContent: "var(--medias-banner-content-height)",
         reader: "var(--reader-height)",
       },
       maxWidth: {
@@ -56,9 +62,6 @@ export default {
         smChapterLayout: "auto 50px 70px",
         mdChapterLayout: "auto 130px 70px",
         mediaChapter: "min-content auto min-content",
-      },
-      animation: {
-        "spin-medium": "spin 2s linear infinite",
       },
     },
   },

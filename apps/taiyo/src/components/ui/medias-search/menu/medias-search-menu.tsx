@@ -1,6 +1,6 @@
 import { Modal, ModalContent } from "@nextui-org/modal"
 import { Command } from "cmdk"
-import { InstantSearchNext } from "react-instantsearch-nextjs"
+import { InstantSearch } from "react-instantsearch"
 import { useToggle } from "usehooks-ts"
 import { MediasSearchResults } from "~/components/ui/medias-search/menu/medias-search-menu-results"
 import { meiliClient } from "~/meiliClient"
@@ -24,10 +24,10 @@ export const MediasSearchMenu = () => {
           backdrop: "bg-black/80",
         }}
         onClose={toggle}
-        placement="top-center"
+        placement="center"
       >
         <ModalContent>
-          <InstantSearchNext searchClient={meiliClient} indexName="medias">
+          <InstantSearch searchClient={meiliClient} indexName="medias">
             <Command
               className="max-h-full overflow-y-auto"
               label="Quick search command"
@@ -39,7 +39,7 @@ export const MediasSearchMenu = () => {
                 <MediasSearchResults toggleModal={toggle} />
               </div>
             </Command>
-          </InstantSearchNext>
+          </InstantSearch>
         </ModalContent>
       </Modal>
     </>

@@ -36,13 +36,13 @@ export const useReaderSettingsStore = create<ReaderSettings & Actions>(
 
     update: (key, newValue, persistent = false) => {
       set((state) => {
-        const newSettings = structuredClone(omit(state, ["update", "reset"]))
+        let newSettings = structuredClone(omit(state, ["update", "reset"]))
 
-        objSet(newSettings, key, newValue)
+        newSettings = objSet(newSettings, key, newValue)
 
         // If the user is trying to open the sidebar while the page overlay is open, close the overlay
         if (key === "sidebar.state" && newValue === "show") {
-          objSet(newSettings, "page.overlay", "hide")
+          newSettings = objSet(newSettings, "page.overlay", "hide")
         }
 
         // If the user is trying to open the page overlay while the sidebar is open, stop him

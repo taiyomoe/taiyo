@@ -1,17 +1,17 @@
-import type { Roles } from "@prisma/client"
-import { auth } from "@taiyomoe/auth"
+import type { SessionContextValue } from "@taiyomoe/auth/client"
+import type { Roles } from "@taiyomoe/db"
 import type { Permission } from "@taiyomoe/types"
 
-type Props = {
+export type SignedInProps = {
   requiredRole?: Roles
   requiredPermissions?: Permission[]
   children: React.ReactNode
 }
 
-export const SignedIn = async (props: Props) => {
-  const { requiredRole, requiredPermissions, children } = props
-  const session = await auth()
-
+export const computeAccess = (
+  { requiredRole, requiredPermissions, children }: SignedInProps,
+  session: SessionContextValue["data"],
+) => {
   // Not signed in
   if (!session) return null
 

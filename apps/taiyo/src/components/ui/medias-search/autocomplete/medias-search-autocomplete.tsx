@@ -12,8 +12,7 @@ import { MediaUtils } from "@taiyomoe/utils"
 import { useRouter } from "next/navigation"
 import { useCallback } from "react"
 import type { Key } from "react-aria-components"
-import { useHits, useSearchBox } from "react-instantsearch"
-import { InstantSearchNext } from "react-instantsearch-nextjs"
+import { InstantSearch, useHits, useSearchBox } from "react-instantsearch"
 import { meiliClient } from "~/meiliClient"
 import { MediasSearchAutocompleteItem } from "./medias-search-autocomplete-item"
 
@@ -82,9 +81,9 @@ const MediasSearchAutocompleteComponent = (props: Props) => {
 }
 
 const MediasSearchAutocompleteWrapper = (props: Props) => (
-  <InstantSearchNext searchClient={meiliClient} indexName="medias">
+  <InstantSearch searchClient={meiliClient} indexName="medias">
     <MediasSearchAutocompleteComponent {...props} />
-  </InstantSearchNext>
+  </InstantSearch>
 )
 
 export const MediasSearchAutocomplete = MediasSearchAutocompleteWrapper

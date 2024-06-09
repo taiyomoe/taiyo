@@ -1,10 +1,10 @@
 import Image from "next/image"
-import { NavbarAuth } from "~/components/navbar/NavbarAuth"
+import { Navbar } from "~/components/navbar/navbar"
 
-const NotFound = () => {
+export default function NotFound() {
   return (
     <div className="flex h-dvh select-none flex-col">
-      <NavbarAuth />
+      <Navbar />
       <div className="mx-bodyPadding flex grow flex-col items-center justify-center gap-16">
         <Image
           src="/illustrations/not_found.svg"
@@ -21,5 +21,3 @@ const NotFound = () => {
     </div>
   )
 }
-
-export default NotFound

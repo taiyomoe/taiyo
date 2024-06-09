@@ -27,6 +27,8 @@
 
     --body-padding: 24px;
     --navbar-height: 60px;
+    --medias-banner-content-height: 200px;
+    --medias-banner-height: calc(var(--medias-banner-content-height) + var(--navbar-height));
     --reader-height: calc(100dvh - var(--navbar-height));
     --reader-sidebar-width: 300px;
     --library-sidebar-width: 300px;
@@ -43,15 +45,23 @@
     --content2-foreground: 0 0% 98%;
   }
 
+  @screen sm {
+    :root {
+      --medias-banner-content-height: 250px;
+    }
+  }
+
   @screen md {
     :root {
       --body-padding: 32px;
+      --medias-banner-content-height: 300px;
     }
   }
 
   @screen lg {
     :root {
       --body-padding: 48px;
+      --medias-banner-content-height: 350px;
     }
   }
 }
