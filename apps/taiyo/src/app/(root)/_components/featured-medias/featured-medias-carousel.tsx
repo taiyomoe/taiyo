@@ -24,7 +24,7 @@ export const FeaturedMediasCarousel = ({ medias }: Props) => {
           <Link
             key={media.id}
             href={`/media/${media.id}`}
-            className="mr-6 max-h-[200px] min-h-[200px] min-w-0 flex-[0_0_100%] last:mr-0 lg:max-h-[350px] md:max-h-[300px] sm:max-h-[250px] lg:min-h-[350px] md:min-h-[300px] sm:min-h-[250px] hover:cursor-pointer"
+            className="mr-6 max-h-mediasBanner min-h-mediasBanner min-w-0 flex-[0_0_100%] last:mr-0 hover:cursor-pointer"
           >
             <MediaImage
               src={MediaBannerUtils.getUrl(media)}
@@ -38,7 +38,7 @@ export const FeaturedMediasCarousel = ({ medias }: Props) => {
               maxWidth={1200}
               alt="media's banner"
             />
-            <div className="-mt-[200px] sm:-mt-[250px] md:-mt-[300px] lg:-mt-[350px] relative z-10 flex h-full gap-6 p-4">
+            <div className="-mt-mediasBannerContent relative z-10 flex h-full max-h-mediasBannerContent gap-6 p-4">
               <MediaImage
                 src={MediaCoverUtils.getUrl(media)}
                 classNames={{

@@ -4,12 +4,14 @@ import { Chip } from "@nextui-org/chip"
 import { useSession } from "@taiyomoe/auth/client"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { useMemo } from "react"
 import { tv } from "tailwind-variants"
 import { ReaderSidebarOpenButton } from "~/app/(reader)/_components/readerSidebar/ui/ReaderSidebarOpenButton"
 import { CompanyLogo } from "~/components/ui/CompanyLogo"
 import { MediasSearchMenu } from "~/components/ui/medias-search/menu/medias-search-menu"
 import { SignedIn } from "~/components/utils/signed-in/client"
 import { useDevice } from "~/hooks/useDevice"
+import { useScrollOpacity } from "~/hooks/useScrollOpacity"
 import { useReaderSettingsStore } from "~/stores"
 import { NavbarDashboardButton } from "./buttons/navbar-dashboard-button"
 import { NavbarUserLibraryButton } from "./buttons/navbar-user-library-button"
@@ -20,9 +22,9 @@ import { NavbarUserPopover } from "./popovers/navbar-user-popover"
 const navbar = tv({
   slots: {
     container:
-      "group data-[sidebar-state=hide]:!p-0 z-20 flex h-navbar max-h-navbar w-full flex-col justify-center p-0 child:relative md:p-[unset] data-[sidebar-side=right]:pr-readerSidebar data-[sidebar-side=left]:pl-readerSidebar",
+      "group z-20 flex h-navbar max-h-navbar w-full flex-col justify-center p-0 child:relative md:p-[unset]",
     contentWrapper:
-      "flex grow items-center justify-between bg-background px-bodyPadding transition-all",
+      "flex grow items-center justify-between px-bodyPadding transition-all",
   },
   variants: {
     mode: {
@@ -34,6 +36,23 @@ const navbar = tv({
         container: "child:-top-navbar fixed top-0",
         contentWrapper: "group-hover:top-0",
       },
+      scroll: {
+        container: "-mb-navbar sticky top-0",
+      },
+    },
+    sidebarState: {
+      hide: {
+        container: "!p-0",
+      },
+      show: {},
+    },
+    sidebarSide: {
+      left: {
+        container: "pl-readerSidebar",
+      },
+      right: {
+        container: "pr-readerSidebar",
+      },
     },
   },
 })
@@ -43,26 +62,31 @@ export const Navbar = () => {
   const pathname = usePathname()
   const device = useDevice()
   const { data: session } = useSession()
-
+  const opacity = useScrollOpacity({ min: 0, max: 100 })
+  const supportsSidebar =
+    pathname.includes("/chapter/") && device?.isAboveTablet
+  const mode = useMemo(() => {
+    if (pathname === "/" || pathname.includes("/media/")) return "scroll"
+    if (pathname.includes("/chapter/")) return navbarMode
+    return "sticky"
+  }, [pathname, navbarMode])
   const slots = navbar({
-    mode: pathname.includes("/chapter/") ? navbarMode : "sticky",
+    mode,
+    sidebarState: supportsSidebar ? sidebar.state : undefined,
+    sidebarSide: supportsSidebar ? sidebar.side : undefined,
   })
 
   return (
-    <div
-      className={slots.container()}
-      data-sidebar-state={
-        pathname.includes("/chapter/") && device?.isAboveTablet
-          ? sidebar.state
-          : undefined
-      }
-      data-sidebar-side={
-        pathname.includes("/chapter/") && device?.isAboveTablet
-          ? sidebar.side
-          : undefined
-      }
-    >
-      <nav className={slots.contentWrapper()}>
+    <div className={slots.container()}>
+      <nav
+        className={slots.contentWrapper()}
+        style={{
+          backgroundColor:
+            mode === "scroll"
+              ? `rgba(22,22,26,${opacity})`
+              : "var(--background)",
+        }}
+      >
         <Link
           href="/"
           className="flex select-none items-center gap-2 md:hidden"
