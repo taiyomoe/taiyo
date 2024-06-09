@@ -28,7 +28,7 @@ const getStatus = async (mediaId: string): Promise<MediaStatus> => {
  * Gets the latest medias.
  * Used to populate the homepage.
  */
-const getLatestMedias = async () => {
+const getLatest = async () => {
   const result = await db.media.findMany({
     select: {
       id: true,
@@ -64,7 +64,7 @@ const getLatestMedias = async () => {
  * Gets the featured medias.
  * Used to populate the homepage.
  */
-const getFeaturedMedias = async (preferredTitles: Languages = "ja_ro") => {
+const getFeatured = async (preferredTitles: Languages = "ja_ro") => {
   const banners = await db.$queryRaw<
     { id: string; mediaId: string }[]
   >`SELECT "id", "mediaId" FROM "MediaBanner" WHERE "deletedAt" IS NULL ORDER BY RANDOM() LIMIT 15;`
@@ -115,6 +115,6 @@ const getFeaturedMedias = async (preferredTitles: Languages = "ja_ro") => {
 
 export const MediaService = {
   getStatus,
-  getLatestMedias,
-  getFeaturedMedias,
+  getLatest,
+  getFeatured,
 }
