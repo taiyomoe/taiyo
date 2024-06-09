@@ -10,7 +10,6 @@ import { ReaderSidebarOpenButton } from "~/app/(reader)/_components/readerSideba
 import { CompanyLogo } from "~/components/ui/CompanyLogo"
 import { MediasSearchMenu } from "~/components/ui/medias-search/menu/medias-search-menu"
 import { SignedIn } from "~/components/utils/signed-in/client"
-import { useDevice } from "~/hooks/useDevice"
 import { useScrollOpacity } from "~/hooks/useScrollOpacity"
 import { useReaderSettingsStore } from "~/stores"
 import { NavbarDashboardButton } from "./buttons/navbar-dashboard-button"
@@ -21,8 +20,11 @@ import { NavbarUserPopover } from "./popovers/navbar-user-popover"
 
 const navbar = tv({
   slots: {
-    container:
+    container: [
       "group z-20 flex h-navbar max-h-navbar w-full flex-col justify-center p-0 child:relative md:p-[unset]",
+      'data-[sidebar-state="hide"]:md:!p-0',
+      'data-[sidebar-side="right"]:md:pr-readerSidebar data-[sidebar-side="left"]:md:pl-readerSidebar',
+    ],
     contentWrapper:
       "flex grow items-center justify-between px-bodyPadding transition-all",
   },
@@ -40,44 +42,30 @@ const navbar = tv({
         container: "-mb-navbar sticky top-0",
       },
     },
-    sidebarState: {
-      hide: {
-        container: "!p-0",
-      },
-      show: {},
-    },
-    sidebarSide: {
-      left: {
-        container: "pl-readerSidebar",
-      },
-      right: {
-        container: "pr-readerSidebar",
-      },
-    },
   },
 })
 
 export const Navbar = () => {
   const { sidebar, navbarMode } = useReaderSettingsStore()
   const pathname = usePathname()
-  const device = useDevice()
   const { data: session } = useSession()
   const opacity = useScrollOpacity({ min: 0, max: 100 })
-  const supportsSidebar =
-    pathname.includes("/chapter/") && device?.isAboveTablet
+  const shouldCollapse = pathname.includes("/chapter/")
   const mode = useMemo(() => {
     if (pathname === "/" || pathname.includes("/media/")) return "scroll"
     if (pathname.includes("/chapter/")) return navbarMode
     return "sticky"
   }, [pathname, navbarMode])
-  const slots = navbar({
-    mode,
-    sidebarState: supportsSidebar ? sidebar.state : undefined,
-    sidebarSide: supportsSidebar ? sidebar.side : undefined,
-  })
+  const slots = navbar({ mode })
+
+  console.log("navbarMode", mode)
 
   return (
-    <div className={slots.container()}>
+    <div
+      className={slots.container()}
+      data-sidebar-state={shouldCollapse && sidebar.state}
+      data-sidebar-side={shouldCollapse && sidebar.side}
+    >
       <nav
         className={slots.contentWrapper()}
         style={{

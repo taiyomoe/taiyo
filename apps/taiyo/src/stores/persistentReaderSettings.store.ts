@@ -37,11 +37,9 @@ export const usePersistentReaderSettingsStore = create<
         set((state) => {
           const newSettings = structuredClone(omit(state, ["update"]))
 
-          objSet(newSettings, key, newValue)
-
           return {
             ...state,
-            ...newSettings,
+            ...objSet(newSettings, key, newValue),
           }
         })
       },

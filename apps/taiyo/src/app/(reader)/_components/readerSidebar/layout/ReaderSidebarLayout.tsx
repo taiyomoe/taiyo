@@ -13,7 +13,7 @@ import { ReaderSidebarHeader } from "../ui/ReaderSidebarHeader"
 const readerSidebarLayout = tv({
   slots: {
     container:
-      "-mt-navbar fixed z-30 h-full bg-content1 shadow-xl transition-all md:sticky data-[navbar-mode=hover]:mt-0 data-[page-mode=longstrip]:h-[calc(100%+var(--navbar-height))] md:shadow-none",
+      "-mt-navbar fixed z-30 h-dvh bg-content1 shadow-xl md:sticky data-[navbar-mode=hover]:mt-0 md:shadow-none",
     contentWrapper:
       "width-[unset] scrollbar-thin scrollbar-track-content2 scrollbar-thumb-content3 sticky top-0 right-[unset] flex max-h-dvh w-[calc(var(--reader-sidebar-width)-1px)] max-w-[calc(var(--reader-sidebar-width)-1px)] flex-col gap-2 overflow-y-auto overflow-x-hidden bg-content1 p-4 pt-0",
   },
