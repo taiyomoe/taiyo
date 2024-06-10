@@ -4,10 +4,6 @@
   "private": true,
   "type": "module",
   "license": "MIT",
-  "engines": {
-    "node": "20.14.0"
-  },
-  "packageManager": "pnpm@9.2.0",
   "exports": {
     ".": "./src/exports.ts"
   },
