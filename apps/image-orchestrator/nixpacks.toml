@@ -1,2 +1,2 @@
-[start]
-cmd = "eval \"$(INFISICAL_TOKEN=$(infisical login --method=universal-auth --silent --plain) infisical export --projectId=$INFISICAL_PROJECT_ID --env=$INFISICAL_ENV)\" && pnpm --filter image-orchestrator run start"
+[phases.build]
+cmds = ["eval \"$(INFISICAL_TOKEN=$(infisical login --method=universal-auth --silent --plain) infisical export --projectId=$INFISICAL_PROJECT_ID --env=$INFISICAL_ENV)\"", "pnpm --filter image-orchestrator run start"]
