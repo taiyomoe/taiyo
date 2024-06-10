@@ -1,0 +1,5 @@
+[phases.build]
+cmds = ["echo building!"]
+
+[start]
+cmd = "./start.sh"
