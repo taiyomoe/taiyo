@@ -1,6 +1,7 @@
 import type { MediasIndexItem, ScansIndexItem } from "@taiyomoe/types"
 import type { Meilisearch } from "meilisearch"
 import { MeiliSearch } from "meilisearch"
+import { env } from "../env"
 
 const globalForMeilisearch = globalThis as unknown as {
   meilisearch: Meilisearch | undefined
@@ -9,8 +10,8 @@ const globalForMeilisearch = globalThis as unknown as {
 export const meilisearch =
   globalForMeilisearch.meilisearch ??
   new MeiliSearch({
-    host: process.env.NEXT_PUBLIC_MEILISEARCH_URL!,
-    apiKey: process.env.MEILISEARCH_ADMIN_KEY!,
+    host: env.NEXT_PUBLIC_MEILISEARCH_URL,
+    apiKey: env.MEILISEARCH_ADMIN_KEY,
   })
 
 export const meilisearchIndexes = {

@@ -379,9 +379,15 @@ importers:
 
   packages/meilisearch:
     dependencies:
+      '@t3-oss/env-nextjs':
+        specifier: ^0.10.1
+        version: 0.10.1(typescript@5.4.5)(zod@3.23.8)
       meilisearch:
         specifier: ^0.40.0
         version: 0.40.0(encoding@0.1.13)
+      zod:
+        specifier: ^3.23.8
+        version: 3.23.8
     devDependencies:
       '@taiyomoe/tsconfig':
         specifier: workspace:^0.1.0
@@ -508,6 +514,9 @@ importers:
       mangadex-full-api:
         specifier: ^5.12.1
         version: 5.12.1
+      zod:
+        specifier: ^3.23.8
+        version: 3.23.8
     devDependencies:
       '@taiyomoe/tsconfig':
         specifier: workspace:^0.1.0
