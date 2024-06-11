@@ -12,7 +12,7 @@ type Props = {
 }
 
 export const MediasSearchResultsItem = (props: Props) => {
-  const { item, preferredTitles = "ja_ro", toggleModal } = props
+  const { item, preferredTitles = "en", toggleModal } = props
   const title = MediaUtils.getMainTitle(item.titles, preferredTitles)
 
   return (

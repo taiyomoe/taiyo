@@ -315,6 +315,28 @@ importers:
         specifier: workspace:^0.1.0
         version: link:../types
 
+  packages/cache:
+    dependencies:
+      '@t3-oss/env-nextjs':
+        specifier: ^0.10.1
+        version: 0.10.1(typescript@5.4.5)(zod@3.23.8)
+      ioredis:
+        specifier: ^5.4.1
+        version: 5.4.1
+      zod:
+        specifier: ^3.23.8
+        version: 3.23.8
+    devDependencies:
+      '@taiyomoe/db':
+        specifier: workspace:^0.1.0
+        version: link:../db
+      '@taiyomoe/tsconfig':
+        specifier: workspace:^0.1.0
+        version: link:../../tooling/typescript
+      '@taiyomoe/types':
+        specifier: workspace:^0.1.0
+        version: link:../types
+
   packages/constants:
     devDependencies:
       '@taiyomoe/tsconfig':
@@ -351,22 +373,6 @@ importers:
       typescript:
         specifier: ^5.4.5
         version: 5.4.5
-
-  packages/dragonfly:
-    dependencies:
-      '@t3-oss/env-nextjs':
-        specifier: ^0.10.1
-        version: 0.10.1(typescript@5.4.5)(zod@3.23.8)
-      ioredis:
-        specifier: ^5.4.1
-        version: 5.4.1
-      zod:
-        specifier: ^3.23.8
-        version: 3.23.8
-    devDependencies:
-      '@taiyomoe/tsconfig':
-        specifier: workspace:^0.1.0
-        version: link:../../tooling/typescript
 
   packages/global-types:
     devDependencies:
@@ -430,6 +436,9 @@ importers:
 
   packages/services:
     dependencies:
+      '@taiyomoe/cache':
+        specifier: workspace:^0.1.0
+        version: link:../cache
       '@taiyomoe/db':
         specifier: workspace:^0.1.0
         version: link:../db
@@ -449,12 +458,12 @@ importers:
       '@taiyomoe/auth':
         specifier: workspace:^0.1.0
         version: link:../auth
+      '@taiyomoe/cache':
+        specifier: workspace:^0.1.0
+        version: link:../cache
       '@taiyomoe/db':
         specifier: workspace:^0.1.0
         version: link:../db
-      '@taiyomoe/dragonfly':
-        specifier: workspace:^0.1.0
-        version: link:../dragonfly
       '@taiyomoe/meilisearch':
         specifier: workspace:^0.1.0
         version: link:../meilisearch

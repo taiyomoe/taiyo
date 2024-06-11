@@ -2,7 +2,7 @@ import { MediaService } from "@taiyomoe/services"
 import { TrendingMediasCarousel } from "./trending-medias-carousel"
 
 export const TrendingMediasCategory = async () => {
-  const medias = await MediaService.getLatestMedias()
+  const medias = await MediaService.getLatest()
 
   return (
     <div className="sticky top-24 flex h-fit min-w-[300px] flex-col gap-4">

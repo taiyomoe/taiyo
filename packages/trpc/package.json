@@ -14,7 +14,7 @@
   "dependencies": {
     "@taiyomoe/auth": "workspace:^0.1.0",
     "@taiyomoe/db": "workspace:^0.1.0",
-    "@taiyomoe/dragonfly": "workspace:^0.1.0",
+    "@taiyomoe/cache": "workspace:^0.1.0",
     "@taiyomoe/meilisearch": "workspace:^0.1.0",
     "@taiyomoe/schemas": "workspace:^0.1.0",
     "@taiyomoe/services": "workspace:^0.1.0",

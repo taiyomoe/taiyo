@@ -58,8 +58,6 @@ export const Navbar = () => {
   }, [pathname, navbarMode])
   const slots = navbar({ mode })
 
-  console.log("navbarMode", mode)
-
   return (
     <div
       className={slots.container()}
