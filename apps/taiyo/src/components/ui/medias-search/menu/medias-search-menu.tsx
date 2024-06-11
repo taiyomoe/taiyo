@@ -15,16 +15,16 @@ export const MediasSearchMenu = () => {
     <>
       <MediasSearchButton onClick={toggle} />
       <Modal
-        backdrop="opaque"
-        hideCloseButton
-        isOpen={isToggled}
-        size="xl"
         classNames={{
           base: "border-default-100 border-small border-content2 supports-[background-filter]:bg-background/80 supports-[backdrop-filter]:backdrop-blur-md bg-content1/80",
           backdrop: "bg-black/80",
         }}
+        backdrop="opaque"
+        isOpen={isToggled}
         onClose={toggle}
         placement="center"
+        size="3xl"
+        hideCloseButton
       >
         <ModalContent>
           <InstantSearch searchClient={meiliClient} indexName="medias">
