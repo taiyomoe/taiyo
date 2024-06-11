@@ -56,7 +56,7 @@
     "react-hook-form": "^7.51.5",
     "react-instantsearch": "^7.11.1",
     "react-select": "^5.8.0",
-    "react-selectable-box": "^1.9.1",
+    "react-selectable-box": "^1.9.3",
     "sharp": "^0.33.4",
     "sonner": "^1.5.0",
     "superjson": "^2.2.1",
