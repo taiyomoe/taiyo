@@ -7,9 +7,9 @@ import { tv } from "tailwind-variants"
 
 type Props = {
   scans?: Scan[] | Pick<Scan, "id" | "name">[]
-} & VariantProps<typeof mediaChapterScans>
+} & VariantProps<typeof chapterScansList>
 
-const mediaChapterScans = tv({
+const chapterScansList = tv({
   slots: {
     container: "flex w-full",
     iconContainer: "flex items-center",
@@ -59,9 +59,9 @@ const mediaChapterScans = tv({
   },
 })
 
-export const MediaChapterScans = (props: Props) => {
+export const ChapterScansList = (props: Props) => {
   const { scans, size, orientation, isCompact } = props
-  const slots = mediaChapterScans({ size, orientation })
+  const slots = chapterScansList({ size, orientation })
 
   const scansToDisplay = isCompact ? scans?.slice(0, 1) : scans
   const otherScansCount =

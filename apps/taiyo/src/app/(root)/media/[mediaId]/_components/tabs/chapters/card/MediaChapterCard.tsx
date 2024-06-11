@@ -3,8 +3,8 @@ import type { MediaLimitedChapter } from "@taiyomoe/types"
 import { MediaChapterUtils } from "@taiyomoe/utils"
 import Link from "next/link"
 import { tv } from "tailwind-variants"
-import { MediaChapterScans } from "~/components/ui/MediaChapterScans"
-import { MediaChapterCardUploadedTime } from "../../../../../../../../components/ui/MediaChapterUploadedTime"
+import { ChapterScansList } from "~/components/ui/chapter-scans-list"
+import { ChapterUploadedTime } from "~/components/ui/chapter-uploaded-time"
 import { MediaChapterUploader } from "../../../../../../../../components/ui/MediaChapterUploader"
 import { MediaChapterCardCommentsCount } from "./MediaChapterCardCommentsCount"
 import { MediaChapterCardPath } from "./MediaChapterCardPath"
@@ -65,7 +65,7 @@ export const MediaChapterCard = ({ chapter, order }: Props) => {
             </Link>
             {/* UPLOADED TIME */}
             <div className={slots.chapterUploadedTime()}>
-              <MediaChapterCardUploadedTime chapter={chapter} />
+              <ChapterUploadedTime chapter={chapter} />
             </div>
             {/* VIEWS */}
             <div className={slots.chapterViews()}>
@@ -73,7 +73,7 @@ export const MediaChapterCard = ({ chapter, order }: Props) => {
             </div>
             {/* SCANS */}
             <div className={slots.chapterScans()}>
-              <MediaChapterScans scans={chapter.scans} />
+              <ChapterScansList scans={chapter.scans} />
             </div>
             {/* UPLOADER */}
             <div className={slots.chapterUploader()}>
