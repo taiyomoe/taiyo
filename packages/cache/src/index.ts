@@ -6,7 +6,7 @@ import { parseCache } from "./utils"
 
 const HOUR = 60 * 60
 const DAY = 60 * 60 * 24
-const client = new DF({ port: env.DRAGONFLY_PORT })
+const client = new DF(env.DRAGONFLY_URL)
 
 export const cacheClient = {
   medias: {

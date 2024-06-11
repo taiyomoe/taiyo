@@ -3,7 +3,7 @@ import { z } from "zod"
 
 export const env = createEnv({
   server: {
-    DRAGONFLY_PORT: z.coerce.number().int().positive(),
+    DRAGONFLY_URL: z.string().url(),
   },
   experimental__runtimeEnv: {},
   skipValidation: !!process.env.CI || !!process.env.SKIP_ENV_VALIDATION,
