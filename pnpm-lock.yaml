@@ -164,10 +164,10 @@ importers:
         version: 1.0.0(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       embla-carousel-autoplay:
         specifier: ^8.1.5
-        version: 8.1.5(embla-carousel@8.1.4)
+        version: 8.1.5(embla-carousel@8.1.5)
       embla-carousel-react:
-        specifier: ^8.1.4
-        version: 8.1.4(react@18.3.1)
+        specifier: ^8.1.5
+        version: 8.1.5(react@18.3.1)
       encoding:
         specifier: ^0.1.13
         version: 0.1.13
@@ -3595,18 +3595,18 @@ packages:
     peerDependencies:
       embla-carousel: 8.1.5
 
-  embla-carousel-react@8.1.4:
-    resolution: {integrity: sha512-0llfX4HlXrdgJKxlZ8q8LyI6EV+TvOI7KtZx9GkDTwdgP6/AyyuvzO8KYvDUNZOnbFBAPbVEe2qEgGMLEinlYw==}
+  embla-carousel-react@8.1.5:
+    resolution: {integrity: sha512-xFmfxgJd7mpWDHQ4iyK1Qs+5BTTwu4bkn+mSROKiUH9nKpPHTeilQ+rpeQDCHRrAPeshD67aBk0/p6FxWxXsng==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.1 || ^18.0.0
 
-  embla-carousel-reactive-utils@8.1.4:
-    resolution: {integrity: sha512-qkovXTiNaURsnYhJxUBsDx9YV6crxLIZwfO6jIFSKKn6ZZE1JVeZAvy/UsiyNxiFikVrO76iquvD6uBHI9YD8w==}
+  embla-carousel-reactive-utils@8.1.5:
+    resolution: {integrity: sha512-76uZTrSaEGGta+qpiGkMFlLK0I7N04TdjZ2obrBhyggYIFDWlxk1CriIEmt2lisLNsa1IYXM85kr863JoCMSyg==}
     peerDependencies:
-      embla-carousel: 8.1.4
+      embla-carousel: 8.1.5
 
-  embla-carousel@8.1.4:
-    resolution: {integrity: sha512-AMe40ZpyLpztfNnGQtMWVIgYdcBoY2MuQttRwQ/xqSPC3UvDG2QF17CR5Efz4c8qEkno7pxdZFDRO2R11y6hRQ==}
+  embla-carousel@8.1.5:
+    resolution: {integrity: sha512-R6xTf7cNdR2UTNM6/yUPZlJFRmZSogMiRjJ5vXHO65II5MoUlrVYUAP0fHQei/py82Vf15lj+WI+QdhnzBxA2g==}
 
   emoji-regex@8.0.0:
     resolution: {integrity: sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A==}
@@ -5291,10 +5291,10 @@ snapshots:
       '@aws-crypto/sha1-browser': 3.0.0
       '@aws-crypto/sha256-browser': 3.0.0
       '@aws-crypto/sha256-js': 3.0.0
-      '@aws-sdk/client-sso-oidc': 3.592.0(@aws-sdk/client-sts@3.592.0)
-      '@aws-sdk/client-sts': 3.592.0
+      '@aws-sdk/client-sso-oidc': 3.592.0
+      '@aws-sdk/client-sts': 3.592.0(@aws-sdk/client-sso-oidc@3.592.0)
       '@aws-sdk/core': 3.592.0
-      '@aws-sdk/credential-provider-node': 3.592.0(@aws-sdk/client-sso-oidc@3.592.0(@aws-sdk/client-sts@3.592.0))(@aws-sdk/client-sts@3.592.0)
+      '@aws-sdk/credential-provider-node': 3.592.0(@aws-sdk/client-sso-oidc@3.592.0)(@aws-sdk/client-sts@3.592.0(@aws-sdk/client-sso-oidc@3.592.0))
       '@aws-sdk/middleware-bucket-endpoint': 3.587.0
       '@aws-sdk/middleware-expect-continue': 3.577.0
       '@aws-sdk/middleware-flexible-checksums': 3.587.0
@@ -5349,13 +5349,13 @@ snapshots:
     transitivePeerDependencies:
       - aws-crt
 
-  '@aws-sdk/client-sso-oidc@3.592.0(@aws-sdk/client-sts@3.592.0)':
+  '@aws-sdk/client-sso-oidc@3.592.0':
     dependencies:
       '@aws-crypto/sha256-browser': 3.0.0
       '@aws-crypto/sha256-js': 3.0.0
-      '@aws-sdk/client-sts': 3.592.0
+      '@aws-sdk/client-sts': 3.592.0(@aws-sdk/client-sso-oidc@3.592.0)
       '@aws-sdk/core': 3.592.0
-      '@aws-sdk/credential-provider-node': 3.592.0(@aws-sdk/client-sso-oidc@3.592.0(@aws-sdk/client-sts@3.592.0))(@aws-sdk/client-sts@3.592.0)
+      '@aws-sdk/credential-provider-node': 3.592.0(@aws-sdk/client-sso-oidc@3.592.0)(@aws-sdk/client-sts@3.592.0(@aws-sdk/client-sso-oidc@3.592.0))
       '@aws-sdk/middleware-host-header': 3.577.0
       '@aws-sdk/middleware-logger': 3.577.0
       '@aws-sdk/middleware-recursion-detection': 3.577.0
@@ -5392,7 +5392,6 @@ snapshots:
       '@smithy/util-utf8': 3.0.0
       tslib: 2.6.2
     transitivePeerDependencies:
-      - '@aws-sdk/client-sts'
       - aws-crt
 
   '@aws-sdk/client-sso@3.592.0':
@@ -5438,13 +5437,13 @@ snapshots:
     transitivePeerDependencies:
       - aws-crt
 
-  '@aws-sdk/client-sts@3.592.0':
+  '@aws-sdk/client-sts@3.592.0(@aws-sdk/client-sso-oidc@3.592.0)':
     dependencies:
       '@aws-crypto/sha256-browser': 3.0.0
       '@aws-crypto/sha256-js': 3.0.0
-      '@aws-sdk/client-sso-oidc': 3.592.0(@aws-sdk/client-sts@3.592.0)
+      '@aws-sdk/client-sso-oidc': 3.592.0
       '@aws-sdk/core': 3.592.0
-      '@aws-sdk/credential-provider-node': 3.592.0(@aws-sdk/client-sso-oidc@3.592.0(@aws-sdk/client-sts@3.592.0))(@aws-sdk/client-sts@3.592.0)
+      '@aws-sdk/credential-provider-node': 3.592.0(@aws-sdk/client-sso-oidc@3.592.0)(@aws-sdk/client-sts@3.592.0(@aws-sdk/client-sso-oidc@3.592.0))
       '@aws-sdk/middleware-host-header': 3.577.0
       '@aws-sdk/middleware-logger': 3.577.0
       '@aws-sdk/middleware-recursion-detection': 3.577.0
@@ -5481,6 +5480,7 @@ snapshots:
       '@smithy/util-utf8': 3.0.0
       tslib: 2.6.2
     transitivePeerDependencies:
+      - '@aws-sdk/client-sso-oidc'
       - aws-crt
 
   '@aws-sdk/core@3.592.0':
@@ -5512,14 +5512,14 @@ snapshots:
       '@smithy/util-stream': 3.0.1
       tslib: 2.6.2
 
-  '@aws-sdk/credential-provider-ini@3.592.0(@aws-sdk/client-sso-oidc@3.592.0(@aws-sdk/client-sts@3.592.0))(@aws-sdk/client-sts@3.592.0)':
+  '@aws-sdk/credential-provider-ini@3.592.0(@aws-sdk/client-sso-oidc@3.592.0)(@aws-sdk/client-sts@3.592.0(@aws-sdk/client-sso-oidc@3.592.0))':
     dependencies:
-      '@aws-sdk/client-sts': 3.592.0
+      '@aws-sdk/client-sts': 3.592.0(@aws-sdk/client-sso-oidc@3.592.0)
       '@aws-sdk/credential-provider-env': 3.587.0
       '@aws-sdk/credential-provider-http': 3.587.0
       '@aws-sdk/credential-provider-process': 3.587.0
-      '@aws-sdk/credential-provider-sso': 3.592.0(@aws-sdk/client-sso-oidc@3.592.0(@aws-sdk/client-sts@3.592.0))
-      '@aws-sdk/credential-provider-web-identity': 3.587.0(@aws-sdk/client-sts@3.592.0)
+      '@aws-sdk/credential-provider-sso': 3.592.0(@aws-sdk/client-sso-oidc@3.592.0)
+      '@aws-sdk/credential-provider-web-identity': 3.587.0(@aws-sdk/client-sts@3.592.0(@aws-sdk/client-sso-oidc@3.592.0))
       '@aws-sdk/types': 3.577.0
       '@smithy/credential-provider-imds': 3.1.0
       '@smithy/property-provider': 3.1.0
@@ -5530,14 +5530,14 @@ snapshots:
       - '@aws-sdk/client-sso-oidc'
       - aws-crt
 
-  '@aws-sdk/credential-provider-node@3.592.0(@aws-sdk/client-sso-oidc@3.592.0(@aws-sdk/client-sts@3.592.0))(@aws-sdk/client-sts@3.592.0)':
+  '@aws-sdk/credential-provider-node@3.592.0(@aws-sdk/client-sso-oidc@3.592.0)(@aws-sdk/client-sts@3.592.0(@aws-sdk/client-sso-oidc@3.592.0))':
     dependencies:
       '@aws-sdk/credential-provider-env': 3.587.0
       '@aws-sdk/credential-provider-http': 3.587.0
-      '@aws-sdk/credential-provider-ini': 3.592.0(@aws-sdk/client-sso-oidc@3.592.0(@aws-sdk/client-sts@3.592.0))(@aws-sdk/client-sts@3.592.0)
+      '@aws-sdk/credential-provider-ini': 3.592.0(@aws-sdk/client-sso-oidc@3.592.0)(@aws-sdk/client-sts@3.592.0(@aws-sdk/client-sso-oidc@3.592.0))
       '@aws-sdk/credential-provider-process': 3.587.0
-      '@aws-sdk/credential-provider-sso': 3.592.0(@aws-sdk/client-sso-oidc@3.592.0(@aws-sdk/client-sts@3.592.0))
-      '@aws-sdk/credential-provider-web-identity': 3.587.0(@aws-sdk/client-sts@3.592.0)
+      '@aws-sdk/credential-provider-sso': 3.592.0(@aws-sdk/client-sso-oidc@3.592.0)
+      '@aws-sdk/credential-provider-web-identity': 3.587.0(@aws-sdk/client-sts@3.592.0(@aws-sdk/client-sso-oidc@3.592.0))
       '@aws-sdk/types': 3.577.0
       '@smithy/credential-provider-imds': 3.1.0
       '@smithy/property-provider': 3.1.0
@@ -5557,10 +5557,10 @@ snapshots:
       '@smithy/types': 3.0.0
       tslib: 2.6.2
 
-  '@aws-sdk/credential-provider-sso@3.592.0(@aws-sdk/client-sso-oidc@3.592.0(@aws-sdk/client-sts@3.592.0))':
+  '@aws-sdk/credential-provider-sso@3.592.0(@aws-sdk/client-sso-oidc@3.592.0)':
     dependencies:
       '@aws-sdk/client-sso': 3.592.0
-      '@aws-sdk/token-providers': 3.587.0(@aws-sdk/client-sso-oidc@3.592.0(@aws-sdk/client-sts@3.592.0))
+      '@aws-sdk/token-providers': 3.587.0(@aws-sdk/client-sso-oidc@3.592.0)
       '@aws-sdk/types': 3.577.0
       '@smithy/property-provider': 3.1.0
       '@smithy/shared-ini-file-loader': 3.1.0
@@ -5570,9 +5570,9 @@ snapshots:
       - '@aws-sdk/client-sso-oidc'
       - aws-crt
 
-  '@aws-sdk/credential-provider-web-identity@3.587.0(@aws-sdk/client-sts@3.592.0)':
+  '@aws-sdk/credential-provider-web-identity@3.587.0(@aws-sdk/client-sts@3.592.0(@aws-sdk/client-sso-oidc@3.592.0))':
     dependencies:
-      '@aws-sdk/client-sts': 3.592.0
+      '@aws-sdk/client-sts': 3.592.0(@aws-sdk/client-sso-oidc@3.592.0)
       '@aws-sdk/types': 3.577.0
       '@smithy/property-provider': 3.1.0
       '@smithy/types': 3.0.0
@@ -5686,9 +5686,9 @@ snapshots:
       '@smithy/types': 3.0.0
       tslib: 2.6.2
 
-  '@aws-sdk/token-providers@3.587.0(@aws-sdk/client-sso-oidc@3.592.0(@aws-sdk/client-sts@3.592.0))':
+  '@aws-sdk/token-providers@3.587.0(@aws-sdk/client-sso-oidc@3.592.0)':
     dependencies:
-      '@aws-sdk/client-sso-oidc': 3.592.0(@aws-sdk/client-sts@3.592.0)
+      '@aws-sdk/client-sso-oidc': 3.592.0
       '@aws-sdk/types': 3.577.0
       '@smithy/property-provider': 3.1.0
       '@smithy/shared-ini-file-loader': 3.1.0
@@ -9702,21 +9702,21 @@ snapshots:
       openapi-types: 12.1.3
       typescript: 5.4.5
 
-  embla-carousel-autoplay@8.1.5(embla-carousel@8.1.4):
+  embla-carousel-autoplay@8.1.5(embla-carousel@8.1.5):
     dependencies:
-      embla-carousel: 8.1.4
+      embla-carousel: 8.1.5
 
-  embla-carousel-react@8.1.4(react@18.3.1):
+  embla-carousel-react@8.1.5(react@18.3.1):
     dependencies:
-      embla-carousel: 8.1.4
-      embla-carousel-reactive-utils: 8.1.4(embla-carousel@8.1.4)
+      embla-carousel: 8.1.5
+      embla-carousel-reactive-utils: 8.1.5(embla-carousel@8.1.5)
       react: 18.3.1
 
-  embla-carousel-reactive-utils@8.1.4(embla-carousel@8.1.4):
+  embla-carousel-reactive-utils@8.1.5(embla-carousel@8.1.5):
     dependencies:
-      embla-carousel: 8.1.4
+      embla-carousel: 8.1.5
 
-  embla-carousel@8.1.4: {}
+  embla-carousel@8.1.5: {}
 
   emoji-regex@8.0.0: {}
 
