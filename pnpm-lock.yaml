@@ -145,14 +145,14 @@ importers:
         specifier: workspace:^0.1.0
         version: link:../../packages/utils
       '@tanstack/react-query':
-        specifier: ^5.44.0
-        version: 5.44.0(react@18.3.1)
+        specifier: ^5.45.0
+        version: 5.45.0(react@18.3.1)
       '@trpc/client':
         specifier: 11.0.0-rc.403
         version: 11.0.0-rc.403(@trpc/server@11.0.0-rc.403)
       '@trpc/react-query':
         specifier: 11.0.0-rc.403
-        version: 11.0.0-rc.403(@tanstack/react-query@5.44.0(react@18.3.1))(@trpc/client@11.0.0-rc.403(@trpc/server@11.0.0-rc.403))(@trpc/server@11.0.0-rc.403)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 11.0.0-rc.403(@tanstack/react-query@5.45.0(react@18.3.1))(@trpc/client@11.0.0-rc.403(@trpc/server@11.0.0-rc.403))(@trpc/server@11.0.0-rc.403)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@trpc/server':
         specifier: 11.0.0-rc.403
         version: 11.0.0-rc.403
@@ -3088,11 +3088,11 @@ packages:
       typescript:
         optional: true
 
-  '@tanstack/query-core@5.44.0':
-    resolution: {integrity: sha512-Fa1J7iEEyJnjXG1N4+Fz4OXNH/INve3XSn0Htms3X4wgRsXHxMDwqBE2XtDCts7swkwSIs4izEtaFqWVFr/eLQ==}
+  '@tanstack/query-core@5.45.0':
+    resolution: {integrity: sha512-RVfIZQmFUTdjhSAAblvueimfngYyfN6HlwaJUPK71PKd7yi43Vs1S/rdimmZedPWX/WGppcq/U1HOj7O7FwYxw==}
 
-  '@tanstack/react-query@5.44.0':
-    resolution: {integrity: sha512-zmaD6cw8P2cBOfRHhqRmwvDsAi56gqbiwG2CDR6oQOCXSDOvRagvpP6RUStn+RrfcVUrNjKsxBmrgG6Za8p5zg==}
+  '@tanstack/react-query@5.45.0':
+    resolution: {integrity: sha512-y272cKRJp1BvehrWG4ashOBuqBj1Qm2O6fgYJ9LYSHrLdsCXl74GbSVjUQTReUdHuRIl9cEOoyPa6HYag400lw==}
     peerDependencies:
       react: ^18.0.0
 
@@ -9171,11 +9171,11 @@ snapshots:
     optionalDependencies:
       typescript: 5.4.5
 
-  '@tanstack/query-core@5.44.0': {}
+  '@tanstack/query-core@5.45.0': {}
 
-  '@tanstack/react-query@5.44.0(react@18.3.1)':
+  '@tanstack/react-query@5.45.0(react@18.3.1)':
     dependencies:
-      '@tanstack/query-core': 5.44.0
+      '@tanstack/query-core': 5.45.0
       react: 18.3.1
 
   '@tokenizer/token@0.3.0': {}
@@ -9188,9 +9188,9 @@ snapshots:
     dependencies:
       '@trpc/server': 11.0.0-rc.403
 
-  '@trpc/react-query@11.0.0-rc.403(@tanstack/react-query@5.44.0(react@18.3.1))(@trpc/client@11.0.0-rc.403(@trpc/server@11.0.0-rc.403))(@trpc/server@11.0.0-rc.403)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@trpc/react-query@11.0.0-rc.403(@tanstack/react-query@5.45.0(react@18.3.1))(@trpc/client@11.0.0-rc.403(@trpc/server@11.0.0-rc.403))(@trpc/server@11.0.0-rc.403)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
-      '@tanstack/react-query': 5.44.0(react@18.3.1)
+      '@tanstack/react-query': 5.45.0(react@18.3.1)
       '@trpc/client': 11.0.0-rc.403(@trpc/server@11.0.0-rc.403)
       '@trpc/server': 11.0.0-rc.403
       react: 18.3.1
