@@ -57,7 +57,7 @@ export const FeaturedMediasCarousel = ({ medias }: Props) => {
                   <p className="line-clamp-1 pb-1 font-bold text-3xl drop-shadow-accent transition-all md:text-left md:text-4xl xl:text-5xl hover:opacity-70">
                     {media.mainTitle}
                   </p>
-                  <p className="line-clamp-2 text-neutral-300 italic drop-shadow-accent">
+                  <p className="line-clamp-2 text-neutral-300 italic drop-shadow-accent lg:line-clamp-6 md:line-clamp-4 sm:line-clamp-3">
                     {media.synopsis}
                   </p>
                 </div>
