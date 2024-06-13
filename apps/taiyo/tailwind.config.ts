@@ -59,8 +59,6 @@ export default {
         mediaChapter: ["leftSidebar chapter rightSidebar"],
       },
       gridTemplateColumns: {
-        smChapterLayout: "auto 50px 70px",
-        mdChapterLayout: "auto 130px 70px",
         mediaChapter: "min-content auto min-content",
       },
     },
