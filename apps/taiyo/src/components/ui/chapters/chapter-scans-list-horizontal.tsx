@@ -29,7 +29,7 @@ const chapterScansListHorizontal = tv({
   base: "flex items-center gap-1",
   slots: {
     icon: "",
-    wrapper: "flex max-h-6 w-full gap-1",
+    wrapper: "flex max-h-5 w-full gap-1",
     link: "mr-2 line-clamp-1 select-none px-1 transition-all hover:bg-content4",
     empty: "",
   },
