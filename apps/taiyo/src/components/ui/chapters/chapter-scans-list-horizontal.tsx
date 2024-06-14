@@ -8,7 +8,7 @@ import { cache, useEffect, useRef, useState } from "react"
 import Marquee from "react-fast-marquee"
 
 type Props = {
-  scans: { id: string; name: string }[]
+  chapter: { scans: { id: string; name: string }[] }
   className?: string
   classNames?: Partial<(typeof chapterScansListHorizontal)["slots"]>
   index: number
@@ -55,7 +55,12 @@ const chapterScansListHorizontal = tv({
 })
 
 export const ChapterScansListHorizontal = (props: Props) => {
-  const { scans, className, index, ...variants } = props
+  const {
+    chapter: { scans },
+    className,
+    index,
+    ...variants
+  } = props
   const slots = chapterScansListHorizontal({ className, ...variants })
   const [shouldPlay, setShouldPlay] = useState(false)
   const wrapperRef = useRef<HTMLObjectElement>(null)

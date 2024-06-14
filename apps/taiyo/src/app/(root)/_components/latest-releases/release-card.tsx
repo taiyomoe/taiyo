@@ -46,8 +46,8 @@ export const ReleaseCard = ({ release, index }: Props) => (
       <div className="grid grid-cols-chapterCard grid-rows-2 gap-x-1 gap-y-0.5 text-small">
         <ChapterTitle chapter={release} />
         <ChapterUploadedTime className="min-w-28" chapter={release} />
-        <ChapterScansListHorizontal scans={release.scans} index={index} />
-        <ChapterUploader uploader={release.uploader} />
+        <ChapterScansListHorizontal chapter={release} index={index} />
+        <ChapterUploader chapter={release} />
       </div>
     </div>
   </Link>

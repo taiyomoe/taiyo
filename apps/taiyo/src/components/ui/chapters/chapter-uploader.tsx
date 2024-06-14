@@ -3,7 +3,7 @@ import { UserIcon } from "lucide-react"
 import Link from "next/link"
 
 type Props = {
-  uploader?: { id: string; name: string | null }
+  chapter: { uploader: { id: string; name: string | null } }
   className?: string
   classNames?: Partial<(typeof mediaChapterUploader)["slots"]>
 } & VariantProps<typeof mediaChapterUploader>
@@ -36,7 +36,12 @@ const mediaChapterUploader = tv({
 })
 
 export const ChapterUploader = (props: Props) => {
-  const { uploader, className, classNames, ...variants } = props
+  const {
+    chapter: { uploader },
+    className,
+    classNames,
+    ...variants
+  } = props
   const slots = mediaChapterUploader({ className, ...variants })
 
   return (
