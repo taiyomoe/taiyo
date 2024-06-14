@@ -12,10 +12,11 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@taiyomoe/db": "workspace:^0.1.0",
     "@taiyomoe/cache": "workspace:^0.1.0",
+    "@taiyomoe/db": "workspace:^0.1.0",
     "@taiyomoe/types": "workspace:^0.1.0",
-    "@taiyomoe/utils": "workspace:^0.1.0"
+    "@taiyomoe/utils": "workspace:^0.1.0",
+    "radash": "^12.1.0"
   },
   "devDependencies": {
     "@taiyomoe/tsconfig": "workspace:^0.1.0"

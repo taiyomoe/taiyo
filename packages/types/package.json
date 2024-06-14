@@ -12,10 +12,10 @@
     "clean": "rm -rf .turbo node_modules",
     "typecheck": "tsc --noEmit"
   },
-  "devDependencies": {
-    "@taiyomoe/tsconfig": "workspace:^0.1.0"
-  },
   "dependencies": {
     "@prisma/client": "^5.15.0"
+  },
+  "devDependencies": {
+    "@taiyomoe/tsconfig": "workspace:^0.1.0"
   }
 }

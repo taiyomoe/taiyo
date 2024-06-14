@@ -323,6 +323,9 @@ importers:
       ioredis:
         specifier: ^5.4.1
         version: 5.4.1
+      superjson:
+        specifier: ^2.2.1
+        version: 2.2.1
       zod:
         specifier: ^3.23.8
         version: 3.23.8
@@ -448,6 +451,9 @@ importers:
       '@taiyomoe/utils':
         specifier: workspace:^0.1.0
         version: link:../utils
+      radash:
+        specifier: ^12.1.0
+        version: 12.1.0
     devDependencies:
       '@taiyomoe/tsconfig':
         specifier: workspace:^0.1.0

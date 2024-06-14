@@ -1,3 +1,5 @@
+import SuperJSON from "superjson"
+
 export const parseCache = async <T>(input: Promise<string | null>) => {
   const value = await input
 
@@ -5,5 +7,5 @@ export const parseCache = async <T>(input: Promise<string | null>) => {
     return null
   }
 
-  return JSON.parse(value) as T
+  return SuperJSON.parse<T>(value)
 }

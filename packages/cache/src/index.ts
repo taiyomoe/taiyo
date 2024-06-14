@@ -1,6 +1,11 @@
 import type { Languages } from "@taiyomoe/db"
-import type { FeaturedMedia, LatestMedia } from "@taiyomoe/types"
+import type {
+  FeaturedMedia,
+  LatestMedia,
+  RawLatestRelease,
+} from "@taiyomoe/types"
 import DF from "ioredis"
+import SuperJSON from "superjson"
 import { env } from "../env"
 import { parseCache } from "./utils"
 
@@ -13,14 +18,25 @@ export const cacheClient = {
     latest: {
       get: () => parseCache<LatestMedia[]>(client.get("medias:latest")),
       set: (input: LatestMedia[]) =>
-        client.setex("medias:latest", HOUR, JSON.stringify(input)),
+        client.setex("medias:latest", HOUR, SuperJSON.stringify(input)),
     },
     featured: (lang: Languages) => ({
       get: () =>
         parseCache<FeaturedMedia[]>(client.get(`medias:featured:${lang}`)),
       set: (input: FeaturedMedia[]) =>
-        client.setex(`medias:featured:${lang}`, DAY, JSON.stringify(input)),
+        client.setex(
+          `medias:featured:${lang}`,
+          DAY,
+          SuperJSON.stringify(input),
+        ),
     }),
+  },
+  chapters: {
+    latest: {
+      get: () => parseCache<RawLatestRelease[]>(client.get("chapters:latest")),
+      set: (input: RawLatestRelease[]) =>
+        client.setex("chapters:latest", DAY, SuperJSON.stringify(input)),
+    },
   },
 }
 
