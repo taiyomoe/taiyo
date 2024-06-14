@@ -12,7 +12,7 @@ export default async function Page() {
         <div className="-mt-12 absolute right-0 z-0 h-[350px] w-full 2xl:max-w-[1200px] lg:max-w-[900px] md:max-w-[600px] xl:max-w-[1100px]">
           <DashedGridPattern />
         </div>
-        <div className="z-0 flex w-full flex-col gap-12 md:flex-row">
+        <div className="z-0 flex w-full flex-col gap-12 lg:flex-row">
           <LatestReleasesCategory />
           <TrendingMediasCategory />
         </div>

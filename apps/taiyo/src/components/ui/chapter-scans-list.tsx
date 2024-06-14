@@ -10,10 +10,10 @@ type Props = {
 } & VariantProps<typeof chapterScansList>
 
 const chapterScansList = tv({
+  base: "flex w-full",
   slots: {
-    container: "flex w-full",
-    iconContainer: "flex items-center",
-    linkContainer: "flex gap-1",
+    iconWrapper: "flex items-center",
+    linkWrapper: "flex gap-1",
     icon: "w-auto",
     skeleton: "grow",
     link: "hover:bg-content3",
@@ -22,15 +22,15 @@ const chapterScansList = tv({
   variants: {
     size: {
       sm: {
-        container: "gap-1",
+        base: "gap-1",
         icon: "h-4 md:h-5", // intentional md:h-5
         skeleton: "rounded",
         link: "rounded",
         text: "text-sm",
       },
       md: {
-        container: "gap-2",
-        iconContainer: "h-6",
+        base: "gap-2",
+        iconWrapper: "h-6",
         icon: "h-5",
         skeleton: "h-6 rounded-md",
         link: "rounded-md",
@@ -39,16 +39,16 @@ const chapterScansList = tv({
     },
     orientation: {
       horizontal: {
-        linkContainer: "scrollbar-none flex-row overflow-x-scroll",
+        linkWrapper: "scrollbar-none flex-row overflow-x-scroll",
       },
       vertical: {
-        linkContainer: "flex-col",
+        linkWrapper: "flex-col",
         link: "w-fit",
       },
     },
     isCompact: {
       true: {
-        linkContainer: "max-w-[150px]",
+        linkWrapper: "max-w-[150px]",
         text: "truncate",
       },
     },
@@ -68,14 +68,14 @@ export const ChapterScansList = (props: Props) => {
     scans && scansToDisplay ? scans.length - scansToDisplay.length : 0
 
   return (
-    <div className={slots.container()}>
-      <div className={slots.iconContainer()}>
+    <div className={slots.base()}>
+      <div className={slots.iconWrapper()}>
         <UsersIcon className={slots.icon()} />
       </div>
       {scans === undefined && <Skeleton className={slots.skeleton()} />}
       {scans && scans.length === 0 && <p className={slots.text()}>Sem scans</p>}
       {scans && scans.length !== 0 && (
-        <div className={slots.linkContainer()}>
+        <div className={slots.linkWrapper()}>
           {scansToDisplay?.map((scan) => (
             <Link
               key={scan.id}

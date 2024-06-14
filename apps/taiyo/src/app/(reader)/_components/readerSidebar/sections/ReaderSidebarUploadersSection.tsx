@@ -1,6 +1,6 @@
 "use client"
-import { MediaChapterUploader } from "~/components/ui/MediaChapterUploader"
 import { ChapterScansList } from "~/components/ui/chapter-scans-list"
+import { ChapterUploader } from "~/components/ui/chapters/chapter-uploader"
 import { useReaderStore } from "~/stores"
 
 type Props = {
@@ -14,7 +14,7 @@ export const ReaderSidebarUploadersSection = ({ className }: Props) => {
     <div className={className}>
       <p className="font-medium text-md">Upado por</p>
       <div className="flex flex-col gap-2">
-        <MediaChapterUploader uploader={chapter?.uploader} size="md" />
+        <ChapterUploader uploader={chapter?.uploader} />
         <ChapterScansList
           scans={chapter?.scans}
           orientation="vertical"

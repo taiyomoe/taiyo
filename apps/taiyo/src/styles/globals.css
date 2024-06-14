@@ -55,6 +55,7 @@
   }
 }
 
+/* CHARTS */
 .apexcharts-toolbar svg {
   @apply fill-default-300 stroke-none !important;
 }
@@ -65,4 +66,22 @@
 
 .apexcharts-toolbar > div:not(.apexcharts-selected):hover {
   @apply opacity-70 !important;
+}
+
+/* MARQUEE */
+@property --content1-gradient {
+  syntax: '<color>';
+  initial-value: #2d2d30;
+  inherits: false;
+}
+
+.rfm-overlay::before,
+.rfm-overlay::after {
+  background: linear-gradient(to right, var(--content1-gradient), rgba(255, 255, 255, 0)) !important;
+  transition: --content1-gradient 250ms;
+}
+
+[id^="release-card-"]:hover .rfm-overlay::before,
+[id^="release-card-"]:hover .rfm-overlay::after {
+  --content1-gradient: var(--content2);
 }
