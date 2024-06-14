@@ -38,7 +38,7 @@ export const ReleaseCard = ({ release, index }: Props) => (
       <object>
         <Link
           className="line-clamp-1 font-medium text-medium brightness-[0.6] hover:underline"
-          href={MediaUtils.getUrl(release)}
+          href={MediaUtils.getUrl(release.media)}
         >
           {release.media.mainTitle}
         </Link>
