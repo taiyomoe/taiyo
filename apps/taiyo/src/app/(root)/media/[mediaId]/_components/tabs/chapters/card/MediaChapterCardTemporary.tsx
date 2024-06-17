@@ -90,10 +90,7 @@ export const MediaChapterCardTemporary = ({ chapter, order }: Props) => {
             </div>
             {/* UPLOADER */}
             <div className={slots.uploader()}>
-              <ChapterUploader
-                className="justify-end"
-                uploader={chapter.uploader}
-              />
+              <ChapterUploader className="justify-end" chapter={chapter} />
             </div>
           </div>
         </CardBody>
