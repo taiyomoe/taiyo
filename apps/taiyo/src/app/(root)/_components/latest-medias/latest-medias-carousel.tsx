@@ -6,7 +6,6 @@ import { MediaCoverUtils } from "@taiyomoe/utils"
 import useEmblaCarousel from "embla-carousel-react"
 import Link from "next/link"
 import { MediaImage } from "~/components/generics/images/MediaImage"
-import { cn } from "~/lib/utils/cn"
 
 type Props = {
   medias: LatestMedia[]
@@ -22,16 +21,11 @@ export const LatestMediasCarousel = ({ medias }: Props) => {
       ref={emblaRef}
     >
       <div className="flex">
-        {medias.map((media, i) => (
+        {medias.map((media) => (
           <Link
             key={media.id}
             href={`/media/${media.id}`}
-            className={cn(
-              "relative max-h-[300px] min-h-[300px] w-fit hover:cursor-pointer",
-              {
-                "mr-6": i !== medias.length - 1,
-              },
-            )}
+            className="relative mr-6 max-h-[300px] min-h-[300px] w-fit last:mr-0 hover:cursor-pointer"
           >
             <MediaImage
               src={MediaCoverUtils.getUrl(media)}
