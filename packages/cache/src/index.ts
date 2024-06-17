@@ -3,6 +3,7 @@ import type {
   FeaturedMedia,
   LatestMedia,
   RawLatestRelease,
+  RawLatestReleaseGrouped,
 } from "@taiyomoe/types"
 import DF from "ioredis"
 import SuperJSON from "superjson"
@@ -36,6 +37,18 @@ export const cacheClient = {
       get: () => parseCache<RawLatestRelease[]>(client.get("chapters:latest")),
       set: (input: RawLatestRelease[]) =>
         client.setex("chapters:latest", DAY, SuperJSON.stringify(input)),
+    },
+    latestGrouped: {
+      get: () =>
+        parseCache<RawLatestReleaseGrouped[]>(
+          client.get("chapters:latest:grouped"),
+        ),
+      set: (input: RawLatestReleaseGrouped[]) =>
+        client.setex(
+          "chapters:latest:grouped",
+          DAY,
+          SuperJSON.stringify(input),
+        ),
     },
   },
 }

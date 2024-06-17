@@ -1,6 +1,7 @@
 import {
   bulkUpdateChaptersScansSchema,
   bulkUpdateChaptersVolumesSchema,
+  getLatestChaptersGroupedSchema,
   getMediaChaptersByMediaIdSchema,
   idSchema,
   updateChapterSchema,
@@ -9,6 +10,7 @@ import type { MediaChapterLimited } from "@taiyomoe/types"
 import { MediaUtils } from "@taiyomoe/utils"
 import { TRPCError } from "@trpc/server"
 
+import { MediaChapterService } from "@taiyomoe/services"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 
 export const mediaChaptersRouter = createTRPCRouter({
@@ -279,6 +281,16 @@ export const mediaChaptersRouter = createTRPCRouter({
 
       return mediaLimitedChapterPagination
     }),
+
+  getLatestGrouped: publicProcedure
+    .input(getLatestChaptersGroupedSchema)
+    .query(({ ctx, input }) =>
+      MediaChapterService.getLatestGrouped(
+        ctx.session?.user.preferredTitles,
+        input.page,
+        input.perPage,
+      ),
+    ),
 
   delete: protectedProcedure
     .meta({ resource: "mediaChapters", action: "delete" })

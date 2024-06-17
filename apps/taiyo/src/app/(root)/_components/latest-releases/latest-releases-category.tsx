@@ -1,8 +1,9 @@
-import { Button, ButtonGroup } from "@nextui-org/button"
+import { Button } from "@nextui-org/button"
 import { MediaChapterService } from "@taiyomoe/services"
-import { ArrowRightIcon, Columns2Icon, Rows2Icon } from "lucide-react"
+import { ArrowRightIcon } from "lucide-react"
+import { LatestReleasesLayoutButton } from "~/app/(root)/_components/latest-releases/latest-releases-layout-button"
 import { UnderlineButton } from "~/components/generics/buttons/underline-button"
-import { ReleaseCard } from "./release-card"
+import { LatestReleasesLayout } from "./latest-releases-layout"
 
 export const LatestReleasesCategory = async () => {
   const releases = await MediaChapterService.getLatest()
@@ -16,24 +17,13 @@ export const LatestReleasesCategory = async () => {
             Acompanhando
           </UnderlineButton>
           <UnderlineButton className="block md:hidden">A</UnderlineButton>
-          <ButtonGroup isIconOnly>
-            <Button color="primary">
-              <Rows2Icon />
-            </Button>
-            <Button>
-              <Columns2Icon />
-            </Button>
-          </ButtonGroup>
+          <LatestReleasesLayoutButton />
           <Button isIconOnly variant="light">
             <ArrowRightIcon />
           </Button>
         </div>
       </div>
-      <div className="grid max-h-[944px] grid-cols-1 gap-4 overflow-hidden 2xl:grid-cols-3 lg:md:grid-cols-1 md:grid-cols-2 xl:grid-cols-2">
-        {releases.map((release, i) => (
-          <ReleaseCard key={release.id} release={release} index={i} />
-        ))}
-      </div>
+      <LatestReleasesLayout releases={releases} />
     </div>
   )
 }

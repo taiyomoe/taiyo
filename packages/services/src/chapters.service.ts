@@ -1,5 +1,9 @@
 import type { Languages } from "@prisma/client"
 import { cacheClient } from "@taiyomoe/cache"
+import {
+  DEFAULT_LATEST_CHAPTERS_GROUPED_PAGE,
+  DEFAULT_LATEST_CHAPTERS_GROUPED_PER_PAGE,
+} from "@taiyomoe/constants"
 import { type MediaChapter, db } from "@taiyomoe/db"
 import type {
   MediaChaptersUploadersStats,
@@ -7,94 +11,6 @@ import type {
   RawLatestReleaseGrouped,
 } from "@taiyomoe/types"
 import { MediaUtils } from "@taiyomoe/utils"
-
-// const getLatest = async (preferredTitles: Languages = "en") => {
-//   const formatRaw = (input: RawLatestReleaseGrouped[]) =>
-//     input.map(({ titles, ...r }) => ({
-//       ...r,
-//       mainTitle: MediaUtils.getMainTitle(titles, preferredTitles),
-//     }))
-
-//   const rawChapters = await db.$queryRaw<MediaChapter[]>`
-//     SELECT *
-//     FROM (
-//       SELECT *
-//       FROM (
-//         SELECT DISTINCT ON ("mediaId") "mediaId", "createdAt"
-//         FROM "MediaChapter"
-//         WHERE "deletedAt" IS NULL
-//         LIMIT 100
-//       )
-//       ORDER BY "createdAt" DESC
-//     ) AS distinct_media
-//     CROSS JOIN LATERAL (
-//       WITH RankedChapters AS (
-//       	SELECT *, ROW_NUMBER() OVER (PARTITION BY "mediaId" ORDER BY "createdAt" DESC) AS rn
-//       	FROM "MediaChapter"
-// 		    WHERE "mediaId" = distinct_media."mediaId"
-//       )
-//       SELECT *
-//       FROM RankedChapters
-//       WHERE (rn = 1 OR "createdAt" > NOW() - INTERVAL '3 days')
-//       ORDER BY "createdAt" DESC
-//       LIMIT 3
-//     );
-//   `
-//   const medias = await db.media.findMany({
-//     where: { id: { in: [...new Set(rawChapters.map((c) => c.mediaId))] } },
-//     select: {
-//       id: true,
-//       covers: {
-//         select: { id: true },
-//         where: { isMainCover: true },
-//         take: 1,
-//       },
-//       titles: {
-//         select: {
-//           title: true,
-//           language: true,
-//           priority: true,
-//           isAcronym: true,
-//           isMainTitle: true,
-//         },
-//         where: { deletedAt: null },
-//       },
-//     },
-//   })
-//   const uploaders = await db.user.findMany({
-//     where: { id: { in: [...new Set(rawChapters.map((c) => c.uploaderId))] } },
-//     select: { id: true, name: true },
-//   })
-//   const chaptersWithScans = await db.mediaChapter.findMany({
-//     select: { id: true, scans: { select: { id: true, name: true } } },
-//     where: { id: { in: rawChapters.map((c) => c.id) } },
-//   })
-
-//   const distinctMediaIds = [...new Set(rawChapters.map((c) => c.mediaId))]
-//   const rawReleases: RawLatestReleaseGrouped[] = distinctMediaIds.map(
-//     (mediaId) => {
-//       const media = medias.find((m) => m.id === mediaId)!
-//       const chapters = rawChapters.filter((c) => c.mediaId === mediaId)
-
-//       return {
-//         id: mediaId,
-//         coverId: media.covers.at(0)!.id,
-//         titles: media.titles,
-//         chapters: chapters.map((c) => ({
-//           id: c.id,
-//           createdAt: c.createdAt,
-//           number: c.number,
-//           volume: c.volume,
-//           title: c.title,
-//           uploader: uploaders.find((u) => u.id === c.uploaderId)!,
-//           scans: chaptersWithScans.find(({ id }) => id === c.id)!.scans,
-//         })),
-//       }
-//     },
-//   )
-
-//   return formatRaw(rawReleases)
-// }
 
 const getLatest = async (preferredTitles: Languages = "en") => {
   const cacheController = cacheClient.chapters.latest
@@ -164,31 +80,68 @@ const getLatest = async (preferredTitles: Languages = "en") => {
   return formatRaw(rawLatestReleases)
 }
 
-const getLatestGrouped = async (preferredTitles: Languages = "en") => {
-  const formatRaw = (input: RawLatestReleaseGrouped[]) =>
-    input.map(({ titles, ...r }) => ({
-      ...r,
-      mainTitle: MediaUtils.getMainTitle(titles, preferredTitles),
-    }))
+const getLatestGrouped = async (
+  preferredTitles: Languages = "en",
+  page = DEFAULT_LATEST_CHAPTERS_GROUPED_PAGE,
+  perPage = DEFAULT_LATEST_CHAPTERS_GROUPED_PER_PAGE,
+) => {
+  const cacheController = cacheClient.chapters.latestGrouped
+  const cached = await cacheController.get()
 
-  const rawChapters = await db.$queryRaw<MediaChapter[]>`
-    SELECT mc.*
+  const formatRaw = (input: RawLatestReleaseGrouped[]) => ({
+    medias: input
+      .map(({ titles, ...r }) => ({
+        ...r,
+        mainTitle: MediaUtils.getMainTitle(titles, preferredTitles),
+      }))
+      .slice((page - 1) * perPage, page * perPage),
+    totalPages: Math.ceil(input.length / perPage),
+  })
+
+  if (cached) {
+    return formatRaw(cached)
+  }
+
+  type RawChapter = Pick<
+    MediaChapter,
+    | "id"
+    | "createdAt"
+    | "number"
+    | "volume"
+    | "title"
+    | "mediaId"
+    | "uploaderId"
+  >
+  const rawChapters = await db.$queryRaw<RawChapter[]>`
+    SELECT chapters.*
     FROM (
-      SELECT DISTINCT "mediaId"
-      FROM "MediaChapter"
-      WHERE "deletedAt" IS NULL
-      LIMIT 100
-    ) AS distinct_media
-    CROSS JOIN LATERAL (
       SELECT *
-      FROM "MediaChapter" mc
-      WHERE mc."mediaId" = distinct_media."mediaId"
-      ORDER BY "id"
-      LIMIT 5
-    ) AS mc;
+      FROM (
+          SELECT DISTINCT ON ("mediaId") "createdAt", "mediaId"
+          FROM "MediaChapter"
+          WHERE "deletedAt" IS NULL
+          ORDER BY "mediaId", "createdAt" DESC
+      )
+      ORDER BY "createdAt" DESC
+      LIMIT 100
+    ) AS rawMedias
+    CROSS JOIN LATERAL (
+      WITH rankedChapters AS (
+        SELECT "id", "createdAt", "number", "volume", "title", "mediaId", "uploaderId", ROW_NUMBER() OVER (PARTITION BY "mediaId" ORDER BY "createdAt" DESC) AS rank
+        FROM "MediaChapter"
+        WHERE "mediaId" = rawMedias."mediaId"
+      )
+      SELECT *
+      FROM rankedChapters
+      WHERE ("rank" = 1 OR "createdAt" > NOW() - INTERVAL '3 days')
+      LIMIT 30
+    ) as chapters
   `
+  const uniqueMedias = [...new Set(rawChapters.map((c) => c.mediaId))]
+  const uniqueUploaders = [...new Set(rawChapters.map((c) => c.uploaderId))]
+
   const medias = await db.media.findMany({
-    where: { id: { in: [...new Set(rawChapters.map((c) => c.mediaId))] } },
+    where: { id: { in: uniqueMedias } },
     select: {
       id: true,
       covers: {
@@ -209,32 +162,25 @@ const getLatestGrouped = async (preferredTitles: Languages = "en") => {
     },
   })
   const uploaders = await db.user.findMany({
-    where: { id: { in: [...new Set(rawChapters.map((c) => c.uploaderId))] } },
+    where: { id: { in: uniqueUploaders } },
     select: { id: true, name: true },
   })
 
-  const distinctMediaIds = [...new Set(rawChapters.map((c) => c.mediaId))]
-  const rawReleases: RawLatestReleaseGrouped[] = distinctMediaIds.map(
-    (mediaId) => {
-      const media = medias.find((m) => m.id === mediaId)!
-      const chapters = rawChapters.filter((c) => c.mediaId === mediaId)
+  const rawReleases: RawLatestReleaseGrouped[] = uniqueMedias.map((mediaId) => {
+    const media = medias.find((m) => m.id === mediaId)!
+    const chapters = rawChapters.filter((c) => c.mediaId === mediaId)
 
-      return {
-        id: mediaId,
-        coverId: media.covers.at(0)!.id,
-        titles: media.titles,
-        chapters: chapters.map((c) => ({
-          id: c.id,
-          createdAt: c.createdAt,
-          number: c.number,
-          volume: c.volume,
-          title: c.title,
-          uploader: uploaders.find((u) => u.id === c.uploaderId)!,
-          scans: [],
-        })),
-      }
-    },
-  )
+    return {
+      id: media.id,
+      coverId: media.covers.at(0)!.id,
+      titles: media.titles,
+      chapters: chapters.map(({ mediaId: _, uploaderId, ...c }) => ({
+        ...c,
+        uploader: uploaders.find((u) => u.id === uploaderId)!,
+        scans: [],
+      })),
+    }
+  })
 
   return formatRaw(rawReleases)
 }

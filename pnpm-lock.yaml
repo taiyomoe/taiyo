@@ -445,6 +445,9 @@ importers:
       '@taiyomoe/cache':
         specifier: workspace:^0.1.0
         version: link:../cache
+      '@taiyomoe/constants':
+        specifier: workspace:^0.1.0
+        version: link:../constants
       '@taiyomoe/db':
         specifier: workspace:^0.1.0
         version: link:../db

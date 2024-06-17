@@ -12,7 +12,7 @@ type Props = {
   index: number
 }
 
-export const ReleaseCard = ({ release, index }: Props) => (
+export const ReleaseCardRow = ({ release, index }: Props) => (
   <Link
     id={`release-card-${index}`}
     href={MediaChapterUtils.getUrl(release)}
