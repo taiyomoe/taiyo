@@ -4,46 +4,75 @@ import { ScrollShadow } from "@nextui-org/react"
 import type { LatestMedia } from "@taiyomoe/types"
 import { MediaCoverUtils } from "@taiyomoe/utils"
 import useEmblaCarousel from "embla-carousel-react"
+import { useAtomValue } from "jotai"
 import Link from "next/link"
+import { useEffect, useRef } from "react"
+import { releasesLayoutAtom } from "~/atoms/homeLayout.atoms"
 import { MediaImage } from "~/components/generics/images/MediaImage"
+import { cn } from "~/lib/utils/cn"
 
 type Props = {
   medias: LatestMedia[]
 }
 
+const CAROUSEL_BREAKPOINTS: NonNullable<
+  Parameters<typeof useEmblaCarousel>[0]
+>["breakpoints"] = {
+  "(min-width: 1024px)": {
+    dragFree: false,
+    axis: "y",
+    loop: true,
+  },
+}
+
 export const TrendingMediasCarousel = ({ medias }: Props) => {
-  const [emblaRef] = useEmblaCarousel({
+  const releasesLayout = useAtomValue(releasesLayoutAtom)
+  const [emblaRef, emblaApi] = useEmblaCarousel({
     dragFree: true,
     axis: "x",
     loop: false,
-    breakpoints: {
-      // MD and up
-      "(min-width: 768px)": {
-        dragFree: false,
-        axis: "y",
-        loop: true,
-      },
-    },
+    breakpoints: CAROUSEL_BREAKPOINTS,
   })
+  const previousReleasesLayout = useRef(releasesLayout)
+
+  useEffect(() => {
+    if (!emblaApi) return
+
+    if (previousReleasesLayout.current !== releasesLayout) {
+      emblaApi.reInit({
+        breakpoints:
+          releasesLayout === "rows" ? CAROUSEL_BREAKPOINTS : undefined,
+      })
+
+      previousReleasesLayout.current = releasesLayout
+    }
+  }, [emblaApi, releasesLayout])
 
   return (
     <ScrollShadow
-      className="scrollbar-none overflow-hidden"
-      orientation="horizontal"
       ref={emblaRef}
+      orientation="horizontal"
+      hideScrollBar
+      data-right-scroll={true}
     >
-      <div className="flex max-h-[400px] flex-row md:max-h-[498px] md:flex-col">
+      <div
+        className="flex max-h-[400px] flex-row lg:max-h-[498px] data-[releases-layout=columns]:flex-row lg:flex-col"
+        data-releases-layout={releasesLayout}
+      >
         {medias.map((media) => (
           <Link
             key={media.id}
             href={`/media/${media.id}`}
-            className="relative mr-6 max-h-[400px] min-h-[400px] last:mr-0 md:mr-0 md:mb-6 md:max-h-[498px] md:min-h-[498px] hover:cursor-pointer"
+            className={cn(
+              "relative mr-6 max-h-[400px] min-h-[400px] last:mr-0 lg:max-h-[498px] lg:min-h-[498px] hover:cursor-pointer",
+              { "lg:mr-0 lg:mb-6": releasesLayout === "rows" },
+            )}
           >
             <MediaImage
               src={MediaCoverUtils.getUrl(media)}
               classNames={{
-                height: "h-[400px] md:h-[498px]",
-                width: "w-[280px] md:w-[350px]",
+                height: "h-[400px] lg:h-[498px]",
+                width: "w-[280px] lg:w-[350px]",
               }}
               maxHeight={498}
               maxWidth={350}

@@ -1,6 +1,9 @@
 import {
+  DEFAULT_LATEST_CHAPTERS_GROUPED_PAGE,
+  DEFAULT_LATEST_CHAPTERS_GROUPED_PER_PAGE,
   DEFAULT_MEDIA_PAGE,
   DEFAULT_MEDIA_PER_PAGE,
+  LATEST_CHAPTERS_GROUPED_PER_PAGE_CHOICES,
   MEDIA_PER_PAGE_CHOICES,
 } from "@taiyomoe/constants"
 import { z } from "zod"
@@ -48,8 +51,21 @@ export const getMediaChaptersByMediaIdSchema = z.object({
     }),
 })
 
+export const getLatestChaptersGroupedSchema = z.object({
+  page: z.number().optional().default(DEFAULT_LATEST_CHAPTERS_GROUPED_PAGE),
+  perPage: z
+    .number()
+    .optional()
+    .default(DEFAULT_LATEST_CHAPTERS_GROUPED_PER_PAGE)
+    .refine((x) => LATEST_CHAPTERS_GROUPED_PER_PAGE_CHOICES.includes(x), {
+      message: `perPage must be one of ${LATEST_CHAPTERS_GROUPED_PER_PAGE_CHOICES.join(", ")}`,
+    }),
+})
+
 export type UpdateChapterInput = typeof updateChapterSchema._type
 export type BulkUpdateChaptersVolumesInput =
   typeof bulkUpdateChaptersVolumesSchema._type
 export type BulkUpdateChaptersScansInput =
   typeof bulkUpdateChaptersScansSchema._type
+export type GetLatestChaptersGroupedInput =
+  typeof getLatestChaptersGroupedSchema._type

@@ -1,3 +1,4 @@
+import type { StaticDecode } from "@sinclair/typebox"
 import { TAG_KEYS } from "@taiyomoe/constants"
 import {
   ContentRating,
@@ -9,7 +10,7 @@ import {
   MediaStatus,
   MediaType,
 } from "@taiyomoe/db"
-import { type Static, t } from "elysia"
+import { t } from "elysia"
 import { DEFAULT_MIME_TYPES } from "../utils/constants"
 
 const stringifiedDateSchema = t
@@ -49,5 +50,5 @@ export const importMediaSchema = t.Object({
   mdId: t.String({ format: "uuid" }),
 })
 
-export type CreateMediaInput = Static<typeof createMediaSchema>
-export type ImportMediaInput = Static<typeof importMediaSchema>
+export type CreateMediaInput = StaticDecode<typeof createMediaSchema>
+export type ImportMediaInput = StaticDecode<typeof importMediaSchema>

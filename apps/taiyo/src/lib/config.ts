@@ -1,8 +1,13 @@
 import type { Metadata } from "next"
 
-type SiteConfig = Record<string, unknown> & {
+export type SiteConfig = Record<string, unknown> & {
   twitter: Metadata["twitter"]
   openGraph: Metadata["openGraph"]
+  home: {
+    releasesLayoutContainerId: string
+    releasesLayout: "rows" | "columns"
+    displayFollowingReleases: boolean
+  }
 }
 
 export const siteConfig = {
@@ -37,5 +42,10 @@ export const siteConfig = {
       height: 315,
       alt: "Taiyō banner",
     },
+  },
+  home: {
+    releasesLayoutContainerId: "releases-layout-container",
+    releasesLayout: "rows",
+    displayFollowingReleases: false,
   },
 } satisfies SiteConfig

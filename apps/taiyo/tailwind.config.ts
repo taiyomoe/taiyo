@@ -59,9 +59,21 @@ export default {
         mediaChapter: ["leftSidebar chapter rightSidebar"],
       },
       gridTemplateColumns: {
-        smChapterLayout: "auto 50px 70px",
-        mdChapterLayout: "auto 130px 70px",
         mediaChapter: "min-content auto min-content",
+        chapterCard: "auto 112px",
+      },
+      animation: {
+        shimmer: "shimmer 8s infinite",
+      },
+      keyframes: {
+        shimmer: {
+          "0%, 90%, 100%": {
+            "background-position": "calc(-100% - var(--shimmer-width)) 0",
+          },
+          "30%, 60%": {
+            "background-position": "calc(100% + var(--shimmer-width)) 0",
+          },
+        },
       },
     },
   },
@@ -84,28 +96,6 @@ export default {
         },
       },
       themes: {
-        light: {
-          colors: {
-            background: "#f0f0f5",
-            foreground: "hsl(0 0% 3.9%)",
-            content1: {
-              DEFAULT: "#ececee",
-              foreground: "hsl(0 0% 3.9%)",
-            },
-            content2: {
-              DEFAULT: "#dfdfe2",
-              foreground: "hsl(0 0% 3.9%)",
-            },
-            primary: {
-              DEFAULT: "hsl(0 100% 65.49%)",
-              foreground: "hsl(0 0% 98%)",
-            },
-            secondary: {
-              DEFAULT: "#383842",
-              foreground: "hsl(0 0% 9%)",
-            },
-          },
-        },
         dark: {
           colors: {
             background: "#16161a",

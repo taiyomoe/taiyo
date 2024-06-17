@@ -58,6 +58,8 @@ export const TransactionIsolationLevelSchema = z.enum(['ReadUncommitted','ReadCo
 
 export const UserScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','name','email','emailVerified','image','role','points']);
 
+export const RelationLoadStrategySchema = z.enum(['query','join']);
+
 export const UserSettingScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','birthDate','gender','city','country','about','contentRating','preferredTitles','userId']);
 
 export const UserLibraryScalarFieldEnumSchema = z.enum(['reading','rereading','planToRead','completed','onHold','dropped','userId']);

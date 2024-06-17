@@ -12,7 +12,7 @@ import type {
 export type MediaChapterPage = { id: string }
 export type MediaCommentAttachement = { id: string; extension: "png" | "gif" }
 
-export type LatestRelease = {
+export type RawLatestRelease = {
   id: MediaChapter["id"]
   createdAt: MediaChapter["createdAt"]
   number: MediaChapter["number"]
@@ -21,16 +21,48 @@ export type LatestRelease = {
   media: {
     id: Media["id"]
     coverId: MediaCover["id"]
-    mainTitle: MediaTitle["title"]
+    titles: Pick<
+      MediaTitle,
+      "title" | "language" | "priority" | "isAcronym" | "isMainTitle"
+    >[]
   }
-  uploader: {
-    id: User["id"]
-    name: User["name"]
-  }
-  scans: {
-    id: Scan["id"]
-    name: Scan["name"]
+  uploader: Pick<User, "id" | "name">
+  scans: Pick<Scan, "id" | "name">[]
+}
+
+export type LatestRelease = Omit<RawLatestRelease, "media"> & {
+  media: Omit<RawLatestRelease["media"], "titles"> & { mainTitle: string }
+}
+
+export type RawLatestReleaseGrouped = {
+  id: Media["id"]
+  coverId: MediaCover["id"]
+  titles: {
+    title: MediaTitle["title"]
+    language: MediaTitle["language"]
+    priority: MediaTitle["priority"]
+    isAcronym: MediaTitle["isAcronym"]
+    isMainTitle: MediaTitle["isMainTitle"]
   }[]
+  chapters: {
+    id: MediaChapter["id"]
+    createdAt: MediaChapter["createdAt"]
+    number: MediaChapter["number"]
+    volume: MediaChapter["volume"]
+    title: MediaChapter["title"]
+    uploader: {
+      id: User["id"]
+      name: User["name"]
+    }
+    scans: {
+      id: Scan["id"]
+      name: Scan["name"]
+    }[]
+  }[]
+}
+
+export type LatestReleaseGrouped = Omit<RawLatestReleaseGrouped, "titles"> & {
+  mainTitle: string
 }
 
 export type MediaChapterLimitedBase = {

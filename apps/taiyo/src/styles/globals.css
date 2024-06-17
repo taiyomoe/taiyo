@@ -4,8 +4,8 @@
 
 @layer base {
   :root {
-    --background: #f0f0f5;
-    --foreground: 0 0% 3.9%;
+    --background: #16161a;
+    --foreground: 0 0% 98%;
 
     --primary: 0 100% 65.49%;
     --primary-foreground: 0 0% 98%;
@@ -13,11 +13,11 @@
     --secondary: #383842;
     --secondary-foreground: 0 0% 9%;
 
-    --content1: #ececee; /* zinc-100 + 3% darker */
-    --content1-foreground: 0 0% 3.9%;
+    --content1: #2d2d30;
+    --content1-foreground: 0 0% 98%;
 
-    --content2: #dfdfe2; /* zinc-100 + 8% darker */
-    --content2-foreground: 0 0% 3.9%;
+    --content2: #37373b;
+    --content2-foreground: 0 0% 98%;
 
     --discord: #5865f2;
     --discord-foreground: white;
@@ -32,17 +32,6 @@
     --reader-height: calc(100dvh - var(--navbar-height));
     --reader-sidebar-width: 300px;
     --library-sidebar-width: 300px;
-  }
-
-  .dark {
-    --background: #16161a;
-    --foreground: 0 0% 98%;
-
-    --content1: #27272a; /* zinc-800 */
-    --content1-foreground: 0 0% 98%;
-
-    --content2: #37373b; /* zinc-800 + 8% brighter */
-    --content2-foreground: 0 0% 98%;
   }
 
   @screen sm {
@@ -66,6 +55,7 @@
   }
 }
 
+/* CHARTS */
 .apexcharts-toolbar svg {
   @apply fill-default-300 stroke-none !important;
 }
@@ -76,4 +66,22 @@
 
 .apexcharts-toolbar > div:not(.apexcharts-selected):hover {
   @apply opacity-70 !important;
+}
+
+/* MARQUEE */
+@property --content1-gradient {
+  syntax: '<color>';
+  initial-value: #2d2d30;
+  inherits: false;
+}
+
+.rfm-overlay::before,
+.rfm-overlay::after {
+  background: linear-gradient(to right, var(--content1-gradient), rgba(255, 255, 255, 0)) !important;
+  transition: --content1-gradient 250ms;
+}
+
+[id^="release-card-"]:hover .rfm-overlay::before,
+[id^="release-card-"]:hover .rfm-overlay::after {
+  --content1-gradient: var(--content2);
 }

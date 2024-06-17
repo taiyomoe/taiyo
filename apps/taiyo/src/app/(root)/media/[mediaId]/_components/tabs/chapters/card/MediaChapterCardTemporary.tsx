@@ -5,9 +5,9 @@ import { MediaChapterUtils } from "@taiyomoe/utils"
 import Link from "next/link"
 import { useState } from "react"
 import { tv } from "tailwind-variants"
-import { MediaChapterScans } from "~/components/ui/MediaChapterScans"
-import { MediaChapterCardUploadedTime } from "~/components/ui/MediaChapterUploadedTime"
-import { MediaChapterUploader } from "~/components/ui/MediaChapterUploader"
+import { ChapterScansList } from "~/components/ui/chapter-scans-list"
+import { ChapterUploadedTime } from "~/components/ui/chapters/chapter-uploaded-time"
+import { ChapterUploader } from "~/components/ui/chapters/chapter-uploader"
 import { MediaChapterActions } from "../MediaChapterActions"
 import { MediaChapterCardPath } from "./MediaChapterCardPath"
 import { MediaChapterCardProgressionButton } from "./MediaChapterCardProgressionButton"
@@ -82,18 +82,15 @@ export const MediaChapterCardTemporary = ({ chapter, order }: Props) => {
             </div>
             {/* UPLOADED TIME */}
             <div className={slots.uploadedTime()}>
-              <MediaChapterCardUploadedTime chapter={chapter} />
+              <ChapterUploadedTime chapter={chapter} />
             </div>
             {/* SCANS */}
             <div className={slots.scans()}>
-              <MediaChapterScans scans={chapter.scans} />
+              <ChapterScansList scans={chapter.scans} />
             </div>
             {/* UPLOADER */}
             <div className={slots.uploader()}>
-              <MediaChapterUploader
-                className="justify-end"
-                uploader={chapter.uploader}
-              />
+              <ChapterUploader className="justify-end" chapter={chapter} />
             </div>
           </div>
         </CardBody>
