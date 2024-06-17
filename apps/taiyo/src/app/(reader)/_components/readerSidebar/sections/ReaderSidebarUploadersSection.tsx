@@ -14,7 +14,7 @@ export const ReaderSidebarUploadersSection = ({ className }: Props) => {
     <div className={className}>
       <p className="font-medium text-md">Upado por</p>
       <div className="flex flex-col gap-2">
-        <ChapterUploader uploader={chapter?.uploader} />
+        <ChapterUploader chapter={chapter} />
         <ChapterScansList
           scans={chapter?.scans}
           orientation="vertical"
