@@ -1,3 +1,4 @@
+import type { MediaCover } from "@prisma/client"
 import type { MediaCoverVolume, MediaWithRelations } from "@taiyomoe/types"
 import { env } from "../env"
 
@@ -23,7 +24,7 @@ const getLowestVolumeNumber = ({
   }
 }
 
-const computeVolumes = (covers: { volume: number | null }[]) => {
+const computeVolumes = (covers: MediaCover[]) => {
   const volumes = Array.from(
     new Set(covers.map((c) => c.volume).filter(Boolean)),
   )
