@@ -223,8 +223,8 @@ importers:
         specifier: ^7.52.0
         version: 7.52.0(react@18.3.1)
       react-instantsearch:
-        specifier: ^7.11.1
-        version: 7.11.1(algoliasearch@4.23.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: ^7.11.2
+        version: 7.11.2(algoliasearch@4.23.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-select:
         specifier: ^5.8.0
         version: 5.8.0(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -2957,8 +2957,8 @@ packages:
     resolution: {integrity: sha512-4I7Td01quW/RpocfNayFdFVk1qSuoh0E7JrbRJ16nH01HhKFQ88INq9Sd+nd72zqRySlr9BmDA8xlEJ6vJMrYA==}
     engines: {node: '>=8'}
 
-  algoliasearch-helper@3.21.0:
-    resolution: {integrity: sha512-hjVOrL15I3Y3K8xG0icwG1/tWE+MocqBrhW6uVBWpU+/kVEMK0BnM2xdssj6mZM61eJ4iRxHR0djEI3ENOpR8w==}
+  algoliasearch-helper@3.22.0:
+    resolution: {integrity: sha512-ZIVcE0929m2g00GuMiRWpemsGW3589qYxIcQonB7ms4B/KoeS94OiqPRMJ9hGoL23SlYJOmMNjZyXSoItDXO1w==}
     peerDependencies:
       algoliasearch: '>= 3.1 < 6'
 
@@ -3608,11 +3608,11 @@ packages:
     resolution: {integrity: sha512-M1WuAmb7pn9zdFRtQYk26ZBoY043Sse0wVDdk4Bppr+JOXyQYybdtvK+l9wUibhtjdjvtoiNy8tk+EgsYIUqKg==}
     engines: {node: '>=12.0.0'}
 
-  instantsearch-ui-components@0.6.0:
-    resolution: {integrity: sha512-Jj3F9D46ef8VtzVZTgWsy79P25Q5nhI5XzK0NqfUVVI5yI3vA/3NkvKYtBHBlz50DDyBm6t9kIn/ZfpOwENm2A==}
+  instantsearch-ui-components@0.7.0:
+    resolution: {integrity: sha512-4dHmCFbKWap5iSR2VmF5pSBECGQbAa8sPMoazMihYY2/0ahVzdHrOOtT8/hferG1A/xTT8nzfU7PIg+8lomNsA==}
 
-  instantsearch.js@4.71.1:
-    resolution: {integrity: sha512-4AvEPadnDBf0NsCCw+a1GjmMFEZ3zQzQhCe51cFPLYRXnRyKw5bLvRVaNQckiDG+vl7bPyJrWn5YAh5UhBwA+w==}
+  instantsearch.js@4.72.0:
+    resolution: {integrity: sha512-iZ7I9iJapqQXaUtF9v5fRMlW6UWzVK6H2y546/JlJIkp3Vs6LSa7RA7nKGH7/fmcQL4uEUAJKAGMLnyy4fYjtg==}
     peerDependencies:
       algoliasearch: '>= 3.1 < 6'
 
@@ -4223,14 +4223,14 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17 || ^18 || ^19
 
-  react-instantsearch-core@7.11.1:
-    resolution: {integrity: sha512-FsfEvefr3AZtsN4NYLxrqWFvzlrR73ejNX9f/1NBDERxaM+dZFKRfWpRXrA1QSwFeAppRmyC5+TMmga8OK8M0g==}
+  react-instantsearch-core@7.11.2:
+    resolution: {integrity: sha512-Ar3Mw17ZN92G4iGCGJhX4QuvGlIFex0PwdizsS/3ETgBC/riz/nXPCzwCq4Jv9zi7i0bXqneaAuR+5nclxNzjA==}
     peerDependencies:
       algoliasearch: '>= 3.1 < 5'
       react: '>= 16.8.0 < 19'
 
-  react-instantsearch@7.11.1:
-    resolution: {integrity: sha512-XiCH2SfifJAk5kfdT1Mi3HxX3MzeJL72oF1kUltgmD7fqEi8HsK+vn2wGxAvSGhuLzltV2Lg3xIXd4OAocjeWA==}
+  react-instantsearch@7.11.2:
+    resolution: {integrity: sha512-PDUtLy5bGryYBOc6QsmnOMOL1mcR8mt4IdsaVp/HJWMF4TkZ/8C8BGbvBiLT7a6uE8EkObStWw77pp0qSp6r/A==}
     peerDependencies:
       algoliasearch: '>= 3.1 < 5'
       react: '>= 16.8.0 < 19'
@@ -5040,10 +5040,10 @@ snapshots:
       '@aws-crypto/sha1-browser': 5.2.0
       '@aws-crypto/sha256-browser': 5.2.0
       '@aws-crypto/sha256-js': 5.2.0
-      '@aws-sdk/client-sso-oidc': 3.598.0(@aws-sdk/client-sts@3.598.0)
-      '@aws-sdk/client-sts': 3.598.0
+      '@aws-sdk/client-sso-oidc': 3.598.0
+      '@aws-sdk/client-sts': 3.598.0(@aws-sdk/client-sso-oidc@3.598.0)
       '@aws-sdk/core': 3.598.0
-      '@aws-sdk/credential-provider-node': 3.598.0(@aws-sdk/client-sso-oidc@3.598.0(@aws-sdk/client-sts@3.598.0))(@aws-sdk/client-sts@3.598.0)
+      '@aws-sdk/credential-provider-node': 3.598.0(@aws-sdk/client-sso-oidc@3.598.0)(@aws-sdk/client-sts@3.598.0(@aws-sdk/client-sso-oidc@3.598.0))
       '@aws-sdk/middleware-bucket-endpoint': 3.598.0
       '@aws-sdk/middleware-expect-continue': 3.598.0
       '@aws-sdk/middleware-flexible-checksums': 3.598.0
@@ -5098,13 +5098,13 @@ snapshots:
     transitivePeerDependencies:
       - aws-crt
 
-  '@aws-sdk/client-sso-oidc@3.598.0(@aws-sdk/client-sts@3.598.0)':
+  '@aws-sdk/client-sso-oidc@3.598.0':
     dependencies:
       '@aws-crypto/sha256-browser': 5.2.0
       '@aws-crypto/sha256-js': 5.2.0
-      '@aws-sdk/client-sts': 3.598.0
+      '@aws-sdk/client-sts': 3.598.0(@aws-sdk/client-sso-oidc@3.598.0)
       '@aws-sdk/core': 3.598.0
-      '@aws-sdk/credential-provider-node': 3.598.0(@aws-sdk/client-sso-oidc@3.598.0(@aws-sdk/client-sts@3.598.0))(@aws-sdk/client-sts@3.598.0)
+      '@aws-sdk/credential-provider-node': 3.598.0(@aws-sdk/client-sso-oidc@3.598.0)(@aws-sdk/client-sts@3.598.0(@aws-sdk/client-sso-oidc@3.598.0))
       '@aws-sdk/middleware-host-header': 3.598.0
       '@aws-sdk/middleware-logger': 3.598.0
       '@aws-sdk/middleware-recursion-detection': 3.598.0
@@ -5141,7 +5141,6 @@ snapshots:
       '@smithy/util-utf8': 3.0.0
       tslib: 2.6.3
     transitivePeerDependencies:
-      - '@aws-sdk/client-sts'
       - aws-crt
 
   '@aws-sdk/client-sso@3.598.0':
@@ -5187,13 +5186,13 @@ snapshots:
     transitivePeerDependencies:
       - aws-crt
 
-  '@aws-sdk/client-sts@3.598.0':
+  '@aws-sdk/client-sts@3.598.0(@aws-sdk/client-sso-oidc@3.598.0)':
     dependencies:
       '@aws-crypto/sha256-browser': 5.2.0
       '@aws-crypto/sha256-js': 5.2.0
-      '@aws-sdk/client-sso-oidc': 3.598.0(@aws-sdk/client-sts@3.598.0)
+      '@aws-sdk/client-sso-oidc': 3.598.0
       '@aws-sdk/core': 3.598.0
-      '@aws-sdk/credential-provider-node': 3.598.0(@aws-sdk/client-sso-oidc@3.598.0(@aws-sdk/client-sts@3.598.0))(@aws-sdk/client-sts@3.598.0)
+      '@aws-sdk/credential-provider-node': 3.598.0(@aws-sdk/client-sso-oidc@3.598.0)(@aws-sdk/client-sts@3.598.0(@aws-sdk/client-sso-oidc@3.598.0))
       '@aws-sdk/middleware-host-header': 3.598.0
       '@aws-sdk/middleware-logger': 3.598.0
       '@aws-sdk/middleware-recursion-detection': 3.598.0
@@ -5230,6 +5229,7 @@ snapshots:
       '@smithy/util-utf8': 3.0.0
       tslib: 2.6.3
     transitivePeerDependencies:
+      - '@aws-sdk/client-sso-oidc'
       - aws-crt
 
   '@aws-sdk/core@3.598.0':
@@ -5261,14 +5261,14 @@ snapshots:
       '@smithy/util-stream': 3.0.2
       tslib: 2.6.3
 
-  '@aws-sdk/credential-provider-ini@3.598.0(@aws-sdk/client-sso-oidc@3.598.0(@aws-sdk/client-sts@3.598.0))(@aws-sdk/client-sts@3.598.0)':
+  '@aws-sdk/credential-provider-ini@3.598.0(@aws-sdk/client-sso-oidc@3.598.0)(@aws-sdk/client-sts@3.598.0(@aws-sdk/client-sso-oidc@3.598.0))':
     dependencies:
-      '@aws-sdk/client-sts': 3.598.0
+      '@aws-sdk/client-sts': 3.598.0(@aws-sdk/client-sso-oidc@3.598.0)
       '@aws-sdk/credential-provider-env': 3.598.0
       '@aws-sdk/credential-provider-http': 3.598.0
       '@aws-sdk/credential-provider-process': 3.598.0
-      '@aws-sdk/credential-provider-sso': 3.598.0(@aws-sdk/client-sso-oidc@3.598.0(@aws-sdk/client-sts@3.598.0))
-      '@aws-sdk/credential-provider-web-identity': 3.598.0(@aws-sdk/client-sts@3.598.0)
+      '@aws-sdk/credential-provider-sso': 3.598.0(@aws-sdk/client-sso-oidc@3.598.0)
+      '@aws-sdk/credential-provider-web-identity': 3.598.0(@aws-sdk/client-sts@3.598.0(@aws-sdk/client-sso-oidc@3.598.0))
       '@aws-sdk/types': 3.598.0
       '@smithy/credential-provider-imds': 3.1.1
       '@smithy/property-provider': 3.1.1
@@ -5279,14 +5279,14 @@ snapshots:
       - '@aws-sdk/client-sso-oidc'
       - aws-crt
 
-  '@aws-sdk/credential-provider-node@3.598.0(@aws-sdk/client-sso-oidc@3.598.0(@aws-sdk/client-sts@3.598.0))(@aws-sdk/client-sts@3.598.0)':
+  '@aws-sdk/credential-provider-node@3.598.0(@aws-sdk/client-sso-oidc@3.598.0)(@aws-sdk/client-sts@3.598.0(@aws-sdk/client-sso-oidc@3.598.0))':
     dependencies:
       '@aws-sdk/credential-provider-env': 3.598.0
       '@aws-sdk/credential-provider-http': 3.598.0
-      '@aws-sdk/credential-provider-ini': 3.598.0(@aws-sdk/client-sso-oidc@3.598.0(@aws-sdk/client-sts@3.598.0))(@aws-sdk/client-sts@3.598.0)
+      '@aws-sdk/credential-provider-ini': 3.598.0(@aws-sdk/client-sso-oidc@3.598.0)(@aws-sdk/client-sts@3.598.0(@aws-sdk/client-sso-oidc@3.598.0))
       '@aws-sdk/credential-provider-process': 3.598.0
-      '@aws-sdk/credential-provider-sso': 3.598.0(@aws-sdk/client-sso-oidc@3.598.0(@aws-sdk/client-sts@3.598.0))
-      '@aws-sdk/credential-provider-web-identity': 3.598.0(@aws-sdk/client-sts@3.598.0)
+      '@aws-sdk/credential-provider-sso': 3.598.0(@aws-sdk/client-sso-oidc@3.598.0)
+      '@aws-sdk/credential-provider-web-identity': 3.598.0(@aws-sdk/client-sts@3.598.0(@aws-sdk/client-sso-oidc@3.598.0))
       '@aws-sdk/types': 3.598.0
       '@smithy/credential-provider-imds': 3.1.1
       '@smithy/property-provider': 3.1.1
@@ -5306,10 +5306,10 @@ snapshots:
       '@smithy/types': 3.1.0
       tslib: 2.6.3
 
-  '@aws-sdk/credential-provider-sso@3.598.0(@aws-sdk/client-sso-oidc@3.598.0(@aws-sdk/client-sts@3.598.0))':
+  '@aws-sdk/credential-provider-sso@3.598.0(@aws-sdk/client-sso-oidc@3.598.0)':
     dependencies:
       '@aws-sdk/client-sso': 3.598.0
-      '@aws-sdk/token-providers': 3.598.0(@aws-sdk/client-sso-oidc@3.598.0(@aws-sdk/client-sts@3.598.0))
+      '@aws-sdk/token-providers': 3.598.0(@aws-sdk/client-sso-oidc@3.598.0)
       '@aws-sdk/types': 3.598.0
       '@smithy/property-provider': 3.1.1
       '@smithy/shared-ini-file-loader': 3.1.1
@@ -5319,9 +5319,9 @@ snapshots:
       - '@aws-sdk/client-sso-oidc'
       - aws-crt
 
-  '@aws-sdk/credential-provider-web-identity@3.598.0(@aws-sdk/client-sts@3.598.0)':
+  '@aws-sdk/credential-provider-web-identity@3.598.0(@aws-sdk/client-sts@3.598.0(@aws-sdk/client-sso-oidc@3.598.0))':
     dependencies:
-      '@aws-sdk/client-sts': 3.598.0
+      '@aws-sdk/client-sts': 3.598.0(@aws-sdk/client-sso-oidc@3.598.0)
       '@aws-sdk/types': 3.598.0
       '@smithy/property-provider': 3.1.1
       '@smithy/types': 3.1.0
@@ -5435,9 +5435,9 @@ snapshots:
       '@smithy/types': 3.1.0
       tslib: 2.6.3
 
-  '@aws-sdk/token-providers@3.598.0(@aws-sdk/client-sso-oidc@3.598.0(@aws-sdk/client-sts@3.598.0))':
+  '@aws-sdk/token-providers@3.598.0(@aws-sdk/client-sso-oidc@3.598.0)':
     dependencies:
-      '@aws-sdk/client-sso-oidc': 3.598.0(@aws-sdk/client-sts@3.598.0)
+      '@aws-sdk/client-sso-oidc': 3.598.0
       '@aws-sdk/types': 3.598.0
       '@smithy/property-provider': 3.1.1
       '@smithy/shared-ini-file-loader': 3.1.1
@@ -8556,7 +8556,7 @@ snapshots:
       clean-stack: 2.2.0
       indent-string: 4.0.0
 
-  algoliasearch-helper@3.21.0(algoliasearch@4.23.3):
+  algoliasearch-helper@3.22.0(algoliasearch@4.23.3):
     dependencies:
       '@algolia/events': 4.0.1
       algoliasearch: 4.23.3
@@ -9281,11 +9281,11 @@ snapshots:
       through: 2.3.8
       wrap-ansi: 6.2.0
 
-  instantsearch-ui-components@0.6.0:
+  instantsearch-ui-components@0.7.0:
     dependencies:
       '@babel/runtime': 7.24.7
 
-  instantsearch.js@4.71.1(algoliasearch@4.23.3):
+  instantsearch.js@4.72.0(algoliasearch@4.23.3):
     dependencies:
       '@algolia/events': 4.0.1
       '@types/dom-speech-recognition': 0.0.1
@@ -9293,10 +9293,10 @@ snapshots:
       '@types/hogan.js': 3.0.5
       '@types/qs': 6.9.15
       algoliasearch: 4.23.3
-      algoliasearch-helper: 3.21.0(algoliasearch@4.23.3)
+      algoliasearch-helper: 3.22.0(algoliasearch@4.23.3)
       hogan.js: 3.0.2
       htm: 3.1.1
-      instantsearch-ui-components: 0.6.0
+      instantsearch-ui-components: 0.7.0
       preact: 10.22.0
       qs: 6.9.7
       search-insights: 2.14.0
@@ -9919,24 +9919,24 @@ snapshots:
     dependencies:
       react: 18.3.1
 
-  react-instantsearch-core@7.11.1(algoliasearch@4.23.3)(react@18.3.1):
+  react-instantsearch-core@7.11.2(algoliasearch@4.23.3)(react@18.3.1):
     dependencies:
       '@babel/runtime': 7.24.7
       algoliasearch: 4.23.3
-      algoliasearch-helper: 3.21.0(algoliasearch@4.23.3)
-      instantsearch.js: 4.71.1(algoliasearch@4.23.3)
+      algoliasearch-helper: 3.22.0(algoliasearch@4.23.3)
+      instantsearch.js: 4.72.0(algoliasearch@4.23.3)
       react: 18.3.1
       use-sync-external-store: 1.2.2(react@18.3.1)
 
-  react-instantsearch@7.11.1(algoliasearch@4.23.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  react-instantsearch@7.11.2(algoliasearch@4.23.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
       '@babel/runtime': 7.24.7
       algoliasearch: 4.23.3
-      instantsearch-ui-components: 0.6.0
-      instantsearch.js: 4.71.1(algoliasearch@4.23.3)
+      instantsearch-ui-components: 0.7.0
+      instantsearch.js: 4.72.0(algoliasearch@4.23.3)
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
-      react-instantsearch-core: 7.11.1(algoliasearch@4.23.3)(react@18.3.1)
+      react-instantsearch-core: 7.11.2(algoliasearch@4.23.3)(react@18.3.1)
 
   react-is@16.13.1: {}
 
