@@ -207,7 +207,7 @@ const getUploaderStats = async () => {
   }))
 }
 
-export const MediaChapterService = {
+export const ChaptersService = {
   getLatest,
   getLatestGrouped,
   getUploaderStats,

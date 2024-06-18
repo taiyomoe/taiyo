@@ -1,8 +1,8 @@
-import { MediaService } from "@taiyomoe/services"
+import { MediasService } from "@taiyomoe/services"
 import { LatestMediasCarousel } from "./latest-medias-carousel"
 
 export const LatestMediasCategory = async () => {
-  const medias = await MediaService.getLatest()
+  const medias = await MediasService.getLatest()
 
   return (
     <div className="flex w-full flex-col gap-4">

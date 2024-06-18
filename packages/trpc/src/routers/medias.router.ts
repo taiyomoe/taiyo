@@ -1,6 +1,6 @@
 import { getMediaIndexItem } from "@taiyomoe/meilisearch/utils"
 import { idSchema, updateMediaSchema } from "@taiyomoe/schemas"
-import { LibraryService } from "@taiyomoe/services"
+import { LibrariesService } from "@taiyomoe/services"
 import type { MediaLimited } from "@taiyomoe/types"
 import { MediaUtils } from "@taiyomoe/utils"
 import { TRPCError } from "@trpc/server"
@@ -70,7 +70,7 @@ export const mediasRouter = createTRPCRouter({
         return null
       }
 
-      const userLibraryMedia = await LibraryService.getUserLibraryMedia(
+      const userLibraryMedia = await LibrariesService.getUserLibraryMedia(
         ctx.session?.user.id,
         mediaId,
       )

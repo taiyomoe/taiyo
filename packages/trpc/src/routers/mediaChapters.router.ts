@@ -10,7 +10,7 @@ import type { MediaChapterLimited } from "@taiyomoe/types"
 import { MediaUtils } from "@taiyomoe/utils"
 import { TRPCError } from "@trpc/server"
 
-import { MediaChapterService } from "@taiyomoe/services"
+import { ChaptersService } from "@taiyomoe/services"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 
 export const mediaChaptersRouter = createTRPCRouter({
@@ -285,7 +285,7 @@ export const mediaChaptersRouter = createTRPCRouter({
   getLatestGrouped: publicProcedure
     .input(getLatestChaptersGroupedSchema)
     .query(({ ctx, input }) =>
-      MediaChapterService.getLatestGrouped(
+      ChaptersService.getLatestGrouped(
         ctx.session?.user.preferredTitles,
         input.page,
         input.perPage,
