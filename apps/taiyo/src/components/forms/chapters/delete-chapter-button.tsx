@@ -27,8 +27,7 @@ export const DeleteChapterButton = ({ chapter }: Props) => {
       loading: "Apagando o capítulo...",
       success: () => {
         onOpenChange()
-        // deleteChapter(chapter.id);
-        void apiUtils.mediaChapters.getByMediaId.invalidate()
+        void apiUtils.chapters.getByMediaId.invalidate()
 
         return "Capítulo apagado com sucesso!"
       },

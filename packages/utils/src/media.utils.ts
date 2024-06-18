@@ -7,7 +7,7 @@ const getUrl = (media: { id: string }) => `/media/${media.id}`
 const getBannerOrCoverUrl = (media: {
   id: string
   coverId: string
-  bannerId: string
+  bannerId: string | null
 }) => {
   if (!media.bannerId) return CoverUtils.getUrl(media)
 
