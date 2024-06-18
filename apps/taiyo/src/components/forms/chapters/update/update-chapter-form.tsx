@@ -17,7 +17,7 @@ type Props = {
 }
 
 export const UpdateChapterForm = ({ chapter }: Props) => {
-  const { mutateAsync } = api.mediaChapters.update.useMutation()
+  const { mutateAsync } = api.chapters.update.useMutation()
   const initialValues = {
     ...pick(chapter, [
       "id",

@@ -4,7 +4,7 @@ import type { UserLibraryMedia } from "@taiyomoe/types"
 import { MediaUtils } from "@taiyomoe/utils"
 import { createTRPCRouter, protectedProcedure } from "../trpc"
 
-export const libraryRouter = createTRPCRouter({
+export const librariesRouter = createTRPCRouter({
   getLibrary: protectedProcedure
     .meta({
       resource: "library",

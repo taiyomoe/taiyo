@@ -25,7 +25,7 @@ type Props = {
 }
 
 export const CreateMediaTitleForm = ({ mediaId }: Props) => {
-  const { mutateAsync } = api.mediaTitles.create.useMutation()
+  const { mutateAsync } = api.titles.create.useMutation()
   const initialValues: CreateTitleInput = {
     title: "",
     language: "ja",

@@ -4,7 +4,7 @@ import { TRPCError } from "@trpc/server"
 import { getMediaIndexItem } from "@taiyomoe/meilisearch/utils"
 import { createTRPCRouter, protectedProcedure } from "../trpc"
 
-export const mediaCoversRouter = createTRPCRouter({
+export const coversRouter = createTRPCRouter({
   update: protectedProcedure
     .meta({ resource: "mediaCovers", action: "update" })
     .input(updateCoverSchema)

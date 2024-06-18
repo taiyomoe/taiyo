@@ -14,7 +14,7 @@ export const DeleteMediaTitleButton = ({ toggleModal }: Props) => {
     getValues,
     formState: { defaultValues },
   } = useFormContext<UpdateTitleInput>()
-  const { mutateAsync } = api.mediaTitles.delete.useMutation()
+  const { mutateAsync } = api.titles.delete.useMutation()
   const { del } = useMediaUpdateStore()
 
   const handlePress = () => {

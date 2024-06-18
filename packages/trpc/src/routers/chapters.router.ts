@@ -13,7 +13,7 @@ import { TRPCError } from "@trpc/server"
 import { ChaptersService } from "@taiyomoe/services"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 
-export const mediaChaptersRouter = createTRPCRouter({
+export const chaptersRouter = createTRPCRouter({
   update: protectedProcedure
     .meta({ resource: "mediaChapters", action: "update" })
     .input(updateChapterSchema)

@@ -28,7 +28,7 @@ const mediaChapterCardProgressionButton = tv({
 export const MediaChapterCardProgressionButton = (props: Props) => {
   const { chapter, completed, setCompleted } = props
   const slots = mediaChapterCardProgressionButton({ completed })
-  const { mutate } = api.history.updateProgression.useMutation()
+  const { mutate } = api.histories.updateProgression.useMutation()
   const Icon = completed ? EyeOffIcon : EyeIcon
   const divTitle = completed ? "Marcar como não lido" : "Marcar como lido"
   const { data: session } = useSession()

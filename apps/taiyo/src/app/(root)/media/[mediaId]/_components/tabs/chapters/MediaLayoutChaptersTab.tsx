@@ -23,7 +23,7 @@ export const MediaLayoutChaptersTab = ({ media }: Props) => {
     data: chaptersPagination,
     isInitialLoading,
     isSuccess,
-  } = api.mediaChapters.getByMediaId.useQuery(
+  } = api.chapters.getByMediaId.useQuery(
     {
       mediaId: media.id,
       page,

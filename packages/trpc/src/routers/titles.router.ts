@@ -8,7 +8,7 @@ import { TRPCError } from "@trpc/server"
 import { getMediaIndexItem } from "@taiyomoe/meilisearch/utils"
 import { createTRPCRouter, protectedProcedure } from "../trpc"
 
-export const mediaTitlesRouter = createTRPCRouter({
+export const titlesRouter = createTRPCRouter({
   create: protectedProcedure
     .meta({ resource: "mediaTitles", action: "create" })
     .input(createTitleSchema)

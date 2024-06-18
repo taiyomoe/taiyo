@@ -32,7 +32,7 @@ type Props = {
 }
 
 export const UpdateCoverForm = ({ media, cover }: Props) => {
-  const { mutateAsync } = api.mediaCovers.update.useMutation()
+  const { mutateAsync } = api.covers.update.useMutation()
   const initialValues = pick(cover, [
     "id",
     "volume",

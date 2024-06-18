@@ -22,7 +22,7 @@ type Props = {
 export const BulkUpdateChaptersVolumesForm = (props: Props) => {
   const { chapters: initialChapters } = props
   const [chapters, setChapters] = useState(initialChapters)
-  const { mutateAsync } = api.mediaChapters.updateVolumes.useMutation()
+  const { mutateAsync } = api.chapters.updateVolumes.useMutation()
   const methods = useForm<BulkUpdateChaptersVolumesInput>({
     resolver: zodResolver(bulkUpdateChaptersVolumesSchema),
     mode: "onTouched",

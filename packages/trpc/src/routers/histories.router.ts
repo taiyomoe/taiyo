@@ -1,7 +1,7 @@
 import { updateProgressionSchema } from "@taiyomoe/schemas"
 import { createTRPCRouter, protectedProcedure } from "../trpc"
 
-export const historyRouter = createTRPCRouter({
+export const historiesRouter = createTRPCRouter({
   updateProgression: protectedProcedure
     .meta({
       resource: "history",
