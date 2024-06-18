@@ -6,7 +6,7 @@ import { ReleaseCardColumn } from "./release-card-column"
 
 export const LatestReleasesColumnLayout = () => {
   const [emblaRef] = useEmblaCarousel({ dragFree: true })
-  const { data, isLoading } = api.mediaChapters.getLatestGrouped.useQuery({})
+  const { data, isLoading } = api.chapters.getLatestGrouped.useQuery({})
 
   if (!data || isLoading) {
     return <Spinner size="lg" />

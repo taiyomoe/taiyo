@@ -131,7 +131,7 @@ const getFeatured = async (preferredTitles: Languages = "en") => {
   return featuredMedias
 }
 
-export const MediaService = {
+export const MediasService = {
   getStatus,
   getLatest,
   getFeatured,

@@ -1,6 +1,6 @@
 import { Chip } from "@nextui-org/chip"
 import type { MediaLimited } from "@taiyomoe/types"
-import { MediaTitleUtils } from "@taiyomoe/utils"
+import { TitleUtils } from "@taiyomoe/utils"
 import { Category } from "~/components/generics/Category"
 import { List } from "~/components/generics/List"
 import { CountryFlag } from "~/components/ui/CountryFlag"
@@ -10,7 +10,7 @@ type Props = {
 }
 
 export const MediaInfoTabTitles = ({ media }: Props) => {
-  const sortedTitles = MediaTitleUtils.sort(media.titles).filter(
+  const sortedTitles = TitleUtils.sort(media.titles).filter(
     (x) => !x.isMainTitle,
   )
 

@@ -1,5 +1,5 @@
 import type { LatestReleaseGrouped } from "@taiyomoe/types"
-import { MediaChapterUtils, MediaCoverUtils, MediaUtils } from "@taiyomoe/utils"
+import { ChapterUtils, CoverUtils, MediaUtils } from "@taiyomoe/utils"
 import Link from "next/link"
 import { useMemo } from "react"
 import { MediaImage } from "~/components/generics/images/MediaImage"
@@ -20,7 +20,7 @@ export const ReleaseCardColumn = ({ release }: Props) => {
     <div className="flex flex-col gap-2">
       <Link href={MediaUtils.getUrl(release)}>
         <MediaImage
-          src={MediaCoverUtils.getUrl(release)}
+          src={CoverUtils.getUrl(release)}
           classNames={{
             height: "min-h-[270px] h-[270px]",
             width: "min-w-[200px] w-[200px]",
@@ -35,7 +35,7 @@ export const ReleaseCardColumn = ({ release }: Props) => {
         {latestChapters.map((c) => (
           <Link
             key={c.id}
-            href={MediaChapterUtils.getUrl(c)}
+            href={ChapterUtils.getUrl(c)}
             className="flex items-center justify-between rounded-small border border-content2 bg-content1 p-2 font-medium transition-background hover:bg-content2 hover:underline"
           >
             Cap. {c.number}

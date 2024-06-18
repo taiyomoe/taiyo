@@ -1,6 +1,6 @@
 import { Image } from "@nextui-org/image"
 import type { MediaLimited } from "@taiyomoe/types"
-import { MediaCoverUtils } from "@taiyomoe/utils"
+import { CoverUtils } from "@taiyomoe/utils"
 import NextImage from "next/image"
 
 type Props = {
@@ -8,7 +8,7 @@ type Props = {
 }
 
 export const MediaLayoutCover = ({ media }: Props) => {
-  const coverUrl = MediaCoverUtils.getUrl(media)
+  const coverUrl = CoverUtils.getUrl(media)
 
   return (
     <Image

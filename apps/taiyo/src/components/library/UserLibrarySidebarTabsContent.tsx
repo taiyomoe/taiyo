@@ -3,7 +3,7 @@ import { Spinner } from "@nextui-org/spinner"
 import { useSession } from "@taiyomoe/auth/client"
 import type { UserLibraryStatus } from "@taiyomoe/types"
 import { MediaUtils } from "@taiyomoe/utils"
-import { MediaCoverUtils } from "@taiyomoe/utils"
+import { CoverUtils } from "@taiyomoe/utils"
 import NextImage from "next/image"
 import Link from "next/link"
 import { useEffect } from "react"
@@ -19,7 +19,7 @@ type Props = {
 export const UserLibrarySidebarTabsContent = ({ status }: Props) => {
   const { addEntries, ...libraryStore } = useLibraryStore()
   const { data: session } = useSession()
-  const { data, isLoading } = api.libary.getLibrary.useQuery(
+  const { data, isLoading } = api.libraries.getLibrary.useQuery(
     {
       status,
       userId: session!.user.id,
@@ -61,7 +61,7 @@ export const UserLibrarySidebarTabsContent = ({ status }: Props) => {
         <div key={media.id} className="relative flex h-[80px] gap-2">
           <Image
             as={NextImage}
-            src={MediaCoverUtils.getUrl(media)}
+            src={CoverUtils.getUrl(media)}
             className="h-full min-w-[60px] rounded-small object-fit"
             width={60}
             height={80}

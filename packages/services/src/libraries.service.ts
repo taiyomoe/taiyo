@@ -34,7 +34,7 @@ const getUserLibraryMedia = async (
   return null
 }
 
-export const LibraryService = {
+export const LibrariesService = {
   getUserLibrary,
   getUserLibraryMedia,
 }

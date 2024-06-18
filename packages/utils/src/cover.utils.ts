@@ -37,7 +37,7 @@ const computeVolumes = (covers: MediaCover[]) => {
   return volumes
 }
 
-export const MediaCoverUtils = {
+export const CoverUtils = {
   getUrl,
   getLowestVolumeNumber,
   computeVolumes,

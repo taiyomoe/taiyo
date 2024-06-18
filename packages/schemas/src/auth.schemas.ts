@@ -15,5 +15,3 @@ export const sessionSchema = z.object({
   }),
   expires: z.coerce.date(),
 })
-
-export type SessionUser = z.infer<typeof sessionSchema>["user"]

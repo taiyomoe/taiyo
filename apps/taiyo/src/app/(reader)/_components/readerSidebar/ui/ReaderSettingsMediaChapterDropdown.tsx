@@ -8,7 +8,7 @@ import {
   DropdownTrigger,
 } from "@nextui-org/dropdown"
 import { Skeleton } from "@nextui-org/skeleton"
-import { MediaChapterUtils } from "@taiyomoe/utils"
+import { ChapterUtils } from "@taiyomoe/utils"
 import { ChevronsUpDownIcon } from "lucide-react"
 import Link from "next/link"
 import { tv } from "tailwind-variants"
@@ -34,11 +34,11 @@ export const ReaderSettingsMediaChapterDropdown = () => {
   const { onNextChapter } = useChapterProgression()
 
   const backButtonUrl = chapter?.previousChapter
-    ? MediaChapterUtils.getUrl(chapter?.previousChapter)
+    ? ChapterUtils.getUrl(chapter?.previousChapter)
     : "https://google.com/"
 
   const forwardButtonUrl = chapter?.nextChapter
-    ? MediaChapterUtils.getUrl(chapter?.nextChapter)
+    ? ChapterUtils.getUrl(chapter?.nextChapter)
     : "https://google.com/"
 
   return (
@@ -69,7 +69,7 @@ export const ReaderSettingsMediaChapterDropdown = () => {
             {chapter.media.chapters.map((_) => (
               <DropdownItem
                 as={Link}
-                href={MediaChapterUtils.getUrl(_)}
+                href={ChapterUtils.getUrl(_)}
                 key={`chapter-${_.number}`}
                 textValue={`Capítulo ${_.number}`}
               >

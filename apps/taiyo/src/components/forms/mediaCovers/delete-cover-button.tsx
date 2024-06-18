@@ -14,7 +14,7 @@ export const DeleteCoverButton = ({ toggleModal }: Props) => {
     getValues,
     formState: { defaultValues },
   } = useFormContext<UpdateCoverInput>()
-  const { mutateAsync } = api.mediaCovers.delete.useMutation()
+  const { mutateAsync } = api.covers.delete.useMutation()
   const { del } = useMediaUpdateStore()
 
   const handlePress = () => {

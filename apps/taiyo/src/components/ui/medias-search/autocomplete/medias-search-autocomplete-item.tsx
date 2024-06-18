@@ -1,5 +1,5 @@
 import type { MediasIndexItem } from "@taiyomoe/types"
-import { MediaCoverUtils } from "@taiyomoe/utils"
+import { CoverUtils } from "@taiyomoe/utils"
 import { MediaImage } from "~/components/generics/images/MediaImage"
 
 type Props = {
@@ -13,7 +13,7 @@ export const MediasSearchAutocompleteItem = (props: Props) => {
   return (
     <div className="group flex gap-2 transition-background duration-200">
       <MediaImage
-        src={MediaCoverUtils.getUrl({
+        src={CoverUtils.getUrl({
           id: item.id,
           coverId: item.mainCoverId,
         })}

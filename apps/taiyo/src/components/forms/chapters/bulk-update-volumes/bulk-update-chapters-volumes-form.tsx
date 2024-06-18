@@ -6,7 +6,7 @@ import {
   type BulkUpdateChaptersVolumesInput,
   bulkUpdateChaptersVolumesSchema,
 } from "@taiyomoe/schemas"
-import { MediaChapterUtils } from "@taiyomoe/utils"
+import { ChapterUtils } from "@taiyomoe/utils"
 import { TRPCClientError } from "@trpc/client"
 import { useState } from "react"
 import { type SubmitHandler, useForm } from "react-hook-form"
@@ -22,7 +22,7 @@ type Props = {
 export const BulkUpdateChaptersVolumesForm = (props: Props) => {
   const { chapters: initialChapters } = props
   const [chapters, setChapters] = useState(initialChapters)
-  const { mutateAsync } = api.mediaChapters.updateVolumes.useMutation()
+  const { mutateAsync } = api.chapters.updateVolumes.useMutation()
   const methods = useForm<BulkUpdateChaptersVolumesInput>({
     resolver: zodResolver(bulkUpdateChaptersVolumesSchema),
     mode: "onTouched",
@@ -32,7 +32,7 @@ export const BulkUpdateChaptersVolumesForm = (props: Props) => {
   const handleSubmit: SubmitHandler<BulkUpdateChaptersVolumesInput> = async (
     values,
   ) => {
-    const duplicatedChapters = MediaChapterUtils.getDuplicatedChapters(
+    const duplicatedChapters = ChapterUtils.getDuplicatedChapters(
       values.volumes,
       chapters,
     )

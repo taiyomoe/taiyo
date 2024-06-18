@@ -13,7 +13,7 @@ type Props = {
 
 export const UserLibrarySidebarStatusSelect = ({ status, media }: Props) => {
   const { updateEntry } = useLibraryStore()
-  const { mutate } = api.libary.updateLibrary.useMutation()
+  const { mutate } = api.libraries.updateLibrary.useMutation()
 
   const handleSelectionChange = (selection: Selection) => {
     const selectedKey = SelectUtils.getSelectedKey(

@@ -2,34 +2,33 @@ import type { MediaChapter } from "@prisma/client"
 import type { BulkUpdateChaptersVolumesInput } from "@taiyomoe/schemas"
 import type {
   MediaChapterGroups,
-  MediaChapterLimited,
   MediaChapterNavigation,
   MediaLimitedChapter,
 } from "@taiyomoe/types"
 import { DateTime } from "luxon"
 import { env } from "../env"
 
-const getTitle = (mediaChapter: MediaLimitedChapter) => {
-  return mediaChapter.title ?? `Cap. ${mediaChapter.number}`
+const getTitle = (chapter: { title: string | null; number: number }) => {
+  return chapter.title ?? `Cap. ${chapter.number}`
 }
 
-const getUrl = (mediaChapter: { id: string }) => {
-  return `/chapter/${mediaChapter.id}/1`
+const getUrl = (chapter: { id: string }) => {
+  return `/chapter/${chapter.id}/1`
 }
 
 const getUploadEndpoint = () => `${env.NEXT_PUBLIC_IO_URL}/upload`
 
 const getNavigation = (
-  mediaChapter: MediaChapterLimited,
+  chapter: { pages: MediaChapter["pages"] },
   currentPage: number,
 ): MediaChapterNavigation => ({
   previousPage: currentPage === 1 ? null : currentPage - 1,
   currentPage,
-  nextPage: currentPage === mediaChapter.pages.length ? null : currentPage + 1,
+  nextPage: currentPage === chapter.pages.length ? null : currentPage + 1,
 })
 
-const getVolumes = (mediaChapters: { volume: number | null }[]) => {
-  const volumes = mediaChapters
+const getVolumes = (chapter: { volume: number | null }[]) => {
+  const volumes = chapter
     .map((c) => c.volume)
     .filter((v) => v !== null) as number[]
 
@@ -38,14 +37,14 @@ const getVolumes = (mediaChapters: { volume: number | null }[]) => {
 
 const getDuplicatedChapters = (
   input: BulkUpdateChaptersVolumesInput["volumes"],
-  mediaChapters: MediaChapter[],
+  chapters: MediaChapter[],
 ) => {
   const duplicated: number[] = []
 
   for (const volume of input) {
     for (const id of volume.ids) {
       if (input.some((v) => v !== volume && v.ids.includes(id))) {
-        duplicated.push(mediaChapters.find((c) => c.id === id)!.number)
+        duplicated.push(chapters.find((c) => c.id === id)!.number)
       }
     }
   }
@@ -55,20 +54,23 @@ const getDuplicatedChapters = (
   return duplicated
 }
 
-const getFromRange = (mediaChapters: MediaChapter[], range: number[]) => {
-  return mediaChapters.filter((c) => range.includes(c.number)).map((c) => c.id)
+const getFromRange = (
+  chapter: { id: string; number: number }[],
+  range: number[],
+) => {
+  return chapter.filter((c) => range.includes(c.number)).map((c) => c.id)
 }
 
-const computeUploadedTime = (mediaChapter: { createdAt: Date }) => {
-  const uploadedAt = DateTime.fromJSDate(mediaChapter.createdAt)
+const computeUploadedTime = (chapter: { createdAt: Date }) => {
+  const uploadedAt = DateTime.fromJSDate(chapter.createdAt)
 
   return uploadedAt.toRelative({ locale: "pt", style: "short" })
 }
 
-const computeVolumeGroups = (mediaChapters: MediaLimitedChapter[]) => {
+const computeVolumeGroups = (input: MediaLimitedChapter[]) => {
   const volumes: Record<string, MediaLimitedChapter[]> = {}
 
-  for (const mediaChapter of mediaChapters) {
+  for (const mediaChapter of input) {
     const volume = mediaChapter.volume ?? "null"
 
     if (!volumes[volume]) {
@@ -132,7 +134,7 @@ const parseUrl = (pathname: string) => {
   }
 }
 
-export const MediaChapterUtils = {
+export const ChapterUtils = {
   getTitle,
   getUrl,
   getUploadEndpoint,

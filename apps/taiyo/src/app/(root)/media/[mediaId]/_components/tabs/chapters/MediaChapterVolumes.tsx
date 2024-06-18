@@ -2,7 +2,7 @@ import { Accordion, AccordionItem } from "@nextui-org/accordion"
 import { Divider } from "@nextui-org/divider"
 import type { Selection } from "@nextui-org/react"
 import type { MediaLimitedChapterPagination } from "@taiyomoe/types"
-import { MediaChapterUtils } from "@taiyomoe/utils"
+import { ChapterUtils } from "@taiyomoe/utils"
 import { MediaChapterGroupCard } from "./MediaChapterGroupCard"
 import { MediaChaptersTabPagination } from "./MediaChaptersTabPagination"
 
@@ -18,7 +18,7 @@ export const MediaChapterVolumes = ({
   setSelectedKeys,
 }: Props) => {
   const { chapters, totalPages } = chaptersPagination
-  const computedVolumes = MediaChapterUtils.computeVolumeGroups(chapters)
+  const computedVolumes = ChapterUtils.computeVolumeGroups(chapters)
 
   return (
     <div>

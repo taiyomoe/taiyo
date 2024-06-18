@@ -1,5 +1,5 @@
 import type { MediaLimited } from "@taiyomoe/types"
-import { MediaCoverUtils } from "@taiyomoe/utils"
+import { CoverUtils } from "@taiyomoe/utils"
 import { MediaImage } from "~/components/generics/images/MediaImage"
 import { MediaLayoutLeftPanelTitle } from "./MediaLayoutLeftPanelTitle"
 
@@ -8,7 +8,7 @@ type Props = {
 }
 
 export const MediaLayoutLeftPanel = ({ media }: Props) => {
-  const coverUrl = MediaCoverUtils.getUrl(media)
+  const coverUrl = CoverUtils.getUrl(media)
 
   return (
     <section className="z-10 flex h-fit w-[250px] flex-col items-center gap-8 md:sticky md:top-[calc(var(--navbar-height)+36px)] lg:w-[300px]">

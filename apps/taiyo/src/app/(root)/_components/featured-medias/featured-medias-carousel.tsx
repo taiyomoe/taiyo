@@ -1,7 +1,7 @@
 "use client"
 
 import type { FeaturedMedia } from "@taiyomoe/types"
-import { MediaBannerUtils, MediaCoverUtils } from "@taiyomoe/utils"
+import { BannerUtils, CoverUtils } from "@taiyomoe/utils"
 import Autoplay from "embla-carousel-autoplay"
 import useEmblaCarousel from "embla-carousel-react"
 import Link from "next/link"
@@ -27,7 +27,7 @@ export const FeaturedMediasCarousel = ({ medias }: Props) => {
             className="mr-6 max-h-mediasBanner min-h-mediasBanner min-w-0 flex-[0_0_100%] last:mr-0 hover:cursor-pointer"
           >
             <MediaImage
-              src={MediaBannerUtils.getUrl(media)}
+              src={BannerUtils.getUrl(media)}
               classNames={{
                 wrapper: "h-full",
                 height: "h-full",
@@ -40,7 +40,7 @@ export const FeaturedMediasCarousel = ({ medias }: Props) => {
             />
             <div className="-mt-mediasBannerContent relative z-10 flex h-full max-h-mediasBannerContent gap-6 px-4 pt-2 pb-6">
               <MediaImage
-                src={MediaCoverUtils.getUrl(media)}
+                src={CoverUtils.getUrl(media)}
                 classNames={{
                   wrapper: "h-full z-10",
                   height: "h-full",

@@ -1,12 +1,12 @@
 import { Button } from "@nextui-org/button"
-import { MediaChapterService } from "@taiyomoe/services"
+import { ChaptersService } from "@taiyomoe/services"
 import { ArrowRightIcon } from "lucide-react"
 import { LatestReleasesLayoutButton } from "~/app/(root)/_components/latest-releases/latest-releases-layout-button"
 import { UnderlineButton } from "~/components/generics/buttons/underline-button"
 import { LatestReleasesLayout } from "./latest-releases-layout"
 
 export const LatestReleasesCategory = async () => {
-  const releases = await MediaChapterService.getLatest()
+  const releases = await ChaptersService.getLatest()
 
   return (
     <div className="flex grow flex-col gap-4">

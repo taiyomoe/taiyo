@@ -1,6 +1,6 @@
 import type { Languages } from "@taiyomoe/db"
 import type { MediasIndexItem } from "@taiyomoe/types"
-import { MediaCoverUtils, MediaUtils } from "@taiyomoe/utils"
+import { CoverUtils, MediaUtils } from "@taiyomoe/utils"
 import { CommandItem } from "cmdk"
 import Link from "next/link"
 import { MediaImage } from "~/components/generics/images/MediaImage"
@@ -23,7 +23,7 @@ export const MediasSearchResultsItem = (props: Props) => {
         onClick={toggleModal}
       >
         <MediaImage
-          src={MediaCoverUtils.getUrl({
+          src={CoverUtils.getUrl({
             id: item.id,
             coverId: item.mainCoverId,
           })}

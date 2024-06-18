@@ -1,5 +1,5 @@
 import { Chip } from "@nextui-org/chip"
-import { MediaTitleUtils } from "@taiyomoe/utils"
+import { TitleUtils } from "@taiyomoe/utils"
 import { useMemo } from "react"
 import { List } from "~/components/generics/List"
 import { Form } from "~/components/generics/form/form"
@@ -14,7 +14,7 @@ type Props = {
 export const UpdateMediaTitlesShowcase = ({ mediaId }: Props) => {
   const { titles } = useMediaUpdateStore()
 
-  const sortedTitles = useMemo(() => MediaTitleUtils.sort(titles), [titles])
+  const sortedTitles = useMemo(() => TitleUtils.sort(titles), [titles])
 
   return (
     <Form.Category

@@ -28,7 +28,7 @@ type Props = {
 }
 
 export const UpdateMediaTitleForm = ({ title }: Props) => {
-  const { mutateAsync } = api.mediaTitles.update.useMutation()
+  const { mutateAsync } = api.titles.update.useMutation()
   const initialValues = pick(title, [
     "id",
     "title",

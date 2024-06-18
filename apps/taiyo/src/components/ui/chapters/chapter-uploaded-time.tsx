@@ -1,6 +1,6 @@
 import { type VariantProps, tv } from "@nextui-org/react"
 import type {} from "@taiyomoe/types"
-import { MediaChapterUtils } from "@taiyomoe/utils"
+import { ChapterUtils } from "@taiyomoe/utils"
 import { ClockIcon } from "lucide-react"
 import { cn } from "~/lib/utils/cn"
 
@@ -38,7 +38,7 @@ export const ChapterUploadedTime = (props: Props) => {
     <div className={slots.base()}>
       <ClockIcon className={slots.icon({ className: classNames?.icon })} />
       <p className={cn(slots.text(), classNames?.text)}>
-        {MediaChapterUtils.computeUploadedTime(chapter)}
+        {ChapterUtils.computeUploadedTime(chapter)}
       </p>
     </div>
   )
