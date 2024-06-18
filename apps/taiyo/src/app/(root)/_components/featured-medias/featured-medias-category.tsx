@@ -1,3 +1,4 @@
+import { MediasService } from "@taiyomoe/services"
 import { FeaturedMediasCarousel } from "./featured-medias-carousel"
 
 export const FeaturedMediasCategory = async () => {
