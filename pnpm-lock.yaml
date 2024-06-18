@@ -148,14 +148,14 @@ importers:
         specifier: ^5.45.1
         version: 5.45.1(react@18.3.1)
       '@trpc/client':
-        specifier: 11.0.0-rc.403
-        version: 11.0.0-rc.403(@trpc/server@11.0.0-rc.403)
+        specifier: 11.0.0-rc.413
+        version: 11.0.0-rc.413(@trpc/server@11.0.0-rc.413)
       '@trpc/react-query':
-        specifier: 11.0.0-rc.403
-        version: 11.0.0-rc.403(@tanstack/react-query@5.45.1(react@18.3.1))(@trpc/client@11.0.0-rc.403(@trpc/server@11.0.0-rc.403))(@trpc/server@11.0.0-rc.403)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: 11.0.0-rc.413
+        version: 11.0.0-rc.413(@tanstack/react-query@5.45.1(react@18.3.1))(@trpc/client@11.0.0-rc.413(@trpc/server@11.0.0-rc.413))(@trpc/server@11.0.0-rc.413)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@trpc/server':
-        specifier: 11.0.0-rc.403
-        version: 11.0.0-rc.403
+        specifier: 11.0.0-rc.413
+        version: 11.0.0-rc.413
       apexcharts:
         specifier: ^3.49.1
         version: 3.49.1
@@ -489,8 +489,8 @@ importers:
         specifier: workspace:^0.1.0
         version: link:../utils
       '@trpc/server':
-        specifier: 11.0.0-rc.403
-        version: 11.0.0-rc.403
+        specifier: 11.0.0-rc.413
+        version: 11.0.0-rc.413
       accesscontrol:
         specifier: ^2.2.1
         version: 2.2.1
@@ -2840,22 +2840,22 @@ packages:
   '@total-typescript/ts-reset@0.5.1':
     resolution: {integrity: sha512-AqlrT8YA1o7Ff5wPfMOL0pvL+1X+sw60NN6CcOCqs658emD6RfiXhF7Gu9QcfKBH7ELY2nInLhKSCWVoNL70MQ==}
 
-  '@trpc/client@11.0.0-rc.403':
-    resolution: {integrity: sha512-4Elc4/PQI1H2Mpt3VWVINtYI8HhuPkvu/xowGDlHhYemmuvR3OqnE4H3I1XiPS9EXDOT397VadTJ5eGhQIZxPA==}
+  '@trpc/client@11.0.0-rc.413':
+    resolution: {integrity: sha512-+5WRP5gK2OLHWSCkNDkrEeO0EmLScytUPU0jhp3gdKrpyx1AkVqCXUDioofkNXCmQd/WNUrWF35tkVfY3kYwlQ==}
     peerDependencies:
-      '@trpc/server': 11.0.0-rc.403+ab71a1be6
+      '@trpc/server': 11.0.0-rc.413+87f0cbc94
 
-  '@trpc/react-query@11.0.0-rc.403':
-    resolution: {integrity: sha512-a4emDWo0EBTPULqzC92pJaJYTjM71GzdZfYcKYMxGMaevruUQAgmnXumeTkUUrj3QP6eszxVgolSu69Jw+iiSQ==}
+  '@trpc/react-query@11.0.0-rc.413':
+    resolution: {integrity: sha512-b+mmkhmdijEFa3vEoUwgpcq36ha7U5f/1w2RW/UQGMFrEJyZJn3lFQpEXQSvn23AEnE0ckDBJo+y/TDrleMCNQ==}
     peerDependencies:
       '@tanstack/react-query': ^5.40.0
-      '@trpc/client': 11.0.0-rc.403+ab71a1be6
-      '@trpc/server': 11.0.0-rc.403+ab71a1be6
+      '@trpc/client': 11.0.0-rc.413+87f0cbc94
+      '@trpc/server': 11.0.0-rc.413+87f0cbc94
       react: '>=18.2.0'
       react-dom: '>=18.2.0'
 
-  '@trpc/server@11.0.0-rc.403':
-    resolution: {integrity: sha512-DIt0GijW3nzq3zk9rFw1Ly/b6E9eTcsKV+caOMSeJl6A7Pby8QpdKaN8yJZDHhEojULeIVFNE4Izals5T0fQgg==}
+  '@trpc/server@11.0.0-rc.413':
+    resolution: {integrity: sha512-fQl7/69pSfk+7+Emm5eOCoAW6f2anxKV/3mUObQfFe0NLH0d4XwGyJuYV+sK7NBy1oit0Qwg12B0EXdsIryDuw==}
 
   '@tsconfig/node10@1.0.11':
     resolution: {integrity: sha512-DcRjDCujK/kCk/cUe8Xz8ZSpm8mS3mNNpta+jGCA6USEDfktlNvm1+IuZ9eTcDbNk41BHwpHHeW+N1lKCz4zOw==}
@@ -8422,19 +8422,19 @@ snapshots:
 
   '@total-typescript/ts-reset@0.5.1': {}
 
-  '@trpc/client@11.0.0-rc.403(@trpc/server@11.0.0-rc.403)':
+  '@trpc/client@11.0.0-rc.413(@trpc/server@11.0.0-rc.413)':
     dependencies:
-      '@trpc/server': 11.0.0-rc.403
+      '@trpc/server': 11.0.0-rc.413
 
-  '@trpc/react-query@11.0.0-rc.403(@tanstack/react-query@5.45.1(react@18.3.1))(@trpc/client@11.0.0-rc.403(@trpc/server@11.0.0-rc.403))(@trpc/server@11.0.0-rc.403)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@trpc/react-query@11.0.0-rc.413(@tanstack/react-query@5.45.1(react@18.3.1))(@trpc/client@11.0.0-rc.413(@trpc/server@11.0.0-rc.413))(@trpc/server@11.0.0-rc.413)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@tanstack/react-query': 5.45.1(react@18.3.1)
-      '@trpc/client': 11.0.0-rc.403(@trpc/server@11.0.0-rc.403)
-      '@trpc/server': 11.0.0-rc.403
+      '@trpc/client': 11.0.0-rc.413(@trpc/server@11.0.0-rc.413)
+      '@trpc/server': 11.0.0-rc.413
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
 
-  '@trpc/server@11.0.0-rc.403': {}
+  '@trpc/server@11.0.0-rc.413': {}
 
   '@tsconfig/node10@1.0.11': {}
 
