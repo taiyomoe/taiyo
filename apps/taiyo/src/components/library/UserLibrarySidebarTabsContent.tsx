@@ -19,7 +19,7 @@ type Props = {
 export const UserLibrarySidebarTabsContent = ({ status }: Props) => {
   const { addEntries, ...libraryStore } = useLibraryStore()
   const { data: session } = useSession()
-  const { data, isLoading } = api.libary.getLibrary.useQuery(
+  const { data, isLoading } = api.libraries.getLibrary.useQuery(
     {
       status,
       userId: session!.user.id,
