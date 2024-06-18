@@ -3,7 +3,7 @@
 import type { Selection } from "@nextui-org/react"
 import { Spinner } from "@nextui-org/spinner"
 import type { MediaLimited } from "@taiyomoe/types"
-import { MediaChapterUtils } from "@taiyomoe/utils"
+import { ChapterUtils } from "@taiyomoe/utils"
 import Image from "next/image"
 import { useEffect, useMemo, useState } from "react"
 import { useMediaNavigation } from "~/hooks/useMediaNavigation"
@@ -34,9 +34,9 @@ export const MediaLayoutChaptersTab = ({ media }: Props) => {
 
   const volumeKeys = useMemo(
     () =>
-      MediaChapterUtils.computeVolumeGroups(
-        chaptersPagination?.chapters ?? [],
-      ).map(({ volume }) => `volume-${volume}`),
+      ChapterUtils.computeVolumeGroups(chaptersPagination?.chapters ?? []).map(
+        ({ volume }) => `volume-${volume}`,
+      ),
     [chaptersPagination],
   )
 

@@ -2,7 +2,7 @@ import { Card, CardBody } from "@nextui-org/card"
 import type { Selection } from "@nextui-org/react"
 import { Select, SelectItem } from "@nextui-org/select"
 import type { MediaWithRelations } from "@taiyomoe/types"
-import { MediaCoverUtils } from "@taiyomoe/utils"
+import { CoverUtils } from "@taiyomoe/utils"
 import { useMemo, useState } from "react"
 import { SelectUtils } from "~/lib/utils/select.utils"
 import { useMediaUpdateStore } from "~/stores"
@@ -14,12 +14,9 @@ type Props = {
 
 export const UpdateCoverShowcase = ({ media }: Props) => {
   const { covers } = useMediaUpdateStore()
-  const volumes = useMemo(
-    () => MediaCoverUtils.computeVolumes(covers),
-    [covers],
-  )
+  const volumes = useMemo(() => CoverUtils.computeVolumes(covers), [covers])
 
-  const lowestVolumeNumber = MediaCoverUtils.getLowestVolumeNumber({ media })
+  const lowestVolumeNumber = CoverUtils.getLowestVolumeNumber({ media })
   const [values, setValues] = useState<Selection>(
     new Set([lowestVolumeNumber?.toString() ?? ""]),
   )
@@ -32,7 +29,7 @@ export const UpdateCoverShowcase = ({ media }: Props) => {
 
     if (selectedVolume) return selectedVolume
 
-    const lowestVolumeNum = MediaCoverUtils.getLowestVolumeNumber({ volumes })
+    const lowestVolumeNum = CoverUtils.getLowestVolumeNumber({ volumes })
     setValues(new Set([lowestVolumeNum?.toString() ?? ""]))
 
     return volumes.find((v) => v.number === lowestVolumeNum)

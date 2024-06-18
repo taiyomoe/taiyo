@@ -13,7 +13,7 @@ import type { MediaCover } from "@prisma/client"
 import type { UpdateCoverInput } from "@taiyomoe/schemas"
 import { updateCoverSchema } from "@taiyomoe/schemas"
 import type { MediaWithRelations } from "@taiyomoe/types"
-import { MediaCoverUtils, ObjectUtils } from "@taiyomoe/utils"
+import { CoverUtils, ObjectUtils } from "@taiyomoe/utils"
 import NextImage from "next/image"
 import { pick } from "radash"
 import { type SubmitHandler, useForm } from "react-hook-form"
@@ -73,7 +73,7 @@ export const UpdateCoverForm = ({ media, cover }: Props) => {
       <Image
         as={NextImage}
         className="h-[300px] min-w-[210px] rounded-small object-cover transition-all hover:cursor-pointer hover:opacity-80"
-        src={MediaCoverUtils.getUrl({ id: media.id, coverId: cover.id })}
+        src={CoverUtils.getUrl({ id: media.id, coverId: cover.id })}
         onClick={onOpen}
         height={300}
         width={210}
@@ -85,7 +85,7 @@ export const UpdateCoverForm = ({ media, cover }: Props) => {
             <ModalHeader>Modificar covar</ModalHeader>
             <ModalBody className="flex-row">
               <MediaImage
-                src={MediaCoverUtils.getUrl({
+                src={CoverUtils.getUrl({
                   id: media.id,
                   coverId: cover.id,
                 })}

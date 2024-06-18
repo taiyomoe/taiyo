@@ -1,7 +1,7 @@
 import { Card, CardBody } from "@nextui-org/card"
 import { useSession } from "@taiyomoe/auth/client"
 import type { MediaLimitedChapter } from "@taiyomoe/types"
-import { MediaChapterUtils } from "@taiyomoe/utils"
+import { ChapterUtils } from "@taiyomoe/utils"
 import Link from "next/link"
 import { useState } from "react"
 import { tv } from "tailwind-variants"
@@ -74,9 +74,9 @@ export const MediaChapterCardTemporary = ({ chapter, order }: Props) => {
                 completed={completed}
                 setCompleted={setCompleted}
               />
-              <Link href={MediaChapterUtils.getUrl(chapter)}>
+              <Link href={ChapterUtils.getUrl(chapter)}>
                 <p className={slots.title()}>
-                  {MediaChapterUtils.getTitle(chapter)}
+                  {ChapterUtils.getTitle(chapter)}
                 </p>
               </Link>
             </div>

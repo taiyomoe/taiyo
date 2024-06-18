@@ -2,7 +2,7 @@
 
 import { ScrollShadow } from "@nextui-org/scroll-shadow"
 import type { LatestMedia } from "@taiyomoe/types"
-import { MediaCoverUtils } from "@taiyomoe/utils"
+import { CoverUtils } from "@taiyomoe/utils"
 import useEmblaCarousel from "embla-carousel-react"
 import Link from "next/link"
 import { MediaImage } from "~/components/generics/images/MediaImage"
@@ -28,7 +28,7 @@ export const LatestMediasCarousel = ({ medias }: Props) => {
             className="relative mr-6 max-h-[300px] min-h-[300px] w-fit last:mr-0 hover:cursor-pointer"
           >
             <MediaImage
-              src={MediaCoverUtils.getUrl(media)}
+              src={CoverUtils.getUrl(media)}
               classNames={{
                 height: "min-h-[300px] h-[300px]",
                 width: "min-w-[210px] w-[210px]",

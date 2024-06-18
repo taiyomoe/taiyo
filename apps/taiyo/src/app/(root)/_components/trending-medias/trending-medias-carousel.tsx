@@ -2,7 +2,7 @@
 
 import { ScrollShadow } from "@nextui-org/react"
 import type { LatestMedia } from "@taiyomoe/types"
-import { MediaCoverUtils } from "@taiyomoe/utils"
+import { CoverUtils } from "@taiyomoe/utils"
 import useEmblaCarousel from "embla-carousel-react"
 import { useAtomValue } from "jotai"
 import Link from "next/link"
@@ -69,7 +69,7 @@ export const TrendingMediasCarousel = ({ medias }: Props) => {
             )}
           >
             <MediaImage
-              src={MediaCoverUtils.getUrl(media)}
+              src={CoverUtils.getUrl(media)}
               classNames={{
                 height: "h-[400px] lg:h-[498px]",
                 width: "w-[280px] lg:w-[350px]",

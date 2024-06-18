@@ -1,5 +1,5 @@
 import type { LatestRelease } from "@taiyomoe/types"
-import { MediaChapterUtils, MediaCoverUtils, MediaUtils } from "@taiyomoe/utils"
+import { ChapterUtils, CoverUtils, MediaUtils } from "@taiyomoe/utils"
 import Link from "next/link"
 import { MediaImage } from "~/components/generics/images/MediaImage"
 import { ChapterScansListHorizontal } from "~/components/ui/chapters/chapter-scans-list-horizontal"
@@ -15,13 +15,13 @@ type Props = {
 export const ReleaseCardRow = ({ release, index }: Props) => (
   <Link
     id={`release-card-${index}`}
-    href={MediaChapterUtils.getUrl(release)}
+    href={ChapterUtils.getUrl(release)}
     className="flex gap-2 rounded-small bg-content1 transition-background hover:bg-content2"
   >
     <object className="inline-table">
       <Link href={MediaUtils.getUrl(release.media)} className="min-w-fit">
         <MediaImage
-          src={MediaCoverUtils.getUrl(release.media)}
+          src={CoverUtils.getUrl(release.media)}
           classNames={{
             height: "min-h-[80px] h-[80px]",
             width: "min-w-[56px] w-[56px]",

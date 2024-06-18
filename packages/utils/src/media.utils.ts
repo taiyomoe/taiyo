@@ -1,12 +1,15 @@
 import type { Languages, MediaTitle } from "@prisma/client"
-import type { MediaLimited } from "@taiyomoe/types"
 import { env } from "../env"
-import { MediaCoverUtils } from "./mediaCover.utils"
+import { CoverUtils } from "./cover.utils"
 
 const getUrl = (media: { id: string }) => `/media/${media.id}`
 
-const getBannerOrCoverUrl = (media: MediaLimited) => {
-  if (!media.bannerId) return MediaCoverUtils.getUrl(media)
+const getBannerOrCoverUrl = (media: {
+  id: string
+  coverId: string
+  bannerId: string
+}) => {
+  if (!media.bannerId) return CoverUtils.getUrl(media)
 
   return `${env.NEXT_PUBLIC_CDN_URL}/medias/${media.id}/banners/${media.bannerId}.jpg`
 }
