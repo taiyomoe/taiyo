@@ -34,7 +34,7 @@
   "devDependencies": {
     "@taiyomoe/tsconfig": "workspace:^0.1.0",
     "@taiyomoe/types": "workspace:^0.1.0",
-    "@types/node": "^20.14.5",
+    "@types/node": "^20.14.6",
     "typescript": "^5.4.5"
   }
 }
