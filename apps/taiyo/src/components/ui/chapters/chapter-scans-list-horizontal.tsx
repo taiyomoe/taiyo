@@ -6,6 +6,7 @@ import Link from "next/link"
 import { debounce } from "radash"
 import { cache, useEffect, useRef, useState } from "react"
 import Marquee from "react-fast-marquee"
+import { useEventListener } from "usehooks-ts"
 
 type Props = {
   chapter: { scans: { id: string; name: string }[] }
@@ -82,12 +83,10 @@ export const ChapterScansListHorizontal = (props: Props) => {
   })
 
   useEffect(() => {
-    window.addEventListener("resize", computeMarqueeWidth)
-
-    return () => {
-      window.removeEventListener("resize", computeMarqueeWidth)
-    }
+    computeMarqueeWidth()
   }, [computeMarqueeWidth])
+
+  useEventListener("resize", computeMarqueeWidth)
 
   // This should return an empty element so it doesn't break the grid
   if (!scans.length) return <div />
