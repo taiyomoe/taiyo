@@ -2,6 +2,7 @@ import { sessionSchema } from "@taiyomoe/schemas"
 import type { ForgedPermission } from "@taiyomoe/types"
 import { PermissionUtils } from "@taiyomoe/utils"
 import { Elysia } from "elysia"
+import { env } from "../env"
 import { UnauthorizedError } from "../utils/errors"
 
 export const authMiddleware = (perms: ForgedPermission[] = []) =>
@@ -14,7 +15,7 @@ export const authMiddleware = (perms: ForgedPermission[] = []) =>
         throw new UnauthorizedError()
       }
 
-      const session = await fetch("http://localhost:3000/api/auth/session", {
+      const session = await fetch(`${env.NEXTAUTH_URL}/api/auth/session`, {
         headers: { Cookie: cookies },
       })
         .then(async (res) => {
