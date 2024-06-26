@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@elysiajs/cors": "^1.0.2",
-    "@elysiajs/stream": "^1.0.2",
+    "@elysiajs/stream": "^1.0.3",
     "@elysiajs/swagger": "^1.0.5",
     "@t3-oss/env-core": "^0.10.1",
     "@taiyomoe/constants": "workspace:^0.1.0",
