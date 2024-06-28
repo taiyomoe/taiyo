@@ -1,6 +1,7 @@
 import type { Media, MediaChapter, MediaCover } from "@taiyomoe/db"
 import { HttpError } from "@taiyomoe/image-orchestrator"
 import type { ImportMediaEventMessage } from "@taiyomoe/types"
+import { env } from "~/lib/env.mjs"
 
 export const handleErrors = (defaultMessage: string) => (err: unknown) =>
   err instanceof HttpError ? err.message : defaultMessage
@@ -40,7 +41,7 @@ const createClient =
       formData.append(key, transformValue(value))
     }
 
-    const res = await fetch(`http://localhost:4000/v3/${path}`, {
+    const res = await fetch(`${env.NEXT_PUBLIC_IO_URL}/${path}`, {
       method: "POST",
       body: formData,
       credentials: "include",
@@ -79,7 +80,7 @@ const createSseClient =
   ) => {
     const searchParams = new URLSearchParams(data).toString()
     const source = new EventSource(
-      `http://localhost:4000/v3/${path}?${searchParams}`,
+      `${env.NEXT_PUBLIC_IO_URL}/${path}?${searchParams}`,
       { withCredentials: true },
     )
 
