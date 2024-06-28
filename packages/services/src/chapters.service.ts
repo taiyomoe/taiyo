@@ -11,73 +11,26 @@ import type {
   RawLatestReleaseGrouped,
 } from "@taiyomoe/types"
 import { MediaUtils } from "@taiyomoe/utils"
+import { formatRawLatestReleases, latestReleaseQuery } from "./utils"
 
-const getLatest = async (preferredTitles: Languages = "en") => {
+const getLatest = async (preferredTitles?: Languages) => {
   const cacheController = cacheClient.chapters.latest
   const cached = await cacheController.get()
 
-  const formatRaw = (input: RawLatestRelease[]) =>
-    input.map(({ media, ...r }) => ({
-      ...r,
-      media: {
-        id: media.id,
-        coverId: media.coverId,
-        mainTitle: MediaUtils.getMainTitle(media.titles, preferredTitles),
-      },
-    }))
-
   if (cached) {
-    return formatRaw(cached)
+    return formatRawLatestReleases(cached, preferredTitles)
   }
 
-  const result = await db.mediaChapter.findMany({
+  const result: RawLatestRelease[] = await db.mediaChapter.findMany({
     take: 30,
     where: { deletedAt: null },
     orderBy: { createdAt: "desc" },
-    select: {
-      id: true,
-      createdAt: true,
-      number: true,
-      volume: true,
-      title: true,
-      media: {
-        select: {
-          id: true,
-          covers: {
-            select: { id: true },
-            where: { isMainCover: true },
-            take: 1,
-          },
-          titles: {
-            select: {
-              title: true,
-              language: true,
-              priority: true,
-              isAcronym: true,
-              isMainTitle: true,
-            },
-            where: { deletedAt: null },
-          },
-        },
-      },
-      uploader: { select: { id: true, name: true } },
-      scans: { select: { id: true, name: true } },
-    },
+    select: latestReleaseQuery,
   })
-  const rawLatestReleases: RawLatestRelease[] = result.map(
-    ({ media, ...r }) => ({
-      ...r,
-      media: {
-        id: media.id,
-        coverId: media.covers.at(0)!.id,
-        titles: media.titles,
-      },
-    }),
-  )
 
-  void cacheController.set(rawLatestReleases)
+  void cacheController.set(result)
 
-  return formatRaw(rawLatestReleases)
+  return formatRawLatestReleases(result, preferredTitles)
 }
 
 const getLatestGrouped = async (

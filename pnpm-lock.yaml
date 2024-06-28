@@ -38,6 +38,9 @@ importers:
       '@t3-oss/env-core':
         specifier: ^0.10.1
         version: 0.10.1(typescript@5.5.2)(zod@3.23.8)
+      '@taiyomoe/cache':
+        specifier: workspace:^0.1.0
+        version: link:../../packages/cache
       '@taiyomoe/constants':
         specifier: workspace:^0.1.0
         version: link:../../packages/constants
@@ -53,6 +56,9 @@ importers:
       '@taiyomoe/schemas':
         specifier: workspace:^0.1.0
         version: link:../../packages/schemas
+      '@taiyomoe/services':
+        specifier: workspace:^0.1.0
+        version: link:../../packages/services
       '@taiyomoe/utils':
         specifier: workspace:^0.1.0
         version: link:../../packages/utils

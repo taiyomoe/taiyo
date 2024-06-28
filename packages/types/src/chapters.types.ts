@@ -20,7 +20,7 @@ export type RawLatestRelease = {
   title: MediaChapter["title"]
   media: {
     id: Media["id"]
-    coverId: MediaCover["id"]
+    covers: { id: MediaCover["id"] }[]
     titles: Pick<
       MediaTitle,
       "title" | "language" | "priority" | "isAcronym" | "isMainTitle"
@@ -31,7 +31,10 @@ export type RawLatestRelease = {
 }
 
 export type LatestRelease = Omit<RawLatestRelease, "media"> & {
-  media: Omit<RawLatestRelease["media"], "titles"> & { mainTitle: string }
+  media: Omit<RawLatestRelease["media"], "titles" | "covers"> & {
+    coverId: string
+    mainTitle: string
+  }
 }
 
 export type RawLatestReleaseGrouped = {
