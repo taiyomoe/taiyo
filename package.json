@@ -20,6 +20,6 @@
     "@turbo/gen": "^1.13.4",
     "@types/global-types": "workspace:^0.1.0",
     "turbo": "^1.13.4",
-    "typescript": "^5.5.2"
+    "typescript": "^5.5.3"
   }
 }
