@@ -29,6 +29,6 @@
     "cross-env": "^7.0.3",
     "prisma": "^5.16.1",
     "tsx": "^4.16.0",
-    "typescript": "^5.5.2"
+    "typescript": "^5.5.3"
   }
 }
