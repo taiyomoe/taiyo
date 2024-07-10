@@ -66,8 +66,8 @@ importers:
         specifier: ^1.0.27
         version: 1.0.27(@sinclair/typebox@0.32.33)(openapi-types@12.1.3)(typescript@5.5.3)
       file-type:
-        specifier: ^19.1.0
-        version: 19.1.0
+        specifier: ^19.1.1
+        version: 19.1.1
       mangadex-full-api:
         specifier: ^5.12.1
         version: 5.12.1
@@ -3448,8 +3448,8 @@ packages:
     resolution: {integrity: sha512-QlZ5yJC0VxHxQQsQhXvBaC7VRJ2uaxTf+Tfpu4Z/OcVQJVpZO+DGU0rkoVW5ce2SccxugvpBJoMvUs59iILYdw==}
     engines: {node: '>= 12'}
 
-  file-type@19.1.0:
-    resolution: {integrity: sha512-5rzeC2/GeStiAlYCenfrbKrQCiEzJTetCExFinFCH1UUz1XL7NlxRpLTwdWXzlVhLReRrWkfkNCH1Ap5zqOXtg==}
+  file-type@19.1.1:
+    resolution: {integrity: sha512-FF4rVPjylL7HkybFBpnBfcnpdi4MGNSFuk4s4VvTdt1wm9tVMdGmtBhvXyz+nh8565FJ5qDUMIPXR+WHLrfHew==}
     engines: {node: '>=18'}
 
   fill-range@7.1.1:
@@ -9097,7 +9097,7 @@ snapshots:
     dependencies:
       tslib: 2.6.3
 
-  file-type@19.1.0:
+  file-type@19.1.1:
     dependencies:
       strtok3: 7.1.0
       token-types: 6.0.0
