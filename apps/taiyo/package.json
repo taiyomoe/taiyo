@@ -29,7 +29,7 @@
     "@taiyomoe/trpc": "workspace:^0.1.0",
     "@taiyomoe/tsconfig": "workspace:^0.1.0",
     "@taiyomoe/utils": "workspace:^0.1.0",
-    "@tanstack/react-query": "^5.50.1",
+    "@tanstack/react-query": "^5.51.1",
     "@trpc/client": "11.0.0-rc.456",
     "@trpc/react-query": "11.0.0-rc.456",
     "@trpc/server": "11.0.0-rc.456",
