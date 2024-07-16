@@ -30,8 +30,8 @@ importers:
         specifier: ^1.1.0
         version: 1.1.0(elysia@1.0.27(@sinclair/typebox@0.32.33)(openapi-types@12.1.3)(typescript@5.5.3))
       '@elysiajs/stream':
-        specifier: ^1.0.3
-        version: 1.0.3(elysia@1.0.27(@sinclair/typebox@0.32.33)(openapi-types@12.1.3)(typescript@5.5.3))
+        specifier: ^1.1.0
+        version: 1.1.0(elysia@1.0.27(@sinclair/typebox@0.32.33)(openapi-types@12.1.3)(typescript@5.5.3))
       '@elysiajs/swagger':
         specifier: ^1.0.5
         version: 1.0.5(elysia@1.0.27(@sinclair/typebox@0.32.33)(openapi-types@12.1.3)(typescript@5.5.3))
@@ -964,10 +964,10 @@ packages:
     peerDependencies:
       elysia: '>= 1.1.0'
 
-  '@elysiajs/stream@1.0.3':
-    resolution: {integrity: sha512-P9Cq6iLyFjlTWkdkKm6zWtASAIWVPgTH+RMKb2TwXTGzd83WiWhZsnbiA35tScgqUZpgG32EsUz/RkCt7nHHsQ==}
+  '@elysiajs/stream@1.1.0':
+    resolution: {integrity: sha512-n95wLadSWTx+q1MR+sp9h3a5OdRcJX/LLXhF3PJskIbZ7dGINho74JFLrT/Ixkal9bgA612JHFgCh6MSLVD5sA==}
     peerDependencies:
-      elysia: '>= 1.0.2'
+      elysia: '>= 1.1.0'
 
   '@elysiajs/swagger@1.0.5':
     resolution: {integrity: sha512-DEy5iwLMiathyRcCteJYrK+VITiDODQPt4ahKC0Qyqg09Yuo0JKz7/nBGTbm1ogmfdzCopgLxB1QcWore1C1/A==}
@@ -5651,7 +5651,7 @@ snapshots:
     dependencies:
       elysia: 1.0.27(@sinclair/typebox@0.32.33)(openapi-types@12.1.3)(typescript@5.5.3)
 
-  '@elysiajs/stream@1.0.3(elysia@1.0.27(@sinclair/typebox@0.32.33)(openapi-types@12.1.3)(typescript@5.5.3))':
+  '@elysiajs/stream@1.1.0(elysia@1.0.27(@sinclair/typebox@0.32.33)(openapi-types@12.1.3)(typescript@5.5.3))':
     dependencies:
       elysia: 1.0.27(@sinclair/typebox@0.32.33)(openapi-types@12.1.3)(typescript@5.5.3)
       nanoid: 5.0.7
