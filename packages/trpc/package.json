@@ -19,7 +19,7 @@
     "@taiyomoe/schemas": "workspace:^0.1.0",
     "@taiyomoe/services": "workspace:^0.1.0",
     "@taiyomoe/utils": "workspace:^0.1.0",
-    "@trpc/server": "11.0.0-rc.461",
+    "@trpc/server": "11.0.0-rc.465",
     "accesscontrol": "^2.2.1",
     "superjson": "^2.2.1"
   },
