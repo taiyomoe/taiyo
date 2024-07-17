@@ -4,6 +4,7 @@ import type { ButtonProps } from "@nextui-org/button"
 import { Spinner } from "@nextui-org/spinner"
 import { useControlledState } from "@react-stately/utils"
 import { LazyMotion, domAnimation, m } from "framer-motion"
+import { PlusIcon } from "lucide-react"
 import type { ComponentProps } from "react"
 import React from "react"
 import { cn } from "~/lib/utils/cn"
@@ -13,6 +14,7 @@ export type VerticalStepProps = {
   description?: React.ReactNode
   title?: React.ReactNode
   shouldLoad?: boolean
+  hasError?: boolean
 }
 
 export interface VerticalStepsProps
@@ -112,6 +114,8 @@ const VerticalSteps = React.forwardRef<HTMLButtonElement, VerticalStepsProps>(
         "[--complete-border-color:var(--step-color)]",
         "[--inactive-border-color:hsl(var(--nextui-default-300))]",
         "[--inactive-color:hsl(var(--nextui-default-300))]",
+        "[--error-border-color:hsl(var(--nextui-danger))]",
+        "[--error-color:hsl(var(--nextui-danger))]",
       ]
 
       switch (color) {
@@ -158,8 +162,10 @@ const VerticalSteps = React.forwardRef<HTMLButtonElement, VerticalStepsProps>(
         <ol className={cn("flex flex-col gap-y-8", colors, className)}>
           {steps?.map((step, stepIdx) => {
             const shouldLoad = step.shouldLoad ?? true
-            const status =
-              currentStep === stepIdx
+            const hasError = step.hasError ?? false
+            const status = hasError
+              ? "error"
+              : currentStep === stepIdx && shouldLoad
                 ? "active"
                 : currentStep < stepIdx
                   ? "inactive"
@@ -175,7 +181,7 @@ const VerticalSteps = React.forwardRef<HTMLButtonElement, VerticalStepsProps>(
                     ref={ref}
                     aria-current={status === "active" ? "step" : undefined}
                     className={cn(
-                      "group flex w-full items-start justify-center gap-4 rounded-large",
+                      "flex w-full items-start justify-center gap-4 rounded-large",
                       stepClassName,
                     )}
                     {...props}
@@ -208,10 +214,18 @@ const VerticalSteps = React.forwardRef<HTMLButtonElement, VerticalStepsProps>(
                                   "var(--complete-background-color)",
                                 borderColor: "var(--complete-border-color)",
                               },
+                              error: {
+                                backgroundColor: "transparent",
+                                borderColor: "var(--error-border-color)",
+                                color: "var(--error-color)",
+                              },
                             }}
                           >
                             <div className="flex items-center justify-center">
-                              {status === "active" && shouldLoad && (
+                              {status === "error" && (
+                                <PlusIcon className="h-6 w-6 rotate-45 text-[var(--error-color)]" />
+                              )}
+                              {status === "active" && (
                                 <Spinner size="sm" color="warning" />
                               )}
                               {status === "complete" && (
@@ -244,16 +258,14 @@ const VerticalSteps = React.forwardRef<HTMLButtonElement, VerticalStepsProps>(
                     </div>
                     <div className="flex grow flex-col gap-4 text-left">
                       <div
-                        className={cn(
-                          "font-semibold text-2xl text-default-foreground transition-[color,opacity] duration-300 group-active:opacity-70",
-                          { "text-default-500": status === "inactive" },
-                        )}
+                        className="font-semibold text-2xl text-default-foreground transition-[color] duration-300 data-[status=error]:text-[var(--error-color)] data-[status=inactive]:text-default-500"
+                        data-status={status}
                       >
                         {step.title}
                       </div>
                       <div
                         className={cn(
-                          "space-y-1 text-default-600 transition-[color,opacity] duration-300 group-active:opacity-70",
+                          "space-y-1 text-default-600 transition-[color] duration-300",
                           { "text-default-500": status === "inactive" },
                         )}
                       >

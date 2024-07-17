@@ -1,40 +1,33 @@
 import { Spinner } from "@nextui-org/spinner"
-import { useAtomValue } from "jotai"
 import { CheckIcon } from "lucide-react"
+import { group, mapValues } from "radash"
 import { useMemo } from "react"
-import { importMediaMessagesAtom } from "~/atoms/importMedia.atoms"
+import { useImportMediaStore } from "~/stores/importMedia.store"
 
 type Props = {
   stepIndex: number
 }
 
 export const ImportMediaCoversStepDescription = ({ stepIndex }: Props) => {
-  const messages = useAtomValue(importMediaMessagesAtom)[stepIndex] ?? []
+  const { messages } = useImportMediaStore()
   const latestUpdates = useMemo(() => {
-    const hashMap = new Map<
-      string,
-      (typeof messages)[number] & { index: number }
-    >()
+    const filtered = messages.filter((m) => m.step === stepIndex)
+    const grouped = group(filtered, (m) => m.itemIndex)
+    const mapped = mapValues(
+      grouped,
+      (m) =>
+        m!.sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime()).pop()!,
+    )
 
-    for (const [i, msg] of messages.entries()) {
-      const match = msg.content.match(/cover (\d+)\/\d+/i)
-
-      if (match) {
-        const coverNumber = match[1]!
-
-        hashMap.set(coverNumber, { ...msg, index: i })
-      }
-    }
-
-    return Array.from(hashMap.values()).sort((a, b) => a.index - b.index)
-  }, [messages])
+    return Object.values(mapped)
+  }, [stepIndex, messages])
 
   if (!messages.length) return null
 
   return (
     <>
       {latestUpdates.map((msg) => (
-        <div key={msg.index} className="flex gap-2">
+        <div key={msg.itemIndex} className="flex gap-2">
           {msg.type === "ongoing" && (
             <Spinner size="sm" className="min-w-[24px]" />
           )}

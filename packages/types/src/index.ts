@@ -1,5 +1,6 @@
 export * from "./chapters.types"
 export * from "./common.types"
+export * from "./io.types"
 export * from "./library.types"
 export * from "./md.types"
 export * from "./media.types"

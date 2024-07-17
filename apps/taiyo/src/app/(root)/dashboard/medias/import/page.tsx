@@ -1,20 +1,31 @@
 "use client"
 
-import { useAtomValue } from "jotai"
-import {
-  importMediaCurrentStepAtom,
-  importMediaMessagesAtom,
-} from "~/atoms/importMedia.atoms"
 import { ImportMediaForm } from "~/components/forms/medias/import/import-media-form"
 import VerticalSteps from "~/components/ui/vertical-steps"
+import { useImportMediaStore } from "~/stores/importMedia.store"
 import { ImportMediaCoversStepDescription } from "./_components/import-media-covers-step-description"
 
 export default function Page() {
-  const currentStep = useAtomValue(importMediaCurrentStepAtom)
-  const messages = useAtomValue(importMediaMessagesAtom)
+  const { currentStep, downloadChapters, messages } = useImportMediaStore()
 
-  const getLatestMessage = (stepIndex: number) => {
-    return messages[stepIndex]?.at(-1)?.content
+  const generateStep = (
+    stepIndex: number,
+    defaultMessage: string,
+    description?: React.ReactNode,
+  ) => {
+    const message = messages
+      .filter((m) => m.step === stepIndex)
+      .sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime())
+      .pop()
+
+    if (!message || message.type === "error")
+      return {
+        title: defaultMessage,
+        hasError: message?.type === "error",
+        description,
+      }
+
+    return { title: message.content, hasError: false, description }
   }
 
   return (
@@ -26,14 +37,33 @@ export default function Page() {
           description: <ImportMediaForm />,
           shouldLoad: false,
         },
-        { title: getLatestMessage(1) ?? "Recuperar as informações da obra" },
-        { title: getLatestMessage(2) ?? "Criar a página da obra" },
-        {
-          title: getLatestMessage(3) ?? "Upar as covers",
-          description: <ImportMediaCoversStepDescription stepIndex={3} />,
-        },
-        { title: getLatestMessage(4) ?? "Reindexar a obra" },
-      ]}
+        generateStep(1, "Recuperar as informações da obra"),
+        generateStep(2, "Criar a página da obra"),
+        generateStep(
+          3,
+          "Upar as covers",
+          <ImportMediaCoversStepDescription stepIndex={3} />,
+        ),
+        generateStep(4, "Reindexar a busca da obra"),
+      ].concat(
+        downloadChapters
+          ? [
+              generateStep(5, "Recuperar os capítulos"),
+              generateStep(6, "Recuperar as scans"),
+              generateStep(
+                7,
+                "Criar as scans (se necessário)",
+                <ImportMediaCoversStepDescription stepIndex={7} />,
+              ),
+              generateStep(8, "Reindexar a busca das scans (se necessário)"),
+              generateStep(
+                9,
+                "Upar os capítulos (se houver)",
+                <ImportMediaCoversStepDescription stepIndex={9} />,
+              ),
+            ]
+          : [],
+      )}
     />
   )
 }

@@ -13,6 +13,7 @@ import {
   DuplicatedMediaTrackerError,
   MediaTrackerNotFoundError,
 } from "../utils/errors"
+import { sendStream } from "../utils/streams"
 import { MediaChaptersService } from "./mediaChapters.service"
 import { MediaCoversService } from "./mediaCovers.service"
 import { MediasService } from "./medias.service"
@@ -34,33 +35,21 @@ const importFn = async (
   { mdId, downloadChapters }: ImportMediaInput,
   creatorId: string,
 ) => {
+  const s = sendStream(stream)
   const existingMedia = await getById(mdId).catch(() => null)
 
   if (existingMedia) {
     throw new DuplicatedMediaTrackerError(existingMedia.id, "MANGADEX")
   }
 
-  stream.send({
-    step: 1,
-    content: "Recuperando as informações da obra...",
-    type: "ongoing",
-  })
+  s(1, "Recuperando as informações da obra", "ongoing")
 
   const manga = await Manga.get(mdId)
   const covers = await manga.getCovers()
   const mainCover = await manga.mainCover.resolve()
 
-  stream.send({
-    step: 1,
-    content: "Informações recuperadas",
-    type: "success",
-  })
-
-  stream.send({
-    step: 2,
-    content: "Criando a obra...",
-    type: "ongoing",
-  })
+  s(1, "Informações recuperadas", "success")
+  s(2, "Criando a obra...", "ongoing")
 
   const { genres, tags, isOneShot } = MdUtils.getGenresAndTags(manga)
   const titles = MdUtils.getTitles(manga)
@@ -100,11 +89,7 @@ const importFn = async (
     },
   })
 
-  stream.send({
-    step: 2,
-    content: "Obra criada",
-    type: "success",
-  })
+  s(2, "Obra criada", "success")
 
   for (const [i, cover] of covers.entries()) {
     const coverLanguage = MdUtils.getLanguage(cover.locale)
@@ -117,27 +102,12 @@ const importFn = async (
       media.id,
       cover.imageSource,
       {
-        onDownloadStart: () => {
-          stream.send({
-            step: 3,
-            content: `Baixando a cover ${i + 1}/${covers.length}...`,
-            type: "ongoing",
-          })
-        },
-        onUploadStart: () => {
-          stream.send({
-            step: 3,
-            content: `Upando a cover ${i + 1}/${covers.length}...`,
-            type: "ongoing",
-          })
-        },
-        onUploadEnd: () => {
-          stream.send({
-            step: 3,
-            content: `Cover ${i + 1}/${covers.length} upada`,
-            type: "success",
-          })
-        },
+        onDownloadStart: () =>
+          s(3, `Baixando a cover ${i + 1}/${covers.length}...`, "ongoing", i),
+        onUploadStart: () =>
+          s(3, `Upando a cover ${i + 1}/${covers.length}...`, "ongoing", i),
+        onUploadEnd: () =>
+          s(3, `Cover ${i + 1}/${covers.length} upada`, "success", i),
       },
     )
 
@@ -155,36 +125,19 @@ const importFn = async (
     })
   }
 
-  stream.send({
-    step: 3,
-    content: "Covers upadas",
-    type: "success",
-  })
-
-  stream.send({
-    step: 4,
-    content: "Reindexando a busca...",
-    type: "ongoing",
-  })
+  s(3, "Covers upadas", "success")
+  s(4, "Reindexando a busca...", "ongoing")
 
   const mediaIndexItem = await getMediaIndexItem(db, media.id)
   await meilisearchIndexes.medias.updateDocuments([mediaIndexItem])
 
-  stream.send({
-    step: 4,
-    content: "Busca reindexada",
-    type: "success",
-  })
+  s(4, "Busca reindexada", "success")
 
   if (!downloadChapters) {
     return
   }
 
-  stream.send({
-    step: 5,
-    content: "Recuperando os capítulos...",
-    type: "ongoing",
-  })
+  s(5, "Recuperando os capítulos...", "ongoing")
 
   const chapters = await manga.getFeed({
     // biome-ignore lint/style/useNumberNamespace: Number.Infinity is not allowed
@@ -193,17 +146,8 @@ const importFn = async (
     order: { chapter: "asc" },
   })
 
-  stream.send({
-    step: 5,
-    content: "Capítulos recuperados",
-    type: "success",
-  })
-
-  stream.send({
-    step: 6,
-    content: "Recuperando as scans de todos os capítulos...",
-    type: "ongoing",
-  })
+  s(5, "Capítulos recuperados", "success")
+  s(6, "Recuperando as scans de todos os capítulos...", "ongoing")
 
   const groupsIds = [
     ...new Set(
@@ -213,18 +157,16 @@ const importFn = async (
   const groups = await Group.getMultiple(...groupsIds)
   const scans: Scan[] = []
 
-  for (const group of groups) {
+  s(6, "Scans recuperadas", "success")
+
+  for (const [i, group] of groups.entries()) {
     const result = await db.scan.findFirst({ where: { name: group.name } })
 
     if (result) {
       continue
     }
 
-    stream.send({
-      step: 6,
-      content: `Criando a scan '${group.name}'...`,
-      type: "ongoing",
-    })
+    s(7, `Criando a scan '${group.name}'...`, "ongoing", i)
 
     const scan = await db.scan.create({
       data: {
@@ -240,49 +182,30 @@ const importFn = async (
 
     scans.push(scan)
 
-    stream.send({
-      step: 6,
-      content: `Scan '${group.name}' criada`,
-      type: "success",
-    })
+    s(7, `Scan '${group.name}' criada`, "success", i)
   }
 
   if (scans.length) {
-    stream.send({
-      step: 7,
-      content: "Reindexando a busca das scans...",
-      type: "ongoing",
-    })
+    s(7, "Scans criadas", "success")
+    s(8, "Reindexando a busca das scans...", "ongoing")
 
     const scansIndexItems = await parallel(10, scans, ({ id }) =>
       getScanIndexItem(db, id),
     )
     await meilisearchIndexes.scans.updateDocuments(scansIndexItems)
 
-    stream.send({
-      step: 7,
-      content: "Busca das scans reindexada",
-      type: "success",
-    })
+    s(8, "Busca das scans reindexada", "success")
   }
 
-  for (const chapter of chapters) {
-    stream.send({
-      step: 8,
-      content: `Baixando o capítulo ${chapter.chapter}...`,
-      type: "ongoing",
-    })
+  for (const [i, chapter] of chapters.entries()) {
+    s(9, `Baixando o capítulo ${chapter.chapter}...`, "ongoing", i)
 
     const pagesUrls = await chapter.getReadablePages()
     const pages = await parallel(10, pagesUrls, (url) =>
       fetch(url).then((r) => r.blob()),
     )
 
-    stream.send({
-      step: 8,
-      content: `Upando o capítulo ${chapter.chapter}...`,
-      type: "ongoing",
-    })
+    s(9, `Upando o capítulo ${chapter.chapter}...`, "ongoing", i)
 
     const uploaded = await MediaChaptersService.upload(media.id, pages)
 
@@ -304,19 +227,11 @@ const importFn = async (
       creatorId,
     )
 
-    stream.send({
-      step: 8,
-      content: `Capítulo ${chapter.chapter} upado`,
-      type: "success",
-    })
+    s(9, `Capítulo ${chapter.chapter} upado`, "success", i)
   }
 
   if (chapters.length) {
-    stream.send({
-      step: 8,
-      content: "Capítulos upados.",
-      type: "success",
-    })
+    s(9, "Capítulos upados", "success")
   }
 }
 

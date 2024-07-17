@@ -1,6 +1,8 @@
 import type { Media, MediaChapter, MediaCover } from "@taiyomoe/db"
 import { HttpError } from "@taiyomoe/image-orchestrator"
-import type { ImportMediaEventMessage } from "@taiyomoe/types"
+import type { IOStreamError, ImportMediaEventMessage } from "@taiyomoe/types"
+import { mapValues } from "radash"
+import SuperJSON from "superjson"
 import { env } from "~/lib/env.mjs"
 
 export const handleErrors = (defaultMessage: string) => (err: unknown) =>
@@ -69,23 +71,39 @@ const createClient =
   }
 
 const createSseClient =
-  <TMessage>(path: string) =>
+  <TMessage extends Record<string, unknown>>(path: string) =>
   async (
-    data: Record<string, string>,
+    data: Record<string, string | number | boolean>,
     callbacks: {
       onMessage: (message: TMessage) => void
+      onError?: (content: string) => void
       onOpen?: () => void
       onClose?: () => void
     },
   ) => {
-    const searchParams = new URLSearchParams(data).toString()
+    const searchParams = new URLSearchParams(mapValues(data, String)).toString()
     const source = new EventSource(
       `${env.NEXT_PUBLIC_IO_URL}/${path}?${searchParams}`,
       { withCredentials: true },
     )
+    let messageCount = 0
+    let errorsCount = 0
 
     source.onmessage = (event) => {
-      callbacks.onMessage(JSON.parse(event.data) as TMessage)
+      const message = SuperJSON.parse<TMessage | IOStreamError>(event.data)
+      const isError = (msg: typeof message): msg is IOStreamError =>
+        "type" in msg && msg.type === "error"
+
+      messageCount++
+
+      if (isError(message)) {
+        callbacks.onError?.(message.content)
+        errorsCount++
+
+        return
+      }
+
+      callbacks.onMessage(message)
     }
 
     source.onopen = () => {
@@ -95,9 +113,15 @@ const createSseClient =
     source.onerror = () => {
       source.close()
 
-      if (source.readyState === EventSource.CLOSED) {
-        callbacks.onClose?.()
+      // If we didn't receive any messages, we assume the client couldn't connect
+      if (messageCount === 0) {
+        callbacks.onError?.("Ocorreu um erro inesperado.")
+
         return
+      }
+
+      if (errorsCount === 0) {
+        callbacks.onClose?.()
       }
     }
   }

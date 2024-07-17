@@ -9,7 +9,7 @@ import {
   MediaTrackersService,
   MediasService,
 } from "../services"
-import { handleStreamErrors } from "../utils/handleStreamErrors"
+import { handleStreamErrors } from "../utils/streams"
 
 const create = new Elysia().use(authMiddleware([["medias", "create"]])).post(
   "/",
