@@ -11,7 +11,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@elysiajs/eden": "^1.1.0",
+    "@elysiajs/eden": "^1.1.1",
     "@hookform/resolvers": "^3.9.0",
     "@meilisearch/instant-meilisearch": "^0.19.0",
     "@nextui-org/react": "^2.4.2",
