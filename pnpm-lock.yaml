@@ -962,8 +962,8 @@ packages:
     peerDependencies:
       elysia: '>= 1.1.0'
 
-  '@elysiajs/eden@1.1.0':
-    resolution: {integrity: sha512-AQz+IPFCYE+zeC++JinsGCtHPB5pvViqHWzTv9VewDJcBERyHOkbDJo2cYAsFGeZ35wlJ1a7XpNaGxMASX6QMA==}
+  '@elysiajs/eden@1.1.1':
+    resolution: {integrity: sha512-2emKzcqT1aIvdczTa1u7eKClImYOcmbL2bHc64+v+jOhPGzgoG5JZo8ILahwq64S1hVY0OtPrcQhayf1z+BBLw==}
     peerDependencies:
       elysia: '>= 1.1.0'
 
