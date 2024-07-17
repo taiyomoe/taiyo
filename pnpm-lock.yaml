@@ -97,8 +97,8 @@ importers:
   apps/taiyo:
     dependencies:
       '@elysiajs/eden':
-        specifier: ^1.1.0
-        version: 1.1.0(elysia@1.1.2(@sinclair/typebox@0.32.33)(openapi-types@12.1.3)(typescript@5.5.3))
+        specifier: ^1.1.1
+        version: 1.1.1(elysia@1.1.2(@sinclair/typebox@0.32.33)(openapi-types@12.1.3)(typescript@5.5.3))
       '@hookform/resolvers':
         specifier: ^3.9.0
         version: 3.9.0(react-hook-form@7.52.1(react@18.3.1))
@@ -959,8 +959,8 @@ packages:
     peerDependencies:
       elysia: '>= 1.1.0'
 
-  '@elysiajs/eden@1.1.0':
-    resolution: {integrity: sha512-AQz+IPFCYE+zeC++JinsGCtHPB5pvViqHWzTv9VewDJcBERyHOkbDJo2cYAsFGeZ35wlJ1a7XpNaGxMASX6QMA==}
+  '@elysiajs/eden@1.1.1':
+    resolution: {integrity: sha512-2emKzcqT1aIvdczTa1u7eKClImYOcmbL2bHc64+v+jOhPGzgoG5JZo8ILahwq64S1hVY0OtPrcQhayf1z+BBLw==}
     peerDependencies:
       elysia: '>= 1.1.0'
 
@@ -5641,7 +5641,7 @@ snapshots:
     dependencies:
       elysia: 1.1.2(@sinclair/typebox@0.32.33)(openapi-types@12.1.3)(typescript@5.5.3)
 
-  '@elysiajs/eden@1.1.0(elysia@1.1.2(@sinclair/typebox@0.32.33)(openapi-types@12.1.3)(typescript@5.5.3))':
+  '@elysiajs/eden@1.1.1(elysia@1.1.2(@sinclair/typebox@0.32.33)(openapi-types@12.1.3)(typescript@5.5.3))':
     dependencies:
       elysia: 1.1.2(@sinclair/typebox@0.32.33)(openapi-types@12.1.3)(typescript@5.5.3)
 
