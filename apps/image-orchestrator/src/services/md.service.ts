@@ -1,14 +1,19 @@
 import type Stream from "@elysiajs/stream"
-import { db } from "@taiyomoe/db"
+import { type Scan, db } from "@taiyomoe/db"
 import { meilisearchIndexes } from "@taiyomoe/meilisearch"
-import { getMediaIndexItem } from "@taiyomoe/meilisearch/utils"
+import {
+  getMediaIndexItem,
+  getScanIndexItem,
+} from "@taiyomoe/meilisearch/utils"
 import { MdUtils } from "@taiyomoe/utils"
-import { Manga } from "mangadex-full-api"
+import { Group, Manga } from "mangadex-full-api"
+import { parallel } from "radash"
 import type { ImportMediaInput } from "../schemas"
 import {
   DuplicatedMediaTrackerError,
   MediaTrackerNotFoundError,
 } from "../utils/errors"
+import { MediaChaptersService } from "./mediaChapters.service"
 import { MediaCoversService } from "./mediaCovers.service"
 import { MediasService } from "./medias.service"
 
@@ -24,7 +29,7 @@ const getById = async (id: string) => {
 
 const importFn = async (
   stream: Stream<string | number | boolean | object>,
-  { mdId }: ImportMediaInput,
+  { mdId, downloadChapters }: ImportMediaInput,
   creatorId: string,
 ) => {
   const existingMedia = await getById(mdId).catch(() => null)
@@ -160,14 +165,157 @@ const importFn = async (
     type: "ongoing",
   })
 
-  const indexItem = await getMediaIndexItem(db, media.id)
-  await meilisearchIndexes.medias.updateDocuments([indexItem])
+  const mediaIndexItem = await getMediaIndexItem(db, media.id)
+  await meilisearchIndexes.medias.updateDocuments([mediaIndexItem])
 
   stream.send({
     step: 4,
     content: "Busca reindexada",
     type: "success",
   })
+
+  if (!downloadChapters) {
+    return
+  }
+
+  stream.send({
+    step: 5,
+    content: "Recuperando os capítulos...",
+    type: "ongoing",
+  })
+
+  const chapters = await manga.getFeed({
+    // biome-ignore lint/style/useNumberNamespace: Number.Infinity is not allowed
+    limit: Infinity,
+    translatedLanguage: ["pt-br"],
+    order: { chapter: "asc" },
+  })
+
+  stream.send({
+    step: 5,
+    content: "Capítulos recuperados",
+    type: "success",
+  })
+
+  stream.send({
+    step: 6,
+    content: "Recuperando as scans de todos os capítulos...",
+    type: "ongoing",
+  })
+
+  const groupsIds = [
+    ...new Set(
+      chapters.flatMap((chapter) => chapter.groups.flatMap((g) => g.id)),
+    ),
+  ]
+  const groups = await Group.getMultiple(...groupsIds)
+  const scans: Scan[] = []
+
+  for (const group of groups) {
+    const result = await db.scan.findFirst({ where: { name: group.name } })
+
+    if (result) {
+      continue
+    }
+
+    stream.send({
+      step: 6,
+      content: `Criando a scan '${group.name}'...`,
+      type: "ongoing",
+    })
+
+    const scan = await db.scan.create({
+      data: {
+        name: group.name,
+        description: group.description,
+        website: group.website,
+        discord: group.discord,
+        twitter: group.twitter,
+        email: group.contactEmail,
+        creatorId,
+      },
+    })
+
+    scans.push(scan)
+
+    stream.send({
+      step: 6,
+      content: `Scan '${group.name}' criada`,
+      type: "success",
+    })
+  }
+
+  if (scans.length) {
+    stream.send({
+      step: 7,
+      content: "Reindexando a busca das scans...",
+      type: "ongoing",
+    })
+
+    const scansIndexItems = await parallel(10, scans, ({ id }) =>
+      getScanIndexItem(db, id),
+    )
+    await meilisearchIndexes.scans.updateDocuments(scansIndexItems)
+
+    stream.send({
+      step: 7,
+      content: "Busca das scans reindexada",
+      type: "success",
+    })
+  }
+
+  for (const chapter of chapters) {
+    stream.send({
+      step: 8,
+      content: `Baixando o capítulo ${chapter.chapter}...`,
+      type: "ongoing",
+    })
+
+    const pagesUrls = await chapter.getReadablePages()
+    const pages = await parallel(10, pagesUrls, (url) =>
+      fetch(url).then((r) => r.blob()),
+    )
+
+    stream.send({
+      step: 8,
+      content: `Upando o capítulo ${chapter.chapter}...`,
+      type: "ongoing",
+    })
+
+    const uploaded = await MediaChaptersService.upload(media.id, pages)
+
+    await MediaChaptersService.insert(
+      {
+        title: chapter.title,
+        number: Number(chapter.chapter),
+        volume: Number.isNaN(chapter.volume)
+          ? undefined
+          : Number.parseFloat(chapter.volume),
+        contentRating: media.contentRating,
+        language: "pt_br",
+        flag: "OK",
+        files: [],
+        scanIds: scans.map((s) => s.id),
+        mediaId: media.id,
+      },
+      uploaded,
+      creatorId,
+    )
+
+    stream.send({
+      step: 8,
+      content: `Capítulo ${chapter.chapter} upado`,
+      type: "success",
+    })
+  }
+
+  if (chapters.length) {
+    stream.send({
+      step: 8,
+      content: "Capítulos upados.",
+      type: "success",
+    })
+  }
 }
 
 export const MdService = {

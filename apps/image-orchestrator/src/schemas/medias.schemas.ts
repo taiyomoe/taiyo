@@ -48,6 +48,7 @@ export const createMediaSchema = t.Object({
 
 export const importMediaSchema = t.Object({
   mdId: t.String({ format: "uuid" }),
+  downloadChapters: t.BooleanString({ default: false }),
 })
 
 export type CreateMediaInput = StaticDecode<typeof createMediaSchema>
