@@ -151,7 +151,7 @@ importers:
         specifier: workspace:^0.1.0
         version: link:../../packages/utils
       '@tanstack/react-query':
-        specifier: ^5.51.3
+        specifier: ^5.51.5
         version: 5.51.5(react@18.3.1)
       '@trpc/client':
         specifier: 11.0.0-rc.465
@@ -178,7 +178,7 @@ importers:
         specifier: ^0.1.13
         version: 0.1.13
       framer-motion:
-        specifier: ^11.3.5
+        specifier: ^11.3.6
         version: 11.3.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       jotai:
         specifier: ^2.9.0
