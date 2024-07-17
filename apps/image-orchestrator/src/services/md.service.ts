@@ -18,7 +18,9 @@ import { MediaCoversService } from "./mediaCovers.service"
 import { MediasService } from "./medias.service"
 
 const getById = async (id: string) => {
-  const result = await db.mediaTracker.findUnique({ where: { id } })
+  const result = await db.mediaTracker.findFirst({
+    where: { externalId: id, tracker: "MANGADEX" },
+  })
 
   if (!result) {
     throw new MediaTrackerNotFoundError()
