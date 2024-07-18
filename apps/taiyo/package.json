@@ -14,7 +14,7 @@
     "@elysiajs/eden": "^1.1.1",
     "@hookform/resolvers": "^3.9.0",
     "@meilisearch/instant-meilisearch": "^0.19.1",
-    "@nextui-org/react": "^2.4.3",
+    "@nextui-org/react": "^2.4.5",
     "@react-stately/data": "^3.11.4",
     "@savvywombat/tailwindcss-grid-areas": "^4.0.0",
     "@t3-oss/env-nextjs": "^0.10.1",
