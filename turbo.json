@@ -34,7 +34,8 @@
     "NEXTAUTH_URL",
     "DISCORD_CLIENT_ID",
     "DISCORD_CLIENT_SECRET",
-    "MEILISEARCH_ADMIN_KEY"
+    "MEILISEARCH_ADMIN_KEY",
+    "DRAGONFLY_URL"
   ],
   "globalPassThroughEnv": [
     "NODE_ENV",
