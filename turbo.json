@@ -1,6 +1,6 @@
 {
   "$schema": "https://turborepo.org/schema.json",
-  "pipeline": {
+  "tasks": {
     "topo": {
       "dependsOn": ["^topo"]
     },
@@ -27,5 +27,22 @@
     "//#clean": {
       "cache": false
     }
-  }
+  },
+  "globalEnv": [
+    "DATABASE_URL",
+    "NEXTAUTH_SECRET",
+    "NEXTAUTH_URL",
+    "DISCORD_CLIENT_ID",
+    "DISCORD_CLIENT_SECRET",
+    "MEILISEARCH_ADMIN_KEY",
+    "DRAGONFLY_URL"
+  ],
+  "globalPassThroughEnv": [
+    "NODE_ENV",
+    "CI",
+    "VERCEL",
+    "VERCEL_ENV",
+    "VERCEL_URL",
+    "npm_lifecycle_event"
+  ]
 }
