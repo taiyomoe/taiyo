@@ -5095,7 +5095,7 @@ snapshots:
       '@aws-sdk/xml-builder': 3.609.0
       '@smithy/config-resolver': 3.0.5
       '@smithy/core': 2.2.8
-      '@smithy/eventstream-serde-browser': 3.0.4
+      '@smithy/eventstream-serde-browser': 3.0.5
       '@smithy/eventstream-serde-config-resolver': 3.0.3
       '@smithy/eventstream-serde-node': 3.0.4
       '@smithy/fetch-http-handler': 3.2.2
