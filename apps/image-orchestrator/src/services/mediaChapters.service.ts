@@ -41,7 +41,7 @@ const insert = async (
 
 const upload = async (
   mediaId: string,
-  files: File[],
+  files: File[] | Blob[],
 ): Promise<UploadedResource> => {
   const id = randomUUID()
   const uploaded = await FilesService.uploadFiles(

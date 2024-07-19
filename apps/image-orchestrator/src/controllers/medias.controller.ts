@@ -9,6 +9,7 @@ import {
   MediaTrackersService,
   MediasService,
 } from "../services"
+import { handleStreamErrors } from "../utils/streams"
 
 const create = new Elysia().use(authMiddleware([["medias", "create"]])).post(
   "/",
@@ -42,7 +43,9 @@ const importRoute = new Elysia()
     "/import",
     ({ query, session }) =>
       new Stream(async (stream) => {
-        await MdService.import(stream, query, session.user.id)
+        await MdService.import(stream, query, session.user.id).catch(
+          handleStreamErrors(stream),
+        )
 
         stream.close()
       }),

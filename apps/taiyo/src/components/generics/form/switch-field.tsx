@@ -11,6 +11,7 @@ export const SwitchField = ({
   label,
   labelPlacement,
   className,
+  onValueChange,
   ...rest
 }: Props) => {
   const { register, getValues, setValue } = useFormContext()
@@ -20,8 +21,9 @@ export const SwitchField = ({
     (newValue: boolean) => {
       setValue(name, newValue, { shouldValidate: true })
       setIsSelected(newValue)
+      onValueChange?.(newValue)
     },
-    [setValue, name],
+    [setValue, onValueChange, name],
   )
 
   return (
