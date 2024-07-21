@@ -25,7 +25,12 @@ export const env = createEnv({
     NEXT_PUBLIC_MEILISEARCH_PUBLIC_KEY: z.string(),
   },
 
-  runtimeEnv: process.env,
+  runtimeEnvStrict: {
+    MEILISEARCH_ADMIN_KEY: process.env.MEILISEARCH_ADMIN_KEY,
+    NEXT_PUBLIC_MEILISEARCH_URL: process.env.NEXT_PUBLIC_MEILISEARCH_URL,
+    NEXT_PUBLIC_MEILISEARCH_PUBLIC_KEY:
+      process.env.NEXT_PUBLIC_MEILISEARCH_PUBLIC_KEY,
+  },
   skipValidation:
     !!process.env.CI || process.env.npm_lifecycle_event === "lint",
 })

@@ -27,7 +27,11 @@ export const env = createEnv({
     NEXT_PUBLIC_IO_URL: z.string().url(),
   },
 
-  runtimeEnv: process.env,
+  runtimeEnvStrict: {
+    NODE_ENV: process.env.NODE_ENV,
+    NEXT_PUBLIC_CDN_URL: process.env.NEXT_PUBLIC_CDN_URL,
+    NEXT_PUBLIC_IO_URL: process.env.NEXT_PUBLIC_IO_URL,
+  },
   skipValidation:
     !!process.env.CI || process.env.npm_lifecycle_event === "lint",
 })
