@@ -2,9 +2,9 @@ import { ScrollShadow } from "@nextui-org/scroll-shadow"
 import { notFound } from "next/navigation"
 import { api } from "~/trpc/server"
 
-import { MediaLayout } from "./_components/layout/MediaLayout"
-import { MediaLayoutActions } from "./_components/layout/MediaLayoutActions"
-import { MediaLayoutTabs } from "./_components/layout/MediaLayoutTabs"
+import { MediaLayout } from "./_components/layout/media-layout"
+import { MediaLayoutActions } from "./_components/layout/media-layout-actions"
+import { MediaLayoutTabs } from "./_components/layout/media-layout-tabs"
 
 type Props = {
   params: { mediaId: string }

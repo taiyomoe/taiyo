@@ -14,7 +14,7 @@ type Props = {
 
 export const FeaturedMediasCarousel = ({ medias }: Props) => {
   const [emblaRef, emblaApi] = useEmblaCarousel({}, [
-    Autoplay({ delay: 10000 }),
+    Autoplay({ delay: 1000000 }),
   ])
 
   return (
@@ -34,7 +34,7 @@ export const FeaturedMediasCarousel = ({ medias }: Props) => {
                 width: "w-full",
                 img: "blur-sm brightness-50",
               }}
-              maxHeight={350}
+              maxHeight={410}
               maxWidth={1200}
               alt="media's banner"
             />
@@ -54,10 +54,10 @@ export const FeaturedMediasCarousel = ({ medias }: Props) => {
               />
               <div className="flex flex-col justify-between py-4">
                 <div className="flex flex-col gap-4">
-                  <p className="line-clamp-1 pb-1 font-bold text-3xl drop-shadow-accent transition-all md:text-left md:text-4xl xl:text-5xl hover:opacity-70">
+                  <p className="line-clamp-1 pb-1 font-bold text-3xl drop-shadow-accent transition-all hover:opacity-70 md:text-left md:text-4xl xl:text-5xl">
                     {media.mainTitle}
                   </p>
-                  <p className="line-clamp-2 text-neutral-300 italic drop-shadow-accent lg:line-clamp-6 md:line-clamp-4 sm:line-clamp-3">
+                  <p className="line-clamp-2 text-neutral-300 italic drop-shadow-accent sm:line-clamp-3 md:line-clamp-4 lg:line-clamp-6">
                     {media.synopsis}
                   </p>
                 </div>

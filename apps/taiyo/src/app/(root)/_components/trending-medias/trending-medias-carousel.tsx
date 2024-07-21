@@ -52,11 +52,11 @@ export const TrendingMediasCarousel = ({ medias }: Props) => {
     <ScrollShadow
       ref={emblaRef}
       orientation="horizontal"
-      hideScrollBar
       data-right-scroll={true}
+      hideScrollBar
     >
       <div
-        className="flex max-h-[400px] flex-row lg:max-h-[498px] data-[releases-layout=columns]:flex-row lg:flex-col"
+        className="flex max-h-[400px] flex-row data-[releases-layout=columns]:flex-row lg:max-h-[498px] lg:flex-col"
         data-releases-layout={releasesLayout}
       >
         {medias.map((media) => (
@@ -64,7 +64,7 @@ export const TrendingMediasCarousel = ({ medias }: Props) => {
             key={media.id}
             href={`/media/${media.id}`}
             className={cn(
-              "relative mr-6 max-h-[400px] min-h-[400px] last:mr-0 lg:max-h-[498px] lg:min-h-[498px] hover:cursor-pointer",
+              "relative mr-6 max-h-[400px] min-h-[400px] last:mr-0 hover:cursor-pointer lg:max-h-[498px] lg:min-h-[498px]",
               { "lg:mr-0 lg:mb-6": releasesLayout === "rows" },
             )}
           >
