@@ -39,7 +39,6 @@
     "embla-carousel-react": "^8.1.7",
     "encoding": "^0.1.13",
     "framer-motion": "^11.3.8",
-    "jiti": "^1.21.6",
     "jotai": "^2.9.0",
     "lucide-react": "^0.412.0",
     "luxon": "^3.4.4",
@@ -76,6 +75,7 @@
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "autoprefixer": "^10.4.19",
+    "jiti": "^1.21.6",
     "postcss": "^8.4.39",
     "tailwindcss": "^3.4.6",
     "typescript": "^5.5.3"
