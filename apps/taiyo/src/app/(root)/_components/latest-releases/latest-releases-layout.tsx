@@ -19,7 +19,7 @@ export const LatestReleasesLayout = ({ releases }: Props) => {
 
   if (releasesLayout === "rows") {
     return (
-      <div className="grid max-h-[752px] grid-cols-1 gap-4 overflow-hidden 2xl:grid-cols-3 lg:md:grid-cols-1 md:grid-cols-2 xl:grid-cols-2">
+      <div className="grid max-h-[752px] grid-cols-1 gap-4 overflow-hidden md:grid-cols-2 lg:md:grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3">
         {releases.map((r, i) => (
           <ReleaseCardRow key={r.id} release={r} index={i} />
         ))}

@@ -20,7 +20,7 @@ export const UnderlineButton = ({
   return (
     <button
       className={cn(
-        "relative text-default-500 transition-colors duration-400 after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:origin-bottom-right hover:after:origin-bottom-left after:scale-x-0 data-[selected=true]:after:scale-x-100 hover:after:scale-x-100 hover:cursor-pointer after:bg-gray-200 data-[selected=true]:text-foreground hover:text-foreground after:transition-transform after:duration-300 after:ease-in-out",
+        "relative text-default-500 transition-colors duration-400 after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:origin-bottom-right after:scale-x-0 after:bg-gray-200 after:transition-transform after:duration-300 after:ease-in-out hover:cursor-pointer hover:text-foreground hover:after:origin-bottom-left hover:after:scale-x-100 data-[selected=true]:text-foreground data-[selected=true]:after:scale-x-100",
         className,
       )}
       onClick={handleClick}
