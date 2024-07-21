@@ -1,4 +1,3 @@
-import { tv } from "@nextui-org/react"
 import { useSession } from "@taiyomoe/auth/client"
 import type { MediaLimitedChapter } from "@taiyomoe/types"
 import { EyeIcon, EyeOffIcon } from "lucide-react"
@@ -11,27 +10,11 @@ type Props = {
   setCompleted: Dispatch<SetStateAction<boolean>>
 }
 
-const mediaChapterCardProgressionButton = tv({
-  slots: {
-    container: "hover:cursor-pointer",
-    icon: "h-4 w-fit md:h-5",
-  },
-  variants: {
-    completed: {
-      true: {
-        icon: "text-default-300",
-      },
-    },
-  },
-})
-
-export const MediaChapterCardProgressionButton = (props: Props) => {
+export const MediaChaptersTabRowProgressionButton = (props: Props) => {
   const { chapter, completed, setCompleted } = props
-  const slots = mediaChapterCardProgressionButton({ completed })
   const { mutate } = api.histories.updateProgression.useMutation()
-  const Icon = completed ? EyeOffIcon : EyeIcon
-  const divTitle = completed ? "Marcar como não lido" : "Marcar como lido"
   const { data: session } = useSession()
+  const Icon = completed ? EyeOffIcon : EyeIcon
 
   const handleClick = () => {
     mutate({
@@ -45,8 +28,11 @@ export const MediaChapterCardProgressionButton = (props: Props) => {
   if (!session) return null
 
   return (
-    <div className={slots.container()} onClick={handleClick} title={divTitle}>
-      <Icon className={slots.icon()} />
-    </div>
+    <Icon
+      className="h-4 w-4 min-w-4 text-default-500 transition-colors hover:cursor-pointer hover:text-foreground"
+      onClick={handleClick}
+    >
+      <title>{completed ? "Marcar como não lido" : "Marcar como lido"}</title>
+    </Icon>
   )
 }

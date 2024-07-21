@@ -5,8 +5,8 @@ import type { MediaLimited, MediaTabs } from "@taiyomoe/types"
 import type { Key } from "react"
 import { useCallback } from "react"
 import { useMediaNavigation } from "~/hooks/useMediaNavigation"
-import { MediaLayoutChaptersTab } from "../tabs/chapters/MediaLayoutChaptersTab"
-import { MediaLayoutInfoTab } from "../tabs/info/MediaLayoutInfoTab"
+import { MediaLayoutChaptersTab } from "../tabs/chapters/media-layout-chapters-tab"
+import { MediaLayoutInfoTab } from "../tabs/info/media-layout-info-tab"
 
 type Props = {
   media: MediaLimited
