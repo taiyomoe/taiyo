@@ -6,7 +6,7 @@ type Props = {
   media: { id: string }
 }
 
-export const MediaChapterUploadPageButton = ({ media: { id } }: Props) => (
+export const MediaLayoutActionsUploadButton = ({ media: { id } }: Props) => (
   <Button
     as={Link}
     href={`/dashboard/chapters/upload?mediaId=${id}`}

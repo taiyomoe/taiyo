@@ -13,7 +13,7 @@ type Props = {
   media: MediaLimited
 }
 
-export const AddToUserLibraryButton = ({ media }: Props) => {
+export const MediaLayoutActionsLibraryButton = ({ media }: Props) => {
   const { updateEntry } = useLibraryStore()
   const [entry, setEntry] = useState<UserLibraryMedia | null>(null)
   const { data: session } = useSession()
