@@ -1,6 +1,6 @@
 import type { MediasIndexItem } from "@taiyomoe/types"
 import { CoverUtils } from "@taiyomoe/utils"
-import { MediaImage } from "~/components/generics/images/MediaImage"
+import { MediaImage } from "~/components/images/MediaImage"
 
 type Props = {
   item: MediasIndexItem

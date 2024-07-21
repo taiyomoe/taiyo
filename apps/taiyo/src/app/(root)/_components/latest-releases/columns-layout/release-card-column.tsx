@@ -2,8 +2,9 @@ import type { LatestReleaseGrouped } from "@taiyomoe/types"
 import { ChapterUtils, CoverUtils, MediaUtils } from "@taiyomoe/utils"
 import Link from "next/link"
 import { useMemo } from "react"
-import { MediaImage } from "~/components/generics/images/MediaImage"
-import SparklesText from "~/components/generics/texts/sparkles-text"
+import SparklesTextm "~/components/gegegenerics/texts/sparkles-textkles-textkles-text"
+import { MediaImage }
+} } from "~/componeimagesIMediaImage
 import { DateUtils } from "~/lib/utils/date.utils"
 
 type Props = {

@@ -3,7 +3,7 @@ import type { MediasIndexItem } from "@taiyomoe/types"
 import { CoverUtils, MediaUtils } from "@taiyomoe/utils"
 import { CommandItem } from "cmdk"
 import Link from "next/link"
-import { MediaImage } from "~/components/generics/images/MediaImage"
+import { MediaImage } from "~/components/images/MediaImage"
 
 type Props = {
   item: MediasIndexItem

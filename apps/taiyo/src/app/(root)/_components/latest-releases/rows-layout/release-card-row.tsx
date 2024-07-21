@@ -1,7 +1,7 @@
 import type { LatestRelease } from "@taiyomoe/types"
 import { ChapterUtils, CoverUtils, MediaUtils } from "@taiyomoe/utils"
 import Link from "next/link"
-import { MediaImage } from "~/components/generics/images/MediaImage"
+import { MediaImage } from "~/components/images/MediaImage"
 import { ChapterScansListHorizontal } from "~/components/ui/chapters/chapter-scans-list-horizontal"
 import { ChapterTitle } from "~/components/ui/chapters/chapter-title"
 import { ChapterUploadedTime } from "~/components/ui/chapters/chapter-uploaded-time"

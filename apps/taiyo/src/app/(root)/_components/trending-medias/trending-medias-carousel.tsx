@@ -8,7 +8,7 @@ import { useAtomValue } from "jotai"
 import Link from "next/link"
 import { useEffect, useRef } from "react"
 import { releasesLayoutAtom } from "~/atoms/homeLayout.atoms"
-import { MediaImage } from "~/components/generics/images/MediaImage"
+import { MediaImage } from "~/components/images/MediaImage"
 import { cn } from "~/lib/utils/cn"
 
 type Props = {
