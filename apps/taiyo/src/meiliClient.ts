@@ -1,5 +1,5 @@
 import { instantMeiliSearch } from "@meilisearch/instant-meilisearch"
-import { env } from "~/lib/env.mjs"
+import { env } from "~/env"
 
 const { searchClient } = instantMeiliSearch(
   env.NEXT_PUBLIC_MEILISEARCH_URL,

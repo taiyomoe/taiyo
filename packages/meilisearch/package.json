@@ -5,7 +5,8 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
-    "./utils": "./src/utils/index.ts"
+    "./utils": "./src/utils/index.ts",
+    "./env": "./env.ts"
   },
   "license": "MIT",
   "scripts": {
@@ -13,7 +14,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@t3-oss/env-nextjs": "^0.10.1",
+    "@t3-oss/env-core": "^0.10.1",
     "meilisearch": "^0.41.0",
     "zod": "^3.23.8"
   },

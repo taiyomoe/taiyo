@@ -1,7 +1,7 @@
 import { appRouter, createTRPCContext } from "@taiyomoe/trpc"
 import { fetchRequestHandler } from "@trpc/server/adapters/fetch"
 import type { NextRequest } from "next/server"
-import { env } from "~/lib/env.mjs"
+import { env } from "~/env"
 
 /**
  * This wraps the `createTRPCContext` helper and provides the required context for the tRPC API when

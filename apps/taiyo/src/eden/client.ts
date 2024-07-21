@@ -3,7 +3,7 @@ import { HttpError } from "@taiyomoe/image-orchestrator"
 import type { IOStreamError, ImportMediaEventMessage } from "@taiyomoe/types"
 import { mapValues } from "radash"
 import SuperJSON from "superjson"
-import { env } from "~/lib/env.mjs"
+import { env } from "~/env"
 
 export const handleErrors = (defaultMessage: string) => (err: unknown) =>
   err instanceof HttpError ? err.message : defaultMessage

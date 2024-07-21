@@ -5,7 +5,8 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
-    "./client": "./src/client.ts"
+    "./client": "./src/client.ts",
+    "./env": "./env.ts"
   },
   "license": "MIT",
   "scripts": {
@@ -14,7 +15,7 @@
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.4.1",
-    "@t3-oss/env-nextjs": "^0.10.1",
+    "@t3-oss/env-core": "^0.10.1",
     "@taiyomoe/db": "workspace:^0.1.0",
     "@taiyomoe/utils": "workspace:^0.1.0",
     "next-auth": "5.0.0-beta.19",

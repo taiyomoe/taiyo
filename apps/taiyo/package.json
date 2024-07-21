@@ -39,6 +39,7 @@
     "embla-carousel-react": "^8.1.7",
     "encoding": "^0.1.13",
     "framer-motion": "^11.3.8",
+    "jiti": "^1.21.6",
     "jotai": "^2.9.0",
     "lucide-react": "^0.412.0",
     "luxon": "^3.4.4",

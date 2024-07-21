@@ -183,6 +183,9 @@ importers:
       framer-motion:
         specifier: ^11.3.8
         version: 11.3.8(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      jiti:
+        specifier: ^1.21.6
+        version: 1.21.6
       jotai:
         specifier: ^2.9.0
         version: 2.9.0(@types/react@18.3.3)(react@18.3.1)
@@ -301,7 +304,7 @@ importers:
       '@auth/prisma-adapter':
         specifier: ^2.4.1
         version: 2.4.1(@prisma/client@5.17.0(prisma@5.17.0))
-      '@t3-oss/env-nextjs':
+      '@t3-oss/env-core':
         specifier: ^0.10.1
         version: 0.10.1(typescript@5.5.3)(zod@3.23.8)
       '@taiyomoe/db':
@@ -329,7 +332,7 @@ importers:
 
   packages/cache:
     dependencies:
-      '@t3-oss/env-nextjs':
+      '@t3-oss/env-core':
         specifier: ^0.10.1
         version: 0.10.1(typescript@5.5.3)(zod@3.23.8)
       ioredis:
@@ -363,9 +366,15 @@ importers:
       '@prisma/client':
         specifier: ^5.17.0
         version: 5.17.0(prisma@5.17.0)
+      '@t3-oss/env-core':
+        specifier: ^0.10.1
+        version: 0.10.1(typescript@5.5.3)(zod@3.23.8)
       prisma-json-types-generator:
         specifier: ^3.0.4
         version: 3.0.4(prisma@5.17.0)(typescript@5.5.3)
+      zod:
+        specifier: ^3.23.8
+        version: 3.23.8
       zod-prisma-types:
         specifier: ^3.1.8
         version: 3.1.8
@@ -400,7 +409,7 @@ importers:
 
   packages/meilisearch:
     dependencies:
-      '@t3-oss/env-nextjs':
+      '@t3-oss/env-core':
         specifier: ^0.10.1
         version: 0.10.1(typescript@5.5.3)(zod@3.23.8)
       meilisearch:
@@ -422,7 +431,7 @@ importers:
       '@aws-sdk/client-s3':
         specifier: ^3.616.0
         version: 3.616.0
-      '@t3-oss/env-nextjs':
+      '@t3-oss/env-core':
         specifier: ^0.10.1
         version: 0.10.1(typescript@5.5.3)(zod@3.23.8)
       zod:
@@ -529,7 +538,7 @@ importers:
       '@prisma/client':
         specifier: ^5.17.0
         version: 5.17.0(prisma@5.17.0)
-      '@t3-oss/env-nextjs':
+      '@t3-oss/env-core':
         specifier: ^0.10.1
         version: 0.10.1(typescript@5.5.3)(zod@3.23.8)
       '@taiyomoe/constants':
