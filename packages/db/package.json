@@ -27,8 +27,8 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@taiyomoe/meilisearch": "workspace:^0.1.0",
-    "@taiyomoe/tsconfig": "workspace:^0.1.0",
+    "@taiyomoe/meilisearch": "workspace:*",
+    "@taiyomoe/tsconfig": "workspace:*",
     "cross-env": "^7.0.3",
     "prisma": "^5.17.0",
     "tsx": "^4.16.2",

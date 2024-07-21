@@ -12,19 +12,19 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@taiyomoe/auth": "workspace:^0.1.0",
-    "@taiyomoe/db": "workspace:^0.1.0",
-    "@taiyomoe/cache": "workspace:^0.1.0",
-    "@taiyomoe/meilisearch": "workspace:^0.1.0",
-    "@taiyomoe/schemas": "workspace:^0.1.0",
-    "@taiyomoe/services": "workspace:^0.1.0",
-    "@taiyomoe/utils": "workspace:^0.1.0",
+    "@taiyomoe/auth": "workspace:*",
+    "@taiyomoe/db": "workspace:*",
+    "@taiyomoe/cache": "workspace:*",
+    "@taiyomoe/meilisearch": "workspace:*",
+    "@taiyomoe/schemas": "workspace:*",
+    "@taiyomoe/services": "workspace:*",
+    "@taiyomoe/utils": "workspace:*",
     "@trpc/server": "11.0.0-rc.466",
     "accesscontrol": "^2.2.1",
     "superjson": "^2.2.1"
   },
   "devDependencies": {
-    "@taiyomoe/tsconfig": "workspace:^0.1.0",
-    "@taiyomoe/types": "workspace:^0.1.0"
+    "@taiyomoe/tsconfig": "workspace:*",
+    "@taiyomoe/types": "workspace:*"
   }
 }

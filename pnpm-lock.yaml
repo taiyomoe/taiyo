@@ -15,7 +15,7 @@ importers:
         specifier: ^2.0.9
         version: 2.0.9(@types/node@20.14.11)(typescript@5.5.3)
       '@types/global-types':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:packages/global-types
       turbo:
         specifier: ^2.0.9
@@ -39,31 +39,31 @@ importers:
         specifier: ^0.10.1
         version: 0.10.1(typescript@5.5.3)(zod@3.23.8)
       '@taiyomoe/auth':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../../packages/auth
       '@taiyomoe/cache':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../../packages/cache
       '@taiyomoe/constants':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../../packages/constants
       '@taiyomoe/db':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../../packages/db
       '@taiyomoe/meilisearch':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../../packages/meilisearch
       '@taiyomoe/s3':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../../packages/s3
       '@taiyomoe/schemas':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../../packages/schemas
       '@taiyomoe/services':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../../packages/services
       '@taiyomoe/utils':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../../packages/utils
       elysia:
         specifier: 1.1.3
@@ -88,10 +88,10 @@ importers:
         version: 3.23.8
     devDependencies:
       '@taiyomoe/tsconfig':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../../tooling/typescript
       '@taiyomoe/types':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../../packages/types
       '@types/node':
         specifier: ^20.14.11
@@ -124,37 +124,37 @@ importers:
         specifier: ^0.10.1
         version: 0.10.1(typescript@5.5.3)(zod@3.23.8)
       '@taiyomoe/auth':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../../packages/auth
       '@taiyomoe/constants':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../../packages/constants
       '@taiyomoe/db':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../../packages/db
       '@taiyomoe/image-orchestrator':
         specifier: workspace:^
         version: link:../image-orchestrator
       '@taiyomoe/meilisearch':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../../packages/meilisearch
       '@taiyomoe/schemas':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../../packages/schemas
       '@taiyomoe/services':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../../packages/services
       '@taiyomoe/tailwind-config':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../../tooling/tailwind
       '@taiyomoe/trpc':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../../packages/trpc
       '@taiyomoe/tsconfig':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../../tooling/typescript
       '@taiyomoe/utils':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../../packages/utils
       '@tanstack/react-query':
         specifier: ^5.51.11
@@ -275,7 +275,7 @@ importers:
         specifier: 1.8.3
         version: 1.8.3
       '@taiyomoe/types':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../../packages/types
       '@types/luxon':
         specifier: ^3.4.2
@@ -311,10 +311,10 @@ importers:
         specifier: ^0.10.1
         version: 0.10.1(typescript@5.5.3)(zod@3.23.8)
       '@taiyomoe/db':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../db
       '@taiyomoe/utils':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../utils
       next-auth:
         specifier: 5.0.0-beta.19
@@ -327,10 +327,10 @@ importers:
         version: 3.23.8
     devDependencies:
       '@taiyomoe/tsconfig':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../../tooling/typescript
       '@taiyomoe/types':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../types
 
   packages/cache:
@@ -349,19 +349,19 @@ importers:
         version: 3.23.8
     devDependencies:
       '@taiyomoe/db':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../db
       '@taiyomoe/tsconfig':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../../tooling/typescript
       '@taiyomoe/types':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../types
 
   packages/constants:
     devDependencies:
       '@taiyomoe/tsconfig':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../../tooling/typescript
 
   packages/db:
@@ -383,10 +383,10 @@ importers:
         version: 3.1.8
     devDependencies:
       '@taiyomoe/meilisearch':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../meilisearch
       '@taiyomoe/tsconfig':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../../tooling/typescript
       cross-env:
         specifier: ^7.0.3
@@ -404,7 +404,7 @@ importers:
   packages/global-types:
     devDependencies:
       '@taiyomoe/constants':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../constants
       '@total-typescript/ts-reset':
         specifier: ^0.5.1
@@ -423,10 +423,10 @@ importers:
         version: 3.23.8
     devDependencies:
       '@taiyomoe/tsconfig':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../../tooling/typescript
       '@taiyomoe/types':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../types
 
   packages/s3:
@@ -442,72 +442,72 @@ importers:
         version: 3.23.8
     devDependencies:
       '@taiyomoe/tsconfig':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../../tooling/typescript
 
   packages/schemas:
     dependencies:
       '@taiyomoe/constants':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../constants
       '@taiyomoe/types':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../types
       zod:
         specifier: ^3.23.8
         version: 3.23.8
     devDependencies:
       '@taiyomoe/tsconfig':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../../tooling/typescript
 
   packages/services:
     dependencies:
       '@taiyomoe/cache':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../cache
       '@taiyomoe/constants':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../constants
       '@taiyomoe/db':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../db
       '@taiyomoe/types':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../types
       '@taiyomoe/utils':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../utils
       radash:
         specifier: ^12.1.0
         version: 12.1.0
     devDependencies:
       '@taiyomoe/tsconfig':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../../tooling/typescript
 
   packages/trpc:
     dependencies:
       '@taiyomoe/auth':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../auth
       '@taiyomoe/cache':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../cache
       '@taiyomoe/db':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../db
       '@taiyomoe/meilisearch':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../meilisearch
       '@taiyomoe/schemas':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../schemas
       '@taiyomoe/services':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../services
       '@taiyomoe/utils':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../utils
       '@trpc/server':
         specifier: 11.0.0-rc.466
@@ -520,10 +520,10 @@ importers:
         version: 2.2.1
     devDependencies:
       '@taiyomoe/tsconfig':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../../tooling/typescript
       '@taiyomoe/types':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../types
 
   packages/types:
@@ -533,7 +533,7 @@ importers:
         version: 5.17.0(prisma@5.17.0)
     devDependencies:
       '@taiyomoe/tsconfig':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../../tooling/typescript
 
   packages/utils:
@@ -545,10 +545,10 @@ importers:
         specifier: ^0.10.1
         version: 0.10.1(typescript@5.5.3)(zod@3.23.8)
       '@taiyomoe/constants':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../constants
       '@taiyomoe/schemas':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../schemas
       deep-object-diff:
         specifier: ^1.1.9
@@ -561,10 +561,10 @@ importers:
         version: 3.23.8
     devDependencies:
       '@taiyomoe/tsconfig':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../../tooling/typescript
       '@taiyomoe/types':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../types
 
   tooling/github: {}
@@ -585,7 +585,7 @@ importers:
         version: 1.0.7(tailwindcss@3.4.6(ts-node@10.9.2(@types/node@20.14.11)(typescript@5.5.3)))
     devDependencies:
       '@taiyomoe/tsconfig':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../typescript
       typescript:
         specifier: ^5.5.3

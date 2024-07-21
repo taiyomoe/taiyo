@@ -12,11 +12,11 @@
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "@taiyomoe/tsconfig": "workspace:^0.1.0"
+    "@taiyomoe/tsconfig": "workspace:*"
   },
   "dependencies": {
-    "@taiyomoe/constants": "workspace:^0.1.0",
-    "@taiyomoe/types": "workspace:^0.1.0",
+    "@taiyomoe/constants": "workspace:*",
+    "@taiyomoe/types": "workspace:*",
     "zod": "^3.23.8"
   }
 }
