@@ -23,7 +23,12 @@ export const MediasSearchButton = ({ onClick }: Props) => {
     >
       <SearchIcon className="text-white" />
       <div>
-        <Kbd className="bg-content3">⌘K</Kbd>
+        <Kbd
+          className="bg-content3 text-content3-foreground"
+          keys={["command"]}
+        >
+          K
+        </Kbd>
       </div>
     </div>
   )
