@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.4.1",
-    "@t3-oss/env-core": "^0.10.1",
+    "@t3-oss/env-core": "^0.11.0",
     "@taiyomoe/db": "workspace:*",
     "@taiyomoe/utils": "workspace:*",
     "next-auth": "5.0.0-beta.19",
