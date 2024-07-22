@@ -4,7 +4,7 @@
   "main": "./src/index.d.ts",
   "types": "./src/index.d.ts",
   "devDependencies": {
-    "@taiyomoe/constants": "workspace:^0.1.0",
+    "@taiyomoe/constants": "workspace:*",
     "@total-typescript/ts-reset": "^0.5.1"
   }
 }

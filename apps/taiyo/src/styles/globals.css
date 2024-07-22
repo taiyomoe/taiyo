@@ -81,7 +81,7 @@
   transition: --content1-gradient 250ms;
 }
 
-[id^="release-card-"]:hover .rfm-overlay::before,
-[id^="release-card-"]:hover .rfm-overlay::after {
+[id^="marquee-card-"]:hover .rfm-overlay::before,
+[id^="marquee-card-"]:hover .rfm-overlay::after {
   --content1-gradient: var(--content2);
 }

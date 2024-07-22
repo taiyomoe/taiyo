@@ -8,8 +8,8 @@ import Image from "next/image"
 import { useEffect, useMemo, useState } from "react"
 import { useMediaNavigation } from "~/hooks/useMediaNavigation"
 import { api } from "~/trpc/react"
-import { MediaChapterVolumes } from "./MediaChapterVolumes"
-import { MediaChaptersTabActions } from "./MediaChaptersTabActions"
+import { MediaChaptersTabActions } from "./media-chapters-tab-actions"
+import { MediaChaptersTabVolumes } from "./media-chapters-tab-volumes"
 
 type Props = {
   media: MediaLimited
@@ -76,7 +76,7 @@ export const MediaLayoutChaptersTab = ({ media }: Props) => {
         volumeKeys={volumeKeys}
         setSelectedKeys={setSelectedKeys}
       />
-      <MediaChapterVolumes
+      <MediaChaptersTabVolumes
         chaptersPagination={chaptersPagination}
         selectedKeys={selectedKeys}
         setSelectedKeys={setSelectedKeys}

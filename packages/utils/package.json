@@ -5,7 +5,8 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
-    "./i18n": "./src/i18n/index.ts"
+    "./i18n": "./src/i18n/index.ts",
+    "./env": "./env.ts"
   },
   "license": "MIT",
   "scripts": {
@@ -14,15 +15,15 @@
   },
   "dependencies": {
     "@prisma/client": "^5.17.0",
-    "@t3-oss/env-nextjs": "^0.10.1",
-    "@taiyomoe/constants": "workspace:^0.1.0",
-    "@taiyomoe/schemas": "workspace:^0.1.0",
+    "@t3-oss/env-core": "^0.10.1",
+    "@taiyomoe/constants": "workspace:*",
+    "@taiyomoe/schemas": "workspace:*",
     "deep-object-diff": "^1.1.9",
     "mangadex-full-api": "^5.12.1",
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@taiyomoe/tsconfig": "workspace:^0.1.0",
-    "@taiyomoe/types": "workspace:^0.1.0"
+    "@taiyomoe/tsconfig": "workspace:*",
+    "@taiyomoe/types": "workspace:*"
   }
 }

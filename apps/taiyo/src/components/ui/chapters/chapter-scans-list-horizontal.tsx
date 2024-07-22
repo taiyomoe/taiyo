@@ -13,6 +13,7 @@ type Props = {
   className?: string
   classNames?: Partial<(typeof chapterScansListHorizontal)["slots"]>
   index: number
+  noisyWidth: number
 } & VariantProps<typeof chapterScansListHorizontal>
 
 const computeTextWidth = cache((text: string) => {
@@ -60,6 +61,7 @@ export const ChapterScansListHorizontal = (props: Props) => {
     chapter: { scans },
     className,
     index,
+    noisyWidth,
     ...variants
   } = props
   const slots = chapterScansListHorizontal({ className, ...variants })
@@ -67,7 +69,7 @@ export const ChapterScansListHorizontal = (props: Props) => {
   const wrapperRef = useRef<HTMLObjectElement>(null)
 
   const computeMarqueeWidth = debounce({ delay: 100 }, () => {
-    const card = document.getElementById(`release-card-${index}`)
+    const card = document.getElementById(`marquee-card-${index}`)
     const totalWidth = scans.reduce((acc, scan) => {
       return acc + computeTextWidth(scan.name) + 16
     }, 0)
@@ -75,7 +77,7 @@ export const ChapterScansListHorizontal = (props: Props) => {
     if (!card || !wrapperRef.current) return
 
     const cardWidth = card.clientWidth
-    const containerWidth = cardWidth - 204 // image width + gap + icon + gap + uploader width + padding right
+    const containerWidth = cardWidth - noisyWidth
 
     wrapperRef.current.style.width = `${containerWidth}px`
 

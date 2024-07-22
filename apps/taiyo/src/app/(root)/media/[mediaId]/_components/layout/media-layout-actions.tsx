@@ -1,10 +1,8 @@
-import { Button } from "@nextui-org/button"
 import type { MediaLimited } from "@taiyomoe/types"
-import { FileEditIcon } from "lucide-react"
-import Link from "next/link"
-import { AddToUserLibraryButton } from "~/components/library/AddToUserLibraryButton"
 import { SignedIn } from "~/components/utils/signed-in/server"
-import { MediaChapterUploadPageButton } from "../ui/MediaChapterUploadPageButton"
+import { MediaLayoutActionsLibraryButton } from "../buttons/media-layout-actions-library-button"
+import { MediaLayoutActionsUpdateButton } from "../buttons/media-layout-actions-update-button"
+import { MediaLayoutActionsUploadButton } from "../buttons/media-layout-actions-upload-button"
 
 type Props = {
   media: MediaLimited
@@ -16,19 +14,12 @@ export const MediaLayoutActions = ({ media }: Props) => (
       {media.mainTitle}
     </p>
     <div className="flex gap-4">
-      <AddToUserLibraryButton media={media} />
+      <MediaLayoutActionsLibraryButton media={media} />
       <SignedIn requiredPermissions={["medias:update:any"]}>
-        <Button
-          as={Link}
-          href={`/dashboard/medias/edit/${media.id}`}
-          startContent={<FileEditIcon className="h-6 w-6" />}
-          color="warning"
-          radius="sm"
-          isIconOnly
-        />
+        <MediaLayoutActionsUpdateButton media={media} />
       </SignedIn>
       <SignedIn requiredPermissions={["mediaChapters:create"]}>
-        <MediaChapterUploadPageButton media={media} />
+        <MediaLayoutActionsUploadButton media={media} />
       </SignedIn>
     </div>
   </div>

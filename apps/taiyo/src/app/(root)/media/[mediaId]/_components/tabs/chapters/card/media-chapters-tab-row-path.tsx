@@ -4,7 +4,7 @@ type Props = {
   order: "unique" | "first" | "middle" | "last"
 }
 
-export const MediaChapterCardPath = ({ order }: Props) => {
+export const MediaChaptersTabRowPath = ({ order }: Props) => {
   return (
     <div className="flex min-h-full w-[14px]">
       <div className="flex w-[4px] flex-col">

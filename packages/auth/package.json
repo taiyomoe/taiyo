@@ -5,7 +5,8 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
-    "./client": "./src/client.ts"
+    "./client": "./src/client.ts",
+    "./env": "./env.ts"
   },
   "license": "MIT",
   "scripts": {
@@ -14,15 +15,15 @@
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.4.1",
-    "@t3-oss/env-nextjs": "^0.10.1",
-    "@taiyomoe/db": "workspace:^0.1.0",
-    "@taiyomoe/utils": "workspace:^0.1.0",
+    "@t3-oss/env-core": "^0.10.1",
+    "@taiyomoe/db": "workspace:*",
+    "@taiyomoe/utils": "workspace:*",
     "next-auth": "5.0.0-beta.19",
     "radash": "^12.1.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@taiyomoe/tsconfig": "workspace:^0.1.0",
-    "@taiyomoe/types": "workspace:^0.1.0"
+    "@taiyomoe/tsconfig": "workspace:*",
+    "@taiyomoe/types": "workspace:*"
   }
 }

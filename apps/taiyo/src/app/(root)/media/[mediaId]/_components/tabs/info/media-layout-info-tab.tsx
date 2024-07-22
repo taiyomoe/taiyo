@@ -1,8 +1,8 @@
 import type { MediaLimited } from "@taiyomoe/types"
-import { MediaInfoTabGenres } from "./MediaInfoTabGenres"
-import { MediaInfoTabTags } from "./MediaInfoTabTags"
-import { MediaInfoTabTitles } from "./MediaInfoTabTitles"
-import { MediaInfoTabTrackers } from "./MediaInfoTabTrackers"
+import { MediaInfoTabGenres } from "./media-info-tab-genres"
+import { MediaInfoTabTags } from "./media-info-tab-tags"
+import { MediaInfoTabTitles } from "./media-info-tab-titles"
+import { MediaInfoTabTrackers } from "./media-info-tab-trackers"
 
 type Props = {
   media: MediaLimited

@@ -13,14 +13,14 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@taiyomoe/cache": "workspace:^0.1.0",
-    "@taiyomoe/constants": "workspace:^0.1.0",
-    "@taiyomoe/db": "workspace:^0.1.0",
-    "@taiyomoe/types": "workspace:^0.1.0",
-    "@taiyomoe/utils": "workspace:^0.1.0",
+    "@taiyomoe/cache": "workspace:*",
+    "@taiyomoe/constants": "workspace:*",
+    "@taiyomoe/db": "workspace:*",
+    "@taiyomoe/types": "workspace:*",
+    "@taiyomoe/utils": "workspace:*",
     "radash": "^12.1.0"
   },
   "devDependencies": {
-    "@taiyomoe/tsconfig": "workspace:^0.1.0"
+    "@taiyomoe/tsconfig": "workspace:*"
   }
 }

@@ -13,7 +13,7 @@ import { ReaderSidebarHeader } from "../ui/ReaderSidebarHeader"
 const readerSidebarLayout = tv({
   slots: {
     container:
-      "-mt-navbar fixed z-30 h-dvh bg-content1 shadow-xl md:sticky data-[navbar-mode=hover]:mt-0 md:shadow-none",
+      "-mt-navbar fixed z-30 h-dvh bg-content1 shadow-xl data-[navbar-mode=hover]:mt-0 md:sticky md:shadow-none",
     contentWrapper:
       "width-[unset] scrollbar-thin scrollbar-track-content2 scrollbar-thumb-content3 sticky top-0 right-[unset] flex max-h-dvh w-[calc(var(--reader-sidebar-width)-1px)] max-w-[calc(var(--reader-sidebar-width)-1px)] flex-col gap-2 overflow-y-auto overflow-x-hidden bg-content1 p-4 pt-0",
   },
@@ -21,11 +21,11 @@ const readerSidebarLayout = tv({
     side: {
       left: {
         container:
-          "-ml-readerSidebar grid-in-leftSidebar left-0 border-r border-r-divider md:left-[unset] aria-expanded:ml-0",
+          "-ml-readerSidebar grid-in-leftSidebar left-0 border-r border-r-divider aria-expanded:ml-0 md:left-[unset]",
       },
       right: {
         container:
-          "-mr-readerSidebar grid-in-rightSidebar right-0 border-l border-l-divider md:right-[unset] aria-expanded:mr-0",
+          "-mr-readerSidebar grid-in-rightSidebar right-0 border-l border-l-divider aria-expanded:mr-0 md:right-[unset]",
       },
     },
   },

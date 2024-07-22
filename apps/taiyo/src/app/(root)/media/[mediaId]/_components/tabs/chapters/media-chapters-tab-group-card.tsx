@@ -1,5 +1,5 @@
 import type { MediaChapterGroup } from "@taiyomoe/types"
-import { MediaChapterCardTemporary } from "./card/MediaChapterCardTemporary"
+import { MediaChaptersTabRow } from "./card/media-chapters-tab-row"
 
 type Props = {
   group: MediaChapterGroup
@@ -17,10 +17,11 @@ export const MediaChapterGroupCard = ({ group }: Props) => {
   return (
     <div>
       {group.chapters.map((chapter, i) => (
-        <MediaChapterCardTemporary
+        <MediaChaptersTabRow
           key={chapter.id}
           chapter={chapter}
           order={computeChapterOrder(i)}
+          index={i}
         />
       ))}
     </div>

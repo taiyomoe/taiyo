@@ -5,7 +5,7 @@ import type { LatestMedia } from "@taiyomoe/types"
 import { CoverUtils } from "@taiyomoe/utils"
 import useEmblaCarousel from "embla-carousel-react"
 import Link from "next/link"
-import { MediaImage } from "~/components/generics/images/MediaImage"
+import { MediaImage } from "~/components/images/MediaImage"
 
 type Props = {
   medias: LatestMedia[]

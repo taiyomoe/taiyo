@@ -21,7 +21,7 @@ import { NavbarUserPopover } from "./popovers/navbar-user-popover"
 const navbar = tv({
   slots: {
     container: [
-      "group z-20 flex h-navbar max-h-navbar w-full flex-col justify-center p-0 child:relative md:p-[unset]",
+      "group child:relative z-20 flex h-navbar max-h-navbar w-full flex-col justify-center p-0 md:p-[unset]",
       'data-[sidebar-state="hide"]:md:!p-0',
       'data-[sidebar-side="right"]:md:pr-readerSidebar data-[sidebar-side="left"]:md:pl-readerSidebar',
     ],
