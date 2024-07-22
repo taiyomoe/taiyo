@@ -3,8 +3,8 @@ import { Divider } from "@nextui-org/divider"
 import type { Selection } from "@nextui-org/react"
 import type { MediaLimitedChapterPagination } from "@taiyomoe/types"
 import { ChapterUtils } from "@taiyomoe/utils"
-import { MediaChapterGroupCard } from "./MediaChapterGroupCard"
-import { MediaChaptersTabPagination } from "./MediaChaptersTabPagination"
+import { MediaChapterGroupCard } from "./media-chapters-tab-group-card"
+import { MediaChaptersTabPagination } from "./media-chapters-tab-pagination"
 
 type Props = {
   chaptersPagination: MediaLimitedChapterPagination
@@ -12,7 +12,7 @@ type Props = {
   setSelectedKeys: (keys: Selection) => void
 }
 
-export const MediaChapterVolumes = ({
+export const MediaChaptersTabVolumes = ({
   chaptersPagination,
   selectedKeys,
   setSelectedKeys,

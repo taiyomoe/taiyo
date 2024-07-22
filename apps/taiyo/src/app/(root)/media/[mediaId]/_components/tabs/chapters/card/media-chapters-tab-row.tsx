@@ -6,12 +6,13 @@ import { MediaChaptersTabRowPath } from "./media-chapters-tab-row-path"
 type Props = {
   chapter: MediaLimitedChapter
   order: "unique" | "first" | "middle" | "last"
+  index: number
 }
 
-export const MediaChaptersTabRow = ({ chapter, order }: Props) => (
-  <div className="flex gap-2">
+export const MediaChaptersTabRow = ({ chapter, order, index }: Props) => (
+  <div id={`marquee-card-${index}`} className="flex gap-2">
     <MediaChaptersTabRowPath order={order} />
-    <MediaChaptersTabRowCard chapter={chapter} order={order} />
+    <MediaChaptersTabRowCard chapter={chapter} order={order} index={index} />
     <MediaChaptersTabRowActions chapter={chapter} />
   </div>
 )

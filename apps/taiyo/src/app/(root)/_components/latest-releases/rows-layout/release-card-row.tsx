@@ -14,7 +14,7 @@ type Props = {
 
 export const ReleaseCardRow = ({ release, index }: Props) => (
   <Link
-    id={`release-card-${index}`}
+    id={`marquee-card-${index}`}
     href={ChapterUtils.getUrl(release)}
     className="flex gap-2 rounded-small bg-content1 transition-background hover:bg-content2"
   >
@@ -46,7 +46,11 @@ export const ReleaseCardRow = ({ release, index }: Props) => (
       <div className="grid grid-cols-chapterCard grid-rows-2 gap-x-1 gap-y-0.5 text-small">
         <ChapterTitle chapter={release} />
         <ChapterUploadedTime className="min-w-28" chapter={release} />
-        <ChapterScansListHorizontal chapter={release} index={index} />
+        <ChapterScansListHorizontal
+          chapter={release}
+          index={index}
+          noisyWidth={204} // image width + gap + icon + gap + uploader width + padding right
+        />
         <ChapterUploader chapter={release} />
       </div>
     </div>

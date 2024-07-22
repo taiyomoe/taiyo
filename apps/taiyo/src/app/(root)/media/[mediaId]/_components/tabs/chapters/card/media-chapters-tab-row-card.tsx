@@ -1,5 +1,7 @@
 import { tv } from "@nextui-org/react"
 import type { MediaLimitedChapter } from "@taiyomoe/types"
+import { ChapterUtils } from "@taiyomoe/utils"
+import Link from "next/link"
 import { useState } from "react"
 import { ChapterScansListHorizontal } from "~/components/ui/chapters/chapter-scans-list-horizontal"
 import { ChapterTitle } from "~/components/ui/chapters/chapter-title"
@@ -10,6 +12,7 @@ import { MediaChaptersTabRowProgressionButton } from "./media-chapters-tab-row-p
 type Props = {
   chapter: MediaLimitedChapter
   order: "unique" | "first" | "middle" | "last"
+  index: number
 }
 
 const mediaChaptersTabRowCard = tv({
@@ -29,11 +32,14 @@ const mediaChaptersTabRowCard = tv({
   },
 })
 
-export const MediaChaptersTabRowCard = ({ chapter, order }: Props) => {
+export const MediaChaptersTabRowCard = ({ chapter, order, index }: Props) => {
   const [completed, setCompleted] = useState(chapter.completed ?? false)
 
   return (
-    <div className={mediaChaptersTabRowCard({ completed, order })}>
+    <Link
+      className={mediaChaptersTabRowCard({ completed, order })}
+      href={ChapterUtils.getUrl(chapter)}
+    >
       <div className="flex items-center gap-2">
         <MediaChaptersTabRowProgressionButton
           chapter={chapter}
@@ -43,8 +49,12 @@ export const MediaChaptersTabRowCard = ({ chapter, order }: Props) => {
         <ChapterTitle chapter={chapter} />
       </div>
       <ChapterUploadedTime className="min-w-28" chapter={chapter} />
-      <ChapterScansListHorizontal chapter={chapter} index={2} />
+      <ChapterScansListHorizontal
+        chapter={chapter}
+        index={index}
+        noisyWidth={216}
+      />
       <ChapterUploader chapter={chapter} />
-    </div>
+    </Link>
   )
 }

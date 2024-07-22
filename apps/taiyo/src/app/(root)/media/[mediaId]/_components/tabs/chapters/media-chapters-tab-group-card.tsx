@@ -21,6 +21,7 @@ export const MediaChapterGroupCard = ({ group }: Props) => {
           key={chapter.id}
           chapter={chapter}
           order={computeChapterOrder(i)}
+          index={i}
         />
       ))}
     </div>
