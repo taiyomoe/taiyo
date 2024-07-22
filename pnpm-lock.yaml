@@ -115,8 +115,8 @@ importers:
         specifier: ^2.4.6
         version: 2.4.6(@types/react@18.3.3)(framer-motion@11.3.8(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tailwindcss@3.4.6(ts-node@10.9.2(@types/node@20.14.11)(typescript@5.5.3)))
       '@react-stately/data':
-        specifier: ^3.11.4
-        version: 3.11.4(react@18.3.1)
+        specifier: ^3.11.5
+        version: 3.11.5(react@18.3.1)
       '@savvywombat/tailwindcss-grid-areas':
         specifier: ^4.0.0
         version: 4.0.0(tailwindcss@3.4.6(ts-node@10.9.2(@types/node@20.14.11)(typescript@5.5.3)))
@@ -2365,10 +2365,10 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
 
-  '@react-stately/data@3.11.4':
-    resolution: {integrity: sha512-PbnUQxeE6AznSuEWYnRmrYQ9t5z1Asx98Jtrl96EeA6Iapt9kOjTN9ySqCxtPxMKleb1NIqG3+uHU3veIqmLsg==}
+  '@react-stately/data@3.11.5':
+    resolution: {integrity: sha512-vWzEfbQxWs2YeD3y55tHA7F5MEtypxFEFfDOzfEUEUl1ofxj4ZbKsWcJfjkMyAIkdPUSe2yTgXpRaPuXL0lhyw==}
     peerDependencies:
-      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0
 
   '@react-stately/datepicker@3.9.4':
     resolution: {integrity: sha512-yBdX01jn6gq4NIVvHIqdjBUPo+WN8Bujc4OnPw+ZnfA4jI0eIgq04pfZ84cp1LVXW0IB0VaCu1AlQ/kvtZjfGA==}
@@ -2582,6 +2582,11 @@ packages:
     resolution: {integrity: sha512-5d+3HbFDxGZjhbMBeFHRQhexMFt4pUce3okyRtUVKbbedQFUrtXSBg9VszgF2RTeQDKDkMCIQDtz5ccP/Lk1gw==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
+
+  '@react-types/shared@3.24.0':
+    resolution: {integrity: sha512-0mTSGqxq1ETwVLgpBKb7XzCLh0/agnH7a9EbOMonVwWJbuYw2YP8S3VwOMvFrvVToqYir4Z/xS5Waiz+0Ix1dQ==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0
 
   '@react-types/slider@3.7.3':
     resolution: {integrity: sha512-F8qFQaD2mqug2D0XeWMmjGBikiwbdERFlhFzdvNGbypPLz3AZICBKp1ZLPWdl0DMuy03G/jy6Gl4mDobl7RT2g==}
@@ -7755,9 +7760,9 @@ snapshots:
       '@swc/helpers': 0.5.12
       react: 18.3.1
 
-  '@react-stately/data@3.11.4(react@18.3.1)':
+  '@react-stately/data@3.11.5(react@18.3.1)':
     dependencies:
-      '@react-types/shared': 3.23.1(react@18.3.1)
+      '@react-types/shared': 3.24.0(react@18.3.1)
       '@swc/helpers': 0.5.12
       react: 18.3.1
 
@@ -8045,6 +8050,10 @@ snapshots:
       react: 18.3.1
 
   '@react-types/shared@3.23.1(react@18.3.1)':
+    dependencies:
+      react: 18.3.1
+
+  '@react-types/shared@3.24.0(react@18.3.1)':
     dependencies:
       react: 18.3.1
 
@@ -10027,7 +10036,7 @@ snapshots:
       '@react-stately/checkbox': 3.6.5(react@18.3.1)
       '@react-stately/collections': 3.10.7(react@18.3.1)
       '@react-stately/combobox': 3.8.4(react@18.3.1)
-      '@react-stately/data': 3.11.4(react@18.3.1)
+      '@react-stately/data': 3.11.5(react@18.3.1)
       '@react-stately/datepicker': 3.9.4(react@18.3.1)
       '@react-stately/dnd': 3.3.1(react@18.3.1)
       '@react-stately/form': 3.0.3(react@18.3.1)
