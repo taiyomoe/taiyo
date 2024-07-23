@@ -90,6 +90,8 @@ export const ScanScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','d
 
 export const ScanMemberScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','roles','permissions','userId']);
 
+export const ClickHouseMigrationsScalarFieldEnumSchema = z.enum(['id','startedAt','finishedAt','migrationName']);
+
 export const SortOrderSchema = z.enum(['asc','desc']);
 
 export const QueryModeSchema = z.enum(['default','insensitive']);
@@ -490,3 +492,16 @@ export const ScanMemberSchema = z.object({
 })
 
 export type ScanMember = z.infer<typeof ScanMemberSchema>
+
+/////////////////////////////////////////
+// CLICK HOUSE MIGRATIONS SCHEMA
+/////////////////////////////////////////
+
+export const ClickHouseMigrationsSchema = z.object({
+  id: z.string().uuid(),
+  startedAt: z.coerce.date(),
+  finishedAt: z.coerce.date(),
+  migrationName: z.string(),
+})
+
+export type ClickHouseMigrations = z.infer<typeof ClickHouseMigrationsSchema>

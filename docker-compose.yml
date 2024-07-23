@@ -1,7 +1,7 @@
 services:
   postgres:
     image: "postgres:16-alpine"
-    restart: always
+    restart: unless-stopped
     environment:
       - POSTGRES_USER=$DATABASE_USERNAME
       - POSTGRES_PASSWORD=$DATABASE_PASSWORD
@@ -13,7 +13,7 @@ services:
 
   meilisearch:
     image: "getmeili/meilisearch:v1.9"
-    restart: always
+    restart: unless-stopped
     environment:
       - MEILI_MASTER_KEY=$MEILISEARCH_MASTER_KEY
       - MEILI_ENV=$NODE_ENV
@@ -23,10 +23,26 @@ services:
       - "./data/meilisearch:/meili_data"
 
   dragonfly:
-    image: 'docker.dragonflydb.io/dragonflydb/dragonfly'
+    image: "docker.dragonflydb.io/dragonflydb/dragonfly"
+    restart: unless-stopped
     ulimits:
       memlock: -1
     ports:
       - "$DRAGONFLY_PORT:6379"
     volumes:
       - "./data/dragonfly:/data"
+
+  clickhouse:
+    image: "bitnami/clickhouse:24"
+    restart: unless-stopped
+    environment:
+      - CLICKHOUSE_ADMIN_USER=$CLICKHOUSE_USERNAME
+      - CLICKHOUSE_ADMIN_PASSWORD=$CLICKHOUSE_PASSWORD
+    ports:
+      - "8123:8123"
+      - "9000:9000"
+      - "9004:9004"
+      - "9005:9005"
+    volumes:
+      - "./data/clickhouse:/bitnami/clickhouse"
+      - "./packages/logs/config.xml:/bitnami/clickhouse/etc/conf.d/override.xml:ro"
