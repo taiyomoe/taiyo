@@ -13,7 +13,6 @@ export const env = createEnv({
    */
   server: {
     CLICKHOUSE_URL: z.string().url(),
-    CLICKHOUSE_PORT: z.coerce.number(),
     CLICKHOUSE_USERNAME: z.string(),
     CLICKHOUSE_PASSWORD: z.string(),
   },

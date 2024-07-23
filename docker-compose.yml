@@ -39,10 +39,7 @@ services:
       - CLICKHOUSE_ADMIN_USER=$CLICKHOUSE_USERNAME
       - CLICKHOUSE_ADMIN_PASSWORD=$CLICKHOUSE_PASSWORD
     ports:
-      - "8123:8123"
-      - "9000:9000"
-      - "9004:9004"
-      - "9005:9005"
+      - "$CLICKHOUSE_PORT:8123"
     volumes:
       - "./data/clickhouse:/bitnami/clickhouse"
       - "./packages/logs/config.xml:/bitnami/clickhouse/etc/conf.d/override.xml:ro"
