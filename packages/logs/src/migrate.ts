@@ -1,8 +1,9 @@
 import { client } from "./"
 import migration1 from "./migrations/20240722143359_init"
+import migration2 from "./migrations/20240723104911_add_chapters"
 import { wrapper } from "./wrapper"
 
-const migrations = [migration1]
+const migrations = [migration1, migration2]
 const migrationsRan = await wrapper.migrations.getAll()
 const migrationsToRun = migrations.filter((m) =>
   migrationsRan.every((mr) => mr.migrationName !== m.name),
