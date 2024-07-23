@@ -14,7 +14,7 @@ export const wrapper = {
     insert: (name: string, startedAt: Date, finishedAt: Date) =>
       client.command({
         query:
-          "INSERT INTO _clickhouse_migrations (startedAt, finishedAt, migrationName) VALUES ({startedAt: DateTime64}, {finishedAt: DateTime64}, {migrationName: String});",
+          "INSERT INTO logs._clickhouse_migrations (startedAt, finishedAt, migrationName) VALUES ({startedAt: DateTime64}, {finishedAt: DateTime64}, {migrationName: String});",
         query_params: { startedAt, finishedAt, migrationName: name },
       }),
   },
