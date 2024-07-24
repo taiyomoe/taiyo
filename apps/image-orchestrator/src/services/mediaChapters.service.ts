@@ -1,6 +1,7 @@
 import { randomUUID } from "crypto"
 import { cacheClient } from "@taiyomoe/cache"
 import { db } from "@taiyomoe/db"
+import { logsClient } from "@taiyomoe/logs"
 import { latestReleaseQuery } from "@taiyomoe/services/utils"
 import { omit } from "radash"
 import type { UploadChapterInput } from "../schemas"
@@ -22,6 +23,8 @@ const insert = async (
       uploaderId,
     },
   })
+
+  await logsClient.chapters.insert("created", null, result, uploaderId)
 
   const cached = await cacheClient.chapters.latest.get()
 

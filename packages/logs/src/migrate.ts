@@ -1,10 +1,9 @@
-import { client } from "./"
+import { logsClient, rawLogsClient } from "./"
 import migration1 from "./migrations/20240722143359_init"
 import migration2 from "./migrations/20240723104911_add_chapters"
-import { wrapper } from "./wrapper"
 
 const migrations = [migration1, migration2]
-const migrationsRan = await wrapper.migrations.getAll()
+const migrationsRan = await logsClient.migrations.getAll()
 const migrationsToRun = migrations.filter((m) =>
   migrationsRan.every((mr) => mr.migrationName !== m.name),
 )
@@ -23,11 +22,11 @@ for (const migration of migrationsToRun) {
 
   const finishedAt = new Date()
 
-  await wrapper.migrations.insert(migration.name, finishedAt, startedAt)
+  await logsClient.migrations.insert(migration.name, finishedAt, startedAt)
 
   console.log(
     `Migration ${migration.name} finished. Took ${finishedAt.getTime() - startedAt.getTime()}ms`,
   )
 }
 
-await client.close()
+await rawLogsClient.close()

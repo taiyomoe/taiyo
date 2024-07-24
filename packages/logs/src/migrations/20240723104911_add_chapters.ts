@@ -1,7 +1,7 @@
-import { client } from "../"
+import { rawLogsClient } from "../"
 
 const up = async () => {
-  await client.command({
+  await rawLogsClient.command({
     query: `
       CREATE TABLE IF NOT EXISTS logs.chapters (
         id UUID DEFAULT generateUUIDv4(),
@@ -10,12 +10,11 @@ const up = async () => {
         old JSON,
         new JSON,
         diff Array(String),
+        chapterId UUID,
+        userId UUID,
         PRIMARY KEY (id)
       ) ENGINE = MergeTree() ORDER BY (id);
     `,
-    clickhouse_settings: {
-      allow_experimental_object_type: 1,
-    },
   })
 }
 
