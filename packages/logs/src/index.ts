@@ -3,7 +3,7 @@ import type { MediaChapter } from "@taiyomoe/db"
 import { ObjectUtils } from "@taiyomoe/utils"
 import SuperJSON from "superjson"
 import { env } from "../env"
-import type { LogsMigration, LogsType } from "./types"
+import type { InsertResource, LogsMigration } from "./types"
 
 export const rawLogsClient = createClient({
   url: env.CLICKHOUSE_URL,
@@ -34,23 +34,20 @@ export const logsClient = {
   },
 
   chapters: {
-    insert: async (
-      type: LogsType,
-      old: MediaChapter | null,
-      _new: MediaChapter | null,
-      userId: string,
-    ) =>
+    insert: async (input: InsertResource<MediaChapter>) =>
       rawLogsClient.insert({
         table: "logs.chapters",
         values: [
           ["type", "old", "new", "diff", "chapterId", "userId"],
           [
-            type,
-            SuperJSON.serialize(old ?? {}),
-            SuperJSON.serialize(_new ?? {}),
-            old && _new ? Object.keys(ObjectUtils.deepDiff(old, _new)) : [],
-            old?.id || _new?.id,
-            userId,
+            input.type,
+            SuperJSON.serialize("old" in input ? input.old : {}),
+            SuperJSON.serialize("_new" in input ? input._new : {}),
+            input.type === "updated"
+              ? Object.keys(ObjectUtils.deepDiff(input.old, input._new))
+              : [],
+            "old" in input ? input.old.id : input._new.id,
+            input.userId,
           ],
         ],
         format: "JSONCompactEachRowWithNames",

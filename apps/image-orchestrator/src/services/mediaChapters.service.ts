@@ -24,7 +24,11 @@ const insert = async (
     },
   })
 
-  await logsClient.chapters.insert("created", null, result, uploaderId)
+  await logsClient.chapters.insert({
+    type: "created",
+    _new: result,
+    userId: uploaderId,
+  })
 
   const cached = await cacheClient.chapters.latest.get()
 

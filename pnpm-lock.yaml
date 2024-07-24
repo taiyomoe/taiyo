@@ -415,9 +415,6 @@ importers:
 
   packages/logs:
     dependencies:
-      '@clickhouse/client':
-        specifier: ^1.4.0
-        version: 1.4.0
       '@clickhouse/client-web':
         specifier: ^1.4.0
         version: 1.4.0
@@ -531,6 +528,9 @@ importers:
       '@taiyomoe/db':
         specifier: workspace:*
         version: link:../db
+      '@taiyomoe/logs':
+        specifier: workspace:*
+        version: link:../logs
       '@taiyomoe/meilisearch':
         specifier: workspace:*
         version: link:../meilisearch
@@ -1004,10 +1004,6 @@ packages:
 
   '@clickhouse/client-web@1.4.0':
     resolution: {integrity: sha512-wnwkesTfHfP3bYrfVlg1NLoYp4rxhrajgFRARju+kcqUWLSR+2jfIU0N1N3se39UTuc24NHW3H84PQgan0nOmw==}
-
-  '@clickhouse/client@1.4.0':
-    resolution: {integrity: sha512-O4mbFPM/wQtFck01ghYI2mnNHv9jSFEiQBsTCH4t6MKeGHNAPkJGaFGv+KycLTv6zjnQNjiUGdXDMVRema5SyA==}
-    engines: {node: '>=16'}
 
   '@cspotcode/source-map-support@0.8.1':
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
@@ -6056,10 +6052,6 @@ snapshots:
   '@clickhouse/client-common@1.4.0': {}
 
   '@clickhouse/client-web@1.4.0':
-    dependencies:
-      '@clickhouse/client-common': 1.4.0
-
-  '@clickhouse/client@1.4.0':
     dependencies:
       '@clickhouse/client-common': 1.4.0
 

@@ -31,3 +31,9 @@ type LogsResource<TRaw, TModel> = TRaw & { diff: (keyof TModel)[] } & (
         new: null
       }
   )
+
+export type InsertResource<TModel> = { userId: string } & (
+  | { type: "created"; _new: TModel }
+  | { type: "deleted"; old: TModel }
+  | { type: "updated"; old: TModel; _new: TModel }
+)

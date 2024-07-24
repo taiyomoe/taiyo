@@ -311,5 +311,11 @@ export const chaptersRouter = createTRPCRouter({
         data: { deletedAt: new Date(), deleterId: ctx.session.user.id },
         where: { id: input },
       })
+
+      await ctx.logs.chapters.insert({
+        type: "deleted",
+        old: mediaChapter,
+        userId: ctx.session.user.id,
+      })
     }),
 })
