@@ -202,8 +202,8 @@ importers:
         specifier: ^0.3.0
         version: 0.3.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       next-usequerystate:
-        specifier: ^1.17.5
-        version: 1.17.5(next@14.2.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
+        specifier: ^1.17.6
+        version: 1.17.6(next@14.2.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
       parse-numeric-range:
         specifier: ^1.3.0
         version: 1.3.0
@@ -4320,8 +4320,8 @@ packages:
       react: ^16.8 || ^17 || ^18
       react-dom: ^16.8 || ^17 || ^18
 
-  next-usequerystate@1.17.5:
-    resolution: {integrity: sha512-oTy1Q3V90k6wxdDQ+8yxx4JB3JEwYVJ6BHk5r8lsR4uvdqlEYUsPSohWM0TzTT7TwA7Lz7ye86NvlDkvZ2tMLQ==}
+  next-usequerystate@1.17.6:
+    resolution: {integrity: sha512-uE/zI+1/H09cpGBBalBolJD+pROj31Veu0KD1HvYSCCrp4Coe1PoEVH6Q/xZWJCVlN7p3PlKgOJT1eT9mEmtKA==}
     peerDependencies:
       next: '>=13.4 <14.0.2 || ^14.0.3'
 
@@ -10579,7 +10579,7 @@ snapshots:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
 
-  next-usequerystate@1.17.5(next@14.2.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)):
+  next-usequerystate@1.17.6(next@14.2.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)):
     dependencies:
       mitt: 3.0.1
       next: 14.2.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
