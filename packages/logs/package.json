@@ -14,7 +14,7 @@
     "migrate": "tsx ./src/migrate.ts"
   },
   "dependencies": {
-    "@clickhouse/client": "^1.4.0",
+    "@clickhouse/client": "^1.4.1",
     "@t3-oss/env-core": "^0.11.0",
     "tsx": "^4.16.5",
     "zod": "^3.23.8"

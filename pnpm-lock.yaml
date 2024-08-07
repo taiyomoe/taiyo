@@ -413,8 +413,8 @@ importers:
   packages/logs:
     dependencies:
       '@clickhouse/client':
-        specifier: ^1.4.0
-        version: 1.4.0
+        specifier: ^1.4.1
+        version: 1.4.1
       '@t3-oss/env-core':
         specifier: ^0.11.0
         version: 0.11.0(typescript@5.5.4)(zod@3.23.8)
@@ -966,11 +966,11 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@clickhouse/client-common@1.4.0':
-    resolution: {integrity: sha512-kglG8YyWnR1K24RckUf5ZdNTN0U0s+a1j/bpCO4ZjzjO87ICgWlXFVD22pZqSACW7/2IIi1IkzbwtxKI2s/MOw==}
+  '@clickhouse/client-common@1.4.1':
+    resolution: {integrity: sha512-f5eoTrUSDplrMoi3ddeZ0MzGTn0iGMByEQ8j63eVMoBSOI2+F6jEIPcW2tWofT79Rvnn3RRlveYcShiaIiCJyw==}
 
-  '@clickhouse/client@1.4.0':
-    resolution: {integrity: sha512-O4mbFPM/wQtFck01ghYI2mnNHv9jSFEiQBsTCH4t6MKeGHNAPkJGaFGv+KycLTv6zjnQNjiUGdXDMVRema5SyA==}
+  '@clickhouse/client@1.4.1':
+    resolution: {integrity: sha512-12iV+MeykxdQySRFHwaVU+hKUv3JP6kdwOI+z3zzyfPVYHynTlV8emJjjGZR0+VfRaj3PCMuQfryfsJ82nh9WQ==}
     engines: {node: '>=16'}
 
   '@cspotcode/source-map-support@0.8.1':
@@ -6006,11 +6006,11 @@ snapshots:
   '@biomejs/cli-win32-x64@1.8.3':
     optional: true
 
-  '@clickhouse/client-common@1.4.0': {}
+  '@clickhouse/client-common@1.4.1': {}
 
-  '@clickhouse/client@1.4.0':
+  '@clickhouse/client@1.4.1':
     dependencies:
-      '@clickhouse/client-common': 1.4.0
+      '@clickhouse/client-common': 1.4.1
 
   '@cspotcode/source-map-support@0.8.1':
     dependencies:
