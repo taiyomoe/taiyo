@@ -109,8 +109,8 @@ importers:
         specifier: ^3.9.0
         version: 3.9.0(react-hook-form@7.52.2(react@18.3.1))
       '@meilisearch/instant-meilisearch':
-        specifier: ^0.19.1
-        version: 0.19.1(encoding@0.1.13)
+        specifier: ^0.19.2
+        version: 0.19.2(encoding@0.1.13)
       '@nextui-org/react':
         specifier: ^2.4.6
         version: 2.4.6(@types/react@18.3.3)(framer-motion@11.3.22(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tailwindcss@3.4.7(ts-node@10.9.2(@types/node@20.14.14)(typescript@5.5.4)))
@@ -1361,8 +1361,8 @@ packages:
   '@jridgewell/trace-mapping@0.3.9':
     resolution: {integrity: sha512-3Belt6tdc8bPgAtbcmdtNJlirVoTmEb5e2gC94PnkwEW9jI6CAHUeoG85tjWP5WquqfavoMtMwiG4P926ZKKuQ==}
 
-  '@meilisearch/instant-meilisearch@0.19.1':
-    resolution: {integrity: sha512-a61jHJTRk14KQYw2yj90H7HwfYPdVg7QoNZOhtQ6f5FO/ojL2pETkQuFHTDdLTuNBwLfKTSaTFpPLBlQnqzVKA==}
+  '@meilisearch/instant-meilisearch@0.19.2':
+    resolution: {integrity: sha512-CJo3sPUJfSQ4oThxRaMK8MzUpFz9R1Ng1BdCtRsvg4x7ENGouAplq0GOi9Bc6tXTUFjMfSq/oOYUDeoFdkaPwg==}
 
   '@next/env@14.2.5':
     resolution: {integrity: sha512-/zZGkrTOsraVfYjGP8uM0p6r0BDT6xWpkjdVbcz66PJVSpwXX3yNiRycxAuDfBKGWBrZBXRuK/YVlkNgxHGwmA==}
@@ -6337,7 +6337,7 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
 
-  '@meilisearch/instant-meilisearch@0.19.1(encoding@0.1.13)':
+  '@meilisearch/instant-meilisearch@0.19.2(encoding@0.1.13)':
     dependencies:
       meilisearch: 0.41.0(encoding@0.1.13)
     transitivePeerDependencies:
