@@ -27,7 +27,7 @@
     "@taiyomoe/schemas": "workspace:*",
     "@taiyomoe/services": "workspace:*",
     "@taiyomoe/utils": "workspace:*",
-    "elysia": "1.1.5",
+    "elysia": "1.1.6",
     "file-type": "19.4.0",
     "mangadex-full-api": "^5.12.1",
     "radash": "^12.1.0",
