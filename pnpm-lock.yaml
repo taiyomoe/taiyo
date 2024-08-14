@@ -12,7 +12,7 @@ importers:
         specifier: ^1.8.3
         version: 1.8.3
       '@turbo/gen':
-        specifier: ^2.0.12
+        specifier: ^2.0.13
         version: 2.0.13(@types/node@20.14.15)(typescript@5.5.4)
       '@types/global-types':
         specifier: workspace:*
