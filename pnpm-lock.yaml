@@ -18,7 +18,7 @@ importers:
         specifier: workspace:*
         version: link:packages/global-types
       turbo:
-        specifier: ^2.0.12
+        specifier: ^2.0.13
         version: 2.0.13
       typescript:
         specifier: ^5.5.4
