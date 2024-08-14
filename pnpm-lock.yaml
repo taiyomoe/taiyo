@@ -448,7 +448,7 @@ importers:
   packages/s3:
     dependencies:
       '@aws-sdk/client-s3':
-        specifier: ^3.627.0
+        specifier: ^3.631.0
         version: 3.631.0
       '@t3-oss/env-core':
         specifier: ^0.11.0
