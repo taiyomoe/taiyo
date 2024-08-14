@@ -17,7 +17,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^1.8.3",
-    "@turbo/gen": "^2.0.12",
+    "@turbo/gen": "^2.0.13",
     "@types/global-types": "workspace:*",
     "turbo": "^2.0.12",
     "typescript": "^5.5.4"
