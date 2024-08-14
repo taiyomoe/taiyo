@@ -6,7 +6,7 @@ runs:
   steps:
     - shell: bash
       run: echo ::set-output name=nodeVersion::$(node -p "require('./package.json').engines.node")
-      id: node-version
+      id: engines
 
     - uses: pnpm/action-setup@v2
     - uses: actions/setup-node@v4
