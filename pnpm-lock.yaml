@@ -293,7 +293,7 @@ importers:
         specifier: ^8.4.41
         version: 8.4.41
       tailwindcss:
-        specifier: ^3.4.9
+        specifier: ^3.4.10
         version: 3.4.10(ts-node@10.9.2(@types/node@20.14.15)(typescript@5.5.4))
       typescript:
         specifier: ^5.5.4
@@ -594,7 +594,7 @@ importers:
         specifier: ^8.4.41
         version: 8.4.41
       tailwindcss:
-        specifier: ^3.4.9
+        specifier: ^3.4.10
         version: 3.4.10(ts-node@10.9.2(@types/node@20.14.15)(typescript@5.5.4))
       tailwindcss-animate:
         specifier: ^1.0.7
