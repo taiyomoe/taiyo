@@ -4,14 +4,10 @@ description: "Common setup steps for Actions"
 runs:
   using: composite
   steps:
-    - shell: bash
-      run: echo ::set-output name=nodeVersion::$(node -p "require('./package.json').engines.node")
-      id: engines
-
     - uses: pnpm/action-setup@v2
     - uses: actions/setup-node@v4
       with:
-        node-version: ${{ steps.engines.outputs.nodeVersion }}
+        node-version-file: '.nvmrc'
         cache: "pnpm"
 
     - shell: bash
