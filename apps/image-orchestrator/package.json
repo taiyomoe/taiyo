@@ -16,7 +16,7 @@
   "dependencies": {
     "@elysiajs/cors": "^1.1.0",
     "@elysiajs/stream": "^1.1.0",
-    "@elysiajs/swagger": "^1.1.0",
+    "@elysiajs/swagger": "^1.1.1",
     "@t3-oss/env-core": "^0.11.0",
     "@taiyomoe/auth": "workspace:*",
     "@taiyomoe/cache": "workspace:*",
@@ -28,8 +28,8 @@
     "@taiyomoe/schemas": "workspace:*",
     "@taiyomoe/services": "workspace:*",
     "@taiyomoe/utils": "workspace:*",
-    "elysia": "1.0.27",
-    "file-type": "19.0.0",
+    "elysia": "1.1.6",
+    "file-type": "19.4.0",
     "mangadex-full-api": "^5.12.1",
     "radash": "^12.1.0",
     "sharp": "^0.33.4",
@@ -39,7 +39,7 @@
   "devDependencies": {
     "@taiyomoe/tsconfig": "workspace:*",
     "@taiyomoe/types": "workspace:*",
-    "@types/node": "^20.14.12",
+    "@types/node": "^20.14.15",
     "typescript": "^5.5.4"
   }
 }

@@ -7,7 +7,7 @@ runs:
     - uses: pnpm/action-setup@v2
     - uses: actions/setup-node@v4
       with:
-        node-version: 20.15.1
+        node-version-file: '.nvmrc'
         cache: "pnpm"
 
     - shell: bash
