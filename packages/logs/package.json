@@ -19,7 +19,7 @@
     "@taiyomoe/db": "workspace:*",
     "@taiyomoe/utils": "workspace:*",
     "superjson": "^2.2.1",
-    "tsx": "^4.16.2",
+    "tsx": "^4.17.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {
