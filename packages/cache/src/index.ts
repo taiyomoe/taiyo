@@ -14,6 +14,8 @@ const HOUR = 60 * 60
 const DAY = 60 * 60 * 24
 const client = new DF(env.DRAGONFLY_URL)
 
+export const rawCacheClient = client
+
 export const cacheClient = {
   medias: {
     latest: {
@@ -52,5 +54,3 @@ export const cacheClient = {
     },
   },
 }
-
-export const rawCacheClient = client

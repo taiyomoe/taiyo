@@ -15,6 +15,7 @@
     "@taiyomoe/auth": "workspace:*",
     "@taiyomoe/db": "workspace:*",
     "@taiyomoe/cache": "workspace:*",
+    "@taiyomoe/logs": "workspace:*",
     "@taiyomoe/meilisearch": "workspace:*",
     "@taiyomoe/schemas": "workspace:*",
     "@taiyomoe/services": "workspace:*",

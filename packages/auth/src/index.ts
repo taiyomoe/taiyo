@@ -1,10 +1,12 @@
 import { PrismaAdapter } from "@auth/prisma-adapter"
 import { type Languages, type User, db } from "@taiyomoe/db"
+import { logsClient } from "@taiyomoe/logs"
 import type { Permission } from "@taiyomoe/types"
 import { PermissionUtils } from "@taiyomoe/utils"
 import NextAuth, { type DefaultSession } from "next-auth"
 import Discord from "next-auth/providers/discord"
 import { env } from "../env"
+import { getIp } from "./utils"
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -63,6 +65,33 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 
       await db.userSetting.create({ data: { userId: user.id } })
       await db.userLibrary.create({ data: { userId: user.id } })
+      await logsClient.users.auth.insert({
+        type: "registered",
+        ip: getIp(),
+        userId: user.id,
+      })
+    },
+    signIn: async ({ user }) => {
+      if (!user.id) return
+
+      await logsClient.users.auth.insert({
+        type: "signedIn",
+        ip: getIp(),
+        userId: user.id,
+      })
+    },
+    signOut: async (message) => {
+      if ("token" in message) {
+        throw new Error("Unreachable with JWT strategy.")
+      }
+
+      if (!message.session?.userId) return
+
+      await logsClient.users.auth.insert({
+        type: "signedOut",
+        ip: getIp(),
+        userId: message.session.userId,
+      })
     },
   },
 })

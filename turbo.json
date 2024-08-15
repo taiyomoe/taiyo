@@ -39,7 +39,10 @@
     "S3_URL",
     "S3_ACCESS_KEY_ID",
     "S3_SECRET_ACCESS_KEY",
-    "S3_BUCKET_NAME"
+    "S3_BUCKET_NAME",
+    "CLICKHOUSE_URL",
+    "CLICKHOUSE_USERNAME",
+    "CLICKHOUSE_PASSWORD"
   ],
   "globalPassThroughEnv": [
     "NODE_ENV",

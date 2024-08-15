@@ -1,9 +1,9 @@
-import { client } from "../"
+import { rawLogsClient } from "../"
 
 const up = async () => {
-  await client.command({ query: "CREATE DATABASE IF NOT EXISTS logs;" })
+  await rawLogsClient.command({ query: "CREATE DATABASE IF NOT EXISTS logs;" })
 
-  await client.command({
+  await rawLogsClient.command({
     query: `
       CREATE TABLE IF NOT EXISTS logs._clickhouse_migrations (
         id UUID DEFAULT generateUUIDv4(),
