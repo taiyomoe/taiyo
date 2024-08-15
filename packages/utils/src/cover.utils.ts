@@ -2,8 +2,12 @@ import type { MediaCover } from "@prisma/client"
 import type { MediaCoverVolume, MediaWithRelations } from "@taiyomoe/types"
 import { env } from "../env"
 
-const getUrl = (media: { id: string; coverId: string }) =>
-  `${env.NEXT_PUBLIC_CDN_URL}/medias/${media.id}/covers/${media.coverId}.jpg`
+const getUrl = (
+  media:
+    | { id: string; coverId: string }
+    | { id: string; covers: { id: string }[] },
+) =>
+  `${env.NEXT_PUBLIC_CDN_URL}/medias/${media.id}/covers/${"coverId" in media ? media.coverId : media.covers[0]!.id}.jpg`
 
 const getLowestVolumeNumber = ({
   media,
