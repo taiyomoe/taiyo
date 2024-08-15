@@ -187,7 +187,7 @@ importers:
         specifier: ^11.3.24
         version: 11.3.27(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       jotai:
-        specifier: ^2.9.2
+        specifier: ^2.9.3
         version: 2.9.3(@types/react@18.3.3)(react@18.3.1)
       lucide-react:
         specifier: ^0.427.0
