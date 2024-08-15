@@ -1,12 +1,15 @@
 import { logsClient, rawLogsClient } from "./"
 import migration1 from "./migrations/20240722143359_init"
 import migration2 from "./migrations/20240723104911_add_chapters"
+import migration3 from "./migrations/20240724160021_add_users"
 
-const migrations = [migration1, migration2]
+const migrations = [migration1, migration2, migration3]
 const migrationsRan = await logsClient.migrations.getAll()
 const migrationsToRun = migrations.filter((m) =>
   migrationsRan.every((mr) => mr.migrationName !== m.name),
 )
+
+console.log("migrationsToRun", migrationsToRun)
 
 if (migrationsToRun.length === 0) {
   console.log("No migrations to run.")

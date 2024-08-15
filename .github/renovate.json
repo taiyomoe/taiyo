@@ -10,6 +10,5 @@
   ],
   "updateInternalDeps": true,
   "rangeStrategy": "bump",
-  "automerge": true,
-  "ignoreDeps": ["elysia", "file-type"]
+  "automerge": true
 }

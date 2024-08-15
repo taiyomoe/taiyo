@@ -3,7 +3,7 @@ import type { MediaChapter } from "@taiyomoe/db"
 import { ObjectUtils } from "@taiyomoe/utils"
 import SuperJSON from "superjson"
 import { env } from "../env"
-import type { InsertResource, LogsMigration } from "./types"
+import type { InsertResource, LogsMigration, LogsUsersAuthType } from "./types"
 
 export const rawLogsClient = createClient({
   url: env.CLICKHOUSE_URL,
@@ -34,7 +34,7 @@ export const logsClient = {
   },
 
   chapters: {
-    insert: async (input: InsertResource<MediaChapter>) =>
+    insert: (input: InsertResource<MediaChapter>) =>
       rawLogsClient.insert({
         table: "logs.chapters",
         values: [
@@ -52,6 +52,24 @@ export const logsClient = {
         ],
         format: "JSONCompactEachRowWithNames",
       }),
+  },
+
+  users: {
+    auth: {
+      insert: (input: {
+        type: LogsUsersAuthType
+        ip: string
+        userId: string
+      }) =>
+        rawLogsClient.insert({
+          table: "logs.usersAuth",
+          values: [
+            ["type", "ip", "userId"],
+            [input.type, input.ip, input.userId],
+          ],
+          format: "JSONCompactEachRowWithNames",
+        }),
+    },
   },
 }
 
