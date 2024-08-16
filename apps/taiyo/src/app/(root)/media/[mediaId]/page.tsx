@@ -24,7 +24,7 @@ export const generateMetadata = async ({
   }
 
   return {
-    title: MediaUtils.getMainTitle(media.titles, "en"),
+    title: MediaUtils.getDisplayTitle(media.titles),
     description: media.synopsis,
     openGraph: {
       siteName: siteConfig.name,
@@ -32,7 +32,7 @@ export const generateMetadata = async ({
         url: `/api/og?mediaId=${params.mediaId}`,
         width: 1200,
         height: 630,
-        alt: MediaUtils.getMainTitle(media.titles, "en"),
+        alt: MediaUtils.getDisplayTitle(media.titles),
       },
     },
   }

@@ -62,7 +62,7 @@ export const mediasRouter = createTRPCRouter({
         // ----- RELATIONS
         coverId: result.covers.at(0)!.id,
         bannerId: result.banners.at(0)?.id ?? null,
-        mainTitle: MediaUtils.getMainTitle(
+        mainTitle: MediaUtils.getDisplayTitle(
           result.titles,
           ctx.session?.user.preferredTitles,
         ),

@@ -61,7 +61,7 @@ const MediasSearchAutocompleteComponent = (props: Props) => {
       {...rest}
     >
       {(item) => {
-        const title = MediaUtils.getMainTitle(
+        const title = MediaUtils.getDisplayTitle(
           item.titles,
           session?.user.preferredTitles,
         )

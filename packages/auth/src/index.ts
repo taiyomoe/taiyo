@@ -22,7 +22,7 @@ declare module "next-auth" {
     user: DefaultSession["user"] & {
       id: string
       role: { name: string; permissions: Permission[] }
-      preferredTitles: Languages
+      preferredTitles: Languages | null
     }
   }
 }

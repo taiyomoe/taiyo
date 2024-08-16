@@ -41,7 +41,7 @@ export const MediaOGCard = async ({ mediaId }: Props) => {
                 WebkitBoxOrient: "vertical",
               }}
             >
-              {MediaUtils.getMainTitle(media.titles, "en")}
+              {MediaUtils.getDisplayTitle(media.titles)}
             </p>
             <div tw="flex items-center">
               {media.startDate && !media.endDate && (

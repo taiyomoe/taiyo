@@ -194,7 +194,7 @@ export const chaptersRouter = createTRPCRouter({
       const currentMediaChapterIndex = sortedMediaChapters.findIndex(
         (c) => c.id === chapterId,
       )
-      const mediaTitle = MediaUtils.getMainTitle(
+      const mediaTitle = MediaUtils.getDisplayTitle(
         result.media.titles,
         ctx.session?.user.preferredTitles,
       )

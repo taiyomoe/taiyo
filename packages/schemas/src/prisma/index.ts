@@ -181,7 +181,7 @@ export type User = z.infer<typeof UserSchema>
 export const UserSettingSchema = z.object({
   gender: GendersSchema,
   contentRating: ContentRatingSchema,
-  preferredTitles: LanguagesSchema,
+  preferredTitles: LanguagesSchema.nullable(),
   id: z.string(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),

@@ -22,7 +22,10 @@ export const MediasField = ({ name, ...rest }: Props) => {
   const placeholderText = useMemo(() => {
     if (!media) return "Pesquisar..."
 
-    return MediaUtils.getMainTitle(media.titles, session?.user.preferredTitles)
+    return MediaUtils.getDisplayTitle(
+      media.titles,
+      session?.user.preferredTitles,
+    )
   }, [media, session])
 
   const handleSelectionChange = useCallback(

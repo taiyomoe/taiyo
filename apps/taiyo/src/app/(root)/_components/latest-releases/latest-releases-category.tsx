@@ -1,4 +1,5 @@
 import { Button } from "@nextui-org/button"
+import { auth } from "@taiyomoe/auth"
 import { ChaptersService } from "@taiyomoe/services"
 import { ArrowRightIcon } from "lucide-react"
 // import { UnderlineButton } from "~/components/generics/buttons/underline-button"
@@ -6,7 +7,10 @@ import { LatestReleasesLayout } from "./latest-releases-layout"
 import { LatestReleasesLayoutButton } from "./latest-releases-layout-button"
 
 export const LatestReleasesCategory = async () => {
-  const releases = await ChaptersService.getLatest()
+  const session = await auth()
+  const releases = await ChaptersService.getLatest(
+    session?.user.preferredTitles,
+  )
 
   return (
     <div className="flex grow flex-col gap-4">

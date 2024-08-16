@@ -9,7 +9,7 @@ export const sessionSchema = z.object({
       name: z.nativeEnum($Enums.Roles),
       permissions: z.string().array(),
     }),
-    preferredTitles: z.string().nullable(),
+    preferredTitles: z.nativeEnum($Enums.Languages).nullable(),
   }),
   expires: z.coerce.date(),
 })

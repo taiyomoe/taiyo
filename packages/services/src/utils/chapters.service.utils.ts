@@ -34,13 +34,13 @@ export const latestReleaseQuery = {
 
 export const formatRawLatestReleases = (
   input: RawLatestRelease[],
-  preferredTitles: Languages = "en",
+  preferredTitles?: Languages | null,
 ): LatestRelease[] =>
   input.map(({ media, ...r }) => ({
     ...r,
     media: {
       id: media.id,
       coverId: media.covers.at(0)!.id,
-      mainTitle: MediaUtils.getMainTitle(media.titles, preferredTitles),
+      mainTitle: MediaUtils.getDisplayTitle(media.titles, preferredTitles),
     },
   }))
