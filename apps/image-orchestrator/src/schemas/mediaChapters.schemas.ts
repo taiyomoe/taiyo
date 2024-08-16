@@ -1,5 +1,6 @@
+import type { StaticDecode } from "@sinclair/typebox"
 import { ContentRating, Flag, Languages } from "@taiyomoe/db"
-import { type Static, t } from "elysia"
+import { t } from "elysia"
 import { DEFAULT_MIME_TYPES } from "../utils/constants"
 
 export enum UploadChapterState {
@@ -7,6 +8,18 @@ export enum UploadChapterState {
   UPLOADING,
   UPLOADED,
 }
+
+const scansSchema = t
+  .Transform(
+    t.Optional(
+      t.Union([
+        t.String({ format: "uuid" }),
+        t.Array(t.String({ format: "uuid" }), { uniqueItems: true }),
+      ]),
+    ),
+  )
+  .Decode((v) => (typeof v === "string" ? [v] : v))
+  .Encode((v) => v)
 
 export const uploadChapterSchema = t.Object({
   title: t.Optional(t.String()),
@@ -16,9 +29,7 @@ export const uploadChapterSchema = t.Object({
   flag: t.Enum(Flag),
   language: t.Enum(Languages),
   mediaId: t.String({ format: "uuid" }),
-  scanIds: t.Optional(
-    t.Array(t.String({ format: "uuid" }), { uniqueItems: true }),
-  ),
+  scanIds: scansSchema,
   files: t.Files({ maxItems: 100, maxSize: "10m", type: DEFAULT_MIME_TYPES }),
 })
 
@@ -28,5 +39,5 @@ export const uploadChaptersSchema = t.Object({
   concurrent: t.Numeric({ minimum: 1 }),
 })
 
-export type UploadChapterInput = Static<typeof uploadChapterSchema>
-export type UploadChaptersInput = Static<typeof uploadChaptersSchema>
+export type UploadChapterInput = StaticDecode<typeof uploadChapterSchema>
+export type UploadChaptersInput = StaticDecode<typeof uploadChaptersSchema>

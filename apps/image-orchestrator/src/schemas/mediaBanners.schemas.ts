@@ -1,5 +1,6 @@
+import type { StaticDecode } from "@sinclair/typebox"
 import { ContentRating } from "@taiyomoe/db"
-import { type Static, t } from "elysia"
+import { t } from "elysia"
 import { DEFAULT_MIME_TYPES } from "../utils/constants"
 
 export const uploadBannerSchema = t.Object({
@@ -8,4 +9,4 @@ export const uploadBannerSchema = t.Object({
   file: t.File({ maxSize: "10m", type: DEFAULT_MIME_TYPES }),
 })
 
-export type UploadBannerInput = Static<typeof uploadBannerSchema>
+export type UploadBannerInput = StaticDecode<typeof uploadBannerSchema>

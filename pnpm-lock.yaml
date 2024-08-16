@@ -28,13 +28,13 @@ importers:
     dependencies:
       '@elysiajs/cors':
         specifier: ^1.1.0
-        version: 1.1.0(elysia@1.1.6(@sinclair/typebox@0.33.7)(openapi-types@12.1.3)(typescript@5.5.4))
+        version: 1.1.0(elysia@1.0.27(@sinclair/typebox@0.33.7)(openapi-types@12.1.3)(typescript@5.5.4))
       '@elysiajs/stream':
         specifier: ^1.1.0
-        version: 1.1.0(elysia@1.1.6(@sinclair/typebox@0.33.7)(openapi-types@12.1.3)(typescript@5.5.4))
+        version: 1.1.0(elysia@1.0.27(@sinclair/typebox@0.33.7)(openapi-types@12.1.3)(typescript@5.5.4))
       '@elysiajs/swagger':
         specifier: ^1.1.1
-        version: 1.1.1(elysia@1.1.6(@sinclair/typebox@0.33.7)(openapi-types@12.1.3)(typescript@5.5.4))
+        version: 1.1.1(elysia@1.0.27(@sinclair/typebox@0.33.7)(openapi-types@12.1.3)(typescript@5.5.4))
       '@t3-oss/env-core':
         specifier: ^0.11.0
         version: 0.11.0(typescript@5.5.4)(zod@3.23.8)
@@ -69,11 +69,11 @@ importers:
         specifier: workspace:*
         version: link:../../packages/utils
       elysia:
-        specifier: 1.1.6
-        version: 1.1.6(@sinclair/typebox@0.33.7)(openapi-types@12.1.3)(typescript@5.5.4)
+        specifier: 1.0.27
+        version: 1.0.27(@sinclair/typebox@0.33.7)(openapi-types@12.1.3)(typescript@5.5.4)
       file-type:
-        specifier: 19.4.0
-        version: 19.4.0
+        specifier: 19.0.0
+        version: 19.0.0
       mangadex-full-api:
         specifier: ^5.12.1
         version: 5.12.1
@@ -107,7 +107,7 @@ importers:
     dependencies:
       '@elysiajs/eden':
         specifier: ^1.1.2
-        version: 1.1.2(elysia@1.1.6(@sinclair/typebox@0.33.7)(openapi-types@12.1.3)(typescript@5.5.4))
+        version: 1.1.2(elysia@1.0.27(@sinclair/typebox@0.33.7)(openapi-types@12.1.3)(typescript@5.5.4))
       '@hookform/resolvers':
         specifier: ^3.9.0
         version: 3.9.0(react-hook-form@7.52.2(react@18.3.1))
@@ -2969,9 +2969,6 @@ packages:
     peerDependencies:
       tailwindcss: ^3.0.1
 
-  '@sec-ant/readable-stream@0.4.1':
-    resolution: {integrity: sha512-831qok9r2t8AlxLko40y2ebgSDhenenCatLVeW/uBtnHPyhHOvG0C7TvfgecV+wHzIm5KUICgzmVpWS+IMEAeg==}
-
   '@sinclair/typebox@0.33.7':
     resolution: {integrity: sha512-et38XPs6GMoB6XugH+Spp/HRv5gHYffw7rXC3caen/dIKC7Q6sqs6eEH9Yd9UKziUkOQdrLr9OXUULAc+pRMng==}
 
@@ -3693,13 +3690,13 @@ packages:
   eastasianwidth@0.2.0:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
 
-  electron-to-chromium@1.5.8:
-    resolution: {integrity: sha512-4Nx0gP2tPNBLTrFxBMHpkQbtn2hidPVr/+/FTtcCiBYTucqc70zRyVZiOLj17Ui3wTO7SQ1/N+hkHYzJjBzt6A==}
+  electron-to-chromium@1.5.9:
+    resolution: {integrity: sha512-HfkT8ndXR0SEkU8gBQQM3rz035bpE/hxkZ1YIt4KJPEFES68HfIU6LzKukH0H794Lm83WJtkSAMfEToxCs15VA==}
 
-  elysia@1.1.6:
-    resolution: {integrity: sha512-nj3m1EU+KK2171yhHKm4MyVf5tYAOvq0uwjQ57q40r+fNxxPr8YEahE9PoJngZrrs6ctmKYCuoKSr96bfnSZAQ==}
+  elysia@1.0.27:
+    resolution: {integrity: sha512-mf76BUZeLyw459KbKL+LLy+KtwOV152EfeZWp3p1fivbqEGu20IKbqkDmpiwzJxIz26ifp6Y3gQ0d4UizFvHrw==}
     peerDependencies:
-      '@sinclair/typebox': '>= 0.32.0'
+      '@sinclair/typebox': '>= 0.31.0'
       openapi-types: '>= 12.0.0'
       typescript: '>= 5.0.0'
     peerDependenciesMeta:
@@ -3773,6 +3770,9 @@ packages:
     resolution: {integrity: sha512-kVscqXk4OCp68SZ0dkgEKVi6/8ij300KBWTJq32P/dYeWTSwK41WyTxalN1eRmA5Z9UU/LX9D7FWSmV9SAYx6g==}
     engines: {node: '>=0.10.0'}
 
+  eventemitter3@5.0.1:
+    resolution: {integrity: sha512-GWkBvjiSZK87ELrYOSESUYeVIc9mvLLf/nXalMOS5dYrgZq9o5OVkbZAVM06CVxYsCwH9BDZFPlQTlPA1j4ahA==}
+
   execa@5.1.1:
     resolution: {integrity: sha512-8uSpZZocAZRBAPIEINJj3Lo9HyGitllczc27Eh5YYojjMFMn8yHMDMaUHE2Jqfq05D/wucwI4JGURyXt1vchyg==}
     engines: {node: '>=10'}
@@ -3787,6 +3787,9 @@ packages:
   fast-glob@3.3.2:
     resolution: {integrity: sha512-oX2ruAFQwf/Orj8m737Y5adxDQO0LAB7/S5MnxCdTNDd4p6BsyIVsv9JQsATbTSq8KHRpLwIHbVlUNatxd+1Ow==}
     engines: {node: '>=8.6.0'}
+
+  fast-querystring@1.1.2:
+    resolution: {integrity: sha512-g6KuKWmFXc0fID8WWH0jit4g0AGBoJhCkJMb1RmbsSEUNvQ+ZC8D6CUZ+GtF8nMzSPXnhiePyyqqipzNNEnHjg==}
 
   fast-xml-parser@4.4.1:
     resolution: {integrity: sha512-xkjOecfnKGkSsOwtZ5Pz7Us/T6mrbPQrq0nh+aCO5V9nk5NLWmasAHumTKjiPJPWANe+kAZ84Jc8ooJkzZ88Sw==}
@@ -3803,8 +3806,8 @@ packages:
     resolution: {integrity: sha512-QlZ5yJC0VxHxQQsQhXvBaC7VRJ2uaxTf+Tfpu4Z/OcVQJVpZO+DGU0rkoVW5ce2SccxugvpBJoMvUs59iILYdw==}
     engines: {node: '>= 12'}
 
-  file-type@19.4.0:
-    resolution: {integrity: sha512-7N7Pu0UzVYV8YP6WXhN+kcvtp/P00eWKVo76nMAK+RasRO/ICzuJzjoG+aSLqbY6khDAFQuqsyImGaSdkm49Iw==}
+  file-type@19.0.0:
+    resolution: {integrity: sha512-s7cxa7/leUWLiXO78DVVfBVse+milos9FitauDLG1pI7lNaJ2+5lzPnr2N24ym+84HVwJL6hVuGfgVE+ALvU8Q==}
     engines: {node: '>=18'}
 
   fill-range@7.1.1:
@@ -3865,10 +3868,6 @@ packages:
   get-stream@6.0.1:
     resolution: {integrity: sha512-ts6Wi+2j3jQjqi70w5AlN8DFnkSwC+MqmxEzdEALB2qXZYV3X/b1CTfgPLGJNMeAWxdPfU8FO1ms3NUfaHCPYg==}
     engines: {node: '>=10'}
-
-  get-stream@9.0.1:
-    resolution: {integrity: sha512-kVCxPF3vQM/N0B1PmoqVUqgHP+EeVjmZSQn+1oCRPxd2P21P2F19lIgbR3HBosbB1PUhOAoctJnfEn2GbN2eZA==}
-    engines: {node: '>=18'}
 
   get-tsconfig@4.7.6:
     resolution: {integrity: sha512-ZAqrLlu18NbDdRaHq+AKXzAmqIUPswPWKUchfytdAjiRFnCe5ojG2bstg6mRiZabkKfCoL/e98pbBELIV/YCeA==}
@@ -4061,10 +4060,6 @@ packages:
   is-stream@2.0.1:
     resolution: {integrity: sha512-hFoiJiTl63nn+kstHGBtewWSKnQLpyb155KHheA1l39uvtO9nWIop1p3udqPcUd/xbF1VLMO4n7OI6p7RbngDg==}
     engines: {node: '>=8'}
-
-  is-stream@4.0.1:
-    resolution: {integrity: sha512-Dnz92NInDqYckGEUJv689RbRiTSEHCQ7wOVeALbkOz999YpqT46yMRIGtSNl2iCL1waAZSx40+h59NV/EwzV/A==}
-    engines: {node: '>=18'}
 
   is-unicode-supported@0.1.0:
     resolution: {integrity: sha512-knxG2q4UC3u8stRGyAVJCOdxFmv5DZiRcdlIaAQXAbSfJya+OhopNotLQrstBhququ4ZpuKbDc/8S6mgXgPFPw==}
@@ -4708,6 +4703,10 @@ packages:
     resolution: {integrity: sha512-9u/sniCrY3D5WdsERHzHE4G2YCXqoG5FTHUiCC4SIbr6XcLZBY05ya9EKjYek9O5xOAwjGq+1JdGBAS7Q9ScoA==}
     engines: {node: '>= 6'}
 
+  readable-web-to-node-stream@3.0.2:
+    resolution: {integrity: sha512-ePeK6cc1EcKLEhJFt/AebMCLL+GgSKhuygrZ/GLaKZYEecIgIECf4UaUuaByiGtzckwR4ain9VzUh95T1exYGw==}
+    engines: {node: '>=8'}
+
   readdirp@3.6.0:
     resolution: {integrity: sha512-hOS089on8RduqdbhvQ5Z37A0ESjsqz6qnRcffsMU3495FuTdqSm+7bhJ29JvIOsBDEEnan5DPu9t3To9VRlMzA==}
     engines: {node: '>=8.10.0'}
@@ -4890,8 +4889,8 @@ packages:
   strnum@1.0.5:
     resolution: {integrity: sha512-J8bbNyKKXl5qYcR36TIO8W3mVGVHrmmxsd5PAItGkmyzwJvybiw2IVq5nqd0i4LSNSkB/sx9VHllbfFdr9k1JA==}
 
-  strtok3@8.1.0:
-    resolution: {integrity: sha512-ExzDvHYPj6F6QkSNe/JxSlBxTh3OrI6wrAIz53ulxo1c4hBJ1bT9C/JrAthEKHWG9riVH3Xzg7B03Oxty6S2Lw==}
+  strtok3@7.1.1:
+    resolution: {integrity: sha512-mKX8HA/cdBqMKUr0MMZAFssCkIGoZeSCMXgnt79yKxNFguMLVFgRe6wB+fsL0NmoHDbeyZXczy7vEPSoo3rkzg==}
     engines: {node: '>=16'}
 
   styled-jsx@5.1.1:
@@ -5024,8 +5023,8 @@ packages:
     resolution: {integrity: sha512-65P7iz6X5yEr1cwcgvQxbbIw7Uk3gOy5dIdtZ4rDveLqhrdJP+Li/Hx6tyK0NEb+2GCyneCMJiGqrADCSNk8sQ==}
     engines: {node: '>=8.0'}
 
-  token-types@6.0.0:
-    resolution: {integrity: sha512-lbDrTLVsHhOMljPscd0yitpozq7Ga2M5Cvez5AjGg8GASBjtt6iERCAJ93yommPmz62fb45oFIXHEZ3u9bfJEA==}
+  token-types@5.0.1:
+    resolution: {integrity: sha512-Y2fmSnZjQdDb9W4w4r1tswlMHylzWIeOKpx0aZH9BgGtACHhrk3OkT52AzwcuqTRBZtvvnTjDBh8eynMulu8Vg==}
     engines: {node: '>=14.16'}
 
   tr46@0.0.3:
@@ -5109,10 +5108,6 @@ packages:
     resolution: {integrity: sha512-S8KA6DDI47nQXJSi2ctQ629YzwOVs+bQML6DAtvy0wgNdpi+0ySpQK0g2pxBq2xfF2z3YCscu7NNA8nXT9PlIQ==}
     engines: {node: '>=0.8.0'}
     hasBin: true
-
-  uint8array-extras@1.4.0:
-    resolution: {integrity: sha512-ZPtzy0hu4cZjv3z5NW9gfKnNLjoz4y6uv4HlelAjDK7sY/xOkKZv9xK/WQpcsBB3jEybChz9DPC2U/+cusjJVQ==}
-    engines: {node: '>=18'}
 
   undici-types@5.26.5:
     resolution: {integrity: sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==}
@@ -5940,22 +5935,22 @@ snapshots:
     dependencies:
       '@jridgewell/trace-mapping': 0.3.9
 
-  '@elysiajs/cors@1.1.0(elysia@1.1.6(@sinclair/typebox@0.33.7)(openapi-types@12.1.3)(typescript@5.5.4))':
+  '@elysiajs/cors@1.1.0(elysia@1.0.27(@sinclair/typebox@0.33.7)(openapi-types@12.1.3)(typescript@5.5.4))':
     dependencies:
-      elysia: 1.1.6(@sinclair/typebox@0.33.7)(openapi-types@12.1.3)(typescript@5.5.4)
+      elysia: 1.0.27(@sinclair/typebox@0.33.7)(openapi-types@12.1.3)(typescript@5.5.4)
 
-  '@elysiajs/eden@1.1.2(elysia@1.1.6(@sinclair/typebox@0.33.7)(openapi-types@12.1.3)(typescript@5.5.4))':
+  '@elysiajs/eden@1.1.2(elysia@1.0.27(@sinclair/typebox@0.33.7)(openapi-types@12.1.3)(typescript@5.5.4))':
     dependencies:
-      elysia: 1.1.6(@sinclair/typebox@0.33.7)(openapi-types@12.1.3)(typescript@5.5.4)
+      elysia: 1.0.27(@sinclair/typebox@0.33.7)(openapi-types@12.1.3)(typescript@5.5.4)
 
-  '@elysiajs/stream@1.1.0(elysia@1.1.6(@sinclair/typebox@0.33.7)(openapi-types@12.1.3)(typescript@5.5.4))':
+  '@elysiajs/stream@1.1.0(elysia@1.0.27(@sinclair/typebox@0.33.7)(openapi-types@12.1.3)(typescript@5.5.4))':
     dependencies:
-      elysia: 1.1.6(@sinclair/typebox@0.33.7)(openapi-types@12.1.3)(typescript@5.5.4)
+      elysia: 1.0.27(@sinclair/typebox@0.33.7)(openapi-types@12.1.3)(typescript@5.5.4)
       nanoid: 5.0.7
 
-  '@elysiajs/swagger@1.1.1(elysia@1.1.6(@sinclair/typebox@0.33.7)(openapi-types@12.1.3)(typescript@5.5.4))':
+  '@elysiajs/swagger@1.1.1(elysia@1.0.27(@sinclair/typebox@0.33.7)(openapi-types@12.1.3)(typescript@5.5.4))':
     dependencies:
-      elysia: 1.1.6(@sinclair/typebox@0.33.7)(openapi-types@12.1.3)(typescript@5.5.4)
+      elysia: 1.0.27(@sinclair/typebox@0.33.7)(openapi-types@12.1.3)(typescript@5.5.4)
       lodash.clonedeep: 4.5.0
       openapi-types: 12.1.3
 
@@ -7720,7 +7715,7 @@ snapshots:
     dependencies:
       '@react-aria/interactions': 3.21.3(react@18.3.1)
       '@react-aria/utils': 3.24.1(react@18.3.1)
-      '@react-types/shared': 3.23.1(react@18.3.1)
+      '@react-types/shared': 3.24.1(react@18.3.1)
       '@swc/helpers': 0.5.12
       clsx: 2.1.1
       react: 18.3.1
@@ -7814,7 +7809,7 @@ snapshots:
     dependencies:
       '@react-aria/ssr': 3.9.5(react@18.3.1)
       '@react-aria/utils': 3.24.1(react@18.3.1)
-      '@react-types/shared': 3.23.1(react@18.3.1)
+      '@react-types/shared': 3.24.1(react@18.3.1)
       '@swc/helpers': 0.5.12
       react: 18.3.1
 
@@ -7896,16 +7891,16 @@ snapshots:
     dependencies:
       '@react-aria/focus': 3.17.1(react@18.3.1)
       '@react-aria/i18n': 3.12.1(react@18.3.1)
-      '@react-aria/interactions': 3.22.1(react@18.3.1)
+      '@react-aria/interactions': 3.21.3(react@18.3.1)
       '@react-aria/overlays': 3.23.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@react-aria/selection': 3.19.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@react-aria/utils': 3.24.1(react@18.3.1)
       '@react-stately/collections': 3.10.9(react@18.3.1)
       '@react-stately/menu': 3.7.1(react@18.3.1)
-      '@react-stately/tree': 3.8.3(react@18.3.1)
+      '@react-stately/tree': 3.8.1(react@18.3.1)
       '@react-types/button': 3.9.6(react@18.3.1)
       '@react-types/menu': 3.9.9(react@18.3.1)
-      '@react-types/shared': 3.24.1(react@18.3.1)
+      '@react-types/shared': 3.23.1(react@18.3.1)
       '@swc/helpers': 0.5.12
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
@@ -7954,15 +7949,15 @@ snapshots:
 
   '@react-aria/overlays@3.22.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
-      '@react-aria/focus': 3.18.1(react@18.3.1)
-      '@react-aria/i18n': 3.11.1(react@18.3.1)
-      '@react-aria/interactions': 3.22.1(react@18.3.1)
+      '@react-aria/focus': 3.17.1(react@18.3.1)
+      '@react-aria/i18n': 3.12.1(react@18.3.1)
+      '@react-aria/interactions': 3.21.3(react@18.3.1)
       '@react-aria/ssr': 3.9.5(react@18.3.1)
       '@react-aria/utils': 3.24.1(react@18.3.1)
       '@react-aria/visually-hidden': 3.8.12(react@18.3.1)
-      '@react-stately/overlays': 3.6.9(react@18.3.1)
+      '@react-stately/overlays': 3.6.7(react@18.3.1)
       '@react-types/button': 3.9.6(react@18.3.1)
-      '@react-types/overlays': 3.8.9(react@18.3.1)
+      '@react-types/overlays': 3.8.7(react@18.3.1)
       '@react-types/shared': 3.24.1(react@18.3.1)
       '@swc/helpers': 0.5.12
       react: 18.3.1
@@ -8066,7 +8061,7 @@ snapshots:
   '@react-aria/selection@3.18.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@react-aria/focus': 3.17.1(react@18.3.1)
-      '@react-aria/i18n': 3.12.1(react@18.3.1)
+      '@react-aria/i18n': 3.11.1(react@18.3.1)
       '@react-aria/interactions': 3.21.3(react@18.3.1)
       '@react-aria/utils': 3.24.1(react@18.3.1)
       '@react-stately/selection': 3.16.1(react@18.3.1)
@@ -8324,7 +8319,7 @@ snapshots:
   '@react-aria/utils@3.24.1(react@18.3.1)':
     dependencies:
       '@react-aria/ssr': 3.9.5(react@18.3.1)
-      '@react-stately/utils': 3.10.1(react@18.3.1)
+      '@react-stately/utils': 3.10.2(react@18.3.1)
       '@react-types/shared': 3.24.1(react@18.3.1)
       '@swc/helpers': 0.5.12
       clsx: 2.1.1
@@ -8549,7 +8544,7 @@ snapshots:
     dependencies:
       '@react-stately/overlays': 3.6.9(react@18.3.1)
       '@react-types/menu': 3.9.9(react@18.3.1)
-      '@react-types/shared': 3.24.1(react@18.3.1)
+      '@react-types/shared': 3.23.1(react@18.3.1)
       '@swc/helpers': 0.5.12
       react: 18.3.1
 
@@ -8688,7 +8683,7 @@ snapshots:
   '@react-stately/toggle@3.7.4(react@18.3.1)':
     dependencies:
       '@react-stately/utils': 3.10.2(react@18.3.1)
-      '@react-types/checkbox': 3.8.1(react@18.3.1)
+      '@react-types/checkbox': 3.8.3(react@18.3.1)
       '@swc/helpers': 0.5.12
       react: 18.3.1
 
@@ -8881,7 +8876,7 @@ snapshots:
   '@react-types/menu@3.9.9(react@18.3.1)':
     dependencies:
       '@react-types/overlays': 3.8.9(react@18.3.1)
-      '@react-types/shared': 3.24.1(react@18.3.1)
+      '@react-types/shared': 3.23.1(react@18.3.1)
       react: 18.3.1
 
   '@react-types/meter@3.4.3(react@18.3.1)':
@@ -9005,8 +9000,6 @@ snapshots:
   '@savvywombat/tailwindcss-grid-areas@4.0.0(tailwindcss@3.4.10(ts-node@10.9.2(@types/node@20.14.15)(typescript@5.5.4)))':
     dependencies:
       tailwindcss: 3.4.10(ts-node@10.9.2(@types/node@20.14.15)(typescript@5.5.4))
-
-  '@sec-ant/readable-stream@0.4.1': {}
 
   '@sinclair/typebox@0.33.7': {}
 
@@ -9632,7 +9625,7 @@ snapshots:
   browserslist@4.23.3:
     dependencies:
       caniuse-lite: 1.0.30001651
-      electron-to-chromium: 1.5.8
+      electron-to-chromium: 1.5.9
       node-releases: 2.0.18
       update-browserslist-db: 1.1.0(browserslist@4.23.3)
 
@@ -9876,13 +9869,15 @@ snapshots:
 
   eastasianwidth@0.2.0: {}
 
-  electron-to-chromium@1.5.8: {}
+  electron-to-chromium@1.5.9: {}
 
-  elysia@1.1.6(@sinclair/typebox@0.33.7)(openapi-types@12.1.3)(typescript@5.5.4):
+  elysia@1.0.27(@sinclair/typebox@0.33.7)(openapi-types@12.1.3)(typescript@5.5.4):
     dependencies:
       '@sinclair/typebox': 0.33.7
       cookie: 0.6.0
+      eventemitter3: 5.0.1
       fast-decode-uri-component: 1.0.1
+      fast-querystring: 1.1.2
     optionalDependencies:
       openapi-types: 12.1.3
       typescript: 5.5.4
@@ -9962,6 +9957,8 @@ snapshots:
 
   esutils@2.0.3: {}
 
+  eventemitter3@5.0.1: {}
+
   execa@5.1.1:
     dependencies:
       cross-spawn: 7.0.3
@@ -9990,6 +9987,10 @@ snapshots:
       merge2: 1.4.1
       micromatch: 4.0.7
 
+  fast-querystring@1.1.2:
+    dependencies:
+      fast-decode-uri-component: 1.0.1
+
   fast-xml-parser@4.4.1:
     dependencies:
       strnum: 1.0.5
@@ -10006,12 +10007,11 @@ snapshots:
     dependencies:
       tslib: 2.6.3
 
-  file-type@19.4.0:
+  file-type@19.0.0:
     dependencies:
-      get-stream: 9.0.1
-      strtok3: 8.1.0
-      token-types: 6.0.0
-      uint8array-extras: 1.4.0
+      readable-web-to-node-stream: 3.0.2
+      strtok3: 7.1.1
+      token-types: 5.0.1
 
   fill-range@7.1.1:
     dependencies:
@@ -10057,11 +10057,6 @@ snapshots:
   get-nonce@1.0.1: {}
 
   get-stream@6.0.1: {}
-
-  get-stream@9.0.1:
-    dependencies:
-      '@sec-ant/readable-stream': 0.4.1
-      is-stream: 4.0.1
 
   get-tsconfig@4.7.6:
     dependencies:
@@ -10316,8 +10311,6 @@ snapshots:
   is-path-inside@3.0.3: {}
 
   is-stream@2.0.1: {}
-
-  is-stream@4.0.1: {}
 
   is-unicode-supported@0.1.0: {}
 
@@ -11021,6 +11014,10 @@ snapshots:
       string_decoder: 1.3.0
       util-deprecate: 1.0.2
 
+  readable-web-to-node-stream@3.0.2:
+    dependencies:
+      readable-stream: 3.6.2
+
   readdirp@3.6.0:
     dependencies:
       picomatch: 2.3.1
@@ -11206,7 +11203,7 @@ snapshots:
 
   strnum@1.0.5: {}
 
-  strtok3@8.1.0:
+  strtok3@7.1.1:
     dependencies:
       '@tokenizer/token': 0.3.0
       peek-readable: 5.1.4
@@ -11354,7 +11351,7 @@ snapshots:
     dependencies:
       is-number: 7.0.0
 
-  token-types@6.0.0:
+  token-types@5.0.1:
     dependencies:
       '@tokenizer/token': 0.3.0
       ieee754: 1.2.1
@@ -11427,8 +11424,6 @@ snapshots:
 
   uglify-js@3.19.2:
     optional: true
-
-  uint8array-extras@1.4.0: {}
 
   undici-types@5.26.5: {}
 
