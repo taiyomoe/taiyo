@@ -43,28 +43,28 @@ export const MediaOGCard = async ({ mediaId }: Props) => {
             >
               {MediaUtils.getMainTitle(media.titles, "en")}
             </p>
-            <div tw="flex">
+            <div tw="flex items-center">
               {media.startDate && !media.endDate && (
-                <p tw="m-0">{media.startDate.getFullYear()}</p>
+                <p tw="text-xl m-0">{media.startDate.getFullYear()}</p>
               )}
               {media.startDate && media.endDate && (
-                <p tw="m-0">{`${media.startDate.getFullYear()} até ${media.endDate.getFullYear()}`}</p>
+                <p tw="text-xl m-0">{`${media.startDate.getFullYear()} até ${media.endDate.getFullYear()}`}</p>
               )}
               {hasDates && <span tw="mx-2">—</span>}
               {chaptersCount > 0 && (
-                <p tw="m-0">{`${chaptersCount} capítulos`}</p>
+                <p tw="text-xl m-0">{`${chaptersCount} capítulos`}</p>
               )}
             </div>
           </div>
           <div tw="flex flex-col">
-            <div tw="flex flex-wrap mb-4">
+            <div tw="flex flex-wrap mb-8">
               {media.genres.map((g) => (
-                <p
+                <div
                   key={g}
-                  tw="m-0 px-3 py-1.5 rounded-full bg-zinc-700 font-medium mr-2 mb-2 uppercase text-lg"
+                  tw="px-3 py-1.5 rounded-full bg-zinc-700 font-medium mr-2 mb-2 uppercase text-lg flex items-center"
                 >
-                  {GENRES_PT[g]}
-                </p>
+                  <p tw="m-0 -mb-[3px]">{GENRES_PT[g]}</p>
+                </div>
               ))}
             </div>
             <div tw="flex items-center">
@@ -107,15 +107,15 @@ export const MediaOGCard = async ({ mediaId }: Props) => {
       >
         <img
           src={CoverUtils.getUrl({ id: mediaId, ...media })}
-          height="600"
-          width="450"
+          height="630"
+          width="460"
           alt="Media's cover"
         />
       </div>
     </div>,
     {
       width: 1200,
-      height: 600,
+      height: 630,
       fonts: await OGUtils.getFonts(),
     },
   )
