@@ -26,7 +26,7 @@ const getStatus = async (mediaId: string): Promise<MediaStatus> => {
 
 /**
  * Gets the latest medias.
- * Used to populate the homepage.
+ * Used to populate the home page.
  */
 const getLatest = async () => {
   const cacheController = cacheClient.medias.latest
@@ -71,10 +71,10 @@ const getLatest = async () => {
 
 /**
  * Gets the featured medias.
- * Used to populate the homepage.
+ * Used to populate the home page.
  */
-const getFeatured = async (preferredTitles: Languages = "en") => {
-  const cacheController = cacheClient.medias.featured(preferredTitles)
+const getFeatured = async (preferredTitles?: Languages | null) => {
+  const cacheController = cacheClient.medias.featured(preferredTitles ?? "main")
   const cached = await cacheController.get()
 
   if (cached) {
@@ -123,7 +123,7 @@ const getFeatured = async (preferredTitles: Languages = "en") => {
     synopsis: m.synopsis,
     coverId: m.covers.at(0)!.id,
     bannerId: banners.find((b) => b.mediaId === m.id)!.id,
-    mainTitle: MediaUtils.getMainTitle(m.titles, preferredTitles),
+    mainTitle: MediaUtils.getDisplayTitle(m.titles, preferredTitles),
   }))
 
   void cacheController.set(featuredMedias)

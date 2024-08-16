@@ -7,13 +7,13 @@ import { MediaImage } from "~/components/images/MediaImage"
 
 type Props = {
   item: MediasIndexItem
-  preferredTitles: Languages | undefined
+  preferredTitles?: Languages | null
   toggleModal: () => void
 }
 
 export const MediasSearchResultsItem = (props: Props) => {
   const { item, preferredTitles = "en", toggleModal } = props
-  const title = MediaUtils.getMainTitle(item.titles, preferredTitles)
+  const title = MediaUtils.getDisplayTitle(item.titles, preferredTitles)
 
   return (
     <CommandItem asChild>

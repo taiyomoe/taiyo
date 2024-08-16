@@ -14,9 +14,9 @@ const getBannerOrCoverUrl = (media: {
   return `${env.NEXT_PUBLIC_CDN_URL}/medias/${media.id}/banners/${media.bannerId}.jpg`
 }
 
-const getMainTitle = (
+const getDisplayTitle = (
   titles: Pick<MediaTitle, "title" | "language" | "priority" | "isMainTitle">[],
-  preferredTitles: Languages = "en",
+  preferredTitles?: Languages | null,
 ) => {
   if (!preferredTitles) {
     return titles.find((t) => t.isMainTitle)!.title
@@ -68,5 +68,5 @@ const getMainTitle = (
 export const MediaUtils = {
   getUrl,
   getBannerOrCoverUrl,
-  getMainTitle,
+  getDisplayTitle,
 }

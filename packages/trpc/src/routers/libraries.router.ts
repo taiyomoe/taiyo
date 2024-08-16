@@ -63,9 +63,9 @@ export const librariesRouter = createTRPCRouter({
           library.find((m) => m.mediaId === media.id)!.updatedAt,
         ),
         coverId: media.covers.at(0)?.id ?? "",
-        mainTitle: MediaUtils.getMainTitle(
+        mainTitle: MediaUtils.getDisplayTitle(
           media.titles,
-          ctx.session?.user.preferredTitles ?? null,
+          ctx.session?.user.preferredTitles,
         ),
         mediaStatus: media.status,
         libraryStatus: input.status,

@@ -13,7 +13,7 @@ import type {
 import { MediaUtils } from "@taiyomoe/utils"
 import { formatRawLatestReleases, latestReleaseQuery } from "./utils"
 
-const getLatest = async (preferredTitles?: Languages) => {
+const getLatest = async (preferredTitles?: Languages | null) => {
   const cacheController = cacheClient.chapters.latest
   const cached = await cacheController.get()
 
@@ -34,7 +34,7 @@ const getLatest = async (preferredTitles?: Languages) => {
 }
 
 const getLatestGrouped = async (
-  preferredTitles: Languages = "en",
+  preferredTitles?: Languages | null,
   page = DEFAULT_LATEST_CHAPTERS_GROUPED_PAGE,
   perPage = DEFAULT_LATEST_CHAPTERS_GROUPED_PER_PAGE,
 ) => {
@@ -45,7 +45,7 @@ const getLatestGrouped = async (
     medias: input
       .map(({ titles, ...r }) => ({
         ...r,
-        mainTitle: MediaUtils.getMainTitle(titles, preferredTitles),
+        mainTitle: MediaUtils.getDisplayTitle(titles, preferredTitles),
       }))
       .slice((page - 1) * perPage, page * perPage),
     totalPages: Math.ceil(input.length / perPage),
