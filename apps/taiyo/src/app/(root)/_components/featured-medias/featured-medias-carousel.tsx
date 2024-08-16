@@ -2,6 +2,7 @@
 
 import type { FeaturedMedia } from "@taiyomoe/types"
 import { BannerUtils, CoverUtils } from "@taiyomoe/utils"
+import Autoplay from "embla-carousel-autoplay"
 import useEmblaCarousel from "embla-carousel-react"
 import Link from "next/link"
 import { MediaImage } from "~/components/images/MediaImage"
@@ -13,7 +14,7 @@ type Props = {
 
 export const FeaturedMediasCarousel = ({ medias }: Props) => {
   const [emblaRef, emblaApi] = useEmblaCarousel({}, [
-    // Autoplay({ delay: 10000 }),
+    Autoplay({ delay: 10000 }),
   ])
 
   return (
