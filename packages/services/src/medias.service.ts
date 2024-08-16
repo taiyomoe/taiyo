@@ -134,6 +134,8 @@ const getFeatured = async (preferredTitles: Languages = "en") => {
 const getFull = async (mediaId: string) => {
   const result = await db.media.findFirst({
     select: {
+      startDate: true,
+      endDate: true,
       synopsis: true,
       status: true,
       genres: true,

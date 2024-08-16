@@ -8,7 +8,13 @@ const fetchFont = async (name: string) =>
 const getFonts = async () => {
   const fonts = await parallel(
     10,
-    ["Inter-Regular.woff", "Inter-Bold.woff", "Inter-ExtraBold.woff"],
+    [
+      "Inter-Regular.woff",
+      "Inter-Medium.woff",
+      "Inter-Bold.woff",
+      "Inter-SemiBold.woff",
+      "Inter-ExtraBold.woff",
+    ],
     (name) => fetchFont(name),
   )
 
@@ -23,11 +29,23 @@ const getFonts = async () => {
       name: "Inter",
       data: fonts.at(1)!,
       style: "normal" as const,
-      weight: 700 as const,
+      weight: 500 as const,
     },
     {
       name: "Inter",
       data: fonts.at(2)!,
+      style: "normal" as const,
+      weight: 600 as const,
+    },
+    {
+      name: "Inter",
+      data: fonts.at(3)!,
+      style: "normal" as const,
+      weight: 700 as const,
+    },
+    {
+      name: "Inter",
+      data: fonts.at(4)!,
       style: "normal" as const,
       weight: 800 as const,
     },

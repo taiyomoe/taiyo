@@ -160,8 +160,19 @@ const getUploaderStats = async () => {
   }))
 }
 
+const getDistinctCount = async (mediaId: string) => {
+  const result = await db.$queryRaw<[{ count: number }]>`
+    SELECT COUNT(DISTINCT "number")
+    FROM "MediaChapter"
+    WHERE "mediaId" = ${mediaId} AND "deletedAt" IS NULL;
+  `
+
+  return result[0].count
+}
+
 export const ChaptersService = {
   getLatest,
   getLatestGrouped,
   getUploaderStats,
+  getDistinctCount,
 }
