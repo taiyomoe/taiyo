@@ -31,7 +31,7 @@ export const generateMetadata = async ({
       images: {
         url: `/api/og?mediaId=${params.mediaId}`,
         width: 1200,
-        height: 600,
+        height: 630,
         alt: MediaUtils.getMainTitle(media.titles, "en"),
       },
     },

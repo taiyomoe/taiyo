@@ -10,5 +10,5 @@ export const DefaultOGCard = new ImageResponse(
       <span tw="text-[#FF4F4F] mx-1">&quot;?chapterId=UUID&quot;</span>
     </p>
   </div>,
-  { width: 1200, height: 600 },
+  { width: 1200, height: 630 },
 )
