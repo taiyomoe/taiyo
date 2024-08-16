@@ -18,7 +18,11 @@ export const MediaImage = (props: Props) => {
       as={NextImage}
       src={src}
       classNames={{
-        wrapper: cn("!max-w-full z-0", classNames?.width, classNames?.wrapper),
+        wrapper: cn(
+          "!max-w-full z-0 select-none",
+          classNames?.width,
+          classNames?.wrapper,
+        ),
         img: cn("w-full object-cover", classNames?.height, classNames?.img),
         blurredImg: cn(classNames?.height, classNames?.width),
         zoomedWrapper: classNames?.height,
