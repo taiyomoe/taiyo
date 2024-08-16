@@ -7,8 +7,6 @@ import type { InsertResource, LogsMigration, LogsUsersAuthType } from "./types"
 
 export const rawLogsClient = createClient({
   url: env.CLICKHOUSE_URL,
-  username: env.CLICKHOUSE_USERNAME,
-  password: env.CLICKHOUSE_PASSWORD,
   clickhouse_settings: {
     allow_experimental_object_type: 1,
     date_time_input_format: "best_effort",
