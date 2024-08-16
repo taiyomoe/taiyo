@@ -8,6 +8,18 @@ export enum UploadChapterState {
   UPLOADED,
 }
 
+const scansSchema = t
+  .Transform(
+    t.Optional(
+      t.Union([
+        t.String({ format: "uuid" }),
+        t.Array(t.String({ format: "uuid" }), { uniqueItems: true }),
+      ]),
+    ),
+  )
+  .Decode((v) => (typeof v === "string" ? [v] : v))
+  .Encode((v) => v)
+
 export const uploadChapterSchema = t.Object({
   title: t.Optional(t.String()),
   number: t.Numeric({ minimum: 0 }),
@@ -16,9 +28,7 @@ export const uploadChapterSchema = t.Object({
   flag: t.Enum(Flag),
   language: t.Enum(Languages),
   mediaId: t.String({ format: "uuid" }),
-  scanIds: t.Optional(
-    t.Array(t.String({ format: "uuid" }), { uniqueItems: true }),
-  ),
+  scanIds: scansSchema,
   files: t.Files({ maxItems: 100, maxSize: "10m", type: DEFAULT_MIME_TYPES }),
 })
 
