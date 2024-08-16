@@ -15,46 +15,69 @@ type Props = {
   index: number
 }
 
-const mediaChaptersTabRowCard = tv({
-  base: "grid w-full grid-cols-chapterCard grid-rows-2 gap-x-1 gap-y-0.5 rounded-md border-l-2 bg-content1 p-2 text-small transition-colors",
+const mediaChaptersTabRowCard2 = tv({
+  slots: {
+    card: "grid h-full w-full grid-cols-chapterCard grid-rows-2 gap-x-1 gap-y-0.5 rounded-md border-l-2 bg-content1 p-2 text-small transition-colors",
+    top: "h-px border-l-2 border-l-content1 bg-content3",
+    bottom: "h-px border-l-2 border-l-content1 bg-content3",
+  },
   variants: {
     completed: {
       null: "",
-      true: "border-l-content1",
-      false: "border-l-primary",
+      true: {
+        card: "border-l-content1",
+      },
+      false: {
+        card: "border-l-primary",
+        top: "border-l-primary",
+        bottom: "border-l-primary",
+      },
     },
     order: {
-      unique: "",
-      first: "rounded-b-none border-b border-b-content3",
-      middle: "rounded-t-none rounded-b-none border-y border-y-content3",
-      last: "rounded-t-none border-t border-t-content3",
+      unique: {
+        top: "h-0",
+        bottom: "h-0",
+      },
+      first: {
+        card: "rounded-b-none",
+        top: "h-0",
+      },
+      middle: {
+        card: "rounded-t-none rounded-b-none",
+      },
+      last: {
+        card: "rounded-t-none",
+        bottom: "h-0",
+      },
     },
   },
 })
 
 export const MediaChaptersTabRowCard = ({ chapter, order, index }: Props) => {
   const [completed, setCompleted] = useState(chapter.completed ?? false)
+  const slots = mediaChaptersTabRowCard2({ completed, order })
 
   return (
-    <Link
-      className={mediaChaptersTabRowCard({ completed, order })}
-      href={ChapterUtils.getUrl(chapter)}
-    >
-      <div className="flex items-center gap-2">
-        <MediaChaptersTabRowProgressionButton
+    <div className="flex grow flex-col">
+      <div className={slots.top()} />
+      <Link className={slots.card()} href={ChapterUtils.getUrl(chapter)}>
+        <div className="flex items-center gap-2">
+          <MediaChaptersTabRowProgressionButton
+            chapter={chapter}
+            completed={completed}
+            setCompleted={setCompleted}
+          />
+          <ChapterTitle chapter={chapter} />
+        </div>
+        <ChapterUploadedTime className="min-w-28" chapter={chapter} />
+        <ChapterScansListHorizontal
           chapter={chapter}
-          completed={completed}
-          setCompleted={setCompleted}
+          index={index}
+          noisyWidth={216}
         />
-        <ChapterTitle chapter={chapter} />
-      </div>
-      <ChapterUploadedTime className="min-w-28" chapter={chapter} />
-      <ChapterScansListHorizontal
-        chapter={chapter}
-        index={index}
-        noisyWidth={216}
-      />
-      <ChapterUploader chapter={chapter} />
-    </Link>
+        <ChapterUploader chapter={chapter} />
+      </Link>
+      <div className={slots.bottom()} />
+    </div>
   )
 }
