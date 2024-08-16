@@ -1,5 +1,6 @@
+import type { StaticDecode } from "@sinclair/typebox"
 import { ContentRating, Flag, Languages } from "@taiyomoe/db"
-import { type Static, t } from "elysia"
+import { t } from "elysia"
 import { DEFAULT_MIME_TYPES } from "../utils/constants"
 
 export enum UploadChapterState {
@@ -38,5 +39,5 @@ export const uploadChaptersSchema = t.Object({
   concurrent: t.Numeric({ minimum: 1 }),
 })
 
-export type UploadChapterInput = Static<typeof uploadChapterSchema>
-export type UploadChaptersInput = Static<typeof uploadChaptersSchema>
+export type UploadChapterInput = StaticDecode<typeof uploadChapterSchema>
+export type UploadChaptersInput = StaticDecode<typeof uploadChaptersSchema>
