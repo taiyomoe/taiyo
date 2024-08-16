@@ -10,15 +10,16 @@ export const MediaChaptersTabRowPath = ({ order }: Props) => {
       <div className="flex w-[4px] flex-col">
         <span
           className={cn("h-[24px] w-full rounded bg-content3", {
-            "rounded-b-none": order === "first",
-            "rounded-t-none": order === "last",
+            "rounded-b-none": order === "first" || order === "middle",
+            "rounded-t-none": order === "last" || order === "middle",
             "rounded-br-none": order === "last" || order === "unique",
             "mt-2 h-[16px]": order === "unique" || order === "first",
           })}
         />
         <span
           className={cn("h-full w-full rounded bg-content3", {
-            "rounded-t-none rounded-b-none": order === "first",
+            "rounded-t-none rounded-b-none":
+              order === "first" || order === "middle",
             hidden: order === "last" || order === "unique",
           })}
         />

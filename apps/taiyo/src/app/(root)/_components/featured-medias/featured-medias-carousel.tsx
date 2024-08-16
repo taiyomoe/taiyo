@@ -2,7 +2,6 @@
 
 import type { FeaturedMedia } from "@taiyomoe/types"
 import { BannerUtils, CoverUtils } from "@taiyomoe/utils"
-import Autoplay from "embla-carousel-autoplay"
 import useEmblaCarousel from "embla-carousel-react"
 import Link from "next/link"
 import { MediaImage } from "~/components/images/MediaImage"
@@ -14,7 +13,7 @@ type Props = {
 
 export const FeaturedMediasCarousel = ({ medias }: Props) => {
   const [emblaRef, emblaApi] = useEmblaCarousel({}, [
-    Autoplay({ delay: 10000 }),
+    // Autoplay({ delay: 10000 }),
   ])
 
   return (
@@ -36,18 +35,19 @@ export const FeaturedMediasCarousel = ({ medias }: Props) => {
               }}
               maxHeight={410}
               maxWidth={1200}
-              alt="media's banner"
+              alt="Media's banner"
             />
             <div className="-mt-mediasBannerContent relative z-10 flex h-full max-h-mediasBannerContent gap-6 px-4 pt-2 pb-6">
               <MediaImage
                 src={CoverUtils.getUrl(media)}
                 classNames={{
                   wrapper: "h-full z-10",
-                  height: "h-full",
+                  height: "h-[168px] sm:h-[218px] md:h-[268px] lg:h-[318px]",
                   width:
-                    "min-w-[120px] sm:min-w-[160px] md:min-w-[190px] lg:min-w-[230px]",
+                    "min-w-[120px] sm:min-w-[160px] md:min-w-[200px] lg:min-w-[230px]",
+                  img: "max-h-full",
                 }}
-                maxHeight={350}
+                maxHeight={318}
                 maxWidth={230}
                 alt="media's cover"
                 isZoomed
