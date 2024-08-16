@@ -35,7 +35,7 @@ export const FeaturedMediasCarousel = ({ medias }: Props) => {
               }}
               maxHeight={410}
               maxWidth={1200}
-              alt="media's banner"
+              alt="Media's banner"
             />
             <div className="-mt-mediasBannerContent relative z-10 flex h-full max-h-mediasBannerContent gap-6 px-4 pt-2 pb-6">
               <MediaImage

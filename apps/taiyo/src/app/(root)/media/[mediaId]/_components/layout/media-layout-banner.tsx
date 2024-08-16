@@ -19,7 +19,7 @@ export const MediaLayoutBanner = ({ media }: Props) => {
       src={bannerUrl}
       classNames={{
         wrapper:
-          "!max-w-full w-full z-0 after:shadow-[0_-64px_48px_16px_inset_var(--background)]",
+          "!max-w-full w-full z-0 after:shadow-[0_-64px_48px_16px_inset_var(--background)] select-none",
         img: cn(
           "h-mediasBanner w-full rounded-none object-cover blur-xs brightness-50",
           { "blur-md": bannerUrl === coverUrl },
@@ -27,7 +27,7 @@ export const MediaLayoutBanner = ({ media }: Props) => {
       }}
       height={350}
       width={1200}
-      alt="media's banner"
+      alt="Media's banner"
       priority
     />
   )
