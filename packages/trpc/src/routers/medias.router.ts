@@ -1,6 +1,6 @@
 import { getMediaIndexItem } from "@taiyomoe/meilisearch/utils"
 import { idSchema, updateMediaSchema } from "@taiyomoe/schemas"
-import { LibrariesService } from "@taiyomoe/services"
+import { LibrariesService, MediasService } from "@taiyomoe/services"
 import type { MediaLimited } from "@taiyomoe/types"
 import { MediaUtils } from "@taiyomoe/utils"
 import { TRPCError } from "@trpc/server"
@@ -35,38 +35,9 @@ export const mediasRouter = createTRPCRouter({
   getById: publicProcedure
     .input(idSchema)
     .query(async ({ ctx, input: mediaId }) => {
-      const result = await ctx.db.media.findFirst({
-        select: {
-          synopsis: true,
-          status: true,
-          genres: true,
-          tags: true,
-          covers: {
-            select: { id: true },
-            where: { isMainCover: true, deletedAt: null },
-            take: 1,
-          },
-          banners: {
-            select: { id: true },
-            take: 1,
-            where: { deletedAt: null },
-          },
-          titles: {
-            select: {
-              title: true,
-              language: true,
-              priority: true,
-              isAcronym: true,
-              isMainTitle: true,
-            },
-            where: { deletedAt: null },
-          },
-          trackers: { select: { tracker: true, externalId: true } },
-        },
-        where: { id: mediaId, deletedAt: null },
-      })
+      const result = await MediasService.getFull(mediaId)
 
-      if (!result?.covers.at(0) || !result.titles.at(0)) {
+      if (!result) {
         return null
       }
 
