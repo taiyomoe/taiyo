@@ -3,9 +3,9 @@
 import type { LatestRelease } from "@taiyomoe/types"
 import { useAtom } from "jotai"
 import { useHydrateAtoms } from "jotai/utils"
-import { LatestReleasesColumnLayout } from "~/app/(root)/_components/latest-releases/columns-layout/latest-releases-column-layout"
 import { releasesLayoutAtom } from "~/atoms/homeLayout.atoms"
 import { siteConfig } from "~/lib/config"
+import { LatestReleasesColumnLayout } from "./columns-layout/latest-releases-column-layout"
 import { ReleaseCardRow } from "./rows-layout/release-card-row"
 
 type Props = {

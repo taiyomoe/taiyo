@@ -18,13 +18,19 @@ import {
   TableRow,
 } from "@nextui-org/table"
 import type { ScansList } from "@taiyomoe/types"
-import { ChevronDownIcon, EllipsisIcon, PlusIcon } from "lucide-react"
+import { useAtomValue } from "jotai"
+import { useHydrateAtoms } from "jotai/utils"
+import { EllipsisIcon } from "lucide-react"
 import { type Key, useCallback, useMemo, useState } from "react"
-import { SearchInput } from "~/components/generics/inputs/search-input"
+import {
+  scansListInitialItemsAtom,
+  scansListLoadingAtom,
+  scansListVisibleColumnsAtom,
+} from "~/atoms/scansList.atoms"
+import { ScansTableTopContent } from "~/components/ui/scans/scans-table-top-content"
 import { useScansList } from "~/hooks/useScansList"
 
-const INITIAL_VISIBLE_COLUMNS = ["name", "chapters", "members", "actions"]
-const columns = [
+export const columns = [
   { name: "Id", uid: "id" },
   { name: "Nome", uid: "name" },
   { name: "Capítulos", uid: "chapters" },
@@ -37,10 +43,12 @@ type Props = {
 }
 
 export const ScansTable = ({ initialItems }: Props) => {
+  useHydrateAtoms([[scansListInitialItemsAtom, initialItems]])
+
+  const visibleColumns = useAtomValue(scansListVisibleColumnsAtom)
+  const isLoading = useAtomValue(scansListLoadingAtom)
+  const { items } = useScansList()
   const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]))
-  const [visibleColumns, setVisibleColumns] = useState<Selection>(
-    new Set(INITIAL_VISIBLE_COLUMNS),
-  )
   const headerColumns = useMemo(() => {
     if (visibleColumns === "all") return columns
 
@@ -48,8 +56,6 @@ export const ScansTable = ({ initialItems }: Props) => {
       Array.from(visibleColumns).includes(column.uid),
     )
   }, [visibleColumns])
-  const { query, items, isLoading, handleQueryChange, handleClear } =
-    useScansList(initialItems)
 
   const renderCell = useCallback((scan: ScansList[number], columnKey: Key) => {
     const value = scan[columnKey as keyof ScansList[number]]
@@ -76,48 +82,6 @@ export const ScansTable = ({ initialItems }: Props) => {
     return value
   }, [])
 
-  const topContent = useMemo(
-    () => (
-      <div className="flex flex-col gap-2 sm:flex-row sm:justify-between">
-        <SearchInput
-          className="w-full sm:w-1/3"
-          placeholder="Pesquisar por nome..."
-          value={query}
-          onClear={handleClear}
-          onValueChange={handleQueryChange}
-        />
-        <div className="flex justify-between sm:justify-normal sm:gap-4">
-          <Dropdown>
-            <DropdownTrigger className="flex">
-              <Button
-                endContent={<ChevronDownIcon className="text-small" />}
-                variant="flat"
-              >
-                Colunas
-              </Button>
-            </DropdownTrigger>
-            <DropdownMenu
-              disallowEmptySelection
-              aria-label="Table columns"
-              closeOnSelect={false}
-              selectedKeys={visibleColumns}
-              selectionMode="multiple"
-              onSelectionChange={setVisibleColumns}
-            >
-              {columns.map((c) => (
-                <DropdownItem key={c.uid}>{c.name}</DropdownItem>
-              ))}
-            </DropdownMenu>
-          </Dropdown>
-          <Button color="primary" endContent={<PlusIcon />}>
-            Add New
-          </Button>
-        </div>
-      </div>
-    ),
-    [visibleColumns, query, handleClear, handleQueryChange],
-  )
-
   return (
     <div className="flex flex-col gap-12">
       <p className="font-semibold text-4xl">Scans</p>
@@ -125,7 +89,7 @@ export const ScansTable = ({ initialItems }: Props) => {
         <Table
           selectedKeys={selectedKeys}
           selectionMode="multiple"
-          topContent={topContent}
+          topContent={<ScansTableTopContent />}
           topContentPlacement="outside"
           onSelectionChange={setSelectedKeys}
           aria-label="Scans list"
@@ -149,7 +113,7 @@ export const ScansTable = ({ initialItems }: Props) => {
             )}
           </TableHeader>
           <TableBody
-            items={items}
+            items={isLoading ? [] : items}
             isLoading={isLoading}
             emptyContent="Nenhuma scan encontrada"
             loadingContent={<Spinner size="lg" />}

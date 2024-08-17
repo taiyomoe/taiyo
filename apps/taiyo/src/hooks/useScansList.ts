@@ -1,33 +1,35 @@
 import { DEFAULT_SCANS_LIST_PER_PAGE } from "@taiyomoe/constants"
-import type { ScansList } from "@taiyomoe/types"
+import { useAtom, useAtomValue } from "jotai"
 import { parseAsInteger, parseAsString, useQueryState } from "nuqs"
-import { useCallback, useState } from "react"
+import { useCallback } from "react"
 import { useDebounceCallback } from "usehooks-ts"
+import {
+  scansListInitialItemsAtom,
+  scansListLoadingAtom,
+} from "~/atoms/scansList.atoms"
 import { api } from "~/trpc/react"
 
-export const useScansList = (initialitem: ScansList) => {
+export const useScansList = () => {
+  const initialItems = useAtomValue(scansListInitialItemsAtom)
+  const [isInternallyLoading, setIsInternallyLoading] =
+    useAtom(scansListLoadingAtom)
   const [query, setQuery] = useQueryState("q", parseAsString.withDefault(""))
   const [page, setPage] = useQueryState("page", parseAsInteger.withDefault(1))
   const [perPage, setPerPage] = useQueryState(
     "perPage",
     parseAsInteger.withDefault(DEFAULT_SCANS_LIST_PER_PAGE),
   )
-  const {
-    data: items,
-    isPlaceholderData,
-    refetch,
-  } = api.scans.getList.useQuery(
+  const { data: items, refetch } = api.scans.getList.useQuery(
     { search: query, page, perPage },
-    { initialData: initialitem, refetchOnMount: false, enabled: false },
+    { initialData: initialItems, refetchOnMount: false, enabled: false },
   )
-  const [isInternallyLoading, setIsInternallyLoading] = useState(false)
 
   const handleSearch = useDebounceCallback(
     useCallback(async () => {
       await refetch()
       setIsInternallyLoading(false)
-    }, [refetch]),
-    200,
+    }, [refetch, setIsInternallyLoading]),
+    300,
   )
 
   const handleQueryChange = useCallback(
@@ -37,7 +39,7 @@ export const useScansList = (initialitem: ScansList) => {
       setIsInternallyLoading(true)
       handleSearch()
     },
-    [setQuery, setPage, handleSearch],
+    [setQuery, setPage, setIsInternallyLoading, handleSearch],
   )
 
   const handleClear = useCallback(() => {
@@ -50,8 +52,6 @@ export const useScansList = (initialitem: ScansList) => {
     page,
     perPage,
     items: isInternallyLoading ? [] : items,
-    isLoading: isInternallyLoading,
-    isPlaceholderData,
     setQuery,
     setPage,
     setPerPage,
