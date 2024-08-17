@@ -1,4 +1,9 @@
+import {
+  DEFAULT_SCANS_LIST_PER_PAGE,
+  SCANS_LIST_PER_PAGE_CHOICES,
+} from "@taiyomoe/constants"
 import { z } from "zod"
+import { pageSchema, perPageSchema } from "./common.schemas"
 
 export const createScanSchema = z.object({
   name: z.string().min(2),
@@ -18,6 +23,15 @@ export const createScanSchema = z.object({
   telegram: z.string().url().startsWith("https://t.me/").optional(),
   youtube: z.string().url().startsWith("https://youtube.com/").optional(),
   email: z.string().email().optional(),
+})
+
+export const getScansListSchema = z.object({
+  search: z.string().optional(),
+  page: pageSchema,
+  perPage: perPageSchema(
+    DEFAULT_SCANS_LIST_PER_PAGE,
+    SCANS_LIST_PER_PAGE_CHOICES,
+  ),
 })
 
 export type CreateScanInput = typeof createScanSchema._type
