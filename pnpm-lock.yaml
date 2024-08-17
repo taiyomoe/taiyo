@@ -204,7 +204,7 @@ importers:
       next-themes:
         specifier: ^0.3.0
         version: 0.3.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      next-usequerystate:
+      nuqs:
         specifier: ^1.17.8
         version: 1.17.8(next@14.2.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
       parse-numeric-range:
@@ -552,6 +552,9 @@ importers:
       accesscontrol:
         specifier: ^2.2.1
         version: 2.2.1
+      radash:
+        specifier: ^12.1.0
+        version: 12.1.0
       superjson:
         specifier: ^2.2.1
         version: 2.2.1
@@ -4290,11 +4293,6 @@ packages:
       react: ^16.8 || ^17 || ^18
       react-dom: ^16.8 || ^17 || ^18
 
-  next-usequerystate@1.17.8:
-    resolution: {integrity: sha512-9lwrnqFRafi2KGmt9TgnlFP4w0rNSsVtAf+2ufyj/KgQZDv+fIQAGZSCZkmkU1f1Q4tsKvnG94h3prK88mP2sA==}
-    peerDependencies:
-      next: '>=13.4 <14.0.2 || ^14.0.3'
-
   next@14.2.5:
     resolution: {integrity: sha512-0f8aRfBVL+mpzfBjYfQuLWh2WyAwtJXCRfkPF4UJ5qd2YwrHczsrSzXU4tRMV0OAxR8ZJZWPFn6uhSC56UTsLA==}
     engines: {node: '>=18.17.0'}
@@ -4350,6 +4348,11 @@ packages:
   npm-run-path@4.0.1:
     resolution: {integrity: sha512-S48WzZW777zhNIrn7gxOlISNAqi9ZC/uQFnRdbeIHhZhCA6UqpkOT8T1G7BvfdgP4Er8gF4sUbaS0i7QvIfCWw==}
     engines: {node: '>=8'}
+
+  nuqs@1.17.8:
+    resolution: {integrity: sha512-JqsnzO+hJyjJE7ebuhpHMLA2iGY48e2xr0oJQFhj7kjUmDABL2XOup47rxF5TL/5b9jEsmU2t0lAKin1VdK1/A==}
+    peerDependencies:
+      next: '>=13.4 <14.0.2 || ^14.0.3'
 
   oauth4webapi@2.11.1:
     resolution: {integrity: sha512-aNzOnL98bL6izG97zgnZs1PFEyO4WDVRhz2Pd066NPak44w5ESLRCYmJIyey8avSBPOMtBjhF3ZDDm7bIb7UOg==}
@@ -10476,11 +10479,6 @@ snapshots:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
 
-  next-usequerystate@1.17.8(next@14.2.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)):
-    dependencies:
-      mitt: 3.0.1
-      next: 14.2.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-
   next@14.2.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
       '@next/env': 14.2.5
@@ -10545,6 +10543,11 @@ snapshots:
   npm-run-path@4.0.1:
     dependencies:
       path-key: 3.1.1
+
+  nuqs@1.17.8(next@14.2.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)):
+    dependencies:
+      mitt: 3.0.1
+      next: 14.2.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
 
   oauth4webapi@2.11.1: {}
 

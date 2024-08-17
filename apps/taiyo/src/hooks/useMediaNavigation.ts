@@ -2,11 +2,7 @@
 
 import { DEFAULT_MEDIA_PAGE, DEFAULT_MEDIA_PER_PAGE } from "@taiyomoe/constants"
 import type { MediaTabs } from "@taiyomoe/types"
-import {
-  parseAsInteger,
-  parseAsStringEnum,
-  useQueryState,
-} from "next-usequerystate"
+import { parseAsInteger, parseAsStringEnum, useQueryState } from "nuqs"
 import { useCallback } from "react"
 
 export const useMediaNavigation = () => {
