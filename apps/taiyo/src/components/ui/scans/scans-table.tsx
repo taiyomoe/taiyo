@@ -25,11 +25,11 @@ import { useScansList } from "~/hooks/useScansList"
 
 const INITIAL_VISIBLE_COLUMNS = ["name", "chapters", "members", "actions"]
 const columns = [
-  { name: "ID", uid: "id" },
-  { name: "NOME", uid: "name" },
-  { name: "CAPÍTULOS", uid: "chapters" },
-  { name: "MEMBROS", uid: "members" },
-  { name: "AÇÕES", uid: "actions" },
+  { name: "Id", uid: "id" },
+  { name: "Nome", uid: "name" },
+  { name: "Capítulos", uid: "chapters" },
+  { name: "Membros", uid: "members" },
+  { name: "Ações", uid: "actions" },
 ]
 
 type Props = {
@@ -78,7 +78,7 @@ export const ScansTable = ({ initialItems }: Props) => {
 
   const topContent = useMemo(
     () => (
-      <div className="flex justify-between">
+      <div className="flex flex-col gap-2 sm:flex-row sm:justify-between">
         <SearchInput
           className="w-full sm:w-1/3"
           placeholder="Pesquisar por nome..."
@@ -86,14 +86,14 @@ export const ScansTable = ({ initialItems }: Props) => {
           onClear={handleClear}
           onValueChange={handleQueryChange}
         />
-        <div className="flex gap-4">
+        <div className="flex justify-between sm:justify-normal sm:gap-4">
           <Dropdown>
-            <DropdownTrigger className="hidden sm:flex">
+            <DropdownTrigger className="flex">
               <Button
                 endContent={<ChevronDownIcon className="text-small" />}
                 variant="flat"
               >
-                Columns
+                Colunas
               </Button>
             </DropdownTrigger>
             <DropdownMenu
@@ -104,10 +104,8 @@ export const ScansTable = ({ initialItems }: Props) => {
               selectionMode="multiple"
               onSelectionChange={setVisibleColumns}
             >
-              {columns.map((column) => (
-                <DropdownItem key={column.uid} className="capitalize">
-                  {column.name}
-                </DropdownItem>
+              {columns.map((c) => (
+                <DropdownItem key={c.uid}>{c.name}</DropdownItem>
               ))}
             </DropdownMenu>
           </Dropdown>
@@ -134,12 +132,19 @@ export const ScansTable = ({ initialItems }: Props) => {
           isStriped
         >
           <TableHeader columns={headerColumns}>
-            {(column) => (
+            {(c) => (
               <TableColumn
-                key={column.uid}
-                align={column.uid === "actions" ? "center" : "start"}
+                key={c.uid}
+                className="uppercase"
+                align={
+                  c.uid === "actions"
+                    ? "end"
+                    : ["chapters", "members"].includes(c.uid)
+                      ? "center"
+                      : "start"
+                }
               >
-                {column.name}
+                {c.name}
               </TableColumn>
             )}
           </TableHeader>
