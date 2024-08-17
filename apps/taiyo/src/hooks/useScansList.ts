@@ -4,13 +4,13 @@ import { parseAsInteger, parseAsString, useQueryState } from "nuqs"
 import { useCallback } from "react"
 import { useDebounceCallback } from "usehooks-ts"
 import {
-  scansListInitialItemsAtom,
+  scansListInitialDataAtom,
   scansListLoadingAtom,
 } from "~/atoms/scansList.atoms"
 import { api } from "~/trpc/react"
 
 export const useScansList = () => {
-  const initialItems = useAtomValue(scansListInitialItemsAtom)
+  const initialItems = useAtomValue(scansListInitialDataAtom)
   const [isInternallyLoading, setIsInternallyLoading] =
     useAtom(scansListLoadingAtom)
   const [query, setQuery] = useQueryState("q", parseAsString.withDefault(""))
@@ -19,7 +19,10 @@ export const useScansList = () => {
     "perPage",
     parseAsInteger.withDefault(DEFAULT_SCANS_LIST_PER_PAGE),
   )
-  const { data: items, refetch } = api.scans.getList.useQuery(
+  const {
+    data: { scans: items, totalPages },
+    refetch,
+  } = api.scans.getList.useQuery(
     { search: query, page, perPage },
     { initialData: initialItems, refetchOnMount: false, enabled: false },
   )
@@ -42,6 +45,25 @@ export const useScansList = () => {
     [setQuery, setPage, setIsInternallyLoading, handleSearch],
   )
 
+  const handlePageChange = useCallback(
+    (newPage: number) => {
+      setPage(newPage)
+      setIsInternallyLoading(true)
+      handleSearch()
+    },
+    [setPage, setIsInternallyLoading, handleSearch],
+  )
+
+  const handlePerPageChange = useCallback(
+    (newPerPage: number) => {
+      setPerPage(newPerPage)
+      setPage(1)
+      setIsInternallyLoading(true)
+      handleSearch()
+    },
+    [setPerPage, setPage, setIsInternallyLoading, handleSearch],
+  )
+
   const handleClear = useCallback(() => {
     setQuery("")
     setPage(1)
@@ -51,11 +73,12 @@ export const useScansList = () => {
     query,
     page,
     perPage,
+    totalPages,
     items: isInternallyLoading ? [] : items,
     setQuery,
-    setPage,
-    setPerPage,
-    handleQueryChange,
     handleClear,
+    handleQueryChange,
+    handlePageChange,
+    handlePerPageChange,
   }
 }

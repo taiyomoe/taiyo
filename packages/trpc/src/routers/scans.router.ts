@@ -40,6 +40,6 @@ export const scansRouter = createTRPCRouter({
         return { id, name, members, chapters }
       })
 
-      return scans
+      return { scans, totalPages: searched.totalPages }
     }),
 })

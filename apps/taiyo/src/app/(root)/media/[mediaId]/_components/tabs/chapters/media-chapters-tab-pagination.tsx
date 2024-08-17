@@ -30,12 +30,13 @@ export const MediaChaptersTabPagination = ({ totalPages }: Props) => {
     mediaChaptersTabPagination()
 
   const { page, perPage, setPage, handlePerPageChange } = useMediaNavigation()
-  const [selectedKeys, setSelectedKeys] = useState(new Set([perPage]))
+  const [selectedKeys, setSelectedKeys] = useState<Selection>(
+    new Set([perPage]),
+  )
 
   const handleSelectionChange = (keys: Selection) => {
     const newPerPage = Array.from(keys).join(", ").replaceAll("_", " ")
 
-    // @ts-expect-error -- NextUI wrong types
     setSelectedKeys(keys)
     void handlePerPageChange(Number.parseInt(newPerPage))
   }

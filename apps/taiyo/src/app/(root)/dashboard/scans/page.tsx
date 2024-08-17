@@ -20,11 +20,11 @@ export default async function Page({ searchParams }: Props) {
     DEFAULT_SCANS_LIST_PER_PAGE,
     SCANS_LIST_PER_PAGE_CHOICES,
   ).parse(searchParams.perPage)
-  const initialItems = await api.scans.getList({
+  const initialData = await api.scans.getList({
     search: searchParams.q,
     page,
     perPage,
   })
 
-  return <ScansTable initialItems={initialItems} />
+  return <ScansTable initialData={initialData} />
 }

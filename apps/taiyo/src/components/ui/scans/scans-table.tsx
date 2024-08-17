@@ -7,7 +7,6 @@ import {
   DropdownMenu,
   DropdownTrigger,
 } from "@nextui-org/dropdown"
-import type { Selection } from "@nextui-org/react"
 import { Spinner } from "@nextui-org/spinner"
 import {
   Table,
@@ -18,15 +17,17 @@ import {
   TableRow,
 } from "@nextui-org/table"
 import type { ScansList } from "@taiyomoe/types"
-import { useAtomValue } from "jotai"
+import { useAtom, useAtomValue } from "jotai"
 import { useHydrateAtoms } from "jotai/utils"
 import { EllipsisIcon } from "lucide-react"
-import { type Key, useCallback, useMemo, useState } from "react"
+import { type Key, useCallback, useMemo } from "react"
 import {
-  scansListInitialItemsAtom,
+  scansListInitialDataAtom,
   scansListLoadingAtom,
+  scansListSelectedKeysAtom,
   scansListVisibleColumnsAtom,
 } from "~/atoms/scansList.atoms"
+import { ScansTableBottomContent } from "~/components/ui/scans/scans-table-bottom-content"
 import { ScansTableTopContent } from "~/components/ui/scans/scans-table-top-content"
 import { useScansList } from "~/hooks/useScansList"
 
@@ -39,16 +40,16 @@ export const columns = [
 ]
 
 type Props = {
-  initialItems: ScansList
+  initialData: { scans: ScansList; totalPages: number }
 }
 
-export const ScansTable = ({ initialItems }: Props) => {
-  useHydrateAtoms([[scansListInitialItemsAtom, initialItems]])
+export const ScansTable = ({ initialData }: Props) => {
+  useHydrateAtoms([[scansListInitialDataAtom, initialData]])
 
   const visibleColumns = useAtomValue(scansListVisibleColumnsAtom)
   const isLoading = useAtomValue(scansListLoadingAtom)
+  const [selectedKeys, setSelectedKeys] = useAtom(scansListSelectedKeysAtom)
   const { items } = useScansList()
-  const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]))
   const headerColumns = useMemo(() => {
     if (visibleColumns === "all") return columns
 
@@ -91,6 +92,8 @@ export const ScansTable = ({ initialItems }: Props) => {
           selectionMode="multiple"
           topContent={<ScansTableTopContent />}
           topContentPlacement="outside"
+          bottomContent={<ScansTableBottomContent />}
+          bottomContentPlacement="outside"
           onSelectionChange={setSelectedKeys}
           aria-label="Scans list"
           isStriped
