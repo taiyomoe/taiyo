@@ -1,9 +1,6 @@
 import type { Languages } from "@prisma/client"
 import { cacheClient } from "@taiyomoe/cache"
-import {
-  DEFAULT_LATEST_CHAPTERS_GROUPED_PAGE,
-  DEFAULT_LATEST_CHAPTERS_GROUPED_PER_PAGE,
-} from "@taiyomoe/constants"
+import { DEFAULT_LATEST_CHAPTERS_GROUPED_PER_PAGE } from "@taiyomoe/constants"
 import { type MediaChapter, db } from "@taiyomoe/db"
 import type {
   MediaChaptersUploadersStats,
@@ -35,7 +32,7 @@ const getLatest = async (preferredTitles?: Languages | null) => {
 
 const getLatestGrouped = async (
   preferredTitles?: Languages | null,
-  page = DEFAULT_LATEST_CHAPTERS_GROUPED_PAGE,
+  page = 1,
   perPage = DEFAULT_LATEST_CHAPTERS_GROUPED_PER_PAGE,
 ) => {
   const cacheController = cacheClient.chapters.latestGrouped
