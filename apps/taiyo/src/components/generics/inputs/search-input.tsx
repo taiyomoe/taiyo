@@ -5,9 +5,7 @@ type Props = Omit<InputProps, "isClearable" | "startContent">
 
 export const SearchInput = (props: Props) => (
   <Input
-    startContent={
-      <SearchIcon className="!duration-150 text-foreground-500 transition-colors" />
-    }
+    startContent={<SearchIcon className="text-foreground-500" />}
     isClearable
     {...props}
   />
