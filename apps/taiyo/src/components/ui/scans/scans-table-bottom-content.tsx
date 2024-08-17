@@ -24,12 +24,12 @@ export const ScansTableBottomContent = () => {
 
   return (
     <div className="flex items-center justify-between">
-      <span className="hidden w-[30%] text-default-400 text-small sm:block">
+      <span className="hidden text-default-400 text-small sm:block">
         {selectedKeys === "all"
           ? "Todos as scans selecionadas"
           : ` Scans ${selectedKeys.size} de ${items.length} selecionadas`}
       </span>
-      <div className="flex gap-2">
+      <div className="flex gap-4">
         <PerPageDropdown
           defaultChoice={perPage}
           choices={SCANS_LIST_PER_PAGE_CHOICES}
@@ -38,7 +38,6 @@ export const ScansTableBottomContent = () => {
         />
         <Pagination
           initialPage={page}
-          page={page}
           total={totalPages}
           color="primary"
           onChange={handlePageChange}

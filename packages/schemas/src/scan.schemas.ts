@@ -34,4 +34,8 @@ export const getScansListSchema = z.object({
   ),
 })
 
+export const bulkDeleteScansSchema = z.object({
+  ids: z.array(z.string().uuid()).min(1),
+})
+
 export type CreateScanInput = typeof createScanSchema._type

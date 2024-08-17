@@ -5,6 +5,7 @@ import {
   DropdownMenu,
   DropdownTrigger,
 } from "@nextui-org/dropdown"
+import {} from "framer-motion"
 import { useAtom } from "jotai"
 import { ChevronDownIcon, PlusIcon } from "lucide-react"
 import Link from "next/link"
@@ -12,6 +13,7 @@ import { scansListVisibleColumnsAtom } from "~/atoms/scansList.atoms"
 import { SearchInput } from "~/components/generics/inputs/search-input"
 import { useScansList } from "~/hooks/useScansList"
 import { columns } from "./scans-table"
+import { ScansTableMultipleActionsDeleteButton } from "./scans-table-multiple-actions-delete-button"
 
 export const ScansTableTopContent = () => {
   const [visibleColumns, setVisibleColumns] = useAtom(
@@ -29,6 +31,7 @@ export const ScansTableTopContent = () => {
         onValueChange={handleQueryChange}
       />
       <div className="flex justify-between sm:justify-normal sm:gap-4">
+        <ScansTableMultipleActionsDeleteButton />
         <Dropdown>
           <DropdownTrigger className="flex">
             <Button

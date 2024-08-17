@@ -39,6 +39,7 @@ export const PerPageDropdown = ({
         <Button
           className="h-9 w-fit min-w-fit justify-between gap-1 px-3"
           endContent={<ChevronDownIcon size={16} />}
+          variant="flat"
           radius="sm"
         >
           {Array.from(selectedKeys).join()}
@@ -46,10 +47,10 @@ export const PerPageDropdown = ({
       </DropdownTrigger>
       <DropdownMenu
         selectionMode="single"
-        disallowEmptySelection
         selectedKeys={selectedKeys}
         onSelectionChange={handleSelectionChange}
         aria-label="Capítulos por página"
+        disallowEmptySelection
       >
         {choices.map((option) => {
           const rendered = renderOption(option)

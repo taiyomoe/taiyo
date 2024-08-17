@@ -69,6 +69,11 @@ export const useScansList = () => {
     setPage(1)
   }, [setQuery, setPage])
 
+  const handleForceRefetch = useCallback(() => {
+    setIsInternallyLoading(true)
+    handleSearch()
+  }, [setIsInternallyLoading, handleSearch])
+
   return {
     query,
     page,
@@ -80,5 +85,6 @@ export const useScansList = () => {
     handleQueryChange,
     handlePageChange,
     handlePerPageChange,
+    handleForceRefetch,
   }
 }

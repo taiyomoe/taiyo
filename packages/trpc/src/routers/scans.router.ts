@@ -1,8 +1,12 @@
 import { getScanIndexItem } from "@taiyomoe/meilisearch/utils"
-import { createScanSchema, getScansListSchema } from "@taiyomoe/schemas"
+import {
+  bulkDeleteScansSchema,
+  createScanSchema,
+  getScansListSchema,
+} from "@taiyomoe/schemas"
+import { TRPCError } from "@trpc/server"
 import { parallel } from "radash"
 import { createTRPCRouter, protectedProcedure } from "../trpc"
-
 export const scansRouter = createTRPCRouter({
   create: protectedProcedure
     .meta({ resource: "scans", action: "create" })
@@ -41,5 +45,35 @@ export const scansRouter = createTRPCRouter({
       })
 
       return { scans, totalPages: searched.totalPages }
+    }),
+
+  bulkDelete: protectedProcedure
+    .meta({ resource: "scans", action: "delete" })
+    .input(bulkDeleteScansSchema)
+    .mutation(async ({ ctx, input }) => {
+      const scans = await ctx.db.scan.findMany({
+        where: { id: { in: input.ids } },
+      })
+
+      if (scans.length !== input.ids.length) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Uma ou várias scans não existem.",
+        })
+      }
+
+      for (const scan of scans) {
+        await ctx.db.scan.update({
+          data: {
+            deletedAt: new Date(),
+            deleterId: ctx.session.user.id,
+            chapters: { set: [] },
+            members: { set: [] },
+          },
+          where: { id: scan.id },
+        })
+      }
+
+      await ctx.indexes.scans.deleteDocuments(input.ids)
     }),
 })
