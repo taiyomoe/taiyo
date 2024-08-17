@@ -7,6 +7,7 @@ import {
 } from "@nextui-org/dropdown"
 import { useAtom } from "jotai"
 import { ChevronDownIcon, PlusIcon } from "lucide-react"
+import Link from "next/link"
 import { scansListVisibleColumnsAtom } from "~/atoms/scansList.atoms"
 import { SearchInput } from "~/components/generics/inputs/search-input"
 import { useScansList } from "~/hooks/useScansList"
@@ -50,8 +51,13 @@ export const ScansTableTopContent = () => {
             ))}
           </DropdownMenu>
         </Dropdown>
-        <Button color="primary" endContent={<PlusIcon />}>
-          Add New
+        <Button
+          as={Link}
+          href="/dashboard/scans/add"
+          color="primary"
+          endContent={<PlusIcon />}
+        >
+          Adicionar
         </Button>
       </div>
     </div>
