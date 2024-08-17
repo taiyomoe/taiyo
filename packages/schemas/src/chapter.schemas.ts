@@ -41,25 +41,11 @@ export const bulkUpdateChaptersScansSchema = z.object({
 
 export const getMediaChaptersByMediaIdSchema = z.object({
   mediaId: z.string(),
-  page: z.number().optional().default(DEFAULT_MEDIA_PAGE),
-  perPage: z
-    .number()
-    .optional()
-    .default(DEFAULT_MEDIA_PER_PAGE)
-    .refine((x) => MEDIA_PER_PAGE_CHOICES.includes(x), {
-      message: `perPage must be one of ${MEDIA_PER_PAGE_CHOICES.join(", ")}`,
-    }),
+  page: pageSchema,
 })
 
 export const getLatestChaptersGroupedSchema = z.object({
-  page: z.number().optional().default(DEFAULT_LATEST_CHAPTERS_GROUPED_PAGE),
-  perPage: z
-    .number()
-    .optional()
-    .default(DEFAULT_LATEST_CHAPTERS_GROUPED_PER_PAGE)
-    .refine((x) => LATEST_CHAPTERS_GROUPED_PER_PAGE_CHOICES.includes(x), {
-      message: `perPage must be one of ${LATEST_CHAPTERS_GROUPED_PER_PAGE_CHOICES.join(", ")}`,
-    }),
+  page: pageSchema,
 })
 
 export type UpdateChapterInput = typeof updateChapterSchema._type
