@@ -18,14 +18,9 @@ import {
   TableRow,
 } from "@nextui-org/table"
 import type { ScansList } from "@taiyomoe/types"
-import {
-  ChevronDownIcon,
-  EllipsisIcon,
-  PlusIcon,
-  SearchIcon,
-} from "lucide-react"
+import { ChevronDownIcon, EllipsisIcon, PlusIcon } from "lucide-react"
 import { type Key, useCallback, useMemo, useState } from "react"
-import { Input } from "~/components/generics/input"
+import { SearchInput } from "~/components/generics/inputs/search-input"
 import { useScansList } from "~/hooks/useScansList"
 
 const INITIAL_VISIBLE_COLUMNS = ["name", "chapters", "members", "actions"]
@@ -84,11 +79,9 @@ export const ScansTable = ({ initialItems }: Props) => {
   const topContent = useMemo(
     () => (
       <div className="flex justify-between">
-        <Input
-          isClearable
+        <SearchInput
           className="w-full sm:w-1/3"
-          placeholder="Search by name..."
-          startContent={<SearchIcon />}
+          placeholder="Pesquisar por nome..."
           value={query}
           onClear={handleClear}
           onValueChange={handleQueryChange}
