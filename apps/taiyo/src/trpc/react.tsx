@@ -8,7 +8,14 @@ import { useState } from "react"
 import SuperJSON from "superjson"
 import { getBaseUrl } from "~/trpc/shared"
 
-const createQueryClient = () => new QueryClient()
+const createQueryClient = () =>
+  new QueryClient({
+    defaultOptions: {
+      queries: {
+        refetchOnWindowFocus: false,
+      },
+    },
+  })
 
 let clientQueryClientSingleton: QueryClient | undefined = undefined
 const getQueryClient = () => {

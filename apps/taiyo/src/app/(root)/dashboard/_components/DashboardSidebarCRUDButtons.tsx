@@ -1,5 +1,11 @@
 import { Button } from "@nextui-org/button"
-import { BarChart2Icon, PencilIcon, PlusIcon, Trash2Icon } from "lucide-react"
+import {
+  BarChart2Icon,
+  ListChecksIcon,
+  PencilIcon,
+  PlusIcon,
+  Trash2Icon,
+} from "lucide-react"
 import NextLink from "next/link"
 import { tv } from "tailwind-variants"
 
@@ -7,7 +13,7 @@ type Props = {
   items: {
     label: string
     href: string
-    type: "create" | "update" | "del" | "stats"
+    type: "create" | "update" | "del" | "stats" | "home"
     isDisabled?: boolean
   }[]
 }
@@ -34,8 +40,10 @@ export const DashboardSidebarCRUDButtons = ({ items }: Props) => {
               <PencilIcon className="text-warning" />
             ) : type === "del" ? (
               <Trash2Icon className="text-danger" />
-            ) : (
+            ) : type === "stats" ? (
               <BarChart2Icon className="text-primary" />
+            ) : (
+              <ListChecksIcon />
             )
           }
           href={href}

@@ -133,6 +133,11 @@ export const DashboardSidebarContent = ({ className }: Props) => {
         <DashboardSidebarCRUDButtons
           items={[
             {
+              label: "Lista",
+              href: "/dashboard/scans",
+              type: "home",
+            },
+            {
               label: "Adicionar",
               href: "/dashboard/scans/add",
               type: "create",
