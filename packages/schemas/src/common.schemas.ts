@@ -13,15 +13,19 @@ export const perPageSchema = (initial: number, choices: number[]) =>
       message: `perPage must be one of ${choices.join(", ")}`,
     })
 
+export const optionalStringSchema = z
+  .string()
+  .optional()
+  .or(z.literal("").transform(() => undefined))
+
 export const optionalUrlSchema = (startsWith?: string[]) =>
   z
     .string()
     .url()
     .optional()
-    .or(z.literal(""))
+    .or(z.literal("").transform(() => undefined))
     .refine((v) => {
-      if (v === "" || !startsWith) return true
-      if (!v) return false
+      if (!v || !startsWith) return true
 
       return startsWith.some((s) => v.startsWith(s))
     })

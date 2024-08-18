@@ -3,11 +3,16 @@ import {
   SCANS_LIST_PER_PAGE_CHOICES,
 } from "@taiyomoe/constants"
 import { z } from "zod"
-import { optionalUrlSchema, pageSchema, perPageSchema } from "./common.schemas"
+import {
+  optionalStringSchema,
+  optionalUrlSchema,
+  pageSchema,
+  perPageSchema,
+} from "./common.schemas"
 
 export const createScanSchema = z.object({
   name: z.string().min(2),
-  description: z.string().optional(),
+  description: optionalStringSchema,
   logo: optionalUrlSchema(),
   banner: optionalUrlSchema(),
   website: optionalUrlSchema(),
@@ -21,7 +26,7 @@ export const createScanSchema = z.object({
 })
 
 export const getScansListSchema = z.object({
-  search: z.string().optional(),
+  search: optionalStringSchema,
   page: pageSchema,
   perPage: perPageSchema(
     DEFAULT_SCANS_LIST_PER_PAGE,
