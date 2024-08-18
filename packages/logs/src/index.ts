@@ -1,5 +1,5 @@
 import { createClient } from "@clickhouse/client-web"
-import type { MediaChapter } from "@taiyomoe/db"
+import type { MediaChapter, Scan } from "@taiyomoe/db"
 import { ObjectUtils } from "@taiyomoe/utils"
 import SuperJSON from "superjson"
 import { env } from "../env"
@@ -68,6 +68,36 @@ export const logsClient = {
           format: "JSONCompactEachRowWithNames",
         }),
     },
+  },
+
+  scans: {
+    bulkDelete: (
+      input: { old: Scan; affectedChaptersIds: string[]; userId: string }[],
+    ) =>
+      rawLogsClient.insert({
+        table: "logs.scans",
+        values: [
+          [
+            "type",
+            "old",
+            "new",
+            "diff",
+            "affectedChaptersId",
+            "scanId",
+            "userId",
+          ],
+          ...input.map((item) => [
+            "deleted",
+            SuperJSON.serialize(item.old),
+            SuperJSON.serialize({}),
+            [],
+            item.affectedChaptersIds,
+            item.old.id,
+            item.userId,
+          ]),
+        ],
+        format: "JSONCompactEachRowWithNames",
+      }),
   },
 }
 

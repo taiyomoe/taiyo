@@ -54,6 +54,7 @@ export const ScansTableMultipleActionsDeleteModal = ({
         setSelectedKeys(new Set())
         handleForceRefetch()
         onOpenChange()
+        setInputValue("")
 
         return "Scans apagadas com sucesso!"
       },
