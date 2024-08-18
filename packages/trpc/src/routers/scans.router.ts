@@ -21,7 +21,9 @@ export const scansRouter = createTRPCRouter({
 
       const indexItem = await getScanIndexItem(ctx.db, createdScan.id)
       await ctx.indexes.scans.updateDocuments([indexItem])
-
+      await ctx.logs.scans.insert([
+        { type: "created", _new: createdScan, userId: ctx.session.user.id },
+      ])
       return createdScan
     }),
 
@@ -76,8 +78,9 @@ export const scansRouter = createTRPCRouter({
       }
 
       await ctx.indexes.scans.deleteDocuments(input.ids)
-      await ctx.logs.scans.bulkDelete(
+      await ctx.logs.scans.insert(
         scans.map((s) => ({
+          type: "deleted",
           old: omit(s, ["chapters"]),
           userId: ctx.session.user.id,
           affectedChaptersIds: s.chapters.map((c) => c.id),

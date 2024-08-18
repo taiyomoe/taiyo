@@ -71,8 +71,8 @@ export const logsClient = {
   },
 
   scans: {
-    bulkDelete: (
-      input: { old: Scan; affectedChaptersIds: string[]; userId: string }[],
+    insert: (
+      input: (InsertResource<Scan> & { affectedChaptersIds?: string[] })[],
     ) =>
       rawLogsClient.insert({
         table: "logs.scans",
@@ -87,12 +87,14 @@ export const logsClient = {
             "userId",
           ],
           ...input.map((item) => [
-            "deleted",
-            SuperJSON.serialize(item.old),
-            SuperJSON.serialize({}),
-            [],
-            item.affectedChaptersIds,
-            item.old.id,
+            item.type,
+            SuperJSON.serialize("old" in item ? item.old : {}),
+            SuperJSON.serialize("_new" in item ? item._new : {}),
+            item.type === "updated"
+              ? Object.keys(ObjectUtils.deepDiff(item.old, item._new))
+              : [],
+            item.affectedChaptersIds ?? [],
+            "old" in item ? item.old.id : item._new.id,
             item.userId,
           ]),
         ],
