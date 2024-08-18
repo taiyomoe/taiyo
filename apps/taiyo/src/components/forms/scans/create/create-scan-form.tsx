@@ -1,8 +1,7 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import type { CreateScanInput } from "@taiyomoe/schemas"
-import { createScanSchema } from "@taiyomoe/schemas"
+import { type CreateScanInput, createScanSchema } from "@taiyomoe/schemas"
 import { type SubmitHandler, useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { Form } from "~/components/generics/form/form"

@@ -3,30 +3,30 @@ import {
   SCANS_LIST_PER_PAGE_CHOICES,
 } from "@taiyomoe/constants"
 import { z } from "zod"
-import { pageSchema, perPageSchema } from "./common.schemas"
+import {
+  optionalStringSchema,
+  optionalUrlSchema,
+  pageSchema,
+  perPageSchema,
+} from "./common.schemas"
 
 export const createScanSchema = z.object({
   name: z.string().min(2),
-  description: z.string().optional(),
-  logo: z.string().url().optional(),
-  banner: z.string().url().optional(),
-  website: z.string().url().optional(),
-  discord: z.string().url().startsWith("https://discord.gg/").optional(),
-  twitter: z
-    .union([
-      z.string().url().startsWith("https://twitter.com/"),
-      z.string().url().startsWith("https://x.com/"),
-    ])
-    .optional(),
-  facebook: z.string().url().startsWith("https://facebook.com/").optional(),
-  instagram: z.string().url().startsWith("https://instagram.com/").optional(),
-  telegram: z.string().url().startsWith("https://t.me/").optional(),
-  youtube: z.string().url().startsWith("https://youtube.com/").optional(),
-  email: z.string().email().optional(),
+  description: optionalStringSchema,
+  logo: optionalUrlSchema(),
+  banner: optionalUrlSchema(),
+  website: optionalUrlSchema(),
+  discord: optionalUrlSchema(["https://discord.gg/"]),
+  twitter: optionalUrlSchema(["https://twitter.com/", "https://x.com/"]),
+  facebook: optionalUrlSchema(["https://facebook.com/"]),
+  instagram: optionalUrlSchema(["https://instagram.com/"]),
+  telegram: optionalUrlSchema(["https://t.me/"]),
+  youtube: optionalUrlSchema(["https://youtube.com/"]),
+  email: z.string().email().optional().or(z.literal("")),
 })
 
 export const getScansListSchema = z.object({
-  search: z.string().optional(),
+  search: optionalStringSchema,
   page: pageSchema,
   perPage: perPageSchema(
     DEFAULT_SCANS_LIST_PER_PAGE,

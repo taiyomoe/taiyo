@@ -1,5 +1,5 @@
 import { createClient } from "@clickhouse/client-web"
-import type { MediaChapter } from "@taiyomoe/db"
+import type { MediaChapter, Scan } from "@taiyomoe/db"
 import { ObjectUtils } from "@taiyomoe/utils"
 import SuperJSON from "superjson"
 import { env } from "../env"
@@ -68,6 +68,38 @@ export const logsClient = {
           format: "JSONCompactEachRowWithNames",
         }),
     },
+  },
+
+  scans: {
+    insert: (
+      input: (InsertResource<Scan> & { affectedChaptersIds?: string[] })[],
+    ) =>
+      rawLogsClient.insert({
+        table: "logs.scans",
+        values: [
+          [
+            "type",
+            "old",
+            "new",
+            "diff",
+            "affectedChaptersId",
+            "scanId",
+            "userId",
+          ],
+          ...input.map((item) => [
+            item.type,
+            SuperJSON.serialize("old" in item ? item.old : {}),
+            SuperJSON.serialize("_new" in item ? item._new : {}),
+            item.type === "updated"
+              ? Object.keys(ObjectUtils.deepDiff(item.old, item._new))
+              : [],
+            item.affectedChaptersIds ?? [],
+            "old" in item ? item.old.id : item._new.id,
+            item.userId,
+          ]),
+        ],
+        format: "JSONCompactEachRowWithNames",
+      }),
   },
 }
 
