@@ -35,6 +35,11 @@ const config = {
         hostname: "flagcdn.com",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "mangadex.org",
+        pathname: "/**",
+      },
     ],
   },
 

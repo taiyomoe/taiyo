@@ -56,7 +56,7 @@ export type InputJsonValueType = z.infer<typeof InputJsonValueSchema>;
 
 export const TransactionIsolationLevelSchema = z.enum(['ReadUncommitted','ReadCommitted','RepeatableRead','Serializable']);
 
-export const UserScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','name','email','emailVerified','image','role','points']);
+export const UserScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','name','email','emailVerified','image','banner','role','points']);
 
 export const RelationLoadStrategySchema = z.enum(['query','join']);
 
@@ -65,6 +65,8 @@ export const UserSettingScalarFieldEnumSchema = z.enum(['id','createdAt','update
 export const UserLibraryScalarFieldEnumSchema = z.enum(['reading','rereading','planToRead','completed','onHold','dropped','userId']);
 
 export const UserHistoryScalarFieldEnumSchema = z.enum(['progression','mediaId','userId']);
+
+export const UserFollowScalarFieldEnumSchema = z.enum(['id','createdAt','followerId','followedId']);
 
 export const AccountScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','type','refresh_token','access_token','expires_at','token_type','scope','id_token','session_state','provider','providerAccountId','userId']);
 
@@ -169,6 +171,7 @@ export const UserSchema = z.object({
   email: z.string(),
   emailVerified: z.coerce.date().nullable(),
   image: z.string().nullable(),
+  banner: z.string().nullable(),
   points: z.number().int(),
 })
 
@@ -242,6 +245,19 @@ export const UserHistorySchema = z.object({
 })
 
 export type UserHistory = z.infer<typeof UserHistorySchema>
+
+/////////////////////////////////////////
+// USER FOLLOW SCHEMA
+/////////////////////////////////////////
+
+export const UserFollowSchema = z.object({
+  id: z.string(),
+  createdAt: z.coerce.date(),
+  followerId: z.string(),
+  followedId: z.string(),
+})
+
+export type UserFollow = z.infer<typeof UserFollowSchema>
 
 /////////////////////////////////////////
 // ACCOUNT SCHEMA

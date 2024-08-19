@@ -5,6 +5,7 @@ import { librariesRouter } from "./routers/libraries.router"
 import { mediasRouter } from "./routers/medias.router"
 import { scansRouter } from "./routers/scans.router"
 import { titlesRouter } from "./routers/titles.router"
+import { usersRouter } from "./routers/users.router"
 import { createTRPCRouter } from "./trpc"
 
 /**
@@ -20,6 +21,7 @@ export const appRouter = createTRPCRouter({
   histories: historiesRouter,
   libraries: librariesRouter,
   scans: scansRouter,
+  users: usersRouter,
 })
 
 // export type definition of API
