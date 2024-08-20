@@ -5,6 +5,7 @@ import type { UserLimited } from "@taiyomoe/types"
 import { useAtomValue } from "jotai"
 import { useHydrateAtoms } from "jotai/utils"
 import { userProfileFollowersCountAtom } from "~/atoms/userProfile.atoms"
+import { UserLayoutInfoTab } from "./tabs/user-layout-info-tab"
 
 type Props = {
   user: UserLimited
@@ -23,7 +24,7 @@ export const UserLayoutTabs = ({ user }: Props) => {
           "p-0 scrollbar-default overflow-x-auto scrollbar-thin scrollbar-track-content2 scrollbar-thumb-content4",
         tab: "",
         panel:
-          "p-0 pt-bodyPadding -ml-[calc(126px+var(--body-padding))] sm:-ml-[calc(206px+var(--body-padding))]",
+          "p-0 pt-bodyPadding sm:pt-[calc(var(--body-padding)*2)] sm:-ml-[calc(206px+var(--body-padding))]",
         cursor: "",
       }}
       defaultSelectedKey="info"
@@ -31,7 +32,9 @@ export const UserLayoutTabs = ({ user }: Props) => {
       variant="underlined"
       size="lg"
     >
-      <Tab key="info" title="Informações" />
+      <Tab key="info" title="Informações">
+        <UserLayoutInfoTab user={user} />
+      </Tab>
       <Tab key="uploads" title={`Uploads (${user.uploadsCount})`} />
       <Tab key="followers" title={`Seguidores (${followersCount})`} />
       <Tab
