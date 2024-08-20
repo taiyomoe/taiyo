@@ -1,4 +1,5 @@
 import { toggleFollowSchema } from "@taiyomoe/schemas"
+import { UsersService } from "@taiyomoe/services"
 import { createTRPCRouter, protectedProcedure } from "../trpc"
 
 export const usersRouter = createTRPCRouter({
@@ -14,28 +15,23 @@ export const usersRouter = createTRPCRouter({
         throw new Error("User not found")
       }
 
-      const isFollowing = await ctx.db.userFollow.findFirst({
-        where: { followerId: ctx.session.user.id, followedId: user.id },
-      })
+      const isFollowing = await UsersService.isFollowing(
+        ctx.session.user.id,
+        user.id,
+      )
 
       if (isFollowing) {
-        await ctx.db.userFollow.delete({
-          where: {
-            followerId_followedId: {
-              followerId: ctx.session.user.id,
-              followedId: user.id,
-            },
-          },
+        await ctx.db.user.update({
+          data: { following: { disconnect: { id: user.id } } },
+          where: { id: ctx.session.user.id },
         })
 
         return
       }
 
-      await ctx.db.userFollow.create({
-        data: {
-          followerId: ctx.session.user.id,
-          followedId: user.id,
-        },
+      await ctx.db.user.update({
+        data: { following: { connect: { id: user.id } } },
+        where: { id: ctx.session.user.id },
       })
     }),
 })
