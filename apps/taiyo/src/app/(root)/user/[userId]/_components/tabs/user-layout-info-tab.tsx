@@ -1,4 +1,6 @@
 import type { UserLimited } from "@taiyomoe/types"
+import { COUNTRIES_PT } from "@taiyomoe/utils/i18n"
+import { CountryFlag } from "~/components/ui/CountryFlag"
 
 type Props = {
   user: UserLimited
@@ -36,7 +38,10 @@ export const UserLayoutInfoTab = ({ user }: Props) => {
           <p className="font-bold text-foreground-400 text-small uppercase">
             País
           </p>
-          <p>{user.profile.country}</p>
+          <div className="flex items-center gap-2">
+            <CountryFlag country={user.profile.country} size={24} />
+            <p>{COUNTRIES_PT[user.profile.country]}</p>
+          </div>
         </div>
       )}
     </div>

@@ -1,5 +1,6 @@
 import { tv } from "@nextui-org/react"
 import type { UserLimited } from "@taiyomoe/types"
+import { CountryFlag } from "~/components/ui/CountryFlag"
 
 type Props = {
   user: UserLimited
@@ -25,5 +26,12 @@ export const UserLayoutUsername = ({ user }: Props) => {
     return <p className={base}>Ghost</p>
   }
 
-  return <p className={base}>{user.name}</p>
+  return (
+    <div className="flex items-center gap-4">
+      {user.profile.country && (
+        <CountryFlag country={user.profile.country} size={48} />
+      )}
+      <p className={base}>{user.name}</p>
+    </div>
+  )
 }
