@@ -13,7 +13,7 @@
     "typecheck": "tsc --noEmit",
     "seed": "prisma db push --force-reset && prisma generate && prisma db seed",
     "db": "prisma",
-    "postinstall": "prisma generate --no-hints"
+    "postinstall": "prisma generate --no-hints --schema=./src/prisma/schema.prisma"
   },
   "prisma": {
     "schema": "./src/prisma/schema.prisma",
