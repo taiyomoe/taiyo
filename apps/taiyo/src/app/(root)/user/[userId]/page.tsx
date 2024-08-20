@@ -1,4 +1,4 @@
-import { db } from "@taiyomoe/db"
+import { UsersService } from "@taiyomoe/services"
 import { notFound } from "next/navigation"
 import { UserLayout } from "./_components/user-layout"
 
@@ -7,7 +7,7 @@ type Props = {
 }
 
 export default async function Page({ params }: Props) {
-  const user = await db.user.findUnique({ where: { id: params.userId } })
+  const user = await UsersService.getLimited(params.userId)
 
   if (!user) {
     return notFound()

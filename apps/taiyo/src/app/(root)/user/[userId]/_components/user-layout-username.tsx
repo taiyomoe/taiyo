@@ -1,12 +1,12 @@
 import { tv } from "@nextui-org/react"
-import type { User } from "@taiyomoe/db"
+import type { UserLimited } from "@taiyomoe/types"
 
 type Props = {
-  user: User
+  user: UserLimited
 }
 
 const userLayoutUsername = tv({
-  base: "w-full overflow-hidden text-ellipsis font-semibold text-2xl leading-normal drop-shadow-accent md:text-3xl lg:text-4xl xl:text-5xl",
+  base: "!leading-normal w-full overflow-hidden text-ellipsis font-semibold text-2xl drop-shadow-accent md:text-3xl lg:text-4xl xl:text-5xl",
   variants: {
     role: {
       USER: "",

@@ -1,14 +1,14 @@
 "use client"
 
 import { Button } from "@nextui-org/button"
-import type { User } from "@taiyomoe/db"
+import type { UserLimited } from "@taiyomoe/types"
 import { UserMinusIcon, UserPlusIcon } from "lucide-react"
 import { useState } from "react"
 import { useDevice } from "~/hooks/useDevice"
 import { api } from "~/trpc/react"
 
 type Props = {
-  user: User
+  user: UserLimited
   isFollowing: boolean
 }
 

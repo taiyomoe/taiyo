@@ -63,6 +63,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     createUser: async ({ user }) => {
       if (!user.id) return
 
+      await db.userProfile.create({ data: { userId: user.id } })
       await db.userSetting.create({ data: { userId: user.id } })
       await db.userLibrary.create({ data: { userId: user.id } })
       await logsClient.users.auth.insert({

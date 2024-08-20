@@ -56,17 +56,17 @@ export type InputJsonValueType = z.infer<typeof InputJsonValueSchema>;
 
 export const TransactionIsolationLevelSchema = z.enum(['ReadUncommitted','ReadCommitted','RepeatableRead','Serializable']);
 
-export const UserScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','name','email','emailVerified','image','banner','role','points']);
+export const UserScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','name','email','emailVerified','image','role']);
 
 export const RelationLoadStrategySchema = z.enum(['query','join']);
 
-export const UserSettingScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','birthDate','gender','city','country','about','contentRating','preferredTitles','userId']);
+export const UserProfileScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','banner','birthDate','gender','city','country','about','points','userId']);
+
+export const UserSettingScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','contentRating','preferredTitles','showFollowing','showLibrary','userId']);
 
 export const UserLibraryScalarFieldEnumSchema = z.enum(['reading','rereading','planToRead','completed','onHold','dropped','userId']);
 
 export const UserHistoryScalarFieldEnumSchema = z.enum(['progression','mediaId','userId']);
-
-export const UserFollowScalarFieldEnumSchema = z.enum(['id','createdAt','followerId','followedId']);
 
 export const AccountScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','type','refresh_token','access_token','expires_at','token_type','scope','id_token','session_state','provider','providerAccountId','userId']);
 
@@ -171,27 +171,42 @@ export const UserSchema = z.object({
   email: z.string(),
   emailVerified: z.coerce.date().nullable(),
   image: z.string().nullable(),
-  banner: z.string().nullable(),
-  points: z.number().int(),
 })
 
 export type User = z.infer<typeof UserSchema>
+
+/////////////////////////////////////////
+// USER PROFILE SCHEMA
+/////////////////////////////////////////
+
+export const UserProfileSchema = z.object({
+  gender: GendersSchema,
+  id: z.string(),
+  createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date(),
+  banner: z.string().nullable(),
+  birthDate: z.coerce.date().nullable(),
+  city: z.string().nullable(),
+  country: z.string().nullable(),
+  about: z.string().nullable(),
+  points: z.number().int(),
+  userId: z.string(),
+})
+
+export type UserProfile = z.infer<typeof UserProfileSchema>
 
 /////////////////////////////////////////
 // USER SETTING SCHEMA
 /////////////////////////////////////////
 
 export const UserSettingSchema = z.object({
-  gender: GendersSchema,
   contentRating: ContentRatingSchema,
   preferredTitles: LanguagesSchema.nullable(),
   id: z.string(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
-  birthDate: z.coerce.date().nullable(),
-  city: z.string().nullable(),
-  country: z.string().nullable(),
-  about: z.string().nullable(),
+  showFollowing: z.boolean(),
+  showLibrary: z.boolean(),
   userId: z.string(),
 })
 
@@ -245,19 +260,6 @@ export const UserHistorySchema = z.object({
 })
 
 export type UserHistory = z.infer<typeof UserHistorySchema>
-
-/////////////////////////////////////////
-// USER FOLLOW SCHEMA
-/////////////////////////////////////////
-
-export const UserFollowSchema = z.object({
-  id: z.string(),
-  createdAt: z.coerce.date(),
-  followerId: z.string(),
-  followedId: z.string(),
-})
-
-export type UserFollow = z.infer<typeof UserFollowSchema>
 
 /////////////////////////////////////////
 // ACCOUNT SCHEMA

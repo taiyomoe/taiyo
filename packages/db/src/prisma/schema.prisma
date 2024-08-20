@@ -36,18 +36,18 @@ model User {
     email         String    @unique
     emailVerified DateTime?
     image         String?
-    banner        String?
     role          Roles     @default(USER)
-    points        Int       @default(0)
 
     accounts  Account[]
     sessions  Session[]
+    profile   UserProfile?
     settings  UserSetting?
     library   UserLibrary?
     history   UserHistory[]
-    followers UserFollow[]  @relation("Follower")
-    following UserFollow[]  @relation("Followed")
+    followers User[]        @relation("UserFollow")
+    following User[]        @relation("UserFollow")
 
+    // These exist solely to satisfy Prisma's "relations must be defined on both sides" rule
     createdMedias         Media[]
     uploadedMediaCovers   MediaCover[]
     uploadedMediaBanners  MediaBanner[]
@@ -61,18 +61,32 @@ model User {
     @@index([id])
 }
 
+model UserProfile {
+    id        String   @id @default(uuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    banner    String?
+    birthDate DateTime?
+    gender    Genders   @default(NOT_SPECIFIED)
+    city      String?
+    country   String?
+    about     String?
+    points    Int       @default(0)
+
+    userId String @unique
+    user   User   @relation(fields: [userId], references: [id])
+}
+
 model UserSetting {
     id        String   @id @default(uuid())
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    birthDate       DateTime?
-    gender          Genders       @default(NOT_SPECIFIED)
-    city            String?
-    country         String?
-    about           String?
     contentRating   ContentRating @default(NSFL)
     preferredTitles Languages?
+    showFollowing   Boolean       @default(true)
+    showLibrary     Boolean       @default(true)
 
     user   User   @relation(fields: [userId], references: [id])
     userId String @unique
@@ -107,19 +121,6 @@ model UserHistory {
     userId String
 
     @@unique([mediaId, userId])
-}
-
-model UserFollow {
-    id        String   @id @default(uuid())
-    createdAt DateTime @default(now())
-
-    followerId String
-    followedId String
-
-    follower User @relation("Follower", fields: [followerId], references: [id])
-    followed User @relation("Followed", fields: [followedId], references: [id])
-
-    @@unique([followerId, followedId])
 }
 
 model Account {

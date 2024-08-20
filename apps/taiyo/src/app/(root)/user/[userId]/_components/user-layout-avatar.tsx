@@ -1,10 +1,10 @@
 import { Image } from "@nextui-org/image"
-import type { User } from "@taiyomoe/db"
+import type { UserLimited } from "@taiyomoe/types"
 import { UserUtils } from "@taiyomoe/utils"
 import NextImage from "next/image"
 
 type Props = {
-  user: User
+  user: UserLimited
 }
 
 export const UserLayoutAvatar = ({ user }: Props) => {

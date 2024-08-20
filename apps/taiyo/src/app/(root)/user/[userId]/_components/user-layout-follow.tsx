@@ -1,9 +1,10 @@
 import { auth } from "@taiyomoe/auth"
-import { type User, db } from "@taiyomoe/db"
+import { UsersService } from "@taiyomoe/services"
+import type { UserLimited } from "@taiyomoe/types"
 import { UserLayoutFollowButton } from "./user-layout-follow-button"
 
 type Props = {
-  user: User
+  user: UserLimited
 }
 
 export const UserLayoutFollow = async ({ user }: Props) => {
@@ -13,9 +14,7 @@ export const UserLayoutFollow = async ({ user }: Props) => {
     return null
   }
 
-  const isFollowing = await db.userFollow.findFirst({
-    where: { followerId: session.user.id, followedId: user.id },
-  })
+  const isFollowing = await UsersService.isFollowing(session.user.id, user.id)
 
-  return <UserLayoutFollowButton user={user} isFollowing={!!isFollowing} />
+  return <UserLayoutFollowButton user={user} isFollowing={isFollowing} />
 }
