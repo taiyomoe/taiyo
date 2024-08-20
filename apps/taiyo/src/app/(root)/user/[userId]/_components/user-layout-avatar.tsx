@@ -15,8 +15,9 @@ export const UserLayoutAvatar = ({ user }: Props) => {
       as={NextImage}
       src={url}
       classNames={{
-        wrapper: "min-w-[206px] size-[206px] !max-w-full bg-content1 flex",
-        img: "!size-[200px] self-center justify-self-center",
+        wrapper:
+          "min-w-[126px] size-[126px] sm:min-w-[206px] sm:size-[206px] !max-w-full bg-content1 flex select-none",
+        img: "!size-[120px] sm:!size-[200px] self-center justify-self-center",
       }}
       radius="full"
       alt="User's avatar"

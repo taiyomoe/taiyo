@@ -6,7 +6,7 @@ type Props = {
 }
 
 const userLayoutUsername = tv({
-  base: "overflow-hidden text-ellipsis font-semibold text-5xl leading-normal drop-shadow-accent",
+  base: "w-full overflow-hidden text-ellipsis font-semibold text-2xl leading-normal drop-shadow-accent md:text-3xl lg:text-4xl xl:text-5xl",
   variants: {
     role: {
       USER: "",
@@ -17,6 +17,7 @@ const userLayoutUsername = tv({
     },
   },
 })
+
 export const UserLayoutUsername = ({ user }: Props) => {
   const base = userLayoutUsername({ role: user.role })
 
@@ -27,7 +28,7 @@ export const UserLayoutUsername = ({ user }: Props) => {
   // return <p className={base}>{user.name}</p>
   return (
     <p className={base} title={user.name}>
-      {user.name}
+      unnomdutilisaterusuperlongcommeçaildepassse
     </p>
   )
 }

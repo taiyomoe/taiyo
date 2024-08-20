@@ -4,6 +4,7 @@ import { Button } from "@nextui-org/button"
 import type { User } from "@taiyomoe/db"
 import { UserMinusIcon, UserPlusIcon } from "lucide-react"
 import { useState } from "react"
+import { useDevice } from "~/hooks/useDevice"
 import { api } from "~/trpc/react"
 
 type Props = {
@@ -15,6 +16,7 @@ export const UserLayoutFollowButton = ({
   user,
   isFollowing: initialIsFollowing,
 }: Props) => {
+  const { isAboveTablet } = useDevice()
   const [isFollowing, setIsFollowing] = useState(initialIsFollowing)
   const { mutate, isPending } = api.users.toggleFollow.useMutation()
 
@@ -27,12 +29,12 @@ export const UserLayoutFollowButton = ({
 
   return (
     <Button
-      className="min-w-fit font-medium"
+      className="w-full min-w-fit font-medium sm:w-fit"
       onPress={handlePress}
       startContent={isFollowing ? <UserMinusIcon /> : <UserPlusIcon />}
       isLoading={isPending}
       color="primary"
-      size="lg"
+      size={isAboveTablet ? "lg" : "md"}
     >
       {isFollowing ? "Deixar de seguir" : "Seguir"}
     </Button>

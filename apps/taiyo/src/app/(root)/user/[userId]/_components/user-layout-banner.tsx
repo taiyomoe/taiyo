@@ -16,7 +16,7 @@ export const UserLayoutBanner = ({ user }: Props) => {
       src={url}
       classNames={{
         wrapper:
-          "h-mediasBannerContent rounded-none w-full !max-w-full after:absolute after:-bottom-[3px] after:left-0 after:h-0.5 after:w-full after:bg-primary z-0",
+          "h-mediasBannerContent rounded-none w-full !max-w-full after:absolute after:-bottom-[3px] after:left-0 after:h-0.5 after:w-full after:bg-primary z-0 select-none",
         img: "rounded-none object-cover blur-xs brightness-75",
       }}
       alt="User's banner"

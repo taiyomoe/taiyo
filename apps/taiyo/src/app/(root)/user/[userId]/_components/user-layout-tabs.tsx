@@ -19,19 +19,23 @@ export const UserLayoutTabs = ({ user }: Props) => {
         // tabList: "p-0 rounded-b-none",
         // tab: "rounded-small",
         // cursor: "rounded-small rounded-b-none",
-        base: "",
-        tabList: "!bg-content1 p-0 rounded-small rounded-b-none",
+        base: "h-[102px] items-end border-b border-b-content3",
+        tabList: "p-",
         tab: "",
-        cursor: "rounded-b-none",
+        panel:
+          "p-0 pt-bodyPadding -ml-[calc(126px+var(--body-padding))] sm:-ml-[calc(206px+var(--body-padding))]",
+        cursor: "",
       }}
       defaultSelectedKey="info"
       color="primary"
-      variant="light"
+      variant="underlined"
+      size="lg"
     >
-      <Tab key="info">Infooo</Tab>
-      <Tab key="followers">Followers</Tab>
-      <Tab key="following">Following</Tab>
-      <Tab key="stats">Estatisticas</Tab>
+      <Tab key="info" title="Informações" />
+      <Tab key="followers" title="Seguidores" />
+      <Tab key="following" title="Seguindo" />
+      <Tab key="uploads" title="Uploads" />
+      <Tab key="stats" title="Estatísticas" isDisabled />
     </Tabs>
   )
 }
