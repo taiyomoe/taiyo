@@ -25,10 +25,5 @@ export const UserLayoutUsername = ({ user }: Props) => {
     return <p className={base}>Ghost</p>
   }
 
-  // return <p className={base}>{user.name}</p>
-  return (
-    <p className={base} title={user.name}>
-      unnomdutilisaterusuperlongcommeçaildepassse
-    </p>
-  )
+  return <p className={base}>{user.name}</p>
 }
