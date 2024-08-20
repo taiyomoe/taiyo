@@ -1,25 +1,17 @@
-import { useWindowSize } from "usehooks-ts"
+import { useMediaQuery } from "usehooks-ts"
 
 export const useDevice = () => {
-  const { width } = useWindowSize()
-
-  const isAboveMobile = width >= 640
-  const isAboveTablet = width >= 768
-  const isAboveLaptop = width >= 1024
-  const isAboveDesktop = width >= 1280
-
-  const isMobile = !isAboveMobile
-  const isTablet = isAboveMobile && !isAboveTablet
-  const isLaptop = isAboveTablet && !isAboveLaptop
-  const isDesktop = isAboveLaptop && !isAboveDesktop
-  const isWideScreen = isAboveDesktop
+  const isAboveMobile = useMediaQuery("(min-width: 640px)")
+  const isAboveTablet = useMediaQuery("(min-width: 768px)")
+  const isAboveLaptop = useMediaQuery("(min-width: 1024px)")
+  const isAboveDesktop = useMediaQuery("(min-width: 1280px)")
 
   return {
-    isMobile,
-    isTablet,
-    isLaptop,
-    isDesktop,
-    isWideScreen,
+    isMobile: !isAboveMobile,
+    isTablet: isAboveMobile && !isAboveTablet,
+    isLaptop: isAboveTablet && !isAboveLaptop,
+    isDesktop: isAboveLaptop && !isAboveDesktop,
+    isWideScreen: isAboveDesktop,
 
     isAboveMobile,
     isAboveTablet,

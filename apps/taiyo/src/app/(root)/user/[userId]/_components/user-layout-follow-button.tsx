@@ -6,7 +6,6 @@ import { useSetAtom } from "jotai"
 import { UserMinusIcon, UserPlusIcon } from "lucide-react"
 import { useState } from "react"
 import { userProfileFollowersCountAtom } from "~/atoms/userProfile.atoms"
-import { useDevice } from "~/hooks/useDevice"
 import { api } from "~/trpc/react"
 
 type Props = {
@@ -18,7 +17,6 @@ export const UserLayoutFollowButton = ({
   user,
   isFollowing: initialIsFollowing,
 }: Props) => {
-  const { isAboveTablet } = useDevice()
   const [isFollowing, setIsFollowing] = useState(initialIsFollowing)
   const setFollowersCount = useSetAtom(userProfileFollowersCountAtom)
   const { mutate, isPending } = api.users.toggleFollow.useMutation()
@@ -37,12 +35,11 @@ export const UserLayoutFollowButton = ({
 
   return (
     <Button
-      className="w-full min-w-fit font-medium sm:w-fit"
+      className="w-full min-w-fit font-medium sm:w-fit md:h-12 md:gap-3 md:rounded-large md:px-6 md:text-medium"
       onPress={handlePress}
       startContent={isFollowing ? <UserMinusIcon /> : <UserPlusIcon />}
       isLoading={isPending}
       color="primary"
-      size={isAboveTablet ? "lg" : "md"}
     >
       {isFollowing ? "Deixar de seguir" : "Seguir"}
     </Button>
