@@ -2,8 +2,10 @@
 
 import { Button } from "@nextui-org/button"
 import type { UserLimited } from "@taiyomoe/types"
+import { useSetAtom } from "jotai"
 import { UserMinusIcon, UserPlusIcon } from "lucide-react"
 import { useState } from "react"
+import { userProfileFollowersCountAtom } from "~/atoms/userProfile.atoms"
 import { useDevice } from "~/hooks/useDevice"
 import { api } from "~/trpc/react"
 
@@ -18,12 +20,18 @@ export const UserLayoutFollowButton = ({
 }: Props) => {
   const { isAboveTablet } = useDevice()
   const [isFollowing, setIsFollowing] = useState(initialIsFollowing)
+  const setFollowersCount = useSetAtom(userProfileFollowersCountAtom)
   const { mutate, isPending } = api.users.toggleFollow.useMutation()
 
   const handlePress = () => {
     mutate(
       { followingId: user.id },
-      { onSuccess: () => setIsFollowing(!isFollowing) },
+      {
+        onSuccess: () => {
+          setIsFollowing(!isFollowing)
+          setFollowersCount((prev) => (isFollowing ? prev - 1 : prev + 1))
+        },
+      },
     )
   }
 

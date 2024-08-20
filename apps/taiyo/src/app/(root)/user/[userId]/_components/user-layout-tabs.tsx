@@ -2,12 +2,19 @@
 
 import { Tab, Tabs } from "@nextui-org/tabs"
 import type { UserLimited } from "@taiyomoe/types"
+import { useAtomValue } from "jotai"
+import { useHydrateAtoms } from "jotai/utils"
+import { userProfileFollowersCountAtom } from "~/atoms/userProfile.atoms"
 
 type Props = {
   user: UserLimited
 }
 
 export const UserLayoutTabs = ({ user }: Props) => {
+  useHydrateAtoms([[userProfileFollowersCountAtom, user.followersCount]])
+
+  const followersCount = useAtomValue(userProfileFollowersCountAtom)
+
   return (
     <Tabs
       classNames={{
@@ -26,7 +33,7 @@ export const UserLayoutTabs = ({ user }: Props) => {
     >
       <Tab key="info" title="Informações" />
       <Tab key="uploads" title={`Uploads (${user.uploadsCount})`} />
-      <Tab key="followers" title={`Seguidores (${user.followersCount})`} />
+      <Tab key="followers" title={`Seguidores (${followersCount})`} />
       <Tab
         key="following"
         title={`Seguindo (${user.followingCount})`}
