@@ -16,11 +16,13 @@ export const UserLayoutFollowButton = ({
   isFollowing: initialIsFollowing,
 }: Props) => {
   const [isFollowing, setIsFollowing] = useState(initialIsFollowing)
-  const { mutate } = api.users.toggleFollow.useMutation()
+  const { mutate, isPending } = api.users.toggleFollow.useMutation()
 
   const handlePress = () => {
-    setIsFollowing(!isFollowing)
-    mutate({ followingId: user.id })
+    mutate(
+      { followingId: user.id },
+      { onSuccess: () => setIsFollowing(!isFollowing) },
+    )
   }
 
   return (
@@ -28,6 +30,7 @@ export const UserLayoutFollowButton = ({
       className="min-w-fit font-medium"
       onPress={handlePress}
       startContent={isFollowing ? <UserMinusIcon /> : <UserPlusIcon />}
+      isLoading={isPending}
       color="primary"
       size="lg"
     >
