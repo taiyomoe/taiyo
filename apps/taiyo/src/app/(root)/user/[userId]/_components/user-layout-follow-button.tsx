@@ -20,6 +20,7 @@ export const UserLayoutFollowButton = ({
   const [isFollowing, setIsFollowing] = useState(initialIsFollowing)
   const setFollowersCount = useSetAtom(userProfileFollowersCountAtom)
   const { mutate, isPending } = api.users.toggleFollow.useMutation()
+  const { data: session } = useSession()
 
   const handlePress = () => {
     mutate(
@@ -27,7 +28,10 @@ export const UserLayoutFollowButton = ({
       {
         onSuccess: () => {
           setIsFollowing(!isFollowing)
-          setFollowersCount((prev) => (isFollowing ? prev - 1 : prev + 1))
+
+          if (session!.user.showFollowing) {
+            setFollowersCount((prev) => (isFollowing ? prev - 1 : prev + 1))
+          }
         },
       },
     )
