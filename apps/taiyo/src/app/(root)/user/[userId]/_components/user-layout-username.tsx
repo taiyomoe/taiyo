@@ -7,7 +7,7 @@ type Props = {
 }
 
 const userLayoutUsername = tv({
-  base: "!leading-normal w-full overflow-hidden text-ellipsis font-semibold text-2xl drop-shadow-accent md:text-3xl lg:text-4xl xl:text-5xl",
+  base: "w-full overflow-x-hidden overflow-y-clip text-ellipsis font-semibold text-2xl drop-shadow-accent md:text-3xl lg:text-4xl xl:text-5xl",
   variants: {
     role: {
       USER: "",
@@ -29,7 +29,7 @@ export const UserLayoutUsername = ({ user }: Props) => {
   return (
     <div className="flex items-center gap-4">
       {user.profile.country && (
-        <CountryFlag country={user.profile.country} size={48} />
+        <CountryFlag country={user.profile.country} size={38} />
       )}
       <p className={base}>{user.name}</p>
     </div>
