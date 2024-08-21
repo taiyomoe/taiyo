@@ -30,5 +30,7 @@ export const useUserNavigation = () => {
     page,
     perPage,
     handleTabChange,
+    setPage,
+    setPerPage,
   }
 }

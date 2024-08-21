@@ -1,13 +1,14 @@
-import { Spinner } from "@nextui-org/react"
+import { Pagination } from "@nextui-org/pagination"
+import { Spinner } from "@nextui-org/spinner"
+import { USER_FOLLOWS_PER_PAGE_CHOICES } from "@taiyomoe/constants"
 import type { UserLimited } from "@taiyomoe/types"
-import { UserUtils } from "@taiyomoe/utils"
 import { useAtomValue } from "jotai"
 import Image from "next/image"
-import Link from "next/link"
 import { userProfileFollowersCountAtom } from "~/atoms/userProfile.atoms"
-import { CountryFlag } from "~/components/ui/CountryFlag"
+import { PerPageDropdown } from "~/components/ui/pagination/per-page-dropdown"
 import { useUserNavigation } from "~/hooks/useUserNavigation"
 import { api } from "~/trpc/react"
+import { UserFollowersTabCard } from "./user-followers-tab-card"
 
 type Props = {
   user: UserLimited
@@ -15,7 +16,7 @@ type Props = {
 
 export const UserLayoutFollowersTab = ({ user }: Props) => {
   const followersCount = useAtomValue(userProfileFollowersCountAtom)
-  const { page, perPage } = useUserNavigation()
+  const { page, perPage, setPage, setPerPage } = useUserNavigation()
   const { data, isLoading } = api.users.getFollowers.useQuery(
     {
       userId: user.id,
@@ -25,7 +26,7 @@ export const UserLayoutFollowersTab = ({ user }: Props) => {
     { enabled: followersCount > 0 },
   )
 
-  if (followersCount === 0 || data?.length === 0) {
+  if (followersCount === 0 || data?.followers.length === 0) {
     return (
       <div>
         <Image
@@ -48,39 +49,31 @@ export const UserLayoutFollowersTab = ({ user }: Props) => {
     )
   }
 
-  console.log("data", data)
-
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex grow flex-wrap justify-center gap-4 bg-amber-900">
-        {data.map((user) => (
-          <Link
-            key={user.id}
-            className="group flex w-full transition-transform hover:scale-105 hover:cursor-pointer md:w-[320px]"
-            href={`/user/${user.id}`}
-          >
-            <Image
-              src={UserUtils.getAvatarUrl(user)}
-              className="z-10 rounded-full"
-              width={60}
-              height={60}
-              alt="Foto do usuário"
-            />
-            <div className="-ml-8 z-0 w-full rounded-large bg-content1 p-2 pl-10 group-hover:bg-content2">
-              <div className="flex items-center gap-2">
-                {user.profile.country && (
-                  <CountryFlag country={user.profile.country} size={24} />
-                )}
-                <p className="font-medium group-hover:underline">{user.name}</p>
-              </div>
-              <p className="line-clamp-1 break-all text-foreground-400">
-                {user.profile.about}
-              </p>
-            </div>
-          </Link>
+      <div className="flex grow flex-wrap justify-center gap-4">
+        {data.followers.map((user) => (
+          <UserFollowersTabCard key={user.id} user={user} />
         ))}
       </div>
-      <div>Pagination</div>
+      <div className="flex justify-end gap-4">
+        <PerPageDropdown
+          defaultChoice={perPage}
+          choices={USER_FOLLOWS_PER_PAGE_CHOICES}
+          renderOption={(o) => `${o} usuários`}
+          onChange={setPerPage}
+        />
+        <Pagination
+          initialPage={page}
+          total={data.totalPages}
+          color="primary"
+          onChange={setPage}
+          showControls
+          showShadow
+          isDisabled={isLoading || data.totalPages === 1}
+          isCompact
+        />
+      </div>
     </div>
   )
 }

@@ -9,6 +9,11 @@ export const usersRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const user = await ctx.db.user.findUnique({
         select: {
+          _count: {
+            select: {
+              followers: { where: { settings: { showFollowing: true } } },
+            },
+          },
           followers: {
             select: {
               id: true,
@@ -37,7 +42,10 @@ export const usersRouter = createTRPCRouter({
         throw new Error("User not found")
       }
 
-      return user.followers as UserFollower[]
+      return {
+        followers: user.followers as UserFollower[],
+        totalPages: Math.ceil(user._count.followers / input.perPage),
+      }
     }),
 
   toggleFollow: protectedProcedure
