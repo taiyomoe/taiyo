@@ -1,5 +1,7 @@
 import type { User, UserProfile, UserSetting } from "@prisma/client"
 
+export type UserTabs = "info" | "uploads" | "followers" | "following"
+
 export type UserLimited = Pick<
   User,
   "id" | "createdAt" | "image" | "name" | "role"
@@ -15,4 +17,6 @@ export type UserLimited = Pick<
   followingCount: number | null
 }
 
-export type UserTabs = "info" | "uploads" | "followers" | "following"
+export type UserFollower = Pick<User, "id" | "name" | "image"> & {
+  profile: Pick<UserProfile, "about" | "country">
+}

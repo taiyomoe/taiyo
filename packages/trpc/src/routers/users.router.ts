@@ -1,5 +1,6 @@
 import { getFollowersSchema, toggleFollowSchema } from "@taiyomoe/schemas"
 import { UsersService } from "@taiyomoe/services"
+import type { UserFollower } from "@taiyomoe/types"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 
 export const usersRouter = createTRPCRouter({
@@ -12,17 +13,11 @@ export const usersRouter = createTRPCRouter({
             select: {
               id: true,
               name: true,
+              image: true,
               profile: {
                 select: {
-                  country: true,
-                  city: true,
                   about: true,
-                  birthDate: true,
-                },
-              },
-              settings: {
-                select: {
-                  showFollowing: true,
+                  country: true,
                 },
               },
             },
@@ -42,7 +37,7 @@ export const usersRouter = createTRPCRouter({
         throw new Error("User not found")
       }
 
-      return user.followers
+      return user.followers as UserFollower[]
     }),
 
   toggleFollow: protectedProcedure
