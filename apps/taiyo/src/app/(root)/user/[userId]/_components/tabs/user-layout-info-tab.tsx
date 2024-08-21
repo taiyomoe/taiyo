@@ -1,6 +1,8 @@
 import type { UserLimited } from "@taiyomoe/types"
 import { COUNTRIES_PT } from "@taiyomoe/utils/i18n"
+import { DateTime } from "luxon"
 import { CountryFlag } from "~/components/ui/CountryFlag"
+import { DateUtils } from "~/lib/utils/date.utils"
 
 type Props = {
   user: UserLimited
@@ -14,7 +16,7 @@ export const UserLayoutInfoTab = ({ user }: Props) => {
           <p className="font-bold text-foreground-400 text-small uppercase">
             Sobre mim
           </p>
-          <p>{user.profile.about}</p>
+          <p className="break-words">{user.profile.about}</p>
         </div>
       )}
       {user.profile.birthDate && (
@@ -22,7 +24,10 @@ export const UserLayoutInfoTab = ({ user }: Props) => {
           <p className="font-bold text-foreground-400 text-small uppercase">
             Data de nascimento
           </p>
-          <p>{user.profile.birthDate.toISOString()}</p>
+          <p>
+            {DateTime.fromJSDate(user.profile.birthDate).toFormat("dd/MM/yyyy")}{" "}
+            ({DateUtils.getAge(user.profile.birthDate)} anos)
+          </p>
         </div>
       )}
       {user.profile.city && (
@@ -30,7 +35,7 @@ export const UserLayoutInfoTab = ({ user }: Props) => {
           <p className="font-bold text-foreground-400 text-small uppercase">
             Cidade
           </p>
-          <p>{user.profile.city}</p>
+          <p className="break-words">{user.profile.city}</p>
         </div>
       )}
       {user.profile.country && (

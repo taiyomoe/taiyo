@@ -50,6 +50,7 @@ const getDateFromRange = (type: "from" | "to", range: DateRangeKey) => {
       return DateTime.now().minus({ years: 1 }).endOf("year").toMillis()
   }
 }
+
 const isLessThanDays = (date: Date, number: number) => {
   const dt = DateTime.fromJSDate(date)
   const now = DateTime.now()
@@ -57,8 +58,23 @@ const isLessThanDays = (date: Date, number: number) => {
   return now.diff(dt, "days").days < number
 }
 
+const getAge = (date: Date) => {
+  const today = new Date()
+  let years = today.getFullYear() - date.getFullYear()
+
+  if (
+    today.getMonth() < date.getMonth() ||
+    (today.getMonth() === date.getMonth() && today.getDate() < date.getDate())
+  ) {
+    years--
+  }
+
+  return years
+}
+
 export const DateUtils = {
   formatToInputValue,
   getDateFromRange,
   isLessThanDays,
+  getAge,
 }
