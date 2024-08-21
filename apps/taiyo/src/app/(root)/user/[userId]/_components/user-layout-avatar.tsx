@@ -21,6 +21,7 @@ export const UserLayoutAvatar = ({ user }: Props) => {
       }}
       radius="full"
       alt="User's avatar"
+      sizes="1"
       priority
       fill
     />
