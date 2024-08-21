@@ -2,6 +2,7 @@
 
 import { NextUIProvider } from "@nextui-org/react"
 import { SessionProvider } from "@taiyomoe/auth/client"
+import { Provider as JotaiProvider } from "jotai"
 import { ThemeProvider } from "next-themes"
 import { useRouter } from "next/navigation"
 import { Toaster } from "sonner"
@@ -16,15 +17,17 @@ export const Providers = (props: LayoutProps) => {
       <TRPCReactProvider>
         <NextUIProvider navigate={router.push}>
           <ThemeProvider attribute="class" defaultTheme="dark">
-            <Toaster
-              richColors
-              closeButton
-              position="top-right"
-              toastOptions={{
-                className: "top-[var(--navbar-height)_!important] left-2",
-              }}
-            />
-            {props.children}
+            <JotaiProvider>
+              <Toaster
+                richColors
+                closeButton
+                position="top-right"
+                toastOptions={{
+                  className: "top-[var(--navbar-height)_!important] left-2",
+                }}
+              />
+              {props.children}
+            </JotaiProvider>
           </ThemeProvider>
         </NextUIProvider>
       </TRPCReactProvider>
