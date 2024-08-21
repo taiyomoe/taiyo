@@ -1,6 +1,7 @@
+import { Image } from "@nextui-org/image"
 import type { UserFollower } from "@taiyomoe/types"
 import { UserUtils } from "@taiyomoe/utils"
-import Image from "next/image"
+import NextImage from "next/image"
 import Link from "next/link"
 import { CountryFlag } from "~/components/ui/CountryFlag"
 
@@ -15,6 +16,7 @@ export const UserFollowersTabCard = ({ user }: Props) => (
     href={`/user/${user.id}`}
   >
     <Image
+      as={NextImage}
       src={UserUtils.getAvatarUrl(user)}
       className="z-10 rounded-full"
       width={60}
