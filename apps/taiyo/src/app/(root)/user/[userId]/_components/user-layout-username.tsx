@@ -7,7 +7,7 @@ type Props = {
 }
 
 const userLayoutUsername = tv({
-  base: "w-full overflow-x-hidden overflow-y-clip text-ellipsis font-semibold text-2xl drop-shadow-accent md:text-3xl lg:text-4xl xl:text-5xl",
+  base: "!leading-tight line-clamp-1 w-full break-all font-semibold text-2xl drop-shadow-accent md:text-3xl lg:text-4xl xl:text-5xl",
   variants: {
     role: {
       USER: "",
