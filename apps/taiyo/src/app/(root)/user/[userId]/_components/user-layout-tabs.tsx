@@ -2,9 +2,12 @@
 
 import { Tab, Tabs } from "@nextui-org/tabs"
 import type { UserLimited } from "@taiyomoe/types"
-import { useAtomValue } from "jotai"
+import { useAtom } from "jotai"
 import { useHydrateAtoms } from "jotai/utils"
+import { useEffect } from "react"
 import { userProfileFollowersCountAtom } from "~/atoms/userProfile.atoms"
+import { useUserNavigation } from "~/hooks/useUserNavigation"
+import { UserLayoutFollowersTab } from "./tabs/user-layout-followers-tab"
 import { UserLayoutInfoTab } from "./tabs/user-layout-info-tab"
 
 type Props = {
@@ -14,7 +17,14 @@ type Props = {
 export const UserLayoutTabs = ({ user }: Props) => {
   useHydrateAtoms([[userProfileFollowersCountAtom, user.followersCount]])
 
-  const followersCount = useAtomValue(userProfileFollowersCountAtom)
+  const { tab, handleTabChange } = useUserNavigation()
+  const [followersCount, setFollowersCount] = useAtom(
+    userProfileFollowersCountAtom,
+  )
+
+  useEffect(() => {
+    setFollowersCount(user.followersCount)
+  }, [user.followersCount, setFollowersCount])
 
   return (
     <Tabs
@@ -27,7 +37,8 @@ export const UserLayoutTabs = ({ user }: Props) => {
           "p-0 pt-bodyPadding sm:pt-[calc(var(--body-padding)*2)] sm:-ml-[calc(206px+var(--body-padding))]",
         cursor: "",
       }}
-      defaultSelectedKey="info"
+      selectedKey={tab}
+      onSelectionChange={handleTabChange}
       color="primary"
       variant="underlined"
       size="lg"
@@ -36,7 +47,9 @@ export const UserLayoutTabs = ({ user }: Props) => {
         <UserLayoutInfoTab user={user} />
       </Tab>
       <Tab key="uploads" title={`Uploads (${user.uploadsCount})`} />
-      <Tab key="followers" title={`Seguidores (${followersCount})`} />
+      <Tab key="followers" title={`Seguidores (${followersCount})`}>
+        <UserLayoutFollowersTab user={user} />
+      </Tab>
       <Tab
         key="following"
         title={`Seguindo (${user.followingCount})`}

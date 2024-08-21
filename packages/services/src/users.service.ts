@@ -1,5 +1,6 @@
 import { db } from "@taiyomoe/db"
 import type { UserLimited } from "@taiyomoe/types"
+import { omit } from "radash"
 
 const getLimited = async (userId: string): Promise<UserLimited | null> => {
   const result = await db.user.findUnique({
@@ -24,7 +25,7 @@ const getLimited = async (userId: string): Promise<UserLimited | null> => {
       _count: {
         select: {
           uploadedMediaChapters: true,
-          followers: true,
+          followers: { where: { settings: { showFollowing: true } } },
           following: true,
         },
       },
@@ -35,12 +36,14 @@ const getLimited = async (userId: string): Promise<UserLimited | null> => {
   if (!result || !result.settings || !result.profile) return null
 
   return {
-    ...result,
+    ...omit(result, ["settings", "profile", "_count"]),
     settings: result.settings,
     profile: result.profile,
     uploadsCount: result._count.uploadedMediaChapters,
     followersCount: result._count.followers,
-    followingCount: result._count.following,
+    followingCount: result.settings.showFollowing
+      ? result._count.following
+      : null,
   }
 }
 

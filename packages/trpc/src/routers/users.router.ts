@@ -1,8 +1,50 @@
-import { toggleFollowSchema } from "@taiyomoe/schemas"
+import { getFollowersSchema, toggleFollowSchema } from "@taiyomoe/schemas"
 import { UsersService } from "@taiyomoe/services"
-import { createTRPCRouter, protectedProcedure } from "../trpc"
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 
 export const usersRouter = createTRPCRouter({
+  getFollowers: publicProcedure
+    .input(getFollowersSchema)
+    .query(async ({ ctx, input }) => {
+      const user = await ctx.db.user.findUnique({
+        select: {
+          followers: {
+            select: {
+              id: true,
+              name: true,
+              profile: {
+                select: {
+                  country: true,
+                  city: true,
+                  about: true,
+                  birthDate: true,
+                },
+              },
+              settings: {
+                select: {
+                  showFollowing: true,
+                },
+              },
+            },
+            where: {
+              settings: {
+                showFollowing: true,
+              },
+            },
+            take: input.perPage,
+            skip: (input.page - 1) * input.perPage,
+          },
+        },
+        where: { id: input.userId },
+      })
+
+      if (!user) {
+        throw new Error("User not found")
+      }
+
+      return user.followers
+    }),
+
   toggleFollow: protectedProcedure
     .meta({ resource: "usersFollow", action: "update" })
     .input(toggleFollowSchema)

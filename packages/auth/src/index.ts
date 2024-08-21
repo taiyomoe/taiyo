@@ -23,6 +23,8 @@ declare module "next-auth" {
       id: string
       role: { name: string; permissions: Permission[] }
       preferredTitles: Languages | null
+      showFollowing: boolean
+      showLibrary: boolean
     }
   }
 }
@@ -41,6 +43,11 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     session: async ({ session, user: adapterUser }) => {
       const user = adapterUser as User
       const settings = await db.userSetting.findUnique({
+        select: {
+          preferredTitles: true,
+          showFollowing: true,
+          showLibrary: true,
+        },
         where: { userId: user.id },
       })
       const role = {
@@ -54,7 +61,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           id: user.id,
           image: user.image,
           role,
-          preferredTitles: settings!.preferredTitles,
+          ...settings!,
         },
       }
     },

@@ -12,5 +12,7 @@ export type UserLimited = Pick<
 } & {
   uploadsCount: number
   followersCount: number
-  followingCount: number
+  followingCount: number | null
 }
+
+export type UserTabs = "info" | "uploads" | "followers" | "following"
