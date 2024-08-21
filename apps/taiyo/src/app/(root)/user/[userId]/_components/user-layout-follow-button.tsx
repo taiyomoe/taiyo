@@ -1,6 +1,7 @@
 "use client"
 
 import { Button } from "@nextui-org/button"
+import { useSession } from "@taiyomoe/auth/client"
 import type { UserLimited } from "@taiyomoe/types"
 import { useSetAtom } from "jotai"
 import { UserMinusIcon, UserPlusIcon } from "lucide-react"
@@ -41,7 +42,13 @@ export const UserLayoutFollowButton = ({
     <Button
       className="w-full min-w-fit font-medium sm:w-fit md:h-12 md:gap-3 md:rounded-large md:px-6 md:text-medium"
       onPress={handlePress}
-      startContent={isFollowing ? <UserMinusIcon /> : <UserPlusIcon />}
+      startContent={
+        isPending ? undefined : isFollowing ? (
+          <UserMinusIcon />
+        ) : (
+          <UserPlusIcon />
+        )
+      }
       isLoading={isPending}
       color="primary"
     >
