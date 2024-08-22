@@ -23,7 +23,7 @@ export const PerPageDropdown = ({
   onChange,
 }: Props) => {
   const [selectedKeys, setSelectedKeys] = useState<Selection>(
-    new Set([defaultChoice]),
+    new Set([defaultChoice.toString()]),
   )
 
   const handleSelectionChange = (keys: Selection) => {

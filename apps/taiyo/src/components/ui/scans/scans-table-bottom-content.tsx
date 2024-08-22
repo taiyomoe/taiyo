@@ -42,7 +42,6 @@ export const ScansTableBottomContent = () => {
           color="primary"
           onChange={handlePageChange}
           showControls
-          showShadow
           isDisabled={isLoading || totalPages === 1}
           isCompact
         />
