@@ -419,8 +419,8 @@ importers:
   packages/logs:
     dependencies:
       '@clickhouse/client-web':
-        specifier: ^1.4.1
-        version: 1.4.1
+        specifier: ^1.5.0
+        version: 1.5.0
       '@t3-oss/env-core':
         specifier: ^0.11.0
         version: 0.11.0(typescript@5.5.4)(zod@3.23.8)
@@ -958,11 +958,11 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@clickhouse/client-common@1.4.1':
-    resolution: {integrity: sha512-f5eoTrUSDplrMoi3ddeZ0MzGTn0iGMByEQ8j63eVMoBSOI2+F6jEIPcW2tWofT79Rvnn3RRlveYcShiaIiCJyw==}
+  '@clickhouse/client-common@1.5.0':
+    resolution: {integrity: sha512-U3vDp+PDnNVEv6kia+Mq5ygnlMZzsYU+3TX+0da3XvL926jzYLMBlIvFUxe2+/5k47ySvnINRC/2QxVK7PC2/A==}
 
-  '@clickhouse/client-web@1.4.1':
-    resolution: {integrity: sha512-gH1TlPxL8tzqH1tX0sau4tIPj7xmXCnRl1MqyGRQMOc2Dvv4uSBltgU65cZ63/1vZl/jwf00VOvFju+TZIFZRw==}
+  '@clickhouse/client-web@1.5.0':
+    resolution: {integrity: sha512-21+c2UJ4cx9SPiIWQThCLULb8h/zng0pNrtTwbbnaoCqMbasyRCyRTHs3wRr7fqRUcZ3p9krIPuN0gnJw3GJ6Q==}
 
   '@cspotcode/source-map-support@0.8.1':
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
@@ -6042,11 +6042,11 @@ snapshots:
   '@biomejs/cli-win32-x64@1.8.3':
     optional: true
 
-  '@clickhouse/client-common@1.4.1': {}
+  '@clickhouse/client-common@1.5.0': {}
 
-  '@clickhouse/client-web@1.4.1':
+  '@clickhouse/client-web@1.5.0':
     dependencies:
-      '@clickhouse/client-common': 1.4.1
+      '@clickhouse/client-common': 1.5.0
 
   '@cspotcode/source-map-support@0.8.1':
     dependencies:

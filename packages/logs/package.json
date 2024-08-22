@@ -14,7 +14,7 @@
     "migrate": "tsx ./src/migrate.ts"
   },
   "dependencies": {
-    "@clickhouse/client-web": "^1.4.1",
+    "@clickhouse/client-web": "^1.5.0",
     "@t3-oss/env-core": "^0.11.0",
     "@taiyomoe/db": "workspace:*",
     "@taiyomoe/utils": "workspace:*",
