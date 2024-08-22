@@ -1,6 +1,7 @@
 import { getFollowsSchema, toggleFollowSchema } from "@taiyomoe/schemas"
 import { UsersService } from "@taiyomoe/services"
 import type { UserFollower } from "@taiyomoe/types"
+import { omit } from "radash"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 
 export const usersRouter = createTRPCRouter({
@@ -121,5 +122,27 @@ export const usersRouter = createTRPCRouter({
         data: { following: { connect: { id: user.id } } },
         where: { id: ctx.session.user.id },
       })
+
+      const ownUser = await ctx.db.user.findUnique({
+        select: {
+          id: true,
+          name: true,
+          image: true,
+          profile: {
+            select: {
+              about: true,
+              country: true,
+            },
+          },
+          settings: { select: { showFollowing: true } },
+        },
+        where: { id: ctx.session.user.id },
+      })
+
+      if (!ownUser || !ownUser.settings?.showFollowing) {
+        return
+      }
+
+      return omit(ownUser, ["settings"]) as UserFollower
     }),
 })

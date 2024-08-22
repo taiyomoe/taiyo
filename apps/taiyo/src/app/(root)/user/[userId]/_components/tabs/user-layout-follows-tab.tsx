@@ -1,8 +1,11 @@
 import { Pagination } from "@nextui-org/pagination"
 import { Spinner } from "@nextui-org/spinner"
+import { useSession } from "@taiyomoe/auth/client"
 import { USER_FOLLOWS_PER_PAGE_CHOICES } from "@taiyomoe/constants"
 import type { UserLimited } from "@taiyomoe/types"
+import { useAtomValue } from "jotai"
 import Image from "next/image"
+import { userProfileOwnFollowerAtom } from "~/atoms/userProfile.atoms"
 import { PerPageDropdown } from "~/components/ui/pagination/per-page-dropdown"
 import { useUserNavigation } from "~/hooks/useUserNavigation"
 import { api } from "~/trpc/react"
@@ -14,7 +17,9 @@ type Props = {
 }
 
 export const UserLayoutFollowsTab = ({ user, type }: Props) => {
+  const ownUser = useAtomValue(userProfileOwnFollowerAtom)
   const { page, perPage, setPage, setPerPage } = useUserNavigation()
+  const { data: session } = useSession()
   const { data, isLoading } = api.users[
     type === "followers" ? "getFollowers" : "getFollowing"
   ].useQuery(
@@ -57,10 +62,25 @@ export const UserLayoutFollowsTab = ({ user, type }: Props) => {
     )
   }
 
+  /**
+   * If the logged in user just followed the user profile, then we add him to the list.
+   *
+   * Otherwise, we remove the logged in user from the list.
+   */
+  const updatedUser = data.users
+    .concat(
+      ownUser && !data.users.some((u) => u.id === ownUser.id) ? [ownUser] : [],
+    )
+    .filter((u) => {
+      if (ownUser === null && u.id === session?.user.id) return false
+
+      return true
+    })
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex grow flex-wrap justify-center gap-4">
-        {data.users.map((u) => (
+        {updatedUser.map((u) => (
           <UserFollowersTabCard key={u.id} user={u} />
         ))}
       </div>

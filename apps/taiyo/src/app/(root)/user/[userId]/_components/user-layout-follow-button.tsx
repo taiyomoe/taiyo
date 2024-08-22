@@ -6,7 +6,10 @@ import type { UserLimited } from "@taiyomoe/types"
 import { useSetAtom } from "jotai"
 import { UserMinusIcon, UserPlusIcon } from "lucide-react"
 import { useState } from "react"
-import { userProfileFollowersCountAtom } from "~/atoms/userProfile.atoms"
+import {
+  userProfileFollowersCountAtom,
+  userProfileOwnFollowerAtom,
+} from "~/atoms/userProfile.atoms"
 import { api } from "~/trpc/react"
 
 type Props = {
@@ -20,6 +23,7 @@ export const UserLayoutFollowButton = ({
 }: Props) => {
   const [isFollowing, setIsFollowing] = useState(initialIsFollowing)
   const setFollowersCount = useSetAtom(userProfileFollowersCountAtom)
+  const setOwnUser = useSetAtom(userProfileOwnFollowerAtom)
   const { mutate, isPending } = api.users.toggleFollow.useMutation()
   const { data: session } = useSession()
 
@@ -27,8 +31,9 @@ export const UserLayoutFollowButton = ({
     mutate(
       { followingId: user.id },
       {
-        onSuccess: () => {
+        onSuccess: (data) => {
           setIsFollowing(!isFollowing)
+          setOwnUser(data ?? null)
 
           if (session!.user.showFollowing) {
             setFollowersCount((prev) => (isFollowing ? prev - 1 : prev + 1))
