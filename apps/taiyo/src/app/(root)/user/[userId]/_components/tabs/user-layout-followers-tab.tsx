@@ -28,15 +28,17 @@ export const UserLayoutFollowersTab = ({ user }: Props) => {
 
   if (followersCount === 0 || data?.followers.length === 0) {
     return (
-      <div>
+      <div className="flex flex-col items-center justify-center gap-8 p-12 md:flex-row md:gap-12 md:p-16">
+        <p className="text-center font-medium text-lg md:text-xl lg:text-2xl">
+          Nenhum seguidor encontrado :(
+        </p>
         <Image
           src="/illustrations/online_friends.svg"
-          className="rounded-medium bg-content1 p-4"
+          className="rounded-medium p-4"
           width={350}
           height={300}
           alt="Ilustração de amigos online"
         />
-        <p>Nenhum seguidor encontrado</p>
       </div>
     )
   }
