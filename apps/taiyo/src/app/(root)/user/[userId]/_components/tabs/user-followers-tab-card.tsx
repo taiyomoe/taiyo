@@ -18,9 +18,9 @@ export const UserFollowersTabCard = ({ user }: Props) => (
     <Image
       as={NextImage}
       src={UserUtils.getAvatarUrl(user)}
-      className="z-10 rounded-full"
-      width={60}
-      height={60}
+      className="z-10 min-w-16 rounded-full object-cover"
+      width={64}
+      height={64}
       alt="Foto do usuário"
     />
     <div className="-ml-8 z-0 w-full rounded-large bg-content1 p-2 pl-10 group-hover:bg-content2">
