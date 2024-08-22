@@ -1,5 +1,5 @@
 import { fakerPT_BR } from "@faker-js/faker"
-import { ContentRating, Genders, Languages, db } from "../.."
+import { ContentRating, Countries, Genders, Languages, db } from "../.."
 
 const execute = async () => {
   const users = [
@@ -176,10 +176,9 @@ const execute = async () => {
       birthDate: fakerPT_BR.date.birthdate(),
       gender: fakerPT_BR.helpers.enumValue(Genders),
       city: fakerPT_BR.location.city(),
-      country: "Brasil",
+      country: Countries.br,
       about: fakerPT_BR.lorem.sentence(),
       points: fakerPT_BR.number.int({ min: 0, max: 1000 }),
-      // followers: fakerPT_BR.helpers.arrayElements(users, {min: 0, max:15}).map((u) => ),
       userId: u.id,
     })),
   })
