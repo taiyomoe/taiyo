@@ -5,7 +5,7 @@ import {
 import { z } from "zod"
 import { pageSchema, perPageSchema } from "./common.schemas"
 
-export const getFollowersSchema = z.object({
+export const getFollowsSchema = z.object({
   userId: z.string().uuid(),
   page: pageSchema,
   perPage: perPageSchema(

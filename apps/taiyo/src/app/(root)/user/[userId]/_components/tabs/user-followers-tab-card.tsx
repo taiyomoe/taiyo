@@ -18,7 +18,10 @@ export const UserFollowersTabCard = ({ user }: Props) => (
     <Image
       as={NextImage}
       src={UserUtils.getAvatarUrl(user)}
-      className="z-10 min-w-16 rounded-full object-cover"
+      classNames={{
+        wrapper: "z-10 min-w-16 rounded-full",
+        img: "object-cover rounded-full",
+      }}
       width={64}
       height={64}
       alt="Foto do usuário"

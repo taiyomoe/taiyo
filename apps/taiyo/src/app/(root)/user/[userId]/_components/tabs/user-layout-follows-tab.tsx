@@ -2,9 +2,7 @@ import { Pagination } from "@nextui-org/pagination"
 import { Spinner } from "@nextui-org/spinner"
 import { USER_FOLLOWS_PER_PAGE_CHOICES } from "@taiyomoe/constants"
 import type { UserLimited } from "@taiyomoe/types"
-import { useAtomValue } from "jotai"
 import Image from "next/image"
-import { userProfileFollowersCountAtom } from "~/atoms/userProfile.atoms"
 import { PerPageDropdown } from "~/components/ui/pagination/per-page-dropdown"
 import { useUserNavigation } from "~/hooks/useUserNavigation"
 import { api } from "~/trpc/react"
@@ -12,25 +10,33 @@ import { UserFollowersTabCard } from "./user-followers-tab-card"
 
 type Props = {
   user: UserLimited
+  type: "followers" | "following"
 }
 
-export const UserLayoutFollowersTab = ({ user }: Props) => {
-  const followersCount = useAtomValue(userProfileFollowersCountAtom)
+export const UserLayoutFollowsTab = ({ user, type }: Props) => {
   const { page, perPage, setPage, setPerPage } = useUserNavigation()
-  const { data, isLoading } = api.users.getFollowers.useQuery(
+  const { data, isLoading } = api.users[
+    type === "followers" ? "getFollowers" : "getFollowing"
+  ].useQuery(
     {
       userId: user.id,
       page,
       perPage,
     },
-    { enabled: followersCount > 0 },
+    { enabled: !!user.followingCount, refetchOnMount: false },
   )
 
-  if (followersCount === 0 || data?.followers.length === 0) {
+  if (
+    !user.followingCount ||
+    user.followingCount === 0 ||
+    data?.users.length === 0
+  ) {
     return (
       <div className="flex flex-col items-center justify-center gap-8 p-12 md:flex-row md:gap-12 md:p-16">
         <p className="text-center font-medium text-lg md:text-xl lg:text-2xl">
-          Nenhum seguidor encontrado :(
+          {type === "followers"
+            ? "Nenhum seguidor encontrado :("
+            : "Ninguém segue este usuário :("}
         </p>
         <Image
           src="/illustrations/online_friends.svg"
@@ -54,8 +60,8 @@ export const UserLayoutFollowersTab = ({ user }: Props) => {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex grow flex-wrap justify-center gap-4">
-        {data.followers.map((user) => (
-          <UserFollowersTabCard key={user.id} user={user} />
+        {data.users.map((u) => (
+          <UserFollowersTabCard key={u.id} user={u} />
         ))}
       </div>
       <div className="flex justify-end gap-4">

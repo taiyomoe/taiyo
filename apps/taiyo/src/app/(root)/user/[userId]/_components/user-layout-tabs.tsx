@@ -7,7 +7,7 @@ import { useHydrateAtoms } from "jotai/utils"
 import { useEffect } from "react"
 import { userProfileFollowersCountAtom } from "~/atoms/userProfile.atoms"
 import { useUserNavigation } from "~/hooks/useUserNavigation"
-import { UserLayoutFollowersTab } from "./tabs/user-layout-followers-tab"
+import { UserLayoutFollowsTab } from "./tabs/user-layout-follows-tab"
 import { UserLayoutInfoTab } from "./tabs/user-layout-info-tab"
 
 type Props = {
@@ -48,13 +48,15 @@ export const UserLayoutTabs = ({ user }: Props) => {
       </Tab>
       <Tab key="uploads" title={`Uploads (${user.uploadsCount})`} />
       <Tab key="followers" title={`Seguidores (${followersCount})`}>
-        <UserLayoutFollowersTab user={user} />
+        <UserLayoutFollowsTab user={user} type="followers" />
       </Tab>
       <Tab
         key="following"
         title={`Seguindo (${user.followingCount})`}
         isDisabled={!user.settings.showFollowing}
-      />
+      >
+        <UserLayoutFollowsTab user={user} type="following" />
+      </Tab>
       <Tab key="stats" title="Estatísticas" isDisabled />
     </Tabs>
   )
