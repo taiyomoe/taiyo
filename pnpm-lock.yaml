@@ -509,12 +509,18 @@ importers:
       '@taiyomoe/db':
         specifier: workspace:*
         version: link:../db
+      '@taiyomoe/schemas':
+        specifier: workspace:^
+        version: link:../schemas
       '@taiyomoe/types':
         specifier: workspace:*
         version: link:../types
       '@taiyomoe/utils':
         specifier: workspace:*
         version: link:../utils
+      '@trpc/server':
+        specifier: 11.0.0-rc.477
+        version: 11.0.0-rc.477
       radash:
         specifier: ^12.1.0
         version: 12.1.0
@@ -531,6 +537,9 @@ importers:
       '@taiyomoe/cache':
         specifier: workspace:*
         version: link:../cache
+      '@taiyomoe/constants':
+        specifier: workspace:^
+        version: link:../constants
       '@taiyomoe/db':
         specifier: workspace:*
         version: link:../db

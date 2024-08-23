@@ -14,6 +14,7 @@
   "dependencies": {
     "@taiyomoe/auth": "workspace:*",
     "@taiyomoe/cache": "workspace:*",
+    "@taiyomoe/constants": "workspace:^",
     "@taiyomoe/db": "workspace:*",
     "@taiyomoe/logs": "workspace:*",
     "@taiyomoe/meilisearch": "workspace:*",

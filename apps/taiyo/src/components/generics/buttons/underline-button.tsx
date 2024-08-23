@@ -1,33 +1,60 @@
 "use client"
 
-import type { HTMLAttributes, MouseEventHandler } from "react"
+import { type VariantProps, tv } from "@nextui-org/react"
+import type {} from "react"
+import {
+  Button,
+  type ButtonProps,
+  type PressEvent,
+} from "react-aria-components"
 import { useToggle } from "usehooks-ts"
-import { cn } from "~/lib/utils/cn"
+
+const underlineButton = tv({
+  base: "relative transition-all after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:origin-bottom-right after:scale-x-0 after:transition-transform after:duration-300 after:ease-in-out hover:cursor-pointer hover:after:origin-bottom-left hover:after:scale-x-100 focus-visible:outline-none",
+  variants: {
+    color: {
+      default:
+        "text-foreground after:bg-gray-200 data-[pressed=true]:text-foreground/70",
+      primary:
+        "text-primary after:bg-primary data-[pressed=true]:brightness-75",
+    },
+    type: {
+      default: "",
+      stay: "data-[selected=true]:after:scale-x-100",
+    },
+  },
+  defaultVariants: {
+    color: "default",
+    type: "default",
+  },
+})
+
+type Props = Omit<ButtonProps, "className"> &
+  VariantProps<typeof underlineButton> & { className?: string }
 
 export const UnderlineButton = ({
   className,
-  onClick,
+  onPress,
+  color,
+  type,
   children,
   ...props
-}: HTMLAttributes<HTMLButtonElement>) => {
+}: Props) => {
   const [isToggled, toggle] = useToggle(false)
 
-  const handleClick: MouseEventHandler<HTMLButtonElement> = (e) => {
+  const handlePress = (e: PressEvent) => {
     toggle()
-    onClick?.(e)
+    onPress?.(e)
   }
 
   return (
-    <button
-      className={cn(
-        "relative text-default-500 transition-colors duration-400 after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:origin-bottom-right after:scale-x-0 after:bg-gray-200 after:transition-transform after:duration-300 after:ease-in-out hover:cursor-pointer hover:text-foreground hover:after:origin-bottom-left hover:after:scale-x-100 data-[selected=true]:text-foreground data-[selected=true]:after:scale-x-100",
-        className,
-      )}
-      onClick={handleClick}
+    <Button
+      className={underlineButton({ color, type, className })}
+      onPress={handlePress}
       data-selected={isToggled}
       {...props}
     >
       {children}
-    </button>
+    </Button>
   )
 }

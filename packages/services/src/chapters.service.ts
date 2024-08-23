@@ -1,14 +1,22 @@
 import type { Languages } from "@prisma/client"
 import { cacheClient } from "@taiyomoe/cache"
-import { DEFAULT_LATEST_CHAPTERS_GROUPED_PER_PAGE } from "@taiyomoe/constants"
-import { type MediaChapter, db } from "@taiyomoe/db"
+import { DEFAULT_GROUPED_CHAPTERS_LIMIT } from "@taiyomoe/constants"
+import { db } from "@taiyomoe/db"
+import type {
+  GetLatestChaptersGroupedByUserInput,
+  GetLatestChaptersGroupedInput,
+} from "@taiyomoe/schemas"
 import type {
   MediaChaptersUploadersStats,
   RawLatestRelease,
-  RawLatestReleaseGrouped,
+  RawLatestReleaseGroupedChapter,
 } from "@taiyomoe/types"
-import { MediaUtils } from "@taiyomoe/utils"
-import { formatRawLatestReleases, latestReleaseQuery } from "./utils"
+import {
+  formatRawLatestReleases,
+  formatRawLatestReleasesGrouped,
+  getFormattedLatestReleasesGrouped,
+  latestReleaseQuery,
+} from "./utils"
 
 const getLatest = async (preferredTitles?: Languages | null) => {
   const cacheController = cacheClient.chapters.latest
@@ -31,39 +39,24 @@ const getLatest = async (preferredTitles?: Languages | null) => {
 }
 
 const getLatestGrouped = async (
+  { page, perPage }: GetLatestChaptersGroupedInput,
+  userId?: string,
   preferredTitles?: Languages | null,
-  page = 1,
-  perPage = DEFAULT_LATEST_CHAPTERS_GROUPED_PER_PAGE,
 ) => {
   const cacheController = cacheClient.chapters.latestGrouped
   const cached = await cacheController.get()
 
-  const formatRaw = (input: RawLatestReleaseGrouped[]) => ({
-    medias: input
-      .map(({ titles, ...r }) => ({
-        ...r,
-        mainTitle: MediaUtils.getDisplayTitle(titles, preferredTitles),
-      }))
-      .slice((page - 1) * perPage, page * perPage),
-    totalPages: Math.ceil(input.length / perPage),
-  })
-
   if (cached) {
-    return formatRaw(cached)
+    return formatRawLatestReleasesGrouped(
+      cached,
+      page,
+      perPage,
+      preferredTitles,
+    )
   }
 
-  type RawChapter = Pick<
-    MediaChapter,
-    | "id"
-    | "createdAt"
-    | "number"
-    | "volume"
-    | "title"
-    | "mediaId"
-    | "uploaderId"
-  >
-  const rawChapters = await db.$queryRaw<RawChapter[]>`
-    SELECT chapters.*
+  const rawChapters = await db.$queryRaw<RawLatestReleaseGroupedChapter[]>`
+    SELECT mc.*
     FROM (
       SELECT *
       FROM (
@@ -74,65 +67,73 @@ const getLatestGrouped = async (
       )
       ORDER BY "createdAt" DESC
       LIMIT 100
-    ) AS rawMedias
+    ) AS rc
     CROSS JOIN LATERAL (
-      WITH rankedChapters AS (
+      WITH RankedChapters AS (
         SELECT "id", "createdAt", "number", "volume", "title", "mediaId", "uploaderId", ROW_NUMBER() OVER (PARTITION BY "mediaId" ORDER BY "createdAt" DESC) AS rank
         FROM "MediaChapter"
-        WHERE "mediaId" = rawMedias."mediaId"
+        WHERE "mediaId" = rc."mediaId"
       )
       SELECT *
-      FROM rankedChapters
+      FROM RankedChapters
       WHERE ("rank" = 1 OR "createdAt" > NOW() - INTERVAL '3 days')
       LIMIT 30
-    ) as chapters
+    ) as mc
   `
-  const uniqueMedias = [...new Set(rawChapters.map((c) => c.mediaId))]
-  const uniqueUploaders = [...new Set(rawChapters.map((c) => c.uploaderId))]
 
-  const medias = await db.media.findMany({
-    where: { id: { in: uniqueMedias } },
-    select: {
-      id: true,
-      covers: {
-        select: { id: true },
-        where: { isMainCover: true },
-        take: 1,
-      },
-      titles: {
-        select: {
-          title: true,
-          language: true,
-          priority: true,
-          isAcronym: true,
-          isMainTitle: true,
-        },
-        where: { deletedAt: null },
-      },
-    },
-  })
-  const uploaders = await db.user.findMany({
-    where: { id: { in: uniqueUploaders } },
-    select: { id: true, name: true },
-  })
+  return getFormattedLatestReleasesGrouped(
+    rawChapters,
+    page,
+    perPage,
+    userId,
+    preferredTitles,
+  )
+}
 
-  const rawReleases: RawLatestReleaseGrouped[] = uniqueMedias.map((mediaId) => {
-    const media = medias.find((m) => m.id === mediaId)!
-    const chapters = rawChapters.filter((c) => c.mediaId === mediaId)
+const getLatestGroupedByUser = async (
+  { userId, page, perPage }: GetLatestChaptersGroupedByUserInput,
+  requesterId?: string,
+  preferredTitles?: Languages | null,
+) => {
+  const offset = (page - 1) * perPage
+  const rawChapters = await db.$queryRaw<RawLatestReleaseGroupedChapter[]>`
+    WITH RankedChapters AS (
+      SELECT
+        mc."id",
+        mc."createdAt",
+        mc."title",
+        mc."number",
+        mc."volume",
+        mc."mediaId",
+        mc."uploaderId",
+        ARRAY_AGG(cs."B") AS "scanIds",
+        COUNT(*) OVER (PARTITION BY mc."mediaId") AS "uploadedCount",
+        ROW_NUMBER() OVER (PARTITION BY mc."mediaId" ORDER BY mc."createdAt" DESC) AS "rank"
+      FROM "public"."MediaChapter" mc
+      LEFT JOIN "_MediaChapterToScan" cs ON mc."id" = cs."A"
+      WHERE mc."uploaderId" = ${userId} AND mc."deletedAt" IS NULL
+      GROUP BY mc."id"
+    ),
+    TotalCount AS (
+      SELECT COUNT(*) AS "totalCount"
+      FROM RankedChapters
+      WHERE "rank" <= ${DEFAULT_GROUPED_CHAPTERS_LIMIT}
+    )
+    SELECT rc.*, tc.*
+    FROM RankedChapters rc, TotalCount tc
+    WHERE rc."rank" <= ${DEFAULT_GROUPED_CHAPTERS_LIMIT}
+    ORDER BY rc."mediaId", rc."rank"
+    LIMIT ${perPage * DEFAULT_GROUPED_CHAPTERS_LIMIT}
+    OFFSET ${offset};
+  `
 
-    return {
-      id: media.id,
-      coverId: media.covers.at(0)!.id,
-      titles: media.titles,
-      chapters: chapters.map(({ mediaId: _, uploaderId, ...c }) => ({
-        ...c,
-        uploader: uploaders.find((u) => u.id === uploaderId)!,
-        scans: [],
-      })),
-    }
-  })
-
-  return formatRaw(rawReleases)
+  return getFormattedLatestReleasesGrouped(
+    rawChapters,
+    page,
+    perPage,
+    requesterId,
+    preferredTitles,
+  )
 }
 
 const getUploaderStats = async () => {
@@ -170,6 +171,7 @@ const getDistinctCount = async (mediaId: string) => {
 export const ChaptersService = {
   getLatest,
   getLatestGrouped,
+  getLatestGroupedByUser,
   getUploaderStats,
   getDistinctCount,
 }

@@ -10,6 +10,8 @@ export const SCANS_LIST_PER_PAGE_CHOICES = [5, 10, 20, 30, 50]
 export const DEFAULT_USER_FOLLOWS_PER_PAGE = 30
 export const USER_FOLLOWS_PER_PAGE_CHOICES = [10, 20, 30, 50]
 
+export const DEFAULT_GROUPED_CHAPTERS_LIMIT = 3
+
 export const PRELOAD_PAGES_COUNT = 5
 
 export const ALLOWED_MIME_TYPES = [
