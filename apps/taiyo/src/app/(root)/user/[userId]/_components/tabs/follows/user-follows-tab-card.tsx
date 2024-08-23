@@ -9,7 +9,7 @@ type Props = {
   user: UserFollower
 }
 
-export const UserFollowersTabCard = ({ user }: Props) => (
+export const UserFollowsTabCard = ({ user }: Props) => (
   <Link
     key={user.id}
     className="group flex w-full transition-transform hover:scale-105 hover:cursor-pointer md:w-[320px]"

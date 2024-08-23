@@ -9,7 +9,7 @@ import { userProfileOwnFollowerAtom } from "~/atoms/userProfile.atoms"
 import { PerPageDropdown } from "~/components/ui/pagination/per-page-dropdown"
 import { useUserNavigation } from "~/hooks/useUserNavigation"
 import { api } from "~/trpc/react"
-import { UserFollowersTabCard } from "./user-followers-tab-card"
+import { UserFollowsTabCard } from "./user-follows-tab-card"
 
 type Props = {
   user: UserLimited
@@ -81,7 +81,7 @@ export const UserLayoutFollowsTab = ({ user, type }: Props) => {
     <div className="flex flex-col gap-4">
       <div className="flex grow flex-wrap justify-center gap-4">
         {updatedUser.map((u) => (
-          <UserFollowersTabCard key={u.id} user={u} />
+          <UserFollowsTabCard key={u.id} user={u} />
         ))}
       </div>
       <div className="flex justify-end gap-4">
