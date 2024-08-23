@@ -46,6 +46,7 @@ export const UserUploadsMediaCard = ({ user, media, index }: Props) => {
         <MediaImage
           src={CoverUtils.getUrl(media)}
           classNames={{
+            wrapper: "sticky top-[calc(var(--navbar-height)+16px)]",
             height: "min-h-[295px] h-[295px]",
             width: "min-w-[215px] w-[215px]",
           }}
