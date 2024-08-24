@@ -4,7 +4,7 @@ import {
 } from "@taiyomoe/constants"
 import type { UserTabs } from "@taiyomoe/types"
 import { parseAsInteger, parseAsStringEnum, useQueryState } from "nuqs"
-import type { Key } from "react"
+import { type Key, useEffect } from "react"
 
 export const useUserNavigation = () => {
   const [tab, setTab] = useQueryState(
@@ -31,6 +31,16 @@ export const useUserNavigation = () => {
     setPage(null)
     setPerPage(null)
   }
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: when the user changes the page or perPage, we want to scroll to the top of the page
+  useEffect(() => {
+    document.scrollingElement?.scrollTo({ top: 0, left: 0, behavior: "smooth" })
+  }, [page, perPage])
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: when the user changes perPage, we want to reset the page to 1
+  useEffect(() => {
+    setPage(null)
+  }, [perPage])
 
   return {
     tab,

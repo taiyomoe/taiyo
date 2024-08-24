@@ -12,6 +12,7 @@ import { useState } from "react"
 type Props = {
   defaultChoice: number
   choices: number[]
+  isLoading: boolean
   renderOption: (option: number) => string
   onChange: (newPerPage: number) => void
 }
@@ -19,6 +20,7 @@ type Props = {
 export const PerPageDropdown = ({
   defaultChoice,
   choices,
+  isLoading,
   renderOption,
   onChange,
 }: Props) => {
@@ -34,7 +36,11 @@ export const PerPageDropdown = ({
   }
 
   return (
-    <Dropdown classNames={{ content: "min-w-fit" }} radius="sm">
+    <Dropdown
+      classNames={{ content: "min-w-fit" }}
+      radius="sm"
+      isDisabled={isLoading}
+    >
       <DropdownTrigger>
         <Button
           className="h-9 w-fit min-w-fit justify-between gap-1 px-3"

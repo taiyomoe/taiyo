@@ -33,6 +33,7 @@ export const ScansTableBottomContent = () => {
         <PerPageDropdown
           defaultChoice={perPage}
           choices={SCANS_LIST_PER_PAGE_CHOICES}
+          isLoading={isLoading}
           renderOption={(o) => `${o} scans`}
           onChange={handlePerPageChange}
         />

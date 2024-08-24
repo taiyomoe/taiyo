@@ -18,7 +18,7 @@ type Props = {
 
 export const UserLayoutUploadsTab = ({ user }: Props) => {
   const { page, perPage, setPage, setPerPage } = useUserNavigation()
-  const { data, isLoading, isPlaceholderData } =
+  const { data, isFetching, isPlaceholderData } =
     api.chapters.getLatestGroupedByUser.useQuery(
       { userId: user.id, page, perPage },
       {
@@ -45,9 +45,12 @@ export const UserLayoutUploadsTab = ({ user }: Props) => {
     )
   }
 
+  console.log("totalPages", data?.totalPages)
+  console.log("page", page)
+
   return (
     <div className="flex flex-col gap-4">
-      {(isLoading || !data || isPlaceholderData) && (
+      {(isFetching || !data || isPlaceholderData) && (
         <div className="flex items-center justify-center">
           <Spinner size="lg" />
         </div>
@@ -69,18 +72,19 @@ export const UserLayoutUploadsTab = ({ user }: Props) => {
           <PerPageDropdown
             defaultChoice={DEFAULT_GROUPED_CHAPTERS_PER_PAGE}
             choices={GROUPED_CHAPTERS_CHOICES}
+            isLoading={isFetching}
             renderOption={(o) => `${o} obras`}
             onChange={setPerPage}
           />
           <Pagination
-            initialPage={page}
-            total={data?.totalPages}
+            page={page}
+            total={data.totalPages}
             color="primary"
             onChange={setPage}
             showControls
             showShadow
             siblings={0}
-            isDisabled={isLoading || data?.totalPages === 1}
+            isDisabled={isFetching || data.totalPages === 1}
             isCompact
           />
         </div>

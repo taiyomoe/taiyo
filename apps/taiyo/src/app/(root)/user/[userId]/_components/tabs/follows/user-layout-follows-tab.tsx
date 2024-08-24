@@ -20,7 +20,7 @@ export const UserLayoutFollowsTab = ({ user, type }: Props) => {
   const ownUser = useAtomValue(userProfileOwnFollowerAtom)
   const { page, perPage, setPage, setPerPage } = useUserNavigation()
   const { data: session } = useSession()
-  const { data, isLoading } = api.users[
+  const { data, isFetching } = api.users[
     type === "followers" ? "getFollowers" : "getFollowing"
   ].useQuery(
     {
@@ -54,7 +54,7 @@ export const UserLayoutFollowsTab = ({ user, type }: Props) => {
     )
   }
 
-  if (isLoading || !data) {
+  if (isFetching || !data) {
     return (
       <div className="flex items-center justify-center">
         <Spinner size="lg" />
@@ -88,6 +88,7 @@ export const UserLayoutFollowsTab = ({ user, type }: Props) => {
         <PerPageDropdown
           defaultChoice={perPage}
           choices={USER_FOLLOWS_PER_PAGE_CHOICES}
+          isLoading={isFetching}
           renderOption={(o) => `${o} usuários`}
           onChange={setPerPage}
         />
@@ -98,7 +99,7 @@ export const UserLayoutFollowsTab = ({ user, type }: Props) => {
           onChange={setPage}
           showControls
           showShadow
-          isDisabled={isLoading || data.totalPages === 1}
+          isDisabled={isFetching || data.totalPages === 1}
           isCompact
         />
       </div>
