@@ -5,6 +5,7 @@ import {
   GROUPED_CHAPTERS_CHOICES,
 } from "@taiyomoe/constants"
 import type { UserLimited } from "@taiyomoe/types"
+import { keepPreviousData } from "@tanstack/react-query"
 import Image from "next/image"
 import { UserUploadsMediaCard } from "~/app/(root)/user/[userId]/_components/tabs/uploads/user-uploads-media-card"
 import { PerPageDropdown } from "~/components/ui/pagination/per-page-dropdown"
@@ -17,11 +18,12 @@ type Props = {
 
 export const UserLayoutUploadsTab = ({ user }: Props) => {
   const { page, perPage, setPage, setPerPage } = useUserNavigation()
-  const { data, isLoading, isSuccess } =
+  const { data, isLoading, isPlaceholderData } =
     api.chapters.getLatestGroupedByUser.useQuery(
       { userId: user.id, page, perPage },
       {
         enabled: !!user.uploadsCount,
+        placeholderData: keepPreviousData,
         refetchOnMount: false,
       },
     )
@@ -43,16 +45,14 @@ export const UserLayoutUploadsTab = ({ user }: Props) => {
     )
   }
 
-  console.log("data", data)
-
   return (
     <div className="flex flex-col gap-4">
-      {(isLoading || !data) && (
+      {(isLoading || !data || isPlaceholderData) && (
         <div className="flex items-center justify-center">
           <Spinner size="lg" />
         </div>
       )}
-      {data && (
+      {data && !isPlaceholderData && (
         <div className="space-y-4 md:space-y-8">
           {data.medias.map((media, i) => (
             <UserUploadsMediaCard
@@ -64,7 +64,7 @@ export const UserLayoutUploadsTab = ({ user }: Props) => {
           ))}
         </div>
       )}
-      {isSuccess && (
+      {data && (
         <div className="flex justify-end gap-4">
           <PerPageDropdown
             defaultChoice={DEFAULT_GROUPED_CHAPTERS_PER_PAGE}
