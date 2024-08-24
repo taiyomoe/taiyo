@@ -18,7 +18,7 @@ export const ScansField = ({ name, className, ...rest }: Props) => {
     if (!inputValue) return []
 
     const searched = await meiliClient.search([
-      { query: inputValue, indexName: "scans" },
+      { indexName: "scans", params: { query: inputValue } },
     ])
     const results = searched.results as AlgoliaSearchResponse<ScansIndexItem>[]
     const items = results.flatMap((result) => result.hits)

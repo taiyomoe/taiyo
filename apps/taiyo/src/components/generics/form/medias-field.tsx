@@ -38,7 +38,7 @@ export const MediasField = ({ name, ...rest }: Props) => {
   const searchMedia = useCallback(
     async (mediaId: string) => {
       const searched = await meiliClient.search([
-        { indexName: "medias", query: mediaId },
+        { indexName: "medias", params: { query: mediaId } },
       ])
       const results =
         searched.results as AlgoliaSearchResponse<MediasIndexItem>[]
