@@ -25,7 +25,7 @@ export const MediaInfoTabTitles = ({ media }: Props) => {
                 className="flex items-center gap-2"
               >
                 <div className="flex min-h-[24px] min-w-[24px]">
-                  <CountryFlag language={item.language} />
+                  <CountryFlag language={item.language} size={24} />
                 </div>
                 <p>{item.title}</p>
                 {item.isAcronym && (

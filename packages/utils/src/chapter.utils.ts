@@ -112,6 +112,14 @@ const computeVolumeGroups = (input: MediaLimitedChapter[]) => {
     })
 }
 
+const computeOrder = (chapterIndex: number, total: number) => {
+  if (total === 1) return "unique"
+  if (chapterIndex === 0) return "first"
+  if (chapterIndex === total - 1) return "last"
+
+  return "middle"
+}
+
 const parseUrl = (pathname: string) => {
   const splitted = pathname.split("/")
   const currentPage = splitted[3]
@@ -144,5 +152,6 @@ export const ChapterUtils = {
   getFromRange,
   computeUploadedTime,
   computeVolumeGroups,
+  computeOrder,
   parseUrl,
 }

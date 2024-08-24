@@ -37,8 +37,19 @@ export type LatestRelease = Omit<RawLatestRelease, "media"> & {
   }
 }
 
+export type RawLatestReleaseGroupedChapter = Pick<
+  MediaChapter,
+  "id" | "createdAt" | "number" | "volume" | "title" | "mediaId" | "uploaderId"
+> & {
+  scanIds: string[]
+  uploadedCount: number
+  totalCount: number
+  rank: number
+}
 export type RawLatestReleaseGrouped = {
   id: Media["id"]
+  synopsis: Media["synopsis"]
+  hasMoreChapters: boolean
   coverId: MediaCover["id"]
   titles: {
     title: MediaTitle["title"]
@@ -53,6 +64,7 @@ export type RawLatestReleaseGrouped = {
     number: MediaChapter["number"]
     volume: MediaChapter["volume"]
     title: MediaChapter["title"]
+    completed: boolean | null
     uploader: {
       id: User["id"]
       name: User["name"]

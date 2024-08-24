@@ -52,7 +52,8 @@ export const Navbar = () => {
   const opacity = useScrollOpacity({ min: 0, max: 100 })
   const shouldCollapse = pathname.includes("/chapter/")
   const mode = useMemo(() => {
-    if (pathname === "/" || pathname.includes("/media/")) return "scroll"
+    if (pathname === "/") return "scroll"
+    if (["/media/", "/user/"].some((p) => pathname.includes(p))) return "scroll"
     if (pathname.includes("/chapter/")) return navbarMode
     return "sticky"
   }, [pathname, navbarMode])

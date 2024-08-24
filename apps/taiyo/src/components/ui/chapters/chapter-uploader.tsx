@@ -46,7 +46,7 @@ export const ChapterUploader = (props: Props) => {
       <UserIcon className={slots.icon()} />
       {chapter.uploader && (
         <object>
-          <Link className={slots.link()} href={`/users/${chapter.uploader.id}`}>
+          <Link className={slots.link()} href={`/user/${chapter.uploader.id}`}>
             {chapter.uploader.name}
           </Link>
         </object>

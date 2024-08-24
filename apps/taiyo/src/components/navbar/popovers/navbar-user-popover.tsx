@@ -30,7 +30,6 @@ export const NavbarUserPopover = ({ session }: Props) => (
           className="justify-end gap-3 p-2 font-medium text-medium"
           endContent={<LinkIcon />}
           variant="light"
-          isDisabled
         >
           Meu perfil
         </Button>

@@ -12,7 +12,12 @@ type Props = {
 export const MediaChaptersTabRow = ({ chapter, order, index }: Props) => (
   <div id={`marquee-card-${index}`} className="flex gap-2">
     <MediaChaptersTabRowPath order={order} />
-    <MediaChaptersTabRowCard chapter={chapter} order={order} index={index} />
+    <MediaChaptersTabRowCard
+      chapter={chapter}
+      order={order}
+      index={index}
+      noisyWidth={216}
+    />
     <MediaChaptersTabRowActions chapter={chapter} />
   </div>
 )

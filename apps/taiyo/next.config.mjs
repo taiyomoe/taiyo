@@ -35,6 +35,25 @@ const config = {
         hostname: "flagcdn.com",
         pathname: "/**",
       },
+      ...(process.env.NODE_ENV === "development"
+        ? [
+            {
+              protocol: "https",
+              hostname: "avatars.githubusercontent.com",
+              pathname: "/u/**",
+            },
+            {
+              protocol: "https",
+              hostname: "loremflickr.com",
+              pathname: "/**",
+            },
+            {
+              protocol: "https",
+              hostname: "picsum.photos",
+              pathname: "/seed/**",
+            },
+          ]
+        : []),
     ],
   },
 

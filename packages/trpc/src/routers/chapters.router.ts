@@ -1,16 +1,19 @@
+import { DEFAULT_GROUPED_CHAPTERS_LIMIT } from "@taiyomoe/constants"
+import { db } from "@taiyomoe/db"
 import {
   bulkUpdateChaptersScansSchema,
   bulkUpdateChaptersVolumesSchema,
+  getChaptersByUserIdSchema,
+  getLatestChaptersGroupedByUserSchema,
   getLatestChaptersGroupedSchema,
   getMediaChaptersByMediaIdSchema,
   idSchema,
   updateChapterSchema,
 } from "@taiyomoe/schemas"
-import type { MediaChapterLimited } from "@taiyomoe/types"
+import { ChaptersService } from "@taiyomoe/services"
+import type { LatestReleaseGrouped, MediaChapterLimited } from "@taiyomoe/types"
 import { MediaUtils } from "@taiyomoe/utils"
 import { TRPCError } from "@trpc/server"
-
-import { ChaptersService } from "@taiyomoe/services"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 
 export const chaptersRouter = createTRPCRouter({
@@ -282,15 +285,74 @@ export const chaptersRouter = createTRPCRouter({
       return mediaLimitedChapterPagination
     }),
 
+  getByUserId: publicProcedure
+    .input(getChaptersByUserIdSchema)
+    .query(async ({ ctx, input }) => {
+      const user = await ctx.db.user.findUnique({
+        select: { id: true, name: true },
+        where: { id: input.userId },
+      })
+
+      if (!user) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "User not found",
+        })
+      }
+
+      const history = ctx.session?.user.id
+        ? (await ctx.db.userHistory.findFirst({
+            where: { mediaId: input.mediaId, userId: ctx.session.user.id },
+            select: { progression: true },
+          })) ?? { progression: [] }
+        : { progression: [] }
+
+      const chapters = await db.mediaChapter.findMany({
+        select: {
+          id: true,
+          createdAt: true,
+          number: true,
+          volume: true,
+          title: true,
+          scans: { select: { id: true, name: true } },
+        },
+        where: { mediaId: input.mediaId, deletedAt: null },
+        orderBy: { createdAt: "desc" },
+        skip: DEFAULT_GROUPED_CHAPTERS_LIMIT,
+      })
+
+      console.log("chapters", chapters)
+
+      return chapters.map((c) => ({
+        ...c,
+        completed: history.progression.some(
+          (p) => p.chapterId === c.id && p.completed,
+        ),
+        uploader: user,
+      })) satisfies LatestReleaseGrouped["chapters"]
+    }),
+
   getLatestGrouped: publicProcedure
     .input(getLatestChaptersGroupedSchema)
     .query(({ ctx, input }) =>
       ChaptersService.getLatestGrouped(
+        input,
+        ctx.session?.user.id,
         ctx.session?.user.preferredTitles,
-        input.page,
-        input.perPage,
       ),
     ),
+
+  getLatestGroupedByUser: publicProcedure
+    .input(getLatestChaptersGroupedByUserSchema)
+    .query(({ ctx, input }) => {
+      console.log("input", input)
+
+      return ChaptersService.getLatestGroupedByUser(
+        input,
+        ctx.session?.user.id,
+        ctx.session?.user.preferredTitles,
+      )
+    }),
 
   delete: protectedProcedure
     .meta({ resource: "mediaChapters", action: "delete" })

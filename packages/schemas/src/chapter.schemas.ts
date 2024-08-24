@@ -52,6 +52,20 @@ export const getLatestChaptersGroupedSchema = z.object({
   ),
 })
 
+export const getChaptersByUserIdSchema = z.object({
+  userId: z.string(),
+  mediaId: z.string(),
+})
+
+export const getLatestChaptersGroupedByUserSchema = z.object({
+  userId: z.string(),
+  page: pageSchema,
+  perPage: perPageSchema(
+    DEFAULT_LATEST_CHAPTERS_GROUPED_PER_PAGE,
+    LATEST_CHAPTERS_GROUPED_PER_PAGE_CHOICES,
+  ),
+})
+
 export type UpdateChapterInput = typeof updateChapterSchema._type
 export type BulkUpdateChaptersVolumesInput =
   typeof bulkUpdateChaptersVolumesSchema._type
@@ -59,3 +73,5 @@ export type BulkUpdateChaptersScansInput =
   typeof bulkUpdateChaptersScansSchema._type
 export type GetLatestChaptersGroupedInput =
   typeof getLatestChaptersGroupedSchema._type
+export type GetLatestChaptersGroupedByUserInput =
+  typeof getLatestChaptersGroupedByUserSchema._type

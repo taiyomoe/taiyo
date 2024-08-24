@@ -10,20 +10,22 @@ import { ChevronDownIcon } from "lucide-react"
 import { useState } from "react"
 
 type Props = {
-  defaultChoice: number
+  perPage: number
   choices: number[]
+  isLoading: boolean
   renderOption: (option: number) => string
   onChange: (newPerPage: number) => void
 }
 
 export const PerPageDropdown = ({
-  defaultChoice,
+  perPage,
   choices,
+  isLoading,
   renderOption,
   onChange,
 }: Props) => {
   const [selectedKeys, setSelectedKeys] = useState<Selection>(
-    new Set([defaultChoice]),
+    new Set([perPage.toString()]),
   )
 
   const handleSelectionChange = (keys: Selection) => {
@@ -34,7 +36,11 @@ export const PerPageDropdown = ({
   }
 
   return (
-    <Dropdown classNames={{ content: "min-w-fit" }} radius="sm">
+    <Dropdown
+      classNames={{ content: "min-w-fit" }}
+      radius="sm"
+      isDisabled={isLoading}
+    >
       <DropdownTrigger>
         <Button
           className="h-9 w-fit min-w-fit justify-between gap-1 px-3"

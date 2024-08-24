@@ -34,6 +34,7 @@ export const cacheClient = {
         ),
     }),
   },
+
   chapters: {
     latest: {
       get: () => parseCache<RawLatestRelease[]>(client.get("chapters:latest")),
