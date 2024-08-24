@@ -57,8 +57,13 @@ export const UserUploadsMediaCard = ({ user, media, index }: Props) => {
         />
       </Link>
       <div className="flex w-full flex-col gap-4 md:mt-4">
-        <div className="flex justify-between">
-          <p className="font-medium text-lg md:text-xl">{media.mainTitle}</p>
+        <div className="flex items-center justify-between gap-4">
+          <Link
+            href={MediaUtils.getUrl(media)}
+            className="line-clamp-1 break-all font-medium text-lg hover:underline md:text-xl"
+          >
+            {media.mainTitle}
+          </Link>
           <UserUploadsExpandButton mediaId={media.id} />
         </div>
         <Divider />
