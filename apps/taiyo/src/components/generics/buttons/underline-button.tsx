@@ -10,7 +10,7 @@ import {
 import { useToggle } from "usehooks-ts"
 
 const underlineButton = tv({
-  base: "relative transition-all after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:origin-bottom-right after:scale-x-0 after:transition-transform after:duration-300 after:ease-in-out hover:cursor-pointer hover:after:origin-bottom-left hover:after:scale-x-100 focus-visible:outline-none",
+  base: "relative outline-none transition-all after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:origin-bottom-right after:scale-x-0 after:transition-transform after:duration-300 after:ease-in-out hover:cursor-pointer hover:after:origin-bottom-left hover:after:scale-x-100",
   variants: {
     color: {
       default:
