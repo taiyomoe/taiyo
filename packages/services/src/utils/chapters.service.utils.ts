@@ -55,17 +55,15 @@ export const formatRawLatestReleases = (
 
 export const formatRawLatestReleasesGrouped = (
   input: RawLatestReleaseGrouped[],
-  page: number,
+  _page: number,
   perPage: number,
   preferredTitles?: Languages | null,
   totalCount = 1,
 ) => ({
-  medias: input
-    .map(({ titles, ...r }) => ({
-      ...r,
-      mainTitle: MediaUtils.getDisplayTitle(titles, preferredTitles),
-    }))
-    .slice((page - 1) * perPage, page * perPage),
+  medias: input.map(({ titles, ...r }) => ({
+    ...r,
+    mainTitle: MediaUtils.getDisplayTitle(titles, preferredTitles),
+  })),
   totalPages: Math.ceil(Number(totalCount) / perPage),
 })
 

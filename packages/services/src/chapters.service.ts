@@ -95,7 +95,6 @@ const getLatestGroupedByUser = async (
   requesterId?: string,
   preferredTitles?: Languages | null,
 ) => {
-  const offset = (page - 1) * perPage
   const rawChapters = await db.$queryRaw<RawLatestReleaseGroupedChapter[]>`
     WITH RankedChapters AS (
       SELECT
@@ -114,17 +113,27 @@ const getLatestGroupedByUser = async (
       WHERE mc."uploaderId" = ${userId} AND mc."deletedAt" IS NULL
       GROUP BY mc."id"
     ),
-    TotalCount AS (
-      SELECT COUNT(*) AS "totalCount"
+    FilteredRankedChapters AS (
+      SELECT *
       FROM RankedChapters
       WHERE "rank" <= ${DEFAULT_GROUPED_CHAPTERS_LIMIT}
+    ),
+    FilteredMedia AS (
+      SELECT DISTINCT "mediaId", MAX("createdAt") AS "createdAt"
+      FROM FilteredRankedChapters
+      GROUP BY "mediaId"
+      ORDER BY "createdAt" DESC
+      LIMIT ${perPage}
+      OFFSET ${(page - 1) * perPage}
+    ),
+    TotalCount AS (
+      SELECT COUNT(DISTINCT "mediaId") AS "totalCount"
+      FROM RankedChapters
     )
-    SELECT rc.*, tc.*
-    FROM RankedChapters rc, TotalCount tc
-    WHERE rc."rank" <= ${DEFAULT_GROUPED_CHAPTERS_LIMIT}
-    ORDER BY rc."mediaId", rc."rank"
-    LIMIT ${perPage * DEFAULT_GROUPED_CHAPTERS_LIMIT}
-    OFFSET ${offset};
+    SELECT frc.*, tc."totalCount"
+    FROM FilteredRankedChapters frc
+    JOIN FilteredMedia fm ON frc."mediaId" = fm."mediaId", TotalCount tc
+    ORDER BY frc."createdAt" DESC
   `
 
   return getFormattedLatestReleasesGrouped(
