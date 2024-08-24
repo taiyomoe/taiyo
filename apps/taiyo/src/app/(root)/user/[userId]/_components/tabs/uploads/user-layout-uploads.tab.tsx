@@ -1,11 +1,7 @@
 import { Pagination } from "@nextui-org/pagination"
 import { Spinner } from "@nextui-org/spinner"
-import {
-  DEFAULT_GROUPED_CHAPTERS_PER_PAGE,
-  GROUPED_CHAPTERS_CHOICES,
-} from "@taiyomoe/constants"
+import { GROUPED_CHAPTERS_CHOICES } from "@taiyomoe/constants"
 import type { UserLimited } from "@taiyomoe/types"
-import { keepPreviousData } from "@tanstack/react-query"
 import Image from "next/image"
 import { UserUploadsMediaCard } from "~/app/(root)/user/[userId]/_components/tabs/uploads/user-uploads-media-card"
 import { PerPageDropdown } from "~/components/ui/pagination/per-page-dropdown"
@@ -18,17 +14,20 @@ type Props = {
 
 export const UserLayoutUploadsTab = ({ user }: Props) => {
   const { page, perPage, setPage, setPerPage } = useUserNavigation()
-  const { data, isFetching, isPlaceholderData } =
-    api.chapters.getLatestGroupedByUser.useQuery(
-      { userId: user.id, page, perPage },
-      {
-        enabled: !!user.uploadsCount,
-        placeholderData: keepPreviousData,
-        refetchOnMount: false,
-      },
-    )
+  const { data, isFetching } = api.chapters.getLatestGroupedByUser.useQuery(
+    { userId: user.id, page, perPage },
+    { enabled: !!user.uploadsCount, refetchOnMount: false },
+  )
 
-  if (data?.medias.length === 0) {
+  if (isFetching || !data) {
+    return (
+      <div className="flex items-center justify-center">
+        <Spinner size="lg" />
+      </div>
+    )
+  }
+
+  if (data.medias.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center gap-8 p-12 md:flex-row md:gap-12 md:p-16">
         <p className="text-center font-medium text-lg md:text-xl lg:text-2xl">
@@ -39,7 +38,7 @@ export const UserLayoutUploadsTab = ({ user }: Props) => {
           className="rounded-medium p-4"
           width={350}
           height={300}
-          alt="Ilustração de amigos online"
+          alt="Ilustração de documentos vazios"
         />
       </div>
     )
@@ -50,45 +49,36 @@ export const UserLayoutUploadsTab = ({ user }: Props) => {
 
   return (
     <div className="flex flex-col gap-4">
-      {(isFetching || !data || isPlaceholderData) && (
-        <div className="flex items-center justify-center">
-          <Spinner size="lg" />
-        </div>
-      )}
-      {data && !isPlaceholderData && (
-        <div className="space-y-4 md:space-y-8">
-          {data.medias.map((media, i) => (
-            <UserUploadsMediaCard
-              key={media.id}
-              user={user}
-              media={media}
-              index={i}
-            />
-          ))}
-        </div>
-      )}
-      {data && (
-        <div className="flex justify-end gap-4">
-          <PerPageDropdown
-            defaultChoice={DEFAULT_GROUPED_CHAPTERS_PER_PAGE}
-            choices={GROUPED_CHAPTERS_CHOICES}
-            isLoading={isFetching}
-            renderOption={(o) => `${o} obras`}
-            onChange={setPerPage}
+      <div className="space-y-4 md:space-y-8">
+        {data.medias.map((media, i) => (
+          <UserUploadsMediaCard
+            key={media.id}
+            user={user}
+            media={media}
+            index={i}
           />
-          <Pagination
-            page={page}
-            total={data.totalPages}
-            color="primary"
-            onChange={setPage}
-            showControls
-            showShadow
-            siblings={0}
-            isDisabled={isFetching || data.totalPages === 1}
-            isCompact
-          />
-        </div>
-      )}
+        ))}
+      </div>
+      <div className="flex justify-end gap-4">
+        <PerPageDropdown
+          perPage={perPage}
+          choices={GROUPED_CHAPTERS_CHOICES}
+          isLoading={isFetching}
+          renderOption={(o) => `${o} obras`}
+          onChange={setPerPage}
+        />
+        <Pagination
+          page={page}
+          total={data.totalPages}
+          color="primary"
+          onChange={setPage}
+          showControls
+          showShadow
+          siblings={0}
+          isDisabled={isFetching || data.totalPages === 1}
+          isCompact
+        />
+      </div>
     </div>
   )
 }

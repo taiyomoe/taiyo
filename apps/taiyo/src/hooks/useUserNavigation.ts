@@ -32,11 +32,6 @@ export const useUserNavigation = () => {
     setPerPage(null)
   }
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: when the user changes the page or perPage, we want to scroll to the top of the page
-  useEffect(() => {
-    document.scrollingElement?.scrollTo({ top: 0, left: 0, behavior: "smooth" })
-  }, [page, perPage])
-
   // biome-ignore lint/correctness/useExhaustiveDependencies: when the user changes perPage, we want to reset the page to 1
   useEffect(() => {
     setPage(null)

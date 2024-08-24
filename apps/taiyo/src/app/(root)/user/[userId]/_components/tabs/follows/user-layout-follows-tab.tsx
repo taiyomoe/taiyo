@@ -86,7 +86,7 @@ export const UserLayoutFollowsTab = ({ user, type }: Props) => {
       </div>
       <div className="flex justify-end gap-4">
         <PerPageDropdown
-          defaultChoice={perPage}
+          perPage={perPage}
           choices={USER_FOLLOWS_PER_PAGE_CHOICES}
           isLoading={isFetching}
           renderOption={(o) => `${o} usuários`}

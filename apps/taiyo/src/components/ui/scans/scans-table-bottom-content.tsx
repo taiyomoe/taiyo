@@ -31,7 +31,7 @@ export const ScansTableBottomContent = () => {
       </span>
       <div className="flex gap-4">
         <PerPageDropdown
-          defaultChoice={perPage}
+          perPage={perPage}
           choices={SCANS_LIST_PER_PAGE_CHOICES}
           isLoading={isLoading}
           renderOption={(o) => `${o} scans`}
