@@ -44,9 +44,6 @@ export const UserLayoutUploadsTab = ({ user }: Props) => {
     )
   }
 
-  console.log("totalPages", data?.totalPages)
-  console.log("page", page)
-
   return (
     <div className="flex flex-col gap-4">
       <div className="space-y-4 md:space-y-8">

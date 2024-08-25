@@ -321,8 +321,6 @@ export const chaptersRouter = createTRPCRouter({
         skip: DEFAULT_GROUPED_CHAPTERS_LIMIT,
       })
 
-      console.log("chapters", chapters)
-
       return chapters.map((c) => ({
         ...c,
         completed: history.progression.some(
@@ -344,15 +342,13 @@ export const chaptersRouter = createTRPCRouter({
 
   getLatestGroupedByUser: publicProcedure
     .input(getLatestChaptersGroupedByUserSchema)
-    .query(({ ctx, input }) => {
-      console.log("input", input)
-
-      return ChaptersService.getLatestGroupedByUser(
+    .query(({ ctx, input }) =>
+      ChaptersService.getLatestGroupedByUser(
         input,
         ctx.session?.user.id,
         ctx.session?.user.preferredTitles,
-      )
-    }),
+      ),
+    ),
 
   delete: protectedProcedure
     .meta({ resource: "mediaChapters", action: "delete" })
