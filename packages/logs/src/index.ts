@@ -3,6 +3,7 @@ import { env } from "../env"
 import { chaptersService } from "./services/chapters.logsService"
 import { migrationsService } from "./services/migrations.logsService"
 import { scansService } from "./services/scans.logsService"
+import { usersActivityService } from "./services/usersActivity.logsService"
 import { usersAuthService } from "./services/usersAuth.logsService"
 
 export const rawLogsClient = createClient({
@@ -18,6 +19,7 @@ export const logsClient = {
   chapters: chaptersService,
   users: {
     auth: usersAuthService,
+    activity: usersActivityService,
   },
   scans: scansService,
 }

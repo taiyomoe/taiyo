@@ -115,12 +115,24 @@ export const usersRouter = createTRPCRouter({
           where: { id: ctx.session.user.id },
         })
 
+        await ctx.logs.users.activity.insert({
+          type: "unfollow",
+          userId: ctx.session.user.id,
+          targetId: user.id,
+        })
+
         return
       }
 
       await ctx.db.user.update({
         data: { following: { connect: { id: user.id } } },
         where: { id: ctx.session.user.id },
+      })
+
+      await ctx.logs.users.activity.insert({
+        type: "follow",
+        userId: ctx.session.user.id,
+        targetId: user.id,
       })
 
       const ownUser = await ctx.db.user.findUnique({
