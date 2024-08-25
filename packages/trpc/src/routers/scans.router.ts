@@ -3,6 +3,7 @@ import {
   bulkDeleteScansSchema,
   createScanSchema,
   getScansListSchema,
+  updateScanSchema,
 } from "@taiyomoe/schemas"
 import { TRPCError } from "@trpc/server"
 import { omit, parallel } from "radash"
@@ -25,6 +26,27 @@ export const scansRouter = createTRPCRouter({
         { type: "created", _new: createdScan, userId: ctx.session.user.id },
       ])
       return createdScan
+    }),
+
+  update: protectedProcedure
+    .meta({ resource: "scans", action: "update" })
+    .input(updateScanSchema)
+    .mutation(async ({ ctx, input }) => {
+      const scan = await ctx.db.scan.findUnique({
+        where: { id: input.id },
+      })
+
+      if (!scan) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Scan not found",
+        })
+      }
+
+      const updatedScan = await ctx.db.scan.update({
+        data: input,
+        where: { id: input.id },
+      })
     }),
 
   getList: protectedProcedure

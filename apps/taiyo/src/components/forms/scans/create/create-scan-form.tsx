@@ -49,7 +49,7 @@ export const CreateScanForm = () => {
 
   return (
     <Form.Component onSubmit={handleSubmit} {...methods}>
-      <CreateScanFormFields />
+      <CreateScanFormFields action="create" />
     </Form.Component>
   )
 }

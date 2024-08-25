@@ -1,9 +1,13 @@
-import { Button } from "@nextui-org/button"
+import { SubmitButton } from "~/components/generics/buttons/submit-button"
 import { Form } from "~/components/generics/form/form"
 import { InputField } from "~/components/generics/form/input-field"
 import { TextAreaField } from "~/components/generics/form/textarea-field"
 
-export const CreateScanFormFields = () => {
+type Props = {
+  action: "create" | "update"
+}
+
+export const CreateScanFormFields = ({ action }: Props) => {
   return (
     <Form.Layout>
       <Form.Category>
@@ -81,9 +85,9 @@ export const CreateScanFormFields = () => {
         />
       </Form.Category>
       <Form.Actions>
-        <Button color="primary" type="submit" className="w-fit font-medium">
-          Adicionar
-        </Button>
+        <SubmitButton>
+          {action === "create" ? "Adicionar" : "Salvar"}
+        </SubmitButton>
       </Form.Actions>
     </Form.Layout>
   )

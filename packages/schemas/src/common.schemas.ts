@@ -15,14 +15,14 @@ export const perPageSchema = (initial: number, choices: number[]) =>
 
 export const optionalStringSchema = z
   .string()
-  .optional()
+  .nullish()
   .or(z.literal("").transform(() => undefined))
 
 export const optionalUrlSchema = (startsWith?: string[]) =>
   z
     .string()
     .url()
-    .optional()
+    .nullish()
     .or(z.literal("").transform(() => undefined))
     .refine((v) => {
       if (!v || !startsWith) return true
