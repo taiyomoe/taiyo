@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.4.2",
-    "@t3-oss/env-core": "^0.11.0",
+    "@t3-oss/env-core": "^0.11.1",
     "@taiyomoe/db": "workspace:*",
     "@taiyomoe/logs": "workspace:*",
     "@taiyomoe/utils": "workspace:*",
