@@ -1,9 +1,9 @@
 import { createClient } from "@clickhouse/client-web"
-import type { MediaChapter, Scan } from "@taiyomoe/db"
-import { ObjectUtils } from "@taiyomoe/utils"
-import SuperJSON from "superjson"
 import { env } from "../env"
-import type { InsertResource, LogsMigration, LogsUsersAuthType } from "./types"
+import { chaptersService } from "./services/chapters.logsService"
+import { migrationsService } from "./services/migrations.logsService"
+import { scansService } from "./services/scans.logsService"
+import { usersAuthService } from "./services/usersAuth.logsService"
 
 export const rawLogsClient = createClient({
   url: env.CLICKHOUSE_URL,
@@ -14,93 +14,12 @@ export const rawLogsClient = createClient({
 })
 
 export const logsClient = {
-  migrations: {
-    getAll: () =>
-      rawLogsClient
-        .query({
-          query: "SELECT * FROM logs._clickhouse_migrations;",
-          format: "JSONEachRow",
-        })
-        .then((r) => r.json<LogsMigration>())
-        .catch(() => [] as LogsMigration[]),
-    insert: (name: string, startedAt: Date, finishedAt: Date) =>
-      rawLogsClient.command({
-        query:
-          "INSERT INTO logs._clickhouse_migrations (startedAt, finishedAt, migrationName) VALUES ({startedAt: DateTime64}, {finishedAt: DateTime64}, {migrationName: String});",
-        query_params: { startedAt, finishedAt, migrationName: name },
-      }),
-  },
-
-  chapters: {
-    insert: (input: InsertResource<MediaChapter>) =>
-      rawLogsClient.insert({
-        table: "logs.chapters",
-        values: [
-          ["type", "old", "new", "diff", "chapterId", "userId"],
-          [
-            input.type,
-            SuperJSON.serialize("old" in input ? input.old : {}),
-            SuperJSON.serialize("_new" in input ? input._new : {}),
-            input.type === "updated"
-              ? Object.keys(ObjectUtils.deepDiff(input.old, input._new))
-              : [],
-            "old" in input ? input.old.id : input._new.id,
-            input.userId,
-          ],
-        ],
-        format: "JSONCompactEachRowWithNames",
-      }),
-  },
-
+  migrations: migrationsService,
+  chapters: chaptersService,
   users: {
-    auth: {
-      insert: (input: {
-        type: LogsUsersAuthType
-        ip: string
-        userId: string
-      }) =>
-        rawLogsClient.insert({
-          table: "logs.usersAuth",
-          values: [
-            ["type", "ip", "userId"],
-            [input.type, input.ip, input.userId],
-          ],
-          format: "JSONCompactEachRowWithNames",
-        }),
-    },
+    auth: usersAuthService,
   },
-
-  scans: {
-    insert: (
-      input: (InsertResource<Scan> & { affectedChaptersIds?: string[] })[],
-    ) =>
-      rawLogsClient.insert({
-        table: "logs.scans",
-        values: [
-          [
-            "type",
-            "old",
-            "new",
-            "diff",
-            "affectedChaptersId",
-            "scanId",
-            "userId",
-          ],
-          ...input.map((item) => [
-            item.type,
-            SuperJSON.serialize("old" in item ? item.old : {}),
-            SuperJSON.serialize("_new" in item ? item._new : {}),
-            item.type === "updated"
-              ? Object.keys(ObjectUtils.deepDiff(item.old, item._new))
-              : [],
-            item.affectedChaptersIds ?? [],
-            "old" in item ? item.old.id : item._new.id,
-            item.userId,
-          ]),
-        ],
-        format: "JSONCompactEachRowWithNames",
-      }),
-  },
+  scans: scansService,
 }
 
 export * from "./types"

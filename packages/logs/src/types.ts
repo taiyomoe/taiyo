@@ -1,7 +1,5 @@
 import type { MediaChapter } from "@taiyomoe/db"
 
-export type LogsUsersAuthType = "registered" | "signedIn" | "signedOut"
-
 export type LogsMigration = {
   id: string
   startedAt: Date
