@@ -2,10 +2,11 @@ import { createEnv } from "@t3-oss/env-nextjs"
 import { vercel } from "@t3-oss/env-nextjs/presets"
 import { env as authEnv } from "@taiyomoe/auth/env"
 import { env as meilisearchEnv } from "@taiyomoe/meilisearch/env"
+import { env as umamiEnv } from "@taiyomoe/umami/env"
 import { env as utilsEnv } from "@taiyomoe/utils/env"
 
 export const env = createEnv({
-  extends: [authEnv, meilisearchEnv, utilsEnv, vercel()],
+  extends: [authEnv, meilisearchEnv, umamiEnv, utilsEnv, vercel()],
 
   /**
    * Specify your shared environment variables schema here.
