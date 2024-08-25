@@ -11,12 +11,13 @@ export type Resources =
   | "scans"
   | "scanMembers"
   | "usersFollow"
+  | "usersSettings"
 
 export type Posession = "any" | "own"
 export type ResourcesWithPossession = Exclude<Resources, "scanMembers">
 export type ResourcesWithoutPossession = Extract<
   Resources,
-  "scanMembers" | "usersFollow"
+  "scanMembers" | "usersFollow" | "usersSettings"
 >
 
 export type Actions = "create" | "update" | "delete" // read is omitted

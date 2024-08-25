@@ -33,6 +33,7 @@ const getUserPermissions = (): Permission[] => [
   "history:update:own",
   "library:update:own",
   "usersFollow:update:own",
+  "usersSettings:update:own",
 ]
 
 const getModeratorPermissions = (): Permission[] => [
@@ -113,6 +114,7 @@ const getResourcesWithPosession = (): ResourcesWithPossession[] => [
 const getResourcesWithoutPosession = (): ResourcesWithoutPossession[] => [
   "scanMembers",
   "usersFollow",
+  "usersSettings",
 ]
 
 const canAccessDashboard = (permissions: Permission[]) =>
