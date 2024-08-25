@@ -156,6 +156,9 @@ importers:
       '@taiyomoe/tsconfig':
         specifier: workspace:*
         version: link:../../tooling/typescript
+      '@taiyomoe/umami':
+        specifier: workspace:^
+        version: link:../../packages/umami
       '@taiyomoe/utils':
         specifier: workspace:*
         version: link:../../packages/utils

@@ -28,6 +28,7 @@
     "@taiyomoe/tailwind-config": "workspace:*",
     "@taiyomoe/trpc": "workspace:*",
     "@taiyomoe/tsconfig": "workspace:*",
+    "@taiyomoe/umami": "workspace:^",
     "@taiyomoe/utils": "workspace:*",
     "@tanstack/react-query": "^5.52.1",
     "@trpc/client": "11.0.0-rc.485",
