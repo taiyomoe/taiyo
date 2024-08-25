@@ -142,6 +142,11 @@ export const DashboardSidebarContent = ({ className }: Props) => {
               href: "/dashboard/scans/add",
               type: "create",
             },
+            {
+              label: "Modificar",
+              href: "/dashboard/scans/edit",
+              type: "update",
+            },
           ]}
         />
       </AccordionItem>

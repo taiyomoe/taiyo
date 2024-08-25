@@ -4,6 +4,7 @@ import {
 } from "@taiyomoe/constants"
 import { z } from "zod"
 import {
+  idSchema,
   optionalStringSchema,
   optionalUrlSchema,
   pageSchema,
@@ -22,7 +23,11 @@ export const createScanSchema = z.object({
   instagram: optionalUrlSchema(["https://instagram.com/"]),
   telegram: optionalUrlSchema(["https://t.me/"]),
   youtube: optionalUrlSchema(["https://youtube.com/"]),
-  email: z.string().email().optional().or(z.literal("")),
+  email: z.string().email().nullish().or(z.literal("")),
+})
+
+export const updateScanSchema = createScanSchema.partial().extend({
+  id: idSchema,
 })
 
 export const getScansListSchema = z.object({
@@ -39,3 +44,4 @@ export const bulkDeleteScansSchema = z.object({
 })
 
 export type CreateScanInput = typeof createScanSchema._type
+export type UpdateScanInput = typeof updateScanSchema._type

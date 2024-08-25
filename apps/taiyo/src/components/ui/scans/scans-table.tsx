@@ -19,7 +19,8 @@ import {
 import type { ScansList } from "@taiyomoe/types"
 import { useAtom, useAtomValue } from "jotai"
 import { useHydrateAtoms } from "jotai/utils"
-import { EllipsisIcon } from "lucide-react"
+import { EllipsisIcon, ExternalLinkIcon, PencilIcon } from "lucide-react"
+import Link from "next/link"
 import { type Key, useCallback, useMemo } from "react"
 import {
   scansListInitialDataAtom,
@@ -70,10 +71,17 @@ export const ScansTable = ({ initialData }: Props) => {
                 <EllipsisIcon className="text-default-300" />
               </Button>
             </DropdownTrigger>
-            <DropdownMenu>
-              <DropdownItem>View</DropdownItem>
-              <DropdownItem>Edit</DropdownItem>
-              <DropdownItem>Delete</DropdownItem>
+            <DropdownMenu variant="flat">
+              <DropdownItem
+                as={Link}
+                href={`/dashboard/scans/edit/${scan.id}`}
+                target="_blank"
+                color="warning"
+                startContent={<PencilIcon size={18} />}
+                endContent={<ExternalLinkIcon size={18} />}
+              >
+                Modificar
+              </DropdownItem>
             </DropdownMenu>
           </Dropdown>
         </div>
