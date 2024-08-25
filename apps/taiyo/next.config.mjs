@@ -60,12 +60,15 @@ const config = {
   /** Enables hot reloading for local packages without a build step */
   transpilePackages: [
     "@taiyomoe/auth",
+    "@taiyomoe/cache",
     "@taiyomoe/constants",
     "@taiyomoe/db",
+    "@taiyomoe/logs",
     "@taiyomoe/meilisearch",
     "@taiyomoe/schemas",
     "@taiyomoe/services",
     "@taiyomoe/trpc",
+    "@taiyomoe/umami",
     "@taiyomoe/utils",
   ],
 
