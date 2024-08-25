@@ -13,6 +13,7 @@ import { db } from "@taiyomoe/db"
 import { logsClient } from "@taiyomoe/logs"
 import { meilisearch, meilisearchIndexes } from "@taiyomoe/meilisearch"
 import type { Actions, Resources } from "@taiyomoe/types"
+import { umamiClient } from "@taiyomoe/umami"
 import { initTRPC } from "@trpc/server"
 import superjson from "superjson"
 import { ZodError } from "zod"
@@ -46,6 +47,7 @@ export const createTRPCContext = async (opts: { headers: Headers }) => {
     indexes: meilisearchIndexes,
     cache: cacheClient,
     logs: logsClient,
+    umami: umamiClient,
     ...opts,
   }
 }

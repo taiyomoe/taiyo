@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
+import Script from "next/script"
 import { siteConfig } from "~/lib/config"
 import type { LayoutProps } from "~/lib/types"
 import { cn } from "~/lib/utils/cn"
@@ -7,6 +8,7 @@ import { getBaseUrl } from "~/trpc/shared"
 import { Providers } from "./providers"
 
 import "~/styles/globals.css"
+import { env } from "~/env"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -40,6 +42,11 @@ export default function Layout({ children }: LayoutProps) {
           inter.className,
         )}
       >
+        <Script
+          src={`${env.NEXT_PUBLIC_UMAMI_URL}/script.js`}
+          data-website-id={env.NEXT_PUBLIC_UMAMI_WEBSITE_ID}
+          strategy="afterInteractive"
+        />
         <Providers>{children}</Providers>
       </body>
     </html>
