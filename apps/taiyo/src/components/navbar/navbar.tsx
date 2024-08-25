@@ -53,6 +53,7 @@ export const Navbar = () => {
   const shouldCollapse = pathname.includes("/chapter/")
   const mode = useMemo(() => {
     if (pathname === "/") return "scroll"
+    if (pathname === "/user/settings") return "sticky"
     if (["/media/", "/user/"].some((p) => pathname.includes(p))) return "scroll"
     if (pathname.includes("/chapter/")) return navbarMode
     return "sticky"

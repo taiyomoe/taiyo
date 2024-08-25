@@ -4,7 +4,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@nextui-org/popover"
 import { GaugeIcon, LinkIcon } from "lucide-react"
 import type { Session } from "next-auth"
 import Image from "next/image"
-import NextLink from "next/link"
+import Link from "next/link"
 import { SignOutButton } from "~/components/auth/SignOutButton"
 import { SignedIn } from "~/components/utils/signed-in/client"
 import { NavbarPopoverCommon } from "./navbar-popover-common"
@@ -25,7 +25,7 @@ export const NavbarUserPopover = ({ session }: Props) => (
     <PopoverContent className="p-6">
       <div className="flex flex-col gap-4">
         <Button
-          as={NextLink}
+          as={Link}
           href={`/user/${session.user.id}`}
           className="justify-end gap-3 p-2 font-medium text-medium"
           endContent={<LinkIcon />}
@@ -35,7 +35,7 @@ export const NavbarUserPopover = ({ session }: Props) => (
         </Button>
         <SignedIn requiredRole="ADMIN">
           <Button
-            as={NextLink}
+            as={Link}
             href={"/dashboard"}
             className="justify-end gap-3 p-2 font-medium text-medium"
             endContent={<GaugeIcon />}
