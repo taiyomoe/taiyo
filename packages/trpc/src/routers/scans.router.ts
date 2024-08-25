@@ -43,7 +43,7 @@ export const scansRouter = createTRPCRouter({
         })
       }
 
-      const updatedScan = await ctx.db.scan.update({
+      await ctx.db.scan.update({
         data: input,
         where: { id: input.id },
       })
