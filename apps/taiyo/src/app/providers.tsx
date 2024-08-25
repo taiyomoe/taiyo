@@ -15,7 +15,7 @@ export const Providers = (props: LayoutProps) => {
   return (
     <SessionProvider refetchOnWindowFocus={false}>
       <TRPCReactProvider>
-        <NextUIProvider navigate={router.push}>
+        <NextUIProvider locale="pt-BR" navigate={router.push}>
           <ThemeProvider attribute="class" defaultTheme="dark">
             <JotaiProvider>
               <Toaster

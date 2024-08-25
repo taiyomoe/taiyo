@@ -1,8 +1,13 @@
 import type { ButtonProps } from "@nextui-org/button"
 import { Button } from "@nextui-org/button"
 import { useFormState } from "react-hook-form"
+import { cn } from "~/lib/utils/cn"
 
-export const SubmitButton = ({ isDisabled, children }: ButtonProps) => {
+export const SubmitButton = ({
+  className,
+  isDisabled,
+  children,
+}: ButtonProps) => {
   const { isSubmitting, isValid, isDirty, errors } = useFormState()
   const shouldDisableButton =
     isSubmitting ||
@@ -12,7 +17,7 @@ export const SubmitButton = ({ isDisabled, children }: ButtonProps) => {
 
   return (
     <Button
-      className="w-fit font-medium"
+      className={cn("w-fit font-medium", className)}
       isDisabled={shouldDisableButton}
       isLoading={isSubmitting}
       color="primary"

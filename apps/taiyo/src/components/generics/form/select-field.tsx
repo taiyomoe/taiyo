@@ -2,13 +2,15 @@
 
 import { tv } from "@nextui-org/react"
 import { Select, SelectItem, type SelectProps } from "@nextui-org/select"
+import type { ReactNode } from "react"
 import { useFormContext } from "react-hook-form"
 import { SelectUtils } from "~/lib/utils/select.utils"
 
-type Props = { name: string; items: Record<string, unknown> } & Omit<
-  SelectProps,
-  "items" | "children"
->
+type Props = {
+  name: string
+  items: Record<string, unknown>
+  renderOption?: (item: unknown) => ReactNode
+} & Omit<SelectProps, "items" | "children">
 
 const select = tv({
   slots: {
@@ -28,6 +30,7 @@ const select = tv({
 export const SelectField = ({
   name,
   items,
+  renderOption,
   labelPlacement = "outside",
   classNames,
   ...rest
@@ -56,8 +59,8 @@ export const SelectField = ({
       {...rest}
     >
       {(item) => (
-        <SelectItem key={item.value} value={item.value}>
-          {item.label}
+        <SelectItem key={item.value} value={item.value} textValue={item.label}>
+          {renderOption ? renderOption(item.value) : item.label}
         </SelectItem>
       )}
     </Select>
