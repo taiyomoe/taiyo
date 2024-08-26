@@ -1,9 +1,9 @@
 import type { Selection } from "@nextui-org/react"
-import type { ScansList } from "@taiyomoe/types"
+import type { ScansListItem } from "@taiyomoe/types"
 import { atom } from "jotai"
 
 export const scansListInitialDataAtom = atom<{
-  scans: ScansList
+  scans: ScansListItem[]
   totalPages: number
 }>({ scans: [], totalPages: 0 })
 

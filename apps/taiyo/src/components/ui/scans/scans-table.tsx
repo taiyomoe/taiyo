@@ -9,7 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/table"
-import type { ScansList } from "@taiyomoe/types"
+import type { ScansListItem } from "@taiyomoe/types"
 import { useAtom, useAtomValue } from "jotai"
 import { useHydrateAtoms } from "jotai/utils"
 import { type Key, useCallback, useMemo } from "react"
@@ -33,7 +33,7 @@ export const columns = [
 ]
 
 type Props = {
-  initialData: { scans: ScansList; totalPages: number }
+  initialData: { scans: ScansListItem[]; totalPages: number }
 }
 
 export const ScansTable = ({ initialData }: Props) => {
@@ -51,8 +51,8 @@ export const ScansTable = ({ initialData }: Props) => {
     )
   }, [visibleColumns])
 
-  const renderCell = useCallback((scan: ScansList[number], columnKey: Key) => {
-    const value = scan[columnKey as keyof ScansList[number]]
+  const renderCell = useCallback((scan: ScansListItem, columnKey: Key) => {
+    const value = scan[columnKey as keyof ScansListItem]
 
     if (columnKey === "actions") {
       return <ScansTableSingleActions scan={scan} />

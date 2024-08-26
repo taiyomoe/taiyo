@@ -6,7 +6,7 @@ import {
   DropdownTrigger,
 } from "@nextui-org/dropdown"
 import { useDisclosure } from "@nextui-org/react"
-import type { ScansList } from "@taiyomoe/types"
+import type { ScansListItem } from "@taiyomoe/types"
 import {
   CopyIcon,
   EllipsisIcon,
@@ -19,7 +19,7 @@ import { useCopyToClipboard } from "usehooks-ts"
 import { ScansTableDeleteModal } from "./scans-table-delete-modal"
 
 type Props = {
-  scan: ScansList[number]
+  scan: ScansListItem
 }
 export const ScansTableSingleActions = ({ scan }: Props) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()

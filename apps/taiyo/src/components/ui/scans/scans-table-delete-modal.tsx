@@ -7,7 +7,7 @@ import {
   ModalHeader,
 } from "@nextui-org/modal"
 import { Input } from "@nextui-org/react"
-import type { ScansList } from "@taiyomoe/types"
+import type { ScansListItem } from "@taiyomoe/types"
 import { useSetAtom } from "jotai"
 import { useMemo, useState } from "react"
 import { toast } from "sonner"
@@ -16,7 +16,7 @@ import { useScansList } from "~/hooks/useScansList"
 import { api } from "~/trpc/react"
 
 type Props = {
-  selectedScans: ScansList
+  selectedScans: ScansListItem[]
   isOpen: boolean
   onOpenChange: () => void
 }
