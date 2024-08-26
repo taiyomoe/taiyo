@@ -23,7 +23,7 @@ export const useScansList = () => {
     data: { scans: items, totalPages },
     refetch,
   } = api.scans.getList.useQuery(
-    { search: query, page, perPage },
+    { query, page, perPage },
     { initialData: initialItems, refetchOnMount: false, enabled: false },
   )
 

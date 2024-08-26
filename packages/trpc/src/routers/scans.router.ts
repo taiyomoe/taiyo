@@ -53,7 +53,7 @@ export const scansRouter = createTRPCRouter({
     .meta({ resource: "scans", action: "create" })
     .input(getScansListSchema)
     .query(async ({ ctx, input }) => {
-      const searched = await ctx.indexes.scans.search(input.search ?? "", {
+      const searched = await ctx.indexes.scans.search(input.query, {
         hitsPerPage: input.perPage,
         page: input.page,
       })
