@@ -6,6 +6,7 @@ import { UserSettingsFormFieldBuilder } from "~/components/forms/users/update-se
 import { DateField } from "~/components/generics/form/date-field"
 import { InputField } from "~/components/generics/form/input-field"
 import { SelectField } from "~/components/generics/form/select-field"
+import { SwitchField } from "~/components/generics/form/switch-field"
 import { TextAreaField } from "~/components/generics/form/textarea-field"
 import { CountryFlag } from "~/components/ui/CountryFlag"
 
@@ -92,6 +93,20 @@ export const UserSettingsFormProfileCategory = () => (
         )}
         aria-label="Country"
       />
+    </UserSettingsFormFieldBuilder>
+    <Divider />
+    <UserSettingsFormFieldBuilder
+      title="Mostrar meus seguidores"
+      description="Se você quiser que os seguidores do seu perfil sejam exibidos no site."
+    >
+      <SwitchField name="showFollowing" aria-label="Show following" />
+    </UserSettingsFormFieldBuilder>
+    <Divider />
+    <UserSettingsFormFieldBuilder
+      title="Mostrar minha biblioteca"
+      description="Se você quiser que sua biblioteca seja exibida no site."
+    >
+      <SwitchField name="showLibrary" aria-label="Show library" />
     </UserSettingsFormFieldBuilder>
   </div>
 )
