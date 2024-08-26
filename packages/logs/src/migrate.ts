@@ -4,8 +4,16 @@ import migration2 from "./migrations/20240723104911_add_chapters"
 import migration3 from "./migrations/20240724160021_add_users_auth"
 import migration4 from "./migrations/20240818012246_add_scans"
 import migration5 from "./migrations/20240824232511_add_users_activity"
+import migration6 from "./migrations/20240826135905_add_users_settings"
 
-const migrations = [migration1, migration2, migration3, migration4, migration5]
+const migrations = [
+  migration1,
+  migration2,
+  migration3,
+  migration4,
+  migration5,
+  migration6,
+]
 const migrationsRan = await logsClient.migrations.getAll()
 const migrationsToRun = migrations.filter((m) =>
   migrationsRan.every((mr) => mr.migrationName !== m.name),
