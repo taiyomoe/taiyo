@@ -19,7 +19,7 @@ export const SwitchField = ({
 
   const handleChange = useCallback(
     (newValue: boolean) => {
-      setValue(name, newValue, { shouldValidate: true })
+      setValue(name, newValue, { shouldValidate: true, shouldDirty: true })
       setIsSelected(newValue)
       onValueChange?.(newValue)
     },

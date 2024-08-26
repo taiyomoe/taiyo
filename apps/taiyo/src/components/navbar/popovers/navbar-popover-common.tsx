@@ -3,18 +3,22 @@ import { FlagIcon, SettingsIcon, SunMoonIcon } from "lucide-react"
 import Link from "next/link"
 import { CompanyLogo } from "~/components/ui/CompanyLogo"
 import ThemeSwitch from "~/components/ui/ThemeSwitch"
+import { SignedIn } from "~/components/utils/signed-in/client"
 import { siteConfig } from "~/lib/config"
 
 export const NavbarPopoverCommon = () => (
   <div className="flex w-full flex-col gap-2">
-    <Button
-      className="justify-normal gap-3 p-2 font-medium text-medium line-through"
-      startContent={<SettingsIcon />}
-      variant="light"
-      isDisabled
-    >
-      Configurações
-    </Button>
+    <SignedIn>
+      <Button
+        as={Link}
+        href="/user/settings"
+        className="justify-end gap-3 p-2 font-medium text-medium"
+        endContent={<SettingsIcon />}
+        variant="light"
+      >
+        Configurações
+      </Button>
+    </SignedIn>
     <Button
       className="disabled justify-normal gap-3 p-2 font-medium text-medium line-through"
       startContent={<FlagIcon />}

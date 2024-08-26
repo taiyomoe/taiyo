@@ -18,6 +18,9 @@ export const optionalStringSchema = z
   .nullish()
   .or(z.literal("").transform(() => undefined))
 
+export const optionalEnumSchema = (input: z.ZodSchema) =>
+  input.nullish().or(z.literal("").transform(() => undefined))
+
 export const optionalUrlSchema = (startsWith?: string[]) =>
   z
     .string()

@@ -1,6 +1,11 @@
-import { getFollowsSchema, toggleFollowSchema } from "@taiyomoe/schemas"
+import {
+  getFollowsSchema,
+  toggleFollowSchema,
+  updateUserSettingsSchema,
+} from "@taiyomoe/schemas"
 import { UsersService } from "@taiyomoe/services"
 import type { UserFollower } from "@taiyomoe/types"
+import { TRPCError } from "@trpc/server"
 import { omit } from "radash"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 
@@ -156,5 +161,36 @@ export const usersRouter = createTRPCRouter({
       }
 
       return omit(ownUser, ["settings"]) as UserFollower
+    }),
+
+  updateSettings: protectedProcedure
+    .meta({ resource: "usersSettings", action: "update" })
+    .input(updateUserSettingsSchema)
+    .mutation(async ({ ctx, input }) => {
+      const user = await ctx.db.user.findUnique({
+        select: {
+          id: true,
+          name: true,
+          image: true,
+          role: true,
+          settings: true,
+        },
+        where: { id: ctx.session.user.id },
+      })
+
+      if (!user) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "User not found",
+        })
+      }
+
+      await ctx.db.user.update({
+        data: {
+          settings: { update: omit(input, ["profile"]) },
+          profile: { update: input.profile },
+        },
+        where: { id: ctx.session.user.id },
+      })
     }),
 })
