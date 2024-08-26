@@ -1,4 +1,4 @@
-import type { MediaTitle, MediaType } from "@prisma/client"
+import type { MediaChapter, MediaTitle, MediaType } from "@prisma/client"
 
 export type MediasIndexItem = {
   id: string
@@ -14,4 +14,8 @@ export type MediasIndexItem = {
 export type ScansIndexItem = {
   id: string
   name: string
+}
+
+export type ChaptersIndexItem = Omit<MediaChapter, "pages"> & {
+  scanIds: string[]
 }

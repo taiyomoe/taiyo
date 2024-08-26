@@ -2,10 +2,6 @@ import type { PrismaClient } from "@prisma/client"
 import type { ScansIndexItem } from "@taiyomoe/types"
 import { TRPCError } from "@trpc/server"
 
-/**
- * Gets the name of a scan.
- * This is used to populate the Meilisearch titles index.
- */
 export const getScanIndexItem = async (
   db: PrismaClient,
   scanId: string,

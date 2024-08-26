@@ -2,10 +2,6 @@ import type { PrismaClient } from "@prisma/client"
 import type { MediasIndexItem } from "@taiyomoe/types"
 import { TRPCError } from "@trpc/server"
 
-/**
- * Gets the titles and main cover of a media.
- * This is used to populate the Meilisearch titles index.
- */
 export const getMediaIndexItem = async (
   db: PrismaClient,
   mediaId: string,
