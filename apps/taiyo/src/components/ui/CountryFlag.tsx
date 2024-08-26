@@ -29,6 +29,7 @@ export const CountryFlag = ({ language, country, size }: Props) => {
       className="select-none object-contain"
       width={size}
       height={size}
+      style={{ height: size, width: size }}
       alt={countryCode ?? "Country flag"}
     />
   )
