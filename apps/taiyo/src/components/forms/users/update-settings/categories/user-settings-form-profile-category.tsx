@@ -1,7 +1,7 @@
 import { now } from "@internationalized/date"
 import { Divider } from "@nextui-org/react"
 import { Countries, Genders } from "@taiyomoe/db"
-import { COUNTRIES_PT } from "@taiyomoe/utils/i18n"
+import { COUNTRIES_PT, GENDERS_PT } from "@taiyomoe/utils/i18n"
 import { UserSettingsFormFieldBuilder } from "~/components/forms/users/update-settings/categories/user-settings-form-field-builder"
 import { DateField } from "~/components/generics/form/date-field"
 import { InputField } from "~/components/generics/form/input-field"
@@ -14,7 +14,7 @@ export const UserSettingsFormProfileCategory = () => {
     <div className="space-y-8">
       <UserSettingsFormFieldBuilder
         title="Sobre mim"
-        description="Descrição curta (2000 caracteres máximo)"
+        description="Conte um pouco sobre você. Queremos te conhecer melhor! (2000 caracteres no máximo)"
         orientation="vertical"
       >
         <TextAreaField
@@ -45,16 +45,24 @@ export const UserSettingsFormProfileCategory = () => {
         />
       </UserSettingsFormFieldBuilder>
       <Divider />
-      <UserSettingsFormFieldBuilder title="Gênero" description="Sei lá">
+      <UserSettingsFormFieldBuilder
+        title="Gênero"
+        description="O gênero ajuda a personalizar a sua experiência na plataforma."
+      >
         <SelectField
           name="profile.gender"
           className="w-full md:w-1/3"
           items={Genders}
-          aria-label="Genre"
+          renderValue={(item) => item[0]?.rendered}
+          renderOption={(item) => GENDERS_PT[item as Genders]}
+          aria-label="Gender"
         />
       </UserSettingsFormFieldBuilder>
       <Divider />
-      <UserSettingsFormFieldBuilder title="Cidade" description="Sei lá">
+      <UserSettingsFormFieldBuilder
+        title="Cidade"
+        description="De onde você vem?"
+      >
         <InputField
           name="profile.city"
           className="w-full md:w-1/3"
@@ -62,7 +70,18 @@ export const UserSettingsFormProfileCategory = () => {
         />
       </UserSettingsFormFieldBuilder>
       <Divider />
-      <UserSettingsFormFieldBuilder title="País" description="Sei lá">
+      <UserSettingsFormFieldBuilder
+        title="País"
+        description={
+          <>
+            O país servirá principalmente para personalizar as recomendações de
+            conteúdo.
+            <br />
+            Também será usado como decoração em vários lugares onde o seu nome
+            aparecer.
+          </>
+        }
+      >
         <SelectField
           name="profile.country"
           className="w-full md:w-1/3"
