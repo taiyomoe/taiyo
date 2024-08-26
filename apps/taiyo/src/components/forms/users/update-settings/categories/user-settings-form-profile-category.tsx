@@ -105,6 +105,7 @@ export const UserSettingsFormProfileCategory = () => (
     <UserSettingsFormFieldBuilder
       title="Mostrar minha biblioteca"
       description="Se você quiser que sua biblioteca seja exibida no site."
+      warning="Não efetivo"
     >
       <SwitchField name="showLibrary" aria-label="Show library" />
     </UserSettingsFormFieldBuilder>
