@@ -5,22 +5,35 @@ import {
   DropdownMenu,
   DropdownTrigger,
 } from "@nextui-org/dropdown"
+import { useDisclosure } from "@nextui-org/react"
 import type { ScansList } from "@taiyomoe/types"
-import { CopyIcon, EllipsisIcon, ExternalLinkIcon } from "lucide-react"
+import {
+  CopyIcon,
+  EllipsisIcon,
+  ExternalLinkIcon,
+  Trash2Icon,
+} from "lucide-react"
 import Link from "next/link"
 import type { Key } from "react"
 import { useCopyToClipboard } from "usehooks-ts"
+import { ScansTableDeleteModal } from "./scans-table-delete-modal"
 
 type Props = {
   scan: ScansList[number]
 }
 export const ScansTableSingleActions = ({ scan }: Props) => {
+  const { isOpen, onOpen, onOpenChange } = useDisclosure()
   const [, copy] = useCopyToClipboard()
 
   const handleAction = (key: Key) => {
-    if (key !== "copyId") return
-
-    copy(scan.id)
+    switch (key) {
+      case "copyId":
+        copy(scan.id)
+        break
+      case "delete":
+        onOpen()
+        break
+    }
   }
 
   return (
@@ -45,8 +58,20 @@ export const ScansTableSingleActions = ({ scan }: Props) => {
           >
             Modificar
           </DropdownItem>
+          <DropdownItem
+            key="delete"
+            endContent={<Trash2Icon size={18} />}
+            color="danger"
+          >
+            Deletar
+          </DropdownItem>
         </DropdownMenu>
       </Dropdown>
+      <ScansTableDeleteModal
+        selectedScans={[scan]}
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+      />
     </div>
   )
 }
