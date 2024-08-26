@@ -23,8 +23,8 @@ export const SubmitButton = ({
   console.log("errors", errors)
   console.log(
     "getFieldState",
-    getFieldState("preferredTitles"),
-    getValues("preferredTitles"),
+    getFieldState("showFollowing"),
+    getValues("showFollowing"),
   )
 
   return (

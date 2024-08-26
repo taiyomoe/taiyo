@@ -12,8 +12,8 @@ export const UserSettingsFormLanguageCategory = () => (
         <>
           Idioma dos títulos usados através do site.
           <br />
-          Se alguma obra não tiver um título específico, o título padrão será
-          usado.
+          Se uma obra não tiver um título no idioma selecionado, o título padrão
+          será usado.
         </>
       }
     >
