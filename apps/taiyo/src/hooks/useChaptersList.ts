@@ -1,0 +1,91 @@
+import { DEFAULT_CHAPTERS_LIST_PER_PAGE } from "@taiyomoe/constants"
+import { useAtom, useAtomValue } from "jotai"
+import { parseAsInteger, parseAsString, useQueryState } from "nuqs"
+import { useCallback } from "react"
+import { useDebounceCallback } from "usehooks-ts"
+import {
+  chaptersListInitialDataAtom,
+  chaptersListLoadingAtom,
+} from "~/atoms/chaptersList.atoms"
+import { api } from "~/trpc/react"
+
+export const useChaptersList = () => {
+  const initialItems = useAtomValue(chaptersListInitialDataAtom)
+  const [isInternallyLoading, setIsInternallyLoading] = useAtom(
+    chaptersListLoadingAtom,
+  )
+  const [query, setQuery] = useQueryState("q", parseAsString.withDefault(""))
+  const [page, setPage] = useQueryState("page", parseAsInteger.withDefault(1))
+  const [perPage, setPerPage] = useQueryState(
+    "perPage",
+    parseAsInteger.withDefault(DEFAULT_CHAPTERS_LIST_PER_PAGE),
+  )
+  const {
+    data: { chapters: items, totalPages },
+    refetch,
+  } = api.chapters.getList.useQuery(
+    { query, page, perPage },
+    { initialData: initialItems, refetchOnMount: false, enabled: false },
+  )
+
+  const handleSearch = useDebounceCallback(
+    useCallback(async () => {
+      await refetch()
+      setIsInternallyLoading(false)
+    }, [refetch, setIsInternallyLoading]),
+    300,
+  )
+
+  const handleQueryChange = useCallback(
+    (value: string) => {
+      setQuery(value)
+      setPage(1)
+      setIsInternallyLoading(true)
+      handleSearch()
+    },
+    [setQuery, setPage, setIsInternallyLoading, handleSearch],
+  )
+
+  const handlePageChange = useCallback(
+    (newPage: number) => {
+      setPage(newPage)
+      setIsInternallyLoading(true)
+      handleSearch()
+    },
+    [setPage, setIsInternallyLoading, handleSearch],
+  )
+
+  const handlePerPageChange = useCallback(
+    (newPerPage: number) => {
+      setPerPage(newPerPage)
+      setPage(1)
+      setIsInternallyLoading(true)
+      handleSearch()
+    },
+    [setPerPage, setPage, setIsInternallyLoading, handleSearch],
+  )
+
+  const handleClear = useCallback(() => {
+    setQuery("")
+    setPage(1)
+  }, [setQuery, setPage])
+
+  const handleForceRefetch = useCallback(() => {
+    setIsInternallyLoading(true)
+    handleSearch()
+  }, [setIsInternallyLoading, handleSearch])
+
+  return {
+    query,
+    page,
+    perPage,
+    totalPages,
+    items: isInternallyLoading ? [] : items,
+    setQuery,
+    handleClear,
+    handleQueryChange,
+    handlePageChange,
+    handlePerPageChange,
+    handleForceRefetch,
+  }
+}

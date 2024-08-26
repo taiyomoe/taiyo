@@ -4,6 +4,7 @@ import {
   bulkUpdateChaptersScansSchema,
   bulkUpdateChaptersVolumesSchema,
   getChaptersByUserIdSchema,
+  getChaptersListSchema,
   getLatestChaptersGroupedByUserSchema,
   getLatestChaptersGroupedSchema,
   getMediaChaptersByMediaIdSchema,
@@ -14,6 +15,7 @@ import { ChaptersService } from "@taiyomoe/services"
 import type { LatestReleaseGrouped, MediaChapterLimited } from "@taiyomoe/types"
 import { MediaUtils } from "@taiyomoe/utils"
 import { TRPCError } from "@trpc/server"
+import { camel, mapValues, omit } from "radash"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 
 export const chaptersRouter = createTRPCRouter({
@@ -349,6 +351,39 @@ export const chaptersRouter = createTRPCRouter({
         ctx.session?.user.preferredTitles,
       ),
     ),
+
+  getList: protectedProcedure
+    .meta({ resource: "mediaChapters", action: "create" })
+    .input(getChaptersListSchema)
+    .query(async ({ ctx, input }) => {
+      console.log("received input", input)
+      const filter = Object.values(
+        mapValues(
+          omit(input, ["includeDeleted", "page", "perPage"]),
+          (arr, k) => {
+            if (arr.length === 0) return ""
+
+            const normalizedKey = camel(k.replace(/^not/, "").replace(/s$/, ""))
+            const operator = k.startsWith("not") ? "!=" : "="
+            const mapped = arr
+              .map((v) => `${normalizedKey} ${operator} ${v}`)
+              .join(" OR ")
+
+            return `(${mapped})`
+          },
+        ),
+      )
+        .filter(Boolean)
+        .join(" AND ")
+
+      console.log("filter", filter)
+
+      return ctx.indexes.chapters.search(null, {
+        filter,
+        hitsPerPage: input.perPage,
+        page: input.page,
+      })
+    }),
 
   delete: protectedProcedure
     .meta({ resource: "mediaChapters", action: "delete" })
