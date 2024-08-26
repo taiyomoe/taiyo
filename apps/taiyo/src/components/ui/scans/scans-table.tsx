@@ -1,12 +1,5 @@
 "use client"
 
-import { Button } from "@nextui-org/button"
-import {
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownTrigger,
-} from "@nextui-org/dropdown"
 import { Spinner } from "@nextui-org/spinner"
 import {
   Table,
@@ -19,8 +12,6 @@ import {
 import type { ScansList } from "@taiyomoe/types"
 import { useAtom, useAtomValue } from "jotai"
 import { useHydrateAtoms } from "jotai/utils"
-import { EllipsisIcon, ExternalLinkIcon, PencilIcon } from "lucide-react"
-import Link from "next/link"
 import { type Key, useCallback, useMemo } from "react"
 import {
   scansListInitialDataAtom,
@@ -28,9 +19,10 @@ import {
   scansListSelectedKeysAtom,
   scansListVisibleColumnsAtom,
 } from "~/atoms/scansList.atoms"
-import { ScansTableBottomContent } from "~/components/ui/scans/scans-table-bottom-content"
-import { ScansTableTopContent } from "~/components/ui/scans/scans-table-top-content"
 import { useScansList } from "~/hooks/useScansList"
+import { ScansTableBottomContent } from "./scans-table-bottom-content"
+import { ScansTableSingleActions } from "./scans-table-single-actions"
+import { ScansTableTopContent } from "./scans-table-top-content"
 
 export const columns = [
   { name: "Id", uid: "id" },
@@ -63,29 +55,7 @@ export const ScansTable = ({ initialData }: Props) => {
     const value = scan[columnKey as keyof ScansList[number]]
 
     if (columnKey === "actions") {
-      return (
-        <div className="relative flex items-center justify-end gap-2">
-          <Dropdown>
-            <DropdownTrigger>
-              <Button isIconOnly size="sm" variant="light">
-                <EllipsisIcon className="text-default-300" />
-              </Button>
-            </DropdownTrigger>
-            <DropdownMenu variant="flat">
-              <DropdownItem
-                as={Link}
-                href={`/dashboard/scans/edit/${scan.id}`}
-                target="_blank"
-                color="warning"
-                startContent={<PencilIcon size={18} />}
-                endContent={<ExternalLinkIcon size={18} />}
-              >
-                Modificar
-              </DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
-        </div>
-      )
+      return <ScansTableSingleActions scan={scan} />
     }
 
     return value
