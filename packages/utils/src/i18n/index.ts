@@ -1,3 +1,4 @@
+export * from "./contentRating/contentRating.pt"
 export * from "./countries/countries.pt"
 export * from "./dateRanges/dateRanges.pt"
 export * from "./genders/genders.pt"
