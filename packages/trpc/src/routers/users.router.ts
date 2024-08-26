@@ -6,7 +6,7 @@ import {
 import { UsersService } from "@taiyomoe/services"
 import type { UserFollower } from "@taiyomoe/types"
 import { TRPCError } from "@trpc/server"
-import { omit } from "radash"
+import { crush, get, omit, parallel } from "radash"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 
 export const usersRouter = createTRPCRouter({
@@ -169,16 +169,13 @@ export const usersRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const user = await ctx.db.user.findUnique({
         select: {
-          id: true,
-          name: true,
-          image: true,
-          role: true,
           settings: true,
+          profile: true,
         },
         where: { id: ctx.session.user.id },
       })
 
-      if (!user) {
+      if (!user || !user.settings || !user.profile) {
         throw new TRPCError({
           code: "NOT_FOUND",
           message: "User not found",
@@ -192,5 +189,20 @@ export const usersRouter = createTRPCRouter({
         },
         where: { id: ctx.session.user.id },
       })
+
+      const normalizedUser = { ...user.settings, profile: user.profile }
+
+      await parallel(
+        10,
+        Object.entries(crush(input)),
+        async ([type, value]) => {
+          await ctx.logs.users.settings.insert({
+            type,
+            old: String(get(normalizedUser, type)),
+            new: String(value),
+            userId: ctx.session.user.id,
+          })
+        },
+      )
     }),
 })

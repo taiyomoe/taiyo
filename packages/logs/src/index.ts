@@ -5,6 +5,7 @@ import { migrationsService } from "./services/migrations.logsService"
 import { scansService } from "./services/scans.logsService"
 import { usersActivityService } from "./services/usersActivity.logsService"
 import { usersAuthService } from "./services/usersAuth.logsService"
+import { usersSettingsService } from "./services/usersSettings.logsService"
 
 export const rawLogsClient = createClient({
   url: env.CLICKHOUSE_URL,
@@ -20,6 +21,7 @@ export const logsClient = {
   users: {
     auth: usersAuthService,
     activity: usersActivityService,
+    settings: usersSettingsService,
   },
   scans: scansService,
 }
