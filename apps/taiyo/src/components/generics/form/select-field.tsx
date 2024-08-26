@@ -10,6 +10,7 @@ type Props = {
   name: string
   items: Record<string, unknown>
   renderOption?: (item: unknown) => ReactNode
+  allowEmpty?: boolean
 } & Omit<SelectProps, "items" | "children">
 
 const select = tv({
@@ -31,6 +32,7 @@ export const SelectField = ({
   name,
   items,
   renderOption,
+  allowEmpty,
   labelPlacement = "outside",
   classNames,
   ...rest
@@ -40,7 +42,10 @@ export const SelectField = ({
     formState: { errors, defaultValues },
   } = useFormContext()
   const errorMessage = errors[name]?.message?.toString()
-  const itemsArray = SelectUtils.enumToItems(items)
+  const itemsArray = [
+    allowEmpty ? { label: "Selecionar", value: "" } : null,
+    ...SelectUtils.enumToItems(items),
+  ].filter(Boolean)
   const slots = select({ labelPlacement })
 
   return (
@@ -55,12 +60,17 @@ export const SelectField = ({
         label: slots.label(),
         ...classNames,
       }}
+      renderValue={(item) =>
+        item.at(0)?.data?.value === "" ? "" : item.at(0)?.rendered
+      }
       {...register(name)}
       {...rest}
     >
       {(item) => (
         <SelectItem key={item.value} value={item.value} textValue={item.label}>
-          {renderOption ? renderOption(item.value) : item.label}
+          {item.value === "" || !renderOption
+            ? item.label
+            : renderOption(item.value)}
         </SelectItem>
       )}
     </Select>

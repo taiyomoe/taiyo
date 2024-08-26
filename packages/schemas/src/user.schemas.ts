@@ -3,7 +3,7 @@ import {
   USER_FOLLOWS_PER_PAGE_CHOICES,
 } from "@taiyomoe/constants"
 import { z } from "zod"
-import { pageSchema, perPageSchema } from "./common.schemas"
+import { optionalEnumSchema, pageSchema, perPageSchema } from "./common.schemas"
 import {
   ContentRatingSchema,
   CountriesSchema,
@@ -36,7 +36,7 @@ export const updateUserSettingsSchema = z
       })
       .partial(),
     contentRating: ContentRatingSchema,
-    preferredTitles: LanguagesSchema.nullable(),
+    preferredTitles: optionalEnumSchema(LanguagesSchema),
     showFollowing: z.boolean(),
     showLibrary: z.boolean(),
   })
