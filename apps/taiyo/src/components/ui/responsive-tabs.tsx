@@ -4,7 +4,7 @@ import { type ReactNode, useState } from "react"
 import { Button } from "react-aria-components"
 
 const responsiveTabs = tv({
-  base: "scrollbar-none flex min-w-fit flex-row gap-4 overflow-x-auto md:flex-col",
+  base: "scrollbar-none flex flex-row gap-4 overflow-x-auto md:min-w-fit md:flex-col",
   slots: {
     button:
       "relative flex items-center gap-2 px-3 py-1.5 outline-none transition-background",
