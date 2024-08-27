@@ -152,3 +152,13 @@ export type MediaChapterWithRelations = Prisma.MediaChapterGetPayload<
 >
 
 export type MediaChapterWithScans = MediaChapter & { scanIds: string[] }
+
+export type ChaptersListItem = Omit<
+  MediaChapter,
+  "pages" | "mediaId" | "uploaderId" | "deleterId"
+> & {
+  media: { id: string; mainTitle: string }
+  uploader: Pick<User, "id" | "name" | "image">
+  deleter: Pick<User, "id" | "name" | "image"> | null
+  scans: Pick<Scan, "id" | "name">[]
+}
