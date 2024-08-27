@@ -35,6 +35,7 @@ export const TablePagination = ({
       color="primary"
       showControls
       isDisabled={isLoading || totalPages === 1}
+      siblings={1}
       isCompact
     />
   </div>
