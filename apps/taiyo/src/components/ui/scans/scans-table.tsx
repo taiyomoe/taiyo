@@ -64,51 +64,49 @@ export const ScansTable = ({ initialData }: Props) => {
   return (
     <div className="flex flex-col gap-12">
       <p className="font-semibold text-4xl">Scans</p>
-      <div>
-        <Table
-          selectedKeys={selectedKeys}
-          selectionMode="multiple"
-          topContent={<ScansTableTopContent />}
-          topContentPlacement="outside"
-          bottomContent={<ScansTableBottomContent />}
-          bottomContentPlacement="outside"
-          onSelectionChange={setSelectedKeys}
-          aria-label="Scans list"
-          isStriped
+      <Table
+        selectedKeys={selectedKeys}
+        selectionMode="multiple"
+        topContent={<ScansTableTopContent />}
+        topContentPlacement="outside"
+        bottomContent={<ScansTableBottomContent />}
+        bottomContentPlacement="outside"
+        onSelectionChange={setSelectedKeys}
+        aria-label="Scans list"
+        isStriped
+      >
+        <TableHeader columns={headerColumns}>
+          {(c) => (
+            <TableColumn
+              key={c.uid}
+              className="uppercase"
+              align={
+                c.uid === "actions"
+                  ? "end"
+                  : ["chapters", "members"].includes(c.uid)
+                    ? "center"
+                    : "start"
+              }
+            >
+              {c.name}
+            </TableColumn>
+          )}
+        </TableHeader>
+        <TableBody
+          items={isLoading ? [] : items}
+          isLoading={isLoading}
+          emptyContent="Nenhuma scan encontrada"
+          loadingContent={<Spinner size="lg" />}
         >
-          <TableHeader columns={headerColumns}>
-            {(c) => (
-              <TableColumn
-                key={c.uid}
-                className="uppercase"
-                align={
-                  c.uid === "actions"
-                    ? "end"
-                    : ["chapters", "members"].includes(c.uid)
-                      ? "center"
-                      : "start"
-                }
-              >
-                {c.name}
-              </TableColumn>
-            )}
-          </TableHeader>
-          <TableBody
-            items={isLoading ? [] : items}
-            isLoading={isLoading}
-            emptyContent="Nenhuma scan encontrada"
-            loadingContent={<Spinner size="lg" />}
-          >
-            {(item) => (
-              <TableRow key={item.id}>
-                {(columnKey) => (
-                  <TableCell>{renderCell(item, columnKey)}</TableCell>
-                )}
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
+          {(item) => (
+            <TableRow key={item.id}>
+              {(columnKey) => (
+                <TableCell>{renderCell(item, columnKey)}</TableCell>
+              )}
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
     </div>
   )
 }
