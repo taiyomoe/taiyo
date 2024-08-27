@@ -22,7 +22,9 @@ export const TableCellUser = ({ user }: Props) => {
         height={24}
         alt={user.name ?? "User avatar"}
       />
-      <p className="font-medium">{user.name}</p>
+      <p className="font-medium underline underline-offset-4 transition-colors hover:text-foreground-400">
+        {user.name}
+      </p>
     </Link>
   )
 }

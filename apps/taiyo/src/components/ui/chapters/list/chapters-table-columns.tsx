@@ -6,6 +6,8 @@ import {
 } from "~/components/generics/data-table/data-table-presets"
 import { TableCellDate } from "~/components/tables/table-cell-date"
 import { TableCellLanguage } from "~/components/tables/table-cell-language"
+import { TableCellMedia } from "~/components/tables/table-cell-media"
+import { TableCellScans } from "~/components/tables/table-cell-scans"
 import { TableCellUser } from "~/components/tables/table-cell-user"
 
 export const columns: ColumnDef<ChaptersListItem>[] = [
@@ -51,8 +53,20 @@ export const columns: ColumnDef<ChaptersListItem>[] = [
       <TableCellUser user={getValue<ChaptersListItem["uploader"]>()} />
     ),
   },
-  { accessorKey: "scans", header: "Scans" },
-  { accessorKey: "media", header: "Obra" },
+  {
+    accessorKey: "scans",
+    header: "Scans",
+    cell: ({ getValue }) => (
+      <TableCellScans scans={getValue<ChaptersListItem["scans"]>()} />
+    ),
+  },
+  {
+    accessorKey: "media",
+    header: "Obra",
+    cell: ({ getValue }) => (
+      <TableCellMedia media={getValue<ChaptersListItem["media"]>()} />
+    ),
+  },
   {
     accessorKey: "deleter",
     header: "Deletado por",

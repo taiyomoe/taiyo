@@ -91,6 +91,8 @@ export const useChaptersList = () => {
 
   const handlePageChange = useCallback(
     (newPage: number) => {
+      console.log("received new page", newPage)
+
       setPage(newPage)
       setIsInternallyLoading(true)
       handleSearch()
@@ -100,6 +102,8 @@ export const useChaptersList = () => {
 
   const handlePerPageChange = useCallback(
     (newPerPage: number) => {
+      console.log("received new perPage", newPerPage)
+
       setPerPage(newPerPage)
       setPage(1)
       setIsInternallyLoading(true)
@@ -107,10 +111,6 @@ export const useChaptersList = () => {
     },
     [setPerPage, setPage, setIsInternallyLoading, handleSearch],
   )
-
-  const handleClear = useCallback(() => {
-    setPage(1)
-  }, [setPage])
 
   const handleForceRefetch = useCallback(() => {
     setIsInternallyLoading(true)
@@ -121,8 +121,8 @@ export const useChaptersList = () => {
     page,
     perPage,
     totalPages,
-    items: isInternallyLoading ? [] : items,
-    handleClear,
+    items,
+    isLoading: isInternallyLoading,
     handlePageChange,
     handlePerPageChange,
     handleForceRefetch,

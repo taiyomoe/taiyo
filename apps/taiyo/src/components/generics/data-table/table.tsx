@@ -41,7 +41,7 @@ const TableBody = forwardRef<
   <tbody
     ref={ref}
     className={cn(
-      "[&_tr:first-child_td:first-child]:rounded-tl-lg [&_tr:first-child_td:last-child]:rounded-tr-lg [&_tr:hover]:bg-default-100 [&_tr:hover]:bg-opacity-70 [&_tr:last-child_td:first-child]:rounded-bl-lg [&_tr:last-child_td:last-child]:rounded-br-lg [&_tr:nth-child(even)]:bg-default-100 [&_tr[data-state='selected']]:bg-default/60",
+      "[&_tr:first-child_td:first-child]:rounded-tl-lg [&_tr:first-child_td:last-child]:rounded-tr-lg [&_tr:last-child_td:first-child]:rounded-bl-lg [&_tr:last-child_td:last-child]:rounded-br-lg [&_tr:not([data-state='empty']):hover]:bg-default-100 [&_tr:not([data-state='empty']):hover]:bg-opacity-70 [&_tr:nth-child(even)]:bg-default-100 [&_tr[data-state='selected']]:bg-default/60",
       className,
     )}
     {...props}
@@ -71,7 +71,7 @@ const TableRow = forwardRef<
   <tr
     ref={ref}
     className={cn(
-      "group [&_td:nth-child(n+3)>div]:justify-center [&_th:not(:nth-child(1n+3))]:text-start", // [&_th:last-child]:!text-end [&_th:not(:nth-child(1n+3))]:!text-start
+      "group [&_td:nth-child(n+3)>div]:justify-center [&_th:last-child]:text-end [&_th:not(:nth-child(1n+3))]:text-start", // [&_th:not(:nth-child(1n+3))]:!text-start
       className,
     )}
     {...props}

@@ -1,14 +1,16 @@
-"use client"
-
 import {
   type ColumnDef,
   type VisibilityState,
   flexRender,
+  functionalUpdate,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table"
-
-import { TableColumnVisibilityDropdown } from "../../tables/table-column-visibility-dropdown"
+import { useMemo } from "react"
+import { TableBodyEmpty } from "~/components/tables/table-body-empty"
+import { TableBodyLoading } from "~/components/tables/table-body-loading"
+import { TableColumnVisibilityDropdown } from "~/components/tables/table-column-visibility-dropdown"
+import { TablePagination } from "~/components/tables/table-pagination"
 import {
   Table,
   TableBody,
@@ -22,21 +24,61 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
   initialVisibility?: Partial<Record<keyof TData, boolean>>
+  page: number
+  perPage: number
+  totalPages: number
+  isLoading: boolean
+  onPageChange: (newPage: number) => void
+  onPerPageChange: (newPerPage: number) => void
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
   initialVisibility,
+  page,
+  perPage,
+  totalPages,
+  isLoading,
+  onPageChange,
+  onPerPageChange,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
     columns,
+    pageCount: totalPages,
+    manualPagination: true,
     getCoreRowModel: getCoreRowModel(),
+    onPaginationChange: (updater) => {
+      const newValues = functionalUpdate(updater, {
+        pageIndex: page - 1,
+        pageSize: perPage,
+      })
+
+      if (newValues.pageIndex !== page - 1) {
+        onPageChange(newValues.pageIndex + 1)
+      }
+
+      if (newValues.pageSize !== perPage) {
+        onPerPageChange(newValues.pageSize)
+      }
+    },
     initialState: {
       columnVisibility: initialVisibility as VisibilityState,
     },
+    state: {
+      pagination: {
+        pageIndex: page - 1,
+        pageSize: perPage,
+      },
+    },
   })
+  const status = useMemo(() => {
+    if (isLoading) return "loading"
+    if (table.getRowModel().rows?.length === 0) return "empty"
+
+    return "data"
+  }, [isLoading, table.getRowModel])
 
   return (
     <div className="space-y-4">
@@ -62,9 +104,9 @@ export function DataTable<TData, TValue>({
             </TableRow>
           ))}
         </TableHeader>
-        <TableBody>
-          {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => (
+        {status === "data" && (
+          <TableBody>
+            {table.getRowModel().rows.map((row) => (
               <TableRow
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
@@ -75,16 +117,25 @@ export function DataTable<TData, TValue>({
                   </TableCell>
                 ))}
               </TableRow>
-            ))
-          ) : (
-            <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
-                No results.
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
+            ))}
+          </TableBody>
+        )}
+        {status === "empty" && <TableBodyEmpty colSpan={columns.length} />}
+        {status === "loading" && (
+          <TableBodyLoading perPage={perPage} colSpan={columns.length} />
+        )}
       </Table>
+      <div className="flex md:justify-end">
+        <TablePagination
+          page={table.getState().pagination.pageIndex + 1}
+          perPage={table.getState().pagination.pageSize}
+          totalPages={table.getPageCount()}
+          perPageChoices={[5, 10, 20, 50]}
+          onPageChange={(newPage) => table.setPageIndex(newPage - 1)}
+          onPerPageChange={table.setPageSize}
+          isLoading={false}
+        />
+      </div>
     </div>
   )
 }

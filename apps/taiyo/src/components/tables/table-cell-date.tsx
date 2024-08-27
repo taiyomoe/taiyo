@@ -5,4 +5,4 @@ type Props = {
 }
 
 export const TableCellDate = ({ date }: Props) =>
-  DateTime.fromJSDate(date).toFormat("dd/MM/yyyy HH:mm")
+  DateTime.fromJSDate(date).toFormat("dd/MM/yyyy 'às' HH:mm")

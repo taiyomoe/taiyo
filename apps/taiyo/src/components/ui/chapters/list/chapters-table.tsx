@@ -14,7 +14,20 @@ type Props = {
 export const ChaptersTableNew = ({ initialData }: Props) => {
   useHydrateAtoms([[chaptersListInitialDataAtom, initialData]])
 
-  const { items } = useChaptersList()
+  const {
+    items,
+    page,
+    perPage,
+    totalPages,
+    isLoading,
+    handlePageChange,
+    handlePerPageChange,
+  } = useChaptersList()
+
+  console.log("items", items)
+  console.log("page", page)
+  console.log("perPage", perPage)
+  console.log("totalPages", totalPages)
 
   return (
     <DataTable
@@ -27,6 +40,13 @@ export const ChaptersTableNew = ({ initialData }: Props) => {
         flag: false,
         deleter: false,
       }}
+      page={page}
+      perPage={perPage}
+      totalPages={totalPages}
+      isLoading={isLoading}
+      // isLoading
+      onPageChange={handlePageChange}
+      onPerPageChange={handlePerPageChange}
     />
   )
 }
