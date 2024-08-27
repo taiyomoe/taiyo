@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@faker-js/faker": "^8.4.1",
-    "@prisma/client": "^5.18.0",
+    "@prisma/client": "^5.19.0",
     "@t3-oss/env-core": "^0.11.1",
     "prisma-json-types-generator": "^3.0.4",
     "zod": "^3.23.8",
@@ -31,7 +31,7 @@
     "@taiyomoe/meilisearch": "workspace:*",
     "@taiyomoe/tsconfig": "workspace:*",
     "cross-env": "^7.0.3",
-    "prisma": "^5.18.0",
+    "prisma": "^5.19.0",
     "tsx": "^4.19.0",
     "typescript": "^5.5.4"
   }
