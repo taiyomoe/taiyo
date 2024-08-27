@@ -12,7 +12,7 @@ type Props<TData> = {
   table: Table<TData>
 }
 
-export const DataTableColumnVisibilityDropdown = <TData,>({
+export const TableColumnVisibilityDropdown = <TData,>({
   table,
 }: Props<TData>) => {
   const visibleColumns = table.getAllColumns().filter((c) => c.getIsVisible())

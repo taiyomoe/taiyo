@@ -8,7 +8,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table"
 
-import { DataTableColumnVisibilityDropdown } from "./data-table-column-visibility-dropdown"
+import { TableColumnVisibilityDropdown } from "../../tables/table-column-visibility-dropdown"
 import {
   Table,
   TableBody,
@@ -41,7 +41,7 @@ export function DataTable<TData, TValue>({
   return (
     <div className="space-y-4">
       <div className="flex justify-end">
-        <DataTableColumnVisibilityDropdown table={table} />
+        <TableColumnVisibilityDropdown table={table} />
       </div>
       <Table>
         <TableHeader>
