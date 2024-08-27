@@ -22,7 +22,7 @@
     "@taiyomoe/services": "workspace:*",
     "@taiyomoe/umami": "workspace:^",
     "@taiyomoe/utils": "workspace:*",
-    "@trpc/server": "11.0.0-rc.485",
+    "@trpc/server": "11.0.0-rc.487",
     "accesscontrol": "^2.2.1",
     "radash": "^12.1.0",
     "superjson": "^2.2.1"
