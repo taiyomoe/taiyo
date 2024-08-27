@@ -9,6 +9,7 @@ export const perPageSchema = (initial: number, choices: number[]) =>
   z.coerce
     .number()
     .optional()
+    .default(initial)
     .refine((x) => choices.includes(x ?? initial))
     .catch(initial)
 

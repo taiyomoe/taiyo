@@ -181,8 +181,8 @@ export const LANGUAGES_PT = {
   es: "Espanhol",
   es_la: "Espanhol latino-americano",
 
-  pt_br: "Português brasileiro",
-  pt_pt: "Português europeu",
+  pt_br: "Português",
+  pt_pt: "Português",
 
   ja: "Japonês",
   ja_ro: "Japonês (romanizado)",

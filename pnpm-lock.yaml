@@ -455,6 +455,9 @@ importers:
       '@t3-oss/env-core':
         specifier: ^0.11.1
         version: 0.11.1(typescript@5.5.4)(zod@3.23.8)
+      luxon:
+        specifier: ^3.5.0
+        version: 3.5.0
       meilisearch:
         specifier: ^0.41.0
         version: 0.41.0(encoding@0.1.13)
@@ -576,6 +579,9 @@ importers:
       accesscontrol:
         specifier: ^2.2.1
         version: 2.2.1
+      luxon:
+        specifier: ^3.5.0
+        version: 3.5.0
       radash:
         specifier: ^12.1.0
         version: 12.1.0

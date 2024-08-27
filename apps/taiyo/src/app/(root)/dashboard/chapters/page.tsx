@@ -4,6 +4,7 @@ import {
   getChaptersListSchema,
 } from "@taiyomoe/schemas"
 import { parseAsBoolean } from "nuqs/server"
+import { ChaptersTable } from "~/components/ui/chapters/list/chapters-table"
 import { api } from "~/trpc/server"
 import {
   contentRatingsParser,
@@ -37,14 +38,5 @@ export default async function Page({ searchParams }: Props) {
   ])
   const initialData = await api.chapters.getList(params)
 
-  return (
-    <div>
-      <p>{JSON.stringify(params)}</p>
-      <br />
-      <br />
-      <br />
-      <br />
-      <p>{JSON.stringify(initialData)}</p>
-    </div>
-  )
+  return <ChaptersTable initialData={initialData} />
 }
