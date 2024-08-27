@@ -1,6 +1,7 @@
 import type { PrismaClient } from "@prisma/client"
 import type { ChaptersIndexItem } from "@taiyomoe/types"
 import { TRPCError } from "@trpc/server"
+import { DateTime } from "luxon"
 import { omit } from "radash"
 
 export const getChapterIndexItem = async (
@@ -21,7 +22,12 @@ export const getChapterIndexItem = async (
   }
 
   return {
-    ...omit(result, ["scans"]),
+    ...omit(result, ["createdAt", "updatedAt", "deletedAt", "scans"]),
+    createdAt: DateTime.fromJSDate(result.createdAt).toSeconds(),
+    updatedAt: DateTime.fromJSDate(result.updatedAt).toSeconds(),
+    deletedAt: result.deletedAt
+      ? DateTime.fromJSDate(result.deletedAt).toSeconds()
+      : null,
     scanIds: result.scans.map((s) => s.id),
   }
 }

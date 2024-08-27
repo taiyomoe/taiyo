@@ -16,6 +16,12 @@ export type ScansIndexItem = {
   name: string
 }
 
-export type ChaptersIndexItem = Omit<MediaChapter, "pages"> & {
+export type ChaptersIndexItem = Omit<
+  MediaChapter,
+  "createdAt" | "updatedAt" | "deletedAt" | "pages"
+> & {
+  createdAt: number
+  updatedAt: number
+  deletedAt: number | null
   scanIds: string[]
 }
