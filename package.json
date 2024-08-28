@@ -4,7 +4,7 @@
   "engines": {
     "node": "20.17.0"
   },
-  "packageManager": "pnpm@9.8.0",
+  "packageManager": "pnpm@9.9.0",
   "scripts": {
     "build": "turbo build",
     "dev": "infisical run -- turbo dev --parallel",
@@ -17,9 +17,9 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^1.8.3",
-    "@turbo/gen": "^2.0.14",
+    "@turbo/gen": "^2.1.0",
     "@types/global-types": "workspace:*",
-    "turbo": "^2.0.14",
+    "turbo": "^2.1.0",
     "typescript": "^5.5.4"
   }
 }
