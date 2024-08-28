@@ -91,8 +91,6 @@ export const useChaptersList = () => {
 
   const handlePageChange = useCallback(
     (newPage: number) => {
-      console.log("received new page", newPage)
-
       setPage(newPage)
       setIsInternallyLoading(true)
       handleSearch()
@@ -102,8 +100,6 @@ export const useChaptersList = () => {
 
   const handlePerPageChange = useCallback(
     (newPerPage: number) => {
-      console.log("received new perPage", newPerPage)
-
       setPerPage(newPerPage)
       setPage(1)
       setIsInternallyLoading(true)

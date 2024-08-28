@@ -25,11 +25,6 @@ export const ChaptersTableNew = ({ initialData }: Props) => {
     handlePerPageChange,
   } = useChaptersList()
 
-  console.log("items", items)
-  console.log("page", page)
-  console.log("perPage", perPage)
-  console.log("totalPages", totalPages)
-
   return (
     <DataTable
       columns={columns}
