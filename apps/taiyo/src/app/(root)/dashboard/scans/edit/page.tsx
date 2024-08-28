@@ -1,10 +1,7 @@
-import { ScansSearchAutocomplete } from "~/components/ui/scans-search/scans-search-autocomplete"
+import { ScansAutocomplete } from "~/components/ui/autocompletes/scans-autocomplete"
 
 export default function Page() {
   return (
-    <ScansSearchAutocomplete
-      href="edit/"
-      itemProps={{ hideSelectedIcon: true }}
-    />
+    <ScansAutocomplete href="edit/" itemProps={{ hideSelectedIcon: true }} />
   )
 }

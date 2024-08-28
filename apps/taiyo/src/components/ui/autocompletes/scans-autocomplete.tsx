@@ -19,7 +19,7 @@ type Props = {
   itemProps?: Omit<AutocompleteItemProps<ScansIndexItem>, "key">
 } & Omit<AutocompleteProps<ScansIndexItem>, "children" | "onSelectionChange">
 
-const ScansSearchAutocompleteComponent = (props: Props) => {
+const ScansAutocompleteComponent = (props: Props) => {
   const { href, onSelectionChange, itemProps, ...rest } = props
   const { query, refine } = useSearchBox()
   const { hits } = useHits<ScansIndexItem>()
@@ -65,11 +65,11 @@ const ScansSearchAutocompleteComponent = (props: Props) => {
   )
 }
 
-const ScansSearchAutocompleteWrapper = (props: Props) => (
+const ScansAutocompleteWrapper = (props: Props) => (
   <InstantSearch searchClient={meiliClient} indexName="scans">
-    <ScansSearchAutocompleteComponent {...props} />
+    <ScansAutocompleteComponent {...props} />
   </InstantSearch>
 )
 
-export const ScansSearchAutocomplete = ScansSearchAutocompleteWrapper
-export type ScansSearchAutocompleteProps = Props
+export const ScansAutocomplete = ScansAutocompleteWrapper
+export type ScansAutocompleteProps = Props
