@@ -26,6 +26,7 @@ interface DataTableProps<TData, TValue> {
   initialVisibility?: Partial<Record<keyof TData, boolean>>
   page: number
   perPage: number
+  perPageChoices: number[]
   totalPages: number
   isLoading: boolean
   onPageChange: (newPage: number) => void
@@ -38,6 +39,7 @@ export function DataTable<TData, TValue>({
   initialVisibility,
   page,
   perPage,
+  perPageChoices,
   totalPages,
   isLoading,
   onPageChange,
@@ -48,6 +50,7 @@ export function DataTable<TData, TValue>({
     columns,
     pageCount: totalPages,
     manualPagination: true,
+    manualFiltering: true,
     getCoreRowModel: getCoreRowModel(),
     onPaginationChange: (updater) => {
       const newValues = functionalUpdate(updater, {
@@ -131,7 +134,7 @@ export function DataTable<TData, TValue>({
           page={table.getState().pagination.pageIndex + 1}
           perPage={table.getState().pagination.pageSize}
           totalPages={table.getPageCount()}
-          perPageChoices={[5, 10, 20, 50]}
+          perPageChoices={perPageChoices}
           onPageChange={(newPage) => table.setPageIndex(newPage - 1)}
           onPerPageChange={table.setPageSize}
           isLoading={false}

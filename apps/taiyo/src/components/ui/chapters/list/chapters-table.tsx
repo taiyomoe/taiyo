@@ -1,5 +1,6 @@
 "use client"
 
+import { CHAPTERS_LIST_PER_PAGE_CHOICES } from "@taiyomoe/constants"
 import type { ChaptersListItem } from "@taiyomoe/types"
 import { useHydrateAtoms } from "jotai/utils"
 import { chaptersListInitialDataAtom } from "~/atoms/chaptersList.atoms"
@@ -42,9 +43,9 @@ export const ChaptersTableNew = ({ initialData }: Props) => {
       }}
       page={page}
       perPage={perPage}
+      perPageChoices={CHAPTERS_LIST_PER_PAGE_CHOICES}
       totalPages={totalPages}
       isLoading={isLoading}
-      // isLoading
       onPageChange={handlePageChange}
       onPerPageChange={handlePerPageChange}
     />
