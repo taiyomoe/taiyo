@@ -4,7 +4,7 @@ import {
   getChaptersListSchema,
 } from "@taiyomoe/schemas"
 import { parseAsBoolean } from "nuqs/server"
-import { ChaptersTableNew } from "~/components/ui/chapters/list/chapters-table"
+import { ChaptersTable } from "~/components/ui/chapters/list/chapters-table"
 import { api } from "~/trpc/server"
 import {
   contentRatingsParser,
@@ -41,7 +41,7 @@ export default async function Page({ searchParams }: Props) {
   return (
     <div className="flex flex-col gap-12">
       <p className="font-semibold text-4xl">Capítulos</p>
-      <ChaptersTableNew initialData={initialData} />
+      <ChaptersTable initialData={initialData} />
     </div>
   )
 }

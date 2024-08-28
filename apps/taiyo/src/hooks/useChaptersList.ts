@@ -1,4 +1,6 @@
 import { DEFAULT_CHAPTERS_LIST_PER_PAGE } from "@taiyomoe/constants"
+import type { ContentRating, Flag, Languages } from "@taiyomoe/db"
+import type { ChaptersListFilters } from "@taiyomoe/types"
 import { useAtom, useAtomValue } from "jotai"
 import { parseAsBoolean, useQueryState } from "nuqs"
 import { useCallback } from "react"
@@ -77,7 +79,29 @@ export const useChaptersList = () => {
     data: { chapters: items, totalPages },
     refetch,
   } = api.chapters.getList.useQuery(
-    { page, perPage },
+    {
+      numbers,
+      notNumbers,
+      volumes,
+      notVolumes,
+      languages,
+      notLanguages,
+      contentRatings,
+      notContentRatings,
+      flags,
+      notFlags,
+      uploaderIds,
+      notUploaderIds,
+      mediaIds,
+      notMediaIds,
+      scanIds,
+      notScanIds,
+      deleterIds,
+      notDeleterIds,
+      includeDeleted,
+      page,
+      perPage,
+    },
     { initialData: initialItems, refetchOnMount: false, enabled: false },
   )
 
@@ -101,17 +125,83 @@ export const useChaptersList = () => {
   const handlePerPageChange = useCallback(
     (newPerPage: number) => {
       setPerPage(newPerPage)
-      setPage(1)
+      setPage(null)
       setIsInternallyLoading(true)
       handleSearch()
     },
     [setPerPage, setPage, setIsInternallyLoading, handleSearch],
   )
 
-  const handleForceRefetch = useCallback(() => {
-    setIsInternallyLoading(true)
-    handleSearch()
-  }, [setIsInternallyLoading, handleSearch])
+  const handleFilterChange =
+    <TFilter extends keyof ChaptersListFilters>(key: TFilter) =>
+    (newValue: ChaptersListFilters[TFilter]) => {
+      console.log("Filter changed", key, newValue)
+
+      setPage(null)
+      setIsInternallyLoading(true)
+
+      switch (key) {
+        case "numbers":
+          setNumbers(newValue as number[])
+          break
+        case "notNumbers":
+          setNotNumbers(newValue as number[])
+          break
+        case "volumes":
+          setVolumes(newValue as number[])
+          break
+        case "notVolumes":
+          setNotVolumes(newValue as number[])
+          break
+        case "languages":
+          setLanguages(newValue as Languages[])
+          break
+        case "notLanguages":
+          setNotLanguages(newValue as Languages[])
+          break
+        case "contentRatings":
+          setContentRatings(newValue as ContentRating[])
+          break
+        case "notContentRatings":
+          setNotContentRatings(newValue as ContentRating[])
+          break
+        case "flags":
+          setFlags(newValue as Flag[])
+          break
+        case "notFlags":
+          setNotFlags(newValue as Flag[])
+          break
+        case "uploaderIds":
+          setUploaderIds(newValue as string[])
+          break
+        case "notUploaderIds":
+          setNotUploaderIds(newValue as string[])
+          break
+        case "mediaIds":
+          setMediaIds(newValue as string[])
+          break
+        case "notMediaIds":
+          setNotMediaIds(newValue as string[])
+          break
+        case "scanIds":
+          setScanIds(newValue as string[])
+          break
+        case "notScanIds":
+          setNotScanIds(newValue as string[])
+          break
+        case "deleterIds":
+          setDeleterIds(newValue as string[])
+          break
+        case "notDeleterIds":
+          setNotDeleterIds(newValue as string[])
+          break
+        case "includeDeleted":
+          setIncludeDeleted(newValue as boolean)
+          break
+      }
+
+      handleSearch()
+    }
 
   return {
     numbers,
@@ -140,25 +230,6 @@ export const useChaptersList = () => {
     isLoading: isInternallyLoading,
     handlePageChange,
     handlePerPageChange,
-    handleForceRefetch,
-    setNumbers,
-    setNotNumbers,
-    setVolumes,
-    setNotVolumes,
-    setLanguages,
-    setNotLanguages,
-    setContentRatings,
-    setNotContentRatings,
-    setFlags,
-    setNotFlags,
-    setUploaderIds,
-    setNotUploaderIds,
-    setMediaIds,
-    setNotMediaIds,
-    setScanIds,
-    setNotScanIds,
-    setDeleterIds,
-    setNotDeleterIds,
-    setIncludeDeleted,
+    handleFilterChange,
   }
 }

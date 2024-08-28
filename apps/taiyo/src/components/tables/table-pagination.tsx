@@ -19,24 +19,27 @@ export const TablePagination = ({
   isLoading,
   onPageChange,
   onPerPageChange,
-}: Props) => (
-  <div className="flex gap-4">
-    <PerPageDropdown
-      perPage={perPage}
-      choices={perPageChoices}
-      isLoading={isLoading}
-      renderOption={(o) => `${o} capítulos`}
-      onChange={onPerPageChange}
-    />
-    <Pagination
-      page={page}
-      total={totalPages}
-      onChange={onPageChange}
-      color="primary"
-      showControls
-      isDisabled={isLoading || totalPages === 1}
-      siblings={1}
-      isCompact
-    />
-  </div>
-)
+}: Props) => {
+  console.log("page", page, totalPages)
+
+  return (
+    <div className="flex gap-4">
+      <PerPageDropdown
+        perPage={perPage}
+        choices={perPageChoices}
+        isLoading={isLoading}
+        renderOption={(o) => `${o} capítulos`}
+        onChange={onPerPageChange}
+      />
+      <Pagination
+        page={page}
+        total={totalPages}
+        onChange={onPageChange}
+        color="primary"
+        isDisabled={isLoading || totalPages === 1}
+        showControls
+        isCompact
+      />
+    </div>
+  )
+}

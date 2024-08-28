@@ -79,7 +79,7 @@ export const getChaptersListSchema = z.object({
   volumes: intsSchema,
   notVolumes: intsSchema,
   languages: LanguagesSchema.array().optional().default([]),
-  notLanguages: LanguagesSchema.array().array().optional().default([]),
+  notLanguages: LanguagesSchema.array().optional().default([]),
   contentRatings: ContentRatingSchema.array().optional().default([]),
   notContentRatings: ContentRatingSchema.array().optional().default([]),
   flags: FlagSchema.array().optional().default([]),

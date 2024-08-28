@@ -7,12 +7,13 @@ import { chaptersListInitialDataAtom } from "~/atoms/chaptersList.atoms"
 import { DataTable } from "~/components/generics/data-table/data-table"
 import { useChaptersList } from "~/hooks/useChaptersList"
 import { columns } from "./chapters-table-columns"
+import { ChaptersTableFilters } from "./chapters-table-filters"
 
 type Props = {
   initialData: { chapters: ChaptersListItem[]; totalPages: number }
 }
 
-export const ChaptersTableNew = ({ initialData }: Props) => {
+export const ChaptersTable = ({ initialData }: Props) => {
   useHydrateAtoms([[chaptersListInitialDataAtom, initialData]])
 
   const {
@@ -29,6 +30,7 @@ export const ChaptersTableNew = ({ initialData }: Props) => {
     <DataTable
       columns={columns}
       data={items}
+      filters={<ChaptersTableFilters />}
       initialVisibility={{
         id: false,
         updatedAt: false,

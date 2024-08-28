@@ -6,7 +6,7 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table"
-import { useMemo } from "react"
+import { type ReactNode, useMemo } from "react"
 import { TableBodyEmpty } from "~/components/tables/table-body-empty"
 import { TableBodyLoading } from "~/components/tables/table-body-loading"
 import { TableColumnVisibilityDropdown } from "~/components/tables/table-column-visibility-dropdown"
@@ -23,7 +23,8 @@ import {
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
-  initialVisibility?: Partial<Record<keyof TData, boolean>>
+  filters: ReactNode
+  initialVisibility: Partial<Record<keyof TData, boolean>>
   page: number
   perPage: number
   perPageChoices: number[]
@@ -36,6 +37,7 @@ interface DataTableProps<TData, TValue> {
 export function DataTable<TData, TValue>({
   columns,
   data,
+  filters,
   initialVisibility,
   page,
   perPage,
@@ -84,8 +86,11 @@ export function DataTable<TData, TValue>({
     return "data"
   }, [isLoading, table.getRowModel])
 
+  console.log("page count", totalPages, table.getPageCount())
+
   return (
     <div className="space-y-4">
+      <div>{filters}</div>
       <div className="flex justify-end">
         <TableColumnVisibilityDropdown table={table} />
       </div>

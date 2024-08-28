@@ -386,6 +386,10 @@ export const chaptersRouter = createTRPCRouter({
         where: { id: { in: uniqueScans } },
       })
 
+      console.log(
+        buildFilter(omit(input, ["includeDeleted", "page", "perPage"])),
+      )
+
       return {
         chapters: searched.hits.map((h) => ({
           ...omit(h, [
