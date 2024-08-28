@@ -41,7 +41,7 @@ const TableBody = forwardRef<
   <tbody
     ref={ref}
     className={cn(
-      "[&_tr:first-child_td:first-child]:rounded-tl-lg [&_tr:first-child_td:last-child]:rounded-tr-lg [&_tr:last-child_td:first-child]:rounded-bl-lg [&_tr:last-child_td:last-child]:rounded-br-lg [&_tr:not([data-state='empty']):hover]:bg-default-100 [&_tr:not([data-state='empty']):hover]:bg-opacity-70 [&_tr:nth-child(even)]:bg-default-100 [&_tr[data-state='selected']]:bg-default/60",
+      "[&_tr[data-state='selected']]:!bg-default/60 [&_tr:first-child_td:first-child]:rounded-tl-lg [&_tr:first-child_td:last-child]:rounded-tr-lg [&_tr:last-child_td:first-child]:rounded-bl-lg [&_tr:last-child_td:last-child]:rounded-br-lg [&_tr:not([data-state='empty']):hover]:bg-default-100 [&_tr:not([data-state='empty']):hover]:bg-opacity-70 [&_tr:nth-child(even)]:bg-default-100",
       className,
     )}
     {...props}
