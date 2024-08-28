@@ -56,6 +56,7 @@ export function DataTable<TData, TValue>({
       })
 
       if (newValues.pageIndex !== page - 1) {
+        table.resetRowSelection()
         onPageChange(newValues.pageIndex + 1)
       }
 
