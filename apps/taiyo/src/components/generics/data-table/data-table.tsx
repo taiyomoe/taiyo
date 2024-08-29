@@ -90,7 +90,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="space-y-4">
-      <div>{filters}</div>
+      {filters}
       <div className="flex justify-end">
         <TableColumnVisibilityDropdown table={table} />
       </div>
