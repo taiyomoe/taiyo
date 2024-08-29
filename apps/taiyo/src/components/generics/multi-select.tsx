@@ -27,7 +27,7 @@ export type MultiSelectProps<T extends SelectItem = SelectItem> = Omit<
 >
 
 const SelectContainer = <T,>(props: ContainerProps<T, true>) => (
-  <components.SelectContainer {...props} className="min-w-52" />
+  <components.SelectContainer {...props} className="w-full min-w-52" />
 )
 
 const Control = <T,>(props: ControlProps<T, true>) => (
@@ -145,6 +145,8 @@ export const MultiSelect = <T extends SelectItem>(
         MenuList,
         Option,
       }}
+      menuPortalTarget={document.body}
+      styles={{ menuPortal: (base) => ({ ...base, zIndex: 10000 }) }}
       {...props}
     />
   )
@@ -175,6 +177,8 @@ export const MultiSelectAsync = <T extends SelectItem>(
         MenuList,
         Option,
       }}
+      menuPortalTarget={document.body}
+      styles={{ menuPortal: (base) => ({ ...base, zIndex: 10000 }) }}
       {...props}
     />
   )
