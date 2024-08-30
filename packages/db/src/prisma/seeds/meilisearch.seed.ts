@@ -40,6 +40,7 @@ const execute = async () => {
     "number",
     "volume",
     "language",
+    "contentRating",
     "flag",
     "scanIds",
     "uploaderId",
