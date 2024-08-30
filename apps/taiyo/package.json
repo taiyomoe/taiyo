@@ -34,7 +34,7 @@
     "@trpc/client": "11.0.0-rc.490",
     "@trpc/react-query": "11.0.0-rc.490",
     "@trpc/server": "11.0.0-rc.490",
-    "apexcharts": "^3.52.0",
+    "apexcharts": "^3.53.0",
     "cmdk": "^1.0.0",
     "embla-carousel-autoplay": "^8.2.0",
     "embla-carousel-react": "^8.2.0",
