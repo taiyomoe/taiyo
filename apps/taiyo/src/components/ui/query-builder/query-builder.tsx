@@ -42,6 +42,7 @@ export const QueryBuilder = <
       }}
       getOperators={getOperators}
       showCombinatorsBetweenRules
+      resetOnOperatorChange
       {...props}
     />
   )

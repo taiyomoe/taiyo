@@ -19,21 +19,6 @@ const getEnum = (name: string) => {
 }
 
 export const QueryBuilderValueEditor = (props: ValueEditorProps) => {
-  // if (props.fieldData.datatype === "date") {
-  //   return (
-  //     <div>
-  //       <DatePicker
-  //         dateFormat={dateFormat}
-  //         selected={
-  //           !props.value ? null : parse(props.value, dateFormat, new Date())
-  //         }
-  //         onChange={(d: Date) =>
-  //           props.handleOnChange(d ? format(d, dateFormat) : null)
-  //         }
-  //       />
-  //     </div>
-  //   )
-  // }
   if (props.fieldData.datatype === "number") {
     return (
       <Input className="min-w-[300px]" onValueChange={props.handleOnChange} />
