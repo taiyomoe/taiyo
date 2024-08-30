@@ -6,9 +6,7 @@ import {
 } from "~/components/generics/multi-select"
 import { meiliClient } from "~/meiliClient"
 
-type Props = { onChange: MultiSelectProps["onChange"] } & MultiSelectProps
-
-export const ScansMultiAutocomplete = (props: Props) => {
+export const ScansMultiAutocomplete = (props: MultiSelectProps) => {
   const loadOptions = async (inputValue: string) => {
     if (!inputValue) return []
 
