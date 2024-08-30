@@ -32,8 +32,6 @@ export const QueryBuilderValueSelector = (props: ValueSelectorProps) => {
     props.handleOnChange(Array.from(keys).at(0))
   }
 
-  console.log("value selector props", props)
-
   return (
     <Select
       items={props.options as SelectItemType[]}

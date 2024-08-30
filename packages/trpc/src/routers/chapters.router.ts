@@ -359,7 +359,7 @@ export const chaptersRouter = createTRPCRouter({
     .input(getChaptersListSchema)
     .query(async ({ ctx, input }) => {
       const searched = await ctx.indexes.chapters.search(null, {
-        filter: buildFilter(omit(input, ["includeDeleted", "page", "perPage"])),
+        filter: buildFilter(input.query),
         hitsPerPage: input.perPage,
         page: input.page,
       })
@@ -385,10 +385,6 @@ export const chaptersRouter = createTRPCRouter({
         select: { id: true, name: true },
         where: { id: { in: uniqueScans } },
       })
-
-      console.log(
-        buildFilter(omit(input, ["includeDeleted", "page", "perPage"])),
-      )
 
       return {
         chapters: searched.hits.map((h) => ({

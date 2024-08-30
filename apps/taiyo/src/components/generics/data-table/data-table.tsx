@@ -86,8 +86,6 @@ export function DataTable<TData, TValue>({
     return "data"
   }, [isLoading, table.getRowModel])
 
-  console.log("page count", totalPages, table.getPageCount())
-
   return (
     <div className="space-y-4">
       {filters}

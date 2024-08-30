@@ -33,7 +33,5 @@ export const QueryBuilderValueEditor = (props: ValueEditorProps) => {
     )
   }
 
-  console.log("value editor props", props)
-
   return <ValueEditor {...props} />
 }

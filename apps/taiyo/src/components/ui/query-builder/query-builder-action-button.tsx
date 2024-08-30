@@ -33,7 +33,5 @@ export const QueryBuilderActionButton = (props: ActionProps) => {
       )
   }
 
-  console.log("props", props)
-
   return <div>azerty</div>
 }

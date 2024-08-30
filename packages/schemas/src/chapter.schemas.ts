@@ -8,12 +8,7 @@ import {
 } from "@taiyomoe/constants"
 import { z } from "zod"
 
-import {
-  intsSchema,
-  pageSchema,
-  perPageSchema,
-  uuidsSchema,
-} from "./common.schemas"
+import { pageSchema, perPageSchema } from "./common.schemas"
 import { ContentRatingSchema, FlagSchema, LanguagesSchema } from "./prisma"
 
 export const updateChapterSchema = z.object({
@@ -74,25 +69,7 @@ export const getLatestChaptersGroupedByUserSchema = z.object({
 })
 
 export const getChaptersListSchema = z.object({
-  numbers: intsSchema,
-  notNumbers: intsSchema,
-  volumes: intsSchema,
-  notVolumes: intsSchema,
-  languages: LanguagesSchema.array().optional().default([]),
-  notLanguages: LanguagesSchema.array().optional().default([]),
-  contentRatings: ContentRatingSchema.array().optional().default([]),
-  notContentRatings: ContentRatingSchema.array().optional().default([]),
-  flags: FlagSchema.array().optional().default([]),
-  notFlags: FlagSchema.array().optional().default([]),
-  uploaderIds: uuidsSchema,
-  notUploaderIds: uuidsSchema,
-  mediaIds: uuidsSchema,
-  notMediaIds: uuidsSchema,
-  scanIds: uuidsSchema,
-  notScanIds: uuidsSchema,
-  deleterIds: uuidsSchema,
-  notDeleterIds: uuidsSchema,
-  includeDeleted: z.boolean().optional().default(false),
+  query: z.string().optional().default(""),
   page: pageSchema,
   perPage: perPageSchema(
     DEFAULT_CHAPTERS_LIST_PER_PAGE,

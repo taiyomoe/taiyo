@@ -48,8 +48,6 @@ export const QueryBuilder = <
 }
 
 const getOperators = (_: string, { fieldData }: { fieldData: Field }) => {
-  console.log("get operators", fieldData.datatype)
-
   switch (fieldData.datatype) {
     case "number":
       return [
@@ -67,7 +65,7 @@ const getOperators = (_: string, { fieldData }: { fieldData: Field }) => {
     case "scan":
       return [
         { name: "in", label: "in" },
-        { name: "not in", label: "not in" },
+        { name: "notIn", label: "not in" },
       ]
   }
 

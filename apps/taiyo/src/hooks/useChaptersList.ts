@@ -2,7 +2,7 @@ import { DEFAULT_CHAPTERS_LIST_PER_PAGE } from "@taiyomoe/constants"
 import { useAtom, useAtomValue } from "jotai"
 import { parseAsString, useQueryState } from "nuqs"
 import { useCallback } from "react"
-import { type RuleGroupType, formatQuery } from "react-querybuilder"
+import type { RuleGroupType } from "react-querybuilder"
 import { useDebounceCallback } from "usehooks-ts"
 import {
   chaptersListInitialDataAtom,
@@ -10,6 +10,7 @@ import {
 } from "~/atoms/chaptersList.atoms"
 import { api } from "~/trpc/react"
 import { pageParser, perPageParser } from "~/utils/nuqsParsers"
+import { RQBUtils } from "~/utils/rqb.utils"
 
 export const useChaptersList = () => {
   const initialItems = useAtomValue(chaptersListInitialDataAtom)
@@ -28,10 +29,7 @@ export const useChaptersList = () => {
     data: { chapters: items, totalPages },
     refetch,
   } = api.chapters.getList.useQuery(
-    {
-      page,
-      perPage,
-    },
+    { query, page, perPage },
     { initialData: initialItems, refetchOnMount: false, enabled: false },
   )
 
@@ -63,15 +61,18 @@ export const useChaptersList = () => {
   )
 
   const handleQueryChange = (newQuery: RuleGroupType) => {
-    setQuery(formatQuery(newQuery, { format: "jsonata", parseNumbers: true }))
-    setPage(null)
-    setIsInternallyLoading(true)
-    handleSearch()
+    const formatted = RQBUtils.formatQuery(newQuery)
 
-    console.log(
-      "formatted",
-      formatQuery(newQuery, { format: "jsonata", parseNumbers: true }),
-    )
+    if (formatted === null && query === "") {
+      return
+    }
+
+    if (query !== formatted) {
+      setQuery(formatted)
+      setPage(null)
+      setIsInternallyLoading(true)
+      handleSearch()
+    }
   }
 
   return {
