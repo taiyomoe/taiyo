@@ -25,8 +25,13 @@ const queryBuilderValueSelector = tv({
   },
 })
 
+const getType = (input?: string) =>
+  input && input in queryBuilderValueSelector.variants.type
+    ? (input as keyof typeof queryBuilderValueSelector.variants.type)
+    : undefined
+
 export const QueryBuilderValueSelector = (props: ValueSelectorProps) => {
-  const slots = queryBuilderValueSelector({ type: props.testID })
+  const slots = queryBuilderValueSelector({ type: getType(props.testID) })
 
   const handleSelectionChange = (keys: Selection) => {
     props.handleOnChange(Array.from(keys).at(0))
