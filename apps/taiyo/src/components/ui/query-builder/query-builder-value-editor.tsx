@@ -3,6 +3,7 @@ import { ContentRating, Flag, Languages } from "@taiyomoe/db"
 import { ValueEditor, type ValueEditorProps } from "react-querybuilder"
 import { MultiSelect } from "~/components/generics/multi-select"
 import { MediasAutocomplete } from "~/components/ui/autocompletes/medias-autocomplete"
+import { UsersAutocomplete } from "~/components/ui/autocompletes/users/users-autocomplete"
 import { MediasMultiAutocomplete } from "~/components/ui/multi-autocompletes/medias-multi-autocomplete"
 import { ScansMultiAutocomplete } from "~/components/ui/multi-autocompletes/scans-multi-autocomplete"
 import { SelectUtils } from "~/lib/utils/select.utils"
@@ -41,6 +42,15 @@ export const QueryBuilderValueEditor = (props: ValueEditorProps) => {
       <MediasAutocomplete
         classNames={{ base: "min-w-[300px]" }}
         onSelectionChange={(media) => props.handleOnChange(media.id)}
+      />
+    )
+  }
+
+  if (props.fieldData.datatype === "user") {
+    return (
+      <UsersAutocomplete
+        classNames={{ base: "min-w-[300px]" }}
+        onSelectionChange={(user) => props.handleOnChange(user?.id ?? "")}
       />
     )
   }
