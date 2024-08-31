@@ -9,6 +9,7 @@ import { TableCellLanguage } from "~/components/tables/table-cell-language"
 import { TableCellMedia } from "~/components/tables/table-cell-media"
 import { TableCellScans } from "~/components/tables/table-cell-scans"
 import { TableCellUser } from "~/components/tables/table-cell-user"
+import { ChaptersTableSingleActions } from "~/components/ui/chapters/list/chapters-table-single-actions"
 
 export const columns: ColumnDef<ChaptersListItem>[] = [
   selectableColumn(),
@@ -74,5 +75,7 @@ export const columns: ColumnDef<ChaptersListItem>[] = [
       <TableCellUser user={getValue<ChaptersListItem["deleter"]>()} />
     ),
   },
-  actionsColumn(),
+  actionsColumn(({ row }) => (
+    <ChaptersTableSingleActions chapter={row.original} />
+  )),
 ]

@@ -1,5 +1,9 @@
 import { Checkbox } from "@nextui-org/checkbox"
-import type { ColumnDef } from "@tanstack/react-table"
+import type {
+  CellContext,
+  ColumnDef,
+  ColumnDefTemplate,
+} from "@tanstack/react-table"
 
 export const selectableColumn = <TData,>(): ColumnDef<TData> => ({
   id: "select",
@@ -22,8 +26,11 @@ export const selectableColumn = <TData,>(): ColumnDef<TData> => ({
   enableHiding: false,
 })
 
-export const actionsColumn = <TData,>(): ColumnDef<TData> => ({
+export const actionsColumn = <TData,>(
+  cell: ColumnDefTemplate<CellContext<TData, unknown>>,
+): ColumnDef<TData> => ({
   accessorKey: "actions",
   header: "Ações",
   enableHiding: false,
+  cell,
 })
