@@ -1,10 +1,5 @@
-import {
-  Select,
-  SelectItem,
-  type SelectProps,
-  type Selection,
-  type SharedSelection,
-} from "@nextui-org/react"
+import type { Selection, SharedSelection } from "@nextui-org/react"
+import { Select, SelectItem, type SelectProps } from "@nextui-org/select"
 import { useRef, useState } from "react"
 import { SelectUtils } from "~/lib/utils/select.utils"
 

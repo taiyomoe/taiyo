@@ -5,7 +5,7 @@ import {
   DropdownMenu,
   DropdownTrigger,
 } from "@nextui-org/dropdown"
-import { useDisclosure } from "@nextui-org/react"
+import { useDisclosure } from "@nextui-org/modal"
 import type { ScansListItem } from "@taiyomoe/types"
 import {
   CopyIcon,

@@ -1,4 +1,4 @@
-import { ScrollShadow } from "@nextui-org/react"
+import { ScrollShadow } from "@nextui-org/scroll-shadow"
 import { useSession } from "@taiyomoe/auth/client"
 import type { MediasIndexItem } from "@taiyomoe/types"
 import { Command } from "cmdk"

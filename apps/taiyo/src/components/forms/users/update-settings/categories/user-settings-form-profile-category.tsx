@@ -1,5 +1,5 @@
 import { now } from "@internationalized/date"
-import { Divider } from "@nextui-org/react"
+import { Divider } from "@nextui-org/divider"
 import { Countries, Genders } from "@taiyomoe/db"
 import { COUNTRIES_PT, GENDERS_PT } from "@taiyomoe/utils/i18n"
 import { UserSettingsFormFieldBuilder } from "~/components/forms/users/update-settings/categories/user-settings-form-field-builder"

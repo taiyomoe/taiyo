@@ -1,4 +1,5 @@
 import { Button } from "@nextui-org/button"
+import { Input } from "@nextui-org/input"
 import {
   Modal,
   ModalBody,
@@ -6,7 +7,6 @@ import {
   ModalFooter,
   ModalHeader,
 } from "@nextui-org/modal"
-import { Input } from "@nextui-org/react"
 import type { ScansListItem } from "@taiyomoe/types"
 import { useSetAtom } from "jotai"
 import { useMemo, useState } from "react"

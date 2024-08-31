@@ -1,4 +1,4 @@
-import { Button } from "@nextui-org/react"
+import { Button } from "@nextui-org/button"
 import { ChevronDownIcon } from "lucide-react"
 import { omit } from "radash"
 import Select, {

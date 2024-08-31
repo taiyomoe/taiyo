@@ -1,4 +1,4 @@
-import { AutocompleteItem } from "@nextui-org/react"
+import { AutocompleteItem } from "@nextui-org/autocomplete"
 import { useSession } from "@taiyomoe/auth/client"
 import { MediaUtils } from "@taiyomoe/utils"
 import {

@@ -1,4 +1,5 @@
-import { Select, SelectItem, type Selection, tv } from "@nextui-org/react"
+import { type Selection, tv } from "@nextui-org/react"
+import { Select, SelectItem } from "@nextui-org/select"
 import type { ValueSelectorProps } from "react-querybuilder"
 import type { SelectItem as SelectItemType } from "~/lib/types"
 

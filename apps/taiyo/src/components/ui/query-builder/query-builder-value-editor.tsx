@@ -1,4 +1,4 @@
-import { Input } from "@nextui-org/react"
+import { Input } from "@nextui-org/input"
 import { ContentRating, Flag, Languages } from "@taiyomoe/db"
 import { ValueEditor, type ValueEditorProps } from "react-querybuilder"
 import { MultiSelect } from "~/components/generics/multi-select"

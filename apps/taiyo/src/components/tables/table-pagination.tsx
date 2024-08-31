@@ -1,4 +1,4 @@
-import { Pagination } from "@nextui-org/react"
+import { Pagination } from "@nextui-org/pagination"
 import { PerPageDropdown } from "~/components/ui/pagination/per-page-dropdown"
 
 type Props = {
