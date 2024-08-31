@@ -1,7 +1,8 @@
-import { Input, Select, SelectItem } from "@nextui-org/react"
+import { Input } from "@nextui-org/react"
 import { ContentRating, Flag, Languages } from "@taiyomoe/db"
 import { ValueEditor, type ValueEditorProps } from "react-querybuilder"
 import { MultiSelect } from "~/components/generics/multi-select"
+import { EnumSelect } from "~/components/generics/selects/enum-select"
 import { MediasAutocomplete } from "~/components/ui/autocompletes/medias-autocomplete"
 import { UsersAutocomplete } from "~/components/ui/autocompletes/users/users-autocomplete"
 import { MediasMultiAutocomplete } from "~/components/ui/multi-autocompletes/medias-multi-autocomplete"
@@ -85,20 +86,12 @@ export const QueryBuilderValueEditor = (props: ValueEditorProps) => {
 
   if (props.fieldData.datatype === "enum") {
     return (
-      <Select
-        items={SelectUtils.enumToItems(getEnum(props.fieldData.name))}
-        onSelectionChange={(keys) =>
-          props.handleOnChange(SelectUtils.getSelectedKey(keys))
+      <EnumSelect
+        items={getEnum(props.fieldData.name)}
+        onSelectionChange={(value) =>
+          props.handleOnChange(SelectUtils.getSelectedKey(value))
         }
-        selectionMode="single"
-        aria-label="Select value"
-      >
-        {({ label, value }) => (
-          <SelectItem key={value} value={value} textValue={label}>
-            {label}
-          </SelectItem>
-        )}
-      </Select>
+      />
     )
   }
 
