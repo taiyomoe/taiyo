@@ -13,6 +13,7 @@ export const QueryBuilderActionButton = (props: ActionProps) => {
     case "add-group":
       return (
         <Button
+          className="w-[140px]"
           startContent={<PlusIcon size={20} />}
           variant="flat"
           {...defaultProps}

@@ -16,7 +16,7 @@ const queryBuilderValueSelector = tv({
         trigger: "w-[100px]",
       },
       combinators: {
-        trigger: "w-[100px]",
+        trigger: "w-[140px]",
       },
     },
   },

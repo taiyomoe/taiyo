@@ -71,7 +71,7 @@ const TableRow = forwardRef<
   <tr
     ref={ref}
     className={cn(
-      "group [&_td:nth-child(n+3)>div]:justify-center [&_th:last-child]:text-end [&_th:not(:nth-child(1n+3))]:text-start", // [&_th:not(:nth-child(1n+3))]:!text-start
+      "group [&_td:last-child>div]:justify-end [&_td:nth-child(n+3):not(:last-child)>div]:justify-center [&_th:last-child]:text-end [&_th:not(:nth-child(1n+3))]:text-start",
       className,
     )}
     {...props}
