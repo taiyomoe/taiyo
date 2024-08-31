@@ -3,6 +3,7 @@ import {
   getChapterIndexItem,
   getMediaIndexItem,
   getScanIndexItem,
+  getUserIndexItem,
 } from "@taiyomoe/meilisearch/utils"
 import { db } from "../.."
 
@@ -60,6 +61,19 @@ const execute = async () => {
   )
 
   await meilisearchIndexes.chapters.updateDocuments(chapters)
+
+  // Users
+  await meilisearch.deleteIndexIfExists("users")
+  await meilisearch.createIndex("users", { primaryKey: "id" })
+  await meilisearch.index("users").updateFilterableAttributes(["name"])
+  await meilisearch.index("users").updateSortableAttributes(["name"])
+  await meilisearchIndexes.users.deleteAllDocuments()
+
+  const users = await Promise.all(
+    (await db.user.findMany()).map(({ id }) => getUserIndexItem(db, id)),
+  )
+
+  await meilisearchIndexes.users.updateDocuments(users)
 }
 
 export default { execute }

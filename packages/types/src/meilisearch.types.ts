@@ -1,4 +1,10 @@
-import type { MediaChapter, MediaTitle, MediaType } from "@prisma/client"
+import type {
+  MediaChapter,
+  MediaTitle,
+  MediaType,
+  User,
+  UserProfile,
+} from "@prisma/client"
 
 export type MediasIndexItem = {
   id: string
@@ -25,3 +31,6 @@ export type ChaptersIndexItem = Omit<
   deletedAt: number | null
   scanIds: string[]
 }
+
+export type UsersIndexItem = Pick<User, "id" | "name" | "image" | "role"> &
+  Pick<UserProfile, "about">

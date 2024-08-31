@@ -2,6 +2,7 @@ import type {
   ChaptersIndexItem,
   MediasIndexItem,
   ScansIndexItem,
+  UsersIndexItem,
 } from "@taiyomoe/types"
 import type { Meilisearch } from "meilisearch"
 import { MeiliSearch } from "meilisearch"
@@ -22,6 +23,7 @@ export const meilisearchIndexes = {
   medias: meilisearch.index<MediasIndexItem>("medias"),
   scans: meilisearch.index<ScansIndexItem>("scans"),
   chapters: meilisearch.index<ChaptersIndexItem>("chapters"),
+  users: meilisearch.index<UsersIndexItem>("users"),
 }
 
 if (process.env.NODE_ENV !== "production")
