@@ -24,73 +24,71 @@ const getEnum = (name: string) => {
 }
 
 export const QueryBuilderValueEditor = (props: ValueEditorProps) => {
-  if (props.fieldData.datatype === "number") {
-    return (
-      <Input className="min-w-[300px]" onValueChange={props.handleOnChange} />
-    )
+  const { fieldData, operator, handleOnChange } = props
+
+  if (fieldData.datatype === "number") {
+    return <Input className="min-w-[300px]" onValueChange={handleOnChange} />
   }
 
-  if (props.fieldData.datatype === "media" && props.operator.includes("in")) {
+  if (fieldData.datatype === "media" && operator.includes("in")) {
     return (
       <MediasMultiAutocomplete
         classNames={{ container: () => "min-w-[300px]" }}
-        onChange={(values) => props.handleOnChange(values.map((s) => s.value))}
+        onChange={(v) => handleOnChange(v.map((s) => s.value))}
       />
     )
   }
 
-  if (props.fieldData.datatype === "media") {
+  if (fieldData.datatype === "media") {
     return (
       <MediasAutocomplete
         classNames={{ base: "min-w-[300px]" }}
-        onSelectionChange={(media) => props.handleOnChange(media?.id ?? "")}
+        onSelectionChange={(v) => handleOnChange(v?.id ?? "")}
       />
     )
   }
 
-  if (props.fieldData.datatype === "user" && props.operator.includes("in")) {
+  if (fieldData.datatype === "user" && operator.includes("in")) {
     return (
       <UsersMultiAutocomplete
         classNames={{ container: () => "min-w-[300px]" }}
-        onChange={(values) => props.handleOnChange(values.map((s) => s.value))}
+        onChange={(v) => handleOnChange(v.map((s) => s.value))}
       />
     )
   }
 
-  if (props.fieldData.datatype === "user") {
+  if (fieldData.datatype === "user") {
     return (
       <UsersAutocomplete
         classNames={{ base: "min-w-[300px]" }}
-        onSelectionChange={(user) => props.handleOnChange(user?.id ?? "")}
+        onSelectionChange={(v) => handleOnChange(v?.id ?? "")}
       />
     )
   }
 
-  if (props.fieldData.datatype === "scan") {
+  if (fieldData.datatype === "scan") {
     return (
       <ScansMultiAutocomplete
         classNames={{ container: () => "min-w-[300px]" }}
-        onChange={(values) => props.handleOnChange(values.map((s) => s.value))}
+        onChange={(v) => handleOnChange(v.map((s) => s.value))}
       />
     )
   }
 
-  if (props.fieldData.datatype === "enum" && props.operator.includes("in")) {
+  if (fieldData.datatype === "enum" && operator.includes("in")) {
     return (
       <MultiSelect
-        options={SelectUtils.enumToItems(getEnum(props.fieldData.name))}
-        onChange={(values) => props.handleOnChange(values.map((v) => v.value))}
+        options={SelectUtils.enumToItems(getEnum(fieldData.name))}
+        onChange={(v) => handleOnChange(v.map((v) => v.value))}
       />
     )
   }
 
-  if (props.fieldData.datatype === "enum") {
+  if (fieldData.datatype === "enum") {
     return (
       <EnumSelect
-        items={getEnum(props.fieldData.name)}
-        onSelectionChange={(value) =>
-          props.handleOnChange(SelectUtils.getSelectedKey(value))
-        }
+        items={getEnum(fieldData.name)}
+        onSelectionChange={(v) => handleOnChange(SelectUtils.getSelectedKey(v))}
       />
     )
   }

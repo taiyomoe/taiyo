@@ -32,17 +32,18 @@ const getType = (input?: string) =>
     : undefined
 
 export const QueryBuilderValueSelector = (props: ValueSelectorProps) => {
-  const slots = queryBuilderValueSelector({ type: getType(props.testID) })
+  const { testID, options, multiple, value, handleOnChange } = props
+  const slots = queryBuilderValueSelector({ type: getType(testID) })
 
   const handleSelectionChange = (keys: Selection) => {
-    props.handleOnChange(Array.from(keys).at(0))
+    handleOnChange(Array.from(keys).at(0))
   }
 
   return (
     <Select
-      items={props.options as SelectItemType[]}
-      selectionMode={props.multiple ? "multiple" : "single"}
-      selectedKeys={new Set([props.value]) as Selection}
+      items={options as SelectItemType[]}
+      selectionMode={multiple ? "multiple" : "single"}
+      selectedKeys={new Set([value]) as Selection}
       onSelectionChange={handleSelectionChange}
       aria-label="Select value"
       classNames={{

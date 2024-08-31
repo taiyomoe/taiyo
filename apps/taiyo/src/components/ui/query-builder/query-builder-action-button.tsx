@@ -3,12 +3,13 @@ import { PlusIcon, Trash2Icon } from "lucide-react"
 import type { ActionProps } from "react-querybuilder"
 
 export const QueryBuilderActionButton = (props: ActionProps) => {
+  const { testID, handleOnClick } = props
   const defaultProps = {
-    onPress: () => props.handleOnClick(),
+    onPress: () => handleOnClick(),
     color: "primary",
   } as const
 
-  switch (props.testID) {
+  switch (testID) {
     case "add-rule":
     case "add-group":
       return (
@@ -18,7 +19,7 @@ export const QueryBuilderActionButton = (props: ActionProps) => {
           variant="flat"
           {...defaultProps}
         >
-          {props.testID === "add-rule" ? "Nova regra" : "Novo grupo"}
+          {testID === "add-rule" ? "Nova regra" : "Novo grupo"}
         </Button>
       )
 
@@ -34,5 +35,5 @@ export const QueryBuilderActionButton = (props: ActionProps) => {
       )
   }
 
-  return <div>azerty</div>
+  throw new Error(`Unknown action: ${testID}`)
 }

@@ -24,6 +24,7 @@ export const QueryBuilder = <
     | "controlElements"
     | "getOperators"
     | "showCombinatorsBetweenRules"
+    | "resetOnOperatorChange"
   >,
 ) => {
   return (
