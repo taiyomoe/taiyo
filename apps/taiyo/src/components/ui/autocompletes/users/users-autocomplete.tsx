@@ -9,15 +9,14 @@ import type { UsersIndexItem } from "@taiyomoe/types"
 import { useCallback } from "react"
 import type { Key } from "react-aria-components"
 import { InstantSearch, useHits, useSearchBox } from "react-instantsearch"
-import { UsersAutocompleteItem } from "~/components/ui/autocompletes/users/users-autocomplete-item"
 import { meiliClient } from "~/meiliClient"
+import { UsersAutocompleteItem } from "./users-autocomplete-item"
 
 type Props = {
   onSelectionChange?: (item: UsersIndexItem | null) => void
 } & Omit<AutocompleteProps<UsersIndexItem>, "children" | "onSelectionChange">
 
-const UsersAutocompleteComponent = (props: Props) => {
-  const { onSelectionChange, ...rest } = props
+const UsersAutocompleteComponent = ({ onSelectionChange, ...props }: Props) => {
   const { query, refine } = useSearchBox()
   const { items } = useHits<UsersIndexItem>()
 
@@ -34,17 +33,13 @@ const UsersAutocompleteComponent = (props: Props) => {
 
   return (
     <Autocomplete<UsersIndexItem>
-      inputProps={{
-        classNames: { mainWrapper: "w-full", label: "z-0 min-w-[100px] mr-6" },
-      }}
       items={items}
       value={query}
       onInputChange={refine}
-      labelPlacement="outside-left"
-      placeholder="Pesquisar..."
-      aria-label="Search for a scan"
       onSelectionChange={handleSelectionChange}
-      {...rest}
+      placeholder="Pesquisar..."
+      aria-label="Search for a user"
+      {...props}
     >
       {(item) => (
         <AutocompleteItem key={item.id} textValue={item.name ?? ""}>

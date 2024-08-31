@@ -11,45 +11,41 @@ import { MediaUtils } from "@taiyomoe/utils"
 import { useCallback } from "react"
 import type { Key } from "react-aria-components"
 import { InstantSearch, useHits, useSearchBox } from "react-instantsearch"
-import { MediasSearchAutocompleteItem } from "~/components/ui/medias-search/autocomplete/medias-search-autocomplete-item"
 import { meiliClient } from "~/meiliClient"
+import { MediasAutocompleteItem } from "./medias-autocomplete-item"
 
 type Props = {
-  onSelectionChange?: (item: MediasIndexItem) => void
+  onSelectionChange?: (item: MediasIndexItem | null) => void
 } & Omit<AutocompleteProps<MediasIndexItem>, "children" | "onSelectionChange">
 
-const MediasAutocompleteComponent = (props: Props) => {
-  const { onSelectionChange, ...rest } = props
+const MediasAutocompleteComponent = ({
+  onSelectionChange,
+  ...props
+}: Props) => {
   const session = useSession()
   const { query, refine } = useSearchBox()
   const { items } = useHits<MediasIndexItem>()
 
   const handleSelectionChange = useCallback(
     (key: Key | null) => {
-      if (!key) return
+      if (!key) return onSelectionChange?.(null)
 
-      const media = items.find((item) => item.id === key)!
+      const value = items.find((item) => item.id === key)!
 
-      if (onSelectionChange) {
-        onSelectionChange(media)
-      }
+      onSelectionChange?.(value)
     },
     [onSelectionChange, items],
   )
 
   return (
     <Autocomplete<MediasIndexItem>
-      inputProps={{
-        classNames: { mainWrapper: "w-full", label: "z-0 min-w-[100px] mr-6" },
-      }}
       items={items}
       value={query}
       onInputChange={refine}
-      labelPlacement="outside-left"
-      placeholder="Pesquisar..."
-      aria-label="Search for a scan"
       onSelectionChange={handleSelectionChange}
-      {...rest}
+      placeholder="Pesquisar..."
+      aria-label="Search for a media"
+      {...props}
     >
       {(item) => {
         const title = MediaUtils.getDisplayTitle(
@@ -59,7 +55,7 @@ const MediasAutocompleteComponent = (props: Props) => {
 
         return (
           <AutocompleteItem key={item.id} textValue={title}>
-            <MediasSearchAutocompleteItem item={item} title={title} />
+            <MediasAutocompleteItem item={item} title={title} />
           </AutocompleteItem>
         )
       }}

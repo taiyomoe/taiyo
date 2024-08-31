@@ -3,7 +3,7 @@ import { ContentRating, Flag, Languages } from "@taiyomoe/db"
 import { ValueEditor, type ValueEditorProps } from "react-querybuilder"
 import { MultiSelect } from "~/components/generics/multi-select"
 import { EnumSelect } from "~/components/generics/selects/enum-select"
-import { MediasAutocomplete } from "~/components/ui/autocompletes/medias-autocomplete"
+import { MediasAutocomplete } from "~/components/ui/autocompletes/medias/medias-autocomplete"
 import { UsersAutocomplete } from "~/components/ui/autocompletes/users/users-autocomplete"
 import { MediasMultiAutocomplete } from "~/components/ui/multi-autocompletes/medias-multi-autocomplete"
 import { ScansMultiAutocomplete } from "~/components/ui/multi-autocompletes/scans-multi-autocomplete"
@@ -43,7 +43,7 @@ export const QueryBuilderValueEditor = (props: ValueEditorProps) => {
     return (
       <MediasAutocomplete
         classNames={{ base: "min-w-[300px]" }}
-        onSelectionChange={(media) => props.handleOnChange(media.id)}
+        onSelectionChange={(media) => props.handleOnChange(media?.id ?? "")}
       />
     )
   }

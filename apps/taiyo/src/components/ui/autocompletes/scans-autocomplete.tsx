@@ -3,61 +3,45 @@
 import {
   Autocomplete,
   AutocompleteItem,
-  type AutocompleteItemProps,
   type AutocompleteProps,
 } from "@nextui-org/autocomplete"
 import type { ScansIndexItem } from "@taiyomoe/types"
-import { useRouter } from "next/navigation"
 import { useCallback } from "react"
 import type { Key } from "react-aria-components"
 import { InstantSearch, useHits, useSearchBox } from "react-instantsearch"
 import { meiliClient } from "~/meiliClient"
 
 type Props = {
-  href?: string
-  onSelectionChange?: (item: ScansIndexItem) => void
-  itemProps?: Omit<AutocompleteItemProps<ScansIndexItem>, "key">
+  onSelectionChange?: (item: ScansIndexItem | null) => void
 } & Omit<AutocompleteProps<ScansIndexItem>, "children" | "onSelectionChange">
 
-const ScansAutocompleteComponent = (props: Props) => {
-  const { href, onSelectionChange, itemProps, ...rest } = props
+const ScansAutocompleteComponent = ({ onSelectionChange, ...props }: Props) => {
   const { query, refine } = useSearchBox()
   const { items } = useHits<ScansIndexItem>()
-  const router = useRouter()
 
   const handleSelectionChange = useCallback(
     (key: Key | null) => {
-      if (!key) return
+      if (!key) return onSelectionChange?.(null)
 
-      const scan = items.find((item) => item.id === key)!
+      const user = items.find((item) => item.id === key)!
 
-      if (onSelectionChange) {
-        onSelectionChange(scan)
-      }
-
-      if (href) {
-        router.push(href + scan.id)
-      }
+      onSelectionChange?.(user)
     },
-    [onSelectionChange, router.push, items, href],
+    [onSelectionChange, items],
   )
 
   return (
     <Autocomplete<ScansIndexItem>
-      inputProps={{
-        classNames: { mainWrapper: "w-full", label: "z-0 min-w-[100px] mr-6" },
-      }}
       items={items}
       value={query}
       onInputChange={refine}
-      labelPlacement="outside-left"
+      onSelectionChange={handleSelectionChange}
       placeholder="Pesquisar..."
       aria-label="Search for a scan"
-      onSelectionChange={handleSelectionChange}
-      {...rest}
+      {...props}
     >
       {(item) => (
-        <AutocompleteItem key={item.id} {...itemProps} textValue={item.name}>
+        <AutocompleteItem key={item.id} textValue={item.name}>
           <p>{item.name}</p>
         </AutocompleteItem>
       )}

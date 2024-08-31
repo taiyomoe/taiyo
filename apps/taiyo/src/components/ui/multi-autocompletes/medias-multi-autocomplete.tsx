@@ -6,7 +6,7 @@ import {
   MultiSelectAsync,
   type MultiSelectProps,
 } from "~/components/generics/multi-select"
-import { MediasSearchAutocompleteItem } from "~/components/ui/medias-search/autocomplete/medias-search-autocomplete-item"
+import { MediasAutocompleteItem } from "~/components/ui/autocompletes/medias/medias-autocomplete-item"
 import type { SelectItem } from "~/lib/types"
 import { meiliClient } from "~/meiliClient"
 
@@ -40,7 +40,7 @@ export const MediasMultiAutocomplete = (
     (item, { context }) => {
       if (context === "value") return item.label
 
-      return <MediasSearchAutocompleteItem item={item} title={item.label} />
+      return <MediasAutocompleteItem item={item} title={item.label} />
     }
 
   return (

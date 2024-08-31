@@ -7,12 +7,12 @@ import { useCallback, useEffect, useMemo, useState } from "react"
 import { useFormContext } from "react-hook-form"
 import { z } from "zod"
 import {
-  MediasSearchAutocomplete,
-  type MediasSearchAutocompleteProps,
-} from "~/components/ui/medias-search/autocomplete/medias-search-autocomplete"
+  MediasAutocomplete,
+  type MediasAutocompleteProps,
+} from "~/components/ui/autocompletes/medias/medias-autocomplete"
 import { meiliClient } from "~/meiliClient"
 
-type Props = { name: string } & MediasSearchAutocompleteProps
+type Props = { name: string } & MediasAutocompleteProps
 
 export const MediasField = ({ name, ...rest }: Props) => {
   const [mediaId] = useQueryState(name, parseAsString.withDefault(""))
@@ -29,8 +29,11 @@ export const MediasField = ({ name, ...rest }: Props) => {
   }, [media, session])
 
   const handleSelectionChange = useCallback(
-    (item: { id: string }) => {
-      setValue(name, item.id, { shouldValidate: true, shouldDirty: true })
+    (item: { id: string } | null) => {
+      setValue(name, item?.id ?? null, {
+        shouldValidate: true,
+        shouldDirty: true,
+      })
     },
     [setValue, name],
   )
@@ -61,12 +64,16 @@ export const MediasField = ({ name, ...rest }: Props) => {
   }, [searchMedia, mediaId])
 
   return (
-    <MediasSearchAutocomplete
+    <MediasAutocomplete
       label="Obra"
+      labelPlacement="outside-left"
       onSelectionChange={handleSelectionChange}
       value={mediaId}
       placeholder={placeholderText}
       isDisabled={!!media}
+      inputProps={{
+        classNames: { mainWrapper: "w-full", label: "z-0 min-w-[100px] mr-6" },
+      }}
       {...rest}
     />
   )
