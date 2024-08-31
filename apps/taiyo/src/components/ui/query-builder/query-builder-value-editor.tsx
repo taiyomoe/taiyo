@@ -6,6 +6,7 @@ import { MediasAutocomplete } from "~/components/ui/autocompletes/medias-autocom
 import { UsersAutocomplete } from "~/components/ui/autocompletes/users/users-autocomplete"
 import { MediasMultiAutocomplete } from "~/components/ui/multi-autocompletes/medias-multi-autocomplete"
 import { ScansMultiAutocomplete } from "~/components/ui/multi-autocompletes/scans-multi-autocomplete"
+import { UsersMultiAutocomplete } from "~/components/ui/multi-autocompletes/users-multi-autocomplete"
 import { SelectUtils } from "~/lib/utils/select.utils"
 
 const getEnum = (name: string) => {
@@ -42,6 +43,15 @@ export const QueryBuilderValueEditor = (props: ValueEditorProps) => {
       <MediasAutocomplete
         classNames={{ base: "min-w-[300px]" }}
         onSelectionChange={(media) => props.handleOnChange(media.id)}
+      />
+    )
+  }
+
+  if (props.fieldData.datatype === "user" && props.operator.includes("in")) {
+    return (
+      <UsersMultiAutocomplete
+        classNames={{ container: () => "min-w-[300px]" }}
+        onChange={(values) => props.handleOnChange(values.map((s) => s.value))}
       />
     )
   }
