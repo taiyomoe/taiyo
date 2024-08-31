@@ -4,9 +4,12 @@ import {
   type IndexAutocompleteProps,
 } from "~/components/ui/autocompletes/index-autocomplete"
 
-type Props = Omit<IndexAutocompleteProps<"scans">, "index" | "children">
+export type ScansAutocompleteProps = Omit<
+  IndexAutocompleteProps<"scans">,
+  "index" | "children"
+>
 
-export const ScansAutocomplete = (props: Props) => (
+export const ScansAutocomplete = (props: ScansAutocompleteProps) => (
   <IndexAutocomplete index="scans" aria-label="Search for a scan" {...props}>
     {(item) => (
       <AutocompleteItem key={item.id} textValue={item.name}>

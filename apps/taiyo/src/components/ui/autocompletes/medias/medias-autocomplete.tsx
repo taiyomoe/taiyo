@@ -7,9 +7,12 @@ import {
 } from "~/components/ui/autocompletes/index-autocomplete"
 import { MediasAutocompleteItem } from "./medias-autocomplete-item"
 
-type Props = Omit<IndexAutocompleteProps<"medias">, "index" | "children">
+export type MediasAutocompleteProps = Omit<
+  IndexAutocompleteProps<"medias">,
+  "index" | "children"
+>
 
-export const MediasAutocomplete = (props: Props) => {
+export const MediasAutocomplete = (props: MediasAutocompleteProps) => {
   const session = useSession()
 
   return (
