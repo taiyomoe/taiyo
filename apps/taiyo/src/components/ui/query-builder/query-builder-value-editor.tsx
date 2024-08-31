@@ -2,6 +2,8 @@ import { Input, Select, SelectItem } from "@nextui-org/react"
 import { ContentRating, Flag, Languages } from "@taiyomoe/db"
 import { ValueEditor, type ValueEditorProps } from "react-querybuilder"
 import { MultiSelect } from "~/components/generics/multi-select"
+import { MediasAutocomplete } from "~/components/ui/autocompletes/medias-autocomplete"
+import { MediasMultiAutocomplete } from "~/components/ui/multi-autocompletes/medias-multi-autocomplete"
 import { ScansMultiAutocomplete } from "~/components/ui/multi-autocompletes/scans-multi-autocomplete"
 import { SelectUtils } from "~/lib/utils/select.utils"
 
@@ -25,6 +27,24 @@ export const QueryBuilderValueEditor = (props: ValueEditorProps) => {
     )
   }
 
+  if (props.fieldData.datatype === "media" && props.operator.includes("in")) {
+    return (
+      <MediasMultiAutocomplete
+        classNames={{ container: () => "min-w-[300px]" }}
+        onChange={(values) => props.handleOnChange(values.map((s) => s.value))}
+      />
+    )
+  }
+
+  if (props.fieldData.datatype === "media") {
+    return (
+      <MediasAutocomplete
+        classNames={{ base: "min-w-[300px]" }}
+        onSelectionChange={(media) => props.handleOnChange(media.id)}
+      />
+    )
+  }
+
   if (props.fieldData.datatype === "scan") {
     return (
       <ScansMultiAutocomplete
@@ -43,7 +63,7 @@ export const QueryBuilderValueEditor = (props: ValueEditorProps) => {
     )
   }
 
-  if (props.fieldData.datatype === "enum" && !props.operator.includes("in")) {
+  if (props.fieldData.datatype === "enum") {
     return (
       <Select
         items={SelectUtils.enumToItems(getEnum(props.fieldData.name))}

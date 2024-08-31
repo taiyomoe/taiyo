@@ -60,16 +60,12 @@ const getOperators = (_: string, { fieldData }: { fieldData: Field }) => {
         { name: ">=", label: ">=" },
       ]
     case "enum":
-      return [
-        { name: "=", label: "=" },
-        { name: "!=", label: "!=" },
-        { name: "in", label: "in" },
-        { name: "notIn", label: "not in" },
-      ]
     case "user":
     case "media":
     case "scan":
       return [
+        { name: "=", label: "=" },
+        { name: "!=", label: "!=" },
         { name: "in", label: "in" },
         { name: "notIn", label: "not in" },
       ]

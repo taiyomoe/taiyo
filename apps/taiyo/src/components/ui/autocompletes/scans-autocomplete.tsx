@@ -22,14 +22,14 @@ type Props = {
 const ScansAutocompleteComponent = (props: Props) => {
   const { href, onSelectionChange, itemProps, ...rest } = props
   const { query, refine } = useSearchBox()
-  const { hits } = useHits<ScansIndexItem>()
+  const { items } = useHits<ScansIndexItem>()
   const router = useRouter()
 
   const handleSelectionChange = useCallback(
     (key: Key | null) => {
       if (!key) return
 
-      const scan = hits.find((item) => item.id === key)!
+      const scan = items.find((item) => item.id === key)!
 
       if (onSelectionChange) {
         onSelectionChange(scan)
@@ -39,7 +39,7 @@ const ScansAutocompleteComponent = (props: Props) => {
         router.push(href + scan.id)
       }
     },
-    [onSelectionChange, router.push, hits, href],
+    [onSelectionChange, router.push, items, href],
   )
 
   return (
@@ -47,7 +47,7 @@ const ScansAutocompleteComponent = (props: Props) => {
       inputProps={{
         classNames: { mainWrapper: "w-full", label: "z-0 min-w-[100px] mr-6" },
       }}
-      items={hits}
+      items={items}
       value={query}
       onInputChange={refine}
       labelPlacement="outside-left"
