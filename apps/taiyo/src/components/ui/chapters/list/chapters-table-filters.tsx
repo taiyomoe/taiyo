@@ -12,7 +12,7 @@ const fields: Field[] = [
   { name: "mediaId", datatype: "media", label: "Obras" },
   { name: "scanIds", datatype: "scan", label: "Scans" },
   { name: "deleterId", datatype: "user", label: "Deletado por" },
-  { name: "includeDeleted", datatype: "boolean", label: "Incluir deletados" },
+  { name: "onlyDeleted", datatype: "boolean", label: "Somente deletados" },
 ]
 
 export const ChaptersTableFilters = () => {

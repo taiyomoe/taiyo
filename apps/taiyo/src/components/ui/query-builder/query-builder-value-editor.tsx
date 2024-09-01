@@ -1,4 +1,5 @@
 import { Input } from "@nextui-org/input"
+import { Switch } from "@nextui-org/switch"
 import { ContentRating, Flag, Languages } from "@taiyomoe/db"
 import { ValueEditor, type ValueEditorProps } from "react-querybuilder"
 import { MultiSelect } from "~/components/generics/multi-select"
@@ -26,72 +27,69 @@ const getEnum = (name: string) => {
 export const QueryBuilderValueEditor = (props: ValueEditorProps) => {
   const { fieldData, operator, handleOnChange } = props
 
-  if (fieldData.datatype === "number") {
-    return <Input className="min-w-[300px]" onValueChange={handleOnChange} />
+  switch (true) {
+    case fieldData.datatype === "boolean":
+      return <Switch onValueChange={handleOnChange} />
+    case fieldData.datatype === "number":
+      return (
+        <Input
+          className="min-w-[300px]"
+          onValueChange={handleOnChange}
+          type="number"
+        />
+      )
+    case fieldData.datatype === "media" && operator.includes("in"):
+      return (
+        <MediasMultiAutocomplete
+          classNames={{ container: () => "min-w-[300px]" }}
+          onChange={(v) => handleOnChange(v.map((s) => s.value))}
+        />
+      )
+    case fieldData.datatype === "media":
+      return (
+        <MediasAutocomplete
+          classNames={{ base: "min-w-[300px]" }}
+          onSelectionChange={(v) => handleOnChange(v?.id ?? "")}
+        />
+      )
+    case fieldData.datatype === "user" && operator.includes("in"):
+      return (
+        <UsersMultiAutocomplete
+          classNames={{ container: () => "min-w-[300px]" }}
+          onChange={(v) => handleOnChange(v.map((s) => s.value))}
+        />
+      )
+    case fieldData.datatype === "user":
+      return (
+        <UsersAutocomplete
+          classNames={{ base: "min-w-[300px]" }}
+          onSelectionChange={(v) => handleOnChange(v?.id ?? "")}
+        />
+      )
+    case fieldData.datatype === "scan":
+      return (
+        <ScansMultiAutocomplete
+          classNames={{ container: () => "min-w-[300px]" }}
+          onChange={(v) => handleOnChange(v.map((s) => s.value))}
+        />
+      )
+    case fieldData.datatype === "enum" && operator.includes("in"):
+      return (
+        <MultiSelect
+          options={SelectUtils.enumToItems(getEnum(fieldData.name))}
+          onChange={(v) => handleOnChange(v.map((v) => v.value))}
+        />
+      )
+    case fieldData.datatype === "enum":
+      return (
+        <EnumSelect
+          items={getEnum(fieldData.name)}
+          onSelectionChange={(v) =>
+            handleOnChange(SelectUtils.getSelectedKey(v))
+          }
+        />
+      )
+    default:
+      return <ValueEditor {...props} />
   }
-
-  if (fieldData.datatype === "media" && operator.includes("in")) {
-    return (
-      <MediasMultiAutocomplete
-        classNames={{ container: () => "min-w-[300px]" }}
-        onChange={(v) => handleOnChange(v.map((s) => s.value))}
-      />
-    )
-  }
-
-  if (fieldData.datatype === "media") {
-    return (
-      <MediasAutocomplete
-        classNames={{ base: "min-w-[300px]" }}
-        onSelectionChange={(v) => handleOnChange(v?.id ?? "")}
-      />
-    )
-  }
-
-  if (fieldData.datatype === "user" && operator.includes("in")) {
-    return (
-      <UsersMultiAutocomplete
-        classNames={{ container: () => "min-w-[300px]" }}
-        onChange={(v) => handleOnChange(v.map((s) => s.value))}
-      />
-    )
-  }
-
-  if (fieldData.datatype === "user") {
-    return (
-      <UsersAutocomplete
-        classNames={{ base: "min-w-[300px]" }}
-        onSelectionChange={(v) => handleOnChange(v?.id ?? "")}
-      />
-    )
-  }
-
-  if (fieldData.datatype === "scan") {
-    return (
-      <ScansMultiAutocomplete
-        classNames={{ container: () => "min-w-[300px]" }}
-        onChange={(v) => handleOnChange(v.map((s) => s.value))}
-      />
-    )
-  }
-
-  if (fieldData.datatype === "enum" && operator.includes("in")) {
-    return (
-      <MultiSelect
-        options={SelectUtils.enumToItems(getEnum(fieldData.name))}
-        onChange={(v) => handleOnChange(v.map((v) => v.value))}
-      />
-    )
-  }
-
-  if (fieldData.datatype === "enum") {
-    return (
-      <EnumSelect
-        items={getEnum(fieldData.name)}
-        onSelectionChange={(v) => handleOnChange(SelectUtils.getSelectedKey(v))}
-      />
-    )
-  }
-
-  return <ValueEditor {...props} />
 }

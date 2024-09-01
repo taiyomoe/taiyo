@@ -51,6 +51,11 @@ export const QueryBuilder = <
 
 const getOperators = (_: string, { fieldData }: { fieldData: Field }) => {
   switch (fieldData.datatype) {
+    case "boolean":
+      return [
+        { name: "=", label: "=" },
+        { name: "!=", label: "!=" },
+      ]
     case "number":
       return [
         { name: "=", label: "=" },
