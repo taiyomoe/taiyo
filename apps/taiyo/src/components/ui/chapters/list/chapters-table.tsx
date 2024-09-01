@@ -2,10 +2,8 @@
 
 import { CHAPTERS_LIST_PER_PAGE_CHOICES } from "@taiyomoe/constants"
 import type { ChaptersListItem } from "@taiyomoe/types"
-import { useHydrateAtoms } from "jotai/utils"
 import { useRef } from "react"
 import { useDebounceCallback } from "usehooks-ts"
-import { chaptersListInitialDataAtom } from "~/atoms/chaptersList.atoms"
 import { DataTable } from "~/components/generics/data-table/data-table"
 import { useChaptersListStore } from "~/stores/chaptersList.store"
 import { api } from "~/trpc/react"
@@ -17,8 +15,6 @@ type Props = {
 }
 
 export const ChaptersTable = ({ initialData }: Props) => {
-  useHydrateAtoms([[chaptersListInitialDataAtom, initialData]])
-
   const { page, perPage, query, setPage, setPerPage } = useChaptersListStore()
   const previousQuery = useRef(query)
 
