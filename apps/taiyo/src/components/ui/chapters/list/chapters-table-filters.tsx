@@ -1,4 +1,5 @@
 import type { Field } from "react-querybuilder"
+import { useDebounceCallback } from "usehooks-ts"
 import { QueryBuilder } from "~/components/ui/query-builder/query-builder"
 import { useChaptersListStore } from "~/stores/chaptersList.store"
 
@@ -18,5 +19,10 @@ const fields: Field[] = [
 export const ChaptersTableFilters = () => {
   const { setQuery } = useChaptersListStore()
 
-  return <QueryBuilder fields={fields} onQueryChange={setQuery} />
+  const handleQueryChange = useDebounceCallback(
+    (newQuery) => setQuery(newQuery),
+    300,
+  )
+
+  return <QueryBuilder fields={fields} onQueryChange={handleQueryChange} />
 }

@@ -2,8 +2,6 @@
 
 import { CHAPTERS_LIST_PER_PAGE_CHOICES } from "@taiyomoe/constants"
 import type { ChaptersListItem } from "@taiyomoe/types"
-import { useRef } from "react"
-import { useDebounceCallback } from "usehooks-ts"
 import { DataTable } from "~/components/generics/data-table/data-table"
 import { useChaptersListStore } from "~/stores/chaptersList.store"
 import { api } from "~/trpc/react"
@@ -15,26 +13,14 @@ type Props = {
 }
 
 export const ChaptersTable = ({ initialData }: Props) => {
-  const { page, perPage, query, setPage, setPerPage } = useChaptersListStore()
-  const previousQuery = useRef(query)
-
+  const { query, page, perPage, setPage, setPerPage } = useChaptersListStore()
   const {
     data: { chapters: items, totalPages },
     isFetching,
-    refetch,
   } = api.chapters.getList.useQuery(
     { query, page, perPage },
-    { initialData, refetchOnMount: false, enabled: false },
+    { initialData, refetchOnMount: false },
   )
-
-  const handleSearch = useDebounceCallback(async () => {
-    await refetch()
-  }, 300)
-
-  if (previousQuery.current !== query) {
-    previousQuery.current = query
-    handleSearch()
-  }
 
   return (
     <DataTable

@@ -1,3 +1,4 @@
+import { DEFAULT_CHAPTERS_LIST_PER_PAGE } from "@taiyomoe/constants"
 import type { DefaultRuleGroupType } from "react-querybuilder"
 import { create } from "zustand"
 import { RQBUtils } from "~/utils/rqb.utils"
@@ -17,7 +18,7 @@ type Actions = {
 export const useChaptersListStore = create<State & Actions>((set, get) => ({
   query: "",
   page: 1,
-  perPage: 30,
+  perPage: DEFAULT_CHAPTERS_LIST_PER_PAGE,
 
   setPage: (value) => {
     set((state) => ({ ...state, page: value }))
