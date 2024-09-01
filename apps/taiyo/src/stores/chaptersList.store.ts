@@ -29,7 +29,7 @@ export const useChaptersListStore = create<State & Actions>((set, get) => ({
   setQuery: (value) => {
     const computed = RQBUtils.computeNewQuery(get().query, value)
 
-    if (!computed) {
+    if (computed === null) {
       return
     }
 
