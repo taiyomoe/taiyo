@@ -1,3 +1,4 @@
+import { Spinner } from "@nextui-org/spinner"
 import {
   type ColumnDef,
   type VisibilityState,
@@ -6,9 +7,9 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table"
-import { type ReactNode, useMemo } from "react"
+import { type ReactNode, useMemo, useRef } from "react"
 import { TableBodyEmpty } from "~/components/tables/table-body-empty"
-import { TableBodyLoading } from "~/components/tables/table-body-loading"
+// import { TableBodyLoading } from "~/components/tables/table-body-loading"
 import { TableColumnVisibilityDropdown } from "~/components/tables/table-column-visibility-dropdown"
 import { TablePagination } from "~/components/tables/table-pagination"
 import {
@@ -47,10 +48,12 @@ export function DataTable<TData, TValue>({
   onPageChange,
   onPerPageChange,
 }: DataTableProps<TData, TValue>) {
+  const previousData = useRef(data)
+  const previousTotalPages = useRef(totalPages)
   const table = useReactTable({
-    data,
+    data: isLoading ? previousData.current : data,
     columns,
-    pageCount: totalPages,
+    pageCount: isLoading ? previousTotalPages.current : totalPages,
     manualPagination: true,
     manualFiltering: true,
     getCoreRowModel: getCoreRowModel(),
@@ -86,10 +89,16 @@ export function DataTable<TData, TValue>({
     return "data"
   }, [isLoading, table.getRowModel])
 
+  if (!isLoading && data !== previousData.current) {
+    previousData.current = data
+    previousTotalPages.current = totalPages
+  }
+
   return (
     <div className="space-y-4">
       {filters}
-      <div className="flex justify-end">
+      <div className="flex justify-end gap-2">
+        {status === "loading" && <Spinner size="sm" />}
         <TableColumnVisibilityDropdown table={table} />
       </div>
       <Table>
@@ -111,7 +120,7 @@ export function DataTable<TData, TValue>({
             </TableRow>
           ))}
         </TableHeader>
-        {status === "data" && (
+        {status !== "empty" && (
           <TableBody>
             {table.getRowModel().rows.map((row) => (
               <TableRow
@@ -128,9 +137,6 @@ export function DataTable<TData, TValue>({
           </TableBody>
         )}
         {status === "empty" && <TableBodyEmpty colSpan={columns.length} />}
-        {status === "loading" && (
-          <TableBodyLoading perPage={perPage} colSpan={columns.length} />
-        )}
       </Table>
       <div className="flex md:justify-end">
         <TablePagination
