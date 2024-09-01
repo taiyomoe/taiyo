@@ -3,9 +3,12 @@
 import { CHAPTERS_LIST_PER_PAGE_CHOICES } from "@taiyomoe/constants"
 import type { ChaptersListItem } from "@taiyomoe/types"
 import { useHydrateAtoms } from "jotai/utils"
+import { useRef } from "react"
+import { useDebounceCallback } from "usehooks-ts"
 import { chaptersListInitialDataAtom } from "~/atoms/chaptersList.atoms"
 import { DataTable } from "~/components/generics/data-table/data-table"
-import { useChaptersList } from "~/hooks/useChaptersList"
+import { useChaptersListStore } from "~/stores/chaptersList.store"
+import { api } from "~/trpc/react"
 import { columns } from "./chapters-table-columns"
 import { ChaptersTableFilters } from "./chapters-table-filters"
 
@@ -16,15 +19,26 @@ type Props = {
 export const ChaptersTable = ({ initialData }: Props) => {
   useHydrateAtoms([[chaptersListInitialDataAtom, initialData]])
 
+  const { page, perPage, query, setPage, setPerPage } = useChaptersListStore()
+  const previousQuery = useRef(query)
+
   const {
-    items,
-    page,
-    perPage,
-    totalPages,
-    isLoading,
-    handlePageChange,
-    handlePerPageChange,
-  } = useChaptersList()
+    data: { chapters: items, totalPages },
+    isFetching,
+    refetch,
+  } = api.chapters.getList.useQuery(
+    { query, page, perPage },
+    { initialData, refetchOnMount: false, enabled: false },
+  )
+
+  const handleSearch = useDebounceCallback(async () => {
+    await refetch()
+  }, 300)
+
+  if (previousQuery.current !== query) {
+    previousQuery.current = query
+    handleSearch()
+  }
 
   return (
     <DataTable
@@ -42,9 +56,9 @@ export const ChaptersTable = ({ initialData }: Props) => {
       perPage={perPage}
       perPageChoices={CHAPTERS_LIST_PER_PAGE_CHOICES}
       totalPages={totalPages}
-      isLoading={isLoading}
-      onPageChange={handlePageChange}
-      onPerPageChange={handlePerPageChange}
+      isLoading={isFetching}
+      onPageChange={setPage}
+      onPerPageChange={setPerPage}
     />
   )
 }

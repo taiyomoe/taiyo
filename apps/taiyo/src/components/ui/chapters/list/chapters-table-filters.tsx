@@ -1,6 +1,6 @@
 import type { Field } from "react-querybuilder"
 import { QueryBuilder } from "~/components/ui/query-builder/query-builder"
-import { useChaptersList } from "~/hooks/useChaptersList"
+import { useChaptersListStore } from "~/stores/chaptersList.store"
 
 const fields: Field[] = [
   { name: "number", datatype: "number", label: "Número" },
@@ -16,7 +16,7 @@ const fields: Field[] = [
 ]
 
 export const ChaptersTableFilters = () => {
-  const { handleQueryChange } = useChaptersList()
+  const { setQuery } = useChaptersListStore()
 
-  return <QueryBuilder fields={fields} onQueryChange={handleQueryChange} />
+  return <QueryBuilder fields={fields} onQueryChange={setQuery} />
 }

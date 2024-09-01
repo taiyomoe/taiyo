@@ -1,5 +1,9 @@
-import type { RuleGroupType, RuleType } from "react-querybuilder"
-import { formatQuery as baseFormatQuery } from "react-querybuilder"
+import type {
+  DefaultRuleGroupType,
+  RuleGroupType,
+  RuleType,
+} from "react-querybuilder"
+import { formatQuery as baseFormatQuery } from "react-querybuilder/formatQuery"
 
 const ruleFilterSingle = (r: RuleGroupType | RuleType) => {
   if ("rules" in r) {
@@ -22,6 +26,17 @@ const formatQuery = (newQuery: RuleGroupType) => {
   )
 }
 
+const computeNewQuery = (oldQuery: string, newQuery: DefaultRuleGroupType) => {
+  const formatted = formatQuery(newQuery)
+
+  if ((formatted === null && oldQuery === "") || oldQuery === formatted) {
+    return null
+  }
+
+  return formatted ?? ""
+}
+
 export const RQBUtils = {
   formatQuery,
+  computeNewQuery,
 }
