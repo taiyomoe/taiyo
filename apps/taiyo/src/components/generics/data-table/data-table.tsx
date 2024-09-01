@@ -140,7 +140,7 @@ export function DataTable<TData, TValue>({
           perPageChoices={perPageChoices}
           onPageChange={(newPage) => table.setPageIndex(newPage - 1)}
           onPerPageChange={table.setPageSize}
-          isLoading={false}
+          isLoading={isLoading}
         />
       </div>
     </div>
