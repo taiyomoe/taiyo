@@ -13,7 +13,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@prisma/client": "^5.19.0"
+    "@prisma/client": "^5.19.1"
   },
   "devDependencies": {
     "@taiyomoe/tsconfig": "workspace:*"
