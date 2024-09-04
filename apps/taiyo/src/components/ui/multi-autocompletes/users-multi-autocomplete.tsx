@@ -24,7 +24,7 @@ export const UsersMultiAutocomplete = (
 
     return items.map((item) => ({
       ...item,
-      label: item.name,
+      label: item.name!,
       value: item.id,
     }))
   }
