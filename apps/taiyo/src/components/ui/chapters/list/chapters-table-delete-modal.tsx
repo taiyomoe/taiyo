@@ -47,7 +47,7 @@ export const ChaptersTableDeleteModal = ({ isOpen, onOpenChange }: Props) => {
 
     setIsDisabled(true)
 
-    toast.promise(mutateAsync({ ids }), {
+    toast.promise(mutateAsync(ids), {
       loading: `Apagando ${dynamicTextAs}...`,
       success: () => {
         table.resetRowSelection()

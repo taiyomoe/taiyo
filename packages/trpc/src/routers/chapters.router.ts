@@ -3,7 +3,6 @@ import { db } from "@taiyomoe/db"
 import { ChaptersIndexService } from "@taiyomoe/meilisearch/services"
 import { buildFilter } from "@taiyomoe/meilisearch/utils"
 import {
-  bulkDeleteChaptersSchema,
   bulkUpdateChaptersScansSchema,
   bulkUpdateChaptersVolumesSchema,
   getChaptersByUserIdSchema,
@@ -419,42 +418,15 @@ export const chaptersRouter = createTRPCRouter({
       }
     }),
 
-  delete: protectedProcedure
-    .meta({ resource: "mediaChapters", action: "delete" })
-    .input(idSchema)
-    .mutation(async ({ ctx, input }) => {
-      const mediaChapter = await ctx.db.mediaChapter.findUnique({
-        where: { id: input, deletedAt: null },
-      })
-
-      if (!mediaChapter) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "Media chapter not found",
-        })
-      }
-
-      await ctx.db.mediaChapter.update({
-        data: { deletedAt: new Date(), deleterId: ctx.session.user.id },
-        where: { id: input },
-      })
-
-      await ctx.logs.chapters.insert({
-        type: "deleted",
-        old: mediaChapter,
-        userId: ctx.session.user.id,
-      })
-    }),
-
   bulkDelete: protectedProcedure
     .meta({ resource: "mediaChapters", action: "delete" })
-    .input(bulkDeleteChaptersSchema)
+    .input(idSchema.array())
     .mutation(async ({ ctx, input }) => {
       const chapters = await ctx.db.mediaChapter.findMany({
-        where: { id: { in: input.ids } },
+        where: { id: { in: input } },
       })
 
-      if (chapters.length !== input.ids.length) {
+      if (chapters.length !== input.length) {
         throw new TRPCError({
           code: "NOT_FOUND",
           message: "Um ou vários capítulos não existem.",
