@@ -7,6 +7,7 @@ import { useChaptersListStore } from "~/stores/chaptersList.store"
 import { api } from "~/trpc/react"
 import { columns } from "./chapters-table-columns"
 import { ChaptersTableFilters } from "./chapters-table-filters"
+import { ChaptersTableMultipleActions } from "./chapters-table-multiple-actions"
 
 type Props = {
   initialData: { chapters: ChaptersListItem[]; totalPages: number }
@@ -27,6 +28,7 @@ export const ChaptersTable = ({ initialData }: Props) => {
       columns={columns}
       data={items}
       filters={<ChaptersTableFilters />}
+      multipleActions={<ChaptersTableMultipleActions />}
       initialVisibility={{
         id: false,
         updatedAt: false,

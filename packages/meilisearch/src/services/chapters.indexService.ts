@@ -3,6 +3,7 @@ import type { ChaptersIndexItem } from "@taiyomoe/types"
 import { TRPCError } from "@trpc/server"
 import { DateTime } from "luxon"
 import { omit } from "radash"
+import { meilisearchClient } from "../"
 
 const getItem = async (
   db: PrismaClient,
@@ -30,6 +31,19 @@ const getItem = async (
       : null,
     scanIds: result.scans.map((s) => s.id),
   }
+}
+
+const bulkDelete = (rawChapters: MediaChapter[]) => {
+  const chapters = rawChapters.map((c) => ({
+    ...omit(c, ["createdAt", "updatedAt", "deletedAt"]),
+    createdAt: DateTime.fromJSDate(c.createdAt).toSeconds(),
+    updatedAt: DateTime.fromJSDate(c.updatedAt).toSeconds(),
+    deletedAt: c.deletedAt
+      ? DateTime.fromJSDate(c.deletedAt).toSeconds()
+      : null,
+  }))
+
+  return meilisearchClient.chapters.updateDocuments(chapters)
 }
 
 export const ChaptersIndexService = {

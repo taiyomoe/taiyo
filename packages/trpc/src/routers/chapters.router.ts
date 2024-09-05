@@ -1,7 +1,9 @@
 import { DEFAULT_GROUPED_CHAPTERS_LIMIT } from "@taiyomoe/constants"
 import { db } from "@taiyomoe/db"
+import { ChaptersIndexService } from "@taiyomoe/meilisearch/services"
 import { buildFilter } from "@taiyomoe/meilisearch/utils"
 import {
+  bulkDeleteChaptersSchema,
   bulkUpdateChaptersScansSchema,
   bulkUpdateChaptersVolumesSchema,
   getChaptersByUserIdSchema,
@@ -442,5 +444,45 @@ export const chaptersRouter = createTRPCRouter({
         old: mediaChapter,
         userId: ctx.session.user.id,
       })
+    }),
+
+  bulkDelete: protectedProcedure
+    .meta({ resource: "mediaChapters", action: "delete" })
+    .input(bulkDeleteChaptersSchema)
+    .mutation(async ({ ctx, input }) => {
+      const chapters = await ctx.db.mediaChapter.findMany({
+        where: { id: { in: input.ids } },
+      })
+
+      if (chapters.length !== input.ids.length) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Um ou vários capítulos não existem.",
+        })
+      }
+
+      const updatedChapters = chapters.map((c) => ({
+        ...c,
+        deletedAt: new Date(),
+        deleterId: ctx.session.user.id,
+      }))
+
+      for (const chapter of updatedChapters) {
+        await ctx.db.mediaChapter.update({
+          data: {
+            deletedAt: chapter.deletedAt,
+            deleterId: chapter.deleterId,
+          },
+          where: { id: chapter.id },
+        })
+
+        await ctx.logs.chapters.insert({
+          type: "deleted",
+          old: chapters.find((c) => c.id === chapter.id)!,
+          userId: ctx.session.user.id,
+        })
+      }
+
+      await ChaptersIndexService.bulkDelete(updatedChapters)
     }),
 })

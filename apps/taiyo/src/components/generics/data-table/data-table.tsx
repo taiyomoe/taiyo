@@ -7,11 +7,12 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table"
+import { AnimatePresence, motion } from "framer-motion"
 import { type ReactNode, useMemo, useRef } from "react"
 import { TableBodyEmpty } from "~/components/tables/table-body-empty"
-// import { TableBodyLoading } from "~/components/tables/table-body-loading"
 import { TableColumnVisibilityDropdown } from "~/components/tables/table-column-visibility-dropdown"
 import { TablePagination } from "~/components/tables/table-pagination"
+import { DataTableContext } from "./data-table-context"
 import {
   Table,
   TableBody,
@@ -25,6 +26,7 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
   filters: ReactNode
+  multipleActions: ReactNode
   initialVisibility: Partial<Record<keyof TData, boolean>>
   page: number
   perPage: number
@@ -39,6 +41,7 @@ export function DataTable<TData, TValue>({
   columns,
   data,
   filters,
+  multipleActions,
   initialVisibility,
   page,
   perPage,
@@ -95,60 +98,76 @@ export function DataTable<TData, TValue>({
   }
 
   return (
-    <div className="space-y-4">
-      {filters}
-      <div className="flex justify-end gap-2">
-        {status === "loading" && <Spinner size="sm" />}
-        <TableColumnVisibilityDropdown table={table} />
-      </div>
-      <Table>
-        <TableHeader>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => {
-                return (
-                  <TableHead key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext(),
-                        )}
-                  </TableHead>
-                )
-              })}
-            </TableRow>
-          ))}
-        </TableHeader>
-        {status !== "empty" && (
-          <TableBody>
-            {table.getRowModel().rows.map((row) => (
-              <TableRow
-                key={row.id}
-                data-state={row.getIsSelected() && "selected"}
+    <DataTableContext.Provider value={table}>
+      <div className="space-y-4">
+        {filters}
+        <div className="flex justify-end gap-2">
+          {status === "loading" && <Spinner size="sm" />}
+          <AnimatePresence initial={false}>
+            {table.getSelectedRowModel().rows.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
               >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
+                {multipleActions}
+              </motion.div>
+            )}
+          </AnimatePresence>
+          <TableColumnVisibilityDropdown table={table} />
+        </div>
+        <Table>
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => {
+                  return (
+                    <TableHead key={header.id}>
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext(),
+                          )}
+                    </TableHead>
+                  )
+                })}
               </TableRow>
             ))}
-          </TableBody>
-        )}
-        {status === "empty" && <TableBodyEmpty colSpan={columns.length} />}
-      </Table>
-      <div className="flex md:justify-end">
-        <TablePagination
-          page={table.getState().pagination.pageIndex + 1}
-          perPage={table.getState().pagination.pageSize}
-          totalPages={table.getPageCount()}
-          perPageChoices={perPageChoices}
-          onPageChange={(newPage) => table.setPageIndex(newPage - 1)}
-          onPerPageChange={table.setPageSize}
-          isLoading={isLoading}
-        />
+          </TableHeader>
+          {status !== "empty" && (
+            <TableBody>
+              {table.getRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))}
+            </TableBody>
+          )}
+          {status === "empty" && <TableBodyEmpty colSpan={columns.length} />}
+        </Table>
+        <div className="flex md:justify-end">
+          <TablePagination
+            page={table.getState().pagination.pageIndex + 1}
+            perPage={table.getState().pagination.pageSize}
+            totalPages={table.getPageCount()}
+            perPageChoices={perPageChoices}
+            onPageChange={(newPage) => table.setPageIndex(newPage - 1)}
+            onPerPageChange={table.setPageSize}
+            isLoading={isLoading}
+          />
+        </div>
       </div>
-    </div>
+    </DataTableContext.Provider>
   )
 }
