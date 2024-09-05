@@ -1,6 +1,6 @@
 import { meilisearch, meilisearchIndexes } from "@taiyomoe/meilisearch"
+import { ChaptersIndexService } from "@taiyomoe/meilisearch/services"
 import {
-  getChapterIndexItem,
   getMediaIndexItem,
   getScanIndexItem,
   getUserIndexItem,
@@ -56,7 +56,7 @@ const execute = async () => {
 
   const chapters = await Promise.all(
     (await db.mediaChapter.findMany()).map(({ id }) =>
-      getChapterIndexItem(db, id),
+      ChaptersIndexService.getItem(db, id),
     ),
   )
 

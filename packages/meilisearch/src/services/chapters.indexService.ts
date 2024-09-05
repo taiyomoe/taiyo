@@ -1,10 +1,10 @@
-import type { PrismaClient } from "@prisma/client"
+import type { MediaChapter, PrismaClient } from "@prisma/client"
 import type { ChaptersIndexItem } from "@taiyomoe/types"
 import { TRPCError } from "@trpc/server"
 import { DateTime } from "luxon"
 import { omit } from "radash"
 
-export const getChapterIndexItem = async (
+const getItem = async (
   db: PrismaClient,
   chapterId: string,
 ): Promise<ChaptersIndexItem> => {
@@ -30,4 +30,9 @@ export const getChapterIndexItem = async (
       : null,
     scanIds: result.scans.map((s) => s.id),
   }
+}
+
+export const ChaptersIndexService = {
+  getItem,
+  bulkDelete,
 }
