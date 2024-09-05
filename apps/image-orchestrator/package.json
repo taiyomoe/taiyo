@@ -14,7 +14,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@elysiajs/cors": "^1.1.0",
+    "@elysiajs/cors": "^1.1.1",
     "@elysiajs/stream": "^1.1.0",
     "@elysiajs/swagger": "^1.1.1",
     "@t3-oss/env-core": "^0.11.1",
