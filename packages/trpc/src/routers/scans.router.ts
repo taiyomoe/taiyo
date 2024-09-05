@@ -21,7 +21,7 @@ export const scansRouter = createTRPCRouter({
       })
 
       const indexItem = await getScanIndexItem(ctx.db, createdScan.id)
-      await ctx.indexes.scans.updateDocuments([indexItem])
+      await ctx.meilisearch.scans.updateDocuments([indexItem])
       await ctx.logs.scans.insert({
         type: "created",
         _new: createdScan,
@@ -62,7 +62,7 @@ export const scansRouter = createTRPCRouter({
     .meta({ resource: "scans", action: "create" })
     .input(getScansListSchema)
     .query(async ({ ctx, input }) => {
-      const searched = await ctx.indexes.scans.search(input.query, {
+      const searched = await ctx.meilisearch.scans.search(input.query, {
         hitsPerPage: input.perPage,
         page: input.page,
       })
@@ -115,6 +115,6 @@ export const scansRouter = createTRPCRouter({
         })
       }
 
-      await ctx.indexes.scans.deleteDocuments(input.ids)
+      await ctx.meilisearch.scans.deleteDocuments(input.ids)
     }),
 })

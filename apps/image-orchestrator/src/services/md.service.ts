@@ -1,6 +1,6 @@
 import type Stream from "@elysiajs/stream"
 import { type Scan, db } from "@taiyomoe/db"
-import { meilisearchIndexes } from "@taiyomoe/meilisearch"
+import { meilisearchClient } from "@taiyomoe/meilisearch"
 import {
   getMediaIndexItem,
   getScanIndexItem,
@@ -129,7 +129,7 @@ const importFn = async (
   s(4, "Reindexando a busca...", "ongoing")
 
   const mediaIndexItem = await getMediaIndexItem(db, media.id)
-  await meilisearchIndexes.medias.updateDocuments([mediaIndexItem])
+  await meilisearchClient.medias.updateDocuments([mediaIndexItem])
 
   s(4, "Busca reindexada", "success")
 
@@ -192,7 +192,7 @@ const importFn = async (
     const scansIndexItems = await parallel(10, scans, ({ id }) =>
       getScanIndexItem(db, id),
     )
-    await meilisearchIndexes.scans.updateDocuments(scansIndexItems)
+    await meilisearchClient.scans.updateDocuments(scansIndexItems)
 
     s(8, "Busca das scans reindexada", "success")
   }

@@ -43,7 +43,7 @@ export const coversRouter = createTRPCRouter({
         })
 
         const indexItem = await getMediaIndexItem(ctx.db, cover.mediaId)
-        await ctx.indexes.medias.updateDocuments([indexItem])
+        await ctx.meilisearch.medias.updateDocuments([indexItem])
       }
     }),
 

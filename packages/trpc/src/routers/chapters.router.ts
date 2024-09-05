@@ -358,7 +358,7 @@ export const chaptersRouter = createTRPCRouter({
     .meta({ resource: "mediaChapters", action: "create" })
     .input(getChaptersListSchema)
     .query(async ({ ctx, input }) => {
-      const searched = await ctx.indexes.chapters.search(null, {
+      const searched = await ctx.meilisearch.chapters.search(null, {
         filter: buildFilter(input.query),
         hitsPerPage: input.perPage,
         page: input.page,
