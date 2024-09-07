@@ -14,7 +14,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@elysiajs/cors": "^1.1.0",
+    "@elysiajs/cors": "^1.1.1",
     "@elysiajs/stream": "^1.1.0",
     "@elysiajs/swagger": "^1.1.1",
     "@t3-oss/env-core": "^0.11.1",
@@ -39,7 +39,7 @@
   "devDependencies": {
     "@taiyomoe/tsconfig": "workspace:*",
     "@taiyomoe/types": "workspace:*",
-    "@types/node": "^20.16.4",
+    "@types/node": "^20.16.5",
     "typescript": "^5.5.4"
   }
 }
