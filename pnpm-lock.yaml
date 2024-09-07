@@ -603,8 +603,8 @@ importers:
         specifier: ^0.11.1
         version: 0.11.1(typescript@5.5.4)(zod@3.23.8)
       '@umami/api-client':
-        specifier: ^0.72.0
-        version: 0.72.0(encoding@0.1.13)(next@14.2.8(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: ^0.73.0
+        version: 0.73.0(encoding@0.1.13)(next@14.2.8(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       zod:
         specifier: ^3.23.8
         version: 3.23.8
@@ -3355,8 +3355,8 @@ packages:
   '@types/tinycolor2@1.4.6':
     resolution: {integrity: sha512-iEN8J0BoMnsWBqjVbWH/c0G0Hh7O21lpR2/+PrvAVgWdzL7eexIFm4JN/Wn10PTcmNdtS6U67r499mlWMXOxNw==}
 
-  '@umami/api-client@0.72.0':
-    resolution: {integrity: sha512-a0cg6MFc0Z0esrq1SdVc/HPE3yWupkA+f8x4V9aJzdYDVIm3vF7pF8k6NeokBxEmTLtOUK2mczIsHSyNTwowIA==}
+  '@umami/api-client@0.73.0':
+    resolution: {integrity: sha512-bzH+B0cMqBbBkpotpRLiwdbq4CuYf6/a0PZerG0wocHJu+xsGv063reVTtyzsag7ZrrPp7ttg/IYzRUJ75TtzQ==}
 
   '@yr/monotone-cubic-spline@1.0.3':
     resolution: {integrity: sha512-FQXkOta0XBSUPHndIKON2Y9JeQz5ZeMqLYZVVK93FliNBFm7LNMIZmY6FrMEB9XPcDbE2bekMbZD6kzDkxwYjA==}
@@ -9588,7 +9588,7 @@ snapshots:
 
   '@types/tinycolor2@1.4.6': {}
 
-  '@umami/api-client@0.72.0(encoding@0.1.13)(next@14.2.8(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@umami/api-client@0.73.0(encoding@0.1.13)(next@14.2.8(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
       cross-fetch: 3.1.8(encoding@0.1.13)
       debug: 4.3.6
