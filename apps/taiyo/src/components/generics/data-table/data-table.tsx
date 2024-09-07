@@ -115,7 +115,7 @@ export function DataTable<TData, TValue>({
           >
             {multipleActions}
           </AnimatedPresence>
-          <TableColumnVisibilityDropdown table={table} />
+          <TableColumnVisibilityDropdown />
         </div>
         <Table>
           <TableHeader>

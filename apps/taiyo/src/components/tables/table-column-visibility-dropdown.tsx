@@ -5,16 +5,11 @@ import {
   DropdownMenu,
   DropdownTrigger,
 } from "@nextui-org/dropdown"
-import type { Table } from "@tanstack/react-table"
 import { ArrowLeftRightIcon, ChevronRightIcon } from "lucide-react"
+import { useDataTable } from "~/components/generics/data-table/data-table-context"
 
-type Props<TData> = {
-  table: Table<TData>
-}
-
-export const TableColumnVisibilityDropdown = <TData,>({
-  table,
-}: Props<TData>) => {
+export const TableColumnVisibilityDropdown = () => {
+  const table = useDataTable()
   const visibleColumns = table.getAllColumns().filter((c) => c.getIsVisible())
   const hideableColumns = table.getAllColumns().filter((c) => c.getCanHide())
 
