@@ -33,7 +33,7 @@ const getItem = async (
   }
 }
 
-const bulkDelete = (rawChapters: MediaChapter[]) => {
+const bulkMutate = (rawChapters: MediaChapter[]) => {
   const chapters = rawChapters.map((c) => ({
     ...omit(c, ["createdAt", "updatedAt", "deletedAt"]),
     createdAt: DateTime.fromJSDate(c.createdAt).toSeconds(),
@@ -48,5 +48,5 @@ const bulkDelete = (rawChapters: MediaChapter[]) => {
 
 export const ChaptersIndexService = {
   getItem,
-  bulkDelete,
+  bulkMutate,
 }

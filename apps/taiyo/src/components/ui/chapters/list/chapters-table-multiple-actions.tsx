@@ -10,10 +10,12 @@ import type { ChaptersListItem } from "@taiyomoe/types"
 import { ArchiveRestoreIcon, EllipsisIcon, Trash2Icon } from "lucide-react"
 import { type Key, useMemo } from "react"
 import { useDataTable } from "~/components/generics/data-table/data-table-context"
+import { ChaptersTableRestoreModal } from "~/components/ui/chapters/list/chapters-table-restore-modal"
 import { ChaptersTableDeleteModal } from "./chapters-table-delete-modal"
 
 export const ChaptersTableMultipleActions = () => {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure()
+  const restoreModal = useDisclosure()
+  const deleteModal = useDisclosure()
   const table = useDataTable<ChaptersListItem>()
   const selectedDeletedChaptersCount = table
     .getSelectedRowModel()
@@ -30,8 +32,10 @@ export const ChaptersTableMultipleActions = () => {
   const handleAction = (key: Key) => {
     switch (key) {
       case "restore":
+        restoreModal.onOpen()
+        break
       case "delete":
-        onOpen()
+        deleteModal.onOpen()
         break
     }
   }
@@ -67,7 +71,8 @@ export const ChaptersTableMultipleActions = () => {
           </DropdownItem>
         </DropdownMenu>
       </Dropdown>
-      <ChaptersTableDeleteModal isOpen={isOpen} onOpenChange={onOpenChange} />
+      <ChaptersTableRestoreModal {...restoreModal} />
+      <ChaptersTableDeleteModal {...deleteModal} />
     </>
   )
 }

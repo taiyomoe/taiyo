@@ -418,6 +418,54 @@ export const chaptersRouter = createTRPCRouter({
       }
     }),
 
+  bulkRestore: protectedProcedure
+    .meta({ resource: "mediaChapters", action: "delete" })
+    .input(idSchema.array())
+    .mutation(async ({ ctx, input }) => {
+      const chapters = await ctx.db.mediaChapter.findMany({
+        where: { id: { in: input } },
+      })
+
+      if (chapters.length !== input.length) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Um ou vários capítulos não existem.",
+        })
+      }
+
+      if (chapters.some((c) => c.deletedAt === null)) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Alguns capítulos não estão deletados.",
+        })
+      }
+
+      const updatedChapters = chapters.map((c) => ({
+        ...c,
+        deletedAt: null,
+        deleterId: null,
+      }))
+
+      for (const chapter of updatedChapters) {
+        await ctx.db.mediaChapter.update({
+          data: {
+            deletedAt: chapter.deletedAt,
+            deleterId: chapter.deleterId,
+          },
+          where: { id: chapter.id },
+        })
+
+        await ctx.logs.chapters.insert({
+          type: "restored",
+          old: chapters.find((c) => c.id === chapter.id)!,
+          _new: chapter,
+          userId: ctx.session.user.id,
+        })
+      }
+
+      await ChaptersIndexService.bulkMutate(updatedChapters)
+    }),
+
   bulkDelete: protectedProcedure
     .meta({ resource: "mediaChapters", action: "delete" })
     .input(idSchema.array())
@@ -430,6 +478,13 @@ export const chaptersRouter = createTRPCRouter({
         throw new TRPCError({
           code: "NOT_FOUND",
           message: "Um ou vários capítulos não existem.",
+        })
+      }
+
+      if (chapters.some((c) => c.deletedAt !== null)) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Alguns capítulos já estão deletados.",
         })
       }
 
@@ -455,6 +510,6 @@ export const chaptersRouter = createTRPCRouter({
         })
       }
 
-      await ChaptersIndexService.bulkDelete(updatedChapters)
+      await ChaptersIndexService.bulkMutate(updatedChapters)
     }),
 })
