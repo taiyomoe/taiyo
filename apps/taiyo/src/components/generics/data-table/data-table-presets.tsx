@@ -22,7 +22,6 @@ export const selectableColumn = <TData,>(): ColumnDef<TData> => ({
       aria-label="Select row"
     />
   ),
-  enableSorting: false,
   enableHiding: false,
 })
 

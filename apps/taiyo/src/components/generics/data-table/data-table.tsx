@@ -1,15 +1,17 @@
 import { Spinner } from "@nextui-org/spinner"
 import {
   type ColumnDef,
+  type SortingState,
   type VisibilityState,
   flexRender,
   functionalUpdate,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table"
-import { type ReactNode, useMemo, useRef } from "react"
+import { type ReactNode, useMemo, useRef, useState } from "react"
 import { TableBodyEmpty } from "~/components/tables/table-body-empty"
 import { TableColumnVisibilityDropdown } from "~/components/tables/table-column-visibility-dropdown"
+import { TableHeadSorted } from "~/components/tables/table-head-sorted"
 import { TablePagination } from "~/components/tables/table-pagination"
 import { AnimatedPresence } from "~/components/ui/animated-presence"
 import { DataTableContext } from "./data-table-context"
@@ -53,13 +55,17 @@ export function DataTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
   const previousData = useRef(data)
   const previousTotalPages = useRef(totalPages)
+  const [sorting, setSorting] = useState<SortingState>([])
   const table = useReactTable({
     data: isLoading ? previousData.current : data,
     columns,
     pageCount: isLoading ? previousTotalPages.current : totalPages,
     manualPagination: true,
     manualFiltering: true,
+    manualSorting: true,
+    enableMultiSort: false,
     getCoreRowModel: getCoreRowModel(),
+    onSortingChange: setSorting,
     onPaginationChange: (updater) => {
       const newValues = functionalUpdate(updater, {
         pageIndex: page - 1,
@@ -79,6 +85,7 @@ export function DataTable<TData, TValue>({
       columnVisibility: initialVisibility as VisibilityState,
     },
     state: {
+      sorting,
       pagination: {
         pageIndex: page - 1,
         pageSize: perPage,
@@ -114,15 +121,18 @@ export function DataTable<TData, TValue>({
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
+                {headerGroup.headers.map((h) => {
+                  if (h.column.getCanMultiSort()) {
+                    return (
+                      <TableHeadSorted key={h.id} column={h.column}>
+                        {flexRender(h.column.columnDef.header, h.getContext())}
+                      </TableHeadSorted>
+                    )
+                  }
+
                   return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext(),
-                          )}
+                    <TableHead key={h.id}>
+                      {flexRender(h.column.columnDef.header, h.getContext())}
                     </TableHead>
                   )
                 })}
@@ -131,17 +141,14 @@ export function DataTable<TData, TValue>({
           </TableHeader>
           {status !== "empty" && (
             <TableBody>
-              {table.getRowModel().rows.map((row) => (
+              {table.getRowModel().rows.map((r) => (
                 <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
+                  key={r.id}
+                  data-state={r.getIsSelected() && "selected"}
                 >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
-                      )}
+                  {r.getVisibleCells().map((c) => (
+                    <TableCell key={c.id}>
+                      {flexRender(c.column.columnDef.cell, c.getContext())}
                     </TableCell>
                   ))}
                 </TableRow>
