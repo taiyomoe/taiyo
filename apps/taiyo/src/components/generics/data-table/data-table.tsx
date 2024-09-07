@@ -7,11 +7,11 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table"
-import { AnimatePresence, motion } from "framer-motion"
 import { type ReactNode, useMemo, useRef } from "react"
 import { TableBodyEmpty } from "~/components/tables/table-body-empty"
 import { TableColumnVisibilityDropdown } from "~/components/tables/table-column-visibility-dropdown"
 import { TablePagination } from "~/components/tables/table-pagination"
+import { AnimatedPresence } from "~/components/ui/animated-presence"
 import { DataTableContext } from "./data-table-context"
 import {
   Table,
@@ -98,22 +98,16 @@ export function DataTable<TData, TValue>({
   }
 
   return (
-    <DataTableContext.Provider value={table}>
+    <DataTableContext.Provider value={{ table }}>
       <div className="space-y-4">
         {filters}
         <div className="flex justify-end gap-2">
           {status === "loading" && <Spinner size="sm" />}
-          <AnimatePresence initial={false}>
-            {table.getSelectedRowModel().rows.length > 0 && (
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 10 }}
-              >
-                {multipleActions}
-              </motion.div>
-            )}
-          </AnimatePresence>
+          <AnimatedPresence
+            active={table.getSelectedRowModel().rows.length > 0}
+          >
+            {multipleActions}
+          </AnimatedPresence>
           <TableColumnVisibilityDropdown table={table} />
         </div>
         <Table>
