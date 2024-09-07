@@ -6,6 +6,8 @@ import type {
 import { formatQuery as baseFormatQuery } from "react-querybuilder/formatQuery"
 
 const ruleFilterSingle = (input: RuleGroupType | RuleType) => {
+  if (typeof input === "string") return true
+
   if ("rules" in input) {
     return input.rules.length ? input.rules.every(ruleFilterSingle) : false
   }
@@ -21,6 +23,10 @@ const ruleFilterSingle = (input: RuleGroupType | RuleType) => {
 
 const formatQuery = (input: RuleGroupType) => {
   const filteredRules = input.rules.filter(ruleFilterSingle)
+
+  if (["and", "or"].includes(String(filteredRules.at(-1)))) {
+    filteredRules.pop()
+  }
 
   if (filteredRules.length === 0) {
     return null
