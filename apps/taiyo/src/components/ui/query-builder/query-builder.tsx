@@ -41,6 +41,10 @@ export const QueryBuilder = <
         valueEditor: QueryBuilderValueEditor,
         actionElement: QueryBuilderActionButton,
       }}
+      translations={{
+        addRule: { label: "Nova regra" },
+        addGroup: { label: "Novo grupo" },
+      }}
       getOperators={getOperators}
       enableMountQueryChange={false}
       showCombinatorsBetweenRules
@@ -53,9 +57,12 @@ export const QueryBuilder = <
 const getOperators = (_: string, { fieldData }: { fieldData: Field }) => {
   const isNullable = String(fieldData.datatype).includes("nullable-")
   const datatype = String(fieldData.datatype).replace("nullable-", "")
-  const NULLABLE_OPERATORS = defaultOperators.filter((op) =>
-    ["null", "notNull"].includes(op.name),
-  )
+  const NULLABLE_OPERATORS = isNullable
+    ? [
+        { name: "null", label: "nulo" },
+        { name: "notNull", label: "não nulo" },
+      ]
+    : []
 
   switch (datatype) {
     case "boolean":
@@ -71,7 +78,7 @@ const getOperators = (_: string, { fieldData }: { fieldData: Field }) => {
         { name: "<=", label: "<=" },
         { name: ">", label: ">" },
         { name: ">=", label: ">=" },
-        ...(isNullable ? NULLABLE_OPERATORS : []),
+        ...NULLABLE_OPERATORS,
       ]
     case "enum":
     case "user":
@@ -80,19 +87,19 @@ const getOperators = (_: string, { fieldData }: { fieldData: Field }) => {
       return [
         { name: "=", label: "=" },
         { name: "!=", label: "!=" },
-        { name: "in", label: "in" },
-        { name: "notIn", label: "not in" },
-        ...(isNullable ? NULLABLE_OPERATORS : []),
+        { name: "in", label: "em" },
+        { name: "notIn", label: "não em" },
+        ...NULLABLE_OPERATORS,
       ]
     case "date":
       return [
         { name: "=", label: "=" },
         { name: "!=", label: "!=" },
-        { name: "<", label: "before" },
-        { name: "<=", label: "before or equal" },
-        { name: ">", label: "after" },
-        { name: ">=", label: "after or equal" },
-        ...(isNullable ? NULLABLE_OPERATORS : []),
+        { name: "<", label: "antes" },
+        { name: "<=", label: "antes ou igual" },
+        { name: ">", label: "depois" },
+        { name: ">=", label: "depois ou igual" },
+        ...NULLABLE_OPERATORS,
       ]
   }
 

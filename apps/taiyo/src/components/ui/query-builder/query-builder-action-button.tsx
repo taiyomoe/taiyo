@@ -19,7 +19,7 @@ export const QueryBuilderActionButton = (props: ActionProps) => {
           variant="flat"
           {...defaultProps}
         >
-          {testID === "add-rule" ? "Nova regra" : "Novo grupo"}
+          {props.label}
         </Button>
       )
 
