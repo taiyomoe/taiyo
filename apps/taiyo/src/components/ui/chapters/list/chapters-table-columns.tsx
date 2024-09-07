@@ -17,16 +17,19 @@ export const columns: ColumnDef<ChaptersListItem>[] = [
   {
     accessorKey: "createdAt",
     header: "Data de upload",
+    enableMultiSort: true,
     cell: ({ getValue }) => <TableCellDate date={getValue<Date>()} />,
   },
   {
     accessorKey: "updatedAt",
     header: "Última atualização",
+    enableMultiSort: true,
     cell: ({ getValue }) => <TableCellDate date={getValue<Date>()} />,
   },
   {
     accessorKey: "deletedAt",
     header: "Data de remoção",
+    enableMultiSort: true,
     cell: ({ getValue }) => {
       const value = getValue<ChaptersListItem["deletedAt"]>()
 
@@ -35,21 +38,43 @@ export const columns: ColumnDef<ChaptersListItem>[] = [
       return <TableCellDate date={value} />
     },
   },
-  { accessorKey: "title", header: "Título" },
-  { accessorKey: "number", header: "Número" },
-  { accessorKey: "volume", header: "Volume" },
+  {
+    accessorKey: "title",
+    header: "Título",
+    enableMultiSort: true,
+  },
+  {
+    accessorKey: "number",
+    header: "Número",
+    enableMultiSort: true,
+  },
+  {
+    accessorKey: "volume",
+    header: "Volume",
+    enableMultiSort: true,
+  },
   {
     accessorKey: "language",
     header: "Língua",
+    enableMultiSort: true,
     cell: ({ getValue }) => (
       <TableCellLanguage language={getValue<ChaptersListItem["language"]>()} />
     ),
   },
-  { accessorKey: "contentRating", header: "Classificação" },
-  { accessorKey: "flag", header: "Flag" },
+  {
+    accessorKey: "contentRating",
+    header: "Classificação",
+    enableMultiSort: true,
+  },
+  {
+    accessorKey: "flag",
+    header: "Flag",
+    enableMultiSort: true,
+  },
   {
     accessorKey: "uploader",
     header: "Uploader",
+    enableMultiSort: true,
     cell: ({ getValue }) => (
       <TableCellUser user={getValue<ChaptersListItem["uploader"]>()} />
     ),
@@ -64,6 +89,7 @@ export const columns: ColumnDef<ChaptersListItem>[] = [
   {
     accessorKey: "media",
     header: "Obra",
+    enableMultiSort: true,
     cell: ({ getValue }) => (
       <TableCellMedia media={getValue<ChaptersListItem["media"]>()} />
     ),
@@ -71,6 +97,7 @@ export const columns: ColumnDef<ChaptersListItem>[] = [
   {
     accessorKey: "deleter",
     header: "Deletado por",
+    enableMultiSort: true,
     cell: ({ getValue }) => (
       <TableCellUser user={getValue<ChaptersListItem["deleter"]>()} />
     ),
