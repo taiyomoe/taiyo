@@ -2,6 +2,7 @@ import { fromDate } from "@internationalized/date"
 import { Input } from "@nextui-org/input"
 import { Switch } from "@nextui-org/switch"
 import { ContentRating, Flag, Languages } from "@taiyomoe/db"
+import { useRef } from "react"
 import { ValueEditor, type ValueEditorProps } from "react-querybuilder"
 import { DatePicker } from "~/components/generics/date-picker"
 import { MultiSelect } from "~/components/generics/multi-select"
@@ -29,6 +30,11 @@ const getEnum = (name: string) => {
 
 export const QueryBuilderValueEditor = (props: ValueEditorProps) => {
   const { fieldData, operator, handleOnChange } = props
+  const previousValue = useRef(props.value)
+
+  if (previousValue.current !== props.value && !props.value) {
+    previousValue.current = null
+  }
 
   if (["null", "notNull"].includes(props.operator)) {
     return null
@@ -42,14 +48,16 @@ export const QueryBuilderValueEditor = (props: ValueEditorProps) => {
       return (
         <Input
           className="min-w-[300px]"
-          onValueChange={handleOnChange}
+          value={previousValue.current ?? ""}
+          onValueChange={(v) => {
+            handleOnChange(v)
+            previousValue.current = v
+          }}
           type="number"
         />
       )
     case fieldData.datatype === "date":
     case fieldData.datatype === "nullable-date":
-      console.log("props value", props.value)
-
       return (
         <DatePicker
           className="min-w-[300px]"
@@ -69,21 +77,33 @@ export const QueryBuilderValueEditor = (props: ValueEditorProps) => {
       return (
         <MediasMultiAutocomplete
           classNames={{ container: () => "min-w-[300px]" }}
-          onChange={(v) => handleOnChange(v.map((s) => s.value))}
+          value={previousValue.current}
+          onChange={(v) => {
+            handleOnChange(v.map((s) => s.value))
+            previousValue.current = v
+          }}
         />
       )
     case fieldData.datatype === "media":
       return (
         <MediasAutocomplete
           classNames={{ base: "min-w-[300px]" }}
-          onSelectionChange={(v) => handleOnChange(v?.id ?? "")}
+          selectedKey={previousValue.current}
+          onSelectionChange={(v) => {
+            handleOnChange(v?.id ?? "")
+            previousValue.current = v?.id ?? ""
+          }}
         />
       )
     case fieldData.datatype === "user" && operator.includes("in"):
       return (
         <UsersMultiAutocomplete
           classNames={{ container: () => "min-w-[300px]" }}
-          onChange={(v) => handleOnChange(v.map((s) => s.value))}
+          value={previousValue.current}
+          onChange={(v) => {
+            handleOnChange(v.map((s) => s.value))
+            previousValue.current = v
+          }}
         />
       )
     case fieldData.datatype === "user":
@@ -91,26 +111,39 @@ export const QueryBuilderValueEditor = (props: ValueEditorProps) => {
       return (
         <UsersAutocomplete
           classNames={{ base: "min-w-[300px]" }}
-          onSelectionChange={(v) => handleOnChange(v?.id ?? "")}
+          selectedKey={previousValue.current}
+          onSelectionChange={(v) => {
+            handleOnChange(v?.id ?? "")
+            previousValue.current = v?.id ?? ""
+          }}
         />
       )
     case fieldData.datatype === "scan":
       return (
         <ScansMultiAutocomplete
           classNames={{ container: () => "min-w-[300px]" }}
-          onChange={(v) => handleOnChange(v.map((s) => s.value))}
+          value={previousValue.current}
+          onChange={(v) => {
+            handleOnChange(v.map((s) => s.value))
+            previousValue.current = v
+          }}
         />
       )
-    case fieldData.datatype === "enum" && operator.includes("in"):
+    case fieldData.datatype === "enum" && ["in", "notIn"].includes(operator):
       return (
         <MultiSelect
           options={SelectUtils.enumToItems(getEnum(fieldData.name))}
-          onChange={(v) => handleOnChange(v.map((v) => v.value))}
+          value={previousValue.current}
+          onChange={(v) => {
+            handleOnChange(v.map((v) => v.value))
+            previousValue.current = v
+          }}
         />
       )
     case fieldData.datatype === "enum":
       return (
         <EnumSelect
+          selectedKeys={[props.value] || null}
           items={getEnum(fieldData.name)}
           onSelectionChange={(v) =>
             handleOnChange(SelectUtils.getSelectedKey(v))
