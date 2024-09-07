@@ -6,7 +6,7 @@ import {
   DropdownTrigger,
 } from "@nextui-org/dropdown"
 import type { Table } from "@tanstack/react-table"
-import { ChevronDownIcon } from "lucide-react"
+import { ArrowLeftRightIcon, ChevronRightIcon } from "lucide-react"
 
 type Props<TData> = {
   table: Table<TData>
@@ -21,7 +21,18 @@ export const TableColumnVisibilityDropdown = <TData,>({
   return (
     <Dropdown>
       <DropdownTrigger className="flex">
-        <Button endContent={<ChevronDownIcon size={16} />} variant="flat">
+        <Button
+          startContent={
+            <ArrowLeftRightIcon className="text-default-400" size={16} />
+          }
+          endContent={
+            <ChevronRightIcon
+              className="transition-transform group-aria-expanded:rotate-90"
+              size={16}
+            />
+          }
+          variant="flat"
+        >
           Colunas
         </Button>
       </DropdownTrigger>
