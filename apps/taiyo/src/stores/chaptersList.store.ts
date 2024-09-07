@@ -16,7 +16,7 @@ type Actions = {
 }
 
 export const useChaptersListStore = create<State & Actions>((set, get) => ({
-  query: "",
+  query: "deletedAt = null",
   page: 1,
   perPage: DEFAULT_CHAPTERS_LIST_PER_PAGE,
 
