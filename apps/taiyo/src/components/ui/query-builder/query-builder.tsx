@@ -22,7 +22,9 @@ export const QueryBuilder = <
     QueryBuilderProps<RG, F, O, C>,
     | "controlClassnames"
     | "controlElements"
+    | "translations"
     | "getOperators"
+    | "enableMountQueryChange"
     | "showCombinatorsBetweenRules"
     | "resetOnOperatorChange"
   >,
