@@ -42,6 +42,7 @@ export const QueryBuilder = <
         actionElement: QueryBuilderActionButton,
       }}
       getOperators={getOperators}
+      enableMountQueryChange={false}
       showCombinatorsBetweenRules
       resetOnOperatorChange
       {...props}
@@ -50,7 +51,13 @@ export const QueryBuilder = <
 }
 
 const getOperators = (_: string, { fieldData }: { fieldData: Field }) => {
-  switch (fieldData.datatype) {
+  const isNullable = String(fieldData.datatype).includes("nullable-")
+  const datatype = String(fieldData.datatype).replace("nullable-", "")
+  const NULLABLE_OPERATORS = defaultOperators.filter((op) =>
+    ["null", "notNull"].includes(op.name),
+  )
+
+  switch (datatype) {
     case "boolean":
       return [
         { name: "=", label: "=" },
@@ -64,6 +71,7 @@ const getOperators = (_: string, { fieldData }: { fieldData: Field }) => {
         { name: "<=", label: "<=" },
         { name: ">", label: ">" },
         { name: ">=", label: ">=" },
+        ...(isNullable ? NULLABLE_OPERATORS : []),
       ]
     case "enum":
     case "user":
@@ -74,6 +82,17 @@ const getOperators = (_: string, { fieldData }: { fieldData: Field }) => {
         { name: "!=", label: "!=" },
         { name: "in", label: "in" },
         { name: "notIn", label: "not in" },
+        ...(isNullable ? NULLABLE_OPERATORS : []),
+      ]
+    case "date":
+      return [
+        { name: "=", label: "=" },
+        { name: "!=", label: "!=" },
+        { name: "<", label: "before" },
+        { name: "<=", label: "before or equal" },
+        { name: ">", label: "after" },
+        { name: ">=", label: "after or equal" },
+        ...(isNullable ? NULLABLE_OPERATORS : []),
       ]
   }
 

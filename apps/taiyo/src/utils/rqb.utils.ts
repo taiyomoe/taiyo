@@ -10,6 +10,10 @@ const ruleFilterSingle = (input: RuleGroupType | RuleType) => {
     return input.rules.length ? input.rules.every(ruleFilterSingle) : false
   }
 
+  if (["null", "notNull"].includes(input.operator)) {
+    return true
+  }
+
   return Array.isArray(input.value)
     ? input.value.length !== 0
     : input.value !== ""
