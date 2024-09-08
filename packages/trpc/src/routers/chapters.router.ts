@@ -26,12 +26,12 @@ export const chaptersRouter = createTRPCRouter({
     .meta({ resource: "mediaChapters", action: "update" })
     .input(updateChapterSchema)
     .mutation(async ({ ctx, input: { scanIds, ...input } }) => {
-      const mediaChapter = await ctx.db.mediaChapter.findUnique({
+      const chapter = await ctx.db.mediaChapter.findUnique({
         include: { scans: true },
         where: { id: input.id, deletedAt: null },
       })
 
-      if (!mediaChapter) {
+      if (!chapter) {
         throw new TRPCError({
           code: "NOT_FOUND",
           message: "Media chapter not found",
@@ -58,6 +58,15 @@ export const chaptersRouter = createTRPCRouter({
         where: { id: input.id },
       })
 
+      await ctx.logs.chapters.insert({
+        type: "updated",
+        old: omit(chapter, ["scans"]),
+        _new: result,
+        userId: ctx.session.user.id,
+      })
+
+      await ChaptersIndexService.bulkMutate([result])
+
       return result
     }),
 
@@ -82,6 +91,21 @@ export const chaptersRouter = createTRPCRouter({
           data: { volume: chptrs.number },
           where: { id: { in: chptrs.ids } },
         })
+
+        const newChapters = await ctx.db.mediaChapter.findMany({
+          where: { id: { in: chptrs.ids } },
+        })
+
+        for (const chapterId of chptrs.ids) {
+          await ctx.logs.chapters.insert({
+            type: "updated",
+            old: chapters.find((c) => c.id === chapterId)!,
+            _new: newChapters.find((c) => c.id === chapterId)!,
+            userId: ctx.session.user.id,
+          })
+        }
+
+        await ChaptersIndexService.bulkMutate(newChapters)
       }
     }),
 
@@ -150,6 +174,21 @@ export const chaptersRouter = createTRPCRouter({
       }
 
       await ctx.db.$transaction(mutations)
+
+      const newChapters = await ctx.db.mediaChapter.findMany({
+        where: { id: { in: chapters.map((c) => c.id) } },
+      })
+
+      for (const chapterId of chapters.map((c) => c.id)) {
+        await ctx.logs.chapters.insert({
+          type: "updated",
+          old: chapters.find((c) => c.id === chapterId)!,
+          _new: newChapters.find((c) => c.id === chapterId)!,
+          userId: ctx.session.user.id,
+        })
+      }
+
+      await ChaptersIndexService.bulkMutate(newChapters)
     }),
 
   getById: publicProcedure

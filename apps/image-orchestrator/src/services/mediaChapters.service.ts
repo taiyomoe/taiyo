@@ -2,6 +2,7 @@ import { randomUUID } from "crypto"
 import { cacheClient } from "@taiyomoe/cache"
 import { db } from "@taiyomoe/db"
 import { logsClient } from "@taiyomoe/logs"
+import { ChaptersIndexService } from "@taiyomoe/meilisearch/services"
 import { latestReleaseQuery } from "@taiyomoe/services/utils"
 import { omit } from "radash"
 import type { UploadChapterInput } from "../schemas"
@@ -29,6 +30,8 @@ const insert = async (
     _new: result,
     userId: uploaderId,
   })
+
+  await ChaptersIndexService.bulkMutate([result])
 
   const cached = await cacheClient.chapters.latest.get()
 
