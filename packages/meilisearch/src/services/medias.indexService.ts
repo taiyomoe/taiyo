@@ -51,9 +51,9 @@ const getItem = async (db: PrismaClient, id: string) => {
 }
 
 const sync = async (db: PrismaClient, ids: string[]) => {
-  const chapters = await parallel(10, ids, (id) => getItem(db, id))
+  const medias = await parallel(10, ids, (id) => getItem(db, id))
 
-  return meilisearchClient.chapters.updateDocuments(chapters)
+  return meilisearchClient.medias.updateDocuments(medias)
 }
 
 export const MediasIndexService = {
