@@ -20,13 +20,15 @@ export const scansRouter = createTRPCRouter({
         },
       })
 
-      const indexItem = await getScanIndexItem(ctx.db, createdScan.id)
+      const indexItem = await ScansIndexService.getItem(ctx.db, createdScan.id)
       await ctx.meilisearch.scans.updateDocuments([indexItem])
+
       await ctx.logs.scans.insert({
         type: "created",
         _new: createdScan,
         userId: ctx.session.user.id,
       })
+
       return createdScan
     }),
 
@@ -56,6 +58,9 @@ export const scansRouter = createTRPCRouter({
         _new: newScan,
         userId: ctx.session.user.id,
       })
+
+      const indexItem = await ScansIndexService.getItem(ctx.db, newScan.id)
+      await ctx.meilisearch.scans.updateDocuments([indexItem])
     }),
 
   getList: protectedProcedure

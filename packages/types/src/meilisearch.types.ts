@@ -2,6 +2,7 @@ import type {
   MediaChapter,
   MediaTitle,
   MediaType,
+  Scan,
   User,
   UserProfile,
 } from "@prisma/client"
@@ -30,9 +31,13 @@ export type MediasIndexItem = {
   mainCoverId: string
 }
 
-export type ScansIndexItem = {
-  id: string
-  name: string
+export type ScansIndexItem = Omit<
+  Scan,
+  "createdAt" | "updatedAt" | "deletedAt"
+> & {
+  createdAt: number
+  updatedAt: number
+  deletedAt: number | null
 }
 
 export type ChaptersIndexItem = Omit<

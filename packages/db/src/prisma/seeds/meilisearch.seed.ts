@@ -1,8 +1,8 @@
 import { meilisearchClient, rawMeilisearchClient } from "@taiyomoe/meilisearch"
 import { ChaptersIndexService } from "@taiyomoe/meilisearch/services"
+import { ScansIndexService } from "@taiyomoe/meilisearch/services"
 import {
   getMediaIndexItem,
-  getScanIndexItem,
   getUserIndexItem,
 } from "@taiyomoe/meilisearch/utils"
 import { db } from "../.."
@@ -26,7 +26,9 @@ const execute = async () => {
   await meilisearchClient.scans.deleteAllDocuments()
 
   const scans = await Promise.all(
-    (await db.scan.findMany()).map(({ id }) => getScanIndexItem(db, id)),
+    (await db.scan.findMany()).map(({ id }) =>
+      ScansIndexService.getItem(db, id),
+    ),
   )
 
   await meilisearchClient.scans.updateDocuments(scans)
