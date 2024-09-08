@@ -1,8 +1,11 @@
 import { DateTime } from "luxon"
 
 type Props = {
-  date: Date
+  date: Date | null
 }
 
-export const TableCellDate = ({ date }: Props) =>
-  DateTime.fromJSDate(date).setLocale("pt-br").toFormat("F")
+export const TableCellDate = ({ date }: Props) => {
+  if (!date) return null
+
+  return DateTime.fromJSDate(date).setLocale("pt-br").toFormat("F")
+}

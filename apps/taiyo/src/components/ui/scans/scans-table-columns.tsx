@@ -32,13 +32,9 @@ export const columns: ColumnDef<ScansListItem>[] = [
     accessorKey: "deletedAt",
     header: "Data de remoção",
     enableMultiSort: true,
-    cell: ({ getValue }) => {
-      const value = getValue<ScansListItem["deletedAt"]>()
-
-      if (!value) return null
-
-      return <TableCellDate date={value} />
-    },
+    cell: ({ getValue }) => (
+      <TableCellDate date={getValue<ScansListItem["deletedAt"]>()} />
+    ),
   },
   { accessorKey: "name", header: "Nome", enableMultiSort: true },
   { accessorKey: "description", header: "Descrição", enableMultiSort: true },

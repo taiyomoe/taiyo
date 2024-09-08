@@ -35,13 +35,9 @@ export const columns: ColumnDef<ChaptersListItem>[] = [
     accessorKey: "deletedAt",
     header: "Data de remoção",
     enableMultiSort: true,
-    cell: ({ getValue }) => {
-      const value = getValue<ChaptersListItem["deletedAt"]>()
-
-      if (!value) return null
-
-      return <TableCellDate date={value} />
-    },
+    cell: ({ getValue }) => (
+      <TableCellDate date={getValue<ChaptersListItem["deletedAt"]>()} />
+    ),
   },
   {
     accessorKey: "number",
