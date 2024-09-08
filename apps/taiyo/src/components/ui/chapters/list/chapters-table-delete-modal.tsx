@@ -75,11 +75,8 @@ export const ChaptersTableDeleteModal = ({ isOpen, onOpenChange }: Props) => {
           </p>
           <div className="rounded-md border border-warning-200 bg-warning-100 p-2">
             {chaptersCount === 1
-              ? "O capítulos não será totalmente excluído, ele poderá ser restaurado"
-              : "Os capítulos não serão totalmente excluídos, eles poderão ser restaurados"}{" "}
-            no futuro. No entanto, esse sistema ainda não está completo por
-            tanto não é possível restaurá-lo
-            {chaptersCount > 1 ? "s" : ""} no momento.
+              ? "O capítulo poderá ser restaurado."
+              : "Os capítulos poderão ser restaurados."}
           </div>
           <div className="flex flex-col gap-2">
             <p>
