@@ -8,7 +8,7 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table"
-import { type ReactNode, useMemo, useRef, useState } from "react"
+import { type ReactNode, useRef, useState } from "react"
 import { TableBodyEmpty } from "~/components/tables/table-body-empty"
 import { TableColumnVisibilityDropdown } from "~/components/tables/table-column-visibility-dropdown"
 import { TableHeadSorted } from "~/components/tables/table-head-sorted"
@@ -29,6 +29,7 @@ interface DataTableProps<TData, TValue> {
   data: TData[]
   filters: ReactNode
   multipleActions: ReactNode
+  emptyContent: ReactNode
   initialVisibility: Partial<Record<keyof TData, boolean>>
   page: number
   perPage: number
@@ -45,6 +46,7 @@ export function DataTable<TData, TValue>({
   data,
   filters,
   multipleActions,
+  emptyContent,
   initialVisibility,
   page,
   perPage,
@@ -100,12 +102,7 @@ export function DataTable<TData, TValue>({
       },
     },
   })
-  const status = useMemo(() => {
-    if (isLoading) return "loading"
-    if (table.getRowModel().rows?.length === 0) return "empty"
-
-    return "data"
-  }, [isLoading, table.getRowModel])
+  const hasData = table.getRowModel().rows?.length > 0
 
   if (!isLoading && data !== previousData.current) {
     previousData.current = data
@@ -117,7 +114,7 @@ export function DataTable<TData, TValue>({
       <div className="space-y-4">
         {filters}
         <div className="flex justify-end gap-4">
-          {status === "loading" && <Spinner size="sm" />}
+          {isLoading && <Spinner size="sm" />}
           <AnimatedPresence
             active={table.getSelectedRowModel().rows.length > 0}
           >
@@ -127,27 +124,31 @@ export function DataTable<TData, TValue>({
         </div>
         <Table>
           <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((h) => {
-                  if (h.column.getCanMultiSort()) {
-                    return (
-                      <TableHeadSorted key={h.id} column={h.column}>
-                        {flexRender(h.column.columnDef.header, h.getContext())}
-                      </TableHeadSorted>
-                    )
-                  }
+            {hasData &&
+              table.getHeaderGroups().map((headerGroup) => (
+                <TableRow key={headerGroup.id}>
+                  {headerGroup.headers.map((h) => {
+                    if (h.column.getCanMultiSort()) {
+                      return (
+                        <TableHeadSorted key={h.id} column={h.column}>
+                          {flexRender(
+                            h.column.columnDef.header,
+                            h.getContext(),
+                          )}
+                        </TableHeadSorted>
+                      )
+                    }
 
-                  return (
-                    <TableHead key={h.id}>
-                      {flexRender(h.column.columnDef.header, h.getContext())}
-                    </TableHead>
-                  )
-                })}
-              </TableRow>
-            ))}
+                    return (
+                      <TableHead key={h.id}>
+                        {flexRender(h.column.columnDef.header, h.getContext())}
+                      </TableHead>
+                    )
+                  })}
+                </TableRow>
+              ))}
           </TableHeader>
-          {status !== "empty" && (
+          {hasData && (
             <TableBody>
               {table.getRowModel().rows.map((r) => (
                 <TableRow
@@ -163,7 +164,11 @@ export function DataTable<TData, TValue>({
               ))}
             </TableBody>
           )}
-          {status === "empty" && <TableBodyEmpty colSpan={columns.length} />}
+          {!hasData && (
+            <TableBodyEmpty colSpan={columns.length}>
+              {emptyContent}
+            </TableBodyEmpty>
+          )}
         </Table>
         <div className="flex md:justify-end">
           <TablePagination

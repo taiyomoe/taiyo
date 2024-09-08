@@ -6,6 +6,7 @@ import { DataTable } from "~/components/generics/data-table/data-table"
 import { useChaptersListStore } from "~/stores/chaptersList.store"
 import { api } from "~/trpc/react"
 import { columns } from "./chapters-table-columns"
+import { ChaptersTableEmptyContent } from "./chapters-table-empty-content"
 import { ChaptersTableFilters } from "./chapters-table-filters"
 import { ChaptersTableMultipleActions } from "./chapters-table-multiple-actions"
 
@@ -30,6 +31,7 @@ export const ChaptersTable = ({ initialData }: Props) => {
       data={items}
       filters={<ChaptersTableFilters />}
       multipleActions={<ChaptersTableMultipleActions />}
+      emptyContent={<ChaptersTableEmptyContent />}
       initialVisibility={{
         id: false,
         updatedAt: false,
