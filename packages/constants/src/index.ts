@@ -6,6 +6,21 @@ export const LATEST_CHAPTERS_GROUPED_PER_PAGE_CHOICES = [5, 10, 20, 30, 50]
 
 export const DEFAULT_CHAPTERS_LIST_PER_PAGE = 20
 export const CHAPTERS_LIST_PER_PAGE_CHOICES = [5, 10, 20, 30, 50]
+export const CHAPTERS_LIST_SORTABLE_FIELDS = [
+  "createdAt",
+  "updatedAt",
+  "deletedAt",
+  "title",
+  "number",
+  "volume",
+  "language",
+  "contentRating",
+  "flag",
+  "uploader",
+  "media",
+  "scans",
+  "deleter",
+] as const
 
 export const DEFAULT_SCANS_LIST_PER_PAGE = 20
 export const SCANS_LIST_PER_PAGE_CHOICES = [5, 10, 20, 30, 50]

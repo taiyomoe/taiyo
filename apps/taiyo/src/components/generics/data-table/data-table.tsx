@@ -37,6 +37,7 @@ interface DataTableProps<TData, TValue> {
   isLoading: boolean
   onPageChange: (newPage: number) => void
   onPerPageChange: (newPerPage: number) => void
+  onSort: (newSortingState: SortingState) => void
 }
 
 export function DataTable<TData, TValue>({
@@ -52,6 +53,7 @@ export function DataTable<TData, TValue>({
   isLoading,
   onPageChange,
   onPerPageChange,
+  onSort,
 }: DataTableProps<TData, TValue>) {
   const previousData = useRef(data)
   const previousTotalPages = useRef(totalPages)
@@ -65,7 +67,13 @@ export function DataTable<TData, TValue>({
     manualSorting: true,
     enableMultiSort: false,
     getCoreRowModel: getCoreRowModel(),
-    onSortingChange: setSorting,
+    onSortingChange: (updater) => {
+      const newSortingValue =
+        updater instanceof Function ? updater(sorting) : updater
+
+      setSorting(newSortingValue)
+      onSort(newSortingValue)
+    },
     onPaginationChange: (updater) => {
       const newValues = functionalUpdate(updater, {
         pageIndex: page - 1,
@@ -108,7 +116,7 @@ export function DataTable<TData, TValue>({
     <DataTableContext.Provider value={{ table }}>
       <div className="space-y-4">
         {filters}
-        <div className="flex justify-end gap-2">
+        <div className="flex justify-end gap-4">
           {status === "loading" && <Spinner size="sm" />}
           <AnimatedPresence
             active={table.getSelectedRowModel().rows.length > 0}

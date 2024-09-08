@@ -1,7 +1,7 @@
 import { DEFAULT_GROUPED_CHAPTERS_LIMIT } from "@taiyomoe/constants"
 import { db } from "@taiyomoe/db"
 import { ChaptersIndexService } from "@taiyomoe/meilisearch/services"
-import { buildFilter } from "@taiyomoe/meilisearch/utils"
+import { buildFilter, buildSort } from "@taiyomoe/meilisearch/utils"
 import {
   bulkUpdateChaptersScansSchema,
   bulkUpdateChaptersVolumesSchema,
@@ -361,6 +361,7 @@ export const chaptersRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const searched = await ctx.meilisearch.chapters.search(null, {
         filter: buildFilter(input.query),
+        sort: buildSort(input.sort),
         hitsPerPage: input.perPage,
         page: input.page,
       })

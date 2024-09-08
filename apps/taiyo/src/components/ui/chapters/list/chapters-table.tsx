@@ -14,12 +14,13 @@ type Props = {
 }
 
 export const ChaptersTable = ({ initialData }: Props) => {
-  const { query, page, perPage, setPage, setPerPage } = useChaptersListStore()
+  const { query, sort, page, perPage, setSort, setPage, setPerPage } =
+    useChaptersListStore()
   const {
     data: { chapters: items, totalPages },
     isFetching,
   } = api.chapters.getList.useQuery(
-    { query, page, perPage },
+    { query, sort, page, perPage },
     { initialData, refetchOnMount: false },
   )
 
@@ -43,6 +44,7 @@ export const ChaptersTable = ({ initialData }: Props) => {
       isLoading={isFetching}
       onPageChange={setPage}
       onPerPageChange={setPerPage}
+      onSort={setSort}
     />
   )
 }

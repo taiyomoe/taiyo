@@ -32,3 +32,34 @@ export const optionalUrlSchema = (startsWith?: string[]) =>
 
       return startsWith.some((s) => v.startsWith(s))
     })
+
+export const sortableFieldsSchema = <
+  TType extends readonly [string, ...string[]],
+>(
+  input: TType,
+) =>
+  z
+    .tuple([
+      z.enum(input).transform((v) => {
+        if (!["uploader", "media", "scans", "deleter"].includes(v)) {
+          return v
+        }
+
+        switch (v) {
+          case "uploader":
+            return "uploaderId"
+          case "media":
+            return "mediaId"
+          case "scans":
+            return "scanIds"
+          case "deleter":
+            return "deleterId"
+          default:
+            return v
+        }
+      }),
+      z.enum(["asc", "desc"]),
+    ])
+    .array()
+    .optional()
+    .default([])
