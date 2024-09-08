@@ -1,7 +1,6 @@
+import { MediasIndexService } from "@taiyomoe/meilisearch/services"
 import { idSchema, updateCoverSchema } from "@taiyomoe/schemas"
 import { TRPCError } from "@trpc/server"
-
-import { getMediaIndexItem } from "@taiyomoe/meilisearch/utils"
 import { createTRPCRouter, protectedProcedure } from "../trpc"
 
 export const coversRouter = createTRPCRouter({
@@ -42,8 +41,7 @@ export const coversRouter = createTRPCRouter({
           },
         })
 
-        const indexItem = await getMediaIndexItem(ctx.db, cover.mediaId)
-        await ctx.meilisearch.medias.updateDocuments([indexItem])
+        await MediasIndexService.sync(ctx.db, [updatedCover.mediaId])
       }
     }),
 

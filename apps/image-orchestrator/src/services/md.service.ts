@@ -1,8 +1,9 @@
 import type Stream from "@elysiajs/stream"
 import { db } from "@taiyomoe/db"
-import { meilisearchClient } from "@taiyomoe/meilisearch"
-import { ScansIndexService } from "@taiyomoe/meilisearch/services"
-import { getMediaIndexItem } from "@taiyomoe/meilisearch/utils"
+import {
+  MediasIndexService,
+  ScansIndexService,
+} from "@taiyomoe/meilisearch/services"
 import { MdUtils } from "@taiyomoe/utils"
 import { Group, Manga } from "mangadex-full-api"
 import { parallel } from "radash"
@@ -126,8 +127,7 @@ const importFn = async (
   s(3, "Covers upadas", "success")
   s(4, "Reindexando a busca...", "ongoing")
 
-  const mediaIndexItem = await getMediaIndexItem(db, media.id)
-  await meilisearchClient.medias.updateDocuments([mediaIndexItem])
+  await MediasIndexService.sync(db, [media.id])
 
   s(4, "Busca reindexada", "success")
 
