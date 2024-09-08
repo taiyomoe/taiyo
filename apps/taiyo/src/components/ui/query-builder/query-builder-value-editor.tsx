@@ -3,7 +3,11 @@ import { Input } from "@nextui-org/input"
 import { Switch } from "@nextui-org/switch"
 import { ContentRating, Flag, Languages } from "@taiyomoe/db"
 import { useRef } from "react"
-import { ValueEditor, type ValueEditorProps } from "react-querybuilder"
+import {
+  type Field,
+  ValueEditor,
+  type ValueEditorProps,
+} from "react-querybuilder"
 import { DatePicker } from "~/components/generics/date-picker"
 import { MultiSelect } from "~/components/generics/multi-select"
 import { EnumSelect } from "~/components/generics/selects/enum-select"
@@ -29,7 +33,8 @@ const getEnum = (name: string) => {
 }
 
 export const QueryBuilderValueEditor = (props: ValueEditorProps) => {
-  const { fieldData, operator, handleOnChange } = props
+  const { field, operator, handleOnChange } = props
+  const fieldData = props.fieldData as Field
   const previousValue = useRef(props.value)
 
   if (previousValue.current !== props.value && !props.value) {
@@ -132,7 +137,7 @@ export const QueryBuilderValueEditor = (props: ValueEditorProps) => {
     case fieldData.datatype === "enum" && ["in", "notIn"].includes(operator):
       return (
         <MultiSelect
-          options={SelectUtils.enumToItems(getEnum(fieldData.name))}
+          options={SelectUtils.enumToItems(getEnum(field))}
           value={previousValue.current}
           onChange={(v) => {
             handleOnChange(v.map((v) => v.value))
@@ -144,7 +149,7 @@ export const QueryBuilderValueEditor = (props: ValueEditorProps) => {
       return (
         <EnumSelect
           selectedKeys={[props.value] || null}
-          items={getEnum(fieldData.name)}
+          items={getEnum(field)}
           onSelectionChange={(v) =>
             handleOnChange(SelectUtils.getSelectedKey(v))
           }

@@ -61,5 +61,3 @@ export const GridPattern = ({
     </svg>
   )
 }
-
-export default GridPattern

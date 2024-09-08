@@ -1,4 +1,5 @@
 import { Button } from "@nextui-org/button"
+import { tv } from "@nextui-org/react"
 import {
   BarChart2Icon,
   ListChecksIcon,
@@ -7,7 +8,6 @@ import {
   Trash2Icon,
 } from "lucide-react"
 import NextLink from "next/link"
-import { tv } from "tailwind-variants"
 
 type Props = {
   items: {

@@ -9,7 +9,7 @@ import type { ComponentProps } from "react"
 import React from "react"
 import { cn } from "~/lib/utils/cn"
 
-export type VerticalStepProps = {
+type StepProps = {
   className?: string
   description?: React.ReactNode
   title?: React.ReactNode
@@ -17,14 +17,13 @@ export type VerticalStepProps = {
   hasError?: boolean
 }
 
-export interface VerticalStepsProps
-  extends React.HTMLAttributes<HTMLButtonElement> {
+type Props = React.HTMLAttributes<HTMLButtonElement> & {
   /**
    * An array of steps.
    *
    * @default []
    */
-  steps?: VerticalStepProps[]
+  steps?: StepProps[]
   /**
    * The color of the steps.
    *
@@ -82,7 +81,7 @@ function CheckIcon(props: ComponentProps<"svg">) {
   )
 }
 
-const VerticalSteps = React.forwardRef<HTMLButtonElement, VerticalStepsProps>(
+const VerticalSteps = React.forwardRef<HTMLButtonElement, Props>(
   (
     {
       color = "primary",

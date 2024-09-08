@@ -1,7 +1,7 @@
 "use client"
 
 import { Accordion, AccordionItem } from "@nextui-org/accordion"
-import { tv } from "tailwind-variants"
+import { tv } from "@nextui-org/react"
 import { DashboardSidebarCRUDButtons } from "./DashboardSidebarCRUDButtons"
 
 type Props = {

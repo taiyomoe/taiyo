@@ -1,7 +1,7 @@
 "use client"
 
 import { Divider } from "@nextui-org/divider"
-import { tv } from "tailwind-variants"
+import { tv } from "@nextui-org/react"
 import { useReaderSettingsStore } from "~/stores"
 import { ReaderSidebarSettingsSection } from "../sections/ReaderSidebarSettingsSection"
 import { ReaderSidebarUploadersSection } from "../sections/ReaderSidebarUploadersSection"

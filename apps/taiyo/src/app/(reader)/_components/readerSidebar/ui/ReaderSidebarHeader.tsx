@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "@nextui-org/button"
-import { tv } from "tailwind-variants"
+import { tv } from "@nextui-org/react"
 import { SidebarIcon } from "~/components/icons/SidebarIcon"
 import { useReaderSettingsStore } from "~/stores"
 import { ReaderSidebarMediaTitle } from "./ReaderSidebarMediaTitle"

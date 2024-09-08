@@ -12,7 +12,7 @@ type WorkItemResult<K> = {
 type ArgumentsType<T> = T extends (...args: infer U) => any ? U : never
 type UnwrapPromisify<T> = T extends Promise<infer U> ? U : T
 
-export const isFunction = (value: any): value is Function => {
+const isFunction = (value: any): value is Function => {
   return !!(value?.constructor && value.call && value.apply)
 }
 
@@ -20,7 +20,7 @@ export const isFunction = (value: any): value is Function => {
  * Sort an array without modifying it and return
  * the newly sorted value
  */
-export const sort = <T>(
+const sort = <T>(
   array: readonly T[],
   getter: (item: T) => number,
   desc = false,
@@ -35,7 +35,7 @@ export const sort = <T>(
  * Split an array into two array based on
  * a true/false condition function
  */
-export const fork = <T>(
+const fork = <T>(
   list: readonly T[],
   condition: (item: T) => boolean,
 ): [T[], T[]] => {
@@ -67,7 +67,7 @@ export const fork = <T>(
  * range(0, 3, obj)          // yields obj, obj, obj, obj
  * range(0, 6, i => i, 2)    // yields 0, 2, 4, 6
  */
-export function* range<T = number>(
+function* range<T = number>(
   startOrLength: number,
   end?: number,
   valueOrMapper: T | ((i: number) => T) = (i) => i as T,
@@ -96,7 +96,7 @@ export function* range<T = number>(
  * list(0, 3, obj)          // obj, obj, obj, obj
  * list(0, 6, i => i, 2)    // 0, 2, 4, 6
  */
-export const list = <T = number>(
+const list = <T = number>(
   startOrLength: number,
   end?: number,
   valueOrMapper?: T | ((i: number) => T),
@@ -110,9 +110,7 @@ export const list = <T = number>(
  * the control flow. Returns an error first callback _like_
  * array response as [Error, result]
  */
-export const tryit = <TFunction extends (...args: any) => any>(
-  func: TFunction,
-) => {
+const tryit = <TFunction extends (...args: any) => any>(func: TFunction) => {
   return async (
     ...args: ArgumentsType<TFunction>
   ): Promise<

@@ -19,6 +19,7 @@
     "@taiyomoe/constants": "workspace:*",
     "@taiyomoe/schemas": "workspace:*",
     "deep-object-diff": "^1.1.9",
+    "luxon": "^3.5.0",
     "mangadex-full-api": "^5.12.1",
     "zod": "^3.23.8"
   },

@@ -7,10 +7,10 @@ import {
 } from "@nextui-org/dropdown"
 import { Pagination } from "@nextui-org/pagination"
 import type { Selection } from "@nextui-org/react"
+import { tv } from "@nextui-org/react"
 import { MEDIA_PER_PAGE_CHOICES } from "@taiyomoe/constants"
 import { ChevronDownIcon } from "lucide-react"
 import { useState } from "react"
-import { tv } from "tailwind-variants"
 import { useMediaNavigation } from "~/hooks/useMediaNavigation"
 
 type Props = {

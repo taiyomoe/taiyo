@@ -8,7 +8,7 @@ import {
   ModalHeader,
   useDisclosure,
 } from "@nextui-org/modal"
-import type { MediaTitle } from "@prisma/client"
+import type { MediaTitle } from "@taiyomoe/db"
 import { type UpdateTitleInput, updateTitleSchema } from "@taiyomoe/schemas"
 import { ObjectUtils } from "@taiyomoe/utils"
 import { TRPCClientError } from "@trpc/client"

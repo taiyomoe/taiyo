@@ -1,7 +1,7 @@
 import { Stream } from "@elysiajs/stream"
 import { db } from "@taiyomoe/db"
 import { Elysia } from "elysia"
-import { authMiddleware } from "../middlewares/auth.middleware"
+import { authMiddleware } from "../middlewares"
 import { createMediaSchema, importMediaSchema } from "../schemas"
 import {
   MdService,

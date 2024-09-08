@@ -1,5 +1,5 @@
 import { Tooltip } from "@nextui-org/tooltip"
-import { Languages } from "@prisma/client"
+import { Languages } from "@taiyomoe/db"
 import type { UpdateTitleInput } from "@taiyomoe/schemas"
 import { useFormState } from "react-hook-form"
 import { Form } from "~/components/generics/form/form"

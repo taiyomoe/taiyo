@@ -1,7 +1,6 @@
-import type { Languages } from "@prisma/client"
 import { cacheClient } from "@taiyomoe/cache"
 import { DEFAULT_GROUPED_CHAPTERS_LIMIT } from "@taiyomoe/constants"
-import { db } from "@taiyomoe/db"
+import { type Languages, db } from "@taiyomoe/db"
 import type {
   GetLatestChaptersGroupedByUserInput,
   GetLatestChaptersGroupedInput,

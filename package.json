@@ -13,12 +13,14 @@
     "check:ws": "biome check apps/ packages/ tooling/",
     "lint:ws": "pnpm dlx sherif@latest",
     "typecheck": "turbo typecheck",
-    "postinstall": "pnpm lint:ws"
+    "postinstall": "pnpm lint:ws",
+    "knip": "knip"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.8.3",
-    "@turbo/gen": "^2.1.1",
     "@types/global-types": "workspace:*",
+    "@types/node": "^20.16.5",
+    "knip": "^5.30.0",
     "turbo": "^2.1.1",
     "typescript": "^5.5.4"
   }
