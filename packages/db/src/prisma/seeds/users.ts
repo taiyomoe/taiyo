@@ -1,5 +1,5 @@
 import { fakerPT_BR } from "@faker-js/faker"
-import { ContentRating, Countries, Genders, Languages, db } from "../.."
+import { ContentRating, Countries, Genders, Languages, db } from "../../"
 
 const execute = async () => {
   const users = [

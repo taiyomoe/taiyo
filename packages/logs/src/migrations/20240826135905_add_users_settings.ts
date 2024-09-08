@@ -1,4 +1,4 @@
-import { rawLogsClient } from ".."
+import { rawLogsClient } from "../"
 
 const up = async () => {
   await rawLogsClient.command({
