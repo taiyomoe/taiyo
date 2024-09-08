@@ -47,13 +47,11 @@ const execute = async () => {
   await meilisearchClient.scans.updateSortableAttributes(scanFields)
   await meilisearchClient.scans.deleteAllDocuments()
 
-  const scans = await Promise.all(
-    (await db.scan.findMany()).map(({ id }) =>
-      ScansIndexService.getItem(db, id),
-    ),
+  const scans = await db.scan.findMany()
+  await ScansIndexService.sync(
+    db,
+    scans.map((s) => s.id),
   )
-
-  await meilisearchClient.scans.updateDocuments(scans)
 
   // Chapters
   const chapterFields = [

@@ -1,5 +1,5 @@
 import type Stream from "@elysiajs/stream"
-import { type Scan, db } from "@taiyomoe/db"
+import { db } from "@taiyomoe/db"
 import { meilisearchClient } from "@taiyomoe/meilisearch"
 import { ScansIndexService } from "@taiyomoe/meilisearch/services"
 import { getMediaIndexItem } from "@taiyomoe/meilisearch/utils"
@@ -153,7 +153,7 @@ const importFn = async (
     ),
   ]
   const groups = await Group.getMultiple(...groupsIds)
-  const scans: Scan[] = []
+  const scanIds: string[] = []
 
   s(6, "Scans recuperadas", "success")
 
@@ -178,19 +178,16 @@ const importFn = async (
       },
     })
 
-    scans.push(scan)
+    scanIds.push(scan.id)
 
     s(7, `Scan '${group.name}' criada`, "success", i)
   }
 
-  if (scans.length) {
+  if (scanIds.length) {
     s(7, "Scans criadas", "success")
     s(8, "Reindexando a busca das scans...", "ongoing")
 
-    const scansIndexItems = await parallel(10, scans, ({ id }) =>
-      ScansIndexService.getItem(db, id),
-    )
-    await meilisearchClient.scans.updateDocuments(scansIndexItems)
+    await ScansIndexService.sync(db, scanIds)
 
     s(8, "Busca das scans reindexada", "success")
   }
@@ -218,7 +215,7 @@ const importFn = async (
         language: "pt_br",
         flag: "OK",
         files: [],
-        scanIds: scans.map((s) => s.id),
+        scanIds,
         mediaId: media.id,
       },
       uploaded,

@@ -23,14 +23,13 @@ export const scansRouter = createTRPCRouter({
         },
       })
 
-      const indexItem = await ScansIndexService.getItem(ctx.db, createdScan.id)
-      await ctx.meilisearch.scans.updateDocuments([indexItem])
-
       await ctx.logs.scans.insert({
         type: "created",
         _new: createdScan,
         userId: ctx.session.user.id,
       })
+
+      await ScansIndexService.sync(ctx.db, [createdScan.id])
 
       return createdScan
     }),
@@ -62,8 +61,7 @@ export const scansRouter = createTRPCRouter({
         userId: ctx.session.user.id,
       })
 
-      const indexItem = await ScansIndexService.getItem(ctx.db, newScan.id)
-      await ctx.meilisearch.scans.updateDocuments([indexItem])
+      await ScansIndexService.sync(ctx.db, [newScan.id])
     }),
 
   getList: protectedProcedure
@@ -177,6 +175,6 @@ export const scansRouter = createTRPCRouter({
         })
       }
 
-      await ScansIndexService.bulkMutate(newScans)
+      await ScansIndexService.sync(ctx.db, input.ids)
     }),
 })

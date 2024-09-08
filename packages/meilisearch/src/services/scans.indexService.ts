@@ -1,8 +1,8 @@
-import type { PrismaClient, Scan } from "@prisma/client"
+import type { PrismaClient } from "@prisma/client"
 import type { ScansIndexItem } from "@taiyomoe/types"
 import { TRPCError } from "@trpc/server"
 import { DateTime } from "luxon"
-import { omit } from "radash"
+import { omit, parallel } from "radash"
 import { meilisearchClient } from "../"
 
 const getItem = async (
@@ -28,20 +28,13 @@ const getItem = async (
   }
 }
 
-const bulkMutate = (rawScans: Scan[]) => {
-  const scans = rawScans.map((c) => ({
-    ...omit(c, ["createdAt", "updatedAt", "deletedAt"]),
-    createdAt: DateTime.fromJSDate(c.createdAt).toSeconds(),
-    updatedAt: DateTime.fromJSDate(c.updatedAt).toSeconds(),
-    deletedAt: c.deletedAt
-      ? DateTime.fromJSDate(c.deletedAt).toSeconds()
-      : null,
-  }))
+const sync = async (db: PrismaClient, ids: string[]) => {
+  const scans = await parallel(10, ids, (id) => getItem(db, id))
 
   return meilisearchClient.scans.updateDocuments(scans)
 }
 
 export const ScansIndexService = {
   getItem,
-  bulkMutate,
+  sync,
 }
