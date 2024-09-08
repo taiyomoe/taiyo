@@ -416,6 +416,7 @@ export const chaptersRouter = createTRPCRouter({
           scans: h.scanIds.map((s) => scans.find((sc) => sc.id === s)!),
         })),
         totalPages: searched.totalPages,
+        totalCount: searched.totalHits,
       }
     }),
 

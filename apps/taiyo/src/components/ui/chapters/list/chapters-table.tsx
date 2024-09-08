@@ -11,14 +11,18 @@ import { ChaptersTableFilters } from "./chapters-table-filters"
 import { ChaptersTableMultipleActions } from "./chapters-table-multiple-actions"
 
 type Props = {
-  initialData: { chapters: ChaptersListItem[]; totalPages: number }
+  initialData: {
+    chapters: ChaptersListItem[]
+    totalPages: number
+    totalCount: number
+  }
 }
 
 export const ChaptersTable = ({ initialData }: Props) => {
   const { query, sort, page, perPage, setSort, setPage, setPerPage } =
     useChaptersListStore()
   const {
-    data: { chapters: items, totalPages },
+    data: { chapters: items, totalPages, totalCount },
     isFetching,
   } = api.chapters.getList.useQuery(
     { query, sort, page, perPage },
@@ -43,6 +47,7 @@ export const ChaptersTable = ({ initialData }: Props) => {
       perPage={perPage}
       perPageChoices={CHAPTERS_LIST_PER_PAGE_CHOICES}
       totalPages={totalPages}
+      totalCount={totalCount}
       isLoading={isFetching}
       onPageChange={setPage}
       onPerPageChange={setPerPage}

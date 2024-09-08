@@ -35,6 +35,7 @@ interface DataTableProps<TData, TValue> {
   perPage: number
   perPageChoices: number[]
   totalPages: number
+  totalCount: number
   isLoading: boolean
   onPageChange: (newPage: number) => void
   onPerPageChange: (newPerPage: number) => void
@@ -52,6 +53,7 @@ export function DataTable<TData, TValue>({
   perPage,
   perPageChoices,
   totalPages,
+  totalCount,
   isLoading,
   onPageChange,
   onPerPageChange,
@@ -103,6 +105,7 @@ export function DataTable<TData, TValue>({
     },
   })
   const hasData = table.getRowModel().rows?.length > 0
+  const selectedRowsCount = table.getSelectedRowModel().rows.length
 
   if (!isLoading && data !== previousData.current) {
     previousData.current = data
@@ -170,16 +173,27 @@ export function DataTable<TData, TValue>({
             </TableBodyEmpty>
           )}
         </Table>
-        <div className="flex md:justify-end">
-          <TablePagination
-            page={table.getState().pagination.pageIndex + 1}
-            perPage={table.getState().pagination.pageSize}
-            totalPages={table.getPageCount()}
-            perPageChoices={perPageChoices}
-            onPageChange={(newPage) => table.setPageIndex(newPage - 1)}
-            onPerPageChange={table.setPageSize}
-            isLoading={isLoading}
-          />
+        <div className="flex flex-col items-center gap-4 md:flex-row md:justify-between">
+          <p className="text-default-400 text-sm">
+            {totalCount === 0 ? "Nenhum resultado" : `${totalCount} resultados`}
+            {selectedRowsCount > 0 && (
+              <span className="text-default-400 text-sm">
+                , {selectedRowsCount}{" "}
+                {selectedRowsCount === 1 ? "selecionado" : "selecionados"}
+              </span>
+            )}
+          </p>
+          <div className="flex md:justify-end">
+            <TablePagination
+              page={table.getState().pagination.pageIndex + 1}
+              perPage={table.getState().pagination.pageSize}
+              totalPages={table.getPageCount()}
+              perPageChoices={perPageChoices}
+              onPageChange={(newPage) => table.setPageIndex(newPage - 1)}
+              onPerPageChange={table.setPageSize}
+              isLoading={isLoading}
+            />
+          </div>
         </div>
       </div>
     </DataTableContext.Provider>
