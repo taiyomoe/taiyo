@@ -6,6 +6,7 @@ import {
 } from "~/components/generics/data-table/data-table-presets"
 import { TableCellDate } from "~/components/tables/table-cell-date"
 import { TableCellId } from "~/components/tables/table-cell-id"
+import { TableCellUrl } from "~/components/tables/table-cell-url"
 import { TableCellUser } from "~/components/tables/table-cell-user"
 import { ScansTableSingleActions } from "./scans-table-single-actions"
 
@@ -38,13 +39,48 @@ export const columns: ColumnDef<ScansListItem>[] = [
   },
   { accessorKey: "name", header: "Nome", enableMultiSort: true },
   { accessorKey: "description", header: "Descrição", enableMultiSort: true },
-  { accessorKey: "website", header: "Website", enableMultiSort: true },
-  { accessorKey: "discord", header: "Discord", enableMultiSort: true },
-  { accessorKey: "twitter", header: "Twitter", enableMultiSort: true },
-  { accessorKey: "facebook", header: "Facebook", enableMultiSort: true },
-  { accessorKey: "instagram", header: "Instagram", enableMultiSort: true },
-  { accessorKey: "telegram", header: "Telegram", enableMultiSort: true },
-  { accessorKey: "youtube", header: "YouTube", enableMultiSort: true },
+  {
+    accessorKey: "website",
+    header: "Website",
+    enableMultiSort: true,
+    cell: ({ getValue }) => <TableCellUrl url={getValue<string>()} />,
+  },
+  {
+    accessorKey: "discord",
+    header: "Discord",
+    enableMultiSort: true,
+    cell: ({ getValue }) => <TableCellUrl url={getValue<string>()} />,
+  },
+  {
+    accessorKey: "twitter",
+    header: "Twitter",
+    enableMultiSort: true,
+    cell: ({ getValue }) => <TableCellUrl url={getValue<string>()} />,
+  },
+  {
+    accessorKey: "facebook",
+    header: "Facebook",
+    enableMultiSort: true,
+    cell: ({ getValue }) => <TableCellUrl url={getValue<string>()} />,
+  },
+  {
+    accessorKey: "instagram",
+    header: "Instagram",
+    enableMultiSort: true,
+    cell: ({ getValue }) => <TableCellUrl url={getValue<string>()} />,
+  },
+  {
+    accessorKey: "telegram",
+    header: "Telegram",
+    enableMultiSort: true,
+    cell: ({ getValue }) => <TableCellUrl url={getValue<string>()} />,
+  },
+  {
+    accessorKey: "youtube",
+    header: "YouTube",
+    enableMultiSort: true,
+    cell: ({ getValue }) => <TableCellUrl url={getValue<string>()} />,
+  },
   { accessorKey: "email", header: "Email", enableMultiSort: true },
   {
     accessorKey: "creator",
