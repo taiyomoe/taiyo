@@ -186,6 +186,9 @@ importers:
       apexcharts:
         specifier: ^3.53.0
         version: 3.53.0
+      autoprefixer:
+        specifier: ^10.4.20
+        version: 10.4.20(postcss@8.4.45)
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -222,6 +225,9 @@ importers:
       parse-numeric-range:
         specifier: ^1.3.0
         version: 1.3.0
+      postcss:
+        specifier: ^8.4.45
+        version: 8.4.45
       pretty-bytes:
         specifier: ^6.1.1
         version: 6.1.1
@@ -301,15 +307,9 @@ importers:
       '@types/react-dom':
         specifier: ^18.3.0
         version: 18.3.0
-      autoprefixer:
-        specifier: ^10.4.20
-        version: 10.4.20(postcss@8.4.45)
       jiti:
         specifier: ^1.21.6
         version: 1.21.6
-      postcss:
-        specifier: ^8.4.45
-        version: 8.4.45
       tailwindcss:
         specifier: ^3.4.10
         version: 3.4.10
