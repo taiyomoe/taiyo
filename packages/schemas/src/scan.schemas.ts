@@ -39,7 +39,8 @@ export const getScansListSchema = z.object({
   ),
 })
 
-export const bulkDeleteScansSchema = z.object({
+export const bulkMutateScansSchema = z.object({
+  type: z.enum(["restore", "delete"]),
   ids: z.array(z.string().uuid()).min(1),
 })
 

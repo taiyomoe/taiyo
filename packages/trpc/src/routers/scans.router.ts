@@ -1,6 +1,6 @@
-import { getScanIndexItem } from "@taiyomoe/meilisearch/utils"
+import { ScansIndexService } from "@taiyomoe/meilisearch/services"
 import {
-  bulkDeleteScansSchema,
+  bulkMutateScansSchema,
   createScanSchema,
   getScansListSchema,
   updateScanSchema,
@@ -85,9 +85,9 @@ export const scansRouter = createTRPCRouter({
       return { scans, totalPages: searched.totalPages }
     }),
 
-  bulkDelete: protectedProcedure
-    .meta({ resource: "scans", action: "delete" })
-    .input(bulkDeleteScansSchema)
+  bulkMutate: protectedProcedure
+    .meta({ resource: "scans", action: "update" })
+    .input(bulkMutateScansSchema)
     .mutation(async ({ ctx, input }) => {
       const scans = await ctx.db.scan.findMany({
         include: { chapters: { select: { id: true } } },
@@ -101,11 +101,35 @@ export const scansRouter = createTRPCRouter({
         })
       }
 
-      for (const scan of scans) {
+      if (input.type === "restore") {
+        if (scans.some((c) => c.deletedAt !== null)) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Algumas scans já estão deletadas.",
+          })
+        }
+      }
+
+      if (input.type === "delete") {
+        if (scans.some((c) => c.deletedAt === null)) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Algumas scans não estão deletadas.",
+          })
+        }
+      }
+
+      const newScans = scans.map((scan) => ({
+        ...scan,
+        deletedAt: input.type === "delete" ? new Date() : null,
+        deleterId: input.type === "delete" ? ctx.session.user.id : null,
+      }))
+
+      for (const scan of newScans) {
         await ctx.db.scan.update({
           data: {
-            deletedAt: new Date(),
-            deleterId: ctx.session.user.id,
+            deletedAt: scan.deletedAt,
+            deleterId: scan.deleterId,
             chapters: { set: [] },
             members: { set: [] },
           },
@@ -120,6 +144,6 @@ export const scansRouter = createTRPCRouter({
         })
       }
 
-      await ctx.meilisearch.scans.deleteDocuments(input.ids)
+      await ScansIndexService.bulkMutate(newScans)
     }),
 })
