@@ -31,7 +31,7 @@ const insert = async (
     userId: uploaderId,
   })
 
-  await ChaptersIndexService.bulkMutate([result])
+  await ChaptersIndexService.sync(db, [result.id])
 
   const cached = await cacheClient.chapters.latest.get()
 

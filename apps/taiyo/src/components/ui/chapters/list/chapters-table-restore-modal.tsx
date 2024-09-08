@@ -22,7 +22,7 @@ export const ChaptersTableRestoreModal = ({ isOpen, onOpenChange }: Props) => {
   const table = useDataTable<ChaptersListItem>()
   const [isDisabled, setIsDisabled] = useState(true)
   const [inputValue, setInputValue] = useState("")
-  const { mutateAsync } = api.chapters.bulkRestore.useMutation()
+  const { mutateAsync } = api.chapters.bulkMutate.useMutation()
   const selectedChapters = table
     .getSelectedRowModel()
     .rows.map((row) => row.original)
@@ -47,7 +47,7 @@ export const ChaptersTableRestoreModal = ({ isOpen, onOpenChange }: Props) => {
 
     setIsDisabled(true)
 
-    toast.promise(mutateAsync(ids), {
+    toast.promise(mutateAsync({ type: "restore", ids }), {
       loading: `Restaurando ${dynamicTextAs}...`,
       success: () => {
         table.resetRowSelection()

@@ -5,16 +5,13 @@ import { DateTime } from "luxon"
 import { omit, parallel } from "radash"
 import { meilisearchClient } from "../"
 
-const getItem = async (
-  db: PrismaClient,
-  scanId: string,
-): Promise<ScansIndexItem> => {
-  const result = await db.scan.findUnique({ where: { id: scanId } })
+const getItem = async (db: PrismaClient, id: string) => {
+  const result = await db.scan.findUnique({ where: { id } })
 
   if (!result) {
     throw new TRPCError({
       code: "NOT_FOUND",
-      message: `Scan '${scanId}' not found`,
+      message: `Scan '${id}' not found`,
     })
   }
 
@@ -25,7 +22,7 @@ const getItem = async (
     deletedAt: result.deletedAt
       ? DateTime.fromJSDate(result.deletedAt).toSeconds()
       : null,
-  }
+  } satisfies ScansIndexItem
 }
 
 const sync = async (db: PrismaClient, ids: string[]) => {

@@ -17,13 +17,13 @@ type Props = {
 }
 
 export const DeleteChapterButton = ({ chapter }: Props) => {
-  const { mutateAsync } = api.chapters.bulkDelete.useMutation()
+  const { mutateAsync } = api.chapters.bulkMutate.useMutation()
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
   const apiUtils = api.useUtils()
 
   const handleDelete = () => {
-    toast.promise(mutateAsync([chapter.id]), {
+    toast.promise(mutateAsync({ type: "delete", ids: [chapter.id] }), {
       loading: "Apagando o capítulo...",
       success: () => {
         onOpenChange()

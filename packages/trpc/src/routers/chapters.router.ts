@@ -3,6 +3,7 @@ import { db } from "@taiyomoe/db"
 import { ChaptersIndexService } from "@taiyomoe/meilisearch/services"
 import { buildFilter, buildSort } from "@taiyomoe/meilisearch/utils"
 import {
+  bulkMutateChaptersSchema,
   bulkUpdateChaptersScansSchema,
   bulkUpdateChaptersVolumesSchema,
   getChaptersByUserIdSchema,
@@ -69,7 +70,7 @@ export const chaptersRouter = createTRPCRouter({
         userId: ctx.session.user.id,
       })
 
-      await ChaptersIndexService.bulkMutate([result])
+      await ChaptersIndexService.sync(ctx.db, [result.id])
 
       return result
     }),
@@ -109,7 +110,10 @@ export const chaptersRouter = createTRPCRouter({
           })
         }
 
-        await ChaptersIndexService.bulkMutate(newChapters)
+        await ChaptersIndexService.sync(
+          ctx.db,
+          newChapters.map((c) => c.id),
+        )
       }
     }),
 
@@ -192,7 +196,10 @@ export const chaptersRouter = createTRPCRouter({
         })
       }
 
-      await ChaptersIndexService.bulkMutate(newChapters)
+      await ChaptersIndexService.sync(
+        ctx.db,
+        newChapters.map((c) => c.id),
+      )
     }),
 
   getById: publicProcedure
@@ -462,98 +469,61 @@ export const chaptersRouter = createTRPCRouter({
       }
     }),
 
-  bulkRestore: protectedProcedure
-    .meta({ resource: "mediaChapters", action: "delete" })
-    .input(idSchema.array())
+  bulkMutate: protectedProcedure
+    .meta({ resource: "scans", action: "update" })
+    .input(bulkMutateChaptersSchema)
     .mutation(async ({ ctx, input }) => {
       const chapters = await ctx.db.mediaChapter.findMany({
-        where: { id: { in: input } },
+        where: { id: { in: input.ids } },
       })
 
-      if (chapters.length !== input.length) {
+      if (chapters.length !== input.ids.length) {
         throw new TRPCError({
           code: "NOT_FOUND",
           message: "Um ou vários capítulos não existem.",
         })
       }
 
-      if (chapters.some((c) => c.deletedAt === null)) {
-        throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: "Alguns capítulos não estão deletados.",
-        })
+      if (input.type === "restore") {
+        if (chapters.some((c) => c.deletedAt === null)) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Alguns capítulos não estão deletados.",
+          })
+        }
       }
 
-      const updatedChapters = chapters.map((c) => ({
-        ...c,
-        deletedAt: null,
-        deleterId: null,
-      }))
-
-      for (const chapter of updatedChapters) {
-        await ctx.db.mediaChapter.update({
-          data: {
-            deletedAt: chapter.deletedAt,
-            deleterId: chapter.deleterId,
-          },
-          where: { id: chapter.id },
-        })
-
-        await ctx.logs.chapters.insert({
-          type: "restored",
-          old: chapters.find((c) => c.id === chapter.id)!,
-          _new: chapter,
-          userId: ctx.session.user.id,
-        })
+      if (input.type === "delete") {
+        if (chapters.some((c) => c.deletedAt !== null)) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Alguns capítulos já estão deletados.",
+          })
+        }
       }
 
-      await ChaptersIndexService.bulkMutate(updatedChapters)
-    }),
-
-  bulkDelete: protectedProcedure
-    .meta({ resource: "mediaChapters", action: "delete" })
-    .input(idSchema.array())
-    .mutation(async ({ ctx, input }) => {
-      const chapters = await ctx.db.mediaChapter.findMany({
-        where: { id: { in: input } },
+      await ctx.db.mediaChapter.updateMany({
+        data: {
+          deletedAt: input.type === "delete" ? new Date() : null,
+          deleterId: input.type === "delete" ? ctx.session.user.id : null,
+        },
+        where: { id: { in: input.ids } },
       })
 
-      if (chapters.length !== input.length) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "Um ou vários capítulos não existem.",
-        })
-      }
-
-      if (chapters.some((c) => c.deletedAt !== null)) {
-        throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: "Alguns capítulos já estão deletados.",
-        })
-      }
-
-      const updatedChapters = chapters.map((c) => ({
+      const newChapters = chapters.map((c) => ({
         ...c,
-        deletedAt: new Date(),
-        deleterId: ctx.session.user.id,
+        deletedAt: input.type === "delete" ? new Date() : null,
+        deleterId: input.type === "delete" ? ctx.session.user.id : null,
       }))
 
-      for (const chapter of updatedChapters) {
-        await ctx.db.mediaChapter.update({
-          data: {
-            deletedAt: chapter.deletedAt,
-            deleterId: chapter.deleterId,
-          },
-          where: { id: chapter.id },
-        })
-
+      for (const chapter of newChapters) {
         await ctx.logs.chapters.insert({
           type: "deleted",
-          old: chapters.find((c) => c.id === chapter.id)!,
+          old: chapter,
           userId: ctx.session.user.id,
         })
       }
 
-      await ChaptersIndexService.bulkMutate(updatedChapters)
+      await ChaptersIndexService.sync(ctx.db, input.ids)
     }),
 })
