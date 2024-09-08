@@ -33,7 +33,7 @@ export const updateScanSchema = createScanSchema.partial().extend({
 })
 
 export const getScansListSchema = z.object({
-  query: z.string().optional().default(""),
+  filter: z.string().optional().default(""),
   sort: sortableFieldsSchema(SCANS_LIST_SORTABLE_FIELDS),
   page: pageSchema,
   perPage: perPageSchema(

@@ -8,33 +8,33 @@ import { create } from "zustand"
 import { RQBUtils } from "~/utils/rqb.utils"
 
 type State = {
-  query: string
+  filter: string
   sort: [(typeof CHAPTERS_LIST_SORTABLE_FIELDS)[number], "asc" | "desc"][]
   page: number
   perPage: number
 }
 
 type Actions = {
-  setQuery: (value: DefaultRuleGroupType) => void
+  setFilter: (value: DefaultRuleGroupType) => void
   setSort: (value: SortingState) => void
   setPage: (value: number) => void
   setPerPage: (value: number) => void
 }
 
 export const useChaptersListStore = create<State & Actions>((set, get) => ({
-  query: "deletedAt = null",
+  filter: "deletedAt = null",
   sort: [],
   page: 1,
   perPage: DEFAULT_CHAPTERS_LIST_PER_PAGE,
 
-  setQuery: (value) => {
-    const computed = RQBUtils.computeNewQuery(get().query, value)
+  setFilter: (value) => {
+    const computed = RQBUtils.computeNewFilter(get().filter, value)
 
     if (computed === null) {
       return
     }
 
-    set((state) => ({ ...state, query: computed, page: 1 }))
+    set((state) => ({ ...state, filter: computed, page: 1 }))
   },
   setSort: (value) => {
     set((state) => ({

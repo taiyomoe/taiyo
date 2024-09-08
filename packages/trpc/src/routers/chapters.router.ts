@@ -403,7 +403,7 @@ export const chaptersRouter = createTRPCRouter({
     .input(getChaptersListSchema)
     .query(async ({ ctx, input }) => {
       const searched = await ctx.meilisearch.chapters.search(null, {
-        filter: buildFilter(input.query),
+        filter: buildFilter(input.filter),
         sort: buildSort(input.sort),
         hitsPerPage: input.perPage,
         page: input.page,

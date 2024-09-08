@@ -22,10 +22,10 @@ const fields: Field[] = [
 ]
 
 export const ScansTableFilters = () => {
-  const { setQuery } = useScansListStore()
+  const { setFilter } = useScansListStore()
 
   const handleQueryChange = useDebounceCallback(
-    (newQuery) => setQuery(newQuery),
+    (newQuery) => setFilter(newQuery),
     300,
   )
 

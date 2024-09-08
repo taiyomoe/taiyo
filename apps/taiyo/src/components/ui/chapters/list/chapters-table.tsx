@@ -19,13 +19,13 @@ type Props = {
 }
 
 export const ChaptersTable = ({ initialData }: Props) => {
-  const { query, sort, page, perPage, setSort, setPage, setPerPage } =
+  const { filter, sort, page, perPage, setSort, setPage, setPerPage } =
     useChaptersListStore()
   const {
     data: { chapters: items, totalPages, totalCount },
     isFetching,
   } = api.chapters.getList.useQuery(
-    { query, sort, page, perPage },
+    { filter, sort, page, perPage },
     { initialData, refetchOnMount: false },
   )
 

@@ -19,10 +19,10 @@ const fields: Field[] = [
 ]
 
 export const ChaptersTableFilters = () => {
-  const { setQuery } = useChaptersListStore()
+  const { setFilter } = useChaptersListStore()
 
   const handleQueryChange = useDebounceCallback(
-    (newQuery) => setQuery(newQuery),
+    (newQuery) => setFilter(newQuery),
     300,
   )
 

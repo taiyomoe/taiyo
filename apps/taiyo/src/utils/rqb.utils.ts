@@ -38,7 +38,7 @@ const formatQuery = (input: RuleGroupType) => {
   )
 }
 
-const computeNewQuery = (oldQuery: string, newQuery: DefaultRuleGroupType) => {
+const computeNewFilter = (oldQuery: string, newQuery: DefaultRuleGroupType) => {
   const formatted = formatQuery(newQuery)
 
   if ((formatted === null && oldQuery === "") || oldQuery === formatted) {
@@ -50,5 +50,5 @@ const computeNewQuery = (oldQuery: string, newQuery: DefaultRuleGroupType) => {
 
 export const RQBUtils = {
   formatQuery,
-  computeNewQuery,
+  computeNewFilter,
 }

@@ -74,7 +74,7 @@ export const getLatestChaptersGroupedByUserSchema = z.object({
 })
 
 export const getChaptersListSchema = z.object({
-  query: z.string().optional().default(""),
+  filter: z.string().optional().default(""),
   sort: sortableFieldsSchema(CHAPTERS_LIST_SORTABLE_FIELDS),
   page: pageSchema,
   perPage: perPageSchema(
