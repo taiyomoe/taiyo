@@ -173,7 +173,7 @@ export const MultiSelect = <T extends SelectItem>(
         MenuList,
         Option,
       }}
-      menuPortalTarget={document.body}
+      menuPortalTarget={document?.body}
       styles={{ menuPortal: (base) => ({ ...base, zIndex: 10000 }) }}
       {...props}
     />
@@ -208,7 +208,7 @@ export const MultiSelectAsync = <T extends SelectItem>(
         MenuList,
         Option,
       }}
-      menuPortalTarget={document.body}
+      menuPortalTarget={document?.body}
       styles={{ menuPortal: (base) => ({ ...base, zIndex: 10000 }) }}
       {...props}
     />
