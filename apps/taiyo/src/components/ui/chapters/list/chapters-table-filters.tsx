@@ -9,11 +9,13 @@ const fields: Field[] = [
   { name: "language", datatype: "enum", label: "Idioma" },
   { name: "contentRating", datatype: "enum", label: "Classificação" },
   { name: "flag", datatype: "enum", label: "Flag" },
-  { name: "uploaderId", datatype: "user", label: "Uploader" },
   { name: "mediaId", datatype: "media", label: "Obras" },
   { name: "scanIds", datatype: "scan", label: "Scans" },
-  { name: "deleterId", datatype: "nullable-user", label: "Deletado por" },
+  { name: "createdAt", datatype: "date", label: "Data de upload" },
+  { name: "updatedAt", datatype: "date", label: "Última atualização" },
   { name: "deletedAt", datatype: "nullable-date", label: "Deletado em" },
+  { name: "uploaderId", datatype: "user", label: "Uploader" },
+  { name: "deleterId", datatype: "nullable-user", label: "Deletado por" },
 ]
 
 export const ChaptersTableFilters = () => {
