@@ -1,4 +1,5 @@
 import { Spinner } from "@nextui-org/spinner"
+import type { ListQuery } from "@taiyomoe/types"
 import {
   type ColumnDef,
   type SortingState,
@@ -15,6 +16,7 @@ import { TableHeadSorted } from "~/components/tables/table-head-sorted"
 import { TablePagination } from "~/components/tables/table-pagination"
 import { AnimatedPresence } from "~/components/ui/animated-presence"
 import { DataTableContext } from "./data-table-context"
+import { DataTableQuery } from "./data-table-query"
 import {
   Table,
   TableBody,
@@ -24,7 +26,7 @@ import {
   TableRow,
 } from "./table"
 
-interface DataTableProps<TData, TValue> {
+interface DataTableProps<TData, TValue, TQueryAttribute> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
   filters: ReactNode
@@ -34,15 +36,17 @@ interface DataTableProps<TData, TValue> {
   page: number
   perPage: number
   perPageChoices: number[]
+  queryableFields?: string[]
   totalPages: number
   totalCount: number
   isLoading: boolean
   onPageChange: (newPage: number) => void
   onPerPageChange: (newPerPage: number) => void
   onSort: (newSortingState: SortingState) => void
+  onQueryChange?: (newQuery: ListQuery<TQueryAttribute>) => void
 }
 
-export function DataTable<TData, TValue>({
+export function DataTable<TData, TValue, TQueryAttribute>({
   columns,
   data,
   filters,
@@ -52,13 +56,15 @@ export function DataTable<TData, TValue>({
   page,
   perPage,
   perPageChoices,
+  queryableFields,
   totalPages,
   totalCount,
   isLoading,
   onPageChange,
   onPerPageChange,
   onSort,
-}: DataTableProps<TData, TValue>) {
+  onQueryChange,
+}: DataTableProps<TData, TValue, TQueryAttribute>) {
   const previousData = useRef(data)
   const previousTotalPages = useRef(totalPages)
   const [sorting, setSorting] = useState<SortingState>([])
@@ -116,14 +122,22 @@ export function DataTable<TData, TValue>({
     <DataTableContext.Provider value={{ table }}>
       <div className="space-y-4">
         {filters}
-        <div className="flex justify-end gap-4">
-          {isLoading && <Spinner size="sm" />}
-          <AnimatedPresence
-            active={table.getSelectedRowModel().rows.length > 0}
-          >
-            {multipleActions}
-          </AnimatedPresence>
-          <TableColumnVisibilityDropdown />
+        <div
+          className="flex flex-col justify-end gap-4 data-[has-query=true]:justify-between md:flex-row"
+          data-has-query={!!queryableFields}
+        >
+          {queryableFields && onQueryChange && (
+            <DataTableQuery fields={queryableFields} onChange={onQueryChange} />
+          )}
+          <div className="flex justify-end gap-4">
+            {isLoading && <Spinner size="sm" />}
+            <AnimatedPresence
+              active={table.getSelectedRowModel().rows.length > 0}
+            >
+              {multipleActions}
+            </AnimatedPresence>
+            <TableColumnVisibilityDropdown />
+          </div>
         </div>
         <Table>
           <TableHeader>

@@ -14,7 +14,11 @@ import {
   updateChapterSchema,
 } from "@taiyomoe/schemas"
 import { ChaptersService } from "@taiyomoe/services"
-import type { LatestReleaseGrouped, MediaChapterLimited } from "@taiyomoe/types"
+import type {
+  ChaptersListItem,
+  LatestReleaseGrouped,
+  MediaChapterLimited,
+} from "@taiyomoe/types"
 import { MediaUtils } from "@taiyomoe/utils"
 import { TRPCError } from "@trpc/server"
 import { DateTime } from "luxon"
@@ -399,61 +403,60 @@ export const chaptersRouter = createTRPCRouter({
     .input(getChaptersListSchema)
     .query(async ({ ctx, input }) => {
       const searched = await ctx.meilisearch.chapters.search(null, {
-        filter: buildFilter(input.query),
+        filter: buildFilter(input.filter),
         sort: buildSort(input.sort),
         hitsPerPage: input.perPage,
         page: input.page,
       })
       const uniqueMedias = unique(searched.hits.map((h) => h.mediaId))
-      const uniqueUploaders = unique(searched.hits.map((h) => h.uploaderId))
-      const uniqueDeleters = unique(
-        searched.hits.map((h) => h.deleterId).filter(Boolean),
+      const uniqueUsers = unique(
+        [
+          searched.hits.map((h) => h.uploaderId),
+          searched.hits.map((h) => h.deleterId).filter(Boolean),
+        ].flat(),
       )
       const uniqueScans = unique(searched.hits.flatMap((h) => h.scanIds))
       const medias = await ctx.db.media.findMany({
         select: { id: true, titles: true },
         where: { id: { in: uniqueMedias } },
       })
-      const uploaders = await ctx.db.user.findMany({
+      const users = await ctx.db.user.findMany({
         select: { id: true, name: true, image: true },
-        where: { id: { in: uniqueUploaders } },
-      })
-      const deleters = await ctx.db.user.findMany({
-        select: { id: true, name: true, image: true },
-        where: { id: { in: uniqueDeleters } },
+        where: { id: { in: uniqueUsers } },
       })
       const scans = await ctx.db.scan.findMany({
         select: { id: true, name: true },
         where: { id: { in: uniqueScans } },
       })
+      const chapters = searched.hits.map((h) => ({
+        ...omit(h, [
+          "createdAt",
+          "updatedAt",
+          "deletedAt",
+          "mediaId",
+          "uploaderId",
+          "deleterId",
+          "scanIds",
+        ]),
+        createdAt: DateTime.fromSeconds(h.createdAt).toJSDate(),
+        updatedAt: DateTime.fromSeconds(h.updatedAt).toJSDate(),
+        deletedAt: h.deletedAt
+          ? DateTime.fromSeconds(h.deletedAt).toJSDate()
+          : null,
+        media: {
+          id: h.mediaId,
+          mainTitle: MediaUtils.getDisplayTitle(
+            medias.find((m) => m.id === h.mediaId)!.titles,
+            ctx.session.user.preferredTitles,
+          ),
+        },
+        uploader: users.find((u) => u.id === h.uploaderId)!,
+        deleter: users.find((d) => d.id === h.deleterId) ?? null,
+        scans: h.scanIds.map((s) => scans.find((sc) => sc.id === s)!),
+      })) satisfies ChaptersListItem[]
 
       return {
-        chapters: searched.hits.map((h) => ({
-          ...omit(h, [
-            "createdAt",
-            "updatedAt",
-            "deletedAt",
-            "mediaId",
-            "uploaderId",
-            "deleterId",
-            "scanIds",
-          ]),
-          createdAt: DateTime.fromSeconds(h.createdAt).toJSDate(),
-          updatedAt: DateTime.fromSeconds(h.updatedAt).toJSDate(),
-          deletedAt: h.deletedAt
-            ? DateTime.fromSeconds(h.deletedAt).toJSDate()
-            : null,
-          media: {
-            id: h.mediaId,
-            mainTitle: MediaUtils.getDisplayTitle(
-              medias.find((m) => m.id === h.mediaId)!.titles,
-              ctx.session.user.preferredTitles,
-            ),
-          },
-          uploader: uploaders.find((u) => u.id === h.uploaderId)!,
-          deleter: deleters.find((d) => d.id === h.deleterId) ?? null,
-          scans: h.scanIds.map((s) => scans.find((sc) => sc.id === s)!),
-        })),
+        chapters,
         totalPages: searched.totalPages,
         totalCount: searched.totalHits,
       }

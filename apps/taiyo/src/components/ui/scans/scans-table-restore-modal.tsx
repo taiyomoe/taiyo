@@ -18,7 +18,7 @@ type Props = {
   onOpenChange: () => void
 }
 
-export const ScansTableDeleteModal = ({ isOpen, onOpenChange }: Props) => {
+export const ScansTableRestoreModal = ({ isOpen, onOpenChange }: Props) => {
   const table = useDataTable<ScansListItem>()
   const [isDisabled, setIsDisabled] = useState(true)
   const [inputValue, setInputValue] = useState("")
@@ -39,25 +39,25 @@ export const ScansTableDeleteModal = ({ isOpen, onOpenChange }: Props) => {
 
   const handleChange = (newValue: string) => {
     setInputValue(newValue)
-    setIsDisabled(newValue.toLowerCase() !== `apagar ${dynamicTextAs}`)
+    setIsDisabled(newValue.toLowerCase() !== `restaurar ${dynamicTextAs}`)
   }
 
-  const handleDelete = () => {
+  const handleRestore = () => {
     const ids = selectedScans.map((s) => s.id)
 
     setIsDisabled(true)
 
-    toast.promise(mutateAsync({ type: "delete", ids }), {
-      loading: `Apagando ${dynamicTextAs}...`,
+    toast.promise(mutateAsync({ type: "restore", ids }), {
+      loading: `Restaurando ${dynamicTextAs}...`,
       success: () => {
         table.resetRowSelection()
         utils.scans.getList.invalidate()
         onOpenChange()
         setInputValue("")
 
-        return `${scansCount === 1 ? "Scan apagada" : "Scans apagadas"} com sucesso!`
+        return `${scansCount === 1 ? "Scan restaurada" : "Scans restauradas"} com sucesso!`
       },
-      error: `Ocorreu um erro inesperado ao apagar ${dynamicTextAs}.`,
+      error: `Ocorreu um erro inesperado ao restaurar ${dynamicTextAs}.`,
     })
   }
 
@@ -66,27 +66,24 @@ export const ScansTableDeleteModal = ({ isOpen, onOpenChange }: Props) => {
     <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
       <ModalContent>
         <ModalHeader>
-          Apagar {scansCount} {dynamicTextSolo}
+          Restaurar {scansCount} {dynamicTextSolo}
         </ModalHeader>
         <ModalBody className="gap-6">
           <p>
-            Você está prestes a apagar {scansCount} {dynamicTextSolo}. Tem
+            Você está prestes a restaurar {scansCount} {dynamicTextSolo}. Tem
             certeza?
           </p>
-          <div className="rounded-md border border-warning-200 bg-warning-100 p-2">
-            {scansCount === 1
-              ? "A scan poderá ser restaurada."
-              : "As scans poderão ser restauradas."}
-          </div>
           <div className="flex flex-col gap-2">
             <p>
               Para confirmar que é o que você quer, digite "
-              <span className="text-warning-400">apagar {dynamicTextAs}</span>"
-              no campo abaixo.
+              <span className="text-warning-400">
+                restaurar {dynamicTextAs}
+              </span>
+              " no campo abaixo.
             </p>
             <Input
               value={inputValue}
-              placeholder={`Digite "apagar ${dynamicTextAs}" para confirmar`}
+              placeholder={`Digite "restaurar ${dynamicTextAs}" para confirmar`}
               onValueChange={handleChange}
               autoFocus
             />
@@ -97,12 +94,12 @@ export const ScansTableDeleteModal = ({ isOpen, onOpenChange }: Props) => {
             Cancelar
           </Button>
           <Button
-            color="danger"
+            color="warning"
             variant="flat"
-            onPress={handleDelete}
+            onPress={handleRestore}
             isDisabled={isDisabled}
           >
-            Apagar
+            Restaurar
           </Button>
         </ModalFooter>
       </ModalContent>

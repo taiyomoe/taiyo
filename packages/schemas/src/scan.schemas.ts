@@ -1,6 +1,8 @@
 import {
   DEFAULT_SCANS_LIST_PER_PAGE,
   SCANS_LIST_PER_PAGE_CHOICES,
+  SCANS_LIST_QUERYABLE_FIELDS,
+  SCANS_LIST_SORTABLE_FIELDS,
 } from "@taiyomoe/constants"
 import { z } from "zod"
 import {
@@ -9,6 +11,8 @@ import {
   optionalUrlSchema,
   pageSchema,
   perPageSchema,
+  queryableFieldsSchema,
+  sortableFieldsSchema,
 } from "./common.schemas"
 
 export const createScanSchema = z.object({
@@ -31,7 +35,9 @@ export const updateScanSchema = createScanSchema.partial().extend({
 })
 
 export const getScansListSchema = z.object({
-  query: optionalStringSchema.default(""),
+  query: queryableFieldsSchema(SCANS_LIST_QUERYABLE_FIELDS),
+  filter: z.string().optional().default(""),
+  sort: sortableFieldsSchema(SCANS_LIST_SORTABLE_FIELDS),
   page: pageSchema,
   perPage: perPageSchema(
     DEFAULT_SCANS_LIST_PER_PAGE,
@@ -39,7 +45,8 @@ export const getScansListSchema = z.object({
   ),
 })
 
-export const bulkDeleteScansSchema = z.object({
+export const bulkMutateScansSchema = z.object({
+  type: z.enum(["restore", "delete"]),
   ids: z.array(z.string().uuid()).min(1),
 })
 

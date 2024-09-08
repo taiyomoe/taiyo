@@ -1,112 +1,77 @@
 "use client"
 
-import { Spinner } from "@nextui-org/spinner"
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableColumn,
-  TableHeader,
-  TableRow,
-} from "@nextui-org/table"
+  SCANS_LIST_PER_PAGE_CHOICES,
+  SCANS_LIST_QUERYABLE_FIELDS,
+} from "@taiyomoe/constants"
 import type { ScansListItem } from "@taiyomoe/types"
-import { useAtom, useAtomValue } from "jotai"
-import { useHydrateAtoms } from "jotai/utils"
-import { type Key, useCallback, useMemo } from "react"
-import {
-  scansListInitialDataAtom,
-  scansListLoadingAtom,
-  scansListSelectedKeysAtom,
-  scansListVisibleColumnsAtom,
-} from "~/atoms/scansList.atoms"
-import { useScansList } from "~/hooks/useScansList"
-import { ScansTableBottomContent } from "./scans-table-bottom-content"
-import { ScansTableSingleActions } from "./scans-table-single-actions"
-import { ScansTableTopContent } from "./scans-table-top-content"
-
-export const columns = [
-  { name: "Id", uid: "id" },
-  { name: "Nome", uid: "name" },
-  { name: "Capítulos", uid: "chapters" },
-  { name: "Membros", uid: "members" },
-  { name: "Ações", uid: "actions" },
-]
+import { DataTable } from "~/components/generics/data-table/data-table"
+import { useScansListStore } from "~/stores/scansList.store"
+import { api } from "~/trpc/react"
+import { columns } from "./scans-table-columns"
+import { ScansTableEmptyContent } from "./scans-table-empty-content"
+import { ScansTableFilters } from "./scans-table-filters"
+import { ScansTableMultipleActions } from "./scans-table-multiple-actions"
 
 type Props = {
-  initialData: { scans: ScansListItem[]; totalPages: number }
+  initialData: {
+    scans: ScansListItem[]
+    totalPages: number
+    totalCount: number
+  }
 }
 
 export const ScansTable = ({ initialData }: Props) => {
-  useHydrateAtoms([[scansListInitialDataAtom, initialData]])
-
-  const visibleColumns = useAtomValue(scansListVisibleColumnsAtom)
-  const isLoading = useAtomValue(scansListLoadingAtom)
-  const [selectedKeys, setSelectedKeys] = useAtom(scansListSelectedKeysAtom)
-  const { items } = useScansList()
-  const headerColumns = useMemo(() => {
-    if (visibleColumns === "all") return columns
-
-    return columns.filter((column) =>
-      Array.from(visibleColumns).includes(column.uid),
-    )
-  }, [visibleColumns])
-
-  const renderCell = useCallback((scan: ScansListItem, columnKey: Key) => {
-    const value = scan[columnKey as keyof ScansListItem]
-
-    if (columnKey === "actions") {
-      return <ScansTableSingleActions scan={scan} />
-    }
-
-    return value
-  }, [])
+  const {
+    query,
+    filter,
+    sort,
+    page,
+    perPage,
+    setQuery,
+    setSort,
+    setPage,
+    setPerPage,
+  } = useScansListStore()
+  const {
+    data: { scans: items, totalPages, totalCount },
+    isFetching,
+  } = api.scans.getList.useQuery(
+    { query, filter, sort, page, perPage },
+    { initialData, refetchOnMount: false },
+  )
 
   return (
-    <div className="flex flex-col gap-12">
-      <p className="font-semibold text-4xl">Scans</p>
-      <Table
-        selectedKeys={selectedKeys}
-        selectionMode="multiple"
-        topContent={<ScansTableTopContent />}
-        topContentPlacement="outside"
-        bottomContent={<ScansTableBottomContent />}
-        bottomContentPlacement="outside"
-        onSelectionChange={setSelectedKeys}
-        aria-label="Scans list"
-        isStriped
-      >
-        <TableHeader columns={headerColumns}>
-          {(c) => (
-            <TableColumn
-              key={c.uid}
-              className="uppercase"
-              align={
-                c.uid === "actions"
-                  ? "end"
-                  : ["chapters", "members"].includes(c.uid)
-                    ? "center"
-                    : "start"
-              }
-            >
-              {c.name}
-            </TableColumn>
-          )}
-        </TableHeader>
-        <TableBody
-          items={isLoading ? [] : items}
-          isLoading={isLoading}
-          emptyContent="Nenhuma scan encontrada"
-          loadingContent={<Spinner size="lg" />}
-        >
-          {(item) => (
-            <TableRow key={item.id}>
-              {(columnKey) => (
-                <TableCell>{renderCell(item, columnKey)}</TableCell>
-              )}
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
-    </div>
+    <DataTable
+      columns={columns}
+      data={items}
+      filters={<ScansTableFilters />}
+      multipleActions={<ScansTableMultipleActions />}
+      emptyContent={<ScansTableEmptyContent />}
+      initialVisibility={{
+        id: false,
+        updatedAt: false,
+        deletedAt: false,
+        description: false,
+        twitter: false,
+        facebook: false,
+        instagram: false,
+        telegram: false,
+        youtube: false,
+        email: false,
+        deleter: false,
+      }}
+      page={page}
+      perPage={perPage}
+      perPageChoices={SCANS_LIST_PER_PAGE_CHOICES}
+      queryableFields={SCANS_LIST_QUERYABLE_FIELDS.options}
+      totalPages={totalPages}
+      totalCount={totalCount}
+      isLoading={isFetching}
+      onPageChange={setPage}
+      onPerPageChange={setPerPage}
+      onSort={setSort}
+      onQueryChange={setQuery}
+    />
   )
 }

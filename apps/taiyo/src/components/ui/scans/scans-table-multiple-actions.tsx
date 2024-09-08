@@ -6,28 +6,28 @@ import {
   DropdownTrigger,
 } from "@nextui-org/dropdown"
 import { useDisclosure } from "@nextui-org/modal"
-import type { ChaptersListItem } from "@taiyomoe/types"
+import type { ScansListItem } from "@taiyomoe/types"
 import { ArchiveRestoreIcon, EllipsisIcon, Trash2Icon } from "lucide-react"
 import { type Key, useMemo } from "react"
 import { useDataTable } from "~/components/generics/data-table/data-table-context"
-import { ChaptersTableDeleteModal } from "./chapters-table-delete-modal"
-import { ChaptersTableRestoreModal } from "./chapters-table-restore-modal"
+import { ScansTableDeleteModal } from "./scans-table-delete-modal"
+import { ScansTableRestoreModal } from "./scans-table-restore-modal"
 
-export const ChaptersTableMultipleActions = () => {
+export const ScansTableMultipleActions = () => {
   const restoreModal = useDisclosure()
   const deleteModal = useDisclosure()
-  const table = useDataTable<ChaptersListItem>()
-  const selectedDeletedChaptersCount = table
+  const table = useDataTable<ScansListItem>()
+  const selectedDeletedScansCount = table
     .getSelectedRowModel()
     .rows.filter((r) => r.original.deletedAt !== null).length
-  const selectedChaptersCount =
-    table.getSelectedRowModel().rows.length - selectedDeletedChaptersCount
+  const selectedScansCount =
+    table.getSelectedRowModel().rows.length - selectedDeletedScansCount
   const disabledKeys = useMemo(() => {
     const keys: string[] = []
-    if (selectedChaptersCount === 0) keys.push("delete")
-    if (selectedDeletedChaptersCount === 0) keys.push("restore")
+    if (selectedScansCount === 0) keys.push("delete")
+    if (selectedDeletedScansCount === 0) keys.push("restore")
     return keys
-  }, [selectedChaptersCount, selectedDeletedChaptersCount])
+  }, [selectedScansCount, selectedDeletedScansCount])
 
   const handleAction = (key: Key) => {
     switch (key) {
@@ -59,7 +59,7 @@ export const ChaptersTableMultipleActions = () => {
             endContent={<ArchiveRestoreIcon size={18} />}
             textValue="Restaurar"
           >
-            Restaurar ({selectedDeletedChaptersCount})
+            Restaurar ({selectedDeletedScansCount})
           </DropdownItem>
           <DropdownItem
             key="delete"
@@ -67,12 +67,12 @@ export const ChaptersTableMultipleActions = () => {
             endContent={<Trash2Icon size={18} />}
             textValue="Deletar"
           >
-            Deletar ({selectedChaptersCount})
+            Deletar ({selectedScansCount})
           </DropdownItem>
         </DropdownMenu>
       </Dropdown>
-      <ChaptersTableRestoreModal {...restoreModal} />
-      <ChaptersTableDeleteModal {...deleteModal} />
+      <ScansTableRestoreModal {...restoreModal} />
+      <ScansTableDeleteModal {...deleteModal} />
     </>
   )
 }

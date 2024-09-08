@@ -17,3 +17,8 @@ export type DateRangeKey =
   | "lastMonth"
   | "thisYear"
   | "lastYear"
+
+export type ListQuery<TAttribute> = {
+  attributes: TAttribute[]
+  q: string
+}

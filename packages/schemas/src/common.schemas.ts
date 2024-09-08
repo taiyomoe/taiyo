@@ -33,6 +33,19 @@ export const optionalUrlSchema = (startsWith?: string[]) =>
       return startsWith.some((s) => v.startsWith(s))
     })
 
+export const queryableFieldsSchema = <
+  TType extends z.ZodEnum<[string, ...string[]]>,
+>(
+  input: TType,
+) =>
+  z
+    .object({
+      attributes: input.array().nonempty().catch(["*"]),
+      q: z.string().optional().default(""),
+    })
+    .optional()
+    .default({ attributes: ["*"], q: "" })
+
 export const sortableFieldsSchema = <
   TType extends readonly [string, ...string[]],
 >(

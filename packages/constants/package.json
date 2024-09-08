@@ -13,5 +13,8 @@
   },
   "devDependencies": {
     "@taiyomoe/tsconfig": "workspace:*"
+  },
+  "dependencies": {
+    "zod": "^3.23.8"
   }
 }

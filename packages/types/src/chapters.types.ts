@@ -1,8 +1,5 @@
 import { Prisma } from "@prisma/client"
 import type {
-  ContentRating,
-  Flag,
-  Languages,
   Media,
   MediaChapter,
   MediaChapterComment,
@@ -164,28 +161,4 @@ export type ChaptersListItem = Omit<
   uploader: Pick<User, "id" | "name" | "image">
   deleter: Pick<User, "id" | "name" | "image"> | null
   scans: Pick<Scan, "id" | "name">[]
-}
-
-export type ChaptersListFilters = {
-  numbers: number[]
-  notNumbers: number[]
-  volumes: number[]
-  notVolumes: number[]
-  languages: Languages[]
-  notLanguages: Languages[]
-  contentRatings: ContentRating[]
-  notContentRatings: ContentRating[]
-  flags: Flag[]
-  notFlags: Flag[]
-  uploaderIds: string[]
-  notUploaderIds: string[]
-  mediaIds: string[]
-  notMediaIds: string[]
-  scanIds: string[]
-  notScanIds: string[]
-  deleterIds: string[]
-  notDeleterIds: string[]
-  includeDeleted: boolean
-  page: number
-  perPage: number
 }

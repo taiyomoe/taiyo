@@ -374,6 +374,10 @@ importers:
         version: link:../types
 
   packages/constants:
+    dependencies:
+      zod:
+        specifier: ^3.23.8
+        version: 3.23.8
     devDependencies:
       '@taiyomoe/tsconfig':
         specifier: workspace:*

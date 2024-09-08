@@ -1,4 +1,3 @@
-import {} from "lucide-react"
 import { CopyText } from "~/components/generics/texts/copy-text"
 
 type Props = {
