@@ -1,12 +1,5 @@
 "use client"
 
-import { Button } from "@nextui-org/button"
-import {
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownTrigger,
-} from "@nextui-org/dropdown"
 import { Spinner } from "@nextui-org/spinner"
 import {
   Table,
@@ -16,11 +9,9 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/table"
-import type { ScansList } from "@taiyomoe/types"
+import type { ScansListItem } from "@taiyomoe/types"
 import { useAtom, useAtomValue } from "jotai"
 import { useHydrateAtoms } from "jotai/utils"
-import { EllipsisIcon, ExternalLinkIcon, PencilIcon } from "lucide-react"
-import Link from "next/link"
 import { type Key, useCallback, useMemo } from "react"
 import {
   scansListInitialDataAtom,
@@ -28,9 +19,10 @@ import {
   scansListSelectedKeysAtom,
   scansListVisibleColumnsAtom,
 } from "~/atoms/scansList.atoms"
-import { ScansTableBottomContent } from "~/components/ui/scans/scans-table-bottom-content"
-import { ScansTableTopContent } from "~/components/ui/scans/scans-table-top-content"
 import { useScansList } from "~/hooks/useScansList"
+import { ScansTableBottomContent } from "./scans-table-bottom-content"
+import { ScansTableSingleActions } from "./scans-table-single-actions"
+import { ScansTableTopContent } from "./scans-table-top-content"
 
 export const columns = [
   { name: "Id", uid: "id" },
@@ -41,7 +33,7 @@ export const columns = [
 ]
 
 type Props = {
-  initialData: { scans: ScansList; totalPages: number }
+  initialData: { scans: ScansListItem[]; totalPages: number }
 }
 
 export const ScansTable = ({ initialData }: Props) => {
@@ -59,33 +51,11 @@ export const ScansTable = ({ initialData }: Props) => {
     )
   }, [visibleColumns])
 
-  const renderCell = useCallback((scan: ScansList[number], columnKey: Key) => {
-    const value = scan[columnKey as keyof ScansList[number]]
+  const renderCell = useCallback((scan: ScansListItem, columnKey: Key) => {
+    const value = scan[columnKey as keyof ScansListItem]
 
     if (columnKey === "actions") {
-      return (
-        <div className="relative flex items-center justify-end gap-2">
-          <Dropdown>
-            <DropdownTrigger>
-              <Button isIconOnly size="sm" variant="light">
-                <EllipsisIcon className="text-default-300" />
-              </Button>
-            </DropdownTrigger>
-            <DropdownMenu variant="flat">
-              <DropdownItem
-                as={Link}
-                href={`/dashboard/scans/edit/${scan.id}`}
-                target="_blank"
-                color="warning"
-                startContent={<PencilIcon size={18} />}
-                endContent={<ExternalLinkIcon size={18} />}
-              >
-                Modificar
-              </DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
-        </div>
-      )
+      return <ScansTableSingleActions scan={scan} />
     }
 
     return value
@@ -94,51 +64,49 @@ export const ScansTable = ({ initialData }: Props) => {
   return (
     <div className="flex flex-col gap-12">
       <p className="font-semibold text-4xl">Scans</p>
-      <div>
-        <Table
-          selectedKeys={selectedKeys}
-          selectionMode="multiple"
-          topContent={<ScansTableTopContent />}
-          topContentPlacement="outside"
-          bottomContent={<ScansTableBottomContent />}
-          bottomContentPlacement="outside"
-          onSelectionChange={setSelectedKeys}
-          aria-label="Scans list"
-          isStriped
+      <Table
+        selectedKeys={selectedKeys}
+        selectionMode="multiple"
+        topContent={<ScansTableTopContent />}
+        topContentPlacement="outside"
+        bottomContent={<ScansTableBottomContent />}
+        bottomContentPlacement="outside"
+        onSelectionChange={setSelectedKeys}
+        aria-label="Scans list"
+        isStriped
+      >
+        <TableHeader columns={headerColumns}>
+          {(c) => (
+            <TableColumn
+              key={c.uid}
+              className="uppercase"
+              align={
+                c.uid === "actions"
+                  ? "end"
+                  : ["chapters", "members"].includes(c.uid)
+                    ? "center"
+                    : "start"
+              }
+            >
+              {c.name}
+            </TableColumn>
+          )}
+        </TableHeader>
+        <TableBody
+          items={isLoading ? [] : items}
+          isLoading={isLoading}
+          emptyContent="Nenhuma scan encontrada"
+          loadingContent={<Spinner size="lg" />}
         >
-          <TableHeader columns={headerColumns}>
-            {(c) => (
-              <TableColumn
-                key={c.uid}
-                className="uppercase"
-                align={
-                  c.uid === "actions"
-                    ? "end"
-                    : ["chapters", "members"].includes(c.uid)
-                      ? "center"
-                      : "start"
-                }
-              >
-                {c.name}
-              </TableColumn>
-            )}
-          </TableHeader>
-          <TableBody
-            items={isLoading ? [] : items}
-            isLoading={isLoading}
-            emptyContent="Nenhuma scan encontrada"
-            loadingContent={<Spinner size="lg" />}
-          >
-            {(item) => (
-              <TableRow key={item.id}>
-                {(columnKey) => (
-                  <TableCell>{renderCell(item, columnKey)}</TableCell>
-                )}
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
+          {(item) => (
+            <TableRow key={item.id}>
+              {(columnKey) => (
+                <TableCell>{renderCell(item, columnKey)}</TableCell>
+              )}
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
     </div>
   )
 }

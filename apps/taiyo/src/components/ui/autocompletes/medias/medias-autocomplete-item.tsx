@@ -7,7 +7,7 @@ type Props = {
   title: string
 }
 
-export const MediasSearchAutocompleteItem = (props: Props) => {
+export const MediasAutocompleteItem = (props: Props) => {
   const { item, title } = props
 
   return (

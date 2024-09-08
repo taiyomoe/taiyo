@@ -1,3 +1,5 @@
+import { Button } from "@nextui-org/button"
+import { ChevronDownIcon } from "lucide-react"
 import { omit } from "radash"
 import Select, {
   components,
@@ -16,6 +18,8 @@ import Select, {
   type ValueContainerProps,
   type GroupBase,
   type ContainerProps,
+  type PlaceholderProps,
+  type IndicatorsContainerProps,
 } from "react-select"
 import SelectAsync, { type AsyncProps } from "react-select/async"
 import type { SelectItem } from "~/lib/types"
@@ -27,21 +31,35 @@ export type MultiSelectProps<T extends SelectItem = SelectItem> = Omit<
 >
 
 const SelectContainer = <T,>(props: ContainerProps<T, true>) => (
-  <components.SelectContainer {...props} className="min-w-52" />
+  <components.SelectContainer {...props} className="w-full min-w-52" />
 )
 
 const Control = <T,>(props: ControlProps<T, true>) => (
   <components.Control
     {...props}
-    className="!bg-default-100 hover:!bg-default-200 !transition-background !duration-150 !rounded-medium !border-none !ring-0 hover:!cursor-text !min-h-10 !motion-reduce:transition-none"
+    className={cn(
+      "!bg-default-100 !transition-background !duration-150 !rounded-medium !border-none !ring-0 hover:!cursor-text !min-h-10 !motion-reduce:transition-none",
+      { "hover:!bg-default-200": !props.isFocused },
+    )}
   />
 )
 
 const Input = <T,>(props: InputProps<T, true>) => (
   <components.Input
     {...props}
-    className="!p-0 !m-0 !text-content1-foreground"
+    className="!p-0 !m-0 !text-default-foreground !text-small"
   />
+)
+
+const Placeholder = <T,>(props: PlaceholderProps<T, true>) => (
+  <components.Placeholder
+    {...props}
+    className="!m-0 !text-foreground-500 !text-small"
+  />
+)
+
+const IndicatorsContainer = <T,>(props: IndicatorsContainerProps<T, true>) => (
+  <components.IndicatorsContainer {...props} className="[&>div]:!p-0 pr-1" />
 )
 
 const ClearIndicator = <T,>(props: ClearIndicatorProps<T, true>) => (
@@ -52,14 +70,19 @@ const ClearIndicator = <T,>(props: ClearIndicatorProps<T, true>) => (
 )
 
 const DropdownIndicator = <T,>(props: DropdownIndicatorProps<T, true>) => (
-  <components.DropdownIndicator
-    {...props}
-    className="!text-default-400 child:hover:!text-default-600 hover:cursor-pointer"
-  />
+  <components.DropdownIndicator {...props}>
+    <Button
+      startContent={<ChevronDownIcon size={16} />}
+      variant="light"
+      radius="full"
+      size="sm"
+      isIconOnly
+    />
+  </components.DropdownIndicator>
 )
 
 const IndicatorSeparator = <T,>(props: IndicatorSeparatorProps<T, true>) => (
-  <components.IndicatorSeparator {...props} className="!bg-default-400" />
+  <components.IndicatorSeparator {...props} className="hidden" />
 )
 
 const MultiValue = <T,>(props: MultiValueProps<T, true>) => (
@@ -75,7 +98,7 @@ const MultiValue = <T,>(props: MultiValueProps<T, true>) => (
 )
 
 const ValueContainer = <T,>(props: ValueContainerProps<T, true>) => (
-  <components.ValueContainer {...props} className="!p-2 gap-1" />
+  <components.ValueContainer {...props} className="!px-3 !py-2 gap-1" />
 )
 
 const MultiValueLabel = <T,>(props: MultiValueGenericProps<T, true>) => (
@@ -101,7 +124,7 @@ const MultiValueRemove = <T,>(props: MultiValueRemoveProps<T, true>) => (
 const Menu = <T,>(props: MenuProps<T, true>) => (
   <components.Menu
     {...props}
-    className={cn("!z-20 !bg-content1 !rounded-large")}
+    className={cn("!z-20 !bg-content1 !rounded-large !my-[5px]")}
   />
 )
 
@@ -129,11 +152,14 @@ export const MultiSelect = <T extends SelectItem>(
       isMulti
       menuPlacement="auto"
       noOptionsMessage={() => "Nenhum resultado encontrado"}
+      placeholder="Pesquisar..."
       closeMenuOnSelect={false}
       components={{
         SelectContainer,
         Control,
         Input,
+        Placeholder,
+        IndicatorsContainer,
         ClearIndicator,
         DropdownIndicator,
         IndicatorSeparator,
@@ -145,6 +171,8 @@ export const MultiSelect = <T extends SelectItem>(
         MenuList,
         Option,
       }}
+      menuPortalTarget={document.body}
+      styles={{ menuPortal: (base) => ({ ...base, zIndex: 10000 }) }}
       {...props}
     />
   )
@@ -159,11 +187,14 @@ export const MultiSelectAsync = <T extends SelectItem>(
       cacheOptions
       menuPlacement="auto"
       noOptionsMessage={() => "Nenhum resultado encontrado"}
+      placeholder="Pesquisar..."
       closeMenuOnSelect={false}
       components={{
         SelectContainer,
         Control,
         Input,
+        Placeholder,
+        IndicatorsContainer,
         ClearIndicator,
         DropdownIndicator,
         IndicatorSeparator,
@@ -175,6 +206,8 @@ export const MultiSelectAsync = <T extends SelectItem>(
         MenuList,
         Option,
       }}
+      menuPortalTarget={document.body}
+      styles={{ menuPortal: (base) => ({ ...base, zIndex: 10000 }) }}
       {...props}
     />
   )

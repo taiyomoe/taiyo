@@ -31,7 +31,7 @@ export const updateScanSchema = createScanSchema.partial().extend({
 })
 
 export const getScansListSchema = z.object({
-  search: optionalStringSchema,
+  query: optionalStringSchema.default(""),
   page: pageSchema,
   perPage: perPageSchema(
     DEFAULT_SCANS_LIST_PER_PAGE,

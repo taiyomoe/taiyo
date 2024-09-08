@@ -3,12 +3,19 @@ import { useDisclosure } from "@nextui-org/modal"
 import { AnimatePresence, motion } from "framer-motion"
 import { useAtomValue } from "jotai"
 import { Trash2Icon } from "lucide-react"
+import { useMemo } from "react"
 import { scansListSelectedKeysAtom } from "~/atoms/scansList.atoms"
-import { ScansTableMultipleActionsDeleteModal } from "./scans-table-multiple-actions-delete-modal"
+import { useScansList } from "~/hooks/useScansList"
+import { ScansTableDeleteModal } from "./scans-table-delete-modal"
 
 export const ScansTableMultipleActionsDeleteButton = () => {
   const selectedKeys = useAtomValue(scansListSelectedKeysAtom)
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
+  const { items } = useScansList()
+  const selectedScans = useMemo(
+    () => items.filter((item) => Array.from(selectedKeys).includes(item.id)),
+    [selectedKeys, items],
+  )
 
   return (
     <>
@@ -25,7 +32,8 @@ export const ScansTableMultipleActionsDeleteButton = () => {
           </motion.div>
         )}
       </AnimatePresence>
-      <ScansTableMultipleActionsDeleteModal
+      <ScansTableDeleteModal
+        selectedScans={selectedScans}
         isOpen={isOpen}
         onOpenChange={onOpenChange}
       />

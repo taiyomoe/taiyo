@@ -85,3 +85,8 @@
 [id^="marquee-card-"]:hover .rfm-overlay::after {
   --content1-gradient: var(--content2);
 }
+
+.ruleGroup-body > .rule:first-child:not(:only-child),
+.ruleGroup-body > .ruleGroup:first-child:not(:only-child) {
+  grid-column-start: 2;
+}

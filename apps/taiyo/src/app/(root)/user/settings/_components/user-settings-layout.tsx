@@ -1,4 +1,4 @@
-import { Divider } from "@nextui-org/react"
+import { Divider } from "@nextui-org/divider"
 import type { UpdateUserSettingsInput } from "@taiyomoe/schemas"
 import { UpdateUserSettingsForm } from "~/components/forms/users/update-settings/update-user-settings-form"
 import { UserSettingsTabs } from "./user-settings-tabs"

@@ -3,10 +3,10 @@ import { rawLogsClient } from "./"
 export const insertWrapper = (
   table: string,
   columns: string[],
-  ...input: unknown[][]
+  input: unknown[],
 ) =>
   rawLogsClient.insert({
     table,
-    values: [columns, input.flat()],
+    values: [columns, input],
     format: "JSONCompactEachRowWithNames",
   })

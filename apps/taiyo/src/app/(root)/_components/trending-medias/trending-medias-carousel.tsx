@@ -1,6 +1,6 @@
 "use client"
 
-import { ScrollShadow } from "@nextui-org/react"
+import { ScrollShadow } from "@nextui-org/scroll-shadow"
 import type { LatestMedia } from "@taiyomoe/types"
 import { CoverUtils } from "@taiyomoe/utils"
 import useEmblaCarousel from "embla-carousel-react"

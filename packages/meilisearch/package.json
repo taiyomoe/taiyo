@@ -5,6 +5,7 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
+    "./services": "./src/services/index.ts",
     "./utils": "./src/utils/index.ts",
     "./env": "./env.ts"
   },
@@ -15,8 +16,10 @@
   },
   "dependencies": {
     "@t3-oss/env-core": "^0.11.1",
+    "luxon": "^3.5.0",
     "meilisearch": "^0.42.0",
     "punycode": "^2.3.1",
+    "radash": "^12.1.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {

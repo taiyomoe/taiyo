@@ -29,7 +29,7 @@ export const mediasRouter = createTRPCRouter({
       })
 
       const indexItem = await getMediaIndexItem(ctx.db, input.id)
-      await ctx.indexes.medias.updateDocuments([indexItem])
+      await ctx.meilisearch.medias.updateDocuments([indexItem])
     }),
 
   getById: publicProcedure

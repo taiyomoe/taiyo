@@ -3,6 +3,7 @@ import { GENRES_PT } from "@taiyomoe/utils/i18n"
 import { Controller } from "react-hook-form"
 import { Label } from "~/components/generics/label"
 import { MultiSelect } from "~/components/generics/multi-select"
+import { SelectUtils } from "~/lib/utils/select.utils"
 
 export const GenresField = () => {
   return (
@@ -18,10 +19,7 @@ export const GenresField = () => {
               label: GENRES_PT[v],
               value: v,
             }))}
-            options={Object.entries(GENRES_PT).map(([value, label]) => ({
-              label,
-              value,
-            }))}
+            options={SelectUtils.enumToItems(GENRES_PT)}
           />
         )}
       />

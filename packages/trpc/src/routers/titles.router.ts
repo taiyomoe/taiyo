@@ -60,7 +60,7 @@ export const titlesRouter = createTRPCRouter({
       }
 
       const indexItem = await getMediaIndexItem(ctx.db, input.mediaId)
-      await ctx.indexes.medias.updateDocuments([indexItem])
+      await ctx.meilisearch.medias.updateDocuments([indexItem])
 
       return createdTitle
     }),
@@ -123,7 +123,7 @@ export const titlesRouter = createTRPCRouter({
       }
 
       const indexItem = await getMediaIndexItem(ctx.db, title.mediaId)
-      await ctx.indexes.medias.updateDocuments([indexItem])
+      await ctx.meilisearch.medias.updateDocuments([indexItem])
     }),
 
   delete: protectedProcedure
@@ -155,6 +155,6 @@ export const titlesRouter = createTRPCRouter({
       })
 
       const indexItem = await getMediaIndexItem(ctx.db, title.mediaId)
-      await ctx.indexes.medias.updateDocuments([indexItem])
+      await ctx.meilisearch.medias.updateDocuments([indexItem])
     }),
 })

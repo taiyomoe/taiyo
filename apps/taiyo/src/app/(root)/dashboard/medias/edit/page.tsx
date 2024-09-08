@@ -1,10 +1,5 @@
-import { MediasSearchAutocomplete } from "~/components/ui/medias-search/autocomplete/medias-search-autocomplete"
+import { MediasLinkAutocomplete } from "~/components/ui/autocompletes/medias/medias-link-autocomplete"
 
 export default function Page() {
-  return (
-    <MediasSearchAutocomplete
-      href="edit/"
-      itemProps={{ hideSelectedIcon: true }}
-    />
-  )
+  return <MediasLinkAutocomplete href="edit/" />
 }

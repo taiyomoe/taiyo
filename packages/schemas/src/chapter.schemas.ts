@@ -1,4 +1,7 @@
 import {
+  CHAPTERS_LIST_PER_PAGE_CHOICES,
+  CHAPTERS_LIST_SORTABLE_FIELDS,
+  DEFAULT_CHAPTERS_LIST_PER_PAGE,
   DEFAULT_LATEST_CHAPTERS_GROUPED_PER_PAGE,
   DEFAULT_MEDIA_PER_PAGE,
   LATEST_CHAPTERS_GROUPED_PER_PAGE_CHOICES,
@@ -6,7 +9,11 @@ import {
 } from "@taiyomoe/constants"
 import { z } from "zod"
 
-import { pageSchema, perPageSchema } from "./common.schemas"
+import {
+  pageSchema,
+  perPageSchema,
+  sortableFieldsSchema,
+} from "./common.schemas"
 import { ContentRatingSchema, FlagSchema, LanguagesSchema } from "./prisma"
 
 export const updateChapterSchema = z.object({
@@ -66,6 +73,16 @@ export const getLatestChaptersGroupedByUserSchema = z.object({
   ),
 })
 
+export const getChaptersListSchema = z.object({
+  query: z.string().optional().default(""),
+  sort: sortableFieldsSchema(CHAPTERS_LIST_SORTABLE_FIELDS),
+  page: pageSchema,
+  perPage: perPageSchema(
+    DEFAULT_CHAPTERS_LIST_PER_PAGE,
+    CHAPTERS_LIST_PER_PAGE_CHOICES,
+  ),
+})
+
 export type UpdateChapterInput = typeof updateChapterSchema._type
 export type BulkUpdateChaptersVolumesInput =
   typeof bulkUpdateChaptersVolumesSchema._type
@@ -75,3 +92,4 @@ export type GetLatestChaptersGroupedInput =
   typeof getLatestChaptersGroupedSchema._type
 export type GetLatestChaptersGroupedByUserInput =
   typeof getLatestChaptersGroupedByUserSchema._type
+export type GetChaptersListInput = typeof getChaptersListSchema._type

@@ -102,6 +102,11 @@ export const DashboardSidebarContent = ({ className }: Props) => {
         <DashboardSidebarCRUDButtons
           items={[
             {
+              label: "Lista",
+              href: "/dashboard/chapters",
+              type: "home",
+            },
+            {
               label: "Estatísticas",
               href: "/dashboard/chapters/stats",
               type: "stats",
