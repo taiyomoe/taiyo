@@ -150,8 +150,8 @@ export const scansRouter = createTRPCRouter({
         }
       }
 
-      const newScans = scans.map((scan) => ({
-        ...scan,
+      const newScans = scans.map((s) => ({
+        ...s,
         deletedAt: input.type === "delete" ? new Date() : null,
         deleterId: input.type === "delete" ? ctx.session.user.id : null,
       }))

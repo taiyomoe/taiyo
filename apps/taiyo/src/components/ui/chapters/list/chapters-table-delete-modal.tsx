@@ -22,7 +22,7 @@ export const ChaptersTableDeleteModal = ({ isOpen, onOpenChange }: Props) => {
   const table = useDataTable<ChaptersListItem>()
   const [isDisabled, setIsDisabled] = useState(true)
   const [inputValue, setInputValue] = useState("")
-  const { mutateAsync } = api.chapters.bulkDelete.useMutation()
+  const { mutateAsync } = api.chapters.bulkMutate.useMutation()
   const selectedChapters = table
     .getSelectedRowModel()
     .rows.map((row) => row.original)
@@ -47,7 +47,7 @@ export const ChaptersTableDeleteModal = ({ isOpen, onOpenChange }: Props) => {
 
     setIsDisabled(true)
 
-    toast.promise(mutateAsync(ids), {
+    toast.promise(mutateAsync({ type: "delete", ids }), {
       loading: `Apagando ${dynamicTextAs}...`,
       success: () => {
         table.resetRowSelection()
