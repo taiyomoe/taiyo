@@ -53,14 +53,7 @@ const TableRow = forwardRef<
   HTMLTableRowElement,
   HTMLAttributes<HTMLTableRowElement>
 >(({ className, ...props }, ref) => (
-  <tr
-    ref={ref}
-    className={cn(
-      "group [&_td:last-child>div]:justify-end [&_td:nth-child(n+3):not(:last-child)>div]:justify-center [&_th:last-child]:text-end [&_th:not(:nth-child(1n+3))]:text-start",
-      className,
-    )}
-    {...props}
-  />
+  <tr ref={ref} className={cn("group", className)} {...props} />
 ))
 TableRow.displayName = "TableRow"
 
@@ -71,7 +64,7 @@ const TableHead = forwardRef<
   <th
     ref={ref}
     className={cn(
-      "h-10 whitespace-nowrap bg-default-100 px-3 align-middle font-semibold text-foreground-500 text-xs uppercase first:rounded-l-lg last:rounded-r-lg",
+      "h-10 whitespace-nowrap bg-default-100 px-3 align-middle font-semibold text-foreground-500 text-xs uppercase first:rounded-l-lg last:rounded-r-lg last:text-end [&:not(:nth-child(1n+3))]:text-start",
       className,
     )}
     {...props}
@@ -86,7 +79,7 @@ const TableCell = forwardRef<
   <td
     ref={ref}
     className={cn(
-      "relative h-10 whitespace-nowrap px-3 py-2 align-middle font-normal text-small data-[selected=true]:text-default-foreground group-data-[odd=true]:before:bg-default-100 group-data-[odd=true]:before:opacity-100 [&:has([role=checkbox])]:pr-0",
+      "relative h-10 whitespace-nowrap px-3 py-2 align-middle font-normal text-small data-[selected=true]:text-default-foreground group-data-[odd=true]:before:bg-default-100 group-data-[odd=true]:before:opacity-100 [&:has([role=checkbox])]:pr-0 [&:last-child>div]:justify-end [&:nth-child(n+3):not(:last-child)>div]:justify-center",
       className,
     )}
     suppressHydrationWarning
