@@ -70,7 +70,8 @@ export const scansRouter = createTRPCRouter({
     .meta({ resource: "scans", action: "create" })
     .input(getScansListSchema)
     .query(async ({ ctx, input }) => {
-      const searched = await ctx.meilisearch.scans.search(null, {
+      const searched = await ctx.meilisearch.scans.search(input.query.q, {
+        attributesToSearchOn: input.query.attributes,
         filter: buildFilter(input.filter),
         sort: buildSort(input.sort),
         hitsPerPage: input.perPage,

@@ -1,6 +1,7 @@
 import {
   DEFAULT_SCANS_LIST_PER_PAGE,
   SCANS_LIST_PER_PAGE_CHOICES,
+  SCANS_LIST_QUERYABLE_FIELDS,
   SCANS_LIST_SORTABLE_FIELDS,
 } from "@taiyomoe/constants"
 import { z } from "zod"
@@ -10,6 +11,7 @@ import {
   optionalUrlSchema,
   pageSchema,
   perPageSchema,
+  queryableFieldsSchema,
   sortableFieldsSchema,
 } from "./common.schemas"
 
@@ -33,6 +35,7 @@ export const updateScanSchema = createScanSchema.partial().extend({
 })
 
 export const getScansListSchema = z.object({
+  query: queryableFieldsSchema(SCANS_LIST_QUERYABLE_FIELDS),
   filter: z.string().optional().default(""),
   sort: sortableFieldsSchema(SCANS_LIST_SORTABLE_FIELDS),
   page: pageSchema,

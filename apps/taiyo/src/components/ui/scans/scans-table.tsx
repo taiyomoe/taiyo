@@ -1,6 +1,9 @@
 "use client"
 
-import { SCANS_LIST_PER_PAGE_CHOICES } from "@taiyomoe/constants"
+import {
+  SCANS_LIST_PER_PAGE_CHOICES,
+  SCANS_LIST_QUERYABLE_FIELDS,
+} from "@taiyomoe/constants"
 import type { ScansListItem } from "@taiyomoe/types"
 import { DataTable } from "~/components/generics/data-table/data-table"
 import { useScansListStore } from "~/stores/scansList.store"
@@ -19,13 +22,22 @@ type Props = {
 }
 
 export const ScansTable = ({ initialData }: Props) => {
-  const { query, sort, page, perPage, setSort, setPage, setPerPage } =
-    useScansListStore()
+  const {
+    query,
+    filter,
+    sort,
+    page,
+    perPage,
+    setQuery,
+    setSort,
+    setPage,
+    setPerPage,
+  } = useScansListStore()
   const {
     data: { scans: items, totalPages, totalCount },
     isFetching,
   } = api.scans.getList.useQuery(
-    { query, sort, page, perPage },
+    { query, filter, sort, page, perPage },
     { initialData, refetchOnMount: false },
   )
 
@@ -52,12 +64,14 @@ export const ScansTable = ({ initialData }: Props) => {
       page={page}
       perPage={perPage}
       perPageChoices={SCANS_LIST_PER_PAGE_CHOICES}
+      queryableFields={SCANS_LIST_QUERYABLE_FIELDS.options}
       totalPages={totalPages}
       totalCount={totalCount}
       isLoading={isFetching}
       onPageChange={setPage}
       onPerPageChange={setPerPage}
       onSort={setSort}
+      onQueryChange={setQuery}
     />
   )
 }
