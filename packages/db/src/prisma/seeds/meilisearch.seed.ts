@@ -21,8 +21,30 @@ const execute = async () => {
   await meilisearchClient.medias.updateDocuments(medias)
 
   // Scans
+  const scanFields = [
+    "id",
+    "createdAt",
+    "updatedAt",
+    "deletedAt",
+    "name",
+    "description",
+    "logo",
+    "banner",
+    "website",
+    "discord",
+    "twitter",
+    "facebook",
+    "instagram",
+    "telegram",
+    "youtube",
+    "email",
+    "creatorId",
+    "deleterId",
+  ]
   await rawMeilisearchClient.deleteIndexIfExists("scans")
   await rawMeilisearchClient.createIndex("scans", { primaryKey: "id" })
+  await meilisearchClient.scans.updateFilterableAttributes(scanFields)
+  await meilisearchClient.scans.updateSortableAttributes(scanFields)
   await meilisearchClient.scans.deleteAllDocuments()
 
   const scans = await Promise.all(
@@ -34,7 +56,7 @@ const execute = async () => {
   await meilisearchClient.scans.updateDocuments(scans)
 
   // Chapters
-  const fields = [
+  const chapterFields = [
     "id",
     "createdAt",
     "updatedAt",
@@ -52,8 +74,8 @@ const execute = async () => {
   ]
   await rawMeilisearchClient.deleteIndexIfExists("chapters")
   await rawMeilisearchClient.createIndex("chapters", { primaryKey: "id" })
-  await meilisearchClient.chapters.updateFilterableAttributes(fields)
-  await meilisearchClient.chapters.updateSortableAttributes(fields)
+  await meilisearchClient.chapters.updateFilterableAttributes(chapterFields)
+  await meilisearchClient.chapters.updateSortableAttributes(chapterFields)
   await meilisearchClient.chapters.deleteAllDocuments()
 
   const chapters = await Promise.all(
