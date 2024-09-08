@@ -1,4 +1,4 @@
-import { getMediaIndexItem } from "@taiyomoe/meilisearch/utils"
+import { MediasIndexService } from "@taiyomoe/meilisearch/services"
 import { idSchema, updateMediaSchema } from "@taiyomoe/schemas"
 import { LibrariesService, MediasService } from "@taiyomoe/services"
 import type { MediaLimited } from "@taiyomoe/types"
@@ -28,8 +28,7 @@ export const mediasRouter = createTRPCRouter({
         data: input,
       })
 
-      const indexItem = await getMediaIndexItem(ctx.db, input.id)
-      await ctx.meilisearch.medias.updateDocuments([indexItem])
+      await MediasIndexService.sync(ctx.db, [input.id])
     }),
 
   getById: publicProcedure

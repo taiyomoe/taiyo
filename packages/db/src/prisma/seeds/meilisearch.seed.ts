@@ -1,11 +1,11 @@
 import { meilisearchClient, rawMeilisearchClient } from "@taiyomoe/meilisearch"
-import { ChaptersIndexService } from "@taiyomoe/meilisearch/services"
-import { ScansIndexService } from "@taiyomoe/meilisearch/services"
 import {
-  getMediaIndexItem,
-  getUserIndexItem,
-} from "@taiyomoe/meilisearch/utils"
-import { db } from "../.."
+  ChaptersIndexService,
+  MediasIndexService,
+} from "@taiyomoe/meilisearch/services"
+import { ScansIndexService } from "@taiyomoe/meilisearch/services"
+import { getUserIndexItem } from "@taiyomoe/meilisearch/utils"
+import { db } from "../../"
 
 const execute = async () => {
   // Medias
@@ -14,11 +14,11 @@ const execute = async () => {
   await meilisearchClient.medias.updateFilterableAttributes(["type"])
   await meilisearchClient.medias.deleteAllDocuments()
 
-  const medias = await Promise.all(
-    (await db.media.findMany()).map(({ id }) => getMediaIndexItem(db, id)),
+  const medias = await db.media.findMany()
+  await MediasIndexService.sync(
+    db,
+    medias.map((s) => s.id),
   )
-
-  await meilisearchClient.medias.updateDocuments(medias)
 
   // Scans
   const scanFields = [

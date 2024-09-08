@@ -1,11 +1,10 @@
 import type { PrismaClient } from "@prisma/client"
 import type { MediasIndexItem } from "@taiyomoe/types"
 import { TRPCError } from "@trpc/server"
+import { parallel } from "radash"
+import { meilisearchClient } from "../"
 
-export const getMediaIndexItem = async (
-  db: PrismaClient,
-  mediaId: string,
-): Promise<MediasIndexItem> => {
+const getItem = async (db: PrismaClient, id: string) => {
   const result = await db.media.findUnique({
     select: {
       id: true,
@@ -25,22 +24,20 @@ export const getMediaIndexItem = async (
         where: { isMainCover: true },
       },
     },
-    where: {
-      id: mediaId,
-    },
+    where: { id },
   })
 
   if (!result) {
     throw new TRPCError({
       code: "NOT_FOUND",
-      message: `Media '${mediaId}' not found`,
+      message: `Media '${id}' not found`,
     })
   }
 
   if (!result.covers.length) {
     throw new TRPCError({
       code: "INTERNAL_SERVER_ERROR",
-      message: `Media '${mediaId}' has no main cover`,
+      message: `Media '${id}' has no main cover`,
     })
   }
 
@@ -50,5 +47,16 @@ export const getMediaIndexItem = async (
     type: result.type,
     titles: result.titles,
     mainCoverId: result.covers[0]!.id,
-  }
+  } satisfies MediasIndexItem
+}
+
+const sync = async (db: PrismaClient, ids: string[]) => {
+  const medias = await parallel(10, ids, (id) => getItem(db, id))
+
+  return meilisearchClient.medias.updateDocuments(medias)
+}
+
+export const MediasIndexService = {
+  getItem,
+  sync,
 }

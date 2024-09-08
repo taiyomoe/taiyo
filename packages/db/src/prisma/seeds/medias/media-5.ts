@@ -1,4 +1,4 @@
-import { db } from "../../.."
+import { db } from "../../../"
 
 const execute = async () => {
   await db.media.create({
