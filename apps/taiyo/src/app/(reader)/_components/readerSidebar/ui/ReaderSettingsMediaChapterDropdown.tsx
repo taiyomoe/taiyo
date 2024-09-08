@@ -7,11 +7,11 @@ import {
   DropdownMenu,
   DropdownTrigger,
 } from "@nextui-org/dropdown"
+import { tv } from "@nextui-org/react"
 import { Skeleton } from "@nextui-org/skeleton"
 import { ChapterUtils } from "@taiyomoe/utils"
 import { ChevronsUpDownIcon } from "lucide-react"
 import Link from "next/link"
-import { tv } from "tailwind-variants"
 import { BackButton } from "~/components/generics/buttons/BackButton"
 import { ForwardButton } from "~/components/generics/buttons/ForwardButton"
 import { useChapterProgression } from "~/hooks/useChapterProgression"

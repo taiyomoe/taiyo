@@ -9,7 +9,7 @@ import {
   ModalHeader,
   useDisclosure,
 } from "@nextui-org/modal"
-import type { MediaCover } from "@prisma/client"
+import type { MediaCover } from "@taiyomoe/db"
 import type { UpdateCoverInput } from "@taiyomoe/schemas"
 import { updateCoverSchema } from "@taiyomoe/schemas"
 import type { MediaWithRelations } from "@taiyomoe/types"

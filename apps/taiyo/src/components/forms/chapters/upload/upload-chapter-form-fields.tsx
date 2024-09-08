@@ -1,4 +1,4 @@
-import { ContentRating, Flag, Languages } from "@prisma/client"
+import { ContentRating, Flag, Languages } from "@taiyomoe/db"
 import { ChapterFormImagesCategory } from "~/components/forms/chapters/upload/categories/chapter-form-images-category"
 import { SubmitButton } from "~/components/generics/buttons/submit-button"
 import { Form } from "~/components/generics/form/form"

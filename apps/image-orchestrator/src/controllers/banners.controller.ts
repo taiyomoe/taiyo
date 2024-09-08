@@ -1,5 +1,5 @@
 import { Elysia } from "elysia"
-import { authMiddleware } from "../middlewares/auth.middleware"
+import { authMiddleware } from "../middlewares"
 import { uploadBannerSchema } from "../schemas"
 import { MediaBannersService, MediasService } from "../services"
 import { fileTypeValidator } from "../validators/fileType.validator"

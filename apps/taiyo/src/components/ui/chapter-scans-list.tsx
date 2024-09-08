@@ -1,9 +1,9 @@
 import type { VariantProps } from "@nextui-org/react"
+import { tv } from "@nextui-org/react"
 import { Skeleton } from "@nextui-org/skeleton"
-import type { Scan } from "@prisma/client"
+import type { Scan } from "@taiyomoe/db"
 import { UsersIcon } from "lucide-react"
 import Link from "next/link"
-import { tv } from "tailwind-variants"
 
 type Props = {
   scans?: Scan[] | Pick<Scan, "id" | "name">[]

@@ -1,11 +1,11 @@
 "use client"
 
 import { Chip } from "@nextui-org/chip"
+import { tv } from "@nextui-org/react"
 import { useSession } from "@taiyomoe/auth/client"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useMemo } from "react"
-import { tv } from "tailwind-variants"
 import { ReaderSidebarOpenButton } from "~/app/(reader)/_components/readerSidebar/ui/ReaderSidebarOpenButton"
 import { CompanyLogo } from "~/components/ui/CompanyLogo"
 import { MediasSearchMenu } from "~/components/ui/medias-search/menu/medias-search-menu"

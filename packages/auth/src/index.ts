@@ -103,3 +103,5 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     },
   },
 })
+
+export type { Session } from "next-auth"

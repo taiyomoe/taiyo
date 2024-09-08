@@ -16,7 +16,6 @@
   },
   "dependencies": {
     "@taiyomoe/constants": "workspace:*",
-    "@taiyomoe/types": "workspace:*",
     "zod": "^3.23.8"
   }
 }

@@ -1,7 +1,7 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import type { MediaChapter } from "@prisma/client"
+import type { MediaChapter } from "@taiyomoe/db"
 import {
   type BulkUpdateChaptersVolumesInput,
   bulkUpdateChaptersVolumesSchema,

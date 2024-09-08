@@ -1,4 +1,4 @@
-import type { Countries, Languages } from "@prisma/client"
+import type { Countries, Languages } from "@taiyomoe/db"
 import { LanguageUtils } from "@taiyomoe/utils"
 import Image from "next/image"
 import { useMemo } from "react"

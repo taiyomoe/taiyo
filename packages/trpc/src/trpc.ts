@@ -32,7 +32,7 @@ import { withPermissions } from "./middlewares/withPermissions"
  *
  * @see https://trpc.io/docs/server/context
  */
-export type Meta = {
+type Meta = {
   resource?: Resources
   action?: Actions
 }

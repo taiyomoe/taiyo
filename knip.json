@@ -1,8 +1,12 @@
 {
   "$schema": "https://unpkg.com/knip@5/schema.json",
-  "ignoreDependencies": ["@nextui-org/.+"],
-  "ignore": [
-    "./packages/schemas/src/prisma/index.ts",
-    "./packages/db/src/prisma/**/*.ts"
-  ]
+  "ignoreBinaries": ["infisical"],
+  "ignoreWorkspaces": ["./packages/db"],
+  "ignoreDependencies": [
+    "@types/global-types",
+    "@nextui-org/.+",
+    "punycode",
+    "sharp"
+  ],
+  "ignore": ["./packages/schemas/src/prisma/index.ts"]
 }
