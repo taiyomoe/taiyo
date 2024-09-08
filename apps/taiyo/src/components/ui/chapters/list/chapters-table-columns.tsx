@@ -5,6 +5,7 @@ import {
   selectableColumn,
 } from "~/components/generics/data-table/data-table-presets"
 import { TableCellDate } from "~/components/tables/table-cell-date"
+import { TableCellId } from "~/components/tables/table-cell-id"
 import { TableCellLanguage } from "~/components/tables/table-cell-language"
 import { TableCellMedia } from "~/components/tables/table-cell-media"
 import { TableCellScans } from "~/components/tables/table-cell-scans"
@@ -13,7 +14,11 @@ import { ChaptersTableSingleActions } from "./chapters-table-single-actions"
 
 export const columns: ColumnDef<ChaptersListItem>[] = [
   selectableColumn(),
-  { accessorKey: "id", header: "ID" },
+  {
+    accessorKey: "id",
+    header: "ID",
+    cell: ({ getValue }) => <TableCellId id={getValue<string>()} />,
+  },
   {
     accessorKey: "createdAt",
     header: "Data de upload",
@@ -39,11 +44,6 @@ export const columns: ColumnDef<ChaptersListItem>[] = [
     },
   },
   {
-    accessorKey: "title",
-    header: "Título",
-    enableMultiSort: true,
-  },
-  {
     accessorKey: "number",
     header: "Número",
     enableMultiSort: true,
@@ -51,6 +51,11 @@ export const columns: ColumnDef<ChaptersListItem>[] = [
   {
     accessorKey: "volume",
     header: "Volume",
+    enableMultiSort: true,
+  },
+  {
+    accessorKey: "title",
+    header: "Título",
     enableMultiSort: true,
   },
   {
