@@ -62,7 +62,7 @@ SELECT
     "us"."birthDate",
     "us"."gender",
     "us"."city",
-    "us"."country",
+    NULL,
     "us"."about",
     "u"."points",
     "us"."userId"
