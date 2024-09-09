@@ -1,12 +1,11 @@
-import { Card, CardBody } from "@nextui-org/card"
 import type { UploadChaptersInput } from "@taiyomoe/image-orchestrator"
 import { useCallback, useState } from "react"
-import { FileTrigger, type FileTriggerProps } from "react-aria-components"
+import type { FileTriggerProps } from "react-aria-components"
 import { useFieldArray } from "react-hook-form"
 import { Form } from "~/components/generics/form/form"
-import { AssetSelection } from "~/components/ui/AssetSelection"
 import { BulkUploadChapterCard } from "~/components/ui/bulk-upload/bulk-upload-chapter-card"
 import { BulkUploadInvalidFilesModal } from "~/components/ui/bulk-upload/bulk-upload-invalid-files-modal"
+import { FolderSelection } from "~/components/ui/upload/folder-selection"
 import type { InvalidFile } from "~/lib/types"
 import { FileUtils } from "~/lib/utils/file.utils"
 
@@ -41,22 +40,11 @@ export const BulkUploadChaptersImagesCategory = () => {
 
   return (
     <Form.Category title="Capítulos">
-      <FileTrigger acceptDirectory onSelect={handleSelect}>
-        <Card
-          className="h-full rounded-medium data-[selected=true]:hidden"
-          data-selected={fields.length !== 0}
-          isPressable={!fields.length}
-          disableAnimation
-        >
-          <CardBody
-            as="section"
-            className="scrollbar-track-content2 scrollbar-thumb-primary scrollbar-thin !duration-150 max-h-[498px] rounded-medium border-default border-dashed transition-background data-[selected=true]:gap-3 data-[selected=true]:rounded-r-none data-[selected=false]:border data-[selected=false]:hover:cursor-pointer data-[selected=false]:hover:bg-default-200"
-            data-selected={fields.length !== 0}
-          >
-            {fields.length === 0 && <AssetSelection type="folder" />}
-          </CardBody>
-        </Card>
-      </FileTrigger>
+      <FolderSelection
+        onSelect={handleSelect}
+        className="data-[selected=true]:hidden"
+        isSelected={fields.length !== 0}
+      />
 
       {fields.length !== 0 && (
         <div className="flex flex-col gap-2">

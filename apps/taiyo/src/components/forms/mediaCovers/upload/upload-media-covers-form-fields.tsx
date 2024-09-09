@@ -8,7 +8,7 @@ import { SubmitButton } from "~/components/generics/buttons/submit-button"
 import { Form } from "~/components/generics/form/form"
 import { InputField } from "~/components/generics/form/input-field"
 import { SelectField } from "~/components/generics/form/select-field"
-import { AssetSelection } from "~/components/ui/AssetSelection"
+import { AssetSelection } from "~/components/ui/upload/asset-selection"
 import { DEFAULT_MIME_TYPES } from "~/lib/utils/constants"
 
 export const UploadMediaCoversFormFields = () => {

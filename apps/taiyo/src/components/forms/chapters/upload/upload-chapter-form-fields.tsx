@@ -1,11 +1,11 @@
 import { ContentRating, Flag, Languages } from "@taiyomoe/db"
-import { ChapterFormImagesCategory } from "~/components/forms/chapters/upload/categories/chapter-form-images-category"
 import { SubmitButton } from "~/components/generics/buttons/submit-button"
 import { Form } from "~/components/generics/form/form"
 import { InputField } from "~/components/generics/form/input-field"
 import { MediasField } from "~/components/generics/form/medias-field"
 import { ScansField } from "~/components/generics/form/scans-field"
 import { SelectField } from "~/components/generics/form/select-field"
+import { ChapterFormImagesCategory } from "./categories/chapter-form-images-category"
 
 export const UploadChapterFormFields = () => {
   return (

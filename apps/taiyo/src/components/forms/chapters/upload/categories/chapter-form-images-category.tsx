@@ -3,7 +3,7 @@ import { Card, CardBody } from "@nextui-org/card"
 import { useDropzone } from "react-dropzone"
 import { useFormContext } from "react-hook-form"
 import { Form } from "~/components/generics/form/form"
-import { AssetSelection } from "~/components/ui/AssetSelection"
+import { AssetSelection } from "~/components/ui/upload/asset-selection"
 import { ImageCard } from "~/components/ui/upload/image-card"
 import { DEFAULT_MIME_TYPES } from "~/lib/utils/constants"
 
