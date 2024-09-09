@@ -17,9 +17,6 @@ ALTER TABLE "Session" DROP CONSTRAINT "Session_pkey",
 DROP COLUMN "id";
 
 -- AlterTable
-ALTER TABLE "User" ALTER COLUMN "email" SET NOT NULL;
-
--- AlterTable
 ALTER TABLE "VerificationToken" ADD CONSTRAINT "VerificationToken_pkey" PRIMARY KEY ("identifier", "token");
 
 -- AlterTable
