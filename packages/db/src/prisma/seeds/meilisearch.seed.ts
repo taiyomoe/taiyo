@@ -2,25 +2,28 @@ import { meilisearchClient, rawMeilisearchClient } from "@taiyomoe/meilisearch"
 import {
   ChaptersIndexService,
   MediasIndexService,
+  UsersIndexService,
 } from "@taiyomoe/meilisearch/services"
 import { ScansIndexService } from "@taiyomoe/meilisearch/services"
-import { getUserIndexItem } from "@taiyomoe/meilisearch/utils"
 import { db } from "../../"
 
 const execute = async () => {
   // Medias
+  const medias = await db.media.findMany()
+  const mediaFields = ["type"]
+
   await rawMeilisearchClient.deleteIndexIfExists("medias")
   await rawMeilisearchClient.createIndex("medias", { primaryKey: "id" })
-  await meilisearchClient.medias.updateFilterableAttributes(["type"])
+  await meilisearchClient.medias.updateFilterableAttributes(mediaFields)
+  await meilisearchClient.medias.updateSortableAttributes(mediaFields)
   await meilisearchClient.medias.deleteAllDocuments()
-
-  const medias = await db.media.findMany()
   await MediasIndexService.sync(
     db,
     medias.map((s) => s.id),
   )
 
   // Scans
+  const scans = await db.scan.findMany()
   const scanFields = [
     "id",
     "createdAt",
@@ -41,19 +44,19 @@ const execute = async () => {
     "creatorId",
     "deleterId",
   ]
+
   await rawMeilisearchClient.deleteIndexIfExists("scans")
   await rawMeilisearchClient.createIndex("scans", { primaryKey: "id" })
   await meilisearchClient.scans.updateFilterableAttributes(scanFields)
   await meilisearchClient.scans.updateSortableAttributes(scanFields)
   await meilisearchClient.scans.deleteAllDocuments()
-
-  const scans = await db.scan.findMany()
   await ScansIndexService.sync(
     db,
     scans.map((s) => s.id),
   )
 
   // Chapters
+  const chapters = await db.mediaChapter.findMany()
   const chapterFields = [
     "id",
     "createdAt",
@@ -70,32 +73,30 @@ const execute = async () => {
     "mediaId",
     "deleterId",
   ]
+
   await rawMeilisearchClient.deleteIndexIfExists("chapters")
   await rawMeilisearchClient.createIndex("chapters", { primaryKey: "id" })
   await meilisearchClient.chapters.updateFilterableAttributes(chapterFields)
   await meilisearchClient.chapters.updateSortableAttributes(chapterFields)
   await meilisearchClient.chapters.deleteAllDocuments()
-
-  const chapters = await Promise.all(
-    (await db.mediaChapter.findMany()).map(({ id }) =>
-      ChaptersIndexService.getItem(db, id),
-    ),
+  await ChaptersIndexService.sync(
+    db,
+    chapters.map((s) => s.id),
   )
-
-  await meilisearchClient.chapters.updateDocuments(chapters)
 
   // Users
+  const users = await db.user.findMany()
+  const userFields = ["name"]
+
   await rawMeilisearchClient.deleteIndexIfExists("users")
   await rawMeilisearchClient.createIndex("users", { primaryKey: "id" })
-  await meilisearchClient.users.updateFilterableAttributes(["name"])
-  await meilisearchClient.users.updateSortableAttributes(["name"])
+  await meilisearchClient.users.updateFilterableAttributes(userFields)
+  await meilisearchClient.users.updateSortableAttributes(userFields)
   await meilisearchClient.users.deleteAllDocuments()
-
-  const users = await Promise.all(
-    (await db.user.findMany()).map(({ id }) => getUserIndexItem(db, id)),
+  await UsersIndexService.sync(
+    db,
+    users.map((s) => s.id),
   )
-
-  await meilisearchClient.users.updateDocuments(users)
 }
 
 export default { execute }
