@@ -33,7 +33,7 @@ model User {
     updatedAt DateTime @updatedAt
 
     name          String?
-    email         String    @unique
+    email         String?   @unique
     emailVerified DateTime?
     image         String?
     role          Roles     @default(USER)

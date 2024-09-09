@@ -172,7 +172,7 @@ export const UserSchema = z.object({
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
   name: z.string().nullable(),
-  email: z.string(),
+  email: z.string().nullable(),
   emailVerified: z.coerce.date().nullable(),
   image: z.string().nullable(),
 })
