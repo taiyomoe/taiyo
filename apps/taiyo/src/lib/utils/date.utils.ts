@@ -1,5 +1,6 @@
+import type { DateValue } from "@nextui-org/react"
+import type { DateRangeKey } from "@taiyomoe/types"
 import { DateTime } from "luxon"
-import { DateRangeKey } from "~/lib/types"
 
 const formatToInputValue = (input: Date) => {
   const dt = DateTime.fromJSDate(input)
@@ -7,6 +8,13 @@ const formatToInputValue = (input: Date) => {
   if (!dt.isValid) return ""
 
   return dt.toISODate()
+}
+
+const isLessThanDays = (date: Date, number: number) => {
+  const dt = DateTime.fromJSDate(date)
+  const now = DateTime.now()
+
+  return now.diff(dt, "days").days < number
 }
 
 const getDateFromRange = (type: "from" | "to", range: DateRangeKey) => {
@@ -51,7 +59,30 @@ const getDateFromRange = (type: "from" | "to", range: DateRangeKey) => {
   }
 }
 
+const getAge = (date: Date) => {
+  const today = new Date()
+  let years = today.getFullYear() - date.getFullYear()
+
+  if (
+    today.getMonth() < date.getMonth() ||
+    (today.getMonth() === date.getMonth() && today.getDate() < date.getDate())
+  ) {
+    years--
+  }
+
+  return years
+}
+
+const getTimezone = () => Intl.DateTimeFormat().resolvedOptions().timeZone
+
+const getFromDateValue = (input: DateValue) =>
+  DateTime.fromJSDate(input.toDate(getTimezone()))
+
 export const DateUtils = {
   formatToInputValue,
+  isLessThanDays,
   getDateFromRange,
+  getAge,
+  getTimezone,
+  getFromDateValue,
 }

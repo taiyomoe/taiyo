@@ -1,86 +1,12 @@
-import type { Trackers } from "@prisma/client"
-import { getMediaIndexItem } from "@taiyomoe/meilisearch/utils"
-import {
-  getMediaByIdSchema,
-  insertMediaSchema,
-  searchMediaSchema,
-  updateMediaSchema,
-} from "@taiyomoe/schemas"
-import {
-  LibraryService,
-  MediaChapterService,
-  MediaService,
-} from "@taiyomoe/services"
-import type { MediaLimited, SearchedMedia } from "@taiyomoe/types"
+import { MediasIndexService } from "@taiyomoe/meilisearch/services"
+import { idSchema, updateMediaSchema } from "@taiyomoe/schemas"
+import { LibrariesService, MediasService } from "@taiyomoe/services"
+import type { MediaLimited } from "@taiyomoe/types"
 import { MediaUtils } from "@taiyomoe/utils"
 import { TRPCError } from "@trpc/server"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 
 export const mediasRouter = createTRPCRouter({
-  create: protectedProcedure
-    .meta({
-      resource: "medias",
-      action: "create",
-    })
-    .input(insertMediaSchema)
-    .mutation(
-      async ({
-        ctx,
-        input: { mdTracker, alTracker, malTracker, ...input },
-      }) => {
-        /**
-         * Before creating the media, we need to create the trackers array.
-         * It would be too much of a hassle to create it in the creating object.
-         */
-        const trackers = []
-
-        if (mdTracker) {
-          trackers.push({
-            tracker: "MANGADEX" as Trackers,
-            externalId: mdTracker,
-            creatorId: ctx.session.user.id,
-          })
-        }
-
-        if (alTracker) {
-          trackers.push({
-            tracker: "ANILIST" as Trackers,
-            externalId: alTracker.toString(),
-            creatorId: ctx.session.user.id,
-          })
-        }
-
-        if (malTracker) {
-          trackers.push({
-            tracker: "MYANIMELIST" as Trackers,
-            externalId: malTracker.toString(),
-            creatorId: ctx.session.user.id,
-          })
-        }
-
-        const result = await ctx.db.media.create({
-          data: {
-            ...input,
-            titles: {
-              createMany: {
-                data: input.titles.map((t) => ({
-                  ...t,
-                  creatorId: ctx.session.user.id,
-                })),
-              },
-            },
-            trackers: { createMany: { data: trackers } },
-            creatorId: ctx.session.user.id,
-          },
-        })
-
-        const indexItem = await getMediaIndexItem(ctx.db, result.id)
-        await ctx.indexes.medias.updateDocuments([indexItem])
-
-        return result
-      },
-    ),
-
   update: protectedProcedure
     .meta({ resource: "medias", action: "update" })
     .input(updateMediaSchema)
@@ -102,49 +28,19 @@ export const mediasRouter = createTRPCRouter({
         data: input,
       })
 
-      const indexItem = await getMediaIndexItem(ctx.db, input.id)
-      await ctx.indexes.medias.updateDocuments([indexItem])
+      await MediasIndexService.sync(ctx.db, [input.id])
     }),
 
   getById: publicProcedure
-    .input(getMediaByIdSchema)
+    .input(idSchema)
     .query(async ({ ctx, input: mediaId }) => {
-      const result = await ctx.db.media.findFirst({
-        select: {
-          synopsis: true,
-          status: true,
-          genres: true,
-          tags: true,
-          covers: {
-            select: { id: true },
-            where: { isMainCover: true, deletedAt: null },
-            take: 1,
-          },
-          banners: {
-            select: { id: true },
-            take: 1,
-            where: { deletedAt: null },
-          },
-          titles: {
-            select: {
-              title: true,
-              language: true,
-              priority: true,
-              isAcronym: true,
-              isMainTitle: true,
-            },
-            where: { deletedAt: null },
-          },
-          trackers: { select: { tracker: true, externalId: true } },
-        },
-        where: { id: mediaId, deletedAt: null },
-      })
+      const result = await MediasService.getFull(mediaId)
 
-      if (!result?.covers.at(0) || !result.titles.at(0)) {
+      if (!result) {
         return null
       }
 
-      const userLibraryMedia = await LibraryService.getUserLibraryMedia(
+      const userLibraryMedia = await LibrariesService.getUserLibraryMedia(
         ctx.session?.user.id,
         mediaId,
       )
@@ -165,7 +61,7 @@ export const mediasRouter = createTRPCRouter({
         // ----- RELATIONS
         coverId: result.covers.at(0)!.id,
         bannerId: result.banners.at(0)?.id ?? null,
-        mainTitle: MediaUtils.getMainTitle(
+        mainTitle: MediaUtils.getDisplayTitle(
           result.titles,
           ctx.session?.user.preferredTitles,
         ),
@@ -174,36 +70,5 @@ export const mediasRouter = createTRPCRouter({
       }
 
       return mediaLimited
-    }),
-
-  getHomePage: publicProcedure.query(async ({ ctx }) => {
-    const preferredTitles = ctx.session?.user.preferredTitles
-    const latestMedias = await MediaService.getLatestMedias()
-    const featuredMedias = await MediaService.getFeaturedMedias(preferredTitles)
-    const latestReleases =
-      await MediaChapterService.getLatestReleases(preferredTitles)
-
-    return {
-      latestMedias,
-      featuredMedias,
-      latestReleases,
-    }
-  }),
-
-  search: publicProcedure
-    .input(searchMediaSchema)
-    .mutation(async ({ ctx, input: { title } }) => {
-      const results = await ctx.indexes.medias.search(title)
-      const searchedMedias: SearchedMedia[] = results.hits.map((h) => ({
-        id: h.id,
-        synopsis: h.synopsis ? `${h.synopsis.slice(0, 100)}...` : null,
-        title: MediaUtils.getMainTitle(
-          h.titles,
-          ctx.session?.user.preferredTitles ?? null,
-        ),
-        coverId: h.mainCoverId,
-      }))
-
-      return searchedMedias
     }),
 })

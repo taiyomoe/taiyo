@@ -1,4 +1,4 @@
-import type { Trackers } from "@prisma/client"
+import type { Trackers } from "@taiyomoe/db"
 import type { ImageProps } from "next/image"
 import Image from "next/image"
 

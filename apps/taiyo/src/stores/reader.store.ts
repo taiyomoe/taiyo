@@ -3,8 +3,8 @@ import type {
   MediaChapterNavigation,
   ReaderImage,
 } from "@taiyomoe/types"
-import { MediaChapterImageUtils, MediaChapterUtils } from "@taiyomoe/utils"
-import { omit } from "lodash-es"
+import { ChapterImageUtils, ChapterUtils } from "@taiyomoe/utils"
+import { omit } from "radash"
 import { create } from "zustand"
 import { useReaderSettingsStore } from "~/stores"
 
@@ -54,7 +54,7 @@ export const useReaderStore = create<State & Actions>((set, get) => ({
         return state
       }
 
-      const newNavigation = MediaChapterUtils.getNavigation(
+      const newNavigation = ChapterUtils.getNavigation(
         state.chapter,
         newPageNumber,
       )!
@@ -116,7 +116,7 @@ export const useReaderStore = create<State & Actions>((set, get) => ({
         images: {
           ...state.images,
           [chapterId]: state.images[chapterId]!.concat(
-            newImages.map((x) => omit(x, "url")),
+            newImages.map((x) => omit(x, ["url"])),
           ),
         },
       }))
@@ -136,7 +136,7 @@ export const useReaderStore = create<State & Actions>((set, get) => ({
       return
     }
 
-    const allImages = MediaChapterImageUtils.getAllImages(chapter)
+    const allImages = ChapterImageUtils.getAllImages(chapter)
     const newImages = allImages
       .filter((x) => !chapterImages.some((y) => y.number === x.number))
       .filter((x) => !loadedImages.includes(x.url))
@@ -159,10 +159,7 @@ export const useReaderStore = create<State & Actions>((set, get) => ({
       return
     }
 
-    const imagesChunk = MediaChapterImageUtils.getImagesChunk(
-      chapter,
-      newPageNumber,
-    )
+    const imagesChunk = ChapterImageUtils.getImagesChunk(chapter, newPageNumber)
     const newImages = imagesChunk
       .filter((x) => !chapterImages.some((y) => y.number === x.number))
       .filter((x) => !loadedImages.includes(x.url))
@@ -174,7 +171,7 @@ export const useReaderStore = create<State & Actions>((set, get) => ({
     const { updateNavigation } = get()
     const settings = useReaderSettingsStore.getState()
     const navigation = initialPageNumber
-      ? MediaChapterUtils.getNavigation(chapter, initialPageNumber)
+      ? ChapterUtils.getNavigation(chapter, initialPageNumber)
       : null
 
     set((state) => ({

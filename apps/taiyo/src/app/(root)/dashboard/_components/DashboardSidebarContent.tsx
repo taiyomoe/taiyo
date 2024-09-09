@@ -1,7 +1,7 @@
 "use client"
 
 import { Accordion, AccordionItem } from "@nextui-org/accordion"
-import { tv } from "tailwind-variants"
+import { tv } from "@nextui-org/react"
 import { DashboardSidebarCRUDButtons } from "./DashboardSidebarCRUDButtons"
 
 type Props = {
@@ -10,11 +10,11 @@ type Props = {
 
 const sidebarContent = tv({
   slots: {
-    container: "flex flex-col gap-4 max-w-[inherit]",
+    container: "flex max-w-[inherit] flex-col gap-4",
     categorytitle:
-      "uppercase text-small text-default-300 font-semibold select-none",
+      "select-none font-semibold text-default-300 text-small uppercase",
     categoryIndicator: "text-default-300",
-    categoryItemButton: "text-md justify-end gap-4 px-2 font-medium w-full",
+    categoryItemButton: "w-full justify-end gap-4 px-2 font-medium text-md",
   },
 })
 
@@ -55,7 +55,6 @@ export const DashboardSidebarContent = ({ className }: Props) => {
               label: "Adicionar",
               href: "/dashboard/medias/add",
               type: "create",
-              isDisabled: true,
             },
             {
               label: "Modificar",
@@ -103,6 +102,11 @@ export const DashboardSidebarContent = ({ className }: Props) => {
         <DashboardSidebarCRUDButtons
           items={[
             {
+              label: "Lista",
+              href: "/dashboard/chapters",
+              type: "home",
+            },
+            {
               label: "Estatísticas",
               href: "/dashboard/chapters/stats",
               type: "stats",
@@ -134,9 +138,19 @@ export const DashboardSidebarContent = ({ className }: Props) => {
         <DashboardSidebarCRUDButtons
           items={[
             {
+              label: "Lista",
+              href: "/dashboard/scans",
+              type: "home",
+            },
+            {
               label: "Adicionar",
               href: "/dashboard/scans/add",
               type: "create",
+            },
+            {
+              label: "Modificar",
+              href: "/dashboard/scans/edit",
+              type: "update",
             },
           ]}
         />

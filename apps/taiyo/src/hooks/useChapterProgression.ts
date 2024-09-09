@@ -1,10 +1,10 @@
-import { useSession } from "next-auth/react"
+import { useSession } from "@taiyomoe/auth/client"
 import { useReaderStore } from "~/stores"
 import { api } from "~/trpc/react"
 
 export const useChapterProgression = () => {
   const { chapter } = useReaderStore()
-  const { mutate } = api.history.updateProgression.useMutation()
+  const { mutate } = api.histories.updateProgression.useMutation()
   const { status } = useSession()
 
   const onPageUpdate = (newCurrentPageNumber: number) => {

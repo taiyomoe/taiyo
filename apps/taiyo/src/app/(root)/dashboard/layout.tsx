@@ -1,8 +1,16 @@
+import { auth } from "@taiyomoe/auth"
+import { notFound } from "next/navigation"
 import { Sidebar } from "~/components/layout/Sidebar"
-import { LayoutProps } from "~/lib/types"
+import type { LayoutProps } from "~/lib/types"
 import { DashboardSidebarContent } from "./_components/DashboardSidebarContent"
 
-export default function Layout({ children }: LayoutProps) {
+export default async function Layout({ children }: LayoutProps) {
+  const session = await auth()
+
+  if (!session || session.user.role.name !== "ADMIN") {
+    notFound()
+  }
+
   return (
     <div className="flex h-full min-h-[calc(100dvh-var(--navbar-height))] w-full">
       <Sidebar

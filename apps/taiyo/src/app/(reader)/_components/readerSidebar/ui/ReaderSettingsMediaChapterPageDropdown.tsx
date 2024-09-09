@@ -7,10 +7,10 @@ import {
   DropdownMenu,
   DropdownTrigger,
 } from "@nextui-org/dropdown"
-import { Skeleton } from "@nextui-org/react"
+import { tv } from "@nextui-org/react"
+import { Skeleton } from "@nextui-org/skeleton"
 import { ChevronsUpDownIcon } from "lucide-react"
 import type { Key } from "react"
-import { tv } from "tailwind-variants"
 import { BackButton } from "~/components/generics/buttons/BackButton"
 import { ForwardButton } from "~/components/generics/buttons/ForwardButton"
 import { useChapterNavigation } from "~/hooks/useChapterNavigation"
@@ -23,7 +23,7 @@ const readerSettingsMediaChapterPageDropdown = tv({
     skeleton: "h-[52px] w-full rounded-lg",
     dropdownBase: "rounded-r-none p-0",
     dropdownMenu:
-      "scrollbar-track-content3 scrollbar-thumb-rounded-none max-h-[300px] overflow-y-scroll p-2 scrollbar-thin scrollbar-thumb-primary",
+      "scrollbar-track-content3 scrollbar-thumb-rounded-none scrollbar-thin scrollbar-thumb-primary max-h-[300px] overflow-y-scroll p-2",
     textContainer: "flex flex-col text-left",
     textDescription: "chapter-currentPage text-default-500 text-xs",
   },
@@ -66,7 +66,7 @@ export const ReaderSettingsMediaChapterPageDropdown = () => {
           aria-label="Páginas"
           onSelectionChange={(keys) => {
             for (const key of keys as Set<Key>) {
-              goTo(parseInt(key.toString().replace("page-", "")))
+              goTo(Number.parseInt(key.toString().replace("page-", "")))
             }
           }}
         >

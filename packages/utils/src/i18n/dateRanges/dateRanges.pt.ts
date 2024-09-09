@@ -1,4 +1,4 @@
-import { DateRangeKey } from "~/lib/types"
+import type { DateRangeKey } from "@taiyomoe/types"
 
 export const DATERANGES_PT: Record<DateRangeKey, string> = {
   today: "Hoje",

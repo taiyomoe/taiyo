@@ -1,13 +1,13 @@
 "use client"
 
 import { Button } from "@nextui-org/button"
-import { signIn } from "next-auth/react"
+import { signIn } from "@taiyomoe/auth/client"
 import { CompanyLogo } from "~/components/ui/CompanyLogo"
 
 export const DiscordButton = () => {
   return (
     <Button
-      className="hover:bg-discord/80 w-full bg-discord text-medium font-medium text-discord-foreground"
+      className="w-full bg-discord font-medium text-discord-foreground text-medium hover:bg-discord/80"
       startContent={<CompanyLogo company="discord" height={28} />}
       onClick={() => signIn("discord")}
       radius="full"

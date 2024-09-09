@@ -1,6 +1,6 @@
 "use client"
 
-import { MediaChaptersUploadersStats } from "@taiyomoe/types"
+import type { MediaChaptersUploadersStats } from "@taiyomoe/types"
 import { useMemo } from "react"
 import { DateChart } from "~/components/charts/DateChart"
 

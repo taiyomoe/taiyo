@@ -1,8 +1,11 @@
-import type { ReaderSettings } from "@taiyomoe/types"
-import _ from "lodash-es"
+import type {
+  InferNestedPaths,
+  InferNestedValues,
+  ReaderSettings,
+} from "@taiyomoe/types"
+import { set as objSet, omit } from "radash"
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
-import { InferNestedPaths, InferNestedValues } from "~/lib/types"
 
 type Actions = {
   update: (
@@ -32,13 +35,11 @@ export const usePersistentReaderSettingsStore = create<
 
       update: (key, newValue) => {
         set((state) => {
-          const newSettings = structuredClone(_.omit(state, "update"))
-
-          _.set(newSettings, key, newValue)
+          const newSettings = structuredClone(omit(state, ["update"]))
 
           return {
             ...state,
-            ...newSettings,
+            ...objSet(newSettings, key, newValue),
           }
         })
       },

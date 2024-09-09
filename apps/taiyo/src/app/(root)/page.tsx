@@ -1,22 +1,27 @@
-import { api } from "~/trpc/server"
-import { FeaturedMedias } from "./_components/FeaturedMedias"
-import { LatestMedias } from "./_components/LatestMedias"
-import { LatestReleases } from "./_components/LatestReleases"
-import { TrendingMedias } from "./_components/TrendingMedias"
+import { DashedGridPattern } from "~/components/ui/background-patterns/dashed-grid-pattern"
+import { siteConfig } from "~/lib/config"
+import { FeaturedMediasCategory } from "./_components/featured-medias/featured-medias-category"
+import { LatestMediasCategory } from "./_components/latest-medias/latest-medias-category"
+import { LatestReleasesCategory } from "./_components/latest-releases/latest-releases-category"
+import { TrendingMediasCategory } from "./_components/trending-medias/trending-medias-category"
 
-export default async function HomePage() {
-  const { latestMedias, featuredMedias, latestReleases } =
-    await api.medias.getHomePage()
-
+export default async function Page() {
   return (
-    <main className="flex h-full flex-col p-bodyPadding">
-      <div className="flex flex-col gap-12">
-        <FeaturedMedias featuredMedias={featuredMedias} />
-        <div className="flex w-full flex-col gap-12 md:flex-row">
-          <LatestReleases latestReleases={latestReleases} />
-          <TrendingMedias trendingMedias={latestMedias} />
+    <main className="flex h-full flex-col gap-12">
+      <FeaturedMediasCategory />
+      <div className="flex flex-col gap-12 p-bodyPadding pt-0">
+        <div className="-mt-12 absolute right-0 z-0 h-[350px] w-full md:max-w-[600px] lg:max-w-[900px] xl:max-w-[1100px] 2xl:max-w-[1200px]">
+          <DashedGridPattern />
         </div>
-        <LatestMedias latestMedias={latestMedias} />
+        <div
+          id={siteConfig.home.releasesLayoutContainerId}
+          className="z-0 flex w-full flex-col gap-12 data-[releases-layout=columns]:flex-col lg:flex-row"
+          data-releases-layout={siteConfig.home.releasesLayout}
+        >
+          <LatestReleasesCategory />
+          <TrendingMediasCategory />
+        </div>
+        <LatestMediasCategory />
       </div>
     </main>
   )

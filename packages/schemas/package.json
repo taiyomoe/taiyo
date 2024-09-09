@@ -9,15 +9,13 @@
   "license": "MIT",
   "scripts": {
     "clean": "rm -rf .turbo node_modules",
-    "typecheck": "tsc --noEmit",
-    "with-env": "dotenv -e ../../.env --"
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "@taiyomoe/tsconfig": "workspace:^0.1.0"
+    "@taiyomoe/tsconfig": "workspace:*"
   },
   "dependencies": {
-    "@taiyomoe/constants": "workspace:^0.1.0",
-    "@taiyomoe/types": "workspace:^0.1.0",
-    "zod": "^3.22.4"
+    "@taiyomoe/constants": "workspace:*",
+    "zod": "^3.23.8"
   }
 }

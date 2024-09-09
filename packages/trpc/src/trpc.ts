@@ -7,10 +7,13 @@
  * need to use are documented accordingly near the end.
  */
 
-import { getServerAuthSession } from "@taiyomoe/auth"
+import { auth } from "@taiyomoe/auth"
+import { cacheClient } from "@taiyomoe/cache"
 import { db } from "@taiyomoe/db"
-import { meilisearch, meilisearchIndexes } from "@taiyomoe/meilisearch"
+import { logsClient } from "@taiyomoe/logs"
+import { meilisearchClient } from "@taiyomoe/meilisearch"
 import type { Actions, Resources } from "@taiyomoe/types"
+import { umamiClient } from "@taiyomoe/umami"
 import { initTRPC } from "@trpc/server"
 import superjson from "superjson"
 import { ZodError } from "zod"
@@ -29,19 +32,21 @@ import { withPermissions } from "./middlewares/withPermissions"
  *
  * @see https://trpc.io/docs/server/context
  */
-export type Meta = {
+type Meta = {
   resource?: Resources
   action?: Actions
 }
 
 export const createTRPCContext = async (opts: { headers: Headers }) => {
-  const session = await getServerAuthSession()
+  const session = await auth()
 
   return {
     db,
     session,
-    meilisearch,
-    indexes: meilisearchIndexes,
+    meilisearch: meilisearchClient,
+    cache: cacheClient,
+    logs: logsClient,
+    umami: umamiClient,
     ...opts,
   }
 }

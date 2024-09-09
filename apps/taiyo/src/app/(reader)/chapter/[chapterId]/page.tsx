@@ -9,7 +9,7 @@ type Props = {
 
 export default async function Page(props: Props) {
   const { chapterId } = props.params
-  const mediaChapter = await api.mediaChapters.getById(chapterId)
+  const mediaChapter = await api.chapters.getById(chapterId)
 
   if (!mediaChapter) {
     return notFound()

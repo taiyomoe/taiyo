@@ -1,5 +1,5 @@
 import { MediaUtils } from "@taiyomoe/utils"
-import { MediaChapterUtils } from "@taiyomoe/utils"
+import { ChapterUtils } from "@taiyomoe/utils"
 import { usePathname, useRouter } from "next/navigation"
 import { useCallback, useState } from "react"
 import { useChapterProgression } from "~/hooks/useChapterProgression"
@@ -9,7 +9,7 @@ export const useChapterNavigation = () => {
   const router = useRouter()
   const pathname = usePathname()
   const { rawPathname, currentPageNumber: initialPageNumber } =
-    MediaChapterUtils.parseUrl(pathname)
+    ChapterUtils.parseUrl(pathname)
 
   const { chapter, navigation, updateNavigation } = useReaderStore()
   const { onPageUpdate, onNextChapter } = useChapterProgression()
@@ -43,7 +43,7 @@ export const useChapterNavigation = () => {
      * then we should go to the previous chapter.
      */
     if (chapter.previousChapter) {
-      return router.push(MediaChapterUtils.getUrl(chapter.previousChapter))
+      return router.push(ChapterUtils.getUrl(chapter.previousChapter))
     }
 
     /**
@@ -69,7 +69,7 @@ export const useChapterNavigation = () => {
      */
     if (chapter.nextChapter) {
       onNextChapter()
-      return router.push(MediaChapterUtils.getUrl(chapter.nextChapter))
+      return router.push(ChapterUtils.getUrl(chapter.nextChapter))
     }
 
     /**

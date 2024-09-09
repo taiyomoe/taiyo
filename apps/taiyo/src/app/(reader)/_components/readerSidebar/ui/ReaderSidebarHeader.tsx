@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "@nextui-org/button"
-import { tv } from "tailwind-variants"
+import { tv } from "@nextui-org/react"
 import { SidebarIcon } from "~/components/icons/SidebarIcon"
 import { useReaderSettingsStore } from "~/stores"
 import { ReaderSidebarMediaTitle } from "./ReaderSidebarMediaTitle"
@@ -9,7 +9,7 @@ import { ReaderSidebarMediaTitle } from "./ReaderSidebarMediaTitle"
 const readerSidebarHeader = tv({
   slots: {
     container: "flex w-full items-center gap-2",
-    text: "text-lg font-semibold",
+    text: "font-semibold text-lg",
     icon: "",
   },
   variants: {

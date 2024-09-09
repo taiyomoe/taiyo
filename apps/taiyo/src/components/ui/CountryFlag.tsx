@@ -1,24 +1,36 @@
-import type { Languages } from "@prisma/client"
+import type { Countries, Languages } from "@taiyomoe/db"
 import { LanguageUtils } from "@taiyomoe/utils"
 import Image from "next/image"
+import { useMemo } from "react"
 
 type Props = {
-  language: Languages
+  language?: Languages
+  country?: Countries
+  size: number
 }
 
-export const CountryFlag = ({ language }: Props) => {
-  const countryCode = LanguageUtils.languageCodeToCountryCode(language)
-  const countryFlagUrl = countryCode
-    ? `https://flagcdn.com/${countryCode}.svg`
-    : "https://upload.wikimedia.org/wikipedia/commons/5/50/Flag_with_question_mark.svg"
+export const CountryFlag = ({ language, country, size }: Props) => {
+  const countryCode = useMemo(
+    () =>
+      language ? LanguageUtils.languageCodeToCountryCode(language) : country,
+    [language, country],
+  )
+  const countryFlagUrl = useMemo(() => {
+    if (countryCode) {
+      return `https://flagcdn.com/${countryCode}.svg`
+    }
+
+    return "https://upload.wikimedia.org/wikipedia/commons/5/50/Flag_with_question_mark.svg"
+  }, [countryCode])
 
   return (
     <Image
       src={countryFlagUrl}
-      className="max-h-6 select-none object-contain"
-      width={24}
-      height={24}
-      alt={language}
+      className="select-none object-contain"
+      width={size}
+      height={size}
+      style={{ height: size, width: size }}
+      alt={countryCode ?? "Country flag"}
     />
   )
 }

@@ -2,12 +2,40 @@ import { ScrollShadow } from "@nextui-org/scroll-shadow"
 import { notFound } from "next/navigation"
 import { api } from "~/trpc/server"
 
-import { MediaLayout } from "./_components/layout/MediaLayout"
-import { MediaLayoutActions } from "./_components/layout/MediaLayoutActions"
-import { MediaLayoutTabs } from "./_components/layout/MediaLayoutTabs"
+import { MediasService } from "@taiyomoe/services"
+import { MediaUtils } from "@taiyomoe/utils"
+import type { Metadata } from "next"
+import { siteConfig } from "~/lib/config"
+import { MediaLayout } from "./_components/layout/media-layout"
+import { MediaLayoutActions } from "./_components/layout/media-layout-actions"
+import { MediaLayoutTabs } from "./_components/layout/media-layout-tabs"
 
 type Props = {
   params: { mediaId: string }
+}
+
+export const generateMetadata = async ({
+  params,
+}: Props): Promise<Metadata> => {
+  const media = await MediasService.getFull(params.mediaId)
+
+  if (!media) {
+    return {}
+  }
+
+  return {
+    title: MediaUtils.getDisplayTitle(media.titles),
+    description: media.synopsis,
+    openGraph: {
+      siteName: siteConfig.name,
+      images: {
+        url: `/api/og?mediaId=${params.mediaId}`,
+        width: 1200,
+        height: 630,
+        alt: MediaUtils.getDisplayTitle(media.titles),
+      },
+    },
+  }
 }
 
 export default async function Page({ params }: Props) {

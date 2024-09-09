@@ -1,8 +1,8 @@
 "use client"
 
 import { Button, ButtonGroup } from "@nextui-org/button"
+import { tv } from "@nextui-org/react"
 import { FoldVerticalIcon, UnfoldVerticalIcon } from "lucide-react"
-import { tv } from "tailwind-variants"
 import { useReaderSettingsStore } from "~/stores"
 
 const readerSidebarSettingsPageHeight = tv({

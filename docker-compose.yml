@@ -1,9 +1,7 @@
-version: "3.8"
 services:
   postgres:
-    container_name: postgres
     image: "postgres:16-alpine"
-    restart: always
+    restart: unless-stopped
     environment:
       - POSTGRES_USER=$DATABASE_USERNAME
       - POSTGRES_PASSWORD=$DATABASE_PASSWORD
@@ -14,9 +12,8 @@ services:
       - "./data/postgres:/var/lib/postgresql/data"
 
   meilisearch:
-    container_name: meilisearch
-    image: "getmeili/meilisearch:v1.6"
-    restart: always
+    image: "getmeili/meilisearch:v1.10"
+    restart: unless-stopped
     environment:
       - MEILI_MASTER_KEY=$MEILISEARCH_MASTER_KEY
       - MEILI_ENV=$NODE_ENV
@@ -25,13 +22,25 @@ services:
     volumes:
       - "./data/meilisearch:/meili_data"
 
-  soketi:
-    container_name: soketi
-    image: "quay.io/soketi/soketi:1.6-16-debian"
-    restart: always
-    environment:
-      - SOKETI_DEFAULT_APP_ID=$SOKETI_APP_ID
-      - SOKETI_DEFAULT_APP_KEY=$NEXT_PUBLIC_SOKETI_APP_KEY
-      - SOKETI_DEFAULT_APP_SECRET=$SOKETI_APP_SECRET
+  dragonfly:
+    image: "docker.dragonflydb.io/dragonflydb/dragonfly"
+    restart: unless-stopped
+    ulimits:
+      memlock: -1
     ports:
-      - "$NEXT_PUBLIC_SOKETI_PORT:6001"
+      - "$DRAGONFLY_PORT:6379"
+    volumes:
+      - "./data/dragonfly:/data"
+
+  clickhouse:
+    image: "bitnami/clickhouse:24"
+    restart: unless-stopped
+    environment:
+      - CLICKHOUSE_ADMIN_USER=$CLICKHOUSE_USERNAME
+      - CLICKHOUSE_ADMIN_PASSWORD=$CLICKHOUSE_PASSWORD
+    ports:
+      - "$CLICKHOUSE_HTTP_PORT:8123"
+      - "$CLICKHOUSE_TCP_PORT:9000"
+    volumes:
+      - "./data/clickhouse:/bitnami/clickhouse"
+      - "./packages/logs/config.xml:/bitnami/clickhouse/etc/conf.d/override.xml:ro"

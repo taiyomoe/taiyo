@@ -1,8 +1,8 @@
 import { semanticColors } from "@nextui-org/react"
+import type { DateRangeKey } from "@taiyomoe/types"
 import { useCallback } from "react"
 import Chart from "react-apexcharts"
 import { DateRangeDropdown } from "~/components/stats/DateRangeDropdown"
-import { DateRangeKey } from "~/lib/types"
 import { ColorUtils } from "~/lib/utils/color.utils"
 import { DateUtils } from "~/lib/utils/date.utils"
 
@@ -27,8 +27,8 @@ export const DateChart = ({ id, title, series }: Props) => {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-medium">{title}</h2>
+      <div className="flex items-center justify-between">
+        <h2 className="font-medium text-2xl">{title}</h2>
         <DateRangeDropdown onChange={handleChange} />
       </div>
       <Chart

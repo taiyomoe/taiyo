@@ -1,12 +1,11 @@
-import { historyRouter } from "./routers/history.router"
-import { libraryRouter } from "./routers/library.router"
-import { mdRouter } from "./routers/md.router"
-import { mediaChaptersRouter } from "./routers/mediaChapters.router"
-import { mediaCoversRouter } from "./routers/mediaCovers.router"
-import { mediaTitlesRouter } from "./routers/mediaTitles.router"
+import { chaptersRouter } from "./routers/chapters.router"
+import { coversRouter } from "./routers/covers.router"
+import { historiesRouter } from "./routers/histories.router"
+import { librariesRouter } from "./routers/libraries.router"
 import { mediasRouter } from "./routers/medias.router"
 import { scansRouter } from "./routers/scans.router"
-import { uploadsRouter } from "./routers/uploads.router"
+import { titlesRouter } from "./routers/titles.router"
+import { usersRouter } from "./routers/users.router"
 import { createTRPCRouter } from "./trpc"
 
 /**
@@ -16,14 +15,13 @@ import { createTRPCRouter } from "./trpc"
  */
 export const appRouter = createTRPCRouter({
   medias: mediasRouter,
-  mediaCovers: mediaCoversRouter,
-  mediaTitles: mediaTitlesRouter,
-  mediaChapters: mediaChaptersRouter,
-  history: historyRouter,
-  libary: libraryRouter,
+  covers: coversRouter,
+  titles: titlesRouter,
+  chapters: chaptersRouter,
+  histories: historiesRouter,
+  libraries: librariesRouter,
   scans: scansRouter,
-  uploads: uploadsRouter,
-  md: mdRouter,
+  users: usersRouter,
 })
 
 // export type definition of API

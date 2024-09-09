@@ -1,9 +1,9 @@
 import { Image } from "@nextui-org/image"
-import { Spinner } from "@nextui-org/react"
+import { Spinner } from "@nextui-org/spinner"
+import { useSession } from "@taiyomoe/auth/client"
 import type { UserLibraryStatus } from "@taiyomoe/types"
 import { MediaUtils } from "@taiyomoe/utils"
-import { MediaCoverUtils } from "@taiyomoe/utils"
-import { useSession } from "next-auth/react"
+import { CoverUtils } from "@taiyomoe/utils"
 import NextImage from "next/image"
 import Link from "next/link"
 import { useEffect } from "react"
@@ -19,7 +19,7 @@ type Props = {
 export const UserLibrarySidebarTabsContent = ({ status }: Props) => {
   const { addEntries, ...libraryStore } = useLibraryStore()
   const { data: session } = useSession()
-  const { data, isLoading } = api.libary.getLibrary.useQuery(
+  const { data, isLoading } = api.libraries.getLibrary.useQuery(
     {
       status,
       userId: session!.user.id,
@@ -50,7 +50,7 @@ export const UserLibrarySidebarTabsContent = ({ status }: Props) => {
           height={150}
           alt="empty"
         />
-        <p className="text-lg font-medium">Nenhuma obra encontrada</p>
+        <p className="font-medium text-lg">Nenhuma obra encontrada</p>
       </div>
     )
   }
@@ -61,15 +61,15 @@ export const UserLibrarySidebarTabsContent = ({ status }: Props) => {
         <div key={media.id} className="relative flex h-[80px] gap-2">
           <Image
             as={NextImage}
-            src={MediaCoverUtils.getUrl(media)}
-            className="object-fit h-full min-w-[60px] rounded-small"
+            src={CoverUtils.getUrl(media)}
+            className="h-full min-w-[60px] rounded-small object-fit"
             width={60}
             height={80}
             alt="media's cover"
           />
           <div className="flex grow flex-col justify-between gap-1">
             <Link
-              className="line-clamp-1 text-lg font-medium hover:underline"
+              className="line-clamp-1 font-medium text-lg hover:underline"
               href={MediaUtils.getUrl(media)}
             >
               {media.mainTitle}

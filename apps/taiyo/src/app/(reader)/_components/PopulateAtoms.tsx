@@ -1,10 +1,9 @@
 "use client"
 
 import type { MediaChapterLimited } from "@taiyomoe/types"
-import { MediaChapterUtils } from "@taiyomoe/utils"
+import { ChapterUtils } from "@taiyomoe/utils"
 import { usePathname } from "next/navigation"
 import { useEffect, useRef } from "react"
-import { useWindowSize } from "usehooks-ts"
 import { useDevice } from "~/hooks/useDevice"
 import { useReaderSettingsStore, useReaderStore } from "~/stores"
 
@@ -19,7 +18,7 @@ export const PopulateAtoms = ({ mediaChapter }: Props) => {
   const pathname = usePathname()
   const loaded = useRef(false)
 
-  const { currentPageNumber } = MediaChapterUtils.parseUrl(pathname)
+  const { currentPageNumber } = ChapterUtils.parseUrl(pathname)
 
   useEffect(() => {
     if (!loaded.current) {

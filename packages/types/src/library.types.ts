@@ -1,5 +1,5 @@
 import type { Media } from "@prisma/client"
-import { MediaLimited } from "."
+import type { MediaLimited } from "."
 
 export type UserLibraryStatus =
   | "reading"

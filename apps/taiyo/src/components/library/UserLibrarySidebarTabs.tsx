@@ -1,4 +1,4 @@
-import { Tab, Tabs } from "@nextui-org/react"
+import { Tab, Tabs } from "@nextui-org/tabs"
 import { LibraryUtils } from "@taiyomoe/utils"
 import { UserLibrarySidebarTabsContent } from "~/components/library/UserLibrarySidebarTabsContent"
 

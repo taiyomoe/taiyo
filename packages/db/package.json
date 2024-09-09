@@ -4,32 +4,35 @@
   "private": true,
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./env": "./env.ts"
   },
   "license": "MIT",
   "scripts": {
     "clean": "rm -rf .turbo node_modules",
     "typecheck": "tsc --noEmit",
-    "with-env": "dotenv -e ../../.env --",
-    "seed": "pnpm with-env prisma db push --force-reset && prisma generate && prisma db seed",
-    "postinstall": "prisma generate"
+    "seed": "prisma db push --force-reset && prisma generate && prisma db seed",
+    "db": "prisma",
+    "postinstall": "prisma generate --no-hints"
   },
   "prisma": {
     "schema": "./src/prisma/schema.prisma",
-    "seed": "cross-env PRISMA_SEED=1 pnpm with-env tsx ./src/prisma/seed.ts"
+    "seed": "cross-env PRISMA_SEED=1 tsx ./src/prisma/seed.ts"
   },
   "dependencies": {
-    "@prisma/client": "^5.9.1"
+    "@faker-js/faker": "^9.0.0",
+    "@prisma/client": "^5.19.1",
+    "@t3-oss/env-core": "^0.11.1",
+    "prisma-json-types-generator": "^3.0.4",
+    "zod": "^3.23.8",
+    "zod-prisma-types": "^3.1.8"
   },
   "devDependencies": {
-    "@taiyomoe/meilisearch": "workspace:^0.1.0",
-    "@taiyomoe/tsconfig": "workspace:^0.1.0",
+    "@taiyomoe/meilisearch": "workspace:*",
+    "@taiyomoe/tsconfig": "workspace:*",
     "cross-env": "^7.0.3",
-    "dotenv-cli": "^7.3.0",
-    "prisma": "^5.9.1",
-    "prisma-json-types-generator": "^3.0.4",
-    "tsx": "^4.7.1",
-    "typescript": "^5.3.3",
-    "zod-prisma-types": "^3.1.6"
+    "prisma": "^5.19.1",
+    "tsx": "^4.19.0",
+    "typescript": "^5.5.4"
   }
 }

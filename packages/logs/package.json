@@ -1,0 +1,28 @@
+{
+  "name": "@taiyomoe/logs",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./env": "./env.ts"
+  },
+  "license": "MIT",
+  "scripts": {
+    "clean": "rm -rf .turbo node_modules",
+    "typecheck": "tsc --noEmit",
+    "migrate": "tsx ./src/migrate.ts"
+  },
+  "dependencies": {
+    "@clickhouse/client-web": "^1.5.0",
+    "@t3-oss/env-core": "^0.11.1",
+    "@taiyomoe/db": "workspace:*",
+    "@taiyomoe/utils": "workspace:*",
+    "superjson": "^2.2.1",
+    "tsx": "^4.19.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@taiyomoe/tsconfig": "workspace:*"
+  }
+}

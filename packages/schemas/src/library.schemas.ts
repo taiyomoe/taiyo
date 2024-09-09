@@ -1,4 +1,5 @@
 import { z } from "zod"
+import { pageSchema } from "./common.schemas"
 
 const statusSchema = z.enum([
   "reading",
@@ -26,5 +27,5 @@ export const updateLibrarySchema = z.object({
 export const getLibrarySchema = z.object({
   userId: z.string().uuid(),
   status: statusSchema,
-  page: z.number().int().positive().default(1),
+  page: pageSchema,
 })

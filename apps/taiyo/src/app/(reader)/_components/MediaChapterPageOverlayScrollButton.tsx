@@ -1,6 +1,6 @@
-import { Button } from "@nextui-org/react"
-import { throttle } from "lodash-es"
+import { Button } from "@nextui-org/button"
 import { ChevronsUp } from "lucide-react"
+import { throttle } from "radash"
 import { useEffect } from "react"
 import { useReaderSettingsStore } from "~/stores"
 
@@ -16,20 +16,16 @@ export const MediaChapterPageOverlayScrollButton = () => {
       return
     }
 
-    const onScroll = throttle(
-      () => {
-        const execute = async () => {
-          // wait 500 ms
-          await new Promise((resolve) => setTimeout(resolve, 200))
+    const onScroll = throttle({ interval: 1000 }, () => {
+      const execute = async () => {
+        // wait 500 ms
+        await new Promise((resolve) => setTimeout(resolve, 200))
 
-          update("page.overlay", "hide")
-        }
+        update("page.overlay", "hide")
+      }
 
-        void execute()
-      },
-      1000,
-      { trailing: false },
-    )
+      void execute()
+    })
 
     window.addEventListener("scroll", onScroll)
 

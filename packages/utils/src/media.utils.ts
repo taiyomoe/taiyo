@@ -1,22 +1,22 @@
-import type { Languages, UploadSessionType } from "@prisma/client"
-import type { MediaLimited } from "@taiyomoe/types"
+import type { Languages, MediaTitle } from "@prisma/client"
 import { env } from "../env"
-import { MediaCoverUtils } from "./mediaCover.utils"
+import { CoverUtils } from "./cover.utils"
 
 const getUrl = (media: { id: string }) => `/media/${media.id}`
 
-const getUploadUrl = (type: UploadSessionType) =>
-  `${env.NEXT_PUBLIC_IO_URL}/upload/${type.toLowerCase()}`
-
-const getBannerOrCoverUrl = (media: MediaLimited) => {
-  if (!media.bannerId) return MediaCoverUtils.getUrl(media)
+const getBannerOrCoverUrl = (media: {
+  id: string
+  coverId: string
+  bannerId: string | null
+}) => {
+  if (!media.bannerId) return CoverUtils.getUrl(media)
 
   return `${env.NEXT_PUBLIC_CDN_URL}/medias/${media.id}/banners/${media.bannerId}.jpg`
 }
 
-const getMainTitle = (
-  titles: MediaLimited["titles"],
-  preferredTitles: Languages | null | undefined,
+const getDisplayTitle = (
+  titles: Pick<MediaTitle, "title" | "language" | "priority" | "isMainTitle">[],
+  preferredTitles?: Languages | null,
 ) => {
   if (!preferredTitles) {
     return titles.find((t) => t.isMainTitle)!.title
@@ -67,8 +67,6 @@ const getMainTitle = (
 
 export const MediaUtils = {
   getUrl,
-  getUploadUrl,
   getBannerOrCoverUrl,
-  getMainTitle,
-  getUploadEndpoint: () => `${env.NEXT_PUBLIC_IO_URL}/upload/url`,
+  getDisplayTitle,
 }

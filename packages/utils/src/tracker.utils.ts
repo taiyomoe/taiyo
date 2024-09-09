@@ -1,5 +1,4 @@
 import type { Trackers } from "@prisma/client"
-import { MediaLimited } from "@taiyomoe/types"
 
 const getTrackerLabel = (tracker: Trackers) => {
   switch (tracker) {
@@ -12,7 +11,7 @@ const getTrackerLabel = (tracker: Trackers) => {
   }
 }
 
-const getTrackerUrl = (tracker: MediaLimited["trackers"][number]) => {
+const getTrackerUrl = (tracker: { tracker: Trackers; externalId: string }) => {
   switch (tracker.tracker) {
     case "MANGADEX":
       return `https://mangadex.org/title/${tracker.externalId}`
@@ -20,8 +19,6 @@ const getTrackerUrl = (tracker: MediaLimited["trackers"][number]) => {
       return `https://anilist.co/manga/${tracker.externalId}`
     case "MYANIMELIST":
       return `https://myanimelist.net/manga/${tracker.externalId}`
-    default:
-      return ""
   }
 }
 

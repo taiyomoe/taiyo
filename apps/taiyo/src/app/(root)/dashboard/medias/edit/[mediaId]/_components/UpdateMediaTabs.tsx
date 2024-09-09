@@ -3,9 +3,9 @@
 import { Tab, Tabs } from "@nextui-org/tabs"
 import type { MediaWithRelations } from "@taiyomoe/types"
 import { useEffect } from "react"
-import { UpdateMediaCoversShowcase } from "~/components/forms/mediaCovers/UpdateMediaCoversShowcase"
-import { UploadMediaCoversForm } from "~/components/forms/mediaCovers/UploadMediaCoversForm"
-import { UpdateMediaTitlesShowcase } from "~/components/forms/mediaTitles/update/UpdateMediaTitlesShowcase"
+import { UpdateCoverShowcase } from "~/components/forms/mediaCovers/update/update-cover-showcase"
+import { UploadMediaCoversForm } from "~/components/forms/mediaCovers/upload/upload-media-covers-form"
+import { UpdateMediaTitlesShowcase } from "~/components/forms/mediaTitles/update/update-media-titles-showcase"
 import { useMediaUpdateStore } from "~/stores"
 import { UpdateMediaBannersTab } from "./tabs/UpdateMediaBannersTab"
 import { UpdateMediaInfoTab } from "./tabs/UpdateMediaInfoTab"
@@ -38,11 +38,11 @@ export const UpdateMediaTabs = ({ media }: Props) => {
       <Tab key="info" title="Informações">
         <UpdateMediaInfoTab media={media} />
       </Tab>
-      <Tab key="titles" title="Títulos">
+      <Tab key="titles" title="Títulos" className="mt-0">
         <UpdateMediaTitlesShowcase mediaId={media.id} />
       </Tab>
       <Tab key="covers" title="Covers" className="mt-0 flex flex-col gap-16">
-        <UpdateMediaCoversShowcase media={media} />
+        <UpdateCoverShowcase media={media} />
         <UploadMediaCoversForm mediaId={media.id} />
       </Tab>
       <Tab key="banners" title="Banners">

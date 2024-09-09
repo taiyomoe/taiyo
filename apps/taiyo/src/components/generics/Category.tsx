@@ -8,7 +8,7 @@ type Props = {
 
 const category = tv({
   slots: {
-    container: "flex flex-col gap-2 justify-start",
+    container: "flex flex-col justify-start gap-2",
     title: "font-semibold",
   },
   variants: {

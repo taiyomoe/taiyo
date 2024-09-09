@@ -1,5 +1,8 @@
-// Importing env files here to validate on build
-import "./src/lib/env.mjs"
+import { fileURLToPath } from "url"
+import createJiti from "jiti"
+
+// Import env files to validate at build time. Use jiti so we can load .ts files in here.
+createJiti(fileURLToPath(import.meta.url))("./src/env")
 
 /** @type {import("next").NextConfig} */
 const config = {
@@ -32,20 +35,46 @@ const config = {
         hostname: "flagcdn.com",
         pathname: "/**",
       },
+      ...(process.env.NODE_ENV === "development"
+        ? [
+            {
+              protocol: "https",
+              hostname: "avatars.githubusercontent.com",
+              pathname: "/u/**",
+            },
+            {
+              protocol: "https",
+              hostname: "loremflickr.com",
+              pathname: "/**",
+            },
+            {
+              protocol: "https",
+              hostname: "picsum.photos",
+              pathname: "/seed/**",
+            },
+          ]
+        : []),
     ],
   },
 
   /** Enables hot reloading for local packages without a build step */
   transpilePackages: [
+    "@taiyomoe/auth",
+    "@taiyomoe/cache",
+    "@taiyomoe/constants",
     "@taiyomoe/db",
-    "@taiyomoe/services",
-    "@taiyomoe/utils",
+    "@taiyomoe/logs",
+    "@taiyomoe/meilisearch",
     "@taiyomoe/schemas",
+    "@taiyomoe/services",
+    "@taiyomoe/trpc",
+    "@taiyomoe/umami",
+    "@taiyomoe/utils",
   ],
 
   /** We already do linting and typechecking as separate tasks in CI */
-  // eslint: { ignoreDuringBuilds: true },
-  // typescript: { ignoreBuildErrors: true },
+  eslint: { ignoreDuringBuilds: true },
+  typescript: { ignoreBuildErrors: true },
 }
 
 export default config

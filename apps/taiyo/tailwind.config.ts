@@ -18,25 +18,33 @@ export default {
       spacing: {
         bodyPadding: "var(--body-padding)",
         navbar: "var(--navbar-height)",
+        mediasBanner: "var(--medias-banner-height)",
+        mediasBannerContent: "var(--medias-banner-content-height)",
         reader: "var(--reader-height)",
         readerSidebar: "var(--reader-sidebar-width)",
         librarySidebar: "var(--library-sidebar-width)",
       },
       maxHeight: {
         navbar: "var(--navbar-height)",
+        mediasBanner: "var(--medias-banner-height)",
+        mediasBannerContent: "var(--medias-banner-content-height)",
         reader: "var(--reader-height)",
       },
       minHeight: {
         navbar: "var(--navbar-height)",
+        mediasBanner: "var(--medias-banner-height)",
+        mediasBannerContent: "var(--medias-banner-content-height)",
         reader: "var(--reader-height)",
       },
       maxWidth: {
         readerSidebar: "var(--reader-sidebar-width)",
         librarySidebar: "var(--library-sidebar-width)",
+        "2/4": "50%",
       },
       minWidth: {
         readerSidebar: "var(--reader-sidebar-width)",
         librarySidebar: "var(--library-sidebar-width)",
+        "2/4": "50%",
       },
       blur: {
         xs: "3px",
@@ -51,17 +59,16 @@ export default {
         mediaChapter: ["leftSidebar chapter rightSidebar"],
       },
       gridTemplateColumns: {
-        smChapterLayout: "auto 50px 70px",
-        mdChapterLayout: "auto 130px 70px",
         mediaChapter: "min-content auto min-content",
-      },
-      animation: {
-        "spin-medium": "spin 2s linear infinite",
+        chapterCard: "auto 112px",
       },
     },
   },
   plugins: [
-    tailwindScrollbar({ nocompatible: true }),
+    tailwindScrollbar({
+      nocompatible: true,
+      preferredStrategy: "pseudoelements",
+    }),
     plugin(({ addVariant }) => {
       addVariant("child", "& > *")
       addVariant("child-hover", "& > *:hover")
@@ -69,29 +76,13 @@ export default {
     require("@savvywombat/tailwindcss-grid-areas"),
     nextui({
       addCommonColors: true,
-      themes: {
-        light: {
-          colors: {
-            background: "#f0f0f5",
-            foreground: "hsl(0 0% 3.9%)",
-            content1: {
-              DEFAULT: "#ececee",
-              foreground: "hsl(0 0% 3.9%)",
-            },
-            content2: {
-              DEFAULT: "#dfdfe2",
-              foreground: "hsl(0 0% 3.9%)",
-            },
-            primary: {
-              DEFAULT: "hsl(0 100% 65.49%)",
-              foreground: "hsl(0 0% 98%)",
-            },
-            secondary: {
-              DEFAULT: "#383842",
-              foreground: "hsl(0 0% 9%)",
-            },
-          },
+      layout: {
+        radius: {
+          medium: "0.4rem",
+          large: "0.6rem",
         },
+      },
+      themes: {
         dark: {
           colors: {
             background: "#16161a",

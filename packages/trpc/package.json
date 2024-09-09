@@ -9,26 +9,28 @@
   "license": "MIT",
   "scripts": {
     "clean": "rm -rf .turbo node_modules",
-    "typecheck": "tsc --noEmit",
-    "with-env": "dotenv -e ../../.env --"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@t3-oss/env-nextjs": "^0.8.0",
-    "@taiyomoe/auth": "workspace:^0.1.0",
-    "@taiyomoe/db": "workspace:^0.1.0",
-    "@taiyomoe/meilisearch": "workspace:^0.1.0",
-    "@taiyomoe/schemas": "workspace:^0.1.0",
-    "@taiyomoe/services": "workspace:^0.1.0",
-    "@taiyomoe/soketi": "workspace:^0.1.0",
-    "@taiyomoe/utils": "workspace:^0.1.0",
-    "@trpc/server": "11.0.0-next-beta.294",
+    "@taiyomoe/auth": "workspace:*",
+    "@taiyomoe/cache": "workspace:*",
+    "@taiyomoe/constants": "workspace:^",
+    "@taiyomoe/db": "workspace:*",
+    "@taiyomoe/logs": "workspace:*",
+    "@taiyomoe/meilisearch": "workspace:*",
+    "@taiyomoe/schemas": "workspace:*",
+    "@taiyomoe/services": "workspace:*",
+    "@taiyomoe/umami": "workspace:^",
+    "@taiyomoe/utils": "workspace:*",
+    "@trpc/server": "11.0.0-rc.502",
     "accesscontrol": "^2.2.1",
-    "mangadex-full-api": "^5.12.1",
+    "luxon": "^3.5.0",
+    "radash": "^12.1.0",
     "superjson": "^2.2.1",
-    "zod": "^3.22.4"
+    "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@taiyomoe/tsconfig": "workspace:^0.1.0",
-    "@taiyomoe/types": "workspace:^0.1.0"
+    "@taiyomoe/tsconfig": "workspace:*",
+    "@taiyomoe/types": "workspace:*"
   }
 }

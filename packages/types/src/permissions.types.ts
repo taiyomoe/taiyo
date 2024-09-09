@@ -10,10 +10,15 @@ export type Resources =
   | "library"
   | "scans"
   | "scanMembers"
+  | "usersFollow"
+  | "usersSettings"
 
 export type Posession = "any" | "own"
 export type ResourcesWithPossession = Exclude<Resources, "scanMembers">
-export type ResourcesWithoutPossession = Extract<Resources, "scanMembers">
+export type ResourcesWithoutPossession = Extract<
+  Resources,
+  "scanMembers" | "usersFollow" | "usersSettings"
+>
 
 export type Actions = "create" | "update" | "delete" // read is omitted
 type ActionsWithoutCreate = Exclude<Actions, "create">
@@ -28,3 +33,9 @@ export type Grant = {
   resource: Resources
   action: `${Actions}:${"any" | "own"}`
 }
+
+export type ForgedPermission = [
+  Resources | Resources[],
+  Actions | Actions[],
+  Posession?,
+]

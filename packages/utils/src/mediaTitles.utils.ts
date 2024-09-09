@@ -44,6 +44,6 @@ const sort = <T extends MediaLimited["titles"] | MediaTitle[]>(titles: T) => {
   return titles.sort(customSort) as T
 }
 
-export const MediaTitleUtils = {
+export const TitleUtils = {
   sort,
 }

@@ -1,10 +1,11 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.4.1/schema.json",
+  "$schema": "https://biomejs.dev/schemas/1.6.1/schema.json",
   "organizeImports": {
     "enabled": true
   },
   "formatter": {
     "enabled": true,
+    "formatWithErrors": true,
     "indentStyle": "space"
   },
   "linter": {
@@ -13,10 +14,23 @@
       "recommended": true,
       "style": {
         "noNonNullAssertion": "off",
+        "useNodejsImportProtocol": "off",
         "useEnumInitializers": "off"
       },
       "a11y": {
         "useKeyWithClickEvents": "off"
+      },
+      "correctness": {
+        "noUnusedImports": "error",
+        "noUnusedVariables": "error"
+      },
+      "nursery": {
+        "useSortedClasses": {
+          "level": "warn",
+          "options": {
+            "functions": ["cn", "tv"]
+          }
+        }
       }
     }
   },
@@ -32,5 +46,28 @@
   },
   "files": {
     "ignore": ["./packages/schemas/src/prisma/index.ts"]
-  }
+  },
+  "overrides": [
+    {
+      "include": ["./apps/image-orchestrator/**/*.ts"],
+      "javascript": {
+        "parser": {
+          "unsafeParameterDecoratorsEnabled": true
+        }
+      }
+    },
+    {
+      "include": ["./apps/taiyo/src/lib/utils/array.utils.ts"],
+      "linter": {
+        "rules": {
+          "complexity": {
+            "noBannedTypes": "off"
+          },
+          "suspicious": {
+            "noExplicitAny": "off"
+          }
+        }
+      }
+    }
+  ]
 }

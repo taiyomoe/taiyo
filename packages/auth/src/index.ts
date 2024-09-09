@@ -1,120 +1,109 @@
-import { PrismaAdapter } from "@next-auth/prisma-adapter"
-import { Languages, User, db } from "@taiyomoe/db"
+import { PrismaAdapter } from "@auth/prisma-adapter"
+import { type Languages, type User, db } from "@taiyomoe/db"
+import { logsClient } from "@taiyomoe/logs"
+import { UsersIndexService } from "@taiyomoe/meilisearch/services"
 import type { Permission } from "@taiyomoe/types"
 import { PermissionUtils } from "@taiyomoe/utils"
-import type { AdapterUser, DefaultSession, NextAuthOptions } from "next-auth"
-import nextAuth from "next-auth"
-import DiscordProvider from "next-auth/providers/discord"
+import NextAuth, { type DefaultSession } from "next-auth"
+import Discord from "next-auth/providers/discord"
 import { env } from "../env"
+import { getIp } from "./utils"
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
  * object and keep type safety.
  *
- * @see https://next-auth.js.org/getting-started/typescript#module-augmentation
+ * @see https://authjs.dev/getting-started/typescript#module-augmentation
  */
 declare module "next-auth" {
-  type AdapterUser = User
-
-  interface Session extends DefaultSession {
-    user: {
-      /** The user's ID */
+  /**
+   * Returned by `auth`, `useSession`, `getSession` and received as a prop on the `SessionProvider` React Context
+   */
+  interface Session {
+    user: DefaultSession["user"] & {
       id: string
-      /** The user's current role and permissions. */
-      role: {
-        name: string
-        permissions: Permission[]
-      }
-      /** The user's preferred titles language. */
+      role: { name: string; permissions: Permission[] }
       preferredTitles: Languages | null
-    } & DefaultSession["user"]
-  }
-}
-
-declare module "next-auth/jwt" {
-  interface JWT {
-    /** The user's current role */
-    role: {
-      name: string
-      permissions: Permission[]
+      showFollowing: boolean
+      showLibrary: boolean
     }
-    /** The user's preferred titles language. */
-    preferredTitles: Languages | null
   }
 }
 
-/**
- * Options for NextAuth.js used to configure adapters, providers, callbacks, etc.
- *
- * @see https://next-auth.js.org/configuration/options
- */
-export const authOptions: NextAuthOptions = {
+export const { auth, handlers, signIn, signOut } = NextAuth({
+  debug: process.env.NODE_ENV === "development",
   adapter: PrismaAdapter(db),
   providers: [
-    DiscordProvider({
+    Discord({
       clientId: env.DISCORD_CLIENT_ID,
       clientSecret: env.DISCORD_CLIENT_SECRET,
     }),
-    /**
-     * ...add more providers here.
-     *
-     * Most other providers require a bit more work than the Discord provider. For example, the
-     * GitHub provider requires you to add the `refresh_token_expires_in` field to the Account
-     * model. Refer to the NextAuth.js docs for the provider you want to use. Example:
-     *
-     * @see https://next-auth.js.org/providers/github
-     */
   ],
-  pages: {
-    signIn: "/auth/sign-in",
-  },
-  session: { strategy: "jwt" },
+  pages: { signIn: "/auth/sign-in" },
   callbacks: {
-    jwt: async ({ user, token }) => {
-      if (!user || !("role" in user)) {
-        return token
-      }
-
-      const adapterUser = user as AdapterUser
-      const userSettings = await db.userSetting.findFirst({
-        where: { userId: adapterUser.id },
+    session: async ({ session, user: adapterUser }) => {
+      const user = adapterUser as User
+      const settings = await db.userSetting.findUnique({
+        select: {
+          preferredTitles: true,
+          showFollowing: true,
+          showLibrary: true,
+        },
+        where: { userId: user.id },
       })
-
-      token.role = {
-        name: adapterUser.role,
-        permissions: PermissionUtils.getRolePermissions(adapterUser.role),
+      const role = {
+        name: user.role,
+        permissions: PermissionUtils.getRolePermissions(user.role),
       }
 
-      token.preferredTitles = userSettings?.preferredTitleLanguage ?? null
-
-      return token
+      return {
+        ...session,
+        user: {
+          id: user.id,
+          image: user.image,
+          role,
+          ...settings!,
+        },
+      }
     },
-    session: ({ session, token }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        id: token.sub,
-        role: token.role,
-        preferredTitles: token.preferredTitles,
-      },
-    }),
   },
   events: {
     createUser: async ({ user }) => {
-      await db.userSetting.create({
-        data: {
-          userId: user.id,
-        },
-      })
+      if (!user.id) return
 
-      await db.userLibrary.create({
-        data: {
-          userId: user.id,
-        },
+      await db.userProfile.create({ data: { userId: user.id } })
+      await db.userSetting.create({ data: { userId: user.id } })
+      await db.userLibrary.create({ data: { userId: user.id } })
+      await logsClient.users.auth.insert({
+        type: "registered",
+        ip: getIp(),
+        userId: user.id,
+      })
+      await UsersIndexService.sync(db, [user.id])
+    },
+    signIn: async ({ user }) => {
+      if (!user.id) return
+
+      await logsClient.users.auth.insert({
+        type: "signedIn",
+        ip: getIp(),
+        userId: user.id,
+      })
+    },
+    signOut: async (message) => {
+      if ("token" in message) {
+        throw new Error("Unreachable with JWT strategy.")
+      }
+
+      if (!message.session?.userId) return
+
+      await logsClient.users.auth.insert({
+        type: "signedOut",
+        ip: getIp(),
+        userId: message.session.userId,
       })
     },
   },
-}
+})
 
-export const handler = nextAuth(authOptions)
-export * from "./utils"
+export type { Session } from "next-auth"

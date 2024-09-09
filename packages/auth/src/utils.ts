@@ -1,9 +1,16 @@
-import { getServerSession } from "next-auth"
-import { authOptions } from "."
+import { headers } from "next/headers"
 
-/**
- * Wrapper for `getServerSession` so that you don't need to import the `authOptions` in every file.
- *
- * @see https://next-auth.js.org/configuration/nextjs
- */
-export const getServerAuthSession = () => getServerSession(authOptions)
+export const getIp = () => {
+  if (process.env.NODE_ENV === "development") {
+    return "127.0.0.1"
+  }
+
+  const FALLBACK_IP_ADDRESS = "0.0.0.0"
+  const forwardedFor = headers().get("x-forwarded-for")
+
+  if (forwardedFor) {
+    return forwardedFor.split(",")[0] ?? FALLBACK_IP_ADDRESS
+  }
+
+  return headers().get("x-real-ip") ?? FALLBACK_IP_ADDRESS
+}

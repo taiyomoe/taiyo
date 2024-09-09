@@ -1,3 +1,3 @@
-import { handler } from "@taiyomoe/auth"
+import { handlers } from "@taiyomoe/auth"
 
-export { handler as GET, handler as POST }
+export const { GET, POST } = handlers

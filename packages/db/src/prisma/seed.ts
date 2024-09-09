@@ -23,20 +23,6 @@ import scan11 from "./seeds/scans/scan-11"
 import users from "./seeds/users"
 
 async function main() {
-  if (process.env.NODE_ENV === "production") {
-    console.error("Cannot run seed in production")
-    process.exit(1)
-  }
-
-  console.log(
-    "process.env.NEXT_PUBLIC_MEILISEARCH_URL",
-    process.env.NEXT_PUBLIC_MEILISEARCH_URL,
-  )
-  console.log(
-    "process.env.MEILISEARCH_ADMIN_KEY",
-    process.env.MEILISEARCH_ADMIN_KEY,
-  )
-
   if (
     !process.env.NEXT_PUBLIC_MEILISEARCH_URL ||
     !process.env.MEILISEARCH_ADMIN_KEY

@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useIsMounted } from "usehooks-ts"
 
 type Props = {
   min: number
@@ -8,6 +9,8 @@ type Props = {
 }
 
 export const useScrollOpacity = ({ min, max }: Props) => {
+  const isMounted = useIsMounted()
+
   const computeOpacity = () => {
     if (typeof window === "undefined") return 0
 
@@ -36,7 +39,5 @@ export const useScrollOpacity = ({ min, max }: Props) => {
     return () => window.removeEventListener("scroll", handleScroll)
   })
 
-  if (typeof window === "undefined") return { opacity: 0 }
-
-  return { opacity }
+  return isMounted() ? opacity : 1
 }
