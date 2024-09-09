@@ -1,3 +1,4 @@
+import { UsersIndexService } from "@taiyomoe/meilisearch/services"
 import {
   getFollowsSchema,
   toggleFollowSchema,
@@ -204,5 +205,7 @@ export const usersRouter = createTRPCRouter({
           })
         },
       )
+
+      await UsersIndexService.sync(ctx.db, [ctx.session.user.id])
     }),
 })

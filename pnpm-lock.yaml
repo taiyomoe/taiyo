@@ -331,6 +331,9 @@ importers:
       '@taiyomoe/logs':
         specifier: workspace:*
         version: link:../logs
+      '@taiyomoe/meilisearch':
+        specifier: workspace:^
+        version: link:../meilisearch
       '@taiyomoe/utils':
         specifier: workspace:*
         version: link:../utils

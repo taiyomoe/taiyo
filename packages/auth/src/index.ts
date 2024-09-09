@@ -1,6 +1,7 @@
 import { PrismaAdapter } from "@auth/prisma-adapter"
 import { type Languages, type User, db } from "@taiyomoe/db"
 import { logsClient } from "@taiyomoe/logs"
+import { UsersIndexService } from "@taiyomoe/meilisearch/services"
 import type { Permission } from "@taiyomoe/types"
 import { PermissionUtils } from "@taiyomoe/utils"
 import NextAuth, { type DefaultSession } from "next-auth"
@@ -78,6 +79,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         ip: getIp(),
         userId: user.id,
       })
+      await UsersIndexService.sync(db, [user.id])
     },
     signIn: async ({ user }) => {
       if (!user.id) return
