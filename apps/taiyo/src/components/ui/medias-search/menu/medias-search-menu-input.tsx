@@ -26,15 +26,13 @@ export const MediasSearchInput = ({ toggleModal }: Props) => {
           ESC
         </Kbd>
         <Button
-          className=""
           onPress={toggleModal}
+          startContent={<XIcon className="text-default-400" size={20} />}
           variant="light"
           size="sm"
           radius="full"
           isIconOnly
-        >
-          <XIcon className="text-default-400" size={20} />
-        </Button>
+        />
       </div>
     </div>
   )
