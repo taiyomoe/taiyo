@@ -22,8 +22,8 @@ export const MediasSearchResults = (props: Props) => {
       forceMount
     >
       {hits.length === 0 && <Command.Empty>No results found.</Command.Empty>}
-      <Command.List>
-        <ScrollShadow className="scrollbar-none mt-2 flex h-[300px] w-full grow flex-col gap-1.5">
+      <Command.List className="mt-2">
+        <ScrollShadow className="scrollbar-none h-[calc(100dvh-272px)] space-y-1.5 overflow-y-auto md:h-[400px]">
           {hits.map((hit) => (
             <MediasSearchResultsItem
               key={hit.id}
