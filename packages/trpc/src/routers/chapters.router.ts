@@ -310,10 +310,10 @@ export const chaptersRouter = createTRPCRouter({
         where: { mediaId, deletedAt: null },
       })
       const { progression } = ctx.session
-        ? (await ctx.db.userHistory.findFirst({
+        ? ((await ctx.db.userHistory.findFirst({
             select: { progression: true },
             where: { userId: ctx.session?.user.id, mediaId },
-          })) ?? { progression: [] }
+          })) ?? { progression: [] })
         : { progression: [] }
 
       const mediaLimitedChapterPagination = {
@@ -356,10 +356,10 @@ export const chaptersRouter = createTRPCRouter({
       }
 
       const history = ctx.session?.user.id
-        ? (await ctx.db.userHistory.findFirst({
+        ? ((await ctx.db.userHistory.findFirst({
             where: { mediaId: input.mediaId, userId: ctx.session.user.id },
             select: { progression: true },
-          })) ?? { progression: [] }
+          })) ?? { progression: [] })
         : { progression: [] }
 
       const chapters = await db.mediaChapter.findMany({

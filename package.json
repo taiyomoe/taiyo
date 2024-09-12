@@ -17,7 +17,7 @@
     "knip": "knip"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.8.3",
+    "@biomejs/biome": "^1.9.0",
     "@types/global-types": "workspace:*",
     "@types/node": "^20.16.5",
     "knip": "^5.30.1",
