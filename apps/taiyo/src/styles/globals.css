@@ -28,7 +28,10 @@
     --body-padding: 24px;
     --navbar-height: 60px;
     --medias-banner-content-height: 200px;
-    --medias-banner-height: calc(var(--medias-banner-content-height) + var(--navbar-height));
+    --medias-banner-height: calc(
+      var(--medias-banner-content-height) +
+      var(--navbar-height)
+    );
     --reader-height: calc(100dvh - var(--navbar-height));
     --reader-sidebar-width: 300px;
     --library-sidebar-width: 300px;
@@ -70,14 +73,18 @@
 
 /* MARQUEE */
 @property --content1-gradient {
-  syntax: '<color>';
+  syntax: "<color>";
   initial-value: #2d2d30;
   inherits: false;
 }
 
 .rfm-overlay::before,
 .rfm-overlay::after {
-  background: linear-gradient(to right, var(--content1-gradient), rgba(255, 255, 255, 0)) !important;
+  background: linear-gradient(
+    to right,
+    var(--content1-gradient),
+    rgba(255, 255, 255, 0)
+  ) !important;
   transition: --content1-gradient 250ms;
 }
 
