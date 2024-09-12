@@ -32,7 +32,7 @@ export const MediasSearchMenu = () => {
         <ModalContent>
           <InstantSearch searchClient={meiliClient} indexName="medias">
             <Command className="max-h-full" label="Quick search command">
-              <MediasSearchInput />
+              <MediasSearchInput toggleModal={toggle} />
               <div className="flex w-full flex-col gap-4 p-3 sm:flex-row">
                 <MediasSearchTypes />
                 <Command.Separator
