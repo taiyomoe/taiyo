@@ -30,6 +30,8 @@ declare module "next-auth" {
   }
 }
 
+const COOKIE_DOMAIN = `.${env.NEXTAUTH_URL.replace(/https?:\/\//, "")}`
+
 export const { auth, handlers, signIn, signOut } = NextAuth({
   debug: process.env.NODE_ENV === "development",
   trustHost: true,
@@ -42,8 +44,8 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
   ],
   pages: { signIn: "/auth/sign-in" },
   cookies: {
-    csrfToken: { options: { sameSite: "lax" } },
-    sessionToken: { options: { sameSite: "lax" } },
+    csrfToken: { options: { domain: COOKIE_DOMAIN } },
+    sessionToken: { options: { domain: COOKIE_DOMAIN } },
   },
   callbacks: {
     session: async ({ session, user: adapterUser }) => {
