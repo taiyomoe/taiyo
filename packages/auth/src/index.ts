@@ -41,6 +41,10 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     }),
   ],
   pages: { signIn: "/auth/sign-in" },
+  cookies: {
+    csrfToken: { options: { sameSite: "lax" } },
+    sessionToken: { options: { sameSite: "lax" } },
+  },
   callbacks: {
     session: async ({ session, user: adapterUser }) => {
       const user = adapterUser as User
