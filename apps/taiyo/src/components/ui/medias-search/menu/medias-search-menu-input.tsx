@@ -16,7 +16,7 @@ export const MediasSearchInput = () => {
         onValueChange={refine}
         autoFocus
       />
-      <Kbd className="ml-2 hidden bg-content3 px-2 py-1 font-medium text-[0.6rem] md:block">
+      <Kbd className="ml-2 hidden bg-content3 px-2 py-1 font-medium text-[0.6rem] text-default-500 md:block">
         ESC
       </Kbd>
     </div>
