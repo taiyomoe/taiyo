@@ -1,5 +1,5 @@
 import { DateTime } from "luxon"
-import { useEffect, useState, type HTMLAttributes } from "react"
+import { type HTMLAttributes, useEffect, useState } from "react"
 
 type Props = HTMLAttributes<HTMLParagraphElement> & {
   date: Date

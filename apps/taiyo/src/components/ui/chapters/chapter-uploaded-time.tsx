@@ -1,6 +1,6 @@
 import { type VariantProps, tv } from "@nextui-org/react"
-import { RelativeTime } from "~/components/ui/relative-time"
 import { ClockIcon } from "lucide-react"
+import { RelativeTime } from "~/components/ui/relative-time"
 import { cn } from "~/lib/utils/cn"
 
 type Props = {
