@@ -5,7 +5,6 @@ import type {
   MediaChapterNavigation,
   MediaLimitedChapter,
 } from "@taiyomoe/types"
-import { DateTime } from "luxon"
 import { env } from "../env"
 
 const getTitle = (chapter: { title: string | null; number: number }) => {
@@ -59,12 +58,6 @@ const getFromRange = (
   range: number[],
 ) => {
   return chapter.filter((c) => range.includes(c.number)).map((c) => c.id)
-}
-
-const computeUploadedTime = (chapter: { createdAt: Date }) => {
-  const uploadedAt = DateTime.fromJSDate(chapter.createdAt)
-
-  return uploadedAt.toRelative({ locale: "pt", style: "short" })
 }
 
 const computeVolumeGroups = (input: MediaLimitedChapter[]) => {
@@ -150,7 +143,6 @@ export const ChapterUtils = {
   getVolumes,
   getDuplicatedChapters,
   getFromRange,
-  computeUploadedTime,
   computeVolumeGroups,
   computeOrder,
   parseUrl,
