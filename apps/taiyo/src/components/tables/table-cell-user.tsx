@@ -16,7 +16,11 @@ export const TableCellUser = ({ user }: Props) => {
 
   return (
     <div className="flex items-center gap-2">
-      <Link href={`/user/${user.id}`} className="flex items-center gap-2">
+      <Link
+        href={`/user/${user.id}`}
+        className="flex items-center gap-2"
+        target="_blank"
+      >
         <Image
           src={UserUtils.getAvatarUrl(user)}
           className="rounded-full"
