@@ -39,20 +39,23 @@ export const BulkUploadChaptersForm = () => {
 
       setState(UploadChapterState.UPLOADING)
 
-      toast.promise(ioApi.chapters.upload(data), {
-        loading: `Upando o capítulo ${position}...`,
-        error: (err) => {
-          setState(UploadChapterState.PENDING)
+      await new Promise((resolve) => {
+        toast.promise(ioApi.chapters.upload(data), {
+          loading: `Upando o capítulo ${position}...`,
+          error: (err) => {
+            setState(UploadChapterState.PENDING)
 
-          return handleErrors(
-            `Ocorreu um erro inesperado ao upar o capítulo ${position}`,
-          )(err)
-        },
-        success: () => {
-          setState(UploadChapterState.UPLOADED)
+            return handleErrors(
+              `Ocorreu um erro inesperado ao upar o capítulo ${position}`,
+            )(err)
+          },
+          success: () => {
+            setState(UploadChapterState.UPLOADED)
+            resolve(null)
 
-          return `Capítulo ${position} upado com sucesso!`
-        },
+            return `Capítulo ${position} upado com sucesso!`
+          },
+        })
       })
     })
 
