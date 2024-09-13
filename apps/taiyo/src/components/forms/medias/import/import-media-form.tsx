@@ -15,7 +15,7 @@ import { useImportMediaStore } from "~/stores/importMedia.store"
 export const ImportMediaForm = () => {
   const methods = useForm<ImportMediaInput>({
     resolver: typeboxResolver(importMediaSchema),
-    defaultValues: { mdId: "", downloadChapters: false },
+    defaultValues: { mdId: "", downloadChapters: true },
     mode: "onTouched",
   })
   const { set, addMessage } = useImportMediaStore()
