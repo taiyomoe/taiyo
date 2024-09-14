@@ -5,7 +5,9 @@ import {
   selectableColumn,
 } from "~/components/generics/data-table/data-table-presets"
 import { TableCellDate } from "~/components/tables/table-cell-date"
+import { TableCellGenres } from "~/components/tables/table-cell-genres"
 import { TableCellId } from "~/components/tables/table-cell-id"
+import { TableCellTags } from "~/components/tables/table-cell-tags"
 import { TableCellUser } from "~/components/tables/table-cell-user"
 // import { ScansTableSingleActions } from "./scans-table-single-actions"
 
@@ -64,13 +66,25 @@ export const columns: ColumnDef<MediasListItem>[] = [
   { accessorKey: "source", header: "Fonte", enableMultiSort: true },
   { accessorKey: "demography", header: "Demografia", enableMultiSort: true },
   { accessorKey: "countryOfOrigin", header: "Origem", enableMultiSort: true },
-  { accessorKey: "genres", header: "Gêneros", enableMultiSort: true },
-  { accessorKey: "tags", header: "Tags", enableMultiSort: true },
+  {
+    accessorKey: "genres",
+    header: "Gêneros",
+    cell: ({ getValue }) => (
+      <TableCellGenres genres={getValue<MediasListItem["genres"]>()} />
+    ),
+  },
+  {
+    accessorKey: "tags",
+    header: "Tags",
+    cell: ({ getValue }) => (
+      <TableCellTags tags={getValue<MediasListItem["tags"]>()} />
+    ),
+  },
   { accessorKey: "flag", header: "Flag", enableMultiSort: true },
-  { accessorKey: "titlesCount", header: "Títulos", enableMultiSort: true },
-  { accessorKey: "coversCount", header: "Covers", enableMultiSort: true },
-  { accessorKey: "bannersCount", header: "Banners", enableMultiSort: true },
-  { accessorKey: "chaptersCount", header: "Capítulos", enableMultiSort: true },
+  { accessorKey: "titlesCount", header: "Títulos" },
+  { accessorKey: "coversCount", header: "Covers" },
+  { accessorKey: "bannersCount", header: "Banners" },
+  { accessorKey: "chaptersCount", header: "Capítulos" },
   {
     accessorKey: "creator",
     header: "Criador",
