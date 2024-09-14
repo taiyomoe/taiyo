@@ -15,7 +15,7 @@ type Actions = {
 
 export const useImportMediaStore = create<s & Actions>((set) => ({
   currentStep: 0,
-  downloadChapters: false,
+  downloadChapters: true,
   messages: [],
   error: null,
 

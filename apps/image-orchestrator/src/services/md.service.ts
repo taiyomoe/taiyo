@@ -153,7 +153,7 @@ const importFn = async (
     ),
   ]
   const groups = await Group.getMultiple(...groupsIds)
-  const scanIds: string[] = []
+  const groupToScan = new Map<string, string>()
 
   s(6, "Scans recuperadas", "success")
 
@@ -178,16 +178,16 @@ const importFn = async (
       },
     })
 
-    scanIds.push(scan.id)
+    groupToScan.set(group.id, scan.id)
 
     s(7, `Scan '${group.name}' criada`, "success", i)
   }
 
-  if (scanIds.length) {
+  if (groupToScan.size) {
     s(7, "Scans criadas", "success")
     s(8, "Reindexando a busca das scans...", "ongoing")
 
-    await ScansIndexService.sync(db, scanIds)
+    await ScansIndexService.sync(db, Array.from(groupToScan.values()))
 
     s(8, "Busca das scans reindexada", "success")
   }
@@ -215,7 +215,7 @@ const importFn = async (
         language: "pt_br",
         flag: "OK",
         files: [],
-        scanIds,
+        scanIds: chapter.groups.map((g) => groupToScan.get(g.id)!),
         mediaId: media.id,
       },
       uploaded,
