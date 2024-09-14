@@ -4,6 +4,7 @@ import {
   // actionsColumn,
   selectableColumn,
 } from "~/components/generics/data-table/data-table-presets"
+import { TableCellBoolean } from "~/components/tables/table-cell-boolean"
 import { TableCellDate } from "~/components/tables/table-cell-date"
 import { TableCellGenres } from "~/components/tables/table-cell-genres"
 import { TableCellId } from "~/components/tables/table-cell-id"
@@ -59,7 +60,12 @@ export const columns: ColumnDef<MediasListItem>[] = [
     header: "Classificação",
     enableMultiSort: true,
   },
-  { accessorKey: "oneShot", header: "One-Shot", enableMultiSort: true },
+  {
+    accessorKey: "oneShot",
+    header: "One-Shot",
+    enableMultiSort: true,
+    cell: ({ getValue }) => <TableCellBoolean value={getValue<boolean>()} />,
+  },
   { accessorKey: "trailer", header: "Trailer", enableMultiSort: true },
   { accessorKey: "type", header: "Tipo", enableMultiSort: true },
   { accessorKey: "status", header: "Status", enableMultiSort: true },
