@@ -64,7 +64,7 @@ export const columns: ColumnDef<MediasListItem>[] = [
       />
     ),
   },
-  { accessorKey: "mainTitle", header: "Título" },
+  { accessorKey: "mainTitle", header: "Título principal" },
   { accessorKey: "synopsis", header: "Sinopse" },
   {
     accessorKey: "contentRating",
