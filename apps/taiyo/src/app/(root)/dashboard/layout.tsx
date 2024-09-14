@@ -2,7 +2,7 @@ import { auth } from "@taiyomoe/auth"
 import { notFound } from "next/navigation"
 import { Sidebar } from "~/components/layout/Sidebar"
 import type { LayoutProps } from "~/lib/types"
-import { DashboardSidebarContent } from "./_components/DashboardSidebarContent"
+import { DashboardSidebarContent } from "./_components/dashboard-sidebar-content"
 
 export default async function Layout({ children }: LayoutProps) {
   const session = await auth()

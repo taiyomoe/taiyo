@@ -2,7 +2,7 @@
 
 import { Accordion, AccordionItem } from "@nextui-org/accordion"
 import { tv } from "@nextui-org/react"
-import { DashboardSidebarCRUDButtons } from "./DashboardSidebarCRUDButtons"
+import { DashboardSidebarButtons } from "./dashboard-sidebar-buttons"
 
 type Props = {
   className?: string
@@ -44,8 +44,13 @@ export const DashboardSidebarContent = ({ className }: Props) => {
         title="— Obras"
         key="medias"
       >
-        <DashboardSidebarCRUDButtons
+        <DashboardSidebarButtons
           items={[
+            {
+              label: "Lista",
+              href: "/dashboard/medias",
+              type: "home",
+            },
             {
               label: "Importar",
               href: "/dashboard/medias/import",
@@ -74,7 +79,7 @@ export const DashboardSidebarContent = ({ className }: Props) => {
         title="— Capítulos (bulk)"
         key="bulkMediaChapters"
       >
-        <DashboardSidebarCRUDButtons
+        <DashboardSidebarButtons
           items={[
             {
               label: "Upar",
@@ -99,7 +104,7 @@ export const DashboardSidebarContent = ({ className }: Props) => {
         title="— Capítulos"
         key="mediaChapters"
       >
-        <DashboardSidebarCRUDButtons
+        <DashboardSidebarButtons
           items={[
             {
               label: "Lista",
@@ -135,7 +140,7 @@ export const DashboardSidebarContent = ({ className }: Props) => {
         title="— Scans"
         key="scans"
       >
-        <DashboardSidebarCRUDButtons
+        <DashboardSidebarButtons
           items={[
             {
               label: "Lista",
