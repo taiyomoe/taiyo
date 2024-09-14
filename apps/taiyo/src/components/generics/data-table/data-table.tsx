@@ -123,7 +123,7 @@ export function DataTable<TData, TValue, TQueryAttribute>({
       <div className="space-y-4">
         {filters}
         <div
-          className="flex flex-col justify-end gap-4 data-[has-query=true]:justify-between md:flex-row"
+          className="flex flex-col justify-end gap-4 data-[has-query=true]:justify-between lg:flex-row"
           data-has-query={!!queryableFields}
         >
           {queryableFields && onQueryChange && (
