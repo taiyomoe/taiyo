@@ -1,9 +1,9 @@
 import type { PrismaClient } from "@prisma/client"
 import type { MediasIndexItem } from "@taiyomoe/types"
 import { TRPCError } from "@trpc/server"
+import { DateTime } from "luxon"
 import { omit, parallel } from "radash"
 import { meilisearchClient } from "../"
-import { DateTime } from "luxon"
 
 const getItem = async (db: PrismaClient, id: string) => {
   const result = await db.media.findUnique({
