@@ -1,0 +1,89 @@
+import type { MediasListItem } from "@taiyomoe/types"
+import type { ColumnDef } from "@tanstack/react-table"
+import {
+  // actionsColumn,
+  selectableColumn,
+} from "~/components/generics/data-table/data-table-presets"
+import { TableCellDate } from "~/components/tables/table-cell-date"
+import { TableCellId } from "~/components/tables/table-cell-id"
+import { TableCellUser } from "~/components/tables/table-cell-user"
+// import { ScansTableSingleActions } from "./scans-table-single-actions"
+
+export const columns: ColumnDef<MediasListItem>[] = [
+  selectableColumn(),
+  {
+    accessorKey: "id",
+    header: "ID",
+    cell: ({ getValue }) => <TableCellId id={getValue<string>()} />,
+  },
+  {
+    accessorKey: "createdAt",
+    header: "Data de criação",
+    enableMultiSort: true,
+    cell: ({ getValue }) => <TableCellDate date={getValue<Date>()} />,
+  },
+  {
+    accessorKey: "updatedAt",
+    header: "Última atualização",
+    enableMultiSort: true,
+    cell: ({ getValue }) => <TableCellDate date={getValue<Date>()} />,
+  },
+  {
+    accessorKey: "deletedAt",
+    header: "Data de remoção",
+    enableMultiSort: true,
+    cell: ({ getValue }) => <TableCellDate date={getValue<Date>()} />,
+  },
+  {
+    accessorKey: "startDate",
+    header: "Data de início",
+    enableMultiSort: true,
+    cell: ({ getValue }) => (
+      <TableCellDate date={getValue<Date>()} format="D" />
+    ),
+  },
+  {
+    accessorKey: "endDate",
+    header: "Data de término",
+    enableMultiSort: true,
+    cell: ({ getValue }) => (
+      <TableCellDate date={getValue<Date>()} format="D" />
+    ),
+  },
+  { accessorKey: "mainTitle", header: "Título" },
+  { accessorKey: "synopsis", header: "Sinopse" },
+  {
+    accessorKey: "contentRating",
+    header: "Classificação",
+    enableMultiSort: true,
+  },
+  { accessorKey: "oneShot", header: "One-Shot", enableMultiSort: true },
+  { accessorKey: "trailer", header: "Trailer", enableMultiSort: true },
+  { accessorKey: "type", header: "Tipo", enableMultiSort: true },
+  { accessorKey: "status", header: "Status", enableMultiSort: true },
+  { accessorKey: "source", header: "Fonte", enableMultiSort: true },
+  { accessorKey: "demography", header: "Demografia", enableMultiSort: true },
+  { accessorKey: "countryOfOrigin", header: "Origem", enableMultiSort: true },
+  { accessorKey: "genres", header: "Gêneros", enableMultiSort: true },
+  { accessorKey: "tags", header: "Tags", enableMultiSort: true },
+  { accessorKey: "flag", header: "Flag", enableMultiSort: true },
+  { accessorKey: "titlesCount", header: "Títulos", enableMultiSort: true },
+  { accessorKey: "coversCount", header: "Covers", enableMultiSort: true },
+  { accessorKey: "bannersCount", header: "Banners", enableMultiSort: true },
+  { accessorKey: "chaptersCount", header: "Capítulos", enableMultiSort: true },
+  {
+    accessorKey: "creator",
+    header: "Criador",
+    cell: ({ getValue }) => (
+      <TableCellUser user={getValue<MediasListItem["creator"]>()} />
+    ),
+  },
+  {
+    accessorKey: "deleter",
+    header: "Deletado por",
+    cell: ({ getValue }) => (
+      <TableCellUser user={getValue<MediasListItem["deleter"]>()} />
+    ),
+  },
+  // actionsColumn(({ row }) => <ScansTableSingleActions scan={row.original} />),
+]

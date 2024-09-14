@@ -1,9 +1,16 @@
 import { MediasIndexService } from "@taiyomoe/meilisearch/services"
-import { idSchema, updateMediaSchema } from "@taiyomoe/schemas"
+import { buildFilter, buildSort } from "@taiyomoe/meilisearch/utils"
+import {
+  getMediasListSchema,
+  idSchema,
+  updateMediaSchema,
+} from "@taiyomoe/schemas"
 import { LibrariesService, MediasService } from "@taiyomoe/services"
-import type { MediaLimited } from "@taiyomoe/types"
+import type { MediaLimited, MediasListItem } from "@taiyomoe/types"
 import { MediaUtils } from "@taiyomoe/utils"
 import { TRPCError } from "@trpc/server"
+import { DateTime } from "luxon"
+import { omit, parallel, unique } from "radash"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 
 export const mediasRouter = createTRPCRouter({
@@ -70,5 +77,83 @@ export const mediasRouter = createTRPCRouter({
       }
 
       return mediaLimited
+    }),
+
+  getList: protectedProcedure
+    .meta({ resource: "medias", action: "create" })
+    .input(getMediasListSchema)
+    .query(async ({ ctx, input }) => {
+      const searched = await ctx.meilisearch.medias.search(input.query.q, {
+        attributesToSearchOn: input.query.attributes,
+        filter: buildFilter(input.filter),
+        sort: buildSort(input.sort),
+        hitsPerPage: input.perPage,
+        page: input.page,
+      })
+      const uniqueUsers = unique(
+        [
+          searched.hits.map((h) => h.creatorId),
+          searched.hits.map((h) => h.deleterId).filter(Boolean),
+        ].flat(),
+      )
+      const users = await ctx.db.user.findMany({
+        select: { id: true, name: true, image: true },
+        where: { id: { in: uniqueUsers } },
+      })
+      const medias = (await parallel(10, searched.hits, async (h) => {
+        const titlesCount = await ctx.db.mediaTitle.count({
+          where: { mediaId: h.id },
+        })
+        const coversCount = await ctx.db.mediaCover.count({
+          where: { mediaId: h.id },
+        })
+        const bannersCount = await ctx.db.mediaBanner.count({
+          where: { mediaId: h.id },
+        })
+        const chaptersCount = await ctx.db.mediaChapter.count({
+          where: { mediaId: h.id },
+        })
+
+        return {
+          ...omit(h, [
+            "createdAt",
+            "updatedAt",
+            "deletedAt",
+            "startDate",
+            "endDate",
+            "titles",
+            "mainCoverId",
+            "creatorId",
+            "deleterId",
+          ]),
+          createdAt: DateTime.fromSeconds(h.createdAt).toJSDate(),
+          updatedAt: DateTime.fromSeconds(h.updatedAt).toJSDate(),
+          deletedAt: h.deletedAt
+            ? DateTime.fromSeconds(h.deletedAt).toJSDate()
+            : null,
+          startDate: h.startDate
+            ? DateTime.fromSeconds(h.startDate).toJSDate()
+            : null,
+          endDate: h.endDate
+            ? DateTime.fromSeconds(h.endDate).toJSDate()
+            : null,
+          creator: users.find((u) => u.id === h.creatorId)!,
+          deleter: users.find((d) => d.id === h.deleterId) ?? null,
+          mainTitle: MediaUtils.getDisplayTitle(
+            h.titles,
+            ctx.session.user.preferredTitles,
+          ),
+          titlesCount,
+          chaptersCount,
+          coversCount,
+          bannersCount,
+        }
+      })) satisfies MediasListItem[]
+
+      return {
+        medias,
+        totalPages: searched.totalPages,
+        totalCount: searched.totalHits,
+      }
     }),
 })

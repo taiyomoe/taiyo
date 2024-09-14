@@ -6,6 +6,29 @@ export const MEDIA_PER_PAGE_CHOICES = [5, 10, 20, 30, 50]
 export const DEFAULT_LATEST_CHAPTERS_GROUPED_PER_PAGE = 10
 export const LATEST_CHAPTERS_GROUPED_PER_PAGE_CHOICES = [5, 10, 20, 30, 50]
 
+export const DEFAULT_MEDIAS_LIST_PER_PAGE = 30
+export const MEDIAS_LIST_PER_PAGE_CHOICES = [5, 10, 20, 30, 50]
+export const MEDIAS_LIST_QUERYABLE_FIELDS = z.enum(["*", "titles", "synopsis"])
+export const MEDIAS_LIST_SORTABLE_FIELDS = [
+  "createdAt",
+  "updatedAt",
+  "deletedAt",
+  "startDate",
+  "endDate",
+  "contentRating",
+  "oneShot",
+  "type",
+  "status",
+  "source",
+  "demography",
+  "countryOfOrigin",
+  "genres",
+  "tags",
+  "flag",
+  "creator",
+  "deleter",
+] as const
+
 export const DEFAULT_CHAPTERS_LIST_PER_PAGE = 20
 export const CHAPTERS_LIST_PER_PAGE_CHOICES = [5, 10, 20, 30, 50]
 export const CHAPTERS_LIST_SORTABLE_FIELDS = [
