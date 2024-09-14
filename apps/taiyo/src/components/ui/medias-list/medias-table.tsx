@@ -53,6 +53,7 @@ export const MediasTable = ({ initialData }: Props) => {
         deletedAt: false,
         startDate: false,
         endDate: false,
+        mainCoverId: false,
         synopsis: false,
         contentRating: false,
         oneShot: false,

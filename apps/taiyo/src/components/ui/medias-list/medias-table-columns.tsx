@@ -5,6 +5,7 @@ import {
   selectableColumn,
 } from "~/components/generics/data-table/data-table-presets"
 import { TableCellBoolean } from "~/components/tables/table-cell-boolean"
+import { TableCellCover } from "~/components/tables/table-cell-cover"
 import { TableCellDate } from "~/components/tables/table-cell-date"
 import { TableCellGenres } from "~/components/tables/table-cell-genres"
 import { TableCellId } from "~/components/tables/table-cell-id"
@@ -51,6 +52,16 @@ export const columns: ColumnDef<MediasListItem>[] = [
     enableMultiSort: true,
     cell: ({ getValue }) => (
       <TableCellDate date={getValue<Date>()} format="D" />
+    ),
+  },
+  {
+    accessorKey: "mainCoverId",
+    header: "Cover principal",
+    cell: ({ row }) => (
+      <TableCellCover
+        mediaId={row.original.id}
+        coverId={row.original.mainCoverId}
+      />
     ),
   },
   { accessorKey: "mainTitle", header: "Título" },
