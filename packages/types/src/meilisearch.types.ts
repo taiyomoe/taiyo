@@ -1,7 +1,7 @@
 import type {
+  Media,
   MediaChapter,
   MediaTitle,
-  MediaType,
   Scan,
   User,
   UserProfile,
@@ -20,14 +20,19 @@ export type MeilisearchIndexesItems<TIndex extends MeilisearchIndexes> =
           ? UsersIndexItem
           : never
 
-export type MediasIndexItem = {
-  id: string
-  synopsis: string | null
+export type MediasIndexItem = Omit<
+  Media,
+  "createdAt" | "updatedAt" | "deletedAt" | "startDate" | "endDate"
+> & {
+  createdAt: number
+  updatedAt: number
+  deletedAt: number | null
+  startDate: number | null
+  endDate: number | null
   titles: Pick<
     MediaTitle,
     "title" | "language" | "priority" | "isAcronym" | "isMainTitle"
   >[]
-  type: MediaType
   mainCoverId: string
 }
 

@@ -1,15 +1,13 @@
 import type { PrismaClient } from "@prisma/client"
 import type { MediasIndexItem } from "@taiyomoe/types"
 import { TRPCError } from "@trpc/server"
-import { parallel } from "radash"
+import { omit, parallel } from "radash"
 import { meilisearchClient } from "../"
+import { DateTime } from "luxon"
 
 const getItem = async (db: PrismaClient, id: string) => {
   const result = await db.media.findUnique({
-    select: {
-      id: true,
-      synopsis: true,
-      type: true,
+    include: {
       titles: {
         select: {
           title: true,
@@ -42,10 +40,25 @@ const getItem = async (db: PrismaClient, id: string) => {
   }
 
   return {
-    id: result.id,
-    synopsis: result.synopsis,
-    type: result.type,
-    titles: result.titles,
+    ...omit(result, [
+      "createdAt",
+      "updatedAt",
+      "deletedAt",
+      "startDate",
+      "endDate",
+      "covers",
+    ]),
+    createdAt: DateTime.fromJSDate(result.createdAt).toSeconds(),
+    updatedAt: DateTime.fromJSDate(result.updatedAt).toSeconds(),
+    deletedAt: result.deletedAt
+      ? DateTime.fromJSDate(result.deletedAt).toSeconds()
+      : null,
+    startDate: result.startDate
+      ? DateTime.fromJSDate(result.startDate).toSeconds()
+      : null,
+    endDate: result.endDate
+      ? DateTime.fromJSDate(result.endDate).toSeconds()
+      : null,
     mainCoverId: result.covers[0]!.id,
   } satisfies MediasIndexItem
 }
