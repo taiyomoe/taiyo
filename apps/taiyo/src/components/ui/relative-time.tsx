@@ -21,6 +21,9 @@ export const RelativeTime = ({ date, ...props }: Props) => {
   }, [date])
 
   return (
-    <p {...props}>{relative ?? DateTime.fromJSDate(date).toLocaleString()}</p>
+    <p {...props}>
+      {relative ??
+        DateTime.fromJSDate(date).setLocale("pt-br").toLocaleString()}
+    </p>
   )
 }

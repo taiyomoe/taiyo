@@ -36,9 +36,10 @@ export const ChapterUploadedTime = (props: Props) => {
   return (
     <div className={slots.base()}>
       <ClockIcon className={slots.icon({ className: classNames?.icon })} />
-      <p className={cn(slots.text(), classNames?.text)}>
-        <RelativeTime date={chapter.createdAt} />
-      </p>
+      <RelativeTime
+        className={cn(slots.text(), classNames?.text)}
+        date={chapter.createdAt}
+      />
     </div>
   )
 }
