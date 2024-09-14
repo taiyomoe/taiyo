@@ -1,6 +1,7 @@
 import { Chip } from "@nextui-org/chip"
 import { Tooltip } from "@nextui-org/tooltip"
 import type { MediaGenres } from "@taiyomoe/db"
+import { GENRES_PT } from "@taiyomoe/utils/i18n"
 import { cn } from "~/lib/utils/cn"
 
 type Props = {
@@ -13,7 +14,7 @@ export const TableCellGenres = ({ genres }: Props) => {
 
   const renderChip = (t: MediaGenres) => (
     <Chip key={t} size="sm">
-      {t}
+      {GENRES_PT[t]}
     </Chip>
   )
 

@@ -1,5 +1,6 @@
 import { Chip } from "@nextui-org/chip"
 import { Tooltip } from "@nextui-org/tooltip"
+import { TAGS_PT } from "@taiyomoe/utils/i18n"
 import { cn } from "~/lib/utils/cn"
 
 type Props = {
@@ -12,7 +13,7 @@ export const TableCellTags = ({ tags }: Props) => {
 
   const renderChip = (t: PrismaJson.MediaTag) => (
     <Chip key={t.key} size="sm">
-      {t.key}
+      {TAGS_PT[t.key].name}
     </Chip>
   )
 
