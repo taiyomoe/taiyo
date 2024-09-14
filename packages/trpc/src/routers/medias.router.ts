@@ -102,16 +102,16 @@ export const mediasRouter = createTRPCRouter({
       })
       const medias = (await parallel(10, searched.hits, async (h) => {
         const titlesCount = await ctx.db.mediaTitle.count({
-          where: { mediaId: h.id },
+          where: { mediaId: h.id, deletedAt: null },
         })
         const coversCount = await ctx.db.mediaCover.count({
-          where: { mediaId: h.id },
+          where: { mediaId: h.id, deletedAt: null },
         })
         const bannersCount = await ctx.db.mediaBanner.count({
-          where: { mediaId: h.id },
+          where: { mediaId: h.id, deletedAt: null },
         })
         const chaptersCount = await ctx.db.mediaChapter.count({
-          where: { mediaId: h.id },
+          where: { mediaId: h.id, deletedAt: null },
         })
 
         return {
