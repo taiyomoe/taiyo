@@ -1,6 +1,10 @@
-import { MediasIndexService } from "@taiyomoe/meilisearch/services"
+import {
+  ChaptersIndexService,
+  MediasIndexService,
+} from "@taiyomoe/meilisearch/services"
 import { buildFilter, buildSort } from "@taiyomoe/meilisearch/utils"
 import {
+  bulkMutateSchema,
   getMediasListSchema,
   idSchema,
   updateMediaSchema,
@@ -151,5 +155,80 @@ export const mediasRouter = createTRPCRouter({
         totalPages: searched.totalPages,
         totalCount: searched.totalHits,
       }
+    }),
+
+  bulkMutate: protectedProcedure
+    .meta({ resource: "medias", action: "update" })
+    .input(bulkMutateSchema)
+    .mutation(async ({ ctx, input }) => {
+      const medias = await ctx.db.media.findMany({
+        where: { id: { in: input.ids } },
+      })
+
+      if (medias.length !== input.ids.length) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Um ou vários capítulos não existem.",
+        })
+      }
+
+      if (input.type === "restore") {
+        if (medias.some((m) => m.deletedAt === null)) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Algumas obras não estão deletadas.",
+          })
+        }
+      }
+
+      if (input.type === "delete") {
+        if (medias.some((m) => m.deletedAt !== null)) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Algumas obras já estão deletadas.",
+          })
+        }
+      }
+
+      await ctx.db.media.updateMany({
+        data: {
+          deletedAt: input.type === "delete" ? new Date() : null,
+          deleterId: input.type === "delete" ? ctx.session.user.id : null,
+        },
+        where: { id: { in: input.ids } },
+      })
+
+      for (const media of medias) {
+        const chapters = await ctx.db.mediaChapter.findMany({
+          select: { id: true },
+          where: { mediaId: media.id },
+        })
+        const chaptersIds = chapters.map((c) => c.id)
+
+        if (input.type === "restore") {
+          await ChaptersIndexService.sync(ctx.db, chaptersIds)
+
+          continue
+        }
+
+        await ctx.meilisearch.chapters.deleteDocuments(chaptersIds)
+      }
+
+      // const newChapters = chapters.map((c) => ({
+      //   ...c,
+      //   deletedAt: input.type === "delete" ? new Date() : null,
+      //   deleterId: input.type === "delete" ? ctx.session.user.id : null,
+      // }))
+
+      // for (const chapter of newChapters) {
+      //   await ctx.logs.chapters.insert({
+      //     type: "deleted",
+      //     old: chapter,
+      //     userId: ctx.session.user.id,
+      //   })
+      // }
+
+      await MediasIndexService.sync(ctx.db, input.ids)
+      await ctx.cache.medias.invalidateAll()
     }),
 })

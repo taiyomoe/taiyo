@@ -33,6 +33,16 @@ export const cacheClient = {
           SuperJSON.stringify(input),
         ),
     }),
+    invalidateAll: async () => {
+      const mediaKeys = await client.keys("medias:*")
+
+      for (const key of mediaKeys) {
+        await client.del(key)
+      }
+
+      await client.del("chapters:latest")
+      await client.del("chapters:latest:grouped")
+    },
   },
 
   chapters: {

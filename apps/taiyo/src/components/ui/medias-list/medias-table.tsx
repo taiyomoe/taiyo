@@ -11,6 +11,7 @@ import { api } from "~/trpc/react"
 import { columns } from "./medias-table-columns"
 import { MediasTableEmptyContent } from "./medias-table-empty-content"
 import { MediasTableFilters } from "./medias-table-filters"
+import { MediasTableMultipleActions } from "./medias-table-multiple-actions"
 
 type Props = {
   initialData: {
@@ -45,7 +46,7 @@ export const MediasTable = ({ initialData }: Props) => {
       columns={columns}
       data={items}
       filters={<MediasTableFilters />}
-      multipleActions={<p>Azerty</p>}
+      multipleActions={<MediasTableMultipleActions />}
       emptyContent={<MediasTableEmptyContent />}
       initialVisibility={{
         id: false,
