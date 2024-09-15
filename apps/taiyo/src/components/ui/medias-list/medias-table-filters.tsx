@@ -4,7 +4,6 @@ import { QueryBuilder } from "~/components/ui/query-builder/query-builder"
 import { useMediasListStore } from "~/stores/mediasList.store"
 
 const fields: Field[] = [
-  { name: "synposis", label: "Sinopse" },
   { name: "type", datatype: "enum", label: "Tipo" },
   { name: "status", datatype: "enum", label: "Status" },
   { name: "source", datatype: "enum", label: "Fonte" },

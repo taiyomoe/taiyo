@@ -9,6 +9,7 @@ import { TableCellCover } from "~/components/tables/table-cell-cover"
 import { TableCellDate } from "~/components/tables/table-cell-date"
 import { TableCellGenres } from "~/components/tables/table-cell-genres"
 import { TableCellId } from "~/components/tables/table-cell-id"
+import { TableCellLong } from "~/components/tables/table-cell-long"
 import { TableCellTags } from "~/components/tables/table-cell-tags"
 import { TableCellUser } from "~/components/tables/table-cell-user"
 import { MediasTableSingleActions } from "./medias-table-single-actions"
@@ -65,7 +66,11 @@ export const columns: ColumnDef<MediasListItem>[] = [
     ),
   },
   { accessorKey: "mainTitle", header: "Título principal" },
-  { accessorKey: "synopsis", header: "Sinopse" },
+  {
+    accessorKey: "synopsis",
+    header: "Sinopse",
+    cell: ({ getValue }) => <TableCellLong text={getValue<string>()} />,
+  },
   {
     accessorKey: "contentRating",
     header: "Classificação",
