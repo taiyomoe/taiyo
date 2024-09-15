@@ -1,21 +1,69 @@
 import type Stream from "@elysiajs/stream"
-import { db } from "@taiyomoe/db"
+import { type Prisma, db } from "@taiyomoe/db"
 import {
   MediasIndexService,
   ScansIndexService,
 } from "@taiyomoe/meilisearch/services"
-import { MdUtils } from "@taiyomoe/utils"
+import { MdUtils, TitleUtils } from "@taiyomoe/utils"
 import { Group, Manga } from "mangadex-full-api"
 import { parallel } from "radash"
-import type { ImportMediaInput } from "../schemas"
+import type { ImportMediaInput, SyncMediaInput } from "../schemas"
 import {
   DuplicatedMediaTrackerError,
+  MediaNotFoundError,
   MediaTrackerNotFoundError,
 } from "../utils/errors"
 import { sendStream } from "../utils/streams"
-import { MediaChaptersService } from "./mediaChapters.service"
-import { MediaCoversService } from "./mediaCovers.service"
-import { MediasService } from "./medias.service"
+import {
+  MediaChaptersService,
+  MediaCoversService,
+  MediaTitlesService,
+  MediaTrackersService,
+  MediasService,
+} from "./"
+
+const getInfoPayload = <TAction extends "create" | "update">(
+  action: TAction,
+  manga: Manga,
+  creatorId: string,
+) => {
+  const { genres, tags, isOneShot } = MdUtils.getGenresAndTags(manga)
+  const titles = MdUtils.getTitles(manga)
+  const trackers = MdUtils.getTrackers(manga)
+  const staticData = {
+    synopsis: "Under construction...",
+    status: "RELEASING",
+    source: "LIGHT_NOVEL",
+  }
+
+  const data = {
+    startDate: manga.year ? new Date(Date.parse(manga.year.toString())) : null,
+    // -----
+    contentRating: MdUtils.getContentRating(manga),
+    oneShot: isOneShot,
+    type: MdUtils.getType(manga),
+    demography: MdUtils.getDemography(manga),
+    countryOfOrigin: MdUtils.getCountryOfOrigin(manga),
+    genres,
+    tags: tags.map((key) => ({ key, isSpoiler: false })),
+    creatorId,
+    ...(action === "create" ? staticData : {}),
+  } as unknown as TAction extends "create"
+    ? Prisma.MediaCreateInput
+    : Prisma.MediaUpdateInput
+
+  return {
+    data,
+    titles: titles.map((title) => ({
+      ...title,
+      creatorId,
+    })),
+    trackers: trackers.map((tracker) => ({
+      ...tracker,
+      creatorId,
+    })),
+  }
+}
 
 const getById = async (id: string) => {
   const result = await db.mediaTracker.findFirst({
@@ -50,41 +98,12 @@ const importFn = async (
   s(1, "Informações recuperadas", "success")
   s(2, "Criando a obra...", "ongoing")
 
-  const { genres, tags, isOneShot } = MdUtils.getGenresAndTags(manga)
-  const titles = MdUtils.getTitles(manga)
-  const trackers = MdUtils.getTrackers(manga)
-
+  const infoPayload = getInfoPayload("create", manga, creatorId)
   const media = await db.media.create({
     data: {
-      startDate: manga.year
-        ? new Date(Date.parse(manga.year.toString()))
-        : null,
-      // -----
-      synopsis: "Under construction...",
-      contentRating: MdUtils.getContentRating(manga),
-      oneShot: isOneShot,
-      type: MdUtils.getType(manga),
-      status: "RELEASING",
-      source: "LIGHT_NOVEL",
-      demography: MdUtils.getDemography(manga),
-      countryOfOrigin: MdUtils.getCountryOfOrigin(manga),
-      genres,
-      tags: tags.map((key) => ({ key, isSpoiler: false })),
-      // -----
-      titles: {
-        create: titles.map((title) => ({
-          ...title,
-          creatorId,
-        })),
-      },
-      trackers: {
-        create: trackers.map((tracker) => ({
-          ...tracker,
-          creatorId,
-        })),
-      },
-      // -----
-      creatorId,
+      ...infoPayload.data,
+      titles: { create: infoPayload.titles },
+      trackers: { create: infoPayload.trackers },
     },
   })
 
@@ -230,7 +249,63 @@ const importFn = async (
   }
 }
 
+const sync = async (
+  stream: Stream<string | number | boolean | object>,
+  { id }: SyncMediaInput,
+  creatorId: string,
+) => {
+  const s = sendStream(stream)
+  const _media = await MediasService.getById(id)
+  const currentTitles = await MediaTitlesService.getAll(id)
+  const currentTrackers = await MediaTrackersService.getAll(id)
+  const mdTracker = currentTrackers.find((t) => t.tracker === "MANGADEX")
+
+  if (!mdTracker) {
+    throw new MediaNotFoundError()
+  }
+
+  s(1, "Recuperando as informações da obra", "ongoing")
+
+  const manga = await Manga.get(mdTracker.externalId)
+
+  s(1, "Informações recuperadas", "success")
+
+  const infoPayload = getInfoPayload("update", manga, creatorId)
+  const newTitles = MdUtils.getTitles(manga)
+  const deltaTitles = TitleUtils.computeDelta(currentTitles, newTitles)
+  const deltaTitlesWithPriorities = TitleUtils.computePriorities(
+    currentTitles,
+    deltaTitles,
+  )
+
+  await db.media.update({
+    data: infoPayload.data,
+    where: { id },
+  })
+
+  for (const title of deltaTitlesWithPriorities) {
+    await db.mediaTitle.upsert({
+      create: { ...title, mediaId: id, creatorId },
+      update: title,
+      where: { id: "id" in title ? title.id : "" },
+    })
+  }
+
+  for (const tracker of infoPayload.trackers) {
+    const existingTracker = currentTrackers.find(
+      (t) => t.externalId === tracker.externalId,
+    )
+
+    await db.mediaTracker.upsert({
+      create: { ...tracker, mediaId: id },
+      update: tracker,
+      where: { id: existingTracker?.id ?? "" },
+    })
+  }
+}
+
 export const MdService = {
   getById,
   import: importFn,
+  sync,
 }

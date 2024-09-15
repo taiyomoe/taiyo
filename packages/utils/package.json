@@ -20,6 +20,7 @@
     "@taiyomoe/schemas": "workspace:*",
     "deep-object-diff": "^1.1.9",
     "mangadex-full-api": "^5.12.1",
+    "radash": "^12.1.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {
