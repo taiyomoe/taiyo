@@ -17,7 +17,7 @@
     "@elysiajs/cors": "^1.1.1",
     "@elysiajs/stream": "^1.1.0",
     "@elysiajs/swagger": "^1.1.1",
-    "@sinclair/typebox": "^0.33.10",
+    "@sinclair/typebox": "^0.33.11",
     "@t3-oss/env-core": "^0.11.1",
     "@taiyomoe/auth": "workspace:*",
     "@taiyomoe/cache": "workspace:*",
