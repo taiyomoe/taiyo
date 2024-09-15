@@ -1,6 +1,6 @@
 import { Chip } from "@nextui-org/chip"
-import { Tooltip } from "~/components/generics/tooltip"
 import { TAGS_PT } from "@taiyomoe/utils/i18n"
+import { Tooltip } from "~/components/generics/tooltip"
 import { cn } from "~/lib/utils/cn"
 
 type Props = {

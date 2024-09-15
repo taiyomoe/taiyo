@@ -1,5 +1,5 @@
-import { Tooltip as BaseTooltip } from "@nextui-org/tooltip"
 import { extendVariants } from "@nextui-org/react"
+import { Tooltip as BaseTooltip } from "@nextui-org/tooltip"
 
 export const Tooltip = extendVariants(BaseTooltip, {
   variants: {
