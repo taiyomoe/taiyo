@@ -83,11 +83,6 @@ export const getChaptersListSchema = z.object({
   ),
 })
 
-export const bulkMutateChaptersSchema = z.object({
-  type: z.enum(["restore", "delete"]),
-  ids: z.array(z.string().uuid()).min(1),
-})
-
 export type UpdateChapterInput = typeof updateChapterSchema._type
 export type BulkUpdateChaptersVolumesInput =
   typeof bulkUpdateChaptersVolumesSchema._type

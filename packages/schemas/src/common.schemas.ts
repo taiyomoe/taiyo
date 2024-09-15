@@ -76,3 +76,8 @@ export const sortableFieldsSchema = <
     .array()
     .optional()
     .default([])
+
+export const bulkMutateSchema = z.object({
+  type: z.enum(["restore", "delete"]),
+  ids: z.array(z.string().uuid()).min(1),
+})
