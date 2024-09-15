@@ -30,7 +30,7 @@ export const uploadChapterSchema = t.Object({
   language: t.Enum(Languages),
   mediaId: t.String({ format: "uuid" }),
   scanIds: scansSchema,
-  files: t.Files({ maxItems: 100, maxSize: "10m", type: DEFAULT_MIME_TYPES }),
+  files: t.Files({ maxItems: 200, maxSize: "10m", type: DEFAULT_MIME_TYPES }),
 })
 
 export const uploadChaptersSchema = t.Object({
