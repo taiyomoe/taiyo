@@ -59,14 +59,14 @@ export const DataTableQuery = <TQueryAttribute,>({
   }, 300)
 
   return (
-    <div className="flex flex-col items-center gap-4 md:flex-row">
+    <div className="flex flex-col items-center gap-4 lg:flex-row">
       <MultiSelect
-        classNames={{ container: () => "w-full md:w-64" }}
+        classNames={{ container: () => "w-full lg:w-64" }}
         options={options}
         onChange={handleChange}
       />
       <SearchInput
-        className="w-full md:w-[300px]"
+        className="w-full lg:w-[300px]"
         onValueChange={handleValueChange}
       />
     </div>

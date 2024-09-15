@@ -1,5 +1,17 @@
-import { TAG_KEYS } from "@taiyomoe/constants"
+import {
+  DEFAULT_MEDIAS_LIST_PER_PAGE,
+  MEDIAS_LIST_PER_PAGE_CHOICES,
+  MEDIAS_LIST_QUERYABLE_FIELDS,
+  MEDIAS_LIST_SORTABLE_FIELDS,
+  TAG_KEYS,
+} from "@taiyomoe/constants"
 import { z } from "zod"
+import {
+  pageSchema,
+  perPageSchema,
+  queryableFieldsSchema,
+  sortableFieldsSchema,
+} from "./common.schemas"
 import {
   ContentRatingSchema,
   FlagSchema,
@@ -33,5 +45,16 @@ export const updateMediaSchema = z
   })
   .partial()
   .required({ id: true })
+
+export const getMediasListSchema = z.object({
+  query: queryableFieldsSchema(MEDIAS_LIST_QUERYABLE_FIELDS),
+  filter: z.string().optional().default(""),
+  sort: sortableFieldsSchema(MEDIAS_LIST_SORTABLE_FIELDS),
+  page: pageSchema,
+  perPage: perPageSchema(
+    DEFAULT_MEDIAS_LIST_PER_PAGE,
+    MEDIAS_LIST_PER_PAGE_CHOICES,
+  ),
+})
 
 export type UpdateMediaInput = Required<typeof updateMediaSchema._type>

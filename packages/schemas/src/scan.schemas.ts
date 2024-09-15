@@ -45,10 +45,5 @@ export const getScansListSchema = z.object({
   ),
 })
 
-export const bulkMutateScansSchema = z.object({
-  type: z.enum(["restore", "delete"]),
-  ids: z.array(z.string().uuid()).min(1),
-})
-
 export type CreateScanInput = typeof createScanSchema._type
 export type UpdateScanInput = typeof updateScanSchema._type

@@ -27,7 +27,7 @@ const getLatest = async (preferredTitles?: Languages | null) => {
 
   const result: RawLatestRelease[] = await db.mediaChapter.findMany({
     take: 30,
-    where: { deletedAt: null },
+    where: { deletedAt: null, media: { deletedAt: null } },
     orderBy: { createdAt: "desc" },
     select: latestReleaseQuery,
   })
@@ -109,7 +109,8 @@ const getLatestGroupedByUser = async (
         ROW_NUMBER() OVER (PARTITION BY mc."mediaId" ORDER BY mc."createdAt" DESC) AS "rank"
       FROM "public"."MediaChapter" mc
       LEFT JOIN "_MediaChapterToScan" cs ON mc."id" = cs."A"
-      WHERE mc."uploaderId" = ${userId} AND mc."deletedAt" IS NULL
+      LEFT JOIN "Media" m ON mc."mediaId" = m."id"
+      WHERE mc."uploaderId" = ${userId} AND mc."deletedAt" IS NULL AND m."deletedAt" IS NULL
       GROUP BY mc."id"
     ),
     FilteredRankedChapters AS (

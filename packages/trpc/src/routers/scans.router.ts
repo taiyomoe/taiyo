@@ -1,7 +1,7 @@
 import { ScansIndexService } from "@taiyomoe/meilisearch/services"
 import { buildFilter, buildSort } from "@taiyomoe/meilisearch/utils"
 import {
-  bulkMutateScansSchema,
+  bulkMutateSchema,
   createScanSchema,
   getScansListSchema,
   updateScanSchema,
@@ -118,7 +118,7 @@ export const scansRouter = createTRPCRouter({
 
   bulkMutate: protectedProcedure
     .meta({ resource: "scans", action: "update" })
-    .input(bulkMutateScansSchema)
+    .input(bulkMutateSchema)
     .mutation(async ({ ctx, input }) => {
       const scans = await ctx.db.scan.findMany({
         include: { chapters: { select: { id: true } } },

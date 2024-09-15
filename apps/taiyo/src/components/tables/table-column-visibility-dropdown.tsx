@@ -14,7 +14,7 @@ export const TableColumnVisibilityDropdown = () => {
   const hideableColumns = table.getAllColumns().filter((c) => c.getCanHide())
 
   return (
-    <Dropdown>
+    <Dropdown classNames={{ content: "p-0" }}>
       <DropdownTrigger className="flex">
         <Button
           startContent={
@@ -33,6 +33,7 @@ export const TableColumnVisibilityDropdown = () => {
       </DropdownTrigger>
       <DropdownMenu
         selectedKeys={visibleColumns.map((c) => c.id)}
+        className="scrollbar-thin scrollbar-track-content2 scrollbar-thumb-primary max-h-80 overflow-y-auto p-2"
         selectionMode="multiple"
         closeOnSelect={false}
         disallowEmptySelection

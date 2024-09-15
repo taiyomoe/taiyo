@@ -3,7 +3,7 @@ import { db } from "@taiyomoe/db"
 import { ChaptersIndexService } from "@taiyomoe/meilisearch/services"
 import { buildFilter, buildSort } from "@taiyomoe/meilisearch/utils"
 import {
-  bulkMutateChaptersSchema,
+  bulkMutateSchema,
   bulkUpdateChaptersScansSchema,
   bulkUpdateChaptersVolumesSchema,
   getChaptersByUserIdSchema,
@@ -470,8 +470,8 @@ export const chaptersRouter = createTRPCRouter({
     }),
 
   bulkMutate: protectedProcedure
-    .meta({ resource: "scans", action: "update" })
-    .input(bulkMutateChaptersSchema)
+    .meta({ resource: "mediaChapters", action: "update" })
+    .input(bulkMutateSchema)
     .mutation(async ({ ctx, input }) => {
       const chapters = await ctx.db.mediaChapter.findMany({
         where: { id: { in: input.ids } },
