@@ -14,7 +14,7 @@
     "@hookform/resolvers": "^3.9.0",
     "@internationalized/date": "^3.5.5",
     "@meilisearch/instant-meilisearch": "^0.20.0",
-    "@nextui-org/react": "^2.4.6",
+    "@nextui-org/react": "^2.4.8",
     "@react-stately/utils": "^3.10.3",
     "@savvywombat/tailwindcss-grid-areas": "^4.0.0",
     "@t3-oss/env-nextjs": "^0.11.1",
