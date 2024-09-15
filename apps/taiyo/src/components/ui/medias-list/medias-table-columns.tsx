@@ -1,7 +1,7 @@
 import type { MediasListItem } from "@taiyomoe/types"
 import type { ColumnDef } from "@tanstack/react-table"
 import {
-  // actionsColumn,
+  actionsColumn,
   selectableColumn,
 } from "~/components/generics/data-table/data-table-presets"
 import { TableCellBoolean } from "~/components/tables/table-cell-boolean"
@@ -11,7 +11,7 @@ import { TableCellGenres } from "~/components/tables/table-cell-genres"
 import { TableCellId } from "~/components/tables/table-cell-id"
 import { TableCellTags } from "~/components/tables/table-cell-tags"
 import { TableCellUser } from "~/components/tables/table-cell-user"
-// import { ScansTableSingleActions } from "./scans-table-single-actions"
+import { MediasTableSingleActions } from "./medias-table-single-actions"
 
 export const columns: ColumnDef<MediasListItem>[] = [
   selectableColumn(),
@@ -116,5 +116,5 @@ export const columns: ColumnDef<MediasListItem>[] = [
       <TableCellUser user={getValue<MediasListItem["deleter"]>()} />
     ),
   },
-  // actionsColumn(({ row }) => <ScansTableSingleActions scan={row.original} />),
+  actionsColumn(({ row }) => <MediasTableSingleActions media={row.original} />),
 ]
