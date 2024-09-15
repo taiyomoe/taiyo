@@ -2,7 +2,7 @@ import { db } from "@taiyomoe/db"
 import type { CreateMediaInput } from "../schemas"
 import { DuplicatedMediaTrackerError } from "../utils/errors"
 
-const hasTrackers = async (
+const has = async (
   trackers: Pick<CreateMediaInput, "mdId" | "alId" | "malId">,
 ) => {
   const array = [
@@ -27,5 +27,5 @@ const hasTrackers = async (
 }
 
 export const MediaTrackersService = {
-  hasTrackers,
+  has,
 }

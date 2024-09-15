@@ -14,7 +14,7 @@ import { handleStreamErrors } from "../utils/streams"
 const create = new Elysia().use(authMiddleware([["medias", "create"]])).post(
   "/",
   async ({ body, session }) => {
-    await MediaTrackersService.hasTrackers(body)
+    await MediaTrackersService.has(body)
 
     const media = db.$transaction(async (client) => {
       const media = await MediasService.create(client, body, session.user.id)
