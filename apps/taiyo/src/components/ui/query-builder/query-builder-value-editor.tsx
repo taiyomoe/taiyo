@@ -148,7 +148,7 @@ export const QueryBuilderValueEditor = (props: ValueEditorProps) => {
     case fieldData.datatype === "enum":
       return (
         <EnumSelect
-          selectedKeys={[props.value] || null}
+          selectedKeys={props.value ? [props.value] : []}
           items={getEnum(field)}
           onSelectionChange={(v) =>
             handleOnChange(SelectUtils.getSelectedKey(v))
