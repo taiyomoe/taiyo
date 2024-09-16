@@ -1,15 +1,20 @@
 import { Spinner } from "@nextui-org/spinner"
+import type { GenericMessage } from "@taiyomoe/types"
 import { CheckIcon } from "lucide-react"
 import { group, mapValues } from "radash"
 import { useMemo } from "react"
-import { useImportMediaStore } from "~/stores/importMedia.store"
 
 type Props = {
+  messages: GenericMessage[]
+  currentStep: number
   stepIndex: number
 }
 
-export const ImportMediaCoversStepDescription = ({ stepIndex }: Props) => {
-  const { messages } = useImportMediaStore()
+export const EventSteppedDescription = ({
+  messages,
+  currentStep,
+  stepIndex,
+}: Props) => {
   const latestUpdates = useMemo(() => {
     const filtered = messages.filter((m) => m.step === stepIndex)
     const grouped = group(filtered, (m) => m.itemIndex)
@@ -18,9 +23,14 @@ export const ImportMediaCoversStepDescription = ({ stepIndex }: Props) => {
       (m) =>
         m!.sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime()).pop()!,
     )
+    const updates = Object.values(mapped)
 
-    return Object.values(mapped)
-  }, [stepIndex, messages])
+    if (currentStep > stepIndex + 1) {
+      updates.splice(updates.length - 1, 1)
+    }
+
+    return updates
+  }, [currentStep, stepIndex, messages])
 
   if (!messages.length) return null
 

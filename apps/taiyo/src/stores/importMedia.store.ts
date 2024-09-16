@@ -1,17 +1,17 @@
-import type { ImportMediaEventMessage } from "@taiyomoe/types"
+import type { GenericMessage } from "@taiyomoe/types"
 import { create } from "zustand"
 
 type s = {
   currentStep: number
   downloadChapters: boolean
-  messages: ImportMediaEventMessage[]
+  messages: GenericMessage[]
   error: string | null
 }
 
 type Actions = {
   incrementStep: () => void
   set: (state: Partial<s>) => void
-  addMessage: (message: ImportMediaEventMessage) => void
+  addMessage: (message: GenericMessage) => void
 }
 
 export const useImportMediaStore = create<s & Actions>((set) => ({

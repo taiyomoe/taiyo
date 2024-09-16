@@ -1,4 +1,4 @@
-export type ImportMediaEventMessage = {
+export type GenericMessage = {
   step: number
   itemIndex: number
   content: string
