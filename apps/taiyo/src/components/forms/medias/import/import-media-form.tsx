@@ -18,7 +18,7 @@ export const ImportMediaForm = () => {
     defaultValues: { mdId: "", downloadChapters: true },
     mode: "onTouched",
   })
-  const { set, addMessage } = useImportMediaStore()
+  const { incrementStep, set, addMessage } = useImportMediaStore()
 
   const handleSubmit: SubmitHandler<ImportMediaInput> = async (values) => {
     await ioApi.medias.import(values, {
@@ -35,6 +35,8 @@ export const ImportMediaForm = () => {
       },
       onClose: () => {
         toast.success("Obra importada com sucesso.")
+
+        incrementStep()
       },
     })
   }
