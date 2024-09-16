@@ -5,7 +5,6 @@ import { api } from "~/trpc/server"
 import { MediasService } from "@taiyomoe/services"
 import { MediaUtils } from "@taiyomoe/utils"
 import type { Metadata } from "next"
-import { env } from "~/env"
 import { siteConfig } from "~/lib/config"
 import { MediaLayout } from "./_components/layout/media-layout"
 import { MediaLayoutActions } from "./_components/layout/media-layout-actions"
@@ -30,7 +29,7 @@ export const generateMetadata = async ({
     openGraph: {
       siteName: siteConfig.name,
       images: {
-        url: `${env.NEXTAUTH_URL}/api/og?mediaId=${params.mediaId}`,
+        url: `/api/og?mediaId=${params.mediaId}`,
         width: 1200,
         height: 630,
         alt: MediaUtils.getDisplayTitle(media.titles),
