@@ -1,6 +1,9 @@
 import { cacheClient } from "@taiyomoe/cache"
 import { DEFAULT_GROUPED_CHAPTERS_LIMIT } from "@taiyomoe/constants"
-import { type Languages, db } from "@taiyomoe/db"
+import { type Languages, type MediaChapter, db } from "@taiyomoe/db"
+import { logsClient } from "@taiyomoe/logs"
+import { meilisearchClient } from "@taiyomoe/meilisearch"
+import { ChaptersIndexService } from "@taiyomoe/meilisearch/services"
 import type {
   GetLatestChaptersGroupedByUserInput,
   GetLatestChaptersGroupedInput,
@@ -177,10 +180,43 @@ const getDistinctCount = async (mediaId: string) => {
   return result[0].count
 }
 
+const postRestore = async (chapters: MediaChapter[], userId: string) => {
+  const ids = chapters.map((c) => c.id)
+
+  for (const chapter of chapters) {
+    await logsClient.chapters.insert({
+      type: "restored",
+      old: chapter,
+      _new: { ...chapter, deletedAt: null, deleterId: null },
+      userId,
+    })
+  }
+
+  await ChaptersIndexService.sync(db, ids)
+  await cacheClient.chapters.invalidateAll()
+}
+
+const postDelete = async (chapters: MediaChapter[], userId: string) => {
+  const ids = chapters.map((c) => c.id)
+
+  for (const chapter of chapters) {
+    await logsClient.chapters.insert({
+      type: "deleted",
+      old: chapter,
+      userId,
+    })
+  }
+
+  await meilisearchClient.chapters.deleteDocuments(ids)
+  await cacheClient.chapters.invalidateAll()
+}
+
 export const ChaptersService = {
   getLatest,
   getLatestGrouped,
   getLatestGroupedByUser,
   getUploaderStats,
   getDistinctCount,
+  postRestore,
+  postDelete,
 }

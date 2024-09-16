@@ -502,28 +502,25 @@ export const chaptersRouter = createTRPCRouter({
         }
       }
 
+      const newDeletedAt = input.type === "delete" ? new Date() : null
+      const newDeleterId = input.type === "delete" ? ctx.session.user.id : null
+      const newChapters = chapters.map((c) => ({
+        ...c,
+        deletedAt: newDeletedAt,
+        deleterId: newDeleterId,
+      }))
+
       await ctx.db.mediaChapter.updateMany({
-        data: {
-          deletedAt: input.type === "delete" ? new Date() : null,
-          deleterId: input.type === "delete" ? ctx.session.user.id : null,
-        },
+        data: { deletedAt: newDeletedAt, deleterId: newDeleterId },
         where: { id: { in: input.ids } },
       })
 
-      const newChapters = chapters.map((c) => ({
-        ...c,
-        deletedAt: input.type === "delete" ? new Date() : null,
-        deleterId: input.type === "delete" ? ctx.session.user.id : null,
-      }))
+      if (input.type === "restore") {
+        await ChaptersService.postRestore(newChapters, ctx.session.user.id)
 
-      for (const chapter of newChapters) {
-        await ctx.logs.chapters.insert({
-          type: "deleted",
-          old: chapter,
-          userId: ctx.session.user.id,
-        })
+        return
       }
 
-      await ChaptersIndexService.sync(ctx.db, input.ids)
+      await ChaptersService.postDelete(newChapters, ctx.session.user.id)
     }),
 })
