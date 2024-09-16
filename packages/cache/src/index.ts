@@ -22,6 +22,7 @@ export const cacheClient = {
       get: () => parseCache<LatestMedia[]>(client.get("medias:latest")),
       set: (input: LatestMedia[]) =>
         client.setex("medias:latest", HOUR, SuperJSON.stringify(input)),
+      invalidate: () => client.del("medias:latest"),
     },
     featured: (lang: Languages | "main") => ({
       get: () =>
@@ -32,7 +33,18 @@ export const cacheClient = {
           DAY,
           SuperJSON.stringify(input),
         ),
+      invalidate: () => client.del(`medias:featured:${lang}`),
     }),
+    invalidateAll: async () => {
+      const mediaKeys = await client.keys("medias:*")
+
+      for (const key of mediaKeys) {
+        await client.del(key)
+      }
+
+      await client.del("chapters:latest")
+      await client.del("chapters:latest:grouped")
+    },
   },
 
   chapters: {
@@ -52,6 +64,10 @@ export const cacheClient = {
           DAY,
           SuperJSON.stringify(input),
         ),
+    },
+    invalidateAll: async () => {
+      await client.del("chapters:latest")
+      await client.del("chapters:latest:grouped")
     },
   },
 }

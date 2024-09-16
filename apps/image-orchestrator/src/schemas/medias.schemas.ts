@@ -51,5 +51,12 @@ export const importMediaSchema = t.Object({
   downloadChapters: t.BooleanString({ default: false }),
 })
 
+export const syncMediaSchema = t.Object({
+  mediaId: t.String({ format: "uuid" }),
+  downloadCovers: t.BooleanString({ default: false }),
+  downloadChapters: t.BooleanString({ default: false }),
+})
+
 export type CreateMediaInput = StaticDecode<typeof createMediaSchema>
 export type ImportMediaInput = StaticDecode<typeof importMediaSchema>
+export type SyncMediaInput = StaticDecode<typeof syncMediaSchema>

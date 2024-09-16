@@ -1,8 +1,12 @@
 import { createClient } from "@clickhouse/client-web"
 import { env } from "../env"
 import { chaptersService } from "./services/chapters.logsService"
+import { coversService } from "./services/covers.logsService"
+import { mediasService } from "./services/medias.logsService"
 import { migrationsService } from "./services/migrations.logsService"
 import { scansService } from "./services/scans.logsService"
+import { titlesService } from "./services/titles.logsService"
+import { trackersService } from "./services/trackers.logsService"
 import { usersActivityService } from "./services/usersActivity.logsService"
 import { usersAuthService } from "./services/usersAuth.logsService"
 import { usersSettingsService } from "./services/usersSettings.logsService"
@@ -17,13 +21,17 @@ export const rawLogsClient = createClient({
 
 export const logsClient = {
   migrations: migrationsService,
+  medias: mediasService,
+  covers: coversService,
+  titles: titlesService,
+  trackers: trackersService,
   chapters: chaptersService,
+  scans: scansService,
   users: {
     auth: usersAuthService,
     activity: usersActivityService,
     settings: usersSettingsService,
   },
-  scans: scansService,
 }
 
 export * from "./types"

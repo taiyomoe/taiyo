@@ -1,8 +1,17 @@
 import { Stream } from "@elysiajs/stream"
 import { db } from "@taiyomoe/db"
+import {
+  MediasService as BaseMediasService,
+  TitlesService,
+  TrackersService,
+} from "@taiyomoe/services"
 import { Elysia } from "elysia"
 import { authMiddleware } from "../middlewares"
-import { createMediaSchema, importMediaSchema } from "../schemas"
+import {
+  createMediaSchema,
+  importMediaSchema,
+  syncMediaSchema,
+} from "../schemas"
 import {
   MdService,
   MediaCoversService,
@@ -14,25 +23,36 @@ import { handleStreamErrors } from "../utils/streams"
 const create = new Elysia().use(authMiddleware([["medias", "create"]])).post(
   "/",
   async ({ body, session }) => {
-    await MediaTrackersService.hasTrackers(body)
+    await MediaTrackersService.has(body)
 
-    const media = db.$transaction(async (client) => {
-      const media = await MediasService.create(client, body, session.user.id)
-      const [uploadedFile] = await MediaCoversService.upload(media.id, [
+    const result = await db.$transaction(async (client) => {
+      const result = await MediasService.create(client, body, session.user.id)
+      const [uploadedFile] = await MediaCoversService.upload(result.id, [
         body.cover,
       ])
 
       await MediaCoversService.insertLimited(
         uploadedFile!,
-        media.id,
+        result.id,
         session.user.id,
         client,
       )
 
-      return media
+      return result
     })
 
-    return media
+    const titles = await db.mediaTitle.findMany({
+      where: { mediaId: result.id },
+    })
+    const trackers = await db.mediaTracker.findMany({
+      where: { mediaId: result.id },
+    })
+
+    await BaseMediasService.postCreate("created", result)
+    await TitlesService.postCreate("created", titles)
+    await TrackersService.postCreate("created", trackers)
+
+    return result
   },
   { body: createMediaSchema },
 )
@@ -52,6 +72,20 @@ const importRoute = new Elysia()
     { query: importMediaSchema },
   )
 
+const sync = new Elysia().use(authMiddleware([["medias", "create"]])).get(
+  "/sync",
+  ({ query, session }) =>
+    new Stream(async (stream) => {
+      await MdService.sync(stream, query, session.user.id).catch(
+        handleStreamErrors(stream),
+      )
+
+      stream.close()
+    }),
+  { query: syncMediaSchema },
+)
+
 export const mediasController = new Elysia({ prefix: "/medias" })
   .use(create)
   .use(importRoute)
+  .use(sync)

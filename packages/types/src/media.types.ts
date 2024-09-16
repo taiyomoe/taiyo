@@ -91,3 +91,14 @@ const mediaWithRelations = Prisma.validator<Prisma.MediaDefaultArgs>()({
 export type MediaWithRelations = Prisma.MediaGetPayload<
   typeof mediaWithRelations
 >
+
+export type MediasListItem = Omit<Media, "creatorId" | "deleterId"> & {
+  creator: Pick<User, "id" | "name" | "image">
+  deleter: Pick<User, "id" | "name" | "image"> | null
+  mainTitle: string
+  mainCoverId: string
+  titlesCount: number
+  chaptersCount: number
+  coversCount: number
+  bannersCount: number
+}

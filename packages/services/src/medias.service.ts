@@ -1,7 +1,19 @@
 import { cacheClient } from "@taiyomoe/cache"
-import { type Languages, type MediaStatus, db } from "@taiyomoe/db"
+import {
+  type Languages,
+  type Media,
+  type MediaChapter,
+  type MediaStatus,
+  db,
+} from "@taiyomoe/db"
+import { logsClient } from "@taiyomoe/logs"
+import { meilisearchClient } from "@taiyomoe/meilisearch"
+import {
+  ChaptersIndexService,
+  MediasIndexService,
+} from "@taiyomoe/meilisearch/services"
 import type { FeaturedMedia, LatestMedia } from "@taiyomoe/types"
-import { MediaUtils } from "@taiyomoe/utils"
+import { MediaUtils, ObjectUtils } from "@taiyomoe/utils"
 import { TRPCError } from "@trpc/server"
 
 /**
@@ -172,9 +184,97 @@ const getFull = async (mediaId: string) => {
   return result
 }
 
+const postCreate = async (
+  type: "created" | "imported" | "synced",
+  media: Media,
+) => {
+  await logsClient.medias.insert({
+    type,
+    _new: media,
+    userId: media.creatorId,
+  })
+
+  await MediasIndexService.sync(db, [media.id])
+  await cacheClient.medias.latest.invalidate()
+}
+
+const postUpdate = async (
+  type: "updated" | "synced",
+  oldMedia: Media,
+  newMedia: Media,
+  userId: string,
+) => {
+  if (ObjectUtils.areEqualTimed(oldMedia, newMedia)) {
+    return
+  }
+
+  await logsClient.medias.insert({
+    type,
+    old: oldMedia,
+    _new: newMedia,
+    userId,
+  })
+
+  await MediasIndexService.sync(db, [newMedia.id])
+}
+
+const postRestore = async (
+  medias: Media[],
+  groupedChapters: Record<string, MediaChapter[]>,
+  userId: string,
+) => {
+  const ids = medias.map((m) => m.id)
+
+  for (const media of medias) {
+    await logsClient.medias.insert({
+      type: "restored",
+      old: media,
+      _new: { ...media, deletedAt: null, deleterId: null },
+      userId,
+    })
+  }
+
+  for (const chapters of Object.values(groupedChapters)) {
+    const chapterIds = chapters.map((c) => c.id)
+
+    await ChaptersIndexService.sync(db, chapterIds)
+  }
+
+  await MediasIndexService.sync(db, ids)
+  await cacheClient.medias.invalidateAll()
+}
+
+const postDelete = async (
+  medias: Media[],
+  groupedChapters: Record<string, MediaChapter[]>,
+) => {
+  const ids = medias.map((m) => m.id)
+
+  for (const media of medias) {
+    await logsClient.medias.insert({
+      type: "deleted",
+      old: media,
+      userId: media.deleterId!,
+    })
+  }
+
+  for (const chapters of Object.values(groupedChapters)) {
+    const chapterIds = chapters.map((c) => c.id)
+
+    await meilisearchClient.chapters.deleteDocuments(chapterIds)
+  }
+
+  await MediasIndexService.sync(db, ids)
+  await cacheClient.medias.invalidateAll()
+}
+
 export const MediasService = {
   getStatus,
   getLatest,
   getFeatured,
   getFull,
+  postCreate,
+  postUpdate,
+  postRestore,
+  postDelete,
 }

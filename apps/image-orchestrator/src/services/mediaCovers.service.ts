@@ -1,8 +1,17 @@
 import { type Prisma, db } from "@taiyomoe/db"
+import { CoversService } from "@taiyomoe/services"
 import { omit } from "radash"
 import type { UploadCoverInput } from "../schemas"
 import { FilesService } from "../services/files.service"
 import type { UploadedFile } from "../types"
+
+const getAll = async (mediaId: string) => {
+  const result = await db.mediaCover.findMany({
+    where: { mediaId, deletedAt: null },
+  })
+
+  return result
+}
 
 const insert = async (
   input: UploadCoverInput,
@@ -16,6 +25,8 @@ const insert = async (
       uploaderId,
     },
   })
+
+  await CoversService.postUpload("created", [result])
 
   return result
 }
@@ -35,6 +46,8 @@ const insertLimited = async (
       uploaderId,
     },
   })
+
+  await CoversService.postUpload("created", [result])
 
   return result
 }
@@ -74,6 +87,7 @@ const uploadFromUrl = async (
 }
 
 export const MediaCoversService = {
+  getAll,
   insert,
   insertLimited,
   upload,

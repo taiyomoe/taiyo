@@ -1,6 +1,7 @@
 import type { MediaLimited } from "@taiyomoe/types"
 import { SignedIn } from "~/components/utils/signed-in/server"
 import { MediaLayoutActionsLibraryButton } from "../buttons/media-layout-actions-library-button"
+import { MediaLayoutActionsSyncButton } from "../buttons/media-layout-actions-sync-button"
 import { MediaLayoutActionsUpdateButton } from "../buttons/media-layout-actions-update-button"
 import { MediaLayoutActionsUploadButton } from "../buttons/media-layout-actions-upload-button"
 
@@ -17,6 +18,9 @@ export const MediaLayoutActions = ({ media }: Props) => (
       <MediaLayoutActionsLibraryButton media={media} />
       <SignedIn requiredPermissions={["medias:update:any"]}>
         <MediaLayoutActionsUpdateButton media={media} />
+      </SignedIn>
+      <SignedIn requiredPermissions={["mediaChapters:create"]}>
+        <MediaLayoutActionsSyncButton media={media} />
       </SignedIn>
       <SignedIn requiredPermissions={["mediaChapters:create"]}>
         <MediaLayoutActionsUploadButton media={media} />

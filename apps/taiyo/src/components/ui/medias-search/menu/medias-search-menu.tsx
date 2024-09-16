@@ -1,6 +1,6 @@
 import { Modal, ModalContent } from "@nextui-org/modal"
 import { Command } from "cmdk"
-import { InstantSearch } from "react-instantsearch"
+import { Configure, InstantSearch } from "react-instantsearch"
 import { useToggle } from "usehooks-ts"
 import { MediasSearchResults } from "~/components/ui/medias-search/menu/medias-search-menu-results"
 import { useDevice } from "~/hooks/useDevice"
@@ -31,6 +31,7 @@ export const MediasSearchMenu = () => {
       >
         <ModalContent>
           <InstantSearch searchClient={meiliClient} indexName="medias">
+            <Configure filters="deletedAt IS NULL" />
             <Command className="max-h-full" label="Quick search command">
               <MediasSearchInput toggleModal={toggle} />
               <div className="flex w-full flex-col gap-4 p-3 sm:flex-row">

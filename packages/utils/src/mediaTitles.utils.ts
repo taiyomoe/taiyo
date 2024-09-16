@@ -1,5 +1,6 @@
 import type { MediaTitle } from "@prisma/client"
-import type { MediaLimited } from "@taiyomoe/types"
+import type { MediaLimited, NewTitle } from "@taiyomoe/types"
+import { group, listify, mapValues } from "radash"
 
 const sort = <T extends MediaLimited["titles"] | MediaTitle[]>(titles: T) => {
   const inputOrder = [
@@ -44,6 +45,78 @@ const sort = <T extends MediaLimited["titles"] | MediaTitle[]>(titles: T) => {
   return titles.sort(customSort) as T
 }
 
+const computeDelta = (oldTitles: MediaTitle[], newTitles: NewTitle[]) => {
+  return newTitles
+    .map((t) =>
+      oldTitles.find(
+        (tt) =>
+          tt.title.toLowerCase() === t.title.toLowerCase() &&
+          tt.language === t.language,
+      )
+        ? null
+        : t,
+    )
+    .filter(Boolean)
+}
+
+const computePriorities = (oldTitles: MediaTitle[], newTitles: NewTitle[]) => {
+  const groupedByLanguage: Record<string, (MediaTitle | NewTitle)[]> = group(
+    oldTitles,
+    (t) => t.language,
+  )
+
+  for (const title of newTitles) {
+    if (!groupedByLanguage[title.language]) {
+      groupedByLanguage[title.language] = []
+    }
+
+    groupedByLanguage[title.language]!.unshift(title)
+  }
+
+  /**
+   * Sort the titles by priority.
+   *
+   * Acronyms first.
+   * Then, new titles sorted by priority.
+   * Then, old titles sorted by priority.
+   * Then, main titles.
+   */
+  const sortedTitles = mapValues(groupedByLanguage, (titles) =>
+    [...titles].sort((a, b) => {
+      if (a.isMainTitle && !b.isMainTitle) {
+        return 1
+      }
+
+      if (!a.isMainTitle && b.isMainTitle) {
+        return -1
+      }
+
+      if ("isAcronym" in a && "isAcronym" in b) {
+        return a.priority - b.priority
+      }
+
+      if ("isAcronym" in a) {
+        return a.isAcronym ? -1 : 0
+      }
+
+      if ("isAcronym" in b) {
+        return b.isAcronym ? -1 : 0
+      }
+
+      return a.priority - b.priority
+    }),
+  )
+
+  // Recompute priorities after sorting
+  const computedTitles = mapValues(sortedTitles, (titles) =>
+    titles.map((t, i) => ({ ...t, priority: i + 1 })),
+  )
+
+  return listify(computedTitles, (_, value) => value).flat()
+}
+
 export const TitleUtils = {
   sort,
+  computeDelta,
+  computePriorities,
 }

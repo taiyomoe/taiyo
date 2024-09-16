@@ -1,25 +1,290 @@
 import type Stream from "@elysiajs/stream"
-import { db } from "@taiyomoe/db"
 import {
-  MediasIndexService,
-  ScansIndexService,
-} from "@taiyomoe/meilisearch/services"
-import { MdUtils } from "@taiyomoe/utils"
-import { Group, Manga } from "mangadex-full-api"
-import { parallel } from "radash"
-import type { ImportMediaInput } from "../schemas"
+  type Media,
+  type MediaChapter,
+  type MediaCover,
+  type MediaTitle,
+  type MediaTracker,
+  type Prisma,
+  db,
+} from "@taiyomoe/db"
+import { ScansIndexService } from "@taiyomoe/meilisearch/services"
+import {
+  MediasService as BaseMediasService,
+  CoversService,
+  TitlesService,
+  TrackersService,
+} from "@taiyomoe/services"
+import { MdUtils, ObjectUtils, TitleUtils } from "@taiyomoe/utils"
+import { type Chapter, type Cover, Group, Manga } from "mangadex-full-api"
+import { parallel, pick } from "radash"
+import type { ImportMediaInput, SyncMediaInput } from "../schemas"
 import {
   DuplicatedMediaTrackerError,
+  MediaNotFoundError,
   MediaTrackerNotFoundError,
 } from "../utils/errors"
 import { sendStream } from "../utils/streams"
-import { MediaChaptersService } from "./mediaChapters.service"
-import { MediaCoversService } from "./mediaCovers.service"
-import { MediasService } from "./medias.service"
+import {
+  MediaChaptersService,
+  MediaCoversService,
+  MediaTitlesService,
+  MediaTrackersService,
+  MediasService,
+  ScansService,
+} from "./"
+
+const getInfoPayload = <TAction extends "create" | "update">(
+  action: TAction,
+  manga: Manga,
+  creatorId: string,
+) => {
+  const { genres, tags, isOneShot } = MdUtils.getGenresAndTags(manga)
+  const titles = MdUtils.getTitles(manga)
+  const trackers = MdUtils.getTrackers(manga)
+  const staticData = {
+    synopsis: "Under construction...",
+    status: "RELEASING",
+    source: "LIGHT_NOVEL",
+  }
+
+  const data = {
+    startDate: manga.year ? new Date(Date.parse(manga.year.toString())) : null,
+    // -----
+    contentRating: MdUtils.getContentRating(manga),
+    oneShot: isOneShot,
+    type: MdUtils.getType(manga),
+    demography: MdUtils.getDemography(manga),
+    countryOfOrigin: MdUtils.getCountryOfOrigin(manga),
+    genres,
+    tags: tags.map((key) => ({ key, isSpoiler: false })),
+    creatorId,
+    ...(action === "create" ? staticData : {}),
+  } as unknown as TAction extends "create"
+    ? Prisma.MediaCreateInput
+    : Prisma.MediaUpdateInput
+
+  return {
+    data,
+    titles: titles.map((title) => ({
+      ...title,
+      creatorId,
+    })),
+    trackers: trackers.map((tracker) => ({
+      ...tracker,
+      creatorId,
+    })),
+  }
+}
+
+const uploadCovers = async (
+  type: "imported" | "synced",
+  s: ReturnType<typeof sendStream>,
+  step: number,
+  mediaId: string,
+  mainCoverId: string,
+  covers: Cover[],
+  uploaderId: string,
+) => {
+  const uploadedCovers: MediaCover[] = []
+
+  for (const [i, cover] of covers.entries()) {
+    const coverLanguage = MdUtils.getLanguage(cover.locale)
+
+    if (!coverLanguage) {
+      continue
+    }
+
+    const _uploaded = await MediaCoversService.uploadFromUrl(
+      mediaId,
+      cover.imageSource,
+      {
+        onDownloadStart: () =>
+          s(
+            step,
+            `Baixando a cover ${i + 1}/${covers.length}...`,
+            "ongoing",
+            i,
+          ),
+        onUploadStart: () =>
+          s(step, `Upando a cover ${i + 1}/${covers.length}...`, "ongoing", i),
+        onUploadEnd: () =>
+          s(step, `Cover ${i + 1}/${covers.length} upada`, "success", i),
+      },
+    )
+
+    const result = await db.mediaCover.create({
+      data: {
+        id: _uploaded.id,
+        volume: Number.isNaN(cover.volume)
+          ? null
+          : Number.parseFloat(cover.volume),
+        isMainCover: mainCoverId === cover.id,
+        language: coverLanguage,
+        mediaId,
+        uploaderId,
+      },
+    })
+
+    uploadedCovers.push(result)
+  }
+
+  await CoversService.postUpload(type, uploadedCovers)
+
+  s(step, "Covers upadas", "success")
+}
+
+const createScans = async (
+  s: ReturnType<typeof sendStream>,
+  step: number,
+  chapters: Chapter[],
+  creatorId: string,
+) => {
+  let currentStep = step
+
+  s(currentStep, "Recuperando as scans de todos os capítulos...", "ongoing")
+
+  const groupsIds = [
+    ...new Set(
+      chapters.flatMap((chapter) => chapter.groups.flatMap((g) => g.id)),
+    ),
+  ]
+  const groups = await Group.getMultiple(...groupsIds)
+  const groupToScan = new Map<string, string>()
+
+  s(currentStep, "Scans recuperadas", "success")
+
+  currentStep++
+
+  for (const [i, group] of groups.entries()) {
+    const result = await ScansService.getByName(group.name).catch(() => null)
+
+    if (result) {
+      continue
+    }
+
+    s(currentStep, `Criando a scan '${group.name}'...`, "ongoing", i)
+
+    const scan = await ScansService.insert(group, creatorId)
+
+    groupToScan.set(group.id, scan.id)
+
+    s(currentStep, `Scan '${group.name}' criada`, "success", i)
+  }
+
+  if (groupToScan.size) {
+    s(currentStep, "Scans criadas", "success")
+
+    currentStep++
+
+    s(currentStep, "Reindexando a busca das scans...", "ongoing")
+
+    await ScansIndexService.sync(db, Array.from(groupToScan.values()))
+
+    s(currentStep, "Busca das scans reindexada", "success")
+  }
+
+  for (const group of groups) {
+    if (groupToScan.has(group.id)) continue
+
+    const scan = await ScansService.getByName(group.name)
+
+    groupToScan.set(group.id, scan.id)
+  }
+
+  return groupToScan
+}
+
+const uploadChapters = async (
+  type: "imported" | "synced",
+  s: ReturnType<typeof sendStream>,
+  step: number,
+  media: Media,
+  manga: Manga,
+  existingChapters: MediaChapter[],
+  uploaderId: string,
+) => {
+  let currentStep = step
+
+  s(step, "Recuperando os capítulos...", "ongoing")
+
+  const chapters = await manga.getFeed({
+    // biome-ignore lint/style/useNumberNamespace: Number.Infinity is not allowed
+    limit: Infinity,
+    translatedLanguage: ["pt-br"],
+    order: { chapter: "asc" },
+  })
+
+  s(step, "Capítulos recuperados", "success")
+
+  currentStep++
+
+  const groupToScan = await createScans(s, currentStep, chapters, uploaderId)
+
+  currentStep += 3
+
+  const newChapters = chapters
+    .map((c) =>
+      existingChapters.find((cc) => cc.number === Number(c.chapter)) ? null : c,
+    )
+    .filter(Boolean)
+
+  for (const [i, chapter] of newChapters.entries()) {
+    s(currentStep, `Baixando o capítulo ${chapter.chapter}...`, "ongoing", i)
+
+    const pagesUrls = await chapter.getReadablePages()
+    const pages = await parallel(10, pagesUrls, (url) =>
+      fetch(url).then((r) => r.blob()),
+    )
+
+    s(currentStep, `Upando o capítulo ${chapter.chapter}...`, "ongoing", i)
+
+    const uploaded = await MediaChaptersService.upload(media.id, pages)
+
+    await MediaChaptersService.insert(
+      type,
+      {
+        title: chapter.title,
+        number: Number(chapter.chapter),
+        volume: Number.isNaN(chapter.volume)
+          ? undefined
+          : Number.parseFloat(chapter.volume),
+        contentRating: media.contentRating,
+        language: "pt_br",
+        flag: "OK",
+        files: [],
+        scanIds: chapter.groups.map((g) => groupToScan.get(g.id)!),
+        mediaId: media.id,
+      },
+      uploaded,
+      uploaderId,
+    )
+
+    s(currentStep, `Capítulo ${chapter.chapter} upado`, "success", i)
+  }
+
+  if (newChapters.length) {
+    s(currentStep, "Capítulos upados", "success")
+  }
+}
+
+const postMediaUpdate = async (
+  s: ReturnType<typeof sendStream>,
+  step: number,
+  oldMedia: Media,
+  newMedia: Media,
+  userId: string,
+) => {
+  s(step, "Atualizando a obra...", "ongoing")
+
+  await BaseMediasService.postUpdate("synced", oldMedia, newMedia, userId)
+
+  s(step, "Obra atualizada", "success")
+}
 
 const getById = async (id: string) => {
   const result = await db.mediaTracker.findFirst({
-    where: { externalId: id, tracker: "MANGADEX" },
+    where: { externalId: id, tracker: "MANGADEX", media: { deletedAt: null } },
   })
 
   if (!result) {
@@ -50,84 +315,38 @@ const importFn = async (
   s(1, "Informações recuperadas", "success")
   s(2, "Criando a obra...", "ongoing")
 
-  const { genres, tags, isOneShot } = MdUtils.getGenresAndTags(manga)
-  const titles = MdUtils.getTitles(manga)
-  const trackers = MdUtils.getTrackers(manga)
-
+  const infoPayload = getInfoPayload("create", manga, creatorId)
   const media = await db.media.create({
     data: {
-      startDate: manga.year
-        ? new Date(Date.parse(manga.year.toString()))
-        : null,
-      // -----
-      synopsis: "Under construction...",
-      contentRating: MdUtils.getContentRating(manga),
-      oneShot: isOneShot,
-      type: MdUtils.getType(manga),
-      status: "RELEASING",
-      source: "LIGHT_NOVEL",
-      demography: MdUtils.getDemography(manga),
-      countryOfOrigin: MdUtils.getCountryOfOrigin(manga),
-      genres,
-      tags: tags.map((key) => ({ key, isSpoiler: false })),
-      // -----
-      titles: {
-        create: titles.map((title) => ({
-          ...title,
-          creatorId,
-        })),
-      },
-      trackers: {
-        create: trackers.map((tracker) => ({
-          ...tracker,
-          creatorId,
-        })),
-      },
-      // -----
-      creatorId,
+      ...infoPayload.data,
+      titles: { create: infoPayload.titles },
+      trackers: { create: infoPayload.trackers },
     },
+  })
+  const titles = await db.mediaTitle.findMany({
+    where: { mediaId: media.id },
+  })
+  const trackers = await db.mediaTracker.findMany({
+    where: { mediaId: media.id },
   })
 
   s(2, "Obra criada", "success")
 
-  for (const [i, cover] of covers.entries()) {
-    const coverLanguage = MdUtils.getLanguage(cover.locale)
+  await uploadCovers(
+    "imported",
+    s,
+    3,
+    media.id,
+    mainCover.id,
+    covers,
+    creatorId,
+  )
 
-    if (!coverLanguage) {
-      continue
-    }
-
-    const _uploaded = await MediaCoversService.uploadFromUrl(
-      media.id,
-      cover.imageSource,
-      {
-        onDownloadStart: () =>
-          s(3, `Baixando a cover ${i + 1}/${covers.length}...`, "ongoing", i),
-        onUploadStart: () =>
-          s(3, `Upando a cover ${i + 1}/${covers.length}...`, "ongoing", i),
-        onUploadEnd: () =>
-          s(3, `Cover ${i + 1}/${covers.length} upada`, "success", i),
-      },
-    )
-
-    await db.mediaCover.create({
-      data: {
-        id: _uploaded.id,
-        volume: Number.isNaN(cover.volume)
-          ? null
-          : Number.parseFloat(cover.volume),
-        isMainCover: mainCover.id === cover.id,
-        language: coverLanguage,
-        mediaId: media.id,
-        uploaderId: creatorId,
-      },
-    })
-  }
-
-  s(3, "Covers upadas", "success")
   s(4, "Reindexando a busca...", "ongoing")
 
-  await MediasIndexService.sync(db, [media.id])
+  await BaseMediasService.postCreate("imported", media)
+  await TitlesService.postCreate("imported", titles)
+  await TrackersService.postCreate("imported", trackers)
 
   s(4, "Busca reindexada", "success")
 
@@ -135,102 +354,196 @@ const importFn = async (
     return
   }
 
-  s(5, "Recuperando os capítulos...", "ongoing")
+  await uploadChapters("imported", s, 5, media, manga, [], creatorId)
+}
 
-  const chapters = await manga.getFeed({
-    // biome-ignore lint/style/useNumberNamespace: Number.Infinity is not allowed
-    limit: Infinity,
-    translatedLanguage: ["pt-br"],
-    order: { chapter: "asc" },
+const sync = async (
+  stream: Stream<string | number | boolean | object>,
+  { mediaId, downloadCovers, downloadChapters }: SyncMediaInput,
+  creatorId: string,
+) => {
+  const s = sendStream(stream)
+  const currentTrackers = await MediaTrackersService.getAll(mediaId)
+  const mdTracker = currentTrackers.find((t) => t.tracker === "MANGADEX")
+
+  if (!mdTracker) {
+    throw new MediaNotFoundError()
+  }
+
+  s(1, "Recuperando as informações da obra", "ongoing")
+
+  const media = await MediasService.getById(mediaId)
+  const currentChapters = await MediaChaptersService.getAll(mediaId)
+  const currentTitles = await MediaTitlesService.getAll(mediaId)
+  const manga = await Manga.get(mdTracker.externalId)
+  const mainCover = await manga.mainCover.resolve()
+
+  s(1, "Informações recuperadas", "success")
+  s(2, "Atualizando a obra...", "ongoing")
+
+  const infoPayload = getInfoPayload("update", manga, creatorId)
+  const newTitles = MdUtils.getTitles(manga)
+  const deltaTitles = TitleUtils.computeDelta(currentTitles, newTitles)
+  const deltaTitlesWithPriorities = TitleUtils.computePriorities(
+    currentTitles,
+    deltaTitles,
+  )
+
+  const result = await db.media.update({
+    data: infoPayload.data,
+    where: { id: mediaId },
   })
 
-  s(5, "Capítulos recuperados", "success")
-  s(6, "Recuperando as scans de todos os capítulos...", "ongoing")
+  await db.$transaction(async (tx) => {
+    for (const [i, title] of deltaTitlesWithPriorities.entries()) {
+      if (!("id" in title)) continue
 
-  const groupsIds = [
-    ...new Set(
-      chapters.flatMap((chapter) => chapter.groups.flatMap((g) => g.id)),
-    ),
-  ]
-  const groups = await Group.getMultiple(...groupsIds)
-  const groupToScan = new Map<string, string>()
+      await tx.mediaTitle.update({
+        data: { priority: 1000 + i },
+        where: { id: title.id },
+      })
+    }
 
-  s(6, "Scans recuperadas", "success")
+    const createdTitles: MediaTitle[] = []
 
-  for (const [i, group] of groups.entries()) {
-    const result = await db.scan.findFirst({ where: { name: group.name } })
+    for (const title of deltaTitlesWithPriorities) {
+      if ("id" in title) {
+        const currentTitle = currentTitles.find((t) => t.id === title.id)!
 
-    if (result) {
+        if (
+          Object.keys(ObjectUtils.deepDiff(currentTitle, title)).length === 0
+        ) {
+          continue
+        }
+
+        const result = await tx.mediaTitle.update({
+          data: pick(title, [
+            "title",
+            "language",
+            "priority",
+            "isAcronym",
+            "isMainTitle",
+          ]),
+          where: { id: title.id },
+        })
+
+        await TitlesService.postUpdate(
+          "synced",
+          currentTitle,
+          result,
+          creatorId,
+        )
+
+        continue
+      }
+
+      const result = await tx.mediaTitle.create({
+        data: { ...title, mediaId, creatorId },
+      })
+
+      createdTitles.push(result)
+    }
+
+    await TitlesService.postCreate("synced", createdTitles)
+  })
+
+  const createdTrackers: MediaTracker[] = []
+
+  for (const tracker of infoPayload.trackers) {
+    const existingTracker = currentTrackers.find(
+      (t) => t.externalId === tracker.externalId,
+    )
+
+    if (existingTracker) {
+      const result = await db.mediaTracker.update({
+        data: tracker,
+        where: { id: existingTracker.id },
+      })
+
+      await TrackersService.postUpdate(
+        "synced",
+        existingTracker,
+        result,
+        creatorId,
+      )
+
       continue
     }
 
-    s(7, `Criando a scan '${group.name}'...`, "ongoing", i)
-
-    const scan = await db.scan.create({
-      data: {
-        name: group.name,
-        description: group.description,
-        website: group.website,
-        discord: group.discord,
-        twitter: group.twitter,
-        email: group.contactEmail,
-        creatorId,
-      },
+    const result = await db.mediaTracker.create({
+      data: { ...tracker, mediaId },
     })
 
-    groupToScan.set(group.id, scan.id)
+    createdTrackers.push(result)
+  }
+  await TrackersService.postCreate("synced", createdTrackers)
 
-    s(7, `Scan '${group.name}' criada`, "success", i)
+  s(2, "Obra atualizada", "ongoing")
+
+  if (!downloadCovers && !downloadChapters) {
+    await postMediaUpdate(s, 3, media, result, creatorId)
+
+    return
   }
 
-  if (groupToScan.size) {
-    s(7, "Scans criadas", "success")
-    s(8, "Reindexando a busca das scans...", "ongoing")
+  let currentStep = 3
 
-    await ScansIndexService.sync(db, Array.from(groupToScan.values()))
+  if (downloadCovers) {
+    s(currentStep, "Recuperando as covers...", "ongoing")
 
-    s(8, "Busca das scans reindexada", "success")
+    const currentCovers = await MediaCoversService.getAll(mediaId)
+    const covers = await manga.getCovers()
+
+    s(currentStep, "Covers recuperadas", "success")
+
+    currentStep++
+
+    const newCovers = covers
+      .map((c) =>
+        currentCovers.find(
+          (cc) => cc.language === c.locale && cc.volume === Number(c.volume),
+        )
+          ? null
+          : c,
+      )
+      .filter(Boolean)
+
+    if (newCovers.length > 0) {
+      await uploadCovers(
+        "synced",
+        s,
+        currentStep,
+        media.id,
+        mainCover.id,
+        covers,
+        creatorId,
+      )
+    }
+
+    currentStep++
   }
 
-  for (const [i, chapter] of chapters.entries()) {
-    s(9, `Baixando o capítulo ${chapter.chapter}...`, "ongoing", i)
+  await postMediaUpdate(s, currentStep, media, result, creatorId)
 
-    const pagesUrls = await chapter.getReadablePages()
-    const pages = await parallel(10, pagesUrls, (url) =>
-      fetch(url).then((r) => r.blob()),
-    )
-
-    s(9, `Upando o capítulo ${chapter.chapter}...`, "ongoing", i)
-
-    const uploaded = await MediaChaptersService.upload(media.id, pages)
-
-    await MediaChaptersService.insert(
-      {
-        title: chapter.title,
-        number: Number(chapter.chapter),
-        volume: Number.isNaN(chapter.volume)
-          ? undefined
-          : Number.parseFloat(chapter.volume),
-        contentRating: media.contentRating,
-        language: "pt_br",
-        flag: "OK",
-        files: [],
-        scanIds: chapter.groups.map((g) => groupToScan.get(g.id)!),
-        mediaId: media.id,
-      },
-      uploaded,
-      creatorId,
-    )
-
-    s(9, `Capítulo ${chapter.chapter} upado`, "success", i)
+  if (!downloadChapters) {
+    return
   }
 
-  if (chapters.length) {
-    s(9, "Capítulos upados", "success")
-  }
+  currentStep++
+
+  await uploadChapters(
+    "synced",
+    s,
+    currentStep,
+    media,
+    manga,
+    currentChapters,
+    creatorId,
+  )
 }
 
 export const MdService = {
   getById,
   import: importFn,
+  sync,
 }

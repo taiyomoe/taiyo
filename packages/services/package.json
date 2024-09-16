@@ -16,6 +16,8 @@
     "@taiyomoe/cache": "workspace:*",
     "@taiyomoe/constants": "workspace:*",
     "@taiyomoe/db": "workspace:*",
+    "@taiyomoe/logs": "workspace:^",
+    "@taiyomoe/meilisearch": "workspace:^",
     "@taiyomoe/schemas": "workspace:^",
     "@taiyomoe/types": "workspace:*",
     "@taiyomoe/utils": "workspace:*",

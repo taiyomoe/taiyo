@@ -10,7 +10,28 @@ import { db } from "../../"
 const execute = async () => {
   // Medias
   const medias = await db.media.findMany()
-  const mediaFields = ["type"]
+  const mediaFields = [
+    "id",
+    "createdAt",
+    "updatedAt",
+    "deletedAt",
+    "startDate",
+    "endDate",
+    "synopsis",
+    "contentRating",
+    "oneShot",
+    "trailer",
+    "type",
+    "status",
+    "source",
+    "demography",
+    "countryOfOrigin",
+    "genres",
+    "tags",
+    "flag",
+    "creatorId",
+    "deleterId",
+  ]
 
   await rawMeilisearchClient.deleteIndexIfExists("medias")
   await rawMeilisearchClient.createIndex("medias", { primaryKey: "id" })
