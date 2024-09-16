@@ -47,7 +47,7 @@ export const MediasField = ({ name, ...rest }: Props) => {
         searched.results as AlgoliaSearchResponse<MediasIndexItem>[]
       const media = results.at(0)?.hits.at(0)
 
-      if (!media) {
+      if (!media || media.deletedAt !== null) {
         return
       }
 
