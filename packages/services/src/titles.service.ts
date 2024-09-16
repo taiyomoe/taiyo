@@ -9,13 +9,12 @@ const postCreate = async (
 ) => {
   const uniqueMediaIds = Array.from(new Set(titles.map((t) => t.mediaId)))
   const mainTitle = titles.find((t) => t.isMainTitle)
-  const userId = titles.at(0)!.creatorId
 
   for (const title of titles) {
     await logsClient.titles.insert({
       type,
       _new: title,
-      userId,
+      userId: title.creatorId,
     })
   }
 
