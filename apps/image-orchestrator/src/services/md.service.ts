@@ -1,11 +1,12 @@
 import type Stream from "@elysiajs/stream"
-import { type Prisma, db } from "@taiyomoe/db"
+import { type Media, type MediaChapter, type Prisma, db } from "@taiyomoe/db"
 import {
+  ChaptersIndexService,
   MediasIndexService,
   ScansIndexService,
 } from "@taiyomoe/meilisearch/services"
 import { MdUtils, TitleUtils } from "@taiyomoe/utils"
-import { Group, Manga } from "mangadex-full-api"
+import { type Chapter, type Cover, Group, Manga } from "mangadex-full-api"
 import { parallel } from "radash"
 import type { ImportMediaInput, SyncMediaInput } from "../schemas"
 import {
@@ -20,6 +21,7 @@ import {
   MediaTitlesService,
   MediaTrackersService,
   MediasService,
+  ScansService,
 } from "./"
 
 const getInfoPayload = <TAction extends "create" | "update">(
@@ -65,9 +67,205 @@ const getInfoPayload = <TAction extends "create" | "update">(
   }
 }
 
+const uploadCovers = async (
+  s: ReturnType<typeof sendStream>,
+  step: number,
+  mediaId: string,
+  mainCoverId: string,
+  covers: Cover[],
+  uploaderId: string,
+) => {
+  for (const [i, cover] of covers.entries()) {
+    const coverLanguage = MdUtils.getLanguage(cover.locale)
+
+    if (!coverLanguage) {
+      continue
+    }
+
+    const _uploaded = await MediaCoversService.uploadFromUrl(
+      mediaId,
+      cover.imageSource,
+      {
+        onDownloadStart: () =>
+          s(
+            step,
+            `Baixando a cover ${i + 1}/${covers.length}...`,
+            "ongoing",
+            i,
+          ),
+        onUploadStart: () =>
+          s(step, `Upando a cover ${i + 1}/${covers.length}...`, "ongoing", i),
+        onUploadEnd: () =>
+          s(step, `Cover ${i + 1}/${covers.length} upada`, "success", i),
+      },
+    )
+
+    await db.mediaCover.create({
+      data: {
+        id: _uploaded.id,
+        volume: Number.isNaN(cover.volume)
+          ? null
+          : Number.parseFloat(cover.volume),
+        isMainCover: mainCoverId === cover.id,
+        language: coverLanguage,
+        mediaId,
+        uploaderId,
+      },
+    })
+  }
+
+  s(step, "Covers upadas", "success")
+}
+
+const createScans = async (
+  s: ReturnType<typeof sendStream>,
+  step: number,
+  chapters: Chapter[],
+  creatorId: string,
+) => {
+  let currentStep = step
+
+  s(currentStep, "Recuperando as scans de todos os capítulos...", "ongoing")
+
+  const groupsIds = [
+    ...new Set(
+      chapters.flatMap((chapter) => chapter.groups.flatMap((g) => g.id)),
+    ),
+  ]
+  const groups = await Group.getMultiple(...groupsIds)
+  const groupToScan = new Map<string, string>()
+
+  s(currentStep, "Scans recuperadas", "success")
+
+  currentStep++
+
+  for (const [i, group] of groups.entries()) {
+    const result = await ScansService.getByName(group.name).catch(() => null)
+
+    if (result) {
+      continue
+    }
+
+    s(currentStep, `Criando a scan '${group.name}'...`, "ongoing", i)
+
+    const scan = await ScansService.insert(group, creatorId)
+
+    groupToScan.set(group.id, scan.id)
+
+    s(currentStep, `Scan '${group.name}' criada`, "success", i)
+  }
+
+  if (groupToScan.size) {
+    s(currentStep, "Scans criadas", "success")
+
+    currentStep++
+
+    s(currentStep, "Reindexando a busca das scans...", "ongoing")
+
+    await ScansIndexService.sync(db, Array.from(groupToScan.values()))
+
+    s(currentStep, "Busca das scans reindexada", "success")
+  }
+
+  for (const group of groups) {
+    if (groupToScan.has(group.id)) continue
+
+    const scan = await ScansService.getByName(group.name)
+
+    groupToScan.set(group.id, scan.id)
+  }
+
+  return groupToScan
+}
+
+const uploadChapters = async (
+  s: ReturnType<typeof sendStream>,
+  step: number,
+  media: Media,
+  manga: Manga,
+  existingChapters: MediaChapter[],
+  uploaderId: string,
+) => {
+  let currentStep = step
+
+  s(step, "Recuperando os capítulos...", "ongoing")
+
+  const chapters = await manga.getFeed({
+    // biome-ignore lint/style/useNumberNamespace: Number.Infinity is not allowed
+    limit: Infinity,
+    translatedLanguage: ["pt-br"],
+    order: { chapter: "asc" },
+  })
+
+  s(step, "Capítulos recuperados", "success")
+
+  currentStep++
+
+  const groupToScan = await createScans(s, currentStep, chapters, uploaderId)
+
+  currentStep += 3
+
+  const newChapters = chapters
+    .map((c) =>
+      existingChapters.find((cc) => cc.number === Number(c.chapter)) ? null : c,
+    )
+    .filter(Boolean)
+  const uploadedChapters = []
+
+  for (const [i, chapter] of newChapters.entries()) {
+    s(currentStep, `Baixando o capítulo ${chapter.chapter}...`, "ongoing", i)
+
+    const pagesUrls = await chapter.getReadablePages()
+    const pages = await parallel(10, pagesUrls, (url) =>
+      fetch(url).then((r) => r.blob()),
+    )
+
+    s(currentStep, `Upando o capítulo ${chapter.chapter}...`, "ongoing", i)
+
+    const uploaded = await MediaChaptersService.upload(media.id, pages)
+    const uploadedChapter = await MediaChaptersService.insert(
+      {
+        title: chapter.title,
+        number: Number(chapter.chapter),
+        volume: Number.isNaN(chapter.volume)
+          ? undefined
+          : Number.parseFloat(chapter.volume),
+        contentRating: media.contentRating,
+        language: "pt_br",
+        flag: "OK",
+        files: [],
+        scanIds: chapter.groups.map((g) => groupToScan.get(g.id)!),
+        mediaId: media.id,
+      },
+      uploaded,
+      uploaderId,
+    )
+
+    uploadedChapters.push(uploadedChapter)
+
+    s(currentStep, `Capítulo ${chapter.chapter} upado`, "success", i)
+  }
+
+  if (chapters.length) {
+    s(currentStep, "Capítulos upados", "success")
+  }
+}
+
+const syncMediasIndex = async (
+  s: ReturnType<typeof sendStream>,
+  step: number,
+  mediaId: string,
+) => {
+  s(step, "Reindexando a busca...", "ongoing")
+
+  await MediasIndexService.sync(db, [mediaId])
+
+  s(step, "Busca reindexada", "success")
+}
+
 const getById = async (id: string) => {
   const result = await db.mediaTracker.findFirst({
-    where: { externalId: id, tracker: "MANGADEX" },
+    where: { externalId: id, tracker: "MANGADEX", media: { deletedAt: null } },
   })
 
   if (!result) {
@@ -109,154 +307,22 @@ const importFn = async (
 
   s(2, "Obra criada", "success")
 
-  for (const [i, cover] of covers.entries()) {
-    const coverLanguage = MdUtils.getLanguage(cover.locale)
-
-    if (!coverLanguage) {
-      continue
-    }
-
-    const _uploaded = await MediaCoversService.uploadFromUrl(
-      media.id,
-      cover.imageSource,
-      {
-        onDownloadStart: () =>
-          s(3, `Baixando a cover ${i + 1}/${covers.length}...`, "ongoing", i),
-        onUploadStart: () =>
-          s(3, `Upando a cover ${i + 1}/${covers.length}...`, "ongoing", i),
-        onUploadEnd: () =>
-          s(3, `Cover ${i + 1}/${covers.length} upada`, "success", i),
-      },
-    )
-
-    await db.mediaCover.create({
-      data: {
-        id: _uploaded.id,
-        volume: Number.isNaN(cover.volume)
-          ? null
-          : Number.parseFloat(cover.volume),
-        isMainCover: mainCover.id === cover.id,
-        language: coverLanguage,
-        mediaId: media.id,
-        uploaderId: creatorId,
-      },
-    })
-  }
-
-  s(3, "Covers upadas", "success")
-  s(4, "Reindexando a busca...", "ongoing")
-
-  await MediasIndexService.sync(db, [media.id])
-
-  s(4, "Busca reindexada", "success")
+  await uploadCovers(s, 3, media.id, mainCover.id, covers, creatorId)
+  await syncMediasIndex(s, 4, media.id)
 
   if (!downloadChapters) {
     return
   }
 
-  s(5, "Recuperando os capítulos...", "ongoing")
-
-  const chapters = await manga.getFeed({
-    // biome-ignore lint/style/useNumberNamespace: Number.Infinity is not allowed
-    limit: Infinity,
-    translatedLanguage: ["pt-br"],
-    order: { chapter: "asc" },
-  })
-
-  s(5, "Capítulos recuperados", "success")
-  s(6, "Recuperando as scans de todos os capítulos...", "ongoing")
-
-  const groupsIds = [
-    ...new Set(
-      chapters.flatMap((chapter) => chapter.groups.flatMap((g) => g.id)),
-    ),
-  ]
-  const groups = await Group.getMultiple(...groupsIds)
-  const groupToScan = new Map<string, string>()
-
-  s(6, "Scans recuperadas", "success")
-
-  for (const [i, group] of groups.entries()) {
-    const result = await db.scan.findFirst({ where: { name: group.name } })
-
-    if (result) {
-      continue
-    }
-
-    s(7, `Criando a scan '${group.name}'...`, "ongoing", i)
-
-    const scan = await db.scan.create({
-      data: {
-        name: group.name,
-        description: group.description,
-        website: group.website,
-        discord: group.discord,
-        twitter: group.twitter,
-        email: group.contactEmail,
-        creatorId,
-      },
-    })
-
-    groupToScan.set(group.id, scan.id)
-
-    s(7, `Scan '${group.name}' criada`, "success", i)
-  }
-
-  if (groupToScan.size) {
-    s(7, "Scans criadas", "success")
-    s(8, "Reindexando a busca das scans...", "ongoing")
-
-    await ScansIndexService.sync(db, Array.from(groupToScan.values()))
-
-    s(8, "Busca das scans reindexada", "success")
-  }
-
-  for (const [i, chapter] of chapters.entries()) {
-    s(9, `Baixando o capítulo ${chapter.chapter}...`, "ongoing", i)
-
-    const pagesUrls = await chapter.getReadablePages()
-    const pages = await parallel(10, pagesUrls, (url) =>
-      fetch(url).then((r) => r.blob()),
-    )
-
-    s(9, `Upando o capítulo ${chapter.chapter}...`, "ongoing", i)
-
-    const uploaded = await MediaChaptersService.upload(media.id, pages)
-
-    await MediaChaptersService.insert(
-      {
-        title: chapter.title,
-        number: Number(chapter.chapter),
-        volume: Number.isNaN(chapter.volume)
-          ? undefined
-          : Number.parseFloat(chapter.volume),
-        contentRating: media.contentRating,
-        language: "pt_br",
-        flag: "OK",
-        files: [],
-        scanIds: chapter.groups.map((g) => groupToScan.get(g.id)!),
-        mediaId: media.id,
-      },
-      uploaded,
-      creatorId,
-    )
-
-    s(9, `Capítulo ${chapter.chapter} upado`, "success", i)
-  }
-
-  if (chapters.length) {
-    s(9, "Capítulos upados", "success")
-  }
+  await uploadChapters(s, 5, media, manga, [], creatorId)
 }
 
 const sync = async (
   stream: Stream<string | number | boolean | object>,
-  { id }: SyncMediaInput,
+  { id, downloadCovers, downloadChapters }: SyncMediaInput,
   creatorId: string,
 ) => {
   const s = sendStream(stream)
-  const _media = await MediasService.getById(id)
-  const currentTitles = await MediaTitlesService.getAll(id)
   const currentTrackers = await MediaTrackersService.getAll(id)
   const mdTracker = currentTrackers.find((t) => t.tracker === "MANGADEX")
 
@@ -266,9 +332,14 @@ const sync = async (
 
   s(1, "Recuperando as informações da obra", "ongoing")
 
+  const media = await MediasService.getById(id)
+  const currentChapters = await MediaChaptersService.getAll(id)
+  const currentTitles = await MediaTitlesService.getAll(id)
   const manga = await Manga.get(mdTracker.externalId)
+  const mainCover = await manga.mainCover.resolve()
 
   s(1, "Informações recuperadas", "success")
+  s(2, "Atualizando a obra...", "ongoing")
 
   const infoPayload = getInfoPayload("update", manga, creatorId)
   const newTitles = MdUtils.getTitles(manga)
@@ -302,6 +373,58 @@ const sync = async (
       where: { id: existingTracker?.id ?? "" },
     })
   }
+
+  s(2, "Obra atualizada", "ongoing")
+
+  if (!downloadCovers && !downloadChapters) {
+    await syncMediasIndex(s, 3, media.id)
+
+    return
+  }
+
+  let currentStep = 3
+
+  if (downloadCovers) {
+    s(currentStep, "Recuperando as covers...", "ongoing")
+
+    const currentCovers = await MediaCoversService.getAll(id)
+    const covers = await manga.getCovers()
+
+    s(currentStep, "Covers recuperadas", "success")
+
+    currentStep++
+
+    const newCovers = covers
+      .map((c) =>
+        currentCovers.find(
+          (cc) => cc.language === c.locale && cc.volume === Number(c.volume),
+        )
+          ? null
+          : c,
+      )
+      .filter(Boolean)
+
+    if (newCovers.length > 0) {
+      await uploadCovers(
+        s,
+        currentStep,
+        media.id,
+        mainCover.id,
+        covers,
+        creatorId,
+      )
+
+      currentStep++
+    }
+  }
+
+  await syncMediasIndex(s, currentStep, media.id)
+
+  if (!downloadChapters) {
+    return
+  }
+
+  await uploadChapters(s, currentStep, media, manga, currentChapters, creatorId)
 }
 
 export const MdService = {

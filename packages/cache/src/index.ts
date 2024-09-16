@@ -22,6 +22,7 @@ export const cacheClient = {
       get: () => parseCache<LatestMedia[]>(client.get("medias:latest")),
       set: (input: LatestMedia[]) =>
         client.setex("medias:latest", HOUR, SuperJSON.stringify(input)),
+      invalidate: () => client.del("medias:latest"),
     },
     featured: (lang: Languages | "main") => ({
       get: () =>

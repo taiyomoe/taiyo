@@ -4,6 +4,14 @@ import type { UploadCoverInput } from "../schemas"
 import { FilesService } from "../services/files.service"
 import type { UploadedFile } from "../types"
 
+const getAll = async (mediaId: string) => {
+  const result = await db.mediaCover.findMany({
+    where: { mediaId, deletedAt: null },
+  })
+
+  return result
+}
+
 const insert = async (
   input: UploadCoverInput,
   file: UploadedFile,
@@ -74,6 +82,7 @@ const uploadFromUrl = async (
 }
 
 export const MediaCoversService = {
+  getAll,
   insert,
   insertLimited,
   upload,

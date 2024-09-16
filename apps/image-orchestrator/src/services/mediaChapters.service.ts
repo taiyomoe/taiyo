@@ -9,6 +9,14 @@ import type { UploadChapterInput } from "../schemas"
 import type { UploadedResource } from "../types"
 import { FilesService } from "./files.service"
 
+const getAll = async (mediaId: string) => {
+  const result = await db.mediaChapter.findMany({
+    where: { mediaId, deletedAt: null },
+  })
+
+  return result
+}
+
 const insert = async (
   input: UploadChapterInput,
   resource: UploadedResource,
@@ -63,6 +71,7 @@ const upload = async (
 }
 
 export const MediaChaptersService = {
+  getAll,
   insert,
   upload,
 }
