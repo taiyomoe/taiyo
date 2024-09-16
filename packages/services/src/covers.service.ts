@@ -6,7 +6,6 @@ import { MediasIndexService } from "@taiyomoe/meilisearch/services"
 const postUpload = async (
   type: "created" | "imported" | "synced",
   covers: MediaCover[],
-  userId: string,
 ) => {
   const uniqueMediaIds = Array.from(new Set(covers.map((c) => c.mediaId)))
   const hasMainCover = covers.some((c) => c.isMainCover)
@@ -15,7 +14,7 @@ const postUpload = async (
     await logsClient.covers.insert({
       type,
       _new: cover,
-      userId,
+      userId: cover.uploaderId,
     })
   }
 
@@ -47,12 +46,12 @@ const postUpdate = async (
  * Main covers cannot be deleted, so there is no need to
  * reindex the medias or invalidate the cache.
  */
-const postDelete = async (covers: MediaCover[], userId: string) => {
+const postDelete = async (covers: MediaCover[]) => {
   for (const cover of covers) {
     await logsClient.covers.insert({
       type: "deleted",
       old: cover,
-      userId,
+      userId: cover.deleterId!,
     })
   }
 }

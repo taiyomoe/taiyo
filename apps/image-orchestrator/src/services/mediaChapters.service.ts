@@ -30,7 +30,7 @@ const insert = async (
     },
   })
 
-  await ChaptersService.postUpload("created", [result], uploaderId)
+  await ChaptersService.postUpload("created", [result])
 
   return result
 }

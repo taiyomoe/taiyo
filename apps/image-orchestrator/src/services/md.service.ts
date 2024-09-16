@@ -130,7 +130,7 @@ const uploadCovers = async (
     uploadedCovers.push(result)
   }
 
-  await CoversService.postUpload(type, uploadedCovers, uploaderId)
+  await CoversService.postUpload(type, uploadedCovers)
 
   s(step, "Covers upadas", "success")
 }
@@ -270,21 +270,12 @@ const uploadChapters = async (
 
     currentStep++
 
-    await syncChaptersIndex(type, s, currentStep, uploadedChapters, uploaderId)
+    s(currentStep, "Reindexando a busca dos capítulos...", "ongoing")
+
+    await ChaptersService.postUpload(type, uploadedChapters)
+
+    s(currentStep, "Busca dos capítulos reindexada", "success")
   }
-}
-
-const postMediaCreation = async (
-  s: ReturnType<typeof sendStream>,
-  step: number,
-  media: Media,
-  userId: string,
-) => {
-  s(step, "Reindexando a busca...", "ongoing")
-
-  await BaseMediasService.postCreate("imported", media, userId)
-
-  s(step, "Busca reindexada", "success")
 }
 
 const postMediaUpdate = async (
@@ -299,20 +290,6 @@ const postMediaUpdate = async (
   await BaseMediasService.postUpdate("synced", oldMedia, newMedia, userId)
 
   s(step, "Obra atualizada", "success")
-}
-
-const syncChaptersIndex = async (
-  type: "imported" | "synced",
-  s: ReturnType<typeof sendStream>,
-  step: number,
-  chapters: MediaChapter[],
-  uploaderId: string,
-) => {
-  s(step, "Reindexando a busca dos capítulos...", "ongoing")
-
-  await ChaptersService.postUpload(type, chapters, uploaderId)
-
-  s(step, "Busca dos capítulos reindexada", "success")
 }
 
 const getById = async (id: string) => {
@@ -377,7 +354,12 @@ const importFn = async (
     covers,
     creatorId,
   )
-  await postMediaCreation(s, 4, media, creatorId)
+
+  s(4, "Reindexando a busca...", "ongoing")
+
+  await BaseMediasService.postCreate("imported", media)
+
+  s(4, "Busca reindexada", "success")
 
   if (!downloadChapters) {
     return

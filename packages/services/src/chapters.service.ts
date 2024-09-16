@@ -183,7 +183,6 @@ const getDistinctCount = async (mediaId: string) => {
 const postUpload = async (
   type: "created" | "imported" | "synced",
   chapters: MediaChapter[],
-  userId: string,
 ) => {
   const ids = chapters.map((c) => c.id)
 
@@ -191,7 +190,7 @@ const postUpload = async (
     await logsClient.chapters.insert({
       type,
       _new: chapter,
-      userId,
+      userId: chapter.uploaderId,
     })
   }
 

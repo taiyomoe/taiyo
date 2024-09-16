@@ -187,12 +187,11 @@ const getFull = async (mediaId: string) => {
 const postCreate = async (
   type: "created" | "imported" | "synced",
   media: Media,
-  userId: string,
 ) => {
   await logsClient.medias.insert({
     type,
     _new: media,
-    userId,
+    userId: media.creatorId,
   })
 
   await MediasIndexService.sync(db, [media.id])
@@ -244,7 +243,6 @@ const postRestore = async (
 const postDelete = async (
   medias: Media[],
   groupedChapters: Record<string, MediaChapter[]>,
-  userId: string,
 ) => {
   const ids = medias.map((m) => m.id)
 
@@ -252,7 +250,7 @@ const postDelete = async (
     await logsClient.medias.insert({
       type: "deleted",
       old: media,
-      userId,
+      userId: media.deleterId!,
     })
   }
 

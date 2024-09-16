@@ -26,7 +26,7 @@ const insert = async (
     },
   })
 
-  await CoversService.postUpload("created", [result], uploaderId)
+  await CoversService.postUpload("created", [result])
 
   return result
 }
@@ -47,7 +47,7 @@ const insertLimited = async (
     },
   })
 
-  await CoversService.postUpload("created", [result], uploaderId)
+  await CoversService.postUpload("created", [result])
 
   return result
 }

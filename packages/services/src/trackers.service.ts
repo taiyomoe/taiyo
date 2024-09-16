@@ -38,13 +38,11 @@ const postCreate = async (
   type: "created" | "imported" | "synced",
   trackers: MediaTracker[],
 ) => {
-  const userId = trackers.at(0)!.creatorId
-
   for (const title of trackers) {
     await logsClient.trackers.insert({
       type,
       _new: title,
-      userId,
+      userId: title.creatorId,
     })
   }
 }
