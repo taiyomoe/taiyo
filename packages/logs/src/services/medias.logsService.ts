@@ -8,7 +8,7 @@ export const mediasService = {
   insert: (input: InsertResource<Media>) =>
     insertWrapper(
       "logs.medias",
-      ["type", "old", "new", "diff", "userId"],
+      ["type", "old", "new", "diff", "mediaId", "userId"],
       [
         input.type,
         SuperJSON.serialize("old" in input ? input.old : {}),
@@ -16,6 +16,7 @@ export const mediasService = {
         input.type === "updated"
           ? Object.keys(ObjectUtils.deepDiff(input.old, input._new))
           : [],
+        "old" in input ? input.old.id : input._new.id,
         input.userId,
       ],
     ),

@@ -15,6 +15,7 @@ const up = async () => {
         old JSON,
         new JSON,
         diff Array(String),
+        mediaId UUID,
         userId UUID,
         PRIMARY KEY (id)
       ) ENGINE = MergeTree() ORDER BY (id);
@@ -46,7 +47,7 @@ const up = async () => {
         old JSON,
         new JSON,
         diff Array(String),
-        chapterId UUID,
+        titleId UUID,
         userId UUID,
         PRIMARY KEY (id)
       ) ENGINE = MergeTree() ORDER BY (id);
