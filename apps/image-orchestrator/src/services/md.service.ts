@@ -1,10 +1,10 @@
 import type Stream from "@elysiajs/stream"
 import { type Media, type MediaChapter, type Prisma, db } from "@taiyomoe/db"
+import { ScansIndexService } from "@taiyomoe/meilisearch/services"
 import {
-  MediasIndexService,
-  ScansIndexService,
-} from "@taiyomoe/meilisearch/services"
-import { ChaptersService } from "@taiyomoe/services"
+  MediasService as BaseMediasService,
+  ChaptersService,
+} from "@taiyomoe/services"
 import { MdUtils, TitleUtils } from "@taiyomoe/utils"
 import { type Chapter, type Cover, Group, Manga } from "mangadex-full-api"
 import { parallel, pick } from "radash"
@@ -179,7 +179,7 @@ const createScans = async (
 }
 
 const uploadChapters = async (
-  source: "imported" | "synced",
+  type: "imported" | "synced",
   s: ReturnType<typeof sendStream>,
   step: number,
   media: Media,
@@ -252,30 +252,39 @@ const uploadChapters = async (
 
     currentStep++
 
-    await syncChaptersIndex(
-      source,
-      s,
-      currentStep,
-      uploadedChapters,
-      uploaderId,
-    )
+    await syncChaptersIndex(type, s, currentStep, uploadedChapters, uploaderId)
   }
 }
 
-const syncMediasIndex = async (
+const postMediaCreation = async (
   s: ReturnType<typeof sendStream>,
   step: number,
-  mediaId: string,
+  media: Media,
+  userId: string,
 ) => {
   s(step, "Reindexando a busca...", "ongoing")
 
-  await MediasIndexService.sync(db, [mediaId])
+  await BaseMediasService.postCreate("imported", media, userId)
 
   s(step, "Busca reindexada", "success")
 }
 
+const postMediaUpdate = async (
+  s: ReturnType<typeof sendStream>,
+  step: number,
+  oldMedia: Media,
+  newMedia: Media,
+  userId: string,
+) => {
+  s(step, "Atualizando a obra...", "ongoing")
+
+  await BaseMediasService.postUpdate("synced", oldMedia, newMedia, userId)
+
+  s(step, "Obra atualizada", "success")
+}
+
 const syncChaptersIndex = async (
-  source: "imported" | "synced",
+  type: "imported" | "synced",
   s: ReturnType<typeof sendStream>,
   step: number,
   chapters: MediaChapter[],
@@ -283,7 +292,7 @@ const syncChaptersIndex = async (
 ) => {
   s(step, "Reindexando a busca dos capítulos...", "ongoing")
 
-  await ChaptersService.postUpload(source, chapters, uploaderId)
+  await ChaptersService.postUpload(type, chapters, uploaderId)
 
   s(step, "Busca dos capítulos reindexada", "success")
 }
@@ -333,7 +342,7 @@ const importFn = async (
   s(2, "Obra criada", "success")
 
   await uploadCovers(s, 3, media.id, mainCover.id, covers, creatorId)
-  await syncMediasIndex(s, 4, media.id)
+  await postMediaCreation(s, 4, media, creatorId)
 
   if (!downloadChapters) {
     return
@@ -374,7 +383,7 @@ const sync = async (
     deltaTitles,
   )
 
-  await db.media.update({
+  const result = await db.media.update({
     data: infoPayload.data,
     where: { id: mediaId },
   })
@@ -426,7 +435,7 @@ const sync = async (
   s(2, "Obra atualizada", "ongoing")
 
   if (!downloadCovers && !downloadChapters) {
-    await syncMediasIndex(s, 3, media.id)
+    await postMediaUpdate(s, 3, media, result, creatorId)
 
     return
   }
@@ -467,7 +476,7 @@ const sync = async (
     currentStep++
   }
 
-  await syncMediasIndex(s, currentStep, media.id)
+  await postMediaUpdate(s, currentStep, media, result, creatorId)
 
   if (!downloadChapters) {
     return

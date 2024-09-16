@@ -1,6 +1,7 @@
 import { createClient } from "@clickhouse/client-web"
 import { env } from "../env"
 import { chaptersService } from "./services/chapters.logsService"
+import { mediasService } from "./services/medias.logsService"
 import { migrationsService } from "./services/migrations.logsService"
 import { scansService } from "./services/scans.logsService"
 import { usersActivityService } from "./services/usersActivity.logsService"
@@ -17,6 +18,7 @@ export const rawLogsClient = createClient({
 
 export const logsClient = {
   migrations: migrationsService,
+  medias: mediasService,
   chapters: chaptersService,
   users: {
     auth: usersAuthService,

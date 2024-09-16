@@ -1,5 +1,5 @@
-import { cacheClient } from "@taiyomoe/cache"
 import { type Prisma, db } from "@taiyomoe/db"
+
 import { omit } from "radash"
 import type { CreateMediaInput } from "../schemas"
 import { MediaNotFoundError } from "../utils/errors"
@@ -45,7 +45,7 @@ const create = async (
     })
   }
 
-  const media = await client.media.create({
+  const result = await client.media.create({
     data: {
       ...omit(input, ["mainTitle", "mdId", "alId", "malId", "cover"]),
       titles: {
@@ -62,9 +62,7 @@ const create = async (
     },
   })
 
-  await cacheClient.medias.latest.invalidate()
-
-  return media
+  return result
 }
 
 export const MediasService = {

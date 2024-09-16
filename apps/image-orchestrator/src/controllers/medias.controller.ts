@@ -1,5 +1,6 @@
 import { Stream } from "@elysiajs/stream"
 import { db } from "@taiyomoe/db"
+import { MediasService as BaseMediasService } from "@taiyomoe/services"
 import { Elysia } from "elysia"
 import { authMiddleware } from "../middlewares"
 import {
@@ -20,23 +21,25 @@ const create = new Elysia().use(authMiddleware([["medias", "create"]])).post(
   async ({ body, session }) => {
     await MediaTrackersService.has(body)
 
-    const media = db.$transaction(async (client) => {
-      const media = await MediasService.create(client, body, session.user.id)
-      const [uploadedFile] = await MediaCoversService.upload(media.id, [
+    const result = await db.$transaction(async (client) => {
+      const result = await MediasService.create(client, body, session.user.id)
+      const [uploadedFile] = await MediaCoversService.upload(result.id, [
         body.cover,
       ])
 
       await MediaCoversService.insertLimited(
         uploadedFile!,
-        media.id,
+        result.id,
         session.user.id,
         client,
       )
 
-      return media
+      return result
     })
 
-    return media
+    await BaseMediasService.postCreate("created", result, session.user.id)
+
+    return result
   },
   { body: createMediaSchema },
 )

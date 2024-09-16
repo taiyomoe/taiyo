@@ -1,7 +1,3 @@
-import {
-  ChaptersIndexService,
-  MediasIndexService,
-} from "@taiyomoe/meilisearch/services"
 import { buildFilter, buildSort } from "@taiyomoe/meilisearch/utils"
 import {
   bulkMutateSchema,
@@ -9,7 +5,11 @@ import {
   idSchema,
   updateMediaSchema,
 } from "@taiyomoe/schemas"
-import { LibrariesService, MediasService } from "@taiyomoe/services"
+import {
+  ChaptersService,
+  LibrariesService,
+  MediasService,
+} from "@taiyomoe/services"
 import type { MediaLimited, MediasListItem } from "@taiyomoe/types"
 import { MediaUtils } from "@taiyomoe/utils"
 import { TRPCError } from "@trpc/server"
@@ -23,7 +23,6 @@ export const mediasRouter = createTRPCRouter({
     .input(updateMediaSchema)
     .mutation(async ({ ctx, input }) => {
       const media = await ctx.db.media.findUnique({
-        select: { id: true },
         where: { id: input.id },
       })
 
@@ -34,12 +33,17 @@ export const mediasRouter = createTRPCRouter({
         })
       }
 
-      await ctx.db.media.update({
+      const result = await ctx.db.media.update({
         where: { id: input.id },
         data: input,
       })
 
-      await MediasIndexService.sync(ctx.db, [input.id])
+      await MediasService.postUpdate(
+        "updated",
+        media,
+        result,
+        ctx.session.user.id,
+      )
     }),
 
   getById: publicProcedure
@@ -190,15 +194,20 @@ export const mediasRouter = createTRPCRouter({
         }
       }
 
+      const newDeletedAt = input.type === "delete" ? new Date() : null
+      const newDeleterId = input.type === "delete" ? ctx.session.user.id : null
+      const newMedias = medias.map((m) => ({
+        ...m,
+        deletedAt: newDeletedAt,
+        deleterId: newDeleterId,
+      }))
+
       await ctx.db.media.updateMany({
-        data: {
-          deletedAt: input.type === "delete" ? new Date() : null,
-          deleterId: input.type === "delete" ? ctx.session.user.id : null,
-        },
+        data: { deletedAt: newDeletedAt, deleterId: newDeleterId },
         where: { id: { in: input.ids } },
       })
 
-      for (const media of medias) {
+      for (const media of newMedias) {
         const chapters = await ctx.db.mediaChapter.findMany({
           where: { mediaId: media.id },
         })
@@ -212,7 +221,12 @@ export const mediasRouter = createTRPCRouter({
         await ChaptersService.postDelete(chapters, ctx.session.user.id)
       }
 
-      await MediasIndexService.sync(ctx.db, input.ids)
-      await ctx.cache.medias.invalidateAll()
+      if (input.type === "restore") {
+        await MediasService.postRestore(newMedias, ctx.session.user.id)
+
+        return
+      }
+
+      await MediasService.postDelete(newMedias, ctx.session.user.id)
     }),
 })
