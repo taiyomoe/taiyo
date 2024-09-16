@@ -1,6 +1,6 @@
 import type { Media, MediaChapter, MediaCover } from "@taiyomoe/db"
 import { HttpError } from "@taiyomoe/image-orchestrator"
-import type { IOStreamError, ImportMediaEventMessage } from "@taiyomoe/types"
+import type { GenericMessage, IOStreamError } from "@taiyomoe/types"
 import { mapValues } from "radash"
 import SuperJSON from "superjson"
 import { env } from "~/env"
@@ -129,7 +129,8 @@ const createSseClient =
 export const ioApi = {
   medias: {
     create: createClient<Media>("medias"),
-    import: createSseClient<ImportMediaEventMessage>("medias/import"),
+    import: createSseClient<GenericMessage>("medias/import"),
+    sync: createSseClient<GenericMessage>("medias/sync"),
   },
   covers: {
     upload: createClient<MediaCover>("covers"),

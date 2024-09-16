@@ -3,6 +3,7 @@ import { create } from "zustand"
 
 type s = {
   currentStep: number
+  downloadCovers: boolean
   downloadChapters: boolean
   messages: GenericMessage[]
   error: string | null
@@ -13,8 +14,9 @@ type Actions = {
   addMessage: (message: GenericMessage) => void
 }
 
-export const useImportMediaStore = create<s & Actions>((set) => ({
+export const useSyncMediaStore = create<s & Actions>((set) => ({
   currentStep: 0,
+  downloadCovers: true,
   downloadChapters: true,
   messages: [],
   error: null,

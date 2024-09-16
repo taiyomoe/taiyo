@@ -2,7 +2,11 @@ import { Stream } from "@elysiajs/stream"
 import { db } from "@taiyomoe/db"
 import { Elysia } from "elysia"
 import { authMiddleware } from "../middlewares"
-import { createMediaSchema, importMediaSchema } from "../schemas"
+import {
+  createMediaSchema,
+  importMediaSchema,
+  syncMediaSchema,
+} from "../schemas"
 import {
   MdService,
   MediaCoversService,
@@ -14,7 +18,7 @@ import { handleStreamErrors } from "../utils/streams"
 const create = new Elysia().use(authMiddleware([["medias", "create"]])).post(
   "/",
   async ({ body, session }) => {
-    await MediaTrackersService.hasTrackers(body)
+    await MediaTrackersService.has(body)
 
     const media = db.$transaction(async (client) => {
       const media = await MediasService.create(client, body, session.user.id)
@@ -52,6 +56,20 @@ const importRoute = new Elysia()
     { query: importMediaSchema },
   )
 
+const sync = new Elysia().use(authMiddleware([["medias", "create"]])).get(
+  "/sync",
+  ({ query, session }) =>
+    new Stream(async (stream) => {
+      await MdService.sync(stream, query, session.user.id).catch(
+        handleStreamErrors(stream),
+      )
+
+      stream.close()
+    }),
+  { query: syncMediaSchema },
+)
+
 export const mediasController = new Elysia({ prefix: "/medias" })
   .use(create)
   .use(importRoute)
+  .use(sync)
