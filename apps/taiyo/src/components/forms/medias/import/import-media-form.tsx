@@ -1,4 +1,5 @@
 import { typeboxResolver } from "@hookform/resolvers/typebox"
+import { Button } from "@nextui-org/button"
 import {
   type ImportMediaInput,
   importMediaSchema,
@@ -18,26 +19,35 @@ export const ImportMediaForm = () => {
     defaultValues: { mdId: "", downloadChapters: true },
     mode: "onTouched",
   })
-  const { incrementStep, set, addMessage } = useImportMediaStore()
+  const { set, addMessage } = useImportMediaStore()
+
+  const handleReset = () => {
+    methods.reset()
+    set({ currentStep: 0, messages: [], error: null })
+  }
 
   const handleSubmit: SubmitHandler<ImportMediaInput> = async (values) => {
-    await ioApi.medias.import(values, {
-      onMessage: (m) => {
-        addMessage(m)
-        set({ currentStep: m.step })
-      },
-      onError: (content) => {
-        toast.error(content)
-        set({ error: content })
-      },
-      onOpen: () => {
-        set({ currentStep: 1 })
-      },
-      onClose: () => {
-        toast.success("Obra importada com sucesso.")
+    return new Promise((resolve, reject) => {
+      void ioApi.medias.import(values, {
+        onMessage: (m) => {
+          addMessage(m)
+          set({ currentStep: m.step })
+        },
+        onError: (content) => {
+          toast.error(content)
+          reject(content)
+          set({ error: content })
+        },
+        onOpen: () => {
+          set({ currentStep: 1 })
+        },
+        onClose: () => {
+          toast.success("Obra importada com sucesso.")
 
-        incrementStep()
-      },
+          resolve(null)
+          set({ currentStep: 100 })
+        },
+      })
     })
   }
 
@@ -56,7 +66,14 @@ export const ImportMediaForm = () => {
         label="Baixar e upar os capítulos?"
         onValueChange={(isSelected) => set({ downloadChapters: isSelected })}
       />
-      <SubmitButton>Importar</SubmitButton>
+      <div className="flex gap-6 self-end">
+        {methods.formState.isSubmitted && (
+          <Button onPress={handleReset} variant="flat" color="danger">
+            Resetar
+          </Button>
+        )}
+        <SubmitButton>Importar</SubmitButton>
+      </div>
     </Form.Component>
   )
 }

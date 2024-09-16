@@ -49,7 +49,7 @@ export const SyncMediaForm = () => {
           set({ currentStep: 1 })
         },
         onClose: () => {
-          toast.success("Obra importada com sucesso.")
+          toast.success("Obra sincronizada com sucesso.")
 
           resolve(null)
           set({ currentStep: 100 })

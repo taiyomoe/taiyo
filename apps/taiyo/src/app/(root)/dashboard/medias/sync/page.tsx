@@ -55,7 +55,7 @@ export default function Page() {
         "Reindexar a busca dos capítulos (se necessário)",
       ),
     ]
-  }, [generateStep, currentStep, downloadCovers, downloadChapters, messages])
+  }, [generateStep, downloadCovers, downloadChapters, messages, currentStep])
 
   return (
     <VerticalSteps

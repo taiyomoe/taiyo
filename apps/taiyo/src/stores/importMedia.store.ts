@@ -9,7 +9,6 @@ type s = {
 }
 
 type Actions = {
-  incrementStep: () => void
   set: (state: Partial<s>) => void
   addMessage: (message: GenericMessage) => void
 }
@@ -20,7 +19,6 @@ export const useImportMediaStore = create<s & Actions>((set) => ({
   messages: [],
   error: null,
 
-  incrementStep: () => set((s) => ({ currentStep: s.currentStep + 1 })),
   set: (state) => set(state),
   addMessage: (message) => set((s) => ({ messages: [...s.messages, message] })),
 }))
