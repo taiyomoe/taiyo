@@ -43,23 +43,25 @@ export const coversRouter = createTRPCRouter({
           data: input,
           where: { id: input.id },
         })
+        const oldMainCover = input.isMainCover
+          ? await tx.mediaCover.update({
+              data: { isMainCover: false },
+              where: { id: mainCover.id },
+            })
+          : null
 
-        if (input.isMainCover) {
-          await tx.mediaCover.update({
-            data: { isMainCover: false },
-            where: { id: mainCover.id },
-          })
-        }
-
-        return result
+        return { new: result, old: oldMainCover }
       })
 
-      await CoversService.postUpdate(
-        cover,
-        result,
-        input.isMainCover ? mainCover : null,
-        ctx.session.user.id,
-      )
+      if (input.isMainCover && result.old) {
+        await CoversService.postUpdate(
+          mainCover,
+          result.old,
+          ctx.session.user.id,
+        )
+      }
+
+      await CoversService.postUpdate(cover, result.new, ctx.session.user.id)
     }),
 
   delete: protectedProcedure

@@ -28,7 +28,6 @@ const postUpload = async (
 const postUpdate = async (
   oldCover: MediaCover,
   newCover: MediaCover,
-  oldMainCover: MediaCover | null,
   userId: string,
 ) => {
   await logsClient.covers.insert({
@@ -37,15 +36,6 @@ const postUpdate = async (
     _new: newCover,
     userId,
   })
-
-  if (oldMainCover) {
-    await logsClient.covers.insert({
-      type: "updated",
-      old: oldMainCover,
-      _new: { ...oldMainCover, isMainCover: false },
-      userId,
-    })
-  }
 
   if (newCover.isMainCover) {
     await MediasIndexService.sync(db, [newCover.mediaId])
