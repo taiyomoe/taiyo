@@ -11,8 +11,9 @@ import {
   MediasService as BaseMediasService,
   ChaptersService,
   CoversService,
+  TitlesService,
 } from "@taiyomoe/services"
-import { MdUtils, TitleUtils } from "@taiyomoe/utils"
+import { MdUtils, ObjectUtils, TitleUtils } from "@taiyomoe/utils"
 import { type Chapter, type Cover, Group, Manga } from "mangadex-full-api"
 import { parallel, pick } from "radash"
 import type { ImportMediaInput, SyncMediaInput } from "../schemas"
@@ -352,6 +353,11 @@ const importFn = async (
       trackers: { create: infoPayload.trackers },
     },
   })
+  const titles = await db.mediaTitle.findMany({
+    where: { mediaId: media.id },
+  })
+
+  await TitlesService.postCreate("imported", titles)
 
   s(2, "Obra criada", "success")
 
@@ -422,7 +428,15 @@ const sync = async (
 
     for (const title of deltaTitlesWithPriorities) {
       if ("id" in title) {
-        await tx.mediaTitle.update({
+        const currentTitle = currentTitles.find((t) => t.id === title.id)!
+
+        if (
+          Object.keys(ObjectUtils.deepDiff(currentTitle, title)).length === 0
+        ) {
+          continue
+        }
+
+        const result = await tx.mediaTitle.update({
           data: pick(title, [
             "title",
             "language",
@@ -432,6 +446,13 @@ const sync = async (
           ]),
           where: { id: title.id },
         })
+
+        await TitlesService.postUpdate(
+          "synced",
+          currentTitle,
+          result,
+          creatorId,
+        )
 
         continue
       }

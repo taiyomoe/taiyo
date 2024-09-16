@@ -5,19 +5,24 @@ import { MediasIndexService } from "@taiyomoe/meilisearch/services"
 
 const postCreate = async (
   type: "created" | "imported" | "synced",
-  title: MediaTitle,
-  userId: string,
+  titles: MediaTitle[],
 ) => {
-  await logsClient.titles.insert({
-    type,
-    _new: title,
-    userId,
-  })
+  const uniqueMediaIds = Array.from(new Set(titles.map((t) => t.mediaId)))
+  const mainTitle = titles.find((t) => t.isMainTitle)
+  const userId = titles.at(0)!.creatorId
 
-  await MediasIndexService.sync(db, [title.mediaId])
+  for (const title of titles) {
+    await logsClient.titles.insert({
+      type,
+      _new: title,
+      userId,
+    })
+  }
 
-  if (title.isMainTitle) {
-    await cacheClient.medias.featured(title.language).invalidate()
+  await MediasIndexService.sync(db, uniqueMediaIds)
+
+  if (mainTitle) {
+    await cacheClient.medias.featured(mainTitle.language).invalidate()
   }
 }
 
@@ -41,11 +46,11 @@ const postUpdate = async (
   }
 }
 
-const postDelete = async (title: MediaTitle, userId: string) => {
+const postDelete = async (title: MediaTitle) => {
   await logsClient.titles.insert({
     type: "deleted",
     old: title,
-    userId,
+    userId: title.deleterId!,
   })
 
   await MediasIndexService.sync(db, [title.mediaId])

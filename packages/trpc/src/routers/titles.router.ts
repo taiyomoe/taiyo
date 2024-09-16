@@ -59,7 +59,7 @@ export const titlesRouter = createTRPCRouter({
         return { new: result, old: oldMainTitle }
       })
 
-      await TitlesService.postCreate("created", result.new, ctx.session.user.id)
+      await TitlesService.postCreate("created", [result.new])
 
       return result.new
     }),
@@ -167,6 +167,6 @@ export const titlesRouter = createTRPCRouter({
         where: { id: input },
       })
 
-      await TitlesService.postDelete(result, ctx.session.user.id)
+      await TitlesService.postDelete(result)
     }),
 })

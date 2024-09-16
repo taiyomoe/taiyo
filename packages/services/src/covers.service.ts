@@ -8,7 +8,7 @@ const postUpload = async (
   covers: MediaCover[],
   userId: string,
 ) => {
-  const uniqueMediaIds = new Set(covers.map((c) => c.mediaId))
+  const uniqueMediaIds = Array.from(new Set(covers.map((c) => c.mediaId)))
   const hasMainCover = covers.some((c) => c.isMainCover)
 
   for (const cover of covers) {
@@ -20,7 +20,7 @@ const postUpload = async (
   }
 
   if (hasMainCover) {
-    await MediasIndexService.sync(db, Array.from(uniqueMediaIds))
+    await MediasIndexService.sync(db, uniqueMediaIds)
     await cacheClient.medias.invalidateAll()
   }
 }
