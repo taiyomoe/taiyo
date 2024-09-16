@@ -1,5 +1,5 @@
-import { MediasIndexService } from "@taiyomoe/meilisearch/services"
 import { idSchema, updateCoverSchema } from "@taiyomoe/schemas"
+import { CoversService } from "@taiyomoe/services"
 import { TRPCError } from "@trpc/server"
 import { createTRPCRouter, protectedProcedure } from "../trpc"
 
@@ -27,22 +27,39 @@ export const coversRouter = createTRPCRouter({
         })
       }
 
-      const updatedCover = await ctx.db.mediaCover.update({
-        data: input,
-        where: { id: input.id },
+      const mainCover = await ctx.db.mediaCover.findFirst({
+        where: { mediaId: cover.mediaId, isMainCover: true },
       })
 
-      if (input.isMainCover) {
-        await ctx.db.mediaCover.updateMany({
-          data: { isMainCover: false },
-          where: {
-            mediaId: updatedCover.mediaId,
-            id: { not: input.id },
-          },
+      if (!mainCover) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Media cover not found",
+        })
+      }
+
+      const result = await ctx.db.$transaction(async (tx) => {
+        const result = await ctx.db.mediaCover.update({
+          data: input,
+          where: { id: input.id },
         })
 
-        await MediasIndexService.sync(ctx.db, [updatedCover.mediaId])
-      }
+        if (input.isMainCover) {
+          await tx.mediaCover.update({
+            data: { isMainCover: false },
+            where: { id: mainCover.id },
+          })
+        }
+
+        return result
+      })
+
+      await CoversService.postUpdate(
+        cover,
+        result,
+        input.isMainCover ? mainCover : null,
+        ctx.session.user.id,
+      )
     }),
 
   delete: protectedProcedure
@@ -68,9 +85,11 @@ export const coversRouter = createTRPCRouter({
         })
       }
 
-      await ctx.db.mediaCover.update({
+      const result = await ctx.db.mediaCover.update({
         data: { deletedAt: new Date(), deleterId: ctx.session.user.id },
         where: { id: input },
       })
+
+      await CoversService.postDelete([result], ctx.session.user.id)
     }),
 })
