@@ -1,4 +1,5 @@
 import { type Prisma, db } from "@taiyomoe/db"
+import { CoversService } from "@taiyomoe/services"
 import { omit } from "radash"
 import type { UploadCoverInput } from "../schemas"
 import { FilesService } from "../services/files.service"
@@ -25,6 +26,8 @@ const insert = async (
     },
   })
 
+  await CoversService.postUpload("created", [result], uploaderId)
+
   return result
 }
 
@@ -43,6 +46,8 @@ const insertLimited = async (
       uploaderId,
     },
   })
+
+  await CoversService.postUpload("created", [result], uploaderId)
 
   return result
 }

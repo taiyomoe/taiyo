@@ -1,9 +1,16 @@
 import type Stream from "@elysiajs/stream"
-import { type Media, type MediaChapter, type Prisma, db } from "@taiyomoe/db"
+import {
+  type Media,
+  type MediaChapter,
+  type MediaCover,
+  type Prisma,
+  db,
+} from "@taiyomoe/db"
 import { ScansIndexService } from "@taiyomoe/meilisearch/services"
 import {
   MediasService as BaseMediasService,
   ChaptersService,
+  CoversService,
 } from "@taiyomoe/services"
 import { MdUtils, TitleUtils } from "@taiyomoe/utils"
 import { type Chapter, type Cover, Group, Manga } from "mangadex-full-api"
@@ -68,6 +75,7 @@ const getInfoPayload = <TAction extends "create" | "update">(
 }
 
 const uploadCovers = async (
+  type: "imported" | "synced",
   s: ReturnType<typeof sendStream>,
   step: number,
   mediaId: string,
@@ -75,6 +83,8 @@ const uploadCovers = async (
   covers: Cover[],
   uploaderId: string,
 ) => {
+  const uploadedCovers: MediaCover[] = []
+
   for (const [i, cover] of covers.entries()) {
     const coverLanguage = MdUtils.getLanguage(cover.locale)
 
@@ -100,7 +110,7 @@ const uploadCovers = async (
       },
     )
 
-    await db.mediaCover.create({
+    const result = await db.mediaCover.create({
       data: {
         id: _uploaded.id,
         volume: Number.isNaN(cover.volume)
@@ -112,7 +122,11 @@ const uploadCovers = async (
         uploaderId,
       },
     })
+
+    uploadedCovers.push(result)
   }
+
+  await CoversService.postUpload(type, uploadedCovers, uploaderId)
 
   s(step, "Covers upadas", "success")
 }
@@ -341,7 +355,15 @@ const importFn = async (
 
   s(2, "Obra criada", "success")
 
-  await uploadCovers(s, 3, media.id, mainCover.id, covers, creatorId)
+  await uploadCovers(
+    "imported",
+    s,
+    3,
+    media.id,
+    mainCover.id,
+    covers,
+    creatorId,
+  )
   await postMediaCreation(s, 4, media, creatorId)
 
   if (!downloadChapters) {
@@ -464,6 +486,7 @@ const sync = async (
 
     if (newCovers.length > 0) {
       await uploadCovers(
+        "synced",
         s,
         currentStep,
         media.id,
