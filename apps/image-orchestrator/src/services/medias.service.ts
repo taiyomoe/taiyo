@@ -2,6 +2,7 @@ import { type Prisma, db } from "@taiyomoe/db"
 import { omit } from "radash"
 import type { CreateMediaInput } from "../schemas"
 import { MediaNotFoundError } from "../utils/errors"
+import { cacheClient } from "@taiyomoe/cache"
 
 const getById = async (id: string) => {
   const result = await db.media.findUnique({ where: { id } })
@@ -13,7 +14,7 @@ const getById = async (id: string) => {
   return result
 }
 
-const create = (
+const create = async (
   client: Prisma.TransactionClient,
   input: CreateMediaInput,
   creatorId: string,
@@ -44,7 +45,7 @@ const create = (
     })
   }
 
-  return client.media.create({
+  const media = await client.media.create({
     data: {
       ...omit(input, ["mainTitle", "mdId", "alId", "malId", "cover"]),
       titles: {
@@ -60,6 +61,10 @@ const create = (
       creatorId,
     },
   })
+
+  await cacheClient.medias.latest.invalidate()
+
+  return media
 }
 
 export const MediasService = {
