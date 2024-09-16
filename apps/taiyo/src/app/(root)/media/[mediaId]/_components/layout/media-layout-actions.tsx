@@ -1,9 +1,9 @@
 import type { MediaLimited } from "@taiyomoe/types"
 import { SignedIn } from "~/components/utils/signed-in/server"
 import { MediaLayoutActionsLibraryButton } from "../buttons/media-layout-actions-library-button"
+import { MediaLayoutActionsSyncButton } from "../buttons/media-layout-actions-sync-button"
 import { MediaLayoutActionsUpdateButton } from "../buttons/media-layout-actions-update-button"
 import { MediaLayoutActionsUploadButton } from "../buttons/media-layout-actions-upload-button"
-import { MediaLayoutActionsSyncButton } from "../buttons/media-layout-actions-sync-button"
 
 type Props = {
   media: MediaLimited
