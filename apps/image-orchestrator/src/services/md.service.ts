@@ -515,7 +515,7 @@ const sync = async (
         currentStep,
         media.id,
         mainCover.id,
-        covers,
+        newCovers,
         creatorId,
       )
     }
