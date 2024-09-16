@@ -1,3 +1,4 @@
+import type { MediaChapter } from "@taiyomoe/db"
 import { buildFilter, buildSort } from "@taiyomoe/meilisearch/utils"
 import {
   bulkMutateSchema,
@@ -5,16 +6,12 @@ import {
   idSchema,
   updateMediaSchema,
 } from "@taiyomoe/schemas"
-import {
-  ChaptersService,
-  LibrariesService,
-  MediasService,
-} from "@taiyomoe/services"
+import { LibrariesService, MediasService } from "@taiyomoe/services"
 import type { MediaLimited, MediasListItem } from "@taiyomoe/types"
 import { MediaUtils } from "@taiyomoe/utils"
 import { TRPCError } from "@trpc/server"
 import { DateTime } from "luxon"
-import { omit, parallel, unique } from "radash"
+import { group, omit, parallel, unique } from "radash"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 
 export const mediasRouter = createTRPCRouter({
@@ -201,32 +198,31 @@ export const mediasRouter = createTRPCRouter({
         deletedAt: newDeletedAt,
         deleterId: newDeleterId,
       }))
+      const rawChapters = await parallel(10, medias, (m) =>
+        ctx.db.mediaChapter.findMany({
+          where: { mediaId: m.id },
+        }),
+      )
+      const chapters = group(rawChapters.flat(), (c) => c.mediaId) as Record<
+        string,
+        MediaChapter[]
+      >
 
       await ctx.db.media.updateMany({
         data: { deletedAt: newDeletedAt, deleterId: newDeleterId },
         where: { id: { in: input.ids } },
       })
 
-      for (const media of newMedias) {
-        const chapters = await ctx.db.mediaChapter.findMany({
-          where: { mediaId: media.id },
-        })
-
-        if (input.type === "restore") {
-          await ChaptersService.postRestore(chapters, ctx.session.user.id)
-
-          continue
-        }
-
-        await ChaptersService.postDelete(chapters, ctx.session.user.id)
-      }
-
       if (input.type === "restore") {
-        await MediasService.postRestore(newMedias, ctx.session.user.id)
+        await MediasService.postRestore(
+          newMedias,
+          chapters,
+          ctx.session.user.id,
+        )
 
         return
       }
 
-      await MediasService.postDelete(newMedias, ctx.session.user.id)
+      await MediasService.postDelete(newMedias, chapters, ctx.session.user.id)
     }),
 })

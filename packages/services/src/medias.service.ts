@@ -1,7 +1,17 @@
 import { cacheClient } from "@taiyomoe/cache"
-import { type Languages, type Media, type MediaStatus, db } from "@taiyomoe/db"
+import {
+  type Languages,
+  type Media,
+  type MediaChapter,
+  type MediaStatus,
+  db,
+} from "@taiyomoe/db"
 import { logsClient } from "@taiyomoe/logs"
-import { MediasIndexService } from "@taiyomoe/meilisearch/services"
+import { meilisearchClient } from "@taiyomoe/meilisearch"
+import {
+  ChaptersIndexService,
+  MediasIndexService,
+} from "@taiyomoe/meilisearch/services"
 import type { FeaturedMedia, LatestMedia } from "@taiyomoe/types"
 import { MediaUtils } from "@taiyomoe/utils"
 import { TRPCError } from "@trpc/server"
@@ -205,7 +215,11 @@ const postUpdate = async (
   await MediasIndexService.sync(db, [newMedia.id])
 }
 
-const postRestore = async (medias: Media[], userId: string) => {
+const postRestore = async (
+  medias: Media[],
+  groupedChapters: Record<string, MediaChapter[]>,
+  userId: string,
+) => {
   const ids = medias.map((m) => m.id)
 
   for (const media of medias) {
@@ -217,11 +231,21 @@ const postRestore = async (medias: Media[], userId: string) => {
     })
   }
 
+  for (const chapters of Object.values(groupedChapters)) {
+    const chapterIds = chapters.map((c) => c.id)
+
+    await ChaptersIndexService.sync(db, chapterIds)
+  }
+
   await MediasIndexService.sync(db, ids)
   await cacheClient.medias.invalidateAll()
 }
 
-const postDelete = async (medias: Media[], userId: string) => {
+const postDelete = async (
+  medias: Media[],
+  groupedChapters: Record<string, MediaChapter[]>,
+  userId: string,
+) => {
   const ids = medias.map((m) => m.id)
 
   for (const media of medias) {
@@ -230,6 +254,12 @@ const postDelete = async (medias: Media[], userId: string) => {
       old: media,
       userId,
     })
+  }
+
+  for (const chapters of Object.values(groupedChapters)) {
+    const chapterIds = chapters.map((c) => c.id)
+
+    await meilisearchClient.chapters.deleteDocuments(chapterIds)
   }
 
   await MediasIndexService.sync(db, ids)
