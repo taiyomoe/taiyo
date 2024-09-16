@@ -63,14 +63,7 @@ export const chaptersRouter = createTRPCRouter({
         where: { id: input.id },
       })
 
-      await ctx.logs.chapters.insert({
-        type: "updated",
-        old: omit(chapter, ["scans"]),
-        _new: result,
-        userId: ctx.session.user.id,
-      })
-
-      await ChaptersIndexService.sync(ctx.db, [result.id])
+      await ChaptersService.postUpdate([chapter], [result], ctx.session.user.id)
 
       return result
     }),
@@ -101,18 +94,10 @@ export const chaptersRouter = createTRPCRouter({
           where: { id: { in: chptrs.ids } },
         })
 
-        for (const chapterId of chptrs.ids) {
-          await ctx.logs.chapters.insert({
-            type: "updated",
-            old: chapters.find((c) => c.id === chapterId)!,
-            _new: newChapters.find((c) => c.id === chapterId)!,
-            userId: ctx.session.user.id,
-          })
-        }
-
-        await ChaptersIndexService.sync(
-          ctx.db,
-          newChapters.map((c) => c.id),
+        await ChaptersService.postUpdate(
+          chapters,
+          newChapters,
+          ctx.session.user.id,
         )
       }
     }),
@@ -502,28 +487,25 @@ export const chaptersRouter = createTRPCRouter({
         }
       }
 
+      const newDeletedAt = input.type === "delete" ? new Date() : null
+      const newDeleterId = input.type === "delete" ? ctx.session.user.id : null
+      const newChapters = chapters.map((c) => ({
+        ...c,
+        deletedAt: newDeletedAt,
+        deleterId: newDeleterId,
+      }))
+
       await ctx.db.mediaChapter.updateMany({
-        data: {
-          deletedAt: input.type === "delete" ? new Date() : null,
-          deleterId: input.type === "delete" ? ctx.session.user.id : null,
-        },
+        data: { deletedAt: newDeletedAt, deleterId: newDeleterId },
         where: { id: { in: input.ids } },
       })
 
-      const newChapters = chapters.map((c) => ({
-        ...c,
-        deletedAt: input.type === "delete" ? new Date() : null,
-        deleterId: input.type === "delete" ? ctx.session.user.id : null,
-      }))
+      if (input.type === "restore") {
+        await ChaptersService.postRestore(newChapters, ctx.session.user.id)
 
-      for (const chapter of newChapters) {
-        await ctx.logs.chapters.insert({
-          type: "deleted",
-          old: chapter,
-          userId: ctx.session.user.id,
-        })
+        return
       }
 
-      await ChaptersIndexService.sync(ctx.db, input.ids)
+      await ChaptersService.postDelete(newChapters, ctx.session.user.id)
     }),
 })

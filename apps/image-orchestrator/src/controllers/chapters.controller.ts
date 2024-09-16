@@ -18,6 +18,7 @@ const upload = new Elysia()
         body.files,
       )
       const chapter = await MediaChaptersService.insert(
+        "created",
         body,
         uploadedChapter,
         session.user.id,

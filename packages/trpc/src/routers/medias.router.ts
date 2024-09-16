@@ -1,7 +1,4 @@
-import {
-  ChaptersIndexService,
-  MediasIndexService,
-} from "@taiyomoe/meilisearch/services"
+import type { MediaChapter, MediaTracker } from "@taiyomoe/db"
 import { buildFilter, buildSort } from "@taiyomoe/meilisearch/utils"
 import {
   bulkMutateSchema,
@@ -9,12 +6,16 @@ import {
   idSchema,
   updateMediaSchema,
 } from "@taiyomoe/schemas"
-import { LibrariesService, MediasService } from "@taiyomoe/services"
+import {
+  LibrariesService,
+  MediasService,
+  TrackersService,
+} from "@taiyomoe/services"
 import type { MediaLimited, MediasListItem } from "@taiyomoe/types"
 import { MediaUtils } from "@taiyomoe/utils"
 import { TRPCError } from "@trpc/server"
 import { DateTime } from "luxon"
-import { omit, parallel, unique } from "radash"
+import { group, omit, parallel, unique } from "radash"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 
 export const mediasRouter = createTRPCRouter({
@@ -23,9 +24,10 @@ export const mediasRouter = createTRPCRouter({
     .input(updateMediaSchema)
     .mutation(async ({ ctx, input }) => {
       const media = await ctx.db.media.findUnique({
-        select: { id: true },
+        include: { trackers: true },
         where: { id: input.id },
       })
+      const trackers = TrackersService.getFormatted(input, ctx.session.user.id)
 
       if (!media) {
         throw new TRPCError({
@@ -34,12 +36,47 @@ export const mediasRouter = createTRPCRouter({
         })
       }
 
-      await ctx.db.media.update({
+      const result = await ctx.db.media.update({
+        data: omit(input, ["mdId", "alId", "malId"]),
         where: { id: input.id },
-        data: input,
       })
+      const createdTrackers: MediaTracker[] = []
 
-      await MediasIndexService.sync(ctx.db, [input.id])
+      for (const tracker of trackers) {
+        const oldTracker = media.trackers.find(
+          (t) => t.tracker === tracker.tracker,
+        )
+
+        if (oldTracker) {
+          const result = await ctx.db.mediaTracker.update({
+            data: tracker,
+            where: { id: oldTracker.id },
+          })
+
+          await TrackersService.postUpdate(
+            "updated",
+            oldTracker,
+            result,
+            ctx.session.user.id,
+          )
+
+          continue
+        }
+
+        const result = await ctx.db.mediaTracker.create({
+          data: { ...tracker, mediaId: media.id },
+        })
+
+        createdTrackers.push(result)
+      }
+
+      await MediasService.postUpdate(
+        "updated",
+        omit(media, ["trackers"]),
+        result,
+        ctx.session.user.id,
+      )
+      await TrackersService.postCreate("created", createdTrackers)
     }),
 
   getById: publicProcedure
@@ -190,45 +227,38 @@ export const mediasRouter = createTRPCRouter({
         }
       }
 
+      const newDeletedAt = input.type === "delete" ? new Date() : null
+      const newDeleterId = input.type === "delete" ? ctx.session.user.id : null
+      const newMedias = medias.map((m) => ({
+        ...m,
+        deletedAt: newDeletedAt,
+        deleterId: newDeleterId,
+      }))
+      const rawChapters = await parallel(10, medias, (m) =>
+        ctx.db.mediaChapter.findMany({
+          where: { mediaId: m.id },
+        }),
+      )
+      const chapters = group(rawChapters.flat(), (c) => c.mediaId) as Record<
+        string,
+        MediaChapter[]
+      >
+
       await ctx.db.media.updateMany({
-        data: {
-          deletedAt: input.type === "delete" ? new Date() : null,
-          deleterId: input.type === "delete" ? ctx.session.user.id : null,
-        },
+        data: { deletedAt: newDeletedAt, deleterId: newDeleterId },
         where: { id: { in: input.ids } },
       })
 
-      for (const media of medias) {
-        const chapters = await ctx.db.mediaChapter.findMany({
-          select: { id: true },
-          where: { mediaId: media.id },
-        })
-        const chaptersIds = chapters.map((c) => c.id)
+      if (input.type === "restore") {
+        await MediasService.postRestore(
+          newMedias,
+          chapters,
+          ctx.session.user.id,
+        )
 
-        if (input.type === "restore") {
-          await ChaptersIndexService.sync(ctx.db, chaptersIds)
-
-          continue
-        }
-
-        await ctx.meilisearch.chapters.deleteDocuments(chaptersIds)
+        return
       }
 
-      // const newChapters = chapters.map((c) => ({
-      //   ...c,
-      //   deletedAt: input.type === "delete" ? new Date() : null,
-      //   deleterId: input.type === "delete" ? ctx.session.user.id : null,
-      // }))
-
-      // for (const chapter of newChapters) {
-      //   await ctx.logs.chapters.insert({
-      //     type: "deleted",
-      //     old: chapter,
-      //     userId: ctx.session.user.id,
-      //   })
-      // }
-
-      await MediasIndexService.sync(ctx.db, input.ids)
-      await ctx.cache.medias.invalidateAll()
+      await MediasService.postDelete(newMedias, chapters)
     }),
 })

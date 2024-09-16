@@ -1,11 +1,21 @@
 import type Stream from "@elysiajs/stream"
-import { type Media, type MediaChapter, type Prisma, db } from "@taiyomoe/db"
 import {
-  ChaptersIndexService,
-  MediasIndexService,
-  ScansIndexService,
-} from "@taiyomoe/meilisearch/services"
-import { MdUtils, TitleUtils } from "@taiyomoe/utils"
+  type Media,
+  type MediaChapter,
+  type MediaCover,
+  type MediaTitle,
+  type MediaTracker,
+  type Prisma,
+  db,
+} from "@taiyomoe/db"
+import { ScansIndexService } from "@taiyomoe/meilisearch/services"
+import {
+  MediasService as BaseMediasService,
+  CoversService,
+  TitlesService,
+  TrackersService,
+} from "@taiyomoe/services"
+import { MdUtils, ObjectUtils, TitleUtils } from "@taiyomoe/utils"
 import { type Chapter, type Cover, Group, Manga } from "mangadex-full-api"
 import { parallel, pick } from "radash"
 import type { ImportMediaInput, SyncMediaInput } from "../schemas"
@@ -68,6 +78,7 @@ const getInfoPayload = <TAction extends "create" | "update">(
 }
 
 const uploadCovers = async (
+  type: "imported" | "synced",
   s: ReturnType<typeof sendStream>,
   step: number,
   mediaId: string,
@@ -75,6 +86,8 @@ const uploadCovers = async (
   covers: Cover[],
   uploaderId: string,
 ) => {
+  const uploadedCovers: MediaCover[] = []
+
   for (const [i, cover] of covers.entries()) {
     const coverLanguage = MdUtils.getLanguage(cover.locale)
 
@@ -100,7 +113,7 @@ const uploadCovers = async (
       },
     )
 
-    await db.mediaCover.create({
+    const result = await db.mediaCover.create({
       data: {
         id: _uploaded.id,
         volume: Number.isNaN(cover.volume)
@@ -112,7 +125,11 @@ const uploadCovers = async (
         uploaderId,
       },
     })
+
+    uploadedCovers.push(result)
   }
+
+  await CoversService.postUpload(type, uploadedCovers)
 
   s(step, "Covers upadas", "success")
 }
@@ -179,6 +196,7 @@ const createScans = async (
 }
 
 const uploadChapters = async (
+  type: "imported" | "synced",
   s: ReturnType<typeof sendStream>,
   step: number,
   media: Media,
@@ -210,7 +228,6 @@ const uploadChapters = async (
       existingChapters.find((cc) => cc.number === Number(c.chapter)) ? null : c,
     )
     .filter(Boolean)
-  const uploadedChapters = []
 
   for (const [i, chapter] of newChapters.entries()) {
     s(currentStep, `Baixando o capítulo ${chapter.chapter}...`, "ongoing", i)
@@ -223,7 +240,9 @@ const uploadChapters = async (
     s(currentStep, `Upando o capítulo ${chapter.chapter}...`, "ongoing", i)
 
     const uploaded = await MediaChaptersService.upload(media.id, pages)
-    const uploadedChapter = await MediaChaptersService.insert(
+
+    await MediaChaptersService.insert(
+      type,
       {
         title: chapter.title,
         number: Number(chapter.chapter),
@@ -241,46 +260,26 @@ const uploadChapters = async (
       uploaderId,
     )
 
-    uploadedChapters.push(uploadedChapter)
-
     s(currentStep, `Capítulo ${chapter.chapter} upado`, "success", i)
   }
 
-  if (uploadedChapters.length) {
+  if (newChapters.length) {
     s(currentStep, "Capítulos upados", "success")
-
-    currentStep++
-
-    await syncChaptersIndex(
-      s,
-      currentStep,
-      uploadedChapters.map((c) => c.id),
-    )
   }
 }
 
-const syncMediasIndex = async (
+const postMediaUpdate = async (
   s: ReturnType<typeof sendStream>,
   step: number,
-  mediaId: string,
+  oldMedia: Media,
+  newMedia: Media,
+  userId: string,
 ) => {
-  s(step, "Reindexando a busca...", "ongoing")
+  s(step, "Atualizando a obra...", "ongoing")
 
-  await MediasIndexService.sync(db, [mediaId])
+  await BaseMediasService.postUpdate("synced", oldMedia, newMedia, userId)
 
-  s(step, "Busca reindexada", "success")
-}
-
-const syncChaptersIndex = async (
-  s: ReturnType<typeof sendStream>,
-  step: number,
-  chapterIds: string[],
-) => {
-  s(step, "Reindexando a busca dos capítulos...", "ongoing")
-
-  await ChaptersIndexService.sync(db, chapterIds)
-
-  s(step, "Busca dos capítulos reindexada", "success")
+  s(step, "Obra atualizada", "success")
 }
 
 const getById = async (id: string) => {
@@ -324,17 +323,38 @@ const importFn = async (
       trackers: { create: infoPayload.trackers },
     },
   })
+  const titles = await db.mediaTitle.findMany({
+    where: { mediaId: media.id },
+  })
+  const trackers = await db.mediaTracker.findMany({
+    where: { mediaId: media.id },
+  })
 
   s(2, "Obra criada", "success")
 
-  await uploadCovers(s, 3, media.id, mainCover.id, covers, creatorId)
-  await syncMediasIndex(s, 4, media.id)
+  await uploadCovers(
+    "imported",
+    s,
+    3,
+    media.id,
+    mainCover.id,
+    covers,
+    creatorId,
+  )
+
+  s(4, "Reindexando a busca...", "ongoing")
+
+  await BaseMediasService.postCreate("imported", media)
+  await TitlesService.postCreate("imported", titles)
+  await TrackersService.postCreate("imported", trackers)
+
+  s(4, "Busca reindexada", "success")
 
   if (!downloadChapters) {
     return
   }
 
-  await uploadChapters(s, 5, media, manga, [], creatorId)
+  await uploadChapters("imported", s, 5, media, manga, [], creatorId)
 }
 
 const sync = async (
@@ -369,7 +389,7 @@ const sync = async (
     deltaTitles,
   )
 
-  await db.media.update({
+  const result = await db.media.update({
     data: infoPayload.data,
     where: { id: mediaId },
   })
@@ -384,9 +404,19 @@ const sync = async (
       })
     }
 
+    const createdTitles: MediaTitle[] = []
+
     for (const title of deltaTitlesWithPriorities) {
       if ("id" in title) {
-        await tx.mediaTitle.update({
+        const currentTitle = currentTitles.find((t) => t.id === title.id)!
+
+        if (
+          Object.keys(ObjectUtils.deepDiff(currentTitle, title)).length === 0
+        ) {
+          continue
+        }
+
+        const result = await tx.mediaTitle.update({
           data: pick(title, [
             "title",
             "language",
@@ -397,31 +427,61 @@ const sync = async (
           where: { id: title.id },
         })
 
+        await TitlesService.postUpdate(
+          "synced",
+          currentTitle,
+          result,
+          creatorId,
+        )
+
         continue
       }
 
-      await tx.mediaTitle.create({
+      const result = await tx.mediaTitle.create({
         data: { ...title, mediaId, creatorId },
       })
+
+      createdTitles.push(result)
     }
+
+    await TitlesService.postCreate("synced", createdTitles)
   })
+
+  const createdTrackers: MediaTracker[] = []
 
   for (const tracker of infoPayload.trackers) {
     const existingTracker = currentTrackers.find(
       (t) => t.externalId === tracker.externalId,
     )
 
-    await db.mediaTracker.upsert({
-      create: { ...tracker, mediaId },
-      update: tracker,
-      where: { id: existingTracker?.id ?? "" },
+    if (existingTracker) {
+      const result = await db.mediaTracker.update({
+        data: tracker,
+        where: { id: existingTracker.id },
+      })
+
+      await TrackersService.postUpdate(
+        "synced",
+        existingTracker,
+        result,
+        creatorId,
+      )
+
+      continue
+    }
+
+    const result = await db.mediaTracker.create({
+      data: { ...tracker, mediaId },
     })
+
+    createdTrackers.push(result)
   }
+  await TrackersService.postCreate("synced", createdTrackers)
 
   s(2, "Obra atualizada", "ongoing")
 
   if (!downloadCovers && !downloadChapters) {
-    await syncMediasIndex(s, 3, media.id)
+    await postMediaUpdate(s, 3, media, result, creatorId)
 
     return
   }
@@ -450,6 +510,7 @@ const sync = async (
 
     if (newCovers.length > 0) {
       await uploadCovers(
+        "synced",
         s,
         currentStep,
         media.id,
@@ -462,7 +523,7 @@ const sync = async (
     currentStep++
   }
 
-  await syncMediasIndex(s, currentStep, media.id)
+  await postMediaUpdate(s, currentStep, media, result, creatorId)
 
   if (!downloadChapters) {
     return
@@ -470,7 +531,15 @@ const sync = async (
 
   currentStep++
 
-  await uploadChapters(s, currentStep, media, manga, currentChapters, creatorId)
+  await uploadChapters(
+    "synced",
+    s,
+    currentStep,
+    media,
+    manga,
+    currentChapters,
+    creatorId,
+  )
 }
 
 export const MdService = {

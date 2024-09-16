@@ -3,9 +3,8 @@ import {
   idSchema,
   updateTitleSchema,
 } from "@taiyomoe/schemas"
+import { TitlesService } from "@taiyomoe/services"
 import { TRPCError } from "@trpc/server"
-
-import { MediasIndexService } from "@taiyomoe/meilisearch/services"
 import { createTRPCRouter, protectedProcedure } from "../trpc"
 
 export const titlesRouter = createTRPCRouter({
@@ -16,6 +15,7 @@ export const titlesRouter = createTRPCRouter({
       const titles = await ctx.db.mediaTitle.findMany({
         where: { mediaId: input.mediaId },
       })
+      const mainTitle = titles.find((t) => t.isMainTitle)!
 
       if (
         titles.some(
@@ -42,26 +42,26 @@ export const titlesRouter = createTRPCRouter({
         })
       }
 
-      const createdTitle = await ctx.db.mediaTitle.create({
-        data: {
-          ...input,
-          creatorId: ctx.session.user.id,
-        },
-      })
-
-      if (input.isMainTitle) {
-        await ctx.db.mediaTitle.updateMany({
-          data: { isMainTitle: false },
-          where: {
-            id: { not: createdTitle.id },
-            mediaId: input.mediaId,
+      const result = await ctx.db.$transaction(async (tx) => {
+        const result = await ctx.db.mediaTitle.create({
+          data: {
+            ...input,
+            creatorId: ctx.session.user.id,
           },
         })
-      }
+        const oldMainTitle = input.isMainTitle
+          ? await tx.mediaTitle.update({
+              data: { isMainTitle: false },
+              where: { id: mainTitle.id },
+            })
+          : null
 
-      await MediasIndexService.sync(ctx.db, [input.mediaId])
+        return { new: result, old: oldMainTitle }
+      })
 
-      return createdTitle
+      await TitlesService.postCreate("created", [result.new])
+
+      return result.new
     }),
 
   update: protectedProcedure
@@ -90,6 +90,7 @@ export const titlesRouter = createTRPCRouter({
       const titles = await ctx.db.mediaTitle.findMany({
         where: { mediaId: title.mediaId },
       })
+      const mainTitle = titles.find((t) => t.isMainTitle)!
 
       // If there is already a title with the same language and title
       if (
@@ -106,22 +107,36 @@ export const titlesRouter = createTRPCRouter({
         })
       }
 
-      await ctx.db.mediaTitle.update({
-        data: input,
-        where: { id: input.id },
+      const result = await ctx.db.$transaction(async (tx) => {
+        const result = await ctx.db.mediaTitle.update({
+          data: input,
+          where: { id: input.id },
+        })
+        const oldMainTitle = input.isMainTitle
+          ? await tx.mediaTitle.update({
+              data: { isMainTitle: false },
+              where: { id: mainTitle.id },
+            })
+          : null
+
+        return { new: result, old: oldMainTitle }
       })
 
-      if (input.isMainTitle) {
-        await ctx.db.mediaTitle.updateMany({
-          data: { isMainTitle: false },
-          where: {
-            id: { not: input.id },
-            mediaId: title.mediaId,
-          },
-        })
+      if (input.isMainTitle && result.old) {
+        await TitlesService.postUpdate(
+          "updated",
+          mainTitle,
+          result.old,
+          ctx.session.user.id,
+        )
       }
 
-      await MediasIndexService.sync(ctx.db, [title.mediaId])
+      await TitlesService.postUpdate(
+        "updated",
+        title,
+        result.new,
+        ctx.session.user.id,
+      )
     }),
 
   delete: protectedProcedure
@@ -147,11 +162,11 @@ export const titlesRouter = createTRPCRouter({
         })
       }
 
-      await ctx.db.mediaTitle.update({
+      const result = await ctx.db.mediaTitle.update({
         data: { deletedAt: new Date(), deleterId: ctx.session.user.id },
         where: { id: input },
       })
 
-      await MediasIndexService.sync(ctx.db, [title.mediaId])
+      await TitlesService.postDelete(result)
     }),
 })

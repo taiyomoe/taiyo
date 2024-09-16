@@ -33,6 +33,7 @@ export const cacheClient = {
           DAY,
           SuperJSON.stringify(input),
         ),
+      invalidate: () => client.del(`medias:featured:${lang}`),
     }),
     invalidateAll: async () => {
       const mediaKeys = await client.keys("medias:*")
@@ -63,6 +64,10 @@ export const cacheClient = {
           DAY,
           SuperJSON.stringify(input),
         ),
+    },
+    invalidateAll: async () => {
+      await client.del("chapters:latest")
+      await client.del("chapters:latest:grouped")
     },
   },
 }

@@ -1,5 +1,6 @@
-import { cacheClient } from "@taiyomoe/cache"
 import { type Prisma, db } from "@taiyomoe/db"
+
+import { TrackersService } from "@taiyomoe/services"
 import { omit } from "radash"
 import type { CreateMediaInput } from "../schemas"
 import { MediaNotFoundError } from "../utils/errors"
@@ -19,33 +20,8 @@ const create = async (
   input: CreateMediaInput,
   creatorId: string,
 ) => {
-  const trackers: Prisma.MediaTrackerCreateManyMediaInput[] = []
-
-  if (input.mdId) {
-    trackers.push({
-      tracker: "MANGADEX",
-      externalId: input.mdId,
-      creatorId,
-    })
-  }
-
-  if (input.alId) {
-    trackers.push({
-      tracker: "ANILIST",
-      externalId: input.alId.toString(),
-      creatorId,
-    })
-  }
-
-  if (input.malId) {
-    trackers.push({
-      tracker: "MYANIMELIST",
-      externalId: input.malId.toString(),
-      creatorId,
-    })
-  }
-
-  const media = await client.media.create({
+  const trackers = TrackersService.getFormatted(input, creatorId)
+  const result = await client.media.create({
     data: {
       ...omit(input, ["mainTitle", "mdId", "alId", "malId", "cover"]),
       titles: {
@@ -62,9 +38,7 @@ const create = async (
     },
   })
 
-  await cacheClient.medias.latest.invalidate()
-
-  return media
+  return result
 }
 
 export const MediasService = {
