@@ -1,4 +1,4 @@
-import type { MediaChapter } from "@taiyomoe/db"
+import type { MediaChapter, MediaTracker } from "@taiyomoe/db"
 import { buildFilter, buildSort } from "@taiyomoe/meilisearch/utils"
 import {
   bulkMutateSchema,
@@ -6,7 +6,11 @@ import {
   idSchema,
   updateMediaSchema,
 } from "@taiyomoe/schemas"
-import { LibrariesService, MediasService } from "@taiyomoe/services"
+import {
+  LibrariesService,
+  MediasService,
+  TrackersService,
+} from "@taiyomoe/services"
 import type { MediaLimited, MediasListItem } from "@taiyomoe/types"
 import { MediaUtils } from "@taiyomoe/utils"
 import { TRPCError } from "@trpc/server"
@@ -20,8 +24,10 @@ export const mediasRouter = createTRPCRouter({
     .input(updateMediaSchema)
     .mutation(async ({ ctx, input }) => {
       const media = await ctx.db.media.findUnique({
+        include: { trackers: true },
         where: { id: input.id },
       })
+      const trackers = TrackersService.getFormatted(input, ctx.session.user.id)
 
       if (!media) {
         throw new TRPCError({
@@ -31,16 +37,46 @@ export const mediasRouter = createTRPCRouter({
       }
 
       const result = await ctx.db.media.update({
+        data: omit(input, ["mdId", "alId", "malId"]),
         where: { id: input.id },
-        data: input,
       })
+      const createdTrackers: MediaTracker[] = []
+
+      for (const tracker of trackers) {
+        const oldTracker = media.trackers.find(
+          (t) => t.tracker === tracker.tracker,
+        )
+
+        if (oldTracker) {
+          const result = await ctx.db.mediaTracker.update({
+            data: tracker,
+            where: { id: oldTracker.id },
+          })
+
+          await TrackersService.postUpdate(
+            "updated",
+            oldTracker,
+            result,
+            ctx.session.user.id,
+          )
+
+          continue
+        }
+
+        const result = await ctx.db.mediaTracker.create({
+          data: { ...tracker, mediaId: media.id },
+        })
+
+        createdTrackers.push(result)
+      }
 
       await MediasService.postUpdate(
         "updated",
-        media,
+        omit(media, ["trackers"]),
         result,
         ctx.session.user.id,
       )
+      await TrackersService.postCreate("created", createdTrackers)
     }),
 
   getById: publicProcedure

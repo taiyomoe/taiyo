@@ -3,6 +3,8 @@ import {
   type Media,
   type MediaChapter,
   type MediaCover,
+  type MediaTitle,
+  type MediaTracker,
   type Prisma,
   db,
 } from "@taiyomoe/db"
@@ -12,6 +14,7 @@ import {
   ChaptersService,
   CoversService,
   TitlesService,
+  TrackersService,
 } from "@taiyomoe/services"
 import { MdUtils, ObjectUtils, TitleUtils } from "@taiyomoe/utils"
 import { type Chapter, type Cover, Group, Manga } from "mangadex-full-api"
@@ -356,8 +359,12 @@ const importFn = async (
   const titles = await db.mediaTitle.findMany({
     where: { mediaId: media.id },
   })
+  const trackers = await db.mediaTracker.findMany({
+    where: { mediaId: media.id },
+  })
 
   await TitlesService.postCreate("imported", titles)
+  await TrackersService.postCreate("imported", trackers)
 
   s(2, "Obra criada", "success")
 
@@ -426,6 +433,8 @@ const sync = async (
       })
     }
 
+    const createdTitles: MediaTitle[] = []
+
     for (const title of deltaTitlesWithPriorities) {
       if ("id" in title) {
         const currentTitle = currentTitles.find((t) => t.id === title.id)!
@@ -457,23 +466,46 @@ const sync = async (
         continue
       }
 
-      await tx.mediaTitle.create({
+      const result = await tx.mediaTitle.create({
         data: { ...title, mediaId, creatorId },
       })
+
+      createdTitles.push(result)
     }
+
+    await TitlesService.postCreate("synced", createdTitles)
   })
+
+  const createdTrackers: MediaTracker[] = []
 
   for (const tracker of infoPayload.trackers) {
     const existingTracker = currentTrackers.find(
       (t) => t.externalId === tracker.externalId,
     )
 
-    await db.mediaTracker.upsert({
-      create: { ...tracker, mediaId },
-      update: tracker,
-      where: { id: existingTracker?.id ?? "" },
+    if (existingTracker) {
+      const result = await db.mediaTracker.update({
+        data: tracker,
+        where: { id: existingTracker.id },
+      })
+
+      await TrackersService.postUpdate(
+        "synced",
+        existingTracker,
+        result,
+        creatorId,
+      )
+
+      continue
+    }
+
+    const result = await db.mediaTracker.create({
+      data: { ...tracker, mediaId },
     })
+
+    createdTrackers.push(result)
   }
+  await TrackersService.postCreate("synced", createdTrackers)
 
   s(2, "Obra atualizada", "ongoing")
 

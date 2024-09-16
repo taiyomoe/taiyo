@@ -3,6 +3,7 @@ import { type Prisma, db } from "@taiyomoe/db"
 import { omit } from "radash"
 import type { CreateMediaInput } from "../schemas"
 import { MediaNotFoundError } from "../utils/errors"
+import { TrackersService } from "@taiyomoe/services"
 
 const getById = async (id: string) => {
   const result = await db.media.findUnique({ where: { id } })
@@ -19,32 +20,7 @@ const create = async (
   input: CreateMediaInput,
   creatorId: string,
 ) => {
-  const trackers: Prisma.MediaTrackerCreateManyMediaInput[] = []
-
-  if (input.mdId) {
-    trackers.push({
-      tracker: "MANGADEX",
-      externalId: input.mdId,
-      creatorId,
-    })
-  }
-
-  if (input.alId) {
-    trackers.push({
-      tracker: "ANILIST",
-      externalId: input.alId.toString(),
-      creatorId,
-    })
-  }
-
-  if (input.malId) {
-    trackers.push({
-      tracker: "MYANIMELIST",
-      externalId: input.malId.toString(),
-      creatorId,
-    })
-  }
-
+  const trackers = TrackersService.getFormatted(input, creatorId)
   const result = await client.media.create({
     data: {
       ...omit(input, ["mainTitle", "mdId", "alId", "malId", "cover"]),

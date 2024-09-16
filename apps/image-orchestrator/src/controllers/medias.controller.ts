@@ -1,6 +1,10 @@
 import { Stream } from "@elysiajs/stream"
 import { db } from "@taiyomoe/db"
-import { MediasService as BaseMediasService } from "@taiyomoe/services"
+import {
+  MediasService as BaseMediasService,
+  TitlesService,
+  TrackersService,
+} from "@taiyomoe/services"
 import { Elysia } from "elysia"
 import { authMiddleware } from "../middlewares"
 import {
@@ -37,7 +41,16 @@ const create = new Elysia().use(authMiddleware([["medias", "create"]])).post(
       return result
     })
 
+    const titles = await db.mediaTitle.findMany({
+      where: { mediaId: result.id },
+    })
+    const trackers = await db.mediaTracker.findMany({
+      where: { mediaId: result.id },
+    })
+
     await BaseMediasService.postCreate("created", result, session.user.id)
+    await TitlesService.postCreate("created", titles)
+    await TrackersService.postCreate("created", trackers)
 
     return result
   },

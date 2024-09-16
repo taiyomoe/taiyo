@@ -4,7 +4,6 @@ import { DuplicatedMediaTrackerError } from "../utils/errors"
 
 const getAll = async (id: string) => {
   const result = await db.mediaTracker.findMany({
-    select: { id: true, tracker: true, externalId: true },
     where: { mediaId: id },
   })
 
