@@ -61,6 +61,10 @@ export default function Page() {
                 "Upar os capítulos (se houver)",
                 <ImportMediaCoversStepDescription stepIndex={9} />,
               ),
+              generateStep(
+                10,
+                "Reindexar a busca dos capítulos (se necessário)",
+              ),
             ]
           : [],
       )}

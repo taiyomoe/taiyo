@@ -248,6 +248,14 @@ const uploadChapters = async (
 
   if (chapters.length) {
     s(currentStep, "Capítulos upados", "success")
+
+    currentStep++
+
+    await syncChaptersIndex(
+      s,
+      currentStep,
+      uploadedChapters.map((c) => c.id),
+    )
   }
 }
 
@@ -261,6 +269,18 @@ const syncMediasIndex = async (
   await MediasIndexService.sync(db, [mediaId])
 
   s(step, "Busca reindexada", "success")
+}
+
+const syncChaptersIndex = async (
+  s: ReturnType<typeof sendStream>,
+  step: number,
+  chapterIds: string[],
+) => {
+  s(step, "Reindexando a busca dos capítulos...", "ongoing")
+
+  await ChaptersIndexService.sync(db, chapterIds)
+
+  s(step, "Busca dos capítulos reindexada", "success")
 }
 
 const getById = async (id: string) => {
