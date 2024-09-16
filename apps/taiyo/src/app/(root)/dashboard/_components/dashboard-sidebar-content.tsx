@@ -62,6 +62,11 @@ export const DashboardSidebarContent = ({ className }: Props) => {
               type: "create",
             },
             {
+              label: "Sincronizar",
+              href: "/dashboard/medias/sync",
+              type: "update",
+            },
+            {
               label: "Modificar",
               href: "/dashboard/medias/edit",
               type: "update",

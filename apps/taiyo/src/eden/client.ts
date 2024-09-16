@@ -130,6 +130,7 @@ export const ioApi = {
   medias: {
     create: createClient<Media>("medias"),
     import: createSseClient<GenericMessage>("medias/import"),
+    sync: createSseClient<GenericMessage>("medias/sync"),
   },
   covers: {
     upload: createClient<MediaCover>("covers"),

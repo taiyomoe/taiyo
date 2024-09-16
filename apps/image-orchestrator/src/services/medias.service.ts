@@ -1,8 +1,8 @@
+import { cacheClient } from "@taiyomoe/cache"
 import { type Prisma, db } from "@taiyomoe/db"
 import { omit } from "radash"
 import type { CreateMediaInput } from "../schemas"
 import { MediaNotFoundError } from "../utils/errors"
-import { cacheClient } from "@taiyomoe/cache"
 
 const getById = async (id: string) => {
   const result = await db.media.findUnique({ where: { id } })

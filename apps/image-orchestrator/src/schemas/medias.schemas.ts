@@ -52,7 +52,7 @@ export const importMediaSchema = t.Object({
 })
 
 export const syncMediaSchema = t.Object({
-  id: t.String({ format: "uuid" }),
+  mediaId: t.String({ format: "uuid" }),
   downloadCovers: t.BooleanString({ default: false }),
   downloadChapters: t.BooleanString({ default: false }),
 })

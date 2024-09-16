@@ -7,7 +7,7 @@ import {
 } from "@taiyomoe/meilisearch/services"
 import { MdUtils, TitleUtils } from "@taiyomoe/utils"
 import { type Chapter, type Cover, Group, Manga } from "mangadex-full-api"
-import { parallel } from "radash"
+import { parallel, pick } from "radash"
 import type { ImportMediaInput, SyncMediaInput } from "../schemas"
 import {
   DuplicatedMediaTrackerError,
@@ -246,7 +246,7 @@ const uploadChapters = async (
     s(currentStep, `Capítulo ${chapter.chapter} upado`, "success", i)
   }
 
-  if (chapters.length) {
+  if (uploadedChapters.length) {
     s(currentStep, "Capítulos upados", "success")
 
     currentStep++
@@ -339,11 +339,11 @@ const importFn = async (
 
 const sync = async (
   stream: Stream<string | number | boolean | object>,
-  { id, downloadCovers, downloadChapters }: SyncMediaInput,
+  { mediaId, downloadCovers, downloadChapters }: SyncMediaInput,
   creatorId: string,
 ) => {
   const s = sendStream(stream)
-  const currentTrackers = await MediaTrackersService.getAll(id)
+  const currentTrackers = await MediaTrackersService.getAll(mediaId)
   const mdTracker = currentTrackers.find((t) => t.tracker === "MANGADEX")
 
   if (!mdTracker) {
@@ -352,9 +352,9 @@ const sync = async (
 
   s(1, "Recuperando as informações da obra", "ongoing")
 
-  const media = await MediasService.getById(id)
-  const currentChapters = await MediaChaptersService.getAll(id)
-  const currentTitles = await MediaTitlesService.getAll(id)
+  const media = await MediasService.getById(mediaId)
+  const currentChapters = await MediaChaptersService.getAll(mediaId)
+  const currentTitles = await MediaTitlesService.getAll(mediaId)
   const manga = await Manga.get(mdTracker.externalId)
   const mainCover = await manga.mainCover.resolve()
 
@@ -371,16 +371,40 @@ const sync = async (
 
   await db.media.update({
     data: infoPayload.data,
-    where: { id },
+    where: { id: mediaId },
   })
 
-  for (const title of deltaTitlesWithPriorities) {
-    await db.mediaTitle.upsert({
-      create: { ...title, mediaId: id, creatorId },
-      update: title,
-      where: { id: "id" in title ? title.id : "" },
-    })
-  }
+  await db.$transaction(async (tx) => {
+    for (const [i, title] of deltaTitlesWithPriorities.entries()) {
+      if (!("id" in title)) continue
+
+      await tx.mediaTitle.update({
+        data: { priority: 1000 + i },
+        where: { id: title.id },
+      })
+    }
+
+    for (const title of deltaTitlesWithPriorities) {
+      if ("id" in title) {
+        await tx.mediaTitle.update({
+          data: pick(title, [
+            "title",
+            "language",
+            "priority",
+            "isAcronym",
+            "isMainTitle",
+          ]),
+          where: { id: title.id },
+        })
+
+        continue
+      }
+
+      await tx.mediaTitle.create({
+        data: { ...title, mediaId, creatorId },
+      })
+    }
+  })
 
   for (const tracker of infoPayload.trackers) {
     const existingTracker = currentTrackers.find(
@@ -388,7 +412,7 @@ const sync = async (
     )
 
     await db.mediaTracker.upsert({
-      create: { ...tracker, mediaId: id },
+      create: { ...tracker, mediaId },
       update: tracker,
       where: { id: existingTracker?.id ?? "" },
     })
@@ -407,7 +431,7 @@ const sync = async (
   if (downloadCovers) {
     s(currentStep, "Recuperando as covers...", "ongoing")
 
-    const currentCovers = await MediaCoversService.getAll(id)
+    const currentCovers = await MediaCoversService.getAll(mediaId)
     const covers = await manga.getCovers()
 
     s(currentStep, "Covers recuperadas", "success")
@@ -433,9 +457,9 @@ const sync = async (
         covers,
         creatorId,
       )
-
-      currentStep++
     }
+
+    currentStep++
   }
 
   await syncMediasIndex(s, currentStep, media.id)
@@ -443,6 +467,8 @@ const sync = async (
   if (!downloadChapters) {
     return
   }
+
+  currentStep++
 
   await uploadChapters(s, currentStep, media, manga, currentChapters, creatorId)
 }

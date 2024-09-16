@@ -82,9 +82,13 @@ const computePriorities = (oldTitles: MediaTitle[], newTitles: NewTitle[]) => {
    * Then, main titles.
    */
   const sortedTitles = mapValues(groupedByLanguage, (titles) =>
-    titles.sort((a, b) => {
-      if (a.isMainTitle || b.isMainTitle) {
+    [...titles].sort((a, b) => {
+      if (a.isMainTitle && !b.isMainTitle) {
         return 1
+      }
+
+      if (!a.isMainTitle && b.isMainTitle) {
+        return -1
       }
 
       if ("isAcronym" in a && "isAcronym" in b) {
@@ -92,11 +96,11 @@ const computePriorities = (oldTitles: MediaTitle[], newTitles: NewTitle[]) => {
       }
 
       if ("isAcronym" in a) {
-        return a.isAcronym ? -1 : 1
+        return a.isAcronym ? -1 : 0
       }
 
       if ("isAcronym" in b) {
-        return b.isAcronym ? -1 : 1
+        return b.isAcronym ? -1 : 0
       }
 
       return a.priority - b.priority
