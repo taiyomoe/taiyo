@@ -230,6 +230,10 @@ const uploadChapters = async (
     .filter(Boolean)
 
   for (const [i, chapter] of newChapters.entries()) {
+    if (chapter.isExternal) {
+      continue
+    }
+
     s(currentStep, `Baixando o capítulo ${chapter.chapter}...`, "ongoing", i)
 
     const pagesUrls = await chapter.getReadablePages()
