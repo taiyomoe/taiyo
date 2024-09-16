@@ -259,6 +259,6 @@ export const mediasRouter = createTRPCRouter({
         return
       }
 
-      await MediasService.postDelete(newMedias, chapters, ctx.session.user.id)
+      await MediasService.postDelete(newMedias, chapters)
     }),
 })

@@ -92,6 +92,6 @@ export const coversRouter = createTRPCRouter({
         where: { id: input },
       })
 
-      await CoversService.postDelete([result], ctx.session.user.id)
+      await CoversService.postDelete([result])
     }),
 })
