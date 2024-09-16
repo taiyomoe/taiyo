@@ -13,13 +13,13 @@ import type {
   RawLatestRelease,
   RawLatestReleaseGroupedChapter,
 } from "@taiyomoe/types"
+import { ObjectUtils } from "@taiyomoe/utils"
 import {
   formatRawLatestReleases,
   formatRawLatestReleasesGrouped,
   getFormattedLatestReleasesGrouped,
   latestReleaseQuery,
 } from "./utils"
-import { ObjectUtils } from "@taiyomoe/utils"
 
 const getLatest = async (preferredTitles?: Languages | null) => {
   const cacheController = cacheClient.chapters.latest
@@ -186,6 +186,8 @@ const postUpload = async (
   chapters: MediaChapter[],
 ) => {
   const ids = chapters.map((c) => c.id)
+
+  console.log("chapters", chapters)
 
   for (const chapter of chapters) {
     await logsClient.chapters.insert({

@@ -11,7 +11,6 @@ import {
 import { ScansIndexService } from "@taiyomoe/meilisearch/services"
 import {
   MediasService as BaseMediasService,
-  ChaptersService,
   CoversService,
   TitlesService,
   TrackersService,
@@ -229,7 +228,6 @@ const uploadChapters = async (
       existingChapters.find((cc) => cc.number === Number(c.chapter)) ? null : c,
     )
     .filter(Boolean)
-  const uploadedChapters = []
 
   for (const [i, chapter] of newChapters.entries()) {
     s(currentStep, `Baixando o capítulo ${chapter.chapter}...`, "ongoing", i)
@@ -242,7 +240,9 @@ const uploadChapters = async (
     s(currentStep, `Upando o capítulo ${chapter.chapter}...`, "ongoing", i)
 
     const uploaded = await MediaChaptersService.upload(media.id, pages)
-    const uploadedChapter = await MediaChaptersService.insert(
+
+    await MediaChaptersService.insert(
+      type,
       {
         title: chapter.title,
         number: Number(chapter.chapter),
@@ -260,21 +260,11 @@ const uploadChapters = async (
       uploaderId,
     )
 
-    uploadedChapters.push(uploadedChapter)
-
     s(currentStep, `Capítulo ${chapter.chapter} upado`, "success", i)
   }
 
-  if (uploadedChapters.length) {
+  if (newChapters.length) {
     s(currentStep, "Capítulos upados", "success")
-
-    currentStep++
-
-    s(currentStep, "Reindexando a busca dos capítulos...", "ongoing")
-
-    await ChaptersService.postUpload(type, uploadedChapters)
-
-    s(currentStep, "Busca dos capítulos reindexada", "success")
   }
 }
 
@@ -340,9 +330,6 @@ const importFn = async (
     where: { mediaId: media.id },
   })
 
-  await TitlesService.postCreate("imported", titles)
-  await TrackersService.postCreate("imported", trackers)
-
   s(2, "Obra criada", "success")
 
   await uploadCovers(
@@ -358,6 +345,8 @@ const importFn = async (
   s(4, "Reindexando a busca...", "ongoing")
 
   await BaseMediasService.postCreate("imported", media)
+  await TitlesService.postCreate("imported", titles)
+  await TrackersService.postCreate("imported", trackers)
 
   s(4, "Busca reindexada", "success")
 

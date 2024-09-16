@@ -15,6 +15,7 @@ const getAll = async (mediaId: string) => {
 }
 
 const insert = async (
+  type: "created" | "imported" | "synced",
   input: UploadChapterInput,
   resource: UploadedResource,
   uploaderId: string,
@@ -30,7 +31,7 @@ const insert = async (
     },
   })
 
-  await ChaptersService.postUpload("created", [result])
+  await ChaptersService.postUpload(type, [result])
 
   return result
 }
