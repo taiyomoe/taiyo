@@ -1,10 +1,10 @@
 import type Stream from "@elysiajs/stream"
 import { type Media, type MediaChapter, type Prisma, db } from "@taiyomoe/db"
 import {
-  ChaptersIndexService,
   MediasIndexService,
   ScansIndexService,
 } from "@taiyomoe/meilisearch/services"
+import { ChaptersService } from "@taiyomoe/services"
 import { MdUtils, TitleUtils } from "@taiyomoe/utils"
 import { type Chapter, type Cover, Group, Manga } from "mangadex-full-api"
 import { parallel, pick } from "radash"
@@ -179,6 +179,7 @@ const createScans = async (
 }
 
 const uploadChapters = async (
+  source: "imported" | "synced",
   s: ReturnType<typeof sendStream>,
   step: number,
   media: Media,
@@ -252,9 +253,11 @@ const uploadChapters = async (
     currentStep++
 
     await syncChaptersIndex(
+      source,
       s,
       currentStep,
-      uploadedChapters.map((c) => c.id),
+      uploadedChapters,
+      uploaderId,
     )
   }
 }
@@ -272,13 +275,15 @@ const syncMediasIndex = async (
 }
 
 const syncChaptersIndex = async (
+  source: "imported" | "synced",
   s: ReturnType<typeof sendStream>,
   step: number,
-  chapterIds: string[],
+  chapters: MediaChapter[],
+  uploaderId: string,
 ) => {
   s(step, "Reindexando a busca dos capítulos...", "ongoing")
 
-  await ChaptersIndexService.sync(db, chapterIds)
+  await ChaptersService.postUpload(source, chapters, uploaderId)
 
   s(step, "Busca dos capítulos reindexada", "success")
 }
@@ -334,7 +339,7 @@ const importFn = async (
     return
   }
 
-  await uploadChapters(s, 5, media, manga, [], creatorId)
+  await uploadChapters("imported", s, 5, media, manga, [], creatorId)
 }
 
 const sync = async (
@@ -470,7 +475,15 @@ const sync = async (
 
   currentStep++
 
-  await uploadChapters(s, currentStep, media, manga, currentChapters, creatorId)
+  await uploadChapters(
+    "synced",
+    s,
+    currentStep,
+    media,
+    manga,
+    currentChapters,
+    creatorId,
+  )
 }
 
 export const MdService = {

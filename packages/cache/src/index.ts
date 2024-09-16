@@ -64,5 +64,9 @@ export const cacheClient = {
           SuperJSON.stringify(input),
         ),
     },
+    invalidateAll: async () => {
+      await client.del("chapters:latest")
+      await client.del("chapters:latest:grouped")
+    },
   },
 }

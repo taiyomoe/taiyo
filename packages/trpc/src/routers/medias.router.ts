@@ -200,33 +200,17 @@ export const mediasRouter = createTRPCRouter({
 
       for (const media of medias) {
         const chapters = await ctx.db.mediaChapter.findMany({
-          select: { id: true },
           where: { mediaId: media.id },
         })
-        const chaptersIds = chapters.map((c) => c.id)
 
         if (input.type === "restore") {
-          await ChaptersIndexService.sync(ctx.db, chaptersIds)
+          await ChaptersService.postRestore(chapters, ctx.session.user.id)
 
           continue
         }
 
-        await ctx.meilisearch.chapters.deleteDocuments(chaptersIds)
+        await ChaptersService.postDelete(chapters, ctx.session.user.id)
       }
-
-      // const newChapters = chapters.map((c) => ({
-      //   ...c,
-      //   deletedAt: input.type === "delete" ? new Date() : null,
-      //   deleterId: input.type === "delete" ? ctx.session.user.id : null,
-      // }))
-
-      // for (const chapter of newChapters) {
-      //   await ctx.logs.chapters.insert({
-      //     type: "deleted",
-      //     old: chapter,
-      //     userId: ctx.session.user.id,
-      //   })
-      // }
 
       await MediasIndexService.sync(ctx.db, input.ids)
       await ctx.cache.medias.invalidateAll()

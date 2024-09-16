@@ -1,9 +1,6 @@
 import { randomUUID } from "crypto"
-import { cacheClient } from "@taiyomoe/cache"
 import { db } from "@taiyomoe/db"
-import { logsClient } from "@taiyomoe/logs"
-import { ChaptersIndexService } from "@taiyomoe/meilisearch/services"
-import { latestReleaseQuery } from "@taiyomoe/services/utils"
+import { ChaptersService } from "@taiyomoe/services"
 import { omit } from "radash"
 import type { UploadChapterInput } from "../schemas"
 import type { UploadedResource } from "../types"
@@ -33,26 +30,7 @@ const insert = async (
     },
   })
 
-  await logsClient.chapters.insert({
-    type: "created",
-    _new: result,
-    userId: uploaderId,
-  })
-
-  await ChaptersIndexService.sync(db, [result.id])
-
-  const cached = await cacheClient.chapters.latest.get()
-
-  if (!cached) {
-    return result
-  }
-
-  const rawResult = await db.mediaChapter.findUnique({
-    where: { id: result.id },
-    select: latestReleaseQuery,
-  })
-
-  await cacheClient.chapters.latest.set([rawResult!, ...cached])
+  await ChaptersService.postUpload("created", [result], uploaderId)
 
   return result
 }

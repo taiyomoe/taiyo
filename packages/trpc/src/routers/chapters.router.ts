@@ -63,14 +63,7 @@ export const chaptersRouter = createTRPCRouter({
         where: { id: input.id },
       })
 
-      await ctx.logs.chapters.insert({
-        type: "updated",
-        old: omit(chapter, ["scans"]),
-        _new: result,
-        userId: ctx.session.user.id,
-      })
-
-      await ChaptersIndexService.sync(ctx.db, [result.id])
+      await ChaptersService.postUpdate([chapter], [result], ctx.session.user.id)
 
       return result
     }),
@@ -101,18 +94,10 @@ export const chaptersRouter = createTRPCRouter({
           where: { id: { in: chptrs.ids } },
         })
 
-        for (const chapterId of chptrs.ids) {
-          await ctx.logs.chapters.insert({
-            type: "updated",
-            old: chapters.find((c) => c.id === chapterId)!,
-            _new: newChapters.find((c) => c.id === chapterId)!,
-            userId: ctx.session.user.id,
-          })
-        }
-
-        await ChaptersIndexService.sync(
-          ctx.db,
-          newChapters.map((c) => c.id),
+        await ChaptersService.postUpdate(
+          chapters,
+          newChapters,
+          ctx.session.user.id,
         )
       }
     }),

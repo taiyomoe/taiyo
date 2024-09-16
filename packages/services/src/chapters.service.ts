@@ -180,6 +180,57 @@ const getDistinctCount = async (mediaId: string) => {
   return result[0].count
 }
 
+const postUpload = async (
+  type: "created" | "imported" | "synced",
+  chapters: MediaChapter[],
+  userId: string,
+) => {
+  const ids = chapters.map((c) => c.id)
+
+  for (const chapter of chapters) {
+    await logsClient.chapters.insert({
+      type,
+      _new: chapter,
+      userId,
+    })
+  }
+
+  await ChaptersIndexService.sync(db, ids)
+
+  const cached = await cacheClient.chapters.latest.get()
+
+  if (!cached) {
+    return
+  }
+
+  const rawLatestReleases = await db.mediaChapter.findMany({
+    select: latestReleaseQuery,
+    where: { id: { in: ids } },
+  })
+
+  await cacheClient.chapters.latest.set([...rawLatestReleases, ...cached])
+}
+
+const postUpdate = async (
+  oldChapters: MediaChapter[],
+  newChapters: MediaChapter[],
+  userId: string,
+) => {
+  const ids = oldChapters.map((c) => c.id)
+
+  for (const chapter of oldChapters) {
+    await logsClient.chapters.insert({
+      type: "updated",
+      old: chapter,
+      _new: newChapters.find((c) => c.id === chapter.id)!,
+      userId,
+    })
+  }
+
+  await ChaptersIndexService.sync(db, ids)
+  await cacheClient.chapters.invalidateAll()
+}
+
 const postRestore = async (chapters: MediaChapter[], userId: string) => {
   const ids = chapters.map((c) => c.id)
 
@@ -217,6 +268,8 @@ export const ChaptersService = {
   getLatestGroupedByUser,
   getUploaderStats,
   getDistinctCount,
+  postUpload,
+  postUpdate,
   postRestore,
   postDelete,
 }

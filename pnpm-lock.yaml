@@ -540,6 +540,12 @@ importers:
       '@taiyomoe/db':
         specifier: workspace:*
         version: link:../db
+      '@taiyomoe/logs':
+        specifier: workspace:^
+        version: link:../logs
+      '@taiyomoe/meilisearch':
+        specifier: workspace:^
+        version: link:../meilisearch
       '@taiyomoe/schemas':
         specifier: workspace:^
         version: link:../schemas
