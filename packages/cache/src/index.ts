@@ -33,6 +33,7 @@ export const cacheClient = {
           DAY,
           SuperJSON.stringify(input),
         ),
+      invalidate: () => client.del(`medias:featured:${lang}`),
     }),
     invalidateAll: async () => {
       const mediaKeys = await client.keys("medias:*")

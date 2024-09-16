@@ -5,6 +5,7 @@ import { coversService } from "./services/covers.logsService"
 import { mediasService } from "./services/medias.logsService"
 import { migrationsService } from "./services/migrations.logsService"
 import { scansService } from "./services/scans.logsService"
+import { titlesService } from "./services/titles.logsService"
 import { usersActivityService } from "./services/usersActivity.logsService"
 import { usersAuthService } from "./services/usersAuth.logsService"
 import { usersSettingsService } from "./services/usersSettings.logsService"
@@ -21,6 +22,7 @@ export const logsClient = {
   migrations: migrationsService,
   medias: mediasService,
   covers: coversService,
+  titles: titlesService,
   chapters: chaptersService,
   users: {
     auth: usersAuthService,
