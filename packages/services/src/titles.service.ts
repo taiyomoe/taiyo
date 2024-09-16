@@ -2,6 +2,7 @@ import { cacheClient } from "@taiyomoe/cache"
 import { type MediaTitle, db } from "@taiyomoe/db"
 import { logsClient } from "@taiyomoe/logs"
 import { MediasIndexService } from "@taiyomoe/meilisearch/services"
+import { ObjectUtils } from "@taiyomoe/utils"
 
 const postCreate = async (
   type: "created" | "imported" | "synced",
@@ -31,6 +32,10 @@ const postUpdate = async (
   newTitle: MediaTitle,
   userId: string,
 ) => {
+  if (ObjectUtils.areEqualTimed(oldTitle, newTitle)) {
+    return
+  }
+
   await logsClient.titles.insert({
     type,
     old: oldTitle,

@@ -1,5 +1,6 @@
 import type { MediaTracker, Prisma } from "@taiyomoe/db"
 import { logsClient } from "@taiyomoe/logs"
+import { ObjectUtils } from "@taiyomoe/utils"
 
 const getFormatted = (
   input: { malId?: number; alId?: number; mdId?: string },
@@ -53,6 +54,10 @@ const postUpdate = async (
   newTracker: MediaTracker,
   userId: string,
 ) => {
+  if (ObjectUtils.areEqualTimed(oldTracker, newTracker)) {
+    return
+  }
+
   await logsClient.trackers.insert({
     type,
     old: oldTracker,

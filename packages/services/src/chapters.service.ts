@@ -19,6 +19,7 @@ import {
   getFormattedLatestReleasesGrouped,
   latestReleaseQuery,
 } from "./utils"
+import { ObjectUtils } from "@taiyomoe/utils"
 
 const getLatest = async (preferredTitles?: Languages | null) => {
   const cacheController = cacheClient.chapters.latest
@@ -218,10 +219,16 @@ const postUpdate = async (
   const ids = oldChapters.map((c) => c.id)
 
   for (const chapter of oldChapters) {
+    const newChapter = newChapters.find((c) => c.id === chapter.id)!
+
+    if (ObjectUtils.areEqualTimed(chapter, newChapter)) {
+      continue
+    }
+
     await logsClient.chapters.insert({
       type: "updated",
       old: chapter,
-      _new: newChapters.find((c) => c.id === chapter.id)!,
+      _new: newChapter,
       userId,
     })
   }

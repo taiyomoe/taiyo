@@ -13,7 +13,7 @@ import {
   MediasIndexService,
 } from "@taiyomoe/meilisearch/services"
 import type { FeaturedMedia, LatestMedia } from "@taiyomoe/types"
-import { MediaUtils } from "@taiyomoe/utils"
+import { MediaUtils, ObjectUtils } from "@taiyomoe/utils"
 import { TRPCError } from "@trpc/server"
 
 /**
@@ -204,6 +204,10 @@ const postUpdate = async (
   newMedia: Media,
   userId: string,
 ) => {
+  if (ObjectUtils.areEqualTimed(oldMedia, newMedia)) {
+    return
+  }
+
   await logsClient.medias.insert({
     type,
     old: oldMedia,
