@@ -6,6 +6,7 @@ import migration4 from "./migrations/20240818012246_add_scans"
 import migration5 from "./migrations/20240824232511_add_users_activity"
 import migration6 from "./migrations/20240826135905_add_users_settings"
 import migration7 from "./migrations/20240907145502_add_chapters_restoration"
+import migration8 from "./migrations/20240916063706_add_medias"
 
 const migrations = [
   migration1,
@@ -15,6 +16,7 @@ const migrations = [
   migration5,
   migration6,
   migration7,
+  migration8,
 ]
 const migrationsRan = await logsClient.migrations.getAll()
 const migrationsToRun = migrations.filter((m) =>
