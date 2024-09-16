@@ -17,7 +17,7 @@ import {
 } from "@taiyomoe/services"
 import { MdUtils, ObjectUtils, TitleUtils } from "@taiyomoe/utils"
 import { type Chapter, type Cover, Group, Manga } from "mangadex-full-api"
-import { parallel, pick } from "radash"
+import { isInt, parallel, pick } from "radash"
 import type { ImportMediaInput, SyncMediaInput } from "../schemas"
 import {
   DuplicatedMediaTrackerError,
@@ -257,7 +257,9 @@ const uploadChapters = async (
         language: "pt_br",
         flag: "OK",
         files: [],
-        scanIds: chapter.groups.map((g) => groupToScan.get(g.id)!),
+        scanIds: chapter.groups
+          .map((g) => groupToScan.get(g.id))
+          .filter(Boolean),
         mediaId: media.id,
       },
       uploaded,
@@ -503,6 +505,7 @@ const sync = async (
     currentStep++
 
     const newCovers = covers
+      .filter((c) => isInt(c.volume))
       .map((c) =>
         currentCovers.find(
           (cc) => cc.language === c.locale && cc.volume === Number(c.volume),
