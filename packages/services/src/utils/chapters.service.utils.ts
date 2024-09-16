@@ -76,7 +76,9 @@ export const getFormattedLatestReleasesGrouped = async (
 ) => {
   const uniqueMedias = [...new Set(input.map((c) => c.mediaId))]
   const uniqueUploaders = [...new Set(input.map((c) => c.uploaderId))]
-  const uniqueScans = [...new Set(input.flatMap((c) => c.scanIds))]
+  const uniqueScans = [...new Set(input.flatMap((c) => c.scanIds))].filter(
+    Boolean,
+  )
 
   const medias = await db.media.findMany({
     where: { id: { in: uniqueMedias } },
