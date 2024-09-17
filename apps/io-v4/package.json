@@ -1,19 +1,19 @@
 {
   "name": "@taiyomoe/io-v4",
   "scripts": {
-    "dev": "wrangler dev src/index.ts",
-    "deploy": "wrangler deploy --minify src/index.ts"
+    "dev": "tsx watch src/index.ts"
   },
   "dependencies": {
+    "@hono/node-server": "^1.13.0",
     "@taiyomoe/messages": "workspace:*",
     "hono": "^4.6.1",
     "use-intl": "^3.19.1"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20240529.0",
     "@taiyomoe/tsconfig": "workspace:^",
     "@taiyomoe/types": "workspace:^",
-    "typescript": "^5.6.2",
-    "wrangler": "^3.57.2"
+    "@types/node": "^20.16.5",
+    "tsx": "^4.19.1",
+    "typescript": "^5.6.2"
   }
 }

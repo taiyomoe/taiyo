@@ -1,12 +1,12 @@
+import { serve } from "@hono/node-server"
 import { Hono } from "hono"
 import { withInternationalization } from "./middlewares/withInternationalization"
 
 const app = new Hono().use(withInternationalization)
 
-app.get("/", (c) => {
-  const msg = c.var.t("medias.notFound", { name: "taiyo" })
+console.log("Server is running on port 4000")
 
-  return c.text(msg)
+serve({
+  fetch: app.fetch,
+  port: 4000,
 })
-
-export default app
