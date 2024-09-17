@@ -5,7 +5,12 @@
   },
   "dependencies": {
     "@hono/node-server": "^1.13.0",
+    "@taiyomoe/cache": "workspace:^",
+    "@taiyomoe/db": "workspace:^",
+    "@taiyomoe/logs": "workspace:^",
+    "@taiyomoe/meilisearch": "workspace:^",
     "@taiyomoe/messages": "workspace:*",
+    "@taiyomoe/services": "workspace:^",
     "hono": "^4.6.1",
     "use-intl": "^3.19.1"
   },
