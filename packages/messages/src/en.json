@@ -1,5 +1,11 @@
 {
-  "HomePage": {
-    "title": "Hello world!"
+  "home": {
+    "title": "Hello world!",
+    "toformat": "Hello {name}!!"
+  },
+  "api": {
+    "medias": {
+      "notFound": "Media not found"
+    }
   }
 }

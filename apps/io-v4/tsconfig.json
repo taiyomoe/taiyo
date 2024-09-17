@@ -1,0 +1,9 @@
+{
+  "extends": "@taiyomoe/tsconfig/base.json",
+  "compilerOptions": {
+    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
+    "types": ["@cloudflare/workers-types/2023-07-01"]
+  },
+  "include": ["src"],
+  "exclude": ["node_modules"]
+}
