@@ -7,7 +7,6 @@ export default getRequestConfig(async () => {
 
   return {
     locale,
-    messages: (await import(`../../../../packages/messages/src/${locale}.json`))
-      .default,
+    messages: (await import(`@taiyomoe/messages/${locale}.json`)).default,
   }
 })
