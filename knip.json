@@ -8,5 +8,8 @@
     "punycode",
     "sharp"
   ],
-  "ignore": ["./packages/schemas/src/prisma/index.ts"]
+  "ignore": [
+    "./apps/taiyo/src/i18n/request.ts",
+    "./packages/schemas/src/prisma/index.ts"
+  ]
 }
