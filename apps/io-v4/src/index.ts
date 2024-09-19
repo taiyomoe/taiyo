@@ -2,11 +2,13 @@ import { serve } from "@hono/node-server"
 import { Hono } from "hono"
 import { cors } from "hono/cors"
 import { chaptersController } from "./controllers/chapters.controller"
+import { mediasController } from "./controllers/medias.controller"
 import { withHelpers } from "./middlewares/withHelpers"
 
 const app = new Hono()
   .use(cors())
   .use(withHelpers)
+  .route("/medias", mediasController)
   .route("/chapters", chaptersController)
 
 console.log("Server is running on port 4000")
