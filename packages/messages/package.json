@@ -9,10 +9,6 @@
   },
   "license": "MIT",
   "scripts": {
-    "clean": "rm -rf .turbo node_modules",
-    "typecheck": "tsc --noEmit"
-  },
-  "devDependencies": {
-    "@taiyomoe/tsconfig": "workspace:*"
+    "clean": "rm -rf .turbo node_modules"
   }
 }

@@ -1,8 +1,0 @@
-{
-  "extends": "@taiyomoe/tsconfig/base.json",
-  "compilerOptions": {
-    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
-    "resolveJsonModule": true
-  },
-  "exclude": ["node_modules"]
-}

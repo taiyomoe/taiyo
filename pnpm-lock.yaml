@@ -561,11 +561,7 @@ importers:
         specifier: workspace:*
         version: link:../types
 
-  packages/messages:
-    devDependencies:
-      '@taiyomoe/tsconfig':
-        specifier: workspace:*
-        version: link:../../tooling/typescript
+  packages/messages: {}
 
   packages/s3:
     dependencies:
