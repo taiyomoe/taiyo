@@ -1,5 +1,11 @@
 {
-  "HomePage": {
-    "title": "Olá mundo!"
+  "home": {
+    "title": "Olá mundo!",
+    "toformat": "Olá {name}!!"
+  },
+  "api": {
+    "medias": {
+      "notFound": "Obra não encontrada"
+    }
   }
 }
