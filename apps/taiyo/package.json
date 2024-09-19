@@ -23,6 +23,7 @@
     "@taiyomoe/db": "workspace:*",
     "@taiyomoe/image-orchestrator": "workspace:*",
     "@taiyomoe/meilisearch": "workspace:*",
+    "@taiyomoe/messages": "workspace:*",
     "@taiyomoe/schemas": "workspace:*",
     "@taiyomoe/services": "workspace:*",
     "@taiyomoe/tailwind-config": "workspace:*",

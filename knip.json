@@ -3,6 +3,7 @@
   "ignoreBinaries": ["infisical"],
   "ignoreWorkspaces": ["./packages/db"],
   "ignoreDependencies": [
+    "@taiyomoe/messages",
     "@types/global-types",
     "@nextui-org/.+",
     "punycode",

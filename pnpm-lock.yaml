@@ -199,6 +199,9 @@ importers:
       '@taiyomoe/meilisearch':
         specifier: workspace:*
         version: link:../../packages/meilisearch
+      '@taiyomoe/messages':
+        specifier: workspace:*
+        version: link:../../packages/messages
       '@taiyomoe/schemas':
         specifier: workspace:*
         version: link:../../packages/schemas
