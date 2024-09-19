@@ -4,6 +4,5 @@
     "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
     "resolveJsonModule": true
   },
-  "include": ["src"],
   "exclude": ["node_modules"]
 }
