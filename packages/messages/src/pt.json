@@ -4,6 +4,7 @@
     "toformat": "Olá {name}!!"
   },
   "api": {
+    "notFound": "Não encontrado",
     "medias": {
       "notFound": "Obra não encontrada"
     }

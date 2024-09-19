@@ -2,9 +2,9 @@ import { zValidator } from "@hono/zod-validator"
 import { Hono } from "hono"
 import { streamSSE } from "hono/streaming"
 import { z } from "zod"
-import type { Context } from "../types"
+import type { CustomContext } from "../types"
 
-export const mediasImportHandler = new Hono<Context>()
+export const mediasImportHandler = new Hono<CustomContext>()
 
 const importSchema = z.object({
   mdId: z.string().uuid(),

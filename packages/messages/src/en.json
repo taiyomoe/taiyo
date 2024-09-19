@@ -4,6 +4,7 @@
     "toformat": "Hello {name}!!"
   },
   "api": {
+    "notFound": "Not found",
     "medias": {
       "notFound": "Media not found"
     }

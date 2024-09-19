@@ -2,18 +2,13 @@ import { cacheClient } from "@taiyomoe/cache"
 import { db } from "@taiyomoe/db"
 import { logsClient } from "@taiyomoe/logs"
 import { meilisearchClient } from "@taiyomoe/meilisearch"
-import en from "@taiyomoe/messages/en.json"
-import pt from "@taiyomoe/messages/pt.json"
-import * as services from "@taiyomoe/services"
 import { createMiddleware } from "hono/factory"
 import { createTranslator } from "use-intl"
+import type { CustomContext } from "../types"
+import { messages } from "../utils/get-messages"
+import { services } from "../utils/get-services"
 
-const messages = {
-  en,
-  pt,
-}
-
-export const withHelpers = createMiddleware(async (c, next) => {
+export const withHelpers = createMiddleware<CustomContext>(async (c, next) => {
   const locale = "en"
   const t = createTranslator({
     locale,

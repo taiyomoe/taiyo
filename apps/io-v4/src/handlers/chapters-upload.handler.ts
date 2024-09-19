@@ -3,9 +3,9 @@ import { ContentRating, Flag, Languages } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { z } from "zod"
 import { zfd } from "zod-form-data"
-import type { Context } from "../types"
+import type { CustomContext } from "../types"
 
-export const chaptersUploadHandler = new Hono<Context>()
+export const chaptersUploadHandler = new Hono<CustomContext>()
 
 const uploadSchema = z.object({
   title: z.string().optional(),
