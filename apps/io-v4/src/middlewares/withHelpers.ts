@@ -2,18 +2,24 @@ import { cacheClient } from "@taiyomoe/cache"
 import { db } from "@taiyomoe/db"
 import { logsClient } from "@taiyomoe/logs"
 import { meilisearchClient } from "@taiyomoe/meilisearch"
-import messages from "@taiyomoe/messages/en.json"
-import type { InferNestedPaths } from "@taiyomoe/types"
+import en from "@taiyomoe/messages/en.json"
+import pt from "@taiyomoe/messages/pt.json"
 import { createMiddleware } from "hono/factory"
 import { createTranslator } from "use-intl"
 
-export const t = createTranslator({
-  locale: "en",
-  namespace: "api",
-  messages,
-})<InferNestedPaths<(typeof messages)["api"]>>
+const messages = {
+  en,
+  pt,
+}
 
 export const withHelpers = createMiddleware(async (c, next) => {
+  const locale = "en"
+  const t = createTranslator({
+    locale,
+    namespace: "api",
+    messages: messages[locale],
+  })
+
   c.set("t", t)
   c.set("db", db)
   c.set("meilisearch", meilisearchClient)

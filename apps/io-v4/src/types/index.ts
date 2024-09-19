@@ -2,11 +2,11 @@ import type { cacheClient } from "@taiyomoe/cache"
 import type { db } from "@taiyomoe/db"
 import type { logsClient } from "@taiyomoe/logs"
 import type { meilisearchClient } from "@taiyomoe/meilisearch"
-import type { t } from "../middlewares/withHelpers"
+import type { createTranslator } from "use-intl"
 
 export type Context = {
   Variables: {
-    t: typeof t
+    t: ReturnType<typeof createTranslator<"api">>
     db: typeof db
     meilisearch: typeof meilisearchClient
     cache: typeof cacheClient
