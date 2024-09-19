@@ -114,6 +114,9 @@ importers:
       '@hono/node-server':
         specifier: ^1.13.0
         version: 1.13.0(hono@4.6.2)
+      '@hono/zod-validator':
+        specifier: ^0.2.2
+        version: 0.2.2(hono@4.6.2)(zod@3.23.8)
       '@taiyomoe/cache':
         specifier: workspace:^
         version: link:../../packages/cache
@@ -138,6 +141,12 @@ importers:
       use-intl:
         specifier: ^3.19.1
         version: 3.19.3(react@18.3.1)
+      zod:
+        specifier: ^3.23.8
+        version: 3.23.8
+      zod-form-data:
+        specifier: ^2.0.2
+        version: 2.0.2(zod@3.23.8)
     devDependencies:
       '@taiyomoe/tsconfig':
         specifier: workspace:^
@@ -1329,6 +1338,12 @@ packages:
     engines: {node: '>=18.14.1'}
     peerDependencies:
       hono: ^4
+
+  '@hono/zod-validator@0.2.2':
+    resolution: {integrity: sha512-dSDxaPV70Py8wuIU2QNpoVEIOSzSXZ/6/B/h4xA7eOMz7+AarKTSGV8E6QwrdcCbBLkpqfJ4Q2TmBO0eP1tCBQ==}
+    peerDependencies:
+      hono: '>=3.9.0'
+      zod: ^3.19.1
 
   '@hookform/resolvers@3.9.0':
     resolution: {integrity: sha512-bU0Gr4EepJ/EQsH/IwEzYLsT/PEj5C0ynLQ4m+GSHS+xKH4TfSelhluTgOaoc4kA5s7eCsQbM4wvZLzELmWzUg==}
@@ -4981,6 +4996,11 @@ packages:
     engines: {node: '>= 14'}
     hasBin: true
 
+  zod-form-data@2.0.2:
+    resolution: {integrity: sha512-sKTi+k0fvkxdakD0V5rq+9WVJA3cuTQUfEmNqvHrTzPLvjfLmkkBLfR0ed3qOi9MScJXTHIDH/jUNnEJ3CBX4g==}
+    peerDependencies:
+      zod: '>= 3.11.0'
+
   zod-prisma-types@3.1.8:
     resolution: {integrity: sha512-5oe0ays3ur4u2GtuUqlhgCraKBcsuMaMI8o7VMV4YAnFeOuVid7K2zGvjI19V0ue9PeNF2ICyVREQVohaQm5dw==}
     hasBin: true
@@ -5876,6 +5896,11 @@ snapshots:
   '@hono/node-server@1.13.0(hono@4.6.2)':
     dependencies:
       hono: 4.6.2
+
+  '@hono/zod-validator@0.2.2(hono@4.6.2)(zod@3.23.8)':
+    dependencies:
+      hono: 4.6.2
+      zod: 3.23.8
 
   '@hookform/resolvers@3.9.0(react-hook-form@7.53.0(react@18.3.1))':
     dependencies:
@@ -10784,6 +10809,10 @@ snapshots:
   yaml@1.10.2: {}
 
   yaml@2.5.1: {}
+
+  zod-form-data@2.0.2(zod@3.23.8):
+    dependencies:
+      zod: 3.23.8
 
   zod-prisma-types@3.1.8:
     dependencies:

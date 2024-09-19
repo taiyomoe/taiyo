@@ -1,8 +1,4 @@
 import { Hono } from "hono"
-import type { Context } from "../types"
+import { chaptersUploadHandler } from "../handlers/chapters-upload.handler"
 
-export const chaptersController = new Hono<Context>()
-
-chaptersController.post("/", (c) => {
-  return c.text(c.var.t("medias.notFound", { name: "taiyo" }))
-})
+export const chaptersController = new Hono().route("/", chaptersUploadHandler)
