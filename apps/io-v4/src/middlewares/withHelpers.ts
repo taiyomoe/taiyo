@@ -4,6 +4,7 @@ import { logsClient } from "@taiyomoe/logs"
 import { meilisearchClient } from "@taiyomoe/meilisearch"
 import en from "@taiyomoe/messages/en.json"
 import pt from "@taiyomoe/messages/pt.json"
+import * as services from "@taiyomoe/services"
 import { createMiddleware } from "hono/factory"
 import { createTranslator } from "use-intl"
 
@@ -25,6 +26,7 @@ export const withHelpers = createMiddleware(async (c, next) => {
   c.set("meilisearch", meilisearchClient)
   c.set("cache", cacheClient)
   c.set("logs", logsClient)
+  c.set("services", services)
 
   await next()
 })
