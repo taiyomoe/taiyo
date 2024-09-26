@@ -392,8 +392,8 @@ importers:
   packages/db:
     dependencies:
       '@faker-js/faker':
-        specifier: ^9.0.2
-        version: 9.0.2
+        specifier: ^9.0.3
+        version: 9.0.3
       '@prisma/client':
         specifier: ^5.20.0
         version: 5.20.0(prisma@5.20.0)
@@ -1245,8 +1245,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@faker-js/faker@9.0.2':
-    resolution: {integrity: sha512-nI/FP30ZGXb+UaR7yXawVTH40NVKXPIx0tA3GKjkKLjorqBoMAeq4iSEacl8mJmpVhOCDa0vYHwYDmOOcFMrYw==}
+  '@faker-js/faker@9.0.3':
+    resolution: {integrity: sha512-lWrrK4QNlFSU+13PL9jMbMKLJYXDFu3tQfayBsMXX7KL/GiQeqfB1CzHkqD5UHBUtPAuPo6XwGbMFNdVMZObRA==}
     engines: {node: '>=18.0.0', npm: '>=9.0.0'}
 
   '@floating-ui/core@1.6.7':
@@ -5768,7 +5768,7 @@ snapshots:
   '@esbuild/win32-x64@0.23.1':
     optional: true
 
-  '@faker-js/faker@9.0.2': {}
+  '@faker-js/faker@9.0.3': {}
 
   '@floating-ui/core@1.6.7':
     dependencies:
