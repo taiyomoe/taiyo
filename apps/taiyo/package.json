@@ -35,7 +35,7 @@
     "@trpc/client": "11.0.0-rc.553",
     "@trpc/react-query": "11.0.0-rc.553",
     "@trpc/server": "11.0.0-rc.553",
-    "apexcharts": "^3.53.0",
+    "apexcharts": "^3.54.0",
     "autoprefixer": "^10.4.20",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",
