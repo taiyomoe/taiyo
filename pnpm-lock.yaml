@@ -481,8 +481,8 @@ importers:
         specifier: ^3.5.0
         version: 3.5.0
       meilisearch:
-        specifier: ^0.42.0
-        version: 0.42.0
+        specifier: ^0.43.0
+        version: 0.43.0
       punycode:
         specifier: ^2.3.1
         version: 2.3.1
@@ -4359,6 +4359,9 @@ packages:
 
   meilisearch@0.42.0:
     resolution: {integrity: sha512-pXaOPx/uhVGYVpejNuOcXifQVJlRVSxtvpgrGKb7ygmYo4qSNXkQXPxq1p0Tv+4/RsPJug3W04pcNnYXiqungA==}
+
+  meilisearch@0.43.0:
+    resolution: {integrity: sha512-Bis2Hq5txVi3thzAHY5lladcJ3Yf/xRzhaBmTLJtsOVXgvbs5ikaLxCgiaSZiQ18raFWX/fvfd2fX3h7gd2+DQ==}
 
   memoize-one@6.0.0:
     resolution: {integrity: sha512-rkpe71W0N0c0Xz6QD0eJETuWAJGnJ9afsl1srmwPrI+yBCkge5EycXXbYRyvL29zZVUWQCY7InPRCv3GDXuZNw==}
@@ -10635,6 +10638,8 @@ snapshots:
       cross-fetch: 3.1.8
     transitivePeerDependencies:
       - encoding
+
+  meilisearch@0.43.0: {}
 
   memoize-one@6.0.0: {}
 
