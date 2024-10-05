@@ -308,8 +308,8 @@ importers:
         specifier: ^18.3.0
         version: 18.3.0
       jiti:
-        specifier: ^2.2.1
-        version: 2.2.1
+        specifier: ^2.3.1
+        version: 2.3.1
       tailwindcss:
         specifier: ^3.4.13
         version: 3.4.13
@@ -4226,8 +4226,8 @@ packages:
     resolution: {integrity: sha512-2yTgeWTWzMWkHu6Jp9NKgePDaYHbntiwvYuuJLbbN9vl7DC9DvXKOB2BC3ZZ92D3cvV/aflH0osDfwpHepQ53w==}
     hasBin: true
 
-  jiti@2.2.1:
-    resolution: {integrity: sha512-weIl/Bv3G0J3UKamLxEA2G+FfQ33Z1ZkQJGPjKFV21zQdKWu2Pi6o4elpj2uEl5XdFJZ9xzn1fsanWTFSt45zw==}
+  jiti@2.3.1:
+    resolution: {integrity: sha512-xPZ6pPzUifI8XDBBxIL4OB1w1ZKmBpmNEeKwNt2d0Spn8XisAIZhWrlOHq5seBrFGTxVx9PbrWvEMyrk4IO5bA==}
     hasBin: true
 
   jose@5.8.0:
@@ -10520,7 +10520,7 @@ snapshots:
 
   jiti@1.21.6: {}
 
-  jiti@2.2.1: {}
+  jiti@2.3.1: {}
 
   jose@5.8.0: {}
 
@@ -10571,7 +10571,7 @@ snapshots:
       easy-table: 1.2.0
       enhanced-resolve: 5.17.1
       fast-glob: 3.3.2
-      jiti: 2.2.1
+      jiti: 2.3.1
       js-yaml: 4.1.0
       minimist: 1.2.8
       picocolors: 1.1.0
