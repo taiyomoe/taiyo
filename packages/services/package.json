@@ -21,7 +21,7 @@
     "@taiyomoe/schemas": "workspace:^",
     "@taiyomoe/types": "workspace:*",
     "@taiyomoe/utils": "workspace:*",
-    "@trpc/server": "11.0.0-rc.561",
+    "@trpc/server": "11.0.0-rc.566",
     "radash": "^12.1.0"
   },
   "devDependencies": {
