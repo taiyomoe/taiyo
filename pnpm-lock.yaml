@@ -265,8 +265,8 @@ importers:
         specifier: ^5.8.1
         version: 5.8.1(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-selectable-box:
-        specifier: ^1.9.4
-        version: 1.9.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: ^1.9.5
+        version: 1.9.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       sharp:
         specifier: ^0.33.5
         version: 0.33.5
@@ -4803,8 +4803,8 @@ packages:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
       react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
 
-  react-selectable-box@1.9.4:
-    resolution: {integrity: sha512-1GIE507K+WTzjWn4xOkpmDBPpIXEYLfJcm2sBd8G/wsLtnvsu6sCIxPu+mMwYzr3UK/BAyON346rl9llCJllLQ==}
+  react-selectable-box@1.9.5:
+    resolution: {integrity: sha512-TZ9BZKkL/YqKfn6O9ApaZOgLh5e5Isrzf8Uj4pDF/HuUcBLy6i1Ii/Fe0Ioa9y6oBglAagKRabtvrlyNs5gXtg==}
     peerDependencies:
       react: '>=16.8.0'
       react-dom: '>=16.8.0'
@@ -11125,7 +11125,7 @@ snapshots:
       - '@types/react'
       - supports-color
 
-  react-selectable-box@1.9.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  react-selectable-box@1.9.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
