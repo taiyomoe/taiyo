@@ -259,8 +259,8 @@ importers:
         specifier: ^7.13.3
         version: 7.13.3(algoliasearch@5.3.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-querybuilder:
-        specifier: ^7.6.1
-        version: 7.6.1(@types/react@18.3.11)(react@18.3.1)(redux@5.0.1)
+        specifier: ^7.7.0
+        version: 7.7.0(@types/react@18.3.11)(react@18.3.1)(redux@5.0.1)
       react-select:
         specifier: ^5.8.1
         version: 5.8.1(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -4768,8 +4768,8 @@ packages:
   react-is@16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
 
-  react-querybuilder@7.6.1:
-    resolution: {integrity: sha512-vwlgP0ihMGjCoeb1sYDNyTru9sKtKGM3bYen2yUgZOlo2KDipyjZa6RQZHkWQcLz9i8zjrmeMsjZbqwsi4hJAw==}
+  react-querybuilder@7.7.0:
+    resolution: {integrity: sha512-Ny8lTv0iaD+5bBWRGBDv9QGjmqY4GpjQU6jfqcR/NxaPr5LPFutBpe74RDcdpopw5D+mUfEl5WydxCbrctb10Q==}
     peerDependencies:
       react: '>=18'
 
@@ -11106,10 +11106,9 @@ snapshots:
 
   react-is@16.13.1: {}
 
-  react-querybuilder@7.6.1(@types/react@18.3.11)(react@18.3.1)(redux@5.0.1):
+  react-querybuilder@7.7.0(@types/react@18.3.11)(react@18.3.1)(redux@5.0.1):
     dependencies:
       '@reduxjs/toolkit': 2.2.7(react-redux@9.1.2(@types/react@18.3.11)(react@18.3.1)(redux@5.0.1))(react@18.3.1)
-      clsx: 2.1.1
       immer: 10.1.1
       numeric-quantity: 2.0.1
       react: 18.3.1
