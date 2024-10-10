@@ -60,7 +60,7 @@
     "react-fast-marquee": "^1.6.5",
     "react-hook-form": "^7.53.0",
     "react-instantsearch": "^7.13.3",
-    "react-querybuilder": "^7.6.1",
+    "react-querybuilder": "^7.7.0",
     "react-select": "^5.8.1",
     "react-selectable-box": "^1.9.5",
     "sharp": "^0.33.5",
