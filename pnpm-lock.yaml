@@ -238,6 +238,9 @@ importers:
       '@trpc/server':
         specifier: 11.0.0-rc.502
         version: 11.0.0-rc.502
+      accept-language-parser:
+        specifier: ^1.5.0
+        version: 1.5.0
       apexcharts:
         specifier: ^3.53.0
         version: 3.53.0
@@ -353,6 +356,9 @@ importers:
       '@taiyomoe/types':
         specifier: workspace:*
         version: link:../../packages/types
+      '@types/accept-language-parser':
+        specifier: ^1.5.6
+        version: 1.5.6
       '@types/luxon':
         specifier: ^3.4.2
         version: 3.4.2
@@ -3392,6 +3398,9 @@ packages:
   '@trpc/server@11.0.0-rc.502':
     resolution: {integrity: sha512-n6B8Q/UqF+hFXyCTXq9AWSn6EkXBbVo/Bs7/QzZxe5KD5CdnBomC7A1y6Qr+i0eiOWwTHJZQ0az+gJetb2fdxw==}
 
+  '@types/accept-language-parser@1.5.6':
+    resolution: {integrity: sha512-lhSQUsAhAtbKjYgaw3f0c4EQKNQHFXhX87+OXUIqDHMkycvHGaqGskSRtnzysIUiqHPqNJ4BqI5SE++drsxx6A==}
+
   '@types/cookie@0.6.0':
     resolution: {integrity: sha512-4Kh9a6B2bQciAhf7FSuMRRkUWecJgJu9nPnx3yzpsfXX/c50REIqpHY4C82bXP90qrLtXtkDxTZosYO3UpOwlA==}
 
@@ -3445,6 +3454,9 @@ packages:
 
   abbrev@1.1.1:
     resolution: {integrity: sha512-nne9/IiQ/hzIhY6pdDnbBtz7DjPTKrY00P/zvPSm5pOFkl6xuGrGnXn/VtTNNfNtAfZ9/1RtehkszU9qcTii0Q==}
+
+  accept-language-parser@1.5.0:
+    resolution: {integrity: sha512-QhyTbMLYo0BBGg1aWbeMG4ekWtds/31BrEU+DONOg/7ax23vxpL03Pb7/zBmha2v7vdD3AyzZVWBVGEZxKOXWw==}
 
   accesscontrol@2.2.1:
     resolution: {integrity: sha512-52EvFk/J9EF+w4mYQoKnOTkEMj01R1U5n2fc1dai6x1xkgOks3DGkx01qQL2cKFxGmE4Tn1krAU3jJA9L1NMkg==}
@@ -9169,6 +9181,8 @@ snapshots:
 
   '@trpc/server@11.0.0-rc.502': {}
 
+  '@types/accept-language-parser@1.5.6': {}
+
   '@types/cookie@0.6.0': {}
 
   '@types/dom-speech-recognition@0.0.1': {}
@@ -9226,6 +9240,8 @@ snapshots:
   '@yr/monotone-cubic-spline@1.0.3': {}
 
   abbrev@1.1.1: {}
+
+  accept-language-parser@1.5.0: {}
 
   accesscontrol@2.2.1:
     dependencies:

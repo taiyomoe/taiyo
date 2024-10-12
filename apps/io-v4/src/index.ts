@@ -25,9 +25,9 @@ const app = new Hono()
   })
   .notFound(formatError("notFound"))
 
-console.log("Server is running on port 4000")
+console.log("Server is running on port 4100")
 
 serve({
   fetch: app.fetch,
-  port: 4000,
+  port: 4100,
 })
