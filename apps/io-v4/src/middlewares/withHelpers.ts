@@ -9,11 +9,10 @@ import { messages } from "../utils/get-messages"
 import { services } from "../utils/get-services"
 
 export const withHelpers = createMiddleware<CustomContext>(async (c, next) => {
-  const locale = "en"
   const t = createTranslator({
-    locale,
+    locale: "en",
     namespace: "api",
-    messages: messages[locale],
+    messages: messages.en,
   })
 
   c.set("t", t)

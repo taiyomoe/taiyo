@@ -1,7 +1,7 @@
-import { zValidator } from "@hono/zod-validator"
 import { Hono } from "hono"
 import { streamSSE } from "hono/streaming"
 import { z } from "zod"
+import { withValidation } from "../middlewares/withValidation"
 import type { CustomContext } from "../types"
 
 export const mediasImportHandler = new Hono<CustomContext>()
@@ -11,7 +11,7 @@ const importSchema = z.object({
   downloadChapters: z.coerce.boolean().default(false),
 })
 
-mediasImportHandler.get("/", zValidator("query", importSchema), (c) =>
+mediasImportHandler.get("/", withValidation("query", importSchema), (c) =>
   streamSSE(c, async (s) => {
     while (true) {
       await s.writeSSE({ id: "azert", data: "Hello world!" })
