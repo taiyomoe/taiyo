@@ -17,7 +17,7 @@
   "dependencies": {
     "@prisma/client": "^5.20.0",
     "@t3-oss/env-core": "^0.11.1",
-    "@trpc/server": "11.0.0-rc.569",
+    "@trpc/server": "11.0.0-rc.571",
     "luxon": "^3.5.0",
     "meilisearch": "^0.44.1",
     "punycode": "^2.3.1",
