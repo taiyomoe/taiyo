@@ -1,4 +1,21 @@
 import type { Languages } from "@prisma/client"
+import { I18N_DEFAULT_LANGUAGE, I18N_LANGUAGES } from "@taiyomoe/constants"
+import { pick } from "accept-language-parser"
+import { z } from "zod"
+
+const parseReq = (cookie?: string | null, header?: string | null) => {
+  const parsedHeaderLocale = pick([...I18N_LANGUAGES], header ?? [], {
+    loose: true,
+  })
+  const locale =
+    [cookie, parsedHeaderLocale]
+      .map((l) => z.enum(I18N_LANGUAGES).safeParse(l))
+      .map((r) => (r.success ? r.data : null))
+      .filter(Boolean)
+      .at(0) ?? I18N_DEFAULT_LANGUAGE
+
+  return locale
+}
 
 const languageCodeToCountryCode = (languageCode: Languages) => {
   switch (languageCode) {
@@ -388,4 +405,5 @@ const languageCodeToCountryCode = (languageCode: Languages) => {
 
 export const LanguageUtils = {
   languageCodeToCountryCode,
+  parseReq,
 }
