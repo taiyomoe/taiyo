@@ -1,5 +1,5 @@
 import type { Context } from "hono"
-import type { CustomContext } from "../types"
+import type { CustomContext } from "~/types"
 
 export const formatError =
   (id: Parameters<CustomContext["Variables"]["t"]>[0]) =>

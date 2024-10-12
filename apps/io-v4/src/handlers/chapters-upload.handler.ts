@@ -2,9 +2,9 @@ import { ContentRating, Flag, Languages } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { z } from "zod"
 import { zfd } from "zod-form-data"
-import { withValidation } from "../middlewares/withValidation"
-import type { CustomContext } from "../types"
-import { HttpError } from "../utils/http-error"
+import { withValidation } from "~/middlewares/withValidation"
+import type { CustomContext } from "~/types"
+import { HttpError } from "~/utils/http-error"
 
 export const chaptersUploadHandler = new Hono<CustomContext>()
 

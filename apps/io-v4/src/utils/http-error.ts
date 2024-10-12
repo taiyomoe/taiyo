@@ -1,5 +1,5 @@
 import type { StatusCode } from "hono/utils/http-status"
-import type { CustomContext } from "../types"
+import type { CustomContext } from "~/types"
 
 export class HttpError extends Error {
   status: StatusCode

@@ -1,8 +1,8 @@
 import { zValidator } from "@hono/zod-validator"
 import type { Context, ValidationTargets } from "hono"
 import type { ZodSchema } from "zod"
-import type { CustomContext } from "../types"
-import { formatError } from "../utils/format-error"
+import type { CustomContext } from "~/types"
+import { formatError } from "~/utils/format-error"
 
 export const withValidation = <TSchema extends ZodSchema>(
   where: keyof ValidationTargets,

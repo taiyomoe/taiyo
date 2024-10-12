@@ -1,8 +1,8 @@
 import { Hono } from "hono"
 import { streamSSE } from "hono/streaming"
 import { z } from "zod"
-import { withValidation } from "../middlewares/withValidation"
-import type { CustomContext } from "../types"
+import { withValidation } from "~/middlewares/withValidation"
+import type { CustomContext } from "~/types"
 
 export const mediasImportHandler = new Hono<CustomContext>()
 
