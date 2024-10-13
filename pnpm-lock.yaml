@@ -148,7 +148,7 @@ importers:
         specifier: workspace:*
         version: link:../../packages/utils
       hono:
-        specifier: ^4.6.1
+        specifier: ^4.6.4
         version: 4.6.4
       use-intl:
         specifier: ^3.19.1
