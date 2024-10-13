@@ -18,6 +18,7 @@
     "@t3-oss/env-core": "^0.11.1",
     "@taiyomoe/constants": "workspace:*",
     "@taiyomoe/schemas": "workspace:*",
+    "accept-language-parser": "^1.5.0",
     "deep-object-diff": "^1.1.9",
     "mangadex-full-api": "^5.12.1",
     "radash": "^12.1.0",
@@ -25,6 +26,7 @@
   },
   "devDependencies": {
     "@taiyomoe/tsconfig": "workspace:*",
-    "@taiyomoe/types": "workspace:*"
+    "@taiyomoe/types": "workspace:*",
+    "@types/accept-language-parser": "^1.5.6"
   }
 }

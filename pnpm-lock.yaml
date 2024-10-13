@@ -253,9 +253,6 @@ importers:
       '@trpc/server':
         specifier: 11.0.0-rc.571
         version: 11.0.0-rc.571
-      accept-language-parser:
-        specifier: ^1.5.0
-        version: 1.5.0
       apexcharts:
         specifier: ^3.54.0
         version: 3.54.0
@@ -371,9 +368,6 @@ importers:
       '@taiyomoe/types':
         specifier: workspace:*
         version: link:../../packages/types
-      '@types/accept-language-parser':
-        specifier: ^1.5.6
-        version: 1.5.6
       '@types/luxon':
         specifier: ^3.4.2
         version: 3.4.2
@@ -748,6 +742,9 @@ importers:
       '@taiyomoe/schemas':
         specifier: workspace:*
         version: link:../schemas
+      accept-language-parser:
+        specifier: ^1.5.0
+        version: 1.5.0
       deep-object-diff:
         specifier: ^1.1.9
         version: 1.1.9
@@ -767,6 +764,9 @@ importers:
       '@taiyomoe/types':
         specifier: workspace:*
         version: link:../types
+      '@types/accept-language-parser':
+        specifier: ^1.5.6
+        version: 1.5.6
 
   tooling/github: {}
 
