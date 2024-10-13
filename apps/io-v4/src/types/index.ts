@@ -3,10 +3,12 @@ import type { cacheClient } from "@taiyomoe/cache"
 import type { db } from "@taiyomoe/db"
 import type { logsClient } from "@taiyomoe/logs"
 import type { meilisearchClient } from "@taiyomoe/meilisearch"
+import type { Bindings } from "hono/types"
 import type { createTranslator } from "use-intl"
 import type { ContextServices } from "~/utils/get-services"
 
 export type HelpersMiddleware = {
+  Bindings: Bindings
   Variables: {
     t: ReturnType<typeof createTranslator<"api">>
     db: typeof db
@@ -18,11 +20,10 @@ export type HelpersMiddleware = {
 }
 
 export type AuthMiddleware = {
+  Bindings: Bindings
   Variables: {
     session: Session
   }
 }
 
-export type CustomContext = {
-  Variables: HelpersMiddleware["Variables"] & AuthMiddleware["Variables"]
-}
+export type CustomContext = HelpersMiddleware & AuthMiddleware

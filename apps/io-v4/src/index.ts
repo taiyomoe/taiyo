@@ -3,7 +3,7 @@ import { Hono } from "hono"
 import { cors } from "hono/cors"
 import { chaptersController } from "~/controllers/chapters.controller"
 import { mediasController } from "~/controllers/medias.controller"
-import { withHelpers } from "~/middlewares/withHelpers"
+import { withHelpers } from "~/middlewares/helpers.middleware"
 import { formatError } from "~/utils/format-error"
 import { HttpError } from "~/utils/http-error"
 
