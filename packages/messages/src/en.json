@@ -1,0 +1,15 @@
+{
+  "home": {
+    "title": "Hello world!",
+    "toformat": "Hello {name}!!"
+  },
+  "api": {
+    "unauthorized": "Unauthorized",
+    "notFound": "Not found",
+    "unexpected": "An unexpected error occurred. Please try again later",
+    "validation": "Validation failed",
+    "medias": {
+      "notFound": "Media not found"
+    }
+  }
+}

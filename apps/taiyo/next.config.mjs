@@ -1,5 +1,8 @@
 import { fileURLToPath } from "url"
 import createJiti from "jiti"
+import createNextIntlPlugin from "next-intl/plugin"
+
+const withNextIntl = createNextIntlPlugin()
 
 // Import env files to validate at build time. Use jiti so we can load .ts files in here.
 createJiti(fileURLToPath(import.meta.url))("./src/env")
@@ -65,6 +68,7 @@ const config = {
     "@taiyomoe/db",
     "@taiyomoe/logs",
     "@taiyomoe/meilisearch",
+    "@taiyomoe/messages",
     "@taiyomoe/schemas",
     "@taiyomoe/services",
     "@taiyomoe/trpc",
@@ -77,4 +81,4 @@ const config = {
   typescript: { ignoreBuildErrors: true },
 }
 
-export default config
+export default withNextIntl(config)

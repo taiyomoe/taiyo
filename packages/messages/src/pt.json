@@ -1,0 +1,15 @@
+{
+  "home": {
+    "title": "Olá mundo!",
+    "toformat": "Olá {name}!!"
+  },
+  "api": {
+    "unauthorized": "Não autorizado",
+    "notFound": "Não encontrado",
+    "unexpected": "Um erro inesperado ocorreu",
+    "validation": "Falha na validação",
+    "medias": {
+      "notFound": "Obra não encontrada"
+    }
+  }
+}

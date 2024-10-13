@@ -1,6 +1,6 @@
 services:
   postgres:
-    image: "postgres:17-alpine"
+    image: "postgres:16-alpine"
     restart: unless-stopped
     environment:
       - POSTGRES_USER=$DATABASE_USERNAME

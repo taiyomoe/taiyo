@@ -98,4 +98,5 @@ export const ALLOWED_MIME_TYPES = [
   "image/gif",
 ]
 
+export * from "./i18n"
 export * from "./tags"
