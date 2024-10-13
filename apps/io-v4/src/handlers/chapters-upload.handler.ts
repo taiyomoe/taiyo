@@ -2,6 +2,7 @@ import { ContentRating, Flag, Languages } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { z } from "zod"
 import { zfd } from "zod-form-data"
+import { withAuth } from "~/middlewares/withAuth"
 import { withValidation } from "~/middlewares/withValidation"
 import type { CustomContext } from "~/types"
 import { HttpError } from "~/utils/http-error"
@@ -22,6 +23,7 @@ const uploadSchema = z.object({
 
 chaptersUploadHandler.post(
   "/",
+  withAuth([["mediaChapters", "create"]]),
   withValidation("form", uploadSchema),
   async ({ json, req, var: { db } }) => {
     const body = req.valid("form")

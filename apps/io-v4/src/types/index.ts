@@ -1,3 +1,4 @@
+import type { Session } from "@taiyomoe/auth"
 import type { cacheClient } from "@taiyomoe/cache"
 import type { db } from "@taiyomoe/db"
 import type { logsClient } from "@taiyomoe/logs"
@@ -5,7 +6,7 @@ import type { meilisearchClient } from "@taiyomoe/meilisearch"
 import type { createTranslator } from "use-intl"
 import type { ContextServices } from "~/utils/get-services"
 
-export type CustomContext = {
+export type HelpersMiddleware = {
   Variables: {
     t: ReturnType<typeof createTranslator<"api">>
     db: typeof db
@@ -14,4 +15,14 @@ export type CustomContext = {
     logs: typeof logsClient
     services: ContextServices
   }
+}
+
+export type AuthMiddleware = {
+  Variables: {
+    session: Session
+  }
+}
+
+export type CustomContext = {
+  Variables: HelpersMiddleware["Variables"] & AuthMiddleware["Variables"]
 }

@@ -1,10 +1,10 @@
 {
   "extends": "@taiyomoe/tsconfig/base.json",
   "compilerOptions": {
-    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
     "paths": {
       "~/*": ["./src/*"]
-    }
+    },
+    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
   },
   "include": ["src"],
   "exclude": ["node_modules"]

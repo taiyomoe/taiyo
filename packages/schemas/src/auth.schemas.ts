@@ -10,6 +10,7 @@ export const sessionSchema = z.object({
       permissions: z.string().array(),
     }),
     preferredTitles: LanguagesSchema.nullable(),
+    showFollowing: z.boolean(),
+    showLibrary: z.boolean(),
   }),
-  expires: z.coerce.date(),
 })
