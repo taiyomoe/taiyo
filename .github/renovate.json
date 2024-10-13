@@ -9,9 +9,7 @@
     }
   ],
   "docker-compose": {
-    "digest": {
-      "enabled": false
-    }
+    "enabled": false
   },
   "rangeStrategy": "bump",
   "automerge": true,
