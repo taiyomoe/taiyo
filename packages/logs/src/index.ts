@@ -1,4 +1,6 @@
 import { createClient } from "@clickhouse/client-web"
+import { createLogger, format, transports } from "winston"
+import LokiTransport from "winston-loki"
 import { env } from "../env"
 import { chaptersService } from "./services/chapters.logsService"
 import { coversService } from "./services/covers.logsService"
@@ -10,6 +12,21 @@ import { trackersService } from "./services/trackers.logsService"
 import { usersActivityService } from "./services/usersActivity.logsService"
 import { usersAuthService } from "./services/usersAuth.logsService"
 import { usersSettingsService } from "./services/usersSettings.logsService"
+
+export const initLogger = (app: "taiyo" | "image-orchestrator") =>
+  createLogger({
+    level: "debug",
+    format: format.json(),
+    transports: [
+      new transports.Console(),
+      new LokiTransport({
+        host: env.GRAFANA_LOKI_URL,
+        labels: { app },
+        json: true,
+        basicAuth: `${env.GRAFANA_USERNAME}:${env.GRAFANA_PASSWORD}`,
+      }),
+    ],
+  })
 
 export const rawLogsClient = createClient({
   url: env.CLICKHOUSE_URL,

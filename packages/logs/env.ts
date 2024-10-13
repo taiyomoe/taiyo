@@ -13,6 +13,9 @@ export const env = createEnv({
    */
   server: {
     CLICKHOUSE_URL: z.string().url(),
+    GRAFANA_USERNAME: z.string(),
+    GRAFANA_PASSWORD: z.string(),
+    GRAFANA_LOKI_URL: z.string().url(),
   },
 
   /**
