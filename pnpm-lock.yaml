@@ -211,6 +211,9 @@ importers:
       '@taiyomoe/image-orchestrator':
         specifier: workspace:*
         version: link:../image-orchestrator
+      '@taiyomoe/logs':
+        specifier: workspace:*
+        version: link:../../packages/logs
       '@taiyomoe/meilisearch':
         specifier: workspace:*
         version: link:../../packages/meilisearch

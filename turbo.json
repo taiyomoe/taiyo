@@ -42,7 +42,10 @@
     "S3_BUCKET_NAME",
     "CLICKHOUSE_URL",
     "UMAMI_USER_ID",
-    "UMAMI_SECRET"
+    "UMAMI_SECRET",
+    "GRAFANA_USERNAME",
+    "GRAFANA_PASSWORD",
+    "GRAFANA_LOKI_URL"
   ],
   "globalPassThroughEnv": [
     "NODE_ENV",

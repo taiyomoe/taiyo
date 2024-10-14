@@ -10,7 +10,7 @@
 import { auth } from "@taiyomoe/auth"
 import { cacheClient } from "@taiyomoe/cache"
 import { db } from "@taiyomoe/db"
-import { logsClient } from "@taiyomoe/logs"
+import { initLogger, logsClient } from "@taiyomoe/logs"
 import { meilisearchClient } from "@taiyomoe/meilisearch"
 import type { Actions, Resources } from "@taiyomoe/types"
 import { umamiClient } from "@taiyomoe/umami"
@@ -46,6 +46,7 @@ export const createTRPCContext = async (opts: { headers: Headers }) => {
     meilisearch: meilisearchClient,
     cache: cacheClient,
     logs: logsClient,
+    logger: initLogger("taiyo"),
     umami: umamiClient,
     ...opts,
   }

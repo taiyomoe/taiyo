@@ -33,7 +33,7 @@ export const withAuth = (perms: ForgedPermission[] = []) =>
       throw new HttpError(401, "unauthorized")
     }
 
-    c.set("session", session)
+    c.set("session", session.user)
 
     await next()
   })
