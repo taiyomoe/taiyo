@@ -2,7 +2,7 @@ import type { PrismaClient } from "@prisma/client"
 import type { UsersIndexItem } from "@taiyomoe/types"
 import { TRPCError } from "@trpc/server"
 import { omit, parallel } from "radash"
-import { meilisearchClient } from "~/index"
+import { meilisearchClient } from "../"
 
 const getItem = async (db: PrismaClient, id: string) => {
   const result = await db.user.findUnique({

@@ -3,7 +3,7 @@ import type { ChaptersIndexItem } from "@taiyomoe/types"
 import { TRPCError } from "@trpc/server"
 import { DateTime } from "luxon"
 import { omit, parallel } from "radash"
-import { meilisearchClient } from "~/index"
+import { meilisearchClient } from "../"
 
 const getItem = async (db: PrismaClient, id: string) => {
   const result = await db.mediaChapter.findUnique({
