@@ -117,11 +117,6 @@ export const DashboardSidebarContent = ({ className }: Props) => {
               type: "home",
             },
             {
-              label: "Estatísticas",
-              href: "/dashboard/chapters/stats",
-              type: "stats",
-            },
-            {
               label: "Upar",
               href: "/dashboard/chapters/upload",
               type: "create",

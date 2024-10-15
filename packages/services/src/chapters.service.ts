@@ -9,7 +9,6 @@ import type {
   GetLatestChaptersGroupedInput,
 } from "@taiyomoe/schemas"
 import type {
-  MediaChaptersUploadersStats,
   RawLatestRelease,
   RawLatestReleaseGroupedChapter,
 } from "@taiyomoe/types"
@@ -149,28 +148,6 @@ const getLatestGroupedByUser = async (
   )
 }
 
-const getUploaderStats = async () => {
-  const result = await db.$queryRaw<MediaChaptersUploadersStats>`
-    SELECT 
-      DATE_TRUNC('day', c."createdAt") as "date",
-      COUNT(*) as "chaptersCount",
-      u."name" as "userName"
-    FROM
-      "MediaChapter" c
-    JOIN
-      "User" u ON c."uploaderId" = u."id"
-    GROUP BY 
-      "date", c."uploaderId", u."name"
-    ORDER BY 
-      "date", c."uploaderId";
-  `
-
-  return result.map((r) => ({
-    ...r,
-    chaptersCount: Number(r.chaptersCount),
-  }))
-}
-
 const getDistinctCount = async (mediaId: string) => {
   const result = await db.$queryRaw<[{ count: number }]>`
     SELECT COUNT(DISTINCT "number")
@@ -274,7 +251,6 @@ export const ChaptersService = {
   getLatest,
   getLatestGrouped,
   getLatestGroupedByUser,
-  getUploaderStats,
   getDistinctCount,
   postUpload,
   postUpdate,

@@ -135,12 +135,6 @@ export type ReaderSettings = {
   }
 }
 
-export type MediaChaptersUploadersStats = {
-  date: Date
-  chaptersCount: number
-  userName: string
-}[]
-
 const mediaChapterWithRelations =
   Prisma.validator<Prisma.MediaChapterDefaultArgs>()({
     include: {
