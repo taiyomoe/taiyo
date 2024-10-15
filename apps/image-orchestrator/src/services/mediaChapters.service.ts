@@ -4,7 +4,7 @@ import { ChaptersService } from "@taiyomoe/services"
 import { omit } from "radash"
 import type { UploadChapterInput } from "../schemas"
 import type { UploadedResource } from "../types"
-import { FilesService } from "./files.service"
+import { FilesService } from "./"
 
 const getAll = async (mediaId: string) => {
   const result = await db.mediaChapter.findMany({

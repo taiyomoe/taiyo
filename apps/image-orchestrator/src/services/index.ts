@@ -1,4 +1,4 @@
-export * from "./files.service"
+export * from "./files.io-service"
 export * from "./images.service"
 export * from "./md.service"
 export * from "./mediaBanners.service"

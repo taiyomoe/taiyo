@@ -2,8 +2,8 @@ import { type Prisma, db } from "@taiyomoe/db"
 import { CoversService } from "@taiyomoe/services"
 import { omit } from "radash"
 import type { UploadCoverInput } from "../schemas"
-import { FilesService } from "../services/files.service"
 import type { UploadedFile } from "../types"
+import { FilesService } from "./"
 
 const getAll = async (mediaId: string) => {
   const result = await db.mediaCover.findMany({
