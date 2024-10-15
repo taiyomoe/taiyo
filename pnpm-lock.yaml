@@ -254,7 +254,7 @@ importers:
         specifier: 11.0.0-rc.571
         version: 11.0.0-rc.571
       apexcharts:
-        specifier: ^3.54.0
+        specifier: ^3.54.1
         version: 3.54.1
       autoprefixer:
         specifier: ^10.4.20
