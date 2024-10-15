@@ -11,7 +11,7 @@ import {
 import { ScansIndexService } from "@taiyomoe/meilisearch/services"
 import {
   MediasService as BaseMediasService,
-  TitlesService,
+  BaseTitlesService,
 } from "@taiyomoe/services"
 import { MdUtils, ObjectUtils, TitleUtils } from "@taiyomoe/utils"
 import { type Chapter, type Cover, Group, Manga } from "mangadex-full-api"
@@ -26,7 +26,6 @@ import { sendStream } from "../utils/streams"
 import {
   CoversService,
   MediaChaptersService,
-  MediaTitlesService,
   MediasService,
   ScansService,
   TrackersService,
@@ -349,7 +348,7 @@ const importFn = async (
   s(4, "Reindexando a busca...", "ongoing")
 
   await BaseMediasService.postCreate("imported", media)
-  await TitlesService.postCreate("imported", titles)
+  await BaseTitlesService.postCreate("imported", titles)
   await TrackersService.postCreate("imported", trackers)
 
   s(4, "Busca reindexada", "success")
@@ -380,7 +379,9 @@ const sync = async (
 
   const media = await MediasService.getById(mediaId)
   const currentChapters = await MediaChaptersService.getAll(mediaId)
-  const currentTitles = await MediaTitlesService.getAll(mediaId)
+  const currentTitles = await db.mediaTitle.findMany({
+    where: { mediaId: mediaId, deletedAt: null },
+  })
   const manga = await Manga.get(mdTracker.externalId)
   const mainCover = await manga.mainCover.resolve()
 
@@ -433,7 +434,7 @@ const sync = async (
           where: { id: title.id },
         })
 
-        await TitlesService.postUpdate(
+        await BaseTitlesService.postUpdate(
           "synced",
           currentTitle,
           result,
@@ -450,7 +451,7 @@ const sync = async (
       createdTitles.push(result)
     }
 
-    await TitlesService.postCreate("synced", createdTitles)
+    await BaseTitlesService.postCreate("synced", createdTitles)
   })
 
   const createdTrackers: MediaTracker[] = []

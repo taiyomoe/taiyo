@@ -5,6 +5,6 @@ export const services = {
   covers: rawServices.BaseCoversService,
   chapters: rawServices.ChaptersService,
   users: rawServices.BaseUsersService,
-  titles: rawServices.TitlesService,
+  titles: rawServices.BaseTitlesService,
   trackers: rawServices.BaseTrackersService,
 }

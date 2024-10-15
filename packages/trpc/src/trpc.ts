@@ -14,6 +14,7 @@ import { initLogger, logsClient } from "@taiyomoe/logs"
 import { meilisearchClient } from "@taiyomoe/meilisearch"
 import {
   BaseCoversService,
+  BaseTitlesService,
   BaseTrackersService,
   BaseUsersService,
 } from "@taiyomoe/services"
@@ -58,6 +59,7 @@ export const createTRPCContext = async (opts: {
     libraries: LibrariesService,
     trackers: BaseTrackersService,
     covers: BaseCoversService,
+    titles: BaseTitlesService,
   },
   ...opts,
 })

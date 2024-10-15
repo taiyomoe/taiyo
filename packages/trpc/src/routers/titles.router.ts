@@ -3,7 +3,6 @@ import {
   idSchema,
   updateTitleSchema,
 } from "@taiyomoe/schemas"
-import { TitlesService } from "@taiyomoe/services"
 import { TRPCError } from "@trpc/server"
 import { createTRPCRouter, protectedProcedure } from "../trpc"
 
@@ -59,7 +58,7 @@ export const titlesRouter = createTRPCRouter({
         return { new: result, old: oldMainTitle }
       })
 
-      await TitlesService.postCreate("created", [result.new])
+      await ctx.services.titles.postCreate("created", [result.new])
 
       return result.new
     }),
@@ -123,7 +122,7 @@ export const titlesRouter = createTRPCRouter({
       })
 
       if (input.isMainTitle && result.old) {
-        await TitlesService.postUpdate(
+        await ctx.services.titles.postUpdate(
           "updated",
           mainTitle,
           result.old,
@@ -131,7 +130,7 @@ export const titlesRouter = createTRPCRouter({
         )
       }
 
-      await TitlesService.postUpdate(
+      await ctx.services.titles.postUpdate(
         "updated",
         title,
         result.new,
@@ -167,6 +166,6 @@ export const titlesRouter = createTRPCRouter({
         where: { id: input },
       })
 
-      await TitlesService.postDelete(result)
+      await ctx.services.titles.postDelete(result)
     }),
 })

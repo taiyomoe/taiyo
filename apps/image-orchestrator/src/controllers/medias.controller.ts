@@ -2,7 +2,7 @@ import { Stream } from "@elysiajs/stream"
 import { db } from "@taiyomoe/db"
 import {
   MediasService as BaseMediasService,
-  TitlesService,
+  BaseTitlesService,
 } from "@taiyomoe/services"
 import { Elysia } from "elysia"
 import { authMiddleware } from "../middlewares"
@@ -46,7 +46,7 @@ const create = new Elysia().use(authMiddleware([["medias", "create"]])).post(
     })
 
     await BaseMediasService.postCreate("created", result)
-    await TitlesService.postCreate("created", titles)
+    BaseTitlesService.postCreate("created", titles)
     await TrackersService.postCreate("created", trackers)
 
     return result

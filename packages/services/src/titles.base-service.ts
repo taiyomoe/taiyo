@@ -61,7 +61,7 @@ const postDelete = async (title: MediaTitle) => {
   await cacheClient.medias.invalidateAll()
 }
 
-export const TitlesService = {
+export const BaseTitlesService = {
   postCreate,
   postUpdate,
   postDelete,
