@@ -7,7 +7,7 @@ import type {
 } from "@taiyomoe/types"
 import DF from "ioredis"
 import SuperJSON from "superjson"
-import { env } from "../env"
+import { env } from "./env"
 import { parseCache } from "./utils"
 
 const HOUR = 60 * 60

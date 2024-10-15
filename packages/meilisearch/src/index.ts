@@ -6,7 +6,7 @@ import type {
 } from "@taiyomoe/types"
 import type { Meilisearch } from "meilisearch"
 import { MeiliSearch } from "meilisearch"
-import { env } from "../env"
+import { env } from "./env"
 
 const globalForMeilisearch = globalThis as unknown as {
   meilisearch: Meilisearch | undefined

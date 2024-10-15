@@ -1,5 +1,5 @@
 import { getClient } from "@umami/api-client"
-import { env } from "../env"
+import { env } from "./env"
 
 export const umamiClient = getClient({
   apiEndpoint: `${env.NEXT_PUBLIC_UMAMI_URL}/api/`,

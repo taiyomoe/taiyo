@@ -1,6 +1,9 @@
 {
   "extends": "@taiyomoe/tsconfig/base.json",
   "compilerOptions": {
+    "paths": {
+      "~/*": ["./src/*"]
+    },
     "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
   },
   "include": ["src"],
