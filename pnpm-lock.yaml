@@ -578,6 +578,22 @@ importers:
 
   packages/messages: {}
 
+  packages/rabbit:
+    dependencies:
+      '@t3-oss/env-core':
+        specifier: ^0.11.1
+        version: 0.11.1(typescript@5.6.3)(zod@3.23.8)
+      rabbitmq-client:
+        specifier: ^5.0.0
+        version: 5.0.0
+      zod:
+        specifier: ^3.23.8
+        version: 3.23.8
+    devDependencies:
+      '@taiyomoe/tsconfig':
+        specifier: workspace:*
+        version: link:../../tooling/typescript
+
   packages/s3:
     dependencies:
       '@aws-sdk/client-s3':
@@ -4748,6 +4764,10 @@ packages:
 
   queue-microtask@1.2.3:
     resolution: {integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==}
+
+  rabbitmq-client@5.0.0:
+    resolution: {integrity: sha512-IvPafeLO89qEv9QPbMb8nqkXOKRYHvo0sXntK8cHLY/fkkS8DJRtwCPtQerMZZ9n1jLhifJtioyK7vp5wIp6Gg==}
+    engines: {node: '>=16'}
 
   radash@12.1.0:
     resolution: {integrity: sha512-b0Zcf09AhqKS83btmUeYBS8tFK7XL2e3RvLmZcm0sTdF1/UUlHSsjXdCcWNxe7yfmAlPve5ym0DmKGtTzP6kVQ==}
@@ -10834,6 +10854,8 @@ snapshots:
   qs@6.9.7: {}
 
   queue-microtask@1.2.3: {}
+
+  rabbitmq-client@5.0.0: {}
 
   radash@12.1.0: {}
 
