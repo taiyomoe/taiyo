@@ -1,8 +1,8 @@
 import type { MediaCover } from "@taiyomoe/db"
 import { ObjectUtils } from "@taiyomoe/utils"
 import SuperJSON from "superjson"
-import type { InsertResource } from "~/types"
-import { insertWrapper } from "~/utils"
+import type { InsertResource } from "../types"
+import { insertWrapper } from "../utils"
 
 export const coversService = {
   insert: (input: InsertResource<MediaCover>) =>
