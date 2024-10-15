@@ -44,3 +44,15 @@ services:
     volumes:
       - "./data/clickhouse:/bitnami/clickhouse"
       - "./packages/logs/config.xml:/bitnami/clickhouse/etc/conf.d/override.xml:ro"
+
+  rabbitmq:
+    image: "rabbitmq:4-management"
+    restart: unless-stopped
+    environment:
+      - RABBITMQ_DEFAULT_USER=$RABBITMQ_USERNAME
+      - RABBITMQ_DEFAULT_PASS=$RABBITMQ_PASSWORD
+    ports:
+      - "${RABBITMQ_SERVER_PORT}:5672"
+      - "${RABBITMQ_WEB_PORT}:15672"
+    volumes:
+      - ./data/rabbitmq:/var/lib/rabbitmq
