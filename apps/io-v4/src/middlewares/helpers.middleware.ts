@@ -2,6 +2,7 @@ import { cacheClient } from "@taiyomoe/cache"
 import { db } from "@taiyomoe/db"
 import { logsClient } from "@taiyomoe/logs"
 import { meilisearchClient } from "@taiyomoe/meilisearch"
+import { rabbitPublisher } from "@taiyomoe/rabbit"
 import { createMiddleware } from "hono/factory"
 import { createTranslator } from "use-intl"
 import type { HelpersMiddleware } from "~/types"
@@ -24,6 +25,7 @@ export const withHelpers = createMiddleware<HelpersMiddleware>(
     c.set("logs", logsClient)
     c.set("logger", logger)
     c.set("services", services)
+    c.set("rabbit", rabbitPublisher)
 
     await next()
   },

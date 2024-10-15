@@ -13,6 +13,7 @@
     "@taiyomoe/logs": "workspace:*",
     "@taiyomoe/meilisearch": "workspace:*",
     "@taiyomoe/messages": "workspace:*",
+    "@taiyomoe/rabbit": "workspace:^",
     "@taiyomoe/schemas": "workspace:*",
     "@taiyomoe/services": "workspace:*",
     "@taiyomoe/utils": "workspace:*",

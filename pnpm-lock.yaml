@@ -138,6 +138,9 @@ importers:
       '@taiyomoe/messages':
         specifier: workspace:*
         version: link:../../packages/messages
+      '@taiyomoe/rabbit':
+        specifier: workspace:^
+        version: link:../../packages/rabbit
       '@taiyomoe/schemas':
         specifier: workspace:*
         version: link:../../packages/schemas

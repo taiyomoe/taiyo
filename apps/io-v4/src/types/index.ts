@@ -3,6 +3,7 @@ import type { cacheClient } from "@taiyomoe/cache"
 import type { db } from "@taiyomoe/db"
 import type { logsClient } from "@taiyomoe/logs"
 import type { meilisearchClient } from "@taiyomoe/meilisearch"
+import type { rabbitPublisher } from "@taiyomoe/rabbit"
 import type { Bindings } from "hono/types"
 import type { createTranslator } from "use-intl"
 import type { ContextServices } from "~/utils/get-services"
@@ -18,6 +19,7 @@ export type HelpersMiddleware = {
     logs: typeof logsClient
     logger: typeof logger
     services: ContextServices
+    rabbit: typeof rabbitPublisher
   }
 }
 
