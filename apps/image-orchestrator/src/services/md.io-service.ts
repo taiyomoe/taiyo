@@ -13,6 +13,13 @@ import { BaseTitlesService } from "@taiyomoe/services"
 import { MdUtils, ObjectUtils, TitleUtils } from "@taiyomoe/utils"
 import { type Chapter, type Cover, Group, Manga } from "mangadex-full-api"
 import { isInt, parallel, pick } from "radash"
+import {
+  ChaptersService,
+  CoversService,
+  MediasService,
+  ScansService,
+  TrackersService,
+} from "."
 import type { ImportMediaInput, SyncMediaInput } from "../schemas"
 import {
   DuplicatedMediaTrackerError,
@@ -20,13 +27,6 @@ import {
   MediaTrackerNotFoundError,
 } from "../utils/errors"
 import { sendStream } from "../utils/streams"
-import {
-  ChaptersService,
-  CoversService,
-  MediasService,
-  ScansService,
-  TrackersService,
-} from "./"
 
 const getInfoPayload = <TAction extends "create" | "update">(
   action: TAction,
