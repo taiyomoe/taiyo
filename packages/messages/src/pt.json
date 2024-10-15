@@ -10,6 +10,9 @@
     "validation": "Falha na validação",
     "medias": {
       "notFound": "Obra não encontrada"
+    },
+    "scans": {
+      "multipleNotFound": "Uma ou mais scans não foram encontradas"
     }
   }
 }

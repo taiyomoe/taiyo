@@ -10,6 +10,9 @@
     "validation": "Validation failed",
     "medias": {
       "notFound": "Media not found"
+    },
+    "scans": {
+      "multipleNotFound": "One or more scans were not found"
     }
   }
 }
