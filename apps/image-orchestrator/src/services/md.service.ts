@@ -21,8 +21,8 @@ import {
 } from "../utils/errors"
 import { sendStream } from "../utils/streams"
 import {
+  ChaptersService,
   CoversService,
-  MediaChaptersService,
   MediasService,
   ScansService,
   TrackersService,
@@ -237,9 +237,9 @@ const uploadChapters = async (
 
     s(currentStep, `Upando o capítulo ${chapter.chapter}...`, "ongoing", i)
 
-    const uploaded = await MediaChaptersService.upload(media.id, pages)
+    const uploaded = await ChaptersService.upload(media.id, pages)
 
-    await MediaChaptersService.insert(
+    await ChaptersService.insert(
       type,
       {
         title: chapter.title,
@@ -375,7 +375,9 @@ const sync = async (
   s(1, "Recuperando as informações da obra", "ongoing")
 
   const media = await MediasService.getById(mediaId)
-  const currentChapters = await MediaChaptersService.getAll(mediaId)
+  const currentChapters = await db.mediaChapter.findMany({
+    where: { mediaId: mediaId, deletedAt: null },
+  })
   const currentTitles = await db.mediaTitle.findMany({
     where: { mediaId: mediaId, deletedAt: null },
   })

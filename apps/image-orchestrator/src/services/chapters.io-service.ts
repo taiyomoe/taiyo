@@ -1,18 +1,10 @@
 import { randomUUID } from "crypto"
 import { db } from "@taiyomoe/db"
-import { ChaptersService } from "@taiyomoe/services"
+import { BaseChaptersService } from "@taiyomoe/services"
 import { omit } from "radash"
+import { FilesService } from "."
 import type { UploadChapterInput } from "../schemas"
 import type { UploadedResource } from "../types"
-import { FilesService } from "./"
-
-const getAll = async (mediaId: string) => {
-  const result = await db.mediaChapter.findMany({
-    where: { mediaId, deletedAt: null },
-  })
-
-  return result
-}
 
 const insert = async (
   type: "created" | "imported" | "synced",
@@ -31,7 +23,7 @@ const insert = async (
     },
   })
 
-  await ChaptersService.postUpload(type, [result])
+  await BaseChaptersService.postUpload(type, [result])
 
   return result
 }
@@ -49,8 +41,8 @@ const upload = async (
   return { id, files: uploaded }
 }
 
-export const MediaChaptersService = {
-  getAll,
+export const ChaptersService = {
+  ...BaseChaptersService,
   insert,
   upload,
 }

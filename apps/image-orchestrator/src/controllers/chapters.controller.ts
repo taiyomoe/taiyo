@@ -1,7 +1,7 @@
 import { Elysia } from "elysia"
 import { authMiddleware } from "../middlewares"
 import { uploadChapterSchema } from "../schemas"
-import { MediaChaptersService, MediasService, ScansService } from "../services"
+import { ChaptersService, MediasService, ScansService } from "../services"
 import { fileTypeValidator } from "../validators/fileType.validator"
 
 const upload = new Elysia()
@@ -13,11 +13,8 @@ const upload = new Elysia()
 
       await ScansService.getByIds(body.scanIds ?? [])
 
-      const uploadedChapter = await MediaChaptersService.upload(
-        media.id,
-        body.files,
-      )
-      const chapter = await MediaChaptersService.insert(
+      const uploadedChapter = await ChaptersService.upload(media.id, body.files)
+      const chapter = await ChaptersService.insert(
         "created",
         body,
         uploadedChapter,

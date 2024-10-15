@@ -14,7 +14,6 @@ import {
   idSchema,
   updateChapterSchema,
 } from "@taiyomoe/schemas"
-import { ChaptersService } from "@taiyomoe/services"
 import type {
   ChaptersListItem,
   LatestReleaseGrouped,
@@ -63,7 +62,11 @@ export const chaptersRouter = createTRPCRouter({
         where: { id: input.id },
       })
 
-      await ChaptersService.postUpdate([chapter], [result], ctx.session.user.id)
+      await ctx.services.chapters.postUpdate(
+        [chapter],
+        [result],
+        ctx.session.user.id,
+      )
 
       return result
     }),
@@ -94,7 +97,7 @@ export const chaptersRouter = createTRPCRouter({
           where: { id: { in: chptrs.ids } },
         })
 
-        await ChaptersService.postUpdate(
+        await ctx.services.chapters.postUpdate(
           chapters,
           newChapters,
           ctx.session.user.id,
@@ -373,7 +376,7 @@ export const chaptersRouter = createTRPCRouter({
   getLatestGrouped: publicProcedure
     .input(getLatestChaptersGroupedSchema)
     .query(({ ctx, input }) =>
-      ChaptersService.getLatestGrouped(
+      ctx.services.chapters.getLatestGrouped(
         input,
         ctx.session?.user.id,
         ctx.session?.user.preferredTitles,
@@ -383,7 +386,7 @@ export const chaptersRouter = createTRPCRouter({
   getLatestGroupedByUser: publicProcedure
     .input(getLatestChaptersGroupedByUserSchema)
     .query(({ ctx, input }) =>
-      ChaptersService.getLatestGroupedByUser(
+      ctx.services.chapters.getLatestGroupedByUser(
         input,
         ctx.session?.user.id,
         ctx.session?.user.preferredTitles,
@@ -501,11 +504,14 @@ export const chaptersRouter = createTRPCRouter({
       })
 
       if (input.type === "restore") {
-        await ChaptersService.postRestore(newChapters, ctx.session.user.id)
+        await ctx.services.chapters.postRestore(
+          newChapters,
+          ctx.session.user.id,
+        )
 
         return
       }
 
-      await ChaptersService.postDelete(newChapters, ctx.session.user.id)
+      await ctx.services.chapters.postDelete(newChapters, ctx.session.user.id)
     }),
 })
