@@ -535,8 +535,8 @@ importers:
         specifier: ^3.15.0
         version: 3.15.0
       winston-loki:
-        specifier: ^6.1.2
-        version: 6.1.2
+        specifier: ^6.1.3
+        version: 6.1.3
       zod:
         specifier: ^3.23.8
         version: 3.23.8
@@ -5312,8 +5312,8 @@ packages:
     engines: {node: '>= 8'}
     hasBin: true
 
-  winston-loki@6.1.2:
-    resolution: {integrity: sha512-l1iqDDaEUt63Q8arDsiVCXIrK3jLjPOEc5UTs+WMVnWf8D+A8ZRErAAXKDOduT240aNGzpTbCwe5zfdqqLlzMg==}
+  winston-loki@6.1.3:
+    resolution: {integrity: sha512-DjWtJ230xHyYQWr9mZJa93yhwHttn3JEtSYWP8vXZWJOahiQheUhf+88dSIidbGXB3u0oLweV6G1vkL/ouT62Q==}
 
   winston-transport@4.8.0:
     resolution: {integrity: sha512-qxSTKswC6llEMZKgCQdaWgDuMJQnhuvF5f2Nk3SNXc4byfQ+voo2mX1Px9dkNOuR8p0KAjfPG29PuYUSIb+vSA==}
@@ -11508,7 +11508,7 @@ snapshots:
     dependencies:
       isexe: 2.0.0
 
-  winston-loki@6.1.2:
+  winston-loki@6.1.3:
     dependencies:
       async-exit-hook: 2.0.1
       btoa: 1.2.1
