@@ -5,7 +5,7 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
-    "./env": "./env.ts"
+    "./env": "./src/env.ts"
   },
   "license": "MIT",
   "scripts": {
