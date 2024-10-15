@@ -12,7 +12,7 @@ import { cacheClient } from "@taiyomoe/cache"
 import { db } from "@taiyomoe/db"
 import { initLogger, logsClient } from "@taiyomoe/logs"
 import { meilisearchClient } from "@taiyomoe/meilisearch"
-import { BaseUsersService } from "@taiyomoe/services"
+import { BaseTrackersService, BaseUsersService } from "@taiyomoe/services"
 import type { Actions, Resources } from "@taiyomoe/types"
 import { umamiClient } from "@taiyomoe/umami"
 import { initTRPC } from "@trpc/server"
@@ -52,6 +52,7 @@ export const createTRPCContext = async (opts: {
   services: {
     users: BaseUsersService,
     libraries: LibrariesService,
+    trackers: BaseTrackersService,
   },
   ...opts,
 })

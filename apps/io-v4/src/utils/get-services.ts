@@ -4,8 +4,7 @@ export const services = {
   medias: rawServices.MediasService,
   covers: rawServices.CoversService,
   chapters: rawServices.ChaptersService,
-  users: rawServices.UsersService,
-  libraries: rawServices.LibrariesService,
+  users: rawServices.BaseUsersService,
   titles: rawServices.TitlesService,
-  trackers: rawServices.TrackersService,
+  trackers: rawServices.BaseTrackersService,
 }

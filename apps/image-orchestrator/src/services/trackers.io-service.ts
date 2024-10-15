@@ -1,14 +1,7 @@
 import { db } from "@taiyomoe/db"
+import { BaseTrackersService } from "@taiyomoe/services"
 import type { CreateMediaInput } from "../schemas"
 import { DuplicatedMediaTrackerError } from "../utils/errors"
-
-const getAll = async (id: string) => {
-  const result = await db.mediaTracker.findMany({
-    where: { mediaId: id },
-  })
-
-  return result
-}
 
 const has = async (
   trackers: Pick<CreateMediaInput, "mdId" | "alId" | "malId">,
@@ -34,7 +27,7 @@ const has = async (
   throw new DuplicatedMediaTrackerError(media.id, duplicatedTracker.tracker)
 }
 
-export const MediaTrackersService = {
-  getAll,
+export const TrackersService = {
+  ...BaseTrackersService,
   has,
 }

@@ -74,7 +74,7 @@ const postDelete = async (tracker: MediaTracker) => {
   })
 }
 
-export const TrackersService = {
+export const BaseTrackersService = {
   getFormatted,
   postCreate,
   postUpdate,

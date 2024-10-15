@@ -6,7 +6,7 @@ import {
   idSchema,
   updateMediaSchema,
 } from "@taiyomoe/schemas"
-import { MediasService, TrackersService } from "@taiyomoe/services"
+import { MediasService } from "@taiyomoe/services"
 import type { MediaLimited, MediasListItem } from "@taiyomoe/types"
 import { MediaUtils } from "@taiyomoe/utils"
 import { TRPCError } from "@trpc/server"
@@ -23,7 +23,10 @@ export const mediasRouter = createTRPCRouter({
         include: { trackers: true },
         where: { id: input.id },
       })
-      const trackers = TrackersService.getFormatted(input, ctx.session.user.id)
+      const trackers = ctx.services.trackers.getFormatted(
+        input,
+        ctx.session.user.id,
+      )
 
       if (!media) {
         throw new TRPCError({
@@ -49,7 +52,7 @@ export const mediasRouter = createTRPCRouter({
             where: { id: oldTracker.id },
           })
 
-          await TrackersService.postUpdate(
+          await ctx.services.trackers.postUpdate(
             "updated",
             oldTracker,
             result,
@@ -72,7 +75,7 @@ export const mediasRouter = createTRPCRouter({
         result,
         ctx.session.user.id,
       )
-      await TrackersService.postCreate("created", createdTrackers)
+      await ctx.services.trackers.postCreate("created", createdTrackers)
     }),
 
   getById: publicProcedure

@@ -3,7 +3,6 @@ import { db } from "@taiyomoe/db"
 import {
   MediasService as BaseMediasService,
   TitlesService,
-  TrackersService,
 } from "@taiyomoe/services"
 import { Elysia } from "elysia"
 import { authMiddleware } from "../middlewares"
@@ -15,15 +14,15 @@ import {
 import {
   MdService,
   MediaCoversService,
-  MediaTrackersService,
   MediasService,
+  TrackersService,
 } from "../services"
 import { handleStreamErrors } from "../utils/streams"
 
 const create = new Elysia().use(authMiddleware([["medias", "create"]])).post(
   "/",
   async ({ body, session }) => {
-    await MediaTrackersService.has(body)
+    await TrackersService.has(body)
 
     const result = await db.$transaction(async (client) => {
       const result = await MediasService.create(client, body, session.user.id)

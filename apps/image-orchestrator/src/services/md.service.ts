@@ -13,7 +13,6 @@ import {
   MediasService as BaseMediasService,
   CoversService,
   TitlesService,
-  TrackersService,
 } from "@taiyomoe/services"
 import { MdUtils, ObjectUtils, TitleUtils } from "@taiyomoe/utils"
 import { type Chapter, type Cover, Group, Manga } from "mangadex-full-api"
@@ -29,9 +28,9 @@ import {
   MediaChaptersService,
   MediaCoversService,
   MediaTitlesService,
-  MediaTrackersService,
   MediasService,
   ScansService,
+  TrackersService,
 } from "./"
 
 const getInfoPayload = <TAction extends "create" | "update">(
@@ -369,7 +368,9 @@ const sync = async (
   creatorId: string,
 ) => {
   const s = sendStream(stream)
-  const currentTrackers = await MediaTrackersService.getAll(mediaId)
+  const currentTrackers = await db.mediaTracker.findMany({
+    where: { mediaId: mediaId },
+  })
   const mdTracker = currentTrackers.find((t) => t.tracker === "MANGADEX")
 
   if (!mdTracker) {
