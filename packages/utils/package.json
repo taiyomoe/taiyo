@@ -6,7 +6,7 @@
   "exports": {
     ".": "./src/index.ts",
     "./i18n": "./src/i18n/index.ts",
-    "./env": "./env.ts"
+    "./env": "./src/env.ts"
   },
   "license": "MIT",
   "scripts": {

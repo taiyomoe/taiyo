@@ -6,7 +6,7 @@ import type { Permission } from "@taiyomoe/types"
 import { PermissionUtils } from "@taiyomoe/utils"
 import NextAuth, { type DefaultSession } from "next-auth"
 import Discord from "next-auth/providers/discord"
-import { env } from "../env"
+import { env } from "./env"
 import { getIp } from "./utils"
 
 /**
