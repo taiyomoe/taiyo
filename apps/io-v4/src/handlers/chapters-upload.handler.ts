@@ -5,7 +5,6 @@ import { zfd } from "zod-form-data"
 import { withAuth } from "~/middlewares/auth.middleware"
 import { withValidation } from "~/middlewares/validation.middleware"
 import type { CustomContext } from "~/types"
-import { HttpError } from "~/utils/http-error"
 
 export const chaptersUploadHandler = new Hono<CustomContext>()
 
@@ -25,15 +24,9 @@ chaptersUploadHandler.post(
   "/",
   withAuth([["mediaChapters", "create"]]),
   withValidation("form", uploadSchema),
-  async ({ json, req, var: { db, logger, session } }) => {
+  async ({ json, req, var: { logger, session, medias } }) => {
     const body = req.valid("form")
-    const media = await db.media.findUnique({
-      where: { id: body.mediaId, deletedAt: null },
-    })
-
-    if (!media) {
-      throw new HttpError(404, "medias.notFound")
-    }
+    const media = await medias.get(body.mediaId)
 
     logger.info(`${session.name} (${session.id}) started uploading a chapter.`)
 
