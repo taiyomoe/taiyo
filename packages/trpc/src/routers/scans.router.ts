@@ -10,7 +10,7 @@ import type { ScansListItem } from "@taiyomoe/types"
 import { TRPCError } from "@trpc/server"
 import { DateTime } from "luxon"
 import { omit, parallel, unique } from "radash"
-import { createTRPCRouter, protectedProcedure } from "../trpc"
+import { createTRPCRouter, protectedProcedure } from "~/trpc"
 export const scansRouter = createTRPCRouter({
   create: protectedProcedure
     .meta({ resource: "scans", action: "create" })

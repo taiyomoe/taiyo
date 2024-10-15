@@ -2,7 +2,7 @@ import { getLibrarySchema, updateLibrarySchema } from "@taiyomoe/schemas"
 import { MediasService } from "@taiyomoe/services"
 import type { UserLibraryMedia } from "@taiyomoe/types"
 import { MediaUtils } from "@taiyomoe/utils"
-import { createTRPCRouter, protectedProcedure } from "../trpc"
+import { createTRPCRouter, protectedProcedure } from "~/trpc"
 
 export const librariesRouter = createTRPCRouter({
   getLibrary: protectedProcedure

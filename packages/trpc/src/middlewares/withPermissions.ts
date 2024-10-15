@@ -2,7 +2,7 @@ import type { Actions, Grant, Posession, Resources } from "@taiyomoe/types"
 import { AccessControl } from "accesscontrol"
 
 import { TRPCError } from "@trpc/server"
-import { authMiddleware } from "../trpc"
+import { authMiddleware } from "~/trpc"
 
 export const withPermissions = () =>
   authMiddleware.unstable_pipe(async ({ ctx, meta, next }) => {

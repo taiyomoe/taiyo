@@ -4,6 +4,9 @@
     "composite": true,
     "declaration": true,
     "skipLibCheck": true,
+    "paths": {
+      "~/*": ["./src/*"]
+    },
     "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
   },
   "include": ["src"],

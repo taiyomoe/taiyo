@@ -1,4 +1,4 @@
-import { insertWrapper } from "../utils"
+import { insertWrapper } from "~/utils"
 
 type LogsUsersAuthType = "registered" | "signedIn" | "signedOut"
 type LogsUsersAuthInsertInput = {

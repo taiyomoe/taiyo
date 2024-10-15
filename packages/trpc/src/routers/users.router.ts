@@ -8,7 +8,7 @@ import { UsersService } from "@taiyomoe/services"
 import type { UserFollower } from "@taiyomoe/types"
 import { TRPCError } from "@trpc/server"
 import { crush, get, omit, parallel } from "radash"
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "~/trpc"
 
 export const usersRouter = createTRPCRouter({
   getFollowers: publicProcedure

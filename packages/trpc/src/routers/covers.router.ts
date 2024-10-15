@@ -1,7 +1,7 @@
 import { idSchema, updateCoverSchema } from "@taiyomoe/schemas"
 import { CoversService } from "@taiyomoe/services"
 import { TRPCError } from "@trpc/server"
-import { createTRPCRouter, protectedProcedure } from "../trpc"
+import { createTRPCRouter, protectedProcedure } from "~/trpc"
 
 export const coversRouter = createTRPCRouter({
   update: protectedProcedure

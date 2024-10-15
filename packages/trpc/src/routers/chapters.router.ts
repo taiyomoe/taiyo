@@ -24,7 +24,7 @@ import { MediaUtils } from "@taiyomoe/utils"
 import { TRPCError } from "@trpc/server"
 import { DateTime } from "luxon"
 import { omit, unique } from "radash"
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "~/trpc"
 
 export const chaptersRouter = createTRPCRouter({
   update: protectedProcedure

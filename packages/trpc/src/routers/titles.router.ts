@@ -5,7 +5,7 @@ import {
 } from "@taiyomoe/schemas"
 import { TitlesService } from "@taiyomoe/services"
 import { TRPCError } from "@trpc/server"
-import { createTRPCRouter, protectedProcedure } from "../trpc"
+import { createTRPCRouter, protectedProcedure } from "~/trpc"
 
 export const titlesRouter = createTRPCRouter({
   create: protectedProcedure
