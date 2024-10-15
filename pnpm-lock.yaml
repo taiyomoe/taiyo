@@ -205,6 +205,9 @@ importers:
       '@taiyomoe/auth':
         specifier: workspace:*
         version: link:../../packages/auth
+      '@taiyomoe/cache':
+        specifier: workspace:^
+        version: link:../../packages/cache
       '@taiyomoe/constants':
         specifier: workspace:*
         version: link:../../packages/constants

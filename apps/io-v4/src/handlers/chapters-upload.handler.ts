@@ -26,8 +26,8 @@ chaptersUploadHandler.post(
   withValidation("form", uploadSchema),
   async ({ json, req, var: { logger, session, medias, scans } }) => {
     const body = req.valid("form")
-    const media = await medias.get(body.mediaId)
-    const parsedScans = await scans.getAll(body.scanIds)
+    const media = await medias.getById(body.mediaId)
+    const parsedScans = await scans.getAllById(body.scanIds)
 
     logger.info(`${session.name} (${session.id}) started uploading a chapter.`)
     logger.info(`Media: ${media.id}`)

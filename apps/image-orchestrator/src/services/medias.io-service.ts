@@ -1,9 +1,10 @@
 import { type Prisma, db } from "@taiyomoe/db"
 
+import { BaseMediasService } from "@taiyomoe/services"
 import { omit } from "radash"
+import { TrackersService } from "."
 import type { CreateMediaInput } from "../schemas"
 import { MediaNotFoundError } from "../utils/errors"
-import { TrackersService } from "./"
 
 const getById = async (id: string) => {
   const result = await db.media.findUnique({ where: { id } })
@@ -42,6 +43,7 @@ const create = async (
 }
 
 export const MediasService = {
+  ...BaseMediasService,
   getById,
   create,
 }

@@ -1,7 +1,8 @@
 import { db } from "@taiyomoe/db"
+import { BaseMediasService } from "@taiyomoe/services"
 import { HttpError } from "~/utils/http-error"
 
-const get = async (input: string) => {
+const getById = async (input: string) => {
   const result = await db.media.findUnique({
     where: { id: input, deletedAt: null },
   })
@@ -14,5 +15,6 @@ const get = async (input: string) => {
 }
 
 export const MediasService = {
-  get,
+  ...BaseMediasService,
+  getById,
 }

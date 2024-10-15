@@ -9,10 +9,7 @@ import {
   db,
 } from "@taiyomoe/db"
 import { ScansIndexService } from "@taiyomoe/meilisearch/services"
-import {
-  MediasService as BaseMediasService,
-  BaseTitlesService,
-} from "@taiyomoe/services"
+import { BaseTitlesService } from "@taiyomoe/services"
 import { MdUtils, ObjectUtils, TitleUtils } from "@taiyomoe/utils"
 import { type Chapter, type Cover, Group, Manga } from "mangadex-full-api"
 import { isInt, parallel, pick } from "radash"
@@ -280,7 +277,7 @@ const postMediaUpdate = async (
 ) => {
   s(step, "Atualizando a obra...", "ongoing")
 
-  await BaseMediasService.postUpdate("synced", oldMedia, newMedia, userId)
+  await MediasService.postUpdate("synced", oldMedia, newMedia, userId)
 
   s(step, "Obra atualizada", "success")
 }
@@ -347,7 +344,7 @@ const importFn = async (
 
   s(4, "Reindexando a busca...", "ongoing")
 
-  await BaseMediasService.postCreate("imported", media)
+  await MediasService.postCreate("imported", media)
   await BaseTitlesService.postCreate("imported", titles)
   await TrackersService.postCreate("imported", trackers)
 
