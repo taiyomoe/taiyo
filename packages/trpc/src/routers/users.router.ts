@@ -4,7 +4,6 @@ import {
   toggleFollowSchema,
   updateUserSettingsSchema,
 } from "@taiyomoe/schemas"
-import { UsersService } from "@taiyomoe/services"
 import type { UserFollower } from "@taiyomoe/types"
 import { TRPCError } from "@trpc/server"
 import { crush, get, omit, parallel } from "radash"
@@ -110,7 +109,7 @@ export const usersRouter = createTRPCRouter({
         throw new Error("User not found")
       }
 
-      const isFollowing = await UsersService.isFollowing(
+      const isFollowing = await ctx.services.users.isFollowing(
         ctx.session.user.id,
         user.id,
       )

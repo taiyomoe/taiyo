@@ -1,6 +1,6 @@
 import { auth } from "@taiyomoe/auth"
-import { UsersService } from "@taiyomoe/services"
 import type { UserLimited } from "@taiyomoe/types"
+import { UsersService } from "~/services/users.web-service"
 import { UserLayoutFollowButton } from "./user-layout-follow-button"
 
 type Props = {

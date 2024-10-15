@@ -1,4 +1,5 @@
 import { db } from "@taiyomoe/db"
+import { BaseUsersService } from "@taiyomoe/services"
 import type { UserLimited } from "@taiyomoe/types"
 import { omit } from "radash"
 
@@ -47,16 +48,7 @@ const getLimited = async (userId: string): Promise<UserLimited | null> => {
   }
 }
 
-const isFollowing = async (userId: string, targetId: string) => {
-  const result = await db.user.findUnique({
-    select: { id: true },
-    where: { id: userId, following: { some: { id: targetId } } },
-  })
-
-  return !!result
-}
-
 export const UsersService = {
+  ...BaseUsersService,
   getLimited,
-  isFollowing,
 }
