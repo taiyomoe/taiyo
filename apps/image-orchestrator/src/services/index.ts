@@ -1,5 +1,5 @@
 export * from "./files.io-service"
-export * from "./images.service"
+export * from "./images.io-service"
 export * from "./md.service"
 export * from "./mediaBanners.service"
 export * from "./mediaChapters.service"

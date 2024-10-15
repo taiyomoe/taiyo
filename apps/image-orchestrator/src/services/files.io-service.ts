@@ -4,7 +4,7 @@ import { fileTypeFromBlob } from "file-type"
 import { parallel, tryit } from "radash"
 import { env } from "../env"
 import { PARALLEL_UPLOADS } from "../utils/constants"
-import { ImagesService } from "./images.service"
+import { ImagesService } from "./"
 
 /**
  * Every file is converted to a JPEG file, except for GIF files.
