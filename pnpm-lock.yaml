@@ -344,7 +344,7 @@ importers:
         specifier: ^2.2.1
         version: 2.2.1
       tailwind-merge:
-        specifier: ^2.5.3
+        specifier: ^2.5.4
         version: 2.5.4
       tailwind-scrollbar:
         specifier: ^3.1.0
