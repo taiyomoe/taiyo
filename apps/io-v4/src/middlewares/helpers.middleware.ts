@@ -5,6 +5,7 @@ import { meilisearchClient } from "@taiyomoe/meilisearch"
 import { rabbitPublisher } from "@taiyomoe/rabbit"
 import { createMiddleware } from "hono/factory"
 import { createTranslator } from "use-intl"
+import { MediasService } from "~/services/medias.io-service"
 import type { HelpersMiddleware } from "~/types"
 import { messages } from "~/utils/get-messages"
 import { services } from "~/utils/get-services"
@@ -26,6 +27,7 @@ export const withHelpers = createMiddleware<HelpersMiddleware>(
     c.set("logger", logger)
     c.set("services", services)
     c.set("rabbit", rabbitPublisher)
+    c.set("medias", MediasService)
 
     await next()
   },

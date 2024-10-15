@@ -9,5 +9,3 @@ export const services = {
   titles: rawServices.TitlesService,
   trackers: rawServices.TrackersService,
 }
-
-export type ContextServices = typeof services
