@@ -8,16 +8,6 @@ export type InferNestedValues<T> = T extends object
   ? { [K in keyof T]: InferNestedValues<T[K]> }[keyof T]
   : T
 
-export type DateRangeKey =
-  | "today"
-  | "yesterday"
-  | "thisWeek"
-  | "lastWeek"
-  | "thisMonth"
-  | "lastMonth"
-  | "thisYear"
-  | "lastYear"
-
 export type ListQuery<TAttribute> = {
   attributes: TAttribute[]
   q: string
