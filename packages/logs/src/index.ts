@@ -1,7 +1,7 @@
 import { createClient } from "@clickhouse/client-web"
 import { createLogger, format, transports } from "winston"
 import LokiTransport from "winston-loki"
-import { env } from "../env"
+import { env } from "./env"
 import { chaptersService } from "./services/chapters.logsService"
 import { coversService } from "./services/covers.logsService"
 import { mediasService } from "./services/medias.logsService"

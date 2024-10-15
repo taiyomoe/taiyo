@@ -1,6 +1,6 @@
 import type { Languages, MediaTitle } from "@prisma/client"
-import { env } from "../env"
 import { CoverUtils } from "./cover.utils"
+import { env } from "./env"
 
 const getUrl = (media: { id: string }) => `/media/${media.id}`
 

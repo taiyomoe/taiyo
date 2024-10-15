@@ -1,6 +1,6 @@
 import { PRELOAD_PAGES_COUNT } from "@taiyomoe/constants"
 import type { MediaChapterLimited, MediaChapterPage } from "@taiyomoe/types"
-import { env } from "../env"
+import { env } from "./env"
 
 const boundary = Math.floor(PRELOAD_PAGES_COUNT / 2)
 

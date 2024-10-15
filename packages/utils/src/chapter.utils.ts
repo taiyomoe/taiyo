@@ -5,7 +5,7 @@ import type {
   MediaChapterNavigation,
   MediaLimitedChapter,
 } from "@taiyomoe/types"
-import { env } from "../env"
+import { env } from "./env"
 
 const getTitle = (chapter: { title: string | null; number: number }) => {
   return chapter.title ?? `Cap. ${chapter.number}`

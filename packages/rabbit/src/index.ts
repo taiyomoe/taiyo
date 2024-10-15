@@ -1,5 +1,5 @@
 import Connection from "rabbitmq-client"
-import { env } from "../env"
+import { env } from "./env"
 
 const rawRabbitClient = new Connection(env.RABBITMQ_URL)
 
