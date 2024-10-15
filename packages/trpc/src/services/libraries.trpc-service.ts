@@ -16,7 +16,7 @@ const getUserLibrary = async (userId: string | undefined) => {
   return userLibrary
 }
 
-const getUserLibraryMedia = async (
+const getUserMediaLibrary = async (
   userId: string | undefined,
   mediaId: string,
 ) => {
@@ -36,5 +36,5 @@ const getUserLibraryMedia = async (
 
 export const LibrariesService = {
   getUserLibrary,
-  getUserLibraryMedia,
+  getUserMediaLibrary,
 }

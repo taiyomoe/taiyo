@@ -19,6 +19,7 @@ import superjson from "superjson"
 import { ZodError } from "zod"
 import { withAuth } from "./middlewares/withAuth"
 import { withPermissions } from "./middlewares/withPermissions"
+import { LibrariesService } from "./services/libraries.trpc-service"
 
 type Meta = {
   resource?: Resources
@@ -47,6 +48,9 @@ export const createTRPCContext = async (opts: {
   logs: logsClient,
   logger: initLogger("taiyo"),
   umami: umamiClient,
+  services: {
+    libraries: LibrariesService,
+  },
   ...opts,
 })
 
