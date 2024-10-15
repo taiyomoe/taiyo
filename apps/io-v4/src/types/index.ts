@@ -7,6 +7,7 @@ import type { rabbitPublisher } from "@taiyomoe/rabbit"
 import type { Bindings } from "hono/types"
 import type { createTranslator } from "use-intl"
 import type { MediasService } from "~/services/medias.io-service"
+import type { ScansService } from "~/services/scans.io-service"
 import type { services } from "~/utils/get-services"
 import type { logger } from "~/utils/logger"
 
@@ -22,6 +23,7 @@ export type HelpersMiddleware = {
     services: typeof services
     rabbit: typeof rabbitPublisher
     medias: typeof MediasService
+    scans: typeof ScansService
   }
 }
 

@@ -1,8 +1,8 @@
 import { db } from "@taiyomoe/db"
 import { HttpError } from "~/utils/http-error"
 
-const get = (input: string) => {
-  const result = db.media.findUnique({
+const get = async (input: string) => {
+  const result = await db.media.findUnique({
     where: { id: input, deletedAt: null },
   })
 
