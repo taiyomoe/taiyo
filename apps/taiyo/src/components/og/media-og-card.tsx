@@ -1,7 +1,7 @@
-import { ChaptersService } from "@taiyomoe/services"
 import { CoverUtils, MediaUtils } from "@taiyomoe/utils"
 import { GENRES_PT } from "@taiyomoe/utils/i18n"
 import { ImageResponse } from "next/og"
+import { ChaptersService } from "~/services/chapters.web-service"
 import { MediasService } from "~/services/medias.web-service"
 import { OGUtils } from "~/utils/og.utils"
 import { DefaultOGCard } from "./default-og-card"

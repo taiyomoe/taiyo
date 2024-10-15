@@ -1,4 +1,5 @@
 import type { Languages } from "@taiyomoe/db"
+import { BaseChaptersServiceUtils } from "@taiyomoe/services"
 import type { LatestRelease, RawLatestRelease } from "@taiyomoe/types"
 import { MediaUtils } from "@taiyomoe/utils"
 
@@ -16,5 +17,6 @@ const formatRawLatestReleases = (
   }))
 
 export const ChaptersServiceUtils = {
+  ...BaseChaptersServiceUtils,
   formatRawLatestReleases,
 }

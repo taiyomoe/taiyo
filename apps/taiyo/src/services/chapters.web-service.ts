@@ -1,7 +1,6 @@
 import { cacheClient } from "@taiyomoe/cache"
 import { type Languages, db } from "@taiyomoe/db"
 import { BaseChaptersService } from "@taiyomoe/services"
-import { latestReleaseQuery } from "@taiyomoe/services/utils"
 import type { RawLatestRelease } from "@taiyomoe/types"
 import { ChaptersServiceUtils } from "./utils/chapters.web-service-utils"
 
@@ -17,7 +16,7 @@ const getLatest = async (preferredTitles?: Languages | null) => {
     take: 30,
     where: { deletedAt: null, media: { deletedAt: null } },
     orderBy: { createdAt: "desc" },
-    select: latestReleaseQuery,
+    select: ChaptersServiceUtils.latestReleaseQuery,
   })
 
   void cacheController.set(result)
