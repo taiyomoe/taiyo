@@ -11,7 +11,6 @@ import {
 import { ScansIndexService } from "@taiyomoe/meilisearch/services"
 import {
   MediasService as BaseMediasService,
-  CoversService,
   TitlesService,
 } from "@taiyomoe/services"
 import { MdUtils, ObjectUtils, TitleUtils } from "@taiyomoe/utils"
@@ -25,8 +24,8 @@ import {
 } from "../utils/errors"
 import { sendStream } from "../utils/streams"
 import {
+  CoversService,
   MediaChaptersService,
-  MediaCoversService,
   MediaTitlesService,
   MediasService,
   ScansService,
@@ -94,7 +93,7 @@ const uploadCovers = async (
       continue
     }
 
-    const _uploaded = await MediaCoversService.uploadFromUrl(
+    const _uploaded = await CoversService.uploadFromUrl(
       mediaId,
       cover.imageSource,
       {
@@ -498,7 +497,9 @@ const sync = async (
   if (downloadCovers) {
     s(currentStep, "Recuperando as covers...", "ongoing")
 
-    const currentCovers = await MediaCoversService.getAll(mediaId)
+    const currentCovers = await db.mediaCover.findMany({
+      where: { mediaId: mediaId, deletedAt: null },
+    })
     const covers = await manga.getCovers()
 
     s(currentStep, "Covers recuperadas", "success")

@@ -12,8 +12,8 @@ import {
   syncMediaSchema,
 } from "../schemas"
 import {
+  CoversService,
   MdService,
-  MediaCoversService,
   MediasService,
   TrackersService,
 } from "../services"
@@ -26,11 +26,9 @@ const create = new Elysia().use(authMiddleware([["medias", "create"]])).post(
 
     const result = await db.$transaction(async (client) => {
       const result = await MediasService.create(client, body, session.user.id)
-      const [uploadedFile] = await MediaCoversService.upload(result.id, [
-        body.cover,
-      ])
+      const [uploadedFile] = await CoversService.upload(result.id, [body.cover])
 
-      await MediaCoversService.insertLimited(
+      await CoversService.insertLimited(
         uploadedFile!,
         result.id,
         session.user.id,

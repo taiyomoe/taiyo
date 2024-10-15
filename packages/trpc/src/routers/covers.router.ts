@@ -1,5 +1,4 @@
 import { idSchema, updateCoverSchema } from "@taiyomoe/schemas"
-import { CoversService } from "@taiyomoe/services"
 import { TRPCError } from "@trpc/server"
 import { createTRPCRouter, protectedProcedure } from "../trpc"
 
@@ -54,14 +53,18 @@ export const coversRouter = createTRPCRouter({
       })
 
       if (input.isMainCover && result.old) {
-        await CoversService.postUpdate(
+        await ctx.services.covers.postUpdate(
           mainCover,
           result.old,
           ctx.session.user.id,
         )
       }
 
-      await CoversService.postUpdate(cover, result.new, ctx.session.user.id)
+      await ctx.services.covers.postUpdate(
+        cover,
+        result.new,
+        ctx.session.user.id,
+      )
     }),
 
   delete: protectedProcedure
@@ -92,6 +95,6 @@ export const coversRouter = createTRPCRouter({
         where: { id: input },
       })
 
-      await CoversService.postDelete([result])
+      await ctx.services.covers.postDelete([result])
     }),
 })

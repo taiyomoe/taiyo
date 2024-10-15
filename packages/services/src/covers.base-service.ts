@@ -61,7 +61,7 @@ const postDelete = async (covers: MediaCover[]) => {
   }
 }
 
-export const CoversService = {
+export const BaseCoversService = {
   postUpload,
   postUpdate,
   postDelete,
