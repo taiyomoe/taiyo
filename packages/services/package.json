@@ -17,10 +17,8 @@
     "@taiyomoe/db": "workspace:*",
     "@taiyomoe/logs": "workspace:*",
     "@taiyomoe/meilisearch": "workspace:*",
-    "@taiyomoe/schemas": "workspace:*",
     "@taiyomoe/types": "workspace:*",
     "@taiyomoe/utils": "workspace:*",
-    "@trpc/server": "11.0.0-rc.577",
     "radash": "^12.1.0"
   },
   "devDependencies": {
