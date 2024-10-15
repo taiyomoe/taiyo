@@ -1,8 +1,8 @@
 import { db } from "@taiyomoe/db"
 import { omit } from "radash"
+import { FilesService } from "."
 import type { UploadBannerInput } from "../schemas"
 import type { UploadedFile } from "../types"
-import { FilesService } from "./"
 
 const insert = async (
   input: UploadBannerInput,
@@ -29,7 +29,7 @@ const upload = async (mediaId: string, files: File[]) => {
   return uploaded
 }
 
-export const MediaBannersService = {
+export const BannersService = {
   insert,
   upload,
 }
