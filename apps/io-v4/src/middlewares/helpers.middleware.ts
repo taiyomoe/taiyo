@@ -7,6 +7,7 @@ import { createTranslator } from "use-intl"
 import type { HelpersMiddleware } from "~/types"
 import { messages } from "~/utils/get-messages"
 import { services } from "~/utils/get-services"
+import { logger } from "~/utils/logger"
 
 export const withHelpers = createMiddleware<HelpersMiddleware>(
   async (c, next) => {
@@ -21,6 +22,7 @@ export const withHelpers = createMiddleware<HelpersMiddleware>(
     c.set("meilisearch", meilisearchClient)
     c.set("cache", cacheClient)
     c.set("logs", logsClient)
+    c.set("logger", logger)
     c.set("services", services)
 
     await next()

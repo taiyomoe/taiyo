@@ -6,6 +6,7 @@ import type { meilisearchClient } from "@taiyomoe/meilisearch"
 import type { Bindings } from "hono/types"
 import type { createTranslator } from "use-intl"
 import type { ContextServices } from "~/utils/get-services"
+import type { logger } from "~/utils/logger"
 
 export type HelpersMiddleware = {
   Bindings: Bindings
@@ -15,6 +16,7 @@ export type HelpersMiddleware = {
     meilisearch: typeof meilisearchClient
     cache: typeof cacheClient
     logs: typeof logsClient
+    logger: typeof logger
     services: ContextServices
   }
 }
@@ -22,7 +24,7 @@ export type HelpersMiddleware = {
 export type AuthMiddleware = {
   Bindings: Bindings
   Variables: {
-    session: Session
+    session: Session["user"]
   }
 }
 

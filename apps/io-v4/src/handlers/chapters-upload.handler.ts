@@ -25,7 +25,7 @@ chaptersUploadHandler.post(
   "/",
   withAuth([["mediaChapters", "create"]]),
   withValidation("form", uploadSchema),
-  async ({ json, req, var: { db } }) => {
+  async ({ json, req, var: { db, logger, session } }) => {
     const body = req.valid("form")
     const media = await db.media.findUnique({
       where: { id: body.mediaId, deletedAt: null },
@@ -34,6 +34,8 @@ chaptersUploadHandler.post(
     if (!media) {
       throw new HttpError(404, "medias.notFound")
     }
+
+    logger.info(`${session.name} (${session.id}) started uploading a chapter.`)
 
     return json(media)
   },

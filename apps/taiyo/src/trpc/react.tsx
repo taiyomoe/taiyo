@@ -1,21 +1,14 @@
 "use client"
 
 import type { AppRouter } from "@taiyomoe/trpc"
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { type QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { loggerLink, unstable_httpBatchStreamLink } from "@trpc/client"
 import { createTRPCReact } from "@trpc/react-query"
 import { useState } from "react"
 import SuperJSON from "superjson"
+import { env } from "~/env"
 import { getBaseUrl } from "~/trpc/shared"
-
-const createQueryClient = () =>
-  new QueryClient({
-    defaultOptions: {
-      queries: {
-        refetchOnWindowFocus: false,
-      },
-    },
-  })
+import { createQueryClient } from "./query-client"
 
 let clientQueryClientSingleton: QueryClient | undefined = undefined
 const getQueryClient = () => {
@@ -25,8 +18,11 @@ const getQueryClient = () => {
   }
 
   // Browser: use singleton pattern to keep the same query client
-  // biome-ignore lint/suspicious/noAssignInExpressions: let me cook
-  return (clientQueryClientSingleton ??= createQueryClient())
+  if (!clientQueryClientSingleton) {
+    clientQueryClientSingleton = createQueryClient()
+  }
+
+  return clientQueryClientSingleton
 }
 
 export const api = createTRPCReact<AppRouter>()
@@ -39,13 +35,13 @@ export function TRPCReactProvider(props: { children: React.ReactNode }) {
       links: [
         loggerLink({
           enabled: (op) =>
-            process.env.NODE_ENV === "development" ||
+            env.NODE_ENV === "development" ||
             (op.direction === "down" && op.result instanceof Error),
         }),
         unstable_httpBatchStreamLink({
           transformer: SuperJSON,
           url: `${getBaseUrl()}/api/trpc`,
-          async headers() {
+          headers: () => {
             const headers = new Headers()
             headers.set("x-trpc-source", "nextjs-react")
             return headers
