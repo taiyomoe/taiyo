@@ -1,7 +1,7 @@
 import { db } from "@taiyomoe/db"
 import { HttpError } from "~/utils/http-error"
 
-const getAll = async (input: string[]) => {
+const getAllById = async (input: string[]) => {
   const result = await db.scan.findMany({
     where: { id: { in: input }, deletedAt: null },
   })
@@ -14,5 +14,5 @@ const getAll = async (input: string[]) => {
 }
 
 export const ScansService = {
-  getAll,
+  getAllById,
 }

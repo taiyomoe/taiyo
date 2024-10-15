@@ -139,7 +139,7 @@ importers:
         specifier: workspace:*
         version: link:../../packages/messages
       '@taiyomoe/rabbit':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/rabbit
       '@taiyomoe/schemas':
         specifier: workspace:*
@@ -205,6 +205,9 @@ importers:
       '@taiyomoe/auth':
         specifier: workspace:*
         version: link:../../packages/auth
+      '@taiyomoe/cache':
+        specifier: workspace:*
+        version: link:../../packages/cache
       '@taiyomoe/constants':
         specifier: workspace:*
         version: link:../../packages/constants
@@ -643,18 +646,12 @@ importers:
       '@taiyomoe/meilisearch':
         specifier: workspace:*
         version: link:../meilisearch
-      '@taiyomoe/schemas':
-        specifier: workspace:*
-        version: link:../schemas
       '@taiyomoe/types':
         specifier: workspace:*
         version: link:../types
       '@taiyomoe/utils':
         specifier: workspace:*
         version: link:../utils
-      '@trpc/server':
-        specifier: 11.0.0-rc.577
-        version: 11.0.0-rc.577
       radash:
         specifier: ^12.1.0
         version: 12.1.0

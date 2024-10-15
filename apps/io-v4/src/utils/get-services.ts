@@ -1,10 +1,9 @@
 import * as rawServices from "@taiyomoe/services"
 
 export const services = {
-  medias: rawServices.MediasService,
+  chapters: rawServices.BaseChaptersService,
   covers: rawServices.BaseCoversService,
-  chapters: rawServices.ChaptersService,
-  users: rawServices.BaseUsersService,
   titles: rawServices.BaseTitlesService,
   trackers: rawServices.BaseTrackersService,
+  users: rawServices.BaseUsersService,
 }

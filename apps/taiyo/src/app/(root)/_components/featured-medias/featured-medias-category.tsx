@@ -1,5 +1,5 @@
 import { auth } from "@taiyomoe/auth"
-import { MediasService } from "@taiyomoe/services"
+import { MediasService } from "~/services/medias.web-service"
 import { FeaturedMediasCarousel } from "./featured-medias-carousel"
 
 export const FeaturedMediasCategory = async () => {

@@ -25,7 +25,9 @@ import superjson from "superjson"
 import { ZodError } from "zod"
 import { withAuth } from "./middlewares/withAuth"
 import { withPermissions } from "./middlewares/withPermissions"
+import { ChaptersService } from "./services/chapters.trpc-service"
 import { LibrariesService } from "./services/libraries.trpc-service"
+import { MediasService } from "./services/medias.trpc-service"
 
 type Meta = {
   resource?: Resources
@@ -57,9 +59,11 @@ export const createTRPCContext = async (opts: {
   services: {
     users: BaseUsersService,
     libraries: LibrariesService,
+    medias: MediasService,
     trackers: BaseTrackersService,
     covers: BaseCoversService,
     titles: BaseTitlesService,
+    chapters: ChaptersService,
   },
   ...opts,
 })

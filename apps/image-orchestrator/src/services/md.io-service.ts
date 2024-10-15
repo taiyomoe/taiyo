@@ -9,13 +9,17 @@ import {
   db,
 } from "@taiyomoe/db"
 import { ScansIndexService } from "@taiyomoe/meilisearch/services"
-import {
-  MediasService as BaseMediasService,
-  BaseTitlesService,
-} from "@taiyomoe/services"
+import { BaseTitlesService } from "@taiyomoe/services"
 import { MdUtils, ObjectUtils, TitleUtils } from "@taiyomoe/utils"
 import { type Chapter, type Cover, Group, Manga } from "mangadex-full-api"
 import { isInt, parallel, pick } from "radash"
+import {
+  ChaptersService,
+  CoversService,
+  MediasService,
+  ScansService,
+  TrackersService,
+} from "."
 import type { ImportMediaInput, SyncMediaInput } from "../schemas"
 import {
   DuplicatedMediaTrackerError,
@@ -23,13 +27,6 @@ import {
   MediaTrackerNotFoundError,
 } from "../utils/errors"
 import { sendStream } from "../utils/streams"
-import {
-  CoversService,
-  MediaChaptersService,
-  MediasService,
-  ScansService,
-  TrackersService,
-} from "./"
 
 const getInfoPayload = <TAction extends "create" | "update">(
   action: TAction,
@@ -240,9 +237,9 @@ const uploadChapters = async (
 
     s(currentStep, `Upando o capítulo ${chapter.chapter}...`, "ongoing", i)
 
-    const uploaded = await MediaChaptersService.upload(media.id, pages)
+    const uploaded = await ChaptersService.upload(media.id, pages)
 
-    await MediaChaptersService.insert(
+    await ChaptersService.insert(
       type,
       {
         title: chapter.title,
@@ -280,7 +277,7 @@ const postMediaUpdate = async (
 ) => {
   s(step, "Atualizando a obra...", "ongoing")
 
-  await BaseMediasService.postUpdate("synced", oldMedia, newMedia, userId)
+  await MediasService.postUpdate("synced", oldMedia, newMedia, userId)
 
   s(step, "Obra atualizada", "success")
 }
@@ -347,7 +344,7 @@ const importFn = async (
 
   s(4, "Reindexando a busca...", "ongoing")
 
-  await BaseMediasService.postCreate("imported", media)
+  await MediasService.postCreate("imported", media)
   await BaseTitlesService.postCreate("imported", titles)
   await TrackersService.postCreate("imported", trackers)
 
@@ -378,7 +375,9 @@ const sync = async (
   s(1, "Recuperando as informações da obra", "ongoing")
 
   const media = await MediasService.getById(mediaId)
-  const currentChapters = await MediaChaptersService.getAll(mediaId)
+  const currentChapters = await db.mediaChapter.findMany({
+    where: { mediaId: mediaId, deletedAt: null },
+  })
   const currentTitles = await db.mediaTitle.findMany({
     where: { mediaId: mediaId, deletedAt: null },
   })

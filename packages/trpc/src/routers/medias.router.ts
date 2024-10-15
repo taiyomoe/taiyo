@@ -6,7 +6,6 @@ import {
   idSchema,
   updateMediaSchema,
 } from "@taiyomoe/schemas"
-import { MediasService } from "@taiyomoe/services"
 import type { MediaLimited, MediasListItem } from "@taiyomoe/types"
 import { MediaUtils } from "@taiyomoe/utils"
 import { TRPCError } from "@trpc/server"
@@ -69,7 +68,7 @@ export const mediasRouter = createTRPCRouter({
         createdTrackers.push(result)
       }
 
-      await MediasService.postUpdate(
+      await ctx.services.medias.postUpdate(
         "updated",
         omit(media, ["trackers"]),
         result,
@@ -81,7 +80,7 @@ export const mediasRouter = createTRPCRouter({
   getById: publicProcedure
     .input(idSchema)
     .query(async ({ ctx, input: mediaId }) => {
-      const result = await MediasService.getFull(mediaId)
+      const result = await ctx.services.medias.getFull(mediaId)
 
       if (!result) {
         return null
@@ -249,7 +248,7 @@ export const mediasRouter = createTRPCRouter({
       })
 
       if (input.type === "restore") {
-        await MediasService.postRestore(
+        await ctx.services.medias.postRestore(
           newMedias,
           chapters,
           ctx.session.user.id,
@@ -258,6 +257,6 @@ export const mediasRouter = createTRPCRouter({
         return
       }
 
-      await MediasService.postDelete(newMedias, chapters)
+      await ctx.services.medias.postDelete(newMedias, chapters)
     }),
 })

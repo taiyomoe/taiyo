@@ -1,5 +1,4 @@
 import { getLibrarySchema, updateLibrarySchema } from "@taiyomoe/schemas"
-import { MediasService } from "@taiyomoe/services"
 import type { UserLibraryMedia } from "@taiyomoe/types"
 import { MediaUtils } from "@taiyomoe/utils"
 import { createTRPCRouter, protectedProcedure } from "../trpc"
@@ -109,7 +108,7 @@ export const librariesRouter = createTRPCRouter({
         })
       }
 
-      const status = await MediasService.getStatus(input.mediaId)
+      const status = await ctx.services.medias.getStatus(input.mediaId)
 
       if (input.status === "completed" && status !== "FINISHED") {
         throw new Error("Cannot mark as completed a media that is not finished")
