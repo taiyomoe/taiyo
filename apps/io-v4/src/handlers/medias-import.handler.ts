@@ -15,4 +15,10 @@ mediasImportHandler.get(
     ["mediaChapters", "create"],
   ]),
   withValidation("query", importMediaSchema),
+  async ({ json, req, var: { md } }) => {
+    const body = req.valid("query")
+    const mdMedia = await md.getMedia(body.mdId)
+
+    return json(mdMedia)
+  },
 )

@@ -153,6 +153,9 @@ importers:
       hono:
         specifier: ^4.6.5
         version: 4.6.5
+      mangadex-full-api:
+        specifier: ^5.12.1
+        version: 5.12.1
       use-intl:
         specifier: ^3.21.1
         version: 3.21.1(react@18.3.1)
