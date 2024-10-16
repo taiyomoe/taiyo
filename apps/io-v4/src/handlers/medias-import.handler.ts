@@ -15,10 +15,29 @@ mediasImportHandler.get(
     ["mediaChapters", "create"],
   ]),
   withValidation("query", importMediaSchema),
-  async ({ json, req, var: { md } }) => {
+  async ({ json, req, var: { logger, md, session, rabbit } }) => {
     const body = req.valid("query")
     const mdMedia = await md.getMedia(body.mdId)
+    const mainCover = await mdMedia.mainCover.resolve()
+    logger.debug(`Got media ${body.mdId} from MangaDex`, mdMedia, mainCover)
 
-    return json(mdMedia)
+    await md.ensureValid(body.mdId)
+    logger.debug(`Media ${body.mdId} is valid`)
+    logger.info(`${session.id} started importing MangDex media ${body.mdId}`)
+
+    const payload = md.getCreationPayload(mdMedia, session.id)
+    logger.debug(`Parsed payload from MangaDex media ${body.mdId}`, payload)
+
+    await rabbit.send({ routingKey: "import" }, payload)
+
+    if (body.importCovers) {
+      const covers = await mdMedia.getCovers()
+      logger.debug(
+        `Got ${covers.length} covers from MangaDex media ${body.mdId}`,
+        covers,
+      )
+    }
+
+    return json(payload)
   },
 )

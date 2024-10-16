@@ -9,10 +9,14 @@
     "unexpected": "An unexpected error occurred. Please try again later",
     "validation": "Validation failed",
     "medias": {
-      "notFound": "Media not found"
+      "notFound": "Media not found",
+      "alreadyExists": "This media has already been imported"
     },
     "scans": {
       "multipleNotFound": "One or more scans were not found"
+    },
+    "md": {
+      "notFound": "MangaDex media not found"
     }
   }
 }

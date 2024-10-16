@@ -459,6 +459,11 @@ const getTrackers = (manga: Manga) => {
   return trackers
 }
 
+const getSynopsis = (manga: Manga) =>
+  manga.localizedDescription.data["pt-br"] ||
+  manga.localizedDescription.data.en ||
+  Object.values(manga.localizedDescription.data).at(0)
+
 export const MdUtils = {
   getContentRating,
   getType,
@@ -469,4 +474,5 @@ export const MdUtils = {
   getGenresAndTags,
   getTitles,
   getTrackers,
+  getSynopsis,
 }
