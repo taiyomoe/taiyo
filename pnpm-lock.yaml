@@ -188,8 +188,8 @@ importers:
         specifier: ^3.5.6
         version: 3.5.6
       '@meilisearch/instant-meilisearch':
-        specifier: ^0.20.1
-        version: 0.20.1
+        specifier: ^0.21.1
+        version: 0.21.1
       '@nextui-org/react':
         specifier: ^2.4.8
         version: 2.4.8(@types/react@18.3.11)(framer-motion@11.11.9(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tailwindcss@3.4.14)
@@ -1543,8 +1543,8 @@ packages:
   '@jridgewell/trace-mapping@0.3.25':
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
 
-  '@meilisearch/instant-meilisearch@0.20.1':
-    resolution: {integrity: sha512-NAgLygKlL+8/Eb8a6xwYxyeBQS1BL+vUvqK6NZYeTUhcjnzMKbL2rpWKZmyqHLe6tcJvm4g8IJxd2J+k6YJKWg==}
+  '@meilisearch/instant-meilisearch@0.21.1':
+    resolution: {integrity: sha512-igbDiEwUnYvB0CqbdL7M9ninRL3OGH/my5Aacsz8TaGIWtacCzIaRPgYizHApqPLGT8jk7OSn+OcZrBUa6p6RA==}
 
   '@napi-rs/snappy-android-arm-eabi@7.2.2':
     resolution: {integrity: sha512-H7DuVkPCK5BlAr1NfSU8bDEN7gYs+R78pSHhDng83QxRnCLmVIZk33ymmIwurmoA1HrdTxbkbuNl+lMvNqnytw==}
@@ -4436,9 +4436,6 @@ packages:
     resolution: {integrity: sha512-YxkAzHCd9webTo6W7pUlwXEMq+g3PUmgP0IPKFs8no9T5WcenE4VxtvoIAAPiDYa6bgHRljGnCNq28Yhl2c0dA==}
     engines: {node: '>=12.0.0'}
 
-  meilisearch@0.42.0:
-    resolution: {integrity: sha512-pXaOPx/uhVGYVpejNuOcXifQVJlRVSxtvpgrGKb7ygmYo4qSNXkQXPxq1p0Tv+4/RsPJug3W04pcNnYXiqungA==}
-
   meilisearch@0.44.1:
     resolution: {integrity: sha512-ZTZYBmomtRwjaWbvU8U8ct04g/YnrNOlvchogJOPgHcQIQBfjdbAvMJ8mLhuZEzpioYXIT6Cv+FcE150pc2+nw==}
 
@@ -6407,11 +6404,9 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
 
-  '@meilisearch/instant-meilisearch@0.20.1':
+  '@meilisearch/instant-meilisearch@0.21.1':
     dependencies:
-      meilisearch: 0.42.0
-    transitivePeerDependencies:
-      - encoding
+      meilisearch: 0.44.1
 
   '@napi-rs/snappy-android-arm-eabi@7.2.2':
     optional: true
@@ -10576,12 +10571,6 @@ snapshots:
   luxon@3.5.0: {}
 
   mangadex-full-api@5.12.1: {}
-
-  meilisearch@0.42.0:
-    dependencies:
-      cross-fetch: 3.1.8
-    transitivePeerDependencies:
-      - encoding
 
   meilisearch@0.44.1: {}
 
