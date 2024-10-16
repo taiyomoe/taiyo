@@ -19,7 +19,7 @@ const logsUsersSettingsType = [
   "showLibrary",
 ]
 
-export const usersSettingsService = {
+export const UsersSettingsService = {
   insert: (input: LogsUsersSettingsInsertInput) => {
     if (!logsUsersSettingsType.includes(input.type)) {
       console.error(

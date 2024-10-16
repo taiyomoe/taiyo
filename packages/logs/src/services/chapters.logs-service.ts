@@ -1,14 +1,14 @@
-import type { Media } from "@taiyomoe/db"
+import type { MediaChapter } from "@taiyomoe/db"
 import { ObjectUtils } from "@taiyomoe/utils"
 import SuperJSON from "superjson"
 import type { InsertResource } from "../types"
 import { insertWrapper } from "../utils"
 
-export const mediasService = {
-  insert: (input: InsertResource<Media>) =>
+export const ChaptersService = {
+  insert: (input: InsertResource<MediaChapter>) =>
     insertWrapper(
-      "logs.medias",
-      ["type", "old", "new", "diff", "mediaId", "userId"],
+      "logs.chapters",
+      ["type", "old", "new", "diff", "chapterId", "userId"],
       [
         input.type,
         SuperJSON.serialize("old" in input ? input.old : {}),

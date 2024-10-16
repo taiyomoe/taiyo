@@ -7,7 +7,7 @@ type LogsUsersAuthInsertInput = {
   userId: string
 }
 
-export const usersAuthService = {
+export const UsersAuthService = {
   insert: (input: LogsUsersAuthInsertInput) =>
     insertWrapper(
       "logs.usersAuth",

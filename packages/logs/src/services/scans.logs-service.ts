@@ -1,14 +1,18 @@
-import type { MediaChapter } from "@taiyomoe/db"
+import type { Scan } from "@taiyomoe/db"
 import { ObjectUtils } from "@taiyomoe/utils"
 import SuperJSON from "superjson"
 import type { InsertResource } from "../types"
 import { insertWrapper } from "../utils"
 
-export const chaptersService = {
-  insert: (input: InsertResource<MediaChapter>) =>
+type LogsScansInsertInput = InsertResource<Scan> & {
+  affectedChaptersIds?: string[]
+}
+
+export const ScansService = {
+  insert: (input: LogsScansInsertInput) =>
     insertWrapper(
-      "logs.chapters",
-      ["type", "old", "new", "diff", "chapterId", "userId"],
+      "logs.scans",
+      ["type", "old", "new", "diff", "affectedChaptersId", "scanId", "userId"],
       [
         input.type,
         SuperJSON.serialize("old" in input ? input.old : {}),
@@ -16,6 +20,7 @@ export const chaptersService = {
         input.type === "updated"
           ? Object.keys(ObjectUtils.deepDiff(input.old, input._new))
           : [],
+        input.affectedChaptersIds ?? [],
         "old" in input ? input.old.id : input._new.id,
         input.userId,
       ],

@@ -7,7 +7,7 @@ type LogsUsersActivityInsertInput = {
   targetId: string
 }
 
-export const usersActivityService = {
+export const UsersActivityService = {
   insert: (input: LogsUsersActivityInsertInput) =>
     insertWrapper(
       "logs.usersActivity",

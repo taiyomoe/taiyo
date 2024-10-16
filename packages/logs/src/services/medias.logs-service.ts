@@ -1,14 +1,14 @@
-import type { MediaTracker } from "@taiyomoe/db"
+import type { Media } from "@taiyomoe/db"
 import { ObjectUtils } from "@taiyomoe/utils"
 import SuperJSON from "superjson"
 import type { InsertResource } from "../types"
 import { insertWrapper } from "../utils"
 
-export const trackersService = {
-  insert: (input: InsertResource<MediaTracker>) =>
+export const MediasService = {
+  insert: (input: InsertResource<Media>) =>
     insertWrapper(
-      "logs.titles",
-      ["type", "old", "new", "diff", "trackerId", "userId"],
+      "logs.medias",
+      ["type", "old", "new", "diff", "mediaId", "userId"],
       [
         input.type,
         SuperJSON.serialize("old" in input ? input.old : {}),

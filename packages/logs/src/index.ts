@@ -2,16 +2,16 @@ import { createClient } from "@clickhouse/client-web"
 import { createLogger, format, transports } from "winston"
 import LokiTransport from "winston-loki"
 import { env } from "./env"
-import { chaptersService } from "./services/chapters.logsService"
-import { coversService } from "./services/covers.logsService"
-import { mediasService } from "./services/medias.logsService"
-import { migrationsService } from "./services/migrations.logsService"
-import { scansService } from "./services/scans.logsService"
-import { titlesService } from "./services/titles.logsService"
-import { trackersService } from "./services/trackers.logsService"
-import { usersActivityService } from "./services/usersActivity.logsService"
-import { usersAuthService } from "./services/usersAuth.logsService"
-import { usersSettingsService } from "./services/usersSettings.logsService"
+import { ChaptersService } from "./services/chapters.logs-service"
+import { CoversService } from "./services/covers.logs-service"
+import { MediasService } from "./services/medias.logs-service"
+import { MigrationsService } from "./services/migrations.logs-service"
+import { ScansService } from "./services/scans.logs-service"
+import { TitlesService } from "./services/titles.logs-service"
+import { TrackersService } from "./services/trackers.logs-service"
+import { UsersActivityService } from "./services/users-activity.logs-service"
+import { UsersAuthService } from "./services/users-auth.logs-service"
+import { UsersSettingsService } from "./services/users-settings.logs-service"
 
 export const initLogger = (app: "taiyo" | "image-orchestrator") =>
   createLogger({
@@ -22,6 +22,7 @@ export const initLogger = (app: "taiyo" | "image-orchestrator") =>
       new LokiTransport({
         host: env.GRAFANA_LOKI_URL,
         labels: { app },
+        batching: true,
         json: true,
         basicAuth: `${env.GRAFANA_USERNAME}:${env.GRAFANA_PASSWORD}`,
       }),
@@ -37,17 +38,17 @@ export const rawLogsClient = createClient({
 })
 
 export const logsClient = {
-  migrations: migrationsService,
-  medias: mediasService,
-  covers: coversService,
-  titles: titlesService,
-  trackers: trackersService,
-  chapters: chaptersService,
-  scans: scansService,
+  migrations: MigrationsService,
+  medias: MediasService,
+  covers: CoversService,
+  titles: TitlesService,
+  trackers: TrackersService,
+  chapters: ChaptersService,
+  scans: ScansService,
   users: {
-    auth: usersAuthService,
-    activity: usersActivityService,
-    settings: usersSettingsService,
+    auth: UsersAuthService,
+    activity: UsersActivityService,
+    settings: UsersSettingsService,
   },
 }
 
