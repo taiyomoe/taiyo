@@ -15,7 +15,7 @@ export const env = createEnv({
     RABBITMQ_USERNAME: z.string(),
     RABBITMQ_PASSWORD: z.string(),
     RABBITMQ_SERVER_PORT: z.coerce.number(),
-    RABBITMQ_UI_PORTET_NAME: z.coerce.number(),
+    RABBITMQ_WEB_PORT: z.coerce.number(),
     RABBITMQ_URL: z.string().url(),
   },
 
