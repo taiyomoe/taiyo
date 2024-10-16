@@ -23,6 +23,12 @@ import {
   MediaTypeSchema,
 } from "./prisma"
 
+export const importMediaSchema = z.object({
+  mdId: z.string().uuid(),
+  importCovers: z.coerce.boolean().default(true),
+  importChapters: z.coerce.boolean().default(true),
+})
+
 export const updateMediaSchema = z
   .object({
     id: z.string().uuid(),
