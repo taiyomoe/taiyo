@@ -15,7 +15,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@prisma/client": "^5.21.0",
+    "@prisma/client": "^5.21.1",
     "@t3-oss/env-core": "^0.11.1",
     "@trpc/server": "11.0.0-rc.584",
     "luxon": "^3.5.0",
