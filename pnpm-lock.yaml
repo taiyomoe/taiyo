@@ -393,8 +393,8 @@ importers:
   packages/auth:
     dependencies:
       '@auth/prisma-adapter':
-        specifier: ^2.7.0
-        version: 2.7.0(@prisma/client@5.21.1(prisma@5.21.1))
+        specifier: ^2.7.1
+        version: 2.7.1(@prisma/client@5.21.1(prisma@5.21.1))
       '@t3-oss/env-core':
         specifier: ^0.11.1
         version: 0.11.1(typescript@5.6.3)(zod@3.23.8)
@@ -860,8 +860,8 @@ packages:
       nodemailer:
         optional: true
 
-  '@auth/core@0.37.0':
-    resolution: {integrity: sha512-LybAgfFC5dta3Mu3al0UbnzMGVBpZRqLMvvXupQOfETtPNlL7rXgTO13EVRTCdvPqMQrVYjODUDvgVfQM1M3Qg==}
+  '@auth/core@0.37.1':
+    resolution: {integrity: sha512-85PosPEZXHKZhEaAH5DVCig2N1Cu5PC8CbWX03Dw9g1JISLHyrRT0RZRcaWlgmz+0Ua4N52sFRX+g9WARQaUlA==}
     peerDependencies:
       '@simplewebauthn/browser': ^9.0.1
       '@simplewebauthn/server': ^9.0.2
@@ -874,8 +874,8 @@ packages:
       nodemailer:
         optional: true
 
-  '@auth/prisma-adapter@2.7.0':
-    resolution: {integrity: sha512-Ts4cvwxjXPPa9UMjONGcUSoP1Fb0GAkwIXHFzDGsmvoDQnbJExRFJ6OclGYPiJuNRR+4qhb/0w+gAi7x+42FdQ==}
+  '@auth/prisma-adapter@2.7.1':
+    resolution: {integrity: sha512-Wqs18vM6N6tJUvJ1mOEmuAqtsR+m3s8i9ROCvWmaLIF7ilbQdBJetywbiNQEbwaM4ThsgWmvCDpSRDhpVWDg7g==}
     peerDependencies:
       '@prisma/client': '>=2.26.0 || >=3 || >=4 || >=5'
 
@@ -5441,7 +5441,7 @@ snapshots:
       preact: 10.11.3
       preact-render-to-string: 5.2.3(preact@10.11.3)
 
-  '@auth/core@0.37.0':
+  '@auth/core@0.37.1':
     dependencies:
       '@panva/hkdf': 1.2.1
       '@types/cookie': 0.6.0
@@ -5451,9 +5451,9 @@ snapshots:
       preact: 10.11.3
       preact-render-to-string: 5.2.3(preact@10.11.3)
 
-  '@auth/prisma-adapter@2.7.0(@prisma/client@5.21.1(prisma@5.21.1))':
+  '@auth/prisma-adapter@2.7.1(@prisma/client@5.21.1(prisma@5.21.1))':
     dependencies:
-      '@auth/core': 0.37.0
+      '@auth/core': 0.37.1
       '@prisma/client': 5.21.1(prisma@5.21.1)
     transitivePeerDependencies:
       - '@simplewebauthn/browser'
