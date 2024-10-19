@@ -18,7 +18,7 @@ const insert = async (
     },
   })
 
-  await BaseCoversService.postUpload("created", [result])
+  await BaseCoversService.postUpload(db, "created", [result])
 
   return result
 }
@@ -39,7 +39,7 @@ const insertLimited = async (
     },
   })
 
-  await BaseCoversService.postUpload("created", [result])
+  await BaseCoversService.postUpload(db, "created", [result])
 
   return result
 }

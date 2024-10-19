@@ -1,11 +1,14 @@
-import type { PrismaClient } from "@prisma/client"
+import type { Prisma, PrismaClient } from "@prisma/client"
 import type { ChaptersIndexItem } from "@taiyomoe/types"
 import { TRPCError } from "@trpc/server"
 import { DateTime } from "luxon"
 import { omit, parallel } from "radash"
 import { meilisearchClient } from ".."
 
-const getItem = async (db: PrismaClient, id: string) => {
+const getItem = async (
+  db: PrismaClient | Prisma.TransactionClient,
+  id: string,
+) => {
   const result = await db.mediaChapter.findUnique({
     omit: { pages: true },
     include: { scans: { select: { id: true } } },
@@ -30,7 +33,10 @@ const getItem = async (db: PrismaClient, id: string) => {
   } satisfies ChaptersIndexItem
 }
 
-const sync = async (db: PrismaClient, ids: string[]) => {
+const sync = async (
+  db: PrismaClient | Prisma.TransactionClient,
+  ids: string[],
+) => {
   const chapters = await parallel(10, ids, (id) => getItem(db, id))
 
   return meilisearchClient.chapters.updateDocuments(chapters)

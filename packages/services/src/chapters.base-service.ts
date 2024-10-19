@@ -22,8 +22,6 @@ const postUpload = async (
 ) => {
   const ids = chapters.map((c) => c.id)
 
-  console.log("chapters", chapters)
-
   for (const chapter of chapters) {
     await logsClient.chapters.insert({
       type,

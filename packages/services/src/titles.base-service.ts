@@ -1,10 +1,16 @@
 import { cacheClient } from "@taiyomoe/cache"
-import { type MediaTitle, db } from "@taiyomoe/db"
+import {
+  type MediaTitle,
+  type Prisma,
+  type PrismaClient,
+  db,
+} from "@taiyomoe/db"
 import { logsClient } from "@taiyomoe/logs"
 import { MediasIndexService } from "@taiyomoe/meilisearch/services"
 import { ObjectUtils } from "@taiyomoe/utils"
 
 const postCreate = async (
+  db: PrismaClient | Prisma.TransactionClient,
   type: "created" | "imported" | "synced",
   titles: MediaTitle[],
 ) => {

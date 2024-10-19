@@ -58,7 +58,7 @@ export const titlesRouter = createTRPCRouter({
         return { new: result, old: oldMainTitle }
       })
 
-      await ctx.services.titles.postCreate("created", [result.new])
+      await ctx.services.titles.postCreate(ctx.db, "created", [result.new])
 
       return result.new
     }),
