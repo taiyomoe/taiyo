@@ -13,7 +13,7 @@ import { UsersActivityService } from "./services/users-activity.logs-service"
 import { UsersAuthService } from "./services/users-auth.logs-service"
 import { UsersSettingsService } from "./services/users-settings.logs-service"
 
-export const initLogger = (app: "taiyo" | "image-orchestrator") =>
+export const initLogger = (app: "taiyo" | "image-orchestrator" | "io-worker") =>
   createLogger({
     level: "debug",
     format: format.json(),

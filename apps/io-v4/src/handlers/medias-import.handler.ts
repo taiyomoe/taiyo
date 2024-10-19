@@ -28,7 +28,14 @@ mediasImportHandler.get(
     const payload = md.getCreationPayload(mdMedia, session.id)
     logger.debug(`Parsed payload from MangaDex media ${body.mdId}`, payload)
 
-    await rabbit.send({ routingKey: "import" }, payload)
+    const media = await rabbit.medias.import({
+      payload,
+      mainCoverPayload: md.parseCover(mainCover),
+    })
+    logger.debug(
+      `Received created media from RabbitMQ worker for MangaDex import ${body.mdId}`,
+      media,
+    )
 
     if (body.importCovers) {
       const covers = await mdMedia.getCovers()
