@@ -13,7 +13,7 @@
     "@taiyomoe/db": "workspace:*",
     "@taiyomoe/logs": "workspace:*",
     "@taiyomoe/rabbit": "workspace:*",
-    "@taiyomoe/s3": "workspace:^",
+    "@taiyomoe/s3": "workspace:*",
     "@taiyomoe/schemas": "workspace:*",
     "@taiyomoe/services": "workspace:*",
     "@taiyomoe/utils": "workspace:*",
