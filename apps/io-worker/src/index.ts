@@ -1,5 +1,7 @@
 import { RABBIT_DEFAULT_EXCHANGES, rawRabbitClient } from "@taiyomoe/rabbit"
+import type { ImportChapterMessageInput } from "@taiyomoe/types"
 import SuperJSON from "superjson"
+import { importChapterHandler } from "~/handlers/import-chapter.handler"
 import { importCoverHandler } from "~/handlers/import-cover.handler"
 import { mediasInitialImportHandler } from "~/handlers/medias-initial-import.handler"
 import { logger } from "~/logger"
@@ -19,6 +21,10 @@ const rabbitConsumer = rawRabbitClient.createConsumer(
     switch (routingKey) {
       case "import-cover":
         return importCoverHandler(SuperJSON.parse(body))
+      case "import-chapter":
+        return importChapterHandler(
+          JSON.parse(body) as ImportChapterMessageInput,
+        )
       default:
         logger.error("Received unknown RabbitMQ routing key", routingKey)
     }

@@ -36,11 +36,15 @@ const compressImage = async (file: Buffer, extension: string) => {
 }
 
 const download = async (input: string) => {
+  logger.debug(`Downloading file from: ${input}`)
+
   const response = await fetch(input)
 
   if (!response.ok) {
     throw new Error(`Failed to download file: ${input}`)
   }
+
+  logger.debug(`Downloaded file from: ${input}`)
 
   return Buffer.from(await response.arrayBuffer())
 }

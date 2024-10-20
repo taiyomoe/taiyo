@@ -193,6 +193,9 @@ importers:
       '@taiyomoe/logs':
         specifier: workspace:*
         version: link:../../packages/logs
+      '@taiyomoe/meilisearch':
+        specifier: workspace:^
+        version: link:../../packages/meilisearch
       '@taiyomoe/rabbit':
         specifier: workspace:*
         version: link:../../packages/rabbit
@@ -205,6 +208,9 @@ importers:
       file-type:
         specifier: 19.6.0
         version: 19.6.0
+      mangadex-full-api:
+        specifier: ^5.12.1
+        version: 5.12.1
       radash:
         specifier: ^12.1.0
         version: 12.1.0

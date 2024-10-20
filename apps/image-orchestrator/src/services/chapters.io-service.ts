@@ -23,7 +23,7 @@ const insert = async (
     },
   })
 
-  await BaseChaptersService.postUpload(type, [result])
+  await BaseChaptersService.postUpload(db, type, [result])
 
   return result
 }

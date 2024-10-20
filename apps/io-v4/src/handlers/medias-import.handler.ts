@@ -60,6 +60,37 @@ mediasImportHandler.get(
       }
     }
 
+    if (body.importChapters) {
+      const chapters = await md.getChapters(mdMedia)
+      logger.debug(
+        `Got ${chapters.length} chapters from MangaDex media ${body.mdId}`,
+        chapters,
+      )
+
+      for (const chapter of chapters) {
+        if (chapter.isExternal) {
+          logger.debug(
+            `Skipped external chapter when importing MangaDex media ${body.mdId}`,
+            chapter,
+          )
+          continue
+        }
+
+        const parsedChapter = {
+          ...md.parseChapter(chapter),
+          contentRating: media.contentRating,
+          mediaId: media.id,
+          uploaderId: session.id,
+        }
+
+        await rabbit.medias.importChapter(parsedChapter)
+        logger.debug(
+          `Sent chapter ${chapter.id} to RabbitMQ queue when importing MangaDex media ${body.mdId}`,
+          parsedChapter,
+        )
+      }
+    }
+
     return json(media)
   },
 )

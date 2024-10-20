@@ -1,5 +1,10 @@
 import { cacheClient } from "@taiyomoe/cache"
-import { type MediaChapter, db } from "@taiyomoe/db"
+import {
+  type MediaChapter,
+  type Prisma,
+  type PrismaClient,
+  db,
+} from "@taiyomoe/db"
 import { logsClient } from "@taiyomoe/logs"
 import { meilisearchClient } from "@taiyomoe/meilisearch"
 import { ChaptersIndexService } from "@taiyomoe/meilisearch/services"
@@ -17,6 +22,7 @@ const getDistinctCount = async (mediaId: string) => {
 }
 
 const postUpload = async (
+  db: PrismaClient | Prisma.TransactionClient,
   type: "created" | "imported" | "synced",
   chapters: MediaChapter[],
 ) => {

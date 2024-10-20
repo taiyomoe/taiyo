@@ -1,4 +1,5 @@
 import type {
+  ImportChapterMessageInput,
   ImportCoverMessageInput,
   ImportMediaInitialMessageInput,
   ImportMediaInitialMessageOutput,
@@ -25,6 +26,8 @@ export const rabbitPublisher = {
       ),
     importCover: (input: ImportCoverMessageInput) =>
       messageHandler("import-cover", input),
+    importChapter: (input: ImportChapterMessageInput) =>
+      messageHandler("import-chapter", input),
   },
 }
 

@@ -1,6 +1,6 @@
 import { type Prisma, db } from "@taiyomoe/db"
 import { MdUtils } from "@taiyomoe/utils"
-import { type Cover, Manga } from "mangadex-full-api"
+import { type Chapter, type Cover, Manga } from "mangadex-full-api"
 import { HttpError } from "~/utils/http-error"
 import { logger } from "~/utils/logger"
 
@@ -27,6 +27,25 @@ const parseCover = (input: Cover) => {
     url: input.imageSource,
     volume,
     language,
+  }
+}
+
+const parseChapter = (input: Chapter) => {
+  const volume = Number.parseInt(input.volume)
+
+  if (volume.toString() !== input.volume) {
+    logger.warn(
+      `MangaDex chapter volume (stringified) didn't match the number one. It was probably a float. This happened when importing MangaDex media ${input.manga.id}`,
+      input,
+    )
+  }
+
+  return {
+    mdId: input.id,
+    title: input.title,
+    number: Number.parseInt(input.chapter),
+    volume,
+    groupIds: input.groups.map((g) => g.id),
   }
 }
 
@@ -67,6 +86,17 @@ const getCreationPayload = (input: Manga, creatorId: string) => {
   } satisfies Prisma.MediaCreateInput
 }
 
+const getChapters = async (input: Manga) => {
+  const result = await input.getFeed({
+    // biome-ignore lint/style/useNumberNamespace: Number.Infinity is not allowed
+    limit: Infinity,
+    translatedLanguage: ["pt-br"],
+    order: { chapter: "asc" },
+  })
+
+  return result
+}
+
 const ensureValid = async (input: string) => {
   const result = await db.mediaTracker.findFirst({
     where: { externalId: input },
@@ -83,7 +113,9 @@ const ensureValid = async (input: string) => {
 
 export const MdService = {
   parseCover,
+  parseChapter,
   getMedia,
   getCreationPayload,
+  getChapters,
   ensureValid,
 }

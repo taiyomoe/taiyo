@@ -1,10 +1,4 @@
-import type {
-  ContentRating,
-  Languages,
-  Media,
-  MediaCover,
-  Prisma,
-} from "@prisma/client"
+import type { ContentRating, Languages, Media, Prisma } from "@prisma/client"
 
 export type ImportMediaInitialMessageInput = {
   payload: Prisma.MediaCreateInput
@@ -24,4 +18,14 @@ export type ImportCoverMessageInput = {
   mediaId: string
   uploaderId: string
 }
-export type ImportCoverMessageOutput = MediaCover
+
+export type ImportChapterMessageInput = {
+  mdId: string
+  title: string | null
+  number: number
+  volume: number
+  contentRating: ContentRating
+  groupIds: string[]
+  mediaId: string
+  uploaderId: string
+}
