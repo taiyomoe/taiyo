@@ -32,7 +32,9 @@ const compressImage = async (file: Buffer, extension: string) => {
     return file
   }
 
-  return await sharp(file).jpeg({ progressive: true, quality: 85 }).toBuffer()
+  return await sharp(file, { failOn: "none" })
+    .jpeg({ progressive: true, quality: 85 })
+    .toBuffer()
 }
 
 const download = async (input: string) => {
