@@ -99,7 +99,7 @@ const getChapters = async (input: Manga) => {
 
 const ensureValid = async (input: string) => {
   const result = await db.mediaTracker.findFirst({
-    where: { externalId: input },
+    where: { externalId: input, media: { deletedAt: null } },
     select: { id: true },
   })
 
