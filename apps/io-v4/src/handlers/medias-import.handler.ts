@@ -23,7 +23,7 @@ mediasImportHandler.get(
 
     await md.ensureValid(body.mdId)
     logger.debug(`Media ${body.mdId} is valid`)
-    logger.info(`${session.id} started importing MangDex media ${body.mdId}`)
+    logger.info(`${session.id} started importing MangaDex media ${body.mdId}`)
 
     const payload = md.getCreationPayload(mdMedia, session.id)
     logger.debug(`Parsed payload from MangaDex media ${body.mdId}`, payload)
