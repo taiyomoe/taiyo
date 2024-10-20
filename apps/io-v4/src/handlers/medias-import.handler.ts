@@ -43,8 +43,23 @@ mediasImportHandler.get(
         `Got ${covers.length} covers from MangaDex media ${body.mdId}`,
         covers,
       )
+
+      for (const cover of covers) {
+        const parsedCover = {
+          ...md.parseCover(cover),
+          contentRating: media.contentRating,
+          mediaId: media.id,
+          uploaderId: session.id,
+        }
+
+        await rabbit.medias.importCover(parsedCover)
+        logger.debug(
+          `Sent cover ${cover.id} to RabbitMQ queue when importing MangaDex media ${body.mdId}`,
+          parsedCover,
+        )
+      }
     }
 
-    return json(payload)
+    return json(media)
   },
 )

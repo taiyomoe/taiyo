@@ -1,4 +1,5 @@
 import type {
+  ImportCoverMessageInput,
   ImportMediaInitialMessageInput,
   ImportMediaInitialMessageOutput,
 } from "@taiyomoe/types"
@@ -22,17 +23,12 @@ export const rabbitPublisher = {
         "medias-initial-import",
         input,
       ),
-    importCover: (input: unknown) =>
-      rawRabbitPublisher.send(
-        { exchange: "medias", routingKey: "import-cover" },
-        input,
-      ),
+    importCover: (input: ImportCoverMessageInput) =>
+      messageHandler("import-cover", input),
   },
 }
 
 const rpcHandler = async <TOutput>(routingKey: string, content: unknown) => {
-  console.log("inside rpc handler", routingKey, content)
-
   const { body } = await rawRabbitRpcClient.send(
     routingKey,
     SuperJSON.stringify(content),
@@ -40,6 +36,12 @@ const rpcHandler = async <TOutput>(routingKey: string, content: unknown) => {
 
   return SuperJSON.parse<TOutput>(body)
 }
+
+const messageHandler = async (routingKey: string, content: unknown) =>
+  rawRabbitPublisher.send(
+    { exchange: "medias", routingKey },
+    SuperJSON.stringify(content),
+  )
 
 process.on("SIGINT", async () => {
   await rawRabbitPublisher.close()
