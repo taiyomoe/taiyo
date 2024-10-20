@@ -21,7 +21,7 @@
     "@taiyomoe/meilisearch": "workspace:*",
     "@taiyomoe/utils": "workspace:*",
     "next": "^14.2.15",
-    "next-auth": "5.0.0-beta.23",
+    "next-auth": "5.0.0-beta.25",
     "zod": "^3.23.8"
   },
   "devDependencies": {
