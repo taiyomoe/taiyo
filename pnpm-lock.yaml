@@ -160,8 +160,8 @@ importers:
         specifier: ^12.1.0
         version: 12.1.0
       use-intl:
-        specifier: ^3.21.1
-        version: 3.21.1(react@18.3.1)
+        specifier: ^3.22.0
+        version: 3.22.0(react@18.3.1)
       zod:
         specifier: ^3.23.8
         version: 3.23.8
@@ -5269,11 +5269,6 @@ packages:
 
   use-composed-ref@1.3.0:
     resolution: {integrity: sha512-GLMG0Jc/jiKov/3Ulid1wbv3r54K9HlMW29IWcDFPEqFkSO2nS0MuefWgMJpeHQ9YJeXDL3ZUF+P3jdXlZX/cQ==}
-    peerDependencies:
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0
-
-  use-intl@3.21.1:
-    resolution: {integrity: sha512-52kYgcydYkG9SX0ZZGt7W6WD2Va01hwe15bDgkXuaTdSxrF9fDu6hHTV5DxIuSmSSf/FEcBo/nodpw3ZhY31Lw==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
 
@@ -11382,12 +11377,6 @@ snapshots:
 
   use-composed-ref@1.3.0(react@18.3.1):
     dependencies:
-      react: 18.3.1
-
-  use-intl@3.21.1(react@18.3.1):
-    dependencies:
-      '@formatjs/fast-memoize': 2.2.1
-      intl-messageformat: 10.7.0
       react: 18.3.1
 
   use-intl@3.22.0(react@18.3.1):
