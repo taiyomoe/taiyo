@@ -1,6 +1,6 @@
 import { chaptersRouter } from "./routers/chapters.router"
 import { coversRouter } from "./routers/covers.router"
-import { historiesRouter } from "./routers/histories.router"
+import { historyRouter } from "./routers/history.router"
 import { librariesRouter } from "./routers/libraries.router"
 import { mediasRouter } from "./routers/medias.router"
 import { scansRouter } from "./routers/scans.router"
@@ -18,7 +18,7 @@ export const appRouter = createTRPCRouter({
   covers: coversRouter,
   titles: titlesRouter,
   chapters: chaptersRouter,
-  histories: historiesRouter,
+  history: historyRouter,
   libraries: librariesRouter,
   scans: scansRouter,
   users: usersRouter,

@@ -11,7 +11,7 @@ type Props = {
 
 export const MediaChaptersTabRowProgressionButton = (props: Props) => {
   const { chapter, completed, setCompleted } = props
-  const { mutate } = api.histories.updateProgression.useMutation()
+  const { mutate } = api.history.updateProgression.useMutation()
   const { data: session } = useSession()
   const Icon = completed ? EyeOffIcon : EyeIcon
 
