@@ -42,8 +42,8 @@ const create = new Elysia().use(authMiddleware([["medias", "create"]])).post(
       where: { mediaId: result.id },
     })
 
-    await MediasService.postCreate("created", result)
-    await BaseTitlesService.postCreate("created", titles)
+    await MediasService.postCreate(db, "created", result)
+    await BaseTitlesService.postCreate(db, "created", titles)
     await TrackersService.postCreate("created", trackers)
 
     return result

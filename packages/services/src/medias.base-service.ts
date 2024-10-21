@@ -1,5 +1,11 @@
 import { cacheClient } from "@taiyomoe/cache"
-import { type Media, type MediaChapter, db } from "@taiyomoe/db"
+import {
+  type Media,
+  type MediaChapter,
+  type Prisma,
+  type PrismaClient,
+  db,
+} from "@taiyomoe/db"
 import { logsClient } from "@taiyomoe/logs"
 import { meilisearchClient } from "@taiyomoe/meilisearch"
 import {
@@ -51,6 +57,7 @@ const getFull = async (mediaId: string) => {
 }
 
 const postCreate = async (
+  db: PrismaClient | Prisma.TransactionClient,
   type: "created" | "imported" | "synced",
   media: Media,
 ) => {

@@ -9,10 +9,14 @@
     "unexpected": "Um erro inesperado ocorreu",
     "validation": "Falha na validação",
     "medias": {
-      "notFound": "Obra não encontrada"
+      "notFound": "Obra não encontrada",
+      "alreadyExists": "Esta obra já foi importada"
     },
     "scans": {
       "multipleNotFound": "Uma ou mais scans não foram encontradas"
+    },
+    "md": {
+      "notFound": "Obra da MangaDex não encontrada"
     }
   }
 }

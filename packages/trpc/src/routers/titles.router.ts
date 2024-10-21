@@ -58,7 +58,7 @@ export const titlesRouter = createTRPCRouter({
         return { new: result, old: oldMainTitle }
       })
 
-      await ctx.services.titles.postCreate("created", [result.new])
+      await ctx.services.titles.postCreate(ctx.db, "created", [result.new])
 
       return result.new
     }),
@@ -123,6 +123,7 @@ export const titlesRouter = createTRPCRouter({
 
       if (input.isMainTitle && result.old) {
         await ctx.services.titles.postUpdate(
+          ctx.db,
           "updated",
           mainTitle,
           result.old,
@@ -131,6 +132,7 @@ export const titlesRouter = createTRPCRouter({
       }
 
       await ctx.services.titles.postUpdate(
+        ctx.db,
         "updated",
         title,
         result.new,

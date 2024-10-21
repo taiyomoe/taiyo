@@ -123,7 +123,7 @@ const uploadCovers = async (
     uploadedCovers.push(result)
   }
 
-  await CoversService.postUpload(type, uploadedCovers)
+  await CoversService.postUpload(db, type, uploadedCovers)
 
   s(step, "Covers upadas", "success")
 }
@@ -344,8 +344,8 @@ const importFn = async (
 
   s(4, "Reindexando a busca...", "ongoing")
 
-  await MediasService.postCreate("imported", media)
-  await BaseTitlesService.postCreate("imported", titles)
+  await MediasService.postCreate(db, "imported", media)
+  await BaseTitlesService.postCreate(db, "imported", titles)
   await TrackersService.postCreate("imported", trackers)
 
   s(4, "Busca reindexada", "success")
@@ -434,6 +434,7 @@ const sync = async (
         })
 
         await BaseTitlesService.postUpdate(
+          tx,
           "synced",
           currentTitle,
           result,
@@ -450,7 +451,7 @@ const sync = async (
       createdTitles.push(result)
     }
 
-    await BaseTitlesService.postCreate("synced", createdTitles)
+    await BaseTitlesService.postCreate(db, "synced", createdTitles)
   })
 
   const createdTrackers: MediaTracker[] = []

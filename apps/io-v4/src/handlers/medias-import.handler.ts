@@ -1,16 +1,10 @@
+import { importMediaSchema } from "@taiyomoe/schemas"
 import { Hono } from "hono"
-import { streamSSE } from "hono/streaming"
-import { z } from "zod"
 import { withAuth } from "~/middlewares/auth.middleware"
 import { withValidation } from "~/middlewares/validation.middleware"
 import type { CustomContext } from "~/types"
 
 export const mediasImportHandler = new Hono<CustomContext>()
-
-const importSchema = z.object({
-  mdId: z.string().uuid(),
-  downloadChapters: z.coerce.boolean().default(false),
-})
 
 mediasImportHandler.get(
   "/",
@@ -20,12 +14,83 @@ mediasImportHandler.get(
     ["mediaTitles", "create"],
     ["mediaChapters", "create"],
   ]),
-  withValidation("query", importSchema),
-  (c) =>
-    streamSSE(c, async (s) => {
-      while (true) {
-        await s.writeSSE({ id: "azert", data: "Hello world!" })
-        await s.sleep(1000)
+  withValidation("query", importMediaSchema),
+  async ({ json, req, var: { logger, md, session, rabbit } }) => {
+    const body = req.valid("query")
+    const mdMedia = await md.getMedia(body.mdId)
+    const mainCover = await mdMedia.mainCover.resolve()
+    logger.debug(`Got media ${body.mdId} from MangaDex`, mdMedia, mainCover)
+
+    await md.ensureValid(body.mdId)
+    logger.debug(`Media ${body.mdId} is valid`)
+    logger.info(`${session.id} started importing MangaDex media ${body.mdId}`)
+
+    const payload = md.getCreationPayload(mdMedia, session.id)
+    logger.debug(`Parsed payload from MangaDex media ${body.mdId}`, payload)
+
+    const media = await rabbit.medias.import({
+      payload,
+      mainCoverPayload: md.parseCover(mainCover),
+    })
+    logger.debug(
+      `Received created media from RabbitMQ worker for MangaDex import ${body.mdId}`,
+      media,
+    )
+
+    if (body.importCovers) {
+      const covers = await mdMedia.getCovers()
+      logger.debug(
+        `Got ${covers.length} covers from MangaDex media ${body.mdId}`,
+        covers,
+      )
+
+      for (const cover of covers) {
+        const parsedCover = {
+          ...md.parseCover(cover),
+          contentRating: media.contentRating,
+          mediaId: media.id,
+          uploaderId: session.id,
+        }
+
+        await rabbit.medias.importCover(parsedCover)
+        logger.debug(
+          `Sent cover ${cover.id} to RabbitMQ queue when importing MangaDex media ${body.mdId}`,
+          parsedCover,
+        )
       }
-    }),
+    }
+
+    if (body.importChapters) {
+      const chapters = await md.getChapters(mdMedia)
+      logger.debug(
+        `Got ${chapters.length} chapters from MangaDex media ${body.mdId}`,
+        chapters,
+      )
+
+      for (const chapter of chapters) {
+        if (chapter.isExternal) {
+          logger.debug(
+            `Skipped external chapter when importing MangaDex media ${body.mdId}`,
+            chapter,
+          )
+          continue
+        }
+
+        const parsedChapter = {
+          ...md.parseChapter(chapter),
+          contentRating: media.contentRating,
+          mediaId: media.id,
+          uploaderId: session.id,
+        }
+
+        await rabbit.medias.importChapter(parsedChapter)
+        logger.debug(
+          `Sent chapter ${chapter.id} to RabbitMQ queue when importing MangaDex media ${body.mdId}`,
+          parsedChapter,
+        )
+      }
+    }
+
+    return json(media)
+  },
 )

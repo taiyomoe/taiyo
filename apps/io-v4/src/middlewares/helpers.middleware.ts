@@ -5,8 +5,10 @@ import { meilisearchClient } from "@taiyomoe/meilisearch"
 import { rabbitPublisher } from "@taiyomoe/rabbit"
 import { createMiddleware } from "hono/factory"
 import { createTranslator } from "use-intl"
+import { MdService } from "~/services/md.io-service"
 import { MediasService } from "~/services/medias.io-service"
 import { ScansService } from "~/services/scans.io-service"
+import { TrackersService } from "~/services/trackers.io-service"
 import type { HelpersMiddleware } from "~/types"
 import { messages } from "~/utils/get-messages"
 import { services } from "~/utils/get-services"
@@ -30,6 +32,8 @@ export const withHelpers = createMiddleware<HelpersMiddleware>(
     c.set("rabbit", rabbitPublisher)
     c.set("medias", MediasService)
     c.set("scans", ScansService)
+    c.set("md", MdService)
+    c.set("trackers", TrackersService)
 
     await next()
   },
