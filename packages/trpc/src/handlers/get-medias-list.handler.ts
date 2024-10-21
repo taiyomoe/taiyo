@@ -5,7 +5,7 @@ import { DateTime } from "luxon"
 import { omit, parallel, unique } from "radash"
 import { protectedProcedure } from "../trpc"
 
-export const getMediaListHandler = protectedProcedure
+export const getMediasListHandler = protectedProcedure
   .meta({ resource: "medias", action: "create" })
   .input(getMediasListSchema)
   .query(async ({ ctx, input }) => {
