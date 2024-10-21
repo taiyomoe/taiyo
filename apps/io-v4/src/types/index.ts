@@ -9,6 +9,7 @@ import type { createTranslator } from "use-intl"
 import type { MdService } from "~/services/md.io-service"
 import type { MediasService } from "~/services/medias.io-service"
 import type { ScansService } from "~/services/scans.io-service"
+import type { TrackersService } from "~/services/trackers.io-service"
 import type { services } from "~/utils/get-services"
 import type { logger } from "~/utils/logger"
 
@@ -26,6 +27,7 @@ export type HelpersMiddleware = {
     medias: typeof MediasService
     scans: typeof ScansService
     md: typeof MdService
+    trackers: typeof TrackersService
   }
 }
 

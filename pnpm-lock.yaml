@@ -156,6 +156,9 @@ importers:
       mangadex-full-api:
         specifier: ^5.12.1
         version: 5.12.1
+      radash:
+        specifier: ^12.1.0
+        version: 12.1.0
       use-intl:
         specifier: ^3.21.1
         version: 3.21.1(react@18.3.1)

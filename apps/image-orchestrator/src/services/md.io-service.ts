@@ -434,6 +434,7 @@ const sync = async (
         })
 
         await BaseTitlesService.postUpdate(
+          tx,
           "synced",
           currentTitle,
           result,

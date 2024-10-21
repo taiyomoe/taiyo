@@ -33,6 +33,7 @@ const postCreate = async (
 }
 
 const postUpdate = async (
+  db: PrismaClient | Prisma.TransactionClient,
   type: "updated" | "synced",
   oldTitle: MediaTitle,
   newTitle: MediaTitle,

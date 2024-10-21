@@ -29,6 +29,12 @@ export const importMediaSchema = z.object({
   importChapters: z.coerce.boolean().default(true),
 })
 
+export const syncMediaSchema = z.object({
+  id: z.string().uuid(),
+  importCovers: z.coerce.boolean().default(true),
+  importChapters: z.coerce.boolean().default(true),
+})
+
 export const updateMediaSchema = z
   .object({
     id: z.string().uuid(),

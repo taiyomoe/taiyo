@@ -9,7 +9,7 @@ console.log("image-orchestrator worker up and running!")
 
 const rabbitConsumer = rawRabbitClient.createConsumer(
   {
-    qos: { prefetchCount: 5 },
+    qos: { prefetchCount: 1 },
     queueOptions: { durable: true },
     exchanges: RABBIT_DEFAULT_EXCHANGES,
     queueBindings: [{ exchange: "medias", routingKey: "*" }],
