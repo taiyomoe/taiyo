@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "license": "MIT",
   "exports": {
     "./base": "./base.ts"
   },
-  "license": "MIT",
   "scripts": {
     "clean": "rm -rf .turbo node_modules",
     "typecheck": "tsc --noEmit"
@@ -15,7 +15,6 @@
     "tailwindcss": "^3.4.14"
   },
   "devDependencies": {
-    "@taiyomoe/tsconfig": "workspace:*",
-    "typescript": "^5.6.3"
+    "@taiyomoe/tsconfig": "workspace:*"
   }
 }

@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "license": "MIT",
   "exports": {
     ".": "./src/index.ts",
     "./env": "./src/env.ts"
   },
-  "license": "MIT",
   "scripts": {
     "clean": "rm -rf .turbo node_modules",
     "typecheck": "tsc --noEmit",
@@ -32,7 +32,6 @@
     "@taiyomoe/tsconfig": "workspace:*",
     "cross-env": "^7.0.3",
     "prisma": "^5.21.1",
-    "tsx": "^4.19.1",
-    "typescript": "^5.6.3"
+    "tsx": "^4.19.1"
   }
 }
