@@ -123,6 +123,7 @@ export const titlesRouter = createTRPCRouter({
 
       if (input.isMainTitle && result.old) {
         await ctx.services.titles.postUpdate(
+          ctx.db,
           "updated",
           mainTitle,
           result.old,
@@ -131,6 +132,7 @@ export const titlesRouter = createTRPCRouter({
       }
 
       await ctx.services.titles.postUpdate(
+        ctx.db,
         "updated",
         title,
         result.new,
