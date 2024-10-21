@@ -1,7 +1,7 @@
 import { updateProgressionSchema } from "@taiyomoe/schemas"
 import { protectedProcedure } from "../trpc"
 
-export const updateHistoryProgressionHandler = protectedProcedure
+export const updateUserHistoryProgressionHandler = protectedProcedure
   .meta({
     resource: "history",
     action: "update",

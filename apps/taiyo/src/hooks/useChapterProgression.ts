@@ -4,7 +4,7 @@ import { api } from "~/trpc/react"
 
 export const useChapterProgression = () => {
   const { chapter } = useReaderStore()
-  const { mutate } = api.history.updateProgression.useMutation()
+  const { mutate } = api.users.updateProgression.useMutation()
   const { status } = useSession()
 
   const onPageUpdate = (newCurrentPageNumber: number) => {
