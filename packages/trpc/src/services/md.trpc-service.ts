@@ -2,8 +2,8 @@ import { type Media, type Prisma, db } from "@taiyomoe/db"
 import { rabbitPublisher } from "@taiyomoe/rabbit"
 import { MdUtils } from "@taiyomoe/utils"
 import { type Chapter, type Cover, Manga } from "mangadex-full-api"
-import { HttpError } from "~/utils/http-error"
-import { logger } from "~/utils/logger"
+import { logger } from "../utils/logger"
+import { HttpError } from "../utils/trpc-error"
 
 const parseCover = (input: Cover) => {
   const volume = Number.parseInt(input.volume)
@@ -54,10 +54,37 @@ const getMedia = async (input: string) => {
   const result = await Manga.get(input).catch(() => null)
 
   if (!result) {
-    throw new HttpError(404, "md.notFound")
+    throw new HttpError("NOT_FOUND", "md.notFound")
   }
 
   return result
+}
+
+const getCreationPayload = (input: Manga, creatorId: string) => {
+  const { genres, tags, isOneShot } = MdUtils.getGenresAndTags(input)
+  const titles = MdUtils.getTitles(input)
+  const trackers = MdUtils.getTrackers(input)
+
+  return {
+    startDate: input.year ? new Date(Date.parse(input.year.toString())) : null,
+    contentRating: MdUtils.getContentRating(input),
+    oneShot: isOneShot,
+    type: MdUtils.getType(input),
+    demography: MdUtils.getDemography(input),
+    countryOfOrigin: MdUtils.getCountryOfOrigin(input),
+    genres,
+    tags: tags.map((key) => ({ key, isSpoiler: false })),
+    synopsis: MdUtils.getSynopsis(input),
+    status: "RELEASING",
+    source: "LIGHT_NOVEL",
+    creator: { connect: { id: creatorId } },
+    titles: {
+      createMany: { data: titles.map((t) => ({ ...t, creatorId })) },
+    },
+    trackers: {
+      createMany: { data: trackers.map((t) => ({ ...t, creatorId })) },
+    },
+  } satisfies Prisma.MediaCreateInput
 }
 
 const getUpdatePayload = (input: Manga, original: Media) => {
@@ -103,7 +130,7 @@ const ensureValid = async (input: string) => {
 
   if (result) {
     logger.debug(`Media ${input} already exists in the database`)
-    throw new HttpError(409, "medias.alreadyExists")
+    throw new HttpError("CONFLICT", "medias.alreadyExists")
   }
 
   return true
@@ -171,6 +198,7 @@ export const MdService = {
   parseCover,
   parseChapter,
   getMedia,
+  getCreationPayload,
   getUpdatePayload,
   getChapters,
   ensureValid,

@@ -10,8 +10,10 @@
 import type { Session } from "@taiyomoe/auth"
 import { cacheClient } from "@taiyomoe/cache"
 import { db } from "@taiyomoe/db"
-import { initLogger, logsClient } from "@taiyomoe/logs"
+import { logsClient } from "@taiyomoe/logs"
 import { meilisearchClient } from "@taiyomoe/meilisearch"
+import messages from "@taiyomoe/messages/en.json"
+import { rabbitPublisher } from "@taiyomoe/rabbit"
 import {
   BaseCoversService,
   BaseTitlesService,
@@ -22,12 +24,15 @@ import type { Actions, Resources } from "@taiyomoe/types"
 import { umamiClient } from "@taiyomoe/umami"
 import { initTRPC } from "@trpc/server"
 import superjson from "superjson"
+import { createTranslator } from "use-intl"
 import { ZodError } from "zod"
 import { withAuth } from "./middlewares/withAuth"
 import { withPermissions } from "./middlewares/withPermissions"
 import { ChaptersService } from "./services/chapters.trpc-service"
 import { LibrariesService } from "./services/libraries.trpc-service"
+import { MdService } from "./services/md.trpc-service"
 import { MediasService } from "./services/medias.trpc-service"
+import { logger } from "./utils/logger"
 
 type Meta = {
   resource?: Resources
@@ -50,12 +55,18 @@ export const createTRPCContext = async (opts: {
   session: Session | null
   headers: Headers
 }) => ({
+  t: createTranslator({
+    locale: "en",
+    namespace: "api",
+    messages,
+  }),
   db,
   meilisearch: meilisearchClient,
   cache: cacheClient,
   logs: logsClient,
-  logger: initLogger("taiyo"),
+  logger,
   umami: umamiClient,
+  rabbit: rabbitPublisher,
   services: {
     users: BaseUsersService,
     libraries: LibrariesService,
@@ -64,6 +75,7 @@ export const createTRPCContext = async (opts: {
     covers: BaseCoversService,
     titles: BaseTitlesService,
     chapters: ChaptersService,
+    md: MdService,
   },
   ...opts,
 })
