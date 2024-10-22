@@ -15,9 +15,10 @@ import { UsersSettingsService } from "./services/users-settings.logs-service"
 export const initLogger = (app: "taiyo" | "image-orchestrator" | "io-worker") =>
   createLogger({
     level: "debug",
-    format: format.json(),
     transports: [
-      new transports.Console(),
+      new transports.Console({
+        format: format.prettyPrint({ colorize: true }),
+      }),
       new LokiTransport({
         host: env.GRAFANA_LOKI_URL,
         labels: { app },
