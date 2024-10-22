@@ -3,13 +3,14 @@ import { notFound } from "next/navigation"
 import { BulkUpdateChaptersActionsTabs } from "./_components/bulk-update-chapters-actions-tabs"
 
 type Props = {
-  params: { mediaId: string }
+  params: Promise<{ mediaId: string }>
 }
 
-export default async function Page({ params }: Props) {
+export default async function Page(props: Props) {
+  const { mediaId } = await props.params
   const media = await db.media.findUnique({
     select: { id: true },
-    where: { id: params.mediaId, deletedAt: null },
+    where: { id: mediaId, deletedAt: null },
   })
 
   if (!media) {
@@ -18,7 +19,7 @@ export default async function Page({ params }: Props) {
 
   const chapters = await db.mediaChapter.findMany({
     include: { scans: { select: { id: true } } },
-    where: { mediaId: params.mediaId, deletedAt: null },
+    where: { mediaId: mediaId, deletedAt: null },
     orderBy: { number: "asc" },
   })
 

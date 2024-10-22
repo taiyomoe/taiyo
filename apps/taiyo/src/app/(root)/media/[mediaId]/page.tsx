@@ -11,13 +11,12 @@ import { MediaLayoutActions } from "./_components/layout/media-layout-actions"
 import { MediaLayoutTabs } from "./_components/layout/media-layout-tabs"
 
 type Props = {
-  params: { mediaId: string }
+  params: Promise<{ mediaId: string }>
 }
 
-export const generateMetadata = async ({
-  params,
-}: Props): Promise<Metadata> => {
-  const media = await MediasService.getFull(params.mediaId)
+export const generateMetadata = async (props: Props): Promise<Metadata> => {
+  const { mediaId } = await props.params
+  const media = await MediasService.getFull(mediaId)
 
   if (!media) {
     return {}
@@ -29,7 +28,7 @@ export const generateMetadata = async ({
     openGraph: {
       siteName: siteConfig.name,
       images: {
-        url: `/api/og?mediaId=${params.mediaId}`,
+        url: `/api/og?mediaId=${mediaId}`,
         width: 1200,
         height: 630,
         alt: MediaUtils.getDisplayTitle(media.titles),
@@ -38,9 +37,8 @@ export const generateMetadata = async ({
   }
 }
 
-export default async function Page({ params }: Props) {
-  const { mediaId } = params
-
+export default async function Page(props: Props) {
+  const { mediaId } = await props.params
   const media = await api.medias.getById(mediaId)
 
   if (!media) {

@@ -4,8 +4,10 @@ import { getRequestConfig } from "next-intl/server"
 import { cookies, headers } from "next/headers"
 
 export default getRequestConfig(async () => {
-  const cookie = cookies().get(I18N_COOKIE_NAME)?.value
-  const header = headers().get("Accept-Language")
+  const cookieStore = await cookies()
+  const headerStore = await headers()
+  const cookie = cookieStore.get(I18N_COOKIE_NAME)?.value
+  const header = headerStore.get("Accept-Language")
   const locale = LanguageUtils.parseReq(cookie, header)
 
   return {

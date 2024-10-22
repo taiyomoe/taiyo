@@ -3,11 +3,12 @@ import { UsersService } from "~/services/users.web-service"
 import { UserLayout } from "./_components/user-layout"
 
 type Props = {
-  params: { userId: string }
+  params: Promise<{ userId: string }>
 }
 
-export default async function Page({ params }: Props) {
-  const user = await UsersService.getLimited(params.userId)
+export default async function Page(props: Props) {
+  const { userId } = await props.params
+  const user = await UsersService.getLimited(userId)
 
   if (!user) {
     return notFound()

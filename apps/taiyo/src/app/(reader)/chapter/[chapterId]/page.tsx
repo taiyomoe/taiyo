@@ -4,11 +4,11 @@ import { PopulateAtoms } from "../../_components/PopulateAtoms"
 import { MediaChapterPage } from "./_components/MediaChapterPage"
 
 type Props = {
-  params: { chapterId: string }
+  params: Promise<{ chapterId: string }>
 }
 
 export default async function Page(props: Props) {
-  const { chapterId } = props.params
+  const { chapterId } = await props.params
   const mediaChapter = await api.chapters.getById(chapterId)
 
   if (!mediaChapter) {

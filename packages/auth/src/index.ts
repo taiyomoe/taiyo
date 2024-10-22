@@ -82,7 +82,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       await db.userLibrary.create({ data: { userId: user.id } })
       await logsClient.users.auth.insert({
         type: "registered",
-        ip: getIp(),
+        ip: await getIp(),
         userId: user.id,
       })
       await UsersIndexService.sync(db, [user.id])
@@ -92,7 +92,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 
       await logsClient.users.auth.insert({
         type: "signedIn",
-        ip: getIp(),
+        ip: await getIp(),
         userId: user.id,
       })
     },
@@ -105,7 +105,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 
       await logsClient.users.auth.insert({
         type: "signedOut",
-        ip: getIp(),
+        ip: await getIp(),
         userId: message.session.userId,
       })
     },
