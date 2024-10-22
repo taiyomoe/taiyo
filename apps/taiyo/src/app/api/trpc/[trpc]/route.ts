@@ -1,6 +1,7 @@
 import { auth } from "@taiyomoe/auth"
 import { appRouter, createTRPCContext } from "@taiyomoe/trpc"
 import { fetchRequestHandler } from "@trpc/server/adapters/fetch"
+import { logger } from "~/utils/logger"
 
 const handler = auth((req) =>
   fetchRequestHandler({
@@ -13,7 +14,11 @@ const handler = auth((req) =>
         headers: req.headers,
       }),
     onError({ error, path }) {
-      console.error(`>>> tRPC Error on '${path}'`, error)
+      if (error.code !== "INTERNAL_SERVER_ERROR") {
+        return
+      }
+
+      logger.error(`tRPC error on '${path}'`, error)
     },
   }),
 )
