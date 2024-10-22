@@ -46,17 +46,4 @@ export const createMediaSchema = t.Object({
   cover: t.File({ maxSize: "10m", type: DEFAULT_MIME_TYPES }),
 })
 
-export const importMediaSchema = t.Object({
-  mdId: t.String({ format: "uuid" }),
-  downloadChapters: t.BooleanString({ default: false }),
-})
-
-export const syncMediaSchema = t.Object({
-  mediaId: t.String({ format: "uuid" }),
-  downloadCovers: t.BooleanString({ default: false }),
-  downloadChapters: t.BooleanString({ default: false }),
-})
-
 export type CreateMediaInput = StaticDecode<typeof createMediaSchema>
-export type ImportMediaInput = StaticDecode<typeof importMediaSchema>
-export type SyncMediaInput = StaticDecode<typeof syncMediaSchema>
