@@ -1,4 +1,5 @@
-import { type LogsMigration, rawLogsClient } from ".."
+import type { LogsMigration } from "../"
+import { rawLogsClient } from "../raw-client"
 
 export const MigrationsService = {
   getAll: () =>

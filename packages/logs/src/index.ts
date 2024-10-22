@@ -1,4 +1,3 @@
-import { createClient } from "@clickhouse/client-web"
 import { createLogger, format, transports } from "winston"
 import LokiTransport from "winston-loki"
 import { env } from "./env"
@@ -28,14 +27,6 @@ export const initLogger = (app: "taiyo" | "image-orchestrator" | "io-worker") =>
       }),
     ],
   })
-
-export const rawLogsClient = createClient({
-  url: env.CLICKHOUSE_URL,
-  clickhouse_settings: {
-    allow_experimental_object_type: 1,
-    date_time_input_format: "best_effort",
-  },
-})
 
 export const logsClient = {
   migrations: MigrationsService,
