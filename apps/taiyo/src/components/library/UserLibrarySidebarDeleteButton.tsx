@@ -18,7 +18,7 @@ type Props = {
 
 export const UserLibrarySidebarDeleteButton = ({ media }: Props) => {
   const { updateEntry } = useLibraryStore()
-  const { mutate } = api.libraries.updateLibrary.useMutation()
+  const { mutate } = api.users.updateLibrary.useMutation()
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
   const handleDelete = () => {
