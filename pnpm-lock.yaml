@@ -333,8 +333,8 @@ importers:
         specifier: ^0.3.0
         version: 0.3.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       nuqs:
-        specifier: ^2.0.0
-        version: 2.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)
+        specifier: ^2.0.1
+        version: 2.0.1(@remix-run/react@2.13.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3))(next@14.2.15(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-router-dom@6.27.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       parse-numeric-range:
         specifier: ^1.3.0
         version: 1.3.0
@@ -4588,10 +4588,20 @@ packages:
     resolution: {integrity: sha512-+Bt2X6YxM5bg8XIBl76NVeG2eL0Y5VQRoyz6GLYrZXW/TDh7We+tGeX4/WZWhaVGOg5ZjNBEOZt9a86slMhOJA==}
     engines: {node: '>=16'}
 
-  nuqs@2.0.0:
-    resolution: {integrity: sha512-atnb/zVSGF25ULMGe+udBWtnNKRzi/oqd8e+6xPYw/ScMMO63P62g+iCyTlE6j5qnrw44boIw4SNhPyenEYCHg==}
+  nuqs@2.0.1:
+    resolution: {integrity: sha512-y0TOlNFR6QwZmIYx8cxb9zwPPlrY8mrSM4rr44EiwpE5/Nq1+BuLttW5ElctINOq4gi/ezK5WMQ48rTKjqG1EQ==}
     peerDependencies:
+      '@remix-run/react': '>= 2'
+      next: '>= 14.2.0'
       react: '>= 18.2.0'
+      react-router-dom: '>= 6'
+    peerDependenciesMeta:
+      '@remix-run/react':
+        optional: true
+      next:
+        optional: true
+      react-router-dom:
+        optional: true
 
   oauth4webapi@3.1.1:
     resolution: {integrity: sha512-0h4FZjsntbKQ5IHGM9mFT7uOwQCRdcTG7YhC0xXlWIcCch24wUa6Vggaipa3Sw6Ab7nEnmO4rctROmyuHBfP7Q==}
@@ -10667,7 +10677,7 @@ snapshots:
 
   numeric-quantity@2.0.1: {}
 
-  nuqs@2.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3):
+  nuqs@2.0.1(@remix-run/react@2.13.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3))(next@14.2.15(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-router-dom@6.27.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1):
     dependencies:
       mitt: 3.0.1
       react: 18.3.1
@@ -10675,14 +10685,6 @@ snapshots:
       '@remix-run/react': 2.13.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.6.3)
       next: 14.2.15(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-router-dom: 6.27.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-    transitivePeerDependencies:
-      - '@babel/core'
-      - '@opentelemetry/api'
-      - '@playwright/test'
-      - babel-plugin-macros
-      - react-dom
-      - sass
-      - typescript
 
   oauth4webapi@3.1.1: {}
 
