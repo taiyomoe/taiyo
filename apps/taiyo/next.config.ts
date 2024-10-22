@@ -1,13 +1,9 @@
-import { fileURLToPath } from "url"
-import createJiti from "jiti"
 import createNextIntlPlugin from "next-intl/plugin"
+import "./src/env"
+import type { NextConfig } from "next"
 
 const withNextIntl = createNextIntlPlugin()
 
-// Import env files to validate at build time. Use jiti so we can load .ts files in here.
-createJiti(fileURLToPath(import.meta.url))("./src/env")
-
-/** @type {import("next").NextConfig} */
 const config = {
   reactStrictMode: true,
   images: {
@@ -41,17 +37,17 @@ const config = {
       ...(process.env.NODE_ENV === "development"
         ? [
             {
-              protocol: "https",
+              protocol: "https" as const,
               hostname: "avatars.githubusercontent.com",
               pathname: "/u/**",
             },
             {
-              protocol: "https",
+              protocol: "https" as const,
               hostname: "loremflickr.com",
               pathname: "/**",
             },
             {
-              protocol: "https",
+              protocol: "https" as const,
               hostname: "picsum.photos",
               pathname: "/seed/**",
             },
@@ -79,6 +75,6 @@ const config = {
   /** We already do linting and typechecking as separate tasks in CI */
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
-}
+} satisfies NextConfig
 
 export default withNextIntl(config)
