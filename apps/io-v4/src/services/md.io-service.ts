@@ -6,7 +6,7 @@ import { HttpError } from "~/utils/http-error"
 import { logger } from "~/utils/logger"
 
 const parseCover = (input: Cover) => {
-  const volume = Number.parseInt(input.volume)
+  const volume = Number.parseFloat(input.volume)
   let language = MdUtils.getLanguage(input.locale)
 
   if (volume.toString() !== input.volume) {
@@ -32,7 +32,7 @@ const parseCover = (input: Cover) => {
 }
 
 const parseChapter = (input: Chapter) => {
-  const volume = Number.parseInt(input.volume)
+  const volume = Number.parseFloat(input.volume)
 
   if (volume.toString() !== input.volume) {
     logger.warn(
@@ -44,7 +44,7 @@ const parseChapter = (input: Chapter) => {
   return {
     mdId: input.id,
     title: input.title,
-    number: Number.parseInt(input.chapter),
+    number: Number.parseFloat(input.chapter),
     volume,
     groupIds: input.groups.map((g) => g.id),
   }
