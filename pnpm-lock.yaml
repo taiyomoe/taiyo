@@ -420,9 +420,6 @@ importers:
       '@types/react-dom':
         specifier: npm:types-react-dom@19.0.0-rc.1
         version: types-react-dom@19.0.0-rc.1
-      jiti:
-        specifier: ^2.3.3
-        version: 2.3.3
       tailwindcss:
         specifier: ^3.4.14
         version: 3.4.14
