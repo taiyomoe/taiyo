@@ -154,8 +154,8 @@ importers:
         specifier: ^12.1.0
         version: 12.1.0
       use-intl:
-        specifier: ^3.22.0
-        version: 3.22.0(react@19.0.0-rc-69d4b800-20241021)
+        specifier: ^3.23.0
+        version: 3.23.0(react@19.0.0-rc-69d4b800-20241021)
       zod:
         specifier: ^3.23.8
         version: 3.23.8
@@ -5248,8 +5248,8 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
 
-  use-intl@3.22.0:
-    resolution: {integrity: sha512-SoiPcyLJODhenrbDkcYJuOImgrBFN7Z8keLSHe7ffsNkIJtjdjet/RmqAv5Ym9TVxPpCs+fH2cl1J3YzFJSkWw==}
+  use-intl@3.23.0:
+    resolution: {integrity: sha512-f4bkMrV0ymqzU0DSFvlhMtp0Xcvd0Z60ghH8tn6Jz0mZFp4e5EG8cH2pZHQpymKE68VJ/Wy1n6Glc/2SjX1l/A==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
 
@@ -10526,7 +10526,7 @@ snapshots:
       negotiator: 0.6.4
       next: 15.0.1-canary.1(react-dom@19.0.0-rc-69d4b800-20241021(react@19.0.0-rc-69d4b800-20241021))(react@19.0.0-rc-69d4b800-20241021)
       react: 19.0.0-rc-69d4b800-20241021
-      use-intl: 3.22.0(react@19.0.0-rc-69d4b800-20241021)
+      use-intl: 3.23.0(react@19.0.0-rc-69d4b800-20241021)
 
   next-themes@0.3.0(react-dom@19.0.0-rc-69d4b800-20241021(react@19.0.0-rc-69d4b800-20241021))(react@19.0.0-rc-69d4b800-20241021):
     dependencies:
@@ -11354,7 +11354,7 @@ snapshots:
     dependencies:
       react: 19.0.0-rc-69d4b800-20241021
 
-  use-intl@3.22.0(react@19.0.0-rc-69d4b800-20241021):
+  use-intl@3.23.0(react@19.0.0-rc-69d4b800-20241021):
     dependencies:
       '@formatjs/fast-memoize': 2.2.1
       intl-messageformat: 10.7.1
