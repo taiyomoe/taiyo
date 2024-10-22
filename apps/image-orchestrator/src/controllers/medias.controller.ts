@@ -1,20 +1,9 @@
-import { Stream } from "@elysiajs/stream"
 import { db } from "@taiyomoe/db"
 import { BaseTitlesService } from "@taiyomoe/services"
 import { Elysia } from "elysia"
 import { authMiddleware } from "../middlewares"
-import {
-  createMediaSchema,
-  importMediaSchema,
-  syncMediaSchema,
-} from "../schemas"
-import {
-  CoversService,
-  MdService,
-  MediasService,
-  TrackersService,
-} from "../services"
-import { handleStreamErrors } from "../utils/streams"
+import { createMediaSchema } from "../schemas"
+import { CoversService, MediasService, TrackersService } from "../services"
 
 const create = new Elysia().use(authMiddleware([["medias", "create"]])).post(
   "/",
@@ -51,35 +40,4 @@ const create = new Elysia().use(authMiddleware([["medias", "create"]])).post(
   { body: createMediaSchema },
 )
 
-const importRoute = new Elysia()
-  .use(authMiddleware([["medias", "create"]]))
-  .get(
-    "/import",
-    ({ query, session }) =>
-      new Stream(async (stream) => {
-        await MdService.import(stream, query, session.user.id).catch(
-          handleStreamErrors(stream),
-        )
-
-        stream.close()
-      }),
-    { query: importMediaSchema },
-  )
-
-const sync = new Elysia().use(authMiddleware([["medias", "create"]])).get(
-  "/sync",
-  ({ query, session }) =>
-    new Stream(async (stream) => {
-      await MdService.sync(stream, query, session.user.id).catch(
-        handleStreamErrors(stream),
-      )
-
-      stream.close()
-    }),
-  { query: syncMediaSchema },
-)
-
-export const mediasController = new Elysia({ prefix: "/medias" })
-  .use(create)
-  .use(importRoute)
-  .use(sync)
+export const mediasController = new Elysia({ prefix: "/medias" }).use(create)
