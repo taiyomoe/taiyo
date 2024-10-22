@@ -154,8 +154,8 @@ importers:
         specifier: ^12.1.0
         version: 12.1.0
       use-intl:
-        specifier: ^3.23.0
-        version: 3.23.0(react@18.3.1)
+        specifier: ^3.23.1
+        version: 3.23.1(react@18.3.1)
       zod:
         specifier: ^3.23.8
         version: 3.23.8
@@ -5251,8 +5251,8 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
 
-  use-intl@3.23.0:
-    resolution: {integrity: sha512-f4bkMrV0ymqzU0DSFvlhMtp0Xcvd0Z60ghH8tn6Jz0mZFp4e5EG8cH2pZHQpymKE68VJ/Wy1n6Glc/2SjX1l/A==}
+  use-intl@3.23.1:
+    resolution: {integrity: sha512-AOA9bBTtFkpibI5pfZ95ipUR/WmmC2A8fTW+QF3U2hKfDePIP9AxhXohiv9fEY7eBHaQwPWBaBDBvSyQhfeQag==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
 
@@ -10541,7 +10541,7 @@ snapshots:
       negotiator: 0.6.4
       next: 14.2.15(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react: 18.3.1
-      use-intl: 3.23.0(react@18.3.1)
+      use-intl: 3.23.1(react@18.3.1)
 
   next-themes@0.3.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
@@ -11366,7 +11366,7 @@ snapshots:
     dependencies:
       react: 18.3.1
 
-  use-intl@3.23.0(react@18.3.1):
+  use-intl@3.23.1(react@18.3.1):
     dependencies:
       '@formatjs/fast-memoize': 2.2.1
       intl-messageformat: 10.7.1
