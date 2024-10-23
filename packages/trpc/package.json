@@ -27,7 +27,6 @@
     "@trpc/server": "11.0.0-rc.593",
     "accesscontrol": "^2.2.1",
     "luxon": "^3.5.0",
-    "mangadex-full-api": "^5.12.1",
     "radash": "^12.1.0",
     "superjson": "^2.2.1",
     "use-intl": "^3.23.2",
