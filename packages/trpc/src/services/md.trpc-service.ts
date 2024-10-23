@@ -1,10 +1,4 @@
 import { type Media, type Prisma, db } from "@taiyomoe/db"
-import { rabbitPublisher } from "@taiyomoe/rabbit"
-import { MdUtils } from "@taiyomoe/utils"
-import { type Chapter, type Cover, Manga } from "mangadex-full-api"
-import { logger } from "../utils/logger"
-import { HttpError } from "../utils/trpc-error"
-
 const parseCover = (input: Cover) => {
   const volume = Number.parseFloat(input.volume)
   let language = MdUtils.getLanguage(input.locale)
@@ -136,64 +130,6 @@ const ensureValid = async (input: string) => {
   return true
 }
 
-const importCovers = async (input: Manga, media: Media, uploaderId: string) => {
-  const covers = await input.getCovers()
-  logger.debug(
-    `Got ${covers.length} covers from MangaDex media ${input.id}`,
-    covers,
-  )
-
-  for (const cover of covers) {
-    const parsedCover = {
-      ...parseCover(cover),
-      contentRating: media.contentRating,
-      mediaId: media.id,
-      uploaderId,
-    }
-
-    await rabbitPublisher.medias.importCover(parsedCover)
-    logger.debug(
-      `Sent cover ${cover.id} to RabbitMQ queue when importing/syncing MangaDex media ${input.id}`,
-      parsedCover,
-    )
-  }
-}
-
-const importChapters = async (
-  input: Manga,
-  media: Media,
-  uploaderId: string,
-) => {
-  const chapters = await getChapters(input)
-  logger.debug(
-    `Got ${chapters.length} chapters from MangaDex media ${input.id}`,
-    chapters,
-  )
-
-  for (const chapter of chapters) {
-    if (chapter.isExternal) {
-      logger.debug(
-        `Skipped external chapter when importing/syncing MangaDex media ${input.id}`,
-        chapter,
-      )
-      continue
-    }
-
-    const parsedChapter = {
-      ...parseChapter(chapter),
-      contentRating: media.contentRating,
-      mediaId: media.id,
-      uploaderId,
-    }
-
-    await rabbitPublisher.medias.importChapter(parsedChapter)
-    logger.debug(
-      `Sent chapter ${chapter.id} to RabbitMQ queue when importing/syncing MangaDex media ${input.id}`,
-      parsedChapter,
-    )
-  }
-}
-
 export const MdService = {
   parseCover,
   parseChapter,
@@ -202,6 +138,4 @@ export const MdService = {
   getUpdatePayload,
   getChapters,
   ensureValid,
-  importCovers,
-  importChapters,
 }
