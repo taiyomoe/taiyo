@@ -369,6 +369,18 @@ model ScanMember {
     scans Scan[]
 }
 
+// ---- TASKS
+model Task {
+    id        String   @id @default(uuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    type   TaskType
+    status TaskStatus
+
+    sessionId String
+}
+
 // ----- ENUMS
 enum Roles {
     USER
@@ -484,6 +496,19 @@ enum ScanMemberPermissions {
     UPLOAD
     EDIT
     DELETE
+}
+
+enum TaskType {
+    IMPORT_COVER
+    IMPORT_CHAPTER
+}
+
+enum TaskStatus {
+    PENDING
+    DOWNLOADING
+    UPLOADING
+    FINISHED
+    FAILED
 }
 
 // ISO 639-1

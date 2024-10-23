@@ -5,7 +5,18 @@ import { omit } from "radash"
 import { FilesService } from "~/services/files.worker-service"
 
 export const importCoverHandler = async (input: ImportCoverMessageInput) => {
+  await db.task.update({
+    data: { status: "DOWNLOADING" },
+    where: { id: input.taskId },
+  })
+
   const coverBuffer = await FilesService.download(input.url)
+
+  await db.task.update({
+    data: { status: "UPLOADING" },
+    where: { id: input.taskId },
+  })
+
   const coverFile = await FilesService.upload(
     `medias/${input.mediaId}/covers`,
     coverBuffer,
@@ -19,5 +30,5 @@ export const importCoverHandler = async (input: ImportCoverMessageInput) => {
     },
   })
 
-  await BaseCoversService.postUpload(db, "imported", [cover])
+  await BaseCoversService.postUpload(db, "imported", [cover], input.taskId)
 }
