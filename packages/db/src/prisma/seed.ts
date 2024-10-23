@@ -1,5 +1,3 @@
-import { cacheClient } from "@taiyomoe/cache"
-import { logsClient } from "@taiyomoe/logs"
 import media1 from "./seeds/medias/media-1"
 import media2 from "./seeds/medias/media-2"
 import media3 from "./seeds/medias/media-3"
@@ -69,21 +67,9 @@ async function main() {
   // Meilisearch
   console.log("\nMeilisearch:")
   await meilisearch.execute().then(() => console.log("Meilisearch reindexed"))
-
-  // Cache
-  console.log("\nCache:")
-  await cacheClient.clear().then(() => console.log("Cache cleared"))
-
-  // Logs
-  console.log("\nLogs:")
-  await logsClient.migrations.clear().then(() => console.log("Logs cleared"))
 }
 
-main()
-  .then(() => {
-    process.exit(0)
-  })
-  .catch((e) => {
-    console.error(e)
-    process.exit(1)
-  })
+main().catch((e) => {
+  console.error(e)
+  process.exit(1)
+})

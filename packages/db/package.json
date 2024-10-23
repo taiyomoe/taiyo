@@ -11,7 +11,7 @@
   "scripts": {
     "clean": "rm -rf .turbo node_modules",
     "typecheck": "tsc --noEmit",
-    "seed": "prisma db push --force-reset && prisma generate && prisma db seed && pnpm -F @taiyomoe/logs run migrate",
+    "seed": "prisma db push --force-reset && prisma generate && rm -rf ../../data/dragonfly && rm -rf ../../data/clickhouse && prisma db seed",
     "db": "prisma",
     "postinstall": "prisma generate --no-hints"
   },
@@ -23,8 +23,6 @@
     "@faker-js/faker": "^9.0.3",
     "@prisma/client": "^5.21.1",
     "@t3-oss/env-core": "^0.11.1",
-    "@taiyomoe/cache": "workspace:*",
-    "@taiyomoe/logs": "workspace:*",
     "prisma-json-types-generator": "^3.1.1",
     "zod": "^3.23.8",
     "zod-prisma-types": "^3.1.8"
