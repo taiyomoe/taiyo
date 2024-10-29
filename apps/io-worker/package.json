@@ -24,6 +24,6 @@
   "devDependencies": {
     "@taiyomoe/tsconfig": "workspace:*",
     "@taiyomoe/types": "workspace:*",
-    "tsx": "^4.19.1"
+    "tsx": "^4.19.2"
   }
 }

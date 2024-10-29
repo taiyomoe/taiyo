@@ -8,7 +8,7 @@
     "dev": "tsx watch src/index.ts"
   },
   "dependencies": {
-    "@hono/node-server": "^1.13.2",
+    "@hono/node-server": "^1.13.3",
     "@hono/zod-validator": "^0.4.1",
     "@t3-oss/env-core": "^0.11.1",
     "@taiyomoe/auth": "workspace:*",
@@ -21,16 +21,16 @@
     "@taiyomoe/schemas": "workspace:*",
     "@taiyomoe/services": "workspace:*",
     "@taiyomoe/utils": "workspace:*",
-    "hono": "^4.6.6",
+    "hono": "^4.6.8",
     "mangadex-full-api": "^5.12.1",
     "radash": "^12.1.0",
-    "use-intl": "^3.23.2",
+    "use-intl": "^3.23.5",
     "zod": "^3.23.8",
     "zod-form-data": "^2.0.2"
   },
   "devDependencies": {
     "@taiyomoe/tsconfig": "workspace:*",
     "@taiyomoe/types": "workspace:*",
-    "tsx": "^4.19.1"
+    "tsx": "^4.19.2"
   }
 }
