@@ -104,10 +104,10 @@ importers:
     dependencies:
       '@hono/node-server':
         specifier: ^1.13.3
-        version: 1.13.3(hono@4.6.7)
+        version: 1.13.3(hono@4.6.8)
       '@hono/zod-validator':
         specifier: ^0.4.1
-        version: 0.4.1(hono@4.6.7)(zod@3.23.8)
+        version: 0.4.1(hono@4.6.8)(zod@3.23.8)
       '@t3-oss/env-core':
         specifier: ^0.11.1
         version: 0.11.1(typescript@5.6.3)(zod@3.23.8)
@@ -142,8 +142,8 @@ importers:
         specifier: workspace:^
         version: link:../../packages/utils
       hono:
-        specifier: ^4.6.7
-        version: 4.6.7
+        specifier: ^4.6.8
+        version: 4.6.8
       mangadex-full-api:
         specifier: ^5.12.1
         version: 5.12.1
@@ -4210,8 +4210,8 @@ packages:
   hoist-non-react-statics@3.3.2:
     resolution: {integrity: sha512-/gGivxi8JPKWNm/W0jSmzcMPpfpPLc3dY/6GxhX2hQ9iGj3aDfklV4ET7NjKpSinLpJ5vafa9iiGIEZg10SfBw==}
 
-  hono@4.6.7:
-    resolution: {integrity: sha512-wX4ZbOnzfNO61hUjuQbJ7OPGs1fWXXVVJ8VTPDb2Ls/x9HjCbVTm80Je6VTHMz5n5RGDtBgV9d9ZFZxBqx56ng==}
+  hono@4.6.8:
+    resolution: {integrity: sha512-f+2Ec9JAzabT61pglDiLJcF/DjiSefZkjCn9bzm1cYLGkD5ExJ3Jnv93ax9h0bn7UPLHF81KktoyjdQfWI2n1Q==}
     engines: {node: '>=16.9.0'}
 
   hookable@5.5.3:
@@ -6350,13 +6350,13 @@ snapshots:
     dependencies:
       tslib: 2.8.0
 
-  '@hono/node-server@1.13.3(hono@4.6.7)':
+  '@hono/node-server@1.13.3(hono@4.6.8)':
     dependencies:
-      hono: 4.6.7
+      hono: 4.6.8
 
-  '@hono/zod-validator@0.4.1(hono@4.6.7)(zod@3.23.8)':
+  '@hono/zod-validator@0.4.1(hono@4.6.8)(zod@3.23.8)':
     dependencies:
-      hono: 4.6.7
+      hono: 4.6.8
       zod: 3.23.8
 
   '@hookform/resolvers@3.9.1(react-hook-form@7.53.1(react@18.3.1))':
@@ -10336,7 +10336,7 @@ snapshots:
     dependencies:
       react-is: 16.13.1
 
-  hono@4.6.7: {}
+  hono@4.6.8: {}
 
   hookable@5.5.3: {}
 
