@@ -21,7 +21,7 @@
     "@taiyomoe/schemas": "workspace:^",
     "@taiyomoe/services": "workspace:*",
     "@taiyomoe/utils": "workspace:^",
-    "hono": "^4.6.7",
+    "hono": "^4.6.8",
     "mangadex-full-api": "^5.12.1",
     "radash": "^12.1.0",
     "use-intl": "^3.23.5",
