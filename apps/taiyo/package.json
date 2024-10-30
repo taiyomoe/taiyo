@@ -71,7 +71,7 @@
     "tailwind-scrollbar": "^3.1.0",
     "usehooks-ts": "^3.1.0",
     "zod": "^3.23.8",
-    "zustand": "^5.0.0"
+    "zustand": "^5.0.1"
   },
   "devDependencies": {
     "@taiyomoe/types": "workspace:*",
