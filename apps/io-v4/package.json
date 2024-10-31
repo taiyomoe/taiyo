@@ -24,7 +24,7 @@
     "hono": "^4.6.8",
     "mangadex-full-api": "^5.12.1",
     "radash": "^12.1.0",
-    "use-intl": "^3.23.5",
+    "use-intl": "^3.24.0",
     "zod": "^3.23.8",
     "zod-form-data": "^2.0.2"
   },
