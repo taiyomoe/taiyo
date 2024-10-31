@@ -30,7 +30,7 @@
     "mangadex-full-api": "^5.12.1",
     "radash": "^12.1.0",
     "superjson": "^2.2.1",
-    "use-intl": "^3.23.2",
+    "use-intl": "^3.23.5",
     "zod": "^3.23.8"
   },
   "devDependencies": {
