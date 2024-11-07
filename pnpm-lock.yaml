@@ -545,8 +545,8 @@ importers:
   packages/logs:
     dependencies:
       '@clickhouse/client-web':
-        specifier: ^1.7.0
-        version: 1.7.0
+        specifier: ^1.8.0
+        version: 1.8.0
       '@t3-oss/env-core':
         specifier: ^0.11.1
         version: 0.11.1(typescript@5.6.3)(zod@3.23.8)
@@ -1187,11 +1187,11 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@clickhouse/client-common@1.7.0':
-    resolution: {integrity: sha512-RkHYf23/wyv/6C0KcVD4nRX4JAn/Y+9AZBQPlrSId2JwXsmAnjDkkKpuPLwZPNVH6J3BkW+y8bQCEk3VHQzArw==}
+  '@clickhouse/client-common@1.8.0':
+    resolution: {integrity: sha512-aQgH0UODGuFHfL8rgeLSrGCoh3NCoNUs0tFGl0o79iyfASfvWtT/K/X3RM0QJpXXOgXpB//T2nD5XvCFtdk32w==}
 
-  '@clickhouse/client-web@1.7.0':
-    resolution: {integrity: sha512-iboDZTP0J5A37wrruzKu/TG9xXp/8dswAQBmCXwE/ho7p9NZQ/6aPsDC74OKOVFMa6sdZi/V8Qb5GHlGbREdAg==}
+  '@clickhouse/client-web@1.8.0':
+    resolution: {integrity: sha512-Lsn5uBfWEsmA+U64csfb2Bm93zP7bQO66x2MSKm5v0NPy31uB1sN8eNMuPqCc+KWOH1lXfAnRRLbW0Yz/ksW5Q==}
 
   '@colors/colors@1.6.0':
     resolution: {integrity: sha512-Ir+AOibqzrIsL6ajt3Rz3LskB7OiMVHqltZmspbW/TJuTVuyOMirVqAkjfY6JISiLHgyNqicAC8AyHHGzNd/dA==}
@@ -6163,11 +6163,11 @@ snapshots:
   '@biomejs/cli-win32-x64@1.9.4':
     optional: true
 
-  '@clickhouse/client-common@1.7.0': {}
+  '@clickhouse/client-common@1.8.0': {}
 
-  '@clickhouse/client-web@1.7.0':
+  '@clickhouse/client-web@1.8.0':
     dependencies:
-      '@clickhouse/client-common': 1.7.0
+      '@clickhouse/client-common': 1.8.0
 
   '@colors/colors@1.6.0': {}
 
