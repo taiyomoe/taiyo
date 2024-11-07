@@ -31,16 +31,16 @@ importers:
     dependencies:
       '@elysiajs/cors':
         specifier: ^1.1.1
-        version: 1.1.1(elysia@1.0.27(@sinclair/typebox@0.33.20)(openapi-types@12.1.3)(typescript@5.6.3))
+        version: 1.1.1(elysia@1.0.27(@sinclair/typebox@0.33.21)(openapi-types@12.1.3)(typescript@5.6.3))
       '@elysiajs/stream':
         specifier: ^1.1.0
-        version: 1.1.0(elysia@1.0.27(@sinclair/typebox@0.33.20)(openapi-types@12.1.3)(typescript@5.6.3))
+        version: 1.1.0(elysia@1.0.27(@sinclair/typebox@0.33.21)(openapi-types@12.1.3)(typescript@5.6.3))
       '@elysiajs/swagger':
         specifier: ^1.1.5
-        version: 1.1.5(elysia@1.0.27(@sinclair/typebox@0.33.20)(openapi-types@12.1.3)(typescript@5.6.3))
+        version: 1.1.5(elysia@1.0.27(@sinclair/typebox@0.33.21)(openapi-types@12.1.3)(typescript@5.6.3))
       '@sinclair/typebox':
-        specifier: ^0.33.20
-        version: 0.33.20
+        specifier: ^0.33.21
+        version: 0.33.21
       '@t3-oss/env-core':
         specifier: ^0.11.1
         version: 0.11.1(typescript@5.6.3)(zod@3.23.8)
@@ -76,7 +76,7 @@ importers:
         version: link:../../packages/utils
       elysia:
         specifier: 1.0.27
-        version: 1.0.27(@sinclair/typebox@0.33.20)(openapi-types@12.1.3)(typescript@5.6.3)
+        version: 1.0.27(@sinclair/typebox@0.33.21)(openapi-types@12.1.3)(typescript@5.6.3)
       file-type:
         specifier: 19.0.0
         version: 19.0.0
@@ -3385,8 +3385,8 @@ packages:
   '@sec-ant/readable-stream@0.4.1':
     resolution: {integrity: sha512-831qok9r2t8AlxLko40y2ebgSDhenenCatLVeW/uBtnHPyhHOvG0C7TvfgecV+wHzIm5KUICgzmVpWS+IMEAeg==}
 
-  '@sinclair/typebox@0.33.20':
-    resolution: {integrity: sha512-gU8nPAO2A21UjaiUA0kKq47WDs2JcPkUUfXrEc+BuQnsN6ShohgXPqNepVW3VADIsG7Pbt8rzz2zhRlYRdBN9Q==}
+  '@sinclair/typebox@0.33.21':
+    resolution: {integrity: sha512-1wU0VNSZQt13BmJvxYhHRVwDBnG8y5qrcyi3DnmEQzvfeRycUNneQSd6quyxrNbspM1pV/m4r4udO6o1tCuXjg==}
 
   '@smithy/abort-controller@3.1.6':
     resolution: {integrity: sha512-0XuhuHQlEqbNQZp7QxxrFTdVWdwxch4vjxYgfInF91hZFkPxf9QDrdQka0KfxFMPqLNzSw0b95uGTrLliQUavQ==}
@@ -6177,19 +6177,19 @@ snapshots:
       enabled: 2.0.0
       kuler: 2.0.0
 
-  '@elysiajs/cors@1.1.1(elysia@1.0.27(@sinclair/typebox@0.33.20)(openapi-types@12.1.3)(typescript@5.6.3))':
+  '@elysiajs/cors@1.1.1(elysia@1.0.27(@sinclair/typebox@0.33.21)(openapi-types@12.1.3)(typescript@5.6.3))':
     dependencies:
-      elysia: 1.0.27(@sinclair/typebox@0.33.20)(openapi-types@12.1.3)(typescript@5.6.3)
+      elysia: 1.0.27(@sinclair/typebox@0.33.21)(openapi-types@12.1.3)(typescript@5.6.3)
 
-  '@elysiajs/stream@1.1.0(elysia@1.0.27(@sinclair/typebox@0.33.20)(openapi-types@12.1.3)(typescript@5.6.3))':
+  '@elysiajs/stream@1.1.0(elysia@1.0.27(@sinclair/typebox@0.33.21)(openapi-types@12.1.3)(typescript@5.6.3))':
     dependencies:
-      elysia: 1.0.27(@sinclair/typebox@0.33.20)(openapi-types@12.1.3)(typescript@5.6.3)
+      elysia: 1.0.27(@sinclair/typebox@0.33.21)(openapi-types@12.1.3)(typescript@5.6.3)
       nanoid: 5.0.7
 
-  '@elysiajs/swagger@1.1.5(elysia@1.0.27(@sinclair/typebox@0.33.20)(openapi-types@12.1.3)(typescript@5.6.3))':
+  '@elysiajs/swagger@1.1.5(elysia@1.0.27(@sinclair/typebox@0.33.21)(openapi-types@12.1.3)(typescript@5.6.3))':
     dependencies:
       '@scalar/types': 0.0.12
-      elysia: 1.0.27(@sinclair/typebox@0.33.20)(openapi-types@12.1.3)(typescript@5.6.3)
+      elysia: 1.0.27(@sinclair/typebox@0.33.21)(openapi-types@12.1.3)(typescript@5.6.3)
       openapi-types: 12.1.3
       pathe: 1.1.2
 
@@ -9382,7 +9382,7 @@ snapshots:
 
   '@sec-ant/readable-stream@0.4.1': {}
 
-  '@sinclair/typebox@0.33.20': {}
+  '@sinclair/typebox@0.33.21': {}
 
   '@smithy/abort-controller@3.1.6':
     dependencies:
@@ -10142,9 +10142,9 @@ snapshots:
 
   electron-to-chromium@1.5.41: {}
 
-  elysia@1.0.27(@sinclair/typebox@0.33.20)(openapi-types@12.1.3)(typescript@5.6.3):
+  elysia@1.0.27(@sinclair/typebox@0.33.21)(openapi-types@12.1.3)(typescript@5.6.3):
     dependencies:
-      '@sinclair/typebox': 0.33.20
+      '@sinclair/typebox': 0.33.21
       cookie: 0.6.0
       eventemitter3: 5.0.1
       fast-decode-uri-component: 1.0.1
