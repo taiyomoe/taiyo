@@ -27,7 +27,7 @@ export const DisplayChapterTasks = ({ rawTasks }: Props) => {
           ...t,
           payload: TaskUtils.getPayload(t, "IMPORT_CHAPTER"),
         }))
-        .sort((a, b) => a.payload.number - b.payload.number),
+        .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime()),
     [rawTasks],
   )
 

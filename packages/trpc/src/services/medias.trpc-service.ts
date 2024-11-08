@@ -1,7 +1,17 @@
 import { type MediaStatus, db } from "@taiyomoe/db"
 import { BaseMediasService } from "@taiyomoe/services"
 import { TRPCError } from "@trpc/server"
+import { HttpError } from "../utils/trpc-error"
 
+const getById = async (input: string) => {
+  const result = await db.media.findUnique({ where: { id: input } })
+
+  if (!result) {
+    throw new HttpError("NOT_FOUND", "medias.notFound")
+  }
+
+  return result
+}
 /**
  * Gets the status of a media.
  * Used to check wether or not a user can complete a media.
@@ -24,5 +34,6 @@ const getStatus = async (input: string): Promise<MediaStatus> => {
 
 export const MediasService = {
   ...BaseMediasService,
+  getById,
   getStatus,
 }

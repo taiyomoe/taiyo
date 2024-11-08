@@ -27,7 +27,8 @@ export const DisplayCoverTasks = ({ rawTasks }: Props) => {
         .map((t) => ({
           ...t,
           payload: TaskUtils.getPayload(t, "IMPORT_COVER"),
-        })),
+        }))
+        .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime()),
     [rawTasks],
   )
 

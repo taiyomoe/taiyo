@@ -2,7 +2,6 @@ import { db } from "@taiyomoe/db"
 import { MediaUtils } from "@taiyomoe/utils"
 import { ExternalLinkIcon } from "lucide-react"
 import Link from "next/link"
-import { notFound } from "next/navigation"
 import { DisplayTasks } from "./_components/display-tasks"
 
 type Props = {
@@ -15,10 +14,6 @@ export default async function Page({ params }: Props) {
   })
   const mediaId = result.at(0)?.payload.mediaId as string
 
-  if (!result.length) {
-    return notFound()
-  }
-
   return (
     <div className="flex flex-col gap-12">
       <p className="font-semibold text-4xl">Sessão de upload</p>
@@ -29,7 +24,13 @@ export default async function Page({ params }: Props) {
         >
           Página da obra <ExternalLinkIcon />
         </Link>
-        <DisplayTasks initialData={result} />
+        {result.length > 0 && <DisplayTasks initialData={result} />}
+        {result.length === 0 && (
+          <p>
+            Nenhuma tarefa encontrada. Isto significa que não há nenhuma cover
+            ou capítulo para importar.
+          </p>
+        )}
       </div>
     </div>
   )

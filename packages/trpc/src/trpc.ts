@@ -17,7 +17,6 @@ import { rabbitPublisher } from "@taiyomoe/rabbit"
 import {
   BaseCoversService,
   BaseTitlesService,
-  BaseTrackersService,
   BaseUsersService,
 } from "@taiyomoe/services"
 import type { Actions, Resources } from "@taiyomoe/types"
@@ -32,6 +31,7 @@ import { ChaptersService } from "./services/chapters.trpc-service"
 import { LibrariesService } from "./services/libraries.trpc-service"
 import { MdService } from "./services/md.trpc-service"
 import { MediasService } from "./services/medias.trpc-service"
+import { TrackersService } from "./services/trackers.trpc-service"
 import { logger } from "./utils/logger"
 
 type Meta = {
@@ -71,7 +71,7 @@ export const createTRPCContext = async (opts: {
     users: BaseUsersService,
     libraries: LibrariesService,
     medias: MediasService,
-    trackers: BaseTrackersService,
+    trackers: TrackersService,
     covers: BaseCoversService,
     titles: BaseTitlesService,
     chapters: ChaptersService,

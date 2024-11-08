@@ -1,44 +1,45 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { type ImportMediaInput, importMediaSchema } from "@taiyomoe/schemas"
+import { type SyncMediaInput, syncMediaSchema } from "@taiyomoe/schemas"
 import { useRouter } from "next/navigation"
 import { type SubmitHandler, useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { SubmitButton } from "~/components/generics/buttons/submit-button"
 import { Form } from "~/components/generics/form/form"
-import { InputField } from "~/components/generics/form/input-field"
+import { MediasField } from "~/components/generics/form/medias-field"
 import { SwitchField } from "~/components/generics/form/switch-field"
 import { api } from "~/trpc/react"
 
-export const ImportMediaForm = () => {
-  const { mutateAsync } = api.medias.import.useMutation()
-  const methods = useForm<ImportMediaInput>({
-    resolver: zodResolver(importMediaSchema),
+export const SyncMediaForm = () => {
+  const { mutateAsync } = api.medias.sync.useMutation()
+  const methods = useForm<SyncMediaInput>({
+    resolver: zodResolver(syncMediaSchema),
     mode: "onTouched",
     defaultValues: {
-      mdId: "",
+      id: "",
       importCovers: true,
       importChapters: true,
     },
   })
   const router = useRouter()
 
-  const handleSubmit: SubmitHandler<ImportMediaInput> = (values) => {
+  const handleSubmit: SubmitHandler<SyncMediaInput> = (values) => {
     return new Promise((resolve, reject) => {
       toast.promise(mutateAsync(values), {
-        loading: "Importando...",
+        loading: "Sincronizando...",
         success: (data) => {
           methods.reset()
           router.push(`/dashboard/sessions/${data.sessionId}`)
           resolve(data)
 
-          return "Obra criada com sucesso! Upload de covers e capítulos em andamento..."
+          return "Informações sincronizadas com sucesso! Upload de covers e capítulos em andamento..."
         },
-        error: () => {
+        error: (err) => {
           reject()
+          console.log(err)
 
-          return "Ocorreu um erro inesperado ao importar a obra."
+          return "Ocorreu um erro inesperado ao sincronizar a obra."
         },
       })
     })
@@ -48,14 +49,13 @@ export const ImportMediaForm = () => {
     <Form.Component {...methods} onSubmit={handleSubmit}>
       <Form.Col>
         <Form.Row>
-          <InputField
-            name="mdId"
-            label="ID na MangaDex"
+          <MediasField
+            name="id"
+            label="Obra"
             labelPlacement="outside"
-            placeholder="93c8f7f8-58cc-40fe-9146-3f68cbfc71af"
             isRequired
           />
-          <SubmitButton className="self-end">Importar</SubmitButton>
+          <SubmitButton className="self-end">Sincronizar</SubmitButton>
         </Form.Row>
         <Form.Row>
           <SwitchField name="importCovers" label="Baixar e upar covers?" />
