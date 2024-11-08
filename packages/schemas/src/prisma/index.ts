@@ -537,6 +537,9 @@ export const TaskSchema = z.object({
   id: z.string(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
+  /**
+   * [TaskPayload]
+   */
   payload: JsonValueSchema,
   sessionId: z.string(),
 })

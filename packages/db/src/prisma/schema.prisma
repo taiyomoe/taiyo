@@ -377,6 +377,7 @@ model Task {
 
     type    TaskType
     status  TaskStatus
+    /// [TaskPayload]
     payload Json
 
     sessionId String
