@@ -38,21 +38,26 @@ export const importMediaHandler = protectedProcedure
         )
 
         for (const cover of covers) {
-          const task = await db.task.create({
-            data: { type: "IMPORT_COVER", status: "PENDING", sessionId },
-          })
-          const parsedCover = {
+          const payload = {
             ...services.md.parseCover(cover),
             contentRating: media.contentRating,
             mediaId: media.id,
             uploaderId: session.user.id,
-            taskId: task.id,
           }
+          const task = await db.task.create({
+            data: {
+              type: "IMPORT_COVER",
+              status: "PENDING",
+              payload,
+              sessionId,
+            },
+          })
+          const taskPayload = { ...payload, taskId: task.id }
 
-          await rabbit.medias.importCover(parsedCover)
+          await rabbit.medias.importCover(taskPayload)
           logger.debug(
             `Sent cover ${cover.id} to RabbitMQ queue when importing MangaDex media ${input.mdId}`,
-            parsedCover,
+            taskPayload,
           )
         }
       }
@@ -73,21 +78,26 @@ export const importMediaHandler = protectedProcedure
             continue
           }
 
-          const task = await db.task.create({
-            data: { type: "IMPORT_CHAPTER", status: "PENDING", sessionId },
-          })
-          const parsedChapter = {
+          const payload = {
             ...services.md.parseChapter(chapter),
             contentRating: media.contentRating,
             mediaId: media.id,
             uploaderId: session.user.id,
-            taskId: task.id,
           }
+          const task = await db.task.create({
+            data: {
+              type: "IMPORT_CHAPTER",
+              status: "PENDING",
+              payload,
+              sessionId,
+            },
+          })
+          const taskPayload = { ...payload, taskId: task.id }
 
-          await rabbit.medias.importChapter(parsedChapter)
+          await rabbit.medias.importChapter(taskPayload)
           logger.debug(
             `Sent chapter ${chapter.id} to RabbitMQ queue when importing MangaDex media ${input.mdId}`,
-            parsedChapter,
+            taskPayload,
           )
         }
       }

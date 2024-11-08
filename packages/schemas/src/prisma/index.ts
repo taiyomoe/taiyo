@@ -92,13 +92,17 @@ export const ScanScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','d
 
 export const ScanMemberScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','roles','permissions','userId']);
 
-export const TaskScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','type','status','sessionId']);
+export const TaskScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','type','status','payload','sessionId']);
 
 export const SortOrderSchema = z.enum(['asc','desc']);
+
+export const JsonNullValueInputSchema = z.enum(['JsonNull',]).transform((value) => (value === 'JsonNull' ? Prisma.JsonNull : value));
 
 export const QueryModeSchema = z.enum(['default','insensitive']);
 
 export const NullsOrderSchema = z.enum(['first','last']);
+
+export const JsonNullValueFilterSchema = z.enum(['DbNull','JsonNull','AnyNull',]).transform((value) => value === 'JsonNull' ? Prisma.JsonNull : value === 'DbNull' ? Prisma.JsonNull : value === 'AnyNull' ? Prisma.AnyNull : value);
 
 export const RolesSchema = z.enum(['USER','MODERATOR','UPLOADER_INTERN','UPLOADER','ADMIN']);
 
@@ -533,6 +537,7 @@ export const TaskSchema = z.object({
   id: z.string(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
+  payload: JsonValueSchema,
   sessionId: z.string(),
 })
 

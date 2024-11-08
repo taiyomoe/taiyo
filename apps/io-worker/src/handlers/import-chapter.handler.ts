@@ -34,7 +34,7 @@ export const importChapterHandler = async (
   )
   const chapter = await db.mediaChapter.create({
     data: {
-      ...omit(input, ["mdId", "groupIds"]),
+      ...omit(input, ["mdId", "groupIds", "taskId"]),
       id: chapterId,
       language: "pt_br",
       flag: "OK",

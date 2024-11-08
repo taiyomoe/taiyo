@@ -24,7 +24,7 @@ export const importCoverHandler = async (input: ImportCoverMessageInput) => {
   const cover = await db.mediaCover.create({
     data: {
       id: coverFile.id,
-      ...omit(input, ["url", "mediaId", "uploaderId"]),
+      ...omit(input, ["url", "mediaId", "uploaderId", "taskId"]),
       media: { connect: { id: input.mediaId } },
       uploader: { connect: { id: input.uploaderId } },
     },
