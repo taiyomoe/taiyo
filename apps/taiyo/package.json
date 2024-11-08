@@ -59,7 +59,7 @@
     "react-dom": "18.3.1",
     "react-dropzone": "^14.3.5",
     "react-fast-marquee": "^1.6.5",
-    "react-hook-form": "^7.53.1",
+    "react-hook-form": "^7.53.2",
     "react-instantsearch": "^7.13.7",
     "react-querybuilder": "^7.7.1",
     "react-select": "^5.8.2",
