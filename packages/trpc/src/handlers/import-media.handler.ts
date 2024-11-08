@@ -102,6 +102,6 @@ export const importMediaHandler = protectedProcedure
         }
       }
 
-      return media
+      return { media, sessionId }
     },
   )

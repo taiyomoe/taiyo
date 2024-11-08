@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { type ImportMediaInput, importMediaSchema } from "@taiyomoe/schemas"
+import { useRouter } from "next/navigation"
 import { type SubmitHandler, useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { SubmitButton } from "~/components/generics/buttons/submit-button"
@@ -21,6 +22,7 @@ export const ImportMediaForm = () => {
       importChapters: true,
     },
   })
+  const router = useRouter()
 
   const handleSubmit: SubmitHandler<ImportMediaInput> = (values) => {
     return new Promise((resolve, reject) => {
@@ -28,6 +30,7 @@ export const ImportMediaForm = () => {
         loading: "Importando...",
         success: (data) => {
           methods.reset()
+          router.push(`/dashboard/sessions/${data.sessionId}`)
           resolve(data)
 
           return "Obra criada com sucesso! Upload de covers e capítulos em andamento..."
