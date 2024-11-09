@@ -1,5 +1,5 @@
 import type { AlgoliaSearchResponse } from "@meilisearch/instant-meilisearch"
-import { useSession } from "@taiyomoe/auth/client"
+import { useSession } from "@taiyomoe/auth"
 import type { MediasIndexItem } from "@taiyomoe/types"
 import { MediaUtils } from "@taiyomoe/utils"
 import {

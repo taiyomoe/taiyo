@@ -1,5 +1,5 @@
 import { Button } from "@nextui-org/button"
-import { useSession } from "@taiyomoe/auth/client"
+import { useSession } from "@taiyomoe/auth"
 import { LibraryIcon } from "lucide-react"
 import { UserLibrarySidebar } from "~/components/library/UserLibrarySidebar"
 import { useLibraryStore, useReaderSettingsStore } from "~/stores"

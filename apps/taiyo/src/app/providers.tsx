@@ -1,7 +1,7 @@
 "use client"
 
 import { NextUIProvider } from "@nextui-org/react"
-import { SessionProvider } from "@taiyomoe/auth/client"
+import { SessionProvider } from "@taiyomoe/auth"
 import { Provider as JotaiProvider } from "jotai"
 import { ThemeProvider } from "next-themes"
 import { useRouter } from "next/navigation"

@@ -1,4 +1,4 @@
-import { useSession } from "@taiyomoe/auth/client"
+import { useSession } from "@taiyomoe/auth"
 import { type SignedInProps, computeAccess } from "./shared"
 
 export const SignedIn = (props: SignedInProps) => {

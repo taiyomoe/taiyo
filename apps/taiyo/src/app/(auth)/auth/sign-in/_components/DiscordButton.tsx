@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "@nextui-org/button"
-import { signIn } from "@taiyomoe/auth/client"
+import { signIn } from "@taiyomoe/auth"
 import { CompanyLogo } from "~/components/ui/CompanyLogo"
 
 export const DiscordButton = () => {
