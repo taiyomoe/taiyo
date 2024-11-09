@@ -16,9 +16,6 @@
     "postinstall": "pnpm lint:ws",
     "knip": "knip"
   },
-  "dependencies": {
-    "@napi-rs/snappy-linux-arm64-gnu": "^7.2.2"
-  },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
     "@types/global-types": "workspace:*",
