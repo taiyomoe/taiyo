@@ -572,6 +572,9 @@ importers:
         specifier: ^3.23.8
         version: 3.23.8
     devDependencies:
+      '@napi-rs/snappy-linux-arm64-gnu':
+        specifier: ^7.2.2
+        version: 7.2.2
       '@taiyomoe/tsconfig':
         specifier: workspace:*
         version: link:../../tooling/typescript
@@ -6529,8 +6532,7 @@ snapshots:
   '@napi-rs/snappy-linux-arm-gnueabihf@7.2.2':
     optional: true
 
-  '@napi-rs/snappy-linux-arm64-gnu@7.2.2':
-    optional: true
+  '@napi-rs/snappy-linux-arm64-gnu@7.2.2': {}
 
   '@napi-rs/snappy-linux-arm64-musl@7.2.2':
     optional: true
