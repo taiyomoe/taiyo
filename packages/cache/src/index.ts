@@ -70,4 +70,5 @@ export const cacheClient = {
       await client.del("chapters:latest:grouped")
     },
   },
+  clear: () => client.flushdb(),
 }

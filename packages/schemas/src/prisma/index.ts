@@ -92,11 +92,17 @@ export const ScanScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','d
 
 export const ScanMemberScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','roles','permissions','userId']);
 
+export const TaskScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','type','status','payload','sessionId']);
+
 export const SortOrderSchema = z.enum(['asc','desc']);
+
+export const JsonNullValueInputSchema = z.enum(['JsonNull',]).transform((value) => (value === 'JsonNull' ? Prisma.JsonNull : value));
 
 export const QueryModeSchema = z.enum(['default','insensitive']);
 
 export const NullsOrderSchema = z.enum(['first','last']);
+
+export const JsonNullValueFilterSchema = z.enum(['DbNull','JsonNull','AnyNull',]).transform((value) => value === 'JsonNull' ? Prisma.JsonNull : value === 'DbNull' ? Prisma.JsonNull : value === 'AnyNull' ? Prisma.AnyNull : value);
 
 export const RolesSchema = z.enum(['USER','MODERATOR','UPLOADER_INTERN','UPLOADER','ADMIN']);
 
@@ -149,6 +155,14 @@ export type ScanMemberRolesType = `${z.infer<typeof ScanMemberRolesSchema>}`
 export const ScanMemberPermissionsSchema = z.enum(['UPLOAD','EDIT','DELETE']);
 
 export type ScanMemberPermissionsType = `${z.infer<typeof ScanMemberPermissionsSchema>}`
+
+export const TaskTypeSchema = z.enum(['IMPORT_COVER','IMPORT_CHAPTER']);
+
+export type TaskTypeType = `${z.infer<typeof TaskTypeSchema>}`
+
+export const TaskStatusSchema = z.enum(['PENDING','DOWNLOADING','UPLOADING','FINISHED','FAILED']);
+
+export type TaskStatusType = `${z.infer<typeof TaskStatusSchema>}`
 
 export const LanguagesSchema = z.enum(['ab','aa','af','ak','sq','am','ar','an','hy','as','av','ae','ay','az','bm','ba','eu','be','bn','bi','bs','br','bg','my','ca','ch','ce','ny','cu','cv','kw','co','cr','hr','cs','da','dv','nl','dz','en','eo','et','ee','fo','fj','fi','fr','fy','ff','gd','gl','lg','ka','de','el','kl','gn','gu','ht','ha','he','hz','hi','ho','hu','is','io','ig','id','ia','ie','iu','ik','ga','it','jv','kn','kr','ks','kk','km','ki','rw','ky','kv','kg','kj','ku','lo','la','lv','li','ln','lt','lu','lb','mk','mg','ms','ml','mt','gv','mi','mr','mh','mn','na','nv','nd','nr','ng','ne','no','nb','nn','ii','oc','oj','or','om','os','pi','ps','fa','pl','pa','qu','ro','rm','rn','ru','se','sm','sg','sa','sc','sr','sn','sd','si','sk','sl','so','st','su','sw','ss','sv','tl','ty','tg','ta','tt','te','th','bo','ti','to','ts','tn','tr','tk','tw','ug','uk','ur','uz','ve','vi','vo','wa','cy','wo','xh','yi','yo','za','zu','es','es_la','pt_br','pt_pt','ja','ja_ro','ko','ko_ro','zh','zh_hk','zh_ro']);
 
@@ -512,3 +526,22 @@ export const ScanMemberSchema = z.object({
 })
 
 export type ScanMember = z.infer<typeof ScanMemberSchema>
+
+/////////////////////////////////////////
+// TASK SCHEMA
+/////////////////////////////////////////
+
+export const TaskSchema = z.object({
+  type: TaskTypeSchema,
+  status: TaskStatusSchema,
+  id: z.string(),
+  createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date(),
+  /**
+   * [TaskPayload]
+   */
+  payload: JsonValueSchema,
+  sessionId: z.string(),
+})
+
+export type Task = z.infer<typeof TaskSchema>

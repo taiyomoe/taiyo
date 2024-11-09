@@ -115,7 +115,7 @@ importers:
         specifier: workspace:*
         version: link:../../packages/auth
       '@taiyomoe/cache':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/cache
       '@taiyomoe/db':
         specifier: workspace:*
@@ -133,13 +133,13 @@ importers:
         specifier: workspace:*
         version: link:../../packages/rabbit
       '@taiyomoe/schemas':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/schemas
       '@taiyomoe/services':
         specifier: workspace:*
         version: link:../../packages/services
       '@taiyomoe/utils':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/utils
       hono:
         specifier: ^4.6.9
@@ -147,9 +147,6 @@ importers:
       mangadex-full-api:
         specifier: ^5.12.1
         version: 5.12.1
-      radash:
-        specifier: ^12.1.0
-        version: 12.1.0
       use-intl:
         specifier: ^3.25.0
         version: 3.25.0(react@18.3.1)
@@ -182,7 +179,7 @@ importers:
         specifier: workspace:*
         version: link:../../packages/logs
       '@taiyomoe/meilisearch':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/meilisearch
       '@taiyomoe/rabbit':
         specifier: workspace:*
@@ -254,6 +251,9 @@ importers:
       '@taiyomoe/image-orchestrator':
         specifier: workspace:*
         version: link:../image-orchestrator
+      '@taiyomoe/logs':
+        specifier: workspace:*
+        version: link:../../packages/logs
       '@taiyomoe/meilisearch':
         specifier: workspace:*
         version: link:../../packages/meilisearch
@@ -714,6 +714,12 @@ importers:
       '@taiyomoe/meilisearch':
         specifier: workspace:*
         version: link:../meilisearch
+      '@taiyomoe/messages':
+        specifier: workspace:*
+        version: link:../messages
+      '@taiyomoe/rabbit':
+        specifier: workspace:*
+        version: link:../rabbit
       '@taiyomoe/schemas':
         specifier: workspace:*
         version: link:../schemas
@@ -735,12 +741,18 @@ importers:
       luxon:
         specifier: ^3.5.0
         version: 3.5.0
+      mangadex-full-api:
+        specifier: ^5.12.1
+        version: 5.12.1
       radash:
         specifier: ^12.1.0
         version: 12.1.0
       superjson:
         specifier: ^2.2.1
         version: 2.2.1
+      use-intl:
+        specifier: ^3.25.0
+        version: 3.25.0(react@18.3.1)
       zod:
         specifier: ^3.23.8
         version: 3.23.8
@@ -7949,7 +7961,7 @@ snapshots:
     dependencies:
       '@react-aria/interactions': 3.21.3(react@18.3.1)
       '@react-aria/utils': 3.24.1(react@18.3.1)
-      '@react-types/shared': 3.23.1(react@18.3.1)
+      '@react-types/shared': 3.25.0(react@18.3.1)
       '@swc/helpers': 0.5.13
       clsx: 2.1.1
       react: 18.3.1
@@ -8043,7 +8055,7 @@ snapshots:
     dependencies:
       '@react-aria/ssr': 3.9.6(react@18.3.1)
       '@react-aria/utils': 3.24.1(react@18.3.1)
-      '@react-types/shared': 3.23.1(react@18.3.1)
+      '@react-types/shared': 3.25.0(react@18.3.1)
       '@swc/helpers': 0.5.13
       react: 18.3.1
 

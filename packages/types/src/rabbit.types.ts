@@ -17,6 +17,7 @@ export type ImportCoverMessageInput = {
   contentRating: ContentRating
   mediaId: string
   uploaderId: string
+  taskId: string
 }
 
 export type ImportChapterMessageInput = {
@@ -28,4 +29,5 @@ export type ImportChapterMessageInput = {
   groupIds: string[]
   mediaId: string
   uploaderId: string
+  taskId: string
 }

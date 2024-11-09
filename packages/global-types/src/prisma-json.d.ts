@@ -12,5 +12,6 @@ declare global {
       pageId: string | null
       completed: boolean
     }
+    type TaskPayload = Record<string, unknown>
   }
 }

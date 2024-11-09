@@ -1,4 +1,4 @@
-import { rawLogsClient } from "../"
+import { rawLogsClient } from "../raw-client"
 
 const up = async () => {
   await rawLogsClient.command({ query: "CREATE DATABASE IF NOT EXISTS logs;" })

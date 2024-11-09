@@ -1,12 +1,11 @@
 import { type Media, type Prisma, db } from "@taiyomoe/db"
-import { rabbitPublisher } from "@taiyomoe/rabbit"
 import { MdUtils } from "@taiyomoe/utils"
 import { type Chapter, type Cover, Manga } from "mangadex-full-api"
 import { HttpError } from "~/utils/http-error"
 import { logger } from "~/utils/logger"
 
 const parseCover = (input: Cover) => {
-  const volume = Number.parseInt(input.volume)
+  const volume = Number.parseFloat(input.volume)
   let language = MdUtils.getLanguage(input.locale)
 
   if (volume.toString() !== input.volume) {
@@ -32,7 +31,7 @@ const parseCover = (input: Cover) => {
 }
 
 const parseChapter = (input: Chapter) => {
-  const volume = Number.parseInt(input.volume)
+  const volume = Number.parseFloat(input.volume)
 
   if (volume.toString() !== input.volume) {
     logger.warn(
@@ -44,7 +43,7 @@ const parseChapter = (input: Chapter) => {
   return {
     mdId: input.id,
     title: input.title,
-    number: Number.parseInt(input.chapter),
+    number: Number.parseFloat(input.chapter),
     volume,
     groupIds: input.groups.map((g) => g.id),
   }
@@ -58,33 +57,6 @@ const getMedia = async (input: string) => {
   }
 
   return result
-}
-
-const getCreationPayload = (input: Manga, creatorId: string) => {
-  const { genres, tags, isOneShot } = MdUtils.getGenresAndTags(input)
-  const titles = MdUtils.getTitles(input)
-  const trackers = MdUtils.getTrackers(input)
-
-  return {
-    startDate: input.year ? new Date(Date.parse(input.year.toString())) : null,
-    contentRating: MdUtils.getContentRating(input),
-    oneShot: isOneShot,
-    type: MdUtils.getType(input),
-    demography: MdUtils.getDemography(input),
-    countryOfOrigin: MdUtils.getCountryOfOrigin(input),
-    genres,
-    tags: tags.map((key) => ({ key, isSpoiler: false })),
-    synopsis: MdUtils.getSynopsis(input),
-    status: "RELEASING",
-    source: "LIGHT_NOVEL",
-    creator: { connect: { id: creatorId } },
-    titles: {
-      createMany: { data: titles.map((t) => ({ ...t, creatorId })) },
-    },
-    trackers: {
-      createMany: { data: trackers.map((t) => ({ ...t, creatorId })) },
-    },
-  } satisfies Prisma.MediaCreateInput
 }
 
 const getUpdatePayload = (input: Manga, original: Media) => {
@@ -136,72 +108,11 @@ const ensureValid = async (input: string) => {
   return true
 }
 
-const importCovers = async (input: Manga, media: Media, uploaderId: string) => {
-  const covers = await input.getCovers()
-  logger.debug(
-    `Got ${covers.length} covers from MangaDex media ${input.id}`,
-    covers,
-  )
-
-  for (const cover of covers) {
-    const parsedCover = {
-      ...parseCover(cover),
-      contentRating: media.contentRating,
-      mediaId: media.id,
-      uploaderId,
-    }
-
-    await rabbitPublisher.medias.importCover(parsedCover)
-    logger.debug(
-      `Sent cover ${cover.id} to RabbitMQ queue when importing/syncing MangaDex media ${input.id}`,
-      parsedCover,
-    )
-  }
-}
-
-const importChapters = async (
-  input: Manga,
-  media: Media,
-  uploaderId: string,
-) => {
-  const chapters = await getChapters(input)
-  logger.debug(
-    `Got ${chapters.length} chapters from MangaDex media ${input.id}`,
-    chapters,
-  )
-
-  for (const chapter of chapters) {
-    if (chapter.isExternal) {
-      logger.debug(
-        `Skipped external chapter when importing/syncing MangaDex media ${input.id}`,
-        chapter,
-      )
-      continue
-    }
-
-    const parsedChapter = {
-      ...parseChapter(chapter),
-      contentRating: media.contentRating,
-      mediaId: media.id,
-      uploaderId,
-    }
-
-    await rabbitPublisher.medias.importChapter(parsedChapter)
-    logger.debug(
-      `Sent chapter ${chapter.id} to RabbitMQ queue when importing/syncing MangaDex media ${input.id}`,
-      parsedChapter,
-    )
-  }
-}
-
 export const MdService = {
   parseCover,
   parseChapter,
   getMedia,
-  getCreationPayload,
   getUpdatePayload,
   getChapters,
   ensureValid,
-  importCovers,
-  importChapters,
 }

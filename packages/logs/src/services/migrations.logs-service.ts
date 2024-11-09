@@ -1,4 +1,5 @@
-import { type LogsMigration, rawLogsClient } from ".."
+import type { LogsMigration } from "../"
+import { rawLogsClient } from "../raw-client"
 
 export const MigrationsService = {
   getAll: () =>
@@ -15,4 +16,6 @@ export const MigrationsService = {
         "INSERT INTO logs._clickhouse_migrations (startedAt, finishedAt, migrationName) VALUES ({startedAt: DateTime64}, {finishedAt: DateTime64}, {migrationName: String});",
       query_params: { startedAt, finishedAt, migrationName: name },
     }),
+  clear: () =>
+    rawLogsClient.command({ query: "DROP DATABASE IF EXISTS logs;" }),
 }

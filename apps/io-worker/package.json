@@ -11,7 +11,7 @@
     "@t3-oss/env-core": "^0.11.1",
     "@taiyomoe/db": "workspace:*",
     "@taiyomoe/logs": "workspace:*",
-    "@taiyomoe/meilisearch": "workspace:^",
+    "@taiyomoe/meilisearch": "workspace:*",
     "@taiyomoe/rabbit": "workspace:*",
     "@taiyomoe/s3": "workspace:*",
     "@taiyomoe/services": "workspace:*",

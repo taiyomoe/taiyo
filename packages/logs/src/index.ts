@@ -1,4 +1,3 @@
-import { createClient } from "@clickhouse/client-web"
 import { createLogger, format, transports } from "winston"
 import LokiTransport from "winston-loki"
 import { env } from "./env"
@@ -16,9 +15,10 @@ import { UsersSettingsService } from "./services/users-settings.logs-service"
 export const initLogger = (app: "taiyo" | "image-orchestrator" | "io-worker") =>
   createLogger({
     level: "debug",
-    format: format.json(),
     transports: [
-      new transports.Console(),
+      new transports.Console({
+        format: format.prettyPrint({ colorize: true }),
+      }),
       new LokiTransport({
         host: env.GRAFANA_LOKI_URL,
         labels: { app },
@@ -28,14 +28,6 @@ export const initLogger = (app: "taiyo" | "image-orchestrator" | "io-worker") =>
       }),
     ],
   })
-
-export const rawLogsClient = createClient({
-  url: env.CLICKHOUSE_URL,
-  clickhouse_settings: {
-    allow_experimental_object_type: 1,
-    date_time_input_format: "best_effort",
-  },
-})
 
 export const logsClient = {
   migrations: MigrationsService,

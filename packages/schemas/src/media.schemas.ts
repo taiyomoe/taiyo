@@ -69,4 +69,6 @@ export const getMediasListSchema = z.object({
   ),
 })
 
+export type ImportMediaInput = Required<typeof importMediaSchema._type>
+export type SyncMediaInput = Required<typeof syncMediaSchema._type>
 export type UpdateMediaInput = Required<typeof updateMediaSchema._type>

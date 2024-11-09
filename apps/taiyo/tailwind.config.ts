@@ -8,10 +8,7 @@ export default {
   presets: [baseConfig],
   content: [
     "./src/{app,components}/**/*.tsx",
-    "../../../node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
     "../../node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
-    "../node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
-    "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {

@@ -11,7 +11,7 @@
   "scripts": {
     "clean": "rm -rf .turbo node_modules",
     "typecheck": "tsc --noEmit",
-    "seed": "prisma db push --force-reset && prisma generate && prisma db seed",
+    "seed": "prisma db push --force-reset && prisma generate && rm -rf ../../data/dragonfly && rm -rf ../../data/clickhouse && prisma db seed",
     "db": "prisma",
     "postinstall": "prisma generate --no-hints"
   },

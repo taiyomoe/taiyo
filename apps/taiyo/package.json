@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "build": "next build",
-    "dev": "next dev",
+    "dev": "next dev --turbo",
     "start": "next start",
     "clean": "git clean -xdf .next .turbo node_modules",
     "typecheck": "tsc --noEmit"
@@ -23,6 +23,7 @@
     "@taiyomoe/constants": "workspace:*",
     "@taiyomoe/db": "workspace:*",
     "@taiyomoe/image-orchestrator": "workspace:*",
+    "@taiyomoe/logs": "workspace:*",
     "@taiyomoe/meilisearch": "workspace:*",
     "@taiyomoe/messages": "workspace:*",
     "@taiyomoe/schemas": "workspace:*",
