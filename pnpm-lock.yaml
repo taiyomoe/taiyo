@@ -7,6 +7,10 @@ settings:
 importers:
 
   .:
+    dependencies:
+      '@napi-rs/snappy-linux-arm64-gnu':
+        specifier: ^7.2.2
+        version: 7.2.2
     devDependencies:
       '@biomejs/biome':
         specifier: ^1.9.4
@@ -547,9 +551,6 @@ importers:
       '@clickhouse/client-web':
         specifier: ^1.8.0
         version: 1.8.0
-      '@napi-rs/snappy-linux-arm64-gnu':
-        specifier: ^7.2.2
-        version: 7.2.2
       '@t3-oss/env-core':
         specifier: ^0.11.1
         version: 0.11.1(typescript@5.6.3)(zod@3.23.8)
