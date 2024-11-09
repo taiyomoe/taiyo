@@ -5,8 +5,10 @@
   "type": "module",
   "license": "MIT",
   "exports": {
-    ".": "./src/index.ts",
-    "./client": "./src/client.ts",
+    ".": {
+      "react-server": "./src/index.rsc.ts",
+      "default": "./src/index.ts"
+    },
     "./env": "./src/env.ts"
   },
   "scripts": {
