@@ -36,16 +36,11 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(db),
   providers: [
     Discord({
-      clientId: env.DISCORD_CLIENT_ID,
-      clientSecret: env.DISCORD_CLIENT_SECRET,
+      clientId: env.AUTH_DISCORD_ID,
+      clientSecret: env.AUTH_DISCORD_SECRET,
     }),
   ],
   pages: { signIn: "/auth/sign-in" },
-  cookies: {
-    sessionToken: {
-      options: { domain: `.${new URL(env.NEXTAUTH_URL).hostname}` },
-    },
-  },
   callbacks: {
     session: async ({ session, user: adapterUser }) => {
       const user = adapterUser as User
