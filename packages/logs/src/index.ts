@@ -12,9 +12,13 @@ import { UsersAuthService } from "./services/users-auth.logs-service"
 import { UsersSettingsService } from "./services/users-settings.logs-service"
 
 export const initLogger = (app: "taiyo" | "image-orchestrator" | "io-worker") =>
-  pino(
-    { level: "debug" },
-    pino.transport({
+  pino({
+    level: "debug",
+    base: {
+      pid: undefined,
+      hostname: undefined,
+    },
+    transport: {
       targets: [
         {
           target: "pino-pretty",
@@ -38,8 +42,8 @@ export const initLogger = (app: "taiyo" | "image-orchestrator" | "io-worker") =>
           },
         },
       ],
-    }),
-  )
+    },
+  })
 
 export const logsClient = {
   migrations: MigrationsService,
