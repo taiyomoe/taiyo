@@ -6,6 +6,8 @@
     "@taiyomoe/messages",
     "@types/global-types",
     "@nextui-org/.+",
+    "pino-pretty",
+    "pino-loki",
     "punycode",
     "sharp"
   ],
