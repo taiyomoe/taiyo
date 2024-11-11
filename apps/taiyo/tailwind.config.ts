@@ -12,6 +12,9 @@ export default {
   ],
   theme: {
     extend: {
+      screens: {
+        "3xl": "1782px",
+      },
       spacing: {
         bodyPadding: "var(--body-padding)",
         navbar: "var(--navbar-height)",
