@@ -29,7 +29,6 @@ export const FolderSelection = ({ isSelected, className, ...props }: Props) => {
           {...getInputProps()}
           /* @ts-expect-error - react typigns error*/
           webkitdirectory=""
-          directory
         />
         <AssetSelection type="folder" />
       </CardBody>
