@@ -29,6 +29,12 @@ export const uploadChapterSchema = z.object({
   files: zfd.repeatable(zfd.file().array().min(1)),
 })
 
+export const uploadChaptersSchema = z.object({
+  chapters: uploadChapterSchema.omit({ mediaId: true }).array().min(1),
+  concurrent: z.coerce.number().int().positive().min(1),
+  mediaId: z.string().uuid(),
+})
+
 export const updateChapterSchema = z.object({
   id: z.string().uuid(),
   title: z.string().nullish(),
@@ -97,6 +103,7 @@ export const getChaptersListSchema = z.object({
 })
 
 export type UploadChapterInput = z.infer<typeof uploadChapterSchema>
+export type UploadChaptersInput = z.infer<typeof uploadChaptersSchema>
 export type UpdateChapterInput = typeof updateChapterSchema._type
 export type BulkUpdateChaptersVolumesInput =
   typeof bulkUpdateChaptersVolumesSchema._type

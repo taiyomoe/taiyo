@@ -1,28 +1,31 @@
 "use client"
-
-import { typeboxResolver } from "@hookform/resolvers/typebox"
+import { zodResolver } from "@hookform/resolvers/zod"
 import {
   type UploadChapterInput,
-  UploadChapterState,
   type UploadChaptersInput,
   uploadChaptersSchema,
-} from "@taiyomoe/image-orchestrator"
+} from "@taiyomoe/schemas"
+import { UploadChapterState } from "@taiyomoe/types"
 import { useSetAtom } from "jotai"
 import { parallel } from "radash"
 import { type SubmitHandler, useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { bulkUploadChaptersStateAtoms } from "~/atoms/bulkUploadChapters.atoms"
 import { Form } from "~/components/generics/form/form"
-import { handleErrors, ioApi } from "~/eden/client"
+import { handleErrors, ioApi } from "~/utils/hono-rpc"
 import { BulkUploadChaptersFormFields } from "./bulk-upload-chapters-form-fields"
 
 export const BulkUploadChaptersForm = () => {
-  const methods = useForm<UploadChaptersInput>({
-    resolver: typeboxResolver(uploadChaptersSchema),
-    mode: "onTouched",
-    defaultValues: { chapters: [], concurrent: 10 },
-  })
   const setChaptersState = useSetAtom(bulkUploadChaptersStateAtoms)
+  const methods = useForm<UploadChaptersInput>({
+    resolver: zodResolver(uploadChaptersSchema),
+    mode: "onTouched",
+    defaultValues: {
+      chapters: [],
+      concurrent: 10,
+      mediaId: "",
+    },
+  })
 
   const handleSubmit: SubmitHandler<UploadChaptersInput> = (values) =>
     parallel(values.concurrent, values.chapters, async (chapter) => {

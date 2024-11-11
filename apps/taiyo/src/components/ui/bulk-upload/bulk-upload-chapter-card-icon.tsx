@@ -1,5 +1,5 @@
 import { Spinner } from "@nextui-org/spinner"
-import { UploadChapterState } from "@taiyomoe/image-orchestrator"
+import { UploadChapterState } from "@taiyomoe/types"
 import { CheckIcon, HourglassIcon } from "lucide-react"
 
 type Props = {

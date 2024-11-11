@@ -1,7 +1,7 @@
 import { ALLOWED_MIME_TYPES } from "@taiyomoe/constants"
 import type { ImageFolder, InvalidFile } from "~/lib/types"
 
-const computeRelativePaths = (files: FileList) => {
+const computeRelativePaths = (files: File[]) => {
   const invalidFiles: InvalidFile[] = []
   const chapters: ImageFolder[] = []
 
