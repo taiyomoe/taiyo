@@ -117,9 +117,6 @@ importers:
       '@taiyomoe/cache':
         specifier: workspace:*
         version: link:../../packages/cache
-      '@taiyomoe/constants':
-        specifier: workspace:*
-        version: link:../../packages/constants
       '@taiyomoe/db':
         specifier: workspace:*
         version: link:../../packages/db
@@ -150,9 +147,6 @@ importers:
       mangadex-full-api:
         specifier: ^5.12.1
         version: 5.12.1
-      radash:
-        specifier: ^12.1.0
-        version: 12.1.0
       use-intl:
         specifier: ^3.25.0
         version: 3.25.0(react@18.3.1)
