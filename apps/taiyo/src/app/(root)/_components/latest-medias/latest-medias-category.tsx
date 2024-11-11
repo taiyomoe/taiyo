@@ -1,4 +1,4 @@
-import { MediasService } from "@taiyomoe/services"
+import { MediasService } from "~/services/medias.web-service"
 import { LatestMediasCarousel } from "./latest-medias-carousel"
 
 export const LatestMediasCategory = async () => {

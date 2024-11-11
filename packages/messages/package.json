@@ -1,0 +1,14 @@
+{
+  "name": "@taiyomoe/messages",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "exports": {
+    "./en.json": "./src/en.json",
+    "./pt.json": "./src/pt.json"
+  },
+  "scripts": {
+    "clean": "rm -rf .turbo node_modules"
+  }
+}

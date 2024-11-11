@@ -61,7 +61,7 @@ export const MediasField = ({ name, ...rest }: Props) => {
     <MediasAutocomplete
       label="Obra"
       labelPlacement="outside-left"
-      selectedKey={controlledMediaId}
+      selectedKey={controlledMediaId ?? ""}
       onSelectionChange={handleSelectionChange}
       value={mediaId}
       isDisabled={!!media}

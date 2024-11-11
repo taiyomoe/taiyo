@@ -7,18 +7,37 @@
  * need to use are documented accordingly near the end.
  */
 
-import { auth } from "@taiyomoe/auth"
+import type { Session } from "@taiyomoe/auth"
 import { cacheClient } from "@taiyomoe/cache"
 import { db } from "@taiyomoe/db"
 import { logsClient } from "@taiyomoe/logs"
 import { meilisearchClient } from "@taiyomoe/meilisearch"
+import messages from "@taiyomoe/messages/en.json"
+import { rabbitPublisher } from "@taiyomoe/rabbit"
+import {
+  BaseCoversService,
+  BaseTitlesService,
+  BaseUsersService,
+} from "@taiyomoe/services"
 import type { Actions, Resources } from "@taiyomoe/types"
 import { umamiClient } from "@taiyomoe/umami"
 import { initTRPC } from "@trpc/server"
 import superjson from "superjson"
+import { createTranslator } from "use-intl/core"
 import { ZodError } from "zod"
 import { withAuth } from "./middlewares/withAuth"
 import { withPermissions } from "./middlewares/withPermissions"
+import { ChaptersService } from "./services/chapters.trpc-service"
+import { LibrariesService } from "./services/libraries.trpc-service"
+import { MdService } from "./services/md.trpc-service"
+import { MediasService } from "./services/medias.trpc-service"
+import { TrackersService } from "./services/trackers.trpc-service"
+import { logger } from "./utils/logger"
+
+type Meta = {
+  resource?: Resources
+  action?: Actions
+}
 
 /**
  * 1. CONTEXT
@@ -32,24 +51,34 @@ import { withPermissions } from "./middlewares/withPermissions"
  *
  * @see https://trpc.io/docs/server/context
  */
-type Meta = {
-  resource?: Resources
-  action?: Actions
-}
-
-export const createTRPCContext = async (opts: { headers: Headers }) => {
-  const session = await auth()
-
-  return {
-    db,
-    session,
-    meilisearch: meilisearchClient,
-    cache: cacheClient,
-    logs: logsClient,
-    umami: umamiClient,
-    ...opts,
-  }
-}
+export const createTRPCContext = async (opts: {
+  session: Session | null
+  headers: Headers
+}) => ({
+  t: createTranslator({
+    locale: "en",
+    namespace: "api",
+    messages,
+  }),
+  db,
+  meilisearch: meilisearchClient,
+  cache: cacheClient,
+  logs: logsClient,
+  logger,
+  umami: umamiClient,
+  rabbit: rabbitPublisher,
+  services: {
+    users: BaseUsersService,
+    libraries: LibrariesService,
+    medias: MediasService,
+    trackers: TrackersService,
+    covers: BaseCoversService,
+    titles: BaseTitlesService,
+    chapters: ChaptersService,
+    md: MdService,
+  },
+  ...opts,
+})
 
 /**
  * 2. INITIALIZATION
@@ -62,16 +91,14 @@ const t = initTRPC
   .meta<Meta>()
   .create({
     transformer: superjson,
-    errorFormatter({ shape, error }) {
-      return {
-        ...shape,
-        data: {
-          ...shape.data,
-          zodError:
-            error.cause instanceof ZodError ? error.cause.flatten() : null,
-        },
-      }
-    },
+    errorFormatter: ({ shape, error }) => ({
+      ...shape,
+      data: {
+        ...shape.data,
+        zodError:
+          error.cause instanceof ZodError ? error.cause.flatten() : null,
+      },
+    }),
   })
 
 export type tRPCInit = typeof t
@@ -102,13 +129,37 @@ export const createCallerFactory = t.createCallerFactory
 export const createTRPCRouter = t.router
 
 /**
+ * Middleware for timing procedure execution and adding an articifial delay in development.
+ *
+ * You can remove this if you don't like it, but it can help catch unwanted waterfalls by simulating
+ * network latency that would occur in production but not in local development.
+ */
+const timingMiddleware = t.middleware(async ({ next, path, ctx }) => {
+  const start = Date.now()
+
+  if (t._config.isDev) {
+    // artificial delay in dev 100-500ms
+    const waitMs = Math.floor(Math.random() * 400) + 100
+    await new Promise((resolve) => setTimeout(resolve, waitMs))
+  }
+
+  const result = await next()
+
+  const end = Date.now()
+
+  ctx.logger.debug(`[TRPC] ${path} took ${end - start}ms to execute`)
+
+  return result
+})
+
+/**
  * Public (unauthed) procedure
  *
  * This is the base piece you use to build new queries and mutations on your
  * tRPC API. It does not guarantee that a user querying is authorized, but you
  * can still access user session data if they are logged in
  */
-export const publicProcedure = t.procedure
+export const publicProcedure = t.procedure.use(timingMiddleware)
 
 /**
  * Protected (authenticated) procedure
@@ -118,4 +169,6 @@ export const publicProcedure = t.procedure
  *
  * @see https://trpc.io/docs/procedures
  */
-export const protectedProcedure = t.procedure.use(permissionsMiddleware)
+export const protectedProcedure = t.procedure
+  .use(timingMiddleware)
+  .use(permissionsMiddleware)

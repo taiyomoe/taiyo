@@ -1,6 +1,6 @@
 import { Spinner } from "@nextui-org/spinner"
-import { UploadChapterState } from "@taiyomoe/image-orchestrator"
-import { CheckIcon, HourglassIcon } from "lucide-react"
+import { UploadChapterState } from "@taiyomoe/types"
+import { CheckIcon, HourglassIcon, XIcon } from "lucide-react"
 
 type Props = {
   state: UploadChapterState
@@ -13,6 +13,10 @@ export const BulkUploaderChapterCardIcon = ({ state }: Props) => {
 
   if (state === UploadChapterState.UPLOADING) {
     return <Spinner size="sm" />
+  }
+
+  if (state === UploadChapterState.ERROR) {
+    return <XIcon className="text-danger" size={20} />
   }
 
   return <CheckIcon className="text-success" size={20} />

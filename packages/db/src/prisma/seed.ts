@@ -31,12 +31,14 @@ async function main() {
     process.exit(1)
   }
 
-  console.log("Seeding database...")
+  console.log("Seeding database, clearing cache and logs...")
 
   // Users
+  console.log("\nUsers:")
   await users.execute().then(() => console.log("Users seeded"))
 
   // Medias
+  console.log("\nMedias:")
   await media1.execute().then(() => console.log("Media 1 seeded"))
   await media2.execute().then(() => console.log("Media 2 seeded"))
   await media3.execute().then(() => console.log("Media 3 seeded"))
@@ -49,6 +51,7 @@ async function main() {
   await media10.execute().then(() => console.log("Media 10 seeded"))
 
   // Scans
+  console.log("\nScans:")
   await scan1.execute().then(() => console.log("Scan 1 seeded"))
   await scan2.execute().then(() => console.log("Scan 2 seeded"))
   await scan3.execute().then(() => console.log("Scan 3 seeded"))
@@ -62,6 +65,7 @@ async function main() {
   await scan11.execute().then(() => console.log("Scan 11 seeded"))
 
   // Meilisearch
+  console.log("\nMeilisearch:")
   await meilisearch.execute().then(() => console.log("Meilisearch reindexed"))
 }
 

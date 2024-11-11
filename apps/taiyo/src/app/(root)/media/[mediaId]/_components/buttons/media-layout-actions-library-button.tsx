@@ -2,7 +2,7 @@
 
 import { Button } from "@nextui-org/button"
 import { Popover, PopoverContent, PopoverTrigger } from "@nextui-org/popover"
-import { useSession } from "@taiyomoe/auth/client"
+import { useSession } from "@taiyomoe/auth"
 import type { MediaLimited, UserLibraryMedia } from "@taiyomoe/types"
 import { LibraryUtils } from "@taiyomoe/utils"
 import { useEffect, useState } from "react"

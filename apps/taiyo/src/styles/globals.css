@@ -58,19 +58,6 @@
   }
 }
 
-/* CHARTS */
-.apexcharts-toolbar svg {
-  @apply fill-default-300 stroke-none !important;
-}
-
-.apexcharts-toolbar .apexcharts-selected svg {
-  @apply fill-primary !important;
-}
-
-.apexcharts-toolbar > div:not(.apexcharts-selected):hover {
-  @apply opacity-70 !important;
-}
-
 /* MARQUEE */
 @property --content1-gradient {
   syntax: "<color>";

@@ -1,28 +1,25 @@
 "use client"
 
-import { typeboxResolver } from "@hookform/resolvers/typebox"
-import {
-  type CreateMediaInput,
-  createMediaSchema,
-} from "@taiyomoe/image-orchestrator"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { type CreateMediaInput, createMediaSchema } from "@taiyomoe/schemas"
 import { useRouter } from "next/navigation"
 import { type SubmitHandler, useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { Form } from "~/components/generics/form/form"
-import { handleErrors, ioApi } from "~/eden/client"
+import { handleErrors, ioApi } from "~/utils/hono-rpc"
 import { CreateMediaFormFields } from "./create-media-form-fields"
 
 export const CreateMediaForm = () => {
   const router = useRouter()
   const methods = useForm<CreateMediaInput>({
-    resolver: typeboxResolver(createMediaSchema),
+    resolver: zodResolver(createMediaSchema),
     mode: "onTouched",
     defaultValues: {
       startDate: undefined,
       endDate: undefined,
       synopsis: "",
-      contentRating: "NORMAL",
       oneShot: false,
+      contentRating: "NORMAL",
       type: "MANGA",
       status: "RELEASING",
       source: "ORIGINAL",
@@ -31,10 +28,15 @@ export const CreateMediaForm = () => {
       flag: "OK",
       genres: [],
       tags: [],
-      mainTitle: "",
       mdId: undefined,
       alId: undefined,
       malId: undefined,
+      mainTitle: "",
+      mainTitleLanguage: "en",
+      mainCover: undefined,
+      mainCoverLanguage: "en",
+      mainCoverContentRating: "NORMAL",
+      mainCoverVolume: undefined,
     },
   })
 
@@ -42,8 +44,8 @@ export const CreateMediaForm = () => {
     toast.promise(ioApi.medias.create(values), {
       loading: "Criando a obra...",
       error: handleErrors("Ocorreu um erro inesperado ao criar a obra"),
-      success: ({ data }) => {
-        router.push(`/media/${data.id}`)
+      success: ({ id }) => {
+        router.push(`/media/${id}`)
 
         return "Obra criada!"
       },

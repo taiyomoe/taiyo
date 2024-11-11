@@ -1,9 +1,8 @@
 import { chaptersRouter } from "./routers/chapters.router"
 import { coversRouter } from "./routers/covers.router"
-import { historiesRouter } from "./routers/histories.router"
-import { librariesRouter } from "./routers/libraries.router"
 import { mediasRouter } from "./routers/medias.router"
 import { scansRouter } from "./routers/scans.router"
+import { tasksRouter } from "./routers/tasks.router"
 import { titlesRouter } from "./routers/titles.router"
 import { usersRouter } from "./routers/users.router"
 import { createTRPCRouter } from "./trpc"
@@ -18,10 +17,9 @@ export const appRouter = createTRPCRouter({
   covers: coversRouter,
   titles: titlesRouter,
   chapters: chaptersRouter,
-  histories: historiesRouter,
-  libraries: librariesRouter,
   scans: scansRouter,
   users: usersRouter,
+  tasks: tasksRouter,
 })
 
 // export type definition of API

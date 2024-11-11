@@ -3,10 +3,14 @@
   "ignoreBinaries": ["infisical"],
   "ignoreWorkspaces": ["./packages/db"],
   "ignoreDependencies": [
+    "@taiyomoe/messages",
     "@types/global-types",
     "@nextui-org/.+",
     "punycode",
     "sharp"
   ],
-  "ignore": ["./packages/schemas/src/prisma/index.ts"]
+  "ignore": [
+    "./apps/taiyo/src/i18n/request.ts",
+    "./packages/schemas/src/prisma/index.ts"
+  ]
 }

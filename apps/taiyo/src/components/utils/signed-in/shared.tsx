@@ -1,4 +1,4 @@
-import type { SessionContextValue } from "@taiyomoe/auth/client"
+import type { SessionContextValue } from "@taiyomoe/auth"
 import type { Roles } from "@taiyomoe/db"
 import type { Permission } from "@taiyomoe/types"
 

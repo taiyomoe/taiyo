@@ -1,36 +1,52 @@
-import { createClient } from "@clickhouse/client-web"
-import { env } from "../env"
-import { chaptersService } from "./services/chapters.logsService"
-import { coversService } from "./services/covers.logsService"
-import { mediasService } from "./services/medias.logsService"
-import { migrationsService } from "./services/migrations.logsService"
-import { scansService } from "./services/scans.logsService"
-import { titlesService } from "./services/titles.logsService"
-import { trackersService } from "./services/trackers.logsService"
-import { usersActivityService } from "./services/usersActivity.logsService"
-import { usersAuthService } from "./services/usersAuth.logsService"
-import { usersSettingsService } from "./services/usersSettings.logsService"
+import { pino } from "pino"
+import pinoLoki from "pino-loki"
+import pinoPretty from "pino-pretty"
+import { env } from "./env"
+import { ChaptersService } from "./services/chapters.logs-service"
+import { CoversService } from "./services/covers.logs-service"
+import { MediasService } from "./services/medias.logs-service"
+import { MigrationsService } from "./services/migrations.logs-service"
+import { ScansService } from "./services/scans.logs-service"
+import { TitlesService } from "./services/titles.logs-service"
+import { TrackersService } from "./services/trackers.logs-service"
+import { UsersActivityService } from "./services/users-activity.logs-service"
+import { UsersAuthService } from "./services/users-auth.logs-service"
+import { UsersSettingsService } from "./services/users-settings.logs-service"
 
-export const rawLogsClient = createClient({
-  url: env.CLICKHOUSE_URL,
-  clickhouse_settings: {
-    allow_experimental_object_type: 1,
-    date_time_input_format: "best_effort",
-  },
-})
+export const initLogger = (
+  app: "taiyo" | "image-orchestrator" | "io-worker",
+) =>
+  process.env.NODE_ENV === "development"
+    ? pino({ level: "debug" }, pinoPretty({ ignore: "pid,hostname" }))
+    : pino(
+        { level: "debug", base: null },
+        pinoLoki({
+          batching: true,
+          interval: 5,
+          labels: {
+            app,
+            environment: process.env.NODE_ENV ?? "development",
+          },
+          host: env.GRAFANA_LOKI_URL,
+          basicAuth: {
+            username: env.GRAFANA_USERNAME,
+            password: env.GRAFANA_PASSWORD,
+          },
+        }),
+      )
 
 export const logsClient = {
-  migrations: migrationsService,
-  medias: mediasService,
-  covers: coversService,
-  titles: titlesService,
-  trackers: trackersService,
-  chapters: chaptersService,
-  scans: scansService,
+  migrations: MigrationsService,
+  medias: MediasService,
+  covers: CoversService,
+  titles: TitlesService,
+  trackers: TrackersService,
+  chapters: ChaptersService,
+  scans: ScansService,
   users: {
-    auth: usersAuthService,
-    activity: usersActivityService,
-    settings: usersSettingsService,
+    auth: UsersAuthService,
+    activity: UsersActivityService,
+    settings: UsersSettingsService,
   },
 }
 

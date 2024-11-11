@@ -1,6 +1,9 @@
 import type { Metadata } from "next"
+import { NextIntlClientProvider } from "next-intl"
+import { getLocale, getMessages } from "next-intl/server"
 import { Inter } from "next/font/google"
 import Script from "next/script"
+import { env } from "~/env"
 import { siteConfig } from "~/lib/config"
 import type { LayoutProps } from "~/lib/types"
 import { cn } from "~/lib/utils/cn"
@@ -8,7 +11,6 @@ import { getBaseUrl } from "~/trpc/shared"
 import { Providers } from "./providers"
 
 import "~/styles/globals.css"
-import { env } from "~/env"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -33,9 +35,15 @@ export const metadata: Metadata = {
   creator: "rdx",
 }
 
-export default function Layout({ children }: LayoutProps) {
+export default async function Layout({ children }: LayoutProps) {
+  const locale = await getLocale()
+
+  // Providing all messages to the client
+  // side is the easiest way to get started
+  const messages = await getMessages()
+
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang={locale} suppressHydrationWarning>
       <body
         className={cn(
           "scrollbar-thin scrollbar-track-content1 scrollbar-thumb-primary h-full min-h-dvh bg-background",
@@ -47,7 +55,9 @@ export default function Layout({ children }: LayoutProps) {
           data-website-id={env.NEXT_PUBLIC_UMAMI_WEBSITE_ID}
           strategy="afterInteractive"
         />
-        <Providers>{children}</Providers>
+        <NextIntlClientProvider messages={messages}>
+          <Providers>{children}</Providers>
+        </NextIntlClientProvider>
       </body>
     </html>
   )

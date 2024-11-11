@@ -5,7 +5,7 @@ import type { Session } from "@taiyomoe/auth"
 import { GaugeIcon, LinkIcon } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-import { SignOutButton } from "~/components/auth/SignOutButton"
+import { SignOutButton } from "~/components/auth/sign-out-button"
 import { SignedIn } from "~/components/utils/signed-in/client"
 import { NavbarPopoverCommon } from "./navbar-popover-common"
 

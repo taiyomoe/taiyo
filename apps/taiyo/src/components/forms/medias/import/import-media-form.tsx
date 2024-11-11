@@ -1,79 +1,67 @@
-import { typeboxResolver } from "@hookform/resolvers/typebox"
-import { Button } from "@nextui-org/button"
-import {
-  type ImportMediaInput,
-  importMediaSchema,
-} from "@taiyomoe/image-orchestrator"
+"use client"
+
+import { zodResolver } from "@hookform/resolvers/zod"
+import { type ImportMediaInput, importMediaSchema } from "@taiyomoe/schemas"
+import { useRouter } from "next/navigation"
 import { type SubmitHandler, useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { SubmitButton } from "~/components/generics/buttons/submit-button"
 import { Form } from "~/components/generics/form/form"
 import { InputField } from "~/components/generics/form/input-field"
 import { SwitchField } from "~/components/generics/form/switch-field"
-import { ioApi } from "~/eden/client"
-import { useImportMediaStore } from "~/stores/importMedia.store"
+import { api } from "~/trpc/react"
 
 export const ImportMediaForm = () => {
+  const { mutateAsync } = api.medias.import.useMutation()
   const methods = useForm<ImportMediaInput>({
-    resolver: typeboxResolver(importMediaSchema),
-    defaultValues: { mdId: "", downloadChapters: true },
+    resolver: zodResolver(importMediaSchema),
     mode: "onTouched",
+    defaultValues: {
+      mdId: "",
+      importCovers: true,
+      importChapters: true,
+    },
   })
-  const { set, addMessage } = useImportMediaStore()
+  const router = useRouter()
 
-  const handleReset = () => {
-    methods.reset()
-    set({ currentStep: 0, messages: [], error: null })
-  }
-
-  const handleSubmit: SubmitHandler<ImportMediaInput> = async (values) => {
+  const handleSubmit: SubmitHandler<ImportMediaInput> = (values) => {
     return new Promise((resolve, reject) => {
-      void ioApi.medias.import(values, {
-        onMessage: (m) => {
-          addMessage(m)
-          set({ currentStep: m.step })
-        },
-        onError: (content) => {
-          toast.error(content)
-          reject(content)
-          set({ error: content })
-        },
-        onOpen: () => {
-          set({ currentStep: 1 })
-        },
-        onClose: () => {
-          toast.success("Obra importada com sucesso.")
+      toast.promise(mutateAsync(values), {
+        loading: "Importando...",
+        success: (data) => {
+          methods.reset()
+          router.push(`/dashboard/sessions/${data.sessionId}`)
+          resolve(data)
 
-          resolve(null)
-          set({ currentStep: 100 })
+          return "Obra criada com sucesso! Upload de covers e capítulos em andamento..."
+        },
+        error: () => {
+          reject()
+
+          return "Ocorreu um erro inesperado ao importar a obra."
         },
       })
     })
   }
 
   return (
-    <Form.Component
-      {...methods}
-      onSubmit={handleSubmit}
-      className="gap-4 md:flex-row md:items-end"
-    >
-      <InputField
-        name="mdId"
-        placeholder="93c8f7f8-58cc-40fe-9146-3f68cbfc71af"
-      />
-      <SwitchField
-        name="downloadChapters"
-        label="Baixar e upar os capítulos?"
-        onValueChange={(isSelected) => set({ downloadChapters: isSelected })}
-      />
-      <div className="flex gap-6 self-end">
-        {methods.formState.isSubmitted && (
-          <Button onPress={handleReset} variant="flat" color="danger">
-            Resetar
-          </Button>
-        )}
-        <SubmitButton>Importar</SubmitButton>
-      </div>
+    <Form.Component {...methods} onSubmit={handleSubmit}>
+      <Form.Col>
+        <Form.Row>
+          <InputField
+            name="mdId"
+            label="ID na MangaDex"
+            labelPlacement="outside"
+            placeholder="93c8f7f8-58cc-40fe-9146-3f68cbfc71af"
+            isRequired
+          />
+          <SubmitButton className="self-end">Importar</SubmitButton>
+        </Form.Row>
+        <Form.Row>
+          <SwitchField name="importCovers" label="Baixar e upar covers?" />
+          <SwitchField name="importChapters" label="Baixar e upar capítulos?" />
+        </Form.Row>
+      </Form.Col>
     </Form.Component>
   )
 }

@@ -15,7 +15,7 @@ export const authMiddleware = (perms: ForgedPermission[] = []) =>
         throw new UnauthorizedError()
       }
 
-      const session = await fetch(`${env.NEXTAUTH_URL}/api/auth/session`, {
+      const session = await fetch(`${env.AUTH_URL}/api/auth/session`, {
         headers: { Cookie: cookies },
       })
         .then(async (res) => {

@@ -1,11 +1,5 @@
 import { Button } from "@nextui-org/button"
-import {
-  BarChart2Icon,
-  ListChecksIcon,
-  PencilIcon,
-  PlusIcon,
-  Trash2Icon,
-} from "lucide-react"
+import { ListChecksIcon, PencilIcon, PlusIcon, Trash2Icon } from "lucide-react"
 import NextLink from "next/link"
 
 type Props = {
@@ -29,8 +23,6 @@ export const DashboardSidebarButtons = ({ items }: Props) =>
           <PencilIcon className="text-warning" />
         ) : type === "del" ? (
           <Trash2Icon className="text-danger" />
-        ) : type === "stats" ? (
-          <BarChart2Icon className="text-primary" />
         ) : (
           <ListChecksIcon />
         )

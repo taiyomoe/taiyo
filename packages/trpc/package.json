@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "license": "MIT",
   "exports": {
     ".": "./src/index.ts"
   },
-  "license": "MIT",
   "scripts": {
     "clean": "rm -rf .turbo node_modules",
     "typecheck": "tsc --noEmit"
@@ -14,19 +14,23 @@
   "dependencies": {
     "@taiyomoe/auth": "workspace:*",
     "@taiyomoe/cache": "workspace:*",
-    "@taiyomoe/constants": "workspace:^",
+    "@taiyomoe/constants": "workspace:*",
     "@taiyomoe/db": "workspace:*",
     "@taiyomoe/logs": "workspace:*",
     "@taiyomoe/meilisearch": "workspace:*",
+    "@taiyomoe/messages": "workspace:*",
+    "@taiyomoe/rabbit": "workspace:*",
     "@taiyomoe/schemas": "workspace:*",
     "@taiyomoe/services": "workspace:*",
-    "@taiyomoe/umami": "workspace:^",
+    "@taiyomoe/umami": "workspace:*",
     "@taiyomoe/utils": "workspace:*",
-    "@trpc/server": "11.0.0-rc.502",
+    "@trpc/server": "11.0.0-rc.630",
     "accesscontrol": "^2.2.1",
     "luxon": "^3.5.0",
+    "mangadex-full-api": "^5.12.1",
     "radash": "^12.1.0",
     "superjson": "^2.2.1",
+    "use-intl": "^3.25.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {

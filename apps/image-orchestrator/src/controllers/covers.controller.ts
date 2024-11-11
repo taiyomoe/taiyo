@@ -1,7 +1,7 @@
 import { Elysia } from "elysia"
 import { authMiddleware } from "../middlewares"
 import { uploadCoverSchema } from "../schemas"
-import { MediaCoversService, MediasService } from "../services"
+import { CoversService, MediasService } from "../services"
 import { fileTypeValidator } from "../validators/fileType.validator"
 
 const upload = new Elysia()
@@ -10,10 +10,8 @@ const upload = new Elysia()
     "/",
     async ({ body, session }) => {
       const media = await MediasService.getById(body.mediaId)
-      const [uploadedFile] = await MediaCoversService.upload(media.id, [
-        body.file,
-      ])
-      const cover = await MediaCoversService.insert(
+      const [uploadedFile] = await CoversService.upload(media.id, [body.file])
+      const cover = await CoversService.insert(
         body,
         uploadedFile!,
         session.user.id,

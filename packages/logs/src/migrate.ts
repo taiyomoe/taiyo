@@ -1,4 +1,4 @@
-import { logsClient, rawLogsClient } from "./"
+import { logsClient } from "./"
 import migration1 from "./migrations/20240722143359_init"
 import migration2 from "./migrations/20240723104911_add_chapters"
 import migration3 from "./migrations/20240724160021_add_users_auth"
@@ -7,6 +7,7 @@ import migration5 from "./migrations/20240824232511_add_users_activity"
 import migration6 from "./migrations/20240826135905_add_users_settings"
 import migration7 from "./migrations/20240907145502_add_chapters_restoration"
 import migration8 from "./migrations/20240916063706_add_medias"
+import { rawLogsClient } from "./raw-client"
 
 const migrations = [
   migration1,

@@ -2,26 +2,26 @@
   "name": "taiyo",
   "private": true,
   "engines": {
-    "node": "20.17.0"
+    "node": "22.11.0"
   },
-  "packageManager": "pnpm@9.10.0",
+  "packageManager": "pnpm@9.12.3",
   "scripts": {
     "build": "turbo build",
     "dev": "infisical run -- turbo dev --parallel",
     "clean": "git clean -xdf node_modules",
     "clean:ws": "turbo clean",
     "check:ws": "biome check apps/ packages/ tooling/",
-    "lint:ws": "pnpm dlx sherif@latest",
+    "lint:ws": "pnpm dlx sherif@latest -i file-type",
     "typecheck": "turbo typecheck",
     "postinstall": "pnpm lint:ws",
     "knip": "knip"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.9.1",
+    "@biomejs/biome": "^1.9.4",
     "@types/global-types": "workspace:*",
-    "@types/node": "^20.16.5",
-    "knip": "^5.30.2",
-    "turbo": "^2.1.2",
-    "typescript": "^5.6.2"
+    "@types/node": "^22.9.0",
+    "knip": "^5.36.7",
+    "turbo": "^2.2.3",
+    "typescript": "^5.6.3"
   }
 }

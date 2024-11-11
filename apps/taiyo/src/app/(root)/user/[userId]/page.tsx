@@ -1,5 +1,5 @@
-import { UsersService } from "@taiyomoe/services"
 import { notFound } from "next/navigation"
+import { UsersService } from "~/services/users.web-service"
 import { UserLayout } from "./_components/user-layout"
 
 type Props = {

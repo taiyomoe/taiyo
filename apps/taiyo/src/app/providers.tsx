@@ -1,10 +1,11 @@
 "use client"
 
 import { NextUIProvider } from "@nextui-org/react"
-import { SessionProvider } from "@taiyomoe/auth/client"
+import { SessionProvider } from "@taiyomoe/auth"
 import { Provider as JotaiProvider } from "jotai"
 import { ThemeProvider } from "next-themes"
 import { useRouter } from "next/navigation"
+import { NuqsAdapter } from "nuqs/adapters/next/app"
 import { Toaster } from "sonner"
 import type { LayoutProps } from "~/lib/types"
 import { TRPCReactProvider } from "~/trpc/react"
@@ -18,15 +19,17 @@ export const Providers = (props: LayoutProps) => {
         <NextUIProvider locale="pt-BR" navigate={router.push}>
           <ThemeProvider attribute="class" defaultTheme="dark">
             <JotaiProvider>
-              <Toaster
-                richColors
-                closeButton
-                position="top-right"
-                toastOptions={{
-                  className: "top-[var(--navbar-height)_!important] left-2",
-                }}
-              />
-              {props.children}
+              <NuqsAdapter>
+                <Toaster
+                  richColors
+                  closeButton
+                  position="top-right"
+                  toastOptions={{
+                    className: "top-[var(--navbar-height)_!important] left-2",
+                  }}
+                />
+                {props.children}
+              </NuqsAdapter>
             </JotaiProvider>
           </ThemeProvider>
         </NextUIProvider>

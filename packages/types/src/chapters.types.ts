@@ -135,12 +135,6 @@ export type ReaderSettings = {
   }
 }
 
-export type MediaChaptersUploadersStats = {
-  date: Date
-  chaptersCount: number
-  userName: string
-}[]
-
 const mediaChapterWithRelations =
   Prisma.validator<Prisma.MediaChapterDefaultArgs>()({
     include: {
@@ -161,4 +155,11 @@ export type ChaptersListItem = Omit<
   uploader: Pick<User, "id" | "name" | "image">
   deleter: Pick<User, "id" | "name" | "image"> | null
   scans: Pick<Scan, "id" | "name">[]
+}
+
+export enum UploadChapterState {
+  PENDING,
+  UPLOADING,
+  UPLOADED,
+  ERROR,
 }

@@ -17,7 +17,7 @@ export default async function Layout({ children }: LayoutProps) {
         title="Dashboard"
         content={<DashboardSidebarContent className="sticky top-navbar" />}
       />
-      <div className="w-full overflow-auto p-bodyPadding">{children}</div>
+      <main className="w-full overflow-auto p-bodyPadding">{children}</main>
     </div>
   )
 }

@@ -1,0 +1,127 @@
+import { cacheClient } from "@taiyomoe/cache"
+import { DEFAULT_GROUPED_CHAPTERS_LIMIT } from "@taiyomoe/constants"
+import { type Languages, db } from "@taiyomoe/db"
+import type {
+  GetLatestChaptersGroupedByUserInput,
+  GetLatestChaptersGroupedInput,
+} from "@taiyomoe/schemas"
+import {
+  BaseChaptersService,
+  BaseChaptersServiceUtils,
+} from "@taiyomoe/services"
+
+import type { RawLatestReleaseGroupedChapter } from "@taiyomoe/types"
+
+const getLatestGrouped = async (
+  { page, perPage }: GetLatestChaptersGroupedInput,
+  userId?: string,
+  preferredTitles?: Languages | null,
+) => {
+  const cacheController = cacheClient.chapters.latestGrouped
+  const cached = await cacheController.get()
+
+  if (cached) {
+    return BaseChaptersServiceUtils.formatRawLatestReleasesGrouped(
+      cached,
+      page,
+      perPage,
+      preferredTitles,
+    )
+  }
+
+  const rawChapters = await db.$queryRaw<RawLatestReleaseGroupedChapter[]>`
+    SELECT mc.*
+    FROM (
+      SELECT *
+      FROM (
+          SELECT DISTINCT ON ("mediaId") "createdAt", "mediaId"
+          FROM "MediaChapter"
+          WHERE "deletedAt" IS NULL
+          ORDER BY "mediaId", "createdAt" DESC
+      )
+      ORDER BY "createdAt" DESC
+      LIMIT 100
+    ) AS rc
+    CROSS JOIN LATERAL (
+      WITH RankedChapters AS (
+        SELECT "id", "createdAt", "number", "volume", "title", "mediaId", "uploaderId", ROW_NUMBER() OVER (PARTITION BY "mediaId" ORDER BY "createdAt" DESC) AS rank
+        FROM "MediaChapter"
+        WHERE "mediaId" = rc."mediaId"
+      )
+      SELECT *
+      FROM RankedChapters
+      WHERE ("rank" = 1 OR "createdAt" > NOW() - INTERVAL '3 days')
+      LIMIT 30
+    ) as mc
+  `
+
+  return BaseChaptersServiceUtils.getFormattedLatestReleasesGrouped(
+    rawChapters,
+    page,
+    perPage,
+    userId,
+    preferredTitles,
+  )
+}
+
+const getLatestGroupedByUser = async (
+  { userId, page, perPage }: GetLatestChaptersGroupedByUserInput,
+  requesterId?: string,
+  preferredTitles?: Languages | null,
+) => {
+  const rawChapters = await db.$queryRaw<RawLatestReleaseGroupedChapter[]>`
+    WITH RankedChapters AS (
+      SELECT
+        mc."id",
+        mc."createdAt",
+        mc."title",
+        mc."number",
+        mc."volume",
+        mc."mediaId",
+        mc."uploaderId",
+        ARRAY_AGG(cs."B") AS "scanIds",
+        COUNT(*) OVER (PARTITION BY mc."mediaId") AS "uploadedCount",
+        ROW_NUMBER() OVER (PARTITION BY mc."mediaId" ORDER BY mc."createdAt" DESC) AS "rank"
+      FROM "public"."MediaChapter" mc
+      LEFT JOIN "_MediaChapterToScan" cs ON mc."id" = cs."A"
+      LEFT JOIN "Media" m ON mc."mediaId" = m."id"
+      WHERE mc."uploaderId" = ${userId} AND mc."deletedAt" IS NULL AND m."deletedAt" IS NULL
+      GROUP BY mc."id"
+    ),
+    FilteredRankedChapters AS (
+      SELECT *
+      FROM RankedChapters
+      WHERE "rank" <= ${DEFAULT_GROUPED_CHAPTERS_LIMIT}
+    ),
+    FilteredMedia AS (
+      SELECT DISTINCT "mediaId", MAX("createdAt") AS "createdAt"
+      FROM FilteredRankedChapters
+      GROUP BY "mediaId"
+      ORDER BY "createdAt" DESC
+      LIMIT ${perPage}
+      OFFSET ${(page - 1) * perPage}
+    ),
+    TotalCount AS (
+      SELECT COUNT(DISTINCT "mediaId") AS "totalCount"
+      FROM RankedChapters
+    )
+    SELECT frc.*, tc."totalCount"
+    FROM FilteredRankedChapters frc
+    JOIN FilteredMedia fm ON frc."mediaId" = fm."mediaId", TotalCount tc
+    ORDER BY frc."createdAt" DESC
+  `
+
+  return BaseChaptersServiceUtils.getFormattedLatestReleasesGrouped(
+    rawChapters,
+    page,
+    perPage,
+    requesterId,
+    preferredTitles,
+  )
+}
+
+export const ChaptersService = {
+  ...BaseChaptersService,
+  getLatestGrouped,
+  getLatestGroupedByUser,
+}

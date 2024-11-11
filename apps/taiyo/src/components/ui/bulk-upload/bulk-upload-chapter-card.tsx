@@ -1,8 +1,6 @@
 import { Card, CardBody } from "@nextui-org/card"
-import {
-  UploadChapterState,
-  type UploadChaptersInput,
-} from "@taiyomoe/image-orchestrator"
+import type { UploadChaptersInput } from "@taiyomoe/schemas"
+import { UploadChapterState } from "@taiyomoe/types"
 import { useAtomValue } from "jotai"
 import prettyBytes from "pretty-bytes"
 import { useMemo } from "react"
