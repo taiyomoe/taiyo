@@ -6,7 +6,7 @@ import { withAuth } from "~/middlewares/auth.middleware"
 import { withValidation } from "~/middlewares/validation.middleware"
 import type { CustomContext } from "~/types"
 
-export const chaptersUploadHandler = new Hono<CustomContext>()
+export const uploadChapterHandler = new Hono<CustomContext>()
 
 const uploadSchema = z.object({
   title: z.string().optional(),
@@ -20,7 +20,7 @@ const uploadSchema = z.object({
   files: zfd.repeatable(zfd.file().array().max(10)),
 })
 
-chaptersUploadHandler.post(
+uploadChapterHandler.post(
   "/",
   withAuth([["mediaChapters", "create"]]),
   withValidation("form", uploadSchema),

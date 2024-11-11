@@ -1,5 +1,6 @@
 import { RABBIT_DEFAULT_EXCHANGES, rawRabbitClient } from "@taiyomoe/rabbit"
 import SuperJSON from "superjson"
+import { createMediaHandler } from "~/handlers/create-media.handler"
 import { importChapterHandler } from "~/handlers/import-chapter.handler"
 import { importCoverHandler } from "~/handlers/import-cover.handler"
 import { mediasInitialImportHandler } from "~/handlers/medias-initial-import.handler"
@@ -28,11 +29,19 @@ const rabbitConsumer = rawRabbitClient.createConsumer(
   },
 )
 
-const rpcRabbitConsumer = rawRabbitClient.createConsumer(
-  { queue: "medias-initial-import" },
+const mediasInitialImportConsumer = rawRabbitClient.createConsumer(
+  { queue: "medias-initial-import", requeue: false },
   ({ body }, reply) => {
     logger.debug("Received RabbitMQ RPC message (medias-initial-import)")
     return mediasInitialImportHandler(SuperJSON.parse(body), reply)
+  },
+)
+
+const coversUploadConsumer = rawRabbitClient.createConsumer(
+  { queue: "medias-create", requeue: false },
+  ({ body }, reply) => {
+    logger.debug("Received RabbitMQ RPC message (medias-create)")
+    return createMediaHandler(body, reply)
   },
 )
 
@@ -40,6 +49,12 @@ rabbitConsumer.on("error", (err) => {
   logger.error("An error occured while handling a RabbitMQ message", err)
 })
 
-rpcRabbitConsumer.on("error", (err) => {
+mediasInitialImportConsumer.on("error", (err) => {
+  console.error(err)
+  logger.error("An error occured while handling a RabbitMQ RPC message", err)
+})
+
+coversUploadConsumer.on("error", (err) => {
+  console.error(err)
   logger.error("An error occured while handling a RabbitMQ RPC message", err)
 })
