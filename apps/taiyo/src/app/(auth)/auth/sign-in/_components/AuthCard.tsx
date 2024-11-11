@@ -1,8 +1,8 @@
 import { Button } from "@nextui-org/button"
 import { Card, CardBody } from "@nextui-org/card"
 import { Input } from "@nextui-org/input"
-import { DiscordButton } from "./DiscordButton"
 import { GoogleButton } from "./GoogleButton"
+import { DiscordAuthButton } from "./discord-auth-button"
 
 export const AuthCard = () => {
   return (
@@ -31,7 +31,7 @@ export const AuthCard = () => {
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <DiscordButton />
+            <DiscordAuthButton />
             <GoogleButton />
           </div>
         </div>
