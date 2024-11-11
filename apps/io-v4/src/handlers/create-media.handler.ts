@@ -51,7 +51,7 @@ createMediaHandler.post(
       throw new HttpError(409, "medias.alreadyExists")
     }
 
-    logger.info(`${session.id} started creating a media.`)
+    logger.info(`${session.id} started creating a media`)
 
     /**
      * Create media & upload cover.
@@ -62,7 +62,7 @@ createMediaHandler.post(
       creatorId: session.id,
     })
 
-    logger.info(`${session.id} created a media (${result.id}).`)
+    logger.info(`${session.id} created a media (${result.id})`)
 
     return json(result)
   },

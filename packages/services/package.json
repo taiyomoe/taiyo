@@ -5,13 +5,15 @@
   "type": "module",
   "license": "MIT",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./env": "./src/env.ts"
   },
   "scripts": {
     "clean": "rm -rf .turbo node_modules",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@t3-oss/env-core": "^0.11.1",
     "@taiyomoe/cache": "workspace:*",
     "@taiyomoe/constants": "workspace:*",
     "@taiyomoe/db": "workspace:*",

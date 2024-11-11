@@ -2,6 +2,7 @@ import { randomUUID } from "crypto"
 import { PutObjectCommand, client } from "@taiyomoe/s3"
 import { fileTypeFromBuffer } from "file-type"
 import sharp from "sharp"
+import { env } from "./env"
 
 type Logger = { debug: (content: string) => void }
 
@@ -51,24 +52,23 @@ const download = (logger: Logger) => async (input: string) => {
   return Buffer.from(await response.arrayBuffer())
 }
 
-const upload =
-  (logger: Logger) => async (bucket: string, baseKey: string, file: Buffer) => {
-    const { id, mimeType, extension } = await parse(file)
-    const command = new PutObjectCommand({
-      Bucket: bucket,
-      Key: `${baseKey}/${id}.${extension}`,
-      ContentType: mimeType,
-      Body: await compressImage(file, extension),
-    })
+const upload = (logger: Logger) => async (baseKey: string, file: Buffer) => {
+  const { id, mimeType, extension } = await parse(file)
+  const command = new PutObjectCommand({
+    Bucket: env.S3_BUCKET_NAME,
+    Key: `${baseKey}/${id}.${extension}`,
+    ContentType: mimeType,
+    Body: await compressImage(file, extension),
+  })
 
-    logger.debug(`Uploading file to S3: ${baseKey}/${id}.${extension}`)
+  logger.debug(`Uploading file to S3: ${baseKey}/${id}.${extension}`)
 
-    await client.send(command)
+  await client.send(command)
 
-    logger.debug(`File uploaded to S3: ${baseKey}/${id}.${extension}`)
+  logger.debug(`File uploaded to S3: ${baseKey}/${id}.${extension}`)
 
-    return { id, extension }
-  }
+  return { id, extension }
+}
 
 export const BaseFilesService = (logger: Logger) => ({
   parse,

@@ -1,9 +1,8 @@
 import { createEnv } from "@t3-oss/env-core"
-import { env as rabbitEnv } from "@taiyomoe/rabbit/env"
 import { env as s3Env } from "@taiyomoe/s3/env"
 
 export const env = createEnv({
-  extends: [rabbitEnv, s3Env],
+  extends: [s3Env],
 
   /**
    * Specify your shared environment variables schema here.

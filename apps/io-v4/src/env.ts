@@ -1,9 +1,10 @@
 import { createEnv } from "@t3-oss/env-core"
 import { env as authEnv } from "@taiyomoe/auth/env"
 import { env as meilisearchEnv } from "@taiyomoe/meilisearch/env"
+import { env as servicesEnv } from "@taiyomoe/services/env"
 
 export const env = createEnv({
-  extends: [authEnv, meilisearchEnv],
+  extends: [authEnv, meilisearchEnv, servicesEnv],
 
   /**
    * Specify your shared environment variables schema here.

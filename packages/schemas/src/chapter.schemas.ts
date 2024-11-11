@@ -9,12 +9,25 @@ import {
 } from "@taiyomoe/constants"
 import { z } from "zod"
 
+import { zfd } from "zod-form-data"
 import {
   pageSchema,
   perPageSchema,
   sortableFieldsSchema,
 } from "./common.schemas"
 import { ContentRatingSchema, FlagSchema, LanguagesSchema } from "./prisma"
+
+export const uploadChapterSchema = z.object({
+  title: z.string().optional(),
+  number: z.coerce.number().int().positive().min(0),
+  volume: z.coerce.number().int().positive().min(0).optional(),
+  contentRating: ContentRatingSchema,
+  flag: FlagSchema,
+  language: LanguagesSchema,
+  mediaId: z.string().uuid(),
+  scanIds: zfd.repeatableOfType(z.string().uuid()),
+  files: zfd.repeatable(zfd.file().array().min(1)),
+})
 
 export const updateChapterSchema = z.object({
   id: z.string().uuid(),
@@ -83,6 +96,7 @@ export const getChaptersListSchema = z.object({
   ),
 })
 
+export type UploadChapterInput = z.infer<typeof uploadChapterSchema>
 export type UpdateChapterInput = typeof updateChapterSchema._type
 export type BulkUpdateChaptersVolumesInput =
   typeof bulkUpdateChaptersVolumesSchema._type
