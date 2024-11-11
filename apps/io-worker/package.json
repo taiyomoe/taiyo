@@ -5,7 +5,10 @@
   "type": "module",
   "license": "MIT",
   "scripts": {
-    "dev": "tsx watch src/index.ts"
+    "dev": "tsx watch ./src/index.ts",
+    "start": "tsx ./src/main.ts",
+    "clean": "rm -rf .turbo node_modules",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@taiyomoe/db": "workspace:*",
