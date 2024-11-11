@@ -76,24 +76,6 @@ const config = {
     "@taiyomoe/utils",
   ],
 
-  /** Needed to make winston-loki work */
-  webpack: (config, { isServer }) => {
-    // Mark native modules as external for the server build
-    if (isServer) {
-      config.externals = config.externals || {}
-      config.externals["@napi-rs/snappy-linux-x64-gnu"] =
-        "commonjs @napi-rs/snappy-linux-x64-gnu"
-    }
-
-    // Ignore .node files during the build
-    config.module.rules.push({
-      test: /\.node$/,
-      use: "ignore-loader",
-    })
-
-    return config
-  },
-
   /** We already do linting and typechecking as separate tasks in CI */
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
