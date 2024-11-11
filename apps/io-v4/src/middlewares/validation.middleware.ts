@@ -10,6 +10,7 @@ export const withValidation = <TSchema extends ZodSchema>(
 ) =>
   zValidator(where, schema, (r, c: Context<HelpersMiddleware>) => {
     if (!r.success) {
+      c.status(400)
       return formatError("validation")(c)
     }
   })

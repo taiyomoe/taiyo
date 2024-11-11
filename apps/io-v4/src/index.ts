@@ -8,11 +8,13 @@ import { formatError } from "~/utils/format-error"
 import { HttpError } from "~/utils/http-error"
 
 const app = new Hono()
-  .use(cors())
+  .use("*", cors({ origin: "http://localhost:3000", credentials: true }))
   .use(withHelpers)
-  .route("/medias", mediasController)
-  .route("/chapters", chaptersController)
+  .route("/v4/medias", mediasController)
+  .route("/v4/chapters", chaptersController)
   .onError((e, c) => {
+    console.log("instance of error", e)
+
     if (e instanceof HttpError) {
       c.status(e.status)
       return formatError(e.i18nKey)(c)

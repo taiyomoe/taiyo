@@ -12,6 +12,7 @@ export const SwitchField = ({
   labelPlacement,
   className,
   onValueChange,
+  isRequired,
   ...rest
 }: Props) => {
   const { register, getValues, setValue } = useFormContext()
@@ -27,7 +28,12 @@ export const SwitchField = ({
   )
 
   return (
-    <Label label={label} labelPlacement={labelPlacement} className={className}>
+    <Label
+      label={label}
+      labelPlacement={labelPlacement}
+      className={className}
+      isRequired={isRequired}
+    >
       <Switch
         onValueChange={handleChange}
         isSelected={isSelected}

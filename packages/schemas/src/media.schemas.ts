@@ -30,7 +30,7 @@ export const createMediaSchema = z.object({
   startDate: z.coerce.date().optional(),
   endDate: z.coerce.date().optional(),
   synopsis: z.string().min(1),
-  oneShot: z.boolean().optional(),
+  oneShot: z.coerce.boolean().optional(),
   contentRating: ContentRatingSchema,
   type: MediaTypeSchema,
   status: MediaStatusSchema,
