@@ -1,5 +1,4 @@
-import { createLogger, format, transports } from "winston"
-import LokiTransport from "winston-loki"
+import { pino } from "pino"
 import { env } from "./env"
 import { ChaptersService } from "./services/chapters.logs-service"
 import { CoversService } from "./services/covers.logs-service"
@@ -13,20 +12,37 @@ import { UsersAuthService } from "./services/users-auth.logs-service"
 import { UsersSettingsService } from "./services/users-settings.logs-service"
 
 export const initLogger = (app: "taiyo" | "image-orchestrator" | "io-worker") =>
-  createLogger({
+  pino({
     level: "debug",
-    transports: [
-      new transports.Console({
-        format: format.prettyPrint({ colorize: true }),
-      }),
-      new LokiTransport({
-        host: env.GRAFANA_LOKI_URL,
-        labels: { app },
-        batching: true,
-        json: true,
-        basicAuth: `${env.GRAFANA_USERNAME}:${env.GRAFANA_PASSWORD}`,
-      }),
-    ],
+    base: {
+      pid: undefined,
+      hostname: undefined,
+    },
+    transport: {
+      targets: [
+        {
+          target: "pino-pretty",
+          level: "debug",
+        },
+        {
+          target: "pino-loki",
+          level: "debug",
+          options: {
+            batching: true,
+            interval: 5,
+            labels: {
+              app,
+              environment: process.env.NODE_ENV ?? "development",
+            },
+            host: env.GRAFANA_LOKI_URL,
+            basicAuth: {
+              username: env.GRAFANA_USERNAME,
+              password: env.GRAFANA_PASSWORD,
+            },
+          },
+        },
+      ],
+    },
   })
 
 export const logsClient = {

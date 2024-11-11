@@ -30,6 +30,7 @@
   },
   "globalEnv": [
     "DATABASE_URL",
+    "AUTH_URL",
     "AUTH_SECRET",
     "AUTH_DISCORD_ID",
     "AUTH_DISCORD_SECRET",
