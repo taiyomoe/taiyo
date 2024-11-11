@@ -13,8 +13,6 @@ const app = new Hono()
   .route("/v4/medias", mediasController)
   .route("/v4/chapters", chaptersController)
   .onError((e, c) => {
-    console.log("instance of error", e)
-
     if (e instanceof HttpError) {
       c.status(e.status)
       return formatError(e.i18nKey)(c)

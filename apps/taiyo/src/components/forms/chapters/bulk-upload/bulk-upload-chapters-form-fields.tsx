@@ -1,3 +1,6 @@
+import { useSetAtom } from "jotai"
+import { useFormContext } from "react-hook-form"
+import { bulkUploadChaptersStateAtoms } from "~/atoms/bulkUploadChapters.atoms"
 import { ResetButton } from "~/components/generics/buttons/reset-button"
 import { SubmitButton } from "~/components/generics/buttons/submit-button"
 import { Form } from "~/components/generics/form/form"
@@ -7,6 +10,16 @@ import { BulkUploadChaptersImagesCategory } from "./categories/bulk-upload-chapt
 import { BulkUploadChaptersLegendCategory } from "./categories/bulk-upload-chapters-legend-category"
 
 export const BulkUploadChaptersFormFields = () => {
+  const setChaptersState = useSetAtom(bulkUploadChaptersStateAtoms)
+  const { reset } = useFormContext()
+
+  const handleReset = () => {
+    setChaptersState({})
+
+    /** Shouldn't have to do this manually, but seems like reset() is not working */
+    reset({ chapters: [], mediaId: "" })
+  }
+
   return (
     <Form.Layout>
       <Form.Category>
@@ -16,7 +29,7 @@ export const BulkUploadChaptersFormFields = () => {
       <BulkUploadChaptersImagesCategory />
       <BulkUploadChaptersLegendCategory />
       <Form.Actions>
-        <ResetButton>Resetar</ResetButton>
+        <ResetButton onPress={handleReset}>Resetar</ResetButton>
         <SubmitButton>Salvar</SubmitButton>
       </Form.Actions>
     </Form.Layout>

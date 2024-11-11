@@ -64,8 +64,6 @@ const createClient =
       return body as TOutput
     }
 
-    console.log("Error", body)
-
     if (body && typeof body === "object" && "code" in body) {
       const { code, message } = body as { code: string; message: string }
 
