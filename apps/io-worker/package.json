@@ -15,7 +15,6 @@
     "@taiyomoe/rabbit": "workspace:*",
     "@taiyomoe/s3": "workspace:*",
     "@taiyomoe/services": "workspace:*",
-    "file-type": "19.6.0",
     "mangadex-full-api": "^5.12.1",
     "radash": "^12.1.0",
     "superjson": "^2.2.1",

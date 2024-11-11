@@ -17,9 +17,12 @@
     "@taiyomoe/db": "workspace:*",
     "@taiyomoe/logs": "workspace:*",
     "@taiyomoe/meilisearch": "workspace:*",
+    "@taiyomoe/s3": "workspace:*",
     "@taiyomoe/types": "workspace:*",
     "@taiyomoe/utils": "workspace:*",
-    "radash": "^12.1.0"
+    "file-type": "^19.6.0",
+    "radash": "^12.1.0",
+    "sharp": "^0.33.5"
   },
   "devDependencies": {
     "@taiyomoe/tsconfig": "workspace:*"

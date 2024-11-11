@@ -1,35 +1,15 @@
-import { randomUUID } from "crypto"
 import { PutObjectCommand, client } from "@taiyomoe/s3"
-import { fileTypeFromBlob } from "file-type"
+import { BaseFilesService } from "@taiyomoe/services"
 import { parallel, tryit } from "radash"
 import { env } from "../env"
 import { PARALLEL_UPLOADS } from "../utils/constants"
 import { ImagesService } from "./"
 
-/**
- * Every file is converted to a JPEG file, except for GIF files.
- *
- * This function parses file type and returns the DESIRED file type and extension to use.
- *
- * @param file input file.
- * @returns parsed file type and extension.
- */
-const parse = async (file: File | Blob) => {
-  const parsed = await fileTypeFromBlob(file)
-
-  if (!parsed) {
-    throw new Error("Failed to parse the file type.")
-  }
-
-  return {
-    id: randomUUID(),
-    mimeType: parsed.mime === "image/gif" ? "image/gif" : "image/jpeg",
-    extension: parsed.ext === "gif" ? "gif" : "jpg",
-  }
-}
-
 const upload = (baseKey: string) => async (file: File | Blob) => {
-  const { id, mimeType, extension } = await parse(file)
+  const buffer = await file.arrayBuffer()
+  const { id, mimeType, extension } = await BaseFilesService({
+    debug: () => null,
+  }).parse(Buffer.from(buffer))
   const command = new PutObjectCommand({
     Bucket: env.S3_BUCKET_NAME,
     Key: `${baseKey}/${id}.${extension}`,
@@ -59,5 +39,6 @@ const uploadFiles = async (key: string, files: File[] | Blob[]) => {
 }
 
 export const FilesService = {
+  ...BaseFilesService,
   uploadFiles,
 }
