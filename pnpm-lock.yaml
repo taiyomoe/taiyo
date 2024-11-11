@@ -50,9 +50,6 @@ importers:
       '@taiyomoe/cache':
         specifier: workspace:*
         version: link:../../packages/cache
-      '@taiyomoe/constants':
-        specifier: workspace:*
-        version: link:../../packages/constants
       '@taiyomoe/db':
         specifier: workspace:*
         version: link:../../packages/db
