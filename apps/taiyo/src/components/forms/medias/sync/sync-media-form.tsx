@@ -35,9 +35,8 @@ export const SyncMediaForm = () => {
 
           return "Informações sincronizadas com sucesso! Upload de covers e capítulos em andamento..."
         },
-        error: (err) => {
+        error: () => {
           reject()
-          console.log(err)
 
           return "Ocorreu um erro inesperado ao sincronizar a obra."
         },

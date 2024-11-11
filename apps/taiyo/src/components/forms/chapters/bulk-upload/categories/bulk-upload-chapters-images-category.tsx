@@ -1,6 +1,6 @@
-import type { UploadChaptersInput } from "@taiyomoe/image-orchestrator"
+import type { UploadChaptersInput } from "@taiyomoe/schemas"
 import { useCallback, useState } from "react"
-import type { FileTriggerProps } from "react-aria-components"
+import type { DropzoneProps } from "react-dropzone"
 import { useFieldArray } from "react-hook-form"
 import { Form } from "~/components/generics/form/form"
 import { BulkUploadChapterCard } from "~/components/ui/bulk-upload/bulk-upload-chapter-card"
@@ -15,10 +15,8 @@ export const BulkUploadChaptersImagesCategory = () => {
   })
   const [invalidFiles, setInvalidFiles] = useState<InvalidFile[]>([])
 
-  const handleSelect: NonNullable<FileTriggerProps["onSelect"]> = useCallback(
+  const handleDrop: NonNullable<DropzoneProps["onDrop"]> = useCallback(
     (fileList) => {
-      if (!fileList) return
-
       const { invalidFiles, chapters } =
         FileUtils.computeRelativePaths(fileList)
 
@@ -41,7 +39,7 @@ export const BulkUploadChaptersImagesCategory = () => {
   return (
     <Form.Category title="Capítulos">
       <FolderSelection
-        onSelect={handleSelect}
+        onDrop={handleDrop}
         className="data-[selected=true]:hidden"
         isSelected={fields.length !== 0}
       />

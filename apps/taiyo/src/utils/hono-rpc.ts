@@ -1,5 +1,5 @@
-import type { Media } from "@taiyomoe/db"
-import type { CreateMediaInput } from "@taiyomoe/schemas"
+import type { Media, MediaChapter } from "@taiyomoe/db"
+import type { CreateMediaInput, UploadChapterInput } from "@taiyomoe/schemas"
 import { env } from "~/env"
 
 class ApiError extends Error {
@@ -64,8 +64,6 @@ const createClient =
       return body as TOutput
     }
 
-    console.log("Error", body)
-
     if (body && typeof body === "object" && "code" in body) {
       const { code, message } = body as { code: string; message: string }
 
@@ -78,5 +76,8 @@ const createClient =
 export const ioApi = {
   medias: {
     create: createClient<CreateMediaInput, Media>("medias"),
+  },
+  chapters: {
+    upload: createClient<UploadChapterInput, MediaChapter>("chapters"),
   },
 }

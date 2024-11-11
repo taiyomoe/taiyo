@@ -156,3 +156,10 @@ export type ChaptersListItem = Omit<
   deleter: Pick<User, "id" | "name" | "image"> | null
   scans: Pick<Scan, "id" | "name">[]
 }
+
+export enum UploadChapterState {
+  PENDING,
+  UPLOADING,
+  UPLOADED,
+  ERROR,
+}

@@ -1,5 +1,6 @@
 export * from "./chapters.base-service"
 export * from "./covers.base-service"
+export * from "./files.base-service"
 export * from "./medias.base-service"
 export * from "./titles.base-service"
 export * from "./trackers.base-service"

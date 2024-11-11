@@ -1,35 +1,51 @@
-import { ContentRating, Flag, Languages } from "@taiyomoe/db"
+import { randomUUID } from "crypto"
+import { uploadChapterSchema } from "@taiyomoe/schemas"
+import { BaseChaptersService } from "@taiyomoe/services"
 import { Hono } from "hono"
-import { z } from "zod"
-import { zfd } from "zod-form-data"
+import { omit, parallel } from "radash"
 import { withAuth } from "~/middlewares/auth.middleware"
 import { withValidation } from "~/middlewares/validation.middleware"
+import { FilesService } from "~/services/files.io-service"
 import type { CustomContext } from "~/types"
 
 export const uploadChapterHandler = new Hono<CustomContext>()
 
-const uploadSchema = z.object({
-  title: z.string().optional(),
-  number: z.coerce.number().int().positive(),
-  volume: z.coerce.number().int().positive().optional(),
-  contentRating: z.nativeEnum(ContentRating),
-  flag: z.nativeEnum(Flag),
-  language: z.nativeEnum(Languages),
-  mediaId: z.string().uuid(),
-  scanIds: zfd.repeatableOfType(z.string().uuid()),
-  files: zfd.repeatable(zfd.file().array().max(10)),
-})
-
 uploadChapterHandler.post(
   "/",
   withAuth([["mediaChapters", "create"]]),
-  withValidation("form", uploadSchema),
-  async ({ json, req, var: { logger, session, medias } }) => {
+  withValidation("form", uploadChapterSchema),
+  async ({ json, req, var: { logger, session, db, medias, scans } }) => {
     const body = req.valid("form")
     const media = await medias.getById(body.mediaId)
+    const requestedScans = await scans.getAllById(body.scanIds)
 
-    logger.info(`${session.name} (${session.id}) started uploading a chapter.`)
+    logger.info(`${session.id} started uploading a chapter`)
 
-    return json(media)
+    const chapterId = randomUUID()
+    const pageBuffers = await parallel(10, body.files, (f) => f.arrayBuffer())
+    const pageFiles = await parallel(
+      10,
+      pageBuffers,
+      async (b) =>
+        await FilesService.upload(
+          `medias/${media.id}/chapters/${chapterId}`,
+          Buffer.from(b),
+        ),
+    )
+    const chapter = await db.mediaChapter.create({
+      data: {
+        ...omit(body, ["files", "scanIds"]),
+        id: chapterId,
+        pages: pageFiles,
+        scans: { connect: requestedScans.map((s) => ({ id: s.id })) },
+        uploaderId: session.id,
+      },
+    })
+
+    await BaseChaptersService.postUpload(db, "created", [chapter])
+
+    logger.info(`${session.id} uploaded a chapter`)
+
+    return json(chapter)
   },
 )

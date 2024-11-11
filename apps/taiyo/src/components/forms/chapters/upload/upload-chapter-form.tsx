@@ -1,28 +1,25 @@
 "use client"
 
-import { typeboxResolver } from "@hookform/resolvers/typebox"
-import {
-  type UploadChapterInput,
-  uploadChapterSchema,
-} from "@taiyomoe/image-orchestrator"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { type UploadChapterInput, uploadChapterSchema } from "@taiyomoe/schemas"
 import { type SubmitHandler, useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { Form } from "~/components/generics/form/form"
-import { handleErrors, ioApi } from "~/eden/client"
+import { handleErrors, ioApi } from "~/utils/hono-rpc"
 import { UploadChapterFormFields } from "./upload-chapter-form-fields"
 
 export const UploadChapterForm = () => {
   const methods = useForm<UploadChapterInput>({
-    resolver: typeboxResolver(uploadChapterSchema),
+    resolver: zodResolver(uploadChapterSchema),
     mode: "onTouched",
     defaultValues: {
-      mediaId: "",
-      title: "",
+      title: undefined,
       number: 0,
       volume: undefined,
       contentRating: "NORMAL",
       flag: "OK",
       language: "pt_br",
+      scanIds: [],
       files: [],
     },
   })

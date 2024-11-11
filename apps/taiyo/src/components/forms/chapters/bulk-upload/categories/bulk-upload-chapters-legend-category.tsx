@@ -1,5 +1,5 @@
 import { Spinner } from "@nextui-org/spinner"
-import { CheckIcon, HourglassIcon } from "lucide-react"
+import { CheckIcon, HourglassIcon, XIcon } from "lucide-react"
 import { Form } from "~/components/generics/form/form"
 
 export const BulkUploadChaptersLegendCategory = () => (
@@ -18,6 +18,11 @@ export const BulkUploadChaptersLegendCategory = () => (
       <div className="flex items-center gap-4">
         <CheckIcon className="text-success" size={20} />
         <p>Upload efetuado</p>
+      </div>
+
+      <div className="flex items-center gap-4">
+        <XIcon className="text-danger" size={20} />
+        <p>Erro</p>
       </div>
     </div>
   </Form.Category>
