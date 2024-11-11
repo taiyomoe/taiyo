@@ -11,7 +11,6 @@ import { ScansService } from "~/services/scans.io-service"
 import { TrackersService } from "~/services/trackers.io-service"
 import type { HelpersMiddleware } from "~/types"
 import { messages } from "~/utils/get-messages"
-import { services } from "~/utils/get-services"
 import { logger } from "~/utils/logger"
 
 export const withHelpers = createMiddleware<HelpersMiddleware>(
@@ -28,7 +27,6 @@ export const withHelpers = createMiddleware<HelpersMiddleware>(
     c.set("cache", cacheClient)
     c.set("logs", logsClient)
     c.set("logger", logger)
-    c.set("services", services)
     c.set("rabbit", rabbitPublisher)
     c.set("medias", MediasService)
     c.set("scans", ScansService)

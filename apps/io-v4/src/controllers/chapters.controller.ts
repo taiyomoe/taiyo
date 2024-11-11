@@ -1,4 +1,4 @@
 import { Hono } from "hono"
-import { chaptersUploadHandler } from "~/handlers/chapters-upload.handler"
+import { uploadChapterHandler } from "~/handlers/upload-chapter.handler"
 
-export const chaptersController = new Hono().route("/", chaptersUploadHandler)
+export const chaptersController = new Hono().route("/", uploadChapterHandler)

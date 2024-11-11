@@ -50,9 +50,6 @@ importers:
       '@taiyomoe/cache':
         specifier: workspace:*
         version: link:../../packages/cache
-      '@taiyomoe/constants':
-        specifier: workspace:*
-        version: link:../../packages/constants
       '@taiyomoe/db':
         specifier: workspace:*
         version: link:../../packages/db
@@ -664,6 +661,12 @@ importers:
       zod:
         specifier: ^3.23.8
         version: 3.23.8
+      zod-form-data:
+        specifier: ^2.0.2
+        version: 2.0.2(zod@3.23.8)
+      zod_utilz:
+        specifier: ^0.8.3
+        version: 0.8.3(typescript@5.6.3)(zod@3.23.8)
     devDependencies:
       '@taiyomoe/tsconfig':
         specifier: workspace:*
@@ -775,6 +778,9 @@ importers:
       '@prisma/client':
         specifier: ^5.22.0
         version: 5.22.0(prisma@5.22.0)
+      '@taiyomoe/schemas':
+        specifier: workspace:*
+        version: link:../schemas
     devDependencies:
       '@taiyomoe/tsconfig':
         specifier: workspace:*
@@ -5586,6 +5592,12 @@ packages:
 
   zod@3.23.8:
     resolution: {integrity: sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g==}
+
+  zod_utilz@0.8.3:
+    resolution: {integrity: sha512-8ga6g6J+QfWpGOTyhciu8uMioBVKPe7QTx9hSk+JW/NdralSLPR1LzMzxq4HuzOVdTYG/6T3cWflxoHiUuSyDA==}
+    peerDependencies:
+      typescript: ^5.0.0
+      zod: ^3.22.4
 
   zustand@5.0.1:
     resolution: {integrity: sha512-pRET7Lao2z+n5R/HduXMio35TncTlSW68WsYBq2Lg1ASspsNGjpwLAsij3RpouyV6+kHMwwwzP0bZPD70/Jx/w==}
@@ -12052,6 +12064,11 @@ snapshots:
       zod: 3.23.8
 
   zod@3.23.8: {}
+
+  zod_utilz@0.8.3(typescript@5.6.3)(zod@3.23.8):
+    dependencies:
+      typescript: 5.6.3
+      zod: 3.23.8
 
   zustand@5.0.1(@types/react@18.3.12)(immer@10.1.1)(react@18.3.1)(use-sync-external-store@1.2.2(react@18.3.1)):
     optionalDependencies:

@@ -5,7 +5,6 @@ import { Elysia } from "elysia"
 import { bannersController } from "./controllers/banners.controller"
 import { chaptersController } from "./controllers/chapters.controller"
 import { coversController } from "./controllers/covers.controller"
-import { mediasController } from "./controllers/medias.controller"
 import * as customErrors from "./utils/errors"
 
 const buildResponse = (obj: Record<string, unknown>, status = 200) =>
@@ -48,7 +47,6 @@ export const app = new Elysia({ prefix: "/v3" })
         )
     }
   })
-  .use(mediasController)
   .use(chaptersController)
   .use(bannersController)
   .use(coversController)
