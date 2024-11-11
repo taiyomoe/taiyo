@@ -1,13 +1,12 @@
 import { PrismaAdapter } from "@auth/prisma-adapter"
 import { type Languages, type User, db } from "@taiyomoe/db"
-import { logsClient } from "@taiyomoe/logs"
-import { UsersIndexService } from "@taiyomoe/meilisearch/services"
 import type { Permission } from "@taiyomoe/types"
 import { PermissionUtils } from "@taiyomoe/utils"
 import type { DefaultSession, NextAuthConfig } from "next-auth"
 import Discord from "next-auth/providers/discord"
-import { env } from "./env"
-import { getIp } from "./utils"
+import { createUserHandler } from "./handlers/create-user.handler"
+import { signInHandler } from "./handlers/sign-in.hander"
+import { signOutHandler } from "./handlers/sign-out.handler"
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -34,12 +33,7 @@ export const authConfig = {
   debug: process.env.NODE_ENV === "development",
   trustHost: true,
   adapter: PrismaAdapter(db),
-  providers: [
-    Discord({
-      clientId: env.AUTH_DISCORD_ID,
-      clientSecret: env.AUTH_DISCORD_SECRET,
-    }),
-  ],
+  providers: [Discord],
   pages: { signIn: "/auth/sign-in" },
   callbacks: {
     session: async ({ session, user: adapterUser }) => {
@@ -69,40 +63,8 @@ export const authConfig = {
     },
   },
   events: {
-    createUser: async ({ user }) => {
-      if (!user.id) return
-
-      await db.userProfile.create({ data: { userId: user.id } })
-      await db.userSetting.create({ data: { userId: user.id } })
-      await db.userLibrary.create({ data: { userId: user.id } })
-      await logsClient.users.auth.insert({
-        type: "registered",
-        ip: getIp(),
-        userId: user.id,
-      })
-      await UsersIndexService.sync(db, [user.id])
-    },
-    signIn: async ({ user }) => {
-      if (!user.id) return
-
-      await logsClient.users.auth.insert({
-        type: "signedIn",
-        ip: getIp(),
-        userId: user.id,
-      })
-    },
-    signOut: async (message) => {
-      if ("token" in message) {
-        throw new Error("Unreachable with JWT strategy.")
-      }
-
-      if (!message.session?.userId) return
-
-      await logsClient.users.auth.insert({
-        type: "signedOut",
-        ip: getIp(),
-        userId: message.session.userId,
-      })
-    },
+    createUser: createUserHandler,
+    signIn: signInHandler,
+    signOut: signOutHandler,
   },
 } satisfies NextAuthConfig
