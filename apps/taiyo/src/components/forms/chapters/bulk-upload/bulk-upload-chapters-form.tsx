@@ -27,8 +27,8 @@ export const BulkUploadChaptersForm = () => {
     },
   })
 
-  const handleSubmit: SubmitHandler<UploadChaptersInput> = (values) =>
-    parallel(values.concurrent, values.chapters, async (chapter) => {
+  const handleSubmit: SubmitHandler<UploadChaptersInput> = async (values) => {
+    await parallel(values.concurrent, values.chapters, async (chapter) => {
       const index = values.chapters.findIndex(
         (c) => c.number === chapter.number,
       )
@@ -61,6 +61,9 @@ export const BulkUploadChaptersForm = () => {
         })
       })
     })
+
+    methods.reset(methods.getValues())
+  }
 
   return (
     <Form.Component {...methods} onSubmit={handleSubmit}>

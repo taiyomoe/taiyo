@@ -1,3 +1,4 @@
+import { ResetButton } from "~/components/generics/buttons/reset-button"
 import { SubmitButton } from "~/components/generics/buttons/submit-button"
 import { Form } from "~/components/generics/form/form"
 import { InputField } from "~/components/generics/form/input-field"
@@ -15,6 +16,7 @@ export const BulkUploadChaptersFormFields = () => {
       <BulkUploadChaptersImagesCategory />
       <BulkUploadChaptersLegendCategory />
       <Form.Actions>
+        <ResetButton>Resetar</ResetButton>
         <SubmitButton>Salvar</SubmitButton>
       </Form.Actions>
     </Form.Layout>
