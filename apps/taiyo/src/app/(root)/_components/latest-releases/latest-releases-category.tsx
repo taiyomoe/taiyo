@@ -1,6 +1,4 @@
-import { Button } from "@nextui-org/button"
 import { auth } from "@taiyomoe/auth"
-import { ArrowRightIcon } from "lucide-react"
 import { ChaptersService } from "~/services/chapters.web-service"
 // import { UnderlineButton } from "~/components/generics/buttons/underline-button"
 import { LatestReleasesLayout } from "./latest-releases-layout"
@@ -22,9 +20,9 @@ export const LatestReleasesCategory = async () => {
           </UnderlineButton> */}
           {/* <UnderlineButton className="block md:hidden">A</UnderlineButton> */}
           <LatestReleasesLayoutButton />
-          <Button isIconOnly variant="light">
+          {/* <Button isIconOnly variant="light">
             <ArrowRightIcon />
-          </Button>
+          </Button> */}
         </div>
       </div>
       <LatestReleasesLayout releases={releases} />
