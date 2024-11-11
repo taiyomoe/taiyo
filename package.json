@@ -20,7 +20,7 @@
     "@biomejs/biome": "^1.9.4",
     "@types/global-types": "workspace:*",
     "@types/node": "^22.9.0",
-    "knip": "^5.36.5",
+    "knip": "^5.36.6",
     "turbo": "^2.2.3",
     "typescript": "^5.6.3"
   }
