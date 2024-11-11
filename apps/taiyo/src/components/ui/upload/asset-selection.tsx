@@ -42,6 +42,7 @@ export const AssetSelection = ({ type, isCompact }: Props) => {
         sizes="1"
         className={illustration()}
         alt="asset selection"
+        priority
       />
       <div className={contentWrapper()}>
         {type === "image" ? (
