@@ -2,9 +2,6 @@ import type { Media, MediaChapter, MediaCover } from "@taiyomoe/db"
 import { HttpError } from "@taiyomoe/image-orchestrator"
 import { env } from "~/env"
 
-export const handleErrors = (defaultMessage: string) => (err: unknown) =>
-  err instanceof HttpError ? err.message : defaultMessage
-
 const transformValue = (value: unknown): File | string => {
   if (value instanceof File) {
     return value
