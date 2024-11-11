@@ -54,14 +54,12 @@ export const MediaFormCoverCategory = () => {
             items={Languages}
             isRequired
           />
-
           <SelectField
             name="mainCoverContentRating"
             label="Classificação"
             items={ContentRating}
             isRequired
           />
-
           <InputField
             name="volume"
             label="Volume"
