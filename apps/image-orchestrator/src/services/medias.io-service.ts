@@ -1,9 +1,5 @@
-import { type Prisma, db } from "@taiyomoe/db"
-
+import { db } from "@taiyomoe/db"
 import { BaseMediasService } from "@taiyomoe/services"
-import { omit } from "radash"
-import { TrackersService } from "."
-import type { CreateMediaInput } from "../schemas"
 import { MediaNotFoundError } from "../utils/errors"
 
 const getById = async (id: string) => {
@@ -16,34 +12,7 @@ const getById = async (id: string) => {
   return result
 }
 
-const create = async (
-  client: Prisma.TransactionClient,
-  input: CreateMediaInput,
-  creatorId: string,
-) => {
-  const trackers = TrackersService.getFormatted(input, creatorId)
-  const result = await client.media.create({
-    data: {
-      ...omit(input, ["mainTitle", "mdId", "alId", "malId", "cover"]),
-      titles: {
-        create: {
-          title: input.mainTitle,
-          isMainTitle: true,
-          language: "en",
-          priority: 1,
-          creatorId,
-        },
-      },
-      trackers: { createMany: { data: trackers } },
-      creatorId,
-    },
-  })
-
-  return result
-}
-
 export const MediasService = {
   ...BaseMediasService,
   getById,
-  create,
 }
