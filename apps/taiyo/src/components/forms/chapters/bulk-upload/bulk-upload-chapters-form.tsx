@@ -46,7 +46,7 @@ export const BulkUploadChaptersForm = () => {
         toast.promise(ioApi.chapters.upload(data), {
           loading: `Upando o capítulo ${position}...`,
           error: (err) => {
-            setState(UploadChapterState.PENDING)
+            setState(UploadChapterState.ERROR)
 
             return handleErrors(
               `Ocorreu um erro inesperado ao upar o capítulo ${position}`,

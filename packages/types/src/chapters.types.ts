@@ -161,4 +161,5 @@ export enum UploadChapterState {
   PENDING,
   UPLOADING,
   UPLOADED,
+  ERROR,
 }
