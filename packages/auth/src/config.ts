@@ -33,10 +33,14 @@ declare module "next-auth" {
 export const authConfig = {
   debug: process.env.NODE_ENV === "development",
   trustHost: true,
-  secret: env.AUTH_SECRET,
   adapter: PrismaAdapter(db),
   providers: [Discord],
   pages: { signIn: "/auth/sign-in" },
+  cookies: {
+    sessionToken: {
+      options: { domain: `.${new URL(env.AUTH_URL).hostname}` },
+    },
+  },
   callbacks: {
     session: async ({ session, user: adapterUser }) => {
       const user = adapterUser as User
