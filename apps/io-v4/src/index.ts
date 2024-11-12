@@ -11,8 +11,8 @@ import { HttpError } from "~/utils/http-error"
 const app = new Hono()
   .use(cors({ origin: env.AUTH_URL, credentials: true }))
   .use(withHelpers)
-  .route("/v4/medias", mediasController)
-  .route("/v4/chapters", chaptersController)
+  .route("/medias", mediasController)
+  .route("/chapters", chaptersController)
   .onError((e, c) => {
     if (e instanceof HttpError) {
       c.status(e.status)
