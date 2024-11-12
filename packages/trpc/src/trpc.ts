@@ -147,7 +147,9 @@ const timingMiddleware = t.middleware(async ({ next, path, ctx }) => {
 
   const end = Date.now()
 
-  ctx.logger.debug(`[TRPC] ${path} took ${end - start}ms to execute`)
+  if (t._config.isDev) {
+    ctx.logger.debug(`[TRPC] ${path} took ${end - start}ms to execute`)
+  }
 
   return result
 })
