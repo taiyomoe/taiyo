@@ -1,4 +1,4 @@
-import { auth } from "@taiyomoe/auth"
+import { auth } from "@taiyomoe/auth/server"
 import { notFound } from "next/navigation"
 import { Sidebar } from "~/components/layout/Sidebar"
 import type { LayoutProps } from "~/lib/types"

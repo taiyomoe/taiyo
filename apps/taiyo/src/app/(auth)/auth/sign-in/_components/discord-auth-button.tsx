@@ -1,5 +1,5 @@
 import { Button } from "@nextui-org/button"
-import { signIn } from "@taiyomoe/auth"
+import { signIn } from "@taiyomoe/auth/server"
 import { CompanyLogo } from "~/components/ui/CompanyLogo"
 
 export const DiscordAuthButton = () => (

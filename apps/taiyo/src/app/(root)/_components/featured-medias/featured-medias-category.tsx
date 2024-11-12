@@ -1,4 +1,4 @@
-import { auth } from "@taiyomoe/auth"
+import { auth } from "@taiyomoe/auth/server"
 import { MediasService } from "~/services/medias.web-service"
 import { FeaturedMediasCarousel } from "./featured-medias-carousel"
 

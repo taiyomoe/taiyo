@@ -1,5 +1,5 @@
 import { AutocompleteItem } from "@nextui-org/autocomplete"
-import { useSession } from "@taiyomoe/auth"
+import { useSession } from "@taiyomoe/auth/client"
 import { MediaUtils } from "@taiyomoe/utils"
 import {
   IndexAutocomplete,

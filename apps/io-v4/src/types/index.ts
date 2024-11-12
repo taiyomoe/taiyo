@@ -1,4 +1,4 @@
-import type { Session } from "@taiyomoe/auth"
+import type { Session } from "@taiyomoe/auth/server"
 import type { cacheClient } from "@taiyomoe/cache"
 import type { db } from "@taiyomoe/db"
 import type { logsClient } from "@taiyomoe/logs"

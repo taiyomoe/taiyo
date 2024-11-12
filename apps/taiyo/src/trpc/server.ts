@@ -1,4 +1,4 @@
-import { auth } from "@taiyomoe/auth"
+import { auth } from "@taiyomoe/auth/server"
 import { type AppRouter, createCaller, createTRPCContext } from "@taiyomoe/trpc"
 import { createHydrationHelpers } from "@trpc/react-query/rsc"
 import { headers } from "next/headers"

@@ -1,4 +1,4 @@
-import type { Session } from "@taiyomoe/auth"
+import type { Session } from "@taiyomoe/auth/server"
 import { sessionSchema } from "@taiyomoe/schemas"
 import type { ForgedPermission } from "@taiyomoe/types"
 import { PermissionUtils } from "@taiyomoe/utils"

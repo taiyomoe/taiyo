@@ -1,7 +1,7 @@
 import { Button } from "@nextui-org/button"
 import { Divider } from "@nextui-org/divider"
 import { Popover, PopoverContent, PopoverTrigger } from "@nextui-org/popover"
-import type { Session } from "@taiyomoe/auth"
+import type { Session } from "@taiyomoe/auth/client"
 import { GaugeIcon, LinkIcon } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"

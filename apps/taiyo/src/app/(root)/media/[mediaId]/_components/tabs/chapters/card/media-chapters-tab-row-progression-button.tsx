@@ -1,4 +1,4 @@
-import { useSession } from "@taiyomoe/auth"
+import { useSession } from "@taiyomoe/auth/client"
 import { EyeIcon, EyeOffIcon } from "lucide-react"
 import type { Dispatch, SetStateAction } from "react"
 import { api } from "~/trpc/react"

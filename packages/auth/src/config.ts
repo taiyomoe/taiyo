@@ -4,6 +4,7 @@ import type { Permission } from "@taiyomoe/types"
 import { PermissionUtils } from "@taiyomoe/utils"
 import type { DefaultSession, NextAuthConfig } from "next-auth"
 import Discord from "next-auth/providers/discord"
+import { env } from "./env"
 import { createUserHandler } from "./handlers/create-user.handler"
 import { signInHandler } from "./handlers/sign-in.hander"
 import { signOutHandler } from "./handlers/sign-out.handler"
@@ -32,6 +33,7 @@ declare module "next-auth" {
 export const authConfig = {
   debug: process.env.NODE_ENV === "development",
   trustHost: true,
+  secret: env.AUTH_SECRET,
   adapter: PrismaAdapter(db),
   providers: [Discord],
   pages: { signIn: "/auth/sign-in" },

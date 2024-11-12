@@ -1,6 +1,6 @@
 import { Image } from "@nextui-org/image"
 import { Spinner } from "@nextui-org/spinner"
-import { useSession } from "@taiyomoe/auth"
+import { useSession } from "@taiyomoe/auth/client"
 import type { UserLibraryStatus } from "@taiyomoe/types"
 import { MediaUtils } from "@taiyomoe/utils"
 import { CoverUtils } from "@taiyomoe/utils"

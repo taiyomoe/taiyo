@@ -1,4 +1,4 @@
-import { auth } from "@taiyomoe/auth"
+import { auth } from "@taiyomoe/auth/server"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 import { DiscordAuthButton } from "~/app/(auth)/auth/sign-in/_components/discord-auth-button"
