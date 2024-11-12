@@ -56,8 +56,9 @@ const postUpload = async (
     select: BaseChaptersServiceUtils.latestReleaseQuery,
     where: { id: { in: ids } },
   })
+  const latestReleases = [...rawLatestReleases, ...cached].slice(0, 30)
 
-  await cacheClient.chapters.latest.set([...rawLatestReleases, ...cached])
+  await cacheClient.chapters.latest.set(latestReleases)
 }
 
 const postUpdate = async (

@@ -31,7 +31,7 @@ async function main() {
     process.exit(1)
   }
 
-  console.log("Seeding database, clearing cache and logs...")
+  console.log("Seeding database and executing logs migrations...")
 
   // Users
   console.log("\nUsers:")
