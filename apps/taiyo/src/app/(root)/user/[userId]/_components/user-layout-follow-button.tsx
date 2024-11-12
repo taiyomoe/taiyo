@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "@nextui-org/button"
-import { useSession } from "@taiyomoe/auth"
+import { useSession } from "@taiyomoe/auth/client"
 import type { UserLimited } from "@taiyomoe/types"
 import { useSetAtom } from "jotai"
 import { UserMinusIcon, UserPlusIcon } from "lucide-react"

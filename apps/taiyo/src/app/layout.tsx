@@ -1,3 +1,5 @@
+import { SessionProvider } from "@taiyomoe/auth/client"
+import { auth } from "@taiyomoe/auth/server"
 import type { Metadata } from "next"
 import { NextIntlClientProvider } from "next-intl"
 import { getLocale, getMessages } from "next-intl/server"
@@ -37,10 +39,8 @@ export const metadata: Metadata = {
 
 export default async function Layout({ children }: LayoutProps) {
   const locale = await getLocale()
-
-  // Providing all messages to the client
-  // side is the easiest way to get started
   const messages = await getMessages()
+  const session = await auth()
 
   return (
     <html lang={locale} suppressHydrationWarning>
@@ -56,7 +56,9 @@ export default async function Layout({ children }: LayoutProps) {
           strategy="afterInteractive"
         />
         <NextIntlClientProvider messages={messages}>
-          <Providers>{children}</Providers>
+          <SessionProvider session={session} refetchOnWindowFocus={false}>
+            <Providers>{children}</Providers>
+          </SessionProvider>
         </NextIntlClientProvider>
       </body>
     </html>

@@ -1,4 +1,4 @@
-import { auth } from "@taiyomoe/auth"
+import { auth } from "@taiyomoe/auth/server"
 import { ChaptersService } from "~/services/chapters.web-service"
 // import { UnderlineButton } from "~/components/generics/buttons/underline-button"
 import { LatestReleasesLayout } from "./latest-releases-layout"

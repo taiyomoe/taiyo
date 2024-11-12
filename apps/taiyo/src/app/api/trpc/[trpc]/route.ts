@@ -1,4 +1,4 @@
-import { auth } from "@taiyomoe/auth"
+import { auth } from "@taiyomoe/auth/server"
 import { appRouter, createTRPCContext } from "@taiyomoe/trpc"
 import { fetchRequestHandler } from "@trpc/server/adapters/fetch"
 import { logger } from "~/utils/logger"

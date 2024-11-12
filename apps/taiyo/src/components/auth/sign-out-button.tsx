@@ -1,5 +1,5 @@
 import { Button } from "@nextui-org/button"
-import { signOut } from "@taiyomoe/auth"
+import { signOut } from "@taiyomoe/auth/client"
 
 export const SignOutButton = () => (
   <Button

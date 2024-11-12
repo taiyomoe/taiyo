@@ -1,4 +1,4 @@
-import { auth } from "@taiyomoe/auth"
+import { auth } from "@taiyomoe/auth/server"
 import { db } from "@taiyomoe/db"
 import { UserSettingsLayout } from "./_components/user-settings-layout"
 

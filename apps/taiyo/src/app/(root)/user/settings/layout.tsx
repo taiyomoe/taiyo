@@ -1,5 +1,5 @@
 import { Divider } from "@nextui-org/divider"
-import { auth } from "@taiyomoe/auth"
+import { auth } from "@taiyomoe/auth/server"
 import { notFound } from "next/navigation"
 import type { LayoutProps } from "~/lib/types"
 

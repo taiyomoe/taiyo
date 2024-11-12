@@ -2,7 +2,7 @@
 
 import { Chip } from "@nextui-org/chip"
 import { tv } from "@nextui-org/react"
-import { useSession } from "@taiyomoe/auth"
+import { useSession } from "@taiyomoe/auth/client"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useMemo } from "react"

@@ -7,7 +7,7 @@
  * need to use are documented accordingly near the end.
  */
 
-import type { Session } from "@taiyomoe/auth"
+import type { Session } from "@taiyomoe/auth/server"
 import { cacheClient } from "@taiyomoe/cache"
 import { db } from "@taiyomoe/db"
 import { logsClient } from "@taiyomoe/logs"
