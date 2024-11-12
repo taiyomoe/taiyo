@@ -19,8 +19,8 @@ import { ContentRatingSchema, FlagSchema, LanguagesSchema } from "./prisma"
 
 export const uploadChapterSchema = z.object({
   title: z.string().optional(),
-  number: z.coerce.number().int().positive().min(0),
-  volume: z.coerce.number().int().positive().min(0).optional(),
+  number: z.coerce.number().positive().min(0),
+  volume: z.coerce.number().positive().min(0).optional(),
   contentRating: ContentRatingSchema,
   flag: FlagSchema,
   language: LanguagesSchema,
