@@ -97,7 +97,7 @@ importers:
   apps/io-v4:
     dependencies:
       '@hono/node-server':
-        specifier: ^1.13.6
+        specifier: ^1.13.7
         version: 1.13.7(hono@4.6.9)
       '@hono/zod-validator':
         specifier: ^0.4.1
