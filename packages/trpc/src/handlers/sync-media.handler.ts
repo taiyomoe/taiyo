@@ -224,7 +224,7 @@ export const syncMediaHandler = protectedProcedure
         for (const chapter of newChapters) {
           const task = await db.task.create({
             data: {
-              type: "IMPORT_COVER",
+              type: "IMPORT_CHAPTER",
               status: "PENDING",
               payload: chapter,
               sessionId,
