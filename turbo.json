@@ -6,12 +6,7 @@
     },
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [
-        ".next/**",
-        "!.next/cache/**",
-        "next-env.d.ts",
-        ".vercel/output/**"
-      ]
+      "outputs": [".next/**", "!.next/cache/**", "next-env.d.ts"]
     },
     "dev": {
       "persistent": true,
@@ -52,12 +47,5 @@
     "RABBITMQ_WEB_PORT",
     "RABBITMQ_URL"
   ],
-  "globalPassThroughEnv": [
-    "NODE_ENV",
-    "CI",
-    "VERCEL",
-    "VERCEL_ENV",
-    "VERCEL_URL",
-    "npm_lifecycle_event"
-  ]
+  "globalPassThroughEnv": ["NODE_ENV", "CI", "npm_lifecycle_event"]
 }
