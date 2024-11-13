@@ -13,7 +13,7 @@ export type ImportMediaInitialMessageOutput = Media
 
 export type ImportCoverMessageInput = {
   url: string
-  volume: number
+  volume: number | null
   language: Languages
   contentRating: ContentRating
   mediaId: string
@@ -25,7 +25,7 @@ export type ImportChapterMessageInput = {
   mdId: string
   title: string | null
   number: number
-  volume: number
+  volume: number | null
   contentRating: ContentRating
   groupIds: string[]
   mediaId: string
