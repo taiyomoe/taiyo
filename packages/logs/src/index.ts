@@ -15,25 +15,39 @@ import { UsersSettingsService } from "./services/users-settings.logs-service"
 
 export const initLogger = (
   app: "taiyo" | "image-orchestrator" | "io-worker",
-) =>
-  process.env.NODE_ENV === "development"
-    ? pino({ level: "debug" }, pinoPretty({ ignore: "pid,hostname" }))
-    : pino(
-        { level: "debug", base: null },
-        pinoLoki({
-          batching: true,
-          interval: 5,
-          labels: {
-            app,
-            environment: process.env.NODE_ENV ?? "development",
-          },
-          host: env.GRAFANA_LOKI_URL,
-          basicAuth: {
-            username: env.GRAFANA_USERNAME,
-            password: env.GRAFANA_PASSWORD,
-          },
-        }),
-      )
+) => {
+  const logger =
+    process.env.NODE_ENV === "development"
+      ? pino({ level: "debug" }, pinoPretty({ ignore: "pid,hostname" }))
+      : pino(
+          { level: "debug", base: null },
+          pinoLoki({
+            batching: true,
+            interval: 5,
+            labels: {
+              app,
+              environment: process.env.NODE_ENV ?? "development",
+            },
+            host: env.GRAFANA_LOKI_URL,
+            basicAuth: {
+              username: env.GRAFANA_USERNAME,
+              password: env.GRAFANA_PASSWORD,
+            },
+          }),
+        )
+
+  return {
+    ...logger,
+    debug: (msg: string, ...data: unknown[]) =>
+      logger.debug(data.length ? { msg, data } : msg),
+    info: (msg: string, ...data: unknown[]) =>
+      logger.info(data.length ? { msg, data } : msg),
+    warn: (msg: string, ...data: unknown[]) =>
+      logger.warn(data.length ? { msg, data } : msg),
+    error: (msg: string, ...data: unknown[]) =>
+      logger.error(data.length ? { msg, data } : msg),
+  }
+}
 
 export const logsClient = {
   migrations: MigrationsService,
