@@ -5,6 +5,7 @@ import { type CreateScanInput, createScanSchema } from "@taiyomoe/schemas"
 import { type SubmitHandler, useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { Form } from "~/components/generics/form/form"
+import { useErrorHandler } from "~/hooks/useErrorHandler"
 import { api } from "~/trpc/react"
 import { CreateScanFormFields } from "./create-scan-form-fields"
 
@@ -25,6 +26,7 @@ const initialValues: CreateScanInput = {
 
 export const CreateScanForm = () => {
   const { mutateAsync } = api.scans.create.useMutation()
+  const { handleError } = useErrorHandler()
   const methods = useForm<CreateScanInput>({
     resolver: zodResolver(createScanSchema),
     mode: "onTouched",
@@ -39,11 +41,7 @@ export const CreateScanForm = () => {
 
         return "Scan adicionada com sucesso!"
       },
-      error: (error) => {
-        console.error(error)
-
-        return "Ocorreu um erro inesperado ao adicionar a scan."
-      },
+      error: handleError("Ocorreu um erro inesperado ao adicionar a scan."),
     })
   }
 

@@ -10,13 +10,13 @@ import {
 } from "@nextui-org/modal"
 import type { CreateTitleInput } from "@taiyomoe/schemas"
 import { createTitleSchema } from "@taiyomoe/schemas"
-import { TRPCClientError } from "@trpc/client"
 import { PlusIcon } from "lucide-react"
 import { type SubmitHandler, useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { MediaTitleFormFields } from "~/components/forms/mediaTitles/media-title-form-fields"
 import { SubmitButton } from "~/components/generics/buttons/submit-button"
 import { Form } from "~/components/generics/form/form"
+import { useErrorHandler } from "~/hooks/useErrorHandler"
 import { useMediaUpdateStore } from "~/stores"
 import { api } from "~/trpc/react"
 
@@ -26,6 +26,7 @@ type Props = {
 
 export const CreateMediaTitleForm = ({ mediaId }: Props) => {
   const { mutateAsync } = api.titles.create.useMutation()
+  const { handleError } = useErrorHandler()
   const initialValues: CreateTitleInput = {
     title: "",
     language: "ja",
@@ -51,13 +52,7 @@ export const CreateMediaTitleForm = ({ mediaId }: Props) => {
 
         return "Título criado com sucesso."
       },
-      error: (err) => {
-        if (err instanceof TRPCClientError) {
-          return err.message
-        }
-
-        return "Ocorreu um erro inesperado ao criar o título."
-      },
+      error: handleError("Ocorreu um erro inesperado ao criar o título."),
     })
   }
 

@@ -11,7 +11,6 @@ import {
 import type { MediaTitle } from "@taiyomoe/db"
 import { type UpdateTitleInput, updateTitleSchema } from "@taiyomoe/schemas"
 import { ObjectUtils } from "@taiyomoe/utils"
-import { TRPCClientError } from "@trpc/client"
 import { FileEditIcon } from "lucide-react"
 import { pick } from "radash"
 import { type SubmitHandler, useForm } from "react-hook-form"
@@ -20,6 +19,7 @@ import { DeleteMediaTitleButton } from "~/components/forms/mediaTitles/delete-me
 import { MediaTitleFormFields } from "~/components/forms/mediaTitles/media-title-form-fields"
 import { SubmitButton } from "~/components/generics/buttons/submit-button"
 import { Form } from "~/components/generics/form/form"
+import { useErrorHandler } from "~/hooks/useErrorHandler"
 import { useMediaUpdateStore } from "~/stores"
 import { api } from "~/trpc/react"
 
@@ -29,6 +29,7 @@ type Props = {
 
 export const UpdateMediaTitleForm = ({ title }: Props) => {
   const { mutateAsync } = api.titles.update.useMutation()
+  const { handleError } = useErrorHandler()
   const initialValues = pick(title, [
     "id",
     "title",
@@ -62,13 +63,7 @@ export const UpdateMediaTitleForm = ({ title }: Props) => {
 
         return "Alterações salvas com sucesso!"
       },
-      error: (err) => {
-        if (err instanceof TRPCClientError) {
-          return err.message
-        }
-
-        return "Ocorreu um erro inesperado ao salvar as alterações."
-      },
+      error: handleError("Ocorreu um erro inesperado ao salvar as alterações."),
     })
   }
 

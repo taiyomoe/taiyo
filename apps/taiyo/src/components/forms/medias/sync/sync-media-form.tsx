@@ -9,10 +9,12 @@ import { SubmitButton } from "~/components/generics/buttons/submit-button"
 import { Form } from "~/components/generics/form/form"
 import { MediasField } from "~/components/generics/form/medias-field"
 import { SwitchField } from "~/components/generics/form/switch-field"
+import { useErrorHandler } from "~/hooks/useErrorHandler"
 import { api } from "~/trpc/react"
 
 export const SyncMediaForm = () => {
   const { mutateAsync } = api.medias.sync.useMutation()
+  const { handleError } = useErrorHandler()
   const methods = useForm<SyncMediaInput>({
     resolver: zodResolver(syncMediaSchema),
     mode: "onTouched",
@@ -35,11 +37,10 @@ export const SyncMediaForm = () => {
 
           return "Informações sincronizadas com sucesso! Upload de covers e capítulos em andamento..."
         },
-        error: () => {
-          reject()
-
-          return "Ocorreu um erro inesperado ao sincronizar a obra."
-        },
+        error: handleError(
+          "Ocorreu um erro inesperado ao sincronizar a obra.",
+          reject,
+        ),
       })
     })
   }
