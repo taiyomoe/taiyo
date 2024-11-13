@@ -4,12 +4,14 @@ import { createMediaHandler } from "~/handlers/create-media.handler"
 import { importChapterHandler } from "~/handlers/import-chapter.handler"
 import { importCoverHandler } from "~/handlers/import-cover.handler"
 import { mediasInitialImportHandler } from "~/handlers/medias-initial-import.handler"
-import { logger } from "~/logger"
+import { handleErrors } from "~/utils/handle-errors"
+import { logger } from "~/utils/logger"
 
 console.log("image-orchestrator worker up and running!")
 
 const rabbitConsumer = rawRabbitClient.createConsumer(
   {
+    requeue: false,
     qos: { prefetchCount: 2 },
     queueOptions: { durable: true },
     exchanges: RABBIT_DEFAULT_EXCHANGES,
@@ -20,9 +22,9 @@ const rabbitConsumer = rawRabbitClient.createConsumer(
 
     switch (routingKey) {
       case "import-cover":
-        return importCoverHandler(SuperJSON.parse(body))
+        return handleErrors(importCoverHandler)(SuperJSON.parse(body))
       case "import-chapter":
-        return importChapterHandler(SuperJSON.parse(body))
+        return handleErrors(importChapterHandler)(SuperJSON.parse(body))
       default:
         logger.error("Received unknown RabbitMQ routing key", routingKey)
     }
@@ -33,15 +35,18 @@ const mediasInitialImportConsumer = rawRabbitClient.createConsumer(
   { queue: "medias-initial-import", requeue: false },
   ({ body }, reply) => {
     logger.debug("Received RabbitMQ RPC message (medias-initial-import)")
-    return mediasInitialImportHandler(SuperJSON.parse(body), reply)
+    return handleErrors(mediasInitialImportHandler)(
+      SuperJSON.parse(body),
+      reply,
+    )
   },
 )
 
-const coversUploadConsumer = rawRabbitClient.createConsumer(
+const mediasCreateConsumer = rawRabbitClient.createConsumer(
   { queue: "medias-create", requeue: false },
   ({ body }, reply) => {
     logger.debug("Received RabbitMQ RPC message (medias-create)")
-    return createMediaHandler(body, reply)
+    return handleErrors(createMediaHandler)(body, reply)
   },
 )
 
@@ -50,11 +55,15 @@ rabbitConsumer.on("error", (err) => {
 })
 
 mediasInitialImportConsumer.on("error", (err) => {
-  console.error(err)
-  logger.error("An error occured while handling a RabbitMQ RPC message", err)
+  logger.error(
+    "An error occured while handling a RabbitMQ RPC message (medias-initial-import)",
+    err,
+  )
 })
 
-coversUploadConsumer.on("error", (err) => {
-  console.error(err)
-  logger.error("An error occured while handling a RabbitMQ RPC message", err)
+mediasCreateConsumer.on("error", (err) => {
+  logger.error(
+    "An error occured while handling a RabbitMQ RPC message (medias-create)",
+    err,
+  )
 })
