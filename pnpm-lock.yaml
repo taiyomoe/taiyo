@@ -138,9 +138,6 @@ importers:
       hono:
         specifier: ^4.6.9
         version: 4.6.9
-      mangadex-full-api:
-        specifier: ^5.12.1
-        version: 5.12.1
       radash:
         specifier: ^12.1.0
         version: 12.1.0
