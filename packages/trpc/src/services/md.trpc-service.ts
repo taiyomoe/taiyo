@@ -117,6 +117,7 @@ const getChapters = async (input: Manga) => {
     limit: Infinity,
     translatedLanguage: ["pt-br"],
     order: { chapter: "asc" },
+    contentRating: ["safe", "suggestive", "erotica", "pornographic"],
   })
 
   return result
