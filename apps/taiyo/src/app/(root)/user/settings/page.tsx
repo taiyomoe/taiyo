@@ -1,5 +1,6 @@
 import { auth } from "@taiyomoe/auth/server"
 import { db } from "@taiyomoe/db"
+import { notFound } from "next/navigation"
 import { UserSettingsLayout } from "./_components/user-settings-layout"
 
 export default async function Page() {
@@ -28,7 +29,7 @@ export default async function Page() {
   })
 
   if (!session || !user || !user.settings || !user.profile) {
-    return null
+    notFound()
   }
 
   return (

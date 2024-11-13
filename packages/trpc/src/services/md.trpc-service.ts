@@ -5,10 +5,10 @@ import { logger } from "../utils/logger"
 import { HttpError } from "../utils/trpc-error"
 
 const parseCover = (input: Cover) => {
-  const volume = Number.parseFloat(input.volume)
+  const volume = input.volume ? Number.parseFloat(input.volume) : null
   let language = MdUtils.getLanguage(input.locale)
 
-  if (volume.toString() !== input.volume) {
+  if (volume && volume.toString() !== input.volume) {
     logger.warn(
       `MangaDex cover volume (stringified) didn't match the number one. It was probably a decimal volume. This happened when importing MangaDex media ${input.manga.id}`,
       input,
@@ -24,17 +24,17 @@ const parseCover = (input: Cover) => {
   }
 
   return {
-    url: input.imageSource,
-    volume: Number.isNaN(volume) ? null : volume,
+    url: input.url,
+    volume,
     language,
   }
 }
 
 const parseChapter = (input: Chapter) => {
-  const volume = Number.parseFloat(input.volume)
-  const number = Number.parseFloat(input.chapter)
+  const volume = input.volume ? Number.parseFloat(input.volume) : null
+  const number = input.chapter ? Number.parseFloat(input.chapter) : 0
 
-  if (volume.toString() !== input.volume) {
+  if (volume && volume.toString() !== input.volume) {
     logger.warn(
       `MangaDex chapter volume (stringified) didn't match the number one. It was probably a float. This happened when importing MangaDex media ${input.manga.id}`,
       input,
@@ -44,8 +44,8 @@ const parseChapter = (input: Chapter) => {
   return {
     mdId: input.id,
     title: input.title,
-    number: Number.isNaN(number) ? 0 : number,
-    volume: Number.isNaN(volume) ? null : volume,
+    number,
+    volume,
     groupIds: input.groups.map((g) => g.id),
   }
 }
@@ -105,8 +105,8 @@ const getUpdatePayload = (input: Manga, original: Media) => {
     countryOfOrigin: MdUtils.getCountryOfOrigin(input),
     genres,
     tags: tags.map((key) => ({ key, isSpoiler: false })),
-    synopsis: input.localizedDescription.data["pt-br"]
-      ? input.localizedDescription.data["pt-br"]
+    synopsis: input.description["pt-br"]
+      ? input.description["pt-br"]
       : original.synopsis,
   } satisfies Prisma.MediaUpdateInput
 }

@@ -11,6 +11,8 @@ import { z } from "zod"
 
 import { zfd } from "zod-form-data"
 import {
+  chapterNumberSchema,
+  chapterVolumeSchema,
   pageSchema,
   perPageSchema,
   sortableFieldsSchema,
@@ -19,8 +21,8 @@ import { ContentRatingSchema, FlagSchema, LanguagesSchema } from "./prisma"
 
 export const uploadChapterSchema = z.object({
   title: z.string().optional(),
-  number: z.coerce.number().positive().min(0),
-  volume: z.coerce.number().positive().min(0).optional(),
+  number: chapterNumberSchema,
+  volume: chapterVolumeSchema,
   contentRating: ContentRatingSchema,
   flag: FlagSchema,
   language: LanguagesSchema,
@@ -38,8 +40,8 @@ export const uploadChaptersSchema = z.object({
 export const updateChapterSchema = z.object({
   id: z.string().uuid(),
   title: z.string().nullish(),
-  number: z.coerce.number().min(0).optional(),
-  volume: z.coerce.number().min(0).nullish(),
+  number: chapterNumberSchema.optional(),
+  volume: chapterVolumeSchema,
   language: LanguagesSchema.optional(),
   contentRating: ContentRatingSchema.optional(),
   flag: FlagSchema.optional(),
@@ -49,7 +51,7 @@ export const updateChapterSchema = z.object({
 export const bulkUpdateChaptersVolumesSchema = z.object({
   volumes: z
     .object({
-      number: z.coerce.number().min(0).nullable(),
+      number: chapterVolumeSchema,
       ids: z.string().uuid().array().min(1),
     })
     .array(),

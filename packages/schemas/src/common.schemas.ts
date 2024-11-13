@@ -4,6 +4,8 @@ export const idSchema = z.string().uuid()
 export const pageSchema = z.coerce.number().int().positive().catch(1)
 export const intsSchema = z.coerce.number().array().catch([])
 export const uuidsSchema = z.string().uuid().array().catch([])
+export const chapterNumberSchema = z.coerce.number().min(0)
+export const chapterVolumeSchema = z.coerce.number().min(0).nullish()
 
 export const perPageSchema = (initial: number, choices: number[]) =>
   z.coerce
