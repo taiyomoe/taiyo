@@ -291,7 +291,7 @@ importers:
         specifier: ^8.3.1
         version: 8.3.1(react@18.3.1)
       framer-motion:
-        specifier: ^11.11.13
+        specifier: ^11.11.15
         version: 11.11.15(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       jotai:
         specifier: ^2.10.2
