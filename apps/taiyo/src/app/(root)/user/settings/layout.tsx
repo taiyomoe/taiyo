@@ -6,7 +6,7 @@ import type { LayoutProps } from "~/lib/types"
 export default async function Layout({ children }: LayoutProps) {
   const session = await auth()
 
-  if (!session || session.user.role.name !== "ADMIN") {
+  if (!session) {
     notFound()
   }
 
