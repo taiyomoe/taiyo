@@ -26,6 +26,8 @@ import {
   MediaTypeSchema,
 } from "./prisma"
 
+const tagsSchema = z.object({ key: z.enum(TAG_KEYS), isSpoiler: z.boolean() })
+
 export const createMediaSchema = z.object({
   startDate: z.coerce.date().optional(),
   endDate: z.coerce.date().optional(),
@@ -39,11 +41,10 @@ export const createMediaSchema = z.object({
   countryOfOrigin: MediaCountryOfOriginSchema,
   flag: FlagSchema,
   genres: zfd.repeatableOfType(MediaGenresSchema),
-  tags: zfd.repeatableOfType(
-    stringToJSON().pipe(
-      z.object({ key: z.enum(TAG_KEYS), isSpoiler: z.boolean() }),
-    ),
-  ),
+  tags: z.union([
+    tagsSchema.array(),
+    zfd.repeatableOfType(stringToJSON().pipe(tagsSchema)),
+  ]),
   mdId: z.string().uuid().optional(),
   alId: z.coerce.number().positive().min(30000).optional(),
   malId: z.coerce.number().positive().min(1).optional(),
