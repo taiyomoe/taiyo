@@ -9,10 +9,12 @@ import { SubmitButton } from "~/components/generics/buttons/submit-button"
 import { Form } from "~/components/generics/form/form"
 import { InputField } from "~/components/generics/form/input-field"
 import { SwitchField } from "~/components/generics/form/switch-field"
+import { useErrorHandler } from "~/hooks/useErrorHandler"
 import { api } from "~/trpc/react"
 
 export const ImportMediaForm = () => {
   const { mutateAsync } = api.medias.import.useMutation()
+  const { handleError } = useErrorHandler()
   const methods = useForm<ImportMediaInput>({
     resolver: zodResolver(importMediaSchema),
     mode: "onTouched",
@@ -35,11 +37,10 @@ export const ImportMediaForm = () => {
 
           return "Obra criada com sucesso! Upload de covers e capítulos em andamento..."
         },
-        error: () => {
-          reject()
-
-          return "Ocorreu um erro inesperado ao importar a obra."
-        },
+        error: handleError(
+          "Ocorreu um erro inesperado ao importar a obra.",
+          reject,
+        ),
       })
     })
   }

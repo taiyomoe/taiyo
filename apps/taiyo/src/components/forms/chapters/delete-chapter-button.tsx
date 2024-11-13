@@ -10,6 +10,7 @@ import {
 import type { MediaLimitedChapter } from "@taiyomoe/types"
 import { TrashIcon } from "lucide-react"
 import { toast } from "sonner"
+import { useErrorHandler } from "~/hooks/useErrorHandler"
 import { api } from "~/trpc/react"
 
 type Props = {
@@ -18,6 +19,7 @@ type Props = {
 
 export const DeleteChapterButton = ({ chapter }: Props) => {
   const { mutateAsync } = api.chapters.bulkMutate.useMutation()
+  const { handleError } = useErrorHandler()
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
   const apiUtils = api.useUtils()
@@ -31,11 +33,7 @@ export const DeleteChapterButton = ({ chapter }: Props) => {
 
         return "Capítulo apagado com sucesso!"
       },
-      error: (error) => {
-        console.error(error)
-
-        return "Erro ao apagar o capítulo."
-      },
+      error: handleError("Erro ao apagar o capítulo."),
     })
   }
 

@@ -7,11 +7,11 @@ import {
   bulkUpdateChaptersVolumesSchema,
 } from "@taiyomoe/schemas"
 import { ChapterUtils } from "@taiyomoe/utils"
-import { TRPCClientError } from "@trpc/client"
 import { useState } from "react"
 import { type SubmitHandler, useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { Form } from "~/components/generics/form/form"
+import { useErrorHandler } from "~/hooks/useErrorHandler"
 import { api } from "~/trpc/react"
 import { BulkUpdateChaptersVolumesFormFields } from "./bulk-update-chapters-volumes-form-fields"
 
@@ -23,6 +23,7 @@ export const BulkUpdateChaptersVolumesForm = (props: Props) => {
   const { chapters: initialChapters } = props
   const [chapters, setChapters] = useState(initialChapters)
   const { mutateAsync } = api.chapters.updateVolumes.useMutation()
+  const { handleError } = useErrorHandler()
   const methods = useForm<BulkUpdateChaptersVolumesInput>({
     resolver: zodResolver(bulkUpdateChaptersVolumesSchema),
     mode: "onTouched",
@@ -68,13 +69,9 @@ export const BulkUpdateChaptersVolumesForm = (props: Props) => {
 
         return "Capítulos atualizados com sucesso."
       },
-      error: (error) => {
-        if (error instanceof TRPCClientError) {
-          return error.message
-        }
-
-        return "Erro ao atualizar capítulos."
-      },
+      error: handleError(
+        "Ocorreu um erro inesperado ao atualizar os capítulos.",
+      ),
     })
   }
 
