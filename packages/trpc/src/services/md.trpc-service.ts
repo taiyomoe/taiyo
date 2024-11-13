@@ -25,13 +25,14 @@ const parseCover = (input: Cover) => {
 
   return {
     url: input.imageSource,
-    volume,
+    volume: Number.isNaN(volume) ? null : volume,
     language,
   }
 }
 
 const parseChapter = (input: Chapter) => {
   const volume = Number.parseFloat(input.volume)
+  const number = Number.parseFloat(input.chapter)
 
   if (volume.toString() !== input.volume) {
     logger.warn(
@@ -43,8 +44,8 @@ const parseChapter = (input: Chapter) => {
   return {
     mdId: input.id,
     title: input.title,
-    number: Number.parseFloat(input.chapter),
-    volume,
+    number: Number.isNaN(number) ? 0 : number,
+    volume: Number.isNaN(volume) ? null : volume,
     groupIds: input.groups.map((g) => g.id),
   }
 }
