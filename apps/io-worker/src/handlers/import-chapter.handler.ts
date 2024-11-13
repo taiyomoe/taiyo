@@ -11,7 +11,8 @@ export const importChapterHandler = async (
   input: ImportChapterMessageInput,
 ) => {
   const chapterId = randomUUID()
-  const pageUrls = await new Chapter(input.mdId).getReadablePages()
+  const mdChapter = await Chapter.get(input.mdId)
+  const pageUrls = await mdChapter.getReadablePages()
 
   await db.task.update({
     data: { status: "DOWNLOADING" },

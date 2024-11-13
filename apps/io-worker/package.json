@@ -16,7 +16,7 @@
     "@taiyomoe/meilisearch": "workspace:*",
     "@taiyomoe/rabbit": "workspace:*",
     "@taiyomoe/services": "workspace:*",
-    "mangadex-full-api": "^5.12.1",
+    "mangadex-full-api": "^6.0.0",
     "radash": "^12.1.0",
     "superjson": "^2.2.1"
   },

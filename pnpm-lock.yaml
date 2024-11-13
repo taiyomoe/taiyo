@@ -176,8 +176,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/services
       mangadex-full-api:
-        specifier: ^5.12.1
-        version: 5.12.1
+        specifier: ^6.0.0
+        version: 6.0.0
       radash:
         specifier: ^12.1.0
         version: 12.1.0
@@ -745,8 +745,8 @@ importers:
         specifier: ^3.5.0
         version: 3.5.0
       mangadex-full-api:
-        specifier: ^5.12.1
-        version: 5.12.1
+        specifier: ^6.0.0
+        version: 6.0.0
       radash:
         specifier: ^12.1.0
         version: 12.1.0
@@ -817,8 +817,8 @@ importers:
         specifier: ^1.1.9
         version: 1.1.9
       mangadex-full-api:
-        specifier: ^5.12.1
-        version: 5.12.1
+        specifier: ^6.0.0
+        version: 6.0.0
       radash:
         specifier: ^12.1.0
         version: 12.1.0
@@ -4481,9 +4481,9 @@ packages:
     resolution: {integrity: sha512-rh+Zjr6DNfUYR3bPwJEnuwDdqMbxZW7LOQfUN4B54+Cl+0o5zaU9RJ6bcidfDtC1cWCZXQ+nvX8bf6bAji37QQ==}
     engines: {node: '>=12'}
 
-  mangadex-full-api@5.12.1:
-    resolution: {integrity: sha512-YxkAzHCd9webTo6W7pUlwXEMq+g3PUmgP0IPKFs8no9T5WcenE4VxtvoIAAPiDYa6bgHRljGnCNq28Yhl2c0dA==}
-    engines: {node: '>=12.0.0'}
+  mangadex-full-api@6.0.0:
+    resolution: {integrity: sha512-gVgJqPOf9pIMI/zSbWyFVDBWbHFhkBVWVPJvnfpg7Os7LiuilyIESqkg/Mi223kMBl3E92Y5PY1qgxkHhUrpqQ==}
+    engines: {node: '>=19.0.0'}
 
   media-typer@0.3.0:
     resolution: {integrity: sha512-dq+qelQ9akHpcOl/gUVRTxVIOkAJ1wR3QAvb4RsVjS8oVoFjDGTc679wJYmUmknUF5HwMLOgb5O+a3KxfWapPQ==}
@@ -10874,7 +10874,7 @@ snapshots:
 
   luxon@3.5.0: {}
 
-  mangadex-full-api@5.12.1: {}
+  mangadex-full-api@6.0.0: {}
 
   media-typer@0.3.0:
     optional: true

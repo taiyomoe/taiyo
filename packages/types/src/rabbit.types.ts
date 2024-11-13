@@ -5,7 +5,7 @@ export type ImportMediaInitialMessageInput = {
   payload: Prisma.MediaCreateInput
   mainCoverPayload: {
     url: string
-    volume: number
+    volume: number | null
     language: Languages
   }
 }

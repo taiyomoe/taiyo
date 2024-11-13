@@ -4,7 +4,7 @@ import { Group } from "mangadex-full-api"
 import { logger } from "~/utils/logger"
 
 const ensureGroups = async (input: string[], creatorId: string) => {
-  const groups = await Group.getMultiple(...input)
+  const groups = await Group.getMultiple(input)
   const scansIds: string[] = []
   const createdScansIds: string[] = []
 

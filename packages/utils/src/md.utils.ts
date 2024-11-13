@@ -83,7 +83,7 @@ const getCountryOfOrigin = (manga: Manga): MediaCountryOfOrigin => {
   }
 }
 
-const getLanguage = (input: string) => {
+const getLanguage = (input: string | null) => {
   switch (input) {
     case "ja-ro":
       return "ja_ro"
@@ -100,7 +100,7 @@ const getLanguage = (input: string) => {
     case "es-la":
       return "es_la"
     default: {
-      if (input in Languages) {
+      if (input && input in Languages) {
         return input as Languages
       }
 
@@ -116,7 +116,7 @@ const getGenresAndTags = (manga: Manga) => {
 
   // Tags list as of December 4th, 2023
   for (const tag of manga.tags) {
-    switch (tag.name) {
+    switch (tag.name.en) {
       case "4-Koma":
         tags.push("FOUR_KOMA")
         break
@@ -389,23 +389,22 @@ const getTitles = (manga: Manga) => {
   const titles = []
 
   rawTitles.push({
-    title:
-      manga.localizedTitle.data[manga.localizedTitle.availableLocales[0]!]!,
-    language: getLanguage(manga.localizedTitle.availableLocales[0]!),
+    title: Object.values(manga.title)[0]!,
+    language: getLanguage(Object.keys(manga.title)[0]!),
     isMainTitle: true,
   })
 
-  for (const title of manga.localizedAltTitles) {
-    for (const l of title.availableLocales) {
+  for (const title of manga.altTitles) {
+    for (const l of Object.keys(title)) {
       const alreadyExists = rawTitles.some(
-        (t) => t.title === title.data[l]! && t.language === getLanguage(l),
+        (t) => t.title === title[l]! && t.language === getLanguage(l),
       )
       const language = getLanguage(l)
 
       if (alreadyExists || !language) continue
 
       rawTitles.push({
-        title: title.data[l]!,
+        title: title[l]!,
         language,
         isMainTitle: false,
       })
@@ -442,16 +441,16 @@ const getTrackers = (manga: Manga) => {
     tracker: "MANGADEX",
   })
 
-  if (manga.links.al) {
+  if (manga.links.anilist) {
     trackers.push({
-      externalId: manga.links.al.split("/").pop()!,
+      externalId: manga.links.anilist.split("/").pop()!,
       tracker: "ANILIST",
     })
   }
 
-  if (manga.links.mal) {
+  if (manga.links.myAnimeList) {
     trackers.push({
-      externalId: manga.links.mal.split("/").pop()!,
+      externalId: manga.links.myAnimeList.split("/").pop()!,
       tracker: "MYANIMELIST",
     })
   }
@@ -460,9 +459,9 @@ const getTrackers = (manga: Manga) => {
 }
 
 const getSynopsis = (manga: Manga) =>
-  manga.localizedDescription.data["pt-br"] ||
-  manga.localizedDescription.data.en ||
-  Object.values(manga.localizedDescription.data).at(0)
+  manga.description["pt-br"] ||
+  manga.description.en ||
+  Object.values(manga.description).at(0)
 
 export const MdUtils = {
   getContentRating,
