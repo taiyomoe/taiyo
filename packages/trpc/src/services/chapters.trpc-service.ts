@@ -10,7 +10,36 @@ import {
   BaseChaptersServiceUtils,
 } from "@taiyomoe/services"
 
-import type { RawLatestReleaseGroupedChapter } from "@taiyomoe/types"
+import type {
+  RawLatestRelease,
+  RawLatestReleaseGroupedChapter,
+} from "@taiyomoe/types"
+
+const getLatest = async (preferredTitles?: Languages | null) => {
+  const cacheController = cacheClient.chapters.latest
+  const cached = await cacheController.get()
+
+  if (cached) {
+    return BaseChaptersServiceUtils.formatRawLatestReleases(
+      cached,
+      preferredTitles,
+    )
+  }
+
+  const result: RawLatestRelease[] = await db.mediaChapter.findMany({
+    take: 30,
+    where: { deletedAt: null, media: { deletedAt: null } },
+    orderBy: { createdAt: "desc" },
+    select: BaseChaptersServiceUtils.latestReleaseQuery,
+  })
+
+  void cacheController.set(result)
+
+  return BaseChaptersServiceUtils.formatRawLatestReleases(
+    result,
+    preferredTitles,
+  )
+}
 
 const getLatestGrouped = async (
   { page, perPage }: GetLatestChaptersGroupedInput,
@@ -122,6 +151,7 @@ const getLatestGroupedByUser = async (
 
 export const ChaptersService = {
   ...BaseChaptersService,
+  getLatest,
   getLatestGrouped,
   getLatestGroupedByUser,
 }

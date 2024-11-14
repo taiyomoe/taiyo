@@ -58,6 +58,13 @@
   }
 }
 
+/* Disable zoom effect on mobile */
+@media (max-width: 768px) {
+  img.hover\:scale-125:hover {
+    transform: none;
+  }
+}
+
 /* MARQUEE */
 @property --content1-gradient {
   syntax: "<color>";

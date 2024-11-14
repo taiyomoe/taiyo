@@ -21,6 +21,9 @@ export const chaptersRouter = createTRPCRouter({
   getByMediaId: getChapterByMediaIdHandler,
   getByUserId: getChaptersByUserIdHandler,
   getList: getChaptersListHandler,
+  getLatest: publicProcedure.query(({ ctx }) =>
+    ctx.services.chapters.getLatest(ctx.session?.user.preferredTitles),
+  ),
   getLatestGrouped: publicProcedure
     .input(getLatestChaptersGroupedSchema)
     .query(({ ctx, input }) =>

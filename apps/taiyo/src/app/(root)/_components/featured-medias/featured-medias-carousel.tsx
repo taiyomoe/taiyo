@@ -1,12 +1,11 @@
 "use client"
-
 import type { FeaturedMedia } from "@taiyomoe/types"
 import { BannerUtils, CoverUtils } from "@taiyomoe/utils"
 import Autoplay from "embla-carousel-autoplay"
 import useEmblaCarousel from "embla-carousel-react"
 import Link from "next/link"
+import { CarouselButtons } from "~/components/generics/buttons/carousel-buttons"
 import { MediaImage } from "~/components/images/MediaImage"
-import { FeaturedMediaControlButtons } from "./featured-medias-control-buttons"
 
 type Props = {
   medias: FeaturedMedia[]
@@ -68,7 +67,8 @@ export const FeaturedMediasCarousel = ({ medias }: Props) => {
           </Link>
         ))}
       </div>
-      <FeaturedMediaControlButtons
+      <CarouselButtons
+        className="absolute right-4 bottom-4"
         onPrev={() => emblaApi?.scrollPrev()}
         onNext={() => emblaApi?.scrollNext()}
       />

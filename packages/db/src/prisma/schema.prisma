@@ -87,6 +87,7 @@ model UserSetting {
     preferredTitles Languages?
     showFollowing   Boolean       @default(true)
     showLibrary     Boolean       @default(true)
+    homeLayout      HomeLayout    @default(ROWS)
 
     user   User   @relation(fields: [userId], references: [id])
     userId String @unique
@@ -397,6 +398,11 @@ enum Genders {
     FEMALE
     OTHER
     NOT_SPECIFIED
+}
+
+enum HomeLayout {
+    ROWS
+    COLUMNS
 }
 
 enum ContentRating {

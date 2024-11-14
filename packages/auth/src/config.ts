@@ -1,5 +1,5 @@
 import { PrismaAdapter } from "@auth/prisma-adapter"
-import { type Languages, type User, db } from "@taiyomoe/db"
+import { type HomeLayout, type Languages, type User, db } from "@taiyomoe/db"
 import type { Permission } from "@taiyomoe/types"
 import { PermissionUtils } from "@taiyomoe/utils"
 import type { DefaultSession, NextAuthConfig } from "next-auth"
@@ -26,6 +26,7 @@ declare module "next-auth" {
       preferredTitles: Languages | null
       showFollowing: boolean
       showLibrary: boolean
+      homeLayout: HomeLayout
     }
   }
 }
@@ -49,6 +50,7 @@ export const authConfig = {
           preferredTitles: true,
           showFollowing: true,
           showLibrary: true,
+          homeLayout: true,
         },
         where: { userId: user.id },
       })

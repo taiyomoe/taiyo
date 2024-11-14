@@ -1,3 +1,4 @@
+import type { HomeLayout } from "@taiyomoe/db"
 import type { Metadata } from "next"
 
 export type SiteConfig = Record<string, unknown> & {
@@ -5,7 +6,7 @@ export type SiteConfig = Record<string, unknown> & {
   openGraph: Metadata["openGraph"]
   home: {
     releasesLayoutContainerId: string
-    releasesLayout: "rows" | "columns"
+    releasesLayout: HomeLayout
     displayFollowingReleases: boolean
   }
 }
@@ -20,7 +21,7 @@ export const siteConfig = {
     description:
       "Leia mangás online e gratuitamente na Taiyō, sem anúncios, com alta qualidade de imagens e suporte aos leitores.",
     images: {
-      url: "https://cdn.rdx.dev/taiyo/banner-red.png",
+      url: "https://cdn.taiyo.moe/assets/banner-red.png",
       width: 600,
       height: 315,
       alt: "Taiyō banner",
@@ -37,7 +38,7 @@ export const siteConfig = {
     description:
       "Leia mangás online e gratuitamente na Taiyō, sem anúncios, com alta qualidade de imagens e suporte aos leitores",
     images: {
-      url: "https://cdn.rdx.dev/taiyo/banner-red.png",
+      url: "https://cdn.taiyo.moe/assets/banner-red.png",
       width: 600,
       height: 315,
       alt: "Taiyō banner",
@@ -45,7 +46,7 @@ export const siteConfig = {
   },
   home: {
     releasesLayoutContainerId: "releases-layout-container",
-    releasesLayout: "rows",
+    releasesLayout: "ROWS",
     displayFollowingReleases: false,
   },
 } satisfies SiteConfig

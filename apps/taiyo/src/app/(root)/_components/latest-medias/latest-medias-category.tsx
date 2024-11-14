@@ -6,7 +6,7 @@ export const LatestMediasCategory = async () => {
 
   return (
     <div className="flex w-full flex-col gap-4">
-      <p className="font-semibold text-2xl">Últimas obras adicionadas</p>
+      <p className="font-semibold text-2xl">Obras recentes</p>
       <LatestMediasCarousel medias={medias} />
     </div>
   )
