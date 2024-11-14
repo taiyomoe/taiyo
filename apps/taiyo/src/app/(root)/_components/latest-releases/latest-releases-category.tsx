@@ -12,7 +12,7 @@ export const LatestReleasesCategory = async ({ initialLayout }: Props) => {
   const releases =
     initialLayout === "ROWS"
       ? await api.chapters.getLatest()
-      : await api.chapters.getLatestGrouped({})
+      : await api.chapters.getLatestGroupedLite()
 
   return (
     <div className="flex grow flex-col gap-4">
@@ -31,7 +31,7 @@ export const LatestReleasesCategory = async ({ initialLayout }: Props) => {
       </div>
       <LatestReleasesLayout
         initialLayout={initialLayout}
-        initialData={"totalPages" in releases ? releases.medias : releases}
+        initialData={releases}
       />
     </div>
   )

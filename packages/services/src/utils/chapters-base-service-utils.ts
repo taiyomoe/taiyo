@@ -152,6 +152,5 @@ const getFormattedLatestReleasesGrouped = async (
 export const BaseChaptersServiceUtils = {
   latestReleaseQuery,
   formatRawLatestReleases,
-  formatRawLatestReleasesGrouped,
   getFormattedLatestReleasesGrouped,
 }
