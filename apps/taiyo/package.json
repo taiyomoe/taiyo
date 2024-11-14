@@ -61,7 +61,7 @@
     "react-dropzone": "^14.3.5",
     "react-fast-marquee": "^1.6.5",
     "react-hook-form": "^7.53.2",
-    "react-instantsearch": "^7.13.7",
+    "react-instantsearch": "^7.13.8",
     "react-querybuilder": "^8.0.0",
     "react-select": "^5.8.3",
     "react-selectable-box": "^1.9.8",
