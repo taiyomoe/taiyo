@@ -1,7 +1,7 @@
 "use client"
 
 import type { HomeLayout } from "@taiyomoe/db"
-import type { LatestRelease, LatestReleaseGrouped } from "@taiyomoe/types"
+import type { LatestRelease, LatestReleaseGroupedLite } from "@taiyomoe/types"
 import { useAtomValue } from "jotai"
 import { releasesLayoutAtom } from "~/atoms/homeLayout.atoms"
 import { LatestReleasesColumnLayout } from "./columns-layout/latest-releases-column-layout"
@@ -9,7 +9,7 @@ import { LatestReleasesRowsLayout } from "./rows-layout/latest-releases-rows-lay
 
 type Props = {
   initialLayout: HomeLayout
-  initialData: LatestRelease[] | LatestReleaseGrouped[]
+  initialData: LatestRelease[] | LatestReleaseGroupedLite[]
 }
 
 export const LatestReleasesLayout = ({ initialLayout, initialData }: Props) => {
@@ -29,7 +29,7 @@ export const LatestReleasesLayout = ({ initialLayout, initialData }: Props) => {
     <LatestReleasesColumnLayout
       initialData={
         initialLayout === "COLUMNS"
-          ? (initialData as LatestReleaseGrouped[])
+          ? (initialData as LatestReleaseGroupedLite[])
           : null
       }
     />

@@ -1,7 +1,4 @@
-import {
-  getLatestChaptersGroupedByUserSchema,
-  getLatestChaptersGroupedSchema,
-} from "@taiyomoe/schemas"
+import { getLatestChaptersGroupedByUserSchema } from "@taiyomoe/schemas"
 import { bulkMutateChaptersHandler } from "../handlers/bulk-mutate-chapters.handler"
 import { getChapterByIdHandler } from "../handlers/get-chapter-by-id.handler"
 import { getChapterByMediaIdHandler } from "../handlers/get-chapter-by-media-id.handler"
@@ -24,15 +21,9 @@ export const chaptersRouter = createTRPCRouter({
   getLatest: publicProcedure.query(({ ctx }) =>
     ctx.services.chapters.getLatest(ctx.session?.user.preferredTitles),
   ),
-  getLatestGrouped: publicProcedure
-    .input(getLatestChaptersGroupedSchema)
-    .query(({ ctx, input }) =>
-      ctx.services.chapters.getLatestGrouped(
-        input,
-        ctx.session?.user.id,
-        ctx.session?.user.preferredTitles,
-      ),
-    ),
+  getLatestGroupedLite: publicProcedure.query(({ ctx }) =>
+    ctx.services.chapters.getLatestGroupedLite(),
+  ),
   getLatestGroupedByUser: publicProcedure
     .input(getLatestChaptersGroupedByUserSchema)
     .query(({ ctx, input }) =>

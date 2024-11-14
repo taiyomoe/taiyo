@@ -2,8 +2,8 @@ import type { Languages } from "@taiyomoe/db"
 import type {
   FeaturedMedia,
   LatestMedia,
+  LatestReleaseGroupedLite,
   RawLatestRelease,
-  RawLatestReleaseGrouped,
 } from "@taiyomoe/types"
 import DF from "ioredis"
 import SuperJSON from "superjson"
@@ -53,21 +53,21 @@ export const cacheClient = {
       set: (input: RawLatestRelease[]) =>
         client.setex("chapters:latest", DAY, SuperJSON.stringify(input)),
     },
-    latestGrouped: {
+    latestGroupedLite: {
       get: () =>
-        parseCache<RawLatestReleaseGrouped[]>(
-          client.get("chapters:latest:grouped"),
+        parseCache<LatestReleaseGroupedLite[]>(
+          client.get("chapters:latest:grouped-lite"),
         ),
-      set: (input: RawLatestReleaseGrouped[]) =>
+      set: (input: LatestReleaseGroupedLite[]) =>
         client.setex(
-          "chapters:latest:grouped",
+          "chapters:latest:grouped-lite",
           DAY,
           SuperJSON.stringify(input),
         ),
     },
     invalidateAll: async () => {
       await client.del("chapters:latest")
-      await client.del("chapters:latest:grouped")
+      await client.del("chapters:latest:grouped-lite")
     },
   },
   clear: () => client.flushdb(),

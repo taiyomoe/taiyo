@@ -37,6 +37,17 @@ export type LatestRelease = Omit<RawLatestRelease, "media"> & {
   }
 }
 
+export type RawLatestReleaseGroupedLite = Pick<
+  MediaChapter,
+  "id" | "createdAt" | "number" | "mediaId"
+>
+
+export type LatestReleaseGroupedLite = {
+  id: string
+  coverId: string
+  chapters: Omit<RawLatestReleaseGroupedLite, "mediaId">[]
+}
+
 export type RawLatestReleaseGroupedChapter = Pick<
   MediaChapter,
   "id" | "createdAt" | "number" | "volume" | "title" | "mediaId" | "uploaderId"
@@ -46,34 +57,21 @@ export type RawLatestReleaseGroupedChapter = Pick<
   totalCount: number
   rank: number
 }
-export type RawLatestReleaseGrouped = {
-  id: Media["id"]
-  synopsis: Media["synopsis"]
+export type RawLatestReleaseGrouped = Pick<Media, "id" | "synopsis"> & {
   hasMoreChapters: boolean
-  coverId: MediaCover["id"]
-  titles: {
-    title: MediaTitle["title"]
-    language: MediaTitle["language"]
-    priority: MediaTitle["priority"]
-    isAcronym: MediaTitle["isAcronym"]
-    isMainTitle: MediaTitle["isMainTitle"]
-  }[]
-  chapters: {
-    id: MediaChapter["id"]
-    createdAt: MediaChapter["createdAt"]
-    number: MediaChapter["number"]
-    volume: MediaChapter["volume"]
-    title: MediaChapter["title"]
+  coverId: string
+  titles: Pick<
+    MediaTitle,
+    "title" | "language" | "priority" | "isAcronym" | "isMainTitle"
+  >[]
+  chapters: (Pick<
+    MediaChapter,
+    "id" | "createdAt" | "number" | "volume" | "title"
+  > & {
     completed: boolean | null
-    uploader: {
-      id: User["id"]
-      name: User["name"]
-    }
-    scans: {
-      id: Scan["id"]
-      name: Scan["name"]
-    }[]
-  }[]
+    uploader: Pick<User, "id" | "name">
+    scans: Pick<Scan, "id" | "name">[]
+  })[]
 }
 
 export type LatestReleaseGrouped = Omit<RawLatestReleaseGrouped, "titles"> & {
