@@ -43,12 +43,13 @@ export const TrendingMediasCarousel = ({ initialLayout, medias }: Props) => {
 
   return (
     <>
-      <div className="relative">
+      <div
+        className="relative data-[releases-layout=ROWS]:lg:hidden"
+        data-releases-layout={layout}
+      >
         <ScrollShadow
           ref={horizontalEmblaRef}
-          className="data-[releases-layout=ROWS]:lg:hidden"
           orientation="horizontal"
-          data-releases-layout={layout}
           data-right-scroll={true}
           hideScrollBar
         >
@@ -69,7 +70,6 @@ export const TrendingMediasCarousel = ({ initialLayout, medias }: Props) => {
           className="-top-[52px] absolute right-0"
           onPrev={() => horizontalEmblaApi?.scrollPrev()}
           onNext={() => horizontalEmblaApi?.scrollNext()}
-          data-releases-layout={layout}
         />
       </div>
       <div
