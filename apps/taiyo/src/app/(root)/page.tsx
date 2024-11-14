@@ -24,7 +24,7 @@ export default async function Page() {
           data-releases-layout={initialLayout}
         >
           <LatestReleasesCategory initialLayout={initialLayout} />
-          <TrendingMediasCategory />
+          <TrendingMediasCategory initialLayout={initialLayout} />
         </div>
         <LatestMediasCategory />
       </div>
