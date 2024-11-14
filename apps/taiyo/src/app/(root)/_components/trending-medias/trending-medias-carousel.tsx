@@ -62,7 +62,7 @@ export const TrendingMediasCarousel = ({ medias }: Props) => {
           <Link
             key={media.id}
             href={`/media/${media.id}`}
-            className="relative mr-6 max-h-[400px] min-h-[400px] last:mr-0 hover:cursor-pointer lg:max-h-[498px] lg:min-h-[498px] data-[releases-layout=ROWS]:lg:mr-0 data-[releases-layout=COLUMNS]:lg:mb-6"
+            className="relative mr-6 max-h-[400px] min-h-[400px] last:mr-0 hover:cursor-pointer lg:max-h-[498px] lg:min-h-[498px] data-[releases-layout=ROWS]:lg:mr-0 data-[releases-layout=ROWS]:lg:mb-6"
             data-releases-layout={releasesLayout}
           >
             <MediaImage
