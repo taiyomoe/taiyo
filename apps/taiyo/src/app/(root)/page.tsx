@@ -1,3 +1,4 @@
+import { auth } from "@taiyomoe/auth/server"
 import { DashedGridPattern } from "~/components/ui/background-patterns/dashed-grid-pattern"
 import { siteConfig } from "~/lib/config"
 import { FeaturedMediasCategory } from "./_components/featured-medias/featured-medias-category"
@@ -6,6 +7,10 @@ import { LatestReleasesCategory } from "./_components/latest-releases/latest-rel
 import { TrendingMediasCategory } from "./_components/trending-medias/trending-medias-category"
 
 export default async function Page() {
+  const session = await auth()
+  const initialLayout =
+    session?.user.homeLayout ?? siteConfig.home.releasesLayout
+
   return (
     <main className="flex h-full flex-col gap-12">
       <FeaturedMediasCategory />
@@ -15,10 +20,10 @@ export default async function Page() {
         </div>
         <div
           id={siteConfig.home.releasesLayoutContainerId}
-          className="z-0 flex w-full flex-col gap-12 data-[releases-layout=columns]:flex-col lg:flex-row"
-          data-releases-layout={siteConfig.home.releasesLayout}
+          className="z-0 flex w-full flex-col gap-12 data-[releases-layout=COLUMNS]:flex-col lg:flex-row"
+          data-releases-layout={initialLayout}
         >
-          <LatestReleasesCategory />
+          <LatestReleasesCategory initialLayout={initialLayout} />
           <TrendingMediasCategory />
         </div>
         <LatestMediasCategory />

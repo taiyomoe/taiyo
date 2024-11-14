@@ -8,6 +8,7 @@ import {
   ContentRatingSchema,
   CountriesSchema,
   GendersSchema,
+  HomeLayoutSchema,
   LanguagesSchema,
 } from "./prisma"
 
@@ -39,6 +40,7 @@ export const updateUserSettingsSchema = z
     preferredTitles: optionalEnumSchema(LanguagesSchema),
     showFollowing: z.boolean(),
     showLibrary: z.boolean(),
+    homeLayout: HomeLayoutSchema,
   })
   .partial()
 

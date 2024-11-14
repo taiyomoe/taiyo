@@ -9,7 +9,6 @@ import Link from "next/link"
 import { useEffect, useRef } from "react"
 import { releasesLayoutAtom } from "~/atoms/homeLayout.atoms"
 import { MediaImage } from "~/components/images/MediaImage"
-import { cn } from "~/lib/utils/cn"
 
 type Props = {
   medias: LatestMedia[]
@@ -41,7 +40,7 @@ export const TrendingMediasCarousel = ({ medias }: Props) => {
     if (previousReleasesLayout.current !== releasesLayout) {
       emblaApi.reInit({
         breakpoints:
-          releasesLayout === "rows" ? CAROUSEL_BREAKPOINTS : undefined,
+          releasesLayout === "ROWS" ? CAROUSEL_BREAKPOINTS : undefined,
       })
 
       previousReleasesLayout.current = releasesLayout
@@ -56,17 +55,15 @@ export const TrendingMediasCarousel = ({ medias }: Props) => {
       hideScrollBar
     >
       <div
-        className="flex max-h-[400px] flex-row data-[releases-layout=columns]:flex-row lg:max-h-[498px] lg:flex-col"
+        className="flex max-h-[400px] flex-row data-[releases-layout=COLUMNS]:flex-row lg:max-h-[498px] lg:flex-col"
         data-releases-layout={releasesLayout}
       >
         {medias.map((media) => (
           <Link
             key={media.id}
             href={`/media/${media.id}`}
-            className={cn(
-              "relative mr-6 max-h-[400px] min-h-[400px] last:mr-0 hover:cursor-pointer lg:max-h-[498px] lg:min-h-[498px]",
-              { "lg:mr-0 lg:mb-6": releasesLayout === "rows" },
-            )}
+            className="relative mr-6 max-h-[400px] min-h-[400px] last:mr-0 hover:cursor-pointer lg:max-h-[498px] lg:min-h-[498px] data-[releases-layout=ROWS]:lg:mr-0 data-[releases-layout=COLUMNS]:lg:mb-6"
+            data-releases-layout={releasesLayout}
           >
             <MediaImage
               src={CoverUtils.getUrl(media)}

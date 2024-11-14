@@ -1,14 +1,18 @@
-import { auth } from "@taiyomoe/auth/server"
-import { ChaptersService } from "~/services/chapters.web-service"
+import type { HomeLayout } from "@taiyomoe/db"
+import { api } from "~/trpc/server"
 // import { UnderlineButton } from "~/components/generics/buttons/underline-button"
 import { LatestReleasesLayout } from "./latest-releases-layout"
 import { LatestReleasesLayoutButton } from "./latest-releases-layout-button"
 
-export const LatestReleasesCategory = async () => {
-  const session = await auth()
-  const releases = await ChaptersService.getLatest(
-    session?.user.preferredTitles,
-  )
+type Props = {
+  initialLayout: HomeLayout
+}
+
+export const LatestReleasesCategory = async ({ initialLayout }: Props) => {
+  const releases =
+    initialLayout === "ROWS"
+      ? await api.chapters.getLatest()
+      : await api.chapters.getLatestGrouped({})
 
   return (
     <div className="flex grow flex-col gap-4">
@@ -16,16 +20,19 @@ export const LatestReleasesCategory = async () => {
         <p className="font-semibold text-2xl">Lançamentos</p>
         <div className="flex h-8 items-center gap-4">
           {/* <UnderlineButton className="hidden md:block">
-            Acompanhando
-          </UnderlineButton> */}
+              Acompanhando
+            </UnderlineButton> */}
           {/* <UnderlineButton className="block md:hidden">A</UnderlineButton> */}
-          <LatestReleasesLayoutButton />
+          <LatestReleasesLayoutButton initialLayout={initialLayout} />
           {/* <Button isIconOnly variant="light">
-            <ArrowRightIcon />
-          </Button> */}
+              <ArrowRightIcon />
+            </Button> */}
         </div>
       </div>
-      <LatestReleasesLayout releases={releases} />
+      <LatestReleasesLayout
+        initialLayout={initialLayout}
+        initialData={"totalPages" in releases ? releases.medias : releases}
+      />
     </div>
   )
 }

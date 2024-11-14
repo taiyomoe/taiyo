@@ -1,6 +1,8 @@
 import { DEFAULT_GROUPED_CHAPTERS_LIMIT } from "@taiyomoe/constants"
 import { type Languages, type Prisma, db } from "@taiyomoe/db"
 import type {
+  LatestRelease,
+  RawLatestRelease,
   RawLatestReleaseGrouped,
   RawLatestReleaseGroupedChapter,
 } from "@taiyomoe/types"
@@ -36,6 +38,19 @@ const latestReleaseQuery = {
   uploader: { select: { id: true, name: true } },
   scans: { select: { id: true, name: true } },
 } satisfies Prisma.MediaChapterFindManyArgs["select"]
+
+const formatRawLatestReleases = (
+  input: RawLatestRelease[],
+  preferredTitles?: Languages | null,
+): LatestRelease[] =>
+  input.map(({ media, ...r }) => ({
+    ...r,
+    media: {
+      id: media.id,
+      coverId: media.covers.at(0)!.id,
+      mainTitle: MediaUtils.getDisplayTitle(media.titles, preferredTitles),
+    },
+  }))
 
 const formatRawLatestReleasesGrouped = (
   input: RawLatestReleaseGrouped[],
@@ -136,6 +151,7 @@ const getFormattedLatestReleasesGrouped = async (
 
 export const BaseChaptersServiceUtils = {
   latestReleaseQuery,
+  formatRawLatestReleases,
   formatRawLatestReleasesGrouped,
   getFormattedLatestReleasesGrouped,
 }
