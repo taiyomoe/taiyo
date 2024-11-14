@@ -13,7 +13,6 @@ const carouselButtons = tv({
     orientation: {
       horizontal: {},
       vertical: {
-        base: "flex-col",
         prev: "rotate-90",
         next: "rotate-90",
       },

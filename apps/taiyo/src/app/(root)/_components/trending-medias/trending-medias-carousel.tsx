@@ -73,25 +73,25 @@ export const TrendingMediasCarousel = ({ initialLayout, medias }: Props) => {
         />
       </div>
       <div
-        ref={verticalEmblaRef}
-        className="relative hidden overflow-hidden data-[releases-layout=ROWS]:lg:flex"
+        className="relative hidden data-[releases-layout=ROWS]:lg:block"
         data-releases-layout={layout}
       >
-        <div className="flex h-[498px] flex-col gap-6">
-          {medias.map((media) => (
-            <TrendingMediasCard
-              key={media.id}
-              initialLayout={initialLayout}
-              media={media}
-            />
-          ))}
+        <div ref={verticalEmblaRef} className="flex overflow-hidden">
+          <div className="flex h-[498px] flex-col gap-6">
+            {medias.map((media) => (
+              <TrendingMediasCard
+                key={media.id}
+                initialLayout={initialLayout}
+                media={media}
+              />
+            ))}
+          </div>
         </div>
         <CarouselButtons
-          className="absolute right-4 bottom-4 hidden data-[releases-layout=COLUMNS]:hidden lg:flex"
+          className="-top-[52px] absolute right-0"
           orientation="vertical"
           onPrev={() => verticalEmblaApi?.scrollPrev()}
           onNext={() => verticalEmblaApi?.scrollNext()}
-          data-releases-layout={layout}
         />
       </div>
     </>
