@@ -1,7 +1,7 @@
+import { BaseChaptersService } from "@taiyomoe/services"
 import { CoverUtils, MediaUtils } from "@taiyomoe/utils"
 import { GENRES_PT } from "@taiyomoe/utils/i18n"
 import { ImageResponse } from "next/og"
-import { ChaptersService } from "~/services/chapters.web-service"
 import { MediasService } from "~/services/medias.web-service"
 import { OGUtils } from "~/utils/og.utils"
 import { DefaultOGCard } from "./default-og-card"
@@ -12,7 +12,7 @@ type Props = {
 
 export const MediaOGCard = async ({ mediaId }: Props) => {
   const media = await MediasService.getFull(mediaId)
-  const chaptersCount = await ChaptersService.getDistinctCount(mediaId)
+  const chaptersCount = await BaseChaptersService.getDistinctCount(mediaId)
   const hasDates = media?.startDate !== null || media?.endDate !== null
 
   if (!media) {
