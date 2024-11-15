@@ -62,7 +62,7 @@ export const RelationLoadStrategySchema = z.enum(['query','join']);
 
 export const UserProfileScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','banner','birthDate','gender','city','country','about','points','userId']);
 
-export const UserSettingScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','contentRating','preferredTitles','showFollowing','showLibrary','userId']);
+export const UserSettingScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','contentRating','preferredTitles','showFollowing','showLibrary','homeLayout','userId']);
 
 export const UserLibraryScalarFieldEnumSchema = z.enum(['reading','rereading','planToRead','completed','onHold','dropped','userId']);
 
@@ -111,6 +111,10 @@ export type RolesType = `${z.infer<typeof RolesSchema>}`
 export const GendersSchema = z.enum(['MALE','FEMALE','OTHER','NOT_SPECIFIED']);
 
 export type GendersType = `${z.infer<typeof GendersSchema>}`
+
+export const HomeLayoutSchema = z.enum(['ROWS','COLUMNS']);
+
+export type HomeLayoutType = `${z.infer<typeof HomeLayoutSchema>}`
 
 export const ContentRatingSchema = z.enum(['NORMAL','SUGGESTIVE','NSFW','NSFL']);
 
@@ -220,6 +224,7 @@ export type UserProfile = z.infer<typeof UserProfileSchema>
 export const UserSettingSchema = z.object({
   contentRating: ContentRatingSchema,
   preferredTitles: LanguagesSchema.nullable(),
+  homeLayout: HomeLayoutSchema,
   id: z.string(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),

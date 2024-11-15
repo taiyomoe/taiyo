@@ -1,31 +1,37 @@
 "use client"
 
-import type { LatestRelease } from "@taiyomoe/types"
-import { useAtom } from "jotai"
-import { useHydrateAtoms } from "jotai/utils"
+import type { HomeLayout } from "@taiyomoe/db"
+import type { LatestRelease, LatestReleaseGroupedLite } from "@taiyomoe/types"
+import { useAtomValue } from "jotai"
 import { releasesLayoutAtom } from "~/atoms/homeLayout.atoms"
-import { siteConfig } from "~/lib/config"
 import { LatestReleasesColumnLayout } from "./columns-layout/latest-releases-column-layout"
-import { ReleaseCardRow } from "./rows-layout/release-card-row"
+import { LatestReleasesRowsLayout } from "./rows-layout/latest-releases-rows-layout"
 
 type Props = {
-  releases: LatestRelease[]
+  initialLayout: HomeLayout
+  initialData: LatestRelease[] | LatestReleaseGroupedLite[]
 }
 
-export const LatestReleasesLayout = ({ releases }: Props) => {
-  const [releasesLayout] = useAtom(releasesLayoutAtom)
+export const LatestReleasesLayout = ({ initialLayout, initialData }: Props) => {
+  const layout = useAtomValue(releasesLayoutAtom)
 
-  useHydrateAtoms([[releasesLayoutAtom, siteConfig.home.releasesLayout]])
-
-  if (releasesLayout === "rows") {
+  if (layout === "ROWS") {
     return (
-      <div className="grid max-h-[752px] grid-cols-1 gap-4 overflow-hidden md:grid-cols-2 lg:md:grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3">
-        {releases.map((r, i) => (
-          <ReleaseCardRow key={r.id} release={r} index={i} />
-        ))}
-      </div>
+      <LatestReleasesRowsLayout
+        initialData={
+          initialLayout === "ROWS" ? (initialData as LatestRelease[]) : null
+        }
+      />
     )
   }
 
-  return <LatestReleasesColumnLayout />
+  return (
+    <LatestReleasesColumnLayout
+      initialData={
+        initialLayout === "COLUMNS"
+          ? (initialData as LatestReleaseGroupedLite[])
+          : null
+      }
+    />
+  )
 }
