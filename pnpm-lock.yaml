@@ -261,8 +261,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/utils
       '@tanstack/react-query':
-        specifier: ^5.60.2
-        version: 5.60.2(react@18.3.1)
+        specifier: ^5.60.4
+        version: 5.60.4(react@18.3.1)
       '@tanstack/react-table':
         specifier: ^8.20.5
         version: 8.20.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -271,7 +271,7 @@ importers:
         version: 11.0.0-rc.637(@trpc/server@11.0.0-rc.637(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
       '@trpc/react-query':
         specifier: 11.0.0-rc.637
-        version: 11.0.0-rc.637(@tanstack/react-query@5.60.2(react@18.3.1))(@trpc/client@11.0.0-rc.637(@trpc/server@11.0.0-rc.637(react-dom@18.3.1(react@18.3.1))(react@18.3.1)))(@trpc/server@11.0.0-rc.637(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 11.0.0-rc.637(@tanstack/react-query@5.60.4(react@18.3.1))(@trpc/client@11.0.0-rc.637(@trpc/server@11.0.0-rc.637(react-dom@18.3.1(react@18.3.1))(react@18.3.1)))(@trpc/server@11.0.0-rc.637(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@trpc/server':
         specifier: 11.0.0-rc.637
         version: 11.0.0-rc.637(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -3510,8 +3510,8 @@ packages:
   '@tanstack/query-core@5.59.20':
     resolution: {integrity: sha512-e8vw0lf7KwfGe1if4uPFhvZRWULqHjFcz3K8AebtieXvnMOz5FSzlZe3mTLlPuUBcydCnBRqYs2YJ5ys68wwLg==}
 
-  '@tanstack/react-query@5.60.2':
-    resolution: {integrity: sha512-JhpJNxIAPuE0YCpP1Py4zAsgx+zY0V531McRMtQbwVlJF8+mlZwcOPrzGmPV248K8IP+mPbsfxXToVNMNwjUcw==}
+  '@tanstack/react-query@5.60.4':
+    resolution: {integrity: sha512-zvtD5tenG4PDNtHOs7uJtC6NNPLn3jjRMiWGrccvzj8Lxgl/2CUvTY86G2qGAvwvU2siXueK02GwyS0uRdv0Ww==}
     peerDependencies:
       react: ^18 || ^19
 
@@ -9803,7 +9803,7 @@ snapshots:
 
   '@tanstack/query-core@5.59.20': {}
 
-  '@tanstack/react-query@5.60.2(react@18.3.1)':
+  '@tanstack/react-query@5.60.4(react@18.3.1)':
     dependencies:
       '@tanstack/query-core': 5.59.20
       react: 18.3.1
@@ -9824,9 +9824,9 @@ snapshots:
     dependencies:
       '@trpc/server': 11.0.0-rc.637(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
 
-  '@trpc/react-query@11.0.0-rc.637(@tanstack/react-query@5.60.2(react@18.3.1))(@trpc/client@11.0.0-rc.637(@trpc/server@11.0.0-rc.637(react-dom@18.3.1(react@18.3.1))(react@18.3.1)))(@trpc/server@11.0.0-rc.637(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@trpc/react-query@11.0.0-rc.637(@tanstack/react-query@5.60.4(react@18.3.1))(@trpc/client@11.0.0-rc.637(@trpc/server@11.0.0-rc.637(react-dom@18.3.1(react@18.3.1))(react@18.3.1)))(@trpc/server@11.0.0-rc.637(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
-      '@tanstack/react-query': 5.60.2(react@18.3.1)
+      '@tanstack/react-query': 5.60.4(react@18.3.1)
       '@trpc/client': 11.0.0-rc.637(@trpc/server@11.0.0-rc.637(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
       '@trpc/server': 11.0.0-rc.637(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react: 18.3.1
