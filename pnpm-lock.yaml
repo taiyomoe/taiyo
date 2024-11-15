@@ -606,8 +606,8 @@ importers:
         specifier: workspace:*
         version: link:../types
       rabbitmq-client:
-        specifier: ^5.0.0
-        version: 5.0.0
+        specifier: ^5.0.1
+        version: 5.0.1
       superjson:
         specifier: ^2.2.1
         version: 2.2.1
@@ -4910,8 +4910,8 @@ packages:
   quick-format-unescaped@4.0.4:
     resolution: {integrity: sha512-tYC1Q1hgyRuHgloV/YXs2w15unPVh8qfu/qCTfhTYamaw7fyhumKa2yGpdSo87vY32rIclj+4fWYQXUMs9EHvg==}
 
-  rabbitmq-client@5.0.0:
-    resolution: {integrity: sha512-IvPafeLO89qEv9QPbMb8nqkXOKRYHvo0sXntK8cHLY/fkkS8DJRtwCPtQerMZZ9n1jLhifJtioyK7vp5wIp6Gg==}
+  rabbitmq-client@5.0.1:
+    resolution: {integrity: sha512-oi6JtLc9R73HCJjudf75uEqMsxe+d5xm4TznGC/lMFnXh1kidmdnYdb6z/O26inm+BAMXkzquUHpRln/h1Nj4w==}
     engines: {node: '>=16'}
 
   radash@12.1.0:
@@ -11251,7 +11251,7 @@ snapshots:
 
   quick-format-unescaped@4.0.4: {}
 
-  rabbitmq-client@5.0.0: {}
+  rabbitmq-client@5.0.1: {}
 
   radash@12.1.0: {}
 
