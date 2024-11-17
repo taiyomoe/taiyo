@@ -34,18 +34,14 @@
     "S3_URL",
     "S3_ACCESS_KEY_ID",
     "S3_SECRET_ACCESS_KEY",
-    "S3_BUCKET_NAME",
+    "S3_CDN_BUCKET_NAME",
+    "S3_UPLOADS_BUCKET_NAME",
     "CLICKHOUSE_URL",
     "UMAMI_USER_ID",
     "UMAMI_SECRET",
     "GRAFANA_USERNAME",
     "GRAFANA_PASSWORD",
-    "GRAFANA_LOKI_URL",
-    "RABBITMQ_USERNAME",
-    "RABBITMQ_PASSWORD",
-    "RABBITMQ_SERVER_PORT",
-    "RABBITMQ_WEB_PORT",
-    "RABBITMQ_URL"
+    "GRAFANA_LOKI_URL"
   ],
   "globalPassThroughEnv": ["NODE_ENV", "CI", "npm_lifecycle_event"]
 }

@@ -1,7 +1,8 @@
 import { createEnv } from "@t3-oss/env-core"
-import { z } from "zod"
+import { env as cacheEnv } from "@taiyomoe/cache/env"
 
 export const env = createEnv({
+  extends: [cacheEnv],
   /**
    * Specify your shared environment variables schema here.
    */
@@ -11,13 +12,7 @@ export const env = createEnv({
    * Specify your server-side environment variables schema here.
    * This way you can ensure the app isn't built with invalid env vars.
    */
-  server: {
-    RABBITMQ_USERNAME: z.string(),
-    RABBITMQ_PASSWORD: z.string(),
-    RABBITMQ_SERVER_PORT: z.coerce.number(),
-    RABBITMQ_WEB_PORT: z.coerce.number(),
-    RABBITMQ_URL: z.string().url(),
-  },
+  server: {},
 
   /**
    * Specify your client-side environment variables schema here.

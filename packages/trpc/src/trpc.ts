@@ -13,6 +13,7 @@ import { db } from "@taiyomoe/db"
 import { logsClient } from "@taiyomoe/logs"
 import { meilisearchClient } from "@taiyomoe/meilisearch"
 import messages from "@taiyomoe/messages/en.json"
+import { messagingClient } from "@taiyomoe/messaging"
 import { s3Client } from "@taiyomoe/s3"
 import {
   BaseCoversService,
@@ -67,6 +68,7 @@ export const createTRPCContext = async (opts: {
   logs: logsClient,
   logger,
   umami: umamiClient,
+  messaging: messagingClient,
   s3: s3Client,
   services: {
     users: BaseUsersService,

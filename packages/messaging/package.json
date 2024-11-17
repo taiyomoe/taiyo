@@ -1,5 +1,5 @@
 {
-  "name": "@taiyomoe/rabbit",
+  "name": "@taiyomoe/messaging",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -14,8 +14,9 @@
   },
   "dependencies": {
     "@t3-oss/env-core": "^0.11.1",
+    "@taiyomoe/cache": "workspace:*",
     "@taiyomoe/types": "workspace:*",
-    "rabbitmq-client": "^5.0.1",
+    "bullmq": "^5.26.2",
     "superjson": "^2.2.1",
     "zod": "^3.23.8"
   },

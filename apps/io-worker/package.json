@@ -14,8 +14,10 @@
     "@taiyomoe/db": "workspace:*",
     "@taiyomoe/logs": "workspace:*",
     "@taiyomoe/meilisearch": "workspace:*",
-    "@taiyomoe/rabbit": "workspace:*",
+    "@taiyomoe/messaging": "workspace:*",
+    "@taiyomoe/schemas": "workspace:*",
     "@taiyomoe/services": "workspace:*",
+    "bullmq": "^5.26.2",
     "mangadex-full-api": "^6.0.0",
     "radash": "^12.1.0",
     "superjson": "^2.2.1"
