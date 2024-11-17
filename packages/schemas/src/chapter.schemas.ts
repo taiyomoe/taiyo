@@ -8,11 +8,11 @@ import {
   MEDIA_PER_PAGE_CHOICES,
 } from "@taiyomoe/constants"
 import { z } from "zod"
-
-import { zfd } from "zod-form-data"
 import {
   chapterNumberSchema,
   chapterVolumeSchema,
+  extensionSchema,
+  mimeTypeSchema,
   pageSchema,
   perPageSchema,
   sortableFieldsSchema,
@@ -27,8 +27,17 @@ export const uploadChapterSchema = z.object({
   flag: FlagSchema,
   language: LanguagesSchema,
   mediaId: z.string().uuid(),
-  scanIds: zfd.repeatableOfType(z.string().uuid()),
-  files: zfd.repeatable(zfd.file().array().min(1)),
+  scanIds: z.string().uuid().array(),
+  files: z
+    .object({
+      name: z.string(),
+      size: z.coerce.number().int().positive(),
+      mimeType: mimeTypeSchema,
+      extension: extensionSchema,
+      file: z.instanceof(File).optional(),
+    })
+    .array()
+    .min(1),
 })
 
 export const uploadChaptersSchema = z.object({

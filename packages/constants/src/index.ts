@@ -97,7 +97,9 @@ export const ALLOWED_MIME_TYPES = [
   "image/png",
   "image/webp",
   "image/gif",
-]
+] as const
+
+export const ALLOWED_EXTENSIONS = ["jpg", "jpeg", "png", "webp", "gif"] as const
 
 export * from "./i18n"
 export * from "./tags"
