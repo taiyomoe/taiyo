@@ -15,7 +15,8 @@ export const env = createEnv({
     S3_URL: z.string().url(),
     S3_ACCESS_KEY_ID: z.string(),
     S3_SECRET_ACCESS_KEY: z.string(),
-    S3_BUCKET_NAME: z.string(),
+    S3_CDN_BUCKET_NAME: z.string(),
+    S3_UPLOADS_BUCKET_NAME: z.string(),
   },
 
   /**

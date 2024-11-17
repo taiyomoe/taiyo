@@ -24,7 +24,7 @@ export const getSignedUrl = async (
 ) => {
   const result = await presignedClient.sign(
     new Request(
-      `${env.S3_URL}/${env.S3_BUCKET_NAME}/${key}?X-Amz-Expires=${300}`,
+      `${env.S3_URL}/${env.S3_UPLOADS_BUCKET_NAME}/${key}?X-Amz-Expires=${300}`,
       { method: "PUT" },
     ),
     {

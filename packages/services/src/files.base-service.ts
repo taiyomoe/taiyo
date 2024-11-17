@@ -55,7 +55,7 @@ const download = (logger: Logger) => async (input: string) => {
 const upload = (logger: Logger) => async (baseKey: string, file: Buffer) => {
   const { id, mimeType, extension } = await parse(file)
   const command = new PutObjectCommand({
-    Bucket: env.S3_BUCKET_NAME,
+    Bucket: env.S3_CDN_BUCKET_NAME,
     Key: `${baseKey}/${id}.${extension}`,
     ContentType: mimeType,
     Body: await compressImage(file, extension),
