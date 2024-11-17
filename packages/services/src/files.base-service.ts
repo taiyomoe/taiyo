@@ -1,5 +1,5 @@
 import { randomUUID } from "crypto"
-import { PutObjectCommand, client } from "@taiyomoe/s3"
+import { PutObjectCommand, s3Client } from "@taiyomoe/s3"
 import { fileTypeFromBuffer } from "file-type"
 import sharp from "sharp"
 import { env } from "./env"
@@ -63,7 +63,7 @@ const upload = (logger: Logger) => async (baseKey: string, file: Buffer) => {
 
   logger.debug(`Uploading file to S3: ${baseKey}/${id}.${extension}`)
 
-  await client.send(command)
+  await s3Client.send(command)
 
   logger.debug(`File uploaded to S3: ${baseKey}/${id}.${extension}`)
 

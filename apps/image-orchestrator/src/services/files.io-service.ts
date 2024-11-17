@@ -1,4 +1,4 @@
-import { PutObjectCommand, client } from "@taiyomoe/s3"
+import { PutObjectCommand, s3Client } from "@taiyomoe/s3"
 import { BaseFilesService } from "@taiyomoe/services"
 import { parallel, tryit } from "radash"
 import { env } from "../env"
@@ -17,7 +17,7 @@ const upload = (baseKey: string) => async (file: File | Blob) => {
     Body: await ImagesService.compress(file, extension),
   })
 
-  await client.send(command)
+  await s3Client.send(command)
 
   return { id, extension }
 }
