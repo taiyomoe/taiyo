@@ -5,17 +5,10 @@ import type {
   MediaChapterNavigation,
   MediaLimitedChapter,
 } from "@taiyomoe/types"
-import { env } from "./env"
-
-const getTitle = (chapter: { title: string | null; number: number }) => {
-  return chapter.title ?? `Cap. ${chapter.number}`
-}
 
 const getUrl = (chapter: { id: string }) => {
   return `/chapter/${chapter.id}/1`
 }
-
-const getUploadEndpoint = () => `${env.NEXT_PUBLIC_IO_URL}/upload`
 
 const getNavigation = (
   chapter: { pages: MediaChapter["pages"] },
@@ -25,14 +18,6 @@ const getNavigation = (
   currentPage,
   nextPage: currentPage === chapter.pages.length ? null : currentPage + 1,
 })
-
-const getVolumes = (chapter: { volume: number | null }[]) => {
-  const volumes = chapter
-    .map((c) => c.volume)
-    .filter((v) => v !== null) as number[]
-
-  return [...new Set(volumes)].sort((a, b) => b - a)
-}
 
 const getDuplicatedChapters = (
   input: BulkUpdateChaptersVolumesInput["volumes"],
@@ -51,13 +36,6 @@ const getDuplicatedChapters = (
   duplicated.sort()
 
   return duplicated
-}
-
-const getFromRange = (
-  chapter: { id: string; number: number }[],
-  range: number[],
-) => {
-  return chapter.filter((c) => range.includes(c.number)).map((c) => c.id)
 }
 
 const computeVolumeGroups = (input: MediaLimitedChapter[]) => {
@@ -136,13 +114,9 @@ const parseUrl = (pathname: string) => {
 }
 
 export const ChapterUtils = {
-  getTitle,
   getUrl,
-  getUploadEndpoint,
   getNavigation,
-  getVolumes,
   getDuplicatedChapters,
-  getFromRange,
   computeVolumeGroups,
   computeOrder,
   parseUrl,
