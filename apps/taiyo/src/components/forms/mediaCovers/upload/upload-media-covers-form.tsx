@@ -1,12 +1,6 @@
-import { typeboxResolver } from "@hookform/resolvers/typebox"
-import {
-  type UploadCoversInput,
-  uploadCoversSchema,
-} from "@taiyomoe/image-orchestrator"
 import { type SubmitHandler, useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { Form } from "~/components/generics/form/form"
-import { ioApi } from "~/eden/client"
 import { parallel } from "~/lib/utils/array.utils"
 import { useMediaUpdateStore } from "~/stores"
 import { UploadMediaCoversFormFields } from "./upload-media-covers-form-fields"

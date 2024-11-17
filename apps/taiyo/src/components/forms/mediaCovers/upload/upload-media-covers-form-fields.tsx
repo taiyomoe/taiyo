@@ -1,6 +1,5 @@
 import { Card, CardBody } from "@nextui-org/card"
 import { ContentRating, Languages } from "@taiyomoe/db"
-import type { UploadCoversInput } from "@taiyomoe/image-orchestrator"
 import { useDropzone } from "react-dropzone"
 import { useFieldArray } from "react-hook-form"
 import { List } from "~/components/generics/List"
