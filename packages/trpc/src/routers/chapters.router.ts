@@ -7,9 +7,11 @@ import { getChaptersListHandler } from "../handlers/get-chapters-list.handler"
 import { updateChapterScansHandler } from "../handlers/update-chapter-scans.handler"
 import { updateChapterVolumesHandler } from "../handlers/update-chapter-volumes.handler"
 import { updateChapterHandler } from "../handlers/update-chapter.handler"
+import { uploadChapterHandler } from "../handlers/upload-chapter.handler"
 import { createTRPCRouter, publicProcedure } from "../trpc"
 
 export const chaptersRouter = createTRPCRouter({
+  upload: uploadChapterHandler,
   update: updateChapterHandler,
   updateVolumes: updateChapterVolumesHandler,
   updateScans: updateChapterScansHandler,

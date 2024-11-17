@@ -1,4 +1,5 @@
 import type { Languages } from "@taiyomoe/db"
+import type { UploadChapterInput } from "@taiyomoe/schemas"
 import type {
   FeaturedMedia,
   LatestMedia,
@@ -63,6 +64,18 @@ export const cacheClient = {
           "chapters:latest:grouped-lite",
           DAY,
           SuperJSON.stringify(input),
+        ),
+    },
+    uploads: {
+      set: (input: UploadChapterInput & { id: string; pages: string[] }) =>
+        client.setex(
+          `chapters:uploads:${input.id}`,
+          DAY,
+          SuperJSON.stringify(input),
+        ),
+      get: (id: string) =>
+        parseCache<UploadChapterInput & { id: string; pages: string[] }>(
+          client.get(`chapters:uploads:${id}`),
         ),
     },
     invalidateAll: async () => {
