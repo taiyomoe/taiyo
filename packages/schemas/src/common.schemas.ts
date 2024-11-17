@@ -1,3 +1,4 @@
+import { ALLOWED_EXTENSIONS, ALLOWED_MIME_TYPES } from "@taiyomoe/constants"
 import { z } from "zod"
 
 export const idSchema = z.string().uuid()
@@ -6,6 +7,8 @@ export const intsSchema = z.coerce.number().array().catch([])
 export const uuidsSchema = z.string().uuid().array().catch([])
 export const chapterNumberSchema = z.coerce.number().min(0)
 export const chapterVolumeSchema = z.coerce.number().min(0).nullish()
+export const mimeTypeSchema = z.enum(ALLOWED_MIME_TYPES)
+export const extensionSchema = z.enum(ALLOWED_EXTENSIONS)
 
 export const perPageSchema = (initial: number, choices: number[]) =>
   z.coerce

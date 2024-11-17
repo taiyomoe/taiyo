@@ -1,6 +1,7 @@
 import { TRPCClientError } from "@trpc/client"
 import { useMessages } from "next-intl"
 import { get } from "radash"
+import { toast } from "sonner"
 
 export const useErrorHandler = () => {
   const messages = useMessages()
@@ -10,12 +11,21 @@ export const useErrorHandler = () => {
       reject?.()
 
       if (err instanceof TRPCClientError) {
-        console.log("is trpc erro", err, messages)
         return get(messages, `api.${err.message}`, defaultMessage)
       }
 
       return defaultMessage
     }
 
-  return { handleError }
+  const handleErrorRaw = (
+    err: unknown,
+    defaultMessage: string,
+    toastId: string | number,
+  ) => {
+    const message = handleError(defaultMessage)(err)
+
+    toast.error(message, { id: toastId })
+  }
+
+  return { handleError, handleErrorRaw }
 }

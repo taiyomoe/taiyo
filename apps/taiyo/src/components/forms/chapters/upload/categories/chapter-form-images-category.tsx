@@ -6,16 +6,20 @@ import { Form } from "~/components/generics/form/form"
 import { AssetSelection } from "~/components/ui/upload/asset-selection"
 import { ImageCard } from "~/components/ui/upload/image-card"
 import { DEFAULT_MIME_TYPES } from "~/lib/utils/constants"
+import { UploadUtils } from "~/utils/upload.utils"
 
 export const ChapterFormImagesCategory = () => {
   const { setValue, watch } = useFormContext()
   const { getRootProps, getInputProps, open } = useDropzone({
     accept: DEFAULT_MIME_TYPES,
-    onDrop: (files) => {
-      setValue("files", files, { shouldValidate: true, shouldDirty: true })
-    },
+    onDrop: UploadUtils.handleDrop((files) => {
+      setValue("files", files, {
+        shouldValidate: true,
+        shouldDirty: true,
+      })
+    }),
   })
-  const selectedFiles = watch("files") as File[]
+  const selectedFiles = watch("files") as { file: File }[]
 
   return (
     <Form.Category
@@ -36,10 +40,10 @@ export const ChapterFormImagesCategory = () => {
           <input {...getInputProps()} disabled={selectedFiles.length !== 0} />
           {selectedFiles.length === 0 && <AssetSelection type="image" />}
           {selectedFiles.length !== 0 &&
-            selectedFiles.map((f, i) => (
+            selectedFiles.map(({ file }, i) => (
               <ImageCard
-                key={f.name}
-                file={f}
+                key={file.name}
+                file={file}
                 position={`${i + 1}/${selectedFiles.length}`}
               />
             ))}
