@@ -1,10 +1,10 @@
 import type { Languages } from "@taiyomoe/db"
-import type { UploadChapterInput } from "@taiyomoe/schemas"
 import type {
   FeaturedMedia,
   LatestMedia,
   LatestReleaseGroupedLite,
   RawLatestRelease,
+  UploadChapterMessageInput,
 } from "@taiyomoe/types"
 import DF from "ioredis"
 import SuperJSON from "superjson"
@@ -67,14 +67,14 @@ export const cacheClient = {
         ),
     },
     uploads: {
-      set: (input: UploadChapterInput & { id: string; pages: string[] }) =>
+      set: (input: UploadChapterMessageInput) =>
         client.setex(
           `chapters:uploads:${input.id}`,
           DAY,
           SuperJSON.stringify(input),
         ),
       get: (id: string) =>
-        parseCache<UploadChapterInput & { id: string; pages: string[] }>(
+        parseCache<UploadChapterMessageInput>(
           client.get(`chapters:uploads:${id}`),
         ),
     },

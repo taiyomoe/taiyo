@@ -29,6 +29,9 @@ importers:
 
   apps/io-worker:
     dependencies:
+      '@taiyomoe/cache':
+        specifier: workspace:*
+        version: link:../../packages/cache
       '@taiyomoe/db':
         specifier: workspace:*
         version: link:../../packages/db
@@ -38,15 +41,24 @@ importers:
       '@taiyomoe/meilisearch':
         specifier: workspace:*
         version: link:../../packages/meilisearch
+      '@taiyomoe/messages':
+        specifier: workspace:*
+        version: link:../../packages/messages
       '@taiyomoe/messaging':
         specifier: workspace:*
         version: link:../../packages/messaging
+      '@taiyomoe/s3':
+        specifier: workspace:*
+        version: link:../../packages/s3
       '@taiyomoe/schemas':
         specifier: workspace:*
         version: link:../../packages/schemas
       '@taiyomoe/services':
         specifier: workspace:*
         version: link:../../packages/services
+      '@taiyomoe/utils':
+        specifier: workspace:*
+        version: link:../../packages/utils
       bullmq:
         specifier: ^5.26.2
         version: 5.26.2

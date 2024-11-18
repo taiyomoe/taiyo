@@ -11,12 +11,15 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@taiyomoe/cache": "workspace:*",
     "@taiyomoe/db": "workspace:*",
     "@taiyomoe/logs": "workspace:*",
     "@taiyomoe/meilisearch": "workspace:*",
     "@taiyomoe/messaging": "workspace:*",
+    "@taiyomoe/s3": "workspace:*",
     "@taiyomoe/schemas": "workspace:*",
     "@taiyomoe/services": "workspace:*",
+    "@taiyomoe/utils": "workspace:*",
     "bullmq": "^5.26.2",
     "mangadex-full-api": "^6.0.0",
     "radash": "^12.1.0",

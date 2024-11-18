@@ -1,10 +1,8 @@
 import { randomUUID } from "crypto"
-import { PutObjectCommand, s3Client } from "@taiyomoe/s3"
+import { GetObjectCommand, PutObjectCommand, s3Client } from "@taiyomoe/s3"
 import { fileTypeFromBuffer } from "file-type"
 import sharp from "sharp"
 import { env } from "./env"
-
-type Logger = { debug: (content: string) => void }
 
 /**
  * Every file is converted to a JPEG file, except for GIF files.
@@ -38,21 +36,33 @@ const compressImage = async (file: Buffer, extension: string) => {
     .toBuffer()
 }
 
-const download = (logger: Logger) => async (input: string) => {
-  logger.debug(`Downloading file from: ${input}`)
-
+const download = async (input: string) => {
   const response = await fetch(input)
 
   if (!response.ok) {
     throw new Error(`Failed to download file: ${input}`)
   }
 
-  logger.debug(`Downloaded file from: ${input}`)
-
   return Buffer.from(await response.arrayBuffer())
 }
 
-const upload = (logger: Logger) => async (baseKey: string, file: Buffer) => {
+const downloadFromS3 = async (input: string) => {
+  const command = new GetObjectCommand({
+    Bucket: env.S3_UPLOADS_BUCKET_NAME,
+    Key: input,
+  })
+  const result = await s3Client.send(command)
+
+  if (!result.Body) {
+    throw new Error(`Couldn't download the file ${input}`)
+  }
+
+  const byteArray = await result.Body.transformToByteArray()
+
+  return Buffer.from(byteArray)
+}
+
+const upload = async (baseKey: string, file: Buffer) => {
   const { id, mimeType, extension } = await parse(file)
   const command = new PutObjectCommand({
     Bucket: env.S3_CDN_BUCKET_NAME,
@@ -61,18 +71,15 @@ const upload = (logger: Logger) => async (baseKey: string, file: Buffer) => {
     Body: await compressImage(file, extension),
   })
 
-  logger.debug(`Uploading file to S3: ${baseKey}/${id}.${extension}`)
-
   await s3Client.send(command)
-
-  logger.debug(`File uploaded to S3: ${baseKey}/${id}.${extension}`)
 
   return { id, extension }
 }
 
-export const BaseFilesService = (logger: Logger) => ({
+export const BaseFilesService = {
   parse,
   compressImage,
-  download: download(logger),
-  upload: upload(logger),
-})
+  download,
+  downloadFromS3,
+  upload,
+}

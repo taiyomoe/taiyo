@@ -1,7 +1,7 @@
 import { randomUUID } from "crypto"
 import { getSignedUrl } from "@taiyomoe/s3"
 import { uploadChapterSchema } from "@taiyomoe/schemas"
-import { parallel } from "radash"
+import { omit, parallel } from "radash"
 import { protectedProcedure } from "../trpc"
 
 export const uploadChapterHandler = protectedProcedure
@@ -28,9 +28,10 @@ export const uploadChapterHandler = protectedProcedure
     )
 
     await ctx.cache.chapters.uploads.set({
-      ...input,
+      ...omit(input, ["files"]),
       id: chapterId,
       pages: pages.flatMap((p) => `${chapterId}/${p.id}.${p.extension}`),
+      uploaderId: ctx.session.user.id,
     })
 
     return { id: chapterId, urls: presignedUrls }

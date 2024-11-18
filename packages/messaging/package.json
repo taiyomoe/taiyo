@@ -17,7 +17,6 @@
     "@taiyomoe/cache": "workspace:*",
     "@taiyomoe/types": "workspace:*",
     "bullmq": "^5.26.2",
-    "superjson": "^2.2.1",
     "zod": "^3.23.8"
   },
   "devDependencies": {

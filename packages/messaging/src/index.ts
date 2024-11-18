@@ -1,3 +1,4 @@
+import type { UploadChapterMessageInput } from "@taiyomoe/types"
 import { Queue, QueueEvents } from "bullmq"
 import { QUEUE_OPTIONS, UPLOADS_QUEUE } from "./constants"
 
@@ -14,7 +15,8 @@ export const messagingClient = {
 
   medias: {},
   chapters: {
-    upload: (input: unknown) => uploadsQueue.add("chapters-upload", input),
+    upload: (input: UploadChapterMessageInput) =>
+      uploadsQueue.add("chapters-upload", input),
   },
 }
 

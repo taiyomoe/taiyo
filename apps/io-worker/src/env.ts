@@ -1,8 +1,9 @@
 import { createEnv } from "@t3-oss/env-core"
 import { env as cacheEnv } from "@taiyomoe/cache/env"
+import { env as s3Env } from "@taiyomoe/s3/env"
 
 export const env = createEnv({
-  extends: [cacheEnv],
+  extends: [cacheEnv, s3Env],
   /**
    * Specify your shared environment variables schema here.
    */
