@@ -29,6 +29,9 @@ importers:
 
   apps/io-worker:
     dependencies:
+      '@t3-oss/env-core':
+        specifier: ^0.11.1
+        version: 0.11.1(typescript@5.6.3)(zod@3.23.8)
       '@taiyomoe/cache':
         specifier: workspace:*
         version: link:../../packages/cache
@@ -47,9 +50,6 @@ importers:
       '@taiyomoe/s3':
         specifier: workspace:*
         version: link:../../packages/s3
-      '@taiyomoe/schemas':
-        specifier: workspace:*
-        version: link:../../packages/schemas
       '@taiyomoe/services':
         specifier: workspace:*
         version: link:../../packages/services
@@ -65,9 +65,6 @@ importers:
       radash:
         specifier: ^12.1.0
         version: 12.1.0
-      superjson:
-        specifier: ^2.2.1
-        version: 2.2.1
     devDependencies:
       '@taiyomoe/tsconfig':
         specifier: workspace:*
@@ -489,9 +486,6 @@ importers:
       '@taiyomoe/cache':
         specifier: workspace:*
         version: link:../cache
-      '@taiyomoe/db':
-        specifier: workspace:*
-        version: link:../db
       '@taiyomoe/types':
         specifier: workspace:*
         version: link:../types
