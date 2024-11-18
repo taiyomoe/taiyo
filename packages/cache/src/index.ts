@@ -6,6 +6,7 @@ import type {
   LatestReleaseGroupedLite,
   RawLatestRelease,
   UploadChapterMessageInput,
+  UploadCoverMessageInput,
 } from "@taiyomoe/types"
 import DF from "ioredis"
 import SuperJSON from "superjson"
@@ -27,7 +28,7 @@ export const cacheClient = {
       set: (input: CreateMediaMessageInput) =>
         client.setex(
           `medias:create:${input.id}`,
-          DAY,
+          HOUR,
           SuperJSON.stringify(input),
         ),
       get: (id: string) =>
@@ -66,6 +67,22 @@ export const cacheClient = {
     },
   },
 
+  covers: {
+    /**
+     * Mutations
+     */
+    upload: {
+      set: (input: UploadCoverMessageInput) =>
+        client.setex(
+          `covers:upload:${input.id}`,
+          HOUR,
+          SuperJSON.stringify(input),
+        ),
+      get: (id: string) =>
+        parseCache<UploadCoverMessageInput>(client.get(`covers:upload:${id}`)),
+    },
+  },
+
   chapters: {
     /**
      * Mutations
@@ -74,7 +91,7 @@ export const cacheClient = {
       set: (input: UploadChapterMessageInput) =>
         client.setex(
           `chapters:uploads:${input.id}`,
-          DAY,
+          HOUR,
           SuperJSON.stringify(input),
         ),
       get: (id: string) =>

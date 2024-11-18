@@ -10,8 +10,6 @@ import type { CreateMediaMessageInput } from "@taiyomoe/types"
 import { pick } from "radash"
 
 export const createMediaHandler = async (input: CreateMediaMessageInput) => {
-  console.log("inside handler", input)
-
   const mainCover = await BaseFilesService.downloadFromS3(input.mainCover)
   const uploadedMainCover = await BaseFilesService.upload(
     `medias/${input.id}/covers`,

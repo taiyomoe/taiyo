@@ -3,6 +3,7 @@ import { env } from "@taiyomoe/messaging/env"
 import { Worker } from "bullmq"
 import { createMediaHandler } from "~/handlers/create-media.handler"
 import { uploadChapterHandler } from "~/handlers/upload-chapter.handler"
+import { uploadCoverHandler } from "~/handlers/upload-cover.handler"
 import { logger } from "~/utils/logger"
 
 const worker = new Worker(
@@ -13,6 +14,8 @@ const worker = new Worker(
     switch (job.name) {
       case "medias-create":
         return await createMediaHandler(job.data)
+      case "covers-upload":
+        return await uploadCoverHandler(job.data)
       case "chapters-upload":
         return await uploadChapterHandler(job.data)
       default:

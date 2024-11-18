@@ -1,5 +1,9 @@
 import type { ContentRating, Languages, Media, Prisma } from "@prisma/client"
-import type { CreateMediaInput, UploadChapterInput } from "@taiyomoe/schemas"
+import type {
+  CreateMediaInput,
+  UploadChapterInput,
+  UploadCoverInput,
+} from "@taiyomoe/schemas"
 
 export type ImportMediaInitialMessageInput = {
   payload: Prisma.MediaCreateInput
@@ -37,6 +41,12 @@ export type CreateMediaMessageInput = Omit<CreateMediaInput, "mainCover"> & {
   id: string
   mainCover: string
   creatorId: string
+}
+
+export type UploadCoverMessageInput = Omit<UploadCoverInput, "file"> & {
+  id: string
+  cover: string
+  uploaderId: string
 }
 
 export type UploadChapterMessageInput = Omit<UploadChapterInput, "files"> & {

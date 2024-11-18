@@ -1,6 +1,7 @@
 import type {
   CreateMediaMessageInput,
   UploadChapterMessageInput,
+  UploadCoverMessageInput,
 } from "@taiyomoe/types"
 import { Queue, QueueEvents } from "bullmq"
 import { QUEUE_OPTIONS, UPLOADS_QUEUE } from "./constants"
@@ -19,6 +20,10 @@ export const messagingClient = {
   medias: {
     create: (input: CreateMediaMessageInput) =>
       uploadsQueue.add("medias-create", input),
+  },
+  covers: {
+    upload: (input: UploadCoverMessageInput) =>
+      uploadsQueue.add("covers-upload", input),
   },
   chapters: {
     upload: (input: UploadChapterMessageInput) =>
