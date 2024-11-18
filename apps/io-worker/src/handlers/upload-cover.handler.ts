@@ -6,7 +6,7 @@ import { omit } from "radash"
 export const uploadCoverHandler = async (input: UploadCoverMessageInput) => {
   const coverFile = await BaseFilesService.downloadFromS3(input.cover)
   const uploadedCover = await BaseFilesService.upload(
-    `medias/${input.id}/covers`,
+    `medias/${input.mediaId}/covers`,
     coverFile,
   )
   const cover = await db.mediaCover.create({

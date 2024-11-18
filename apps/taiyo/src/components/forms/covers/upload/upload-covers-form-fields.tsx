@@ -1,5 +1,6 @@
 import { Card, CardBody } from "@nextui-org/card"
 import { ContentRating, Languages } from "@taiyomoe/db"
+import type { UploadCoversInput } from "@taiyomoe/schemas"
 import { useDropzone } from "react-dropzone"
 import { useFieldArray } from "react-hook-form"
 import { List } from "~/components/generics/List"
@@ -9,14 +10,15 @@ import { InputField } from "~/components/generics/form/input-field"
 import { SelectField } from "~/components/generics/form/select-field"
 import { AssetSelection } from "~/components/ui/upload/asset-selection"
 import { DEFAULT_MIME_TYPES } from "~/lib/utils/constants"
+import { UploadUtils } from "~/utils/upload.utils"
 
-export const UploadMediaCoversFormFields = () => {
+export const UploadCoversFormFields = () => {
   const { fields, append } = useFieldArray<UploadCoversInput>({
     name: "covers",
   })
   const { getRootProps, getInputProps } = useDropzone({
     accept: DEFAULT_MIME_TYPES,
-    onDrop: (files) => {
+    onDrop: UploadUtils.handleDrop((files) => {
       append(
         files.map((file) => ({
           volume: undefined,
@@ -25,7 +27,7 @@ export const UploadMediaCoversFormFields = () => {
           file,
         })),
       )
-    },
+    }),
   })
   const { onClick, ...rootProps } = getRootProps()
 
@@ -48,7 +50,7 @@ export const UploadMediaCoversFormFields = () => {
                   <div key={id} className="flex gap-2">
                     <img
                       className="h-[300px] w-[210px] rounded-medium object-cover"
-                      src={URL.createObjectURL(file)}
+                      src={URL.createObjectURL(file.file!)}
                       alt={`Selected file ${i + 1}`}
                     />
                     <div className="grow p-2">
