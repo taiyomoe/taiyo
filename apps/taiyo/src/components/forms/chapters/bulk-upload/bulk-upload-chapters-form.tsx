@@ -6,7 +6,6 @@ import {
   type UploadChaptersInput,
   uploadChaptersSchema,
 } from "@taiyomoe/schemas"
-import { BaseFilesService } from "@taiyomoe/services"
 import { UploadChapterState } from "@taiyomoe/types"
 import { useSetAtom } from "jotai"
 import { parallel, tryit } from "radash"
@@ -15,6 +14,7 @@ import { toast } from "sonner"
 import { bulkUploadChaptersStateAtoms } from "~/atoms/bulkUploadChapters.atoms"
 import { Form } from "~/components/generics/form/form"
 import { useErrorHandler } from "~/hooks/useErrorHandler"
+import { S3Service } from "~/services/s3.web-service"
 import { api } from "~/trpc/react"
 import { BulkUploadChaptersFormFields } from "./bulk-upload-chapters-form-fields"
 
@@ -71,6 +71,7 @@ export const BulkUploadChaptersForm = () => {
       const { id, urls } = getUrlsResult
       const files = data.files.map((f, i) => ({
         ...f,
+        file: f.file!,
         url: urls[i]!,
       }))
 
@@ -81,17 +82,14 @@ export const BulkUploadChaptersForm = () => {
         id: toastId,
       })
 
-      const uploadedFiles = await BaseFilesService.uploadPresigned(
-        files,
-        (name) => {
-          setState(UploadChapterState.ERROR)
+      const uploadedFiles = await S3Service.upload(files, (name) => {
+        setState(UploadChapterState.ERROR)
 
-          toast.error(
-            `Ocorreu um erro inesperado ao upar o ficheiro '${name}' do capítulo ${position}. Cancelando o upload...`,
-            { id: toastId },
-          )
-        },
-      )
+        toast.error(
+          `Ocorreu um erro inesperado ao upar o ficheiro '${name}' do capítulo ${position}. Cancelando o upload...`,
+          { id: toastId },
+        )
+      })
 
       if (uploadedFiles.includes(null)) {
         return

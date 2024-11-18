@@ -2,12 +2,12 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { type UploadChapterInput, uploadChapterSchema } from "@taiyomoe/schemas"
-import { BaseFilesService } from "@taiyomoe/services"
 import { tryit } from "radash"
 import { type SubmitHandler, useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { Form } from "~/components/generics/form/form"
 import { useErrorHandler } from "~/hooks/useErrorHandler"
+import { S3Service } from "~/services/s3.web-service"
 import { api } from "~/trpc/react"
 import { UploadChapterFormFields } from "./upload-chapter-form-fields"
 
@@ -52,6 +52,7 @@ export const UploadChapterForm = () => {
     const { id, urls } = getUrlsResult
     const files = values.files.map((f, i) => ({
       ...f,
+      file: f.file!,
       url: urls[i]!,
     }))
 
@@ -60,15 +61,12 @@ export const UploadChapterForm = () => {
      */
     toast.loading("Upando os ficheiros na Cloudflare...", { id: toastId })
 
-    const uploadedFiles = await BaseFilesService.uploadPresigned(
-      files,
-      (name) => {
-        toast.error(
-          `Ocorreu um erro inesperado ao upar o ficheiro '${name}'. Cancelando o upload...`,
-          { id: toastId },
-        )
-      },
-    )
+    const uploadedFiles = await S3Service.upload(files, (name) => {
+      toast.error(
+        `Ocorreu um erro inesperado ao upar o ficheiro '${name}'. Cancelando o upload...`,
+        { id: toastId },
+      )
+    })
 
     if (uploadedFiles.includes(null)) {
       return
