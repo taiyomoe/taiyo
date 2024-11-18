@@ -6,18 +6,19 @@ import { Form } from "~/components/generics/form/form"
 import { InputField } from "~/components/generics/form/input-field"
 import { SelectField } from "~/components/generics/form/select-field"
 import { DEFAULT_MIME_TYPES } from "~/lib/utils/constants"
+import { UploadUtils } from "~/utils/upload.utils"
 
 export const MediaFormCoverCategory = () => {
   const { setValue, watch } = useFormContext()
   const { getRootProps, getInputProps, acceptedFiles } = useDropzone({
     accept: DEFAULT_MIME_TYPES,
     maxFiles: 1,
-    onDrop: (files) => {
+    onDrop: UploadUtils.handleDrop((files) => {
       setValue("mainCover", files[0], {
         shouldValidate: true,
         shouldDirty: true,
       })
-    },
+    }),
   })
   const selectedFile = watch("mainCover") as File
 
@@ -61,7 +62,7 @@ export const MediaFormCoverCategory = () => {
             isRequired
           />
           <InputField
-            name="volume"
+            name="mainCoverVolume"
             label="Volume"
             labelPlacement="outside"
             placeholder="Ex: 1"

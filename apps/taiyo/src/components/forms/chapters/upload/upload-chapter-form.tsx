@@ -49,18 +49,17 @@ export const UploadChapterForm = () => {
       )
     }
 
+    /**
+     * 2. Upload files to S3 Bucket
+     */
+    toast.loading("Upando os ficheiros na Cloudflare...", { id: toastId })
+
     const { id, urls } = getUrlsResult
     const files = values.files.map((f, i) => ({
       ...f,
       file: f.file!,
       url: urls[i]!,
     }))
-
-    /**
-     * 2. Upload files to S3 Bucket
-     */
-    toast.loading("Upando os ficheiros na Cloudflare...", { id: toastId })
-
     const uploadedFiles = await S3Service.upload(files, (name) => {
       toast.error(
         `Ocorreu um erro inesperado ao upar o ficheiro '${name}'. Cancelando o upload...`,

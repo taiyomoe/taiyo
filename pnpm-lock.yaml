@@ -41,9 +41,6 @@ importers:
       '@taiyomoe/meilisearch':
         specifier: workspace:*
         version: link:../../packages/meilisearch
-      '@taiyomoe/messages':
-        specifier: workspace:*
-        version: link:../../packages/messages
       '@taiyomoe/messaging':
         specifier: workspace:*
         version: link:../../packages/messaging
@@ -332,9 +329,6 @@ importers:
       '@t3-oss/env-core':
         specifier: ^0.11.1
         version: 0.11.1(typescript@5.6.3)(zod@3.23.8)
-      '@taiyomoe/schemas':
-        specifier: workspace:*
-        version: link:../schemas
       ioredis:
         specifier: ^5.4.1
         version: 5.4.1
@@ -501,9 +495,6 @@ importers:
       bullmq:
         specifier: ^5.26.2
         version: 5.26.2
-      superjson:
-        specifier: ^2.2.1
-        version: 2.2.1
       zod:
         specifier: ^3.23.8
         version: 3.23.8

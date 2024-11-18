@@ -50,8 +50,9 @@ export const createMediaHandler = protectedProcedure
      */
     const mediaId = randomUUID()
     const mainCoverId = randomUUID()
+    const mainCoverKey = `${mediaId}/${mainCoverId}.${mainCover.extension}`
     const presignedUrl = await getSignedUrl(
-      `${mediaId}/${mainCoverId}.${mainCover.extension}`,
+      mainCoverKey,
       mainCover.mimeType,
       mainCover.size,
     )
@@ -63,7 +64,7 @@ export const createMediaHandler = protectedProcedure
     await ctx.cache.medias.create.set({
       ...input,
       id: mediaId,
-      mainCover: presignedUrl,
+      mainCover: mainCoverKey,
       creatorId: ctx.session.user.id,
     })
 

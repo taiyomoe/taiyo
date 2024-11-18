@@ -34,10 +34,10 @@ export type ImportChapterMessageInput = {
 }
 
 export type CreateMediaMessageInput = Omit<CreateMediaInput, "mainCover"> & {
-  mainCover: Buffer
+  id: string
+  mainCover: string
   creatorId: string
 }
-export type CreateMediaMessageOutput = Media
 
 export type UploadChapterMessageInput = Omit<UploadChapterInput, "files"> & {
   id: string

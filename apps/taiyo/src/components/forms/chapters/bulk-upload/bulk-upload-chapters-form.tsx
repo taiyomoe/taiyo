@@ -68,13 +68,6 @@ export const BulkUploadChaptersForm = () => {
         )
       }
 
-      const { id, urls } = getUrlsResult
-      const files = data.files.map((f, i) => ({
-        ...f,
-        file: f.file!,
-        url: urls[i]!,
-      }))
-
       /**
        * 2. Upload files to S3 Bucket
        */
@@ -82,6 +75,12 @@ export const BulkUploadChaptersForm = () => {
         id: toastId,
       })
 
+      const { id, urls } = getUrlsResult
+      const files = data.files.map((f, i) => ({
+        ...f,
+        file: f.file!,
+        url: urls[i]!,
+      }))
       const uploadedFiles = await S3Service.upload(files, (name) => {
         setState(UploadChapterState.ERROR)
 
