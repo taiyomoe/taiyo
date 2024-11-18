@@ -16,7 +16,9 @@ export const commitCoverHandler = protectedProcedure
     ctx.logger.info(`${ctx.session.user.id} committed a cover upload`)
 
     const job = await ctx.messaging.covers.upload(payload)
-    const uploadedCover = await job.waitUntilFinished(ctx.messaging.queue)
+    const uploadedCover = await job.waitUntilFinished(
+      ctx.messaging.rawQueueEvents,
+    )
 
     return uploadedCover as MediaCover
   })

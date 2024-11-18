@@ -1,4 +1,3 @@
-import { db } from "@taiyomoe/db"
 import type {
   CreateMediaMessageInput,
   ImportChapterMessageInput,
@@ -7,53 +6,34 @@ import type {
   UploadChapterMessageInput,
   UploadCoverMessageInput,
 } from "@taiyomoe/types"
-import { type Job, Queue, QueueEvents } from "bullmq"
+import { Queue, QueueEvents } from "bullmq"
 import { QUEUE_OPTIONS, UPLOADS_QUEUE } from "./constants"
-import { updateTaskStatus } from "./utils"
 
-const queue = new Queue(UPLOADS_QUEUE, QUEUE_OPTIONS)
-const queueEvents = new QueueEvents(UPLOADS_QUEUE, QUEUE_OPTIONS)
+export const rawQueue = new Queue(UPLOADS_QUEUE, QUEUE_OPTIONS)
+export const rawQueueEvents = new QueueEvents(UPLOADS_QUEUE, QUEUE_OPTIONS)
 
-export * from "./constants"
 export const messagingClient = {
-  queue: queueEvents,
+  rawQueue,
+  rawQueueEvents,
 
   medias: {
     import: (input: ImportMediaMessageInput) =>
-      queue.add("medias-import", input),
+      rawQueue.add("medias-import", input),
     create: (input: CreateMediaMessageInput) =>
-      queue.add("medias-create", input),
+      rawQueue.add("medias-create", input),
   },
   covers: {
     import: (input: ImportCoverMessageInput) =>
-      queue.add("covers-import", input),
+      rawQueue.add("covers-import", input),
     upload: (input: UploadCoverMessageInput) =>
-      queue.add("covers-upload", input),
+      rawQueue.add("covers-upload", input),
   },
   chapters: {
+    import: (input: ImportChapterMessageInput) =>
+      rawQueue.add("chapters-import", input),
     upload: (input: UploadChapterMessageInput) =>
-      queue.add("chapters-upload", input),
+      rawQueue.add("chapters-upload", input),
   },
 }
 
-queue.on("waiting", async (job: Job) => {
-  if (!["covers-import", "chapters-import"].includes(job.name)) {
-    return
-  }
-
-  const input = job.data as ImportChapterMessageInput
-
-  void db.task.create({
-    data: {
-      id: input.taskId,
-      type: job.name === "covers-import" ? "IMPORT_COVER" : "IMPORT_CHAPTER",
-      status: "PENDING",
-      payload: input,
-      sessionId: input.sessionId,
-    },
-  })
-})
-
-queueEvents.on("active", updateTaskStatus(queue, "DOWNLOADING"))
-queueEvents.on("completed", updateTaskStatus(queue, "FINISHED"))
-queueEvents.on("failed", updateTaskStatus(queue, "FAILED"))
+export * from "./constants"

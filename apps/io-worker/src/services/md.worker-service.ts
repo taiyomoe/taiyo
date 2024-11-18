@@ -1,6 +1,6 @@
 import type { Prisma } from "@taiyomoe/db"
 import { MdUtils } from "@taiyomoe/utils"
-import type { Cover, Manga } from "mangadex-full-api"
+import type { Chapter, Cover, Manga } from "mangadex-full-api"
 import { logger } from "~/utils/logger"
 
 const parseCover = (input: Cover) => {
@@ -26,6 +26,25 @@ const parseCover = (input: Cover) => {
     url: input.url,
     volume,
     language,
+  }
+}
+
+const parseChapter = (input: Chapter) => {
+  const volume = input.volume ? Number.parseFloat(input.volume) : null
+  const number = input.chapter ? Number.parseFloat(input.chapter) : 0
+
+  if (volume && volume.toString() !== input.volume) {
+    logger.warn(
+      `MangaDex chapter volume (stringified) didn't match the number one. It was probably a float. This happened when importing MangaDex media ${input.manga.id}`,
+      input,
+    )
+  }
+
+  return {
+    title: input.title,
+    number,
+    volume,
+    groupIds: input.groups.map((g) => g.id),
   }
 }
 
@@ -58,5 +77,6 @@ const getCreationPayload = (input: Manga, creatorId: string) => {
 
 export const MdService = {
   parseCover,
+  parseChapter,
   getCreationPayload,
 }

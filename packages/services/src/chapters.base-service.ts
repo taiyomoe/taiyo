@@ -25,7 +25,6 @@ const postUpload = async (
   db: PrismaClient | Prisma.TransactionClient,
   type: "created" | "imported" | "synced",
   chapters: MediaChapter[],
-  taskId?: string,
 ) => {
   const ids = chapters.map((c) => c.id)
 
@@ -34,13 +33,6 @@ const postUpload = async (
       type,
       _new: chapter,
       userId: chapter.uploaderId,
-    })
-  }
-
-  if (taskId) {
-    await db.task.update({
-      data: { status: "FINISHED" },
-      where: { id: taskId },
     })
   }
 

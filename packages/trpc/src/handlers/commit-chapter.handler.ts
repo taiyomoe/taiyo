@@ -16,5 +16,5 @@ export const commitChapterHandler = protectedProcedure
 
     const job = await ctx.messaging.chapters.upload(payload)
 
-    await job.waitUntilFinished(ctx.messaging.queue)
+    await job.waitUntilFinished(ctx.messaging.rawQueueEvents)
   })

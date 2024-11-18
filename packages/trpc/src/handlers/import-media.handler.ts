@@ -1,5 +1,6 @@
 import { randomUUID } from "crypto"
 import type { Media } from "@taiyomoe/db"
+import { rawQueueEvents } from "@taiyomoe/messaging"
 import { importMediaSchema } from "@taiyomoe/schemas"
 import { protectedProcedure } from "../trpc"
 
@@ -18,7 +19,7 @@ export const importMediaHandler = protectedProcedure
       mdId: input.mdId,
       creatorId: ctx.session.user.id,
     })
-    const media: Media = await job.waitUntilFinished(ctx.messaging.queue)
+    const media: Media = await job.waitUntilFinished(rawQueueEvents)
     const sessionId = randomUUID()
 
     if (input.importCovers) {
@@ -41,41 +42,29 @@ export const importMediaHandler = protectedProcedure
     }
 
     if (input.importChapters) {
-      const chapters = await services.md.getChapters(mdMedia)
-      logger.debug(
-        `Got ${chapters.length} chapters from MangaDex media ${input.mdId}`,
-        chapters,
-      )
+      const chapters = await ctx.services.md.getChapters(manga)
 
       for (const chapter of chapters) {
         if (chapter.isExternal) {
-          logger.debug(
+          ctx.logger.debug(
             `Skipped external chapter when importing MangaDex media ${input.mdId}`,
             chapter,
           )
+
           continue
         }
 
-        const payload = {
-          ...services.md.parseChapter(chapter),
+        await ctx.messaging.chapters.import({
+          mdId: chapter.id,
           contentRating: media.contentRating,
           mediaId: media.id,
-          uploaderId: session.user.id,
-        }
-        const task = await db.task.create({
-          data: {
-            type: "IMPORT_CHAPTER",
-            status: "PENDING",
-            payload,
-            sessionId,
-          },
+          uploaderId: ctx.session.user.id,
+          taskId: randomUUID(),
+          sessionId,
         })
-        const taskPayload = { ...payload, taskId: task.id }
 
-        await rabbit.medias.importChapter(taskPayload)
-        logger.debug(
-          `Sent chapter ${chapter.id} to RabbitMQ queue when importing MangaDex media ${input.mdId}`,
-          taskPayload,
+        ctx.logger.debug(
+          `Sent chapter ${chapter.id} to BullMQ when importing MangaDex media ${input.mdId}`,
         )
       }
     }

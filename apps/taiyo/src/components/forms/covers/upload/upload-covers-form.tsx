@@ -94,8 +94,6 @@ export const UploadCoversForm = ({ mediaId }: Props) => {
         )
       }
 
-      console.log("uploadedCover", uploadedCover)
-
       /**
        * 4. Add the cover to the store
        */

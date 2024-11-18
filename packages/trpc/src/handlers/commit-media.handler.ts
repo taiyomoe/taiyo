@@ -16,5 +16,5 @@ export const commitMediaHandler = protectedProcedure
 
     const job = await ctx.messaging.medias.create(payload)
 
-    await job.waitUntilFinished(ctx.messaging.queue)
+    await job.waitUntilFinished(ctx.messaging.rawQueueEvents)
   })
