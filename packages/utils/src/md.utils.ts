@@ -9,7 +9,12 @@ import {
   type Trackers,
 } from "@prisma/client"
 import type { TAG_KEYS } from "@taiyomoe/constants"
-import type { Manga } from "mangadex-full-api"
+import type { Chapter, Cover, Manga } from "mangadex-full-api"
+
+type Logger = Record<
+  "warn" | "error",
+  (msg: string, ...data: unknown[]) => void
+>
 
 const getContentRating = (manga: Manga): ContentRating => {
   switch (manga.contentRating) {
@@ -463,6 +468,51 @@ const getSynopsis = (manga: Manga) =>
   manga.description.en ||
   Object.values(manga.description).at(0)
 
+const parseCover = (input: Cover, logger: Logger) => {
+  const volume = input.volume ? Number.parseFloat(input.volume) : null
+  let language = MdUtils.getLanguage(input.locale)
+
+  if (volume && volume.toString() !== input.volume) {
+    logger.warn(
+      `MangaDex cover volume (stringified) didn't match the number one. It was probably a decimal volume. This happened when importing MangaDex media ${input.manga.id}`,
+      input,
+    )
+  }
+
+  if (!language) {
+    language = "en"
+    logger.error(
+      `Failed to get cover language when importing MangaDex media ${input.manga.id}. Defaulting to "en"`,
+      input,
+    )
+  }
+
+  return {
+    url: input.url,
+    volume,
+    language,
+  }
+}
+
+const parseChapter = (input: Chapter, logger: Logger) => {
+  const volume = input.volume ? Number.parseFloat(input.volume) : null
+  const number = input.chapter ? Number.parseFloat(input.chapter) : 0
+
+  if (volume && volume.toString() !== input.volume) {
+    logger.warn(
+      `MangaDex chapter volume (stringified) didn't match the number one. It was probably a float. This happened when importing MangaDex media ${input.manga.id}`,
+      input,
+    )
+  }
+
+  return {
+    title: input.title,
+    number,
+    volume,
+    groupIds: input.groups.map((g) => g.id),
+  }
+}
+
 export const MdUtils = {
   getContentRating,
   getType,
@@ -474,4 +524,6 @@ export const MdUtils = {
   getTitles,
   getTrackers,
   getSynopsis,
+  parseCover,
+  parseChapter,
 }

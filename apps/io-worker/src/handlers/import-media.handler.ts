@@ -8,6 +8,7 @@ import {
   BaseTrackersService,
 } from "@taiyomoe/services"
 import type { ImportMediaMessageInput } from "@taiyomoe/types"
+import { MdUtils } from "@taiyomoe/utils"
 import { Manga } from "mangadex-full-api"
 import { MdService } from "~/services/md.worker-service"
 import { logger } from "~/utils/logger"
@@ -18,7 +19,7 @@ export const importMediaHandler = async ({
 }: ImportMediaMessageInput) => {
   const manga = await Manga.get(mdId)
   const rawMainCover = await manga.mainCover.resolve()
-  const mainCover = MdService.parseCover(rawMainCover)
+  const mainCover = MdUtils.parseCover(rawMainCover, logger)
   const payload = MdService.getCreationPayload(manga, creatorId)
 
   logger.debug(`Parsed payload from MangaDex media ${mdId}`, payload)

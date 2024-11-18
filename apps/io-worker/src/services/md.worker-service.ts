@@ -1,52 +1,6 @@
 import type { Prisma } from "@taiyomoe/db"
 import { MdUtils } from "@taiyomoe/utils"
-import type { Chapter, Cover, Manga } from "mangadex-full-api"
-import { logger } from "~/utils/logger"
-
-const parseCover = (input: Cover) => {
-  const volume = input.volume ? Number.parseFloat(input.volume) : null
-  let language = MdUtils.getLanguage(input.locale)
-
-  if (volume && volume.toString() !== input.volume) {
-    logger.warn(
-      `MangaDex cover volume (stringified) didn't match the number one. It was probably a decimal volume. This happened when importing MangaDex media ${input.manga.id}`,
-      input,
-    )
-  }
-
-  if (!language) {
-    language = "en"
-    logger.error(
-      `Failed to get cover language when importing MangaDex media ${input.manga.id}. Defaulting to "en"`,
-      input,
-    )
-  }
-
-  return {
-    url: input.url,
-    volume,
-    language,
-  }
-}
-
-const parseChapter = (input: Chapter) => {
-  const volume = input.volume ? Number.parseFloat(input.volume) : null
-  const number = input.chapter ? Number.parseFloat(input.chapter) : 0
-
-  if (volume && volume.toString() !== input.volume) {
-    logger.warn(
-      `MangaDex chapter volume (stringified) didn't match the number one. It was probably a float. This happened when importing MangaDex media ${input.manga.id}`,
-      input,
-    )
-  }
-
-  return {
-    title: input.title,
-    number,
-    volume,
-    groupIds: input.groups.map((g) => g.id),
-  }
-}
+import type { Manga } from "mangadex-full-api"
 
 const getCreationPayload = (input: Manga, creatorId: string) => {
   const { genres, tags, isOneShot } = MdUtils.getGenresAndTags(input)
@@ -76,7 +30,5 @@ const getCreationPayload = (input: Manga, creatorId: string) => {
 }
 
 export const MdService = {
-  parseCover,
-  parseChapter,
   getCreationPayload,
 }

@@ -2,9 +2,9 @@ import { randomUUID } from "crypto"
 import { db } from "@taiyomoe/db"
 import { BaseChaptersService, BaseFilesService } from "@taiyomoe/services"
 import type { ImportChapterMessageInput } from "@taiyomoe/types"
+import { MdUtils } from "@taiyomoe/utils"
 import { Chapter } from "mangadex-full-api"
 import { omit, parallel } from "radash"
-import { MdService } from "~/services/md.worker-service"
 import { ScansService } from "~/services/scans.worker-service"
 import { logger } from "~/utils/logger"
 
@@ -13,7 +13,7 @@ export const importChapterHandler = async (
 ) => {
   const chapterId = randomUUID()
   const rawChapter = await Chapter.get(input.mdId)
-  const parsedChapter = MdService.parseChapter(rawChapter)
+  const parsedChapter = MdUtils.parseChapter(rawChapter, logger)
   const pageUrls = await rawChapter.getReadablePages()
   const pageBuffers = await parallel(5, pageUrls, BaseFilesService.download)
 

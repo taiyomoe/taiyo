@@ -1,13 +1,13 @@
 import { db } from "@taiyomoe/db"
 import { BaseCoversService, BaseFilesService } from "@taiyomoe/services"
 import type { ImportCoverMessageInput } from "@taiyomoe/types"
+import { MdUtils } from "@taiyomoe/utils"
 import { Cover } from "mangadex-full-api"
-import { MdService } from "~/services/md.worker-service"
 import { logger } from "~/utils/logger"
 
 export const importCoverHandler = async (input: ImportCoverMessageInput) => {
   const rawCover = await Cover.get(input.mdId)
-  const parsedCover = MdService.parseCover(rawCover)
+  const parsedCover = MdUtils.parseCover(rawCover, logger)
   const coverBuffer = await BaseFilesService.download(parsedCover.url)
 
   await db.task.update({
