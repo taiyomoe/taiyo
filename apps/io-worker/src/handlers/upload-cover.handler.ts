@@ -2,6 +2,7 @@ import { db } from "@taiyomoe/db"
 import { BaseCoversService, BaseFilesService } from "@taiyomoe/services"
 import type { UploadCoverMessageInput } from "@taiyomoe/types"
 import { omit } from "radash"
+import { logger } from "~/utils/logger"
 
 export const uploadCoverHandler = async (input: UploadCoverMessageInput) => {
   const coverFile = await BaseFilesService.downloadFromS3(input.cover)
@@ -17,6 +18,8 @@ export const uploadCoverHandler = async (input: UploadCoverMessageInput) => {
   })
 
   await BaseCoversService.postUpload(db, "created", [cover])
+
+  logger.info(`${input.uploaderId} uploaded a cover`, cover.id)
 
   return cover
 }

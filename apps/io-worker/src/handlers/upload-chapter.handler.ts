@@ -23,7 +23,7 @@ export const uploadChapterHandler = async (
 
   await BaseChaptersService.postUpload(db, "imported", [chapter])
 
-  logger.info(`${input.uploaderId} uploaded a chapter`)
+  logger.info(`${input.uploaderId} uploaded a chapter`, chapter.id)
 
   return chapter
 }

@@ -8,6 +8,7 @@ import {
 } from "@taiyomoe/services"
 import type { CreateMediaMessageInput } from "@taiyomoe/types"
 import { pick } from "radash"
+import { logger } from "~/utils/logger"
 
 export const createMediaHandler = async (input: CreateMediaMessageInput) => {
   const mainCover = await BaseFilesService.downloadFromS3(input.mainCover)
@@ -93,7 +94,7 @@ export const createMediaHandler = async (input: CreateMediaMessageInput) => {
   await BaseTitlesService.postCreate(db, "created", titles)
   await BaseTrackersService.postCreate("created", trackers)
 
-  console.log("media", media)
+  logger.info(`${input.creatorId} created a media`, media.id)
 
   return media
 }
