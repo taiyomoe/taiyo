@@ -2,7 +2,8 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { type UploadChapterInput, uploadChapterSchema } from "@taiyomoe/schemas"
-import { parallel, tryit } from "radash"
+import { BaseFilesService } from "@taiyomoe/services"
+import { tryit } from "radash"
 import { type SubmitHandler, useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { Form } from "~/components/generics/form/form"
@@ -59,29 +60,13 @@ export const UploadChapterForm = () => {
      */
     toast.loading("Upando os ficheiros na Cloudflare...", { id: toastId })
 
-    const uploadedFiles = await parallel(
-      10,
+    const uploadedFiles = await BaseFilesService.uploadPresigned(
       files,
-      async ({ url, file, name, mimeType, size }) => {
-        const res = await fetch(url, {
-          method: "PUT",
-          body: file,
-          headers: {
-            "Content-Type": mimeType,
-            "Content-Length": String(size),
-          },
-        })
-
-        if (!res.ok) {
-          toast.error(
-            `Ocorreu um erro inesperado ao upar o ficheiro '${name}'. Cancelando o upload...`,
-            { id: toastId },
-          )
-
-          return null
-        }
-
-        return "OK"
+      (name) => {
+        toast.error(
+          `Ocorreu um erro inesperado ao upar o ficheiro '${name}'. Cancelando o upload...`,
+          { id: toastId },
+        )
       },
     )
 

@@ -82,5 +82,6 @@ const handleDrop =
   }
 
 export const UploadUtils = {
+  parseFiles,
   handleDrop,
 }

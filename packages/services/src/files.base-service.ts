@@ -1,6 +1,7 @@
 import { randomUUID } from "crypto"
 import { GetObjectCommand, PutObjectCommand, s3Client } from "@taiyomoe/s3"
 import { fileTypeFromBuffer } from "file-type"
+import { parallel } from "radash"
 import sharp from "sharp"
 import { env } from "./env"
 
@@ -76,10 +77,47 @@ const upload = async (baseKey: string, file: Buffer) => {
   return { id, extension }
 }
 
+const uploadPresigned = async (
+  input: {
+    url: string
+    file?: File
+    name: string
+    mimeType: string
+    size: number
+  }[],
+  onError?: (fileName: string) => void,
+) => {
+  const uploaded = await parallel(
+    10,
+    input,
+    async ({ url, file, name, mimeType, size }) => {
+      const res = await fetch(url, {
+        method: "PUT",
+        body: file,
+        headers: {
+          "Content-Type": mimeType,
+          "Content-Length": String(size),
+        },
+      })
+
+      if (!res.ok) {
+        onError?.(name)
+
+        return null
+      }
+
+      return "OK"
+    },
+  )
+
+  return uploaded
+}
+
 export const BaseFilesService = {
   parse,
   compressImage,
   download,
   downloadFromS3,
   upload,
+  uploadPresigned,
 }
