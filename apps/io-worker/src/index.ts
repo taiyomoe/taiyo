@@ -1,6 +1,6 @@
 import { UPLOADS_QUEUE } from "@taiyomoe/messaging"
-import { env } from "@taiyomoe/messaging/env"
 import { Worker } from "bullmq"
+import { env } from "~/env"
 import { createMediaHandler } from "~/handlers/create-media.handler"
 import { uploadChapterHandler } from "~/handlers/upload-chapter.handler"
 import { uploadCoverHandler } from "~/handlers/upload-cover.handler"
