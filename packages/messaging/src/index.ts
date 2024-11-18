@@ -23,14 +23,16 @@ export const messagingClient = {
       rawQueue.add("medias-create", input),
   },
   covers: {
-    import: (input: ImportCoverMessageInput) =>
-      rawQueue.add("covers-import", input),
+    import: (input: ImportCoverMessageInput[]) =>
+      rawQueue.addBulk(input.map((i) => ({ name: "covers-import", data: i }))),
     upload: (input: UploadCoverMessageInput) =>
       rawQueue.add("covers-upload", input),
   },
   chapters: {
-    import: (input: ImportChapterMessageInput) =>
-      rawQueue.add("chapters-import", input),
+    import: (input: ImportChapterMessageInput[]) =>
+      rawQueue.addBulk(
+        input.map((i) => ({ name: "chapters-import", data: i })),
+      ),
     upload: (input: UploadChapterMessageInput) =>
       rawQueue.add("chapters-upload", input),
   },

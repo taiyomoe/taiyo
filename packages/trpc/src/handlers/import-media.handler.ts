@@ -23,50 +23,54 @@ export const importMediaHandler = protectedProcedure
     const sessionId = randomUUID()
 
     if (input.importCovers) {
-      const covers = await manga.getCovers()
+      const rawCovers = await manga.getCovers()
+      const covers = rawCovers.map((c) => ({
+        mdId: c.id,
+        contentRating: media.contentRating,
+        mediaId: media.id,
+        uploaderId: ctx.session.user.id,
+        taskId: randomUUID(),
+        sessionId,
+      }))
 
-      for (const cover of covers) {
-        await ctx.messaging.covers.import({
-          mdId: cover.id,
-          contentRating: media.contentRating,
-          mediaId: media.id,
-          uploaderId: ctx.session.user.id,
-          taskId: randomUUID(),
-          sessionId,
-        })
+      await ctx.messaging.covers.import(covers)
 
-        ctx.logger.debug(
-          `Sent cover ${cover.id} to BullMQ when importing MangaDex media ${input.mdId}`,
-        )
-      }
+      ctx.logger.debug(
+        `Sent ${covers.length} covers to BullMQ when importing MangaDex media ${input.mdId}`,
+        covers,
+      )
     }
 
     if (input.importChapters) {
-      const chapters = await ctx.services.md.getChapters(manga)
+      const rawChapters = await ctx.services.md.getChapters(manga)
+      const chapters = rawChapters
+        .filter((c) => {
+          if (c.isExternal) {
+            ctx.logger.debug(
+              `Skipped external chapter when importing MangaDex media ${input.mdId}`,
+              c,
+            )
 
-      for (const chapter of chapters) {
-        if (chapter.isExternal) {
-          ctx.logger.debug(
-            `Skipped external chapter when importing MangaDex media ${input.mdId}`,
-            chapter,
-          )
+            return false
+          }
 
-          continue
-        }
-
-        await ctx.messaging.chapters.import({
-          mdId: chapter.id,
+          return true
+        })
+        .map((c) => ({
+          mdId: c.id,
           contentRating: media.contentRating,
           mediaId: media.id,
           uploaderId: ctx.session.user.id,
           taskId: randomUUID(),
           sessionId,
-        })
+        }))
 
-        ctx.logger.debug(
-          `Sent chapter ${chapter.id} to BullMQ when importing MangaDex media ${input.mdId}`,
-        )
-      }
+      await ctx.messaging.chapters.import(chapters)
+
+      ctx.logger.debug(
+        `Sent ${chapters.length} chapters to BullMQ when importing MangaDex media ${input.mdId}`,
+        chapters,
+      )
     }
 
     return { media, sessionId }
