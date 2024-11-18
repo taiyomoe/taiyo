@@ -1,5 +1,6 @@
 import type {
   CreateMediaMessageInput,
+  ImportMediaMessageInput,
   UploadChapterMessageInput,
   UploadCoverMessageInput,
 } from "@taiyomoe/types"
@@ -13,6 +14,8 @@ export const messagingClient = {
   queue: uploadsQueueEvents,
 
   medias: {
+    import: (input: ImportMediaMessageInput) =>
+      uploadsQueue.add("medias-import", input),
     create: (input: CreateMediaMessageInput) =>
       uploadsQueue.add("medias-create", input),
   },
