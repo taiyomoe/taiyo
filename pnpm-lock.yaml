@@ -489,6 +489,9 @@ importers:
       '@taiyomoe/cache':
         specifier: workspace:*
         version: link:../cache
+      '@taiyomoe/db':
+        specifier: workspace:*
+        version: link:../db
       '@taiyomoe/types':
         specifier: workspace:*
         version: link:../types
@@ -530,12 +533,6 @@ importers:
       zod:
         specifier: ^3.23.8
         version: 3.23.8
-      zod-form-data:
-        specifier: ^2.0.2
-        version: 2.0.2(zod@3.23.8)
-      zod_utilz:
-        specifier: ^0.8.3
-        version: 0.8.3(typescript@5.6.3)(zod@3.23.8)
     devDependencies:
       '@taiyomoe/tsconfig':
         specifier: workspace:*
@@ -5406,11 +5403,6 @@ packages:
     engines: {node: '>= 14'}
     hasBin: true
 
-  zod-form-data@2.0.2:
-    resolution: {integrity: sha512-sKTi+k0fvkxdakD0V5rq+9WVJA3cuTQUfEmNqvHrTzPLvjfLmkkBLfR0ed3qOi9MScJXTHIDH/jUNnEJ3CBX4g==}
-    peerDependencies:
-      zod: '>= 3.11.0'
-
   zod-prisma-types@3.1.8:
     resolution: {integrity: sha512-5oe0ays3ur4u2GtuUqlhgCraKBcsuMaMI8o7VMV4YAnFeOuVid7K2zGvjI19V0ue9PeNF2ICyVREQVohaQm5dw==}
     hasBin: true
@@ -5423,12 +5415,6 @@ packages:
 
   zod@3.23.8:
     resolution: {integrity: sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g==}
-
-  zod_utilz@0.8.3:
-    resolution: {integrity: sha512-8ga6g6J+QfWpGOTyhciu8uMioBVKPe7QTx9hSk+JW/NdralSLPR1LzMzxq4HuzOVdTYG/6T3cWflxoHiUuSyDA==}
-    peerDependencies:
-      typescript: ^5.0.0
-      zod: ^3.22.4
 
   zustand@5.0.1:
     resolution: {integrity: sha512-pRET7Lao2z+n5R/HduXMio35TncTlSW68WsYBq2Lg1ASspsNGjpwLAsij3RpouyV6+kHMwwwzP0bZPD70/Jx/w==}
@@ -11845,10 +11831,6 @@ snapshots:
 
   yaml@2.6.0: {}
 
-  zod-form-data@2.0.2(zod@3.23.8):
-    dependencies:
-      zod: 3.23.8
-
   zod-prisma-types@3.1.8:
     dependencies:
       '@prisma/generator-helper': 5.22.0
@@ -11861,11 +11843,6 @@ snapshots:
       zod: 3.23.8
 
   zod@3.23.8: {}
-
-  zod_utilz@0.8.3(typescript@5.6.3)(zod@3.23.8):
-    dependencies:
-      typescript: 5.6.3
-      zod: 3.23.8
 
   zustand@5.0.1(@types/react@18.3.12)(immer@10.1.1)(react@18.3.1)(use-sync-external-store@1.2.2(react@18.3.1)):
     optionalDependencies:

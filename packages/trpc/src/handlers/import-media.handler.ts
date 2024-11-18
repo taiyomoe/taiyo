@@ -1,3 +1,4 @@
+import { randomUUID } from "crypto"
 import type { Media } from "@taiyomoe/db"
 import { importMediaSchema } from "@taiyomoe/schemas"
 import { protectedProcedure } from "../trpc"
@@ -6,7 +7,7 @@ export const importMediaHandler = protectedProcedure
   .meta({ resource: "medias", action: "create" })
   .input(importMediaSchema)
   .mutation(async ({ ctx, input }) => {
-    await ctx.services.md.getMedia(input.mdId)
+    const manga = await ctx.services.md.getMedia(input.mdId)
     await ctx.services.md.ensureValid(input.mdId)
 
     ctx.logger.info(
@@ -18,35 +19,23 @@ export const importMediaHandler = protectedProcedure
       creatorId: ctx.session.user.id,
     })
     const media: Media = await job.waitUntilFinished(ctx.messaging.queue)
+    const sessionId = randomUUID()
 
     if (input.importCovers) {
-      const covers = await mdMedia.getCovers()
-      logger.debug(
-        `Got ${covers.length} covers from MangaDex media ${input.mdId}`,
-        covers,
-      )
+      const covers = await manga.getCovers()
 
       for (const cover of covers) {
-        const payload = {
-          ...services.md.parseCover(cover),
+        await ctx.messaging.covers.import({
+          mdId: cover.id,
           contentRating: media.contentRating,
           mediaId: media.id,
-          uploaderId: session.user.id,
-        }
-        const task = await db.task.create({
-          data: {
-            type: "IMPORT_COVER",
-            status: "PENDING",
-            payload,
-            sessionId,
-          },
+          uploaderId: ctx.session.user.id,
+          taskId: randomUUID(),
+          sessionId,
         })
-        const taskPayload = { ...payload, taskId: task.id }
 
-        await rabbit.medias.importCover(taskPayload)
-        logger.debug(
-          `Sent cover ${cover.id} to RabbitMQ queue when importing MangaDex media ${input.mdId}`,
-          taskPayload,
+        ctx.logger.debug(
+          `Sent cover ${cover.id} to BullMQ when importing MangaDex media ${input.mdId}`,
         )
       }
     }

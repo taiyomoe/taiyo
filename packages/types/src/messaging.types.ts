@@ -1,4 +1,4 @@
-import type { ContentRating, Languages } from "@prisma/client"
+import type { ContentRating } from "@prisma/client"
 import type {
   CreateMediaInput,
   UploadChapterInput,
@@ -11,26 +11,15 @@ export type ImportMediaMessageInput = {
 }
 
 export type ImportCoverMessageInput = {
-  url: string
-  volume: number | null
-  language: Languages
   contentRating: ContentRating
+  mdId: string
   mediaId: string
   uploaderId: string
   taskId: string
+  sessionId: string
 }
 
-export type ImportChapterMessageInput = {
-  mdId: string
-  title: string | null
-  number: number
-  volume: number | null
-  contentRating: ContentRating
-  groupIds: string[]
-  mediaId: string
-  uploaderId: string
-  taskId: string
-}
+export type ImportChapterMessageInput = ImportCoverMessageInput
 
 export type CreateMediaMessageInput = Omit<CreateMediaInput, "mainCover"> & {
   id: string
