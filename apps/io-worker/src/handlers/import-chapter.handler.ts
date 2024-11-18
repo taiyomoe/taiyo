@@ -2,9 +2,8 @@ import { randomUUID } from "crypto"
 import { db } from "@taiyomoe/db"
 import { BaseChaptersService, BaseFilesService } from "@taiyomoe/services"
 import type { ImportChapterMessageInput } from "@taiyomoe/types"
-import { MdUtils } from "@taiyomoe/utils"
 import { Chapter } from "mangadex-full-api"
-import { omit, parallel } from "radash"
+import { parallel, pick } from "radash"
 import { ScansService } from "~/services/scans.worker-service"
 import { logger } from "~/utils/logger"
 
@@ -13,7 +12,6 @@ export const importChapterHandler = async (
 ) => {
   const chapterId = randomUUID()
   const rawChapter = await Chapter.get(input.mdId)
-  const parsedChapter = MdUtils.parseChapter(rawChapter, logger)
   const pageUrls = await rawChapter.getReadablePages()
   const pageBuffers = await parallel(5, pageUrls, BaseFilesService.download)
 
@@ -26,19 +24,24 @@ export const importChapterHandler = async (
     BaseFilesService.upload(`medias/${input.mediaId}/chapters/${chapterId}`, b),
   )
   const scanIds = await ScansService.ensureGroups(
-    parsedChapter.groupIds,
+    input.groupIds,
     input.uploaderId,
   )
   const chapter = await db.mediaChapter.create({
     data: {
-      ...omit(parsedChapter, ["groupIds"]),
+      ...pick(input, [
+        "title",
+        "number",
+        "volume",
+        "contentRating",
+        "mediaId",
+        "uploaderId",
+      ]),
       id: chapterId,
       language: "pt_br",
       flag: "OK",
       pages: uploadedPages,
       scans: { connect: scanIds.map((id) => ({ id })) },
-      mediaId: input.mediaId,
-      uploaderId: input.uploaderId,
     },
   })
 

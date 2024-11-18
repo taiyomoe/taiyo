@@ -9,6 +9,7 @@ import {
   type Trackers,
 } from "@prisma/client"
 import type { TAG_KEYS } from "@taiyomoe/constants"
+import type { ParsedMdChapter, ParsedMdCover } from "@taiyomoe/types"
 import type { Chapter, Cover, Manga } from "mangadex-full-api"
 
 type Logger = Record<
@@ -488,10 +489,11 @@ const parseCover = (input: Cover, logger: Logger) => {
   }
 
   return {
+    mdId: input.id,
     url: input.url,
     volume,
     language,
-  }
+  } satisfies ParsedMdCover
 }
 
 const parseChapter = (input: Chapter, logger: Logger) => {
@@ -506,11 +508,12 @@ const parseChapter = (input: Chapter, logger: Logger) => {
   }
 
   return {
+    mdId: input.id,
     title: input.title,
     number,
     volume,
     groupIds: input.groups.map((g) => g.id),
-  }
+  } satisfies ParsedMdChapter
 }
 
 export const MdUtils = {

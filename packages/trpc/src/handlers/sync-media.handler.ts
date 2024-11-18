@@ -1,7 +1,7 @@
 import { randomUUID } from "crypto"
 import { syncMediaSchema } from "@taiyomoe/schemas"
 import { MdUtils, TitleUtils } from "@taiyomoe/utils"
-import { omit, pick } from "radash"
+import { pick } from "radash"
 import { protectedProcedure } from "../trpc"
 
 export const syncMediaHandler = protectedProcedure
@@ -161,7 +161,6 @@ export const syncMediaHandler = protectedProcedure
               (ec) => ec.volume === c.volume && ec.language === c.language,
             ),
         )
-        .map((c) => omit(c, ["url", "volume", "language"]))
 
       await ctx.messaging.covers.import(newCovers)
 
@@ -202,7 +201,6 @@ export const syncMediaHandler = protectedProcedure
           sessionId,
         }))
         .filter((c) => !existingChapters.some((ec) => ec.number === c.number))
-        .map((c) => omit(c, ["title", "number", "volume", "groupIds"]))
 
       await ctx.messaging.chapters.import(newChapters)
 

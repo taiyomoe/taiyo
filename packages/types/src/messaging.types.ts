@@ -4,22 +4,28 @@ import type {
   UploadChapterInput,
   UploadCoverInput,
 } from "@taiyomoe/schemas"
+import type { ParsedMdChapter, ParsedMdCover } from "./md.types"
 
 export type ImportMediaMessageInput = {
   mdId: string
   creatorId: string
 }
 
-export type ImportCoverMessageInput = {
+export type ImportCoverMessageInput = ParsedMdCover & {
   contentRating: ContentRating
-  mdId: string
   mediaId: string
   uploaderId: string
   taskId: string
   sessionId: string
 }
 
-export type ImportChapterMessageInput = ImportCoverMessageInput
+export type ImportChapterMessageInput = ParsedMdChapter & {
+  contentRating: ContentRating
+  mediaId: string
+  uploaderId: string
+  taskId: string
+  sessionId: string
+}
 
 export type CreateMediaMessageInput = Omit<CreateMediaInput, "mainCover"> & {
   id: string

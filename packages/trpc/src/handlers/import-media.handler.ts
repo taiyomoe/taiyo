@@ -2,6 +2,7 @@ import { randomUUID } from "crypto"
 import type { Media } from "@taiyomoe/db"
 import { rawQueueEvents } from "@taiyomoe/messaging"
 import { importMediaSchema } from "@taiyomoe/schemas"
+import { MdUtils } from "@taiyomoe/utils"
 import { protectedProcedure } from "../trpc"
 
 export const importMediaHandler = protectedProcedure
@@ -25,7 +26,7 @@ export const importMediaHandler = protectedProcedure
     if (input.importCovers) {
       const rawCovers = await manga.getCovers()
       const covers = rawCovers.map((c) => ({
-        mdId: c.id,
+        ...MdUtils.parseCover(c, ctx.logger),
         contentRating: media.contentRating,
         mediaId: media.id,
         uploaderId: ctx.session.user.id,
@@ -57,7 +58,7 @@ export const importMediaHandler = protectedProcedure
           return true
         })
         .map((c) => ({
-          mdId: c.id,
+          ...MdUtils.parseChapter(c, ctx.logger),
           contentRating: media.contentRating,
           mediaId: media.id,
           uploaderId: ctx.session.user.id,

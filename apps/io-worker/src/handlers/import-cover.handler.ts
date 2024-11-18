@@ -1,14 +1,11 @@
 import { db } from "@taiyomoe/db"
 import { BaseCoversService, BaseFilesService } from "@taiyomoe/services"
 import type { ImportCoverMessageInput } from "@taiyomoe/types"
-import { MdUtils } from "@taiyomoe/utils"
-import { Cover } from "mangadex-full-api"
+import { pick } from "radash"
 import { logger } from "~/utils/logger"
 
 export const importCoverHandler = async (input: ImportCoverMessageInput) => {
-  const rawCover = await Cover.get(input.mdId)
-  const parsedCover = MdUtils.parseCover(rawCover, logger)
-  const coverBuffer = await BaseFilesService.download(parsedCover.url)
+  const coverBuffer = await BaseFilesService.download(input.url)
 
   await db.task.update({
     data: { status: "UPLOADING" },
@@ -21,12 +18,14 @@ export const importCoverHandler = async (input: ImportCoverMessageInput) => {
   )
   const cover = await db.mediaCover.create({
     data: {
+      ...pick(input, [
+        "contentRating",
+        "volume",
+        "language",
+        "mediaId",
+        "uploaderId",
+      ]),
       id: uploadedCover.id,
-      volume: parsedCover.volume,
-      language: parsedCover.language,
-      contentRating: input.contentRating,
-      mediaId: input.mediaId,
-      uploaderId: input.uploaderId,
     },
   })
 
