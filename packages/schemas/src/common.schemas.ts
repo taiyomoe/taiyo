@@ -9,6 +9,13 @@ export const chapterNumberSchema = z.coerce.number().min(0)
 export const chapterVolumeSchema = z.coerce.number().min(0).nullish()
 export const mimeTypeSchema = z.enum(ALLOWED_MIME_TYPES)
 export const extensionSchema = z.enum(ALLOWED_EXTENSIONS)
+export const fileSchema = z.object({
+  name: z.string(),
+  size: z.coerce.number().int().positive(),
+  mimeType: mimeTypeSchema,
+  extension: extensionSchema,
+  file: z.instanceof(File).optional(),
+})
 
 export const perPageSchema = (initial: number, choices: number[]) =>
   z.coerce

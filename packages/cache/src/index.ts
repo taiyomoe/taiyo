@@ -1,5 +1,6 @@
 import type { Languages } from "@taiyomoe/db"
 import type {
+  CreateMediaMessageInput,
   FeaturedMedia,
   LatestMedia,
   LatestReleaseGroupedLite,
@@ -19,6 +20,22 @@ export const rawCacheClient = client
 
 export const cacheClient = {
   medias: {
+    /**
+     * Mutations
+     */
+    create: {
+      set: (input: CreateMediaMessageInput) =>
+        client.setex(
+          `medias:create:${input.id}`,
+          DAY,
+          SuperJSON.stringify(input),
+        ),
+      get: (id: string) =>
+        parseCache<CreateMediaMessageInput>(client.get(`medias:create:${id}`)),
+    },
+    /**
+     * Queries
+     */
     latest: {
       get: () => parseCache<LatestMedia[]>(client.get("medias:latest")),
       set: (input: LatestMedia[]) =>
@@ -37,18 +54,37 @@ export const cacheClient = {
       invalidate: () => client.del(`medias:featured:${lang}`),
     }),
     invalidateAll: async () => {
-      const mediaKeys = await client.keys("medias:*")
+      const featuredMediasKeys = await client.keys("medias:featured:*")
 
-      for (const key of mediaKeys) {
+      for (const key of featuredMediasKeys) {
         await client.del(key)
       }
 
+      await client.del("medias:latest")
       await client.del("chapters:latest")
       await client.del("chapters:latest:grouped")
     },
   },
 
   chapters: {
+    /**
+     * Mutations
+     */
+    uploads: {
+      set: (input: UploadChapterMessageInput) =>
+        client.setex(
+          `chapters:uploads:${input.id}`,
+          DAY,
+          SuperJSON.stringify(input),
+        ),
+      get: (id: string) =>
+        parseCache<UploadChapterMessageInput>(
+          client.get(`chapters:uploads:${id}`),
+        ),
+    },
+    /**
+     * Queries
+     */
     latest: {
       get: () => parseCache<RawLatestRelease[]>(client.get("chapters:latest")),
       set: (input: RawLatestRelease[]) =>
@@ -64,18 +100,6 @@ export const cacheClient = {
           "chapters:latest:grouped-lite",
           DAY,
           SuperJSON.stringify(input),
-        ),
-    },
-    uploads: {
-      set: (input: UploadChapterMessageInput) =>
-        client.setex(
-          `chapters:uploads:${input.id}`,
-          DAY,
-          SuperJSON.stringify(input),
-        ),
-      get: (id: string) =>
-        parseCache<UploadChapterMessageInput>(
-          client.get(`chapters:uploads:${id}`),
         ),
     },
     invalidateAll: async () => {

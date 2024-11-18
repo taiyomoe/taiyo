@@ -11,8 +11,7 @@ import { z } from "zod"
 import {
   chapterNumberSchema,
   chapterVolumeSchema,
-  extensionSchema,
-  mimeTypeSchema,
+  fileSchema,
   pageSchema,
   perPageSchema,
   sortableFieldsSchema,
@@ -28,16 +27,7 @@ export const uploadChapterSchema = z.object({
   language: LanguagesSchema,
   mediaId: z.string().uuid(),
   scanIds: z.string().uuid().array(),
-  files: z
-    .object({
-      name: z.string(),
-      size: z.coerce.number().int().positive(),
-      mimeType: mimeTypeSchema,
-      extension: extensionSchema,
-      file: z.instanceof(File).optional(),
-    })
-    .array()
-    .min(1),
+  files: fileSchema.array().min(1),
 })
 
 export const uploadChaptersSchema = z.object({
