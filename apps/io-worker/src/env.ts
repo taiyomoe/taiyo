@@ -1,9 +1,22 @@
 import { createEnv } from "@t3-oss/env-core"
 import { env as cacheEnv } from "@taiyomoe/cache/env"
+import { env as dbEnv } from "@taiyomoe/db/env"
+import { env as meilisearchEnv } from "@taiyomoe/meilisearch/env"
+import { env as messagingEnv } from "@taiyomoe/messaging/env"
 import { env as s3Env } from "@taiyomoe/s3/env"
+import { env as servicesEnv } from "@taiyomoe/services/env"
+import { env as utilsEnv } from "@taiyomoe/utils/env"
 
 export const env = createEnv({
-  extends: [cacheEnv, s3Env],
+  extends: [
+    cacheEnv,
+    dbEnv,
+    meilisearchEnv,
+    messagingEnv,
+    s3Env,
+    servicesEnv,
+    utilsEnv,
+  ],
   /**
    * Specify your shared environment variables schema here.
    */
