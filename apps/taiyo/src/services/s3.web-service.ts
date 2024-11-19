@@ -16,9 +16,9 @@ const upload = async (
           "Content-Type": mimeType,
           "Content-Length": String(size),
         },
-      })
+      }).catch(() => null)
 
-      if (!res.ok) {
+      if (!res?.ok) {
         onError?.(name)
 
         return null
