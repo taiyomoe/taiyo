@@ -13,6 +13,14 @@ export const updateTaskStatus =
       return
     }
 
+    if (status === "DOWNLOADING") {
+      /**
+       * Wait for the task to be created in the database.
+       * Sometimes, it's so fast that the task is not created yet.
+       */
+      await new Promise((resolve) => setTimeout(resolve, 300))
+    }
+
     await db.task.update({
       data: { status },
       where: { id: input.taskId },
