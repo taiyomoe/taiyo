@@ -24,15 +24,11 @@ export const env = createEnv({
   clientPrefix: "NEXT_PUBLIC_",
   client: {
     NEXT_PUBLIC_CDN_URL: z.string().url(),
-    NEXT_PUBLIC_IO_URL: z.string().url(),
-    NEXT_PUBLIC_IOV4_URL: z.string().url(),
   },
 
   runtimeEnvStrict: {
     NODE_ENV: process.env.NODE_ENV,
     NEXT_PUBLIC_CDN_URL: process.env.NEXT_PUBLIC_CDN_URL,
-    NEXT_PUBLIC_IO_URL: process.env.NEXT_PUBLIC_IO_URL,
-    NEXT_PUBLIC_IOV4_URL: process.env.NEXT_PUBLIC_IOV4_URL,
   },
   skipValidation:
     !!process.env.CI || process.env.npm_lifecycle_event === "lint",

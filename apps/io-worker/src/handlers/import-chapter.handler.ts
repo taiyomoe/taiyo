@@ -1,33 +1,27 @@
 import { randomUUID } from "crypto"
 import { db } from "@taiyomoe/db"
-import { BaseChaptersService } from "@taiyomoe/services"
+import { BaseChaptersService, BaseFilesService } from "@taiyomoe/services"
 import type { ImportChapterMessageInput } from "@taiyomoe/types"
 import { Chapter } from "mangadex-full-api"
-import { omit, parallel } from "radash"
-import { FilesService } from "~/services/files.worker-service"
+import { parallel, pick } from "radash"
 import { ScansService } from "~/services/scans.worker-service"
+import { logger } from "~/utils/logger"
 
 export const importChapterHandler = async (
   input: ImportChapterMessageInput,
 ) => {
   const chapterId = randomUUID()
-  const mdChapter = await Chapter.get(input.mdId)
-  const pageUrls = await mdChapter.getReadablePages()
-
-  await db.task.update({
-    data: { status: "DOWNLOADING" },
-    where: { id: input.taskId },
-  })
-
-  const pageBuffers = await parallel(5, pageUrls, FilesService.download)
+  const rawChapter = await Chapter.get(input.mdId)
+  const pageUrls = await rawChapter.getReadablePages()
+  const pageBuffers = await parallel(5, pageUrls, BaseFilesService.download)
 
   await db.task.update({
     data: { status: "UPLOADING" },
     where: { id: input.taskId },
   })
 
-  const pageFiles = await parallel(10, pageBuffers, (b) =>
-    FilesService.upload(`medias/${input.mediaId}/chapters/${chapterId}`, b),
+  const uploadedPages = await parallel(10, pageBuffers, (b) =>
+    BaseFilesService.upload(`medias/${input.mediaId}/chapters/${chapterId}`, b),
   )
   const scanIds = await ScansService.ensureGroups(
     input.groupIds,
@@ -35,14 +29,25 @@ export const importChapterHandler = async (
   )
   const chapter = await db.mediaChapter.create({
     data: {
-      ...omit(input, ["mdId", "groupIds", "taskId"]),
+      ...pick(input, [
+        "title",
+        "number",
+        "volume",
+        "contentRating",
+        "mediaId",
+        "uploaderId",
+      ]),
       id: chapterId,
       language: "pt_br",
       flag: "OK",
-      pages: pageFiles,
+      pages: uploadedPages,
       scans: { connect: scanIds.map((id) => ({ id })) },
     },
   })
 
-  await BaseChaptersService.postUpload(db, "imported", [chapter], input.taskId)
+  await BaseChaptersService.postUpload(db, "imported", [chapter])
+
+  logger.info(`${input.uploaderId} imported a chapter`, chapter.id)
+
+  return chapter
 }

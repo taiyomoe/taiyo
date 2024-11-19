@@ -13,7 +13,8 @@ import { db } from "@taiyomoe/db"
 import { logsClient } from "@taiyomoe/logs"
 import { meilisearchClient } from "@taiyomoe/meilisearch"
 import messages from "@taiyomoe/messages/en.json"
-import { rabbitPublisher } from "@taiyomoe/rabbit"
+import { messagingClient } from "@taiyomoe/messaging"
+import { s3Client } from "@taiyomoe/s3"
 import {
   BaseCoversService,
   BaseTitlesService,
@@ -31,6 +32,7 @@ import { ChaptersService } from "./services/chapters.trpc-service"
 import { LibrariesService } from "./services/libraries.trpc-service"
 import { MdService } from "./services/md.trpc-service"
 import { MediasService } from "./services/medias.trpc-service"
+import { ScansService } from "./services/scans.trpc-service"
 import { TrackersService } from "./services/trackers.trpc-service"
 import { logger } from "./utils/logger"
 
@@ -66,7 +68,8 @@ export const createTRPCContext = async (opts: {
   logs: logsClient,
   logger,
   umami: umamiClient,
-  rabbit: rabbitPublisher,
+  messaging: messagingClient,
+  s3: s3Client,
   services: {
     users: BaseUsersService,
     libraries: LibrariesService,
@@ -75,6 +78,7 @@ export const createTRPCContext = async (opts: {
     covers: BaseCoversService,
     titles: BaseTitlesService,
     chapters: ChaptersService,
+    scans: ScansService,
     md: MdService,
   },
   ...opts,

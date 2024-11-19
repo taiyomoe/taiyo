@@ -13,7 +13,6 @@ const postUpload = async (
   db: PrismaClient | Prisma.TransactionClient,
   type: "created" | "imported" | "synced",
   covers: MediaCover[],
-  taskId?: string,
 ) => {
   const uniqueMediaIds = Array.from(new Set(covers.map((c) => c.mediaId)))
   const hasMainCover = covers.some((c) => c.isMainCover)
@@ -29,13 +28,6 @@ const postUpload = async (
   if (hasMainCover) {
     await MediasIndexService.sync(db, uniqueMediaIds)
     await cacheClient.medias.invalidateAll()
-  }
-
-  if (taskId) {
-    await db.task.update({
-      data: { status: "FINISHED" },
-      where: { id: taskId },
-    })
   }
 }
 

@@ -11,14 +11,18 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@t3-oss/env-core": "^0.11.1",
+    "@taiyomoe/cache": "workspace:*",
     "@taiyomoe/db": "workspace:*",
     "@taiyomoe/logs": "workspace:*",
     "@taiyomoe/meilisearch": "workspace:*",
-    "@taiyomoe/rabbit": "workspace:*",
+    "@taiyomoe/messaging": "workspace:*",
+    "@taiyomoe/s3": "workspace:*",
     "@taiyomoe/services": "workspace:*",
+    "@taiyomoe/utils": "workspace:*",
+    "bullmq": "^5.26.2",
     "mangadex-full-api": "^6.0.0",
-    "radash": "^12.1.0",
-    "superjson": "^2.2.1"
+    "radash": "^12.1.0"
   },
   "devDependencies": {
     "@taiyomoe/tsconfig": "workspace:*",

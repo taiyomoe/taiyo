@@ -1,102 +1,100 @@
 import { type Prisma, db } from "@taiyomoe/db"
 import {
   BaseCoversService,
+  BaseFilesService,
   BaseMediasService,
   BaseTitlesService,
   BaseTrackersService,
 } from "@taiyomoe/services"
 import type { CreateMediaMessageInput } from "@taiyomoe/types"
 import { pick } from "radash"
-import SuperJSON from "superjson"
-import { FilesService } from "~/services/files.worker-service"
+import { logger } from "~/utils/logger"
 
-export const createMediaHandler = async (
-  payload: CreateMediaMessageInput,
-  reply: (content: string) => void,
-) => {
-  const result = await db.$transaction(async (tx) => {
-    const media = await tx.media.create({
-      data: {
-        ...pick(payload, [
-          "startDate",
-          "endDate",
-          "synopsis",
-          "contentRating",
-          "oneShot",
-          "type",
-          "status",
-          "source",
-          "demography",
-          "countryOfOrigin",
-          "genres",
-          "tags",
-          "flag",
-          "creatorId",
-        ]),
-        titles: {
-          create: {
-            title: payload.mainTitle,
-            language: payload.mainTitleLanguage,
-            isMainTitle: true,
-            priority: 1,
-            creatorId: payload.creatorId,
-          },
-        },
-        trackers: {
-          createMany: {
-            data: [
-              {
-                tracker: "MANGADEX",
-                externalId: payload.mdId,
-                creatorId: payload.creatorId,
-              },
-              {
-                tracker: "ANILIST",
-                externalId: payload.alId?.toString(),
-                creatorId: payload.creatorId,
-              },
-              {
-                tracker: "MYANIMELIST",
-                externalId: payload.malId?.toString(),
-                creatorId: payload.creatorId,
-              },
-            ].filter(
-              (t) => t.externalId !== undefined,
-            ) as Prisma.MediaTrackerCreateManyMediaInput[],
-          },
+export const createMediaHandler = async (input: CreateMediaMessageInput) => {
+  const mainCover = await BaseFilesService.downloadFromS3(input.mainCover)
+  const uploadedMainCover = await BaseFilesService.upload(
+    `medias/${input.id}/covers`,
+    mainCover,
+  )
+  const media = await db.media.create({
+    data: {
+      ...pick(input, [
+        "startDate",
+        "endDate",
+        "synopsis",
+        "contentRating",
+        "oneShot",
+        "type",
+        "status",
+        "source",
+        "demography",
+        "countryOfOrigin",
+        "genres",
+        "tags",
+        "flag",
+        "creatorId",
+      ]),
+      id: input.id,
+      covers: {
+        create: {
+          id: uploadedMainCover.id,
+          language: input.mainCoverLanguage,
+          volume: input.mainCoverVolume,
+          contentRating: input.mainCoverContentRating,
+          isMainCover: true,
+          uploaderId: input.creatorId,
         },
       },
-    })
-    const coverBuffer = Buffer.from(payload.mainCover)
-    const coverFile = await FilesService.upload(
-      `medias/${media.id}/covers`,
-      coverBuffer,
-    )
-    const cover = await tx.mediaCover.create({
-      data: {
-        id: coverFile.id,
-        language: payload.mainCoverLanguage,
-        volume: payload.mainCoverVolume,
-        contentRating: payload.mainCoverContentRating,
-        isMainCover: true,
-        mediaId: media.id,
-        uploaderId: payload.creatorId,
+      titles: {
+        create: {
+          title: input.mainTitle,
+          language: input.mainTitleLanguage,
+          isMainTitle: true,
+          priority: 1,
+          creatorId: input.creatorId,
+        },
       },
-    })
-    const titles = await tx.mediaTitle.findMany({
-      where: { mediaId: media.id },
-    })
-    const trackers = await tx.mediaTracker.findMany({
-      where: { mediaId: media.id },
-    })
-
-    await BaseMediasService.postCreate(tx, "created", media)
-    await BaseTitlesService.postCreate(tx, "created", titles)
-    await BaseTrackersService.postCreate("created", trackers)
-    await BaseCoversService.postUpload(tx, "created", [cover])
-
-    return media
+      trackers: {
+        createMany: {
+          data: [
+            {
+              tracker: "MANGADEX",
+              externalId: input.mdId,
+              creatorId: input.creatorId,
+            },
+            {
+              tracker: "ANILIST",
+              externalId: input.alId?.toString(),
+              creatorId: input.creatorId,
+            },
+            {
+              tracker: "MYANIMELIST",
+              externalId: input.malId?.toString(),
+              creatorId: input.creatorId,
+            },
+          ].filter(
+            (t) => t.externalId !== undefined,
+          ) as Prisma.MediaTrackerCreateManyMediaInput[],
+        },
+      },
+    },
+  })
+  const covers = await db.mediaCover.findMany({
+    where: { mediaId: media.id },
+  })
+  const titles = await db.mediaTitle.findMany({
+    where: { mediaId: media.id },
+  })
+  const trackers = await db.mediaTracker.findMany({
+    where: { mediaId: media.id },
   })
 
-  return reply(SuperJSON.stringify(result))
+  await BaseMediasService.postCreate(db, "created", media)
+  await BaseCoversService.postUpload(db, "created", covers)
+  await BaseTitlesService.postCreate(db, "created", titles)
+  await BaseTrackersService.postCreate("created", trackers)
+
+  logger.info(`${input.creatorId} created a media`, media.id)
+
+  return media
 }

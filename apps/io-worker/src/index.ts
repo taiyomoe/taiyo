@@ -1,69 +1,72 @@
-import { RABBIT_DEFAULT_EXCHANGES, rawRabbitClient } from "@taiyomoe/rabbit"
-import SuperJSON from "superjson"
+import { db } from "@taiyomoe/db"
+import { UPLOADS_QUEUE, rawQueue, rawQueueEvents } from "@taiyomoe/messaging"
+import type { ImportChapterMessageInput } from "@taiyomoe/types"
+import { type Job, Worker } from "bullmq"
+import { env } from "~/env"
 import { createMediaHandler } from "~/handlers/create-media.handler"
 import { importChapterHandler } from "~/handlers/import-chapter.handler"
 import { importCoverHandler } from "~/handlers/import-cover.handler"
-import { mediasInitialImportHandler } from "~/handlers/medias-initial-import.handler"
-import { handleErrors } from "~/utils/handle-errors"
+import { importMediaHandler } from "~/handlers/import-media.handler"
+import { uploadChapterHandler } from "~/handlers/upload-chapter.handler"
+import { uploadCoverHandler } from "~/handlers/upload-cover.handler"
 import { logger } from "~/utils/logger"
+import { updateTaskStatus } from "~/utils/update-task-status"
 
-console.log("image-orchestrator worker up and running!")
+const worker = new Worker(
+  UPLOADS_QUEUE,
+  async (job) => {
+    logger.debug("Worker received a job", job.name, job.data)
 
-const rabbitConsumer = rawRabbitClient.createConsumer(
-  {
-    requeue: false,
-    qos: { prefetchCount: 2 },
-    queueOptions: { durable: true },
-    exchanges: RABBIT_DEFAULT_EXCHANGES,
-    queueBindings: [{ exchange: "medias", routingKey: "*" }],
-  },
-  async ({ routingKey, body }) => {
-    logger.debug(`Received RabbitMQ message (${routingKey})`)
-
-    switch (routingKey) {
-      case "import-cover":
-        return handleErrors(importCoverHandler)(SuperJSON.parse(body))
-      case "import-chapter":
-        return handleErrors(importChapterHandler)(SuperJSON.parse(body))
+    switch (job.name) {
+      case "medias-import":
+        return await importMediaHandler(job.data)
+      case "medias-create":
+        return await createMediaHandler(job.data)
+      case "covers-import":
+        return await importCoverHandler(job.data)
+      case "covers-upload":
+        return await uploadCoverHandler(job.data)
+      case "chapters-import":
+        return await importChapterHandler(job.data)
+      case "chapters-upload":
+        return await uploadChapterHandler(job.data)
       default:
-        logger.error("Received unknown RabbitMQ routing key", routingKey)
+        logger.error("Received unknown job", job.name)
+        throw new Error("Received unknown job")
     }
   },
-)
-
-const mediasInitialImportConsumer = rawRabbitClient.createConsumer(
-  { queue: "medias-initial-import", requeue: false },
-  ({ body }, reply) => {
-    logger.debug("Received RabbitMQ RPC message (medias-initial-import)")
-    return handleErrors(mediasInitialImportHandler)(
-      SuperJSON.parse(body),
-      reply,
-    )
+  {
+    connection: { url: env.DRAGONFLY_URL },
+    limiter: {
+      max: 20,
+      duration: 1000 * 60,
+    },
   },
 )
 
-const mediasCreateConsumer = rawRabbitClient.createConsumer(
-  { queue: "medias-create", requeue: false },
-  ({ body }, reply) => {
-    logger.debug("Received RabbitMQ RPC message (medias-create)")
-    return handleErrors(createMediaHandler)(body, reply)
-  },
-)
-
-rabbitConsumer.on("error", (err) => {
-  logger.error("An error occured while handling a RabbitMQ message", err)
+worker.on("ready", () => {
+  console.log("io-worker up and running!")
 })
 
-mediasInitialImportConsumer.on("error", (err) => {
-  logger.error(
-    "An error occured while handling a RabbitMQ RPC message (medias-initial-import)",
-    err,
-  )
+rawQueueEvents.on("added", async ({ jobId }) => {
+  const job: Job = await rawQueue.getJob(jobId)
+  const input = job.data as ImportChapterMessageInput
+
+  if (!["covers-import", "chapters-import"].includes(job.name)) {
+    return
+  }
+
+  await db.task.create({
+    data: {
+      id: input.taskId,
+      type: job.name === "covers-import" ? "IMPORT_COVER" : "IMPORT_CHAPTER",
+      status: "PENDING",
+      payload: input,
+      sessionId: input.sessionId,
+    },
+  })
 })
 
-mediasCreateConsumer.on("error", (err) => {
-  logger.error(
-    "An error occured while handling a RabbitMQ RPC message (medias-create)",
-    err,
-  )
-})
+rawQueueEvents.on("active", updateTaskStatus("DOWNLOADING"))
+rawQueueEvents.on("completed", updateTaskStatus("FINISHED"))
+rawQueueEvents.on("failed", updateTaskStatus("FAILED"))

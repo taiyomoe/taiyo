@@ -12,6 +12,5 @@
     "enabled": false
   },
   "rangeStrategy": "bump",
-  "automerge": true,
-  "ignoreDeps": ["elysia", "file-type"]
+  "automerge": true
 }

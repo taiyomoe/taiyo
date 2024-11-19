@@ -6,9 +6,8 @@ import {
   TAG_KEYS,
 } from "@taiyomoe/constants"
 import { z } from "zod"
-import { zfd } from "zod-form-data"
-import { stringToJSON } from "zod_utilz"
 import {
+  fileSchema,
   pageSchema,
   perPageSchema,
   queryableFieldsSchema,
@@ -26,8 +25,6 @@ import {
   MediaTypeSchema,
 } from "./prisma"
 
-const tagsSchema = z.object({ key: z.enum(TAG_KEYS), isSpoiler: z.boolean() })
-
 export const createMediaSchema = z.object({
   startDate: z.coerce.date().optional(),
   endDate: z.coerce.date().optional(),
@@ -40,17 +37,14 @@ export const createMediaSchema = z.object({
   demography: MediaDemographySchema,
   countryOfOrigin: MediaCountryOfOriginSchema,
   flag: FlagSchema,
-  genres: zfd.repeatableOfType(MediaGenresSchema),
-  tags: z.union([
-    tagsSchema.array(),
-    zfd.repeatableOfType(stringToJSON().pipe(tagsSchema)),
-  ]),
+  genres: MediaGenresSchema.array(),
+  tags: z.object({ key: z.enum(TAG_KEYS), isSpoiler: z.boolean() }).array(),
   mdId: z.string().uuid().optional(),
   alId: z.coerce.number().positive().min(30000).optional(),
   malId: z.coerce.number().positive().min(1).optional(),
   mainTitle: z.string().min(1),
   mainTitleLanguage: LanguagesSchema,
-  mainCover: zfd.file(),
+  mainCover: fileSchema,
   mainCoverLanguage: LanguagesSchema,
   mainCoverContentRating: ContentRatingSchema.optional(),
   mainCoverVolume: z.coerce.number().int().positive().optional(),

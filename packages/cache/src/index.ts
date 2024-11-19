@@ -1,9 +1,12 @@
 import type { Languages } from "@taiyomoe/db"
 import type {
+  CreateMediaMessageInput,
   FeaturedMedia,
   LatestMedia,
   LatestReleaseGroupedLite,
   RawLatestRelease,
+  UploadChapterMessageInput,
+  UploadCoverMessageInput,
 } from "@taiyomoe/types"
 import DF from "ioredis"
 import SuperJSON from "superjson"
@@ -18,6 +21,22 @@ export const rawCacheClient = client
 
 export const cacheClient = {
   medias: {
+    /**
+     * Mutations
+     */
+    create: {
+      set: (input: CreateMediaMessageInput) =>
+        client.setex(
+          `medias:create:${input.id}`,
+          HOUR,
+          SuperJSON.stringify(input),
+        ),
+      get: (id: string) =>
+        parseCache<CreateMediaMessageInput>(client.get(`medias:create:${id}`)),
+    },
+    /**
+     * Queries
+     */
     latest: {
       get: () => parseCache<LatestMedia[]>(client.get("medias:latest")),
       set: (input: LatestMedia[]) =>
@@ -36,18 +55,53 @@ export const cacheClient = {
       invalidate: () => client.del(`medias:featured:${lang}`),
     }),
     invalidateAll: async () => {
-      const mediaKeys = await client.keys("medias:*")
+      const featuredMediasKeys = await client.keys("medias:featured:*")
 
-      for (const key of mediaKeys) {
+      for (const key of featuredMediasKeys) {
         await client.del(key)
       }
 
+      await client.del("medias:latest")
       await client.del("chapters:latest")
       await client.del("chapters:latest:grouped")
     },
   },
 
+  covers: {
+    /**
+     * Mutations
+     */
+    upload: {
+      set: (input: UploadCoverMessageInput) =>
+        client.setex(
+          `covers:upload:${input.id}`,
+          HOUR,
+          SuperJSON.stringify(input),
+        ),
+      get: (id: string) =>
+        parseCache<UploadCoverMessageInput>(client.get(`covers:upload:${id}`)),
+    },
+  },
+
   chapters: {
+    /**
+     * Mutations
+     */
+    uploads: {
+      set: (input: UploadChapterMessageInput) =>
+        client.setex(
+          `chapters:uploads:${input.id}`,
+          HOUR,
+          SuperJSON.stringify(input),
+        ),
+      get: (id: string) =>
+        parseCache<UploadChapterMessageInput>(
+          client.get(`chapters:uploads:${id}`),
+        ),
+    },
+    /**
+     * Queries
+     */
     latest: {
       get: () => parseCache<RawLatestRelease[]>(client.get("chapters:latest")),
       set: (input: RawLatestRelease[]) =>
