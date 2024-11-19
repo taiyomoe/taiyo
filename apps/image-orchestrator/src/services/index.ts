@@ -1,5 +1,0 @@
-export * from "./files.io-service"
-export * from "./images.io-service"
-export * from "./banners.io-service"
-export * from "./covers.io-service"
-export * from "./medias.io-service"

@@ -1,107 +1,78 @@
 import { randomUUID } from "crypto"
+import type { Media } from "@taiyomoe/db"
+import { rawQueueEvents } from "@taiyomoe/messaging"
 import { importMediaSchema } from "@taiyomoe/schemas"
+import { MdUtils } from "@taiyomoe/utils"
 import { protectedProcedure } from "../trpc"
 
 export const importMediaHandler = protectedProcedure
   .meta({ resource: "medias", action: "create" })
   .input(importMediaSchema)
-  .mutation(
-    async ({ ctx: { db, logger, rabbit, services, session }, input }) => {
-      const mdMedia = await services.md.getMedia(input.mdId)
-      const mainCover = await mdMedia.mainCover.resolve()
-      logger.debug(`Got media ${input.mdId} from MangaDex`, mdMedia, mainCover)
+  .mutation(async ({ ctx, input }) => {
+    const manga = await ctx.services.md.getMedia(input.mdId)
+    await ctx.services.md.ensureValid(input.mdId)
 
-      await services.md.ensureValid(input.mdId)
-      logger.debug(`Media ${input.mdId} is valid`)
-      logger.info(
-        `${session.user.id} started importing MangaDex media ${input.mdId}`,
+    ctx.logger.info(
+      `${ctx.session.user.id} started importing MangaDex media ${input.mdId}`,
+    )
+
+    const job = await ctx.messaging.medias.import({
+      mdId: input.mdId,
+      creatorId: ctx.session.user.id,
+    })
+    const media: Media = await job.waitUntilFinished(rawQueueEvents)
+    const sessionId = randomUUID()
+
+    if (input.importCovers) {
+      const rawCovers = await manga.getCovers()
+      const covers = rawCovers.map((c) => ({
+        ...MdUtils.parseCover(c, ctx.logger),
+        contentRating: media.contentRating,
+        mediaId: media.id,
+        uploaderId: ctx.session.user.id,
+        taskId: randomUUID(),
+        sessionId,
+      }))
+
+      await ctx.messaging.covers.import(covers)
+
+      ctx.logger.debug(
+        `Sent ${covers.length} covers to BullMQ when importing MangaDex media ${input.mdId}`,
+        covers,
       )
+    }
 
-      const payload = services.md.getCreationPayload(mdMedia, session.user.id)
-      const sessionId = randomUUID()
-      logger.debug(`Parsed payload from MangaDex media ${input.mdId}`, payload)
-
-      const media = await rabbit.medias.import({
-        payload,
-        mainCoverPayload: services.md.parseCover(mainCover),
-      })
-      logger.debug(
-        `Received created media from RabbitMQ worker for MangaDex import ${input.mdId}`,
-        media,
-      )
-
-      if (input.importCovers) {
-        const covers = await mdMedia.getCovers()
-        logger.debug(
-          `Got ${covers.length} covers from MangaDex media ${input.mdId}`,
-          covers,
-        )
-
-        for (const cover of covers) {
-          const payload = {
-            ...services.md.parseCover(cover),
-            contentRating: media.contentRating,
-            mediaId: media.id,
-            uploaderId: session.user.id,
-          }
-          const task = await db.task.create({
-            data: {
-              type: "IMPORT_COVER",
-              status: "PENDING",
-              payload,
-              sessionId,
-            },
-          })
-          const taskPayload = { ...payload, taskId: task.id }
-
-          await rabbit.medias.importCover(taskPayload)
-          logger.debug(
-            `Sent cover ${cover.id} to RabbitMQ queue when importing MangaDex media ${input.mdId}`,
-            taskPayload,
-          )
-        }
-      }
-
-      if (input.importChapters) {
-        const chapters = await services.md.getChapters(mdMedia)
-        logger.debug(
-          `Got ${chapters.length} chapters from MangaDex media ${input.mdId}`,
-          chapters,
-        )
-
-        for (const chapter of chapters) {
-          if (chapter.isExternal) {
-            logger.debug(
+    if (input.importChapters) {
+      const rawChapters = await ctx.services.md.getChapters(manga)
+      const chapters = rawChapters
+        .filter((c) => {
+          if (c.isExternal) {
+            ctx.logger.debug(
               `Skipped external chapter when importing MangaDex media ${input.mdId}`,
-              chapter,
+              c,
             )
-            continue
+
+            return false
           }
 
-          const payload = {
-            ...services.md.parseChapter(chapter),
-            contentRating: media.contentRating,
-            mediaId: media.id,
-            uploaderId: session.user.id,
-          }
-          const task = await db.task.create({
-            data: {
-              type: "IMPORT_CHAPTER",
-              status: "PENDING",
-              payload,
-              sessionId,
-            },
-          })
-          const taskPayload = { ...payload, taskId: task.id }
+          return true
+        })
+        .map((c) => ({
+          ...MdUtils.parseChapter(c, ctx.logger),
+          contentRating: media.contentRating,
+          mediaId: media.id,
+          uploaderId: ctx.session.user.id,
+          taskId: randomUUID(),
+          sessionId,
+        }))
 
-          await rabbit.medias.importChapter(taskPayload)
-          logger.debug(
-            `Sent chapter ${chapter.id} to RabbitMQ queue when importing MangaDex media ${input.mdId}`,
-            taskPayload,
-          )
-        }
-      }
+      await ctx.messaging.chapters.import(chapters)
 
-      return { media, sessionId }
-    },
-  )
+      ctx.logger.debug(
+        `Sent ${chapters.length} chapters to BullMQ when importing MangaDex media ${input.mdId}`,
+        chapters,
+      )
+    }
+
+    return { media, sessionId }
+  })

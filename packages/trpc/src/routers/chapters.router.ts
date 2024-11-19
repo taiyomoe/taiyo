@@ -1,5 +1,6 @@
 import { getLatestChaptersGroupedByUserSchema } from "@taiyomoe/schemas"
 import { bulkMutateChaptersHandler } from "../handlers/bulk-mutate-chapters.handler"
+import { commitChapterHandler } from "../handlers/commit-chapter.handler"
 import { getChapterByIdHandler } from "../handlers/get-chapter-by-id.handler"
 import { getChapterByMediaIdHandler } from "../handlers/get-chapter-by-media-id.handler"
 import { getChaptersByUserIdHandler } from "../handlers/get-chapters-by-user-id.handler"
@@ -7,9 +8,12 @@ import { getChaptersListHandler } from "../handlers/get-chapters-list.handler"
 import { updateChapterScansHandler } from "../handlers/update-chapter-scans.handler"
 import { updateChapterVolumesHandler } from "../handlers/update-chapter-volumes.handler"
 import { updateChapterHandler } from "../handlers/update-chapter.handler"
+import { uploadChapterHandler } from "../handlers/upload-chapter.handler"
 import { createTRPCRouter, publicProcedure } from "../trpc"
 
 export const chaptersRouter = createTRPCRouter({
+  upload: uploadChapterHandler,
+  commit: commitChapterHandler,
   update: updateChapterHandler,
   updateVolumes: updateChapterVolumesHandler,
   updateScans: updateChapterScansHandler,
