@@ -5,6 +5,7 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <div className="flex h-full flex-col">
       <Navbar />
+      <div class="scroll-detect"></div>
       {children}
     </div>
   )
