@@ -17,6 +17,7 @@ const logsUsersSettingsType = [
   "preferredTitles",
   "showFollowing",
   "showLibrary",
+  "homeLayout",
 ]
 
 export const UsersSettingsService = {
@@ -26,8 +27,6 @@ export const UsersSettingsService = {
         "Users settings logs service didn't receive a valid type",
         input.type,
       )
-
-      return
     }
 
     return insertWrapper(
