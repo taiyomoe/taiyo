@@ -69,4 +69,13 @@ rawQueueEvents.on("added", async ({ jobId }) => {
 
 rawQueueEvents.on("active", updateTaskStatus("DOWNLOADING"))
 rawQueueEvents.on("completed", updateTaskStatus("FINISHED"))
-rawQueueEvents.on("failed", updateTaskStatus("FAILED"))
+rawQueueEvents.on("failed", async ({ jobId, failedReason }) => {
+  const job = await updateTaskStatus("FAILED")({ jobId })
+
+  logger.error(
+    "An error occured while handling a job",
+    job.name,
+    job.data,
+    failedReason,
+  )
+})
