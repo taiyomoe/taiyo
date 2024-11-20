@@ -1,0 +1,53 @@
+name: Build and push io-worker
+
+on:
+  push:
+    branches: [develop]
+
+env:
+  LOCAL_IMAGE_NAME: io-worker:latest
+  REGISTRY_IMAGE_NAME: ${{ secrets.REGISTRY_URL }}/io-worker:latest
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Nixpacks
+        run: curl -sSL https://nixpacks.com/install.sh | bash
+
+      - name: Install bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Login to Docker Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ secrets.REGISTRY_URL }}
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+
+      - name: Build the image
+        run: |
+          nixpacks build . \
+          --name ${{ env.LOCAL_IMAGE_NAME }} \
+          --build-cmd "npx turbo run build --filter=@taiyomoe/io-worker..." \
+          --start-cmd "pnpm -F @taiyomoe/io-worker run start"
+
+      - name: Tag the image
+        run: docker tag ${{ env.LOCAL_IMAGE_NAME }} ${{ env.REGISTRY_IMAGE_NAME }}
+
+      - name: Clone serverless-registry
+        run: git clone https://github.com/cloudflare/serverless-registry.git
+
+      - name: Install serverless-registry/push packages
+        working-directory: ./serverless-registry/push
+        run: bun install
+
+      - name: Push the image
+        working-directory: ./serverless-registry/push
+        run: echo $PASSWORD_REGISTRY | bun run index.ts ${{ env.REGISTRY_IMAGE_NAME }}
+        env:
+          PASSWORD_REGISTRY: ${{ secrets.REGISTRY_PASSWORD }}
+          USERNAME_REGISTRY: ${{ secrets.REGISTRY_USERNAME }}
