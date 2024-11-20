@@ -1,4 +1,3 @@
-import { initLogger } from ".."
 import { insertWrapper } from "../utils"
 
 type LogsUsersSettingsInsertInput = {
@@ -24,7 +23,7 @@ const logsUsersSettingsType = [
 export const UsersSettingsService = {
   insert: (input: LogsUsersSettingsInsertInput) => {
     if (!logsUsersSettingsType.includes(input.type)) {
-      initLogger("taiyo").error(
+      console.error(
         "Users settings logs service didn't receive a valid type",
         input.type,
       )
