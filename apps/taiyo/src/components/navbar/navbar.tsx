@@ -3,6 +3,7 @@
 import { Chip } from "@nextui-org/chip"
 import { tv } from "@nextui-org/react"
 import { useSession } from "@taiyomoe/auth/client"
+import { motion, useScroll, useTransform } from "framer-motion"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useMemo } from "react"
@@ -10,7 +11,6 @@ import { ReaderSidebarOpenButton } from "~/app/(reader)/_components/readerSideba
 import { CompanyLogo } from "~/components/ui/CompanyLogo"
 import { MediasSearchMenu } from "~/components/ui/medias-search/menu/medias-search-menu"
 import { SignedIn } from "~/components/utils/signed-in/client"
-import { useScrollOpacity } from "~/hooks/useScrollOpacity"
 import { useReaderSettingsStore } from "~/stores"
 import { NavbarDashboardButton } from "./buttons/navbar-dashboard-button"
 import { NavbarUserLibraryButton } from "./buttons/navbar-user-library-button"
@@ -49,7 +49,6 @@ export const Navbar = () => {
   const { sidebar, navbarMode } = useReaderSettingsStore()
   const pathname = usePathname()
   const { data: session } = useSession()
-  const opacity = useScrollOpacity({ min: 0, max: 100 })
   const shouldCollapse = pathname.includes("/chapter/")
   const mode = useMemo(() => {
     if (pathname === "/") return "scroll"
@@ -59,6 +58,13 @@ export const Navbar = () => {
     return "sticky"
   }, [pathname, navbarMode])
   const slots = navbar({ mode })
+  const { scrollY } = useScroll()
+  const backgroundOpacity = useTransform(scrollY, [0, 200], [0, 1])
+  const backgroundColor = useTransform(
+    backgroundOpacity,
+    [0, 1],
+    ["rgba(22, 22, 26, 0)", "rgba(22, 22, 26, 1)"],
+  )
 
   return (
     <div
@@ -66,13 +72,11 @@ export const Navbar = () => {
       data-sidebar-state={shouldCollapse && sidebar.state}
       data-sidebar-side={shouldCollapse && sidebar.side}
     >
-      <nav
+      <motion.nav
         className={slots.contentWrapper()}
         style={{
           backgroundColor:
-            mode === "scroll"
-              ? `rgba(22,22,26,${opacity})`
-              : "var(--background)",
+            mode === "scroll" ? backgroundColor : "var(--background)",
         }}
       >
         <Link
@@ -101,7 +105,7 @@ export const Navbar = () => {
           {!session && <NavbarGuestPopover />}
           <ReaderSidebarOpenButton />
         </div>
-      </nav>
+      </motion.nav>
       <NavbarBorder />
     </div>
   )

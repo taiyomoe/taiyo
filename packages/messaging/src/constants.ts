@@ -5,4 +5,7 @@ export const UPLOADS_QUEUE = "{uploads}"
 
 export const QUEUE_OPTIONS: QueueOptions = {
   connection: { url: env.DRAGONFLY_URL },
+  defaultJobOptions: {
+    attempts: 3,
+  },
 }

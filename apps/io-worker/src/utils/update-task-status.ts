@@ -10,7 +10,7 @@ export const updateTaskStatus =
     const input = job.data as ImportChapterMessageInput
 
     if (!["covers-import", "chapters-import"].includes(job.name)) {
-      return
+      return job
     }
 
     if (status === "DOWNLOADING") {
@@ -25,4 +25,6 @@ export const updateTaskStatus =
       data: { status },
       where: { id: input.taskId },
     })
+
+    return job
   }
