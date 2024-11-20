@@ -18,7 +18,7 @@ export const initLogger = (
 ) => {
   const logger =
     process.env.NODE_ENV === "development"
-      ? pino({ level: "debug" }, pinoPretty({ ignore: "pid,hostname" }))
+      ? pino({ level: "debug" }, pinoPretty({ ignore: "pid" }))
       : pino(
           { level: "debug", base: null },
           pinoLoki({
