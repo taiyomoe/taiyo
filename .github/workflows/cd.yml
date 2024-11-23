@@ -1,15 +1,15 @@
-name: Build and push io-worker
+name: Build apps
 
 on:
   push:
-    branches: [develop]
+    branches: [main]
 
 env:
   LOCAL_IMAGE_NAME: io-worker:latest
   REGISTRY_IMAGE_NAME: ${{ secrets.REGISTRY_URL }}/io-worker:latest
 
 jobs:
-  build-and-push:
+  io-worker:
     runs-on: blacksmith-4vcpu-ubuntu-2204
     steps:
       - name: Checkout code
