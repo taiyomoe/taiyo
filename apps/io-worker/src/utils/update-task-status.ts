@@ -18,7 +18,7 @@ export const updateTaskStatus =
        * Wait for the task to be created in the database.
        * Sometimes, it's so fast that the task is not created yet.
        */
-      await new Promise((resolve) => setTimeout(resolve, 300))
+      await new Promise((resolve) => setTimeout(resolve, 400))
     }
 
     await db.task.update({
