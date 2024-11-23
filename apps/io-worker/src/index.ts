@@ -79,3 +79,11 @@ rawQueueEvents.on("failed", async ({ jobId, failedReason }) => {
     failedReason,
   )
 })
+
+process.on("SIGTERM", async () => {
+  console.log("Received SIGTERM, shutting down...")
+
+  await worker.close()
+
+  console.log("All jobs completed, exiting...")
+})
