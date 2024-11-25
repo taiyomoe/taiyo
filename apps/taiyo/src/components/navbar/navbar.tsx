@@ -21,7 +21,7 @@ import { NavbarUserPopover } from "./popovers/navbar-user-popover"
 const navbar = tv({
   slots: {
     container: [
-      "group child:relative z-20 flex h-navbar max-h-navbar w-full flex-col justify-center p-0 md:p-[unset]",
+      "group child:relative z-20 flex h-navbar max-h-navbar flex-col justify-center p-0 md:p-[unset]",
       'data-[sidebar-state="hide"]:md:!p-0',
       'data-[sidebar-side="right"]:md:pr-readerSidebar data-[sidebar-side="left"]:md:pl-readerSidebar',
     ],
@@ -49,7 +49,11 @@ export const Navbar = () => {
   const { sidebar, navbarMode } = useReaderSettingsStore()
   const pathname = usePathname()
   const { data: session } = useSession()
-  const shouldCollapse = pathname.includes("/chapter/")
+  const shouldCollapse = useMemo(() => {
+    if (pathname.includes("/chapter/")) return true
+    if (pathname.includes("/dashboard")) return true
+    return false
+  }, [pathname])
   const mode = useMemo(() => {
     if (pathname === "/") return "scroll"
     if (pathname === "/user/settings") return "sticky"

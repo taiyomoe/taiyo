@@ -35,6 +35,15 @@
     --reader-height: calc(100dvh - var(--navbar-height));
     --reader-sidebar-width: 300px;
     --library-sidebar-width: 300px;
+
+    --sidebar-background: 240 3% 18%; /* content1 */
+    --sidebar-foreground: 0 0% 98%; /* content1-foreground */
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.5% 22.4%; /* content2 */
+    --sidebar-accent-foreground: 0 0% 98%; /* content2-foreground */
+    --sidebar-border: 240 3.5% 22.4%; /* content2 */
+    --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
   @screen sm {

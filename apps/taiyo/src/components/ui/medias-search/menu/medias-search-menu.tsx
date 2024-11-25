@@ -1,3 +1,5 @@
+"use client"
+
 import { Modal, ModalContent } from "@nextui-org/modal"
 import { Command } from "cmdk"
 import { Configure, InstantSearch } from "react-instantsearch"
