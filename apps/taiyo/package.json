@@ -82,7 +82,8 @@
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "jiti": "^2.4.0",
-    "tailwindcss": "^3.4.15"
+    "tailwindcss": "^3.4.15",
+    "tailwindcss-animate": "^1.0.7"
   },
   "browser": {
     "child_process": false,

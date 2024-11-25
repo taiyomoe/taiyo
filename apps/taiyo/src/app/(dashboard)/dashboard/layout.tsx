@@ -16,9 +16,11 @@ export default async function Layout({ children }: LayoutProps) {
   return (
     <SidebarProvider className="flex w-full">
       <DashboardSidebar />
-      <SidebarInset className="w-full md:max-w-[calc(100%-var(--sidebar-width))]">
-        <Navbar mode="sticky" />
-        <main className="p-bodyPadding">{children}</main>
+      <SidebarInset className="w-px">
+        <Navbar mode="sticky" showCollapse />
+        <main className="w-full max-w-screen-3xl place-self-center p-bodyPadding">
+          {children}
+        </main>
       </SidebarInset>
     </SidebarProvider>
   )

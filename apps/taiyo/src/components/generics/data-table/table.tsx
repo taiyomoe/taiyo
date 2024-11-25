@@ -8,12 +8,8 @@ import { cn } from "~/lib/utils/cn"
 
 const Table = forwardRef<HTMLTableElement, HTMLAttributes<HTMLTableElement>>(
   ({ className, ...props }, ref) => (
-    <div className="scrollbar-thin relative z-0 w-full overflow-auto rounded-large bg-content1 p-4">
-      <table
-        ref={ref}
-        className={cn("h-auto w-full min-w-full table-auto", className)}
-        {...props}
-      />
+    <div className="scrollbar-thin relative z-0 overflow-auto rounded-large bg-content1 p-4">
+      <table ref={ref} className={cn("w-full", className)} {...props} />
     </div>
   ),
 )

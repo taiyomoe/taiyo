@@ -22,26 +22,31 @@ const groups = [
       {
         name: "Lista",
         url: "/dashboard/medias",
+        tooltip: "Lista de obras",
         type: "list",
       },
       {
         name: "Importar",
         url: "/dashboard/medias/import",
+        tooltip: "Importar uma obra",
         type: "add",
       },
       {
         name: "Adicionar",
         url: "/dashboard/medias/add",
+        tooltip: "Adicionar uma obra",
         type: "add",
       },
       {
         name: "Sincronizar",
         url: "/dashboard/medias/sync",
+        tooltip: "Sincronizar uma obra",
         type: "edit",
       },
       {
         name: "Editar",
         url: "/dashboard/medias/edit",
+        tooltip: "Editar obras",
         type: "edit",
       },
     ],
@@ -52,11 +57,13 @@ const groups = [
       {
         name: "Upar",
         url: "/dashboard/chapters/bulk-upload",
+        tooltip: "Upar capítulos em massa",
         type: "add",
       },
       {
         name: "Modificar",
         url: "/dashboard/chapters/bulk-edit",
+        tooltip: "Modificar capítulos em massa",
         type: "edit",
       },
     ],
@@ -67,16 +74,19 @@ const groups = [
       {
         name: "Lista",
         url: "/dashboard/chapters",
+        tooltip: "Lista de capítulos",
         type: "list",
       },
       {
         name: "Upar",
         url: "/dashboard/chapters/upload",
+        tooltip: "Upar capítulo",
         type: "add",
       },
       {
         name: "Modificar",
         url: "/dashboard/chapters/edit",
+        tooltip: "Modificar capítulo",
         type: "edit",
         disabled: true,
       },
@@ -88,16 +98,19 @@ const groups = [
       {
         name: "Lista",
         url: "/dashboard/scans",
+        tooltip: "Lista de scans",
         type: "list",
       },
       {
         name: "Adicionar",
         url: "/dashboard/scans/add",
+        tooltip: "Adicionar scan",
         type: "add",
       },
       {
         name: "Editar",
         url: "/dashboard/scans/edit",
+        tooltip: "Editar scan",
         type: "edit",
       },
     ],
@@ -107,10 +120,15 @@ const groups = [
 export function DashboardSidebar() {
   return (
     <Sidebar collapsible="icon">
-      <SidebarHeader className="p-4">
-        <Link href="/" className="flex select-none justify-center gap-3">
-          <CompanyLogo company="taiyo" width={35} priority />
-          <p className="font-semibold text-xl">Taiyō</p>
+      <SidebarHeader className="p-4 transition-[padding] group-data-[collapsible=icon]:p-2">
+        <Link
+          href="/"
+          className="flex select-none items-center justify-center gap-3"
+        >
+          <CompanyLogo company="taiyo" width={35} height={35} priority />
+          <p className="font-semibold text-xl group-data-[collapsible=icon]:hidden">
+            Taiyō
+          </p>
         </Link>
       </SidebarHeader>
       <SidebarContent>
@@ -121,7 +139,7 @@ export function DashboardSidebar() {
               <SidebarMenu>
                 {group.items.map((item) => (
                   <SidebarMenuItem key={item.name}>
-                    <SidebarMenuButton asChild>
+                    <SidebarMenuButton asChild tooltip={item.tooltip}>
                       <Link
                         href={item.url}
                         className="data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50"

@@ -14,7 +14,13 @@ import {
   forwardRef,
   useMemo,
 } from "react"
-import { Sheet, SheetContent } from "~/components/generics/sheet"
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from "~/components/generics/sheet"
 import { cn } from "~/lib/utils/cn"
 import { useSidebar } from "./sidebar-provider"
 
@@ -59,12 +65,17 @@ const Sidebar = forwardRef<
     if (isMobile && typeof window !== "undefined") {
       return (
         <Sheet open={openMobile} onOpenChange={setOpenMobile} {...props}>
+          <SheetHeader className="sr-only" aria-hidden="true">
+            <SheetTitle>Sidebar</SheetTitle>
+            <SheetDescription>Sidebar</SheetDescription>
+          </SheetHeader>
           <SheetContent
-            data-sidebar="sidebar"
-            data-mobile="true"
-            className="w-[--sidebar-width] bg-sidebar p-0 text-sidebar-foreground [&>button]:hidden"
+            className="w-[--sidebar-width] border-sidebar-border bg-sidebar p-0 text-sidebar-foreground [&>button]:hidden"
             style={{ "--sidebar-width": SIDEBAR_WIDTH_MOBILE } as CSSProperties}
             side={side}
+            data-sidebar="sidebar"
+            data-mobile="true"
+            aria-describedby="Sidebar"
           >
             <div className="flex h-full w-full flex-col">{children}</div>
           </SheetContent>
@@ -94,7 +105,7 @@ const Sidebar = forwardRef<
         />
         <div
           className={cn(
-            "fixed inset-y-0 z-10 hidden h-svh w-[--sidebar-width] transition-[left,right,width] duration-200 ease-linear md:flex",
+            "fixed inset-y-0 z-30 hidden h-svh w-[--sidebar-width] transition-[left,right,width] duration-200 ease-linear md:flex",
             side === "left"
               ? "left-0 group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)]"
               : "right-0 group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)]",
@@ -173,94 +184,82 @@ const SidebarRail = forwardRef<HTMLButtonElement, ComponentProps<"button">>(
 )
 SidebarRail.displayName = "SidebarRail"
 
-const SidebarInset = forwardRef<HTMLDivElement, ComponentProps<"main">>(
-  ({ className, ...props }, ref) => {
-    return (
-      <div
-        ref={ref}
-        className={cn(
-          "relative flex min-h-svh flex-1 flex-col bg-background",
-          "peer-data-[variant=inset]:min-h-[calc(100svh-theme(spacing.4))] md:peer-data-[state=collapsed]:peer-data-[variant=inset]:ml-2 md:peer-data-[variant=inset]:m-2 md:peer-data-[variant=inset]:ml-0 md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow",
-          className,
-        )}
-        {...props}
-      />
-    )
-  },
+const SidebarInset = forwardRef<HTMLDivElement, ComponentProps<"div">>(
+  ({ className, ...props }, ref) => (
+    <div
+      ref={ref}
+      className={cn(
+        "relative flex min-h-svh flex-1 flex-col bg-background",
+        "peer-data-[variant=inset]:min-h-[calc(100svh-theme(spacing.4))] md:peer-data-[state=collapsed]:peer-data-[variant=inset]:ml-2 md:peer-data-[variant=inset]:m-2 md:peer-data-[variant=inset]:ml-0 md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow",
+        className,
+      )}
+      {...props}
+    />
+  ),
 )
 SidebarInset.displayName = "SidebarInset"
 
 const SidebarHeader = forwardRef<HTMLDivElement, ComponentProps<"div">>(
-  ({ className, ...props }, ref) => {
-    return (
-      <div
-        ref={ref}
-        data-sidebar="header"
-        className={cn("flex flex-col gap-2 p-2", className)}
-        {...props}
-      />
-    )
-  },
+  ({ className, ...props }, ref) => (
+    <div
+      ref={ref}
+      data-sidebar="header"
+      className={cn("flex flex-col gap-2 p-2", className)}
+      {...props}
+    />
+  ),
 )
 SidebarHeader.displayName = "SidebarHeader"
 
 const SidebarFooter = forwardRef<HTMLDivElement, ComponentProps<"div">>(
-  ({ className, ...props }, ref) => {
-    return (
-      <div
-        ref={ref}
-        data-sidebar="footer"
-        className={cn("flex flex-col gap-2 p-2", className)}
-        {...props}
-      />
-    )
-  },
+  ({ className, ...props }, ref) => (
+    <div
+      ref={ref}
+      data-sidebar="footer"
+      className={cn("flex flex-col gap-2 p-2", className)}
+      {...props}
+    />
+  ),
 )
 SidebarFooter.displayName = "SidebarFooter"
 
 const SidebarSeparator = forwardRef<
   ElementRef<typeof Divider>,
   ComponentProps<typeof Divider>
->(({ className, ...props }, ref) => {
-  return (
-    <Divider
-      ref={ref}
-      data-sidebar="separator"
-      className={cn("mx-2 w-auto bg-sidebar-border", className)}
-      {...props}
-    />
-  )
-})
+>(({ className, ...props }, ref) => (
+  <Divider
+    ref={ref}
+    data-sidebar="separator"
+    className={cn("mx-2 w-auto bg-sidebar-border", className)}
+    {...props}
+  />
+))
 SidebarSeparator.displayName = "SidebarSeparator"
 
 const SidebarContent = forwardRef<HTMLDivElement, ComponentProps<"div">>(
-  ({ className, ...props }, ref) => {
-    return (
-      <div
-        ref={ref}
-        data-sidebar="content"
-        className={cn(
-          "flex min-h-0 flex-1 flex-col gap-2 overflow-auto group-data-[collapsible=icon]:overflow-hidden",
-          className,
-        )}
-        {...props}
-      />
-    )
-  },
+  ({ className, ...props }, ref) => (
+    <div
+      ref={ref}
+      data-sidebar="content"
+      className={cn(
+        "scrollbar-thin scrollbar-thumb-content2 flex min-h-0 flex-1 flex-col gap-2 overflow-auto group-data-[collapsible=icon]:overflow-hidden",
+        className,
+      )}
+      {...props}
+    />
+  ),
 )
 SidebarContent.displayName = "SidebarContent"
 
 const SidebarGroup = forwardRef<HTMLDivElement, ComponentProps<"div">>(
-  ({ className, ...props }, ref) => {
-    return (
-      <div
-        ref={ref}
-        data-sidebar="group"
-        className={cn("relative flex w-full min-w-0 flex-col p-2", className)}
-        {...props}
-      />
-    )
-  },
+  ({ className, ...props }, ref) => (
+    <div
+      ref={ref}
+      data-sidebar="group"
+      className={cn("relative flex w-full min-w-0 flex-col p-2", className)}
+      {...props}
+    />
+  ),
 )
 SidebarGroup.displayName = "SidebarGroup"
 

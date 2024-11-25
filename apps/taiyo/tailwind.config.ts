@@ -90,6 +90,7 @@ export default {
       addVariant("child-hover", "& > *:hover")
     }),
     require("@savvywombat/tailwindcss-grid-areas"),
+    require("tailwindcss-animate"),
     nextui({
       addCommonColors: true,
       layout: {
