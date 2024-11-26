@@ -45,7 +45,7 @@
     "file-type": "^19.6.0",
     "framer-motion": "^11.11.17",
     "jotai": "^2.10.3",
-    "lucide-react": "^0.460.0",
+    "lucide-react": "^0.461.0",
     "luxon": "^3.5.0",
     "next": "^14.2.18",
     "next-intl": "^3.25.3",
