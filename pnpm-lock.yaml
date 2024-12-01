@@ -368,8 +368,8 @@ importers:
         specifier: ^0.11.1
         version: 0.11.1(typescript@5.7.2)(zod@3.23.8)
       prisma-json-types-generator:
-        specifier: ^3.2.1
-        version: 3.2.1(prisma@6.0.0)(typescript@5.7.2)
+        specifier: ^3.2.2
+        version: 3.2.2(prisma@6.0.0)(typescript@5.7.2)
       zod:
         specifier: ^3.23.8
         version: 3.23.8
@@ -4689,8 +4689,8 @@ packages:
     resolution: {integrity: sha512-4yf0QO/sllf/1zbZWYnvWw3NxCQwLXKzIj0G849LSufP15BXKM0rbD2Z3wVnkMfjdn/CB0Dpp444gYAACdsplg==}
     engines: {node: '>=18'}
 
-  prisma-json-types-generator@3.2.1:
-    resolution: {integrity: sha512-rBIk2RJ9/+32c+1Kag05X465M8hzKlFl1vWo+4wsxdeC9TrpalY0L/mh8aAsJnv2ShmD1hv3uTsdn2S7Ffdzuw==}
+  prisma-json-types-generator@3.2.2:
+    resolution: {integrity: sha512-kvEbJPIP5gxk65KmLs0nAvY+CxpqVMWb4OsEvXlyXZmp2IGfi5f52BUV7ezTYQNjRPZyR4QlayWJXffoqVVAfA==}
     engines: {node: '>=14.0'}
     hasBin: true
     peerDependencies:
@@ -10887,7 +10887,7 @@ snapshots:
     dependencies:
       parse-ms: 4.0.0
 
-  prisma-json-types-generator@3.2.1(prisma@6.0.0)(typescript@5.7.2):
+  prisma-json-types-generator@3.2.2(prisma@6.0.0)(typescript@5.7.2):
     dependencies:
       '@prisma/generator-helper': 6.0.0
       prisma: 6.0.0
