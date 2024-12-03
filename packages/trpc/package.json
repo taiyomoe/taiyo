@@ -25,13 +25,13 @@
     "@taiyomoe/services": "workspace:*",
     "@taiyomoe/umami": "workspace:*",
     "@taiyomoe/utils": "workspace:*",
-    "@trpc/server": "11.0.0-rc.643",
+    "@trpc/server": "11.0.0-rc.648",
     "accesscontrol": "^2.2.1",
     "luxon": "^3.5.0",
     "mangadex-full-api": "^6.0.0",
     "radash": "^12.1.0",
     "superjson": "^2.2.1",
-    "use-intl": "^3.25.1",
+    "use-intl": "^3.25.3",
     "zod": "^3.23.8"
   },
   "devDependencies": {

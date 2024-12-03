@@ -14,12 +14,12 @@
     "migrate": "tsx ./src/migrate.ts"
   },
   "dependencies": {
-    "@clickhouse/client-web": "^1.8.1",
+    "@clickhouse/client-web": "^1.9.0",
     "@t3-oss/env-core": "^0.11.1",
     "@taiyomoe/db": "workspace:*",
     "@taiyomoe/utils": "workspace:*",
     "pino": "^9.5.0",
-    "pino-loki": "^2.3.1",
+    "pino-loki": "^2.4.0",
     "pino-pretty": "^13.0.0",
     "superjson": "^2.2.1",
     "tsx": "^4.19.2",
