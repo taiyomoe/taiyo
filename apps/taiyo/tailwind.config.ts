@@ -62,6 +62,22 @@ export default {
         mediaChapter: "min-content auto min-content",
         chapterCard: "auto 112px",
       },
+      colors: {
+        sidebar: {
+          DEFAULT: "hsl(var(--sidebar-background))",
+          foreground: "hsl(var(--sidebar-foreground))",
+          primary: {
+            DEFAULT: "hsl(var(--sidebar-primary))",
+            foreground: "hsl(var(--sidebar-primary-foreground))",
+          },
+          accent: {
+            DEFAULT: "hsl(var(--sidebar-accent))",
+            foreground: "hsl(var(--sidebar-accent-foreground))",
+          },
+          border: "hsl(var(--sidebar-border))",
+          ring: "hsl(var(--sidebar-ring))",
+        },
+      },
     },
   },
   plugins: [
@@ -74,6 +90,7 @@ export default {
       addVariant("child-hover", "& > *:hover")
     }),
     require("@savvywombat/tailwindcss-grid-areas"),
+    require("tailwindcss-animate"),
     nextui({
       addCommonColors: true,
       layout: {

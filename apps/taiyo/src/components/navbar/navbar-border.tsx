@@ -1,5 +1,6 @@
+"use client"
+
 import { motion, useScroll, useTransform } from "framer-motion"
-import { cn } from "~/lib/utils/cn"
 
 export const NavbarBorder = () => {
   const { scrollY } = useScroll()
@@ -7,7 +8,7 @@ export const NavbarBorder = () => {
 
   return (
     <motion.span
-      className={cn("h-[1px] bg-primary transition-all group-hover:top-0")}
+      className="absolute bottom-0 left-0 h-[1px] w-full bg-primary transition-all group-hover:top-0"
       style={{ opacity }}
     />
   )

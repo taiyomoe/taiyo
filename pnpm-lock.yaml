@@ -90,6 +90,12 @@ importers:
       '@nextui-org/react':
         specifier: ^2.4.8
         version: 2.4.8(@types/react@18.3.12)(framer-motion@11.12.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tailwindcss@3.4.15)
+      '@radix-ui/react-dialog':
+        specifier: ^1.1.2
+        version: 1.1.2(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@radix-ui/react-slot':
+        specifier: ^1.1.0
+        version: 1.1.0(@types/react@18.3.12)(react@18.3.1)
       '@savvywombat/tailwindcss-grid-areas':
         specifier: ^4.0.0
         version: 4.0.0(tailwindcss@3.4.15)
@@ -280,6 +286,9 @@ importers:
       tailwindcss:
         specifier: ^3.4.15
         version: 3.4.15
+      tailwindcss-animate:
+        specifier: ^1.0.7
+        version: 1.0.7(tailwindcss@3.4.15)
 
   packages/auth:
     dependencies:
@@ -5075,6 +5084,11 @@ packages:
     engines: {node: '>=16.x', pnpm: '>=7.x'}
     peerDependencies:
       tailwindcss: '*'
+
+  tailwindcss-animate@1.0.7:
+    resolution: {integrity: sha512-bl6mpH3T7I3UFxuvDEXLxy/VuFxBk5bbzplh7tXI68mwMokNYd1t9qPBHlnyTwfa4JGC4zP516I1hYYtQ/vspA==}
+    peerDependencies:
+      tailwindcss: '>=3.0.0 || insiders'
 
   tailwindcss@3.4.15:
     resolution: {integrity: sha512-r4MeXnfBmSOuKUWmXe6h2CcyfzJCEk4F0pptO5jlnYSIViUkVmsawj80N5h2lO3gwcmSb4n3PuN+e+GC1Guylw==}
@@ -11366,6 +11380,10 @@ snapshots:
   tailwind-variants@0.1.20(tailwindcss@3.4.15):
     dependencies:
       tailwind-merge: 1.14.0
+      tailwindcss: 3.4.15
+
+  tailwindcss-animate@1.0.7(tailwindcss@3.4.15):
+    dependencies:
       tailwindcss: 3.4.15
 
   tailwindcss@3.4.15:
