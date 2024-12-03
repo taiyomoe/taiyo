@@ -457,8 +457,8 @@ importers:
         specifier: ^3.5.0
         version: 3.5.0
       meilisearch:
-        specifier: ^0.45.0
-        version: 0.45.0
+        specifier: ^0.46.0
+        version: 0.46.0
       punycode:
         specifier: ^2.3.1
         version: 2.3.1
@@ -4366,6 +4366,9 @@ packages:
 
   meilisearch@0.45.0:
     resolution: {integrity: sha512-+zCzEqE+CumY4icB0Vox180adZqaNtnr60hJWGiEdmol5eWmksfY8rYsTcz87styXC2ZOg+2yF56gdH6oyIBTA==}
+
+  meilisearch@0.46.0:
+    resolution: {integrity: sha512-bx0tei1B+Ke0Y02pCoqmcwfpkwuDf+/ZkQDVDvb+ZfGDpWaxq9Z7sE5kc3o8zWvP6wJE7e3PoU3Oy6WINqq5bw==}
 
   memoize-one@6.0.0:
     resolution: {integrity: sha512-rkpe71W0N0c0Xz6QD0eJETuWAJGnJ9afsl1srmwPrI+yBCkge5EycXXbYRyvL29zZVUWQCY7InPRCv3GDXuZNw==}
@@ -10595,6 +10598,8 @@ snapshots:
   mangadex-full-api@6.0.0: {}
 
   meilisearch@0.45.0: {}
+
+  meilisearch@0.46.0: {}
 
   memoize-one@6.0.0: {}
 
