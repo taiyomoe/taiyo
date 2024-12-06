@@ -30,7 +30,7 @@
     "luxon": "^3.5.0",
     "mangadex-full-api": "^6.0.0",
     "radash": "^12.1.0",
-    "superjson": "^2.2.1",
+    "superjson": "^2.2.2",
     "use-intl": "^3.25.3",
     "zod": "^3.23.8"
   },
