@@ -68,7 +68,7 @@
     "react-select": "^5.8.3",
     "react-selectable-box": "^1.10.0",
     "sharp": "^0.33.5",
-    "sonner": "^1.7.0",
+    "sonner": "^1.7.1",
     "superjson": "^2.2.2",
     "tailwind-merge": "^2.5.5",
     "tailwind-scrollbar": "^3.1.0",
