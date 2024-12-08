@@ -160,7 +160,7 @@ export const ScanMemberPermissionsSchema = z.enum(['UPLOAD','EDIT','DELETE']);
 
 export type ScanMemberPermissionsType = `${z.infer<typeof ScanMemberPermissionsSchema>}`
 
-export const TaskTypeSchema = z.enum(['IMPORT_COVER','IMPORT_CHAPTER']);
+export const TaskTypeSchema = z.enum(['CREATE_MEDIA','IMPORT_MEDIA','IMPORT_COVER','IMPORT_CHAPTER','UPLOAD_CHAPTER','UPLOAD_COVER','UPLOAD_BANNER']);
 
 export type TaskTypeType = `${z.infer<typeof TaskTypeSchema>}`
 

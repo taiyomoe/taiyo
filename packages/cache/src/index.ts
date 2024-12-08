@@ -25,14 +25,16 @@ export const cacheClient = {
      * Mutations
      */
     create: {
-      set: (input: CreateMediaMessageInput) =>
+      set: (input: Omit<CreateMediaMessageInput, "taskId">) =>
         client.setex(
           `medias:create:${input.id}`,
           HOUR,
           SuperJSON.stringify(input),
         ),
       get: (id: string) =>
-        parseCache<CreateMediaMessageInput>(client.get(`medias:create:${id}`)),
+        parseCache<Omit<CreateMediaMessageInput, "taskId">>(
+          client.get(`medias:create:${id}`),
+        ),
     },
     /**
      * Queries
@@ -72,14 +74,16 @@ export const cacheClient = {
      * Mutations
      */
     upload: {
-      set: (input: UploadCoverMessageInput) =>
+      set: (input: Omit<UploadCoverMessageInput, "taskId">) =>
         client.setex(
           `covers:upload:${input.id}`,
           HOUR,
           SuperJSON.stringify(input),
         ),
       get: (id: string) =>
-        parseCache<UploadCoverMessageInput>(client.get(`covers:upload:${id}`)),
+        parseCache<Omit<UploadCoverMessageInput, "taskId">>(
+          client.get(`covers:upload:${id}`),
+        ),
     },
   },
 
@@ -88,14 +92,14 @@ export const cacheClient = {
      * Mutations
      */
     uploads: {
-      set: (input: UploadChapterMessageInput) =>
+      set: (input: Omit<UploadChapterMessageInput, "taskId">) =>
         client.setex(
           `chapters:uploads:${input.id}`,
           HOUR,
           SuperJSON.stringify(input),
         ),
       get: (id: string) =>
-        parseCache<UploadChapterMessageInput>(
+        parseCache<Omit<UploadChapterMessageInput, "taskId">>(
           client.get(`chapters:uploads:${id}`),
         ),
     },

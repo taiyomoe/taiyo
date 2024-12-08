@@ -1,7 +1,5 @@
-import { db } from "@taiyomoe/db"
-import { UPLOADS_QUEUE, rawQueue, rawQueueEvents } from "@taiyomoe/messaging"
-import type { ImportChapterMessageInput } from "@taiyomoe/types"
-import { type Job, Worker } from "bullmq"
+import { UPLOADS_QUEUE, rawQueueEvents } from "@taiyomoe/messaging"
+import { Worker } from "bullmq"
 import { env } from "~/env"
 import { createMediaHandler } from "~/handlers/create-media.handler"
 import { importChapterHandler } from "~/handlers/import-chapter.handler"
@@ -48,25 +46,6 @@ worker.on("ready", () => {
   console.log("io-worker up and running!")
 })
 
-rawQueueEvents.on("added", async ({ jobId }) => {
-  const job: Job = await rawQueue.getJob(jobId)
-  const input = job.data as ImportChapterMessageInput
-
-  if (!["covers-import", "chapters-import"].includes(job.name)) {
-    return
-  }
-
-  await db.task.create({
-    data: {
-      id: input.taskId,
-      type: job.name === "covers-import" ? "IMPORT_COVER" : "IMPORT_CHAPTER",
-      status: "PENDING",
-      payload: input,
-      sessionId: input.sessionId,
-    },
-  })
-})
-
 rawQueueEvents.on("active", updateTaskStatus("DOWNLOADING"))
 rawQueueEvents.on("completed", updateTaskStatus("FINISHED"))
 rawQueueEvents.on("failed", async ({ jobId, failedReason }) => {
@@ -86,4 +65,11 @@ process.on("SIGTERM", async () => {
   await worker.close()
 
   console.log("All jobs completed, exiting...")
+})
+
+process.on("uncaughtException", (err) => {
+  logger.error(
+    "An error occured inside an event handler (?)",
+    JSON.stringify(err, Object.getOwnPropertyNames(err)),
+  )
 })

@@ -17,6 +17,7 @@ import { messagingClient } from "@taiyomoe/messaging"
 import { s3Client } from "@taiyomoe/s3"
 import {
   BaseCoversService,
+  BaseTasksService,
   BaseTitlesService,
   BaseUsersService,
 } from "@taiyomoe/services"
@@ -74,6 +75,7 @@ export const createTRPCContext = async (opts: {
     users: BaseUsersService,
     libraries: LibrariesService,
     medias: MediasService,
+    tasks: BaseTasksService,
     trackers: TrackersService,
     covers: BaseCoversService,
     titles: BaseTitlesService,

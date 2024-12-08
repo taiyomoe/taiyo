@@ -507,8 +507,13 @@ enum ScanMemberPermissions {
 }
 
 enum TaskType {
+    CREATE_MEDIA
+    IMPORT_MEDIA
     IMPORT_COVER
     IMPORT_CHAPTER
+    UPLOAD_CHAPTER
+    UPLOAD_COVER
+    UPLOAD_BANNER
 }
 
 enum TaskStatus {
