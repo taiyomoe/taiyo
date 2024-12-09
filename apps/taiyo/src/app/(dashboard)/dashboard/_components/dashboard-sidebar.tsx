@@ -115,6 +115,16 @@ const groups = [
       },
     ],
   },
+  {
+    items: [
+      {
+        name: "Fila de espera",
+        url: "/dashboard/tasks",
+        tooltip: "Fila de espera",
+        type: "list",
+      },
+    ],
+  },
 ]
 
 export function DashboardSidebar() {
@@ -134,16 +144,18 @@ export function DashboardSidebar() {
       <SidebarContent>
         {groups.map((group) => (
           <SidebarGroup key={group.name}>
-            <SidebarGroupLabel>{group.name}</SidebarGroupLabel>
+            {group.name && <SidebarGroupLabel>{group.name}</SidebarGroupLabel>}
             <SidebarGroupContent>
               <SidebarMenu>
                 {group.items.map((item) => (
                   <SidebarMenuItem key={item.name}>
-                    <SidebarMenuButton asChild tooltip={item.tooltip}>
+                    <SidebarMenuButton tooltip={item.tooltip} asChild>
                       <Link
                         href={item.url}
                         className="data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50"
-                        data-disabled={item.disabled}
+                        data-disabled={
+                          "disabled" in item ? item.disabled : false
+                        }
                       >
                         {item.type === "list" && <ListChecksIcon />}
                         {item.type === "add" && (
