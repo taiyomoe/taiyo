@@ -178,7 +178,7 @@ importers:
         specifier: ^19.6.0
         version: 19.6.0
       framer-motion:
-        specifier: ^11.13.4
+        specifier: ^11.13.5
         version: 11.13.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       jotai:
         specifier: ^2.10.3
