@@ -32,7 +32,7 @@
     "radash": "^12.1.0",
     "superjson": "^2.2.2",
     "use-intl": "^3.26.0",
-    "zod": "^3.24.0"
+    "zod": "^3.24.1"
   },
   "devDependencies": {
     "@taiyomoe/tsconfig": "workspace:*",

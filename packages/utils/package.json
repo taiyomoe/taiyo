@@ -22,7 +22,7 @@
     "deep-object-diff": "^1.1.9",
     "mangadex-full-api": "^6.0.0",
     "radash": "^12.1.0",
-    "zod": "^3.24.0"
+    "zod": "^3.24.1"
   },
   "devDependencies": {
     "@taiyomoe/tsconfig": "workspace:*",
