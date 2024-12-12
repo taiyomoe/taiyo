@@ -21,7 +21,7 @@ export const TablePagination = ({
   onPerPageChange,
 }: Props) => {
   return (
-    <div className="flex gap-4">
+    <div className="flex flex-col items-center gap-4 md:flex-row">
       <PerPageDropdown
         perPage={perPage}
         choices={perPageChoices}

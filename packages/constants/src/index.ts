@@ -82,7 +82,7 @@ export const SCANS_LIST_SORTABLE_FIELDS = [
   "deleter",
 ] as const
 
-export const DEFAULT_TASKS_LIST_PER_PAGE = 50
+export const DEFAULT_TASKS_LIST_PER_PAGE = 30
 export const TASKS_LIST_PER_PAGE_CHOICES = [5, 10, 20, 30, 50, 100]
 export const TASKS_LIST_SORTABLE_FIELDS = [
   "createdAt",

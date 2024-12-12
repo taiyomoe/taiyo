@@ -1,13 +1,19 @@
+import { getTasksListSchema } from "@taiyomoe/schemas"
 import { ActivityIcon, CalculatorIcon, CircleDashedIcon } from "lucide-react"
-import { TasksTable } from "~/app/(dashboard)/dashboard/tasks/_components/tasks-table"
+import type { SearchParams } from "nuqs"
+import { TasksListStoreProvider } from "~/stores/use-tasks-list-store"
 import { api } from "~/trpc/server"
 import { TaskOverviewCard } from "./_components/task-overview-card"
+import { tasksSearchParamsCache } from "./_components/tasks-search-params"
+import { TasksTable } from "./_components/tasks-table"
 
-export default async function Page() {
-  const initialData = await api.tasks.getList({
-    page: 1,
-    perPage: 50,
-  })
+type Props = {
+  searchParams: SearchParams
+}
+export default async function Page(props: Props) {
+  const parsedSearchParams = tasksSearchParamsCache.parse(props.searchParams)
+  const searchParams = getTasksListSchema.parse(parsedSearchParams)
+  const initialData = await api.tasks.getList(searchParams)
 
   return (
     <div className="flex flex-col gap-12">
@@ -30,7 +36,9 @@ export default async function Page() {
             icon={<CalculatorIcon size={20} />}
           />
         </div>
-        <TasksTable initialData={initialData} />
+        <TasksListStoreProvider value={searchParams}>
+          <TasksTable initialData={initialData} />
+        </TasksListStoreProvider>
       </div>
     </div>
   )

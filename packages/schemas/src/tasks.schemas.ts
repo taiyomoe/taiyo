@@ -4,18 +4,19 @@ import {
   TASKS_LIST_SORTABLE_FIELDS,
 } from "@taiyomoe/constants"
 import { z } from "zod"
-import {
-  pageSchema,
-  perPageSchema,
-  sortableFieldsSchema,
-} from "./common.schemas"
+import { pageSchema, perPageSchema } from "./common.schemas"
 
 export const getTasksListSchema = z.object({
-  filter: z.string().optional().default(""),
-  sort: sortableFieldsSchema(TASKS_LIST_SORTABLE_FIELDS),
+  filter: z.string().catch(""),
+  sort: z
+    .tuple([z.enum(TASKS_LIST_SORTABLE_FIELDS), z.enum(["asc", "desc"])])
+    .array()
+    .catch([]),
   page: pageSchema,
   perPage: perPageSchema(
     DEFAULT_TASKS_LIST_PER_PAGE,
     TASKS_LIST_PER_PAGE_CHOICES,
   ),
 })
+
+export type GetTasksListInput = z.infer<typeof getTasksListSchema>
