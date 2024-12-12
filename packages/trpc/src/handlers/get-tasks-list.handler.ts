@@ -14,11 +14,6 @@ export const getTasksListHandler = protectedProcedure
       ? `WHERE ${rawWhereClause}`
       : Prisma.empty
     const offset = (input.page - 1) * input.perPage
-
-    console.log("rawFilter", rawFilter)
-    console.log("rawWhereClause", rawWhereClause)
-    console.log("whereClause", whereClause)
-
     const [active, pending, totalCount, tasks] = await Promise.all([
       await ctx.db.task.count({
         where: { status: { in: ["DOWNLOADING", "UPLOADING"] } },
@@ -28,10 +23,6 @@ export const getTasksListHandler = protectedProcedure
       await ctx.db.$queryRaw<
         Task[]
       >`SELECT * FROM "Task" ${whereClause} LIMIT ${input.perPage} OFFSET ${offset}`,
-      // await ctx.db.task.findMany({
-      //   take: input.perPage,
-      //   skip: (input.page - 1) * input.perPage,
-      // }),
     ])
 
     return {

@@ -46,8 +46,6 @@ export const useTasksListStore = create<State & Actions>((set, get) => ({
     }))
   },
   setPage: (value) => {
-    console.log("new page", value)
-
     set((state) => ({ ...state, page: value }))
   },
   setPerPage: (value) => {

@@ -28,8 +28,6 @@ export function NumberTicker({
   useEffect(() => {
     isInView &&
       setTimeout(() => {
-        console.log("inside setTimeout")
-
         motionValue.set(direction === "down" ? 0 : value)
       }, delay * 1000)
   }, [motionValue, isInView, delay, value, direction])
@@ -38,13 +36,6 @@ export function NumberTicker({
     () =>
       springValue.on("change", (latest) => {
         if (ref.current) {
-          console.log(
-            Intl.NumberFormat("pt-BR", {
-              minimumFractionDigits: decimalPlaces,
-              maximumFractionDigits: decimalPlaces,
-            }).format(Number(latest.toFixed(decimalPlaces))),
-          )
-
           ref.current.textContent = Intl.NumberFormat("pt-BR", {
             minimumFractionDigits: decimalPlaces,
             maximumFractionDigits: decimalPlaces,

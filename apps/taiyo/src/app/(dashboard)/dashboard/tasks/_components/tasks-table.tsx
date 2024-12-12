@@ -23,10 +23,6 @@ export const TasksTable = ({ initialData }: Props) => {
     { initialData, refetchOnMount: false },
   )
 
-  console.log("page", page)
-  console.log("perPage", perPage)
-  console.log("filter", filter)
-
   return (
     <DataTable
       columns={columns}
