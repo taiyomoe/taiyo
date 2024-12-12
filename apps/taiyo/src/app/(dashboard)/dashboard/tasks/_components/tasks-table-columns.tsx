@@ -24,18 +24,18 @@ export const columns: ColumnDef<Task>[] = [
     cell: ({ getValue }) => <TableCellDate date={getValue<Date>()} />,
   },
   {
-    accessorKey: "type",
-    header: "Tipo",
-    enableMultiSort: true,
-    cell: ({ getValue }) => <p>{getValue<string>()}</p>,
-  },
-  {
     accessorKey: "status",
     header: "Status",
     enableMultiSort: true,
     cell: ({ getValue }) => (
       <TableCellTaskStatus status={getValue<TaskStatus>()} />
     ),
+  },
+  {
+    accessorKey: "type",
+    header: "Tipo",
+    enableMultiSort: true,
+    cell: ({ getValue }) => <p>{getValue<string>()}</p>,
   },
   {
     accessorKey: "payload",
