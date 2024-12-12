@@ -2,11 +2,13 @@
 
 import { TASKS_LIST_PER_PAGE_CHOICES } from "@taiyomoe/constants"
 import type { AppRouter } from "@taiyomoe/trpc"
+import { useQueryStates } from "nuqs"
 import { useEffect } from "react"
 import { DataTable } from "~/components/generics/data-table/data-table"
 import { useTasksListStore } from "~/stores/use-tasks-list-store"
 import { api } from "~/trpc/react"
 import { keepPreviousData } from "~/utils/keep-previous-data"
+import { tasksSearchParams } from "./tasks-search-params"
 import { columns } from "./tasks-table-columns"
 import { TasksTableFilters } from "./tasks-table-filters"
 
@@ -15,6 +17,7 @@ type Props = {
 }
 
 export const TasksTable = ({ initialData }: Props) => {
+  const [_, setSearchParams] = useQueryStates(tasksSearchParams)
   const { filter, sort, page, perPage, setSort, setPage, setPerPage } =
     useTasksListStore()
   const {
@@ -24,11 +27,10 @@ export const TasksTable = ({ initialData }: Props) => {
     { filter, sort, page, perPage },
     { placeholderData: keepPreviousData(initialData) },
   )
-  const utils = api.useUtils()
 
   useEffect(() => {
-    utils.tasks.getList.invalidate({ filter, sort, page, perPage })
-  }, [filter, sort, page, perPage, utils.tasks.getList.invalidate])
+    setSearchParams({ filter, page, perPage })
+  }, [filter, page, perPage, setSearchParams])
 
   return (
     <DataTable
