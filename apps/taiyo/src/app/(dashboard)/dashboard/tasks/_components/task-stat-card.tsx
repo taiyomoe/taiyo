@@ -8,7 +8,7 @@ type Props = {
   icon: ReactNode
 }
 
-export const TaskOverviewCard = ({ label, value, icon }: Props) => {
+export const TaskStatCard = ({ label, value, icon }: Props) => {
   return (
     <Card className="min-w-60 sm:last:col-span-2 lg:last:col-auto">
       <CardHeader className="select-none justify-between pb-0 text-default-500">

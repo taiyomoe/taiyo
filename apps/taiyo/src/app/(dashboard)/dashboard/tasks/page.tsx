@@ -3,7 +3,7 @@ import { ActivityIcon, CalculatorIcon, CircleDashedIcon } from "lucide-react"
 import type { SearchParams } from "nuqs"
 import { TasksListStoreProvider } from "~/stores/use-tasks-list-store"
 import { api } from "~/trpc/server"
-import { TaskOverviewCard } from "./_components/task-overview-card"
+import { TaskStatCard } from "./_components/task-stat-card"
 import { tasksSearchParamsCache } from "./_components/tasks-search-params"
 import { TasksTable } from "./_components/tasks-table"
 
@@ -20,17 +20,17 @@ export default async function Page(props: Props) {
       <p className="font-semibold text-4xl">Fila de espera</p>
       <div className="space-y-8">
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          <TaskOverviewCard
+          <TaskStatCard
             label="Tarefas ativas"
             value={initialData.stats.active}
             icon={<ActivityIcon size={20} />}
           />
-          <TaskOverviewCard
+          <TaskStatCard
             label="Tarefas pendentes"
             value={initialData.stats.pending}
             icon={<CircleDashedIcon size={20} />}
           />
-          <TaskOverviewCard
+          <TaskStatCard
             label="Tarefas total"
             value={initialData.stats.totalCount}
             icon={<CalculatorIcon size={20} />}
