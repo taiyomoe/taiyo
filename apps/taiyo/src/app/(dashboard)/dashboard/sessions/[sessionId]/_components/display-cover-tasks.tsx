@@ -13,7 +13,7 @@ import { TableCellDate } from "~/components/tables/table-cell-date"
 import { TableCellId } from "~/components/tables/table-cell-id"
 import { TableCellJson } from "~/components/tables/table-cell-json"
 import { TableCellLanguage } from "~/components/tables/table-cell-language"
-import { TableCellStatus } from "~/components/tables/table-cell-status"
+import { TableCellTaskStatus } from "~/components/tables/table-cell-task-status"
 
 type Props = {
   rawTasks: Task[]
@@ -56,7 +56,7 @@ export const DisplayCoverTasks = ({ rawTasks }: Props) => {
                 <TableCellDate date={task.createdAt} />
               </TableCell>
               <TableCell>
-                <TableCellStatus status={task.status} />
+                <TableCellTaskStatus status={task.status} />
               </TableCell>
               <TableCell>
                 <p>{task.payload.volume}</p>
