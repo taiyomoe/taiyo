@@ -10,6 +10,7 @@ import { api } from "~/trpc/react"
 import { keepPreviousData } from "~/utils/keep-previous-data"
 import { tasksSearchParams } from "./tasks-search-params"
 import { columns } from "./tasks-table-columns"
+import { TasksTableEmptyContent } from "./tasks-table-empty-content"
 import { TasksTableFilters } from "./tasks-table-filters"
 
 type Props = {
@@ -37,7 +38,7 @@ export const TasksTable = ({ initialData }: Props) => {
       columns={columns}
       data={items}
       filters={<TasksTableFilters />}
-      emptyContent={<p>Nenhuma tarefa encontrada</p>}
+      emptyContent={<TasksTableEmptyContent />}
       initialVisibility={{
         id: false,
         payload: false,
