@@ -238,8 +238,8 @@ importers:
         specifier: ^8.0.0
         version: 8.0.0(@types/react@18.3.16)(react@18.3.1)(redux@5.0.1)
       react-select:
-        specifier: ^5.8.3
-        version: 5.8.3(@types/react@18.3.16)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: ^5.9.0
+        version: 5.9.0(@types/react@18.3.16)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-selectable-box:
         specifier: ^1.10.0
         version: 1.10.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -4836,11 +4836,11 @@ packages:
       '@types/react':
         optional: true
 
-  react-select@5.8.3:
-    resolution: {integrity: sha512-lVswnIq8/iTj1db7XCG74M/3fbGB6ZaluCzvwPGT5ZOjCdL/k0CLWhEK0vCBLuU5bHTEf6Gj8jtSvi+3v+tO1w==}
+  react-select@5.9.0:
+    resolution: {integrity: sha512-nwRKGanVHGjdccsnzhFte/PULziueZxGD8LL2WojON78Mvnq7LdAMEtu2frrwld1fr3geixg3iiMBIc/LLAZpw==}
     peerDependencies:
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0
-      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
   react-selectable-box@1.10.0:
     resolution: {integrity: sha512-2z/91e3b2Kc/oouIXepPs98emlnJdMrS+zIK9/zSrq0b/JYX1d5wVfh/crroQpirrqbBAZ0KG6MEL8TO47Bn8g==}
@@ -5199,11 +5199,6 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
 
-  use-intl@3.26.0:
-    resolution: {integrity: sha512-HGXmpjGlbEv1uFZPfm557LK8p/hv0pKF9UwnrJeHUTxQx6bUGzMgpmPRLCVY3zkr7hfjy4LPwQJfk4Fhnn+dIg==}
-    peerDependencies:
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || >=19.0.0-rc <19.0.0 || ^19.0.0
-
   use-intl@3.26.1:
     resolution: {integrity: sha512-MZhtSBcMrDna3xs1T6O7CAXx4wRfm1eGyUYrDCCnW9qTOGZurCH5k/X6ChDl6EI4f+qYEtXQCRMkQUVOIhJWTQ==}
     peerDependencies:
@@ -5214,6 +5209,15 @@ packages:
     peerDependencies:
       '@types/react': '*'
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+
+  use-isomorphic-layout-effect@1.2.0:
+    resolution: {integrity: sha512-q6ayo8DWoPZT0VdG4u3D3uxcgONP3Mevx2i2b0434cwWBoL+aelL1DzkXI6w3PhTZzUeR2kaVlZn70iCiseP6w==}
+    peerDependencies:
+      '@types/react': '*'
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -11123,7 +11127,7 @@ snapshots:
     optionalDependencies:
       '@types/react': 18.3.16
 
-  react-select@5.8.3(@types/react@18.3.16)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  react-select@5.9.0(@types/react@18.3.16)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
       '@babel/runtime': 7.26.0
       '@emotion/cache': 11.13.1
@@ -11135,7 +11139,7 @@ snapshots:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
       react-transition-group: 4.4.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      use-isomorphic-layout-effect: 1.1.2(@types/react@18.3.16)(react@18.3.1)
+      use-isomorphic-layout-effect: 1.2.0(@types/react@18.3.16)(react@18.3.1)
     transitivePeerDependencies:
       - '@types/react'
       - supports-color
@@ -11510,12 +11514,6 @@ snapshots:
     dependencies:
       react: 18.3.1
 
-  use-intl@3.26.0(react@18.3.1):
-    dependencies:
-      '@formatjs/fast-memoize': 2.2.3
-      intl-messageformat: 10.7.7
-      react: 18.3.1
-
   use-intl@3.26.1(react@18.3.1):
     dependencies:
       '@formatjs/fast-memoize': 2.2.3
@@ -11523,6 +11521,12 @@ snapshots:
       react: 18.3.1
 
   use-isomorphic-layout-effect@1.1.2(@types/react@18.3.16)(react@18.3.1):
+    dependencies:
+      react: 18.3.1
+    optionalDependencies:
+      '@types/react': 18.3.16
+
+  use-isomorphic-layout-effect@1.2.0(@types/react@18.3.16)(react@18.3.1):
     dependencies:
       react: 18.3.1
     optionalDependencies:
