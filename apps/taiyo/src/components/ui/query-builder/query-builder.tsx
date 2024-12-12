@@ -1,3 +1,5 @@
+import { Divider } from "@nextui-org/divider"
+import { Input } from "@nextui-org/input"
 import {
   QueryBuilder as BaseQueryBuilder,
   type Field,
@@ -17,20 +19,23 @@ export const QueryBuilder = <
   F extends FullField,
   O extends FullOperator,
   C extends FullCombinator,
->(
-  props: Omit<
-    QueryBuilderProps<RG, F, O, C>,
-    | "controlClassnames"
-    | "controlElements"
-    | "translations"
-    | "getOperators"
-    | "enableMountQueryChange"
-    | "showCombinatorsBetweenRules"
-    | "resetOnOperatorChange"
-  >,
-) => {
-  return (
-    // @ts-expect-error - Typings error. This works fine
+>({
+  filter,
+  ...props
+}: Omit<
+  QueryBuilderProps<RG, F, O, C>,
+  | "controlClassnames"
+  | "controlElements"
+  | "translations"
+  | "getOperators"
+  | "enableMountQueryChange"
+  | "showCombinatorsBetweenRules"
+  | "resetOnOperatorChange"
+> & { filter?: string }) => (
+  <div className="flex flex-col">
+    <h5 className="text-default-400 text-sm">Filtros</h5>
+    <Divider className="mb-2 bg-default-300" />
+    {/* @ts-expect-error - Typings error. This works fine */}
     <BaseQueryBuilder
       controlClassnames={{
         ruleGroup: "space-y-2 [&:only-child]:col-span-2",
@@ -53,8 +58,13 @@ export const QueryBuilder = <
       resetOnOperatorChange
       {...props}
     />
-  )
-}
+    <Input
+      classNames={{ inputWrapper: "data-[hover=true]:bg-default-100" }}
+      value={filter || "(1 = 1)"}
+      isReadOnly
+    />
+  </div>
+)
 
 const getOperators = (_: string, { fieldData }: { fieldData: Field }) => {
   const isNullable = String(fieldData.datatype).includes("nullable-")
