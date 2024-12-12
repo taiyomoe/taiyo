@@ -6,7 +6,7 @@ import type { SelectItem as SelectItemType } from "~/lib/types"
 const queryBuilderValueSelector = tv({
   base: "w-fit",
   slots: {
-    trigger: "",
+    trigger: "transition-colors data-[hover=true]:bg-default-200",
   },
   variants: {
     type: {
