@@ -186,7 +186,7 @@ export type CountriesType = `${z.infer<typeof CountriesSchema>}`
 
 export const UserSchema = z.object({
   role: RolesSchema,
-  id: z.string(),
+  id: z.string().uuid(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
   name: z.string().nullable(),
@@ -204,7 +204,7 @@ export type User = z.infer<typeof UserSchema>
 export const UserProfileSchema = z.object({
   gender: GendersSchema,
   country: CountriesSchema.nullable(),
-  id: z.string(),
+  id: z.string().uuid(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
   banner: z.string().nullable(),
@@ -225,7 +225,7 @@ export const UserSettingSchema = z.object({
   contentRating: ContentRatingSchema,
   preferredTitles: LanguagesSchema.nullable(),
   homeLayout: HomeLayoutSchema,
-  id: z.string(),
+  id: z.string().uuid(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
   showFollowing: z.boolean(),
@@ -289,7 +289,7 @@ export type UserHistory = z.infer<typeof UserHistorySchema>
 /////////////////////////////////////////
 
 export const AccountSchema = z.object({
-  id: z.string(),
+  id: z.string().uuid(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
   type: z.string(),
@@ -346,7 +346,7 @@ export const MediaSchema = z.object({
   countryOfOrigin: MediaCountryOfOriginSchema,
   genres: MediaGenresSchema.array(),
   flag: FlagSchema,
-  id: z.string(),
+  id: z.string().uuid(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
   deletedAt: z.coerce.date().nullable(),
@@ -372,7 +372,7 @@ export type Media = z.infer<typeof MediaSchema>
 export const MediaCoverSchema = z.object({
   contentRating: ContentRatingSchema,
   language: LanguagesSchema,
-  id: z.string(),
+  id: z.string().uuid(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
   deletedAt: z.coerce.date().nullable(),
@@ -391,7 +391,7 @@ export type MediaCover = z.infer<typeof MediaCoverSchema>
 
 export const MediaBannerSchema = z.object({
   contentRating: ContentRatingSchema,
-  id: z.string(),
+  id: z.string().uuid(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
   deletedAt: z.coerce.date().nullable(),
@@ -408,7 +408,7 @@ export type MediaBanner = z.infer<typeof MediaBannerSchema>
 
 export const MediaTitleSchema = z.object({
   language: LanguagesSchema,
-  id: z.string(),
+  id: z.string().uuid(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
   deletedAt: z.coerce.date().nullable(),
@@ -429,7 +429,7 @@ export type MediaTitle = z.infer<typeof MediaTitleSchema>
 
 export const MediaTrackerSchema = z.object({
   tracker: TrackersSchema,
-  id: z.string(),
+  id: z.string().uuid(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
   deletedAt: z.coerce.date().nullable(),
@@ -449,7 +449,7 @@ export const MediaChapterSchema = z.object({
   language: LanguagesSchema,
   contentRating: ContentRatingSchema,
   flag: FlagSchema,
-  id: z.string(),
+  id: z.string().uuid(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
   deletedAt: z.coerce.date().nullable(),
@@ -472,7 +472,7 @@ export type MediaChapter = z.infer<typeof MediaChapterSchema>
 /////////////////////////////////////////
 
 export const MediaChapterCommentSchema = z.object({
-  id: z.string(),
+  id: z.string().uuid(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
   deletedAt: z.coerce.date().nullable(),
@@ -494,7 +494,7 @@ export type MediaChapterComment = z.infer<typeof MediaChapterCommentSchema>
 /////////////////////////////////////////
 
 export const ScanSchema = z.object({
-  id: z.string(),
+  id: z.string().uuid(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
   deletedAt: z.coerce.date().nullable(),
@@ -523,7 +523,7 @@ export type Scan = z.infer<typeof ScanSchema>
 export const ScanMemberSchema = z.object({
   roles: ScanMemberRolesSchema.array(),
   permissions: ScanMemberPermissionsSchema.array(),
-  id: z.string(),
+  id: z.string().uuid(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
   deletedAt: z.coerce.date().nullable(),
@@ -539,12 +539,9 @@ export type ScanMember = z.infer<typeof ScanMemberSchema>
 export const TaskSchema = z.object({
   type: TaskTypeSchema,
   status: TaskStatusSchema,
-  id: z.string(),
+  id: z.string().uuid(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
-  /**
-   * [TaskPayload]
-   */
   payload: JsonValueSchema,
   sessionId: z.string(),
 })

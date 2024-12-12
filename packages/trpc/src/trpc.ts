@@ -9,7 +9,7 @@
 
 import type { Session } from "@taiyomoe/auth/server"
 import { cacheClient } from "@taiyomoe/cache"
-import { db } from "@taiyomoe/db"
+import { Prisma, db } from "@taiyomoe/db"
 import { logsClient } from "@taiyomoe/logs"
 import { meilisearchClient } from "@taiyomoe/meilisearch"
 import messages from "@taiyomoe/messages/en.json"
@@ -63,6 +63,7 @@ export const createTRPCContext = async (opts: {
     namespace: "api",
     messages,
   }),
+  Prisma,
   db,
   meilisearch: meilisearchClient,
   cache: cacheClient,

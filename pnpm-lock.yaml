@@ -586,6 +586,9 @@ importers:
 
   packages/trpc:
     dependencies:
+      '@prisma/client':
+        specifier: ^6.0.1
+        version: 6.0.1(prisma@6.0.1)
       '@taiyomoe/auth':
         specifier: workspace:*
         version: link:../auth
@@ -640,6 +643,9 @@ importers:
       radash:
         specifier: ^12.1.0
         version: 12.1.0
+      react-querybuilder:
+        specifier: ^8.0.0
+        version: 8.0.0(@types/react@18.3.12)(react@18.3.1)(redux@5.0.1)
       superjson:
         specifier: ^2.2.1
         version: 2.2.1

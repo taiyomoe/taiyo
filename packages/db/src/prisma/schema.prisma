@@ -3,7 +3,7 @@
 
 generator client {
     provider        = "prisma-client-js"
-    previewFeatures = ["relationJoins", "omitApi"]
+    previewFeatures = ["relationJoins", "omitApi", "typedSql"]
 }
 
 generator json {
@@ -378,7 +378,6 @@ model Task {
 
     type    TaskType
     status  TaskStatus
-    /// [TaskPayload]
     payload Json
 
     sessionId String

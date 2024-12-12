@@ -1,7 +1,13 @@
 import { fromDate } from "@internationalized/date"
 import { Input } from "@nextui-org/input"
 import { Switch } from "@nextui-org/switch"
-import { ContentRating, Flag, Languages } from "@taiyomoe/db"
+import {
+  ContentRating,
+  Flag,
+  Languages,
+  TaskStatus,
+  TaskType,
+} from "@taiyomoe/db"
 import { useRef } from "react"
 import {
   type Field,
@@ -27,6 +33,10 @@ const getEnum = (name: string) => {
       return ContentRating
     case "flag":
       return Flag
+    case "status":
+      return TaskStatus
+    case "type":
+      return TaskType
     default:
       return {}
   }
