@@ -9,18 +9,20 @@ export const getTasksListHandler = protectedProcedure
   .input(getTasksListSchema)
   .query(async ({ ctx, input }) => {
     const rawFilter = parseJSONata(input.filter)
-    const rawWhereClause = formatQuery(rawFilter, "sql").replace("(1 = 1)", "")
-    const whereClause = rawWhereClause
-      ? `WHERE ${rawWhereClause}`
-      : Prisma.empty
+    const rawWhereClause = formatQuery(rawFilter, {
+      format: "sql",
+      preset: "postgresql",
+    })
+    const whereClause =
+      rawWhereClause === "(1 = 1)" ? Prisma.empty : `WHERE ${rawWhereClause}`
     const offset = (input.page - 1) * input.perPage
     const [active, pending, totalCount, tasks] = await Promise.all([
-      await ctx.db.task.count({
+      ctx.db.task.count({
         where: { status: { in: ["DOWNLOADING", "UPLOADING"] } },
       }),
-      await ctx.db.task.count({ where: { status: "PENDING" } }),
-      await ctx.db.task.count(),
-      await ctx.db.$queryRaw<
+      ctx.db.task.count({ where: { status: "PENDING" } }),
+      ctx.db.task.count(),
+      ctx.db.$queryRaw<
         Task[]
       >`SELECT * FROM "Task" ${whereClause} LIMIT ${input.perPage} OFFSET ${offset}`,
     ])
