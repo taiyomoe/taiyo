@@ -26,6 +26,7 @@ export const TablePagination = ({
         perPage={perPage}
         choices={perPageChoices}
         isLoading={isLoading}
+        isDisabled={totalPages === 0}
         renderOption={(o) => `${o} capítulos`}
         onChange={onPerPageChange}
       />
@@ -34,7 +35,7 @@ export const TablePagination = ({
         total={totalPages}
         onChange={onPageChange}
         color="primary"
-        isDisabled={isLoading || totalPages === 1}
+        isDisabled={isLoading || totalPages < 2}
         showControls
         isCompact
       />
