@@ -23,6 +23,8 @@ export const TasksTableFilters = () => {
       fields={fields}
       onQueryChange={handleQueryChange}
       filter={filter}
+      disableGroups
+      disableCombinators
     />
   )
 }

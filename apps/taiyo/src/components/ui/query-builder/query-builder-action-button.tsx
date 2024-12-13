@@ -1,9 +1,10 @@
 import { Button } from "@nextui-org/button"
 import { PlusIcon, Trash2Icon } from "lucide-react"
 import type { ActionProps } from "react-querybuilder"
+import { cn } from "~/lib/utils/cn"
 
 export const QueryBuilderActionButton = (props: ActionProps) => {
-  const { testID, handleOnClick } = props
+  const { className, testID, handleOnClick } = props
   const defaultProps = {
     onPress: () => handleOnClick(),
     color: "primary",
@@ -14,7 +15,7 @@ export const QueryBuilderActionButton = (props: ActionProps) => {
     case "add-group":
       return (
         <Button
-          className="w-[140px] text-primary"
+          className={cn("w-[140px] text-primary", className)}
           startContent={<PlusIcon size={20} />}
           variant="flat"
           {...defaultProps}
@@ -27,6 +28,7 @@ export const QueryBuilderActionButton = (props: ActionProps) => {
     case "remove-group":
       return (
         <Button
+          className={className}
           startContent={<Trash2Icon size={20} />}
           variant="light"
           isIconOnly
