@@ -96,7 +96,11 @@
   --content1-gradient: var(--content2);
 }
 
-.ruleGroup-body > .rule:first-child:not(:only-child),
-.ruleGroup-body > .ruleGroup:first-child:not(:only-child) {
+div[data-disable-combinators="false"]
+  .ruleGroup-body
+  > .rule:first-child:not(:only-child),
+div[data-disable-combinators="false"]
+  .ruleGroup-body
+  > .ruleGroup:first-child:not(:only-child) {
   grid-column-start: 2;
 }

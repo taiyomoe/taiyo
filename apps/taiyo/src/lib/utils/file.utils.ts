@@ -48,7 +48,7 @@ const computeRelativePaths = (files: File[]) => {
 
   return {
     invalidFiles,
-    chapters,
+    chapters: chapters.sort((a, b) => a[0] - b[0]),
   }
 }
 

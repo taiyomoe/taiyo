@@ -13,16 +13,18 @@ import { Manga } from "mangadex-full-api"
 import { MdService } from "~/services/md.worker-service"
 import { logger } from "~/utils/logger"
 
-export const importMediaHandler = async ({
-  mdId,
-  creatorId,
-}: ImportMediaMessageInput) => {
-  const manga = await Manga.get(mdId)
+export const importMediaHandler = async (input: ImportMediaMessageInput) => {
+  const manga = await Manga.get(input.mdId)
   const rawMainCover = await manga.mainCover.resolve()
   const mainCover = MdUtils.parseCover(rawMainCover, logger)
-  const payload = MdService.getCreationPayload(manga, creatorId)
+  const payload = MdService.getCreationPayload(manga, input.creatorId)
 
-  logger.debug(`Parsed payload from MangaDex media ${mdId}`, payload)
+  logger.debug(`Parsed payload from MangaDex media ${input.mdId}`, payload)
+
+  await db.task.update({
+    data: { status: "UPLOADING" },
+    where: { id: input.taskId },
+  })
 
   const mediaId = randomUUID()
   const coverBuffer = await BaseFilesService.download(mainCover.url)
@@ -41,7 +43,7 @@ export const importMediaHandler = async ({
           language: mainCover.language,
           contentRating: payload.contentRating,
           isMainCover: true,
-          uploaderId: creatorId,
+          uploaderId: input.creatorId,
         },
       },
     },
@@ -61,7 +63,7 @@ export const importMediaHandler = async ({
   await BaseTrackersService.postCreate("imported", trackers)
   await BaseCoversService.postUpload(db, "imported", covers)
 
-  logger.info(`${creatorId} imported a media`, media.id)
+  logger.info(`${input.creatorId} imported a media`, media.id)
 
   return media
 }

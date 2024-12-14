@@ -9,7 +9,7 @@
 
 import type { Session } from "@taiyomoe/auth/server"
 import { cacheClient } from "@taiyomoe/cache"
-import { db } from "@taiyomoe/db"
+import { Prisma, db } from "@taiyomoe/db"
 import { logsClient } from "@taiyomoe/logs"
 import { meilisearchClient } from "@taiyomoe/meilisearch"
 import messages from "@taiyomoe/messages/en.json"
@@ -17,6 +17,7 @@ import { messagingClient } from "@taiyomoe/messaging"
 import { s3Client } from "@taiyomoe/s3"
 import {
   BaseCoversService,
+  BaseTasksService,
   BaseTitlesService,
   BaseUsersService,
 } from "@taiyomoe/services"
@@ -62,6 +63,7 @@ export const createTRPCContext = async (opts: {
     namespace: "api",
     messages,
   }),
+  Prisma,
   db,
   meilisearch: meilisearchClient,
   cache: cacheClient,
@@ -74,6 +76,7 @@ export const createTRPCContext = async (opts: {
     users: BaseUsersService,
     libraries: LibrariesService,
     medias: MediasService,
+    tasks: BaseTasksService,
     trackers: TrackersService,
     covers: BaseCoversService,
     titles: BaseTitlesService,

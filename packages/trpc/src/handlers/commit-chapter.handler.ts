@@ -14,7 +14,11 @@ export const commitChapterHandler = protectedProcedure
 
     ctx.logger.info(`${ctx.session.user.id} committed a chapter upload`)
 
-    const job = await ctx.messaging.chapters.upload(payload)
+    const task = await ctx.services.tasks.create("UPLOAD_CHAPTER", payload)
+    const job = await ctx.messaging.chapters.upload({
+      ...payload,
+      taskId: task.id,
+    })
 
     await job.waitUntilFinished(ctx.messaging.rawQueueEvents)
   })

@@ -12,18 +12,21 @@ export default async function Page({ params }: Props) {
   const result = await db.task.findMany({
     where: { sessionId: params.sessionId },
   })
-  const mediaId = result.at(0)?.payload.mediaId as string
+  const mediaId = (result.at(0)?.payload as Record<string, string> | undefined)
+    ?.mediaId
 
   return (
     <div className="flex flex-col gap-12">
       <p className="font-semibold text-4xl">Sessão de upload</p>
       <div className="space-y-8">
-        <Link
-          href={MediaUtils.getUrl({ id: mediaId })}
-          className="flex items-center gap-2 transition-colors hover:text-default-600"
-        >
-          Página da obra <ExternalLinkIcon />
-        </Link>
+        {mediaId && (
+          <Link
+            href={MediaUtils.getUrl({ id: mediaId })}
+            className="flex items-center gap-2 transition-colors hover:text-default-600"
+          >
+            Página da obra <ExternalLinkIcon />
+          </Link>
+        )}
         {result.length > 0 && <DisplayTasks initialData={result} />}
         {result.length === 0 && (
           <p>

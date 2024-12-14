@@ -89,6 +89,54 @@ export const sortableFieldsSchema = <
     .optional()
     .default([])
 
+export const buildFilterSchema = <
+  TName extends string,
+  TSchema extends z.ZodType,
+>(
+  name: TName,
+  schema: TSchema,
+) => {
+  const capitalized = name.charAt(0).toUpperCase() + name.slice(1)
+  const invertedName = `not${capitalized}`
+
+  return {
+    [name]: schema,
+    [invertedName]: schema,
+  } as Record<TName | `not${Capitalize<TName>}`, TSchema>
+}
+
+export const enumFilterSchema = <TSchema extends z.ZodSchema>(input: TSchema) =>
+  z
+    .object({
+      equals: input.optional().catch(undefined),
+      not: input.optional().catch(undefined),
+      in: input.array().optional().catch(undefined),
+      notIn: input.array().optional().catch(undefined),
+    })
+    .optional()
+
+export const dateFilterSchema = z.preprocess(
+  (input) => {
+    if (input && typeof input === "object") {
+      return Object.fromEntries(
+        Object.entries(input).map(([k, v]) => [k, v === null ? undefined : v]),
+      )
+    }
+
+    return input
+  },
+  z
+    .object({
+      equals: z.coerce.date().optional().catch(undefined),
+      not: z.coerce.date().optional().catch(undefined),
+      lt: z.coerce.date().optional().catch(undefined),
+      lte: z.coerce.date().optional().catch(undefined),
+      gt: z.coerce.date().optional().catch(undefined),
+      gte: z.coerce.date().optional().catch(undefined),
+    })
+    .optional(),
+)
+
 export const bulkMutateSchema = z.object({
   type: z.enum(["restore", "delete"]),
   ids: z.array(z.string().uuid()).min(1),

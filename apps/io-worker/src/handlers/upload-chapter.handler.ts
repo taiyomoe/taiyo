@@ -1,7 +1,7 @@
 import { db } from "@taiyomoe/db"
 import { BaseChaptersService, BaseFilesService } from "@taiyomoe/services"
 import type { UploadChapterMessageInput } from "@taiyomoe/types"
-import { omit, parallel } from "radash"
+import { parallel, pick } from "radash"
 import { logger } from "~/utils/logger"
 
 export const uploadChapterHandler = async (
@@ -13,11 +13,19 @@ export const uploadChapterHandler = async (
   )
   const chapter = await db.mediaChapter.create({
     data: {
-      ...omit(input, ["scanIds", "pages"]),
+      ...pick(input, [
+        "title",
+        "number",
+        "volume",
+        "contentRating",
+        "flag",
+        "language",
+        "mediaId",
+        "uploaderId",
+      ]),
       id: input.id,
       scans: { connect: input.scanIds.map((s) => ({ id: s })) },
       pages: uploadedPages,
-      uploaderId: input.uploaderId,
     },
   })
 

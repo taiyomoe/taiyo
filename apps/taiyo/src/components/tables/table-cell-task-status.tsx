@@ -7,7 +7,7 @@ import {
   UploadCloudIcon,
 } from "lucide-react"
 
-const tableCellStatus = tv({
+const tableCellTaskStatus = tv({
   base: "",
   variants: {
     status: {
@@ -20,10 +20,10 @@ const tableCellStatus = tv({
   },
 })
 
-type Props = VariantProps<typeof tableCellStatus>
+type Props = VariantProps<typeof tableCellTaskStatus>
 
-export const TableCellStatus = ({ status }: Props) => {
-  const classes = tableCellStatus({ status })
+export const TableCellTaskStatus = ({ status }: Props) => {
+  const classes = tableCellTaskStatus({ status })
 
   switch (status) {
     case "PENDING":

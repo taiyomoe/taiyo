@@ -47,16 +47,14 @@ const ThemeSwitch = () => {
           {renderButtonContent()}
         </Button>
       </DropdownTrigger>
-      <DropdownMenu selectionMode="single" aria-label="Theme options">
-        <DropdownItem value="system" onPress={() => setTheme("system")}>
-          Sistema
-        </DropdownItem>
-        <DropdownItem value="dark" onPress={() => setTheme("dark")}>
-          Escuro
-        </DropdownItem>
-        <DropdownItem value="light" onPress={() => setTheme("light")}>
-          Branco
-        </DropdownItem>
+      <DropdownMenu
+        selectionMode="single"
+        onAction={(key) => setTheme(String(key))}
+        aria-label="Theme options"
+      >
+        <DropdownItem key="system">Sistema</DropdownItem>
+        <DropdownItem key="dark">Escuro</DropdownItem>
+        <DropdownItem key="light">Branco</DropdownItem>
       </DropdownMenu>
     </Dropdown>
   )

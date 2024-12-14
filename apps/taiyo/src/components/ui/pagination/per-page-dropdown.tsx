@@ -13,6 +13,7 @@ type Props = {
   perPage: number
   choices: number[]
   isLoading: boolean
+  isDisabled?: boolean
   renderOption: (option: number) => string
   onChange: (newPerPage: number) => void
 }
@@ -21,6 +22,7 @@ export const PerPageDropdown = ({
   perPage,
   choices,
   isLoading,
+  isDisabled,
   renderOption,
   onChange,
 }: Props) => {
@@ -39,7 +41,7 @@ export const PerPageDropdown = ({
     <Dropdown
       classNames={{ content: "min-w-fit" }}
       radius="sm"
-      isDisabled={isLoading}
+      isDisabled={isLoading || isDisabled}
     >
       <DropdownTrigger>
         <Button

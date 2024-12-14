@@ -21,11 +21,12 @@ export const TablePagination = ({
   onPerPageChange,
 }: Props) => {
   return (
-    <div className="flex gap-4">
+    <div className="flex flex-col items-center gap-4 md:flex-row">
       <PerPageDropdown
         perPage={perPage}
         choices={perPageChoices}
         isLoading={isLoading}
+        isDisabled={totalPages === 0}
         renderOption={(o) => `${o} capítulos`}
         onChange={onPerPageChange}
       />
@@ -34,7 +35,7 @@ export const TablePagination = ({
         total={totalPages}
         onChange={onPageChange}
         color="primary"
-        isDisabled={isLoading || totalPages === 1}
+        isDisabled={isLoading || totalPages < 2}
         showControls
         isCompact
       />
