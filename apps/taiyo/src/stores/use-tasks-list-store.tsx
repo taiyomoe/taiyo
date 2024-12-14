@@ -73,7 +73,7 @@ const tasksListStore = (initProps: Props) =>
 /**
  * React part.
  */
-export const TasksListStoreContext = createContext<Store | null>(null)
+const TasksListStoreContext = createContext<Store | null>(null)
 
 export const TasksListStoreProvider = ({
   children,

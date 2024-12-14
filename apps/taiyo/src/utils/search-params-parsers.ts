@@ -5,7 +5,7 @@ import {
   parseAsStringEnum,
 } from "nuqs/server"
 
-export const parseAsIsoDate = createParser({
+const parseAsIsoDate = createParser({
   parse: (v) => {
     const date = new Date(v.slice(0, 10))
     if (Number.isNaN(date.valueOf())) {
@@ -29,8 +29,6 @@ export const enumFilterParser = <
   name: TName,
   data: TData,
 ) => {
-  console.log("data", data)
-
   const values = Object.values(data) as TValues[]
   const mainParser = parseAsStringEnum<TValues>(values)
 
