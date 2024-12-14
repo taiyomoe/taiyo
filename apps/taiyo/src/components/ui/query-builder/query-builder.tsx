@@ -121,9 +121,9 @@ const getOperators = (_: string, { fieldData }: { fieldData: Field }) => {
         // { name: "=", label: "=" },
         // { name: "!=", label: "!=" },
         { name: "<", label: "antes" },
-        { name: "<=", label: "antes ou igual" },
+        // { name: "<=", label: "antes ou igual" },
         { name: ">", label: "depois" },
-        { name: ">=", label: "depois ou igual" },
+        // { name: ">=", label: "depois ou igual" },
         ...NULLABLE_OPERATORS,
       ]
   }

@@ -1,9 +1,25 @@
 import {
   type ParserBuilder,
+  createParser,
   parseAsArrayOf,
-  parseAsString,
   parseAsStringEnum,
 } from "nuqs/server"
+
+export const parseAsIsoDate = createParser({
+  parse: (v) => {
+    const date = new Date(v.slice(0, 10))
+    if (Number.isNaN(date.valueOf())) {
+      return null
+    }
+    return date
+  },
+  serialize: (v: Date) => {
+    const offsetMs = v.getTimezoneOffset() * 60 * 1000
+    const date = new Date(v.getTime() - offsetMs)
+
+    return date.toISOString().slice(0, 10)
+  },
+})
 
 export const enumFilterParser = <
   TName extends string,
@@ -36,18 +52,8 @@ export const enumFilterParser = <
 
 export const dateFilterParser = <TName extends string>(name: TName) =>
   ({
-    [`${name}.equals`]: parseAsString,
-    [`${name}.not`]: parseAsString,
-    [`${name}.lt`]: parseAsString,
-    [`${name}.lte`]: parseAsString,
-    [`${name}.gt`]: parseAsString,
-    [`${name}.gte`]: parseAsString,
+    [`${name}.lt`]: parseAsIsoDate,
+    [`${name}.gt`]: parseAsIsoDate,
   }) as {
-    [K in
-      | `${TName}.equals`
-      | `${TName}.not`
-      | `${TName}.lte`
-      | `${TName}.lt`
-      | `${TName}.gt`
-      | `${TName}.gte`]: ParserBuilder<string>
+    [K in `${TName}.lte` | `${TName}.gt`]: ParserBuilder<Date>
   }

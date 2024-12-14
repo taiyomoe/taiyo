@@ -16,5 +16,18 @@ export const rqbOperatorTransformer = (operator: string) => {
       return "gt"
     case ">=":
       return "gte"
+
+    case "equals":
+      return "="
+    case "not":
+      return "!="
+    case "lt":
+      return "<"
+    case "lte":
+      return "<="
+    case "gt":
+      return ">"
+    case "gte":
+      return ">="
   }
 }
