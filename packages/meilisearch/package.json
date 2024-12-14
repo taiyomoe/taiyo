@@ -17,12 +17,12 @@
   "dependencies": {
     "@prisma/client": "^6.0.1",
     "@t3-oss/env-core": "^0.11.1",
-    "@trpc/server": "11.0.0-rc.648",
+    "@trpc/server": "11.0.0-rc.660",
     "luxon": "^3.5.0",
     "meilisearch": "^0.46.0",
     "punycode": "^2.3.1",
     "radash": "^12.1.0",
-    "zod": "^3.23.8"
+    "zod": "^3.24.1"
   },
   "devDependencies": {
     "@taiyomoe/tsconfig": "workspace:*",
