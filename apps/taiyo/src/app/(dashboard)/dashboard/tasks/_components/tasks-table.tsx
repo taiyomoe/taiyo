@@ -3,6 +3,7 @@
 import { TASKS_LIST_PER_PAGE_CHOICES } from "@taiyomoe/constants"
 import type { AppRouter } from "@taiyomoe/trpc"
 import { useQueryStates } from "nuqs"
+import { assign, crush, mapValues } from "radash"
 import { useEffect } from "react"
 import { DataTable } from "~/components/generics/data-table/data-table"
 import { useTasksListStore } from "~/stores/use-tasks-list-store"
@@ -19,19 +20,20 @@ type Props = {
 
 export const TasksTable = ({ initialData }: Props) => {
   const [_, setSearchParams] = useQueryStates(tasksSearchParams)
-  const { filter, sort, page, perPage, setSort, setPage, setPerPage } =
-    useTasksListStore()
+  const { input, setSort, setPage, setPerPage } = useTasksListStore()
   const {
     data: { tasks: items, totalPages, totalCount } = initialData,
     isFetching,
-  } = api.tasks.getList.useQuery(
-    { filter, sort, page, perPage },
-    { placeholderData: keepPreviousData(initialData) },
-  )
+  } = api.tasks.getList.useQuery(input, {
+    placeholderData: keepPreviousData(initialData),
+  })
 
   useEffect(() => {
-    setSearchParams({ filter, page, perPage })
-  }, [filter, page, perPage, setSearchParams])
+    const emptySearchParams = mapValues(tasksSearchParams, () => null)
+    const searchParams = assign(emptySearchParams, crush(input))
+
+    setSearchParams(searchParams)
+  }, [input, setSearchParams])
 
   return (
     <DataTable
@@ -43,8 +45,8 @@ export const TasksTable = ({ initialData }: Props) => {
         id: false,
         payload: false,
       }}
-      page={page}
-      perPage={perPage}
+      page={input.page}
+      perPage={input.perPage}
       perPageChoices={TASKS_LIST_PER_PAGE_CHOICES}
       totalPages={totalPages}
       totalCount={totalCount}

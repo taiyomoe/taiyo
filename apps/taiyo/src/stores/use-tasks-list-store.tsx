@@ -3,12 +3,13 @@
 import type { TASKS_LIST_SORTABLE_FIELDS } from "@taiyomoe/constants"
 import type { GetTasksListInput } from "@taiyomoe/schemas"
 import type { SortingState } from "@tanstack/react-table"
+import { pick } from "radash"
 import { type ReactNode, createContext, useContext, useRef } from "react"
 import type { DefaultRuleGroupType } from "react-querybuilder"
 import { createStore, useStore } from "zustand"
-import { RQBUtils } from "~/utils/rqb.utils"
+import { rqbOperatorTransformer } from "~/utils/rqb-operator-transformer"
 
-type Props = GetTasksListInput
+type Props = { input: GetTasksListInput }
 type State = Props & {
   setFilter: (value: DefaultRuleGroupType) => void
   setSort: (value: SortingState) => void
@@ -18,32 +19,54 @@ type State = Props & {
 type Store = ReturnType<typeof tasksListStore>
 
 const tasksListStore = (initProps: Props) =>
-  createStore<State>()((set, get) => ({
+  createStore<State>()((set) => ({
     ...initProps,
 
     setFilter: (value) => {
-      const computed = RQBUtils.computeNewFilter(get().filter, value)
+      const values: Record<string, Record<string, unknown>> = {}
 
-      if (computed === null) {
-        return
+      for (const rule of value.rules) {
+        if (!("operator" in rule) || rule.value === "") continue
+
+        const operator = rqbOperatorTransformer(rule.operator)
+
+        if (!operator) continue
+
+        values[rule.field] = {
+          ...(values[rule.field] ?? {}),
+          [operator]: rule.value,
+        }
       }
 
-      set((state) => ({ ...state, filter: computed, page: 1 }))
+      set((state) => ({
+        ...state,
+        input: {
+          page: 1,
+          ...values,
+          ...pick(state.input, ["perPage", "sort"]),
+        },
+      }))
     },
     setSort: (value) => {
       set((state) => ({
         ...state,
-        sort: value.map((v) => [
-          v.id as (typeof TASKS_LIST_SORTABLE_FIELDS)[number],
-          v.desc ? "desc" : "asc",
-        ]),
+        input: {
+          ...state.input,
+          sort: value.map((v) => [
+            v.id as (typeof TASKS_LIST_SORTABLE_FIELDS)[number],
+            v.desc ? "desc" : "asc",
+          ]),
+        },
       }))
     },
     setPage: (value) => {
-      set((state) => ({ ...state, page: value }))
+      set((state) => ({ ...state, input: { ...state.input, page: value } }))
     },
     setPerPage: (value) => {
-      set((state) => ({ ...state, perPage: value, page: 1 }))
+      set((state) => ({
+        ...state,
+        input: { ...state.input, perPage: value, page: 1 },
+      }))
     },
   }))
 

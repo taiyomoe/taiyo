@@ -78,11 +78,11 @@ export const QueryBuilderValueEditor = (props: ValueEditorProps) => {
           className="min-w-[300px]"
           value={
             props.value
-              ? fromDate(new Date(props.value * 1000), DateUtils.getTimezone())
+              ? fromDate(new Date(props.value), DateUtils.getTimezone())
               : null
           }
           onChange={(v) =>
-            handleOnChange(DateUtils.getFromDateValue(v).toSeconds())
+            handleOnChange(DateUtils.getFromDateValue(v).toISODate())
           }
           granularity="day"
           aria-label="Date picker"

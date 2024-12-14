@@ -118,8 +118,8 @@ const getOperators = (_: string, { fieldData }: { fieldData: Field }) => {
       ]
     case "date":
       return [
-        { name: "=", label: "=" },
-        { name: "!=", label: "!=" },
+        // { name: "=", label: "=" },
+        // { name: "!=", label: "!=" },
         { name: "<", label: "antes" },
         { name: "<=", label: "antes ou igual" },
         { name: ">", label: "depois" },

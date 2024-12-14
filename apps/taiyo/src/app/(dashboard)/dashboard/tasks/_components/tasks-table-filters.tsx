@@ -11,7 +11,7 @@ const fields: Field[] = [
 ]
 
 export const TasksTableFilters = () => {
-  const { filter, setFilter } = useTasksListStore()
+  const { setFilter } = useTasksListStore()
 
   const handleQueryChange = useDebounceCallback(
     (newQuery) => setFilter(newQuery),
@@ -22,7 +22,6 @@ export const TasksTableFilters = () => {
     <QueryBuilder
       fields={fields}
       onQueryChange={handleQueryChange}
-      filter={filter}
       disableGroups
       disableCombinators
     />

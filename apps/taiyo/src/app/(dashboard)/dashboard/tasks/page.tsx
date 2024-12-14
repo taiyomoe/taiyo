@@ -3,6 +3,7 @@ import { ActivityIcon, CalculatorIcon, CircleDashedIcon } from "lucide-react"
 import type { SearchParams } from "nuqs"
 import { TasksListStoreProvider } from "~/stores/use-tasks-list-store"
 import { api } from "~/trpc/server"
+import { sanitizeSearchParams } from "~/utils/sanitize-search-params"
 import { TaskStatCard } from "./_components/task-stat-card"
 import { tasksSearchParamsCache } from "./_components/tasks-search-params"
 import { TasksTable } from "./_components/tasks-table"
@@ -11,8 +12,11 @@ type Props = {
   searchParams: SearchParams
 }
 export default async function Page(props: Props) {
-  const parsedSearchParams = tasksSearchParamsCache.parse(props.searchParams)
-  const searchParams = getTasksListSchema.parse(parsedSearchParams)
+  const searchParams = sanitizeSearchParams(
+    props.searchParams,
+    tasksSearchParamsCache,
+    getTasksListSchema,
+  )
   const initialData = await api.tasks.getList(searchParams)
 
   return (
@@ -36,7 +40,7 @@ export default async function Page(props: Props) {
             icon={<CalculatorIcon size={20} />}
           />
         </div>
-        <TasksListStoreProvider value={searchParams}>
+        <TasksListStoreProvider value={{ input: searchParams }}>
           <TasksTable initialData={initialData} />
         </TasksListStoreProvider>
       </div>

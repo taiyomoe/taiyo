@@ -4,10 +4,19 @@ import {
   TASKS_LIST_SORTABLE_FIELDS,
 } from "@taiyomoe/constants"
 import { z } from "zod"
-import { pageSchema, perPageSchema } from "./common.schemas"
+import {
+  dateFilterSchema,
+  enumFilterSchema,
+  pageSchema,
+  perPageSchema,
+} from "./common.schemas"
+import { TaskStatusSchema, TaskTypeSchema } from "./prisma"
 
 export const getTasksListSchema = z.object({
-  filter: z.string().catch(""),
+  status: enumFilterSchema(TaskStatusSchema),
+  type: enumFilterSchema(TaskTypeSchema),
+  createdAt: dateFilterSchema,
+  updatedAt: dateFilterSchema,
   sort: z
     .tuple([z.enum(TASKS_LIST_SORTABLE_FIELDS), z.enum(["asc", "desc"])])
     .array()
