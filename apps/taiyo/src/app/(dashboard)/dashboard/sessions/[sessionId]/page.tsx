@@ -12,7 +12,8 @@ export default async function Page({ params }: Props) {
   const result = await db.task.findMany({
     where: { sessionId: params.sessionId },
   })
-  const mediaId = result.at(0)?.payload.mediaId as string | undefined
+  const mediaId = (result.at(0)?.payload as Record<string, string> | undefined)
+    ?.mediaId
 
   return (
     <div className="flex flex-col gap-12">

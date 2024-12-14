@@ -22,7 +22,7 @@ export const DateField = ({ name, labelPlacement, ...rest }: Props) => (
         errorMessage={error?.message}
         isInvalid={invalid}
         value={value ? fromDate(value, DEFAULT_TIMEZONE) : null}
-        onChange={(newDate) => onChange(newDate.toDate(DEFAULT_TIMEZONE))}
+        onChange={(v) => onChange(v?.toDate(DEFAULT_TIMEZONE))}
         granularity="day"
         {...field}
         {...rest}

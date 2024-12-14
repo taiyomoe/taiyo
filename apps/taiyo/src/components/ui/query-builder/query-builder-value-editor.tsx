@@ -81,7 +81,7 @@ export const QueryBuilderValueEditor = (props: ValueEditorProps) => {
               ? fromDate(new Date(props.value), DateUtils.getTimezone())
               : null
           }
-          onChange={(v) => handleOnChange(v.toDate(DateUtils.getTimezone()))}
+          onChange={(v) => handleOnChange(v?.toDate(DateUtils.getTimezone()))}
           granularity="day"
           aria-label="Date picker"
         />

@@ -24,6 +24,7 @@ export const MediasTableSingleActions = ({ media }: Props) => (
       </DropdownTrigger>
       <DropdownMenu variant="flat">
         <DropdownItem
+          key="open-media-page"
           as={Link}
           href={MediaUtils.getUrl(media)}
           endContent={<ExternalLinkIcon size={18} />}
@@ -32,6 +33,7 @@ export const MediasTableSingleActions = ({ media }: Props) => (
           Abrir a página da obra
         </DropdownItem>
         <DropdownItem
+          key="edit-media"
           as={Link}
           href={`/dashboard/medias/edit/${media.id}`}
           endContent={<ExternalLinkIcon size={18} />}
