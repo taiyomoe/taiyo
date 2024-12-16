@@ -80,7 +80,7 @@
   "devDependencies": {
     "@taiyomoe/types": "workspace:*",
     "@types/luxon": "^3.4.2",
-    "@types/react": "^18.3.16",
+    "@types/react": "^18.3.17",
     "@types/react-dom": "^18.3.5",
     "jiti": "^2.4.1",
     "tailwindcss": "^3.4.16",
