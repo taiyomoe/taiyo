@@ -21,7 +21,7 @@
     "@taiyomoe/meilisearch": "workspace:*",
     "@taiyomoe/utils": "workspace:*",
     "better-auth": "^1.2.3",
-    "next": "^14.2.21",
+    "next": "^15.1.2",
     "react": "^19.0.0",
     "zod": "^3.24.2"
   },

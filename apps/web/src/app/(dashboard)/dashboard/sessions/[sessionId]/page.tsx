@@ -5,13 +5,12 @@ import Link from "next/link"
 import { DisplayTasks } from "./_components/display-tasks"
 
 type Props = {
-  params: { sessionId: string }
+  params: Promise<{ sessionId: string }>
 }
 
 export default async function Page({ params }: Props) {
-  const result = await db.task.findMany({
-    where: { sessionId: params.sessionId },
-  })
+  const { sessionId } = await params
+  const result = await db.task.findMany({ where: { sessionId } })
   const mediaId = (result.at(0)?.payload as Record<string, string> | undefined)
     ?.mediaId
 
