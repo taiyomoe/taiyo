@@ -1,3 +1,5 @@
+"use client"
+
 import { Button } from "@nextui-org/button"
 import { Divider } from "@nextui-org/divider"
 import { Popover, PopoverContent, PopoverTrigger } from "@nextui-org/popover"

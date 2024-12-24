@@ -3,6 +3,7 @@ import type { Media } from "@taiyomoe/db"
 import { rawQueueEvents } from "@taiyomoe/messaging"
 import { importMediaSchema } from "@taiyomoe/schemas"
 import { MdUtils } from "@taiyomoe/utils"
+import { parallel } from "radash"
 import { protectedProcedure } from "../trpc"
 
 export const importMediaHandler = protectedProcedure
@@ -16,23 +17,36 @@ export const importMediaHandler = protectedProcedure
       `${ctx.session.user.id} started importing MangaDex media ${input.mdId}`,
     )
 
-    const job = await ctx.messaging.medias.import({
+    const payload = {
       mdId: input.mdId,
       creatorId: ctx.session.user.id,
+    }
+    const task = await ctx.services.tasks.create("IMPORT_MEDIA", payload)
+    const job = await ctx.messaging.medias.import({
+      ...payload,
+      taskId: task.id,
     })
     const media: Media = await job.waitUntilFinished(rawQueueEvents)
     const sessionId = randomUUID()
 
     if (input.importCovers) {
       const rawCovers = await manga.getCovers()
-      const covers = rawCovers.map((c) => ({
-        ...MdUtils.parseCover(c, ctx.logger),
-        contentRating: media.contentRating,
-        mediaId: media.id,
-        uploaderId: ctx.session.user.id,
-        taskId: randomUUID(),
-        sessionId,
-      }))
+      const covers = await parallel(10, rawCovers, async (c) => {
+        const payload = {
+          ...MdUtils.parseCover(c, ctx.logger),
+          contentRating: media.contentRating,
+          mediaId: media.id,
+          uploaderId: ctx.session.user.id,
+          sessionId,
+        }
+        const task = await ctx.services.tasks.create(
+          "IMPORT_COVER",
+          payload,
+          sessionId,
+        )
+
+        return { ...payload, taskId: task.id }
+      })
 
       await ctx.messaging.covers.import(covers)
 
@@ -44,27 +58,34 @@ export const importMediaHandler = protectedProcedure
 
     if (input.importChapters) {
       const rawChapters = await ctx.services.md.getChapters(manga)
-      const chapters = rawChapters
-        .filter((c) => {
-          if (c.isExternal) {
-            ctx.logger.debug(
-              `Skipped external chapter when importing MangaDex media ${input.mdId}`,
-              c,
-            )
+      const filteredChapters = rawChapters.filter((c) => {
+        if (c.isExternal) {
+          ctx.logger.debug(
+            `Skipped external chapter when importing MangaDex media ${input.mdId}`,
+            c,
+          )
 
-            return false
-          }
+          return false
+        }
 
-          return true
-        })
-        .map((c) => ({
+        return true
+      })
+      const chapters = await parallel(10, filteredChapters, async (c) => {
+        const payload = {
           ...MdUtils.parseChapter(c, ctx.logger),
           contentRating: media.contentRating,
           mediaId: media.id,
           uploaderId: ctx.session.user.id,
-          taskId: randomUUID(),
           sessionId,
-        }))
+        }
+        const task = await ctx.services.tasks.create(
+          "IMPORT_CHAPTER",
+          payload,
+          sessionId,
+        )
+
+        return { ...payload, taskId: task.id }
+      })
 
       await ctx.messaging.chapters.import(chapters)
 

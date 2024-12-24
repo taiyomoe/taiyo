@@ -1,7 +1,7 @@
 import { randomUUID } from "crypto"
 import { syncMediaSchema } from "@taiyomoe/schemas"
 import { MdUtils, TitleUtils } from "@taiyomoe/utils"
-import { pick } from "radash"
+import { parallel, pick } from "radash"
 import { protectedProcedure } from "../trpc"
 
 export const syncMediaHandler = protectedProcedure
@@ -144,15 +144,14 @@ export const syncMediaHandler = protectedProcedure
       const existingCovers = await ctx.db.mediaCover.findMany({
         where: { mediaId: input.id, deletedAt: null },
       })
-      const covers = await mdMedia.getCovers()
-      const newCovers = covers
+      const rawCovers = await mdMedia.getCovers()
+      const filteredCovers = rawCovers
         .map((c) => ({
           ...MdUtils.parseCover(c, ctx.logger),
           contentRating: media.contentRating,
           mdId: c.id,
           mediaId: input.id,
           uploaderId: ctx.session.user.id,
-          taskId: randomUUID(),
           sessionId,
         }))
         .filter(
@@ -161,12 +160,21 @@ export const syncMediaHandler = protectedProcedure
               (ec) => ec.volume === c.volume && ec.language === c.language,
             ),
         )
+      const covers = await parallel(10, filteredCovers, async (c) => {
+        const task = await ctx.services.tasks.create(
+          "IMPORT_COVER",
+          c,
+          sessionId,
+        )
 
-      await ctx.messaging.covers.import(newCovers)
+        return { ...c, taskId: task.id }
+      })
+
+      await ctx.messaging.covers.import(covers)
 
       ctx.logger.debug(
-        `Sent ${newCovers.length} covers to BullMQ when syncing MangaDex media ${mdId}`,
-        newCovers,
+        `Sent ${covers.length} covers to BullMQ when syncing MangaDex media ${mdId}`,
+        covers,
       )
     }
 
@@ -177,8 +185,8 @@ export const syncMediaHandler = protectedProcedure
       const existingChapters = await ctx.db.mediaChapter.findMany({
         where: { mediaId: input.id, deletedAt: null },
       })
-      const chapters = await ctx.services.md.getChapters(mdMedia)
-      const newChapters = chapters
+      const rawChapters = await ctx.services.md.getChapters(mdMedia)
+      const filteredChapters = rawChapters
         .filter((c) => {
           if (c.isExternal) {
             ctx.logger.debug(
@@ -197,16 +205,24 @@ export const syncMediaHandler = protectedProcedure
           mdId: c.id,
           mediaId: media.id,
           uploaderId: ctx.session.user.id,
-          taskId: randomUUID(),
           sessionId,
         }))
         .filter((c) => !existingChapters.some((ec) => ec.number === c.number))
+      const chapters = await parallel(10, filteredChapters, async (c) => {
+        const task = await ctx.services.tasks.create(
+          "IMPORT_CHAPTER",
+          c,
+          sessionId,
+        )
 
-      await ctx.messaging.chapters.import(newChapters)
+        return { ...c, taskId: task.id }
+      })
+
+      await ctx.messaging.chapters.import(chapters)
 
       ctx.logger.debug(
-        `Sent ${newChapters.length} chapters to BullMQ when syncing MangaDex media ${mdId}`,
-        newChapters,
+        `Sent ${chapters.length} chapters to BullMQ when syncing MangaDex media ${mdId}`,
+        chapters,
       )
     }
 

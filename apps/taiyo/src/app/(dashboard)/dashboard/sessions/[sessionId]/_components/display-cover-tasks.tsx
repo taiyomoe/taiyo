@@ -12,20 +12,21 @@ import {
 import { TableCellDate } from "~/components/tables/table-cell-date"
 import { TableCellId } from "~/components/tables/table-cell-id"
 import { TableCellJson } from "~/components/tables/table-cell-json"
-import { TableCellStatus } from "~/components/tables/table-cell-status"
+import { TableCellLanguage } from "~/components/tables/table-cell-language"
+import { TableCellTaskStatus } from "~/components/tables/table-cell-task-status"
 
 type Props = {
   rawTasks: Task[]
 }
 
-export const DisplayChapterTasks = ({ rawTasks }: Props) => {
+export const DisplayCoverTasks = ({ rawTasks }: Props) => {
   const tasks = useMemo(
     () =>
       rawTasks
-        .filter((t) => t.type === "IMPORT_CHAPTER")
+        .filter((t) => t.type === "IMPORT_COVER")
         .map((t) => ({
           ...t,
-          payload: TaskUtils.getPayload(t, "IMPORT_CHAPTER"),
+          payload: TaskUtils.getPayload(t, "IMPORT_COVER"),
         }))
         .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime()),
     [rawTasks],
@@ -33,15 +34,15 @@ export const DisplayChapterTasks = ({ rawTasks }: Props) => {
 
   return (
     <div className="space-y-4">
-      <p className="font-medium text-lg">Capítulos</p>
+      <p className="font-medium text-lg">Covers</p>
       <Table>
         <TableHeader>
           <TableRow>
             <TableHead>ID</TableHead>
             <TableHead>Data de criação</TableHead>
             <TableHead>Status</TableHead>
-            <TableHead>Número</TableHead>
             <TableHead>Volume</TableHead>
+            <TableHead>Linguagem</TableHead>
             <TableHead>Payload</TableHead>
           </TableRow>
         </TableHeader>
@@ -55,13 +56,13 @@ export const DisplayChapterTasks = ({ rawTasks }: Props) => {
                 <TableCellDate date={task.createdAt} />
               </TableCell>
               <TableCell>
-                <TableCellStatus status={task.status} />
-              </TableCell>
-              <TableCell>
-                <p>{task.payload.number}</p>
+                <TableCellTaskStatus status={task.status} />
               </TableCell>
               <TableCell>
                 <p>{task.payload.volume}</p>
+              </TableCell>
+              <TableCell>
+                <TableCellLanguage language={task.payload.language} />
               </TableCell>
               <TableCell>
                 <TableCellJson json={task.payload} />

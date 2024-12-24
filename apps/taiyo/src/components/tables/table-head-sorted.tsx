@@ -25,10 +25,10 @@ export const TableHeadSorted = <TData extends RowData, TValue>({
 
   return (
     <th
-      className="h-10 select-none bg-default-100 px-3 first:rounded-l-lg last:rounded-r-lg hover:cursor-pointer [&:hover>div]:text-default-600 [&:not(:nth-child(1n+3))>div]:justify-start"
+      className="group h-10 select-none bg-default-100 px-3 first:rounded-l-lg last:rounded-r-lg hover:cursor-pointer [&:hover>div]:text-default-600 [&:not(:nth-child(1n+3))>div]:justify-start"
       onClick={handleClick}
     >
-      <div className="flex items-center justify-center gap-1 whitespace-nowrap font-semibold text-foreground-500 text-xs uppercase transition-colors">
+      <div className="flex items-center justify-center gap-1 whitespace-nowrap font-semibold text-foreground-500 text-xs uppercase transition-colors group-last:justify-end">
         {children}
         {currentSort && (
           <div className="rounded-full bg-default-200 px-2 py-1 text-[10px]">

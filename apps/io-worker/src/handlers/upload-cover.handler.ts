@@ -1,7 +1,7 @@
 import { db } from "@taiyomoe/db"
 import { BaseCoversService, BaseFilesService } from "@taiyomoe/services"
 import type { UploadCoverMessageInput } from "@taiyomoe/types"
-import { omit } from "radash"
+import { pick } from "radash"
 import { logger } from "~/utils/logger"
 
 export const uploadCoverHandler = async (input: UploadCoverMessageInput) => {
@@ -12,7 +12,13 @@ export const uploadCoverHandler = async (input: UploadCoverMessageInput) => {
   )
   const cover = await db.mediaCover.create({
     data: {
-      ...omit(input, ["id", "cover"]),
+      ...pick(input, [
+        "volume",
+        "contentRating",
+        "language",
+        "mediaId",
+        "uploaderId",
+      ]),
       id: uploadedCover.id,
     },
   })

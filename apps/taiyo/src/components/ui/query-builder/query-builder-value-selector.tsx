@@ -6,7 +6,7 @@ import type { SelectItem as SelectItemType } from "~/lib/types"
 const queryBuilderValueSelector = tv({
   base: "w-fit",
   slots: {
-    trigger: "",
+    trigger: "transition-colors data-[hover=true]:bg-default-200",
   },
   variants: {
     type: {
@@ -32,7 +32,7 @@ const getType = (input?: string) =>
     : undefined
 
 export const QueryBuilderValueSelector = (props: ValueSelectorProps) => {
-  const { testID, options, multiple, value, handleOnChange } = props
+  const { className, testID, options, multiple, value, handleOnChange } = props
   const slots = queryBuilderValueSelector({ type: getType(testID) })
 
   const handleSelectionChange = (keys: Selection) => {
@@ -47,7 +47,7 @@ export const QueryBuilderValueSelector = (props: ValueSelectorProps) => {
       onSelectionChange={handleSelectionChange}
       aria-label="Select value"
       classNames={{
-        base: slots.base(),
+        base: slots.base({ className }),
         trigger: slots.trigger(),
       }}
     >

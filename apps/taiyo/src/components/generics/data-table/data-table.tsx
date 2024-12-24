@@ -30,7 +30,7 @@ interface DataTableProps<TData, TValue, TQueryAttribute> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
   filters: ReactNode
-  multipleActions: ReactNode
+  multipleActions?: ReactNode
   emptyContent: ReactNode
   initialVisibility: Partial<Record<keyof TData, boolean>>
   page: number
@@ -131,11 +131,13 @@ export function DataTable<TData, TValue, TQueryAttribute>({
           )}
           <div className="flex justify-end gap-4">
             {isLoading && <Spinner size="sm" />}
-            <AnimatedPresence
-              active={table.getSelectedRowModel().rows.length > 0}
-            >
-              {multipleActions}
-            </AnimatedPresence>
+            {multipleActions && (
+              <AnimatedPresence
+                active={table.getSelectedRowModel().rows.length > 0}
+              >
+                {multipleActions}
+              </AnimatedPresence>
+            )}
             <TableColumnVisibilityDropdown />
           </div>
         </div>

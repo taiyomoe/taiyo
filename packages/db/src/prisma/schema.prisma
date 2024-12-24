@@ -3,7 +3,7 @@
 
 generator client {
     provider        = "prisma-client-js"
-    previewFeatures = ["relationJoins", "omitApi"]
+    previewFeatures = ["relationJoins", "omitApi", "strictUndefinedChecks"]
 }
 
 generator json {
@@ -378,7 +378,6 @@ model Task {
 
     type    TaskType
     status  TaskStatus
-    /// [TaskPayload]
     payload Json
 
     sessionId String
@@ -507,8 +506,13 @@ enum ScanMemberPermissions {
 }
 
 enum TaskType {
+    CREATE_MEDIA
+    IMPORT_MEDIA
     IMPORT_COVER
     IMPORT_CHAPTER
+    UPLOAD_CHAPTER
+    UPLOAD_COVER
+    UPLOAD_BANNER
 }
 
 enum TaskStatus {

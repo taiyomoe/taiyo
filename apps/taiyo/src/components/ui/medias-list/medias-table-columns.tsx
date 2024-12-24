@@ -65,7 +65,11 @@ export const columns: ColumnDef<MediasListItem>[] = [
       />
     ),
   },
-  { accessorKey: "mainTitle", header: "Título principal" },
+  {
+    accessorKey: "mainTitle",
+    header: "Título principal",
+    cell: ({ getValue }) => <TableCellLong text={getValue<string>()} />,
+  },
   {
     accessorKey: "synopsis",
     header: "Sinopse",

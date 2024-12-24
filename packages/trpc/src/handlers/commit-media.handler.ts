@@ -14,7 +14,11 @@ export const commitMediaHandler = protectedProcedure
 
     ctx.logger.info(`${ctx.session.user.id} committed a media creation`)
 
-    const job = await ctx.messaging.medias.create(payload)
+    const task = await ctx.services.tasks.create("CREATE_MEDIA", payload)
+    const job = await ctx.messaging.medias.create({
+      ...payload,
+      taskId: task.id,
+    })
 
     await job.waitUntilFinished(ctx.messaging.rawQueueEvents)
   })
