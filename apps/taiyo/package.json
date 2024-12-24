@@ -71,7 +71,7 @@
     "sharp": "^0.33.5",
     "sonner": "^1.7.1",
     "superjson": "^2.2.2",
-    "tailwind-merge": "^2.5.5",
+    "tailwind-merge": "^2.6.0",
     "tailwind-scrollbar": "^3.1.0",
     "usehooks-ts": "^3.1.0",
     "zod": "^3.24.1",
