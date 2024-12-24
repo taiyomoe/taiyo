@@ -68,6 +68,7 @@
     "react-querybuilder": "^8.0.0",
     "react-select": "^5.9.0",
     "react-selectable-box": "^1.10.0",
+    "react-snowfall": "^2.2.0",
     "sharp": "^0.33.5",
     "sonner": "^1.7.1",
     "superjson": "^2.2.2",
