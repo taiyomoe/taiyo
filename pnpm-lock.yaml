@@ -85,8 +85,8 @@ importers:
         specifier: ^3.6.0
         version: 3.6.0
       '@meilisearch/instant-meilisearch':
-        specifier: ^0.22.0
-        version: 0.22.0
+        specifier: ^0.23.0
+        version: 0.23.0
       '@nextui-org/react':
         specifier: ^2.6.8
         version: 2.6.8(@types/react@18.3.18)(framer-motion@11.15.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tailwindcss@3.4.17)
@@ -1466,8 +1466,8 @@ packages:
   '@jridgewell/trace-mapping@0.3.25':
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
 
-  '@meilisearch/instant-meilisearch@0.22.0':
-    resolution: {integrity: sha512-vIIzUMgyIIqzrtukGRN3w2OEcTgVJjZpU1wTMnVVN6YPpIOZwMxOnuuufTV7xa5b5WIX53oFYVLG2MtINDShew==}
+  '@meilisearch/instant-meilisearch@0.23.0':
+    resolution: {integrity: sha512-KXyTZ7HEj4EQzROSno0k7BeijHS0YQu5AIH76OWcuGxFwUIajlk9k6CsH1DsW9+W8SPpmoJY0BglaW0lK6YH1w==}
 
   '@msgpackr-extract/msgpackr-extract-darwin-arm64@3.0.3':
     resolution: {integrity: sha512-QZHtlVgbAdy2zAqNA9Gu1UpIuI8Xvsd1v8ic6B2pZmeFnFcMWiPLfWXh7TVw4eGEZ/C9TH281KwhVoeQUKbyjw==}
@@ -3847,9 +3847,6 @@ packages:
     resolution: {integrity: sha512-gVgJqPOf9pIMI/zSbWyFVDBWbHFhkBVWVPJvnfpg7Os7LiuilyIESqkg/Mi223kMBl3E92Y5PY1qgxkHhUrpqQ==}
     engines: {node: '>=19.0.0'}
 
-  meilisearch@0.45.0:
-    resolution: {integrity: sha512-+zCzEqE+CumY4icB0Vox180adZqaNtnr60hJWGiEdmol5eWmksfY8rYsTcz87styXC2ZOg+2yF56gdH6oyIBTA==}
-
   meilisearch@0.47.0:
     resolution: {integrity: sha512-Qq+hatuDJ0z5c+szVb0O/uI7Z2jfMUjj8eNB6xPyKp9Og7GVnrOZJRVoDPqGoVY484Iwh+F61y2UreIetda00w==}
 
@@ -5841,9 +5838,9 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
 
-  '@meilisearch/instant-meilisearch@0.22.0':
+  '@meilisearch/instant-meilisearch@0.23.0':
     dependencies:
-      meilisearch: 0.45.0
+      meilisearch: 0.47.0
 
   '@msgpackr-extract/msgpackr-extract-darwin-arm64@3.0.3':
     optional: true
@@ -9204,8 +9201,6 @@ snapshots:
   luxon@3.5.0: {}
 
   mangadex-full-api@6.0.0: {}
-
-  meilisearch@0.45.0: {}
 
   meilisearch@0.47.0: {}
 
