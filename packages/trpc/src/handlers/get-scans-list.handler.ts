@@ -1,58 +1,32 @@
-import { buildFilter, buildSort } from "@taiyomoe/meilisearch/utils"
+import type { Prisma } from "@taiyomoe/db"
 import { getScansListSchema } from "@taiyomoe/schemas"
-import type { ScansListItem } from "@taiyomoe/types"
-import { DateTime } from "luxon"
-import { omit, parallel, unique } from "radash"
+import { pick } from "radash"
 import { protectedProcedure } from "../trpc"
+import { convertToFilter } from "../utils/convert-to-filter"
 
 export const getScansListHandler = protectedProcedure
   .meta({ resource: "scans", action: "create" })
   .input(getScansListSchema)
   .query(async ({ ctx, input }) => {
-    const searched = await ctx.meilisearch.scans.search(input.query.q, {
-      attributesToSearchOn: input.query.attributes,
-      filter: buildFilter(input.filter),
-      sort: buildSort(input.sort),
-      hitsPerPage: input.perPage,
-      page: input.page,
-    })
-    const uniqueUsers = unique(
-      [
-        searched.hits.map((h) => h.creatorId),
-        searched.hits.map((h) => h.deleterId).filter(Boolean),
-      ].flat(),
+    const filter: Prisma.ScanWhereInput = convertToFilter(
+      pick(input, ["createdAt", "updatedAt", "deletedAt"]),
     )
-    const users = await ctx.db.user.findMany({
-      select: { id: true, name: true, image: true },
-      where: { id: { in: uniqueUsers } },
-    })
-    const scans = (await parallel(10, searched.hits, async (h) => {
-      const chaptersCount = await ctx.db.mediaChapter.count({
-        where: { scans: { some: { id: h.id } } },
-      })
-
-      return {
-        ...omit(h, [
-          "createdAt",
-          "updatedAt",
-          "deletedAt",
-          "creatorId",
-          "deleterId",
-        ]),
-        createdAt: DateTime.fromSeconds(h.createdAt).toJSDate(),
-        updatedAt: DateTime.fromSeconds(h.updatedAt).toJSDate(),
-        deletedAt: h.deletedAt
-          ? DateTime.fromSeconds(h.deletedAt).toJSDate()
-          : null,
-        creator: users.find((u) => u.id === h.creatorId)!,
-        deleter: users.find((d) => d.id === h.deleterId) ?? null,
-        chaptersCount,
-      }
-    })) satisfies ScansListItem[]
+    const [totalCount, scans, scansCount] = await Promise.all([
+      ctx.db.scan.count({ where: { deletedAt: null } }),
+      ctx.db.scan.findMany({
+        where: filter,
+        take: input.perPage,
+        skip: (input.page - 1) * input.perPage,
+      }),
+      ctx.db.scan.count({ where: filter }),
+    ])
 
     return {
+      stats: {
+        totalCount,
+      },
       scans,
-      totalPages: searched.totalPages,
-      totalCount: searched.totalHits,
+      totalPages: Math.ceil(scansCount / input.perPage),
+      totalCount: scansCount,
     }
   })

@@ -11,7 +11,6 @@ export const getTasksListHandler = protectedProcedure
     const filter: Prisma.TaskWhereInput = convertToFilter(
       pick(input, ["createdAt", "updatedAt", "status", "type"]),
     )
-
     const [active, pending, totalCount, tasks, tasksCount] = await Promise.all([
       ctx.db.task.count({
         where: { status: { in: ["DOWNLOADING", "UPLOADING"] } },
