@@ -3,6 +3,7 @@ import {
   createParser,
   parseAsArrayOf,
   parseAsStringEnum,
+  parseAsStringLiteral,
 } from "nuqs/server"
 
 const parseAsIsoDate = createParser({
@@ -53,5 +54,18 @@ export const dateFilterParser = <TName extends string>(name: TName) =>
     [`${name}.lt`]: parseAsIsoDate,
     [`${name}.gt`]: parseAsIsoDate,
   }) as {
-    [K in `${TName}.lte` | `${TName}.gt`]: ParserBuilder<Date>
+    [K in `${TName}.lt` | `${TName}.gt`]: ParserBuilder<Date>
+  }
+
+export const nullableDateFilterParser = <TName extends string>(name: TName) =>
+  ({
+    [`${name}.equals`]: parseAsStringLiteral(["null", "notNull"]).withDefault(
+      "null",
+    ),
+    [`${name}.lt`]: parseAsIsoDate,
+    [`${name}.gt`]: parseAsIsoDate,
+  }) as {
+    [K in TName | `${TName}.lt` | `${TName}.gt`]: ParserBuilder<
+      "null" | "notNull" | Date
+    >
   }

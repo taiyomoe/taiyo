@@ -115,11 +115,39 @@ export const enumFilterSchema = <TSchema extends z.ZodSchema>(input: TSchema) =>
     })
     .optional()
 
+/**
+ * This schema is used to parse date search params.
+ *
+ * A typical input looks like this:
+ * { equals: "null", lt: null, gt: null }
+ * { equals: "notNull", lt: null, gt: null }
+ *
+ * This schema will convert it to:
+ * { equals: null, not: undefined, lt: undefined, gt: undefined }
+ * { equals: undefined, not: null, lt: undefined, gt: undefined }
+ *
+ * If you pay attention, you'll note that in the input the `equals` property is a string.
+ * This is expected behavior because this comes directly from the URL.
+ * It'll get converted to a null value in the schema.
+ */
 export const dateFilterSchema = z.preprocess(
   (input) => {
     if (input && typeof input === "object") {
       return Object.fromEntries(
-        Object.entries(input).map(([k, v]) => [k, v === null ? undefined : v]),
+        Object.entries(input).map(([k, v]) => {
+          /**
+           * If the value is "null" or "notNull" (stringified),
+           * it means it's either `equals` or `not` that we want to use.
+           */
+          if (k === "equals" && v === "null") return ["equals", null]
+          if (k === "equals" && v === "notNull") return ["not", null]
+
+          /**
+           * Otherwise, as the value is probably null (plain null, not a stringified one),
+           * we'll just let the schema take the default value
+           */
+          return [k, v === null ? undefined : v]
+        }),
       )
     }
 
@@ -127,12 +155,10 @@ export const dateFilterSchema = z.preprocess(
   },
   z
     .object({
-      equals: z.coerce.date().optional().catch(undefined),
-      not: z.coerce.date().optional().catch(undefined),
+      equals: z.null().optional().catch(undefined),
+      not: z.null().optional().catch(undefined),
       lt: z.coerce.date().optional().catch(undefined),
-      lte: z.coerce.date().optional().catch(undefined),
       gt: z.coerce.date().optional().catch(undefined),
-      gte: z.coerce.date().optional().catch(undefined),
     })
     .optional(),
 )
