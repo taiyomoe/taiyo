@@ -4,6 +4,11 @@ export const rqbOperatorTransformer = (operator: string) => {
       return "equals"
     case "!=":
       return "not"
+    //These are indeed "equals"
+    case "null":
+      return "equals"
+    case "notNull":
+      return "equals"
     case "in":
       return "in"
     case "notIn":

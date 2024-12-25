@@ -7,7 +7,7 @@ import { pick } from "radash"
 import { type ReactNode, createContext, useContext, useRef } from "react"
 import type { DefaultRuleGroupType } from "react-querybuilder"
 import { createStore, useStore } from "zustand"
-import { rqbOperatorTransformer } from "~/utils/rqb-operator-transformer"
+import { rqbFilterTransformer } from "~/utils/rqb-filter-transformer"
 
 type Props = { input: GetTasksListInput }
 type State = Props & {
@@ -23,26 +23,11 @@ const tasksListStore = (initProps: Props) =>
     ...initProps,
 
     setFilter: (value) => {
-      const values: Record<string, Record<string, unknown>> = {}
-
-      for (const rule of value.rules) {
-        if (!("operator" in rule) || rule.value === "") continue
-
-        const operator = rqbOperatorTransformer(rule.operator)
-
-        if (!operator) continue
-
-        values[rule.field] = {
-          ...(values[rule.field] ?? {}),
-          [operator]: rule.value,
-        }
-      }
-
       set((state) => ({
         ...state,
         input: {
           page: 1,
-          ...values,
+          ...rqbFilterTransformer(value),
           ...pick(state.input, ["perPage", "sort"]),
         },
       }))
