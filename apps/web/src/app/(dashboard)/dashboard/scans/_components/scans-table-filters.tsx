@@ -1,40 +1,39 @@
-import { crush, pick } from "radash"
+import { pick } from "radash"
 import { useMemo } from "react"
-import type { Field, RuleGroupArray, RuleGroupType } from "react-querybuilder"
+import type { Field } from "react-querybuilder"
 import { useDebounceCallback } from "usehooks-ts"
 import { QueryBuilder } from "~/components/ui/query-builder/query-builder"
 import { useScansListStore } from "~/stores/use-scans-list-store"
-import { rqbOperatorTransformer } from "~/utils/rqb-operator-transformer"
+import { rqbQueryTransformer } from "~/utils/rqb-query-transformer"
 
 const fields: Field[] = [
+  { name: "name", label: "Nome" },
+  { name: "description", label: "Descrição" },
+  { name: "website", label: "Website" },
+  { name: "discord", label: "Discord" },
+  { name: "twitter", label: "Twitter" },
+  { name: "facebook", label: "Facebook" },
+  { name: "instagram", label: "Instagram" },
+  { name: "telegram", label: "Telegram" },
+  { name: "youtube", label: "YouTube" },
+  { name: "email", label: "Email" },
   { name: "createdAt", datatype: "date", label: "Data de criação" },
   { name: "updatedAt", datatype: "date", label: "Última atualização" },
-  { name: "status", datatype: "enum", label: "Status" },
-  { name: "type", datatype: "enum", label: "Tipo" },
+  { name: "deletedAt", datatype: "nullable-date", label: "Data de remoção" },
+  { name: "creatorId", datatype: "user", label: "Criador" },
+  { name: "deleterId", datatype: "nullable-user", label: "Deletado por" },
 ]
 
 export const ScansTableFilters = () => {
   const { input, setFilter } = useScansListStore()
-  const defaultQuery = useMemo(() => {
-    const rules: RuleGroupArray = []
-    const crushed = crush(pick(input, ["createdAt", "updatedAt", "deletedAt"]))
-
-    for (const [key, value] of Object.entries(crushed)) {
-      if (!value) continue
-
-      const [field, rawOperator] = key.split(".")
-
-      if (!field || !rawOperator) continue
-
-      const operator = rqbOperatorTransformer(rawOperator)
-
-      if (!operator) continue
-
-      rules.push({ field, operator, value })
-    }
-
-    return { combinator: "and", rules } as RuleGroupType
-  }, [input])
+  const defaultQuery = useMemo(
+    () =>
+      rqbQueryTransformer(
+        pick(input, ["createdAt", "updatedAt", "deletedAt"]),
+        [{ field: "deletedAt", operator: "null", value: null }],
+      ),
+    [input],
+  )
 
   const handleQueryChange = useDebounceCallback(
     (newQuery) => setFilter(newQuery),
