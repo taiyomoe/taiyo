@@ -10,7 +10,7 @@
     "sharp"
   ],
   "ignore": [
-    "./apps/taiyo/src/i18n/request.ts",
+    "./apps/web/src/i18n/request.ts",
     "./packages/schemas/src/prisma/index.ts"
   ]
 }
