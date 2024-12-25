@@ -22,7 +22,7 @@ export default async function Page(props: Props) {
 
   return (
     <div className="flex flex-col gap-12">
-      <p className="font-semibold text-4xl">Fila de espera</p>
+      <p className="font-semibold text-4xl">Scans</p>
       <div className="space-y-8">
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           <StatsCard
