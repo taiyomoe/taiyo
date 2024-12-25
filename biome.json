@@ -57,7 +57,7 @@
       }
     },
     {
-      "include": ["./apps/taiyo/src/lib/utils/array.utils.ts"],
+      "include": ["./apps/web/src/lib/utils/array.utils.ts"],
       "linter": {
         "rules": {
           "complexity": {
