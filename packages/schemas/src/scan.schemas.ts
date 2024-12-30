@@ -39,7 +39,7 @@ export const getScansListSchema = z.object({
   sort: z
     .tuple([z.enum(SCANS_LIST_SORTABLE_FIELDS), z.enum(["asc", "desc"])])
     .array()
-    .catch([]),
+    .catch([["createdAt", "desc"]]),
   page: pageSchema,
   perPage: perPageSchema(
     DEFAULT_SCANS_LIST_PER_PAGE,

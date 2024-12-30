@@ -3,12 +3,13 @@
 import { SCANS_LIST_PER_PAGE_CHOICES } from "@taiyomoe/constants"
 import type { AppRouter } from "@taiyomoe/trpc"
 import { useQueryStates } from "nuqs"
-import { assign, crush, mapValues } from "radash"
+import {} from "radash"
 import { useEffect } from "react"
 import { DataTable } from "~/components/generics/data-table/data-table"
 import { useScansListStore } from "~/stores/use-scans-list-store"
 import { api } from "~/trpc/react"
 import { keepPreviousData } from "~/utils/keep-previous-data"
+import { normalizeSearchParams } from "~/utils/normalize-search-params"
 import { scansSearchParams } from "./scans-search-params"
 import { columns } from "./scans-table-columns"
 import { ScansTableEmptyContent } from "./scans-table-empty-content"
@@ -29,10 +30,9 @@ export const ScansTable = ({ initialData }: Props) => {
   })
 
   useEffect(() => {
-    const emptySearchParams = mapValues(scansSearchParams, () => null)
-    const searchParams = assign(emptySearchParams, crush(input))
+    const normalized = normalizeSearchParams(scansSearchParams, input)
 
-    setSearchParams(searchParams)
+    setSearchParams(normalized)
   }, [input, setSearchParams])
 
   return (
@@ -41,6 +41,7 @@ export const ScansTable = ({ initialData }: Props) => {
       data={items}
       filters={<ScansTableFilters />}
       emptyContent={<ScansTableEmptyContent />}
+      initialSort={input.sort}
       initialVisibility={{
         id: false,
         updatedAt: false,

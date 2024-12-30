@@ -1,16 +1,17 @@
-import type { Prisma } from "@taiyomoe/db"
 import { getTasksListSchema } from "@taiyomoe/schemas"
 import { pick } from "radash"
 import { protectedProcedure } from "../trpc"
 import { convertToFilter } from "../utils/convert-to-filter"
+import { convertToSort } from "../utils/convert-to-sort"
 
 export const getTasksListHandler = protectedProcedure
   .meta({ resource: "medias", action: "create" })
   .input(getTasksListSchema)
   .query(async ({ ctx, input }) => {
-    const filter: Prisma.TaskWhereInput = convertToFilter(
+    const filter = convertToFilter(
       pick(input, ["createdAt", "updatedAt", "status", "type"]),
     )
+    const sort = convertToSort(input.sort)
     const [active, pending, totalCount, tasks, tasksCount] = await Promise.all([
       ctx.db.task.count({
         where: { status: { in: ["DOWNLOADING", "UPLOADING"] } },
@@ -19,6 +20,7 @@ export const getTasksListHandler = protectedProcedure
       ctx.db.task.count(),
       ctx.db.task.findMany({
         where: filter,
+        orderBy: sort,
         take: input.perPage,
         skip: (input.page - 1) * input.perPage,
       }),

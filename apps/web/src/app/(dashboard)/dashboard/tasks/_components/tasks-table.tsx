@@ -3,12 +3,13 @@
 import { TASKS_LIST_PER_PAGE_CHOICES } from "@taiyomoe/constants"
 import type { AppRouter } from "@taiyomoe/trpc"
 import { useQueryStates } from "nuqs"
-import { assign, crush, mapValues } from "radash"
+import {} from "radash"
 import { useEffect } from "react"
 import { DataTable } from "~/components/generics/data-table/data-table"
 import { useTasksListStore } from "~/stores/use-tasks-list-store"
 import { api } from "~/trpc/react"
 import { keepPreviousData } from "~/utils/keep-previous-data"
+import { normalizeSearchParams } from "~/utils/normalize-search-params"
 import { tasksSearchParams } from "./tasks-search-params"
 import { columns } from "./tasks-table-columns"
 import { TasksTableEmptyContent } from "./tasks-table-empty-content"
@@ -29,10 +30,9 @@ export const TasksTable = ({ initialData }: Props) => {
   })
 
   useEffect(() => {
-    const emptySearchParams = mapValues(tasksSearchParams, () => null)
-    const searchParams = assign(emptySearchParams, crush(input))
+    const normalized = normalizeSearchParams(tasksSearchParams, input)
 
-    setSearchParams(searchParams)
+    setSearchParams(normalized)
   }, [input, setSearchParams])
 
   return (
@@ -41,6 +41,7 @@ export const TasksTable = ({ initialData }: Props) => {
       data={items}
       filters={<TasksTableFilters />}
       emptyContent={<TasksTableEmptyContent />}
+      initialSort={input.sort}
       initialVisibility={{
         id: false,
         payload: false,

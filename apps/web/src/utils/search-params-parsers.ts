@@ -5,6 +5,7 @@ import {
   parseAsStringEnum,
   parseAsStringLiteral,
 } from "nuqs/server"
+import { z } from "zod"
 
 const parseAsIsoDate = createParser({
   parse: (v) => {
@@ -69,3 +70,21 @@ export const nullableDateFilterParser = <TName extends string>(name: TName) =>
       "null" | "notNull" | Date
     >
   }
+
+export const sortParser = (sorteableFields: readonly [string, ...string[]]) =>
+  createParser({
+    parse: (v) => {
+      const schema = z
+        .tuple([z.enum(sorteableFields), z.enum(["asc", "desc"])])
+        .array()
+      const parsed = schema.safeParse(JSON.parse(v))
+
+      if (parsed.error) {
+        return null
+      }
+
+      return parsed.data
+    },
+    serialize: (v) => JSON.stringify(v),
+    eq: (a, b) => JSON.stringify(a) === JSON.stringify(b),
+  })
