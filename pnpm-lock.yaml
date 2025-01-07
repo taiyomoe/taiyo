@@ -246,9 +246,6 @@ importers:
       react-selectable-box:
         specifier: ^1.10.0
         version: 1.10.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      react-snowfall:
-        specifier: ^2.2.0
-        version: 2.2.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       sharp:
         specifier: ^0.33.5
         version: 0.33.5
@@ -4253,9 +4250,6 @@ packages:
     peerDependencies:
       react: '>= 16.8 || 18.0.0'
 
-  react-fast-compare@3.2.2:
-    resolution: {integrity: sha512-nsO+KSNgo1SbJqJEYRE9ERzo7YtYbou/OqjSQKxV7jcKox7+usiUVZOAC+XnDOABXggQTno0Y1CpVnuWEc1boQ==}
-
   react-fast-marquee@1.6.5:
     resolution: {integrity: sha512-swDnPqrT2XISAih0o74zQVE2wQJFMvkx+9VZXYYNSLb/CUcAzU9pNj637Ar2+hyRw6b4tP6xh4GQZip2ZCpQpg==}
     peerDependencies:
@@ -4332,12 +4326,6 @@ packages:
     peerDependencies:
       react: '>=16.8.0'
       react-dom: '>=16.8.0'
-
-  react-snowfall@2.2.0:
-    resolution: {integrity: sha512-dRk7vEHq/ZUOG+JHk2k/hH3HmliOWGXr4rKRDeW4mjWuHeI1r5h0Lc1r2jnTtUS1im702d6tCmNGymlNTdhXYg==}
-    peerDependencies:
-      react: "^16.8 ||\_17.x || 18.x"
-      react-dom: ^16.8 || 17.x || 18.x
 
   react-stately@3.34.0:
     resolution: {integrity: sha512-0N9tZ8qQ/CxpJH7ao0O6gr+8955e7VrOskg9N+TIxkFknPetwOCtgppMYhnTfteBV8WfM/vv4OC1NbkgYTqXJA==}
@@ -9628,8 +9616,6 @@ snapshots:
       prop-types: 15.8.1
       react: 18.3.1
 
-  react-fast-compare@3.2.2: {}
-
   react-fast-marquee@1.6.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
       react: 18.3.1
@@ -9720,12 +9706,6 @@ snapshots:
     dependencies:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
-
-  react-snowfall@2.2.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
-    dependencies:
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
-      react-fast-compare: 3.2.2
 
   react-stately@3.34.0(react@18.3.1):
     dependencies:
