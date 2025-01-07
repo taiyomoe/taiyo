@@ -7,12 +7,23 @@ import {
   dateFilterParser,
   nullableDateFilterParser,
   sortParser,
+  textFilterParser,
 } from "~/utils/search-params-parsers"
 
 export const scansSearchParams = {
   ...dateFilterParser("createdAt"),
   ...dateFilterParser("updatedAt"),
   ...nullableDateFilterParser("deletedAt"),
+  ...textFilterParser("name"),
+  ...textFilterParser("description"),
+  ...textFilterParser("website"),
+  ...textFilterParser("discord"),
+  ...textFilterParser("twitter"),
+  ...textFilterParser("facebook"),
+  ...textFilterParser("instagram"),
+  ...textFilterParser("telegram"),
+  ...textFilterParser("youtube"),
+  ...textFilterParser("email"),
   sort: sortParser(SCANS_LIST_SORTABLE_FIELDS).withDefault([
     ["createdAt", "desc"],
   ]),

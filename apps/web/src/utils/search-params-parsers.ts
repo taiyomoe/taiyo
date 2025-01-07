@@ -2,6 +2,7 @@ import {
   type ParserBuilder,
   createParser,
   parseAsArrayOf,
+  parseAsString,
   parseAsStringEnum,
   parseAsStringLiteral,
 } from "nuqs/server"
@@ -69,6 +70,22 @@ export const nullableDateFilterParser = <TName extends string>(name: TName) =>
     [K in TName | `${TName}.lt` | `${TName}.gt`]: ParserBuilder<
       "null" | "notNull" | Date
     >
+  }
+
+export const textFilterParser = <TName extends string>(name: TName) =>
+  ({
+    [`${name}.equals`]: parseAsString,
+    [`${name}.startsWith`]: parseAsString,
+    [`${name}.endsWith`]: parseAsString,
+    [`${name}.in`]: parseAsArrayOf(parseAsString),
+    [`${name}.notIn`]: parseAsArrayOf(parseAsString),
+  }) as {
+    [K in
+      | `${TName}.equals`
+      | `${TName}.startsWith`
+      | `${TName}.endsWith`
+      | `${TName}.in`
+      | `${TName}.notIn`]: ParserBuilder<string | string[]>
   }
 
 export const sortParser = (sorteableFields: readonly [string, ...string[]]) =>

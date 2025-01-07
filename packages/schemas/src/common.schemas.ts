@@ -1,5 +1,6 @@
 import { ALLOWED_EXTENSIONS, ALLOWED_MIME_TYPES } from "@taiyomoe/constants"
 import { z } from "zod"
+import { nullablePreprocessor } from "./utils/nullable-preprocessor"
 
 export const idSchema = z.string().uuid()
 export const pageSchema = z.coerce.number().int().positive().catch(1)
@@ -115,8 +116,26 @@ export const enumFilterSchema = <TSchema extends z.ZodSchema>(input: TSchema) =>
     })
     .optional()
 
+export const dateFilterSchema = z.preprocess(
+  (input) => {
+    if (input && typeof input === "object") {
+      return Object.fromEntries(
+        Object.entries(input).map(([k, v]) => [k, v === null ? undefined : v]),
+      )
+    }
+
+    return input
+  },
+  z
+    .object({
+      lt: z.coerce.date().optional().catch(undefined),
+      gt: z.coerce.date().optional().catch(undefined),
+    })
+    .optional(),
+)
+
 /**
- * This schema is used to parse date search params.
+ * This schema is used to parse date search params (mainly deletedAt).
  *
  * A typical input looks like this:
  * { equals: "null", lt: null, gt: null }
@@ -130,35 +149,39 @@ export const enumFilterSchema = <TSchema extends z.ZodSchema>(input: TSchema) =>
  * This is expected behavior because this comes directly from the URL.
  * It'll get converted to a null value in the schema.
  */
-export const dateFilterSchema = z.preprocess(
-  (input) => {
-    if (input && typeof input === "object") {
-      return Object.fromEntries(
-        Object.entries(input).map(([k, v]) => {
-          /**
-           * If the value is "null" or "notNull" (stringified),
-           * it means it's either `equals` or `not` that we want to use.
-           */
-          if (k === "equals" && v === "null") return ["equals", null]
-          if (k === "equals" && v === "notNull") return ["not", null]
-
-          /**
-           * Otherwise, as the value is probably null (plain null, not a stringified one),
-           * we'll just let the schema take the default value
-           */
-          return [k, v === null ? undefined : v]
-        }),
-      )
-    }
-
-    return input
-  },
+export const nullableDateFilterSchema = z.preprocess(
+  nullablePreprocessor,
   z
     .object({
       equals: z.null().optional().catch(undefined),
       not: z.null().optional().catch(undefined),
       lt: z.coerce.date().optional().catch(undefined),
       gt: z.coerce.date().optional().catch(undefined),
+    })
+    .optional(),
+)
+
+export const textFilterSchema = z
+  .object({
+    equals: z.string().optional().catch(undefined),
+    not: z.string().optional().catch(undefined),
+    startsWith: z.string().optional().catch(undefined),
+    endsWith: z.string().optional().catch(undefined),
+    in: z.string().array().optional().catch(undefined),
+    notIn: z.string().array().optional().catch(undefined),
+  })
+  .optional()
+
+export const nullableTextFilterSchema = z.preprocess(
+  nullablePreprocessor,
+  z
+    .object({
+      equals: z.union([z.string(), z.null()]).optional().catch(undefined),
+      not: z.union([z.string(), z.null()]).optional().catch(undefined),
+      startsWith: z.string().optional().catch(undefined),
+      endsWith: z.string().optional().catch(undefined),
+      in: z.string().array().optional().catch(undefined),
+      notIn: z.string().array().optional().catch(undefined),
     })
     .optional(),
 )

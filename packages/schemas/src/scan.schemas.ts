@@ -7,10 +7,13 @@ import { z } from "zod"
 import {
   dateFilterSchema,
   idSchema,
+  nullableDateFilterSchema,
+  nullableTextFilterSchema,
   optionalStringSchema,
   optionalUrlSchema,
   pageSchema,
   perPageSchema,
+  textFilterSchema,
 } from "./common.schemas"
 
 export const createScanSchema = z.object({
@@ -35,7 +38,17 @@ export const updateScanSchema = createScanSchema.partial().extend({
 export const getScansListSchema = z.object({
   createdAt: dateFilterSchema,
   updatedAt: dateFilterSchema,
-  deletedAt: dateFilterSchema,
+  deletedAt: nullableDateFilterSchema,
+  name: textFilterSchema,
+  description: nullableTextFilterSchema,
+  website: nullableTextFilterSchema,
+  discord: nullableTextFilterSchema,
+  twitter: nullableTextFilterSchema,
+  facebook: nullableTextFilterSchema,
+  instagram: nullableTextFilterSchema,
+  telegram: nullableTextFilterSchema,
+  youtube: nullableTextFilterSchema,
+  email: nullableTextFilterSchema,
   sort: z
     .tuple([z.enum(SCANS_LIST_SORTABLE_FIELDS), z.enum(["asc", "desc"])])
     .array()

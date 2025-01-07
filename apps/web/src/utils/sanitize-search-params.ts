@@ -7,9 +7,14 @@ export const sanitizeSearchParams = <TSchema extends z.ZodSchema>(
   rawSearchParams: SearchParams,
   parser: ReturnType<typeof createSearchParamsCache>,
   schema: TSchema,
-) => {
+): z.infer<TSchema> => {
   const parsed = parser.parse(rawSearchParams)
   const constructed = construct(parsed)
+  const validated = schema.safeParse(constructed)
 
-  return schema.parse(constructed) as z.infer<TSchema>
+  if (validated.success) {
+    return constructed
+  }
+
+  return {}
 }

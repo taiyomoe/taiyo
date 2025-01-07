@@ -1,4 +1,4 @@
-import { pick } from "radash"
+import { omit } from "radash"
 import { useMemo } from "react"
 import type { Field } from "react-querybuilder"
 import { useDebounceCallback } from "usehooks-ts"
@@ -8,15 +8,15 @@ import { rqbQueryTransformer } from "~/utils/rqb-query-transformer"
 
 const fields: Field[] = [
   { name: "name", label: "Nome" },
-  { name: "description", label: "Descrição" },
-  { name: "website", label: "Website" },
-  { name: "discord", label: "Discord" },
-  { name: "twitter", label: "Twitter" },
-  { name: "facebook", label: "Facebook" },
-  { name: "instagram", label: "Instagram" },
-  { name: "telegram", label: "Telegram" },
-  { name: "youtube", label: "YouTube" },
-  { name: "email", label: "Email" },
+  { name: "description", datatype: "nullable-text", label: "Descrição" },
+  { name: "website", datatype: "nullable-text", label: "Website" },
+  { name: "discord", datatype: "nullable-text", label: "Discord" },
+  { name: "twitter", datatype: "nullable-text", label: "Twitter" },
+  { name: "facebook", datatype: "nullable-text", label: "Facebook" },
+  { name: "instagram", datatype: "nullable-text", label: "Instagram" },
+  { name: "telegram", datatype: "nullable-text", label: "Telegram" },
+  { name: "youtube", datatype: "nullable-text", label: "YouTube" },
+  { name: "email", datatype: "nullable-text", label: "Email" },
   { name: "createdAt", datatype: "date", label: "Data de criação" },
   { name: "updatedAt", datatype: "date", label: "Última atualização" },
   { name: "deletedAt", datatype: "nullable-date", label: "Data de remoção" },
@@ -28,10 +28,9 @@ export const ScansTableFilters = () => {
   const { input, setFilter } = useScansListStore()
   const defaultQuery = useMemo(
     () =>
-      rqbQueryTransformer(
-        pick(input, ["createdAt", "updatedAt", "deletedAt"]),
-        [{ field: "deletedAt", operator: "null", value: null }],
-      ),
+      rqbQueryTransformer(omit(input, ["page", "perPage", "sort"]), [
+        { field: "deletedAt", operator: "null", value: null },
+      ]),
     [input],
   )
 

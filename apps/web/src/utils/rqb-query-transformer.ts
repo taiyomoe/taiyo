@@ -16,6 +16,12 @@ export const rqbQueryTransformer = (
 
     if (!field || !rawOperator) continue
 
+    if (value === "null" || value === "notNull") {
+      rules.push({ field, operator: value, value: null })
+
+      continue
+    }
+
     const operator = rqbOperatorTransformer(rawOperator)
 
     if (!operator) continue
