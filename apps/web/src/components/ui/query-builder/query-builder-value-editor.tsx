@@ -183,9 +183,6 @@ export const QueryBuilderValueEditor = (props: ValueEditorProps) => {
       return (
         <Input
           className="min-w-[300px]"
-          classNames={{
-            inputWrapper: "group-data-[hover=true]:bg-default-200",
-          }}
           value={previousValue.current ?? ""}
           onValueChange={(v) => {
             handleOnChange(v)

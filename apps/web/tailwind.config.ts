@@ -92,9 +92,10 @@ export default {
     require("@savvywombat/tailwindcss-grid-areas"),
     require("tailwindcss-animate"),
     nextui({
-      addCommonColors: true,
+      prefix: "taiyo",
       layout: {
         radius: {
+          small: "0.3rem",
           medium: "0.4rem",
           large: "0.6rem",
         },
@@ -103,23 +104,11 @@ export default {
         dark: {
           colors: {
             background: "#16161a",
-            foreground: "hsl(0 0% 98%)",
-            content1: {
-              DEFAULT: "#2d2d30",
-              foreground: "hsl(0 0% 98%)",
-            },
-            content2: {
-              DEFAULT: "#37373b",
-              foreground: "hsl(0 0% 98%)",
-            },
-            primary: {
-              DEFAULT: "hsl(0 100% 65.49%)",
-              foreground: "hsl(0 0% 98%)",
-            },
-            secondary: {
-              DEFAULT: "#383842",
-              foreground: "hsl(0 0% 98%)",
-            },
+            foreground: "#ffffff",
+            content1: "#2d2d30",
+            content2: "#37373b",
+            primary: "#ff4f4f",
+            secondary: "#383842",
           },
         },
       },

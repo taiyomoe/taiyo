@@ -67,6 +67,11 @@
   }
 }
 
+/* NextUI overrides */
+.data-\[hover\=true\]\:bg-default-50[data-hover="true"] {
+  @apply !bg-default-200 transition-colors;
+}
+
 /* Disable zoom effect on mobile */
 @media (max-width: 768px) {
   img.hover\:scale-125:hover {
