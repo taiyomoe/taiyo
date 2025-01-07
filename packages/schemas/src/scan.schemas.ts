@@ -60,6 +60,6 @@ export const getScansListSchema = z.object({
   ),
 })
 
-export type CreateScanInput = typeof createScanSchema._type
-export type UpdateScanInput = typeof updateScanSchema._type
+export type CreateScanInput = z.infer<typeof createScanSchema>
+export type UpdateScanInput = z.infer<typeof updateScanSchema>
 export type GetScansListInput = z.infer<typeof getScansListSchema>

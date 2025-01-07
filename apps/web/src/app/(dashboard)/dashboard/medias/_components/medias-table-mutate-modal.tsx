@@ -8,82 +8,89 @@ import {
   ModalHeader,
 } from "@nextui-org/modal"
 import type { MediasListItem } from "@taiyomoe/types"
-import { useMemo, useState } from "react"
+import { useTranslations } from "next-intl"
+import { useState } from "react"
 import { toast } from "sonner"
 import { useDataTable } from "~/components/generics/data-table/data-table-context"
 import { api } from "~/trpc/react"
 
 type Props = {
+  type: "delete" | "restore"
   isOpen: boolean
   onOpenChange: () => void
 }
 
-export const MediasTableRestoreModal = ({ isOpen, onOpenChange }: Props) => {
+export const MediasTableMutateModal = ({
+  type,
+  isOpen,
+  onOpenChange,
+}: Props) => {
   const table = useDataTable<MediasListItem>()
   const [isDisabled, setIsDisabled] = useState(true)
   const [inputValue, setInputValue] = useState("")
   const { mutateAsync } = api.medias.bulkMutate.useMutation()
+  const globalT = useTranslations("global")
+  const t = useTranslations("dashboard.medias.list")
   const selectedMedias = table
     .getSelectedRowModel()
     .rows.map((row) => row.original)
-  const mediasCount = selectedMedias.length
-  const dynamicTextSolo = useMemo(
-    () => (mediasCount === 1 ? "obra" : "obras"),
-    [mediasCount],
-  )
-  const dynamicTextAs = useMemo(
-    () => (mediasCount === 1 ? "a obra" : "as obras"),
-    [mediasCount],
-  )
+  const defaultI18nArgs = { type, count: selectedMedias.length }
   const utils = api.useUtils()
 
   const handleChange = (newValue: string) => {
     setInputValue(newValue)
-    setIsDisabled(newValue.toLowerCase() !== `restaurar ${dynamicTextAs}`)
+    setIsDisabled(
+      newValue.toLowerCase() !== t("mutate.confirmationText", defaultI18nArgs),
+    )
   }
 
-  const handleRestore = () => {
+  const handleDelete = () => {
     const ids = selectedMedias.map((s) => s.id)
 
     setIsDisabled(true)
 
-    toast.promise(mutateAsync({ type: "restore", ids }), {
-      loading: `Restaurando ${dynamicTextAs}...`,
+    toast.promise(mutateAsync({ type, ids }), {
+      loading: t("mutate.loading", defaultI18nArgs),
       success: () => {
         table.resetRowSelection()
         utils.medias.getList.invalidate()
         onOpenChange()
         setInputValue("")
 
-        return `${mediasCount === 1 ? "Obra restaurada" : "Obras restauradas"} com sucesso!`
+        return t("mutate.success", defaultI18nArgs)
       },
-      error: `Ocorreu um erro inesperado ao restaurar ${dynamicTextAs}.`,
+      error: t("mutate.error", defaultI18nArgs),
     })
   }
 
-  // This is the ugliest shit ever. I'm sorry but I have to move fast...
   return (
     <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
       <ModalContent>
-        <ModalHeader>
-          Restaurar {mediasCount} {dynamicTextSolo}
-        </ModalHeader>
+        <ModalHeader>{t("mutate.title", defaultI18nArgs)}</ModalHeader>
         <ModalBody className="gap-6">
-          <p>
-            Você está prestes a restaurar {mediasCount} {dynamicTextSolo}. Tem
-            certeza?
-          </p>
+          <p>{t("mutate.description", defaultI18nArgs)}</p>
+          <div
+            className="hidden rounded-md border border-warning-200 bg-warning-100 p-2 data-[type=delete]:block"
+            data-type={type}
+          >
+            {t("mutate.deleteWarning", defaultI18nArgs)}
+          </div>
           <div className="flex flex-col gap-2">
             <p>
-              Para confirmar que é o que você quer, digite "
-              <span className="text-warning-400">
-                restaurar {dynamicTextAs}
-              </span>
-              " no campo abaixo.
+              {t.rich("mutate.confirmationDescription", {
+                confirmationText: () => (
+                  <span>{t("mutate.confirmationText", defaultI18nArgs)}</span>
+                ),
+              })}
             </p>
             <Input
               value={inputValue}
-              placeholder={`Digite "restaurar ${dynamicTextAs}" para confirmar`}
+              placeholder={t
+                .rich("mutate.confirmationPlaceholder", {
+                  confirmationText: () =>
+                    t("mutate.confirmationText", defaultI18nArgs),
+                })
+                ?.toString()}
               onValueChange={handleChange}
               autoFocus
             />
@@ -91,15 +98,15 @@ export const MediasTableRestoreModal = ({ isOpen, onOpenChange }: Props) => {
         </ModalBody>
         <ModalFooter>
           <Button variant="light" onPress={onOpenChange}>
-            Cancelar
+            {globalT("cancel")}
           </Button>
           <Button
-            color="warning"
+            color="danger"
             variant="flat"
-            onPress={handleRestore}
+            onPress={handleDelete}
             isDisabled={isDisabled}
           >
-            Restaurar
+            {t("mutate.action", defaultI18nArgs)}
           </Button>
         </ModalFooter>
       </ModalContent>

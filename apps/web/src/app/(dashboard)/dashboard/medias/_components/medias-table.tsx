@@ -1,45 +1,40 @@
 "use client"
 
-import {
-  MEDIAS_LIST_PER_PAGE_CHOICES,
-  MEDIAS_LIST_QUERYABLE_FIELDS,
-} from "@taiyomoe/constants"
-import type { MediasListItem } from "@taiyomoe/types"
+import { MEDIAS_LIST_PER_PAGE_CHOICES } from "@taiyomoe/constants"
+import type { AppRouter } from "@taiyomoe/trpc"
+import { useQueryStates } from "nuqs"
+import { useEffect } from "react"
 import { DataTable } from "~/components/generics/data-table/data-table"
-import { useMediasListStore } from "~/stores/mediasList.store"
+import { useMediasListStore } from "~/stores/use-medias-list-store"
 import { api } from "~/trpc/react"
+import { keepPreviousData } from "~/utils/keep-previous-data"
+import { normalizeSearchParams } from "~/utils/normalize-search-params"
+import { mediasSearchParams } from "./medias-search-params"
 import { columns } from "./medias-table-columns"
 import { MediasTableEmptyContent } from "./medias-table-empty-content"
 import { MediasTableFilters } from "./medias-table-filters"
 import { MediasTableMultipleActions } from "./medias-table-multiple-actions"
 
 type Props = {
-  initialData: {
-    medias: MediasListItem[]
-    totalPages: number
-    totalCount: number
-  }
+  initialData: Awaited<ReturnType<AppRouter["medias"]["getList"]>>
 }
 
 export const MediasTable = ({ initialData }: Props) => {
+  const [_, setSearchParams] = useQueryStates(mediasSearchParams)
+  const { input, setSort, setPage, setPerPage } = useMediasListStore()
   const {
-    query,
-    filter,
-    sort,
-    page,
-    perPage,
-    setQuery,
-    setSort,
-    setPage,
-    setPerPage,
-  } = useMediasListStore()
-  const {
-    data: { medias: items, totalPages, totalCount },
+    data: { medias: items, totalPages, totalCount } = initialData,
     isFetching,
-  } = api.medias.getList.useQuery(
-    { query, filter, sort, page, perPage },
-    { initialData, refetchOnMount: false },
-  )
+  } = api.medias.getList.useQuery(input, {
+    placeholderData: keepPreviousData(initialData),
+  })
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: we only want to this trigger when the input changes
+  useEffect(() => {
+    const normalized = normalizeSearchParams(mediasSearchParams, input)
+
+    setSearchParams(normalized)
+  }, [input])
 
   return (
     <DataTable
@@ -68,17 +63,15 @@ export const MediasTable = ({ initialData }: Props) => {
         flag: false,
         deleter: false,
       }}
-      page={page}
-      perPage={perPage}
+      page={input.page}
+      perPage={input.perPage}
       perPageChoices={MEDIAS_LIST_PER_PAGE_CHOICES}
-      queryableFields={MEDIAS_LIST_QUERYABLE_FIELDS.options}
       totalPages={totalPages}
       totalCount={totalCount}
       isLoading={isFetching}
       onPageChange={setPage}
       onPerPageChange={setPerPage}
       onSort={setSort}
-      onQueryChange={setQuery}
     />
   )
 }

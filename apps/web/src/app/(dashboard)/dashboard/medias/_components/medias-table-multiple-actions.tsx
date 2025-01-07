@@ -8,14 +8,12 @@ import {
 import { useDisclosure } from "@nextui-org/modal"
 import type { MediasListItem } from "@taiyomoe/types"
 import { ArchiveRestoreIcon, EllipsisIcon, Trash2Icon } from "lucide-react"
-import { type Key, useMemo } from "react"
+import { type Key, useMemo, useState } from "react"
 import { useDataTable } from "~/components/generics/data-table/data-table-context"
-import { MediasTableDeleteModal } from "./medias-table-delete-modal"
-import { MediasTableRestoreModal } from "./medias-table-restore-modal"
+import { MediasTableMutateModal } from "./medias-table-mutate-modal"
 
 export const MediasTableMultipleActions = () => {
-  const restoreModal = useDisclosure()
-  const deleteModal = useDisclosure()
+  const mutateModal = useDisclosure()
   const table = useDataTable<MediasListItem>()
   const selectedDeletedMediasCount = table
     .getSelectedRowModel()
@@ -28,16 +26,11 @@ export const MediasTableMultipleActions = () => {
     if (selectedDeletedMediasCount === 0) keys.push("restore")
     return keys
   }, [selectedMediasCount, selectedDeletedMediasCount])
+  const [type, setType] = useState<"delete" | "restore">("delete")
 
   const handleAction = (key: Key) => {
-    switch (key) {
-      case "restore":
-        restoreModal.onOpen()
-        break
-      case "delete":
-        deleteModal.onOpen()
-        break
-    }
+    mutateModal.onOpen()
+    setType(key as "delete" | "restore")
   }
 
   return (
@@ -71,8 +64,7 @@ export const MediasTableMultipleActions = () => {
           </DropdownItem>
         </DropdownMenu>
       </Dropdown>
-      <MediasTableRestoreModal {...restoreModal} />
-      <MediasTableDeleteModal {...deleteModal} />
+      <MediasTableMutateModal type={type} {...mutateModal} />
     </>
   )
 }
