@@ -1,4 +1,5 @@
 import { getScansListSchema } from "@taiyomoe/schemas"
+import type { ScansListItem } from "@taiyomoe/types"
 import { omit, parallel, unique } from "radash"
 import { protectedProcedure } from "../trpc"
 import { convertToFilter } from "../utils/convert-to-filter"
@@ -29,7 +30,7 @@ export const getScansListHandler = protectedProcedure
       select: { id: true, name: true, image: true },
       where: { id: { in: uniqueUsers } },
     })
-    const scans = await parallel(10, rawScans, async (s) => {
+    const scans = (await parallel(10, rawScans, async (s) => {
       const chaptersCount = await ctx.db.mediaChapter.count({
         where: { scans: { some: { id: s.id } } },
       })
@@ -40,7 +41,7 @@ export const getScansListHandler = protectedProcedure
         deleter: users.find((d) => d.id === s.deleterId) ?? null,
         chaptersCount,
       }
-    })
+    })) satisfies ScansListItem[]
 
     return {
       stats: { totalCount },
