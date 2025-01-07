@@ -8,14 +8,12 @@ import {
 import { useDisclosure } from "@nextui-org/modal"
 import type { ChaptersListItem } from "@taiyomoe/types"
 import { ArchiveRestoreIcon, EllipsisIcon, Trash2Icon } from "lucide-react"
-import { type Key, useMemo } from "react"
+import { type Key, useMemo, useState } from "react"
 import { useDataTable } from "~/components/generics/data-table/data-table-context"
-import { ChaptersTableDeleteModal } from "./chapters-table-delete-modal"
-import { ChaptersTableRestoreModal } from "./chapters-table-restore-modal"
+import { ChaptersTableMutateModal } from "./chapters-table-mutate-modal"
 
 export const ChaptersTableMultipleActions = () => {
-  const restoreModal = useDisclosure()
-  const deleteModal = useDisclosure()
+  const mutateModal = useDisclosure()
   const table = useDataTable<ChaptersListItem>()
   const selectedDeletedChaptersCount = table
     .getSelectedRowModel()
@@ -28,16 +26,11 @@ export const ChaptersTableMultipleActions = () => {
     if (selectedDeletedChaptersCount === 0) keys.push("restore")
     return keys
   }, [selectedChaptersCount, selectedDeletedChaptersCount])
+  const [type, setType] = useState<"delete" | "restore">("delete")
 
   const handleAction = (key: Key) => {
-    switch (key) {
-      case "restore":
-        restoreModal.onOpen()
-        break
-      case "delete":
-        deleteModal.onOpen()
-        break
-    }
+    mutateModal.onOpen()
+    setType(key as "delete" | "restore")
   }
 
   return (
@@ -71,8 +64,7 @@ export const ChaptersTableMultipleActions = () => {
           </DropdownItem>
         </DropdownMenu>
       </Dropdown>
-      <ChaptersTableRestoreModal {...restoreModal} />
-      <ChaptersTableDeleteModal {...deleteModal} />
+      <ChaptersTableMutateModal type={type} {...mutateModal} />
     </>
   )
 }

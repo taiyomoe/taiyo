@@ -26,8 +26,8 @@ const fields: Field[] = [
   { name: "deletedAt", datatype: "nullableDate", label: "Data de remoção" },
   { name: "startDate", datatype: "nullableDate", label: "Data de início" },
   { name: "endDate", datatype: "nullableDate", label: "Data de término" },
-  { name: "creatorId", datatype: "user", label: "Criador" },
-  { name: "deleterId", datatype: "user", label: "Deletado por" },
+  // { name: "creatorId", datatype: "user", label: "Criador" },
+  // { name: "deleterId", datatype: "user", label: "Deletado por" },
 ]
 
 export const MediasTableFilters = () => {

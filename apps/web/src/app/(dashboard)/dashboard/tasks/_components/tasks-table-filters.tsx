@@ -7,10 +7,10 @@ import { useTasksListStore } from "~/stores/use-tasks-list-store"
 import { rqbQueryTransformer } from "~/utils/rqb-query-transformer"
 
 const fields: Field[] = [
+  { name: "type", datatype: "taskStatus", label: "Tipo" },
+  { name: "status", datatype: "taskStatus", label: "Status" },
   { name: "createdAt", datatype: "date", label: "Data de criação" },
   { name: "updatedAt", datatype: "date", label: "Última atualização" },
-  { name: "status", datatype: "taskStatus", label: "Status" },
-  { name: "type", datatype: "taskStatus", label: "Tipo" },
 ]
 
 export const TasksTableFilters = () => {
