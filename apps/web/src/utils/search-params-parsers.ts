@@ -59,11 +59,14 @@ export const dateFilterParser = <TName extends string>(name: TName) =>
     [K in `${TName}.lt` | `${TName}.gt`]: ParserBuilder<Date>
   }
 
-export const nullableDateFilterParser = <TName extends string>(name: TName) =>
+export const nullableDateFilterParser = <TName extends string>(
+  name: TName,
+  withDefault = true,
+) =>
   ({
-    [`${name}.equals`]: parseAsStringLiteral(["null", "notNull"]).withDefault(
-      "null",
-    ),
+    [`${name}.equals`]: withDefault
+      ? parseAsStringLiteral(["null", "notNull"]).withDefault("null")
+      : parseAsStringLiteral(["null", "notNull"]),
     [`${name}.lt`]: parseAsIsoDate,
     [`${name}.gt`]: parseAsIsoDate,
   }) as {

@@ -5,6 +5,11 @@ import {
   ContentRating,
   Flag,
   Languages,
+  MediaCountryOfOrigin,
+  MediaDemography,
+  MediaSource,
+  MediaStatus,
+  MediaType,
   TaskStatus,
   TaskType,
 } from "@taiyomoe/db"
@@ -20,19 +25,33 @@ import { ScansMultiAutocomplete } from "~/components/ui/multi-autocompletes/scan
 import { UsersMultiAutocomplete } from "~/components/ui/multi-autocompletes/users-multi-autocomplete"
 import { DateUtils } from "~/lib/utils/date.utils"
 import { SelectUtils } from "~/lib/utils/select.utils"
+import { AVAILABLE_ENUMS } from "~/utils/rqb-operators"
 
-const getEnum = (name: string) => {
-  switch (name) {
+const getEnum = (datatype: string) => {
+  switch (datatype) {
+    case "mediaType":
+      return MediaType
+    case "mediaStatus":
+      return MediaStatus
+    case "source":
+      return MediaSource
+    case "demography":
+      return MediaDemography
+    case "countryOfOrigin":
+      return MediaCountryOfOrigin
+
+    case "taskType":
+      return TaskType
+    case "taskStatus":
+      return TaskStatus
+
     case "language":
       return Languages
     case "contentRating":
       return ContentRating
     case "flag":
       return Flag
-    case "status":
-      return TaskStatus
-    case "type":
-      return TaskType
+
     default:
       return {}
   }
@@ -41,6 +60,7 @@ const getEnum = (name: string) => {
 export const QueryBuilderValueEditor = (props: ValueEditorProps) => {
   const { field, operator, handleOnChange } = props
   const fieldData = props.fieldData as Field
+  const datatype = String(fieldData.datatype)
   const previousValue = useRef(props.value)
 
   if (previousValue.current !== props.value && !props.value) {
@@ -52,10 +72,10 @@ export const QueryBuilderValueEditor = (props: ValueEditorProps) => {
   }
 
   switch (true) {
-    case fieldData.datatype === "boolean":
+    case datatype === "boolean":
       return <Switch onValueChange={handleOnChange} />
-    case fieldData.datatype === "number":
-    case fieldData.datatype === "nullable-number":
+    case datatype === "number":
+    case datatype === "nullableNumber":
       return (
         <Input
           className="min-w-[300px]"
@@ -67,8 +87,8 @@ export const QueryBuilderValueEditor = (props: ValueEditorProps) => {
           type="number"
         />
       )
-    case fieldData.datatype === "date":
-    case fieldData.datatype === "nullable-date":
+    case datatype === "date":
+    case datatype === "nullableDate":
       return (
         <DatePicker
           className="min-w-[300px]"
@@ -82,7 +102,7 @@ export const QueryBuilderValueEditor = (props: ValueEditorProps) => {
           aria-label="Date picker"
         />
       )
-    case fieldData.datatype === "media" && operator.includes("in"):
+    case datatype === "media" && operator.includes("in"):
       return (
         <MediasMultiAutocomplete
           classNames={{ container: () => "min-w-[300px]" }}
@@ -93,7 +113,7 @@ export const QueryBuilderValueEditor = (props: ValueEditorProps) => {
           }}
         />
       )
-    case fieldData.datatype === "media":
+    case datatype === "media":
       return (
         <MediasAutocomplete
           classNames={{ base: "min-w-[300px]" }}
@@ -104,7 +124,7 @@ export const QueryBuilderValueEditor = (props: ValueEditorProps) => {
           }}
         />
       )
-    case fieldData.datatype === "user" && operator.includes("in"):
+    case datatype === "user" && operator.includes("in"):
       return (
         <UsersMultiAutocomplete
           classNames={{ container: () => "min-w-[300px]" }}
@@ -115,8 +135,7 @@ export const QueryBuilderValueEditor = (props: ValueEditorProps) => {
           }}
         />
       )
-    case fieldData.datatype === "user":
-    case fieldData.datatype === "nullable-user":
+    case datatype === "user":
       return (
         <UsersAutocomplete
           classNames={{ base: "min-w-[300px]" }}
@@ -127,7 +146,7 @@ export const QueryBuilderValueEditor = (props: ValueEditorProps) => {
           }}
         />
       )
-    case fieldData.datatype === "scan":
+    case datatype === "scan":
       return (
         <ScansMultiAutocomplete
           classNames={{ container: () => "min-w-[300px]" }}
@@ -138,10 +157,11 @@ export const QueryBuilderValueEditor = (props: ValueEditorProps) => {
           }}
         />
       )
-    case fieldData.datatype === "enum" && ["in", "notIn"].includes(operator):
+    case AVAILABLE_ENUMS.includes(datatype) &&
+      ["in", "notIn"].includes(operator):
       return (
         <MultiSelect
-          options={SelectUtils.enumToItems(getEnum(field))}
+          options={SelectUtils.enumToItems(getEnum(datatype))}
           value={previousValue.current}
           onChange={(v) => {
             handleOnChange(v.map((v) => v.value))
@@ -149,7 +169,7 @@ export const QueryBuilderValueEditor = (props: ValueEditorProps) => {
           }}
         />
       )
-    case fieldData.datatype === "enum":
+    case AVAILABLE_ENUMS.includes(datatype):
       return (
         <EnumSelect
           selectedKeys={props.value ? [props.value] : []}

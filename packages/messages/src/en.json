@@ -7,6 +7,22 @@
     "toformat": "Hello {name}!!"
   },
   "dashboard": {
+    "medias": {
+      "list": {
+        "mutate": {
+          "title": "{type, select, delete {Delete} other {Restore}} {count, plural, one {media} other {medias}}",
+          "description": "You're about to {type, select, delete {delete} other {restore}} {count, plural, one {a media} other {# medias}}. Are you sure?",
+          "deleteWarning": "The {count, plural, one {media} other {medias}} CAN be restored later.",
+          "confirmationDescription": "To confirm that this is what you want, type \"<confirmationText></confirmationText>\" in the field below.",
+          "confirmationPlaceholder": "Type \"<confirmationText></confirmationText>\" to confirm",
+          "confirmationText": "{type, select, delete {delete} other {restore}} {count, plural, one {media} other {medias}}",
+          "loading": "{type, select, delete {Deleting} other {Restoring}} {count, plural, one {media} other {medias}}...",
+          "success": "{count, plural, one {Media} other {Medias}} {type, select, delete {deleted} other {restored}} successfully!",
+          "error": "An unexpected error occurred when {type, select, delete {deleting} other {restoring}} the {count, plural, one {media} other {medias}}.",
+          "action": "{type, select, delete {Delete} other {Restore}}"
+        }
+      }
+    },
     "scans": {
       "list": {
         "mutate": {

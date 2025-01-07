@@ -5,17 +5,17 @@ import { useChaptersListStore } from "~/stores/chaptersList.store"
 
 const fields: Field[] = [
   { name: "number", datatype: "number", label: "Número" },
-  { name: "volume", datatype: "nullable-number", label: "Volume" },
-  { name: "language", datatype: "enum", label: "Idioma" },
-  { name: "contentRating", datatype: "enum", label: "Classificação" },
-  { name: "flag", datatype: "enum", label: "Flag" },
+  { name: "volume", datatype: "nullableNumber", label: "Volume" },
+  { name: "language", datatype: "language", label: "Idioma" },
+  { name: "contentRating", datatype: "contentRating", label: "Classificação" },
+  { name: "flag", datatype: "flag", label: "Flag" },
   { name: "mediaId", datatype: "media", label: "Obras" },
   { name: "scanIds", datatype: "scan", label: "Scans" },
   { name: "createdAt", datatype: "date", label: "Data de upload" },
   { name: "updatedAt", datatype: "date", label: "Última atualização" },
-  { name: "deletedAt", datatype: "nullable-date", label: "Deletado em" },
+  { name: "deletedAt", datatype: "nullableDate", label: "Deletado em" },
   { name: "uploaderId", datatype: "user", label: "Uploader" },
-  { name: "deleterId", datatype: "nullable-user", label: "Deletado por" },
+  { name: "deleterId", datatype: "user", label: "Deletado por" },
 ]
 
 export const ChaptersTableFilters = () => {

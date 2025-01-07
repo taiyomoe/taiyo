@@ -3,29 +3,35 @@ import { useMemo } from "react"
 import type { Field } from "react-querybuilder"
 import { useDebounceCallback } from "usehooks-ts"
 import { QueryBuilder } from "~/components/ui/query-builder/query-builder"
-import { useScansListStore } from "~/stores/use-scans-list-store"
+import { useMediasListStore } from "~/stores/use-medias-list-store"
 import { rqbQueryTransformer } from "~/utils/rqb-query-transformer"
 
 const fields: Field[] = [
-  { name: "name", label: "Nome" },
-  { name: "description", datatype: "nullableText", label: "Descrição" },
-  { name: "website", datatype: "nullableText", label: "Website" },
-  { name: "discord", datatype: "nullableText", label: "Discord" },
-  { name: "twitter", datatype: "nullableText", label: "Twitter" },
-  { name: "facebook", datatype: "nullableText", label: "Facebook" },
-  { name: "instagram", datatype: "nullableText", label: "Instagram" },
-  { name: "telegram", datatype: "nullableText", label: "Telegram" },
-  { name: "youtube", datatype: "nullableText", label: "YouTube" },
-  { name: "email", datatype: "nullableText", label: "Email" },
+  { name: "contentRating", datatype: "contentRating", label: "Classificação" },
+  // one shot
+  { name: "type", datatype: "mediaType", label: "Tipo" },
+  { name: "status", datatype: "mediaStatus", label: "Status" },
+  { name: "source", datatype: "source", label: "Fonte" },
+  { name: "demography", datatype: "demography", label: "Demografia" },
+  {
+    name: "countryOfOrigin",
+    datatype: "countryOfOrigin",
+    label: "Origem",
+  },
+  // genres
+  // tags
+  { name: "flag", datatype: "flag", label: "Flag" },
   { name: "createdAt", datatype: "date", label: "Data de criação" },
   { name: "updatedAt", datatype: "date", label: "Última atualização" },
   { name: "deletedAt", datatype: "nullableDate", label: "Data de remoção" },
+  { name: "startDate", datatype: "nullableDate", label: "Data de início" },
+  { name: "endDate", datatype: "nullableDate", label: "Data de término" },
   { name: "creatorId", datatype: "user", label: "Criador" },
   { name: "deleterId", datatype: "user", label: "Deletado por" },
 ]
 
-export const ScansTableFilters = () => {
-  const { input, setFilter } = useScansListStore()
+export const MediasTableFilters = () => {
+  const { input, setFilter } = useMediasListStore()
   const defaultQuery = useMemo(
     () =>
       rqbQueryTransformer(omit(input, ["page", "perPage", "sort"]), [
@@ -38,6 +44,8 @@ export const ScansTableFilters = () => {
     (newQuery) => setFilter(newQuery),
     300,
   )
+
+  console.log("defaultQuery", defaultQuery)
 
   return (
     <QueryBuilder

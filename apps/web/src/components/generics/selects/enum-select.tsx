@@ -24,6 +24,9 @@ export const EnumSelect = ({ items, onSelectionChange, ...props }: Props) => {
 
   return (
     <Select
+      classNames={{
+        trigger: "data-[hover=true]:bg-default-200 transition-colors",
+      }}
       items={SelectUtils.enumToItems(previousItems.current)}
       selectedKeys={selectedKeys}
       onSelectionChange={handleSelectionChange}

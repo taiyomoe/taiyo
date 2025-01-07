@@ -2,13 +2,13 @@ import { Divider } from "@nextui-org/divider"
 import { Input } from "@nextui-org/input"
 import {
   QueryBuilder as BaseQueryBuilder,
-  type Field,
   type FullCombinator,
   type FullField,
   type FullOperator,
   type QueryBuilderProps,
   type RuleGroupTypeAny,
 } from "react-querybuilder"
+import { rqbOperators } from "~/utils/rqb-operators"
 import { QueryBuilderActionButton } from "./query-builder-action-button"
 import { QueryBuilderValueEditor } from "./query-builder-value-editor"
 import { QueryBuilderValueSelector } from "./query-builder-value-selector"
@@ -63,7 +63,7 @@ export const QueryBuilder = <
         addRule: { label: "Nova regra" },
         addGroup: { label: "Novo grupo" },
       }}
-      getOperators={getOperators}
+      getOperators={rqbOperators}
       enableMountQueryChange={false}
       showCombinatorsBetweenRules
       resetOnOperatorChange
@@ -77,63 +77,3 @@ export const QueryBuilder = <
     />
   </div>
 )
-
-const getOperators = (_: string, { fieldData }: { fieldData: Field }) => {
-  const isNullable = String(fieldData.datatype).includes("nullable-")
-  const datatype = String(fieldData.datatype).replace("nullable-", "")
-  const NULLABLE_OPERATORS = isNullable
-    ? [
-        { name: "null", label: "nulo" },
-        { name: "notNull", label: "não nulo" },
-      ]
-    : []
-
-  switch (datatype) {
-    case "boolean":
-      return [
-        { name: "=", label: "=" },
-        { name: "!=", label: "!=" },
-      ]
-    case "number":
-      return [
-        { name: "=", label: "=" },
-        { name: "!=", label: "!=" },
-        { name: "<", label: "<" },
-        { name: "<=", label: "<=" },
-        { name: ">", label: ">" },
-        { name: ">=", label: ">=" },
-        ...NULLABLE_OPERATORS,
-      ]
-    case "enum":
-    case "user":
-    case "media":
-    case "scan":
-      return [
-        { name: "=", label: "=" },
-        { name: "!=", label: "!=" },
-        { name: "in", label: "em" },
-        { name: "notIn", label: "não em" },
-        ...NULLABLE_OPERATORS,
-      ]
-    case "date":
-      return [
-        // { name: "=", label: "=" },
-        // { name: "!=", label: "!=" },
-        { name: "<", label: "antes" },
-        // { name: "<=", label: "antes ou igual" },
-        { name: ">", label: "depois" },
-        // { name: ">=", label: "depois ou igual" },
-        ...NULLABLE_OPERATORS,
-      ]
-  }
-
-  return [
-    { name: "=", label: "=" },
-    { name: "!=", label: "!=" },
-    { name: "startsWith", label: "começa com" },
-    { name: "endsWith", label: "termina com" },
-    { name: "in", label: "em" },
-    { name: "notIn", label: "não em" },
-    ...NULLABLE_OPERATORS,
-  ]
-}
