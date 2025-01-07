@@ -21,7 +21,7 @@ const fields: Field[] = [
   { name: "updatedAt", datatype: "date", label: "Última atualização" },
   { name: "deletedAt", datatype: "nullableDate", label: "Data de remoção" },
   { name: "creatorId", datatype: "user", label: "Criador" },
-  { name: "deleterId", datatype: "nullable-user", label: "Deletado por" },
+  { name: "deleterId", datatype: "user", label: "Deletado por" },
 ]
 
 export const ScansTableFilters = () => {

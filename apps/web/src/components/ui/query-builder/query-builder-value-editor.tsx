@@ -5,6 +5,11 @@ import {
   ContentRating,
   Flag,
   Languages,
+  MediaCountryOfOrigin,
+  MediaDemography,
+  MediaSource,
+  MediaStatus,
+  MediaType,
   TaskStatus,
   TaskType,
 } from "@taiyomoe/db"
@@ -20,19 +25,33 @@ import { ScansMultiAutocomplete } from "~/components/ui/multi-autocompletes/scan
 import { UsersMultiAutocomplete } from "~/components/ui/multi-autocompletes/users-multi-autocomplete"
 import { DateUtils } from "~/lib/utils/date.utils"
 import { SelectUtils } from "~/lib/utils/select.utils"
+import { AVAILABLE_ENUMS } from "~/utils/rqb-operators"
 
-const getEnum = (name: string) => {
-  switch (name) {
+const getEnum = (datatype: string) => {
+  switch (datatype) {
+    case "mediaType":
+      return MediaType
+    case "mediaStatus":
+      return MediaStatus
+    case "source":
+      return MediaSource
+    case "demography":
+      return MediaDemography
+    case "countryOfOrigin":
+      return MediaCountryOfOrigin
+
+    case "taskType":
+      return TaskType
+    case "taskStatus":
+      return TaskStatus
+
     case "language":
       return Languages
     case "contentRating":
       return ContentRating
     case "flag":
       return Flag
-    case "status":
-      return TaskStatus
-    case "type":
-      return TaskType
+
     default:
       return {}
   }
@@ -138,10 +157,11 @@ export const QueryBuilderValueEditor = (props: ValueEditorProps) => {
           }}
         />
       )
-    case fieldData.datatype === "enum" && ["in", "notIn"].includes(operator):
+    case AVAILABLE_ENUMS.includes(datatype) &&
+      ["in", "notIn"].includes(operator):
       return (
         <MultiSelect
-          options={SelectUtils.enumToItems(getEnum(field))}
+          options={SelectUtils.enumToItems(getEnum(datatype))}
           value={previousValue.current}
           onChange={(v) => {
             handleOnChange(v.map((v) => v.value))
@@ -149,7 +169,7 @@ export const QueryBuilderValueEditor = (props: ValueEditorProps) => {
           }}
         />
       )
-    case fieldData.datatype === "enum":
+    case AVAILABLE_ENUMS.includes(datatype):
       return (
         <EnumSelect
           selectedKeys={props.value ? [props.value] : []}
