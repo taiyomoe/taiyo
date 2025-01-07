@@ -32,6 +32,7 @@ interface DataTableProps<TData, TValue, TQueryAttribute> {
   filters: ReactNode
   multipleActions?: ReactNode
   emptyContent: ReactNode
+  initialSort?: [keyof TData, "asc" | "desc"][]
   initialVisibility: Partial<Record<keyof TData, boolean>>
   page: number
   perPage: number
@@ -52,6 +53,7 @@ export function DataTable<TData, TValue, TQueryAttribute>({
   filters,
   multipleActions,
   emptyContent,
+  initialSort = [],
   initialVisibility,
   page,
   perPage,
@@ -67,7 +69,12 @@ export function DataTable<TData, TValue, TQueryAttribute>({
 }: DataTableProps<TData, TValue, TQueryAttribute>) {
   const previousData = useRef(data)
   const previousTotalPages = useRef(totalPages)
-  const [sorting, setSorting] = useState<SortingState>([])
+  const [sorting, setSorting] = useState<SortingState>(
+    initialSort.map(([field, order]) => ({
+      id: field as string,
+      desc: order === "desc",
+    })),
+  )
   const table = useReactTable({
     data: isLoading ? previousData.current : data,
     columns,

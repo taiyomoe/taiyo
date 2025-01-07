@@ -7,5 +7,5 @@ export const convertToFilter = (
   mapValues(input, (v) => {
     if (isObject(v)) return convertToFilter(v as Record<string, unknown>)
 
-    return v ?? Prisma.skip
+    return v === undefined ? Prisma.skip : v
   })

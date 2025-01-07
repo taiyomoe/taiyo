@@ -8,38 +8,40 @@ import {
   ModalHeader,
 } from "@nextui-org/modal"
 import type { ScansListItem } from "@taiyomoe/types"
-import { useMemo, useState } from "react"
+import { useTranslations } from "next-intl"
+import { useState } from "react"
 import { toast } from "sonner"
 import { useDataTable } from "~/components/generics/data-table/data-table-context"
 import { api } from "~/trpc/react"
 
 type Props = {
+  type: "delete" | "restore"
   isOpen: boolean
   onOpenChange: () => void
 }
 
-export const ScansTableDeleteModal = ({ isOpen, onOpenChange }: Props) => {
+export const ScansTableMutateModal = ({
+  type,
+  isOpen,
+  onOpenChange,
+}: Props) => {
   const table = useDataTable<ScansListItem>()
   const [isDisabled, setIsDisabled] = useState(true)
   const [inputValue, setInputValue] = useState("")
   const { mutateAsync } = api.scans.bulkMutate.useMutation()
+  const globalT = useTranslations("global")
+  const t = useTranslations("dashboard.scans.list")
   const selectedScans = table
     .getSelectedRowModel()
     .rows.map((row) => row.original)
-  const scansCount = selectedScans.length
-  const dynamicTextSolo = useMemo(
-    () => (scansCount === 1 ? "scan" : "scans"),
-    [scansCount],
-  )
-  const dynamicTextAs = useMemo(
-    () => (scansCount === 1 ? "a scan" : "as scans"),
-    [scansCount],
-  )
+  const defaultI18nArgs = { type, count: selectedScans.length }
   const utils = api.useUtils()
 
   const handleChange = (newValue: string) => {
     setInputValue(newValue)
-    setIsDisabled(newValue.toLowerCase() !== `apagar ${dynamicTextAs}`)
+    setIsDisabled(
+      newValue.toLowerCase() !== t("mutate.confirmationText", defaultI18nArgs),
+    )
   }
 
   const handleDelete = () => {
@@ -47,46 +49,48 @@ export const ScansTableDeleteModal = ({ isOpen, onOpenChange }: Props) => {
 
     setIsDisabled(true)
 
-    toast.promise(mutateAsync({ type: "delete", ids }), {
-      loading: `Apagando ${dynamicTextAs}...`,
+    toast.promise(mutateAsync({ type, ids }), {
+      loading: t("mutate.loading", defaultI18nArgs),
       success: () => {
         table.resetRowSelection()
         utils.scans.getList.invalidate()
         onOpenChange()
         setInputValue("")
 
-        return `${scansCount === 1 ? "Scan apagada" : "Scans apagadas"} com sucesso!`
+        return t("mutate.success", defaultI18nArgs)
       },
-      error: `Ocorreu um erro inesperado ao apagar ${dynamicTextAs}.`,
+      error: t("mutate.error", defaultI18nArgs),
     })
   }
 
-  // This is the ugliest shit ever. I'm sorry but I have to move fast...
   return (
     <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
       <ModalContent>
-        <ModalHeader>
-          Apagar {scansCount} {dynamicTextSolo}
-        </ModalHeader>
+        <ModalHeader>{t("mutate.title", defaultI18nArgs)}</ModalHeader>
         <ModalBody className="gap-6">
-          <p>
-            Você está prestes a apagar {scansCount} {dynamicTextSolo}. Tem
-            certeza?
-          </p>
-          <div className="rounded-md border border-warning-200 bg-warning-100 p-2">
-            {scansCount === 1
-              ? "A scan poderá ser restaurada."
-              : "As scans poderão ser restauradas."}
+          <p>{t("mutate.description", defaultI18nArgs)}</p>
+          <div
+            className="hidden rounded-md border border-warning-200 bg-warning-100 p-2 data-[type=delete]:block"
+            data-type={type}
+          >
+            {t("mutate.deleteWarning", defaultI18nArgs)}
           </div>
           <div className="flex flex-col gap-2">
             <p>
-              Para confirmar que é o que você quer, digite "
-              <span className="text-warning-400">apagar {dynamicTextAs}</span>"
-              no campo abaixo.
+              {t.rich("mutate.confirmationDescription", {
+                confirmationText: () => (
+                  <span>{t("mutate.confirmationText", defaultI18nArgs)}</span>
+                ),
+              })}
             </p>
             <Input
               value={inputValue}
-              placeholder={`Digite "apagar ${dynamicTextAs}" para confirmar`}
+              placeholder={t
+                .rich("mutate.confirmationPlaceholder", {
+                  confirmationText: () =>
+                    t("mutate.confirmationText", defaultI18nArgs),
+                })
+                ?.toString()}
               onValueChange={handleChange}
               autoFocus
             />
@@ -94,7 +98,7 @@ export const ScansTableDeleteModal = ({ isOpen, onOpenChange }: Props) => {
         </ModalBody>
         <ModalFooter>
           <Button variant="light" onPress={onOpenChange}>
-            Cancelar
+            {globalT("cancel")}
           </Button>
           <Button
             color="danger"
@@ -102,7 +106,7 @@ export const ScansTableDeleteModal = ({ isOpen, onOpenChange }: Props) => {
             onPress={handleDelete}
             isDisabled={isDisabled}
           >
-            Apagar
+            {t("mutate.action", defaultI18nArgs)}
           </Button>
         </ModalFooter>
       </ModalContent>

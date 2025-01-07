@@ -8,7 +8,6 @@ import {
   type FullOperator,
   type QueryBuilderProps,
   type RuleGroupTypeAny,
-  defaultOperators,
 } from "react-querybuilder"
 import { QueryBuilderActionButton } from "./query-builder-action-button"
 import { QueryBuilderValueEditor } from "./query-builder-value-editor"
@@ -128,5 +127,13 @@ const getOperators = (_: string, { fieldData }: { fieldData: Field }) => {
       ]
   }
 
-  return defaultOperators
+  return [
+    { name: "=", label: "=" },
+    { name: "!=", label: "!=" },
+    { name: "startsWith", label: "começa com" },
+    { name: "endsWith", label: "termina com" },
+    { name: "in", label: "em" },
+    { name: "notIn", label: "não em" },
+    ...NULLABLE_OPERATORS,
+  ]
 }

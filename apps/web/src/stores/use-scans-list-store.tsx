@@ -1,7 +1,7 @@
 "use client"
 
-import type { TASKS_LIST_SORTABLE_FIELDS } from "@taiyomoe/constants"
-import type { GetTasksListInput } from "@taiyomoe/schemas"
+import type { SCANS_LIST_SORTABLE_FIELDS } from "@taiyomoe/constants"
+import type { GetScansListInput } from "@taiyomoe/schemas"
 import type { SortingState } from "@tanstack/react-table"
 import { pick } from "radash"
 import { type ReactNode, createContext, useContext, useRef } from "react"
@@ -9,16 +9,16 @@ import type { DefaultRuleGroupType } from "react-querybuilder"
 import { createStore, useStore } from "zustand"
 import { rqbFilterTransformer } from "~/utils/rqb-filter-transformer"
 
-type Props = { input: GetTasksListInput }
+type Props = { input: GetScansListInput }
 type State = Props & {
   setFilter: (value: DefaultRuleGroupType) => void
   setSort: (value: SortingState) => void
   setPage: (value: number) => void
   setPerPage: (value: number) => void
 }
-type Store = ReturnType<typeof tasksListStore>
+type Store = ReturnType<typeof scansListStore>
 
-const tasksListStore = (initProps: Props) =>
+const scansListStore = (initProps: Props) =>
   createStore<State>()((set) => ({
     ...initProps,
 
@@ -38,7 +38,7 @@ const tasksListStore = (initProps: Props) =>
         input: {
           ...state.input,
           sort: value.map((v) => [
-            v.id as (typeof TASKS_LIST_SORTABLE_FIELDS)[number],
+            v.id as (typeof SCANS_LIST_SORTABLE_FIELDS)[number],
             v.desc ? "desc" : "asc",
           ]),
         },
@@ -58,32 +58,32 @@ const tasksListStore = (initProps: Props) =>
 /**
  * React part.
  */
-const TasksListStoreContext = createContext<Store | null>(null)
+const ScansListStoreContext = createContext<Store | null>(null)
 
-export const TasksListStoreProvider = ({
+export const ScansListStoreProvider = ({
   children,
   value,
 }: { children: ReactNode; value: Props }) => {
   const storeRef = useRef<Store>()
 
   if (!storeRef.current) {
-    storeRef.current = tasksListStore(value)
+    storeRef.current = scansListStore(value)
   }
 
   return (
-    <TasksListStoreContext.Provider value={storeRef.current}>
+    <ScansListStoreContext.Provider value={storeRef.current}>
       {children}
-    </TasksListStoreContext.Provider>
+    </ScansListStoreContext.Provider>
   )
 }
 
-export function useTasksListStore(): State
-export function useTasksListStore<T>(selector?: (state: State) => T) {
-  const store = useContext(TasksListStoreContext)
+export function useScansListStore(): State
+export function useScansListStore<T>(selector?: (state: State) => T) {
+  const store = useContext(ScansListStoreContext)
 
   if (!store) {
     throw new Error(
-      "useTasksListStore must be used within a TasksListStoreProvider",
+      "useScansListStore must be used within a ScansListStoreProvider",
     )
   }
 

@@ -8,14 +8,12 @@ import {
 import { useDisclosure } from "@nextui-org/modal"
 import type { ScansListItem } from "@taiyomoe/types"
 import { ArchiveRestoreIcon, EllipsisIcon, Trash2Icon } from "lucide-react"
-import { type Key, useMemo } from "react"
+import { type Key, useMemo, useState } from "react"
 import { useDataTable } from "~/components/generics/data-table/data-table-context"
-import { ScansTableDeleteModal } from "./scans-table-delete-modal"
-import { ScansTableRestoreModal } from "./scans-table-restore-modal"
+import { ScansTableMutateModal } from "./scans-table-mutate-modal"
 
 export const ScansTableMultipleActions = () => {
-  const restoreModal = useDisclosure()
-  const deleteModal = useDisclosure()
+  const mutateModal = useDisclosure()
   const table = useDataTable<ScansListItem>()
   const selectedDeletedScansCount = table
     .getSelectedRowModel()
@@ -28,16 +26,11 @@ export const ScansTableMultipleActions = () => {
     if (selectedDeletedScansCount === 0) keys.push("restore")
     return keys
   }, [selectedScansCount, selectedDeletedScansCount])
+  const [type, setType] = useState<"delete" | "restore">("delete")
 
   const handleAction = (key: Key) => {
-    switch (key) {
-      case "restore":
-        restoreModal.onOpen()
-        break
-      case "delete":
-        deleteModal.onOpen()
-        break
-    }
+    mutateModal.onOpen()
+    setType(key as "delete" | "restore")
   }
 
   return (
@@ -71,8 +64,7 @@ export const ScansTableMultipleActions = () => {
           </DropdownItem>
         </DropdownMenu>
       </Dropdown>
-      <ScansTableRestoreModal {...restoreModal} />
-      <ScansTableDeleteModal {...deleteModal} />
+      <ScansTableMutateModal type={type} {...mutateModal} />
     </>
   )
 }

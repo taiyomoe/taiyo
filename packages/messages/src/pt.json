@@ -1,7 +1,28 @@
 {
+  "global": {
+    "cancel": "Cancel"
+  },
   "home": {
     "title": "Olá mundo!",
     "toformat": "Olá {name}!!"
+  },
+  "dashboard": {
+    "scans": {
+      "list": {
+        "mutate": {
+          "title": "{type, select, delete {Apagar} other {Restaurar}} {count, plural, one {scan} other {scans}}",
+          "description": "Você está prestes a {type, select, delete {apagar} other {restaurar}} {count, plural, one {a a scan} other {# scans}}. Tem certeza?",
+          "deleteWarning": "{count, plural, one {A scan} other {As scans}} {count, plural, one {PODERÁ} other {PODERÃO}} ser {count, plural, one {restaurada} other {restauradas}} mais tarde, mas os capítulos associados serão perdidos para sempre.",
+          "confirmationDescription": "Para confirmar que é o que você quer, digite \"<confirmationText></confirmationText>\" no campo abaixo.",
+          "confirmationPlaceholder": "Digite \"<confirmationText></confirmationText>\" para confirmar",
+          "confirmationText": "{type, select, delete {apagar} other {restaurar}} {count, plural, one {a scan} other {as scans}}",
+          "loading": "{type, select, delete {Apagando} other {Restaurando}} {count, plural, one {a scan} other {as scans}}...",
+          "success": "{count, plural, one {Scan} other {Scans}} {type, select, delete {apagada} other {restaurada}}{count, plural, one {} other {s}} com sucesso!",
+          "error": "Um erro inesperado ocorreu ao tentar {type, select, delete {apagar} other {restaurar}} {count, plural, one {a scan} other {as scans}}.",
+          "action": "{type, select, delete {Apagar} other {Restaurar}}"
+        }
+      }
+    }
   },
   "api": {
     "unauthorized": "Não autorizado",

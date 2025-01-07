@@ -20,7 +20,7 @@ export const getTasksListSchema = z.object({
   sort: z
     .tuple([z.enum(TASKS_LIST_SORTABLE_FIELDS), z.enum(["asc", "desc"])])
     .array()
-    .catch([]),
+    .catch([["createdAt", "desc"]]),
   page: pageSchema,
   perPage: perPageSchema(
     DEFAULT_TASKS_LIST_PER_PAGE,

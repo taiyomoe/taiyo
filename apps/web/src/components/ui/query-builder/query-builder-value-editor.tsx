@@ -9,11 +9,7 @@ import {
   TaskType,
 } from "@taiyomoe/db"
 import { useRef } from "react"
-import {
-  type Field,
-  ValueEditor,
-  type ValueEditorProps,
-} from "react-querybuilder"
+import type { Field, ValueEditorProps } from "react-querybuilder"
 import { DatePicker } from "~/components/generics/date-picker"
 import { MultiSelect } from "~/components/generics/multi-select"
 import { EnumSelect } from "~/components/generics/selects/enum-select"
@@ -164,6 +160,18 @@ export const QueryBuilderValueEditor = (props: ValueEditorProps) => {
         />
       )
     default:
-      return <ValueEditor {...props} />
+      return (
+        <Input
+          className="min-w-[300px]"
+          classNames={{
+            inputWrapper: "group-data-[hover=true]:bg-default-200",
+          }}
+          value={previousValue.current ?? ""}
+          onValueChange={(v) => {
+            handleOnChange(v)
+            previousValue.current = v
+          }}
+        />
+      )
   }
 }

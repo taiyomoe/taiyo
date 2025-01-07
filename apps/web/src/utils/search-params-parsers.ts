@@ -2,8 +2,11 @@ import {
   type ParserBuilder,
   createParser,
   parseAsArrayOf,
+  parseAsString,
   parseAsStringEnum,
+  parseAsStringLiteral,
 } from "nuqs/server"
+import { z } from "zod"
 
 const parseAsIsoDate = createParser({
   parse: (v) => {
@@ -53,5 +56,52 @@ export const dateFilterParser = <TName extends string>(name: TName) =>
     [`${name}.lt`]: parseAsIsoDate,
     [`${name}.gt`]: parseAsIsoDate,
   }) as {
-    [K in `${TName}.lte` | `${TName}.gt`]: ParserBuilder<Date>
+    [K in `${TName}.lt` | `${TName}.gt`]: ParserBuilder<Date>
   }
+
+export const nullableDateFilterParser = <TName extends string>(name: TName) =>
+  ({
+    [`${name}.equals`]: parseAsStringLiteral(["null", "notNull"]).withDefault(
+      "null",
+    ),
+    [`${name}.lt`]: parseAsIsoDate,
+    [`${name}.gt`]: parseAsIsoDate,
+  }) as {
+    [K in TName | `${TName}.lt` | `${TName}.gt`]: ParserBuilder<
+      "null" | "notNull" | Date
+    >
+  }
+
+export const textFilterParser = <TName extends string>(name: TName) =>
+  ({
+    [`${name}.equals`]: parseAsString,
+    [`${name}.startsWith`]: parseAsString,
+    [`${name}.endsWith`]: parseAsString,
+    [`${name}.in`]: parseAsArrayOf(parseAsString),
+    [`${name}.notIn`]: parseAsArrayOf(parseAsString),
+  }) as {
+    [K in
+      | `${TName}.equals`
+      | `${TName}.startsWith`
+      | `${TName}.endsWith`
+      | `${TName}.in`
+      | `${TName}.notIn`]: ParserBuilder<string | string[]>
+  }
+
+export const sortParser = (sorteableFields: readonly [string, ...string[]]) =>
+  createParser({
+    parse: (v) => {
+      const schema = z
+        .tuple([z.enum(sorteableFields), z.enum(["asc", "desc"])])
+        .array()
+      const parsed = schema.safeParse(JSON.parse(v))
+
+      if (parsed.error) {
+        return null
+      }
+
+      return parsed.data
+    },
+    serialize: (v) => JSON.stringify(v),
+    eq: (a, b) => JSON.stringify(a) === JSON.stringify(b),
+  })

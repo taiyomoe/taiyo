@@ -1,45 +1,40 @@
 "use client"
 
-import {
-  SCANS_LIST_PER_PAGE_CHOICES,
-  SCANS_LIST_QUERYABLE_FIELDS,
-} from "@taiyomoe/constants"
-import type { ScansListItem } from "@taiyomoe/types"
+import { SCANS_LIST_PER_PAGE_CHOICES } from "@taiyomoe/constants"
+import type { AppRouter } from "@taiyomoe/trpc"
+import { useQueryStates } from "nuqs"
+import {} from "radash"
+import { useEffect } from "react"
 import { DataTable } from "~/components/generics/data-table/data-table"
-import { useScansListStore } from "~/stores/scansList.store"
+import { useScansListStore } from "~/stores/use-scans-list-store"
 import { api } from "~/trpc/react"
+import { keepPreviousData } from "~/utils/keep-previous-data"
+import { normalizeSearchParams } from "~/utils/normalize-search-params"
+import { scansSearchParams } from "./scans-search-params"
 import { columns } from "./scans-table-columns"
 import { ScansTableEmptyContent } from "./scans-table-empty-content"
 import { ScansTableFilters } from "./scans-table-filters"
 import { ScansTableMultipleActions } from "./scans-table-multiple-actions"
 
 type Props = {
-  initialData: {
-    scans: ScansListItem[]
-    totalPages: number
-    totalCount: number
-  }
+  initialData: Awaited<ReturnType<AppRouter["scans"]["getList"]>>
 }
 
 export const ScansTable = ({ initialData }: Props) => {
+  const [_, setSearchParams] = useQueryStates(scansSearchParams)
+  const { input, setSort, setPage, setPerPage } = useScansListStore()
   const {
-    query,
-    filter,
-    sort,
-    page,
-    perPage,
-    setQuery,
-    setSort,
-    setPage,
-    setPerPage,
-  } = useScansListStore()
-  const {
-    data: { scans: items, totalPages, totalCount },
+    data: { scans: items, totalPages, totalCount } = initialData,
     isFetching,
-  } = api.scans.getList.useQuery(
-    { query, filter, sort, page, perPage },
-    { initialData, refetchOnMount: false },
-  )
+  } = api.scans.getList.useQuery(input, {
+    placeholderData: keepPreviousData(initialData),
+  })
+
+  useEffect(() => {
+    const normalized = normalizeSearchParams(scansSearchParams, input)
+
+    setSearchParams(normalized)
+  }, [input, setSearchParams])
 
   return (
     <DataTable
@@ -48,6 +43,7 @@ export const ScansTable = ({ initialData }: Props) => {
       filters={<ScansTableFilters />}
       multipleActions={<ScansTableMultipleActions />}
       emptyContent={<ScansTableEmptyContent />}
+      initialSort={input.sort}
       initialVisibility={{
         id: false,
         updatedAt: false,
@@ -61,17 +57,15 @@ export const ScansTable = ({ initialData }: Props) => {
         email: false,
         deleter: false,
       }}
-      page={page}
-      perPage={perPage}
+      page={input.page}
+      perPage={input.perPage}
       perPageChoices={SCANS_LIST_PER_PAGE_CHOICES}
-      queryableFields={SCANS_LIST_QUERYABLE_FIELDS.options}
       totalPages={totalPages}
       totalCount={totalCount}
       isLoading={isFetching}
       onPageChange={setPage}
       onPerPageChange={setPerPage}
       onSort={setSort}
-      onQueryChange={setQuery}
     />
   )
 }

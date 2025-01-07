@@ -1,16 +1,17 @@
 import { getTasksListSchema } from "@taiyomoe/schemas"
 import { ActivityIcon, CalculatorIcon, CircleDashedIcon } from "lucide-react"
 import type { SearchParams } from "nuqs"
+import { StatsCard } from "~/components/ui/stats-card"
 import { TasksListStoreProvider } from "~/stores/use-tasks-list-store"
 import { api } from "~/trpc/server"
 import { sanitizeSearchParams } from "~/utils/sanitize-search-params"
-import { TaskStatCard } from "./_components/task-stat-card"
 import { tasksSearchParamsCache } from "./_components/tasks-search-params"
 import { TasksTable } from "./_components/tasks-table"
 
 type Props = {
   searchParams: SearchParams
 }
+
 export default async function Page(props: Props) {
   const searchParams = sanitizeSearchParams(
     props.searchParams,
@@ -24,17 +25,17 @@ export default async function Page(props: Props) {
       <p className="font-semibold text-4xl">Fila de espera</p>
       <div className="space-y-8">
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          <TaskStatCard
+          <StatsCard
             label="Tarefas ativas"
             value={initialData.stats.active}
             icon={<ActivityIcon size={20} />}
           />
-          <TaskStatCard
+          <StatsCard
             label="Tarefas pendentes"
             value={initialData.stats.pending}
             icon={<CircleDashedIcon size={20} />}
           />
-          <TaskStatCard
+          <StatsCard
             label="Tarefas total"
             value={initialData.stats.totalCount}
             icon={<CalculatorIcon size={20} />}
