@@ -20,8 +20,8 @@ const fields: Field[] = [
   { name: "createdAt", datatype: "date", label: "Data de criação" },
   { name: "updatedAt", datatype: "date", label: "Última atualização" },
   { name: "deletedAt", datatype: "nullableDate", label: "Data de remoção" },
-  { name: "creatorId", datatype: "user", label: "Criador" },
-  { name: "deleterId", datatype: "user", label: "Deletado por" },
+  // { name: "creatorId", datatype: "user", label: "Criador" },
+  // { name: "deleterId", datatype: "user", label: "Deletado por" },
 ]
 
 export const ScansTableFilters = () => {

@@ -23,6 +23,22 @@
         }
       }
     },
+    "chapters": {
+      "list": {
+        "mutate": {
+          "title": "{type, select, delete {Delete} other {Restore}} {count, plural, one {chapter} other {chapters}}",
+          "description": "You're about to {type, select, delete {delete} other {restore}} {count, plural, one {a chapter} other {# chapters}}. Are you sure?",
+          "deleteWarning": "The {count, plural, one {chapter} other {chapters}} CAN be restored later.",
+          "confirmationDescription": "To confirm that this is what you want, type \"<confirmationText></confirmationText>\" in the field below.",
+          "confirmationPlaceholder": "Type \"<confirmationText></confirmationText>\" to confirm",
+          "confirmationText": "{type, select, delete {delete} other {restore}} {count, plural, one {chapter} other {chapters}}",
+          "loading": "{type, select, delete {Deleting} other {Restoring}} {count, plural, one {chapter} other {chapters}}...",
+          "success": "{count, plural, one {Chapter} other {Chapters}} {type, select, delete {deleted} other {restored}} successfully!",
+          "error": "An unexpected error occurred when {type, select, delete {deleting} other {restoring}} the {count, plural, one {chapter} other {chapters}}.",
+          "action": "{type, select, delete {Delete} other {Restore}}"
+        }
+      }
+    },
     "scans": {
       "list": {
         "mutate": {

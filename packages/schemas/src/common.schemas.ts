@@ -186,6 +186,41 @@ export const nullableTextFilterSchema = z.preprocess(
     .optional(),
 )
 
+const rawNumberFilterSchema = z.preprocess(
+  (v) => (v === null ? undefined : v),
+  z.coerce.number(),
+)
+export const numberFilterSchema = z
+  .object({
+    equals: rawNumberFilterSchema.optional().catch(undefined),
+    not: rawNumberFilterSchema.optional().catch(undefined),
+    gt: rawNumberFilterSchema.optional().catch(undefined),
+    gte: rawNumberFilterSchema.optional().catch(undefined),
+    lt: rawNumberFilterSchema.optional().catch(undefined),
+    lte: rawNumberFilterSchema.optional().catch(undefined),
+  })
+  .optional()
+
+export const nullableNumberFilterSchema = z.preprocess(
+  nullablePreprocessor,
+  z
+    .object({
+      equals: z
+        .union([rawNumberFilterSchema, z.null()])
+        .optional()
+        .catch(undefined),
+      not: z
+        .union([rawNumberFilterSchema, z.null()])
+        .optional()
+        .catch(undefined),
+      gt: rawNumberFilterSchema.optional().catch(undefined),
+      gte: rawNumberFilterSchema.optional().catch(undefined),
+      lt: rawNumberFilterSchema.optional().catch(undefined),
+      lte: rawNumberFilterSchema.optional().catch(undefined),
+    })
+    .optional(),
+)
+
 export const bulkMutateSchema = z.object({
   type: z.enum(["restore", "delete"]),
   ids: z.array(z.string().uuid()).min(1),

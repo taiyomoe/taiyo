@@ -11,10 +11,14 @@ import { z } from "zod"
 import {
   chapterNumberSchema,
   chapterVolumeSchema,
+  dateFilterSchema,
+  enumFilterSchema,
   fileSchema,
+  nullableDateFilterSchema,
+  nullableNumberFilterSchema,
+  numberFilterSchema,
   pageSchema,
   perPageSchema,
-  sortableFieldsSchema,
 } from "./common.schemas"
 import { ContentRatingSchema, FlagSchema, LanguagesSchema } from "./prisma"
 
@@ -86,8 +90,18 @@ export const getLatestChaptersGroupedByUserSchema = z.object({
 })
 
 export const getChaptersListSchema = z.object({
-  filter: z.string().optional().default(""),
-  sort: sortableFieldsSchema(CHAPTERS_LIST_SORTABLE_FIELDS),
+  createdAt: dateFilterSchema,
+  updatedAt: dateFilterSchema,
+  deletedAt: nullableDateFilterSchema,
+  number: numberFilterSchema,
+  volume: nullableNumberFilterSchema,
+  language: enumFilterSchema(LanguagesSchema),
+  contentRating: enumFilterSchema(ContentRatingSchema),
+  flag: enumFilterSchema(FlagSchema),
+  sort: z
+    .tuple([z.enum(CHAPTERS_LIST_SORTABLE_FIELDS), z.enum(["asc", "desc"])])
+    .array()
+    .catch([["createdAt", "desc"]]),
   page: pageSchema,
   perPage: perPageSchema(
     DEFAULT_CHAPTERS_LIST_PER_PAGE,
@@ -97,11 +111,14 @@ export const getChaptersListSchema = z.object({
 
 export type UploadChapterInput = z.infer<typeof uploadChapterSchema>
 export type UploadChaptersInput = z.infer<typeof uploadChaptersSchema>
-export type UpdateChapterInput = typeof updateChapterSchema._type
-export type BulkUpdateChaptersVolumesInput =
-  typeof bulkUpdateChaptersVolumesSchema._type
-export type BulkUpdateChaptersScansInput =
-  typeof bulkUpdateChaptersScansSchema._type
-export type GetLatestChaptersGroupedByUserInput =
-  typeof getLatestChaptersGroupedByUserSchema._type
-export type GetChaptersListInput = typeof getChaptersListSchema._type
+export type UpdateChapterInput = z.infer<typeof updateChapterSchema>
+export type BulkUpdateChaptersVolumesInput = z.infer<
+  typeof bulkUpdateChaptersVolumesSchema
+>
+export type BulkUpdateChaptersScansInput = z.infer<
+  typeof bulkUpdateChaptersScansSchema
+>
+export type GetLatestChaptersGroupedByUserInput = z.infer<
+  typeof getLatestChaptersGroupedByUserSchema
+>
+export type GetChaptersListInput = z.infer<typeof getChaptersListSchema>

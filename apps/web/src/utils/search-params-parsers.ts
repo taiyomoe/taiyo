@@ -2,6 +2,7 @@ import {
   type ParserBuilder,
   createParser,
   parseAsArrayOf,
+  parseAsFloat,
   parseAsString,
   parseAsStringEnum,
   parseAsStringLiteral,
@@ -11,17 +12,33 @@ import { z } from "zod"
 const parseAsIsoDate = createParser({
   parse: (v) => {
     const date = new Date(v.slice(0, 10))
+
     if (Number.isNaN(date.valueOf())) {
       return null
     }
+
     return date
   },
-  serialize: (v: Date) => {
+  serialize: (v) => {
     const offsetMs = v.getTimezoneOffset() * 60 * 1000
     const date = new Date(v.getTime() - offsetMs)
 
     return date.toISOString().slice(0, 10)
   },
+})
+
+const parseAsNullableFloat = createParser({
+  parse: (v) => {
+    if (v === "null") return v
+    if (v === "notNull") return v
+
+    if (Number.isNaN(Number.parseFloat(v))) {
+      return null
+    }
+
+    return Number.parseFloat(v)
+  },
+  serialize: (v) => v.toString(),
 })
 
 export const enumFilterParser = <
@@ -89,6 +106,38 @@ export const textFilterParser = <TName extends string>(name: TName) =>
       | `${TName}.endsWith`
       | `${TName}.in`
       | `${TName}.notIn`]: ParserBuilder<string | string[]>
+  }
+
+export const numberFilterParser = <TName extends string>(name: TName) =>
+  ({
+    [`${name}.equals`]: parseAsFloat,
+    [`${name}.gt`]: parseAsFloat,
+    [`${name}.gte`]: parseAsFloat,
+    [`${name}.lt`]: parseAsFloat,
+    [`${name}.lte`]: parseAsFloat,
+  }) as {
+    [K in
+      | `${TName}.equals`
+      | `${TName}.gt`
+      | `${TName}.gte`
+      | `${TName}.lt`
+      | `${TName}.lte`]: ParserBuilder<number | number[]>
+  }
+
+export const nullableNumberFilterParser = <TName extends string>(name: TName) =>
+  ({
+    [`${name}.equals`]: parseAsNullableFloat,
+    [`${name}.gt`]: parseAsFloat,
+    [`${name}.gte`]: parseAsFloat,
+    [`${name}.lt`]: parseAsFloat,
+    [`${name}.lte`]: parseAsFloat,
+  }) as {
+    [K in
+      | `${TName}.equals`
+      | `${TName}.gt`
+      | `${TName}.gte`
+      | `${TName}.lt`
+      | `${TName}.lte`]: ParserBuilder<"null" | "notNull" | number | number[]>
   }
 
 export const sortParser = (sorteableFields: readonly [string, ...string[]]) =>

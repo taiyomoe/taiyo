@@ -17,8 +17,24 @@
           "confirmationPlaceholder": "Digite \"<confirmationText></confirmationText>\" para confirmar",
           "confirmationText": "{type, select, delete {apagar} other {restaurar}} {count, plural, one {a obra} other {as obras}}",
           "loading": "{type, select, delete {Apagando} other {Restaurando}} {count, plural, one {a obra} other {as obras}}...",
-          "success": "{count, plural, one {Obra} other {Obrass}} {type, select, delete {apagada} other {restaurada}}{count, plural, one {} other {s}} com sucesso!",
+          "success": "{count, plural, one {Obra} other {Obras}} {type, select, delete {apagada} other {restaurada}}{count, plural, one {} other {s}} com sucesso!",
           "error": "Um erro inesperado ocorreu ao tentar {type, select, delete {apagar} other {restaurar}} {count, plural, one {a obra} other {as obras}}.",
+          "action": "{type, select, delete {Apagar} other {Restaurar}}"
+        }
+      }
+    },
+    "chapters": {
+      "list": {
+        "mutate": {
+          "title": "{type, select, delete {Apagar} other {Restaurar}} {count, plural, one {capítulo} other {capítulos}}",
+          "description": "Você está prestes a {type, select, delete {apagar} other {restaurar}} {count, plural, one {o capítulo} other {# capítulos}}. Tem certeza?",
+          "deleteWarning": "{count, plural, one {O capítulo} other {Os capítulos}} {count, plural, one {PODERÁ} other {PODERÃO}} ser {count, plural, one {restaurado} other {restaurados}} mais tarde.",
+          "confirmationDescription": "Para confirmar que é o que você quer, digite \"<confirmationText></confirmationText>\" no campo abaixo.",
+          "confirmationPlaceholder": "Digite \"<confirmationText></confirmationText>\" para confirmar",
+          "confirmationText": "{type, select, delete {apagar} other {restaurar}} {count, plural, one {o capítulo} other {os capítulos}}",
+          "loading": "{type, select, delete {Apagando} other {Restaurando}} {count, plural, one {o capítulo} other {os capítulos}}...",
+          "success": "{count, plural, one {Capítulo} other {Capítulos}} {type, select, delete {apagado} other {restaurado}}{count, plural, one {} other {s}} com sucesso!",
+          "error": "Um erro inesperado ocorreu ao tentar {type, select, delete {apagar} other {restaurar}} {count, plural, one {o capítulo} other {os capítulos}}.",
           "action": "{type, select, delete {Apagar} other {Restaurar}}"
         }
       }
