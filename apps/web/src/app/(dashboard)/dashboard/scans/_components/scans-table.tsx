@@ -14,6 +14,7 @@ import { scansSearchParams } from "./scans-search-params"
 import { columns } from "./scans-table-columns"
 import { ScansTableEmptyContent } from "./scans-table-empty-content"
 import { ScansTableFilters } from "./scans-table-filters"
+import { ScansTableMultipleActions } from "./scans-table-multiple-actions"
 
 type Props = {
   initialData: Awaited<ReturnType<AppRouter["scans"]["getList"]>>
@@ -40,6 +41,7 @@ export const ScansTable = ({ initialData }: Props) => {
       columns={columns}
       data={items}
       filters={<ScansTableFilters />}
+      multipleActions={<ScansTableMultipleActions />}
       emptyContent={<ScansTableEmptyContent />}
       initialSort={input.sort}
       initialVisibility={{

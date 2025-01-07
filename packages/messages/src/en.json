@@ -1,7 +1,28 @@
 {
+  "global": {
+    "cancel": "Cancel"
+  },
   "home": {
     "title": "Hello world!",
     "toformat": "Hello {name}!!"
+  },
+  "dashboard": {
+    "scans": {
+      "list": {
+        "mutate": {
+          "title": "{type, select, delete {Delete} other {Restore}} {count, plural, one {group} other {groups}}",
+          "description": "You're about to {type, select, delete {delete} other {restore}} {count, plural, one {a group} other {# groups}}. Are you sure?",
+          "deleteWarning": "The {count, plural, one {group} other {groups}} CAN be restored later, however, linked chapters are lost forever.",
+          "confirmationDescription": "To confirm that this is what you want, type \"<confirmationText></confirmationText>\" in the field below.",
+          "confirmationPlaceholder": "Type \"<confirmationText></confirmationText>\" to confirm",
+          "confirmationText": "{type, select, delete {delete} other {restore}} {count, plural, one {group} other {groups}}",
+          "loading": "{type, select, delete {Deleting} other {Restoring}} {count, plural, one {group} other {groups}}...",
+          "success": "{count, plural, one {Group} other {Groups}} {type, select, delete {deleted} other {restored}} successfully!",
+          "error": "An unexpected error occurred when {type, select, delete {deleting} other {restoring}} the {count, plural, one {group} other {groups}}.",
+          "action": "{type, select, delete {Delete} other {Restore}}"
+        }
+      }
+    }
   },
   "api": {
     "unauthorized": "Unauthorized",

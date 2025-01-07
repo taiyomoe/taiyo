@@ -1,11 +1,14 @@
 import type { ScansListItem } from "@taiyomoe/types"
 import type { ColumnDef } from "@tanstack/react-table"
-import { selectableColumn } from "~/components/generics/data-table/data-table-presets"
+import {
+  actionsColumn,
+  selectableColumn,
+} from "~/components/generics/data-table/data-table-presets"
 import { TableCellDate } from "~/components/tables/table-cell-date"
 import { TableCellId } from "~/components/tables/table-cell-id"
 import { TableCellUrl } from "~/components/tables/table-cell-url"
 import { TableCellUser } from "~/components/tables/table-cell-user"
-// import { ScansTableSingleActions } from "./scans-table-single-actions"
+import { ScansTableSingleActions } from "./scans-table-single-actions"
 
 export const columns: ColumnDef<ScansListItem>[] = [
   selectableColumn(),
@@ -94,5 +97,5 @@ export const columns: ColumnDef<ScansListItem>[] = [
       <TableCellUser user={getValue<ScansListItem["deleter"]>()} />
     ),
   },
-  // actionsColumn(({ row }) => <ScansTableSingleActions scan={row.original} />),
+  actionsColumn(({ row }) => <ScansTableSingleActions scan={row.original} />),
 ]
