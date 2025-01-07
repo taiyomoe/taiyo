@@ -37,7 +37,7 @@ export const FeaturedMediasCarousel = ({ medias }: Props) => {
               maxWidth={1200}
               alt="Media's banner"
             />
-            <div className="-mt-mediasBannerContent relative z-10 flex h-full max-h-mediasBannerContent gap-6 px-4 pt-2 pb-6">
+            <div className="-mt-mediasBannerContent relative z-10 flex h-full max-h-mediasBannerContent gap-6 px-bodyPadding pt-2">
               <MediaImage
                 src={CoverUtils.getUrl(media)}
                 classNames={{
@@ -68,7 +68,7 @@ export const FeaturedMediasCarousel = ({ medias }: Props) => {
         ))}
       </div>
       <CarouselButtons
-        className="absolute right-4 bottom-4"
+        className="absolute right-bodyPadding bottom-4"
         onPrev={() => emblaApi?.scrollPrev()}
         onNext={() => emblaApi?.scrollNext()}
       />
