@@ -41,6 +41,7 @@ const getEnum = (name: string) => {
 export const QueryBuilderValueEditor = (props: ValueEditorProps) => {
   const { field, operator, handleOnChange } = props
   const fieldData = props.fieldData as Field
+  const datatype = String(fieldData.datatype)
   const previousValue = useRef(props.value)
 
   if (previousValue.current !== props.value && !props.value) {
@@ -52,10 +53,10 @@ export const QueryBuilderValueEditor = (props: ValueEditorProps) => {
   }
 
   switch (true) {
-    case fieldData.datatype === "boolean":
+    case datatype === "boolean":
       return <Switch onValueChange={handleOnChange} />
-    case fieldData.datatype === "number":
-    case fieldData.datatype === "nullable-number":
+    case datatype === "number":
+    case datatype === "nullableNumber":
       return (
         <Input
           className="min-w-[300px]"
@@ -67,8 +68,8 @@ export const QueryBuilderValueEditor = (props: ValueEditorProps) => {
           type="number"
         />
       )
-    case fieldData.datatype === "date":
-    case fieldData.datatype === "nullable-date":
+    case datatype === "date":
+    case datatype === "nullableDate":
       return (
         <DatePicker
           className="min-w-[300px]"
@@ -82,7 +83,7 @@ export const QueryBuilderValueEditor = (props: ValueEditorProps) => {
           aria-label="Date picker"
         />
       )
-    case fieldData.datatype === "media" && operator.includes("in"):
+    case datatype === "media" && operator.includes("in"):
       return (
         <MediasMultiAutocomplete
           classNames={{ container: () => "min-w-[300px]" }}
@@ -93,7 +94,7 @@ export const QueryBuilderValueEditor = (props: ValueEditorProps) => {
           }}
         />
       )
-    case fieldData.datatype === "media":
+    case datatype === "media":
       return (
         <MediasAutocomplete
           classNames={{ base: "min-w-[300px]" }}
@@ -104,7 +105,7 @@ export const QueryBuilderValueEditor = (props: ValueEditorProps) => {
           }}
         />
       )
-    case fieldData.datatype === "user" && operator.includes("in"):
+    case datatype === "user" && operator.includes("in"):
       return (
         <UsersMultiAutocomplete
           classNames={{ container: () => "min-w-[300px]" }}
@@ -115,8 +116,7 @@ export const QueryBuilderValueEditor = (props: ValueEditorProps) => {
           }}
         />
       )
-    case fieldData.datatype === "user":
-    case fieldData.datatype === "nullable-user":
+    case datatype === "user":
       return (
         <UsersAutocomplete
           classNames={{ base: "min-w-[300px]" }}
@@ -127,7 +127,7 @@ export const QueryBuilderValueEditor = (props: ValueEditorProps) => {
           }}
         />
       )
-    case fieldData.datatype === "scan":
+    case datatype === "scan":
       return (
         <ScansMultiAutocomplete
           classNames={{ container: () => "min-w-[300px]" }}

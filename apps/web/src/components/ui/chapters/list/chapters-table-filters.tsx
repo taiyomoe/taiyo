@@ -13,7 +13,7 @@ const fields: Field[] = [
   { name: "scanIds", datatype: "scan", label: "Scans" },
   { name: "createdAt", datatype: "date", label: "Data de upload" },
   { name: "updatedAt", datatype: "date", label: "Última atualização" },
-  { name: "deletedAt", datatype: "nullable-date", label: "Deletado em" },
+  { name: "deletedAt", datatype: "nullableDate", label: "Deletado em" },
   { name: "uploaderId", datatype: "user", label: "Uploader" },
   { name: "deleterId", datatype: "nullable-user", label: "Deletado por" },
 ]
