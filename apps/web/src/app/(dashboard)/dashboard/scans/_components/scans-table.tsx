@@ -30,11 +30,12 @@ export const ScansTable = ({ initialData }: Props) => {
     placeholderData: keepPreviousData(initialData),
   })
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: we only want to this trigger when the input changes
   useEffect(() => {
     const normalized = normalizeSearchParams(scansSearchParams, input)
 
     setSearchParams(normalized)
-  }, [input, setSearchParams])
+  }, [input])
 
   return (
     <DataTable
