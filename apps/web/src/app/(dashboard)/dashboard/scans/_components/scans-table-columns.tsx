@@ -79,6 +79,7 @@ export const columns: ColumnDef<ScansListItem>[] = [
     cell: ({ getValue }) => <TableCellUrl url={getValue<string>()} />,
   },
   { accessorKey: "email", header: "Email", enableMultiSort: true },
+  { accessorKey: "chaptersCount", header: "Capítulos" },
   {
     accessorKey: "creator",
     header: "Criador",
