@@ -18,9 +18,9 @@ export const messagingClient = {
 
   medias: {
     import: (input: ImportMediaMessageInput) =>
-      rawQueue.add("medias-import", input),
+      rawQueue.add("medias-import", input, { priority: 0 }),
     create: (input: CreateMediaMessageInput) =>
-      rawQueue.add("medias-create", input),
+      rawQueue.add("medias-create", input, { priority: 0 }),
   },
   covers: {
     import: (input: ImportCoverMessageInput[]) =>
