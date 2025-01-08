@@ -48,8 +48,10 @@ export const syncMediaHandler = protectedProcedure
       for (const [i, title] of deltaTitles.entries()) {
         if (!("id" in title)) continue
 
+        const randomNumber = 1000 + Math.floor(Math.random() * 1000)
+
         await tx.mediaTitle.update({
-          data: { priority: 1000 + i },
+          data: { priority: randomNumber + i },
           where: { id: title.id },
         })
       }
