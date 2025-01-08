@@ -53,6 +53,7 @@ export const SyncMediaForm = () => {
             name="id"
             label="Obra"
             labelPlacement="outside"
+            inputProps={{ classNames: { helperWrapper: "!hidden" } }}
             isRequired
           />
           <SubmitButton className="self-end">Sincronizar</SubmitButton>
