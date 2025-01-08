@@ -1,6 +1,7 @@
 import type { AlgoliaSearchResponse } from "@meilisearch/instant-meilisearch"
 import type { MediasIndexItem } from "@taiyomoe/types"
 import { parseAsString, useQueryState } from "nuqs"
+import { assign } from "radash"
 import { useCallback, useEffect, useState } from "react"
 import { useFormContext } from "react-hook-form"
 import { z } from "zod"
@@ -65,10 +66,15 @@ export const MediasField = ({ name, ...rest }: Props) => {
       onSelectionChange={handleSelectionChange}
       value={mediaId}
       isDisabled={!!media}
-      inputProps={{
-        classNames: { mainWrapper: "w-full", label: "z-0 min-w-[100px] mr-6" },
-      }}
-      {...rest}
+      {...(media ? { item: [media] } : {})}
+      {...assign(rest, {
+        inputProps: {
+          classNames: {
+            mainWrapper: "w-full",
+            label: "z-0 min-w-[100px] mr-6",
+          },
+        },
+      })}
     />
   )
 }

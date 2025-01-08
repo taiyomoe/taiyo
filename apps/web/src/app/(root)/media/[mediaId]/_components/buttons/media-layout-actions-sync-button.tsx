@@ -9,7 +9,7 @@ type Props = {
 export const MediaLayoutActionsSyncButton = ({ media: { id } }: Props) => (
   <Button
     as={Link}
-    href={`/dashboard/medias/sync?mediaId=${id}`}
+    href={`/dashboard/medias/sync?id=${id}`}
     startContent={<RefreshCwIcon className="h-6 w-6" />}
     color="warning"
     radius="sm"

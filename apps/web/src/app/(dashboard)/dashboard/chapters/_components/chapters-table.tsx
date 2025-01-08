@@ -29,8 +29,6 @@ export const ChaptersTable = ({ initialData }: Props) => {
     placeholderData: keepPreviousData(initialData),
   })
 
-  console.log("input", input)
-
   // biome-ignore lint/correctness/useExhaustiveDependencies: we only want to this trigger when the input changes
   useEffect(() => {
     const normalized = normalizeSearchParams(chaptersSearchParams, input)

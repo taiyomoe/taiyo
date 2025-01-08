@@ -1,7 +1,6 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Alert } from "@nextui-org/alert"
 import { Divider } from "@nextui-org/divider"
 import { type ImportMediaInput, importMediaSchema } from "@taiyomoe/schemas"
 import { useRouter } from "next/navigation"
@@ -13,6 +12,7 @@ import { Form } from "~/components/generics/form/form"
 import { InputField } from "~/components/generics/form/input-field"
 import { useErrorHandler } from "~/hooks/useErrorHandler"
 import { api } from "~/trpc/react"
+import { ImportMediaFormWarning } from "./import-media-form-warning"
 
 export const ImportMediaForm = () => {
   const { mutateAsync } = api.medias.import.useMutation()
@@ -49,23 +49,7 @@ export const ImportMediaForm = () => {
 
   return (
     <Form.Component {...methods} onSubmit={handleSubmit}>
-      <Alert
-        className="space-y-2"
-        color="warning"
-        title={
-          <div className="space-y-2">
-            <p>
-              Importar é uma ação que pode levar algum tempo dependendo da
-              quantidade de covers e capítulos que você deseja importar.
-            </p>
-            <p>
-              Também deve se levar em consideração que a fila de espera pode
-              estar cheia, e que leve algum tempo até que as tarefas comecem a
-              ser executadas.
-            </p>
-          </div>
-        }
-      />
+      <ImportMediaFormWarning />
       <Form.Col>
         <Form.Row>
           <InputField
