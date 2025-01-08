@@ -1,5 +1,4 @@
 import { Divider } from "@nextui-org/divider"
-import { Input } from "@nextui-org/input"
 import {
   QueryBuilder as BaseQueryBuilder,
   type FullCombinator,
@@ -68,12 +67,6 @@ export const QueryBuilder = <
       showCombinatorsBetweenRules
       resetOnOperatorChange
       {...props}
-    />
-    <Input
-      className="mt-2"
-      classNames={{ inputWrapper: "data-[hover=true]:bg-default-100" }}
-      value={filter || "(1 = 1)"}
-      isReadOnly
     />
   </div>
 )

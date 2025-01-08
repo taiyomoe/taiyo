@@ -11,7 +11,7 @@ export const getScansListHandler = protectedProcedure
   .query(async ({ ctx, input }) => {
     const filter = convertToFilter(omit(input, ["sort", "page", "perPage"]))
     const sorts = convertToSort(input.sort)
-    const [totalCount, scansCount, rawScans] = await Promise.all([
+    const [totalCount, scansCount, rawScans] = await ctx.db.$transaction([
       ctx.db.scan.count({ where: { deletedAt: null } }),
       ctx.db.scan.count({ where: filter }),
       ctx.db.scan.findMany({

@@ -11,7 +11,7 @@ export const getMediasListHandler = protectedProcedure
   .query(async ({ ctx, input }) => {
     const filter = convertToFilter(omit(input, ["sort", "page", "perPage"]))
     const sorts = convertToSort(input.sort)
-    const [totalCount, mediasCount, rawMedias] = await Promise.all([
+    const [totalCount, mediasCount, rawMedias] = await ctx.db.$transaction([
       ctx.db.media.count({ where: { deletedAt: null } }),
       ctx.db.media.count({ where: filter }),
       ctx.db.media.findMany({
@@ -35,18 +35,14 @@ export const getMediasListHandler = protectedProcedure
       where: { id: { in: uniqueUsers } },
     })
     const medias = (await parallel(10, rawMedias, async (m) => {
-      const titlesCount = await ctx.db.mediaTitle.count({
-        where: { mediaId: m.id, deletedAt: null },
-      })
-      const coversCount = await ctx.db.mediaCover.count({
-        where: { mediaId: m.id, deletedAt: null },
-      })
-      const bannersCount = await ctx.db.mediaBanner.count({
-        where: { mediaId: m.id, deletedAt: null },
-      })
-      const chaptersCount = await ctx.db.mediaChapter.count({
-        where: { mediaId: m.id, deletedAt: null },
-      })
+      const filter = { mediaId: m.id, deletedAt: null }
+      const [titlesCount, coversCount, bannersCount, chaptersCount] =
+        await ctx.db.$transaction([
+          ctx.db.mediaTitle.count({ where: filter }),
+          ctx.db.mediaCover.count({ where: filter }),
+          ctx.db.mediaBanner.count({ where: filter }),
+          ctx.db.mediaChapter.count({ where: filter }),
+        ])
 
       return {
         ...m,

@@ -12,20 +12,21 @@ export const getTasksListHandler = protectedProcedure
       pick(input, ["createdAt", "updatedAt", "status", "type"]),
     )
     const sort = convertToSort(input.sort)
-    const [active, pending, totalCount, tasks, tasksCount] = await Promise.all([
-      ctx.db.task.count({
-        where: { status: { in: ["DOWNLOADING", "UPLOADING"] } },
-      }),
-      ctx.db.task.count({ where: { status: "PENDING" } }),
-      ctx.db.task.count(),
-      ctx.db.task.findMany({
-        where: filter,
-        orderBy: sort,
-        take: input.perPage,
-        skip: (input.page - 1) * input.perPage,
-      }),
-      ctx.db.task.count({ where: filter }),
-    ])
+    const [active, pending, totalCount, tasks, tasksCount] =
+      await ctx.db.$transaction([
+        ctx.db.task.count({
+          where: { status: { in: ["DOWNLOADING", "UPLOADING"] } },
+        }),
+        ctx.db.task.count({ where: { status: "PENDING" } }),
+        ctx.db.task.count(),
+        ctx.db.task.findMany({
+          where: filter,
+          orderBy: sort,
+          take: input.perPage,
+          skip: (input.page - 1) * input.perPage,
+        }),
+        ctx.db.task.count({ where: filter }),
+      ])
 
     return {
       stats: {

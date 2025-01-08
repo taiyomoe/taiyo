@@ -13,7 +13,7 @@ export const getChaptersListHandler = protectedProcedure
   .query(async ({ ctx, input }) => {
     const filter = convertToFilter(omit(input, ["sort", "page", "perPage"]))
     const sorts = convertToSort(input.sort)
-    const [totalCount, chaptersCount, rawChapters] = await Promise.all([
+    const [totalCount, chaptersCount, rawChapters] = await ctx.db.$transaction([
       ctx.db.mediaChapter.count({ where: { deletedAt: null } }),
       ctx.db.mediaChapter.count({ where: filter }),
       ctx.db.mediaChapter.findMany({
@@ -38,7 +38,7 @@ export const getChaptersListHandler = protectedProcedure
         .flat()
         .filter(Boolean),
     )
-    const [medias, scans, users] = await Promise.all([
+    const [medias, scans, users] = await ctx.db.$transaction([
       ctx.db.media.findMany({
         select: { id: true, titles: true },
         where: { id: { in: uniqueMedias } },
