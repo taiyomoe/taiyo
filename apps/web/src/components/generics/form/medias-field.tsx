@@ -66,7 +66,7 @@ export const MediasField = ({ name, ...rest }: Props) => {
       onSelectionChange={handleSelectionChange}
       value={mediaId}
       isDisabled={!!media}
-      {...(media ? { item: [media] } : {})}
+      {...(media ? { items: [media] } : {})}
       {...assign(rest, {
         inputProps: {
           classNames: {
