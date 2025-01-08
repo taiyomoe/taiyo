@@ -29,8 +29,6 @@ export const mdIdSchema = z.union([
         /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/gi
       const uuids = [...v.matchAll(uuidRegex)].flat()
 
-      console.log("uuids", uuids)
-
       if (uuids?.at(0) && uuids.length === 1) {
         return true
       }

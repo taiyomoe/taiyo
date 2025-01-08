@@ -11,9 +11,6 @@ export const sanitizeSearchParams = <TSchema extends z.ZodSchema>(
   const parsed = parser.parse(rawSearchParams)
   const constructed = construct(parsed)
 
-  console.log("parsed", parsed)
-  console.log("constructed", constructed)
-
   const validated = schema.safeParse(constructed)
 
   if (validated.success) {

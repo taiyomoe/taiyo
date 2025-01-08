@@ -18,8 +18,6 @@ export default async function Page(props: Props) {
     chaptersSearchParamsCache,
     getChaptersListSchema,
   )
-  console.log("searchParams", searchParams)
-
   const initialData = await api.chapters.getList(searchParams)
 
   return (

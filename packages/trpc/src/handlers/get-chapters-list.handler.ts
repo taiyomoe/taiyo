@@ -66,9 +66,6 @@ export const getChaptersListHandler = protectedProcedure
       deleter: users.find((d) => d.id === c.deleterId) ?? null,
     })) satisfies ChaptersListItem[]
 
-    console.log("input", input)
-    console.log("filter", filter)
-
     return {
       stats: { totalCount },
       chapters,

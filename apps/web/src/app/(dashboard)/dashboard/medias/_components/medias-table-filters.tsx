@@ -45,8 +45,6 @@ export const MediasTableFilters = () => {
     300,
   )
 
-  console.log("defaultQuery", defaultQuery)
-
   return (
     <QueryBuilder
       fields={fields}
