@@ -7,12 +7,8 @@ import type {
 } from "@taiyomoe/types"
 import { useCallback } from "react"
 import type { Key } from "react-aria-components"
-import {
-  Configure,
-  InstantSearch,
-  useHits,
-  useSearchBox,
-} from "react-instantsearch"
+import { Configure, useHits, useSearchBox } from "react-instantsearch"
+import { InstantSearchNext } from "react-instantsearch-nextjs"
 import { meiliClient } from "~/meiliClient"
 
 export type IndexAutocompleteProps<
@@ -65,10 +61,10 @@ const IndexAutocompleteComponent = <
 const IndexAutocompleteWrapper = <TIndex extends MeilisearchIndexes>(
   props: IndexAutocompleteProps<TIndex>,
 ) => (
-  <InstantSearch searchClient={meiliClient} indexName={props.index}>
+  <InstantSearchNext searchClient={meiliClient} indexName={props.index}>
     <Configure filters={props.index === "users" ? "" : "deletedAt IS NULL"} />
     <IndexAutocompleteComponent {...props} />
-  </InstantSearch>
+  </InstantSearchNext>
 )
 
 export const IndexAutocomplete = IndexAutocompleteWrapper
