@@ -1,14 +1,16 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
+import { Alert } from "@nextui-org/alert"
+import { Divider } from "@nextui-org/divider"
 import { type ImportMediaInput, importMediaSchema } from "@taiyomoe/schemas"
 import { useRouter } from "next/navigation"
 import { type SubmitHandler, useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { SubmitButton } from "~/components/generics/buttons/submit-button"
+import { CheckboxField } from "~/components/generics/form/checkbox-field"
 import { Form } from "~/components/generics/form/form"
 import { InputField } from "~/components/generics/form/input-field"
-import { SwitchField } from "~/components/generics/form/switch-field"
 import { useErrorHandler } from "~/hooks/useErrorHandler"
 import { api } from "~/trpc/react"
 
@@ -47,21 +49,43 @@ export const ImportMediaForm = () => {
 
   return (
     <Form.Component {...methods} onSubmit={handleSubmit}>
+      <Alert
+        className="space-y-2"
+        color="warning"
+        title={
+          <div className="space-y-2">
+            <p>
+              Importar é uma ação que pode levar algum tempo dependendo da
+              quantidade de covers e capítulos que você deseja importar.
+            </p>
+            <p>
+              Também deve se levar em consideração que a fila de espera pode
+              estar cheia, e que leve algum tempo até que as tarefas comecem a
+              ser executadas.
+            </p>
+          </div>
+        }
+      />
       <Form.Col>
         <Form.Row>
           <InputField
             name="mdId"
-            label="ID na MangaDex"
+            classNames={{ helperWrapper: "!hidden" }}
+            label="ID ou link da MangaDex"
             labelPlacement="outside"
-            placeholder="93c8f7f8-58cc-40fe-9146-3f68cbfc71af"
+            placeholder="https://mangadex.org/title/e91dcdd1-005c-457d-a6c0-84f3fe22c1b0/the-main-heroines-are-trying-to-kill-me"
             isRequired
           />
           <SubmitButton className="self-end">Importar</SubmitButton>
         </Form.Row>
-        <Form.Row>
-          <SwitchField name="importCovers" label="Baixar e upar covers?" />
-          <SwitchField name="importChapters" label="Baixar e upar capítulos?" />
-        </Form.Row>
+        <div>
+          <h5 className="text-default-400 text-sm">Opções</h5>
+          <Divider className="mb-2 bg-default-300" />
+          <div className="flex flex-col gap-2">
+            <CheckboxField name="importCovers" label="Upar covers" />
+            <CheckboxField name="importChapters" label="Upar capítulos" />
+          </div>
+        </div>
       </Form.Col>
     </Form.Component>
   )
