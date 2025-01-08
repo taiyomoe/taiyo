@@ -52,12 +52,12 @@ export const FeaturedMediasCarousel = ({ medias }: Props) => {
                 alt="media's cover"
                 isZoomed
               />
-              <div className="flex flex-col justify-between py-4">
+              <div className="flex flex-col justify-between py-3">
                 <div className="flex flex-col gap-4">
-                  <p className="line-clamp-1 pb-1 font-bold text-3xl drop-shadow-accent transition-all hover:opacity-70 md:text-left md:text-4xl xl:text-5xl">
+                  <p className="line-clamp-4 max-h-[130px] font-bold text-2xl drop-shadow-accent transition-all hover:opacity-70 sm:line-clamp-1 sm:h-auto sm:pb-1 md:text-left md:text-4xl xl:text-5xl">
                     {media.mainTitle}
                   </p>
-                  <p className="line-clamp-2 text-neutral-300 italic drop-shadow-accent sm:line-clamp-3 md:line-clamp-4 lg:line-clamp-6">
+                  <p className="hidden text-neutral-300 italic drop-shadow-accent sm:line-clamp-4 md:line-clamp-6">
                     {media.synopsis}
                   </p>
                 </div>
