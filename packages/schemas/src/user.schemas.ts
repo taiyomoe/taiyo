@@ -29,7 +29,11 @@ export const updateUserSettingsSchema = z
   .object({
     profile: z
       .object({
-        birthDate: z.coerce.date().nullable(),
+        birthDate: z.coerce
+          .date()
+          .min(new Date("1900-01-01"))
+          .max(new Date())
+          .nullable(),
         gender: GendersSchema,
         city: z.string().min(1).nullable(),
         country: CountriesSchema.nullable(),
