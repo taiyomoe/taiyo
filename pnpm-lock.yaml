@@ -193,7 +193,11 @@ importers:
         specifier: ^3.5.0
         version: 3.5.0
       next:
+<<<<<<< fix/task-1985
         specifier: ^14.2.22
+=======
+        specifier: ^14.2.23
+>>>>>>> develop
         version: 14.2.23(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       next-intl:
         specifier: ^3.26.3
@@ -317,7 +321,11 @@ importers:
         specifier: workspace:*
         version: link:../utils
       next:
+<<<<<<< fix/task-1985
         specifier: ^14.2.22
+=======
+        specifier: ^14.2.23
+>>>>>>> develop
         version: 14.2.23(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       next-auth:
         specifier: 5.0.0-beta.25
