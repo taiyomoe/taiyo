@@ -1,6 +1,6 @@
-import { now } from "@internationalized/date"
+import { fromDate, now } from "@internationalized/date"
 import { Divider } from "@nextui-org/divider"
-import { Countries, Genders } from "@taiyomoe/db"
+import { Countries, Genders } from "@prisma/client"
 import { COUNTRIES_PT, GENDERS_PT } from "@taiyomoe/utils/i18n"
 import { UserSettingsFormFieldBuilder } from "~/components/forms/users/update-settings/categories/user-settings-form-field-builder"
 import { DateField } from "~/components/generics/form/date-field"
@@ -9,6 +9,7 @@ import { SelectField } from "~/components/generics/form/select-field"
 import { SwitchField } from "~/components/generics/form/switch-field"
 import { TextAreaField } from "~/components/generics/form/textarea-field"
 import { CountryFlag } from "~/components/ui/CountryFlag"
+import { DateUtils } from "~/lib/utils/date.utils"
 
 export const UserSettingsFormProfileCategory = () => (
   <div className="space-y-8">
@@ -39,7 +40,8 @@ export const UserSettingsFormProfileCategory = () => (
       <DateField
         name="profile.birthDate"
         className="w-full md:w-1/3"
-        maxValue={now("America/Sao_Paulo")}
+        minValue={fromDate(new Date("1900-01-01"), DateUtils.getTimezone())}
+        maxValue={now(DateUtils.getTimezone())}
         aria-label="Birth date"
         showMonthAndYearPickers
       />
