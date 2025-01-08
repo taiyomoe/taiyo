@@ -26,7 +26,7 @@ export const messagingClient = {
     import: (input: ImportCoverMessageInput[]) =>
       rawQueue.addBulk(input.map((i) => ({ name: "covers-import", data: i }))),
     upload: (input: UploadCoverMessageInput) =>
-      rawQueue.add("covers-upload", input),
+      rawQueue.add("covers-upload", input, { priority: 5 }),
   },
   chapters: {
     import: (input: ImportChapterMessageInput[]) =>
@@ -34,7 +34,7 @@ export const messagingClient = {
         input.map((i) => ({ name: "chapters-import", data: i })),
       ),
     upload: (input: UploadChapterMessageInput) =>
-      rawQueue.add("chapters-upload", input),
+      rawQueue.add("chapters-upload", input, { priority: 5 }),
   },
 }
 
