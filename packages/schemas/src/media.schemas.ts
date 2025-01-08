@@ -9,6 +9,7 @@ import {
   dateFilterSchema,
   enumFilterSchema,
   fileSchema,
+  mdIdSchema,
   nullableDateFilterSchema,
   pageSchema,
   perPageSchema,
@@ -51,7 +52,7 @@ export const createMediaSchema = z.object({
 })
 
 export const importMediaSchema = z.object({
-  mdId: z.string().uuid(),
+  mdId: mdIdSchema,
   importCovers: z.coerce.boolean().default(true),
   importChapters: z.coerce.boolean().default(true),
 })

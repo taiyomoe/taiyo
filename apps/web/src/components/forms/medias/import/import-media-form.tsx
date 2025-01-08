@@ -51,9 +51,9 @@ export const ImportMediaForm = () => {
         <Form.Row>
           <InputField
             name="mdId"
-            label="ID na MangaDex"
+            label="ID ou link da MangaDex"
             labelPlacement="outside"
-            placeholder="93c8f7f8-58cc-40fe-9146-3f68cbfc71af"
+            placeholder="https://mangadex.org/title/e91dcdd1-005c-457d-a6c0-84f3fe22c1b0/the-main-heroines-are-trying-to-kill-me"
             isRequired
           />
           <SubmitButton className="self-end">Importar</SubmitButton>

@@ -18,6 +18,28 @@ export const fileSchema = z.object({
   file: z.instanceof(File).optional(),
 })
 
+export const mdIdSchema = z.union([
+  z.string().uuid(),
+  z
+    .string()
+    .url()
+    .startsWith("https://mangadex.org/title/")
+    .refine((v) => {
+      const uuidRegex =
+        /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/gi
+      const uuids = [...v.matchAll(uuidRegex)].flat()
+
+      console.log("uuids", uuids)
+
+      if (uuids?.at(0) && uuids.length === 1) {
+        return true
+      }
+
+      return false
+    }, "Invalid URL")
+    .transform((v) => v.split("/").at(4)!),
+])
+
 export const perPageSchema = (initial: number, choices: number[]) =>
   z.coerce
     .number()
