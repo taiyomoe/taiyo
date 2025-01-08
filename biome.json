@@ -46,28 +46,5 @@
   },
   "files": {
     "ignore": ["./packages/schemas/src/prisma/index.ts"]
-  },
-  "overrides": [
-    {
-      "include": ["./apps/image-orchestrator/**/*.ts"],
-      "javascript": {
-        "parser": {
-          "unsafeParameterDecoratorsEnabled": true
-        }
-      }
-    },
-    {
-      "include": ["./apps/taiyo/src/lib/utils/array.utils.ts"],
-      "linter": {
-        "rules": {
-          "complexity": {
-            "noBannedTypes": "off"
-          },
-          "suspicious": {
-            "noExplicitAny": "off"
-          }
-        }
-      }
-    }
-  ]
+  }
 }
