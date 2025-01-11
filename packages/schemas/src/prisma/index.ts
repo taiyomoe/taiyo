@@ -86,11 +86,7 @@ export const MediaTrackerScalarFieldEnumSchema = z.enum(['id','createdAt','updat
 
 export const MediaChapterScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','title','number','volume','language','pages','contentRating','flag','mediaId','uploaderId','deleterId']);
 
-export const MediaChapterCommentScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','content','attachments','parentId','mediaChapterId','userId','deleterId']);
-
 export const ScanScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','name','description','logo','banner','website','discord','twitter','facebook','instagram','telegram','youtube','email','creatorId','deleterId']);
-
-export const ScanMemberScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','roles','permissions','userId']);
 
 export const TaskScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','type','status','payload','sessionId']);
 
@@ -468,28 +464,6 @@ export const MediaChapterSchema = z.object({
 export type MediaChapter = z.infer<typeof MediaChapterSchema>
 
 /////////////////////////////////////////
-// MEDIA CHAPTER COMMENT SCHEMA
-/////////////////////////////////////////
-
-export const MediaChapterCommentSchema = z.object({
-  id: z.string().uuid(),
-  createdAt: z.coerce.date(),
-  updatedAt: z.coerce.date(),
-  deletedAt: z.coerce.date().nullable(),
-  content: z.string(),
-  /**
-   * [MediaCommentAttachement]
-   */
-  attachments: JsonValueSchema.array(),
-  parentId: z.string().nullable(),
-  mediaChapterId: z.string(),
-  userId: z.string(),
-  deleterId: z.string().nullable(),
-})
-
-export type MediaChapterComment = z.infer<typeof MediaChapterCommentSchema>
-
-/////////////////////////////////////////
 // SCAN SCHEMA
 /////////////////////////////////////////
 
@@ -515,22 +489,6 @@ export const ScanSchema = z.object({
 })
 
 export type Scan = z.infer<typeof ScanSchema>
-
-/////////////////////////////////////////
-// SCAN MEMBER SCHEMA
-/////////////////////////////////////////
-
-export const ScanMemberSchema = z.object({
-  roles: ScanMemberRolesSchema.array(),
-  permissions: ScanMemberPermissionsSchema.array(),
-  id: z.string().uuid(),
-  createdAt: z.coerce.date(),
-  updatedAt: z.coerce.date(),
-  deletedAt: z.coerce.date().nullable(),
-  userId: z.string(),
-})
-
-export type ScanMember = z.infer<typeof ScanMemberSchema>
 
 /////////////////////////////////////////
 // TASK SCHEMA

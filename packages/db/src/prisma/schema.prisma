@@ -3,7 +3,7 @@
 
 generator client {
     provider        = "prisma-client-js"
-    previewFeatures = ["relationJoins", "omitApi", "strictUndefinedChecks"]
+    previewFeatures = ["relationJoins", "strictUndefinedChecks"]
 }
 
 generator json {
@@ -54,11 +54,7 @@ model User {
     createdMediaTitles    MediaTitle[]
     createdMediaTrackers  MediaTracker[]
     uploadedMediaChapters MediaChapter[]
-    mediaChapterComments  MediaChapterComment[]
     createdScans          Scan[]
-    scanMembers           ScanMember[]
-
-    @@index([id])
 }
 
 model UserProfile {
@@ -291,8 +287,7 @@ model MediaChapter {
     contentRating ContentRating @default(NORMAL)
     flag          Flag          @default(OK)
 
-    scans    Scan[]
-    comments MediaChapterComment[]
+    scans Scan[]
 
     media   Media  @relation(fields: [mediaId], references: [id], onDelete: Cascade)
     mediaId String
@@ -300,29 +295,6 @@ model MediaChapter {
     uploader   User    @relation(fields: [uploaderId], references: [id])
     uploaderId String
     deleterId  String?
-}
-
-model MediaChapterComment {
-    id        String    @id @default(uuid())
-    createdAt DateTime  @default(now())
-    updatedAt DateTime  @updatedAt
-    deletedAt DateTime?
-
-    content     String
-    /// [MediaCommentAttachement]
-    attachments Json[]
-
-    replies MediaChapterComment[] @relation("ParentComment")
-
-    parent   MediaChapterComment? @relation("ParentComment", fields: [parentId], references: [id], onDelete: Cascade)
-    parentId String?
-
-    mediaChapter   MediaChapter @relation(fields: [mediaChapterId], references: [id], onDelete: Cascade)
-    mediaChapterId String
-
-    user      User    @relation(fields: [userId], references: [id])
-    userId    String
-    deleterId String?
 }
 
 // ---- SCANS
@@ -348,26 +320,10 @@ model Scan {
     email     String?
 
     chapters MediaChapter[]
-    members  ScanMember[]
 
     creator   User    @relation(fields: [creatorId], references: [id])
     creatorId String
     deleterId String?
-}
-
-model ScanMember {
-    id        String    @id @default(uuid())
-    createdAt DateTime  @default(now())
-    updatedAt DateTime  @updatedAt
-    deletedAt DateTime?
-
-    roles       ScanMemberRoles[]
-    permissions ScanMemberPermissions[]
-
-    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-    userId String
-
-    scans Scan[]
 }
 
 // ---- TASKS
