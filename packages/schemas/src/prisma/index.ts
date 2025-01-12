@@ -182,7 +182,7 @@ export type CountriesType = `${z.infer<typeof CountriesSchema>}`
 
 export const UserSchema = z.object({
   role: RolesSchema,
-  id: z.string().uuid(),
+  id: z.string(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
   name: z.string().nullable(),
@@ -200,7 +200,7 @@ export type User = z.infer<typeof UserSchema>
 export const UserProfileSchema = z.object({
   gender: GendersSchema,
   country: CountriesSchema.nullable(),
-  id: z.string().uuid(),
+  id: z.string(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
   banner: z.string().nullable(),
@@ -221,7 +221,7 @@ export const UserSettingSchema = z.object({
   contentRating: ContentRatingSchema,
   preferredTitles: LanguagesSchema.nullable(),
   homeLayout: HomeLayoutSchema,
-  id: z.string().uuid(),
+  id: z.string(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
   showFollowing: z.boolean(),
@@ -285,7 +285,7 @@ export type UserHistory = z.infer<typeof UserHistorySchema>
 /////////////////////////////////////////
 
 export const AccountSchema = z.object({
-  id: z.string().uuid(),
+  id: z.string(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
   type: z.string(),

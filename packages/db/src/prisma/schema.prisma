@@ -28,7 +28,7 @@ datasource db {
 
 // ----- USERS
 model User {
-    id        String   @id @default(uuid())
+    id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
@@ -58,7 +58,7 @@ model User {
 }
 
 model UserProfile {
-    id        String   @id @default(uuid())
+    id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
@@ -70,12 +70,12 @@ model UserProfile {
     about     String?
     points    Int        @default(0)
 
-    userId String @unique
     user   User   @relation(fields: [userId], references: [id])
+    userId String @unique @db.Uuid
 }
 
 model UserSetting {
-    id        String   @id @default(uuid())
+    id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
@@ -86,7 +86,7 @@ model UserSetting {
     homeLayout      HomeLayout    @default(ROWS)
 
     user   User   @relation(fields: [userId], references: [id])
-    userId String @unique
+    userId String @unique @db.Uuid
 }
 
 model UserLibrary {
@@ -104,7 +104,7 @@ model UserLibrary {
     dropped    Json[] @default([])
 
     user   User   @relation(fields: [userId], references: [id])
-    userId String @unique
+    userId String @unique @db.Uuid
 }
 
 model UserHistory {
@@ -115,13 +115,13 @@ model UserHistory {
     mediaId String
 
     user   User   @relation(fields: [userId], references: [id])
-    userId String
+    userId String @db.Uuid
 
     @@unique([mediaId, userId])
 }
 
 model Account {
-    id        String   @id @default(uuid())
+    id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
@@ -138,7 +138,7 @@ model Account {
     providerAccountId String
 
     user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-    userId String
+    userId String @db.Uuid
 
     @@unique([provider, providerAccountId])
 }
@@ -151,7 +151,7 @@ model Session {
     expires      DateTime
 
     user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-    userId String
+    userId String @db.Uuid
 }
 
 model VerificationToken {
@@ -194,8 +194,8 @@ model Media {
     history  UserHistory[]
 
     creator   User    @relation(fields: [creatorId], references: [id])
-    creatorId String
-    deleterId String?
+    creatorId String  @db.Uuid
+    deleterId String? @db.Uuid
 }
 
 model MediaCover {
@@ -213,8 +213,8 @@ model MediaCover {
     mediaId String
 
     uploader   User    @relation(fields: [uploaderId], references: [id])
-    uploaderId String
-    deleterId  String?
+    uploaderId String  @db.Uuid
+    deleterId  String? @db.Uuid
 }
 
 model MediaBanner {
@@ -229,8 +229,8 @@ model MediaBanner {
     mediaId String
 
     uploader   User    @relation(fields: [uploaderId], references: [id])
-    uploaderId String
-    deleterId  String?
+    uploaderId String  @db.Uuid
+    deleterId  String? @db.Uuid
 }
 
 model MediaTitle {
@@ -249,8 +249,8 @@ model MediaTitle {
     mediaId String
 
     creator   User    @relation(fields: [creatorId], references: [id])
-    creatorId String
-    deleterId String?
+    creatorId String  @db.Uuid
+    deleterId String? @db.Uuid
 
     @@unique([mediaId, language, priority], name: "MediaTitlePriority")
 }
@@ -268,8 +268,8 @@ model MediaTracker {
     mediaId String
 
     creator   User    @relation(fields: [creatorId], references: [id])
-    creatorId String
-    deleterId String?
+    creatorId String  @db.Uuid
+    deleterId String? @db.Uuid
 }
 
 model MediaChapter {
@@ -293,8 +293,8 @@ model MediaChapter {
     mediaId String
 
     uploader   User    @relation(fields: [uploaderId], references: [id])
-    uploaderId String
-    deleterId  String?
+    uploaderId String  @db.Uuid
+    deleterId  String? @db.Uuid
 }
 
 // ---- SCANS
@@ -322,8 +322,8 @@ model Scan {
     chapters MediaChapter[]
 
     creator   User    @relation(fields: [creatorId], references: [id])
-    creatorId String
-    deleterId String?
+    creatorId String  @db.Uuid
+    deleterId String? @db.Uuid
 }
 
 // ---- TASKS
