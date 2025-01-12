@@ -342,7 +342,7 @@ export const MediaSchema = z.object({
   countryOfOrigin: MediaCountryOfOriginSchema,
   genres: MediaGenresSchema.array(),
   flag: FlagSchema,
-  id: z.string().uuid(),
+  id: z.string(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
   deletedAt: z.coerce.date().nullable(),
@@ -368,7 +368,7 @@ export type Media = z.infer<typeof MediaSchema>
 export const MediaCoverSchema = z.object({
   contentRating: ContentRatingSchema,
   language: LanguagesSchema,
-  id: z.string().uuid(),
+  id: z.string(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
   deletedAt: z.coerce.date().nullable(),
@@ -387,7 +387,7 @@ export type MediaCover = z.infer<typeof MediaCoverSchema>
 
 export const MediaBannerSchema = z.object({
   contentRating: ContentRatingSchema,
-  id: z.string().uuid(),
+  id: z.string(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
   deletedAt: z.coerce.date().nullable(),
@@ -404,7 +404,7 @@ export type MediaBanner = z.infer<typeof MediaBannerSchema>
 
 export const MediaTitleSchema = z.object({
   language: LanguagesSchema,
-  id: z.string().uuid(),
+  id: z.string(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
   deletedAt: z.coerce.date().nullable(),
@@ -425,7 +425,7 @@ export type MediaTitle = z.infer<typeof MediaTitleSchema>
 
 export const MediaTrackerSchema = z.object({
   tracker: TrackersSchema,
-  id: z.string().uuid(),
+  id: z.string(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
   deletedAt: z.coerce.date().nullable(),
@@ -445,7 +445,7 @@ export const MediaChapterSchema = z.object({
   language: LanguagesSchema,
   contentRating: ContentRatingSchema,
   flag: FlagSchema,
-  id: z.string().uuid(),
+  id: z.string(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
   deletedAt: z.coerce.date().nullable(),
@@ -468,7 +468,7 @@ export type MediaChapter = z.infer<typeof MediaChapterSchema>
 /////////////////////////////////////////
 
 export const ScanSchema = z.object({
-  id: z.string().uuid(),
+  id: z.string(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
   deletedAt: z.coerce.date().nullable(),
@@ -497,7 +497,7 @@ export type Scan = z.infer<typeof ScanSchema>
 export const TaskSchema = z.object({
   type: TaskTypeSchema,
   status: TaskStatusSchema,
-  id: z.string().uuid(),
+  id: z.string(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
   payload: JsonValueSchema,

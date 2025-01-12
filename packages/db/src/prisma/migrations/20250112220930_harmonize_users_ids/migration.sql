@@ -195,7 +195,6 @@ ALTER TABLE "User" RENAME COLUMN "id" TO "idTemp";
 ALTER TABLE "User" ADD COLUMN "id" UUID NOT NULL DEFAULT gen_random_uuid();
 UPDATE "User" SET "id" = "idTemp"::UUID;
 ALTER TABLE "User" DROP COLUMN "idTemp";
-ALTER TABLE "Scan" ALTER COLUMN "id" SET NOT NULL;
 ALTER TABLE "User" ADD CONSTRAINT "User_pkey" PRIMARY KEY ("id");
 
 -- CreateIndex
