@@ -56,7 +56,7 @@ export type InputJsonValueType = z.infer<typeof InputJsonValueSchema>;
 
 export const TransactionIsolationLevelSchema = z.enum(['ReadUncommitted','ReadCommitted','RepeatableRead','Serializable']);
 
-export const UserScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','name','email','emailVerified','image','role']);
+export const UserScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','name','email','emailVerified','image','banned','banReason','banExpires','role']);
 
 export const RelationLoadStrategySchema = z.enum(['query','join']);
 
@@ -68,11 +68,11 @@ export const UserLibraryScalarFieldEnumSchema = z.enum(['reading','rereading','p
 
 export const UserHistoryScalarFieldEnumSchema = z.enum(['progression','mediaId','userId']);
 
-export const AccountScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','type','refresh_token','access_token','expires_at','token_type','scope','id_token','session_state','provider','providerAccountId','userId']);
+export const AccountScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','accessToken','refreshToken','accessTokenExpiresAt','refreshTokenExpiresAt','scope','password','idToken','accountId','providerId','userId']);
 
-export const SessionScalarFieldEnumSchema = z.enum(['createdAt','updatedAt','sessionToken','expires','userId']);
+export const SessionScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','expiresAt','token','ipAddress','userAgent','impersonatedBy','userId']);
 
-export const VerificationTokenScalarFieldEnumSchema = z.enum(['identifier','token','expires']);
+export const VerificationScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','expiresAt','identifier','value']);
 
 export const MediaScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','startDate','endDate','synopsis','contentRating','oneShot','trailer','type','status','source','demography','countryOfOrigin','genres','tags','flag','creatorId','deleterId']);
 
@@ -185,10 +185,13 @@ export const UserSchema = z.object({
   id: z.string(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
-  name: z.string().nullable(),
-  email: z.string().nullable(),
+  name: z.string(),
+  email: z.string(),
   emailVerified: z.coerce.date().nullable(),
   image: z.string().nullable(),
+  banned: z.boolean().nullable(),
+  banReason: z.string().nullable(),
+  banExpires: z.coerce.date().nullable(),
 })
 
 export type User = z.infer<typeof UserSchema>
@@ -288,16 +291,15 @@ export const AccountSchema = z.object({
   id: z.string(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
-  type: z.string(),
-  refresh_token: z.string().nullable(),
-  access_token: z.string().nullable(),
-  expires_at: z.number().int().nullable(),
-  token_type: z.string().nullable(),
+  accessToken: z.string().nullable(),
+  refreshToken: z.string().nullable(),
+  accessTokenExpiresAt: z.coerce.date().nullable(),
+  refreshTokenExpiresAt: z.coerce.date().nullable(),
   scope: z.string().nullable(),
-  id_token: z.string().nullable(),
-  session_state: z.string().nullable(),
-  provider: z.string(),
-  providerAccountId: z.string(),
+  password: z.string().nullable(),
+  idToken: z.string().nullable(),
+  accountId: z.string(),
+  providerId: z.string(),
   userId: z.string(),
 })
 
@@ -308,26 +310,33 @@ export type Account = z.infer<typeof AccountSchema>
 /////////////////////////////////////////
 
 export const SessionSchema = z.object({
+  id: z.string(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
-  sessionToken: z.string(),
-  expires: z.coerce.date(),
+  expiresAt: z.coerce.date(),
+  token: z.string(),
+  ipAddress: z.string().nullable(),
+  userAgent: z.string().nullable(),
+  impersonatedBy: z.string().nullable(),
   userId: z.string(),
 })
 
 export type Session = z.infer<typeof SessionSchema>
 
 /////////////////////////////////////////
-// VERIFICATION TOKEN SCHEMA
+// VERIFICATION SCHEMA
 /////////////////////////////////////////
 
-export const VerificationTokenSchema = z.object({
+export const VerificationSchema = z.object({
+  id: z.string(),
+  createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date(),
+  expiresAt: z.coerce.date(),
   identifier: z.string(),
-  token: z.string(),
-  expires: z.coerce.date(),
+  value: z.string(),
 })
 
-export type VerificationToken = z.infer<typeof VerificationTokenSchema>
+export type Verification = z.infer<typeof VerificationSchema>
 
 /////////////////////////////////////////
 // MEDIA SCHEMA

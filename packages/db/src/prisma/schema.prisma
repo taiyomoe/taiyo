@@ -32,10 +32,13 @@ model User {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    name          String?
-    email         String?   @unique
+    name          String
+    email         String    @unique
     emailVerified DateTime?
     image         String?
+    banned        Boolean?
+    banReason     String?
+    banExpires    DateTime?
     role          Roles     @default(USER)
 
     accounts  Account[]
@@ -125,41 +128,45 @@ model Account {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    type          String
-    refresh_token String?
-    access_token  String?
-    expires_at    Int?
-    token_type    String?
-    scope         String?
-    id_token      String?
-    session_state String?
-
-    provider          String
-    providerAccountId String
+    accessToken           String?
+    refreshToken          String?
+    accessTokenExpiresAt  DateTime?
+    refreshTokenExpiresAt DateTime?
+    scope                 String?
+    password              String?
+    idToken               String?
+    accountId             String
+    providerId            String
 
     user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
     userId String @db.Uuid
 
-    @@unique([provider, providerAccountId])
+    @@unique([accountId, providerId, userId])
 }
 
 model Session {
+    id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+    expiresAt DateTime
 
-    sessionToken String   @unique
-    expires      DateTime
+    token          String  @unique
+    ipAddress      String?
+    userAgent      String?
+    impersonatedBy String?
 
     user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
     userId String @db.Uuid
 }
 
-model VerificationToken {
-    identifier String
-    token      String
-    expires    DateTime
+model Verification {
+    id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    expiresAt DateTime
 
-    @@id([identifier, token])
+    identifier String
+    value      String
 }
 
 // ----- MEDIAS
