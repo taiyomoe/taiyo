@@ -7,9 +7,7 @@ import {
 import type { BetterAuthOptions } from "better-auth"
 import { z } from "zod"
 
-export const additionalFields: NonNullable<
-  BetterAuthOptions["user"]
->["additionalFields"] = {
+export const additionalFields = {
   role: {
     type: "string",
     defaultValue: "USER",
@@ -57,4 +55,4 @@ export const additionalFields: NonNullable<
       output: HomeLayoutSchema,
     },
   },
-}
+} satisfies NonNullable<BetterAuthOptions["user"]>["additionalFields"]
