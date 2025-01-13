@@ -5,7 +5,8 @@
   "type": "module",
   "license": "MIT",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./db": "./src/prisma/index.ts"
   },
   "scripts": {
     "clean": "rm -rf .turbo node_modules",

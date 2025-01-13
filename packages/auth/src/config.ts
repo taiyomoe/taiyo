@@ -1,78 +1,79 @@
-import { PrismaAdapter } from "@auth/prisma-adapter"
-import { type HomeLayout, type Languages, type User, db } from "@taiyomoe/db"
-import type { Permission } from "@taiyomoe/types"
-import { PermissionUtils } from "@taiyomoe/utils"
-import type { DefaultSession, NextAuthConfig } from "next-auth"
-import Discord from "next-auth/providers/discord"
+import { db } from "@taiyomoe/db"
+import {
+  ContentRatingSchema,
+  HomeLayoutSchema,
+  LanguagesSchema,
+  RolesSchema,
+} from "@taiyomoe/schemas/db"
+import { betterAuth, z } from "better-auth"
+import { prismaAdapter } from "better-auth/adapters/prisma"
+import { admin } from "better-auth/plugins"
 import { env } from "./env"
-import { createUserHandler } from "./handlers/create-user.handler"
-import { signInHandler } from "./handlers/sign-in.hander"
-import { signOutHandler } from "./handlers/sign-out.handler"
 
-/**
- * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
- * object and keep type safety.
- *
- * @see https://authjs.dev/getting-started/typescript#module-augmentation
- */
-declare module "next-auth" {
-  /**
-   * Returned by `auth`, `useSession`, `getSession` and received as a prop on the `SessionProvider` React Context
-   */
-  interface Session {
-    user: DefaultSession["user"] & {
-      id: string
-      role: { name: string; permissions: Permission[] }
-      preferredTitles: Languages | null
-      showFollowing: boolean
-      showLibrary: boolean
-      homeLayout: HomeLayout
-    }
-  }
-}
-
-export const authConfig = {
-  debug: process.env.NODE_ENV === "development",
-  trustHost: true,
-  adapter: PrismaAdapter(db),
-  providers: [Discord],
-  pages: { signIn: "/auth/sign-in" },
-  cookies: {
-    sessionToken: {
-      options: { domain: `.${new URL(env.AUTH_URL).hostname}` },
+export const auth = betterAuth({
+  appName: "Taiyō",
+  database: prismaAdapter(db, { provider: "postgresql" }),
+  emailAndPassword: {
+    enabled: true,
+  },
+  user: {
+    additionalFields: {
+      role: {
+        type: "string",
+        defaultValue: "USER",
+        validator: {
+          input: RolesSchema,
+          output: RolesSchema,
+        },
+      },
+      contentRating: {
+        type: "string",
+        defaultValue: "NSFL",
+        validator: {
+          input: ContentRatingSchema,
+          output: ContentRatingSchema,
+        },
+      },
+      preferredTitles: {
+        type: "string",
+        validator: {
+          input: LanguagesSchema,
+          output: LanguagesSchema,
+        },
+      },
+      showFollowing: {
+        type: "boolean",
+        defaultValue: true,
+        validator: {
+          input: z.boolean(),
+          output: z.boolean(),
+        },
+      },
+      showLibrary: {
+        type: "boolean",
+        defaultValue: true,
+        validator: {
+          input: z.boolean(),
+          output: z.boolean(),
+        },
+      },
+      homeLayout: {
+        type: "string",
+        defaultValue: "ROWS",
+        validator: {
+          input: HomeLayoutSchema,
+          output: HomeLayoutSchema,
+        },
+      },
     },
   },
-  callbacks: {
-    session: async ({ session, user: adapterUser }) => {
-      const user = adapterUser as User
-      const settings = await db.userSetting.findUnique({
-        select: {
-          preferredTitles: true,
-          showFollowing: true,
-          showLibrary: true,
-          homeLayout: true,
-        },
-        where: { userId: user.id },
-      })
-      const role = {
-        name: user.role,
-        permissions: PermissionUtils.getRolePermissions(user.role),
-      }
-
-      return {
-        ...session,
-        user: {
-          id: user.id,
-          image: user.image,
-          role,
-          ...settings!,
-        },
-      }
+  socialProviders: {
+    discord: {
+      clientId: env.BETTER_AUTH_DISCORD_ID,
+      clientSecret: env.BETTER_AUTH_DISCORD_SECRET,
     },
   },
-  events: {
-    createUser: createUserHandler,
-    signIn: signInHandler,
-    signOut: signOutHandler,
-  },
-} satisfies NextAuthConfig
+  plugins: [admin({
+    defaultRole: false
+  })],
+})
