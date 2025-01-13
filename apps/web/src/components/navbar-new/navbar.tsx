@@ -1,5 +1,4 @@
 import { type VariantProps, tv } from "@nextui-org/react"
-import { auth } from "@taiyomoe/auth/server"
 import { ReaderSidebarOpenButton } from "~/app/(reader)/_components/readerSidebar/ui/ReaderSidebarOpenButton"
 import { NavbarCollapseButton } from "~/components/navbar-new/navbar-collapse-button"
 import { NavbarLogo } from "~/components/navbar-new/navbar-logo"
@@ -10,6 +9,7 @@ import { NavbarGuestPopover } from "~/components/navbar/popovers/navbar-guest-po
 import { NavbarUserPopover } from "~/components/navbar/popovers/navbar-user-popover"
 import { MediasSearchMenu } from "~/components/ui/medias-search/menu/medias-search-menu"
 import { SignedIn } from "~/components/utils/signed-in/server"
+import { getSession } from "~/utils/get-session"
 
 const navbar = tv({
   base: "relative z-20 flex h-navbar items-center justify-between px-bodyPadding",
@@ -28,7 +28,7 @@ type Props = {
 } & VariantProps<typeof navbar>
 
 export const Navbar = async ({ mode, showCollapse, showLogo }: Props) => {
-  const session = await auth()
+  const session = await getSession()
   const slots = navbar({ mode })
 
   return (

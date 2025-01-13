@@ -5,10 +5,10 @@ import { api } from "~/trpc/react"
 export const useChapterProgression = () => {
   const { chapter } = useReaderStore()
   const { mutate } = api.users.updateProgression.useMutation()
-  const { status } = useSession()
+  const { data: session } = useSession()
 
   const onPageUpdate = (newCurrentPageNumber: number) => {
-    if (status !== "authenticated" || !chapter) return
+    if (!session || !chapter) return
 
     const newCurrentPageId = chapter.pages[(newCurrentPageNumber ?? 0) - 1]?.id
 
@@ -20,7 +20,7 @@ export const useChapterProgression = () => {
   }
 
   const onNextChapter = () => {
-    if (status !== "authenticated" || !chapter) return
+    if (!session || !chapter) return
 
     mutate({
       chapterId: chapter.id,

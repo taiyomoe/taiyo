@@ -1,11 +1,11 @@
-import { auth } from "@taiyomoe/auth/server"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 import { DiscordAuthButton } from "~/app/(auth)/auth/sign-in/_components/discord-auth-button"
 import { CompanyLogo } from "~/components/ui/CompanyLogo"
+import { getSession } from "~/utils/get-session"
 
 export default async function SignInPage() {
-  const session = await auth()
+  const session = await getSession()
 
   if (session) {
     redirect("/")

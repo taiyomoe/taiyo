@@ -1,15 +1,15 @@
-import { auth } from "@taiyomoe/auth/server"
 import { notFound } from "next/navigation"
 import { Navbar } from "~/components/navbar-new/navbar"
 import { SidebarInset } from "~/components/sidebar/sidebar"
 import { SidebarProvider } from "~/components/sidebar/sidebar-provider"
 import type { LayoutProps } from "~/lib/types"
+import { getSession } from "~/utils/get-session"
 import { DashboardSidebar } from "./_components/dashboard-sidebar"
 
 export default async function Layout({ children }: LayoutProps) {
-  const session = await auth()
+  const session = await getSession()
 
-  if (!session || session.user.role.name !== "ADMIN") {
+  if (!session || session.user.role !== "ADMIN") {
     notFound()
   }
 

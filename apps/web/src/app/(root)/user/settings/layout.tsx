@@ -1,10 +1,10 @@
 import { Divider } from "@nextui-org/divider"
-import { auth } from "@taiyomoe/auth/server"
 import { notFound } from "next/navigation"
 import type { LayoutProps } from "~/lib/types"
+import { getSession } from "~/utils/get-session"
 
 export default async function Layout({ children }: LayoutProps) {
-  const session = await auth()
+  const session = await getSession()
 
   if (!session) {
     notFound()
