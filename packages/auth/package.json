@@ -19,13 +19,10 @@
     "@taiyomoe/logs": "workspace:*",
     "@taiyomoe/meilisearch": "workspace:*",
     "@taiyomoe/schemas": "workspace:*",
-    "@taiyomoe/utils": "workspace:*",
     "better-auth": "^1.1.10",
-    "react": "18.3.1",
     "zod": "^3.24.1"
   },
   "devDependencies": {
-    "@taiyomoe/tsconfig": "workspace:*",
-    "@taiyomoe/types": "workspace:*"
+    "@taiyomoe/tsconfig": "workspace:*"
   }
 }
