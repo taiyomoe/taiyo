@@ -50,7 +50,6 @@ export const bulkMutateScansHandler = protectedProcedure
           deletedAt: scan.deletedAt,
           deleterId: scan.deleterId,
           chapters: { set: [] },
-          members: { set: [] },
         },
         where: { id: scan.id },
       })
