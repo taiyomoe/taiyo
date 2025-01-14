@@ -13,6 +13,7 @@ import { env } from "./env"
 import { signedInHandler } from "./handlers/signed-in.auth-handler"
 import { signedOutHandler } from "./handlers/signed-out.auth-handler"
 import { signedUpHandler } from "./handlers/signed-up.auth-handler"
+import { getSessionFromHeaders } from "./utils/get-session-from-headers"
 
 export const auth = betterAuth({
   appName: "Taiyō",
@@ -26,19 +27,18 @@ export const auth = betterAuth({
       clientSecret: env.BETTER_AUTH_DISCORD_SECRET,
     },
   },
-  user: { additionalFields },
   advanced: { generateId: false },
   databaseHooks: {
     user: { create: { after: signedUpHandler } },
     session: { create: { after: signedInHandler } },
   },
   hooks: {
-    after: async (ctx) => {
-      const session = ctx.context.session
-
-      if (!session) return
-
+    before: async (ctx) => {
       if (ctx.path === "/sign-out") {
+        const session = await getSessionFromHeaders(ctx)
+
+        if (!session) return
+
         return signedOutHandler(session.user.id, session.session.ipAddress)
       }
     },
