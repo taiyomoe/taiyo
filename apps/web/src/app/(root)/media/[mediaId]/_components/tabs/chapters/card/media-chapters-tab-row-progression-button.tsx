@@ -1,4 +1,4 @@
-import { useSession } from "@taiyomoe/auth/client"
+import { authClient } from "@taiyomoe/auth/client"
 import { EyeIcon, EyeOffIcon } from "lucide-react"
 import type { Dispatch, SetStateAction } from "react"
 import { api } from "~/trpc/react"
@@ -12,7 +12,7 @@ type Props = {
 export const MediaChaptersTabRowProgressionButton = (props: Props) => {
   const { chapter, completed, setCompleted } = props
   const { mutate } = api.users.updateProgression.useMutation()
-  const { data: session } = useSession()
+  const { data: session } = authClient.useSession()
   const Icon = completed ? EyeOffIcon : EyeIcon
 
   const handleClick = () => {

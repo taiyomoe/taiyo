@@ -1,5 +1,5 @@
 import type { AlgoliaSearchResponse } from "@meilisearch/instant-meilisearch"
-import { useSession } from "@taiyomoe/auth/client"
+import { authClient } from "@taiyomoe/auth/client"
 import type { MediasIndexItem } from "@taiyomoe/types"
 import { MediaUtils } from "@taiyomoe/utils"
 import {
@@ -15,7 +15,7 @@ type RefinedSelectItem = MediasIndexItem & SelectItem
 export const MediasMultiAutocomplete = (
   props: MultiSelectProps<RefinedSelectItem>,
 ) => {
-  const session = useSession()
+  const { data: session } = authClient.useSession()
 
   const loadOptions = async (inputValue: string) => {
     if (!inputValue) return []
@@ -30,7 +30,7 @@ export const MediasMultiAutocomplete = (
       ...item,
       label: MediaUtils.getDisplayTitle(
         item.titles,
-        session?.data?.user.preferredTitles,
+        session?.user.settings.preferredTitles,
       ),
       value: item.id,
     }))

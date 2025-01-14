@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "@nextui-org/button"
-import { useSession } from "@taiyomoe/auth/client"
+import { authClient } from "@taiyomoe/auth/client"
 import type { UserLimited } from "@taiyomoe/types"
 import { useSetAtom } from "jotai"
 import { UserMinusIcon, UserPlusIcon } from "lucide-react"
@@ -25,7 +25,7 @@ export const UserLayoutFollowButton = ({
   const setFollowersCount = useSetAtom(userProfileFollowersCountAtom)
   const setOwnUser = useSetAtom(userProfileOwnFollowerAtom)
   const { mutate, isPending } = api.users.toggleFollow.useMutation()
-  const { data: session } = useSession()
+  const { data: session } = authClient.useSession()
 
   const handlePress = () => {
     mutate(
@@ -35,7 +35,7 @@ export const UserLayoutFollowButton = ({
           setIsFollowing(!isFollowing)
           setOwnUser(data ?? null)
 
-          if (session!.user.showFollowing) {
+          if (session!.user.settings.showFollowing) {
             setFollowersCount((prev) => (isFollowing ? prev - 1 : prev + 1))
           }
         },

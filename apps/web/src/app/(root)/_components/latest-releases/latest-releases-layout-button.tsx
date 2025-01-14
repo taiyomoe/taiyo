@@ -1,7 +1,7 @@
 "use client"
 
 import { Button, ButtonGroup } from "@nextui-org/button"
-import { useSession } from "@taiyomoe/auth/client"
+import { authClient } from "@taiyomoe/auth/client"
 import type { HomeLayout } from "@taiyomoe/db"
 import { useAtom } from "jotai"
 import { useHydrateAtoms } from "jotai/utils"
@@ -18,7 +18,7 @@ export const LatestReleasesLayoutButton = ({ initialLayout }: Props) => {
   useHydrateAtoms([[releasesLayoutAtom, initialLayout]])
 
   const [releasesLayout, setReleasesLayout] = useAtom(releasesLayoutAtom)
-  const { data: session } = useSession()
+  const { data: session } = authClient.useSession()
   const { mutateAsync } = api.users.updateSettings.useMutation()
 
   const handlePress = (action: "ROWS" | "COLUMNS") => async () => {

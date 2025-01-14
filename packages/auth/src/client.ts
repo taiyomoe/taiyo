@@ -1,13 +1,7 @@
-import { adminClient, inferAdditionalFields } from "better-auth/client/plugins"
-import { type BetterFetchError, createAuthClient } from "better-auth/react"
-import type { Session, auth } from "./config"
+import { adminClient, customSessionClient } from "better-auth/client/plugins"
+import { createAuthClient } from "better-auth/react"
+import type { auth } from "./config"
 
 export const authClient = createAuthClient({
-  plugins: [inferAdditionalFields<typeof auth>(), adminClient()],
+  plugins: [customSessionClient<typeof auth>(), adminClient()],
 })
-
-export const useSession = authClient.useSession as () => {
-  data: Session | null
-  isPending: boolean
-  error: BetterFetchError | null
-}

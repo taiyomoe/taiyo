@@ -1,5 +1,5 @@
 import { AutocompleteItem } from "@nextui-org/autocomplete"
-import { useSession } from "@taiyomoe/auth/client"
+import { authClient } from "@taiyomoe/auth/client"
 import { MediaUtils } from "@taiyomoe/utils"
 import {
   IndexAutocomplete,
@@ -13,7 +13,7 @@ export type MediasAutocompleteProps = Omit<
 >
 
 export const MediasAutocomplete = (props: MediasAutocompleteProps) => {
-  const session = useSession()
+  const { data: session } = authClient.useSession()
 
   return (
     <IndexAutocomplete
@@ -24,7 +24,7 @@ export const MediasAutocomplete = (props: MediasAutocompleteProps) => {
       {(item) => {
         const title = MediaUtils.getDisplayTitle(
           item.titles,
-          session?.data?.user.preferredTitles,
+          session?.user.settings.preferredTitles,
         )
 
         return (

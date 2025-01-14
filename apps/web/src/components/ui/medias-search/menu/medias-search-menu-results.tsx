@@ -1,5 +1,5 @@
 import { ScrollShadow } from "@nextui-org/scroll-shadow"
-import { useSession } from "@taiyomoe/auth/client"
+import { authClient } from "@taiyomoe/auth/client"
 import type { MediasIndexItem } from "@taiyomoe/types"
 import { Command } from "cmdk"
 import { useHits } from "react-instantsearch"
@@ -10,7 +10,7 @@ type Props = {
 }
 
 export const MediasSearchResults = (props: Props) => {
-  const { data: session } = useSession()
+  const { data: session } = authClient.useSession()
   const { hits } = useHits<MediasIndexItem>()
 
   return (
@@ -28,7 +28,7 @@ export const MediasSearchResults = (props: Props) => {
             <MediasSearchResultsItem
               key={hit.id}
               item={hit}
-              preferredTitles={session?.user.preferredTitles}
+              preferredTitles={session?.user.settings.preferredTitles}
               {...props}
             />
           ))}

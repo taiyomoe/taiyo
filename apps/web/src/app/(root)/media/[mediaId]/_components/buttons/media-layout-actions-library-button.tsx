@@ -2,7 +2,7 @@
 
 import { Button } from "@nextui-org/button"
 import { Popover, PopoverContent, PopoverTrigger } from "@nextui-org/popover"
-import { useSession } from "@taiyomoe/auth/client"
+import { authClient } from "@taiyomoe/auth/client"
 import type { MediaLimited, UserLibraryMedia } from "@taiyomoe/types"
 import { LibraryUtils } from "@taiyomoe/utils"
 import { useEffect, useState } from "react"
@@ -16,7 +16,7 @@ type Props = {
 export const MediaLayoutActionsLibraryButton = ({ media }: Props) => {
   const { updateEntry } = useLibraryStore()
   const [entry, setEntry] = useState<UserLibraryMedia | null>(null)
-  const { data: session } = useSession()
+  const { data: session } = authClient.useSession()
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: we want this to run only once
   useEffect(() => {

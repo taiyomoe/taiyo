@@ -3,17 +3,16 @@ import {
   type HomeLayout,
   type Languages,
   type Roles,
+  type User,
   db,
 } from "@taiyomoe/db"
-import {} from "@taiyomoe/schemas/db"
 import { betterAuth } from "better-auth"
 import { prismaAdapter } from "better-auth/adapters/prisma"
-import { admin } from "better-auth/plugins"
+import { admin, customSession } from "better-auth/plugins"
 import { env } from "./env"
 import { signedInHandler } from "./handlers/signed-in.auth-handler"
 import { signedOutHandler } from "./handlers/signed-out.auth-handler"
 import { signedUpHandler } from "./handlers/signed-up.auth-handler"
-import { additionalFields } from "./utils/auth-additional-fields"
 
 export const auth = betterAuth({
   appName: "Taiyō",
@@ -44,16 +43,40 @@ export const auth = betterAuth({
       }
     },
   },
-  plugins: [admin({ defaultRole: false })],
+  plugins: [
+    admin({ defaultRole: false }),
+    customSession(async ({ user, session }) => {
+      const settings = await db.userSetting.findUnique({
+        select: {
+          contentRating: true,
+          preferredTitles: true,
+          showFollowing: true,
+          showLibrary: true,
+          homeLayout: true,
+        },
+        where: { userId: user.id },
+      })
+
+      return {
+        user: {
+          ...(user as unknown as User),
+          settings: settings!,
+        },
+        session,
+      }
+    }),
+  ],
 })
 
 export type Session = typeof auth.$Infer.Session & {
   user: {
     role: Roles
-    contentRating: ContentRating
-    preferredTitles: Languages | undefined
-    showFollowing: boolean
-    showLibrary: boolean
-    homeLayout: HomeLayout
+    settings: {
+      contentRating: ContentRating
+      preferredTitles: Languages | null
+      showFollowing: boolean
+      showLibrary: boolean
+      homeLayout: HomeLayout
+    }
   }
 }
