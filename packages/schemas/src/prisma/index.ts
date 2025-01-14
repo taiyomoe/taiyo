@@ -187,7 +187,7 @@ export const UserSchema = z.object({
   updatedAt: z.coerce.date(),
   name: z.string(),
   email: z.string(),
-  emailVerified: z.coerce.date().nullable(),
+  emailVerified: z.boolean(),
   image: z.string().nullable(),
   banned: z.boolean().nullable(),
   banReason: z.string().nullable(),
