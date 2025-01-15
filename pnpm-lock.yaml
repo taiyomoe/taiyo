@@ -313,9 +313,6 @@ importers:
       '@taiyomoe/meilisearch':
         specifier: workspace:*
         version: link:../meilisearch
-      '@taiyomoe/schemas':
-        specifier: workspace:*
-        version: link:../schemas
       better-auth:
         specifier: ^1.1.10
         version: 1.1.10

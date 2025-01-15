@@ -19,7 +19,6 @@
     "@taiyomoe/db": "workspace:*",
     "@taiyomoe/logs": "workspace:*",
     "@taiyomoe/meilisearch": "workspace:*",
-    "@taiyomoe/schemas": "workspace:*",
     "better-auth": "^1.1.10",
     "zod": "^3.24.1"
   },
