@@ -147,6 +147,7 @@ const execute = async () => {
   await db.user.createMany({
     data: users.map((u) => ({
       ...u,
+      emailVerified: true,
       image: fakerPT_BR.datatype.boolean({ probability: 0.7 })
         ? null
         : fakerPT_BR.image.avatarGitHub(),
