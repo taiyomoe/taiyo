@@ -58,7 +58,7 @@ export const getChaptersListHandler = protectedProcedure
         id: c.mediaId,
         mainTitle: MediaUtils.getDisplayTitle(
           medias.find((m) => m.id === c.mediaId)!.titles,
-          ctx.session.user.preferredTitles,
+          ctx.session.user.settings.preferredTitles,
         ),
       },
       scans: scans.filter((s) => c.scans.some((sc) => sc.id === s.id)),

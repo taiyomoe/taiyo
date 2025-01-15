@@ -9,7 +9,7 @@ import { TrendingMediasCategory } from "./_components/trending-medias/trending-m
 export default async function Page() {
   const session = await getSession()
   const initialLayout =
-    session?.user.homeLayout ?? siteConfig.home.releasesLayout
+    session?.user.settings.homeLayout ?? siteConfig.home.releasesLayout
 
   return (
     <main className="flex h-full flex-col gap-12">

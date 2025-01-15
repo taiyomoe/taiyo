@@ -54,7 +54,7 @@ export const getChapterByIdHandler = publicProcedure
     )
     const mediaTitle = MediaUtils.getDisplayTitle(
       result.media.titles,
-      ctx.session?.user.preferredTitles,
+      ctx.session?.user.settings.preferredTitles,
     )
 
     const mediaChapterLimited: MediaChapterLimited = {
