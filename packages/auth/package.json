@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@t3-oss/env-core": "^0.11.1",
+    "@taiyomoe/cache": "workspace:*",
     "@taiyomoe/db": "workspace:*",
     "@taiyomoe/logs": "workspace:*",
     "@taiyomoe/meilisearch": "workspace:*",
@@ -23,6 +24,7 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
-    "@taiyomoe/tsconfig": "workspace:*"
+    "@taiyomoe/tsconfig": "workspace:*",
+    "@taiyomoe/types": "workspace:*"
   }
 }

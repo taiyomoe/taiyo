@@ -301,6 +301,9 @@ importers:
       '@t3-oss/env-core':
         specifier: ^0.11.1
         version: 0.11.1(typescript@5.7.3)(zod@3.24.1)
+      '@taiyomoe/cache':
+        specifier: workspace:*
+        version: link:../cache
       '@taiyomoe/db':
         specifier: workspace:*
         version: link:../db
@@ -323,6 +326,9 @@ importers:
       '@taiyomoe/tsconfig':
         specifier: workspace:*
         version: link:../../tooling/typescript
+      '@taiyomoe/types':
+        specifier: workspace:*
+        version: link:../types
 
   packages/cache:
     dependencies:
