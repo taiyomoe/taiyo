@@ -1,15 +1,15 @@
-import { auth } from "@taiyomoe/auth/server"
 import { DashedGridPattern } from "~/components/ui/background-patterns/dashed-grid-pattern"
 import { siteConfig } from "~/lib/config"
+import { getSession } from "~/utils/get-session"
 import { FeaturedMediasCategory } from "./_components/featured-medias/featured-medias-category"
 import { LatestMediasCategory } from "./_components/latest-medias/latest-medias-category"
 import { LatestReleasesCategory } from "./_components/latest-releases/latest-releases-category"
 import { TrendingMediasCategory } from "./_components/trending-medias/trending-medias-category"
 
 export default async function Page() {
-  const session = await auth()
+  const session = await getSession()
   const initialLayout =
-    session?.user.homeLayout ?? siteConfig.home.releasesLayout
+    session?.user.settings.homeLayout ?? siteConfig.home.releasesLayout
 
   return (
     <main className="flex h-full flex-col gap-12">

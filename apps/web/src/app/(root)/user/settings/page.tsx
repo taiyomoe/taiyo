@@ -1,10 +1,10 @@
-import { auth } from "@taiyomoe/auth/server"
 import { db } from "@taiyomoe/db"
 import { notFound } from "next/navigation"
+import { getSession } from "~/utils/get-session"
 import { UserSettingsLayout } from "./_components/user-settings-layout"
 
 export default async function Page() {
-  const session = await auth()
+  const session = await getSession()
   const user = await db.user.findUnique({
     select: {
       settings: {

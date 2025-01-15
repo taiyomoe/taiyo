@@ -1,78 +1,55 @@
-import { PrismaAdapter } from "@auth/prisma-adapter"
-import { type HomeLayout, type Languages, type User, db } from "@taiyomoe/db"
-import type { Permission } from "@taiyomoe/types"
-import { PermissionUtils } from "@taiyomoe/utils"
-import type { DefaultSession, NextAuthConfig } from "next-auth"
-import Discord from "next-auth/providers/discord"
+import { cacheClient } from "@taiyomoe/cache"
+import { type Roles, db } from "@taiyomoe/db"
+import type { UserSettings } from "@taiyomoe/types"
+import { betterAuth } from "better-auth"
+import { prismaAdapter } from "better-auth/adapters/prisma"
+import { admin, customSession } from "better-auth/plugins"
 import { env } from "./env"
-import { createUserHandler } from "./handlers/create-user.handler"
-import { signInHandler } from "./handlers/sign-in.hander"
-import { signOutHandler } from "./handlers/sign-out.handler"
+import { signedInHandler } from "./handlers/signed-in.auth-handler"
+import { signedOutHandler } from "./handlers/signed-out.auth-handler"
+import { signedUpHandler } from "./handlers/signed-up.auth-handler"
+import { getCustomSession } from "./utils/get-custom-session"
+import { getSessionFromHeaders } from "./utils/get-session-from-headers"
 
-/**
- * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
- * object and keep type safety.
- *
- * @see https://authjs.dev/getting-started/typescript#module-augmentation
- */
-declare module "next-auth" {
-  /**
-   * Returned by `auth`, `useSession`, `getSession` and received as a prop on the `SessionProvider` React Context
-   */
-  interface Session {
-    user: DefaultSession["user"] & {
-      id: string
-      role: { name: string; permissions: Permission[] }
-      preferredTitles: Languages | null
-      showFollowing: boolean
-      showLibrary: boolean
-      homeLayout: HomeLayout
-    }
+export const auth = betterAuth({
+  appName: "Taiyō",
+  database: prismaAdapter(db, { provider: "postgresql" }),
+  emailAndPassword: {
+    enabled: true,
+  },
+  socialProviders: {
+    discord: {
+      clientId: env.BETTER_AUTH_DISCORD_ID,
+      clientSecret: env.BETTER_AUTH_DISCORD_SECRET,
+    },
+  },
+  secondaryStorage: {
+    set: cacheClient.users.auth.set,
+    get: cacheClient.users.auth.get,
+    delete: cacheClient.users.auth.invalidate,
+  },
+  advanced: { generateId: false },
+  databaseHooks: {
+    user: { create: { after: signedUpHandler } },
+    session: { create: { after: signedInHandler } },
+  },
+  hooks: {
+    before: async (ctx) => {
+      if (ctx.path === "/sign-out") {
+        const session = await getSessionFromHeaders(ctx)
+
+        if (!session) return
+
+        return signedOutHandler(session.user.id, session.session.ipAddress)
+      }
+    },
+  },
+  plugins: [admin({ defaultRole: false }), customSession(getCustomSession)],
+})
+
+export type Session = typeof auth.$Infer.Session & {
+  user: {
+    role: Roles
+    settings: UserSettings
   }
 }
-
-export const authConfig = {
-  debug: process.env.NODE_ENV === "development",
-  trustHost: true,
-  adapter: PrismaAdapter(db),
-  providers: [Discord],
-  pages: { signIn: "/auth/sign-in" },
-  cookies: {
-    sessionToken: {
-      options: { domain: `.${new URL(env.AUTH_URL).hostname}` },
-    },
-  },
-  callbacks: {
-    session: async ({ session, user: adapterUser }) => {
-      const user = adapterUser as User
-      const settings = await db.userSetting.findUnique({
-        select: {
-          preferredTitles: true,
-          showFollowing: true,
-          showLibrary: true,
-          homeLayout: true,
-        },
-        where: { userId: user.id },
-      })
-      const role = {
-        name: user.role,
-        permissions: PermissionUtils.getRolePermissions(user.role),
-      }
-
-      return {
-        ...session,
-        user: {
-          id: user.id,
-          image: user.image,
-          role,
-          ...settings!,
-        },
-      }
-    },
-  },
-  events: {
-    createUser: createUserHandler,
-    signIn: signInHandler,
-    signOut: signOutHandler,
-  },
-} satisfies NextAuthConfig

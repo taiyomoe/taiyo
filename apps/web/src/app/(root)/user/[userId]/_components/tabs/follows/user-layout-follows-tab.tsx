@@ -1,6 +1,6 @@
 import { Pagination } from "@nextui-org/pagination"
 import { Spinner } from "@nextui-org/spinner"
-import { useSession } from "@taiyomoe/auth/client"
+import { authClient } from "@taiyomoe/auth/client"
 import { USER_FOLLOWS_PER_PAGE_CHOICES } from "@taiyomoe/constants"
 import type { UserLimited } from "@taiyomoe/types"
 import { useAtomValue } from "jotai"
@@ -19,7 +19,7 @@ type Props = {
 export const UserLayoutFollowsTab = ({ user, type }: Props) => {
   const ownUser = useAtomValue(userProfileOwnFollowerAtom)
   const { page, perPage, setPage, setPerPage } = useUserNavigation()
-  const { data: session } = useSession()
+  const { data: session } = authClient.useSession()
   const { data, isFetching } = api.users[
     type === "followers" ? "getFollowers" : "getFollowing"
   ].useQuery(

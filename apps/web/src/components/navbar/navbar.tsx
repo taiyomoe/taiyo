@@ -2,7 +2,7 @@
 
 import { Chip } from "@nextui-org/chip"
 import { tv } from "@nextui-org/react"
-import { useSession } from "@taiyomoe/auth/client"
+import { authClient } from "@taiyomoe/auth/client"
 import { motion, useScroll, useTransform } from "framer-motion"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -48,7 +48,7 @@ const navbar = tv({
 export const Navbar = () => {
   const { sidebar, navbarMode } = useReaderSettingsStore()
   const pathname = usePathname()
-  const { data: session } = useSession()
+  const { data: session } = authClient.useSession()
   const shouldCollapse = useMemo(() => {
     if (pathname.includes("/chapter/")) return true
     if (pathname.includes("/dashboard")) return true

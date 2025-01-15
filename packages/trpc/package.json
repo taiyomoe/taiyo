@@ -26,7 +26,6 @@
     "@taiyomoe/umami": "workspace:*",
     "@taiyomoe/utils": "workspace:*",
     "@trpc/server": "11.0.0-rc.700",
-    "accesscontrol": "^2.2.1",
     "mangadex-full-api": "^6.0.0",
     "radash": "^12.1.0",
     "superjson": "^2.2.2",

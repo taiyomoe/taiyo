@@ -1,6 +1,6 @@
 import { Image } from "@nextui-org/image"
 import { Spinner } from "@nextui-org/spinner"
-import { useSession } from "@taiyomoe/auth/client"
+import { authClient } from "@taiyomoe/auth/client"
 import type { UserLibraryStatus } from "@taiyomoe/types"
 import { MediaUtils } from "@taiyomoe/utils"
 import { CoverUtils } from "@taiyomoe/utils"
@@ -18,7 +18,7 @@ type Props = {
 
 export const UserLibrarySidebarTabsContent = ({ status }: Props) => {
   const { addEntries, ...libraryStore } = useLibraryStore()
-  const { data: session } = useSession()
+  const { data: session } = authClient.useSession()
   const { data, isLoading } = api.users.getLibrary.useQuery(
     {
       status,

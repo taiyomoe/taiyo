@@ -60,7 +60,7 @@ export const getUserLibraryHandler = protectedProcedure
       coverId: media.covers.at(0)?.id ?? "",
       mainTitle: MediaUtils.getDisplayTitle(
         media.titles,
-        ctx.session?.user.preferredTitles,
+        ctx.session?.user.settings.preferredTitles,
       ),
       mediaStatus: media.status,
       libraryStatus: input.status,

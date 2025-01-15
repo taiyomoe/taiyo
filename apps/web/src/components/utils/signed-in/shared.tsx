@@ -1,6 +1,7 @@
-import type { SessionContextValue } from "@taiyomoe/auth/client"
+import type { Session } from "@taiyomoe/auth/server"
 import type { Roles } from "@taiyomoe/db"
 import type { Permission } from "@taiyomoe/types"
+import { PermissionUtils } from "@taiyomoe/utils"
 
 export type SignedInProps = {
   requiredRole?: Roles
@@ -10,19 +11,21 @@ export type SignedInProps = {
 
 export const computeAccess = (
   { requiredRole, requiredPermissions, children }: SignedInProps,
-  session: SessionContextValue["data"],
+  session: Session | null,
 ) => {
   // Not signed in
   if (!session) return null
 
   // No required role
-  if (requiredRole && session.user.role.name !== requiredRole) return null
+  if (requiredRole && session.user.role !== requiredRole) return null
 
   // No required permissions
   if (
     requiredPermissions &&
     !requiredPermissions.every((permission) =>
-      session.user.role.permissions.includes(permission),
+      PermissionUtils.getRolePermissions(session.user.role).includes(
+        permission,
+      ),
     )
   )
     return null

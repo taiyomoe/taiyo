@@ -27,26 +27,26 @@ const execute = async () => {
     },
   })
 
-  await db.scanMember.createMany({
-    data: [
-      {
-        id: "83a47a78-50cb-4b52-bf12-2365e8aa2fe3",
-        // -----
-        roles: ["OWNER", "QUALITY_CHECKER", "TYPESETTER"],
-        permissions: ["UPLOAD", "EDIT", "DELETE"],
-        // -----
-        userId: "81825dd9-01c5-4a8a-9882-f63fd53cc163",
-      },
-      {
-        id: "395a1f4b-4260-4a1a-ad46-48e6f649cefa",
-        // -----
-        roles: ["TRANSLATOR"],
-        permissions: ["UPLOAD", "EDIT"],
-        // -----
-        userId: "6c60a451-4a2d-4179-9b76-7be17d661f53",
-      },
-    ],
-  })
+  // await db.scanMember.createMany({
+  //   data: [
+  //     {
+  //       id: "83a47a78-50cb-4b52-bf12-2365e8aa2fe3",
+  //       // -----
+  //       roles: ["OWNER", "QUALITY_CHECKER", "TYPESETTER"],
+  //       permissions: ["UPLOAD", "EDIT", "DELETE"],
+  //       // -----
+  //       userId: "81825dd9-01c5-4a8a-9882-f63fd53cc163",
+  //     },
+  //     {
+  //       id: "395a1f4b-4260-4a1a-ad46-48e6f649cefa",
+  //       // -----
+  //       roles: ["TRANSLATOR"],
+  //       permissions: ["UPLOAD", "EDIT"],
+  //       // -----
+  //       userId: "6c60a451-4a2d-4179-9b76-7be17d661f53",
+  //     },
+  //   ],
+  // })
 }
 
 export default { execute }

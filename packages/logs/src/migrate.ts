@@ -7,6 +7,7 @@ import migration5 from "./migrations/20240824232511_add_users_activity"
 import migration6 from "./migrations/20240826135905_add_users_settings"
 import migration7 from "./migrations/20240907145502_add_chapters_restoration"
 import migration8 from "./migrations/20240916063706_add_medias"
+import migration9 from "./migrations/20250113232247_reset_ips"
 import { rawLogsClient } from "./raw-client"
 
 const migrations = [
@@ -18,6 +19,7 @@ const migrations = [
   migration6,
   migration7,
   migration8,
+  migration9,
 ]
 const migrationsRan = await logsClient.migrations.getAll()
 const migrationsToRun = migrations.filter((m) =>

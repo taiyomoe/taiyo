@@ -38,7 +38,6 @@ export const getChapterByIdHandler = publicProcedure
           },
         },
         scans: { select: { id: true, name: true } },
-        comments: true,
       },
       where: { id: chapterId, deletedAt: null },
     })
@@ -55,7 +54,7 @@ export const getChapterByIdHandler = publicProcedure
     )
     const mediaTitle = MediaUtils.getDisplayTitle(
       result.media.titles,
-      ctx.session?.user.preferredTitles,
+      ctx.session?.user.settings.preferredTitles,
     )
 
     const mediaChapterLimited: MediaChapterLimited = {
@@ -82,7 +81,6 @@ export const getChapterByIdHandler = publicProcedure
         id: s.id,
         name: s.name,
       })),
-      comments: result.comments,
     }
 
     return mediaChapterLimited

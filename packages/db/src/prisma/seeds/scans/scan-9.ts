@@ -33,26 +33,26 @@ const execute = async () => {
     },
   })
 
-  await db.scanMember.createMany({
-    data: [
-      {
-        id: "e7376258-d9fb-453f-a0c8-3688bac667a7",
-        // -----
-        roles: ["OWNER"],
-        permissions: ["UPLOAD", "EDIT", "DELETE"],
-        // -----
-        userId: "8e27fec3-6218-440b-82ea-61a52373882e",
-      },
-      {
-        id: "2144653c-3580-4a08-bcca-c06bd3a50758",
-        // -----
-        roles: ["TYPESETTER"],
-        permissions: ["UPLOAD", "EDIT"],
-        // -----
-        userId: "bf8efe61-85c1-4880-b2ac-ccbfcf8fa987",
-      },
-    ],
-  })
+  // await db.scanMember.createMany({
+  //   data: [
+  //     {
+  //       id: "e7376258-d9fb-453f-a0c8-3688bac667a7",
+  //       // -----
+  //       roles: ["OWNER"],
+  //       permissions: ["UPLOAD", "EDIT", "DELETE"],
+  //       // -----
+  //       userId: "8e27fec3-6218-440b-82ea-61a52373882e",
+  //     },
+  //     {
+  //       id: "2144653c-3580-4a08-bcca-c06bd3a50758",
+  //       // -----
+  //       roles: ["TYPESETTER"],
+  //       permissions: ["UPLOAD", "EDIT"],
+  //       // -----
+  //       userId: "bf8efe61-85c1-4880-b2ac-ccbfcf8fa987",
+  //     },
+  //   ],
+  // })
 }
 
 export default { execute }

@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "@nextui-org/button"
-import { useSession } from "@taiyomoe/auth/client"
+import { authClient } from "@taiyomoe/auth/client"
 import { LibraryIcon } from "lucide-react"
 import { UserLibrarySidebar } from "~/components/library/UserLibrarySidebar"
 import { useLibraryStore, useReaderSettingsStore } from "~/stores"
@@ -9,7 +9,7 @@ import { useLibraryStore, useReaderSettingsStore } from "~/stores"
 export const NavbarUserLibraryButton = () => {
   const { sidebar, update } = useReaderSettingsStore()
   const { toggleSidebar } = useLibraryStore()
-  const { data: session } = useSession()
+  const { data: session } = authClient.useSession()
 
   if (!session) return null
 

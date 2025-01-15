@@ -1,8 +1,8 @@
-import { auth } from "@taiyomoe/auth/server"
 import { type AppRouter, createCaller, createTRPCContext } from "@taiyomoe/trpc"
 import { createHydrationHelpers } from "@trpc/react-query/rsc"
 import { headers } from "next/headers"
 import { cache } from "react"
+import { getSession } from "~/utils/get-session"
 import { createQueryClient } from "./query-client"
 
 /**
@@ -14,7 +14,7 @@ const createContext = cache(async () => {
   heads.set("x-trpc-source", "rsc")
 
   return createTRPCContext({
-    session: await auth(),
+    session: await getSession(),
     headers: heads,
   })
 })
