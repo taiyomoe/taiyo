@@ -28,13 +28,16 @@ export const auth = betterAuth({
     get: cacheClient.users.auth.get,
     delete: cacheClient.users.auth.invalidate,
   },
+  session: {
+    storeSessionInDatabase: true,
+  },
   advanced: { generateId: false },
   databaseHooks: {
     user: { create: { after: signedUpHandler } },
     session: { create: { after: signedInHandler } },
   },
   hooks: {
-    before: async (ctx) => {
+    after: async (ctx) => {
       if (ctx.path === "/sign-out") {
         const session = await getSessionFromHeaders(ctx)
 

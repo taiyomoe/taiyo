@@ -5,34 +5,29 @@ import { UserSettingsLayout } from "./_components/user-settings-layout"
 
 export default async function Page() {
   const session = await getSession()
-  const user = await db.user.findUnique({
+
+  if (!session) {
+    notFound()
+  }
+
+  const userProfile = await db.userProfile.findUnique({
     select: {
-      settings: {
-        select: {
-          contentRating: true,
-          preferredTitles: true,
-          showFollowing: true,
-          showLibrary: true,
-        },
-      },
-      profile: {
-        select: {
-          birthDate: true,
-          gender: true,
-          city: true,
-          country: true,
-          about: true,
-        },
-      },
+      birthDate: true,
+      gender: true,
+      city: true,
+      country: true,
+      about: true,
     },
-    where: { id: session?.user.id },
+    where: { userId: session.user.id },
   })
 
-  if (!session || !user || !user.settings || !user.profile) {
+  if (!userProfile) {
     notFound()
   }
 
   return (
-    <UserSettingsLayout user={{ ...user.settings, profile: user.profile }} />
+    <UserSettingsLayout
+      user={{ ...session.user.settings, profile: userProfile }}
+    />
   )
 }

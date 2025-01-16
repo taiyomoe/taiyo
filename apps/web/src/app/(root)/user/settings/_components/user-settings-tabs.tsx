@@ -1,6 +1,10 @@
-"use client"
 import { useAtom } from "jotai"
-import { BanIcon, LanguagesIcon, UserPenIcon } from "lucide-react"
+import {
+  BanIcon,
+  FingerprintIcon,
+  LanguagesIcon,
+  UserPenIcon,
+} from "lucide-react"
 import { userSettingsSelectedTabAtom } from "~/atoms/userSettings.atoms"
 import { ResponsiveTabs } from "~/components/ui/responsive-tabs"
 
@@ -24,6 +28,11 @@ export const UserSettingsTabs = () => {
           id: "blocks",
           label: "Bloqueios",
           startContent: <BanIcon size={20} />,
+        },
+        {
+          id: "sessions",
+          label: "Sessões",
+          startContent: <FingerprintIcon size={20} />,
         },
       ]}
       onChange={(id) => setSelectedTab(id as typeof selectedTab)}
