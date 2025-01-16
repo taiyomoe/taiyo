@@ -429,8 +429,8 @@ importers:
         specifier: ^9.6.0
         version: 9.6.0
       pino-loki:
-        specifier: ^2.4.0
-        version: 2.4.0
+        specifier: ^2.5.0
+        version: 2.5.0
       pino-pretty:
         specifier: ^13.0.0
         version: 13.0.0
@@ -4096,8 +4096,8 @@ packages:
   pino-abstract-transport@2.0.0:
     resolution: {integrity: sha512-F63x5tizV6WCh4R6RHyi2Ml+M70DNRXt/+HANowMflpgGFMAym/VKm6G7ZOQRjqN7XbGxK1Lg9t6ZrtzOaivMw==}
 
-  pino-loki@2.4.0:
-    resolution: {integrity: sha512-PN0BQ5TSGRuFI3jSiBIOJ3G8A5wSKGOPgKCseNuKdwnChV+rATAmfZqDo7lq0pDtvifSsBmXhw1gjv69J9bg9g==}
+  pino-loki@2.5.0:
+    resolution: {integrity: sha512-/QCSukecqbjXWcVB58st0bKJFQiXg4ZEGXslnnMCMbcrDr5LT36XvkS0dy0eBvZvI8bWoh3efjLYLmN+94iLSQ==}
     hasBin: true
 
   pino-pretty@13.0.0:
@@ -9458,7 +9458,7 @@ snapshots:
     dependencies:
       split2: 4.2.0
 
-  pino-loki@2.4.0:
+  pino-loki@2.5.0:
     dependencies:
       commander: 12.1.0
       pino-abstract-transport: 2.0.0

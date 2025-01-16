@@ -19,7 +19,7 @@
     "@taiyomoe/db": "workspace:*",
     "@taiyomoe/utils": "workspace:*",
     "pino": "^9.6.0",
-    "pino-loki": "^2.4.0",
+    "pino-loki": "^2.5.0",
     "pino-pretty": "^13.0.0",
     "superjson": "^2.2.2",
     "tsx": "^4.19.2",
