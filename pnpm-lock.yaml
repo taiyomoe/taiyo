@@ -463,8 +463,8 @@ importers:
         specifier: ^3.5.0
         version: 3.5.0
       meilisearch:
-        specifier: ^0.48.1
-        version: 0.48.1
+        specifier: ^0.48.2
+        version: 0.48.2
       punycode:
         specifier: ^2.3.1
         version: 2.3.1
@@ -4319,8 +4319,8 @@ packages:
   meilisearch@0.47.0:
     resolution: {integrity: sha512-Qq+hatuDJ0z5c+szVb0O/uI7Z2jfMUjj8eNB6xPyKp9Og7GVnrOZJRVoDPqGoVY484Iwh+F61y2UreIetda00w==}
 
-  meilisearch@0.48.1:
-    resolution: {integrity: sha512-p3BWLDMiNbKtbdHDltg8X3vnGqsI9P6ENLWOr2GKmbfcMWJ36BjvwABNfSEaU37jRnzzfOSqSZY86cmPVsXAaA==}
+  meilisearch@0.48.2:
+    resolution: {integrity: sha512-auDB6grs3f/+dVzzPiAOOFnrVN/L87/+SWZfy56TpimDinWjU4u6Jc2o6lgeLluotpbMOFY1WpTTbqtUdMduQw==}
 
   memoize-one@6.0.0:
     resolution: {integrity: sha512-rkpe71W0N0c0Xz6QD0eJETuWAJGnJ9afsl1srmwPrI+yBCkge5EycXXbYRyvL29zZVUWQCY7InPRCv3GDXuZNw==}
@@ -10420,7 +10420,7 @@ snapshots:
 
   meilisearch@0.47.0: {}
 
-  meilisearch@0.48.1: {}
+  meilisearch@0.48.2: {}
 
   memoize-one@6.0.0: {}
 
