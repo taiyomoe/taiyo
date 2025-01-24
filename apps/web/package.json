@@ -67,7 +67,7 @@
     "react-instantsearch": "^7.15.1",
     "react-instantsearch-nextjs": "^0.4.2",
     "react-querybuilder": "^8.1.1",
-    "react-select": "^5.9.0",
+    "react-select": "^5.10.0",
     "react-selectable-box": "^1.10.0",
     "sharp": "^0.33.5",
     "sonner": "^1.7.2",
