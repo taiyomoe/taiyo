@@ -20,7 +20,7 @@
     "@taiyomoe/s3": "workspace:*",
     "@taiyomoe/services": "workspace:*",
     "@taiyomoe/utils": "workspace:*",
-    "bullmq": "^5.36.0",
+    "bullmq": "^5.37.0",
     "mangadex-full-api": "^6.0.0",
     "radash": "^12.1.0"
   },
