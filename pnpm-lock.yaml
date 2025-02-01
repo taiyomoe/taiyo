@@ -178,8 +178,8 @@ importers:
         specifier: ^8.5.2
         version: 8.5.2(react@18.3.1)
       file-type:
-        specifier: ^20.0.0
-        version: 20.0.0
+        specifier: ^20.0.1
+        version: 20.0.1
       framer-motion:
         specifier: ^12.0.6
         version: 12.0.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -568,8 +568,8 @@ importers:
         specifier: workspace:*
         version: link:../utils
       file-type:
-        specifier: ^20.0.0
-        version: 20.0.0
+        specifier: ^20.0.1
+        version: 20.0.1
       radash:
         specifier: ^12.1.0
         version: 12.1.0
@@ -4039,8 +4039,8 @@ packages:
     resolution: {integrity: sha512-QgXo+mXTe8ljeqUFaX3QVHc5osSItJ/Km+xpocx0aSqWGMSCf6qYs/VnzZgS864Pjn5iceMRFigeAV7AfTlaig==}
     engines: {node: '>= 12'}
 
-  file-type@20.0.0:
-    resolution: {integrity: sha512-w8Z+QqWtEPIfyoPx9lDhzR52UjY5PfZunJ6lmH48oCR2gVbV52Aaw2bVtbi7P4EAlSpjn8xmNDiRAieYaabEIQ==}
+  file-type@20.0.1:
+    resolution: {integrity: sha512-R80W+NZ+s1M8PsC8L7xn+J0N72vEyxstMH+4vwIyt5B7ojfG80h/nKu2Qw/NYJTIYyGUeaPNLnzfJd78SWnG3A==}
     engines: {node: '>=18'}
 
   fill-range@7.1.1:
@@ -4538,9 +4538,9 @@ packages:
     resolution: {integrity: sha512-gDKb8aZMDeD/tZWs9P6+q0J9Mwkdl6xMV8TjnGP3qJVJ06bdMgkbBlLU8IdfOsIsFz2BW1rNVT3XuNEl8zPAvw==}
     engines: {node: '>=8'}
 
-  peek-readable@5.3.1:
-    resolution: {integrity: sha512-GVlENSDW6KHaXcd9zkZltB7tCLosKB/4Hg0fqBJkAoBgYG2Tn1xtMgXtSUuMU9AK/gCm/tTdT8mgAeF4YNeeqw==}
-    engines: {node: '>=14.16'}
+  peek-readable@6.1.0:
+    resolution: {integrity: sha512-1H5ECS+rPH35Foh4JD/XohQKWsx6Jzn37ESOVTFuCSoI8wMB9r2e2aDSLgHSiyucVrPfoc0DRiipBEP1gr9wLw==}
+    engines: {node: '>=18'}
 
   picocolors@1.1.1:
     resolution: {integrity: sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA==}
@@ -4984,9 +4984,9 @@ packages:
   strnum@1.0.5:
     resolution: {integrity: sha512-J8bbNyKKXl5qYcR36TIO8W3mVGVHrmmxsd5PAItGkmyzwJvybiw2IVq5nqd0i4LSNSkB/sx9VHllbfFdr9k1JA==}
 
-  strtok3@10.0.1:
-    resolution: {integrity: sha512-7OOJepVlvlcgjW/fLNCsIqpNleAoi1y0LTRWGnOpABOSpRmw+65HvnruoOCnjpaQ1efnlYpQ/JwHKuaombnuXQ==}
-    engines: {node: '>=16'}
+  strtok3@10.2.0:
+    resolution: {integrity: sha512-S884oIGzokq3LkL/6jXw5c5oJXRiGt4jB42cuWdaooJdxFMSn99snaShh3cQmJx3jALV2eoyW3rV/TJxwOaBPA==}
+    engines: {node: '>=18'}
 
   styled-jsx@5.1.1:
     resolution: {integrity: sha512-pW7uC1l4mBZ8ugbiZrcIsiIvVx1UmTfw7UkC3Um2tmfUq9Bhk8IiyEIPl6F8agHgjzku6j0xQEZbfA5uSgSaCw==}
@@ -10156,10 +10156,10 @@ snapshots:
     dependencies:
       tslib: 2.8.1
 
-  file-type@20.0.0:
+  file-type@20.0.1:
     dependencies:
       '@tokenizer/inflate': 0.2.6
-      strtok3: 10.0.1
+      strtok3: 10.2.0
       token-types: 6.0.0
       uint8array-extras: 1.4.0
     transitivePeerDependencies:
@@ -10619,7 +10619,7 @@ snapshots:
 
   path-type@4.0.0: {}
 
-  peek-readable@5.3.1: {}
+  peek-readable@6.1.0: {}
 
   picocolors@1.1.1: {}
 
@@ -11167,10 +11167,10 @@ snapshots:
 
   strnum@1.0.5: {}
 
-  strtok3@10.0.1:
+  strtok3@10.2.0:
     dependencies:
       '@tokenizer/token': 0.3.0
-      peek-readable: 5.3.1
+      peek-readable: 6.1.0
 
   styled-jsx@5.1.1(react@18.3.1):
     dependencies:
