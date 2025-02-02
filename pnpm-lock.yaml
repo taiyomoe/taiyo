@@ -262,8 +262,8 @@ importers:
         specifier: ^3.0.1
         version: 3.0.1
       tailwind-scrollbar:
-        specifier: ^3.1.0
-        version: 3.1.0(tailwindcss@3.4.17)
+        specifier: ^4.0.0
+        version: 4.0.0(react@18.3.1)(tailwindcss@3.4.17)
       usehooks-ts:
         specifier: ^3.1.0
         version: 3.1.0(react@18.3.1)
@@ -3644,6 +3644,9 @@ packages:
   '@types/parse-json@4.0.2':
     resolution: {integrity: sha512-dISoDXWWQwUquiKsyZ4Ng+HX2KsPL7LyHKHQwgGFEA3IaKac4Obd+h2a/a6waisAoepJlBcx9paWqjA8/HVjCw==}
 
+  '@types/prismjs@1.26.5':
+    resolution: {integrity: sha512-AUZTa7hQ2KY5L7AmtSiqxlhWxb4ina0yd8hNbl4TWuqnv/pFP0nDMb3YrfSBf4hJVGLh2YEIBfKaBW/9UEl6IQ==}
+
   '@types/prop-types@15.7.14':
     resolution: {integrity: sha512-gNMvNH49DJ7OJYv+KAKn0Xp45p8PLl6zo2YnvDIbTd4J6MER2BmWN49TG7n9LvkyihINxeKW8+3bfS2yDC9dzQ==}
 
@@ -4635,6 +4638,11 @@ packages:
     resolution: {integrity: sha512-4yf0QO/sllf/1zbZWYnvWw3NxCQwLXKzIj0G849LSufP15BXKM0rbD2Z3wVnkMfjdn/CB0Dpp444gYAACdsplg==}
     engines: {node: '>=18'}
 
+  prism-react-renderer@2.4.1:
+    resolution: {integrity: sha512-ey8Ls/+Di31eqzUxC46h8MksNuGx/n0AAC8uKpwFau4RPDYLuE3EXTp8N8G2vX2N7UC/+IXeNUnlWBGGcAG+Ig==}
+    peerDependencies:
+      react: '>=16.0.0'
+
   prisma-json-types-generator@3.2.2:
     resolution: {integrity: sha512-kvEbJPIP5gxk65KmLs0nAvY+CxpqVMWb4OsEvXlyXZmp2IGfi5f52BUV7ezTYQNjRPZyR4QlayWJXffoqVVAfA==}
     engines: {node: '>=14.0'}
@@ -5029,11 +5037,11 @@ packages:
   tailwind-merge@3.0.1:
     resolution: {integrity: sha512-AvzE8FmSoXC7nC+oU5GlQJbip2UO7tmOhOfQyOmPhrStOGXHU08j8mZEHZ4BmCqY5dWTCo4ClWkNyRNx1wpT0g==}
 
-  tailwind-scrollbar@3.1.0:
-    resolution: {integrity: sha512-pmrtDIZeHyu2idTejfV59SbaJyvp1VRjYxAjZBH0jnyrPRo6HL1kD5Glz8VPagasqr6oAx6M05+Tuw429Z8jxg==}
+  tailwind-scrollbar@4.0.0:
+    resolution: {integrity: sha512-elqx9m09VHY8gkrMiyimFO09JlS3AyLFXT0eaLaWPi7ImwHlbZj1ce/AxSis2LtR+ewBGEyUV7URNEMcjP1Z2w==}
     engines: {node: '>=12.13.0'}
     peerDependencies:
-      tailwindcss: 3.x
+      tailwindcss: 4.x
 
   tailwind-variants@0.1.20:
     resolution: {integrity: sha512-AMh7x313t/V+eTySKB0Dal08RHY7ggYK0MSn/ad8wKWOrDUIzyiWNayRUm2PIJ4VRkvRnfNuyRuKbLV3EN+ewQ==}
@@ -9721,6 +9729,8 @@ snapshots:
 
   '@types/parse-json@4.0.2': {}
 
+  '@types/prismjs@1.26.5': {}
+
   '@types/prop-types@15.7.14': {}
 
   '@types/qs@6.9.17': {}
@@ -10724,6 +10734,12 @@ snapshots:
     dependencies:
       parse-ms: 4.0.0
 
+  prism-react-renderer@2.4.1(react@18.3.1):
+    dependencies:
+      '@types/prismjs': 1.26.5
+      clsx: 2.1.1
+      react: 18.3.1
+
   prisma-json-types-generator@3.2.2(prisma@6.3.0(typescript@5.7.3))(typescript@5.7.3):
     dependencies:
       '@prisma/generator-helper': 6.0.0
@@ -11203,9 +11219,12 @@ snapshots:
 
   tailwind-merge@3.0.1: {}
 
-  tailwind-scrollbar@3.1.0(tailwindcss@3.4.17):
+  tailwind-scrollbar@4.0.0(react@18.3.1)(tailwindcss@3.4.17):
     dependencies:
+      prism-react-renderer: 2.4.1(react@18.3.1)
       tailwindcss: 3.4.17
+    transitivePeerDependencies:
+      - react
 
   tailwind-variants@0.1.20(tailwindcss@3.4.17):
     dependencies:
