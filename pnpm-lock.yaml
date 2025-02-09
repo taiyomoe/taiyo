@@ -380,8 +380,8 @@ importers:
         specifier: ^3.24.1
         version: 3.24.1
       zod-prisma-types:
-        specifier: ^3.2.3
-        version: 3.2.3(@prisma/client@6.3.1(prisma@6.3.1(typescript@5.7.3))(typescript@5.7.3))(prisma@6.3.1(typescript@5.7.3))
+        specifier: ^3.2.4
+        version: 3.2.4(@prisma/client@6.3.1(prisma@6.3.1(typescript@5.7.3))(typescript@5.7.3))(prisma@6.3.1(typescript@5.7.3))
     devDependencies:
       '@taiyomoe/meilisearch':
         specifier: workspace:*
@@ -5276,8 +5276,8 @@ packages:
     engines: {node: '>= 14'}
     hasBin: true
 
-  zod-prisma-types@3.2.3:
-    resolution: {integrity: sha512-8JIok58ClsQo2/N8/+VPwmFzOjOX+t9cCVgoHAlRVitxezxoqT78DaQAD5xuN7jHYci+ypXonLrgezl8LapmJw==}
+  zod-prisma-types@3.2.4:
+    resolution: {integrity: sha512-S4spVBMJAmecLv+aLyRhXK26qW9nWwcsOf1H1fRcEmiI8DPbftZ99u0fhqHlymuTpmMcUpuKxcNNOIqNY0ScSQ==}
     hasBin: true
     peerDependencies:
       '@prisma/client': ^4.x.x || ^5.x.x || ^6.x.x
@@ -11464,7 +11464,7 @@ snapshots:
 
   yaml@2.7.0: {}
 
-  zod-prisma-types@3.2.3(@prisma/client@6.3.1(prisma@6.3.1(typescript@5.7.3))(typescript@5.7.3))(prisma@6.3.1(typescript@5.7.3)):
+  zod-prisma-types@3.2.4(@prisma/client@6.3.1(prisma@6.3.1(typescript@5.7.3))(typescript@5.7.3))(prisma@6.3.1(typescript@5.7.3)):
     dependencies:
       '@prisma/client': 6.3.1(prisma@6.3.1(typescript@5.7.3))(typescript@5.7.3)
       '@prisma/generator-helper': 6.3.0
