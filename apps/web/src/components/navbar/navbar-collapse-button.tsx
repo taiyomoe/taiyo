@@ -1,5 +1,3 @@
-"use client"
-
 import { Button } from "@nextui-org/button"
 import { PanelLeftCloseIcon, PanelLeftOpenIcon } from "lucide-react"
 import { useSidebar } from "~/components/sidebar/sidebar-provider"
