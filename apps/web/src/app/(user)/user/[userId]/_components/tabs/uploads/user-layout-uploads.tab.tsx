@@ -3,10 +3,10 @@ import { Spinner } from "@nextui-org/spinner"
 import { GROUPED_CHAPTERS_CHOICES } from "@taiyomoe/constants"
 import type { UserLimited } from "@taiyomoe/types"
 import Image from "next/image"
-import { UserUploadsMediaCard } from "~/app/(root)/user/[userId]/_components/tabs/uploads/user-uploads-media-card"
 import { PerPageDropdown } from "~/components/ui/pagination/per-page-dropdown"
 import { useUserNavigation } from "~/hooks/useUserNavigation"
 import { api } from "~/trpc/react"
+import { UserUploadsMediaCard } from "./user-uploads-media-card"
 
 type Props = {
   user: UserLimited
