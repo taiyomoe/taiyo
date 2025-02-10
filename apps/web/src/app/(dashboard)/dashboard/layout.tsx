@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation"
-import { Navbar } from "~/components/navbar-new/navbar"
+import { Navbar } from "~/components/navbar/navbar"
 import { SidebarInset } from "~/components/sidebar/sidebar"
 import { SidebarProvider } from "~/components/sidebar/sidebar-provider"
 import type { LayoutProps } from "~/lib/types"

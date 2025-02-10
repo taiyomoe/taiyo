@@ -4,7 +4,7 @@ import { Navbar } from "~/components/navbar/navbar"
 export default function NotFound() {
   return (
     <div className="flex h-dvh select-none flex-col">
-      <Navbar />
+      <Navbar showLogo />
       <div className="mx-bodyPadding flex grow flex-col items-center justify-center gap-16">
         <Image
           src="/illustrations/not_found.svg"

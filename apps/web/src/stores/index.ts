@@ -1,4 +1,3 @@
-export * from "./library.store"
 export * from "./reader.store"
 export * from "./readerSettings.store"
 export * from "./persistentReaderSettings.store"
