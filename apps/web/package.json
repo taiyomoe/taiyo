@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
-    "@internationalized/date": "^3.6.0",
+    "@internationalized/date": "3.6.0",
     "@meilisearch/instant-meilisearch": "^0.23.0",
     "@nextui-org/react": "2.6.8",
     "@prisma/client": "^6.3.1",
