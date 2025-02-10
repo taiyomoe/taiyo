@@ -4,7 +4,7 @@ import { ChapterUtils, CoverUtils, MediaUtils } from "@taiyomoe/utils"
 import { useAtomValue } from "jotai"
 import Link from "next/link"
 import { useMemo } from "react"
-import { MediaChaptersTabRowCard } from "~/app/(root)/media/[mediaId]/_components/tabs/chapters/card/media-chapters-tab-row-card"
+import { MediaChaptersTabRowCard } from "~/app/(media)/media/[mediaId]/_components/tabs/chapters/card/media-chapters-tab-row-card"
 import {
   userProfileAdditionalChapters,
   userProfileExpandedMedias,
