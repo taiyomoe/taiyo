@@ -2,7 +2,7 @@
   "name": "taiyo",
   "private": true,
   "engines": {
-    "node": "22.13.1"
+    "node": "22.14.0"
   },
   "packageManager": "pnpm@10.2.1",
   "scripts": {
@@ -19,7 +19,7 @@
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
     "@types/global-types": "workspace:*",
-    "@types/node": "^22.13.1",
+    "@types/node": "^22.13.4",
     "knip": "^5.44.1",
     "turbo": "^2.4.2",
     "typescript": "^5.7.3"
