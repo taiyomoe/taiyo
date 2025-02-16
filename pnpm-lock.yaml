@@ -670,8 +670,8 @@ importers:
         specifier: ^0.12.0
         version: 0.12.0(typescript@5.7.3)(zod@3.24.2)
       '@umami/api-client':
-        specifier: ^0.76.0
-        version: 0.76.0(next@14.2.24(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: ^0.77.0
+        version: 0.77.0(next@14.2.24(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       zod:
         specifier: ^3.24.2
         version: 3.24.2
@@ -3620,8 +3620,8 @@ packages:
   '@types/use-sync-external-store@0.0.6':
     resolution: {integrity: sha512-zFDAD+tlpf2r4asuHEj0XH6pY6i0g5NeAHPn+15wk3BV6JA69eERFXC1gyGThDkVa1zCyKr5jox1+2LbV/AMLg==}
 
-  '@umami/api-client@0.76.0':
-    resolution: {integrity: sha512-c27Diz0bPRGL98+udLHN9I+id2Un82WcKsRHaSDOLRonUe4YMRljvbhxippIpvtdCLaLnhBM9Vz3AY3J2pKqLg==}
+  '@umami/api-client@0.77.0':
+    resolution: {integrity: sha512-X5TVis1Pc2kuVpdfOBAnvez0iaOIfhyq40fiPGCmT9FMDWbC8NlID31KUp4Co1hOiaPO1iMdX6RiyWLBH8nL8w==}
 
   abbrev@1.1.1:
     resolution: {integrity: sha512-nne9/IiQ/hzIhY6pdDnbBtz7DjPTKrY00P/zvPSm5pOFkl6xuGrGnXn/VtTNNfNtAfZ9/1RtehkszU9qcTii0Q==}
@@ -9633,7 +9633,7 @@ snapshots:
 
   '@types/use-sync-external-store@0.0.6': {}
 
-  '@umami/api-client@0.76.0(next@14.2.24(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@umami/api-client@0.77.0(next@14.2.24(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
       cross-fetch: 3.2.0
       debug: 4.4.0
