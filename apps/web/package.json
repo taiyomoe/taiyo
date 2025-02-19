@@ -46,7 +46,7 @@
     "embla-carousel-autoplay": "^8.5.2",
     "embla-carousel-react": "^8.5.2",
     "file-type": "^20.1.0",
-    "framer-motion": "^12.4.3",
+    "framer-motion": "^12.4.4",
     "jotai": "^2.12.1",
     "lucide-react": "^0.475.0",
     "luxon": "^3.5.0",
