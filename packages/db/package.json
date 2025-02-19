@@ -32,6 +32,6 @@
     "@taiyomoe/tsconfig": "workspace:*",
     "cross-env": "^7.0.3",
     "prisma": "^6.3.1",
-    "tsx": "^4.19.2"
+    "tsx": "^4.19.3"
   }
 }
