@@ -202,8 +202,8 @@ importers:
         specifier: ^0.4.4
         version: 0.4.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       nuqs:
-        specifier: ^2.3.2
-        version: 2.3.2(next@14.2.24(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+        specifier: ^2.4.0
+        version: 2.4.0(next@14.2.24(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       parse-numeric-range:
         specifier: ^1.3.0
         version: 1.3.0
@@ -4425,8 +4425,8 @@ packages:
     resolution: {integrity: sha512-+Bt2X6YxM5bg8XIBl76NVeG2eL0Y5VQRoyz6GLYrZXW/TDh7We+tGeX4/WZWhaVGOg5ZjNBEOZt9a86slMhOJA==}
     engines: {node: '>=16'}
 
-  nuqs@2.3.2:
-    resolution: {integrity: sha512-WeG78r8e3a30JY3P8npldvNiAZwGIk499lnpeRs3UYA3PpSvs2/PLunKGgjuF/JMw4BOowD3K2xgGEOZ3PeODA==}
+  nuqs@2.4.0:
+    resolution: {integrity: sha512-+yOdX0q/wdYlseSYtWC8StDDt2QFcYX/zV5/E67J1cOJo3PR0mggxMx4acZGC0Hu66xFHENKQkqI2zSpH742xQ==}
     peerDependencies:
       '@remix-run/react': '>=2'
       next: '>=14.2.0'
@@ -10466,7 +10466,7 @@ snapshots:
 
   numeric-quantity@2.0.1: {}
 
-  nuqs@2.3.2(next@14.2.24(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1):
+  nuqs@2.4.0(next@14.2.24(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1):
     dependencies:
       mitt: 3.0.1
       react: 18.3.1
