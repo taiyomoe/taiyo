@@ -638,8 +638,8 @@ importers:
         specifier: ^2.2.2
         version: 2.2.2
       use-intl:
-        specifier: ^3.26.4
-        version: 3.26.4(react@18.3.1)
+        specifier: ^3.26.5
+        version: 3.26.5(react@18.3.1)
       zod:
         specifier: ^3.24.2
         version: 3.24.2
@@ -5130,11 +5130,6 @@ packages:
     peerDependenciesMeta:
       '@types/react':
         optional: true
-
-  use-intl@3.26.4:
-    resolution: {integrity: sha512-5DhN+YfsocNO7LiLpns7/pxRcMHA4DgBZQo5Z6uw3LvX9XIZyPAdRBdFPE2eBKTAwhY77k5eBhxqDtx8wzUaBg==}
-    peerDependencies:
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || >=19.0.0-rc <19.0.0 || ^19.0.0
 
   use-intl@3.26.5:
     resolution: {integrity: sha512-OdsJnC/znPvHCHLQH/duvQNXnP1w0hPfS+tkSi3mAbfjYBGh4JnyfdwkQBfIVf7t8gs9eSX/CntxUMvtKdG2MQ==}
@@ -11263,12 +11258,6 @@ snapshots:
       react: 18.3.1
     optionalDependencies:
       '@types/react': 18.3.18
-
-  use-intl@3.26.4(react@18.3.1):
-    dependencies:
-      '@formatjs/fast-memoize': 2.2.6
-      intl-messageformat: 10.7.15
-      react: 18.3.1
 
   use-intl@3.26.5(react@18.3.1):
     dependencies:
