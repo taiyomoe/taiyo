@@ -717,8 +717,8 @@ importers:
         specifier: workspace:*
         version: link:../types
       '@types/accept-language-parser':
-        specifier: ^1.5.6
-        version: 1.5.6
+        specifier: ^1.5.7
+        version: 1.5.7
 
   tooling/github: {}
 
@@ -3580,8 +3580,8 @@ packages:
     peerDependencies:
       typescript: '>=5.7.2'
 
-  '@types/accept-language-parser@1.5.6':
-    resolution: {integrity: sha512-lhSQUsAhAtbKjYgaw3f0c4EQKNQHFXhX87+OXUIqDHMkycvHGaqGskSRtnzysIUiqHPqNJ4BqI5SE++drsxx6A==}
+  '@types/accept-language-parser@1.5.7':
+    resolution: {integrity: sha512-bFq8qAT6yYi1kgeO2Wk+/ciZSos6UB7q0gic+rzNrT0tRdVm5ZF5+Ou+EHdLWedP0607LO0SKd66ylhKTypS3w==}
 
   '@types/dom-speech-recognition@0.0.1':
     resolution: {integrity: sha512-udCxb8DvjcDKfk1WTBzDsxFbLgYxmQGKrE/ricoMqHRNjSlSUCcamVTA5lIQqzY10mY5qCY0QDwBfFEwhfoDPw==}
@@ -9615,7 +9615,7 @@ snapshots:
     dependencies:
       typescript: 5.7.3
 
-  '@types/accept-language-parser@1.5.6': {}
+  '@types/accept-language-parser@1.5.7': {}
 
   '@types/dom-speech-recognition@0.0.1': {}
 
