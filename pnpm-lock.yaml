@@ -178,8 +178,8 @@ importers:
         specifier: ^8.5.2
         version: 8.5.2(react@18.3.1)
       file-type:
-        specifier: ^20.1.0
-        version: 20.1.0
+        specifier: ^20.3.0
+        version: 20.3.0
       framer-motion:
         specifier: ^12.4.7
         version: 12.4.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -571,8 +571,8 @@ importers:
         specifier: workspace:*
         version: link:../utils
       file-type:
-        specifier: ^20.1.0
-        version: 20.1.0
+        specifier: ^20.3.0
+        version: 20.3.0
       radash:
         specifier: ^12.1.0
         version: 12.1.0
@@ -4007,8 +4007,8 @@ packages:
     resolution: {integrity: sha512-QgXo+mXTe8ljeqUFaX3QVHc5osSItJ/Km+xpocx0aSqWGMSCf6qYs/VnzZgS864Pjn5iceMRFigeAV7AfTlaig==}
     engines: {node: '>= 12'}
 
-  file-type@20.1.0:
-    resolution: {integrity: sha512-XoxU+lETfCf+bYK3SXkxFusAvmtYQl1u/ZC4zw1DBLEsHUvh339uwYucgQnnSMz1mRCWYJrCzsbJJ95hsQbZ8A==}
+  file-type@20.3.0:
+    resolution: {integrity: sha512-7eYG8OCoBNNf7179DmAUA6HyXYfJO8CQnZkgusRIDKCHQBbYU5rqJC0k2yr0c+C22v4bFfKL+DKuOPSU78uuTA==}
     engines: {node: '>=18'}
 
   fill-range@7.1.1:
@@ -10074,7 +10074,7 @@ snapshots:
     dependencies:
       tslib: 2.8.1
 
-  file-type@20.1.0:
+  file-type@20.3.0:
     dependencies:
       '@tokenizer/inflate': 0.2.6
       strtok3: 10.2.1
