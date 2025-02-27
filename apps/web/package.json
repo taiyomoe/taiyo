@@ -66,7 +66,7 @@
     "react-hook-form": "^7.54.2",
     "react-instantsearch": "^7.15.3",
     "react-instantsearch-nextjs": "^0.4.4",
-    "react-querybuilder": "^8.3.0",
+    "react-querybuilder": "^8.3.1",
     "react-select": "^5.10.0",
     "react-selectable-box": "^1.10.0",
     "sharp": "^0.33.5",
