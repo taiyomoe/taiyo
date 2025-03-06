@@ -20,3 +20,12 @@ export type UserLimited = Pick<
 export type UserFollower = Pick<User, "id" | "name" | "image"> & {
   profile: Pick<UserProfile, "about" | "country">
 }
+
+export type UserSettings = Pick<
+  UserSetting,
+  | "contentRating"
+  | "preferredTitles"
+  | "showFollowing"
+  | "showLibrary"
+  | "homeLayout"
+>

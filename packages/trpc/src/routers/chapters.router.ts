@@ -23,7 +23,7 @@ export const chaptersRouter = createTRPCRouter({
   getByUserId: getChaptersByUserIdHandler,
   getList: getChaptersListHandler,
   getLatest: publicProcedure.query(({ ctx }) =>
-    ctx.services.chapters.getLatest(ctx.session?.user.preferredTitles),
+    ctx.services.chapters.getLatest(ctx.session?.user.settings.preferredTitles),
   ),
   getLatestGroupedLite: publicProcedure.query(({ ctx }) =>
     ctx.services.chapters.getLatestGroupedLite(),
@@ -34,7 +34,7 @@ export const chaptersRouter = createTRPCRouter({
       ctx.services.chapters.getLatestGroupedByUser(
         input,
         ctx.session?.user.id,
-        ctx.session?.user.preferredTitles,
+        ctx.session?.user.settings.preferredTitles,
       ),
     ),
 })

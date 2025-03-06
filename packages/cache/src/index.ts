@@ -7,6 +7,7 @@ import type {
   RawLatestRelease,
   UploadChapterMessageInput,
   UploadCoverMessageInput,
+  UserSettings,
 } from "@taiyomoe/types"
 import DF from "ioredis"
 import SuperJSON from "superjson"
@@ -40,20 +41,20 @@ export const cacheClient = {
      * Queries
      */
     latest: {
-      get: () => parseCache<LatestMedia[]>(client.get("medias:latest")),
       set: (input: LatestMedia[]) =>
         client.setex("medias:latest", HOUR, SuperJSON.stringify(input)),
+      get: () => parseCache<LatestMedia[]>(client.get("medias:latest")),
       invalidate: () => client.del("medias:latest"),
     },
     featured: (lang: Languages | "main") => ({
-      get: () =>
-        parseCache<FeaturedMedia[]>(client.get(`medias:featured:${lang}`)),
       set: (input: FeaturedMedia[]) =>
         client.setex(
           `medias:featured:${lang}`,
           DAY,
           SuperJSON.stringify(input),
         ),
+      get: () =>
+        parseCache<FeaturedMedia[]>(client.get(`medias:featured:${lang}`)),
       invalidate: () => client.del(`medias:featured:${lang}`),
     }),
     invalidateAll: async () => {
@@ -107,25 +108,44 @@ export const cacheClient = {
      * Queries
      */
     latest: {
-      get: () => parseCache<RawLatestRelease[]>(client.get("chapters:latest")),
       set: (input: RawLatestRelease[]) =>
         client.setex("chapters:latest", DAY, SuperJSON.stringify(input)),
+      get: () => parseCache<RawLatestRelease[]>(client.get("chapters:latest")),
     },
     latestGroupedLite: {
-      get: () =>
-        parseCache<LatestReleaseGroupedLite[]>(
-          client.get("chapters:latest:grouped-lite"),
-        ),
       set: (input: LatestReleaseGroupedLite[]) =>
         client.setex(
           "chapters:latest:grouped-lite",
           DAY,
           SuperJSON.stringify(input),
         ),
+      get: () =>
+        parseCache<LatestReleaseGroupedLite[]>(
+          client.get("chapters:latest:grouped-lite"),
+        ),
     },
     invalidateAll: async () => {
       await client.del("chapters:latest")
       await client.del("chapters:latest:grouped-lite")
+    },
+  },
+
+  users: {
+    /**
+     * Queries
+     */
+    auth: {
+      set: (id: string, value: string, ttl = 60) =>
+        client.setex(`users:auth:${id}`, ttl, value),
+      get: (id: string) => client.get(`users:auth:${id}`),
+      invalidate: (id: string) =>
+        client.del(`users:auth:${id}`).then(() => null),
+    },
+    settings: {
+      set: (id: string, value: UserSettings) =>
+        client.setex(`users:settings:${id}`, DAY, SuperJSON.stringify(value)),
+      get: (id: string) =>
+        parseCache<UserSettings>(client.get(`users:settings:${id}`)),
     },
   },
   clear: () => client.flushdb(),

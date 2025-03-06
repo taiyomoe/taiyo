@@ -3,7 +3,7 @@ import { insertWrapper } from "../utils"
 type LogsUsersAuthType = "registered" | "signedIn" | "signedOut"
 type LogsUsersAuthInsertInput = {
   type: LogsUsersAuthType
-  ip: string
+  ip?: string | null
   userId: string
 }
 
@@ -12,6 +12,6 @@ export const UsersAuthService = {
     insertWrapper(
       "logs.usersAuth",
       ["type", "ip", "userId"],
-      [input.type, input.ip, input.userId],
+      [input.type, input.ip ?? null, input.userId],
     ),
 }

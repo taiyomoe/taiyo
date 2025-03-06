@@ -1,17 +1,18 @@
 import {
   DEFAULT_MEDIAS_LIST_PER_PAGE,
   MEDIAS_LIST_PER_PAGE_CHOICES,
-  MEDIAS_LIST_QUERYABLE_FIELDS,
   MEDIAS_LIST_SORTABLE_FIELDS,
   TAG_KEYS,
 } from "@taiyomoe/constants"
 import { z } from "zod"
 import {
+  dateFilterSchema,
+  enumFilterSchema,
   fileSchema,
+  mdIdSchema,
+  nullableDateFilterSchema,
   pageSchema,
   perPageSchema,
-  queryableFieldsSchema,
-  sortableFieldsSchema,
 } from "./common.schemas"
 import {
   ContentRatingSchema,
@@ -51,7 +52,7 @@ export const createMediaSchema = z.object({
 })
 
 export const importMediaSchema = z.object({
-  mdId: z.string().uuid(),
+  mdId: mdIdSchema,
   importCovers: z.coerce.boolean().default(true),
   importChapters: z.coerce.boolean().default(true),
 })
@@ -86,9 +87,25 @@ export const updateMediaSchema = z
   .required({ id: true })
 
 export const getMediasListSchema = z.object({
-  query: queryableFieldsSchema(MEDIAS_LIST_QUERYABLE_FIELDS),
-  filter: z.string().optional().default(""),
-  sort: sortableFieldsSchema(MEDIAS_LIST_SORTABLE_FIELDS),
+  createdAt: dateFilterSchema,
+  updatedAt: dateFilterSchema,
+  deletedAt: nullableDateFilterSchema,
+  startDate: nullableDateFilterSchema,
+  endDate: nullableDateFilterSchema,
+  contentRating: enumFilterSchema(ContentRatingSchema),
+  // one shot
+  type: enumFilterSchema(MediaTypeSchema),
+  status: enumFilterSchema(MediaStatusSchema),
+  source: enumFilterSchema(MediaSourceSchema),
+  demography: enumFilterSchema(MediaDemographySchema),
+  countryOfOrigin: enumFilterSchema(MediaCountryOfOriginSchema),
+  // genres
+  // tags
+  flag: enumFilterSchema(FlagSchema),
+  sort: z
+    .tuple([z.enum(MEDIAS_LIST_SORTABLE_FIELDS), z.enum(["asc", "desc"])])
+    .array()
+    .catch([["createdAt", "desc"]]),
   page: pageSchema,
   perPage: perPageSchema(
     DEFAULT_MEDIAS_LIST_PER_PAGE,
@@ -97,6 +114,7 @@ export const getMediasListSchema = z.object({
 })
 
 export type CreateMediaInput = z.infer<typeof createMediaSchema>
-export type ImportMediaInput = Required<typeof importMediaSchema._type>
-export type SyncMediaInput = Required<typeof syncMediaSchema._type>
-export type UpdateMediaInput = Required<typeof updateMediaSchema._type>
+export type ImportMediaInput = z.infer<typeof importMediaSchema>
+export type SyncMediaInput = z.infer<typeof syncMediaSchema>
+export type UpdateMediaInput = z.infer<typeof updateMediaSchema>
+export type GetMediasListInput = z.infer<typeof getMediasListSchema>

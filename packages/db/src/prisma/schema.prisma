@@ -3,7 +3,7 @@
 
 generator client {
     provider        = "prisma-client-js"
-    previewFeatures = ["relationJoins", "omitApi", "strictUndefinedChecks"]
+    previewFeatures = ["relationJoins", "strictUndefinedChecks"]
 }
 
 generator json {
@@ -28,14 +28,17 @@ datasource db {
 
 // ----- USERS
 model User {
-    id        String   @id @default(uuid())
+    id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    name          String?
-    email         String?   @unique
-    emailVerified DateTime?
+    name          String
+    email         String    @unique
+    emailVerified Boolean
     image         String?
+    banned        Boolean?
+    banReason     String?
+    banExpires    DateTime?
     role          Roles     @default(USER)
 
     accounts  Account[]
@@ -54,15 +57,11 @@ model User {
     createdMediaTitles    MediaTitle[]
     createdMediaTrackers  MediaTracker[]
     uploadedMediaChapters MediaChapter[]
-    mediaChapterComments  MediaChapterComment[]
     createdScans          Scan[]
-    scanMembers           ScanMember[]
-
-    @@index([id])
 }
 
 model UserProfile {
-    id        String   @id @default(uuid())
+    id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
@@ -74,12 +73,12 @@ model UserProfile {
     about     String?
     points    Int        @default(0)
 
-    userId String @unique
     user   User   @relation(fields: [userId], references: [id])
+    userId String @unique @db.Uuid
 }
 
 model UserSetting {
-    id        String   @id @default(uuid())
+    id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
@@ -90,7 +89,7 @@ model UserSetting {
     homeLayout      HomeLayout    @default(ROWS)
 
     user   User   @relation(fields: [userId], references: [id])
-    userId String @unique
+    userId String @unique @db.Uuid
 }
 
 model UserLibrary {
@@ -108,7 +107,7 @@ model UserLibrary {
     dropped    Json[] @default([])
 
     user   User   @relation(fields: [userId], references: [id])
-    userId String @unique
+    userId String @unique @db.Uuid
 }
 
 model UserHistory {
@@ -116,59 +115,63 @@ model UserHistory {
     progression Json[]
 
     media   Media  @relation(fields: [mediaId], references: [id])
-    mediaId String
+    mediaId String @db.Uuid
 
     user   User   @relation(fields: [userId], references: [id])
-    userId String
+    userId String @db.Uuid
 
     @@unique([mediaId, userId])
 }
 
 model Account {
-    id        String   @id @default(uuid())
+    id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    type          String
-    refresh_token String?
-    access_token  String?
-    expires_at    Int?
-    token_type    String?
-    scope         String?
-    id_token      String?
-    session_state String?
-
-    provider          String
-    providerAccountId String
+    accessToken           String?
+    refreshToken          String?
+    accessTokenExpiresAt  DateTime?
+    refreshTokenExpiresAt DateTime?
+    scope                 String?
+    password              String?
+    idToken               String?
+    accountId             String
+    providerId            String
 
     user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-    userId String
+    userId String @db.Uuid
 
-    @@unique([provider, providerAccountId])
+    @@unique([accountId, providerId, userId])
 }
 
 model Session {
+    id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+    expiresAt DateTime
 
-    sessionToken String   @unique
-    expires      DateTime
+    token          String  @unique
+    ipAddress      String?
+    userAgent      String?
+    impersonatedBy String?
 
     user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-    userId String
+    userId String @db.Uuid
 }
 
-model VerificationToken {
-    identifier String
-    token      String
-    expires    DateTime
+model Verification {
+    id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    expiresAt DateTime
 
-    @@id([identifier, token])
+    identifier String
+    value      String
 }
 
 // ----- MEDIAS
 model Media {
-    id        String    @id @default(uuid())
+    id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
     createdAt DateTime  @default(now())
     updatedAt DateTime  @updatedAt
     deletedAt DateTime?
@@ -198,12 +201,12 @@ model Media {
     history  UserHistory[]
 
     creator   User    @relation(fields: [creatorId], references: [id])
-    creatorId String
-    deleterId String?
+    creatorId String  @db.Uuid
+    deleterId String? @db.Uuid
 }
 
 model MediaCover {
-    id        String    @id @default(uuid())
+    id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
     createdAt DateTime  @default(now())
     updatedAt DateTime  @updatedAt
     deletedAt DateTime?
@@ -214,15 +217,15 @@ model MediaCover {
     language      Languages
 
     media   Media  @relation(fields: [mediaId], references: [id], onDelete: Cascade)
-    mediaId String
+    mediaId String @db.Uuid
 
     uploader   User    @relation(fields: [uploaderId], references: [id])
-    uploaderId String
-    deleterId  String?
+    uploaderId String  @db.Uuid
+    deleterId  String? @db.Uuid
 }
 
 model MediaBanner {
-    id        String    @id @default(uuid())
+    id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
     createdAt DateTime  @default(now())
     updatedAt DateTime  @updatedAt
     deletedAt DateTime?
@@ -230,15 +233,15 @@ model MediaBanner {
     contentRating ContentRating @default(NORMAL)
 
     media   Media  @relation(fields: [mediaId], references: [id], onDelete: Cascade)
-    mediaId String
+    mediaId String @db.Uuid
 
     uploader   User    @relation(fields: [uploaderId], references: [id])
-    uploaderId String
-    deleterId  String?
+    uploaderId String  @db.Uuid
+    deleterId  String? @db.Uuid
 }
 
 model MediaTitle {
-    id        String    @id @default(uuid())
+    id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
     createdAt DateTime  @default(now())
     updatedAt DateTime  @updatedAt
     deletedAt DateTime?
@@ -250,17 +253,17 @@ model MediaTitle {
     isMainTitle Boolean   @default(false)
 
     media   Media  @relation(fields: [mediaId], references: [id], onDelete: Cascade)
-    mediaId String
+    mediaId String @db.Uuid
 
     creator   User    @relation(fields: [creatorId], references: [id])
-    creatorId String
-    deleterId String?
+    creatorId String  @db.Uuid
+    deleterId String? @db.Uuid
 
     @@unique([mediaId, language, priority], name: "MediaTitlePriority")
 }
 
 model MediaTracker {
-    id        String    @id @default(uuid())
+    id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
     createdAt DateTime  @default(now())
     updatedAt DateTime  @updatedAt
     deletedAt DateTime?
@@ -269,15 +272,15 @@ model MediaTracker {
     externalId String
 
     media   Media  @relation(fields: [mediaId], references: [id], onDelete: Cascade)
-    mediaId String
+    mediaId String @db.Uuid
 
     creator   User    @relation(fields: [creatorId], references: [id])
-    creatorId String
-    deleterId String?
+    creatorId String  @db.Uuid
+    deleterId String? @db.Uuid
 }
 
 model MediaChapter {
-    id        String    @id @default(uuid())
+    id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
     createdAt DateTime  @default(now())
     updatedAt DateTime  @updatedAt
     deletedAt DateTime?
@@ -291,43 +294,19 @@ model MediaChapter {
     contentRating ContentRating @default(NORMAL)
     flag          Flag          @default(OK)
 
-    scans    Scan[]
-    comments MediaChapterComment[]
+    scans Scan[]
 
     media   Media  @relation(fields: [mediaId], references: [id], onDelete: Cascade)
-    mediaId String
+    mediaId String @db.Uuid
 
     uploader   User    @relation(fields: [uploaderId], references: [id])
-    uploaderId String
-    deleterId  String?
-}
-
-model MediaChapterComment {
-    id        String    @id @default(uuid())
-    createdAt DateTime  @default(now())
-    updatedAt DateTime  @updatedAt
-    deletedAt DateTime?
-
-    content     String
-    /// [MediaCommentAttachement]
-    attachments Json[]
-
-    replies MediaChapterComment[] @relation("ParentComment")
-
-    parent   MediaChapterComment? @relation("ParentComment", fields: [parentId], references: [id], onDelete: Cascade)
-    parentId String?
-
-    mediaChapter   MediaChapter @relation(fields: [mediaChapterId], references: [id], onDelete: Cascade)
-    mediaChapterId String
-
-    user      User    @relation(fields: [userId], references: [id])
-    userId    String
-    deleterId String?
+    uploaderId String  @db.Uuid
+    deleterId  String? @db.Uuid
 }
 
 // ---- SCANS
 model Scan {
-    id        String    @id @default(uuid())
+    id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
     createdAt DateTime  @default(now())
     updatedAt DateTime  @updatedAt
     deletedAt DateTime?
@@ -348,31 +327,15 @@ model Scan {
     email     String?
 
     chapters MediaChapter[]
-    members  ScanMember[]
 
     creator   User    @relation(fields: [creatorId], references: [id])
-    creatorId String
-    deleterId String?
-}
-
-model ScanMember {
-    id        String    @id @default(uuid())
-    createdAt DateTime  @default(now())
-    updatedAt DateTime  @updatedAt
-    deletedAt DateTime?
-
-    roles       ScanMemberRoles[]
-    permissions ScanMemberPermissions[]
-
-    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-    userId String
-
-    scans Scan[]
+    creatorId String  @db.Uuid
+    deleterId String? @db.Uuid
 }
 
 // ---- TASKS
 model Task {
-    id        String   @id @default(uuid())
+    id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
@@ -380,7 +343,7 @@ model Task {
     status  TaskStatus
     payload Json
 
-    sessionId String
+    sessionId String @db.Uuid
 }
 
 // ----- ENUMS

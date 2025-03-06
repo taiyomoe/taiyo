@@ -27,20 +27,11 @@ const getPermissions = (): Permission[] => {
 }
 
 const getUserPermissions = (): Permission[] => [
-  "mediaChapterComments:create",
-  "mediaChapterComments:update:own",
-  "mediaChapterComments:delete:own",
   "history:update:own",
   "library:update:own",
-  "usersFollow:update:own",
-  "usersSettings:update:own",
 ]
 
-const getModeratorPermissions = (): Permission[] => [
-  "mediaChapterComments:create",
-  "mediaChapterComments:update:any",
-  "mediaChapterComments:delete:any",
-]
+const getModeratorPermissions = (): Permission[] => []
 
 const getUploaderInternPermissions = () =>
   getUserPermissions().concat([
@@ -105,14 +96,12 @@ const getResourcesWithPosession = (): ResourcesWithPossession[] => [
   "mediaBanners",
   "mediaCovers",
   "mediaChapters",
-  "mediaChapterComments",
   "history",
   "library",
   "scans",
 ]
 
 const getResourcesWithoutPosession = (): ResourcesWithoutPossession[] => [
-  "scanMembers",
   "usersFollow",
   "usersSettings",
 ]

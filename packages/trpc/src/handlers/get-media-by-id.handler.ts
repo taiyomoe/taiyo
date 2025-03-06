@@ -35,7 +35,7 @@ export const getMediaByIdHandler = publicProcedure
       bannerId: result.banners.at(0)?.id ?? null,
       mainTitle: MediaUtils.getDisplayTitle(
         result.titles,
-        ctx.session?.user.preferredTitles,
+        ctx.session?.user.settings.preferredTitles,
       ),
       titles: result.titles,
       trackers: result.trackers.filter((t) => t.tracker !== "MANGADEX"),

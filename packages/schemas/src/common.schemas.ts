@@ -1,5 +1,6 @@
 import { ALLOWED_EXTENSIONS, ALLOWED_MIME_TYPES } from "@taiyomoe/constants"
 import { z } from "zod"
+import { nullablePreprocessor } from "./utils/nullable-preprocessor"
 
 export const idSchema = z.string().uuid()
 export const pageSchema = z.coerce.number().int().positive().catch(1)
@@ -16,6 +17,26 @@ export const fileSchema = z.object({
   extension: extensionSchema,
   file: z.instanceof(File).optional(),
 })
+
+export const mdIdSchema = z.union([
+  z.string().uuid(),
+  z
+    .string()
+    .url()
+    .startsWith("https://mangadex.org/title/")
+    .refine((v) => {
+      const uuidRegex =
+        /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/gi
+      const uuids = [...v.matchAll(uuidRegex)].flat()
+
+      if (uuids?.at(0) && uuids.length === 1) {
+        return true
+      }
+
+      return false
+    }, "Invalid URL")
+    .transform((v) => v.split("/").at(4)!),
+])
 
 export const perPageSchema = (initial: number, choices: number[]) =>
   z.coerce
@@ -127,12 +148,95 @@ export const dateFilterSchema = z.preprocess(
   },
   z
     .object({
-      equals: z.coerce.date().optional().catch(undefined),
-      not: z.coerce.date().optional().catch(undefined),
       lt: z.coerce.date().optional().catch(undefined),
-      lte: z.coerce.date().optional().catch(undefined),
       gt: z.coerce.date().optional().catch(undefined),
-      gte: z.coerce.date().optional().catch(undefined),
+    })
+    .optional(),
+)
+
+/**
+ * This schema is used to parse date search params (mainly deletedAt).
+ *
+ * A typical input looks like this:
+ * { equals: "null", lt: null, gt: null }
+ * { equals: "notNull", lt: null, gt: null }
+ *
+ * This schema will convert it to:
+ * { equals: null, not: undefined, lt: undefined, gt: undefined }
+ * { equals: undefined, not: null, lt: undefined, gt: undefined }
+ *
+ * If you pay attention, you'll note that in the input the `equals` property is a string.
+ * This is expected behavior because this comes directly from the URL.
+ * It'll get converted to a null value in the schema.
+ */
+export const nullableDateFilterSchema = z.preprocess(
+  nullablePreprocessor,
+  z
+    .object({
+      equals: z.null().optional().catch(undefined),
+      not: z.null().optional().catch(undefined),
+      lt: z.coerce.date().optional().catch(undefined),
+      gt: z.coerce.date().optional().catch(undefined),
+    })
+    .optional(),
+)
+
+export const textFilterSchema = z
+  .object({
+    equals: z.string().optional().catch(undefined),
+    not: z.string().optional().catch(undefined),
+    startsWith: z.string().optional().catch(undefined),
+    endsWith: z.string().optional().catch(undefined),
+    in: z.string().array().optional().catch(undefined),
+    notIn: z.string().array().optional().catch(undefined),
+  })
+  .optional()
+
+export const nullableTextFilterSchema = z.preprocess(
+  nullablePreprocessor,
+  z
+    .object({
+      equals: z.union([z.string(), z.null()]).optional().catch(undefined),
+      not: z.union([z.string(), z.null()]).optional().catch(undefined),
+      startsWith: z.string().optional().catch(undefined),
+      endsWith: z.string().optional().catch(undefined),
+      in: z.string().array().optional().catch(undefined),
+      notIn: z.string().array().optional().catch(undefined),
+    })
+    .optional(),
+)
+
+const rawNumberFilterSchema = z.preprocess(
+  (v) => (v === null ? undefined : v),
+  z.coerce.number(),
+)
+export const numberFilterSchema = z
+  .object({
+    equals: rawNumberFilterSchema.optional().catch(undefined),
+    not: rawNumberFilterSchema.optional().catch(undefined),
+    gt: rawNumberFilterSchema.optional().catch(undefined),
+    gte: rawNumberFilterSchema.optional().catch(undefined),
+    lt: rawNumberFilterSchema.optional().catch(undefined),
+    lte: rawNumberFilterSchema.optional().catch(undefined),
+  })
+  .optional()
+
+export const nullableNumberFilterSchema = z.preprocess(
+  nullablePreprocessor,
+  z
+    .object({
+      equals: z
+        .union([rawNumberFilterSchema, z.null()])
+        .optional()
+        .catch(undefined),
+      not: z
+        .union([rawNumberFilterSchema, z.null()])
+        .optional()
+        .catch(undefined),
+      gt: rawNumberFilterSchema.optional().catch(undefined),
+      gte: rawNumberFilterSchema.optional().catch(undefined),
+      lt: rawNumberFilterSchema.optional().catch(undefined),
+      lte: rawNumberFilterSchema.optional().catch(undefined),
     })
     .optional(),
 )

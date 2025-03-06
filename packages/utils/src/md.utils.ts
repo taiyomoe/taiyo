@@ -467,7 +467,8 @@ const getTrackers = (manga: Manga) => {
 const getSynopsis = (manga: Manga) =>
   manga.description["pt-br"] ||
   manga.description.en ||
-  Object.values(manga.description).at(0)
+  Object.values(manga.description).at(0) ||
+  null
 
 const parseCover = (input: Cover, logger: Logger) => {
   const volume = input.volume ? Number.parseFloat(input.volume) : null

@@ -2,7 +2,6 @@ import { Prisma } from "@prisma/client"
 import type {
   Media,
   MediaChapter,
-  MediaChapterComment,
   MediaCover,
   MediaTitle,
   Scan,
@@ -107,7 +106,6 @@ export type MediaChapterLimited = {
     id: Scan["id"]
     name: Scan["name"]
   }[]
-  comments: MediaChapterComment[]
 }
 
 export type MediaChapterNavigation = {

@@ -1,0 +1,111 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: #16161a;
+    --foreground: 0 0% 98%;
+
+    --primary: 0 100% 65.49%;
+    --primary-foreground: 0 0% 98%;
+
+    --secondary: #383842;
+    --secondary-foreground: 0 0% 9%;
+
+    --content1: #2d2d30;
+    --content1-foreground: 0 0% 98%;
+
+    --content2: #37373b;
+    --content2-foreground: 0 0% 98%;
+
+    --discord: #5865f2;
+    --discord-foreground: white;
+
+    --google: white;
+    --google-foreground: #000;
+
+    --body-padding: 24px;
+    --navbar-height: 60px;
+    --medias-banner-content-height: 200px;
+    --medias-banner-height: calc(
+      var(--medias-banner-content-height) +
+      var(--navbar-height)
+    );
+    --reader-height: calc(100dvh - var(--navbar-height));
+    --reader-sidebar-width: 300px;
+    --library-sidebar-width: 300px;
+
+    --sidebar-background: 240 3% 18%; /* content1 */
+    --sidebar-foreground: 0 0% 98%; /* content1-foreground */
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.5% 22.4%; /* content2 */
+    --sidebar-accent-foreground: 0 0% 98%; /* content2-foreground */
+    --sidebar-border: 240 3.5% 22.4%; /* content2 */
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  @screen sm {
+    :root {
+      --medias-banner-content-height: 250px;
+    }
+  }
+
+  @screen md {
+    :root {
+      --body-padding: 32px;
+      --medias-banner-content-height: 300px;
+    }
+  }
+
+  @screen lg {
+    :root {
+      --body-padding: 48px;
+      --medias-banner-content-height: 350px;
+    }
+  }
+}
+
+/* NextUI overrides */
+.data-\[hover\=true\]\:bg-default-50[data-hover="true"] {
+  @apply !bg-default-200 transition-colors;
+}
+
+/* Disable zoom effect on mobile */
+@media (max-width: 768px) {
+  img.hover\:scale-125:hover {
+    transform: none;
+  }
+}
+
+/* MARQUEE */
+@property --content1-gradient {
+  syntax: "<color>";
+  initial-value: #2d2d30;
+  inherits: false;
+}
+
+.rfm-overlay::before,
+.rfm-overlay::after {
+  background: linear-gradient(
+    to right,
+    var(--content1-gradient),
+    rgba(255, 255, 255, 0)
+  ) !important;
+  transition: --content1-gradient 250ms;
+}
+
+[id^="marquee-card-"]:hover .rfm-overlay::before,
+[id^="marquee-card-"]:hover .rfm-overlay::after {
+  --content1-gradient: var(--content2);
+}
+
+div[data-disable-combinators="false"]
+  .ruleGroup-body
+  > .rule:first-child:not(:only-child),
+div[data-disable-combinators="false"]
+  .ruleGroup-body
+  > .ruleGroup:first-child:not(:only-child) {
+  grid-column-start: 2;
+}

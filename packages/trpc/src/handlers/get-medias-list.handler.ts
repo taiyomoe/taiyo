@@ -1,68 +1,55 @@
-import { buildFilter, buildSort } from "@taiyomoe/meilisearch/utils"
 import { getMediasListSchema } from "@taiyomoe/schemas"
 import type { MediasListItem } from "@taiyomoe/types"
-import { DateTime } from "luxon"
 import { omit, parallel, unique } from "radash"
 import { protectedProcedure } from "../trpc"
+import { convertToFilter } from "../utils/convert-to-filter"
+import { convertToSort } from "../utils/convert-to-sort"
 
 export const getMediasListHandler = protectedProcedure
   .meta({ resource: "medias", action: "create" })
   .input(getMediasListSchema)
   .query(async ({ ctx, input }) => {
-    const searched = await ctx.meilisearch.medias.search(input.query.q, {
-      attributesToSearchOn: input.query.attributes,
-      filter: buildFilter(input.filter),
-      sort: buildSort(input.sort),
-      hitsPerPage: input.perPage,
-      page: input.page,
-    })
+    const filter = convertToFilter(omit(input, ["sort", "page", "perPage"]))
+    const sorts = convertToSort(input.sort)
+    const [totalCount, mediasCount, rawMedias] = await ctx.db.$transaction([
+      ctx.db.media.count({ where: { deletedAt: null } }),
+      ctx.db.media.count({ where: filter }),
+      ctx.db.media.findMany({
+        include: {
+          covers: { where: { deletedAt: null } },
+          titles: { where: { deletedAt: null } },
+        },
+        where: filter,
+        orderBy: sorts,
+        take: input.perPage,
+        skip: (input.page - 1) * input.perPage,
+      }),
+    ])
     const uniqueUsers = unique(
-      [
-        searched.hits.map((h) => h.creatorId),
-        searched.hits.map((h) => h.deleterId).filter(Boolean),
-      ].flat(),
+      [rawMedias.map((s) => s.creatorId), rawMedias.map((s) => s.deleterId)]
+        .flat()
+        .filter(Boolean),
     )
     const users = await ctx.db.user.findMany({
       select: { id: true, name: true, image: true },
       where: { id: { in: uniqueUsers } },
     })
-    const medias = (await parallel(10, searched.hits, async (h) => {
-      const titlesCount = await ctx.db.mediaTitle.count({
-        where: { mediaId: h.id, deletedAt: null },
-      })
-      const coversCount = await ctx.db.mediaCover.count({
-        where: { mediaId: h.id, deletedAt: null },
-      })
-      const bannersCount = await ctx.db.mediaBanner.count({
-        where: { mediaId: h.id, deletedAt: null },
-      })
-      const chaptersCount = await ctx.db.mediaChapter.count({
-        where: { mediaId: h.id, deletedAt: null },
-      })
+    const medias = (await parallel(10, rawMedias, async (m) => {
+      const filter = { mediaId: m.id, deletedAt: null }
+      const [titlesCount, coversCount, bannersCount, chaptersCount] =
+        await ctx.db.$transaction([
+          ctx.db.mediaTitle.count({ where: filter }),
+          ctx.db.mediaCover.count({ where: filter }),
+          ctx.db.mediaBanner.count({ where: filter }),
+          ctx.db.mediaChapter.count({ where: filter }),
+        ])
 
       return {
-        ...omit(h, [
-          "createdAt",
-          "updatedAt",
-          "deletedAt",
-          "startDate",
-          "endDate",
-          "titles",
-          "creatorId",
-          "deleterId",
-        ]),
-        createdAt: DateTime.fromSeconds(h.createdAt).toJSDate(),
-        updatedAt: DateTime.fromSeconds(h.updatedAt).toJSDate(),
-        deletedAt: h.deletedAt
-          ? DateTime.fromSeconds(h.deletedAt).toJSDate()
-          : null,
-        startDate: h.startDate
-          ? DateTime.fromSeconds(h.startDate).toJSDate()
-          : null,
-        endDate: h.endDate ? DateTime.fromSeconds(h.endDate).toJSDate() : null,
-        creator: users.find((u) => u.id === h.creatorId)!,
-        deleter: users.find((d) => d.id === h.deleterId) ?? null,
-        mainTitle: h.titles.find((t) => t.isMainTitle)?.title ?? "",
+        ...m,
+        creator: users.find((u) => u.id === m.creatorId)!,
+        deleter: users.find((d) => d.id === m.deleterId) ?? null,
+        mainTitle: m.titles.find((t) => t.isMainTitle)?.title ?? "",
+        mainCoverId: m.covers.at(0)?.id ?? "",
         titlesCount,
         chaptersCount,
         coversCount,
@@ -71,8 +58,9 @@ export const getMediasListHandler = protectedProcedure
     })) satisfies MediasListItem[]
 
     return {
+      stats: { totalCount },
       medias,
-      totalPages: searched.totalPages,
-      totalCount: searched.totalHits,
+      totalPages: Math.ceil(mediasCount / input.perPage),
+      totalCount: mediasCount,
     }
   })

@@ -13,7 +13,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@t3-oss/env-core": "^0.11.1",
+    "@t3-oss/env-core": "^0.12.0",
     "@taiyomoe/cache": "workspace:*",
     "@taiyomoe/constants": "workspace:*",
     "@taiyomoe/db": "workspace:*",
@@ -22,7 +22,7 @@
     "@taiyomoe/s3": "workspace:*",
     "@taiyomoe/types": "workspace:*",
     "@taiyomoe/utils": "workspace:*",
-    "file-type": "^19.6.0",
+    "file-type": "^20.4.0",
     "radash": "^12.1.0",
     "sharp": "^0.33.5"
   },
