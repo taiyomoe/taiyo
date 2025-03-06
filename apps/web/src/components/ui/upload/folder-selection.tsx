@@ -1,6 +1,6 @@
 "use client"
 
-import { Card, CardBody } from "@nextui-org/card"
+import { Card, CardBody } from "@heroui/card"
 import { type DropzoneProps, useDropzone } from "react-dropzone"
 import { AssetSelection } from "~/components/ui/upload/asset-selection"
 import { cn } from "~/lib/utils/cn"

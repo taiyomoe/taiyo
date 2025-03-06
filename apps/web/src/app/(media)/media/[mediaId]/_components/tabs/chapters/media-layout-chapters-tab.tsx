@@ -1,7 +1,7 @@
 "use client"
 
-import type { Selection } from "@nextui-org/react"
-import { Spinner } from "@nextui-org/spinner"
+import type { Selection } from "@heroui/react"
+import { Spinner } from "@heroui/spinner"
 import type { MediaLimited } from "@taiyomoe/types"
 import { ChapterUtils } from "@taiyomoe/utils"
 import Image from "next/image"

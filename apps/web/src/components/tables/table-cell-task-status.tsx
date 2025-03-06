@@ -1,4 +1,4 @@
-import { type VariantProps, tv } from "@nextui-org/react"
+import { type VariantProps, tv } from "@heroui/react"
 import {
   CheckIcon,
   CircleDashedIcon,

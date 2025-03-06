@@ -1,5 +1,5 @@
-import { Textarea as BaseTextArea } from "@nextui-org/input"
-import { extendVariants } from "@nextui-org/react"
+import { Textarea as BaseTextArea } from "@heroui/input"
+import { extendVariants } from "@heroui/react"
 
 export const TextArea = extendVariants(BaseTextArea, {
   variants: {

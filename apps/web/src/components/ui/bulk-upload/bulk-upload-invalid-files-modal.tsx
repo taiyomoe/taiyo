@@ -1,4 +1,4 @@
-import { Button } from "@nextui-org/button"
+import { Button } from "@heroui/button"
 import {
   Modal,
   ModalBody,
@@ -6,7 +6,7 @@ import {
   ModalFooter,
   ModalHeader,
   useDisclosure,
-} from "@nextui-org/modal"
+} from "@heroui/modal"
 import { useCallback, useEffect } from "react"
 import { BulkUploadInvalidFilesShowcase } from "~/components/ui/bulk-upload/bulk-upload-invalid-files-showcase"
 import type { InvalidFile } from "~/lib/types"

@@ -1,6 +1,6 @@
 "use client"
 
-import { Button } from "@nextui-org/button"
+import { Button } from "@heroui/button"
 import { authClient } from "@taiyomoe/auth/client"
 import { toast } from "sonner"
 import { CompanyLogo } from "~/components/ui/CompanyLogo"

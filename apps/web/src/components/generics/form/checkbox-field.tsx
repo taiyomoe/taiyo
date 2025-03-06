@@ -1,4 +1,4 @@
-import { Checkbox, type CheckboxProps } from "@nextui-org/checkbox"
+import { Checkbox, type CheckboxProps } from "@heroui/checkbox"
 import { omit } from "radash"
 import { useCallback, useState } from "react"
 import { useFormContext } from "react-hook-form"

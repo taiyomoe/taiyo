@@ -1,4 +1,4 @@
-import { Spinner } from "@nextui-org/spinner"
+import { Spinner } from "@heroui/spinner"
 import { useChapterProgression } from "~/hooks/useChapterProgression"
 import { useReaderSettingsStore, useReaderStore } from "~/stores"
 import { MediaChapterImage } from "./MediaChapterImage"

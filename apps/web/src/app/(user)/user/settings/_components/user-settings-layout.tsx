@@ -1,6 +1,6 @@
 "use client"
 
-import { Divider } from "@nextui-org/divider"
+import { Divider } from "@heroui/divider"
 import type { UpdateUserSettingsInput } from "@taiyomoe/schemas"
 import { useAtomValue } from "jotai"
 import { userSettingsSelectedTabAtom } from "~/atoms/userSettings.atoms"

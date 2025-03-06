@@ -1,4 +1,4 @@
-import { Pagination } from "@nextui-org/pagination"
+import { Pagination } from "@heroui/pagination"
 import { PerPageDropdown } from "~/components/ui/pagination/per-page-dropdown"
 
 type Props = {

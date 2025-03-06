@@ -1,5 +1,5 @@
-import { Pagination } from "@nextui-org/pagination"
-import { Spinner } from "@nextui-org/spinner"
+import { Pagination } from "@heroui/pagination"
+import { Spinner } from "@heroui/spinner"
 import { authClient } from "@taiyomoe/auth/client"
 import { USER_FOLLOWS_PER_PAGE_CHOICES } from "@taiyomoe/constants"
 import type { UserLimited } from "@taiyomoe/types"

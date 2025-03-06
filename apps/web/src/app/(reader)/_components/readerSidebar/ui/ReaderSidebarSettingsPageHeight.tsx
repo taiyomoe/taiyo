@@ -1,7 +1,7 @@
 "use client"
 
-import { Button, ButtonGroup } from "@nextui-org/button"
-import { tv } from "@nextui-org/react"
+import { Button, ButtonGroup } from "@heroui/button"
+import { tv } from "@heroui/react"
 import { FoldVerticalIcon, UnfoldVerticalIcon } from "lucide-react"
 import { useReaderSettingsStore } from "~/stores"
 

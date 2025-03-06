@@ -1,5 +1,5 @@
-import { Button } from "@nextui-org/button"
-import { type SlotsToClasses, type VariantProps, tv } from "@nextui-org/react"
+import { Button } from "@heroui/button"
+import { type SlotsToClasses, type VariantProps, tv } from "@heroui/react"
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react"
 import type { HTMLAttributes } from "react"
 

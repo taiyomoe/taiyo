@@ -1,8 +1,8 @@
 "use client"
 
-import { Button } from "@nextui-org/button"
-import { Divider } from "@nextui-org/divider"
-import { Popover, PopoverContent, PopoverTrigger } from "@nextui-org/popover"
+import { Button } from "@heroui/button"
+import { Divider } from "@heroui/divider"
+import { Popover, PopoverContent, PopoverTrigger } from "@heroui/popover"
 import { UserIcon } from "lucide-react"
 import NextLink from "next/link"
 import { NavbarPopoverCommon } from "./navbar-popover-common"

@@ -1,7 +1,7 @@
 "use client"
 
-import { ScrollShadow } from "@nextui-org/scroll-shadow"
-import { Spinner } from "@nextui-org/spinner"
+import { ScrollShadow } from "@heroui/scroll-shadow"
+import { Spinner } from "@heroui/spinner"
 import type { LatestReleaseGroupedLite } from "@taiyomoe/types"
 import useEmblaCarousel from "embla-carousel-react"
 import { api } from "~/trpc/react"

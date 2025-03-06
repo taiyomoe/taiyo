@@ -1,7 +1,7 @@
 "use client"
 
-import { tv } from "@nextui-org/react"
-import { Slider } from "@nextui-org/slider"
+import { tv } from "@heroui/react"
+import { Slider } from "@heroui/slider"
 import { useReaderSettingsStore } from "~/stores"
 
 const readerSidebarSettingsBrightness = tv({

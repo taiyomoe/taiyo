@@ -1,6 +1,6 @@
 "use client"
 
-import { type VariantProps, tv } from "@nextui-org/react"
+import { type VariantProps, tv } from "@heroui/react"
 import type { Session } from "@taiyomoe/auth/server"
 import { motion, useScroll, useTransform } from "framer-motion"
 import { ReaderSidebarOpenButton } from "~/app/(reader)/_components/readerSidebar/ui/ReaderSidebarOpenButton"

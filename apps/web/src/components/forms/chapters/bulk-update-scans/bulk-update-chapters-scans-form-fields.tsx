@@ -1,4 +1,4 @@
-import { Divider } from "@nextui-org/divider"
+import { Divider } from "@heroui/divider"
 import type { BulkUpdateChaptersScansInput } from "@taiyomoe/schemas"
 import type { MediaChapterWithScans } from "@taiyomoe/types"
 import { Fragment, useMemo } from "react"

@@ -1,4 +1,4 @@
-import { Button } from "@nextui-org/button"
+import { Button } from "@heroui/button"
 import { Trash2Icon } from "lucide-react"
 import { useFormContext } from "react-hook-form"
 

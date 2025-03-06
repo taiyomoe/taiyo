@@ -1,14 +1,14 @@
 "use client"
 
-import { Button } from "@nextui-org/button"
+import { Button } from "@heroui/button"
 import {
   Dropdown,
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
-} from "@nextui-org/dropdown"
-import { tv } from "@nextui-org/react"
-import { Skeleton } from "@nextui-org/skeleton"
+} from "@heroui/dropdown"
+import { tv } from "@heroui/react"
+import { Skeleton } from "@heroui/skeleton"
 import { ChapterUtils } from "@taiyomoe/utils"
 import { ChevronsUpDownIcon } from "lucide-react"
 import Link from "next/link"

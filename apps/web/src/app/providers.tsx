@@ -1,6 +1,6 @@
 "use client"
 
-import { NextUIProvider } from "@nextui-org/react"
+import { HeroUIProvider } from "@heroui/react"
 import { Provider as JotaiProvider } from "jotai"
 import { ThemeProvider } from "next-themes"
 import { useRouter } from "next/navigation"
@@ -14,7 +14,7 @@ export const Providers = (props: LayoutProps) => {
 
   return (
     <TRPCReactProvider>
-      <NextUIProvider locale="pt-BR" navigate={router.push}>
+      <HeroUIProvider locale="pt-BR" navigate={router.push}>
         <ThemeProvider attribute="class" defaultTheme="dark">
           <JotaiProvider>
             <NuqsAdapter>
@@ -30,7 +30,7 @@ export const Providers = (props: LayoutProps) => {
             </NuqsAdapter>
           </JotaiProvider>
         </ThemeProvider>
-      </NextUIProvider>
+      </HeroUIProvider>
     </TRPCReactProvider>
   )
 }

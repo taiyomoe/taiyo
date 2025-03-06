@@ -1,4 +1,4 @@
-import { Divider } from "@nextui-org/divider"
+import { Divider } from "@heroui/divider"
 import { Navbar } from "~/components/navbar/navbar"
 import type { LayoutProps } from "~/lib/types"
 

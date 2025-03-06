@@ -1,4 +1,4 @@
-import { Chip } from "@nextui-org/chip"
+import { Chip } from "@heroui/chip"
 import { TAGS_PT } from "@taiyomoe/utils/i18n"
 import { Tooltip } from "~/components/generics/tooltip"
 import { cn } from "~/lib/utils/cn"

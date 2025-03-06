@@ -1,6 +1,6 @@
 "use client"
 
-import { Button } from "@nextui-org/button"
+import { Button } from "@heroui/button"
 import { ChevronDownIcon } from "lucide-react"
 import { omit } from "radash"
 import Select, {

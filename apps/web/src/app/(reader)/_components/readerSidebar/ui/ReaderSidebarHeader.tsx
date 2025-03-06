@@ -1,7 +1,7 @@
 "use client"
 
-import { Button } from "@nextui-org/button"
-import { tv } from "@nextui-org/react"
+import { Button } from "@heroui/button"
+import { tv } from "@heroui/react"
 import { SidebarIcon } from "~/components/icons/SidebarIcon"
 import { useReaderSettingsStore } from "~/stores"
 import { ReaderSidebarMediaTitle } from "./ReaderSidebarMediaTitle"

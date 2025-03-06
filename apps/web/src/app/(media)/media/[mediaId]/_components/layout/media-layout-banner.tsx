@@ -1,4 +1,4 @@
-import { Image } from "@nextui-org/image"
+import { Image } from "@heroui/image"
 import type { MediaLimited } from "@taiyomoe/types"
 import { MediaUtils } from "@taiyomoe/utils"
 import { CoverUtils } from "@taiyomoe/utils"

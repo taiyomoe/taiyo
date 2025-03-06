@@ -1,4 +1,4 @@
-import { Chip } from "@nextui-org/chip"
+import { Chip } from "@heroui/chip"
 import Link from "next/link"
 import { CompanyLogo } from "~/components/ui/CompanyLogo"
 

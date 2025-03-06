@@ -1,12 +1,12 @@
-import { Button } from "@nextui-org/button"
-import { Input } from "@nextui-org/input"
+import { Button } from "@heroui/button"
+import { Input } from "@heroui/input"
 import {
   Modal,
   ModalBody,
   ModalContent,
   ModalFooter,
   ModalHeader,
-} from "@nextui-org/modal"
+} from "@heroui/modal"
 import type { ChaptersListItem } from "@taiyomoe/types"
 import { useTranslations } from "next-intl"
 import { useState } from "react"

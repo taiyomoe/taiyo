@@ -1,5 +1,5 @@
-import type { Selection, SharedSelection } from "@nextui-org/react"
-import { Select, SelectItem, type SelectProps } from "@nextui-org/select"
+import type { Selection, SharedSelection } from "@heroui/react"
+import { Select, SelectItem, type SelectProps } from "@heroui/select"
 import { useRef, useState } from "react"
 import { SelectUtils } from "~/lib/utils/select.utils"
 
@@ -31,7 +31,7 @@ export const EnumSelect = ({ items, onSelectionChange, ...props }: Props) => {
       {...props}
     >
       {({ label, value }) => (
-        <SelectItem key={value} value={value} textValue={label}>
+        <SelectItem key={value} textValue={label}>
           {label}
         </SelectItem>
       )}

@@ -1,6 +1,6 @@
 "use client"
 
-import { Modal, ModalContent } from "@nextui-org/modal"
+import { Modal, ModalContent } from "@heroui/modal"
 import { Command } from "cmdk"
 import { Configure } from "react-instantsearch"
 import { InstantSearchNext } from "react-instantsearch-nextjs"

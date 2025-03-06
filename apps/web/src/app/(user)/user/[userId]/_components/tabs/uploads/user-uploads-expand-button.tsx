@@ -1,4 +1,4 @@
-import { Button } from "@nextui-org/button"
+import { Button } from "@heroui/button"
 import { useAtom, useAtomValue } from "jotai"
 import { ChevronLeft } from "lucide-react"
 import {

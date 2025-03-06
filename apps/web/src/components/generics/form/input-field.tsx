@@ -1,6 +1,6 @@
 "use client"
 
-import type { InputProps } from "@nextui-org/input"
+import type { InputProps } from "@heroui/input"
 import { Controller } from "react-hook-form"
 import { Input } from "~/components/generics/input"
 
@@ -18,8 +18,8 @@ export const InputField = ({ name, labelPlacement, ...rest }: Props) => (
         errorMessage={error?.message}
         isInvalid={invalid}
         value={value ?? ""}
-        {...field}
         {...rest}
+        {...field}
       />
     )}
   />

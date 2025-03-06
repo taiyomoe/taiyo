@@ -1,6 +1,7 @@
-import { fromDate } from "@internationalized/date"
-import { Input } from "@nextui-org/input"
-import { Switch } from "@nextui-org/switch"
+import { Input } from "@heroui/input"
+import type { DateValue } from "@heroui/react"
+import { Switch } from "@heroui/switch"
+import { getLocalTimeZone, parseDate } from "@internationalized/date"
 import {
   ContentRating,
   Flag,
@@ -23,7 +24,6 @@ import { UsersAutocomplete } from "~/components/ui/autocompletes/users/users-aut
 import { MediasMultiAutocomplete } from "~/components/ui/multi-autocompletes/medias-multi-autocomplete"
 import { ScansMultiAutocomplete } from "~/components/ui/multi-autocompletes/scans-multi-autocomplete"
 import { UsersMultiAutocomplete } from "~/components/ui/multi-autocompletes/users-multi-autocomplete"
-import { DateUtils } from "~/lib/utils/date.utils"
 import { SelectUtils } from "~/lib/utils/select.utils"
 import { AVAILABLE_ENUMS } from "~/utils/rqb-operators"
 
@@ -94,10 +94,10 @@ export const QueryBuilderValueEditor = (props: ValueEditorProps) => {
           className="min-w-[300px]"
           value={
             props.value
-              ? fromDate(new Date(props.value), DateUtils.getTimezone())
+              ? (parseDate(props.value) as unknown as DateValue)
               : null
           }
-          onChange={(v) => handleOnChange(v?.toDate(DateUtils.getTimezone()))}
+          onChange={(v) => handleOnChange(v?.toDate(getLocalTimeZone()))}
           granularity="day"
           aria-label="Date picker"
         />

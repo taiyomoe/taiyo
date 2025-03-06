@@ -1,4 +1,4 @@
-import { tv } from "@nextui-org/react"
+import { tv } from "@heroui/react"
 import prettyBytes from "pretty-bytes"
 
 type Props = {

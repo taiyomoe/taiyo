@@ -1,12 +1,12 @@
 "use client"
 
-import { Button } from "@nextui-org/button"
+import { Button } from "@heroui/button"
 import {
   Dropdown,
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
-} from "@nextui-org/dropdown"
+} from "@heroui/dropdown"
 import { ComputerIcon, MoonIcon, SunIcon } from "lucide-react"
 import { useTheme } from "next-themes"
 

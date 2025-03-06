@@ -1,6 +1,6 @@
 "use client"
 
-import { tv } from "@nextui-org/react"
+import { tv } from "@heroui/react"
 import type { KeyboardEventHandler, MouseEvent } from "react"
 import { useCallback } from "react"
 import { MediaChapterPageOverlay } from "~/app/(reader)/_components/MediaChapterPageOverlay"

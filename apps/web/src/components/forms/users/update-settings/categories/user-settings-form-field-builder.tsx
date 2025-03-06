@@ -1,4 +1,4 @@
-import { Chip } from "@nextui-org/chip"
+import { Chip } from "@heroui/chip"
 import type { ReactNode } from "react"
 import { cn } from "~/lib/utils/cn"
 

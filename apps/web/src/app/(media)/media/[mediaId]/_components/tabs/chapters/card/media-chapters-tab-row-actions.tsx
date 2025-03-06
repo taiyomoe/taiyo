@@ -1,4 +1,4 @@
-import { Button } from "@nextui-org/button"
+import { Button } from "@heroui/button"
 import type { MediaLimitedChapter } from "@taiyomoe/types"
 import { PencilIcon } from "lucide-react"
 import Link from "next/link"

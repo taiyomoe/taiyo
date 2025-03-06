@@ -1,5 +1,4 @@
-import { zodResolver } from "@hookform/resolvers/zod"
-import { Button } from "@nextui-org/button"
+import { Button } from "@heroui/button"
 import {
   Modal,
   ModalBody,
@@ -7,7 +6,8 @@ import {
   ModalFooter,
   ModalHeader,
   useDisclosure,
-} from "@nextui-org/modal"
+} from "@heroui/modal"
+import { zodResolver } from "@hookform/resolvers/zod"
 import type { MediaTitle } from "@taiyomoe/db"
 import { type UpdateTitleInput, updateTitleSchema } from "@taiyomoe/schemas"
 import { ObjectUtils } from "@taiyomoe/utils"

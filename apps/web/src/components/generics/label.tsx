@@ -1,5 +1,5 @@
-import type { InputProps } from "@nextui-org/input"
-import { tv } from "@nextui-org/react"
+import type { InputProps } from "@heroui/input"
+import { tv } from "@heroui/react"
 import { cn } from "~/lib/utils/cn"
 
 type Props = {

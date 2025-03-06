@@ -1,6 +1,6 @@
 "use client"
 
-import type { TextAreaProps } from "@nextui-org/input"
+import type { TextAreaProps } from "@heroui/input"
 import { useFormContext } from "react-hook-form"
 import { TextArea } from "~/components/generics/textarea"
 
@@ -18,8 +18,8 @@ export const TextAreaField = ({ name, ...rest }: Props) => {
       color={errorMessage ? "danger" : "default"}
       defaultValue={defaultValues?.[name]}
       errorMessage={errorMessage}
-      {...register(name)}
       {...rest}
+      {...register(name)}
     />
   )
 }

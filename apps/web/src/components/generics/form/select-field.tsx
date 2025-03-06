@@ -1,7 +1,7 @@
 "use client"
 
-import { tv } from "@nextui-org/react"
-import { Select, SelectItem, type SelectProps } from "@nextui-org/select"
+import { tv } from "@heroui/react"
+import { Select, SelectItem, type SelectProps } from "@heroui/select"
 import type { ReactNode } from "react"
 import { useFormContext } from "react-hook-form"
 import { SelectUtils } from "~/lib/utils/select.utils"
@@ -67,7 +67,7 @@ export const SelectField = ({
       {...rest}
     >
       {(item) => (
-        <SelectItem key={item.value} value={item.value} textValue={item.label}>
+        <SelectItem key={item.value} textValue={item.label}>
           {item.value === "" || !renderOption
             ? item.label
             : renderOption(item.value)}

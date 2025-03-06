@@ -1,10 +1,10 @@
 "use client"
 
-import { Button } from "@nextui-org/button"
-import { Divider } from "@nextui-org/divider"
-import { type VariantProps, tv } from "@nextui-org/react"
-import { Skeleton } from "@nextui-org/skeleton"
-import { Tooltip, type TooltipProps } from "@nextui-org/tooltip"
+import { Button } from "@heroui/button"
+import { Divider } from "@heroui/divider"
+import { type VariantProps, tv } from "@heroui/react"
+import { Skeleton } from "@heroui/skeleton"
+import { Tooltip, type TooltipProps } from "@heroui/tooltip"
 import { Slot } from "@radix-ui/react-slot"
 import { PanelLeft } from "lucide-react"
 import {
