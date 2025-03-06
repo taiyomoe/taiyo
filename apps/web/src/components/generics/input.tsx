@@ -1,5 +1,5 @@
-import { Input as BaseInput } from "@nextui-org/input"
-import { extendVariants } from "@nextui-org/react"
+import { Input as BaseInput } from "@heroui/input"
+import { extendVariants } from "@heroui/react"
 
 export const Input = extendVariants(BaseInput, {
   variants: {

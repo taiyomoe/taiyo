@@ -1,4 +1,4 @@
-import { Divider } from "@nextui-org/divider"
+import { Divider } from "@heroui/divider"
 import type { LatestReleaseGrouped, UserLimited } from "@taiyomoe/types"
 import { ChapterUtils, CoverUtils, MediaUtils } from "@taiyomoe/utils"
 import { useAtomValue } from "jotai"

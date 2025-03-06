@@ -1,6 +1,6 @@
 "use client"
 
-import { Divider } from "@nextui-org/divider"
+import { Divider } from "@heroui/divider"
 import type { MediaChapterWithScans } from "@taiyomoe/types"
 import { useAtomValue } from "jotai"
 import { bulkEditChaptersActiveTabAtom } from "~/atoms/bulkEditChapters.atoms"

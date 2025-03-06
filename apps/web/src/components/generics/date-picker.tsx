@@ -1,5 +1,5 @@
-import { DatePicker as BaseDatePicker } from "@nextui-org/date-picker"
-import { extendVariants } from "@nextui-org/react"
+import { DatePicker as BaseDatePicker } from "@heroui/date-picker"
+import { extendVariants } from "@heroui/react"
 
 export const DatePicker = extendVariants(BaseDatePicker, {
   variants: {

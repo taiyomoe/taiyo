@@ -1,6 +1,6 @@
 "use client"
 
-import { Button } from "@nextui-org/button"
+import { Button } from "@heroui/button"
 import { FlagIcon, SettingsIcon, SunMoonIcon } from "lucide-react"
 import Link from "next/link"
 import { CompanyLogo } from "~/components/ui/CompanyLogo"

@@ -1,4 +1,4 @@
-import { tv } from "@nextui-org/react"
+import { tv } from "@heroui/react"
 import { ReaderSidebarSettingsBrightness } from "../ui/ReaderSidebarSettingsBrightness"
 import { ReaderSidebarSettingsNavbarMode } from "../ui/ReaderSidebarSettingsNavbarMode"
 import { ReaderSidebarSettingsOpenMode } from "../ui/ReaderSidebarSettingsOpenMode"

@@ -1,4 +1,4 @@
-import { Divider } from "@nextui-org/divider"
+import { Divider } from "@heroui/divider"
 import { AlertTriangleIcon } from "lucide-react"
 import type { InvalidFile } from "~/lib/types"
 

@@ -1,5 +1,5 @@
-import { Button } from "@nextui-org/button"
-import { Card, CardBody } from "@nextui-org/card"
+import { Button } from "@heroui/button"
+import { Card, CardBody } from "@heroui/card"
 import { useDropzone } from "react-dropzone"
 import { useFormContext } from "react-hook-form"
 import { Form } from "~/components/generics/form/form"

@@ -1,4 +1,4 @@
-import { Image } from "@nextui-org/image"
+import { Image } from "@heroui/image"
 import type { UserLimited } from "@taiyomoe/types"
 import { UserUtils } from "@taiyomoe/utils"
 import NextImage from "next/image"

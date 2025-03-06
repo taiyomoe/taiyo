@@ -1,4 +1,4 @@
-import { Input, type InputProps } from "@nextui-org/input"
+import { Input, type InputProps } from "@heroui/input"
 import { SearchIcon } from "lucide-react"
 
 type Props = Omit<InputProps, "isClearable" | "startContent">

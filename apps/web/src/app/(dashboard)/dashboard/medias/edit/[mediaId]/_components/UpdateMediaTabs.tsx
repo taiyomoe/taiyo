@@ -1,6 +1,6 @@
 "use client"
 
-import { Tab, Tabs } from "@nextui-org/tabs"
+import { Tab, Tabs } from "@heroui/tabs"
 import type { MediaWithRelations } from "@taiyomoe/types"
 import { useEffect } from "react"
 import { UpdateCoverShowcase } from "~/components/forms/covers/update/update-cover-showcase"

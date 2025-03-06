@@ -1,10 +1,10 @@
-import { Button } from "@nextui-org/button"
+import { Button } from "@heroui/button"
 import {
   Dropdown,
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
-} from "@nextui-org/dropdown"
+} from "@heroui/dropdown"
 import { ArrowLeftRightIcon, ChevronRightIcon } from "lucide-react"
 import { useDataTable } from "~/components/generics/data-table/data-table-context"
 

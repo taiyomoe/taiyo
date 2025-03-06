@@ -1,4 +1,4 @@
-import { tv } from "@nextui-org/react"
+import { tv } from "@heroui/react"
 import Image from "next/image"
 
 type Props = {

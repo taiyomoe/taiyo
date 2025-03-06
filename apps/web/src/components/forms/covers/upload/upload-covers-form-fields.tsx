@@ -1,4 +1,4 @@
-import { Card, CardBody } from "@nextui-org/card"
+import { Card, CardBody } from "@heroui/card"
 import { ContentRating, Languages } from "@taiyomoe/db"
 import type { UploadCoversInput } from "@taiyomoe/schemas"
 import { useDropzone } from "react-dropzone"

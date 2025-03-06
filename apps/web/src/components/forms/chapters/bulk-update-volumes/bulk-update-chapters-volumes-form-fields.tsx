@@ -1,4 +1,4 @@
-import { Divider } from "@nextui-org/divider"
+import { Divider } from "@heroui/divider"
 import type { MediaChapter } from "@taiyomoe/db"
 import type { BulkUpdateChaptersVolumesInput } from "@taiyomoe/schemas"
 import { max, sort } from "radash"

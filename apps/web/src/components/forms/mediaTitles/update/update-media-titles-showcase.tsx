@@ -1,4 +1,4 @@
-import { Chip } from "@nextui-org/chip"
+import { Chip } from "@heroui/chip"
 import { TitleUtils } from "@taiyomoe/utils"
 import { useMemo } from "react"
 import { List } from "~/components/generics/List"

@@ -1,12 +1,10 @@
 "use client"
 
-import type { DatePickerProps } from "@nextui-org/date-picker"
-
-import { fromDate } from "@internationalized/date"
+import type { DatePickerProps } from "@heroui/date-picker"
+import type { DateValue } from "@heroui/react"
+import { fromDate, getLocalTimeZone } from "@internationalized/date"
 import { Controller } from "react-hook-form"
 import { DatePicker } from "~/components/generics/date-picker"
-
-const DEFAULT_TIMEZONE = "America/Sao_Paulo"
 
 type Props = { name: string } & DatePickerProps
 
@@ -21,11 +19,15 @@ export const DateField = ({ name, labelPlacement, ...rest }: Props) => (
         labelPlacement={labelPlacement ?? "outside-left"}
         errorMessage={error?.message}
         isInvalid={invalid}
-        value={value ? fromDate(value, DEFAULT_TIMEZONE) : null}
-        onChange={(v) => onChange(v?.toDate(DEFAULT_TIMEZONE))}
+        value={
+          value
+            ? (fromDate(value, getLocalTimeZone()) as unknown as DateValue)
+            : null
+        }
+        onChange={(v) => onChange(v?.toDate(getLocalTimeZone()))}
         granularity="day"
-        {...field}
         {...rest}
+        {...field}
       />
     )}
   />

@@ -1,6 +1,6 @@
 "use client"
 
-import { type VariantProps, tv } from "@nextui-org/react"
+import { type VariantProps, tv } from "@heroui/react"
 import { UsersIcon } from "lucide-react"
 import Link from "next/link"
 import { debounce } from "radash"

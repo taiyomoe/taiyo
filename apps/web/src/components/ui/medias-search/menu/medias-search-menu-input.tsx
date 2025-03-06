@@ -1,5 +1,5 @@
-import { Button } from "@nextui-org/button"
-import { Kbd } from "@nextui-org/kbd"
+import { Button } from "@heroui/button"
+import { Kbd } from "@heroui/kbd"
 import { Command } from "cmdk"
 import { SearchIcon, XIcon } from "lucide-react"
 import { useSearchBox } from "react-instantsearch"

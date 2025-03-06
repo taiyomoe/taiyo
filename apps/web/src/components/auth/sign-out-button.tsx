@@ -1,4 +1,4 @@
-import { Button } from "@nextui-org/button"
+import { Button } from "@heroui/button"
 import { authClient } from "@taiyomoe/auth/client"
 
 export const SignOutButton = () => (

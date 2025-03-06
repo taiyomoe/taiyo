@@ -1,4 +1,4 @@
-import { Card, CardBody, CardHeader } from "@nextui-org/card"
+import { Card, CardBody, CardHeader } from "@heroui/card"
 import type { ReactNode } from "react"
 import { NumberTicker } from "~/components/generics/texts/number-ticker"
 

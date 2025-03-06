@@ -1,4 +1,4 @@
-import {} from "@nextui-org/react"
+import {} from "@heroui/react"
 import { CopyText } from "~/components/generics/texts/copy-text"
 import { Tooltip } from "~/components/generics/tooltip"
 

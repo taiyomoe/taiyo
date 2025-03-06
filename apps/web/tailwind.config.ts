@@ -1,4 +1,4 @@
-import { nextui } from "@nextui-org/react"
+import { heroui } from "@heroui/react"
 import baseConfig from "@taiyomoe/tailwind-config/base"
 import tailwindScrollbar from "tailwind-scrollbar"
 import type { Config } from "tailwindcss"
@@ -8,7 +8,7 @@ export default {
   presets: [baseConfig],
   content: [
     "./src/{app,components}/**/*.tsx",
-    "../../node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
+    "../../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
@@ -91,7 +91,7 @@ export default {
     }),
     require("@savvywombat/tailwindcss-grid-areas"),
     require("tailwindcss-animate"),
-    nextui({
+    heroui({
       prefix: "taiyo",
       layout: {
         radius: {

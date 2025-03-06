@@ -1,6 +1,6 @@
 "use client"
 
-import { Autocomplete, type AutocompleteProps } from "@nextui-org/autocomplete"
+import { Autocomplete, type AutocompleteProps } from "@heroui/autocomplete"
 import type {
   MeilisearchIndexes,
   MeilisearchIndexesItems,

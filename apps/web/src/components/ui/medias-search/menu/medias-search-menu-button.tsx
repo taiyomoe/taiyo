@@ -1,4 +1,4 @@
-import { Kbd } from "@nextui-org/kbd"
+import { Kbd } from "@heroui/kbd"
 import { SearchIcon } from "lucide-react"
 import { useEventListener } from "usehooks-ts"
 

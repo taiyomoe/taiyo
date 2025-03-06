@@ -1,5 +1,5 @@
-import { type Selection, tv } from "@nextui-org/react"
-import { Select, SelectItem } from "@nextui-org/select"
+import { type Selection, tv } from "@heroui/react"
+import { Select, SelectItem } from "@heroui/select"
 import type { ValueSelectorProps } from "react-querybuilder"
 import type { SelectItem as SelectItemType } from "~/lib/types"
 
@@ -52,7 +52,7 @@ export const QueryBuilderValueSelector = (props: ValueSelectorProps) => {
       }}
     >
       {(item) => (
-        <SelectItem key={item.value} value={item.value} textValue={item.label}>
+        <SelectItem key={item.value} textValue={item.label}>
           {item.label}
         </SelectItem>
       )}

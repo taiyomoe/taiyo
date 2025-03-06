@@ -1,6 +1,6 @@
 "use client"
 
-import { Button } from "@nextui-org/button"
+import { Button } from "@heroui/button"
 import { usePathname } from "next/navigation"
 import { SidebarIcon } from "~/components/icons/SidebarIcon"
 import { useDevice } from "~/hooks/useDevice"

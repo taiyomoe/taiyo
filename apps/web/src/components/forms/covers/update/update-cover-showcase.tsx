@@ -1,6 +1,6 @@
-import { Card, CardBody } from "@nextui-org/card"
-import type { Selection } from "@nextui-org/react"
-import { Select, SelectItem } from "@nextui-org/select"
+import { Card, CardBody } from "@heroui/card"
+import type { Selection } from "@heroui/react"
+import { Select, SelectItem } from "@heroui/select"
 import type { MediaWithRelations } from "@taiyomoe/types"
 import { CoverUtils } from "@taiyomoe/utils"
 import { useMemo, useState } from "react"
@@ -55,11 +55,7 @@ export const UpdateCoverShowcase = ({ media }: Props) => {
             aria-label="Select cover volume"
           >
             {volumes.map((v) => (
-              <SelectItem
-                key={v.number}
-                value={v.number.toString()}
-                textValue={`Volume ${v.number}`}
-              >
+              <SelectItem key={v.number} textValue={`Volume ${v.number}`}>
                 <p>Volume {v.number}</p>
               </SelectItem>
             ))}
@@ -75,7 +71,7 @@ export const UpdateCoverShowcase = ({ media }: Props) => {
             aria-label="Select cover languages"
             isDisabled
           >
-            <SelectItem key="en" value="en" textValue="Inglês">
+            <SelectItem key="en" textValue="Inglês">
               Inglês
             </SelectItem>
           </Select>

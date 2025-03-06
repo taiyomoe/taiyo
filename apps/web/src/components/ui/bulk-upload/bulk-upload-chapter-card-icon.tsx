@@ -1,4 +1,4 @@
-import { Spinner } from "@nextui-org/spinner"
+import { Spinner } from "@heroui/spinner"
 import { UploadChapterState } from "@taiyomoe/types"
 import { CheckIcon, HourglassIcon, XIcon } from "lucide-react"
 

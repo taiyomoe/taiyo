@@ -1,4 +1,4 @@
-import { tv } from "@nextui-org/react"
+import { tv } from "@heroui/react"
 import type { HomeLayout } from "@taiyomoe/db"
 import type { LatestMedia } from "@taiyomoe/types"
 import { CoverUtils } from "@taiyomoe/utils"

@@ -1,4 +1,4 @@
-import { Checkbox } from "@nextui-org/checkbox"
+import { Checkbox } from "@heroui/checkbox"
 import type {
   CellContext,
   ColumnDef,

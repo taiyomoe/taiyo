@@ -1,4 +1,4 @@
-import { ScrollShadow } from "@nextui-org/scroll-shadow"
+import { ScrollShadow } from "@heroui/scroll-shadow"
 import { notFound } from "next/navigation"
 import { api } from "~/trpc/server"
 

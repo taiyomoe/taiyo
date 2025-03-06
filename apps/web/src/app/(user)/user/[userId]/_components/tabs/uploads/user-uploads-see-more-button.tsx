@@ -1,4 +1,4 @@
-import { Spinner } from "@nextui-org/spinner"
+import { Spinner } from "@heroui/spinner"
 import type { LatestReleaseGrouped } from "@taiyomoe/types"
 import { useSetAtom } from "jotai"
 import {

@@ -1,4 +1,4 @@
-import { Tooltip } from "@nextui-org/tooltip"
+import { Tooltip } from "@heroui/tooltip"
 import { Languages } from "@taiyomoe/db"
 import type { UpdateTitleInput } from "@taiyomoe/schemas"
 import { useFormState } from "react-hook-form"

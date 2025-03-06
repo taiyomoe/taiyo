@@ -1,6 +1,6 @@
 "use client"
 
-import { type VariantProps, tv } from "@nextui-org/react"
+import { type VariantProps, tv } from "@heroui/react"
 import type {} from "react"
 import {
   Button,

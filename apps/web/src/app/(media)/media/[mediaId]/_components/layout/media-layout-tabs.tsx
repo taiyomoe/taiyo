@@ -1,6 +1,6 @@
 "use client"
 
-import { Tab, Tabs } from "@nextui-org/tabs"
+import { Tab, Tabs } from "@heroui/tabs"
 import type { MediaLimited, MediaTabs } from "@taiyomoe/types"
 import type { Key } from "react"
 import { useCallback } from "react"

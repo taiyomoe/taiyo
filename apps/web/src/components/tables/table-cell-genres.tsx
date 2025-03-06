@@ -1,4 +1,4 @@
-import { Chip } from "@nextui-org/chip"
+import { Chip } from "@heroui/chip"
 import type { MediaGenres } from "@taiyomoe/db"
 import { GENRES_PT } from "@taiyomoe/utils/i18n"
 import { Tooltip } from "~/components/generics/tooltip"

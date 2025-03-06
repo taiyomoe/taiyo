@@ -1,4 +1,4 @@
-import { type SlotsToClasses, type VariantProps, tv } from "@nextui-org/react"
+import { type SlotsToClasses, type VariantProps, tv } from "@heroui/react"
 import { motion } from "framer-motion"
 import { type ReactNode, useState } from "react"
 import { Button } from "react-aria-components"

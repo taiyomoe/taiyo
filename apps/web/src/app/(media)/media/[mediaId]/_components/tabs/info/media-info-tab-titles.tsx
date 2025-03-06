@@ -1,4 +1,4 @@
-import { Chip } from "@nextui-org/chip"
+import { Chip } from "@heroui/chip"
 import type { MediaLimited } from "@taiyomoe/types"
 import { TitleUtils } from "@taiyomoe/utils"
 import { Category } from "~/components/generics/Category"

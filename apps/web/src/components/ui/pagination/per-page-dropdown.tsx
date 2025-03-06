@@ -1,11 +1,11 @@
-import { Button } from "@nextui-org/button"
+import { Button } from "@heroui/button"
 import {
   Dropdown,
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
-} from "@nextui-org/dropdown"
-import type { Selection } from "@nextui-org/react"
+} from "@heroui/dropdown"
+import type { Selection } from "@heroui/react"
 import { ChevronDownIcon } from "lucide-react"
 import { useState } from "react"
 

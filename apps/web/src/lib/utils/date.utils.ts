@@ -1,4 +1,5 @@
-import type { DateValue } from "@nextui-org/react"
+import type { DateValue } from "@heroui/react"
+import { getLocalTimeZone } from "@internationalized/date"
 import { DateTime } from "luxon"
 
 const formatToInputValue = (input: Date) => {
@@ -30,15 +31,12 @@ const getAge = (date: Date) => {
   return years
 }
 
-const getTimezone = () => Intl.DateTimeFormat().resolvedOptions().timeZone
-
 const getFromDateValue = (input: DateValue) =>
-  DateTime.fromJSDate(input.toDate(getTimezone()))
+  DateTime.fromJSDate(input.toDate(getLocalTimeZone()))
 
 export const DateUtils = {
   formatToInputValue,
   isLessThanDays,
   getAge,
-  getTimezone,
   getFromDateValue,
 }

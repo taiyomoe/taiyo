@@ -1,11 +1,11 @@
-import { Button } from "@nextui-org/button"
+import { Button } from "@heroui/button"
 import {
   Dropdown,
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
-} from "@nextui-org/dropdown"
-import { useDisclosure } from "@nextui-org/modal"
+} from "@heroui/dropdown"
+import { useDisclosure } from "@heroui/modal"
 import type { ChaptersListItem } from "@taiyomoe/types"
 import { ArchiveRestoreIcon, EllipsisIcon, Trash2Icon } from "lucide-react"
 import { type Key, useMemo, useState } from "react"

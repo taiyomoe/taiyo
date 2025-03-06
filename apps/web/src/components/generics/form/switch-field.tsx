@@ -1,4 +1,4 @@
-import { Switch, type SwitchProps } from "@nextui-org/switch"
+import { Switch, type SwitchProps } from "@heroui/switch"
 import { omit } from "radash"
 import { useCallback, useState } from "react"
 import { useFormContext } from "react-hook-form"

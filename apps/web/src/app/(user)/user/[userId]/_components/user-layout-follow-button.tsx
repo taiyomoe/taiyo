@@ -1,6 +1,6 @@
 "use client"
 
-import { Button } from "@nextui-org/button"
+import { Button } from "@heroui/button"
 import { authClient } from "@taiyomoe/auth/client"
 import type { UserLimited } from "@taiyomoe/types"
 import { useSetAtom } from "jotai"

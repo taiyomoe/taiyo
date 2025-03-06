@@ -1,4 +1,4 @@
-import { AutocompleteItem } from "@nextui-org/autocomplete"
+import { AutocompleteItem } from "@heroui/autocomplete"
 import { authClient } from "@taiyomoe/auth/client"
 import { MediaUtils } from "@taiyomoe/utils"
 import {

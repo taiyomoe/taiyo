@@ -1,6 +1,6 @@
 "use client"
 
-import { Button, ButtonGroup } from "@nextui-org/button"
+import { Button, ButtonGroup } from "@heroui/button"
 import { authClient } from "@taiyomoe/auth/client"
 import type { HomeLayout } from "@taiyomoe/db"
 import { useAtom } from "jotai"

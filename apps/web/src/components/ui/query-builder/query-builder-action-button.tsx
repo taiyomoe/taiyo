@@ -1,4 +1,4 @@
-import { Button } from "@nextui-org/button"
+import { Button } from "@heroui/button"
 import { PlusIcon, Trash2Icon } from "lucide-react"
 import type { ActionProps } from "react-querybuilder"
 import { cn } from "~/lib/utils/cn"

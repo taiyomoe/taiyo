@@ -1,5 +1,5 @@
-import type { ButtonProps } from "@nextui-org/button"
-import { Button } from "@nextui-org/button"
+import type { ButtonProps } from "@heroui/button"
+import { Button } from "@heroui/button"
 import { ChevronLeftIcon } from "lucide-react"
 
 export const BackButton = (props: ButtonProps) => {

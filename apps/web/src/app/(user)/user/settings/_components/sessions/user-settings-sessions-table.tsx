@@ -1,4 +1,4 @@
-import { Button } from "@nextui-org/react"
+import { Button } from "@heroui/react"
 import { authClient } from "@taiyomoe/auth/client"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import type { Session } from "better-auth"

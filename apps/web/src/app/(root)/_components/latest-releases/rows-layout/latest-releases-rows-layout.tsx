@@ -1,6 +1,6 @@
 "use client"
 
-import { Spinner } from "@nextui-org/spinner"
+import { Spinner } from "@heroui/spinner"
 import type { LatestRelease } from "@taiyomoe/types"
 import { api } from "~/trpc/react"
 import { ReleaseCardRow } from "./release-card-row"

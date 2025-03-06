@@ -1,4 +1,4 @@
-import { Tooltip } from "@nextui-org/tooltip"
+import { Tooltip } from "@heroui/tooltip"
 import { ContentRating, Languages } from "@taiyomoe/db"
 import { Form } from "~/components/generics/form/form"
 import { InputField } from "~/components/generics/form/input-field"

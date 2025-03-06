@@ -5,7 +5,7 @@
   "ignoreDependencies": [
     "@taiyomoe/messages",
     "@types/global-types",
-    "@nextui-org/.+",
+    "@heroui/.+",
     "punycode",
     "sharp"
   ],

@@ -1,4 +1,4 @@
-import { Card, CardBody } from "@nextui-org/card"
+import { Card, CardBody } from "@heroui/card"
 import type { UploadChaptersInput } from "@taiyomoe/schemas"
 import { UploadChapterState } from "@taiyomoe/types"
 import { useAtomValue } from "jotai"

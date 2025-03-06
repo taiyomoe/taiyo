@@ -1,4 +1,4 @@
-import { Link } from "@nextui-org/link"
+import { Link } from "@heroui/link"
 import type { MediaLimited } from "@taiyomoe/types"
 import { TrackerUtils } from "@taiyomoe/utils"
 import { Category } from "~/components/generics/Category"

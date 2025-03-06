@@ -1,13 +1,13 @@
-import { Button } from "@nextui-org/button"
+import { Button } from "@heroui/button"
 import {
   Dropdown,
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
-} from "@nextui-org/dropdown"
-import { Pagination } from "@nextui-org/pagination"
-import type { Selection } from "@nextui-org/react"
-import { tv } from "@nextui-org/react"
+} from "@heroui/dropdown"
+import { Pagination } from "@heroui/pagination"
+import type { Selection } from "@heroui/react"
+import { tv } from "@heroui/react"
 import { MEDIA_PER_PAGE_CHOICES } from "@taiyomoe/constants"
 import { ChevronDownIcon } from "lucide-react"
 import { useState } from "react"

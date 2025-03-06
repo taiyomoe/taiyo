@@ -1,6 +1,5 @@
-import { zodResolver } from "@hookform/resolvers/zod"
-import { Button } from "@nextui-org/button"
-import { Image } from "@nextui-org/image"
+import { Button } from "@heroui/button"
+import { Image } from "@heroui/image"
 import {
   Modal,
   ModalBody,
@@ -8,7 +7,8 @@ import {
   ModalFooter,
   ModalHeader,
   useDisclosure,
-} from "@nextui-org/modal"
+} from "@heroui/modal"
+import { zodResolver } from "@hookform/resolvers/zod"
 import type { MediaCover } from "@taiyomoe/db"
 import type { UpdateCoverInput } from "@taiyomoe/schemas"
 import { updateCoverSchema } from "@taiyomoe/schemas"

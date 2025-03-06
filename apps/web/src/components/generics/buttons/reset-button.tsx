@@ -1,4 +1,4 @@
-import { Button, type ButtonProps } from "@nextui-org/button"
+import { Button, type ButtonProps } from "@heroui/button"
 import { useFormContext } from "react-hook-form"
 
 export const ResetButton = ({ onPress, ...props }: ButtonProps) => {

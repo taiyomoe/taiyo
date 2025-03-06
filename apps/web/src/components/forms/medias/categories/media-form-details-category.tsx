@@ -1,4 +1,5 @@
-import { now } from "@internationalized/date"
+import type { DateValue } from "@heroui/react"
+import { getLocalTimeZone, today } from "@internationalized/date"
 import {
   ContentRating,
   Flag,
@@ -29,7 +30,7 @@ export const MediaFormDetailsCategory = () => (
         name="startDate"
         label="Data de início"
         labelPlacement="outside"
-        maxValue={now("America/Sao_Paulo")}
+        maxValue={today(getLocalTimeZone()) as unknown as DateValue}
         aria-label="Start date"
         showMonthAndYearPickers
       />
@@ -37,7 +38,7 @@ export const MediaFormDetailsCategory = () => (
         name="endDate"
         label="Data de término"
         labelPlacement="outside"
-        maxValue={now("America/Sao_Paulo")}
+        maxValue={today(getLocalTimeZone()) as unknown as DateValue}
         aria-label="End date"
         showMonthAndYearPickers
       />

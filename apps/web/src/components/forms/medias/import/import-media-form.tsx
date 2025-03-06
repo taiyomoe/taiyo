@@ -1,7 +1,7 @@
 "use client"
 
+import { Divider } from "@heroui/divider"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Divider } from "@nextui-org/divider"
 import { type ImportMediaInput, importMediaSchema } from "@taiyomoe/schemas"
 import { useRouter } from "next/navigation"
 import { type SubmitHandler, useForm } from "react-hook-form"

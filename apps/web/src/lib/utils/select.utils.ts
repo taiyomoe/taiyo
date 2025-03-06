@@ -1,4 +1,4 @@
-import type { Selection } from "@nextui-org/react"
+import type { Selection } from "@heroui/react"
 
 const getSelectedKey = <T extends string>(selection: Selection) =>
   (selection as Set<Selection>).values().next().value as T

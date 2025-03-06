@@ -1,4 +1,4 @@
-import { Button } from "@nextui-org/button"
+import { Button } from "@heroui/button"
 import { ChevronsUp } from "lucide-react"
 import { throttle } from "radash"
 import { useEffect } from "react"
