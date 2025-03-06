@@ -281,10 +281,10 @@ importers:
         specifier: ^3.4.2
         version: 3.4.2
       '@types/react':
-        specifier: ^19.0.2
+        specifier: ^19.0.10
         version: 19.0.10
       '@types/react-dom':
-        specifier: ^19.0.2
+        specifier: ^19.0.4
         version: 19.0.4(@types/react@19.0.10)
       better-auth:
         specifier: ^1.2.3
