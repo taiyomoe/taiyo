@@ -1,5 +1,6 @@
 import { NextIntlClientProvider } from "next-intl"
 import { getLocale, getMessages } from "next-intl/server"
+import { ThemeProvider } from "next-themes"
 import type { LayoutProps } from "~/utils/types"
 
 export default async function Layout({ children }: LayoutProps) {
@@ -7,11 +8,13 @@ export default async function Layout({ children }: LayoutProps) {
   const messages = await getMessages()
 
   return (
-    <html lang={locale}>
+    <html lang={locale} suppressHydrationWarning>
       <body>
-        <NextIntlClientProvider messages={messages}>
-          {children}
-        </NextIntlClientProvider>
+        <ThemeProvider>
+          <NextIntlClientProvider messages={messages}>
+            {children}
+          </NextIntlClientProvider>
+        </ThemeProvider>
       </body>
     </html>
   )
