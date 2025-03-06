@@ -3,7 +3,7 @@ import { type Roles, db } from "@taiyomoe/db"
 import type { UserSettings } from "@taiyomoe/types"
 import { betterAuth } from "better-auth"
 import { prismaAdapter } from "better-auth/adapters/prisma"
-import { admin, customSession } from "better-auth/plugins"
+import { admin, createAuthMiddleware, customSession } from "better-auth/plugins"
 import { env } from "./env"
 import { signedInHandler } from "./handlers/signed-in.auth-handler"
 import { signedOutHandler } from "./handlers/signed-out.auth-handler"
@@ -37,7 +37,7 @@ export const auth = betterAuth({
     session: { create: { after: signedInHandler } },
   },
   hooks: {
-    after: async (ctx) => {
+    after: createAuthMiddleware(async (ctx) => {
       if (ctx.path === "/sign-out") {
         const session = await getSessionFromHeaders(ctx)
 
@@ -45,9 +45,9 @@ export const auth = betterAuth({
 
         return signedOutHandler(session.user.id, session.session.ipAddress)
       }
-    },
+    }),
   },
-  plugins: [admin({ defaultRole: false }), customSession(getCustomSession)],
+  plugins: [admin({ defaultRole: "USER" }), customSession(getCustomSession)],
 })
 
 export type Session = typeof auth.$Infer.Session & {
