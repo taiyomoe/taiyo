@@ -64,7 +64,7 @@ export const TasksListStoreProvider = ({
   children,
   value,
 }: { children: ReactNode; value: Props }) => {
-  const storeRef = useRef<Store>()
+  const storeRef = useRef<Store | null>(null)
 
   if (!storeRef.current) {
     storeRef.current = tasksListStore(value)

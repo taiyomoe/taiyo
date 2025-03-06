@@ -9,12 +9,12 @@ import { tasksSearchParamsCache } from "./_components/tasks-search-params"
 import { TasksTable } from "./_components/tasks-table"
 
 type Props = {
-  searchParams: SearchParams
+  searchParams: Promise<SearchParams>
 }
 
 export default async function Page(props: Props) {
   const searchParams = sanitizeSearchParams(
-    props.searchParams,
+    await props.searchParams,
     tasksSearchParamsCache,
     getTasksListSchema,
   )

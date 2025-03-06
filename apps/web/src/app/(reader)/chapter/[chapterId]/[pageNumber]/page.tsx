@@ -4,11 +4,11 @@ import { api } from "~/trpc/server"
 import { MediaChapterPage } from "../_components/MediaChapterPage"
 
 type Props = {
-  params: { chapterId: string }
+  params: Promise<{ chapterId: string }>
 }
 
-export default async function Page(props: Props) {
-  const { chapterId } = props.params
+export default async function Page({ params }: Props) {
+  const { chapterId } = await params
   const mediaChapter = await api.chapters.getById(chapterId)
 
   if (!mediaChapter) {
