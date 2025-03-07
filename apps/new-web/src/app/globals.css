@@ -1,0 +1,43 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  /* Backgrounds */
+  --color-default: var(--background);
+  --color-subtle: var(--background-subtle);
+  --color-muted: var(--background-muted);
+  --color-emphasis: var(--background-emphasis);
+  --color-inverted: var(--background-inverted);
+
+  /* Borders */
+  --border-color-default: var(--border);
+  --border-color-subtle: var(--border-subtle);
+  --border-color-muted: var(--border-muted);
+  --border-color-emphasis: var(--border-emphasis);
+}
+
+:root {
+  /* Backgrounds */
+  --background: hsla(0, 0%, 6%, 1); /* stone-950 */
+  --background-subtle: hsla(0, 0%, 15%, 1); /* stone-800 */
+  --background-muted: hsla(0, 0%, 9%, 1); /* stone-900 */
+  --background-emphasis: hsla(0, 0%, 25%, 1); /* stone-700 */
+  --background-inverted: hsla(0, 0%, 98%, 1); /* stone-50 */
+
+  /* Borders */
+  --border: hsla(0, 0%, 30%, 1); /* stone-600 */
+  --border-subtle: hsla(0, 0%, 15%, 1); /* stone-700 */
+  --border-muted: hsla(0, 0%, 9%, 1); /* stone-500 */
+  --border-emphasis: hsla(0, 0%, 45%, 1); /* stone-800 */
+}
+
+@layer base {
+  * {
+    @apply border-default;
+  }
+
+  body {
+    @apply bg-default;
+  }
+}

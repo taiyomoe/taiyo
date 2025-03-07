@@ -1,7 +1,13 @@
 import { NextIntlClientProvider } from "next-intl"
 import { getLocale, getMessages } from "next-intl/server"
 import { ThemeProvider } from "next-themes"
+import { Inter } from "next/font/google"
+import { cn } from "~/utils/cn"
 import type { LayoutProps } from "~/utils/types"
+
+import "./globals.css"
+
+const inter = Inter({ subsets: ["latin"] })
 
 export default async function Layout({ children }: LayoutProps) {
   const locale = await getLocale()
@@ -9,7 +15,7 @@ export default async function Layout({ children }: LayoutProps) {
 
   return (
     <html lang={locale} suppressHydrationWarning>
-      <body>
+      <body className={cn("antialiased", inter.className)}>
         <ThemeProvider>
           <NextIntlClientProvider messages={messages}>
             {children}
