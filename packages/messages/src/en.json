@@ -1,6 +1,9 @@
 {
   "global": {
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "settings": "Settings"
   },
   "home": {
     "title": "Hello world!",

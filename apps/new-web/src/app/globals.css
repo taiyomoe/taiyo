@@ -1,35 +1,111 @@
 @import "tailwindcss";
+@plugin "tailwindcss-react-aria-components";
 
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  /* Backgrounds */
+  /* Background Standard */
   --color-default: var(--background);
   --color-subtle: var(--background-subtle);
   --color-muted: var(--background-muted);
   --color-emphasis: var(--background-emphasis);
   --color-inverted: var(--background-inverted);
 
-  /* Borders */
+  /* Background Semantic */
+  --color-info-subtle: var(--bg-semantic-info-subtle);
+  --color-success-subtle: var(--bg-semantic-success-subtle);
+  --color-warning-subtle: var(--bg-semantic-warning-subtle);
+  --color-error-subtle: var(--bg-semantic-error-subtle);
+
+  /* Border Standard */
   --border-color-default: var(--border);
   --border-color-subtle: var(--border-subtle);
   --border-color-muted: var(--border-muted);
   --border-color-emphasis: var(--border-emphasis);
+
+  /* Border Semantic */
+  --border-color-warning-subtle: var(--border-semantic-warning-subtle);
+  --border-color-error-subtle: var(--border-semantic-error-subtle);
+  --border-color-error: var(--border-semantic-error);
+
+  /* Content/Text Standard */
+  --text-color-default: var(--text);
+  --text-color-subtle: var(--text-subtle);
+  --text-color-muted: var(--text-muted);
+  --text-color-inverted: var(--text-inverted);
+
+  /* Content/Text Semantic */
+  --text-color-info: var(--text-semantic-info);
+  --text-color-info-subtle: var(--text-semantic-info-subtle);
+  --text-color-success: var(--text-semantic-success);
+  --text-color-success-subtle: var(--text-semantic-success-subtle);
+  --text-color-warning: var(--text-semantic-warning);
+  --text-color-warning-subtle: var(--text-semantic-warning-subtle);
+  --text-color-error: var(--text-semantic-error);
+  --text-color-error-subtle: var(--text-semantic-error-subtle);
+
+  /* Brand */
+  --color-brand: var(--brand);
+  --color-brand-muted: var(--brand-muted);
+  --color-brand-emphasis: var(--brand-emphasis);
+
+  /* Defaults */
+  --radius: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
 }
 
 :root {
-  /* Backgrounds */
+  /* Background Standard */
   --background: hsla(0, 0%, 6%, 1); /* stone-950 */
   --background-subtle: hsla(0, 0%, 15%, 1); /* stone-800 */
   --background-muted: hsla(0, 0%, 9%, 1); /* stone-900 */
   --background-emphasis: hsla(0, 0%, 25%, 1); /* stone-700 */
   --background-inverted: hsla(0, 0%, 98%, 1); /* stone-50 */
 
-  /* Borders */
+  /* Background Semantic */
+  --bg-semantic-info-subtle: hsla(229, 90%, 74%, 0.1); /* blue-100/10 */
+  --bg-semantic-success-subtle: hsla(161, 49%, 54%, 0.1); /* green-100/10 */
+  --bg-semantic-warning-subtle: hsla(27, 96%, 61%, 0.1); /* orange-100/10 */
+  --bg-semantic-error-subtle: hsla(0, 91%, 71%, 0.1); /* red-100/10 */
+
+  /* Border Standard */
   --border: hsla(0, 0%, 30%, 1); /* stone-600 */
   --border-subtle: hsla(0, 0%, 15%, 1); /* stone-700 */
   --border-muted: hsla(0, 0%, 9%, 1); /* stone-500 */
   --border-emphasis: hsla(0, 0%, 45%, 1); /* stone-800 */
+
+  /* Border Semantic */
+  --border-semantic-warning-subtle: hsla(15, 75%, 23%, 1);
+  --border-semantic-error-subtle: hsla(0, 63%, 24%, 1);
+  --border-semantic-error: hsla(0, 63%, 24%, 1); /* red-800 */
+
+  /* Content/Text Standard */
+  --text: hsla(0, 0%, 83%, 1); /* stone-300 */
+  --text-subtle: hsla(0, 0%, 64%, 1); /* stone-400 */
+  --text-muted: hsla(0, 0%, 64%, 1); /* stone-400 */
+  --text-emphasis: hsla(0, 0%, 98%, 1); /* stone-50 */
+  --text-inverted: hsla(0, 0%, 0%, 1); /* black */
+
+  /* Content/Text Semantic */
+  --text-semantic-info: hsla(229, 90%, 74%, 1); /* blue-100 */
+  --text-semantic-info-subtle: hsla(229, 90%, 74%, 0.8); /* blue-100/80 */
+  --text-semantic-success: hsla(161, 49%, 54%, 1); /* green-100 */
+  --text-semantic-success-subtle: hsla(161, 49%, 54%, 0.8); /* green-100/80 */
+  --text-semantic-warning: hsla(27, 96%, 61%, 1); /* orange-100 */
+  --text-semantic-warning-subtle: hsla(27, 96%, 61%, 0.8); /* orange-100/80 */
+  --text-semantic-error: hsla(0, 91%, 71%, 1); /* red-100 */
+  --text-semantic-error-subtle: hsla(0, 91%, 71%, 0.8); /* red-100/80 */
+
+  /* Brand */
+  --brand: hsla(0, 100%, 65.49%, 1);
+  --brand-muted: hsla(0, 97%, 71%, 1);
+  --brand-emphasis: hsla(0, 98%, 55%, 1);
+
+  /* Defaults */
+  --radius: 0.5rem;
+  --default-transition-duration: 0.2s;
 }
 
 @layer base {

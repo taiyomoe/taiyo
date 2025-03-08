@@ -6,6 +6,7 @@ import { cn } from "~/utils/cn"
 import type { LayoutProps } from "~/utils/types"
 
 import "./globals.css"
+import { Providers } from "~/app/_components/providers"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -18,7 +19,7 @@ export default async function Layout({ children }: LayoutProps) {
       <body className={cn("antialiased", inter.className)}>
         <ThemeProvider>
           <NextIntlClientProvider messages={messages}>
-            {children}
+            <Providers>{children}</Providers>
           </NextIntlClientProvider>
         </ThemeProvider>
       </body>
