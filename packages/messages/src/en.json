@@ -5,6 +5,11 @@
     "dashboard": "Dashboard",
     "settings": "Settings"
   },
+  "notFound": {
+    "title": "Page not found",
+    "description": "You seem to be lost. You'd better go back to the home page.",
+    "action": "Go back to the home page"
+  },
   "home": {
     "title": "Hello world!",
     "toformat": "Hello {name}!!"

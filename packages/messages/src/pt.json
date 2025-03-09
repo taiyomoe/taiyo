@@ -5,6 +5,11 @@
     "dashboard": "Dashboard",
     "settings": "Configurações"
   },
+  "notFound": {
+    "title": "Página não encontrada",
+    "description": "Você parece perdido. Você deveria voltar para a página inicial.",
+    "action": "Voltar para a página inicial"
+  },
   "home": {
     "title": "Olá mundo!",
     "toformat": "Olá {name}!!"
