@@ -1,14 +1,14 @@
-import { getTranslations } from "next-intl/server"
+import { useTranslations } from "next-intl"
 import { GaugeIcon } from "~/components/icons/gauge-icon"
 import { HomeIcon } from "~/components/icons/home-icon"
 import { SettingsGearIcon } from "~/components/icons/settings-gear-icon"
 import { SidebarButton } from "./sidebar-button"
 
-export const SidebarContent = async () => {
-  const t = await getTranslations("global")
+export const SidebarContent = () => {
+  const t = useTranslations("global")
 
   return (
-    <div className="p-4">
+    <div className="p-4 transition-[padding] duration-300 group-data-[state=collapsed]:p-2">
       <SidebarButton href="/" label={t("home")} icon={HomeIcon} />
       <SidebarButton
         href="/dashboard"

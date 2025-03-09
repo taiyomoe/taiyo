@@ -9,27 +9,55 @@ import { useHover } from "usehooks-ts"
 import type { AnimatedIconProps } from "~/components/icons/home-icon"
 
 const sidebarButton = tv({
-  base: "relative flex select-none items-center gap-2 rounded p-2 transition",
+  base: [
+    "group/sidebar-button relative block select-none py-1.5 first:pt-0 last:pb-0",
+  ],
   slots: {
     activeBubble:
-      "-left-4 absolute inset-y-0 z-10 my-auto h-2/3 w-1 rounded-r-lg bg-brand",
+      "-left-2 group-data-[state=expanded]:-left-4 absolute inset-y-0 z-10 my-auto h-2/4 w-1 rounded-r-lg bg-brand",
     hoverBubble:
-      "-left-4 absolute inset-y-0 z-0 my-auto hidden h-2/3 w-1 rounded-r-lg md:block",
+      "-left-2 group-data-[state=expanded]:-left-4 absolute inset-y-0 z-0 my-auto hidden h-2/4 w-1 rounded-r-lg md:block",
+    content:
+      "flex h-fit items-center gap-2 rounded p-1 transition-[color,background,margin,padding] duration-300 group-data-[state=collapsed]:ml-[1.5px] group-data-[state=expanded]:p-2",
+    label: "group-data-[state=collapsed]:hidden",
   },
   variants: {
     color: {
       default: {
-        base: "text-subtle hover:bg-subtle hover:text-default data-[active=true]:text-default",
         hoverBubble: "bg-subtle",
+        content:
+          "text-subtle group-hover/sidebar-button:bg-subtle group-hover/sidebar-button:text-default data-[active=true]:text-default",
       },
       warning: {
-        base: "text-warning-subtle hover:bg-warning-subtle hover:text-warning data-[active=true]:text-warning",
         hoverBubble: "bg-warning-subtle",
+        content:
+          "text-warning-subtle group-hover/sidebar-button:bg-warning-subtle group-hover/sidebar-button:text-warning data-[active=true]:text-warning",
       },
     },
+    active: {
+      true: {},
+      false: {},
+    },
   },
+  compoundVariants: [
+    {
+      color: "default",
+      active: true,
+      className: {
+        content: "text-default",
+      },
+    },
+    {
+      color: "warning",
+      active: true,
+      className: {
+        content: "text-warning",
+      },
+    },
+  ],
   defaultVariants: {
     color: "default",
+    active: false,
   },
 })
 
@@ -44,7 +72,7 @@ export const SidebarButton = ({ href, label, icon: Icon, color }: Props) => {
   const isActive = pathname === href
   const ref = useRef<HTMLAnchorElement>(null)
   const isHover = useHover(ref as RefObject<HTMLAnchorElement>)
-  const slots = sidebarButton({ color })
+  const slots = sidebarButton({ color, active: isActive })
 
   return (
     <Link ref={ref} href={href} className={slots.base()} data-active={isActive}>
@@ -62,8 +90,10 @@ export const SidebarButton = ({ href, label, icon: Icon, color }: Props) => {
           transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
         />
       )}
-      <Icon parentRef={ref} />
-      {label}
+      <span className={slots.content()}>
+        <Icon parentRef={ref} />
+        <span className={slots.label()}>{label}</span>
+      </span>
     </Link>
   )
 }
