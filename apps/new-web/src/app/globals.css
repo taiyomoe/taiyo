@@ -116,4 +116,8 @@
   body {
     @apply bg-default;
   }
+
+  button {
+    @apply hover:cursor-pointer;
+  }
 }
