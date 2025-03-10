@@ -17,7 +17,7 @@ export default async function Layout({ children }: LayoutProps) {
   return (
     <html lang={locale} suppressHydrationWarning>
       <body className={cn("antialiased", inter.className)}>
-        <ThemeProvider>
+        <ThemeProvider attribute="class">
           <NextIntlClientProvider messages={messages}>
             <Providers>{children}</Providers>
           </NextIntlClientProvider>

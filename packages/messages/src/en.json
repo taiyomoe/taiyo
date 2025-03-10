@@ -3,7 +3,8 @@
     "cancel": "Cancel",
     "home": "Home",
     "dashboard": "Dashboard",
-    "settings": "Settings"
+    "settings": "Settings",
+    "or": "or"
   },
   "notFound": {
     "title": "Page not found",
@@ -13,6 +14,11 @@
   "home": {
     "title": "Hello world!",
     "toformat": "Hello {name}!!"
+  },
+  "auth": {
+    "google": "Continue with Google",
+    "discord": "Continue with Discord",
+    "email": "Continue with email"
   },
   "dashboard": {
     "medias": {

@@ -3,7 +3,8 @@
     "cancel": "Cancelar",
     "home": "Início",
     "dashboard": "Dashboard",
-    "settings": "Configurações"
+    "settings": "Configurações",
+    "or": "ou"
   },
   "notFound": {
     "title": "Página não encontrada",
@@ -13,6 +14,11 @@
   "home": {
     "title": "Olá mundo!",
     "toformat": "Olá {name}!!"
+  },
+  "auth": {
+    "google": "Continuar com Google",
+    "discord": "Continuar com Discord",
+    "email": "Continuar com email"
   },
   "dashboard": {
     "medias": {
