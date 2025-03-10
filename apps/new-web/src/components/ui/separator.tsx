@@ -6,12 +6,26 @@ import { cn } from "~/utils/cn"
 
 type Props = HTMLAttributes<HTMLDivElement> & SeparatorProps
 
-export const Separator = ({ className, ...props }: Props) => {
+export const Separator = ({ className, children, ...props }: Props) => {
   const { separatorProps } = useSeparator(props)
+
+  if (children) {
+    return (
+      <div
+        className={cn("relative size-px bg-emphasis", className)}
+        {...separatorProps}
+        {...props}
+      >
+        <span className="-translate-x-1/2 -translate-y-1/2 absolute top-1/2 left-1/2 bg-default px-2 text-sm text-subtle">
+          {children}
+        </span>
+      </div>
+    )
+  }
 
   return (
     <div
-      className={cn("size-px bg-subtle", className)}
+      className={cn("size-px bg-emphasis", className)}
       {...separatorProps}
       {...props}
     />
