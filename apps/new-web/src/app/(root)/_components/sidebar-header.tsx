@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Image } from "~/components/ui/image"
+import { TaiyoLogo } from "~/components/logos/taiyo-logo"
 import { SidebarToggleButton } from "./sidebar-toggle-button"
 
 export const SidebarHeader = () => (
@@ -9,14 +9,7 @@ export const SidebarHeader = () => (
         href="/"
         className="flex items-center justify-center gap-2 font-bold text-xl"
       >
-        <Image
-          src="/logo-red.svg"
-          className="size-8"
-          alt="logo"
-          width={36}
-          height={36}
-          priority
-        />
+        <TaiyoLogo className="size-8" />
         <span className="transition-opacity duration-300 ease-in-out group-data-[state=collapsed]:hidden group-data-[state=collapsed]:opacity-0 group-data-[state=expanded]:opacity-100">
           Taiyō
         </span>
