@@ -158,11 +158,11 @@
 
 @layer base {
   * {
-    @apply border-default text-default;
+    @apply border-default;
   }
 
   body {
-    @apply bg-default;
+    @apply bg-default text-default;
   }
 
   button {
