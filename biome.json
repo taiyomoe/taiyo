@@ -31,6 +31,9 @@
             "functions": ["cn", "tv"]
           }
         }
+      },
+      "suspicious": {
+        "noArrayIndexKey": "off"
       }
     }
   },
