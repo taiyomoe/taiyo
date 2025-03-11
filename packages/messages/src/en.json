@@ -4,7 +4,12 @@
     "home": "Home",
     "dashboard": "Dashboard",
     "settings": "Settings",
-    "or": "or"
+    "or": "or",
+    "back": "Back",
+    "email": "Email",
+    "username": "Username",
+    "password": "Password",
+    "confirmPassword": "Confirm password"
   },
   "notFound": {
     "title": "Page not found",
@@ -18,7 +23,9 @@
   "auth": {
     "google": "Continue with Google",
     "discord": "Continue with Discord",
-    "email": "Continue with email"
+    "email": "Continue with email",
+    "signUp": "Sign up",
+    "passwordStrength": "{score, select, 0 {Enter a password} 1 {Weak password} 2 {Medium password} 3 {Strong password} other {Enter a password}}. Must contain:"
   },
   "dashboard": {
     "medias": {

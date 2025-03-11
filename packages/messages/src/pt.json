@@ -4,7 +4,12 @@
     "home": "Início",
     "dashboard": "Dashboard",
     "settings": "Configurações",
-    "or": "ou"
+    "or": "ou",
+    "back": "Voltar",
+    "email": "Email",
+    "username": "Nome de usuário",
+    "password": "Senha",
+    "confirmPassword": "Confirmar senha"
   },
   "notFound": {
     "title": "Página não encontrada",
@@ -18,7 +23,9 @@
   "auth": {
     "google": "Continuar com Google",
     "discord": "Continuar com Discord",
-    "email": "Continuar com email"
+    "email": "Continuar com email",
+    "signUp": "Cadastrar",
+    "passwordStrength": "{score, select, 0 {Digite uma senha} 1 {Senha fraca} 2 {Senha média} 3 {Senha forte} other {Digite uma senha}}. Deve conter:"
   },
   "dashboard": {
     "medias": {
