@@ -1,6 +1,9 @@
 "use client"
 
-import { Button as AriaButton, type ButtonProps } from "react-aria-components"
+import {
+  Button as AriaButton,
+  type ButtonProps as AriaButtonProps,
+} from "react-aria-components"
 import { type VariantProps, tv } from "tailwind-variants"
 
 const button = tv({
@@ -10,27 +13,44 @@ const button = tv({
       default: "",
     },
     variant: {
+      solid: "",
       outline: "border",
+      ghost: "",
     },
   },
   compoundVariants: [
     {
       color: "default",
+      variant: "solid",
+      className: "bg-primary text-inverted hover:bg-primary-emphasis",
+    },
+    {
+      color: "default",
       variant: "outline",
       className: "bg-default text-subtle hover:border-emphasis hover:bg-muted",
+    },
+    {
+      color: "default",
+      variant: "ghost",
+      className: "text-subtle transition-colors hover:text-primary",
     },
   ],
   defaultVariants: {
     color: "default",
-    variant: "outline",
+    variant: "solid",
   },
 })
 
-type Props = Omit<ButtonProps, "className"> &
+export type ButtonProps = Omit<AriaButtonProps, "className"> &
   VariantProps<typeof button> & {
     className?: string
   }
 
-export const Button = ({ className, ...props }: Props) => (
-  <AriaButton className={button({ className })} {...props} />
+export const Button = ({
+  color,
+  variant,
+  className,
+  ...props
+}: ButtonProps) => (
+  <AriaButton className={button({ color, variant, className })} {...props} />
 )
