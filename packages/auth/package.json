@@ -20,6 +20,7 @@
     "@taiyomoe/logs": "workspace:*",
     "@taiyomoe/meilisearch": "workspace:*",
     "better-auth": "^1.2.3",
+    "better-auth-harmony": "^1.2.3",
     "zod": "^3.24.2"
   },
   "devDependencies": {

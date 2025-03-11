@@ -392,6 +392,9 @@ importers:
       better-auth:
         specifier: ^1.2.3
         version: 1.2.3(typescript@5.8.2)
+      better-auth-harmony:
+        specifier: ^1.2.3
+        version: 1.2.3(better-auth@1.2.3(typescript@5.8.2))
       zod:
         specifier: ^3.24.2
         version: 3.24.2
@@ -3859,6 +3862,11 @@ packages:
 
   bcryptjs@2.4.3:
     resolution: {integrity: sha512-V/Hy/X9Vt7f3BbPJEi8BdVFMByHi+jNXrYkW3huaybV/kQ0KJg0Y6PkEMbn+zeT+i+SiKZ/HMqJGIIt4LZDqNQ==}
+
+  better-auth-harmony@1.2.3:
+    resolution: {integrity: sha512-jX/zO1+S/oTh1jHQOs2dYUoKeBkqCZwNKTpsJs8iojYYGkov/tvEFvCTliS1mKVlZ4PnZaJLmrwDD5CQ2hG/3g==}
+    peerDependencies:
+      better-auth: ^1.0.3
 
   better-auth@1.2.3:
     resolution: {integrity: sha512-y97/ah2SOWaW81IRg36m7xMSMVl7ATaHie/nhQ0in/reVlEX/6juVPszNqq0gcTwQtFsB8oe15wQKgdf4yHP9Q==}
@@ -9958,6 +9966,13 @@ snapshots:
       resolve: 1.22.10
 
   bcryptjs@2.4.3: {}
+
+  better-auth-harmony@1.2.3(better-auth@1.2.3(typescript@5.8.2)):
+    dependencies:
+      better-auth: 1.2.3(typescript@5.8.2)
+      libphonenumber-js: 1.12.5
+      mailchecker: 6.0.16
+      validator: 13.12.0
 
   better-auth@1.2.3(typescript@5.8.2):
     dependencies:

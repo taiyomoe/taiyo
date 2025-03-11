@@ -2,6 +2,7 @@ import { cacheClient } from "@taiyomoe/cache"
 import { type Roles, db } from "@taiyomoe/db"
 import type { UserSettings } from "@taiyomoe/types"
 import { betterAuth } from "better-auth"
+import { emailHarmony } from "better-auth-harmony"
 import { prismaAdapter } from "better-auth/adapters/prisma"
 import {
   admin,
@@ -49,6 +50,7 @@ export const auth = betterAuth({
     }),
   },
   plugins: [
+    emailHarmony(),
     captcha({
       provider: "cloudflare-turnstile",
       secretKey: env.TURNSTILE_SECRET_KEY,
