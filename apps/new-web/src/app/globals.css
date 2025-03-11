@@ -17,6 +17,11 @@
   --color-warning-subtle: var(--background-semantic-warning-subtle);
   --color-error-subtle: var(--background-semantic-error-subtle);
 
+  /* Background Primary */
+  --color-primary: var(--background-primary);
+  --color-primary-emphasis: var(--background-primary-emphasis);
+  --color-primary-muted: var(--background-primary-muted);
+
   /* Border Standard */
   --border-color-default: var(--border);
   --border-color-subtle: var(--border-subtle);
@@ -70,6 +75,11 @@
   --background-semantic-warning-subtle: hsla(34, 100%, 92%, 1); /* orange.100 */
   --background-semantic-error-subtle: hsla(0, 93%, 94%, 1); /* red.100 */
 
+  /* Background Primary */
+  --background-primary: hsla(214, 30%, 16%, 1); /* stone.100 */
+  --background-primary-emphasis: hsla(220, 6%, 25%, 1); /* stone.800 */
+  --background-primary-muted: hsla(220, 14%, 94%, 1); /* stone.400 */
+
   /* Border Standard */
   --border: hsla(216, 12%, 84%, 1); /* gray.300 - inputs */
   --border-subtle: hsla(220, 13%, 91%, 1); /* gray.200 - container borders */
@@ -121,6 +131,11 @@
   --background-semantic-success-subtle: hsla(161, 49%, 54%, 0.1); /* green.100/10 */
   --background-semantic-warning-subtle: hsla(27, 96%, 61%, 0.1); /* orange.100/10 */
   --background-semantic-error-subtle: hsla(0, 91%, 71%, 0.1); /* red.100/10 */
+
+  /* Background Primary */
+  --background-primary: hsla(0, 0%, 96%, 1); /* stone.100 */
+  --background-primary-emphasis: hsla(0, 0%, 64%, 1); /* stone.800 */
+  --background-primary-muted: hsla(0, 0%, 15%, 1); /* stone.400 */
 
   /* Border Standard */
   --border: hsla(0, 0%, 30%, 1); /* stone.600 */
