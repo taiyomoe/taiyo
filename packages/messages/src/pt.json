@@ -11,6 +11,27 @@
     "password": "Senha",
     "confirmPassword": "Confirmar senha"
   },
+  "validation": {
+    "username": {
+      "required": "O nome de usuário é obrigatório",
+      "min1Character": "O nome de usuário deve conter pelo menos 1 caractere",
+      "max30Characters": "O nome de usuário deve conter no máximo 30 caracteres"
+    },
+    "email": {
+      "required": "O email é obrigatório",
+      "invalid": "O email é inválido",
+      "max100Characters": "O email deve conter no máximo 100 caracteres"
+    },
+    "password": {
+      "required": "A senha é obrigatória",
+      "min8Character": "A senha deve conter pelo menos 8 caracteres",
+      "max50Characters": "A senha deve conter no máximo 50 caracteres",
+      "atLeast1Number": "Pelo menos 1 número",
+      "atLeast1Uppercase": "Pelo menos 1 letra maiúscula",
+      "atLeast1SpecialCharacter": "Pelo menos 1 caractere especial",
+      "mismatch": "As senhas não coincidem"
+    }
+  },
   "notFound": {
     "title": "Página não encontrada",
     "description": "Você parece perdido. Você deveria voltar para a página inicial.",

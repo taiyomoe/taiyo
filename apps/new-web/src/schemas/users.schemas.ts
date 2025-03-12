@@ -1,27 +1,32 @@
 import { z } from "zod"
+import { zodMessages } from "~/utils/zod-messages"
 import { emailSchema } from "./common.schemas"
 
 export const signUpSchema = z
   .object({
-    name: z.string().min(1).max(30),
+    name: z
+      .string()
+      .min(1, zodMessages.username.min1Character)
+      .max(30, zodMessages.username.max30Characters),
     email: emailSchema,
     password: z
       .string()
-      .nonempty("Ce champ est requis")
-      .min(8, "Le mot de passe doit contenir au moins 8 caractères")
-      .regex(/[0-9]/, "Le mot de passe doit contenir au moins un chiffre")
-      .regex(/[A-Z]/, "Le mot de passe doit contenir au moins une majuscule")
+      .min(8, zodMessages.password.min8Character)
+      .max(50, zodMessages.password.max50Characters)
+      .regex(/[0-9]/, zodMessages.password.atLeast1Number)
+      .regex(/[A-Z]/, zodMessages.password.atLeast1Uppercase)
       .regex(
         /[!@#$%^&*(),.?":{}|<>]/,
-        "Le mot de passe doit contenir au moins un caractère spécial",
+        zodMessages.password.atLeast1SpecialCharacter,
       ),
-    confirmPassword: z.string().nonempty("Ce champ est requis"),
+    confirmPassword: z.string().nonempty(zodMessages.password.required),
+    turnstileToken: z.string(),
   })
   .superRefine((data, ctx) => {
     if (data.password !== data.confirmPassword) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: "Les mots de passe ne correspondent pas",
+        message: zodMessages.password.mismatch,
         path: ["confirmPassword"],
       })
     }
@@ -29,7 +34,7 @@ export const signUpSchema = z
 
 export const signInSchema = z.object({
   email: emailSchema,
-  password: z.string().nonempty("Ce champ est requis"),
+  password: z.string().nonempty(zodMessages.password.required),
 })
 
 export type SignUpInput = z.infer<typeof signUpSchema>

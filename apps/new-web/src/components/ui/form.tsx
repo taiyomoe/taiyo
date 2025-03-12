@@ -1,4 +1,5 @@
 import { Slot } from "@radix-ui/react-slot"
+import { type NestedKeyOf, useTranslations } from "next-intl"
 import {
   type ComponentPropsWithoutRef,
   type ComponentRef,
@@ -19,6 +20,7 @@ import {
   useFormContext,
 } from "react-hook-form"
 import { cn } from "~/utils/cn"
+import type { ZodMessages } from "~/utils/zod-messages"
 import { Label, type LabelProps } from "./label"
 
 type FormProps<TFieldValues extends FieldValues> =
@@ -170,8 +172,16 @@ export const FormMessage = forwardRef<
   HTMLParagraphElement,
   HTMLAttributes<HTMLParagraphElement>
 >(({ className, children, ...props }, ref) => {
-  const { error, formMessageId } = useFormField()
-  const body = error ? String(error?.message ?? "") : children
+  const t = useTranslations()
+  const { name, error, formMessageId } = useFormField()
+  const fieldKey = name as NestedKeyOf<IntlMessages["global"]>
+  const errorKey = error?.message as ZodMessages | null
+
+  const fieldName = t.has(`global.${fieldKey}`)
+    ? t(`global.${fieldKey}`).toLowerCase()
+    : name
+  const body =
+    errorKey && t.has(errorKey) ? t(errorKey, { name: fieldName }) : children
 
   if (!body) {
     return null

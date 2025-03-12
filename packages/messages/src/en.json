@@ -11,6 +11,27 @@
     "password": "Password",
     "confirmPassword": "Confirm password"
   },
+  "validation": {
+    "username": {
+      "required": "The username is required",
+      "min1Character": "The username must be at least 1 character",
+      "max30Characters": "The username must be at most 30 characters"
+    },
+    "email": {
+      "required": "The email is required",
+      "invalid": "The email is invalid",
+      "max100Characters": "The email must be at most 100 characters"
+    },
+    "password": {
+      "required": "The password is required",
+      "min8Character": "The password must be at least 8 characters",
+      "max50Characters": "The password must be at most 50 characters",
+      "atLeast1Number": "At least 1 number",
+      "atLeast1Uppercase": "At least 1 uppercase letter",
+      "atLeast1SpecialCharacter": "At least 1 special character",
+      "mismatch": "Passwords do not match"
+    }
+  },
   "notFound": {
     "title": "Page not found",
     "description": "You seem to be lost. You'd better go back to the home page.",

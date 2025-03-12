@@ -1,4 +1,5 @@
-import { type HookEndpointContext, parseCookies } from "better-auth"
+import type { HookEndpointContext } from "better-auth"
+import { parseCookies } from "better-auth/cookies"
 
 export const getSessionFromHeaders = (ctx: HookEndpointContext) => {
   const cookies = ctx.request?.headers.get("Cookie")

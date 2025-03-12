@@ -2,23 +2,17 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Turnstile } from "@marsidev/react-turnstile"
 import { authClient } from "@taiyomoe/auth/client"
 import { useTranslations } from "next-intl"
+import { pick } from "radash"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
-import { z } from "zod"
+import { EmailField } from "~/components/fields/email-field"
 import { PasswordField } from "~/components/fields/password-field"
 import { TextField } from "~/components/fields/text-field"
 import { BackButton } from "~/components/ui/back-button"
 import { Form } from "~/components/ui/form"
 import { SubmitButton } from "~/components/ui/submit-button"
 import { env } from "~/env"
-
-const formSchema = z.object({
-  username: z.string().min(1).max(20),
-  email: z.string().max(100).email(),
-  password: z.string().min(8).max(100),
-  confirmPassword: z.string().min(8).max(100),
-  turnstileToken: z.string(),
-})
+import { type SignUpInput, signUpSchema } from "~/schemas/users.schemas"
 
 type Props = {
   toggleSocials: () => void
@@ -27,9 +21,10 @@ type Props = {
 export const SignUpForm = ({ toggleSocials }: Props) => {
   const t = useTranslations()
   const form = useForm({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(signUpSchema),
+    mode: "onTouched",
     defaultValues: {
-      username: "",
+      name: "",
       email: "",
       password: "",
       confirmPassword: "",
@@ -37,11 +32,9 @@ export const SignUpForm = ({ toggleSocials }: Props) => {
     },
   })
 
-  const handlePress = async (values: z.infer<typeof formSchema>) => {
+  const handlePress = async (values: SignUpInput) => {
     const data = await authClient.signUp.email({
-      email: values.email,
-      name: values.username,
-      password: values.password,
+      ...pick(values, ["email", "name", "password"]),
       fetchOptions: {
         headers: { "x-captcha-response": values.turnstileToken },
       },
@@ -59,7 +52,7 @@ export const SignUpForm = ({ toggleSocials }: Props) => {
       <Form {...form} onSubmit={handlePress} className="">
         <TextField
           control={form.control}
-          name="username"
+          name="name"
           label={t("global.username")}
           placeholder="rdxx"
         />

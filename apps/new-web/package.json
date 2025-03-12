@@ -25,6 +25,7 @@
     "next-intl": "^3.26.5",
     "next-themes": "^0.4.4",
     "postcss": "^8.5.3",
+    "radash": "^12.1.0",
     "react": "^19.0.0",
     "react-aria": "^3.38.0",
     "react-aria-components": "^1.6.0",
@@ -40,6 +41,7 @@
   },
   "devDependencies": {
     "@taiyomoe/tsconfig": "workspace:*",
+    "@taiyomoe/types": "workspace:^",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4"
   }
