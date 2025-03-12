@@ -63,12 +63,7 @@ export const SignUpForm = ({ toggleSocials }: Props) => {
           label={t("global.username")}
           placeholder="rdxx"
         />
-        <TextField
-          control={form.control}
-          name="email"
-          label={t("global.email")}
-          placeholder="galho-preto-pra-caralho@gmail.com"
-        />
+        <EmailField control={form.control} name="email" />
         <PasswordField
           control={form.control}
           name="password"
