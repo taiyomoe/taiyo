@@ -25,7 +25,14 @@
     "discord": "Continuar com Discord",
     "email": "Continuar com email",
     "signUp": "Cadastrar",
-    "passwordStrength": "{score, select, 0 {Digite uma senha} 1 {Senha fraca} 2 {Senha média} 3 {Senha forte} other {Digite uma senha}}. Deve conter:"
+    "password": {
+      "strength": "{score, select, 0 {Digite uma senha} 1 {Senha fraca} 2 {Senha média} 3 {Senha forte} other {Digite uma senha}}. Deve conter:",
+      "strengthChars": "Pelo menos 8 caracteres",
+      "strengthNumbers": "Pelo menos 1 número",
+      "strengthLowercase": "Pelo menos 1 letra minúscula",
+      "strengthUppercase": "Pelo menos 1 letra maiúscula",
+      "strengthSpecial": "Pelo menos 1 caractere especial"
+    }
   },
   "dashboard": {
     "medias": {

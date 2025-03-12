@@ -25,7 +25,14 @@
     "discord": "Continue with Discord",
     "email": "Continue with email",
     "signUp": "Sign up",
-    "passwordStrength": "{score, select, 0 {Enter a password} 1 {Weak password} 2 {Medium password} 3 {Strong password} other {Enter a password}}. Must contain:"
+    "password": {
+      "strength": "{score, select, 0 {Enter a password} 1 {Weak password} 2 {Medium password} 3 {Strong password} other {Enter a password}}. Must contain:",
+      "strengthChars": "At least 8 characters",
+      "strengthNumbers": "At least 1 number",
+      "strengthLowercase": "At least 1 lowercase letter",
+      "strengthUppercase": "At least 1 uppercase letter",
+      "strengthSpecial": "At least 1 special character"
+    }
   },
   "dashboard": {
     "medias": {

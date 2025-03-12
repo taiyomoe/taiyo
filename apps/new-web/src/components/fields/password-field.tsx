@@ -34,7 +34,7 @@ export const PasswordField = <
             <PasswordInput placeholder="•••••••••••••" {...field} />
           </FormControl>
           {showStrength && <PasswordStrength value={field.value} />}
-          <FormMessage />
+          {!showStrength && <FormMessage />}
         </FormItem>
       )}
     />
