@@ -188,7 +188,7 @@ importers:
         specifier: ^0.23.0
         version: 0.23.0
       '@prisma/client':
-        specifier: ^6.4.1
+        specifier: ^6.5.0
         version: 6.5.0(prisma@6.5.0(typescript@5.8.2))(typescript@5.8.2)
       '@radix-ui/react-dialog':
         specifier: ^1.1.6
@@ -471,7 +471,7 @@ importers:
         specifier: ^9.5.1
         version: 9.6.0
       '@prisma/client':
-        specifier: ^6.4.1
+        specifier: ^6.5.0
         version: 6.5.0(prisma@6.5.0(typescript@5.8.2))(typescript@5.8.2)
       '@t3-oss/env-core':
         specifier: ^0.12.0
@@ -502,7 +502,7 @@ importers:
         specifier: ^7.0.3
         version: 7.0.3
       prisma:
-        specifier: ^6.4.1
+        specifier: ^6.5.0
         version: 6.5.0(typescript@5.8.2)
       tsx:
         specifier: ^4.19.3
@@ -560,7 +560,7 @@ importers:
   packages/meilisearch:
     dependencies:
       '@prisma/client':
-        specifier: ^6.4.1
+        specifier: ^6.5.0
         version: 6.5.0(prisma@6.5.0(typescript@5.8.2))(typescript@5.8.2)
       '@t3-oss/env-core':
         specifier: ^0.12.0
@@ -760,7 +760,7 @@ importers:
   packages/types:
     dependencies:
       '@prisma/client':
-        specifier: ^6.4.1
+        specifier: ^6.5.0
         version: 6.5.0(prisma@6.5.0(typescript@5.8.2))(typescript@5.8.2)
       '@taiyomoe/schemas':
         specifier: workspace:*
@@ -789,7 +789,7 @@ importers:
   packages/utils:
     dependencies:
       '@prisma/client':
-        specifier: ^6.4.1
+        specifier: ^6.5.0
         version: 6.5.0(prisma@6.5.0(typescript@5.8.2))(typescript@5.8.2)
       '@t3-oss/env-core':
         specifier: ^0.12.0
@@ -7836,7 +7836,7 @@ snapshots:
 
   '@react-aria/focus@3.20.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)':
     dependencies:
-      '@react-aria/interactions': 3.24.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      '@react-aria/interactions': 3.24.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       '@react-aria/utils': 3.28.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       '@react-types/shared': 3.28.0(react@19.0.0)
       '@swc/helpers': 0.5.15
