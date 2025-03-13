@@ -53,6 +53,10 @@
       "strengthLowercase": "Pelo menos 1 letra minúscula",
       "strengthUppercase": "Pelo menos 1 letra maiúscula",
       "strengthSpecial": "Pelo menos 1 caractere especial"
+    },
+    "errors": {
+      "emailAlreadyExists": "Este email já está em uso",
+      "usernameAlreadyExists": "Este nome de usuário já está em uso"
     }
   },
   "dashboard": {

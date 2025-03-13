@@ -53,6 +53,10 @@
       "strengthLowercase": "At least 1 lowercase letter",
       "strengthUppercase": "At least 1 uppercase letter",
       "strengthSpecial": "At least 1 special character"
+    },
+    "errors": {
+      "emailAlreadyExists": "This email is already taken",
+      "usernameAlreadyExists": "This username is already taken"
     }
   },
   "dashboard": {

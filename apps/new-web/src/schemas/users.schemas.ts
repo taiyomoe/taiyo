@@ -4,7 +4,7 @@ import { emailSchema } from "./common.schemas"
 
 export const signUpSchema = z
   .object({
-    name: z
+    username: z
       .string()
       .min(1, zodMessages.username.min1Character)
       .max(30, zodMessages.username.max30Characters),

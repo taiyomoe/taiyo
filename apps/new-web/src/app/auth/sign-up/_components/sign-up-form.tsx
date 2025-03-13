@@ -1,7 +1,9 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Turnstile } from "@marsidev/react-turnstile"
 import { authClient } from "@taiyomoe/auth/client"
+import type { InferNestedPaths } from "@taiyomoe/types"
 import { useTranslations } from "next-intl"
+import { useRouter } from "next/navigation"
 import { pick } from "radash"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
@@ -13,6 +15,7 @@ import { Form } from "~/components/ui/form"
 import { SubmitButton } from "~/components/ui/submit-button"
 import { env } from "~/env"
 import { type SignUpInput, signUpSchema } from "~/schemas/users.schemas"
+import { authMessages } from "~/utils/auth-messages"
 
 type Props = {
   toggleSocials: () => void
@@ -20,11 +23,12 @@ type Props = {
 
 export const SignUpForm = ({ toggleSocials }: Props) => {
   const t = useTranslations()
+  const router = useRouter()
   const form = useForm({
     resolver: zodResolver(signUpSchema),
     mode: "onTouched",
     defaultValues: {
-      name: "",
+      username: "",
       email: "",
       password: "",
       confirmPassword: "",
@@ -33,17 +37,23 @@ export const SignUpForm = ({ toggleSocials }: Props) => {
   })
 
   const handlePress = async (values: SignUpInput) => {
-    const data = await authClient.signUp.email({
-      ...pick(values, ["email", "name", "password"]),
+    const { error } = await authClient.signUp.email({
+      ...pick(values, ["email", "username", "password"]),
+      name: values.username,
       fetchOptions: {
         headers: { "x-captcha-response": values.turnstileToken },
       },
     })
 
-    if (data.error) {
-      toast.error("Ocorreu um erro inesperado ao tentar logar com o Discord")
-      console.error(data.error)
+    if (error?.code && error.code in authMessages) {
+      toast.error(
+        t(authMessages[error.code as InferNestedPaths<typeof authMessages>]),
+      )
+
+      return
     }
+
+    router.push("/auth/sign-in")
   }
 
   return (
@@ -52,18 +62,12 @@ export const SignUpForm = ({ toggleSocials }: Props) => {
       <Form {...form} onSubmit={handlePress} className="">
         <TextField
           control={form.control}
-          name="name"
+          name="username"
           label={t("global.username")}
-          placeholder="rdxx"
+          placeholder="rdx"
         />
         <EmailField control={form.control} name="email" />
-        <PasswordField
-          control={form.control}
-          name="password"
-          label={t("global.password")}
-          showStrength
-        />
-
+        <PasswordField control={form.control} name="password" showStrength />
         <PasswordField
           control={form.control}
           name="confirmPassword"
