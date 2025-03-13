@@ -287,8 +287,8 @@ importers:
         specifier: ^19.0.4
         version: 19.0.4(@types/react@19.0.10)
       better-auth:
-        specifier: ^1.2.3
-        version: 1.2.3(typescript@5.8.2)
+        specifier: ^1.2.4
+        version: 1.2.4(typescript@5.8.2)
       jiti:
         specifier: ^2.4.2
         version: 2.4.2
@@ -317,8 +317,8 @@ importers:
         specifier: workspace:*
         version: link:../meilisearch
       better-auth:
-        specifier: ^1.2.3
-        version: 1.2.3(typescript@5.8.2)
+        specifier: ^1.2.4
+        version: 1.2.4(typescript@5.8.2)
       zod:
         specifier: ^3.24.2
         version: 3.24.2
@@ -3588,8 +3588,8 @@ packages:
   bcryptjs@2.4.3:
     resolution: {integrity: sha512-V/Hy/X9Vt7f3BbPJEi8BdVFMByHi+jNXrYkW3huaybV/kQ0KJg0Y6PkEMbn+zeT+i+SiKZ/HMqJGIIt4LZDqNQ==}
 
-  better-auth@1.2.3:
-    resolution: {integrity: sha512-y97/ah2SOWaW81IRg36m7xMSMVl7ATaHie/nhQ0in/reVlEX/6juVPszNqq0gcTwQtFsB8oe15wQKgdf4yHP9Q==}
+  better-auth@1.2.4:
+    resolution: {integrity: sha512-/ZK2jbUjm8JwdeCLFrUWUBmexPyI9PkaLVXWLWtN60sMDHTY8B5G72wcHglo1QMFBaw4G0qFkP5ayl9k6XfDaA==}
 
   better-call@1.0.4:
     resolution: {integrity: sha512-NdAihYdkS0IOz1mtz8mw1gWacCxR9r921U8YqB+VB6++rt8edMG13vVL16Y4TBL4XkjMK/DUewEsOOFkw9LJYQ==}
@@ -9565,7 +9565,7 @@ snapshots:
 
   bcryptjs@2.4.3: {}
 
-  better-auth@1.2.3(typescript@5.8.2):
+  better-auth@1.2.4(typescript@5.8.2):
     dependencies:
       '@better-auth/utils': 0.2.3
       '@better-fetch/fetch': 1.1.15
