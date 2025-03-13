@@ -55,8 +55,8 @@
       "strengthSpecial": "At least 1 special character"
     },
     "errors": {
-      "emailAlreadyExists": "This email is already taken",
-      "usernameAlreadyExists": "This username is already taken"
+      "emailAlreadyExists": "This email is already taken. Please reset your password if you've forgotten it.",
+      "usernameAlreadyExists": "This username is already taken. Please choose another one."
     }
   },
   "dashboard": {

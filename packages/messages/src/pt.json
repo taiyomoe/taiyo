@@ -55,8 +55,8 @@
       "strengthSpecial": "Pelo menos 1 caractere especial"
     },
     "errors": {
-      "emailAlreadyExists": "Este email já está em uso",
-      "usernameAlreadyExists": "Este nome de usuário já está em uso"
+      "emailAlreadyExists": "Este email já está em uso. Por favor, redefina sua senha se esqueceu dela.",
+      "usernameAlreadyExists": "Este nome de usuário já está em uso. Por favor, escolha outro."
     }
   },
   "dashboard": {
