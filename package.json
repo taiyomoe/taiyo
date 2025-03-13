@@ -7,7 +7,7 @@
   "packageManager": "pnpm@10.5.2",
   "scripts": {
     "build": "turbo build",
-    "dev": "infisical run -- turbo dev --parallel",
+    "dev": "turbo dev --parallel",
     "clean": "git clean -xdf node_modules",
     "clean:ws": "turbo clean",
     "check:ws": "biome check apps/ packages/ tooling/",

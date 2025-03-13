@@ -6,7 +6,6 @@
   "license": "MIT",
   "scripts": {
     "build": "pnpm -F @taiyomoe/db run db migrate deploy && pnpm -F @taiyomoe/logs run migrate && next build",
-    "dev": "next dev --turbopack",
     "start": "next start",
     "clean": "git clean -xdf .next .turbo node_modules",
     "typecheck": "tsc --noEmit"

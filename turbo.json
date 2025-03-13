@@ -41,7 +41,8 @@
     "UMAMI_SECRET",
     "GRAFANA_USERNAME",
     "GRAFANA_PASSWORD",
-    "GRAFANA_LOKI_URL"
+    "GRAFANA_LOKI_URL",
+    "TURNSTILE_SECRET_KEY"
   ],
   "globalPassThroughEnv": ["NODE_ENV", "CI", "npm_lifecycle_event"]
 }
