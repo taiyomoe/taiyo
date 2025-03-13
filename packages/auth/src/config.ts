@@ -14,6 +14,7 @@ import { env } from "./env"
 import { signedInHandler } from "./handlers/signed-in.auth-handler"
 import { signedOutHandler } from "./handlers/signed-out.auth-handler"
 import { signedUpHandler } from "./handlers/signed-up.auth-handler"
+import { configuredUsernamePlugin } from "./utils/configured-username-plugin"
 import { getCustomSession } from "./utils/get-custom-session"
 import { getSessionFromHeaders } from "./utils/get-session-from-headers"
 
@@ -50,6 +51,7 @@ export const auth = betterAuth({
     }),
   },
   plugins: [
+    configuredUsernamePlugin,
     emailHarmony(),
     captcha({
       provider: "cloudflare-turnstile",

@@ -33,6 +33,8 @@ model User {
     updatedAt DateTime @updatedAt
 
     name            String
+    username        String?   @unique
+    displayUsername String?   @unique
     email           String    @unique
     emailVerified   Boolean
     normalizedEmail String?   @unique
