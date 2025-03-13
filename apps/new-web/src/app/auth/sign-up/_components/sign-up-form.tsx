@@ -53,6 +53,7 @@ export const SignUpForm = ({ toggleSocials }: Props) => {
       return
     }
 
+    toast.success(t("auth.signUp.success"))
     router.push("/auth/sign-in")
   }
 
@@ -78,7 +79,7 @@ export const SignUpForm = ({ toggleSocials }: Props) => {
           siteKey={env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
           onSuccess={(token) => form.setValue("turnstileToken", token)}
         />
-        <SubmitButton className="mt-6">{t("auth.signUp")}</SubmitButton>
+        <SubmitButton className="mt-6">{t("auth.signUp.title")}</SubmitButton>
       </Form>
     </div>
   )

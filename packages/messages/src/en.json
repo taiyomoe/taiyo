@@ -45,7 +45,11 @@
     "google": "Continue with Google",
     "discord": "Continue with Discord",
     "email": "Continue with email",
-    "signUp": "Sign up",
+    "signUp": {
+      "title": "Sign up",
+      "success": "Your account has been created successfully. An email has been sent to you for verification",
+      "action": "Go to sign in"
+    },
     "password": {
       "strength": "{score, select, 0 {Enter a password} 1 {Weak password} 2 {Medium password} 3 {Strong password} other {Enter a password}}. Must contain:",
       "strengthChars": "At least 8 characters",
