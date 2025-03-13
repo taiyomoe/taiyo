@@ -45,7 +45,7 @@
     "cmdk": "^1.0.4",
     "embla-carousel-autoplay": "^8.5.2",
     "embla-carousel-react": "^8.5.2",
-    "file-type": "^20.4.0",
+    "file-type": "^20.4.1",
     "framer-motion": "^12.5.0",
     "jotai": "^2.12.2",
     "lucide-react": "^0.479.0",

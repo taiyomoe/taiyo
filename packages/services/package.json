@@ -22,7 +22,7 @@
     "@taiyomoe/s3": "workspace:*",
     "@taiyomoe/types": "workspace:*",
     "@taiyomoe/utils": "workspace:*",
-    "file-type": "^20.4.0",
+    "file-type": "^20.4.1",
     "radash": "^12.1.0",
     "sharp": "^0.33.5"
   },
