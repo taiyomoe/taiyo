@@ -6,7 +6,7 @@ This package contains the database schema and migrations for the project.
 
 Migrations are created by PrismaORM by managed but a custom script.
 
-To create a new migration or apply pending ones, run `infisical run -- pnpm -F @taiyomoe/db run db migrate dev --create-only` at the root of the project.
+To create a new migration or apply pending ones, run `infisical run -- pnpm -F @taiyomoe/db db migrate dev --create-only` at the root of the project.
 
 ## Data Migrations
 
