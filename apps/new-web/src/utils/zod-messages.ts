@@ -2,9 +2,9 @@ import type { InferNestedValues } from "@taiyomoe/types"
 
 export const zodMessages = {
   username: {
-    required: "validation.username.required",
-    min1Character: "validation.username.min1Character",
+    min3Characters: "validation.username.min3Characters",
     max30Characters: "validation.username.max30Characters",
+    invalidCharacters: "validation.username.invalidCharacters",
   },
   email: {
     required: "validation.email.required",

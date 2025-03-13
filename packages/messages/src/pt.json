@@ -13,9 +13,9 @@
   },
   "validation": {
     "username": {
-      "required": "O nome de usuário é obrigatório",
-      "min1Character": "O nome de usuário deve conter pelo menos 1 caractere",
-      "max30Characters": "O nome de usuário deve conter no máximo 30 caracteres"
+      "min3Characters": "O nome de usuário deve conter pelo menos 3 caracteres",
+      "max30Characters": "O nome de usuário deve conter no máximo 30 caracteres",
+      "invalidCharacters": "O nome de usuário contém caracteres inválidos"
     },
     "email": {
       "required": "O email é obrigatório",

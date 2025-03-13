@@ -13,9 +13,9 @@
   },
   "validation": {
     "username": {
-      "required": "The username is required",
-      "min1Character": "The username must be at least 1 character",
-      "max30Characters": "The username must be at most 30 characters"
+      "min3Characters": "The username must be at least 3 characters",
+      "max30Characters": "The username must be at most 30 characters",
+      "invalidCharacters": "The username contains invalid characters"
     },
     "email": {
       "required": "The email is required",

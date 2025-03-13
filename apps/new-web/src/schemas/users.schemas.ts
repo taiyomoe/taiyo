@@ -6,8 +6,9 @@ export const signUpSchema = z
   .object({
     username: z
       .string()
-      .min(1, zodMessages.username.min1Character)
-      .max(30, zodMessages.username.max30Characters),
+      .min(3, zodMessages.username.min3Characters)
+      .max(30, zodMessages.username.max30Characters)
+      .regex(/^[a-zA-Z0-9_.]+$/, zodMessages.username.invalidCharacters),
     email: emailSchema,
     password: z
       .string()
