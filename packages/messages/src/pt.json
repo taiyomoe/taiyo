@@ -13,6 +13,7 @@
   },
   "validation": {
     "username": {
+      "required": "O nome de usuário é obrigatório",
       "min3Characters": "O nome de usuário deve conter pelo menos 3 caracteres",
       "max30Characters": "O nome de usuário deve conter no máximo 30 caracteres",
       "invalidCharacters": "O nome de usuário contém caracteres inválidos"
@@ -45,14 +46,17 @@
     "google": "Continuar com Google",
     "discord": "Continuar com Discord",
     "email": "Continuar com email",
+    "username": "Continuar com nome de usuário",
     "signUp": {
       "title": "Cadastrar",
       "success": "Sua conta foi criada com sucesso. Um email de verificação foi enviado para você",
+      "error": "Ocorreu um erro inesperado ao criar sua conta",
       "action": "Ir para o login"
     },
     "signIn": {
       "title": "Entrar",
       "success": "Bem-vindo de volta, {username}!",
+      "error": "Ocorreu um erro inesperado ao logar",
       "action": "Ir para o cadastro"
     },
     "password": {
@@ -64,8 +68,10 @@
       "strengthSpecial": "Pelo menos 1 caractere especial"
     },
     "errors": {
-      "emailAlreadyExists": "Este email já está em uso. Por favor, redefina sua senha se esqueceu dela.",
-      "usernameAlreadyExists": "Este nome de usuário já está em uso. Por favor, escolha outro."
+      "emailAlreadyExists": "Este email já está em uso. Por favor, redefina sua senha se esqueceu dela",
+      "usernameAlreadyExists": "Este nome de usuário já está em uso. Por favor, escolha outro",
+      "invalidEmailOrPassword": "Seu email ou senha estão incorretos. Por favor, tente novamente",
+      "emailNotVerified": "Seu email não foi verificado. Um email de verificação foi enviado novamente"
     }
   },
   "dashboard": {

@@ -33,11 +33,16 @@ export const signUpSchema = z
     }
   })
 
-export const signInSchema = z.object({
+export const signInEmailSchema = z.object({
   email: emailSchema,
   password: z.string().nonempty(zodMessages.password.required),
   turnstileToken: z.string(),
 })
 
+export const signInUsernameSchema = signInEmailSchema
+  .omit({ email: true })
+  .extend({ username: z.string().nonempty(zodMessages.username.required) })
+
 export type SignUpInput = z.infer<typeof signUpSchema>
-export type SignInInput = z.infer<typeof signInSchema>
+export type SignInEmailInput = z.infer<typeof signInEmailSchema>
+export type SignInUsernameInput = z.infer<typeof signInUsernameSchema>

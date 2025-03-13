@@ -1,15 +1,14 @@
+import { useSetAtom } from "jotai"
 import { useTranslations } from "next-intl"
 import Link from "next/link"
+import { signInFlowStepAtom } from "~/atoms/sign-in-flow.atoms"
 import { Button } from "~/components/ui/button"
 import { DiscordButton } from "~/components/ui/discord-button"
 import { GoogleButton } from "~/components/ui/google-button"
 import { Separator } from "~/components/ui/separator"
 
-type Props = {
-  toggleEmail: () => void
-}
-
-export const SocialsSignIn = ({ toggleEmail }: Props) => {
+export const SocialsSignIn = () => {
+  const setStep = useSetAtom(signInFlowStepAtom)
   const t = useTranslations()
 
   return (
@@ -19,13 +18,16 @@ export const SocialsSignIn = ({ toggleEmail }: Props) => {
         <DiscordButton />
       </div>
       <Separator className="w-full bg-emphasis">{t("global.or")}</Separator>
-      <div className="space-y-4">
-        <Button variant="outline" onPress={toggleEmail}>
+      <div className="space-y-2">
+        <Button variant="outline" onPress={() => setStep("email")}>
           {t("auth.email")}
         </Button>
+        <Button variant="outline" onPress={() => setStep("username")}>
+          {t("auth.username")}
+        </Button>
         <Link
-          href="/auth/sign-in"
-          className="block text-center text-sm text-subtle hover:underline"
+          href="/auth/sign-up"
+          className="mt-2 block text-center text-sm text-subtle hover:underline"
         >
           {t("auth.signIn.action")}
         </Link>

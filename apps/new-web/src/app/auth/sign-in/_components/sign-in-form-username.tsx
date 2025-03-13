@@ -2,44 +2,42 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Turnstile } from "@marsidev/react-turnstile"
 import { authClient } from "@taiyomoe/auth/client"
 import type { InferNestedPaths } from "@taiyomoe/types"
+import { useSetAtom } from "jotai"
 import { useTranslations } from "next-intl"
 import { useRouter } from "next/navigation"
 import { pick } from "radash"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
-import { EmailField } from "~/components/fields/email-field"
+import { signInFlowStepAtom } from "~/atoms/sign-in-flow.atoms"
 import { PasswordField } from "~/components/fields/password-field"
 import { TextField } from "~/components/fields/text-field"
 import { BackButton } from "~/components/ui/back-button"
 import { Form } from "~/components/ui/form"
 import { SubmitButton } from "~/components/ui/submit-button"
 import { env } from "~/env"
-import { type SignUpInput, signUpSchema } from "~/schemas/users.schemas"
+import {
+  type SignInUsernameInput,
+  signInUsernameSchema,
+} from "~/schemas/users.schemas"
 import { authMessages } from "~/utils/auth-messages"
 
-type Props = {
-  toggleSocials: () => void
-}
-
-export const SignUpForm = ({ toggleSocials }: Props) => {
+export const SignInFormUsername = () => {
+  const setStep = useSetAtom(signInFlowStepAtom)
   const t = useTranslations()
   const router = useRouter()
   const form = useForm({
-    resolver: zodResolver(signUpSchema),
+    resolver: zodResolver(signInUsernameSchema),
     mode: "onTouched",
     defaultValues: {
       username: "",
-      email: "",
       password: "",
-      confirmPassword: "",
       turnstileToken: "",
     },
   })
 
-  const handlePress = async (values: SignUpInput) => {
-    const { error } = await authClient.signUp.email({
-      ...pick(values, ["email", "username", "password"]),
-      name: values.username,
+  const handlePress = async (values: SignInUsernameInput) => {
+    const { data, error } = await authClient.signIn.username({
+      ...pick(values, ["username", "password"]),
       fetchOptions: {
         headers: { "x-captcha-response": values.turnstileToken },
       },
@@ -50,38 +48,33 @@ export const SignUpForm = ({ toggleSocials }: Props) => {
         toast.error(
           t(authMessages[error.code as InferNestedPaths<typeof authMessages>]),
         )
-      else toast.error(t("auth.signUp.error"))
+      else toast.error(t("auth.signIn.error"))
 
       return
     }
-    toast.success(t("auth.signUp.success"))
-    router.push("/auth/sign-in")
+
+    toast.success(t("auth.signIn.success", { username: data?.user.name }))
+    router.push("/")
   }
 
   return (
     <div className="space-y-8">
-      <BackButton onPress={toggleSocials} />
+      <BackButton onPress={() => setStep("socials")} />
       <Form {...form} onSubmit={handlePress} className="">
         <TextField
           control={form.control}
           name="username"
           label={t("global.username")}
-          placeholder="rdx"
+          placeholder="rdxx"
         />
-        <EmailField control={form.control} name="email" />
-        <PasswordField control={form.control} name="password" showStrength />
-        <PasswordField
-          control={form.control}
-          name="confirmPassword"
-          label={t("global.confirmPassword")}
-        />
+        <PasswordField control={form.control} name="password" />
         <Turnstile
           className="min-h-20"
           siteKey={env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
           onSuccess={(token) => form.setValue("turnstileToken", token)}
           options={{ size: "flexible" }}
         />
-        <SubmitButton className="mt-6">{t("auth.signUp.title")}</SubmitButton>
+        <SubmitButton className="mt-6">{t("auth.signIn.title")}</SubmitButton>
       </Form>
     </div>
   )

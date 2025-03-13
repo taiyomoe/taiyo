@@ -13,6 +13,7 @@
   },
   "validation": {
     "username": {
+      "required": "The username is required",
       "min3Characters": "The username must be at least 3 characters",
       "max30Characters": "The username must be at most 30 characters",
       "invalidCharacters": "The username contains invalid characters"
@@ -45,14 +46,17 @@
     "google": "Continue with Google",
     "discord": "Continue with Discord",
     "email": "Continue with email",
+    "username": "Continue with username",
     "signUp": {
       "title": "Sign up",
       "success": "Your account has been created successfully. An email has been sent to you for verification",
+      "error": "An unexpected error occurred when creating your account",
       "action": "Go to sign in"
     },
     "signIn": {
       "title": "Sign in",
       "success": "Welcome back, {username}!",
+      "error": "An unexpected error occurred when signing in",
       "action": "Go to sign up"
     },
     "password": {
@@ -64,8 +68,10 @@
       "strengthSpecial": "At least 1 special character"
     },
     "errors": {
-      "emailAlreadyExists": "This email is already taken. Please reset your password if you've forgotten it.",
-      "usernameAlreadyExists": "This username is already taken. Please choose another one."
+      "emailAlreadyExists": "This email is already taken. Please reset your password if you've forgotten it",
+      "usernameAlreadyExists": "This username is already taken. Please choose another one",
+      "invalidEmailOrPassword": "Your email or password is incorrect. Please try again",
+      "emailNotVerified": "Your email is not verified. An email has been sent to you for verification"
     }
   },
   "dashboard": {

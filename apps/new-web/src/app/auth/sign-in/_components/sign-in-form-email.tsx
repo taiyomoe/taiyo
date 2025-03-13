@@ -2,29 +2,31 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Turnstile } from "@marsidev/react-turnstile"
 import { authClient } from "@taiyomoe/auth/client"
 import type { InferNestedPaths } from "@taiyomoe/types"
+import { useSetAtom } from "jotai"
 import { useTranslations } from "next-intl"
 import { useRouter } from "next/navigation"
 import { pick } from "radash"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
+import { signInFlowStepAtom } from "~/atoms/sign-in-flow.atoms"
 import { EmailField } from "~/components/fields/email-field"
 import { PasswordField } from "~/components/fields/password-field"
 import { BackButton } from "~/components/ui/back-button"
 import { Form } from "~/components/ui/form"
 import { SubmitButton } from "~/components/ui/submit-button"
 import { env } from "~/env"
-import { type SignInInput, signInSchema } from "~/schemas/users.schemas"
+import {
+  type SignInEmailInput,
+  signInEmailSchema,
+} from "~/schemas/users.schemas"
 import { authMessages } from "~/utils/auth-messages"
 
-type Props = {
-  toggleSocials: () => void
-}
-
-export const SignInForm = ({ toggleSocials }: Props) => {
+export const SignInFormEmail = () => {
+  const setStep = useSetAtom(signInFlowStepAtom)
   const t = useTranslations()
   const router = useRouter()
   const form = useForm({
-    resolver: zodResolver(signInSchema),
+    resolver: zodResolver(signInEmailSchema),
     mode: "onTouched",
     defaultValues: {
       email: "",
@@ -33,7 +35,7 @@ export const SignInForm = ({ toggleSocials }: Props) => {
     },
   })
 
-  const handlePress = async (values: SignInInput) => {
+  const handlePress = async (values: SignInEmailInput) => {
     const { data, error } = await authClient.signIn.email({
       ...pick(values, ["email", "password"]),
       fetchOptions: {
@@ -41,10 +43,12 @@ export const SignInForm = ({ toggleSocials }: Props) => {
       },
     })
 
-    if (error?.code && error.code in authMessages) {
-      toast.error(
-        t(authMessages[error.code as InferNestedPaths<typeof authMessages>]),
-      )
+    if (error) {
+      if (error.code && error.code in authMessages)
+        toast.error(
+          t(authMessages[error.code as InferNestedPaths<typeof authMessages>]),
+        )
+      else toast.error(t("auth.signIn.error"))
 
       return
     }
@@ -55,7 +59,7 @@ export const SignInForm = ({ toggleSocials }: Props) => {
 
   return (
     <div className="space-y-8">
-      <BackButton onPress={toggleSocials} />
+      <BackButton onPress={() => setStep("socials")} />
       <Form {...form} onSubmit={handlePress} className="">
         <EmailField control={form.control} name="email" />
         <PasswordField control={form.control} name="password" />
