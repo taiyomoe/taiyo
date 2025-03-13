@@ -36,6 +36,7 @@ export const signUpSchema = z
 export const signInSchema = z.object({
   email: emailSchema,
   password: z.string().nonempty(zodMessages.password.required),
+  turnstileToken: z.string(),
 })
 
 export type SignUpInput = z.infer<typeof signUpSchema>

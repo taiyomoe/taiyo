@@ -2,10 +2,10 @@
 
 import { AnimatePresence, motion } from "framer-motion"
 import { useState } from "react"
-import { SignUpForm } from "./sign-up-form"
-import { SocialsSignUp } from "./socials-sign-up"
+import { SignInForm } from "./sign-in-form"
+import { SocialsSignIn } from "./socials-sign-in"
 
-export const SignUpFlow = () => {
+export const SignInFlow = () => {
   const [step, setStep] = useState<"socials" | "email">("socials")
 
   return (
@@ -19,7 +19,7 @@ export const SignUpFlow = () => {
             exit={{ x: -20, opacity: 0 }}
             transition={{ duration: 0.2 }}
           >
-            <SocialsSignUp toggleEmail={() => setStep("email")} />
+            <SocialsSignIn toggleEmail={() => setStep("email")} />
           </motion.div>
         )}
         {step === "email" && (
@@ -30,7 +30,7 @@ export const SignUpFlow = () => {
             exit={{ x: 20, opacity: 0 }}
             transition={{ duration: 0.2 }}
           >
-            <SignUpForm toggleSocials={() => setStep("socials")} />
+            <SignInForm toggleSocials={() => setStep("socials")} />
           </motion.div>
         )}
       </AnimatePresence>

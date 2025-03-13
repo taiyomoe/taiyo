@@ -50,6 +50,11 @@
       "success": "Sua conta foi criada com sucesso. Um email de verificação foi enviado para você",
       "action": "Ir para o login"
     },
+    "signIn": {
+      "title": "Entrar",
+      "success": "Bem-vindo de volta, {username}!",
+      "action": "Ir para o cadastro"
+    },
     "password": {
       "strength": "{score, select, 0 {Digite uma senha} 1 {Senha fraca} 2 {Senha média} 3 {Senha forte} other {Digite uma senha}}. Deve conter:",
       "strengthChars": "Pelo menos 8 caracteres",

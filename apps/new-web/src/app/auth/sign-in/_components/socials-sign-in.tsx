@@ -27,7 +27,7 @@ export const SocialsSignIn = ({ toggleEmail }: Props) => {
           href="/auth/sign-in"
           className="block text-center text-sm text-subtle hover:underline"
         >
-          {t("auth.signUp.action")}
+          {t("auth.signIn.action")}
         </Link>
       </div>
     </div>

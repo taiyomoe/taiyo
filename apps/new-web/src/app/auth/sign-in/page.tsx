@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { TaiyoLogo } from "~/components/logos/taiyo-logo"
-import { SignUpFlow } from "./_components/sign-up-flow"
+import { SignInFlow } from "./_components/sign-in-flow"
 
 export default function Page() {
   return (
@@ -9,7 +9,7 @@ export default function Page() {
         <TaiyoLogo className="size-20" />
         <h2 className="font-bold text-4xl tracking-tight">Taiyō</h2>
       </Link>
-      <SignUpFlow />
+      <SignInFlow />
     </main>
   )
 }
