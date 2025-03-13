@@ -12,9 +12,13 @@
   --color-inverted: var(--background-inverted);
 
   /* Background Semantic */
+  --color-info: var(--background-semantic-info);
   --color-info-subtle: var(--background-semantic-info-subtle);
+  --color-success: var(--background-semantic-success);
   --color-success-subtle: var(--background-semantic-success-subtle);
+  --color-warning: var(--background-semantic-warning);
   --color-warning-subtle: var(--background-semantic-warning-subtle);
+  --color-error: var(--background-semantic-error);
   --color-error-subtle: var(--background-semantic-error-subtle);
 
   /* Background Primary */
@@ -70,10 +74,14 @@
   --background-inverted: hsla(210, 30%, 4%, 1); /* gray.900 - tooltips */
 
   /* Background Semantic */
-  --background-semantic-info-subtle: hsla(212, 88%, 97%, 1); /* blue.100 */
-  --background-semantic-success-subtle: hsla(167, 54%, 93%, 1); /* green.100 */
-  --background-semantic-warning-subtle: hsla(34, 100%, 92%, 1); /* orange.100 */
-  --background-semantic-error-subtle: hsla(0, 93%, 94%, 1); /* red.100 */
+  --background-semantic-info: hsla(212, 88%, 97%, 1); /* blue.100 */
+  --background-semantic-info-subtle: hsla(212, 88%, 89%, 1);
+  --background-semantic-success: hsla(167, 54%, 93%, 1); /* green.100 */
+  --background-semantic-success-subtle: hsla(167, 54%, 85%, 1);
+  --background-semantic-warning: hsla(34, 100%, 92%, 1); /* orange.100 */
+  --background-semantic-warning-subtle: hsla(34, 100%, 84%, 1);
+  --background-semantic-error: hsla(0, 93%, 94%, 1); /* red.100 */
+  --background-semantic-error-subtle: hsla(0, 93%, 86%, 1);
 
   /* Background Primary */
   --background-primary: hsla(214, 30%, 16%, 1); /* stone.100 */
@@ -127,10 +135,14 @@
   --background-inverted: hsla(0, 0%, 98%, 1); /* stone.50 */
 
   /* Background Semantic */
-  --background-semantic-info-subtle: hsla(229, 90%, 74%, 0.1); /* blue.100/10 */
-  --background-semantic-success-subtle: hsla(161, 49%, 54%, 0.1); /* green.100/10 */
-  --background-semantic-warning-subtle: hsla(27, 96%, 61%, 0.1); /* orange.100/10 */
-  --background-semantic-error-subtle: hsla(0, 91%, 71%, 0.1); /* red.100/10 */
+  --background-semantic-info: hsla(234, 18%, 13%, 1);
+  --background-semantic-info-subtle: hsla(234, 18%, 21%, 1);
+  --background-semantic-success: hsla(157, 22%, 11%, 1);
+  --background-semantic-success-subtle: hsla(157, 22%, 19%, 1);
+  --background-semantic-warning: hsla(24, 32%, 11%, 1);
+  --background-semantic-warning-subtle: hsla(24, 32%, 19%, 1);
+  --background-semantic-error: hsla(359, 23%, 12%, 1);
+  --background-semantic-error-subtle: hsla(359, 23%, 20%, 1);
 
   /* Background Primary */
   --background-primary: hsla(0, 0%, 96%, 1); /* stone.100 */

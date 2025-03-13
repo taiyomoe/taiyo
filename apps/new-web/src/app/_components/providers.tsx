@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation"
 import { RouterProvider } from "react-aria-components"
-import { Toaster } from "sonner"
+import { Toaster } from "~/components/ui/toaster"
 import type { LayoutProps } from "~/utils/types"
 
 export const Providers = ({ children }: LayoutProps) => {
