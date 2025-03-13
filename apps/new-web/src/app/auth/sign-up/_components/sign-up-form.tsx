@@ -78,6 +78,7 @@ export const SignUpForm = ({ toggleSocials }: Props) => {
           className="min-h-20"
           siteKey={env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
           onSuccess={(token) => form.setValue("turnstileToken", token)}
+          options={{ size: "flexible" }}
         />
         <SubmitButton className="mt-6">{t("auth.signUp.title")}</SubmitButton>
       </Form>
