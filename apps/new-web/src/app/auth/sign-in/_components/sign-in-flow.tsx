@@ -6,8 +6,8 @@ import { useState } from "react"
 import { signInFlowStepAtom } from "~/atoms/auth-flow.atoms"
 import { SignInFormEmail } from "./sign-in-form-email"
 import { SignInFormUsername } from "./sign-in-form-username"
+import { SignInVerificationEmailSent } from "./sign-in-verification-email-sent"
 import { SocialsSignIn } from "./socials-sign-in"
-import { VerificationEmailSent } from "./verification-email-sent"
 
 const variants = {
   exit: (direction: number) => ({
@@ -37,7 +37,7 @@ export const SignInFlow = () => {
           {step === 0 && <SocialsSignIn />}
           {step === 1 && <SignInFormEmail />}
           {step === 2 && <SignInFormUsername />}
-          {step === 3 && <VerificationEmailSent />}
+          {step === 3 && <SignInVerificationEmailSent />}
         </motion.div>
       </AnimatePresence>
     </div>

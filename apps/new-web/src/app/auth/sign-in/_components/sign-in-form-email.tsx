@@ -3,6 +3,7 @@ import { Turnstile } from "@marsidev/react-turnstile"
 import { authClient } from "@taiyomoe/auth/client"
 import type { InferNestedPaths } from "@taiyomoe/types"
 import { useSetAtom } from "jotai"
+import { ArrowRightIcon } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { useRouter } from "next/navigation"
 import { pick } from "radash"
@@ -13,6 +14,7 @@ import { EmailField } from "~/components/fields/email-field"
 import { PasswordField } from "~/components/fields/password-field"
 import { BackButton } from "~/components/ui/back-button"
 import { Form } from "~/components/ui/form"
+import { GradientButton } from "~/components/ui/gradient-button"
 import { SubmitButton } from "~/components/ui/submit-button"
 import { env } from "~/env"
 import {
@@ -44,7 +46,10 @@ export const SignInFormEmail = () => {
     })
 
     if (error) {
-      if (error.code === "VERIFICATION_EMAIL_ALREADY_SENT") {
+      if (
+        error.code === "EMAIL_NOT_VERIFIED" ||
+        error.code === "VERIFICATION_EMAIL_ALREADY_SENT"
+      ) {
         setStep(3)
 
         return
@@ -75,7 +80,12 @@ export const SignInFormEmail = () => {
           onSuccess={(token) => form.setValue("turnstileToken", token)}
           options={{ size: "flexible" }}
         />
-        <SubmitButton className="mt-6">{t("auth.signIn.title")}</SubmitButton>
+        <SubmitButton asChild>
+          <GradientButton className="mt-6 hover:[&_svg]:translate-x-1">
+            {t("auth.signIn.title")}
+            <ArrowRightIcon />
+          </GradientButton>
+        </SubmitButton>
       </Form>
     </div>
   )

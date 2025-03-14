@@ -1,11 +1,11 @@
 import { useSetAtom } from "jotai"
 import { useTranslations } from "next-intl"
-import { signInFlowStepAtom } from "~/atoms/auth-flow.atoms"
+import { signUpFlowStepAtom } from "~/atoms/auth-flow.atoms"
 import { MailSentIllustration } from "~/components/illustrations/mail-sent-illustration"
 import { BackButton } from "~/components/ui/back-button"
 
-export const VerificationEmailSent = () => {
-  const setStep = useSetAtom(signInFlowStepAtom)
+export const SignUpVerificationEmailSent = () => {
+  const setStep = useSetAtom(signUpFlowStepAtom)
   const t = useTranslations("auth.verificationEmailSent")
 
   return (

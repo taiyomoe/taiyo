@@ -48,13 +48,13 @@
     "email": "Continue with email",
     "username": "Continue with username",
     "signUp": {
-      "title": "Sign up",
+      "title": "Sign Up",
       "success": "Your account has been created successfully. An email has been sent to you for verification",
       "error": "An unexpected error occurred when creating your account",
       "action": "Go to sign in"
     },
     "signIn": {
-      "title": "Sign in",
+      "title": "Sign In",
       "success": "Welcome back, {username}!",
       "error": "An unexpected error occurred when signing in",
       "action": "Go to sign up"

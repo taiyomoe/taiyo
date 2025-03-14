@@ -3,8 +3,8 @@ import { Turnstile } from "@marsidev/react-turnstile"
 import { authClient } from "@taiyomoe/auth/client"
 import type { InferNestedPaths } from "@taiyomoe/types"
 import { useSetAtom } from "jotai"
+import { ArrowRightIcon } from "lucide-react"
 import { useTranslations } from "next-intl"
-import { useRouter } from "next/navigation"
 import { pick } from "radash"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
@@ -14,6 +14,7 @@ import { PasswordField } from "~/components/fields/password-field"
 import { TextField } from "~/components/fields/text-field"
 import { BackButton } from "~/components/ui/back-button"
 import { Form } from "~/components/ui/form"
+import { GradientButton } from "~/components/ui/gradient-button"
 import { SubmitButton } from "~/components/ui/submit-button"
 import { env } from "~/env"
 import { type SignUpInput, signUpSchema } from "~/schemas/users.schemas"
@@ -22,7 +23,6 @@ import { authMessages } from "~/utils/auth-messages"
 export const SignUpForm = () => {
   const setStep = useSetAtom(signUpFlowStepAtom)
   const t = useTranslations()
-  const router = useRouter()
   const form = useForm({
     resolver: zodResolver(signUpSchema),
     mode: "onTouched",
@@ -54,7 +54,8 @@ export const SignUpForm = () => {
       return
     }
     toast.success(t("auth.signUp.success"))
-    router.push("/auth/sign-in")
+
+    setStep(2)
   }
 
   return (
@@ -80,7 +81,12 @@ export const SignUpForm = () => {
           onSuccess={(token) => form.setValue("turnstileToken", token)}
           options={{ size: "flexible" }}
         />
-        <SubmitButton className="mt-6">{t("auth.signUp.title")}</SubmitButton>
+        <SubmitButton asChild>
+          <GradientButton className="mt-6 hover:[&_svg]:translate-x-1">
+            {t("auth.signUp.title")}
+            <ArrowRightIcon />
+          </GradientButton>
+        </SubmitButton>
       </Form>
     </div>
   )

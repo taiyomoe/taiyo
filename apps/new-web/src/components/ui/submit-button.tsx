@@ -1,13 +1,18 @@
 "use client"
 
+import { Slot } from "@radix-ui/react-slot"
 import { useFormState } from "react-hook-form"
 import { Button, type ButtonProps } from "~/components/ui/button"
 
+type Props = ButtonProps & { asChild?: boolean }
+
 export const SubmitButton = ({
+  asChild = false,
   isDisabled,
   children,
   ...props
-}: ButtonProps) => {
+}: Props) => {
+  const Comp = asChild ? Slot : Button
   const { isSubmitting, isValid, isDirty, errors } = useFormState()
   const shouldDisableButton =
     isSubmitting ||
@@ -16,8 +21,8 @@ export const SubmitButton = ({
     Object.keys(errors).length !== 0
 
   return (
-    <Button {...props} isDisabled={shouldDisableButton} type="submit">
+    <Comp {...props} isDisabled={shouldDisableButton} type="submit">
       {children}
-    </Button>
+    </Comp>
   )
 }
