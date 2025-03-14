@@ -1,7 +1,7 @@
 import { useSetAtom } from "jotai"
 import { useTranslations } from "next-intl"
 import Link from "next/link"
-import { signInFlowStepAtom } from "~/atoms/sign-in-flow.atoms"
+import { signInFlowStepAtom } from "~/atoms/auth-flow.atoms"
 import { Button } from "~/components/ui/button"
 import { DiscordButton } from "~/components/ui/discord-button"
 import { GoogleButton } from "~/components/ui/google-button"

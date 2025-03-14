@@ -1,6 +1,6 @@
 import { useSetAtom } from "jotai"
 import { useTranslations } from "next-intl"
-import { signInFlowStepAtom } from "~/atoms/sign-in-flow.atoms"
+import { signInFlowStepAtom } from "~/atoms/auth-flow.atoms"
 import { MailSentIllustration } from "~/components/illustrations/mail-sent-illustration"
 import { BackButton } from "~/components/ui/back-button"
 

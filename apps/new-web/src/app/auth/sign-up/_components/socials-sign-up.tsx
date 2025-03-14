@@ -1,15 +1,14 @@
+import { useSetAtom } from "jotai"
 import { useTranslations } from "next-intl"
 import Link from "next/link"
+import { signUpFlowStepAtom } from "~/atoms/auth-flow.atoms"
 import { Button } from "~/components/ui/button"
 import { DiscordButton } from "~/components/ui/discord-button"
 import { GoogleButton } from "~/components/ui/google-button"
 import { Separator } from "~/components/ui/separator"
 
-type Props = {
-  toggleEmail: () => void
-}
-
-export const SocialsSignUp = ({ toggleEmail }: Props) => {
+export const SocialsSignUp = () => {
+  const setStep = useSetAtom(signUpFlowStepAtom)
   const t = useTranslations()
 
   return (
@@ -20,7 +19,7 @@ export const SocialsSignUp = ({ toggleEmail }: Props) => {
       </div>
       <Separator className="w-full bg-emphasis">{t("global.or")}</Separator>
       <div className="space-y-4">
-        <Button variant="outline" onPress={toggleEmail}>
+        <Button variant="outline" onPress={() => setStep(1)}>
           {t("auth.email")}
         </Button>
         <Link

@@ -2,11 +2,13 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Turnstile } from "@marsidev/react-turnstile"
 import { authClient } from "@taiyomoe/auth/client"
 import type { InferNestedPaths } from "@taiyomoe/types"
+import { useSetAtom } from "jotai"
 import { useTranslations } from "next-intl"
 import { useRouter } from "next/navigation"
 import { pick } from "radash"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
+import { signUpFlowStepAtom } from "~/atoms/auth-flow.atoms"
 import { EmailField } from "~/components/fields/email-field"
 import { PasswordField } from "~/components/fields/password-field"
 import { TextField } from "~/components/fields/text-field"
@@ -17,11 +19,8 @@ import { env } from "~/env"
 import { type SignUpInput, signUpSchema } from "~/schemas/users.schemas"
 import { authMessages } from "~/utils/auth-messages"
 
-type Props = {
-  toggleSocials: () => void
-}
-
-export const SignUpForm = ({ toggleSocials }: Props) => {
+export const SignUpForm = () => {
+  const setStep = useSetAtom(signUpFlowStepAtom)
   const t = useTranslations()
   const router = useRouter()
   const form = useForm({
@@ -60,7 +59,7 @@ export const SignUpForm = ({ toggleSocials }: Props) => {
 
   return (
     <div className="space-y-8">
-      <BackButton onPress={toggleSocials} />
+      <BackButton onPress={() => setStep(0)} />
       <Form {...form} onSubmit={handlePress}>
         <TextField
           control={form.control}

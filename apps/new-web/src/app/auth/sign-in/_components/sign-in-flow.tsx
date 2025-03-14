@@ -3,7 +3,7 @@
 import { useAtomValue } from "jotai"
 import { AnimatePresence, motion } from "motion/react"
 import { useState } from "react"
-import { signInFlowStepAtom } from "~/atoms/sign-in-flow.atoms"
+import { signInFlowStepAtom } from "~/atoms/auth-flow.atoms"
 import { SignInFormEmail } from "./sign-in-form-email"
 import { SignInFormUsername } from "./sign-in-form-username"
 import { SocialsSignIn } from "./socials-sign-in"

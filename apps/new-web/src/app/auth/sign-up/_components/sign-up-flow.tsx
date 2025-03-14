@@ -1,38 +1,40 @@
 "use client"
 
 import { AnimatePresence, motion } from "framer-motion"
+import { useAtomValue } from "jotai"
 import { useState } from "react"
+import { signUpFlowStepAtom } from "~/atoms/auth-flow.atoms"
 import { SignUpForm } from "./sign-up-form"
 import { SocialsSignUp } from "./socials-sign-up"
 
+const variants = {
+  exit: (direction: number) => ({
+    x: direction < 0 ? -30 : 30,
+    opacity: 0,
+  }),
+}
+
 export const SignUpFlow = () => {
-  const [step, setStep] = useState<"socials" | "email">("socials")
+  const rawStep = useAtomValue(signUpFlowStepAtom)
+  const [[step, direction], setStep] = useState([0, -1])
+
+  if (rawStep !== step) setStep([rawStep!, rawStep! > step ? 1 : -1])
 
   return (
     <div className="w-full max-w-md">
       <AnimatePresence mode="wait" initial={false}>
-        {step === "socials" && (
-          <motion.div
-            key="socials"
-            initial={{ x: -20, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            exit={{ x: -20, opacity: 0 }}
-            transition={{ duration: 0.2 }}
-          >
-            <SocialsSignUp toggleEmail={() => setStep("email")} />
-          </motion.div>
-        )}
-        {step === "email" && (
-          <motion.div
-            key="email"
-            initial={{ x: 20, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            exit={{ x: 20, opacity: 0 }}
-            transition={{ duration: 0.2 }}
-          >
-            <SignUpForm toggleSocials={() => setStep("socials")} />
-          </motion.div>
-        )}
+        <motion.div
+          key={step}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ duration: 0.2 }}
+          custom={direction}
+          variants={variants}
+          initial="exit"
+          exit="exit"
+        >
+          {step === 0 && <SocialsSignUp />}
+          {step === 1 && <SignUpForm />}
+        </motion.div>
       </AnimatePresence>
     </div>
   )
