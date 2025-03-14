@@ -71,7 +71,9 @@
       "emailAlreadyExists": "Este email já está em uso. Por favor, redefina sua senha se esqueceu dela",
       "usernameAlreadyExists": "Este nome de usuário já está em uso. Por favor, escolha outro",
       "invalidEmailOrPassword": "Seu email ou senha estão incorretos. Por favor, tente novamente",
-      "emailNotVerified": "Seu email não foi verificado. Um email de verificação foi enviado novamente"
+      "invalidUsernameOrPassword": "Seu nome de usuário ou senha estão incorretos. Por favor, tente novamente",
+      "emailNotVerified": "Seu email não foi verificado. Um email de verificação foi enviado novamente",
+      "verificationEmailAlreadySent": "Por favor, verifique sua caixa de entrada para um email de verificação. Se não vir, por favor, aguarde alguns minutos e tente novamente."
     }
   },
   "dashboard": {

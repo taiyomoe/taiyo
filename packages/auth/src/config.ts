@@ -4,24 +4,29 @@ import type { UserSettings } from "@taiyomoe/types"
 import { betterAuth } from "better-auth"
 import { emailHarmony } from "better-auth-harmony"
 import { prismaAdapter } from "better-auth/adapters/prisma"
-import {
-  admin,
-  captcha,
-  createAuthMiddleware,
-  customSession,
-} from "better-auth/plugins"
+import { admin, captcha, customSession, username } from "better-auth/plugins"
 import { env } from "./env"
 import { signedInHandler } from "./handlers/signed-in.auth-handler"
-import { signedOutHandler } from "./handlers/signed-out.auth-handler"
 import { signedUpHandler } from "./handlers/signed-up.auth-handler"
-import { configuredUsernamePlugin } from "./utils/configured-username-plugin"
+import { afterHook } from "./utils/after-hook"
+import { beforeHook } from "./utils/before-hook"
 import { getCustomSession } from "./utils/get-custom-session"
-import { getSessionFromHeaders } from "./utils/get-session-from-headers"
+import { sendVerificationEmail } from "./utils/send-verification-email"
 
 export const auth = betterAuth({
   appName: "Taiyō",
   database: prismaAdapter(db, { provider: "postgresql" }),
-  emailAndPassword: { enabled: true },
+  emailAndPassword: {
+    enabled: true,
+    minPasswordLength: 8,
+    maxPasswordLength: 50,
+    requireEmailVerification: true,
+  },
+  emailVerification: {
+    sendOnSignUp: true,
+    autoSignInAfterVerification: true,
+    sendVerificationEmail,
+  },
   socialProviders: {
     discord: {
       clientId: env.BETTER_AUTH_DISCORD_ID,
@@ -35,23 +40,16 @@ export const auth = betterAuth({
   },
   session: { storeSessionInDatabase: true },
   advanced: { generateId: false },
+  hooks: { before: beforeHook, after: afterHook },
   databaseHooks: {
     user: { create: { after: signedUpHandler } },
     session: { create: { after: signedInHandler } },
   },
-  hooks: {
-    after: createAuthMiddleware(async (ctx) => {
-      if (ctx.path === "/sign-out") {
-        const session = await getSessionFromHeaders(ctx)
-
-        if (!session) return
-
-        return signedOutHandler(session.user.id, session.session.ipAddress)
-      }
-    }),
-  },
   plugins: [
-    configuredUsernamePlugin,
+    username({
+      minUsernameLength: 3,
+      maxUsernameLength: 30,
+    }),
     emailHarmony(),
     captcha({
       provider: "cloudflare-turnstile",
@@ -62,9 +60,11 @@ export const auth = betterAuth({
   ],
 })
 
+export type User = typeof auth.$Infer.Session.user & {
+  role: Roles
+  settings: UserSettings
+}
+
 export type Session = typeof auth.$Infer.Session & {
-  user: {
-    role: Roles
-    settings: UserSettings
-  }
+  user: User
 }

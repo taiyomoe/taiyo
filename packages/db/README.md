@@ -15,3 +15,5 @@ Data migrations are migrations that have to process data with real code. They ar
 ## Applying migrations
 
 To apply migrations, run `infisical run -- pnpm -F @taiyomoe/db migrate`. We have a custom migrations handler that ensures migrations and data migrations are applied in the correct order.
+
+After migrating, don't forget to generate the Prisma client again with `pnpm -F @taiyomoe/db db generate`.

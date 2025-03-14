@@ -1,10 +1,7 @@
 import { createEnv } from "@t3-oss/env-core"
-import { env as emailEnv } from "@taiyomoe/email/env"
 import { z } from "zod"
 
 export const env = createEnv({
-  extends: [emailEnv],
-
   /**
    * Specify your shared environment variables schema here.
    */
@@ -15,11 +12,7 @@ export const env = createEnv({
    * This way you can ensure the app isn't built with invalid env vars.
    */
   server: {
-    BETTER_AUTH_URL: z.string().url(),
-    BETTER_AUTH_SECRET: z.string(),
-    BETTER_AUTH_DISCORD_ID: z.string(),
-    BETTER_AUTH_DISCORD_SECRET: z.string(),
-    TURNSTILE_SECRET_KEY: z.string(),
+    RESEND_API_KEY: z.string(),
   },
 
   /**
