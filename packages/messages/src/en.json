@@ -59,6 +59,11 @@
       "error": "An unexpected error occurred when signing in",
       "action": "Go to sign up"
     },
+    "verificationEmailSent": {
+      "title": "Verification email sent",
+      "description1": "Please check your inbox for a verification link.",
+      "description2": "We either just sent you a verification email, or you already had one sent to you in the last hour. If you didn't receive anything, please wait another hour and check again."
+    },
     "password": {
       "strength": "{score, select, 0 {Enter a password} 1 {Weak password} 2 {Medium password} 3 {Strong password} other {Enter a password}}. Must contain:",
       "strengthChars": "At least 8 characters",

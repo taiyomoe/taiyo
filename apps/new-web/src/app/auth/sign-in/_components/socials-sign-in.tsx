@@ -19,10 +19,10 @@ export const SocialsSignIn = () => {
       </div>
       <Separator className="w-full bg-emphasis">{t("global.or")}</Separator>
       <div className="space-y-2">
-        <Button variant="outline" onPress={() => setStep("email")}>
+        <Button variant="outline" onPress={() => setStep(1)}>
           {t("auth.email")}
         </Button>
-        <Button variant="outline" onPress={() => setStep("username")}>
+        <Button variant="outline" onPress={() => setStep(2)}>
           {t("auth.username")}
         </Button>
         <Link

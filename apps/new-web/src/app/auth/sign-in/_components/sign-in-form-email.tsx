@@ -44,6 +44,12 @@ export const SignInFormEmail = () => {
     })
 
     if (error) {
+      if (error.code === "VERIFICATION_EMAIL_ALREADY_SENT") {
+        setStep(3)
+
+        return
+      }
+
       if (error.code && error.code in authMessages)
         toast.error(
           t(authMessages[error.code as InferNestedPaths<typeof authMessages>]),
@@ -59,8 +65,8 @@ export const SignInFormEmail = () => {
 
   return (
     <div className="space-y-8">
-      <BackButton onPress={() => setStep("socials")} />
-      <Form {...form} onSubmit={handlePress} className="">
+      <BackButton onPress={() => setStep(0)} />
+      <Form {...form} onSubmit={handlePress}>
         <EmailField control={form.control} name="email" />
         <PasswordField control={form.control} name="password" />
         <Turnstile

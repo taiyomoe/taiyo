@@ -61,7 +61,7 @@ export const SignUpForm = ({ toggleSocials }: Props) => {
   return (
     <div className="space-y-8">
       <BackButton onPress={toggleSocials} />
-      <Form {...form} onSubmit={handlePress} className="">
+      <Form {...form} onSubmit={handlePress}>
         <TextField
           control={form.control}
           name="username"

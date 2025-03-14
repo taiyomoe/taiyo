@@ -1,7 +1,7 @@
 import { pick } from "accept-language-parser"
 import { z } from "zod"
 
-export const I18N_LANGUAGES = ["en", "fr", "pt"] as const
+export const I18N_LANGUAGES = ["en", "pt"] as const
 export const I18N_COOKIE_NAME = "Language"
 export const I18N_DEFAULT_LANGUAGE = "en"
 

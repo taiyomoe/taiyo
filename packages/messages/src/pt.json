@@ -59,6 +59,11 @@
       "error": "Ocorreu um erro inesperado ao logar",
       "action": "Ir para o cadastro"
     },
+    "verificationEmailSent": {
+      "title": "Email de verificação enviado",
+      "description1": "Por favor, verifique sua caixa de entrada para um link de verificação.",
+      "description2": "Nós acabamos de enviar um email de verificação para você, ou você já teve um enviado para você nas últimas horas. Se você não recebeu nada, por favor, aguarde mais uma hora e tente novamente."
+    },
     "password": {
       "strength": "{score, select, 0 {Digite uma senha} 1 {Senha fraca} 2 {Senha média} 3 {Senha forte} other {Digite uma senha}}. Deve conter:",
       "strengthChars": "Pelo menos 8 caracteres",

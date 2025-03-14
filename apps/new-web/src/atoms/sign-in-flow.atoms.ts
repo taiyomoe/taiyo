@@ -1,5 +1,12 @@
 import { atom } from "jotai"
 
-export const signInFlowStepAtom = atom<
-  "socials" | "email" | "username" | "verification"
->("socials")
+/**
+ * Step 0: Socials
+ *
+ * Step 1: Email
+ *
+ * Step 2: Username
+ *
+ * Step 3: Verification
+ */
+export const signInFlowStepAtom = atom(0)

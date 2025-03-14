@@ -1,13 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Turnstile } from "@marsidev/react-turnstile"
-import { authClient } from "@taiyomoe/auth/client"
-import type { InferNestedPaths } from "@taiyomoe/types"
 import { useSetAtom } from "jotai"
 import { useTranslations } from "next-intl"
-import { useRouter } from "next/navigation"
-import { pick } from "radash"
 import { useForm } from "react-hook-form"
-import { toast } from "sonner"
 import { signInFlowStepAtom } from "~/atoms/sign-in-flow.atoms"
 import { PasswordField } from "~/components/fields/password-field"
 import { TextField } from "~/components/fields/text-field"
@@ -15,16 +10,11 @@ import { BackButton } from "~/components/ui/back-button"
 import { Form } from "~/components/ui/form"
 import { SubmitButton } from "~/components/ui/submit-button"
 import { env } from "~/env"
-import {
-  type SignInUsernameInput,
-  signInUsernameSchema,
-} from "~/schemas/users.schemas"
-import { authMessages } from "~/utils/auth-messages"
+import { signInUsernameSchema } from "~/schemas/users.schemas"
 
 export const SignInFormUsername = () => {
   const setStep = useSetAtom(signInFlowStepAtom)
   const t = useTranslations()
-  const router = useRouter()
   const form = useForm({
     resolver: zodResolver(signInUsernameSchema),
     mode: "onTouched",
@@ -35,32 +25,40 @@ export const SignInFormUsername = () => {
     },
   })
 
-  const handlePress = async (values: SignInUsernameInput) => {
-    const { data, error } = await authClient.signIn.username({
-      ...pick(values, ["username", "password"]),
-      fetchOptions: {
-        headers: { "x-captcha-response": values.turnstileToken },
-      },
-    })
+  const handlePress = async () => {
+    setStep(3)
 
-    if (error) {
-      if (error.code && error.code in authMessages)
-        toast.error(
-          t(authMessages[error.code as InferNestedPaths<typeof authMessages>]),
-        )
-      else toast.error(t("auth.signIn.error"))
+    // const { data, error } = await authClient.signIn.username({
+    //   ...pick(values, ["username", "password"]),
+    //   fetchOptions: {
+    //     headers: { "x-captcha-response": values.turnstileToken },
+    //   },
+    // })
 
-      return
-    }
+    // if (error) {
+    //   if (error.code === "VERIFICATION_EMAIL_ALREADY_SENT") {
+    //     setStep(3)
 
-    toast.success(t("auth.signIn.success", { username: data?.user.name }))
-    router.push("/")
+    //     return
+    //   }
+
+    //   if (error.code && error.code in authMessages)
+    //     toast.error(
+    //       t(authMessages[error.code as InferNestedPaths<typeof authMessages>]),
+    //     )
+    //   else toast.error(t("auth.signIn.error"))
+
+    //   return
+    // }
+
+    // toast.success(t("auth.signIn.success", { username: data?.user.name }))
+    // router.push("/")
   }
 
   return (
     <div className="space-y-8">
-      <BackButton onPress={() => setStep("socials")} />
-      <Form {...form} onSubmit={handlePress} className="">
+      <BackButton onPress={() => setStep(0)} />
+      <Form {...form} onSubmit={handlePress}>
         <TextField
           control={form.control}
           name="username"
