@@ -8,6 +8,7 @@ export const authMessages = {
   INVALID_USERNAME_OR_PASSWORD: "auth.errors.invalidUsernameOrPassword",
   EMAIL_NOT_VERIFIED: "auth.errors.emailNotVerified",
   VERIFICATION_EMAIL_ALREADY_SENT: "auth.errors.verificationEmailAlreadySent",
+  INVALID_TOKEN: "auth.errors.invalidToken",
 } as const
 
 export type AuthMessages = InferNestedValues<typeof authMessages>

@@ -1,6 +1,6 @@
 import { z } from "zod"
 import { zodMessages } from "~/utils/zod-messages"
-import { emailSchema } from "./common.schemas"
+import { emailSchema, passwordSchema } from "./common.schemas"
 
 export const signUpSchema = z
   .object({
@@ -10,16 +10,7 @@ export const signUpSchema = z
       .max(30, zodMessages.username.max30Characters)
       .regex(/^[a-zA-Z0-9_.]+$/, zodMessages.username.invalidCharacters),
     email: emailSchema,
-    password: z
-      .string()
-      .min(8, zodMessages.password.min8Character)
-      .max(50, zodMessages.password.max50Characters)
-      .regex(/[0-9]/, zodMessages.password.atLeast1Number)
-      .regex(/[A-Z]/, zodMessages.password.atLeast1Uppercase)
-      .regex(
-        /[!@#$%^&*(),.?":{}|<>]/,
-        zodMessages.password.atLeast1SpecialCharacter,
-      ),
+    password: passwordSchema,
     confirmPassword: z.string().nonempty(zodMessages.password.required),
     turnstileToken: z.string(),
   })
@@ -43,6 +34,28 @@ export const signInUsernameSchema = signInEmailSchema
   .omit({ email: true })
   .extend({ username: z.string().nonempty(zodMessages.username.required) })
 
+export const forgotPasswordSchema = z.object({
+  email: emailSchema,
+  turnstileToken: z.string(),
+})
+
+export const resetPasswordSchema = z
+  .object({
+    password: passwordSchema,
+    confirmPassword: z.string().nonempty(zodMessages.password.required),
+  })
+  .superRefine((data, ctx) => {
+    if (data.password !== data.confirmPassword) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: zodMessages.password.mismatch,
+        path: ["confirmPassword"],
+      })
+    }
+  })
+
 export type SignUpInput = z.infer<typeof signUpSchema>
 export type SignInEmailInput = z.infer<typeof signInEmailSchema>
 export type SignInUsernameInput = z.infer<typeof signInUsernameSchema>
+export type ForgotPasswordInput = z.infer<typeof forgotPasswordSchema>
+export type ResetPasswordInput = z.infer<typeof resetPasswordSchema>

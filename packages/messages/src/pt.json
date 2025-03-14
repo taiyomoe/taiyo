@@ -49,15 +49,33 @@
     "username": "Continuar com nome de usuário",
     "signUp": {
       "title": "Cadastrar",
+      "action": "Ir para o login",
       "success": "Sua conta foi criada com sucesso. Um email de verificação foi enviado para você",
-      "error": "Ocorreu um erro inesperado ao criar sua conta",
-      "action": "Ir para o login"
+      "error": "Ocorreu um erro inesperado ao criar sua conta"
     },
     "signIn": {
       "title": "Entrar",
+      "action": "Ir para o cadastro",
       "success": "Bem-vindo de volta, {username}!",
-      "error": "Ocorreu um erro inesperado ao logar",
-      "action": "Ir para o cadastro"
+      "error": "Ocorreu um erro inesperado ao logar"
+    },
+    "forgotPassword": {
+      "title": "Esqueceu sua senha?",
+      "description": "Digite seu endereço de email e enviaremos instruções sobre como redefinir sua senha.",
+      "action": "Enviar email de redefinição",
+      "success": "Se seu email está registrado, você receberá um email com instruções sobre como redefinir sua senha.",
+      "error": "Ocorreu um erro inesperado ao enviar o email de redefinição"
+    },
+    "resetPassword": {
+      "title": "Redefinir sua senha",
+      "description": "Último passo. Por favor, insira sua nova senha nos campos abaixo.",
+      "action": "Redefinir senha",
+      "success": "Sua senha foi redefinida com sucesso.",
+      "error": "Ocorreu um erro inesperado ao redefinir sua senha",
+      "missingToken": {
+        "title": "Token ausente",
+        "description": "Você não deveria estar vendo isso. Se você acha que isso é um bug, por favor, reporte-o no Discord."
+      }
     },
     "verificationEmailSent": {
       "title": "Email de verificação enviado",
@@ -78,7 +96,8 @@
       "invalidEmailOrPassword": "Seu email ou senha estão incorretos. Por favor, tente novamente",
       "invalidUsernameOrPassword": "Seu nome de usuário ou senha estão incorretos. Por favor, tente novamente",
       "emailNotVerified": "Seu email não foi verificado. Um email de verificação foi enviado novamente",
-      "verificationEmailAlreadySent": "Por favor, verifique sua caixa de entrada para um email de verificação. Se não vir, por favor, aguarde alguns minutos e tente novamente."
+      "verificationEmailAlreadySent": "Por favor, verifique sua caixa de entrada para um email de verificação. Se não vir, por favor, aguarde alguns minutos e tente novamente.",
+      "invalidToken": "O token é inválido. Talvez tenha expirado. Por favor, tente solicitar um novo link de redefinição de senha."
     }
   },
   "dashboard": {

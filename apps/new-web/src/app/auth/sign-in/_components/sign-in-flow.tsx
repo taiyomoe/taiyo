@@ -3,6 +3,7 @@
 import { useAtomValue } from "jotai"
 import { AnimatePresence, motion } from "motion/react"
 import { useState } from "react"
+import { ForgotPasswordForm } from "~/app/auth/sign-in/_components/forgot-password-form"
 import { signInFlowStepAtom } from "~/atoms/auth-flow.atoms"
 import { SignInFormEmail } from "./sign-in-form-email"
 import { SignInFormUsername } from "./sign-in-form-username"
@@ -38,6 +39,7 @@ export const SignInFlow = () => {
           {step === 1 && <SignInFormEmail />}
           {step === 2 && <SignInFormUsername />}
           {step === 3 && <SignInVerificationEmailSent />}
+          {step === 4 && <ForgotPasswordForm />}
         </motion.div>
       </AnimatePresence>
     </div>

@@ -22,6 +22,7 @@ import {
   signInUsernameSchema,
 } from "~/schemas/users.schemas"
 import { authMessages } from "~/utils/auth-messages"
+import { ForgotPasswordButton } from "./forgot-password-button"
 
 export const SignInFormUsername = () => {
   const setStep = useSetAtom(signInFlowStepAtom)
@@ -78,7 +79,9 @@ export const SignInFormUsername = () => {
           label={t("global.username")}
           placeholder="rdxx"
         />
-        <PasswordField control={form.control} name="password" />
+        <PasswordField control={form.control} name="password">
+          <ForgotPasswordButton />
+        </PasswordField>
         <Turnstile
           className="min-h-20"
           siteKey={env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}

@@ -11,6 +11,7 @@ import { signedUpHandler } from "./handlers/signed-up.auth-handler"
 import { afterHook } from "./utils/after-hook"
 import { beforeHook } from "./utils/before-hook"
 import { getCustomSession } from "./utils/get-custom-session"
+import { sendResetPassword } from "./utils/send-reset-password"
 import { sendVerificationEmail } from "./utils/send-verification-email"
 
 export const auth = betterAuth({
@@ -21,6 +22,7 @@ export const auth = betterAuth({
     minPasswordLength: 8,
     maxPasswordLength: 50,
     requireEmailVerification: true,
+    sendResetPassword,
   },
   emailVerification: {
     sendOnSignUp: true,

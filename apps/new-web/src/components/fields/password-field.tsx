@@ -1,4 +1,3 @@
-import {} from "lucide-react"
 import { useTranslations } from "next-intl"
 import type { ControllerProps, FieldPath, FieldValues } from "react-hook-form"
 import {
@@ -17,10 +16,12 @@ export const PasswordField = <
 >({
   label,
   showStrength,
+  children,
   ...props
 }: Omit<ControllerProps<TFieldValues, TName>, "render"> & {
   label?: string
   showStrength?: boolean
+  children?: React.ReactNode
 }) => {
   const t = useTranslations("global")
 
@@ -29,7 +30,10 @@ export const PasswordField = <
       {...props}
       render={({ field }) => (
         <FormItem>
-          <FormLabel>{label ?? t("password")}</FormLabel>
+          <div className="flex items-center justify-between text-sm leading-none">
+            <FormLabel className="only">{label ?? t("password")}</FormLabel>
+            {children}
+          </div>
           <FormControl>
             <PasswordInput placeholder="•••••••••••••" {...field} />
           </FormControl>

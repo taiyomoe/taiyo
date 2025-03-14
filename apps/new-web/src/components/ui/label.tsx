@@ -9,7 +9,7 @@ export type LabelProps = AriaLabelProps
 export const Label = ({ className, ...props }: LabelProps) => (
   <AriaLabel
     className={cn(
-      "font-medium text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
+      "block font-medium text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
       className,
     )}
     {...props}

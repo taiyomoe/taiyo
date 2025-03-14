@@ -18,7 +18,7 @@ type Props = {
   url: string
 }
 
-const SignUpEmail = ({ name, url }: Props) => (
+const ResetPasswordEmail = ({ name, url }: Props) => (
   <Tailwind
     config={{
       theme: {
@@ -36,7 +36,7 @@ const SignUpEmail = ({ name, url }: Props) => (
     }}
   >
     <Html lang="en" className="bg-subtle">
-      <Preview>Verify your account on Taiyō</Preview>
+      <Preview>Reset your password on Taiyō</Preview>
       <Section className="mt-[32px]">
         <Img
           src="https://cdn.taiyo.moe/assets/logo.png"
@@ -50,11 +50,11 @@ const SignUpEmail = ({ name, url }: Props) => (
       </Heading>
       <Container className="my-12 rounded-lg border border-subtle border-solid bg-default">
         <Container className="px-8 py-4">
-          <Text className="font-bold text-2xl">Verify your email</Text>
+          <Text className="font-bold text-2xl">Reset your password</Text>
           <Text>
-            Hi {name}, thank you for your interest in Taiyō. We want to ensure
-            that it&apos;s really you who created your account, please click the
-            button below. This link will be valid for 1 hour.
+            Hi {name}, we received a request to reset your password. Please
+            click the button below to reset it. This link will be valid for 1
+            hour.
           </Text>
           <Section>
             <Button
@@ -70,11 +70,14 @@ const SignUpEmail = ({ name, url }: Props) => (
           </Text>
         </Container>
         <Container className="border-subtle border-t border-solid px-8">
-          <Text>If you did not request this email, please ignore it.</Text>
+          <Text>
+            If you did not request this email, please ignore it as nothing will
+            be changed.
+          </Text>
         </Container>
       </Container>
     </Html>
   </Tailwind>
 )
 
-export default SignUpEmail
+export default ResetPasswordEmail
