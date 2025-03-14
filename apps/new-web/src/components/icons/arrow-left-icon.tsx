@@ -48,16 +48,6 @@ export const ArrowLeftIcon = ({
     controls.start("normal")
   }, [isHovered, controls])
 
-  useEffect(() => {
-    if (isHovered) {
-      controls.start("animate")
-
-      return
-    }
-
-    controls.start("normal")
-  }, [isHovered, controls])
-
   return (
     <div className={cn("select-none", className)} {...props}>
       <svg

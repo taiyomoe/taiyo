@@ -1,25 +1,32 @@
 "use client"
 
-import type { Transition } from "motion/react"
+import type { Variants } from "motion/react"
 import { motion, useAnimation } from "motion/react"
-import { type RefObject, useEffect } from "react"
+import type { RefObject } from "react"
+import { useEffect } from "react"
 import { useHover } from "usehooks-ts"
 import { cn } from "~/utils/cn"
 import type { AnimatedIconProps } from "./home-icon"
 
-export interface GaugeIconHandle {
-  startAnimation: () => void
-  stopAnimation: () => void
+const checkVariants: Variants = {
+  normal: {
+    pathLength: 1,
+    opacity: 1,
+    transition: {
+      duration: 0.3,
+    },
+  },
+  animate: {
+    pathLength: [0, 1],
+    opacity: [0, 1],
+    transition: {
+      pathLength: { duration: 0.4, ease: "easeInOut" },
+      opacity: { duration: 0.4, ease: "easeInOut" },
+    },
+  },
 }
 
-const defaultTransition: Transition = {
-  type: "spring",
-  stiffness: 160,
-  damping: 17,
-  mass: 1,
-}
-
-export const GaugeIcon = ({
+export const MailCheckIcon = ({
   size = 20,
   className,
   parentRef,
@@ -51,21 +58,16 @@ export const GaugeIcon = ({
         strokeLinecap="round"
         strokeLinejoin="round"
       >
-        <title>Gauge</title>
+        <title>Mail Check</title>
+        <path d="M22 13V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v12c0 1.1.9 2 2 2h8" />
+        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
         <motion.path
-          d="m12 14 4-4"
-          variants={{
-            animate: { translateX: 0.5, translateY: 3, rotate: 72 },
-            normal: {
-              translateX: 0,
-              rotate: 0,
-              translateY: 0,
-            },
-          }}
           animate={controls}
-          transition={defaultTransition}
+          initial="normal"
+          variants={checkVariants}
+          d="m16 19 2 2 4-4"
+          style={{ transformOrigin: "center" }}
         />
-        <path d="M3.34 19a10 10 0 1 1 17.32 0" />
       </svg>
     </div>
   )
