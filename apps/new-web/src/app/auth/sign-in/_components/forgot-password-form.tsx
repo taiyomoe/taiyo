@@ -1,12 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Turnstile } from "@marsidev/react-turnstile"
 import { authClient } from "@taiyomoe/auth/client"
-import { useSetAtom } from "jotai"
 import { ArrowRightIcon } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
-import { signInFlowStepAtom } from "~/atoms/auth-flow.atoms"
 import { EmailField } from "~/components/fields/email-field"
 import { BackButton } from "~/components/ui/back-button"
 import { Form } from "~/components/ui/form"
@@ -17,9 +15,10 @@ import {
   type ForgotPasswordInput,
   forgotPasswordSchema,
 } from "~/schemas/users.schemas"
+import { useAuthStore } from "~/stores/auth.store"
 
 export const ForgotPasswordForm = () => {
-  const setStep = useSetAtom(signInFlowStepAtom)
+  const { goToSocials } = useAuthStore()
   const t = useTranslations("auth.forgotPassword")
   const form = useForm({
     resolver: zodResolver(forgotPasswordSchema),
@@ -50,7 +49,7 @@ export const ForgotPasswordForm = () => {
 
   return (
     <div className="space-y-8">
-      <BackButton onPress={() => setStep(0)} />
+      <BackButton onPress={goToSocials} />
       <div className="space-y-2">
         <h1 className="font-bold text-2xl">{t("title")}</h1>
         <p className="text-sm text-subtle">{t("description")}</p>

@@ -2,14 +2,12 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Turnstile } from "@marsidev/react-turnstile"
 import { authClient } from "@taiyomoe/auth/client"
 import type { InferNestedPaths } from "@taiyomoe/types"
-import { useSetAtom } from "jotai"
 import { ArrowRightIcon } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { useRouter } from "next/navigation"
 import { pick } from "radash"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
-import { signInFlowStepAtom } from "~/atoms/auth-flow.atoms"
 import { PasswordField } from "~/components/fields/password-field"
 import { TextField } from "~/components/fields/text-field"
 import { BackButton } from "~/components/ui/back-button"
@@ -21,11 +19,12 @@ import {
   type SignInUsernameInput,
   signInUsernameSchema,
 } from "~/schemas/users.schemas"
+import { useAuthStore } from "~/stores/auth.store"
 import { authMessages } from "~/utils/auth-messages"
 import { ForgotPasswordButton } from "./forgot-password-button"
 
 export const SignInFormUsername = () => {
-  const setStep = useSetAtom(signInFlowStepAtom)
+  const { goToStep, goToSocials } = useAuthStore()
   const router = useRouter()
   const t = useTranslations()
   const form = useForm({
@@ -51,7 +50,7 @@ export const SignInFormUsername = () => {
         error.code === "EMAIL_NOT_VERIFIED" ||
         error.code === "VERIFICATION_EMAIL_ALREADY_SENT"
       ) {
-        setStep(3)
+        goToStep("verification-email-sent")
 
         return
       }
@@ -71,7 +70,7 @@ export const SignInFormUsername = () => {
 
   return (
     <div className="space-y-8">
-      <BackButton onPress={() => setStep(0)} />
+      <BackButton onPress={goToSocials} />
       <Form {...form} onSubmit={handlePress}>
         <TextField
           control={form.control}

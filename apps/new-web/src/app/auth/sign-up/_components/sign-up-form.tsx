@@ -2,13 +2,11 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Turnstile } from "@marsidev/react-turnstile"
 import { authClient } from "@taiyomoe/auth/client"
 import type { InferNestedPaths } from "@taiyomoe/types"
-import { useSetAtom } from "jotai"
 import { ArrowRightIcon } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { pick } from "radash"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
-import { signUpFlowStepAtom } from "~/atoms/auth-flow.atoms"
 import { EmailField } from "~/components/fields/email-field"
 import { PasswordField } from "~/components/fields/password-field"
 import { TextField } from "~/components/fields/text-field"
@@ -18,10 +16,11 @@ import { GradientButton } from "~/components/ui/gradient-button"
 import { SubmitButton } from "~/components/ui/submit-button"
 import { env } from "~/env"
 import { type SignUpInput, signUpSchema } from "~/schemas/users.schemas"
+import { useAuthStore } from "~/stores/auth.store"
 import { authMessages } from "~/utils/auth-messages"
 
 export const SignUpForm = () => {
-  const setStep = useSetAtom(signUpFlowStepAtom)
+  const { goToStep, goToSocials } = useAuthStore()
   const t = useTranslations()
   const form = useForm({
     resolver: zodResolver(signUpSchema),
@@ -53,14 +52,14 @@ export const SignUpForm = () => {
 
       return
     }
-    toast.success(t("auth.signUp.success"))
 
-    setStep(2)
+    toast.success(t("auth.signUp.success"))
+    goToStep("verification-email-sent")
   }
 
   return (
     <div className="space-y-8">
-      <BackButton onPress={() => setStep(0)} />
+      <BackButton onPress={goToSocials} />
       <Form {...form} onSubmit={handlePress}>
         <TextField
           control={form.control}
