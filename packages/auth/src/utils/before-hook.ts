@@ -15,7 +15,7 @@ const throwInvalidCredsError = (isEmail: boolean) => {
 
 export const beforeHook = createAuthMiddleware(async (ctx) => {
   /**
-   * Before signing-in with email or username,we need to check 2 things:
+   * Before signing-in with email or username, we need to check 2 things:
    *
    * 1. If the user is trying to sign in using an email or username from a non-credential provider
    * 2. If the user is trying to sign in to an account that is not verified and which has a pending verification email
@@ -67,7 +67,5 @@ export const beforeHook = createAuthMiddleware(async (ctx) => {
       where: { id: user.id },
       data: { verificationEmailSentAt: new Date() },
     })
-
-    console.log("sign in", ctx.body)
   }
 })

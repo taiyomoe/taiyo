@@ -7,7 +7,7 @@ import {
 } from "react-aria-components"
 import { type VariantProps, tv } from "tailwind-variants"
 
-const button = tv({
+export const buttonVariants = tv({
   base: "inline-flex h-9 w-full items-center justify-center gap-2 whitespace-nowrap rounded px-3 py-2 font-medium text-sm transition-colors disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 [&_svg]:transition-transform",
   variants: {
     color: {
@@ -57,7 +57,10 @@ export const Button = ({
   isPending,
   ...props
 }: ButtonProps) => (
-  <AriaButton className={button({ color, variant, className })} {...props}>
+  <AriaButton
+    className={buttonVariants({ color, variant, className })}
+    {...props}
+  >
     {isPending && <LoaderCircleIcon className="animate-spin" />}
     {children}
   </AriaButton>

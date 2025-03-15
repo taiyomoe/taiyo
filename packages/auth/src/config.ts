@@ -31,6 +31,7 @@ export const auth = betterAuth({
     autoSignInAfterVerification: true,
     sendVerificationEmail,
   },
+  account: { accountLinking: { enabled: false } },
   socialProviders: {
     discord: {
       clientId: env.BETTER_AUTH_DISCORD_ID,
