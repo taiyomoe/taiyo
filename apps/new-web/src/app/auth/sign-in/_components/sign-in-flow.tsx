@@ -2,12 +2,14 @@
 
 import { AnimatePresence } from "motion/react"
 import { AuthAnimatedSlide } from "~/app/auth/_components/auth-animated-slide"
+import { AuthVerificationEmailSent } from "~/app/auth/_components/auth-verification-email-sent"
 import { useAuthStore } from "~/stores/auth.store"
 import { ForgotPasswordForm } from "./forgot-password-form"
+import { MagicLinkSent } from "./magic-link-sent"
 import { SignInFormEmail } from "./sign-in-form-email"
+import { SignInFormMagicLink } from "./sign-in-form-magic-link"
 import { SignInFormUsername } from "./sign-in-form-username"
-import { SignInVerificationEmailSent } from "./sign-in-verification-email-sent"
-import { SocialsSignIn } from "./socials-sign-in"
+import { SignInSocials } from "./sign-in-socials"
 
 export const SignInFlow = () => {
   const { page } = useAuthStore()
@@ -17,27 +19,37 @@ export const SignInFlow = () => {
       <AnimatePresence mode="wait" initial={false}>
         {page === 0 && (
           <AuthAnimatedSlide key="socials">
-            <SocialsSignIn />
+            <SignInSocials />
           </AuthAnimatedSlide>
         )}
         {page === 1 && (
+          <AuthAnimatedSlide key="magicLink">
+            <SignInFormMagicLink />
+          </AuthAnimatedSlide>
+        )}
+        {page === 2 && (
           <AuthAnimatedSlide key="email">
             <SignInFormEmail />
           </AuthAnimatedSlide>
         )}
-        {page === 2 && (
+        {page === 3 && (
           <AuthAnimatedSlide key="username">
             <SignInFormUsername />
           </AuthAnimatedSlide>
         )}
-        {page === 3 && (
-          <AuthAnimatedSlide key="verification-email-sent">
-            <SignInVerificationEmailSent />
+        {page === 4 && (
+          <AuthAnimatedSlide key="verificationEmailSent">
+            <AuthVerificationEmailSent />
           </AuthAnimatedSlide>
         )}
-        {page === 4 && (
-          <AuthAnimatedSlide key="forgot-password">
+        {page === 5 && (
+          <AuthAnimatedSlide key="forgotPassword">
             <ForgotPasswordForm />
+          </AuthAnimatedSlide>
+        )}
+        {page === 6 && (
+          <AuthAnimatedSlide key="magicLinkSent">
+            <MagicLinkSent />
           </AuthAnimatedSlide>
         )}
       </AnimatePresence>

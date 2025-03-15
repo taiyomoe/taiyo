@@ -47,6 +47,7 @@
   "auth": {
     "google": "Continuar com Google",
     "discord": "Continuar com Discord",
+    "magicLink": "Continuar com link mágico",
     "email": "Continuar com email",
     "username": "Continuar com nome de usuário",
     "signUp": {
@@ -93,6 +94,7 @@
       "strengthSpecial": "Pelo menos 1 caractere especial"
     },
     "errors": {
+      "userNotFound": "Este email não está registrado. Por favor, cadastre-se primeiro",
       "emailAlreadyExists": "Este email já está em uso. Por favor, redefina sua senha se esqueceu dela",
       "usernameAlreadyExists": "Este nome de usuário já está em uso. Por favor, escolha outro",
       "invalidEmail": "O email é inválido. Talvez você esteja usando um email temporário?",

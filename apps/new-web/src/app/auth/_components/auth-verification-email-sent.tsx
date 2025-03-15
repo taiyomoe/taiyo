@@ -3,7 +3,7 @@ import { MailSentIllustration } from "~/components/illustrations/mail-sent-illus
 import { BackButton } from "~/components/ui/back-button"
 import { useAuthStore } from "~/stores/auth.store"
 
-export const SignUpVerificationEmailSent = () => {
+export const AuthVerificationEmailSent = () => {
   const { goToSocials } = useAuthStore()
   const t = useTranslations("auth.verificationEmailSent")
 

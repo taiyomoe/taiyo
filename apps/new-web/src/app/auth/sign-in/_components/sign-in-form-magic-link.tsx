@@ -2,42 +2,36 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Turnstile } from "@marsidev/react-turnstile"
 import { authClient } from "@taiyomoe/auth/client"
 import type { InferNestedPaths } from "@taiyomoe/types"
-import { ArrowRightIcon } from "lucide-react"
 import { useTranslations } from "next-intl"
-import { pick } from "radash"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { EmailField } from "~/components/fields/email-field"
-import { PasswordField } from "~/components/fields/password-field"
-import { TextField } from "~/components/fields/text-field"
 import { BackButton } from "~/components/ui/back-button"
 import { Form } from "~/components/ui/form"
-import { GradientButton } from "~/components/ui/gradient-button"
-import { SubmitButton } from "~/components/ui/submit-button"
 import { env } from "~/env"
-import { type SignUpInput, signUpSchema } from "~/schemas/users.schemas"
+import {
+  type SignInMagicLinkInput,
+  signInMagicLinkSchema,
+} from "~/schemas/users.schemas"
 import { useAuthStore } from "~/stores/auth.store"
 import { authMessages } from "~/utils/auth-messages"
+import { SignInButton } from "./sign-in-button"
 
-export const SignUpForm = () => {
+export const SignInFormMagicLink = () => {
   const { goToStep, goToSocials } = useAuthStore()
   const t = useTranslations()
   const form = useForm({
-    resolver: zodResolver(signUpSchema),
+    resolver: zodResolver(signInMagicLinkSchema),
     mode: "onTouched",
     defaultValues: {
-      username: "",
       email: "",
-      password: "",
-      confirmPassword: "",
       turnstileToken: "",
     },
   })
 
-  const handlePress = async (values: SignUpInput) => {
-    const { error } = await authClient.signUp.email({
-      ...pick(values, ["email", "username", "password"]),
-      name: values.username,
+  const handlePress = async (values: SignInMagicLinkInput) => {
+    const { error } = await authClient.signIn.magicLink({
+      email: values.email,
       fetchOptions: {
         headers: { "x-captcha-response": values.turnstileToken },
       },
@@ -47,45 +41,27 @@ export const SignUpForm = () => {
       toast.error(
         error.code && error.code in authMessages
           ? t(authMessages[error.code as InferNestedPaths<typeof authMessages>])
-          : t("auth.signUp.error"),
+          : t("auth.signIn.error"),
       )
 
       return
     }
 
-    toast.success(t("auth.signUp.success"))
-    goToStep("verificationEmailSent")
+    goToStep("magicLinkSent")
   }
 
   return (
     <div className="space-y-8">
       <BackButton onPress={goToSocials} />
       <Form {...form} onSubmit={handlePress}>
-        <TextField
-          control={form.control}
-          name="username"
-          label={t("global.username")}
-          placeholder="rdx"
-        />
         <EmailField control={form.control} name="email" />
-        <PasswordField control={form.control} name="password" showStrength />
-        <PasswordField
-          control={form.control}
-          name="confirmPassword"
-          label={t("global.confirmPassword")}
-        />
         <Turnstile
           className="min-h-20"
           siteKey={env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
           onSuccess={(token) => form.setValue("turnstileToken", token)}
           options={{ size: "flexible" }}
         />
-        <SubmitButton asChild>
-          <GradientButton className="mt-6 hover:[&_svg]:translate-x-1">
-            {t("auth.signUp.title")}
-            <ArrowRightIcon />
-          </GradientButton>
-        </SubmitButton>
+        <SignInButton />
       </Form>
     </div>
   )

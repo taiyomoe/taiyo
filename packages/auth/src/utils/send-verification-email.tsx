@@ -7,7 +7,7 @@ export const sendVerificationEmail = async (data: {
   token: string
 }) => {
   await resend.emails.send({
-    from: "no-reply@taiyo.moe",
+    from: "Taiyō <no-reply@taiyo.moe>",
     to: data.user.email,
     subject: "Verify your email",
     react: <SignUpEmail name={data.user.name} url={data.url} />,

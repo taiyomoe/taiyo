@@ -47,6 +47,7 @@
   "auth": {
     "google": "Continue with Google",
     "discord": "Continue with Discord",
+    "magicLink": "Continue with magic link",
     "email": "Continue with email",
     "username": "Continue with username",
     "signUp": {
@@ -79,10 +80,15 @@
         "description": "You shouldn't be seeing this. If you think this is a bug, please report it in the Discord server."
       }
     },
+    "magicLinkSent": {
+      "title": "Magic link sent",
+      "description1": "Please check your inbox for a magic link.",
+      "description2": "We either just sent you a magic link, or you already had one sent to you in the last minute. If you didn't receive anything, please wait another minute and try again."
+    },
     "verificationEmailSent": {
       "title": "Verification email sent",
       "description1": "Please check your inbox for a verification link.",
-      "description2": "We either just sent you a verification email, or you already had one sent to you in the last hour. If you didn't receive anything, please wait another hour and check again."
+      "description2": "We either just sent you a verification email, or you already had one sent to you in the last hour. If you didn't receive anything, please wait another hour and try again."
     },
     "password": {
       "strength": "{score, select, 0 {Enter a password} 1 {Weak password} 2 {Medium password} 3 {Strong password} other {Enter a password}}. Must contain:",
@@ -93,6 +99,7 @@
       "strengthSpecial": "At least 1 special character"
     },
     "errors": {
+      "userNotFound": "This email is not registered. Please sign up first",
       "emailAlreadyExists": "This email is already taken. Please reset your password if you've forgotten it",
       "usernameAlreadyExists": "This username is already taken. Please choose another one",
       "invalidEmail": "The email is invalid. Are you using a disposable email?",

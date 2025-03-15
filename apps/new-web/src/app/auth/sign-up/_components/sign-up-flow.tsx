@@ -2,10 +2,10 @@
 
 import { AnimatePresence } from "motion/react"
 import { AuthAnimatedSlide } from "~/app/auth/_components/auth-animated-slide"
+import { AuthVerificationEmailSent } from "~/app/auth/_components/auth-verification-email-sent"
 import { useAuthStore } from "~/stores/auth.store"
 import { SignUpForm } from "./sign-up-form"
-import { SignUpVerificationEmailSent } from "./sign-up-verification-email-sent"
-import { SocialsSignUp } from "./socials-sign-up"
+import { SignUpSocials } from "./sign-up-socials"
 
 export const SignUpFlow = () => {
   const { page } = useAuthStore()
@@ -15,7 +15,7 @@ export const SignUpFlow = () => {
       <AnimatePresence mode="wait" initial={false}>
         {page === 0 && (
           <AuthAnimatedSlide key="socials">
-            <SocialsSignUp />
+            <SignUpSocials />
           </AuthAnimatedSlide>
         )}
         {page === 1 && (
@@ -24,8 +24,8 @@ export const SignUpFlow = () => {
           </AuthAnimatedSlide>
         )}
         {page === 3 && (
-          <AuthAnimatedSlide key="verification-email-sent">
-            <SignUpVerificationEmailSent />
+          <AuthAnimatedSlide key="verificationEmailSent">
+            <AuthVerificationEmailSent />
           </AuthAnimatedSlide>
         )}
       </AnimatePresence>

@@ -2,10 +2,12 @@ import { create } from "zustand"
 
 const steps = [
   "socials",
+  "magicLink",
   "email",
   "username",
-  "verification-email-sent",
-  "forgot-password",
+  "verificationEmailSent",
+  "forgotPassword",
+  "magicLinkSent",
 ] as const
 
 type State = {

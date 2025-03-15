@@ -24,6 +24,11 @@ export const signUpSchema = z
     }
   })
 
+export const signInMagicLinkSchema = z.object({
+  email: emailSchema,
+  turnstileToken: z.string(),
+})
+
 export const signInEmailSchema = z.object({
   email: emailSchema,
   password: z.string().nonempty(zodMessages.password.required),
@@ -56,6 +61,7 @@ export const resetPasswordSchema = z
   })
 
 export type SignUpInput = z.infer<typeof signUpSchema>
+export type SignInMagicLinkInput = z.infer<typeof signInMagicLinkSchema>
 export type SignInEmailInput = z.infer<typeof signInEmailSchema>
 export type SignInUsernameInput = z.infer<typeof signInUsernameSchema>
 export type ForgotPasswordInput = z.infer<typeof forgotPasswordSchema>

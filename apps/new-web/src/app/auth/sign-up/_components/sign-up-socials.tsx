@@ -6,7 +6,7 @@ import { Button } from "~/components/ui/button"
 import { Separator } from "~/components/ui/separator"
 import { useAuthStore } from "~/stores/auth.store"
 
-export const SocialsSignUp = () => {
+export const SignUpSocials = () => {
   const { goToStep } = useAuthStore()
   const t = useTranslations()
 

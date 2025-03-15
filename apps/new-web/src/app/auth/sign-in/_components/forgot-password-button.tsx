@@ -9,7 +9,7 @@ export const ForgotPasswordButton = () => {
   return (
     <Button
       className="transition hover:text-subtle"
-      onPress={() => goToStep("forgot-password")}
+      onPress={() => goToStep("forgotPassword")}
       excludeFromTabOrder
     >
       {t("title")}

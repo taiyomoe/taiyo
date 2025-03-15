@@ -3,9 +3,9 @@ import { MailSentIllustration } from "~/components/illustrations/mail-sent-illus
 import { BackButton } from "~/components/ui/back-button"
 import { useAuthStore } from "~/stores/auth.store"
 
-export const SignInVerificationEmailSent = () => {
+export const MagicLinkSent = () => {
   const { goToSocials } = useAuthStore()
-  const t = useTranslations("auth.verificationEmailSent")
+  const t = useTranslations("auth.magicLinkSent")
 
   return (
     <div className="space-y-8">

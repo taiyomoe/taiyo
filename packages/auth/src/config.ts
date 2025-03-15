@@ -5,7 +5,13 @@ import type { UserSettings } from "@taiyomoe/types"
 import { betterAuth } from "better-auth"
 import { emailHarmony } from "better-auth-harmony"
 import { prismaAdapter } from "better-auth/adapters/prisma"
-import { admin, captcha, customSession, username } from "better-auth/plugins"
+import {
+  admin,
+  captcha,
+  customSession,
+  magicLink,
+  username,
+} from "better-auth/plugins"
 import { env } from "./env"
 import { afterHook } from "./utils/after-hook"
 import { afterSessionCreatedHook } from "./utils/after-session-created-hook"
@@ -13,6 +19,7 @@ import { afterUserCreatedHook } from "./utils/after-user-created-hook"
 import { beforeHook } from "./utils/before-hook"
 import { beforeUserCreatedHook } from "./utils/before-user-created-hook"
 import { getCustomSession } from "./utils/get-custom-session"
+import { sendMagicLink } from "./utils/send-magic-link"
 import { sendResetPassword } from "./utils/send-reset-password"
 import { sendVerificationEmail } from "./utils/send-verification-email"
 
@@ -65,6 +72,11 @@ export const auth = betterAuth({
       maxUsernameLength: USERNAME_MAX_LENGTH,
     }),
     emailHarmony(),
+    magicLink({
+      sendMagicLink,
+      disableSignUp: true,
+      rateLimit: { window: 60, max: 1 },
+    }),
     captcha({
       provider: "cloudflare-turnstile",
       secretKey: env.TURNSTILE_SECRET_KEY,

@@ -20,6 +20,7 @@ import {
 import { useAuthStore } from "~/stores/auth.store"
 import { authMessages } from "~/utils/auth-messages"
 import { ForgotPasswordButton } from "./forgot-password-button"
+import { SignInButton } from "./sign-in-button"
 
 export const SignInFormUsername = () => {
   const { goToStep, goToSocials } = useAuthStore()
@@ -48,16 +49,16 @@ export const SignInFormUsername = () => {
         error.code === "EMAIL_NOT_VERIFIED" ||
         error.code === "VERIFICATION_EMAIL_ALREADY_SENT"
       ) {
-        goToStep("verification-email-sent")
+        goToStep("verificationEmailSent")
 
         return
       }
 
-      if (error.code && error.code in authMessages)
-        toast.error(
-          t(authMessages[error.code as InferNestedPaths<typeof authMessages>]),
-        )
-      else toast.error(t("auth.signIn.error"))
+      toast.error(
+        error.code && error.code in authMessages
+          ? t(authMessages[error.code as InferNestedPaths<typeof authMessages>])
+          : t("auth.signIn.error"),
+      )
 
       return
     }
