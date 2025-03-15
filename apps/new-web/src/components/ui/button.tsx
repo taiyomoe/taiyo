@@ -43,7 +43,7 @@ export const buttonVariants = tv({
 })
 
 export type ButtonProps = AriaButtonProps &
-  VariantProps<typeof button> & {
+  VariantProps<typeof buttonVariants> & {
     slot?: string
     className?: string
     children?: React.ReactNode
