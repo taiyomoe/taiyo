@@ -9,7 +9,8 @@
     "email": "Email",
     "username": "Nome de usuário",
     "password": "Senha",
-    "confirmPassword": "Confirmar senha"
+    "confirmPassword": "Confirmar senha",
+    "rememberMe": "Lembrar-se de mim"
   },
   "validation": {
     "username": {

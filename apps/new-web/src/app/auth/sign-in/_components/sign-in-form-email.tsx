@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation"
 import { pick } from "radash"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
+import { CheckboxField } from "~/components/fields/checkbox-field"
 import { EmailField } from "~/components/fields/email-field"
 import { PasswordField } from "~/components/fields/password-field"
 import { BackButton } from "~/components/ui/back-button"
@@ -33,13 +34,14 @@ export const SignInFormEmail = () => {
     defaultValues: {
       email: "",
       password: "",
+      rememberMe: true,
       turnstileToken: "",
     },
   })
 
   const handlePress = async (values: SignInEmailInput) => {
     const { data, error } = await authClient.signIn.email({
-      ...pick(values, ["email", "password"]),
+      ...pick(values, ["email", "password", "rememberMe"]),
       fetchOptions: {
         headers: { "x-captcha-response": values.turnstileToken },
       },
@@ -76,6 +78,11 @@ export const SignInFormEmail = () => {
         <PasswordField control={form.control} name="password">
           <ForgotPasswordButton />
         </PasswordField>
+        <CheckboxField
+          control={form.control}
+          name="rememberMe"
+          label="Remember me"
+        />
         <Turnstile
           className="min-h-20"
           siteKey={env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}

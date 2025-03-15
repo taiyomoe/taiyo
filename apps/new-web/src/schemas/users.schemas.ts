@@ -27,6 +27,7 @@ export const signUpSchema = z
 export const signInEmailSchema = z.object({
   email: emailSchema,
   password: z.string().nonempty(zodMessages.password.required),
+  rememberMe: z.boolean().default(true),
   turnstileToken: z.string(),
 })
 
