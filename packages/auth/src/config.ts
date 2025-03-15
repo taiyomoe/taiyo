@@ -7,8 +7,8 @@ import { emailHarmony } from "better-auth-harmony"
 import { prismaAdapter } from "better-auth/adapters/prisma"
 import { admin, captcha, customSession, username } from "better-auth/plugins"
 import { env } from "./env"
-import { signedInHandler } from "./handlers/signed-in.auth-handler"
 import { afterHook } from "./utils/after-hook"
+import { afterSessionCreatedHook } from "./utils/after-session-created-hook"
 import { afterUserCreatedHook } from "./utils/after-user-created-hook"
 import { beforeHook } from "./utils/before-hook"
 import { beforeUserCreatedHook } from "./utils/before-user-created-hook"
@@ -57,7 +57,7 @@ export const auth = betterAuth({
         after: afterUserCreatedHook,
       },
     },
-    session: { create: { after: signedInHandler } },
+    session: { create: { after: afterSessionCreatedHook } },
   },
   plugins: [
     username({

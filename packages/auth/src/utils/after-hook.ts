@@ -1,5 +1,5 @@
+import { logsClient } from "@taiyomoe/logs"
 import { createAuthMiddleware } from "better-auth/api"
-import { signedOutHandler } from "../handlers/signed-out.auth-handler"
 import { getSessionFromHeaders } from "./get-session-from-headers"
 
 export const afterHook = createAuthMiddleware(async (ctx) => {
@@ -8,6 +8,10 @@ export const afterHook = createAuthMiddleware(async (ctx) => {
 
     if (!session) return
 
-    return signedOutHandler(session.user.id, session.session.ipAddress)
+    await logsClient.users.auth.insert({
+      type: "signedOut",
+      ip: session.session.ipAddress,
+      userId: session.user.id,
+    })
   }
 })
