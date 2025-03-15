@@ -22,14 +22,8 @@ export const useAuthStore = create<State>((set) => ({
 
   goToSocials: () => set({ page: 0, direction: -1 }),
   goToStep: (step) =>
-    set((prev) => {
-      const newPageIndex = steps.indexOf(step)
-
-      console.log(`Navigated to ${step} (${newPageIndex})`)
-
-      return {
-        page: newPageIndex,
-        direction: newPageIndex > prev.page ? 1 : -1,
-      }
-    }),
+    set((prev) => ({
+      page: steps.indexOf(step),
+      direction: steps.indexOf(step) > prev.page ? 1 : -1,
+    })),
 }))

@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { TaiyoLogo } from "~/components/logos/taiyo-logo"
+import { BackHomeButton } from "~/components/ui/back-home-button"
 import { AccountNotLinkedAuthError } from "./_components/account-not-linked-auth-error"
 import { UnknownAuthError } from "./_components/unknown-auth-error"
 
@@ -17,6 +18,7 @@ export default async function Page({ searchParams }: Props) {
       </Link>
       {code === "account_not_linked" && <AccountNotLinkedAuthError />}
       {!isKnownError && <UnknownAuthError />}
+      <BackHomeButton className="w-fit" />
     </main>
   )
 }

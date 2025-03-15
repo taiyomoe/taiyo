@@ -12,7 +12,5 @@ export const afterUserCreatedHook = async ({ id }: User) => {
     userId: id,
   })
 
-  console.log("afterUserCreatedHook", { id })
-
   await UsersIndexService.sync(db, [id])
 }
