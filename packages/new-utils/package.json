@@ -1,0 +1,20 @@
+{
+  "name": "@taiyomoe/new-utils",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "clean": "rm -rf .turbo node_modules",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@taiyomoe/tsconfig": "workspace:*"
+  },
+  "dependencies": {
+    "@faker-js/faker": "^9.5.1"
+  }
+}

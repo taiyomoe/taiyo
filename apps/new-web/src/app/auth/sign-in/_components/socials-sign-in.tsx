@@ -1,8 +1,8 @@
 import { useTranslations } from "next-intl"
 import Link from "next/link"
+import { AuthDiscordButton } from "~/app/auth/_components/auth-discord-button"
+import { AuthGoogleButton } from "~/app/auth/_components/auth-google-button"
 import { Button } from "~/components/ui/button"
-import { DiscordButton } from "~/components/ui/discord-button"
-import { GoogleButton } from "~/components/ui/google-button"
 import { Separator } from "~/components/ui/separator"
 import { useAuthStore } from "~/stores/auth.store"
 
@@ -13,8 +13,8 @@ export const SocialsSignIn = () => {
   return (
     <div className="space-y-8">
       <div className="space-y-2">
-        <GoogleButton />
-        <DiscordButton />
+        <AuthGoogleButton />
+        <AuthDiscordButton />
       </div>
       <Separator className="w-full bg-emphasis">{t("global.or")}</Separator>
       <div className="space-y-2">

@@ -1,7 +1,7 @@
 "use client"
 
 import { AnimatePresence } from "motion/react"
-import { AuthAnimatedSlide } from "~/app/auth/sign-in/_components/auth-animated-slide"
+import { AuthAnimatedSlide } from "~/app/auth/_components/auth-animated-slide"
 import { useAuthStore } from "~/stores/auth.store"
 import { SignUpForm } from "./sign-up-form"
 import { SignUpVerificationEmailSent } from "./sign-up-verification-email-sent"

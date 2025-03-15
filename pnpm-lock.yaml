@@ -422,6 +422,9 @@ importers:
       '@taiyomoe/meilisearch':
         specifier: workspace:*
         version: link:../meilisearch
+      '@taiyomoe/new-utils':
+        specifier: workspace:^
+        version: link:../new-utils
       better-auth:
         specifier: ^1.2.3
         version: 1.2.3(typescript@5.8.2)
@@ -488,6 +491,9 @@ importers:
       '@t3-oss/env-core':
         specifier: ^0.12.0
         version: 0.12.0(typescript@5.8.2)(valibot@1.0.0-beta.15(typescript@5.8.2))(zod@3.24.2)
+      '@taiyomoe/new-utils':
+        specifier: workspace:^
+        version: link:../new-utils
       prisma-json-types-generator:
         specifier: ^3.2.2
         version: 3.2.2(prisma@6.5.0(typescript@5.8.2))(typescript@5.8.2)
@@ -650,6 +656,16 @@ importers:
       zod:
         specifier: ^3.24.2
         version: 3.24.2
+    devDependencies:
+      '@taiyomoe/tsconfig':
+        specifier: workspace:*
+        version: link:../../tooling/typescript
+
+  packages/new-utils:
+    dependencies:
+      '@faker-js/faker':
+        specifier: ^9.5.1
+        version: 9.6.0
     devDependencies:
       '@taiyomoe/tsconfig':
         specifier: workspace:*

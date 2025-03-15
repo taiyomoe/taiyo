@@ -19,6 +19,8 @@ export const env = createEnv({
     BETTER_AUTH_SECRET: z.string(),
     BETTER_AUTH_DISCORD_ID: z.string(),
     BETTER_AUTH_DISCORD_SECRET: z.string(),
+    BETTER_AUTH_GOOGLE_ID: z.string(),
+    BETTER_AUTH_GOOGLE_SECRET: z.string(),
     TURNSTILE_SECRET_KEY: z.string(),
   },
 

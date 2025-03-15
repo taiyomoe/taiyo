@@ -1,5 +1,6 @@
 import { cacheClient } from "@taiyomoe/cache"
 import { type Roles, db } from "@taiyomoe/db"
+import { USERNAME_MAX_LENGTH, USERNAME_MIN_LENGTH } from "@taiyomoe/new-utils"
 import type { UserSettings } from "@taiyomoe/types"
 import { betterAuth } from "better-auth"
 import { emailHarmony } from "better-auth-harmony"
@@ -7,9 +8,10 @@ import { prismaAdapter } from "better-auth/adapters/prisma"
 import { admin, captcha, customSession, username } from "better-auth/plugins"
 import { env } from "./env"
 import { signedInHandler } from "./handlers/signed-in.auth-handler"
-import { signedUpHandler } from "./handlers/signed-up.auth-handler"
 import { afterHook } from "./utils/after-hook"
+import { afterUserCreatedHook } from "./utils/after-user-created-hook"
 import { beforeHook } from "./utils/before-hook"
+import { beforeUserCreatedHook } from "./utils/before-user-created-hook"
 import { getCustomSession } from "./utils/get-custom-session"
 import { sendResetPassword } from "./utils/send-reset-password"
 import { sendVerificationEmail } from "./utils/send-verification-email"
@@ -34,6 +36,10 @@ export const auth = betterAuth({
       clientId: env.BETTER_AUTH_DISCORD_ID,
       clientSecret: env.BETTER_AUTH_DISCORD_SECRET,
     },
+    google: {
+      clientId: env.BETTER_AUTH_GOOGLE_ID,
+      clientSecret: env.BETTER_AUTH_GOOGLE_SECRET,
+    },
   },
   secondaryStorage: {
     set: cacheClient.users.auth.set,
@@ -44,18 +50,24 @@ export const auth = betterAuth({
   advanced: { generateId: false },
   hooks: { before: beforeHook, after: afterHook },
   databaseHooks: {
-    user: { create: { after: signedUpHandler } },
+    user: {
+      create: {
+        before: beforeUserCreatedHook,
+        after: afterUserCreatedHook,
+      },
+    },
     session: { create: { after: signedInHandler } },
   },
   plugins: [
     username({
-      minUsernameLength: 3,
-      maxUsernameLength: 30,
+      minUsernameLength: USERNAME_MIN_LENGTH,
+      maxUsernameLength: USERNAME_MAX_LENGTH,
     }),
     emailHarmony(),
     captcha({
       provider: "cloudflare-turnstile",
       secretKey: env.TURNSTILE_SECRET_KEY,
+      endpoints: ["/sign-up", "/forget-password"],
     }),
     admin({ defaultRole: "USER" }),
     customSession(getCustomSession),

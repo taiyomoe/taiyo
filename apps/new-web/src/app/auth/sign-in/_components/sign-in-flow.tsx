@@ -1,8 +1,8 @@
 "use client"
 
 import { AnimatePresence } from "motion/react"
+import { AuthAnimatedSlide } from "~/app/auth/_components/auth-animated-slide"
 import { useAuthStore } from "~/stores/auth.store"
-import { AuthAnimatedSlide } from "./auth-animated-slide"
 import { ForgotPasswordForm } from "./forgot-password-form"
 import { SignInFormEmail } from "./sign-in-form-email"
 import { SignInFormUsername } from "./sign-in-form-username"

@@ -94,6 +94,7 @@
     "errors": {
       "emailAlreadyExists": "Este email já está em uso. Por favor, redefina sua senha se esqueceu dela",
       "usernameAlreadyExists": "Este nome de usuário já está em uso. Por favor, escolha outro",
+      "invalidEmail": "O email é inválido. Talvez você esteja usando um email temporário?",
       "invalidEmailOrPassword": "Seu email ou senha estão incorretos. Por favor, tente novamente",
       "invalidUsernameOrPassword": "Seu nome de usuário ou senha estão incorretos. Por favor, tente novamente",
       "emailNotVerified": "Seu email não foi verificado. Um email de verificação foi enviado novamente",
