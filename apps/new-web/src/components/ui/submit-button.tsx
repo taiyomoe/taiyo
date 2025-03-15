@@ -21,7 +21,12 @@ export const SubmitButton = ({
     Object.keys(errors).length !== 0
 
   return (
-    <Comp {...props} isDisabled={shouldDisableButton} type="submit">
+    <Comp
+      {...props}
+      isDisabled={shouldDisableButton}
+      isPending={isSubmitting}
+      type="submit"
+    >
       {children}
     </Comp>
   )

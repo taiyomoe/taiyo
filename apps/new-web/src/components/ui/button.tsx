@@ -1,5 +1,6 @@
 "use client"
 
+import { LoaderCircleIcon } from "lucide-react"
 import {
   Button as AriaButton,
   type ButtonProps as AriaButtonProps,
@@ -49,10 +50,15 @@ export type ButtonProps = AriaButtonProps &
   }
 
 export const Button = ({
+  children,
   color,
   variant,
   className,
+  isPending,
   ...props
 }: ButtonProps) => (
-  <AriaButton className={button({ color, variant, className })} {...props} />
+  <AriaButton className={button({ color, variant, className })} {...props}>
+    {isPending && <LoaderCircleIcon className="animate-spin" />}
+    {children}
+  </AriaButton>
 )
