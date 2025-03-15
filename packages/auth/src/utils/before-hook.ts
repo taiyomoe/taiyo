@@ -2,6 +2,17 @@ import { db } from "@taiyomoe/db"
 import { APIError, createAuthMiddleware } from "better-auth/api"
 import { DateTime } from "luxon"
 
+const throwInvalidCredsError = (isEmail: boolean) => {
+  throw new APIError("FORBIDDEN", {
+    code: isEmail
+      ? "INVALID_EMAIL_OR_PASSWORD"
+      : "INVALID_USERNAME_OR_PASSWORD",
+    message: isEmail
+      ? "Invalid email or password"
+      : "Invalid username or password",
+  })
+}
+
 export const beforeHook = createAuthMiddleware(async (ctx) => {
   /**
    * Before signing-in with email or username,we need to check 2 things:
@@ -24,14 +35,17 @@ export const beforeHook = createAuthMiddleware(async (ctx) => {
 
     // Tried logging in with an email or username from a non-credential provider
     if (!accounts.some((a) => a.providerId === "credential")) {
-      throw new APIError("FORBIDDEN", {
-        code: ctx.body.email
-          ? "INVALID_EMAIL_OR_PASSWORD"
-          : "INVALID_USERNAME_OR_PASSWORD",
-        message: ctx.body.email
-          ? "Invalid email or password"
-          : "Invalid username or password",
-      })
+      throwInvalidCredsError(ctx.body.email !== undefined)
+    }
+
+    const account = accounts.find((a) => a.providerId === "credential")!
+    const isCorrectPassword = await ctx.context.password.verify({
+      password: ctx.body.password,
+      hash: account.password!,
+    })
+
+    if (!isCorrectPassword) {
+      throwInvalidCredsError(ctx.body.email !== undefined)
     }
 
     // Prevent sending emails too often
