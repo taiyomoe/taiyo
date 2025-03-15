@@ -2,7 +2,6 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Turnstile } from "@marsidev/react-turnstile"
 import { authClient } from "@taiyomoe/auth/client"
 import type { InferNestedPaths } from "@taiyomoe/types"
-import { ArrowRightIcon } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { useRouter } from "next/navigation"
 import { pick } from "radash"
@@ -13,8 +12,6 @@ import { EmailField } from "~/components/fields/email-field"
 import { PasswordField } from "~/components/fields/password-field"
 import { BackButton } from "~/components/ui/back-button"
 import { Form } from "~/components/ui/form"
-import { GradientButton } from "~/components/ui/gradient-button"
-import { SubmitButton } from "~/components/ui/submit-button"
 import { env } from "~/env"
 import {
   type SignInEmailInput,
@@ -89,12 +86,7 @@ export const SignInFormEmail = () => {
           onSuccess={(token) => form.setValue("turnstileToken", token)}
           options={{ size: "flexible" }}
         />
-        <SubmitButton asChild>
-          <GradientButton className="mt-6 hover:[&_svg]:translate-x-1">
-            {t("auth.signIn.title")}
-            <ArrowRightIcon />
-          </GradientButton>
-        </SubmitButton>
+        <SignInButton />
       </Form>
     </div>
   )
