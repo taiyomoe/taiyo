@@ -15,11 +15,11 @@
   },
   "dependencies": {
     "@t3-oss/env-core": "^0.12.0",
-    "@taiyomoe/cache": "workspace:*",
-    "@taiyomoe/db": "workspace:*",
+    "@taiyomoe/cache": "workspace:^",
+    "@taiyomoe/db": "workspace:^",
     "@taiyomoe/email": "workspace:^",
-    "@taiyomoe/logs": "workspace:*",
-    "@taiyomoe/meilisearch": "workspace:*",
+    "@taiyomoe/logs": "workspace:^",
+    "@taiyomoe/meilisearch": "workspace:^",
     "@taiyomoe/new-utils": "workspace:^",
     "better-auth": "^1.2.3",
     "better-auth-harmony": "^1.2.3",
@@ -27,7 +27,7 @@
     "zod": "^3.24.2"
   },
   "devDependencies": {
-    "@taiyomoe/tsconfig": "workspace:*",
-    "@taiyomoe/types": "workspace:*"
+    "@taiyomoe/tsconfig": "workspace:^",
+    "@taiyomoe/types": "workspace:^"
   }
 }

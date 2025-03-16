@@ -33,8 +33,8 @@
     "zod-prisma-types": "^3.2.4"
   },
   "devDependencies": {
-    "@taiyomoe/meilisearch": "workspace:*",
-    "@taiyomoe/tsconfig": "workspace:*",
+    "@taiyomoe/meilisearch": "workspace:^",
+    "@taiyomoe/tsconfig": "workspace:^",
     "@types/validator": "^13.12.2",
     "cross-env": "^7.0.3",
     "prisma": "^6.5.0",

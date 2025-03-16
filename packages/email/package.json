@@ -22,7 +22,7 @@
     "zod": "^3.24.2"
   },
   "devDependencies": {
-    "@taiyomoe/tsconfig": "workspace:*",
+    "@taiyomoe/tsconfig": "workspace:^",
     "react-email": "^3.0.7"
   }
 }
