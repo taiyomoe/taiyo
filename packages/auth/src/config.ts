@@ -45,12 +45,12 @@ export const auth = betterAuth({
   account: { accountLinking: { enabled: false } },
   socialProviders: {
     discord: {
-      clientId: env.BETTER_AUTH_DISCORD_ID,
-      clientSecret: env.BETTER_AUTH_DISCORD_SECRET,
+      clientId: env.DISCORD_CLIENT_ID,
+      clientSecret: env.DISCORD_CLIENT_SECRET,
     },
     google: {
-      clientId: env.BETTER_AUTH_GOOGLE_ID,
-      clientSecret: env.BETTER_AUTH_GOOGLE_SECRET,
+      clientId: env.GOOGLE_CLIENT_ID,
+      clientSecret: env.GOOGLE_CLIENT_SECRET,
     },
   },
   secondaryStorage: {
