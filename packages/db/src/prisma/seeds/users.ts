@@ -1,4 +1,5 @@
 import { fakerPT_BR } from "@faker-js/faker"
+import { normalizeDisplayName, normalizeUsername } from "@taiyomoe/new-utils"
 import { ContentRating, Countries, Genders, Languages, db } from "../../"
 
 const execute = async () => {
@@ -147,6 +148,8 @@ const execute = async () => {
   await db.user.createMany({
     data: users.map((u) => ({
       ...u,
+      username: normalizeUsername(u.name),
+      displayUsername: normalizeDisplayName(u.name),
       emailVerified: true,
       image: fakerPT_BR.datatype.boolean({ probability: 0.7 })
         ? null
