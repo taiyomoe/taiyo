@@ -48,6 +48,10 @@ export const beforeHook = createAuthMiddleware(async (ctx) => {
       throwInvalidCredsError(ctx.body.email !== undefined)
     }
 
+    if (user.emailVerified) {
+      return
+    }
+
     // Prevent sending emails too often
     if (user.verificationEmailSentAt) {
       const lastVerificationSentAt = DateTime.fromJSDate(
