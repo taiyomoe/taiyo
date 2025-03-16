@@ -1,29 +1,30 @@
 "use client"
 
-import { type HTMLAttributes, useRef } from "react"
-import { ArrowLeftIcon } from "~/components/icons/arrow-left-icon"
-import { ArrowRightIcon } from "~/components/icons/arrow-right-icon"
+import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react"
+import { Button, type ButtonProps } from "react-aria-components"
 import { cn } from "~/utils/cn"
 import { useSidebar } from "./sidebar-context"
 
-type Props = Omit<HTMLAttributes<HTMLDivElement>, "onClick">
+type Props = Omit<ButtonProps, "onPress">
 
 export const SidebarToggleButton = ({ className, ...props }: Props) => {
   const { state, toggleSidebar } = useSidebar()
-  const ref = useRef<HTMLDivElement>(null)
 
   return (
-    <div
-      ref={ref}
+    <Button
       className={cn(
-        "rounded p-1 text-subtle transition duration-300 hover:cursor-pointer hover:text-default",
+        "group/sidebar-toggle rounded p-1 text-subtle transition duration-300 hover:cursor-pointer hover:text-default [&_svg]:size-4 [&_svg]:transition-transform",
         className,
       )}
-      onClick={toggleSidebar}
+      onPress={toggleSidebar}
       {...props}
     >
-      {state === "expanded" && <ArrowLeftIcon parentRef={ref} />}
-      {state === "collapsed" && <ArrowRightIcon parentRef={ref} />}
-    </div>
+      {state === "expanded" && (
+        <ArrowLeftIcon className="group-hover/sidebar-toggle:-translate-x-1" />
+      )}
+      {state === "collapsed" && (
+        <ArrowRightIcon className="group-hover/sidebar-toggle:translate-x-1" />
+      )}
+    </Button>
   )
 }

@@ -1,5 +1,6 @@
+import { ArrowLeftIcon } from "lucide-react"
 import { getTranslations } from "next-intl/server"
-import { GoBackButton } from "./_components/go-back-button"
+import Link from "next/link"
 
 export default async function NotFound() {
   const t = await getTranslations("notFound")
@@ -15,7 +16,13 @@ export default async function NotFound() {
         </h1>
         <div className="flex flex-col items-center gap-4">
           <p className="text-subtle md:text-lg">{t("description")}</p>
-          <GoBackButton />
+          <Link
+            href="/"
+            className="hover:[&_svg]:-translate-x-1 flex items-center gap-2 rounded border bg-inverted px-3 py-2 text-inverted transition hover:bg-inverted/80"
+          >
+            <ArrowLeftIcon className="size-4 transition-transform" />
+            {t("action")}
+          </Link>
         </div>
       </div>
     </div>

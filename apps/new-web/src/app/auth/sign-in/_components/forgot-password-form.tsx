@@ -6,7 +6,7 @@ import { AuthSubmitButton } from "~/app/auth/_components/auth-submit-button"
 import { useHandleAuthError } from "~/app/hooks/use-handle-auth-error"
 import { EmailField } from "~/components/fields/email-field"
 import { TurnstileField } from "~/components/fields/turnstile-field"
-import { BackButton } from "~/components/ui/back-button"
+import { BackArrowButton } from "~/components/ui/back-arrow-button"
 import { Form } from "~/components/ui/form"
 import {
   type ForgotPasswordInput,
@@ -41,7 +41,7 @@ export const ForgotPasswordForm = () => {
 
   return (
     <div className="space-y-8">
-      <BackButton onPress={goToSocials} />
+      <BackArrowButton onPress={goToSocials} />
       <div className="space-y-2">
         <h1 className="font-bold text-2xl">{t("title")}</h1>
         <p className="text-sm text-subtle">{t("description")}</p>

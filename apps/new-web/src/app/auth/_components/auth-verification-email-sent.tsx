@@ -1,6 +1,6 @@
 import { useTranslations } from "next-intl"
 import { MailSentIllustration } from "~/components/illustrations/mail-sent-illustration"
-import { BackButton } from "~/components/ui/back-button"
+import { BackArrowButton } from "~/components/ui/back-arrow-button"
 import { useAuthStore } from "~/stores/auth.store"
 
 export const AuthVerificationEmailSent = () => {
@@ -9,7 +9,7 @@ export const AuthVerificationEmailSent = () => {
 
   return (
     <div className="space-y-8">
-      <BackButton onPress={goToSocials} />
+      <BackArrowButton onPress={goToSocials} />
       <div className="relative flex flex-col items-center justify-center gap-2">
         <MailSentIllustration className="mb-6 h-fit w-44 sm:w-56" />
         <h1 className="font-bold text-2xl">{t("title")}</h1>

@@ -10,7 +10,7 @@ import { CheckboxField } from "~/components/fields/checkbox-field"
 import { PasswordField } from "~/components/fields/password-field"
 import { TextField } from "~/components/fields/text-field"
 import { TurnstileField } from "~/components/fields/turnstile-field"
-import { BackButton } from "~/components/ui/back-button"
+import { BackArrowButton } from "~/components/ui/back-arrow-button"
 import { Form } from "~/components/ui/form"
 import {
   type SignInUsernameInput,
@@ -63,7 +63,7 @@ export const SignInFormUsername = () => {
 
   return (
     <div className="space-y-8">
-      <BackButton onPress={goToSocials} />
+      <BackArrowButton onPress={goToSocials} />
       <Form {...form} onSubmit={handlePress}>
         <TextField
           control={form.control}

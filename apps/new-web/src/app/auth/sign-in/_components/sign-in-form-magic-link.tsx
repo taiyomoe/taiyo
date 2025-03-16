@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form"
 import { useHandleAuthError } from "~/app/hooks/use-handle-auth-error"
 import { EmailField } from "~/components/fields/email-field"
 import { TurnstileField } from "~/components/fields/turnstile-field"
-import { BackButton } from "~/components/ui/back-button"
+import { BackArrowButton } from "~/components/ui/back-arrow-button"
 import { Form } from "~/components/ui/form"
 import {
   type SignInMagicLinkInput,
@@ -38,7 +38,7 @@ export const SignInFormMagicLink = () => {
 
   return (
     <div className="space-y-8">
-      <BackButton onPress={goToSocials} />
+      <BackArrowButton onPress={goToSocials} />
       <Form {...form} onSubmit={handlePress}>
         <EmailField control={form.control} name="email" />
         <TurnstileField control={form.control} name="turnstileToken" />
