@@ -32,18 +32,17 @@ model User {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    name                    String
-    username                String    @unique
-    displayUsername         String    @unique
-    email                   String    @unique
-    emailVerified           Boolean
-    normalizedEmail         String?   @unique
-    image                   String?
-    banned                  Boolean?
-    banReason               String?
-    banExpires              DateTime?
-    role                    Roles     @default(USER)
-    verificationEmailSentAt DateTime?
+    name            String
+    username        String    @unique
+    displayUsername String    @unique
+    email           String    @unique
+    emailVerified   Boolean
+    normalizedEmail String?   @unique
+    image           String?
+    banned          Boolean?
+    banReason       String?
+    banExpires      DateTime?
+    role            Roles     @default(USER)
 
     accounts  Account[]
     sessions  Session[]

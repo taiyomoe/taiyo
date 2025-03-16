@@ -56,7 +56,7 @@ export type InputJsonValueType = z.infer<typeof InputJsonValueSchema>;
 
 export const TransactionIsolationLevelSchema = z.enum(['ReadUncommitted','ReadCommitted','RepeatableRead','Serializable']);
 
-export const UserScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','name','username','displayUsername','email','emailVerified','normalizedEmail','image','banned','banReason','banExpires','role','verificationEmailSentAt']);
+export const UserScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','name','username','displayUsername','email','emailVerified','normalizedEmail','image','banned','banReason','banExpires','role']);
 
 export const RelationLoadStrategySchema = z.enum(['query','join']);
 
@@ -195,7 +195,6 @@ export const UserSchema = z.object({
   banned: z.boolean().nullable(),
   banReason: z.string().nullable(),
   banExpires: z.coerce.date().nullable(),
-  verificationEmailSentAt: z.coerce.date().nullable(),
 })
 
 export type User = z.infer<typeof UserSchema>

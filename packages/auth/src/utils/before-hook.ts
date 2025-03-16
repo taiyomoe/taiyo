@@ -1,3 +1,4 @@
+import { cacheClient } from "@taiyomoe/cache"
 import { db } from "@taiyomoe/db"
 import { APIError, createAuthMiddleware } from "better-auth/api"
 import { DateTime } from "luxon"
@@ -52,12 +53,15 @@ export const beforeHook = createAuthMiddleware(async (ctx) => {
       return
     }
 
+    const cacheController = cacheClient.users.verificationEmailSentAt
+    const verificationEmailSentAt = await cacheController.get(user.id)
+
     // Prevent sending emails too often
-    if (user.verificationEmailSentAt) {
+    if (verificationEmailSentAt) {
       const lastVerificationSentAt = DateTime.fromJSDate(
-        user.verificationEmailSentAt,
+        verificationEmailSentAt,
       )
-      const timeLimit = DateTime.now().minus({ minutes: 50 })
+      const timeLimit = DateTime.now().minus({ hours: 1 })
 
       if (lastVerificationSentAt > timeLimit) {
         throw new APIError("FORBIDDEN", {
@@ -67,9 +71,6 @@ export const beforeHook = createAuthMiddleware(async (ctx) => {
       }
     }
 
-    await db.user.update({
-      where: { id: user.id },
-      data: { verificationEmailSentAt: new Date() },
-    })
+    await cacheController.set(user.id, new Date())
   }
 })
