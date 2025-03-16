@@ -1,5 +1,4 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Turnstile } from "@marsidev/react-turnstile"
 import { authClient } from "@taiyomoe/auth/client"
 import { useTranslations } from "next-intl"
 import { useRouter } from "next/navigation"
@@ -10,9 +9,9 @@ import { useHandleAuthError } from "~/app/hooks/use-handle-auth-error"
 import { CheckboxField } from "~/components/fields/checkbox-field"
 import { PasswordField } from "~/components/fields/password-field"
 import { TextField } from "~/components/fields/text-field"
+import { TurnstileField } from "~/components/fields/turnstile-field"
 import { BackButton } from "~/components/ui/back-button"
 import { Form } from "~/components/ui/form"
-import { env } from "~/env"
 import {
   type SignInUsernameInput,
   signInUsernameSchema,
@@ -80,12 +79,7 @@ export const SignInFormUsername = () => {
           name="rememberMe"
           label={t("global.rememberMe")}
         />
-        <Turnstile
-          className="min-h-20"
-          siteKey={env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
-          onSuccess={(token) => form.setValue("turnstileToken", token)}
-          options={{ size: "flexible" }}
-        />
+        <TurnstileField control={form.control} name="turnstileToken" />
         <AuthSubmitButton label="signIn.title" />
       </Form>
     </div>

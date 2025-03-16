@@ -1,12 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Turnstile } from "@marsidev/react-turnstile"
 import { authClient } from "@taiyomoe/auth/client"
 import { useForm } from "react-hook-form"
 import { useHandleAuthError } from "~/app/hooks/use-handle-auth-error"
 import { EmailField } from "~/components/fields/email-field"
+import { TurnstileField } from "~/components/fields/turnstile-field"
 import { BackButton } from "~/components/ui/back-button"
 import { Form } from "~/components/ui/form"
-import { env } from "~/env"
 import {
   type SignInMagicLinkInput,
   signInMagicLinkSchema,
@@ -42,12 +41,7 @@ export const SignInFormMagicLink = () => {
       <BackButton onPress={goToSocials} />
       <Form {...form} onSubmit={handlePress}>
         <EmailField control={form.control} name="email" />
-        <Turnstile
-          className="min-h-20"
-          siteKey={env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
-          onSuccess={(token) => form.setValue("turnstileToken", token)}
-          options={{ size: "flexible" }}
-        />
+        <TurnstileField control={form.control} name="turnstileToken" />
         <AuthSubmitButton label="signIn.title" />
       </Form>
     </div>
