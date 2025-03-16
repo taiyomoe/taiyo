@@ -1,5 +1,3 @@
-import type { InferNestedValues } from "@taiyomoe/types"
-
 export const authMessages = {
   USER_NOT_FOUND: "auth.errors.userNotFound",
   USER_ALREADY_EXISTS: "auth.errors.emailAlreadyExists",
@@ -13,5 +11,3 @@ export const authMessages = {
   VERIFICATION_EMAIL_ALREADY_SENT: "auth.errors.verificationEmailAlreadySent",
   INVALID_TOKEN: "auth.errors.invalidToken",
 } as const
-
-export type AuthMessages = InferNestedValues<typeof authMessages>

@@ -71,7 +71,7 @@ export const FormField = <
   )
 }
 
-export const useFormField = () => {
+const useFormField = () => {
   const fieldContext = useContext(FormFieldContext)
   const itemContext = useContext(FormItemContext)
   const { getFieldState, formState } = useFormContext()
@@ -151,7 +151,7 @@ export const FormControl = forwardRef<
 })
 FormControl.displayName = "FormControl"
 
-export const FormDescription = forwardRef<
+const FormDescription = forwardRef<
   HTMLParagraphElement,
   HTMLAttributes<HTMLParagraphElement>
 >(({ className, ...props }, ref) => {

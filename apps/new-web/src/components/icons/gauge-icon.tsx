@@ -7,11 +7,6 @@ import { useHover } from "usehooks-ts"
 import { cn } from "~/utils/cn"
 import type { AnimatedIconProps } from "./home-icon"
 
-export interface GaugeIconHandle {
-  startAnimation: () => void
-  stopAnimation: () => void
-}
-
 const defaultTransition: Transition = {
   type: "spring",
   stiffness: 160,
