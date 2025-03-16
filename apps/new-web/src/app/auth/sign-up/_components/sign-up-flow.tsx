@@ -18,12 +18,12 @@ export const SignUpFlow = () => {
             <SignUpSocials />
           </AuthAnimatedSlide>
         )}
-        {page === 1 && (
+        {page === 2 && (
           <AuthAnimatedSlide key="email">
             <SignUpForm />
           </AuthAnimatedSlide>
         )}
-        {page === 3 && (
+        {page === 4 && (
           <AuthAnimatedSlide key="verificationEmailSent">
             <AuthVerificationEmailSent />
           </AuthAnimatedSlide>

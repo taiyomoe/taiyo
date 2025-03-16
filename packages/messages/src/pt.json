@@ -53,7 +53,6 @@
     "signUp": {
       "title": "Cadastrar",
       "action": "Ir para o login",
-      "success": "Sua conta foi criada com sucesso. Um email de verificação foi enviado para você",
       "error": "Ocorreu um erro inesperado ao criar sua conta"
     },
     "signIn": {
@@ -66,7 +65,6 @@
       "title": "Esqueceu sua senha?",
       "description": "Digite seu endereço de email e enviaremos instruções sobre como redefinir sua senha.",
       "action": "Enviar email de redefinição",
-      "success": "Se seu email está registrado, você receberá um email com instruções sobre como redefinir sua senha.",
       "error": "Ocorreu um erro inesperado ao enviar o email de redefinição"
     },
     "resetPassword": {
@@ -85,6 +83,11 @@
       "description1": "Por favor, verifique sua caixa de entrada para um link de verificação.",
       "description2": "Nós acabamos de enviar um email de verificação para você, ou você já teve um enviado para você nas últimas horas. Se você não recebeu nada, por favor, aguarde mais uma hora e tente novamente."
     },
+    "resetPasswordEmailSent": {
+      "title": "Email de redefinição de senha enviado",
+      "description1": "Por favor, verifique sua caixa de entrada para um link de redefinição de senha.",
+      "description2": "Se houver uma conta associada a este email, você receberá um email com instruções sobre como redefinir sua senha. Se você não receber nada, por favor, aguarde alguns minutos e tente novamente."
+    },
     "password": {
       "strength": "{score, select, 0 {Digite uma senha} 1 {Senha fraca} 2 {Senha média} 3 {Senha forte} other {Digite uma senha}}. Deve conter:",
       "strengthChars": "Pelo menos 8 caracteres",
@@ -98,11 +101,13 @@
       "emailAlreadyExists": "Este email já está em uso. Por favor, redefina sua senha se esqueceu dela",
       "usernameAlreadyExists": "Este nome de usuário já está em uso. Por favor, escolha outro",
       "invalidEmail": "O email é inválido. Talvez você esteja usando um email temporário?",
+      "invalidUsername": "O nome de usuário é inválido. Ele pode conter apenas letras, números, sublinhados e pontos",
       "invalidEmailOrPassword": "Seu email ou senha estão incorretos. Por favor, tente novamente",
       "invalidUsernameOrPassword": "Seu nome de usuário ou senha estão incorretos. Por favor, tente novamente",
       "emailNotVerified": "Seu email não foi verificado. Um email de verificação foi enviado novamente",
       "verificationEmailAlreadySent": "Por favor, verifique sua caixa de entrada para um email de verificação. Se não vir, por favor, aguarde alguns minutos e tente novamente.",
       "invalidToken": "O token é inválido. Talvez tenha expirado. Por favor, tente solicitar um novo link de redefinição de senha.",
+      "rateLimitExceeded": "Você fez muitas solicitações. Por favor, tente novamente mais tarde.",
       "accountNotLinked": {
         "title": "Link de conta desabilitado",
         "description": "Você acabou de tentar entrar com o Discord ou Google, mas este email já está vinculado a outra conta. Por favor, entre com o mesmo provedor que a outra conta. Se você realmente quiser entrar com este provedor, você pode vincular suas contas nas configurações."

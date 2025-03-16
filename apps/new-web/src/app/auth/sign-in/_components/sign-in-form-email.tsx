@@ -1,12 +1,12 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Turnstile } from "@marsidev/react-turnstile"
 import { authClient } from "@taiyomoe/auth/client"
-import type { InferNestedPaths } from "@taiyomoe/types"
 import { useTranslations } from "next-intl"
 import { useRouter } from "next/navigation"
 import { pick } from "radash"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
+import { useHandleAuthError } from "~/app/hooks/use-handle-auth-error"
 import { CheckboxField } from "~/components/fields/checkbox-field"
 import { EmailField } from "~/components/fields/email-field"
 import { PasswordField } from "~/components/fields/password-field"
@@ -18,12 +18,12 @@ import {
   signInEmailSchema,
 } from "~/schemas/users.schemas"
 import { useAuthStore } from "~/stores/auth.store"
-import { authMessages } from "~/utils/auth-messages"
+import { AuthSubmitButton } from "../../_components/auth-submit-button"
 import { ForgotPasswordButton } from "./forgot-password-button"
-import { SignInButton } from "./sign-in-button"
 
 export const SignInFormEmail = () => {
   const { goToStep, goToSocials } = useAuthStore()
+  const { handleError } = useHandleAuthError()
   const t = useTranslations()
   const router = useRouter()
   const form = useForm({
@@ -38,34 +38,28 @@ export const SignInFormEmail = () => {
   })
 
   const handlePress = async (values: SignInEmailInput) => {
-    const { data, error } = await authClient.signIn.email({
+    await authClient.signIn.email({
       ...pick(values, ["email", "password", "rememberMe"]),
       fetchOptions: {
         headers: { "x-captcha-response": values.turnstileToken },
+        onSuccess: ({ data }) => {
+          toast.success(t("auth.signIn.success", { username: data?.user.name }))
+          router.push("/")
+        },
+        onError: (error) => {
+          if (
+            error.error.code === "EMAIL_NOT_VERIFIED" ||
+            error.error.code === "VERIFICATION_EMAIL_ALREADY_SENT"
+          ) {
+            goToStep("verificationEmailSent")
+
+            return
+          }
+
+          handleError("signIn.error")(error)
+        },
       },
     })
-
-    if (error) {
-      if (
-        error.code === "EMAIL_NOT_VERIFIED" ||
-        error.code === "VERIFICATION_EMAIL_ALREADY_SENT"
-      ) {
-        goToStep("verificationEmailSent")
-
-        return
-      }
-
-      toast.error(
-        error.code && error.code in authMessages
-          ? t(authMessages[error.code as InferNestedPaths<typeof authMessages>])
-          : t("auth.signIn.error"),
-      )
-
-      return
-    }
-
-    toast.success(t("auth.signIn.success", { username: data?.user.name }))
-    router.push("/")
   }
 
   return (
@@ -87,7 +81,7 @@ export const SignInFormEmail = () => {
           onSuccess={(token) => form.setValue("turnstileToken", token)}
           options={{ size: "flexible" }}
         />
-        <SignInButton />
+        <AuthSubmitButton label="signIn.title" />
       </Form>
     </div>
   )

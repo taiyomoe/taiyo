@@ -17,6 +17,7 @@
     "@t3-oss/env-nextjs": "^0.12.0",
     "@tailwindcss/postcss": "^4.0.11",
     "@taiyomoe/auth": "workspace:^",
+    "@taiyomoe/new-utils": "workspace:^",
     "accept-language-parser": "^1.5.0",
     "clsx": "^2.1.1",
     "jotai": "^2.12.1",

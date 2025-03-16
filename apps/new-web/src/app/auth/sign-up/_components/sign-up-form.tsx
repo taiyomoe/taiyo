@@ -1,26 +1,23 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Turnstile } from "@marsidev/react-turnstile"
 import { authClient } from "@taiyomoe/auth/client"
-import type { InferNestedPaths } from "@taiyomoe/types"
-import { ArrowRightIcon } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { pick } from "radash"
 import { useForm } from "react-hook-form"
-import { toast } from "sonner"
+import { AuthSubmitButton } from "~/app/auth/_components/auth-submit-button"
+import { useHandleAuthError } from "~/app/hooks/use-handle-auth-error"
 import { EmailField } from "~/components/fields/email-field"
 import { PasswordField } from "~/components/fields/password-field"
 import { TextField } from "~/components/fields/text-field"
 import { BackButton } from "~/components/ui/back-button"
 import { Form } from "~/components/ui/form"
-import { GradientButton } from "~/components/ui/gradient-button"
-import { SubmitButton } from "~/components/ui/submit-button"
 import { env } from "~/env"
 import { type SignUpInput, signUpSchema } from "~/schemas/users.schemas"
 import { useAuthStore } from "~/stores/auth.store"
-import { authMessages } from "~/utils/auth-messages"
 
 export const SignUpForm = () => {
   const { goToStep, goToSocials } = useAuthStore()
+  const { handleError } = useHandleAuthError()
   const t = useTranslations()
   const form = useForm({
     resolver: zodResolver(signUpSchema),
@@ -35,26 +32,15 @@ export const SignUpForm = () => {
   })
 
   const handlePress = async (values: SignUpInput) => {
-    const { error } = await authClient.signUp.email({
+    await authClient.signUp.email({
       ...pick(values, ["email", "username", "password"]),
       name: values.username,
       fetchOptions: {
         headers: { "x-captcha-response": values.turnstileToken },
+        onSuccess: () => goToStep("verificationEmailSent"),
+        onError: handleError("signUp.error"),
       },
     })
-
-    if (error) {
-      toast.error(
-        error.code && error.code in authMessages
-          ? t(authMessages[error.code as InferNestedPaths<typeof authMessages>])
-          : t("auth.signUp.error"),
-      )
-
-      return
-    }
-
-    toast.success(t("auth.signUp.success"))
-    goToStep("verificationEmailSent")
   }
 
   return (
@@ -80,12 +66,7 @@ export const SignUpForm = () => {
           onSuccess={(token) => form.setValue("turnstileToken", token)}
           options={{ size: "flexible" }}
         />
-        <SubmitButton asChild>
-          <GradientButton className="mt-6 hover:[&_svg]:translate-x-1">
-            {t("auth.signUp.title")}
-            <ArrowRightIcon />
-          </GradientButton>
-        </SubmitButton>
+        <AuthSubmitButton label="signUp.title" />
       </Form>
     </div>
   )

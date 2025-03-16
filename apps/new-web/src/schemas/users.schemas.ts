@@ -1,3 +1,4 @@
+import { USERNAME_REGEX } from "@taiyomoe/new-utils"
 import { z } from "zod"
 import { zodMessages } from "~/utils/zod-messages"
 import { emailSchema, passwordSchema } from "./common.schemas"
@@ -8,11 +9,11 @@ export const signUpSchema = z
       .string()
       .min(3, zodMessages.username.min3Characters)
       .max(30, zodMessages.username.max30Characters)
-      .regex(/^[a-zA-Z0-9_.]+$/, zodMessages.username.invalidCharacters),
+      .regex(USERNAME_REGEX, zodMessages.username.invalidCharacters),
     email: emailSchema,
     password: passwordSchema,
     confirmPassword: z.string().nonempty(zodMessages.password.required),
-    turnstileToken: z.string(),
+    turnstileToken: z.string().nonempty(),
   })
   .superRefine((data, ctx) => {
     if (data.password !== data.confirmPassword) {
@@ -26,14 +27,14 @@ export const signUpSchema = z
 
 export const signInMagicLinkSchema = z.object({
   email: emailSchema,
-  turnstileToken: z.string(),
+  turnstileToken: z.string().nonempty(),
 })
 
 export const signInEmailSchema = z.object({
   email: emailSchema,
   password: z.string().nonempty(zodMessages.password.required),
   rememberMe: z.boolean().default(true),
-  turnstileToken: z.string(),
+  turnstileToken: z.string().nonempty(),
 })
 
 export const signInUsernameSchema = signInEmailSchema
@@ -42,7 +43,7 @@ export const signInUsernameSchema = signInEmailSchema
 
 export const forgotPasswordSchema = z.object({
   email: emailSchema,
-  turnstileToken: z.string(),
+  turnstileToken: z.string().nonempty(),
 })
 
 export const resetPasswordSchema = z

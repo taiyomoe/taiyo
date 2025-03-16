@@ -1,6 +1,10 @@
 import { cacheClient } from "@taiyomoe/cache"
 import { type Roles, db } from "@taiyomoe/db"
-import { USERNAME_MAX_LENGTH, USERNAME_MIN_LENGTH } from "@taiyomoe/new-utils"
+import {
+  USERNAME_MAX_LENGTH,
+  USERNAME_MIN_LENGTH,
+  USERNAME_REGEX,
+} from "@taiyomoe/new-utils"
 import type { UserSettings } from "@taiyomoe/types"
 import { betterAuth } from "better-auth"
 import { emailHarmony } from "better-auth-harmony"
@@ -54,6 +58,17 @@ export const auth = betterAuth({
     get: cacheClient.users.auth.get,
     delete: cacheClient.users.auth.invalidate,
   },
+  rateLimit: {
+    enabled: true,
+    storage: "secondary-storage",
+    customRules: {
+      "/sign-in/email": { window: 60, max: 3 },
+      "/sign-in/username": { window: 60, max: 3 },
+      "/sign-in/magic-link": { window: 60, max: 1 },
+      "/sign-up": { window: 120, max: 1 },
+      "/forget-password": { window: 120, max: 1 },
+    },
+  },
   session: { storeSessionInDatabase: true },
   advanced: { generateId: false },
   hooks: { before: beforeHook, after: afterHook },
@@ -70,13 +85,10 @@ export const auth = betterAuth({
     username({
       minUsernameLength: USERNAME_MIN_LENGTH,
       maxUsernameLength: USERNAME_MAX_LENGTH,
+      usernameValidator: (input) => USERNAME_REGEX.test(input),
     }),
     emailHarmony(),
-    magicLink({
-      sendMagicLink,
-      disableSignUp: true,
-      rateLimit: { window: 60, max: 1 },
-    }),
+    magicLink({ disableSignUp: true, sendMagicLink }),
     captcha({
       provider: "cloudflare-turnstile",
       secretKey: env.TURNSTILE_SECRET_KEY,

@@ -8,6 +8,7 @@ const steps = [
   "verificationEmailSent",
   "forgotPassword",
   "magicLinkSent",
+  "resetPasswordEmailSent",
 ] as const
 
 type State = {

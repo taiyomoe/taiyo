@@ -53,7 +53,6 @@
     "signUp": {
       "title": "Sign Up",
       "action": "Go to sign in",
-      "success": "Your account has been created successfully. An email has been sent to you for verification",
       "error": "An unexpected error occurred when creating your account"
     },
     "signIn": {
@@ -66,7 +65,6 @@
       "title": "Forgot your password?",
       "description": "Enter your email address and we'll send you instructions on how to redefine your password.",
       "action": "Send reset email",
-      "success": "If your email is registered, you will receive an email with instructions on how to redefine your password.",
       "error": "An unexpected error occurred when sending the reset email"
     },
     "resetPassword": {
@@ -90,6 +88,11 @@
       "description1": "Please check your inbox for a verification link.",
       "description2": "We either just sent you a verification email, or you already had one sent to you in the last hour. If you didn't receive anything, please wait another hour and try again."
     },
+    "resetPasswordEmailSent": {
+      "title": "Reset password email sent",
+      "description1": "Please check your inbox for a reset password link.",
+      "description2": "If there is an account associated with this email, you will receive an email with instructions on how to reset your password. If you don't receive anything, please wait a few minutes and try again."
+    },
     "password": {
       "strength": "{score, select, 0 {Enter a password} 1 {Weak password} 2 {Medium password} 3 {Strong password} other {Enter a password}}. Must contain:",
       "strengthChars": "At least 8 characters",
@@ -103,11 +106,13 @@
       "emailAlreadyExists": "This email is already taken. Please reset your password if you've forgotten it",
       "usernameAlreadyExists": "This username is already taken. Please choose another one",
       "invalidEmail": "The email is invalid. Are you using a disposable email?",
+      "invalidUsername": "The username is invalid. It can only contain letters, numbers, underscores and dots",
       "invalidEmailOrPassword": "Your email or password is incorrect. Please try again",
       "invalidUsernameOrPassword": "Your username or password is incorrect. Please try again",
       "emailNotVerified": "Your email is not verified. An email has been sent to you for verification",
       "verificationEmailAlreadySent": "Please check your inbox for a verification email. If you don't see it, please wait a few minutes and try again.",
       "invalidToken": "The token is invalid. Maybe it has expired. Please try requesting a new password reset link.",
+      "rateLimitExceeded": "You have made too many requests. Please try again later.",
       "accountNotLinked": {
         "title": "Account linking disabled",
         "description": "You just tried to sign in with Discord or Google, but this email address is already linked to another account. Please sign in with the same provider as the other account. If you really want to sign in with this provider, you can link your accounts in the settings."

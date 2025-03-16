@@ -6,6 +6,7 @@ import { AuthVerificationEmailSent } from "~/app/auth/_components/auth-verificat
 import { useAuthStore } from "~/stores/auth.store"
 import { ForgotPasswordForm } from "./forgot-password-form"
 import { MagicLinkSent } from "./magic-link-sent"
+import { ResetPasswordEmailSent } from "./reset-password-email-sent"
 import { SignInFormEmail } from "./sign-in-form-email"
 import { SignInFormMagicLink } from "./sign-in-form-magic-link"
 import { SignInFormUsername } from "./sign-in-form-username"
@@ -50,6 +51,11 @@ export const SignInFlow = () => {
         {page === 6 && (
           <AuthAnimatedSlide key="magicLinkSent">
             <MagicLinkSent />
+          </AuthAnimatedSlide>
+        )}
+        {page === 7 && (
+          <AuthAnimatedSlide key="resetPasswordEmailSent">
+            <ResetPasswordEmailSent />
           </AuthAnimatedSlide>
         )}
       </AnimatePresence>

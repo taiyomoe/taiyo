@@ -1,15 +1,13 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Turnstile } from "@marsidev/react-turnstile"
 import { authClient } from "@taiyomoe/auth/client"
-import { ArrowRightIcon } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { useForm } from "react-hook-form"
-import { toast } from "sonner"
+import { AuthSubmitButton } from "~/app/auth/_components/auth-submit-button"
+import { useHandleAuthError } from "~/app/hooks/use-handle-auth-error"
 import { EmailField } from "~/components/fields/email-field"
 import { BackButton } from "~/components/ui/back-button"
 import { Form } from "~/components/ui/form"
-import { GradientButton } from "~/components/ui/gradient-button"
-import { SubmitButton } from "~/components/ui/submit-button"
 import { env } from "~/env"
 import {
   type ForgotPasswordInput,
@@ -18,7 +16,8 @@ import {
 import { useAuthStore } from "~/stores/auth.store"
 
 export const ForgotPasswordForm = () => {
-  const { goToSocials } = useAuthStore()
+  const { goToStep, goToSocials } = useAuthStore()
+  const { handleError } = useHandleAuthError()
   const t = useTranslations("auth.forgotPassword")
   const form = useForm({
     resolver: zodResolver(forgotPasswordSchema),
@@ -30,22 +29,18 @@ export const ForgotPasswordForm = () => {
   })
 
   const handlePress = async (values: ForgotPasswordInput) => {
-    const { error } = await authClient.forgetPassword({
+    await authClient.forgetPassword({
       email: values.email,
       redirectTo: "/auth/reset-password",
       fetchOptions: {
         headers: { "x-captcha-response": values.turnstileToken },
+        onSuccess: () => goToStep("resetPasswordEmailSent"),
+        onError: handleError("forgotPassword.error"),
       },
     })
-
-    if (error) {
-      toast.error(t("error"))
-
-      return
-    }
-
-    toast.success(t("success"))
   }
+
+  console.log(form.getValues())
 
   return (
     <div className="space-y-8">
@@ -62,12 +57,7 @@ export const ForgotPasswordForm = () => {
           onSuccess={(token) => form.setValue("turnstileToken", token)}
           options={{ size: "flexible" }}
         />
-        <SubmitButton asChild>
-          <GradientButton className="mt-6 hover:[&_svg]:translate-x-1">
-            {t("action")}
-            <ArrowRightIcon />
-          </GradientButton>
-        </SubmitButton>
+        <AuthSubmitButton label="forgotPassword.action" />
       </Form>
     </div>
   )
