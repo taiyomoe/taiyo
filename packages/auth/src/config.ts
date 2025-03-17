@@ -99,7 +99,7 @@ export const auth = betterAuth({
   ],
 })
 
-type User = typeof auth.$Infer.Session.user & {
+export type User = typeof auth.$Infer.Session.user & {
   role: Roles
   settings: UserSettings
 }
