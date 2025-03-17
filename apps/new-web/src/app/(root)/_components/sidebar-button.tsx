@@ -9,16 +9,14 @@ import { useHover } from "usehooks-ts"
 import type { AnimatedIconProps } from "~/components/icons/home-icon"
 
 const sidebarButton = tv({
-  base: [
-    "group/sidebar-button relative block select-none py-1.5 first:pt-0 last:pb-0",
-  ],
+  base: 'group/sidebar-button relative block select-none py-1.5 first:pt-0 last:pb-0 first:[&_[id^="bubble-"]]:mt-[8] last:[&_[id^="bubble-"]]:mb-[8] group-data-[state=collapsed]:last:[&_[id^="bubble-"]]:mb-[4] group-data-[state=collapsed]:first:[&_[id^="bubble-"]]:mt-[4]',
   slots: {
     activeBubble:
-      "-left-2 group-data-[state=expanded]:-left-4 absolute inset-y-0 z-10 my-auto h-2/4 w-1 rounded-r-lg bg-brand",
+      "-left-2 group-data-[state=expanded]:-left-4 absolute inset-y-0 z-10 my-auto h-5 w-1 rounded-r-lg bg-brand group-data-[state=expanded]:h-6",
     hoverBubble:
-      "-left-2 group-data-[state=expanded]:-left-4 absolute inset-y-0 z-0 my-auto hidden h-2/4 w-1 rounded-r-lg md:block",
+      "-left-2 group-data-[state=expanded]:-left-4 absolute inset-y-0 z-0 my-auto hidden h-5 w-1 rounded-r-lg group-data-[state=expanded]:h-6 md:block",
     content:
-      "flex h-fit items-center gap-2 rounded p-1 transition-[color,background,margin,padding] duration-300 group-data-[state=collapsed]:ml-[1.5px] group-data-[state=expanded]:p-2",
+      "flex items-center gap-2 rounded p-1 transition-[color,background,margin,padding] duration-300 group-data-[state=collapsed]:ml-[1.5px] group-data-[state=expanded]:p-2",
     label: "group-data-[state=collapsed]:hidden",
   },
   variants: {
@@ -78,6 +76,7 @@ export const SidebarButton = ({ href, label, icon: Icon, color }: Props) => {
     <Link ref={ref} href={href} className={slots.base()} data-active={isActive}>
       {isActive && (
         <motion.span
+          id="bubble-active"
           layoutId="bubble-active"
           className={slots.activeBubble()}
           transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
@@ -85,6 +84,7 @@ export const SidebarButton = ({ href, label, icon: Icon, color }: Props) => {
       )}
       {isHover && (
         <motion.span
+          id="bubble-hover"
           layoutId="bubble-hover"
           className={slots.hoverBubble()}
           transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
