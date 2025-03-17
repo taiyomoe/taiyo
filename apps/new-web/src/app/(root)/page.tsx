@@ -7,7 +7,7 @@ export default async function Page() {
   const session = await getSession()
 
   return (
-    <main className="max-w-[calc(100vw-var(--sidebar-width))] space-y-8 p-4">
+    <main className="flex max-w-[calc(100vw-var(--sidebar-width)-16px)] flex-col space-y-8 p-4 transition-[max-width] duration-300">
       <h1>{t("title")}</h1>
       <SignOutButton />
       <p className="whitespace-pre-wrap">{JSON.stringify(session, null, 4)}</p>

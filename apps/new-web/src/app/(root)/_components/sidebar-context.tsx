@@ -1,6 +1,6 @@
 "use client"
 
-import { createContext, useContext, useState } from "react"
+import { type CSSProperties, createContext, useContext, useState } from "react"
 import type { ProviderProps } from "~/utils/types"
 
 type SidebarContext = {
@@ -33,7 +33,14 @@ export const SidebarProvider = ({ children }: ProviderProps) => {
 
   return (
     <SidebarContext.Provider value={{ state, setState, toggleSidebar }}>
-      <div className="flex min-h-dvh [--sidebar-width-icon:3rem] [--sidebar-width:16rem]">
+      <div
+        className="flex min-h-dvh overflow-x-hidden"
+        style={
+          {
+            "--sidebar-width": state === "expanded" ? "16rem" : "3rem",
+          } as CSSProperties
+        }
+      >
         {children}
       </div>
     </SidebarContext.Provider>
