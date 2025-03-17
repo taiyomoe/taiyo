@@ -4,9 +4,9 @@
   "ignoreDependencies": [
     "@taiyomoe/messages",
     "@types/global-types",
-    "accept-language-parser",
     "postcss",
     "tailwindcss-react-aria-components",
+    "tailwindcss-animate",
     "@heroui/.+",
     "punycode",
     "sharp"

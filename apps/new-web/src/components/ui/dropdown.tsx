@@ -2,12 +2,7 @@
 
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu"
 import { CheckIcon, ChevronRightIcon } from "lucide-react"
-import React, {
-  type ComponentProps,
-  type ComponentType,
-  type HTMLAttributes,
-  useRef,
-} from "react"
+import React, { type ComponentProps, type ComponentType, useRef } from "react"
 import { type VariantProps, tv } from "tailwind-variants"
 import type { AnimatedIconProps } from "~/components/icons/home-icon"
 import { cn } from "~/utils/cn"
@@ -16,7 +11,7 @@ export const DropdownMenu = DropdownMenuPrimitive.Root
 
 export const DropdownMenuTrigger = DropdownMenuPrimitive.Trigger
 
-export const DropdownMenuGroup = DropdownMenuPrimitive.Group
+// export const DropdownMenuGroup = DropdownMenuPrimitive.Group
 
 export const DropdownMenuPortal = DropdownMenuPrimitive.Portal
 
@@ -153,30 +148,30 @@ export const DropdownMenuItem = ({
 }
 DropdownMenuItem.displayName = DropdownMenuPrimitive.Item.displayName
 
-export const DropdownMenuCheckboxItem = ({
-  className,
-  children,
-  checked,
-  ...props
-}: ComponentProps<typeof DropdownMenuPrimitive.CheckboxItem>) => (
-  <DropdownMenuPrimitive.CheckboxItem
-    className={cn(
-      "relative flex select-none items-center rounded-sm py-1.5 pr-8 pl-2 text-sm outline-none transition-colors focus:cursor-pointer focus:bg-subtle focus:text-primary data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
-      className,
-    )}
-    checked={checked}
-    {...props}
-  >
-    {children}
-    <span className="absolute right-2 flex h-3.5 w-3.5 items-center justify-center">
-      <DropdownMenuPrimitive.ItemIndicator>
-        <CheckIcon className="h-4 w-4" />
-      </DropdownMenuPrimitive.ItemIndicator>
-    </span>
-  </DropdownMenuPrimitive.CheckboxItem>
-)
-DropdownMenuCheckboxItem.displayName =
-  DropdownMenuPrimitive.CheckboxItem.displayName
+// export const DropdownMenuCheckboxItem = ({
+//   className,
+//   children,
+//   checked,
+//   ...props
+// }: ComponentProps<typeof DropdownMenuPrimitive.CheckboxItem>) => (
+//   <DropdownMenuPrimitive.CheckboxItem
+//     className={cn(
+//       "relative flex select-none items-center rounded-sm py-1.5 pr-8 pl-2 text-sm outline-none transition-colors focus:cursor-pointer focus:bg-subtle focus:text-primary data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+//       className,
+//     )}
+//     checked={checked}
+//     {...props}
+//   >
+//     {children}
+//     <span className="absolute right-2 flex h-3.5 w-3.5 items-center justify-center">
+//       <DropdownMenuPrimitive.ItemIndicator>
+//         <CheckIcon className="h-4 w-4" />
+//       </DropdownMenuPrimitive.ItemIndicator>
+//     </span>
+//   </DropdownMenuPrimitive.CheckboxItem>
+// )
+// DropdownMenuCheckboxItem.displayName =
+//   DropdownMenuPrimitive.CheckboxItem.displayName
 
 export const DropdownMenuRadioItem = ({
   className,
@@ -209,23 +204,23 @@ export const DropdownMenuRadioItem = ({
 }
 DropdownMenuRadioItem.displayName = DropdownMenuPrimitive.RadioItem.displayName
 
-export const DropdownMenuLabel = ({
-  className,
-  inset,
-  ...props
-}: ComponentProps<typeof DropdownMenuPrimitive.Label> & {
-  inset?: boolean
-}) => (
-  <DropdownMenuPrimitive.Label
-    className={cn(
-      "px-2 py-1.5 font-semibold text-primary text-sm",
-      inset && "pl-8",
-      className,
-    )}
-    {...props}
-  />
-)
-DropdownMenuLabel.displayName = DropdownMenuPrimitive.Label.displayName
+// export const DropdownMenuLabel = ({
+//   className,
+//   inset,
+//   ...props
+// }: ComponentProps<typeof DropdownMenuPrimitive.Label> & {
+//   inset?: boolean
+// }) => (
+//   <DropdownMenuPrimitive.Label
+//     className={cn(
+//       "px-2 py-1.5 font-semibold text-primary text-sm",
+//       inset && "pl-8",
+//       className,
+//     )}
+//     {...props}
+//   />
+// )
+// DropdownMenuLabel.displayName = DropdownMenuPrimitive.Label.displayName
 
 export const DropdownMenuSeparator = ({
   className,
@@ -238,13 +233,13 @@ export const DropdownMenuSeparator = ({
 )
 DropdownMenuSeparator.displayName = DropdownMenuPrimitive.Separator.displayName
 
-export const DropdownMenuShortcut = ({
-  className,
-  ...props
-}: HTMLAttributes<HTMLSpanElement>) => (
-  <span
-    className={cn("ml-auto text-xs tracking-widest opacity-60", className)}
-    {...props}
-  />
-)
-DropdownMenuShortcut.displayName = "DropdownMenuShortcut"
+// export const DropdownMenuShortcut = ({
+//   className,
+//   ...props
+// }: HTMLAttributes<HTMLSpanElement>) => (
+//   <span
+//     className={cn("ml-auto text-xs tracking-widest opacity-60", className)}
+//     {...props}
+//   />
+// )
+// DropdownMenuShortcut.displayName = "DropdownMenuShortcut"
