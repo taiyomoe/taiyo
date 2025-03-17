@@ -11,7 +11,22 @@
     "password": "Password",
     "confirmPassword": "Confirm password",
     "rememberMe": "Remember me",
-    "backHome": "Go back to home"
+    "backHome": "Go back to home",
+    "signOut": "Sign out",
+    "guest": "Guest",
+    "myProfile": "My profile",
+    "theme": {
+      "title": "Theme",
+      "system": "System",
+      "light": "Light",
+      "dark": "Dark"
+    },
+    "language": {
+      "title": "Language",
+      "en": "English",
+      "pt": "Português",
+      "fr": "Français"
+    }
   },
   "validation": {
     "username": {

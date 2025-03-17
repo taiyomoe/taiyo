@@ -38,14 +38,7 @@ export const SettingsGearIcon = ({
         strokeLinecap="round"
         strokeLinejoin="round"
         transition={{ type: "spring", stiffness: 50, damping: 10 }}
-        variants={{
-          normal: {
-            rotate: 0,
-          },
-          animate: {
-            rotate: 180,
-          },
-        }}
+        variants={{ normal: { rotate: 0 }, animate: { rotate: 180 } }}
         animate={controls}
       >
         <title>Settings Gear</title>

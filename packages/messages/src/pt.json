@@ -11,7 +11,22 @@
     "password": "Senha",
     "confirmPassword": "Confirmar senha",
     "rememberMe": "Lembrar-se de mim",
-    "backHome": "Voltar para o início"
+    "backHome": "Voltar para o início",
+    "signOut": "Sair",
+    "guest": "Convidado",
+    "myProfile": "Meu perfil",
+    "theme": {
+      "title": "Tema",
+      "system": "Sistema",
+      "light": "Claro",
+      "dark": "Escuro"
+    },
+    "language": {
+      "title": "Idioma",
+      "en": "Inglês",
+      "pt": "Português",
+      "fr": "Francês"
+    }
   },
   "validation": {
     "username": {

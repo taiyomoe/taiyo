@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @plugin "tailwindcss-react-aria-components";
+@plugin "tailwindcss-animate";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -195,6 +196,30 @@
   button {
     @apply hover:cursor-pointer;
   }
+}
+
+@utility dropdown-content-width-full {
+  width: var(--radix-dropdown-menu-trigger-width);
+  max-height: var(--radix-dropdown-menu-content-available-height);
+}
+
+@utility popover-content-width-full {
+  width: var(--radix-popover-trigger-width);
+  max-height: var(--radix-popover-content-available-height);
+}
+
+@utility min-size-* {
+  min-height: --spacing(--value(number));
+  min-width: --spacing(--value(number));
+}
+
+@utility max-size-* {
+  max-height: --spacing(--value(number));
+  max-width: --spacing(--value(number));
+}
+
+@utility focusable {
+  @apply outline-hidden focus:ring-2 focus:ring-primary;
 }
 
 @theme {

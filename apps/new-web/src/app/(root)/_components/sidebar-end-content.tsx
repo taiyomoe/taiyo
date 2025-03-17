@@ -6,7 +6,7 @@ export const SidebarEndContent = () => {
   const discordButtonSlots = discordButtonVariants()
 
   return (
-    <div className="absolute bottom-[57px] w-full p-4 transition-[padding] duration-300 group-data-[state=collapsed]:p-2">
+    <div className="absolute bottom-[97] w-full space-y-4 p-4 transition-[padding,bottom] duration-300 group-data-[state=collapsed]:bottom-[49] group-data-[state=collapsed]:p-2">
       <Link
         href="https://discord.gg/RYbnyeWcM2"
         className={discordButtonSlots.base({

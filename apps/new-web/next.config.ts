@@ -7,6 +7,16 @@ const config = {
   experimental: {
     nodeMiddleware: true,
   },
+  images: {
+    minimumCacheTTL: 300,
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "cdn.discordapp.com",
+        pathname: "/**",
+      },
+    ],
+  },
 
   /** Enables hot reloading for local packages without a build step */
   transpilePackages: ["@taiyomoe/auth", "@taiyomoe/db", "@taiyomoe/new-utils"],
