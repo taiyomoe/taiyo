@@ -3,7 +3,7 @@
 import { AnimatePresence } from "motion/react"
 import { AuthAnimatedSlide } from "~/app/auth/_components/auth-animated-slide"
 import { AuthVerificationEmailSent } from "~/app/auth/_components/auth-verification-email-sent"
-import { useAuthStore } from "~/stores/auth.store"
+import { useAuthStore } from "~/stores/auth-flow.store"
 import { ForgotPasswordForm } from "./forgot-password-form"
 import { MagicLinkSent } from "./magic-link-sent"
 import { ResetPasswordEmailSent } from "./reset-password-email-sent"

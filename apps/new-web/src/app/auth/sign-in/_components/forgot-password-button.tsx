@@ -1,6 +1,6 @@
 import { useTranslations } from "next-intl"
 import { Button } from "react-aria-components"
-import { useAuthStore } from "~/stores/auth.store"
+import { useAuthStore } from "~/stores/auth-flow.store"
 
 export const ForgotPasswordButton = () => {
   const { goToStep } = useAuthStore()

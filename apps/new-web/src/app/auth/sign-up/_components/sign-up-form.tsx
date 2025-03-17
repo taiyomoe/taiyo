@@ -12,7 +12,7 @@ import { TurnstileField } from "~/components/fields/turnstile-field"
 import { BackArrowButton } from "~/components/ui/back-arrow-button"
 import { Form } from "~/components/ui/form"
 import { type SignUpInput, signUpSchema } from "~/schemas/users.schemas"
-import { useAuthStore } from "~/stores/auth.store"
+import { useAuthStore } from "~/stores/auth-flow.store"
 
 export const SignUpForm = () => {
   const { goToStep, goToSocials } = useAuthStore()

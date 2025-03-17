@@ -10,7 +10,7 @@ import {
   type SignInMagicLinkInput,
   signInMagicLinkSchema,
 } from "~/schemas/users.schemas"
-import { useAuthStore } from "~/stores/auth.store"
+import { useAuthStore } from "~/stores/auth-flow.store"
 import { AuthSubmitButton } from "../../_components/auth-submit-button"
 
 export const SignInFormMagicLink = () => {

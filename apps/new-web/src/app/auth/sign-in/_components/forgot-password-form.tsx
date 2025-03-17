@@ -12,7 +12,7 @@ import {
   type ForgotPasswordInput,
   forgotPasswordSchema,
 } from "~/schemas/users.schemas"
-import { useAuthStore } from "~/stores/auth.store"
+import { useAuthStore } from "~/stores/auth-flow.store"
 
 export const ForgotPasswordForm = () => {
   const { goToStep, goToSocials } = useAuthStore()

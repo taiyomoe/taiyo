@@ -1,7 +1,7 @@
 import { useTranslations } from "next-intl"
 import { MailSentIllustration } from "~/components/illustrations/mail-sent-illustration"
 import { BackArrowButton } from "~/components/ui/back-arrow-button"
-import { useAuthStore } from "~/stores/auth.store"
+import { useAuthStore } from "~/stores/auth-flow.store"
 
 export const AuthVerificationEmailSent = () => {
   const { goToSocials } = useAuthStore()

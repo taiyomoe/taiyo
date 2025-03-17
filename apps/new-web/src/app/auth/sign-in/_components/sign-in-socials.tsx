@@ -6,7 +6,7 @@ import { AuthGoogleButton } from "~/app/auth/_components/auth-google-button"
 import { Button } from "~/components/ui/button"
 import { Separator } from "~/components/ui/separator"
 import { ShineButton } from "~/components/ui/shine-button"
-import { useAuthStore } from "~/stores/auth.store"
+import { useAuthStore } from "~/stores/auth-flow.store"
 
 export const SignInSocials = () => {
   const { goToStep } = useAuthStore()

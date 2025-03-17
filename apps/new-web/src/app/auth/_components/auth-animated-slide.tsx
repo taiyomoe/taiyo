@@ -1,6 +1,6 @@
 import { type MotionProps, motion, useAnimate, usePresence } from "motion/react"
 import { useCallback, useEffect } from "react"
-import { useAuthStore } from "~/stores/auth.store"
+import { useAuthStore } from "~/stores/auth-flow.store"
 
 export const AuthAnimatedSlide = (props: MotionProps) => {
   const [isPresent, safeToRemove] = usePresence()

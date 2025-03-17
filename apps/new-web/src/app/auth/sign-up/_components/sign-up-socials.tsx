@@ -4,7 +4,7 @@ import { AuthDiscordButton } from "~/app/auth/_components/auth-discord-button"
 import { AuthGoogleButton } from "~/app/auth/_components/auth-google-button"
 import { Button } from "~/components/ui/button"
 import { Separator } from "~/components/ui/separator"
-import { useAuthStore } from "~/stores/auth.store"
+import { useAuthStore } from "~/stores/auth-flow.store"
 
 export const SignUpSocials = () => {
   const { goToStep } = useAuthStore()
