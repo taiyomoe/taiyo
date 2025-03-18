@@ -1,6 +1,7 @@
 "use client"
 
 import { type CSSProperties, createContext, useContext, useState } from "react"
+import { siteConfig } from "~/site-config"
 import type { ProviderProps } from "~/utils/types"
 
 type SidebarContext = {
@@ -24,11 +25,21 @@ export const useSidebar = () => {
   return context
 }
 
-export const SidebarProvider = ({ children }: ProviderProps) => {
-  const [state, setState] = useState<"expanded" | "collapsed">("expanded")
+export const SidebarProvider = ({
+  children,
+  defaultOpen,
+}: ProviderProps & { defaultOpen: boolean }) => {
+  const cookieConfig = siteConfig.sidebar.cookie
+  const [state, setState] = useState<"expanded" | "collapsed">(
+    defaultOpen ? "expanded" : "collapsed",
+  )
 
   const toggleSidebar = () => {
-    setState((state) => (state === "expanded" ? "collapsed" : "expanded"))
+    setState((prev) => {
+      document.cookie = `${cookieConfig.name}=${prev === "expanded" ? "false" : "true"}; path=/; max-age=${cookieConfig.maxAge}`
+
+      return prev === "expanded" ? "collapsed" : "expanded"
+    })
   }
 
   return (

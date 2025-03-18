@@ -1,7 +1,6 @@
 import { BR, FR, US } from "country-flag-icons/react/3x2"
 import { useLocale, useTranslations } from "next-intl"
 import { useTheme } from "next-themes"
-import { setLocale } from "~/actions/set-locale"
 import { LanguagesIcon } from "~/components/icons/languages-icon"
 import { MoonIcon } from "~/components/icons/moon-icon"
 import { SunIcon } from "~/components/icons/sun-icon"
@@ -14,6 +13,7 @@ import {
   DropdownMenuSub,
   DropdownMenuSubTrigger,
 } from "~/components/ui/dropdown"
+import { I18N_COOKIE_NAME } from "~/utils/parse-locale"
 
 export const SidebarDropdownCommonContent = () => {
   const locale = useLocale()
@@ -28,7 +28,13 @@ export const SidebarDropdownCommonContent = () => {
         </DropdownMenuSubTrigger>
         <DropdownMenuPortal>
           <DropdownMenuSubContent>
-            <DropdownMenuRadioGroup value={locale} onValueChange={setLocale}>
+            <DropdownMenuRadioGroup
+              value={locale}
+              onValueChange={(newLocale) => {
+                console.log("Changing locale", newLocale)
+                document.cookie = `${I18N_COOKIE_NAME}=${newLocale}; path=/; max-age=${60 * 60 * 24 * 7}`
+              }}
+            >
               <DropdownMenuRadioItem value="en">
                 <US />
                 {t("language.en")}
