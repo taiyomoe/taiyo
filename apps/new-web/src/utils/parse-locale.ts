@@ -1,20 +1,19 @@
 import { pick } from "accept-language-parser"
 import { z } from "zod"
-
-export const I18N_LANGUAGES = ["en", "pt"] as const
-export const I18N_COOKIE_NAME = "Language"
-export const I18N_DEFAULT_LANGUAGE = "en"
+import { siteConfig } from "~/site-config"
 
 export const parseLocale = (cookie: string | null, header: string | null) => {
-  const parsedHeaderLocale = pick([...I18N_LANGUAGES], header ?? [], {
-    loose: true,
-  })
+  const parsedHeaderLocale = pick(
+    [...siteConfig.i18n.availableLocales],
+    header ?? [],
+    { loose: true },
+  )
 
   return (
     [cookie, parsedHeaderLocale]
-      .map((l) => z.enum(I18N_LANGUAGES).safeParse(l))
+      .map((l) => z.enum(siteConfig.i18n.availableLocales).safeParse(l))
       .map((r) => (r.success ? r.data : null))
       .filter(Boolean)
-      .at(0) ?? I18N_DEFAULT_LANGUAGE
+      .at(0) ?? siteConfig.i18n.defaultLocale
   )
 }

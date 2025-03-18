@@ -1,14 +1,16 @@
 "use server"
 
 import { cookies } from "next/headers"
-import { I18N_COOKIE_NAME, I18N_LANGUAGES } from "~/utils/parse-locale"
+import { siteConfig } from "~/site-config"
 
 export const setLocale = async (input: string) => {
   const cookieStore = await cookies()
 
-  if (!I18N_LANGUAGES.includes(input)) {
+  if (!siteConfig.i18n.availableLocales.includes(input)) {
     return
   }
 
-  cookieStore.set(I18N_COOKIE_NAME, input)
+  cookieStore.set(siteConfig.i18n.cookie.name, input, {
+    maxAge: siteConfig.i18n.cookie.maxAge,
+  })
 }
