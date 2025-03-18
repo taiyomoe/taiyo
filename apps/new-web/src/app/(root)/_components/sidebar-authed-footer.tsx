@@ -32,9 +32,9 @@ export const SidebarAuthedFooter = () => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <button
-          type="button"
           className="group/auth-trigger focusable flex w-full items-center justify-between rounded p-2 hover:bg-subtle data-[state=open]:bg-subtle group-data-[state=collapsed]:rounded-full group-data-[state=collapsed]:p-0"
           style={{ transition: "padding 300ms, background 200ms" }}
+          type="button"
         >
           <div className="flex items-center gap-2">
             <Avatar
