@@ -28,9 +28,9 @@ export const PasswordInput = ({ className, ...props }: Props) => {
       />
       <div
         onClick={() => setShow(!show)}
-        className="h-9 rounded-r border bg-default p-2 text-emphasis transition hover:cursor-pointer hover:bg-muted group-hover:border-emphasis"
+        className="h-9 rounded-r border bg-default p-2 transition hover:cursor-pointer hover:bg-muted group-hover:border-emphasis"
       >
-        <Icon size={20} />
+        <Icon className="size-5 text-muted" />
       </div>
     </div>
   )

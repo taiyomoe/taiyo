@@ -16,7 +16,7 @@ export const Separator = ({ className, children, ...props }: Props) => {
         {...separatorProps}
         {...props}
       >
-        <span className="-translate-x-1/2 -translate-y-1/2 absolute top-1/2 left-1/2 bg-default px-2 text-sm text-subtle">
+        <span className="-translate-x-1/2 -translate-y-1/2 absolute top-1/2 left-1/2 bg-subtle px-2 text-sm text-subtle dark:bg-default">
           {children}
         </span>
       </div>
