@@ -28,6 +28,7 @@
   },
   "devDependencies": {
     "@taiyomoe/tsconfig": "workspace:^",
-    "@taiyomoe/types": "workspace:^"
+    "@taiyomoe/types": "workspace:^",
+    "@types/luxon": "^3.4.2"
   }
 }

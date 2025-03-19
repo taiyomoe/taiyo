@@ -50,9 +50,6 @@ importers:
       '@taiyomoe/s3':
         specifier: workspace:^
         version: link:../../packages/s3
-      '@taiyomoe/services':
-        specifier: workspace:^
-        version: link:../../packages/services
       '@taiyomoe/utils':
         specifier: workspace:^
         version: link:../../packages/utils
@@ -242,6 +239,9 @@ importers:
       '@taiyomoe/types':
         specifier: workspace:^
         version: link:../types
+      '@types/luxon':
+        specifier: ^3.4.2
+        version: 3.4.2
 
   packages/cache:
     dependencies:
@@ -258,9 +258,6 @@ importers:
         specifier: ^3.24.2
         version: 3.24.2
     devDependencies:
-      '@taiyomoe/db':
-        specifier: workspace:^
-        version: link:../db
       '@taiyomoe/tsconfig':
         specifier: workspace:^
         version: link:../../tooling/typescript
@@ -431,6 +428,9 @@ importers:
       '@taiyomoe/types':
         specifier: workspace:^
         version: link:../types
+      '@types/luxon':
+        specifier: ^3.4.2
+        version: 3.4.2
 
   packages/messages: {}
 
@@ -498,49 +498,6 @@ importers:
         specifier: workspace:^
         version: link:../../tooling/typescript
 
-  packages/services:
-    dependencies:
-      '@t3-oss/env-core':
-        specifier: ^0.12.0
-        version: 0.12.0(typescript@5.8.2)(valibot@1.0.0-beta.15(typescript@5.8.2))(zod@3.24.2)
-      '@taiyomoe/cache':
-        specifier: workspace:^
-        version: link:../cache
-      '@taiyomoe/constants':
-        specifier: workspace:^
-        version: link:../constants
-      '@taiyomoe/db':
-        specifier: workspace:^
-        version: link:../db
-      '@taiyomoe/logs':
-        specifier: workspace:^
-        version: link:../logs
-      '@taiyomoe/meilisearch':
-        specifier: workspace:^
-        version: link:../meilisearch
-      '@taiyomoe/s3':
-        specifier: workspace:^
-        version: link:../s3
-      '@taiyomoe/types':
-        specifier: workspace:^
-        version: link:../types
-      '@taiyomoe/utils':
-        specifier: workspace:^
-        version: link:../utils
-      file-type:
-        specifier: ^20.4.1
-        version: 20.4.1
-      radash:
-        specifier: ^12.1.0
-        version: 12.1.0
-      sharp:
-        specifier: ^0.33.5
-        version: 0.33.5
-    devDependencies:
-      '@taiyomoe/tsconfig':
-        specifier: workspace:^
-        version: link:../../tooling/typescript
-
   packages/trpc:
     dependencies:
       '@taiyomoe/auth':
@@ -549,9 +506,6 @@ importers:
       '@taiyomoe/cache':
         specifier: workspace:^
         version: link:../cache
-      '@taiyomoe/constants':
-        specifier: workspace:^
-        version: link:../constants
       '@taiyomoe/db':
         specifier: workspace:^
         version: link:../db
@@ -570,27 +524,12 @@ importers:
       '@taiyomoe/s3':
         specifier: workspace:^
         version: link:../s3
-      '@taiyomoe/schemas':
-        specifier: workspace:^
-        version: link:../schemas
-      '@taiyomoe/services':
-        specifier: workspace:^
-        version: link:../services
       '@taiyomoe/umami':
         specifier: workspace:^
         version: link:../umami
-      '@taiyomoe/utils':
-        specifier: workspace:^
-        version: link:../utils
       '@trpc/server':
         specifier: 11.0.0-rc.840
         version: 11.0.0-rc.840(typescript@5.8.2)
-      mangadex-full-api:
-        specifier: ^6.0.0
-        version: 6.0.0
-      radash:
-        specifier: ^12.1.0
-        version: 12.1.0
       superjson:
         specifier: ^2.2.2
         version: 2.2.2
@@ -3036,13 +2975,6 @@ packages:
   '@tailwindcss/postcss@4.0.14':
     resolution: {integrity: sha512-+uIR6KtKhla1XeIanF27KtrfYy+PX+R679v5LxbkmEZlhQe3g8rk+wKj7Xgt++rWGRuFLGMXY80Ek8JNn+kN/g==}
 
-  '@tokenizer/inflate@0.2.7':
-    resolution: {integrity: sha512-MADQgmZT1eKjp06jpI2yozxaU9uVs4GzzgSL+uEq7bVcJ9V1ZXQkeGNql1fsSI0gMy1vhvNTNbUqrx+pZfJVmg==}
-    engines: {node: '>=18'}
-
-  '@tokenizer/token@0.3.0':
-    resolution: {integrity: sha512-OvjF+z51L3ov0OyAU0duzsYuvO01PH7x4t6DJx+guahgTnBHkhJdG7soQeTSFLWN3efnHyibZ4Z8l2EuWwJN3A==}
-
   '@total-typescript/ts-reset@0.6.1':
     resolution: {integrity: sha512-cka47fVSo6lfQDIATYqb/vO1nvFfbPw7uWLayIXIhGETj0wcOOlrlkobOMDNQOFr9QOafegUPq13V2+6vtD7yg==}
 
@@ -3059,6 +2991,9 @@ packages:
 
   '@types/country-flag-icons@1.2.2':
     resolution: {integrity: sha512-CefEn/J336TBDp7NX8JqzlDtCBOsm8M3r1Li0gEOt0HOMHF1XemNyrx9lSHjsafcb1yYWybU0N8ZAXuyCaND0w==}
+
+  '@types/luxon@3.4.2':
+    resolution: {integrity: sha512-TifLZlFudklWlMBfhubvgqTXRzLDI5pCbGa4P8a3wPyUQSW+1xQ5eDsreP9DWHX3tjq1ke96uYG/nwundroWcA==}
 
   '@types/node@22.13.10':
     resolution: {integrity: sha512-I6LPUvlRH+O6VRUqYOcMudhaIdUVWfsjnZavnsraHvpBwaEyMN29ry+0UVJhImYL16xsscu0aske3yA+uPOWfw==}
@@ -3444,13 +3379,6 @@ packages:
 
   fastq@1.19.1:
     resolution: {integrity: sha512-GwLTyxkCXjXbxqIhTsMI2Nui8huMPtnxg7krajPJAjnEG/iiOS7i+zCtWGZR9G0NBKbXKh6X9m9UIsYX/N6vvQ==}
-
-  fflate@0.8.2:
-    resolution: {integrity: sha512-cPJU47OaAoCbg0pBvzsgpTPhmhqI5eJjh/JIu8tPj5q+T7iLvW/JAYUqmE7KOB4R1ZyEhzBaIQpQpardBF5z8A==}
-
-  file-type@20.4.1:
-    resolution: {integrity: sha512-hw9gNZXUfZ02Jo0uafWLaFVPter5/k2rfcrjFJJHX/77xtSDOfJuEFb6oKlFV86FLP1SuyHMW1PSk0U9M5tKkQ==}
-    engines: {node: '>=18'}
 
   fill-range@7.1.1:
     resolution: {integrity: sha512-YsGpe3WHLK8ZYi4tWDg2Jy3ebRz2rXowDxnld4bkQB00cc/1Zw9AWnC0i9ztDJitivtQvaI9KaLyKrc+hBW0yg==}
@@ -4010,10 +3938,6 @@ packages:
   peberminta@0.9.0:
     resolution: {integrity: sha512-XIxfHpEuSJbITd1H3EeQwpcZbTLHc+VVr8ANI9t5sit565tsI4/xK3KWTUFE2e6QiangUkh3B0jihzmGnNrRsQ==}
 
-  peek-readable@7.0.0:
-    resolution: {integrity: sha512-nri2TO5JE3/mRryik9LlHFT53cgHfRK0Lt0BAZQXku/AW3E6XLt2GaY8siWi7dvW/m1z0ecn+J+bpDa9ZN3IsQ==}
-    engines: {node: '>=18'}
-
   picocolors@1.1.1:
     resolution: {integrity: sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA==}
 
@@ -4345,10 +4269,6 @@ packages:
   strnum@1.1.2:
     resolution: {integrity: sha512-vrN+B7DBIoTTZjnPNewwhx6cBA/H+IS7rfW68n7XxC1y7uoiGQBxaKzqucGUgavX15dJgiGztLJ8vxuEzwqBdA==}
 
-  strtok3@10.2.2:
-    resolution: {integrity: sha512-Xt18+h4s7Z8xyZ0tmBoRmzxcop97R4BAh+dXouUDCYn+Em+1P3qpkUfI5ueWLT8ynC5hZ+q4iPEmGG1urvQGBg==}
-    engines: {node: '>=18'}
-
   styled-jsx@5.1.6:
     resolution: {integrity: sha512-qSVyDTeMotdvQYoHWLNGwRFJHC+i+ZvdBRYosOFgC+Wg1vx4frN2/RG/NA7SYqqvKNLf39P2LSRA2pu6n0XYZA==}
     engines: {node: '>= 12.0.0'}
@@ -4400,10 +4320,6 @@ packages:
   to-regex-range@5.0.1:
     resolution: {integrity: sha512-65P7iz6X5yEr1cwcgvQxbbIw7Uk3gOy5dIdtZ4rDveLqhrdJP+Li/Hx6tyK0NEb+2GCyneCMJiGqrADCSNk8sQ==}
     engines: {node: '>=8.0'}
-
-  token-types@6.0.0:
-    resolution: {integrity: sha512-lbDrTLVsHhOMljPscd0yitpozq7Ga2M5Cvez5AjGg8GASBjtt6iERCAJ93yommPmz62fb45oFIXHEZ3u9bfJEA==}
-    engines: {node: '>=14.16'}
 
   tr46@0.0.3:
     resolution: {integrity: sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==}
@@ -4457,10 +4373,6 @@ packages:
     resolution: {integrity: sha512-aJn6wq13/afZp/jT9QZmwEjDqqvSGp1VT5GVg+f/t6/oVyrgXM6BY1h9BRh/O5p3PlUPAe+WuiEZOmb/49RqoQ==}
     engines: {node: '>=14.17'}
     hasBin: true
-
-  uint8array-extras@1.4.0:
-    resolution: {integrity: sha512-ZPtzy0hu4cZjv3z5NW9gfKnNLjoz4y6uv4HlelAjDK7sY/xOkKZv9xK/WQpcsBB3jEybChz9DPC2U/+cusjJVQ==}
-    engines: {node: '>=18'}
 
   uncrypto@0.1.3:
     resolution: {integrity: sha512-Ql87qFHB3s/De2ClA9e0gsnS6zXG27SkTiSJwjCc9MebbfapQfuPzumMIUMi38ezPZVNFcHI9sUIepeQfw8J8Q==}
@@ -7595,16 +7507,6 @@ snapshots:
       postcss: 8.5.3
       tailwindcss: 4.0.14
 
-  '@tokenizer/inflate@0.2.7':
-    dependencies:
-      debug: 4.4.0
-      fflate: 0.8.2
-      token-types: 6.0.0
-    transitivePeerDependencies:
-      - supports-color
-
-  '@tokenizer/token@0.3.0': {}
-
   '@total-typescript/ts-reset@0.6.1': {}
 
   '@trpc/server@11.0.0-rc.839(typescript@5.8.2)':
@@ -7618,6 +7520,8 @@ snapshots:
       '@types/node': 22.13.10
 
   '@types/country-flag-icons@1.2.2': {}
+
+  '@types/luxon@3.4.2': {}
 
   '@types/node@22.13.10':
     dependencies:
@@ -7811,11 +7715,13 @@ snapshots:
     dependencies:
       color-name: 1.1.4
       simple-swizzle: 0.2.2
+    optional: true
 
   color@4.2.3:
     dependencies:
       color-convert: 2.0.1
       color-string: 1.9.1
+    optional: true
 
   colorette@2.0.20: {}
 
@@ -8059,17 +7965,6 @@ snapshots:
     dependencies:
       reusify: 1.1.0
 
-  fflate@0.8.2: {}
-
-  file-type@20.4.1:
-    dependencies:
-      '@tokenizer/inflate': 0.2.7
-      strtok3: 10.2.2
-      token-types: 6.0.0
-      uint8array-extras: 1.4.0
-    transitivePeerDependencies:
-      - supports-color
-
   fill-range@7.1.1:
     dependencies:
       to-regex-range: 5.0.1
@@ -8174,7 +8069,8 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  is-arrayish@0.3.2: {}
+  is-arrayish@0.3.2:
+    optional: true
 
   is-extglob@2.1.1: {}
 
@@ -8586,8 +8482,6 @@ snapshots:
 
   peberminta@0.9.0: {}
 
-  peek-readable@7.0.0: {}
-
   picocolors@1.1.1: {}
 
   picomatch@2.3.1: {}
@@ -8957,6 +8851,7 @@ snapshots:
       '@img/sharp-wasm32': 0.33.5
       '@img/sharp-win32-ia32': 0.33.5
       '@img/sharp-win32-x64': 0.33.5
+    optional: true
 
   shebang-command@2.0.0:
     dependencies:
@@ -8971,6 +8866,7 @@ snapshots:
   simple-swizzle@0.2.2:
     dependencies:
       is-arrayish: 0.3.2
+    optional: true
 
   smol-toml@1.3.1: {}
 
@@ -9051,11 +8947,6 @@ snapshots:
 
   strnum@1.1.2: {}
 
-  strtok3@10.2.2:
-    dependencies:
-      '@tokenizer/token': 0.3.0
-      peek-readable: 7.0.0
-
   styled-jsx@5.1.6(@babel/core@7.24.5)(react@19.0.0):
     dependencies:
       client-only: 0.0.1
@@ -9095,11 +8986,6 @@ snapshots:
   to-regex-range@5.0.1:
     dependencies:
       is-number: 7.0.0
-
-  token-types@6.0.0:
-    dependencies:
-      '@tokenizer/token': 0.3.0
-      ieee754: 1.2.1
 
   tr46@0.0.3: {}
 
@@ -9142,8 +9028,6 @@ snapshots:
   tw-animate-css@1.2.4: {}
 
   typescript@5.8.2: {}
-
-  uint8array-extras@1.4.0: {}
 
   uncrypto@0.1.3: {}
 

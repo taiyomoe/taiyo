@@ -1,6 +1,6 @@
 {
   "$schema": "https://unpkg.com/knip@5/schema.json",
-  "ignoreWorkspaces": ["./packages/db"],
+  "ignoreWorkspaces": ["./apps/io-worker", "./packages/db"],
   "ignoreDependencies": [
     "@taiyomoe/db",
     "@types/global-types",
