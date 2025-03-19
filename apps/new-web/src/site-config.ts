@@ -1,6 +1,6 @@
 export const siteConfig = {
   i18n: {
-    availableLocales: ["en", "pt", "fr"],
+    availableLocales: ["en", "pt"],
     defaultLocale: "en",
     cookie: {
       name: "Language",

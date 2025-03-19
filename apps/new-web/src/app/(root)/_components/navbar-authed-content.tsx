@@ -1,5 +1,4 @@
 import { authClient } from "@taiyomoe/auth/client"
-import { ChevronDownIcon } from "lucide-react"
 import { useTranslations } from "next-intl"
 import Link from "next/link"
 import { toast } from "sonner"
@@ -14,11 +13,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown"
-import { Username } from "~/components/ui/username"
 import { useAuth } from "~/stores/auth.store"
 import { SidebarDropdownCommonContent } from "./sidebar-dropdown-common-content"
 
-export const SidebarAuthedFooter = () => {
+export const NavbarAuthedContent = () => {
   const t = useTranslations("global")
   const { user, signOut } = useAuth()
 
@@ -36,24 +34,17 @@ export const SidebarAuthedFooter = () => {
           style={{ transition: "padding 300ms, background 200ms" }}
           type="button"
         >
-          <div className="flex items-center gap-2">
-            <Avatar
-              src={user!.image}
-              className="max-size-8 min-size-8 group-data-[state=expanded]:max-size-12 group-data-[state=expanded]:min-size-12 hover:opacity-80 group-data-[state=open]/auth-trigger:opacity-80"
-              alt="Avatar"
-              width={48}
-              height={48}
-              radius="full"
-            />
-            <Username
-              className="group-data-[state=collapsed]:hidden"
-              user={user!}
-            />
-          </div>
-          <ChevronDownIcon className="size-4 text-subtle transition-[colors,rotate] group-hover/auth-trigger:text-default group-data-[state=collapsed]:hidden group-data-[state=open]/auth-trigger:rotate-180 group-data-[state=open]/auth-trigger:text-default" />
+          <Avatar
+            src={user!.image}
+            className="max-size-8 min-size-8 group-data-[state=expanded]:max-size-12 group-data-[state=expanded]:min-size-12 hover:opacity-80 group-data-[state=open]/auth-trigger:opacity-80"
+            alt="Avatar"
+            width={48}
+            height={48}
+            radius="full"
+          />
         </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="min-w-48">
+      <DropdownMenuContent className="min-w-48" align="end">
         <DropdownMenuItem animatedIcon={IdCardIcon} asChild>
           <Link href="/profile">{t("myProfile")}</Link>
         </DropdownMenuItem>

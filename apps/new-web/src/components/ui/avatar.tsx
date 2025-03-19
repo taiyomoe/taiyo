@@ -16,12 +16,13 @@ export const Avatar = ({ src, className, ...props }: Props) => {
         className,
       )}
       style={{
+        width: props.width,
+        height: props.height,
         transition:
           "color 200ms, background 200ms, width 300ms, height 300ms, min-width 300ms, min-height 300ms, padding 300ms",
       }}
-      {...props}
     >
-      <UserIcon className="size-full" />
+      <UserIcon className="size-full transition-colors" />
     </div>
   )
 }
