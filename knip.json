@@ -16,6 +16,8 @@
     "./apps/new-web/src/utils/parse-locale.ts",
     "./apps/new-web/src/components/ui/image.tsx",
     "./apps/new-web/src/components/ui/username.tsx",
-    "./packages/schemas/src/prisma/index.ts"
+    "./packages/schemas/src/prisma/index.ts",
+    "./packages/trpc/src/trpc.ts",
+    "./packages/trpc/src/utils/trpc-error.ts"
   ]
 }

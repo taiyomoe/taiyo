@@ -15,12 +15,6 @@ import { meilisearchClient } from "@taiyomoe/meilisearch"
 import messages from "@taiyomoe/messages/en.json"
 import { messagingClient } from "@taiyomoe/messaging"
 import { s3Client } from "@taiyomoe/s3"
-import {
-  BaseCoversService,
-  BaseTasksService,
-  BaseTitlesService,
-  BaseUsersService,
-} from "@taiyomoe/services"
 import type { Actions, Resources } from "@taiyomoe/types"
 import { umamiClient } from "@taiyomoe/umami"
 import { initTRPC } from "@trpc/server"
@@ -28,13 +22,6 @@ import superjson from "superjson"
 import { createTranslator } from "use-intl/core"
 import { ZodError } from "zod"
 import { withAuth } from "./middlewares/auth.middleware"
-import { withPermissions } from "./middlewares/permissions.middleware"
-import { ChaptersService } from "./services/chapters.trpc-service"
-import { LibrariesService } from "./services/libraries.trpc-service"
-import { MdService } from "./services/md.trpc-service"
-import { MediasService } from "./services/medias.trpc-service"
-import { ScansService } from "./services/scans.trpc-service"
-import { TrackersService } from "./services/trackers.trpc-service"
 import { logger } from "./utils/logger"
 
 type Meta = {
@@ -72,18 +59,6 @@ export const createTRPCContext = async (opts: {
   umami: umamiClient,
   messaging: messagingClient,
   s3: s3Client,
-  services: {
-    users: BaseUsersService,
-    libraries: LibrariesService,
-    medias: MediasService,
-    tasks: BaseTasksService,
-    trackers: TrackersService,
-    covers: BaseCoversService,
-    titles: BaseTitlesService,
-    chapters: ChaptersService,
-    scans: ScansService,
-    md: MdService,
-  },
   ...opts,
 })
 
@@ -114,7 +89,6 @@ export type tRPCInit = typeof t
  * Reusable middlewares
  */
 export const authMiddleware = withAuth(t)
-const permissionsMiddleware = withPermissions()
 
 /**
  * Create a server-side caller
@@ -178,6 +152,4 @@ export const publicProcedure = t.procedure.use(timingMiddleware)
  *
  * @see https://trpc.io/docs/procedures
  */
-export const protectedProcedure = t.procedure
-  .use(timingMiddleware)
-  .use(permissionsMiddleware)
+export const protectedProcedure = t.procedure.use(timingMiddleware)
