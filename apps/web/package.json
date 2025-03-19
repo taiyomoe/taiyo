@@ -84,7 +84,7 @@
     "@types/react-dom": "^19.0.4",
     "better-auth": "^1.2.4",
     "jiti": "^2.4.2",
-    "tailwindcss": "^4.0.11",
+    "tailwindcss": "^4.0.14",
     "tailwindcss-animate": "^1.0.7"
   },
   "browser": {
