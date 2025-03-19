@@ -16,7 +16,6 @@ import messages from "@taiyomoe/messages/en.json"
 import { messagingClient } from "@taiyomoe/messaging"
 import { s3Client } from "@taiyomoe/s3"
 import type { Actions, Resources } from "@taiyomoe/types"
-import { umamiClient } from "@taiyomoe/umami"
 import { initTRPC } from "@trpc/server"
 import superjson from "superjson"
 import { createTranslator } from "use-intl/core"
@@ -56,7 +55,6 @@ export const createTRPCContext = async (opts: {
   cache: cacheClient,
   logs: logsClient,
   logger,
-  umami: umamiClient,
   messaging: messagingClient,
   s3: s3Client,
   ...opts,
