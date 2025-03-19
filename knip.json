@@ -3,10 +3,12 @@
   "ignoreWorkspaces": ["./packages/db"],
   "ignoreDependencies": [
     "@taiyomoe/messages",
+    "@taiyomoe/db",
     "@types/global-types",
     "postcss",
+    "accept-language-parser",
     "tailwindcss-react-aria-components",
-    "tailwindcss-animate",
+    "tw-animate-css",
     "@heroui/.+",
     "punycode",
     "sharp"
@@ -16,6 +18,7 @@
     "./apps/new-web/src/i18n/request.ts",
     "./apps/new-web/src/utils/parse-locale.ts",
     "./apps/new-web/src/components/ui/image.tsx",
+    "./apps/new-web/src/components/ui/username.tsx",
     "./packages/schemas/src/prisma/index.ts"
   ]
 }

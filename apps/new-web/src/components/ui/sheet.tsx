@@ -8,13 +8,13 @@ import { cn } from "~/utils/cn"
 
 export const Sheet = SheetPrimitive.Root
 
-export const SheetTrigger = SheetPrimitive.Trigger
+// const SheetTrigger = SheetPrimitive.Trigger
 
-export const SheetClose = SheetPrimitive.Close
+// const SheetClose = SheetPrimitive.Close
 
-export const SheetPortal = SheetPrimitive.Portal
+const SheetPortal = SheetPrimitive.Portal
 
-export const SheetOverlay = ({
+const SheetOverlay = ({
   className,
   ...props
 }: ComponentProps<typeof SheetPrimitive.Overlay>) => (
@@ -84,7 +84,7 @@ export const SheetHeader = ({
 )
 SheetHeader.displayName = "SheetHeader"
 
-export const SheetFooter = ({
+const SheetFooter = ({
   className,
   ...props
 }: HTMLAttributes<HTMLDivElement>) => (
