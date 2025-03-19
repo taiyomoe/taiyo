@@ -57,8 +57,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/utils
       bullmq:
-        specifier: ^5.43.1
-        version: 5.43.1
+        specifier: ^5.44.0
+        version: 5.44.0
       mangadex-full-api:
         specifier: ^6.0.0
         version: 6.0.0
@@ -499,8 +499,8 @@ importers:
         specifier: workspace:*
         version: link:../types
       bullmq:
-        specifier: ^5.43.1
-        version: 5.43.1
+        specifier: ^5.44.0
+        version: 5.44.0
       zod:
         specifier: ^3.24.2
         version: 3.24.2
@@ -3616,8 +3616,8 @@ packages:
   buffer-equal-constant-time@1.0.1:
     resolution: {integrity: sha512-zRpUiDwd/xk6ADqPMATG8vc9VPrkck7T07OIx0gnjmJAnHnTVXNQG3vfvWNuiZIkwu9KrKdA1iJKfsfTVxE6NA==}
 
-  bullmq@5.43.1:
-    resolution: {integrity: sha512-gtAa4QiPMVY0/iUoMXFjs8OXIfVlFHBk5Fo9GIKLs6+nrzyHoJvAM4KphY4w8yUUSonnkw4PkYo0Ey684a+PeA==}
+  bullmq@5.44.0:
+    resolution: {integrity: sha512-OnEtkuXyrUx2Jm5BpH92+ttrobblBdCbkhOe3OoR0hxZuAilI3mPWlwELslhfImRpDv8rK+C/0/VK7I8f3xIig==}
 
   busboy@1.6.0:
     resolution: {integrity: sha512-8SFQbg/0hQ9xy3UNTB0YEnsNBbWfhf7RtnzpL7TkBiTBRfrQ9Fxcnz7VJsleJpyp6rVLvXiuORqjlHi5q+PYuA==}
@@ -9611,7 +9611,7 @@ snapshots:
 
   buffer-equal-constant-time@1.0.1: {}
 
-  bullmq@5.43.1:
+  bullmq@5.44.0:
     dependencies:
       cron-parser: 4.9.0
       ioredis: 5.6.0
