@@ -18,13 +18,13 @@ export const NavbarUnauthedContent = () => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <button
-          className="max-h-[36] outline-none data-[state=open]:[&>div]:bg-emphasis data-[state=open]:[&_svg]:text-default "
+          className="outline-none data-[state=open]:[&>div]:bg-emphasis data-[state=open]:[&_svg]:text-default"
           type="button"
         >
           <Avatar
-            className="hover:bg-emphasis hover:[&_svg]:text-default"
-            width={36}
-            height={36}
+            className="max-size-9 group-data-[state=expanded]/navbar:max-size-10 hover:bg-emphasis hover:[&_svg]:text-default"
+            width={40}
+            height={40}
             radius="full"
             alt="Avatar"
           />

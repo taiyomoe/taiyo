@@ -11,10 +11,13 @@ import { useSidebar } from "./sidebar-context"
 
 export const Navbar = () => {
   const session = useSession()
-  const { setOpenMobile } = useSidebar()
+  const { state, isMobile, setOpenMobile } = useSidebar()
 
   return (
-    <div className="flex h-[49] items-center justify-between border-subtle border-b bg-muted px-4 py-2 md:justify-end">
+    <div
+      className="group/navbar flex h-[49] items-center justify-between border-subtle border-b bg-muted px-4 py-2 transition-[height] duration-300 data-[state=expanded]:h-[57] md:justify-end"
+      data-state={isMobile ? "collapsed" : state}
+    >
       <div className="-translate-x-1/2 absolute left-1/2 flex items-center gap-2 md:hidden">
         <Link
           href="/"

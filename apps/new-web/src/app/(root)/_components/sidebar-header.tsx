@@ -3,7 +3,7 @@ import { TaiyoLogo } from "~/components/logos/taiyo-logo"
 import { SidebarToggleButton } from "./sidebar-toggle-button"
 
 export const SidebarHeader = () => (
-  <div className="flex justify-between border-subtle border-b p-4 transition-[padding] duration-300 group-data-[state=collapsed]:p-2">
+  <div className="flex justify-between border-subtle border-b px-4 py-3 transition-[padding] duration-300 group-data-[state=collapsed]:p-2">
     <div className="flex items-center gap-2">
       <Link
         href="/"
