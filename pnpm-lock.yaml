@@ -450,7 +450,7 @@ importers:
         specifier: ^1.2.4
         version: 1.2.4(typescript@5.8.2)
       better-auth-harmony:
-        specifier: ^1.2.3
+        specifier: ^1.2.4
         version: 1.2.4(better-auth@1.2.4(typescript@5.8.2))
       luxon:
         specifier: ^3.5.0
