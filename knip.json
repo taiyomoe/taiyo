@@ -2,16 +2,13 @@
   "$schema": "https://unpkg.com/knip@5/schema.json",
   "ignoreWorkspaces": ["./packages/db"],
   "ignoreDependencies": [
-    "@taiyomoe/messages",
     "@taiyomoe/db",
     "@types/global-types",
     "postcss",
     "accept-language-parser",
     "tailwindcss-react-aria-components",
     "tw-animate-css",
-    "@heroui/.+",
-    "punycode",
-    "sharp"
+    "punycode"
   ],
   "ignore": [
     "./apps/web/src/i18n/request.ts",
