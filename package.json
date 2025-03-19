@@ -7,7 +7,7 @@
   "packageManager": "pnpm@10.6.4",
   "scripts": {
     "build": "turbo build",
-    "dev": "infisical run -- turbo dev --parallel",
+    "dev": "turbo dev --parallel",
     "clean": "git clean -xdf node_modules",
     "clean:ws": "turbo clean",
     "check:ws": "biome check apps/ packages/ tooling/",
@@ -18,7 +18,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
-    "@types/global-types": "workspace:*",
+    "@types/global-types": "workspace:^",
     "@types/node": "^22.13.10",
     "knip": "^5.46.0",
     "turbo": "^2.4.4",

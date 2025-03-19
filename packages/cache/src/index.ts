@@ -141,6 +141,16 @@ export const cacheClient = {
       invalidate: (id: string) =>
         client.del(`users:auth:${id}`).then(() => null),
     },
+    verificationEmailSentAt: {
+      set: (id: string, value: Date) =>
+        client.setex(
+          `users:verification-email-sent-at:${id}`,
+          HOUR,
+          SuperJSON.stringify(value),
+        ),
+      get: (id: string) =>
+        parseCache<Date>(client.get(`users:verification-email-sent-at:${id}`)),
+    },
     settings: {
       set: (id: string, value: UserSettings) =>
         client.setex(`users:settings:${id}`, DAY, SuperJSON.stringify(value)),

@@ -5,28 +5,27 @@
   "type": "module",
   "license": "MIT",
   "scripts": {
-    "dev": "tsx watch ./src/index.ts",
     "start": "tsx ./src/index.ts",
     "clean": "rm -rf .turbo node_modules",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@t3-oss/env-core": "^0.12.0",
-    "@taiyomoe/cache": "workspace:*",
-    "@taiyomoe/db": "workspace:*",
-    "@taiyomoe/logs": "workspace:*",
-    "@taiyomoe/meilisearch": "workspace:*",
-    "@taiyomoe/messaging": "workspace:*",
-    "@taiyomoe/s3": "workspace:*",
-    "@taiyomoe/services": "workspace:*",
-    "@taiyomoe/utils": "workspace:*",
+    "@taiyomoe/cache": "workspace:^",
+    "@taiyomoe/db": "workspace:^",
+    "@taiyomoe/logs": "workspace:^",
+    "@taiyomoe/meilisearch": "workspace:^",
+    "@taiyomoe/messaging": "workspace:^",
+    "@taiyomoe/s3": "workspace:^",
+    "@taiyomoe/services": "workspace:^",
+    "@taiyomoe/utils": "workspace:^",
     "bullmq": "^5.44.0",
     "mangadex-full-api": "^6.0.0",
     "radash": "^12.1.0"
   },
   "devDependencies": {
-    "@taiyomoe/tsconfig": "workspace:*",
-    "@taiyomoe/types": "workspace:*",
+    "@taiyomoe/tsconfig": "workspace:^",
+    "@taiyomoe/types": "workspace:^",
     "tsx": "^4.19.3"
   }
 }

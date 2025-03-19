@@ -1,7 +1,10 @@
 import { createEnv } from "@t3-oss/env-core"
+import { env as emailEnv } from "@taiyomoe/email/env"
 import { z } from "zod"
 
 export const env = createEnv({
+  extends: [emailEnv],
+
   /**
    * Specify your shared environment variables schema here.
    */
@@ -14,8 +17,11 @@ export const env = createEnv({
   server: {
     BETTER_AUTH_URL: z.string().url(),
     BETTER_AUTH_SECRET: z.string(),
-    BETTER_AUTH_DISCORD_ID: z.string(),
-    BETTER_AUTH_DISCORD_SECRET: z.string(),
+    DISCORD_CLIENT_ID: z.string(),
+    DISCORD_CLIENT_SECRET: z.string(),
+    GOOGLE_CLIENT_ID: z.string(),
+    GOOGLE_CLIENT_SECRET: z.string(),
+    TURNSTILE_SECRET_KEY: z.string(),
   },
 
   /**

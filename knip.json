@@ -1,16 +1,24 @@
 {
   "$schema": "https://unpkg.com/knip@5/schema.json",
-  "ignoreBinaries": ["infisical"],
   "ignoreWorkspaces": ["./packages/db"],
   "ignoreDependencies": [
     "@taiyomoe/messages",
+    "@taiyomoe/db",
     "@types/global-types",
+    "postcss",
+    "accept-language-parser",
+    "tailwindcss-react-aria-components",
+    "tw-animate-css",
     "@heroui/.+",
     "punycode",
     "sharp"
   ],
   "ignore": [
     "./apps/web/src/i18n/request.ts",
+    "./apps/new-web/src/i18n/request.ts",
+    "./apps/new-web/src/utils/parse-locale.ts",
+    "./apps/new-web/src/components/ui/image.tsx",
+    "./apps/new-web/src/components/ui/username.tsx",
     "./packages/schemas/src/prisma/index.ts"
   ]
 }

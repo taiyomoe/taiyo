@@ -1,0 +1,9 @@
+{
+  "extends": "@taiyomoe/tsconfig/base.json",
+  "compilerOptions": {
+    "jsx": "react",
+    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
+  },
+  "include": ["src"],
+  "exclude": ["node_modules"]
+}

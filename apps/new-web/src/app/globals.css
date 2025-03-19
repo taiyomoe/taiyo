@@ -1,0 +1,236 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@plugin "tailwindcss-react-aria-components";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme inline {
+  /* Background Standard */
+  --color-default: var(--background);
+  --color-subtle: var(--background-subtle);
+  --color-muted: var(--background-muted);
+  --color-emphasis: var(--background-emphasis);
+  --color-inverted: var(--background-inverted);
+
+  /* Background Semantic */
+  --color-info: var(--background-semantic-info);
+  --color-info-subtle: var(--background-semantic-info-subtle);
+  --color-success: var(--background-semantic-success);
+  --color-success-subtle: var(--background-semantic-success-subtle);
+  --color-warning: var(--background-semantic-warning);
+  --color-warning-subtle: var(--background-semantic-warning-subtle);
+  --color-error: var(--background-semantic-error);
+  --color-error-subtle: var(--background-semantic-error-subtle);
+
+  /* Background Primary */
+  --color-primary: var(--background-primary);
+  --color-primary-emphasis: var(--background-primary-emphasis);
+  --color-primary-muted: var(--background-primary-muted);
+
+  /* Border Standard */
+  --border-color-default: var(--border);
+  --border-color-subtle: var(--border-subtle);
+  --border-color-muted: var(--border-muted);
+  --border-color-emphasis: var(--border-emphasis);
+
+  /* Border Semantic */
+  --border-color-warning-subtle: var(--border-semantic-warning-subtle);
+  --border-color-error-subtle: var(--border-semantic-error-subtle);
+  --border-color-error: var(--border-semantic-error);
+
+  /* Content/Text Standard */
+  --text-color-default: var(--text);
+  --text-color-subtle: var(--text-subtle);
+  --text-color-muted: var(--text-muted);
+  --text-color-inverted: var(--text-inverted);
+
+  /* Content/Text Semantic */
+  --text-color-info: var(--text-semantic-info);
+  --text-color-info-subtle: var(--text-semantic-info-subtle);
+  --text-color-success: var(--text-semantic-success);
+  --text-color-success-subtle: var(--text-semantic-success-subtle);
+  --text-color-warning: var(--text-semantic-warning);
+  --text-color-warning-subtle: var(--text-semantic-warning-subtle);
+  --text-color-error: var(--text-semantic-error);
+  --text-color-error-subtle: var(--text-semantic-error-subtle);
+
+  /* Brand */
+  --color-brand: var(--brand);
+  --color-brand-muted: var(--brand-muted);
+  --color-brand-emphasis: var(--brand-emphasis);
+
+  /* Defaults */
+  --radius: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+}
+
+:root {
+  /* Background Standard */
+  --background: hsla(0, 0%, 100%, 1); /* white - default background */
+  --background-subtle: hsla(220, 14%, 94%, 1); /* gray.100 - hovering on items, subtle raising */
+  --background-muted: hsla(210, 20%, 97%, 1); /* gray.50 - large items, sidebar, sections */
+  --background-emphasis: hsla(220, 13%, 91%, 1); /* gray.200 - active items and emphasising */
+  --background-inverted: hsla(210, 30%, 4%, 1); /* gray.900 - tooltips */
+
+  /* Background Semantic */
+  --background-semantic-info: hsla(212, 88%, 97%, 1); /* blue.100 */
+  --background-semantic-info-subtle: hsla(212, 88%, 89%, 1);
+  --background-semantic-success: hsla(167, 54%, 93%, 1); /* green.100 */
+  --background-semantic-success-subtle: hsla(167, 54%, 85%, 1);
+  --background-semantic-warning: hsla(34, 100%, 92%, 1); /* orange.100 */
+  --background-semantic-warning-subtle: hsla(34, 100%, 84%, 1);
+  --background-semantic-error: hsla(0, 93%, 94%, 1); /* red.100 */
+  --background-semantic-error-subtle: hsla(0, 93%, 86%, 1);
+
+  /* Background Primary */
+  --background-primary: hsla(214, 30%, 16%, 1); /* stone.100 */
+  --background-primary-emphasis: hsla(220, 6%, 25%, 1); /* stone.800 */
+  --background-primary-muted: hsla(220, 14%, 94%, 1); /* stone.400 */
+
+  /* Border Standard */
+  --border: hsla(216, 12%, 84%, 1); /* gray.300 - inputs */
+  --border-subtle: hsla(220, 13%, 91%, 1); /* gray.200 - container borders */
+  --border-muted: hsla(220, 14%, 94%, 1); /* gray.100 */
+  --border-emphasis: hsla(218, 11%, 65%, 1); /* gray.400 - input:hover */
+
+  /* Border Semantic */
+  --border-semantic-warning-subtle: hsla(32, 98%, 83%, 1);
+  --border-semantic-error-subtle: hsla(0, 96%, 89%, 1);
+  --border-semantic-error: hsla(0, 63%, 24%, 1); /* red.800 */
+
+  /* Content/Text Standard */
+  --text: hsla(220, 6%, 25%, 1); /* gray.700 */
+  --text-subtle: hsla(220, 9%, 46%, 1); /* gray.500 */
+  --text-muted: hsla(218, 11%, 65%, 1); /* gray.400 */
+  --text-emphasis: hsla(210, 30%, 4%, 1); /* gray.900 */
+  --text-inverted: hsla(0, 0%, 100%, 1); /* white */
+
+  /* Content/Text Semantic */
+  --text-semantic-info: hsla(236, 80%, 25%, 1); /* blue-800 */
+  --text-semantic-info-subtle: hsla(236, 80%, 25%, 0.8); /* blue.100/80 */
+  --text-semantic-success: hsla(150, 84%, 22%, 1); /* green-800 */
+  --text-semantic-success-subtle: hsla(150, 84%, 22%, 0.8); /* green.100/80 */
+  --text-semantic-attention: hsla(15, 79%, 34%, 1); /* orange-800 */
+  --text-semantic-warning-subtle: hsla(15, 79%, 34%, 0.8); /* orange.100/80 */
+  --text-semantic-error: hsla(0, 63%, 24%, 1); /* red-800 */
+  --text-semantic-error-subtle: hsla(0, 63%, 24%, 0.8); /* red.100/80 */
+
+  /* Brand */
+  --brand: hsla(0, 100%, 65.49%, 1);
+  --brand-muted: hsla(0, 97%, 71%, 1);
+  --brand-emphasis: hsla(0, 98%, 55%, 1);
+
+  /* Defaults */
+  --radius: 0.5rem;
+  --default-transition-duration: 0.2s;
+}
+
+.dark {
+  /* Background Standard */
+  --background: hsla(0, 0%, 6%, 1); /* stone.950 */
+  --background-subtle: hsla(0, 0%, 15%, 1); /* stone.800 */
+  --background-muted: hsla(0, 0%, 9%, 1); /* stone.900 */
+  --background-emphasis: hsla(0, 0%, 25%, 1); /* stone.700 */
+  --background-inverted: hsla(0, 0%, 98%, 1); /* stone.50 */
+
+  /* Background Semantic */
+  --background-semantic-info: hsla(234, 18%, 13%, 1);
+  --background-semantic-info-subtle: hsla(234, 18%, 21%, 1);
+  --background-semantic-success: hsla(157, 22%, 11%, 1);
+  --background-semantic-success-subtle: hsla(157, 22%, 19%, 1);
+  --background-semantic-warning: hsla(24, 32%, 11%, 1);
+  --background-semantic-warning-subtle: hsla(24, 32%, 19%, 1);
+  --background-semantic-error: hsla(359, 23%, 12%, 1);
+  --background-semantic-error-subtle: hsla(359, 23%, 20%, 1);
+
+  /* Background Primary */
+  --background-primary: hsla(0, 0%, 96%, 1); /* stone.100 */
+  --background-primary-emphasis: hsla(0, 0%, 64%, 1); /* stone.800 */
+  --background-primary-muted: hsla(0, 0%, 15%, 1); /* stone.400 */
+
+  /* Border Standard */
+  --border: hsla(0, 0%, 30%, 1); /* stone.600 */
+  --border-subtle: hsla(0, 0%, 15%, 1); /* stone.700 */
+  --border-muted: hsla(0, 0%, 9%, 1); /* stone.500 */
+  --border-emphasis: hsla(0, 0%, 45%, 1); /* stone.800 */
+
+  /* Border Semantic */
+  --border-semantic-warning-subtle: hsla(15, 75%, 23%, 1);
+  --border-semantic-error-subtle: hsla(0, 63%, 24%, 1);
+  --border-semantic-error: hsla(0, 63%, 24%, 1); /* red.800 */
+
+  /* Content/Text Standard */
+  --text: hsla(0, 0%, 83%, 1); /* stone.300 */
+  --text-subtle: hsla(0, 0%, 64%, 1); /* stone.400 */
+  --text-muted: hsla(0, 0%, 64%, 1); /* stone.400 */
+  --text-emphasis: hsla(0, 0%, 98%, 1); /* stone.50 */
+  --text-inverted: hsla(0, 0%, 0%, 1); /* black */
+
+  /* Content/Text Semantic */
+  --text-semantic-info: hsla(229, 90%, 74%, 1); /* blue.100 */
+  --text-semantic-info-subtle: hsla(229, 90%, 74%, 0.8); /* blue.100/80 */
+  --text-semantic-success: hsla(161, 49%, 54%, 1); /* green.100 */
+  --text-semantic-success-subtle: hsla(161, 49%, 54%, 0.8); /* green.100/80 */
+  --text-semantic-warning: hsla(27, 96%, 61%, 1); /* orange.100 */
+  --text-semantic-warning-subtle: hsla(27, 96%, 61%, 0.8); /* orange.100/80 */
+  --text-semantic-error: hsla(0, 91%, 71%, 1); /* red.100 */
+  --text-semantic-error-subtle: hsla(0, 91%, 71%, 0.8); /* red.100/80 */
+
+  /* Brand */
+  --brand: hsla(0, 100%, 65.49%, 1);
+  --brand-muted: hsla(0, 97%, 71%, 1);
+  --brand-emphasis: hsla(0, 98%, 55%, 1);
+}
+
+@layer base {
+  * {
+    @apply border-default;
+  }
+
+  body {
+    @apply bg-default text-default;
+  }
+
+  button {
+    @apply hover:cursor-pointer;
+  }
+}
+
+@utility dropdown-content-width-full {
+  width: var(--radix-dropdown-menu-trigger-width);
+  max-height: var(--radix-dropdown-menu-content-available-height);
+}
+
+@utility popover-content-width-full {
+  width: var(--radix-popover-trigger-width);
+  max-height: var(--radix-popover-content-available-height);
+}
+
+@utility min-size-* {
+  min-height: --spacing(--value(number));
+  min-width: --spacing(--value(number));
+}
+
+@utility max-size-* {
+  max-height: --spacing(--value(number));
+  max-width: --spacing(--value(number));
+}
+
+@utility focusable {
+  @apply outline-hidden focus:ring-2 focus:ring-primary;
+}
+
+@theme {
+  --animate-shine: shine 9s linear infinite;
+
+  @keyframes shine {
+    0% {
+      background-position: 0 0;
+    }
+    100% {
+      background-position: -400% 0;
+    }
+  }
+}

@@ -14,19 +14,19 @@
   },
   "dependencies": {
     "@t3-oss/env-core": "^0.12.0",
-    "@taiyomoe/cache": "workspace:*",
-    "@taiyomoe/constants": "workspace:*",
-    "@taiyomoe/db": "workspace:*",
-    "@taiyomoe/logs": "workspace:*",
-    "@taiyomoe/meilisearch": "workspace:*",
-    "@taiyomoe/s3": "workspace:*",
-    "@taiyomoe/types": "workspace:*",
-    "@taiyomoe/utils": "workspace:*",
+    "@taiyomoe/cache": "workspace:^",
+    "@taiyomoe/constants": "workspace:^",
+    "@taiyomoe/db": "workspace:^",
+    "@taiyomoe/logs": "workspace:^",
+    "@taiyomoe/meilisearch": "workspace:^",
+    "@taiyomoe/s3": "workspace:^",
+    "@taiyomoe/types": "workspace:^",
+    "@taiyomoe/utils": "workspace:^",
     "file-type": "^20.4.1",
     "radash": "^12.1.0",
     "sharp": "^0.33.5"
   },
   "devDependencies": {
-    "@taiyomoe/tsconfig": "workspace:*"
+    "@taiyomoe/tsconfig": "workspace:^"
   }
 }
