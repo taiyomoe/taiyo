@@ -33,7 +33,7 @@
     "postcss": "^8.5.3",
     "radash": "^12.1.0",
     "react": "^19.0.0",
-    "react-aria": "^3.38.0",
+    "react-aria": "^3.38.1",
     "react-aria-components": "^1.7.1",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.54.2",
