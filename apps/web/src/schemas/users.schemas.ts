@@ -1,4 +1,4 @@
-import { USERNAME_REGEX } from "@taiyomoe/new-utils"
+import { USERNAME_REGEX } from "@taiyomoe/utils"
 import { z } from "zod"
 import { zodMessages } from "~/utils/zod-messages"
 import { emailSchema, passwordSchema } from "./common.schemas"

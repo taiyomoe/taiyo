@@ -1,5 +1,5 @@
 import { fakerPT_BR } from "@faker-js/faker"
-import { normalizeDisplayName, normalizeUsername } from "@taiyomoe/new-utils"
+import { normalizeDisplayName, normalizeUsername } from "@taiyomoe/utils"
 import { ContentRating, Countries, Genders, Languages, db } from "../../"
 
 const execute = async () => {

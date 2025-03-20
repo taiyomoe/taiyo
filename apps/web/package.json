@@ -20,7 +20,7 @@
     "@tailwindcss/postcss": "^4.0.14",
     "@taiyomoe/auth": "workspace:^",
     "@taiyomoe/db": "workspace:^",
-    "@taiyomoe/new-utils": "workspace:^",
+    "@taiyomoe/utils": "workspace:^",
     "accept-language-parser": "^1.5.0",
     "better-auth": "^1.2.4",
     "clsx": "^2.1.1",

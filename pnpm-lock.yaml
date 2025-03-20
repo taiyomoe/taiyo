@@ -70,7 +70,7 @@ importers:
         specifier: ^4.19.3
         version: 4.19.3
 
-  apps/new-web:
+  apps/web:
     dependencies:
       '@hookform/resolvers':
         specifier: ^4.1.3
@@ -99,9 +99,9 @@ importers:
       '@taiyomoe/db':
         specifier: workspace:^
         version: link:../../packages/db
-      '@taiyomoe/new-utils':
+      '@taiyomoe/utils':
         specifier: workspace:^
-        version: link:../../packages/new-utils
+        version: link:../../packages/utils
       accept-language-parser:
         specifier: ^1.5.0
         version: 1.5.0
@@ -214,9 +214,9 @@ importers:
       '@taiyomoe/meilisearch':
         specifier: workspace:^
         version: link:../meilisearch
-      '@taiyomoe/new-utils':
+      '@taiyomoe/utils':
         specifier: workspace:^
-        version: link:../new-utils
+        version: link:../utils
       better-auth:
         specifier: ^1.2.4
         version: 1.2.4(typescript@5.8.2)
@@ -279,9 +279,9 @@ importers:
       '@t3-oss/env-core':
         specifier: ^0.12.0
         version: 0.12.0(typescript@5.8.2)(valibot@1.0.0-beta.15(typescript@5.8.2))(zod@3.24.2)
-      '@taiyomoe/new-utils':
+      '@taiyomoe/utils':
         specifier: workspace:^
-        version: link:../new-utils
+        version: link:../utils
       prisma-json-types-generator:
         specifier: ^3.2.2
         version: 3.2.2(prisma@6.5.0(typescript@5.8.2))(typescript@5.8.2)
@@ -412,7 +412,7 @@ importers:
         specifier: workspace:^
         version: link:../../tooling/typescript
 
-  packages/new-utils:
+  packages/utils:
     dependencies:
       '@faker-js/faker':
         specifier: ^9.5.1

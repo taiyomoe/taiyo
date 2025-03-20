@@ -4,7 +4,7 @@ import {
   USERNAME_MAX_LENGTH,
   USERNAME_MIN_LENGTH,
   USERNAME_REGEX,
-} from "@taiyomoe/new-utils"
+} from "@taiyomoe/utils"
 import type { UserSettings } from "@taiyomoe/types"
 import { betterAuth } from "better-auth"
 import { emailHarmony } from "better-auth-harmony"

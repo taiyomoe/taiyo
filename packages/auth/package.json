@@ -19,7 +19,7 @@
     "@taiyomoe/db": "workspace:^",
     "@taiyomoe/email": "workspace:^",
     "@taiyomoe/meilisearch": "workspace:^",
-    "@taiyomoe/new-utils": "workspace:^",
+    "@taiyomoe/utils": "workspace:^",
     "better-auth": "^1.2.4",
     "better-auth-harmony": "^1.2.4",
     "luxon": "^3.5.0",

@@ -1,4 +1,4 @@
-import { normalizeDisplayName, normalizeUsername } from "@taiyomoe/new-utils"
+import { normalizeDisplayName, normalizeUsername } from "@taiyomoe/utils"
 import type { User } from "better-auth"
 
 export const beforeUserCreatedHook = async (user: User) => {

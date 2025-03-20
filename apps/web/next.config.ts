@@ -19,7 +19,7 @@ const config = {
   },
 
   /** Enables hot reloading for local packages without a build step */
-  transpilePackages: ["@taiyomoe/auth", "@taiyomoe/db", "@taiyomoe/new-utils"],
+  transpilePackages: ["@taiyomoe/auth", "@taiyomoe/db", "@taiyomoe/utils"],
 
   /** We already do linting and typechecking as separate tasks in CI */
   eslint: { ignoreDuringBuilds: true },
