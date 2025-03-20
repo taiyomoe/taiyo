@@ -1,6 +1,6 @@
 import type { Prisma } from "@taiyomoe/db"
-import { MdUtils } from "@taiyomoe/utils"
 import type { Manga } from "mangadex-full-api"
+import { MdUtils } from "~/utils/md.utils"
 
 const getCreationPayload = (input: Manga, creatorId: string) => {
   const { genres, tags, isOneShot } = MdUtils.getGenresAndTags(input)

@@ -1,5 +1,0 @@
-<clickhouse>
-  <logger>
-    <level>warning</level>
-  </logger>
-</clickhouse>

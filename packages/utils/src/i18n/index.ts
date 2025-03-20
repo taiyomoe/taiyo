@@ -1,7 +1,0 @@
-export * from "./contentRating/contentRating.pt"
-export * from "./countries/countries.pt"
-export * from "./genders/genders.pt"
-export * from "./genres/genres.pt"
-export * from "./languages/languages.pt"
-export * from "./tags/tags.pt"
-export * from "./types/types.pt"

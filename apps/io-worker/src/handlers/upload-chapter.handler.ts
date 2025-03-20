@@ -1,37 +1,37 @@
-import { db } from "@taiyomoe/db"
-import { BaseChaptersService, BaseFilesService } from "@taiyomoe/services"
-import type { UploadChapterMessageInput } from "@taiyomoe/types"
-import { parallel, pick } from "radash"
-import { logger } from "~/utils/logger"
+// import { db } from "@taiyomoe/db"
+// import { BaseChaptersService, BaseFilesService } from "@taiyomoe/services"
+// import type { UploadChapterMessageInput } from "@taiyomoe/types"
+// import { parallel, pick } from "radash"
+// import { logger } from "~/utils/logger"
 
-export const uploadChapterHandler = async (
-  input: UploadChapterMessageInput,
-) => {
-  const pages = await parallel(10, input.pages, BaseFilesService.downloadFromS3)
-  const uploadedPages = await parallel(10, pages, async (p) =>
-    BaseFilesService.upload(`medias/${input.mediaId}/chapters/${input.id}`, p),
-  )
-  const chapter = await db.mediaChapter.create({
-    data: {
-      ...pick(input, [
-        "title",
-        "number",
-        "volume",
-        "contentRating",
-        "flag",
-        "language",
-        "mediaId",
-        "uploaderId",
-      ]),
-      id: input.id,
-      scans: { connect: input.scanIds.map((s) => ({ id: s })) },
-      pages: uploadedPages,
-    },
-  })
+// export const uploadChapterHandler = async (
+//   input: UploadChapterMessageInput,
+// ) => {
+//   const pages = await parallel(10, input.pages, BaseFilesService.downloadFromS3)
+//   const uploadedPages = await parallel(10, pages, async (p) =>
+//     BaseFilesService.upload(`medias/${input.mediaId}/chapters/${input.id}`, p),
+//   )
+//   const chapter = await db.mediaChapter.create({
+//     data: {
+//       ...pick(input, [
+//         "title",
+//         "number",
+//         "volume",
+//         "contentRating",
+//         "flag",
+//         "language",
+//         "mediaId",
+//         "uploaderId",
+//       ]),
+//       id: input.id,
+//       scans: { connect: input.scanIds.map((s) => ({ id: s })) },
+//       pages: uploadedPages,
+//     },
+//   })
 
-  await BaseChaptersService.postUpload(db, "imported", [chapter])
+//   await BaseChaptersService.postUpload(db, "imported", [chapter])
 
-  logger.info(`${input.uploaderId} uploaded a chapter`, chapter.id)
+//   logger.info(`${input.uploaderId} uploaded a chapter`, chapter.id)
 
-  return chapter
-}
+//   return chapter
+// }

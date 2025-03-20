@@ -1,24 +1,8 @@
-import {
-  CHAPTERS_LIST_PER_PAGE_CHOICES,
-  CHAPTERS_LIST_SORTABLE_FIELDS,
-  DEFAULT_CHAPTERS_LIST_PER_PAGE,
-  DEFAULT_LATEST_CHAPTERS_GROUPED_PER_PAGE,
-  DEFAULT_MEDIA_PER_PAGE,
-  LATEST_CHAPTERS_GROUPED_PER_PAGE_CHOICES,
-  MEDIA_PER_PAGE_CHOICES,
-} from "@taiyomoe/constants"
 import { z } from "zod"
 import {
   chapterNumberSchema,
   chapterVolumeSchema,
-  dateFilterSchema,
-  enumFilterSchema,
   fileSchema,
-  nullableDateFilterSchema,
-  nullableNumberFilterSchema,
-  numberFilterSchema,
-  pageSchema,
-  perPageSchema,
 } from "./common.schemas"
 import { ContentRatingSchema, FlagSchema, LanguagesSchema } from "./prisma"
 
@@ -34,91 +18,4 @@ export const uploadChapterSchema = z.object({
   files: fileSchema.array().min(1),
 })
 
-export const uploadChaptersSchema = z.object({
-  chapters: uploadChapterSchema.omit({ mediaId: true }).array().min(1),
-  concurrent: z.coerce.number().int().positive().min(1),
-  mediaId: z.string().uuid(),
-})
-
-export const updateChapterSchema = z.object({
-  id: z.string().uuid(),
-  title: z.string().nullish(),
-  number: chapterNumberSchema.optional(),
-  volume: chapterVolumeSchema,
-  language: LanguagesSchema.optional(),
-  contentRating: ContentRatingSchema.optional(),
-  flag: FlagSchema.optional(),
-  scanIds: z.string().uuid().array(),
-})
-
-export const bulkUpdateChaptersVolumesSchema = z.object({
-  volumes: z
-    .object({
-      number: chapterVolumeSchema,
-      ids: z.string().uuid().array().min(1),
-    })
-    .array(),
-})
-
-export const bulkUpdateChaptersScansSchema = z.object({
-  scans: z
-    .object({
-      scanIds: z.string().uuid().array(),
-      ids: z.string().uuid().array().min(1),
-    })
-    .array(),
-})
-
-export const getMediaChaptersByMediaIdSchema = z.object({
-  mediaId: z.string(),
-  page: pageSchema,
-  perPage: perPageSchema(DEFAULT_MEDIA_PER_PAGE, MEDIA_PER_PAGE_CHOICES),
-})
-
-export const getChaptersByUserIdSchema = z.object({
-  userId: z.string(),
-  mediaId: z.string(),
-})
-
-export const getLatestChaptersGroupedByUserSchema = z.object({
-  userId: z.string(),
-  page: pageSchema,
-  perPage: perPageSchema(
-    DEFAULT_LATEST_CHAPTERS_GROUPED_PER_PAGE,
-    LATEST_CHAPTERS_GROUPED_PER_PAGE_CHOICES,
-  ),
-})
-
-export const getChaptersListSchema = z.object({
-  createdAt: dateFilterSchema,
-  updatedAt: dateFilterSchema,
-  deletedAt: nullableDateFilterSchema,
-  number: numberFilterSchema,
-  volume: nullableNumberFilterSchema,
-  language: enumFilterSchema(LanguagesSchema),
-  contentRating: enumFilterSchema(ContentRatingSchema),
-  flag: enumFilterSchema(FlagSchema),
-  sort: z
-    .tuple([z.enum(CHAPTERS_LIST_SORTABLE_FIELDS), z.enum(["asc", "desc"])])
-    .array()
-    .catch([["createdAt", "desc"]]),
-  page: pageSchema,
-  perPage: perPageSchema(
-    DEFAULT_CHAPTERS_LIST_PER_PAGE,
-    CHAPTERS_LIST_PER_PAGE_CHOICES,
-  ),
-})
-
 export type UploadChapterInput = z.infer<typeof uploadChapterSchema>
-export type UploadChaptersInput = z.infer<typeof uploadChaptersSchema>
-export type UpdateChapterInput = z.infer<typeof updateChapterSchema>
-export type BulkUpdateChaptersVolumesInput = z.infer<
-  typeof bulkUpdateChaptersVolumesSchema
->
-export type BulkUpdateChaptersScansInput = z.infer<
-  typeof bulkUpdateChaptersScansSchema
->
-export type GetLatestChaptersGroupedByUserInput = z.infer<
-  typeof getLatestChaptersGroupedByUserSchema
->
-export type GetChaptersListInput = z.infer<typeof getChaptersListSchema>

@@ -1,23 +1,17 @@
 {
-  "name": "@taiyomoe/schemas",
+  "name": "@taiyomoe/config",
   "version": "0.1.0",
   "private": true,
   "type": "module",
   "license": "MIT",
   "exports": {
-    ".": "./src/index.ts",
-    "./db": "./src/prisma/index.ts"
+    ".": "./src/index.ts"
   },
   "scripts": {
     "clean": "rm -rf .turbo node_modules",
     "typecheck": "tsc --noEmit"
   },
-  "dependencies": {
-    "@taiyomoe/config": "workspace:^",
-    "zod": "^3.24.2"
-  },
   "devDependencies": {
-    "@prisma/client": "^6.5.0",
     "@taiyomoe/tsconfig": "workspace:^"
   }
 }

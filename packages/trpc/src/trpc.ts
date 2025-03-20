@@ -10,37 +10,15 @@
 import type { Session } from "@taiyomoe/auth/server"
 import { cacheClient } from "@taiyomoe/cache"
 import { Prisma, db } from "@taiyomoe/db"
-import { logsClient } from "@taiyomoe/logs"
 import { meilisearchClient } from "@taiyomoe/meilisearch"
 import messages from "@taiyomoe/messages/en.json"
 import { messagingClient } from "@taiyomoe/messaging"
 import { s3Client } from "@taiyomoe/s3"
-import {
-  BaseCoversService,
-  BaseTasksService,
-  BaseTitlesService,
-  BaseUsersService,
-} from "@taiyomoe/services"
-import type { Actions, Resources } from "@taiyomoe/types"
-import { umamiClient } from "@taiyomoe/umami"
 import { initTRPC } from "@trpc/server"
 import superjson from "superjson"
 import { createTranslator } from "use-intl/core"
 import { ZodError } from "zod"
 import { withAuth } from "./middlewares/auth.middleware"
-import { withPermissions } from "./middlewares/permissions.middleware"
-import { ChaptersService } from "./services/chapters.trpc-service"
-import { LibrariesService } from "./services/libraries.trpc-service"
-import { MdService } from "./services/md.trpc-service"
-import { MediasService } from "./services/medias.trpc-service"
-import { ScansService } from "./services/scans.trpc-service"
-import { TrackersService } from "./services/trackers.trpc-service"
-import { logger } from "./utils/logger"
-
-type Meta = {
-  resource?: Resources
-  action?: Actions
-}
 
 /**
  * 1. CONTEXT
@@ -67,23 +45,8 @@ export const createTRPCContext = async (opts: {
   db,
   meilisearch: meilisearchClient,
   cache: cacheClient,
-  logs: logsClient,
-  logger,
-  umami: umamiClient,
   messaging: messagingClient,
   s3: s3Client,
-  services: {
-    users: BaseUsersService,
-    libraries: LibrariesService,
-    medias: MediasService,
-    tasks: BaseTasksService,
-    trackers: TrackersService,
-    covers: BaseCoversService,
-    titles: BaseTitlesService,
-    chapters: ChaptersService,
-    scans: ScansService,
-    md: MdService,
-  },
   ...opts,
 })
 
@@ -93,20 +56,16 @@ export const createTRPCContext = async (opts: {
  * This is where the trpc api is initialized, connecting the context and
  * transformer
  */
-const t = initTRPC
-  .context<typeof createTRPCContext>()
-  .meta<Meta>()
-  .create({
-    transformer: superjson,
-    errorFormatter: ({ shape, error }) => ({
-      ...shape,
-      data: {
-        ...shape.data,
-        zodError:
-          error.cause instanceof ZodError ? error.cause.flatten() : null,
-      },
-    }),
-  })
+const t = initTRPC.context<typeof createTRPCContext>().create({
+  transformer: superjson,
+  errorFormatter: ({ shape, error }) => ({
+    ...shape,
+    data: {
+      ...shape.data,
+      zodError: error.cause instanceof ZodError ? error.cause.flatten() : null,
+    },
+  }),
+})
 
 export type tRPCInit = typeof t
 
@@ -114,7 +73,6 @@ export type tRPCInit = typeof t
  * Reusable middlewares
  */
 export const authMiddleware = withAuth(t)
-const permissionsMiddleware = withPermissions()
 
 /**
  * Create a server-side caller
@@ -141,7 +99,7 @@ export const createTRPCRouter = t.router
  * You can remove this if you don't like it, but it can help catch unwanted waterfalls by simulating
  * network latency that would occur in production but not in local development.
  */
-const timingMiddleware = t.middleware(async ({ next, path, ctx }) => {
+const timingMiddleware = t.middleware(async ({ next, path }) => {
   const start = Date.now()
 
   if (t._config.isDev) {
@@ -155,7 +113,7 @@ const timingMiddleware = t.middleware(async ({ next, path, ctx }) => {
   const end = Date.now()
 
   if (t._config.isDev) {
-    ctx.logger.debug(`[TRPC] ${path} took ${end - start}ms to execute`)
+    console.debug(`[TRPC] ${path} took ${end - start}ms to execute`)
   }
 
   return result
@@ -178,6 +136,4 @@ export const publicProcedure = t.procedure.use(timingMiddleware)
  *
  * @see https://trpc.io/docs/procedures
  */
-export const protectedProcedure = t.procedure
-  .use(timingMiddleware)
-  .use(permissionsMiddleware)
+export const protectedProcedure = t.procedure.use(timingMiddleware)
