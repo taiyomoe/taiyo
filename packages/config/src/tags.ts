@@ -1,4 +1,4 @@
-export const TAG_KEYS = [
+export const tagsKeys = [
   "ACHROMATIC",
   "ACHRONOLOGICAL_ORDER",
   "ACTING",

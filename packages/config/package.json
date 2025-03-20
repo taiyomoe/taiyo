@@ -1,5 +1,5 @@
 {
-  "name": "@taiyomoe/constants",
+  "name": "@taiyomoe/config",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -13,8 +13,5 @@
   },
   "devDependencies": {
     "@taiyomoe/tsconfig": "workspace:^"
-  },
-  "dependencies": {
-    "zod": "^3.24.2"
   }
 }

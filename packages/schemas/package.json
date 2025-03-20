@@ -12,11 +12,12 @@
     "clean": "rm -rf .turbo node_modules",
     "typecheck": "tsc --noEmit"
   },
-  "devDependencies": {
-    "@taiyomoe/tsconfig": "workspace:^"
-  },
   "dependencies": {
-    "@taiyomoe/constants": "workspace:^",
+    "@taiyomoe/config": "workspace:^",
     "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@prisma/client": "^6.5.0",
+    "@taiyomoe/tsconfig": "workspace:^"
   }
 }

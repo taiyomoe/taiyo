@@ -265,11 +265,7 @@ importers:
         specifier: workspace:^
         version: link:../types
 
-  packages/constants:
-    dependencies:
-      zod:
-        specifier: ^3.24.2
-        version: 3.24.2
+  packages/config:
     devDependencies:
       '@taiyomoe/tsconfig':
         specifier: workspace:^
@@ -348,9 +344,9 @@ importers:
 
   packages/global-types:
     devDependencies:
-      '@taiyomoe/constants':
+      '@taiyomoe/config':
         specifier: workspace:^
-        version: link:../constants
+        version: link:../config
       '@taiyomoe/messages':
         specifier: workspace:^
         version: link:../messages
@@ -487,13 +483,16 @@ importers:
 
   packages/schemas:
     dependencies:
-      '@taiyomoe/constants':
+      '@taiyomoe/config':
         specifier: workspace:^
-        version: link:../constants
+        version: link:../config
       zod:
         specifier: ^3.24.2
         version: 3.24.2
     devDependencies:
+      '@prisma/client':
+        specifier: ^6.5.0
+        version: 6.5.0(prisma@6.5.0(typescript@5.8.2))(typescript@5.8.2)
       '@taiyomoe/tsconfig':
         specifier: workspace:^
         version: link:../../tooling/typescript
@@ -565,9 +564,9 @@ importers:
       '@t3-oss/env-core':
         specifier: ^0.12.0
         version: 0.12.0(typescript@5.8.2)(valibot@1.0.0-beta.15(typescript@5.8.2))(zod@3.24.2)
-      '@taiyomoe/constants':
+      '@taiyomoe/config':
         specifier: workspace:^
-        version: link:../constants
+        version: link:../config
       '@taiyomoe/schemas':
         specifier: workspace:^
         version: link:../schemas

@@ -16,7 +16,7 @@
   "dependencies": {
     "@prisma/client": "^6.5.0",
     "@t3-oss/env-core": "^0.12.0",
-    "@taiyomoe/constants": "workspace:^",
+    "@taiyomoe/config": "workspace:^",
     "@taiyomoe/schemas": "workspace:^",
     "accept-language-parser": "^1.5.0",
     "deep-object-diff": "^1.1.9",
