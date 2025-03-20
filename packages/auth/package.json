@@ -18,7 +18,6 @@
     "@taiyomoe/cache": "workspace:^",
     "@taiyomoe/db": "workspace:^",
     "@taiyomoe/email": "workspace:^",
-    "@taiyomoe/logs": "workspace:^",
     "@taiyomoe/meilisearch": "workspace:^",
     "@taiyomoe/new-utils": "workspace:^",
     "better-auth": "^1.2.4",

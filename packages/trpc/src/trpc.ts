@@ -10,7 +10,6 @@
 import type { Session } from "@taiyomoe/auth/server"
 import { cacheClient } from "@taiyomoe/cache"
 import { Prisma, db } from "@taiyomoe/db"
-import { logsClient } from "@taiyomoe/logs"
 import { meilisearchClient } from "@taiyomoe/meilisearch"
 import messages from "@taiyomoe/messages/en.json"
 import { messagingClient } from "@taiyomoe/messaging"
@@ -21,7 +20,6 @@ import superjson from "superjson"
 import { createTranslator } from "use-intl/core"
 import { ZodError } from "zod"
 import { withAuth } from "./middlewares/auth.middleware"
-import { logger } from "./utils/logger"
 
 type Meta = {
   resource?: Resources
@@ -53,8 +51,6 @@ export const createTRPCContext = async (opts: {
   db,
   meilisearch: meilisearchClient,
   cache: cacheClient,
-  logs: logsClient,
-  logger,
   messaging: messagingClient,
   s3: s3Client,
   ...opts,
@@ -113,7 +109,7 @@ export const createTRPCRouter = t.router
  * You can remove this if you don't like it, but it can help catch unwanted waterfalls by simulating
  * network latency that would occur in production but not in local development.
  */
-const timingMiddleware = t.middleware(async ({ next, path, ctx }) => {
+const timingMiddleware = t.middleware(async ({ next, path }) => {
   const start = Date.now()
 
   if (t._config.isDev) {
@@ -127,7 +123,7 @@ const timingMiddleware = t.middleware(async ({ next, path, ctx }) => {
   const end = Date.now()
 
   if (t._config.isDev) {
-    ctx.logger.debug(`[TRPC] ${path} took ${end - start}ms to execute`)
+    console.debug(`[TRPC] ${path} took ${end - start}ms to execute`)
   }
 
   return result

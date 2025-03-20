@@ -7,13 +7,12 @@ import { env } from "~/env"
 // import { importMediaHandler } from "~/handlers/import-media.handler"
 // import { uploadChapterHandler } from "~/handlers/upload-chapter.handler"
 // import { uploadCoverHandler } from "~/handlers/upload-cover.handler"
-import { logger } from "~/utils/logger"
 import { updateTaskStatus } from "~/utils/update-task-status"
 
 const worker = new Worker(
   UPLOADS_QUEUE,
   async (job) => {
-    logger.debug("Worker received a job", job.name, job.data)
+    // logger.debug("Worker received a job", job.name, job.data)
 
     switch (job.name) {
       // case "medias-import":
@@ -29,7 +28,7 @@ const worker = new Worker(
       // case "chapters-upload":
       //   return await uploadChapterHandler(job.data)
       default:
-        logger.error("Received unknown job", job.name)
+        // logger.error("Received unknown job", job.name)
         throw new Error("Received unknown job")
     }
   },
@@ -48,16 +47,16 @@ worker.on("ready", () => {
 
 rawQueueEvents.on("active", updateTaskStatus("DOWNLOADING"))
 rawQueueEvents.on("completed", updateTaskStatus("FINISHED"))
-rawQueueEvents.on("failed", async ({ jobId, failedReason }) => {
-  const job = await updateTaskStatus("FAILED")({ jobId })
+// rawQueueEvents.on("failed", async ({ jobId, failedReason }) => {
+//   const job = await updateTaskStatus("FAILED")({ jobId })
 
-  logger.error(
-    "An error occured while handling a job",
-    job.name,
-    job.data,
-    failedReason,
-  )
-})
+//   logger.error(
+//     "An error occured while handling a job",
+//     job.name,
+//     job.data,
+//     failedReason,
+//   )
+// })
 
 process.on("SIGTERM", async () => {
   console.log("Received SIGTERM, shutting down...")
@@ -67,9 +66,9 @@ process.on("SIGTERM", async () => {
   console.log("All jobs completed, exiting...")
 })
 
-process.on("uncaughtException", (err) => {
-  logger.error(
-    "An error occured inside an event handler (?)",
-    JSON.stringify(err, Object.getOwnPropertyNames(err)),
-  )
-})
+// process.on("uncaughtException", (err) => {
+//   logger.error(
+//     "An error occured inside an event handler (?)",
+//     JSON.stringify(err, Object.getOwnPropertyNames(err)),
+//   )
+// })

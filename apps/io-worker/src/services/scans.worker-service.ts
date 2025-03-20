@@ -1,7 +1,6 @@
 import { db } from "@taiyomoe/db"
 import { ScansIndexService } from "@taiyomoe/meilisearch/services"
 import { Group } from "mangadex-full-api"
-import { logger } from "~/utils/logger"
 
 const ensureGroups = async (input: string[], creatorId: string) => {
   const groups = await Group.getMultiple(input)
@@ -31,7 +30,7 @@ const ensureGroups = async (input: string[], creatorId: string) => {
       },
     })
 
-    logger.debug(`Created scan ${scan.id} from MangaDex group ${group.id}`)
+    // logger.debug(`Created scan ${scan.id} from MangaDex group ${group.id}`)
 
     scansIds.push(scan.id)
     createdScansIds.push(scan.id)
