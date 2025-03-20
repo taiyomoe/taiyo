@@ -12,12 +12,12 @@
   "dependencies": {
     "@t3-oss/env-core": "^0.12.0",
     "@taiyomoe/cache": "workspace:^",
+    "@taiyomoe/config": "workspace:^",
     "@taiyomoe/db": "workspace:^",
     "@taiyomoe/logs": "workspace:^",
     "@taiyomoe/meilisearch": "workspace:^",
     "@taiyomoe/messaging": "workspace:^",
     "@taiyomoe/s3": "workspace:^",
-    "@taiyomoe/utils": "workspace:^",
     "bullmq": "^5.44.0",
     "mangadex-full-api": "^6.0.0",
     "radash": "^12.1.0"

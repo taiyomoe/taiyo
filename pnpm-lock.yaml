@@ -35,6 +35,9 @@ importers:
       '@taiyomoe/cache':
         specifier: workspace:^
         version: link:../../packages/cache
+      '@taiyomoe/config':
+        specifier: workspace:^
+        version: link:../../packages/config
       '@taiyomoe/db':
         specifier: workspace:^
         version: link:../../packages/db
@@ -50,9 +53,6 @@ importers:
       '@taiyomoe/s3':
         specifier: workspace:^
         version: link:../../packages/s3
-      '@taiyomoe/utils':
-        specifier: workspace:^
-        version: link:../../packages/utils
       bullmq:
         specifier: ^5.44.0
         version: 5.44.0
@@ -365,9 +365,9 @@ importers:
       '@taiyomoe/db':
         specifier: workspace:^
         version: link:../db
-      '@taiyomoe/utils':
-        specifier: workspace:^
-        version: link:../utils
+      deep-object-diff:
+        specifier: ^1.1.9
+        version: 1.1.9
       pino:
         specifier: ^9.6.0
         version: 9.6.0

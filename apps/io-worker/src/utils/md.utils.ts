@@ -8,7 +8,7 @@ import {
   type MediaType,
   type Trackers,
 } from "@prisma/client"
-import type { TAG_KEYS } from "@taiyomoe/constants"
+import type { config } from "@taiyomoe/config"
 import type { ParsedMdChapter, ParsedMdCover } from "@taiyomoe/types"
 import type { Chapter, Cover, Manga } from "mangadex-full-api"
 
@@ -117,7 +117,7 @@ const getLanguage = (input: string | null) => {
 
 const getGenresAndTags = (manga: Manga) => {
   const genres: MediaGenres[] = []
-  const tags: (typeof TAG_KEYS)[number][] = []
+  const tags: (typeof config.tags)[number][] = []
   let isOneShot = false
 
   // Tags list as of December 4th, 2023

@@ -1,5 +1,5 @@
 import type { MediaTracker } from "@taiyomoe/db"
-import { ObjectUtils } from "@taiyomoe/utils"
+import { diff } from "deep-object-diff"
 import SuperJSON from "superjson"
 import type { InsertResource } from "../types"
 import { insertWrapper } from "../utils"
@@ -14,7 +14,7 @@ export const TrackersService = {
         SuperJSON.serialize("old" in input ? input.old : {}),
         SuperJSON.serialize("_new" in input ? input._new : {}),
         input.type === "updated"
-          ? Object.keys(ObjectUtils.deepDiff(input.old, input._new))
+          ? Object.keys(diff(input.old, input._new))
           : [],
         "old" in input ? input.old.id : input._new.id,
         input.userId,

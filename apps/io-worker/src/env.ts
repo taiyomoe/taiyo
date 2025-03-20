@@ -4,10 +4,9 @@ import { env as dbEnv } from "@taiyomoe/db/env"
 import { env as meilisearchEnv } from "@taiyomoe/meilisearch/env"
 import { env as messagingEnv } from "@taiyomoe/messaging/env"
 import { env as s3Env } from "@taiyomoe/s3/env"
-import { env as utilsEnv } from "@taiyomoe/utils/env"
 
 export const env = createEnv({
-  extends: [cacheEnv, dbEnv, meilisearchEnv, messagingEnv, s3Env, utilsEnv],
+  extends: [cacheEnv, dbEnv, meilisearchEnv, messagingEnv, s3Env],
   /**
    * Specify your shared environment variables schema here.
    */
