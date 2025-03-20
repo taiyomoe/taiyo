@@ -50,6 +50,7 @@
   "devDependencies": {
     "@taiyomoe/tsconfig": "workspace:^",
     "@taiyomoe/types": "workspace:^",
+    "@types/accept-language-parser": "^1.5.7",
     "@types/country-flag-icons": "^1.2.2",
     "@types/react": "^19.0.12",
     "@types/react-dom": "^19.0.4"

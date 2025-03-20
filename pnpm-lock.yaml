@@ -184,6 +184,9 @@ importers:
       '@taiyomoe/types':
         specifier: workspace:^
         version: link:../../packages/types
+      '@types/accept-language-parser':
+        specifier: ^1.5.7
+        version: 1.5.7
       '@types/country-flag-icons':
         specifier: ^1.2.2
         version: 1.2.2
@@ -2870,6 +2873,9 @@ packages:
     resolution: {integrity: sha512-bk079wyaGk76w8bpAoiFrcNNEBbV5U0zoq7v4EIsslhB7EIJwd4Vyn52GtdZEpJOFuCCORxgGZxmn8slIo9tvg==}
     peerDependencies:
       typescript: '>=5.7.2'
+
+  '@types/accept-language-parser@1.5.7':
+    resolution: {integrity: sha512-bFq8qAT6yYi1kgeO2Wk+/ciZSos6UB7q0gic+rzNrT0tRdVm5ZF5+Ou+EHdLWedP0607LO0SKd66ylhKTypS3w==}
 
   '@types/cors@2.8.17':
     resolution: {integrity: sha512-8CGDvrBj1zgo2qE+oS3pOCyYNqCPryMWY2bGfwA0dcfopWGgxs+78df0Rs3rc9THP4JkOhLsAa+15VdpAqkcUA==}
@@ -7218,6 +7224,8 @@ snapshots:
   '@trpc/server@11.0.0-rc.840(typescript@5.8.2)':
     dependencies:
       typescript: 5.8.2
+
+  '@types/accept-language-parser@1.5.7': {}
 
   '@types/cors@2.8.17':
     dependencies:
