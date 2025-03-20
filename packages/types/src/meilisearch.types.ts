@@ -7,19 +7,6 @@ import type {
   UserProfile,
 } from "@prisma/client"
 
-export type MeilisearchIndexes = "medias" | "chapters" | "scans" | "users"
-
-export type MeilisearchIndexesItems<TIndex extends MeilisearchIndexes> =
-  TIndex extends "medias"
-    ? MediasIndexItem
-    : TIndex extends "chapters"
-      ? ChaptersIndexItem
-      : TIndex extends "scans"
-        ? ScansIndexItem
-        : TIndex extends "users"
-          ? UsersIndexItem
-          : never
-
 export type MediasIndexItem = Omit<
   Media,
   "createdAt" | "updatedAt" | "deletedAt" | "startDate" | "endDate"

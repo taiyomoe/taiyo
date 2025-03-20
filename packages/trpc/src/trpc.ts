@@ -14,17 +14,11 @@ import { meilisearchClient } from "@taiyomoe/meilisearch"
 import messages from "@taiyomoe/messages/en.json"
 import { messagingClient } from "@taiyomoe/messaging"
 import { s3Client } from "@taiyomoe/s3"
-import type { Actions, Resources } from "@taiyomoe/types"
 import { initTRPC } from "@trpc/server"
 import superjson from "superjson"
 import { createTranslator } from "use-intl/core"
 import { ZodError } from "zod"
 import { withAuth } from "./middlewares/auth.middleware"
-
-type Meta = {
-  resource?: Resources
-  action?: Actions
-}
 
 /**
  * 1. CONTEXT
@@ -62,20 +56,16 @@ export const createTRPCContext = async (opts: {
  * This is where the trpc api is initialized, connecting the context and
  * transformer
  */
-const t = initTRPC
-  .context<typeof createTRPCContext>()
-  .meta<Meta>()
-  .create({
-    transformer: superjson,
-    errorFormatter: ({ shape, error }) => ({
-      ...shape,
-      data: {
-        ...shape.data,
-        zodError:
-          error.cause instanceof ZodError ? error.cause.flatten() : null,
-      },
-    }),
-  })
+const t = initTRPC.context<typeof createTRPCContext>().create({
+  transformer: superjson,
+  errorFormatter: ({ shape, error }) => ({
+    ...shape,
+    data: {
+      ...shape.data,
+      zodError: error.cause instanceof ZodError ? error.cause.flatten() : null,
+    },
+  }),
+})
 
 export type tRPCInit = typeof t
 

@@ -14,7 +14,6 @@
     "@taiyomoe/cache": "workspace:^",
     "@taiyomoe/config": "workspace:^",
     "@taiyomoe/db": "workspace:^",
-    "@taiyomoe/logs": "workspace:^",
     "@taiyomoe/meilisearch": "workspace:^",
     "@taiyomoe/messaging": "workspace:^",
     "@taiyomoe/s3": "workspace:^",
