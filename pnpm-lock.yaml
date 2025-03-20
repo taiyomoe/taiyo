@@ -493,6 +493,9 @@ importers:
       '@taiyomoe/tsconfig':
         specifier: workspace:^
         version: link:../../tooling/typescript
+      '@taiyomoe/types':
+        specifier: workspace:^
+        version: link:../types
 
   packages/types:
     dependencies:
