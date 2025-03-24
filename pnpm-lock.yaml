@@ -360,8 +360,8 @@ importers:
         specifier: ^0.12.0
         version: 0.12.0(typescript@5.8.2)(valibot@1.0.0-beta.15(typescript@5.8.2))(zod@3.24.2)
       '@trpc/server':
-        specifier: 11.0.0-rc.840
-        version: 11.0.0-rc.840(typescript@5.8.2)
+        specifier: 11.0.0
+        version: 11.0.0(typescript@5.8.2)
       luxon:
         specifier: ^3.5.0
         version: 3.5.0
@@ -471,8 +471,8 @@ importers:
         specifier: workspace:^
         version: link:../s3
       '@trpc/server':
-        specifier: 11.0.0-rc.840
-        version: 11.0.0-rc.840(typescript@5.8.2)
+        specifier: 11.0.0
+        version: 11.0.0(typescript@5.8.2)
       superjson:
         specifier: ^2.2.2
         version: 2.2.2
@@ -2869,8 +2869,8 @@ packages:
   '@total-typescript/ts-reset@0.6.1':
     resolution: {integrity: sha512-cka47fVSo6lfQDIATYqb/vO1nvFfbPw7uWLayIXIhGETj0wcOOlrlkobOMDNQOFr9QOafegUPq13V2+6vtD7yg==}
 
-  '@trpc/server@11.0.0-rc.840':
-    resolution: {integrity: sha512-bk079wyaGk76w8bpAoiFrcNNEBbV5U0zoq7v4EIsslhB7EIJwd4Vyn52GtdZEpJOFuCCORxgGZxmn8slIo9tvg==}
+  '@trpc/server@11.0.0':
+    resolution: {integrity: sha512-xY9q/b/wR/tWGYTm5xmRjivkYD2EZZXmOKmHuNJRYZuLbieeNUsdfQRjJC409WB1pjKWInomhHwuA8bahZJ4lQ==}
     peerDependencies:
       typescript: '>=5.7.2'
 
@@ -7221,7 +7221,7 @@ snapshots:
 
   '@total-typescript/ts-reset@0.6.1': {}
 
-  '@trpc/server@11.0.0-rc.840(typescript@5.8.2)':
+  '@trpc/server@11.0.0(typescript@5.8.2)':
     dependencies:
       typescript: 5.8.2
 
