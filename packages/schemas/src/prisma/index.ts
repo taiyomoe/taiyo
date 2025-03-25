@@ -86,7 +86,7 @@ export const MediaTrackerScalarFieldEnumSchema = z.enum(['id','createdAt','updat
 
 export const MediaChapterScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','title','number','volume','language','pages','contentRating','flag','mediaId','uploaderId','deleterId']);
 
-export const GroupScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','name','description','logo','banner','website','discord','twitter','facebook','instagram','telegram','youtube','email','creatorId','deleterId']);
+export const GroupScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','name','description','logo','banner','website','discord','x','facebook','instagram','telegram','youtube','email','creatorId','deleterId']);
 
 export const TaskScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','type','status','payload','sessionId']);
 
@@ -490,7 +490,7 @@ export const GroupSchema = z.object({
   banner: z.string().nullable(),
   website: z.string().nullable(),
   discord: z.string().nullable(),
-  twitter: z.string().nullable(),
+  x: z.string().nullable(),
   facebook: z.string().nullable(),
   instagram: z.string().nullable(),
   telegram: z.string().nullable(),
