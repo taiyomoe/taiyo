@@ -46,6 +46,9 @@ ALTER TABLE "Cover" RENAME CONSTRAINT "MediaCover_uploaderId_fkey" TO "Cover_upl
 -- RenamePrimaryKey
 ALTER TABLE "Title" RENAME CONSTRAINT "MediaTitle_pkey" TO "Title_pkey";
 
+-- RenameIndex
+ALTER INDEX "MediaTitle_mediaId_language_priority_key" RENAME TO "Title_mediaId_language_priority_key";
+
 -- RenameForeignKey
 ALTER TABLE "Title" RENAME CONSTRAINT "MediaTitle_mediaId_fkey" TO "Title_mediaId_fkey";
 
