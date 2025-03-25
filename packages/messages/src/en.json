@@ -137,5 +137,6 @@
         "description": "We don't know what went wrong. Please try again later. If the problem persists, please report it in the Discord server."
       }
     }
-  }
+  },
+  "api": {}
 }

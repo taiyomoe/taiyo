@@ -132,5 +132,6 @@
         "description": "Não sabemos o que aconteceu. Por favor, tente novamente mais tarde. Se o problema persistir, por favor, reporte-o no Discord."
       }
     }
-  }
+  },
+  "api": {}
 }
