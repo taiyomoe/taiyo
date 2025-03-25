@@ -2,10 +2,9 @@ import type { Prisma, PrismaClient } from "@prisma/client"
 import type { GroupsIndexItem } from "@taiyomoe/types"
 import { TRPCError } from "@trpc/server"
 import { DateTime } from "luxon"
-import { omit, parallel } from "radash"
-import { meilisearchClient } from ".."
+import { omit } from "radash"
 
-const getItem = async (
+export const getGroupIndexItem = async (
   db: PrismaClient | Prisma.TransactionClient,
   id: string,
 ) => {
@@ -26,18 +25,4 @@ const getItem = async (
       ? DateTime.fromJSDate(result.deletedAt).toSeconds()
       : null,
   } satisfies GroupsIndexItem
-}
-
-const sync = async (
-  db: PrismaClient | Prisma.TransactionClient,
-  ids: string[],
-) => {
-  const groups = await parallel(10, ids, (id) => getItem(db, id))
-
-  return meilisearchClient.groups.updateDocuments(groups)
-}
-
-export const GroupsIndexService = {
-  getItem,
-  sync,
 }

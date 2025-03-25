@@ -14,7 +14,6 @@
   ],
   "ignore": [
     "./apps/web/src/i18n/request.ts",
-    "./apps/web/src/i18n/request.ts",
     "./apps/web/src/utils/parse-locale.ts",
     "./apps/web/src/components/ui/image.tsx",
     "./apps/web/src/components/ui/username.tsx",

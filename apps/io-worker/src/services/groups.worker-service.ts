@@ -1,6 +1,8 @@
 import { db } from "@taiyomoe/db"
-import { GroupsIndexService } from "@taiyomoe/meilisearch/services"
+import { meilisearchClient } from "@taiyomoe/meilisearch"
+import { getGroupIndexItem } from "@taiyomoe/meilisearch"
 import { Group } from "mangadex-full-api"
+import { parallel } from "radash"
 
 const ensureGroups = async (input: string[], creatorId: string) => {
   const mdGroups = await Group.getMultiple(input)
@@ -37,7 +39,11 @@ const ensureGroups = async (input: string[], creatorId: string) => {
   }
 
   if (createdgroupIds.length) {
-    await GroupsIndexService.sync(db, createdgroupIds)
+    const groupIndexItems = await parallel(10, createdgroupIds, (id) =>
+      getGroupIndexItem(db, id),
+    )
+
+    await meilisearchClient.groups.addDocuments(groupIndexItems)
   }
 
   return groupIds

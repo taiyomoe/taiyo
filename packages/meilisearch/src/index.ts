@@ -26,3 +26,7 @@ export const meilisearchClient = {
 
 if (process.env.NODE_ENV !== "production")
   globalForMeilisearch.meilisearch = rawMeilisearchClient
+
+export * from "./utils/get-group-index-item"
+export * from "./utils/get-media-index-item"
+export * from "./utils/get-user-index-item"

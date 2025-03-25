@@ -6,8 +6,6 @@
   "license": "MIT",
   "exports": {
     ".": "./src/index.ts",
-    "./services": "./src/services/index.ts",
-    "./utils": "./src/utils/index.ts",
     "./env": "./src/env.ts"
   },
   "scripts": {

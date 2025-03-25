@@ -2,10 +2,9 @@ import type { Prisma, PrismaClient } from "@prisma/client"
 import type { MediasIndexItem } from "@taiyomoe/types"
 import { TRPCError } from "@trpc/server"
 import { DateTime } from "luxon"
-import { omit, parallel } from "radash"
-import { meilisearchClient } from ".."
+import { omit } from "radash"
 
-const getItem = async (
+export const getMediaIndexItem = async (
   db: PrismaClient | Prisma.TransactionClient,
   id: string,
 ) => {
@@ -64,18 +63,4 @@ const getItem = async (
       : null,
     mainCoverId: result.covers[0]!.id,
   } satisfies MediasIndexItem
-}
-
-const sync = async (
-  db: PrismaClient | Prisma.TransactionClient,
-  ids: string[],
-) => {
-  const medias = await parallel(10, ids, (id) => getItem(db, id))
-
-  return meilisearchClient.medias.updateDocuments(medias)
-}
-
-export const MediasIndexService = {
-  getItem,
-  sync,
 }

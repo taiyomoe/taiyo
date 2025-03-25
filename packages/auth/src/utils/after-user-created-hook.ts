@@ -1,5 +1,5 @@
 import { db } from "@taiyomoe/db"
-import { UsersIndexService } from "@taiyomoe/meilisearch/services"
+import { getUserIndexItem, meilisearchClient } from "@taiyomoe/meilisearch"
 import type { User } from "better-auth"
 
 export const afterUserCreatedHook = async ({ id }: User) => {
@@ -11,5 +11,7 @@ export const afterUserCreatedHook = async ({ id }: User) => {
   //   userId: id,
   // })
 
-  await UsersIndexService.sync(db, [id])
+  const userIndexItem = await getUserIndexItem(db, id)
+
+  await meilisearchClient.users.addDocuments([userIndexItem])
 }

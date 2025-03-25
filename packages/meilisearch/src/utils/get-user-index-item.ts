@@ -1,10 +1,9 @@
 import type { Prisma, PrismaClient } from "@prisma/client"
 import type { UsersIndexItem } from "@taiyomoe/types"
 import { TRPCError } from "@trpc/server"
-import { omit, parallel } from "radash"
-import { meilisearchClient } from ".."
+import { omit } from "radash"
 
-const getItem = async (
+export const getUserIndexItem = async (
   db: PrismaClient | Prisma.TransactionClient,
   id: string,
 ) => {
@@ -30,18 +29,4 @@ const getItem = async (
     ...omit(result, ["profile"]),
     about: result.profile.about,
   } satisfies UsersIndexItem
-}
-
-const sync = async (
-  db: PrismaClient | Prisma.TransactionClient,
-  ids: string[],
-) => {
-  const users = await parallel(10, ids, (id) => getItem(db, id))
-
-  return meilisearchClient.users.updateDocuments(users)
-}
-
-export const UsersIndexService = {
-  getItem,
-  sync,
 }
