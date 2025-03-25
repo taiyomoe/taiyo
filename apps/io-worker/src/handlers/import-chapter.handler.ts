@@ -4,7 +4,7 @@
 // import type { ImportChapterMessageInput } from "@taiyomoe/types"
 // import { Chapter } from "mangadex-full-api"
 // import { parallel, pick } from "radash"
-// import { ScansService } from "~/services/scans.worker-service"
+// import { GroupsService } from "~/services/groups.worker-service"
 // import { logger } from "~/utils/logger"
 
 // export const importChapterHandler = async (
@@ -23,7 +23,7 @@
 //   const uploadedPages = await parallel(10, pageBuffers, (b) =>
 //     BaseFilesService.upload(`medias/${input.mediaId}/chapters/${chapterId}`, b),
 //   )
-//   const scanIds = await ScansService.ensureGroups(
+//   const groupIds = await GroupsService.ensureGroups(
 //     input.groupIds,
 //     input.uploaderId,
 //   )
@@ -41,7 +41,7 @@
 //       language: "pt_br",
 //       flag: "OK",
 //       pages: uploadedPages,
-//       scans: { connect: scanIds.map((id) => ({ id })) },
+//       groups: { connect: groupIds.map((id) => ({ id })) },
 //     },
 //   })
 

@@ -1,7 +1,7 @@
-import { db } from "../../../"
+import { db } from "../../.."
 
 const execute = async () => {
-  await db.scan.create({
+  await db.group.create({
     data: {
       id: "2be06bd9-bddf-4029-8536-78108f420f30",
       // -----

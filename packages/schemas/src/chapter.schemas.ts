@@ -14,7 +14,7 @@ export const uploadChapterSchema = z.object({
   flag: FlagSchema,
   language: LanguagesSchema,
   mediaId: z.string().uuid(),
-  scanIds: z.string().uuid().array(),
+  groupIds: z.string().uuid().array(),
   files: fileSchema.array().min(1),
 })
 

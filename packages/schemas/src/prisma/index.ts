@@ -86,7 +86,7 @@ export const MediaTrackerScalarFieldEnumSchema = z.enum(['id','createdAt','updat
 
 export const MediaChapterScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','title','number','volume','language','pages','contentRating','flag','mediaId','uploaderId','deleterId']);
 
-export const ScanScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','name','description','logo','banner','website','discord','twitter','facebook','instagram','telegram','youtube','email','creatorId','deleterId']);
+export const GroupScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','name','description','logo','banner','website','discord','twitter','facebook','instagram','telegram','youtube','email','creatorId','deleterId']);
 
 export const TaskScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','type','status','payload','sessionId']);
 
@@ -148,13 +148,13 @@ export const TrackersSchema = z.enum(['MANGADEX','MYANIMELIST','ANILIST']);
 
 export type TrackersType = `${z.infer<typeof TrackersSchema>}`
 
-export const ScanMemberRolesSchema = z.enum(['OWNER','ADMIN','TRANSLATOR','PROOFREADER','CLEANER','REDRAWER','TYPESETTER','QUALITY_CHECKER','RAW_PROVIDER','OTHER']);
+export const GroupMemberRolesSchema = z.enum(['OWNER','ADMIN','TRANSLATOR','PROOFREADER','CLEANER','REDRAWER','TYPESETTER','QUALITY_CHECKER','RAW_PROVIDER','OTHER']);
 
-export type ScanMemberRolesType = `${z.infer<typeof ScanMemberRolesSchema>}`
+export type GroupMemberRolesType = `${z.infer<typeof GroupMemberRolesSchema>}`
 
-export const ScanMemberPermissionsSchema = z.enum(['UPLOAD','EDIT','DELETE']);
+export const GroupMemberPermissionsSchema = z.enum(['UPLOAD','EDIT','DELETE']);
 
-export type ScanMemberPermissionsType = `${z.infer<typeof ScanMemberPermissionsSchema>}`
+export type GroupMemberPermissionsType = `${z.infer<typeof GroupMemberPermissionsSchema>}`
 
 export const TaskTypeSchema = z.enum(['CREATE_MEDIA','IMPORT_MEDIA','IMPORT_COVER','IMPORT_CHAPTER','UPLOAD_CHAPTER','UPLOAD_COVER','UPLOAD_BANNER']);
 
@@ -476,10 +476,10 @@ export const MediaChapterSchema = z.object({
 export type MediaChapter = z.infer<typeof MediaChapterSchema>
 
 /////////////////////////////////////////
-// SCAN SCHEMA
+// GROUP SCHEMA
 /////////////////////////////////////////
 
-export const ScanSchema = z.object({
+export const GroupSchema = z.object({
   id: z.string(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
@@ -500,7 +500,7 @@ export const ScanSchema = z.object({
   deleterId: z.string().nullable(),
 })
 
-export type Scan = z.infer<typeof ScanSchema>
+export type Group = z.infer<typeof GroupSchema>
 
 /////////////////////////////////////////
 // TASK SCHEMA

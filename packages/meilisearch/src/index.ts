@@ -1,7 +1,7 @@
 import type {
   ChaptersIndexItem,
+  GroupsIndexItem,
   MediasIndexItem,
-  ScansIndexItem,
   UsersIndexItem,
 } from "@taiyomoe/types"
 import type { Meilisearch } from "meilisearch"
@@ -21,7 +21,7 @@ export const rawMeilisearchClient =
 
 export const meilisearchClient = {
   medias: rawMeilisearchClient.index<MediasIndexItem>("medias"),
-  scans: rawMeilisearchClient.index<ScansIndexItem>("scans"),
+  groups: rawMeilisearchClient.index<GroupsIndexItem>("groups"),
   chapters: rawMeilisearchClient.index<ChaptersIndexItem>("chapters"),
   users: rawMeilisearchClient.index<UsersIndexItem>("users"),
 }

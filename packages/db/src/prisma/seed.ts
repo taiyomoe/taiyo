@@ -1,3 +1,14 @@
+import group1 from "./seeds/groups/group-1"
+import group2 from "./seeds/groups/group-2"
+import group3 from "./seeds/groups/group-3"
+import group4 from "./seeds/groups/group-4"
+import group5 from "./seeds/groups/group-5"
+import group6 from "./seeds/groups/group-6"
+import group7 from "./seeds/groups/group-7"
+import group8 from "./seeds/groups/group-8"
+import group9 from "./seeds/groups/group-9"
+import group10 from "./seeds/groups/group-10"
+import group11 from "./seeds/groups/group-11"
 import media1 from "./seeds/medias/media-1"
 import media2 from "./seeds/medias/media-2"
 import media3 from "./seeds/medias/media-3"
@@ -9,17 +20,6 @@ import media8 from "./seeds/medias/media-8"
 import media9 from "./seeds/medias/media-9"
 import media10 from "./seeds/medias/media-10"
 import meilisearch from "./seeds/meilisearch.seed"
-import scan1 from "./seeds/scans/scan-1"
-import scan2 from "./seeds/scans/scan-2"
-import scan3 from "./seeds/scans/scan-3"
-import scan4 from "./seeds/scans/scan-4"
-import scan5 from "./seeds/scans/scan-5"
-import scan6 from "./seeds/scans/scan-6"
-import scan7 from "./seeds/scans/scan-7"
-import scan8 from "./seeds/scans/scan-8"
-import scan9 from "./seeds/scans/scan-9"
-import scan10 from "./seeds/scans/scan-10"
-import scan11 from "./seeds/scans/scan-11"
 import users from "./seeds/users"
 
 async function main() {
@@ -50,19 +50,19 @@ async function main() {
   await media9.execute().then(() => console.log("Media 9 seeded"))
   await media10.execute().then(() => console.log("Media 10 seeded"))
 
-  // Scans
-  console.log("\nScans:")
-  await scan1.execute().then(() => console.log("Scan 1 seeded"))
-  await scan2.execute().then(() => console.log("Scan 2 seeded"))
-  await scan3.execute().then(() => console.log("Scan 3 seeded"))
-  await scan4.execute().then(() => console.log("Scan 4 seeded"))
-  await scan5.execute().then(() => console.log("Scan 5 seeded"))
-  await scan6.execute().then(() => console.log("Scan 6 seeded"))
-  await scan7.execute().then(() => console.log("Scan 7 seeded"))
-  await scan8.execute().then(() => console.log("Scan 8 seeded"))
-  await scan9.execute().then(() => console.log("Scan 9 seeded"))
-  await scan10.execute().then(() => console.log("Scan 10 seeded"))
-  await scan11.execute().then(() => console.log("Scan 11 seeded"))
+  // Groups
+  console.log("\nGroups:")
+  await group1.execute().then(() => console.log("Group 1 seeded"))
+  await group2.execute().then(() => console.log("Group 2 seeded"))
+  await group3.execute().then(() => console.log("Group 3 seeded"))
+  await group4.execute().then(() => console.log("Group 4 seeded"))
+  await group5.execute().then(() => console.log("Group 5 seeded"))
+  await group6.execute().then(() => console.log("Group 6 seeded"))
+  await group7.execute().then(() => console.log("Group 7 seeded"))
+  await group8.execute().then(() => console.log("Group 8 seeded"))
+  await group9.execute().then(() => console.log("Group 9 seeded"))
+  await group10.execute().then(() => console.log("Group 10 seeded"))
+  await group11.execute().then(() => console.log("Group 11 seeded"))
 
   // Meilisearch
   console.log("\nMeilisearch:")

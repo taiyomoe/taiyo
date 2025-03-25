@@ -24,7 +24,7 @@
 //         "uploaderId",
 //       ]),
 //       id: input.id,
-//       scans: { connect: input.scanIds.map((s) => ({ id: s })) },
+//       groups: { connect: input.groupIds.map((s) => ({ id: s })) },
 //       pages: uploadedPages,
 //     },
 //   })
