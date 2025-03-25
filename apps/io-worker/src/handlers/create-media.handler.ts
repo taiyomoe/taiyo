@@ -79,13 +79,13 @@
 //       },
 //     },
 //   })
-//   const covers = await db.mediaCover.findMany({
+//   const covers = await db.cover.findMany({
 //     where: { mediaId: media.id },
 //   })
-//   const titles = await db.mediaTitle.findMany({
+//   const titles = await db.title.findMany({
 //     where: { mediaId: media.id },
 //   })
-//   const trackers = await db.mediaTracker.findMany({
+//   const trackers = await db.tracker.findMany({
 //     where: { mediaId: media.id },
 //   })
 

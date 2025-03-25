@@ -76,15 +76,15 @@ export const VerificationScalarFieldEnumSchema = z.enum(['id','createdAt','updat
 
 export const MediaScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','startDate','endDate','synopsis','contentRating','oneShot','trailer','type','status','source','demography','countryOfOrigin','genres','tags','flag','creatorId','deleterId']);
 
-export const MediaCoverScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','volume','contentRating','isMainCover','language','mediaId','uploaderId','deleterId']);
+export const CoverScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','volume','contentRating','isMainCover','language','mediaId','uploaderId','deleterId']);
 
-export const MediaBannerScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','contentRating','mediaId','uploaderId','deleterId']);
+export const BannerScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','contentRating','mediaId','uploaderId','deleterId']);
 
-export const MediaTitleScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','title','language','priority','isAcronym','isMainTitle','mediaId','creatorId','deleterId']);
+export const TitleScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','title','language','priority','isAcronym','isMainTitle','mediaId','creatorId','deleterId']);
 
-export const MediaTrackerScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','tracker','externalId','mediaId','creatorId','deleterId']);
+export const TrackerScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','tracker','externalId','mediaId','creatorId','deleterId']);
 
-export const MediaChapterScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','title','number','volume','language','pages','contentRating','flag','mediaId','uploaderId','deleterId']);
+export const ChapterScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','title','number','volume','language','pages','contentRating','flag','mediaId','uploaderId','deleterId']);
 
 export const GroupScalarFieldEnumSchema = z.enum(['id','createdAt','updatedAt','deletedAt','name','description','logo','banner','website','discord','x','facebook','instagram','telegram','youtube','email','creatorId','deleterId']);
 
@@ -374,10 +374,10 @@ export const MediaSchema = z.object({
 export type Media = z.infer<typeof MediaSchema>
 
 /////////////////////////////////////////
-// MEDIA COVER SCHEMA
+// COVER SCHEMA
 /////////////////////////////////////////
 
-export const MediaCoverSchema = z.object({
+export const CoverSchema = z.object({
   contentRating: ContentRatingSchema,
   language: LanguagesSchema,
   id: z.string(),
@@ -391,13 +391,13 @@ export const MediaCoverSchema = z.object({
   deleterId: z.string().nullable(),
 })
 
-export type MediaCover = z.infer<typeof MediaCoverSchema>
+export type Cover = z.infer<typeof CoverSchema>
 
 /////////////////////////////////////////
-// MEDIA BANNER SCHEMA
+// BANNER SCHEMA
 /////////////////////////////////////////
 
-export const MediaBannerSchema = z.object({
+export const BannerSchema = z.object({
   contentRating: ContentRatingSchema,
   id: z.string(),
   createdAt: z.coerce.date(),
@@ -408,13 +408,13 @@ export const MediaBannerSchema = z.object({
   deleterId: z.string().nullable(),
 })
 
-export type MediaBanner = z.infer<typeof MediaBannerSchema>
+export type Banner = z.infer<typeof BannerSchema>
 
 /////////////////////////////////////////
-// MEDIA TITLE SCHEMA
+// TITLE SCHEMA
 /////////////////////////////////////////
 
-export const MediaTitleSchema = z.object({
+export const TitleSchema = z.object({
   language: LanguagesSchema,
   id: z.string(),
   createdAt: z.coerce.date(),
@@ -429,13 +429,13 @@ export const MediaTitleSchema = z.object({
   deleterId: z.string().nullable(),
 })
 
-export type MediaTitle = z.infer<typeof MediaTitleSchema>
+export type Title = z.infer<typeof TitleSchema>
 
 /////////////////////////////////////////
-// MEDIA TRACKER SCHEMA
+// TRACKER SCHEMA
 /////////////////////////////////////////
 
-export const MediaTrackerSchema = z.object({
+export const TrackerSchema = z.object({
   tracker: TrackersSchema,
   id: z.string(),
   createdAt: z.coerce.date(),
@@ -447,13 +447,13 @@ export const MediaTrackerSchema = z.object({
   deleterId: z.string().nullable(),
 })
 
-export type MediaTracker = z.infer<typeof MediaTrackerSchema>
+export type Tracker = z.infer<typeof TrackerSchema>
 
 /////////////////////////////////////////
-// MEDIA CHAPTER SCHEMA
+// CHAPTER SCHEMA
 /////////////////////////////////////////
 
-export const MediaChapterSchema = z.object({
+export const ChapterSchema = z.object({
   language: LanguagesSchema,
   contentRating: ContentRatingSchema,
   flag: FlagSchema,
@@ -473,7 +473,7 @@ export const MediaChapterSchema = z.object({
   deleterId: z.string().nullable(),
 })
 
-export type MediaChapter = z.infer<typeof MediaChapterSchema>
+export type Chapter = z.infer<typeof ChapterSchema>
 
 /////////////////////////////////////////
 // GROUP SCHEMA

@@ -10,7 +10,7 @@
 //     `medias/${input.mediaId}/covers`,
 //     coverFile,
 //   )
-//   const cover = await db.mediaCover.create({
+//   const cover = await db.cover.create({
 //     data: {
 //       ...pick(input, [
 //         "volume",

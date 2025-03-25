@@ -55,11 +55,11 @@ model User {
 
     // These exist solely to satisfy Prisma's "relations must be defined on both sides" rule
     createdMedias         Media[]
-    uploadedMediaCovers   MediaCover[]
-    uploadedMediaBanners  MediaBanner[]
-    createdMediaTitles    MediaTitle[]
-    createdMediaTrackers  MediaTracker[]
-    uploadedMediaChapters MediaChapter[]
+    uploadedMediaCovers   Cover[]
+    uploadedMediaBanners  Banner[]
+    createdMediaTitles    Title[]
+    createdMediaTrackers  Tracker[]
+    uploadedMediaChapters Chapter[]
     createdGroups         Group[]
 }
 
@@ -196,11 +196,11 @@ model Media {
     tags            Json[]
     flag            Flag                 @default(OK)
 
-    covers   MediaCover[]
-    banners  MediaBanner[]
-    titles   MediaTitle[]
-    trackers MediaTracker[]
-    chapters MediaChapter[]
+    covers   Cover[]
+    banners  Banner[]
+    titles   Title[]
+    trackers Tracker[]
+    chapters Chapter[]
     history  UserHistory[]
 
     creator   User    @relation(fields: [creatorId], references: [id])
@@ -208,7 +208,7 @@ model Media {
     deleterId String? @db.Uuid
 }
 
-model MediaCover {
+model Cover {
     id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
     createdAt DateTime  @default(now())
     updatedAt DateTime  @updatedAt
@@ -227,7 +227,7 @@ model MediaCover {
     deleterId  String? @db.Uuid
 }
 
-model MediaBanner {
+model Banner {
     id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
     createdAt DateTime  @default(now())
     updatedAt DateTime  @updatedAt
@@ -243,7 +243,7 @@ model MediaBanner {
     deleterId  String? @db.Uuid
 }
 
-model MediaTitle {
+model Title {
     id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
     createdAt DateTime  @default(now())
     updatedAt DateTime  @updatedAt
@@ -265,7 +265,7 @@ model MediaTitle {
     @@unique([mediaId, language, priority], name: "MediaTitlePriority")
 }
 
-model MediaTracker {
+model Tracker {
     id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
     createdAt DateTime  @default(now())
     updatedAt DateTime  @updatedAt
@@ -282,7 +282,7 @@ model MediaTracker {
     deleterId String? @db.Uuid
 }
 
-model MediaChapter {
+model Chapter {
     id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
     createdAt DateTime  @default(now())
     updatedAt DateTime  @updatedAt
@@ -329,7 +329,7 @@ model Group {
     youtube   String?
     email     String?
 
-    chapters MediaChapter[]
+    chapters Chapter[]
 
     creator   User    @relation(fields: [creatorId], references: [id])
     creatorId String  @db.Uuid

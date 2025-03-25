@@ -27,7 +27,7 @@
 //     input.groupIds,
 //     input.uploaderId,
 //   )
-//   const chapter = await db.mediaChapter.create({
+//   const chapter = await db.chapter.create({
 //     data: {
 //       ...pick(input, [
 //         "title",

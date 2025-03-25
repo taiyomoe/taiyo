@@ -11,7 +11,7 @@
 //   const uploadedPages = await parallel(10, pages, async (p) =>
 //     BaseFilesService.upload(`medias/${input.mediaId}/chapters/${input.id}`, p),
 //   )
-//   const chapter = await db.mediaChapter.create({
+//   const chapter = await db.chapter.create({
 //     data: {
 //       ...pick(input, [
 //         "title",

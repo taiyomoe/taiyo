@@ -16,7 +16,7 @@
 //     `medias/${input.mediaId}/covers`,
 //     coverBuffer,
 //   )
-//   const cover = await db.mediaCover.create({
+//   const cover = await db.cover.create({
 //     data: {
 //       ...pick(input, [
 //         "contentRating",
