@@ -4,7 +4,7 @@ import {
   MediasIndexService,
   UsersIndexService,
 } from "@taiyomoe/meilisearch/services"
-import { ScansIndexService } from "@taiyomoe/meilisearch/services"
+import { GroupsIndexService } from "@taiyomoe/meilisearch/services"
 import { db } from "../../"
 
 const execute = async () => {
@@ -43,9 +43,9 @@ const execute = async () => {
     medias.map((s) => s.id),
   )
 
-  // Scans
-  const scans = await db.scan.findMany()
-  const scanFields = [
+  // Groups
+  const groups = await db.group.findMany()
+  const groupFields = [
     "id",
     "createdAt",
     "updatedAt",
@@ -66,14 +66,14 @@ const execute = async () => {
     "deleterId",
   ]
 
-  await rawMeilisearchClient.deleteIndexIfExists("scans")
-  await rawMeilisearchClient.createIndex("scans", { primaryKey: "id" })
-  await meilisearchClient.scans.updateFilterableAttributes(scanFields)
-  await meilisearchClient.scans.updateSortableAttributes(scanFields)
-  await meilisearchClient.scans.deleteAllDocuments()
-  await ScansIndexService.sync(
+  await rawMeilisearchClient.deleteIndexIfExists("groups")
+  await rawMeilisearchClient.createIndex("groups", { primaryKey: "id" })
+  await meilisearchClient.groups.updateFilterableAttributes(groupFields)
+  await meilisearchClient.groups.updateSortableAttributes(groupFields)
+  await meilisearchClient.groups.deleteAllDocuments()
+  await GroupsIndexService.sync(
     db,
-    scans.map((s) => s.id),
+    groups.map((s) => s.id),
   )
 
   // Chapters
@@ -89,7 +89,7 @@ const execute = async () => {
     "language",
     "contentRating",
     "flag",
-    "scanIds",
+    "groupIds",
     "uploaderId",
     "mediaId",
     "deleterId",

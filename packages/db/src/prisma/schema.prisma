@@ -60,7 +60,7 @@ model User {
     createdMediaTitles    MediaTitle[]
     createdMediaTrackers  MediaTracker[]
     uploadedMediaChapters MediaChapter[]
-    createdScans          Scan[]
+    createdGroups         Group[]
 }
 
 model UserProfile {
@@ -297,7 +297,7 @@ model MediaChapter {
     contentRating ContentRating @default(NORMAL)
     flag          Flag          @default(OK)
 
-    scans Scan[]
+    groups Group[]
 
     media   Media  @relation(fields: [mediaId], references: [id], onDelete: Cascade)
     mediaId String @db.Uuid
@@ -307,8 +307,8 @@ model MediaChapter {
     deleterId  String? @db.Uuid
 }
 
-// ---- SCANS
-model Scan {
+// ---- GROUPS
+model Group {
     id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
     createdAt DateTime  @default(now())
     updatedAt DateTime  @updatedAt
@@ -322,7 +322,7 @@ model Scan {
 
     website   String?
     discord   String?
-    twitter   String?
+    x         String?
     facebook  String?
     instagram String?
     telegram  String?
@@ -452,7 +452,7 @@ enum Trackers {
     ANILIST
 }
 
-enum ScanMemberRoles {
+enum GroupMemberRoles {
     OWNER
     ADMIN
     TRANSLATOR
@@ -465,7 +465,7 @@ enum ScanMemberRoles {
     OTHER
 }
 
-enum ScanMemberPermissions {
+enum GroupMemberPermissions {
     UPLOAD
     EDIT
     DELETE

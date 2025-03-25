@@ -1,5 +1,5 @@
 import type { Prisma, PrismaClient } from "@prisma/client"
-import type { ScansIndexItem } from "@taiyomoe/types"
+import type { GroupsIndexItem } from "@taiyomoe/types"
 import { TRPCError } from "@trpc/server"
 import { DateTime } from "luxon"
 import { omit, parallel } from "radash"
@@ -9,12 +9,12 @@ const getItem = async (
   db: PrismaClient | Prisma.TransactionClient,
   id: string,
 ) => {
-  const result = await db.scan.findUnique({ where: { id } })
+  const result = await db.group.findUnique({ where: { id } })
 
   if (!result) {
     throw new TRPCError({
       code: "NOT_FOUND",
-      message: `Scan '${id}' not found`,
+      message: `Group '${id}' not found`,
     })
   }
 
@@ -25,19 +25,19 @@ const getItem = async (
     deletedAt: result.deletedAt
       ? DateTime.fromJSDate(result.deletedAt).toSeconds()
       : null,
-  } satisfies ScansIndexItem
+  } satisfies GroupsIndexItem
 }
 
 const sync = async (
   db: PrismaClient | Prisma.TransactionClient,
   ids: string[],
 ) => {
-  const scans = await parallel(10, ids, (id) => getItem(db, id))
+  const groups = await parallel(10, ids, (id) => getItem(db, id))
 
-  return meilisearchClient.scans.updateDocuments(scans)
+  return meilisearchClient.groups.updateDocuments(groups)
 }
 
-export const ScansIndexService = {
+export const GroupsIndexService = {
   getItem,
   sync,
 }

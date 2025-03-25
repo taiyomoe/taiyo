@@ -1,7 +1,7 @@
-import { db } from "../../../"
+import { db } from "../../.."
 
 const execute = async () => {
-  await db.scan.create({
+  await db.group.create({
     data: {
       id: "a9f2139e-54fc-4524-8688-ed7b46920f5d",
       // -----
@@ -9,7 +9,7 @@ const execute = async () => {
       description: "É agora ou nunca.",
       // -----,
       website: "https://shinsekaiscans.wordpress.com/",
-      twitter: "https://twitter.com/ShinSekaiscans",
+      x: "https://twitter.com/ShinSekaiscans",
       // -----
       creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
       chapters: {

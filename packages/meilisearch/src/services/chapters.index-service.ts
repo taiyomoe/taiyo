@@ -11,7 +11,7 @@ const getItem = async (
 ) => {
   const result = await db.mediaChapter.findUnique({
     omit: { pages: true },
-    include: { scans: { select: { id: true } } },
+    include: { groups: { select: { id: true } } },
     where: { id },
   })
 
@@ -23,13 +23,13 @@ const getItem = async (
   }
 
   return {
-    ...omit(result, ["createdAt", "updatedAt", "deletedAt", "scans"]),
+    ...omit(result, ["createdAt", "updatedAt", "deletedAt", "groups"]),
     createdAt: DateTime.fromJSDate(result.createdAt).toSeconds(),
     updatedAt: DateTime.fromJSDate(result.updatedAt).toSeconds(),
     deletedAt: result.deletedAt
       ? DateTime.fromJSDate(result.deletedAt).toSeconds()
       : null,
-    scanIds: result.scans.map((s) => s.id),
+    groupIds: result.groups.map((s) => s.id),
   } satisfies ChaptersIndexItem
 }
 

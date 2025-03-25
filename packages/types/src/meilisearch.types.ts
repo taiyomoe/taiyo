@@ -1,8 +1,8 @@
 import type {
+  Group,
   Media,
   MediaChapter,
   MediaTitle,
-  Scan,
   User,
   UserProfile,
 } from "@prisma/client"
@@ -23,8 +23,8 @@ export type MediasIndexItem = Omit<
   mainCoverId: string
 }
 
-export type ScansIndexItem = Omit<
-  Scan,
+export type GroupsIndexItem = Omit<
+  Group,
   "createdAt" | "updatedAt" | "deletedAt"
 > & {
   createdAt: number
@@ -39,7 +39,7 @@ export type ChaptersIndexItem = Omit<
   createdAt: number
   updatedAt: number
   deletedAt: number | null
-  scanIds: string[]
+  groupIds: string[]
 }
 
 export type UsersIndexItem = Pick<User, "id" | "name" | "image" | "role"> &
