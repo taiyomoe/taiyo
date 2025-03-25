@@ -1,30 +1,18 @@
-import { PrismaClient } from "@prisma/client"
+import type { Prisma } from "@prisma/client"
 import normalizeEmail from "validator/lib/normalizeEmail"
 
-const prisma = new PrismaClient()
+export default async (tx: Prisma.TransactionClient) => {
+  const users = await tx.$queryRaw<
+    { id: string; email: string | null }[]
+  >`SELECT "id", "email" FROM "User"`
 
-async function main() {
-  await prisma.$transaction(async (tx) => {
-    const users = await tx.user.findMany()
+  for (const user of users) {
+    const normalizedEmail = user.email ? normalizeEmail(user.email) : null
 
-    for (const user of users) {
-      const normalizedEmail = normalizeEmail(user.email)
-
-      if (!normalizedEmail) {
-        throw new Error(`Failed to normalize email for user ${user.id}`)
-      }
-
-      await tx.user.update({
-        where: { id: user.id },
-        data: { normalizedEmail },
-      })
+    if (normalizedEmail === false) {
+      throw new Error(`Failed to normalize email for user ${user.id}`)
     }
-  })
-}
 
-main()
-  .catch(async (e) => {
-    console.error(e)
-    process.exit(1)
-  })
-  .finally(async () => await prisma.$disconnect())
+    await tx.$executeRaw`UPDATE "User" SET "normalizedEmail" = ${normalizedEmail || null} WHERE "id" = ${user.id}::UUID`
+  }
+}

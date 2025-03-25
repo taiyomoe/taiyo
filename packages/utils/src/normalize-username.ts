@@ -7,7 +7,8 @@ export const USERNAME_MAX_LENGTH = 30
 export const normalizeUsername = (input: string) => {
   const normalized = input
     .slice(0, USERNAME_MAX_LENGTH)
-    .replace(/^[a-zA-Z0-9_.]$/, "")
+    .replaceAll(" ", "_")
+    .replace(/[^a-zA-Z0-9_.]/g, "")
     .toLowerCase()
 
   return normalized.length < USERNAME_MIN_LENGTH

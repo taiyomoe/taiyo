@@ -1,46 +1,37 @@
 import { faker } from "@faker-js/faker"
-import { PrismaClient } from "@prisma/client"
+import type { Prisma } from "@prisma/client"
+import { normalizeDisplayName, normalizeUsername } from "@taiyomoe/utils"
 
-const prisma = new PrismaClient()
-const USERNAME_REGEX = /^[a-zA-Z0-9_.]$/g
+export default async (tx: Prisma.TransactionClient) => {
+  const takenUsernames = new Set<string>()
+  const takenDisplayUsernames = new Set<string>()
+  const users = await tx.$queryRaw<
+    { id: string; name: string }[]
+  >`SELECT "id", "name" FROM "User" ORDER BY "createdAt" ASC`
 
-async function main() {
-  await prisma.$transaction(async (tx) => {
-    const takenUsernames = new Set<string>()
-    const takenDisplayUsernames = new Set<string>()
-    const users = await tx.user.findMany()
+  const generateUsername = (set: Set<string>): string => {
+    const username = faker.internet.username()
 
-    for (const user of users) {
-      let normalizedUsername = user.name
-        .slice(0, 30)
-        .replace(USERNAME_REGEX, "")
-      let displayUsername = user.name
+    return set.has(username) ? generateUsername(set) : username
+  }
 
-      if (!normalizedUsername || takenUsernames.has(normalizedUsername)) {
-        normalizedUsername = faker.internet.username()
-      }
+  for (const user of users) {
+    let username = normalizeUsername(user.name)
+    let displayUsername = normalizeDisplayName(user.name)
 
-      if (takenDisplayUsernames.has(displayUsername)) {
-        displayUsername = faker.internet.username()
-      }
-
-      await tx.user.update({
-        where: { id: user.id },
-        data: {
-          username: normalizedUsername,
-          displayUsername,
-        },
-      })
-
-      takenUsernames.add(normalizedUsername)
-      takenDisplayUsernames.add(user.name)
+    if (takenUsernames.has(username)) {
+      username = generateUsername(takenUsernames).toLowerCase()
     }
-  })
-}
 
-main()
-  .catch(async (e) => {
-    console.error(e)
-    process.exit(1)
-  })
-  .finally(async () => await prisma.$disconnect())
+    if (takenDisplayUsernames.has(displayUsername)) {
+      displayUsername = generateUsername(takenDisplayUsernames)
+    }
+
+    console.log(`Setting '${username}'::'${displayUsername}' for ${user.id}`)
+
+    await tx.$executeRaw`UPDATE "User" SET "username" = ${username}, "displayUsername" = ${displayUsername} WHERE "id" = ${user.id}::UUID`
+
+    takenUsernames.add(username)
+    takenDisplayUsernames.add(displayUsername)
+  }
+}

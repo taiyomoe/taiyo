@@ -9,6 +9,3 @@
 ALTER TABLE "User" ADD COLUMN     "normalizedEmail" TEXT,
 ALTER COLUMN "emailVerified" SET NOT NULL,
 ALTER COLUMN "emailVerified" DROP DEFAULT;
-
--- CreateIndex
-CREATE UNIQUE INDEX "User_normalizedEmail_key" ON "User"("normalizedEmail");

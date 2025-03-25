@@ -32,7 +32,6 @@ ALTER TABLE "Session"
 -- AlterTable
 ALTER TABLE "User"
   ALTER COLUMN "name" SET NOT NULL,
-  ALTER COLUMN "email" SET NOT NULL,
   ADD COLUMN "banExpires" TIMESTAMP(3),
   ADD COLUMN "banReason" TEXT,
   ADD COLUMN "banned" BOOLEAN;

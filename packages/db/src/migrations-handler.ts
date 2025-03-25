@@ -34,7 +34,7 @@ const main = async () => {
     join(fileURLToPath(dirname(import.meta.url)), MIGRATIONS_RELATIVE_PATH),
   )
   const foundMigrations = rawFoundMigrations.filter(
-    (m) => m !== "migration_lock.toml",
+    (m) => !["migration_lock.toml", ".DS_Store"].includes(m),
   )
   const appliedMigrations = await prisma.$queryRaw<
     Migration[]
@@ -66,58 +66,61 @@ const main = async () => {
     process.exit(0)
   }
 
-  await prisma.$transaction(async (tx) => {
-    for (const migrationName of migrationsToApply) {
-      const migrationPath = join(migrationsPath, migrationName)
-      const files = await readdir(migrationPath)
-      const sqlFile = files.find((f) => f.endsWith(".sql"))
-      const dataMigrationFile = files.find((f) => f.endsWith(".ts"))
+  await prisma.$transaction(
+    async (tx) => {
+      for (const migrationName of migrationsToApply) {
+        const migrationPath = join(migrationsPath, migrationName)
+        const files = await readdir(migrationPath)
+        const sqlFile = files.find((f) => f.endsWith(".sql"))
+        const dataMigrationFile = files.find((f) => f.endsWith(".ts"))
 
-      if (!sqlFile) {
-        console.log(
-          `Migration ${migrationName} has no SQL file. This should not happen.`,
-        )
-        process.exit(1)
-      }
-
-      console.log(
-        `Executing migration ${migrationName}... ${dataMigrationFile ? "A data migration was also found and will be executed right after." : ""}`,
-      )
-
-      const sqlContent = await readFile(join(migrationPath, sqlFile), "utf8")
-      const statements = sqlContent.split(";")
-
-      for (const statement of statements) {
-        try {
-          await tx.$executeRawUnsafe(statement)
-        } catch (err) {
+        if (!sqlFile) {
           console.log(
-            `There was an error while executing the migration ${migrationName}.`,
+            `Migration ${migrationName} has no SQL file. This should not happen.`,
           )
-          console.error(err)
           process.exit(1)
         }
-      }
-
-      const id = randomUUID()
-      const checksum = createHash("sha256").update(sqlContent).digest("hex")
-
-      await tx.$executeRaw`INSERT INTO _prisma_migrations (id, checksum, finished_at, migration_name) VALUES (${id}, ${checksum}, NOW(), ${migrationName})`
-
-      console.log(`Migration ${migrationName} executed successfully.`)
-
-      if (dataMigrationFile) {
-        const dataMigrationPath = join(migrationPath, dataMigrationFile)
-        const dataMigration = await import(dataMigrationPath)
-
-        await dataMigration.default()
 
         console.log(
-          `Data migration ${dataMigrationFile} executed successfully.`,
+          `Executing migration ${migrationName}... ${dataMigrationFile ? "A data migration was also found and will be executed right after." : ""}`,
         )
+
+        const sqlContent = await readFile(join(migrationPath, sqlFile), "utf8")
+        const statements = sqlContent.split(";")
+
+        for (const statement of statements) {
+          try {
+            await tx.$executeRawUnsafe(statement)
+          } catch (err) {
+            console.log(
+              `There was an error while executing the migration ${migrationName}.`,
+            )
+            console.error(err)
+            process.exit(1)
+          }
+        }
+
+        const id = randomUUID()
+        const checksum = createHash("sha256").update(sqlContent).digest("hex")
+
+        await tx.$executeRaw`INSERT INTO _prisma_migrations (id, checksum, finished_at, migration_name) VALUES (${id}, ${checksum}, NOW(), ${migrationName})`
+
+        console.log(`Migration ${migrationName} executed successfully.`)
+
+        if (dataMigrationFile) {
+          const dataMigrationPath = join(migrationPath, dataMigrationFile)
+          const dataMigration = await import(dataMigrationPath)
+
+          await dataMigration.default(tx)
+
+          console.log(
+            `Data migration ${dataMigrationFile} executed successfully.`,
+          )
+        }
       }
-    }
-  })
+    },
+    { timeout: 1000000000 },
+  )
 }
 
 main()

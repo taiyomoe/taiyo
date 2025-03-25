@@ -35,9 +35,9 @@ model User {
     name            String
     username        String    @unique
     displayUsername String    @unique
-    email           String    @unique
+    email           String?   @unique
     emailVerified   Boolean
-    normalizedEmail String?   @unique
+    normalizedEmail String?
     image           String?
     banned          Boolean?
     banReason       String?
