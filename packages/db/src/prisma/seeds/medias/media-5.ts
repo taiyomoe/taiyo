@@ -53,7 +53,7 @@ const execute = async () => {
     },
   })
 
-  await db.mediaTitle.createMany({
+  await db.title.createMany({
     data: [
       {
         id: "018e02ec-af40-427d-a7ce-cc4bf66b73ba",
@@ -117,7 +117,7 @@ const execute = async () => {
     ],
   })
 
-  await db.mediaTracker.createMany({
+  await db.tracker.createMany({
     data: [
       {
         tracker: "MANGADEX",
@@ -140,7 +140,7 @@ const execute = async () => {
     ],
   })
 
-  await db.mediaCover.createMany({
+  await db.cover.createMany({
     data: [
       {
         id: "d8401ce2-5937-43ee-83dd-0464847b04aa",
@@ -188,7 +188,7 @@ const execute = async () => {
     ],
   })
 
-  await db.mediaBanner.create({
+  await db.banner.create({
     data: {
       id: "fee093fc-82c1-4ba2-892e-48e61aa3d827",
       mediaId: "7d64e4f8-d955-4b59-a7c5-7ee2ddcad68b",
@@ -196,7 +196,7 @@ const execute = async () => {
     },
   })
 
-  await db.mediaChapter.createMany({
+  await db.chapter.createMany({
     data: [
       {
         id: "4b31f537-0b93-423d-9a52-8283bf6db5b7",

@@ -1,10 +1,4 @@
-import type {
-  Group,
-  Media,
-  MediaTitle,
-  User,
-  UserProfile,
-} from "@prisma/client"
+import type { Group, Media, Title, User, UserProfile } from "@prisma/client"
 
 export type MediasIndexItem = Omit<
   Media,
@@ -16,7 +10,7 @@ export type MediasIndexItem = Omit<
   startDate: number | null
   endDate: number | null
   titles: Pick<
-    MediaTitle,
+    Title,
     "title" | "language" | "priority" | "isAcronym" | "isMainTitle"
   >[]
   mainCoverId: string
