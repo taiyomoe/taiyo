@@ -35,7 +35,7 @@
   "devDependencies": {
     "@taiyomoe/meilisearch": "workspace:^",
     "@taiyomoe/tsconfig": "workspace:^",
-    "@types/validator": "^13.12.2",
+    "@types/validator": "^13.12.3",
     "cross-env": "^7.0.3",
     "prisma": "^6.5.0",
     "tsx": "^4.19.3"
