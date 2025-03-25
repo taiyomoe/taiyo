@@ -1,7 +1,6 @@
 import type {
   Group,
   Media,
-  MediaChapter,
   MediaTitle,
   User,
   UserProfile,
@@ -30,16 +29,6 @@ export type GroupsIndexItem = Omit<
   createdAt: number
   updatedAt: number
   deletedAt: number | null
-}
-
-export type ChaptersIndexItem = Omit<
-  MediaChapter,
-  "createdAt" | "updatedAt" | "deletedAt" | "pages"
-> & {
-  createdAt: number
-  updatedAt: number
-  deletedAt: number | null
-  groupIds: string[]
 }
 
 export type UsersIndexItem = Pick<User, "id" | "name" | "image" | "role"> &

@@ -1,5 +1,4 @@
 import type {
-  ChaptersIndexItem,
   GroupsIndexItem,
   MediasIndexItem,
   UsersIndexItem,
@@ -22,7 +21,6 @@ export const rawMeilisearchClient =
 export const meilisearchClient = {
   medias: rawMeilisearchClient.index<MediasIndexItem>("medias"),
   groups: rawMeilisearchClient.index<GroupsIndexItem>("groups"),
-  chapters: rawMeilisearchClient.index<ChaptersIndexItem>("chapters"),
   users: rawMeilisearchClient.index<UsersIndexItem>("users"),
 }
 

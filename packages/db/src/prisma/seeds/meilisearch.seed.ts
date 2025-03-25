@@ -1,6 +1,5 @@
 import { meilisearchClient, rawMeilisearchClient } from "@taiyomoe/meilisearch"
 import {
-  ChaptersIndexService,
   MediasIndexService,
   UsersIndexService,
 } from "@taiyomoe/meilisearch/services"
@@ -74,35 +73,6 @@ const execute = async () => {
   await GroupsIndexService.sync(
     db,
     groups.map((s) => s.id),
-  )
-
-  // Chapters
-  const chapters = await db.mediaChapter.findMany()
-  const chapterFields = [
-    "id",
-    "createdAt",
-    "updatedAt",
-    "deletedAt",
-    "title",
-    "number",
-    "volume",
-    "language",
-    "contentRating",
-    "flag",
-    "groupIds",
-    "uploaderId",
-    "mediaId",
-    "deleterId",
-  ]
-
-  await rawMeilisearchClient.deleteIndexIfExists("chapters")
-  await rawMeilisearchClient.createIndex("chapters", { primaryKey: "id" })
-  await meilisearchClient.chapters.updateFilterableAttributes(chapterFields)
-  await meilisearchClient.chapters.updateSortableAttributes(chapterFields)
-  await meilisearchClient.chapters.deleteAllDocuments()
-  await ChaptersIndexService.sync(
-    db,
-    chapters.map((s) => s.id),
   )
 
   // Users
