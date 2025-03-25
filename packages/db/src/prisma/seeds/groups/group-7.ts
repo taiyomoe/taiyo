@@ -9,7 +9,7 @@ const execute = async () => {
       description: "É agora ou nunca.",
       // -----,
       website: "https://shinsekaiscans.wordpress.com/",
-      twitter: "https://twitter.com/ShinSekaiscans",
+      x: "https://twitter.com/ShinSekaiscans",
       // -----
       creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
       chapters: {

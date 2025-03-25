@@ -24,7 +24,7 @@ const ensureGroups = async (input: string[], creatorId: string) => {
         description: mdGroup.description,
         website: mdGroup.website,
         discord: mdGroup.discord,
-        twitter: mdGroup.twitter,
+        x: mdGroup.twitter,
         email: mdGroup.contactEmail,
         creatorId,
       },
