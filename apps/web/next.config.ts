@@ -24,6 +24,23 @@ const config = {
   /** We already do linting and typechecking as separate tasks in CI */
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
+
+  /** PostHog-related configuration */
+  rewrites: async () => [
+    {
+      source: "/ingest/static/:path*",
+      destination: "https://us-assets.i.posthog.com/static/:path*",
+    },
+    {
+      source: "/ingest/:path*",
+      destination: "https://us.i.posthog.com/:path*",
+    },
+    {
+      source: "/ingest/decide",
+      destination: "https://us.i.posthog.com/decide",
+    },
+  ],
+  skipTrailingSlashRedirect: true,
 } satisfies NextConfig
 
 const withNextIntl = createNextIntlPlugin()
