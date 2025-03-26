@@ -1,3 +1,4 @@
+import { getFeaturedMediasHandler } from "./handlers/get-featured-medias-handler"
 import { createTRPCRouter } from "./trpc"
 
 /**
@@ -5,7 +6,10 @@ import { createTRPCRouter } from "./trpc"
  *
  * All routers added in /api/routers should be manually added here.
  */
-export const appRouter = createTRPCRouter({})
+export const appRouter = createTRPCRouter({
+  medias: {
+    getFeaturedMedias: getFeaturedMediasHandler,
+  },
+})
 
-// export type definition of API
 export type AppRouter = typeof appRouter

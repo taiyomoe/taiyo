@@ -18,7 +18,7 @@ import { initTRPC } from "@trpc/server"
 import superjson from "superjson"
 import { createTranslator } from "use-intl/core"
 import { ZodError } from "zod"
-import { withAuth } from "./middlewares/auth.middleware"
+import { withAuth } from "./middlewares/auth-middleware"
 
 /**
  * 1. CONTEXT
@@ -67,13 +67,6 @@ const t = initTRPC.context<typeof createTRPCContext>().create({
   }),
 })
 
-export type tRPCInit = typeof t
-
-/**
- * Reusable middlewares
- */
-export const authMiddleware = withAuth(t)
-
 /**
  * Create a server-side caller
  * @see https://trpc.io/docs/server/server-side-calls
@@ -92,6 +85,8 @@ export const createCallerFactory = t.createCallerFactory
  * @see https://trpc.io/docs/router
  */
 export const createTRPCRouter = t.router
+
+export type tRPCInit = typeof t
 
 /**
  * Middleware for timing procedure execution and adding an articifial delay in development.
@@ -136,4 +131,5 @@ export const publicProcedure = t.procedure.use(timingMiddleware)
  *
  * @see https://trpc.io/docs/procedures
  */
+export const authMiddleware = withAuth(t)
 export const protectedProcedure = t.procedure.use(timingMiddleware)

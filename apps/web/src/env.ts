@@ -8,7 +8,9 @@ export const env = createEnv({
   /**
    * Specify your shared environment variables schema here.
    */
-  shared: {},
+  shared: {
+    NODE_ENV: z.enum(["development", "production"]).default("development"),
+  },
 
   /**
    * Specify your server-side environment variables schema here.
@@ -30,6 +32,7 @@ export const env = createEnv({
    * Destructure all variables from `process.env` to make sure they aren't tree-shaken away.
    */
   experimental__runtimeEnv: {
+    NODE_ENV: process.env.NODE_ENV,
     NEXT_PUBLIC_POSTHOG_HOST: process.env.NEXT_PUBLIC_POSTHOG_HOST,
     NEXT_PUBLIC_POSTHOG_KEY: process.env.NEXT_PUBLIC_POSTHOG_KEY,
     NEXT_PUBLIC_TURNSTILE_SITE_KEY: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY,

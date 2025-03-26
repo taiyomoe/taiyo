@@ -1,14 +1,17 @@
-import { getTranslations } from "next-intl/server"
-import { Button } from "../../components/ui/button"
+import { Suspense } from "react"
+import { HydrateClient } from "~/utils/trpc/server"
+import { FeaturedMediasCarousel } from "./_components/featured-medias/featured-medias-carousel"
+import { FeaturedMediasSkeleton } from "./_components/featured-medias/featured-medias-skeleton"
 
 export default async function Page() {
-  const t = await getTranslations("home")
-
   return (
-    <main className="flex flex-col space-y-8 p-4">
-      <h1>{t("title")}</h1>
-      <Button>Click me</Button>
-      <Button variant="outline">Click me</Button>
-    </main>
+    <HydrateClient>
+      <main className="flex flex-col space-y-8">
+        <Suspense fallback={<FeaturedMediasSkeleton />}>
+          <FeaturedMediasCarousel />
+        </Suspense>
+        <div className="min-h-[3000px] overflow-x-hidden p-4">zerth</div>
+      </main>
+    </HydrateClient>
   )
 }
