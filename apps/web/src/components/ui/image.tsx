@@ -6,15 +6,19 @@ import { Skeleton } from "~/components/ui/skeleton"
 import { cn } from "~/utils/cn"
 
 const image = tv({
-  base: "relative min-w-fit",
+  base: "relative min-w-fit overflow-hidden",
   slots: {
     skeleton: "absolute size-full",
-    image: "size-full opacity-0 data-[loading=false]:opacity-100",
+    image:
+      "size-full opacity-0 transition-transform duration-300 data-[loading=false]:opacity-100",
   },
   variants: {
     radius: {
-      md: "*:rounded",
-      full: "*:rounded-full",
+      md: "rounded *:rounded",
+      full: "rounded-full *:rounded-full",
+    },
+    shouldZoom: {
+      true: "hover:[&_img]:scale-110",
     },
   },
 })
@@ -45,9 +49,10 @@ export const Image = ({
   className,
   classNames,
   radius,
+  shouldZoom,
   ...props
 }: ImageProps) => {
-  const slots = image({ radius })
+  const slots = image({ radius, shouldZoom })
   const [isLoading, setIsLoading] = useState(true)
 
   return (

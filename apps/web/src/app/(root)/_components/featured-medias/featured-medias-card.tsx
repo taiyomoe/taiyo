@@ -25,10 +25,12 @@ export const FeaturedMediasCard = ({ media }: Props) => {
       <div className="absolute inset-x-0 top-0 left-0 z-20 mx-auto mt-[50] flex w-full max-w-9xl gap-4 p-4">
         <Image
           src={getCoverUrl(media.id, media.covers.at(0)!)}
-          className="aspect-7/10 max-h-[160] select-none rounded md:max-h-[300]"
+          className="aspect-7/10 max-h-[160] select-none md:max-h-[300]"
           width={200}
           height={300}
+          radius="md"
           alt={`${getDisplayTitle(media.titles)}'s cover`}
+          shouldZoom
         />
         <div className="space-y-2">
           <h2 className="line-clamp-5 overflow-hidden font-bold text-2xl text-primary sm:line-clamp-2 lg:text-4xl">
