@@ -19,7 +19,12 @@ export default async function Layout({ children }: LayoutProps) {
 
   return (
     <html lang={locale} suppressHydrationWarning>
-      <body className={cn("antialiased", inter.className)}>
+      <body
+        className={cn(
+          "scrollbar-thin scrollbar-thumb-brand scrollbar-track-subtle overflow-y-auto bg-default text-default antialiased",
+          inter.className,
+        )}
+      >
         <ThemeProvider attribute="class">
           <NextIntlClientProvider messages={messages}>
             <AuthStoreProvider value={session}>
