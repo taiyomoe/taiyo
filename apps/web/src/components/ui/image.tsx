@@ -5,7 +5,7 @@ import { type VariantProps, tv } from "tailwind-variants"
 import { Skeleton } from "~/components/ui/skeleton"
 
 const image = tv({
-  base: "relative transition-[width,height,min-width,min-height] duration-300",
+  base: "relative",
   slots: {
     skeleton: "absolute size-full",
     image: "size-full",
@@ -39,8 +39,16 @@ export const Image = ({ className, radius, ...props }: ImageProps) => {
   const [isLoading, setIsLoading] = useState(true)
 
   return (
-    <div className={slots.base({ className })}>
-      {isLoading && <Skeleton className={slots.skeleton()} />}
+    <div
+      className={slots.base({ className })}
+      style={{
+        transition:
+          "color 200ms, background 200ms, opacity 200ms, width 300ms, height 300ms, min-width 300ms, min-height 300ms, max-width 300ms, max-height 300ms, padding 300ms",
+      }}
+    >
+      {(isLoading || typeof window === "undefined") && (
+        <Skeleton className={slots.skeleton()} />
+      )}
       <NextImage
         className={slots.image()}
         onLoad={() => setIsLoading(false)}
