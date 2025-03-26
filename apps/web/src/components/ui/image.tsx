@@ -8,7 +8,7 @@ import { cn } from "~/utils/cn"
 const image = tv({
   base: "relative min-w-fit overflow-hidden",
   slots: {
-    skeleton: "absolute size-full",
+    skeleton: "absolute size-full data-[loading=false]:hidden",
     image:
       "size-full opacity-0 transition-transform duration-300 data-[loading=false]:opacity-100",
   },
@@ -63,11 +63,10 @@ export const Image = ({
           "color 200ms, background 200ms, opacity 200ms, width 300ms, height 300ms, min-width 300ms, min-height 300ms, max-width 300ms, max-height 300ms, padding 300ms",
       }}
     >
-      {(isLoading || typeof window === "undefined") && (
-        <Skeleton
-          className={slots.skeleton({ className: classNames?.skeleton })}
-        />
-      )}
+      <Skeleton
+        className={slots.skeleton({ className: classNames?.skeleton })}
+        data-loading={isLoading}
+      />
       <NextImage
         className={slots.image({ className: cn(className, classNames?.image) })}
         onLoad={() => setIsLoading(false)}

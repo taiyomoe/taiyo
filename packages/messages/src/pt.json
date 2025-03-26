@@ -26,6 +26,27 @@
       "en": "Inglês",
       "pt": "Português",
       "fr": "Francês"
+    },
+    "genres": {
+      "ACTION": "Ação",
+      "ADVENTURE": "Aventura",
+      "COMEDY": "Comédia",
+      "DRAMA": "Drama",
+      "ECCHI": "Ecchi",
+      "FANTASY": "Fantasia",
+      "HENTAI": "Hentai",
+      "HORROR": "Horror",
+      "MAHOU_SHOUJO": "Mahou Shoujo",
+      "MECHA": "Mecha",
+      "MUSIC": "Música",
+      "MYSTERY": "Mistério",
+      "PSYCHOLOGICAL": "Psicologia",
+      "ROMANCE": "Romance",
+      "SCI_FI": "Ficção Científica",
+      "SLICE_OF_LIFE": "Slice of Life",
+      "SPORTS": "Esportes",
+      "SUPERNATURAL": "Supernatural",
+      "THRILLER": "Suspense"
     }
   },
   "validation": {
