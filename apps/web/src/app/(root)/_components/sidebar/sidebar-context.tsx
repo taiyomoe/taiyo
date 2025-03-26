@@ -56,7 +56,7 @@ export const SidebarProvider = ({
       value={{ state, openMobile, isMobile, setState, setOpenMobile, toggle }}
     >
       <div
-        className="flex min-h-dvh overflow-x-hidden"
+        className="flex min-h-dvh"
         style={
           {
             "--sidebar-width": state === "expanded" ? "16rem" : "3rem",

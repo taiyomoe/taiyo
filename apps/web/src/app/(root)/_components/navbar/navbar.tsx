@@ -29,15 +29,14 @@ export const Navbar = () => {
 
   return (
     <motion.div
-      className="group/navbar sticky z-20 flex h-(--navbar-height) items-center justify-between px-4 py-2 transition-[height] duration-300 md:justify-end"
+      className="group/navbar fixed top-0 z-10 flex h-(--navbar-height) w-[-webkit-fill-available] items-center justify-between px-4 py-2 transition-[height] duration-300 md:justify-end"
       style={
         {
           backgroundColor,
-          "--navbar-height": state === "expanded" ? "57" : "49",
+          "--navbar-height": state === "expanded" ? "57px" : "49px",
         } as MotionStyle
       }
       data-state={isMobile ? "collapsed" : state}
-      data-height={state === "expanded" ? "57" : "49"}
     >
       <div className="-translate-x-1/2 absolute left-1/2 flex items-center gap-2 md:hidden">
         <Link

@@ -8,7 +8,7 @@ export const NavbarBorder = () => {
 
   return (
     <motion.span
-      className="absolute bottom-0 left-0 h-[1px] w-full bg-brand transition-all"
+      className="absolute bottom-0 left-0 h-[1px] w-full bg-subtle transition-all"
       style={{ opacity }}
     />
   )
