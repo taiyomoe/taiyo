@@ -1,7 +1,6 @@
 "use client"
 
 import type { Session, User } from "@taiyomoe/auth/server"
-import type { UserSettings } from "@taiyomoe/types"
 import { omit } from "radash"
 import { type ReactNode, createContext, useContext, useRef } from "react"
 import { createStore, useStore } from "zustand"
@@ -9,7 +8,7 @@ import { createStore, useStore } from "zustand"
 type State = {
   user: Omit<User, "settings"> | null
   session: Session["session"] | null
-  settings: UserSettings
+  settings: PrismaJson.UserSettings
 
   signOut: () => void
 }
@@ -20,12 +19,13 @@ const createAuthStore = (initProps: Session | null) =>
   createStore<State>((set) => ({
     user: initProps ? omit(initProps.user, ["settings"]) : null,
     session: initProps?.session ?? null,
-    settings: initProps?.user.settings ?? {
-      contentRating: "NSFL",
+    settings: {
+      contentRating: ["NORMAL", "SUGGESTIVE", "NSFW", "NSFL"],
       preferredTitles: "en",
       showFollowing: true,
       showLibrary: true,
       homeLayout: "ROWS",
+      ...initProps?.user.settings,
     },
 
     signOut: () => {

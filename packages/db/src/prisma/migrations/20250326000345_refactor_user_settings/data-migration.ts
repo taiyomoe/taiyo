@@ -1,18 +1,13 @@
-import type {
-  ContentRating,
-  HomeLayout,
-  Languages,
-  Prisma,
-} from "@prisma/client"
+import type { Prisma } from "@prisma/client"
 
 export default async (tx: Prisma.TransactionClient) => {
   const users = await tx.$queryRaw<
     {
-      contentRating: ContentRating
-      preferredTitles: Languages | null
+      contentRating: string
+      preferredTitles: string | null
       showFollowing: boolean
       showLibrary: boolean
-      homeLayout: HomeLayout
+      homeLayout: string
       userId: string
     }[]
   >`SELECT * FROM "UserSetting"`

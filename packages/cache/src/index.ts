@@ -1,11 +1,10 @@
-import type { UserSettings } from "@taiyomoe/types"
 import DF from "ioredis"
 import SuperJSON from "superjson"
 import { env } from "./env"
 import { parseCache } from "./utils/parse-cache"
 
 const HOUR = 60 * 60
-const DAY = 60 * 60 * 24
+// const DAY = 60 * 60 * 24
 const client = new DF(env.DRAGONFLY_URL)
 
 export const cacheClient = {
@@ -29,12 +28,6 @@ export const cacheClient = {
         ),
       get: (id: string) =>
         parseCache<Date>(client.get(`users:verification-email-sent-at:${id}`)),
-    },
-    settings: {
-      set: (id: string, value: UserSettings) =>
-        client.setex(`users:settings:${id}`, DAY, SuperJSON.stringify(value)),
-      get: (id: string) =>
-        parseCache<UserSettings>(client.get(`users:settings:${id}`)),
     },
   },
   clear: () => client.flushdb(),

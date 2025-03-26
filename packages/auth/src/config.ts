@@ -1,6 +1,5 @@
 import { cacheClient } from "@taiyomoe/cache"
 import { type Roles, db } from "@taiyomoe/db"
-import type { UserSettings } from "@taiyomoe/types"
 import {
   USERNAME_MAX_LENGTH,
   USERNAME_MIN_LENGTH,
@@ -22,7 +21,6 @@ import { afterSessionCreatedHook } from "./utils/after-session-created-hook"
 import { afterUserCreatedHook } from "./utils/after-user-created-hook"
 import { beforeHook } from "./utils/before-hook"
 import { beforeUserCreatedHook } from "./utils/before-user-created-hook"
-import { getCustomSession } from "./utils/get-custom-session"
 import { sendMagicLink } from "./utils/send-magic-link"
 import { sendResetPassword } from "./utils/send-reset-password"
 import { sendVerificationEmail } from "./utils/send-verification-email"
@@ -43,6 +41,9 @@ export const auth = betterAuth({
     sendVerificationEmail,
   },
   account: { accountLinking: { enabled: false } },
+  user: {
+    additionalFields: { settings: { fieldName: "settings", type: "string" } },
+  },
   socialProviders: {
     discord: {
       clientId: env.DISCORD_CLIENT_ID,
@@ -95,15 +96,29 @@ export const auth = betterAuth({
       endpoints: ["/sign-up", "/forget-password"],
     }),
     admin({ defaultRole: "USER" }),
-    customSession(getCustomSession),
+    customSession(async ({ session, user }) => ({
+      session,
+      user: {
+        ...user,
+        ...(user as unknown as {
+          username: string | null | undefined
+          displayUsername: string | null | undefined
+          banned: boolean | null | undefined
+          banReason: string | null | undefined
+          banExpires: Date | null | undefined
+          role: Roles
+          settings: PrismaJson.UserSettings
+        }),
+      },
+    })),
   ],
 })
 
-export type User = typeof auth.$Infer.Session.user & {
+export type User = Omit<typeof auth.$Infer.Session.user, "settings"> & {
   role: Roles
-  settings: UserSettings
+  settings: PrismaJson.UserSettings
 }
 
-export type Session = typeof auth.$Infer.Session & {
+export type Session = Omit<typeof auth.$Infer.Session, "user"> & {
   user: User
 }
