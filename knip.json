@@ -2,14 +2,13 @@
   "$schema": "https://unpkg.com/knip@5/schema.json",
   "ignoreWorkspaces": ["./apps/io-worker", "./packages/db"],
   "ignoreDependencies": [
-    "@taiyomoe/db",
-    "@taiyomoe/types",
     "@types/global-types",
     "postcss",
     "accept-language-parser",
     "@types/accept-language-parser",
     "tailwindcss-react-aria-components",
     "tw-animate-css",
+    "tailwind-scrollbar",
     "punycode"
   ],
   "ignore": [

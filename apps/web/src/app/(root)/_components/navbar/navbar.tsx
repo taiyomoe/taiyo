@@ -1,12 +1,7 @@
 "use client"
 
-import {
-  type MotionStyle,
-  motion,
-  useScroll,
-  useTransform,
-} from "framer-motion"
 import { MenuIcon } from "lucide-react"
+import { type MotionStyle, motion, useScroll, useTransform } from "motion/react"
 import Link from "next/link"
 import { Button } from "react-aria-components"
 import { TaiyoLogo } from "~/components/logos/taiyo-logo"
