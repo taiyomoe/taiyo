@@ -96,9 +96,6 @@ importers:
       '@taiyomoe/auth':
         specifier: workspace:^
         version: link:../../packages/auth
-      '@taiyomoe/db':
-        specifier: workspace:^
-        version: link:../../packages/db
       '@taiyomoe/trpc':
         specifier: workspace:^
         version: link:../../packages/trpc
@@ -112,7 +109,7 @@ importers:
         specifier: ^11.0.0
         version: 11.0.0(@trpc/server@11.0.0(typescript@5.8.2))(typescript@5.8.2)
       '@trpc/server':
-        specifier: 11.0.0
+        specifier: ^11.0.0
         version: 11.0.0(typescript@5.8.2)
       '@trpc/tanstack-react-query':
         specifier: ^11.0.0
@@ -257,9 +254,6 @@ importers:
       '@taiyomoe/tsconfig':
         specifier: workspace:^
         version: link:../../tooling/typescript
-      '@taiyomoe/types':
-        specifier: workspace:^
-        version: link:../types
       '@types/luxon':
         specifier: ^3.4.2
         version: 3.4.2
@@ -282,9 +276,6 @@ importers:
       '@taiyomoe/tsconfig':
         specifier: workspace:^
         version: link:../../tooling/typescript
-      '@taiyomoe/types':
-        specifier: workspace:^
-        version: link:../types
 
   packages/config:
     devDependencies:
@@ -387,7 +378,7 @@ importers:
         specifier: ^0.12.0
         version: 0.12.0(typescript@5.8.2)(valibot@1.0.0-beta.15(typescript@5.8.2))(zod@3.24.2)
       '@trpc/server':
-        specifier: 11.0.0
+        specifier: ^11.0.0
         version: 11.0.0(typescript@5.8.2)
       luxon:
         specifier: ^3.6.0
@@ -498,7 +489,7 @@ importers:
         specifier: workspace:^
         version: link:../s3
       '@trpc/server':
-        specifier: 11.0.0
+        specifier: ^11.0.0
         version: 11.0.0(typescript@5.8.2)
       superjson:
         specifier: ^2.2.2
@@ -513,9 +504,6 @@ importers:
       '@taiyomoe/tsconfig':
         specifier: workspace:^
         version: link:../../tooling/typescript
-      '@taiyomoe/types':
-        specifier: workspace:^
-        version: link:../types
 
   packages/types:
     dependencies:
