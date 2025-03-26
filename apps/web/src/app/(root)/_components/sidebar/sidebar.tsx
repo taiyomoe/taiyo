@@ -40,7 +40,7 @@ export const Sidebar = () => {
 
   return (
     <>
-      <div className="relative hidden w-(--sidebar-width) bg-transparent transition-[width] duration-300 md:block" />
+      <div className="relative hidden min-w-(--sidebar-width) bg-transparent transition-[min-width] duration-300 md:block" />
       <aside
         className="group fixed inset-y-0 hidden max-h-dvh w-(--sidebar-width) border-subtle border-r bg-muted transition-[width] duration-300 md:block"
         data-state={state}

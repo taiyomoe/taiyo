@@ -14,7 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown"
 import { useAuth } from "~/stores/auth.store"
-import { SidebarDropdownCommonContent } from "./sidebar-dropdown-common-content"
+import { SidebarDropdownCommonContent } from "../sidebar/sidebar-dropdown-common-content"
 
 export const NavbarAuthedContent = () => {
   const t = useTranslations("global")

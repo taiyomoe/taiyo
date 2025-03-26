@@ -9,7 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown"
-import { SidebarDropdownCommonContent } from "./sidebar-dropdown-common-content"
+import { SidebarDropdownCommonContent } from "../sidebar/sidebar-dropdown-common-content"
 
 export const NavbarUnauthedContent = () => {
   const t = useTranslations()
