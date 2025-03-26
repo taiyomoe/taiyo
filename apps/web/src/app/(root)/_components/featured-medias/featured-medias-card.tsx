@@ -27,7 +27,7 @@ export const FeaturedMediasCard = ({ media }: Props) => {
       <div className="absolute inset-x-0 top-0 left-0 z-20 mx-auto mt-[50] flex w-full max-w-9xl gap-4 p-4">
         <Image
           src={getCoverUrl(media.id, media.covers.at(-1)!)}
-          className="aspect-7/10 max-h-[160] select-none md:max-h-[300]"
+          className="aspect-7/10 max-h-[160] select-none md:max-h-[270] xl:max-h-[300]"
           width={200}
           height={300}
           radius="md"
