@@ -29,6 +29,8 @@
     "better-auth": "^1.2.4",
     "clsx": "^2.1.1",
     "country-flag-icons": "^1.5.18",
+    "embla-carousel-autoplay": "^8.5.2",
+    "embla-carousel-react": "^8.5.2",
     "lucide-react": "^0.484.0",
     "motion": "^12.6.0",
     "next": "15.3.0-canary.23",

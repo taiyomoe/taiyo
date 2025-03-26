@@ -12,7 +12,9 @@ export default async function Page() {
         <Suspense fallback={<FeaturedMediasSkeleton />}>
           <FeaturedMediasCarousel />
         </Suspense>
-        <div className="min-h-[3000px] overflow-x-hidden p-4">zerth</div>
+        <div className="min-h-[800px] overflow-x-hidden p-4">
+          <h1 className="font-bold text-2xl">Lançamentos</h1>
+        </div>
       </main>
     </HydrateClient>
   )

@@ -68,6 +68,10 @@
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
+
+  /* Container sizes */
+  --container-8xl: 88rem;
+  --container-9xl: 96rem;
 }
 
 :root {
