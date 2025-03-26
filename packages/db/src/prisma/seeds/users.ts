@@ -154,6 +154,19 @@ const execute = async () => {
       image: fakerPT_BR.datatype.boolean({ probability: 0.7 })
         ? null
         : fakerPT_BR.image.avatarGitHub(),
+      settings: {
+        contentRating: [
+          ...new Set([
+            fakerPT_BR.helpers.enumValue(ContentRating),
+            fakerPT_BR.helpers.enumValue(ContentRating),
+            fakerPT_BR.helpers.enumValue(ContentRating),
+            fakerPT_BR.helpers.enumValue(ContentRating),
+          ]),
+        ],
+        preferredTitles: fakerPT_BR.helpers.enumValue(Languages),
+        showFollowing: fakerPT_BR.datatype.boolean({ probability: 0.7 }),
+        showLibrary: fakerPT_BR.datatype.boolean({ probability: 0.7 }),
+      },
     })),
   })
 
@@ -183,16 +196,6 @@ const execute = async () => {
       country: Countries.br,
       about: fakerPT_BR.lorem.sentence(),
       points: fakerPT_BR.number.int({ min: 0, max: 1000 }),
-      userId: u.id,
-    })),
-  })
-
-  await db.userSetting.createMany({
-    data: users.map((u) => ({
-      contentRating: fakerPT_BR.helpers.enumValue(ContentRating),
-      preferredTitles: fakerPT_BR.helpers.enumValue(Languages),
-      showFollowing: fakerPT_BR.datatype.boolean({ probability: 0.7 }),
-      showLibrary: fakerPT_BR.datatype.boolean({ probability: 0.7 }),
       userId: u.id,
     })),
   })

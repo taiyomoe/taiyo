@@ -344,6 +344,9 @@ importers:
 
   packages/global-types:
     devDependencies:
+      '@prisma/client':
+        specifier: ^6.5.0
+        version: 6.5.0(prisma@6.5.0(typescript@5.8.2))(typescript@5.8.2)
       '@taiyomoe/config':
         specifier: workspace:^
         version: link:../config
