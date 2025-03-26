@@ -1,7 +1,15 @@
+import type { ContentRating, HomeLayout, Languages } from "@prisma/client"
 import type { config } from "@taiyomoe/config"
 
 declare global {
   namespace PrismaJson {
+    type UserSettings = {
+      contentRating: ContentRating[]
+      preferredTitles: Languages[]
+      showFollowing: boolean
+      showLibrary: boolean
+      homeLayout: HomeLayout
+    }
     type MediaChapterPage = { id: string }
     type MediaCommentAttachement = { id: string; extension: "png" | "gif" }
     type MediaTag = { key: (typeof config)["tags"][number]; isSpoiler: boolean }

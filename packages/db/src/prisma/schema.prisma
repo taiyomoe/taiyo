@@ -43,11 +43,12 @@ model User {
     banReason       String?
     banExpires      DateTime?
     role            Roles     @default(USER)
+    /// [UserSettings]
+    settings        Json      @default("{}")
 
     accounts  Account[]
     sessions  Session[]
     profile   UserProfile?
-    settings  UserSetting?
     library   UserLibrary?
     history   UserHistory[]
     followers User[]        @relation("UserFollow")
@@ -75,21 +76,6 @@ model UserProfile {
     country   Countries?
     about     String?
     points    Int        @default(0)
-
-    user   User   @relation(fields: [userId], references: [id])
-    userId String @unique @db.Uuid
-}
-
-model UserSetting {
-    id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-
-    contentRating   ContentRating @default(NSFL)
-    preferredTitles Languages?
-    showFollowing   Boolean       @default(true)
-    showLibrary     Boolean       @default(true)
-    homeLayout      HomeLayout    @default(ROWS)
 
     user   User   @relation(fields: [userId], references: [id])
     userId String @unique @db.Uuid
@@ -363,11 +349,6 @@ enum Genders {
     FEMALE
     OTHER
     NOT_SPECIFIED
-}
-
-enum HomeLayout {
-    ROWS
-    COLUMNS
 }
 
 enum ContentRating {
