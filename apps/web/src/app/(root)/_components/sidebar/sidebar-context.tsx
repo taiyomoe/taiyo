@@ -60,6 +60,7 @@ export const SidebarProvider = ({
         style={
           {
             "--sidebar-width": state === "expanded" ? "16rem" : "3rem",
+            "--navbar-height": state === "expanded" ? "57px" : "49px",
           } as CSSProperties
         }
       >

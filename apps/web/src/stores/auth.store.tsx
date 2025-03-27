@@ -85,12 +85,12 @@ export const useSession = () => {
   return useStore(store, (state) => state.session)
 }
 
-// export const useSettings = () => {
-//   const store = useContext(AuthContext)
+export const useSettings = () => {
+  const store = useContext(AuthContext)
 
-//   if (!store) {
-//     throw new Error("useSettings must be used within a AuthContext")
-//   }
+  if (!store) {
+    throw new Error("useSettings must be used within a AuthContext")
+  }
 
-//   return useStore(store, (state) => state.settings)
-// }
+  return useStore(store, (state) => state.settings)
+}

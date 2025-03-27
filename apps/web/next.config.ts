@@ -12,6 +12,11 @@ const config = {
     remotePatterns: [
       {
         protocol: "https",
+        hostname: "cdn.taiyo.moe",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
         hostname: "cdn.discordapp.com",
         pathname: "/**",
       },

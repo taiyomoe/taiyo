@@ -1,7 +1,7 @@
 "use client"
 
 import { MenuIcon } from "lucide-react"
-import { type MotionStyle, motion, useScroll, useTransform } from "motion/react"
+import { motion, useScroll, useTransform } from "motion/react"
 import Link from "next/link"
 import { Button } from "react-aria-components"
 import { TaiyoLogo } from "~/components/logos/taiyo-logo"
@@ -19,18 +19,13 @@ export const Navbar = () => {
   const backgroundColor = useTransform(
     backgroundOpacity,
     [0, 1],
-    ["rgba(23, 23, 23, 0)", "rgba(23, 23, 23, 1)"],
+    ["hsla(var(--background-muted), 0)", "hsla(var(--background-muted), 1)"],
   )
 
   return (
     <motion.div
       className="group/navbar fixed top-0 z-10 flex h-(--navbar-height) w-[-webkit-fill-available] items-center justify-between px-4 py-2 transition-[height] duration-300 md:justify-end"
-      style={
-        {
-          backgroundColor,
-          "--navbar-height": state === "expanded" ? "57px" : "49px",
-        } as MotionStyle
-      }
+      style={{ backgroundColor }}
       data-state={isMobile ? "collapsed" : state}
     >
       <div className="-translate-x-1/2 absolute left-1/2 flex items-center gap-2 md:hidden">
