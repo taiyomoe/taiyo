@@ -56,7 +56,7 @@ export const FeaturedMediasCard = ({ media }: Props) => {
               </span>
             ))}
           </div>
-          <ScrollShadow className="hidden max-h-32 text-sm [word-break:break-word] md:block md:text-base">
+          <ScrollShadow className="hidden max-h-32 text-sm [word-break:break-word] md:block md:text-base xl:max-h-40">
             {media.synopsis}
           </ScrollShadow>
         </div>
