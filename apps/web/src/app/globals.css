@@ -133,6 +133,11 @@
   /* Defaults */
   --radius: 0.5rem;
   --default-transition-duration: 0.2s;
+
+  /* Custom dynamic sizes */
+  --featured-media-card-height: 288px;
+  --featured-media-card-height-md: 398px;
+  --featured-media-card-height-xl: 428px;
 }
 
 .dark {
@@ -242,5 +247,17 @@
     100% {
       background-position: -400% 0;
     }
+  }
+}
+
+@media (min-width: 768px) {
+  :root {
+    --featured-media-card-height: var(--featured-media-card-height-md);
+  }
+}
+
+@media (min-width: 1280px) {
+  :root {
+    --featured-media-card-height: var(--featured-media-card-height-xl);
   }
 }

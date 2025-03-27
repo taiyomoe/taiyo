@@ -18,7 +18,7 @@ const image = tv({
       full: "rounded-full *:rounded-full",
     },
     shouldZoom: {
-      true: "hover:[&_img]:scale-110",
+      true: "hover:md:[&_img]:scale-110",
     },
   },
 })
