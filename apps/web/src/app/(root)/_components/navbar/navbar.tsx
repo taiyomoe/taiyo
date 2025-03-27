@@ -19,7 +19,7 @@ export const Navbar = () => {
   const backgroundColor = useTransform(
     backgroundOpacity,
     [0, 1],
-    ["rgba(23, 23, 23, 0)", "rgba(23, 23, 23, 1)"],
+    ["hsla(var(--background-muted), 0)", "hsla(var(--background-muted), 1)"],
   )
 
   return (

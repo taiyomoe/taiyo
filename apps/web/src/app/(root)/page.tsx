@@ -12,8 +12,8 @@ export default async function Page() {
         <Suspense fallback={<FeaturedMediasSkeleton />}>
           <FeaturedMediasCarousel />
         </Suspense>
-        <div className="min-h-[800px] overflow-x-hidden p-4">
-          <h1 className="font-bold text-2xl">Lançamentos</h1>
+        <div className="mx-auto mt-8 min-h-[1300px] w-full max-w-9xl overflow-x-hidden px-4">
+          <h1 className="font-bold text-3xl">Lançamentos</h1>
         </div>
       </main>
     </HydrateClient>
