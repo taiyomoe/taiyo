@@ -26,7 +26,7 @@
     "@trpc/server": "^11.0.0",
     "@trpc/tanstack-react-query": "^11.0.0",
     "accept-language-parser": "^1.5.0",
-    "better-auth": "^1.2.4",
+    "better-auth": "^1.2.5",
     "clsx": "^2.1.1",
     "country-flag-icons": "^1.5.18",
     "embla-carousel-autoplay": "^8.5.2",
