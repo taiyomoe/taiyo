@@ -202,6 +202,9 @@ importers:
         specifier: ^5.0.3
         version: 5.0.3(@types/react@19.0.12)(react@19.0.0)(use-sync-external-store@1.4.0(react@19.0.0))
     devDependencies:
+      '@taiyomoe/db':
+        specifier: workspace:^
+        version: link:../../packages/db
       '@taiyomoe/tsconfig':
         specifier: workspace:^
         version: link:../../tooling/typescript
@@ -510,6 +513,9 @@ importers:
       '@taiyomoe/tsconfig':
         specifier: workspace:^
         version: link:../../tooling/typescript
+      '@taiyomoe/types':
+        specifier: workspace:^
+        version: link:../types
 
   packages/types:
     dependencies:

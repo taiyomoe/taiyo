@@ -25,6 +25,7 @@
     "zod": "^3.24.2"
   },
   "devDependencies": {
-    "@taiyomoe/tsconfig": "workspace:^"
+    "@taiyomoe/tsconfig": "workspace:^",
+    "@taiyomoe/types": "workspace:^"
   }
 }
