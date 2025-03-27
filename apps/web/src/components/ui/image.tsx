@@ -8,7 +8,7 @@ import { cn } from "~/utils/cn"
 const image = tv({
   base: "relative min-w-fit overflow-hidden",
   slots: {
-    skeleton: "absolute size-full data-[loading=false]:hidden",
+    skeleton: "absolute size-full data-[loaded=true]:hidden",
     image:
       "size-full opacity-0 transition-transform duration-300 data-[loading=false]:opacity-100",
   },
@@ -18,7 +18,7 @@ const image = tv({
       full: "rounded-full *:rounded-full",
     },
     shouldZoom: {
-      true: "hover:md:[&_img]:scale-110",
+      true: "hover:cursor-pointer hover:md:[&_img]:scale-110",
     },
   },
 })
@@ -64,8 +64,10 @@ export const Image = ({
       }}
     >
       <Skeleton
-        className={slots.skeleton({ className: classNames?.skeleton })}
-        data-loading={isLoading}
+        className={slots.skeleton({
+          className: cn(className, classNames?.skeleton),
+        })}
+        data-loaded={!isLoading}
       />
       <NextImage
         className={slots.image({ className: cn(className, classNames?.image) })}
