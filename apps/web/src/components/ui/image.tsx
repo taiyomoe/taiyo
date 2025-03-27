@@ -38,7 +38,7 @@ export type ImageProps = NextImageProps &
  *
  * <Image
  *   src={image}
- *   className="max-h-8 min-h-8 min-w-8 max-w-8 md:max-h-12 md:min-h-12 md:min-w-12 md:max-w-12"
+ *   className="min-size-8 max-size-8 md:min-size-12 md:max-size-12"
  *   alt="Avatar"
  *   width={48}
  *   height={48}
