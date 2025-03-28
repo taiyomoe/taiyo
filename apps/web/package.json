@@ -32,6 +32,7 @@
     "embla-carousel-autoplay": "^8.5.2",
     "embla-carousel-react": "^8.5.2",
     "lucide-react": "^0.484.0",
+    "luxon": "^3.6.0",
     "motion": "^12.6.2",
     "next": "15.3.0-canary.24",
     "next-intl": "^4.0.2",

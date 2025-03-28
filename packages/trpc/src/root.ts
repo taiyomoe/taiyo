@@ -1,4 +1,5 @@
 import { getFeaturedMediasHandler } from "./handlers/get-featured-medias-handler"
+import { getLatestReleasesHandler } from "./handlers/get-latest-releases-handler"
 import { createTRPCRouter } from "./trpc"
 
 /**
@@ -9,6 +10,7 @@ import { createTRPCRouter } from "./trpc"
 export const appRouter = createTRPCRouter({
   medias: {
     getFeaturedMedias: getFeaturedMediasHandler,
+    getLatestReleases: getLatestReleasesHandler,
   },
 })
 

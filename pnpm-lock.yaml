@@ -135,6 +135,9 @@ importers:
       lucide-react:
         specifier: ^0.484.0
         version: 0.484.0(react@19.0.0)
+      luxon:
+        specifier: ^3.6.0
+        version: 3.6.0
       motion:
         specifier: ^12.6.2
         version: 12.6.2(react-dom@19.0.0(react@19.0.0))(react@19.0.0)

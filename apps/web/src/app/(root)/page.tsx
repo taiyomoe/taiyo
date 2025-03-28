@@ -3,10 +3,12 @@ import { HydrateClient, prefetch, trpc } from "~/utils/trpc/server"
 import { FeaturedMediasCarousel } from "./_components/featured-medias/featured-medias-carousel"
 import { FeaturedMediasSkeleton } from "./_components/featured-medias/featured-medias-skeleton"
 import { LatestReleases } from "./_components/latest-releases/latest-releases"
+import { LatestReleasesSkeleton } from "./_components/latest-releases/latest-releases-skeleton"
 import { TrendingMediasCarousel } from "./_components/trending-medias/trending-medias-carousel"
 
 export default async function Page() {
   prefetch(trpc.medias.getFeaturedMedias.queryOptions())
+  prefetch(trpc.medias.getLatestReleases.queryOptions())
 
   return (
     <HydrateClient>
@@ -16,7 +18,9 @@ export default async function Page() {
         </Suspense>
         <div className="mx-auto min-h-[1400px] w-full max-w-9xl px-4 md:px-8">
           <div className="flex flex-col gap-4 md:flex-row md:gap-8">
-            <LatestReleases />
+            <Suspense fallback={<LatestReleasesSkeleton />}>
+              <LatestReleases />
+            </Suspense>
             <TrendingMediasCarousel />
           </div>
         </div>
