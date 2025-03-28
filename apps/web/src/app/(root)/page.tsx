@@ -12,12 +12,12 @@ export default async function Page() {
 
   return (
     <HydrateClient>
-      <main className="flex flex-col space-y-8">
+      <main className="flex flex-col space-y-8 pb-4 md:pb-8">
         <Suspense fallback={<FeaturedMediasSkeleton />}>
           <FeaturedMediasCarousel />
         </Suspense>
-        <div className="mx-auto min-h-[1400px] w-full max-w-9xl px-4 md:px-8">
-          <div className="flex flex-col gap-4 md:flex-row md:gap-8">
+        <div className="mx-auto w-full max-w-9xl px-4 md:px-8">
+          <div className="flex flex-col gap-8 md:flex-row">
             <Suspense fallback={<LatestReleasesSkeleton />}>
               <LatestReleases />
             </Suspense>
