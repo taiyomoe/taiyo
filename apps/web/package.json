@@ -63,6 +63,6 @@
     "@types/country-flag-icons": "^1.2.2",
     "@types/react": "^19.0.12",
     "@types/react-dom": "^19.0.4",
-    "tailwind-scrollbar": "^4.0.1"
+    "tailwind-scrollbar": "^4.0.2"
   }
 }
