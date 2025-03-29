@@ -56,13 +56,14 @@ export const SidebarProvider = ({
       value={{ state, openMobile, isMobile, setState, setOpenMobile, toggle }}
     >
       <div
-        className="flex min-h-dvh"
+        className="group/sidebar flex min-h-dvh"
         style={
           {
             "--sidebar-width": state === "expanded" ? "16rem" : "3rem",
             "--navbar-height": state === "expanded" ? "57px" : "49px",
           } as CSSProperties
         }
+        data-state={state}
       >
         {children}
       </div>

@@ -14,8 +14,9 @@ export const FeaturedMediasSkeleton = () => {
             <Skeleton className="h-[25] w-[50]" />
             <Skeleton className="h-[25] w-[70]" />
             <Skeleton className="h-[25] w-[55]" />
+            <Skeleton className="h-[25] w-[60]" />
           </div>
-          <div className="hidden flex-wrap gap-1 md:flex">
+          <div className="hidden max-h-[136] flex-wrap gap-1 overflow-hidden md:flex lg:max-h-[164]">
             <Skeleton className="h-6 w-[200]" />
             <Skeleton className="h-6 w-[130]" />
             <Skeleton className="h-6 w-[150]" />
