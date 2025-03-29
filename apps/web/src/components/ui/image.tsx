@@ -6,7 +6,7 @@ import { Skeleton } from "~/components/ui/skeleton"
 import { cn } from "~/utils/cn"
 
 const image = tv({
-  base: "relative min-w-fit overflow-hidden *:transition-[width,height,min-width,min-height,max-width,max-height] *:duration-300",
+  base: "relative min-w-fit overflow-hidden *:transition-[scale,width,height,min-width,min-height,max-width,max-height] *:duration-300",
   slots: {
     skeleton: "absolute size-full data-[loaded=true]:hidden",
     image: "size-full opacity-0 data-[loading=false]:opacity-100",
