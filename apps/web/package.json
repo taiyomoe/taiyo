@@ -31,7 +31,7 @@
     "country-flag-icons": "^1.5.18",
     "embla-carousel-autoplay": "^8.5.2",
     "embla-carousel-react": "^8.5.2",
-    "lucide-react": "^0.485.0",
+    "lucide-react": "^0.486.0",
     "motion": "^12.6.2",
     "next": "15.3.0-canary.26",
     "next-intl": "^4.0.2",
