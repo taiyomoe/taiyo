@@ -9,6 +9,7 @@ export const getLatestReleasesHandler = publicProcedure.query(
         number: true,
         volume: true,
         title: true,
+        language: true,
         uploader: {
           select: {
             id: true,

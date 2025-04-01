@@ -3,6 +3,7 @@ import { ClockIcon, UserIcon } from "lucide-react"
 import Link from "next/link"
 import { useDynamicMedias } from "~/app/hooks/use-dynamic-medias"
 import { ChapterTitle } from "~/components/ui/chapter-title"
+import { Flag } from "~/components/ui/flag"
 import { Image } from "~/components/ui/image"
 import { RelativeTime } from "~/components/ui/relative-time"
 import { Username } from "~/components/ui/username"
@@ -28,7 +29,7 @@ export const LatestReleasesCard = ({ chapter }: Props) => {
           shouldZoom
         />
       </Link>
-      <div className="flex w-full flex-col justify-between gap-2 p-1 pl-2 text-sm text-subtle">
+      <div className="flex w-full flex-col justify-between gap-2 p-1.5 text-sm text-subtle">
         <Link
           href={`/medias/${chapter.media.id}`}
           className="line-clamp-1 font-bold text-subtle hover:underline"
@@ -36,20 +37,24 @@ export const LatestReleasesCard = ({ chapter }: Props) => {
           {getDisplayTitle(chapter.media.titles)}
         </Link>
         <div className="grid grid-cols-[auto_112px] grid-rows-2 gap-x-1 gap-y-0.5">
-          <Link href={`/medias/${chapter.media.id}/chapters/${chapter.id}`}>
+          <Link
+            href={`/medias/${chapter.media.id}/chapters/${chapter.id}`}
+            className="flex items-center gap-1.5"
+          >
+            <Flag className="size-3 min-w-fit" language={chapter.language} />
             <ChapterTitle
-              className="line-clamp-1 text-default"
+              className="line-clamp-1 break-all text-default"
               title={chapter.title}
               number={chapter.number}
             />
           </Link>
           <div className="flex items-center justify-end gap-1 text-end">
-            <ClockIcon className="size-4" />
+            <ClockIcon className="size-4 min-w-fit" />
             <RelativeTime date={chapter.createdAt} />
           </div>
           <span className="">Scansfefe</span>
           <div className="flex items-center justify-end gap-1 text-end">
-            <UserIcon className="size-4" />
+            <UserIcon className="size-4 min-w-fit" />
             <Username user={chapter.uploader} />
           </div>
         </div>
