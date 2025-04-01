@@ -178,7 +178,7 @@ importers:
         specifier: ^7.55.0
         version: 7.55.0(react@19.1.0)
       sonner:
-        specifier: ^2.0.2
+        specifier: ^2.0.3
         version: 2.0.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       superjson:
         specifier: ^2.2.2
