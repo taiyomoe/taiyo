@@ -23,7 +23,7 @@ export const GroupsHoverCardContent = ({ id, enabled }: Props) => {
 
   return (
     <HoverCardContent className="relative w-90">
-      {(isFetching || !data) && <GroupsHoverCardContentSkeleton />}
+      {isFetching && <GroupsHoverCardContentSkeleton />}
       {data && (
         <>
           <div className="-mx-3 -mt-3">
