@@ -15,11 +15,11 @@ importers:
         specifier: workspace:^
         version: link:packages/global-types
       '@types/node':
-        specifier: ^22.13.16
-        version: 22.13.16
+        specifier: ^22.13.17
+        version: 22.13.17
       knip:
         specifier: ^5.46.4
-        version: 5.46.4(@types/node@22.13.16)(typescript@5.8.2)
+        version: 5.46.4(@types/node@22.13.17)(typescript@5.8.2)
       turbo:
         specifier: ^2.4.4
         version: 2.4.4
@@ -2887,8 +2887,8 @@ packages:
   '@types/luxon@3.6.0':
     resolution: {integrity: sha512-RtEj20xRyG7cRp142MkQpV3GRF8Wo2MtDkKLz65MQs7rM1Lh8bz+HtfPXCCJEYpnDFu6VwAq/Iv2Ikyp9Jw/hw==}
 
-  '@types/node@22.13.16':
-    resolution: {integrity: sha512-15tM+qA4Ypml/N7kyRdvfRjBQT2RL461uF1Bldn06K0Nzn1lY3nAPgHlsVrJxdZ9WhZiW0Fmc1lOYMtDsAuB3w==}
+  '@types/node@22.13.17':
+    resolution: {integrity: sha512-nAJuQXoyPj04uLgu+obZcSmsfOenUg6DxPKogeUy6yNCFwWaj5sBF8/G/pNo8EtBJjAfSVgfIlugR/BCOleO+g==}
 
   '@types/prismjs@1.26.5':
     resolution: {integrity: sha512-AUZTa7hQ2KY5L7AmtSiqxlhWxb4ina0yd8hNbl4TWuqnv/pFP0nDMb3YrfSBf4hJVGLh2YEIBfKaBW/9UEl6IQ==}
@@ -7143,13 +7143,13 @@ snapshots:
 
   '@types/cors@2.8.17':
     dependencies:
-      '@types/node': 22.13.16
+      '@types/node': 22.13.17
 
   '@types/country-flag-icons@1.2.2': {}
 
   '@types/luxon@3.6.0': {}
 
-  '@types/node@22.13.16':
+  '@types/node@22.13.17':
     dependencies:
       undici-types: 6.20.0
 
@@ -7435,7 +7435,7 @@ snapshots:
   engine.io@6.6.4:
     dependencies:
       '@types/cors': 2.8.17
-      '@types/node': 22.13.16
+      '@types/node': 22.13.17
       accepts: 1.3.8
       base64id: 2.0.0
       cookie: 0.7.2
@@ -7665,11 +7665,11 @@ snapshots:
 
   jsesc@3.1.0: {}
 
-  knip@5.46.4(@types/node@22.13.16)(typescript@5.8.2):
+  knip@5.46.4(@types/node@22.13.17)(typescript@5.8.2):
     dependencies:
       '@nodelib/fs.walk': 3.0.1
       '@snyk/github-codeowners': 1.1.0
-      '@types/node': 22.13.16
+      '@types/node': 22.13.17
       easy-table: 1.2.0
       enhanced-resolve: 5.18.1
       fast-glob: 3.3.3
