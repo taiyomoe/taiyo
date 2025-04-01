@@ -1,6 +1,7 @@
 import type { RouterOutputs } from "@taiyomoe/trpc"
 import { ClockIcon, UserIcon } from "lucide-react"
 import Link from "next/link"
+import { LatestReleasesCardGroups } from "~/app/(root)/_components/latest-releases/latest-releases-card-groups"
 import { useDynamicMedias } from "~/app/hooks/use-dynamic-medias"
 import { ChapterTitle } from "~/components/ui/chapter-title"
 import { Flag } from "~/components/ui/flag"
@@ -52,7 +53,7 @@ export const LatestReleasesCard = ({ chapter }: Props) => {
             <ClockIcon className="size-4 min-w-fit" />
             <RelativeTime date={chapter.createdAt} />
           </div>
-          <span className="">Scansfefe</span>
+          <LatestReleasesCardGroups groups={chapter.groups} />
           <div className="flex items-center justify-end gap-1 text-end">
             <UserIcon className="size-4 min-w-fit" />
             <Username user={chapter.uploader} />

@@ -4,15 +4,14 @@ import { cn } from "~/utils/cn"
 
 type Props = HTMLAttributes<HTMLSpanElement> & {
   user: {
-    name: string
-    username?: string | null
-    displayUsername?: string | null
+    username?: string
+    displayUsername?: string
   }
   role?: Roles
 }
 
 export const Username = ({ user, role, className, ...props }: Props) => {
-  const displayableName = user.displayUsername ?? user.username ?? user.name
+  const displayableName = user.displayUsername ?? user.username
 
   return (
     <span

@@ -16,6 +16,7 @@
     "guest": "Convidado",
     "myProfile": "Meu perfil",
     "chapter": "Capítulo",
+    "nChapters": "{count, plural, one {1 capítulo} other {{count} capítulos}}",
     "theme": {
       "title": "Tema",
       "system": "Sistema",

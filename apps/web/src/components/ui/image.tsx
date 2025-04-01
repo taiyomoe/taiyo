@@ -13,6 +13,7 @@ const image = tv({
   },
   variants: {
     radius: {
+      none: "",
       md: "rounded *:rounded",
       full: "rounded-full *:rounded-full",
     },
