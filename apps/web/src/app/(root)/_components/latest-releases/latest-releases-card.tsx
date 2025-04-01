@@ -22,9 +22,9 @@ export const LatestReleasesCard = ({ chapter }: Props) => {
         <Image
           src={getCoverUrl(chapter.media.id, chapter.media.covers[0]!)}
           alt={`${getDisplayTitle(chapter.media.titles)}'s cover`}
-          className="aspect-7/10 max-h-[80] min-h-[80] min-w-[56] select-none"
-          width={100}
-          height={80}
+          className="aspect-7/10 max-h-[82] min-h-[82] min-w-[56] select-none"
+          width={56}
+          height={82}
           radius="md"
           shouldZoom
         />
