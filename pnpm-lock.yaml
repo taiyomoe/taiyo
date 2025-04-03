@@ -264,8 +264,8 @@ importers:
         specifier: workspace:^
         version: link:../../tooling/typescript
       '@types/luxon':
-        specifier: ^3.6.0
-        version: 3.6.0
+        specifier: ^3.6.2
+        version: 3.6.2
 
   packages/cache:
     dependencies:
@@ -412,8 +412,8 @@ importers:
         specifier: workspace:^
         version: link:../types
       '@types/luxon':
-        specifier: ^3.6.0
-        version: 3.6.0
+        specifier: ^3.6.2
+        version: 3.6.2
 
   packages/messages: {}
 
@@ -2890,8 +2890,8 @@ packages:
   '@types/country-flag-icons@1.2.2':
     resolution: {integrity: sha512-CefEn/J336TBDp7NX8JqzlDtCBOsm8M3r1Li0gEOt0HOMHF1XemNyrx9lSHjsafcb1yYWybU0N8ZAXuyCaND0w==}
 
-  '@types/luxon@3.6.0':
-    resolution: {integrity: sha512-RtEj20xRyG7cRp142MkQpV3GRF8Wo2MtDkKLz65MQs7rM1Lh8bz+HtfPXCCJEYpnDFu6VwAq/Iv2Ikyp9Jw/hw==}
+  '@types/luxon@3.6.2':
+    resolution: {integrity: sha512-R/BdP7OxEMc44l2Ex5lSXHoIXTB2JLNa3y2QISIbr58U/YcsffyQrYW//hZSdrfxrjRZj3GcUoxMPGdO8gSYuw==}
 
   '@types/node@22.14.0':
     resolution: {integrity: sha512-Kmpl+z84ILoG+3T/zQFyAJsU6EPTmOCj8/2+83fSN6djd6I4o7uOuGIH6vq3PrjY5BGitSbFuMN18j3iknubbA==}
@@ -7156,7 +7156,7 @@ snapshots:
 
   '@types/country-flag-icons@1.2.2': {}
 
-  '@types/luxon@3.6.0': {}
+  '@types/luxon@3.6.2': {}
 
   '@types/node@22.14.0':
     dependencies:
