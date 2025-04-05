@@ -23,18 +23,23 @@ import { cn } from "~/utils/cn"
 import type { ZodMessages } from "~/utils/zod-messages"
 import { Label, type LabelProps } from "./label"
 
-type FormProps<TFieldValues extends FieldValues> =
-  FormProviderProps<TFieldValues> & {
-    className?: string
-    onSubmit: SubmitHandler<TFieldValues>
-  }
+type FormProps<
+  TFieldValues extends FieldValues,
+  TTransformedValues extends FieldValues,
+> = FormProviderProps<TFieldValues, unknown, TTransformedValues> & {
+  className?: string
+  onSubmit: SubmitHandler<TTransformedValues>
+}
 
-export const Form = <TFieldValues extends FieldValues>({
+export const Form = <
+  TFieldValues extends FieldValues,
+  TTransformedValues extends FieldValues,
+>({
   className,
   onSubmit,
   children,
   ...methods
-}: FormProps<TFieldValues>) => {
+}: FormProps<TFieldValues, TTransformedValues>) => {
   return (
     <FormProvider {...methods}>
       <form
