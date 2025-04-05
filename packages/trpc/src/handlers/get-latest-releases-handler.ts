@@ -15,6 +15,7 @@ export const getLatestReleasesHandler = publicProcedure.query(
             id: true,
             username: true,
             displayUsername: true,
+            role: true,
           },
         },
         groups: true,

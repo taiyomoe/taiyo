@@ -17,6 +17,7 @@
     "myProfile": "My profile",
     "chapter": "Chapter",
     "nChapters": "{count, plural, one {1 chapter} other {{count} chapters}}",
+    "nUploadedChapters": "{count, plural, one {1 uploaded chapter} other {{count} uploaded chapters}}",
     "theme": {
       "title": "Theme",
       "system": "System",

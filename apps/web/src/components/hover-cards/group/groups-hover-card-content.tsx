@@ -22,11 +22,11 @@ export const GroupsHoverCardContent = ({ id, enabled }: Props) => {
   const t = useTranslations("global")
 
   return (
-    <HoverCardContent className="relative w-90">
-      {isFetching && <GroupsHoverCardContentSkeleton />}
+    <HoverCardContent className="w-90">
+      {isFetching && !data && <GroupsHoverCardContentSkeleton />}
       {data && (
         <>
-          <div className="-mx-3 -mt-3">
+          <div className="-mx-3 -mt-3 relative">
             <Image
               src={getBannerUrl(data)}
               className="max-h-16 min-h-16 select-none object-cover"

@@ -1,13 +1,13 @@
 import type { RouterOutputs } from "@taiyomoe/trpc"
-import { ClockIcon, UserIcon } from "lucide-react"
+import { ClockIcon, UserIcon, UsersIcon } from "lucide-react"
 import Link from "next/link"
-import { LatestReleasesCardGroups } from "~/app/(root)/_components/latest-releases/latest-releases-card-groups"
 import { useDynamicMedias } from "~/app/hooks/use-dynamic-medias"
+import { GroupHoverCard } from "~/components/hover-cards/group/group-hover-card"
+import { UserHoverCard } from "~/components/hover-cards/user/user-hover-card"
 import { ChapterTitle } from "~/components/ui/chapter-title"
 import { Flag } from "~/components/ui/flag"
 import { Image } from "~/components/ui/image"
 import { RelativeTime } from "~/components/ui/relative-time"
-import { Username } from "~/components/ui/username"
 import { getCoverUrl } from "~/utils/medias/get-cover-url"
 
 type Props = {
@@ -49,14 +49,22 @@ export const LatestReleasesCard = ({ chapter }: Props) => {
               number={chapter.number}
             />
           </Link>
-          <div className="flex items-center justify-end gap-1 text-end">
+          <div className="flex items-center justify-end gap-2 text-end">
             <ClockIcon className="size-4 min-w-fit" />
             <RelativeTime date={chapter.createdAt} />
           </div>
-          <LatestReleasesCardGroups groups={chapter.groups} />
-          <div className="flex items-center justify-end gap-1 text-end">
+          {chapter.groups.length > 0 && (
+            <div className="flex items-center gap-2">
+              <UsersIcon className="size-4 min-w-fit" />
+              {chapter.groups.map((group) => (
+                <GroupHoverCard key={group.id} group={group} />
+              ))}
+            </div>
+          )}
+          {chapter.groups.length === 0 && <div />}
+          <div className="flex items-center justify-end gap-2 text-end">
             <UserIcon className="size-4 min-w-fit" />
-            <Username user={chapter.uploader} />
+            <UserHoverCard user={chapter.uploader} />
           </div>
         </div>
       </div>

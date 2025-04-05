@@ -2,7 +2,7 @@ import { Skeleton } from "~/components/ui/skeleton"
 
 export const GroupsHoverCardContentSkeleton = () => (
   <>
-    <div className="-mx-3 -mt-3">
+    <div className="-mx-3 -mt-3 relative">
       <Skeleton className="h-16 rounded-none" />
       <div className="absolute top-0 h-full max-h-16 w-full bg-[linear-gradient(to_bottom,hsla(var(--background),0.6),hsla(var(--background)))]" />
     </div>

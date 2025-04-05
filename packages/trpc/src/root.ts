@@ -1,6 +1,7 @@
 import { getFeaturedMediasHandler } from "./handlers/get-featured-medias-handler"
 import { getGroupHoverCardContent } from "./handlers/get-group-hover-card-content"
 import { getLatestReleasesHandler } from "./handlers/get-latest-releases-handler"
+import { getUserHoverCardContent } from "./handlers/get-user-hover-card-content"
 import { createTRPCRouter } from "./trpc"
 
 /**
@@ -15,6 +16,9 @@ export const appRouter = createTRPCRouter({
   },
   groups: {
     getHoverCardContent: getGroupHoverCardContent,
+  },
+  users: {
+    getHoverCardContent: getUserHoverCardContent,
   },
 })
 
