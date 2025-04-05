@@ -18,6 +18,7 @@
     "chapter": "Capítulo",
     "nChapters": "{count, plural, one {1 capítulo} other {{count} capítulos}}",
     "nUploadedChapters": "{count, plural, one {1 capítulo upado} other {{count} capítulos upados}}",
+    "latestReleases": "Lançamentos",
     "theme": {
       "title": "Tema",
       "system": "Sistema",

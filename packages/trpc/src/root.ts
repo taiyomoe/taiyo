@@ -12,6 +12,8 @@ import { createTRPCRouter } from "./trpc"
 export const appRouter = createTRPCRouter({
   medias: {
     getFeaturedMedias: getFeaturedMediasHandler,
+  },
+  chapters: {
     getLatestReleases: getLatestReleasesHandler,
   },
   groups: {
