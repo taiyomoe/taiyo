@@ -2,9 +2,9 @@ import type { Roles } from "@taiyomoe/db"
 import Link from "next/link"
 import { type HTMLAttributes, type RefObject, useRef } from "react"
 import { useHover } from "usehooks-ts"
-import { UserHoverCardContent } from "~/components/hover-cards/user/user-hover-card-content"
 import { HoverCard, HoverCardTrigger } from "~/components/ui/hover-card"
 import { Username } from "~/components/ui/username"
+import { UserHoverCardContent } from "./user-hover-card-content"
 
 type Props = HTMLAttributes<HTMLAnchorElement> & {
   user: {
