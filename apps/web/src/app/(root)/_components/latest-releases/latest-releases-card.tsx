@@ -30,7 +30,7 @@ export const LatestReleasesCard = ({ chapter }: Props) => {
           shouldZoom
         />
       </Link>
-      <div className="flex w-full flex-col justify-between gap-2 p-1.5 text-sm text-subtle">
+      <div className="flex w-full flex-col justify-between gap-2 p-1.5 pr-2 text-sm text-subtle">
         <Link
           href={`/medias/${chapter.media.id}`}
           className="line-clamp-1 font-bold text-subtle hover:underline"
