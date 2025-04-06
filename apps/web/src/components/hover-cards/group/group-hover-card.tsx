@@ -1,11 +1,10 @@
-import type { Group } from "@taiyomoe/db"
 import Link from "next/link"
 import { type RefObject, useRef } from "react"
 import { useHover } from "usehooks-ts"
 import { HoverCard, HoverCardTrigger } from "~/components/ui/hover-card"
 import { GroupsHoverCardContent } from "./groups-hover-card-content"
 
-type Props = { group: Group }
+type Props = { group: { id: string; name: string } }
 
 export const GroupHoverCard = ({ group }: Props) => {
   const triggerRef = useRef<HTMLAnchorElement>(null)

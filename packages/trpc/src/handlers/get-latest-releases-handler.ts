@@ -18,7 +18,7 @@ export const getLatestReleasesHandler = publicProcedure.query(
             role: true,
           },
         },
-        groups: true,
+        groups: { select: { id: true, name: true } },
         media: {
           select: {
             id: true,
@@ -50,6 +50,7 @@ export const getLatestReleasesHandler = publicProcedure.query(
       where: {
         flag: "OK",
         deletedAt: null,
+        media: { deletedAt: null },
       },
       take: 24,
       orderBy: { createdAt: "desc" },
