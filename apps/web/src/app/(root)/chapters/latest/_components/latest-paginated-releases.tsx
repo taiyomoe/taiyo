@@ -13,8 +13,6 @@ export const LatestPaginatedReleases = () => {
     }),
   )
 
-  console.log(data)
-
   return data.map((media) => (
     <LatestPaginatedReleasesCard key={media.id} media={media} />
   ))
