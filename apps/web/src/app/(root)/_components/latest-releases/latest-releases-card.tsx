@@ -11,7 +11,7 @@ import { RelativeTime } from "~/components/ui/relative-time"
 import { getCoverUrl } from "~/utils/medias/get-cover-url"
 
 type Props = {
-  chapter: RouterOutputs["medias"]["getLatestReleases"][number]
+  chapter: RouterOutputs["chapters"]["getLatestReleases"][number]
 }
 
 export const LatestReleasesCard = ({ chapter }: Props) => {
@@ -40,11 +40,11 @@ export const LatestReleasesCard = ({ chapter }: Props) => {
         <div className="grid grid-cols-[auto_112px] grid-rows-2 gap-x-1 gap-y-0.5">
           <Link
             href={`/medias/${chapter.media.id}/chapters/${chapter.id}`}
-            className="flex items-center gap-1.5"
+            className="flex items-center gap-1.5 hover:[&_span]:text-primary"
           >
             <Flag className="size-3 min-w-fit" language={chapter.language} />
             <ChapterTitle
-              className="line-clamp-1 break-all text-default"
+              className="line-clamp-1 break-all text-default transition-colors"
               title={chapter.title}
               number={chapter.number}
             />
