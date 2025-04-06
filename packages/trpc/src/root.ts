@@ -1,6 +1,7 @@
 import { getFeaturedMediasHandler } from "./handlers/get-featured-medias-handler"
 import { getGroupHoverCardContent } from "./handlers/get-group-hover-card-content"
 import { getLatestReleasesHandler } from "./handlers/get-latest-releases-handler"
+import { getPaginatedLatestReleasesHandler } from "./handlers/get-paginated-latest-releases-handler"
 import { getUserHoverCardContent } from "./handlers/get-user-hover-card-content"
 import { createTRPCRouter } from "./trpc"
 
@@ -15,6 +16,7 @@ export const appRouter = createTRPCRouter({
   },
   chapters: {
     getLatestReleases: getLatestReleasesHandler,
+    getPaginatedLatestReleases: getPaginatedLatestReleasesHandler,
   },
   groups: {
     getHoverCardContent: getGroupHoverCardContent,
