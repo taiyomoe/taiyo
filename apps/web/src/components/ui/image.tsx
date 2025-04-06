@@ -25,9 +25,8 @@ const image = tv({
 
 export type ImageProps = NextImageProps &
   VariantProps<typeof image> & {
-    classNames?: Record<
-      "base" | keyof (typeof image)["slots"],
-      string | undefined
+    classNames?: Partial<
+      Record<"base" | keyof (typeof image)["slots"], string | undefined>
     >
   }
 
