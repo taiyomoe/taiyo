@@ -30,13 +30,13 @@ export const FeaturedMediasCarousel = () => {
       <div className="absolute inset-x-0 bottom-4 mx-auto hidden w-full max-w-9xl justify-end px-4 md:flex">
         <div>
           <Button
-            className="rounded-full pressed:bg-primary/20 p-2 outline-none outline-none transition-colors hover:bg-primary/10 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-default disabled:opacity-50"
+            className="rounded-full pressed:bg-primary/20 p-2 outline-none transition-colors hover:bg-primary/10 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-default disabled:opacity-50"
             onPress={() => emblaApi?.scrollPrev()}
           >
             <ChevronLeftIcon className="size-6 text-brand" />
           </Button>
           <Button
-            className="rounded-full pressed:bg-primary/20 p-2 outline-none outline-none transition-colors hover:bg-primary/10 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-default disabled:opacity-50"
+            className="rounded-full pressed:bg-primary/20 p-2 outline-none transition-colors hover:bg-primary/10 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-default disabled:opacity-50"
             onPress={() => emblaApi?.scrollNext()}
           >
             <ChevronRightIcon className="size-6 text-brand" />
