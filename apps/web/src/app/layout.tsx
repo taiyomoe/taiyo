@@ -2,13 +2,13 @@ import { NextIntlClientProvider } from "next-intl"
 import { getLocale, getMessages } from "next-intl/server"
 import { ThemeProvider } from "next-themes"
 import { Inter } from "next/font/google"
-import { cn } from "~/utils/cn"
-import type { LayoutProps } from "~/utils/types"
-
-import "./globals.css"
+import { NuqsAdapter } from "nuqs/adapters/next/app"
 import { Providers } from "~/app/_components/providers"
 import { AuthStoreProvider } from "~/stores/auth.store"
+import { cn } from "~/utils/cn"
 import { getSession } from "~/utils/get-session"
+import type { LayoutProps } from "~/utils/types"
+import "./globals.css"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -28,7 +28,9 @@ export default async function Layout({ children }: LayoutProps) {
         <ThemeProvider attribute="class">
           <NextIntlClientProvider messages={messages}>
             <AuthStoreProvider value={session}>
-              <Providers>{children}</Providers>
+              <NuqsAdapter>
+                <Providers>{children}</Providers>
+              </NuqsAdapter>
             </AuthStoreProvider>
           </NextIntlClientProvider>
         </ThemeProvider>

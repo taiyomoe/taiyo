@@ -14,11 +14,13 @@
   "dependencies": {
     "@taiyomoe/auth": "workspace:^",
     "@taiyomoe/cache": "workspace:^",
+    "@taiyomoe/config": "workspace:^",
     "@taiyomoe/db": "workspace:^",
     "@taiyomoe/meilisearch": "workspace:^",
     "@taiyomoe/messages": "workspace:^",
     "@taiyomoe/messaging": "workspace:^",
     "@taiyomoe/s3": "workspace:^",
+    "@taiyomoe/schemas": "workspace:^",
     "@trpc/server": "^11.0.2",
     "superjson": "^2.2.2",
     "use-intl": "^4.0.2",

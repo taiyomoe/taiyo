@@ -1,8 +1,17 @@
+"use client"
+
+import { config } from "@taiyomoe/config"
+import { parseAsInteger, useQueryState } from "nuqs"
 import { Separator } from "~/components/ui/separator"
 import { Skeleton } from "~/components/ui/skeleton"
 
-export const LatestPaginatedReleasesSkeleton = () =>
-  Array.from({ length: 20 }).map((_, i) => (
+export const LatestPaginatedReleasesSkeleton = () => {
+  const [perPage] = useQueryState(
+    "perPage",
+    parseAsInteger.withDefault(config.pagination.defaultPerPage),
+  )
+
+  return Array.from({ length: perPage }).map((_, i) => (
     <div key={i}>
       <Skeleton className="h-7 w-2/3" />
       <Separator className="mt-1 mb-2 w-full" />
@@ -18,3 +27,4 @@ export const LatestPaginatedReleasesSkeleton = () =>
       </div>
     </div>
   ))
+}

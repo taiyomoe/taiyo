@@ -72,6 +72,7 @@ export const Image = ({
         className={slots.image({ className: cn(className, classNames?.image) })}
         onLoad={() => setIsLoading(false)}
         data-loading={isLoading}
+        priority
         {...props}
       />
     </div>

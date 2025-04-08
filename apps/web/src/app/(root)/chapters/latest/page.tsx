@@ -1,18 +1,22 @@
 import { getTranslations } from "next-intl/server"
 import { Suspense } from "react"
+import { Pagination } from "~/components/ui/pagination"
 import { HydrateClient, prefetch, trpc } from "~/utils/trpc/server"
 import { LatestPaginatedReleases } from "./_components/latest-paginated-releases"
 import { LatestPaginatedReleasesSkeleton } from "./_components/latest-paginated-releases-skeleton"
 
-export default async function Page() {
+type Props = {
+  searchParams: Promise<{
+    page?: string
+    perPage?: string
+  }>
+}
+
+export default async function Page({ searchParams }: Props) {
+  const input = await searchParams
   const t = await getTranslations("global")
 
-  prefetch(
-    trpc.chapters.getPaginatedLatestReleases.queryOptions({
-      page: 1,
-      perPage: 20,
-    }),
-  )
+  prefetch(trpc.chapters.getPaginatedLatestReleases.queryOptions(input))
 
   return (
     <HydrateClient>
@@ -22,6 +26,7 @@ export default async function Page() {
           <Suspense fallback={<LatestPaginatedReleasesSkeleton />}>
             <LatestPaginatedReleases />
           </Suspense>
+          <Pagination />
         </div>
       </main>
     </HydrateClient>

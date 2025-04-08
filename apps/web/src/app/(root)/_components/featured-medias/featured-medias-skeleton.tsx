@@ -5,7 +5,7 @@ export const FeaturedMediasSkeleton = () => {
     <div className="relative">
       <Skeleton className="h-(--featured-media-card-height) rounded-none brightness-80" />
       <div className="absolute top-0 h-full max-h-(--featured-media-card-height) w-full bg-[linear-gradient(to_bottom,hsla(var(--background),0.6),hsla(var(--background)))]" />
-      <div className="absolute inset-x-0 top-0 left-0 mx-auto mt-[48] flex w-full max-w-9xl gap-4 p-4">
+      <div className="absolute inset-x-0 top-0 left-0 mx-auto mt-[48] flex w-full max-w-9xl gap-4 p-4 md:px-8">
         <Skeleton className="aspect-7/10 h-[160] max-w-fit md:h-[270] xl:h-[300]" />
         <div className="flex flex-col gap-2">
           <Skeleton className="h-10 w-full md:w-2/3" />

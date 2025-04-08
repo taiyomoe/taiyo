@@ -1,17 +1,16 @@
 import { getPaginatedLatestReleases } from "@prisma/client/sql"
+import { pageSchema, perPageSchema } from "@taiyomoe/schemas"
 import { z } from "zod"
 import { publicProcedure } from "../trpc"
 
 export const getPaginatedLatestReleasesHandler = publicProcedure
-  .input(
-    z.object({
-      page: z.number().min(1).default(1),
-      perPage: z.number().min(10).max(100).default(20),
-    }),
-  )
+  .input(z.object({ page: pageSchema, perPage: perPageSchema }))
   .query(async ({ ctx, input }) => {
     const chapters = await ctx.db.$queryRawTyped(
-      getPaginatedLatestReleases(input.perPage, input.page),
+      getPaginatedLatestReleases(
+        input.perPage,
+        (input.page - 1) * input.perPage,
+      ),
     )
     const [medias, groups, uploaders] = await ctx.db.$transaction([
       ctx.db.media.findMany({

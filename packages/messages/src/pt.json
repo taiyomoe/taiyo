@@ -19,6 +19,13 @@
     "nChapters": "{count, plural, one {1 capítulo} other {{count} capítulos}}",
     "nUploadedChapters": "{count, plural, one {1 capítulo upado} other {{count} capítulos upados}}",
     "latestReleases": "Lançamentos",
+    "pagination": {
+      "previous": "Anterior",
+      "previousPage": "Voltar para a página anterior",
+      "next": "Próximo",
+      "nextPage": "Ir para a próxima página",
+      "morePages": "Mais páginas"
+    },
     "theme": {
       "title": "Tema",
       "system": "Sistema",

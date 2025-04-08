@@ -1,10 +1,10 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @plugin "tailwindcss-react-aria-components";
-@plugin "tailwind-scrollbar" {
+/* @plugin "tailwind-scrollbar" {
   nocompatible: true;
   preferredStrategy: "pseudoelements";
-}
+}; */
 
 @custom-variant dark (&:where(.dark, .dark *));
 
