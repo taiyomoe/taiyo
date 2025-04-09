@@ -14,7 +14,7 @@
     "seed": "prisma migrate reset && pnpm -F @taiyomoe/logs run migrate",
     "db": "prisma",
     "migrate": "tsx ./src/migrations-handler.ts",
-    "postinstall": "prisma generate --no-hints",
+    "postinstall": "prisma generate && prisma generate --sql",
     "data-migration:add_normalized_email": "tsx ./src/prisma/migrations/20250312161343_add_normalized_email/data-migration.ts",
     "data-migration:add_usernames": "tsx ./src/prisma/migrations/20250312171952_add_usernames/data-migration.ts"
   },
