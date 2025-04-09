@@ -19,6 +19,7 @@
     "nChapters": "{count, plural, one {1 chapter} other {{count} chapters}}",
     "nUploadedChapters": "{count, plural, one {1 uploaded chapter} other {{count} uploaded chapters}}",
     "latestReleases": "Latest releases",
+    "latestMedias": "Recently added",
     "pagination": {
       "previous": "Previous",
       "previousPage": "Go to previous page",

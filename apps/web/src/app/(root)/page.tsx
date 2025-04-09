@@ -3,6 +3,8 @@ import { Suspense } from "react"
 import { HydrateClient, prefetch, trpc } from "~/utils/trpc/server"
 import { FeaturedMediasCarousel } from "./_components/featured-medias/featured-medias-carousel"
 import { FeaturedMediasSkeleton } from "./_components/featured-medias/featured-medias-skeleton"
+import { LatestMediasCarousel } from "./_components/latest-medias/latest-medias-carousel"
+import { LatestMediasSkeleton } from "./_components/latest-medias/latest-medias-skeleton"
 import { LatestReleases } from "./_components/latest-releases/latest-releases"
 import { LatestReleasesPageButton } from "./_components/latest-releases/latest-releases-page-button"
 import { LatestReleasesSkeleton } from "./_components/latest-releases/latest-releases-skeleton"
@@ -11,8 +13,9 @@ import { TrendingMediasCarousel } from "./_components/trending-medias/trending-m
 export default async function Page() {
   const t = await getTranslations("global")
 
-  prefetch(trpc.medias.getFeaturedMedias.queryOptions())
+  prefetch(trpc.medias.getFeatured.queryOptions())
   prefetch(trpc.chapters.getLatestReleases.queryOptions())
+  prefetch(trpc.medias.getLatest.queryOptions())
 
   return (
     <HydrateClient>
@@ -20,7 +23,7 @@ export default async function Page() {
         <Suspense fallback={<FeaturedMediasSkeleton />}>
           <FeaturedMediasCarousel />
         </Suspense>
-        <div className="mx-auto w-full max-w-9xl px-4 md:px-8">
+        <div className="mx-auto w-full max-w-9xl space-y-8 px-4 md:px-8">
           <div className="flex flex-col gap-8 md:flex-row">
             <div className="w-full space-y-4">
               <div className="flex items-center justify-between">
@@ -34,6 +37,12 @@ export default async function Page() {
               </div>
             </div>
             <TrendingMediasCarousel />
+          </div>
+          <div className="relative space-y-4">
+            <h3 className="font-bold text-2xl">{t("latestMedias")}</h3>
+            <Suspense fallback={<LatestMediasSkeleton />}>
+              <LatestMediasCarousel />
+            </Suspense>
           </div>
         </div>
       </main>

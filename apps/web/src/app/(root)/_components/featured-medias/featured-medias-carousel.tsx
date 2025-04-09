@@ -10,9 +10,7 @@ import { FeaturedMediasCard } from "./featured-medias-card"
 
 export const FeaturedMediasCarousel = () => {
   const trpc = useTRPC()
-  const { data } = useSuspenseQuery(
-    trpc.medias.getFeaturedMedias.queryOptions(),
-  )
+  const { data } = useSuspenseQuery(trpc.medias.getFeatured.queryOptions())
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [
     Autoplay({ delay: 10000 }),
   ])
