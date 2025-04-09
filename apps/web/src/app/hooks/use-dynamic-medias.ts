@@ -1,4 +1,4 @@
-import type { Title } from "@taiyomoe/db"
+import type { Title } from "@prisma/client"
 import { useCallback } from "react"
 import { useSettings } from "~/stores/auth.store"
 

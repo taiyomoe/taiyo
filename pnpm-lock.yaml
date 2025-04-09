@@ -29,6 +29,9 @@ importers:
 
   apps/io-worker:
     dependencies:
+      '@prisma/client':
+        specifier: ^6.5.0
+        version: 6.5.0(prisma@6.5.0(typescript@5.8.3))(typescript@5.8.3)
       '@t3-oss/env-core':
         specifier: ^0.12.0
         version: 0.12.0(typescript@5.8.3)(valibot@1.0.0-beta.15(typescript@5.8.3))(zod@3.24.2)
@@ -78,6 +81,9 @@ importers:
       '@marsidev/react-turnstile':
         specifier: ^1.1.0
         version: 1.1.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@prisma/client':
+        specifier: ^6.5.0
+        version: 6.5.0(prisma@6.5.0(typescript@5.8.3))(typescript@5.8.3)
       '@radix-ui/react-dialog':
         specifier: ^1.1.6
         version: 1.1.6(@types/react-dom@19.1.1(@types/react@19.1.0))(@types/react@19.1.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -226,9 +232,6 @@ importers:
         specifier: ^5.0.3
         version: 5.0.3(@types/react@19.1.0)(react@19.1.0)(use-sync-external-store@1.5.0(react@19.1.0))
     devDependencies:
-      '@taiyomoe/db':
-        specifier: workspace:^
-        version: link:../../packages/db
       '@taiyomoe/tsconfig':
         specifier: workspace:^
         version: link:../../tooling/typescript
@@ -253,6 +256,9 @@ importers:
 
   packages/auth:
     dependencies:
+      '@prisma/client':
+        specifier: ^6.5.0
+        version: 6.5.0(prisma@6.5.0(typescript@5.8.3))(typescript@5.8.3)
       '@t3-oss/env-core':
         specifier: ^0.12.0
         version: 0.12.0(typescript@5.8.3)(valibot@1.0.0-beta.15(typescript@5.8.3))(zod@3.24.2)
@@ -500,15 +506,15 @@ importers:
 
   packages/trpc:
     dependencies:
+      '@prisma/client':
+        specifier: ^6.5.0
+        version: 6.5.0(prisma@6.5.0(typescript@5.8.3))(typescript@5.8.3)
       '@taiyomoe/auth':
         specifier: workspace:^
         version: link:../auth
       '@taiyomoe/cache':
         specifier: workspace:^
         version: link:../cache
-      '@taiyomoe/config':
-        specifier: workspace:^
-        version: link:../config
       '@taiyomoe/db':
         specifier: workspace:^
         version: link:../db

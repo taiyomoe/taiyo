@@ -1,4 +1,4 @@
-import type { Roles } from "@taiyomoe/db"
+import type { Roles } from "@prisma/client"
 import type { HTMLAttributes } from "react"
 import { tv } from "tailwind-variants"
 import { Sparkles } from "~/components/ui/sparkles"

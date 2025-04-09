@@ -7,7 +7,7 @@ import { cn } from "~/utils/cn"
 
 export const Select = SelectPrimitive.Root
 
-export const SelectGroup = SelectPrimitive.Group
+// export const SelectGroup = SelectPrimitive.Group
 
 export const SelectValue = SelectPrimitive.Value
 
@@ -34,7 +34,7 @@ export const SelectTrigger = ({
 )
 SelectTrigger.displayName = SelectPrimitive.Trigger.displayName
 
-export const SelectScrollUpButton = ({
+const SelectScrollUpButton = ({
   className,
   ...props
 }: ComponentProps<typeof SelectPrimitive.ScrollUpButton>) => (
@@ -50,7 +50,7 @@ export const SelectScrollUpButton = ({
 )
 SelectScrollUpButton.displayName = SelectPrimitive.ScrollUpButton.displayName
 
-export const SelectScrollDownButton = ({
+const SelectScrollDownButton = ({
   className,
   ...props
 }: ComponentProps<typeof SelectPrimitive.ScrollDownButton>) => (
@@ -100,16 +100,16 @@ export const SelectContent = ({
 )
 SelectContent.displayName = SelectPrimitive.Content.displayName
 
-export const SelectLabel = ({
-  className,
-  ...props
-}: ComponentProps<typeof SelectPrimitive.Label>) => (
-  <SelectPrimitive.Label
-    className={cn("py-1.5 pr-2 pl-8 font-semibold text-sm", className)}
-    {...props}
-  />
-)
-SelectLabel.displayName = SelectPrimitive.Label.displayName
+// export const SelectLabel = ({
+//   className,
+//   ...props
+// }: ComponentProps<typeof SelectPrimitive.Label>) => (
+//   <SelectPrimitive.Label
+//     className={cn("py-1.5 pr-2 pl-8 font-semibold text-sm", className)}
+//     {...props}
+//   />
+// )
+// SelectLabel.displayName = SelectPrimitive.Label.displayName
 
 export const SelectItem = ({
   className,
@@ -133,13 +133,13 @@ export const SelectItem = ({
 )
 SelectItem.displayName = SelectPrimitive.Item.displayName
 
-export const SelectSeparator = ({
-  className,
-  ...props
-}: ComponentProps<typeof SelectPrimitive.Separator>) => (
-  <SelectPrimitive.Separator
-    className={cn("-mx-1 my-1 h-px bg-muted", className)}
-    {...props}
-  />
-)
-SelectSeparator.displayName = SelectPrimitive.Separator.displayName
+// export const SelectSeparator = ({
+//   className,
+//   ...props
+// }: ComponentProps<typeof SelectPrimitive.Separator>) => (
+//   <SelectPrimitive.Separator
+//     className={cn("-mx-1 my-1 h-px bg-muted", className)}
+//     {...props}
+//   />
+// )
+// SelectSeparator.displayName = SelectPrimitive.Separator.displayName

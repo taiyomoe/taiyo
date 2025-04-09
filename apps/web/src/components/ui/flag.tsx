@@ -1,4 +1,4 @@
-import type { Languages } from "@taiyomoe/db"
+import type { Languages } from "@prisma/client"
 import {
   BR,
   FR,

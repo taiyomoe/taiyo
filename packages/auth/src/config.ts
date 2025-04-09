@@ -1,5 +1,6 @@
+import type { Roles } from "@prisma/client"
 import { cacheClient } from "@taiyomoe/cache"
-import { type Roles, db } from "@taiyomoe/db"
+import { db } from "@taiyomoe/db"
 import {
   USERNAME_MAX_LENGTH,
   USERNAME_MIN_LENGTH,

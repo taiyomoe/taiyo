@@ -12,9 +12,9 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@prisma/client": "^6.5.0",
     "@taiyomoe/auth": "workspace:^",
     "@taiyomoe/cache": "workspace:^",
-    "@taiyomoe/config": "workspace:^",
     "@taiyomoe/db": "workspace:^",
     "@taiyomoe/meilisearch": "workspace:^",
     "@taiyomoe/messages": "workspace:^",

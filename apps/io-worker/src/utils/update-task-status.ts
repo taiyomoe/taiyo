@@ -1,4 +1,5 @@
-import { type TaskStatus, db } from "@taiyomoe/db"
+import type { TaskStatus } from "@prisma/client"
+import { db } from "@taiyomoe/db"
 import { rawQueue } from "@taiyomoe/messaging"
 import type { ImportChapterMessageInput } from "@taiyomoe/types"
 import type { Job } from "bullmq"

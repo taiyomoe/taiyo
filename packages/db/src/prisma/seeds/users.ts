@@ -1,6 +1,7 @@
 import { fakerPT_BR } from "@faker-js/faker"
+import { ContentRating, Countries, Genders, Languages } from "@prisma/client"
 import { normalizeDisplayName, normalizeUsername } from "@taiyomoe/utils"
-import { ContentRating, Countries, Genders, Languages, db } from "../../"
+import { db } from "../../"
 
 const execute = async () => {
   const users = [

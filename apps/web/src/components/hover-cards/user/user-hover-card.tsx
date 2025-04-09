@@ -1,4 +1,4 @@
-import type { Roles } from "@taiyomoe/db"
+import type { Roles } from "@prisma/client"
 import Link from "next/link"
 import { type HTMLAttributes, type RefObject, useRef } from "react"
 import { useHover } from "usehooks-ts"
