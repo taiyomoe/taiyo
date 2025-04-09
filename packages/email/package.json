@@ -22,6 +22,6 @@
   },
   "devDependencies": {
     "@taiyomoe/tsconfig": "workspace:^",
-    "react-email": "^4.0.6"
+    "react-email": "^4.0.7"
   }
 }
