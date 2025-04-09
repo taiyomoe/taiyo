@@ -54,7 +54,7 @@ importers:
         specifier: workspace:^
         version: link:../../packages/s3
       bullmq:
-        specifier: ^5.47.3
+        specifier: ^5.48.0
         version: 5.48.0
       mangadex-full-api:
         specifier: ^6.0.0
@@ -181,7 +181,7 @@ importers:
         specifier: ^8.5.3
         version: 8.5.3
       posthog-js:
-        specifier: ^1.234.10
+        specifier: ^1.235.0
         version: 1.235.0
       radash:
         specifier: ^12.1.0
@@ -459,7 +459,7 @@ importers:
         specifier: workspace:^
         version: link:../types
       bullmq:
-        specifier: ^5.47.3
+        specifier: ^5.48.0
         version: 5.48.0
       zod:
         specifier: ^3.24.2
