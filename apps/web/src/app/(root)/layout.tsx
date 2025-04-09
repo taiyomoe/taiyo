@@ -13,7 +13,7 @@ export default async function Layout({ children }: LayoutProps) {
   return (
     <SidebarProvider defaultOpen={defaultOpen}>
       <Sidebar />
-      <div className="w-full transition-[max-width] duration-300 md:max-w-[calc(100vw-var(--sidebar-width))]">
+      <div className="w-full transition-[max-width] duration-300 md:max-w-[calc(100%-var(--sidebar-width))]">
         <Navbar />
         {children}
       </div>

@@ -33,7 +33,7 @@ export const FeaturedMediasCard = ({ media }: Props) => {
         <Image
           src={getCoverUrl(media.id, media.covers.at(-1)!)}
           className="aspect-7/10 max-h-[160] min-h-[160] select-none md:max-h-[270] md:min-h-[270] xl:max-h-[300] xl:min-h-[300]"
-          width={200}
+          width={210}
           height={300}
           radius="md"
           alt={`${getDisplayTitle(media.titles)}'s cover`}
