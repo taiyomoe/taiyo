@@ -42,6 +42,16 @@ export const EditText = ({
     }
   }
 
+  const handleBlur = () => {
+    if (inputValue) {
+      handleSubmit()
+
+      return
+    }
+
+    setIsEditing(false)
+  }
+
   if (isEditing) {
     return (
       <Input
@@ -49,7 +59,7 @@ export const EditText = ({
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
         onKeyDown={handleKeyDown}
-        onBlur={handleSubmit}
+        onBlur={handleBlur}
         autoFocus
       />
     )
