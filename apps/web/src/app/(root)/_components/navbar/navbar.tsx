@@ -24,7 +24,7 @@ export const Navbar = () => {
 
   return (
     <motion.div
-      className="group/navbar fixed top-0 z-10 flex h-(--navbar-height) w-[-webkit-fill-available] items-center justify-between px-4 py-2 transition-[height] duration-300 md:justify-end"
+      className="fixed top-0 z-10 flex h-(--navbar-height) w-[-webkit-fill-available] items-center justify-between px-4 py-2 transition-[height] duration-300 md:justify-end"
       style={{ backgroundColor }}
       data-state={isMobile ? "collapsed" : state}
     >
@@ -34,11 +34,11 @@ export const Navbar = () => {
           className="flex items-center justify-center gap-2 font-bold text-xl"
         >
           <TaiyoLogo className="size-8" />
-          <span className="transition-opacity duration-300 ease-in-out group-data-[state=collapsed]:hidden group-data-[state=collapsed]:opacity-0 group-data-[state=expanded]:opacity-100">
+          <span className="transition-opacity duration-300 ease-in-out">
             Taiyō
           </span>
         </Link>
-        <div className="rounded-full border bg-emphasis px-2 py-1 text-xs uppercase group-data-[state=collapsed]:hidden">
+        <div className="rounded-full border bg-emphasis px-2 py-1 text-xs uppercase">
           Alpha
         </div>
       </div>

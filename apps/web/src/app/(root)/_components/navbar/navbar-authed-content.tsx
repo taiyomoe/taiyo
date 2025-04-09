@@ -32,7 +32,7 @@ export const NavbarAuthedContent = () => {
         <button className="outline-none" type="button">
           <Avatar
             src={user!.image}
-            className="max-size-9 group-data-[state=expanded]/navbar:max-size-10 hover:opacity-80"
+            className="max-size-9 group-data-[state=expanded]/sidebar:max-size-10 hover:opacity-80"
             width={40}
             height={40}
             radius="full"

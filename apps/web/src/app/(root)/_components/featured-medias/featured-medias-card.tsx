@@ -29,7 +29,7 @@ export const FeaturedMediasCard = ({ media }: Props) => {
         />
       </Link>
       <div className="absolute top-0 h-full max-h-(--featured-media-card-height) w-full bg-[linear-gradient(to_bottom,hsla(var(--background),0.6),hsla(var(--background)))]" />
-      <div className="absolute inset-x-0 top-0 left-0 z-20 mx-auto my-[48] flex w-full max-w-9xl gap-4 p-4">
+      <div className="absolute inset-x-0 top-0 left-0 z-20 mx-auto my-[48] flex w-full max-w-9xl gap-4 p-4 md:px-8">
         <Image
           src={getCoverUrl(media.id, media.covers.at(-1)!)}
           className="aspect-7/10 max-h-[160] min-h-[160] select-none md:max-h-[270] md:min-h-[270] xl:max-h-[300] xl:min-h-[300]"

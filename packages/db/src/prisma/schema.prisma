@@ -3,7 +3,7 @@
 
 generator client {
     provider        = "prisma-client-js"
-    previewFeatures = ["relationJoins", "strictUndefinedChecks"]
+    previewFeatures = ["relationJoins", "strictUndefinedChecks", "typedSql"]
 }
 
 generator json {

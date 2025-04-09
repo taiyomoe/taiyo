@@ -12,3 +12,14 @@ export const fileSchema = z.object({
   extension: extensionSchema,
   file: z.instanceof(File).optional(),
 })
+
+export const pageSchema = z.coerce
+  .number()
+  .int()
+  .min(1)
+  .catch(config.pagination.defaultPage)
+
+export const perPageSchema = z.coerce
+  .number()
+  .refine((v) => config.pagination.perPageOptions.includes(v))
+  .catch(config.pagination.defaultPerPage)

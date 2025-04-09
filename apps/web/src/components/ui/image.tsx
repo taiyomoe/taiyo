@@ -6,14 +6,14 @@ import { Skeleton } from "~/components/ui/skeleton"
 import { cn } from "~/utils/cn"
 
 const image = tv({
-  base: "relative min-w-fit overflow-hidden",
+  base: "relative min-w-fit overflow-hidden *:transition-[scale,width,height,min-width,min-height,max-width,max-height] *:duration-300",
   slots: {
     skeleton: "absolute size-full data-[loaded=true]:hidden",
-    image:
-      "size-full opacity-0 transition-transform duration-300 data-[loading=false]:opacity-100",
+    image: "size-full opacity-0 data-[loading=false]:opacity-100",
   },
   variants: {
     radius: {
+      none: "",
       md: "rounded *:rounded",
       full: "rounded-full *:rounded-full",
     },
@@ -25,9 +25,8 @@ const image = tv({
 
 export type ImageProps = NextImageProps &
   VariantProps<typeof image> & {
-    classNames?: Record<
-      "base" | keyof (typeof image)["slots"],
-      string | undefined
+    classNames?: Partial<
+      Record<"base" | keyof (typeof image)["slots"], string | undefined>
     >
   }
 
@@ -73,6 +72,7 @@ export const Image = ({
         className={slots.image({ className: cn(className, classNames?.image) })}
         onLoad={() => setIsLoading(false)}
         data-loading={isLoading}
+        priority
         {...props}
       />
     </div>

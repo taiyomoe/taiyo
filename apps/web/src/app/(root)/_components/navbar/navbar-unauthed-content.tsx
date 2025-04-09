@@ -22,7 +22,7 @@ export const NavbarUnauthedContent = () => {
           type="button"
         >
           <Avatar
-            className="max-size-9 group-data-[state=expanded]/navbar:max-size-10 hover:bg-emphasis hover:[&_svg]:text-default"
+            className="max-size-9 group-data-[state=expanded]/sidebar:max-size-10 hover:bg-emphasis hover:[&_svg]:text-default"
             width={40}
             height={40}
             radius="full"

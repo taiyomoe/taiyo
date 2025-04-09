@@ -1,25 +1,42 @@
-import type { Roles } from "@taiyomoe/db"
+import type { Roles } from "@prisma/client"
 import type { HTMLAttributes } from "react"
-import { cn } from "~/utils/cn"
+import { tv } from "tailwind-variants"
+import { Sparkles } from "~/components/ui/sparkles"
+import { getName } from "~/utils/users/get-name"
+
+const username = tv({
+  base: "relative line-clamp-1 px-1 py-0.5 text-start",
+  variants: {
+    role: {
+      USER: "",
+      MODERATOR: "",
+      UPLOADER_INTERN: "",
+      UPLOADER: "",
+      ADMIN: "text-brand brightness-70",
+    },
+  },
+})
 
 type Props = HTMLAttributes<HTMLSpanElement> & {
   user: {
-    name: string
-    username?: string | null
-    displayUsername?: string | null
+    username: string
+    displayUsername: string
+    role: Roles
   }
-  role?: Roles
 }
 
-export const Username = ({ user, role, className, ...props }: Props) => {
-  const displayableName = user.displayUsername ?? user.username ?? user.name
+export const Username = ({ user, className, ...props }: Props) => {
+  const displayableName = getName(user)
 
   return (
     <span
-      className={cn("line-clamp-1 text-start", className)}
+      className={username({ className, role: user.role })}
       title={displayableName}
       {...props}
     >
+      {user.role === "ADMIN" && (
+        <Sparkles className="absolute top-0 left-0" speed={0.4} density={15} />
+      )}
       {displayableName}
     </span>
   )

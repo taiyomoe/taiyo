@@ -1,4 +1,4 @@
-import type { Prisma } from "@taiyomoe/db"
+import type { Prisma } from "@prisma/client"
 import type { Manga } from "mangadex-full-api"
 import { MdUtils } from "~/utils/md.utils"
 

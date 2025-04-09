@@ -12,6 +12,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@prisma/client": "^6.6.0",
     "@taiyomoe/auth": "workspace:^",
     "@taiyomoe/cache": "workspace:^",
     "@taiyomoe/db": "workspace:^",
@@ -19,6 +20,7 @@
     "@taiyomoe/messages": "workspace:^",
     "@taiyomoe/messaging": "workspace:^",
     "@taiyomoe/s3": "workspace:^",
+    "@taiyomoe/schemas": "workspace:^",
     "@trpc/server": "^11.0.4",
     "superjson": "^2.2.2",
     "use-intl": "^4.0.2",

@@ -8,7 +8,17 @@ export const getFeaturedMediasHandler = publicProcedure.query(
         synopsis: true,
         genres: true,
         tags: true,
-        titles: true,
+        titles: {
+          select: {
+            id: true,
+            title: true,
+            priority: true,
+            language: true,
+            isAcronym: true,
+            isMainTitle: true,
+          },
+          where: { deletedAt: null },
+        },
         covers: {
           select: {
             id: true,
