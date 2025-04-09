@@ -253,6 +253,9 @@ importers:
       '@types/react-dom':
         specifier: ^19.1.2
         version: 19.1.2(@types/react@19.1.0)
+      embla-carousel:
+        specifier: ^8.6.0
+        version: 8.6.0
       tailwind-scrollbar:
         specifier: ^4.0.2
         version: 4.0.2(react@19.1.0)(tailwindcss@4.1.3)
