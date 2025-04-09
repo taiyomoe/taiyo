@@ -46,6 +46,8 @@ jobs:
         uses: ./tooling/github/setup
 
       - name: PrismaORM
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: pnpm -F @taiyomoe/db db generate --sql
 
       - name: Typecheck
