@@ -11,7 +11,7 @@ import { TrendingMediasCarousel } from "./_components/trending-medias/trending-m
 export default async function Page() {
   const t = await getTranslations("global")
 
-  prefetch(trpc.medias.getFeaturedMedias.queryOptions())
+  prefetch(trpc.medias.getFeatured.queryOptions())
   prefetch(trpc.chapters.getLatestReleases.queryOptions())
 
   return (

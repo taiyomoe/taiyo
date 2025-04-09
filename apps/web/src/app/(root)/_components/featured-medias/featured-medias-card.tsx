@@ -10,7 +10,7 @@ import { getBannerUrl } from "~/utils/medias/get-banner-url"
 import { getCoverUrl } from "~/utils/medias/get-cover-url"
 
 type Props = {
-  media: RouterOutputs["medias"]["getFeaturedMedias"][number]
+  media: RouterOutputs["medias"]["getFeatured"][number]
 }
 
 export const FeaturedMediasCard = ({ media }: Props) => {
