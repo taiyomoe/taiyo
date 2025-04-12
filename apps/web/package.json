@@ -47,7 +47,7 @@
     "next-themes": "^0.4.6",
     "nuqs": "^2.4.1",
     "postcss": "^8.5.3",
-    "posthog-js": "^1.235.5",
+    "posthog-js": "^1.235.6",
     "radash": "^12.1.0",
     "react": "^19.1.0",
     "react-aria": "^3.38.1",
