@@ -331,8 +331,8 @@ importers:
   packages/db:
     dependencies:
       '@faker-js/faker':
-        specifier: ^9.5.1
-        version: 9.6.0
+        specifier: ^9.7.0
+        version: 9.7.0
       '@prisma/client':
         specifier: ^6.6.0
         version: 6.6.0(prisma@6.6.0(typescript@5.8.3))(typescript@5.8.3)
@@ -575,8 +575,8 @@ importers:
   packages/utils:
     dependencies:
       '@faker-js/faker':
-        specifier: ^9.5.1
-        version: 9.6.0
+        specifier: ^9.7.0
+        version: 9.7.0
     devDependencies:
       '@taiyomoe/tsconfig':
         specifier: workspace:^
@@ -1153,8 +1153,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@faker-js/faker@9.6.0':
-    resolution: {integrity: sha512-3vm4by+B5lvsFPSyep3ELWmZfE3kicDtmemVpuwl1yH7tqtnHdsA6hG8fbXedMVdkzgtvzWoRgjSB4Q+FHnZiw==}
+  '@faker-js/faker@9.7.0':
+    resolution: {integrity: sha512-aozo5vqjCmDoXLNUJarFZx2IN/GgGaogY4TMJ6so/WLZOWpSV7fvj2dmrV6sEAnUm1O7aCrhTibjpzeDFgNqbg==}
     engines: {node: '>=18.0.0', npm: '>=9.0.0'}
 
   '@floating-ui/core@1.6.9':
@@ -5257,7 +5257,7 @@ snapshots:
   '@esbuild/win32-x64@0.25.2':
     optional: true
 
-  '@faker-js/faker@9.6.0': {}
+  '@faker-js/faker@9.7.0': {}
 
   '@floating-ui/core@1.6.9':
     dependencies:
