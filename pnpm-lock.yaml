@@ -145,8 +145,8 @@ importers:
         specifier: ^1.5.0
         version: 1.5.0
       better-auth:
-        specifier: ^1.2.6
-        version: 1.2.6
+        specifier: ^1.2.7
+        version: 1.2.7
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -284,11 +284,11 @@ importers:
         specifier: workspace:^
         version: link:../utils
       better-auth:
-        specifier: ^1.2.6
-        version: 1.2.6
+        specifier: ^1.2.7
+        version: 1.2.7
       better-auth-harmony:
         specifier: ^1.2.4
-        version: 1.2.4(better-auth@1.2.6)
+        version: 1.2.4(better-auth@1.2.7)
       luxon:
         specifier: ^3.6.1
         version: 3.6.1
@@ -3295,11 +3295,11 @@ packages:
     peerDependencies:
       better-auth: ^1.0.3
 
-  better-auth@1.2.6:
-    resolution: {integrity: sha512-RVy6nfNCXpohx49zP2ChUO3zN0nvz5UXuETJIhWU+dshBKpFMk4P4hAQauM3xqTJdd9hfeB5y+segmG1oYGTJQ==}
+  better-auth@1.2.7:
+    resolution: {integrity: sha512-2hCB263GSrgetsMUZw8vv9O1e4S4AlYJW3P4e8bX9u3Q3idv4u9BzDFCblpTLuL4YjYovghMCN0vurAsctXOAQ==}
 
-  better-call@1.0.7:
-    resolution: {integrity: sha512-p5kEthErx3HsW9dCCvvEx+uuEdncn0ZrlqrOG3TkR1aVYgynpwYbTVU90nY8/UwfMhROzqZWs8vryainSQxrNg==}
+  better-call@1.0.8:
+    resolution: {integrity: sha512-/PV8JLqDRUN7JyBPbklVsS/8E4SO3pnf8hbpa8B7xrBrr+BBYpeOAxoqtnsyk/pRs35vNB4MZx8cn9dBuNlLDA==}
 
   bl@4.1.0:
     resolution: {integrity: sha512-1W07cM9gS6DcLperZfFSj+bWLtaPGSOHWhPiGzXmvVJbRLdG82sH/Kn8EtW1VqWVA54AKf2h5k5BbnIbwF3h6w==}
@@ -7895,14 +7895,14 @@ snapshots:
 
   base64id@2.0.0: {}
 
-  better-auth-harmony@1.2.4(better-auth@1.2.6):
+  better-auth-harmony@1.2.4(better-auth@1.2.7):
     dependencies:
-      better-auth: 1.2.6
+      better-auth: 1.2.7
       libphonenumber-js: 1.12.6
       mailchecker: 6.0.17
       validator: 13.15.0
 
-  better-auth@1.2.6:
+  better-auth@1.2.7:
     dependencies:
       '@better-auth/utils': 0.2.4
       '@better-fetch/fetch': 1.1.18
@@ -7910,14 +7910,14 @@ snapshots:
       '@noble/hashes': 1.7.1
       '@simplewebauthn/browser': 13.1.0
       '@simplewebauthn/server': 13.1.1
-      better-call: 1.0.7
+      better-call: 1.0.8
       defu: 6.1.4
       jose: 5.10.0
       kysely: 0.27.6
       nanostores: 0.11.4
       zod: 3.24.2
 
-  better-call@1.0.7:
+  better-call@1.0.8:
     dependencies:
       '@better-fetch/fetch': 1.1.18
       rou3: 0.5.1
