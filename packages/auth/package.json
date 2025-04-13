@@ -21,7 +21,7 @@
     "@taiyomoe/email": "workspace:^",
     "@taiyomoe/meilisearch": "workspace:^",
     "@taiyomoe/utils": "workspace:^",
-    "better-auth": "^1.2.5",
+    "better-auth": "^1.2.6",
     "better-auth-harmony": "^1.2.4",
     "luxon": "^3.6.1",
     "zod": "^3.24.2"
