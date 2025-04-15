@@ -178,8 +178,8 @@ importers:
         specifier: ^0.4.6
         version: 0.4.6(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       nuqs:
-        specifier: ^2.4.1
-        version: 2.4.1(next@15.3.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)
+        specifier: ^2.4.2
+        version: 2.4.2(next@15.3.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)
       postcss:
         specifier: ^8.5.3
         version: 8.5.3
@@ -3966,8 +3966,8 @@ packages:
     resolution: {integrity: sha512-6eZs5Ls3WtCisHWp9S2GUy8dqkpGi4BVSz3GaqiE6ezub0512ESztXUwUB6C6IKbQkY2Pnb/mD4WYojCRwcwLA==}
     engines: {node: '>=0.10.0'}
 
-  nuqs@2.4.1:
-    resolution: {integrity: sha512-u6sngTspqDe3jWHtcmqHQg3dl35niizCZAsm5gy7PBlgG2rwl71Dp2QUv5hwBaWKI9qz0wqILZY86TsRxq66SQ==}
+  nuqs@2.4.2:
+    resolution: {integrity: sha512-E+HE3HhCI9XzRhqHzsmevSLqV6VgwXZQr9jS1YzzqlgeDLr4fMR6XI5gqIZKgfjfNFl6hh/oYrgjmNrs4x7dEw==}
     peerDependencies:
       '@remix-run/react': '>=2'
       next: '>=14.2.0'
@@ -8600,7 +8600,7 @@ snapshots:
 
   normalize-path@3.0.0: {}
 
-  nuqs@2.4.1(next@15.3.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0):
+  nuqs@2.4.2(next@15.3.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0):
     dependencies:
       mitt: 3.0.1
       react: 19.1.0
