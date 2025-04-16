@@ -429,8 +429,8 @@ importers:
         specifier: ^3.6.1
         version: 3.6.1
       meilisearch:
-        specifier: ^0.49.0
-        version: 0.49.0
+        specifier: ^0.50.0
+        version: 0.50.0
       punycode:
         specifier: ^2.3.1
         version: 2.3.1
@@ -3825,8 +3825,8 @@ packages:
     peerDependencies:
       react: ^18.0 || ^19.0
 
-  meilisearch@0.49.0:
-    resolution: {integrity: sha512-oMJ/e6Or6cz2+owcEKeB11p2OWiWW9NmssqOZC/KIwQB0sBGKLJ7RCpYzf+GhUIZIZ9FRYZ419ox3RGebVQX5g==}
+  meilisearch@0.50.0:
+    resolution: {integrity: sha512-9IzIkobvnuS18Eg4dq/eJB9W+eXqeLZjNRgq/kKMswSmVYYSQsXqGgSuCA0JkF+o5RwJlwIsieQee6rh313VhA==}
 
   merge2@1.4.1:
     resolution: {integrity: sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==}
@@ -8475,7 +8475,7 @@ snapshots:
       marked: 7.0.4
       react: 19.1.0
 
-  meilisearch@0.49.0: {}
+  meilisearch@0.50.0: {}
 
   merge2@1.4.1: {}
 
