@@ -386,8 +386,8 @@ importers:
         specifier: ^19.1.0
         version: 19.1.0
       resend:
-        specifier: ^4.2.0
-        version: 4.2.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        specifier: ^4.3.0
+        version: 4.3.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       zod:
         specifier: ^3.24.2
         version: 3.24.2
@@ -2393,13 +2393,6 @@ packages:
     peerDependencies:
       react: ^18.0 || ^19.0 || ^19.0.0-rc
 
-  '@react-email/render@1.0.5':
-    resolution: {integrity: sha512-CA69HYXPk21HhtAXATIr+9JJwpDNmAFCvdMUjWmeoD1+KhJ9NAxusMRxKNeibdZdslmq3edaeOKGbdQ9qjK8LQ==}
-    engines: {node: '>=18.0.0'}
-    peerDependencies:
-      react: ^18.0 || ^19.0 || ^19.0.0-rc
-      react-dom: ^18.0 || ^19.0 || ^19.0.0-rc
-
   '@react-email/render@1.0.6':
     resolution: {integrity: sha512-zNueW5Wn/4jNC1c5LFgXzbUdv5Lhms+FWjOvWAhal7gx5YVf0q6dPJ0dnR70+ifo59gcMLwCZEaTS9EEuUhKvQ==}
     engines: {node: '>=18.0.0'}
@@ -4055,11 +4048,6 @@ packages:
   preact@10.26.5:
     resolution: {integrity: sha512-fmpDkgfGU6JYux9teDWLhj9mKN55tyepwYbxHgQuIxbWQzgFg5vk7Mrrtfx7xRxq798ynkY4DDDxZr235Kk+4w==}
 
-  prettier@3.4.2:
-    resolution: {integrity: sha512-e9MewbtFo+Fevyuxn/4rrcDAaq0IYxPGLvObpQjiZBMAzB9IGmzlnG9RZy3FFas+eBMu2vA0CszMeduow5dIuQ==}
-    engines: {node: '>=14'}
-    hasBin: true
-
   prettier@3.5.3:
     resolution: {integrity: sha512-QQtaxnoDJeAkDvDKWCLiwIXkTgRhwYDEQCghU9Z6q03iyek/rxRh/2lC3HB7P8sWT2xC/y5JDctPLBIGzHKbhw==}
     engines: {node: '>=14'}
@@ -4200,8 +4188,8 @@ packages:
     resolution: {integrity: sha512-DJnGAeenTdpMEH6uAJRK/uiyEIH9WVsUmoLwzudwGJUwZPp80PDBWPHXSAGNPwNvIXAbe7MSUB1zQFugFml66A==}
     engines: {node: '>=4'}
 
-  resend@4.2.0:
-    resolution: {integrity: sha512-s6ogU+BBYH1H6Zl926cpddtLRAJWeFv5cIKcuHLWk1QYhFTbpFJlhqx31pnN2f0CB075KFSrc1Xf6HG690wzuw==}
+  resend@4.3.0:
+    resolution: {integrity: sha512-4OBHeusMVSl0vcba2J3AaGzdZ1SXAAhX/Wkcwobe16AHmlW9h3li8wG62Fhvlsc61e+wlQoxcwJZP6WrBTbghQ==}
     engines: {node: '>=18'}
 
   resolve-pkg-maps@1.0.0:
@@ -6753,14 +6741,6 @@ snapshots:
     dependencies:
       react: 19.1.0
 
-  '@react-email/render@1.0.5(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
-    dependencies:
-      html-to-text: 9.0.5
-      prettier: 3.4.2
-      react: 19.1.0
-      react-dom: 19.1.0(react@19.1.0)
-      react-promise-suspense: 0.3.4
-
   '@react-email/render@1.0.6(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
     dependencies:
       html-to-text: 9.0.5
@@ -8666,8 +8646,6 @@ snapshots:
 
   preact@10.26.5: {}
 
-  prettier@3.4.2: {}
-
   prettier@3.5.3: {}
 
   pretty-ms@9.2.0:
@@ -8906,9 +8884,9 @@ snapshots:
     dependencies:
       redis-errors: 1.2.0
 
-  resend@4.2.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
+  resend@4.3.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
     dependencies:
-      '@react-email/render': 1.0.5(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@react-email/render': 1.0.6(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
     transitivePeerDependencies:
       - react
       - react-dom
