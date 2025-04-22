@@ -546,7 +546,7 @@ importers:
         specifier: ^2.2.2
         version: 2.2.2
       use-intl:
-        specifier: ^4.0.2
+        specifier: ^4.0.3
         version: 4.0.3(react@19.1.0)
       zod:
         specifier: ^3.24.3
