@@ -77,7 +77,7 @@ importers:
     dependencies:
       '@hookform/resolvers':
         specifier: ^5.0.1
-        version: 5.0.1(react-hook-form@7.56.0(react@19.1.0))
+        version: 5.0.1(react-hook-form@7.56.1(react@19.1.0))
       '@marsidev/react-turnstile':
         specifier: ^1.1.0
         version: 1.1.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -202,8 +202,8 @@ importers:
         specifier: ^19.1.0
         version: 19.1.0(react@19.1.0)
       react-hook-form:
-        specifier: ^7.56.0
-        version: 7.56.0(react@19.1.0)
+        specifier: ^7.56.1
+        version: 7.56.1(react@19.1.0)
       sonner:
         specifier: ^2.0.3
         version: 2.0.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -4133,8 +4133,8 @@ packages:
     engines: {node: '>=18.0.0'}
     hasBin: true
 
-  react-hook-form@7.56.0:
-    resolution: {integrity: sha512-U2QQgx5z2Y8Z0qlXv3W19hWHJgfKdWMz0O/osuY+o+CYq568V2R/JhzC6OAXfR8k24rIN0Muan2Qliaq9eKs/g==}
+  react-hook-form@7.56.1:
+    resolution: {integrity: sha512-qWAVokhSpshhcEuQDSANHx3jiAEFzu2HAaaQIzi/r9FNPm1ioAvuJSD4EuZzWd7Al7nTRKcKPnBKO7sRn+zavQ==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       react: ^16.8.0 || ^17 || ^18 || ^19
@@ -5313,10 +5313,10 @@ snapshots:
 
   '@hexagon/base64@1.1.28': {}
 
-  '@hookform/resolvers@5.0.1(react-hook-form@7.56.0(react@19.1.0))':
+  '@hookform/resolvers@5.0.1(react-hook-form@7.56.1(react@19.1.0))':
     dependencies:
       '@standard-schema/utils': 0.3.0
-      react-hook-form: 7.56.0(react@19.1.0)
+      react-hook-form: 7.56.1(react@19.1.0)
 
   '@img/sharp-darwin-arm64@0.33.5':
     optionalDependencies:
@@ -8820,7 +8820,7 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  react-hook-form@7.56.0(react@19.1.0):
+  react-hook-form@7.56.1(react@19.1.0):
     dependencies:
       react: 19.1.0
 
