@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@prisma/client": "^6.6.0",
-    "@t3-oss/env-core": "^0.12.0",
+    "@t3-oss/env-core": "^0.13.0",
     "@taiyomoe/cache": "workspace:^",
     "@taiyomoe/config": "workspace:^",
     "@taiyomoe/db": "workspace:^",
