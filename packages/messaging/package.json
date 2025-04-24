@@ -13,7 +13,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@t3-oss/env-core": "^0.12.0",
+    "@t3-oss/env-core": "^0.13.0",
     "@taiyomoe/cache": "workspace:^",
     "@taiyomoe/types": "workspace:^",
     "bullmq": "^5.49.2",

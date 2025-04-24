@@ -33,8 +33,8 @@ importers:
         specifier: ^6.6.0
         version: 6.6.0(prisma@6.6.0(typescript@5.8.3))(typescript@5.8.3)
       '@t3-oss/env-core':
-        specifier: ^0.12.0
-        version: 0.12.0(typescript@5.8.3)(valibot@1.0.0-beta.15(typescript@5.8.3))(zod@3.24.3)
+        specifier: ^0.13.0
+        version: 0.13.0(arktype@2.1.20)(typescript@5.8.3)(valibot@1.0.0-beta.15(typescript@5.8.3))(zod@3.24.3)
       '@taiyomoe/cache':
         specifier: workspace:^
         version: link:../../packages/cache
@@ -266,8 +266,8 @@ importers:
         specifier: ^6.6.0
         version: 6.6.0(prisma@6.6.0(typescript@5.8.3))(typescript@5.8.3)
       '@t3-oss/env-core':
-        specifier: ^0.12.0
-        version: 0.12.0(typescript@5.8.3)(valibot@1.0.0-beta.15(typescript@5.8.3))(zod@3.24.3)
+        specifier: ^0.13.0
+        version: 0.13.0(arktype@2.1.20)(typescript@5.8.3)(valibot@1.0.0-beta.15(typescript@5.8.3))(zod@3.24.3)
       '@taiyomoe/cache':
         specifier: workspace:^
         version: link:../cache
@@ -306,8 +306,8 @@ importers:
   packages/cache:
     dependencies:
       '@t3-oss/env-core':
-        specifier: ^0.12.0
-        version: 0.12.0(typescript@5.8.3)(valibot@1.0.0-beta.15(typescript@5.8.3))(zod@3.24.3)
+        specifier: ^0.13.0
+        version: 0.13.0(arktype@2.1.20)(typescript@5.8.3)(valibot@1.0.0-beta.15(typescript@5.8.3))(zod@3.24.3)
       ioredis:
         specifier: ^5.6.1
         version: 5.6.1
@@ -337,8 +337,8 @@ importers:
         specifier: ^6.6.0
         version: 6.6.0(prisma@6.6.0(typescript@5.8.3))(typescript@5.8.3)
       '@t3-oss/env-core':
-        specifier: ^0.12.0
-        version: 0.12.0(typescript@5.8.3)(valibot@1.0.0-beta.15(typescript@5.8.3))(zod@3.24.3)
+        specifier: ^0.13.0
+        version: 0.13.0(arktype@2.1.20)(typescript@5.8.3)(valibot@1.0.0-beta.15(typescript@5.8.3))(zod@3.24.3)
       '@taiyomoe/utils':
         specifier: workspace:^
         version: link:../utils
@@ -380,8 +380,8 @@ importers:
         specifier: ^0.0.36
         version: 0.0.36(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@t3-oss/env-core':
-        specifier: ^0.12.0
-        version: 0.12.0(typescript@5.8.3)(valibot@1.0.0-beta.15(typescript@5.8.3))(zod@3.24.3)
+        specifier: ^0.13.0
+        version: 0.13.0(arktype@2.1.20)(typescript@5.8.3)(valibot@1.0.0-beta.15(typescript@5.8.3))(zod@3.24.3)
       react:
         specifier: ^19.1.0
         version: 19.1.0
@@ -420,8 +420,8 @@ importers:
         specifier: ^6.6.0
         version: 6.6.0(prisma@6.6.0(typescript@5.8.3))(typescript@5.8.3)
       '@t3-oss/env-core':
-        specifier: ^0.12.0
-        version: 0.12.0(typescript@5.8.3)(valibot@1.0.0-beta.15(typescript@5.8.3))(zod@3.24.3)
+        specifier: ^0.13.0
+        version: 0.13.0(arktype@2.1.20)(typescript@5.8.3)(valibot@1.0.0-beta.15(typescript@5.8.3))(zod@3.24.3)
       '@trpc/server':
         specifier: ^11.1.1
         version: 11.1.1(typescript@5.8.3)
@@ -456,8 +456,8 @@ importers:
   packages/messaging:
     dependencies:
       '@t3-oss/env-core':
-        specifier: ^0.12.0
-        version: 0.12.0(typescript@5.8.3)(valibot@1.0.0-beta.15(typescript@5.8.3))(zod@3.24.3)
+        specifier: ^0.13.0
+        version: 0.13.0(arktype@2.1.20)(typescript@5.8.3)(valibot@1.0.0-beta.15(typescript@5.8.3))(zod@3.24.3)
       '@taiyomoe/cache':
         specifier: workspace:^
         version: link:../cache
@@ -481,8 +481,8 @@ importers:
         specifier: ^3.787.0
         version: 3.787.0
       '@t3-oss/env-core':
-        specifier: ^0.12.0
-        version: 0.12.0(typescript@5.8.3)(valibot@1.0.0-beta.15(typescript@5.8.3))(zod@3.24.3)
+        specifier: ^0.13.0
+        version: 0.13.0(arktype@2.1.20)(typescript@5.8.3)(valibot@1.0.0-beta.15(typescript@5.8.3))(zod@3.24.3)
       aws4fetch:
         specifier: ^1.0.20
         version: 1.0.20
@@ -601,6 +601,12 @@ packages:
   '@alloc/quick-lru@5.2.0':
     resolution: {integrity: sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw==}
     engines: {node: '>=10'}
+
+  '@ark/schema@0.46.0':
+    resolution: {integrity: sha512-c2UQdKgP2eqqDArfBqQIJppxJHvNNXuQPeuSPlDML4rjw+f1cu0qAlzOG4b8ujgm9ctIDWwhpyw6gjG5ledIVQ==}
+
+  '@ark/util@0.46.0':
+    resolution: {integrity: sha512-JPy/NGWn/lvf1WmGCPw2VGpBg5utZraE84I7wli18EDF3p3zc/e9WolT35tINeZO3l7C77SjqRJeAUoT0CvMRg==}
 
   '@aws-crypto/crc32@5.2.0':
     resolution: {integrity: sha512-nLbCWqQNgUiwwtFsen1AdzAtvuLRsQS8rYgMuxCrdKf9kOssamGLuPwyTY9wyYblNr9+1XM8v6zoDTPPSIeANg==}
@@ -2979,6 +2985,21 @@ packages:
       zod:
         optional: true
 
+  '@t3-oss/env-core@0.13.0':
+    resolution: {integrity: sha512-bV7LAvwoeyigLXyjBnlgbKb8S9l+E29uSzWtU1GJYuKMQ6qF9dvFbjakkgoxR+tXFoxg7aGbg8DdEfwNihvF8Q==}
+    peerDependencies:
+      arktype: ^2.1.0
+      typescript: '>=5.0.0'
+      valibot: ^1.0.0-beta.7 || ^1.0.0
+      zod: ^3.24.0 || ^4.0.0-beta.0
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+      valibot:
+        optional: true
+      zod:
+        optional: true
+
   '@t3-oss/env-nextjs@0.12.0':
     resolution: {integrity: sha512-rFnvYk1049RnNVUPvY8iQ55AuQh1Rr+qZzQBh3t++RttCGK4COpXGNxS4+45afuQq02lu+QAOy/5955aU8hRKw==}
     peerDependencies:
@@ -3286,6 +3307,9 @@ packages:
   aria-hidden@1.2.4:
     resolution: {integrity: sha512-y+CcFFwelSXpLZk/7fMB2mUbGtX9lKycf1MWJ7CaTIERyitVlyQx6C+sxcROU2BAJ24OiZyK+8wj2i8AlBoS3A==}
     engines: {node: '>=10'}
+
+  arktype@2.1.20:
+    resolution: {integrity: sha512-IZCEEXaJ8g+Ijd59WtSYwtjnqXiwM8sWQ5EjGamcto7+HVN9eK0C4p0zDlCuAwWhpqr6fIBkxPuYDl4/Mcj/+Q==}
 
   asn1js@3.0.6:
     resolution: {integrity: sha512-UOCGPYbl0tv8+006qks/dTgV9ajs97X2p0FAbyS2iyCRrmLSRolDaHdp+v/CLgnzHc3fVB+CwYiUmei7ndFcgA==}
@@ -4557,6 +4581,12 @@ packages:
 snapshots:
 
   '@alloc/quick-lru@5.2.0': {}
+
+  '@ark/schema@0.46.0':
+    dependencies:
+      '@ark/util': 0.46.0
+
+  '@ark/util@0.46.0': {}
 
   '@aws-crypto/crc32@5.2.0':
     dependencies:
@@ -7558,6 +7588,14 @@ snapshots:
       valibot: 1.0.0-beta.15(typescript@5.8.3)
       zod: 3.24.3
 
+  '@t3-oss/env-core@0.13.0(arktype@2.1.20)(typescript@5.8.3)(valibot@1.0.0-beta.15(typescript@5.8.3))(zod@3.24.3)':
+    dependencies:
+      arktype: 2.1.20
+    optionalDependencies:
+      typescript: 5.8.3
+      valibot: 1.0.0-beta.15(typescript@5.8.3)
+      zod: 3.24.3
+
   '@t3-oss/env-nextjs@0.12.0(typescript@5.8.3)(valibot@1.0.0-beta.15(typescript@5.8.3))(zod@3.24.3)':
     dependencies:
       '@t3-oss/env-core': 0.12.0(typescript@5.8.3)(valibot@1.0.0-beta.15(typescript@5.8.3))(zod@3.24.3)
@@ -7889,6 +7927,11 @@ snapshots:
   aria-hidden@1.2.4:
     dependencies:
       tslib: 2.8.1
+
+  arktype@2.1.20:
+    dependencies:
+      '@ark/schema': 0.46.0
+      '@ark/util': 0.46.0
 
   asn1js@3.0.6:
     dependencies:
