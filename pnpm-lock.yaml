@@ -184,8 +184,8 @@ importers:
         specifier: ^8.5.3
         version: 8.5.3
       posthog-js:
-        specifier: ^1.236.5
-        version: 1.236.5
+        specifier: ^1.236.6
+        version: 1.236.6
       radash:
         specifier: ^12.1.0
         version: 12.1.0
@@ -547,7 +547,7 @@ importers:
         version: 2.2.2
       use-intl:
         specifier: ^4.0.3
-        version: 4.0.3(react@19.1.0)
+        version: 4.1.0(react@19.1.0)
       zod:
         specifier: ^3.24.3
         version: 3.24.3
@@ -4053,8 +4053,8 @@ packages:
     resolution: {integrity: sha512-dle9A3yYxlBSrt8Fu+IpjGT8SY8hN0mlaA6GY8t0P5PjIOZemULz/E2Bnm/2dcUOena75OTNkHI76uZBNUUq3A==}
     engines: {node: ^10 || ^12 || >=14}
 
-  posthog-js@1.236.5:
-    resolution: {integrity: sha512-2FrWVZwcLyeZAtdDckJaCfsk9m6DMdr/nVPVSqzF7yvm9pDsdbkvB3A16iqRj5L3EcqV2xWOcv8xWmKgdnNnqA==}
+  posthog-js@1.236.6:
+    resolution: {integrity: sha512-IX4fkn3HCK+ObdHr/AuWd+Ks7bgMpRpOQB93b5rDJAWkG4if4xFVUn5pgEjyCNeOO2GM1ECnp08q9tYNYEfwbA==}
     peerDependencies:
       '@rrweb/types': 2.0.0-alpha.17
       rrweb-snapshot: 2.0.0-alpha.17
@@ -4449,11 +4449,6 @@ packages:
     peerDependenciesMeta:
       '@types/react':
         optional: true
-
-  use-intl@4.0.3:
-    resolution: {integrity: sha512-AeXB+5gPORJHj1BPCj0aNga0y4gpucHcqNk6B+xRSLlBt0Bz+QVtMmdtV1nvxG308rWqqkmfo6RVu9yIcZt+Hw==}
-    peerDependencies:
-      react: ^17.0.0 || ^18.0.0 || >=19.0.0-rc <19.0.0 || ^19.0.0
 
   use-intl@4.1.0:
     resolution: {integrity: sha512-mQvDYFvoGn+bm/PWvlQOtluKCknsQ5a9F1Cj0hMfBjMBVTwnOqLPd6srhjvVdEQEQFVyHM1PfyifKqKYb11M9Q==}
@@ -8684,7 +8679,7 @@ snapshots:
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
-  posthog-js@1.236.5:
+  posthog-js@1.236.6:
     dependencies:
       core-js: 3.41.0
       fflate: 0.4.8
@@ -9197,13 +9192,6 @@ snapshots:
       tslib: 2.8.1
     optionalDependencies:
       '@types/react': 19.1.2
-
-  use-intl@4.0.3(react@19.1.0):
-    dependencies:
-      '@formatjs/fast-memoize': 2.2.7
-      '@schummar/icu-type-parser': 1.21.5
-      intl-messageformat: 10.7.16
-      react: 19.1.0
 
   use-intl@4.1.0(react@19.1.0):
     dependencies:
