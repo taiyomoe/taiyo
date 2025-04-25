@@ -54,8 +54,8 @@ importers:
         specifier: workspace:^
         version: link:../../packages/s3
       bullmq:
-        specifier: ^5.49.2
-        version: 5.49.2
+        specifier: ^5.51.0
+        version: 5.51.0
       mangadex-full-api:
         specifier: ^6.0.0
         version: 6.0.0
@@ -465,8 +465,8 @@ importers:
         specifier: workspace:^
         version: link:../types
       bullmq:
-        specifier: ^5.49.2
-        version: 5.49.2
+        specifier: ^5.51.0
+        version: 5.51.0
       zod:
         specifier: ^3.24.3
         version: 3.24.3
@@ -3341,8 +3341,8 @@ packages:
   buffer@5.7.1:
     resolution: {integrity: sha512-EHcyIPBQ4BSGlvjB16k5KgAJ27CIsHY/2JBmCRReo48y9rQ3MaUzWX3KVlBa4U7MyX02HdVj0K7C3WaB3ju7FQ==}
 
-  bullmq@5.49.2:
-    resolution: {integrity: sha512-LPtQ5+dTNTJi/TcmWt+kd7zWl4Okz6rEvidwphyuzcMwQMP8l26qQcguVxeN8fZ9z9O6BoksZfsWExdtAr0wRg==}
+  bullmq@5.51.0:
+    resolution: {integrity: sha512-YjX+CO2U4nmbCq2ZgNb/Hnu6Xk953j8EFmp0eehTuudavPyNstoZsbnyvvM6PX9rfD9clhcc5kRLyyWoFEM3Lg==}
 
   busboy@1.6.0:
     resolution: {integrity: sha512-8SFQbg/0hQ9xy3UNTB0YEnsNBbWfhf7RtnzpL7TkBiTBRfrQ9Fxcnz7VJsleJpyp6rVLvXiuORqjlHi5q+PYuA==}
@@ -7979,7 +7979,7 @@ snapshots:
       base64-js: 1.5.1
       ieee754: 1.2.1
 
-  bullmq@5.49.2:
+  bullmq@5.51.0:
     dependencies:
       cron-parser: 4.9.0
       ioredis: 5.6.1
