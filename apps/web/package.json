@@ -71,7 +71,7 @@
     "@types/accept-language-parser": "^1.5.8",
     "@types/country-flag-icons": "^1.2.2",
     "@types/react": "^19.1.4",
-    "@types/react-dom": "^19.1.4",
+    "@types/react-dom": "^19.1.5",
     "embla-carousel": "^8.6.0",
     "tailwind-scrollbar": "^4.0.2"
   }
