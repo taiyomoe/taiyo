@@ -12,7 +12,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "tailwindcss": "^4.1.6"
+    "tailwindcss": "^4.1.7"
   },
   "devDependencies": {
     "@taiyomoe/tsconfig": "workspace:^"
