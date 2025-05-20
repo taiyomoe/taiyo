@@ -18,7 +18,7 @@
     "@taiyomoe/meilisearch": "workspace:^",
     "@taiyomoe/messaging": "workspace:^",
     "@taiyomoe/s3": "workspace:^",
-    "bullmq": "^5.52.2",
+    "bullmq": "^5.52.3",
     "mangadex-full-api": "^6.0.0",
     "radash": "^12.1.0"
   },
