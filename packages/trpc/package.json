@@ -24,7 +24,7 @@
     "@trpc/server": "^11.1.2",
     "superjson": "^2.2.2",
     "use-intl": "^4.1.0",
-    "zod": "^3.24.4"
+    "zod": "^3.25.7"
   },
   "devDependencies": {
     "@taiyomoe/tsconfig": "workspace:^",
