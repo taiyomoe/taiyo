@@ -17,7 +17,7 @@
     "@taiyomoe/cache": "workspace:^",
     "@taiyomoe/types": "workspace:^",
     "bullmq": "^5.52.3",
-    "zod": "^3.24.4"
+    "zod": "^3.25.7"
   },
   "devDependencies": {
     "@taiyomoe/tsconfig": "workspace:^"
