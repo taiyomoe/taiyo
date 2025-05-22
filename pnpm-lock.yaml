@@ -343,8 +343,8 @@ importers:
         specifier: workspace:^
         version: link:../utils
       prisma-json-types-generator:
-        specifier: ^3.4.1
-        version: 3.4.1(prisma@6.8.2(typescript@5.8.3))(typescript@5.8.3)
+        specifier: ^3.4.2
+        version: 3.4.2(prisma@6.8.2(typescript@5.8.3))(typescript@5.8.3)
       validator:
         specifier: ^13.15.0
         version: 13.15.0
@@ -3857,8 +3857,8 @@ packages:
     peerDependencies:
       react: '>=16.0.0'
 
-  prisma-json-types-generator@3.4.1:
-    resolution: {integrity: sha512-VWsuvCyHyOHoyyuishw9hPjoDYx9+sa+v0E0ggHheYkQ5N9tt6EXd9AYaR181WWMG+K+1Ua2tW0yEsl52pe9ew==}
+  prisma-json-types-generator@3.4.2:
+    resolution: {integrity: sha512-f//au4IY4HQ/0IF7JpGZAdJg1Gc2/yiLFTh0SiqYtGDmSkqlo5T2E2UUgkNktQt9twmxDawbUwEodOuNSEJ9EQ==}
     engines: {node: '>=14.0'}
     hasBin: true
     peerDependencies:
@@ -8341,7 +8341,7 @@ snapshots:
       clsx: 2.1.1
       react: 19.1.0
 
-  prisma-json-types-generator@3.4.1(prisma@6.8.2(typescript@5.8.3))(typescript@5.8.3):
+  prisma-json-types-generator@3.4.2(prisma@6.8.2(typescript@5.8.3))(typescript@5.8.3):
     dependencies:
       '@prisma/generator-helper': 6.7.0
       prisma: 6.8.2(typescript@5.8.3)
