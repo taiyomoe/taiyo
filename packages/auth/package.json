@@ -22,7 +22,7 @@
     "@taiyomoe/meilisearch": "workspace:^",
     "@taiyomoe/utils": "workspace:^",
     "better-auth": "^1.2.8",
-    "better-auth-harmony": "^1.2.4",
+    "better-auth-harmony": "^1.2.5",
     "luxon": "^3.6.1",
     "zod": "^3.25.36"
   },
