@@ -287,8 +287,8 @@ importers:
         specifier: ^1.2.8
         version: 1.2.8
       better-auth-harmony:
-        specifier: ^1.2.4
-        version: 1.2.4(better-auth@1.2.8)
+        specifier: ^1.2.5
+        version: 1.2.5(better-auth@1.2.8)
       luxon:
         specifier: ^3.6.1
         version: 3.6.1
@@ -3102,8 +3102,8 @@ packages:
     resolution: {integrity: sha512-lGe34o6EHj9y3Kts9R4ZYs/Gr+6N7MCaMlIFA3F1R2O5/m7K06AxfSeO5530PEERE6/WyEg3lsuyw4GHlPZHog==}
     engines: {node: ^4.5.0 || >= 5.9}
 
-  better-auth-harmony@1.2.4:
-    resolution: {integrity: sha512-a5Qe+fEWcOR7c9bmy+g/FmRf3TuJqv3pdz6WD/seuh/ykkxi93u6lG++/L0BIFNhSZkXeIrrosmfBFTycfL3XA==}
+  better-auth-harmony@1.2.5:
+    resolution: {integrity: sha512-4YaAK5vrLnB6heImYJB8Pf524BPFrOYmUy1IFTHk6btGDCbgh3xT/hBCM6Ougwv/drURxtfZlB/FPktIjKLMtg==}
     peerDependencies:
       better-auth: ^1.0.3
 
@@ -3499,8 +3499,8 @@ packages:
   leac@0.6.0:
     resolution: {integrity: sha512-y+SqErxb8h7nE/fiEX07jsbuhrpO9lL8eca7/Y1nuWV2moNlXhyd59iDGcRf6moVyDMbmTNzL40SUyrFU/yDpg==}
 
-  libphonenumber-js@1.12.6:
-    resolution: {integrity: sha512-PJiS4ETaUfCOFLpmtKzAbqZQjCCKVu2OhTV4SVNNE7c2nu/dACvtCqj4L0i/KWNnIgRv7yrILvBj5Lonv5Ncxw==}
+  libphonenumber-js@1.12.8:
+    resolution: {integrity: sha512-f1KakiQJa9tdc7w1phC2ST+DyxWimy9c3g3yeF+84QtEanJr2K77wAmBPP22riU05xldniHsvXuflnLZ4oysqA==}
 
   lightningcss-darwin-arm64@1.30.1:
     resolution: {integrity: sha512-c8JK7hyE65X1MHMN+Viq9n11RRC7hgin3HhYKhrMyaXflk5GVplZ60IxyoVtzILeKr+xAJwg6zK6sjTBJ0FKYQ==}
@@ -4259,10 +4259,6 @@ packages:
     peerDependenciesMeta:
       typescript:
         optional: true
-
-  validator@13.15.0:
-    resolution: {integrity: sha512-36B2ryl4+oL5QxZ3AzD0t5SsMNGvTtQHpjgFO5tbNxfXbMFkY822ktCDe1MnlqV3301QQI9SLHDNJokDI+Z9pA==}
-    engines: {node: '>= 0.10'}
 
   validator@13.15.15:
     resolution: {integrity: sha512-BgWVbCI72aIQy937xbawcs+hrVaN/CZ2UwutgaJ36hGqRrLNM+f5LUT/YPRbo8IV/ASeFzXszezV+y2+rq3l8A==}
@@ -7620,12 +7616,12 @@ snapshots:
 
   base64id@2.0.0: {}
 
-  better-auth-harmony@1.2.4(better-auth@1.2.8):
+  better-auth-harmony@1.2.5(better-auth@1.2.8):
     dependencies:
       better-auth: 1.2.8
-      libphonenumber-js: 1.12.6
+      libphonenumber-js: 1.12.8
       mailchecker: 6.0.17
-      validator: 13.15.0
+      validator: 13.15.15
 
   better-auth@1.2.8:
     dependencies:
@@ -8041,7 +8037,7 @@ snapshots:
 
   leac@0.6.0: {}
 
-  libphonenumber-js@1.12.6: {}
+  libphonenumber-js@1.12.8: {}
 
   lightningcss-darwin-arm64@1.30.1:
     optional: true
@@ -8841,8 +8837,6 @@ snapshots:
     optionalDependencies:
       typescript: 5.8.3
     optional: true
-
-  validator@13.15.0: {}
 
   validator@13.15.15: {}
 
