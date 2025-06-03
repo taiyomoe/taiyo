@@ -16,7 +16,7 @@
     "@t3-oss/env-core": "^0.13.6",
     "@taiyomoe/cache": "workspace:^",
     "@taiyomoe/types": "workspace:^",
-    "bullmq": "^5.53.1",
+    "bullmq": "^5.53.2",
     "zod": "^3.25.46"
   },
   "devDependencies": {
