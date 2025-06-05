@@ -478,8 +478,8 @@ importers:
   packages/s3:
     dependencies:
       '@aws-sdk/client-s3':
-        specifier: ^3.823.0
-        version: 3.823.0
+        specifier: ^3.824.0
+        version: 3.824.0
       '@t3-oss/env-core':
         specifier: ^0.13.6
         version: 0.13.6(arktype@2.1.20)(typescript@5.8.3)(valibot@1.0.0-beta.15(typescript@5.8.3))(zod@3.25.51)
@@ -635,8 +635,8 @@ packages:
   '@aws-crypto/util@5.2.0':
     resolution: {integrity: sha512-4RkU9EsI6ZpBve5fseQlGNUWKMa1RLPQ1dnjnQoe07ldfIzcsGb5hC5W0Dm7u423KWzawlrpbjXBrXCEv9zazQ==}
 
-  '@aws-sdk/client-s3@3.823.0':
-    resolution: {integrity: sha512-cTp1Lkyv5NuHr6aUin5FCARY02o2jiOcRKnWnAahEQrlvgzOAe4SrjjOVVTH67wHdcB9zGeNDNCK/132+zaRow==}
+  '@aws-sdk/client-s3@3.824.0':
+    resolution: {integrity: sha512-7neTQIdSVP/F4RTWG5T87LDpB955iQD6lxg9nJ00fdkIPczDcRtAEXow44NjF4fEdpQ1A9jokUtBSVE+GMXZ/A==}
     engines: {node: '>=18.0.0'}
 
   '@aws-sdk/client-sso@3.823.0':
@@ -723,8 +723,8 @@ packages:
     resolution: {integrity: sha512-t8og+lRCIIy5nlId0bScNpCkif8sc0LhmtaKsbm0ZPm3sCa/WhCbSZibjbZ28FNjVCV+p0D9RYZx0VDDbtWyjw==}
     engines: {node: '>=18.0.0'}
 
-  '@aws-sdk/signature-v4-multi-region@3.823.0':
-    resolution: {integrity: sha512-FAvtmR7G0ppNLa4O2yN8koFYUmUmPuL60UBIFrVb3BBeZvBIFLln69lB8EGtTBpAvVbxknudRZCzYtnOhE4QXg==}
+  '@aws-sdk/signature-v4-multi-region@3.824.0':
+    resolution: {integrity: sha512-HBjuWeN6Z1pvJjUvGXdMNLwEypKKB4km6zXj9jsbOOwP8NTL6J5rY+JmlX/mfBTmvzmI0kMu2bxlQ4ME2CIRbA==}
     engines: {node: '>=18.0.0'}
 
   '@aws-sdk/token-providers@3.823.0':
@@ -4394,7 +4394,7 @@ snapshots:
       '@smithy/util-utf8': 2.3.0
       tslib: 2.8.1
 
-  '@aws-sdk/client-s3@3.823.0':
+  '@aws-sdk/client-s3@3.824.0':
     dependencies:
       '@aws-crypto/sha1-browser': 5.2.0
       '@aws-crypto/sha256-browser': 5.2.0
@@ -4412,7 +4412,7 @@ snapshots:
       '@aws-sdk/middleware-ssec': 3.821.0
       '@aws-sdk/middleware-user-agent': 3.823.0
       '@aws-sdk/region-config-resolver': 3.821.0
-      '@aws-sdk/signature-v4-multi-region': 3.823.0
+      '@aws-sdk/signature-v4-multi-region': 3.824.0
       '@aws-sdk/types': 3.821.0
       '@aws-sdk/util-endpoints': 3.821.0
       '@aws-sdk/util-user-agent-browser': 3.821.0
@@ -4749,7 +4749,7 @@ snapshots:
       '@smithy/util-middleware': 4.0.4
       tslib: 2.8.1
 
-  '@aws-sdk/signature-v4-multi-region@3.823.0':
+  '@aws-sdk/signature-v4-multi-region@3.824.0':
     dependencies:
       '@aws-sdk/middleware-sdk-s3': 3.823.0
       '@aws-sdk/types': 3.821.0
