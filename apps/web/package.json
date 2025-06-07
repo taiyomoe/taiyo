@@ -11,7 +11,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@hookform/resolvers": "^5.0.1",
+    "@hookform/resolvers": "^5.1.0",
     "@marsidev/react-turnstile": "^1.1.0",
     "@prisma/client": "^6.8.2",
     "@radix-ui/react-dialog": "^1.1.14",
