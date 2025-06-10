@@ -20,7 +20,7 @@
     "@radix-ui/react-select": "^2.2.5",
     "@radix-ui/react-slider": "^1.3.5",
     "@radix-ui/react-slot": "^1.2.3",
-    "@t3-oss/env-nextjs": "^0.13.6",
+    "@t3-oss/env-nextjs": "^0.13.8",
     "@tailwindcss/postcss": "^4.1.8",
     "@taiyomoe/auth": "workspace:^",
     "@taiyomoe/config": "workspace:^",
