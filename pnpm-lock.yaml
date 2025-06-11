@@ -145,8 +145,8 @@ importers:
         specifier: ^1.5.0
         version: 1.5.0
       better-auth:
-        specifier: ^1.2.8
-        version: 1.2.8
+        specifier: ^1.2.9
+        version: 1.2.9
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -284,11 +284,11 @@ importers:
         specifier: workspace:^
         version: link:../utils
       better-auth:
-        specifier: ^1.2.8
-        version: 1.2.8
+        specifier: ^1.2.9
+        version: 1.2.9
       better-auth-harmony:
         specifier: ^1.2.5
-        version: 1.2.5(better-auth@1.2.8)
+        version: 1.2.5(better-auth@1.2.9)
       luxon:
         specifier: ^3.6.1
         version: 3.6.1
@@ -3103,8 +3103,8 @@ packages:
     peerDependencies:
       better-auth: ^1.0.3
 
-  better-auth@1.2.8:
-    resolution: {integrity: sha512-y8ry7ZW3/3ZIr82Eo1zUDtMzdoQlFnwNuZ0+b0RxoNZgqmvgTIc/0tCDC7NDJerqSu4UCzer0dvYxBsv3WMIGg==}
+  better-auth@1.2.9:
+    resolution: {integrity: sha512-WLqBXDzuaCQetQctLGC5oTfGmL32zUvxnM4Y+LZkhwseMaZWq5EKI+c/ZATgz2YkFt7726q659PF8CfB9P1VuA==}
 
   better-call@1.0.8:
     resolution: {integrity: sha512-/PV8JLqDRUN7JyBPbklVsS/8E4SO3pnf8hbpa8B7xrBrr+BBYpeOAxoqtnsyk/pRs35vNB4MZx8cn9dBuNlLDA==}
@@ -7612,14 +7612,14 @@ snapshots:
 
   base64id@2.0.0: {}
 
-  better-auth-harmony@1.2.5(better-auth@1.2.8):
+  better-auth-harmony@1.2.5(better-auth@1.2.9):
     dependencies:
-      better-auth: 1.2.8
+      better-auth: 1.2.9
       libphonenumber-js: 1.12.8
       mailchecker: 6.0.17
       validator: 13.15.15
 
-  better-auth@1.2.8:
+  better-auth@1.2.9:
     dependencies:
       '@better-auth/utils': 0.2.5
       '@better-fetch/fetch': 1.1.18
