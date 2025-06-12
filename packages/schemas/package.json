@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@taiyomoe/config": "workspace:^",
-    "zod": "^3.25.56"
+    "zod": "^3.25.62"
   },
   "devDependencies": {
     "@prisma/client": "^6.9.0",
