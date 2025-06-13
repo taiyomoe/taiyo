@@ -20,7 +20,7 @@
     "meilisearch": "^0.50.0",
     "punycode": "^2.3.1",
     "radash": "^12.1.0",
-    "zod": "^3.25.63"
+    "zod": "^3.25.64"
   },
   "devDependencies": {
     "@taiyomoe/tsconfig": "workspace:^",
