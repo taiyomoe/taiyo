@@ -15,11 +15,11 @@ importers:
         specifier: workspace:^
         version: link:packages/global-types
       '@types/node':
-        specifier: ^22.15.31
-        version: 22.15.31
+        specifier: ^22.15.32
+        version: 22.15.32
       knip:
         specifier: ^5.61.0
-        version: 5.61.0(@types/node@22.15.31)(typescript@5.8.3)
+        version: 5.61.0(@types/node@22.15.32)(typescript@5.8.3)
       turbo:
         specifier: ^2.5.4
         version: 2.5.4
@@ -3034,8 +3034,8 @@ packages:
   '@types/luxon@3.6.2':
     resolution: {integrity: sha512-R/BdP7OxEMc44l2Ex5lSXHoIXTB2JLNa3y2QISIbr58U/YcsffyQrYW//hZSdrfxrjRZj3GcUoxMPGdO8gSYuw==}
 
-  '@types/node@22.15.31':
-    resolution: {integrity: sha512-jnVe5ULKl6tijxUhvQeNbQG/84fHfg+yMak02cT8QVhBx/F05rAVxCGBYYTh2EKz22D6JF5ktXuNwdx7b9iEGw==}
+  '@types/node@22.15.32':
+    resolution: {integrity: sha512-3jigKqgSjsH6gYZv2nEsqdXfZqIFGAV36XYYjf9KGZ3PSG+IhLecqPnI310RvjutyMwifE2hhhNEklOUrvx/wA==}
 
   '@types/prismjs@1.26.5':
     resolution: {integrity: sha512-AUZTa7hQ2KY5L7AmtSiqxlhWxb4ina0yd8hNbl4TWuqnv/pFP0nDMb3YrfSBf4hJVGLh2YEIBfKaBW/9UEl6IQ==}
@@ -7549,13 +7549,13 @@ snapshots:
 
   '@types/cors@2.8.17':
     dependencies:
-      '@types/node': 22.15.31
+      '@types/node': 22.15.32
 
   '@types/country-flag-icons@1.2.2': {}
 
   '@types/luxon@3.6.2': {}
 
-  '@types/node@22.15.31':
+  '@types/node@22.15.32':
     dependencies:
       undici-types: 6.21.0
 
@@ -7811,7 +7811,7 @@ snapshots:
   engine.io@6.6.4:
     dependencies:
       '@types/cors': 2.8.17
-      '@types/node': 22.15.31
+      '@types/node': 22.15.32
       accepts: 1.3.8
       base64id: 2.0.0
       cookie: 0.7.2
@@ -8008,10 +8008,10 @@ snapshots:
 
   jsesc@3.1.0: {}
 
-  knip@5.61.0(@types/node@22.15.31)(typescript@5.8.3):
+  knip@5.61.0(@types/node@22.15.32)(typescript@5.8.3):
     dependencies:
       '@nodelib/fs.walk': 1.2.8
-      '@types/node': 22.15.31
+      '@types/node': 22.15.32
       fast-glob: 3.3.3
       formatly: 0.2.4
       jiti: 2.4.2
