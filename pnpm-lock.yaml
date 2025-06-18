@@ -60,8 +60,8 @@ importers:
         specifier: ^6.0.0
         version: 6.0.0
       radash:
-        specifier: ^12.1.0
-        version: 12.1.0
+        specifier: ^12.1.1
+        version: 12.1.1
     devDependencies:
       '@taiyomoe/tsconfig':
         specifier: workspace:^
@@ -187,8 +187,8 @@ importers:
         specifier: ^1.252.1
         version: 1.252.1
       radash:
-        specifier: ^12.1.0
-        version: 12.1.0
+        specifier: ^12.1.1
+        version: 12.1.1
       react:
         specifier: ^19.1.0
         version: 19.1.0
@@ -435,8 +435,8 @@ importers:
         specifier: ^2.3.1
         version: 2.3.1
       radash:
-        specifier: ^12.1.0
-        version: 12.1.0
+        specifier: ^12.1.1
+        version: 12.1.1
       zod:
         specifier: ^3.25.67
         version: 3.25.67
@@ -3890,8 +3890,8 @@ packages:
   queue-microtask@1.2.3:
     resolution: {integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==}
 
-  radash@12.1.0:
-    resolution: {integrity: sha512-b0Zcf09AhqKS83btmUeYBS8tFK7XL2e3RvLmZcm0sTdF1/UUlHSsjXdCcWNxe7yfmAlPve5ym0DmKGtTzP6kVQ==}
+  radash@12.1.1:
+    resolution: {integrity: sha512-h36JMxKRqrAxVD8201FrCpyeNuUY9Y5zZwujr20fFO77tpUtGa6EZzfKw/3WaiBX95fq7+MpsuMLNdSnORAwSA==}
     engines: {node: '>=14.18.0'}
 
   react-aria-components@1.10.1:
@@ -8364,7 +8364,7 @@ snapshots:
 
   queue-microtask@1.2.3: {}
 
-  radash@12.1.0: {}
+  radash@12.1.1: {}
 
   react-aria-components@1.10.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
     dependencies:
