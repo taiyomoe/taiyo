@@ -4,7 +4,7 @@
   "engines": {
     "node": "22.16.0"
   },
-  "packageManager": "pnpm@10.12.1",
+  "packageManager": "pnpm@10.12.2",
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev --parallel",
