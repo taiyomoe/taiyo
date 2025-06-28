@@ -145,8 +145,8 @@ importers:
         specifier: ^1.5.0
         version: 1.5.0
       better-auth:
-        specifier: ^1.2.10
-        version: 1.2.10
+        specifier: ^1.2.12
+        version: 1.2.12
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -284,11 +284,11 @@ importers:
         specifier: workspace:^
         version: link:../utils
       better-auth:
-        specifier: ^1.2.10
-        version: 1.2.10
+        specifier: ^1.2.12
+        version: 1.2.12
       better-auth-harmony:
         specifier: ^1.2.5
-        version: 1.2.5(better-auth@1.2.10)
+        version: 1.2.5(better-auth@1.2.12)
       luxon:
         specifier: ^3.6.1
         version: 3.6.1
@@ -3107,8 +3107,8 @@ packages:
     peerDependencies:
       better-auth: ^1.0.3
 
-  better-auth@1.2.10:
-    resolution: {integrity: sha512-nEj1RG4DdLUuJiV5CR93ORyPCptGRBwksaPPCkUtGo9ka+UIlTpaiKoTaTqVLLYlqwX4bOj9tJ32oBNdf2G3Kg==}
+  better-auth@1.2.12:
+    resolution: {integrity: sha512-YicCyjQ+lxb7YnnaCewrVOjj3nPVa0xcfrOJK7k5MLMX9Mt9UnJ8GYaVQNHOHLyVxl92qc3C758X1ihqAUzm4w==}
 
   better-call@1.0.8:
     resolution: {integrity: sha512-/PV8JLqDRUN7JyBPbklVsS/8E4SO3pnf8hbpa8B7xrBrr+BBYpeOAxoqtnsyk/pRs35vNB4MZx8cn9dBuNlLDA==}
@@ -3465,8 +3465,8 @@ packages:
     resolution: {integrity: sha512-rg9zJN+G4n2nfJl5MW3BMygZX56zKPNVEYYqq7adpmMh4Jn2QNEwhvQlFy6jPVdcod7txZtKHWnyZiA3a0zP7A==}
     hasBin: true
 
-  jose@5.10.0:
-    resolution: {integrity: sha512-s+3Al/p9g32Iq+oqXxkW//7jk2Vig6FF1CFqzVXoTUXt2qz89YWbL+OwS17NFYEvxC35n0FKeGO2LGYSxeM2Gg==}
+  jose@6.0.11:
+    resolution: {integrity: sha512-QxG7EaliDARm1O1S8BGakqncGT9s25bKL1WSf6/oa17Tkqwi8D2ZNglqCF+DsYF88/rV66Q/Q2mFAy697E1DUg==}
 
   js-tokens@4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
@@ -7640,14 +7640,14 @@ snapshots:
 
   base64id@2.0.0: {}
 
-  better-auth-harmony@1.2.5(better-auth@1.2.10):
+  better-auth-harmony@1.2.5(better-auth@1.2.12):
     dependencies:
-      better-auth: 1.2.10
+      better-auth: 1.2.12
       libphonenumber-js: 1.12.8
       mailchecker: 6.0.17
       validator: 13.15.15
 
-  better-auth@1.2.10:
+  better-auth@1.2.12:
     dependencies:
       '@better-auth/utils': 0.2.5
       '@better-fetch/fetch': 1.1.18
@@ -7657,7 +7657,7 @@ snapshots:
       '@simplewebauthn/server': 13.1.1
       better-call: 1.0.8
       defu: 6.1.4
-      jose: 5.10.0
+      jose: 6.0.11
       kysely: 0.28.2
       nanostores: 0.11.4
       zod: 3.25.67
@@ -8026,7 +8026,7 @@ snapshots:
 
   jiti@2.4.2: {}
 
-  jose@5.10.0: {}
+  jose@6.0.11: {}
 
   js-tokens@4.0.0: {}
 
