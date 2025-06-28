@@ -19,7 +19,7 @@
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
     "@types/global-types": "workspace:^",
-    "@types/node": "^22.15.33",
+    "@types/node": "^22.15.34",
     "knip": "^5.61.2",
     "turbo": "^2.5.4",
     "typescript": "^5.8.3"
