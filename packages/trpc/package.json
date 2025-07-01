@@ -23,7 +23,7 @@
     "@taiyomoe/schemas": "workspace:^",
     "@trpc/server": "^11.4.3",
     "superjson": "^2.2.2",
-    "use-intl": "^4.3.1",
+    "use-intl": "^4.3.3",
     "zod": "^3.25.67"
   },
   "devDependencies": {
