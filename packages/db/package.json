@@ -23,7 +23,7 @@
     "seed": "cross-env PRISMA_SEED=1 tsx ./src/prisma/seed.ts"
   },
   "dependencies": {
-    "@faker-js/faker": "^9.8.0",
+    "@faker-js/faker": "^9.9.0",
     "@prisma/client": "^6.10.1",
     "@t3-oss/env-core": "^0.13.8",
     "@taiyomoe/utils": "workspace:^",
