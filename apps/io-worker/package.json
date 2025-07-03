@@ -10,7 +10,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@prisma/client": "^6.10.1",
+    "@prisma/client": "^6.11.0",
     "@t3-oss/env-core": "^0.13.8",
     "@taiyomoe/cache": "workspace:^",
     "@taiyomoe/config": "workspace:^",
