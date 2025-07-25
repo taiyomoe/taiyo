@@ -54,8 +54,8 @@ importers:
         specifier: workspace:^
         version: link:../../packages/s3
       bullmq:
-        specifier: ^5.56.6
-        version: 5.56.6
+        specifier: ^5.56.7
+        version: 5.56.7
       mangadex-full-api:
         specifier: ^6.0.0
         version: 6.0.0
@@ -465,8 +465,8 @@ importers:
         specifier: workspace:^
         version: link:../types
       bullmq:
-        specifier: ^5.56.6
-        version: 5.56.6
+        specifier: ^5.56.7
+        version: 5.56.7
       zod:
         specifier: ^3.25.76
         version: 3.25.76
@@ -3143,8 +3143,8 @@ packages:
     resolution: {integrity: sha512-yQbXgO/OSZVD2IsiLlro+7Hf6Q18EJrKSEsdoMzKePKXct3gvD8oLcOQdIzGupr5Fj+EDe8gO/lxc1BzfMpxvA==}
     engines: {node: '>=8'}
 
-  bullmq@5.56.6:
-    resolution: {integrity: sha512-8ex5cf0LzL6zEjuriz3kBx2YiKilCUy1qv+Mw8Zn8XNKg4WIIlpeKZnzrwQSqAyOAf+CN2J+ebsoVeSzD6zH7w==}
+  bullmq@5.56.7:
+    resolution: {integrity: sha512-Aa4Y7rmkuZOuyHvitGd2rSETgQ0SMawPD0XVsU9gAUg9Q4bwNpSD9ZDVcWGhfAQAUZFJH82JUmLsm0B59Prmtg==}
 
   caniuse-lite@1.0.30001712:
     resolution: {integrity: sha512-MBqPpGYYdQ7/hfKiet9SCI+nmN5/hp4ZzveOJubl5DTAMa5oggjAuoi0Z4onBpKPFI2ePGnQuQIzF3VxDjDJig==}
@@ -7745,7 +7745,7 @@ snapshots:
     dependencies:
       fill-range: 7.1.1
 
-  bullmq@5.56.6:
+  bullmq@5.56.7:
     dependencies:
       cron-parser: 4.9.0
       ioredis: 5.6.1
