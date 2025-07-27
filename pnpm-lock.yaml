@@ -214,8 +214,8 @@ importers:
         specifier: ^3.3.1
         version: 3.3.1
       tailwind-variants:
-        specifier: ^1.0.0
-        version: 1.0.0(tailwindcss@4.1.11)
+        specifier: ^2.0.0
+        version: 2.0.0(tailwind-merge@3.3.1)(tailwindcss@4.1.11)
       tailwindcss:
         specifier: ^4.1.11
         version: 4.1.11
@@ -4174,9 +4174,6 @@ packages:
     resolution: {integrity: sha512-5JRxVqC8I8NuOUjzBbvVJAKNM8qoVuH0O77h4WInc/qC2q5IreqKxYwgkga3PfA22OayK2ikceb/B26dztPl+Q==}
     engines: {node: '>=16'}
 
-  tailwind-merge@3.0.2:
-    resolution: {integrity: sha512-l7z+OYZ7mu3DTqrL88RiKrKIqO3NcpEO8V/Od04bNpvk0kiIFndGEoqfuzvj4yuhRkHKjRkII2z+KS2HfPcSxw==}
-
   tailwind-merge@3.3.1:
     resolution: {integrity: sha512-gBXpgUm/3rp1lMZZrM/w7D8GKqshif0zAymAhbCyIt8KMe+0v9DQ7cdYLR4FHH/cKpdTXb+A/tKKU3eolfsI+g==}
 
@@ -4186,11 +4183,15 @@ packages:
     peerDependencies:
       tailwindcss: 4.x
 
-  tailwind-variants@1.0.0:
-    resolution: {integrity: sha512-2WSbv4ulEEyuBKomOunut65D8UZwxrHoRfYnxGcQNnHqlSCp2+B7Yz2W+yrNDrxRodOXtGD/1oCcKGNBnUqMqA==}
+  tailwind-variants@2.0.0:
+    resolution: {integrity: sha512-qXwOfOwrbXsVLgwHypDKQ0bXvqZLyJS5NdgsRFyNi+8NIFuJvx4hDwUFSIwJ3AMMwPlyf2hUGGuLZbT6I6Wldg==}
     engines: {node: '>=16.x', pnpm: '>=7.x'}
     peerDependencies:
+      tailwind-merge: '>=3.0.0'
       tailwindcss: '*'
+    peerDependenciesMeta:
+      tailwind-merge:
+        optional: true
 
   tailwindcss-react-aria-components@2.0.0:
     resolution: {integrity: sha512-l8YdpXX//qx0Mz2bW3YKLjboTQxR3zLrFhlHniAIn+mTwVM1yvT0Jp7Pn3eFrqi+qtOMmcJzXaF2rsKezSr0SQ==}
@@ -8842,8 +8843,6 @@ snapshots:
     dependencies:
       copy-anything: 3.0.5
 
-  tailwind-merge@3.0.2: {}
-
   tailwind-merge@3.3.1: {}
 
   tailwind-scrollbar@4.0.2(react@19.1.0)(tailwindcss@4.1.11):
@@ -8853,10 +8852,11 @@ snapshots:
     transitivePeerDependencies:
       - react
 
-  tailwind-variants@1.0.0(tailwindcss@4.1.11):
+  tailwind-variants@2.0.0(tailwind-merge@3.3.1)(tailwindcss@4.1.11):
     dependencies:
-      tailwind-merge: 3.0.2
       tailwindcss: 4.1.11
+    optionalDependencies:
+      tailwind-merge: 3.3.1
 
   tailwindcss-react-aria-components@2.0.0(tailwindcss@4.1.11):
     dependencies:
