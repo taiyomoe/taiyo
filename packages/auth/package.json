@@ -28,6 +28,6 @@
   },
   "devDependencies": {
     "@taiyomoe/tsconfig": "workspace:^",
-    "@types/luxon": "^3.6.2"
+    "@types/luxon": "^3.7.1"
   }
 }
