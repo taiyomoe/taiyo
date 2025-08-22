@@ -49,10 +49,10 @@
     "postcss": "^8.5.6",
     "posthog-js": "^1.258.2",
     "radash": "^12.1.1",
-    "react": "^19.1.0",
+    "react": "^19.1.1",
     "react-aria": "^3.42.0",
     "react-aria-components": "^1.11.0",
-    "react-dom": "^19.1.0",
+    "react-dom": "^19.1.1",
     "react-hook-form": "^7.61.1",
     "sonner": "^2.0.6",
     "superjson": "^2.2.2",
@@ -70,8 +70,8 @@
     "@taiyomoe/types": "workspace:^",
     "@types/accept-language-parser": "^1.5.8",
     "@types/country-flag-icons": "^1.2.2",
-    "@types/react": "^19.1.8",
-    "@types/react-dom": "^19.1.6",
+    "@types/react": "^19.1.11",
+    "@types/react-dom": "^19.1.7",
     "embla-carousel": "^8.6.0",
     "tailwind-scrollbar": "^4.0.2"
   }
