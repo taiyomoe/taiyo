@@ -34,7 +34,7 @@ importers:
         version: 6.12.0(prisma@6.12.0(typescript@5.8.3))(typescript@5.8.3)
       '@t3-oss/env-core':
         specifier: ^0.13.8
-        version: 0.13.8(arktype@2.1.20)(typescript@5.8.3)(valibot@1.0.0-beta.15(typescript@5.8.3))(zod@4.0.5)
+        version: 0.13.8(arktype@2.1.20)(typescript@5.8.3)(valibot@1.0.0-beta.15(typescript@5.8.3))(zod@4.1.1)
       '@taiyomoe/cache':
         specifier: workspace:^
         version: link:../../packages/cache
@@ -104,7 +104,7 @@ importers:
         version: 1.2.3(@types/react@19.1.8)(react@19.1.0)
       '@t3-oss/env-nextjs':
         specifier: ^0.13.8
-        version: 0.13.8(arktype@2.1.20)(typescript@5.8.3)(valibot@1.0.0-beta.15(typescript@5.8.3))(zod@3.25.76)
+        version: 0.13.8(arktype@2.1.20)(typescript@5.8.3)(valibot@1.0.0-beta.15(typescript@5.8.3))(zod@4.1.1)
       '@tailwindcss/postcss':
         specifier: ^4.1.11
         version: 4.1.11
@@ -229,8 +229,8 @@ importers:
         specifier: ^3.1.1
         version: 3.1.1(react@19.1.0)
       zod:
-        specifier: ^3.25.76
-        version: 3.25.76
+        specifier: ^4.1.1
+        version: 4.1.1
       zustand:
         specifier: ^5.0.6
         version: 5.0.6(@types/react@19.1.8)(react@19.1.0)(use-sync-external-store@1.5.0(react@19.1.0))
@@ -267,7 +267,7 @@ importers:
         version: 6.12.0(prisma@6.12.0(typescript@5.8.3))(typescript@5.8.3)
       '@t3-oss/env-core':
         specifier: ^0.13.8
-        version: 0.13.8(arktype@2.1.20)(typescript@5.8.3)(valibot@1.0.0-beta.15(typescript@5.8.3))(zod@3.25.76)
+        version: 0.13.8(arktype@2.1.20)(typescript@5.8.3)(valibot@1.0.0-beta.15(typescript@5.8.3))(zod@4.1.1)
       '@taiyomoe/cache':
         specifier: workspace:^
         version: link:../cache
@@ -293,8 +293,8 @@ importers:
         specifier: ^3.7.1
         version: 3.7.1
       zod:
-        specifier: ^3.25.76
-        version: 3.25.76
+        specifier: ^4.1.1
+        version: 4.1.1
     devDependencies:
       '@taiyomoe/tsconfig':
         specifier: workspace:^
@@ -307,7 +307,7 @@ importers:
     dependencies:
       '@t3-oss/env-core':
         specifier: ^0.13.8
-        version: 0.13.8(arktype@2.1.20)(typescript@5.8.3)(valibot@1.0.0-beta.15(typescript@5.8.3))(zod@3.25.76)
+        version: 0.13.8(arktype@2.1.20)(typescript@5.8.3)(valibot@1.0.0-beta.15(typescript@5.8.3))(zod@4.1.1)
       ioredis:
         specifier: ^5.6.1
         version: 5.6.1
@@ -315,8 +315,8 @@ importers:
         specifier: ^2.2.2
         version: 2.2.2
       zod:
-        specifier: ^3.25.76
-        version: 3.25.76
+        specifier: ^4.1.1
+        version: 4.1.1
     devDependencies:
       '@taiyomoe/tsconfig':
         specifier: workspace:^
@@ -338,7 +338,7 @@ importers:
         version: 6.12.0(prisma@6.12.0(typescript@5.8.3))(typescript@5.8.3)
       '@t3-oss/env-core':
         specifier: ^0.13.8
-        version: 0.13.8(arktype@2.1.20)(typescript@5.8.3)(valibot@1.0.0-beta.15(typescript@5.8.3))(zod@3.25.76)
+        version: 0.13.8(arktype@2.1.20)(typescript@5.8.3)(valibot@1.0.0-beta.15(typescript@5.8.3))(zod@4.1.1)
       '@taiyomoe/utils':
         specifier: workspace:^
         version: link:../utils
@@ -349,8 +349,8 @@ importers:
         specifier: ^13.15.15
         version: 13.15.15
       zod:
-        specifier: ^3.25.76
-        version: 3.25.76
+        specifier: ^4.1.1
+        version: 4.1.1
       zod-prisma-types:
         specifier: ^3.2.4
         version: 3.2.4(@prisma/client@6.12.0(prisma@6.12.0(typescript@5.8.3))(typescript@5.8.3))(prisma@6.12.0(typescript@5.8.3))
@@ -381,7 +381,7 @@ importers:
         version: 0.3.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@t3-oss/env-core':
         specifier: ^0.13.8
-        version: 0.13.8(arktype@2.1.20)(typescript@5.8.3)(valibot@1.0.0-beta.15(typescript@5.8.3))(zod@3.25.76)
+        version: 0.13.8(arktype@2.1.20)(typescript@5.8.3)(valibot@1.0.0-beta.15(typescript@5.8.3))(zod@4.1.1)
       react:
         specifier: ^19.1.0
         version: 19.1.0
@@ -389,8 +389,8 @@ importers:
         specifier: ^4.7.0
         version: 4.7.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       zod:
-        specifier: ^3.25.76
-        version: 3.25.76
+        specifier: ^4.1.1
+        version: 4.1.1
     devDependencies:
       '@taiyomoe/tsconfig':
         specifier: workspace:^
@@ -421,7 +421,7 @@ importers:
         version: 6.12.0(prisma@6.12.0(typescript@5.8.3))(typescript@5.8.3)
       '@t3-oss/env-core':
         specifier: ^0.13.8
-        version: 0.13.8(arktype@2.1.20)(typescript@5.8.3)(valibot@1.0.0-beta.15(typescript@5.8.3))(zod@3.25.76)
+        version: 0.13.8(arktype@2.1.20)(typescript@5.8.3)(valibot@1.0.0-beta.15(typescript@5.8.3))(zod@4.1.1)
       '@trpc/server':
         specifier: ^11.4.3
         version: 11.4.3(typescript@5.8.3)
@@ -438,8 +438,8 @@ importers:
         specifier: ^12.1.1
         version: 12.1.1
       zod:
-        specifier: ^3.25.76
-        version: 3.25.76
+        specifier: ^4.1.1
+        version: 4.1.1
     devDependencies:
       '@taiyomoe/tsconfig':
         specifier: workspace:^
@@ -457,7 +457,7 @@ importers:
     dependencies:
       '@t3-oss/env-core':
         specifier: ^0.13.8
-        version: 0.13.8(arktype@2.1.20)(typescript@5.8.3)(valibot@1.0.0-beta.15(typescript@5.8.3))(zod@3.25.76)
+        version: 0.13.8(arktype@2.1.20)(typescript@5.8.3)(valibot@1.0.0-beta.15(typescript@5.8.3))(zod@4.1.1)
       '@taiyomoe/cache':
         specifier: workspace:^
         version: link:../cache
@@ -468,8 +468,8 @@ importers:
         specifier: ^5.56.8
         version: 5.56.8
       zod:
-        specifier: ^3.25.76
-        version: 3.25.76
+        specifier: ^4.1.1
+        version: 4.1.1
     devDependencies:
       '@taiyomoe/tsconfig':
         specifier: workspace:^
@@ -482,13 +482,13 @@ importers:
         version: 3.850.0
       '@t3-oss/env-core':
         specifier: ^0.13.8
-        version: 0.13.8(arktype@2.1.20)(typescript@5.8.3)(valibot@1.0.0-beta.15(typescript@5.8.3))(zod@3.25.76)
+        version: 0.13.8(arktype@2.1.20)(typescript@5.8.3)(valibot@1.0.0-beta.15(typescript@5.8.3))(zod@4.1.1)
       aws4fetch:
         specifier: ^1.0.20
         version: 1.0.20
       zod:
-        specifier: ^3.25.76
-        version: 3.25.76
+        specifier: ^4.1.1
+        version: 4.1.1
     devDependencies:
       '@taiyomoe/tsconfig':
         specifier: workspace:^
@@ -500,8 +500,8 @@ importers:
         specifier: workspace:^
         version: link:../config
       zod:
-        specifier: ^3.25.76
-        version: 3.25.76
+        specifier: ^4.1.1
+        version: 4.1.1
     devDependencies:
       '@prisma/client':
         specifier: ^6.12.0
@@ -549,8 +549,8 @@ importers:
         specifier: ^4.3.4
         version: 4.3.4(react@19.1.0)
       zod:
-        specifier: ^3.25.76
-        version: 3.25.76
+        specifier: ^4.1.1
+        version: 4.1.1
     devDependencies:
       '@taiyomoe/tsconfig':
         specifier: workspace:^
@@ -4388,8 +4388,8 @@ packages:
   zod@3.25.76:
     resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
 
-  zod@4.0.5:
-    resolution: {integrity: sha512-/5UuuRPStvHXu7RS+gmvRf4NXrNxpSllGwDnCBcJZtQsKrviYXm54yDGV2KYNLT5kq0lHGcl7lqWJLgSaG+tgA==}
+  zod@4.1.1:
+    resolution: {integrity: sha512-SgMZK/h8Tigt9nnKkfJMvB/mKjiJXaX26xegP4sa+0wHIFVFWVlsQGdhklDmuargBD3Hsi3rsQRIzwJIhTPJHA==}
 
   zustand@5.0.6:
     resolution: {integrity: sha512-ihAqNeUVhe0MAD+X8M5UzqyZ9k3FFZLBTtqo6JLPwV53cbRB/mJwBI0PxcIgqhBBHlEs8G45OTDTMq3gNcLq3A==}
@@ -7331,28 +7331,21 @@ snapshots:
     dependencies:
       tslib: 2.8.1
 
-  '@t3-oss/env-core@0.13.8(arktype@2.1.20)(typescript@5.8.3)(valibot@1.0.0-beta.15(typescript@5.8.3))(zod@3.25.76)':
+  '@t3-oss/env-core@0.13.8(arktype@2.1.20)(typescript@5.8.3)(valibot@1.0.0-beta.15(typescript@5.8.3))(zod@4.1.1)':
     optionalDependencies:
       arktype: 2.1.20
       typescript: 5.8.3
       valibot: 1.0.0-beta.15(typescript@5.8.3)
-      zod: 3.25.76
+      zod: 4.1.1
 
-  '@t3-oss/env-core@0.13.8(arktype@2.1.20)(typescript@5.8.3)(valibot@1.0.0-beta.15(typescript@5.8.3))(zod@4.0.5)':
-    optionalDependencies:
-      arktype: 2.1.20
-      typescript: 5.8.3
-      valibot: 1.0.0-beta.15(typescript@5.8.3)
-      zod: 4.0.5
-
-  '@t3-oss/env-nextjs@0.13.8(arktype@2.1.20)(typescript@5.8.3)(valibot@1.0.0-beta.15(typescript@5.8.3))(zod@3.25.76)':
+  '@t3-oss/env-nextjs@0.13.8(arktype@2.1.20)(typescript@5.8.3)(valibot@1.0.0-beta.15(typescript@5.8.3))(zod@4.1.1)':
     dependencies:
-      '@t3-oss/env-core': 0.13.8(arktype@2.1.20)(typescript@5.8.3)(valibot@1.0.0-beta.15(typescript@5.8.3))(zod@3.25.76)
+      '@t3-oss/env-core': 0.13.8(arktype@2.1.20)(typescript@5.8.3)(valibot@1.0.0-beta.15(typescript@5.8.3))(zod@4.1.1)
     optionalDependencies:
       arktype: 2.1.20
       typescript: 5.8.3
       valibot: 1.0.0-beta.15(typescript@5.8.3)
-      zod: 3.25.76
+      zod: 4.1.1
 
   '@tailwindcss/node@4.1.11':
     dependencies:
@@ -7729,7 +7722,7 @@ snapshots:
       jose: 5.10.0
       kysely: 0.28.2
       nanostores: 0.11.4
-      zod: 4.0.5
+      zod: 4.1.1
     optionalDependencies:
       react: 19.1.0
       react-dom: 19.1.0(react@19.1.0)
@@ -9014,7 +9007,7 @@ snapshots:
 
   zod@3.25.76: {}
 
-  zod@4.0.5: {}
+  zod@4.1.1: {}
 
   zustand@5.0.6(@types/react@19.1.8)(react@19.1.0)(use-sync-external-store@1.5.0(react@19.1.0)):
     optionalDependencies:
