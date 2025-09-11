@@ -19,6 +19,7 @@ dist
 # misc
 .DS_Store
 *.pem
+.prisma-zod-generator-manifest.json
 
 # debug
 npm-debug.log*
