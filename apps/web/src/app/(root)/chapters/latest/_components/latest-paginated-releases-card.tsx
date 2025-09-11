@@ -48,7 +48,7 @@ export const LatestPaginatedReleasesCard = ({ media }: Props) => {
               key={c.id}
               className="flex h-fit w-full flex-col justify-between gap-2 rounded border border-subtle bg-muted p-1.5 pr-2 text-sm text-subtle"
             >
-              <div className="grid grid-cols-[auto_112px] grid-rows-2 gap-x-1 gap-y-0.5">
+              <div className="grid grid-cols-[auto_116px] grid-rows-2 gap-x-1 gap-y-0.5">
                 <Link
                   href={`/medias/${media.id}/chapters/${c.id}`}
                   className="flex items-center gap-1.5 hover:[&_span]:text-primary"
