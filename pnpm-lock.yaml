@@ -124,7 +124,7 @@ importers:
         specifier: workspace:^
         version: link:../../packages/utils
       '@tanstack/react-query':
-        specifier: ^5.83.0
+        specifier: ^5.87.4
         version: 5.87.4(react@19.1.1)
       '@trpc/client':
         specifier: ^11.4.3
