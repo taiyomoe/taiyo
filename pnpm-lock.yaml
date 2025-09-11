@@ -396,7 +396,7 @@ importers:
         specifier: workspace:^
         version: link:../../tooling/typescript
       react-email:
-        specifier: ^4.2.4
+        specifier: ^4.2.11
         version: 4.2.11
 
   packages/global-types:
