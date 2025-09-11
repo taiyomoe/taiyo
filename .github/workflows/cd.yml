@@ -13,7 +13,7 @@ jobs:
     runs-on: blacksmith-4vcpu-ubuntu-2204
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Install Nixpacks
         run: curl -sSL https://nixpacks.com/install.sh | bash
