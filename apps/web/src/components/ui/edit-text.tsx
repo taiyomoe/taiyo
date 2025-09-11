@@ -5,8 +5,8 @@ import { cn } from "~/utils/cn"
 
 type Props = Omit<HTMLAttributes<HTMLButtonElement>, "onChange"> & {
   inputClassName?: string
-  validation: z.ZodSchema
-  onChange: (value: string) => void
+  validation: z.ZodSchema<string | number>
+  onChange: (value: string | number) => void
 }
 
 export const EditText = ({

@@ -11,13 +11,8 @@ generator json {
 }
 
 generator zod {
-    provider = "zod-prisma-types"
+    provider = "prisma-zod-generator"
     output   = "../../../schemas/src/prisma"
-
-    createInputTypes       = false
-    addInputTypeValidation = false
-    addIncludeType         = false
-    addSelectType          = false
 }
 
 datasource db {

@@ -18,12 +18,12 @@ export const pageSchema = z.coerce
   .number()
   .int()
   .min(1)
-  .catch(config.pagination.defaultPage)
+  .default(config.pagination.defaultPage)
 
 export const perPageSchema = z.coerce
   .number()
   .refine((v) => config.pagination.perPageOptions.includes(v))
-  .catch(config.pagination.defaultPerPage)
+  .default(config.pagination.defaultPerPage)
 
 export const optionsSchema = z.object({
   contentRating: ContentRatingSchema.array().default([

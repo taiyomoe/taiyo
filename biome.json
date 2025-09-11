@@ -36,7 +36,7 @@
   "files": {
     "includes": [
       "**",
-      "!packages/schemas/src/prisma/index.ts",
+      "!packages/schemas/src/prisma",
       "!apps/web/src/app/globals.css"
     ]
   }
