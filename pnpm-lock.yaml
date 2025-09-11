@@ -172,7 +172,7 @@ importers:
         specifier: ^15.5.3
         version: 15.5.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       next-intl:
-        specifier: ^4.3.4
+        specifier: ^4.3.7
         version: 4.3.7(next@15.5.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react@19.1.1)(typescript@5.9.2)
       next-themes:
         specifier: ^0.4.6
