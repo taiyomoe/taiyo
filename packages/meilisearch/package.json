@@ -16,7 +16,7 @@
     "@prisma/client": "^6.12.0",
     "@t3-oss/env-core": "^0.13.8",
     "@trpc/server": "^11.4.3",
-    "luxon": "^3.7.1",
+    "luxon": "^3.7.2",
     "meilisearch": "^0.51.0",
     "punycode": "^2.3.1",
     "radash": "^12.1.1",
@@ -25,6 +25,6 @@
   "devDependencies": {
     "@taiyomoe/tsconfig": "workspace:^",
     "@taiyomoe/types": "workspace:^",
-    "@types/luxon": "^3.6.2"
+    "@types/luxon": "^3.7.1"
   }
 }
