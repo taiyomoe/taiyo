@@ -1,6 +1,7 @@
 "use client"
 
 import type { Session, User } from "@taiyomoe/auth/server"
+import { config } from "@taiyomoe/config"
 import { omit } from "radash"
 import { type ReactNode, createContext, useContext, useRef } from "react"
 import { createStore, useStore } from "zustand"
@@ -8,26 +9,30 @@ import { createStore, useStore } from "zustand"
 type State = {
   user: Omit<User, "settings"> | null
   session: Session["session"] | null
-  settings: PrismaJson.UserSettings
+  settings: Required<PrismaJson.UserSettings>
 
+  updateSettings: (newSettings: PrismaJson.UserSettings) => void
   signOut: () => void
 }
 
 type AuthStore = ReturnType<typeof createAuthStore>
 
-const createAuthStore = (initProps: Session | null) =>
+const createAuthStore = (
+  session: Session | null,
+  settings: PrismaJson.UserSettings,
+) =>
   createStore<State>((set) => ({
-    user: initProps ? omit(initProps.user, ["settings"]) : null,
-    session: initProps?.session ?? null,
+    user: session ? omit(session.user, ["settings"]) : null,
+    session: session?.session ?? null,
     settings: {
-      contentRating: ["NORMAL", "SUGGESTIVE", "NSFW", "NSFL"],
-      preferredTitles: "en",
-      showFollowing: true,
-      showLibrary: true,
-      homeLayout: "ROWS",
-      ...initProps?.user.settings,
+      ...config.settings,
+      ...settings,
+      ...session?.user.settings,
     },
 
+    updateSettings: (newSettings: PrismaJson.UserSettings) => {
+      set((prev) => ({ settings: { ...prev.settings, ...newSettings } }))
+    },
     signOut: () => {
       set({ user: null, session: null })
     },
@@ -40,12 +45,17 @@ const AuthContext = createContext<AuthStore | null>(null)
 
 export const AuthStoreProvider = ({
   children,
-  value,
-}: { children: ReactNode; value: Session | null }) => {
+  session,
+  settings,
+}: {
+  children: ReactNode
+  session: Session | null
+  settings: PrismaJson.UserSettings
+}) => {
   const storeRef = useRef<AuthStore>(null)
 
   if (!storeRef.current) {
-    storeRef.current = createAuthStore(value)
+    storeRef.current = createAuthStore(session, settings)
   }
 
   return (

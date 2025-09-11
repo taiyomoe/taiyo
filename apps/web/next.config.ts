@@ -4,9 +4,6 @@ import "./src/env"
 
 const config = {
   reactStrictMode: true,
-  experimental: {
-    nodeMiddleware: true,
-  },
   images: {
     minimumCacheTTL: 300,
     remotePatterns: [

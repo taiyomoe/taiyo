@@ -4,6 +4,7 @@ import { getLatestMediasHandler } from "./handlers/get-latest-medias-handler"
 import { getLatestReleasesHandler } from "./handlers/get-latest-releases-handler"
 import { getPaginatedLatestReleasesHandler } from "./handlers/get-paginated-latest-releases-handler"
 import { getUserHoverCardContent } from "./handlers/get-user-hover-card-content"
+import { updateSettingsHandler } from "./handlers/update-settings-handler"
 import { createTRPCRouter } from "./trpc"
 
 /**
@@ -25,6 +26,7 @@ export const appRouter = createTRPCRouter({
   },
   users: {
     getHoverCardContent: getUserHoverCardContent,
+    updateSettings: updateSettingsHandler,
   },
 })
 

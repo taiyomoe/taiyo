@@ -7,7 +7,7 @@ import type { Job } from "bullmq"
 export const updateTaskStatus =
   (status: TaskStatus) =>
   async ({ jobId }: { jobId: string }) => {
-    const job: Job = await rawQueue.getJob(jobId)
+    const job = (await rawQueue.getJob(jobId)) as Job
     const input = job.data as ImportChapterMessageInput
 
     await db.task.update({

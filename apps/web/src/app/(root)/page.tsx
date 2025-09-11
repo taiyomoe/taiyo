@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server"
 import { Suspense } from "react"
+import { getSettings } from "~/utils/get-settings"
 import { HydrateClient, prefetch, trpc } from "~/utils/trpc/server"
 import { FeaturedMediasCarousel } from "./_components/featured-medias/featured-medias-carousel"
 import { FeaturedMediasSkeleton } from "./_components/featured-medias/featured-medias-skeleton"
@@ -12,10 +13,14 @@ import { TrendingMediasCarousel } from "./_components/trending-medias/trending-m
 
 export default async function Page() {
   const t = await getTranslations("global")
+  const settings = await getSettings()
+  const queryOptions = {
+    contentRating: settings.contentRating,
+  }
 
-  prefetch(trpc.medias.getFeatured.queryOptions())
-  prefetch(trpc.chapters.getLatestReleases.queryOptions())
-  prefetch(trpc.medias.getLatest.queryOptions())
+  prefetch(trpc.medias.getFeatured.queryOptions(queryOptions))
+  prefetch(trpc.chapters.getLatestReleases.queryOptions(queryOptions))
+  prefetch(trpc.medias.getLatest.queryOptions(queryOptions))
 
   return (
     <HydrateClient>

@@ -37,7 +37,7 @@ export const LatestReleasesCard = ({ chapter }: Props) => {
         >
           {getDisplayTitle(chapter.media.titles)}
         </Link>
-        <div className="grid grid-cols-[auto_112px] grid-rows-2 gap-x-1 gap-y-0.5">
+        <div className="grid grid-cols-[auto_116px] grid-rows-2 gap-x-1 gap-y-0.5">
           <Link
             href={`/medias/${chapter.media.id}/chapters/${chapter.id}`}
             className="flex items-center gap-1.5 hover:[&_span]:text-primary"
