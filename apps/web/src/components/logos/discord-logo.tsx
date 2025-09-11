@@ -1,7 +1,7 @@
 "use client"
 
 import type { SVGProps } from "react"
-import { type VariantProps, tv } from "tailwind-variants"
+import { tv, type VariantProps } from "tailwind-variants"
 
 const discordLogo = tv({
   base: "[&_path]:transition",
@@ -40,7 +40,7 @@ export const DiscordLogo = ({ className, color, shadow, ...props }: Props) => (
       />
     </g>
     <defs>
-      <clipPath id="a">
+      <clipPath>
         <path fill="#fff" d="M0 0h71v55H0z" />
       </clipPath>
     </defs>

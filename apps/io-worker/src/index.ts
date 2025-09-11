@@ -1,4 +1,4 @@
-import { UPLOADS_QUEUE, rawQueueEvents } from "@taiyomoe/messaging"
+import { rawQueueEvents, UPLOADS_QUEUE } from "@taiyomoe/messaging"
 import { Worker } from "bullmq"
 import { env } from "~/env"
 // import { createMediaHandler } from "~/handlers/create-media.handler"

@@ -8,8 +8,7 @@ import {
   MoreHorizontalIcon,
 } from "lucide-react"
 import { useTranslations } from "next-intl"
-import { parseAsInteger } from "nuqs"
-import { useQueryState } from "nuqs"
+import { parseAsInteger, useQueryState } from "nuqs"
 import { type ComponentProps, useMemo, useState } from "react"
 import { EditText } from "~/components/ui/edit-text"
 import {

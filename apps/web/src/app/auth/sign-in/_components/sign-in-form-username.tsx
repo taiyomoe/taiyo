@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { authClient } from "@taiyomoe/auth/client"
-import { useTranslations } from "next-intl"
 import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { pick } from "radash"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"

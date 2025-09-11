@@ -1,5 +1,5 @@
-import { getRequestConfig } from "next-intl/server"
 import { cookies, headers } from "next/headers"
+import { getRequestConfig } from "next-intl/server"
 import { siteConfig } from "~/site-config"
 import { parseLocale } from "~/utils/parse-locale"
 

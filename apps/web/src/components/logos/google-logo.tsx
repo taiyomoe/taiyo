@@ -1,7 +1,7 @@
 "use client"
 
 import type { SVGProps } from "react"
-import { type VariantProps, tv } from "tailwind-variants"
+import { tv, type VariantProps } from "tailwind-variants"
 
 const googleLogo = tv({
   base: "[&_path]:transition",

@@ -1,10 +1,10 @@
 "use client"
 
 import {
-  type Transition,
-  type Variants,
   motion,
+  type Transition,
   useAnimation,
+  type Variants,
 } from "motion/react"
 import { type HTMLAttributes, type RefObject, useEffect } from "react"
 import { useHover } from "usehooks-ts"

@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 import { LinkIcon } from "lucide-react"
-import { useTranslations } from "next-intl"
 import Link from "next/link"
+import { useTranslations } from "next-intl"
 import { DiscordLogo } from "~/components/logos/discord-logo"
 import { XLogo } from "~/components/logos/x-logo"
 import { HoverCardContent } from "~/components/ui/hover-card"

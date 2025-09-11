@@ -11,7 +11,7 @@ import { env } from "~/env"
 import type { ProviderProps } from "~/utils/types"
 import { createQueryClient } from "./query-client"
 
-let clientQueryClientSingleton: QueryClient | undefined = undefined
+let clientQueryClientSingleton: QueryClient | undefined
 
 const getBaseUrl = () => {
   if (typeof window !== "undefined") return window.location.origin

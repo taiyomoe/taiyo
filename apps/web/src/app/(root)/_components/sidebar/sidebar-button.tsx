@@ -2,9 +2,9 @@
 
 import { motion } from "motion/react"
 import { usePathname } from "next/navigation"
-import { type ComponentType, type RefObject, useRef } from "react"
+import { type ComponentType, type RefObject, useId, useRef } from "react"
 import { Link } from "react-aria-components"
-import { type VariantProps, tv } from "tailwind-variants"
+import { tv, type VariantProps } from "tailwind-variants"
 import { useHover } from "usehooks-ts"
 import type { AnimatedIconProps } from "~/components/icons/home-icon"
 
@@ -71,21 +71,23 @@ export const SidebarButton = ({ href, label, icon: Icon, color }: Props) => {
   const ref = useRef<HTMLAnchorElement>(null)
   const isHover = useHover(ref as RefObject<HTMLAnchorElement>)
   const slots = sidebarButton({ color, active: isActive })
+  const activeBubbleId = useId()
+  const hoverBubbleId = useId()
 
   return (
     <Link ref={ref} href={href} className={slots.base()} data-active={isActive}>
       {isActive && (
         <motion.span
-          id="bubble-active"
-          layoutId="bubble-active"
+          id={activeBubbleId}
+          layoutId={activeBubbleId}
           className={slots.activeBubble()}
           transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
         />
       )}
       {isHover && (
         <motion.span
-          id="bubble-hover"
-          layoutId="bubble-hover"
+          id={hoverBubbleId}
+          layoutId={hoverBubbleId}
           className={slots.hoverBubble()}
           transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
         />

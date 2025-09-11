@@ -1,5 +1,5 @@
 import { type AppRouter, appRouter, createTRPCContext } from "@taiyomoe/trpc"
-import { HydrationBoundary, dehydrate } from "@tanstack/react-query"
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query"
 import type { TRPCQueryOptions } from "@trpc/tanstack-react-query"
 import { createTRPCOptionsProxy } from "@trpc/tanstack-react-query"
 import { headers } from "next/headers"

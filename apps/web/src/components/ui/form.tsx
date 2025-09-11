@@ -3,9 +3,9 @@ import { type NestedKeyOf, useTranslations } from "next-intl"
 import {
   type ComponentPropsWithoutRef,
   type ComponentRef,
-  type HTMLAttributes,
   createContext,
   forwardRef,
+  type HTMLAttributes,
   useContext,
   useId,
 } from "react"

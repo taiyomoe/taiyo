@@ -1,6 +1,6 @@
 import { authClient } from "@taiyomoe/auth/client"
-import { useTranslations } from "next-intl"
 import Link from "next/link"
+import { useTranslations } from "next-intl"
 import { toast } from "sonner"
 import { IdCardIcon } from "~/components/icons/id-card-icon"
 import { SettingsIcon } from "~/components/icons/settings-icon"
