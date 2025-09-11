@@ -54,7 +54,7 @@ importers:
         specifier: workspace:^
         version: link:../../packages/s3
       bullmq:
-        specifier: ^5.56.8
+        specifier: ^5.58.5
         version: 5.58.5
       mangadex-full-api:
         specifier: ^6.0.0
@@ -465,7 +465,7 @@ importers:
         specifier: workspace:^
         version: link:../types
       bullmq:
-        specifier: ^5.56.8
+        specifier: ^5.58.5
         version: 5.58.5
       zod:
         specifier: ^3.25.76
