@@ -1,7 +1,18 @@
+import { ContentRatingSchema } from "@taiyomoe/schemas/db"
+import { z } from "zod"
 import { publicProcedure } from "../trpc"
 
-export const getLatestReleasesHandler = publicProcedure.query(
-  async ({ ctx }) => {
+export const getLatestReleasesHandler = publicProcedure
+  .input(
+    z.object({
+      contentRating: ContentRatingSchema.array().default([
+        "NORMAL",
+        "SUGGESTIVE",
+        "NSFL",
+      ]),
+    }),
+  )
+  .query(async ({ ctx, input }) => {
     const result = await ctx.db.chapter.findMany({
       select: {
         id: true,
@@ -50,12 +61,14 @@ export const getLatestReleasesHandler = publicProcedure.query(
       where: {
         flag: "OK",
         deletedAt: null,
-        media: { deletedAt: null },
+        media: {
+          contentRating: { in: input.contentRating },
+          deletedAt: null,
+        },
       },
       take: 24,
       orderBy: { createdAt: "desc" },
     })
 
     return result
-  },
-)
+  })

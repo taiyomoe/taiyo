@@ -9,6 +9,7 @@ import { cn } from "~/utils/cn"
 import { getSession } from "~/utils/get-session"
 import type { LayoutProps } from "~/utils/types"
 import "./globals.css"
+import { getSettings } from "~/utils/get-settings"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -16,6 +17,7 @@ export default async function Layout({ children }: LayoutProps) {
   const locale = await getLocale()
   const messages = await getMessages()
   const session = await getSession()
+  const settings = await getSettings()
 
   return (
     <html lang={locale} suppressHydrationWarning>
@@ -27,7 +29,7 @@ export default async function Layout({ children }: LayoutProps) {
       >
         <ThemeProvider attribute="class">
           <NextIntlClientProvider messages={messages}>
-            <AuthStoreProvider value={session}>
+            <AuthStoreProvider session={session} settings={settings}>
               <NuqsAdapter>
                 <Providers>{children}</Providers>
               </NuqsAdapter>

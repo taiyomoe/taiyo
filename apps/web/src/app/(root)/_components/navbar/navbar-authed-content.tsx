@@ -14,7 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown"
 import { useAuth } from "~/stores/auth.store"
-import { SidebarDropdownCommonContent } from "../sidebar/sidebar-dropdown-common-content"
+import { NavbarCommonContent } from "./navbar-common-content"
 
 export const NavbarAuthedContent = () => {
   const t = useTranslations("global")
@@ -40,7 +40,7 @@ export const NavbarAuthedContent = () => {
           />
         </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="min-w-48" align="end">
+      <DropdownMenuContent className="min-w-56" align="end">
         <DropdownMenuItem animatedIcon={IdCardIcon} asChild>
           <Link href="/profile">{t("myProfile")}</Link>
         </DropdownMenuItem>
@@ -48,7 +48,7 @@ export const NavbarAuthedContent = () => {
           <Link href="/settings">{t("settings")}</Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <SidebarDropdownCommonContent />
+        <NavbarCommonContent />
         <DropdownMenuSeparator />
         <DropdownMenuItem
           animatedIcon={SignOutIcon}

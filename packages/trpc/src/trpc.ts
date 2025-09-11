@@ -131,4 +131,6 @@ export const publicProcedure = t.procedure.use(timingMiddleware)
  * @see https://trpc.io/docs/procedures
  */
 export const authMiddleware = withAuth(t)
-export const protectedProcedure = t.procedure.use(timingMiddleware)
+export const protectedProcedure = t.procedure
+  .use(timingMiddleware)
+  .use(authMiddleware)

@@ -13,4 +13,10 @@ export const siteConfig = {
       maxAge: 60 * 60 * 24 * 7,
     },
   },
+  settings: {
+    cookie: {
+      name: "Settings",
+      maxAge: 60 * 60 * 24 * 7,
+    },
+  },
 } as const

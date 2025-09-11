@@ -9,7 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown"
-import { SidebarDropdownCommonContent } from "../sidebar/sidebar-dropdown-common-content"
+import { NavbarCommonContent } from "./navbar-common-content"
 
 export const NavbarUnauthedContent = () => {
   const t = useTranslations()
@@ -30,8 +30,8 @@ export const NavbarUnauthedContent = () => {
           />
         </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="min-w-48" align="end">
-        <SidebarDropdownCommonContent />
+      <DropdownMenuContent className="min-w-56" align="end">
+        <NavbarCommonContent />
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           <Link

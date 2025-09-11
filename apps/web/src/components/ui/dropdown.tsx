@@ -148,30 +148,30 @@ export const DropdownMenuItem = ({
 }
 DropdownMenuItem.displayName = DropdownMenuPrimitive.Item.displayName
 
-// export const DropdownMenuCheckboxItem = ({
-//   className,
-//   children,
-//   checked,
-//   ...props
-// }: ComponentProps<typeof DropdownMenuPrimitive.CheckboxItem>) => (
-//   <DropdownMenuPrimitive.CheckboxItem
-//     className={cn(
-//       "relative flex select-none items-center rounded-sm py-1.5 pr-8 pl-2 text-sm outline-none transition-colors focus:cursor-pointer focus:bg-subtle focus:text-primary data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
-//       className,
-//     )}
-//     checked={checked}
-//     {...props}
-//   >
-//     {children}
-//     <span className="absolute right-2 flex h-3.5 w-3.5 items-center justify-center">
-//       <DropdownMenuPrimitive.ItemIndicator>
-//         <CheckIcon className="h-4 w-4" />
-//       </DropdownMenuPrimitive.ItemIndicator>
-//     </span>
-//   </DropdownMenuPrimitive.CheckboxItem>
-// )
-// DropdownMenuCheckboxItem.displayName =
-//   DropdownMenuPrimitive.CheckboxItem.displayName
+export const DropdownMenuCheckboxItem = ({
+  className,
+  children,
+  checked,
+  ...props
+}: ComponentProps<typeof DropdownMenuPrimitive.CheckboxItem>) => (
+  <DropdownMenuPrimitive.CheckboxItem
+    className={cn(
+      "relative flex select-none items-center rounded-sm py-1.5 pr-8 pl-2 text-sm outline-none transition-colors focus:cursor-pointer focus:bg-subtle focus:text-primary data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+      className,
+    )}
+    checked={checked}
+    {...props}
+  >
+    {children}
+    <span className="absolute right-2 flex h-3.5 w-3.5 items-center justify-center">
+      <DropdownMenuPrimitive.ItemIndicator>
+        <CheckIcon className="h-4 w-4" />
+      </DropdownMenuPrimitive.ItemIndicator>
+    </span>
+  </DropdownMenuPrimitive.CheckboxItem>
+)
+DropdownMenuCheckboxItem.displayName =
+  DropdownMenuPrimitive.CheckboxItem.displayName
 
 export const DropdownMenuRadioItem = ({
   className,
