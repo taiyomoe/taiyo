@@ -151,7 +151,7 @@ importers:
         specifier: ^2.1.1
         version: 2.1.1
       country-flag-icons:
-        specifier: ^1.5.19
+        specifier: ^1.5.20
         version: 1.5.20
       embla-carousel-autoplay:
         specifier: ^8.6.0
