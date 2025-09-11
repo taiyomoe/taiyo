@@ -16,12 +16,12 @@
   "dependencies": {
     "@react-email/components": "^0.3.2",
     "@t3-oss/env-core": "^0.13.8",
-    "react": "^19.1.0",
+    "react": "^19.1.1",
     "resend": "^4.7.0",
     "zod": "^3.25.76"
   },
   "devDependencies": {
     "@taiyomoe/tsconfig": "workspace:^",
-    "react-email": "^4.2.4"
+    "react-email": "^4.2.11"
   }
 }

@@ -76,7 +76,7 @@ importers:
   apps/web:
     dependencies:
       '@hookform/resolvers':
-        specifier: ^5.2.0
+        specifier: ^5.2.1
         version: 5.2.1(react-hook-form@7.62.0(react@19.1.1))
       '@marsidev/react-turnstile':
         specifier: ^1.1.0
@@ -160,13 +160,13 @@ importers:
         specifier: ^8.6.0
         version: 8.6.0(react@19.1.1)
       lucide-react:
-        specifier: ^0.526.0
-        version: 0.526.0(react@19.1.1)
+        specifier: ^0.544.0
+        version: 0.544.0(react@19.1.1)
       luxon:
         specifier: ^3.7.2
         version: 3.7.2
       motion:
-        specifier: ^12.16.0
+        specifier: ^12.23.12
         version: 12.23.12(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       next:
         specifier: ^15.5.3
@@ -190,7 +190,7 @@ importers:
         specifier: ^12.1.1
         version: 12.1.1
       react:
-        specifier: ^19.1.0
+        specifier: ^19.1.1
         version: 19.1.1
       react-aria:
         specifier: ^3.42.0
@@ -199,7 +199,7 @@ importers:
         specifier: ^1.11.0
         version: 1.12.1(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       react-dom:
-        specifier: ^19.1.0
+        specifier: ^19.1.1
         version: 19.1.1(react@19.1.1)
       react-hook-form:
         specifier: ^7.61.1
@@ -214,7 +214,7 @@ importers:
         specifier: ^3.3.1
         version: 3.3.1
       tailwind-variants:
-        specifier: ^2.0.0
+        specifier: ^2.1.0
         version: 2.1.0(tailwind-merge@3.3.1)(tailwindcss@4.1.13)
       tailwindcss:
         specifier: ^4.1.11
@@ -248,10 +248,10 @@ importers:
         specifier: ^1.2.2
         version: 1.2.2
       '@types/react':
-        specifier: ^19.1.8
+        specifier: ^19.1.12
         version: 19.1.12
       '@types/react-dom':
-        specifier: ^19.1.6
+        specifier: ^19.1.9
         version: 19.1.9(@types/react@19.1.12)
       embla-carousel:
         specifier: ^8.6.0
@@ -383,7 +383,7 @@ importers:
         specifier: ^0.13.8
         version: 0.13.8(typescript@5.9.2)(zod@3.25.76)
       react:
-        specifier: ^19.1.0
+        specifier: ^19.1.1
         version: 19.1.1
       resend:
         specifier: ^4.7.0
@@ -396,7 +396,7 @@ importers:
         specifier: workspace:^
         version: link:../../tooling/typescript
       react-email:
-        specifier: ^4.2.4
+        specifier: ^4.2.11
         version: 4.2.11
 
   packages/global-types:
@@ -478,7 +478,7 @@ importers:
   packages/s3:
     dependencies:
       '@aws-sdk/client-s3':
-        specifier: ^3.850.0
+        specifier: ^3.886.0
         version: 3.886.0
       '@t3-oss/env-core':
         specifier: ^0.13.8
@@ -3690,8 +3690,8 @@ packages:
     resolution: {integrity: sha512-r8LA6i4LP4EeWOhqBaZZjDWwehd1xUJPCJd9Sv300H0ZmcUER4+JPh7bqqZeqs1o5pgtgvXm+d9UGrB5zZGDiQ==}
     engines: {node: 20 || >=22}
 
-  lucide-react@0.526.0:
-    resolution: {integrity: sha512-uGWG/2RKuDLeQHCodn5cmJ9Zij80EstOdcBP+j//B2sr78w7woiEL4aMu6CRlRkyOyJ8sZry8QLhQTmZjynLdA==}
+  lucide-react@0.544.0:
+    resolution: {integrity: sha512-t5tS44bqd825zAW45UQxpG2CvcC4urOwn2TrwSH8u+MjeE+1NnWl6QqeQ/6NdjMqdOygyiT9p3Ev0p1NJykxjw==}
     peerDependencies:
       react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
@@ -8337,7 +8337,7 @@ snapshots:
 
   lru-cache@11.2.1: {}
 
-  lucide-react@0.526.0(react@19.1.1):
+  lucide-react@0.544.0(react@19.1.1):
     dependencies:
       react: 19.1.1
 
