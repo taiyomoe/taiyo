@@ -193,10 +193,10 @@ importers:
         specifier: ^19.1.1
         version: 19.1.1
       react-aria:
-        specifier: ^3.42.0
+        specifier: ^3.43.1
         version: 3.43.1(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       react-aria-components:
-        specifier: ^1.11.0
+        specifier: ^1.12.1
         version: 1.12.1(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       react-dom:
         specifier: ^19.1.1
@@ -220,7 +220,7 @@ importers:
         specifier: ^4.1.13
         version: 4.1.13
       tailwindcss-react-aria-components:
-        specifier: ^2.0.0
+        specifier: ^2.0.1
         version: 2.0.1(tailwindcss@4.1.13)
       tw-animate-css:
         specifier: ^1.3.8
