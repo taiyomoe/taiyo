@@ -343,7 +343,7 @@ importers:
         specifier: workspace:^
         version: link:../utils
       prisma-json-types-generator:
-        specifier: ^3.5.1
+        specifier: ^3.6.0
         version: 3.6.0(@prisma/client@6.16.0(prisma@6.16.0(typescript@5.9.2))(typescript@5.9.2))(prisma@6.16.0(typescript@5.9.2))(typescript@5.9.2)
       prisma-zod-generator:
         specifier: ^1.19.0
@@ -8828,7 +8828,7 @@ snapshots:
   prisma-json-types-generator@3.6.0(@prisma/client@6.16.0(prisma@6.16.0(typescript@5.9.2))(typescript@5.9.2))(prisma@6.16.0(typescript@5.9.2))(typescript@5.9.2):
     dependencies:
       '@prisma/client': 6.16.0(prisma@6.16.0(typescript@5.9.2))(typescript@5.9.2)
-      '@prisma/generator-helper': 6.16.0
+      '@prisma/generator-helper': 6.16.1
       prisma: 6.16.0(typescript@5.9.2)
       semver: 7.7.2
       tslib: 2.8.1
