@@ -4,7 +4,6 @@
   "ignoreDependencies": [
     "@taiyomoe/types",
     "@types/global-types",
-    "postcss",
     "accept-language-parser",
     "@types/accept-language-parser",
     "tailwindcss-react-aria-components",

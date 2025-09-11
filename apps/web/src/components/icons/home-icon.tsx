@@ -18,7 +18,7 @@ export type AnimatedIconProps = HTMLAttributes<HTMLDivElement> & {
 const defaultTransition: Transition = {
   duration: 0.6,
   opacity: { duration: 0.2 },
-  colors: { duration: 0.15 },
+  color: { duration: 0.15 },
 }
 
 const pathVariants: Variants = {
