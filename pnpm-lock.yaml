@@ -106,7 +106,7 @@ importers:
         specifier: ^0.13.8
         version: 0.13.8(typescript@5.9.2)(zod@4.1.7)
       '@tailwindcss/postcss':
-        specifier: ^4.1.11
+        specifier: ^4.1.13
         version: 4.1.13
       '@taiyomoe/auth':
         specifier: workspace:^
@@ -217,7 +217,7 @@ importers:
         specifier: ^2.1.0
         version: 2.1.0(tailwind-merge@3.3.1)(tailwindcss@4.1.13)
       tailwindcss:
-        specifier: ^4.1.11
+        specifier: ^4.1.13
         version: 4.1.13
       tailwindcss-react-aria-components:
         specifier: ^2.0.0
@@ -584,7 +584,7 @@ importers:
   tooling/tailwind:
     dependencies:
       tailwindcss:
-        specifier: ^4.1.11
+        specifier: ^4.1.13
         version: 4.1.13
     devDependencies:
       '@taiyomoe/tsconfig':
