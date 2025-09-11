@@ -10,21 +10,21 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@prisma/client": "^6.6.0",
-    "@t3-oss/env-core": "^0.12.0",
+    "@prisma/client": "^6.12.0",
+    "@t3-oss/env-core": "^0.13.8",
     "@taiyomoe/cache": "workspace:^",
     "@taiyomoe/config": "workspace:^",
     "@taiyomoe/db": "workspace:^",
     "@taiyomoe/meilisearch": "workspace:^",
     "@taiyomoe/messaging": "workspace:^",
     "@taiyomoe/s3": "workspace:^",
-    "bullmq": "^5.48.0",
+    "bullmq": "^5.56.8",
     "mangadex-full-api": "^6.0.0",
-    "radash": "^12.1.0"
+    "radash": "^12.1.1"
   },
   "devDependencies": {
     "@taiyomoe/tsconfig": "workspace:^",
     "@taiyomoe/types": "workspace:^",
-    "tsx": "^4.19.3"
+    "tsx": "^4.20.3"
   }
 }
