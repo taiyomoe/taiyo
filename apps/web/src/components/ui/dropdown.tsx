@@ -3,7 +3,7 @@
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu"
 import { CheckIcon, ChevronRightIcon } from "lucide-react"
 import React, { type ComponentProps, type ComponentType, useRef } from "react"
-import { type VariantProps, tv } from "tailwind-variants"
+import { tv, type VariantProps } from "tailwind-variants"
 import type { AnimatedIconProps } from "~/components/icons/home-icon"
 import { cn } from "~/utils/cn"
 

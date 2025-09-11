@@ -1,6 +1,5 @@
 import { db } from "@taiyomoe/db"
-import { meilisearchClient } from "@taiyomoe/meilisearch"
-import { getGroupIndexItem } from "@taiyomoe/meilisearch"
+import { getGroupIndexItem, meilisearchClient } from "@taiyomoe/meilisearch"
 import { Group } from "mangadex-full-api"
 import { parallel } from "radash"
 

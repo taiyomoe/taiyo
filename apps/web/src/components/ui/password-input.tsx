@@ -26,12 +26,13 @@ export const PasswordInput = ({ className, ...props }: Props) => {
         autoComplete="new-password"
         {...props}
       />
-      <div
+      <button
+        type="button"
         onClick={() => setShow(!show)}
         className="h-9 rounded-r border bg-default p-2 transition hover:cursor-pointer hover:bg-muted group-hover:border-emphasis"
       >
         <Icon className="size-5 text-muted" />
-      </div>
+      </button>
     </div>
   )
 }

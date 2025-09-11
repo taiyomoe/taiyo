@@ -1,7 +1,7 @@
 "use client"
 import NextImage, { type ImageProps as NextImageProps } from "next/image"
 import { useState } from "react"
-import { type VariantProps, tv } from "tailwind-variants"
+import { tv, type VariantProps } from "tailwind-variants"
 import { Skeleton } from "~/components/ui/skeleton"
 import { cn } from "~/utils/cn"
 

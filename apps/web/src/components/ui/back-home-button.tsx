@@ -1,8 +1,8 @@
 "use client"
 
 import { ArrowLeftIcon } from "lucide-react"
-import { useTranslations } from "next-intl"
 import Link, { type LinkProps } from "next/link"
+import { useTranslations } from "next-intl"
 import { buttonVariants } from "~/components/ui/button"
 import { cn } from "~/utils/cn"
 

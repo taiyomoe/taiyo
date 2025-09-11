@@ -1,8 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
-  "organizeImports": {
-    "enabled": true
-  },
+  "$schema": "https://biomejs.dev/schemas/2.2.4/schema.json",
   "formatter": {
     "enabled": true,
     "formatWithErrors": true,
@@ -12,35 +9,24 @@
     "enabled": true,
     "rules": {
       "recommended": true,
-      "style": {
-        "noNonNullAssertion": "off",
-        "useNodejsImportProtocol": "off",
-        "useEnumInitializers": "off"
-      },
-      "a11y": {
-        "useKeyWithClickEvents": "off"
-      },
-      "correctness": {
-        "noUnusedImports": "error",
-        "noUnusedVariables": "error"
+      "style": { "noNonNullAssertion": "off" },
+      "suspicious": {
+        "noArrayIndexKey": "off",
+        "noDocumentCookie": "off"
       },
       "nursery": {
         "useSortedClasses": {
           "level": "warn",
-          "options": {
-            "functions": ["cn", "tv"]
-          }
+          "options": { "functions": ["cn", "tv"] }
         }
-      },
-      "suspicious": {
-        "noArrayIndexKey": "off"
       }
     }
   },
+  "assist": {
+    "actions": { "source": { "organizeImports": "on" } }
+  },
   "javascript": {
-    "formatter": {
-      "semicolons": "asNeeded"
-    }
+    "formatter": { "semicolons": "asNeeded" }
   },
   "vcs": {
     "enabled": true,
@@ -48,9 +34,10 @@
     "useIgnoreFile": true
   },
   "files": {
-    "ignore": [
-      "./packages/schemas/src/prisma/index.ts",
-      "./apps/web/src/app/globals.css"
+    "includes": [
+      "**",
+      "!packages/schemas/src/prisma/index.ts",
+      "!apps/web/src/app/globals.css"
     ]
   }
 }

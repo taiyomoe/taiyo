@@ -1,7 +1,7 @@
+import { Inter } from "next/font/google"
 import { NextIntlClientProvider } from "next-intl"
 import { getLocale, getMessages } from "next-intl/server"
 import { ThemeProvider } from "next-themes"
-import { Inter } from "next/font/google"
 import { NuqsAdapter } from "nuqs/adapters/next/app"
 import { Providers } from "~/app/_components/providers"
 import { AuthStoreProvider } from "~/stores/auth.store"

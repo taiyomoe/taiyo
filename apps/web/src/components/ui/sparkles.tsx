@@ -1,7 +1,7 @@
 "use client"
 import Particles, {
-  initParticlesEngine,
   type IParticlesProps,
+  initParticlesEngine,
 } from "@tsparticles/react"
 import { loadSlim } from "@tsparticles/slim"
 import { useEffect, useId, useState } from "react"

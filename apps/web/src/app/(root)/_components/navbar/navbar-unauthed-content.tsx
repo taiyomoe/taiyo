@@ -1,7 +1,7 @@
 import { DropdownMenuItem } from "@radix-ui/react-dropdown-menu"
 import { ArrowRightIcon } from "lucide-react"
-import { useTranslations } from "next-intl"
 import Link from "next/link"
+import { useTranslations } from "next-intl"
 import { Avatar } from "~/components/ui/avatar"
 import {
   DropdownMenu,

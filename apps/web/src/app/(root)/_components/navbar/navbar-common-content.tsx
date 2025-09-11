@@ -11,13 +11,11 @@ import { SunIcon } from "~/components/icons/sun-icon"
 import { SunMoonIcon } from "~/components/icons/sun-moon-icon"
 import {
   DropdownMenuCheckboxItem,
-  DropdownMenuSubContent,
-} from "~/components/ui/dropdown"
-import {
   DropdownMenuPortal,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuSub,
+  DropdownMenuSubContent,
   DropdownMenuSubTrigger,
 } from "~/components/ui/dropdown"
 import { siteConfig } from "~/site-config"

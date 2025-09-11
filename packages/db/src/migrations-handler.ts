@@ -1,8 +1,8 @@
-import { createHash, randomUUID } from "crypto"
-import { dirname, join } from "path"
-import { fileURLToPath } from "url"
+import { createHash, randomUUID } from "node:crypto"
+import { readdir, readFile } from "node:fs/promises"
+import { dirname, join } from "node:path"
+import { fileURLToPath } from "node:url"
 import { PrismaClient } from "@prisma/client"
-import { readFile, readdir } from "fs/promises"
 
 const MIGRATIONS_RELATIVE_PATH = "./prisma/migrations"
 

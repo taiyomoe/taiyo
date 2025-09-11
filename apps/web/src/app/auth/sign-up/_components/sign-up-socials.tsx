@@ -1,5 +1,5 @@
-import { useTranslations } from "next-intl"
 import Link from "next/link"
+import { useTranslations } from "next-intl"
 import { AuthDiscordButton } from "~/app/auth/_components/auth-discord-button"
 import { AuthGoogleButton } from "~/app/auth/_components/auth-google-button"
 import { Button } from "~/components/ui/button"

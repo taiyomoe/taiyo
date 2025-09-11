@@ -1,8 +1,8 @@
 import type { Languages } from "@prisma/client"
 import {
   BR,
-  FR,
   type Props as FlagProps,
+  FR,
   US,
 } from "country-flag-icons/react/3x2"
 

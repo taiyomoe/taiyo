@@ -1,4 +1,4 @@
-import { SignUpEmail, resend } from "@taiyomoe/email"
+import { resend, SignUpEmail } from "@taiyomoe/email"
 import type { User } from "better-auth"
 
 export const sendVerificationEmail = async (data: {

@@ -3,7 +3,7 @@ import type { z } from "zod"
 import { Input } from "~/components/ui/input"
 import { cn } from "~/utils/cn"
 
-type Props = Omit<HTMLAttributes<HTMLDivElement>, "onChange"> & {
+type Props = Omit<HTMLAttributes<HTMLButtonElement>, "onChange"> & {
   inputClassName?: string
   validation: z.ZodSchema
   onChange: (value: string) => void
@@ -66,7 +66,8 @@ export const EditText = ({
   }
 
   return (
-    <div
+    <button
+      type="button"
       className={cn(
         "hover:cursor-pointer [&_svg]:text-subtle hover:[&_svg]:text-default",
         className,

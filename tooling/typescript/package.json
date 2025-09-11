@@ -4,5 +4,7 @@
   "private": true,
   "type": "module",
   "license": "MIT",
-  "files": ["base.json"]
+  "files": [
+    "base.json"
+  ]
 }
