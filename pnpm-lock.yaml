@@ -214,8 +214,8 @@ importers:
         specifier: ^3.3.1
         version: 3.3.1
       tailwind-variants:
-        specifier: ^2.1.0
-        version: 2.1.0(tailwind-merge@3.3.1)(tailwindcss@4.1.13)
+        specifier: ^3.1.1
+        version: 3.1.1(tailwind-merge@3.3.1)(tailwindcss@4.1.13)
       tailwindcss:
         specifier: ^4.1.13
         version: 4.1.13
@@ -344,7 +344,7 @@ importers:
         version: link:../utils
       prisma-json-types-generator:
         specifier: ^3.6.0
-        version: 3.6.0(@prisma/client@6.16.0(prisma@6.16.0(typescript@5.9.2))(typescript@5.9.2))(prisma@6.16.0(typescript@5.9.2))(typescript@5.9.2)
+        version: 3.6.0(@prisma/client@6.16.1(prisma@6.16.1(typescript@5.9.2))(typescript@5.9.2))(prisma@6.16.1(typescript@5.9.2))(typescript@5.9.2)
       prisma-zod-generator:
         specifier: ^1.19.0
         version: 1.19.0(prisma@6.16.1(typescript@5.9.2))(typescript@5.9.2)(zod@4.1.7)
@@ -1473,14 +1473,8 @@ packages:
   '@prisma/config@6.16.1':
     resolution: {integrity: sha512-sz3uxRPNL62QrJ0EYiujCFkIGZ3hg+9hgC1Ae1HjoYuj0BxCqHua4JNijYvYCrh9LlofZDZcRBX3tHBfLvAngA==}
 
-  '@prisma/debug@6.16.0':
-    resolution: {integrity: sha512-bxzro5vbVqAPkWyDs2A6GpQtRZunD8tyrLmSAchx9u0b+gWCDY6eV+oh5A0YtYT9245dIxQBswckayHuJG4u3w==}
-
   '@prisma/debug@6.16.1':
     resolution: {integrity: sha512-RWv/VisW5vJE4cDRTuAHeVedtGoItXTnhuLHsSlJ9202QKz60uiXWywBlVcqXVq8bFeIZoCoWH+R1duZJPwqLw==}
-
-  '@prisma/dmmf@6.16.0':
-    resolution: {integrity: sha512-bOSbPchrXJ6GVs572PIu8EB2hEpDhdUJ1VhiYwQ6PtDIKkm6rxNFtNuyyGVK5EpcZMsE5jAmTewSxJCL/9MDvg==}
 
   '@prisma/dmmf@6.16.1':
     resolution: {integrity: sha512-SpsNh7DGpmwRM0bqrs63yitkoqmbBicvrKZGzNr2e3b8xiVZhCg/rEnjCgCVvIDII327d/lpoKmrx0N9/SIngQ==}
@@ -1497,14 +1491,8 @@ packages:
   '@prisma/fetch-engine@6.16.1':
     resolution: {integrity: sha512-fl/PKQ8da5YTayw86WD3O9OmKJEM43gD3vANy2hS5S1CnfW2oPXk+Q03+gUWqcKK306QqhjjIHRFuTZ31WaosQ==}
 
-  '@prisma/generator-helper@6.16.0':
-    resolution: {integrity: sha512-LX4w/Py2KKyAL8Fe79XqpYrer381kSCs1r4N8Ok5oS5PARIJaIf+GUf8q3zB+7Nx3xpW6kmxhN+dP7K/RHhy7w==}
-
   '@prisma/generator-helper@6.16.1':
     resolution: {integrity: sha512-IaYP0SVAVCYiUUEsy3WdB7FVAJqPLrbgFfQVKrUgeeQZpp3obCBCHBaE80h4IPoSlohZ8oqFdOrxeC5FK/XEbQ==}
-
-  '@prisma/generator@6.16.0':
-    resolution: {integrity: sha512-YVug5FFhn+jGtSBnJ7CkTFi0K3my2XuD8oiBFjxd1u4BEd/ut5w1yeRKSNyxN+yIkN5fRR9GZyJA1yRXBF3tZw==}
 
   '@prisma/generator@6.16.1':
     resolution: {integrity: sha512-vyxuB1H1uyarkqhQsQm+zj2J5cV2wssLtvzRz92mYrJZRNiSRwjFbVntlXyZzxOui+/cXjmbVaaYoWe7ILucWw==}
@@ -4355,8 +4343,8 @@ packages:
     peerDependencies:
       tailwindcss: 4.x
 
-  tailwind-variants@2.1.0:
-    resolution: {integrity: sha512-82m0eRex0z6A3GpvfoTCpHr+wWJmbecfVZfP3mqLoDxeya5tN4mYJQZwa5Aw1hRZTedwpu1D2JizYenoEdyD8w==}
+  tailwind-variants@3.1.1:
+    resolution: {integrity: sha512-ftLXe3krnqkMHsuBTEmaVUXYovXtPyTK7ckEfDRXS8PBZx0bAUas+A0jYxuKA5b8qg++wvQ3d2MQ7l/xeZxbZQ==}
     engines: {node: '>=16.x', pnpm: '>=7.x'}
     peerDependencies:
       tailwind-merge: '>=3.0.0'
@@ -5615,11 +5603,7 @@ snapshots:
     transitivePeerDependencies:
       - magicast
 
-  '@prisma/debug@6.16.0': {}
-
   '@prisma/debug@6.16.1': {}
-
-  '@prisma/dmmf@6.16.0': {}
 
   '@prisma/dmmf@6.16.1': {}
 
@@ -5642,19 +5626,11 @@ snapshots:
       '@prisma/engines-version': 6.16.0-7.1c57fdcd7e44b29b9313256c76699e91c3ac3c43
       '@prisma/get-platform': 6.16.1
 
-  '@prisma/generator-helper@6.16.0':
-    dependencies:
-      '@prisma/debug': 6.16.0
-      '@prisma/dmmf': 6.16.0
-      '@prisma/generator': 6.16.0
-
   '@prisma/generator-helper@6.16.1':
     dependencies:
       '@prisma/debug': 6.16.1
       '@prisma/dmmf': 6.16.1
       '@prisma/generator': 6.16.1
-
-  '@prisma/generator@6.16.0': {}
 
   '@prisma/generator@6.16.1': {}
 
@@ -8789,9 +8765,9 @@ snapshots:
 
   prisma-json-types-generator@3.6.0(@prisma/client@6.16.1(prisma@6.16.1(typescript@5.9.2))(typescript@5.9.2))(prisma@6.16.1(typescript@5.9.2))(typescript@5.9.2):
     dependencies:
-      '@prisma/client': 6.16.0(prisma@6.16.0(typescript@5.9.2))(typescript@5.9.2)
+      '@prisma/client': 6.16.1(prisma@6.16.1(typescript@5.9.2))(typescript@5.9.2)
       '@prisma/generator-helper': 6.16.1
-      prisma: 6.16.0(typescript@5.9.2)
+      prisma: 6.16.1(typescript@5.9.2)
       semver: 7.7.2
       tslib: 2.8.1
       typescript: 5.9.2
@@ -8799,7 +8775,7 @@ snapshots:
   prisma-zod-generator@1.19.0(prisma@6.16.1(typescript@5.9.2))(typescript@5.9.2)(zod@4.1.7):
     dependencies:
       '@prisma/client': 6.16.1(prisma@6.16.1(typescript@5.9.2))(typescript@5.9.2)
-      '@prisma/generator-helper': 6.16.0
+      '@prisma/generator-helper': 6.16.1
       '@prisma/internals': 6.16.1(typescript@5.9.2)
       ajv: 8.17.1
       ajv-formats: 3.0.1(ajv@8.17.1)
@@ -9203,7 +9179,7 @@ snapshots:
     transitivePeerDependencies:
       - react
 
-  tailwind-variants@2.1.0(tailwind-merge@3.3.1)(tailwindcss@4.1.13):
+  tailwind-variants@3.1.1(tailwind-merge@3.3.1)(tailwindcss@4.1.13):
     dependencies:
       tailwindcss: 4.1.13
     optionalDependencies:
