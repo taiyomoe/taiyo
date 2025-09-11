@@ -1,0 +1,15 @@
+{
+  "mode": "minimal",
+  "useMultipleFiles": false,
+  "singleFileName": "index.ts",
+  "pureModels": true,
+  "variants": {
+    "pure": { "enabled": false },
+    "input": { "enabled": false },
+    "result": { "enabled": false }
+  },
+  "emit": {
+    "crud": false,
+    "objects": false
+  }
+}

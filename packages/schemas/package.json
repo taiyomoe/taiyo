@@ -14,10 +14,9 @@
   },
   "dependencies": {
     "@taiyomoe/config": "workspace:^",
-    "zod": "^3.25.76"
+    "zod": "^4.1.7"
   },
   "devDependencies": {
-    "@prisma/client": "^6.12.0",
     "@taiyomoe/tsconfig": "workspace:^"
   }
 }
