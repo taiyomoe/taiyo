@@ -5,12 +5,18 @@ import Autoplay from "embla-carousel-autoplay"
 import useEmblaCarousel from "embla-carousel-react"
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react"
 import { Button } from "react-aria-components"
+import { useSettings } from "~/stores/auth.store"
 import { useTRPC } from "~/utils/trpc/react"
 import { FeaturedMediasCard } from "./featured-medias-card"
 
 export const FeaturedMediasCarousel = () => {
+  const settings = useSettings()
   const trpc = useTRPC()
-  const { data } = useSuspenseQuery(trpc.medias.getFeatured.queryOptions())
+  const { data } = useSuspenseQuery(
+    trpc.medias.getFeatured.queryOptions({
+      contentRating: settings.contentRating,
+    }),
+  )
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [
     Autoplay({ delay: 10000 }),
   ])

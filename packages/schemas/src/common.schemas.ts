@@ -1,5 +1,6 @@
 import { config } from "@taiyomoe/config"
 import { z } from "zod"
+import { ContentRatingSchema } from "./prisma"
 
 export const chapterNumberSchema = z.coerce.number().min(0)
 export const chapterVolumeSchema = z.coerce.number().min(0).nullish()
@@ -23,3 +24,11 @@ export const perPageSchema = z.coerce
   .number()
   .refine((v) => config.pagination.perPageOptions.includes(v))
   .catch(config.pagination.defaultPerPage)
+
+export const optionsSchema = z.object({
+  contentRating: ContentRatingSchema.array().default([
+    "NORMAL",
+    "SUGGESTIVE",
+    "NSFL",
+  ]),
+})

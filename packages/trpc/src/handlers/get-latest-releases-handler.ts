@@ -1,17 +1,8 @@
-import { ContentRatingSchema } from "@taiyomoe/schemas/db"
-import { z } from "zod"
+import { optionsSchema } from "@taiyomoe/schemas"
 import { publicProcedure } from "../trpc"
 
 export const getLatestReleasesHandler = publicProcedure
-  .input(
-    z.object({
-      contentRating: ContentRatingSchema.array().default([
-        "NORMAL",
-        "SUGGESTIVE",
-        "NSFL",
-      ]),
-    }),
-  )
+  .input(optionsSchema)
   .query(async ({ ctx, input }) => {
     const result = await ctx.db.chapter.findMany({
       select: {

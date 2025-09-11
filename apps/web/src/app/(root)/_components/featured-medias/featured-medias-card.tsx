@@ -16,16 +16,21 @@ type Props = {
 export const FeaturedMediasCard = ({ media }: Props) => {
   const { getDisplayTitle } = useDynamicMedias()
   const t = useTranslations("global.genres")
+  const banner = media.banners.at(-1)
 
   return (
     <div key={media.id} className="relative flex-[0_0_100%]">
       <Link href={`/medias/${media.id}`}>
         <Image
-          src={getBannerUrl(media.id, media.banners.at(-1)!)}
+          src={
+            banner
+              ? getBannerUrl(media.id, banner)
+              : getCoverUrl(media.id, media.covers.at(-1)!)
+          }
           className="max-h-(--featured-media-card-height) min-h-(--featured-media-card-height) select-none object-cover"
           width={1200}
           height={440}
-          alt={`${getDisplayTitle(media.titles)}'s banner`}
+          alt={`${getDisplayTitle(media.titles)}'s ${banner ? "banner" : "cover"}`}
         />
       </Link>
       <div className="absolute top-0 h-full max-h-(--featured-media-card-height) w-full bg-[linear-gradient(to_bottom,hsla(var(--background),0.6),hsla(var(--background)))]" />

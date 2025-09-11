@@ -14,14 +14,13 @@ import { TrendingMediasCarousel } from "./_components/trending-medias/trending-m
 export default async function Page() {
   const t = await getTranslations("global")
   const settings = await getSettings()
+  const queryOptions = {
+    contentRating: settings.contentRating,
+  }
 
-  prefetch(trpc.medias.getFeatured.queryOptions())
-  prefetch(
-    trpc.chapters.getLatestReleases.queryOptions({
-      contentRating: settings.contentRating,
-    }),
-  )
-  prefetch(trpc.medias.getLatest.queryOptions())
+  prefetch(trpc.medias.getFeatured.queryOptions(queryOptions))
+  prefetch(trpc.chapters.getLatestReleases.queryOptions(queryOptions))
+  prefetch(trpc.medias.getLatest.queryOptions(queryOptions))
 
   return (
     <HydrateClient>

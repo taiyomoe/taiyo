@@ -5,12 +5,18 @@ import type { EmblaCarouselType } from "embla-carousel"
 import useEmblaCarousel from "embla-carousel-react"
 import { useCallback, useEffect, useState } from "react"
 import { Slider } from "~/components/ui/slider"
+import { useSettings } from "~/stores/auth.store"
 import { useTRPC } from "~/utils/trpc/react"
 import { LatestMediasCard } from "./latest-medias-card"
 
 export const LatestMediasCarousel = () => {
+  const settings = useSettings()
   const trpc = useTRPC()
-  const { data } = useSuspenseQuery(trpc.medias.getLatest.queryOptions())
+  const { data } = useSuspenseQuery(
+    trpc.medias.getLatest.queryOptions({
+      contentRating: settings.contentRating,
+    }),
+  )
   const [emblaRef, emblaApi] = useEmblaCarousel({ dragFree: true })
   const [scrollProgress, setScrollProgress] = useState(0)
 
