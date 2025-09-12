@@ -18,10 +18,6 @@
     "data-migration:add_normalized_email": "tsx ./src/prisma/migrations/20250312161343_add_normalized_email/data-migration.ts",
     "data-migration:add_usernames": "tsx ./src/prisma/migrations/20250312171952_add_usernames/data-migration.ts"
   },
-  "prisma": {
-    "schema": "./src/prisma/schema.prisma",
-    "seed": "cross-env PRISMA_SEED=1 tsx ./src/prisma/seed.ts"
-  },
   "dependencies": {
     "@faker-js/faker": "^10.0.0",
     "@prisma/client": "^6.16.1",
