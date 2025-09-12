@@ -10,53 +10,17 @@ export const TransactionIsolationLevelSchema = z.enum(['ReadUncommitted', 'ReadC
 
 export type TransactionIsolationLevel = z.infer<typeof TransactionIsolationLevelSchema>;
 
-// File: UserScalarFieldEnum.schema.ts
+// File: GroupScalarFieldEnum.schema.ts
 
-export const UserScalarFieldEnumSchema = z.enum(['id', 'createdAt', 'updatedAt', 'name', 'username', 'displayUsername', 'email', 'emailVerified', 'normalizedEmail', 'image', 'banned', 'banReason', 'banExpires', 'role', 'settings'])
+export const GroupScalarFieldEnumSchema = z.enum(['id', 'createdAt', 'updatedAt', 'deletedAt', 'name', 'description', 'logo', 'banner', 'website', 'discord', 'x', 'facebook', 'instagram', 'telegram', 'youtube', 'email', 'creatorId', 'deleterId'])
 
-export type UserScalarFieldEnum = z.infer<typeof UserScalarFieldEnumSchema>;
+export type GroupScalarFieldEnum = z.infer<typeof GroupScalarFieldEnumSchema>;
 
 // File: RelationLoadStrategy.schema.ts
 
 export const RelationLoadStrategySchema = z.enum(['query', 'join'])
 
 export type RelationLoadStrategy = z.infer<typeof RelationLoadStrategySchema>;
-
-// File: UserProfileScalarFieldEnum.schema.ts
-
-export const UserProfileScalarFieldEnumSchema = z.enum(['id', 'createdAt', 'updatedAt', 'banner', 'birthDate', 'gender', 'city', 'country', 'about', 'points', 'userId'])
-
-export type UserProfileScalarFieldEnum = z.infer<typeof UserProfileScalarFieldEnumSchema>;
-
-// File: UserLibraryScalarFieldEnum.schema.ts
-
-export const UserLibraryScalarFieldEnumSchema = z.enum(['reading', 'rereading', 'planToRead', 'completed', 'onHold', 'dropped', 'userId'])
-
-export type UserLibraryScalarFieldEnum = z.infer<typeof UserLibraryScalarFieldEnumSchema>;
-
-// File: UserHistoryScalarFieldEnum.schema.ts
-
-export const UserHistoryScalarFieldEnumSchema = z.enum(['progression', 'mediaId', 'userId'])
-
-export type UserHistoryScalarFieldEnum = z.infer<typeof UserHistoryScalarFieldEnumSchema>;
-
-// File: AccountScalarFieldEnum.schema.ts
-
-export const AccountScalarFieldEnumSchema = z.enum(['id', 'createdAt', 'updatedAt', 'accessToken', 'refreshToken', 'accessTokenExpiresAt', 'refreshTokenExpiresAt', 'scope', 'password', 'idToken', 'accountId', 'providerId', 'userId'])
-
-export type AccountScalarFieldEnum = z.infer<typeof AccountScalarFieldEnumSchema>;
-
-// File: SessionScalarFieldEnum.schema.ts
-
-export const SessionScalarFieldEnumSchema = z.enum(['id', 'createdAt', 'updatedAt', 'expiresAt', 'token', 'ipAddress', 'userAgent', 'impersonatedBy', 'userId'])
-
-export type SessionScalarFieldEnum = z.infer<typeof SessionScalarFieldEnumSchema>;
-
-// File: VerificationScalarFieldEnum.schema.ts
-
-export const VerificationScalarFieldEnumSchema = z.enum(['id', 'createdAt', 'updatedAt', 'expiresAt', 'identifier', 'value'])
-
-export type VerificationScalarFieldEnum = z.infer<typeof VerificationScalarFieldEnumSchema>;
 
 // File: MediaScalarFieldEnum.schema.ts
 
@@ -94,17 +58,53 @@ export const ChapterScalarFieldEnumSchema = z.enum(['id', 'createdAt', 'updatedA
 
 export type ChapterScalarFieldEnum = z.infer<typeof ChapterScalarFieldEnumSchema>;
 
-// File: GroupScalarFieldEnum.schema.ts
-
-export const GroupScalarFieldEnumSchema = z.enum(['id', 'createdAt', 'updatedAt', 'deletedAt', 'name', 'description', 'logo', 'banner', 'website', 'discord', 'x', 'facebook', 'instagram', 'telegram', 'youtube', 'email', 'creatorId', 'deleterId'])
-
-export type GroupScalarFieldEnum = z.infer<typeof GroupScalarFieldEnumSchema>;
-
 // File: TaskScalarFieldEnum.schema.ts
 
 export const TaskScalarFieldEnumSchema = z.enum(['id', 'createdAt', 'updatedAt', 'type', 'status', 'payload', 'sessionId'])
 
 export type TaskScalarFieldEnum = z.infer<typeof TaskScalarFieldEnumSchema>;
+
+// File: UserScalarFieldEnum.schema.ts
+
+export const UserScalarFieldEnumSchema = z.enum(['id', 'createdAt', 'updatedAt', 'name', 'username', 'displayUsername', 'email', 'emailVerified', 'normalizedEmail', 'image', 'banned', 'banReason', 'banExpires', 'role', 'settings'])
+
+export type UserScalarFieldEnum = z.infer<typeof UserScalarFieldEnumSchema>;
+
+// File: UserProfileScalarFieldEnum.schema.ts
+
+export const UserProfileScalarFieldEnumSchema = z.enum(['id', 'createdAt', 'updatedAt', 'banner', 'birthDate', 'gender', 'city', 'country', 'about', 'points', 'userId'])
+
+export type UserProfileScalarFieldEnum = z.infer<typeof UserProfileScalarFieldEnumSchema>;
+
+// File: UserLibraryScalarFieldEnum.schema.ts
+
+export const UserLibraryScalarFieldEnumSchema = z.enum(['reading', 'rereading', 'planToRead', 'completed', 'onHold', 'dropped', 'userId'])
+
+export type UserLibraryScalarFieldEnum = z.infer<typeof UserLibraryScalarFieldEnumSchema>;
+
+// File: UserHistoryScalarFieldEnum.schema.ts
+
+export const UserHistoryScalarFieldEnumSchema = z.enum(['progression', 'mediaId', 'userId'])
+
+export type UserHistoryScalarFieldEnum = z.infer<typeof UserHistoryScalarFieldEnumSchema>;
+
+// File: AccountScalarFieldEnum.schema.ts
+
+export const AccountScalarFieldEnumSchema = z.enum(['id', 'createdAt', 'updatedAt', 'accessToken', 'refreshToken', 'accessTokenExpiresAt', 'refreshTokenExpiresAt', 'scope', 'password', 'idToken', 'accountId', 'providerId', 'userId'])
+
+export type AccountScalarFieldEnum = z.infer<typeof AccountScalarFieldEnumSchema>;
+
+// File: SessionScalarFieldEnum.schema.ts
+
+export const SessionScalarFieldEnumSchema = z.enum(['id', 'createdAt', 'updatedAt', 'expiresAt', 'token', 'ipAddress', 'userAgent', 'impersonatedBy', 'userId'])
+
+export type SessionScalarFieldEnum = z.infer<typeof SessionScalarFieldEnumSchema>;
+
+// File: VerificationScalarFieldEnum.schema.ts
+
+export const VerificationScalarFieldEnumSchema = z.enum(['id', 'createdAt', 'updatedAt', 'expiresAt', 'identifier', 'value'])
+
+export type VerificationScalarFieldEnum = z.infer<typeof VerificationScalarFieldEnumSchema>;
 
 // File: SortOrder.schema.ts
 
@@ -124,35 +124,17 @@ export const QueryModeSchema = z.enum(['default', 'insensitive'])
 
 export type QueryMode = z.infer<typeof QueryModeSchema>;
 
-// File: JsonNullValueFilter.schema.ts
-
-export const JsonNullValueFilterSchema = z.enum(['DbNull', 'JsonNull', 'AnyNull'])
-
-export type JsonNullValueFilter = z.infer<typeof JsonNullValueFilterSchema>;
-
 // File: NullsOrder.schema.ts
 
 export const NullsOrderSchema = z.enum(['first', 'last'])
 
 export type NullsOrder = z.infer<typeof NullsOrderSchema>;
 
-// File: Roles.schema.ts
+// File: JsonNullValueFilter.schema.ts
 
-export const RolesSchema = z.enum(['USER', 'MODERATOR', 'UPLOADER_INTERN', 'UPLOADER', 'ADMIN'])
+export const JsonNullValueFilterSchema = z.enum(['DbNull', 'JsonNull', 'AnyNull'])
 
-export type Roles = z.infer<typeof RolesSchema>;
-
-// File: Genders.schema.ts
-
-export const GendersSchema = z.enum(['MALE', 'FEMALE', 'OTHER', 'NOT_SPECIFIED'])
-
-export type Genders = z.infer<typeof GendersSchema>;
-
-// File: Countries.schema.ts
-
-export const CountriesSchema = z.enum(['ad', 'ae', 'af', 'ag', 'ai', 'al', 'am', 'ao', 'aq', 'ar', 'as', 'at', 'au', 'aw', 'ax', 'az', 'ba', 'bb', 'bd', 'be', 'bf', 'bg', 'bh', 'bi', 'bj', 'bl', 'bm', 'bn', 'bo', 'bq', 'br', 'bs', 'bt', 'bv', 'bw', 'by', 'bz', 'ca', 'cc', 'cd', 'cf', 'cg', 'ch', 'ci', 'ck', 'cl', 'cm', 'cn', 'co', 'cr', 'cu', 'cv', 'cw', 'cx', 'cy', 'cz', 'de', 'dj', 'dk', 'dm', 'do', 'dz', 'ec', 'ee', 'eg', 'eh', 'er', 'es', 'et', 'fi', 'fj', 'fk', 'fm', 'fo', 'fr', 'ga', 'gb', 'gd', 'ge', 'gf', 'gg', 'gh', 'gi', 'gl', 'gm', 'gn', 'gp', 'gq', 'gr', 'gs', 'gt', 'gu', 'gw', 'gy', 'hk', 'hm', 'hn', 'hr', 'ht', 'hu', 'id', 'ie', 'il', 'im', 'in', 'io', 'iq', 'ir', 'is', 'it', 'je', 'jm', 'jo', 'jp', 'ke', 'kg', 'kh', 'ki', 'km', 'kn', 'kp', 'kr', 'kw', 'ky', 'kz', 'la', 'lb', 'lc', 'li', 'lk', 'lr', 'ls', 'lt', 'lu', 'lv', 'ly', 'ma', 'mc', 'md', 'me', 'mf', 'mg', 'mh', 'mk', 'ml', 'mm', 'mn', 'mo', 'mp', 'mq', 'mr', 'ms', 'mt', 'mu', 'mv', 'mw', 'mx', 'my', 'mz', 'na', 'nc', 'ne', 'nf', 'ng', 'ni', 'nl', 'no', 'np', 'nr', 'nu', 'nz', 'om', 'pa', 'pe', 'pf', 'pg', 'ph', 'pk', 'pl', 'pm', 'pn', 'pr', 'ps', 'pt', 'pw', 'py', 'qa', 're', 'ro', 'rs', 'ru', 'rw', 'sa', 'sb', 'sc', 'sd', 'se', 'sg', 'sh', 'si', 'sj', 'sk', 'sl', 'sm', 'sn', 'so', 'sr', 'ss', 'st', 'sv', 'sx', 'sy', 'sz', 'tc', 'td', 'tf', 'tg', 'th', 'tj', 'tk', 'tl', 'tm', 'tn', 'to', 'tr', 'tt', 'tv', 'tw', 'tz', 'ua', 'ug', 'um', 'us', 'uy', 'uz', 'va', 'vc', 've', 'vg', 'vi', 'vn', 'vu', 'wf', 'ws', 'xk', 'ye', 'yt', 'za', 'zm', 'zw'])
-
-export type Countries = z.infer<typeof CountriesSchema>;
+export type JsonNullValueFilter = z.infer<typeof JsonNullValueFilterSchema>;
 
 // File: ContentRating.schema.ts
 
@@ -226,124 +208,48 @@ export const TaskStatusSchema = z.enum(['PENDING', 'DOWNLOADING', 'UPLOADING', '
 
 export type TaskStatus = z.infer<typeof TaskStatusSchema>;
 
-// File: User.schema.ts
+// File: Roles.schema.ts
 
-export const UserSchema = z.object({
+export const RolesSchema = z.enum(['USER', 'MODERATOR', 'UPLOADER_INTERN', 'UPLOADER', 'ADMIN'])
+
+export type Roles = z.infer<typeof RolesSchema>;
+
+// File: Genders.schema.ts
+
+export const GendersSchema = z.enum(['MALE', 'FEMALE', 'OTHER', 'NOT_SPECIFIED'])
+
+export type Genders = z.infer<typeof GendersSchema>;
+
+// File: Countries.schema.ts
+
+export const CountriesSchema = z.enum(['ad', 'ae', 'af', 'ag', 'ai', 'al', 'am', 'ao', 'aq', 'ar', 'as', 'at', 'au', 'aw', 'ax', 'az', 'ba', 'bb', 'bd', 'be', 'bf', 'bg', 'bh', 'bi', 'bj', 'bl', 'bm', 'bn', 'bo', 'bq', 'br', 'bs', 'bt', 'bv', 'bw', 'by', 'bz', 'ca', 'cc', 'cd', 'cf', 'cg', 'ch', 'ci', 'ck', 'cl', 'cm', 'cn', 'co', 'cr', 'cu', 'cv', 'cw', 'cx', 'cy', 'cz', 'de', 'dj', 'dk', 'dm', 'do', 'dz', 'ec', 'ee', 'eg', 'eh', 'er', 'es', 'et', 'fi', 'fj', 'fk', 'fm', 'fo', 'fr', 'ga', 'gb', 'gd', 'ge', 'gf', 'gg', 'gh', 'gi', 'gl', 'gm', 'gn', 'gp', 'gq', 'gr', 'gs', 'gt', 'gu', 'gw', 'gy', 'hk', 'hm', 'hn', 'hr', 'ht', 'hu', 'id', 'ie', 'il', 'im', 'in', 'io', 'iq', 'ir', 'is', 'it', 'je', 'jm', 'jo', 'jp', 'ke', 'kg', 'kh', 'ki', 'km', 'kn', 'kp', 'kr', 'kw', 'ky', 'kz', 'la', 'lb', 'lc', 'li', 'lk', 'lr', 'ls', 'lt', 'lu', 'lv', 'ly', 'ma', 'mc', 'md', 'me', 'mf', 'mg', 'mh', 'mk', 'ml', 'mm', 'mn', 'mo', 'mp', 'mq', 'mr', 'ms', 'mt', 'mu', 'mv', 'mw', 'mx', 'my', 'mz', 'na', 'nc', 'ne', 'nf', 'ng', 'ni', 'nl', 'no', 'np', 'nr', 'nu', 'nz', 'om', 'pa', 'pe', 'pf', 'pg', 'ph', 'pk', 'pl', 'pm', 'pn', 'pr', 'ps', 'pt', 'pw', 'py', 'qa', 're', 'ro', 'rs', 'ru', 'rw', 'sa', 'sb', 'sc', 'sd', 'se', 'sg', 'sh', 'si', 'sj', 'sk', 'sl', 'sm', 'sn', 'so', 'sr', 'ss', 'st', 'sv', 'sx', 'sy', 'sz', 'tc', 'td', 'tf', 'tg', 'th', 'tj', 'tk', 'tl', 'tm', 'tn', 'to', 'tr', 'tt', 'tv', 'tw', 'tz', 'ua', 'ug', 'um', 'us', 'uy', 'uz', 'va', 'vc', 've', 'vg', 'vi', 'vn', 'vu', 'wf', 'ws', 'xk', 'ye', 'yt', 'za', 'zm', 'zw'])
+
+export type Countries = z.infer<typeof CountriesSchema>;
+
+// File: Group.schema.ts
+
+export const GroupSchema = z.object({
   id: z.string(),
   createdAt: z.date(),
   updatedAt: z.date(),
+  deletedAt: z.date().nullish(),
   name: z.string(),
-  username: z.string(),
-  displayUsername: z.string(),
-  email: z.string().nullish(),
-  emailVerified: z.boolean(),
-  normalizedEmail: z.string().nullish(),
-  image: z.string().nullish(),
-  banned: z.boolean().nullish(),
-  banReason: z.string().nullish(),
-  banExpires: z.date().nullish(),
-  role: RolesSchema.default("USER"),
-  settings: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10").default("{}"),
-});
-
-export type UserType = z.infer<typeof UserSchema>;
-
-
-// File: UserProfile.schema.ts
-
-export const UserProfileSchema = z.object({
-  id: z.string(),
-  createdAt: z.date(),
-  updatedAt: z.date(),
+  description: z.string().nullish(),
+  logo: z.string().nullish(),
   banner: z.string().nullish(),
-  birthDate: z.date().nullish(),
-  gender: GendersSchema.default("NOT_SPECIFIED"),
-  city: z.string().nullish(),
-  country: CountriesSchema.nullish(),
-  about: z.string().nullish(),
-  points: z.number().int(),
-  userId: z.string(),
+  website: z.string().nullish(),
+  discord: z.string().nullish(),
+  x: z.string().nullish(),
+  facebook: z.string().nullish(),
+  instagram: z.string().nullish(),
+  telegram: z.string().nullish(),
+  youtube: z.string().nullish(),
+  email: z.string().nullish(),
+  creatorId: z.string(),
+  deleterId: z.string().nullish(),
 });
 
-export type UserProfileType = z.infer<typeof UserProfileSchema>;
-
-
-// File: UserLibrary.schema.ts
-
-export const UserLibrarySchema = z.object({
-  reading: z.array(z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10")),
-  rereading: z.array(z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10")),
-  planToRead: z.array(z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10")),
-  completed: z.array(z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10")),
-  onHold: z.array(z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10")),
-  dropped: z.array(z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10")),
-  userId: z.string(),
-});
-
-export type UserLibraryType = z.infer<typeof UserLibrarySchema>;
-
-
-// File: UserHistory.schema.ts
-
-export const UserHistorySchema = z.object({
-  progression: z.array(z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10")),
-  mediaId: z.string(),
-  userId: z.string(),
-});
-
-export type UserHistoryType = z.infer<typeof UserHistorySchema>;
-
-
-// File: Account.schema.ts
-
-export const AccountSchema = z.object({
-  id: z.string(),
-  createdAt: z.date(),
-  updatedAt: z.date(),
-  accessToken: z.string().nullish(),
-  refreshToken: z.string().nullish(),
-  accessTokenExpiresAt: z.date().nullish(),
-  refreshTokenExpiresAt: z.date().nullish(),
-  scope: z.string().nullish(),
-  password: z.string().nullish(),
-  idToken: z.string().nullish(),
-  accountId: z.string(),
-  providerId: z.string(),
-  userId: z.string(),
-});
-
-export type AccountType = z.infer<typeof AccountSchema>;
-
-
-// File: Session.schema.ts
-
-export const SessionSchema = z.object({
-  id: z.string(),
-  createdAt: z.date(),
-  updatedAt: z.date(),
-  expiresAt: z.date(),
-  token: z.string(),
-  ipAddress: z.string().nullish(),
-  userAgent: z.string().nullish(),
-  impersonatedBy: z.string().nullish(),
-  userId: z.string(),
-});
-
-export type SessionType = z.infer<typeof SessionSchema>;
-
-
-// File: Verification.schema.ts
-
-export const VerificationSchema = z.object({
-  id: z.string(),
-  createdAt: z.date(),
-  updatedAt: z.date(),
-  expiresAt: z.date(),
-  identifier: z.string(),
-  value: z.string(),
-});
-
-export type VerificationType = z.infer<typeof VerificationSchema>;
+export type GroupType = z.infer<typeof GroupSchema>;
 
 
 // File: Media.schema.ts
@@ -468,32 +374,6 @@ export const ChapterSchema = z.object({
 export type ChapterType = z.infer<typeof ChapterSchema>;
 
 
-// File: Group.schema.ts
-
-export const GroupSchema = z.object({
-  id: z.string(),
-  createdAt: z.date(),
-  updatedAt: z.date(),
-  deletedAt: z.date().nullish(),
-  name: z.string(),
-  description: z.string().nullish(),
-  logo: z.string().nullish(),
-  banner: z.string().nullish(),
-  website: z.string().nullish(),
-  discord: z.string().nullish(),
-  x: z.string().nullish(),
-  facebook: z.string().nullish(),
-  instagram: z.string().nullish(),
-  telegram: z.string().nullish(),
-  youtube: z.string().nullish(),
-  email: z.string().nullish(),
-  creatorId: z.string(),
-  deleterId: z.string().nullish(),
-});
-
-export type GroupType = z.infer<typeof GroupSchema>;
-
-
 // File: Task.schema.ts
 
 export const TaskSchema = z.object({
@@ -507,4 +387,124 @@ export const TaskSchema = z.object({
 });
 
 export type Task = z.infer<typeof TaskSchema>;
+
+
+// File: User.schema.ts
+
+export const UserSchema = z.object({
+  id: z.string(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+  name: z.string(),
+  username: z.string(),
+  displayUsername: z.string(),
+  email: z.string().nullish(),
+  emailVerified: z.boolean(),
+  normalizedEmail: z.string().nullish(),
+  image: z.string().nullish(),
+  banned: z.boolean().nullish(),
+  banReason: z.string().nullish(),
+  banExpires: z.date().nullish(),
+  role: RolesSchema.default("USER"),
+  settings: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10").default("{}"),
+});
+
+export type UserType = z.infer<typeof UserSchema>;
+
+
+// File: UserProfile.schema.ts
+
+export const UserProfileSchema = z.object({
+  id: z.string(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+  banner: z.string().nullish(),
+  birthDate: z.date().nullish(),
+  gender: GendersSchema.default("NOT_SPECIFIED"),
+  city: z.string().nullish(),
+  country: CountriesSchema.nullish(),
+  about: z.string().nullish(),
+  points: z.number().int(),
+  userId: z.string(),
+});
+
+export type UserProfileType = z.infer<typeof UserProfileSchema>;
+
+
+// File: UserLibrary.schema.ts
+
+export const UserLibrarySchema = z.object({
+  reading: z.array(z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10")),
+  rereading: z.array(z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10")),
+  planToRead: z.array(z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10")),
+  completed: z.array(z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10")),
+  onHold: z.array(z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10")),
+  dropped: z.array(z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10")),
+  userId: z.string(),
+});
+
+export type UserLibraryType = z.infer<typeof UserLibrarySchema>;
+
+
+// File: UserHistory.schema.ts
+
+export const UserHistorySchema = z.object({
+  progression: z.array(z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10")),
+  mediaId: z.string(),
+  userId: z.string(),
+});
+
+export type UserHistoryType = z.infer<typeof UserHistorySchema>;
+
+
+// File: Account.schema.ts
+
+export const AccountSchema = z.object({
+  id: z.string(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+  accessToken: z.string().nullish(),
+  refreshToken: z.string().nullish(),
+  accessTokenExpiresAt: z.date().nullish(),
+  refreshTokenExpiresAt: z.date().nullish(),
+  scope: z.string().nullish(),
+  password: z.string().nullish(),
+  idToken: z.string().nullish(),
+  accountId: z.string(),
+  providerId: z.string(),
+  userId: z.string(),
+});
+
+export type AccountType = z.infer<typeof AccountSchema>;
+
+
+// File: Session.schema.ts
+
+export const SessionSchema = z.object({
+  id: z.string(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+  expiresAt: z.date(),
+  token: z.string(),
+  ipAddress: z.string().nullish(),
+  userAgent: z.string().nullish(),
+  impersonatedBy: z.string().nullish(),
+  userId: z.string(),
+});
+
+export type SessionType = z.infer<typeof SessionSchema>;
+
+
+// File: Verification.schema.ts
+
+export const VerificationSchema = z.object({
+  id: z.string(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+  expiresAt: z.date(),
+  identifier: z.string(),
+  value: z.string(),
+});
+
+export type VerificationType = z.infer<typeof VerificationSchema>;
 
