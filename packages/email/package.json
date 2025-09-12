@@ -18,7 +18,7 @@
     "@t3-oss/env-core": "^0.13.8",
     "react": "^19.1.1",
     "resend": "^6.0.3",
-    "zod": "^4.1.7"
+    "zod": "^4.1.8"
   },
   "devDependencies": {
     "@taiyomoe/tsconfig": "workspace:^",

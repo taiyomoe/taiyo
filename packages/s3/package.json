@@ -16,7 +16,7 @@
     "@aws-sdk/client-s3": "^3.886.0",
     "@t3-oss/env-core": "^0.13.8",
     "aws4fetch": "^1.0.20",
-    "zod": "^4.1.7"
+    "zod": "^4.1.8"
   },
   "devDependencies": {
     "@taiyomoe/tsconfig": "workspace:^"
