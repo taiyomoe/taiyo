@@ -9,8 +9,6 @@ import {
   Tailwind,
   Text,
 } from "@react-email/components"
-// biome-ignore lint/correctness/noUnusedImports: required to use react-email
-import * as React from "react"
 
 type Props = {
   name: string
