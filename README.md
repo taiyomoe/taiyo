@@ -89,8 +89,8 @@ taiyo/
 
 ### Prerequisites
 
-- **Node.js**: 22.19.0 (specified in `.nvmrc`)
-- **pnpm**: 10.16.0 (specified in `package.json`)
+- **Node.js**: 22.x.x (specified in `.nvmrc`)
+- **pnpm**: 10.x.x (specified in `package.json`)
 - **Docker & Docker Compose**: For local infrastructure
 
 ### Installation
@@ -203,51 +203,7 @@ This project uses [git-flow](https://git-flow.readthedocs.io/en/latest/presentat
 
 ## 🌐 Environment Variables
 
-### Required Environment Variables
-
-```bash
-# Database
-DATABASE_URL=postgresql://username:password@localhost:5432/taiyo
-
-# Authentication
-BETTER_AUTH_URL=http://localhost:3000
-BETTER_AUTH_SECRET=your-secret-key
-
-# OAuth Providers
-DISCORD_CLIENT_ID=your-discord-client-id
-DISCORD_CLIENT_SECRET=your-discord-client-secret
-GOOGLE_CLIENT_ID=your-google-client-id
-GOOGLE_CLIENT_SECRET=your-google-client-secret
-
-# Security
-TURNSTILE_SECRET_KEY=your-turnstile-secret
-
-# Search
-MEILISEARCH_ADMIN_KEY=your-meilisearch-admin-key
-
-# Cache
-DRAGONFLY_URL=redis://localhost:6379
-
-# Storage
-S3_URL=your-s3-endpoint
-S3_ACCESS_KEY_ID=your-access-key
-S3_SECRET_ACCESS_KEY=your-secret-key
-S3_CDN_BUCKET_NAME=your-cdn-bucket
-S3_UPLOADS_BUCKET_NAME=your-uploads-bucket
-
-# Analytics
-CLICKHOUSE_URL=http://localhost:8123
-UMAMI_USER_ID=your-umami-user-id
-UMAMI_SECRET=your-umami-secret
-
-# Monitoring
-GRAFANA_USERNAME=your-grafana-username
-GRAFANA_PASSWORD=your-grafana-password
-GRAFANA_LOKI_URL=your-loki-url
-
-# Email
-RESEND_API_KEY=your-resend-api-key
-```
+The are 30+ environment variables that are used in the project. You can find them in the `.env.example` file.
 
 ## 📦 Package Overview
 
