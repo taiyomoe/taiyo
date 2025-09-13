@@ -9,7 +9,9 @@
     "tailwindcss-react-aria-components",
     "tw-animate-css",
     "tailwind-scrollbar",
-    "punycode"
+    "punycode",
+    "playwright",
+    "@vitest/coverage-v8"
   ],
   "ignore": [
     "./apps/web/src/i18n/request.ts",

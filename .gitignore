@@ -35,3 +35,7 @@ data/
 
 # turbo
 .turbo
+
+# storybook
+*storybook.log
+storybook-static
