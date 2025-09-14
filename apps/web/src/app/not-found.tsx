@@ -18,7 +18,7 @@ export default async function NotFound() {
           <p className="text-subtle md:text-lg">{t("description")}</p>
           <Link
             href="/"
-            className="hover:[&_svg]:-translate-x-1 flex items-center gap-2 rounded border bg-inverted px-3 py-2 text-inverted transition hover:bg-inverted/80"
+            className="hover:[&_svg]:-translate-x-1 flex items-center gap-2 rounded border bg-primary px-3 py-2 text-inverted transition hover:bg-primary/80"
           >
             <ArrowLeftIcon className="size-4 transition-transform" />
             {t("action")}

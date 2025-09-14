@@ -10,7 +10,6 @@
   --background-subtle: 220, 14%, 94%; /* gray.100 - hovering on items, subtle raising */
   --background-muted: 210, 20%, 97%; /* gray.50 - large items, sidebar, sections */
   --background-emphasis: 220, 13%, 91%; /* gray.200 - active items and emphasising */
-  --background-inverted: 210, 30%, 4%; /* gray.900 - tooltips */
 
   /* Background Semantic */
   --background-semantic-info: 212, 88%, 97%; /* blue.100 */
@@ -71,7 +70,6 @@
   --background-subtle: 0, 0%, 15%; /* stone.800 */
   --background-muted: 0, 0%, 9%; /* stone.900 */
   --background-emphasis: 0, 0%, 25%; /* stone.700 */
-  --background-inverted: 0, 0%, 98%; /* stone.50 */
 
   /* Background Semantic */
   --background-semantic-info: 234, 18%, 13%;
