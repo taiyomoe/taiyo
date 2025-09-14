@@ -71,9 +71,9 @@
 
 .dark {
   /* Background Standard */
-  --background: 0, 0%, 6%; /* stone.950 */
-  --background-subtle: 0, 0%, 15%; /* stone.800 */
-  --background-muted: 0, 0%, 9%; /* stone.900 */
+  --background: 240, 0%, 5%;
+  --background-subtle: 330, 0%, 11.75%;
+  --background-muted: 0, 0%, 7%;
   --background-emphasis: 0, 0%, 25%; /* stone.700 */
 
   /* Background Semantic */
@@ -93,12 +93,12 @@
 
   /* Background Secondary */
   --background-secondary: 250, 7.5%, 11%;
-  --background-secondary-emphasis: 0250, 7.5%, 15%;
+  --background-secondary-emphasis: 250, 7.5%, 15%;
   --background-secondary-muted: 0, 0%, 15%;
 
   /* Border Standard */
-  --border: 0, 0%, 30%; /* stone.600 */
-  --border-subtle: 0, 0%, 15%; /* stone.700 */
+  --border: 330, 0%, 14%; /* stone.600 */
+  --border-subtle: 240, 0%, 10.5%; /* stone.700 */
   --border-muted: 0, 0%, 9%; /* stone.500 */
   --border-emphasis: 0, 0%, 45%; /* stone.800 */
 
@@ -152,6 +152,11 @@
   --color-primary: hsla(var(--background-primary), 1);
   --color-primary-emphasis: hsla(var(--background-primary-emphasis), 1);
   --color-primary-muted: hsla(var(--background-primary-muted), 1);
+
+  /* Background Secondary */
+  --color-secondary: hsla(var(--background-secondary), 1);
+  --color-secondary-emphasis: hsla(var(--background-secondary-emphasis), 1);
+  --color-secondary-muted: hsla(var(--background-secondary-muted), 1);
 
   /* Border Standard */
   --border-color-default: hsla(var(--border), 1);
