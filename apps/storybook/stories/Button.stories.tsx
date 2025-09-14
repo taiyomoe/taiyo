@@ -8,7 +8,7 @@ const meta = {
   component: Button,
   parameters: { layout: "centered" },
   argTypes: {
-    color: { control: "select", options: ["default"] },
+    color: { control: "select", options: ["default", "secondary"] },
     variant: { control: "select", options: ["solid", "outline", "ghost"] },
     className: { control: "text" },
     isPending: { control: "boolean" },
@@ -34,6 +34,34 @@ export const Variants: Story = {
     docs: {
       description: {
         story: "All button variants in default state",
+      },
+    },
+  },
+}
+
+export const Colors: Story = {
+  render: () => (
+    <div className="space-y-4">
+      <div className="flex items-center gap-6">
+        <p className="min-w-24 text-primary">Default</p>
+        <div className="flex gap-2">
+          <Button variant="solid">Solid</Button>
+          <Button variant="outline">Outline</Button>
+          <Button variant="ghost">Ghost</Button>
+        </div>
+      </div>
+      <div className="flex items-center gap-6">
+        <p className="min-w-24 text-primary">Secondary</p>
+        <Button color="secondary" variant="outline">
+          Only in outline variant
+        </Button>
+      </div>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: "All button colors in default state",
       },
     },
   },

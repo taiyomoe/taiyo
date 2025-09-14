@@ -26,6 +26,11 @@
   --background-primary-emphasis: 220, 6%, 25%; /* stone.800 */
   --background-primary-muted: 220, 14%, 94%; /* stone.400 */
 
+  /* Background Secondary */
+  --background-secondary: 250, 7.5%, 95%;
+  --background-secondary-emphasis: 250, 7.5%, 90%;
+  --background-secondary-muted: 0, 0%, 92%;
+
   /* Border Standard */
   --border: 216, 12%, 84%; /* gray.300 - inputs */
   --border-subtle: 220, 13%, 91%; /* gray.200 - container borders */
@@ -85,6 +90,11 @@
   --background-primary: 0, 0%, 96%; /* stone.100 */
   --background-primary-emphasis: 0, 0%, 64%; /* stone.800 */
   --background-primary-muted: 0, 0%, 15%; /* stone.400 */
+
+  /* Background Secondary */
+  --background-secondary: 250, 7.5%, 11%;
+  --background-secondary-emphasis: 0250, 7.5%, 15%;
+  --background-secondary-muted: 0, 0%, 15%;
 
   /* Border Standard */
   --border: 0, 0%, 30%; /* stone.600 */

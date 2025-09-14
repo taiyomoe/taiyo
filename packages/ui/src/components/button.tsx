@@ -13,6 +13,7 @@ export const buttonVariants = tv({
   variants: {
     color: {
       default: "",
+      secondary: "",
     },
     variant: {
       solid: "",
@@ -35,6 +36,12 @@ export const buttonVariants = tv({
       color: "default",
       variant: "ghost",
       className: "text-subtle transition-colors hover:text-primary",
+    },
+    {
+      color: "secondary",
+      variant: "outline",
+      className:
+        "bg-secondary text-primary hover:border-emphasis hover:bg-secondary-muted",
     },
   ],
   defaultVariants: {
