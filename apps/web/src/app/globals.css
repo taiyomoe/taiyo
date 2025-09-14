@@ -1,10 +1,18 @@
 @import "tailwindcss";
+@import "@taiyomoe/ui/globals.css";
 @import "tw-animate-css";
 @plugin "tailwindcss-react-aria-components";
 /* @plugin "tailwind-scrollbar" {
   nocompatible: true;
   preferredStrategy: "pseudoelements";
 }; */
+
+:root {
+  /* Custom dynamic sizes */
+  --featured-media-card-height: 288px;
+  --featured-media-card-height-md: 398px;
+  --featured-media-card-height-xl: 428px;
+}
 
 @utility dropdown-content-width-full {
   width: var(--radix-dropdown-menu-trigger-width);

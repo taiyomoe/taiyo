@@ -63,11 +63,6 @@
   /* Defaults */
   --radius: 0.75rem;
   --default-transition-duration: 0.2s;
-
-  /* Custom dynamic sizes */
-  --featured-media-card-height: 288px;
-  --featured-media-card-height-md: 398px;
-  --featured-media-card-height-xl: 428px;
 }
 
 .dark {
