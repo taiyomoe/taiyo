@@ -7,9 +7,10 @@ import { Providers } from "~/app/_components/providers"
 import { AuthStoreProvider } from "~/stores/auth.store"
 import { cn } from "~/utils/cn"
 import { getSession } from "~/utils/get-session"
-import type { LayoutProps } from "~/utils/types"
-import "./globals.css"
 import { getSettings } from "~/utils/get-settings"
+import type { LayoutProps } from "~/utils/types"
+import "@taiyomoe/ui/globals.css"
+import "./globals.css"
 
 const inter = Inter({ subsets: ["latin"] })
 
