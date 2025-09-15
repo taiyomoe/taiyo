@@ -44,7 +44,7 @@ export const SignUpForm = () => {
 
   return (
     <div className="space-y-8">
-      <BackArrowButton onPress={goToSocials} />
+      <BackArrowButton onClick={goToSocials} />
       <Form {...form} onSubmit={handlePress}>
         <TextField
           control={form.control}

@@ -6,5 +6,5 @@ export const AuthGoogleButton = () => {
     await authClient.signIn.social({ provider: "google" })
   }
 
-  return <GoogleButton onPress={handlePress} />
+  return <GoogleButton onClick={handlePress} />
 }

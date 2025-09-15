@@ -9,7 +9,7 @@ export const ResetPasswordEmailSent = () => {
 
   return (
     <div className="space-y-8">
-      <BackArrowButton onPress={goToSocials} />
+      <BackArrowButton onClick={goToSocials} />
       <div className="relative flex flex-col items-center justify-center gap-2 text-center">
         <MailSentIllustration className="mb-6 h-fit w-44 sm:w-56" />
         <h1 className="font-bold text-2xl">{t("title")}</h1>

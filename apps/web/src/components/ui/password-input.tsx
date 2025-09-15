@@ -27,9 +27,9 @@ export const PasswordInput = ({ className, ...props }: Props) => {
         {...props}
       />
       <button
-        type="button"
-        onClick={() => setShow(!show)}
         className="h-9 rounded-r border bg-default p-2 transition hover:cursor-pointer hover:bg-muted group-hover:border-emphasis"
+        onClick={() => setShow(!show)}
+        type="button"
       >
         <Icon className="size-5 text-muted" />
       </button>

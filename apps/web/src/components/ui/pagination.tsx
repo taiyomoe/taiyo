@@ -2,6 +2,7 @@
 
 import { config } from "@taiyomoe/config"
 import { pageSchema } from "@taiyomoe/schemas"
+import { Button, buttonVariants } from "@taiyomoe/ui/components/button"
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -19,7 +20,6 @@ import {
   SelectValue,
 } from "~/components/ui/select"
 import { cn } from "~/utils/cn"
-import { Button, buttonVariants } from "./button"
 
 export const Pagination = ({ className, ...props }: ComponentProps<"div">) => {
   const [page, setPage] = useQueryState(
@@ -83,13 +83,13 @@ export const Pagination = ({ className, ...props }: ComponentProps<"div">) => {
       <PaginationRoot>
         <PaginationContent>
           <PaginationItem>
-            <PaginationPrevious onPress={() => handlePageChange(page - 1)} />
+            <PaginationPrevious onClick={() => handlePageChange(page - 1)} />
           </PaginationItem>
           {options.map((option) => (
             <PaginationItem key={option.label}>
               <PaginationButton
                 isActive={option.isActive}
-                onPress={() => handlePageChange(option.label)}
+                onClick={() => handlePageChange(option.label)}
               >
                 {option.label}
               </PaginationButton>
@@ -105,7 +105,7 @@ export const Pagination = ({ className, ...props }: ComponentProps<"div">) => {
             </EditText>
           </PaginationItem>
           <PaginationItem>
-            <PaginationNext onPress={() => handlePageChange(page + 1)} />
+            <PaginationNext onClick={() => handlePageChange(page + 1)} />
           </PaginationItem>
         </PaginationContent>
       </PaginationRoot>

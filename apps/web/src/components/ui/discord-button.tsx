@@ -1,5 +1,6 @@
 "use client"
-import { Button, type ButtonProps } from "react-aria-components"
+
+import type { ComponentProps } from "react"
 import { tv } from "tailwind-variants"
 import { DiscordLogo } from "~/components/logos/discord-logo"
 
@@ -10,15 +11,17 @@ export const discordButtonVariants = tv({
   },
 })
 
-type Props = ButtonProps & { className?: string; children: React.ReactNode }
-
-export const DiscordButton = ({ className, children, ...props }: Props) => {
+export const DiscordButton = ({
+  className,
+  children,
+  ...props
+}: ComponentProps<"button">) => {
   const slots = discordButtonVariants()
 
   return (
-    <Button className={slots.base({ className })} {...props}>
+    <button className={slots.base({ className })} type="button" {...props}>
       <DiscordLogo className={slots.icon()} color="white" />
       {children}
-    </Button>
+    </button>
   )
 }
