@@ -21,7 +21,7 @@ export const env = createEnv({
    */
   clientPrefix: "NEXT_PUBLIC_",
   client: {
-    NEXT_PUBLIC_MEILISEARCH_URL: z.string().url(),
+    NEXT_PUBLIC_MEILISEARCH_URL: z.url(),
     NEXT_PUBLIC_MEILISEARCH_PUBLIC_KEY: z.string(),
   },
 
