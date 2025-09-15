@@ -19,6 +19,7 @@
     "zod": "^4.1.8"
   },
   "devDependencies": {
-    "@taiyomoe/tsconfig": "workspace:^"
+    "@taiyomoe/typescript": "workspace:^",
+    "typescript": "^5.9.2"
   }
 }

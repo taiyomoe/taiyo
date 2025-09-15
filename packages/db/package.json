@@ -30,10 +30,11 @@
   },
   "devDependencies": {
     "@taiyomoe/meilisearch": "workspace:^",
-    "@taiyomoe/tsconfig": "workspace:^",
+    "@taiyomoe/typescript": "workspace:^",
     "@types/validator": "^13.15.3",
     "cross-env": "^10.0.0",
     "prisma": "^6.16.1",
-    "tsx": "^4.20.5"
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2"
   }
 }

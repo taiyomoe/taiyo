@@ -63,12 +63,12 @@ importers:
         specifier: ^12.1.1
         version: 12.1.1
     devDependencies:
-      '@taiyomoe/tsconfig':
-        specifier: workspace:^
-        version: link:../../tooling/typescript
       '@taiyomoe/types':
         specifier: workspace:^
         version: link:../../packages/types
+      '@taiyomoe/typescript':
+        specifier: workspace:^
+        version: link:../../tooling/typescript
       tsx:
         specifier: ^4.20.5
         version: 4.20.5
@@ -115,12 +115,12 @@ importers:
       '@storybook/nextjs-vite':
         specifier: ^9.1.6
         version: 9.1.6(@babel/core@7.28.4)(next@15.5.3(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(rollup@4.50.2)(storybook@9.1.6(@testing-library/dom@10.4.1)(prettier@3.6.2)(vite@7.1.5(@types/node@22.18.3)(jiti@2.5.1)(lightningcss@1.30.1)(terser@5.44.0)(tsx@4.20.5)(yaml@2.8.1)))(typescript@5.9.2)(vite@7.1.5(@types/node@22.18.3)(jiti@2.5.1)(lightningcss@1.30.1)(terser@5.44.0)(tsx@4.20.5)(yaml@2.8.1))
-      '@taiyomoe/tsconfig':
-        specifier: workspace:^
-        version: link:../../tooling/typescript
       '@taiyomoe/types':
         specifier: workspace:^
         version: link:../../packages/types
+      '@taiyomoe/typescript':
+        specifier: workspace:^
+        version: link:../../tooling/typescript
       '@types/react':
         specifier: ^19.1.13
         version: 19.1.13
@@ -308,12 +308,12 @@ importers:
         specifier: ^5.0.8
         version: 5.0.8(@types/react@19.1.13)(react@19.1.1)(use-sync-external-store@1.5.0(react@19.1.1))
     devDependencies:
-      '@taiyomoe/tsconfig':
-        specifier: workspace:^
-        version: link:../../tooling/typescript
       '@taiyomoe/types':
         specifier: workspace:^
         version: link:../../packages/types
+      '@taiyomoe/typescript':
+        specifier: workspace:^
+        version: link:../../tooling/typescript
       '@types/accept-language-parser':
         specifier: ^1.5.8
         version: 1.5.8
@@ -369,12 +369,15 @@ importers:
         specifier: ^4.1.8
         version: 4.1.8
     devDependencies:
-      '@taiyomoe/tsconfig':
+      '@taiyomoe/typescript':
         specifier: workspace:^
         version: link:../../tooling/typescript
       '@types/luxon':
         specifier: ^3.7.1
         version: 3.7.1
+      typescript:
+        specifier: ^5.9.2
+        version: 5.9.2
 
   packages/cache:
     dependencies:
@@ -391,15 +394,21 @@ importers:
         specifier: ^4.1.8
         version: 4.1.8
     devDependencies:
-      '@taiyomoe/tsconfig':
+      '@taiyomoe/typescript':
         specifier: workspace:^
         version: link:../../tooling/typescript
+      typescript:
+        specifier: ^5.9.2
+        version: 5.9.2
 
   packages/config:
     devDependencies:
-      '@taiyomoe/tsconfig':
+      '@taiyomoe/typescript':
         specifier: workspace:^
         version: link:../../tooling/typescript
+      typescript:
+        specifier: ^5.9.2
+        version: 5.9.2
 
   packages/db:
     dependencies:
@@ -431,7 +440,7 @@ importers:
       '@taiyomoe/meilisearch':
         specifier: workspace:^
         version: link:../meilisearch
-      '@taiyomoe/tsconfig':
+      '@taiyomoe/typescript':
         specifier: workspace:^
         version: link:../../tooling/typescript
       '@types/validator':
@@ -446,6 +455,9 @@ importers:
       tsx:
         specifier: ^4.20.5
         version: 4.20.5
+      typescript:
+        specifier: ^5.9.2
+        version: 5.9.2
 
   packages/email:
     dependencies:
@@ -468,12 +480,15 @@ importers:
       '@react-email/preview-server':
         specifier: 4.2.11
         version: 4.2.11(postcss@8.5.6)
-      '@taiyomoe/tsconfig':
+      '@taiyomoe/typescript':
         specifier: workspace:^
         version: link:../../tooling/typescript
       react-email:
         specifier: ^4.2.11
         version: 4.2.11
+      typescript:
+        specifier: ^5.9.2
+        version: 5.9.2
 
   packages/global-types:
     devDependencies:
@@ -519,15 +534,18 @@ importers:
         specifier: ^4.1.8
         version: 4.1.8
     devDependencies:
-      '@taiyomoe/tsconfig':
-        specifier: workspace:^
-        version: link:../../tooling/typescript
       '@taiyomoe/types':
         specifier: workspace:^
         version: link:../types
+      '@taiyomoe/typescript':
+        specifier: workspace:^
+        version: link:../../tooling/typescript
       '@types/luxon':
         specifier: ^3.7.1
         version: 3.7.1
+      typescript:
+        specifier: ^5.9.2
+        version: 5.9.2
 
   packages/messages: {}
 
@@ -549,9 +567,12 @@ importers:
         specifier: ^4.1.8
         version: 4.1.8
     devDependencies:
-      '@taiyomoe/tsconfig':
+      '@taiyomoe/typescript':
         specifier: workspace:^
         version: link:../../tooling/typescript
+      typescript:
+        specifier: ^5.9.2
+        version: 5.9.2
 
   packages/s3:
     dependencies:
@@ -568,9 +589,12 @@ importers:
         specifier: ^4.1.8
         version: 4.1.8
     devDependencies:
-      '@taiyomoe/tsconfig':
+      '@taiyomoe/typescript':
         specifier: workspace:^
         version: link:../../tooling/typescript
+      typescript:
+        specifier: ^5.9.2
+        version: 5.9.2
 
   packages/schemas:
     dependencies:
@@ -581,9 +605,12 @@ importers:
         specifier: ^4.1.8
         version: 4.1.8
     devDependencies:
-      '@taiyomoe/tsconfig':
+      '@taiyomoe/typescript':
         specifier: workspace:^
         version: link:../../tooling/typescript
+      typescript:
+        specifier: ^5.9.2
+        version: 5.9.2
 
   packages/trpc:
     dependencies:
@@ -627,12 +654,15 @@ importers:
         specifier: ^4.1.8
         version: 4.1.8
     devDependencies:
-      '@taiyomoe/tsconfig':
-        specifier: workspace:^
-        version: link:../../tooling/typescript
       '@taiyomoe/types':
         specifier: workspace:^
         version: link:../types
+      '@taiyomoe/typescript':
+        specifier: workspace:^
+        version: link:../../tooling/typescript
+      typescript:
+        specifier: ^5.9.2
+        version: 5.9.2
 
   packages/types:
     dependencies:
@@ -643,9 +673,12 @@ importers:
         specifier: workspace:^
         version: link:../schemas
     devDependencies:
-      '@taiyomoe/tsconfig':
+      '@taiyomoe/typescript':
         specifier: workspace:^
         version: link:../../tooling/typescript
+      typescript:
+        specifier: ^5.9.2
+        version: 5.9.2
 
   packages/ui:
     dependencies:
@@ -665,7 +698,7 @@ importers:
         specifier: ^3.1.1
         version: 3.1.1(tailwind-merge@3.3.1)(tailwindcss@4.1.13)
     devDependencies:
-      '@taiyomoe/tsconfig':
+      '@taiyomoe/typescript':
         specifier: workspace:^
         version: link:../../tooling/typescript
       '@types/react':
@@ -684,9 +717,12 @@ importers:
         specifier: ^10.0.0
         version: 10.0.0
     devDependencies:
-      '@taiyomoe/tsconfig':
+      '@taiyomoe/typescript':
         specifier: workspace:^
         version: link:../../tooling/typescript
+      typescript:
+        specifier: ^5.9.2
+        version: 5.9.2
 
   tooling/github: {}
 

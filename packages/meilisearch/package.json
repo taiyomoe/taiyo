@@ -23,8 +23,9 @@
     "zod": "^4.1.8"
   },
   "devDependencies": {
-    "@taiyomoe/tsconfig": "workspace:^",
     "@taiyomoe/types": "workspace:^",
-    "@types/luxon": "^3.7.1"
+    "@taiyomoe/typescript": "workspace:^",
+    "@types/luxon": "^3.7.1",
+    "typescript": "^5.9.2"
   }
 }
