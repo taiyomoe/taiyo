@@ -636,7 +636,7 @@ importers:
         specifier: ^2.2.2
         version: 2.2.2
       use-intl:
-        specifier: ^4.3.8
+        specifier: ^4.3.9
         version: 4.3.9(react@19.1.1)
       zod:
         specifier: ^4.1.8
