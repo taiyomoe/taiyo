@@ -11,10 +11,8 @@ const meta = {
     color: { control: "select", options: ["default", "secondary"] },
     variant: { control: "select", options: ["solid", "outline", "ghost"] },
     size: { control: "select", options: ["default", "icon"] },
-    className: { control: "text" },
     isPending: { control: "boolean" },
     disabled: { control: "boolean" },
-    asChild: { control: "boolean" },
   },
   args: { onClick: fn() },
 } satisfies Meta<typeof Button>

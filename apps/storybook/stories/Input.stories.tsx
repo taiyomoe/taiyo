@@ -10,8 +10,6 @@ const meta = {
   argTypes: {
     placeholder: { control: "text" },
     disabled: { control: "boolean" },
-    required: { control: "boolean" },
-    className: { control: "text" },
   },
   args: { onChange: fn() },
 } satisfies Meta<typeof Input>
