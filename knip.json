@@ -11,14 +11,12 @@
     "tailwind-scrollbar",
     "punycode",
     "playwright",
-    "@vitest/coverage-v8"
+    "@vitest/coverage-v8",
+    "@react-email/preview-server"
   ],
   "ignore": [
     "./apps/web/src/i18n/request.ts",
     "./apps/web/src/utils/parse-locale.ts",
-    "./apps/web/src/components/ui/username.tsx",
-    "./packages/schemas/src/prisma/index.ts",
-    "./packages/trpc/src/trpc.ts",
     "./packages/trpc/src/utils/trpc-error.ts"
   ]
 }
