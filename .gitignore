@@ -28,7 +28,7 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # typescript
-*.tsbuildinfo
+tsbuildinfo.json
 
 # docker
 data/

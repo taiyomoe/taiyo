@@ -1,7 +1,7 @@
 {
   "extends": "@taiyomoe/typescript/base.json",
   "compilerOptions": {
-    "baseUrl": ".",
+    "lib": ["ES2022", "dom", "dom.iterable"],
     "jsx": "preserve",
     "paths": { "~/*": ["./src/*"] },
     "plugins": [{ "name": "next" }]
