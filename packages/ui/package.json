@@ -21,8 +21,8 @@
     "tailwind-variants": "^3.1.1"
   },
   "peerDependencies": {
-    "react": ">=19",
-    "react-dom": ">=19"
+    "react": ">=19.1.1",
+    "react-dom": ">=19.1.1"
   },
   "devDependencies": {
     "@taiyomoe/typescript": "workspace:^",
