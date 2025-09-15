@@ -22,7 +22,8 @@
   },
   "devDependencies": {
     "@react-email/preview-server": "4.2.11",
-    "@taiyomoe/tsconfig": "workspace:^",
-    "react-email": "^4.2.11"
+    "@taiyomoe/typescript": "workspace:^",
+    "react-email": "^4.2.11",
+    "typescript": "^5.9.2"
   }
 }

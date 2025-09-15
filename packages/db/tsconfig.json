@@ -1,8 +1,5 @@
 {
-  "extends": "@taiyomoe/tsconfig/base.json",
-  "compilerOptions": {
-    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
-  },
+  "extends": "@taiyomoe/typescript/base.json",
   "include": ["src", "prisma.config.ts"],
   "exclude": ["node_modules"]
 }

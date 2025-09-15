@@ -11,10 +11,11 @@
     "clean": "rm -rf .turbo node_modules",
     "typecheck": "tsc --noEmit"
   },
-  "devDependencies": {
-    "@taiyomoe/tsconfig": "workspace:^"
-  },
   "dependencies": {
     "@faker-js/faker": "^10.0.0"
+  },
+  "devDependencies": {
+    "@taiyomoe/typescript": "workspace:^",
+    "typescript": "^5.9.2"
   }
 }

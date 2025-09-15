@@ -67,8 +67,8 @@
     "zustand": "^5.0.8"
   },
   "devDependencies": {
-    "@taiyomoe/tsconfig": "workspace:^",
     "@taiyomoe/types": "workspace:^",
+    "@taiyomoe/typescript": "workspace:^",
     "@types/accept-language-parser": "^1.5.8",
     "@types/country-flag-icons": "^1.2.2",
     "@types/react": "^19.1.13",
