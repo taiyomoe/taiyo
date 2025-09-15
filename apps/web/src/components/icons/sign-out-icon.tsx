@@ -1,11 +1,11 @@
 "use client"
 
+import { cn } from "@taiyomoe/ui/utils/cn"
 import type { Variants } from "motion/react"
 import { motion, useAnimation } from "motion/react"
 import { type RefObject, useEffect } from "react"
 import { useHover } from "usehooks-ts"
 import type { AnimatedIconProps } from "~/components/icons/home-icon"
-import { cn } from "~/utils/cn"
 
 const pathVariants: Variants = {
   animate: {

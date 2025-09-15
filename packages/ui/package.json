@@ -9,15 +9,19 @@
   ],
   "exports": {
     "./globals.css": "./src/styles/globals.css",
-    "./components/*": "./src/components/*.tsx"
+    "./components/*": "./src/components/*.tsx",
+    "./utils/*": "./src/utils/*.ts"
   },
   "scripts": {
     "clean": "rm -rf .turbo node_modules",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@base-ui-components/react": "1.0.0-beta.3",
     "@radix-ui/react-slot": "^1.2.3",
+    "clsx": "^2.1.1",
     "lucide-react": "^0.544.0",
+    "tailwind-merge": "^3.3.1",
     "tailwind-variants": "^3.1.1"
   },
   "peerDependencies": {

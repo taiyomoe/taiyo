@@ -74,7 +74,7 @@
   --background: 240, 0%, 5%;
   --background-subtle: 330, 0%, 11.75%;
   --background-muted: 0, 0%, 7%;
-  --background-emphasis: 0, 0%, 25%; /* stone.700 */
+  --background-emphasis: 0, 0%, 25%;
 
   /* Background Semantic */
   --background-semantic-info: 234, 18%, 13%;
@@ -97,10 +97,10 @@
   --background-secondary-muted: 0, 0%, 15%;
 
   /* Border Standard */
-  --border: 330, 0%, 14%; /* stone.600 */
-  --border-subtle: 240, 0%, 10.5%; /* stone.700 */
-  --border-muted: 0, 0%, 9%; /* stone.500 */
-  --border-emphasis: 0, 0%, 45%; /* stone.800 */
+  --border: 330, 0%, 14%;
+  --border-subtle: 240, 0%, 10.5%;
+  --border-muted: 0, 0%, 9%;
+  --border-emphasis: 0, 0%, 20%;
 
   /* Border Semantic */
   --border-semantic-warning-subtle: 15, 75%, 23%;
@@ -136,7 +136,6 @@
   --color-subtle: hsla(var(--background-subtle), 1);
   --color-muted: hsla(var(--background-muted), 1);
   --color-emphasis: hsla(var(--background-emphasis), 1);
-  --color-inverted: hsla(var(--background-inverted), 1);
 
   /* Background Semantic */
   --color-info: hsla(var(--background-semantic-info), 1);

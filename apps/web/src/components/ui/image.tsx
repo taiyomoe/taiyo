@@ -1,9 +1,9 @@
 "use client"
+import { cn } from "@taiyomoe/ui/utils/cn"
 import NextImage, { type ImageProps as NextImageProps } from "next/image"
 import { useState } from "react"
 import { tv, type VariantProps } from "tailwind-variants"
 import { Skeleton } from "~/components/ui/skeleton"
-import { cn } from "~/utils/cn"
 
 const image = tv({
   base: "relative min-w-fit overflow-hidden *:transition-[scale,width,height,min-width,min-height,max-width,max-height] *:duration-300",

@@ -1,8 +1,8 @@
 "use client"
 
+import { cn } from "@taiyomoe/ui/utils/cn"
 import type { HTMLAttributes } from "react"
 import { type SeparatorProps, useSeparator } from "react-aria"
-import { cn } from "~/utils/cn"
 
 type Props = HTMLAttributes<HTMLDivElement> & SeparatorProps
 

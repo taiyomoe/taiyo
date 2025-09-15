@@ -1,9 +1,9 @@
 "use client"
 
+import { cn } from "@taiyomoe/ui/utils/cn"
 import { motion, useAnimation } from "motion/react"
 import { type RefObject, useEffect } from "react"
 import { useHover } from "usehooks-ts"
-import { cn } from "~/utils/cn"
 import type { AnimatedIconProps } from "./home-icon"
 
 export const SettingsGearIcon = ({

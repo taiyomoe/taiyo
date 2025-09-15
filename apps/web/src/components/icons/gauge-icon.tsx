@@ -1,10 +1,10 @@
 "use client"
 
+import { cn } from "@taiyomoe/ui/utils/cn"
 import type { Transition } from "motion/react"
 import { motion, useAnimation } from "motion/react"
 import { type RefObject, useEffect } from "react"
 import { useHover } from "usehooks-ts"
-import { cn } from "~/utils/cn"
 import type { AnimatedIconProps } from "./home-icon"
 
 const defaultTransition: Transition = {

@@ -1,7 +1,7 @@
+import { Input } from "@taiyomoe/ui/components/input"
+import { cn } from "@taiyomoe/ui/utils/cn"
 import { type HTMLAttributes, useState } from "react"
 import type { z } from "zod"
-import { Input } from "~/components/ui/input"
-import { cn } from "~/utils/cn"
 
 type Props = Omit<HTMLAttributes<HTMLButtonElement>, "onChange"> & {
   inputClassName?: string

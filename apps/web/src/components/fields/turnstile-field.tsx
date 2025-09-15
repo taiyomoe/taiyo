@@ -1,4 +1,5 @@
 import { Turnstile } from "@marsidev/react-turnstile"
+import { cn } from "@taiyomoe/ui/utils/cn"
 import {
   type ControllerProps,
   type FieldPath,
@@ -6,7 +7,6 @@ import {
   useController,
 } from "react-hook-form"
 import { env } from "~/env"
-import { cn } from "~/utils/cn"
 
 export const TurnstileField = <
   TFieldValues extends FieldValues = FieldValues,

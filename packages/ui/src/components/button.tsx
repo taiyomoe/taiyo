@@ -5,7 +5,7 @@ import { tv, type VariantProps } from "tailwind-variants"
 
 export const buttonVariants = tv({
   base: [
-    "inline-flex h-9 w-full items-center justify-center gap-2 whitespace-nowrap rounded px-3 py-2 font-medium text-sm transition-[background,scale,border] duration-300 active:scale-[0.98]",
+    "inline-flex w-full shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded px-3 py-2 font-medium text-sm transition-[background,scale,border] duration-300 active:scale-[0.98]",
     "outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-default",
     "disabled:pointer-events-none disabled:opacity-50",
     "[&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 [&_svg]:transition-transform",
@@ -19,6 +19,10 @@ export const buttonVariants = tv({
       solid: "",
       outline: "border",
       ghost: "",
+    },
+    size: {
+      default: "h-9",
+      icon: "size-9!",
     },
   },
   compoundVariants: [
@@ -61,6 +65,7 @@ export type ButtonProps = ComponentProps<"button"> &
 export const Button = ({
   color,
   variant,
+  size,
   className,
   children,
   isPending = false,
@@ -72,7 +77,7 @@ export const Button = ({
   return (
     <Comp
       data-slot="button"
-      className={buttonVariants({ color, variant, className })}
+      className={buttonVariants({ color, variant, size, className })}
       {...props}
     >
       {isPending && <LoaderCircleIcon className="animate-spin" />}

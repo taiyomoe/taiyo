@@ -1,3 +1,4 @@
+import { Input } from "@taiyomoe/ui/components/input"
 import { useTranslations } from "next-intl"
 import type { ControllerProps, FieldPath, FieldValues } from "react-hook-form"
 import {
@@ -7,7 +8,6 @@ import {
   FormLabel,
   FormMessage,
 } from "~/components/ui/form"
-import { Input } from "~/components/ui/input"
 
 export const EmailField = <
   TFieldValues extends FieldValues = FieldValues,

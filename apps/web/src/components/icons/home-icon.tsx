@@ -1,5 +1,6 @@
 "use client"
 
+import { cn } from "@taiyomoe/ui/utils/cn"
 import {
   motion,
   type Transition,
@@ -8,7 +9,6 @@ import {
 } from "motion/react"
 import { type HTMLAttributes, type RefObject, useEffect } from "react"
 import { useHover } from "usehooks-ts"
-import { cn } from "~/utils/cn"
 
 export type AnimatedIconProps = HTMLAttributes<HTMLDivElement> & {
   size?: number

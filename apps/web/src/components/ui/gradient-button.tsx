@@ -1,6 +1,6 @@
+import { cn } from "@taiyomoe/ui/utils/cn"
 import { LoaderCircleIcon } from "lucide-react"
 import type { ComponentProps } from "react"
-import { cn } from "~/utils/cn"
 
 type Props = ComponentProps<"button"> & { isPending?: boolean }
 

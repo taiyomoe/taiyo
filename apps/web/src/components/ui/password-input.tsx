@@ -1,13 +1,13 @@
 "use client"
 
+import { Input } from "@taiyomoe/ui/components/input"
+import { cn } from "@taiyomoe/ui/utils/cn"
 import { EyeIcon, EyeOffIcon } from "lucide-react"
 import {
   type DetailedHTMLProps,
   type InputHTMLAttributes,
   useState,
 } from "react"
-import { cn } from "~/utils/cn"
-import { Input } from "./input"
 
 type Props = DetailedHTMLProps<
   InputHTMLAttributes<HTMLInputElement>,

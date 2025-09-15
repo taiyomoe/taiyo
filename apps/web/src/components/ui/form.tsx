@@ -1,4 +1,5 @@
 import { Slot } from "@radix-ui/react-slot"
+import { cn } from "@taiyomoe/ui/utils/cn"
 import { type NestedKeyOf, useTranslations } from "next-intl"
 import {
   type ComponentPropsWithoutRef,
@@ -19,7 +20,6 @@ import {
   type SubmitHandler,
   useFormContext,
 } from "react-hook-form"
-import { cn } from "~/utils/cn"
 import type { ZodMessages } from "~/utils/zod-messages"
 import { Label, type LabelProps } from "./label"
 

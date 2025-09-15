@@ -1,73 +1,50 @@
-import { Meta } from '@storybook/addon-docs/blocks';
-import { Button } from '@taiyomoe/ui/components/button';
-import { SettingsIcon, EditIcon, TrashIcon } from 'lucide-react';
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as ButtonStories from './Button.stories';
 
 <Meta title="UI/Button" />
 
 # Button
 
-A versatile button component with multiple variants and states, built with Tailwind CSS and Tailwind Variants.
+[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/button.tsx)
 
-## Features
+## Table of Contents
 
-- **Three Variants**: Solid, Outline, and Ghost
-- **Loading State**: Built-in spinner with `isPending` prop
-- **Icon Support**: Works with any React element or icon
-- **Accessibility**: Full keyboard navigation and screen reader support
-- **Customizable**: Extensible with custom className
-- **Type Safe**: Built with TypeScript and proper prop validation
+- [Overview](#overview)
+  - [Default](#default)
+  - [Disabled](#disabled)
+  - [Pending](#pending)
+- [Feedback](#feedback)
 
-## Usage
+## Overview
 
-### Basic Usage
+Buttons are clickable elements that are used to trigger actions. They communicate calls to action to the user and allow users to interact with pages in a variety of ways. Button labels express what action will occur when the user interacts with it.
 
-```tsx
-import { Button } from '@taiyomoe/ui/components/button';
+<Canvas of={ButtonStories.Default} />
 
-// Default solid button
-<Button>Click me</Button>
+### Disabled
 
-// With variant
-<Button variant="outline">Outline Button</Button>
-<Button variant="ghost">Ghost Button</Button>
-```
+Disabled buttons prevent user interaction and provide visual feedback that the action is not available.
 
-### With Icons
+<Canvas of={ButtonStories.Disabled} />
 
-```tsx
-import { Button } from '@taiyomoe/ui/components/button';
-import { HeartIcon } from 'lucide-react';
+### Pending
 
-// Button with icon and text
-<Button>
-  <HeartIcon />
-  Like
-</Button>
+Pending buttons show a loading spinner and prevent interaction while an action is being processed.
 
-// Icon-only button
-<Button className="size-9 p-0">
-  <SettingsIcon />
-</Button>
-```
+<Canvas of={ButtonStories.Pending} />
 
-### Different States
+### Icons
 
-```tsx
-// Show loading spinner
-<Button isPending>
-  Loading...
-</Button>
+Buttons can include icons alongside text to enhance visual communication and help users quickly understand the action. Icons should be relevant to the action and placed consistently (typically to the left of the text).
 
-// Disabled state
-<Button disabled>
-  Disabled Button
-</Button>
-```
+<Canvas of={ButtonStories.Icons} />
 
-## Accessibility
+### Icon Only
 
-- Full keyboard navigation support
-- Proper ARIA attributes
-- Screen reader friendly
-- Focus management
-- Semantic HTML button element
+Icon buttons allow users to take actions, and make choices, with a single tap.
+
+<Canvas of={ButtonStories.IconOnly} />
+
+## Feedback
+
+Help us improve this component by providing feedback, asking questions on [Discord](https://discord.gg/RYbnyeWcM2), or updating this file directly on [GitHub](https://github.com/taiyomoe/taiyo). Your feedback helps us create better components! 🚀

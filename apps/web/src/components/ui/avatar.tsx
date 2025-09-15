@@ -1,6 +1,6 @@
+import { cn } from "@taiyomoe/ui/utils/cn"
 import { UserIcon } from "lucide-react"
 import { Image, type ImageProps } from "~/components/ui/image"
-import { cn } from "~/utils/cn"
 
 type Props = Omit<ImageProps, "src"> & { src?: string | null }
 
