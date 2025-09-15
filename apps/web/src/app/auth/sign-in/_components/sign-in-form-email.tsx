@@ -63,7 +63,7 @@ export const SignInFormEmail = () => {
 
   return (
     <div className="space-y-8">
-      <BackArrowButton onPress={goToSocials} />
+      <BackArrowButton onClick={goToSocials} />
       <Form {...form} onSubmit={handlePress}>
         <EmailField control={form.control} name="email" />
         <PasswordField control={form.control} name="password">

@@ -4,7 +4,6 @@ import { useSuspenseQuery } from "@tanstack/react-query"
 import Autoplay from "embla-carousel-autoplay"
 import useEmblaCarousel from "embla-carousel-react"
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react"
-import { Button } from "react-aria-components"
 import { useSettings } from "~/stores/auth.store"
 import { useTRPC } from "~/utils/trpc/react"
 import { FeaturedMediasCard } from "./featured-medias-card"
@@ -33,18 +32,20 @@ export const FeaturedMediasCarousel = () => {
       </div>
       <div className="absolute inset-x-0 bottom-4 mx-auto hidden w-full max-w-9xl justify-end px-4 md:flex">
         <div>
-          <Button
+          <button
             className="rounded-full pressed:bg-primary/20 p-2 outline-none transition-colors hover:bg-primary/10 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-default disabled:opacity-50"
-            onPress={() => emblaApi?.scrollPrev()}
+            onClick={() => emblaApi?.scrollPrev()}
+            type="button"
           >
             <ChevronLeftIcon className="size-6 text-brand" />
-          </Button>
-          <Button
+          </button>
+          <button
             className="rounded-full pressed:bg-primary/20 p-2 outline-none transition-colors hover:bg-primary/10 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-default disabled:opacity-50"
-            onPress={() => emblaApi?.scrollNext()}
+            onClick={() => emblaApi?.scrollNext()}
+            type="button"
           >
             <ChevronRightIcon className="size-6 text-brand" />
-          </Button>
+          </button>
         </div>
       </div>
     </div>

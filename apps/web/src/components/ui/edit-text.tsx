@@ -67,12 +67,12 @@ export const EditText = ({
 
   return (
     <button
-      type="button"
       className={cn(
         "hover:cursor-pointer [&_svg]:text-subtle hover:[&_svg]:text-default",
         className,
       )}
       onClick={() => setIsEditing(true)}
+      type="button"
       {...props}
     />
   )

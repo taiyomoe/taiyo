@@ -21,6 +21,7 @@
     "zod": "^4.1.8"
   },
   "devDependencies": {
+    "@react-email/preview-server": "4.2.11",
     "@taiyomoe/tsconfig": "workspace:^",
     "react-email": "^4.2.11"
   }

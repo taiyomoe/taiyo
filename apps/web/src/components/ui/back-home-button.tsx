@@ -1,9 +1,9 @@
 "use client"
 
+import { buttonVariants } from "@taiyomoe/ui/components/button"
 import { ArrowLeftIcon } from "lucide-react"
 import Link, { type LinkProps } from "next/link"
 import { useTranslations } from "next-intl"
-import { buttonVariants } from "~/components/ui/button"
 import { cn } from "~/utils/cn"
 
 type Props = Omit<LinkProps, "href"> & { className?: string }

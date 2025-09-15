@@ -1,0 +1,218 @@
+@import "tailwindcss";
+@source "../../../../apps/**/*.{ts,tsx}";
+@source "../components/*.{ts,tsx}";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* Background Standard */
+  --background: 0, 0%, 100%; /* white - default background */
+  --background-subtle: 220, 14%, 94%; /* gray.100 - hovering on items, subtle raising */
+  --background-muted: 210, 20%, 97%; /* gray.50 - large items, sidebar, sections */
+  --background-emphasis: 220, 13%, 91%; /* gray.200 - active items and emphasising */
+
+  /* Background Semantic */
+  --background-semantic-info: 212, 88%, 97%; /* blue.100 */
+  --background-semantic-info-subtle: 212, 88%, 89%;
+  --background-semantic-success: 167, 54%, 93%; /* green.100 */
+  --background-semantic-success-subtle: 167, 54%, 85%;
+  --background-semantic-warning: 34, 100%, 92%; /* orange.100 */
+  --background-semantic-warning-subtle: 34, 100%, 84%;
+  --background-semantic-error: 0, 93%, 94%; /* red.100 */
+  --background-semantic-error-subtle: 0, 93%, 86%;
+
+  /* Background Primary */
+  --background-primary: 214, 30%, 16%; /* stone.100 */
+  --background-primary-emphasis: 220, 6%, 25%; /* stone.800 */
+  --background-primary-muted: 220, 14%, 94%; /* stone.400 */
+
+  /* Background Secondary */
+  --background-secondary: 250, 7.5%, 95%;
+  --background-secondary-emphasis: 250, 7.5%, 90%;
+  --background-secondary-muted: 0, 0%, 92%;
+
+  /* Border Standard */
+  --border: 216, 12%, 84%; /* gray.300 - inputs */
+  --border-subtle: 220, 13%, 91%; /* gray.200 - container borders */
+  --border-muted: 220, 14%, 94%; /* gray.100 */
+  --border-emphasis: 218, 11%, 65%; /* gray.400 - input:hover */
+
+  /* Border Semantic */
+  --border-semantic-warning-subtle: 32, 98%, 83%;
+  --border-semantic-error-subtle: 0, 96%, 89%;
+  --border-semantic-error: 0, 63%, 24%; /* red.800 */
+
+  /* Content/Text Standard */
+  --text: 220, 6%, 25%; /* gray.700 */
+  --text-subtle: 220, 9%, 46%; /* gray.500 */
+  --text-muted: 218, 11%, 65%; /* gray.400 */
+  --text-emphasis: 210, 30%, 4%; /* gray.900 */
+  --text-inverted: 0, 0%, 100%; /* white */
+
+  /* Content/Text Semantic */
+  --text-semantic-info: 236, 80%, 25%; /* blue-800 */
+  --text-semantic-info-subtle: 236, 80%, 25%; /* blue.100/80 */
+  --text-semantic-success: 150, 84%, 22%; /* green-800 */
+  --text-semantic-success-subtle: 150, 84%, 22%; /* green.100/80 */
+  --text-semantic-attention: 15, 79%, 34%; /* orange-800 */
+  --text-semantic-warning-subtle: 15, 79%, 34%; /* orange.100/80 */
+  --text-semantic-error: 0, 63%, 24%; /* red-800 */
+  --text-semantic-error-subtle: 0, 63%, 24%; /* red.100/80 */
+
+  /* Brand */
+  --brand: 0, 100%, 65.49%;
+  --brand-muted: 0, 97%, 71%;
+  --brand-emphasis: 0, 98%, 55%;
+
+  /* Defaults */
+  --radius: 0.75rem;
+  --default-transition-duration: 0.2s;
+}
+
+.dark {
+  /* Background Standard */
+  --background: 240, 0%, 5%;
+  --background-subtle: 330, 0%, 11.75%;
+  --background-muted: 0, 0%, 7%;
+  --background-emphasis: 0, 0%, 25%; /* stone.700 */
+
+  /* Background Semantic */
+  --background-semantic-info: 234, 18%, 13%;
+  --background-semantic-info-subtle: 234, 18%, 21%;
+  --background-semantic-success: 157, 22%, 11%;
+  --background-semantic-success-subtle: 157, 22%, 19%;
+  --background-semantic-warning: 24, 32%, 11%;
+  --background-semantic-warning-subtle: 24, 32%, 19%;
+  --background-semantic-error: 359, 23%, 12%;
+  --background-semantic-error-subtle: 359, 23%, 20%;
+
+  /* Background Primary */
+  --background-primary: 0, 0%, 96%; /* stone.100 */
+  --background-primary-emphasis: 0, 0%, 64%; /* stone.800 */
+  --background-primary-muted: 0, 0%, 15%; /* stone.400 */
+
+  /* Background Secondary */
+  --background-secondary: 250, 7.5%, 11%;
+  --background-secondary-emphasis: 250, 7.5%, 15%;
+  --background-secondary-muted: 0, 0%, 15%;
+
+  /* Border Standard */
+  --border: 330, 0%, 14%; /* stone.600 */
+  --border-subtle: 240, 0%, 10.5%; /* stone.700 */
+  --border-muted: 0, 0%, 9%; /* stone.500 */
+  --border-emphasis: 0, 0%, 45%; /* stone.800 */
+
+  /* Border Semantic */
+  --border-semantic-warning-subtle: 15, 75%, 23%;
+  --border-semantic-error-subtle: 0, 63%, 24%;
+  --border-semantic-error: 0, 63%, 24%; /* red.800 */
+
+  /* Content/Text Standard */
+  --text: 0, 0%, 83%; /* stone.300 */
+  --text-subtle: 0, 0%, 64%; /* stone.400 */
+  --text-muted: 0, 0%, 64%; /* stone.400 */
+  --text-emphasis: 0, 0%, 98%; /* stone.50 */
+  --text-inverted: 0, 0%, 0%; /* black */
+
+  /* Content/Text Semantic */
+  --text-semantic-info: 229, 90%, 74%; /* blue.100 */
+  --text-semantic-info-subtle: 229, 90%, 74%; /* blue.100/80 */
+  --text-semantic-success: 161, 49%, 54%; /* green.100 */
+  --text-semantic-success-subtle: 161, 49%, 54%; /* green.100/80 */
+  --text-semantic-warning: 27, 96%, 61%; /* orange.100 */
+  --text-semantic-warning-subtle: 27, 96%, 61%; /* orange.100/80 */
+  --text-semantic-error: 0, 91%, 71%; /* red.100 */
+  --text-semantic-error-subtle: 0, 91%, 71%; /* red.100/80 */
+
+  /* Brand */
+  --brand: 0, 100%, 65.49%;
+  --brand-muted: 0, 97%, 71%;
+  --brand-emphasis: 0, 98%, 55%;
+}
+
+@theme inline {
+  /* Background Standard */
+  --color-default: hsla(var(--background), 1);
+  --color-subtle: hsla(var(--background-subtle), 1);
+  --color-muted: hsla(var(--background-muted), 1);
+  --color-emphasis: hsla(var(--background-emphasis), 1);
+  --color-inverted: hsla(var(--background-inverted), 1);
+
+  /* Background Semantic */
+  --color-info: hsla(var(--background-semantic-info), 1);
+  --color-info-subtle: hsla(var(--background-semantic-info-subtle), 1);
+  --color-success: hsla(var(--background-semantic-success), 1);
+  --color-success-subtle: hsla(var(--background-semantic-success-subtle), 1);
+  --color-warning: hsla(var(--background-semantic-warning), 1);
+  --color-warning-subtle: hsla(var(--background-semantic-warning-subtle), 1);
+  --color-error: hsla(var(--background-semantic-error), 1);
+  --color-error-subtle: hsla(var(--background-semantic-error-subtle), 1);
+
+  /* Background Primary */
+  --color-primary: hsla(var(--background-primary), 1);
+  --color-primary-emphasis: hsla(var(--background-primary-emphasis), 1);
+  --color-primary-muted: hsla(var(--background-primary-muted), 1);
+
+  /* Background Secondary */
+  --color-secondary: hsla(var(--background-secondary), 1);
+  --color-secondary-emphasis: hsla(var(--background-secondary-emphasis), 1);
+  --color-secondary-muted: hsla(var(--background-secondary-muted), 1);
+
+  /* Border Standard */
+  --border-color-default: hsla(var(--border), 1);
+  --border-color-subtle: hsla(var(--border-subtle), 1);
+  --border-color-muted: hsla(var(--border-muted), 1);
+  --border-color-emphasis: hsla(var(--border-emphasis), 1);
+
+  /* Border Semantic */
+  --border-color-warning-subtle: hsla(var(--border-semantic-warning-subtle), 1);
+  --border-color-error-subtle: hsla(var(--border-semantic-error-subtle), 1);
+  --border-color-error: hsla(var(--border-semantic-error), 1);
+
+  /* Content/Text Standard */
+  --text-color-default: hsla(var(--text), 1);
+  --text-color-subtle: hsla(var(--text-subtle), 1);
+  --text-color-muted: hsla(var(--text-muted), 1);
+  --text-color-inverted: hsla(var(--text-inverted), 1);
+
+  /* Content/Text Semantic */
+  --text-color-info: hsla(var(--text-semantic-info), 1);
+  --text-color-info-subtle: hsla(var(--text-semantic-info-subtle), 0.8);
+  --text-color-success: hsla(var(--text-semantic-success), 1);
+  --text-color-success-subtle: hsla(var(--text-semantic-success-subtle), 0.8);
+  --text-color-warning: hsla(var(--text-semantic-warning), 1);
+  --text-color-warning-subtle: hsla(var(--text-semantic-warning-subtle), 0.8);
+  --text-color-error: hsla(var(--text-semantic-error), 1);
+  --text-color-error-subtle: hsla(var(--text-semantic-error-subtle), 0.8);
+
+  /* Brand */
+  --color-brand: hsla(var(--brand), 1);
+  --color-brand-muted: hsla(var(--brand-muted), 1);
+  --color-brand-emphasis: hsla(var(--brand-emphasis), 1);
+
+  /* Defaults */
+  --radius: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+
+  /* Container sizes */
+  --container-8xl: 88rem;
+  --container-9xl: 96rem;
+}
+
+@layer base {
+  * {
+    @apply border-default;
+  }
+
+  button {
+    @apply hover:cursor-pointer;
+  }
+
+  html body[data-scroll-locked] {
+    overflow-y: scroll !important;
+    --removed-body-scroll-bar-size: 0 !important;
+    margin-right: 0 !important;
+  }
+}

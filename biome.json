@@ -34,10 +34,6 @@
     "useIgnoreFile": true
   },
   "files": {
-    "includes": [
-      "**",
-      "!packages/schemas/src/prisma",
-      "!apps/web/src/app/globals.css"
-    ]
+    "includes": ["**", "!packages/schemas/src/prisma", "!**/*.css"]
   }
 }

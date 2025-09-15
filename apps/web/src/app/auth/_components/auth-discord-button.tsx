@@ -9,5 +9,5 @@ export const AuthDiscordButton = () => {
     await authClient.signIn.social({ provider: "discord" })
   }
 
-  return <DiscordButton onPress={handlePress}>{t("discord")}</DiscordButton>
+  return <DiscordButton onClick={handlePress}>{t("discord")}</DiscordButton>
 }

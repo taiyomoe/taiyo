@@ -41,7 +41,7 @@ export const ForgotPasswordForm = () => {
 
   return (
     <div className="space-y-8">
-      <BackArrowButton onPress={goToSocials} />
+      <BackArrowButton onClick={goToSocials} />
       <div className="space-y-2">
         <h1 className="font-bold text-2xl">{t("title")}</h1>
         <p className="text-sm text-subtle">{t("description")}</p>

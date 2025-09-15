@@ -1,33 +1,29 @@
 "use client"
 
-import { Slot } from "@radix-ui/react-slot"
+import { Button, type ButtonProps } from "@taiyomoe/ui/components/button"
 import { useFormState } from "react-hook-form"
-import { Button, type ButtonProps } from "~/components/ui/button"
-
-type Props = ButtonProps & { asChild?: boolean }
 
 export const SubmitButton = ({
   asChild = false,
-  isDisabled,
+  disabled,
   children,
   ...props
-}: Props) => {
-  const Comp = asChild ? Slot : Button
+}: ButtonProps) => {
   const { isSubmitting, isValid, isDirty, errors } = useFormState()
   const shouldDisableButton =
     isSubmitting ||
     !(isValid && isDirty) ||
-    isDisabled ||
+    disabled ||
     Object.keys(errors).length !== 0
 
   return (
-    <Comp
+    <Button
       {...props}
-      isDisabled={shouldDisableButton}
+      disabled={shouldDisableButton}
       isPending={isSubmitting}
       type="submit"
     >
       {children}
-    </Comp>
+    </Button>
   )
 }

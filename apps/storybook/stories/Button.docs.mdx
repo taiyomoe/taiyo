@@ -1,0 +1,73 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import { Button } from '@taiyomoe/ui/components/button';
+import { SettingsIcon, EditIcon, TrashIcon } from 'lucide-react';
+
+<Meta title="UI/Button" />
+
+# Button
+
+A versatile button component with multiple variants and states, built with Tailwind CSS and Tailwind Variants.
+
+## Features
+
+- **Three Variants**: Solid, Outline, and Ghost
+- **Loading State**: Built-in spinner with `isPending` prop
+- **Icon Support**: Works with any React element or icon
+- **Accessibility**: Full keyboard navigation and screen reader support
+- **Customizable**: Extensible with custom className
+- **Type Safe**: Built with TypeScript and proper prop validation
+
+## Usage
+
+### Basic Usage
+
+```tsx
+import { Button } from '@taiyomoe/ui/components/button';
+
+// Default solid button
+<Button>Click me</Button>
+
+// With variant
+<Button variant="outline">Outline Button</Button>
+<Button variant="ghost">Ghost Button</Button>
+```
+
+### With Icons
+
+```tsx
+import { Button } from '@taiyomoe/ui/components/button';
+import { HeartIcon } from 'lucide-react';
+
+// Button with icon and text
+<Button>
+  <HeartIcon />
+  Like
+</Button>
+
+// Icon-only button
+<Button className="size-9 p-0">
+  <SettingsIcon />
+</Button>
+```
+
+### Different States
+
+```tsx
+// Show loading spinner
+<Button isPending>
+  Loading...
+</Button>
+
+// Disabled state
+<Button disabled>
+  Disabled Button
+</Button>
+```
+
+## Accessibility
+
+- Full keyboard navigation support
+- Proper ARIA attributes
+- Screen reader friendly
+- Focus management
+- Semantic HTML button element

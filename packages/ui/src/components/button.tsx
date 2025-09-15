@@ -1,15 +1,11 @@
-"use client"
-
+import { Slot } from "@radix-ui/react-slot"
 import { LoaderCircleIcon } from "lucide-react"
-import {
-  Button as AriaButton,
-  type ButtonProps as AriaButtonProps,
-} from "react-aria-components"
+import type { ComponentProps, ReactNode } from "react"
 import { tv, type VariantProps } from "tailwind-variants"
 
 export const buttonVariants = tv({
   base: [
-    "inline-flex h-9 w-full items-center justify-center gap-2 whitespace-nowrap rounded px-3 py-2 font-medium text-sm transition-colors",
+    "inline-flex h-9 w-full items-center justify-center gap-2 whitespace-nowrap rounded px-3 py-2 font-medium text-sm transition-[background,scale,border] duration-300 active:scale-[0.98]",
     "outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-default",
     "disabled:pointer-events-none disabled:opacity-50",
     "[&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 [&_svg]:transition-transform",
@@ -17,6 +13,7 @@ export const buttonVariants = tv({
   variants: {
     color: {
       default: "",
+      secondary: "",
     },
     variant: {
       solid: "",
@@ -40,6 +37,12 @@ export const buttonVariants = tv({
       variant: "ghost",
       className: "text-subtle transition-colors hover:text-primary",
     },
+    {
+      color: "secondary",
+      variant: "outline",
+      className:
+        "bg-secondary text-primary hover:border-emphasis hover:bg-secondary-muted",
+    },
   ],
   defaultVariants: {
     color: "default",
@@ -47,26 +50,33 @@ export const buttonVariants = tv({
   },
 })
 
-export type ButtonProps = AriaButtonProps &
+export type ButtonProps = ComponentProps<"button"> &
   VariantProps<typeof buttonVariants> & {
-    slot?: string
     className?: string
-    children?: React.ReactNode
+    isPending?: boolean
+    children?: ReactNode
+    asChild?: boolean
   }
 
 export const Button = ({
-  children,
   color,
   variant,
   className,
-  isPending,
+  children,
+  isPending = false,
+  asChild = false,
   ...props
-}: ButtonProps) => (
-  <AriaButton
-    className={buttonVariants({ color, variant, className })}
-    {...props}
-  >
-    {isPending && <LoaderCircleIcon className="animate-spin" />}
-    {children}
-  </AriaButton>
-)
+}: ButtonProps) => {
+  const Comp = asChild ? Slot : "button"
+
+  return (
+    <Comp
+      data-slot="button"
+      className={buttonVariants({ color, variant, className })}
+      {...props}
+    >
+      {isPending && <LoaderCircleIcon className="animate-spin" />}
+      {children}
+    </Comp>
+  )
+}

@@ -3,7 +3,6 @@
 import { MenuIcon } from "lucide-react"
 import { motion, useScroll, useTransform } from "motion/react"
 import Link from "next/link"
-import { Button } from "react-aria-components"
 import { TaiyoLogo } from "~/components/logos/taiyo-logo"
 import { useSession } from "~/stores/auth.store"
 import { useSidebar } from "../sidebar/sidebar-context"
@@ -43,9 +42,9 @@ export const Navbar = () => {
         </div>
       </div>
       <div className="flex items-center gap-2 md:hidden">
-        <Button onPress={() => setOpenMobile(true)}>
+        <button onClick={() => setOpenMobile(true)} type="button">
           <MenuIcon className="size-6 text-subtle transition-colors hover:text-default" />
-        </Button>
+        </button>
       </div>
       {session && <NavbarAuthedContent />}
       {!session && <NavbarUnauthedContent />}
