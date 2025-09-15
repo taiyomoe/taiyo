@@ -7,7 +7,7 @@
     "clean": "git clean -xdf .next .turbo node_modules",
     "typecheck": "tsc --noEmit",
     "dev": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build": "storybook build"
   },
   "dependencies": {
     "@tailwindcss/postcss": "^4.1.13",
@@ -25,7 +25,6 @@
     "@storybook/addon-themes": "^9.1.6",
     "@storybook/addon-vitest": "^9.1.6",
     "@storybook/nextjs-vite": "^9.1.6",
-    "@taiyomoe/tsconfig": "workspace:^",
     "@taiyomoe/types": "workspace:^",
     "@taiyomoe/typescript": "workspace:^",
     "@types/react": "^19.1.13",
