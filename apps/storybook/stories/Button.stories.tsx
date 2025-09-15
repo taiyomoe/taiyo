@@ -21,7 +21,6 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-// 1. Three variants in default state
 export const Variants: Story = {
   render: () => (
     <div className="flex gap-2">
@@ -67,7 +66,6 @@ export const Colors: Story = {
   },
 }
 
-// 2. Three variants in loading state
 export const Loading: Story = {
   render: () => (
     <div className="flex gap-2">
@@ -91,7 +89,28 @@ export const Loading: Story = {
   },
 }
 
-// 3. Three variants as icon-only buttons
+export const Icons: Story = {
+  render: () => (
+    <div className="flex gap-2">
+      <Button variant="solid">
+        <SettingsIcon />
+        Settings
+      </Button>
+      <Button variant="outline" color="secondary">
+        <TrashIcon />
+        Delete
+      </Button>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: "All button variants with icons",
+      },
+    },
+  },
+}
+
 export const IconOnly: Story = {
   render: () => (
     <div className="flex gap-2">
@@ -115,7 +134,6 @@ export const IconOnly: Story = {
   },
 }
 
-// 4. Complete overview - every variant and every state
 export const AllStates: Story = {
   render: () => (
     <div className="flex flex-col gap-4">
