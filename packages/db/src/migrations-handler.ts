@@ -2,7 +2,7 @@ import { createHash, randomUUID } from "node:crypto"
 import { readdir, readFile } from "node:fs/promises"
 import { dirname, join } from "node:path"
 import { fileURLToPath } from "node:url"
-import { PrismaClient } from "@prisma/client"
+import { PrismaClient } from "./generated/prisma/client"
 
 const MIGRATIONS_RELATIVE_PATH = "./prisma/migrations"
 

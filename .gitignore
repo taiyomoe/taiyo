@@ -19,7 +19,6 @@ dist
 # misc
 .DS_Store
 *.pem
-.prisma-zod-generator-manifest.json
 
 # debug
 npm-debug.log*
@@ -35,6 +34,10 @@ data/
 
 # turbo
 .turbo
+
+# prisma
+generated
+.prisma-zod-generator-manifest.json
 
 # storybook
 *storybook.log
