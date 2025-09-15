@@ -25,4 +25,7 @@ export default {
     name: getAbsolutePath("@storybook/nextjs-vite"),
     options: {},
   },
+  docs: {
+    defaultName: "Overview",
+  },
 } satisfies StorybookConfig
