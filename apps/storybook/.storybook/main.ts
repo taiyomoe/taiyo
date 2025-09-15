@@ -1,15 +1,14 @@
-import path from "node:path"
+import { createRequire } from "node:module"
+import { dirname, join } from "node:path"
 import type { StorybookConfig } from "@storybook/nextjs-vite"
 
 /**
  * This function is used to resolve the absolute path of a package.
  * It is needed in projects that use Yarn PnP or are set up within a monorepo.
  */
-const _require = typeof require === "undefined" ? import.meta : require
+const require = createRequire(import.meta.url)
 const getAbsolutePath = (packageName: string): string =>
-  path
-    .dirname(_require.resolve(path.join(packageName, "package.json")))
-    .replace(/^file:\/\//, "")
+  dirname(require.resolve(join(packageName, "package.json")))
 
 export default {
   stories: [
