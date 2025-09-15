@@ -1,9 +1,9 @@
 "use client"
 
+import { cn } from "@taiyomoe/ui/utils/cn"
 import { ArrowLeftIcon } from "lucide-react"
 import { useTranslations } from "next-intl"
 import type { ComponentProps } from "react"
-import { cn } from "~/utils/cn"
 
 export const BackArrowButton = ({
   className,

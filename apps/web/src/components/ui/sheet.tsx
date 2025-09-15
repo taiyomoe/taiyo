@@ -1,10 +1,10 @@
 "use client"
 
 import * as SheetPrimitive from "@radix-ui/react-dialog"
+import { cn } from "@taiyomoe/ui/utils/cn"
 import { XIcon } from "lucide-react"
 import type { ComponentProps, HTMLAttributes } from "react"
 import { tv, type VariantProps } from "tailwind-variants"
-import { cn } from "~/utils/cn"
 
 export const Sheet = SheetPrimitive.Root
 

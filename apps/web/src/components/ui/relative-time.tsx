@@ -1,5 +1,6 @@
 "use client"
 
+import { cn } from "@taiyomoe/ui/utils/cn"
 import { DateTime } from "luxon"
 import { useLocale } from "next-intl"
 import { capitalize } from "radash"
@@ -9,7 +10,6 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "~/components/ui/hover-card"
-import { cn } from "~/utils/cn"
 
 type Props = HTMLAttributes<HTMLSpanElement> & { date: Date }
 

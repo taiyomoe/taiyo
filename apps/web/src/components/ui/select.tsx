@@ -1,9 +1,9 @@
 "use client"
 
 import * as SelectPrimitive from "@radix-ui/react-select"
+import { cn } from "@taiyomoe/ui/utils/cn"
 import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from "lucide-react"
 import type { ComponentProps } from "react"
-import { cn } from "~/utils/cn"
 
 export const Select = SelectPrimitive.Root
 

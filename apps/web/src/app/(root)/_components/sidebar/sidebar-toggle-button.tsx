@@ -1,8 +1,8 @@
 "use client"
 
+import { cn } from "@taiyomoe/ui/utils/cn"
 import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react"
 import type { ComponentProps } from "react"
-import { cn } from "~/utils/cn"
 import { useSidebar } from "./sidebar-context"
 
 export const SidebarToggleButton = ({

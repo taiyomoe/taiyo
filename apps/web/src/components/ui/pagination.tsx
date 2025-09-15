@@ -3,6 +3,7 @@
 import { config } from "@taiyomoe/config"
 import { pageSchema } from "@taiyomoe/schemas"
 import { Button, buttonVariants } from "@taiyomoe/ui/components/button"
+import { cn } from "@taiyomoe/ui/utils/cn"
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -19,7 +20,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select"
-import { cn } from "~/utils/cn"
 
 export const Pagination = ({ className, ...props }: ComponentProps<"div">) => {
   const [page, setPage] = useQueryState(

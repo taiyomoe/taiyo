@@ -1,5 +1,5 @@
+import { cn } from "@taiyomoe/ui/utils/cn"
 import type { ComponentProps } from "react"
-import { cn } from "~/utils/cn"
 
 export const ShineButton = ({
   className,

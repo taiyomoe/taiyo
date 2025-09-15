@@ -9,7 +9,8 @@
   ],
   "exports": {
     "./globals.css": "./src/styles/globals.css",
-    "./components/*": "./src/components/*.tsx"
+    "./components/*": "./src/components/*.tsx",
+    "./utils/*": "./src/utils/*.ts"
   },
   "scripts": {
     "clean": "rm -rf .turbo node_modules",

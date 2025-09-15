@@ -1,3 +1,4 @@
+import { cn } from "@taiyomoe/ui/utils/cn"
 import {
   type HTMLAttributes,
   useCallback,
@@ -5,7 +6,6 @@ import {
   useRef,
   useState,
 } from "react"
-import { cn } from "~/utils/cn"
 
 type ShadowState = "top" | "bottom" | "top-bottom" | "none"
 
