@@ -1,4 +1,4 @@
-import type { Languages } from "@prisma/client"
+import type { Languages } from "@taiyomoe/db"
 
 export type ParsedMdCover = {
   mdId: string

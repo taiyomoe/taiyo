@@ -1,6 +1,5 @@
-import type { Prisma, PrismaClient } from "@prisma/client"
+import type { Prisma, PrismaClient } from "@taiyomoe/db"
 import type { MediasIndexItem } from "@taiyomoe/types"
-import { TRPCError } from "@trpc/server"
 import { DateTime } from "luxon"
 import { omit } from "radash"
 
@@ -28,17 +27,11 @@ export const getMediaIndexItem = async (
   })
 
   if (!result) {
-    throw new TRPCError({
-      code: "NOT_FOUND",
-      message: `Media '${id}' not found`,
-    })
+    throw new Error(`Media '${id}' not found`)
   }
 
   if (!result.covers.length) {
-    throw new TRPCError({
-      code: "INTERNAL_SERVER_ERROR",
-      message: `Media '${id}' has no main cover`,
-    })
+    throw new Error(`Media '${id}' has no main cover`)
   }
 
   return {

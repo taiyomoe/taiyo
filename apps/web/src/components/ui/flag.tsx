@@ -1,4 +1,4 @@
-import type { Languages } from "@prisma/client"
+import type { Languages } from "@taiyomoe/db/browser"
 import {
   BR,
   type Props as FlagProps,

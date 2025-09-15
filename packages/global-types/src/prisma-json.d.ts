@@ -1,5 +1,5 @@
-import type { ContentRating, Languages } from "@prisma/client"
 import type { config } from "@taiyomoe/config"
+import type { ContentRating, Languages } from "@taiyomoe/db"
 
 declare global {
   namespace PrismaJson {

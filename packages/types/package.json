@@ -12,10 +12,10 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@prisma/client": "^6.16.1",
     "@taiyomoe/schemas": "workspace:^"
   },
   "devDependencies": {
+    "@taiyomoe/db": "workspace:^",
     "@taiyomoe/typescript": "workspace:^",
     "typescript": "^5.9.2"
   }

@@ -9,13 +9,12 @@
     "./env": "./src/env.ts"
   },
   "scripts": {
+    "seed": "tsx ./src/seed.ts",
     "clean": "rm -rf .turbo node_modules",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@prisma/client": "^6.16.1",
     "@t3-oss/env-core": "^0.13.8",
-    "@trpc/server": "^11.5.1",
     "luxon": "^3.7.2",
     "meilisearch": "^0.53.0",
     "punycode": "^2.3.1",
@@ -23,9 +22,11 @@
     "zod": "^4.1.8"
   },
   "devDependencies": {
+    "@taiyomoe/db": "workspace:^",
     "@taiyomoe/types": "workspace:^",
     "@taiyomoe/typescript": "workspace:^",
     "@types/luxon": "^3.7.1",
+    "tsx": "^4.20.5",
     "typescript": "^5.9.2"
   }
 }

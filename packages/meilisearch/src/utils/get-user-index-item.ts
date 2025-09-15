@@ -1,6 +1,5 @@
-import type { Prisma, PrismaClient } from "@prisma/client"
+import type { Prisma, PrismaClient } from "@taiyomoe/db"
 import type { UsersIndexItem } from "@taiyomoe/types"
-import { TRPCError } from "@trpc/server"
 import { omit } from "radash"
 
 export const getUserIndexItem = async (
@@ -19,10 +18,7 @@ export const getUserIndexItem = async (
   })
 
   if (!result || !result.profile) {
-    throw new TRPCError({
-      code: "NOT_FOUND",
-      message: `User '${id}' not found`,
-    })
+    throw new Error(`User '${id}' not found`)
   }
 
   return {

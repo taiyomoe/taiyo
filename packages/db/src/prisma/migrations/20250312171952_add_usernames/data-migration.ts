@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker"
-import type { Prisma } from "@prisma/client"
+import type { Prisma } from "@taiyomoe/db"
 import { normalizeDisplayName, normalizeUsername } from "@taiyomoe/utils"
 
 export default async (tx: Prisma.TransactionClient) => {

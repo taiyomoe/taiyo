@@ -1,3 +1,4 @@
+import type { config } from "@taiyomoe/config"
 import {
   type ContentRating,
   Languages,
@@ -7,8 +8,7 @@ import {
   type MediaStatus,
   type MediaType,
   type Trackers,
-} from "@prisma/client"
-import type { config } from "@taiyomoe/config"
+} from "@taiyomoe/db"
 import type { ParsedMdChapter, ParsedMdCover } from "@taiyomoe/types"
 import type { Chapter, Cover, Manga } from "mangadex-full-api"
 

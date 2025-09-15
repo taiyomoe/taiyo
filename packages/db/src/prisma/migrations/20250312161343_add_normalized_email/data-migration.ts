@@ -1,4 +1,4 @@
-import type { Prisma } from "@prisma/client"
+import type { Prisma } from "@taiyomoe/db"
 import normalizeEmail from "validator/lib/normalizeEmail"
 
 export default async (tx: Prisma.TransactionClient) => {

@@ -1,4 +1,4 @@
-import { getPaginatedLatestReleases } from "@prisma/client/sql"
+import { getPaginatedLatestReleases } from "@taiyomoe/db"
 import { pageSchema, perPageSchema } from "@taiyomoe/schemas"
 import { z } from "zod"
 import { publicProcedure } from "../trpc"
