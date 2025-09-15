@@ -1,4 +1,4 @@
-import type { ContentRating } from "@prisma/client"
+import type { ContentRating } from "@taiyomoe/db"
 import type {
   CreateMediaInput,
   UploadChapterInput,

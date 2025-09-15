@@ -1,4 +1,4 @@
-import { ContentRating } from "@prisma/client"
+import { ContentRating } from "@taiyomoe/db/browser"
 import { useMutation } from "@tanstack/react-query"
 import { BR, FR, US } from "country-flag-icons/react/3x2"
 import { useLocale, useTranslations } from "next-intl"

@@ -12,7 +12,6 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@prisma/client": "^6.16.1",
     "@taiyomoe/auth": "workspace:^",
     "@taiyomoe/cache": "workspace:^",
     "@taiyomoe/db": "workspace:^",

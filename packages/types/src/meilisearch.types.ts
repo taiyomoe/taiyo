@@ -1,4 +1,4 @@
-import type { Group, Media, Title, User, UserProfile } from "@prisma/client"
+import type { Group, Media, Title, User, UserProfile } from "@taiyomoe/db"
 
 export type MediasIndexItem = Omit<
   Media,

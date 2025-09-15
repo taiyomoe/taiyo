@@ -19,7 +19,6 @@ import media7 from "./seeds/medias/media-7"
 import media8 from "./seeds/medias/media-8"
 import media9 from "./seeds/medias/media-9"
 import media10 from "./seeds/medias/media-10"
-import meilisearch from "./seeds/meilisearch.seed"
 import users from "./seeds/users"
 
 async function main() {
@@ -65,8 +64,9 @@ async function main() {
   await group11.execute().then(() => console.log("Group 11 seeded"))
 
   // Meilisearch
-  console.log("\nMeilisearch:")
-  await meilisearch.execute().then(() => console.log("Meilisearch reindexed"))
+  console.log(
+    "\nMeilisearch: Please run `infisical run -- pnpm -F @taiyomoe/meilisearch run seed`",
+  )
 }
 
 main().catch((e) => {

@@ -1,6 +1,5 @@
-import type { Prisma, PrismaClient } from "@prisma/client"
+import type { Prisma, PrismaClient } from "@taiyomoe/db"
 import type { GroupsIndexItem } from "@taiyomoe/types"
-import { TRPCError } from "@trpc/server"
 import { DateTime } from "luxon"
 import { omit } from "radash"
 
@@ -11,10 +10,7 @@ export const getGroupIndexItem = async (
   const result = await db.group.findUnique({ where: { id } })
 
   if (!result) {
-    throw new TRPCError({
-      code: "NOT_FOUND",
-      message: `Group '${id}' not found`,
-    })
+    throw new Error(`Group '${id}' not found`)
   }
 
   return {

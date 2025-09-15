@@ -7,8 +7,8 @@
   "main": "./src/index.d.ts",
   "types": "./src/index.d.ts",
   "devDependencies": {
-    "@prisma/client": "^6.16.1",
     "@taiyomoe/config": "workspace:^",
+    "@taiyomoe/db": "workspace:^",
     "@taiyomoe/messages": "workspace:^",
     "@total-typescript/ts-reset": "^0.6.1"
   }

@@ -1,4 +1,4 @@
-import type { Prisma } from "@prisma/client"
+import type { Prisma } from "@taiyomoe/db"
 
 export default async (tx: Prisma.TransactionClient) => {
   const users = await tx.$queryRaw<

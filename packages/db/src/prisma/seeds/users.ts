@@ -1,5 +1,5 @@
 import { fakerPT_BR } from "@faker-js/faker"
-import { ContentRating, Countries, Genders, Languages } from "@prisma/client"
+import { ContentRating, Countries, Genders, Languages } from "@taiyomoe/db"
 import { normalizeDisplayName, normalizeUsername } from "@taiyomoe/utils"
 import { db } from "../../"
 
