@@ -1,7 +1,6 @@
 @import "tailwindcss";
 @import "@taiyomoe/ui/globals.css";
 @import "tw-animate-css";
-@plugin "tailwindcss-react-aria-components";
 /* @plugin "tailwind-scrollbar" {
   nocompatible: true;
   preferredStrategy: "pseudoelements";
