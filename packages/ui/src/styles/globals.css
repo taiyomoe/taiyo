@@ -7,6 +7,7 @@
 @custom-variant open (&:is([data-popup-open]));
 @custom-variant highlighted (&:is([data-highlighted]));
 @custom-variant selected (&:is([data-selected]));
+@custom-variant disabled (&:is([data-disabled], :disabled)) *;
 
 :root {
   /* Background Standard */
