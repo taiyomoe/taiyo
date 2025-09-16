@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@taiyomoe/config": "workspace:^",
-    "zod": "^4.1.8"
+    "zod": "^4.1.9"
   },
   "devDependencies": {
     "@taiyomoe/typescript": "workspace:^",
