@@ -1,4 +1,5 @@
 import { Checkbox } from "@taiyomoe/ui/components/checkbox"
+import { Label } from "@taiyomoe/ui/components/label"
 import type { ControllerProps, FieldPath, FieldValues } from "react-hook-form"
 import {
   FormControl,
@@ -6,7 +7,6 @@ import {
   FormItem,
   FormMessage,
 } from "~/components/ui/form"
-import { labelVariants } from "~/components/ui/label"
 
 export const CheckboxField = <
   TFieldValues extends FieldValues = FieldValues,
@@ -26,9 +26,8 @@ export const CheckboxField = <
     render={({ field }) => (
       <FormItem className={className}>
         <FormControl>
-          <Checkbox checked={field.value} {...field}>
-            <span className={labelVariants()}>{label}</span>
-          </Checkbox>
+          <Checkbox id={field.name} checked={field.value} {...field} />
+          <Label htmlFor={field.name}>{label}</Label>
         </FormControl>
         <FormMessage />
       </FormItem>
