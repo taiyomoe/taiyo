@@ -1,0 +1,38 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as SelectStories from './Select.stories';
+
+<Meta title="UI/Select" />
+
+# Select
+
+[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/select.tsx)
+
+## Table of Contents
+
+- [Overview](#overview)
+  - [Default](#default)
+  - [Disabled](#disabled)
+  - [Multiple Selection](#multiple-selection)
+- [Feedback](#feedback)
+
+## Overview
+
+Select components allow users to choose from a list of options. They provide a clean, accessible interface for single or multiple selections with clear visual feedback. The select component is perfect for forms where users need to pick from predefined choices.
+
+<Canvas of={SelectStories.Default} />
+
+### Disabled
+
+Disabled selects prevent user interaction and provide visual feedback that the field is not available.
+
+<Canvas of={SelectStories.Disabled} />
+
+### Multiple Selection
+
+Multiple selection allows users to choose several options at once, with each selected item clearly indicated with a checkmark.
+
+<Canvas of={SelectStories.Multiple} />
+
+## Feedback
+
+Help us improve this component by providing feedback, asking questions on [Discord](https://discord.gg/RYbnyeWcM2), or updating this file directly on [GitHub](https://github.com/taiyomoe/taiyo). Your feedback helps us create better components! 🚀
