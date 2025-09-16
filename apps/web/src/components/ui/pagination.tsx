@@ -3,6 +3,13 @@
 import { config } from "@taiyomoe/config"
 import { pageSchema } from "@taiyomoe/schemas"
 import { Button, buttonVariants } from "@taiyomoe/ui/components/button"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@taiyomoe/ui/components/select"
 import { cn } from "@taiyomoe/ui/utils/cn"
 import {
   ChevronLeftIcon,
@@ -13,13 +20,6 @@ import { useTranslations } from "next-intl"
 import { parseAsInteger, useQueryState } from "nuqs"
 import { type ComponentProps, useMemo, useState } from "react"
 import { EditText } from "~/components/ui/edit-text"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "~/components/ui/select"
 
 export const Pagination = ({ className, ...props }: ComponentProps<"div">) => {
   const [page, setPage] = useQueryState(
@@ -70,7 +70,7 @@ export const Pagination = ({ className, ...props }: ComponentProps<"div">) => {
     >
       <Select value={perPage.toString()} onValueChange={handlePerPageChange}>
         <SelectTrigger>
-          <SelectValue placeholder={perPage} />
+          <SelectValue>{perPage}</SelectValue>
         </SelectTrigger>
         <SelectContent>
           {config.pagination.perPageOptions.map((option) => (
