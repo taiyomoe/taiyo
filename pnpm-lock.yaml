@@ -31,7 +31,7 @@ importers:
     dependencies:
       '@t3-oss/env-core':
         specifier: ^0.13.8
-        version: 0.13.8(typescript@5.9.2)(zod@4.1.8)
+        version: 0.13.8(typescript@5.9.2)(zod@4.1.9)
       '@taiyomoe/cache':
         specifier: workspace:^
         version: link:../../packages/cache
@@ -162,7 +162,7 @@ importers:
         version: 1.2.3(@types/react@19.1.13)(react@19.1.1)
       '@t3-oss/env-nextjs':
         specifier: ^0.13.8
-        version: 0.13.8(typescript@5.9.2)(zod@4.1.8)
+        version: 0.13.8(typescript@5.9.2)(zod@4.1.9)
       '@tailwindcss/postcss':
         specifier: ^4.1.13
         version: 4.1.13
@@ -287,8 +287,8 @@ importers:
         specifier: ^3.1.1
         version: 3.1.1(react@19.1.1)
       zod:
-        specifier: ^4.1.8
-        version: 4.1.8
+        specifier: ^4.1.9
+        version: 4.1.9
       zustand:
         specifier: ^5.0.8
         version: 5.0.8(@types/react@19.1.13)(react@19.1.1)(use-sync-external-store@1.5.0(react@19.1.1))
@@ -322,7 +322,7 @@ importers:
     dependencies:
       '@t3-oss/env-core':
         specifier: ^0.13.8
-        version: 0.13.8(typescript@5.9.2)(zod@4.1.8)
+        version: 0.13.8(typescript@5.9.2)(zod@4.1.9)
       '@taiyomoe/cache':
         specifier: workspace:^
         version: link:../cache
@@ -348,8 +348,8 @@ importers:
         specifier: ^3.7.2
         version: 3.7.2
       zod:
-        specifier: ^4.1.8
-        version: 4.1.8
+        specifier: ^4.1.9
+        version: 4.1.9
     devDependencies:
       '@taiyomoe/typescript':
         specifier: workspace:^
@@ -365,7 +365,7 @@ importers:
     dependencies:
       '@t3-oss/env-core':
         specifier: ^0.13.8
-        version: 0.13.8(typescript@5.9.2)(zod@4.1.8)
+        version: 0.13.8(typescript@5.9.2)(zod@4.1.9)
       ioredis:
         specifier: ^5.7.0
         version: 5.7.0
@@ -373,8 +373,8 @@ importers:
         specifier: ^2.2.2
         version: 2.2.2
       zod:
-        specifier: ^4.1.8
-        version: 4.1.8
+        specifier: ^4.1.9
+        version: 4.1.9
     devDependencies:
       '@taiyomoe/typescript':
         specifier: workspace:^
@@ -405,7 +405,7 @@ importers:
         version: 6.16.2(prisma@6.16.2(magicast@0.3.5)(typescript@5.9.2))(typescript@5.9.2)
       '@t3-oss/env-core':
         specifier: ^0.13.8
-        version: 0.13.8(typescript@5.9.2)(zod@4.1.8)
+        version: 0.13.8(typescript@5.9.2)(zod@4.1.9)
       '@taiyomoe/utils':
         specifier: workspace:^
         version: link:../utils
@@ -414,13 +414,13 @@ importers:
         version: 3.6.1(@prisma/client@6.16.2(prisma@6.16.2(magicast@0.3.5)(typescript@5.9.2))(typescript@5.9.2))(prisma@6.16.2(magicast@0.3.5)(typescript@5.9.2))(typescript@5.9.2)
       prisma-zod-generator:
         specifier: ^1.20.3
-        version: 1.20.3(magicast@0.3.5)(prisma@6.16.2(magicast@0.3.5)(typescript@5.9.2))(typescript@5.9.2)(zod@4.1.8)
+        version: 1.20.3(magicast@0.3.5)(prisma@6.16.2(magicast@0.3.5)(typescript@5.9.2))(typescript@5.9.2)(zod@4.1.9)
       validator:
         specifier: ^13.15.15
         version: 13.15.15
       zod:
-        specifier: ^4.1.8
-        version: 4.1.8
+        specifier: ^4.1.9
+        version: 4.1.9
     devDependencies:
       '@taiyomoe/typescript':
         specifier: workspace:^
@@ -445,7 +445,7 @@ importers:
         version: 0.5.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       '@t3-oss/env-core':
         specifier: ^0.13.8
-        version: 0.13.8(typescript@5.9.2)(zod@4.1.8)
+        version: 0.13.8(typescript@5.9.2)(zod@4.1.9)
       react:
         specifier: ^19.1.1
         version: 19.1.1
@@ -453,8 +453,8 @@ importers:
         specifier: ^6.1.0
         version: 6.1.0(@react-email/render@1.2.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))
       zod:
-        specifier: ^4.1.8
-        version: 4.1.8
+        specifier: ^4.1.9
+        version: 4.1.9
     devDependencies:
       '@react-email/preview-server':
         specifier: 4.2.11
@@ -490,7 +490,7 @@ importers:
     dependencies:
       '@t3-oss/env-core':
         specifier: ^0.13.8
-        version: 0.13.8(typescript@5.9.2)(zod@4.1.8)
+        version: 0.13.8(typescript@5.9.2)(zod@4.1.9)
       luxon:
         specifier: ^3.7.2
         version: 3.7.2
@@ -504,8 +504,8 @@ importers:
         specifier: ^12.1.1
         version: 12.1.1
       zod:
-        specifier: ^4.1.8
-        version: 4.1.8
+        specifier: ^4.1.9
+        version: 4.1.9
     devDependencies:
       '@taiyomoe/db':
         specifier: workspace:^
@@ -532,7 +532,7 @@ importers:
     dependencies:
       '@t3-oss/env-core':
         specifier: ^0.13.8
-        version: 0.13.8(typescript@5.9.2)(zod@4.1.8)
+        version: 0.13.8(typescript@5.9.2)(zod@4.1.9)
       '@taiyomoe/cache':
         specifier: workspace:^
         version: link:../cache
@@ -543,8 +543,8 @@ importers:
         specifier: ^5.58.5
         version: 5.58.5
       zod:
-        specifier: ^4.1.8
-        version: 4.1.8
+        specifier: ^4.1.9
+        version: 4.1.9
     devDependencies:
       '@taiyomoe/typescript':
         specifier: workspace:^
@@ -560,13 +560,13 @@ importers:
         version: 3.890.0
       '@t3-oss/env-core':
         specifier: ^0.13.8
-        version: 0.13.8(typescript@5.9.2)(zod@4.1.8)
+        version: 0.13.8(typescript@5.9.2)(zod@4.1.9)
       aws4fetch:
         specifier: ^1.0.20
         version: 1.0.20
       zod:
-        specifier: ^4.1.8
-        version: 4.1.8
+        specifier: ^4.1.9
+        version: 4.1.9
     devDependencies:
       '@taiyomoe/typescript':
         specifier: workspace:^
@@ -581,8 +581,8 @@ importers:
         specifier: workspace:^
         version: link:../config
       zod:
-        specifier: ^4.1.8
-        version: 4.1.8
+        specifier: ^4.1.9
+        version: 4.1.9
     devDependencies:
       '@taiyomoe/typescript':
         specifier: workspace:^
@@ -627,8 +627,8 @@ importers:
         specifier: ^4.3.9
         version: 4.3.9(react@19.1.1)
       zod:
-        specifier: ^4.1.8
-        version: 4.1.8
+        specifier: ^4.1.9
+        version: 4.1.9
     devDependencies:
       '@taiyomoe/types':
         specifier: workspace:^
@@ -6867,8 +6867,8 @@ packages:
   zod@3.25.76:
     resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
 
-  zod@4.1.8:
-    resolution: {integrity: sha512-5R1P+WwQqmmMIEACyzSvo4JXHY5WiAFHRMg+zBZKgKS+Q1viRa0C1hmUKtHltoIFKtIdki3pRxkmpP74jnNYHQ==}
+  zod@4.1.9:
+    resolution: {integrity: sha512-HI32jTq0AUAC125z30E8bQNz0RQ+9Uc+4J7V97gLYjZVKRjeydPgGt6dvQzFrav7MYOUGFqqOGiHpA/fdbd0cQ==}
 
   zustand@5.0.8:
     resolution: {integrity: sha512-gyPKpIaxY9XcO2vSMrLbiER7QMAMGOQZVRdJ6Zi782jkbzZygq5GI9nG8g+sMgitRtndwaBSl7uiqC49o1SSiw==}
@@ -10872,17 +10872,17 @@ snapshots:
     dependencies:
       tslib: 2.8.1
 
-  '@t3-oss/env-core@0.13.8(typescript@5.9.2)(zod@4.1.8)':
+  '@t3-oss/env-core@0.13.8(typescript@5.9.2)(zod@4.1.9)':
     optionalDependencies:
       typescript: 5.9.2
-      zod: 4.1.8
+      zod: 4.1.9
 
-  '@t3-oss/env-nextjs@0.13.8(typescript@5.9.2)(zod@4.1.8)':
+  '@t3-oss/env-nextjs@0.13.8(typescript@5.9.2)(zod@4.1.9)':
     dependencies:
-      '@t3-oss/env-core': 0.13.8(typescript@5.9.2)(zod@4.1.8)
+      '@t3-oss/env-core': 0.13.8(typescript@5.9.2)(zod@4.1.9)
     optionalDependencies:
       typescript: 5.9.2
-      zod: 4.1.8
+      zod: 4.1.9
 
   '@tailwindcss/node@4.1.13':
     dependencies:
@@ -11584,7 +11584,7 @@ snapshots:
       jose: 6.1.0
       kysely: 0.28.7
       nanostores: 1.0.1
-      zod: 4.1.8
+      zod: 4.1.9
     optionalDependencies:
       next: 15.5.3(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       react: 19.1.1
@@ -12975,7 +12975,7 @@ snapshots:
       tslib: 2.8.1
       typescript: 5.9.2
 
-  prisma-zod-generator@1.20.3(magicast@0.3.5)(prisma@6.16.2(magicast@0.3.5)(typescript@5.9.2))(typescript@5.9.2)(zod@4.1.8):
+  prisma-zod-generator@1.20.3(magicast@0.3.5)(prisma@6.16.2(magicast@0.3.5)(typescript@5.9.2))(typescript@5.9.2)(zod@4.1.9):
     dependencies:
       '@prisma/client': 6.16.2(prisma@6.16.2(magicast@0.3.5)(typescript@5.9.2))(typescript@5.9.2)
       '@prisma/generator-helper': 6.16.1
@@ -12985,7 +12985,7 @@ snapshots:
       node-fetch: 3.3.2
       prettier: 3.6.2
       tslib: 2.8.1
-      zod: 4.1.8
+      zod: 4.1.9
     transitivePeerDependencies:
       - magicast
       - prisma
@@ -14116,7 +14116,7 @@ snapshots:
 
   zod@3.25.76: {}
 
-  zod@4.1.8: {}
+  zod@4.1.9: {}
 
   zustand@5.0.8(@types/react@19.1.13)(react@19.1.1)(use-sync-external-store@1.5.0(react@19.1.1)):
     optionalDependencies:
