@@ -15,7 +15,7 @@ importers:
         specifier: workspace:^
         version: link:packages/global-types
       '@types/node':
-        specifier: ^22.18.3
+        specifier: ^22.18.4
         version: 22.18.4
       knip:
         specifier: ^5.63.1
