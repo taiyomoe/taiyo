@@ -45,20 +45,18 @@ export const Pagination = ({ className, ...props }: ComponentProps<"div">) => {
       { label: page + 1, isActive: false },
     ]
   }, [page])
-  const [isEditing, setIsEditing] = useState(false)
+  const [_, setIsEditing] = useState(false)
 
   const handlePageChange = (page: number) => {
     window.scrollTo({ top: 0, behavior: "smooth" })
     setPage(page)
   }
 
-  const handlePerPageChange = (value: string) => {
+  const handlePerPageChange = (value: unknown) => {
     window.scrollTo({ top: 0, behavior: "smooth" })
     setPage(null)
     setPerPage(Number(value))
   }
-
-  console.log("isEditing", isEditing)
 
   return (
     <div
