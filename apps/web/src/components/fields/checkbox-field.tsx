@@ -1,5 +1,5 @@
+import { Checkbox } from "@taiyomoe/ui/components/checkbox"
 import type { ControllerProps, FieldPath, FieldValues } from "react-hook-form"
-import { Checkbox } from "~/components/ui/checkbox"
 import {
   FormControl,
   FormField,
@@ -26,7 +26,7 @@ export const CheckboxField = <
     render={({ field }) => (
       <FormItem className={className}>
         <FormControl>
-          <Checkbox defaultSelected={field.value} {...field}>
+          <Checkbox checked={field.value} {...field}>
             <span className={labelVariants()}>{label}</span>
           </Checkbox>
         </FormControl>
