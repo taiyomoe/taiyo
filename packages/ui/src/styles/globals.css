@@ -3,6 +3,10 @@
 @source "../components/*.{ts,tsx}";
 
 @custom-variant dark (&:is(.dark *));
+@custom-variant pressed (&:is([data-pressed]));
+@custom-variant open (&:is([data-popup-open]));
+@custom-variant highlighted (&:is([data-highlighted]));
+@custom-variant selected (&:is([data-selected]));
 
 :root {
   /* Background Standard */
