@@ -8,6 +8,7 @@
 @custom-variant highlighted (&:is([data-highlighted]));
 @custom-variant selected (&:is([data-selected]));
 @custom-variant disabled (&:is([data-disabled], :disabled)) *;
+@custom-variant checked (&:is([data-checked]));
 
 :root {
   /* Background Standard */
