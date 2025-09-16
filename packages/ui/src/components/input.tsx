@@ -15,6 +15,7 @@ export const Input = ({ className, ...props }: InputProps) => (
       className,
     )}
     title={props.placeholder}
+    data-slot="input"
     {...props}
   />
 )

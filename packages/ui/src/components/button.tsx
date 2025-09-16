@@ -76,8 +76,8 @@ export const Button = ({
 
   return (
     <Comp
-      data-slot="button"
       className={buttonVariants({ color, variant, size, className })}
+      data-slot="button"
       {...props}
     >
       {isPending && <LoaderCircleIcon className="animate-spin" />}
