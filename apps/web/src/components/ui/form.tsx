@@ -1,7 +1,9 @@
 import { Slot } from "@radix-ui/react-slot"
+import { Label } from "@taiyomoe/ui/components/label"
 import { cn } from "@taiyomoe/ui/utils/cn"
 import { type NestedKeyOf, useTranslations } from "next-intl"
 import {
+  type ComponentProps,
   type ComponentPropsWithoutRef,
   type ComponentRef,
   createContext,
@@ -21,7 +23,6 @@ import {
   useFormContext,
 } from "react-hook-form"
 import type { ZodMessages } from "~/utils/zod-messages"
-import { Label, type LabelProps } from "./label"
 
 type FormProps<
   TFieldValues extends FieldValues,
@@ -121,7 +122,10 @@ export const FormItem = forwardRef<
 })
 FormItem.displayName = "FormItem"
 
-export const FormLabel = ({ className, ...props }: LabelProps) => {
+export const FormLabel = ({
+  className,
+  ...props
+}: ComponentProps<typeof Label>) => {
   const { error, formItemId } = useFormField()
 
   return (
