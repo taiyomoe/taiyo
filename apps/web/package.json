@@ -58,7 +58,6 @@
     "tailwind-variants": "^3.1.1",
     "tailwindcss": "^4.1.13",
     "tailwindcss-react-aria-components": "^2.0.1",
-    "tw-animate-css": "^1.3.8",
     "usehooks-ts": "^3.1.1",
     "zod": "^4.1.9",
     "zustand": "^5.0.8"
