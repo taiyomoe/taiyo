@@ -19,6 +19,9 @@
           "level": "warn",
           "options": { "functions": ["cn", "tv"] }
         }
+      },
+      "correctness": {
+        "useUniqueElementIds": "off"
       }
     }
   },
