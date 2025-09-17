@@ -6,7 +6,7 @@ import {
   SheetDescription,
   SheetHeader,
   SheetTitle,
-} from "~/components/ui/sheet"
+} from "@taiyomoe/ui/components/sheet"
 import { SidebarContent } from "./sidebar-content"
 import { useSidebar } from "./sidebar-context"
 import { SidebarFooter } from "./sidebar-footer"
@@ -21,8 +21,8 @@ export const Sidebar = () => {
       <Sheet open={openMobile} onOpenChange={setOpenMobile}>
         <SheetContent
           className="w-64 p-0 [&>button]:hidden"
+          open={openMobile}
           side="left"
-          data-state={openMobile ? "open" : "closed"}
         >
           <SheetHeader className="sr-only">
             <SheetTitle>Sidebar</SheetTitle>

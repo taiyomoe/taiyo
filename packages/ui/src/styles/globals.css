@@ -5,7 +5,8 @@
 
 @custom-variant dark (&:is(.dark *));
 @custom-variant pressed (&:is([data-pressed]));
-@custom-variant open (&:is([data-popup-open]));
+@custom-variant open (&:is([data-popup-open], [data-open]));
+@custom-variant closed (&:is([data-popup-closed], [data-closed]));
 @custom-variant highlighted (&:is([data-highlighted]));
 @custom-variant selected (&:is([data-selected]));
 @custom-variant disabled (&:is([data-disabled], :disabled)) *;

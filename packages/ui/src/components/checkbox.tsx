@@ -14,7 +14,7 @@ export const Checkbox = ({
       "disabled:cursor-not-allowed disabled:opacity-50",
       className,
     )}
-    data-slot="checkbox-root"
+    data-slot="checkbox"
     {...props}
   >
     <BaseCheckbox.Indicator data-slot="checkbox-indicator">
