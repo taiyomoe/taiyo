@@ -1,5 +1,5 @@
+import { Meter } from "@taiyomoe/ui/components/meter"
 import { Skeleton } from "~/components/ui/skeleton"
-import { Slider } from "~/components/ui/slider"
 
 export const LatestMediasSkeleton = async () => (
   <div className="overflow-hidden">
@@ -25,9 +25,9 @@ export const LatestMediasSkeleton = async () => (
         </div>
       ))}
     </div>
-    <Slider
-      className="absolute top-2.5 right-0 z-30 w-[200] [&_[data-slider=thumb]]:hidden [&_[data-slider=track]]:h-3 [&_[data-slider=track]]:border [&_[data-slider=track]]:border-subtle"
-      defaultValue={[0]}
+    <Meter
+      className="absolute top-2.5 right-0 z-30 w-[200] [&_[data-slot=meter-label]]:hidden [&_[data-slot=meter-value]]:hidden"
+      value={0}
     />
   </div>
 )

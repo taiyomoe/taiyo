@@ -11,6 +11,8 @@
 @custom-variant selected (&:is([data-selected]));
 @custom-variant disabled (&:is([data-disabled], :disabled)) *;
 @custom-variant checked (&:is([data-checked]));
+@custom-variant vertical (&:is([data-orientation=vertical]));
+@custom-variant horizontal (&:is([data-orientation=horizontal]));
 
 :root {
   /* Background Standard */

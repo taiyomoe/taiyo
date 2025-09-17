@@ -1,10 +1,10 @@
 "use client"
 
+import { Slider } from "@taiyomoe/ui/components/slider"
 import { useSuspenseQuery } from "@tanstack/react-query"
 import type { EmblaCarouselType } from "embla-carousel"
 import useEmblaCarousel from "embla-carousel-react"
 import { useCallback, useEffect, useState } from "react"
-import { Slider } from "~/components/ui/slider"
 import { useSettings } from "~/stores/auth.store"
 import { useTRPC } from "~/utils/trpc/react"
 import { LatestMediasCard } from "./latest-medias-card"
@@ -26,11 +26,12 @@ export const LatestMediasCarousel = () => {
   }, [])
 
   const handleScrollProgress = useCallback(
-    (v: number[]) => {
+    (v: number | readonly number[]) => {
       if (!emblaApi) return
 
       const slideCount = emblaApi.slideNodes().length
-      const slideIndex = Math.floor((v[0]! / 100) * (slideCount - 1))
+      const slideIndex =
+        Math.floor((typeof v === "number" ? v : v[0]!) / 100) * (slideCount - 1)
 
       emblaApi.scrollTo(slideIndex)
     },
@@ -55,8 +56,8 @@ export const LatestMediasCarousel = () => {
         ))}
       </div>
       <Slider
-        className="absolute top-2.5 right-0 z-30 w-[200] [&_[data-slider=thumb]]:hidden [&_[data-slider=track]]:h-3 [&_[data-slider=track]]:border [&_[data-slider=track]]:border-subtle"
-        value={[scrollProgress]}
+        className="absolute top-2.5 right-0 z-30 w-[200] [&_[data-slider=thumb]]:hidden [&_[data-slider=track]]:h-3"
+        value={scrollProgress}
         onValueChange={handleScrollProgress}
         defaultValue={[0]}
       />

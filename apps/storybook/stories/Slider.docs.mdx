@@ -1,0 +1,38 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as SliderStories from './Slider.stories';
+
+<Meta title="UI/Slider" />
+
+# Slider
+
+[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/slider.tsx)
+
+## Table of Contents
+
+- [Overview](#overview)
+  - [Default](#default)
+  - [Range](#range)
+  - [Disabled](#disabled)
+- [Feedback](#feedback)
+
+## Overview
+
+Sliders allow users to select a value or range of values from a continuous range by dragging a handle along a track. They're perfect for adjusting settings like volume, brightness, or any numeric value where precise control is needed.
+
+<Canvas of={SliderStories.Default} />
+
+### Range
+
+Range sliders enable users to select a range of values with two handles, perfect for filtering data or setting min/max boundaries.
+
+<Canvas of={SliderStories.Range} />
+
+### Disabled
+
+Disabled sliders prevent user interaction and provide visual feedback that the control is not available.
+
+<Canvas of={SliderStories.Disabled} />
+
+## Feedback
+
+Help us improve this component by providing feedback, asking questions on [Discord](https://discord.gg/RYbnyeWcM2), or updating this file directly on [GitHub](https://github.com/taiyomoe/taiyo). Your feedback helps us create better components! 🚀
