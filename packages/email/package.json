@@ -18,7 +18,7 @@
     "@t3-oss/env-core": "^0.13.8",
     "react": "^19.1.1",
     "resend": "^6.1.0",
-    "zod": "^4.1.9"
+    "zod": "^4.1.11"
   },
   "devDependencies": {
     "@react-email/preview-server": "4.2.11",
