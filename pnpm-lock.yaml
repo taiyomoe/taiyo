@@ -206,8 +206,8 @@ importers:
         specifier: ^1.3.14
         version: 1.3.14(next@15.5.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       country-flag-icons:
-        specifier: ^1.5.20
-        version: 1.5.20
+        specifier: ^1.5.21
+        version: 1.5.21
       embla-carousel-autoplay:
         specifier: ^8.6.0
         version: 8.6.0(embla-carousel@8.6.0)
@@ -4613,8 +4613,8 @@ packages:
     resolution: {integrity: sha512-KIHbLJqu73RGr/hnbrO9uBeixNGuvSQjul/jdFvS/KFSIH1hWVd1ng7zOHx+YrEfInLG7q4n6GHQ9cDtxv/P6g==}
     engines: {node: '>= 0.10'}
 
-  country-flag-icons@1.5.20:
-    resolution: {integrity: sha512-ldchBFYlw2dXXGXO6q/xCYaFiiK/eg5qSctBRDzUTDvHqAdIMOVTj1sp0OWVo7g6h+RURTjlu+5BhtGwIbe9tg==}
+  country-flag-icons@1.5.21:
+    resolution: {integrity: sha512-0KmU4oeiyAM+F+atzK99ghQDQJKxEY3tiDhnRraVFL4o65rZgrmrx7xKi0b+hxcVpcEpuUbu+KCC6TKTZQTDcA==}
 
   cron-parser@4.9.0:
     resolution: {integrity: sha512-p0SaNjrHOnQeR8/VnfGbmg9te2kfyYSQ7Sc/j/6DtPL3JQvKxmjO9TSjNFpujqV3vEYYBvNNvXSxzyksBWAx1Q==}
@@ -11663,7 +11663,7 @@ snapshots:
       object-assign: 4.1.1
       vary: 1.1.2
 
-  country-flag-icons@1.5.20: {}
+  country-flag-icons@1.5.21: {}
 
   cron-parser@4.9.0:
     dependencies:
