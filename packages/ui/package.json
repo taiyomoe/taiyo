@@ -21,7 +21,7 @@
     "@radix-ui/react-slot": "^1.2.3",
     "clsx": "^2.1.1",
     "lucide-react": "^0.544.0",
-    "motion": "^12.23.18",
+    "motion": "^12.23.21",
     "tailwind-merge": "^3.3.1",
     "tailwind-variants": "^3.1.1"
   },
