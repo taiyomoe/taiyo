@@ -35,7 +35,7 @@
     "@taiyomoe/typescript": "workspace:^",
     "@types/validator": "^13.15.3",
     "prisma": "^6.16.2",
-    "tsx": "^4.20.5",
+    "tsx": "^4.20.6",
     "typescript": "^5.9.2"
   }
 }

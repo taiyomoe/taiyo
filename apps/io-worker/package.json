@@ -24,6 +24,6 @@
   "devDependencies": {
     "@taiyomoe/types": "workspace:^",
     "@taiyomoe/typescript": "workspace:^",
-    "tsx": "^4.20.5"
+    "tsx": "^4.20.6"
   }
 }
