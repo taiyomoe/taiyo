@@ -24,6 +24,6 @@
     "@react-email/preview-server": "4.2.12",
     "@taiyomoe/typescript": "workspace:^",
     "react-email": "^4.2.12",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.3"
   }
 }

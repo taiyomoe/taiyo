@@ -16,6 +16,6 @@
   },
   "devDependencies": {
     "@taiyomoe/typescript": "workspace:^",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.3"
   }
 }
