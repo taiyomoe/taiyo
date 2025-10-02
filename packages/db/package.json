@@ -22,8 +22,8 @@
   },
   "dependencies": {
     "@faker-js/faker": "^10.0.0",
-    "@prisma/adapter-pg": "^6.16.2",
-    "@prisma/client": "^6.16.2",
+    "@prisma/adapter-pg": "^6.16.3",
+    "@prisma/client": "^6.16.3",
     "@t3-oss/env-core": "^0.13.8",
     "@taiyomoe/utils": "workspace:^",
     "prisma-json-types-generator": "^3.6.1",
@@ -34,7 +34,7 @@
   "devDependencies": {
     "@taiyomoe/typescript": "workspace:^",
     "@types/validator": "^13.15.3",
-    "prisma": "^6.16.2",
+    "prisma": "^6.16.3",
     "tsx": "^4.20.6",
     "typescript": "^5.9.3"
   }
