@@ -441,8 +441,8 @@ importers:
         specifier: ^19.1.1
         version: 19.1.1
       resend:
-        specifier: ^6.1.1
-        version: 6.1.1(@react-email/render@1.3.1(react-dom@19.1.1(react@19.1.1))(react@19.1.1))
+        specifier: ^6.1.2
+        version: 6.1.2(@react-email/render@1.3.1(react-dom@19.1.1(react@19.1.1))(react@19.1.1))
       zod:
         specifier: ^4.1.11
         version: 4.1.11
@@ -6085,11 +6085,11 @@ packages:
   reselect@5.1.1:
     resolution: {integrity: sha512-K/BG6eIky/SBpzfHZv/dd+9JBFiS4SWV7FIujVyJRux6e45+73RaUHXLmIR1f7WOMaQ0U1km6qwklRQxpJJY0w==}
 
-  resend@6.1.1:
-    resolution: {integrity: sha512-qHip8WF4uB2k83vG5EfLWQo27anlHpQagljWLFSIXgbkmNYzoIoAsXctl/RZJl7tf+7uCLM/MEwPzyW5zwCJTA==}
+  resend@6.1.2:
+    resolution: {integrity: sha512-C9Q+YkRe57P8MQlkHG3yatSR/B6sqBGA06Ri2DveJfkz9Vm16182FC/iHB0K6IAfmqZ4yRrFebFw1EPuktLtSg==}
     engines: {node: '>=18'}
     peerDependencies:
-      '@react-email/render': ^1.1.0
+      '@react-email/render': '*'
     peerDependenciesMeta:
       '@react-email/render':
         optional: true
@@ -13190,7 +13190,7 @@ snapshots:
 
   reselect@5.1.1: {}
 
-  resend@6.1.1(@react-email/render@1.3.1(react-dom@19.1.1(react@19.1.1))(react@19.1.1)):
+  resend@6.1.2(@react-email/render@1.3.1(react-dom@19.1.1(react@19.1.1))(react@19.1.1)):
     optionalDependencies:
       '@react-email/render': 1.3.1(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
 
