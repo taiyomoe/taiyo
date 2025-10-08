@@ -16,7 +16,7 @@
     "@t3-oss/env-core": "^0.13.8",
     "ioredis": "^5.8.1",
     "superjson": "^2.2.2",
-    "zod": "^4.1.11"
+    "zod": "^4.1.12"
   },
   "devDependencies": {
     "@taiyomoe/typescript": "workspace:^",
