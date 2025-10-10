@@ -615,8 +615,8 @@ importers:
         specifier: ^2.2.2
         version: 2.2.2
       use-intl:
-        specifier: ^4.3.11
-        version: 4.3.11(react@19.2.0)
+        specifier: ^4.3.12
+        version: 4.3.12(react@19.2.0)
       zod:
         specifier: ^4.1.12
         version: 4.1.12
@@ -6445,11 +6445,6 @@ packages:
     engines: {node: '>= 16.0.0'}
     peerDependencies:
       react: '*'
-
-  use-intl@4.3.11:
-    resolution: {integrity: sha512-cSOPKwVjaB5Y22vnrVMio5qRolBADe+TYiqsW0/jLqRn6MUNRNBparEDfx12F170ruBWhzcdW6+v6j+MlWGbEQ==}
-    peerDependencies:
-      react: ^17.0.0 || ^18.0.0 || >=19.0.0-rc <19.0.0 || ^19.0.0
 
   use-intl@4.3.12:
     resolution: {integrity: sha512-RxW2/D17irlDOJOzClKl+kWA7ReGLpo/A8f/LF7w1kIxO6mPKVh422JJ/pDCcvtYFCI4aPtn1AXUfELKbM+7tg==}
@@ -13692,13 +13687,6 @@ snapshots:
   use-debounce@10.0.4(react@19.0.0):
     dependencies:
       react: 19.0.0
-
-  use-intl@4.3.11(react@19.2.0):
-    dependencies:
-      '@formatjs/fast-memoize': 2.2.7
-      '@schummar/icu-type-parser': 1.21.5
-      intl-messageformat: 10.7.16
-      react: 19.2.0
 
   use-intl@4.3.12(react@19.2.0):
     dependencies:
