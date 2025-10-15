@@ -21,7 +21,7 @@
     "data-migration:add_usernames": "tsx ./src/prisma/migrations/20250312171952_add_usernames/data-migration.ts"
   },
   "dependencies": {
-    "@faker-js/faker": "^10.0.0",
+    "@faker-js/faker": "^10.1.0",
     "@prisma/adapter-pg": "^6.17.1",
     "@prisma/client": "^6.17.1",
     "@t3-oss/env-core": "^0.13.8",
