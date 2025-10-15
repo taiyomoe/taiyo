@@ -12,7 +12,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@faker-js/faker": "^10.0.0"
+    "@faker-js/faker": "^10.1.0"
   },
   "devDependencies": {
     "@taiyomoe/typescript": "workspace:^",
