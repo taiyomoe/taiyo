@@ -407,8 +407,8 @@ importers:
         specifier: ^1.27.4
         version: 1.27.4(magicast@0.3.5)(prisma@6.17.1(magicast@0.3.5)(typescript@5.9.3))(typescript@5.9.3)(zod@4.1.12)
       validator:
-        specifier: ^13.15.15
-        version: 13.15.15
+        specifier: ^13.15.20
+        version: 13.15.20
       zod:
         specifier: ^4.1.12
         version: 4.1.12
@@ -6371,6 +6371,10 @@ packages:
 
   validator@13.15.15:
     resolution: {integrity: sha512-BgWVbCI72aIQy937xbawcs+hrVaN/CZ2UwutgaJ36hGqRrLNM+f5LUT/YPRbo8IV/ASeFzXszezV+y2+rq3l8A==}
+    engines: {node: '>= 0.10'}
+
+  validator@13.15.20:
+    resolution: {integrity: sha512-KxPOq3V2LmfQPP4eqf3Mq/zrT0Dqp2Vmx2Bn285LwVahLc+CsxOM0crBHczm8ijlcjZ0Q5Xd6LW3z3odTPnlrw==}
     engines: {node: '>= 0.10'}
 
   vary@1.1.2:
@@ -13487,6 +13491,8 @@ snapshots:
   uuid@11.1.0: {}
 
   validator@13.15.15: {}
+
+  validator@13.15.20: {}
 
   vary@1.1.2: {}
 
