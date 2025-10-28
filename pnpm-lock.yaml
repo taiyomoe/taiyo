@@ -417,8 +417,8 @@ importers:
         specifier: workspace:^
         version: link:../../tooling/typescript
       '@types/validator':
-        specifier: ^13.15.3
-        version: 13.15.3
+        specifier: ^13.15.4
+        version: 13.15.4
       prisma:
         specifier: ^6.18.0
         version: 6.18.0(magicast@0.3.5)(typescript@5.9.3)
@@ -3940,8 +3940,8 @@ packages:
   '@types/resolve@1.20.6':
     resolution: {integrity: sha512-A4STmOXPhMUtHH+S6ymgE2GiBSMqf4oTvcQZMcHzokuTLVYzXTB8ttjcgxOVaAp2lGwEdzZ0J+cRbbeevQj1UQ==}
 
-  '@types/validator@13.15.3':
-    resolution: {integrity: sha512-7bcUmDyS6PN3EuD9SlGGOxM77F8WLVsrwkxyWxKnxzmXoequ6c7741QBrANq6htVRGOITJ7z72mTP6Z4XyuG+Q==}
+  '@types/validator@13.15.4':
+    resolution: {integrity: sha512-LSFfpSnJJY9wbC0LQxgvfb+ynbHftFo0tMsFOl/J4wexLnYMmDSPaj2ZyDv3TkfL1UePxPrxOWJfbiRS8mQv7A==}
 
   '@types/webpack@5.28.5':
     resolution: {integrity: sha512-wR87cgvxj3p6D0Crt1r5avwqffqPXUkNlnQ1mjU93G7gCuFjufZR4I6j8cz5g1F1tTYpfOOFvly+cmIQwL9wvw==}
@@ -10899,7 +10899,7 @@ snapshots:
 
   '@types/resolve@1.20.6': {}
 
-  '@types/validator@13.15.3': {}
+  '@types/validator@13.15.4': {}
 
   '@types/webpack@5.28.5(esbuild@0.25.10)':
     dependencies:
