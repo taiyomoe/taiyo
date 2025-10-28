@@ -486,8 +486,8 @@ importers:
         specifier: ^3.7.2
         version: 3.7.2
       meilisearch:
-        specifier: ^0.53.0
-        version: 0.53.0
+        specifier: ^0.54.0
+        version: 0.54.0
       punycode:
         specifier: ^2.3.1
         version: 2.3.1
@@ -5170,8 +5170,8 @@ packages:
     engines: {node: '>= 18'}
     hasBin: true
 
-  meilisearch@0.53.0:
-    resolution: {integrity: sha512-nG4VXbEOSzUmtbfsgOo+t6yX1ECEgXaT4hC0ap9MBpQGK5xwT+NWYDENYsKWR75cVaWaAqva+ok4zHlgtdXlLw==}
+  meilisearch@0.54.0:
+    resolution: {integrity: sha512-b1bwJAEfj8C6hgSN88+/LvW3pe3nWC+thBS2seAbPZGakf/vzsLqppgZquiomzCr2GhU7U7H289625qhYe3rbw==}
 
   merge-stream@2.0.0:
     resolution: {integrity: sha512-abv/qOcuPfk3URPfDzmZU1LKmuw8kT+0nIHvKrKgFrwifol/doWcdA4ZqsWQ8ENrFKkd67Mfpo/LovbIUsbt3w==}
@@ -12136,7 +12136,7 @@ snapshots:
 
   marked@15.0.12: {}
 
-  meilisearch@0.53.0: {}
+  meilisearch@0.54.0: {}
 
   merge-stream@2.0.0: {}
 
