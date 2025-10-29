@@ -15,7 +15,7 @@
   "dependencies": {
     "@t3-oss/env-core": "^0.13.8",
     "ioredis": "^5.8.2",
-    "superjson": "^2.2.3",
+    "superjson": "^2.2.5",
     "zod": "^4.1.12"
   },
   "devDependencies": {
