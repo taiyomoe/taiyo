@@ -3,6 +3,11 @@
 @source "../../../../apps/**/*.{ts,tsx}";
 @source "../components/*.{ts,tsx}";
 
+@plugin "tailwind-scrollbar" {
+  nocompatible: true;
+  preferredStrategy: "pseudoelements";
+}
+
 @custom-variant dark (&:is(.dark *));
 @custom-variant pressed (&:is([data-pressed]));
 @custom-variant open (&:is([data-popup-open], [data-open]));
@@ -208,6 +213,10 @@
   /* Container sizes */
   --container-8xl: 88rem;
   --container-9xl: 96rem;
+}
+
+@utility use-scrollbar {
+  @apply scrollbar-thumb-emphasis scrollbar-thin scrollbar-track-subtle scrollbar-thumb-rounded-full;
 }
 
 @layer base {

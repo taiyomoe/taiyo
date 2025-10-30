@@ -1,6 +1,9 @@
 {
   "extends": "@taiyomoe/typescript/base.json",
-  "compilerOptions": { "jsx": "preserve" },
+  "compilerOptions": {
+    "lib": ["ES2022", "dom", "dom.iterable"],
+    "jsx": "preserve"
+  },
   "include": ["src"],
   "exclude": ["node_modules"]
 }

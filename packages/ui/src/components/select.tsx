@@ -75,7 +75,7 @@ export const SelectItem = ({
 }: ComponentProps<typeof BaseSelect.Item>) => (
   <BaseSelect.Item
     className={cn(
-      "highlighted:relative highlighted:z-0 grid min-w-[var(--anchor-width)] cursor-default select-none grid-cols-[1fr_0.75rem] items-center gap-4 px-3 py-2 selected:font-medium highlighted:text-primary selected:text-primary text-sm outline-none highlighted:before:absolute highlighted:before:inset-x-1 highlighted:before:inset-y-0 highlighted:before:z-[-1] highlighted:before:rounded-sm highlighted:before:bg-emphasis hover:cursor-pointer disabled:pointer-events-none disabled:opacity-50 group-data-[side=none]:min-w-[calc(var(--anchor-width)+1rem)] group-data-[side=none]:scroll-my-1 group-data-[side=none]:pr-12 group-data-[side=none]:text-base group-data-[side=none]:leading-4",
+      "highlighted:relative highlighted:z-0 grid min-w-[var(--anchor-width)] cursor-default select-none grid-cols-[1fr_0.75rem] items-center gap-4 px-3 py-1.5 selected:font-medium highlighted:text-primary selected:text-primary text-sm outline-none highlighted:before:absolute highlighted:before:inset-x-1 highlighted:before:inset-y-0 highlighted:before:z-[-1] highlighted:before:rounded-sm highlighted:before:bg-emphasis hover:cursor-pointer disabled:pointer-events-none disabled:opacity-50 group-data-[side=none]:min-w-[calc(var(--anchor-width)+1rem)] group-data-[side=none]:scroll-my-1 group-data-[side=none]:pr-12 group-data-[side=none]:text-base group-data-[side=none]:leading-4",
       className,
     )}
     data-slot="select-item"
