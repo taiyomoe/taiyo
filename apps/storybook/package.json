@@ -10,7 +10,7 @@
     "build": "storybook build"
   },
   "dependencies": {
-    "@tailwindcss/postcss": "^4.1.16",
+    "@tailwindcss/postcss": "^4.1.17",
     "@taiyomoe/ui": "workspace:^",
     "lucide-react": "^0.552.0",
     "next": "^15.5.6",
