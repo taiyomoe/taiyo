@@ -28,10 +28,10 @@
     "@taiyomoe/typescript": "workspace:^",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.2",
-    "@vitest/browser": "^4.0.7",
-    "@vitest/coverage-v8": "^4.0.7",
+    "@vitest/browser": "^4.0.8",
+    "@vitest/coverage-v8": "^4.0.8",
     "playwright": "^1.56.1",
     "storybook": "^10.0.6",
-    "vitest": "^4.0.7"
+    "vitest": "^4.0.8"
   }
 }
