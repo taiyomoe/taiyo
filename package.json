@@ -21,7 +21,7 @@
     "@types/global-types": "workspace:^",
     "@types/node": "^24.10.0",
     "knip": "^5.66.4",
-    "turbo": "^2.6.0",
+    "turbo": "^2.6.1",
     "typescript": "^5.9.3"
   }
 }
