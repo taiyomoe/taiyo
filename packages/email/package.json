@@ -21,7 +21,7 @@
     "zod": "^4.1.12"
   },
   "devDependencies": {
-    "@react-email/preview-server": "5.0.3",
+    "@react-email/preview-server": "5.0.4",
     "@taiyomoe/typescript": "workspace:^",
     "react-email": "^5.0.3",
     "typescript": "^5.9.3"

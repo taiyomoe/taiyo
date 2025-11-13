@@ -448,8 +448,8 @@ importers:
         version: 4.1.12
     devDependencies:
       '@react-email/preview-server':
-        specifier: 5.0.3
-        version: 5.0.3(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+        specifier: 5.0.4
+        version: 5.0.4(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       '@taiyomoe/typescript':
         specifier: workspace:^
         version: link:../../tooling/typescript
@@ -2673,8 +2673,8 @@ packages:
     peerDependencies:
       react: ^18.0 || ^19.0 || ^19.0.0-rc
 
-  '@react-email/preview-server@5.0.3':
-    resolution: {integrity: sha512-01BxNqAz3Qk9x1PkhUnUUdon12xdzjlrcKDBgkc73e0Kw7sUfZruQhTaY0v6yaY2MjOP58BIn2GTWjgbAW9tgg==}
+  '@react-email/preview-server@5.0.4':
+    resolution: {integrity: sha512-i3kUTvE369ly32ZUMmfjIjb9NK8F19S8EgH/KzUvPWOwfXwePJK3AZTBabqGPCqEDRmDe7THEH6lDf2XWC73lg==}
 
   '@react-email/preview@0.0.13':
     resolution: {integrity: sha512-F7j9FJ0JN/A4d7yr+aw28p4uX7VLWs7hTHtLo7WRyw4G+Lit6Zucq4UWKRxJC8lpsUdzVmG7aBJnKOT+urqs/w==}
@@ -8966,7 +8966,7 @@ snapshots:
       marked: 15.0.12
       react: 19.2.0
 
-  '@react-email/preview-server@5.0.3(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
+  '@react-email/preview-server@5.0.4(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
     dependencies:
       next: 16.0.1(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
     transitivePeerDependencies:
