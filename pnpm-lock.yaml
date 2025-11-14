@@ -454,8 +454,8 @@ importers:
         specifier: workspace:^
         version: link:../../tooling/typescript
       react-email:
-        specifier: ^5.0.3
-        version: 5.0.3
+        specifier: ^5.0.4
+        version: 5.0.4
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
@@ -910,10 +910,6 @@ packages:
 
   '@babel/helper-string-parser@7.27.1':
     resolution: {integrity: sha512-qMlSxKbpRlAridDExk92nSobyDdpPijUq2DW6oDnUqd0iOGxmQjyqhMIihI9+zv4LPyZdRje2cavWPbCbWm3eA==}
-    engines: {node: '>=6.9.0'}
-
-  '@babel/helper-validator-identifier@7.27.1':
-    resolution: {integrity: sha512-D2hP9eA+Sqx1kBZgzxZh0y1trbuU+JoDkiEwqhQ36nodYqJwyEIhPSdMNd7lOm/4io72luTPWH20Yda0xOuUow==}
     engines: {node: '>=6.9.0'}
 
   '@babel/helper-validator-identifier@7.28.5':
@@ -5693,8 +5689,8 @@ packages:
     peerDependencies:
       react: ^19.2.0
 
-  react-email@5.0.3:
-    resolution: {integrity: sha512-LSeLmzBNMrKhLfr8156113tVM/MOslfE8uj4/9t28IYMwoVDJisXaRZAS2ahkhTnBAv/CvGcXLR37+DLD6aATg==}
+  react-email@5.0.4:
+    resolution: {integrity: sha512-pI6b4ePMWC1AFtyd0gyVMsJ6Nhg4nnmDxVo1EQP+r011WQafU8UGAUfPUiE5Wh7x28+3yFw7qXCnD33y71guUw==}
     engines: {node: '>=22.0.0'}
     hasBin: true
 
@@ -7064,8 +7060,6 @@ snapshots:
 
   '@babel/helper-string-parser@7.27.1': {}
 
-  '@babel/helper-validator-identifier@7.27.1': {}
-
   '@babel/helper-validator-identifier@7.28.5': {}
 
   '@babel/helper-validator-option@7.27.1': {}
@@ -7102,7 +7096,7 @@ snapshots:
   '@babel/types@7.28.4':
     dependencies:
       '@babel/helper-string-parser': 7.27.1
-      '@babel/helper-validator-identifier': 7.27.1
+      '@babel/helper-validator-identifier': 7.28.5
 
   '@babel/types@7.28.5':
     dependencies:
@@ -12366,7 +12360,7 @@ snapshots:
       react: 19.2.0
       scheduler: 0.27.0
 
-  react-email@5.0.3:
+  react-email@5.0.4:
     dependencies:
       '@babel/parser': 7.28.5
       '@babel/traverse': 7.28.4
