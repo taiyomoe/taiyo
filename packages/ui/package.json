@@ -23,7 +23,7 @@
     "lucide-react": "^0.554.0",
     "motion": "^12.23.24",
     "tailwind-merge": "^3.4.0",
-    "tailwind-variants": "^3.1.1"
+    "tailwind-variants": "^3.2.2"
   },
   "peerDependencies": {
     "react": ">=19.2.0",
