@@ -3,7 +3,7 @@
  * Auto-generated. Do not edit.
  */
 
-import { z } from 'zod';
+import * as z from 'zod';
 // File: TransactionIsolationLevel.schema.ts
 
 export const TransactionIsolationLevelSchema = z.enum(['ReadUncommitted', 'ReadCommitted', 'RepeatableRead', 'Serializable'])
@@ -226,6 +226,18 @@ export const CountriesSchema = z.enum(['ad', 'ae', 'af', 'ag', 'ai', 'al', 'am',
 
 export type Countries = z.infer<typeof CountriesSchema>;
 
+// File: GroupMemberRoles.schema.ts
+
+export const GroupMemberRolesSchema = z.enum(['OWNER', 'ADMIN', 'TRANSLATOR', 'PROOFREADER', 'CLEANER', 'REDRAWER', 'TYPESETTER', 'QUALITY_CHECKER', 'RAW_PROVIDER', 'OTHER'])
+
+export type GroupMemberRoles = z.infer<typeof GroupMemberRolesSchema>;
+
+// File: GroupMemberPermissions.schema.ts
+
+export const GroupMemberPermissionsSchema = z.enum(['UPLOAD', 'EDIT', 'DELETE'])
+
+export type GroupMemberPermissions = z.infer<typeof GroupMemberPermissionsSchema>;
+
 // File: Group.schema.ts
 
 export const GroupSchema = z.object({
@@ -277,8 +289,7 @@ export const MediaSchema = z.object({
   deleterId: z.string().nullish(),
 });
 
-export type Media = z.infer<typeof MediaSchema>;
-
+export type MediaModel = z.infer<typeof MediaSchema>;
 
 // File: Cover.schema.ts
 
@@ -386,8 +397,7 @@ export const TaskSchema = z.object({
   sessionId: z.string(),
 });
 
-export type Task = z.infer<typeof TaskSchema>;
-
+export type TaskModel = z.infer<typeof TaskSchema>;
 
 // File: User.schema.ts
 

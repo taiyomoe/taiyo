@@ -3,7 +3,7 @@ import { defineConfig } from "prisma/config"
 import { env } from "./src/env"
 
 export default defineConfig({
-  datasource: { url: env.DATABASE_URL, shadowDatabaseUrl: env.DATABASE_URL },
+  datasource: { url: env.DATABASE_URL },
   schema: path.join("src", "prisma"),
   migrations: {
     path: path.join("src", "prisma", "migrations"),

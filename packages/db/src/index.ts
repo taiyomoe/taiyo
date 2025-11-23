@@ -10,7 +10,6 @@ const globalForPrisma = globalThis as unknown as {
 export const db =
   globalForPrisma.prisma ??
   new PrismaClient({
-    datasourceUrl: env.DATABASE_URL,
     adapter,
     log:
       process.env.NODE_ENV === "development" && !process.env.PRISMA_SEED

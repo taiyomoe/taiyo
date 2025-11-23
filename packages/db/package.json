@@ -15,10 +15,7 @@
     "typecheck": "tsc --noEmit",
     "seed": "prisma migrate reset && pnpm -F @taiyomoe/logs run migrate",
     "db": "prisma",
-    "migrate": "tsx ./src/migrations-handler.ts",
-    "postinstall": "prisma generate",
-    "data-migration:add_normalized_email": "tsx ./src/prisma/migrations/20250312161343_add_normalized_email/data-migration.ts",
-    "data-migration:add_usernames": "tsx ./src/prisma/migrations/20250312171952_add_usernames/data-migration.ts"
+    "migrate": "tsx ./src/migrations-handler.ts"
   },
   "dependencies": {
     "@faker-js/faker": "^10.1.0",
@@ -26,7 +23,7 @@
     "@prisma/client": "^7.0.0",
     "@t3-oss/env-core": "^0.13.8",
     "@taiyomoe/utils": "workspace:^",
-    "prisma-json-types-generator": "^3.6.2",
+    "prisma-json-types-generator": "4.0.0-beta.1",
     "prisma-zod-generator": "^2.1.2",
     "validator": "^13.15.23",
     "zod": "^4.1.12"
