@@ -1,0 +1,24 @@
+{
+  "name": "@taiyomoe/scripts",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "start": "tsx src/index.ts",
+    "clean": "rm -rf .turbo node_modules",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@taiyomoe/db": "workspace:^",
+    "commander": "^12.1.0",
+    "tsx": "^4.20.6"
+  },
+  "devDependencies": {
+    "@taiyomoe/typescript": "workspace:^",
+    "typescript": "^5.9.3"
+  }
+}

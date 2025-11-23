@@ -12,7 +12,7 @@ export const db =
   new PrismaClient({
     adapter,
     log:
-      process.env.NODE_ENV === "development" && !process.env.PRISMA_SEED
+      process.env.NODE_ENV === "development"
         ? ["query", "error", "warn"]
         : ["error"],
   })
