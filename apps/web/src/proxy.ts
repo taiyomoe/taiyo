@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { getSession } from "~/utils/get-session"
 
-export default async function middleware(req: NextRequest) {
+export default async function proxy(req: NextRequest) {
   const searchParams = req.nextUrl.searchParams
   const session = await getSession()
 
