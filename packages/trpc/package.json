@@ -20,7 +20,7 @@
     "@taiyomoe/messaging": "workspace:^",
     "@taiyomoe/s3": "workspace:^",
     "@taiyomoe/schemas": "workspace:^",
-    "@trpc/server": "^11.7.1",
+    "@trpc/server": "^11.7.2",
     "superjson": "^2.2.5",
     "use-intl": "^4.5.5",
     "zod": "^4.1.12"
