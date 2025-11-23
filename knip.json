@@ -1,21 +1,13 @@
 {
   "$schema": "https://unpkg.com/knip@5/schema.json",
-  "ignoreWorkspaces": ["./apps/io-worker", "./packages/db"],
+  "ignoreWorkspaces": ["./packages/db"],
   "ignoreDependencies": [
-    "@taiyomoe/types",
     "@types/global-types",
-    "accept-language-parser",
-    "@types/accept-language-parser",
-    "tailwindcss-react-aria-components",
-    "punycode",
     "playwright",
     "@vitest/coverage-v8",
     "@react-email/preview-server"
   ],
   "ignore": [
-    "./apps/web/src/i18n/request.ts",
-    "./apps/web/src/utils/parse-locale.ts",
-    "./packages/trpc/src/utils/trpc-error.ts",
     "./packages/ui/src/styles/globals.css"
   ]
 }

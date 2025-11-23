@@ -9,7 +9,6 @@
   "devDependencies": {
     "@taiyomoe/config": "workspace:^",
     "@taiyomoe/db": "workspace:^",
-    "@taiyomoe/messages": "workspace:^",
     "@total-typescript/ts-reset": "^0.6.1"
   }
 }
