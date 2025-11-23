@@ -72,7 +72,7 @@ export const auth = betterAuth({
     },
   },
   session: { storeSessionInDatabase: true },
-  advanced: { generateId: false },
+  advanced: { database: { generateId: "uuid" } },
   hooks: { before: beforeHook, after: afterHook },
   databaseHooks: {
     user: {
