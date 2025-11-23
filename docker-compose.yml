@@ -47,3 +47,9 @@ services:
     volumes:
       - "./data/clickhouse:/bitnami/clickhouse"
       - "./packages/logs/config.xml:/bitnami/clickhouse/etc/conf.d/override.xml:ro"
+
+  hyperdx:
+    image: "docker.hyperdx.io/hyperdx/hyperdx-all-in-one"
+    restart: unless-stopped
+    ports:
+      - "$HYPERDX_PORT:8080"
