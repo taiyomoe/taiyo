@@ -10,7 +10,6 @@ const globalForPrisma = globalThis as unknown as {
 export const db =
   globalForPrisma.prisma ??
   new PrismaClient({
-    datasources: { db: { url: env.DATABASE_URL } },
     datasourceUrl: env.DATABASE_URL,
     adapter,
     log:
