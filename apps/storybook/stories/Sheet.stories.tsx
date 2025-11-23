@@ -31,7 +31,7 @@ const meta = {
   },
   parameters: { layout: "centered" },
   argTypes: {
-    dismissible: { control: "boolean" },
+    disablePointerDismissal: { control: "boolean" },
     side: {
       control: { type: "select" },
       options: ["top", "right", "bottom", "left"],
@@ -45,7 +45,7 @@ type Story = StoryObj<SheetStoryProps>
 
 export const Default: Story = {
   args: {
-    dismissible: true,
+    disablePointerDismissal: true,
     side: "right",
   },
   render: ({ side, ...args }) => {
@@ -88,7 +88,7 @@ export const Default: Story = {
 
 export const Dismissible: Story = {
   args: {
-    dismissible: false,
+    disablePointerDismissal: false,
     side: "right",
   },
   render: ({ side, ...args }) => {
@@ -131,7 +131,7 @@ export const Dismissible: Story = {
 
 export const Sides: Story = {
   args: {
-    dismissible: true,
+    disablePointerDismissal: true,
     side: "left",
   },
   render: ({ side, ...args }) => {
