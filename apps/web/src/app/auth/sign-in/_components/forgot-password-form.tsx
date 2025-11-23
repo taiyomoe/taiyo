@@ -28,7 +28,7 @@ export const ForgotPasswordForm = () => {
   })
 
   const handlePress = async (values: ForgotPasswordInput) => {
-    await authClient.forgetPassword({
+    await authClient.requestPasswordReset({
       email: values.email,
       redirectTo: "/auth/reset-password",
       fetchOptions: {
