@@ -2,7 +2,7 @@ import { createHash, randomUUID } from "node:crypto"
 import { readdir, readFile } from "node:fs/promises"
 import { dirname, join } from "node:path"
 import { fileURLToPath } from "node:url"
-import { PrismaClient } from "./generated/prisma/client"
+import { db } from "./"
 
 const MIGRATIONS_RELATIVE_PATH = "./prisma/migrations"
 
@@ -16,8 +16,6 @@ type Migration = {
   started_at: Date
   applied_steps_count: number
 }
-
-const prisma = new PrismaClient()
 
 const main = async () => {
   console.log("Starting migrations handler...")
@@ -36,15 +34,31 @@ const main = async () => {
   const foundMigrations = rawFoundMigrations.filter(
     (m) => !["migration_lock.toml", ".DS_Store"].includes(m),
   )
-  const appliedMigrations = await prisma.$queryRaw<
+  let appliedMigrations = await db.$queryRaw<
     Migration[]
   >`SELECT * FROM _prisma_migrations`.catch(() => null)
 
   if (!appliedMigrations) {
     console.log(
-      "Your database doesn't seem to be initialized. Please initialize it first.",
+      "Your database doesn't seem to be initialized. Initializing it now...",
     )
-    process.exit(1)
+
+    await db.$executeRaw`
+    CREATE TABLE "public"."_prisma_migrations" (
+      "id" varchar NOT NULL,
+      "checksum" varchar NOT NULL,
+      "finished_at" timestamptz,
+      "migration_name" varchar NOT NULL,
+      "logs" text,
+      "rolled_back_at" timestamptz,
+      "started_at" timestamptz NOT NULL DEFAULT now(),
+      "applied_steps_count" int4 NOT NULL DEFAULT 0,
+      PRIMARY KEY ("id")
+    );`
+
+    console.log("Database initialized successfully.")
+
+    appliedMigrations = []
   }
 
   const migrationsToApply = foundMigrations.filter(
@@ -66,7 +80,7 @@ const main = async () => {
     process.exit(0)
   }
 
-  await prisma.$transaction(
+  await db.$transaction(
     async (tx) => {
       for (const migrationName of migrationsToApply) {
         const migrationPath = join(migrationsPath, migrationName)
@@ -128,4 +142,4 @@ main()
     console.error(e)
     process.exit(1)
   })
-  .finally(async () => await prisma.$disconnect())
+  .finally(async () => await db.$disconnect())

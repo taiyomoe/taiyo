@@ -36,7 +36,7 @@ services:
       - "./data/dragonfly:/data"
 
   clickhouse:
-    image: "bitnami/clickhouse:24"
+    image: "clickhouse:24"
     restart: unless-stopped
     environment:
       - CLICKHOUSE_ADMIN_USER=$CLICKHOUSE_USERNAME
