@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "pnpm -F @taiyomoe/db run db migrate deploy && pnpm -F @taiyomoe/logs run migrate && next build",
-    "dev": "next dev --turbopack",
+    "dev": "next dev",
     "start": "next start",
     "clean": "git clean -xdf .next .turbo node_modules",
     "typecheck": "tsc --noEmit"
@@ -67,6 +67,7 @@
     "@types/country-flag-icons": "^1.2.2",
     "@types/react": "^19.2.6",
     "@types/react-dom": "^19.2.3",
+    "babel-plugin-react-compiler": "^1.0.0",
     "embla-carousel": "^8.6.0",
     "tailwind-scrollbar": "^4.0.2"
   }

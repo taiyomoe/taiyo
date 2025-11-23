@@ -4,6 +4,7 @@ import "./src/env"
 
 const config = {
   reactStrictMode: true,
+  reactCompiler: true,
   images: {
     minimumCacheTTL: 300,
     remotePatterns: [
@@ -23,8 +24,7 @@ const config = {
   /** Enables hot reloading for local packages without a build step */
   transpilePackages: ["@taiyomoe/auth", "@taiyomoe/db", "@taiyomoe/utils"],
 
-  /** We already do linting and typechecking as separate tasks in CI */
-  eslint: { ignoreDuringBuilds: true },
+  /** We already do typechecking as a separate task in CI */
   typescript: { ignoreBuildErrors: true },
 
   /** PostHog-related configuration */
