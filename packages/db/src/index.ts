@@ -22,4 +22,3 @@ if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = db
 
 export * from "./generated/prisma/client"
 export * from "./generated/prisma/sql"
-
