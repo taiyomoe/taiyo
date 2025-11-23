@@ -1,6 +1,10 @@
 import { tagsKeys } from "./tags"
 
 export const config = {
+  logger: {
+    defaultLevel: "info",
+    minimumIntervalInMs: 1000,
+  },
   settings: {
     contentRating: ["NORMAL", "SUGGESTIVE", "NSFL"],
     preferredTitles: "en",

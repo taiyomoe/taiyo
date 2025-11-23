@@ -1,0 +1,26 @@
+{
+  "name": "@taiyomoe/logger",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "exports": {
+    ".": "./src/index.ts",
+    "./env": "./src/env.ts"
+  },
+  "scripts": {
+    "clean": "rm -rf .turbo node_modules",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@hyperdx/node-opentelemetry": "^0.10.2",
+    "@t3-oss/env-core": "^0.13.8",
+    "@taiyomoe/config": "workspace:^",
+    "winston": "^3.18.3",
+    "zod": "^4.1.12"
+  },
+  "devDependencies": {
+    "@taiyomoe/typescript": "workspace:^",
+    "typescript": "^5.9.3"
+  }
+}
