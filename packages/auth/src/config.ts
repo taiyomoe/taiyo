@@ -7,6 +7,7 @@ import {
   USERNAME_REGEX,
 } from "@taiyomoe/utils"
 import { betterAuth } from "better-auth"
+import { emailHarmony } from "better-auth-harmony"
 import { prismaAdapter } from "better-auth/adapters/prisma"
 import {
   admin,
@@ -15,7 +16,6 @@ import {
   magicLink,
   username,
 } from "better-auth/plugins"
-import { emailHarmony } from "better-auth-harmony"
 import { env } from "./env"
 import { afterHook } from "./utils/after-hook"
 import { afterSessionCreatedHook } from "./utils/after-session-created-hook"
@@ -72,7 +72,7 @@ export const auth = betterAuth({
     },
   },
   session: { storeSessionInDatabase: true },
-  advanced: { generateId: false },
+  advanced: { database:{ generateId: "uuid" } },
   hooks: { before: beforeHook, after: afterHook },
   databaseHooks: {
     user: {
