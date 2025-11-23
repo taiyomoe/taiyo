@@ -7,8 +7,6 @@
     "accept-language-parser",
     "@types/accept-language-parser",
     "tailwindcss-react-aria-components",
-    "tw-animate-css",
-    "tailwind-scrollbar",
     "punycode",
     "playwright",
     "@vitest/coverage-v8",
@@ -17,6 +15,7 @@
   "ignore": [
     "./apps/web/src/i18n/request.ts",
     "./apps/web/src/utils/parse-locale.ts",
-    "./packages/trpc/src/utils/trpc-error.ts"
+    "./packages/trpc/src/utils/trpc-error.ts",
+    "./packages/ui/src/styles/globals.css"
   ]
 }
