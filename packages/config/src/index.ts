@@ -2,6 +2,9 @@ import { tagsKeys } from "./tags"
 
 export const config = {
   logger: {
+    services: {
+      api: "api",
+    },
     defaultLevel: "info",
     minimumIntervalInMs: 1000,
   },

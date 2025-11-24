@@ -1,5 +1,5 @@
 import { createEnv } from "@t3-oss/env-core"
-import { z } from "zod"
+import z from "zod"
 
 export const env = createEnv({
   /**
@@ -12,6 +12,7 @@ export const env = createEnv({
    * This way you can ensure the app isn't built with invalid env vars.
    */
   server: {
+    HYPERDX_INGESTION_BASE_URL: z.url(),
     HYPERDX_INGESTION_KEY: z.string(),
   },
 

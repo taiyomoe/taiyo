@@ -1,5 +1,5 @@
 {
-  "name": "@taiyomoe/logger",
+  "name": "@taiyomoe/api",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -9,18 +9,25 @@
     "./env": "./src/env.ts"
   },
   "scripts": {
+    "dev": "tsx watch src/index.ts",
     "clean": "rm -rf .turbo node_modules",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@hyperdx/node-opentelemetry": "^0.10.2",
+    "@elysiajs/node": "^1.4.2",
+    "@elysiajs/opentelemetry": "^1.4.8",
+    "@opentelemetry/exporter-trace-otlp-proto": "^0.208.0",
+    "@opentelemetry/sdk-trace-node": "^2.2.0",
     "@t3-oss/env-core": "^0.13.8",
     "@taiyomoe/config": "workspace:^",
-    "winston": "^3.18.3",
+    "@taiyomoe/db": "workspace:^",
+    "elysia": "^1.4.16",
     "zod": "^4.1.12"
   },
   "devDependencies": {
     "@taiyomoe/typescript": "workspace:^",
+    "@types/node": "^24.10.1",
+    "tsx": "^4.20.6",
     "typescript": "^5.9.3"
   }
 }
