@@ -42,3 +42,6 @@ generated
 # storybook
 *storybook.log
 storybook-static
+
+# env
+.env*

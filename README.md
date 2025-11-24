@@ -105,8 +105,8 @@ taiyo/
 3. **Set up environment variables**
 
    ```bash
-   cp .env.example .env.local
-   # Edit .env.local with your configuration
+   cp .env.example .env
+   # Edit .env with your configuration
    ```
 
 4. **Start infrastructure services**
@@ -118,19 +118,19 @@ taiyo/
 5. **Run database migrations**
 
    ```bash
-   pnpm -F scripts start migrate
+   infisical run -- pnpm -F scripts start migrate
    ```
 
 6. **Seed the database with sample data**
 
    ```bash
-   pnpm -F scripts start seed
+   infisical run -- pnpm -F scripts start seed
    ```
 
 7. **Start development servers**
 
    ```bash
-   pnpm dev
+   infisical run -- pnpm dev
    ```
 
 The application will be available at:
