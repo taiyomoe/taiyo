@@ -78,7 +78,7 @@ export const seedCommand = new Command("seed")
 
     // Meilisearch
     console.log(
-      "\nMeilisearch: Please run `infisical run -- pnpm -F @taiyomoe/meilisearch run seed`",
+      "\nMeilisearch: Please run `infisical run -- pnpm -F meilisearch run seed`",
     )
 
     await db.$disconnect()

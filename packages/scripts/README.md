@@ -10,5 +10,5 @@ This package provides a commander-powered CLI tool for managing database operati
 ## Usage
 
 ```bash
-infisical run -- pnpm -F @taiyomoe/scripts start <command>
+infisical run -- pnpm -F scripts start <command>
 ```

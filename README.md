@@ -30,8 +30,6 @@ This project uses a **monorepo architecture** powered by [Turborepo](https://tur
 ```no-highlight
 taiyo/
 ├── apps/                # Applications
-│   ├── web/               # Next.js web application
-│   ├── io-worker/         # Background job processor
 │   └── storybook/         # Component documentation
 ├── packages/            # Shared packages
 │   ├── auth/              # Authentication utilities
@@ -40,18 +38,13 @@ taiyo/
 │   ├── db/                # Database layer
 │   ├── email/             # Email templates and utilities
 │   ├── global-types/      # Global TypeScript types
-│   ├── logs/              # Logging layer
-│   ├── meilisearch/       # Search engine integration
-│   ├── messages/          # Internationalization message files
-│   ├── messaging/         # Message queue utilities
-│   ├── s3/                # File storage utilities
-│   ├── schemas/           # Zod validation schemas
-│   ├── trpc/              # tRPC API layer
-│   ├── types/             # TypeScript types
+│   ├── logger/            # Logging layer
+│   ├── logs/              # Logs configuration
+│   ├── scripts/           # CLI scripts for database operations
+│   ├── ui/                # Shared UI components
 │   └── utils/             # Shared utilities
 └── tooling/             # Development tools
     ├── github/            # GitHub Actions
-    ├── tailwind/          # Tailwind CSS configuration
     └── typescript/        # TypeScript configuration
 ```
 
@@ -59,7 +52,7 @@ taiyo/
 
 **Frontend:**
 
-- [Next.js 15](https://nextjs.org/) with App Router
+- [Next.js 16](https://nextjs.org/) with App Router
 - [React 19](https://react.dev/)
 - [TypeScript](https://www.typescriptlang.org/)
 - [Tailwind CSS 4](https://tailwindcss.com/)
@@ -70,7 +63,7 @@ taiyo/
 
 **Backend:**
 
-- [tRPC](https://trpc.io/) for type-safe APIs
+- [Hono](https://hono.dev/) for type-safe APIs
 - [Prisma](https://www.prisma.io/) as ORM
 - [Better Auth](https://www.better-auth.com/) for authentication
 - [BullMQ](https://bullmq.io/) for job queues
@@ -82,6 +75,7 @@ taiyo/
 - [PostgreSQL](https://www.postgresql.org/) - Primary database
 - [Meilisearch](https://www.meilisearch.com/) - Search engine
 - [Dragonfly](https://www.dragonflydb.io/) - Redis-compatible cache
+- [HyperDX](https://www.hyperdx.io/) - Observability and monitoring
 - [ClickHouse](https://clickhouse.com/) - Analytics database
 - [S3-compatible storage](https://aws.amazon.com/s3/) - File storage
 
@@ -89,8 +83,8 @@ taiyo/
 
 ### Prerequisites
 
-- **Node.js**: 22.x.x (specified in `.nvmrc`)
-- **pnpm**: 10.x.x (specified in `package.json`)
+- **Node.js**: 24.11.1 (specified in `.nvmrc`)
+- **pnpm**: 10.23.0 (specified in `package.json`)
 - **Docker & Docker Compose**: For local infrastructure
 
 ### Installation
@@ -124,10 +118,16 @@ taiyo/
 5. **Run database migrations**
 
    ```bash
-   pnpm -F @taiyomoe/db run migrate
+   pnpm -F scripts start migrate
    ```
 
-6. **Start development servers**
+6. **Seed the database with sample data**
+
+   ```bash
+   pnpm -F scripts start seed
+   ```
+
+7. **Start development servers**
 
    ```bash
    pnpm dev
@@ -150,30 +150,26 @@ pnpm typecheck          # Run TypeScript type checking
 pnpm clean              # Clean all node_modules
 pnpm clean:ws           # Clean workspace build artifacts
 
+# Testing
+pnpm test               # Run tests
+pnpm test:watch         # Run tests in watch mode
+
 # Code Quality
 pnpm check:ws           # Run Biome linting and formatting
 pnpm lint:ws            # Run Sherif for dependency validation
-pnpm knip               # Check for unused dependencies
+pnpm knip               # Check for unused dependencies and dead code
 ```
 
 ### Package-Specific Commands
 
 ```bash
-# Database
-pnpm -F @taiyomoe/db run db migrate    # Run database migrations
-pnpm -F @taiyomoe/db run seed          # Seed database with sample data
-
-# Web Application
-pnpm -F @taiyomoe/web run dev          # Start web app in dev mode
-pnpm -F @taiyomoe/web run build        # Build web app for production
-pnpm -F @taiyomoe/web run start        # Start production web app
+# Database Scripts
+pnpm -F scripts start migrate  # Run database migrations
+pnpm -F scripts start seed     # Seed database with sample data
 
 # Storybook
-pnpm -F @taiyomoe/storybook run dev    # Start Storybook dev server
-pnpm -F @taiyomoe/storybook run build-storybook  # Build static Storybook
-
-# IO Worker
-pnpm -F @taiyomoe/io-worker run start  # Start background job processor
+pnpm -F storybook run dev      # Start Storybook dev server
+pnpm -F storybook run build   # Build static Storybook
 ```
 
 ## 🔧 Development
@@ -203,7 +199,7 @@ This project uses [git-flow](https://git-flow.readthedocs.io/en/latest/presentat
 
 ## 🌐 Environment Variables
 
-The are 30+ environment variables that are used in the project. You can find them in the `.env.example` file.
+There are 30+ environment variables that are used in the project. You can find them in the `.env.example` file.
 
 ## 📦 Package Overview
 
@@ -211,23 +207,21 @@ The are 30+ environment variables that are used in the project. You can find the
 
 - **`@taiyomoe/db`**: Database layer with Prisma ORM, migrations, and data models
 - **`@taiyomoe/auth`**: Authentication system with Better Auth integration
-- **`@taiyomoe/trpc`**: Type-safe API layer with tRPC
-- **`@taiyomoe/schemas`**: Zod validation schemas for data validation
 - **`@taiyomoe/utils`**: Shared utility functions and helpers
+- **`@taiyomoe/ui`**: Shared UI components built with React and Tailwind CSS
 
 ### Service Packages
 
 - **`@taiyomoe/cache`**: Caching layer with Dragonfly integration
-- **`@taiyomoe/meilisearch`**: Search engine integration
-- **`@taiyomoe/s3`**: File storage utilities
 - **`@taiyomoe/email`**: Email templates and sending utilities
-- **`@taiyomoe/messaging`**: Message queue utilities
+- **`@taiyomoe/logger`**: Logging layer with ClickHouse integration
 
 ### Configuration Packages
 
 - **`@taiyomoe/config`**: Shared configuration and constants
-- **`@taiyomoe/types`**: Global TypeScript type definitions
-- **`@taiyomoe/messages`**: Internationalization message files
+- **`@taiyomoe/global-types`**: Global TypeScript type definitions
+- **`@taiyomoe/scripts`**: CLI scripts for database operations (migrations, seeding)
+- **`@taiyomoe/logs`**: Logs configuration
 
 ## 🚀 Deployment
 
@@ -236,27 +230,23 @@ The are 30+ environment variables that are used in the project. You can find the
 ```bash
 # Build all packages and applications
 pnpm build
-
-# Start production servers
-pnpm -F @taiyomoe/web run start
-pnpm -F @taiyomoe/io-worker run start
 ```
 
 ### Docker Deployment
 
 ```bash
 # Build and start all services
-docker-compose -f docker-compose.prod.yml up -d
+docker-compose up -d
 ```
 
 ## 🤝 Contributing
 
 1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+2. Create a feature branch (`git checkout -b feat/amazing-feature`)
 3. Make your changes
 4. Run tests and linting (`pnpm check:ws`)
 5. Commit your changes (`git commit -m 'Add amazing feature'`)
-6. Push to the branch (`git push origin feature/amazing-feature`)
+6. Push to the branch (`git push origin feat/amazing-feature`)
 7. Open a Pull Request
 
 ### Development Guidelines
