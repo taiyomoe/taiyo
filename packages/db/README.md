@@ -1,19 +1,28 @@
-# @taiyomoe/db
+# `@taiyomoe/db`
 
 This package contains the database schema and migrations for the project.
 
+## Usage
+
+```ts
+import { db } from "@taiyomoe/db";
+
+// Query database
+const user = await db.user.findUnique({ where: { id: userId } });
+const users = await db.user.findMany({ take: 10 });
+```
+
 ## Migrations
 
-Migrations are created by PrismaORM but managed with a custom script.
+Migrations are created by PrismaORM but managed with a custom script. To create a new migration, run:
 
-To create a new migration or apply pending ones, run `infisical run -- pnpm -F @taiyomoe/db db migrate dev --create-only` at the root of the project.
+```bash
+infisical run -- pnpm -F db prisma migrate dev --create-only
+```
 
-### Data Migrations
+After migrating, generate the Prisma client with:
 
-Data migrations are migrations that have to process data with real code. They are usually bound to a specific migration.
-
-### Applying migrations
-
-To apply migrations, run `infisical run -- pnpm -F @taiyomoe/db migrate`. We have a custom migrations handler that ensures migrations and data migrations are applied in the correct order.
-
-After migrating, don't forget to generate the Prisma client again with `pnpm -F @taiyomoe/db db generate`.
+```bash
+pnpm -F @taiyomoe/db prisma generate
+infisical run -- pnpm -F db prisma generate --sql
+```

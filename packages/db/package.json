@@ -11,11 +11,9 @@
     "./env": "./src/env.ts"
   },
   "scripts": {
+    "prisma": "prisma",
     "clean": "rm -rf .turbo node_modules",
-    "typecheck": "tsc --noEmit",
-    "seed": "prisma migrate reset && pnpm -F @taiyomoe/logs run migrate",
-    "db": "prisma",
-    "migrate": "tsx ./src/migrations-handler.ts"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@faker-js/faker": "^10.1.0",
