@@ -29,4 +29,4 @@ services:
     restart: unless-stopped
     ports:
       - "$HYPERDX_PORT:8080"
-      - "$HYPERDX_OTEL_PORT:4317"
+      - "$HYPERDX_OTLP_PORT:4318"
