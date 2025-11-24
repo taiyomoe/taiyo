@@ -1,11 +1,7 @@
 import { cacheClient } from "@taiyomoe/cache"
+import { config } from "@taiyomoe/config"
 import { db } from "@taiyomoe/db"
 import type { Roles } from "@taiyomoe/db/browser"
-import {
-  USERNAME_MAX_LENGTH,
-  USERNAME_MIN_LENGTH,
-  USERNAME_REGEX,
-} from "@taiyomoe/utils"
 import { betterAuth } from "better-auth"
 import { prismaAdapter } from "better-auth/adapters/prisma"
 import {
@@ -31,8 +27,8 @@ export const auth = betterAuth({
   database: prismaAdapter(db, { provider: "postgresql" }),
   emailAndPassword: {
     enabled: true,
-    minPasswordLength: 8,
-    maxPasswordLength: 50,
+    minPasswordLength: config.auth.password.minLength,
+    maxPasswordLength: config.auth.password.maxLength,
     requireEmailVerification: true,
     sendResetPassword,
   },
@@ -85,9 +81,9 @@ export const auth = betterAuth({
   },
   plugins: [
     username({
-      minUsernameLength: USERNAME_MIN_LENGTH,
-      maxUsernameLength: USERNAME_MAX_LENGTH,
-      usernameValidator: (input) => USERNAME_REGEX.test(input),
+      minUsernameLength: config.auth.username.minLength,
+      maxUsernameLength: config.auth.username.maxLength,
+      usernameValidator: (input) => config.auth.username.regex.test(input),
     }),
     emailHarmony(),
     magicLink({ disableSignUp: true, sendMagicLink }),

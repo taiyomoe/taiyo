@@ -1,17 +1,14 @@
 import { faker } from "@faker-js/faker"
-
-export const USERNAME_REGEX = /^[a-zA-Z0-9_.]{3,30}$/
-export const USERNAME_MIN_LENGTH = 3
-export const USERNAME_MAX_LENGTH = 30
+import { config } from "@taiyomoe/config"
 
 export const normalizeUsername = (input: string) => {
   const normalized = input
-    .slice(0, USERNAME_MAX_LENGTH)
+    .slice(0, config.auth.username.maxLength)
     .replaceAll(" ", "_")
     .replace(/[^a-zA-Z0-9_.]/g, "")
     .toLowerCase()
 
-  return normalized.length < USERNAME_MIN_LENGTH
+  return normalized.length < config.auth.username.minLength
     ? faker.internet.username()
     : normalized
 }
