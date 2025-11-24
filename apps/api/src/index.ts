@@ -1,4 +1,5 @@
 import { node } from "@elysiajs/node"
+import { fromTypes, openapi } from "@elysiajs/openapi"
 import { opentelemetry } from "@elysiajs/opentelemetry"
 import HyperDX from "@hyperdx/node-opentelemetry"
 import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-proto"
@@ -6,6 +7,7 @@ import { BatchSpanProcessor } from "@opentelemetry/sdk-trace-node"
 import { config } from "@taiyomoe/config"
 import { db } from "@taiyomoe/db"
 import Elysia from "elysia"
+import z from "zod"
 import { env } from "./env"
 import { logger } from "./utils/logger"
 
@@ -20,7 +22,7 @@ HyperDX.init({
   },
 })
 
-const app = new Elysia({ adapter: node() })
+export const app = new Elysia({ adapter: node() })
   .use(
     opentelemetry({
       serviceName: config.logger.services.api,
@@ -32,6 +34,12 @@ const app = new Elysia({ adapter: node() })
           }),
         ),
       ],
+    }),
+  )
+  .use(
+    openapi({
+      references: fromTypes(),
+      mapJsonSchema: { zod: z.toJSONSchema },
     }),
   )
   .get("/", async () => {

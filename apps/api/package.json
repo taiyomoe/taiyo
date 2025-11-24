@@ -15,7 +15,9 @@
   },
   "dependencies": {
     "@elysiajs/node": "^1.4.2",
+    "@elysiajs/openapi": "^1.4.11",
     "@elysiajs/opentelemetry": "^1.4.8",
+    "@hyperdx/node-opentelemetry": "^0.10.2",
     "@opentelemetry/exporter-trace-otlp-proto": "^0.208.0",
     "@opentelemetry/sdk-trace-node": "^2.2.0",
     "@t3-oss/env-core": "^0.13.8",
