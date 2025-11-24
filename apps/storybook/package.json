@@ -4,10 +4,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "clean": "git clean -xdf .next .turbo node_modules",
-    "typecheck": "tsc --noEmit",
     "dev": "storybook dev -p 6006",
-    "build": "storybook build"
+    "build": "storybook build",
+    "clean": "rm -rf .turbo node_modules",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@tailwindcss/postcss": "^4.1.17",
