@@ -14,7 +14,9 @@
     "lint:ws": "pnpm dlx sherif@latest",
     "typecheck": "turbo typecheck",
     "postinstall": "pnpm lint:ws",
-    "knip": "knip"
+    "knip": "knip",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.3.7",
@@ -22,6 +24,7 @@
     "@types/node": "^24.10.1",
     "knip": "^5.70.1",
     "turbo": "^2.6.1",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.13"
   }
 }
