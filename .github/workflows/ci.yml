@@ -48,7 +48,7 @@ jobs:
       - name: PrismaORM
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        run: pnpm -F db run db generate --sql
+        run: pnpm -F db run db generate && pnpm -F db run db generate --sql
 
       - name: Typecheck
         run: pnpm typecheck
