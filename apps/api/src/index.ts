@@ -1,21 +1,19 @@
 import { node } from "@elysiajs/node"
 import { fromTypes, openapi } from "@elysiajs/openapi"
-import { opentelemetry } from "@elysiajs/opentelemetry"
 import HyperDX from "@hyperdx/node-opentelemetry"
-import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-proto"
-import { BatchSpanProcessor } from "@opentelemetry/sdk-trace-node"
 import { config } from "@taiyomoe/config"
-import { db } from "@taiyomoe/db"
-import Elysia from "elysia"
+import "@types/global-types"
+import Elysia, { env } from "elysia"
 import z from "zod"
-import { env } from "./env"
+import packageJson from "../package.json"
+import { mediasRouter } from "./routers/medias-router"
 import { logger } from "./utils/logger"
 
 HyperDX.init({
   apiKey: env.HYPERDX_INGESTION_KEY,
   service: config.logger.services.api,
   disableStartupLogs: true,
-  disableMetrics: true,
+  consoleCapture: false,
   instrumentations: {
     "@opentelemetry/instrumentation-dns": { enabled: false },
     "@opentelemetry/instrumentation-net": { enabled: false },
@@ -24,35 +22,31 @@ HyperDX.init({
 
 export const app = new Elysia({ adapter: node() })
   .use(
-    opentelemetry({
-      serviceName: config.logger.services.api,
-      spanProcessors: [
-        new BatchSpanProcessor(
-          new OTLPTraceExporter({
-            url: `${env.HYPERDX_INGESTION_BASE_URL}/v1/traces`,
-            headers: { Authorization: env.HYPERDX_INGESTION_KEY },
-          }),
-        ),
-      ],
-    }),
-  )
-  .use(
     openapi({
       references: fromTypes(),
       mapJsonSchema: { zod: z.toJSONSchema },
     }),
   )
-  .get("/", async () => {
-    logger.info("hello world")
+  .onRequest(({ request }) => {
+    const url = new URL(request.url)
 
-    const user = await db.user.findFirst()
-    logger.info(user)
-    logger.info("user", user)
-
-    return "Hello Elysia"
+    logger.debug(`-> ${request.method} ${url.pathname}${url.search}`)
   })
+  .onAfterResponse(({ request, set, status }) => {
+    const url = new URL(request.url)
+    const statusCode = set.status ? status(set.status).code : 500
+    const color =
+      statusCode >= 200 && statusCode < 300 ? "\x1b[32m" : "\x1b[31m" // green for OK, red for others
+    const reset = "\x1b[0m"
+
+    logger.debug(
+      `<- ${color}${set.status}${reset} ${request.method} ${url.pathname}${url.search}`,
+    )
+  })
+  .get("/ping", () => ({ version: packageJson.version }))
+  .use(mediasRouter)
   .listen(3001, () => {
-    logger.info("Server is running on port 3001")
+    logger.debug("Server is running on port 3001")
   })
 
 export type App = typeof app

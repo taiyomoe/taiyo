@@ -1,9 +1,7 @@
 import { createEnv } from "@t3-oss/env-core"
-import { env as loggerEnv } from "@taiyomoe/logger/env"
+import z from "zod"
 
 export const env = createEnv({
-  extends: [loggerEnv],
-
   /**
    * Specify your shared environment variables schema here.
    */
@@ -13,7 +11,10 @@ export const env = createEnv({
    * Specify your server-side environment variables schema here.
    * This way you can ensure the app isn't built with invalid env vars.
    */
-  server: {},
+  server: {
+    HYPERDX_INGESTION_BASE_URL: z.url(),
+    HYPERDX_INGESTION_KEY: z.string(),
+  },
 
   /**
    * Specify your client-side environment variables schema here.

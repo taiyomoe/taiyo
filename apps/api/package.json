@@ -16,18 +16,17 @@
   "dependencies": {
     "@elysiajs/node": "^1.4.2",
     "@elysiajs/openapi": "^1.4.11",
-    "@elysiajs/opentelemetry": "^1.4.8",
     "@hyperdx/node-opentelemetry": "^0.10.2",
-    "@opentelemetry/exporter-trace-otlp-proto": "^0.208.0",
-    "@opentelemetry/sdk-trace-node": "^2.2.0",
     "@t3-oss/env-core": "^0.13.8",
     "@taiyomoe/config": "workspace:^",
     "@taiyomoe/db": "workspace:^",
+    "@taiyomoe/logger": "workspace:^",
     "elysia": "^1.4.16",
     "zod": "^4.1.12"
   },
   "devDependencies": {
     "@taiyomoe/typescript": "workspace:^",
+    "@types/global-types": "workspace:^",
     "@types/node": "^24.10.1",
     "tsx": "^4.20.6",
     "typescript": "^5.9.3"

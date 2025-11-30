@@ -1,2 +1,2 @@
-export * from "./prisma-json"
-export * from "./reset"
+export * from "./prisma-json.d.ts"
+export * from "./reset.d.ts"
