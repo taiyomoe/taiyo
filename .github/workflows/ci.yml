@@ -35,7 +35,7 @@ jobs:
         uses: ./tooling/github/setup
 
       - name: Check
-        run: pnpm check:ws
+        run: pnpm check:ws:ci
 
   typecheck:
     runs-on: ubuntu-latest
