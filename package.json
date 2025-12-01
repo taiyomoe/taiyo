@@ -15,8 +15,10 @@
     "typecheck": "turbo typecheck",
     "postinstall": "pnpm lint:ws",
     "knip": "knip",
-    "test": "vitest run",
-    "test:watch": "vitest"
+    "test:unit": "vitest run --config vitest.config.unit.ts",
+    "test:unit:watch": "vitest --config vitest.config.unit.ts",
+    "test:integration": "vitest run --config vitest.config.integration.ts",
+    "test:integration:watch": "vitest --config vitest.config.integration.ts"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.3.7",

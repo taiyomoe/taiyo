@@ -11,8 +11,7 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "clean": "rm -rf .turbo node_modules",
-    "typecheck": "tsc --noEmit",
-    "test": "vitest run"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@elysiajs/node": "^1.4.2",
@@ -30,7 +29,6 @@
     "@types/global-types": "workspace:^",
     "@types/node": "^24.10.1",
     "tsx": "^4.20.6",
-    "typescript": "^5.9.3",
-    "vitest": "^4.0.13"
+    "typescript": "^5.9.3"
   }
 }

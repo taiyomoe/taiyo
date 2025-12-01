@@ -2,7 +2,6 @@ import { defineConfig } from "vitest/config"
 
 export default defineConfig({
   test: {
-    setupFiles: ["./src/__tests__/setup.ts"],
-    silent: "passed-only",
+    include: ["**/__tests__/**/*.test.ts", "**/__tests__/**/*.spec.ts"],
   },
 })
