@@ -44,6 +44,9 @@ jobs:
 
       - name: Setup
         uses: ./tooling/github/setup
+        with:
+          prisma-generate: true
+          database-url: ${{ secrets.DATABASE_URL }}
 
       - name: Typecheck
         run: pnpm typecheck
@@ -56,6 +59,9 @@ jobs:
 
       - name: Setup
         uses: ./tooling/github/setup
+        with:
+          prisma-generate: true
+          database-url: ${{ secrets.DATABASE_URL }}
 
       - name: Test
         run: pnpm test
