@@ -2,13 +2,14 @@ import { PrismaPg } from "@prisma/adapter-pg"
 import { env } from "./env"
 import { PrismaClient } from "./generated/prisma/client"
 
-const adapter = new PrismaPg({ connectionString: env.DATABASE_URL })
-const globalForPrisma = globalThis as unknown as {
-  prisma: PrismaClient | undefined
+declare global {
+  var prisma: PrismaClient | undefined
 }
 
+const adapter = new PrismaPg({ connectionString: env.DATABASE_URL })
+
 export const db =
-  globalForPrisma.prisma ??
+  globalThis.prisma ??
   new PrismaClient({
     adapter,
     log:
@@ -17,7 +18,8 @@ export const db =
         : ["error"],
   })
 
-if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = db
+if (process.env.NODE_ENV !== "production") globalThis.prisma = db
 
+export { PrismaPg } from "@prisma/adapter-pg"
 export * from "./generated/prisma/client"
 export * from "./generated/prisma/sql"

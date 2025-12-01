@@ -2,7 +2,7 @@ import { createHash, randomUUID } from "node:crypto"
 import { readdir, readFile } from "node:fs/promises"
 import { dirname, join, resolve } from "node:path"
 import { fileURLToPath } from "node:url"
-import { db } from "@taiyomoe/db"
+import { PrismaClient, PrismaPg } from "@taiyomoe/db"
 import { Command } from "commander"
 import { DB_RELATIVE_PATH } from "../utils"
 
@@ -19,7 +19,18 @@ type Migration = {
 
 export const migrateCommand = new Command("migrate")
   .description("Run database migrations")
-  .action(async () => {
+  .option("--db <db>", "Database name", "taiyo")
+  .action(async (options: { db: string }) => {
+    if (!process.env.DATABASE_URL) {
+      console.error("DATABASE_URL environment variable is not set")
+      process.exit(1)
+    }
+
+    const url = new URL(process.env.DATABASE_URL)
+    url.pathname = `/${options.db}`
+    const adapter = new PrismaPg({ connectionString: url.toString() })
+    const db = new PrismaClient({ adapter })
+
     console.log("Starting migrations handler...")
     console.log(
       "Beware this migrations handler doesn't have any fancy features as the one PrismaORM does. It will not detect schema drifts or modified-after-applied migrations.",

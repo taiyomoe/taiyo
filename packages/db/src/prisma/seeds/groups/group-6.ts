@@ -1,6 +1,6 @@
-import { db } from "../../.."
+import type { PrismaClient } from "@taiyomoe/db"
 
-const execute = async () => {
+const execute = async (db: PrismaClient) => {
   await db.group.create({
     data: {
       id: "6d0cd6b0-c794-47d2-a90a-cff5a54e60b6",

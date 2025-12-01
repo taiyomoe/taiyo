@@ -1,19 +1,22 @@
 import { dirname, join, resolve } from "node:path"
 import { fileURLToPath } from "node:url"
-import { db } from "@taiyomoe/db"
+import { PrismaClient, PrismaPg } from "@taiyomoe/db"
 import { Command } from "commander"
 import { DB_RELATIVE_PATH } from "../utils"
 
 export const seedCommand = new Command("seed")
   .description("Seed the database")
-  .action(async () => {
-    if (
-      !process.env.NEXT_PUBLIC_MEILISEARCH_URL ||
-      !process.env.MEILISEARCH_ADMIN_KEY
-    ) {
-      console.error("Missing MeiliSearch URL or admin key")
+  .option("--db <db>", "Database name", "taiyo")
+  .action(async (options: { db: string }) => {
+    if (!process.env.DATABASE_URL) {
+      console.error("DATABASE_URL environment variable is not set")
       process.exit(1)
     }
+
+    const url = new URL(process.env.DATABASE_URL)
+    url.pathname = `/${options.db}`
+    const adapter = new PrismaPg({ connectionString: url.toString() })
+    const db = new PrismaClient({ adapter })
 
     const seedsPath = resolve(
       fileURLToPath(dirname(import.meta.url)),
@@ -43,38 +46,38 @@ export const seedCommand = new Command("seed")
     const media10 = await import(join(seedsPath, "medias/media-10.ts"))
     const users = await import(join(seedsPath, "users.ts"))
 
-    console.log("Seeding database and executing logs migrations...")
+    console.log("Seeding database...")
 
     // Users
     console.log("\nUsers:")
-    await users.default.execute().then(() => console.log("Users seeded"))
+    await users.default.execute(db).then(() => console.log("Users seeded"))
 
     // Medias
     console.log("\nMedias:")
-    await media1.default.execute().then(() => console.log("Media 1 seeded"))
-    await media2.default.execute().then(() => console.log("Media 2 seeded"))
-    await media3.default.execute().then(() => console.log("Media 3 seeded"))
-    await media4.default.execute().then(() => console.log("Media 4 seeded"))
-    await media5.default.execute().then(() => console.log("Media 5 seeded"))
-    await media6.default.execute().then(() => console.log("Media 6 seeded"))
-    await media7.default.execute().then(() => console.log("Media 7 seeded"))
-    await media8.default.execute().then(() => console.log("Media 8 seeded"))
-    await media9.default.execute().then(() => console.log("Media 9 seeded"))
-    await media10.default.execute().then(() => console.log("Media 10 seeded"))
+    await media1.default.execute(db).then(() => console.log("Media 1 seeded"))
+    await media2.default.execute(db).then(() => console.log("Media 2 seeded"))
+    await media3.default.execute(db).then(() => console.log("Media 3 seeded"))
+    await media4.default.execute(db).then(() => console.log("Media 4 seeded"))
+    await media5.default.execute(db).then(() => console.log("Media 5 seeded"))
+    await media6.default.execute(db).then(() => console.log("Media 6 seeded"))
+    await media7.default.execute(db).then(() => console.log("Media 7 seeded"))
+    await media8.default.execute(db).then(() => console.log("Media 8 seeded"))
+    await media9.default.execute(db).then(() => console.log("Media 9 seeded"))
+    await media10.default.execute(db).then(() => console.log("Media 10 seeded"))
 
     // Groups
     console.log("\nGroups:")
-    await group1.default.execute().then(() => console.log("Group 1 seeded"))
-    await group2.default.execute().then(() => console.log("Group 2 seeded"))
-    await group3.default.execute().then(() => console.log("Group 3 seeded"))
-    await group4.default.execute().then(() => console.log("Group 4 seeded"))
-    await group5.default.execute().then(() => console.log("Group 5 seeded"))
-    await group6.default.execute().then(() => console.log("Group 6 seeded"))
-    await group7.default.execute().then(() => console.log("Group 7 seeded"))
-    await group8.default.execute().then(() => console.log("Group 8 seeded"))
-    await group9.default.execute().then(() => console.log("Group 9 seeded"))
-    await group10.default.execute().then(() => console.log("Group 10 seeded"))
-    await group11.default.execute().then(() => console.log("Group 11 seeded"))
+    await group1.default.execute(db).then(() => console.log("Group 1 seeded"))
+    await group2.default.execute(db).then(() => console.log("Group 2 seeded"))
+    await group3.default.execute(db).then(() => console.log("Group 3 seeded"))
+    await group4.default.execute(db).then(() => console.log("Group 4 seeded"))
+    await group5.default.execute(db).then(() => console.log("Group 5 seeded"))
+    await group6.default.execute(db).then(() => console.log("Group 6 seeded"))
+    await group7.default.execute(db).then(() => console.log("Group 7 seeded"))
+    await group8.default.execute(db).then(() => console.log("Group 8 seeded"))
+    await group9.default.execute(db).then(() => console.log("Group 9 seeded"))
+    await group10.default.execute(db).then(() => console.log("Group 10 seeded"))
+    await group11.default.execute(db).then(() => console.log("Group 11 seeded"))
 
     // Meilisearch
     console.log(

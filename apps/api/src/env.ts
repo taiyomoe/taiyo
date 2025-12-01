@@ -1,8 +1,9 @@
 import { createEnv } from "@t3-oss/env-core"
+import { env as dbEnv } from "@taiyomoe/db/env"
 import { env as loggerEnv } from "@taiyomoe/logger/env"
 
 export const env = createEnv({
-  extends: [loggerEnv],
+  extends: [dbEnv, loggerEnv],
 
   /**
    * Specify your shared environment variables schema here.

@@ -1,9 +1,14 @@
 import { fakerPT_BR } from "@faker-js/faker"
-import { ContentRating, Countries, Genders, Languages } from "@taiyomoe/db"
+import {
+  ContentRating,
+  Countries,
+  Genders,
+  Languages,
+  type PrismaClient,
+} from "@taiyomoe/db"
 import { normalizeDisplayName, normalizeUsername } from "@taiyomoe/utils"
-import { db } from "../../"
 
-const execute = async () => {
+const execute = async (db: PrismaClient) => {
   const users = [
     // Drope Scan
     {

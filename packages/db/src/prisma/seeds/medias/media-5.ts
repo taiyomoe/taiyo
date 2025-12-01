@@ -1,6 +1,6 @@
-import { db } from "../../../"
+import type { PrismaClient } from "@taiyomoe/db"
 
-const execute = async () => {
+const execute = async (db: PrismaClient) => {
   await db.media.create({
     data: {
       id: "7d64e4f8-d955-4b59-a7c5-7ee2ddcad68b",

@@ -12,6 +12,9 @@ import { logger } from "./utils/logger"
 HyperDX.init({
   apiKey: env.HYPERDX_INGESTION_KEY,
   service: config.logger.services.api,
+  disableLogs: !!process.env.TEST,
+  disableMetrics: !!process.env.TEST,
+  disableTracing: !!process.env.TEST,
   disableStartupLogs: true,
   consoleCapture: false,
   instrumentations: {
@@ -45,8 +48,12 @@ export const app = new Elysia({ adapter: node() })
   })
   .get("/ping", () => ({ version: packageJson.version }))
   .use(mediasRouter)
-  .listen(3001, () => {
+
+// Only start the server if not in test mode
+if (!process.env.TEST) {
+  app.listen(3001, () => {
     logger.debug("Server is running on port 3001")
   })
+}
 
 export type App = typeof app
