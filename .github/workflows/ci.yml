@@ -51,7 +51,19 @@ jobs:
       - name: Typecheck
         run: pnpm typecheck
 
-  test:
+  unit-tests:
+    runs-on: ubuntu-latest
+    needs: [knip, check, typecheck]
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Setup
+        uses: ./tooling/github/setup
+
+      - name: Run Unit Tests
+        run: pnpm test:unit
+
+  integration-tests:
     runs-on: ubuntu-latest
     needs: [knip, check, typecheck]
     steps:
@@ -63,5 +75,5 @@ jobs:
           prisma-generate: true
           database-url: ${{ secrets.DATABASE_URL }}
 
-      - name: Test
-        run: pnpm test
+      - name: Run Integration Tests
+        run: pnpm test:integration
