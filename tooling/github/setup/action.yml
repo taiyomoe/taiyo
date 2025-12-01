@@ -7,7 +7,7 @@ runs:
     - uses: pnpm/action-setup@v2
     - uses: actions/setup-node@v6
       with:
-        node-version-file: '.nvmrc'
+        node-version-file: ".nvmrc"
         cache: "pnpm"
 
     - shell: bash
@@ -15,3 +15,8 @@ runs:
 
     - shell: bash
       run: pnpm install
+
+    - name: PrismaORM
+      env:
+        DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      run: pnpm -F db prisma generate && pnpm -F db prisma generate --sql

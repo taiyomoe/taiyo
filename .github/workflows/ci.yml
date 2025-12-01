@@ -45,11 +45,6 @@ jobs:
       - name: Setup
         uses: ./tooling/github/setup
 
-      - name: PrismaORM
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        run: pnpm -F db prisma generate && pnpm -F db prisma generate --sql
-
       - name: Typecheck
         run: pnpm typecheck
 
