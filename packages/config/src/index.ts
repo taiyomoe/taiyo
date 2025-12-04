@@ -1,4 +1,4 @@
-import { tagsKeys } from "./tags"
+import { tags } from "./tags"
 
 export const config = {
   logger: {
@@ -7,6 +7,11 @@ export const config = {
     },
     defaultLevel: "info",
     minimumIntervalInMs: 1000,
+  },
+  openapi: {
+    title: "Taiyō API",
+    description:
+      "Welcome to the Taiyō API! This is the official API for the Taiyō project. Here you can find all the information you need to build your own application.\n\nOh, and by the way, we're open-source https://github.com/taiyomoe/taiyo :)",
   },
   auth: {
     username: {
@@ -35,7 +40,7 @@ export const config = {
     allowedExtensions: ["jpg", "jpeg", "png", "webp", "gif"],
     allowedMimeTypes: ["image/jpeg", "image/png", "image/webp", "image/gif"],
   },
-  tags: tagsKeys,
+  tags,
   pagination: {
     defaultPage: 1,
     defaultPerPage: 20,
