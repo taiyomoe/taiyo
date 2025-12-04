@@ -1,0 +1,57 @@
+meta {
+  name: Create media
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{url}}/medias?hello=query
+  body: multipartForm
+  auth: inherit
+}
+
+params:query {
+  hello: query
+}
+
+headers {
+  Content-Type: multipart/form-data
+}
+
+body:multipart-form {
+  titles[0].title: One Punch Man
+  titles[0].language: en
+  titles[0].main: true
+  titles[0].priority: 1
+  titles[0].isAcronym: false
+  titles[1].title: ワンパンマン
+  titles[1].language: ja
+  titles[1].main: false
+  titles[1].priority: 1
+  titles[1].isAcronym: false
+  covers[0].file:
+  covers[0].language: en
+  covers[0].contentRating: NORMAL
+  covers[0].main: true
+  covers[0].volume: 1
+  covers[1].file:
+  covers[1].language: ja
+  covers[1].contentRating: NORMAL
+  covers[1].main: false
+  covers[1].volume: 2
+  oneShot: false
+  contentRating: NORMAL
+  type: MANGA
+  status: RELEASING
+  source: LIGHT_NOVEL
+  demography: SHOUNEN
+  countryOfOrigin: JAPAN
+  genres[0]: ACTION
+  genres[1]: COMEDY
+  genres[2]: SUPERNATURAL
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
