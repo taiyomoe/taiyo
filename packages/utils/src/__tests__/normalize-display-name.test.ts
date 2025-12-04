@@ -37,6 +37,7 @@ describe("normalizeDisplayName", () => {
   it("should truncate to maxLength (30)", () => {
     const longInput = "a".repeat(50)
     const result = normalizeDisplayName(longInput)
+
     expect(result.length).toBe(30)
     expect(result).toBe("a".repeat(30))
   })
