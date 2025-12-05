@@ -37,11 +37,9 @@ export const test = baseTest.extend<Fixtures>({
       database: task.id,
     })
     const db = new PrismaClient({ adapter })
-    await db.$connect()
 
     await use(db)
 
     await dropTestDatabase(task.id)
-    await db.$disconnect()
   },
 })

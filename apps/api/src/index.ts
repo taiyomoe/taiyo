@@ -10,19 +10,18 @@ import { requestLogger } from "./middlewares/request-logger-middleware"
 import { mediasRouter } from "./routers/medias-router"
 import { logger } from "./utils/logger"
 
-HyperDX.init({
-  apiKey: env.HYPERDX_INGESTION_KEY,
-  service: config.logger.services.api,
-  disableLogs: !!process.env.TEST,
-  disableMetrics: !!process.env.TEST,
-  disableTracing: !!process.env.TEST,
-  disableStartupLogs: true,
-  consoleCapture: false,
-  instrumentations: {
-    "@opentelemetry/instrumentation-dns": { enabled: false },
-    "@opentelemetry/instrumentation-net": { enabled: false },
-  },
-})
+if (!process.env.TEST) {
+  HyperDX.init({
+    apiKey: env.HYPERDX_INGESTION_KEY,
+    service: config.logger.services.api,
+    disableStartupLogs: true,
+    consoleCapture: false,
+    instrumentations: {
+      "@opentelemetry/instrumentation-dns": { enabled: false },
+      "@opentelemetry/instrumentation-net": { enabled: false },
+    },
+  })
+}
 
 export const app = new Hono()
   .use(requestLogger)
@@ -50,6 +49,8 @@ app
     }),
   )
 
-serve({ fetch: app.fetch, port: 3002 }, ({ port }) => {
-  logger.debug(`Server is running on http://localhost:${port}`)
-})
+if (!process.env.TEST) {
+  serve({ fetch: app.fetch, port: 3002 }, ({ port }) => {
+    logger.debug(`Server is running on http://localhost:${port}`)
+  })
+}
