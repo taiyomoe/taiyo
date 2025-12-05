@@ -29,7 +29,7 @@ export const validateFormData = <TSchema extends z.ZodType>(
     const validation = schema.safeParse(json)
 
     if (!validation.success) {
-      return c.json({ error: validation.error.issues }, 400)
+      return c.fail("VALIDATION_ERROR", validation.error.issues)
     }
 
     c.set("formData", validation.data)

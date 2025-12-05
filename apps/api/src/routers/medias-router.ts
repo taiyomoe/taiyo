@@ -217,6 +217,9 @@ export const mediasRouter = new Hono().post(
 
     console.log("Creating a new media", body)
 
-    return c.json({ message: "Media created successfully" })
+    // TODO: Implement media creation logic
+    const media = { id: "placeholder", ...body }
+
+    return c.ok(media)
   },
 )
