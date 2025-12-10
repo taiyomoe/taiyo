@@ -19,6 +19,6 @@ export const errorHandler: ErrorHandler = async (err, c) => {
 
   return c.fail(
     "INTERNAL_SERVER_ERROR",
-    process.env.NODE_ENV === "development" ? payload : undefined,
+    process.env.NODE_ENV === "production" ? undefined : payload,
   )
 }
