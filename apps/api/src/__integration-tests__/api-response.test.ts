@@ -8,7 +8,9 @@ import {
   it,
   vi,
 } from "vitest"
+import z from "zod"
 import { app } from "../index"
+import { validateFormData } from "../middlewares/validate-form-data-middleware"
 
 describe("API Response Standardization", () => {
   let testApp: Hono
@@ -45,6 +47,16 @@ describe("API Response Standardization", () => {
       .get("/test-exception", () => {
         throw new Error("Test error message")
       })
+      .post(
+        "/test-validation",
+        validateFormData(
+          z.object({ name: z.string().min(1), email: z.email() }),
+        ),
+        (c) => {
+          const data = c.get("formData")
+          return c.ok(data)
+        },
+      )
   })
 
   afterEach(() => {
@@ -166,6 +178,60 @@ describe("API Response Standardization", () => {
 
       expect(res.status).toBe(500)
       expect(json).not.toHaveProperty("details")
+    })
+  })
+
+  describe("Form Data Validation", () => {
+    it("should return validated data on successful validation", async () => {
+      const formData = new FormData()
+      formData.append("name", "John Doe")
+      formData.append("email", "john@example.com")
+
+      const res = await testApp.request("/test-validation", {
+        method: "POST",
+        body: formData,
+      })
+      const json = await res.json()
+
+      expect(res.status).toBe(201)
+      expect(json).toMatchObject({
+        success: true,
+        data: {
+          name: "John Doe",
+          email: "john@example.com",
+        },
+      })
+    })
+
+    it("should return validation error with details on failed validation", async () => {
+      const formData = new FormData()
+      formData.append("name", "")
+      formData.append("email", "invalid-email")
+
+      const res = await testApp.request("/test-validation", {
+        method: "POST",
+        body: formData,
+      })
+      const json = (await res.json()) as {
+        details: { path: string[]; code: string }[]
+      }
+
+      expect(res.status).toBe(422)
+      expect(json).toMatchObject({
+        success: false,
+        code: "VALIDATION_ERROR",
+        message: "The request data failed validation.",
+        details: expect.arrayContaining([
+          expect.objectContaining({
+            path: ["name"],
+            code: "too_small",
+          }),
+          expect.objectContaining({
+            path: ["email"],
+            code: "invalid_format",
+          }),
+        ]),
+      })
     })
   })
 })
