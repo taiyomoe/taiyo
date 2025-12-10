@@ -22,6 +22,7 @@
     "@taiyomoe/config": "workspace:^",
     "@taiyomoe/db": "workspace:^",
     "@taiyomoe/logger": "workspace:^",
+    "@taiyomoe/s3": "workspace:^",
     "@taiyomoe/utils": "workspace:^",
     "hono": "^4.10.7",
     "hono-openapi": "^1.1.1",

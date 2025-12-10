@@ -17,8 +17,8 @@ services:
     ulimits:
       memlock: -1
     environment:
-      - "DFLY_cluster_mode=emulated"
-      - "DFLY_lock_on_hashtags=1"
+      - DFLY_cluster_mode=emulated
+      - DFLY_lock_on_hashtags=1
     ports:
       - "$DRAGONFLY_PORT:6379"
     volumes:
@@ -30,3 +30,15 @@ services:
     ports:
       - "$HYPERDX_PORT:8080"
       - "$HYPERDX_OTLP_PORT:4318"
+
+  minio:
+    image: minio/minio:latest
+    command: server /data --console-address ":${MINIO_CONSOLE_PORT}"
+    environment:
+      - MINIO_ROOT_USER=$MINIO_ROOT_USER
+      - MINIO_ROOT_PASSWORD=$MINIO_ROOT_PASSWORD
+    ports:
+      - "$MINIO_PORT:9000"
+      - "$MINIO_CONSOLE_PORT:9001"
+    volumes:
+      - "./data/minio:/data"

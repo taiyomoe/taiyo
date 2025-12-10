@@ -1,14 +1,27 @@
-import type { MiddlewareHandler } from "hono"
+import type { S3Client } from "@aws-sdk/client-s3"
+import type { PrismaClient } from "@taiyomoe/db"
+import { db } from "@taiyomoe/db"
+import { s3Client } from "@taiyomoe/s3"
+import { createMiddleware } from "hono/factory"
+import type { Logger } from "winston"
 import { type ErrorCode, errors } from "../utils/errors"
+import { logger } from "../utils/logger"
 
-export type ResponseHelpers = {
+export type AppContext = {
+  db: PrismaClient
+  logger: Logger
+  s3: S3Client
   ok: <T>(data: T) => Response
   fail: (errorCode: ErrorCode, details?: unknown) => Response
 }
 
-export const responseHelpers: MiddlewareHandler = async (c, next) => {
+export const contextMiddleware = createMiddleware(async (c, next) => {
   const timestamp = new Date().toISOString()
   const requestId = c.req.header("x-request-id") || crypto.randomUUID()
+
+  c.set("db", db)
+  c.set("logger", logger)
+  c.set("s3", s3Client)
 
   c.ok = <T>(data: T) => {
     c.status(c.req.method === "POST" ? 201 : 200)
@@ -49,4 +62,4 @@ export const responseHelpers: MiddlewareHandler = async (c, next) => {
   }
 
   await next()
-}
+})

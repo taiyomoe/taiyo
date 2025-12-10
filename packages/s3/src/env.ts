@@ -1,11 +1,7 @@
 import { createEnv } from "@t3-oss/env-core"
-import { env as dbEnv } from "@taiyomoe/db/env"
-import { env as loggerEnv } from "@taiyomoe/logger/env"
-import { env as s3Env } from "@taiyomoe/s3/env"
+import { z } from "zod"
 
 export const env = createEnv({
-  extends: [dbEnv, loggerEnv, s3Env],
-
   /**
    * Specify your shared environment variables schema here.
    */
@@ -15,7 +11,12 @@ export const env = createEnv({
    * Specify your server-side environment variables schema here.
    * This way you can ensure the app isn't built with invalid env vars.
    */
-  server: {},
+  server: {
+    S3_ENDPOINT: z.url(),
+    S3_ACCESS_KEY_ID: z.string().min(1),
+    S3_SECRET_ACCESS_KEY: z.string().min(1),
+    S3_BUCKET_NAME: z.string().min(1),
+  },
 
   /**
    * Specify your client-side environment variables schema here.

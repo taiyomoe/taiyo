@@ -3,21 +3,21 @@ import HyperDX from "@hyperdx/node-opentelemetry"
 import { Scalar } from "@scalar/hono-api-reference"
 import { config } from "@taiyomoe/config"
 import { Hono } from "hono"
-import { requestId } from "hono/request-id"
 import { openAPIRouteHandler } from "hono-openapi"
+import { requestId } from "hono/request-id"
 import packageJson from "../package.json"
 import { env } from "./env"
+import {
+  type AppContext,
+  contextMiddleware,
+} from "./middlewares/context-middleware"
 import { errorHandler } from "./middlewares/error-handler-middleware"
 import { requestLogger } from "./middlewares/request-logger-middleware"
-import {
-  type ResponseHelpers,
-  responseHelpers,
-} from "./middlewares/response-helpers-middleware"
 import { mediasRouter } from "./routers/medias-router"
 import { logger } from "./utils/logger"
 
 declare module "hono" {
-  interface Context extends ResponseHelpers {}
+  interface Context extends AppContext {}
 }
 
 if (!process.env.TEST) {
@@ -36,7 +36,7 @@ if (!process.env.TEST) {
 export const app = new Hono()
   .use(requestId())
   .use(requestLogger)
-  .use(responseHelpers)
+  .use(contextMiddleware)
   .onError(errorHandler)
   .get("/ping", (c) => c.json({ version: packageJson.version }))
   .route("/medias", mediasRouter)
