@@ -10,7 +10,7 @@
   },
   "scripts": {
     "clean": "rm -rf .turbo node_modules",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsgo --noEmit"
   },
   "dependencies": {
     "@t3-oss/env-core": "^0.13.8",
@@ -20,6 +20,6 @@
   },
   "devDependencies": {
     "@taiyomoe/typescript": "workspace:^",
-    "typescript": "^5.9.3"
+    "@typescript/native-preview": "7.0.0-dev.20251210.1"
   }
 }

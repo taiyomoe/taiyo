@@ -1,7 +1,6 @@
 {
   "extends": "@taiyomoe/typescript/base.json",
   "compilerOptions": {
-    "baseUrl": ".",
     "jsx": "preserve",
     "paths": { "~/*": ["./src/*"] }
   },

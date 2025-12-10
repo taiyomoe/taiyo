@@ -10,11 +10,11 @@
   },
   "scripts": {
     "clean": "rm -rf .turbo node_modules",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsgo --noEmit"
   },
   "devDependencies": {
     "@taiyomoe/typescript": "workspace:^",
-    "typescript": "^5.9.3"
+    "@typescript/native-preview": "7.0.0-dev.20251210.1"
   },
   "dependencies": {
     "@hyperdx/node-opentelemetry": "^0.10.2",
