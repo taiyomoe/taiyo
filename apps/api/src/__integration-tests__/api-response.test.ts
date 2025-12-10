@@ -8,7 +8,7 @@ import {
   it,
   vi,
 } from "vitest"
-import { app } from ".."
+import { app } from "../index"
 
 describe("API Response Standardization", () => {
   let testApp: Hono
@@ -163,8 +163,6 @@ describe("API Response Standardization", () => {
     it("should not include error details in production mode", async () => {
       const res = await testApp.request("/test-exception")
       const json = await res.json()
-
-      console.log(json)
 
       expect(res.status).toBe(500)
       expect(json).not.toHaveProperty("details")
