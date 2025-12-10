@@ -36,12 +36,14 @@ export const createLogger = (service: keyof typeof config.logger.services) =>
           format,
         ),
       }),
-      getWinstonTransport(config.logger.defaultLevel, {
-        service,
-        baseUrl: `${env.HYPERDX_INGESTION_BASE_URL}/v1/logs`,
-        headers: { Authorization: env.HYPERDX_INGESTION_KEY },
-        detectResources: true,
-        sendIntervalMs: config.logger.minimumIntervalInMs,
-      }),
-    ],
+      !process.env.TEST
+        ? getWinstonTransport(config.logger.defaultLevel, {
+            service,
+            baseUrl: `${env.HYPERDX_INGESTION_BASE_URL}/v1/logs`,
+            headers: { Authorization: env.HYPERDX_INGESTION_KEY },
+            detectResources: true,
+            sendIntervalMs: config.logger.minimumIntervalInMs,
+          })
+        : null,
+    ].filter(Boolean),
   })
