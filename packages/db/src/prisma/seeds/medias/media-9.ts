@@ -16,8 +16,8 @@ const execute = async (db: PrismaClient) => {
       countryOfOrigin: "USA",
       genres: ["ACTION", "ADVENTURE", "FANTASY", "SUPERNATURAL"],
       tags: [
-        { key: "REINCARNATION", isSpoiler: false },
-        { key: "REVENGE", isSpoiler: true },
+        { key: "Reincarnation", isSpoiler: false },
+        { key: "Revenge", isSpoiler: true },
       ],
       // -----
       creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",

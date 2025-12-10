@@ -14,7 +14,10 @@ declare global {
     }
     type MediaChapterPage = { id: string }
     type MediaCommentAttachement = { id: string; extension: "png" | "gif" }
-    type MediaTag = { key: (typeof config)["tags"][number]; isSpoiler: boolean }
+    type MediaTag = {
+      key: (typeof config)["tags"][number]["name"]
+      isSpoiler: boolean
+    }
     type UserLibraryEntry = { mediaId: string; updatedAt: string }
     type UserHistoryProgression = {
       updatedAt: string
