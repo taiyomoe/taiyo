@@ -17,9 +17,6 @@ importers:
       '@types/node':
         specifier: ^24.10.1
         version: 24.10.3
-      '@typescript/native-preview':
-        specifier: 7.0.0-dev.20251210.1
-        version: 7.0.0-dev.20251210.1
       knip:
         specifier: ^5.70.1
         version: 5.73.1(@types/node@24.10.3)(typescript@5.9.3)
