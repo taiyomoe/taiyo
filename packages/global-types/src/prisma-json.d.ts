@@ -15,7 +15,7 @@ declare global {
     type MediaChapterPage = { id: string }
     type MediaCommentAttachement = { id: string; extension: "png" | "gif" }
     type MediaTag = {
-      key: (typeof config)["tags"][number]["name"]
+      key: keyof (typeof config)["tags"]
       isSpoiler: boolean
     }
     type MediaTracker = Partial<{ [K in "mal" | "al" | "md"]: string | number }>

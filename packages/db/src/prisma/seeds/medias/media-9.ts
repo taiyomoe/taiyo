@@ -16,9 +16,12 @@ const execute = async (db: PrismaClient) => {
       countryOfOrigin: "USA",
       genres: ["ACTION", "ADVENTURE", "FANTASY", "SUPERNATURAL"],
       tags: [
-        { key: "Reincarnation", isSpoiler: false },
-        { key: "Revenge", isSpoiler: true },
+        { key: "REINCARNATION", isSpoiler: false },
+        { key: "REVENGE", isSpoiler: true },
       ],
+      trackers: {
+        md: "4ada20eb-085a-491a-8c49-477ab42014d7",
+      },
       // -----
       creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
     },
@@ -81,17 +84,6 @@ const execute = async (db: PrismaClient) => {
         language: "en",
         isAcronym: true,
         priority: 1,
-        mediaId: "f0bc42eb-b2f7-4017-89f8-77c1834834b1",
-        creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
-      },
-    ],
-  })
-
-  await db.tracker.createMany({
-    data: [
-      {
-        tracker: "MANGADEX",
-        externalId: "4ada20eb-085a-491a-8c49-477ab42014d7",
         mediaId: "f0bc42eb-b2f7-4017-89f8-77c1834834b1",
         creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
       },
