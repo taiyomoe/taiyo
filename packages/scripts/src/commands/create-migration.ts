@@ -1,7 +1,7 @@
-import { Command } from "commander"
 import { mkdir, writeFile } from "node:fs/promises"
 import { dirname, join, resolve } from "node:path"
 import { fileURLToPath } from "node:url"
+import { Command } from "commander"
 import { DB_RELATIVE_PATH } from "../utils"
 
 const generateTimestamp = () => {
