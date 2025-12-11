@@ -14,10 +14,10 @@ const users = await db.user.findMany({ take: 10 });
 
 ## Migrations
 
-Migrations are created by PrismaORM but managed with a custom script. To create a new migration, run:
+Migrations are created manually as we cannot use the PrismaORM built-in migrator command. To create a new migration, run:
 
 ```bash
-infisical run -- pnpm -F db prisma migrate dev --create-only
+infisical run -- pnpm -F scripts start create-migration --name <name>
 ```
 
 After migrating, generate the Prisma client with:
