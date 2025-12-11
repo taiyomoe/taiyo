@@ -169,7 +169,7 @@ const createMediaSchema = z.object({
   tags: z
     .object({
       name: z
-        .enum(config.tags.map((tag) => tag.name))
+        .enum(Object.keys(config.tags))
         .meta({ description: "The name of the tag.", example: "Cowboys" }),
       isSpoiler: z
         .boolean()
