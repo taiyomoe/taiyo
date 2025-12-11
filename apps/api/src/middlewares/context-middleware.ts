@@ -1,16 +1,14 @@
-import type { S3Client } from "@aws-sdk/client-s3"
 import type { PrismaClient } from "@taiyomoe/db"
 import { db } from "@taiyomoe/db"
 import { s3Client } from "@taiyomoe/s3"
 import { createMiddleware } from "hono/factory"
-import type { Logger } from "winston"
 import { type ErrorCode, errors } from "../utils/errors"
 import { logger } from "../utils/logger"
 
 export type AppContext = {
   db: PrismaClient
-  logger: Logger
-  s3: S3Client
+  logger: typeof logger
+  s3: typeof s3Client
   ok: <T>(data: T) => Response
   fail: (errorCode: ErrorCode, details?: unknown) => Response
 }

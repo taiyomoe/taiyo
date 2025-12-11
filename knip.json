@@ -8,5 +8,8 @@
     "@vitest/coverage-v8",
     "@react-email/preview-server"
   ],
-  "ignore": ["./packages/ui/src/styles/globals.css"]
+  "ignore": [
+    "./packages/ui/src/styles/globals.css",
+    "./packages/schemas/src/prisma/index.ts"
+  ]
 }

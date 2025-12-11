@@ -375,9 +375,6 @@ importers:
       commander:
         specifier: ^12.1.0
         version: 12.1.0
-      remeda:
-        specifier: ^2.32.0
-        version: 2.32.0
       tsx:
         specifier: ^4.20.6
         version: 4.21.0
@@ -5031,9 +5028,6 @@ packages:
 
   remeda@2.21.3:
     resolution: {integrity: sha512-XXrZdLA10oEOQhLLzEJEiFFSKi21REGAkHdImIb4rt/XXy8ORGXh5HCcpUOsElfPNDb+X6TA/+wkh+p2KffYmg==}
-
-  remeda@2.32.0:
-    resolution: {integrity: sha512-BZx9DsT4FAgXDTOdgJIc5eY6ECIXMwtlSPQoPglF20ycSWigttDDe88AozEsPPT4OWk5NujroGSBC1phw5uU+w==}
 
   require-directory@2.1.1:
     resolution: {integrity: sha512-fGxEI7+wsG9xrvdjsrlmL22OMTTiHRwAMroiEeMgq8gzoLC/PQr7RsRDSTLUg/bZAZtF+TVIkHc6/4RIKrui+Q==}
@@ -10769,10 +10763,6 @@ snapshots:
   regexp-to-ast@0.5.0: {}
 
   remeda@2.21.3:
-    dependencies:
-      type-fest: 4.41.0
-
-  remeda@2.32.0:
     dependencies:
       type-fest: 4.41.0
 
