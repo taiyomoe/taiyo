@@ -30,7 +30,6 @@ model User {
   uploadedMediaCovers   Cover[]
   uploadedMediaBanners  Banner[]
   createdMediaTitles    Title[]
-  createdMediaTrackers  Tracker[]
   uploadedMediaChapters Chapter[]
   createdGroups         Group[]
 }

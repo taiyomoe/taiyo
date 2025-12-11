@@ -20,11 +20,12 @@ model Media {
   /// [MediaTag]
   tags            Json[]
   flag            Flag                 @default(OK)
+  /// [MediaTracker]
+  trackers        Json                 @default("{}")
 
   covers   Cover[]
   banners  Banner[]
   titles   Title[]
-  trackers Tracker[]
   chapters Chapter[]
   history  UserHistory[]
 
@@ -88,23 +89,6 @@ model Title {
   deleterId String? @db.Uuid
 
   @@unique([mediaId, language, priority], name: "MediaTitlePriority")
-}
-
-model Tracker {
-  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
-
-  tracker    Trackers
-  externalId String
-
-  media   Media  @relation(fields: [mediaId], references: [id], onDelete: Cascade)
-  mediaId String @db.Uuid
-
-  creator   User    @relation(fields: [creatorId], references: [id])
-  creatorId String  @db.Uuid
-  deleterId String? @db.Uuid
 }
 
 model Chapter {

@@ -18,6 +18,7 @@ declare global {
       key: (typeof config)["tags"][number]["name"]
       isSpoiler: boolean
     }
+    type MediaTracker = Partial<{ [K in "mal" | "al" | "md"]: string | number }>
     type UserLibraryEntry = { mediaId: string; updatedAt: string }
     type UserHistoryProgression = {
       updatedAt: string
