@@ -36,8 +36,12 @@ export const config = {
     showLibrary: true,
     homeLayout: "ROWS",
   } satisfies Required<PrismaJson.UserSettings>,
-  files: {
-    allowedExtensions: ["jpg", "jpeg", "png", "webp", "gif"],
+  images: {
+    /** Default maximum image size in bytes (5MB) */
+    maxSizeBytes: 5 * 1024 * 1024,
+    /** JPEG quality for processed images (1-100) */
+    quality: 85,
+    /** Allowed image mime types */
     allowedMimeTypes: ["image/jpeg", "image/png", "image/webp", "image/gif"],
   },
   tags,

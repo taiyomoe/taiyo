@@ -50,9 +50,21 @@ const mediaErrors = {
   },
 } as const
 
+const imageErrors = {
+  INVALID_IMAGE: {
+    message: "The file is not a valid image.",
+    code: 422,
+  },
+  IMAGE_TOO_LARGE: {
+    message: "The image exceeds the maximum allowed size.",
+    code: 422,
+  },
+} as const
+
 export const errors = {
   ...genericErrors,
   ...mediaErrors,
+  ...imageErrors,
 } as const
 
 export type ErrorCode = keyof typeof errors

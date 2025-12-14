@@ -9,5 +9,5 @@ import { config } from "@taiyomoe/config";
 
 // Access configuration
 const defaultPerPage = config.pagination.defaultPerPage;
-const allowedExtensions = config.files.allowedExtensions;
+const imagesQuality = config.images.quality;
 ```
