@@ -18,10 +18,10 @@
   },
   "dependencies": {
     "@hyperdx/node-opentelemetry": "^0.10.2",
-    "@t3-oss/env-core": "^0.13.8",
+    "@t3-oss/env-core": "^0.13.10",
     "@taiyomoe/config": "workspace:^",
     "json-colorizer": "^3.0.1",
-    "winston": "^3.18.3",
-    "zod": "^4.1.12"
+    "winston": "^3.19.0",
+    "zod": "^4.2.1"
   }
 }

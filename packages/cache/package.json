@@ -13,10 +13,10 @@
     "typecheck": "tsgo --noEmit"
   },
   "dependencies": {
-    "@t3-oss/env-core": "^0.13.8",
+    "@t3-oss/env-core": "^0.13.10",
     "ioredis": "^5.8.2",
-    "superjson": "^2.2.5",
-    "zod": "^4.1.12"
+    "superjson": "^2.2.6",
+    "zod": "^4.2.1"
   },
   "devDependencies": {
     "@taiyomoe/typescript": "workspace:^",

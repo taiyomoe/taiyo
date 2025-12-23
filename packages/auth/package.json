@@ -14,16 +14,16 @@
     "typecheck": "tsgo --noEmit"
   },
   "dependencies": {
-    "@t3-oss/env-core": "^0.13.8",
+    "@t3-oss/env-core": "^0.13.10",
     "@taiyomoe/cache": "workspace:^",
     "@taiyomoe/config": "workspace:^",
     "@taiyomoe/db": "workspace:^",
     "@taiyomoe/email": "workspace:^",
     "@taiyomoe/utils": "workspace:^",
-    "better-auth": "^1.4.1",
+    "better-auth": "^1.4.9",
     "better-auth-harmony": "^1.2.5",
     "luxon": "^3.7.2",
-    "zod": "^4.1.12"
+    "zod": "^4.2.1"
   },
   "devDependencies": {
     "@taiyomoe/typescript": "workspace:^",

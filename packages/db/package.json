@@ -17,20 +17,20 @@
   },
   "dependencies": {
     "@faker-js/faker": "^10.1.0",
-    "@prisma/adapter-pg": "^7.0.0",
-    "@prisma/client": "^7.0.0",
-    "@t3-oss/env-core": "^0.13.8",
+    "@prisma/adapter-pg": "^7.2.0",
+    "@prisma/client": "^7.2.0",
+    "@t3-oss/env-core": "^0.13.10",
     "@taiyomoe/utils": "workspace:^",
     "prisma-json-types-generator": "4.0.0-beta.1",
     "prisma-zod-generator": "^2.1.2",
-    "validator": "^13.15.23",
-    "zod": "^4.1.12"
+    "validator": "^13.15.26",
+    "zod": "^4.2.1"
   },
   "devDependencies": {
     "@taiyomoe/typescript": "workspace:^",
     "@types/validator": "^13.15.10",
     "@typescript/native-preview": "7.0.0-dev.20251210.1",
-    "prisma": "^7.0.0",
-    "tsx": "^4.20.6"
+    "prisma": "^7.2.0",
+    "tsx": "^4.21.0"
   }
 }
