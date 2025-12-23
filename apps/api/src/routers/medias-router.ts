@@ -10,6 +10,7 @@ import {
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { checkImages } from "../middlewares/check-images-middleware"
 import { validateFormData } from "../middlewares/validate-form-data-middleware"
 import {
   contentRatingSchema,
@@ -212,6 +213,7 @@ export const mediasRouter = new Hono().post(
     },
   }),
   validateFormData(createMediaSchema),
+  checkImages(),
   async (c) => {
     const body = c.get("formData")
 

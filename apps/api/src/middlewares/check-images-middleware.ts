@@ -3,11 +3,6 @@ import { createMiddleware } from "hono/factory"
 import { filetypeinfo } from "magic-bytes.js"
 import sharp from "sharp"
 
-type CheckImagesOptions = {
-  /** Maximum image size in bytes. Defaults to config.images.maxSizeBytes */
-  maxSizeBytes?: number
-}
-
 const VALID_IMAGE_MIMES = [
   "image/jpeg",
   "image/png",
@@ -36,10 +31,10 @@ const MIME_TO_FORMAT: Record<ValidImageMime, string> = {
  *
  * The FormData is updated with the processed images in-place.
  */
-export const checkImages = (options: CheckImagesOptions = {}) => {
-  const maxSizeBytes = options.maxSizeBytes ?? config.images.maxSizeBytes
-
-  return createMiddleware(async (c, next) => {
+export const checkImages = (
+  maxSizeBytes: number = config.images.maxSizeBytes,
+) =>
+  createMiddleware(async (c, next) => {
     const contentType = c.req.header("content-type")
 
     if (!contentType?.includes("multipart/form-data")) {
@@ -63,9 +58,9 @@ export const checkImages = (options: CheckImagesOptions = {}) => {
       // Check file size
       if (value.size > maxSizeBytes) {
         return c.fail("IMAGE_TOO_LARGE", {
-          field: key,
-          maxSizeBytes,
-          actualSizeBytes: value.size,
+          path: key.split("."),
+          maxSize: `${(maxSizeBytes / 1024 / 1024).toFixed(2)} MB`,
+          actualSize: `${(value.size / 1024 / 1024).toFixed(2)} MB`,
         })
       }
 
@@ -79,9 +74,9 @@ export const checkImages = (options: CheckImagesOptions = {}) => {
 
       if (!detectedType?.mime) {
         return c.fail("INVALID_IMAGE", {
-          field: key,
-          reason: `Invalid image format detected. Allowed mime types are: ${VALID_IMAGE_MIMES.join(", ")}`,
-          detectedFormat: fileTypes[0]?.mime ?? "unknown",
+          path: key.split("."),
+          message: `Invalid image format detected. Allowed mime types are: ${VALID_IMAGE_MIMES.join(", ")}`,
+          detectedMimeType: fileTypes[0]?.mime ?? "unknown",
         })
       }
 
@@ -131,4 +126,3 @@ export const checkImages = (options: CheckImagesOptions = {}) => {
 
     await next()
   })
-}
