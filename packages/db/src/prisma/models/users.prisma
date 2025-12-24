@@ -27,11 +27,12 @@ model User {
 
   // These exist solely to satisfy Prisma's "relations must be defined on both sides" rule
   createdMedias         Media[]
+  createdMediaTitles    Title[]
+  createdGroups         Group[]
+  createdStaffs         Staff[]
   uploadedMediaCovers   Cover[]
   uploadedMediaBanners  Banner[]
-  createdMediaTitles    Title[]
   uploadedMediaChapters Chapter[]
-  createdGroups         Group[]
 }
 
 model UserProfile {

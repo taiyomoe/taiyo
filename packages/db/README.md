@@ -18,6 +18,9 @@ Migrations are created manually as we cannot use the PrismaORM built-in migrator
 
 ```bash
 infisical run -- pnpm -F scripts start create-migration --name <name>
+
+# Then run it
+infisical run -- pnpm -F scripts start migrate
 ```
 
 After migrating, generate the Prisma client with:

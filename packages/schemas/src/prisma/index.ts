@@ -52,6 +52,18 @@ export const ChapterScalarFieldEnumSchema = z.enum(['id', 'createdAt', 'updatedA
 
 export type ChapterScalarFieldEnum = z.infer<typeof ChapterScalarFieldEnumSchema>;
 
+// File: StaffScalarFieldEnum.schema.ts
+
+export const StaffScalarFieldEnumSchema = z.enum(['id', 'createdAt', 'updatedAt', 'deletedAt', 'name', 'bio', 'links', 'creatorId', 'deleterId'])
+
+export type StaffScalarFieldEnum = z.infer<typeof StaffScalarFieldEnumSchema>;
+
+// File: StaffOnMediaScalarFieldEnum.schema.ts
+
+export const StaffOnMediaScalarFieldEnumSchema = z.enum(['mediaId', 'staffId', 'role'])
+
+export type StaffOnMediaScalarFieldEnum = z.infer<typeof StaffOnMediaScalarFieldEnumSchema>;
+
 // File: TaskScalarFieldEnum.schema.ts
 
 export const TaskScalarFieldEnumSchema = z.enum(['id', 'createdAt', 'updatedAt', 'type', 'status', 'payload', 'sessionId'])
@@ -183,6 +195,12 @@ export type MediaGenres = z.infer<typeof MediaGenresSchema>;
 export const LanguagesSchema = z.enum(['ab', 'aa', 'af', 'ak', 'sq', 'am', 'ar', 'an', 'hy', 'as', 'av', 'ae', 'ay', 'az', 'bm', 'ba', 'eu', 'be', 'bn', 'bi', 'bs', 'br', 'bg', 'my', 'ca', 'ch', 'ce', 'ny', 'cu', 'cv', 'kw', 'co', 'cr', 'hr', 'cs', 'da', 'dv', 'nl', 'dz', 'en', 'eo', 'et', 'ee', 'fo', 'fj', 'fi', 'fr', 'fy', 'ff', 'gd', 'gl', 'lg', 'ka', 'de', 'el', 'kl', 'gn', 'gu', 'ht', 'ha', 'he', 'hz', 'hi', 'ho', 'hu', 'is', 'io', 'ig', 'id', 'ia', 'ie', 'iu', 'ik', 'ga', 'it', 'jv', 'kn', 'kr', 'ks', 'kk', 'km', 'ki', 'rw', 'ky', 'kv', 'kg', 'kj', 'ku', 'lo', 'la', 'lv', 'li', 'ln', 'lt', 'lu', 'lb', 'mk', 'mg', 'ms', 'ml', 'mt', 'gv', 'mi', 'mr', 'mh', 'mn', 'na', 'nv', 'nd', 'nr', 'ng', 'ne', 'no', 'nb', 'nn', 'ii', 'oc', 'oj', 'or', 'om', 'os', 'pi', 'ps', 'fa', 'pl', 'pa', 'qu', 'ro', 'rm', 'rn', 'ru', 'se', 'sm', 'sg', 'sa', 'sc', 'sr', 'sn', 'sd', 'si', 'sk', 'sl', 'so', 'st', 'su', 'sw', 'ss', 'sv', 'tl', 'ty', 'tg', 'ta', 'tt', 'te', 'th', 'bo', 'ti', 'to', 'ts', 'tn', 'tr', 'tk', 'tw', 'ug', 'uk', 'ur', 'uz', 've', 'vi', 'vo', 'wa', 'cy', 'wo', 'xh', 'yi', 'yo', 'za', 'zu', 'es', 'es_la', 'pt_br', 'pt_pt', 'ja', 'ja_ro', 'ko', 'ko_ro', 'zh', 'zh_hk', 'zh_ro'])
 
 export type Languages = z.infer<typeof LanguagesSchema>;
+
+// File: StaffRole.schema.ts
+
+export const StaffRoleSchema = z.enum(['AUTHOR', 'ARTIST'])
+
+export type StaffRole = z.infer<typeof StaffRoleSchema>;
 
 // File: TaskType.schema.ts
 
@@ -361,6 +379,34 @@ export const ChapterSchema = z.object({
 });
 
 export type ChapterType = z.infer<typeof ChapterSchema>;
+
+
+// File: Staff.schema.ts
+
+export const StaffSchema = z.object({
+  id: z.string(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+  deletedAt: z.date().nullish(),
+  name: z.string(),
+  bio: z.string().nullish(),
+  links: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10").default("{}"),
+  creatorId: z.string(),
+  deleterId: z.string().nullish(),
+});
+
+export type StaffType = z.infer<typeof StaffSchema>;
+
+
+// File: StaffOnMedia.schema.ts
+
+export const StaffOnMediaSchema = z.object({
+  mediaId: z.string(),
+  staffId: z.string(),
+  role: StaffRoleSchema,
+});
+
+export type StaffOnMediaType = z.infer<typeof StaffOnMediaSchema>;
 
 
 // File: Task.schema.ts

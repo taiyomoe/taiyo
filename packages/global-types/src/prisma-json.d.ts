@@ -27,5 +27,22 @@ declare global {
       completed: boolean
     }
     type TaskPayload = Record<string, unknown>
+    type StaffLink = {
+      website?: string
+      twitter?: string
+      youtube?: string
+      tumblr?: string
+      discord?: string
+      fanbox?: string
+      fantia?: string
+      pixiv?: string
+      melonBooks?: string
+      namicomi?: string
+      naver?: string
+      nicoVideo?: string
+      skeb?: string
+      weibo?: string
+      booth?: string
+    }
   }
 }

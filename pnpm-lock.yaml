@@ -252,12 +252,18 @@ importers:
       '@taiyomoe/utils':
         specifier: workspace:^
         version: link:../utils
+      mangadex-full-api:
+        specifier: ^6.2.0
+        version: 6.2.0
       prisma-json-types-generator:
         specifier: 4.0.0-beta.1
         version: 4.0.0-beta.1(@prisma/client@7.2.0(prisma@7.2.0(@types/react@19.2.7)(react-dom@19.2.1(react@19.2.3))(react@19.2.3)(typescript@5.9.3))(typescript@5.9.3))(prisma@7.2.0(@types/react@19.2.7)(react-dom@19.2.1(react@19.2.3))(react@19.2.3)(typescript@5.9.3))(typescript@5.9.3)
       prisma-zod-generator:
         specifier: ^2.1.2
         version: 2.1.2(prisma@7.2.0(@types/react@19.2.7)(react-dom@19.2.1(react@19.2.3))(react@19.2.3)(typescript@5.9.3))(typescript@5.9.3)(zod@4.2.1)
+      radashi:
+        specifier: ^12.7.1
+        version: 12.7.1
       validator:
         specifier: ^13.15.26
         version: 13.15.26
@@ -4543,6 +4549,10 @@ packages:
   make-dir@4.0.0:
     resolution: {integrity: sha512-hXdUTZYIVOt1Ex//jAQi+wTZZpUpwBj/0QsOzqegb3rGMMeJiSEu5xLHnYfBrRV4RH2+OCSOO95Is/7x1WJ4bw==}
     engines: {node: '>=10'}
+
+  mangadex-full-api@6.2.0:
+    resolution: {integrity: sha512-jUOVqwnT2jYyyG6M/C3XPDIfbBMUjrwv6/gvktQmWTJO1UBKezyUG0DMETlcl0EENF3TOxVhGGjTKtX8OQSvOg==}
+    engines: {node: '>=19.0.0'}
 
   marked@15.0.12:
     resolution: {integrity: sha512-8dD6FusOQSrpv9Z1rdNMdlSgQOIP880DHqnohobOmYLElGEqAL/JvxvuxZO16r4HtjTlfPRDC1hbvxC9dPN2nA==}
@@ -10298,6 +10308,8 @@ snapshots:
   make-dir@4.0.0:
     dependencies:
       semver: 7.7.3
+
+  mangadex-full-api@6.2.0: {}
 
   marked@15.0.12: {}
 

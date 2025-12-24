@@ -28,6 +28,7 @@ model Media {
   titles   Title[]
   chapters Chapter[]
   history  UserHistory[]
+  staff    StaffOnMedia[]
 
   creator   User    @relation(fields: [creatorId], references: [id])
   creatorId String  @db.Uuid
@@ -116,6 +117,36 @@ model Chapter {
   deleterId  String? @db.Uuid
 }
 
+model Staff {
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  name  String
+  bio   String?
+  /// [StaffLink]
+  links Json    @default("{}")
+
+  medias StaffOnMedia[]
+
+  creator   User    @relation(fields: [creatorId], references: [id])
+  creatorId String  @db.Uuid
+  deleterId String? @db.Uuid
+}
+
+model StaffOnMedia {
+  media   Media  @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+  mediaId String @db.Uuid
+
+  staff   Staff  @relation(fields: [staffId], references: [id], onDelete: Cascade)
+  staffId String @db.Uuid
+
+  role StaffRole
+
+  @@id([mediaId, staffId, role])
+}
+
 // ----- ENUMS
 enum ContentRating {
   NORMAL
@@ -197,6 +228,11 @@ enum Trackers {
   MANGADEX
   MYANIMELIST
   ANILIST
+}
+
+enum StaffRole {
+  AUTHOR
+  ARTIST
 }
 
 // ISO 639-1
