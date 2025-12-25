@@ -31,10 +31,10 @@ const execute = async (db: PrismaClient) => {
         { key: "ASSASSINS", isSpoiler: true },
         { key: "CHEERLEADING", isSpoiler: false },
       ],
-      trackers: {
-        mal: 110485,
-        al: 107098,
-        md: "b5b21ca1-bba5-4b9a-8cd1-6248f731650b",
+      links: {
+        myAnimeList: 110485,
+        anilist: 107098,
+        mangaDex: "b5b21ca1-bba5-4b9a-8cd1-6248f731650b",
       },
       // -----
       creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",

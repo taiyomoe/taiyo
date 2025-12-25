@@ -19,8 +19,8 @@ const execute = async (db: PrismaClient) => {
         { key: "REINCARNATION", isSpoiler: false },
         { key: "REVENGE", isSpoiler: true },
       ],
-      trackers: {
-        md: "4ada20eb-085a-491a-8c49-477ab42014d7",
+      links: {
+        mangaDex: "4ada20eb-085a-491a-8c49-477ab42014d7",
       },
       // -----
       creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",

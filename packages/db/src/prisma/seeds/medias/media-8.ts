@@ -44,10 +44,10 @@ const execute = async (db: PrismaClient) => {
         { key: "TIME_SKIP", isSpoiler: true },
         { key: "LANGUAGE_BARRIER", isSpoiler: true },
       ],
-      trackers: {
-        mal: 121496,
-        al: 105398,
-        md: "32d76d19-8a05-4db0-9fc2-e0b0648fe9d0",
+      links: {
+        myAnimeList: 121496,
+        anilist: 105398,
+        mangaDex: "32d76d19-8a05-4db0-9fc2-e0b0648fe9d0",
       },
       // -----
       creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",

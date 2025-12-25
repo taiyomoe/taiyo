@@ -42,10 +42,10 @@ const execute = async (db: PrismaClient) => {
         { key: "NUDITY", isSpoiler: false },
         { key: "URBAN", isSpoiler: false },
       ],
-      trackers: {
-        mal: 74347,
-        al: 44347,
-        md: "d8a959f7-648e-4c8d-8f23-f1f3f8e129f3",
+      links: {
+        myAnimeList: 74347,
+        anilist: 44347,
+        mangaDex: "d8a959f7-648e-4c8d-8f23-f1f3f8e129f3",
       },
       // -----
       creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",

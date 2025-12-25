@@ -48,10 +48,10 @@ const execute = async (db: PrismaClient) => {
         { key: "TRANSGENDER", isSpoiler: false },
         { key: "MEMORY_MANIPULATION", isSpoiler: true },
       ],
-      trackers: {
-        mal: 75989,
-        al: 85486,
-        md: "4f3bcae4-2d96-4c9d-932c-90181d9c873e",
+      links: {
+        myAnimeList: 75989,
+        anilist: 85486,
+        mangaDex: "4f3bcae4-2d96-4c9d-932c-90181d9c873e",
       },
       // -----
       creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",

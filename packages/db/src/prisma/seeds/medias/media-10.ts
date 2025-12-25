@@ -59,9 +59,9 @@ const execute = async (db: PrismaClient) => {
         { key: "TEACHER", isSpoiler: false },
         { key: "COMING_OF_AGE", isSpoiler: false },
       ],
-      trackers: {
-        al: 104494,
-        md: "b1461071-bfbb-43e7-a5b6-a7ba5904649f",
+      links: {
+        anilist: 104494,
+        mangaDex: "b1461071-bfbb-43e7-a5b6-a7ba5904649f",
       },
       // -----
       creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",

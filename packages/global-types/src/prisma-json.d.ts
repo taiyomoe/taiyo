@@ -18,7 +18,11 @@ declare global {
       key: keyof (typeof config)["tags"]
       isSpoiler: boolean
     }
-    type MediaTracker = Partial<{ [K in "mal" | "al" | "md"]: string | number }>
+    type MediaLinks = {
+      mangaDex?: string
+      myAnimeList?: number
+      anilist?: number
+    }
     type UserLibraryEntry = { mediaId: string; updatedAt: string }
     type UserHistoryProgression = {
       updatedAt: string

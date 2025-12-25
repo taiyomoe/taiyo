@@ -36,10 +36,10 @@ const execute = async (db: PrismaClient) => {
         { key: "TSUNDERE", isSpoiler: false },
         { key: "DUNGEON", isSpoiler: false },
       ],
-      trackers: {
-        mal: 86337,
-        al: 86123,
-        md: "e7eabe96-aa17-476f-b431-2497d5e9d060",
+      links: {
+        myAnimeList: 86337,
+        anilist: 86123,
+        mangaDex: "e7eabe96-aa17-476f-b431-2497d5e9d060",
       },
       // -----
       creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",

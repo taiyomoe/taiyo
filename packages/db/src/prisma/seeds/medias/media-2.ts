@@ -49,10 +49,10 @@ const execute = async (db: PrismaClient) => {
         { key: "TRANSGENDER", isSpoiler: true },
         { key: "GUNS", isSpoiler: true },
       ],
-      trackers: {
-        mal: 113138,
-        al: 101517,
-        md: "c52b2ce3-7f95-469c-96b0-479524fb7a1a",
+      links: {
+        myAnimeList: 113138,
+        anilist: 101517,
+        mangaDex: "c52b2ce3-7f95-469c-96b0-479524fb7a1a",
       },
       // -----
       creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",

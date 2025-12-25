@@ -16,7 +16,7 @@ export default async (tx: Prisma.TransactionClient) => {
 
   for (const mediaId of Object.keys(mediaTrackers)) {
     const trackers = mediaTrackers[mediaId] ?? []
-    const trackerMap: PrismaJson.MediaTracker = {}
+    const trackerMap: Record<string, unknown> = {}
 
     for (const tracker of trackers) {
       if (tracker.tracker === "MYANIMELIST") {
@@ -33,10 +33,11 @@ export default async (tx: Prisma.TransactionClient) => {
     }
 
     if (trackers.length > 0) {
-      await tx.media.update({
-        where: { id: mediaId },
-        data: { trackers: trackerMap },
-      })
+      await tx.$executeRaw`
+        UPDATE "Media"
+        SET "trackers" = ${JSON.stringify(trackerMap)}::jsonb
+        WHERE "id" = ${mediaId}::uuid
+      `
     }
   }
 

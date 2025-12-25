@@ -84,10 +84,10 @@ const execute = async (db: PrismaClient) => {
         { key: "ALIENS", isSpoiler: true },
         { key: "BODY_SWAPPING", isSpoiler: false },
       ],
-      trackers: {
-        mal: 13,
-        al: 30013,
-        md: "a1c7c817-4e59-43b7-9365-09675a149a6f",
+      links: {
+        myAnimeList: 13,
+        anilist: 30013,
+        mangaDex: "a1c7c817-4e59-43b7-9365-09675a149a6f",
       },
       // -----
       creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",

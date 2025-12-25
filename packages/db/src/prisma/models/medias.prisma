@@ -20,8 +20,8 @@ model Media {
   /// [MediaTag]
   tags            Json[]
   flag            Flag                 @default(OK)
-  /// [MediaTracker]
-  trackers        Json                 @default("{}")
+  /// [MediaLinks]
+  links           Json                 @default("{}")
 
   covers   Cover[]
   banners  Banner[]

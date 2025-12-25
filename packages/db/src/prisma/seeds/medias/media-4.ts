@@ -9,7 +9,7 @@ const execute = async (db: PrismaClient) => {
       endDate: new Date("2014-11-10"),
       // -----
       synopsis:
-        "Before Naruto's birth, a great demon fox had attacked the Hidden Leaf Village. A man known as the 4th Hokage sealed the demon inside the newly born Naruto, causing him to unknowingly grow up detested by his fellow villagers. Despite his lack of talent in many areas of ninjutsu, Naruto strives for only one goal: to gain the title of Hokage, the strongest ninja in his village. Desiring the respect he never received, Naruto works towards his dream with fellow friends Sasuke and Sakura and mentor Kakashi as they go through many trials and battles that come with being a ninja.",
+        "Before Naruto's birth, a great demon fox had attacked the Hidden Leaf Village. A man known as the 4th Hokage sealed the demon inside the newly born Naruto, causing him to unknowingly grow up detested by his fellow villagers. Despite his lack of talent in many areas of ninjutsu, Naruto strives for only one goanilist: to gain the title of Hokage, the strongest ninja in his village. Desiring the respect he never received, Naruto works towards his dream with fellow friends Sasuke and Sakura and mentor Kakashi as they go through many trials and battles that come with being a ninja.",
       type: "MANGA",
       status: "FINISHED",
       source: "ORIGINAL",
@@ -43,10 +43,10 @@ const execute = async (db: PrismaClient) => {
         { key: "ANIMALS", isSpoiler: false },
         { key: "TRAVEL", isSpoiler: false },
       ],
-      trackers: {
-        mal: 11,
-        al: 30011,
-        md: "6b1eb93e-473a-4ab3-9922-1a66d2a29a4a",
+      links: {
+        myAnimeList: 11,
+        anilist: 30011,
+        mangaDex: "6b1eb93e-473a-4ab3-9922-1a66d2a29a4a",
       },
       // -----
       creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
