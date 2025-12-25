@@ -5,17 +5,8 @@ declare global {
   namespace PrismaJson {
     type LocalizedText = Partial<Record<Languages, string>>
 
-    type HomeLayout = "ROWS" | "COLUMNS"
-
-    type UserSettings = {
-      contentRating?: ContentRating[]
-      preferredTitles?: Languages
-      showFollowing?: boolean
-      showLibrary?: boolean
-      homeLayout?: HomeLayout
-    }
+    // Medias
     type MediaChapterPage = { id: string }
-    type MediaCommentAttachement = { id: string; extension: "png" | "gif" }
     type MediaTags = {
       key: keyof (typeof config)["tags"]
       isSpoiler: boolean
@@ -25,14 +16,6 @@ declare global {
       myAnimeList?: number
       anilist?: number
     }
-    type UserLibraryEntry = { mediaId: string; updatedAt: string }
-    type UserHistoryProgression = {
-      updatedAt: string
-      chapterId: string
-      pageId: string | null
-      completed: boolean
-    }
-    type TaskPayload = Record<string, unknown>
     type StaffLink = {
       website?: string
       twitter?: string
@@ -49,6 +32,22 @@ declare global {
       skeb?: string
       weibo?: string
       booth?: string
+    }
+
+    // Users
+    type UserSettings = {
+      contentRating?: ContentRating[]
+      preferredTitles?: Languages
+      showFollowing?: boolean
+      showLibrary?: boolean
+      homeLayout?: "ROWS" | "COLUMNS"
+    }
+    type UserLibraryEntry = { mediaId: string; updatedAt: string }
+    type UserHistoryProgression = {
+      updatedAt: string
+      chapterId: string
+      pageId: string | null
+      completed: boolean
     }
   }
 }
