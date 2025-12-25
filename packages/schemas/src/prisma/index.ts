@@ -24,7 +24,7 @@ export type RelationLoadStrategy = z.infer<typeof RelationLoadStrategySchema>;
 
 // File: MediaScalarFieldEnum.schema.ts
 
-export const MediaScalarFieldEnumSchema = z.enum(['id', 'createdAt', 'updatedAt', 'deletedAt', 'startDate', 'endDate', 'synopsis', 'contentRating', 'oneShot', 'trailer', 'type', 'status', 'source', 'demography', 'countryOfOrigin', 'genres', 'tags', 'flag', 'links', 'creatorId', 'deleterId'])
+export const MediaScalarFieldEnumSchema = z.enum(['id', 'createdAt', 'updatedAt', 'deletedAt', 'startDate', 'endDate', 'synopsis', 'contentRating', 'type', 'status', 'source', 'demography', 'countryOfOrigin', 'tags', 'flag', 'links', 'creatorId', 'deleterId'])
 
 export type MediaScalarFieldEnum = z.infer<typeof MediaScalarFieldEnumSchema>;
 
@@ -184,12 +184,6 @@ export const FlagSchema = z.enum(['OK', 'STAFF_ONLY', 'VIP_ONLY', 'LOCKED'])
 
 export type Flag = z.infer<typeof FlagSchema>;
 
-// File: MediaGenres.schema.ts
-
-export const MediaGenresSchema = z.enum(['ACTION', 'ADVENTURE', 'COMEDY', 'DRAMA', 'ECCHI', 'FANTASY', 'HENTAI', 'HORROR', 'MAHOU_SHOUJO', 'MECHA', 'MUSIC', 'MYSTERY', 'PSYCHOLOGICAL', 'ROMANCE', 'SCI_FI', 'SLICE_OF_LIFE', 'SPORTS', 'SUPERNATURAL', 'THRILLER'])
-
-export type MediaGenres = z.infer<typeof MediaGenresSchema>;
-
 // File: Languages.schema.ts
 
 export const LanguagesSchema = z.enum(['ab', 'aa', 'af', 'ak', 'sq', 'am', 'ar', 'an', 'hy', 'as', 'av', 'ae', 'ay', 'az', 'bm', 'ba', 'eu', 'be', 'bn', 'bi', 'bs', 'br', 'bg', 'my', 'ca', 'ch', 'ce', 'ny', 'cu', 'cv', 'kw', 'co', 'cr', 'hr', 'cs', 'da', 'dv', 'nl', 'dz', 'en', 'eo', 'et', 'ee', 'fo', 'fj', 'fi', 'fr', 'fy', 'ff', 'gd', 'gl', 'lg', 'ka', 'de', 'el', 'kl', 'gn', 'gu', 'ht', 'ha', 'he', 'hz', 'hi', 'ho', 'hu', 'is', 'io', 'ig', 'id', 'ia', 'ie', 'iu', 'ik', 'ga', 'it', 'jv', 'kn', 'kr', 'ks', 'kk', 'km', 'ki', 'rw', 'ky', 'kv', 'kg', 'kj', 'ku', 'lo', 'la', 'lv', 'li', 'ln', 'lt', 'lu', 'lb', 'mk', 'mg', 'ms', 'ml', 'mt', 'gv', 'mi', 'mr', 'mh', 'mn', 'na', 'nv', 'nd', 'nr', 'ng', 'ne', 'no', 'nb', 'nn', 'ii', 'oc', 'oj', 'or', 'om', 'os', 'pi', 'ps', 'fa', 'pl', 'pa', 'qu', 'ro', 'rm', 'rn', 'ru', 'se', 'sm', 'sg', 'sa', 'sc', 'sr', 'sn', 'sd', 'si', 'sk', 'sl', 'so', 'st', 'su', 'sw', 'ss', 'sv', 'tl', 'ty', 'tg', 'ta', 'tt', 'te', 'th', 'bo', 'ti', 'to', 'ts', 'tn', 'tr', 'tk', 'tw', 'ug', 'uk', 'ur', 'uz', 've', 'vi', 'vo', 'wa', 'cy', 'wo', 'xh', 'yi', 'yo', 'za', 'zu', 'es', 'es_la', 'pt_br', 'pt_pt', 'ja', 'ja_ro', 'ko', 'ko_ro', 'zh', 'zh_hk', 'zh_ro'])
@@ -244,12 +238,6 @@ export const GroupMemberPermissionsSchema = z.enum(['UPLOAD', 'EDIT', 'DELETE'])
 
 export type GroupMemberPermissions = z.infer<typeof GroupMemberPermissionsSchema>;
 
-// File: Trackers.schema.ts
-
-export const TrackersSchema = z.enum(['MANGADEX', 'MYANIMELIST', 'ANILIST'])
-
-export type Trackers = z.infer<typeof TrackersSchema>;
-
 // File: Group.schema.ts
 
 export const GroupSchema = z.object({
@@ -287,14 +275,11 @@ export const MediaSchema = z.object({
   endDate: z.date().nullish(),
   synopsis: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10").default("{}"),
   contentRating: ContentRatingSchema.default("NORMAL"),
-  oneShot: z.boolean(),
-  trailer: z.string().nullish(),
   type: MediaTypeSchema,
   status: MediaStatusSchema,
   source: MediaSourceSchema,
   demography: MediaDemographySchema,
   countryOfOrigin: MediaCountryOfOriginSchema,
-  genres: z.array(MediaGenresSchema),
   tags: z.array(z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10")),
   flag: FlagSchema.default("OK"),
   links: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10").default("{}"),

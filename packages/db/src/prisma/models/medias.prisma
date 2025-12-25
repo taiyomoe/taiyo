@@ -10,8 +10,6 @@ model Media {
   /// [LocalizedText]
   synopsis        Json                 @default("{}")
   contentRating   ContentRating        @default(NORMAL)
-  oneShot         Boolean              @default(false)
-  trailer         String?
   type            MediaType
   status          MediaStatus
   source          MediaSource
