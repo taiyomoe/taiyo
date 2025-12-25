@@ -1,10 +1,9 @@
 import { createHash, randomUUID } from "node:crypto"
 import { readdir, readFile } from "node:fs/promises"
-import { dirname, join, resolve } from "node:path"
-import { fileURLToPath } from "node:url"
+import { join } from "node:path"
 import { PrismaClient, PrismaPg } from "@taiyomoe/db"
 import { Command } from "commander"
-import { DB_RELATIVE_PATH } from "../utils"
+import { migrationsPath } from "../utils"
 
 type Migration = {
   id: string
@@ -37,10 +36,6 @@ export const migrateCommand = new Command("migrate")
     )
     console.log("Please use it at your own risk.\n")
 
-    const migrationsPath = resolve(
-      fileURLToPath(dirname(import.meta.url)),
-      join(DB_RELATIVE_PATH, "migrations"),
-    )
     const rawFoundMigrations = await readdir(migrationsPath)
     const foundMigrations = rawFoundMigrations.filter(
       (m) => !["migration_lock.toml", ".DS_Store"].includes(m),

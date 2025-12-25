@@ -1,8 +1,7 @@
 import { mkdir, writeFile } from "node:fs/promises"
-import { dirname, join, resolve } from "node:path"
-import { fileURLToPath } from "node:url"
+import { join } from "node:path"
 import { Command } from "commander"
-import { DB_RELATIVE_PATH } from "../utils"
+import { migrationsPath } from "../utils"
 
 const generateTimestamp = () => {
   const now = new Date()
@@ -31,10 +30,6 @@ export const createMigrationCommand = new Command("create-migration")
     const timestamp = generateTimestamp()
     const folderName = `${timestamp}_${options.name}`
 
-    const migrationsPath = resolve(
-      fileURLToPath(dirname(import.meta.url)),
-      join(DB_RELATIVE_PATH, "migrations"),
-    )
     const migrationFolderPath = join(migrationsPath, folderName)
 
     await mkdir(migrationFolderPath, { recursive: true })

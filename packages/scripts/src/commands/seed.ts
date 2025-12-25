@@ -1,8 +1,7 @@
-import { dirname, join, resolve } from "node:path"
-import { fileURLToPath } from "node:url"
+import { join } from "node:path"
 import { PrismaClient, PrismaPg } from "@taiyomoe/db"
 import { Command } from "commander"
-import { DB_RELATIVE_PATH } from "../utils"
+import { seedsPath } from "../utils"
 
 export const seedCommand = new Command("seed")
   .description("Seed the database")
@@ -17,11 +16,6 @@ export const seedCommand = new Command("seed")
     url.pathname = `/${options.db}`
     const adapter = new PrismaPg({ connectionString: url.toString() })
     const db = new PrismaClient({ adapter })
-
-    const seedsPath = resolve(
-      fileURLToPath(dirname(import.meta.url)),
-      join(DB_RELATIVE_PATH, "seeds"),
-    )
 
     const group1 = await import(join(seedsPath, "groups/group-1.ts"))
     const group2 = await import(join(seedsPath, "groups/group-2.ts"))
