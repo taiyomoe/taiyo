@@ -1,0 +1,17 @@
+import type { MediaDemography } from "../../db/src/index"
+
+export const toDemography = (input: string): MediaDemography => {
+  switch (input.toLowerCase()) {
+    case "shounen":
+      return "SHOUNEN"
+    case "shoujo":
+      return "SHOUJO"
+    case "josei":
+      return "JOSEI"
+    case "seinen":
+      return "SEINEN"
+    default:
+      return "SHOUNEN"
+  }
+}
+
