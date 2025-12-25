@@ -45,7 +45,8 @@ model UserProfile {
   gender    Genders    @default(NOT_SPECIFIED)
   city      String?
   country   Countries?
-  about     String?
+  /// [LocalizedText]
+  about     Json       @default("{}")
   points    Int        @default(0)
 
   user   User   @relation(fields: [userId], references: [id])

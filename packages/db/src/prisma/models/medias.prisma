@@ -7,7 +7,8 @@ model Media {
   startDate DateTime?
   endDate   DateTime?
 
-  synopsis        String?
+  /// [LocalizedText]
+  synopsis        Json                 @default("{}")
   contentRating   ContentRating        @default(NORMAL)
   oneShot         Boolean              @default(false)
   trailer         String?
@@ -124,9 +125,10 @@ model Staff {
   deletedAt DateTime?
 
   name  String
-  bio   String?
+  /// [LocalizedText]
+  bio   Json   @default("{}")
   /// [StaffLink]
-  links Json    @default("{}")
+  links Json   @default("{}")
 
   medias StaffOnMedia[]
 

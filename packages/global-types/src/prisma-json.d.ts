@@ -3,6 +3,8 @@ import type { ContentRating, Languages } from "@taiyomoe/db"
 
 declare global {
   namespace PrismaJson {
+    type LocalizedText = Partial<Record<Languages, string>>
+
     type HomeLayout = "ROWS" | "COLUMNS"
 
     type UserSettings = {
