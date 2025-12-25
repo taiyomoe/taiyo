@@ -1,4 +1,4 @@
-import { Languages } from "../../db/src/index"
+import { toLanguage } from "./to-language"
 
 export const toLocalizedText = (
   input: Record<string, unknown>,
@@ -6,8 +6,10 @@ export const toLocalizedText = (
   const result: Record<string, string> = {}
 
   for (const [key, value] of Object.entries(input)) {
-    if (key in Languages && typeof value === "string") {
-      result[key as Languages] = value
+    const language = toLanguage(key)
+
+    if (language && typeof value === "string") {
+      result[language] = value
     }
   }
 
