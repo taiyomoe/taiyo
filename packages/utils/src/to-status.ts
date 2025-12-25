@@ -11,6 +11,8 @@ export const toStatus = (input: string): MediaStatus => {
     case "cancelled":
       return "CANCELLED"
     default:
+      console.warn(`Invalid status key "${input}", defaulting to CANCELLED...`)
+
       return "CANCELLED"
   }
 }

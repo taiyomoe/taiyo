@@ -10,6 +10,8 @@ export const toLocalizedText = (
 
     if (language && typeof value === "string") {
       result[language] = value
+    } else {
+      console.warn(`Invalid language key "${key}", skipping...`)
     }
   }
 

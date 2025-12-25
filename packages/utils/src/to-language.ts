@@ -21,6 +21,8 @@ export const toLanguage = (input?: string | null) => {
         return input as Languages
       }
 
+      console.warn(`Invalid language key "${input}", skipping...`)
+
       return null
     }
   }

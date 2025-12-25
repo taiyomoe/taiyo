@@ -7,6 +7,10 @@ export const toContentRating = (input: string): ContentRating => {
     case "suggestive":
       return "SUGGESTIVE"
     default:
+      console.warn(
+        `Invalid content rating key "${input}", defaulting to NSFW...`,
+      )
+
       return "NSFW"
   }
 }
