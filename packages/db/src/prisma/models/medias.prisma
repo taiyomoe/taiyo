@@ -39,7 +39,7 @@ model Cover {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
-  volume        Int?
+  volume        String?
   contentRating ContentRating @default(NORMAL)
   isMainCover   Boolean       @default(false)
   language      Languages

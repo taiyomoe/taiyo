@@ -296,7 +296,7 @@ export const CoverSchema = z.object({
   createdAt: z.date(),
   updatedAt: z.date(),
   deletedAt: z.date().nullish(),
-  volume: z.number().int().nullish(),
+  volume: z.string().nullish(),
   contentRating: ContentRatingSchema.default("NORMAL"),
   isMainCover: z.boolean(),
   language: LanguagesSchema,
