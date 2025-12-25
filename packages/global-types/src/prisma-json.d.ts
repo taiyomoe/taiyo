@@ -16,7 +16,7 @@ declare global {
     }
     type MediaChapterPage = { id: string }
     type MediaCommentAttachement = { id: string; extension: "png" | "gif" }
-    type MediaTag = {
+    type MediaTags = {
       key: keyof (typeof config)["tags"]
       isSpoiler: boolean
     }
