@@ -24,6 +24,10 @@ describe("toDemography", () => {
     expect(toDemography("random")).toBe("SHOUNEN")
   })
 
+  it("should return SHOUNEN for null", () => {
+    expect(toDemography(null)).toBe("SHOUNEN")
+  })
+
   it("should be case insensitive", () => {
     expect(toDemography("SHOUNEN")).toBe("SHOUNEN")
     expect(toDemography("Shounen")).toBe("SHOUNEN")
@@ -35,4 +39,3 @@ describe("toDemography", () => {
     expect(toDemography("Seinen")).toBe("SEINEN")
   })
 })
-

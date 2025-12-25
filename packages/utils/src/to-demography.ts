@@ -1,7 +1,7 @@
 import type { MediaDemography } from "../../db/src/index"
 
-export const toDemography = (input: string): MediaDemography => {
-  switch (input.toLowerCase()) {
+export const toDemography = (input: string | null): MediaDemography => {
+  switch (input?.toLowerCase()) {
     case "shounen":
       return "SHOUNEN"
     case "shoujo":
@@ -14,4 +14,3 @@ export const toDemography = (input: string): MediaDemography => {
       return "SHOUNEN"
   }
 }
-
