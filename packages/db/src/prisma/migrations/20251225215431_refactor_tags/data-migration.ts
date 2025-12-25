@@ -9,15 +9,21 @@ export default async (tx: Prisma.TransactionClient) => {
       id: string
       genres: string[] | null
       tags: MediaTag[] | null
+      oneShot: boolean
     }[]
   >`
-    SELECT "id", "genres", "tags" FROM "Media"
+    SELECT "id", "genres", "tags", "oneShot" FROM "Media"
   `
 
   console.log(`Found ${medias.length} medias to migrate`)
 
   for (const media of medias) {
     const newTags: MediaTag[] = []
+
+    // Add ONESHOT tag if oneShot column is true
+    if (media.oneShot) {
+      newTags.push({ key: "ONESHOT", isSpoiler: false })
+    }
 
     // Add genres to the tags array
     if (media.genres && Array.isArray(media.genres)) {
@@ -64,19 +70,20 @@ export default async (tx: Prisma.TransactionClient) => {
         )
       }
     }
-  }
 
-  // Update the media with the new tags array
-  // Use ARRAY() with jsonb_array_elements to convert JSON array to PostgreSQL jsonb[]
-  await tx.$executeRaw`
+    // Update the media with the new tags array
+    // Use ARRAY() with jsonb_array_elements to convert JSON array to PostgreSQL jsonb[]
+    await tx.$executeRaw`
       UPDATE "Media"
       SET "tags" = ARRAY(SELECT jsonb_array_elements(${JSON.stringify(newTags)}::jsonb))
       WHERE "id" = ${media.id}::uuid
     `
 
-  console.log(`Migrated media ${media.id}: ${newTags.length} tags`)
+    console.log(`Migrated media ${media.id}: ${newTags.length} tags`)
+  }
 
-  // Drop the genres column and enum after migration is complete
+  // Drop the genres column, oneShot column, and MediaGenres enum after migration is complete
   await tx.$executeRaw`ALTER TABLE "Media" DROP COLUMN "genres"`
+  await tx.$executeRaw`ALTER TABLE "Media" DROP COLUMN "oneShot"`
   await tx.$executeRaw`DROP TYPE "MediaGenres"`
 }

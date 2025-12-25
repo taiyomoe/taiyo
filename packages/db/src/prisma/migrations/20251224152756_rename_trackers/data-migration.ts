@@ -2,9 +2,9 @@ import type { Prisma } from "@taiyomoe/db"
 
 export default async (tx: Prisma.TransactionClient) => {
   const medias = await tx.$queryRaw<
-    { id: string; links: Record<string, unknown> }[]
+    { id: string; links: Record<string, unknown>; trailer: string | null }[]
   >`
-    SELECT "id", "links" FROM "Media"
+    SELECT "id", "links", "trailer" FROM "Media"
   `
 
   console.log(`Found ${medias.length} medias to migrate`)
@@ -23,6 +23,11 @@ export default async (tx: Prisma.TransactionClient) => {
       }
     }
 
+    // Add trailer to links if present
+    if (media.trailer) {
+      newLinks.trailer = `https://www.youtube.com/watch?v=${media.trailer}`
+    }
+
     await tx.$executeRaw`
       UPDATE "Media"
       SET "links" = ${JSON.stringify(newLinks)}::jsonb
@@ -31,4 +36,7 @@ export default async (tx: Prisma.TransactionClient) => {
 
     console.log(`Migrated links for media ${media.id}`)
   }
+
+  // Drop the trailer column after migration is complete
+  await tx.$executeRaw`ALTER TABLE "Media" DROP COLUMN "trailer"`
 }
