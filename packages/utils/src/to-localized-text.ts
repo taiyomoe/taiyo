@@ -1,6 +1,8 @@
 import { Languages } from "../../db/src/index"
 
-export const toLocalizedText = (input: Record<string, unknown>) => {
+export const toLocalizedText = (
+  input: Record<string, unknown>,
+): PrismaJson.LocalizedText => {
   const result: Record<string, string> = {}
 
   for (const [key, value] of Object.entries(input)) {
@@ -9,5 +11,5 @@ export const toLocalizedText = (input: Record<string, unknown>) => {
     }
   }
 
-  return result as PrismaJson.LocalizedText
+  return result
 }
