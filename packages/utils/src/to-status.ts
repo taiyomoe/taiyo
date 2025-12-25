@@ -14,4 +14,3 @@ export const toStatus = (input: string): MediaStatus => {
       return "CANCELLED"
   }
 }
-

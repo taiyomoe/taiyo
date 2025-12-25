@@ -52,4 +52,3 @@ describe("toCountryOfOrigin", () => {
     expect(toCountryOfOrigin("Pt_Br")).toBe("BRAZIL")
   })
 })
-

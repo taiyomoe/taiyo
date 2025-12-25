@@ -17,4 +17,3 @@ export const toCountryOfOrigin = (input: string): MediaCountryOfOrigin => {
       return "JAPAN"
   }
 }
-

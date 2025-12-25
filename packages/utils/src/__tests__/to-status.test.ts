@@ -35,4 +35,3 @@ describe("toStatus", () => {
     expect(toStatus("Cancelled")).toBe("CANCELLED")
   })
 })
-
