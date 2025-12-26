@@ -44,6 +44,24 @@ export const config = {
     /** Allowed image mime types */
     allowedMimeTypes: ["image/jpeg", "image/png", "image/webp", "image/gif"],
   },
+  medias: {
+    links: [
+      "anilist",
+      "animePlanet",
+      "bookWalker",
+      "mangaUpdates",
+      "novelUpdates",
+      "myAnimeList",
+      "kitsu",
+      "amazon",
+      "eBookJapan",
+      "raw",
+      "officialENTranslation",
+      "officialFRTranslation",
+      "officialPTBRTranslation",
+      "cdJapan",
+    ] satisfies (keyof PrismaJson.MediaLinks)[],
+  },
   tags,
   pagination: {
     defaultPage: 1,

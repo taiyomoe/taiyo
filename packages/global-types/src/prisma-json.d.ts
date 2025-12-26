@@ -15,6 +15,18 @@ declare global {
       mangaDex?: string
       myAnimeList?: number
       anilist?: number
+      animePlanet?: string
+      bookWalker?: string
+      mangaUpdates?: string
+      novelUpdates?: string
+      kitsu?: string
+      amazon?: string
+      eBookJapan?: string
+      raw?: string
+      officialENTranslation?: string
+      officialFRTranslation?: string
+      officialPTBRTranslation?: string
+      cdJapan?: string
     }
     type StaffLink = {
       website?: string

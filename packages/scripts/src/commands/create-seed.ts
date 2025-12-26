@@ -7,6 +7,7 @@ import {
   toDemography,
   toLanguage,
   toLocalizedText,
+  toMediaLinks,
   toStatus,
   toTags,
   toType,
@@ -197,6 +198,10 @@ export const createSeedCommand = new Command("create-seed")
       source: "ORIGINAL",
       demography: toDemography(manga.publicationDemographic),
       countryOfOrigin: toCountryOfOrigin(manga.originalLanguage),
+      links: {
+        mangaDex: manga.id,
+        ...toMediaLinks(manga.links as Record<string, unknown>),
+      },
       creatorId: CREATOR_ID,
       titles: { create: titles },
       covers: { create: covers },
