@@ -11,7 +11,7 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "clean": "rm -rf .turbo node_modules",
-    "typecheck": "tsgo --noEmit"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@hono/node-server": "^1.19.7",
@@ -35,7 +35,7 @@
     "@taiyomoe/typescript": "workspace:^",
     "@types/global-types": "workspace:^",
     "@types/node": "^24.10.4",
-    "@typescript/native-preview": "7.0.0-dev.20251210.1",
-    "tsx": "^4.21.0"
+    "tsx": "^4.21.0",
+    "typescript": "5.9.3"
   }
 }

@@ -87,12 +87,12 @@ importers:
       '@types/node':
         specifier: ^24.10.4
         version: 24.10.4
-      '@typescript/native-preview':
-        specifier: 7.0.0-dev.20251210.1
-        version: 7.0.0-dev.20251210.1
       tsx:
         specifier: ^4.21.0
         version: 4.21.0
+      typescript:
+        specifier: 5.9.3
+        version: 5.9.3
 
   apps/storybook:
     dependencies:
@@ -142,9 +142,6 @@ importers:
       '@types/react-dom':
         specifier: ^19.2.3
         version: 19.2.3(@types/react@19.2.7)
-      '@typescript/native-preview':
-        specifier: 7.0.0-dev.20251210.1
-        version: 7.0.0-dev.20251210.1
       '@vitest/browser':
         specifier: ^4.0.16
         version: 4.0.16(vite@7.2.7(@types/node@24.10.4)(jiti@2.6.1)(lightningcss@1.30.2)(tsx@4.21.0))(vitest@4.0.16(@opentelemetry/api@1.9.0)(@types/node@24.10.4)(jiti@2.6.1)(lightningcss@1.30.2)(tsx@4.21.0))
@@ -157,6 +154,9 @@ importers:
       storybook:
         specifier: ^10.1.10
         version: 10.1.10(@testing-library/dom@10.4.1)(prettier@3.7.4)(react-dom@19.2.1(react@19.2.3))(react@19.2.3)
+      typescript:
+        specifier: 5.9.3
+        version: 5.9.3
       vitest:
         specifier: ^4.0.16
         version: 4.0.16(@opentelemetry/api@1.9.0)(@types/node@24.10.4)(jiti@2.6.1)(lightningcss@1.30.2)(tsx@4.21.0)
@@ -200,9 +200,9 @@ importers:
       '@types/luxon':
         specifier: ^3.7.1
         version: 3.7.1
-      '@typescript/native-preview':
-        specifier: 7.0.0-dev.20251210.1
-        version: 7.0.0-dev.20251210.1
+      typescript:
+        specifier: 5.9.3
+        version: 5.9.3
 
   packages/cache:
     dependencies:
@@ -222,18 +222,18 @@ importers:
       '@taiyomoe/typescript':
         specifier: workspace:^
         version: link:../../tooling/typescript
-      '@typescript/native-preview':
-        specifier: 7.0.0-dev.20251210.1
-        version: 7.0.0-dev.20251210.1
+      typescript:
+        specifier: 5.9.3
+        version: 5.9.3
 
   packages/config:
     devDependencies:
       '@taiyomoe/typescript':
         specifier: workspace:^
         version: link:../../tooling/typescript
-      '@typescript/native-preview':
-        specifier: 7.0.0-dev.20251210.1
-        version: 7.0.0-dev.20251210.1
+      typescript:
+        specifier: 5.9.3
+        version: 5.9.3
 
   packages/db:
     dependencies:
@@ -277,15 +277,15 @@ importers:
       '@types/validator':
         specifier: ^13.15.10
         version: 13.15.10
-      '@typescript/native-preview':
-        specifier: 7.0.0-dev.20251210.1
-        version: 7.0.0-dev.20251210.1
       prisma:
         specifier: ^7.2.0
         version: 7.2.0(@types/react@19.2.7)(react-dom@19.2.1(react@19.2.3))(react@19.2.3)(typescript@5.9.3)
       tsx:
         specifier: ^4.21.0
         version: 4.21.0
+      typescript:
+        specifier: 5.9.3
+        version: 5.9.3
 
   packages/email:
     dependencies:
@@ -311,12 +311,12 @@ importers:
       '@taiyomoe/typescript':
         specifier: workspace:^
         version: link:../../tooling/typescript
-      '@typescript/native-preview':
-        specifier: 7.0.0-dev.20251210.1
-        version: 7.0.0-dev.20251210.1
       react-email:
         specifier: ^5.1.0
         version: 5.1.0
+      typescript:
+        specifier: 5.9.3
+        version: 5.9.3
 
   packages/global-types:
     devDependencies:
@@ -354,9 +354,9 @@ importers:
       '@taiyomoe/typescript':
         specifier: workspace:^
         version: link:../../tooling/typescript
-      '@typescript/native-preview':
-        specifier: 7.0.0-dev.20251210.1
-        version: 7.0.0-dev.20251210.1
+      typescript:
+        specifier: 5.9.3
+        version: 5.9.3
 
   packages/logs: {}
 
@@ -375,18 +375,36 @@ importers:
       '@taiyomoe/typescript':
         specifier: workspace:^
         version: link:../../tooling/typescript
-      '@typescript/native-preview':
-        specifier: 7.0.0-dev.20251210.1
-        version: 7.0.0-dev.20251210.1
+      typescript:
+        specifier: 5.9.3
+        version: 5.9.3
+
+  packages/schemas:
+    devDependencies:
+      '@taiyomoe/typescript':
+        specifier: workspace:^
+        version: link:../../tooling/typescript
+      typescript:
+        specifier: 5.9.3
+        version: 5.9.3
 
   packages/scripts:
     dependencies:
       '@taiyomoe/db':
         specifier: workspace:^
         version: link:../db
+      '@taiyomoe/utils':
+        specifier: workspace:^
+        version: link:../utils
       commander:
         specifier: ^12.1.0
         version: 12.1.0
+      mangadex-full-api:
+        specifier: ^6.2.0
+        version: 6.2.0
+      radashi:
+        specifier: ^12.7.1
+        version: 12.7.1
       tsx:
         specifier: ^4.21.0
         version: 4.21.0
@@ -394,9 +412,9 @@ importers:
       '@taiyomoe/typescript':
         specifier: workspace:^
         version: link:../../tooling/typescript
-      '@typescript/native-preview':
-        specifier: 7.0.0-dev.20251210.1
-        version: 7.0.0-dev.20251210.1
+      typescript:
+        specifier: 5.9.3
+        version: 5.9.3
 
   packages/ui:
     dependencies:
@@ -434,15 +452,15 @@ importers:
       '@types/react':
         specifier: ^19.2.7
         version: 19.2.7
-      '@typescript/native-preview':
-        specifier: 7.0.0-dev.20251210.1
-        version: 7.0.0-dev.20251210.1
       tailwindcss:
         specifier: ^4.1.18
         version: 4.1.18
       tw-animate-css:
         specifier: ^1.4.0
         version: 1.4.0
+      typescript:
+        specifier: 5.9.3
+        version: 5.9.3
 
   packages/utils:
     dependencies:
@@ -459,9 +477,9 @@ importers:
       '@taiyomoe/typescript':
         specifier: workspace:^
         version: link:../../tooling/typescript
-      '@typescript/native-preview':
-        specifier: 7.0.0-dev.20251210.1
-        version: 7.0.0-dev.20251210.1
+      typescript:
+        specifier: 5.9.3
+        version: 5.9.3
 
   tooling/bruno: {}
 
@@ -3218,45 +3236,6 @@ packages:
 
   '@types/validator@13.15.10':
     resolution: {integrity: sha512-T8L6i7wCuyoK8A/ZeLYt1+q0ty3Zb9+qbSSvrIVitzT3YjZqkTZ40IbRsPanlB4h1QB3JVL1SYCdR6ngtFYcuA==}
-
-  '@typescript/native-preview-darwin-arm64@7.0.0-dev.20251210.1':
-    resolution: {integrity: sha512-6FLhFMAdaW/JMzTPqaIxVTgCFhMQY2v88qVGLUmcf9coCJx5plxuY0zxzXaLrvQulGnDurIKZMW5tBGmQy4Buw==}
-    cpu: [arm64]
-    os: [darwin]
-
-  '@typescript/native-preview-darwin-x64@7.0.0-dev.20251210.1':
-    resolution: {integrity: sha512-JrsZ913/ZyeoFDCVq+k4h0VUJHyqjT6te/IC8aMtLZQRkusQEX+57Anfr/BVXzWBa8+JwIXPGzllilw5dkrHNw==}
-    cpu: [x64]
-    os: [darwin]
-
-  '@typescript/native-preview-linux-arm64@7.0.0-dev.20251210.1':
-    resolution: {integrity: sha512-GViH0JIkpEHCo04VYD/iAKqYjIB2uLXXtTmmLaImzBVd+h1dlKFgi2aOMi51mYnSefnbj7P7PeqIQNLKwi4NSQ==}
-    cpu: [arm64]
-    os: [linux]
-
-  '@typescript/native-preview-linux-arm@7.0.0-dev.20251210.1':
-    resolution: {integrity: sha512-v1hyGd8TWHaoRU8BJfGAdW6ML70TLUOB9+0Xeo30m3xHlOdO1zxunXa/FVhqzrChqzOkcty61PGe9tAPhrIh1w==}
-    cpu: [arm]
-    os: [linux]
-
-  '@typescript/native-preview-linux-x64@7.0.0-dev.20251210.1':
-    resolution: {integrity: sha512-X6p2MrcRcYE9T+ecNHYZHFYew0t+k9Sc2GbyjbNB0+MJ/Lffp3aUH59dp+JASZoyOxugPwN+MCJ/kNzYqiK9vg==}
-    cpu: [x64]
-    os: [linux]
-
-  '@typescript/native-preview-win32-arm64@7.0.0-dev.20251210.1':
-    resolution: {integrity: sha512-FewUZSh7d9YnX0j3hr+N+zQ5B54k4jsVpZp8QbuDduMtautxI18bNO+vL5oO86ezqLWbUnZajXV/61MGfpEtMg==}
-    cpu: [arm64]
-    os: [win32]
-
-  '@typescript/native-preview-win32-x64@7.0.0-dev.20251210.1':
-    resolution: {integrity: sha512-NdqTPzm/Ls3F1amP/e/akCuhY32mjBXT0NMQnYODgT9ltbdkk08b572Bp4GbdfRj9AiJxK70pqoNeZWw4e5fhg==}
-    cpu: [x64]
-    os: [win32]
-
-  '@typescript/native-preview@7.0.0-dev.20251210.1':
-    resolution: {integrity: sha512-SiSRpp42K80X+qJKAi8qvjo2xMZIgJgROXCJo0MiZ8a6fjQK6IetRfUvwdApUsDltf/VaEc/j8v2Hiqp8SGhLQ==}
-    hasBin: true
 
   '@vitest/browser@4.0.16':
     resolution: {integrity: sha512-t4toy8X/YTnjYEPoY0pbDBg3EvDPg1elCDrfc+VupPHwoN/5/FNQ8Z+xBYIaEnOE2vVEyKwqYBzZ9h9rJtZVcg==}
@@ -9012,37 +8991,6 @@ snapshots:
   '@types/triple-beam@1.3.5': {}
 
   '@types/validator@13.15.10': {}
-
-  '@typescript/native-preview-darwin-arm64@7.0.0-dev.20251210.1':
-    optional: true
-
-  '@typescript/native-preview-darwin-x64@7.0.0-dev.20251210.1':
-    optional: true
-
-  '@typescript/native-preview-linux-arm64@7.0.0-dev.20251210.1':
-    optional: true
-
-  '@typescript/native-preview-linux-arm@7.0.0-dev.20251210.1':
-    optional: true
-
-  '@typescript/native-preview-linux-x64@7.0.0-dev.20251210.1':
-    optional: true
-
-  '@typescript/native-preview-win32-arm64@7.0.0-dev.20251210.1':
-    optional: true
-
-  '@typescript/native-preview-win32-x64@7.0.0-dev.20251210.1':
-    optional: true
-
-  '@typescript/native-preview@7.0.0-dev.20251210.1':
-    optionalDependencies:
-      '@typescript/native-preview-darwin-arm64': 7.0.0-dev.20251210.1
-      '@typescript/native-preview-darwin-x64': 7.0.0-dev.20251210.1
-      '@typescript/native-preview-linux-arm': 7.0.0-dev.20251210.1
-      '@typescript/native-preview-linux-arm64': 7.0.0-dev.20251210.1
-      '@typescript/native-preview-linux-x64': 7.0.0-dev.20251210.1
-      '@typescript/native-preview-win32-arm64': 7.0.0-dev.20251210.1
-      '@typescript/native-preview-win32-x64': 7.0.0-dev.20251210.1
 
   '@vitest/browser@4.0.16(vite@7.2.7(@types/node@24.10.4)(jiti@2.6.1)(lightningcss@1.30.2)(tsx@4.21.0))(vitest@4.0.16(@opentelemetry/api@1.9.0)(@types/node@24.10.4)(jiti@2.6.1)(lightningcss@1.30.2)(tsx@4.21.0))':
     dependencies:

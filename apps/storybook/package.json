@@ -7,7 +7,7 @@
     "dev": "storybook dev -p 6006",
     "build": "storybook build",
     "clean": "rm -rf .turbo node_modules",
-    "typecheck": "tsgo --noEmit"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@tailwindcss/postcss": "^4.1.18",
@@ -27,11 +27,11 @@
     "@taiyomoe/typescript": "workspace:^",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
-    "@typescript/native-preview": "7.0.0-dev.20251210.1",
     "@vitest/browser": "^4.0.16",
     "@vitest/coverage-v8": "^4.0.16",
     "playwright": "^1.57.0",
     "storybook": "^10.1.10",
+    "typescript": "5.9.3",
     "vitest": "^4.0.16"
   }
 }

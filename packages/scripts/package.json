@@ -9,8 +9,8 @@
   },
   "scripts": {
     "start": "tsx src/index.ts",
-    "clean": "rm -rf .turbo node_modules",
-    "typecheck": "tsgo --noEmit"
+    "clean": "rm -rf .turbo node_modules output",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@taiyomoe/db": "workspace:^",
@@ -19,6 +19,6 @@
   },
   "devDependencies": {
     "@taiyomoe/typescript": "workspace:^",
-    "@typescript/native-preview": "7.0.0-dev.20251210.1"
+    "typescript": "5.9.3"
   }
 }
