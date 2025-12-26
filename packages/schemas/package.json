@@ -10,6 +10,9 @@
   "scripts": {
     "clean": "rm -rf .turbo node_modules"
   },
+  "dependencies": {
+    "zod": "^4.2.1"
+  },
   "devDependencies": {
     "@taiyomoe/typescript": "workspace:^",
     "typescript": "5.9.3"

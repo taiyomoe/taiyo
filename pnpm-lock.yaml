@@ -380,6 +380,10 @@ importers:
         version: 5.9.3
 
   packages/schemas:
+    dependencies:
+      zod:
+        specifier: ^4.2.1
+        version: 4.2.1
     devDependencies:
       '@taiyomoe/typescript':
         specifier: workspace:^

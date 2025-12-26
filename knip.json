@@ -3,13 +3,9 @@
   "ignoreWorkspaces": ["./packages/db"],
   "ignoreDependencies": [
     "@types/global-types",
-    "@taiyomoe/typescript",
     "playwright",
     "@vitest/coverage-v8",
     "@react-email/preview-server"
   ],
-  "ignore": [
-    "./packages/ui/src/styles/globals.css",
-    "./packages/schemas/src/prisma/index.ts"
-  ]
+  "ignore": ["./packages/ui/src/styles/globals.css"]
 }

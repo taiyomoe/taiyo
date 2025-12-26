@@ -3,7 +3,7 @@ import { dirname, join, resolve } from "node:path"
 import { fileURLToPath } from "node:url"
 import { parallel } from "radashi"
 
-export const DB_RELATIVE_PATH = join("..", "..", "db", "src", "prisma")
+const DB_RELATIVE_PATH = join("..", "..", "db", "src", "prisma")
 
 export const CREATOR_ID = "db852a04-7406-4a6a-87f2-1b494e810a29"
 
