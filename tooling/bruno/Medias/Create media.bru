@@ -29,12 +29,12 @@ body:multipart-form {
   titles[1].main: false
   titles[1].priority: 1
   titles[1].isAcronym: false
-  covers[0].file:
+  covers[0].file: 
   covers[0].language: en
   covers[0].contentRating: NORMAL
   covers[0].main: true
   covers[0].volume: 1
-  covers[1].file:
+  covers[1].file: 
   covers[1].language: ja
   covers[1].contentRating: NORMAL
   covers[1].main: false
@@ -49,6 +49,8 @@ body:multipart-form {
   genres[0]: ACTION
   genres[1]: COMEDY
   genres[2]: SUPERNATURAL
+  covers.0.file: @file()
+  covers.1.file: @file()
 }
 
 settings {

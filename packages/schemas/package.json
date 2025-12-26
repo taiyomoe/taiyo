@@ -8,8 +8,7 @@
     ".": "./src/index.ts"
   },
   "scripts": {
-    "clean": "rm -rf .turbo node_modules",
-    "typecheck": "tsc --noEmit"
+    "clean": "rm -rf .turbo node_modules"
   },
   "devDependencies": {
     "@taiyomoe/typescript": "workspace:^",

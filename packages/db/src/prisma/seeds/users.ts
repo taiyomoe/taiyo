@@ -1,4 +1,4 @@
-import { fakerPT_BR } from "@faker-js/faker"
+import { fakerEN, fakerPT_BR } from "@faker-js/faker"
 import {
   ContentRating,
   Countries,
@@ -200,7 +200,10 @@ const execute = async (db: PrismaClient) => {
       gender: fakerPT_BR.helpers.enumValue(Genders),
       city: fakerPT_BR.location.city(),
       country: Countries.br,
-      about: fakerPT_BR.lorem.sentence(),
+      about: {
+        en: fakerEN.lorem.sentence(),
+        pt_br: fakerPT_BR.lorem.sentence(),
+      },
       points: fakerPT_BR.number.int({ min: 0, max: 1000 }),
       userId: u.id,
     })),

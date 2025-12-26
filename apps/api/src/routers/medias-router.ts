@@ -2,7 +2,6 @@ import { config } from "@taiyomoe/config"
 import {
   MediaCountryOfOrigin,
   MediaDemography,
-  MediaGenres,
   MediaSource,
   MediaStatus,
   MediaType,
@@ -137,10 +136,6 @@ const createMediaSchema = z.object({
         { file: "banner-2.jpg", contentRating: "SUGGESTIVE" },
       ],
     }),
-  oneShot: z.boolean().default(false).meta({
-    description: "Whether the media is a one-shot.",
-    example: false,
-  }),
   contentRating: contentRatingSchema("The content rating of the media."),
   type: z.enum(MediaType).meta({ description: "The type of the media." }),
   status: z.enum(MediaStatus).meta({
@@ -159,14 +154,6 @@ const createMediaSchema = z.object({
     description: "The country where the media was originally created.",
     example: "JAPAN",
   }),
-  genres: z
-    .array(z.enum(MediaGenres))
-    .default([])
-    .optional()
-    .meta({
-      description: "The genres of the media.",
-      example: ["ACTION", "COMEDY", "SUPERNATURAL"],
-    }),
   tags: z
     .object({
       name: z
