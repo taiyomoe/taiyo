@@ -1,5 +1,3 @@
-import type { Languages } from "../../db/src/index"
-
 export type TagCategories =
   | "Genre"
   | "Technical"
@@ -8,6 +6,28 @@ export type TagCategories =
   | "Cast"
   | "Sexual Content"
   | "Other"
+  | "Cast-Traits"
+  | "Theme-Action"
+  | "Theme-Fantasy"
+  | "Theme-Sci-Fi"
+  | "Theme-Sci-Fi-Mecha"
+  | "Theme-Romance"
+  | "Theme-Comedy"
+  | "Theme-Game"
+  | "Theme-Game-Sport"
+  | "Theme-Other"
+  | "Theme-Arts-Music"
+  | "Theme-Other-Vehicle"
+  | "Theme-Other-Organisations"
+  | "Theme-Drama"
+  | "Theme-Arts"
+  | "Theme-Slice of Life"
+  | "Theme-Game-Card & Board Game"
+  | "Setting-Scene"
+  | "Setting-Time"
+  | "Setting-Universe"
+  | "Cast-Main Cast"
+  | "Demographic"
 
 export const tags = {
   // MangaDex genres (December 25, 2025)
@@ -3499,6 +3519,18 @@ export const tags = {
     category: "Theme-Arts",
     isAdult: false,
   },
+  MONSTERS: {
+    name: {
+      en: "Monsters",
+      pt_br: "Monstros",
+    },
+    description: {
+      en: "Prominently features monsters.",
+      pt_br: "Apresenta monstros.",
+    },
+    category: "Theme-Fantasy",
+    isAdult: false,
+  },
   MONSTER_BOY: {
     name: {
       en: "Monster Boy",
@@ -5573,8 +5605,8 @@ export const tags = {
 } as const satisfies Record<
   string,
   {
-    name: Record<Languages, string>
-    description: Record<Languages, string>
+    name: Record<"en" | "pt_br", string>
+    description: Record<"en" | "pt_br", string>
     category: TagCategories
     isAdult: boolean
   }
