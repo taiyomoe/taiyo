@@ -1,0 +1,9 @@
+import type { PrismaClient } from "@taiyomoe/db"
+
+const execute = async (db: PrismaClient) => {
+  await db.media.create({
+    data: {{ media }},
+  })
+}
+
+export default { execute }

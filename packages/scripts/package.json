@@ -14,7 +14,10 @@
   },
   "dependencies": {
     "@taiyomoe/db": "workspace:^",
+    "@taiyomoe/utils": "workspace:^",
     "commander": "^12.1.0",
+    "mangadex-full-api": "^6.2.0",
+    "radashi": "^12.7.1",
     "tsx": "^4.21.0"
   },
   "devDependencies": {
