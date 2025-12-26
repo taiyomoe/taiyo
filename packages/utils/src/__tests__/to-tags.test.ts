@@ -107,6 +107,65 @@ describe("toTags", () => {
     })
   })
 
+  describe("normalization - apostrophe removal", () => {
+    it("should remove apostrophes from tags", () => {
+      const result = toTags(["boy's love", "girl's love"])
+
+      expect(result).toEqual([
+        { key: "BOYS_LOVE", isSpoiler: false },
+        { key: "GIRLS_LOVE", isSpoiler: false },
+      ])
+    })
+
+    it("should handle apostrophes with mixed case", () => {
+      const result = toTags(["Boy's Love"])
+
+      expect(result).toEqual([{ key: "BOYS_LOVE", isSpoiler: false }])
+    })
+  })
+
+  describe("tag mapping", () => {
+    it("should map COOKING to FOOD", () => {
+      const result = toTags(["cooking"])
+
+      expect(result).toEqual([{ key: "FOOD", isSpoiler: false }])
+    })
+
+    it("should map SCHOOL_LIFE to SCHOOL", () => {
+      const result = toTags(["school life"])
+
+      expect(result).toEqual([{ key: "SCHOOL", isSpoiler: false }])
+    })
+
+    it("should map HAREM to FEMALE_HAREM", () => {
+      const result = toTags(["harem"])
+
+      expect(result).toEqual([{ key: "FEMALE_HAREM", isSpoiler: false }])
+    })
+
+    it("should map REVERSE_HAREM to MALE_HAREM", () => {
+      const result = toTags(["reverse harem"])
+
+      expect(result).toEqual([{ key: "MALE_HAREM", isSpoiler: false }])
+    })
+
+    it("should map VAMPIRES to VAMPIRE", () => {
+      const result = toTags(["vampires"])
+
+      expect(result).toEqual([{ key: "VAMPIRE", isSpoiler: false }])
+    })
+
+    it("should handle mapped tags with other valid tags", () => {
+      const result = toTags(["ACTION", "cooking", "COMEDY"])
+
+      expect(result).toEqual([
+        { key: "ACTION", isSpoiler: false },
+        { key: "FOOD", isSpoiler: false },
+        { key: "COMEDY", isSpoiler: false },
+      ])
+    })
+  })
+
   describe("invalid tags", () => {
     it("should skip invalid tag keys", () => {
       const result = toTags(["ACTION", "INVALID_TAG", "COMEDY"])
