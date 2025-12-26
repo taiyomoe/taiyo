@@ -4032,7 +4032,7 @@ export const tags = {
     category: "Theme-Romance",
     isAdult: false,
   },
-  POSTAPOCALYPTIC: {
+  POST_APOCALYPTIC: {
     name: {
       en: "Post-Apocalyptic",
       pt_br: "Pós-Apocalíptico",

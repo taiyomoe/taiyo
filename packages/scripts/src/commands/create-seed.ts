@@ -1,5 +1,3 @@
-import { mkdir, readdir, readFile, writeFile } from "node:fs/promises"
-import { join } from "node:path"
 import type { Prisma } from "@taiyomoe/db"
 import {
   toContentRating,
@@ -13,6 +11,8 @@ import {
 } from "@taiyomoe/utils"
 import { Command } from "commander"
 import { Cover, Manga } from "mangadex-full-api"
+import { mkdir, readdir, readFile, writeFile } from "node:fs/promises"
+import { join } from "node:path"
 import { group, map, mapValues, sleep } from "radashi"
 import {
   CREATOR_ID,
@@ -70,6 +70,7 @@ export const createSeedCommand = new Command("create-seed")
         "covers",
       )
 
+      console.log("Starting to process media ID: ", mediaId)
       console.log("Downloading covers...")
 
       await mkdir(coversDir, { recursive: true })
@@ -128,7 +129,7 @@ export const createSeedCommand = new Command("create-seed")
         return first.concat(middle, last)
       })()
 
-      const parsed = await map(sample, async (c) => {
+      const parsed = await map(sample, async (c, i) => {
         const rawPages = await c.getReadablePages()
         const pages = Array.from({ length: c.pages }, (_, i) => ({
           id: crypto.randomUUID(),
@@ -168,7 +169,7 @@ export const createSeedCommand = new Command("create-seed")
         })
 
         console.log(
-          `Downloaded chapter ${c.chapter} (${c.translatedLanguage}) - ${groups.length} group(s)`,
+          `Downloaded chapter ${c.chapter} (${c.translatedLanguage}) - ${groups.length} group(s) [${i + 1}/${sample.length}]`,
         )
 
         await sleep(2000)
