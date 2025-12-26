@@ -98,7 +98,7 @@ model Chapter {
 
   title         String?
   number        Float
-  volume        Float?
+  volume        String?
   language      Languages
   /// [MediaChapterPage]
   pages         Json[]
