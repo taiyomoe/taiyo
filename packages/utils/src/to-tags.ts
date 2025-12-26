@@ -4,7 +4,10 @@ export const toTags = (input: string[] | null): PrismaJson.MediaTags[] => {
   const tags: PrismaJson.MediaTags[] = []
 
   for (const tag of input ?? []) {
-    const normalizedTag = tag.toUpperCase().replaceAll(" ", "_")
+    const normalizedTag = tag
+      .toUpperCase()
+      .replaceAll(" ", "_")
+      .replaceAll("-", "_")
 
     if (normalizedTag in config.tags) {
       tags.push({

@@ -78,6 +78,35 @@ describe("toTags", () => {
     })
   })
 
+  describe("normalization - hyphen to underscore", () => {
+    it("should replace hyphens with underscores", () => {
+      const result = toTags(["sci-fi", "slice-of-life"])
+
+      expect(result).toEqual([
+        { key: "SCI_FI", isSpoiler: false },
+        { key: "SLICE_OF_LIFE", isSpoiler: false },
+      ])
+    })
+
+    it("should handle mixed case with hyphens", () => {
+      const result = toTags(["Sci-Fi", "Boys-Love"])
+
+      expect(result).toEqual([
+        { key: "SCI_FI", isSpoiler: false },
+        { key: "BOYS_LOVE", isSpoiler: false },
+      ])
+    })
+
+    it("should handle mixed spaces and hyphens", () => {
+      const result = toTags(["full-color", "slice of life"])
+
+      expect(result).toEqual([
+        { key: "FULL_COLOR", isSpoiler: false },
+        { key: "SLICE_OF_LIFE", isSpoiler: false },
+      ])
+    })
+  })
+
   describe("invalid tags", () => {
     it("should skip invalid tag keys", () => {
       const result = toTags(["ACTION", "INVALID_TAG", "COMEDY"])
