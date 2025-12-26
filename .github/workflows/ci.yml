@@ -59,6 +59,9 @@ jobs:
 
       - name: Setup
         uses: ./tooling/github/setup
+        with:
+          prisma-generate: true
+          database-url: ${{ secrets.DATABASE_URL }}
 
       - name: Run Unit Tests
         run: pnpm test:unit
