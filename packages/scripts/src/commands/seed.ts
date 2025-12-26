@@ -1,7 +1,7 @@
-import { PrismaClient, PrismaPg } from "@taiyomoe/db"
-import { Command } from "commander"
 import { readdir } from "node:fs/promises"
 import { join } from "node:path"
+import { PrismaClient, PrismaPg } from "@taiyomoe/db"
+import { Command } from "commander"
 import { seedsPath } from "../utils"
 
 export const seedCommand = new Command("seed")
