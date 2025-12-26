@@ -9,7 +9,7 @@ export const toLocalizedText = (
     const language = toLanguage(key)
 
     if (language && typeof value === "string") {
-      result[language] = value
+      result[language] = value.replaceAll("，", ", ")
     } else {
       console.warn(`Invalid language key "${key}", skipping...`)
     }
