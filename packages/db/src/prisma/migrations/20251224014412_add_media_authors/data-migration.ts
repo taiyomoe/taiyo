@@ -7,7 +7,7 @@ export default async (tx: Prisma.TransactionClient) => {
     SELECT "id", "trackers" FROM "Media" WHERE "trackers" ? 'md'
   `
 
-  console.log("Found", medias.length, "media to migrate")
+  console.log(`Found ${medias.length} medias to migrate`)
 
   // Track staff by MangaDex ID to avoid duplicates
   const staffCache = new Map<string, string>() // mdId -> dbId

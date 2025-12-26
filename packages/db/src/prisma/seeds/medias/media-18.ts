@@ -3,7 +3,7 @@ import type { PrismaClient } from "@taiyomoe/db"
 const execute = async (db: PrismaClient) => {
   await db.media.create({
     data: {
-      id: "1f82a626-6589-4912-8b20-b12df552868f",
+      id: "26a43416-bedd-40b6-b4f6-eb2ca7e0475e",
       synopsis: {
         en: 'After a freak accident involving some lightning winds up zapping him dead, 15-year-old Mochizuki Touya wakes up to find himself face-to-face with God. "I am afraid to say that I have made a bit of a blunder.", laments the old coot. But all is not lost! God says that he can reincarnate Touya into a world of fantasy, and as a bonus, he gets to bring his smartphone along with! \n\nSo begins Touya\'s adventure in a new, anachronistic pseudo-medieval world. Friends! Laughs! Tears! Inexplicable Deus ex Machina! He sets off on a journey full of wonder as he absentmindedly travels from place to place, following whatever goal catches his fancy.',
         ja: "神様のうっかりによって死んでしまった主人公は、スマートフォンとともに中世ヨーロッパ風異世界に転生してしまい……？ゆるゆる異世界珍道中、さて、のんびり参りましょう。",
@@ -30,6 +30,17 @@ const execute = async (db: PrismaClient) => {
       source: "ORIGINAL",
       demography: "SHOUNEN",
       countryOfOrigin: "JAPAN",
+      links: {
+        mangaDex: "8bc61f6d-5b33-4c6b-bfdc-589daa4a4d78",
+        anilist: 99465,
+        animePlanet:
+          "https://www.anime-planet.com/manga/in-another-world-with-my-smartphone",
+        bookWalker: "https://bookwalker.jp/series/116421/list",
+        mangaUpdates: "https://www.mangaupdates.com/series.html?id=lyudjc9",
+        myAnimeList: 105645,
+        kitsu: "https://kitsu.io/api/edge/manga/40132",
+        raw: "https://comic-walker.com/contents/detail/KDCW_KS04000031010000_68/",
+      },
       creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
       titles: {
         create: [
@@ -203,10 +214,53 @@ const execute = async (db: PrismaClient) => {
           },
         ],
       },
+      staff: {
+        create: [
+          {
+            role: "AUTHOR",
+            staff: {
+              connectOrCreate: {
+                where: { id: "24367faa-8f49-46e6-9b73-ae1975bd7c3f" },
+                create: {
+                  id: "24367faa-8f49-46e6-9b73-ae1975bd7c3f",
+                  name: "Patora Fuyuhara",
+                  bio: {},
+                  links: {
+                    website: "https://mypage.syosetu.com/317945/",
+                    twitter: "https://twitter.com/winterpatora",
+                  },
+                  creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+                },
+              },
+            },
+          },
+          {
+            role: "ARTIST",
+            staff: {
+              connectOrCreate: {
+                where: { id: "029ba327-5c8d-456a-aa12-85258c2d8f37" },
+                create: {
+                  id: "029ba327-5c8d-456a-aa12-85258c2d8f37",
+                  name: "Soto",
+                  bio: {
+                    en: "**Alt names**:\nそと",
+                  },
+                  links: {
+                    website: "http://sotoks.sakura.ne.jp/",
+                    twitter: "https://twitter.com/sotok",
+                    pixiv: "https://www.pixiv.net/users/43070",
+                  },
+                  creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+                },
+              },
+            },
+          },
+        ],
+      },
       covers: {
         create: [
           {
-            id: "09914044-970b-495e-b503-953253723b01",
+            id: "d48ce30e-8577-4e85-8ed1-918b05863bc8",
             volume: "17",
             language: "ja",
             contentRating: "NORMAL",
@@ -214,7 +268,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "c70c25aa-4437-4d2b-9f6b-e854fa2f320c",
+            id: "3c687c4c-0795-40a7-8354-582a550b214b",
             volume: "16",
             language: "ja",
             contentRating: "NORMAL",
@@ -222,7 +276,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "88287d1c-0b24-4c7e-a906-25510bee4992",
+            id: "306570e1-3cd3-4c82-9ddd-b7031d624517",
             volume: "14",
             language: "ja",
             contentRating: "NORMAL",
@@ -230,7 +284,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "582bf384-798e-400d-b99e-f97235b6664c",
+            id: "390e0ea7-5bbb-4e56-a5a1-dd2baec4ae70",
             volume: "13",
             language: "ja",
             contentRating: "NORMAL",
@@ -238,7 +292,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "ff831889-63c6-44a7-89bd-1019b7796b77",
+            id: "8060ca69-cee4-4236-a7c6-89deb8cb8643",
             volume: "15",
             language: "ja",
             contentRating: "NORMAL",
@@ -246,7 +300,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "f5d0bd92-cce8-4388-9b0c-dbdea4a4d618",
+            id: "cd3c6770-620f-4417-9cb8-e6e50ca8d7ca",
             volume: "10",
             language: "ko",
             contentRating: "NORMAL",
@@ -254,7 +308,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "d54de00e-3f8b-4302-9048-8d867c8157c8",
+            id: "6bd9606d-4125-4cba-a3a7-1f412f59c348",
             volume: "5",
             language: "en",
             contentRating: "NORMAL",
@@ -262,7 +316,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "4571fff8-0365-4221-b666-c5b13c800681",
+            id: "f3a67aa7-3a42-48f7-a987-77f5a8ec2f46",
             volume: "3",
             language: "en",
             contentRating: "NORMAL",
@@ -270,7 +324,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "1a68fff8-0c0e-4a36-9e28-1a71530d6dcb",
+            id: "56d4fa5c-0fb0-4f55-83fd-bb6f5b7509ec",
             volume: "1",
             language: "en",
             contentRating: "NORMAL",
@@ -278,7 +332,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "0b7d5d9c-3fa2-42e1-a31b-ef60de6b67b3",
+            id: "b0c85824-c19e-4ace-ac12-6799f23218b9",
             volume: "5",
             language: "ko",
             contentRating: "NORMAL",
@@ -286,7 +340,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "8226d9d0-d4cc-4960-96d0-18341ab4f1ac",
+            id: "ef06fd26-ad3a-49c2-93bb-775c315cc0a1",
             volume: "6",
             language: "ko",
             contentRating: "NORMAL",
@@ -294,7 +348,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "276e0ea2-130d-4b71-8242-bbba2e10f881",
+            id: "4214152c-a0c9-4332-b02b-27190da2c255",
             volume: "4",
             language: "en",
             contentRating: "NORMAL",
@@ -302,7 +356,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "151be25c-4ca4-42a3-b0e3-b246b2969d2e",
+            id: "f57ef8ff-c48c-4756-944c-554daa12d2e2",
             volume: "6",
             language: "en",
             contentRating: "NORMAL",
@@ -310,7 +364,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "185da4f1-d6be-41af-8e73-e7ae24b938b3",
+            id: "44e9b1e6-8dc0-47e4-aeaf-7904a14e89c6",
             volume: "7",
             language: "ko",
             contentRating: "NORMAL",
@@ -318,7 +372,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "14b1c4f9-db8a-46ad-9c1c-332a068e07f7",
+            id: "968454fb-0e80-4084-8214-6e259a17fbb5",
             volume: "3",
             language: "ko",
             contentRating: "NORMAL",
@@ -326,7 +380,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "b6e0766c-97a9-4237-b1ee-474ab558c2d0",
+            id: "87c0cfba-fc72-4e4b-8b39-132f23295c8a",
             volume: "2",
             language: "en",
             contentRating: "NORMAL",
@@ -334,7 +388,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "8a0aa915-a16f-4837-b5fa-45a191b498e7",
+            id: "5531e007-8807-4f59-92c3-625ac0b37036",
             volume: "4",
             language: "ko",
             contentRating: "NORMAL",
@@ -342,7 +396,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "025b4fe6-7530-4f45-a2d3-6d902e3e51b6",
+            id: "ec15b6ef-70f2-49e2-adb1-90bf1aa57474",
             volume: "7",
             language: "zh_hk",
             contentRating: "NORMAL",
@@ -350,7 +404,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "d36852d1-71c0-4f2e-a37a-45890886da83",
+            id: "8e5a0be4-7bd2-426c-afb8-16c77196bc56",
             volume: "2",
             language: "ko",
             contentRating: "NORMAL",
@@ -358,7 +412,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "b7f63496-c4ec-49e2-8d1a-6013929103db",
+            id: "e4fe530c-903c-4cf4-b7ab-e14d881959dc",
             volume: "5",
             language: "zh_hk",
             contentRating: "NORMAL",
@@ -366,7 +420,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "5bed73e1-d16f-465c-8748-c36b65bbd446",
+            id: "ed8dcde7-b6aa-4691-aaa6-4ad8f67b2034",
             volume: "1",
             language: "ko",
             contentRating: "NORMAL",
@@ -374,7 +428,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "00e0f6ff-96c6-45a0-bfc8-612b04879d93",
+            id: "f63ae4ce-9515-4bd0-bd6b-985945df2b9f",
             volume: "8",
             language: "ko",
             contentRating: "NORMAL",
@@ -382,7 +436,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "09bd2e21-9079-4713-9008-29e406e4e62e",
+            id: "70650eb4-f3bc-42c9-8716-dd5ea014a858",
             volume: "4",
             language: "zh_hk",
             contentRating: "NORMAL",
@@ -390,7 +444,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "4845e413-d86b-448c-9be9-aa116b99818e",
+            id: "f01d891c-b5a6-47b3-b167-4fd08e496d8d",
             volume: "1",
             language: "zh_hk",
             contentRating: "NORMAL",
@@ -398,7 +452,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "24d3edab-6514-4432-87cc-34a1b3dbe4f5",
+            id: "e7aa061d-aa17-4b7a-9f75-a358bbac66e8",
             volume: "6",
             language: "zh_hk",
             contentRating: "NORMAL",
@@ -406,7 +460,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "24362833-65cf-4619-910b-36163947b6a3",
+            id: "d4a8dcc4-dc4d-4280-b9fe-113988cec100",
             volume: "9",
             language: "ko",
             contentRating: "NORMAL",
@@ -414,7 +468,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "cbcb5938-d0f0-46a9-b2c4-6baf72d14d70",
+            id: "407ff41b-576b-4910-8138-1cf264b20e3a",
             volume: "3",
             language: "zh_hk",
             contentRating: "NORMAL",
@@ -422,7 +476,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "8060b000-70c6-4ae2-9a1f-1147af44063b",
+            id: "cb1c8576-26f5-417a-b01e-5554979b4465",
             volume: "2",
             language: "zh_hk",
             contentRating: "NORMAL",
@@ -430,7 +484,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "ad0410c6-f9d5-41f7-805e-a10ec4d29f8e",
+            id: "2efb655a-b62f-41f0-b991-3710252e5adb",
             volume: "12",
             language: "ja",
             contentRating: "NORMAL",
@@ -438,7 +492,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "eda2f443-bedd-4f11-ac37-452d71c54f47",
+            id: "369c6279-c6e8-47dc-b491-ecfa5c8d6663",
             volume: "11",
             language: "ja",
             contentRating: "NORMAL",
@@ -446,7 +500,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "5aefb296-89c5-4f44-98f9-00e64d72f47d",
+            id: "0a8d4017-8d92-4122-af9a-77e9ee9c7729",
             volume: "10",
             language: "ja",
             contentRating: "NORMAL",
@@ -454,7 +508,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "7dfa82d9-9d2c-4014-8a18-a9e612149b37",
+            id: "b4ab1033-b15c-478a-808a-369419ae5c05",
             volume: "9",
             language: "ja",
             contentRating: "NORMAL",
@@ -462,7 +516,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "9bf71bfc-b434-4848-b7dc-a9ba9c1e1dc5",
+            id: "f9fa6809-b5ac-43cc-b058-0f3c7c11ac6d",
             volume: "8",
             language: "ja",
             contentRating: "NORMAL",
@@ -470,7 +524,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "4591552f-23ce-4ca7-9fb6-278c8e167ffe",
+            id: "eb5255c4-a722-458a-b1b9-449e876a20c5",
             volume: "7",
             language: "ja",
             contentRating: "NORMAL",
@@ -478,7 +532,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "ffd43a09-dd07-4b62-bb07-e102a2b310e3",
+            id: "af1660bb-b52d-4277-a598-dae80e0d4cf3",
             volume: "6",
             language: "ja",
             contentRating: "NORMAL",
@@ -486,7 +540,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "7890c2ec-7ba5-4262-9dc4-22fe73eda5b7",
+            id: "46d7b922-fc86-4b94-9c8d-69dfef85c120",
             volume: "5",
             language: "ja",
             contentRating: "NORMAL",
@@ -494,7 +548,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "2e575aad-ce8d-4a31-b9a4-e4c771bf756e",
+            id: "3fe353db-6d9b-4048-9bb7-ea5a5ac60db5",
             volume: "1",
             language: "ja",
             contentRating: "NORMAL",
@@ -502,7 +556,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "a0155b06-e6d6-47c8-8fdf-2ed2d86034a9",
+            id: "4a341f2b-6ecf-482f-b036-04926913a269",
             volume: "2",
             language: "ja",
             contentRating: "NORMAL",
@@ -510,7 +564,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "162d3951-c55a-4c9d-8fe7-c90f86ec4ece",
+            id: "51700fce-2662-4656-b3a5-e17ffe9ce401",
             volume: "4",
             language: "ja",
             contentRating: "NORMAL",
@@ -518,7 +572,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "0a5243ab-6d0c-41b7-b83d-19281e3bfd8a",
+            id: "c2558d92-9f68-4436-8d7f-f5ae388fa65e",
             volume: "3",
             language: "ja",
             contentRating: "NORMAL",
@@ -530,47 +584,119 @@ const execute = async (db: PrismaClient) => {
       chapters: {
         create: [
           {
-            id: "fae32635-5931-431e-b20f-1a2e69ad5aa1",
+            id: "4fac6121-4248-4bc9-9e2c-27571e40ebfc",
             number: 1,
             volume: "1",
             language: "pt_br",
             pages: [
-              { id: "555ad21b-ba09-4a25-9c17-a1df8ef36a6f" },
-              { id: "f9cfc10a-8801-48bf-80e9-0a7eb481204b" },
-              { id: "00dc8ccc-1c9f-4cc2-b7d7-9d7a6969cc0b" },
-              { id: "7888c70e-9bee-4ca7-af75-addec1318640" },
-              { id: "09d874a2-05f2-4dfa-92d4-c11c49d43595" },
-              { id: "4693a9c2-6548-4de4-8485-bdef33b3dcf3" },
-              { id: "b14a1d9d-0f1c-4d47-8384-b0573be3587d" },
-              { id: "4c75cd9f-7451-49e3-a2f3-0383d8c90911" },
-              { id: "304a663a-9aa3-4f7f-8aa3-041fbc3cf6d3" },
-              { id: "14516285-730d-4775-82a0-e492172016f4" },
-              { id: "425b7691-071b-481a-b5be-92d41147b0e9" },
-              { id: "5b1094f3-e615-4513-8d72-99c2c158a1a0" },
-              { id: "042b6582-f2be-4766-90c4-60466258c70c" },
-              { id: "b1c5ac5f-a466-464f-8a04-44e183a4817f" },
-              { id: "a169b387-d2d1-47f8-bc92-d48f7298e232" },
-              { id: "b71dda51-6fa6-472e-8752-a5b2c5c695a0" },
-              { id: "5ca08a68-6412-4ce7-badf-10744ee10802" },
-              { id: "dbcb6d78-2014-4be9-ade1-b1bd9e4bdda5" },
-              { id: "feebe3af-b536-47bc-b51e-c4debb757575" },
-              { id: "3b06534f-d7ad-48fa-87a4-1a498dd8fea7" },
-              { id: "c41b8f7e-8728-4e88-b81d-06930a3a0c16" },
-              { id: "a7e9b616-0617-42e1-94d9-fd5bf0dca963" },
-              { id: "1765f150-5f1f-4a1f-9e73-1e09d11bdf56" },
-              { id: "e2463c3d-8e8c-401d-a2d9-d677579e4aac" },
-              { id: "e260059c-ddd6-4d32-83ca-b36145dae48c" },
-              { id: "cfaf98b1-b587-4d1a-ae71-0fceaa337070" },
-              { id: "d7136ea7-f769-4b48-955c-82e21c213d30" },
-              { id: "ba7e9cfe-bdd3-46e9-a625-216cf8b245a1" },
-              { id: "4f59b818-4e24-417c-8ac2-14a1f8b64c80" },
-              { id: "13183f20-9e9e-4a03-9f79-d8ee3da0a057" },
-              { id: "23b19884-b173-4297-ba34-e48afaaed534" },
-              { id: "76547285-2721-4908-a568-352bf4cfc259" },
-              { id: "2bb56ef5-9519-4f9b-af24-af581869c235" },
-              { id: "3d690efa-6802-45c9-b59a-ed0d3bae631c" },
-              { id: "b5931608-d69e-4c87-ab41-f4371bb71f3d" },
-              { id: "74cba6cd-4c88-4af2-ae4b-c32ba4794803" },
+              {
+                id: "9de58222-68d0-480d-98e8-ecfc4370ab4a",
+              },
+              {
+                id: "5d2b4b9c-0333-4341-8e61-2694a69c0e6f",
+              },
+              {
+                id: "c54e548a-cda6-4646-a6bf-646bd854d1dd",
+              },
+              {
+                id: "0343ccd1-f4f4-4521-bdf1-c97af1a5c195",
+              },
+              {
+                id: "bc118722-6890-4202-b2e4-83b65e1571cf",
+              },
+              {
+                id: "83e04900-32d6-47c5-970e-3d2d35379242",
+              },
+              {
+                id: "1902f5f7-d462-4378-91f9-9d6064d02f59",
+              },
+              {
+                id: "acf6534d-5fe7-4d3b-b49d-f7366453e634",
+              },
+              {
+                id: "e033cc49-8b86-4067-a9e7-ea154eb5b9c4",
+              },
+              {
+                id: "8c1fcd41-768e-49a4-89c1-2a6a8ecc62c9",
+              },
+              {
+                id: "4cdf0074-9047-493a-bd27-c606a9a2dbc2",
+              },
+              {
+                id: "7ed94a78-d51f-4af7-8671-50f1cd95da21",
+              },
+              {
+                id: "97214a0d-a9b8-4b57-b53d-f356e9435920",
+              },
+              {
+                id: "1d88bada-4fd7-408b-aaae-caaf4af7c78e",
+              },
+              {
+                id: "12f90e6f-1f48-4ea1-8080-f766616a4fdd",
+              },
+              {
+                id: "37ab900c-52ec-405f-8167-a9e04780775d",
+              },
+              {
+                id: "f3863241-51a8-4016-ba17-f3942043988e",
+              },
+              {
+                id: "0c5a3178-9208-47f0-b2cf-be8d805fe24e",
+              },
+              {
+                id: "abc9ed72-52dc-47c8-8453-7f434728accf",
+              },
+              {
+                id: "e4e656d5-55b7-4805-9375-9d727c435fb9",
+              },
+              {
+                id: "7e0ee3d9-b6e1-49bd-8351-d671916a1e5f",
+              },
+              {
+                id: "61b24125-82e1-4c51-b86c-6f3bf9270afc",
+              },
+              {
+                id: "5e319ea5-2761-4334-b614-b76557f0689d",
+              },
+              {
+                id: "8c445365-0efc-4849-92ac-fae2e373ea49",
+              },
+              {
+                id: "4b8d8803-29b7-4bf3-a8b3-ab8e6e2a1e80",
+              },
+              {
+                id: "69d238ec-d273-4cd0-a81b-d75da30a8c43",
+              },
+              {
+                id: "9f3f0fbc-78a6-4d96-ad62-5dea0d5f05cf",
+              },
+              {
+                id: "33082482-9a63-4530-a211-105c0abe31da",
+              },
+              {
+                id: "d134e2a3-9c92-4426-a9ee-5cce872d4a14",
+              },
+              {
+                id: "3c26bdfa-2c51-4c5c-973d-f8761a8c9631",
+              },
+              {
+                id: "bc803294-b309-4ac1-889a-29355ca99f6c",
+              },
+              {
+                id: "f2f9c46a-a690-4464-aa27-f58a3e521c57",
+              },
+              {
+                id: "b5c7e201-b7ef-41c9-b3b4-100897f4bb4c",
+              },
+              {
+                id: "51f7ae95-da8a-45a0-837e-bb25f8cee463",
+              },
+              {
+                id: "328103c0-1378-4a59-8eb3-7d63c51e39fe",
+              },
+              {
+                id: "20586e87-4dfe-4ab0-9a70-431fc75682b7",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -582,6 +708,7 @@ const execute = async (db: PrismaClient) => {
                     name: "UnitZero",
                     description: null,
                     website: "https://uniitzero.blogspot.com/",
+                    email: null,
                     discord: null,
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -591,46 +718,116 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "f08a51c5-43e7-4c5c-8eab-655684616f79",
+            id: "2d5529e3-ffec-4948-8b76-ca6d8fab58bc",
             number: 1,
             volume: "1",
             language: "fr",
             pages: [
-              { id: "d5628ae9-58b2-42d0-8296-d6ea35bcfed4" },
-              { id: "3636122d-e82a-44c1-88fc-11f08868a949" },
-              { id: "75147125-9f3d-4d1b-8da5-2922e1db2371" },
-              { id: "5426a46e-58c0-4a71-a831-27f08f94c870" },
-              { id: "c3f44dca-b709-4dd1-953e-80dade2c2f1f" },
-              { id: "23e467c1-6809-4d23-9db0-a61cf5f245bf" },
-              { id: "0b706d20-e7ab-4b17-bc60-724ae44af268" },
-              { id: "0b0ed5e2-0054-4ad5-87e8-a0812f399597" },
-              { id: "250725be-a20d-4594-a4b4-b91080a454e4" },
-              { id: "b81981b8-2535-4bd9-a141-d84b86800e75" },
-              { id: "4d836984-daa6-43f5-b2f9-3fa92b5faaa5" },
-              { id: "c07037a8-e76c-480e-aba0-6f27b96e4fc4" },
-              { id: "c07854aa-7897-49cb-b830-5654350cddd8" },
-              { id: "0f238ee9-6156-4c01-b900-7ec48aef2e37" },
-              { id: "b517a0e4-d4f3-411a-9772-50e159b8b986" },
-              { id: "85016dfe-b06e-4552-a428-4367f244a309" },
-              { id: "ca03eed6-1567-447b-a5ae-5b6fa86db5e0" },
-              { id: "c6d27ca9-c2ce-4c77-879e-883c2c560594" },
-              { id: "728116be-922b-4a1e-99d3-fd71930b2ccf" },
-              { id: "7aa035db-89cf-47fc-a52c-df6cd71acb23" },
-              { id: "43abc411-026f-479e-9ff0-c1c7539597b3" },
-              { id: "2f380276-732e-4c6e-a382-b4f2352a04fd" },
-              { id: "f3691056-e2f4-42c0-a076-14acc7cee91f" },
-              { id: "563fa59f-4946-4e84-9c97-74b0a62a86a9" },
-              { id: "b97cc0e9-4cf9-449e-ae74-64185baa0a50" },
-              { id: "99a0e0a9-00f7-4392-a708-f1c7c1c28651" },
-              { id: "525d1dd7-d13f-4bcf-9417-571170cb5c68" },
-              { id: "4f45accb-c951-493b-818a-a98e2dc82e24" },
-              { id: "0d8a2a38-bcfd-40fe-bfb5-507b49a6c6ee" },
-              { id: "be7b0530-a49b-414f-b9a5-7c6103e2f947" },
-              { id: "f6b20c35-71ac-40a6-aae7-5664c47b3188" },
-              { id: "16169ad6-a6d6-48fc-a862-175929fd86f7" },
-              { id: "6d90c6c2-723d-4f31-a375-f03b0a7d8bc6" },
-              { id: "3e25184d-059b-4140-a9ee-3bd8544d2517" },
-              { id: "2984d56a-01a1-4ba4-9710-cedce426fd14" },
+              {
+                id: "8f9ec6ea-f6b9-4a94-a17f-a3a44dc78121",
+              },
+              {
+                id: "19c2e005-4362-48ed-b9a8-a63d909d9ae1",
+              },
+              {
+                id: "17cbd01a-ab85-4f6d-ba4c-9f33d36b001c",
+              },
+              {
+                id: "cb0439af-349c-4c3d-a08c-9cdffc4d24ab",
+              },
+              {
+                id: "73f62f6b-8fca-47d1-94a2-d4abbc1d0694",
+              },
+              {
+                id: "39e57f85-bf03-4513-a940-7d544c11a4a8",
+              },
+              {
+                id: "5941967f-04ed-4be1-9ebe-1a579ce19361",
+              },
+              {
+                id: "22260b36-8a5b-4d3a-8085-b737ea7f85f2",
+              },
+              {
+                id: "5583fb37-0122-4e11-8650-0386313032d2",
+              },
+              {
+                id: "407a5b7b-00f2-41fe-a439-e8b340c5bc73",
+              },
+              {
+                id: "8655c40b-53c8-4b6c-8994-954a936f9430",
+              },
+              {
+                id: "a7a7e7db-2bd1-493e-a1cf-9f0be8d60f4c",
+              },
+              {
+                id: "c3054f62-0cbb-4079-87e1-2ca34680deb4",
+              },
+              {
+                id: "7c2e18e2-3a8a-4f5c-a57c-9670202efcb2",
+              },
+              {
+                id: "473bb991-41b8-40d6-90da-2a23a82ce769",
+              },
+              {
+                id: "749477fb-c151-469b-9ad1-700f5ac5f883",
+              },
+              {
+                id: "43e28cda-8c31-4331-bc67-89165b636ce6",
+              },
+              {
+                id: "c06e8392-d32c-4692-8781-64874998cf82",
+              },
+              {
+                id: "ee3cadb7-68a3-40bf-a3a3-e3c491ba7c70",
+              },
+              {
+                id: "967793db-ead9-42fc-ad31-67fcbbd78c78",
+              },
+              {
+                id: "6ebdf423-f51d-4ac6-a294-db33d463ae9e",
+              },
+              {
+                id: "0e394cf1-70fd-49a2-8fb2-c110d00ad87a",
+              },
+              {
+                id: "8af1ffd0-ca37-4272-8d9f-15a581fd1aa9",
+              },
+              {
+                id: "a0eea9df-1cd1-4d8c-818b-ab5f3a631dec",
+              },
+              {
+                id: "44588b3f-fcd3-4c42-9171-9699d6415bc7",
+              },
+              {
+                id: "9fa42888-1bc2-4829-85fb-3a8e2bc2da9f",
+              },
+              {
+                id: "3e7b38fe-5008-4ec1-bd88-82f0db693c3f",
+              },
+              {
+                id: "570f13a4-999a-4cf2-9f6c-6b170d72166b",
+              },
+              {
+                id: "a1dedd1f-86f5-480f-9b8a-4d9ca822997b",
+              },
+              {
+                id: "bb346e87-89bc-4845-b246-c50dee5e6424",
+              },
+              {
+                id: "a597d2f8-79be-4f8c-9c08-f85d05b77e45",
+              },
+              {
+                id: "9b1b9237-d82a-42db-b1c2-e48f9559e112",
+              },
+              {
+                id: "962c05f5-8730-4380-9ede-d61ae5ff380c",
+              },
+              {
+                id: "8cb884d4-d507-4a2f-bcf9-b69f7d364756",
+              },
+              {
+                id: "38962ea1-7ed2-47c6-aa98-96c2e6cf65d4",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -642,6 +839,7 @@ const execute = async (db: PrismaClient) => {
                     name: "Mangalactic",
                     description: null,
                     website: null,
+                    email: "pachad2@hotmail.fr",
                     discord: "https://discord.gg/MSAmZws",
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -651,55 +849,143 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "15fe5af5-ee47-4b81-9869-d55e6ed1ab96",
+            id: "01fd638b-8681-409a-8f40-8b298f0db407",
             number: 2,
             volume: "1",
             language: "fr",
             pages: [
-              { id: "5a76da7c-7bb6-4560-a322-678c07bc3863" },
-              { id: "501158ff-26d0-45d7-aea8-b0d03d344fe6" },
-              { id: "b95025e6-0476-4e98-886d-10ee06b6924b" },
-              { id: "9f21382e-7b4d-43e8-bab8-b04efa6992af" },
-              { id: "24d02b9b-06d4-440a-9512-5320a2093006" },
-              { id: "09af918d-7a29-46de-a6b1-663e71c8cb6e" },
-              { id: "51a8342a-22e2-48b5-9087-68f40f9c6119" },
-              { id: "7fedfd2e-8ae3-4210-a289-6f13393f52d7" },
-              { id: "b38b1945-bbe6-44fa-9eb5-e63b8362d65d" },
-              { id: "0d80dd8d-ee21-451e-a66d-47bd29994b00" },
-              { id: "d9aa2957-e9ae-42f8-a8b5-c35a7a7ae551" },
-              { id: "7aac233e-bd89-4370-891f-4189f683a625" },
-              { id: "10da64c5-9f66-47da-828c-a7994785cd13" },
-              { id: "cf96ca59-8f83-4a28-96bf-29a551abb00e" },
-              { id: "d039105e-2f7b-49c7-85c2-cf463da92be8" },
-              { id: "ae80b95f-18dc-4404-b30a-23dc55f56cbc" },
-              { id: "88116a20-a919-40cb-8ce4-8163644ebdf5" },
-              { id: "13846c5e-bfea-4e4c-8f59-23a5cbfd77ac" },
-              { id: "bf3e1f05-d598-4ccc-b883-9acebb938cd3" },
-              { id: "e592a8d8-ff4d-4eaf-9b99-d5203c0b8241" },
-              { id: "26fbf6ee-9eb3-41d1-b336-9715e23a427c" },
-              { id: "57193f9e-9ee6-4874-9d78-55efbd3099e6" },
-              { id: "50089ded-40ae-421c-a1e7-c302f844baff" },
-              { id: "30721fe3-4162-4f46-b9e6-42093230992f" },
-              { id: "0c557cce-f612-4ffa-b5e0-89415ab9963f" },
-              { id: "56b80b70-610e-471e-8cdd-5dabcf0590cd" },
-              { id: "206fe99c-8cac-48d9-9b5a-5ad3d907edf9" },
-              { id: "36e9a06b-d8ce-4af2-b704-9afe71325e2d" },
-              { id: "ae800ea8-1372-4a27-af8f-e35e4f829dd2" },
-              { id: "3adcd9d0-e85e-4809-82a1-c3c26671876a" },
-              { id: "a7fa1bd2-78dd-4f66-9acd-d3bf3c822061" },
-              { id: "11a355da-531e-4b44-96c1-0a336bba423c" },
-              { id: "83bec29b-e1e9-45fe-8193-ce44d5d8465a" },
-              { id: "d0ea88bd-af30-4c45-8a4b-8f23ec7b8eec" },
-              { id: "3ae4ce74-5a77-4488-9ef0-6beb5c0f6688" },
-              { id: "661d930e-0481-4e4c-9578-b32949d8369f" },
-              { id: "749571e2-d1cf-419e-ae79-66a7dacd2452" },
-              { id: "310172c8-fe04-43bd-8b24-8ff1b8fe53c3" },
-              { id: "79972c71-f611-424e-b44f-2bd3190a16bd" },
-              { id: "f7ddd3db-b8ce-4782-8f18-7dae32ea0db1" },
-              { id: "92a9ccfa-d807-490c-8639-edf7291af9ca" },
-              { id: "2867439b-9222-4831-8b68-8339be52ba59" },
-              { id: "e14c8973-d15e-415d-acb8-0dab3563e285" },
-              { id: "95212dda-9eb4-4ac9-974a-00859c557757" },
+              {
+                id: "96dbef54-9e05-43de-889f-791fce355912",
+              },
+              {
+                id: "a1b01efb-dc22-4dab-91e6-7f7a1e977fb9",
+              },
+              {
+                id: "757da104-3b9b-4b93-9b9c-e7318cafb3df",
+              },
+              {
+                id: "468b3cdf-4dc8-4d39-9f69-8488b95746ff",
+              },
+              {
+                id: "020dbc09-635a-45ec-ace4-cba663cb8949",
+              },
+              {
+                id: "e05de0ed-f909-49d8-8dd4-eb4a067571a4",
+              },
+              {
+                id: "29c37dca-91ba-4913-81eb-25975b2496a8",
+              },
+              {
+                id: "0b5c8613-f7be-4919-83d1-a26895dbfbec",
+              },
+              {
+                id: "1abc9ee2-2991-44cd-9781-d8624e81de35",
+              },
+              {
+                id: "c7d30865-79d4-4fd2-8f40-9bfc3804717e",
+              },
+              {
+                id: "2df2b096-4eaa-488f-a18e-2cde6881717a",
+              },
+              {
+                id: "f360f6fe-750f-4415-88cb-f42abacffbd3",
+              },
+              {
+                id: "ae6f1af6-4e65-42aa-9d06-e36652763d53",
+              },
+              {
+                id: "4e12485e-82a6-45f1-b67e-acd5597f72dc",
+              },
+              {
+                id: "96cbedf7-4cd0-454d-810f-c1ddc5763b82",
+              },
+              {
+                id: "74eb2abc-6660-4948-babc-d745996fde69",
+              },
+              {
+                id: "354cc22c-b51c-4e15-a3be-666a2ad199ef",
+              },
+              {
+                id: "5125529a-902e-4d2f-af9a-eacdc5f94256",
+              },
+              {
+                id: "361b6631-c2a9-4d25-a2ac-11262cd6eb07",
+              },
+              {
+                id: "66fe5d37-7958-4a41-8662-71428fa44374",
+              },
+              {
+                id: "b36e2ca6-1388-4b63-8223-2119695a2056",
+              },
+              {
+                id: "390c83f3-8eb1-4f66-9537-9ba646316d8c",
+              },
+              {
+                id: "fcd70d53-1d9b-48eb-be9c-297641ae0575",
+              },
+              {
+                id: "3bef360c-5d82-4083-88a8-311cc443a4d7",
+              },
+              {
+                id: "300249cb-06a6-4b09-a507-65d3ba4b4917",
+              },
+              {
+                id: "e2233c0e-5d6b-4baa-b99f-a1f1e19598ad",
+              },
+              {
+                id: "e1b9abdf-9629-405d-90d6-5ba4593452b5",
+              },
+              {
+                id: "4a0bede5-d68c-4ef1-897b-d72d0aff2834",
+              },
+              {
+                id: "2295fa83-0289-4768-8264-fbeede68c5a8",
+              },
+              {
+                id: "f1bf36a6-bc99-41c9-b683-edb9feb9c659",
+              },
+              {
+                id: "0b3ea689-114a-42ae-905c-4517392c9d05",
+              },
+              {
+                id: "65113e34-7bdd-4baa-a1a8-68e2b3f9a781",
+              },
+              {
+                id: "754a3e34-c4a2-477a-a144-9c398bf42de1",
+              },
+              {
+                id: "d0859c23-a920-4ce3-aa1e-731c8db3541c",
+              },
+              {
+                id: "686b2c9a-45e8-4148-ba1e-03aaaa838f86",
+              },
+              {
+                id: "00c88fc8-d2b2-479f-b56f-59b162c0a3eb",
+              },
+              {
+                id: "f2abc93d-22c2-4636-a0fd-f146beccbaff",
+              },
+              {
+                id: "54f34de6-b085-43cd-80cb-1832f64a2ba5",
+              },
+              {
+                id: "29936bda-8ff7-4a43-923c-7f8853f3f45f",
+              },
+              {
+                id: "ddfec643-95f3-4451-ae68-dda824fe12f5",
+              },
+              {
+                id: "6f3fd74c-4a45-410d-ac84-b158e834dc9e",
+              },
+              {
+                id: "c464afa2-87eb-4a69-ad81-5fc3030210a8",
+              },
+              {
+                id: "a4c32ae1-e5ec-4000-b235-f1749a5e9e1c",
+              },
+              {
+                id: "3ca7a842-bd00-4cb0-8592-0d156aea481c",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -711,6 +997,7 @@ const execute = async (db: PrismaClient) => {
                     name: "Mangalactic",
                     description: null,
                     website: null,
+                    email: "pachad2@hotmail.fr",
                     discord: "https://discord.gg/MSAmZws",
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -720,57 +1007,149 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "c8ad6e88-faf1-4007-b0a0-9665badbca17",
+            id: "f360be66-8f4e-4c5d-a1a9-de729e6531cd",
             number: 2,
             volume: "1",
             language: "pt_br",
             pages: [
-              { id: "10092f84-e791-4ba9-9f8e-4bde6133e8c9" },
-              { id: "e297201f-60a4-4a16-b005-1af82238adf2" },
-              { id: "7afa6be1-7c91-4055-8e90-f15297f5f253" },
-              { id: "733472c5-fe7b-46bc-a4ab-9ceee55b5c54" },
-              { id: "81517cac-9785-4b2f-8324-a75602374c90" },
-              { id: "d633d01a-5da4-449b-ba2a-86bc11aa2ec1" },
-              { id: "f6c50ee5-6c68-4846-b59e-99aaee1ae104" },
-              { id: "a58df1ba-c920-43e7-ab39-01da00667912" },
-              { id: "85f798d4-47e7-415e-9ccb-289fca4eb7c7" },
-              { id: "124cf547-11ac-42e1-824b-f70f8860ca48" },
-              { id: "39ee5ee5-aab6-4c36-b6ff-f76edd226373" },
-              { id: "35c262bf-5de5-494b-a3a3-32b03570cd29" },
-              { id: "3f3f08ed-3e5d-456c-8c36-0c66dc9653ed" },
-              { id: "768a5da7-9199-4c69-a557-9882b8ba9a7b" },
-              { id: "fbfd416f-943d-4b17-b4d0-2f35f22e5a3f" },
-              { id: "aff48c31-552d-42d5-99ba-f690d0e8425e" },
-              { id: "2deec458-fc07-4b5c-8132-0d87ae6b6359" },
-              { id: "ac4be69a-40a7-4446-90de-310b1f705bd2" },
-              { id: "c6593323-31a1-473d-b99d-b50e377d35cb" },
-              { id: "4bb69fe7-9eda-4177-b201-c7e40620a9bb" },
-              { id: "0b81d76c-9a81-4fbf-a70e-cc56553e2073" },
-              { id: "6802f462-29ed-4156-b8bb-28a3ef6779e0" },
-              { id: "5ae8291c-8b7f-4025-a814-8197fbb693df" },
-              { id: "3c161f2a-7944-4fb0-b5c5-29f7c72013c0" },
-              { id: "08e10c09-869a-401e-b891-1cc7f9b2084f" },
-              { id: "9cd0c83e-b0dc-43a0-b8f1-4320d70d6bcd" },
-              { id: "dbf46ada-8b20-4837-9e2f-1daebe99d54f" },
-              { id: "89306101-20b1-4f4c-9aaa-7f1fb0114477" },
-              { id: "7927b3fd-8dc6-4edb-9d61-175a9573b311" },
-              { id: "006bebae-805c-4f98-a4ad-c1a139c3934d" },
-              { id: "5e7f8a93-43c0-45bf-ad60-254401b0a290" },
-              { id: "4c5830ec-94ca-4bbf-b6e8-229d1d91eb85" },
-              { id: "d7dccb62-db18-4018-8b46-2f97e76e99da" },
-              { id: "66e37b78-d96a-4b85-8ff7-7663fd809452" },
-              { id: "71d801bc-9aab-4543-b501-2f28c559d431" },
-              { id: "213a2897-9ba6-4f4a-96a1-da5b9e80f154" },
-              { id: "7ad1fbef-4bf7-4d27-9be6-e87e77365831" },
-              { id: "81009de7-6145-45e5-aa09-26bd883e53bf" },
-              { id: "0f796c2b-46c0-4a8f-8114-fa62cf9c1dd0" },
-              { id: "8bf9b474-5e2d-4b79-8791-71266c9306c3" },
-              { id: "2cee0939-61e3-4c30-918b-8daf93424a8d" },
-              { id: "f6217195-7c4d-48b8-b3b7-21b02b14ddae" },
-              { id: "a0cfa864-7dc3-4746-9e44-b340fead789f" },
-              { id: "a8371549-9161-405b-9b38-041f24508ef7" },
-              { id: "2200206b-e58d-4fd7-89b0-c12b13bd7184" },
-              { id: "0f31c0f5-710b-4474-bf64-fa446f7b265e" },
+              {
+                id: "ab1d1e3d-8769-4a0f-8380-69c2a84e7fa2",
+              },
+              {
+                id: "b9025005-42f3-4b5b-b390-e6c5fa67cd99",
+              },
+              {
+                id: "502b26e6-0500-4563-a731-2f5a4b1aa2dd",
+              },
+              {
+                id: "733743fd-02d5-482d-92af-8350f2ff9434",
+              },
+              {
+                id: "2348a024-bd6b-4370-8e53-e9177eba9c53",
+              },
+              {
+                id: "6ea07bd6-50fe-4b68-beec-7e6642b97279",
+              },
+              {
+                id: "f7a5691f-8253-49b3-b18e-46c70c952415",
+              },
+              {
+                id: "32aace36-cb91-4c0c-a0f5-a5595507382a",
+              },
+              {
+                id: "cb32ae3f-9ac6-42e5-ac3d-72d881491893",
+              },
+              {
+                id: "83de543a-836a-4ecf-89a7-a7f62fbb9bcc",
+              },
+              {
+                id: "3e634b5e-c60e-42ae-9a75-fb846e53e4ad",
+              },
+              {
+                id: "38de3b1b-b896-45e2-8bdc-5b3f276596a6",
+              },
+              {
+                id: "4f37905e-5acf-417f-9f8f-98a0d3c391f0",
+              },
+              {
+                id: "d7eae54b-268d-49ee-a1f6-a1c0b1072e9f",
+              },
+              {
+                id: "430e0228-e1a5-4ba7-bf5f-653b84a4ae0a",
+              },
+              {
+                id: "09542bc0-2d2e-429d-8378-a0a441ee6994",
+              },
+              {
+                id: "d47cf920-ae33-4471-913d-2c347e439573",
+              },
+              {
+                id: "ce52eb13-726a-46da-98e6-8e23a842d5e5",
+              },
+              {
+                id: "5a11d039-e22e-4a77-936a-3669139bd2e9",
+              },
+              {
+                id: "a6b08400-afd5-4246-959f-936d431b95e7",
+              },
+              {
+                id: "6d6f6ceb-9515-4b9a-baa4-28f812a55a64",
+              },
+              {
+                id: "be33e226-6980-4fce-9dcf-6f482f798e5f",
+              },
+              {
+                id: "835b907d-f8a9-4b22-a502-fa5afef535bd",
+              },
+              {
+                id: "e8730b6b-49d6-4af2-a0de-75de7e08f6d6",
+              },
+              {
+                id: "a1ff6870-c3cb-43dd-96ae-5137df7e11e2",
+              },
+              {
+                id: "0fd1fcb7-df84-4ded-8b18-f96867063ff8",
+              },
+              {
+                id: "c40597c4-fc57-49ea-8822-388622e8de37",
+              },
+              {
+                id: "fd1eb683-7fc1-4187-a9b1-e598ec7d5369",
+              },
+              {
+                id: "5736ea88-7fef-48e0-967c-5f3203f134fc",
+              },
+              {
+                id: "810fd6e9-3d63-4ee7-aed9-ab24195d5bf6",
+              },
+              {
+                id: "7a100c21-8c47-4f2d-bfca-eca95b852e6d",
+              },
+              {
+                id: "143925c0-cfb0-4ae2-a836-80e05cf963ad",
+              },
+              {
+                id: "3d91a263-c226-49cd-8b64-4c5d847816d5",
+              },
+              {
+                id: "c2902453-f3d3-4cec-9ece-c84d185c004a",
+              },
+              {
+                id: "d05ec9b6-656b-4a70-8707-324e07acb082",
+              },
+              {
+                id: "649c15b1-f5c6-4a39-9717-4880154d85cd",
+              },
+              {
+                id: "eaf43152-bb86-4ed1-afd8-c66ac118b3e2",
+              },
+              {
+                id: "2b9b691e-16cd-40ed-a101-6a37db2a59fa",
+              },
+              {
+                id: "c997c849-6187-49bf-a0f5-800799463afb",
+              },
+              {
+                id: "5352f22f-9f0f-4e7d-9a85-0ab304212c8b",
+              },
+              {
+                id: "bc978948-a2ac-40b4-b23f-85d1e43add1e",
+              },
+              {
+                id: "55c353bb-38b3-4f2b-94ee-937a6e4d16fe",
+              },
+              {
+                id: "cea977be-c875-4f9b-92a6-83a185f90b20",
+              },
+              {
+                id: "39d58b97-8112-4862-a9fd-62f08091cbf5",
+              },
+              {
+                id: "3cb00655-676a-4666-b461-9cb9fe251199",
+              },
+              {
+                id: "e9ba4182-d937-4635-bcf7-7591460aec5f",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -782,6 +1161,7 @@ const execute = async (db: PrismaClient) => {
                     name: "UnitZero",
                     description: null,
                     website: "https://uniitzero.blogspot.com/",
+                    email: null,
                     discord: null,
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -791,59 +1171,155 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "e3c0fc99-3872-4de2-9913-3a22d10e57ef",
+            id: "f025c81f-ee4d-495b-8d2b-e6fba2830101",
             number: 3,
             volume: "1",
             language: "pt_br",
             pages: [
-              { id: "3435edc7-e7da-4787-b2ad-1abac25eba01" },
-              { id: "ddb3a6c2-dc2d-4ae3-8bc1-8d07a873cb46" },
-              { id: "4d43df8d-5109-40e2-97ed-5aba18b30ab7" },
-              { id: "0b9aed6d-8a1b-4931-97db-ba2230b8b661" },
-              { id: "0a57c9dd-a4e0-4bbf-b6b1-7c5040f849c9" },
-              { id: "5afd3f8d-c4a1-43a2-920e-5eeb063cfb69" },
-              { id: "e1422ff6-0f24-4244-8e75-9045ed509dba" },
-              { id: "64802c2d-f49d-4ef2-bded-06afdcb5854f" },
-              { id: "7e2f8458-0b20-4f87-a8d9-610491765f5d" },
-              { id: "032ffb8e-78aa-4e88-b5e6-f2c73f776e83" },
-              { id: "11588c27-288c-4439-9ef5-88a23308246e" },
-              { id: "54f5b791-513f-41e9-8932-f074884586c2" },
-              { id: "492fcfe9-f205-4b3d-9ba4-9e9250a8c2be" },
-              { id: "80c6aa04-9ed5-4d6e-9f45-d2a2f124abc1" },
-              { id: "1085947b-41e9-4ecb-b030-66a6a48e44d3" },
-              { id: "ee18b215-de08-4e05-bf22-9dbbd28d4829" },
-              { id: "6cf66846-0e81-4a62-9f6c-8dcc1b4dbad9" },
-              { id: "5672d7a7-2b73-47e4-a829-daeb6d55347a" },
-              { id: "61da5ad3-a0fb-4aac-9931-526d8a314dac" },
-              { id: "b6586231-f76b-42cf-a0d1-69319732187c" },
-              { id: "5607ac9e-2ce6-4b70-b51a-f759fbf4217e" },
-              { id: "19a4fbd4-ca5a-4a9f-9769-b64420dcd3b9" },
-              { id: "eaf93ad4-389a-4a4b-a3cc-8459fed6091b" },
-              { id: "c1dbb300-77d1-44ee-9e81-159fa0d6f9df" },
-              { id: "dec29487-3a06-4449-b5e4-704ed217906c" },
-              { id: "0dcdd97c-3949-4e05-8fa1-5027d4bc63ae" },
-              { id: "613e751a-0813-493a-8aed-910156c2acb0" },
-              { id: "5cca48ee-2264-4075-9e76-342d3b3bfa22" },
-              { id: "cba99fb5-f107-4c9e-94b7-f3748d0dbc02" },
-              { id: "d5e006a3-f499-4f13-89e7-13ccc8018802" },
-              { id: "61e82a8b-44b0-4f49-ba29-6a7413afdde2" },
-              { id: "b9511d60-b6e2-493c-9a83-3c46d7e290db" },
-              { id: "3a343173-6d18-4f26-aba7-f5292e42d930" },
-              { id: "9b3a616b-16a2-4c20-b3f3-c3db4f95057a" },
-              { id: "86c6fc7a-0365-4478-9054-d5f47f99ee4c" },
-              { id: "e04d529c-c62b-4c56-8329-536475ec73ca" },
-              { id: "3a36f965-0ea8-43a8-9207-6297013cc0c9" },
-              { id: "00cf0f20-5ca4-4b3f-8969-394248e84e07" },
-              { id: "4d9793d6-5a79-4766-be57-d2be3dd13256" },
-              { id: "7a4cf984-e99b-49f0-8f8f-249e4a0be590" },
-              { id: "45bb6001-a2ff-4c21-9f64-90a96ed2e00e" },
-              { id: "ac1ed74a-ff6e-4fe3-aba0-e62d85a7df1f" },
-              { id: "bacb1ddb-30ff-4ada-a319-57da5b74f2ed" },
-              { id: "2282f59b-2023-4e9e-a130-3c419976833f" },
-              { id: "687c7c22-9691-49cb-b3e3-1f1457c43993" },
-              { id: "bf7d357d-3cfe-49b4-ab3b-2076495cca62" },
-              { id: "93202b57-0f51-43c0-add2-967c6262e708" },
-              { id: "6ffd2c58-54c9-41ed-92ad-177b19df46f5" },
+              {
+                id: "6b87fb4e-7b48-4f12-a4a7-18276156a6ef",
+              },
+              {
+                id: "ae488995-d88e-4184-91b7-6215c5fc47ed",
+              },
+              {
+                id: "d0907299-abef-4571-9774-a562f7a30b63",
+              },
+              {
+                id: "768dc908-bd2b-42e4-b6bc-7a041929e0e1",
+              },
+              {
+                id: "b3f8c904-ac23-41f4-a3a6-ea9ea1d5528e",
+              },
+              {
+                id: "a6fc8418-8fdc-49b6-897a-c72cc5d3899d",
+              },
+              {
+                id: "a11c6cb2-58d4-499e-ab83-47263d1f751a",
+              },
+              {
+                id: "e6f58fbe-44fa-4d9b-967f-f500c5e901ad",
+              },
+              {
+                id: "246df311-254a-438c-a70c-4515a0b86923",
+              },
+              {
+                id: "b0af5d99-8fee-4baf-ade6-2930db787d67",
+              },
+              {
+                id: "bd399eca-22ad-40b9-884f-593b4a87bac4",
+              },
+              {
+                id: "41af35ba-3e09-4758-af09-99381da9f4b4",
+              },
+              {
+                id: "eccaa50d-2b29-49bb-a599-1cd1b7205144",
+              },
+              {
+                id: "9c88a70c-62b0-4c6f-8a2f-29053739c925",
+              },
+              {
+                id: "a9e1cefb-5aea-44da-929b-1d8fac2191e7",
+              },
+              {
+                id: "814c7157-852c-43fd-a778-f489f42f11b0",
+              },
+              {
+                id: "728a6773-439d-4489-b6b8-5caafbbcee65",
+              },
+              {
+                id: "9811a527-de80-430c-a934-cb14c9ef7b80",
+              },
+              {
+                id: "6bc1f1e1-585e-4ca8-b4df-b098dd2e3cf0",
+              },
+              {
+                id: "f3731c8a-7005-4c8a-81bf-f5a86c14daf9",
+              },
+              {
+                id: "cbd148a5-9efa-457c-b2e7-cdb6ac60feed",
+              },
+              {
+                id: "2751cfa8-2a5f-401c-9a28-103362656585",
+              },
+              {
+                id: "14976116-e75d-437c-975b-44885e4a98e3",
+              },
+              {
+                id: "6046ce0b-cde7-4466-b1da-776a09360c29",
+              },
+              {
+                id: "11b56458-300e-44c5-a605-51b2785fa16b",
+              },
+              {
+                id: "50819f03-34a3-4eb8-b004-7537b367cc3b",
+              },
+              {
+                id: "d79eb391-f47e-42c7-b940-8a67a93d806e",
+              },
+              {
+                id: "53360ddb-1314-4ebf-8a44-10696a311e4b",
+              },
+              {
+                id: "1890e270-cb7a-4744-9e4f-1568abcef2c0",
+              },
+              {
+                id: "4a44bf3c-7f06-4f79-b29b-c174305cf3fe",
+              },
+              {
+                id: "f6745c98-f16b-42a5-9726-3e1989be775d",
+              },
+              {
+                id: "377d6da5-d90b-4262-9a01-3c9e36b29cf4",
+              },
+              {
+                id: "6fb1060e-f9e2-4571-9a6b-60bac1af68b5",
+              },
+              {
+                id: "d7001291-851e-4fdc-b78f-43be22ae2e6e",
+              },
+              {
+                id: "1432a01f-be4c-4c79-a3db-2f5ad4ba0ee1",
+              },
+              {
+                id: "5758ed56-9fc7-4235-a2cf-9bd4a92c6b0a",
+              },
+              {
+                id: "f76c5538-c01b-4ba1-8378-39ea3f04fcc9",
+              },
+              {
+                id: "aa5b328e-779e-4372-aae1-6898fa8d6af8",
+              },
+              {
+                id: "6370a910-a8ee-436f-ad2d-607e4c88d820",
+              },
+              {
+                id: "ca080f26-8f45-4e9b-ad93-9e8085d06f8b",
+              },
+              {
+                id: "1f5537c4-2a8a-4a5c-ba93-7b35d7be1432",
+              },
+              {
+                id: "8def4a7d-6813-4b18-964b-89fc6fef3ac1",
+              },
+              {
+                id: "79b87990-f49f-4dd1-8675-065d29c64822",
+              },
+              {
+                id: "4b47ea71-3c9d-4b2a-ac14-1ac8139185ce",
+              },
+              {
+                id: "52d9c95a-e823-4de4-8acf-442531f315a3",
+              },
+              {
+                id: "f6c4cb9b-73f9-4e24-aedc-e20d58c8956d",
+              },
+              {
+                id: "c1a87b45-3c6e-4380-ba86-d36aafd18950",
+              },
+              {
+                id: "1f690f36-2a50-40a6-bb06-7a61ee91e374",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -855,6 +1331,7 @@ const execute = async (db: PrismaClient) => {
                     name: "UnitZero",
                     description: null,
                     website: "https://uniitzero.blogspot.com/",
+                    email: null,
                     discord: null,
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -864,59 +1341,155 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "1bf364c3-dc7b-45f3-a2dd-523b655ad9de",
+            id: "b5c7f1d3-2c08-4c35-abcc-205c0d1cb988",
             number: 3,
             volume: "1",
             language: "fr",
             pages: [
-              { id: "6e1672a2-c41e-4f4c-9127-686b011c7ee6" },
-              { id: "396076f3-af5b-491c-9ede-b3f5e418392d" },
-              { id: "8830dfad-ddb4-4001-9bdb-693ac155fd2f" },
-              { id: "f734cd26-a2c0-4132-b913-c29e421502b8" },
-              { id: "a3b94d91-a976-4c30-ac99-0ec368e07cb2" },
-              { id: "8f1b4c58-364f-4e68-b832-4a0595ef1b2a" },
-              { id: "3778362f-44f6-4ec9-9f07-ed57da60954c" },
-              { id: "f797f6a5-1679-4620-8b68-de3e82829f64" },
-              { id: "b45f5ac7-337b-45c0-a950-15c9d492b9df" },
-              { id: "e87641a4-29e1-4ea6-b5a4-45534c280228" },
-              { id: "5066735a-843e-4064-9dd9-64a927d01a11" },
-              { id: "d4f154d3-8ca3-4ea2-972b-f8cb8afb9f7d" },
-              { id: "d0687bf4-d37c-4f65-af7f-cd0c94740d39" },
-              { id: "2faab9fc-05e1-4684-add7-0480f23c3cad" },
-              { id: "c4be18dc-2daa-4213-ae9d-e099d7caf8bf" },
-              { id: "1dbdfc73-c109-4779-b4ce-44fd531fb899" },
-              { id: "abb98267-c2e1-435a-8f35-26338e1112da" },
-              { id: "dc46e91f-c915-4825-b492-f3c43e032fd6" },
-              { id: "9551b185-3dc0-4df5-a3a8-d9ce09245c55" },
-              { id: "eee72cfc-b4c7-4f46-b783-de92e5daca26" },
-              { id: "3cae7b35-2325-4c3e-9d54-3cbd0484b9e7" },
-              { id: "5a822de7-2b87-4c06-a82c-c1cebb67db9c" },
-              { id: "5605a042-48bf-4340-87c9-6e47c1db58bd" },
-              { id: "68093b47-af12-4212-9077-de0cf74d71b6" },
-              { id: "2bfd02b1-ebac-4fd3-9841-d68b830bca33" },
-              { id: "bfaa5df5-daf2-4ed8-a285-982747d28ba8" },
-              { id: "da204cda-3e8e-43e0-a56c-897956e73a7e" },
-              { id: "46b594b1-b187-4d61-89e5-e34c4f57be36" },
-              { id: "7289c143-975a-405d-a393-3d5951b4cc68" },
-              { id: "43ca201c-19c0-4815-a3c5-c26e6573fa59" },
-              { id: "cdab6dc8-2f82-4de8-aee6-ea9bb5b8f8dd" },
-              { id: "d4158c81-bbec-4c3c-ae25-e03a0620475c" },
-              { id: "eea5a5d2-ddb3-4760-b11c-d7ab9e7b88a5" },
-              { id: "bf2eda47-0204-41a2-9b1c-fcd833786e31" },
-              { id: "30758672-5dbf-44f4-bd34-17804264980d" },
-              { id: "e05f1bc1-64ca-45a4-b76d-23c0a4636317" },
-              { id: "8e490307-28ed-4388-a1a6-db96d9f88016" },
-              { id: "9f720b97-c093-4802-b148-b42e987a1ced" },
-              { id: "cf79cebe-4ff3-4d2a-8583-e5ab7da2f8d8" },
-              { id: "4f86f6dc-5eef-4f88-bfac-e784a1200c94" },
-              { id: "7f584aef-f599-46f4-b4ee-600fa2f05f72" },
-              { id: "39665e12-d483-4883-ae22-b76b0c2d398a" },
-              { id: "8bd9feec-0331-40fe-ae1f-9741802786ab" },
-              { id: "34f4dcba-f916-449a-b297-633b6f9fb0fd" },
-              { id: "fe9e0c74-139c-43d8-b2dc-f7c3f352829a" },
-              { id: "054175aa-0f58-44a1-a4c3-cc7a86136a73" },
-              { id: "e616118a-5e8f-4772-a9ad-5fdeaa6adbd2" },
-              { id: "f4d517c6-9f11-4890-8fda-452778d7171e" },
+              {
+                id: "192b49bb-8887-4789-bc3a-455614589584",
+              },
+              {
+                id: "e2f544ef-14c2-4ca7-ac08-fd0997722303",
+              },
+              {
+                id: "43c75e64-67e3-4b26-84ea-7649e131c59d",
+              },
+              {
+                id: "9a75554d-1844-4e80-94f9-1f8d70ec23ed",
+              },
+              {
+                id: "4a233de3-ea96-4853-bfab-d2644e99778d",
+              },
+              {
+                id: "ee357f0f-8351-419a-816c-947615d9b860",
+              },
+              {
+                id: "170ce790-b4fb-48ae-937d-8b7d83e01c05",
+              },
+              {
+                id: "668fc16a-d57f-4b30-b5d8-280aa845bd16",
+              },
+              {
+                id: "cf024fe1-6662-4619-b5db-e46f0e37e5a9",
+              },
+              {
+                id: "e076bc4b-d208-49ee-92e5-4ae0604b78c8",
+              },
+              {
+                id: "dc053cf3-6f86-4a80-b21c-74091c193e36",
+              },
+              {
+                id: "38a25af3-00af-4830-bc6c-31d7cd9f7969",
+              },
+              {
+                id: "89a73383-375d-4695-9d38-b47f16de88fa",
+              },
+              {
+                id: "c328371f-7ac4-4c13-b6e3-eca2905e45ff",
+              },
+              {
+                id: "2d45b02a-e15d-44c5-aed2-cf6fa7e634d7",
+              },
+              {
+                id: "dff0d763-755e-46c2-bce5-8a4db305154c",
+              },
+              {
+                id: "d92985ae-8581-4d77-ba93-04e8320f6830",
+              },
+              {
+                id: "be4358ed-f07f-4ebb-8258-63a42fa174b8",
+              },
+              {
+                id: "5dadefa3-4ca8-4020-ba5e-87be6be34ba0",
+              },
+              {
+                id: "01c16335-3a32-40f0-909e-5407e65d692d",
+              },
+              {
+                id: "83b96e5c-0803-4112-a1a9-eabe01bdb347",
+              },
+              {
+                id: "3b1034ee-2fdc-4c7d-af03-e851bdc8ef18",
+              },
+              {
+                id: "e8861538-cbb8-4c1e-95ab-0715844ade07",
+              },
+              {
+                id: "5c71b105-d5d1-43ec-b0af-7b4ab6efebfa",
+              },
+              {
+                id: "d3480015-ffc8-48d1-bee2-58f09604fbb6",
+              },
+              {
+                id: "fd1956e3-019d-4d93-983b-a100ffd5e053",
+              },
+              {
+                id: "3fdc80aa-a087-4228-8c5b-932291fad694",
+              },
+              {
+                id: "503e24a3-fab0-4447-9cef-56a640156394",
+              },
+              {
+                id: "d8eef2eb-0be2-43c9-96de-fd3935867e60",
+              },
+              {
+                id: "ee805c82-6b8e-4944-b2b4-9b3bac2fd2b0",
+              },
+              {
+                id: "2b894c67-5270-4ae8-9709-e0b8ed4a03bb",
+              },
+              {
+                id: "4919478e-def8-4f91-8ae9-907dd42eb118",
+              },
+              {
+                id: "da5c0c5f-df5e-4779-b7e2-9eb618d9bd84",
+              },
+              {
+                id: "a8630148-50fe-4a52-a07f-fbfdcee70032",
+              },
+              {
+                id: "f05d42f1-edf1-4e7a-bfec-ab850d67c49a",
+              },
+              {
+                id: "aafdf1b2-a318-4254-9297-69074bba714a",
+              },
+              {
+                id: "73110fae-b7d7-4ccd-9f00-bf775350492c",
+              },
+              {
+                id: "0f58e0f1-ab73-4163-84f4-18ebcff23257",
+              },
+              {
+                id: "3fe04999-1f54-455c-90e3-8525500fd48c",
+              },
+              {
+                id: "c49308b7-9698-46e3-b858-a14262ee835e",
+              },
+              {
+                id: "362ae230-d965-44a6-b3bf-e844a1f12984",
+              },
+              {
+                id: "659b8d9e-9883-4546-873e-61db7598b0be",
+              },
+              {
+                id: "fb3e4c77-cac9-4e6e-8ec2-eca89c8c2af0",
+              },
+              {
+                id: "f2fdd673-94d9-4562-8a86-b427a44e911c",
+              },
+              {
+                id: "b115dfa0-fb1d-4072-ae2d-a465c3305324",
+              },
+              {
+                id: "291c784f-29c7-4016-980f-4ef68750ab2f",
+              },
+              {
+                id: "eefd43d5-6edb-4be0-b098-b4c27f98f72a",
+              },
+              {
+                id: "b82470f9-5318-464d-aa34-9cc910398639",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -928,6 +1501,7 @@ const execute = async (db: PrismaClient) => {
                     name: "Mangalactic",
                     description: null,
                     website: null,
+                    email: "pachad2@hotmail.fr",
                     discord: "https://discord.gg/MSAmZws",
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -937,29 +1511,65 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "06afee30-c819-4297-a36b-7396b6710470",
+            id: "bc158fdf-abd3-4417-94f0-c80c6603e119",
             number: 4,
             volume: "1",
             language: "fr",
             pages: [
-              { id: "0a3488ca-70c5-4faa-b43c-53cc2e5d24e0" },
-              { id: "25e02d6d-94a9-49dc-a7ef-99bbee8ffc01" },
-              { id: "436b496d-44c9-4a58-bf37-beb357616683" },
-              { id: "58dbe294-090f-487c-ae02-76662448731a" },
-              { id: "f9c2e2cb-1873-47c3-9045-d7c9f50cefdc" },
-              { id: "44ab3175-64fa-4772-b343-2a250b1c3f0b" },
-              { id: "02a39e37-b01e-4ec2-90b4-5a70124bb501" },
-              { id: "b7b0aad6-fcff-4e30-83af-cd5a3610fdd7" },
-              { id: "611ee3c5-9f14-4cd5-b473-bd6a7acd139c" },
-              { id: "9d95905a-a465-4288-acf6-120eea877e63" },
-              { id: "5e7fbb7b-dff3-432d-98e8-08c3cbe96a02" },
-              { id: "662568be-7e69-4d78-bf2b-e64309544270" },
-              { id: "27b7e073-7253-42f7-b2f4-412c0ba51809" },
-              { id: "b61fa370-6d18-4ece-8f3d-b393ebcf0a6d" },
-              { id: "610bbb61-8dab-45f8-a3bc-54c98f7ca476" },
-              { id: "0b991534-99e4-4a18-8537-813d8420df98" },
-              { id: "d9acde5b-743a-4cac-b51c-ff981ee5bf31" },
-              { id: "1e4381e4-e6a4-436b-9e91-f7cb1cf9fb1b" },
+              {
+                id: "2f9aefde-98ef-416e-9325-41f772ccf7d7",
+              },
+              {
+                id: "ecd3752b-c4d4-4a4b-b2e6-519afb3c0d77",
+              },
+              {
+                id: "5d18c4f1-1312-41c0-8bbe-1490c83af917",
+              },
+              {
+                id: "7b7c93e4-c2e9-40fc-a7fa-d5beb3949df5",
+              },
+              {
+                id: "2ef56eae-c9e3-4b20-a5e3-6a20638e991b",
+              },
+              {
+                id: "98fe0b69-95b3-44f0-abec-5d14dd831238",
+              },
+              {
+                id: "5b6ea0ce-49ba-4ab5-a28b-9331f80651d8",
+              },
+              {
+                id: "e80ec2ae-f871-4deb-a8e0-3cf30a166fa1",
+              },
+              {
+                id: "64ea855e-ea2b-4aba-96e8-1d9d13cad952",
+              },
+              {
+                id: "32d04284-76b5-4e08-a2dd-68e3705d33b2",
+              },
+              {
+                id: "9328f7ee-61c0-4768-9eae-a7713c6e7d96",
+              },
+              {
+                id: "c8c23d50-b650-467f-84d9-717469ef88ac",
+              },
+              {
+                id: "10bc6121-aeb0-45dc-87fb-82a0239f89dd",
+              },
+              {
+                id: "90fc0971-3288-4908-89ef-4046823d650c",
+              },
+              {
+                id: "2981c8aa-4a5c-4689-a50f-0106368a553f",
+              },
+              {
+                id: "db22075e-e852-45b3-8f69-32432467c1f6",
+              },
+              {
+                id: "4657c5cf-9023-4a10-bc45-470f0cdf36a8",
+              },
+              {
+                id: "f6525d3e-6a0a-4220-b17e-985ff9f0ed38",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -971,6 +1581,7 @@ const execute = async (db: PrismaClient) => {
                     name: "Mangalactic",
                     description: null,
                     website: null,
+                    email: "pachad2@hotmail.fr",
                     discord: "https://discord.gg/MSAmZws",
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -980,30 +1591,68 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "94957e95-97d6-4435-932f-49de83ac890f",
+            id: "8d262628-681a-471b-8d5b-555a83bba1b7",
             number: 4,
             volume: "1",
             language: "pt_br",
             pages: [
-              { id: "e94971b5-da40-44c4-9a1b-1c7efb4f7e20" },
-              { id: "beaf1690-1ada-4d75-951f-379734cb2a58" },
-              { id: "92572af0-2f59-48e9-b88f-53a06f50b800" },
-              { id: "d7e59d38-8f0a-4a03-b9e1-a1ca85501df8" },
-              { id: "32f20fb6-cced-407e-87a3-33ba483e946c" },
-              { id: "4207a058-3453-4c6d-b9a3-20a33951bb31" },
-              { id: "d7a3e2a8-5031-463c-a91e-329d908abc0a" },
-              { id: "2ed7bcc2-346a-4662-a5f2-430424f8973f" },
-              { id: "858b9086-9190-4bcf-843b-140b2c4185e3" },
-              { id: "05fbd7b1-f7e9-44a8-bbdf-9bed298478e4" },
-              { id: "a82ab4d6-cc48-4f60-bdf5-328a11a1e9a3" },
-              { id: "e296b859-557b-46aa-8fe8-dc121d3615f2" },
-              { id: "4ea9be75-e4be-4550-885a-fefae8da2f91" },
-              { id: "8057beec-2fc2-45aa-8f43-5636b56ed2a4" },
-              { id: "1fadd1f2-c547-4ace-bd92-237da27871f1" },
-              { id: "baf8ee48-c32d-488f-8eed-fcca5addb2a7" },
-              { id: "cc49f721-8f88-43b2-889a-22e3d923b355" },
-              { id: "0d8e99e9-0c57-48e5-b8a5-090b7c80674f" },
-              { id: "d9402f6b-427c-4c4f-b840-404bc2e1188e" },
+              {
+                id: "bb53c446-c15a-4e69-8798-1234c54a2eaa",
+              },
+              {
+                id: "9a79148b-a206-4786-9c87-d4aab2876a77",
+              },
+              {
+                id: "e3a3c78e-e854-408c-8911-3c614eac5d44",
+              },
+              {
+                id: "19e213d6-bab9-4866-ba42-3409b0f8f344",
+              },
+              {
+                id: "d3388741-55a3-4f5f-bf06-07f759a3435d",
+              },
+              {
+                id: "ebe90ad9-91ca-4323-84c8-a0a71c4c0800",
+              },
+              {
+                id: "47a4c4ec-f628-4af2-b2a9-dcf3161adba6",
+              },
+              {
+                id: "f0097ab0-d0e2-4faf-8961-fced52d419e7",
+              },
+              {
+                id: "45ed2a5b-d6a6-4eae-96bc-cc1343c291af",
+              },
+              {
+                id: "a6ecd04e-33ae-4cc1-aef1-18afd911351f",
+              },
+              {
+                id: "548167a9-d8d7-43a1-b4aa-8a6ab2d08b72",
+              },
+              {
+                id: "36683951-b6ab-4be2-942d-c6ac417223e8",
+              },
+              {
+                id: "38e321e2-164b-4554-adb6-7b3880151abf",
+              },
+              {
+                id: "8dfdc48d-08f5-40a3-b1b5-a2b1d7eab1c4",
+              },
+              {
+                id: "ff02bc20-8ca6-4c12-930b-828c657334a5",
+              },
+              {
+                id: "2bdf6013-dcec-456a-b752-a9f274a3be14",
+              },
+              {
+                id: "9f74b9b8-586e-42e1-9f88-4cbd112384b3",
+              },
+              {
+                id: "1c5307ad-d094-46ec-879e-a4f93e9974cb",
+              },
+              {
+                id: "1250a12b-8648-4cfc-a3aa-b151bcf60243",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -1015,6 +1664,7 @@ const execute = async (db: PrismaClient) => {
                     name: "UnitZero",
                     description: null,
                     website: "https://uniitzero.blogspot.com/",
+                    email: null,
                     discord: null,
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -1024,37 +1674,89 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "5a1f0842-ee43-449e-ab58-5e0adf0502f1",
+            id: "0a7ae5fc-cc4c-426f-8bb7-9266244a72c6",
             number: 5,
             volume: "2",
             language: "pt_br",
             pages: [
-              { id: "d3339984-6c8a-4493-a345-da4254123114" },
-              { id: "1dda166b-624a-4763-883b-ac4867f2dea1" },
-              { id: "b9265422-1311-40f5-8a0e-ea6f16f2cd7e" },
-              { id: "d2c07b69-3eea-4589-84fd-56e88cc751ea" },
-              { id: "586e02d3-0940-4333-9c0e-7e7fd78f3451" },
-              { id: "e6cd0fcc-a87a-4e71-ba84-acfd2a1acba2" },
-              { id: "124c45ed-1c4e-474a-aa18-d89fd6d78228" },
-              { id: "835c4536-facd-45b0-b30e-1a2aacf111c2" },
-              { id: "6df9a091-fa1c-4b45-a652-4d07b4e6a70d" },
-              { id: "d65137a6-d81a-4967-92fe-a17e61b11d20" },
-              { id: "ebacc316-46b8-4b5c-8853-a1a38b1c97e6" },
-              { id: "71e6d8f4-34b3-4e9d-8062-b8f14017c398" },
-              { id: "ad440120-b88a-4647-995e-fc4957295d48" },
-              { id: "d35994f1-657d-4e4d-a567-7b95d53ee929" },
-              { id: "be789163-97c6-40e1-a736-69dc3eeba01c" },
-              { id: "3feab66d-0679-486b-a0a1-b4f8cf5adb24" },
-              { id: "6b84f892-d42a-46cd-9b0e-d5c2c5416751" },
-              { id: "ad9b2159-2ab8-4ce5-980f-b166e7f29f29" },
-              { id: "8899cc4a-1451-4095-a2e0-d32492dc1ba9" },
-              { id: "d0bc4ea1-c7d6-4480-acb5-7feac6e98b86" },
-              { id: "10c08cb8-4a4e-4fa9-a78a-3b574e2f3f09" },
-              { id: "92a498be-9f93-4509-af73-5d3ec5759b08" },
-              { id: "6291813d-2896-40cf-9009-811b1a6924ce" },
-              { id: "69b080ed-d57c-4c73-8094-f014d1a06073" },
-              { id: "15652719-9409-46e6-8d58-8ada7855393f" },
-              { id: "4d4c73f6-950a-41d2-8c98-5900c430b9a7" },
+              {
+                id: "5e50b19c-0df1-4869-8016-ed2e417d003d",
+              },
+              {
+                id: "af8dbf79-fa4d-4137-9e18-44e1eec26b71",
+              },
+              {
+                id: "79b642b1-e78b-47fb-886b-057a497981b6",
+              },
+              {
+                id: "358869be-49ff-490a-871b-8ab1f7c4ea82",
+              },
+              {
+                id: "ac8eebd9-cd94-4427-9204-0710abd4cd42",
+              },
+              {
+                id: "e52c9187-8d2a-4d5f-a6d4-f529fe8baf40",
+              },
+              {
+                id: "eb8b51ba-04eb-4819-877e-4d8e05b1c901",
+              },
+              {
+                id: "ebe1be74-0e65-4d1e-aa19-3c1448290083",
+              },
+              {
+                id: "bd1119d4-c837-41c7-a3b1-3c8b077376a4",
+              },
+              {
+                id: "555f06d5-ee1d-4916-ab0a-1f2f336f6ffc",
+              },
+              {
+                id: "c3cfced3-a893-4996-900b-0002ee50be5c",
+              },
+              {
+                id: "77186ffc-45ec-4055-9f8e-e336dd61e2cb",
+              },
+              {
+                id: "c41ea5d7-bf47-4491-b3bb-45d1c25846d1",
+              },
+              {
+                id: "db9d921e-ab51-4352-bad5-bddac1134b9e",
+              },
+              {
+                id: "d7ec36f7-66f0-4d14-a4ad-5447a53800d7",
+              },
+              {
+                id: "66086e62-4c71-4d9b-96a6-1568dfbe30f5",
+              },
+              {
+                id: "13d33198-2305-4958-be6d-7e80b4bc07aa",
+              },
+              {
+                id: "cb8bf9bd-f7b2-4c37-a424-e107104adbe9",
+              },
+              {
+                id: "e2318068-eb2d-41af-ac66-96e89a9a55dc",
+              },
+              {
+                id: "a777b393-5339-4f43-b639-719ce448469b",
+              },
+              {
+                id: "4290fcf1-b999-43af-832f-a84b91c4e98e",
+              },
+              {
+                id: "350b394c-2abb-4af5-b39e-e4c93c6228b4",
+              },
+              {
+                id: "d5acf341-fdd9-47c7-aade-55042a815448",
+              },
+              {
+                id: "173404b0-e8f2-4e83-b4a4-938e9a114818",
+              },
+              {
+                id: "bc80f953-fdd1-465f-a1d4-2009725aadd3",
+              },
+              {
+                id: "b70c7997-bbd1-4107-8919-c08c4a9cea2d",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -1066,6 +1768,7 @@ const execute = async (db: PrismaClient) => {
                     name: "UnitZero",
                     description: null,
                     website: "https://uniitzero.blogspot.com/",
+                    email: null,
                     discord: null,
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -1075,37 +1778,89 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "a6be981a-fcf4-4674-b23d-e57d9c7aeafd",
+            id: "fb2809a2-5770-479b-afc3-c75e1648d957",
             number: 5,
             volume: "2",
             language: "fr",
             pages: [
-              { id: "1ec80563-eadc-4d72-925d-898ae9b21fc0" },
-              { id: "ded4bf97-3b96-4e7d-95b1-230f1f2eae4b" },
-              { id: "cfff5b4d-1927-447d-89d8-3d942cf8ad04" },
-              { id: "f6a59830-af32-42ed-88d1-62c48bcdd715" },
-              { id: "2f5922b3-aeaf-4bb3-a8fc-f5b99a500693" },
-              { id: "8e8155e6-3b73-4ffb-97da-e5ad21e4cf14" },
-              { id: "cc1227c9-2fa4-4deb-a8cc-b04bfde33223" },
-              { id: "38f0f5ed-bd07-4934-a8a0-2013e8eb1eb1" },
-              { id: "6fe1d300-e21c-4315-914c-37e778a15159" },
-              { id: "9b3964c0-9fb3-41c8-872e-0e2224a31e9e" },
-              { id: "a77cb279-c534-4b8f-9a4f-f2497deb4f80" },
-              { id: "72d75cbf-9321-4eea-82e5-be21c8326c66" },
-              { id: "166a108a-f3a1-4cfb-a29d-591e8f449afd" },
-              { id: "720c334e-686b-42d9-82e1-2b8ec112d002" },
-              { id: "4c45ba35-c3d6-41f2-91b5-47ce50afe48d" },
-              { id: "7ec0f9e5-7156-4c7b-9d2a-a5158bbd078d" },
-              { id: "afb89500-4b1c-42de-81b6-57f1a76be6b0" },
-              { id: "33cbe11c-5379-448d-96b1-edc0089770fa" },
-              { id: "96c08729-7ee8-4f1a-9cd1-201565925f6a" },
-              { id: "1e0fb316-3914-453e-a7c4-c7090631e3d8" },
-              { id: "e9f8ced8-c35f-40d1-9211-f2c8fa947e19" },
-              { id: "524145c6-30b7-47be-948f-c1138e2b8960" },
-              { id: "af8cf2b8-b265-483e-a0be-f8ad1b34d5d3" },
-              { id: "dcfa3551-3ccd-4dae-b190-a351a09c5332" },
-              { id: "751607c6-0579-452c-87c4-511f4f47da1e" },
-              { id: "e49edd72-9b9c-451e-b6c8-d47c6945139d" },
+              {
+                id: "2f6a0f0c-960b-4ccc-af9d-3e78bd691d16",
+              },
+              {
+                id: "beca0b88-6b76-454f-8c03-bcbaaea4f268",
+              },
+              {
+                id: "383c28ac-4dcd-4b5b-a576-61136cdf912f",
+              },
+              {
+                id: "fd9523c2-2af0-4d43-b1dc-8fd0a2c891fa",
+              },
+              {
+                id: "2ffbe9f6-3c1d-41b7-b17e-14bb51d6cd79",
+              },
+              {
+                id: "ba7664c3-f8c8-4bbe-9aad-6c8ab30f7028",
+              },
+              {
+                id: "9e6fb6a2-443b-4e36-884a-3b6d448b153a",
+              },
+              {
+                id: "2a2709b9-6e18-4966-ac67-807a8565db7c",
+              },
+              {
+                id: "a4a40774-9454-44b6-82a8-ec462e73d455",
+              },
+              {
+                id: "70e32c2a-4e23-49b9-a59e-90519841e10b",
+              },
+              {
+                id: "de12d668-a36e-4362-a002-86f970ed8045",
+              },
+              {
+                id: "242d63fc-aba3-4a43-8cc8-d9a22e2ba7f1",
+              },
+              {
+                id: "e443bc5e-d5c1-4e94-86d2-65919d59e95b",
+              },
+              {
+                id: "717af7bd-45a3-4043-b488-1216746f9636",
+              },
+              {
+                id: "033f0436-14a0-4596-8a58-1ef05f88d0cd",
+              },
+              {
+                id: "2bf47188-90c0-4943-8917-17a0ac6c73b7",
+              },
+              {
+                id: "9d015d08-9cf5-433d-9d7c-7abf97006f5b",
+              },
+              {
+                id: "7e781768-0ce0-4cb8-a96a-437ba9e1c386",
+              },
+              {
+                id: "14cf29bb-445d-4df0-b6ff-7106909e6c49",
+              },
+              {
+                id: "967a8a0b-afc8-4ec5-b230-e40f85a6ee87",
+              },
+              {
+                id: "24a25e8f-3ab3-4323-abf7-b10530ecf12c",
+              },
+              {
+                id: "bd3709a3-17cb-43b6-b6d9-6947d154c93c",
+              },
+              {
+                id: "4b782892-dd55-4cbb-9fc7-c12377689fc2",
+              },
+              {
+                id: "716ef4c0-1740-4ee5-8fa6-934467a5c2be",
+              },
+              {
+                id: "57dc6f83-3fcd-4078-97a5-3618ae6edc06",
+              },
+              {
+                id: "43c81c89-f195-4fd8-836b-135782605bda",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -1117,6 +1872,7 @@ const execute = async (db: PrismaClient) => {
                     name: "Mangalactic",
                     description: null,
                     website: null,
+                    email: "pachad2@hotmail.fr",
                     discord: "https://discord.gg/MSAmZws",
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -1126,45 +1882,113 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "ee2f1cce-66a4-420b-a9b9-cbe8e826e3f3",
+            id: "ce5e7fb0-2aab-4f16-a81e-d85b4b281b8c",
             number: 6,
             volume: "2",
             language: "fr",
             pages: [
-              { id: "97b5bc75-b2c2-49f7-811e-9d894bf6cb50" },
-              { id: "023d1f71-de71-419e-9a66-920962b7eebf" },
-              { id: "909d7b76-59b1-47e7-a6a0-3c588ec79767" },
-              { id: "af334dac-4e72-40a4-a22d-5da63e1095b9" },
-              { id: "0d476ac7-2fbc-4ba0-9f0d-6c4a04c8deb0" },
-              { id: "95e6f908-7704-421e-b041-6b04e102f552" },
-              { id: "834faff6-9c08-459d-a997-67afbc3de878" },
-              { id: "07f78b49-9da0-4dec-b781-a555fc223f1a" },
-              { id: "deb9f15b-3951-4fbb-8578-51a520aed7c7" },
-              { id: "23682692-2432-4134-8294-1f2bc128ae26" },
-              { id: "4dd51359-ccb8-4383-9fcc-fc4fe98ac81b" },
-              { id: "86c4bdb3-33e3-46e7-bf46-16f024980548" },
-              { id: "406d8bc7-b3df-4774-9268-3229758bc9b9" },
-              { id: "c3464cc0-f2c5-49c3-8d6e-503b4504a109" },
-              { id: "932ec3d1-d750-40f3-90b6-b9cc742f1c10" },
-              { id: "6fe59430-710c-4a50-8cbb-e643d444af55" },
-              { id: "838c5349-d888-415f-b64d-138983c39e2c" },
-              { id: "e525758d-cb2a-457b-9402-6ab3522f545a" },
-              { id: "ff0a734a-7a8f-4822-9289-753d97c54de1" },
-              { id: "191cc051-b056-40df-8240-dda981c38250" },
-              { id: "4d89b3e6-ab99-48ff-81de-90ecccd0ddeb" },
-              { id: "127d6938-fd08-4d34-8137-6b51d66d237a" },
-              { id: "42896a66-c526-4be8-bc46-49afaee96317" },
-              { id: "70c8165a-ebae-4bb0-b00d-ed0b89f78c0b" },
-              { id: "0acc4f24-b7b3-4363-b99f-67c09f977b0f" },
-              { id: "973118ad-738f-4f46-a6b5-8eb0f27f658e" },
-              { id: "7e45d7cb-fa7d-4316-8a7a-2844cbd6d5ec" },
-              { id: "258ddfa3-0fa3-4d91-aafd-618682424d76" },
-              { id: "e235c844-62ed-408c-9fa2-4f6c23a483cb" },
-              { id: "eb317b47-44e3-49db-9886-0e355303ad74" },
-              { id: "85bd3e16-37c0-4978-951f-5d37e4f7ed3f" },
-              { id: "b4477faa-2c9e-49b0-9ab1-587e60ec90a2" },
-              { id: "893f9405-f6c8-4dd5-8068-c122f83d0606" },
-              { id: "3c61dbaf-efd0-423b-b3e2-df78ca391910" },
+              {
+                id: "de483cb9-ae4f-4c71-af1e-f42b761d8bc7",
+              },
+              {
+                id: "473d75bd-7e85-46b1-9bb9-bc2ef70c1469",
+              },
+              {
+                id: "c4eb7453-43fd-4dbe-9811-c092bd053e9b",
+              },
+              {
+                id: "94a15e74-ec0a-4df2-8865-4df97a9a153b",
+              },
+              {
+                id: "ece805cf-6592-44ef-941c-0a1fc98017cb",
+              },
+              {
+                id: "999f2e5d-0a8e-4a90-8bab-5e69af2dcdea",
+              },
+              {
+                id: "bbae92e0-5b63-4a67-93e3-784f319dff2d",
+              },
+              {
+                id: "fc942885-d02d-4f8d-b031-5bb37f8ab3c4",
+              },
+              {
+                id: "223549f9-7b43-471b-b28d-d2681e298bc7",
+              },
+              {
+                id: "576e12c7-c1ed-4e55-ac6a-c3ca61dbd3fd",
+              },
+              {
+                id: "886a19f2-8109-4a0c-9446-f1bbd90ffbf3",
+              },
+              {
+                id: "4c639fbe-0861-4e07-b148-df4a95008c95",
+              },
+              {
+                id: "f6b21d59-e7bc-4cd8-ba9f-074728007ac8",
+              },
+              {
+                id: "74a45961-a846-4069-9472-b0876a84fa05",
+              },
+              {
+                id: "2621e16c-e43d-49f7-9460-a292076e8ed8",
+              },
+              {
+                id: "1bf4523a-076e-4afc-953e-38891a816477",
+              },
+              {
+                id: "7ce8400f-f881-431d-932e-7317b5782e62",
+              },
+              {
+                id: "822260de-5c8b-4690-8aa0-3a1b488987d4",
+              },
+              {
+                id: "36e4116d-9369-45f5-9ccf-e561d19fb10a",
+              },
+              {
+                id: "1138cec2-b338-4fd7-ac36-dec4653d8c3e",
+              },
+              {
+                id: "dc3fa42a-b3f3-4fc6-810d-1e49f51fd845",
+              },
+              {
+                id: "675df731-7bfe-48ab-807a-484dc29cb882",
+              },
+              {
+                id: "354eeee7-e003-4cc9-b955-3c8b36d100eb",
+              },
+              {
+                id: "e1321576-3489-4581-9c7e-6e79714288d0",
+              },
+              {
+                id: "3f92c26d-dc53-4bf5-9c01-8a11cee0fcb8",
+              },
+              {
+                id: "b69bcc34-ba39-43a3-afc9-c30b70632e69",
+              },
+              {
+                id: "75b60f53-9d91-4850-b070-4a027d99887f",
+              },
+              {
+                id: "72b0f241-89ff-4cf1-97ef-ad29c6fc3b85",
+              },
+              {
+                id: "118124c8-01e0-482f-bdb3-0fb6f939615d",
+              },
+              {
+                id: "8de1d437-1797-48c7-bf82-45ea11358cb9",
+              },
+              {
+                id: "fce33265-dc36-4538-8cb7-b37dc07c3d11",
+              },
+              {
+                id: "ff613741-51c6-4540-8138-fa57688630bc",
+              },
+              {
+                id: "d9371455-8915-4ca2-a22c-8d96c01c26f1",
+              },
+              {
+                id: "8f87bd06-108a-43dd-89b6-a2ef9ad40fb3",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -1176,6 +2000,7 @@ const execute = async (db: PrismaClient) => {
                     name: "Harmony-Scan",
                     description: null,
                     website: "https://harmony-scan.fr/",
+                    email: null,
                     discord: "https://discord.gg/Qt7NJ53Vju",
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -1185,45 +2010,113 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "4696646c-46e8-458e-b250-92942a86a68a",
+            id: "349bf4fc-8cec-408c-93b1-609fe67295de",
             number: 6,
             volume: "2",
             language: "pt_br",
             pages: [
-              { id: "2f4a1dfd-bcab-4019-8bf0-5e7d05b510fe" },
-              { id: "3bd13844-aca8-4e80-8e1f-716f0960efa7" },
-              { id: "58d65d39-31fc-432c-8ab6-4e5ffb069714" },
-              { id: "75af3b44-12eb-4720-afd4-3f3d6232150f" },
-              { id: "f619dbbb-9221-499b-b673-8d0ca93d0dce" },
-              { id: "251d0511-a8a9-4106-be16-2dff164bee1b" },
-              { id: "d8cf50af-4214-4df0-838b-a553a48928c0" },
-              { id: "6130a27e-8359-49f3-88d2-d0b17007f5ff" },
-              { id: "77043a82-709d-4426-b71a-f955e3325f75" },
-              { id: "0e2be4a0-c6c8-4b95-a319-9a71fa0ac146" },
-              { id: "fe9373de-449a-4d11-904d-948127847172" },
-              { id: "4752de13-227c-40c5-b3bd-cfee8e0d25b4" },
-              { id: "7d023de5-1955-4a65-9de8-ca10db27eb4a" },
-              { id: "b9ded035-3bd7-40ff-8afb-e31856c2486d" },
-              { id: "5542422e-a1b3-438d-93f7-a175e94719a0" },
-              { id: "b6b8ed1c-e005-4b15-b485-5a402c964216" },
-              { id: "a64c6db5-9ff4-4d2b-98ad-ba02f422a41a" },
-              { id: "e1f69227-e693-4b33-9dc4-18d52ec4dfc1" },
-              { id: "41468ce4-b45f-4019-804f-6f68a1364064" },
-              { id: "ed77d970-dffd-40f4-956e-d65c6f6b22e1" },
-              { id: "5e0ad72a-60a8-4edd-bf23-44f5de6fac7d" },
-              { id: "734b4a67-0c1b-479e-aed9-94b9ecda33a0" },
-              { id: "ef669be8-6652-4d2f-8635-44d6d33289ab" },
-              { id: "2c31d11e-d11f-421b-a112-50671aff5daf" },
-              { id: "ce7a7430-285a-4738-8acc-4032b3b7fae9" },
-              { id: "4f3ed143-617f-4cad-bbeb-c501c0ba2de4" },
-              { id: "a498c4d0-9094-4b62-ada3-d61610264d54" },
-              { id: "6a853e5d-e841-4b50-ac40-e378de588e2c" },
-              { id: "3be74740-9ea4-45da-adcf-18f69d9b107f" },
-              { id: "479c1f24-dc67-4e74-9dac-37d33e78bcba" },
-              { id: "61563e89-967e-42f4-8339-6a669621f2ba" },
-              { id: "a2709b12-d83e-4be4-b77a-5f2a97a1ee78" },
-              { id: "25dd3e40-19d9-43bb-9c93-5fbf7f7a6ac7" },
-              { id: "1ee2412f-a4dc-4d7e-967e-2af63c07e137" },
+              {
+                id: "0306f41b-460e-49df-a2ba-54096ada8920",
+              },
+              {
+                id: "5d4aced7-db18-4d1f-b333-66d4e993964d",
+              },
+              {
+                id: "f894c378-47ce-4568-b4c8-92ed85eebab9",
+              },
+              {
+                id: "a20e083e-b2e9-47e7-bb6f-0b7025c46873",
+              },
+              {
+                id: "1b9b5e06-c73b-4979-a41f-1f0f4670025b",
+              },
+              {
+                id: "3d43e43e-23e9-4033-b541-95e359ff40ad",
+              },
+              {
+                id: "b4e008db-428a-4ef3-940e-45743eb5e988",
+              },
+              {
+                id: "92d6061d-2134-4f00-9e3f-1456c8b48546",
+              },
+              {
+                id: "49edcb94-58c6-47ee-bc59-978535895b6b",
+              },
+              {
+                id: "8da41aaf-1756-4ebb-9cc3-a8b74bc53440",
+              },
+              {
+                id: "37e4a419-6199-4daa-a521-65902f7a2c59",
+              },
+              {
+                id: "85ad84d7-f55a-4acf-a63c-0af3b4eabb96",
+              },
+              {
+                id: "4ef17999-60dc-4b1a-8341-12e4adb88c34",
+              },
+              {
+                id: "7afc83b0-60f4-4039-8ecf-bc7fbf0e70fa",
+              },
+              {
+                id: "632adfd0-1298-43fe-8de4-ceb51c22e49f",
+              },
+              {
+                id: "4ee5ecbd-6fb0-4932-85ca-56d8e6ac6b34",
+              },
+              {
+                id: "543c7a5f-0883-4691-8d23-4f4166aa11f8",
+              },
+              {
+                id: "77df6d4f-5ea1-47b0-8885-af3ba9b1882d",
+              },
+              {
+                id: "edc47c23-50a5-4b63-8027-938810234c83",
+              },
+              {
+                id: "222f7ae7-a949-4d52-885f-98797ad78cbb",
+              },
+              {
+                id: "d7121871-acd3-4e3b-82cf-132abacb1f61",
+              },
+              {
+                id: "4f829352-9a87-493c-aa90-f1d6d3c15aae",
+              },
+              {
+                id: "6e0a3275-ef3f-46b3-944f-54983c9e1666",
+              },
+              {
+                id: "77853175-1680-4518-b619-0b3731363557",
+              },
+              {
+                id: "4d5d11b4-f413-4847-9197-b4c888bd679c",
+              },
+              {
+                id: "cfd1c40c-9ca4-472c-8edc-2538b49c7c7c",
+              },
+              {
+                id: "776f7313-9c45-42ed-ac11-5883b698b684",
+              },
+              {
+                id: "491779aa-426b-4fe1-8ad7-b823d6da1f2a",
+              },
+              {
+                id: "fc6a2faf-5a29-41bd-86d9-bacf6d4ff72f",
+              },
+              {
+                id: "b816f9e5-3256-4e0f-8651-797d4bdcf7be",
+              },
+              {
+                id: "21c5d5d3-3a61-47eb-a602-655daef2eedc",
+              },
+              {
+                id: "94ed0742-c954-4f33-b218-b0a01011e437",
+              },
+              {
+                id: "6e5042e3-0224-4ad8-a145-561772a5bf34",
+              },
+              {
+                id: "d30db513-13fe-4c79-9120-b7de6726cc5f",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -1235,6 +2128,7 @@ const execute = async (db: PrismaClient) => {
                     name: "UnitZero",
                     description: null,
                     website: "https://uniitzero.blogspot.com/",
+                    email: null,
                     discord: null,
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -1244,42 +2138,104 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "139ad1bf-db08-4b84-89ec-295de16d576b",
+            id: "bbc96ed7-f49a-4812-a092-fcee87c00a28",
             number: 7,
             volume: "2",
             language: "fr",
             pages: [
-              { id: "5abc4260-8a94-46ad-8690-403fa0331063" },
-              { id: "6bfed7b6-e21c-47fd-84e2-b9dd029f1109" },
-              { id: "24c93073-3319-410f-a496-a9f449ae79fa" },
-              { id: "0da5fd38-7cb4-49d0-855d-ed33fcdf9041" },
-              { id: "2edec31d-9b2a-488c-ab18-ea85d100a8b5" },
-              { id: "144ff927-b653-4fed-9559-d48461fea10f" },
-              { id: "a667297c-e728-4fbb-9c53-e578fce62c89" },
-              { id: "971a2a46-42a1-432a-a028-17eacc681297" },
-              { id: "3b016a61-9306-4870-9659-890bc4d31088" },
-              { id: "01c8b9e4-8ac2-47ef-9c70-3a4eab2ca2fa" },
-              { id: "977e7bf3-7e57-44e6-b2ff-c42530034f72" },
-              { id: "02a4377c-3d29-4315-9d97-937c7bd6e7dd" },
-              { id: "08d5517b-23c6-4107-ae1a-ed08443ba30c" },
-              { id: "ef77dde0-beed-4432-8374-e9590923e6bd" },
-              { id: "c7302fc7-7a16-4889-aab6-f8d967321a3a" },
-              { id: "a47f917a-3f35-4f8a-bede-1080448e3f90" },
-              { id: "7e2cadcc-bd73-4642-b73a-df937f1eeba4" },
-              { id: "96ad5dbe-2609-4356-b4c5-93df65531d1f" },
-              { id: "583cc8b0-c581-408d-b76f-5c162e63ec31" },
-              { id: "288a6e7a-95ca-4a48-b81a-696d71817b1c" },
-              { id: "48d72fd6-f2d9-4b4f-82ca-a54037c72f6e" },
-              { id: "ecee446a-cf60-4dab-8111-3dbe4b48db23" },
-              { id: "8dc4d40a-dd1f-46dc-b205-9179096ba9bc" },
-              { id: "2445726e-515a-477c-bde2-3fbd3abd88fa" },
-              { id: "8faa5f9a-64f9-495a-9478-85bec9f9578c" },
-              { id: "257f8c4c-f22d-4580-9194-eaac2d6f5a75" },
-              { id: "0d6ac1c4-6357-47d3-82f1-bb45a279a2ec" },
-              { id: "25b188cf-d9e0-45ec-b01e-ba2938f5805f" },
-              { id: "4b9025cf-18c5-4437-bc62-e578d7875cea" },
-              { id: "64748a30-8584-4819-8703-a81aa9638727" },
-              { id: "d4b3c943-406e-4a9a-b9b3-2d924145656f" },
+              {
+                id: "53ee57cb-ab4e-4b2c-b69c-707829c91753",
+              },
+              {
+                id: "c39ffd42-af8d-4082-b295-2e091a0e54c9",
+              },
+              {
+                id: "146e76b1-985c-4107-8ea8-ec18b4e36614",
+              },
+              {
+                id: "821d7f7a-e0f3-4efc-a835-766df37835d9",
+              },
+              {
+                id: "df72efc2-dbbc-405c-b5d1-919ef590dda6",
+              },
+              {
+                id: "8fad1504-d3d0-4dcf-972a-52ff976b96fb",
+              },
+              {
+                id: "5876e54e-f3fc-4deb-8497-e3854a4de9c8",
+              },
+              {
+                id: "e988302a-071d-421f-b3c1-53905185a933",
+              },
+              {
+                id: "51403878-e19e-4013-92b7-68cc5375a6c0",
+              },
+              {
+                id: "4c3b8caa-c4e8-4455-97db-e66f0b633620",
+              },
+              {
+                id: "f68d6b5d-c198-4e59-b575-5712740315eb",
+              },
+              {
+                id: "92a5a6ef-1dc9-4465-9549-4704654c8d95",
+              },
+              {
+                id: "9d1db152-3a7e-4c40-bef1-f6e3f2f9bc3a",
+              },
+              {
+                id: "1b71ea6d-d04f-4b11-8e1d-5ab68bc46fd5",
+              },
+              {
+                id: "015f5f71-47ad-4bb2-aa97-3b8782296747",
+              },
+              {
+                id: "df3a1814-d86e-4bc0-be66-dc83d141ed9b",
+              },
+              {
+                id: "1b4372d5-5def-4a17-8435-cfe65ed6a07d",
+              },
+              {
+                id: "3c74f5f6-08f1-49f8-a9c6-ad57f2584fd7",
+              },
+              {
+                id: "b5bba616-7edd-41cf-a37f-cfb699d78eed",
+              },
+              {
+                id: "9a689617-4273-423f-8155-321c84168849",
+              },
+              {
+                id: "79e7d8c8-99fd-4409-8f75-7802b9086267",
+              },
+              {
+                id: "17faab11-5adc-4cdb-a15f-adba0fa0ac03",
+              },
+              {
+                id: "ca606e9d-e2d9-4771-98a2-76bfad8663f6",
+              },
+              {
+                id: "5ecc2666-6d90-4342-9ca0-4198140fd806",
+              },
+              {
+                id: "ec73f657-eeaa-40de-a14e-e4065825f2de",
+              },
+              {
+                id: "c38c7f79-3440-438b-9967-9c0bb8084ed9",
+              },
+              {
+                id: "c60cf0dd-3b52-4c7b-b107-bae303456311",
+              },
+              {
+                id: "a54ba644-7e06-412d-8145-286b6e7a4f6c",
+              },
+              {
+                id: "ae73d90f-0605-4509-b8d5-9e64f1eeaa15",
+              },
+              {
+                id: "cad239b0-175e-4e4b-be14-ce0819846929",
+              },
+              {
+                id: "06853329-6ab6-4a55-bd8c-c8a582c0752b",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -1291,6 +2247,7 @@ const execute = async (db: PrismaClient) => {
                     name: "Harmony-Scan",
                     description: null,
                     website: "https://harmony-scan.fr/",
+                    email: null,
                     discord: "https://discord.gg/Qt7NJ53Vju",
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -1300,42 +2257,104 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "aea139b3-bc36-41c0-b860-a738ea7678dc",
+            id: "d9411eb3-810d-442f-8fa4-bbedd1ce1d6f",
             number: 7,
             volume: "2",
             language: "pt_br",
             pages: [
-              { id: "826e6f56-3836-4073-a6c9-37f5f92c2141" },
-              { id: "4468f162-1c8d-4d06-8760-ad5998dc5292" },
-              { id: "916ecd51-a79c-4987-a8f3-7c2f4822b97f" },
-              { id: "59a7095e-65dd-4bb7-8656-9e36960ab1ef" },
-              { id: "6b044881-8d5e-4026-b85a-42d72ee545ee" },
-              { id: "c2887c8c-661c-4bbb-a9cf-f865a2ec925e" },
-              { id: "6432f4d3-9ca6-46e4-b262-d59c1685581b" },
-              { id: "077ac12d-bee5-4965-ac07-fc0579be5be1" },
-              { id: "637f4e71-d3f8-4b9d-ab74-1b8a4c36497a" },
-              { id: "1e7eac17-e3b9-40d2-a0ad-5bf105401b7e" },
-              { id: "269e40b9-fc2a-4390-a004-9f0b67d6208c" },
-              { id: "20e6059f-f9e9-4b14-ba10-25191a313d9b" },
-              { id: "622ced95-7987-461b-9916-b06ecb57da6a" },
-              { id: "15b429ca-9911-41af-99de-fdefb03f8949" },
-              { id: "fc4a0f6b-b125-40a2-9ffa-8cff51e6b2f9" },
-              { id: "118d5c31-1d10-4309-9015-47c90735db4b" },
-              { id: "b4a0e354-82a9-4f9a-8c13-e0700d0a6a49" },
-              { id: "3f819345-4b83-45f7-b3be-4329d26338a7" },
-              { id: "056b9bd4-075d-4d62-a6e9-e5b2e31b96af" },
-              { id: "94c5aef9-8dd1-4c6e-be9f-5204866b524b" },
-              { id: "2e193f08-96e9-4045-8655-820b0674dc6b" },
-              { id: "29fb446b-1bbf-4d01-bf06-ec4f744198cf" },
-              { id: "3f898f05-c135-4388-ae3c-d62a0b50f9d5" },
-              { id: "c16dc24a-6746-4b49-bf65-f1f8c694b491" },
-              { id: "9a862231-8ca6-4f30-8d9a-c21a987e7baf" },
-              { id: "8f0f1b84-eea8-40e6-8022-5b157ed5d2c6" },
-              { id: "49395841-1652-4637-9224-bf5a94887b26" },
-              { id: "10190e2f-24ae-4979-875e-fc196c966deb" },
-              { id: "a44e2cff-ef48-4fe3-bbdc-4a7eea3296db" },
-              { id: "7794115f-2b27-41dc-9969-4f2d436a75e9" },
-              { id: "4a6a9590-17e4-45b8-b443-6eca3e27c637" },
+              {
+                id: "0464a9d8-89f8-46f3-8acb-fe11ceb2b48d",
+              },
+              {
+                id: "146401e1-4244-48c6-ad53-15547c1018d9",
+              },
+              {
+                id: "1ad3f966-626c-4629-9481-191dc0a85b83",
+              },
+              {
+                id: "c7ded4c9-0305-4b2a-bb7c-6f3943c90c1e",
+              },
+              {
+                id: "21dfbb6e-f49c-436e-af43-87ddf723bf1c",
+              },
+              {
+                id: "6c2a8339-dd38-4e97-bc8a-1ac32c34801f",
+              },
+              {
+                id: "aacd4950-63d2-43a6-93a7-a3dabca38712",
+              },
+              {
+                id: "41607202-35fd-42ed-b9fb-e3f9343ca52d",
+              },
+              {
+                id: "cadca7d0-4d92-40e3-b3ea-fb7ec9c26abf",
+              },
+              {
+                id: "b2e6067f-96a9-4144-9032-6e1ca8c36f99",
+              },
+              {
+                id: "61e68ccd-6367-4968-930b-324d2388a2c4",
+              },
+              {
+                id: "dcdb82a9-adfa-4f60-b846-d47f292a0e3a",
+              },
+              {
+                id: "672ecb45-e36a-43db-87de-85daf543dd6a",
+              },
+              {
+                id: "9fe28a00-4b40-4bf2-bfa4-b4076921039b",
+              },
+              {
+                id: "bf2374f4-bace-4354-91b3-2a780574cdd1",
+              },
+              {
+                id: "b188acef-bf24-436b-83c9-43cc09c48516",
+              },
+              {
+                id: "e28018d8-e9e8-461e-b4b9-3350125e65a5",
+              },
+              {
+                id: "fdb6fac3-b5c7-435c-8bb7-cb8e3b680ff3",
+              },
+              {
+                id: "c68dea54-56da-46a7-940f-e1581ba55d12",
+              },
+              {
+                id: "cc3a96ba-1fcf-438e-9c09-0de55d943d5e",
+              },
+              {
+                id: "1ea02e82-18e2-4650-b452-ee97662bc9eb",
+              },
+              {
+                id: "b7982145-a5d9-4aee-b458-483ece9a22da",
+              },
+              {
+                id: "bc5517ee-6005-44eb-ad46-5804d077bc29",
+              },
+              {
+                id: "fafa9f8f-c7ac-4701-a5b2-039449dcb68b",
+              },
+              {
+                id: "75db98da-d119-4fb5-901a-d8b9752757e7",
+              },
+              {
+                id: "0887a3eb-995f-402e-b097-75bae583b724",
+              },
+              {
+                id: "c17f82d7-5f0a-4365-adca-eaf5c60b7d53",
+              },
+              {
+                id: "05c132f3-f82f-475d-b672-5b6b1346f826",
+              },
+              {
+                id: "9c058bb2-0888-49a3-a55a-9c010bf08fdc",
+              },
+              {
+                id: "12be0ade-7c38-48a4-a5b1-5b0934f38b4d",
+              },
+              {
+                id: "cf2db755-b96a-4523-b092-734381e9c91b",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -1347,6 +2366,7 @@ const execute = async (db: PrismaClient) => {
                     name: "UnitZero",
                     description: null,
                     website: "https://uniitzero.blogspot.com/",
+                    email: null,
                     discord: null,
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -1356,44 +2376,110 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "084d05d8-702c-4c55-bc57-1c19148a5955",
+            id: "51123d95-2e9d-436c-8b43-380ba839095f",
             number: 8,
             volume: "2",
             language: "pt_br",
             pages: [
-              { id: "f4d9d902-0473-48f6-b90d-da71e92e93dc" },
-              { id: "3070a535-38a0-4c8f-975c-d1d2f0e49618" },
-              { id: "d84ff0d8-58c2-482a-b380-36ce7a4df62e" },
-              { id: "ad97ec02-906f-4524-92c4-e02edb3562a8" },
-              { id: "fb89ac0b-30d5-4585-ac14-6e4af8bfd0d5" },
-              { id: "c9c49b56-994a-42dd-b7c1-b57fe0e1058c" },
-              { id: "89dbae13-b225-46c8-8be9-c75ea02eeaa4" },
-              { id: "9dd21aae-0a59-433d-b202-72abc1d20237" },
-              { id: "23bacc6f-a900-4bca-9b14-e176f28ac296" },
-              { id: "6ff478f0-436a-4eb3-adeb-94b69ade3603" },
-              { id: "92fc68b7-56cf-446f-a43a-d23b0f16ff04" },
-              { id: "d8624462-fb18-45ae-a8a4-757b69118997" },
-              { id: "0377f6e8-2685-4ae1-8625-f7fba899c2d4" },
-              { id: "e13d8d54-d833-41e2-974a-d0148198397e" },
-              { id: "35b2e6aa-5b0e-4542-810c-8e3747751cb1" },
-              { id: "7c434bb0-5003-45c1-baba-fad653f21419" },
-              { id: "1d1973c1-e5f9-446f-a3b2-10e0da3fe69e" },
-              { id: "0b20be15-b1cf-44a5-95da-6a50d23b77fe" },
-              { id: "676ce755-26e6-43a3-a75c-66e237bca3a1" },
-              { id: "3fae3d79-3105-4c72-9482-4e4f68bb8254" },
-              { id: "e25571ff-fd0c-4d61-9dd5-afad8aef8665" },
-              { id: "426a3826-192c-4395-b658-6c3a960e99bc" },
-              { id: "d21084f7-5a5a-447e-9a77-1122bc5c8ce2" },
-              { id: "a45b5550-a332-475f-9f5b-306287eea64e" },
-              { id: "c3923baa-c8cd-4daf-9e5c-82e0dceb346b" },
-              { id: "6fbf28a1-9d8a-4282-a172-884161209ab9" },
-              { id: "08cebd5a-3737-4cab-a71b-a71afefbb7ff" },
-              { id: "e620a046-ea84-4861-afe0-1c03ea9c5f9d" },
-              { id: "6d62b0a8-1e40-4f29-af65-dd665d46951c" },
-              { id: "0e6dbc1a-accc-4cec-925f-1f571c26050e" },
-              { id: "1ea6213b-d098-45b8-b919-28e81528e47a" },
-              { id: "97feb328-fdf0-4615-b42e-d81d47654a1b" },
-              { id: "9d2b1c59-f0cb-4a9b-a0fa-332be0fa9e99" },
+              {
+                id: "2b4f3f5b-4de4-4374-8cfc-d7409f97e43a",
+              },
+              {
+                id: "bec8dbe8-4903-423c-b7bf-dde20d6e3ffd",
+              },
+              {
+                id: "28335584-e406-4eca-8638-7ae23a60f724",
+              },
+              {
+                id: "9ab840a6-ae91-41ff-a95a-1b53b0c76d91",
+              },
+              {
+                id: "a731f26c-12dd-4007-9c04-80dd93b34b18",
+              },
+              {
+                id: "d5f91b61-d856-4120-abb5-bc07403f632f",
+              },
+              {
+                id: "75704bf5-df63-47f2-a390-938011e60526",
+              },
+              {
+                id: "26b07b1b-28ff-4009-a270-e1331d412d27",
+              },
+              {
+                id: "f718733d-35c8-4cef-bf00-b3a2411dff4c",
+              },
+              {
+                id: "d9d6b28e-7366-4beb-bcfe-3034fa270b13",
+              },
+              {
+                id: "de1df441-d926-4a2e-bd7d-2f1ab8eb9d8f",
+              },
+              {
+                id: "d2b7dd8e-bb38-4b5c-935c-1175b6544b02",
+              },
+              {
+                id: "6a6153f5-28b5-42db-ad8a-917f2164c946",
+              },
+              {
+                id: "81626355-2545-4536-aa82-20b58a8c3ed0",
+              },
+              {
+                id: "5bda4a8a-dbde-46c9-b98c-57704f1f5f07",
+              },
+              {
+                id: "6e1a36b1-0c80-4c07-aade-6941bc353a53",
+              },
+              {
+                id: "81519b2d-1c9a-4376-af7b-789203fdebb6",
+              },
+              {
+                id: "775d8312-6ed0-4722-abca-3bcb4b8fb303",
+              },
+              {
+                id: "024237fe-2547-40ee-adf0-66c947f4ebab",
+              },
+              {
+                id: "efe35b82-715b-45b2-a0d3-21f2171d66f3",
+              },
+              {
+                id: "97513f46-64ec-446a-8601-47241a233b08",
+              },
+              {
+                id: "73ce81c7-8a02-4d60-a265-6757205ab260",
+              },
+              {
+                id: "5f4f541d-5ccd-4252-8714-83071b68dfcc",
+              },
+              {
+                id: "a7bcf67e-d490-4a98-ac6a-61da4767ada3",
+              },
+              {
+                id: "23dbdb73-3ad2-46c9-a399-7b55f57f7f99",
+              },
+              {
+                id: "7308fe3d-ed11-48c3-85ae-cb5170a18900",
+              },
+              {
+                id: "a36b5af2-29fe-4166-9049-5547755dfd66",
+              },
+              {
+                id: "f0accbf8-bbcc-4b0d-afc3-b4506e9f9d54",
+              },
+              {
+                id: "12a37d71-4848-4bf7-ab23-1eb29ac29392",
+              },
+              {
+                id: "2b74fdcf-ff11-4eb1-ac69-c3a9a4219b3c",
+              },
+              {
+                id: "0585e57e-5d85-49d5-94fc-c4d9de96288d",
+              },
+              {
+                id: "be237423-5058-406f-9d01-7b44f9669a2d",
+              },
+              {
+                id: "e9e993cd-28df-4a8b-8d91-218c719eab46",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -1405,6 +2491,7 @@ const execute = async (db: PrismaClient) => {
                     name: "UnitZero",
                     description: null,
                     website: "https://uniitzero.blogspot.com/",
+                    email: null,
                     discord: null,
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -1414,44 +2501,110 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "d518f4d2-a0c6-497b-bcdb-3f632213b942",
+            id: "2ce8aae2-c223-499d-9b51-88c65726a6f9",
             number: 8,
             volume: "2",
             language: "fr",
             pages: [
-              { id: "e0fcd38f-392b-4719-b39c-fb0206e55082" },
-              { id: "12e47a6d-e6d2-483f-a7ef-60e116ee2838" },
-              { id: "47d4460a-024c-405e-8724-00557e4b382e" },
-              { id: "83b0ae8f-ef2f-4de4-a834-1772f0dc431b" },
-              { id: "69f6bd2c-a567-4417-b69a-ef6bf302d5de" },
-              { id: "5c125dbf-d4b1-4541-a8e9-1ae9b014aaf3" },
-              { id: "4eb5c969-6365-4781-800f-dc2eb1509346" },
-              { id: "b57a8c25-23ca-4eb3-b412-cd37e4c2fa3b" },
-              { id: "5af0def4-3e8d-48a7-8480-5185b55930d3" },
-              { id: "ed2f019b-6a67-46be-828d-718e16cd5df6" },
-              { id: "ed5629b5-8847-4fdb-b16c-040c619ec91d" },
-              { id: "f7aa0a1e-53bd-4da2-98d5-5aec9e89c6f1" },
-              { id: "2953906d-94b5-4795-b38c-dab32a57e9d7" },
-              { id: "05b56a1d-e4a0-44a4-80b1-77915dcf078c" },
-              { id: "8b7f5b85-0b23-4e5f-b9bc-ae6343fd779a" },
-              { id: "fe8a9298-a943-4e88-82c2-8aa6089a852c" },
-              { id: "fad07682-ff0e-4891-ae3d-6e2693e67af9" },
-              { id: "e7be020e-238d-4637-883c-d713fe195cfd" },
-              { id: "da5e85ed-755d-4832-aa90-6989877569dc" },
-              { id: "05697ed0-59f8-4857-b0b8-a33d0a2de6e1" },
-              { id: "0e42ff5d-c180-4dd9-bf7a-7b4946e6b186" },
-              { id: "c66388fd-60d7-4e15-b93f-d4f1e6aa27d9" },
-              { id: "28e08138-93ab-4108-8e76-f54baa0a9e30" },
-              { id: "66856513-715d-463f-9ef6-e0cc36840750" },
-              { id: "20e40be8-3d85-446d-b22a-6d008d070b02" },
-              { id: "dd727502-0535-4226-98d4-2d9ff16dec50" },
-              { id: "fe83f3ec-d773-439f-b681-a2d3c2c6716d" },
-              { id: "6ed2a2e6-273d-4198-8041-7cdd79b11445" },
-              { id: "0d5c4e8c-de07-4e89-b8f4-7e2bb812cf2d" },
-              { id: "0aec3a0a-0eb8-45f4-a57f-a17c288c97e0" },
-              { id: "4799448e-1d97-4beb-9aea-e06d56819449" },
-              { id: "0ecd5377-5cb4-45f5-9c76-b2a633b16639" },
-              { id: "9e694034-18d5-4c92-baea-85f63f51a9e6" },
+              {
+                id: "c7da350b-63a5-4b7d-8e0a-e883e71af106",
+              },
+              {
+                id: "138cbd17-bf92-4bdb-9781-932b511b1972",
+              },
+              {
+                id: "35795317-3e6d-43e8-a5fd-c49a44e8e797",
+              },
+              {
+                id: "2d853227-0c48-4ac8-b36b-351869f3a798",
+              },
+              {
+                id: "372d0ced-7916-470e-9df6-efc93f551cab",
+              },
+              {
+                id: "5d12c066-7cbe-4f52-a78f-2b5b8f9f00c4",
+              },
+              {
+                id: "48507565-25d8-45b8-bf88-330fcd54ed8d",
+              },
+              {
+                id: "89e09413-36a9-4c83-9572-9ad540180d7b",
+              },
+              {
+                id: "46b7ed61-433f-4ddb-8269-9005ce028916",
+              },
+              {
+                id: "49c46b0b-b525-4d4f-84f1-264ff655ea2e",
+              },
+              {
+                id: "f38fb136-325a-4dfa-9835-d39a86f1ae7c",
+              },
+              {
+                id: "33916d51-5d15-438b-976d-0d2d5cb387c7",
+              },
+              {
+                id: "79ba9fce-41b7-4084-9d35-eb3157bf30d2",
+              },
+              {
+                id: "3f533075-bb78-4044-8dbf-1540eacce49c",
+              },
+              {
+                id: "876322c4-3055-4053-aa6d-3346c7b8fbf3",
+              },
+              {
+                id: "c10459f6-5aec-4bcf-bd6b-88721e0d313e",
+              },
+              {
+                id: "df740bb0-2367-4bd3-a164-b2fa98278fd8",
+              },
+              {
+                id: "36186a67-0278-42f0-b47c-b7545e71bb1c",
+              },
+              {
+                id: "b7d3b79c-256a-4fd4-8c0a-878777cb88ac",
+              },
+              {
+                id: "ce13b5a1-1d49-4bad-8506-d8cb3d107c4d",
+              },
+              {
+                id: "705baf42-c4cc-4f1c-8a3a-b903cc6e3cf3",
+              },
+              {
+                id: "331116f7-5835-4a81-b66f-fe5a63f2aafe",
+              },
+              {
+                id: "29ee9e49-9856-41f4-aa23-a69ec80044e2",
+              },
+              {
+                id: "074c836f-833c-48bd-ae7e-5b02920d0637",
+              },
+              {
+                id: "d445c432-c059-47fe-a5d6-c911382b1063",
+              },
+              {
+                id: "377026d5-7740-43a9-85bc-0a9f32d241d0",
+              },
+              {
+                id: "32482e81-2eb7-429f-af8d-fe17b29b9c58",
+              },
+              {
+                id: "c950b0e7-f687-49cf-babd-3cee9253eaa6",
+              },
+              {
+                id: "0c57205d-a125-461f-9a0c-86c129cd98c6",
+              },
+              {
+                id: "c69cc061-d3a7-4cf0-8718-1ccfb9c89558",
+              },
+              {
+                id: "74c18722-73cc-4c13-96fa-7555c21c81ab",
+              },
+              {
+                id: "cb38591d-788f-4cb4-9c54-429dc7d84a22",
+              },
+              {
+                id: "39fa1333-3283-42ba-adad-4f7efcd7a3e5",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -1463,6 +2616,7 @@ const execute = async (db: PrismaClient) => {
                     name: "Harmony-Scan",
                     description: null,
                     website: "https://harmony-scan.fr/",
+                    email: null,
                     discord: "https://discord.gg/Qt7NJ53Vju",
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -1472,48 +2626,122 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "e3264919-3607-4dd9-b238-d82137a22b8b",
+            id: "179cceb5-c62c-418a-bd65-980d5b3d18e7",
             number: 12,
             volume: "3",
             language: "pt_br",
             pages: [
-              { id: "74ca4e00-f159-45e2-8df4-2e91fb282cc5" },
-              { id: "e0d11002-f6dc-47af-af4a-69ca8bfdc493" },
-              { id: "7a824ae0-7293-4493-958e-7a8085c0528b" },
-              { id: "b62d8c29-1f3c-474b-8052-cb65c2b1b62d" },
-              { id: "5751e7f0-de91-4ccd-a352-dd65d4d86ce1" },
-              { id: "f373993f-2e16-42b2-a905-a9b2b1186ec4" },
-              { id: "70a3230a-4617-4134-90b8-4d23f8faa86b" },
-              { id: "7d82f2f9-230e-4014-8bc7-3d779cbb4997" },
-              { id: "fea8a4de-d9b9-4858-9f77-05ffab8d5893" },
-              { id: "50daaccf-446a-4dc5-87a6-40429c8cfe32" },
-              { id: "bbbfcaa0-07da-4d25-bcf9-64c8fd48fe5a" },
-              { id: "68f23c89-b26f-4f3a-8633-8c36b7170863" },
-              { id: "93bc8fcf-90df-4677-b916-4c4d14946ff2" },
-              { id: "0f06c225-24f4-499a-84ff-be2320a06ccb" },
-              { id: "4fc285ab-5528-477f-908f-5c33e26eadf4" },
-              { id: "8e5f4f5c-307a-4c6c-885c-e40efa92624c" },
-              { id: "e5ba6a48-6d0d-4262-8e62-ae9789cb8961" },
-              { id: "7e3b7c1d-fc75-494a-b7b0-3ba31185b61e" },
-              { id: "0f5c68d9-f5a8-43b5-820b-243db908a8f4" },
-              { id: "9bf10787-0588-4b7e-9676-8285db40b077" },
-              { id: "239f1613-dfb9-4e35-b5be-6c325a0b40bd" },
-              { id: "ae2398b6-a150-4ff0-bdb3-4cda42e79a80" },
-              { id: "4771a773-673a-4fe6-a49f-f6578109e623" },
-              { id: "1412b9f0-f05a-4516-a27c-57d4f22c7177" },
-              { id: "e72fcbb0-a2ad-4429-b07b-9a7ae9ef2742" },
-              { id: "eea962d9-61a5-4caa-b032-e110aec2815d" },
-              { id: "b96c9bdd-1e64-4d71-9d68-cd0cfa1938f5" },
-              { id: "87233e06-5ebd-49d1-bd7b-c30de53d32e0" },
-              { id: "6bcf927c-cb83-4f92-8413-151ecc25f1ce" },
-              { id: "1dce3827-045b-403e-b884-5db8faf5b6d9" },
-              { id: "d5a14bc2-c551-495a-b09b-baff0c2459b8" },
-              { id: "66fcb499-f8d6-40ae-a245-2d1919a680ab" },
-              { id: "795eadd7-1b22-4202-898f-20d62775ca74" },
-              { id: "fe5e121f-0a4e-41a5-bfe8-dd1a4877efe0" },
-              { id: "c7e86802-a093-4eea-9751-6f7c324567a5" },
-              { id: "3c2a72b7-519c-4905-9381-5a0b91757383" },
-              { id: "dbc88d43-bdda-4cbe-a8b1-cc6d1d9fc119" },
+              {
+                id: "ce33075a-69de-4abc-a3c6-67561d3e4be4",
+              },
+              {
+                id: "595ea397-0faf-495f-b598-a00bbfa3b9b9",
+              },
+              {
+                id: "258e0b4e-6abd-4aa5-8290-8aa3072fb8dc",
+              },
+              {
+                id: "894cd95f-d7e6-4923-892f-4cecf982887a",
+              },
+              {
+                id: "0ee5253e-3be6-4fbd-9e2f-df3205fe0697",
+              },
+              {
+                id: "548bf9d5-dc26-4982-b2ce-41b13a08e028",
+              },
+              {
+                id: "17926eda-b7ad-4721-a17d-b4c6f3d4101f",
+              },
+              {
+                id: "53524d43-ad3c-4dca-8f44-d1e2ad620cdd",
+              },
+              {
+                id: "f9ff2338-f8d7-43dd-a6d5-890062f4e6f2",
+              },
+              {
+                id: "76ea52c9-b574-4332-ba66-4a7fe1e9165e",
+              },
+              {
+                id: "0f626786-3a6f-4700-9ba4-12eaaaf37e0e",
+              },
+              {
+                id: "9d290280-b840-4315-8d62-519bd40dd4cb",
+              },
+              {
+                id: "2d8b1262-aac4-4c8f-935d-5491fd5d5730",
+              },
+              {
+                id: "ca3e57e6-da40-48ca-ba21-afb89d807d9f",
+              },
+              {
+                id: "51370397-7756-4e51-984e-a4fc665acbd1",
+              },
+              {
+                id: "a5906d41-5382-4de6-9f5a-2b0bca17ef6a",
+              },
+              {
+                id: "58d7f37c-e8db-4daa-b737-a6025079ae52",
+              },
+              {
+                id: "8a5bc51f-4817-4d57-92a7-3262d63bc531",
+              },
+              {
+                id: "a3113fc5-ce46-49b1-84db-1fbfb87d1a69",
+              },
+              {
+                id: "9004720c-1e42-465b-9e7f-55845dca1b92",
+              },
+              {
+                id: "0ad017b1-c8a5-4caf-93d6-8eb2fe642859",
+              },
+              {
+                id: "637e3eef-d5bd-4a05-bdac-26020b262218",
+              },
+              {
+                id: "6fea333e-4d9e-4c8d-8c22-5d68556c1b75",
+              },
+              {
+                id: "09ddfffd-74bf-4161-9b6d-8935b3b881d7",
+              },
+              {
+                id: "ad31383e-b824-483f-a2ef-839bc728623c",
+              },
+              {
+                id: "68dd45e9-0db6-4b8e-b98b-5d3c55cbffbd",
+              },
+              {
+                id: "0e664b63-46ea-454a-932f-fb92e5d14f28",
+              },
+              {
+                id: "5520fdfb-6d1f-4f23-a277-1e4bb610fb76",
+              },
+              {
+                id: "d3279388-1b70-4306-a8b1-76c001f795dd",
+              },
+              {
+                id: "9fb43dad-400b-481e-8a55-88d08effbae6",
+              },
+              {
+                id: "d352ca9b-50c9-44c2-b689-3a661e86a6db",
+              },
+              {
+                id: "30493b6b-1c22-4de9-90b0-55e236257c12",
+              },
+              {
+                id: "975887d6-e750-4673-8d81-fdb136f57aea",
+              },
+              {
+                id: "8d37ec23-aca3-4a9c-97d5-520c0e5f0f13",
+              },
+              {
+                id: "98b3da5a-d122-4b7b-b779-78ce685428e0",
+              },
+              {
+                id: "41a460c9-b5b2-4518-90b0-cc86d6c9ebc2",
+              },
+              {
+                id: "5646df8d-67bf-4931-92be-8cb5b66071d2",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -1525,6 +2753,7 @@ const execute = async (db: PrismaClient) => {
                     name: "UnitZero",
                     description: null,
                     website: "https://uniitzero.blogspot.com/",
+                    email: null,
                     discord: null,
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -1534,51 +2763,131 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "da7c6364-0f25-44c0-95da-c1606ead7446",
+            id: "b2426028-502e-47ee-a7b8-34c4cf05a4af",
             number: 16,
             volume: "4",
             language: "pt_br",
             pages: [
-              { id: "981b82f5-8672-4ab9-8649-ce48655130bb" },
-              { id: "bb03df56-1801-4618-9b5d-04a7167e709d" },
-              { id: "b26db6bb-1c55-4711-a461-be6aa38f3304" },
-              { id: "b83e9a4f-992f-4445-afb3-b4ea869a5f58" },
-              { id: "690f1202-ba4b-4f70-859a-72e4b47f5f73" },
-              { id: "118a9b3f-8213-4b85-a3d2-4f00f288b6de" },
-              { id: "eb40b480-3df3-48d6-b334-40e16c0248a5" },
-              { id: "6d9402c4-a1cb-457f-b7fa-f892004105c0" },
-              { id: "d67ba436-1ab1-4a05-b054-df062ddf9591" },
-              { id: "6c395455-d3a1-4020-a1b5-5648f91122f1" },
-              { id: "3bd10685-1a18-44f9-b095-8a6a01c0a6be" },
-              { id: "24421bff-9112-4b40-ad28-6b9b59a8d84b" },
-              { id: "76e42790-9fa7-4d1d-ab1a-22a86498058a" },
-              { id: "ea75e3aa-a3f6-4e4a-8613-d01a39e5bc91" },
-              { id: "15e84e76-9bb5-42f7-b67d-d210de1f8c07" },
-              { id: "0f3e24b2-fea8-4975-b1de-af2ae1d19870" },
-              { id: "86b2429f-5385-4aa1-b950-5865616d1807" },
-              { id: "539c8cb5-8b01-4272-aef4-137cc9ce1004" },
-              { id: "1e739d45-a023-4b63-a380-e7623ac5b4e8" },
-              { id: "111f3cfb-213d-4dc4-89ba-16afcf5177ce" },
-              { id: "482eda56-a6dd-4750-8b09-56a54cf547e6" },
-              { id: "5cbf98c8-57c9-4d59-a86d-576433ff4c4c" },
-              { id: "ab53cc3e-747f-442f-a946-3556d8fe67c7" },
-              { id: "ab7294a7-22e0-4352-ac4c-f6c41aa98365" },
-              { id: "6be19939-22a6-4da4-809e-e6f7f334fa6b" },
-              { id: "3868e148-8c28-4cb1-a102-1dee541be3e1" },
-              { id: "b54758c3-8ae0-441d-aeb3-75413a7948c6" },
-              { id: "d217daed-126c-4df9-ade4-ba5ad8410f8d" },
-              { id: "9a397b61-847b-4273-b722-a17eb63a7e4b" },
-              { id: "e107ef56-630c-4600-b46f-36209fda3fad" },
-              { id: "6adb677d-a59f-45f2-80ab-65f0dea666a6" },
-              { id: "8e4e634d-edb1-477f-b537-9e3d8df94d57" },
-              { id: "f69b5063-ea3d-4d41-8f88-cb0f0370d245" },
-              { id: "f4cac788-b38a-41e3-97fc-5089e5ef81f4" },
-              { id: "d90e3e99-842d-411b-8f65-bb1accf9b86d" },
-              { id: "ace4dcc6-fa81-4184-be34-047e3f993929" },
-              { id: "3f3e19a7-5874-4574-bd84-c0dd0eeb2384" },
-              { id: "a8dd5451-b3b1-41a3-91c6-f47634546e30" },
-              { id: "95e6c471-6f17-481c-9889-ec10a46a51c9" },
-              { id: "11db9bd6-c00f-46aa-aa80-7a56649b7a9a" },
+              {
+                id: "c0bfa074-01c5-4749-bd2a-a433dd52484e",
+              },
+              {
+                id: "4e3365c5-afc7-4304-ba6b-9b0f8ed26f0b",
+              },
+              {
+                id: "e7884df9-af96-4619-922b-b839904590ab",
+              },
+              {
+                id: "621f9f41-7181-436a-91fa-0f94f15e9879",
+              },
+              {
+                id: "b7f0f06c-8a74-4af0-9378-be9174bc4739",
+              },
+              {
+                id: "8a957c0e-8017-4289-98cd-c9d47a22f9bb",
+              },
+              {
+                id: "11f2dd45-f356-4391-9992-8b68f99fdcca",
+              },
+              {
+                id: "8caea69b-a5ba-4c0b-9e19-9211446264ff",
+              },
+              {
+                id: "f91a4a98-61f1-4dc5-978a-cd2c795a188e",
+              },
+              {
+                id: "90dfce83-9046-44a5-ae1a-7be43918fdf5",
+              },
+              {
+                id: "7f67b553-0587-40d0-95d6-5ea48047027d",
+              },
+              {
+                id: "84fb70bc-d79a-4c14-b49a-b40b50c9fc8a",
+              },
+              {
+                id: "09652608-5d6c-4b64-a726-d07e02513ad6",
+              },
+              {
+                id: "a04ce1fb-6e2e-4f94-98fa-db83a56718e1",
+              },
+              {
+                id: "731f7e31-cde3-4039-987f-9962a44b2719",
+              },
+              {
+                id: "93d4c9b1-9d81-4284-a3f0-b00407eda367",
+              },
+              {
+                id: "9f39befc-ec5e-42d1-ad05-0a83cfab49fb",
+              },
+              {
+                id: "43a15a42-3ea0-4cb2-8364-fb7897c69d5e",
+              },
+              {
+                id: "0b9336d9-feaf-474a-8813-29173076f718",
+              },
+              {
+                id: "097ec2a3-85da-4eea-8a84-13dd8d57a2a0",
+              },
+              {
+                id: "e5d98eda-5c85-4e33-af92-e91e08b15ac9",
+              },
+              {
+                id: "fee62750-f3b7-4e03-8ad3-8ea68f08efde",
+              },
+              {
+                id: "cbbef788-1d0e-42b7-aa3e-41fa9f2990fc",
+              },
+              {
+                id: "59051434-799b-4d8e-844b-e0f023a4427e",
+              },
+              {
+                id: "603299f4-a0db-4672-a75e-f6c7c14d4429",
+              },
+              {
+                id: "7ff91c71-6c38-4c48-b325-6b85c4a7f7a6",
+              },
+              {
+                id: "4a7afbd8-929f-42df-bd52-d322555c176d",
+              },
+              {
+                id: "24ef104e-262f-429b-ae54-766aad95d020",
+              },
+              {
+                id: "73f47a6c-e1a2-4248-bcb4-9147e21f53f7",
+              },
+              {
+                id: "ff24c6cc-cb6b-43cc-bd4b-87786cca2eaf",
+              },
+              {
+                id: "2b8e52e3-1dab-403d-a1e2-b5b4d4791077",
+              },
+              {
+                id: "b322fb68-ed72-4376-b029-d9cf84856a1b",
+              },
+              {
+                id: "8fc24d05-f86e-4452-858f-05926975076a",
+              },
+              {
+                id: "ef5e5358-92db-46f0-90b6-da31341ad06c",
+              },
+              {
+                id: "7df283fe-561a-4afe-aaf4-84de699b727a",
+              },
+              {
+                id: "3002194c-6ab7-456e-a9c9-885e204f9780",
+              },
+              {
+                id: "3dec7987-81b8-4336-91c0-a903fbb70e5a",
+              },
+              {
+                id: "d1377a1d-ae67-4dab-80ba-642218b7d981",
+              },
+              {
+                id: "77d886cf-079a-44ce-ab28-1087c5577b99",
+              },
+              {
+                id: "4280d2e6-c766-4703-9946-76c100e38a86",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -1590,6 +2899,7 @@ const execute = async (db: PrismaClient) => {
                     name: "UnitZero",
                     description: null,
                     website: "https://uniitzero.blogspot.com/",
+                    email: null,
                     discord: null,
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -1599,34 +2909,80 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "796d43ba-36b8-48ef-b831-655fdddbcc91",
+            id: "8760c602-e1d5-4761-9208-d9dcd541a7a0",
             number: 21,
             volume: "5",
             language: "pt_br",
             pages: [
-              { id: "a30b7d35-f029-4a1b-8e7f-5c59567bea2e" },
-              { id: "913e34f6-c645-445f-8d53-e7addc2cac8e" },
-              { id: "b5e344a4-d65d-4dd5-8d99-4bcb596438c4" },
-              { id: "d7dab9ee-d0fd-4e93-9c70-e50340d64d01" },
-              { id: "a904e466-23ee-4f06-8f00-b22537df0fb2" },
-              { id: "fe3a4074-4022-4663-9a0a-e7cdb7df3f36" },
-              { id: "7cddded1-ffbf-46a3-8f2d-af9c6ff45397" },
-              { id: "18fd5672-ddcd-418b-9fd1-398edef9549c" },
-              { id: "8d88ec9c-92b4-4aac-a900-a3c52d94510f" },
-              { id: "949a55c6-f27d-4476-b328-b21e4aedf9ae" },
-              { id: "5dcad1d1-8789-4fbc-a32c-ca13027c877a" },
-              { id: "2832162e-c1d4-4f41-83fe-f1c18c357297" },
-              { id: "ee858158-76dc-414c-8f4e-300a2df32294" },
-              { id: "a4ee7750-66d4-46c1-8e9d-951ca0556199" },
-              { id: "dea624a3-5900-4b58-889f-6483a84d68bb" },
-              { id: "94a069e8-4714-4583-8783-7a49637745b9" },
-              { id: "bdf64ad7-7cbd-4646-aca5-b203330888a6" },
-              { id: "f6b0cc49-f15e-4c22-af2d-397ab9540626" },
-              { id: "47bb30a9-b223-4dbd-9c47-909c3b94e2ef" },
-              { id: "93b57399-61fa-4739-a80e-80bddf1dfd64" },
-              { id: "9db9b85a-aac7-452b-9064-15936cace219" },
-              { id: "2e543f64-64b3-4f07-8516-8068365f97db" },
-              { id: "cb00b6e1-d2d4-4078-bea8-e5317d5f024b" },
+              {
+                id: "fdec3410-599c-4967-b7f9-da1c23e7a869",
+              },
+              {
+                id: "cf1a50eb-1b0a-4fe6-a350-5f7acd8796c2",
+              },
+              {
+                id: "6feaa441-74f8-4910-94cd-24213d5a1f57",
+              },
+              {
+                id: "80342d53-c5a7-4a58-9e29-1374e76069a6",
+              },
+              {
+                id: "cd43ffca-67ab-4b5c-9375-6db4775c0795",
+              },
+              {
+                id: "96a2a39a-2626-44d9-bcf7-c2d226b4d68e",
+              },
+              {
+                id: "38842bc0-bf79-4220-bbf9-95d513350754",
+              },
+              {
+                id: "a9b54038-eca9-42fd-9989-1217435a0503",
+              },
+              {
+                id: "515631bd-9412-4114-ab2a-f5a2310a5536",
+              },
+              {
+                id: "51a12555-7d71-4ee5-8f59-c937ba2e0a5a",
+              },
+              {
+                id: "3a5bc5da-f825-49ff-9bcd-db51909b12a2",
+              },
+              {
+                id: "efd2d0ad-77f3-4016-8908-36cb347473a6",
+              },
+              {
+                id: "fe035f0d-f066-4abb-8c80-5ea508d3c335",
+              },
+              {
+                id: "e0001c36-d28c-4239-93e5-77a5ca9d48b4",
+              },
+              {
+                id: "3a9b8b3f-f954-4ef3-be1f-abb1d57c71c6",
+              },
+              {
+                id: "95f5c708-0275-45f4-82c7-d15225f0efad",
+              },
+              {
+                id: "b181c5bf-26a1-4744-b70a-b87d180b0ffb",
+              },
+              {
+                id: "3624005c-62ff-43a0-9249-35252fd50c96",
+              },
+              {
+                id: "e9a2bd9e-b612-4daa-a206-520ee470801f",
+              },
+              {
+                id: "e9c35d4e-f50e-4804-bfbb-6fa222bdade8",
+              },
+              {
+                id: "b3202307-9ea0-43d6-9636-3dceb07a2cb2",
+              },
+              {
+                id: "7c3669e2-e30e-47fb-a077-bc309704361f",
+              },
+              {
+                id: "dfaaffed-5031-46f9-916b-73998b0ff872",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -1639,6 +2995,7 @@ const execute = async (db: PrismaClient) => {
                     description:
                       "Precisamos urgente de tradutores de japonês para pt ou até mesmo inglês ou espanhol!!",
                     website: "https://www.imaginescan.com.br/",
+                    email: "imagine_scan@hotmail.com",
                     discord: "https://discord.gg/k9sBceQ",
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -1648,37 +3005,89 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "da8efd71-298c-4041-b05e-a3dae5f8ebc7",
+            id: "a459c795-4bb3-4801-8d34-bccf03ddc2cc",
             number: 25,
             volume: "6",
             language: "pt_br",
             pages: [
-              { id: "806d20e4-8593-428d-a10c-4bd1f93935c8" },
-              { id: "cc620892-6a46-41b0-a0ec-a84d854bb300" },
-              { id: "c8f634b2-ebb0-4b74-a4e2-c9c317d0916a" },
-              { id: "0ca33460-e761-4ab9-a48e-032467cb6d36" },
-              { id: "ad319c17-577c-498f-9c08-35c947550544" },
-              { id: "d7f847b6-5251-4adc-9232-2d1578d04797" },
-              { id: "382c4d38-48b0-43a9-8565-578d2c34d7c5" },
-              { id: "5af0fcd0-43e3-464c-acd4-33839ea60837" },
-              { id: "31a85068-d9a8-490c-8a9d-5a2ca52f701d" },
-              { id: "d8edd588-09cf-4717-aee4-1aeccbda0c5b" },
-              { id: "4a62291f-0cb1-4ec4-bece-f24d48682ff7" },
-              { id: "4bf83390-cf94-4357-8723-fe2a1e5791c8" },
-              { id: "60ac57f9-a639-4189-96fc-1851f0541638" },
-              { id: "c335f140-3acc-4ac3-ba80-74d0d8aab201" },
-              { id: "7f7dd96f-235a-4200-a650-e5d47f876d04" },
-              { id: "c052e1cc-113e-417c-9032-556e687dc0c1" },
-              { id: "6e800acb-4de4-4f4f-92f1-94eed0c1669d" },
-              { id: "79ca726a-9790-4d3f-af6c-a0138f409e96" },
-              { id: "7baa5ee5-bc40-48e1-900c-db2b0f1d58bb" },
-              { id: "f3f6c66e-6d78-430c-be82-5017ac5a3efe" },
-              { id: "f2186b1e-8995-4ea5-bcf7-beb94adc34fa" },
-              { id: "d17852f1-bb2d-4d0d-80fc-b007c8960182" },
-              { id: "0418f0f1-dbb9-4dc7-9154-b2cda45feb00" },
-              { id: "c71a5d4d-7906-4b70-adc8-f39620a456ec" },
-              { id: "c134ef56-4b25-4a12-b49f-3317bb1be601" },
-              { id: "ff95582c-567f-4b95-95f1-00df39b459f2" },
+              {
+                id: "296e0001-80ed-490b-9a9c-ce1f57cab0cc",
+              },
+              {
+                id: "03f16952-260d-4eac-b5e6-97fff48cb4af",
+              },
+              {
+                id: "29447136-ada3-4252-9756-a767cfedac73",
+              },
+              {
+                id: "091d7b01-7ada-4ab3-860d-8946b37184b9",
+              },
+              {
+                id: "83fefd27-7c58-48d0-a1ad-d4b9548bfc42",
+              },
+              {
+                id: "12131f4d-e334-4d62-9eae-565db579f1c5",
+              },
+              {
+                id: "0fc2e218-449a-4605-8aea-549b9c461447",
+              },
+              {
+                id: "edb0ca1c-8884-41cc-af72-e6709538eff6",
+              },
+              {
+                id: "03f5acb0-749d-44fc-a9d8-71da37f584bd",
+              },
+              {
+                id: "68ea2352-8f99-4c38-8c77-91df28ad7d1c",
+              },
+              {
+                id: "0e3b7c1c-705b-4adb-80d7-bdc2b03f500b",
+              },
+              {
+                id: "9ebaf673-4522-4f54-81db-a2397b02d82c",
+              },
+              {
+                id: "69303bd2-c025-4234-9580-111937c1a951",
+              },
+              {
+                id: "422460ea-7023-4c2b-9a32-6b7b063ba1e9",
+              },
+              {
+                id: "52993056-7961-4301-ba87-e0f359bf3482",
+              },
+              {
+                id: "97413d44-7107-4c90-99a0-bdaaa76fbd5a",
+              },
+              {
+                id: "fb7ca934-a4d1-47ac-8724-3083e680912b",
+              },
+              {
+                id: "34a98439-827b-4b54-ad08-6840b18206da",
+              },
+              {
+                id: "84a73cab-c18f-407e-9900-f9bdb38c670b",
+              },
+              {
+                id: "6b8a27f1-4a8b-4bf0-bed6-e52d23c4f130",
+              },
+              {
+                id: "35601c16-787c-472c-866e-3b11d916bf94",
+              },
+              {
+                id: "b3ac228b-b336-464e-abc6-ad5007e0884c",
+              },
+              {
+                id: "aed3f9ce-1ad7-4073-bbdd-f4275ee3a600",
+              },
+              {
+                id: "f376e052-94c1-459a-a99d-5300b925d017",
+              },
+              {
+                id: "41960370-a7d9-46fa-868a-c5e7895b5d02",
+              },
+              {
+                id: "c78b636b-7db3-4655-af60-152051da4558",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -1691,6 +3100,7 @@ const execute = async (db: PrismaClient) => {
                     description:
                       "Precisamos urgente de tradutores de japonês para pt ou até mesmo inglês ou espanhol!!",
                     website: "https://www.imaginescan.com.br/",
+                    email: "imagine_scan@hotmail.com",
                     discord: "https://discord.gg/k9sBceQ",
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -1700,40 +3110,98 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "8ed14a08-23cc-42f3-91c0-e01a570bd2b0",
+            id: "211bb1ac-d639-4af2-9289-bed9f510b017",
             number: 30,
             volume: "6",
             language: "pt_br",
             pages: [
-              { id: "695ef8c9-8ceb-4667-8eb9-090d08e79854" },
-              { id: "1d1744ee-2d72-4495-a474-4ef8e4e391ae" },
-              { id: "ede9f34c-152a-47c0-983a-b419585a51f6" },
-              { id: "7287ca21-739a-4938-a982-453cdba9720d" },
-              { id: "97437d8a-1ea7-41f4-9a27-4e4887efc65a" },
-              { id: "625c207c-5bda-419a-bcf2-ecfaeb24fbe3" },
-              { id: "6dbd85d8-3dee-4f28-802b-49b39712d263" },
-              { id: "c78c069f-37c8-4530-a6d1-599c070f0cd9" },
-              { id: "a2a22b18-44e9-4836-833b-5e11f5786a60" },
-              { id: "0e94ea5b-f130-4061-8cc5-165a08f9855b" },
-              { id: "9e637038-91a2-4113-8839-6912b92ef327" },
-              { id: "5ecc8cf9-4864-4688-ad88-319ca507556c" },
-              { id: "7b492f83-c02a-42f6-ad8b-e42ccb5c316b" },
-              { id: "a22427c0-8b0c-4fad-b5f4-3eb3368d7133" },
-              { id: "d96d1dac-3adf-413b-a614-bc7995adb347" },
-              { id: "bc90f4bc-0f4d-4fa4-b7e6-db56df0ee134" },
-              { id: "9c412e72-ee63-4bd1-88b6-99a4fe7c3674" },
-              { id: "61ecdf08-5870-48d9-80c4-0287111043c7" },
-              { id: "acdc505d-dc5c-4625-aeb6-540db37a96eb" },
-              { id: "146f1f9e-5b06-4655-877b-46c50ef9c1f6" },
-              { id: "467d8f4a-ede2-479c-a06b-0622e4376b1c" },
-              { id: "3390dcfa-55f9-4479-8411-08910f1d01c3" },
-              { id: "e5f0bc1c-9b1b-4474-9f1e-c211391555c8" },
-              { id: "05ca3c9e-c5c2-4a8c-b415-cd73b8f2ed10" },
-              { id: "e9d03bf7-38b2-4669-b6c5-9a4517c37629" },
-              { id: "c0ec29fa-e7fa-4af9-b486-ecd82c213b8d" },
-              { id: "a7d476c8-ec6c-4bed-9c79-ef988acd089b" },
-              { id: "047c01cb-326e-45b5-8f4f-ae56e03905a7" },
-              { id: "4d929897-f222-48a5-9ef8-424685d323c3" },
+              {
+                id: "677fff40-b40b-4953-a8fd-224a58d55ab9",
+              },
+              {
+                id: "2cf2eac4-149c-4a85-9eb6-9241266f1c14",
+              },
+              {
+                id: "818d6fce-b22d-48fe-94e3-dc0b7dd702e9",
+              },
+              {
+                id: "5af2bbea-e741-4f58-803f-bb0298ea6f30",
+              },
+              {
+                id: "ebb40c8e-5303-4c6d-9e2b-6d2b270e222e",
+              },
+              {
+                id: "027d1164-ae56-4197-863d-65593a0a6c57",
+              },
+              {
+                id: "35320657-4c71-479d-9340-68d4bdff768a",
+              },
+              {
+                id: "62cc65a0-f8b1-4e91-8e82-a599f7909db7",
+              },
+              {
+                id: "a9884361-a9f9-4edb-83ea-7cbb40058dbc",
+              },
+              {
+                id: "3aca4b12-16e8-4f76-b7f6-0e621df25ec9",
+              },
+              {
+                id: "152fba7a-7e3b-4a24-9e52-2320ec4fe17d",
+              },
+              {
+                id: "aff6ed4b-7109-49da-8e48-e896901faf6c",
+              },
+              {
+                id: "9ed03353-37b3-43f3-94fb-7f2ed75f9017",
+              },
+              {
+                id: "2120cdc1-03a0-484e-a403-8515a1e4b7c6",
+              },
+              {
+                id: "0dcc4d51-211b-4034-bee6-75f04965e90f",
+              },
+              {
+                id: "0f742aa4-8451-4c38-a50a-4598cf8c13f2",
+              },
+              {
+                id: "cb20ad11-381f-4e64-85e1-18d81a63a59f",
+              },
+              {
+                id: "3e290bd1-a49b-4132-b97e-104de820899b",
+              },
+              {
+                id: "9ece766f-ac06-4831-abe8-3898c853fe05",
+              },
+              {
+                id: "8eb84cb1-f80c-4ed0-872f-4758acc91e2b",
+              },
+              {
+                id: "3e70bc19-7b98-4b5b-a32d-c9c0bfb285df",
+              },
+              {
+                id: "7f82b363-38da-4a4b-983d-d6dd002d1307",
+              },
+              {
+                id: "5114f576-2823-4cec-95b9-3af6b908bfdd",
+              },
+              {
+                id: "5742045b-fb52-4f10-98c6-acd554ad52bd",
+              },
+              {
+                id: "2c67dcb0-ebac-4bef-bfef-dc41480cb548",
+              },
+              {
+                id: "c8167ad2-5c5e-41e3-874b-5947cf7f1dea",
+              },
+              {
+                id: "879ef2c0-65cb-49ea-a8dd-b0e00b152de1",
+              },
+              {
+                id: "2626c36e-1819-4ea4-bda8-e4c62d55c3cd",
+              },
+              {
+                id: "60f155c7-6328-49b5-9071-dd8c65d4a279",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -1746,6 +3214,7 @@ const execute = async (db: PrismaClient) => {
                     description:
                       "Precisamos urgente de tradutores de japonês para pt ou até mesmo inglês ou espanhol!!",
                     website: "https://www.imaginescan.com.br/",
+                    email: "imagine_scan@hotmail.com",
                     discord: "https://discord.gg/k9sBceQ",
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -1755,46 +3224,116 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "d63d4f19-d73c-4b47-a382-f5ca21675f6c",
+            id: "60376d43-e12e-4f70-af35-f0cf087396f8",
             number: 33,
             volume: "7",
             language: "pt_br",
             pages: [
-              { id: "ddd4fc76-725a-4c62-8a85-adbe983e7876" },
-              { id: "a9b0be8f-cc82-49ec-8576-b0adda6fc314" },
-              { id: "96088984-3084-4e24-be84-bd471ce707cd" },
-              { id: "334cb703-b807-4819-bd62-da3a92e32a2f" },
-              { id: "30428bd7-60a4-499c-8ec0-05a006798bdf" },
-              { id: "f52274ae-543d-43dd-bcae-dcd081e97628" },
-              { id: "62e2a08a-402e-4cb4-a31c-f3a15845c655" },
-              { id: "05e78bf1-b358-4abc-acce-0a7b3bd74e22" },
-              { id: "6260d922-e5ca-45ec-9dad-709e5f0a5d94" },
-              { id: "6f06facd-ba6d-4bfc-bd27-3f34ca2c5a28" },
-              { id: "46cddfdf-e697-424e-b5e6-ad6cfceea3a2" },
-              { id: "de8814d5-e738-4d34-8ef9-fc5efa4fcd52" },
-              { id: "9688e82e-2f4d-4811-982b-a03cc77ebb51" },
-              { id: "db8dee1d-d1fe-4e58-af18-f42bd69e4b22" },
-              { id: "a753ea98-1663-4603-9b3a-990afe526bde" },
-              { id: "dc0f8359-dd6d-46eb-8c38-f4370dc26055" },
-              { id: "fc4ca1b3-421d-4002-9585-ffb99589cb9a" },
-              { id: "b23de4fe-2337-4622-9794-1cfe5603f82f" },
-              { id: "20b9375e-880a-4a64-93cb-6a635ef0d92c" },
-              { id: "5460bc08-f2ec-4d43-8cdb-9eff51737eef" },
-              { id: "ce351cac-b3d9-4687-b6dd-a604a2ddf121" },
-              { id: "275e50c6-94f8-45b1-98b1-d0f60b8c57a2" },
-              { id: "0c980784-e252-4115-8275-0a71e03a8d92" },
-              { id: "91251706-00da-4601-8d42-c8aee7556f15" },
-              { id: "fe831205-5685-4f6e-9680-819d679b3229" },
-              { id: "59e4ccb8-c13f-407b-8b1f-6feb36dd05e5" },
-              { id: "9e5f256f-c84d-4ba8-9488-b800dbc4e942" },
-              { id: "5e90b2af-cdf9-44a5-b3a6-f849decf78d8" },
-              { id: "cb8c71e7-53ba-442f-9b0d-acf063f67689" },
-              { id: "bdcf9b51-46e4-46d0-a80a-07f732c957ce" },
-              { id: "2267af27-5930-4c26-a98b-e914f2ce2ca4" },
-              { id: "ef295053-c540-47b1-80d5-df69f3738723" },
-              { id: "e3f97f64-10fb-4166-b005-b061bde7fe04" },
-              { id: "b2e7f8b2-a930-4634-aa0a-04ff8a1c896a" },
-              { id: "6c8c0bef-f7c2-467d-896c-2d976de322d4" },
+              {
+                id: "dc1bd9ab-eae4-4456-ba8e-774d78692c29",
+              },
+              {
+                id: "0b08b2ff-fe9c-4f23-8bd5-9610b5354d67",
+              },
+              {
+                id: "ea2c6c78-638b-4f6c-9a77-14aafc080d43",
+              },
+              {
+                id: "a155855a-7d52-4c56-9e5f-a4c307cd5366",
+              },
+              {
+                id: "7a88a79e-9c6e-4127-be29-79a99b0d460e",
+              },
+              {
+                id: "bbb7bba1-ffd6-4035-82e6-89c72b9de63e",
+              },
+              {
+                id: "5c814389-3454-442d-bfea-c96b1061c571",
+              },
+              {
+                id: "1cdc0bfb-1fa5-4a40-8aab-692680fc0543",
+              },
+              {
+                id: "2e54b39b-f732-43ae-9768-78ccc80ab79d",
+              },
+              {
+                id: "30f71d81-aabb-4e6b-9713-d1398f4950ea",
+              },
+              {
+                id: "52d7c41d-ae1e-4dd3-ba55-214ad4ff9dfd",
+              },
+              {
+                id: "e7b2bf10-0303-45ef-8d60-e0fc5cd07b8a",
+              },
+              {
+                id: "79b70731-054a-487b-b847-e8447e5e66a3",
+              },
+              {
+                id: "a4a9eccf-9042-46f1-84c4-375f4b783df2",
+              },
+              {
+                id: "83eedec3-c8ec-4578-9783-326b123c1066",
+              },
+              {
+                id: "139c9a76-549a-4742-87c1-1513a60c9665",
+              },
+              {
+                id: "ba6d37a8-e140-4a86-9a19-ab4a117deced",
+              },
+              {
+                id: "eefdd38a-431e-4ddb-81a7-47458df8be1e",
+              },
+              {
+                id: "bd77803b-a7a1-4423-be21-12fae0998426",
+              },
+              {
+                id: "ef6bf0f8-39bc-4863-8292-56fe973d525a",
+              },
+              {
+                id: "99af4f03-68c6-4e64-b6ba-0fbb290ccd06",
+              },
+              {
+                id: "941564dc-ddb9-41db-894d-0ed72bd05ba9",
+              },
+              {
+                id: "0a7495f2-38e6-4f0d-85f8-092e79dfafb0",
+              },
+              {
+                id: "08a75da5-5e5b-421e-b306-304fba072965",
+              },
+              {
+                id: "116fe85e-93b5-4d9c-b665-61de5b72d572",
+              },
+              {
+                id: "bb186dc6-cdef-4e07-8e32-de1466b10334",
+              },
+              {
+                id: "c9a72334-3500-4b2d-a65a-24d60d121c75",
+              },
+              {
+                id: "696be729-cc99-4702-a388-ff14b077878c",
+              },
+              {
+                id: "53d808b3-e953-4316-875a-f909cf7fb98f",
+              },
+              {
+                id: "11612b96-1c1d-4cb2-88e6-df6d8d26c2ef",
+              },
+              {
+                id: "219bf20f-7852-48e4-8c21-ca1b1ea57675",
+              },
+              {
+                id: "13b14f84-c395-4f9c-9c5a-a583bdc54c37",
+              },
+              {
+                id: "b23ec8a5-ae8c-441c-aa93-504c98134035",
+              },
+              {
+                id: "786d3c62-3553-491d-8f66-e908e8d64c48",
+              },
+              {
+                id: "5f5ad06d-7478-4779-a4cc-34c2f01ae86b",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -1807,6 +3346,7 @@ const execute = async (db: PrismaClient) => {
                     description:
                       "Precisamos urgente de tradutores de japonês para pt ou até mesmo inglês ou espanhol!!",
                     website: "https://www.imaginescan.com.br/",
+                    email: "imagine_scan@hotmail.com",
                     discord: "https://discord.gg/k9sBceQ",
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -1816,38 +3356,92 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "b80ada63-99fd-47b4-a3f1-911662fb4d9d",
+            id: "e5b1dbb3-f5ff-4d1c-8be2-f708246a74b5",
             number: 38,
             volume: "8",
             language: "pt_br",
             pages: [
-              { id: "468c7659-1c35-43df-bd98-9de9a4b6d627" },
-              { id: "2ba47e84-d45b-483e-b3b4-cba8d4a24157" },
-              { id: "79a684cb-84f0-44dc-9bdd-bfab95c43967" },
-              { id: "8efed5c5-7733-4ed6-aa84-f046a9aba07f" },
-              { id: "5b5cfc83-c886-42c7-a90c-f6c33829c5cb" },
-              { id: "11f39260-44d2-4858-97ea-1b2a89dc5506" },
-              { id: "f3cb2261-d5f4-48fb-8019-a5805d15e45b" },
-              { id: "fd8e8942-ee96-49b8-bc47-f72a34a488ec" },
-              { id: "cc57bb43-a78d-4855-9db9-646efbbee495" },
-              { id: "f68467a7-5b58-446a-8bec-e19bbff8383a" },
-              { id: "d24c936c-23f1-4993-a580-7b3bd061f50a" },
-              { id: "eec96424-6002-4837-9be5-a552be113290" },
-              { id: "1147208a-b511-4039-a56f-0162a555c7b6" },
-              { id: "95cc21a1-9148-421d-acfc-95504e286ed7" },
-              { id: "36c834ac-b571-46ae-aafd-add3136c71ed" },
-              { id: "7843a1b2-c279-4ea2-a1ec-02701c79c62b" },
-              { id: "f784a5c3-6c0a-4d9f-85d7-7f8df5927276" },
-              { id: "2defeae8-8671-448c-b6ec-a35a14ea5040" },
-              { id: "943326c4-5bf2-4e7b-9709-f89309b79c24" },
-              { id: "a1faac2a-c579-4ccf-9315-5fb0cda76343" },
-              { id: "92f5b121-b6a2-45af-9485-cdb3a4a07136" },
-              { id: "1df5043d-def5-45c1-818b-1274adae0663" },
-              { id: "e2e45c81-1eee-4051-9dce-3f467ddd0d90" },
-              { id: "ddcec80f-38d1-47c3-accb-017b7162d604" },
-              { id: "d971dcbe-7e50-4f88-ac7c-2f674a224d80" },
-              { id: "8a78ce87-8f04-42a2-a22c-8f0c8c12290d" },
-              { id: "46f0c113-fae2-4d0c-b424-fe1e378278e4" },
+              {
+                id: "91b9fef9-a717-400c-a206-fb37e7b493ea",
+              },
+              {
+                id: "6d126e1d-7752-484a-8b9f-3cbc098347ff",
+              },
+              {
+                id: "87f0950c-1f04-45b4-b56d-bcea7bbd3b49",
+              },
+              {
+                id: "13559f29-2b5b-4483-93a9-6bfb5a192c6e",
+              },
+              {
+                id: "5ca6adf8-7cb4-4939-b485-6db6dbdceaf5",
+              },
+              {
+                id: "4616c4e7-1a86-43c1-b3e6-75596a2c525d",
+              },
+              {
+                id: "23109839-8a17-4027-84e7-1f23c203d35c",
+              },
+              {
+                id: "b14aa348-8eee-41c2-9276-ec94c8d299c0",
+              },
+              {
+                id: "4a6d9944-3150-4a22-a88f-0cf1bec59623",
+              },
+              {
+                id: "54012a6d-053a-490c-8d74-24280216b038",
+              },
+              {
+                id: "68f0eaf2-b239-4097-817a-39ed404cc9b4",
+              },
+              {
+                id: "b8fcbc86-3a10-4668-b46d-6bc0231cbfae",
+              },
+              {
+                id: "997c7551-a8f1-4658-896f-f0114566164f",
+              },
+              {
+                id: "d0ad11ee-4092-44b8-8b13-14bbc5dc50d7",
+              },
+              {
+                id: "378c73c1-0b37-4906-b25a-24ffaec60014",
+              },
+              {
+                id: "a8a8f0d6-eec6-4116-8897-b7e931a9b0c4",
+              },
+              {
+                id: "3acb81f3-49c2-41df-aa8e-d53121462cef",
+              },
+              {
+                id: "76bff053-1a42-4d56-8d7d-4dbac4e3c47b",
+              },
+              {
+                id: "b667453a-98b8-4f89-b493-db3d9364631b",
+              },
+              {
+                id: "251577c8-3f7f-4f2b-8612-61e8a35562fe",
+              },
+              {
+                id: "595bb3f3-ae8b-4b64-8436-74d37a538452",
+              },
+              {
+                id: "83ff0653-ca64-459c-9438-ad830215423b",
+              },
+              {
+                id: "483930d4-616e-4713-9c0e-6070bc6dc144",
+              },
+              {
+                id: "69523183-0c4e-43e5-aea7-e69ce0a8bf9d",
+              },
+              {
+                id: "f778c154-272b-4f49-b9c7-cd8c74e554e1",
+              },
+              {
+                id: "194015e5-8c1c-4ef1-9f4c-1cf05a3adcbc",
+              },
+              {
+                id: "34ca29cf-3234-47fe-b4cc-91388c01162a",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -1860,6 +3454,7 @@ const execute = async (db: PrismaClient) => {
                     description:
                       "Precisamos urgente de tradutores de japonês para pt ou até mesmo inglês ou espanhol!!",
                     website: "https://www.imaginescan.com.br/",
+                    email: "imagine_scan@hotmail.com",
                     discord: "https://discord.gg/k9sBceQ",
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -1869,36 +3464,86 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "48eeff5b-4775-4578-97da-2b8b9121c157",
+            id: "ea23a155-2b50-48c8-83f0-d34c093f8b31",
             number: 42,
             volume: "9",
             language: "pt_br",
             pages: [
-              { id: "ea63135a-1b61-4381-8690-4f19e8169095" },
-              { id: "5ac818c7-933f-4bc3-9ff9-1b31f047097a" },
-              { id: "16bd1c2f-b64d-4ec6-89f0-ccd5cf8efcd3" },
-              { id: "46018649-cf97-40ef-9802-72013831eb96" },
-              { id: "2f0b0b38-1886-4292-a40a-89881624fd3b" },
-              { id: "2c7e7511-aebd-4f5d-90f4-2d1c7808fe91" },
-              { id: "1d87b794-1a8a-4192-ac5c-8e5cae3688fd" },
-              { id: "f08ba25d-98fe-4507-8e08-341b56a4ecbe" },
-              { id: "16229ff1-1e4f-4917-a881-d8e5d48ad4f4" },
-              { id: "66abbcd0-5540-46d2-a2ed-1369ed99e80d" },
-              { id: "6756b8a3-5fb3-414c-bba5-992edbc1e4df" },
-              { id: "e13aa4f6-d5a8-4136-b203-2dcbe8c9bfd7" },
-              { id: "5eef02a7-a8c4-4ea4-84b3-ac06b69588b3" },
-              { id: "e5fac16f-efc9-4df6-a0dc-f08a14e9e5c1" },
-              { id: "c4497dbf-82ec-42aa-bb94-5f35ff2467fb" },
-              { id: "5b941b54-ee2a-48da-a1e5-ce87f6161c74" },
-              { id: "35b7e9fb-c289-4337-8be4-af24a07f2a29" },
-              { id: "c60b93f3-11a8-48f0-865b-e9c1084abf47" },
-              { id: "1820d2f4-809c-43b8-815a-979179c03280" },
-              { id: "3d4725bc-5c90-4c57-a921-948b6d04ab6d" },
-              { id: "5369879a-207a-4f2d-9753-cebf488b99ca" },
-              { id: "0f98c2ad-8b44-492f-b2df-cfdc570d0699" },
-              { id: "6f15dea7-abdb-467c-b1f0-3e0402ff7579" },
-              { id: "e6de5ada-11c0-429b-a3b6-2d607dc3d6cb" },
-              { id: "47a22e5b-b3cb-4bb8-aa6c-23dfc8aa845a" },
+              {
+                id: "721aee60-363e-4246-8c9e-4dc7fe834b17",
+              },
+              {
+                id: "aa33c4be-448d-40d9-8fba-614d176f6be1",
+              },
+              {
+                id: "5e277b8b-f2c0-4779-8cfa-0f45c75baa0e",
+              },
+              {
+                id: "e6758bc6-62f7-4af4-b1e1-027195d57932",
+              },
+              {
+                id: "b21aca8c-ae3c-4312-ab8b-397a25622b44",
+              },
+              {
+                id: "6fbe2064-cf66-4ab8-86d0-227bd7257a1f",
+              },
+              {
+                id: "2f2acc2e-8fe4-4526-9d7c-95bf470e6637",
+              },
+              {
+                id: "7c7a8655-917b-4c40-8cc7-995a5e32fd72",
+              },
+              {
+                id: "9ab22362-9527-4365-8883-50f8d027ae99",
+              },
+              {
+                id: "58a333f9-a22a-457b-8643-4513b12c42df",
+              },
+              {
+                id: "e7a41120-af69-436d-9481-23403e1b22ce",
+              },
+              {
+                id: "300deb7b-a18d-4f27-9d76-d55a44d9dba5",
+              },
+              {
+                id: "058e11bf-bf33-451d-a6ac-217f60ed5773",
+              },
+              {
+                id: "4903e8b8-f648-42af-b0e3-b4a3e11ab796",
+              },
+              {
+                id: "b0e70c50-c523-4e9a-9955-f9388fa8455e",
+              },
+              {
+                id: "28202ef8-e297-4ca4-9246-12e79a6137b7",
+              },
+              {
+                id: "1ac0bf17-2a3d-49f6-af22-5890cad64aec",
+              },
+              {
+                id: "a0495374-a029-40f8-8599-b95e07d2bcec",
+              },
+              {
+                id: "2f0a3c66-50a7-494a-8e58-b4f80aba72ca",
+              },
+              {
+                id: "79d0c109-0506-4ccf-acbe-f0e1d1b488c3",
+              },
+              {
+                id: "341c1d56-ad43-404e-a323-f63b36f10c9f",
+              },
+              {
+                id: "32d225d5-d6b9-43da-8ea3-0552d4463f92",
+              },
+              {
+                id: "6855d879-a1cb-4342-8559-d02e43a5bfb2",
+              },
+              {
+                id: "cf891235-2361-4f7b-baf0-eb3c3d52096f",
+              },
+              {
+                id: "780c9ca8-9ff0-4ee2-a80a-4d5d038abe2f",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -1911,6 +3556,7 @@ const execute = async (db: PrismaClient) => {
                     description:
                       "Precisamos urgente de tradutores de japonês para pt ou até mesmo inglês ou espanhol!!",
                     website: "https://www.imaginescan.com.br/",
+                    email: "imagine_scan@hotmail.com",
                     discord: "https://discord.gg/k9sBceQ",
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -1920,46 +3566,116 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "2c363477-05fc-4f85-9188-7ee0c7f72179",
+            id: "089b6ebf-4a94-400b-9d47-7690362cd68b",
             number: 47,
             volume: "9",
             language: "pt_br",
             pages: [
-              { id: "4eccb012-bcba-46c9-a508-6ce6f584ed6e" },
-              { id: "6d36fa8b-ea87-4a95-83c5-17cbc9ad629c" },
-              { id: "ca6348c5-589a-4015-afab-99cdc08be204" },
-              { id: "0559a5d0-a062-46c4-bd48-529fb255c3f8" },
-              { id: "3c87314b-7c8a-4351-9e17-5fa762e533a3" },
-              { id: "49251a53-633c-4bb1-a3bf-37be7d342248" },
-              { id: "078c9735-f98a-40bc-bef7-ad76ee7ad36a" },
-              { id: "e733fb27-952d-4236-942f-95bfe075fd17" },
-              { id: "daaaf025-74ab-44ba-8335-3891c361337d" },
-              { id: "36aa3c1f-1611-4fe5-881b-db5a009abd9a" },
-              { id: "77ab9a4d-4cfe-4722-a32f-02859c92f0cd" },
-              { id: "bc12a674-eda2-4d3e-b943-0585ddf22f5e" },
-              { id: "f50b1bb9-4e59-428a-a497-520cef61ffb2" },
-              { id: "f5ad534f-1e99-4aab-9551-2b23775f6b34" },
-              { id: "90347b1e-0cf9-4057-9790-cc4180799407" },
-              { id: "b552aaaa-1780-496a-a183-65dde2dc7067" },
-              { id: "877b56f4-c594-42ed-b66c-43a7dc88b44a" },
-              { id: "fcc51940-27d6-431b-b03b-315d565296c2" },
-              { id: "f43a878c-c18c-4bb7-bb7e-d470cb615483" },
-              { id: "ce88b1d6-9b7c-469a-840d-29c77ff2f96e" },
-              { id: "3d315a40-96e3-48be-bc5e-dfbdf20a1c19" },
-              { id: "4fa77b36-53f6-4596-a0b6-7277376b0314" },
-              { id: "074920ec-a207-498f-82b4-866c35f91ce8" },
-              { id: "bf5dc9e3-78a9-4eec-8614-157851b957cc" },
-              { id: "b9e4ed3d-7a41-49ae-9e83-8e5c394587e8" },
-              { id: "51d13859-0d5a-404f-b8f3-5a11cad8e5e0" },
-              { id: "c4cc0bcc-2674-4508-a868-9f36f436751a" },
-              { id: "e16afcad-4408-48f7-a46f-2bcc77edd785" },
-              { id: "38aba4af-7ade-444d-9c65-a64c99a3134d" },
-              { id: "f9085db6-1cee-4b5c-8aa8-87e71dab1c8c" },
-              { id: "d5fc4947-353d-4c13-9ebb-405224196f67" },
-              { id: "856fb077-5949-4938-9d22-8145eab81d4a" },
-              { id: "288cf14e-e291-4e2b-9ba4-e784c0e90792" },
-              { id: "5bed0e23-57b8-47d5-a18e-24ccd2385549" },
-              { id: "0874ab57-cacb-490d-a054-f7fa672da5df" },
+              {
+                id: "35fca588-eb13-4b71-89d0-77ade42f5fa4",
+              },
+              {
+                id: "70f5cd1a-3cce-4d2d-973d-10bcaac78446",
+              },
+              {
+                id: "cc324b76-efa8-499f-acdb-7923285ce5a8",
+              },
+              {
+                id: "b6fd4f21-8fae-4bf0-840e-776e4ff9a060",
+              },
+              {
+                id: "e7d45743-47b9-47fe-9854-f41b93ea2c94",
+              },
+              {
+                id: "aa08d306-f1bf-4fb6-b5b8-c7a9a3b25e2d",
+              },
+              {
+                id: "aa65ede3-26d9-46fa-a26c-e4b8eb3a905e",
+              },
+              {
+                id: "753b6fdb-3901-4bc4-b86c-d7c88364d00e",
+              },
+              {
+                id: "def1eab7-7175-44e4-9e10-f7a6a33939e4",
+              },
+              {
+                id: "9aeb03b8-5e35-415c-8842-6229519c2749",
+              },
+              {
+                id: "208c6448-75cd-4d4e-be21-aa9a074be647",
+              },
+              {
+                id: "765a1758-056f-4cbd-82ea-a0e3e513412b",
+              },
+              {
+                id: "4fc71b83-26fb-461e-8605-1817c1aa2e1a",
+              },
+              {
+                id: "402be586-c6fe-45b9-b919-23fe77bb85e1",
+              },
+              {
+                id: "2d77d9c0-5d56-405d-bdac-4dec9a24bfc6",
+              },
+              {
+                id: "74ee1527-ac2b-497f-8fb2-1f74024c7691",
+              },
+              {
+                id: "a533c6f1-91f2-493f-940f-79228fe8b0fe",
+              },
+              {
+                id: "1f2f882c-2424-43c7-8b26-03a9c65f7976",
+              },
+              {
+                id: "d901e4df-e980-456c-a922-758c56af15ca",
+              },
+              {
+                id: "8c05d335-b5e1-4a35-af17-b1f113c11cb6",
+              },
+              {
+                id: "1a9e3d20-c3a9-4df2-bf84-a166273d4513",
+              },
+              {
+                id: "163c6534-3e43-454d-ae3b-f4963408211c",
+              },
+              {
+                id: "a3a9d1ce-2108-45c5-b10a-8c0b69fdda15",
+              },
+              {
+                id: "b87cdf8e-e337-4c03-8215-a280c0ae9540",
+              },
+              {
+                id: "39826fa6-8433-4749-aab3-74f41bead4e3",
+              },
+              {
+                id: "d53ab4fb-9d55-4df4-8d02-ebb461156a32",
+              },
+              {
+                id: "50fa102d-7786-43b1-8c68-c15d99d41999",
+              },
+              {
+                id: "19543974-ea0c-4636-b0d3-158475b01a3a",
+              },
+              {
+                id: "fcc9145b-efc6-4a2d-baf0-6a70d018b860",
+              },
+              {
+                id: "85845928-c1c1-4684-9d71-a793aeb8be95",
+              },
+              {
+                id: "88f693da-2cc0-4c77-80c5-5ba7d648e19a",
+              },
+              {
+                id: "df837b7b-7efe-4306-b2a3-6a385d8cff36",
+              },
+              {
+                id: "cd6c3131-8b14-4d9e-96d0-55f6ff8741b0",
+              },
+              {
+                id: "612f6ef3-2df4-4d04-8ba8-72adebe428e4",
+              },
+              {
+                id: "2ceebc80-943e-4ef2-aa10-ba1218f135c2",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -1972,6 +3688,7 @@ const execute = async (db: PrismaClient) => {
                     description:
                       "Não somos uma scan, mas sim um grupo que está adiantando determinados projetos ou até mesmo iniciando algum do zero, então qualquer reclamação sem nenhum motivo de algum projeto que estivermos fazendo não será respondida.\r\nJá que no final será apenas os leitores que decidirão sobre qual versão ler.",
                     website: "https://tstranslatiion.wordpress.com/",
+                    email: null,
                     discord: null,
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -1981,32 +3698,74 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "368049cf-df9d-4331-b73e-a323a7e20955",
+            id: "9420ff9d-2ecc-41d0-b99f-3bfc9ba0dc3e",
             number: 51,
             volume: "10",
             language: "pt_br",
             pages: [
-              { id: "93c02305-f763-40cd-b5f6-58d35e5c1dfe" },
-              { id: "5b379316-5b79-4545-883f-8753f1124734" },
-              { id: "be201b89-32c7-4bfb-b4c7-eebbaf0a1f7a" },
-              { id: "64555724-52f5-4d0b-a81e-8ad106823c1e" },
-              { id: "94e23b8e-fd2e-48e1-b0a8-24eb5a95ab63" },
-              { id: "299a42a8-a5e0-48d3-a647-25033783d392" },
-              { id: "ddc252d2-6c3f-4949-b544-e8868f311f82" },
-              { id: "420b8e7e-42a3-437b-8ab4-6251d3a842f5" },
-              { id: "c811c4d1-7257-4112-8b68-95f254e8b97a" },
-              { id: "9f5ebb57-0283-469b-b465-22ecd8d7b5da" },
-              { id: "65e5c053-1c4b-4974-bc2d-9731df1b1687" },
-              { id: "34a42a34-d608-474e-9052-bfb2322a65a9" },
-              { id: "a39d181d-c946-48f6-a341-bfa9de7084ea" },
-              { id: "3b579cd3-5b98-487a-b601-6f57dc6c09e9" },
-              { id: "5fb2ed85-7efd-4cff-837a-f2f0d64d7543" },
-              { id: "27bc3edf-88a4-44be-b749-c1eb570277bb" },
-              { id: "cae2051c-fbe9-46fa-9788-765ecec3f778" },
-              { id: "fc6f8e87-1bee-4d31-b5f6-bb4879eaa26e" },
-              { id: "5a2d6c34-462d-4c3d-a4c7-2b0e8bf43fe2" },
-              { id: "da103015-6eb4-4ff5-9356-ff39f0b14df7" },
-              { id: "2c24e189-6ba8-4dd2-8f4f-b01082600376" },
+              {
+                id: "cff34e74-a197-4b83-98f9-8bda8f082f8b",
+              },
+              {
+                id: "ccd46c98-7e6b-47be-8ae2-37ce5031e128",
+              },
+              {
+                id: "4170dcea-b5c1-4f9c-bf9a-39d9c7981269",
+              },
+              {
+                id: "46954634-832c-48af-9325-cf81e9aaaec1",
+              },
+              {
+                id: "96016b1a-297b-4bc6-b5ff-85aa199e7ba6",
+              },
+              {
+                id: "45412833-1bf0-495d-b4cc-6499a3af01a6",
+              },
+              {
+                id: "1f06bcf1-33cc-449f-954c-917655de20c8",
+              },
+              {
+                id: "a0a72930-2d58-45c1-931d-aec8161f0555",
+              },
+              {
+                id: "fa77839c-8add-4655-b68e-96f9aa26b6bb",
+              },
+              {
+                id: "282d336d-1f85-4f9d-aed3-f492f85423e1",
+              },
+              {
+                id: "a74d4a8a-229b-46d2-bebb-db54db988463",
+              },
+              {
+                id: "e9fb6f2c-3174-47e1-ab99-5f54ed4a7c92",
+              },
+              {
+                id: "07cc303e-1afd-4b6f-adef-12d337f7bc4a",
+              },
+              {
+                id: "c206f72b-34fe-4391-89c0-682b0672b3b4",
+              },
+              {
+                id: "d429b34c-e283-4bf6-839b-4c4b50f24b52",
+              },
+              {
+                id: "9e57320d-91c0-4b1c-a15a-ed767daca433",
+              },
+              {
+                id: "31d4c4be-4f58-4477-a867-d310d3e9a011",
+              },
+              {
+                id: "4e9ec74f-d3df-4f9e-98b4-c2e002c12f0a",
+              },
+              {
+                id: "bbe65265-1a47-4a8d-a1d8-88ee8cd265a3",
+              },
+              {
+                id: "31f91c04-8ed8-4552-ab41-5a4f59a5b83c",
+              },
+              {
+                id: "1785167c-5ff2-4fe1-859a-1c86d1a80d41",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -2019,6 +3778,7 @@ const execute = async (db: PrismaClient) => {
                     description:
                       "Não somos uma scan, mas sim um grupo que está adiantando determinados projetos ou até mesmo iniciando algum do zero, então qualquer reclamação sem nenhum motivo de algum projeto que estivermos fazendo não será respondida.\r\nJá que no final será apenas os leitores que decidirão sobre qual versão ler.",
                     website: "https://tstranslatiion.wordpress.com/",
+                    email: null,
                     discord: null,
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -2028,35 +3788,83 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "7856045a-c733-4c01-82e0-26f64e50e33e",
+            id: "fbae6faf-ede6-485d-bfbb-9aba5fecc570",
             number: 56,
             volume: "11",
             language: "pt_br",
             pages: [
-              { id: "ed7d98b6-b988-405b-8bb8-89ad5a4d39fc" },
-              { id: "2c1fe733-55fa-4695-a195-7a4c5eafd8c1" },
-              { id: "0478b882-edeb-47b2-a43b-dca5b70f1c48" },
-              { id: "02fc02c5-5064-4f58-9a2b-967d9ae977cd" },
-              { id: "ba1ee449-7fe5-4d7e-9b2b-02979f0de7b8" },
-              { id: "13ff1078-e9b3-415c-81b3-a57075a7cefd" },
-              { id: "a83ed6a8-ac8b-409b-92d4-fd6bea391f60" },
-              { id: "1bc2397b-c5d7-4ec6-8bff-9932d7c59d0e" },
-              { id: "a6074846-8865-41a1-a44a-a1527ed26665" },
-              { id: "e25dff65-2dd8-4774-8240-65643cf4a169" },
-              { id: "b43df628-1b83-4820-8d4c-dd1761e18f4f" },
-              { id: "155b180d-af6d-4fa4-a5e0-5250fd6c8bf3" },
-              { id: "1b8e5597-1209-4ca5-9d1f-dc87a3884463" },
-              { id: "09977543-1227-4135-9036-4e5835c1fea3" },
-              { id: "f39691d7-04b4-4d9b-a098-cb8f4d5c88aa" },
-              { id: "46d4658d-637c-4bf4-aaaa-deafa3b01b5c" },
-              { id: "9435d5ce-1a7a-47e7-a4a0-fd1046001651" },
-              { id: "c49a6ee6-54ed-46be-afd9-86bd69b8c739" },
-              { id: "2e51283a-7449-4288-87be-5050631e69b6" },
-              { id: "dfaa4919-1b55-47c4-a188-72c7918c372d" },
-              { id: "9334eafb-cb55-4e52-8566-bc24c876cad5" },
-              { id: "4732a9ad-a73a-4fc0-be34-1067b995ba8b" },
-              { id: "24da7df6-3942-4593-b982-fc18dda89bfa" },
-              { id: "56f05924-242d-4b77-bdba-8f65f245552f" },
+              {
+                id: "ad6d1385-9510-4f63-acc2-f368e90411c1",
+              },
+              {
+                id: "5075a610-33c1-40e8-b0c6-ddeabdea2c3c",
+              },
+              {
+                id: "8b5f4080-1826-4daa-80ef-89095b20e777",
+              },
+              {
+                id: "23a06e46-5287-40b5-9051-8aef34652f6b",
+              },
+              {
+                id: "a8ba66a1-84de-4469-86a4-0cfa3acd8e7d",
+              },
+              {
+                id: "986f2b5d-b8ad-4853-92f0-d3e920ca92cb",
+              },
+              {
+                id: "48141150-8d8f-4c09-b8c6-c2dc87129489",
+              },
+              {
+                id: "3cc79eaa-283a-4a05-8727-1612e980d9f0",
+              },
+              {
+                id: "0756a705-42c3-41bc-948e-cd751b3eaf86",
+              },
+              {
+                id: "0f558d4e-92f5-419e-9d28-ea50851fba66",
+              },
+              {
+                id: "8f3ee81d-22a1-48ee-84dd-19d7cc012ef7",
+              },
+              {
+                id: "d8b9159b-7626-42d1-b6d2-b8d4e037361d",
+              },
+              {
+                id: "5f2b81e0-b5b3-49d7-b10e-03a701f1ad87",
+              },
+              {
+                id: "a56ab068-ac6e-42cf-b891-cee845252e02",
+              },
+              {
+                id: "4aa773a1-1800-484e-993e-f3197ffa090b",
+              },
+              {
+                id: "7e806b9b-59e4-4266-bb97-2f910f9cb928",
+              },
+              {
+                id: "fddf111b-86a2-4b0c-afba-7db571fa7617",
+              },
+              {
+                id: "d97773f9-746e-4e1f-801e-2a68ba6d098c",
+              },
+              {
+                id: "4cbc20ef-2976-417b-91df-c192b37c6586",
+              },
+              {
+                id: "4cb49369-ebbd-461d-8a45-2abc764f42e4",
+              },
+              {
+                id: "6604057b-746f-4208-b1a9-16d81e90e9ba",
+              },
+              {
+                id: "17b32b29-a9f9-4b50-8d4c-493cc596dda6",
+              },
+              {
+                id: "ec81c071-4a15-475f-b15b-0684b90de0ce",
+              },
+              {
+                id: "dcd7be4d-f2ff-43c7-bad7-5c8585f3ec4c",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -2069,6 +3877,7 @@ const execute = async (db: PrismaClient) => {
                     description:
                       "Precisamos urgente de tradutores de japonês para pt ou até mesmo inglês ou espanhol!!",
                     website: "https://www.imaginescan.com.br/",
+                    email: "imagine_scan@hotmail.com",
                     discord: "https://discord.gg/k9sBceQ",
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -2078,27 +3887,59 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "6fd5b1ca-2a47-424d-bbf4-5959eefe4149",
+            id: "0fb37c0f-bd1b-4f61-bf62-37b8a8995138",
             number: 60,
             volume: "11",
             language: "pt_br",
             pages: [
-              { id: "16da8488-1b69-49ab-b60d-936ad61e457b" },
-              { id: "2486ae07-f1ae-4c17-b23c-576ad827e893" },
-              { id: "8af25f49-aeee-4f26-a315-6b553efe6434" },
-              { id: "f731b8c2-4852-4ae2-92f3-aef8f55920e7" },
-              { id: "aaff0b22-63dd-4934-bf9e-5b6a98e5bc7b" },
-              { id: "5805cac7-ccf1-47fc-a454-f5a5c257591b" },
-              { id: "c7aecfef-1a96-4d43-b089-b300047f96d5" },
-              { id: "e5f925b4-e2c9-415e-a78d-64a38f30a9ff" },
-              { id: "b6e07ae6-8e40-4090-8632-fe8e64e230e1" },
-              { id: "fa289b01-ca58-4035-b397-67a687fd5539" },
-              { id: "3a580dfa-cd5f-4247-93bb-add56935196c" },
-              { id: "42f91310-05b1-4b60-b143-5d9a16b2f4c8" },
-              { id: "b8f4a120-bee8-4e15-980a-470c01e84b85" },
-              { id: "1a2284fc-0efa-4e30-844d-d751e0392258" },
-              { id: "ccbcb6bd-d1bc-421c-b0b6-2a8ff8bdb730" },
-              { id: "1852e0d6-26b4-447f-a7fd-3d2e999715cd" },
+              {
+                id: "f45d38d4-8caf-4c16-8b6a-63c69aa001f8",
+              },
+              {
+                id: "08495309-4487-4dbf-9cdc-1fa468cfb570",
+              },
+              {
+                id: "c7acc1ff-3417-478b-92e0-336772dcce2a",
+              },
+              {
+                id: "b15648b6-bf3b-4724-9c07-2d4b988754da",
+              },
+              {
+                id: "f07656d3-6d6a-41f7-9146-d52eab77dbe8",
+              },
+              {
+                id: "17a11c4c-8a37-436e-b27a-0603ede79979",
+              },
+              {
+                id: "00976fb8-356c-422f-86ae-73efbc8e0ebe",
+              },
+              {
+                id: "e9f3c204-4ee8-4ad8-862f-0062ded605f5",
+              },
+              {
+                id: "93137942-d955-4f3a-b471-b632726323ab",
+              },
+              {
+                id: "499db2aa-98e4-48db-9b44-5425fdc71430",
+              },
+              {
+                id: "8d560c2a-be13-4189-80ce-fcaef0bfa578",
+              },
+              {
+                id: "596fa234-9f1b-45e2-a928-712e3da9ef92",
+              },
+              {
+                id: "01a21084-3e6e-4477-be4c-775cc4bbd65f",
+              },
+              {
+                id: "b12a6792-21bb-491a-a90f-fa5d8d6aca40",
+              },
+              {
+                id: "68082478-f304-4fcc-9292-146adc0d7ca7",
+              },
+              {
+                id: "2e9f09ef-15bf-4c12-9d93-e765c24103c2",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -2111,6 +3952,7 @@ const execute = async (db: PrismaClient) => {
                     description:
                       "Não somos uma scan, mas sim um grupo que está adiantando determinados projetos ou até mesmo iniciando algum do zero, então qualquer reclamação sem nenhum motivo de algum projeto que estivermos fazendo não será respondida.\r\nJá que no final será apenas os leitores que decidirão sobre qual versão ler.",
                     website: "https://tstranslatiion.wordpress.com/",
+                    email: null,
                     discord: null,
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -2120,35 +3962,83 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "04ee5ae2-8d96-481a-acf2-52bbd034e252",
+            id: "bc2e6d83-f468-4fc3-b0d9-c414cdf121a9",
             number: 65,
             volume: "12",
             language: "pt_br",
             pages: [
-              { id: "98afbe9a-9d55-4bf7-85ad-d97fc7a410b7" },
-              { id: "b6d3204e-34e0-468c-a01f-34203d2ee33a" },
-              { id: "70d70d3e-a472-4d11-92d3-d5023f51baa6" },
-              { id: "b334debd-3834-43e7-ad04-34051fed3704" },
-              { id: "ec20351e-6daa-4d75-97de-e8b3a34f1947" },
-              { id: "b2eb71b9-e457-448d-8bdc-58dce76fb7b5" },
-              { id: "c2fb3377-2d62-4c62-bad5-6cdc4210655b" },
-              { id: "b2cf3fd1-99ce-4eaf-bfcd-d3e9de90b0bb" },
-              { id: "e9f6469d-e070-4010-a34f-8d875f854a64" },
-              { id: "4d063ab1-869a-4e78-997f-4848aea790d4" },
-              { id: "1d76ad29-1ee5-4832-b817-548df8705f93" },
-              { id: "4cb68286-d9f4-48a9-bad7-5f095d34a4ff" },
-              { id: "ec24033d-a3a2-4286-99a5-cb4ec4fcf3f9" },
-              { id: "edab1a9b-51ba-4bcf-8477-44672996b7de" },
-              { id: "3068062e-8f01-422e-be53-744912d38d6e" },
-              { id: "173744e5-0bbc-4107-bbc4-62c90f01f494" },
-              { id: "bd6bb2ac-5f95-4369-8ee3-856e0fb0da55" },
-              { id: "6d9a377c-eb92-46eb-b20b-68c28c15888f" },
-              { id: "25a62b68-0553-4a0e-93c2-afe833e98416" },
-              { id: "75588707-79f8-4f83-819d-a2a26dca2a1a" },
-              { id: "4a251bc8-ef83-4bc6-ada7-d2efc91d0ee0" },
-              { id: "89674777-5cce-4e34-9df0-561089946367" },
-              { id: "9b831437-304f-4c89-9715-be86a17f9a61" },
-              { id: "aff286a8-8f47-4a92-aa35-ab4bef5ab4f0" },
+              {
+                id: "2ea56003-3faf-4a47-83d9-a713acb75d0a",
+              },
+              {
+                id: "f12527fd-8d6c-48f9-899f-41115bd97b3c",
+              },
+              {
+                id: "29ff17c0-e0d0-492e-8158-584b13e30c88",
+              },
+              {
+                id: "dc4222d0-287c-409e-8447-af015ece78fc",
+              },
+              {
+                id: "23e2dfb6-08d2-43a1-9a46-de699c1a5825",
+              },
+              {
+                id: "72b46509-71a5-4c9f-9fb7-ac1e5d1d52c1",
+              },
+              {
+                id: "22ad94b1-6455-4f6a-9aff-586671ba24df",
+              },
+              {
+                id: "61b90394-2855-48b3-9217-ec45882f8638",
+              },
+              {
+                id: "0aa3d83a-037a-47f8-a8a4-88c22c1623b1",
+              },
+              {
+                id: "e770add0-a84d-42f5-b99f-de2e19cc9022",
+              },
+              {
+                id: "16e6e37d-db77-408c-bcb5-c1c2e0328b1f",
+              },
+              {
+                id: "aa547cac-13d0-4b55-a439-cc202503879a",
+              },
+              {
+                id: "f2bc0232-6a75-4113-ba0f-4a668f41f447",
+              },
+              {
+                id: "a71aa297-0eae-4a41-b940-d88fd3c97068",
+              },
+              {
+                id: "06b5becb-7708-424d-8b2c-3020cd6882e4",
+              },
+              {
+                id: "4da8ecd0-3887-4739-956d-bd7675bd3d22",
+              },
+              {
+                id: "bc63cd7a-47f8-477a-be45-7b425f946fa4",
+              },
+              {
+                id: "bfd32314-8991-46e8-8112-4fb24049a73b",
+              },
+              {
+                id: "40ecff99-9195-491e-a743-eac75922a692",
+              },
+              {
+                id: "03b2ee85-9f4a-4b53-b39f-48372b9379db",
+              },
+              {
+                id: "55592fa3-1f68-4784-a066-ba9749c5e0e4",
+              },
+              {
+                id: "f1beb87c-2c24-4101-b2fb-f2deee956a59",
+              },
+              {
+                id: "7e387d4f-4d71-4e1b-a952-201df3dcf039",
+              },
+              {
+                id: "7f8208e7-9c39-470a-a6d8-0cd7b285ba8d",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -2161,6 +4051,7 @@ const execute = async (db: PrismaClient) => {
                     description:
                       "Não somos uma scan, mas sim um grupo que está adiantando determinados projetos ou até mesmo iniciando algum do zero, então qualquer reclamação sem nenhum motivo de algum projeto que estivermos fazendo não será respondida.\r\nJá que no final será apenas os leitores que decidirão sobre qual versão ler.",
                     website: "https://tstranslatiion.wordpress.com/",
+                    email: null,
                     discord: null,
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -2170,33 +4061,77 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "ab77eab2-12b4-4288-b4a6-919127c2310c",
+            id: "cd24e114-fa95-46e7-89f6-1e0f86fefeb2",
             number: 69,
             volume: "13",
             language: "pt_br",
             pages: [
-              { id: "9174d885-c159-4df7-a22a-b5364d157d67" },
-              { id: "b198299b-0631-404d-a3f0-8d7ff989aa75" },
-              { id: "d3d3d322-d39d-45a5-982b-46c095d212ff" },
-              { id: "0077bea2-3a1a-4922-853f-8f427e95eea0" },
-              { id: "a10a5738-b3d7-4d33-b6bc-6a8dd00ad301" },
-              { id: "400529b3-2e3c-4e5f-be9b-9171d95ce48e" },
-              { id: "ebdc1931-51ea-4675-8f1b-85a1b81eaec8" },
-              { id: "493febc9-1bfe-460f-8607-2a300c53dd8f" },
-              { id: "8cbdafd4-eacb-43c5-a8a4-70ac548ff52b" },
-              { id: "b17d6842-c4c4-403e-bb0f-5bf715aa2245" },
-              { id: "4a151260-eae3-46e1-a836-9b616bf8c74a" },
-              { id: "8795e132-eeda-4eac-87f1-321e3139d28c" },
-              { id: "8ffa950b-777c-441a-bdc2-f7b5555924c9" },
-              { id: "e584edb2-2cd5-49cd-8375-5e9c101d6ce8" },
-              { id: "825e1040-6c66-45c2-ad4f-45c98f8eb5cb" },
-              { id: "cd0c6adb-2ced-48fa-a234-7599c1a9f620" },
-              { id: "b0085a15-3f5a-4bbd-9ab7-54ff9a986942" },
-              { id: "ef251c52-b037-4b53-8a38-01306d35f3c3" },
-              { id: "f589282e-3b2b-4be4-a8fa-abf1cc4000b6" },
-              { id: "82ac0c92-203d-4b9f-932e-1719b99c739d" },
-              { id: "01bd0269-4c16-47e0-8d09-6163a8d92554" },
-              { id: "b907b584-9f87-4c07-8e68-579d5f6b05fb" },
+              {
+                id: "957537db-947f-4238-ac28-aeddb7351381",
+              },
+              {
+                id: "b78f25a6-d7cc-4f97-9e41-79850c444bb7",
+              },
+              {
+                id: "c66789c6-d549-49d8-8887-d14fe91785a3",
+              },
+              {
+                id: "849bbdfb-084d-4750-85ca-e455d53a374a",
+              },
+              {
+                id: "aa78defa-3256-4639-aec3-19e53ff10be3",
+              },
+              {
+                id: "2cc5311e-daad-4a5b-bb43-a15109a09f12",
+              },
+              {
+                id: "12eeb126-dbc9-4ba2-a17b-e699d0411de9",
+              },
+              {
+                id: "16fa8c19-f51b-4e0a-9f48-d0febb957a16",
+              },
+              {
+                id: "d86149d9-6a5c-4daf-895b-7c7805a7a3de",
+              },
+              {
+                id: "617c2b02-480d-4e89-b2a8-29727a456f4e",
+              },
+              {
+                id: "8896d77f-4cf3-4dfe-aac5-baf3b01dd3c6",
+              },
+              {
+                id: "022753b5-81cd-4585-84da-08f2b6693df8",
+              },
+              {
+                id: "b4a0e617-e0b7-4682-b6c3-60162f2f7ccf",
+              },
+              {
+                id: "1144f30a-9382-4b73-83b8-4eef9e28825f",
+              },
+              {
+                id: "9bddda94-a649-4c73-86e5-ed3d610b85f5",
+              },
+              {
+                id: "26573bec-4415-4752-b1c2-7cb4caa6dcc7",
+              },
+              {
+                id: "6b02f9f4-f0c9-4935-b59e-071319461dba",
+              },
+              {
+                id: "a6967f16-8d21-4218-9d19-85b0c6133658",
+              },
+              {
+                id: "df30308a-d108-4061-9862-3d3d0415b391",
+              },
+              {
+                id: "f1775f14-1024-4c2e-ac95-a4dee03fb8a8",
+              },
+              {
+                id: "2cfb8ff5-add1-40e3-a8b3-a86592e57a63",
+              },
+              {
+                id: "512cb6e5-5ebe-4257-ba12-820e6eb2b49a",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -2209,6 +4144,7 @@ const execute = async (db: PrismaClient) => {
                     description:
                       "Não somos uma scan, mas sim um grupo que está adiantando determinados projetos ou até mesmo iniciando algum do zero, então qualquer reclamação sem nenhum motivo de algum projeto que estivermos fazendo não será respondida.\r\nJá que no final será apenas os leitores que decidirão sobre qual versão ler.",
                     website: "https://tstranslatiion.wordpress.com/",
+                    email: null,
                     discord: null,
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -2218,33 +4154,77 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "e357e9b5-ed43-4082-b615-7cfd66dbe200",
+            id: "1a1e970a-0404-496e-bbd4-8623cd102055",
             number: 74,
             volume: "13",
             language: "pt_br",
             pages: [
-              { id: "c1e7b833-5fdd-4e5f-a54f-0fae5acf824e" },
-              { id: "65d46f7c-63ee-4a05-aa13-41fdc8913a4a" },
-              { id: "eb0e1c92-f719-4e16-a224-fe85ee8d54b2" },
-              { id: "a1cab299-f9eb-4050-a53f-48d11576c0a0" },
-              { id: "b86ee066-fb12-4399-b39c-88d1312aee54" },
-              { id: "87dec322-03f5-4717-86b7-d6e62b986bfb" },
-              { id: "b0a50b5c-16de-4e97-a934-08fbba906f5f" },
-              { id: "0f3e3542-0056-4e51-9b2e-0e13851b0dd5" },
-              { id: "da396c94-5b34-4125-96c7-b0796612bee9" },
-              { id: "44452e2b-82a0-4e28-ac70-63aaa3e6a36e" },
-              { id: "c71dd157-618e-431e-9e73-7d70be108c98" },
-              { id: "c570c406-5efc-4ebb-9c03-95722524d2fe" },
-              { id: "40de96c4-794c-411b-85e0-bad430ebd927" },
-              { id: "695f9580-8bec-4908-ad9e-d5dff2430dd3" },
-              { id: "36d1c6c5-65be-4d61-8996-62eeffc646d5" },
-              { id: "129b5c51-d98b-47ea-aa05-88311469f26e" },
-              { id: "0f8e0c6b-7d4d-4b4c-b303-850df77a177e" },
-              { id: "28ce685d-ad0a-42ff-9635-913b042c958a" },
-              { id: "6cd0f60f-3781-4e7c-a087-97bd3a15aa97" },
-              { id: "df21bac4-a699-484c-9cfe-67de4264edbd" },
-              { id: "cba507a0-41c5-41be-a9d8-98ece23cfaa5" },
-              { id: "d85f3824-e315-4beb-bacd-aeb2ecc09e62" },
+              {
+                id: "2d3c67de-a2f7-4c2f-a0c6-006588b1fc16",
+              },
+              {
+                id: "b94f50b3-17c7-4aaa-9dfc-1ba825c332d6",
+              },
+              {
+                id: "d40fdc44-9fb4-4907-8ea4-a7c6b2e17f94",
+              },
+              {
+                id: "0db2f65f-70a1-4596-85fe-4bcc4206dd6e",
+              },
+              {
+                id: "60a7b969-3a67-4833-aa6a-c7b43221297f",
+              },
+              {
+                id: "e3c7eabd-41d1-44de-ae52-fbc7dd765d43",
+              },
+              {
+                id: "1fe14222-2903-4770-a3f2-8bfee672f8dc",
+              },
+              {
+                id: "cca0070c-6827-448a-ae99-ff89f518d241",
+              },
+              {
+                id: "c509ddf9-dfae-42cc-81ac-59162be0b29e",
+              },
+              {
+                id: "1d15dbaa-63da-47ca-bfff-31ec337885fa",
+              },
+              {
+                id: "7c53d60e-0a7b-47a1-8b06-63b93fac79bf",
+              },
+              {
+                id: "7055f6c5-b1ab-42e7-a83f-05859cae9efc",
+              },
+              {
+                id: "184da1bf-d978-48f6-84ec-a5f19b48fb0d",
+              },
+              {
+                id: "c212864d-3162-44c3-a0d6-039b40c8a10c",
+              },
+              {
+                id: "e7f793c0-7215-4401-8651-ab108c9c9f89",
+              },
+              {
+                id: "0881212e-639f-468e-bef3-4d848b9d393f",
+              },
+              {
+                id: "cf8cce3c-fa6b-447a-966c-f2899f40d077",
+              },
+              {
+                id: "b35670ab-8cdf-449e-9323-195fb60c3e33",
+              },
+              {
+                id: "fb60a57c-9537-4935-9e56-c07017d27e74",
+              },
+              {
+                id: "8e90efed-ec1a-4929-b6a0-48c36e36f6f5",
+              },
+              {
+                id: "75b7cb54-4021-48f1-945d-fcc2bfedd9b2",
+              },
+              {
+                id: "65875851-1072-4844-bf60-008196dd6b78",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -2257,6 +4237,7 @@ const execute = async (db: PrismaClient) => {
                     description:
                       "Não somos uma scan, mas sim um grupo que está adiantando determinados projetos ou até mesmo iniciando algum do zero, então qualquer reclamação sem nenhum motivo de algum projeto que estivermos fazendo não será respondida.\r\nJá que no final será apenas os leitores que decidirão sobre qual versão ler.",
                     website: "https://tstranslatiion.wordpress.com/",
+                    email: null,
                     discord: null,
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -2266,27 +4247,59 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "75c1d45b-eda7-446a-8494-1c787af5d200",
+            id: "869c3c17-2e7d-40c5-9810-4772d1856046",
             number: 75,
             volume: "13",
             language: "pt_br",
             pages: [
-              { id: "5a7d9270-cd4f-44c7-8ecb-a9ccae1c044a" },
-              { id: "320e690c-836f-49c8-86c4-a3e96358a124" },
-              { id: "a19ca974-e24c-4b15-a4de-c800e3d75e2c" },
-              { id: "7e50405a-f682-4496-964b-ccbb6d454ca4" },
-              { id: "ed9a566d-45cc-48f7-8c49-a011b420280c" },
-              { id: "3ee78e43-5b19-4115-b25c-682b9cc5b33c" },
-              { id: "4d53b424-34a8-4641-90d1-fd93b947955d" },
-              { id: "f5933de3-e9b4-4748-bbd3-4b669d968d8a" },
-              { id: "5790f487-adff-42e3-9ec1-1d458780cd5c" },
-              { id: "63c58be9-cf77-4a24-ac44-369f7acec28b" },
-              { id: "e09ee828-6f71-4105-9364-a59b20fd12a8" },
-              { id: "07cf86d3-a187-4d43-a364-f21c4ca52031" },
-              { id: "7e4a8bb1-e73a-4a18-863b-ba1b4378c56b" },
-              { id: "352b0f9d-606e-425f-96a0-4e9bb3e44b12" },
-              { id: "9e205b0f-453e-40e2-bd48-3cafb4dc8193" },
-              { id: "9532ef44-13fa-4c98-974c-4be0f0d1e040" },
+              {
+                id: "9af9c23e-a218-4d4b-80f9-cf7f6f0b7333",
+              },
+              {
+                id: "908e0930-4d61-43bd-a089-7fcca3b1e4ba",
+              },
+              {
+                id: "67eddde4-270e-4441-a5c0-8b2ee23dcce6",
+              },
+              {
+                id: "a51dff35-1027-4ddd-ab6d-e95e8be5a5d7",
+              },
+              {
+                id: "0add799b-f6cd-4298-8f58-07d9db514e6c",
+              },
+              {
+                id: "c5159ff3-bf51-4a36-9abd-4fe07e4c468f",
+              },
+              {
+                id: "52181aee-6682-4864-bd06-44d648677946",
+              },
+              {
+                id: "80bee0b1-eeef-474d-90a4-b82ae0011e6e",
+              },
+              {
+                id: "14e99ca8-3a00-4627-9dac-92a0d6b7c1a1",
+              },
+              {
+                id: "5db662a8-e2df-4d81-80b8-4935a87ff3b1",
+              },
+              {
+                id: "922d606b-636c-4fc2-ba27-0d06ec8397df",
+              },
+              {
+                id: "cc103c58-a99c-4767-ad00-276e52a5c58c",
+              },
+              {
+                id: "aaf74e78-7528-412c-8f4b-4a5a744c3b07",
+              },
+              {
+                id: "851eabbf-c57d-41a6-af80-4f59659e28ec",
+              },
+              {
+                id: "31b09d28-518d-44e2-acf0-e5e956dc8cda",
+              },
+              {
+                id: "12c3f112-deb4-4ce5-89a8-4dd4466fa246",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -2299,6 +4312,7 @@ const execute = async (db: PrismaClient) => {
                     description:
                       "Não somos uma scan, mas sim um grupo que está adiantando determinados projetos ou até mesmo iniciando algum do zero, então qualquer reclamação sem nenhum motivo de algum projeto que estivermos fazendo não será respondida.\r\nJá que no final será apenas os leitores que decidirão sobre qual versão ler.",
                     website: "https://tstranslatiion.wordpress.com/",
+                    email: null,
                     discord: null,
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -2308,29 +4322,65 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "e13696c4-f0f3-44f9-8192-d71c2d1f5562",
+            id: "eb650ae8-ffc7-47bc-abf8-f99362bff1d2",
             number: 76,
             volume: "13",
             language: "pt_br",
             pages: [
-              { id: "b972e1e2-1137-4b7f-9fca-cfd1f26c5c38" },
-              { id: "cc3629ed-4baf-4ea1-998f-e74d68b2f331" },
-              { id: "d773d451-2bdf-4969-8d67-d830e4b7c11e" },
-              { id: "94cc3379-6b0a-41d8-928e-c117f5578e74" },
-              { id: "f083afe0-125b-4799-90ef-585ce40f7f68" },
-              { id: "eea4e813-909d-40bf-9b17-d1f70a92e5ff" },
-              { id: "dc2f57c0-ff8a-4744-b33f-647f02644451" },
-              { id: "2402069c-4ee5-45a2-905c-f5f781c87fe9" },
-              { id: "0865ed52-f0d9-4d8d-b59f-417601e849e4" },
-              { id: "8bf32947-9f5e-4498-9d8b-08085fa76c41" },
-              { id: "ff2a561a-40db-4f28-9582-9234ca45c921" },
-              { id: "bc532445-7f27-4535-bd9c-a9fb488aacac" },
-              { id: "5a815044-4e2d-4b2a-8177-186f77cf7794" },
-              { id: "dd0da302-bd7f-4cf3-b460-fd0dfb1718b5" },
-              { id: "c0e3cb17-e25e-4778-a4ae-717fb6e7baf2" },
-              { id: "daa04c76-77d9-495b-8b6c-90efce096f5d" },
-              { id: "a7fe60cc-930e-41c0-938e-cc6261dba20a" },
-              { id: "a6869f87-0d97-453b-90a9-70eca5ade80a" },
+              {
+                id: "787be86e-3355-4606-bef5-0b20394cf5f8",
+              },
+              {
+                id: "9076dfb9-d723-4037-99b0-4bdb686e7a20",
+              },
+              {
+                id: "13251dd4-7d44-4f52-8c91-a6ad4febddec",
+              },
+              {
+                id: "3a92ba8f-61e7-41fc-8a14-2fad5334362f",
+              },
+              {
+                id: "4c46093d-4588-4ccc-b7eb-4a45b956b1dc",
+              },
+              {
+                id: "2326089c-99bc-460c-8968-a0d72c03f6a3",
+              },
+              {
+                id: "adda43a1-8846-4bdc-98f1-fb82e9d77d6e",
+              },
+              {
+                id: "b89c3114-0274-4349-a28f-39d11eab3c02",
+              },
+              {
+                id: "37046e25-2e82-4d5a-a42f-abb1c96cf06e",
+              },
+              {
+                id: "8c97cbbe-9d29-4532-b8ad-e464128591ad",
+              },
+              {
+                id: "b03a49ca-9249-40d9-8624-ce8811e2d290",
+              },
+              {
+                id: "762c828b-a8b2-42eb-a5aa-6a66c9a66573",
+              },
+              {
+                id: "4fd2e03c-859f-4648-af71-69e737dc4ef0",
+              },
+              {
+                id: "bc8ed569-7d24-4e7a-85d0-2a16882fd82a",
+              },
+              {
+                id: "1d33896c-5b0a-47c3-977c-70ec7d4394c1",
+              },
+              {
+                id: "b2efd42b-21d0-426e-899f-97f5b209784c",
+              },
+              {
+                id: "8a9e6d35-cf1e-49e5-a7c4-6205f2be1d95",
+              },
+              {
+                id: "89289d6b-d87b-4244-b754-9632a6baafc8",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -2343,6 +4393,7 @@ const execute = async (db: PrismaClient) => {
                     description:
                       "Não somos uma scan, mas sim um grupo que está adiantando determinados projetos ou até mesmo iniciando algum do zero, então qualquer reclamação sem nenhum motivo de algum projeto que estivermos fazendo não será respondida.\r\nJá que no final será apenas os leitores que decidirão sobre qual versão ler.",
                     website: "https://tstranslatiion.wordpress.com/",
+                    email: null,
                     discord: null,
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -2352,37 +4403,89 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "7872ac1f-efe5-48ca-912d-c63e7dd74df1",
+            id: "cfe93663-dcea-4d7d-a329-d28e75351c7b",
             number: 77,
             volume: "14",
             language: "pt_br",
             pages: [
-              { id: "b5c98f56-605e-4d23-9894-1517dee88afe" },
-              { id: "222c1906-c2eb-4e5e-af1c-3150205ff2e9" },
-              { id: "0569c225-985c-4b49-a269-76cadda9ace2" },
-              { id: "649ee917-a9ed-4049-873b-d4e2456a1d9b" },
-              { id: "4c79dfc4-9db5-4d3a-a54b-0d80bd29a75c" },
-              { id: "629608e0-f63d-4dc4-89b6-3d1b45f9f6a1" },
-              { id: "705d3366-9735-4206-a5a5-1f33e3f8b17e" },
-              { id: "42d4f5db-28bf-4fd9-afb2-cc166c28db0d" },
-              { id: "3f42b3fd-d755-4da0-beb9-a7e45510304a" },
-              { id: "fe079961-e41e-4d49-96a1-252141091f89" },
-              { id: "c4eba25a-7b13-4675-9514-c85391d8c190" },
-              { id: "ce8d0d3d-4e8d-4214-a310-e36f8b54b838" },
-              { id: "9b4e777c-1524-4f8b-a5c1-2a02c7fd3a13" },
-              { id: "f789696e-efa7-4b37-bae0-fb71ea22f2b7" },
-              { id: "24466bc9-fc63-4275-b6ab-934fc37b5dc7" },
-              { id: "f8465e53-d0e2-4e9a-afd0-3a9d5aeb63ef" },
-              { id: "41308e57-cbfd-4f8f-9e1d-49bf5eb94f5f" },
-              { id: "8f7bd895-cd30-46a2-95cc-15537a514755" },
-              { id: "4be23d26-fbf9-419a-8271-46d160b44a21" },
-              { id: "2a9b3935-9c05-480e-baeb-165e6c6af0e2" },
-              { id: "1492526a-93f7-4b17-b96d-f78c81019ad1" },
-              { id: "cb38be23-4a63-4095-8b62-154e148c24dd" },
-              { id: "0e98ada9-684f-4c5d-856b-db8d6124f40c" },
-              { id: "5c577bdf-0109-473c-8534-cd5fa3012e3d" },
-              { id: "de656de9-7ecf-41dc-9869-ca2eeaa2457b" },
-              { id: "a96f3552-81e8-4d2f-9258-990504e60ed8" },
+              {
+                id: "c5db5b9c-38ee-4756-89c3-95db4a0d98bc",
+              },
+              {
+                id: "30c2df01-37b3-4975-b9c6-f72b9dffe38b",
+              },
+              {
+                id: "e4fe9f6d-2a2e-4734-b701-4b02de9697fa",
+              },
+              {
+                id: "28f4b09b-2486-49c3-baec-92bd426ba64e",
+              },
+              {
+                id: "b4ca5323-668d-4b65-bef8-ce5f650154b5",
+              },
+              {
+                id: "7769de88-d59a-48da-b674-a071aebae221",
+              },
+              {
+                id: "3f6df20c-f806-4da6-b238-65483f0955e4",
+              },
+              {
+                id: "db8c0e14-a60d-4821-baaf-68d00560b844",
+              },
+              {
+                id: "b302f22e-e508-47b3-8d2c-d9d7aaedd8b1",
+              },
+              {
+                id: "f8b76b49-50fe-4361-b360-e3fa828271d6",
+              },
+              {
+                id: "7ebc6fe5-c948-433e-86c8-f222913f6304",
+              },
+              {
+                id: "9f79da10-afc6-4889-9f98-ab99f66a0fc3",
+              },
+              {
+                id: "81e8bd41-5092-4849-b96d-b1d239e47b3d",
+              },
+              {
+                id: "941fb50f-0fe9-42a1-a0e4-27345d161705",
+              },
+              {
+                id: "3b86ae21-3f46-4263-a896-8486b11be466",
+              },
+              {
+                id: "0f216ea5-311e-4b67-88d2-9547504960dc",
+              },
+              {
+                id: "ed8216dc-ba8a-4106-9408-654da82709aa",
+              },
+              {
+                id: "6426a39f-3d1d-4ec4-84e3-76e250f9e756",
+              },
+              {
+                id: "b2fbe763-0a7f-41c9-b95f-219dcad90c6c",
+              },
+              {
+                id: "6b3ec938-e096-4260-9c08-5c0b46563676",
+              },
+              {
+                id: "89c3cd7e-8952-497f-ac7f-b28dfc65230b",
+              },
+              {
+                id: "681df9fa-c490-443e-b243-930d7c24dcc8",
+              },
+              {
+                id: "052209ca-aafb-4dde-8f9b-b1a5d083a07a",
+              },
+              {
+                id: "4ca2b154-038c-4a9d-a6be-f4d970222a80",
+              },
+              {
+                id: "89435461-8681-4ae7-bd85-85ac2648f48f",
+              },
+              {
+                id: "cbe6f427-4e57-463a-9877-7abd8f5417af",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -2395,6 +4498,7 @@ const execute = async (db: PrismaClient) => {
                     description:
                       "Não somos uma scan, mas sim um grupo que está adiantando determinados projetos ou até mesmo iniciando algum do zero, então qualquer reclamação sem nenhum motivo de algum projeto que estivermos fazendo não será respondida.\r\nJá que no final será apenas os leitores que decidirão sobre qual versão ler.",
                     website: "https://tstranslatiion.wordpress.com/",
+                    email: null,
                     discord: null,
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -2404,27 +4508,59 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "6e45474d-2e97-4704-b070-ec2a46b2c961",
+            id: "b75b83a3-2b26-49ad-8682-f60581194ff1",
             number: 78,
             volume: "14",
             language: "pt_br",
             pages: [
-              { id: "04dca3e3-da5b-4bee-8c65-5ca0218ca9c3" },
-              { id: "5618fe11-a1dd-42b5-a36b-bc2ecc735b37" },
-              { id: "752ef71b-0b1e-42f9-88fa-ef6d7bb0b524" },
-              { id: "8445934f-e2b3-4d43-b74e-5dc90c11a88b" },
-              { id: "dc4cc99d-9a06-4fab-b93b-c192b0049ec4" },
-              { id: "fac2d106-92d8-4f76-bce6-659999e59a4e" },
-              { id: "09964e61-bfe7-4a7e-8b60-11d65af99e45" },
-              { id: "86e54887-e5bc-4df7-b23c-33a8e690768e" },
-              { id: "4f3cc4b3-91b2-4429-a772-30ee003a5d8a" },
-              { id: "da5d6097-f962-4f06-8501-e8f68745fde6" },
-              { id: "d677fabd-8ee0-4b82-b2bb-f5de3630af06" },
-              { id: "7c954305-9ad7-4b0d-800c-8a43847acbad" },
-              { id: "c567a92a-6dc6-420a-a810-fd3d451a2307" },
-              { id: "9935c7aa-92c5-445d-af89-ac94eba04c4c" },
-              { id: "d4ab6c9b-e569-4a02-bee3-3c6ebef71db8" },
-              { id: "d3b109be-568d-4f23-a3a5-6fe6186fd5ab" },
+              {
+                id: "0932bacc-fd5a-4c66-8169-6b76eed9e813",
+              },
+              {
+                id: "3dcad123-99ae-43dd-af70-e6fcad9ad72b",
+              },
+              {
+                id: "6905e794-faca-4e97-8454-278687f9535a",
+              },
+              {
+                id: "48b3b635-2f83-4c7f-a6ed-62bb3d49be0d",
+              },
+              {
+                id: "4de18316-0fae-49b1-af98-ed4b60af737e",
+              },
+              {
+                id: "ecb4a313-e5b3-436f-8b4c-979903a6bd36",
+              },
+              {
+                id: "675dcfab-9629-4878-b6f0-adf84b72b03b",
+              },
+              {
+                id: "3eabdbbe-4949-45e2-b627-5a1d1122245e",
+              },
+              {
+                id: "c0d90fce-7a7a-4dfb-b757-b1385586fbea",
+              },
+              {
+                id: "6ece71e0-e8fd-412a-af26-f5462215e176",
+              },
+              {
+                id: "7aaac1ab-61a1-4111-9fc4-c506692b348a",
+              },
+              {
+                id: "2b0978ef-41da-4b21-bf28-728d8f528975",
+              },
+              {
+                id: "494857da-fc20-4108-aa76-5ecbb584905e",
+              },
+              {
+                id: "4d641fc8-34c9-49c5-873f-cdff08c315e8",
+              },
+              {
+                id: "fc7a06b7-a8da-415f-b937-46f95905e18c",
+              },
+              {
+                id: "51731fc6-5ce2-411d-a801-3946b478830c",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -2437,6 +4573,7 @@ const execute = async (db: PrismaClient) => {
                     description:
                       "Não somos uma scan, mas sim um grupo que está adiantando determinados projetos ou até mesmo iniciando algum do zero, então qualquer reclamação sem nenhum motivo de algum projeto que estivermos fazendo não será respondida.\r\nJá que no final será apenas os leitores que decidirão sobre qual versão ler.",
                     website: "https://tstranslatiion.wordpress.com/",
+                    email: null,
                     discord: null,
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -2446,28 +4583,62 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "b5f7d4bb-641d-4965-96ca-879d024be2d1",
+            id: "6affda3f-fefa-4fda-9342-eab5029f14a1",
             number: 79,
             volume: "14",
             language: "pt_br",
             pages: [
-              { id: "b6ddf4b5-c815-4422-ac4b-b6ef878dbe38" },
-              { id: "18fa0045-c4aa-41eb-9887-3a551c17db75" },
-              { id: "9837e629-3037-4c47-8c74-0c84dc530c19" },
-              { id: "a265144a-5d99-4c73-a8e9-d05aa5874844" },
-              { id: "73c186a0-6e35-4a9d-91f6-deed6f710db7" },
-              { id: "ef1c27a5-e096-405d-8367-02a569109521" },
-              { id: "7510619e-3e30-460b-9243-6d8394188cb1" },
-              { id: "07255813-a693-46e7-a69a-b8f0f4c7846c" },
-              { id: "a29254fb-6c18-4afa-92b5-b99932733303" },
-              { id: "0661f41a-67d1-48c7-a394-76b4e743ffdf" },
-              { id: "c28eaac6-9339-49c2-873d-5d93ff7a3a38" },
-              { id: "18874fb0-97e4-47d3-821e-2857a7abaa15" },
-              { id: "ea960bc3-7ccd-4f61-a786-2f8d8160de4c" },
-              { id: "909ce6c4-0db4-4925-a67d-15b06531a8fb" },
-              { id: "e3c04946-6d65-410d-9b49-dd3d76cf2e3a" },
-              { id: "fdfb11af-2cda-4e2c-be01-9de539b33c2f" },
-              { id: "fe2cbbbc-c971-4a4c-a8b3-d8fb9d639891" },
+              {
+                id: "c2576f6c-d0cf-45f2-bad3-fa2e87ea4dd2",
+              },
+              {
+                id: "f6f06ae0-c62f-430f-b8f8-7353ed755f46",
+              },
+              {
+                id: "b5b724e1-9dfb-48bb-aeff-2a5ca13caf61",
+              },
+              {
+                id: "63098f45-9185-4c04-adf5-b96bc426efb4",
+              },
+              {
+                id: "c2557ded-4054-438f-8304-904c9ce65bdd",
+              },
+              {
+                id: "a1ecedbe-2820-4370-8afa-3a7b12d7abb1",
+              },
+              {
+                id: "9ae3c278-ccf1-4a37-93ca-9e8e7bdcb695",
+              },
+              {
+                id: "a7c850d7-b892-4525-a48e-b2ca432f4e47",
+              },
+              {
+                id: "239bca36-c371-461a-acea-677a3a2e2a0d",
+              },
+              {
+                id: "ac367db3-4206-4b87-9dc9-3489f881be33",
+              },
+              {
+                id: "d403e28a-9cef-4e24-ad8c-7ee707ee9e0c",
+              },
+              {
+                id: "534e3042-f1ef-4c47-a1ce-62bbf57a9c9d",
+              },
+              {
+                id: "b7d998f9-3812-48db-8969-1ac53887eaad",
+              },
+              {
+                id: "cc067466-2883-4b79-94ab-c49c7c943515",
+              },
+              {
+                id: "48f83ade-7c9c-4c10-82e4-a4588a333b05",
+              },
+              {
+                id: "1640041c-7299-43f4-a62c-9b786d2a216f",
+              },
+              {
+                id: "1e45370f-b754-40b7-a03c-1c9e2052c861",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -2480,6 +4651,7 @@ const execute = async (db: PrismaClient) => {
                     description:
                       "Não somos uma scan, mas sim um grupo que está adiantando determinados projetos ou até mesmo iniciando algum do zero, então qualquer reclamação sem nenhum motivo de algum projeto que estivermos fazendo não será respondida.\r\nJá que no final será apenas os leitores que decidirão sobre qual versão ler.",
                     website: "https://tstranslatiion.wordpress.com/",
+                    email: null,
                     discord: null,
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -2489,34 +4661,80 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "764239c7-bcf7-4fab-9b2a-4f89e8d9f8e3",
+            id: "e6fedbc8-d6dd-4dcd-a2c6-c9d905896feb",
             number: 80,
             volume: "14",
             language: "pt_br",
             pages: [
-              { id: "97ad833c-216e-4dea-8cbb-11f75ff4529f" },
-              { id: "23577403-93b5-464a-9bd9-d556bef62660" },
-              { id: "afc729bb-5008-4946-a570-cec5090ea42c" },
-              { id: "16c8b26e-f19f-4de0-a9f5-a3d910b5e0b9" },
-              { id: "2fc8e792-7971-4e3a-bcde-5d6aa722ea58" },
-              { id: "6c8dd900-b2ba-403d-838c-880a9ce09bf3" },
-              { id: "80611a1f-4d0f-4f31-98a0-0810a13136b0" },
-              { id: "6ab60979-5665-46b6-9878-88c7e7c37181" },
-              { id: "cd7489f2-5226-41b3-ad89-d7cd0d0d2929" },
-              { id: "555305ae-7466-4ffe-9928-b9dd0f055d16" },
-              { id: "19b89673-d04b-497e-8e0a-98a7880ac404" },
-              { id: "d71b1ff0-f7e4-42a2-8172-a8318802bc93" },
-              { id: "1382b884-fda4-4d53-9dea-de1866e047a5" },
-              { id: "cb4c3ea5-e667-47f6-b46d-1c42df187d16" },
-              { id: "35967eab-073a-47d7-966a-65f1083b0d0e" },
-              { id: "31c07e3e-4535-49e6-9946-842524518662" },
-              { id: "00cdfb20-e668-4492-b15d-ac5c6e85551e" },
-              { id: "87201592-021d-407d-ad8f-dd5dd9645351" },
-              { id: "18a9fc06-8154-4fa0-bab6-7e94869a3cc9" },
-              { id: "f2b5ada2-1773-49f8-aea0-c89ede0882f2" },
-              { id: "06b4f687-d815-4cc4-8481-88db5c60527c" },
-              { id: "7100d19c-be02-4818-b737-be343011a50f" },
-              { id: "9928cdfe-8cbd-40ab-b90c-89cf6bd7c933" },
+              {
+                id: "a4ffa2d4-ce69-462d-94e0-cbba4916fcc0",
+              },
+              {
+                id: "01bc8c8c-990d-4e45-9759-7c3c36cbb99c",
+              },
+              {
+                id: "b4e540f0-eae1-4588-ae0d-4f292a7bbf75",
+              },
+              {
+                id: "7d5ee314-a49c-4dad-977f-e17cee464844",
+              },
+              {
+                id: "9de189ed-7ba3-4a39-9dd0-f4ca44a8af79",
+              },
+              {
+                id: "8ee14427-0c68-45f1-9f96-f6e6e7a27e8e",
+              },
+              {
+                id: "e5a30d5f-88f2-47ea-b611-1f31795c445a",
+              },
+              {
+                id: "4a60944f-fa90-47de-955e-a93d07295da4",
+              },
+              {
+                id: "e4963e9b-0e41-410c-a5bb-c52d6289d668",
+              },
+              {
+                id: "2eeb0607-de1b-4620-acad-8bbffb8fc85f",
+              },
+              {
+                id: "aa0a3202-7592-4c35-9fc4-3b93339dc465",
+              },
+              {
+                id: "e4fa6bae-4f28-49d8-8484-3dab512fcd45",
+              },
+              {
+                id: "84b53886-1dd5-44f5-ae14-37ff30faab9c",
+              },
+              {
+                id: "c421af61-73a3-4279-87cc-d969437eec81",
+              },
+              {
+                id: "8cec55ee-6d1f-4420-9463-bd33dbc0f684",
+              },
+              {
+                id: "fa406726-faf6-480c-a0d9-294f4f386b2b",
+              },
+              {
+                id: "c1f999a6-4321-49c9-8b9f-832ecc74a106",
+              },
+              {
+                id: "ebab8e58-e6f5-4f5a-b49e-23a1d29ae9a1",
+              },
+              {
+                id: "700c6da1-a0d9-44bd-a349-9018b125317c",
+              },
+              {
+                id: "64b8d9db-979b-4b93-9b3f-8eb5e51de1d6",
+              },
+              {
+                id: "66172618-0a1b-40e9-a161-aded826dff00",
+              },
+              {
+                id: "c743768e-34da-4cb3-9140-9a38d3e5ab19",
+              },
+              {
+                id: "ab1ed868-c8ca-4c1a-8923-002ffe7cc909",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -2529,6 +4747,7 @@ const execute = async (db: PrismaClient) => {
                     description:
                       "Não somos uma scan, mas sim um grupo que está adiantando determinados projetos ou até mesmo iniciando algum do zero, então qualquer reclamação sem nenhum motivo de algum projeto que estivermos fazendo não será respondida.\r\nJá que no final será apenas os leitores que decidirão sobre qual versão ler.",
                     website: "https://tstranslatiion.wordpress.com/",
+                    email: null,
                     discord: null,
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -2538,34 +4757,80 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "960d347d-12da-4b1f-976b-bd305df9b464",
+            id: "be51e6c9-eea2-47fc-b947-4d78c32e6216",
             number: 81,
             volume: "14",
             language: "pt_br",
             pages: [
-              { id: "391b3351-85ba-484a-93ef-4eaac675c7be" },
-              { id: "5b0c58c3-2392-4d56-95fc-be7d6f49c078" },
-              { id: "7d863c59-f679-40ea-9323-13d96f3f3a48" },
-              { id: "0a8811a1-3637-4091-b431-dc09063a4517" },
-              { id: "319667c4-a1b6-425c-9cb0-e27d2bd67249" },
-              { id: "df59ab9a-3898-47ce-a63e-c9470ce8721e" },
-              { id: "b51e6551-3ad4-4bdc-8a2d-663e0f1d67a8" },
-              { id: "43a28dc8-4e35-487c-8cbe-75069889c4c4" },
-              { id: "c80ce56b-f681-49eb-b1a6-2083296746fb" },
-              { id: "b2fcd630-f0bd-43f1-85f6-eacb5427e964" },
-              { id: "b87e3ec8-b909-4f24-adf0-c97fe104f866" },
-              { id: "25a44f4c-03ac-4538-8576-cc65f7642aec" },
-              { id: "7fdbdcc5-4a79-4fd7-9ef0-62f2acc77854" },
-              { id: "83a2ba35-60e6-4d96-89fd-3a9efa1693b6" },
-              { id: "24368c31-65a7-41fb-9042-d6602007a859" },
-              { id: "3bf1f349-03bc-4761-8072-d042b85f23f4" },
-              { id: "adc0d96e-c3cb-4cbd-8837-79662000ce45" },
-              { id: "c5f5322c-75d9-444d-86d4-54b582a1d528" },
-              { id: "d2c7f54f-a990-4a47-a5cc-b97120d450a9" },
-              { id: "6e439cc9-e196-4242-bfb1-aa7ec8021167" },
-              { id: "9edc1438-a920-4d72-abc8-d2d9bcd1cfc4" },
-              { id: "cfe337e5-84fd-4f56-b18d-0a0acc90cc96" },
-              { id: "ec6ee6b8-a3db-4d72-a6c8-bd56b26526e2" },
+              {
+                id: "7f2500d9-41e4-40ab-a8de-0f963bfc5f43",
+              },
+              {
+                id: "646f909c-f00b-43ce-88ff-7722815e1d78",
+              },
+              {
+                id: "02445f01-c13c-45fd-ac0b-701ac81c560b",
+              },
+              {
+                id: "b12bf68d-58d3-4758-9642-7b83465302ce",
+              },
+              {
+                id: "60958e82-bf65-4c9a-bff4-b6634a1da8fd",
+              },
+              {
+                id: "5f096a86-24fa-4efc-8c83-fbf946b50c9d",
+              },
+              {
+                id: "a28ddde9-cb74-463a-8fad-41f17979d413",
+              },
+              {
+                id: "97d9818e-2bc6-4fb3-9ddd-e731b7fc5e21",
+              },
+              {
+                id: "aab66c7e-c648-4cdf-b441-dae6ae0d9a37",
+              },
+              {
+                id: "b3a5e616-3e2a-46db-9ed6-a8136b223751",
+              },
+              {
+                id: "6bae8c18-d410-4456-9e5a-3c0b2fa4135a",
+              },
+              {
+                id: "e12ec7f2-2310-4d2d-ac67-41340f0850c1",
+              },
+              {
+                id: "de173562-8fd1-4f30-b018-5c872eb35f23",
+              },
+              {
+                id: "091d5a5c-e81c-4c5e-8895-9de7ea8aa8fd",
+              },
+              {
+                id: "8c3f6ae8-2e08-4dfd-91c2-116dd77c0480",
+              },
+              {
+                id: "ebe34320-ddd9-400f-9b26-0b69c9ec8b34",
+              },
+              {
+                id: "32a5ec0e-8ae4-4110-aa71-c4fcfcf2a8cc",
+              },
+              {
+                id: "b5e5119e-0bff-4034-a4c4-50f069d98e7a",
+              },
+              {
+                id: "e0b65e76-c3d0-4607-a7dd-aab814edc820",
+              },
+              {
+                id: "55622c62-343e-4a96-9e4f-b3dfce43de7d",
+              },
+              {
+                id: "4824fb08-3673-4dd9-a674-f7c4e6a3f7a2",
+              },
+              {
+                id: "0ea65736-bb4f-4d9b-bd73-780515fdede8",
+              },
+              {
+                id: "def8f85c-f992-415e-b45b-8cbed0a3bb53",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -2578,6 +4843,7 @@ const execute = async (db: PrismaClient) => {
                     description:
                       "Não somos uma scan, mas sim um grupo que está adiantando determinados projetos ou até mesmo iniciando algum do zero, então qualquer reclamação sem nenhum motivo de algum projeto que estivermos fazendo não será respondida.\r\nJá que no final será apenas os leitores que decidirão sobre qual versão ler.",
                     website: "https://tstranslatiion.wordpress.com/",
+                    email: null,
                     discord: null,
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -2587,32 +4853,74 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "6808f9a2-5832-44c3-b8a2-ba864a632d9b",
+            id: "8d58242c-d4ee-43e1-9d86-48dce9143a71",
             number: 82,
             volume: "14",
             language: "pt_br",
             pages: [
-              { id: "85143678-d008-43bd-8ea9-4cda120fb149" },
-              { id: "d609cfdf-4ef8-4c8a-b683-4b2c10db6d8f" },
-              { id: "fbbf5280-a1b6-4353-aa33-b931415828fa" },
-              { id: "286b3933-7987-4ec3-b614-faa24f296ec3" },
-              { id: "a361d99d-2a7d-46d0-be07-5f9e46827035" },
-              { id: "234f5ff2-944e-4294-bd06-b7d7e65c4aaa" },
-              { id: "2f9fe077-eb9e-4bb5-a40b-01bcc782d512" },
-              { id: "1377165a-3976-4168-bef5-d529be1d883f" },
-              { id: "4f2001f4-ae8a-4f64-b1b5-0be25bb86ac8" },
-              { id: "cd73010d-8ce3-4c87-8775-fa698fd25bc8" },
-              { id: "7235dfb0-bb9f-4fb7-8aca-cf858efe1825" },
-              { id: "0d665e8b-e0fb-490b-9905-ae449c68c917" },
-              { id: "ec84699f-4c23-4ce2-becb-e0e2f47f0367" },
-              { id: "95ce9e57-0052-44d3-be9c-abb598487e07" },
-              { id: "941ae46f-7b15-4d89-a146-8d30ad90be69" },
-              { id: "381f4c93-f68c-46c7-ad86-7a41d021c5f5" },
-              { id: "cbf4144c-7dbf-4dfb-8be9-9272edacb72a" },
-              { id: "18d76567-6871-488b-8d2a-aeefc65cd72a" },
-              { id: "2dba1433-a908-4644-90a2-12dc7fd67ac4" },
-              { id: "ca492813-b188-49f4-958f-287f91c4abe6" },
-              { id: "eb9795a3-087a-44f7-8732-9c488058ad8a" },
+              {
+                id: "26c1cfe4-b231-4579-a1a2-2a1f125f4d9b",
+              },
+              {
+                id: "641716b1-220a-4aef-88a6-c73acca2b70f",
+              },
+              {
+                id: "57cc949b-6998-4565-8ed5-eb703376107c",
+              },
+              {
+                id: "19340e5f-ded7-4339-8219-b3095af5a916",
+              },
+              {
+                id: "33373a36-0621-404e-9480-8953cd3f301a",
+              },
+              {
+                id: "f297c008-ea8d-46e5-baa2-e1c52cd76859",
+              },
+              {
+                id: "417a7acb-daa8-4e29-bdd7-5a5937f47e72",
+              },
+              {
+                id: "aad7a7cb-3bc1-4bdb-8d3f-f48049a37a98",
+              },
+              {
+                id: "bd6ea2e1-7ae9-4336-8e47-3d3c9a9dd778",
+              },
+              {
+                id: "dd2abfc3-bfb3-4ee9-9e75-7e552cc8602f",
+              },
+              {
+                id: "1481e10e-8c82-46ee-b18b-92a2bf4da867",
+              },
+              {
+                id: "31909243-4423-4646-a855-6aa5cafaa141",
+              },
+              {
+                id: "ec70266f-3156-4199-8b9d-d0dd11be96d5",
+              },
+              {
+                id: "30a070d0-bd5a-4508-9947-613eac4c155f",
+              },
+              {
+                id: "bf237ee0-adff-4292-b620-2dc7ac8bcdca",
+              },
+              {
+                id: "971c4de9-e1a3-4a10-ba4f-9d6d05bb1ae1",
+              },
+              {
+                id: "6c0065cc-7c72-4db8-ad6b-b109b6d4bff8",
+              },
+              {
+                id: "c178cae3-fe9a-4fee-be0f-16717907da91",
+              },
+              {
+                id: "917a4ae6-6e11-469c-8940-61672f2aa052",
+              },
+              {
+                id: "8e94d1b8-f6fe-4461-b5dd-154ca4a54b63",
+              },
+              {
+                id: "bcca5df1-ff20-4c06-b066-93728b533557",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -2625,6 +4933,7 @@ const execute = async (db: PrismaClient) => {
                     description:
                       "Não somos uma scan, mas sim um grupo que está adiantando determinados projetos ou até mesmo iniciando algum do zero, então qualquer reclamação sem nenhum motivo de algum projeto que estivermos fazendo não será respondida.\r\nJá que no final será apenas os leitores que decidirão sobre qual versão ler.",
                     website: "https://tstranslatiion.wordpress.com/",
+                    email: null,
                     discord: null,
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -2634,32 +4943,74 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "9a1a4b25-7920-4700-b8fc-765763447819",
+            id: "39fc3880-1e3e-4989-ba4f-a9ca7042c618",
             number: 83,
             volume: "14",
             language: "pt_br",
             pages: [
-              { id: "7942e585-d8cd-4129-9155-9dbb08be3eef" },
-              { id: "46ac81c1-6776-4f8f-9012-4a5e78627b3a" },
-              { id: "0db741c1-5b67-4d12-9c03-4834fb4ac2fb" },
-              { id: "18af0c5a-b3d4-4aa5-aeb8-e8e37005727e" },
-              { id: "0b11fc59-92af-4a7d-8eb9-07f32922f22c" },
-              { id: "fa033720-8e71-4e38-9147-33e7ffe196a4" },
-              { id: "4803da7b-8911-4f13-8630-654e2904c7cd" },
-              { id: "e747d2cf-acdc-4ee6-8d91-553f4e13c472" },
-              { id: "791ef6fa-e886-41cd-b8ed-799b321f0670" },
-              { id: "9d2f1edb-9879-42c8-bbfa-cfcb16612181" },
-              { id: "289ff1e5-566a-4bbd-a9a1-e9acd343e260" },
-              { id: "767802d6-13d5-4bfd-a676-a21075d5e307" },
-              { id: "81364917-ba47-4ee9-b775-933f39f926fc" },
-              { id: "e230a11d-0d2a-471d-8330-bc10bed65bc0" },
-              { id: "34bbfa30-24ca-4983-8e88-d1415876e73f" },
-              { id: "ef656766-c3a7-4cb8-9b78-fb98903def76" },
-              { id: "615b69de-1acf-4de9-8218-f7dd30cff59c" },
-              { id: "7a6a2da5-7349-45f6-b608-f562be1cb7b4" },
-              { id: "d716596e-4ecc-4857-8a02-18ebbe99f284" },
-              { id: "fe5fdb3f-36c8-467f-a933-1f06725847c9" },
-              { id: "56e8165d-cfd0-4b5d-8918-dac4740c6750" },
+              {
+                id: "c056063e-c2a3-433a-947d-6ce88d6233a5",
+              },
+              {
+                id: "180d7573-bfcd-4ab1-9f53-f343ea33844a",
+              },
+              {
+                id: "adb0e9aa-7458-40ea-a8c5-b182562b7dd7",
+              },
+              {
+                id: "e6c35d0b-fdfb-45a4-9a4c-f6fa301d25fc",
+              },
+              {
+                id: "d6006a18-9db8-411e-a99e-c9aaec538c17",
+              },
+              {
+                id: "905a316e-5659-4d23-8ffd-fb60e75170e2",
+              },
+              {
+                id: "08c98c28-57fb-46a8-83eb-55fa731b2f20",
+              },
+              {
+                id: "34f7d282-5f5a-43de-8316-f50018703ebd",
+              },
+              {
+                id: "cf710d9e-d062-4302-b2f8-50da945f48f6",
+              },
+              {
+                id: "ff48de32-027d-474a-a84e-768ce81a4a0d",
+              },
+              {
+                id: "f1bf1cc6-d349-4d2a-b3c9-4d769e24b682",
+              },
+              {
+                id: "571de80d-5df6-4954-8fb5-fc5a73121981",
+              },
+              {
+                id: "17d2f447-a3da-462c-b723-c19bc705ab47",
+              },
+              {
+                id: "6503fde7-a463-4bbd-b9b4-fefd599f18aa",
+              },
+              {
+                id: "a2b34812-6dc7-4f4c-9b42-f4830d1b36db",
+              },
+              {
+                id: "6fc079fe-8e1c-4061-accd-687540f24666",
+              },
+              {
+                id: "39d80e19-d83a-4f34-938c-4b0a7f0d5b60",
+              },
+              {
+                id: "d129682a-9397-4128-a0ce-1e223d8d1068",
+              },
+              {
+                id: "b3ad13b0-d786-4e16-b61e-590c65d8ed1f",
+              },
+              {
+                id: "3c50ea5f-b2c3-463f-8499-e0301acf0359",
+              },
+              {
+                id: "0c25d5e0-413f-4ec9-b7a1-4e6bd2fd5657",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -2672,6 +5023,7 @@ const execute = async (db: PrismaClient) => {
                     description:
                       "Não somos uma scan, mas sim um grupo que está adiantando determinados projetos ou até mesmo iniciando algum do zero, então qualquer reclamação sem nenhum motivo de algum projeto que estivermos fazendo não será respondida.\r\nJá que no final será apenas os leitores que decidirão sobre qual versão ler.",
                     website: "https://tstranslatiion.wordpress.com/",
+                    email: null,
                     discord: null,
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -2681,36 +5033,86 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "28bebb8f-d809-4c8d-af0d-1da089f70e9c",
+            id: "26776650-2c48-4ca4-a2be-371b2961305c",
             number: 84,
             volume: "15",
             language: "pt_br",
             pages: [
-              { id: "ee4bf6c5-595e-4a76-9e1c-387d0a5eb677" },
-              { id: "27947d22-c034-40be-a5e3-a99b1c848859" },
-              { id: "541c668e-81b6-4d84-a9fa-a50367c34fe8" },
-              { id: "33fb5a52-953b-4126-ad22-a22a65b8b188" },
-              { id: "a596d705-235d-49d3-bff9-23e15ad9eb6b" },
-              { id: "abd5ec7f-58a0-41b8-b1f7-46a6f969cc09" },
-              { id: "8f9c66a6-677d-4c96-b1c9-131a2f822a40" },
-              { id: "57e39405-120a-42c4-847b-cc1cbeab2aad" },
-              { id: "1b44ecd7-7b25-4671-b2c3-bcc3ad399a68" },
-              { id: "e4639deb-6bfc-4f59-8bf8-f489da5dc141" },
-              { id: "bc698841-be4b-4d40-8063-0513e141269a" },
-              { id: "3b85b014-28df-4ae4-b33c-6c740c78dc64" },
-              { id: "a443e304-73ec-4626-ab59-d027009f7338" },
-              { id: "d2f35ac6-404d-40c2-aef4-60dae86e2697" },
-              { id: "e29d7e11-c893-4144-add7-17d317b2d7ab" },
-              { id: "3d1d67f8-956d-401f-a68f-e7e471b1698e" },
-              { id: "89db706c-9486-4733-bdc1-af7b9198b86f" },
-              { id: "9fa82a89-1dc6-4272-b132-128cf3a8b95f" },
-              { id: "2c1d658d-9c4f-44f8-a246-7ecc79ac6735" },
-              { id: "2175ebf2-f105-4a71-b33b-be1aa5daeaf2" },
-              { id: "a3c47dc0-7b17-4871-97e3-6ea05910a3e3" },
-              { id: "ebfcf0b5-3b62-4d3f-bf60-c0e61b5b197f" },
-              { id: "1447f222-0554-4c8c-bb1a-89bac85fdcec" },
-              { id: "baa44b91-ef54-41df-b182-713ebe50f03b" },
-              { id: "5e7e6b8d-ddb6-4b8b-b983-bced7b31a9f0" },
+              {
+                id: "355be895-d674-44d3-806d-66a064afd1e9",
+              },
+              {
+                id: "39fd764c-9e3c-4659-a617-ec7d4d3a0d52",
+              },
+              {
+                id: "03dcbace-b51e-4074-b62e-5d6da9ed288e",
+              },
+              {
+                id: "55492245-50e5-425c-9bed-52c4c449982f",
+              },
+              {
+                id: "a9d8994e-de39-48dd-ab48-28ea8342b7e9",
+              },
+              {
+                id: "2be58f7a-55ff-4231-a9d0-df938235e996",
+              },
+              {
+                id: "d5ba1855-e90d-4c23-93ac-1f835b3b0e4b",
+              },
+              {
+                id: "7475ecfa-2b20-4380-9e51-af4fee61577c",
+              },
+              {
+                id: "a57ea0fb-9e26-41a3-af63-5157e3b2ff50",
+              },
+              {
+                id: "109fba8a-2903-483a-8130-abc95fd4dcdf",
+              },
+              {
+                id: "c5ed9c68-e160-47ba-b6f7-a8c099a20969",
+              },
+              {
+                id: "24df78a2-f4f3-4b02-b28e-7de153a4e9df",
+              },
+              {
+                id: "7ba3f152-3239-4e09-a35f-b3c2fc162559",
+              },
+              {
+                id: "937c35c4-d486-490f-942a-09ab255b8e7c",
+              },
+              {
+                id: "a2781725-ec20-4916-af7a-9a44248bb24e",
+              },
+              {
+                id: "439abe79-d3bf-4957-a999-1948b1926453",
+              },
+              {
+                id: "dd02c481-ce6f-4e45-8137-56097e990182",
+              },
+              {
+                id: "7b136b13-913f-48b8-a069-2e04b3991a58",
+              },
+              {
+                id: "4e5fcd50-6ed3-4eb2-906f-ffd0c75ec426",
+              },
+              {
+                id: "1a719100-3623-442b-a89b-b06476ea0079",
+              },
+              {
+                id: "a0ab0d7c-7d00-4da8-9b20-eabd141b1407",
+              },
+              {
+                id: "b707d228-7e14-4cc4-ae89-c883e3abc398",
+              },
+              {
+                id: "ff624500-2c3a-4cd5-889f-8073befae310",
+              },
+              {
+                id: "c5866f19-3d04-489e-8482-06cb94c40bba",
+              },
+              {
+                id: "03fe747c-c8e4-4e13-85db-690336de69de",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -2723,6 +5125,7 @@ const execute = async (db: PrismaClient) => {
                     description:
                       "Não somos uma scan, mas sim um grupo que está adiantando determinados projetos ou até mesmo iniciando algum do zero, então qualquer reclamação sem nenhum motivo de algum projeto que estivermos fazendo não será respondida.\r\nJá que no final será apenas os leitores que decidirão sobre qual versão ler.",
                     website: "https://tstranslatiion.wordpress.com/",
+                    email: null,
                     discord: null,
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -2732,38 +5135,92 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "c38ec5c8-f1af-4914-81a2-c268f69ed8dd",
+            id: "bec66f3c-bdd1-4616-a298-c0423ab2c40f",
             number: 85,
             volume: "15",
             language: "pt_br",
             pages: [
-              { id: "1bbe2877-a851-4493-971f-127d97eeb5c9" },
-              { id: "ecd16ab4-e261-4b6c-ac55-9c8d5cf46940" },
-              { id: "680ca4d9-7a52-452a-a8a7-ee52e0d503de" },
-              { id: "34a2851c-2e59-4157-bed5-0f6dc98d883a" },
-              { id: "388eb5c5-11a3-452e-84d7-ea18f997f539" },
-              { id: "25d26ecd-e587-429c-b41c-8407e9d7f2e1" },
-              { id: "428ea060-4b58-4321-80bf-195505d14da2" },
-              { id: "cf1441a7-faad-4411-a70e-f876fd54a15c" },
-              { id: "4d38ccc9-c4c5-4fed-a0eb-d66e905b5531" },
-              { id: "10362c95-2590-4fea-af3d-a96361898582" },
-              { id: "c9c8b5db-d09d-4207-a567-416ba3961e37" },
-              { id: "b1037edc-4ae7-4922-9526-056043b78333" },
-              { id: "b624ca70-9082-49e1-87c2-59775e9a99a9" },
-              { id: "efe97638-2052-43f8-b75d-9a30d6e171d7" },
-              { id: "3e14e538-bba5-444f-99e9-ad0ea09f268c" },
-              { id: "0da1bc46-48ef-4594-a085-daf9de655438" },
-              { id: "ca13078e-7e42-4889-a963-35d13489a89e" },
-              { id: "e82323db-a2b7-4a87-a5b2-b34bba4d6378" },
-              { id: "159fa928-65d4-403d-8c18-4a0327cfecf4" },
-              { id: "fa20d5b9-5183-41f9-9a61-9d227995c425" },
-              { id: "73a51eb0-a05f-4033-90b7-ac86935937f7" },
-              { id: "cf6585ba-4f62-4573-b718-9a9de6c9341e" },
-              { id: "54e00349-2359-496d-a912-bba4664665b6" },
-              { id: "26b6e458-f01c-41e8-ab77-b172845aaf89" },
-              { id: "8efc4515-141e-4d0d-8edc-483451d7bd16" },
-              { id: "23393c99-8efd-4375-a8d5-4e8daae4b4bd" },
-              { id: "fb062884-6bb1-4d97-a7c3-e67869ccb2a2" },
+              {
+                id: "8a06833f-e7ce-4883-a70a-c178e4957e91",
+              },
+              {
+                id: "f7433947-7463-4723-bec5-479bd0f9d37b",
+              },
+              {
+                id: "3f3dd9c8-e964-4ff6-bb65-6c0848a86074",
+              },
+              {
+                id: "b606b746-c49f-4ff6-97a0-1618efd3e2cf",
+              },
+              {
+                id: "1cd7ec15-8c28-4b10-8eef-3a831409f49f",
+              },
+              {
+                id: "9470bf65-a7e8-48dc-8c7b-20c40e7c4a94",
+              },
+              {
+                id: "49c40c5e-364f-4e52-804b-739ad810c381",
+              },
+              {
+                id: "65140a64-bc36-4252-b7f9-f2338ee2022b",
+              },
+              {
+                id: "db07835a-c3c3-4879-88ee-a3a535d39a04",
+              },
+              {
+                id: "87fcaee5-b6d3-4e35-bcca-43af63fb66ee",
+              },
+              {
+                id: "f33b72d9-8d6b-4fb0-8c8d-31fe04ddd091",
+              },
+              {
+                id: "3a3dd577-d678-4f35-add9-d65bcb48a86d",
+              },
+              {
+                id: "87b60da9-3dff-4f6d-9ffd-d891893b20f8",
+              },
+              {
+                id: "766be900-175b-4c8c-8404-fd809304783c",
+              },
+              {
+                id: "7d0236bd-265a-4599-bf89-8c03e0506090",
+              },
+              {
+                id: "6e2366dc-ebd8-421c-b5f6-190482d0ca94",
+              },
+              {
+                id: "21ad04e7-4869-4a22-af6c-f93fbbc04511",
+              },
+              {
+                id: "50f1068b-0586-4dd4-b81c-54cb67790aad",
+              },
+              {
+                id: "b777cfef-d0c0-49d8-874e-c4383509f758",
+              },
+              {
+                id: "1538f413-8ed0-4d24-bf3b-deb3e7aed629",
+              },
+              {
+                id: "cc7af29f-77d1-42ef-9b4e-69e6e2ddcb7d",
+              },
+              {
+                id: "74a1dd10-5826-4592-8527-d4c6d62be053",
+              },
+              {
+                id: "7ac648a6-9a3c-42f4-a22e-cc22d032f8db",
+              },
+              {
+                id: "3b2bd4f8-ad41-4a8f-b8fb-336845c74ce1",
+              },
+              {
+                id: "6e97b6dc-3365-44a9-b3dc-9011778617cd",
+              },
+              {
+                id: "7bfad63a-53f5-4406-b60d-8c0ddcee44c8",
+              },
+              {
+                id: "e9da5ebb-5b0e-42d1-b815-8c6c3cc6b7cd",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -2776,6 +5233,7 @@ const execute = async (db: PrismaClient) => {
                     description:
                       "Não somos uma scan, mas sim um grupo que está adiantando determinados projetos ou até mesmo iniciando algum do zero, então qualquer reclamação sem nenhum motivo de algum projeto que estivermos fazendo não será respondida.\r\nJá que no final será apenas os leitores que decidirão sobre qual versão ler.",
                     website: "https://tstranslatiion.wordpress.com/",
+                    email: null,
                     discord: null,
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -2785,36 +5243,86 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "1a7c6602-8783-4146-b788-ca55da79bd21",
+            id: "77b58739-004d-401d-9b44-ae09e2e68243",
             number: 86,
             volume: "15",
             language: "pt_br",
             pages: [
-              { id: "347d39c4-d0ed-4ea0-9016-b94a99f84daa" },
-              { id: "bb8c18f2-a8bc-4404-b35b-93c992b0c5cc" },
-              { id: "a09f072d-97db-4a40-8266-8e16dddb8d02" },
-              { id: "2b9c5b2d-6291-4295-b75b-9a2e6d232c33" },
-              { id: "a8f706ab-45ec-45e7-aa29-dd75cdb9cb07" },
-              { id: "ba53cfb8-af82-46f8-a446-e9c7145f8e5e" },
-              { id: "873f060c-6c27-4937-a736-29b96241ff3b" },
-              { id: "9ddad7b5-8463-453a-b841-0d206314be82" },
-              { id: "3279e3f6-ab90-44ae-8db8-3357dafd833a" },
-              { id: "08aab3cb-c2ab-4cdb-a8c1-c9cf91fcad16" },
-              { id: "da59f86e-09c4-476c-b6b9-674340615bc9" },
-              { id: "4c91c52e-44f0-4785-83b5-6e2bcd8b776e" },
-              { id: "ef8e34c7-261b-4ad2-93f5-bb2b33998959" },
-              { id: "fc1ad3d5-a591-47ae-8a84-ff9d3d7870cb" },
-              { id: "ad986d59-956a-4aed-bff6-fcc31b59bad4" },
-              { id: "f8e14c42-e0e3-436b-bd2d-e576b59693bd" },
-              { id: "02522d49-490a-4525-9cea-05eb17479bd7" },
-              { id: "9fd331d0-5911-48d1-8437-e930a2be337d" },
-              { id: "a80a8884-d361-4a4b-b828-91658e982900" },
-              { id: "4caa960c-8d7a-41b7-b0fa-2785aa3ecaed" },
-              { id: "ce127021-3e65-4a02-9b60-b6c4767fd03a" },
-              { id: "1b113530-f27d-4fb1-ad47-7ae6b5bfb4e5" },
-              { id: "fa6ff588-d444-4068-aca3-6daeaa85e61a" },
-              { id: "4c38c928-a472-431a-b0d2-c4cfcae8a253" },
-              { id: "d22c83b5-c554-4f07-aea3-2cfe8a550d05" },
+              {
+                id: "952399c6-f03e-484c-ab5e-a6684eff14c2",
+              },
+              {
+                id: "dc5325fe-2174-447a-be7d-558778ed33ad",
+              },
+              {
+                id: "9ced8bb7-9af2-42bb-9884-8f3a065de46c",
+              },
+              {
+                id: "b7f8b5fb-f2a6-4ed9-9fe2-08f5bee1de85",
+              },
+              {
+                id: "55ba1c41-e4f0-40f8-9f92-11681fc42bb7",
+              },
+              {
+                id: "08d4692b-956d-4998-97e2-e5c3f4aa02fe",
+              },
+              {
+                id: "fb240484-0658-45b6-9f40-979ff2b460f2",
+              },
+              {
+                id: "89e59aea-37f7-48bd-9b60-577f581866ae",
+              },
+              {
+                id: "7767d63f-1371-4cf9-85d7-1ba43adb451c",
+              },
+              {
+                id: "2156004e-174a-4a58-bb3e-a9c227ae0047",
+              },
+              {
+                id: "6b8cddcc-9e44-41ee-bbf4-04172ced8ae2",
+              },
+              {
+                id: "87822579-9701-44e5-8aa8-04a878ba9344",
+              },
+              {
+                id: "6efdfeac-229e-4579-ade5-73383c54592c",
+              },
+              {
+                id: "90109d79-b1e0-4920-9afd-028a6b483208",
+              },
+              {
+                id: "00d7fa27-436f-4bba-82b0-0a6789498525",
+              },
+              {
+                id: "21b20ebb-6132-48af-870f-59411c11fcfe",
+              },
+              {
+                id: "d9471939-f740-4910-a486-67263efcdfed",
+              },
+              {
+                id: "65c917f1-2387-4fb8-a6d1-d8ec308e3594",
+              },
+              {
+                id: "111165f1-6695-483c-ac5f-ea3ba71bd117",
+              },
+              {
+                id: "6c06890b-b157-493d-86d6-d2541e3ab3c7",
+              },
+              {
+                id: "c9ab8667-7bca-451d-92f5-ced16d41be68",
+              },
+              {
+                id: "c0427831-c357-44a7-a30d-bfba78193dfa",
+              },
+              {
+                id: "b7817cf9-669a-4eea-a624-d0bdc0f2057c",
+              },
+              {
+                id: "8ab80d7d-4309-4f82-ab81-80611ca8870d",
+              },
+              {
+                id: "61ffdc94-b601-4c7a-b7f5-7fa8072bdd43",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -2827,6 +5335,7 @@ const execute = async (db: PrismaClient) => {
                     description:
                       "Não somos uma scan, mas sim um grupo que está adiantando determinados projetos ou até mesmo iniciando algum do zero, então qualquer reclamação sem nenhum motivo de algum projeto que estivermos fazendo não será respondida.\r\nJá que no final será apenas os leitores que decidirão sobre qual versão ler.",
                     website: "https://tstranslatiion.wordpress.com/",
+                    email: null,
                     discord: null,
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -2836,32 +5345,74 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "7cb8c7ef-c884-4f82-afb4-efa07d88c4fd",
+            id: "2ba17316-074b-4c70-a04e-14ee0ed9df33",
             number: 87,
             volume: "15",
             language: "pt_br",
             pages: [
-              { id: "9c3f6bd0-bfd2-4eb1-9adf-53dc7cafe538" },
-              { id: "66252697-4a08-439b-9c49-c93328df1747" },
-              { id: "3d32ec0f-f3c9-47ed-945e-60ffb43e4cfc" },
-              { id: "8a5b5fbf-2d18-493d-898b-ff8767ae13d4" },
-              { id: "e44d18ed-56d7-4069-ada2-f3de2795ce0a" },
-              { id: "c8763688-d3c5-40a3-99b1-2034771c1a78" },
-              { id: "9bc49a32-9828-40c2-869a-307b3867a4e0" },
-              { id: "d8c9456e-38aa-482b-ad7e-3fa9b3631e14" },
-              { id: "b632d828-6fa5-4ab6-951f-98f4eb31359e" },
-              { id: "be9b02ed-fa99-4500-8ce2-766d7cd85a69" },
-              { id: "e9c6a490-540a-4b0b-bc86-aa1dc4a1ac81" },
-              { id: "a7b134cb-d894-4019-8f95-5a2fdee37f18" },
-              { id: "36bddb0f-24ca-4e61-8db1-fedd63f911f2" },
-              { id: "ca73108b-8ebc-4a93-b595-7eb42eade56b" },
-              { id: "cd283523-8ff8-4ce3-b7ba-8293888ca5cd" },
-              { id: "ef8c7cae-36b5-45bc-a213-f576f3962b15" },
-              { id: "341ee974-8aab-404d-ac39-cc125fa20127" },
-              { id: "835df3c6-f4bb-4a1d-9131-78beeece17f9" },
-              { id: "0d5b310a-0a1f-4ec9-8058-287c7dff5bf1" },
-              { id: "592c694f-c0e8-4cea-873e-a64438425d4b" },
-              { id: "fcab9077-4ea1-43b1-ba21-3c5eef1f9651" },
+              {
+                id: "e6136d15-0680-436c-9fa0-52adb82d8b07",
+              },
+              {
+                id: "55f17650-c2aa-43bd-923d-3a3ecfcc8d78",
+              },
+              {
+                id: "49f8344d-0601-4b04-b8d2-ab34b2df6460",
+              },
+              {
+                id: "6f556065-a7d2-4a1a-9b63-dbb766135b59",
+              },
+              {
+                id: "59b30178-85bd-4616-909e-e4d61a01550a",
+              },
+              {
+                id: "4323d16a-630f-4842-8616-cf3ed94b3e34",
+              },
+              {
+                id: "6e3dfce8-af23-4a7b-8a4c-0e962058bb97",
+              },
+              {
+                id: "8c8fa669-1958-4ba0-bf9d-407f61b76096",
+              },
+              {
+                id: "45b9aef0-bca9-4e8e-9210-4504fd3243e5",
+              },
+              {
+                id: "e5e43863-c33f-4338-8d39-73228065f778",
+              },
+              {
+                id: "af2a4c33-e265-43a9-8756-869d5c807f81",
+              },
+              {
+                id: "f0086d9a-006d-44f2-a204-d9e7f6774d10",
+              },
+              {
+                id: "b488a243-e319-4a8d-a719-10269684bb71",
+              },
+              {
+                id: "677aaf06-5245-47a8-b729-5bb9c1e6797b",
+              },
+              {
+                id: "bc9813e4-020b-4d63-92d1-2503faf7cbfc",
+              },
+              {
+                id: "00061366-c95a-4985-8e2d-e851ecc8188a",
+              },
+              {
+                id: "099da8fb-9ff6-4443-980e-f01cded9612d",
+              },
+              {
+                id: "80b8290a-442a-4fc5-837e-2103d38dbd68",
+              },
+              {
+                id: "50210e85-deb1-4850-a505-e0cad5f10839",
+              },
+              {
+                id: "bc720236-0227-43ad-90ae-ace4471c4968",
+              },
+              {
+                id: "b9d43fdd-a0b8-4711-becf-7f27ceda63a3",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -2874,6 +5425,7 @@ const execute = async (db: PrismaClient) => {
                     description:
                       "Não somos uma scan, mas sim um grupo que está adiantando determinados projetos ou até mesmo iniciando algum do zero, então qualquer reclamação sem nenhum motivo de algum projeto que estivermos fazendo não será respondida.\r\nJá que no final será apenas os leitores que decidirão sobre qual versão ler.",
                     website: "https://tstranslatiion.wordpress.com/",
+                    email: null,
                     discord: null,
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -2883,42 +5435,104 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "6d6e5076-b86e-452c-9026-39d0f25b009f",
+            id: "3ebfa97e-6742-4d5d-b9dc-bc98f41fa33f",
             number: 88,
             volume: "15",
             language: "pt_br",
             pages: [
-              { id: "48e4feca-de40-45a0-b109-3197407aad94" },
-              { id: "87ba1ac6-4537-418f-bfb4-904385962b84" },
-              { id: "bb5d1c92-b163-45fa-8893-a50f06313c69" },
-              { id: "24143b93-0062-44ad-964f-95631ab50be2" },
-              { id: "f225e9a5-fa2d-4161-ac95-52d935b43b7a" },
-              { id: "34ddb672-663a-479c-a53c-1c772785d273" },
-              { id: "6fd7f908-1e6c-42c5-ac74-353b82e1f456" },
-              { id: "0d141ef9-9e6e-453c-be6b-967f6f4d2732" },
-              { id: "99911199-ab24-4d79-b2a0-3b4ea86d4be8" },
-              { id: "8dcfe493-aaf8-4e36-a80b-0d079af88cfe" },
-              { id: "a3539bb9-a702-458f-b2ce-a1b450c405d2" },
-              { id: "8def441d-2ab7-4361-92c4-96eb2cdae6da" },
-              { id: "a196a4c1-c9ff-4784-bbf2-6bb414e150a9" },
-              { id: "b52ca504-5b38-4367-909c-c92662389cb9" },
-              { id: "d6e4dcd8-e531-4f8a-8ea4-8263d875e7c9" },
-              { id: "51428369-6796-4595-b0e9-0610b9ca21ee" },
-              { id: "c44d4195-8de1-4377-9c78-e9dec5b15131" },
-              { id: "6e25dbfa-d328-4132-9f1d-9f42bfd61a2b" },
-              { id: "c0dd7c35-79ca-41d4-9d66-85c00b04773e" },
-              { id: "782c9f6d-e3c7-4bb2-8c9e-e16e48224cb3" },
-              { id: "0a4fc8fe-e5a1-41cc-93cc-684b7306035c" },
-              { id: "745c8bc8-0dd0-4afa-b62f-019b365cdcad" },
-              { id: "86937e34-f16f-4820-9a31-61b24ca8a510" },
-              { id: "93c5d2c5-4e7d-415e-bdb7-de80594f4ddd" },
-              { id: "cf660dbb-a563-459c-99f0-ec18a6b5edd0" },
-              { id: "f9ae1733-d344-43af-971d-43386a4a27e4" },
-              { id: "9c471a83-f68b-4db1-b590-3cbe95a7f609" },
-              { id: "33d20e0d-2fc9-452a-89b7-fff98d0aa211" },
-              { id: "49a9c8fd-f037-4fd8-b5bc-538a36ef200d" },
-              { id: "942a8081-44e0-4548-aa21-23603f4f1ba8" },
-              { id: "3ab771b7-b41e-4677-95a8-effc95ba2a07" },
+              {
+                id: "e68a8915-fe52-4485-adfe-ba5cd874f61a",
+              },
+              {
+                id: "55b594e0-a5dd-47eb-984a-f2f1284920c5",
+              },
+              {
+                id: "e9519b40-4b3a-4c1c-9f5f-156d2ccc1b8a",
+              },
+              {
+                id: "8d7a8167-c55a-4325-ab02-821fbdd9a582",
+              },
+              {
+                id: "44923f3a-7d95-40dd-b804-541ebe1d60d8",
+              },
+              {
+                id: "1502baef-411c-48a7-b188-b6522321d91d",
+              },
+              {
+                id: "ccd9926f-411b-46eb-b7e3-9e55e8b1702e",
+              },
+              {
+                id: "98c0f047-a0f1-476f-9ed8-8c6e66a5dc4e",
+              },
+              {
+                id: "dac0b03b-0ac2-441c-ab97-0b4785606a8a",
+              },
+              {
+                id: "73b57b89-fcbb-43db-a5b7-1d528bbea410",
+              },
+              {
+                id: "eae9d080-2729-4e39-9895-ceb18893a6c8",
+              },
+              {
+                id: "4f9124ca-d034-4ad0-a617-a48c9b1fa574",
+              },
+              {
+                id: "4b187960-8e2e-4e91-a616-232949547d7c",
+              },
+              {
+                id: "11bd4059-65b4-469a-a71a-6f6b486af409",
+              },
+              {
+                id: "8c39c478-4ec4-46b3-8a21-0a9a243c6fda",
+              },
+              {
+                id: "895ab95c-9601-4d40-b5c5-44f5ec6a018e",
+              },
+              {
+                id: "30b640e0-9f59-49a4-a5c5-6fabf8f4dfef",
+              },
+              {
+                id: "61996e8b-5b0b-4398-854e-78b49dbf47f4",
+              },
+              {
+                id: "0fbd75b7-8aed-4514-96f7-72e0d44e9691",
+              },
+              {
+                id: "423cf666-850c-48e7-8865-8288d6cd19bc",
+              },
+              {
+                id: "7693b3f8-7696-47f9-a743-c8d0eae62cab",
+              },
+              {
+                id: "9bb1c327-0af5-4cd0-bbfa-1a7e14888941",
+              },
+              {
+                id: "309d906a-c612-4434-ad77-9f1cc48c7d58",
+              },
+              {
+                id: "8d8c48c5-f8d4-4802-a125-defaea4d968a",
+              },
+              {
+                id: "a1caf670-6751-4d9c-b5c5-63f7dbcb9458",
+              },
+              {
+                id: "62674127-3df9-4391-a338-1e26b620034e",
+              },
+              {
+                id: "85920d29-00fd-4980-9e67-a93cf5707161",
+              },
+              {
+                id: "d42761c5-b95c-41e7-a0b7-6a0cfb9e82f1",
+              },
+              {
+                id: "893f7115-89a4-4f77-b786-25def3de9a9d",
+              },
+              {
+                id: "470d3114-3e6d-4dd2-b32e-b707ef44298d",
+              },
+              {
+                id: "b1bf653c-8afc-4912-bad7-b38ae45ec42c",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -2931,6 +5545,7 @@ const execute = async (db: PrismaClient) => {
                     description:
                       "Não somos uma scan, mas sim um grupo que está adiantando determinados projetos ou até mesmo iniciando algum do zero, então qualquer reclamação sem nenhum motivo de algum projeto que estivermos fazendo não será respondida.\r\nJá que no final será apenas os leitores que decidirão sobre qual versão ler.",
                     website: "https://tstranslatiion.wordpress.com/",
+                    email: null,
                     discord: null,
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",

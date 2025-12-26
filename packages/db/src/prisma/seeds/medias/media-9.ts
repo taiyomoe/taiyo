@@ -3,7 +3,7 @@ import type { PrismaClient } from "@taiyomoe/db"
 const execute = async (db: PrismaClient) => {
   await db.media.create({
     data: {
-      id: "b66bae5b-3113-4de3-a2f5-b070006acae0",
+      id: "d22a95ca-be76-4d65-97c4-a1bb5d46d32c",
       synopsis: {
         en: 'What has not yet been seen, and what cannot be seen - "X". Beyblade, accelerated to the limit (extreme), blasts through a new era!',
       },
@@ -18,6 +18,19 @@ const execute = async (db: PrismaClient) => {
       source: "ORIGINAL",
       demography: "SHOUNEN",
       countryOfOrigin: "JAPAN",
+      links: {
+        mangaDex: "f1845adf-270b-4405-9438-0c56b1b9576c",
+        anilist: 165050,
+        animePlanet: "https://www.anime-planet.com/manga/beyblade-x",
+        bookWalker: "https://bookwalker.jp/series/436375/list",
+        mangaUpdates: "https://www.mangaupdates.com/series.html?id=0kzjjmh",
+        myAnimeList: 159721,
+        kitsu: "https://kitsu.io/api/edge/manga?filter[slug]=beyblade-x",
+        amazon: "https://www.amazon.co.jp/dp/B0CJCCKT6L",
+        eBookJapan: "https://ebookjapan.yahoo.co.jp/books/787707/",
+        raw: "https://www.corocoro.jp/title/80",
+        officialENTranslation: "https://www.viz.com/beyblade-x",
+      },
       creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
       titles: {
         create: [
@@ -51,10 +64,77 @@ const execute = async (db: PrismaClient) => {
           },
         ],
       },
+      staff: {
+        create: [
+          {
+            role: "AUTHOR",
+            staff: {
+              connectOrCreate: {
+                where: { id: "d603b641-a4c2-41f0-87cf-7fb641f2cf42" },
+                create: {
+                  id: "d603b641-a4c2-41f0-87cf-7fb641f2cf42",
+                  name: "Muno Hikaru",
+                  bio: {
+                    en: "**Alt names**:\n武野光",
+                  },
+                  links: {
+                    twitter: "https://twitter.com/poipheno",
+                    youtube:
+                      "https://www.youtube.com/channel/UCPbVqKinziUlCLvIaIzRdhw",
+                  },
+                  creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+                },
+              },
+            },
+          },
+          {
+            role: "AUTHOR",
+            staff: {
+              connectOrCreate: {
+                where: { id: "d6d965f5-4021-49f0-a6f2-086fff14db1f" },
+                create: {
+                  id: "d6d965f5-4021-49f0-a6f2-086fff14db1f",
+                  name: "Kawamoto Homura",
+                  bio: {
+                    en: "**Name In Native Language:** 河本ほむら\n\n**Also Known As:**\nGyuunyuu (牛乳)\nHitotsubu Ichigo (一粒苺)\n\n**Additional Sites:**\n- [Webcomics Site](http://ushimilk.web.fc2.com/)\n- [Website (Defunct)](http://2st.jp/500/)\n- [Website (Defunct)](https://kawamuno.com/)\n- [Blog (Defunct)](http://hitotubosite.blog119.fc2.com/)",
+                  },
+                  links: {
+                    twitter: "https://twitter.com/ushimilksan",
+                    pixiv: "https://www.pixiv.net/users/967185",
+                    nicoVideo: "http://www.nicovideo.jp/user/753248",
+                  },
+                  creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+                },
+              },
+            },
+          },
+          {
+            role: "ARTIST",
+            staff: {
+              connectOrCreate: {
+                where: { id: "2ebfaeb3-3b72-4aa5-8c00-64b804b3a905" },
+                create: {
+                  id: "2ebfaeb3-3b72-4aa5-8c00-64b804b3a905",
+                  name: "Demizu Posuka",
+                  bio: {
+                    en: "**Alt names**:\n出水ぽすか",
+                  },
+                  links: {
+                    website: "http://posuka.iinaa.net/",
+                    twitter: "https://twitter.com/DemizuPosuka",
+                    pixiv: "https://www.pixiv.net/users/33333",
+                  },
+                  creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+                },
+              },
+            },
+          },
+        ],
+      },
       covers: {
         create: [
           {
-            id: "0864bfc0-56cd-45b5-b225-0b4850de9d6f",
+            id: "0687f6c4-9f81-4aba-af89-7aa1c15f7289",
             volume: "7",
             language: "ja",
             contentRating: "NORMAL",
@@ -62,7 +142,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "40889e8a-8da4-4015-929f-5dcc1a38d9b2",
+            id: "f54cc8d2-1d47-4312-9962-36a8aa69b8d8",
             volume: "6",
             language: "ja",
             contentRating: "NORMAL",
@@ -70,7 +150,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "ff13b93e-aa25-4529-aeaf-dfa6d5f61d7d",
+            id: "6b1d2f5c-2b52-4e72-981e-5391aa83b854",
             volume: "5",
             language: "ja",
             contentRating: "NORMAL",
@@ -78,7 +158,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "3395bd87-2094-4653-9061-c3009acee25c",
+            id: "59040e09-6859-423d-9b55-3752308b194e",
             volume: "4",
             language: "ja",
             contentRating: "NORMAL",
@@ -86,7 +166,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "e8254b92-a14f-4882-85b8-fb9716f4c335",
+            id: "45790a1b-c4e0-452b-9b00-84b7e1b4ebf4",
             volume: "3",
             language: "ja",
             contentRating: "NORMAL",
@@ -94,7 +174,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "da9f7824-ed83-40b5-a01e-7ae733185c75",
+            id: "4903b90a-9925-4e7d-a8b1-7e2085467d27",
             volume: "2",
             language: "ja",
             contentRating: "NORMAL",
@@ -102,7 +182,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "e3e34f15-1c53-4925-bf5a-ce157fd74d86",
+            id: "19bd04cc-76b6-4a02-9b81-d8bb137c1f58",
             volume: "1",
             language: "ja",
             contentRating: "NORMAL",
@@ -110,7 +190,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "fd38e325-6791-4bfa-ab8f-c1f58e579068",
+            id: "dc35464c-1776-466e-9d2f-3d17c8d807d3",
             volume: "0",
             language: "ja",
             contentRating: "NORMAL",
@@ -122,22 +202,44 @@ const execute = async (db: PrismaClient) => {
       chapters: {
         create: [
           {
-            id: "e1bd484f-4436-4d90-84a8-c761f309ee1c",
+            id: "8a487658-150e-4256-ba48-80228496880c",
             number: 0,
             volume: "1",
             language: "pt_br",
             pages: [
-              { id: "487aab49-8adb-4230-b55a-28eae16b2b2b" },
-              { id: "fa060186-4155-4cec-a7e8-5dffca9634c7" },
-              { id: "24db7fa2-8520-4133-bd5e-0666f36cfe4f" },
-              { id: "820cc40e-2eb6-4a54-a9f5-3dd96a92eb29" },
-              { id: "584c193b-d41e-4742-b38c-5433fa4a99ba" },
-              { id: "b4f438c7-ace1-443f-a5d8-a5db4f8d42a9" },
-              { id: "f25ccb26-8a07-4e1e-93f5-40183c2e2c70" },
-              { id: "50d3a168-4869-43f2-b6ba-3f3a8f3564eb" },
-              { id: "a3ba5d5e-fcba-4917-b0f9-0d2e02697c04" },
-              { id: "2a2ca47e-d49c-487b-8495-eb336df28500" },
-              { id: "e580a1c3-f927-45ad-86a8-8b59be2307d9" },
+              {
+                id: "b2758459-11fb-48b4-9514-db89280d7bda",
+              },
+              {
+                id: "dd837e6d-7eba-4aa5-a1a7-76cad13ca291",
+              },
+              {
+                id: "f4ed6605-6d70-4fbf-a5a7-04bcb91b8433",
+              },
+              {
+                id: "dda244a7-025c-4003-b5d7-c2d62e78eb8a",
+              },
+              {
+                id: "8f972fb1-8de3-4552-a9cf-e74cf072a47a",
+              },
+              {
+                id: "02ba8eeb-3f88-4214-9339-7c7db9bb834a",
+              },
+              {
+                id: "87e792c1-5fa2-4e63-ab3e-d0e1fd5739ce",
+              },
+              {
+                id: "4a30d414-e996-4a54-9c14-c9dca07d3d8d",
+              },
+              {
+                id: "5e964a5c-b926-4c47-ac57-a30c3e573cc9",
+              },
+              {
+                id: "eb224444-9c91-46d8-b8f5-9dcd73802cf8",
+              },
+              {
+                id: "adbefe1c-95d8-4016-9ce4-8bfd85be2303",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -150,6 +252,7 @@ const execute = async (db: PrismaClient) => {
                     description:
                       "Somos apenas um grupo de fãs que querem trazer mais obras que não tem uma tradução em nossa língua PT-BR.",
                     website: null,
+                    email: null,
                     discord: "https://discord.gg//invite/896hybBhdr",
                     x: "https://twitter.com/https://twitter.com/shinprojectscan",
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -159,82 +262,212 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "0c6b8afb-e746-4bd4-a65d-2ce4f5049c75",
+            id: "43fa155c-d37b-4b75-855c-aea97313c0ef",
             number: 1,
             volume: "1",
             language: "pt_br",
             pages: [
-              { id: "64c82882-a29c-474a-9a72-9e7459f5d9a5" },
-              { id: "14b8af58-5789-4fd4-86ca-76b416f8b07a" },
-              { id: "edc27dd7-f519-4267-b790-e10e1166a9d4" },
-              { id: "9bc6ffba-2d00-44f4-a5d1-e4d7bcda49a1" },
-              { id: "93b94e7f-0ee5-4cf5-a01f-bbf12edda0f0" },
-              { id: "598cd0bd-3e9e-4356-af0b-1aac9d3eb86b" },
-              { id: "a3913177-fd4e-4722-a5d9-2a24248706eb" },
-              { id: "edf2fb97-a969-454b-af14-13cab9eebb7c" },
-              { id: "e06ffc60-0d02-45f7-b43a-dc97bd74353a" },
-              { id: "750a3256-e0d4-4d0e-beb3-f64f1c1e8dd8" },
-              { id: "2862d344-eaf7-47cb-9b3f-1cee124aa7c3" },
-              { id: "57dd5c9f-f273-40d8-9692-0eb42f14c504" },
-              { id: "20997c5b-3e02-4e00-becc-070eb9665e6f" },
-              { id: "6b11ee39-911a-4ec1-a4c6-1a1044750b58" },
-              { id: "6a3194a6-b470-47a9-ab11-1bc23d8cbaac" },
-              { id: "cdc2d670-9aa3-4c2d-b7f8-6f5f4f48eabb" },
-              { id: "f50962f6-7e70-485b-9348-d67037b15bd0" },
-              { id: "12ed3848-2658-4a64-b0f6-7a804d58b9eb" },
-              { id: "7c941089-06fd-4176-8a5c-a4a1567a9213" },
-              { id: "49a48cbc-6600-4335-92ac-2d0023e20fb4" },
-              { id: "5ec4c6c9-bfa4-4735-9264-e61b940dc068" },
-              { id: "1bf8e219-b529-437c-9b56-942dbc3351c5" },
-              { id: "379b2008-1a6d-4190-bb3b-8aeae78f414e" },
-              { id: "ab1127d0-9387-4853-815b-91ad07d4ffce" },
-              { id: "875311b1-4220-42f9-84eb-bf60c8c8578d" },
-              { id: "9c7e2249-797c-4ee3-af26-d0899f61660b" },
-              { id: "2fa4b16b-6440-4b03-b3c5-2ae0ecd040e4" },
-              { id: "2f2d1c75-a1c9-404f-b87b-b483fea0e2f3" },
-              { id: "dbfaf40d-fc18-473d-8df2-9b85e2feb425" },
-              { id: "aabbf81e-2b58-4109-b1ef-58ac3990eeb5" },
-              { id: "47d44b7a-f53c-41b4-b74b-dd735bd17e06" },
-              { id: "2515ffdd-9977-48e7-983f-4eafe3adc132" },
-              { id: "466d7aa9-f853-4e1c-8a12-2ee35471d7c7" },
-              { id: "5f08248f-ecff-467b-8355-188b5ee1172f" },
-              { id: "f0e8e50b-6160-41e4-b608-b51f96d48c71" },
-              { id: "944b9f25-e1e1-4232-a35a-4e3317772bc0" },
-              { id: "162f0bd2-91e3-41d4-93ea-73202ae5e3a8" },
-              { id: "b77db93e-f33a-4731-8c25-ceddc498f60e" },
-              { id: "001e0429-adfc-4fba-8798-3f060485fee5" },
-              { id: "50da93c9-d753-46a1-adf1-a4c9f7c87827" },
-              { id: "e3cd0888-a200-49e5-9e2e-ef4bbf252683" },
-              { id: "a0b6f1cf-c3c1-469b-aae8-7a23a58cebf7" },
-              { id: "0043f17c-8241-4afb-bf1a-97f98dbb0eec" },
-              { id: "839b9a50-17d7-4a2b-90ef-798794eee3f7" },
-              { id: "ae0f9576-05ce-448c-977e-593567ab15b2" },
-              { id: "273d7357-6bb3-4ad5-947f-3d75d86fd0bb" },
-              { id: "5c9dd899-ca25-4d5b-9522-56be734f0588" },
-              { id: "21a5cb1a-ca6e-403b-b1be-a54ca9c04500" },
-              { id: "02c38bdc-449c-45fb-8717-61714fce792f" },
-              { id: "458dee82-f1c8-43f9-b0b0-61c8bd3afc3b" },
-              { id: "4614fdad-f898-4fab-86a8-15266d2d1b3e" },
-              { id: "4f4f8d0c-e2eb-43b4-a72f-88a406cedb6d" },
-              { id: "2d613f2d-c2a8-42af-be18-fde832f88fb4" },
-              { id: "73acfb9c-8910-4ad7-b1b6-be8cd575ce8c" },
-              { id: "71c26afc-2a1d-4269-80a9-bbc1fe090f39" },
-              { id: "4a845c07-36a7-4647-bdef-da0faa16ba05" },
-              { id: "ef2ebfd8-0e89-4ecd-9b43-4ba8e728143b" },
-              { id: "30d1f669-f127-40bb-9669-7f0130a9837a" },
-              { id: "a65d604a-ef57-49cd-88b7-f0937abf2ee5" },
-              { id: "1ee7b8c5-aa65-49e1-9fc7-e5ba79adfe19" },
-              { id: "608b83bf-a448-4445-b442-ba3ae052636f" },
-              { id: "8989ff0d-53d5-408b-81db-385ad7224a71" },
-              { id: "8a749731-591a-4fa2-a3e7-e242181f0ca2" },
-              { id: "0eb89765-12fa-461e-964f-8325fbd88fa2" },
-              { id: "bd9f0266-a70a-4b60-952c-c93f7f7d0d26" },
-              { id: "22b43f61-7ae8-4d8c-9824-96616c9701aa" },
+              {
+                id: "e5ce8a1b-3694-494b-a759-dde6eca45524",
+              },
+              {
+                id: "ec23cfe9-e5f5-4411-98bd-7561c8fcd9f4",
+              },
+              {
+                id: "d9bf31da-2409-49bb-9f93-6904bb2e08e2",
+              },
+              {
+                id: "a5264c50-1d94-4da3-81e5-2b38ca6fa805",
+              },
+              {
+                id: "f46f8b5a-2a66-40c1-b85b-61e1ca1d5021",
+              },
+              {
+                id: "6fa92d31-5f77-48f1-bd5e-86c93e88f345",
+              },
+              {
+                id: "54443361-bb60-41cc-9530-ff57b0b83f3a",
+              },
+              {
+                id: "35fcbbbc-c566-4dec-8da5-65adf402abc1",
+              },
+              {
+                id: "ecbce482-f563-4046-a774-331aa478584c",
+              },
+              {
+                id: "5001d8d5-4cb5-4ed3-898a-0352d4291960",
+              },
+              {
+                id: "ff1607ef-02a2-46ae-859b-7cec366c38a5",
+              },
+              {
+                id: "d7e2ed3c-9277-4122-b768-5500cb0d091b",
+              },
+              {
+                id: "2cf0ea46-aa2e-48be-817e-3c55b0f8043c",
+              },
+              {
+                id: "19b72b11-96ea-4caa-b99f-706273cec548",
+              },
+              {
+                id: "3b936766-122e-44ce-a102-863b85f9122d",
+              },
+              {
+                id: "36a29c84-9c3a-449a-89f5-45b60360a91d",
+              },
+              {
+                id: "94037b50-b5c8-49c6-bed5-1fb29e9be537",
+              },
+              {
+                id: "87b6181b-259b-446c-a2b1-21aeec77a034",
+              },
+              {
+                id: "b3fa1e38-dbdc-45cb-b097-1e3b59b081ff",
+              },
+              {
+                id: "4623a0d8-92bd-490c-9678-60dd565e4ea4",
+              },
+              {
+                id: "63681197-e374-42f8-94d7-d9de7894b077",
+              },
+              {
+                id: "5b93db08-a34e-4b20-8c9c-5cf1ebfe48c3",
+              },
+              {
+                id: "eb66f058-41fa-4a8f-b225-ad89d8e7daac",
+              },
+              {
+                id: "8629525a-d183-423c-854b-23576172ec9f",
+              },
+              {
+                id: "6c8d3a0a-e403-4673-9a54-a47e0195632d",
+              },
+              {
+                id: "b8cc7ab5-af4c-4e04-8a91-b41796296479",
+              },
+              {
+                id: "cd0632ce-2711-49a7-b9a9-e87618d8c651",
+              },
+              {
+                id: "53505a71-9498-4994-9a12-420e610a4d17",
+              },
+              {
+                id: "c7a02c3c-efaf-4e3f-8c29-fba7053e8037",
+              },
+              {
+                id: "8146040d-95e5-4dd4-9831-0d56ba06bb0a",
+              },
+              {
+                id: "8a6cef0b-ab50-46cb-b091-a1e0497fa992",
+              },
+              {
+                id: "d2b4e095-cebd-4eb7-b9c5-a82c49809900",
+              },
+              {
+                id: "3b724bc0-7b09-49a4-a28e-1d2fdfb91a38",
+              },
+              {
+                id: "f366489d-c674-40b9-ac3a-65a840998a23",
+              },
+              {
+                id: "1655edae-f171-4862-9924-3d6118ef24a8",
+              },
+              {
+                id: "0c8f8ccb-6837-4b65-bf13-a07bec54f640",
+              },
+              {
+                id: "56b43da0-2f1f-430f-bb17-4fc3a609da1a",
+              },
+              {
+                id: "fb5bae1f-1c17-4a9b-957a-7f4328ea3efe",
+              },
+              {
+                id: "d1fe7347-4b5a-419c-a05c-6f2388228617",
+              },
+              {
+                id: "b15d9cdc-6c32-43d0-b247-de26149910cb",
+              },
+              {
+                id: "1d17de52-04a8-44cb-ae2e-56fe070adf8a",
+              },
+              {
+                id: "a0777b74-ac64-4020-ba8a-7b603f341f3e",
+              },
+              {
+                id: "2dbef6d9-6566-4985-a9bf-671c5a99eded",
+              },
+              {
+                id: "88a6073b-9943-45f7-b44c-8e11a3f7c880",
+              },
+              {
+                id: "54a2ccb3-efe0-4ab7-a910-7f9832fd0905",
+              },
+              {
+                id: "18db3848-18f5-4114-a99b-56101a6296a5",
+              },
+              {
+                id: "9e45fd22-53b9-4e9c-ab35-8d2b10e912cc",
+              },
+              {
+                id: "08703aa1-4d69-4539-addb-90d1afdea7e0",
+              },
+              {
+                id: "0b5f625c-0666-4375-8f5d-436e884cc6e6",
+              },
+              {
+                id: "45bc8999-b996-4d4c-b1d9-e8cae6a98e26",
+              },
+              {
+                id: "4dc42776-6e56-428e-b72d-057a10dbcff5",
+              },
+              {
+                id: "bd829c12-e205-49a1-8967-ebdfd052fafe",
+              },
+              {
+                id: "874dd97c-09d0-4fae-b426-81bdabf83fb3",
+              },
+              {
+                id: "f655c918-83db-439a-b9e5-8e8d68bb7e7b",
+              },
+              {
+                id: "ff911c49-e7cd-4ba2-a30e-1191760edac4",
+              },
+              {
+                id: "c408a275-ebba-45b6-954d-ce351a8b3e95",
+              },
+              {
+                id: "a6c432b4-c11a-4373-93ba-084a8f1e0936",
+              },
+              {
+                id: "65a17ec6-42a9-412c-b982-67cd6b18885c",
+              },
+              {
+                id: "9c117aaf-c276-4b18-936a-d66f90dd4ca0",
+              },
+              {
+                id: "71185fe6-afa9-409d-a55c-8503404522ab",
+              },
+              {
+                id: "a0eeef7f-9063-4ec2-b267-3bf9a265a7e9",
+              },
+              {
+                id: "003a6cc0-2ec4-4487-994f-bf0a6ec70655",
+              },
+              {
+                id: "a843f1de-9753-4377-a6b0-221aa44ce2c1",
+              },
+              {
+                id: "522c98d5-41fa-4277-a9d9-c4616b2a8f95",
+              },
+              {
+                id: "628700cf-dff8-47a1-9569-2305d890c882",
+              },
+              {
+                id: "4df438b9-0c21-4eaa-8c72-0dea619aa585",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
-            groups: {
-              connectOrCreate: [],
-            },
+            groups: { connectOrCreate: [] },
           },
         ],
       },

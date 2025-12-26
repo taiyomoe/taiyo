@@ -3,7 +3,7 @@ import type { PrismaClient } from "@taiyomoe/db"
 const execute = async (db: PrismaClient) => {
   await db.media.create({
     data: {
-      id: "a68f7156-4d1d-462b-afb2-600399668b67",
+      id: "35a1efbe-9bdc-45f1-8483-220995449eaa",
       synopsis: {
         en: 'How would you react if one day you were sucked into an MMORPG and could never get out? After a mysterious incident, roughly 30,000 players from Japan are now forced to live their life inside the MMORPG "Elder Tale" and can not log out. Even death is met with a respawn. Even worse is the fact that food has absolutely no taste. All this combined, many of the players inside this MMO has lost any will to actually play this game, but they are never allowed to leave. A player named Shiro will venture forth to uncover the mystery behind the reason why they are inside this game.',
       },
@@ -19,6 +19,15 @@ const execute = async (db: PrismaClient) => {
       source: "ORIGINAL",
       demography: "SHOUNEN",
       countryOfOrigin: "JAPAN",
+      links: {
+        mangaDex: "fead53e5-f3b5-4793-b19f-b483208ad04e",
+        anilist: 75893,
+        animePlanet: "https://www.anime-planet.com/manga/log-horizon",
+        mangaUpdates: "https://www.mangaupdates.com/series.html?id=03dlf2b",
+        myAnimeList: 45893,
+        kitsu: "https://kitsu.io/api/edge/manga/1762",
+        officialENTranslation: "https://yenpress.com/series/log-horizon-manga",
+      },
       creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
       titles: {
         create: [
@@ -38,10 +47,49 @@ const execute = async (db: PrismaClient) => {
           },
         ],
       },
+      staff: {
+        create: [
+          {
+            role: "AUTHOR",
+            staff: {
+              connectOrCreate: {
+                where: { id: "2f82a964-dfd4-4c25-83c5-c8af95dca667" },
+                create: {
+                  id: "2f82a964-dfd4-4c25-83c5-c8af95dca667",
+                  name: "Touno Mamare",
+                  bio: {},
+                  links: {},
+                  creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+                },
+              },
+            },
+          },
+          {
+            role: "ARTIST",
+            staff: {
+              connectOrCreate: {
+                where: { id: "edaf7a28-c9c9-4b83-a3be-4087b3e4fcae" },
+                create: {
+                  id: "edaf7a28-c9c9-4b83-a3be-4087b3e4fcae",
+                  name: "Hara Kazuhiro",
+                  bio: {
+                    en: "**Name In Native Language:** ハラカズヒロ\n\nLight novel illustrator & character designer for [A B-Grade Adventurer With a Bad Guy Face Becomes a Daddy to the Protagonist and His Childhood Friends](https://mangadex.org/title/a21eab2d-781d-40b2-a666-7b2d72551927).",
+                  },
+                  links: {
+                    website: "https://ninefive95.com/",
+                    twitter: "https://twitter.com/harapand",
+                  },
+                  creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+                },
+              },
+            },
+          },
+        ],
+      },
       covers: {
         create: [
           {
-            id: "05114e85-f65a-4004-b448-5449b704ccf2",
+            id: "787cdbe5-b23b-47b4-ab80-68b2b470e2b3",
             volume: null,
             language: "ja",
             contentRating: "NORMAL",
@@ -49,7 +97,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "36053640-3ba1-4456-b91a-defae688259f",
+            id: "1d689df5-8d8d-4aad-972c-b8ef932bde7c",
             volume: "1",
             language: "ja",
             contentRating: "NORMAL",
@@ -61,16 +109,26 @@ const execute = async (db: PrismaClient) => {
       chapters: {
         create: [
           {
-            id: "cde5d440-637d-410d-a415-b40537656d23",
+            id: "c72b0642-0dc4-478f-b226-647bae417db4",
             number: 0,
             volume: "1",
             language: "pt_br",
             pages: [
-              { id: "afca7c5b-1c4c-4d82-bd4f-7d60f5d9ba74" },
-              { id: "77529613-bc05-417c-b9fc-005f8833b35f" },
-              { id: "06af5bef-9866-4ebf-ac67-d4b6acc1b8c0" },
-              { id: "47bb4875-6ab7-4b2b-8364-41df47b295a4" },
-              { id: "9fbc0b3b-db70-49a0-8946-c1e3eaf33aaf" },
+              {
+                id: "c84fc9f2-a0a3-43de-81e0-33f27d494999",
+              },
+              {
+                id: "ccc38db0-4d1d-41d1-a6bf-d9a99da60bb5",
+              },
+              {
+                id: "74d3feea-046b-4cfd-8f75-ea63cef5480b",
+              },
+              {
+                id: "10f4c875-149a-43aa-9871-68ecb6b6f637",
+              },
+              {
+                id: "f3d1f9ee-b6f6-46e4-8da4-1ef8d579d150",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -83,6 +141,7 @@ const execute = async (db: PrismaClient) => {
                     description:
                       "A God Hand Scans (ou GHS) parou de traduzir mangás e agora atua como uma fansub chamada [God Hands Fansub](https://ghsfansub.com.br/) (ou GHF) legendando Detective Conan.\n\n---\n\nCaso queira acessar o antigo site da GHS (ele está offline) acesse através do [Wayback Machine](https://web.archive.org/details/https://www.godhandscans.com.br/)",
                     website: "https://www.godhandscans.com.br/",
+                    email: null,
                     discord: null,
                     x: "https://twitter.com/https://twitter.com/godhand_scans",
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -92,53 +151,137 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "728b55bb-106d-4d7a-9b57-928ecd08ae1c",
+            id: "e0d82a10-7a6d-4dcb-965a-0b1aee50f2e6",
             number: 1,
             volume: "1",
             language: "pt_br",
             pages: [
-              { id: "71d6b030-8eaf-47a5-91e6-78068b586f76" },
-              { id: "8235b79c-6eb4-43d2-b02b-b9b1aaa957e5" },
-              { id: "0d1fffeb-dcde-4316-b4da-afb63e096152" },
-              { id: "df2a0241-860c-48e5-95f2-9c8fa0c106bb" },
-              { id: "bbe3895f-4c66-489c-a69c-0c56c37828ad" },
-              { id: "e9a305bb-2f20-4dca-b976-744f2af962de" },
-              { id: "09ed56c6-fc6a-4d3a-af4a-4add8356d743" },
-              { id: "4d5f86b9-fd45-43a8-93bd-8a15c774b6f0" },
-              { id: "008a74b0-743c-4eda-9177-e0e5e9eebae7" },
-              { id: "b83d41af-f9d8-4cb3-97b0-6bf53b03c5c0" },
-              { id: "d656f5d4-217a-4985-8b58-9e93b56c0a98" },
-              { id: "31f8a8e0-d30d-4cc8-80a3-67c61855fd7e" },
-              { id: "976b3f28-c24d-4585-a736-7d9659844ad2" },
-              { id: "eed6ca49-8f17-49d3-8d97-5fe3c7339df2" },
-              { id: "d5141b9b-ba1e-4693-b39c-6e5e0c28513b" },
-              { id: "3a479f13-b9d9-4985-b6fd-e0b68fdb482e" },
-              { id: "1dc6a6ad-db14-4ec0-bb2b-a870e3faaaaa" },
-              { id: "1106583f-e5e0-40a2-ad8e-12b0a09d6e27" },
-              { id: "8c004c9a-0f98-4aa7-a391-4d847045b4da" },
-              { id: "8e11a11d-80a8-4e5f-9d92-f0c799474671" },
-              { id: "b3a5e84d-2af5-4e30-af08-7fed513f203f" },
-              { id: "b4616c1e-b033-45f0-a631-80bf3753bb86" },
-              { id: "da1b76a4-50d1-46ad-9b44-5256db288def" },
-              { id: "4c579f34-22c6-4c08-9883-18129e8e9a8b" },
-              { id: "3829ad4e-3066-4a40-b685-dd05714f5d95" },
-              { id: "fecc9c8b-4f4b-4e51-ac4d-3e21ae3d7902" },
-              { id: "d0a2d563-457b-4625-940c-a4c70f9467b2" },
-              { id: "99370960-20cd-4cb1-8e8c-bd869d783b56" },
-              { id: "219407fd-42af-481d-a160-5088b74ed9f7" },
-              { id: "057a1d38-18d6-4248-a7a4-9b305a0d4e0b" },
-              { id: "8a711426-fd9d-4d98-b250-8bc580b7b93d" },
-              { id: "a535142f-38f8-4ce6-87f6-564b086d89b0" },
-              { id: "74b65e74-c50f-482b-b3f2-c28dae806a04" },
-              { id: "c67739d1-7479-4e2a-9ef5-551812e01d63" },
-              { id: "d6ef17a8-b85e-4dbd-b668-b086ed70dc2c" },
-              { id: "e49def0e-b629-4c05-a43d-48c25167563b" },
-              { id: "ddef9f89-5787-4fa8-9c62-00918542a526" },
-              { id: "299ecfde-7233-4ea2-9c9a-bb9fe6769c30" },
-              { id: "77c1e278-77cf-45d4-9934-7c1e19f1dbb8" },
-              { id: "6f64861c-e696-469c-a025-c16971fbf223" },
-              { id: "96c0c503-f4ac-49ee-8e34-c4bb5148a4a2" },
-              { id: "172c1e19-459c-440e-82db-3a106ae33571" },
+              {
+                id: "8d42edc5-4049-49ee-b8fa-345f442baf9f",
+              },
+              {
+                id: "aa41e2a1-2ec3-4c5f-91aa-1037fa4abbe1",
+              },
+              {
+                id: "cde81a3c-e2df-4274-a8ca-f23b3da40ad7",
+              },
+              {
+                id: "452ce5e8-8852-4586-970f-38c0b763065d",
+              },
+              {
+                id: "ca58b9d5-a3c3-4ffc-ba1c-7dc9f774cd7d",
+              },
+              {
+                id: "6d14c68c-e702-42e6-97f2-10941e4b8831",
+              },
+              {
+                id: "c56271af-c405-4410-aa58-8eabbf6c64f9",
+              },
+              {
+                id: "b4cb5f20-d74e-4d22-bb9d-436ca439f3ed",
+              },
+              {
+                id: "1e193dcc-6836-40cf-9dd7-94bd58141c8a",
+              },
+              {
+                id: "ef2ffaa7-b504-4905-acfd-77923170f09c",
+              },
+              {
+                id: "7c80ae7d-a473-4213-8f3a-b3e46e028335",
+              },
+              {
+                id: "5229b4cd-ad20-455a-92ca-173dd00b43e4",
+              },
+              {
+                id: "bee9ea28-a828-40fe-b035-45d4999ba39a",
+              },
+              {
+                id: "49d4c0e7-f68c-4fe4-be35-16d7c6838148",
+              },
+              {
+                id: "70510cf6-2740-4256-bbb0-bb243d409cd8",
+              },
+              {
+                id: "87434d02-0f7a-405e-b489-82c153f19627",
+              },
+              {
+                id: "75f84703-3207-482a-b03b-b4056d63fa39",
+              },
+              {
+                id: "cb01c049-d9c1-4734-8359-f276cc6426d0",
+              },
+              {
+                id: "89fd1599-2649-4c89-bb01-e55390c2573e",
+              },
+              {
+                id: "a0a4bfbc-006f-4859-9939-9a784c452fbe",
+              },
+              {
+                id: "481c5e37-5ec8-4d6f-b00c-46884cb08c20",
+              },
+              {
+                id: "2cf20fad-fa89-4d67-9d70-98cb38cadd58",
+              },
+              {
+                id: "a912ca0d-3c95-4750-bfe7-6630592702e5",
+              },
+              {
+                id: "6fc26d73-daee-4249-ac4a-7dcbf12a3dd5",
+              },
+              {
+                id: "a78e06ae-81d3-4bf7-87c7-f262bb3d9ca0",
+              },
+              {
+                id: "f0291283-1ead-4b86-a9fc-6e8e6310a09d",
+              },
+              {
+                id: "78278a96-adce-48a9-a238-63ff0e4a3d1c",
+              },
+              {
+                id: "8a766904-fc59-4226-8361-30e05cb88168",
+              },
+              {
+                id: "a429dc23-6bf7-4913-a987-fa319c4adf32",
+              },
+              {
+                id: "5b01f502-f351-46ac-b344-c1c74fe6e3ed",
+              },
+              {
+                id: "bc5d8e24-ffea-48d3-8472-9f1cdafca28e",
+              },
+              {
+                id: "51f8e749-a843-4e34-9c7a-190332e28144",
+              },
+              {
+                id: "2a3f1278-5041-4e47-8b2c-5da07bff6cbd",
+              },
+              {
+                id: "c76f7565-573d-4e11-bd83-c768b20946e5",
+              },
+              {
+                id: "8a7450d6-189c-4929-96ed-5fe40b526822",
+              },
+              {
+                id: "bada53b6-7287-4b4d-bcb2-5071bb113ab5",
+              },
+              {
+                id: "99432077-cf22-41a3-977f-21278b88722e",
+              },
+              {
+                id: "9bf898a9-cc43-453a-b4c7-9eeceaff0b58",
+              },
+              {
+                id: "e1ffbe21-99fe-47a5-99b7-186f5db8705f",
+              },
+              {
+                id: "37d15895-dd9e-4778-90b9-52936934e70f",
+              },
+              {
+                id: "57be5cc3-316a-49bc-82a2-75d7eaefc2eb",
+              },
+              {
+                id: "4bb1022c-e3d4-405c-996c-93b9c5ca8a75",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -151,6 +294,7 @@ const execute = async (db: PrismaClient) => {
                     description:
                       "A God Hand Scans (ou GHS) parou de traduzir mangás e agora atua como uma fansub chamada [God Hands Fansub](https://ghsfansub.com.br/) (ou GHF) legendando Detective Conan.\n\n---\n\nCaso queira acessar o antigo site da GHS (ele está offline) acesse através do [Wayback Machine](https://web.archive.org/details/https://www.godhandscans.com.br/)",
                     website: "https://www.godhandscans.com.br/",
+                    email: null,
                     discord: null,
                     x: "https://twitter.com/https://twitter.com/godhand_scans",
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -160,53 +304,137 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "523452be-9292-4f28-8cdb-34fd3572e957",
+            id: "f0f58bfa-df1d-45e7-986c-793523786d3a",
             number: 1,
             volume: "1",
             language: "pt_br",
             pages: [
-              { id: "8ab9a128-d77c-42ad-959e-75b85f25d1b2" },
-              { id: "161b35d6-56e2-4dae-b3bc-749b8cd86587" },
-              { id: "dd1c64a2-fd4e-4a5d-98e9-1a27ac05aed5" },
-              { id: "34587390-241a-416c-ad85-8374894e9a64" },
-              { id: "e7af9bd6-5a33-4cad-a739-4ae17d867eab" },
-              { id: "539fef1b-c1a3-4e81-b7a7-0ef0e290d042" },
-              { id: "c9cf6123-cb74-445b-aabb-8a8330f86375" },
-              { id: "b9db8d83-1f48-425e-b71f-c4879d84ed21" },
-              { id: "9f9f41c5-8643-4e5b-a9b7-8e300ca1b9e0" },
-              { id: "3e910d62-d5ef-45dd-8522-06054316679f" },
-              { id: "74e4cf78-f26b-415b-8122-bdfbe25a40b1" },
-              { id: "e4f1d1c5-b0c2-4951-a82b-ae59769a7834" },
-              { id: "3ed599fe-f599-497a-b22f-97d7101f142a" },
-              { id: "b077eaa7-3fbb-48b0-be31-6474c0bf976c" },
-              { id: "0c91a87f-8c1e-417e-a0c3-883eb439d011" },
-              { id: "8f96f019-9b21-4ae9-8080-80dfcba11686" },
-              { id: "f3babdc4-4461-4283-b4de-be6a8809b71a" },
-              { id: "db0913e0-0142-4df5-a47f-d58ffa40ce2c" },
-              { id: "c67e0343-86fe-415b-9c65-2235ee69c940" },
-              { id: "f302b7af-8b3b-4462-b233-487737a4198e" },
-              { id: "434e4a53-d9ba-4547-a93d-5c355a26f1bc" },
-              { id: "d0be2534-7458-4482-8ad2-5a65cab575a6" },
-              { id: "3bc25a16-a186-4eea-b0fc-6a4570bd3ea3" },
-              { id: "22bbfec0-6528-473f-b43c-6d824e674e1f" },
-              { id: "54a00978-417e-4a9a-ac3a-db3bf83c3e77" },
-              { id: "f7b74f0c-ebc9-4d34-9735-d0364c515b1f" },
-              { id: "fcad54be-58f2-43c9-8540-8c9383099ae9" },
-              { id: "277f2201-0417-4e81-aa97-8b4cddaa7f36" },
-              { id: "316889ab-75ca-4064-a00d-02b6e8636598" },
-              { id: "9968e1e4-2da7-4b84-a5d4-210b7345def0" },
-              { id: "346fbf84-2b6f-4035-9e59-a52fcb1e8636" },
-              { id: "6b1f9e33-7926-4541-bf02-6b026f4dfec3" },
-              { id: "2670c02d-867d-4a29-a3b6-51a062dc75b9" },
-              { id: "fd2285fa-4c2e-4b45-a9ef-9ced45f71631" },
-              { id: "26bd8897-e53f-492e-86bd-b6286713beb5" },
-              { id: "9ffc33a8-2932-4aaa-ad74-14b9b3097db8" },
-              { id: "243c0319-84e5-43f9-954a-7e606eadbffe" },
-              { id: "d4d1bd53-a012-4f2c-8942-992d6f6e8a1b" },
-              { id: "bc76d1a8-6c04-4b4d-bdb3-a14f13fce5b4" },
-              { id: "5fa31753-6528-483b-9ad4-741cbef52004" },
-              { id: "7c93b7c5-ee07-4c20-98ee-65d7f03dcc67" },
-              { id: "ad1fb3bb-6e4a-41db-94a8-1ed2f4893e73" },
+              {
+                id: "efe9ac6b-0414-4a6d-955a-3daa2c08caf3",
+              },
+              {
+                id: "d78ce2ab-9689-477e-a4f4-b2d2d6224dcd",
+              },
+              {
+                id: "6b174f30-5c19-45e4-b51b-3ea0fe018761",
+              },
+              {
+                id: "0a58e584-c77f-489e-b3b9-6d4cb4cb859f",
+              },
+              {
+                id: "099c9ccf-06bc-4216-9a27-f34ef3be13eb",
+              },
+              {
+                id: "6d102144-e1fd-411d-8ede-7495f150c681",
+              },
+              {
+                id: "549756a2-0961-459b-a0dc-ce917ae699d5",
+              },
+              {
+                id: "adb71500-af5f-411d-8cf0-ecfcbf12fc8a",
+              },
+              {
+                id: "a503a868-28ed-4c1c-8ab5-49777eba11f9",
+              },
+              {
+                id: "857ca9ca-9385-475a-bd01-6e5dbf756e84",
+              },
+              {
+                id: "4402c2a7-1980-4a2a-8cd9-d16770532efe",
+              },
+              {
+                id: "9f9ca065-6831-4a9c-a728-7e7c19ad3da1",
+              },
+              {
+                id: "c18ef68e-6577-44d6-a9b8-495cc145b0ed",
+              },
+              {
+                id: "768c795c-63ea-430b-8964-f6c386aa8b31",
+              },
+              {
+                id: "5dc92b86-a341-4f54-ad19-9aa5c693f9f6",
+              },
+              {
+                id: "a71b1d9f-998c-459d-8a36-b64deecec511",
+              },
+              {
+                id: "b69077fb-138b-4f83-9408-277ca4fde1c2",
+              },
+              {
+                id: "244f0459-7aff-407c-9d12-d9c95205c66b",
+              },
+              {
+                id: "8104c9fb-eb3e-4810-9b46-454450cf8daf",
+              },
+              {
+                id: "8009ebc1-4cb4-4fea-b60d-9a400bcf6ca7",
+              },
+              {
+                id: "bfbf5146-7a81-4eee-9eaa-3248c424eb88",
+              },
+              {
+                id: "c400fed9-8e08-4e17-892f-0cf1326e6799",
+              },
+              {
+                id: "7070514b-cee6-41d6-a778-35d44fffeb89",
+              },
+              {
+                id: "b85160eb-860a-45d9-a78a-3d89d010dab8",
+              },
+              {
+                id: "6c28fef4-b158-43b2-bc27-eb3e1a70046b",
+              },
+              {
+                id: "9e8fbcef-91fb-47df-9de1-23766dfe1c96",
+              },
+              {
+                id: "92910941-7d61-4398-a8a6-56410814c435",
+              },
+              {
+                id: "1252912c-1439-484f-9664-3b34f1e1b168",
+              },
+              {
+                id: "08eb803d-bbf4-4389-bd6f-0f801b93ebc9",
+              },
+              {
+                id: "e476daa7-a244-4af7-9071-713122949740",
+              },
+              {
+                id: "0b90b319-a491-4772-ac69-0f6be6995502",
+              },
+              {
+                id: "770075f5-e46f-41a4-af91-3a8eea0b1bd8",
+              },
+              {
+                id: "9ea0114e-4e31-4a82-8850-34413005edaf",
+              },
+              {
+                id: "33295b9c-f2f6-4e6a-9993-81ff3066d369",
+              },
+              {
+                id: "06bc62df-7857-471a-ad32-878e1c9b66a1",
+              },
+              {
+                id: "ccbc7886-f6ee-47c3-baad-bd50270fd8cf",
+              },
+              {
+                id: "b5f8fa0c-d7a3-4ab6-99a3-93851a305766",
+              },
+              {
+                id: "7a876512-8df9-4de0-a080-88ad75263c81",
+              },
+              {
+                id: "01b592db-c2d8-49a3-af76-084f1cbad4a9",
+              },
+              {
+                id: "04fa875e-5161-4fe6-ac31-6cbc3e8030a7",
+              },
+              {
+                id: "8fc4909b-b17d-445f-a4b9-926008c7ff61",
+              },
+              {
+                id: "5ee2d88d-0025-40b0-86ff-14235c226b17",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -216,8 +444,9 @@ const execute = async (db: PrismaClient) => {
                   create: {
                     id: "0774019a-d4cc-48e3-a6ca-c9fd6cc5b6d6",
                     name: "Hime-k Scanlator",
-                    description: "",
+                    description: null,
                     website: "http://hime-ks.blogspot.com/",
+                    email: null,
                     discord: null,
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -227,27 +456,59 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "c008c792-6b82-4b1c-94f1-2a3fcd018085",
+            id: "638743b8-dd54-454c-affa-105978461280",
             number: 2,
             volume: "1",
             language: "pt_br",
             pages: [
-              { id: "b4fa3bbe-546c-423e-b32c-3c4fd6f0ba06" },
-              { id: "d705841e-ffcb-40bc-a5c5-a2450218600b" },
-              { id: "da17e980-b61a-4f1c-996c-d6951f0be42c" },
-              { id: "55ae8f38-b071-463a-9af9-570b23b39304" },
-              { id: "61fbb43d-d18b-419d-8cf2-c0d7789f5507" },
-              { id: "6307a380-d037-402e-bcb2-defc46bed72f" },
-              { id: "cf440fdc-7a89-433a-9560-1324783a8723" },
-              { id: "7cc1a4a6-4a93-4a0a-9012-dd6c54e5ff72" },
-              { id: "a1aaf234-72c1-4c81-b485-b545fa917d49" },
-              { id: "e603df09-c56a-4e8a-a8bc-2371bccd1547" },
-              { id: "737d1ffc-8f42-4f17-a5f4-36e2c4d900b8" },
-              { id: "d17b3771-6cb5-4469-bfb7-b9fe2d9bc340" },
-              { id: "9cb975e7-fd6d-4e70-88f5-1ea54c968a0c" },
-              { id: "fb40ac87-b7db-44e5-a734-02fafa24e074" },
-              { id: "11a2e74d-42cb-413d-85dd-57274a5cd500" },
-              { id: "20629f20-e294-4565-b8ca-77373df31b2e" },
+              {
+                id: "f39c51e8-e574-41ed-bd04-8dba193048cc",
+              },
+              {
+                id: "a28ad0f2-2a41-43e0-8bc6-3bed4d9d097c",
+              },
+              {
+                id: "7f6bb045-0ea3-4596-bc41-6a4a34244789",
+              },
+              {
+                id: "e2f38d37-ba4d-4169-a17a-2f6b9c461d60",
+              },
+              {
+                id: "5f465931-3621-4321-8282-2fcf51e6a1a6",
+              },
+              {
+                id: "d22df89f-0412-457e-8f8c-0540c50880d5",
+              },
+              {
+                id: "70284ec3-ace0-49b2-ae24-285988ed4345",
+              },
+              {
+                id: "eb02de15-8a6c-4b41-9e3b-7316cae939d8",
+              },
+              {
+                id: "66014e8d-b32f-42ac-8667-b40f5c9c10f3",
+              },
+              {
+                id: "3f6ee2e7-ca5b-40ad-b0fb-82f6eaf33584",
+              },
+              {
+                id: "4a957a33-c57e-48c0-b9db-a6ee7810e632",
+              },
+              {
+                id: "674f93ea-691d-4034-b2a4-53739cbe82b5",
+              },
+              {
+                id: "0063ba61-3ac0-4363-a248-99a44ab1c88d",
+              },
+              {
+                id: "cb977db5-f71b-40c9-9e35-6f90a8608799",
+              },
+              {
+                id: "1da0d7eb-fa42-4998-8c36-0ff320cfe213",
+              },
+              {
+                id: "64c76b23-6a80-470f-8862-34c8245b735c",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -260,6 +521,7 @@ const execute = async (db: PrismaClient) => {
                     description:
                       "A God Hand Scans (ou GHS) parou de traduzir mangás e agora atua como uma fansub chamada [God Hands Fansub](https://ghsfansub.com.br/) (ou GHF) legendando Detective Conan.\n\n---\n\nCaso queira acessar o antigo site da GHS (ele está offline) acesse através do [Wayback Machine](https://web.archive.org/details/https://www.godhandscans.com.br/)",
                     website: "https://www.godhandscans.com.br/",
+                    email: null,
                     discord: null,
                     x: "https://twitter.com/https://twitter.com/godhand_scans",
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -269,36 +531,86 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "7f1838e9-4d37-475b-80be-5db4dcb23b13",
+            id: "8f28fd11-f220-43fd-b421-54b86e9aca8e",
             number: 3,
             volume: "1",
             language: "pt_br",
             pages: [
-              { id: "0693bc2b-b2a8-4e4e-8984-0ed26dcf8d30" },
-              { id: "7cb29682-c688-41ed-9131-957969bfb2e9" },
-              { id: "93d00c05-1376-4a42-8879-e6aaedc97408" },
-              { id: "2e5452b0-5aaf-4be1-8bd7-bbf435417ece" },
-              { id: "fe10a86c-32e7-48f4-a518-d68d34bf8c93" },
-              { id: "39132e0a-db01-44ae-82bd-fe2b69970bc8" },
-              { id: "ad96f8db-e448-49da-b15a-332c15b4de27" },
-              { id: "a16f8260-7e8d-46c0-9626-fec9626af1f4" },
-              { id: "b89ec72e-d2a9-4357-be4d-2a2cb77ccd46" },
-              { id: "b7f6bfed-0c30-430d-bd65-fb5f8d2696e3" },
-              { id: "92e72b5e-d5f2-43ee-b54b-16c54954bdfa" },
-              { id: "1be3f593-284c-47bf-9241-202b841785b4" },
-              { id: "72e5c3c6-bb69-45e7-9136-53f7a7c03067" },
-              { id: "52e2cb2d-f0d1-4814-8d08-dd728c8b2da0" },
-              { id: "0fa63afe-d181-4038-b18d-be4f2c0d598c" },
-              { id: "8f65a982-c8c7-4441-87b6-b35144b01028" },
-              { id: "35a1b24e-10bc-4098-93f2-fd883ef5a22a" },
-              { id: "2af19d47-b2d2-4342-9f21-077ece0a8dbe" },
-              { id: "330d5a59-6f5b-49bf-b780-01a9a25e1bad" },
-              { id: "4c496347-1109-4eb4-afc0-767af6421be0" },
-              { id: "be67ac67-b5f2-490b-9ca0-d2d89cf97848" },
-              { id: "787caafb-ff75-491b-b847-158f7d22e461" },
-              { id: "3c685481-2b8a-4b1d-9e44-979c6226d19a" },
-              { id: "2c6d307d-9391-4c5f-8a45-fb998a4f0e93" },
-              { id: "62433d04-d1c9-4da1-b1ef-ef0d2516de88" },
+              {
+                id: "13cd7e23-293d-4c0f-8e72-a6c90d72accb",
+              },
+              {
+                id: "401607c6-cfd1-4fb5-b8a4-e7a76bdd7aed",
+              },
+              {
+                id: "d4ebebc7-e53a-4f11-8c02-d8ef108a1ba7",
+              },
+              {
+                id: "66a85510-4c4f-4c95-8aed-44076336f126",
+              },
+              {
+                id: "25cccf2c-9583-4213-bc9e-7d5045fdb6ae",
+              },
+              {
+                id: "c04dfea1-41a0-4cb7-afb2-2d55deec4d7c",
+              },
+              {
+                id: "59fdeb15-1e84-44f1-b15a-457d342fb8a8",
+              },
+              {
+                id: "16f31e54-34a8-4ace-966d-5ffe66a94f10",
+              },
+              {
+                id: "3eb637d4-1b40-4f24-a6e6-4dab008a8738",
+              },
+              {
+                id: "4fb92482-63a7-480c-8974-fd0aec0aaa82",
+              },
+              {
+                id: "e7f187c3-1189-436d-b041-433dc1aa0db7",
+              },
+              {
+                id: "be6fe754-f636-4d47-8fdb-47e2369e4854",
+              },
+              {
+                id: "4d8df29b-8777-4755-b7ea-92f29ae63d18",
+              },
+              {
+                id: "cae22f7b-5068-4d49-82f9-d7180399be60",
+              },
+              {
+                id: "33c5fdf4-981c-41ae-8c71-f340b4f9c58d",
+              },
+              {
+                id: "28464e18-a585-4cd5-acbb-16fd643289fa",
+              },
+              {
+                id: "f2821b7e-5b2e-44df-a435-0b93f866960d",
+              },
+              {
+                id: "7df64ce8-5298-4290-9748-ebbc96ffeb93",
+              },
+              {
+                id: "72167979-0168-4647-9992-26e39be0b714",
+              },
+              {
+                id: "5ffa9d7a-dee9-42f9-9c0f-26a179f74286",
+              },
+              {
+                id: "ed0ad56c-48ac-45d5-9b0c-1372f4f911d2",
+              },
+              {
+                id: "c9f04829-37cd-44cc-98e5-0a0fd3ea6e9e",
+              },
+              {
+                id: "5b8dd315-5817-4b1b-87e8-8f5f1b55c6b7",
+              },
+              {
+                id: "734eb40a-a64a-4c38-8957-bcf46f2fb6d1",
+              },
+              {
+                id: "861fcace-b915-4771-9007-ebb7713d7f85",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -311,6 +623,7 @@ const execute = async (db: PrismaClient) => {
                     description:
                       "A God Hand Scans (ou GHS) parou de traduzir mangás e agora atua como uma fansub chamada [God Hands Fansub](https://ghsfansub.com.br/) (ou GHF) legendando Detective Conan.\n\n---\n\nCaso queira acessar o antigo site da GHS (ele está offline) acesse através do [Wayback Machine](https://web.archive.org/details/https://www.godhandscans.com.br/)",
                     website: "https://www.godhandscans.com.br/",
+                    email: null,
                     discord: null,
                     x: "https://twitter.com/https://twitter.com/godhand_scans",
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -320,32 +633,74 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "c7aff5ce-5391-4e1a-b705-4ad259ad070f",
+            id: "f492ff87-f5b6-4aaa-b6de-eda3f3bbed10",
             number: 4,
             volume: "1",
             language: "pt_br",
             pages: [
-              { id: "9381b520-825b-4c81-9855-e11c6e13e424" },
-              { id: "a45afde0-7754-40cc-84e1-f68efd7c6175" },
-              { id: "e372644f-ae90-4ca6-bee9-7745e20f948c" },
-              { id: "7af4c54c-5c32-4e48-9b56-f1212c0d0fc7" },
-              { id: "227d0f22-0ba2-428c-8794-9ff65e7e5c84" },
-              { id: "e36f3cac-86f7-42b5-9cfe-9d2ddf066024" },
-              { id: "50f494a9-905e-4197-9c72-f1e860bfe012" },
-              { id: "8d92799c-bd09-4afa-a0ef-976b70e06d91" },
-              { id: "b5256589-8049-4021-a3b3-f8538c3d9d5e" },
-              { id: "1c907cc5-dd84-4850-8ca6-5234c470671b" },
-              { id: "e610e787-4f7d-404d-bd48-efbeca313e08" },
-              { id: "6231abf9-c746-4bc4-a268-bb8baeff43c3" },
-              { id: "8ea9995a-222c-47cf-8bfe-1860ea956483" },
-              { id: "502b7564-c4d1-4bb7-9b9e-234d2fd145bb" },
-              { id: "064f738c-f633-45db-998b-d1d84145d339" },
-              { id: "5e37448f-d240-4c2d-a4a4-0da1293bf7d8" },
-              { id: "d30b1153-fbc2-4f83-99c1-65a1481dbbfa" },
-              { id: "0a765647-56c5-4ee9-959c-78b90d48d2e1" },
-              { id: "5b2e52c7-0fd7-4492-8f6e-a3181b3e7a8c" },
-              { id: "d8d4332e-318f-4200-93d5-49e5f6306a02" },
-              { id: "1cbb254a-418b-412c-bca2-c55ff407b187" },
+              {
+                id: "4ddc45d3-b302-48de-a91c-e4efa8411960",
+              },
+              {
+                id: "08c66213-f592-4b6c-bdfb-79d021431e01",
+              },
+              {
+                id: "395a39c5-db25-45fd-aaa1-2f2ccca70ff2",
+              },
+              {
+                id: "f645996a-9eea-4d84-a356-c0fbe1ca0ed9",
+              },
+              {
+                id: "bbaf2228-bd09-4106-8047-b1fa4367e25a",
+              },
+              {
+                id: "570ebec9-3fe0-4f3e-b6e6-7b7e42531076",
+              },
+              {
+                id: "82dd9384-03a8-4f12-9641-73eb7cd0e951",
+              },
+              {
+                id: "aa230679-3efa-406b-875d-7204dce487ae",
+              },
+              {
+                id: "71ca0492-a196-40ec-a72a-376e69990e8e",
+              },
+              {
+                id: "11329ea4-c5bf-435f-b89e-8e1f0b01dc74",
+              },
+              {
+                id: "b2b07b23-129a-4950-8b3a-c154f3654c45",
+              },
+              {
+                id: "0c8934c2-1378-4d6f-a218-497eee9be51d",
+              },
+              {
+                id: "e2075423-130d-430d-8af3-1ca724232033",
+              },
+              {
+                id: "1e970f78-f94e-4597-9b8d-c04fa88c7550",
+              },
+              {
+                id: "e051447f-fb6a-44e4-b05c-e6ecb718a390",
+              },
+              {
+                id: "81a65014-7503-497e-87da-73e076fadba1",
+              },
+              {
+                id: "62398aa1-8396-4452-a150-f9f2bce67eba",
+              },
+              {
+                id: "91387b52-1bc7-4aab-85ac-def3ab70ea70",
+              },
+              {
+                id: "a0e09744-30b7-4f63-ae8d-47205900e90e",
+              },
+              {
+                id: "53856214-c047-4f2a-8909-717e9a86b0dc",
+              },
+              {
+                id: "27692916-a426-45f1-bbfd-437e665559aa",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -358,6 +713,7 @@ const execute = async (db: PrismaClient) => {
                     description:
                       "A God Hand Scans (ou GHS) parou de traduzir mangás e agora atua como uma fansub chamada [God Hands Fansub](https://ghsfansub.com.br/) (ou GHF) legendando Detective Conan.\n\n---\n\nCaso queira acessar o antigo site da GHS (ele está offline) acesse através do [Wayback Machine](https://web.archive.org/details/https://www.godhandscans.com.br/)",
                     website: "https://www.godhandscans.com.br/",
+                    email: null,
                     discord: null,
                     x: "https://twitter.com/https://twitter.com/godhand_scans",
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",

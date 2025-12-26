@@ -1,5 +1,3 @@
-import { mkdir, readdir, readFile, writeFile } from "node:fs/promises"
-import { join } from "node:path"
 import type { Prisma } from "@taiyomoe/db"
 import {
   toContentRating,
@@ -8,13 +6,16 @@ import {
   toLanguage,
   toLocalizedText,
   toMediaLinks,
+  toStaffLinks,
   toStatus,
   toTags,
   toType,
 } from "@taiyomoe/utils"
 import { Command } from "commander"
 import { Cover, Manga } from "mangadex-full-api"
-import { group, map, mapValues, sleep } from "radashi"
+import { mkdir, readdir, readFile, writeFile } from "node:fs/promises"
+import { join } from "node:path"
+import { group, map, mapValues, pick, sleep } from "radashi"
 import {
   CREATOR_ID,
   downloadFiles,
@@ -29,6 +30,11 @@ export const createSeedCommand = new Command("create-seed")
   .action(async (options: { mdId: string }) => {
     const mediaId = crypto.randomUUID()
     const manga = await Manga.get(options.mdId)
+
+    /**
+     * Get all titles for the media.
+     * - Sort by priority and language.
+     */
     const titles = Object.values(
       mapValues(
         group(
@@ -52,6 +58,11 @@ export const createSeedCommand = new Command("create-seed")
           }),
       ),
     ).flat()
+
+    /**
+     * Get all covers for the media.
+     * - Download each cover and save it to the output directory.
+     */
     const covers = await (async () => {
       const result = (
         await Cover.search({ manga: [manga.id], limit: 100 })
@@ -82,14 +93,11 @@ export const createSeedCommand = new Command("create-seed")
       return result.map(({ url: _, ...c }) => c)
     })()
 
-    if (!titles.some((t) => t.isMainTitle)) {
-      throw new Error("No main title found")
-    }
-
-    if (!covers.some((c) => c.isMainCover)) {
-      throw new Error("No main cover found")
-    }
-
+    /**
+     * Get all chapters for the media.
+     * - Download 15 first, 15 in the middle, and 15 last chapters and save it to the output directory.
+     * - Get all groups for each chapter and also create them if they don't exist.
+     */
     const chapters = await (async () => {
       const result = []
       let hasMore = true
@@ -156,8 +164,9 @@ export const createSeedCommand = new Command("create-seed")
             create: {
               id: resolved.id,
               name: resolved.name,
-              description: resolved.description,
-              website: resolved.website,
+              description: resolved.description || null,
+              website: resolved.website || null,
+              email: resolved.contactEmail || null,
               discord: resolved.discord
                 ? `https://discord.gg/${resolved.discord}`
                 : null,
@@ -166,7 +175,7 @@ export const createSeedCommand = new Command("create-seed")
                 : null,
               creatorId: CREATOR_ID,
             },
-          }
+          } satisfies Prisma.GroupCreateOrConnectWithoutChaptersInput
         })
 
         console.log(
@@ -188,6 +197,77 @@ export const createSeedCommand = new Command("create-seed")
 
       return parsed
     })()
+
+    /**
+     * Get all staff for the media.
+     * - Download each staff image and save it to the output directory.
+     */
+    const staff = await (async () => {
+      const imagesPath = join(outputDir("create-seed"), "staff")
+
+      await mkdir(imagesPath, { recursive: true })
+
+      const result = await map(
+        manga.authors.concat(manga.artists),
+        async (s) => ({ ...(await s.resolve()), type: s.type }),
+      )
+      const imagesToDownload = result
+        .filter((s) => s.imageUrl)
+        .map((s) => ({ id: s.id, url: s.imageUrl! }))
+
+      if (imagesToDownload.length > 0) {
+        console.log(
+          `Downloading staff images (${imagesToDownload.length} / ${imagesToDownload.length})...`,
+        )
+
+        await downloadFiles(imagesToDownload, imagesPath)
+
+        console.log("Downloaded staff images")
+      }
+
+      return result.map((s) => ({
+        role: s.type === "author" ? "AUTHOR" : "ARTIST",
+        staff: {
+          connectOrCreate: {
+            where: { id: s.id },
+            create: {
+              id: s.id,
+              name: s.name,
+              bio: s.biography.localString
+                ? toLocalizedText({ en: s.biography.localString })
+                : {},
+              links: toStaffLinks(
+                pick(s, [
+                  "website",
+                  "twitter",
+                  "youtube",
+                  "tumblr",
+                  "fantia",
+                  "pixiv",
+                  "melonBook",
+                  "namicomi",
+                  "naver",
+                  "nicoVideo",
+                  "skeb",
+                  "weibo",
+                  "booth",
+                ]),
+              ),
+              creatorId: CREATOR_ID,
+            },
+          },
+        },
+      })) satisfies Prisma.StaffOnMediaCreateWithoutMediaInput[]
+    })()
+
+    if (!titles.some((t) => t.isMainTitle)) {
+      throw new Error("No main title found")
+    }
+
+    if (!covers.some((c) => c.isMainCover)) {
+      throw new Error("No main cover found")
+    }
+
     const newMedia = {
       id: mediaId,
       synopsis: toLocalizedText(manga.description),
@@ -204,14 +284,17 @@ export const createSeedCommand = new Command("create-seed")
       },
       creatorId: CREATOR_ID,
       titles: { create: titles },
+      staff: { create: staff },
       covers: { create: covers },
       chapters: { create: chapters },
     } satisfies Prisma.MediaUncheckedCreateInput
 
-    // Find latest seed number
+    /**
+     * Find the latest seed number in order to create a new seed
+     * file with the correct number.
+     */
     const mediasDir = join(seedsPath, "medias")
-    const files = await readdir(mediasDir)
-    const mediaNumbers = files
+    const mediaNumbers = (await readdir(mediasDir))
       .filter((f) => f.startsWith("media-") && f.endsWith(".ts"))
       .map((f) =>
         Number.parseInt(f.replace("media-", "").replace(".ts", ""), 10),
@@ -220,7 +303,9 @@ export const createSeedCommand = new Command("create-seed")
     const latestNumber = mediaNumbers.length > 0 ? Math.max(...mediaNumbers) : 0
     const newNumber = latestNumber + 1
 
-    // Read template and create new seed file
+    /**
+     * Read the template file and create a new seed file.
+     */
     const templateContent = await readFile(
       join(templatesPath, "media-{{count}}.ts.hbs"),
       "utf-8",

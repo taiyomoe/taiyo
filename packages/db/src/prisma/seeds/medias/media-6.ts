@@ -3,7 +3,7 @@ import type { PrismaClient } from "@taiyomoe/db"
 const execute = async (db: PrismaClient) => {
   await db.media.create({
     data: {
-      id: "5dd61b77-5d61-4b81-9915-922cd5bcaa9a",
+      id: "0da55f8e-4715-48e8-8d6a-84f632fca9c2",
       synopsis: {
         de: "In einer Welt regiert durch die stärksten Kämpfer ist König Grey der unangefochten Stärkste, Reichste und Berühmteste. Aber eine solche Macht kommt Hand in Hand mit Einsamkeit. Unter der glamourösen Erscheinung eines mächtigen Königs liegt die leere Hülle eines Mannes, beraubt von Ziel und Willen.\n\nNach einer Wiedergeburt in eine Welt voller Magie und Monster hat der König die Möglichkeit, sein Leben erneut zu leben. Die Fehler seiner Vergangenheit zu korrigieren wird aber nicht seine einzige Herausforderung sein. Unter dem Frieden und Reichtum dieser neuen Welt lauert etwas, das alles vernichten kann, was er jemals erreicht hat, was seine Rolle darin und den Grund für seine Wiedergeburt in Frage stellt.",
         en: "King Grey has unrivaled strength, wealth, and prestige in a world governed by martial ability. However, solitude lingers closely behind those with great power. Beneath the glamorous exterior of a powerful king lurks the shell of man, devoid of purpose and will.\n\nReincarnated into a new world filled with magic and monsters, the king has a second chance to relive his life. Correcting the mistakes of his past will not be his only challenge, however. Underneath the peace and prosperity of the new world is an undercurrent threatening to destroy everything he has worked for, questioning his role and reason for being born again.\n\n---\n\n**Original Webcomic:**  \n- [Digital](https://tapas.io/series/tbate-comic/info)\n- [Volumes](https://yenpress.com/series/the-beginning-after-the-end-comic)\n\n**Official Translations:**  \n- [Japanese](https://jp.piccoma.com/web/product/19682)\n- [Spanish](https://tapas.io/series/el-comienzo-despues-del-fin/info)\n- [T.Chinese](https://tw.kakaowebtoon.com/content/%E7%B5%82%E6%9C%AB%E8%B5%B7%E9%BB%9E/575)\n- [French](https://www.delitoon.com/detail/daf_0000303)  \n- **Korean**: \n  - [Daum](https://webtoon.kakao.com/content/%EB%81%9D%EC%9D%B4-%EC%95%84%EB%8B%8C-%EC%8B%9C%EC%9E%91/3162)\n  - [KakaoPage](https://page.kakao.com/content/53142176)  \n- **Thai**:   \n  - [Kakao Webtoon](https://th.kakaowebtoon.com/content/The_Beginning_After_The_End/468)\n  - [Lezhin](https://www.lezhinth.com/titles/1171)      \n- **S.Chinese**: \n  - [KuaiKan](https://www.kuaikanmanhua.com/web/topic/6884/)\n  - [AC.QQ](https://ac.qq.com/Comic/comicInfo/id/656549)\n  - [BiliBili](https://manga.bilibili.com/detail/mc37565)",
@@ -26,6 +26,7 @@ const execute = async (db: PrismaClient) => {
         { key: "MAGIC", isSpoiler: false },
         { key: "ISEKAI", isSpoiler: false },
         { key: "GORE", isSpoiler: false },
+        { key: "SCHOOL", isSpoiler: false },
         { key: "FANTASY", isSpoiler: false },
         { key: "WEB_COMIC", isSpoiler: false },
         { key: "ADAPTATION", isSpoiler: false },
@@ -37,6 +38,16 @@ const execute = async (db: PrismaClient) => {
       source: "ORIGINAL",
       demography: "SHOUNEN",
       countryOfOrigin: "USA",
+      links: {
+        mangaDex: "4ada20eb-085a-491a-8c49-477ab42014d7",
+        animePlanet:
+          "https://www.anime-planet.com/manga/the-beginning-after-the-end",
+        bookWalker: "https://bookwalker.jp/series/316257",
+        mangaUpdates: "https://www.mangaupdates.com/series.html?id=rwg23en",
+        kitsu: "https://kitsu.io/api/edge/manga/54597",
+        amazon: "https://www.amazon.com/dp/B0B3JHX9D2",
+        officialENTranslation: "https://tapas.io/series/tbate-comic/info",
+      },
       creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
       titles: {
         create: [
@@ -133,10 +144,116 @@ const execute = async (db: PrismaClient) => {
           },
         ],
       },
+      staff: {
+        create: [
+          {
+            role: "AUTHOR",
+            staff: {
+              connectOrCreate: {
+                where: { id: "4785e565-01e5-497c-9c60-6bfb7b429253" },
+                create: {
+                  id: "4785e565-01e5-497c-9c60-6bfb7b429253",
+                  name: "TurtleMe",
+                  bio: {
+                    en: 'Brandon Lee, pen name TurtleMe, is the author of The Beginning After The End Novel and writer for The Beginning After The End Webcomic.\n\nBrandon grew up holing himself in the darkest and most secluded corners of his local Barnes & Noble while reading fantasy novels for hours. The novels provided solace for him throughout the stresses of high school, college, and his job. He has a major in Psychology in order to go into HR to working in finance.\n\nWearing the mask of TurtleMe, he has progressed from his title as a Berkeley graduate and discarded his identity as a corporate worker and delved into the world of fantasy. As a recognized web serial author for over three years, TurtleMe brings together a mix of traditional literature alongside fast-paced installments into his novel "The Beginning After The End", an epic fantasy starting from the rebirth of a king into a new life of magic and twisted fate. He has a fondness for books, comics, games and going on walks with his wonderful fiancée, Grace, and his devious dog, Roy. Today, he\'s a self-published author on Amazon Kindle and Tapas.\n\nBorn in Korea, Brandon currently resides in the Greater Seattle Area in Washington.\n\n[Patreon](https://www.patreon.com/TurtleMe)',
+                  },
+                  links: {
+                    website: "https://linktr.ee/turtleme93",
+                    twitter: "https://twitter.com/turtleme93",
+                  },
+                  creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+                },
+              },
+            },
+          },
+          {
+            role: "ARTIST",
+            staff: {
+              connectOrCreate: {
+                where: { id: "55be27df-c66c-4f5e-a460-e5501ac6a997" },
+                create: {
+                  id: "55be27df-c66c-4f5e-a460-e5501ac6a997",
+                  name: "YOYO",
+                  bio: {},
+                  links: {},
+                  creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+                },
+              },
+            },
+          },
+          {
+            role: "ARTIST",
+            staff: {
+              connectOrCreate: {
+                where: { id: "84e1b9a6-80cf-4b6a-acf9-36c596aef189" },
+                create: {
+                  id: "84e1b9a6-80cf-4b6a-acf9-36c596aef189",
+                  name: "Wudijiurenwang",
+                  bio: {},
+                  links: {},
+                  creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+                },
+              },
+            },
+          },
+          {
+            role: "ARTIST",
+            staff: {
+              connectOrCreate: {
+                where: { id: "dcd588d8-a9d7-4e74-a066-4246d95deb03" },
+                create: {
+                  id: "dcd588d8-a9d7-4e74-a066-4246d95deb03",
+                  name: "Fuyuki23",
+                  bio: {
+                    en: "Duta Permana, pen name Fuyuki23, is the Illustrator of The Beginning After The End Webcomic and Co-Author and Co-Writer for Psycho Love Contract Webtoon.\n\nNot much is known on Duta except that he is a male Indonesian Illustrator and Writer. He is best known for his role in illustrating The Beginning After The End Webcomic on Tapas in which he joined in September 2014.",
+                  },
+                  links: {
+                    website: "https://instagram.com/fuyuki23",
+                    twitter: "https://twitter.com/fuyuki231",
+                    youtube:
+                      "https://www.youtube.com/channel/UCQApIQp-EJ0ni_DRxVeGaeA",
+                  },
+                  creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+                },
+              },
+            },
+          },
+          {
+            role: "ARTIST",
+            staff: {
+              connectOrCreate: {
+                where: { id: "eeef1916-e280-45d8-850f-e59b17b49182" },
+                create: {
+                  id: "eeef1916-e280-45d8-850f-e59b17b49182",
+                  name: "333335",
+                  bio: {},
+                  links: {},
+                  creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+                },
+              },
+            },
+          },
+          {
+            role: "ARTIST",
+            staff: {
+              connectOrCreate: {
+                where: { id: "f016dcdc-6b7c-498f-a798-4782e9a81210" },
+                create: {
+                  id: "f016dcdc-6b7c-498f-a798-4782e9a81210",
+                  name: "Eginhardt",
+                  bio: {},
+                  links: {},
+                  creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
+                },
+              },
+            },
+          },
+        ],
+      },
       covers: {
         create: [
           {
-            id: "e5a47838-ef8f-471c-b70e-02a487572d13",
+            id: "70c54956-b3bf-4fd9-8e55-73d179d38ab0",
             volume: "6.1",
             language: "en",
             contentRating: "NORMAL",
@@ -144,7 +261,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "d23c5efe-7fb2-4abd-bb5b-c5e137c45387",
+            id: "dbbdfb15-8662-4ce4-b95b-800f23abf3da",
             volume: "6",
             language: "ja",
             contentRating: "NORMAL",
@@ -152,7 +269,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "8f3037c9-63d1-49ec-b2d7-009609707eb9",
+            id: "c3264f39-39f7-4869-b5c1-4193c963c92e",
             volume: "6",
             language: "es",
             contentRating: "NORMAL",
@@ -160,7 +277,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "bd0b0ce1-e662-4b86-a67f-194d73f0f67a",
+            id: "6a970990-fbda-4683-ac2d-85cfd8043fc7",
             volume: "6",
             language: "en",
             contentRating: "NORMAL",
@@ -168,7 +285,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "46fd7577-b0ad-4e05-b4bf-3b12bd535c96",
+            id: "1cc82cac-569d-4eb4-b538-ad9f491c96a8",
             volume: "3",
             language: "ja",
             contentRating: "NORMAL",
@@ -176,7 +293,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "5eb97f06-6225-4314-b091-d694040e6317",
+            id: "6bd57933-f2e8-49e3-a507-cd6b647e2bf3",
             volume: "5",
             language: "es",
             contentRating: "NORMAL",
@@ -184,7 +301,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "ae62a1b6-2e50-4776-9342-3d898766a14e",
+            id: "713266a2-9774-4372-aeb5-1d4bea1edc8b",
             volume: "5",
             language: "ko",
             contentRating: "NORMAL",
@@ -192,7 +309,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "2415e7e6-8531-463e-8aab-47023fb5e056",
+            id: "a94e7c39-22af-4aca-84d4-2a6f1977f54e",
             volume: "5",
             language: "ja",
             contentRating: "NORMAL",
@@ -200,7 +317,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "d2eaeaba-02b2-4931-aceb-c05f6ab3782a",
+            id: "e70d5be8-c406-4f2d-be38-17a5eb942cf5",
             volume: "5",
             language: "en",
             contentRating: "NORMAL",
@@ -208,7 +325,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "68d82f27-2c4d-4663-b5c4-743617955f02",
+            id: "d0ce0fe2-feac-4e90-9560-08eda3d7a1fe",
             volume: "4",
             language: "ko",
             contentRating: "NORMAL",
@@ -216,7 +333,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "61eccd05-da46-4eb8-af9e-682c32fb6184",
+            id: "839dee6b-0af2-4c16-bb83-acd7c324da76",
             volume: "1",
             language: "zh",
             contentRating: "NORMAL",
@@ -224,7 +341,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "b3dad4b2-cfbb-404d-b53d-5c7ea26188f8",
+            id: "513dfa21-4e23-4a2f-a663-0c931a7a136d",
             volume: "5",
             language: "ko",
             contentRating: "NORMAL",
@@ -232,7 +349,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "43519c40-eac2-47ae-845a-00e8dfb026b4",
+            id: "453e1732-dff6-4a58-b465-ed40687db363",
             volume: "1",
             language: "ja",
             contentRating: "NORMAL",
@@ -240,7 +357,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "261e9fe9-ec5a-48a8-8151-0dc7d7b7e806",
+            id: "a5291b46-d012-48eb-a898-95a8861ce078",
             volume: "3",
             language: "en",
             contentRating: "NORMAL",
@@ -248,7 +365,7 @@ const execute = async (db: PrismaClient) => {
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
           },
           {
-            id: "7b1c1863-35e5-4f18-8d9f-3ecbf06fd797",
+            id: "bf69cf41-05ea-496d-848a-d5425ba3fb3b",
             volume: "1",
             language: "en",
             contentRating: "NORMAL",
@@ -260,53 +377,137 @@ const execute = async (db: PrismaClient) => {
       chapters: {
         create: [
           {
-            id: "64e212a8-19d4-42b9-bf25-0dcda292c6f1",
+            id: "c9b85da2-b3bd-4d1d-8b3b-87cc3e04a7fd",
             number: 1,
             volume: "1",
             language: "fr",
             pages: [
-              { id: "c974e8cf-475f-45a4-9451-e3457ef0d214" },
-              { id: "abdce557-4f5e-4d55-b4c8-6f1b518cc412" },
-              { id: "3e0777cc-0921-4bdc-ad3e-df988cf20459" },
-              { id: "ea9337c5-742c-4854-a36c-93f34c42e064" },
-              { id: "205cbb1f-2f62-4879-9628-0fe4c59a3852" },
-              { id: "6144cb6d-f1f4-45c7-ba86-f5ab6fc1eba4" },
-              { id: "9d782e76-889c-44b8-acca-3ed1b74b5f3d" },
-              { id: "82fb0286-71f9-456e-9c24-f2108c748025" },
-              { id: "8bca6ee5-3c6b-48b8-b9e6-58c781035f39" },
-              { id: "70de5226-818d-441f-8118-144d95d46d6e" },
-              { id: "e78eafc3-1070-4e82-bd42-bdbdfeec2c5a" },
-              { id: "31404ea5-bd62-4a67-beed-58fef4835e43" },
-              { id: "01811236-86c0-4c9a-87e3-9bffe01a22f4" },
-              { id: "d8fd51c9-1ccb-4cf0-abd9-ceda825e74b5" },
-              { id: "b9e99314-71b2-4567-87e2-603dbcd82985" },
-              { id: "abaaffe2-3041-43e5-b67f-81db03659fb4" },
-              { id: "2c7f85b1-25ec-4f43-a3f8-4bb56169149c" },
-              { id: "efb3580d-d38c-4d1d-ac24-64f23114bb85" },
-              { id: "b9795e1f-17cf-4d29-a33e-caccaa5a3648" },
-              { id: "d3e3296e-13ae-4e62-8fa2-b8a1d2f92313" },
-              { id: "7c1eba91-670e-4a7f-8b8c-e1908a05cbfe" },
-              { id: "43c6402c-fdda-48ff-adaa-c47a89978daf" },
-              { id: "01c7e653-5a9a-4f3a-9db9-a1700728bbd5" },
-              { id: "55f6be62-5199-48f4-aa81-d93ce0d23625" },
-              { id: "f52fc18a-28dd-49a9-b82a-ccb0e4a7121f" },
-              { id: "c55922f3-8ff5-4f3d-95ae-656310b00b16" },
-              { id: "200470d8-1dff-4446-ad0b-d8b789ef0e34" },
-              { id: "ef1ed5a5-9c09-4e2b-ae8d-0f6024991e20" },
-              { id: "f99931a8-fc76-49ac-97e4-a7fa0cdc8b83" },
-              { id: "37851656-7b4a-4d9b-a118-a3d7e0a4a758" },
-              { id: "4432ed10-21c3-443c-b508-136dd8b69d15" },
-              { id: "0a5d1260-a022-4ad5-9f3a-a0b19baac1c8" },
-              { id: "7e3826c8-7e0d-462b-a3b7-a27e0766e943" },
-              { id: "fb777b63-5c15-4b4b-b9fe-f9cbd9a4f29e" },
-              { id: "990d42be-3837-4ff0-b8db-01d4a6a78528" },
-              { id: "c3c20a3e-f96b-4077-b4c9-e24ecdb6d94d" },
-              { id: "8429de39-841e-4a13-9a5c-7cefd52f06c2" },
-              { id: "4aff9577-b55f-4b73-9280-0fcbaae12ac8" },
-              { id: "bbc66ae3-a43f-427e-ba3a-c3ec6daadfc2" },
-              { id: "6aef359b-9cad-41cb-a0e4-6566e062f8bf" },
-              { id: "a7743402-789e-44b6-9415-4116f080ef8e" },
-              { id: "59b2bdc1-4d32-48d6-abf7-608fee345fcc" },
+              {
+                id: "125e337b-feac-4e29-bce7-e5300d5497f9",
+              },
+              {
+                id: "a5429b4f-4f3e-493b-8909-054e382cbdff",
+              },
+              {
+                id: "3183f1f0-e442-4680-aaed-ed5e78a853cc",
+              },
+              {
+                id: "707eb049-b067-4e32-beef-e71384a30cf8",
+              },
+              {
+                id: "cfbd51ef-b32f-4212-8422-9d2c26b58480",
+              },
+              {
+                id: "18b0f0f9-031c-438e-bcdf-9a1e02d76c34",
+              },
+              {
+                id: "9bb43fbd-5342-4943-bb8a-c8389169da64",
+              },
+              {
+                id: "89cf25be-2ae6-4f0d-adf2-84365bb72ce4",
+              },
+              {
+                id: "3632453c-11b0-4c2e-a632-e7d37e6486dc",
+              },
+              {
+                id: "f41e37f5-708d-4cbf-ac93-cee59dac3850",
+              },
+              {
+                id: "eaf61b66-80c6-4913-9f8e-457ec587568f",
+              },
+              {
+                id: "f3c4c238-9dff-4cba-aa89-28450e6d9b01",
+              },
+              {
+                id: "995628c1-bb47-48e1-8eba-8d00bfef4191",
+              },
+              {
+                id: "5af8a6e8-268c-4da6-a521-a93648141151",
+              },
+              {
+                id: "85d041f0-4d19-4f6b-a550-ea82b5ec97fb",
+              },
+              {
+                id: "6fa07ec8-cac8-4806-bbdd-8f28d1e6f1e7",
+              },
+              {
+                id: "fe878f4e-3a51-4a0b-a8da-4c238f850a9c",
+              },
+              {
+                id: "073cf0ac-be71-4628-a5a1-e9226585ee6a",
+              },
+              {
+                id: "dfe90c61-47f0-42ac-aea9-f56513635160",
+              },
+              {
+                id: "72594418-d214-444e-8686-461748314bf1",
+              },
+              {
+                id: "bc0b8447-6f5d-4a9e-89af-8428e7e6795f",
+              },
+              {
+                id: "4fdf4045-a063-41ab-a143-cda51a3e89cf",
+              },
+              {
+                id: "661d7900-4dfa-43d1-b20a-f4cfb79bd65d",
+              },
+              {
+                id: "1cc3a7e9-b794-4e99-9eb1-037ad5060e54",
+              },
+              {
+                id: "4037eadf-2e7f-44d0-8615-f1c07335565e",
+              },
+              {
+                id: "42c8f235-314e-4718-8d3c-e7b00f19eed7",
+              },
+              {
+                id: "a177750a-f140-4f93-8db6-965227ea5450",
+              },
+              {
+                id: "269adb28-7aeb-4e8b-afb4-18a8391e3da4",
+              },
+              {
+                id: "09bb397a-c83b-4b5b-b10c-a3be50a2e64d",
+              },
+              {
+                id: "cfe756ea-de37-4867-ab62-3ff24c1616c3",
+              },
+              {
+                id: "9553b116-41d8-4ba6-8ab2-0880e0e9316d",
+              },
+              {
+                id: "0457762f-3ca9-4240-a865-90f730b5f215",
+              },
+              {
+                id: "f29971fb-467f-4d9d-adc7-d01c7ddcf372",
+              },
+              {
+                id: "11e88dc2-be0c-46d4-8869-8f83fb4f6f1d",
+              },
+              {
+                id: "3a82f5d9-11cd-406a-b2ac-59aec036669f",
+              },
+              {
+                id: "007cd664-6e90-40f2-8866-d2665952f27b",
+              },
+              {
+                id: "46720af6-60a1-43ae-9de5-b4d07622c992",
+              },
+              {
+                id: "bcbad025-0997-4ded-8d23-cbf70a79429f",
+              },
+              {
+                id: "faed0336-d203-4ea7-a60d-f2f46e46b12f",
+              },
+              {
+                id: "9a7cae94-4c28-4645-8510-4891d4ab61a1",
+              },
+              {
+                id: "1537ffbf-61e3-4cc8-9e8a-343b2c6a65f0",
+              },
+              {
+                id: "e3768fde-09f0-40fc-9dd9-6d907fb9567b",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -319,6 +520,7 @@ const execute = async (db: PrismaClient) => {
                     description:
                       "Recrutements aux postes suivants ouverts:  \n→ Traducteur Coréen -> Français/Anglais [**URGENT**]  \n→ Traducteur Anglais -> Français [**URGENT**]  \n→ Traducteur Japonais -> Français/Anglais  \n→ Checkeur  \n→ Editeur [**URGENT**]  \n→ Reconstructeur [**URGENT**]  \n  \nActuellement, voici nos projets:  \n- The Beginning After the End [**Novel**]  \n- Uriah  \n- Whispers of the True King  \n- My Superstar Uncle (Coprod Alpha)  \n- OOPARTS  \n- My Bodyguard is 4 Feet Tall  \n- Code of Silence  \n- Endeavor's Cross  \n- Otherworld Squad [**Pause**]  \n- Get Life [**Pause**]  \n- God and Human [**Pause**]  \n  \nAncien projets:  \n- The Beginning After the End (Webtoon) [**Licencié**]  \n- Hello, Summer. [**Terminé**]",
                     website: null,
+                    email: null,
                     discord: "https://discord.gg/UGzYPzv",
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -328,68 +530,182 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "9471477e-b240-4463-9dc9-fcbe101d5b0e",
+            id: "958712fe-7817-46da-9ea2-1c186f5dac0b",
             number: 1,
             volume: "1",
             language: "fr",
             pages: [
-              { id: "80bd4093-a5a5-4e11-bb53-686880073382" },
-              { id: "0891d35f-9439-42e1-99f0-c00bdc5a8918" },
-              { id: "fc2fdd50-e3aa-44e8-ae38-45642f464179" },
-              { id: "fd0d7651-bfb1-433e-a031-7f9f59ed0c4a" },
-              { id: "b9408c17-a0e9-4c33-a372-622da35190ed" },
-              { id: "dee5d209-2f35-45c7-9153-1d0f35fdcb6a" },
-              { id: "57eee881-c1d3-4351-8b31-e7f36dfcc188" },
-              { id: "9c56da86-af81-49a6-8d47-a59bc3efd3fc" },
-              { id: "27f7011e-1397-4a67-849a-390577d95639" },
-              { id: "1ca5a900-067f-468c-9d14-d730f112e235" },
-              { id: "81ac77d1-93c6-41de-a75d-beda291d02e9" },
-              { id: "ecbe3e07-22eb-476a-85e1-14bc40ef7826" },
-              { id: "4fa8b69d-6da6-488d-91a9-9dd6536edbf3" },
-              { id: "cc613c31-965b-475a-9ab4-c8c57878e30f" },
-              { id: "1d481943-53c1-4344-b460-7c6b290a5ade" },
-              { id: "5f3cc903-4e6d-4a94-bfc3-5c6b6254a4a4" },
-              { id: "79733005-8070-4cb8-a6a2-e88c828f598e" },
-              { id: "252e1620-2784-45b1-8028-3385a911760e" },
-              { id: "ff6e055e-6394-4712-b511-bd12f66254ed" },
-              { id: "30c24f18-00fb-47b5-9de5-27adab152693" },
-              { id: "d844c16a-64ad-44f0-a49d-8433e929e562" },
-              { id: "7ac5ee7c-e485-4330-97c5-afaa844d4a34" },
-              { id: "6a0bb218-28d1-45bc-8fdd-1cd3a18b8fbe" },
-              { id: "9669a186-56e4-4653-b349-d1198869fcfa" },
-              { id: "7eb9c851-4072-453e-bb73-a7a1a6c5c856" },
-              { id: "4b16908a-a55a-4bbf-88e7-6d3a3ad4affa" },
-              { id: "9471b160-cae6-44a7-a978-3cf422334a09" },
-              { id: "00bd5f37-74f1-46ea-90b6-804957fdd5a9" },
-              { id: "2a3d3eae-5d07-461d-91e7-8f58d922fc0c" },
-              { id: "2afbd981-1d77-4198-b6f7-8ef9d11998f7" },
-              { id: "cfe24e4f-3a3e-40b0-9489-939cbd6f34d0" },
-              { id: "d07a335d-dfd6-4fe8-ba62-feff7d814667" },
-              { id: "104327bc-835b-4bd5-ac86-b662f2c214eb" },
-              { id: "c9e931a1-a209-4631-80c2-5eeae3485bae" },
-              { id: "36b1ff27-f235-4feb-859b-6a26c09a82ad" },
-              { id: "513e4b51-394f-49e1-8f08-49780117da47" },
-              { id: "ad27b752-3b12-4fd3-81bd-c7e256bd5f33" },
-              { id: "fa94210d-d978-4880-b250-fda58a238276" },
-              { id: "504c2a08-2c09-4e33-976c-de0886e4df4d" },
-              { id: "7b308738-7439-4eae-ade3-451f91a235f0" },
-              { id: "00f7ff80-851e-46d9-b092-17ec60a02f59" },
-              { id: "72b03e3e-512e-4e3b-b527-2d351aa0619b" },
-              { id: "5a164d58-a82b-42c6-a57b-d5ae91152d30" },
-              { id: "e56c341e-0a28-497d-9a4f-77cc5f431ab8" },
-              { id: "aa4fca34-aed6-4c2f-bc3b-fc2580113692" },
-              { id: "6cd01048-aed6-47f4-ae88-00aebf6175d7" },
-              { id: "b4552ca9-75d1-4ad7-bb1c-2ee0a61babcc" },
-              { id: "93d424b9-5da1-48fd-ba37-b8c8a1774842" },
-              { id: "106f5f4b-96ab-4081-9ca0-9a4419da3c81" },
-              { id: "2b9f321e-d592-4ece-8e82-95d62f9982fd" },
-              { id: "922449ab-16c8-4978-9b16-70d4689eb491" },
-              { id: "42431362-e31d-4d76-b2c5-efdea7b791e4" },
-              { id: "1a3a6a1e-8b8a-43ad-8dc7-f4b459aa7f49" },
-              { id: "f54704e0-f0b8-4ea5-946a-98c5c798710d" },
-              { id: "4a142c3d-a246-4a37-b681-0691d018c061" },
-              { id: "98fa87de-a443-4ec2-800b-3bc9ac33feb0" },
-              { id: "c50bf45b-f0aa-4bb2-8b7d-ec3d483066ad" },
+              {
+                id: "294d11b0-1a3c-4b0e-9e52-1b5241cf035e",
+              },
+              {
+                id: "ea017883-a836-4b5b-b291-a586ec9cf4e9",
+              },
+              {
+                id: "32afdf68-57a5-4457-bc2b-65076cfb3750",
+              },
+              {
+                id: "6ce5864f-2f05-4a0d-9886-682fe1549b95",
+              },
+              {
+                id: "4c32ede9-cc3f-4b12-bab3-670184ad32e6",
+              },
+              {
+                id: "77216ace-9077-43ad-8d6e-0dc7550ee4d0",
+              },
+              {
+                id: "14c63b41-9951-471d-ad07-523908d79b12",
+              },
+              {
+                id: "bbde7ab0-b0dd-4b98-a5b6-bd34ddaae7f2",
+              },
+              {
+                id: "1764a432-a131-4e4d-b509-d0bfb209cd8a",
+              },
+              {
+                id: "47424a1c-9b19-4df2-90e5-929a61cfce4a",
+              },
+              {
+                id: "d698225e-3d06-46de-95fa-750c4e02396e",
+              },
+              {
+                id: "ddc193b9-100b-49db-9980-cfaf2a6801a0",
+              },
+              {
+                id: "007a6951-56d8-41af-8757-88a2bb28b0b4",
+              },
+              {
+                id: "945254c8-d2c1-4c12-8afc-70b9ab2ca031",
+              },
+              {
+                id: "06844240-c446-465e-b340-718891e81dd7",
+              },
+              {
+                id: "548f2e75-5a06-458b-a202-279657e6c09b",
+              },
+              {
+                id: "81e26ec8-16f5-4655-9001-fca0b6f2c210",
+              },
+              {
+                id: "34121cd0-5430-45fc-8fcd-91f0e4f8b5bd",
+              },
+              {
+                id: "3e250986-85d5-45e0-9b0e-bf999f59220d",
+              },
+              {
+                id: "324baf5d-cfaa-447c-9754-c8ef33ee49b5",
+              },
+              {
+                id: "37af09d6-13b3-426b-b143-d8c482a6b101",
+              },
+              {
+                id: "6fe609d5-3057-4a07-b195-296738ed87e3",
+              },
+              {
+                id: "35af3ce9-ad09-47ab-b7bb-56980e39e731",
+              },
+              {
+                id: "7275df9d-a967-43ba-b3b4-8a0fcb5b6bb7",
+              },
+              {
+                id: "9f8cf9d2-c99c-4324-a488-478742973bde",
+              },
+              {
+                id: "89bfd7a6-06f7-425c-8e37-3ba1a3867f56",
+              },
+              {
+                id: "0da6ed08-7859-4333-8d78-3e71253dce95",
+              },
+              {
+                id: "accf2cfd-aaa3-47c5-9fef-e04f85df2e85",
+              },
+              {
+                id: "6464a06a-2c50-48ba-8696-2378f438fcd4",
+              },
+              {
+                id: "49f38003-c6ca-4e19-9cbc-05094f26012a",
+              },
+              {
+                id: "93264eb5-d705-473c-995e-9c7f2096e573",
+              },
+              {
+                id: "1fc40684-29f8-4d6b-a245-f79962b717d6",
+              },
+              {
+                id: "4edb987a-1230-4bf3-99b9-9cc91436b979",
+              },
+              {
+                id: "69faf5dc-78d8-4214-a1ef-d9d1aa1d5471",
+              },
+              {
+                id: "68b21af0-54cf-4a2f-ae25-46252dd6c7c5",
+              },
+              {
+                id: "ceefd3f2-fa70-460a-a73c-e8805a4b354d",
+              },
+              {
+                id: "03b1f1fa-b6bf-49a8-8c6b-02d9ab34c275",
+              },
+              {
+                id: "11a61c42-1865-46c0-befe-e4229cd49003",
+              },
+              {
+                id: "96e5bad7-15c2-4c83-b681-c86455a44b73",
+              },
+              {
+                id: "bf6b8a5b-0f55-4e03-b676-13bcee9ae9db",
+              },
+              {
+                id: "fe90371b-e9e7-4fb5-bd88-eabebc1ab0ee",
+              },
+              {
+                id: "49db3463-7035-40b2-9842-e6db8f6bf3ed",
+              },
+              {
+                id: "cc663622-dc6e-4b98-b5ae-8467dfabb7ee",
+              },
+              {
+                id: "b2eb4201-38ec-4d13-b990-128afdca1513",
+              },
+              {
+                id: "92819e11-53df-4cc0-a5b7-becadb77c310",
+              },
+              {
+                id: "38bc1ca1-a57e-4933-93b6-913553372439",
+              },
+              {
+                id: "ba9c6df6-7fbd-4da5-ac1d-db92ce768147",
+              },
+              {
+                id: "ecb0f8aa-cfdb-438f-b758-3776d581ee94",
+              },
+              {
+                id: "0f3c2a49-337d-4b7b-b180-913ddc9a037a",
+              },
+              {
+                id: "88a5cdb8-0f74-435d-80f2-2e2e55fdd36e",
+              },
+              {
+                id: "e9a525f9-221e-444c-8aec-05b228634cba",
+              },
+              {
+                id: "41da1873-7c06-4857-9d52-c6a1d760774e",
+              },
+              {
+                id: "5d0655d3-8b72-458a-9140-c851f3e95de2",
+              },
+              {
+                id: "48e64248-4762-4824-81db-6fb899057796",
+              },
+              {
+                id: "f4346bfa-e989-4a32-b8f4-59175045d681",
+              },
+              {
+                id: "8dd595a6-c0e2-4ac2-9e5b-7d4b1b83395f",
+              },
+              {
+                id: "15d03ff7-1c59-406a-8c0f-c6b53aba691a",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -401,6 +717,7 @@ const execute = async (db: PrismaClient) => {
                     name: "Silent well translators",
                     description: "Groupe français de traduction.",
                     website: null,
+                    email: null,
                     discord: null,
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -410,82 +727,224 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "f8f98cf3-892c-4d84-8843-f9de8c39a0be",
+            id: "87735d10-212c-4b22-be52-6a6083c715ee",
             number: 2,
             volume: "1",
             language: "fr",
             pages: [
-              { id: "9fb4590e-d2bf-40a7-99c3-0c4882097e19" },
-              { id: "12229322-ca77-4e06-a309-78644dfe5e81" },
-              { id: "2294d006-5a14-4922-a894-91736242d2e1" },
-              { id: "ed15272f-8379-422f-9970-9575f2d7cbe9" },
-              { id: "dd639b70-104b-4384-8951-0281147487ad" },
-              { id: "4fbd9a80-cf70-466e-8f45-fa44214b769d" },
-              { id: "8d625ebd-df31-404e-8916-30094315e446" },
-              { id: "65c6a51a-40fe-48c5-a4b2-4c9292fdcdbd" },
-              { id: "aea5862e-2792-448a-b9d6-2d01d9b0739c" },
-              { id: "336196e8-80f3-4d18-bacf-badb6d1da60e" },
-              { id: "9b04af93-1f3f-4a85-8f59-8e6a3527a2c6" },
-              { id: "f3c0edae-a8e4-44b9-802f-34cc846818d1" },
-              { id: "20630a54-3751-4608-882d-4dba55fbf977" },
-              { id: "7e0c71ea-2df9-4f7c-9626-29bf220222e3" },
-              { id: "61969443-8171-443d-b78e-d7a4713fe9d9" },
-              { id: "a1c760ad-4a15-4230-8ff7-b30b8717d932" },
-              { id: "3fcc04b2-2deb-405e-ba04-54c1e11bde0f" },
-              { id: "992c2324-b40d-44f0-96e9-b5ce91b9804e" },
-              { id: "d6f71e1c-5102-4f1f-8c86-e936af4bd800" },
-              { id: "4d115046-3fef-4e36-846f-233cefaa7fb0" },
-              { id: "e7d75494-8ccb-4963-a933-6e5947a30b42" },
-              { id: "dc0cd7c1-7a3e-4028-8bd5-7cc74e911908" },
-              { id: "738afb54-0b87-40cf-a852-ca42d7827756" },
-              { id: "e81e8e04-1fd2-4fc2-a2a9-284c57231e4a" },
-              { id: "d736e10d-6c9f-469a-900b-82d3d359eb84" },
-              { id: "eaa5238d-9f4a-4e9b-b249-7f97dda5e6b4" },
-              { id: "8c8c1417-0b15-444a-ab0e-ba08c6e7db55" },
-              { id: "038ed97a-79d1-4545-8a67-5ec12995d48d" },
-              { id: "542a3ea7-1835-4607-b6e6-ebfc7e2e8afc" },
-              { id: "bc2d6bbb-d3af-4d3d-b209-8e3d6e911e58" },
-              { id: "c004e2aa-85bd-42f4-bc19-46366db86690" },
-              { id: "79fada88-9dea-4779-97e2-1b4dbffb4dc8" },
-              { id: "04c43db1-2906-4850-83fd-325a53492a25" },
-              { id: "52e09c0c-ea01-4b7a-96da-9bb8e2754c83" },
-              { id: "a517b5b3-06b7-4f2d-ae5b-a6bcdf55b681" },
-              { id: "a727b15d-99c8-4422-9b07-db87dbfdeae2" },
-              { id: "25c39fd9-94fc-47bc-b4aa-3458e0675e8f" },
-              { id: "f716562e-45f7-44b6-bf47-595ea0880581" },
-              { id: "66bb8087-4a03-4d41-9a7c-f48dd5335e12" },
-              { id: "9769bb31-0dcf-44f4-9678-23e7eddc70cf" },
-              { id: "27ad9db0-df66-4937-86aa-ad9819259047" },
-              { id: "d1499c20-84c8-4fd1-aef3-8ca4071cbd92" },
-              { id: "da8a4a78-beeb-41d9-80d1-2395dce9fc5d" },
-              { id: "781600a9-a2b8-4a6e-876e-3bbfc7ec1c49" },
-              { id: "c993c15e-942f-4e3b-9a9f-83b84e47858e" },
-              { id: "ece7f804-cf59-4939-b9cd-d08dff219d58" },
-              { id: "307280bb-dd17-4124-b919-800c9cd0c858" },
-              { id: "9c6396c2-0a7f-48d4-a397-e74e8f1e7c75" },
-              { id: "38b6afd6-5aa7-4ca4-8188-d2c1381e0764" },
-              { id: "ee46ba32-2dc6-4967-b23a-02e097c2196e" },
-              { id: "814c14b4-36c7-4d99-b49d-b69eba8b53cf" },
-              { id: "4d40f2ca-8f36-43f8-bd80-a76b782c0796" },
-              { id: "f6e7ff6f-f992-4c5e-941a-b2be8e16c06b" },
-              { id: "894a2ab6-e7fa-4d40-80fd-94bb3745bbe2" },
-              { id: "cb7cbc40-c217-4532-bbe4-10f83a40ed0e" },
-              { id: "b38ab5c7-2b90-4a31-8eb8-56192357facd" },
-              { id: "4d09be99-cae3-4c3c-bac1-05170c2db0eb" },
-              { id: "1e29d021-b8f9-422d-a3c8-07537e3a3da2" },
-              { id: "b3be13cd-e175-4d14-ba8c-4e6be8220d13" },
-              { id: "907d411a-f8bf-48e6-9bd4-a86e58b3fa54" },
-              { id: "641ede71-eaf8-46e0-b00e-81f963a5d6e2" },
-              { id: "94ffd426-7d36-46de-87c1-83cd4693d147" },
-              { id: "e6a8879f-221e-488f-b319-154977ddf4fa" },
-              { id: "50d7e9d8-cb4c-4133-8443-e139354e1b0d" },
-              { id: "d9119c21-8ce7-4184-a31d-7ae46c7a2cc1" },
-              { id: "fffd8005-dccf-4bc6-8243-681d0ce35297" },
-              { id: "deec3928-ab23-4de5-8b75-ae2d404fe044" },
-              { id: "f46a4136-bdbe-4c66-bc3a-b77f3b089ed9" },
-              { id: "5d25a348-a1ee-4b27-a72a-0a17e1b9209e" },
-              { id: "48fe1e6e-2f20-4fee-840e-f8a961b4d40b" },
-              { id: "49d84a66-6231-4c48-923c-d046044c063f" },
+              {
+                id: "d4e29d51-9051-4d9c-a8da-695c8a472782",
+              },
+              {
+                id: "b198831f-77cf-4943-a1fb-e332c14e87e2",
+              },
+              {
+                id: "e6afafca-eec8-4578-b781-93be39863a01",
+              },
+              {
+                id: "5865aa48-48e5-45f6-9c5c-09cf20008689",
+              },
+              {
+                id: "9a1066e1-bff2-48b7-8dbc-37c1d3ae00f4",
+              },
+              {
+                id: "c56eef5e-f7c5-4c0d-b21b-eed1ff3b14d0",
+              },
+              {
+                id: "ec39cd6d-7071-48b8-837c-300c75d7faec",
+              },
+              {
+                id: "f9068734-65b7-45dd-8802-c25d1d471a61",
+              },
+              {
+                id: "20a5a0a7-2d79-465c-bf9c-886f79865ccd",
+              },
+              {
+                id: "4e2568c6-adab-45b9-88cc-edf1b384ed3b",
+              },
+              {
+                id: "2f38feb5-5c67-40af-8725-7d00fc2c6600",
+              },
+              {
+                id: "916bed75-3127-4cd5-8170-f783b2da231f",
+              },
+              {
+                id: "a84502cf-2e1e-4616-9f4e-89d7d1058604",
+              },
+              {
+                id: "84cb8604-5f0c-40a2-a6cb-1ab123aaddeb",
+              },
+              {
+                id: "759cb13a-3413-430d-9d74-01d6372ad940",
+              },
+              {
+                id: "6b825ab6-6840-498a-807b-b514709e356f",
+              },
+              {
+                id: "6134a42f-48fe-4eac-843d-8bc4a9d2c439",
+              },
+              {
+                id: "aba92e92-4c4d-4bd5-be62-e660610ce51c",
+              },
+              {
+                id: "e83b1281-ed83-4cc6-aafb-ce5a625c1e3e",
+              },
+              {
+                id: "756b7914-0e2e-43cf-961d-f94fc276ed96",
+              },
+              {
+                id: "bf7a6615-ed75-4472-9748-40390bebb0f7",
+              },
+              {
+                id: "46652ebc-0ea9-44ac-84cc-43879b3fcbfb",
+              },
+              {
+                id: "a7aa2ace-d386-4f69-b2d7-6092a356f4b6",
+              },
+              {
+                id: "2d8f368f-a1a1-4306-bfb7-da3593459cd7",
+              },
+              {
+                id: "c93f135e-d8a4-4657-9669-75e03f0cfa7e",
+              },
+              {
+                id: "3d34ac07-c273-4463-aa59-5f2c02fbec58",
+              },
+              {
+                id: "aa87c589-6f35-4337-b39a-aed01c583a23",
+              },
+              {
+                id: "9e739524-56f8-42c1-b73d-5605dd552f8b",
+              },
+              {
+                id: "eaccb421-6a02-4cba-ac99-97969c97e0f9",
+              },
+              {
+                id: "20d28cbc-0605-4ca1-86ad-e45f7477ea9c",
+              },
+              {
+                id: "7bd2f703-b441-4d18-be54-63ba555ec9d9",
+              },
+              {
+                id: "4483fc68-accb-4e38-9b96-160a29129edb",
+              },
+              {
+                id: "fbb4630c-191b-426d-8118-96062d854781",
+              },
+              {
+                id: "f8382f7a-fcba-4355-a867-fbb00ff84b3b",
+              },
+              {
+                id: "1b94d94c-127e-4b87-8e9f-bb73d3bdb1e5",
+              },
+              {
+                id: "c4fb3be3-e453-4cc4-b3ba-1cd151ec2138",
+              },
+              {
+                id: "db3f5f00-14f6-4b64-9931-d923e89cbd4f",
+              },
+              {
+                id: "5442919b-57c9-4399-8b4a-8d9b88b109fa",
+              },
+              {
+                id: "fde5a80d-3852-4c0b-82dd-d5a3b86a44fa",
+              },
+              {
+                id: "a2cf6805-f110-4e51-8f67-3490dd48a92d",
+              },
+              {
+                id: "2c761e61-af48-4fd4-beaf-e120ba096315",
+              },
+              {
+                id: "41ef6df5-be4a-41a0-af29-e76304619e66",
+              },
+              {
+                id: "7af46edd-a7b9-4c0e-ae8d-fb337247b559",
+              },
+              {
+                id: "aea8f212-9b12-441a-a232-a94591a7eaed",
+              },
+              {
+                id: "da6c22aa-5912-4b8d-98c5-9c9350759ea9",
+              },
+              {
+                id: "2523e311-3fa0-4058-9a7f-d84af9439378",
+              },
+              {
+                id: "6f4a1ccd-1d5a-45a5-b703-6cfcd7bfd0bf",
+              },
+              {
+                id: "7930c059-815b-42d6-b94b-b1d4ad9cf379",
+              },
+              {
+                id: "da59fee0-ebf1-4534-9ade-f24c91e592bd",
+              },
+              {
+                id: "e01d754a-5c2d-4df5-96c4-61365801ee1e",
+              },
+              {
+                id: "61681220-2d7a-43ba-b637-5f8e3b930fbb",
+              },
+              {
+                id: "63e9b26c-f439-4487-a70e-65360e53e69d",
+              },
+              {
+                id: "963e75e7-1d55-402d-9aab-5ba5e5e21ed9",
+              },
+              {
+                id: "9e891949-4abf-4110-82a2-11219b22a1dd",
+              },
+              {
+                id: "e34ce109-d3a1-4c11-be16-80ce882a4165",
+              },
+              {
+                id: "4d2e4c2f-b19f-4f2b-9a56-899bde2995d6",
+              },
+              {
+                id: "b50848a2-2d2f-493b-9127-4a34d33eae03",
+              },
+              {
+                id: "067bd7d5-b570-4124-b3dc-d972961822cd",
+              },
+              {
+                id: "f47501c7-ab44-47d9-b74f-bc904c406a67",
+              },
+              {
+                id: "dd44ff55-b802-4660-b09a-98810774f5e9",
+              },
+              {
+                id: "7511948c-e558-4b67-882a-a9cf49b3774d",
+              },
+              {
+                id: "2621b0fd-ff8c-4355-9feb-132429a2780e",
+              },
+              {
+                id: "0d81563d-33a2-42e9-9ff8-ad388e71ec6f",
+              },
+              {
+                id: "8a97a99c-8990-4b74-8351-65ad80eb5b64",
+              },
+              {
+                id: "f186532e-0ee6-42ba-8791-071e5dd9749d",
+              },
+              {
+                id: "5516280a-ba93-4dbd-a5af-69570343f351",
+              },
+              {
+                id: "dc65a114-8ca2-4f8f-8433-e6d1a5ffa7bb",
+              },
+              {
+                id: "9a836fcd-be49-4733-87ff-95b95a1572c6",
+              },
+              {
+                id: "4dc6cfad-60fe-404c-a008-9ac982edc028",
+              },
+              {
+                id: "0d68d5ad-a0e6-44a1-8e2f-0f137a376bc0",
+              },
+              {
+                id: "26bd0935-3e3c-43ac-a0f6-e49d36e77193",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -497,6 +956,7 @@ const execute = async (db: PrismaClient) => {
                     name: "Silent well translators",
                     description: "Groupe français de traduction.",
                     website: null,
+                    email: null,
                     discord: null,
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -506,59 +966,155 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "fa6edcd5-6206-4127-a8ca-134b18e7c33d",
+            id: "4f74f05c-8822-4e58-985a-998203db40f9",
             number: 2,
             volume: "1",
             language: "fr",
             pages: [
-              { id: "673f1c5d-33ab-4683-a589-dd7af6f98804" },
-              { id: "b54861e8-4c6d-4db8-9573-91f2fe2e838d" },
-              { id: "60b6613f-de59-4d03-90a1-18b69947cb77" },
-              { id: "01fbaeca-de67-4eaa-9737-d3ec4eea6784" },
-              { id: "33d8edcc-8e84-44c5-a411-067b248b1dd5" },
-              { id: "294b88af-d757-43a4-85e0-632ffa0c2829" },
-              { id: "5d6bbda9-93f2-43d4-92e2-72e279d93c88" },
-              { id: "e935b21c-31a2-49a5-aee8-88f59bca6fbd" },
-              { id: "ee0af2a7-a39f-4d49-92e9-aa000727cadb" },
-              { id: "2d93591e-130a-4938-894b-397acf3f369c" },
-              { id: "8e2238f6-bd51-4f4b-b8cb-1db9e55f69de" },
-              { id: "e2bad8dd-6415-44c5-bffc-e5a7b2fc197a" },
-              { id: "4ab95967-9417-4109-b2b4-954a7bda1029" },
-              { id: "94e95a58-0be8-4ceb-8580-06b79027abbe" },
-              { id: "25849b4c-5b92-4e84-9080-18631f659163" },
-              { id: "6ca32b11-35be-4162-b9b1-ee3992cf017e" },
-              { id: "a574c69d-8941-4d3a-81b1-0ea701875d2b" },
-              { id: "eaa742a3-7052-40d9-bd88-e61ee7e126de" },
-              { id: "3acb7abb-6e5b-4f43-bc29-a106fc18f775" },
-              { id: "e2d48be1-4493-4612-a697-792bccfe6cbc" },
-              { id: "88d51159-84bc-4be3-807b-c7236a499abe" },
-              { id: "1ad0817a-6756-4773-b1ab-75c97fb5d753" },
-              { id: "2c8c86b8-af50-4101-986b-caa781eb088c" },
-              { id: "7e083e05-073e-4588-bf1e-b917792bd000" },
-              { id: "9f43f3b8-a18e-4100-bafb-c00e689066bb" },
-              { id: "0da4582e-b0a6-4d2f-ac34-5b6641be030b" },
-              { id: "7a09b79c-fca8-4e4b-99fb-1491990e4d04" },
-              { id: "369a83cf-67fb-4f3e-bd12-0d4c1b9e57de" },
-              { id: "ccbc21a3-6dc9-4133-bd5e-73e1a843453f" },
-              { id: "6ec8a9db-f97b-47e4-b533-692080fdc972" },
-              { id: "00b024d8-aaf0-4895-a7cb-874fb617a9dd" },
-              { id: "1fed90b6-becd-4734-8441-f10703816030" },
-              { id: "377eb609-a33c-4b16-b835-fd4a5f1163fb" },
-              { id: "8873a389-aa01-4f78-aded-2d7147878ff4" },
-              { id: "c1bf6297-ff0c-425e-9708-4a77a294c5c5" },
-              { id: "f94bf3dd-c4d9-4f8d-aa54-d6401d2cdf3b" },
-              { id: "8d95156b-eec4-4d20-a355-22d753dd9374" },
-              { id: "a6a23dec-fe08-41c6-8433-4dc3e49764d4" },
-              { id: "28877804-cf0a-4e9e-bcdc-6faeb0d42d98" },
-              { id: "7222e2d5-4b8c-4da5-9703-8b85eec4e37b" },
-              { id: "ad2dbf30-32ef-49bf-a6a9-753afd888d49" },
-              { id: "67208ccf-0c90-4b1f-b524-09804a9df532" },
-              { id: "a98264f2-06ad-4e17-b5a3-f5f5cb6aa170" },
-              { id: "d527779d-ab5c-421b-bec8-598956bf8ed4" },
-              { id: "9c353923-abf7-4530-88bc-06555fbf3873" },
-              { id: "01f19181-573e-49f1-9ec0-56c31a86a291" },
-              { id: "76d67775-cca9-4e5d-b372-a4da825cfb3d" },
-              { id: "c082e8bd-8966-4415-8182-00909a11808c" },
+              {
+                id: "45c00e15-7f66-40c1-a98d-412c7b2b6a2e",
+              },
+              {
+                id: "76817466-26ed-41a0-8161-852f5dd6d7d6",
+              },
+              {
+                id: "b16f6cbc-45a6-4c56-9c62-5926ed2d3c5f",
+              },
+              {
+                id: "6b5a53c6-8722-4c96-9d96-6de184e42f94",
+              },
+              {
+                id: "7e9cccc1-1a7e-437f-9ca2-8a335499b1f6",
+              },
+              {
+                id: "ab8ce06c-a31e-4c67-b154-64fd964ba884",
+              },
+              {
+                id: "334c9ffa-ceea-4863-bbce-a151ee014b7e",
+              },
+              {
+                id: "15bd78c1-b087-40cc-b36f-88cd9d04db65",
+              },
+              {
+                id: "280f7331-83d5-4321-bbfd-459f168b56b2",
+              },
+              {
+                id: "a642df33-a20c-4b97-b51f-e526ae350049",
+              },
+              {
+                id: "02fe098b-d12b-4445-9622-811e2bb821ba",
+              },
+              {
+                id: "d7fc4c02-19e8-4810-ab86-8add485d5184",
+              },
+              {
+                id: "a1bc78d0-207d-40a0-803f-58fd1e2b8be7",
+              },
+              {
+                id: "2bfcf3b5-6a50-47f9-bb2d-6f1ab60e24ae",
+              },
+              {
+                id: "73be6cbe-a791-432d-992e-6e5a779505fb",
+              },
+              {
+                id: "5c1322b8-b5dd-4849-abf9-223c288421ce",
+              },
+              {
+                id: "04023d01-cb84-4696-8cf5-1fcceefc9457",
+              },
+              {
+                id: "85ae9fb6-a527-4d63-8455-79069d1d3023",
+              },
+              {
+                id: "db7531ef-e743-49e3-8d5b-a273ea479251",
+              },
+              {
+                id: "806fed47-c91a-40aa-b98a-26821cab708a",
+              },
+              {
+                id: "36b61f8e-9e73-44b1-a946-b3ffc99001c0",
+              },
+              {
+                id: "606f008a-46ee-4d9b-a520-fad85e378144",
+              },
+              {
+                id: "e361fcc6-1775-4a71-a530-180b501f324c",
+              },
+              {
+                id: "14e80250-9706-4769-8f97-9669e108404f",
+              },
+              {
+                id: "01948cae-35e9-4b5e-8127-9102924ab698",
+              },
+              {
+                id: "5c1c51cb-6092-47fd-ad9f-a38d3e82e296",
+              },
+              {
+                id: "7f29fbec-0272-47f5-94c4-7aa84b0ce39b",
+              },
+              {
+                id: "5c3baef9-f7f3-4548-a150-82c567b4fd7f",
+              },
+              {
+                id: "00077da9-0bc4-448a-9e51-2fe6e11fae1d",
+              },
+              {
+                id: "b8c4c1ae-82e4-4ff2-bcd8-d7d74f921ca3",
+              },
+              {
+                id: "f083f2dd-ef9d-43fc-8348-37fc6bf20b7f",
+              },
+              {
+                id: "2bf9124e-1c1d-4fb8-baaa-7e86735eae40",
+              },
+              {
+                id: "eba2c847-d237-4e5c-8118-21b324d0b1f0",
+              },
+              {
+                id: "16dd6f76-f540-46dc-8e78-368451f8a36f",
+              },
+              {
+                id: "f0a1b0b3-0979-4dc3-ad50-82f7dfe663eb",
+              },
+              {
+                id: "5c6c3f3b-ade4-4c61-ba01-032091cd8f40",
+              },
+              {
+                id: "b284b344-409d-43c5-9140-fb3d40e435df",
+              },
+              {
+                id: "50ffaca4-1fd9-4022-9f3c-a01ca65d18af",
+              },
+              {
+                id: "87271fc6-db8a-4a81-9975-f36e060ff61b",
+              },
+              {
+                id: "202ceaa5-90f2-4692-93d2-92a8e6277b45",
+              },
+              {
+                id: "8b880dbd-0cd3-4548-b5e4-30c74d6ad5d6",
+              },
+              {
+                id: "83f40dcc-2578-46f0-90f5-cf82d1f38fcc",
+              },
+              {
+                id: "75987999-efda-4ace-ab6b-126ff8973a4c",
+              },
+              {
+                id: "3b44b4b4-613f-40a2-be5c-dedbd8bc1437",
+              },
+              {
+                id: "15321d2c-e80a-40a5-9263-b50fa784004e",
+              },
+              {
+                id: "84327ac1-0bc6-4b41-8fc8-a1fb76c51c14",
+              },
+              {
+                id: "d6e85a25-8e31-46e8-96da-c6dfb1bc54cd",
+              },
+              {
+                id: "d7a0f495-7372-4734-85cd-15311a783bbd",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -571,6 +1127,7 @@ const execute = async (db: PrismaClient) => {
                     description:
                       "Recrutements aux postes suivants ouverts:  \n→ Traducteur Coréen -> Français/Anglais [**URGENT**]  \n→ Traducteur Anglais -> Français [**URGENT**]  \n→ Traducteur Japonais -> Français/Anglais  \n→ Checkeur  \n→ Editeur [**URGENT**]  \n→ Reconstructeur [**URGENT**]  \n  \nActuellement, voici nos projets:  \n- The Beginning After the End [**Novel**]  \n- Uriah  \n- Whispers of the True King  \n- My Superstar Uncle (Coprod Alpha)  \n- OOPARTS  \n- My Bodyguard is 4 Feet Tall  \n- Code of Silence  \n- Endeavor's Cross  \n- Otherworld Squad [**Pause**]  \n- Get Life [**Pause**]  \n- God and Human [**Pause**]  \n  \nAncien projets:  \n- The Beginning After the End (Webtoon) [**Licencié**]  \n- Hello, Summer. [**Terminé**]",
                     website: null,
+                    email: null,
                     discord: "https://discord.gg/UGzYPzv",
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -580,66 +1137,176 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "faa4d859-55dc-4420-b9ce-87bd4bffee6c",
+            id: "92361ec6-8716-4ed9-8b3d-0a5bdb2ca234",
             number: 2,
             volume: "1",
             language: "pt_br",
             pages: [
-              { id: "0620f8c5-8207-457d-9737-205c252f2e49" },
-              { id: "5348b859-b8cd-4253-b838-d1795010e067" },
-              { id: "2581e50f-4a02-4e2c-ad1a-fa4b883238a1" },
-              { id: "6c6e04d9-59d9-42f3-a534-83727fc47dd0" },
-              { id: "224637d5-02c4-4f51-b1f4-884302f8a6b9" },
-              { id: "a737a3bc-a133-494b-9f3b-d6a4ce4f5b49" },
-              { id: "7d585f7d-0eca-4ec0-81d1-b9c16a81aa4a" },
-              { id: "9d80dacd-f3a2-4693-b50a-c92d57dd6942" },
-              { id: "fd2d5ac8-8434-41b1-8548-3d655c3aa6a4" },
-              { id: "2c62d2fb-5299-413a-8474-da20477360d7" },
-              { id: "08af13f3-998c-4f2c-bc83-05be87600d2c" },
-              { id: "dc179000-d197-44e6-a685-a64f65a30e97" },
-              { id: "f3461ac1-9a37-4f9a-93f6-952ed03b94db" },
-              { id: "8097d337-da68-4a2e-848b-4e26371d18ce" },
-              { id: "b25b7843-bb71-414b-80bd-ae1ad2a3d740" },
-              { id: "f0635649-38d2-4423-841c-6d5f577a3d9b" },
-              { id: "c1c4fd27-69de-4763-aebe-ee3963bdb7b0" },
-              { id: "6e7f6854-b489-406c-8947-099bc562276f" },
-              { id: "14191dd6-c24b-40ba-9661-4363b9cb7b74" },
-              { id: "0ac48675-98a4-40fe-9fab-01c4da14e0c8" },
-              { id: "3c66f0f5-fbcc-43ea-8e59-13433fc78aa6" },
-              { id: "b985fc59-8ee1-4298-932a-6a30c0004c4c" },
-              { id: "740efc16-7ce5-4d83-b843-93e7f822b60c" },
-              { id: "11e0c860-7348-4f35-8029-21504ea80ab6" },
-              { id: "f6cc9c9f-b63c-46ad-9bd6-9355b65a5d50" },
-              { id: "dd75b9e6-94dd-4a3b-a8af-b1b130d2db56" },
-              { id: "a957d881-b807-441f-b3ce-a9385f80c55b" },
-              { id: "dbe14e1a-ca46-43b2-ae53-789295ca9e3b" },
-              { id: "8bcfc1d1-f392-4201-8dd7-745991db1fbe" },
-              { id: "546cda78-9bbc-4147-8eec-b15c9ba1786d" },
-              { id: "8b9547b3-c681-4b74-a913-ba3a100f8c6c" },
-              { id: "225fbf10-ae46-48ea-8797-68f986af296b" },
-              { id: "28b4b626-13c7-4a97-a83e-7142fdc5c867" },
-              { id: "ffe3f408-b46d-496a-803a-6576f876a40b" },
-              { id: "0d099317-1905-4f1c-97c5-8b6e797b3ae9" },
-              { id: "268fcc6e-d2d4-4a9b-88ce-6aba5ae51bc1" },
-              { id: "9f22c902-42dd-43b9-ba66-36691bcef457" },
-              { id: "639d6c9e-83e7-4b75-8f9c-9549b0131371" },
-              { id: "271868e6-c2dc-41d3-bed4-a262423e27ca" },
-              { id: "a22e6fdd-9dd1-4a06-bc0f-57ca1eebe035" },
-              { id: "7864264a-2ce6-4abe-a12c-009b10e4590e" },
-              { id: "9485cec0-a683-47ba-ba28-e577ad7421d6" },
-              { id: "dfb6de92-7c98-40bb-8c31-b92a70266bcf" },
-              { id: "5184448b-adc7-4489-9e02-82af3d4f16ce" },
-              { id: "66f67099-351c-4f5e-a267-053153194abc" },
-              { id: "f191a3a8-0711-4154-bbbe-94bb0ffdfcb3" },
-              { id: "07e213dc-e816-4c85-a1f3-4dff6a370e09" },
-              { id: "38641adb-8a84-4a77-a4f1-bd5304615636" },
-              { id: "694661bd-c8a1-4786-841f-55626e19c163" },
-              { id: "579227a9-e116-4b93-8ec0-4cc34cd28edb" },
-              { id: "129746d1-4f2c-44b3-a385-cc2f4ef2ea38" },
-              { id: "9f66fd3a-ef1f-4803-a370-364d811f9e81" },
-              { id: "02b98a49-150c-4b51-ba6c-8e9fba540615" },
-              { id: "9945dda3-da25-48e4-9d0e-9311989ea1b8" },
-              { id: "046071a1-fd5f-42a9-bf9f-c78e7fd7b334" },
+              {
+                id: "56530352-0c5f-4664-bc12-caef628d49b3",
+              },
+              {
+                id: "1b6c7be0-671a-41b5-9e34-6faeee028048",
+              },
+              {
+                id: "5d5cf2fc-23b4-4d13-8236-40d12f5776fd",
+              },
+              {
+                id: "3f32dfb6-017f-434b-9031-d450227f384c",
+              },
+              {
+                id: "6dc48212-c4e1-4d53-9905-96a586d7f138",
+              },
+              {
+                id: "f1fc6bbb-89ea-4553-831b-ae95a5159fca",
+              },
+              {
+                id: "58f9bf93-7e27-4f5e-ae81-3ff4ea71821b",
+              },
+              {
+                id: "cf009c31-e5bc-4ce0-9129-7b0b0e43b2e6",
+              },
+              {
+                id: "4380bbb9-97bb-49b3-9f42-22c6686fe38f",
+              },
+              {
+                id: "813c789d-9a08-457f-b4ed-6e6c42e03cfa",
+              },
+              {
+                id: "f12dfd0b-0a49-4291-957b-2bb3043d4f43",
+              },
+              {
+                id: "36f54cdc-5bb5-4374-954a-9445a39487b1",
+              },
+              {
+                id: "2e6d4e46-75bd-4c5c-a11d-72d7c0f88003",
+              },
+              {
+                id: "92671e02-4464-4c03-aabc-c4e61bb61469",
+              },
+              {
+                id: "fd76bf04-b861-4b07-b3e0-52cd2237cf70",
+              },
+              {
+                id: "2a8eb250-66bd-4ee1-8c67-a55d8a82e7e5",
+              },
+              {
+                id: "286e2157-9468-48b1-9487-545555f18ff7",
+              },
+              {
+                id: "0599462d-23c4-42a8-a22c-266a67d7be76",
+              },
+              {
+                id: "8527c2d1-2743-4b8f-b5df-29da11c69596",
+              },
+              {
+                id: "d8cc5ba3-bf5c-47ff-b89e-742d677be4df",
+              },
+              {
+                id: "790ea785-1e6c-4253-a3bb-e08b0696c306",
+              },
+              {
+                id: "166c36ec-ba58-41f3-a91a-f0e292d84434",
+              },
+              {
+                id: "9b118b39-2d3d-4b59-97c2-e95a2cdf5d81",
+              },
+              {
+                id: "5d771854-f6db-4ec4-870b-89192db14fde",
+              },
+              {
+                id: "4e17b674-12ba-43db-92b7-1e6b8fde317b",
+              },
+              {
+                id: "8ea36f5f-400a-4e23-bd11-cc89c2d85a8d",
+              },
+              {
+                id: "8815edf9-e870-4b3a-9194-bd7704f6090d",
+              },
+              {
+                id: "2576bcd3-b672-4e6f-be09-a35e7b624eba",
+              },
+              {
+                id: "7e05fd58-4ed0-408b-8690-f2be4b21e30b",
+              },
+              {
+                id: "25352fa4-a36f-4836-ad63-61a5cc5d3d08",
+              },
+              {
+                id: "8af8123c-78b5-4cf3-a150-cd32a7006765",
+              },
+              {
+                id: "6416731e-1fd8-4368-aba9-f5f65df12d8d",
+              },
+              {
+                id: "ec88b4d0-7770-4ee0-9391-2f632aeb0154",
+              },
+              {
+                id: "771a47a5-186d-4cca-bfd4-05ddfb742999",
+              },
+              {
+                id: "0e148d36-be1d-4957-9432-8901047e2b8d",
+              },
+              {
+                id: "96391c30-87ea-4c34-9425-f0496ae61ee1",
+              },
+              {
+                id: "b2cfe03c-3d8b-4a35-ad39-1ba88d820217",
+              },
+              {
+                id: "60bd25a7-ebdc-45fb-bb6c-4813cf7d31f0",
+              },
+              {
+                id: "f102c946-b5b5-4bde-be7d-600c71e13a1a",
+              },
+              {
+                id: "def6036c-f8b6-499d-9a96-a469f6322de5",
+              },
+              {
+                id: "24f558e4-def5-4b6e-a0de-8f438c07dbc2",
+              },
+              {
+                id: "ec155536-1589-4099-95c8-86fcb61039eb",
+              },
+              {
+                id: "61c60b68-a349-4590-a93e-288908dcb9a5",
+              },
+              {
+                id: "4ed2c528-9403-4425-a9e2-b7dcadb9dbdb",
+              },
+              {
+                id: "3de7906a-ba9c-4aae-9961-d91e1dc97114",
+              },
+              {
+                id: "287f251b-bffe-4714-8964-636542dae273",
+              },
+              {
+                id: "17302681-4940-482d-aa1d-9ae8721c6cea",
+              },
+              {
+                id: "c4c39a20-25b7-495a-b833-340055799a47",
+              },
+              {
+                id: "db7f9bff-c36f-40d1-9c44-a41b3b78199a",
+              },
+              {
+                id: "b1e27b65-b9e3-4b93-b257-5eaa97469e2a",
+              },
+              {
+                id: "dd3f52ad-86fd-4534-bed7-db7e7f1607ee",
+              },
+              {
+                id: "2a4e4a24-5280-4728-aed1-71ed3b27f335",
+              },
+              {
+                id: "869d6f98-d6b1-4e12-be30-0c7336faf419",
+              },
+              {
+                id: "734582d2-0967-4f12-961c-ad1c264daccd",
+              },
+              {
+                id: "56e17306-1372-4734-a624-b6a1702f6379",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -651,6 +1318,7 @@ const execute = async (db: PrismaClient) => {
                     name: "Fudido Scanlator",
                     description: null,
                     website: "https://fudido-scanlator.blogspot.com/",
+                    email: null,
                     discord: "https://discord.gg/WfccQhW",
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -663,6 +1331,7 @@ const execute = async (db: PrismaClient) => {
                     name: "Saikai Scan",
                     description: null,
                     website: "https://saikaiscans.net/",
+                    email: null,
                     discord: "https://discord.gg/cmQuwHB7rf",
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -672,28 +1341,62 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "f37c687a-4478-4c1d-bc6c-438a8ec9c103",
+            id: "ef59d7a9-632d-4991-a706-e330b1550a60",
             number: 3,
             volume: "1",
             language: "fr",
             pages: [
-              { id: "e7cd018a-8ca4-4d2b-ab22-21a3ebaa7c06" },
-              { id: "594edc92-131d-438d-8687-f17827c4f73b" },
-              { id: "e7d65589-a9b5-4c6a-8778-1d0e985f4364" },
-              { id: "b6777d44-6f13-4449-8a43-5f1e9f81df57" },
-              { id: "52ae329e-02b9-454f-8510-9032176760df" },
-              { id: "7e15f1fe-b178-43a6-b3d2-22a13eb6ed32" },
-              { id: "bc49d7b3-453a-41e7-a036-5d40c60e3eda" },
-              { id: "0ed63f43-3863-42f1-896e-dad4ae12b9be" },
-              { id: "20c05b4b-1a2f-4a2c-ae27-d7a86fbaa8e5" },
-              { id: "7a12b0d9-1040-4fc3-bb0e-4888cd773de9" },
-              { id: "aaed5c65-a4b1-4214-9b3f-b8fb7b3650a7" },
-              { id: "4ea97ba8-e72e-4ab2-b916-aeba311df5bd" },
-              { id: "a17c3a07-6733-442f-bf1f-a5a2108e14c3" },
-              { id: "c5633847-7036-454e-91ce-0bbe69dd6b8b" },
-              { id: "0e215fb0-94a4-4973-a5d7-2196b93911ae" },
-              { id: "8d105d3c-414c-45aa-9ae1-66bffb5bb9ba" },
-              { id: "9f143e1e-362b-49a6-bcc6-a6ff7f169a51" },
+              {
+                id: "996cc002-9792-4af8-a04c-ebf22a376c21",
+              },
+              {
+                id: "e852a404-2dbc-4a3b-8d57-1bb8928ccda1",
+              },
+              {
+                id: "52478623-dde4-4eb3-8285-45e5d547aed6",
+              },
+              {
+                id: "441665ce-c75e-4f69-8020-2c4d90be9505",
+              },
+              {
+                id: "62177ca0-7d2f-4abd-83b8-4e949a505f93",
+              },
+              {
+                id: "e80f0481-9e7c-4801-aaaf-03a205494bb4",
+              },
+              {
+                id: "d4e28978-56da-4f82-9581-8c3d14230931",
+              },
+              {
+                id: "c617dd78-759f-4bf7-911d-a6f8bf41f544",
+              },
+              {
+                id: "25c90352-05b0-43f3-a30f-5e3ed75689cf",
+              },
+              {
+                id: "7048296d-ad5f-42d3-8e7e-58f9a9285fd8",
+              },
+              {
+                id: "919c1d25-45b4-468d-a9c2-fec3ac71c7c5",
+              },
+              {
+                id: "c8b2c843-ece3-45e0-9718-4a11e2250ce3",
+              },
+              {
+                id: "febd0ec1-95ca-4eb8-a26e-aebe92a3144b",
+              },
+              {
+                id: "5f6fa273-257d-47aa-b97e-5ec33c73faf6",
+              },
+              {
+                id: "fb19e1de-4514-4fdb-88a8-d86dd7ba3654",
+              },
+              {
+                id: "e6fc6e34-6769-4321-be3e-549cc7440acc",
+              },
+              {
+                id: "5a772c54-34ed-4f6f-ad65-541aa2468f35",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -706,6 +1409,7 @@ const execute = async (db: PrismaClient) => {
                     description:
                       "Recrutements aux postes suivants ouverts:  \n→ Traducteur Coréen -> Français/Anglais [**URGENT**]  \n→ Traducteur Anglais -> Français [**URGENT**]  \n→ Traducteur Japonais -> Français/Anglais  \n→ Checkeur  \n→ Editeur [**URGENT**]  \n→ Reconstructeur [**URGENT**]  \n  \nActuellement, voici nos projets:  \n- The Beginning After the End [**Novel**]  \n- Uriah  \n- Whispers of the True King  \n- My Superstar Uncle (Coprod Alpha)  \n- OOPARTS  \n- My Bodyguard is 4 Feet Tall  \n- Code of Silence  \n- Endeavor's Cross  \n- Otherworld Squad [**Pause**]  \n- Get Life [**Pause**]  \n- God and Human [**Pause**]  \n  \nAncien projets:  \n- The Beginning After the End (Webtoon) [**Licencié**]  \n- Hello, Summer. [**Terminé**]",
                     website: null,
+                    email: null,
                     discord: "https://discord.gg/UGzYPzv",
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -715,44 +1419,110 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "6e68e4dd-654d-4944-b8ff-719c987e5f86",
+            id: "eb2003dc-c870-4716-8304-3c6a17acf239",
             number: 3,
             volume: "1",
             language: "pt_br",
             pages: [
-              { id: "445c81a9-5fab-4121-b854-4bd8c274bec4" },
-              { id: "8de0f9be-ef6e-40a9-bb10-410f93b83dea" },
-              { id: "1ca2a4ad-69c3-4afe-8526-a17c05f80688" },
-              { id: "a5da25e8-0360-4dec-8976-b04bf2bd0207" },
-              { id: "9da0f9cb-d49f-4c9e-a682-59e20ff25caf" },
-              { id: "df80aa69-1d2f-4e96-8626-e913ef1c8574" },
-              { id: "25c181e4-b0b1-4220-acbd-4367cbfcc009" },
-              { id: "43c019bd-92d7-4855-83ae-b8cc277291d3" },
-              { id: "0e2cdbed-597a-4831-9319-fa01c7ab0766" },
-              { id: "e411b015-d2c5-4023-900f-35ee21bb8159" },
-              { id: "d68a609a-25c9-41f2-936f-32bb0287ab20" },
-              { id: "280ad619-9974-4835-bf37-020354029e4b" },
-              { id: "f16630df-f31c-497b-867d-1d6a620b23a3" },
-              { id: "38d43889-6b5f-40fb-93e0-53da4775f85d" },
-              { id: "bcf3c49a-f0ac-4e66-b7ad-5785ce1a8f04" },
-              { id: "6c15e5bf-716c-4bd1-9564-9f0dd5bcf7c6" },
-              { id: "caed7905-36eb-44f8-93c0-77835c228fab" },
-              { id: "0aa7b02e-0abc-4eed-a929-7ccc181ba5db" },
-              { id: "576387c7-e539-4075-98f7-b4fc906b31c5" },
-              { id: "d5040c02-fdca-4cfb-9b17-33ed72b13923" },
-              { id: "8b757855-c001-4eab-83ce-27ba5b7265d8" },
-              { id: "325c2afc-fa39-46e5-86a3-ac8a692a0cce" },
-              { id: "5f7e4de1-7a28-470e-b2b9-b7a16927bd95" },
-              { id: "55c9f4fe-d407-4e90-9be4-c825094ba35d" },
-              { id: "ccf777e4-417a-4c86-87ca-b493ef7fe7ec" },
-              { id: "50adcc07-f039-45c1-bd1c-2b072fc7ebb0" },
-              { id: "ab28daae-ac02-4f01-8405-dd75added21f" },
-              { id: "50e2c20c-458d-415f-87d8-2101e4c0523d" },
-              { id: "20599b8c-b578-442e-aea8-c6bc0e31c529" },
-              { id: "70915137-48f4-4bd5-9601-325169487af3" },
-              { id: "c963be2c-c8ba-4da6-b6e4-df7969a579cd" },
-              { id: "cb881139-4094-4c57-8390-e8812fc550d9" },
-              { id: "821d30d0-b7be-46ae-9fce-96498490de7d" },
+              {
+                id: "dfc54309-4b95-41d8-af59-62d3cf43f5d8",
+              },
+              {
+                id: "2912c12e-0de9-43d3-b717-f1a706d196d7",
+              },
+              {
+                id: "9c75b133-92e9-4acd-8799-e039eae3cbd9",
+              },
+              {
+                id: "729395eb-8796-4e7d-a529-5da4d2c6adf1",
+              },
+              {
+                id: "21f1361c-5509-4cf9-8c7b-a922d5ca7e8c",
+              },
+              {
+                id: "e35e3f2e-1ded-4ff7-83a8-e8ffaecfc610",
+              },
+              {
+                id: "3ea695b8-c473-485b-b1db-ed9bdaec4e7a",
+              },
+              {
+                id: "297a0594-a0d9-47e7-bd6c-6d87d42da2c0",
+              },
+              {
+                id: "57c8af85-57a8-41ad-b8eb-cd22f3750d7d",
+              },
+              {
+                id: "047aed31-25a8-4d29-a6fc-424263c5ae17",
+              },
+              {
+                id: "e76bf282-b23a-4840-bd0e-8e8aad7e3eb1",
+              },
+              {
+                id: "8c2535ee-06da-4dbf-97b1-fd50b2de0c64",
+              },
+              {
+                id: "4176fbd3-a64d-4413-b608-da07d07ec6f5",
+              },
+              {
+                id: "f53a7d00-7f0f-45c8-bc97-d55ff694861f",
+              },
+              {
+                id: "0f4bb3ae-91fc-48d5-8e82-9b46d9fea36c",
+              },
+              {
+                id: "7da9953d-5d99-4046-a528-e72b0f88a84d",
+              },
+              {
+                id: "4c829579-071e-495b-8181-8b6004ecfc35",
+              },
+              {
+                id: "6cccb3d7-431d-4ca4-89cc-6395d3085533",
+              },
+              {
+                id: "9d1eb243-dc42-4543-af86-eafcbf1e92c1",
+              },
+              {
+                id: "a8a49e12-fd8b-4a15-a119-9c8d261ae3b4",
+              },
+              {
+                id: "2e9aa400-4bd4-4eef-b755-94de67e41df4",
+              },
+              {
+                id: "b76e78ab-d7cf-4057-a225-272a0aa86bcf",
+              },
+              {
+                id: "6f43cc39-e2a1-4b60-bb5f-610881c85ceb",
+              },
+              {
+                id: "ddeec57e-89b2-44aa-bd39-a585cd1bf14e",
+              },
+              {
+                id: "bc5e2845-bc97-4106-9304-c7edcf180e12",
+              },
+              {
+                id: "15378f19-c1b6-4ff7-bf92-ddc788fa186b",
+              },
+              {
+                id: "c4a1af15-0d34-4b43-b758-a3625dc6481e",
+              },
+              {
+                id: "4f8b97f6-6173-4b07-80af-505a6c381f59",
+              },
+              {
+                id: "5e1b548a-bf16-4cfc-b01c-b94ca5304872",
+              },
+              {
+                id: "2cbf98ed-4559-4115-b1b6-709c70009632",
+              },
+              {
+                id: "0dd1f060-d418-49af-9372-9c030fa91a27",
+              },
+              {
+                id: "1af8b8dd-5408-4f52-98c6-482d2775de26",
+              },
+              {
+                id: "87d7bc28-d318-4cbf-935e-88bd115d0e53",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -764,6 +1534,7 @@ const execute = async (db: PrismaClient) => {
                     name: "Fudido Scanlator",
                     description: null,
                     website: "https://fudido-scanlator.blogspot.com/",
+                    email: null,
                     discord: "https://discord.gg/WfccQhW",
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -776,6 +1547,7 @@ const execute = async (db: PrismaClient) => {
                     name: "Saikai Scan",
                     description: null,
                     website: "https://saikaiscans.net/",
+                    email: null,
                     discord: "https://discord.gg/cmQuwHB7rf",
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -785,58 +1557,152 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "2699c2dc-cff7-47a4-91ca-84df75547b2b",
+            id: "171e3024-3d94-4735-80d3-c2d572063f70",
             number: 4,
             volume: "1",
             language: "fr",
             pages: [
-              { id: "8b338660-f604-4a47-a306-022943e913dc" },
-              { id: "99c1988b-bd0c-4e44-9bc9-11f544a175af" },
-              { id: "11b8b2e0-89ef-4813-8916-47be8214dbaa" },
-              { id: "5945b3d4-3353-487d-8688-e2d373ed2ec1" },
-              { id: "341cee29-113a-499e-b6a2-ae2dccca5779" },
-              { id: "cfb7ee80-8fff-46ad-bc4d-4343d03de6cd" },
-              { id: "bcfe0647-b84d-4a6c-8353-0bc0cabd62d2" },
-              { id: "cf85464a-f53b-45a6-b94a-e2cfb766ae6e" },
-              { id: "18f475a8-2acc-4cf1-bb99-284c529d5bf6" },
-              { id: "bf37f7c1-0fc4-48e0-9b59-53a07b55286a" },
-              { id: "8969bf99-054e-48ff-8822-33ba0c17fa21" },
-              { id: "833a365a-b3bd-417d-b88f-0a666412af66" },
-              { id: "03df7fe3-8a47-4561-bc0a-80615c471946" },
-              { id: "dee987b1-c6c5-428b-8bd0-e12806976d47" },
-              { id: "0edfa52f-c368-4062-8600-7af26e803fce" },
-              { id: "69341026-6367-4af1-bcba-1c7b3a0aa9c4" },
-              { id: "629bff9b-f1b4-416f-a634-981eb582b3bb" },
-              { id: "57138612-4f48-4942-9c62-7a27721599eb" },
-              { id: "8c03d3aa-048e-4a61-bc20-a99babf692c6" },
-              { id: "0e03e1d0-270d-4e43-9be8-a23da567532d" },
-              { id: "200cee20-91fa-4bfc-bee9-559135cc3c34" },
-              { id: "4af61b6f-7b51-4360-9dde-a73e23d34d9f" },
-              { id: "4e28b39c-d21c-4406-83a8-530745b9be55" },
-              { id: "255bf938-abad-47e5-ac83-1c166e7e6a82" },
-              { id: "c66eb65b-4a90-498e-97f2-69c279289f95" },
-              { id: "05978bc4-4423-4aa0-aa8d-d84ab0e853c2" },
-              { id: "3449e8ec-0e8f-49e0-a02b-1f585b3f9f2e" },
-              { id: "a21d35f9-0700-4c84-b05f-221dc1dde225" },
-              { id: "66d47213-cdf9-4145-aa38-bc7342035fc6" },
-              { id: "e044070b-d472-4651-aab3-7f2629cba3b4" },
-              { id: "3d74da68-be23-4d35-967a-1d8be57bdeff" },
-              { id: "bb78beea-2e74-470b-a803-8879b8b330e8" },
-              { id: "4b3943ad-0d96-4617-9236-86cd3faf5784" },
-              { id: "318d5c85-8e64-41c9-83ab-12315a151827" },
-              { id: "dd50bbf8-901e-4877-a662-33254d161903" },
-              { id: "e6aa48d0-1a9d-425f-a4c8-c3928525126d" },
-              { id: "0b518ad3-da9e-48ee-9401-369b86180a9b" },
-              { id: "603f4eb4-fd91-49f8-b390-6181009696df" },
-              { id: "0fbdf50b-cb2c-48d5-8c6b-4e0b54cdf73f" },
-              { id: "ff855b56-5c0b-44d7-908c-555e44119e5d" },
-              { id: "18119541-b9aa-4703-ae75-5000e88db7b5" },
-              { id: "e36c4dcb-3268-4b0d-a393-c7975c36d2f0" },
-              { id: "9e8a4dfd-4079-4418-bbde-37f35b39ef9e" },
-              { id: "68570aea-8a4a-4e1d-80cb-bcfe2d0df4c5" },
-              { id: "6732dea2-2868-4bf2-b1a4-7c90c28889eb" },
-              { id: "09b7aa50-d0a1-47d7-b120-104f6f26fee1" },
-              { id: "ed019bb2-b022-49e5-9f7d-6f754fb4832f" },
+              {
+                id: "aae6d48d-d82c-42a7-bc22-4370c91768f6",
+              },
+              {
+                id: "2d02e522-1887-4072-b994-f176643c77fa",
+              },
+              {
+                id: "fc140e57-c1fa-4dee-8e39-79aec61ced90",
+              },
+              {
+                id: "6de6d47e-087a-4941-83f0-6b7e6040ada3",
+              },
+              {
+                id: "e56fbeae-ccb6-4413-b07b-3564dc31e9cb",
+              },
+              {
+                id: "793d5675-8c68-42a0-8c28-386e53eb10e2",
+              },
+              {
+                id: "7b7a0170-4200-4fff-826a-9ed70a6be78e",
+              },
+              {
+                id: "6839dff7-8ae7-470c-9887-d78258e4bf5a",
+              },
+              {
+                id: "dcdba6fc-ae8d-4c64-a4e9-f24d19f470a0",
+              },
+              {
+                id: "2f13b50a-da8c-47cc-867c-6489e68329e8",
+              },
+              {
+                id: "1c03cf4e-8b6d-4071-a8f7-cecd8593eb2e",
+              },
+              {
+                id: "5bacae38-fbe2-4ec2-a2ca-47505aadbc8b",
+              },
+              {
+                id: "f831d619-4b53-4d56-982c-1afbbb179d06",
+              },
+              {
+                id: "74d7cd54-dedf-4525-aa03-a8cfefc023e0",
+              },
+              {
+                id: "720836cc-f5fa-42ba-b30f-82dc0ada1fe2",
+              },
+              {
+                id: "3a44c4a8-7a92-406d-a8f7-05f432c8bb00",
+              },
+              {
+                id: "47c2d8fa-7fe9-49b5-a6fe-ec37a79817bc",
+              },
+              {
+                id: "751d3d9e-64bc-4c57-819e-d0178d03b504",
+              },
+              {
+                id: "9a8f4bc7-7c8d-4a26-b652-bc78f48ff1bf",
+              },
+              {
+                id: "da2ff33e-9c97-466b-85ba-15b0b62f5baf",
+              },
+              {
+                id: "9a54c529-e9bd-46d1-8f7d-edbf62ef2efa",
+              },
+              {
+                id: "169dc4bf-8c84-439a-924e-514049aeec46",
+              },
+              {
+                id: "8ace82f1-5ed8-44e5-ae36-74bf0733013f",
+              },
+              {
+                id: "dcf6a782-2202-4a87-9e39-9591cede463d",
+              },
+              {
+                id: "156506af-94f5-441b-8cad-27c703ac75a5",
+              },
+              {
+                id: "01b54f2c-4a69-4b45-a1f5-b15d2dab4f13",
+              },
+              {
+                id: "92d7697f-5972-4dad-adcb-dd22c28d7030",
+              },
+              {
+                id: "ff13bdc8-8b7c-4849-a2cb-203e5bd356ed",
+              },
+              {
+                id: "14e3975c-0cda-4909-8565-714b062251d5",
+              },
+              {
+                id: "8ad74ae8-3421-403e-bef2-ea586fa96f87",
+              },
+              {
+                id: "c2266670-a025-472e-b4da-ba99cc7878a2",
+              },
+              {
+                id: "89cb869e-82a3-401c-8f43-8e575cd1ab02",
+              },
+              {
+                id: "8e737b55-3c3d-499f-9f05-4b55cb37d4b2",
+              },
+              {
+                id: "d1ff9c09-d9f6-4873-a722-4a6daf9367b6",
+              },
+              {
+                id: "61102eb3-b120-4364-b270-1d9f32c0da74",
+              },
+              {
+                id: "2924804f-995e-44bd-b7c5-d897fead8ebb",
+              },
+              {
+                id: "ed04d356-813b-4dad-9d73-684796910e12",
+              },
+              {
+                id: "17885a6d-651b-4981-8971-5b2ae3aeb718",
+              },
+              {
+                id: "c2bf1f28-e095-48d3-a558-e3f84830f3f4",
+              },
+              {
+                id: "d6362b7c-eb92-40cf-a73c-088c7485c1bb",
+              },
+              {
+                id: "a88d259f-921b-4274-94bd-fe10353885e4",
+              },
+              {
+                id: "1dcd78d9-db3b-4fe6-be79-2b20dd68e412",
+              },
+              {
+                id: "23f51a08-dfdd-44d4-8e62-1550a5997956",
+              },
+              {
+                id: "185e8bf9-a8ea-4f6e-a839-1bb55877c8a3",
+              },
+              {
+                id: "74a59f66-191f-459a-b9d7-c066046e1923",
+              },
+              {
+                id: "8b4eeda7-443b-4637-b1c4-15628fbf8164",
+              },
+              {
+                id: "aca99bcd-33cb-4ed3-b041-13a1247fa441",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -849,6 +1715,7 @@ const execute = async (db: PrismaClient) => {
                     description:
                       "Recrutements aux postes suivants ouverts:  \n→ Traducteur Coréen -> Français/Anglais [**URGENT**]  \n→ Traducteur Anglais -> Français [**URGENT**]  \n→ Traducteur Japonais -> Français/Anglais  \n→ Checkeur  \n→ Editeur [**URGENT**]  \n→ Reconstructeur [**URGENT**]  \n  \nActuellement, voici nos projets:  \n- The Beginning After the End [**Novel**]  \n- Uriah  \n- Whispers of the True King  \n- My Superstar Uncle (Coprod Alpha)  \n- OOPARTS  \n- My Bodyguard is 4 Feet Tall  \n- Code of Silence  \n- Endeavor's Cross  \n- Otherworld Squad [**Pause**]  \n- Get Life [**Pause**]  \n- God and Human [**Pause**]  \n  \nAncien projets:  \n- The Beginning After the End (Webtoon) [**Licencié**]  \n- Hello, Summer. [**Terminé**]",
                     website: null,
+                    email: null,
                     discord: "https://discord.gg/UGzYPzv",
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -858,36 +1725,86 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "95776d8b-cf18-443d-a3f4-8bc735ef2c17",
+            id: "4d0b2d98-4d4f-491b-8128-763751bc4c78",
             number: 4,
             volume: "1",
             language: "pt_br",
             pages: [
-              { id: "6450b68c-474b-4858-801f-ade04d16ca3c" },
-              { id: "de4f7225-6702-4011-be6b-122c9c7d1607" },
-              { id: "dc88ffb8-8d90-42fe-aee5-c1a436dc8ad2" },
-              { id: "cb40d255-5577-420c-aed9-3d80016472b7" },
-              { id: "b590e165-18b0-435d-bc5b-d731c9955462" },
-              { id: "75371681-6d1d-42ef-82c9-5c0f9313aa95" },
-              { id: "12b95929-e225-40fb-8e26-07205c561f3e" },
-              { id: "1943dcb6-80c1-4971-95e2-d79a66426303" },
-              { id: "17d49ab5-1bfc-46fc-8695-36916233f146" },
-              { id: "85dce0f4-57b5-485d-9454-64c34fa3da87" },
-              { id: "fda2e366-8cef-4547-b3e0-ea440a3a0ced" },
-              { id: "4e3e0e6d-9aee-4f4e-a81d-8863240b8e53" },
-              { id: "8191c4fa-f096-4ce4-9701-9c992309ce73" },
-              { id: "fd4d82f4-4bed-448a-98b9-299624eaa418" },
-              { id: "2a0e3993-c967-46cb-b122-5a7b3d9d07f5" },
-              { id: "0cac0564-f284-4695-98cc-e5eb12f97a58" },
-              { id: "5d05179a-4e0b-4520-9226-0452ced6686f" },
-              { id: "f8ae7b1d-3bdf-4a5c-be05-dde0eb4ffa7a" },
-              { id: "a632551d-e91b-453e-9beb-7d8a4e72a3ee" },
-              { id: "de1bc504-b777-4505-94d5-4a927dc90c42" },
-              { id: "ef43d3e1-f3d1-4901-bb0d-3f671057a385" },
-              { id: "724d985d-e0b1-4339-a2e4-247b2613fa23" },
-              { id: "879a3251-8536-4526-a645-8d79f7bdf6ae" },
-              { id: "91dee8f6-fabf-467a-890e-bc94408629f2" },
-              { id: "fe6a3caa-3df7-411a-8399-e4957cc4f542" },
+              {
+                id: "597ff65a-f914-445d-94cd-faf6258d4ff6",
+              },
+              {
+                id: "0619d388-0de5-49a1-b2a9-772652399ac6",
+              },
+              {
+                id: "52ba4bc5-981d-424d-8903-dde5a6eeaa4f",
+              },
+              {
+                id: "1f13c526-89f0-44ef-b933-ea98bcbb03c2",
+              },
+              {
+                id: "78e0c47e-81e6-418f-bd16-ca185cf21ca5",
+              },
+              {
+                id: "355a3adb-4ea1-4a8a-99ba-349c0874d4aa",
+              },
+              {
+                id: "ce919753-0b8f-4750-9155-b2abb6f2eb2c",
+              },
+              {
+                id: "ca3399b4-7e5f-428f-8f5f-499bbacedfa0",
+              },
+              {
+                id: "d50f9495-d019-49e0-8839-007058009f6a",
+              },
+              {
+                id: "e4ec2999-c471-4f00-a8ba-38d41048b15d",
+              },
+              {
+                id: "1f62be8a-8de7-45ca-92ee-52fec6bcb0a4",
+              },
+              {
+                id: "c4dd441a-a3d2-43a6-aa3f-e61ae88990ac",
+              },
+              {
+                id: "3206a4f6-c174-4eda-8400-5d46b940b101",
+              },
+              {
+                id: "e0884215-211d-4724-926e-6458d4927fb1",
+              },
+              {
+                id: "60f28303-a038-434c-a379-433fc231f1ae",
+              },
+              {
+                id: "ea63cc6f-9490-47cd-921a-5822d8d486bd",
+              },
+              {
+                id: "849f92c5-4be2-41a4-859a-365312e92c4d",
+              },
+              {
+                id: "a3d4f55b-8b1e-45ce-a298-8a872b68460d",
+              },
+              {
+                id: "6c301ddb-de2f-43b0-b70b-45e6d5da692c",
+              },
+              {
+                id: "9bb41ee7-555d-4cc9-952c-9c50918c0139",
+              },
+              {
+                id: "7357d3ce-e634-46c7-9121-a42244356e4d",
+              },
+              {
+                id: "bb05f23b-527d-4fa8-984e-d655ddb75e46",
+              },
+              {
+                id: "98f28e14-4d16-402f-87fe-5c4114e75baf",
+              },
+              {
+                id: "79786d0b-06ce-4350-8aec-6ddaa8213afe",
+              },
+              {
+                id: "99a74962-c9c0-4ebd-bdb6-60edf6b3d3bf",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -899,6 +1816,7 @@ const execute = async (db: PrismaClient) => {
                     name: "Fudido Scanlator",
                     description: null,
                     website: "https://fudido-scanlator.blogspot.com/",
+                    email: null,
                     discord: "https://discord.gg/WfccQhW",
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -911,6 +1829,7 @@ const execute = async (db: PrismaClient) => {
                     name: "Saikai Scan",
                     description: null,
                     website: "https://saikaiscans.net/",
+                    email: null,
                     discord: "https://discord.gg/cmQuwHB7rf",
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -920,40 +1839,98 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "b27a82c2-f36f-49d8-bd0c-e856bcffb855",
+            id: "de0ae6e5-32f0-40fc-b781-994a36de2c90",
             number: 5,
             volume: "1",
             language: "pt_br",
             pages: [
-              { id: "3fb96135-4b60-4aa8-8e31-0ce4dc01ac95" },
-              { id: "8354fca6-7e5c-4fdc-beee-1ab6782db7f6" },
-              { id: "30426be8-96e7-4ef0-b18c-0429d02128fa" },
-              { id: "b8036c47-640b-4c3d-88a9-d6116767e3dc" },
-              { id: "cba58582-c2fb-419d-b2c5-56f29eda8a86" },
-              { id: "9769258c-3165-4023-bade-43c535db5061" },
-              { id: "8fdf4b8c-8912-43d8-891d-d190ef4e9c65" },
-              { id: "29f7827e-1775-4190-93ac-85d9de782f15" },
-              { id: "0bdafe25-1ed6-4f1f-8f55-c08f5611b9d8" },
-              { id: "30280659-af40-4e6e-8a33-418fdb9b7ccf" },
-              { id: "26fa8bb0-050a-48cf-8b7c-48d9306f318a" },
-              { id: "1320dfc2-ea7a-4170-9613-99f0a05b1fd6" },
-              { id: "417ca92b-2839-40bb-9eda-67e89492e85d" },
-              { id: "e09ea015-1c58-4340-a6a2-f561fc6a8cd8" },
-              { id: "5e2e5481-6419-4f52-872b-8c86f817a6eb" },
-              { id: "7bb52c9a-3fca-4acf-a546-04b31905dd22" },
-              { id: "9ddefa4c-10f5-4784-a351-cb4d26d40cde" },
-              { id: "153d94b8-4aed-4cbd-b215-e7218df3fd18" },
-              { id: "b2f04a65-8283-4302-bccf-d47d17aaee79" },
-              { id: "ccccd4be-0c32-4a74-88cf-8cc00e4c8325" },
-              { id: "05e26eae-6339-473c-b045-c5920ada435a" },
-              { id: "fc303554-5102-4dc1-b642-16caad124a68" },
-              { id: "8a15b030-5925-4917-bbff-7827b0783956" },
-              { id: "7699413b-2194-48d3-bf37-21ba6f973e68" },
-              { id: "81a6817e-36a6-464a-a1a3-e7e0c2970508" },
-              { id: "1a0499a2-b919-430d-b180-eedbb37c03a5" },
-              { id: "3c96ff9f-c651-4f25-a948-07026a4129a3" },
-              { id: "6a7e4b22-38e9-4761-abe0-e09b2debd274" },
-              { id: "a5825019-745d-4ddb-bccd-c96d54525e29" },
+              {
+                id: "a95e87fd-b7ed-480f-b266-6043e54561a3",
+              },
+              {
+                id: "aa436115-b443-4689-afcb-b74c8b991a14",
+              },
+              {
+                id: "4594ab86-0ede-4168-9f0f-9873eefb134f",
+              },
+              {
+                id: "2a9caf5c-0433-4652-af5f-5b7425d13e19",
+              },
+              {
+                id: "03974a1b-061d-45d5-b1cf-7f6b6d2b9a75",
+              },
+              {
+                id: "50b0f771-0075-494e-aba8-7eebf8acd43e",
+              },
+              {
+                id: "81bc6df2-0463-4f34-95c4-ef0fea27b6c4",
+              },
+              {
+                id: "898fc851-ec25-465f-91a8-bf0d83a2e7c5",
+              },
+              {
+                id: "e300a2d7-d1cd-4834-91d4-eb21cddcbc79",
+              },
+              {
+                id: "5175a141-b3a1-4282-9392-b623125a35a3",
+              },
+              {
+                id: "125d2d98-69dd-4ae6-820b-37235de78f25",
+              },
+              {
+                id: "41a20a9a-141d-490b-af82-316428c6cb2c",
+              },
+              {
+                id: "93ed2757-b22c-4a74-a4e8-f5382d97a714",
+              },
+              {
+                id: "735d06ae-0eaf-4bdd-b1d4-c32b961b3798",
+              },
+              {
+                id: "88021bcc-9aef-4947-99ea-6002cf30fd9d",
+              },
+              {
+                id: "d70692c6-fd62-4113-90d1-c968188de307",
+              },
+              {
+                id: "59444bfd-1730-4c70-bf3d-ac50f8ca822d",
+              },
+              {
+                id: "ea3d588b-c9d4-461b-8ca7-b7304d15de9e",
+              },
+              {
+                id: "aea93431-2f6a-4e36-8c03-e323443b868c",
+              },
+              {
+                id: "9031a50c-b215-42ab-87ba-19be0fb1dee6",
+              },
+              {
+                id: "7f768e16-bfbb-4f47-be13-ff89a6cb3ccc",
+              },
+              {
+                id: "5986c057-d9f0-477b-b976-0f2f75c1da7e",
+              },
+              {
+                id: "988123b0-7933-4a6b-81b6-f404513011ae",
+              },
+              {
+                id: "6b404ee8-aee1-4eef-91bd-ca6922c770d9",
+              },
+              {
+                id: "67a5f5fa-40a4-4b77-9678-ea241380bc0f",
+              },
+              {
+                id: "bfa34453-e464-49b4-bcc9-68e891b2ba1f",
+              },
+              {
+                id: "82e0e3b7-8178-44dd-ae80-95b0a99c89f4",
+              },
+              {
+                id: "eff4a55a-7659-465b-8a6d-6b9236320605",
+              },
+              {
+                id: "e1fc8f24-e31f-4feb-9414-5b797745d5b7",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -965,6 +1942,7 @@ const execute = async (db: PrismaClient) => {
                     name: "Fudido Scanlator",
                     description: null,
                     website: "https://fudido-scanlator.blogspot.com/",
+                    email: null,
                     discord: "https://discord.gg/WfccQhW",
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -977,6 +1955,7 @@ const execute = async (db: PrismaClient) => {
                     name: "Saikai Scan",
                     description: null,
                     website: "https://saikaiscans.net/",
+                    email: null,
                     discord: "https://discord.gg/cmQuwHB7rf",
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -986,69 +1965,185 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "1e85d56e-90b0-4d2a-ba7c-f6b09272637c",
+            id: "983ee5d7-81ff-40a4-8d43-cd8cc7e28ca3",
             number: 5,
             volume: "1",
             language: "fr",
             pages: [
-              { id: "f4b720ad-3610-4bfa-911a-1701c66840c3" },
-              { id: "6fb93185-81a1-4b2b-af87-4276412957af" },
-              { id: "7145365e-64ab-4aee-add5-d34c7a5a8bbf" },
-              { id: "a74d2c89-b3a8-42cd-9f37-bb445442a765" },
-              { id: "9cd3a9a7-f041-4363-bffe-78fdb34ee246" },
-              { id: "5e734a51-ad70-402c-bf6f-83834315aade" },
-              { id: "5e7e0ae2-8cea-444c-8770-2de59d217515" },
-              { id: "e2b9783f-b3f4-40bf-9ecf-12de8a17128c" },
-              { id: "fa507107-6d96-4f5b-b232-43eac769f8d3" },
-              { id: "7db8c2bd-4ddc-4d09-acb1-fa9f5c18c3f5" },
-              { id: "965ba725-5181-4eef-b8c1-09b5ea6b2d04" },
-              { id: "5e646d3e-f5c5-4e86-b370-811583f26e0f" },
-              { id: "2102f7b4-7ffd-4567-be3e-1d6998d2d63a" },
-              { id: "eac539af-9f76-4187-b14f-dbcfab8d5309" },
-              { id: "fe5bddec-296f-464f-8c77-a15d6d11aaa6" },
-              { id: "37707751-3d5e-44fb-b66b-6396ba055fae" },
-              { id: "d53f5dd9-c182-47a0-8454-bebd27696b64" },
-              { id: "e86fc793-c719-4443-9c4f-cc2d1bf0025d" },
-              { id: "3a0d1693-b440-4630-b63b-75a8800c4503" },
-              { id: "95deaf2f-3c34-46f0-9849-29d539ee3bad" },
-              { id: "b17d78f0-ed78-4de3-b23e-cbfb659bf74b" },
-              { id: "a7810c63-e368-46ab-a4f7-c3bbcc94dd59" },
-              { id: "424b9c27-a037-4918-95f2-212b99f58a45" },
-              { id: "10e7b17a-cc33-45c6-afb2-9210f6f027d0" },
-              { id: "0df30e88-1e79-4aef-95b4-c24540225604" },
-              { id: "5b25111a-a399-4280-b725-9e96b9556562" },
-              { id: "1ba34a66-608e-44cd-98e2-e14ec3a7d4b1" },
-              { id: "1ef5e111-60ed-49ab-af43-c97e2ad5932d" },
-              { id: "ee122718-6081-4e3d-bd47-1f89914a1227" },
-              { id: "d39d0181-0dcf-4583-81d0-f73f980d4297" },
-              { id: "b83fe767-e446-4a26-b367-cde205a0f16b" },
-              { id: "303af8b0-48c7-4420-a005-f3043d428008" },
-              { id: "5b95292b-443f-4977-a652-91e20961d8c0" },
-              { id: "b91319c9-0ae0-4bdf-8581-d6f7d1ef4e8a" },
-              { id: "91bcaa35-e579-4aff-af30-532f8d692aeb" },
-              { id: "fff40611-3977-46d1-a564-9ac83c30ad8a" },
-              { id: "1b32f8cf-7dc2-4e8a-b5c7-638b94a58d9c" },
-              { id: "e7052471-9a90-4118-a770-1f7fec28a97e" },
-              { id: "684ef9fc-5c1b-49cd-8513-9eec6fd068ff" },
-              { id: "70ee07c2-b8da-450c-9ce7-6966a60c6f94" },
-              { id: "c53559fc-5dbf-4bce-95cf-d9c438640bb6" },
-              { id: "1162d474-6fb2-4d59-9c5a-92dffea15f7a" },
-              { id: "fd96881b-4d11-4a70-8ccc-7b3427165492" },
-              { id: "ea4b325c-3d6a-43ff-8bf3-55bb3965a9ad" },
-              { id: "f7af6be8-7859-405a-8258-31ad6913c593" },
-              { id: "9ecfe5ba-ec30-4971-a55f-d69335f7ed3c" },
-              { id: "1ca4a179-4bb3-44ab-a330-309b4812cbbc" },
-              { id: "00b95035-a79c-41fd-bdc2-b60c0e7b0288" },
-              { id: "8526ef8c-6c50-4a54-b125-6abb9160c6ac" },
-              { id: "6adc5f54-7113-487a-846b-245646889e8c" },
-              { id: "bb0cc487-4a45-4c49-ad61-9fcc6dfd2206" },
-              { id: "8501bd0e-db0e-4a5e-9343-1b7950a70af7" },
-              { id: "1e2ce850-0756-480e-834c-7f13dfda21ce" },
-              { id: "6f09030c-c154-43ca-ab61-e015cb40ee81" },
-              { id: "5b0b3a12-898f-4faa-8664-168fd0223850" },
-              { id: "0850eced-d8c7-421b-9e59-f33da300f1f6" },
-              { id: "c1b6eb4e-21d7-4d98-97f4-b7bf4f1a1f57" },
-              { id: "1a44d372-8157-486b-94df-c7c98712308b" },
+              {
+                id: "c3054cae-22b9-4a22-8569-4adef6dd71e1",
+              },
+              {
+                id: "73c7e015-5bc6-4210-bf80-724282a60b1e",
+              },
+              {
+                id: "6f77fa86-23ef-492f-ad81-204ae9b93625",
+              },
+              {
+                id: "b0c9532a-7555-4d9d-8a5b-f9d2d1a1be76",
+              },
+              {
+                id: "c6ed8ce9-49cc-4044-b246-85603de9c61c",
+              },
+              {
+                id: "e205b35d-2f4c-4d4a-b5d9-853e3a373d7c",
+              },
+              {
+                id: "2afdb77c-ed7c-4476-b8d3-d74a9d16b31a",
+              },
+              {
+                id: "4fc9cee6-560d-4d8b-b4d4-d3b85deb8ef0",
+              },
+              {
+                id: "57c6a8a7-9638-4ab8-837e-0453e34c72d5",
+              },
+              {
+                id: "9ec8553a-f22d-4c3c-a846-7ea830f6fc14",
+              },
+              {
+                id: "ba8937b2-1332-4a30-abc8-45e78c3dcc40",
+              },
+              {
+                id: "6ac21a7e-7bf1-4466-852f-8cb454116102",
+              },
+              {
+                id: "5f04f594-64d6-4fc8-aa76-6bee1d48754c",
+              },
+              {
+                id: "ff5bf145-efb5-488c-a1c9-045a9d60a3a0",
+              },
+              {
+                id: "8727bbaa-bf9b-493c-a2ed-4f17ff6b8a30",
+              },
+              {
+                id: "f1621033-0a17-411a-bc52-44b1201e3e7e",
+              },
+              {
+                id: "29f39e0b-1e7f-4876-a58f-3907879754fd",
+              },
+              {
+                id: "554a4b05-d239-4e2e-ad25-957b1b17878c",
+              },
+              {
+                id: "92715d85-5553-4b3b-927b-6305dd47dd78",
+              },
+              {
+                id: "502f351e-faf2-41dc-9ad9-01ab3d9a93c7",
+              },
+              {
+                id: "be7b4f33-b4e0-424d-8d0d-30ad78c3df05",
+              },
+              {
+                id: "f4920357-71f3-470f-88fb-b2071b439e65",
+              },
+              {
+                id: "ede62719-6890-4ea2-a2c9-3e9d1cdd5ed9",
+              },
+              {
+                id: "7770b0ee-bfdf-4144-b40f-501857893278",
+              },
+              {
+                id: "c557b1dc-0ab5-42f9-b079-77a8f0bad406",
+              },
+              {
+                id: "eac2344c-71b0-40d1-8cda-448fd9b7ef14",
+              },
+              {
+                id: "526f5829-f3a3-4b65-b67e-15a37f19b6e8",
+              },
+              {
+                id: "9d1c93c5-760a-4fef-8de8-9a9b6eaa9390",
+              },
+              {
+                id: "760004a5-d76f-4a0a-b81d-5c5aac52f93f",
+              },
+              {
+                id: "496e156c-27df-4cb7-83ad-3ae8efb77166",
+              },
+              {
+                id: "c6e1c3c1-ea50-4795-8c65-371079b01ea8",
+              },
+              {
+                id: "f958bee3-af1e-4ac3-ab70-2c61fecca7fc",
+              },
+              {
+                id: "d03f3e63-4f68-430f-8610-6452ed2be517",
+              },
+              {
+                id: "d2d1dd71-7da8-4f3d-a346-cce3f188ebde",
+              },
+              {
+                id: "52f857b4-4f4a-4a33-b313-53a1e583e306",
+              },
+              {
+                id: "475f0699-bbee-41bf-a91d-fe315ad4aec0",
+              },
+              {
+                id: "6dd0251b-21f3-4460-ba2a-4b59fc0219df",
+              },
+              {
+                id: "a5791d5e-d53a-4857-b4de-2d2cb52cd549",
+              },
+              {
+                id: "080ca7bd-3645-4a4e-a1a2-d344113c5509",
+              },
+              {
+                id: "f655f8cb-34db-4a07-a8ab-f3a75106d135",
+              },
+              {
+                id: "ac9044aa-6288-4930-83f5-2e0cb2a8c06c",
+              },
+              {
+                id: "301f993b-3a7e-4a91-b98c-e3fd3ce9c5be",
+              },
+              {
+                id: "c83039a6-d96c-4516-8020-67d4794f2bba",
+              },
+              {
+                id: "6113e62d-8453-4890-93c7-6ec2efb5420c",
+              },
+              {
+                id: "0908f65e-2afc-4a33-a013-6d68a99fe652",
+              },
+              {
+                id: "7eecf313-a513-4234-baf7-43b9bfa3630c",
+              },
+              {
+                id: "ea03a9b6-937b-4b1f-8c0c-11ce69f36c09",
+              },
+              {
+                id: "d92b5729-0a76-4ddc-9134-9acb5e14cdad",
+              },
+              {
+                id: "ba3ce394-353e-44a8-8c4c-00a7c54d4b65",
+              },
+              {
+                id: "018216c3-485e-475a-b846-4e3da1736050",
+              },
+              {
+                id: "856d4bd6-25b7-4f95-8281-9c6a35415547",
+              },
+              {
+                id: "5fcdc9f8-9f8f-4ab4-86f9-1d43adda0b1f",
+              },
+              {
+                id: "ba3ff64a-b5e1-4de7-a860-369db011c952",
+              },
+              {
+                id: "d9910d38-e80d-4668-a599-927c3c4013d0",
+              },
+              {
+                id: "a1fbfcd4-f75a-41ff-ae74-162a860e8ad5",
+              },
+              {
+                id: "45f438d4-0d5b-49e3-9b06-b9bd6ef28c0b",
+              },
+              {
+                id: "617cb2c0-8442-45d1-a2e4-495bc1d828b0",
+              },
+              {
+                id: "69543c12-781b-499e-8464-7f128494a13a",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -1061,6 +2156,7 @@ const execute = async (db: PrismaClient) => {
                     description:
                       "Recrutements aux postes suivants ouverts:  \n→ Traducteur Coréen -> Français/Anglais [**URGENT**]  \n→ Traducteur Anglais -> Français [**URGENT**]  \n→ Traducteur Japonais -> Français/Anglais  \n→ Checkeur  \n→ Editeur [**URGENT**]  \n→ Reconstructeur [**URGENT**]  \n  \nActuellement, voici nos projets:  \n- The Beginning After the End [**Novel**]  \n- Uriah  \n- Whispers of the True King  \n- My Superstar Uncle (Coprod Alpha)  \n- OOPARTS  \n- My Bodyguard is 4 Feet Tall  \n- Code of Silence  \n- Endeavor's Cross  \n- Otherworld Squad [**Pause**]  \n- Get Life [**Pause**]  \n- God and Human [**Pause**]  \n  \nAncien projets:  \n- The Beginning After the End (Webtoon) [**Licencié**]  \n- Hello, Summer. [**Terminé**]",
                     website: null,
+                    email: null,
                     discord: "https://discord.gg/UGzYPzv",
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -1070,113 +2166,291 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "05cbb6fc-668a-4f49-af7d-2cbd7e2f53ae",
+            id: "8cef1f7f-7a7a-41b9-a802-c024cd8f62f3",
             number: 6,
             volume: "1",
             language: "fr",
             pages: [
-              { id: "d868f33f-81ba-4b24-ba07-19edac872e6a" },
-              { id: "093656ff-fea3-4fb5-8ad8-d45561ceb77b" },
-              { id: "41c0274d-bef4-4731-8acc-b5a7ab7987a5" },
-              { id: "71e742a5-b172-4f02-be76-f15f0c6f6c3a" },
-              { id: "ed46e414-21e7-4047-bbb0-522f9fa08be2" },
-              { id: "9e974e2c-e99a-425f-aafe-b59e2eaa509f" },
-              { id: "6e558ec7-d32d-4493-8cc1-836ca56c4601" },
-              { id: "d1ad740a-ee26-4f3d-8d0c-b70b475d7790" },
-              { id: "9294705a-0ba9-4538-89e7-eba79a83e80c" },
-              { id: "041f8e55-e160-48eb-b355-7a52fd9c8431" },
-              { id: "c67b9bdb-bcb2-486c-9c48-0b661dd3434a" },
-              { id: "c8a3ec57-c06b-4e00-a8f3-ff8d0fc97c68" },
-              { id: "ca8891dc-d149-4b1c-bddd-837c6e71395b" },
-              { id: "e140d0b5-5276-4a07-a4ac-6677a24fd312" },
-              { id: "b4470010-5d4a-43ee-8612-457726aa48fe" },
-              { id: "7dfc6089-2efa-420f-b0df-f581f4c2f5bf" },
-              { id: "69df8f8f-24e9-46e4-9685-5f09cb3142e0" },
-              { id: "d3b9c96f-eb79-4a8a-8751-40e7ea48762d" },
-              { id: "e7366001-2077-46e4-91e4-2654871dbe92" },
-              { id: "b9db413e-f37c-427b-a6e4-5fefea8399f6" },
-              { id: "05af23db-f5fa-48f6-9296-16fa963fe4f4" },
-              { id: "a04c4e8a-963d-495b-9644-436e16a1857a" },
-              { id: "fd65f15b-345d-4cd8-b7ea-f9b4c7883573" },
-              { id: "7ead9adc-c834-432f-84b1-0ef5b18b1a07" },
-              { id: "fce2cd19-11e0-4610-b7c3-7cbaa954ce89" },
-              { id: "514b9388-4075-4138-97bf-36017c8daf2f" },
-              { id: "0c0e6842-afd5-49d1-9026-df773c5db872" },
-              { id: "5a0e1dbb-bdce-4e5e-b624-980c39cefd81" },
-              { id: "de3c6944-661f-4a89-988f-b6d57f7019fe" },
-              { id: "67c76f66-f5bd-4131-b1d3-8388b6989e58" },
-              { id: "4a6ece82-d16c-4e5c-a6cd-eb3f723352b7" },
-              { id: "4ef78a52-73d9-43e9-9f84-db5e5df2a0fc" },
-              { id: "cb970452-7baa-45eb-9cd5-8ece552d58fa" },
-              { id: "24b6467a-4ee4-4262-9068-2fa80222058e" },
-              { id: "923c4cc2-69b5-4287-a97e-af072dbb67c1" },
-              { id: "d64e49c9-bfdd-45de-99fb-d37644ed25cb" },
-              { id: "4f995a65-509d-4c61-9d9f-fbc1017917e8" },
-              { id: "2d3f5a58-2dc4-4dbd-ac5d-92c9f830fa49" },
-              { id: "33a23387-20ba-459e-b377-a6a892947a31" },
-              { id: "6d006f46-205d-4e3c-84f1-81ef3c61c7e2" },
-              { id: "05d79a61-f3b5-49a7-890c-049f309531ed" },
-              { id: "a0803ee6-b88a-4f19-8141-72e67709a089" },
-              { id: "6fc318b5-07cb-4456-a6cb-312b67132d9f" },
-              { id: "be9f5e6e-c4e9-460e-8033-4acb8328a1ec" },
-              { id: "d7f4d510-02bb-41ec-81b2-3df12981a4af" },
-              { id: "62e95020-5550-4604-b128-284782d4dd54" },
-              { id: "ff0c8a4c-3d92-4186-bc9e-4c7cc63d0184" },
-              { id: "d1ef5e15-0405-4894-a5b2-1b7fee27f214" },
-              { id: "e4e1334c-627d-4e08-bd48-e4493e49c296" },
-              { id: "9435ea7d-9b03-4506-852d-bb6f7599852a" },
-              { id: "d162d32b-aed4-43a5-8bc1-1842ae74e8a2" },
-              { id: "e570ce48-dd82-4fcc-be1d-ed2d4e503caf" },
-              { id: "4f09ddbd-0636-488f-9929-f3573d754258" },
-              { id: "a147b5bd-b7d3-4eae-a74c-b7d505f090af" },
-              { id: "39f8e2a7-201f-4633-b171-1106be70cd3a" },
-              { id: "7ed94366-fe96-471b-b837-7915a7dedd9f" },
-              { id: "bea1d8da-93d2-480f-ad40-94620ea6b13b" },
-              { id: "85aae3a6-238f-4b88-8161-20ed49847b89" },
-              { id: "898a84c9-4169-4da4-8603-36bf80b95bdb" },
-              { id: "d82199e2-7c41-46c5-957d-3806667801b9" },
-              { id: "798db567-a31e-4cfa-aaba-7f2f057d07d4" },
-              { id: "c20ded11-f0ac-41da-902a-c0577f3b6826" },
-              { id: "f2439bbb-4a03-4d19-8ce9-f63d31740ee9" },
-              { id: "2a9d340c-9fb9-4df5-8e99-6b9aa64b16bf" },
-              { id: "0d140692-8e5f-4e17-a06e-49d1b98f8e79" },
+              {
+                id: "e9402645-8376-4c40-b624-071559c1bc5f",
+              },
+              {
+                id: "b05f3066-4c0e-4307-b715-2148d1e0354b",
+              },
+              {
+                id: "4bd5dc24-b764-4c80-b15f-e5dfa2c46995",
+              },
+              {
+                id: "12471a6d-fc17-486b-9c85-6b346655dbb1",
+              },
+              {
+                id: "61202986-0118-4c04-96c3-26f872116228",
+              },
+              {
+                id: "fa10aa32-45a4-414c-9131-e3d9a417757e",
+              },
+              {
+                id: "3d9413dd-19b7-429c-8d32-3c7fa737f55b",
+              },
+              {
+                id: "247dec83-5614-4e65-9345-08cf31d33dd2",
+              },
+              {
+                id: "bfa9d7ce-136d-435e-bfc2-c22428a1fcda",
+              },
+              {
+                id: "76c5b0ff-58e6-475c-b190-e0af3a0fc513",
+              },
+              {
+                id: "7b49832d-636c-4304-82f8-d8801523a53f",
+              },
+              {
+                id: "6ca1af3c-b29d-4450-a902-8e16042398b0",
+              },
+              {
+                id: "fda4d167-b71e-4f30-b615-b976f0a06f47",
+              },
+              {
+                id: "83db15d4-22a6-4aa8-a94a-a1b6a6c3ba2d",
+              },
+              {
+                id: "ff9681f9-3a39-4d0b-8cd2-9318aeda5292",
+              },
+              {
+                id: "407d6672-9835-49e2-a2a4-03213366c4cc",
+              },
+              {
+                id: "ad4f8952-9a42-4273-9387-54275ca7c319",
+              },
+              {
+                id: "a850c683-86a1-4500-8349-e7882151946b",
+              },
+              {
+                id: "f7235a9e-19ed-4a0a-8f5c-d741c2248ecd",
+              },
+              {
+                id: "7ba857b9-5b74-432f-8173-99eee2729493",
+              },
+              {
+                id: "4592a10c-0681-4d70-9146-7386fe546b28",
+              },
+              {
+                id: "95c3c34d-f78a-407c-9c8d-c399a91c151c",
+              },
+              {
+                id: "23c5deb4-307e-4081-8a3b-eb8c1a76b281",
+              },
+              {
+                id: "59143200-9119-4271-a5b7-5746b3ae2c54",
+              },
+              {
+                id: "41c75754-9aa8-4840-8d9b-6c7b146a2926",
+              },
+              {
+                id: "23a05675-4388-4f4e-a26b-578d9d81beb8",
+              },
+              {
+                id: "4d080740-758e-4103-a417-a33711fd32bc",
+              },
+              {
+                id: "e5c53be9-e854-47bb-8dd3-f9e2904d3919",
+              },
+              {
+                id: "92916faf-0b4a-419c-beae-1d9a24a93863",
+              },
+              {
+                id: "4a8bddd3-e937-48de-9a0a-f4b81b2a1d61",
+              },
+              {
+                id: "c16cc046-8618-4733-8059-5452359712a3",
+              },
+              {
+                id: "c14f7172-0d5b-4156-a89f-f3fa8437e1c8",
+              },
+              {
+                id: "10bdce77-4294-4218-bb0c-d4610e5027bb",
+              },
+              {
+                id: "f22a8167-ccde-4dfe-8584-986edb7c5455",
+              },
+              {
+                id: "632e0b85-6f17-42ea-84c1-1a5c954b3dc1",
+              },
+              {
+                id: "48e32b8f-a78d-47ae-97ec-92446bb7b820",
+              },
+              {
+                id: "9fbea217-af88-4c9e-b4b4-974ba562aa76",
+              },
+              {
+                id: "a410097d-3c24-4676-b8a4-65b75ca88654",
+              },
+              {
+                id: "41f642ce-cabe-4c03-aa23-90bfbc9f1aa0",
+              },
+              {
+                id: "3c4aca5c-fdb3-49a0-9cfa-1cb602ac8456",
+              },
+              {
+                id: "2205387a-a60c-4a83-b7f2-8f94058ee9a7",
+              },
+              {
+                id: "55bb930d-f8a5-4f7b-a735-cba7a9cc0c60",
+              },
+              {
+                id: "4dff8f55-d76a-4ffe-99af-94bdee37b0ad",
+              },
+              {
+                id: "cf08df69-e9bc-4362-8209-41c9ed76be14",
+              },
+              {
+                id: "4e97b258-99fe-4c2d-bdec-dfd46b549ae9",
+              },
+              {
+                id: "03e42cca-67ca-41f7-8373-d6d01cc6c5c7",
+              },
+              {
+                id: "08b56b4d-c287-41d7-b6d5-76576f0ef331",
+              },
+              {
+                id: "17b53346-d464-4241-89e9-406c08938eab",
+              },
+              {
+                id: "2a8af66d-35eb-4456-a919-0e00e2fa3f1d",
+              },
+              {
+                id: "dfcfee0e-a714-4212-8092-5cec4002f3f9",
+              },
+              {
+                id: "c9a5e8b6-f8d5-4874-9534-0ec1f80e3a63",
+              },
+              {
+                id: "603eb066-53d1-43cf-ad05-7b56c946d3da",
+              },
+              {
+                id: "d152716c-65f4-49f5-90b4-f523be19599f",
+              },
+              {
+                id: "02ffd63e-03fd-4a48-a1eb-b3a1018ce43f",
+              },
+              {
+                id: "b6028a78-defd-4efb-8c3f-e44278e8fe29",
+              },
+              {
+                id: "796e1356-a642-4938-a83f-0dca58f9ef37",
+              },
+              {
+                id: "a702eaa7-e2a2-4a62-8a48-3e368c7272b3",
+              },
+              {
+                id: "aa43c88b-bb61-4a99-860f-8681b46f526c",
+              },
+              {
+                id: "990c0a60-c3b8-4c90-9c0d-09304c526569",
+              },
+              {
+                id: "82fe330b-e498-4d30-aa53-b39698d90c45",
+              },
+              {
+                id: "5c8eb575-6340-426f-9255-8fea0a545445",
+              },
+              {
+                id: "81fbefea-7cde-4b69-8084-aec2b5984677",
+              },
+              {
+                id: "89a0122a-9c13-452e-9a7f-f867b21cbaa0",
+              },
+              {
+                id: "b3580383-1b10-4ed8-bb59-a2d2fe2aac5a",
+              },
+              {
+                id: "4b637e53-5f9d-4225-9a6e-ee2b471d43e3",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
-            groups: {
-              connectOrCreate: [],
-            },
+            groups: { connectOrCreate: [] },
           },
           {
-            id: "3d9de024-a8d4-4c3a-b848-ac27581d5c83",
+            id: "7dcb2e8f-59ff-42b1-9608-386ffd0438bd",
             number: 6,
             volume: "1",
             language: "pt_br",
             pages: [
-              { id: "dcb1a945-5223-46b2-89da-9b11b8d5a7c5" },
-              { id: "4e2ad47d-604f-40e5-b320-0d561de9770a" },
-              { id: "58923784-efd2-4df4-b5ed-f00b868026d6" },
-              { id: "64077f1f-f9cd-451a-b5e7-caf8074fb45b" },
-              { id: "ac0ffff4-16d4-4b18-bbd1-b88f9f9cb53a" },
-              { id: "d524e042-7b05-4c9b-80e4-f3c08af7af48" },
-              { id: "dcf3b6a9-5cbb-4b06-b50b-19dc21305444" },
-              { id: "fba52c7c-194b-4d34-bda5-06387a6d3679" },
-              { id: "e5bbc3a4-9bf9-4880-8429-84379206173e" },
-              { id: "6d458bce-99e7-4424-b60d-22ad36cc89a0" },
-              { id: "ea8ea7ac-8eed-413a-8cad-e8ce1717cb27" },
-              { id: "8fe7bc8a-d8e5-4687-8b6b-881a5f725644" },
-              { id: "96e40917-2038-4630-9471-20a105b00431" },
-              { id: "01230abd-440b-44de-af80-0619e8ed448c" },
-              { id: "8e856241-a248-4dd8-9b86-50929790e906" },
-              { id: "6bef6a91-bee7-440a-bd2a-4defa9a6efa6" },
-              { id: "43e4d459-1a5b-4f20-93b3-b164210ff5c9" },
-              { id: "4cdd161f-a30d-423d-88e7-840897ccc002" },
-              { id: "74032e1d-edf4-4fe3-884f-8827da0fcf26" },
-              { id: "ce39c7e9-5ebd-42a5-9e4a-9967bb8fe31e" },
-              { id: "6ae5c33f-999c-40a7-8caf-a134ba1c46d3" },
-              { id: "797c0471-aca2-4a80-84e0-06fe893fc974" },
-              { id: "13afe29d-8c56-4c1a-821c-e3325176d85a" },
-              { id: "75a4fe4e-517d-4feb-9c1d-b7b3e2a66ba3" },
-              { id: "625e6291-7aaa-48b4-bd2a-b44f0ee37dba" },
+              {
+                id: "b06c1991-fb12-48fc-91f3-9af65108b1f2",
+              },
+              {
+                id: "ffc950df-63da-4af5-9dae-47953a825ad3",
+              },
+              {
+                id: "2ffdca5a-1f8e-43a7-9615-97ec80c41634",
+              },
+              {
+                id: "fadc3b91-7ec0-45d1-afae-804626f8e5b5",
+              },
+              {
+                id: "361f035d-2388-45b9-9b98-4e8f85b5a129",
+              },
+              {
+                id: "c1309e0c-2314-4607-8196-b8dcaa372c4c",
+              },
+              {
+                id: "6d14e0e6-f006-4ed1-ac89-b0913b559735",
+              },
+              {
+                id: "af16fe34-a75a-470f-9232-6f610739ce6b",
+              },
+              {
+                id: "f2b8ba02-40be-4c25-890f-e7b589e57875",
+              },
+              {
+                id: "056a8a2d-6b95-43a4-a445-3d47efb75c1b",
+              },
+              {
+                id: "304f1c18-a640-4d9a-a6ae-f494ba1e9df0",
+              },
+              {
+                id: "2e5af000-cff8-47bf-9b8f-ad0538d3a733",
+              },
+              {
+                id: "846b3164-5cce-4a4f-91c8-d80886779a81",
+              },
+              {
+                id: "afc62925-d24d-424c-9bb2-aa3a9ba974a3",
+              },
+              {
+                id: "be34c826-64f1-48ff-a61e-73234ebe84ad",
+              },
+              {
+                id: "0c99c5ff-0195-479e-bc06-7186411f3818",
+              },
+              {
+                id: "8df10de7-8de4-4a36-9136-77d9cc5b4243",
+              },
+              {
+                id: "0a09d23f-2f41-4329-a3f9-3b48b21d8b8a",
+              },
+              {
+                id: "5f7b0bc1-cfc7-4f87-968a-7886e2cb6a6d",
+              },
+              {
+                id: "1c929cdd-e7f4-41bb-943b-a8d177e72ff9",
+              },
+              {
+                id: "bddebeef-37e8-49b7-9f4e-57130c9bad63",
+              },
+              {
+                id: "764c036b-ca0a-4866-ad20-6a7160f9ca9c",
+              },
+              {
+                id: "f1187976-8895-456a-ad8c-3d85b0774f0f",
+              },
+              {
+                id: "39f8fdf0-f580-4007-8291-0703b163bef4",
+              },
+              {
+                id: "81a38804-2fe6-4093-9c8d-eca880128616",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -1188,6 +2462,7 @@ const execute = async (db: PrismaClient) => {
                     name: "Fudido Scanlator",
                     description: null,
                     website: "https://fudido-scanlator.blogspot.com/",
+                    email: null,
                     discord: "https://discord.gg/WfccQhW",
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -1200,6 +2475,7 @@ const execute = async (db: PrismaClient) => {
                     name: "Saikai Scan",
                     description: null,
                     website: "https://saikaiscans.net/",
+                    email: null,
                     discord: "https://discord.gg/cmQuwHB7rf",
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -1209,109 +2485,279 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "de854ead-5c4f-469c-a099-51a1d2f30ca5",
+            id: "84e821ad-cdab-431d-a570-778492fd24ee",
             number: 7,
             volume: "1",
             language: "fr",
             pages: [
-              { id: "f16659e4-6e25-4e08-bb1c-09ae7d2a25a9" },
-              { id: "876ab9e4-708c-49af-8ab6-aaebee5e3216" },
-              { id: "4fea0b93-3f49-43fb-94d1-95e1f15a2cc2" },
-              { id: "e2a15f16-c057-4db9-9da4-bf2cc55c2a99" },
-              { id: "754c5934-1f5d-426a-9899-fb0919c38660" },
-              { id: "4772beb3-aef3-4428-8750-714f5ceaf591" },
-              { id: "db6f4e0c-19b8-4884-af6e-ef588147560f" },
-              { id: "74d00ab6-3652-46b5-a8b4-967d62b9c568" },
-              { id: "648a82ee-65a8-4fab-973c-a1cfdcb72485" },
-              { id: "d56f8df0-aee5-439f-9a86-e29be16853a6" },
-              { id: "b6c1b248-aa58-49a5-8c42-be008fd28b61" },
-              { id: "baf5b9e2-c9d0-441f-b4d9-2378ee867cde" },
-              { id: "1a2951dd-ad6d-49f6-9eb2-aecad9f4a000" },
-              { id: "6b50ef08-4a90-4bed-9511-33f29b871da8" },
-              { id: "f5acef7a-1917-4948-ba1a-6f8ba694ebb9" },
-              { id: "403af15b-f5a5-42f2-ab7a-abd68c5378c1" },
-              { id: "089f743d-1e82-4eeb-b334-f3a9d6dc85bb" },
-              { id: "a80cfadd-36eb-4623-8592-821cd4b3a283" },
-              { id: "259a977a-be3f-494d-b913-9bafe3dc4595" },
-              { id: "47a79096-a5ee-4c5c-9e9a-1fd146a21eb7" },
-              { id: "f2150847-b9ab-4073-a9fc-8aae67a55325" },
-              { id: "d2ab6f4e-814b-4833-8846-b52f30a7c1d0" },
-              { id: "311b1b30-f27a-4f19-b412-5f27b2749250" },
-              { id: "81805923-f0e7-4cb7-a3dc-25c23b52054f" },
-              { id: "0e19d395-5ee9-44d4-8c6e-bb024a76230e" },
-              { id: "bab61a24-c9e0-46e2-94d4-86531a6387a0" },
-              { id: "97943c13-f386-471c-acb9-ed076f28fc99" },
-              { id: "20089600-5952-49ae-a02e-f4e8a3d21082" },
-              { id: "7caf460a-c13e-4bd6-8042-18aee4de82de" },
-              { id: "fe7524ae-5d53-4b4f-b42a-74b8b2256070" },
-              { id: "bbd14a6a-5a8f-4905-836f-d62304cbd675" },
-              { id: "21b1a511-8720-455d-ad7d-e95cd6e8d804" },
-              { id: "b1302d64-6ce2-4561-8b7a-978f854a44f0" },
-              { id: "1e025d7b-e4aa-4375-8554-fd9503fc3cf1" },
-              { id: "a1da1f20-1fb7-4a8a-855d-58c5f7f6f9fb" },
-              { id: "300a325f-13a5-41f0-bcc5-50c90c890964" },
-              { id: "4a020fb1-4a15-48d6-979d-1e155dc98bdb" },
-              { id: "1e8da1b1-32fd-4a8a-8adc-df06502ab7c0" },
-              { id: "e3420574-ba6d-4619-8eda-f78b4ceff021" },
-              { id: "8c5dd3e2-9c5f-42fb-b3b2-b52deffef9f3" },
-              { id: "0eeafe97-ede3-4995-9675-c9f69dee98e6" },
-              { id: "bfd49a09-3796-4a82-929a-3ee255630b5a" },
-              { id: "1031b205-7588-44b9-97f5-ccd295c1d220" },
-              { id: "18d6adb4-188e-40aa-929e-077c29e074fa" },
-              { id: "ae632d02-a62d-4d5f-88e6-ac41d7505523" },
-              { id: "dc00639e-1a72-48a6-a141-760707002598" },
-              { id: "c01944b7-46fe-4933-a34c-5ccb7b8bc67f" },
-              { id: "2359fb26-1d4a-4807-8401-09e890b9287e" },
-              { id: "bda44b03-0257-48b4-a95d-78fd05172329" },
-              { id: "6a0c1e8a-45ca-41e9-b825-36898f388ced" },
-              { id: "e1d3dfe3-3403-4c16-9559-efd241e7d3ed" },
-              { id: "01f65d5a-d472-4b9e-9d61-e61c19e19558" },
-              { id: "b27b8e0a-8fbb-41fe-a0e9-b02bce55c458" },
-              { id: "3ad05db0-c9fe-40a9-a257-eda021cf53df" },
-              { id: "15173766-75e4-4c34-86e5-f2ae229cdc7b" },
-              { id: "b3ac6972-239a-4841-a3c3-5c1af5d5f076" },
-              { id: "ddf6a2dd-9aa9-4ee7-b619-9ac2ebc5baab" },
-              { id: "f66e5ad4-538d-478c-8446-7594dba6c6a0" },
-              { id: "1efa3ff9-5cfc-45f5-9139-f3b2a216ae8b" },
-              { id: "99233910-c939-455f-b7b1-1985ba78903c" },
-              { id: "b56df635-6777-4b8d-b23d-8e5d0c9031d0" },
-              { id: "b74854d9-fca3-47dd-b239-a9b2be64549b" },
-              { id: "45b55a43-138c-4128-b944-d80b063082b9" },
+              {
+                id: "0573f4e8-dd6f-47af-960a-b3d95397383e",
+              },
+              {
+                id: "2745f54c-f9c0-4740-bb61-fbac5dc90c66",
+              },
+              {
+                id: "7c972930-e57d-4a97-9e9c-9ae06c19a1a3",
+              },
+              {
+                id: "3b6ba576-9b52-4196-bc54-43bb6b214f7f",
+              },
+              {
+                id: "9d6c6694-bce1-42e8-bf91-b5f783c5c434",
+              },
+              {
+                id: "62d31372-a482-40da-87b3-d321e22ed692",
+              },
+              {
+                id: "168db5d1-c5fa-4c61-a6e1-00883dd843b1",
+              },
+              {
+                id: "d4cce746-e9e1-414a-8d0c-0b3c58cf8f0f",
+              },
+              {
+                id: "72c0d620-19ec-4808-bdc1-e4d904a3ca4b",
+              },
+              {
+                id: "53858c5c-5fda-4e68-b480-fc9ada4ac1fa",
+              },
+              {
+                id: "830e4726-d63e-4760-a58f-dccb2ac0bdc6",
+              },
+              {
+                id: "a08bb60f-51ac-43ab-a5ca-77c9298a3b43",
+              },
+              {
+                id: "58183890-cce7-453e-8081-3cea47055536",
+              },
+              {
+                id: "21d6e3ad-1663-4953-807e-b8105be447fb",
+              },
+              {
+                id: "0d4cfb74-8367-4740-bb77-99540607b12d",
+              },
+              {
+                id: "abc17c34-52af-4a76-950e-91325420d218",
+              },
+              {
+                id: "930b789b-e2b6-4986-bd05-b97d1e7c492c",
+              },
+              {
+                id: "63c3aef2-08fc-47ad-b07c-f3a2e8e01664",
+              },
+              {
+                id: "f6e32e78-c186-43c3-92e7-db1ce750bde5",
+              },
+              {
+                id: "d7dd97bb-ca4b-47b1-9eee-1428bbbb25d1",
+              },
+              {
+                id: "10c6d322-619e-4909-ac8b-97cb4e944559",
+              },
+              {
+                id: "04b60ca4-a3fd-4424-8f9e-384a8d0faa68",
+              },
+              {
+                id: "f9940a88-37f8-4b1c-8573-ee105cd6759e",
+              },
+              {
+                id: "2530ddeb-68e7-4792-93f4-82a9360b9feb",
+              },
+              {
+                id: "865b58df-b19f-4378-b2c6-30b10232996f",
+              },
+              {
+                id: "5f750586-dc23-4343-9219-47d943ae3100",
+              },
+              {
+                id: "078eef34-1aef-467f-b9f3-7c2e9df4475e",
+              },
+              {
+                id: "eccdf292-e073-451e-9cf9-0b4500953bd0",
+              },
+              {
+                id: "871a9176-9b31-4795-8b9b-ac350a2e647c",
+              },
+              {
+                id: "c685523e-6028-45a0-92d2-494aa417b0ef",
+              },
+              {
+                id: "e21dfa44-7d9d-4334-a2a4-056c87e0741d",
+              },
+              {
+                id: "ce8edf9b-2d26-4c39-8838-7e8bd01dee4b",
+              },
+              {
+                id: "79d63efb-64a8-4b6f-ad5b-81708536c7cb",
+              },
+              {
+                id: "072d3b2c-effd-487a-a2f8-cfcc7dc6e691",
+              },
+              {
+                id: "ae58589e-3deb-44bd-bc0f-91f0a6014fd1",
+              },
+              {
+                id: "517bf645-34de-46cb-86f1-6fd1fee6d020",
+              },
+              {
+                id: "b56ef726-a95a-4b6e-8172-69f4b3c5549a",
+              },
+              {
+                id: "41735971-82f4-4eb8-ab8f-f3c9bb7e41fb",
+              },
+              {
+                id: "a0341fad-cbf8-438f-9725-7ada986d4fd0",
+              },
+              {
+                id: "d6fbf741-0271-40ee-8d83-58e41bf511e1",
+              },
+              {
+                id: "5ca49402-f007-4851-9b7f-96023c0eb348",
+              },
+              {
+                id: "9c0884dd-30af-4a48-9b84-78a38c992250",
+              },
+              {
+                id: "85d29d45-ce41-4733-a3f5-e4955e57c48a",
+              },
+              {
+                id: "3b4063bb-f3bc-4270-94a0-b9adac4bbbb4",
+              },
+              {
+                id: "7ba052da-40f2-452a-9ca1-729ae1e418ad",
+              },
+              {
+                id: "4f2c231d-308b-4e22-8f40-ef49bbe584ad",
+              },
+              {
+                id: "e4d288ab-9031-451c-a41f-c87d2cdd1eed",
+              },
+              {
+                id: "a6020b2c-57fd-404f-b1ec-8b06b532bd15",
+              },
+              {
+                id: "1b44fe90-a1ad-4b8a-9b2a-26278bfa903f",
+              },
+              {
+                id: "3004055b-7113-4383-9418-b68084df32cd",
+              },
+              {
+                id: "b96a3a97-cbe3-42fe-aceb-4fcc29b509e6",
+              },
+              {
+                id: "10fc53a3-d04b-48d2-9f30-8394aeb8cd5d",
+              },
+              {
+                id: "0a9b7036-d198-4223-b9d9-8b301d996f8b",
+              },
+              {
+                id: "f2a1e025-8b23-4b8b-885d-00c6701f8c74",
+              },
+              {
+                id: "bf22e2cd-e5f7-473a-9cfd-509e4c899d80",
+              },
+              {
+                id: "67a65ad7-c22b-4697-8dea-2cc2534cd955",
+              },
+              {
+                id: "2cb847ad-9eb2-44e4-b4d1-aea0f309ed53",
+              },
+              {
+                id: "0fa3faa5-2a64-4fc1-97a3-1d04eaa23a41",
+              },
+              {
+                id: "5414d928-ca93-4a25-a57f-9ca656707cdf",
+              },
+              {
+                id: "cb0b5344-5e5b-4474-b1b9-d25259fc43e1",
+              },
+              {
+                id: "c3933d3d-eee0-4165-a5dd-f7dac8f6b0e2",
+              },
+              {
+                id: "ec09bb71-2fbc-44e7-97d2-4d3d1bea12eb",
+              },
+              {
+                id: "2cf62d35-789d-4620-ba36-c3a9e655188e",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
-            groups: {
-              connectOrCreate: [],
-            },
+            groups: { connectOrCreate: [] },
           },
           {
-            id: "329dfa98-b37b-4828-855f-e200a57f8383",
+            id: "ec27977b-367a-46db-8b81-36631500e6ca",
             number: 7,
             volume: "1",
             language: "pt_br",
             pages: [
-              { id: "b2cf45d6-40fe-464b-b684-89d83577f0a5" },
-              { id: "28e948e1-d251-43ad-97e3-9da0c76723e2" },
-              { id: "36cb222b-c054-4bb6-8446-738eb861991f" },
-              { id: "fab8d921-99da-4510-9d86-411ace22baf6" },
-              { id: "dd77ccce-864d-4d1f-a123-4dfd2f018e57" },
-              { id: "61bb966b-4b2a-4463-a6bd-42eb2e3c6788" },
-              { id: "24ee94e8-1cd8-40f2-8cf3-e2b03333f4fa" },
-              { id: "27826e38-e90e-47b1-a2f1-ea9efbc55cb9" },
-              { id: "40de84d6-579d-420b-9a4e-e28675f459a7" },
-              { id: "554715a1-cad4-4dfd-80f9-a1827be83045" },
-              { id: "cac2b149-1802-4358-a9ec-5ba49c79f38d" },
-              { id: "dc5e2c5e-e3ea-4494-ad69-ed809e977f16" },
-              { id: "815e13c6-ddb7-4118-86c5-22951f283c77" },
-              { id: "9c01aaf3-2c6c-4ce9-9ce2-b79d770b13e0" },
-              { id: "11fc437a-78ea-4ccc-8d63-68ac18d8b8c4" },
-              { id: "f54161b2-c601-4775-a915-ed116f13a9ce" },
-              { id: "a03c3da3-0322-4eef-a91d-0952ba51bc5a" },
-              { id: "3c8bd0ce-1c1e-4799-96db-10bdf0347508" },
-              { id: "1217d651-aed3-4aa4-bc18-0f7c6165895e" },
-              { id: "e9b1a111-596d-4303-a6a9-583d06c4c1bc" },
-              { id: "04cb1fee-49f5-465a-9307-576b9d6daebc" },
-              { id: "1110bf32-fc9e-4bdc-8293-4fd887585794" },
-              { id: "55cc398a-f858-4c58-990b-047eb7dc26ea" },
+              {
+                id: "f6cf68f1-47a9-49f7-9d3e-3d0aad3ae910",
+              },
+              {
+                id: "d104bd23-f989-4b30-9233-79f8315961b7",
+              },
+              {
+                id: "ea7d2aca-246d-406d-b281-09b790dc8920",
+              },
+              {
+                id: "95143324-284d-438d-9f9b-f79012cf0986",
+              },
+              {
+                id: "c0df6671-151f-4d57-9b5a-77649c5def4b",
+              },
+              {
+                id: "733f2414-0631-4eab-a79a-6112208e328a",
+              },
+              {
+                id: "8cec276f-3f17-4314-a900-f9fe1564e52a",
+              },
+              {
+                id: "763df464-9476-4c66-8461-42fd1e987bcc",
+              },
+              {
+                id: "969eac36-ab5b-432d-9d8c-2cc19d9adfc4",
+              },
+              {
+                id: "d0d6dc0a-c51f-4b83-9437-a6e6bdd0bb23",
+              },
+              {
+                id: "d93aecbb-9aa9-4934-a061-680148b9e8e7",
+              },
+              {
+                id: "02687435-5591-499a-acdb-5ac76bdfaf07",
+              },
+              {
+                id: "f3a5bdf0-f853-47fe-93c1-db9f2fa44257",
+              },
+              {
+                id: "786c604b-973e-45a5-a3d7-c93c20838767",
+              },
+              {
+                id: "13486934-9447-4ba3-b836-58d028a9c199",
+              },
+              {
+                id: "a236dac6-69cf-4e92-89e5-b9606fe16636",
+              },
+              {
+                id: "95adbdb9-6870-4d0d-888d-2b4353add93a",
+              },
+              {
+                id: "46c25770-7e7c-4647-b0df-9679b8d2eb95",
+              },
+              {
+                id: "976e034c-121a-4d82-aa3b-18b04c3c1eca",
+              },
+              {
+                id: "f58243b3-3a44-4ab8-99ac-c560a278c01a",
+              },
+              {
+                id: "3251733b-70b7-4853-9913-45a4e519baec",
+              },
+              {
+                id: "a28d0926-6656-4c53-a0bd-cca178828de5",
+              },
+              {
+                id: "c2f71169-17e0-4c05-b292-bd9afbb0403a",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -1323,6 +2769,7 @@ const execute = async (db: PrismaClient) => {
                     name: "Fudido Scanlator",
                     description: null,
                     website: "https://fudido-scanlator.blogspot.com/",
+                    email: null,
                     discord: "https://discord.gg/WfccQhW",
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -1335,6 +2782,7 @@ const execute = async (db: PrismaClient) => {
                     name: "Saikai Scan",
                     description: null,
                     website: "https://saikaiscans.net/",
+                    email: null,
                     discord: "https://discord.gg/cmQuwHB7rf",
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -1344,26 +2792,56 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "bafbc3e6-533c-4d08-9f88-44683ca31f36",
+            id: "f02064e2-fa3d-4c6d-b74e-37bb3bdfccc1",
             number: 8,
             volume: "1",
             language: "pt_br",
             pages: [
-              { id: "0f8e5f8c-ac33-4d19-b41f-664156f11d26" },
-              { id: "95070c8b-b76f-42ff-a702-b5edc3a99e31" },
-              { id: "b0ebf73b-29d4-42b6-bae8-b3ec9f9adb10" },
-              { id: "9728425a-119a-4049-98f9-e2ee6b6a1fa3" },
-              { id: "bcf9a9e4-5d8a-4f0f-bae9-3e6b26510d3f" },
-              { id: "e903de1a-2c7d-4058-b50b-308746cb48fb" },
-              { id: "37be110b-a5fe-4db3-86c8-48c75066c37a" },
-              { id: "af8df4a0-0684-4901-bb89-378344da44e8" },
-              { id: "e5514eb0-99b3-475c-b3ed-27920c8b1c7e" },
-              { id: "320e9f26-7810-4ebb-a0d3-bdbc442836fb" },
-              { id: "b0eb12f0-8b60-4e9f-b2a6-d28faef7bb6d" },
-              { id: "f2ec2714-9f8a-4261-aabe-fdcd158cad14" },
-              { id: "a06faf99-3e8d-42d0-bd3d-589fe821ca62" },
-              { id: "0e92fa46-c5ac-4a68-ab19-198664211413" },
-              { id: "2551f398-00db-413b-b3a0-cb6308ccf91f" },
+              {
+                id: "2486c586-6696-4d4f-8e0f-5b686edb7deb",
+              },
+              {
+                id: "db3dc5cf-e51b-4ed3-b541-b9b3c90c971c",
+              },
+              {
+                id: "2a4c3dc2-d4bd-46de-91a8-7c55445d68de",
+              },
+              {
+                id: "2e67e223-fde7-4c51-9b3d-5349ee6281bd",
+              },
+              {
+                id: "955d4c33-a502-459e-9beb-20f9089fb7f8",
+              },
+              {
+                id: "bfccf2c7-68ae-4ed1-8d76-632f251ac515",
+              },
+              {
+                id: "5eafc640-6ab3-422b-a7fc-a8d416576860",
+              },
+              {
+                id: "fa96f1db-b433-4536-af85-24d47ea36c44",
+              },
+              {
+                id: "022aa43d-c1a8-487f-84bf-7f7605f83206",
+              },
+              {
+                id: "6d654176-34ee-455d-a75f-339cef047527",
+              },
+              {
+                id: "26b21304-ffbf-432f-a3f6-15ac3dde3f64",
+              },
+              {
+                id: "3d9ae0c7-e310-4489-bca6-ca8bf0452219",
+              },
+              {
+                id: "7d681305-7597-4df3-85de-e28c512bf775",
+              },
+              {
+                id: "5a2a10c2-79c0-4397-9658-15ccc1291a42",
+              },
+              {
+                id: "32d3cba7-7d52-42a7-9547-c987b01d6820",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -1375,6 +2853,7 @@ const execute = async (db: PrismaClient) => {
                     name: "Fudido Scanlator",
                     description: null,
                     website: "https://fudido-scanlator.blogspot.com/",
+                    email: null,
                     discord: "https://discord.gg/WfccQhW",
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -1387,6 +2866,7 @@ const execute = async (db: PrismaClient) => {
                     name: "Saikai Scan",
                     description: null,
                     website: "https://saikaiscans.net/",
+                    email: null,
                     discord: "https://discord.gg/cmQuwHB7rf",
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -1396,61 +2876,161 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "ec883b20-562b-48c2-913e-4dc85d1c49ef",
+            id: "88e37e4f-70fd-49f0-bb55-aab76427e658",
             number: 21,
             volume: "1",
             language: "fr",
             pages: [
-              { id: "a96b2777-9952-4577-acd6-0352d1abead0" },
-              { id: "065032ba-8e83-4e5a-940c-419f33eccd38" },
-              { id: "5e843fc8-7903-45d4-99e5-5269b13c3edf" },
-              { id: "0eee5200-e01f-4e07-a988-acadde58db93" },
-              { id: "22a7971f-e618-4b33-8724-a16cdf4a19cb" },
-              { id: "299d4025-0d27-4953-91f7-d0728ae04e0d" },
-              { id: "a5f7e93f-a7c7-4fba-8c5d-f061e202ced8" },
-              { id: "49cc297d-4d46-4bb9-af58-dc4893382930" },
-              { id: "cfc0e915-5ef5-4853-9657-d44b7f8c6b8f" },
-              { id: "91ad2d66-247b-4b01-bf53-3871a7adcf43" },
-              { id: "836568c6-33b0-4e5b-83c8-b8652e01b7ff" },
-              { id: "e909d1ca-17ff-469f-80f6-bcbb74ae373d" },
-              { id: "a4927755-c582-489a-ad3d-9564544121d6" },
-              { id: "c29d90f6-6919-4794-b496-97986a274e8b" },
-              { id: "c66b5b25-c5c0-482e-aed8-e80cedde1932" },
-              { id: "08215cd6-df46-46b3-9910-db16e25cba05" },
-              { id: "ae4ae0ca-28c9-4459-bb83-27ed17fd75eb" },
-              { id: "72b7a05a-302a-4e42-9b3d-f00481ae3728" },
-              { id: "90e55ecd-a1c5-490a-99c7-ed95e4cbd3e8" },
-              { id: "b942613a-55d6-415f-9b5a-4ac63dfc1b0b" },
-              { id: "96c49992-208c-473b-8a27-2b34c149a59b" },
-              { id: "b091f72c-3ff2-415d-b50b-31f6847b5420" },
-              { id: "43a7d07d-d81a-4c52-ba31-7e1dbdd08535" },
-              { id: "72ac0ad3-dcbd-4032-a765-523d1074860e" },
-              { id: "d04384f0-73d8-4343-8460-fa51dfbb2d98" },
-              { id: "0821bf27-0f73-47b1-a5a3-aa3bebebce97" },
-              { id: "9d30baba-876b-40e0-9209-63e404566fcf" },
-              { id: "9a8e3a31-6e13-4c0c-a434-2698ae8f96f2" },
-              { id: "6fa6f090-481d-4fff-97e3-be790b302fb6" },
-              { id: "e7a42400-6eba-42dd-98ce-40c64a0a217a" },
-              { id: "6f034368-865e-41cb-a8be-dcb10e13fd11" },
-              { id: "6197acd8-a15b-49ba-bcd6-213c0b511fd3" },
-              { id: "48643c08-8747-48ff-a610-12193dd847d5" },
-              { id: "86c6d695-d8f1-42ed-8c16-a6df185479ce" },
-              { id: "9be83374-54af-45a1-a4c2-b55b24189e46" },
-              { id: "d32670c9-2186-4327-8a34-5e26617ab1c3" },
-              { id: "7502f4d5-55b8-4a87-b9f9-8adf2484655b" },
-              { id: "3146e882-04eb-43ed-8937-ff3a11fecdd1" },
-              { id: "4db93655-24cf-42fc-97ea-7e90d4f1b053" },
-              { id: "ff8f8914-d943-4144-b65e-1a1e59ad2087" },
-              { id: "0fe48dfe-07c1-4c14-8674-ee6bf2f125e8" },
-              { id: "28b58c80-d000-4308-9474-c8e5adae872b" },
-              { id: "b097131b-059a-4c6f-9b99-09001ef6a83c" },
-              { id: "7e7802b2-f88e-4c55-b907-c85ba93c322f" },
-              { id: "1461f31c-ce2e-45bc-8a35-52a35e74a86d" },
-              { id: "c5d7627d-c1c5-447b-9235-630f7f34e9a7" },
-              { id: "40131c2a-6c25-4532-ab6e-2ecc01519901" },
-              { id: "e89e9d07-a52b-49fd-87e5-cd5086072e51" },
-              { id: "b3e09f6a-341c-4a17-84a1-1e08e4550912" },
-              { id: "985dd111-6853-4699-b90b-bdea8fa0aa49" },
+              {
+                id: "87908fba-2b2c-4644-abfe-d367244b9830",
+              },
+              {
+                id: "2f35ad71-c4e6-4cfc-b9c1-55740c5a2889",
+              },
+              {
+                id: "14851a7c-7499-4ad0-8556-6887ceea9767",
+              },
+              {
+                id: "48dc99dc-edce-458f-9edf-6ad30cddda14",
+              },
+              {
+                id: "1b41c08c-37f6-4185-b9ad-ae11eb1d7458",
+              },
+              {
+                id: "1e45d716-963a-4478-a6c4-8df6972e0bc9",
+              },
+              {
+                id: "63d24a18-00c4-42d7-ad86-4838e7237151",
+              },
+              {
+                id: "b1725e75-c322-423a-a1c6-e54b11b6cabd",
+              },
+              {
+                id: "67ce8a57-8628-4693-bd3b-35f75768b745",
+              },
+              {
+                id: "c0d56268-1717-4e04-98e2-62fb9719bf11",
+              },
+              {
+                id: "59fe892d-3dcd-470c-b6fd-51df89f0e011",
+              },
+              {
+                id: "5e50d56f-02f1-407c-aa1d-e76b007ef9e3",
+              },
+              {
+                id: "d0b9eb89-950f-4dab-ad01-66d1f69b6afd",
+              },
+              {
+                id: "95096e04-df92-4dba-a361-80325a338f9c",
+              },
+              {
+                id: "ac70536f-f120-4416-907e-0bf66304d08b",
+              },
+              {
+                id: "c90b839c-d31e-45fe-8d69-92c7e3abe102",
+              },
+              {
+                id: "0f8915f4-b245-40a2-b53e-19991b1e74ba",
+              },
+              {
+                id: "add5d852-743c-433f-bc40-5840c664d66a",
+              },
+              {
+                id: "820036dc-d6d1-4578-8edf-de441e0c7cda",
+              },
+              {
+                id: "deb398d3-db9e-4256-a190-7cfa13fc91df",
+              },
+              {
+                id: "3bdb3750-3aac-4b59-88a0-c7a50adc5f1f",
+              },
+              {
+                id: "7131ee6d-6b80-4aaa-96d7-4e8f8895e732",
+              },
+              {
+                id: "0e1f5976-3877-4b21-aa82-251915677f82",
+              },
+              {
+                id: "3c2ff7ba-5d3f-4a26-a671-afc91a2bbb25",
+              },
+              {
+                id: "9bbd18ed-6884-48f7-82d8-5feabcd2224d",
+              },
+              {
+                id: "8e2d2528-77cf-462f-9274-c48c9006a7fc",
+              },
+              {
+                id: "e20ca1f5-e694-4359-870f-b33c7c93ddab",
+              },
+              {
+                id: "e53d36e9-8527-4af6-8f04-7c7748c32418",
+              },
+              {
+                id: "3582e29a-043f-49bc-9007-f3599ad9a861",
+              },
+              {
+                id: "e64674c6-9d53-4897-95b2-40065edd4adf",
+              },
+              {
+                id: "e0bf0e5d-12f9-4121-917d-756cd24c5693",
+              },
+              {
+                id: "d7ce2219-0f94-4cc2-bf1c-a3f108a2edde",
+              },
+              {
+                id: "4dbb2c79-41a5-47c6-987b-e111b369ab44",
+              },
+              {
+                id: "a022fa11-4641-47c9-8957-406c206b8cc6",
+              },
+              {
+                id: "2232f6d7-dbe1-45e7-9abf-a6b1ea2a22f3",
+              },
+              {
+                id: "27b1f34e-3b31-4e88-bb6a-16e2333aecb2",
+              },
+              {
+                id: "f98c1afe-99f9-43be-aec0-62ff71e05f2f",
+              },
+              {
+                id: "0ec1f60c-db5a-4f76-ad05-f2f56caa834d",
+              },
+              {
+                id: "63a79da5-de36-4ade-a680-7b50a52e65cf",
+              },
+              {
+                id: "8fa0bd70-4d8d-48c8-b866-22d7849ff673",
+              },
+              {
+                id: "17a935b3-065a-4f26-8081-879ddd936e89",
+              },
+              {
+                id: "ed7a178e-c43a-4657-97a1-b1447136b42b",
+              },
+              {
+                id: "bd640ba1-23bd-4402-8bf7-b6e9c9a7bbe1",
+              },
+              {
+                id: "07ad4ed9-0bdd-44a4-8643-acd2923a2bae",
+              },
+              {
+                id: "61af4b22-1a92-442a-8022-da908620bcdf",
+              },
+              {
+                id: "dedc3b12-8871-48ce-aa9b-b1c08c3c52e8",
+              },
+              {
+                id: "5b640b50-84e3-457f-8142-631471bd11cf",
+              },
+              {
+                id: "c896b4ac-ef8c-4710-b6f8-70715c7d77fb",
+              },
+              {
+                id: "fdbf3a34-7cd1-473d-8c80-fc4061a75ca0",
+              },
+              {
+                id: "693e0767-a21f-4ee5-afee-d422cb58dcf3",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -1463,6 +3043,7 @@ const execute = async (db: PrismaClient) => {
                     description:
                       "Recrutements aux postes suivants ouverts:  \n→ Traducteur Coréen -> Français/Anglais [**URGENT**]  \n→ Traducteur Anglais -> Français [**URGENT**]  \n→ Traducteur Japonais -> Français/Anglais  \n→ Checkeur  \n→ Editeur [**URGENT**]  \n→ Reconstructeur [**URGENT**]  \n  \nActuellement, voici nos projets:  \n- The Beginning After the End [**Novel**]  \n- Uriah  \n- Whispers of the True King  \n- My Superstar Uncle (Coprod Alpha)  \n- OOPARTS  \n- My Bodyguard is 4 Feet Tall  \n- Code of Silence  \n- Endeavor's Cross  \n- Otherworld Squad [**Pause**]  \n- Get Life [**Pause**]  \n- God and Human [**Pause**]  \n  \nAncien projets:  \n- The Beginning After the End (Webtoon) [**Licencié**]  \n- Hello, Summer. [**Terminé**]",
                     website: null,
+                    email: null,
                     discord: "https://discord.gg/UGzYPzv",
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -1472,31 +3053,71 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "730af01c-1e5e-4987-a9f0-d2d7f2e381cd",
+            id: "7cd5538e-fc76-4827-b071-2d8414e0a841",
             number: 31,
             volume: "2",
             language: "pt_br",
             pages: [
-              { id: "c6d3d4c7-6f3e-4896-9286-dae3ce8490cc" },
-              { id: "c59862c4-49e5-40dc-80de-228f36ae786c" },
-              { id: "3406b7ec-bc2d-49df-9c86-fba53dd22d82" },
-              { id: "49e404bc-c598-4333-ab54-7a28d8b581a8" },
-              { id: "b1fdd075-f12c-4e93-8688-a2cb31946cc5" },
-              { id: "15508b71-1893-4c47-8280-e84798659e37" },
-              { id: "495487c3-0c1d-4971-a9fc-a896d77e33fd" },
-              { id: "efd4a3cd-ecf1-48ba-9db7-0807292c0017" },
-              { id: "102770af-705c-4109-b438-f9042c140522" },
-              { id: "7968ceb6-f6f7-4e1a-bb9b-5d6e05deccb1" },
-              { id: "1b23bd80-1f41-465e-b27c-19c106f952df" },
-              { id: "3691f51a-cecc-4a4b-8bb5-2b8d8e8d22c6" },
-              { id: "c285984a-b12a-4653-948f-12ca4abea97c" },
-              { id: "d8ce4929-75a9-4f19-9b99-9e38f37e816c" },
-              { id: "3650b51f-ea50-45cb-871c-5ee131b3b345" },
-              { id: "907a9474-8745-4e02-896f-2e163d940f72" },
-              { id: "d5cfbd7b-7565-4cde-a104-984f1e04f277" },
-              { id: "32984f4e-2631-4b7b-8410-2c00366535d8" },
-              { id: "9bdf24bf-5177-40fc-a244-c924b12fc785" },
-              { id: "e2d84350-4611-4046-bbb5-0f7ba5df9137" },
+              {
+                id: "fc7aeefd-6caa-49ed-8474-fb9c25a78c87",
+              },
+              {
+                id: "a3202b60-cc12-492f-be79-2e1b56b9ddcd",
+              },
+              {
+                id: "53fcdfea-74f0-47a8-9016-9c024f67794c",
+              },
+              {
+                id: "ed2fe507-426a-43a8-8b3e-a24645438001",
+              },
+              {
+                id: "b4b90989-689a-45ad-a310-79dd8763a6e2",
+              },
+              {
+                id: "36767360-afa0-483d-821e-5f7e46be1033",
+              },
+              {
+                id: "3587531f-a560-46b8-afed-4cf644663caf",
+              },
+              {
+                id: "cef0d931-c884-4243-89c7-bdfcec3bdc5d",
+              },
+              {
+                id: "2368f8b0-ed7e-4c96-af76-f2b5cb336602",
+              },
+              {
+                id: "c93fdf77-5a61-4e66-917d-46d54bee35b5",
+              },
+              {
+                id: "7f2c18e0-cb23-4c32-a751-b53413ef5dc9",
+              },
+              {
+                id: "be993c22-f9eb-4e8b-b0fe-c3e3af47d793",
+              },
+              {
+                id: "69397a08-c560-41a7-b93d-ab0aad05f12d",
+              },
+              {
+                id: "64655d28-dfdf-498e-b421-5034aa233c79",
+              },
+              {
+                id: "83c2e211-c877-49f6-a490-fc09ba774638",
+              },
+              {
+                id: "d6b5656c-ca56-4920-bf95-50a74d8dec89",
+              },
+              {
+                id: "e2471dd1-86f2-4687-8dd8-83e5aaf637e1",
+              },
+              {
+                id: "c64b1d04-4365-44bc-b191-81e5988edf4b",
+              },
+              {
+                id: "a6f3edea-fa7b-4413-8f03-c2823f94c25e",
+              },
+              {
+                id: "2963ed26-3916-4ea6-a5f0-5c80b73191ce",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -1509,6 +3130,7 @@ const execute = async (db: PrismaClient) => {
                     description: null,
                     website:
                       "https://web.archive.org/web/20240217201147/https://nexoscans.com/",
+                    email: null,
                     discord: "https://discord.gg/neoxscan",
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -1518,43 +3140,107 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "3248fb4b-6ca8-4888-8a09-95e8365a55c3",
+            id: "008ad770-6398-492c-ab9f-54562545df1c",
             number: 43,
             volume: "2",
             language: "pt_br",
             pages: [
-              { id: "e5f720bc-35c9-45fa-ba28-b41b63f9d31b" },
-              { id: "17c6bfa3-6947-4204-ac79-3ba8c09071af" },
-              { id: "9957bfc6-0769-499a-afb5-d71f77ebe6c9" },
-              { id: "09d81620-c367-435d-8876-be6904a5f2f2" },
-              { id: "b18df68c-576d-46d9-ab20-b3f6519dcc92" },
-              { id: "03f0e082-e430-4036-b7c3-dcbab520f60d" },
-              { id: "dcadd04b-17a7-4075-99eb-ed14dcde499e" },
-              { id: "834928fe-75cf-4d94-8ce1-6663f45cdc07" },
-              { id: "8a55eb10-602f-49fc-9385-10bd63f8789c" },
-              { id: "bd47a4a7-35c4-419f-a637-aad785bab8c6" },
-              { id: "96fbeb0b-362a-4481-96d9-492c13398374" },
-              { id: "14b5e866-f1c0-4036-adad-85a6e0173673" },
-              { id: "fcc3cf93-a80a-46df-9c8c-ac5fdc4310c1" },
-              { id: "9428c529-09b3-4bbb-9cf6-40911efadb1a" },
-              { id: "de397fa0-7332-4b02-a4a3-b3eb27a9dfed" },
-              { id: "181babdc-0fbe-4d79-8776-07cbd8c26505" },
-              { id: "d0273982-166f-4ed9-8d1d-a0791175538d" },
-              { id: "43eab316-eb90-4d67-8386-021f4d2d0cf4" },
-              { id: "cd94f96c-dab1-4d08-8408-82e576617476" },
-              { id: "7570b778-8b8e-49ee-a7f5-10fbd3c0df26" },
-              { id: "5f52eb09-03a5-4c19-a310-532f4439ff14" },
-              { id: "f7c0b262-d3d6-43e2-ba82-63d038de4b6b" },
-              { id: "d98f4006-4778-44a8-b520-24080a36a3ec" },
-              { id: "61a50559-f7bb-41f7-83cd-086931a38cdb" },
-              { id: "9b58cba6-cff9-4983-8c5b-e362fb23e58a" },
-              { id: "c3d17628-cf75-4c41-a5c0-6d8a42c0eddb" },
-              { id: "eb98cec4-1486-4537-88f4-f3f05d49af4e" },
-              { id: "af86ccfa-0acd-4faa-8ead-4279a8930ed4" },
-              { id: "6c841388-f247-4189-9589-e73f6bddfc53" },
-              { id: "8c832105-c3d7-4581-b1b2-247de2989b42" },
-              { id: "2447e10f-73d7-4df3-a252-16533ca3da8f" },
-              { id: "c0d8c810-3f84-4968-bdda-d29fe91fecb2" },
+              {
+                id: "09d20771-f2ad-4898-ae17-feea27129939",
+              },
+              {
+                id: "ed917ab1-aa75-4121-8275-d570a17e8776",
+              },
+              {
+                id: "f48ee7a1-0043-4b4a-8bb8-e53ee3eaf96a",
+              },
+              {
+                id: "f1ce0574-56ff-4454-b5b5-f9a2065e96fd",
+              },
+              {
+                id: "40b45304-f270-4b7a-a785-0a4f9ca39b0f",
+              },
+              {
+                id: "b088396f-7ff8-4de8-839a-03350e5efd13",
+              },
+              {
+                id: "ff589fb4-6b6d-4e21-86c0-be42a812345c",
+              },
+              {
+                id: "bf315755-e163-42e3-af0b-eb65cbbba496",
+              },
+              {
+                id: "5079bd7d-f6d5-4dd2-af9f-184452d465e5",
+              },
+              {
+                id: "c87710e4-bc1e-439d-8263-c4ec3982094a",
+              },
+              {
+                id: "d406101a-8ea0-48f2-989b-5490240f1130",
+              },
+              {
+                id: "f14c064c-03a9-4683-ab5c-e8addc7df0a3",
+              },
+              {
+                id: "6143bbf5-8ed5-4024-b0ce-7279cf609345",
+              },
+              {
+                id: "f677949f-ac23-4047-91e0-97c214e25f5d",
+              },
+              {
+                id: "c21bf044-13a0-4097-bbc4-dd6c783b44b0",
+              },
+              {
+                id: "14e3de4d-a3f1-4c1a-b0ba-40e77ec8c535",
+              },
+              {
+                id: "67afb8a4-c110-4cda-80c0-6c11b5768e24",
+              },
+              {
+                id: "a7d78579-4243-46e1-97d8-948b3d1e42ce",
+              },
+              {
+                id: "6b5c3da3-4d54-4550-be11-676c293e6ea9",
+              },
+              {
+                id: "def23f4f-9680-49f7-9e7f-c67466debee6",
+              },
+              {
+                id: "56c76105-6d13-4d02-a07a-3ab618d8f589",
+              },
+              {
+                id: "43ff713b-2f5a-4726-959d-49cb4a847893",
+              },
+              {
+                id: "74ddaf24-2afe-4dfb-aec5-7b7616c9946d",
+              },
+              {
+                id: "279ed94f-d742-4d18-95ed-93f843eb93d9",
+              },
+              {
+                id: "97939243-e294-4e65-9390-989a7d4255c2",
+              },
+              {
+                id: "7270719e-ee81-49b5-a4f6-57e3cd940cd6",
+              },
+              {
+                id: "b2bcde8b-bc51-46a9-8c1c-eec19208705c",
+              },
+              {
+                id: "6d538a62-f856-4c75-b0ec-b8667ac87833",
+              },
+              {
+                id: "c7d448da-bb8f-4655-88e9-32b87bb4e13f",
+              },
+              {
+                id: "8134f9bb-8cc5-430a-9607-6ff27fdad0ec",
+              },
+              {
+                id: "c1e57a77-ba56-424e-874b-1d096fd145d8",
+              },
+              {
+                id: "7c3d5800-a903-4309-b11d-f4043685e905",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -1567,6 +3253,7 @@ const execute = async (db: PrismaClient) => {
                     description: null,
                     website:
                       "https://web.archive.org/web/20240217201147/https://nexoscans.com/",
+                    email: null,
                     discord: "https://discord.gg/neoxscan",
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -1576,110 +3263,308 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "0ed9d523-29fb-47ec-accd-d985dbae1bb5",
+            id: "25c67585-347b-4998-a380-3459c2601f07",
             number: 57,
             volume: "3",
             language: "pt_br",
             pages: [
-              { id: "8195d4d6-a6ed-43bd-9c7d-fe75c51690d6" },
-              { id: "5fbcdc1a-87fb-4aaa-9af9-c1ba45245990" },
-              { id: "cc39cb4c-4149-4cef-b73c-ee812f798e8c" },
-              { id: "2feabf4a-91fb-4f83-807e-6786d401001c" },
-              { id: "d28ee314-959a-43d3-86a7-fee9af394a08" },
-              { id: "8b6a099e-3d2c-48f6-8776-b54e5860ce21" },
-              { id: "419cb758-15d4-4fbc-b674-7cf0b9a01ad3" },
-              { id: "a64b77ae-81cd-4459-b7b0-b63e9eb9a520" },
-              { id: "09421c15-9331-4dbc-9972-be8ac826ae45" },
-              { id: "573899dc-8e02-4623-954f-437328ab2695" },
-              { id: "482aaafb-1722-4be2-989b-b4d26df0f5dd" },
-              { id: "4228d174-ef0f-4897-ab52-dfd1be59f892" },
-              { id: "0883378e-288f-4f71-8294-135f9b2618fc" },
-              { id: "a1955223-6432-4a22-9613-11bed061164f" },
-              { id: "0af84545-2ff0-42d5-a860-4c33aa8f53db" },
-              { id: "f250abfe-709f-473a-8a3c-71015a1388e3" },
-              { id: "a58ae8cf-5ab9-4866-abad-c9bbf80a3c92" },
-              { id: "936152d6-922c-427d-9c40-3c4589e16471" },
-              { id: "eeb1c7ab-d931-4c19-803b-4e15edae1323" },
-              { id: "d7600f30-432b-4ef4-bf02-3110e7a24c4e" },
-              { id: "6418b364-f848-4e3b-aff9-16797d095874" },
-              { id: "1a352f9c-c9b8-4219-9cea-5cc32365e416" },
-              { id: "b6d6d157-de97-460c-ad06-1a1613d6f980" },
-              { id: "4b9313fe-9293-435e-81cf-7845c9bff27b" },
-              { id: "18a4912c-1d5b-40fe-a9f6-16960b507e09" },
-              { id: "f33384b0-0e31-47bd-864f-f8fd3ce85ac6" },
-              { id: "e6d4aa53-5fa6-4179-9006-10028b906cdc" },
-              { id: "687634d8-1e89-4658-a979-2f5e72328aed" },
-              { id: "e8948815-1d2a-455f-b72b-cca3386c6ec8" },
-              { id: "62900a4f-ab8f-4b02-9cd0-244adfd4a86f" },
-              { id: "0e1ec92b-113d-4273-940c-e471370a9d44" },
-              { id: "a1bf3303-375a-41e8-87ce-522e54196653" },
-              { id: "8fc2582e-e705-460e-a67a-7a4a0d195da6" },
-              { id: "fab2cd3e-b5c8-4a0d-97c0-6e03428fe611" },
-              { id: "b7fd4980-7fe5-4352-b9c0-7d5fbf256c2d" },
-              { id: "50b7ec0b-8fa7-41be-aa39-c9808201951a" },
-              { id: "d072fc20-1580-4160-97f1-41bd55a5310b" },
-              { id: "ef587e99-f075-4e95-b939-e87e5cd61cec" },
-              { id: "54ad704b-f72b-4048-803c-d5d1d5c81479" },
-              { id: "96ec5648-541a-499e-a180-2eef1274cca1" },
-              { id: "726fa404-994e-4571-b742-c6ddfc07e6c0" },
-              { id: "ebef07e2-52b7-4dde-bc6b-6bded2b1c9ca" },
-              { id: "2538a247-ec2e-46d6-9768-3a23d34d8ed2" },
-              { id: "64d37d3b-c1b8-404c-858a-625a80960649" },
-              { id: "3c3a38d9-a3eb-4183-b125-0d1b2055be03" },
-              { id: "d7cd5f60-056e-44ee-83c1-89a2593d4dbf" },
-              { id: "93ef2db1-5cdf-4f7e-84f4-bca27244e13e" },
-              { id: "37076f47-8170-4c7d-af07-aa62413f8aa7" },
-              { id: "cdd4cd84-258e-49ab-a046-b9f387a8971b" },
-              { id: "78d2270a-bf95-4435-8643-7490df298a7f" },
-              { id: "cf82e8c3-c816-427c-b471-edb889ebcff1" },
-              { id: "47e92b41-a5ca-4a55-8ba0-1dd5aa2a6cfa" },
-              { id: "1876a0b6-a432-4427-8b36-5aad685e2977" },
-              { id: "fb815c00-e7f5-4b9e-9456-91b37ac94616" },
-              { id: "b7027977-3405-404a-9edf-ce036b780e16" },
-              { id: "e169381d-3c35-4d1c-ba73-9f97860b81ea" },
-              { id: "cdf05099-9796-40ab-aa9e-45bdefadffaf" },
-              { id: "ee1a2d20-bf56-4e4a-8603-15fd969a18c4" },
-              { id: "44033b3a-2b3f-40cd-bb62-bb97dddcd5e6" },
-              { id: "cf21d908-f141-41cd-85b0-4866f533e9de" },
-              { id: "6d5c35aa-116f-4844-a087-d55ab254517a" },
-              { id: "34a984ba-f414-4f77-9939-8a13017d3d57" },
-              { id: "201f4b4f-7346-4bde-a817-7d5e7ea3cdae" },
-              { id: "f250fcf3-c411-4c6e-b15e-79066553fbc0" },
-              { id: "8a9f6f38-230a-4ec3-901b-0e61c266ae25" },
-              { id: "befc1dd3-c6da-437a-84f7-4b6e083f5538" },
-              { id: "26112af8-c00d-4b63-bb08-0a0c0c716aff" },
-              { id: "b01c9e22-a9a8-4925-bbce-1f4fc9918238" },
-              { id: "6bf1ae3c-ff9b-4c0f-9d27-0583f39342e4" },
-              { id: "542c4c06-e370-43ec-b0f1-83f1657d7e9d" },
-              { id: "03b35ddc-3738-4522-9b11-7c079feecbe1" },
-              { id: "2d701b22-6018-4059-b714-fbf4ff41d13c" },
-              { id: "9caf41da-0de2-4630-aa7f-c8998e1cdfd3" },
-              { id: "d958ec82-7c1d-4a82-8150-435c2682ad5c" },
-              { id: "e28b49f6-527e-405d-b851-f53dd744271c" },
-              { id: "6f0672a6-48ea-4c8e-a15a-54cd6c70d9e3" },
-              { id: "58d548b2-346f-49de-8a44-b6e3dd2962fb" },
-              { id: "7c6ec259-a23b-4635-a087-dc6b57ad0b75" },
-              { id: "64fd425f-6c76-47db-9cf2-8d2398820dd1" },
-              { id: "a6692ac6-40c8-4623-a8f9-2f597fc1e0be" },
-              { id: "3978e92b-e283-40d3-9e8e-dc74cdb6123b" },
-              { id: "dda1f920-d8ca-48f3-a9de-6d99dbb3ab5a" },
-              { id: "7647625a-219f-4576-a130-ae4285f1c6fa" },
-              { id: "4edf2e2f-b36b-4205-a573-071a12f50d6b" },
-              { id: "52d05ea5-ca09-404c-9106-3404248312d2" },
-              { id: "50f2697f-1168-4903-b0d3-0d89bd526570" },
-              { id: "101712a9-60e6-4aae-ae20-e212b29982e2" },
-              { id: "47c59e67-6ee8-4708-bacf-d773e8fad58b" },
-              { id: "09582fc5-ddc3-491e-899a-a3c646a127c7" },
-              { id: "c031f8b2-81e6-4241-b521-79b9a53d9487" },
-              { id: "5487e5ca-1876-497f-b4dc-96c8af33108a" },
-              { id: "38ac1878-a677-46cc-a950-5c8c65239386" },
-              { id: "a23c223a-cc03-46b7-91df-758fe4fb5366" },
-              { id: "79520682-58c0-4004-96f3-998936694ca4" },
-              { id: "badd63ec-ee90-40db-ac31-d94754139201" },
-              { id: "5252fe9f-a33d-4249-905d-54d3a81420be" },
-              { id: "28e87587-344e-49d8-9c6f-4d38e19a0280" },
-              { id: "7669893b-5f2a-47b0-b19e-f7d0986265b3" },
-              { id: "c3c1d86e-6252-4461-8c86-29b892ae989f" },
+              {
+                id: "8ddd53ed-33ce-4943-9312-3e4415bd1f5b",
+              },
+              {
+                id: "256b320d-38c9-4af3-9bb3-97f796d1eb8e",
+              },
+              {
+                id: "a96248ee-9e56-48ff-bdea-0ac0acd92eef",
+              },
+              {
+                id: "2b599d48-edce-4c0d-a81a-bd29993e8725",
+              },
+              {
+                id: "3c8b6f30-e7f5-47d7-b7a6-f0a39462d4c9",
+              },
+              {
+                id: "04baf88b-5e21-49f5-a008-8df9dc8bbfca",
+              },
+              {
+                id: "a7a47692-ffe8-49c2-8273-54306edb0a9e",
+              },
+              {
+                id: "c01e01a8-dbea-48c4-820b-e6795df417b6",
+              },
+              {
+                id: "ae4fa733-58de-4bd7-aadc-1be6912cb1b4",
+              },
+              {
+                id: "f91f869d-b8f3-4a55-bd51-a7dd0a6c733c",
+              },
+              {
+                id: "f5a18a50-3188-4b5e-8c4c-de490a219f14",
+              },
+              {
+                id: "e3f5f240-667e-4a6e-806a-8825c28e9d57",
+              },
+              {
+                id: "329d2892-c201-48bd-a0e9-04d18fa7b8d2",
+              },
+              {
+                id: "103862b2-e258-413d-b875-dd36d3de51af",
+              },
+              {
+                id: "a518c840-dc16-4b22-a6d0-a676fc3e0a09",
+              },
+              {
+                id: "00debf43-429b-4d45-8a43-073bfdb3316d",
+              },
+              {
+                id: "36adfdcc-a58d-4248-b4d6-6b7f807f89ed",
+              },
+              {
+                id: "3e874668-7438-4b6b-b7e0-bdb42dd08c51",
+              },
+              {
+                id: "ae386d2b-f69c-4220-9af4-8a11def58845",
+              },
+              {
+                id: "913035e6-c979-4e94-ae51-f6a85465f64c",
+              },
+              {
+                id: "b8d7d71f-d368-4439-9cda-8e2d2cdf9ac5",
+              },
+              {
+                id: "9c348596-b299-46ee-9d8c-a4b563e511f7",
+              },
+              {
+                id: "3d098b3a-c735-4c89-8c7b-2419f1c8fcd3",
+              },
+              {
+                id: "dad59208-2c60-4009-ba6c-2c22a32041b8",
+              },
+              {
+                id: "170ad855-0702-45cb-adc5-514a1f4f7aa1",
+              },
+              {
+                id: "7016386b-9d24-4b48-924d-35930bdf616a",
+              },
+              {
+                id: "e834a7fc-46b9-4fc6-b5d4-d3c50466713b",
+              },
+              {
+                id: "9f1c42f0-6ab7-4459-8931-542a3514d781",
+              },
+              {
+                id: "cd1c1a70-c258-4b8c-a5cc-cea0901ccef1",
+              },
+              {
+                id: "43c68cf7-c4a7-4b59-a0f5-26cab4da7ccc",
+              },
+              {
+                id: "1c7c7fbe-5e68-4d52-812d-b0191fe8b875",
+              },
+              {
+                id: "932b63ba-e792-4a5f-8175-250e3fe80f67",
+              },
+              {
+                id: "0caa69f3-1f97-4169-8320-2745e0757ca8",
+              },
+              {
+                id: "aa644d42-8ad3-4b63-a114-bbc6bd968ae8",
+              },
+              {
+                id: "2eac70d0-c9ce-48e9-9f50-12c695f7f834",
+              },
+              {
+                id: "0d4a2007-f081-4b11-9066-da6cc0342556",
+              },
+              {
+                id: "7cdecb79-7312-488a-8784-80912e18133c",
+              },
+              {
+                id: "029d10d3-a5b4-4af5-affc-a57be687d1aa",
+              },
+              {
+                id: "885969e1-2763-4ca6-a412-44ee9e0b7f0d",
+              },
+              {
+                id: "845df6a0-0f4e-4219-9845-23b81137c03d",
+              },
+              {
+                id: "91fd5e5e-ff5c-4ae3-bcfc-624cac93edb8",
+              },
+              {
+                id: "ff6a4ddd-3c55-407e-ad9b-72ba8a40aa4e",
+              },
+              {
+                id: "1c07e0ce-e2a3-403a-905e-d19882dd3a81",
+              },
+              {
+                id: "a452a880-d423-4762-b88d-352a74ea2c1f",
+              },
+              {
+                id: "902a6459-4f20-4a75-85a8-3ed89ce712be",
+              },
+              {
+                id: "c83b5a51-9c73-482b-bda1-06b0dca20017",
+              },
+              {
+                id: "4098e75a-b933-4aee-99ea-4ed8fc5f61fe",
+              },
+              {
+                id: "a09f4f28-b980-42d0-abe1-3310321a53e4",
+              },
+              {
+                id: "a0bc6f03-ba2c-4d00-b05e-47438a81c0c8",
+              },
+              {
+                id: "91dff421-c971-4b36-9d06-35100261eb0b",
+              },
+              {
+                id: "1cebab74-4ffd-4634-88e1-49174a76ce25",
+              },
+              {
+                id: "452959c6-18a8-4575-a7b3-8a2c1dff8a52",
+              },
+              {
+                id: "2be1786a-eab8-4578-b7db-08076bf73f0c",
+              },
+              {
+                id: "829c51d1-c514-4919-8a06-ba758a24ed6e",
+              },
+              {
+                id: "4b2f219c-31da-4926-8203-b92b9bf9d074",
+              },
+              {
+                id: "b4cb06ff-0e2a-437c-8652-7bb06f714867",
+              },
+              {
+                id: "b7391cbc-33e4-40c4-aed9-4e92cea45076",
+              },
+              {
+                id: "aebd0bd5-1eab-47e3-95f9-5d115c3fadf0",
+              },
+              {
+                id: "855d2da7-fa47-43e1-8bdf-1324e3be5213",
+              },
+              {
+                id: "fe82a3ce-64da-47ea-acc2-d93be2a443b3",
+              },
+              {
+                id: "05a375e2-5213-4db5-b0dc-cf3350a7ad36",
+              },
+              {
+                id: "d37181e2-5aa1-4341-936b-eb2f77bb0bab",
+              },
+              {
+                id: "acbd7eb1-7a5f-4e16-9597-f3d9b0c64136",
+              },
+              {
+                id: "e2207c40-db95-4fc9-bcc4-602cb29a4b8d",
+              },
+              {
+                id: "22eb9e30-28f0-49ac-9590-0a17b99404cd",
+              },
+              {
+                id: "3202d92c-b23b-4d57-b363-14f703b87076",
+              },
+              {
+                id: "0739187e-a69c-4129-95db-9813e28dfc56",
+              },
+              {
+                id: "4b362cb2-a4fa-4c1f-9d12-1f991c684535",
+              },
+              {
+                id: "436d7524-1b1a-4dc0-bd8e-547850adbb2c",
+              },
+              {
+                id: "1194331a-ca39-4b88-a2ad-c4ec8bf3b97d",
+              },
+              {
+                id: "c01b058b-ac9c-4543-9789-325b55ae80cc",
+              },
+              {
+                id: "f7a61bc0-7f08-433c-b5d4-6aecf34e0ac3",
+              },
+              {
+                id: "91ff8e5b-c10a-40c7-a75f-8ab3d047b49f",
+              },
+              {
+                id: "8afc3b96-27c9-4086-ac47-3e4caae98689",
+              },
+              {
+                id: "4b03ab55-f7b2-42a9-90c1-eb2ee300c89d",
+              },
+              {
+                id: "2111abeb-993a-4812-883a-96e0aebcd244",
+              },
+              {
+                id: "6dda6ea2-8bb8-466d-9560-89103b475487",
+              },
+              {
+                id: "e96fb21f-2acd-4693-9ba2-72ce948ee8eb",
+              },
+              {
+                id: "43678726-6730-4f27-b94c-a696c286237c",
+              },
+              {
+                id: "05a119a0-f232-410c-bd44-b5e17e00f427",
+              },
+              {
+                id: "1a25ac49-2d14-4f80-a6e7-b404d7e1790b",
+              },
+              {
+                id: "76af2fda-9235-48e2-b1ac-f7158ce6d11d",
+              },
+              {
+                id: "306e01ed-bb84-41b2-b976-aeefbea2d89f",
+              },
+              {
+                id: "c04ce87f-25f1-471e-9991-7de7897f346b",
+              },
+              {
+                id: "94337755-60da-4f93-aa5c-2a84393659e0",
+              },
+              {
+                id: "622415b2-6da0-4bd5-b8e6-bd0a348b86d6",
+              },
+              {
+                id: "69048ee9-1e35-488d-838c-0e40d2c9ff58",
+              },
+              {
+                id: "8914d877-bd2a-4267-b2ab-16324909812f",
+              },
+              {
+                id: "dcb81d98-7bf7-4d58-80a4-d10e53b64b44",
+              },
+              {
+                id: "5780db88-2a01-45b5-aab7-a1710f5cf792",
+              },
+              {
+                id: "d388ed07-316a-495e-a60c-eb076786a3db",
+              },
+              {
+                id: "d97a6153-6fbb-47cf-85db-bc3decdfbc55",
+              },
+              {
+                id: "ad86889e-492e-4e37-9df1-244fb4c70ffd",
+              },
+              {
+                id: "62a82cf4-48ce-474a-b435-a1413026f14d",
+              },
+              {
+                id: "715a30a3-bf4d-4d1e-aa48-455fee0effb8",
+              },
+              {
+                id: "bb055f81-ab2a-48cc-b9b5-7b804fc49f64",
+              },
+              {
+                id: "4c33e6e8-18a4-43c9-b99d-32963910b451",
+              },
+              {
+                id: "46df00fe-7a91-496f-a03d-35e5c0ec3cef",
+              },
+              {
+                id: "3db59826-3010-46b1-9afd-f9b59a1779c8",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -1692,6 +3577,7 @@ const execute = async (db: PrismaClient) => {
                     description: null,
                     website:
                       "https://web.archive.org/web/20240217201147/https://nexoscans.com/",
+                    email: null,
                     discord: "https://discord.gg/neoxscan",
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -1701,64 +3587,170 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "8e29b6bf-6d17-47c1-b094-05e81c5149dd",
+            id: "74792489-e23b-4c7f-adaf-ff8ba5789a07",
             number: 70,
             volume: "3",
             language: "pt_br",
             pages: [
-              { id: "edb5ed73-9901-4055-9d29-1264059a7ea7" },
-              { id: "91ac1f38-499b-4bfc-812c-90b7a8627091" },
-              { id: "6d8df04c-ba2e-4c57-a256-93a21a478163" },
-              { id: "5f97b693-be0c-4319-88f7-e9c69426c8b2" },
-              { id: "cb78e464-8994-4abf-b280-d1b75966f287" },
-              { id: "7842993e-aeb5-4a34-86c3-32fb476c3513" },
-              { id: "4430d45a-17e8-4d04-aa39-7ccf8583cbc3" },
-              { id: "10aa9aac-002b-444e-abb0-5a45f2356ad9" },
-              { id: "746d5a45-41ae-4cc2-9fd4-be50722e2535" },
-              { id: "214a4ecc-8e37-491f-b5f7-97f85dc14eca" },
-              { id: "b57775bc-5c1e-4bc5-a1d5-77ca0f042107" },
-              { id: "c9f21601-52bb-4c07-8038-6c0439bf80a8" },
-              { id: "dffbda0f-fe3e-4949-8cc4-32958527ab62" },
-              { id: "d13b4810-13d4-47c3-ad30-64265e8f29d5" },
-              { id: "29d7c46c-face-4305-bf52-4c73fa1d2c91" },
-              { id: "5e19b747-2a6f-4799-a546-fb94018fc51e" },
-              { id: "4ffc3576-a381-430b-800e-01b6e05a2909" },
-              { id: "9e428e9c-2b1f-4bae-bdc3-5c0c2cffd020" },
-              { id: "85df74a0-f725-4abc-afa5-0f2abb4422cc" },
-              { id: "c4811d9c-5f98-4abd-b3ee-243f8b653f06" },
-              { id: "25af0faf-fda1-46ef-9fd8-294269dcb90f" },
-              { id: "a183e522-65a5-42dc-8d4e-25da4befa30e" },
-              { id: "a1b17f1b-e0e7-4abb-8aed-282692a315ab" },
-              { id: "75baf278-3706-4a1d-8831-81e660786678" },
-              { id: "c9a0db47-fcb5-40c0-bc59-d59f5fed1958" },
-              { id: "2ae69ba2-cc3b-4641-9b0b-022b40b68b04" },
-              { id: "5bbd3946-f9da-4a93-abcd-140ea48442e5" },
-              { id: "54824587-4c78-45ab-8594-777ca2b32094" },
-              { id: "05bda843-0fb1-4683-8deb-fd58f5f003fc" },
-              { id: "3a8c36c0-246f-4013-9e62-ce312eafe090" },
-              { id: "a2ed45c7-8667-4fe6-9939-598217f001b1" },
-              { id: "f0328568-962a-4f88-a58f-9064b67068d1" },
-              { id: "35384a19-88c7-4764-9860-822a2739e4a5" },
-              { id: "3a93fbf6-ace3-4748-bdf4-7b433bce1481" },
-              { id: "2c6a6136-d17e-4c56-b8d3-4c316fe15694" },
-              { id: "21def99f-3dbc-4c27-a226-2f751ae750d8" },
-              { id: "04a1b2f4-7e66-4574-a5e2-ba338b72446c" },
-              { id: "f7d62405-ad60-494c-bd28-5a2a365be8dd" },
-              { id: "68a4a623-baf5-4f2f-9a81-fad1545229c8" },
-              { id: "57b9e835-5605-4c50-bcec-7bd32270a8d5" },
-              { id: "9c3e894e-1e09-4d93-bd08-f006f121c42d" },
-              { id: "077eca00-18cb-4658-91e5-2bdd47b49ddc" },
-              { id: "6cb23c95-32ce-486e-b6cb-a1a57875855c" },
-              { id: "6cc9397e-beda-4a76-a8e6-e4f7ed8233c8" },
-              { id: "554f11a5-b0ea-4694-91cd-5ef1d211b25a" },
-              { id: "ee1d830f-c879-456d-91b3-d9c9d647afdd" },
-              { id: "2b9696cd-71a6-44f9-8f3b-f4a5348cfa18" },
-              { id: "f9addc00-d3ea-4cf7-8dd8-d077707d08ec" },
-              { id: "c0ccf40a-a579-461f-beef-dc734514af2c" },
-              { id: "2af126fe-e157-4658-a50b-d4db5d38f73c" },
-              { id: "3317ddcf-b15a-4c8a-94af-204e28fa4aab" },
-              { id: "52e9aa2d-e474-486d-a2ca-13549d9cb5c4" },
-              { id: "76d08fa9-b851-48c5-b306-fa8397e9b5a8" },
+              {
+                id: "9bc7e768-4c1f-4218-8e79-b7a8b7b78713",
+              },
+              {
+                id: "a167e253-4bc0-4aa5-88ec-160c7ba30438",
+              },
+              {
+                id: "c6cfb485-e0ce-47ab-b5a5-60a05aa4cad0",
+              },
+              {
+                id: "47e1f703-f54a-4aad-bc33-95430b210f02",
+              },
+              {
+                id: "e9de1846-da4d-41e8-8ffa-b4b07f57da16",
+              },
+              {
+                id: "c182a937-83ee-407c-82a2-2189eb892bc5",
+              },
+              {
+                id: "db4a9b89-e1ab-45d2-b1f8-26aa8758cc36",
+              },
+              {
+                id: "76010416-c390-4f6f-83a4-c2386a8ffdad",
+              },
+              {
+                id: "cf7a0932-2521-48ba-9a80-6f4d401a88c9",
+              },
+              {
+                id: "d85a6a81-3928-4785-9f27-ddf611b65101",
+              },
+              {
+                id: "d3983e94-c534-4e21-81de-7a6d02977211",
+              },
+              {
+                id: "c7345fb8-8d59-4837-bbb4-598a50abce81",
+              },
+              {
+                id: "7ed4a771-3506-444b-8e42-b8eb1cb4631b",
+              },
+              {
+                id: "8360779a-f401-4a90-a338-d032dc6cd28a",
+              },
+              {
+                id: "22c94687-b27e-46bd-88d5-71621f4f7b09",
+              },
+              {
+                id: "cd921afd-b576-4fe6-a1c4-1d76390296c2",
+              },
+              {
+                id: "950c10c0-64d0-47be-ade6-ef0a8fe67e72",
+              },
+              {
+                id: "c93a6d01-152f-41ee-9f34-8f2a519ca60e",
+              },
+              {
+                id: "58d2c812-2204-4d2d-a55f-23415b7cb2b2",
+              },
+              {
+                id: "8adc02c3-3296-43fe-9698-5da4d22070d2",
+              },
+              {
+                id: "9cb7a734-9164-43f7-be00-b3dc61ce0dae",
+              },
+              {
+                id: "1b9978aa-73c9-461b-a65d-cd527aad5291",
+              },
+              {
+                id: "a17ccb60-3a8f-463e-8709-cbe8ed53f4c6",
+              },
+              {
+                id: "3b090f22-ec46-40b7-b79a-5c2da2ad19b7",
+              },
+              {
+                id: "e73d02e1-0344-4df1-84f9-e368d6d387eb",
+              },
+              {
+                id: "e6e2b286-cc41-4959-99fc-dd380b3b72c7",
+              },
+              {
+                id: "213dcd4c-368e-4f9e-9207-4cb7bae1fc3e",
+              },
+              {
+                id: "66d2e55f-62bf-4586-833a-1435185eec02",
+              },
+              {
+                id: "5e74ff07-1405-4c68-80ee-f42b24e80130",
+              },
+              {
+                id: "8ed1ca50-6dca-449b-ad7e-be3af82aae9f",
+              },
+              {
+                id: "ec39b0a9-fd56-4294-8d7b-66064a4ab6fb",
+              },
+              {
+                id: "fde6c87a-a73e-4633-8e55-f99c7faffb04",
+              },
+              {
+                id: "12152828-5d16-4fb5-ad99-10f051427a90",
+              },
+              {
+                id: "0deb40e4-be22-4733-b902-ad3ad53f3a9d",
+              },
+              {
+                id: "d437a2c2-b992-4de4-bdd0-c34e4629d646",
+              },
+              {
+                id: "66364df0-05f1-4cad-bf45-99aec5b93aee",
+              },
+              {
+                id: "404bf23e-b715-4ddd-be8f-f974ba3a5afa",
+              },
+              {
+                id: "180f202b-7177-41cc-b847-57355029ec4f",
+              },
+              {
+                id: "d63ef10d-d67b-404e-8a3c-1314ccff3e3b",
+              },
+              {
+                id: "41f1f53c-02be-4640-9347-19f6a76c7087",
+              },
+              {
+                id: "c26e6dbd-9b67-4106-b3e4-7282ffbea8c6",
+              },
+              {
+                id: "17e47aa4-4626-4998-98ba-fd2ffa2f43bb",
+              },
+              {
+                id: "caff6720-4608-424d-9c5a-e90119af3c7d",
+              },
+              {
+                id: "95422394-8147-4ab6-9c64-92094eb3a803",
+              },
+              {
+                id: "e1caef81-3d30-45ca-819f-e587725e3f71",
+              },
+              {
+                id: "21724d29-4eda-4a8c-bc1a-028eb80c1b72",
+              },
+              {
+                id: "1178b835-f1b1-46a8-a2b6-f6f5012f498a",
+              },
+              {
+                id: "07b67ad2-7746-4aa5-9a89-289096960c50",
+              },
+              {
+                id: "33f24b53-1d2a-4666-b805-4c5667d67a22",
+              },
+              {
+                id: "72716dbc-4f7e-4b5e-b1a0-8e240dbe08e4",
+              },
+              {
+                id: "0f114725-2a52-4685-b0cf-0cc3577e2056",
+              },
+              {
+                id: "9baa615b-6941-4782-8be9-e1b1eab449b7",
+              },
+              {
+                id: "3fa29ff7-9b0f-4c8b-a193-2c80e939b6bf",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -1771,6 +3763,7 @@ const execute = async (db: PrismaClient) => {
                     description: null,
                     website:
                       "https://web.archive.org/web/20240217201147/https://nexoscans.com/",
+                    email: null,
                     discord: "https://discord.gg/neoxscan",
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -1780,68 +3773,182 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "09e71411-c840-4c87-a00b-cd0aa02ff9a2",
+            id: "cf6ef6d9-266f-41bb-8cef-55e515e08490",
             number: 83,
             volume: "3",
             language: "pt_br",
             pages: [
-              { id: "17f5aafc-6e67-4389-beeb-382ec39ba262" },
-              { id: "ac12d8d2-db2a-4a4c-a2fb-82a89d1226c7" },
-              { id: "a6b9a082-c556-4485-80a4-8fa5dffc54aa" },
-              { id: "3d2efa33-c9b9-4bcd-981a-25c7016d3d01" },
-              { id: "19f82e37-4dfc-4548-9d16-327397da6b0d" },
-              { id: "f90cacc9-33b2-4e02-a1fc-6be6d92835bd" },
-              { id: "73bb8533-5f85-4a61-a810-7c8087d12adc" },
-              { id: "923ccb5a-986d-4c57-80ad-5924bc05d934" },
-              { id: "08a45b01-42df-4e4f-970b-d395f5201b93" },
-              { id: "fee4101c-4ad3-40f8-9abf-44cff1c99a43" },
-              { id: "d31bf4eb-bed8-48fa-a7bb-acf9039e980a" },
-              { id: "9cf15d07-2816-4fce-80e9-3a98167ebd5b" },
-              { id: "f72c5e3e-5c8e-4571-924b-ae55561fed0b" },
-              { id: "787f0589-13e5-4b99-9319-ed90291ed360" },
-              { id: "a6b0bb64-de7b-4cb6-8350-e707b9dc83b6" },
-              { id: "70fca3ea-3f71-49f2-b9b3-842a84c6665e" },
-              { id: "5727a2d6-eb8a-46f2-9014-3ff7e0b009da" },
-              { id: "bf4da0c2-bc18-4ec5-8526-5d47e4bdf2a5" },
-              { id: "8956f6e0-adc3-4482-96b4-be9c1d7b98f0" },
-              { id: "f8ca2469-1bd3-41f1-8bce-602cdaaac515" },
-              { id: "422da993-cc9f-4baf-9821-65bb42ffaf66" },
-              { id: "94ebe19a-bdff-4e43-b118-be710fa214f5" },
-              { id: "569c615c-ed88-462e-ae19-e9bb58327138" },
-              { id: "ef151bbe-c32e-4609-9b76-fe98f32226b1" },
-              { id: "6232810c-5e8c-427f-8acd-0850f594004a" },
-              { id: "2cc52483-5ef5-4c46-9127-b8443f38242d" },
-              { id: "56760646-a9ee-48d4-99ee-b15b6c4a09ea" },
-              { id: "71635ef8-cd47-440c-a2ed-e387c1dd3215" },
-              { id: "4c146715-b876-4976-b663-eec45cbc92dc" },
-              { id: "c265e5d9-b8b9-4116-a330-20e7ff25f9e8" },
-              { id: "a6fb564b-3c04-4f45-b112-73574784c45b" },
-              { id: "d93de853-add2-4313-8df9-05d802a6398c" },
-              { id: "196693b2-4228-47ba-ad3a-b2b40c967efe" },
-              { id: "264f5026-de03-4af1-a7ba-fbaf9fae392d" },
-              { id: "3a680cf6-1540-42b1-9777-00e7520547dd" },
-              { id: "6f4ca943-bd06-4c22-b22d-fd6e01118e0f" },
-              { id: "35b7f9f3-24a9-424c-b316-3f63d31e15ea" },
-              { id: "5a899113-c704-4b04-b017-d885d6438030" },
-              { id: "e2ae701d-a6df-469b-90dd-1f22de880d95" },
-              { id: "6a4a13f7-b25a-4c56-a897-7b697308bf00" },
-              { id: "9b429ac5-76be-4735-9be8-2b174f04c218" },
-              { id: "ff88f7b7-2d3c-490f-9575-bd6afdf2ac90" },
-              { id: "0fcd49d4-2ca5-45f5-b064-129515dba4ae" },
-              { id: "bb1f7e3e-5b99-421c-8633-a5c6d0c01f88" },
-              { id: "f263aa9b-34d9-48be-a720-52a3f4361692" },
-              { id: "890d80b1-4f46-49a2-a95d-d5f0c9ebb6bc" },
-              { id: "570134de-daef-4d58-a675-d88cae7d7f69" },
-              { id: "681e9722-c85b-4093-b6e3-94203eb416b6" },
-              { id: "54c305ad-640f-4d94-a382-b6b92839249f" },
-              { id: "0a1e330c-03df-477b-8907-10c2cc635f1c" },
-              { id: "0773c4d4-4cf2-4087-8af5-65084a191c79" },
-              { id: "a20ee734-edb1-454f-84f6-1827137b6217" },
-              { id: "148cc61d-9d30-421d-b54d-fd506696f707" },
-              { id: "2dd555d3-256c-455a-91b2-215efb54b1fd" },
-              { id: "7d146dd6-aebf-4d49-bbf2-908cfdb60375" },
-              { id: "17ae242f-6689-4fad-90e2-833df19671a0" },
-              { id: "9390a2ca-c94c-40fb-88ae-43669d3bd789" },
+              {
+                id: "d72d3d7e-8341-443f-b11b-048144a16df0",
+              },
+              {
+                id: "9526b0c6-e79c-4040-b69d-fded42f6fce1",
+              },
+              {
+                id: "cadcf369-397a-43a8-8bdd-84dc3bf17b76",
+              },
+              {
+                id: "8dbe75cc-2c0d-4565-8537-23be75d4955a",
+              },
+              {
+                id: "4b281c73-dc81-42a4-a50e-0ac083a6ffe9",
+              },
+              {
+                id: "344637a6-a36c-46b4-8696-6d00e8f8f171",
+              },
+              {
+                id: "6e132402-14bf-4265-b0bb-43a9966d8afc",
+              },
+              {
+                id: "1d5b5af4-e3de-4fbf-b151-41107d893c87",
+              },
+              {
+                id: "8a38995e-976d-45a4-a34d-a224f88500c8",
+              },
+              {
+                id: "9b5474c1-64e1-4dbf-8765-6b4c07bf9daa",
+              },
+              {
+                id: "f892baca-f7fb-46e6-9589-602de09054a9",
+              },
+              {
+                id: "9a8e3c41-699d-4f11-b7a9-c70bebc408e3",
+              },
+              {
+                id: "964b4f9c-36f9-4f58-abde-8a5b1c7666c4",
+              },
+              {
+                id: "8c19e78c-9951-4c91-b047-c52a5d35acd6",
+              },
+              {
+                id: "a76d89ee-ee93-4153-afb3-73c01bbf5cd8",
+              },
+              {
+                id: "1455c579-5303-4839-bd3a-0f497050cf50",
+              },
+              {
+                id: "f371949b-026d-4817-846c-b4f6a8c9dd9d",
+              },
+              {
+                id: "b1001b2a-617e-42d1-90ab-9a75ee99571f",
+              },
+              {
+                id: "27efeecd-5859-4a1f-9dbf-6a21ba9aa74f",
+              },
+              {
+                id: "b7a412c9-eb76-458a-ab87-1fa215af7c07",
+              },
+              {
+                id: "524b9f73-5bd8-4e60-837d-089646c33f49",
+              },
+              {
+                id: "e7ae6bd9-f6b5-4f09-be8b-89a8333415fb",
+              },
+              {
+                id: "e7d7e74b-128e-42de-8a4a-05c48a475cbd",
+              },
+              {
+                id: "945b25fd-2362-4a84-8e15-d66261b4ade2",
+              },
+              {
+                id: "569f6b15-3636-4604-9d4d-2bcba4e723f2",
+              },
+              {
+                id: "5be22e0a-3a4c-4acd-af14-e911bbd41977",
+              },
+              {
+                id: "768d4f8b-3a7e-420b-86cc-92979c842b65",
+              },
+              {
+                id: "3cbc0926-66aa-41e0-a51b-65a6b62a8aeb",
+              },
+              {
+                id: "cf272b19-adbd-4e1a-a2a3-315bd5b2c906",
+              },
+              {
+                id: "eb97648b-1c50-46af-b25e-9157429cafee",
+              },
+              {
+                id: "2afcf588-f1d3-4025-9803-45b14b51dec3",
+              },
+              {
+                id: "c5adf7e8-f82d-41ba-a70a-32692a9a5a54",
+              },
+              {
+                id: "aa654d14-db87-430d-8761-8e48646044c9",
+              },
+              {
+                id: "e364d744-bb0f-43d4-984a-27035ca7b827",
+              },
+              {
+                id: "9326429f-213b-4b67-b67d-5250a06c856b",
+              },
+              {
+                id: "a0fc96c1-9653-4416-a142-4889fa754f61",
+              },
+              {
+                id: "13b59491-9fd9-45c3-9296-86cc1beacd10",
+              },
+              {
+                id: "158f69ec-af14-4722-8c8c-7e7e26b4b0ee",
+              },
+              {
+                id: "bfa254d6-e1a2-4629-a7ea-61ce8b9d9243",
+              },
+              {
+                id: "dfeed3ee-8df9-43d7-9d3d-3b73373bb2c8",
+              },
+              {
+                id: "ef295294-5312-4703-a667-b52dd3bf6e0e",
+              },
+              {
+                id: "9192740e-8746-4da1-8544-f76408c945d9",
+              },
+              {
+                id: "356edd09-0ccb-4d2a-919c-0a9642ffce54",
+              },
+              {
+                id: "9cf25a4c-7a8d-4f9a-9975-9440445adbca",
+              },
+              {
+                id: "054bed82-d5ee-491d-b2a3-3ca7f1b3f809",
+              },
+              {
+                id: "aafa0f2d-22c2-4f2e-9361-1a0cc35a2e3b",
+              },
+              {
+                id: "f6e05970-a1bb-480f-b45a-6804827e672d",
+              },
+              {
+                id: "dea8cdb3-2020-49b2-8adc-3afeb6b6b71b",
+              },
+              {
+                id: "e214a176-b908-487b-837e-f3fe093f9fa2",
+              },
+              {
+                id: "6ff92e39-a8a2-42c4-8efe-3253b3891799",
+              },
+              {
+                id: "8b657fe8-a54c-433b-a986-23afae088fc7",
+              },
+              {
+                id: "a08eeda9-ef38-4b74-9581-2fa7a99673f4",
+              },
+              {
+                id: "4ec02928-ed46-402c-8a4a-0983ded9cc22",
+              },
+              {
+                id: "5b6e54f1-6cc6-4920-a67f-eff717aecc94",
+              },
+              {
+                id: "04fba824-12a8-4998-be71-4fc70b99deec",
+              },
+              {
+                id: "fca9fd3f-6923-49ac-b32a-5bd08dc08abb",
+              },
+              {
+                id: "9b847624-bc4a-42d6-ad53-79dae25f88cb",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -1854,6 +3961,7 @@ const execute = async (db: PrismaClient) => {
                     description: null,
                     website:
                       "https://web.archive.org/web/20240217201147/https://nexoscans.com/",
+                    email: null,
                     discord: "https://discord.gg/neoxscan",
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -1863,69 +3971,185 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "8cdf0af8-a538-440b-971a-a39fe1b62385",
+            id: "726f9be9-036d-4fc5-9c3d-07435a5a67c0",
             number: 96,
             volume: "4",
             language: "pt_br",
             pages: [
-              { id: "b192cdff-7490-4d14-84cb-8e20e3f05ee4" },
-              { id: "c84accce-487b-4fa2-a17b-0a1c316f807a" },
-              { id: "a5b7b0c6-3953-43eb-a085-4b4142b20071" },
-              { id: "0b606b1b-0cdd-4676-b67f-42e0ce2529f0" },
-              { id: "028d99a8-9f93-4815-991c-53083ea0c123" },
-              { id: "08ac8ec6-6204-4568-b9cf-1be49df974ec" },
-              { id: "db5ee14e-06fe-4a73-aa0a-115026ed87d2" },
-              { id: "3c3a6250-dd14-4e54-a90b-e173ef475884" },
-              { id: "a097f4ff-513c-47f1-a4fd-34277f594c8c" },
-              { id: "3876c918-57bf-44a0-92c9-e57c3e122f0a" },
-              { id: "63785132-eb25-40d4-872d-01e3b2ccb1f1" },
-              { id: "147642c8-0ede-4807-8563-c6ab81ad7379" },
-              { id: "496dd301-48ca-46c5-bafe-daab439ad4c6" },
-              { id: "b8ea1978-a21e-4121-8923-2eef50ed215b" },
-              { id: "c5708a00-0e75-4b09-926b-f1d4bbc08be2" },
-              { id: "88f831e5-044a-4111-ab54-0f841d1b5186" },
-              { id: "5f07b2e4-bedd-4bcb-97fa-a117beb7c0f4" },
-              { id: "791c4d2f-fa38-4400-916b-afebeb37c68a" },
-              { id: "1baf2aa1-a0e5-42d4-8b80-d8a4e8f183ac" },
-              { id: "738f2d81-e98a-4c85-8a97-dc8a79f165c3" },
-              { id: "f28f1320-b4f1-44c4-9a11-ae582e6baaa1" },
-              { id: "815885c9-fbd2-4591-9c08-a30e95813f0f" },
-              { id: "f9cabb2c-a5d0-4f07-8a3b-bc150c44afb5" },
-              { id: "3b9cc0cd-84d9-4712-bff0-f6bc9aa66377" },
-              { id: "15f2be6b-4197-4b11-92ca-237946702378" },
-              { id: "a85331a3-83e6-4e92-a38c-182b14bed8b4" },
-              { id: "3604c948-a11c-432e-84ff-8c6ea78d60ff" },
-              { id: "60ed8d46-b9cf-4236-884e-9db3f2915215" },
-              { id: "a88545ab-6798-4c83-a533-351e7851a4bb" },
-              { id: "88f80487-1fab-4d7e-bc7b-8033c6a9ae3f" },
-              { id: "3e48a56c-2fc8-4f22-88f2-5ae255345b13" },
-              { id: "927cc6a3-6a91-47eb-b255-44c7ab5d5607" },
-              { id: "c570ea30-9631-42b3-a170-bfd817916677" },
-              { id: "6779a629-2ea4-45c3-9a1a-0c942ef0488a" },
-              { id: "3b3fada0-2225-45eb-b81c-dcfaf458b0f7" },
-              { id: "090c06ed-28f6-4a88-9b4f-ad6eaee77223" },
-              { id: "be2b98ba-4779-452e-a660-399862cf6ba6" },
-              { id: "b13e3efe-75cd-4608-a4f9-d7bc693f4689" },
-              { id: "7dba278b-6110-4cab-9083-573e1afb9c14" },
-              { id: "96b571d7-cfb7-4486-9a3f-0f8211821da0" },
-              { id: "608e83ae-099f-48e4-8525-ef7e2d3bbe18" },
-              { id: "73b19ca7-29b1-4181-a10f-db49a3d1b793" },
-              { id: "92ac38c7-5ce0-47a3-bafd-0cfeaa186811" },
-              { id: "64b1fa4a-3d45-4bcd-b876-90e5978a8f3d" },
-              { id: "fae683ea-4ba6-4297-b65f-f365fc6b8715" },
-              { id: "8d141ffb-3f46-4d48-a532-0a7514f378ce" },
-              { id: "48015ea6-0261-4b9d-8193-a8f79b5e9768" },
-              { id: "282c50af-d1db-4116-b3ae-887e8222ff6f" },
-              { id: "b2513e50-04cb-4c76-8514-0e68dd7d9621" },
-              { id: "44f8e7c7-27ac-4b2c-94dc-cb5ba5a3924e" },
-              { id: "58ef280c-98b3-49d1-931c-1521e48e5dd0" },
-              { id: "7afc5cce-8cf0-40ee-833d-5235edf5ee3c" },
-              { id: "337aa7ae-d35e-47d2-a9bd-f6393807ddd5" },
-              { id: "e95cdbf9-cd2c-4bbd-a890-582110570101" },
-              { id: "ef3f070d-1194-4838-81c6-ef62a55e0a06" },
-              { id: "971cdd4b-95c1-4c32-b12f-8148dabb1ae7" },
-              { id: "36e92b5c-4afc-4c7f-8826-7008e31b6e39" },
-              { id: "54faf5a5-e238-47c4-8cac-f6d3f5b629e6" },
+              {
+                id: "f752b435-dcc0-4c50-9c06-e44319a725d7",
+              },
+              {
+                id: "39268fc9-275f-4846-8e25-909956197361",
+              },
+              {
+                id: "7ce8423c-7d6b-4144-bf2b-efe350cf0412",
+              },
+              {
+                id: "8f5db531-cc31-4daa-8c77-7827f51d401a",
+              },
+              {
+                id: "eb7cd992-3c46-4e46-8c39-13389aea250b",
+              },
+              {
+                id: "7716c11b-75e2-444f-b5d4-c98fc8d0c8c4",
+              },
+              {
+                id: "c0aeeb98-0fb1-4823-a47c-4c67ce66fa5d",
+              },
+              {
+                id: "65279eea-390a-467b-a3f8-fe29eff96a8a",
+              },
+              {
+                id: "6d761679-81e1-456f-939d-973e82fef08e",
+              },
+              {
+                id: "94da12d0-78ff-4f00-b43d-d9c59386ebb2",
+              },
+              {
+                id: "bdefed83-5f7a-47df-8447-27a3cb8983df",
+              },
+              {
+                id: "d89bd9ff-3eb2-4f0a-b651-5e68e881b325",
+              },
+              {
+                id: "16e5d158-522c-4c89-9c72-e3abd39ca803",
+              },
+              {
+                id: "9b94a92a-c554-43e5-9902-1965c61146b9",
+              },
+              {
+                id: "8cfa1a8d-5998-4bf4-89e5-c3c05e283ab5",
+              },
+              {
+                id: "d321dd65-8eb0-46fe-9258-67a00a3ee046",
+              },
+              {
+                id: "87de018a-a3fb-4181-91c4-7f889c3f9210",
+              },
+              {
+                id: "ad64d08e-c53f-4333-bcba-3fac382fe62e",
+              },
+              {
+                id: "b4950d99-1314-4299-841c-49f6e6af251a",
+              },
+              {
+                id: "127839df-72b7-4944-a3a9-b45c2d483d9a",
+              },
+              {
+                id: "695a98b8-5edb-4e9e-9626-9867dd1b6243",
+              },
+              {
+                id: "6c39bf9b-9a1c-4b7b-94bc-d345eed35840",
+              },
+              {
+                id: "fd0d49e2-2fc3-4bc1-9de4-dc05bdfca578",
+              },
+              {
+                id: "0a0732cf-fea1-45aa-b011-f82c5007c4f3",
+              },
+              {
+                id: "ab2be797-9a02-4e3b-a821-ba14123d54b0",
+              },
+              {
+                id: "d65706e0-f946-489b-846b-59d8bffc98d2",
+              },
+              {
+                id: "ed4403ca-b923-4226-a7db-e29b28a46810",
+              },
+              {
+                id: "44652b96-7845-4719-849f-2d4df84a79f8",
+              },
+              {
+                id: "b00c5639-5ac2-42b0-a501-6c5443d2102f",
+              },
+              {
+                id: "e4272a0f-eb0b-46ac-a317-d5dd38b203c8",
+              },
+              {
+                id: "d339f2a2-6436-4dfe-89ed-1345e2650e61",
+              },
+              {
+                id: "ca380030-de5f-4e71-8cfd-746ee049ad76",
+              },
+              {
+                id: "fe56e065-51d4-4905-aae2-0141efd5e411",
+              },
+              {
+                id: "75ed70b9-623d-4ff8-bb82-b0d998cff2c0",
+              },
+              {
+                id: "abb3faec-6660-48ce-985e-7ea35f2faf3b",
+              },
+              {
+                id: "0a954d2b-7f9c-4dee-919e-9b0c982cb5a0",
+              },
+              {
+                id: "14740016-f649-48b4-8822-27861d46ac50",
+              },
+              {
+                id: "c5a7d08d-5781-4e8f-b99d-d1f514469fbd",
+              },
+              {
+                id: "e321e6e3-d6e8-4c4f-b695-d8672725a7fc",
+              },
+              {
+                id: "b2872e42-56f4-40e5-8cf8-3237238b3571",
+              },
+              {
+                id: "74bd18ef-5d6c-480f-a159-bce2e5c80be3",
+              },
+              {
+                id: "85148774-657a-46c4-83d0-3ff69d094504",
+              },
+              {
+                id: "20e94ed4-1732-4e9f-aa54-b91851d120aa",
+              },
+              {
+                id: "a3897202-2ae0-4dc7-9fec-2e7a2abf8e43",
+              },
+              {
+                id: "c3ea7d12-8204-435c-b2fd-5fb4d7afd4bf",
+              },
+              {
+                id: "7252e936-a00d-445e-b3d1-8aedab40b49b",
+              },
+              {
+                id: "634216d0-f64c-400c-a0c6-7773cdb8b09d",
+              },
+              {
+                id: "e8e61f75-7467-4727-987c-111944f16b0e",
+              },
+              {
+                id: "99a18cd5-df24-45cf-bca5-9d79fe8d2c8c",
+              },
+              {
+                id: "e81ef814-260f-4619-afde-870c1fcb5962",
+              },
+              {
+                id: "055f8928-0de4-440d-8da3-370dbc38e594",
+              },
+              {
+                id: "b6537625-7ee3-4778-890b-1373e1cfd0a6",
+              },
+              {
+                id: "a26da61f-7341-4464-8252-9fb8b38a8c5d",
+              },
+              {
+                id: "d6be93ab-7475-471d-9396-6fdca4dd0f28",
+              },
+              {
+                id: "ea079da9-05c1-4499-9749-4aa0ddfe2e6f",
+              },
+              {
+                id: "193c04d2-0cb5-416d-9821-1f58cfa5f8f5",
+              },
+              {
+                id: "f12d3f27-b5d2-4c8c-a509-1a67ba8cacc4",
+              },
+              {
+                id: "7b76b6cb-316b-47fe-a4cc-bab7abcfca17",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -1938,6 +4162,7 @@ const execute = async (db: PrismaClient) => {
                     description: null,
                     website:
                       "https://web.archive.org/web/20240217201147/https://nexoscans.com/",
+                    email: null,
                     discord: "https://discord.gg/neoxscan",
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -1947,164 +4172,444 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "36222a6e-319a-4edc-b598-ad6a481d1644",
+            id: "ba00b15f-c441-43dc-8535-9ab77b298fb8",
             number: 109,
             volume: "4",
             language: "fr",
             pages: [
-              { id: "ec170713-951a-40dc-ada0-f78ab812addc" },
-              { id: "83cbe2a5-ab77-4072-b391-e3ea4b2b2bbc" },
-              { id: "196a31f7-4b7d-4340-91e4-8d8cb6914088" },
-              { id: "d07b43aa-881d-4965-92ab-b4841f0c85ea" },
-              { id: "f6a13e7d-32b8-4b54-825c-0f5c9084b2bd" },
-              { id: "0c805b26-db33-4cbe-bd41-11c8fc8b340c" },
-              { id: "80144a4a-e626-43b9-adfb-3199e211dc9b" },
-              { id: "1be8a866-8c5b-45c6-8229-9a5a5a17ea5c" },
-              { id: "5796f402-b8b2-47fd-bbe5-635f6708c19f" },
-              { id: "851a5ada-7b86-40ee-bb46-117f937d70ff" },
-              { id: "2167e19b-59f6-4c90-ab07-e98e04d419d9" },
-              { id: "873b0103-c0ed-4acc-9074-248f658b86ed" },
-              { id: "7e991253-2bcb-4d47-9be1-99e2f589205e" },
-              { id: "d667fd99-21a0-417f-bfd3-29c48e7acabc" },
-              { id: "f9eec5d3-48af-449c-b841-45da9eff9a4b" },
-              { id: "c2624137-e563-409c-9294-81c51bb1cd71" },
-              { id: "fc4f02e1-061b-4067-a788-6cc9e6b9ca1c" },
-              { id: "80188b28-f789-40d2-962c-d5713943791e" },
-              { id: "7198a267-1976-4177-a81d-04e1163efcb0" },
-              { id: "d9352b49-28f7-4ce7-9749-4f7ec902650c" },
-              { id: "ed027ace-1e65-491d-a54d-70214ead2160" },
-              { id: "5594f13f-48d1-4a9e-837f-6b767c0737ee" },
-              { id: "f6b5ebec-d2cf-4e4e-8d56-d3fca7e93d2f" },
-              { id: "8ad0dd84-b425-436d-a399-3e36aba79c34" },
-              { id: "67f3601a-22f8-4381-b309-3f35f01b36bf" },
-              { id: "e1c44f61-1e23-426b-a7eb-9ae3a4bc5825" },
-              { id: "139c8531-e147-4ff5-b20b-d711daf32198" },
-              { id: "5277f20a-4f40-4b27-9a8a-82c08dce3aed" },
-              { id: "d98706e8-4c8d-4643-a3c6-a36d4ab5d99f" },
-              { id: "26b03944-8db4-487d-b1ee-401f39dbf8a6" },
-              { id: "d9fc6081-b1bb-4b15-bde2-da20500fcc89" },
-              { id: "567fbc77-dfb2-4261-b8da-babe07874bb2" },
-              { id: "4c6dd8e5-1e8a-49ae-9a33-0edbf3464ca2" },
-              { id: "7dca1aba-398f-41c7-920f-50945dcf9c20" },
-              { id: "73a4f892-0a7c-4c3e-82fb-ec15c4bc85cb" },
-              { id: "212108c6-414e-4abb-871d-ce7588e8a0b0" },
-              { id: "234a65cd-7bd5-4645-9138-b904833b8f15" },
-              { id: "6ef673b7-72a7-400c-aa8b-3fed01380274" },
-              { id: "7c9b0178-7e02-473b-9180-e999a1e97110" },
-              { id: "c6bdfe3a-c171-4032-b38e-af7d80c8f654" },
-              { id: "795c212f-a726-4a15-8581-a9e0ff46a4d6" },
-              { id: "28db72a9-9957-497a-bb92-36918d9d5ecf" },
-              { id: "a6394e02-bbec-498f-97f5-22b435ff7fda" },
-              { id: "33efd1af-cbb4-4325-aaa6-c16a804d7470" },
-              { id: "490a5a13-fb56-4b5c-8610-0419f61468f8" },
-              { id: "ba980af4-b6ce-4693-86ea-3236e0814c0a" },
-              { id: "7e56b8aa-8c54-46cf-9076-d4fbfa2403c5" },
-              { id: "87d9daf6-e3cc-44fb-9c01-445fa3f50771" },
-              { id: "9ba7dd9b-597f-4e69-b5d6-fcf8ea2c849f" },
-              { id: "f9eb45c2-4893-42d2-a995-b4614463d940" },
-              { id: "35c878f1-6ace-4ce8-a4df-e095a04a705b" },
+              {
+                id: "87998d6e-2547-4ddb-9450-db7bfbcb0e2e",
+              },
+              {
+                id: "7477c815-b37a-4e23-bec2-d419a05df89d",
+              },
+              {
+                id: "9614f986-2622-4cc9-87a3-76d2219c364a",
+              },
+              {
+                id: "2051a17b-ede9-43dc-91ff-7e2724c82abe",
+              },
+              {
+                id: "af4cdf3c-959b-48bc-aa08-0c007840eeba",
+              },
+              {
+                id: "72ee57be-a849-4c93-8b03-a6fcb11699f7",
+              },
+              {
+                id: "1adf1505-7f61-41d7-9808-6511c26c3933",
+              },
+              {
+                id: "0008f351-5f88-4bff-a8e2-71a9b1dcdc4c",
+              },
+              {
+                id: "b45090f0-b382-4aa5-883e-bef864e5607e",
+              },
+              {
+                id: "12ade7d2-42f2-434e-a6fc-5ee706dc3daf",
+              },
+              {
+                id: "ed35cde8-bfa1-4bd5-a693-69f02273e5ab",
+              },
+              {
+                id: "7e286a8b-5493-490b-acce-93f6766d1d1b",
+              },
+              {
+                id: "31445996-a7a0-436c-a34a-3c85f9e4b8bc",
+              },
+              {
+                id: "18fddebc-2359-4b93-a997-81289b366b5f",
+              },
+              {
+                id: "8f9d0577-bc14-4213-9c4f-3f013e5d746d",
+              },
+              {
+                id: "b43556f3-88b2-4449-9514-d321ba22408e",
+              },
+              {
+                id: "105f3e80-c6a2-4d97-8452-0b9ee69adcce",
+              },
+              {
+                id: "d538ec95-5f86-416e-8d47-9c34c1f727cd",
+              },
+              {
+                id: "05861b7a-f1ae-40e6-bc51-92062559d750",
+              },
+              {
+                id: "f817db79-0cf2-4220-97e0-a7571d2788b7",
+              },
+              {
+                id: "63dda5b8-c5f5-44de-a956-2f5011be733e",
+              },
+              {
+                id: "b6f1c5a1-b397-46af-bd31-a22fe0adaa68",
+              },
+              {
+                id: "28f9af52-9605-493e-813a-4870becf2b9e",
+              },
+              {
+                id: "df8f8f0a-418e-49a0-950e-7aceffa28b19",
+              },
+              {
+                id: "14920156-d084-40f2-9d1d-a2b46052a509",
+              },
+              {
+                id: "0111811e-ddd0-4141-b7d0-d520a0d04a83",
+              },
+              {
+                id: "cc400157-40a4-4480-8c3f-cdf632fe52c9",
+              },
+              {
+                id: "e33527bc-7939-4b0c-a783-08f846d6894c",
+              },
+              {
+                id: "c692a515-e07e-4b03-a390-e2c6b5baace9",
+              },
+              {
+                id: "c5d6480a-ad7f-4e88-b322-b3989f3a71eb",
+              },
+              {
+                id: "e03a5b64-60c6-4a38-b9da-8850a1d62258",
+              },
+              {
+                id: "bc34793e-e14d-4080-8cae-8b71cbaba191",
+              },
+              {
+                id: "0b9d71c8-362c-4770-8b3b-14c5d6084ee5",
+              },
+              {
+                id: "b9674d8f-e1a1-479e-939f-cbbdf3d09049",
+              },
+              {
+                id: "f78e3b75-ebe8-482b-a1db-cdd87229ad2a",
+              },
+              {
+                id: "829ea418-5fb0-4889-bc0a-469b64882906",
+              },
+              {
+                id: "a80cd0a0-d310-4e3d-9104-0acfa77f3e1d",
+              },
+              {
+                id: "763071fd-6a8b-40db-b0ae-c6c4de7cba68",
+              },
+              {
+                id: "db81be3a-4eae-45b3-9969-8789e06a60b9",
+              },
+              {
+                id: "cef5aecd-416e-49e0-85a3-bdb8098f9cad",
+              },
+              {
+                id: "07c4719b-0b22-4fdc-a77b-05764ace5d66",
+              },
+              {
+                id: "bdff359e-5857-40a6-b030-85c84de3f2cc",
+              },
+              {
+                id: "88ae7fb6-18d2-419f-8111-223e8eafb2f7",
+              },
+              {
+                id: "481dd848-f309-48e1-8334-e370cec9e642",
+              },
+              {
+                id: "15dd37aa-428a-47a3-8d2f-14cb7cfea8ad",
+              },
+              {
+                id: "4dbc97ed-f058-441a-9c8b-0f5c08b212d8",
+              },
+              {
+                id: "ee84fb1f-a0d5-4539-b91a-6cfffdbb4abb",
+              },
+              {
+                id: "697e5784-bda8-44d4-9dfa-8c835581d4fe",
+              },
+              {
+                id: "3ed9732c-b312-439f-90af-03d77bdc76ab",
+              },
+              {
+                id: "66754fbb-b744-4387-9673-daa8f10727ef",
+              },
+              {
+                id: "affa1546-c1a7-40af-9f05-d97520701e4a",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
-            groups: {
-              connectOrCreate: [],
-            },
+            groups: { connectOrCreate: [] },
           },
           {
-            id: "0fe9bced-8176-4571-a68f-3f2802687f15",
+            id: "715f5ef7-d41d-4969-89dd-d87b8fad844d",
             number: 123,
             volume: "4",
             language: "fr",
             pages: [
-              { id: "f54878ce-2dda-44ca-9dbb-aca29e2613fe" },
-              { id: "382c3826-77f5-461b-b084-dd7e9beb12cd" },
-              { id: "501c099a-1d7e-458e-8e8d-b2f6a949b435" },
-              { id: "1e5bf478-ff09-41cd-8dc9-d38c08a38752" },
-              { id: "5d46e2dc-6bc0-4551-9579-fa26d086006f" },
-              { id: "dd013fa4-ad27-497e-b4fd-8acfa69b1871" },
-              { id: "f11dee2a-94a3-4666-a7a8-949a3b9d4dd2" },
-              { id: "96ced161-29bc-4539-8110-9d2ca09aef85" },
-              { id: "36abf71b-6782-421c-9eaf-3da5c22cd26d" },
-              { id: "1867fd83-56d0-466b-8e09-78a5942baa4b" },
-              { id: "33c0a379-24d8-4a0b-a661-da5445a82585" },
-              { id: "b2d41839-07b6-418a-9c63-ba3997ce03ba" },
-              { id: "84584eff-e891-4fc3-a98d-51f44bfbfc22" },
-              { id: "525f5292-f715-4e83-90a3-68224c38dfdb" },
-              { id: "ce736acf-8ec2-43d4-a528-1ad167a1da03" },
-              { id: "ba4d2de5-36fc-4c6c-828c-b27a7755ef02" },
-              { id: "a7cf059e-fbd5-4482-8514-19c9890f4040" },
-              { id: "ba30f1f0-fe15-4df4-a58f-e5c2c49475b9" },
-              { id: "b1ce8bfc-a593-45dc-9c67-dd28f148ed15" },
-              { id: "b99f0f52-641a-4585-ae74-8b1bd50c270c" },
-              { id: "9e915478-b251-4ec7-90c4-80d0bfee97e4" },
-              { id: "d73d113c-873b-43d1-bdf4-30530cd7ffde" },
-              { id: "ccd88695-1129-4ea0-9f9f-084a1fbe6c64" },
-              { id: "dfc2c386-9dfc-4d42-9b47-533636796cf1" },
-              { id: "393612f3-fceb-4dbd-9419-c3649743a83a" },
-              { id: "0de1dc0d-fe63-41da-938a-da9bf3f5587c" },
-              { id: "3ad26489-0ebb-4386-bdd4-47a5460b1518" },
-              { id: "b3e0cec4-dd98-48ef-bf73-8b3bcb1c4428" },
-              { id: "da721828-2ab9-450d-a08f-07fe90a75de2" },
-              { id: "4ec882aa-44e7-4de1-97b9-4001d6bc6f88" },
-              { id: "f86ea84b-a329-45f7-8fc6-a5196352eb9b" },
-              { id: "8bda8dd5-ad8e-426e-8920-5fff0d558f8b" },
-              { id: "2d4d3a96-31cc-4c62-8735-958b6693bb6e" },
-              { id: "12a87ec6-f374-46a1-9246-64e663cadad7" },
-              { id: "c19ea2c2-4584-4db8-b5ff-c21450174e40" },
-              { id: "d2ad70eb-1df6-4abf-a9a5-b6d5bf3bd096" },
-              { id: "71fef92e-a17f-448b-a3b4-d13a17ed4027" },
-              { id: "dbe05f21-0bae-4b2b-bf63-130ec51ab6a0" },
-              { id: "83d1bf87-6785-4e66-b082-6a7f188c87f4" },
-              { id: "f8e7efb9-3932-4fd3-bab5-603e9ea2879f" },
-              { id: "9ecae0fd-f822-4b3d-b0a5-86a6d6aeaa7c" },
-              { id: "aaf17318-c1a1-4192-828c-41b93118348c" },
-              { id: "7f0c3960-411d-40aa-beed-8811ce097267" },
-              { id: "75a1340a-f6f1-470b-88d5-d532fac6d177" },
-              { id: "e87d019c-883f-4aa1-9b91-88749bef8d2d" },
-              { id: "484787dd-8fdb-4d07-a1f6-bd30ddc6e407" },
-              { id: "8f5c1be0-65c8-4b6b-ae7c-02ee6786be6f" },
-              { id: "57afcbc2-9978-4989-a215-8e31769ac043" },
-              { id: "dab94d14-af27-4fea-bc39-3c2c378383da" },
-              { id: "76829214-8428-4c36-a7d5-43a267fe920f" },
-              { id: "93f1cc3a-f245-43a4-9044-052819d03f4e" },
-              { id: "6051a457-c7d5-4a41-9940-1e8bfd6b4235" },
-              { id: "14ae8c6f-b4d8-427f-b5b2-875b1d0fc236" },
-              { id: "4fba51b3-bb24-45d8-ac25-40dcb48979be" },
-              { id: "c74d5cf8-c329-46f9-b0bf-1a1507d9b47f" },
-              { id: "49bc63bf-597b-4282-94a2-9650dca3a986" },
-              { id: "d4b349ff-b45e-4470-990f-4e46eb8bd936" },
-              { id: "c24fb158-80cc-4ab6-9823-87db64c619eb" },
-              { id: "cd391dde-9f05-4b73-b680-e5c8f49bf7dd" },
-              { id: "ba9ba626-c315-46cf-9230-80d623eb303f" },
-              { id: "86c744f3-0666-478f-8195-d881569dcbf0" },
-              { id: "81436b9a-266e-4116-9cca-ecb5e38d6684" },
-              { id: "2981d460-55c9-44ba-a466-1ceb36c178c8" },
-              { id: "b0ab803e-06cb-48df-9b67-8db645455ac6" },
-              { id: "35bdeb5e-61b6-422c-a89a-4abbb937ef53" },
-              { id: "530556eb-5ac6-42c0-baeb-b3672271c392" },
-              { id: "06689fd2-2146-4841-8b85-2998d165bc2c" },
-              { id: "ea9d03d9-8881-4937-8986-91d11cc97f6e" },
-              { id: "16151f13-d52d-48f3-b52f-0f54d1a9515f" },
-              { id: "4e871e76-722e-404a-888a-d151008d4a64" },
-              { id: "a8b30e11-ca22-4654-8932-75aac3171264" },
-              { id: "1077afbb-5fb8-4ff1-95b8-8a1820f52242" },
-              { id: "08740cff-0eac-4cf9-9057-b70edada9c2f" },
-              { id: "1deba146-fda2-4db7-b1d3-c77da25009f4" },
-              { id: "5ab0dfdc-4183-4d24-b285-28807ac3683a" },
-              { id: "7efd6d17-8c70-428c-aef5-2c5efd12bb5e" },
-              { id: "ff100515-f208-4e35-8177-a77d98b0da88" },
-              { id: "328b0350-8dd4-47db-bd23-1f98cb19a8a5" },
-              { id: "b2cfa5ce-9145-4cac-857d-9edf87477794" },
-              { id: "296d25cd-ce5f-42e3-a2b0-ca1337facac8" },
-              { id: "46722f2d-cc49-4428-8944-72e0ffe457f9" },
-              { id: "995cbc18-e960-41fe-b23f-ff50ea52bcf5" },
-              { id: "01809f0b-fbce-44f6-b57b-8934f509292c" },
-              { id: "199420a2-59b0-4dcb-8f5f-e94c3eff3f76" },
-              { id: "9b304d4f-5a83-42fa-aaec-302a4b8615b6" },
-              { id: "1c8ce833-0302-4703-9caf-3135e0ca10bb" },
-              { id: "1bf04f45-6c29-4a89-b4d9-d825c3859e2a" },
-              { id: "ae5d6c2b-2d77-40d6-9da8-c6a92ef86010" },
-              { id: "1c91c99a-b9fa-4b8c-bf79-a37ff2f75a59" },
-              { id: "b4f7c1d3-0634-4799-b649-9136dc033f09" },
+              {
+                id: "3770cf05-1de3-44ef-b77c-19399cb0878d",
+              },
+              {
+                id: "36de47ed-3118-4e37-8700-7583c28e86d7",
+              },
+              {
+                id: "a9fcf9b5-a912-4765-b9b2-7f70393cfb5b",
+              },
+              {
+                id: "81f6953d-2be0-40b7-a890-97db32f6e322",
+              },
+              {
+                id: "049e1bc5-4ac9-4264-90f0-7b4bd98d8cff",
+              },
+              {
+                id: "cc36f1d3-c53e-4a67-bb1c-f2a0a9b92b10",
+              },
+              {
+                id: "f67d246e-1a1c-4b3a-9aa8-d9889b4b8841",
+              },
+              {
+                id: "e0e13e4d-c772-43d8-9847-7e4543bf879c",
+              },
+              {
+                id: "af201830-a6b9-4945-80ad-9ff43f86af33",
+              },
+              {
+                id: "a083547f-afa9-4016-9d3f-afe8feeadda9",
+              },
+              {
+                id: "0d7e5875-3e08-43c5-8449-59ea6b971b5a",
+              },
+              {
+                id: "5f9c8206-120b-4306-a811-45995030bdef",
+              },
+              {
+                id: "683cdc5d-18c8-4f2c-9a71-4bc5785d47b8",
+              },
+              {
+                id: "208df8cb-1b71-472d-877f-606894b34cfa",
+              },
+              {
+                id: "3899df21-574c-4129-823f-a5559388e476",
+              },
+              {
+                id: "22b3e0ac-a99e-43d6-a081-09123d73cd65",
+              },
+              {
+                id: "4b15db59-2008-4285-8c22-97096442616d",
+              },
+              {
+                id: "f8877135-5760-4170-be25-e1d594b7322c",
+              },
+              {
+                id: "d24ea281-47e7-4b73-a631-25c7ffe12157",
+              },
+              {
+                id: "ceec230a-fe93-4c85-9772-db50eacdf29f",
+              },
+              {
+                id: "a1be8b10-4509-4a3e-9bbb-91cb567dd65b",
+              },
+              {
+                id: "a72988e8-4a52-4c19-a867-1c542cef68e0",
+              },
+              {
+                id: "8e9bf49b-cf85-4c08-b592-4598a0128d53",
+              },
+              {
+                id: "4baad957-7a9f-4313-8989-cc4b3dd3d74c",
+              },
+              {
+                id: "5eb5b1c7-32b4-4f21-b4dc-2a2e27706ab3",
+              },
+              {
+                id: "512ef111-cdf2-48f1-b55c-16cf5f7bb65b",
+              },
+              {
+                id: "946a4f3c-2b57-43e8-bf31-d4b3b4aae71f",
+              },
+              {
+                id: "a93d25d7-2027-4997-b755-a91b4622d00d",
+              },
+              {
+                id: "c970cd26-23f0-4953-af07-6ca3092d3d96",
+              },
+              {
+                id: "c1b59de3-3355-4432-abe7-e834aa89defa",
+              },
+              {
+                id: "ae6372c9-35cd-4891-b5ec-e28f592996da",
+              },
+              {
+                id: "a0a4fb12-e084-4104-b9d6-2bec28d4e27c",
+              },
+              {
+                id: "ec4dfbd1-11c2-4251-9da9-c18f8e4d5dc3",
+              },
+              {
+                id: "1efaa95c-cb85-4190-9466-79893247443c",
+              },
+              {
+                id: "c3c00f9e-fdb0-4e60-8474-3c7d57be44c8",
+              },
+              {
+                id: "e923ee30-10e6-4292-9c21-70a175c6c603",
+              },
+              {
+                id: "54b9f6a8-74b8-4496-82d6-f735b05ddc22",
+              },
+              {
+                id: "6f4a242f-7ab5-4243-aafb-acd568787cdf",
+              },
+              {
+                id: "ad9ec238-d8ec-4b5f-a79a-daed6a912fdf",
+              },
+              {
+                id: "57018556-08e9-446f-83c0-ef47e8292b62",
+              },
+              {
+                id: "553bdefb-69c5-433a-89c1-f7bb6c63effc",
+              },
+              {
+                id: "98efc6c0-bfce-419c-a836-875041b93c71",
+              },
+              {
+                id: "233ba579-8698-40be-ab1a-682d890e47c3",
+              },
+              {
+                id: "b9f0fb07-c9a8-4de1-b541-5771aa49edc6",
+              },
+              {
+                id: "eff108ea-8bce-45ac-8a22-f3b89b177580",
+              },
+              {
+                id: "b747d7ec-1a78-4a11-bf5a-b705fdda505f",
+              },
+              {
+                id: "c9efcab2-57b4-4b43-971a-579ea6f1ee25",
+              },
+              {
+                id: "af173de8-6fbb-4c8c-a5c1-a52286c753d2",
+              },
+              {
+                id: "03e090d2-d5ba-4ebf-a0f4-232d8be439bd",
+              },
+              {
+                id: "c8815641-1cf6-4716-bf30-dd0fdae080f8",
+              },
+              {
+                id: "3e98a841-428f-4e48-87b5-f68573f8490d",
+              },
+              {
+                id: "8235b982-ae0f-47c2-a547-ef231d70e41e",
+              },
+              {
+                id: "bee3f261-e3fa-46e8-8b65-1c90ec469960",
+              },
+              {
+                id: "debb943f-edd6-42c0-b126-5bbf89470add",
+              },
+              {
+                id: "8ab42d19-d8df-45e5-8ff0-748f8ad9355c",
+              },
+              {
+                id: "08a2767c-e9d9-4be6-9ab0-172c0aed3dea",
+              },
+              {
+                id: "a07ac80b-52eb-445e-929a-da7b827ab94b",
+              },
+              {
+                id: "5c8ea410-7b6f-4da3-9034-c345758d9cae",
+              },
+              {
+                id: "20fa26a9-0a57-4f4a-8d2c-9a52dc00e75e",
+              },
+              {
+                id: "36d06bc7-f2f0-4e6f-8a21-68432af27914",
+              },
+              {
+                id: "d051d40b-a080-48a6-9543-0473cca25a82",
+              },
+              {
+                id: "0e57a9f1-fbdd-43b1-a4d8-dd7c1350c9d7",
+              },
+              {
+                id: "f32cdd65-7752-48e2-956b-705c221ff36d",
+              },
+              {
+                id: "9c686de3-ef96-454a-89ca-3f1f8de2f729",
+              },
+              {
+                id: "dc3e5fe4-8496-475c-b694-3ff5dee6d6ba",
+              },
+              {
+                id: "f5665f6a-57ac-4ed8-9925-94b94b990c01",
+              },
+              {
+                id: "653c6b2e-2f6e-4856-bb45-9b6dcfeb9559",
+              },
+              {
+                id: "1d3f56cc-bd9a-4022-8c12-b6880a223630",
+              },
+              {
+                id: "b4245695-c031-439d-9c8a-b1cd3fc76418",
+              },
+              {
+                id: "04d00166-9ef1-42dc-9d3e-6c0e040b512c",
+              },
+              {
+                id: "038160db-766a-4ccd-9305-5de5188773ed",
+              },
+              {
+                id: "5c25aeaa-45fa-4811-a718-f0d63e64736a",
+              },
+              {
+                id: "ce654d5f-99b9-40d9-8a79-9adac6e9a60b",
+              },
+              {
+                id: "280b08cb-2abb-41bc-b383-b3d9b269c065",
+              },
+              {
+                id: "d1ee1263-c490-4cf8-a693-9ee6261062dd",
+              },
+              {
+                id: "382e38af-44d6-4a88-942c-559ca8712b30",
+              },
+              {
+                id: "fdd0e937-59f6-442e-940e-e3abcedde86a",
+              },
+              {
+                id: "0c48e985-b2e0-4834-b8de-ca3b03f99416",
+              },
+              {
+                id: "67d0c709-8d09-4470-9433-e808afd072b4",
+              },
+              {
+                id: "b4fae55d-d1db-495c-b4db-341a3379de16",
+              },
+              {
+                id: "b44704fb-492b-4139-ac03-b806fee7da9d",
+              },
+              {
+                id: "127563d2-28d1-40e9-839b-b92006ca6257",
+              },
+              {
+                id: "8b52fd1d-6f7a-41be-b422-7a7fdef2c5d0",
+              },
+              {
+                id: "4112eaaf-62af-48ac-9ba4-5472d9bc5732",
+              },
+              {
+                id: "46ae511c-68d2-4e32-b0f8-14255854d2f6",
+              },
+              {
+                id: "39db49d6-befc-41e1-95a1-126a96867364",
+              },
+              {
+                id: "eee38acf-d8ea-4f11-a53e-09a28c82c427",
+              },
+              {
+                id: "0ee04799-611d-4d1f-a3fa-e7c62aad4046",
+              },
+              {
+                id: "82a05c11-4b86-4ab4-aa5f-e501cbaab805",
+              },
+              {
+                id: "c08efb21-6678-4fdc-a08c-c7bdd36f7d38",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -2114,8 +4619,9 @@ const execute = async (db: PrismaClient) => {
                   create: {
                     id: "e951fca2-577c-4f35-999d-938519d60713",
                     name: "Freetoon",
-                    description: "",
+                    description: null,
                     website: null,
+                    email: null,
                     discord: null,
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -2125,33 +4631,77 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "382fa46b-a158-43d6-a878-e03b24fe632c",
+            id: "ced75e82-014f-48b4-bd13-896e60d535f7",
             number: 136,
             volume: "5",
             language: "pt_br",
             pages: [
-              { id: "12c8600d-002f-471f-a0f8-0b516794670b" },
-              { id: "8e0f32c7-f519-4d88-bbda-2f66f26fe6a1" },
-              { id: "23453183-54ca-4859-81ce-175e3074c5c7" },
-              { id: "d4711385-2dba-48ac-b31f-523c6a45ccd1" },
-              { id: "725e896e-d415-4ec9-a094-67da9ec4cc11" },
-              { id: "7c92aad4-1a68-419c-aa7b-5858911e31ee" },
-              { id: "7ddcce6b-20d7-49e8-bfbb-ccf0a653328d" },
-              { id: "acfe46b4-38a4-4829-bcff-5317044e7512" },
-              { id: "a98758b5-edbc-487a-a81a-19ecdfcb1c08" },
-              { id: "9198e6c7-a86f-41fc-b4ff-70aaa6126b9b" },
-              { id: "e5a92675-0efe-49bc-999e-db6d7e2c2eeb" },
-              { id: "69583057-6785-4901-b5c5-ef0fbd8a79a1" },
-              { id: "85fa7cfd-49f9-4a35-b3e9-54d3a5a0d1c0" },
-              { id: "75310dc6-731a-4b1d-86d8-2f8cb5e0fc86" },
-              { id: "a76d9670-2ed6-4402-a215-accf2c799bba" },
-              { id: "1ce9d8af-fc87-4b4d-8282-cf140e49a719" },
-              { id: "bc6ed37a-cccc-4f32-ad08-00cce6cfa0ed" },
-              { id: "c83ebc6b-5731-4ff6-8e07-8dde10da33b2" },
-              { id: "8d438172-fdc6-46ad-b3b1-25055facd398" },
-              { id: "f1b7d4bf-c09e-47fb-b4a1-9b3d66a8a4a7" },
-              { id: "a12cc7b4-b88a-4166-a7cd-22ea43a6897a" },
-              { id: "11310dbe-a156-47ff-ac94-cf149f2f7781" },
+              {
+                id: "02888345-4f5b-41cb-af33-6ce19ca31793",
+              },
+              {
+                id: "8fbe0fc7-362f-4038-a3fb-30ac8f321f55",
+              },
+              {
+                id: "5643b193-867c-4d62-b403-c42cfd3ec5a6",
+              },
+              {
+                id: "feb91e25-a6fa-444a-92b7-08187108976a",
+              },
+              {
+                id: "415927e1-61c0-4048-b9ca-1c6d2fa824e2",
+              },
+              {
+                id: "78dc2da7-957d-48d4-940b-044c9edaf0b0",
+              },
+              {
+                id: "c0844d53-3104-439d-b1f3-fd4d7d7d4012",
+              },
+              {
+                id: "7877b150-d4b7-484a-92f6-c7a307f3c0a8",
+              },
+              {
+                id: "22db5f1b-eaf6-4da5-8a95-038b0d6f2d98",
+              },
+              {
+                id: "5839648c-cf9a-4a30-ad3e-5d4331e6bd43",
+              },
+              {
+                id: "3dcebaa3-6d7d-4672-8480-2bef607c6bcf",
+              },
+              {
+                id: "0d74e2d7-dc8c-4793-a217-d9a7e523eed1",
+              },
+              {
+                id: "fda580f6-2558-4f8b-8379-fb9f1a119283",
+              },
+              {
+                id: "4fdff481-eabd-47de-beb8-f9ee71078f89",
+              },
+              {
+                id: "b09d0ad6-4346-46aa-bf27-0416d377125d",
+              },
+              {
+                id: "c84c6ffa-65dd-458d-a755-26d4ecfbf410",
+              },
+              {
+                id: "01258062-c8ac-459d-88c0-0f48a1fbd614",
+              },
+              {
+                id: "94650523-7405-4248-83c4-c4540a3547d3",
+              },
+              {
+                id: "7fcb0b5b-28ad-4608-b63d-33ad0b624b10",
+              },
+              {
+                id: "d8e0dc80-3f6d-47bc-b578-ece415e6b089",
+              },
+              {
+                id: "04f705d3-036d-492a-98dc-84fa21392fee",
+              },
+              {
+                id: "c6eb7362-5361-44fd-8485-c93852e13c4a",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -2164,6 +4714,7 @@ const execute = async (db: PrismaClient) => {
                     description: null,
                     website:
                       "https://web.archive.org/web/20240217201147/https://nexoscans.com/",
+                    email: null,
                     discord: "https://discord.gg/neoxscan",
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -2173,59 +4724,316 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "b8115cea-916b-4bff-8219-c34e40f87c91",
+            id: "8d02f8bd-ad1c-4914-909d-8ae069024cac",
             number: 149,
             volume: "5",
-            language: "pt_br",
+            language: "fr",
             pages: [
-              { id: "66130fc6-a4ae-4c26-a5c0-214e9dc04143" },
-              { id: "ad0e48ab-5bbf-40a5-a763-bc4b1fc1f459" },
-              { id: "7f352479-bb3e-4243-9e13-a5ef1a1c8c13" },
-              { id: "91526348-a3cd-4c3e-9ad4-bfadf942bb5b" },
-              { id: "eef9dc43-371a-4899-ba71-ccd178c17d6e" },
-              { id: "88ca5f1b-1680-4639-a9bd-379d3a9ef4e4" },
-              { id: "5ac00592-62e3-4b43-953b-6703cd1360d7" },
-              { id: "c4627bc7-dfd5-4bb0-ab83-7f820f8b1499" },
-              { id: "85daa28b-33ca-48a4-b693-d31426867c53" },
-              { id: "aa9087ff-20e0-403a-9182-bca6f049ed5f" },
-              { id: "f0dea076-a52c-4adc-885d-f0871c0d5218" },
-              { id: "7270a56a-a208-4713-a01c-6afe5114edd8" },
-              { id: "bd947d67-4141-498d-8521-ceb514a1af73" },
-              { id: "4a3d5162-1b5a-4158-ab90-7ffdd6575b3d" },
-              { id: "6cc7602f-3b6a-4981-81c4-d79da6bab4a5" },
-              { id: "271f9ac8-08c4-4c36-8e5b-cd712000fbde" },
-              { id: "ee1a6859-70f5-47a0-8b88-78edf4e8c103" },
-              { id: "3112b16b-a759-4379-b0df-c5d36efb0667" },
-              { id: "303b7332-afd5-4f2e-9505-74b54073b52e" },
-              { id: "cbcbfb86-7b2a-4ead-b41e-36f12691b232" },
-              { id: "c1033921-ca30-46eb-b05f-d330b31abf24" },
-              { id: "74a1ab2a-9f59-419a-a066-f0e4f2609d04" },
-              { id: "00d07f20-784b-4549-bcec-b33c4b5c437e" },
-              { id: "045f43fc-1990-41b6-9cc3-2915fbff7077" },
-              { id: "bab81cd6-52ad-450f-a691-808543bae0ac" },
-              { id: "6ab29909-409e-4be3-9cda-5961c7c47a86" },
-              { id: "e2c0d125-0ad7-47ae-9b07-6446acf995e5" },
-              { id: "b19cac87-deeb-440b-83cc-6eeaeab72933" },
-              { id: "624eb74e-cdde-48ef-8651-ed59dee05a59" },
-              { id: "b6dea976-ba1b-42dc-bd12-1528a54513c4" },
-              { id: "3d69a1e8-6dc4-447c-9867-2ebcbcfe217a" },
-              { id: "7e2114f9-25b1-4c51-8e35-f4c5757be1e3" },
-              { id: "b11b98fe-c435-4293-96f2-52d3813cf70c" },
-              { id: "c1144783-8457-4d10-b052-7abe2ef71edc" },
-              { id: "52353844-3e7c-429e-9d13-250dd2c1c44b" },
+              {
+                id: "7d11511c-1273-459d-acc7-033f6dfa42d1",
+              },
+              {
+                id: "c25d0450-87c5-41c3-b737-07b0db3bd0af",
+              },
+              {
+                id: "fcd36637-9ef2-4bc4-87f3-bf69e66f29c0",
+              },
+              {
+                id: "117a19e0-77b6-4d18-ae76-f3c865ebf090",
+              },
+              {
+                id: "81c0831a-ff88-4af4-8b75-c1b138096788",
+              },
+              {
+                id: "7828a847-dee2-48fb-8a41-d8434ec53af2",
+              },
+              {
+                id: "a9352537-b357-4ee9-b854-d5450005f8ec",
+              },
+              {
+                id: "a3ff339b-0e0d-4846-aab8-fa106e26712d",
+              },
+              {
+                id: "43e96a61-f407-44f9-92f2-a4f9b9538105",
+              },
+              {
+                id: "b4c9886d-e7cb-4e85-8e5f-38c539e45f3f",
+              },
+              {
+                id: "816381b8-8d12-4bac-9320-796af32467cb",
+              },
+              {
+                id: "0acd0503-bfe6-4ac8-91ab-ecf9b70cb492",
+              },
+              {
+                id: "3d736122-083a-450b-bc2b-9c39aa89f683",
+              },
+              {
+                id: "4fd80ee6-3f52-4292-8e00-4f0aa24c6144",
+              },
+              {
+                id: "9aeb4fdf-4771-40fb-b8cf-739cfc371efc",
+              },
+              {
+                id: "e996d918-e8b0-45b5-9571-be3ade98b303",
+              },
+              {
+                id: "5f0a3832-3d53-4392-9d14-de49302a7bc6",
+              },
+              {
+                id: "55430495-f9ab-4697-8587-4313e4a0bc49",
+              },
+              {
+                id: "9182ada7-a783-4776-8481-63ab05c0db8f",
+              },
+              {
+                id: "80a2e115-29bb-4b69-a629-08024e1d61f0",
+              },
+              {
+                id: "b2d2c1d2-13e7-48cc-adff-968892140664",
+              },
+              {
+                id: "92362ec8-1061-4e30-98fe-fe641367aea6",
+              },
+              {
+                id: "9a904328-d88f-41eb-bc8b-87ec7ec98596",
+              },
+              {
+                id: "babe7163-7eae-4594-aa20-47d2e038b2e4",
+              },
+              {
+                id: "337c1b63-7472-4f17-b9c5-0112080a29aa",
+              },
+              {
+                id: "2e3817ed-37c1-4ccb-a668-971e7d8e35a2",
+              },
+              {
+                id: "cab43e14-cf70-476b-8f8d-91d4fcfe1368",
+              },
+              {
+                id: "db407f8b-4d6c-40c9-a035-9767167d1ec6",
+              },
+              {
+                id: "83cbb8c1-7deb-44f8-b294-5871213801e2",
+              },
+              {
+                id: "8f1b54eb-e0fc-441a-8acb-9c38b40e5db5",
+              },
+              {
+                id: "c0856707-3343-4bc8-8049-4d809c2196b6",
+              },
+              {
+                id: "4288f327-9a6f-4139-a334-65ec57ce2807",
+              },
+              {
+                id: "e25450b2-7d97-403f-8e7c-0f3abc6adeec",
+              },
+              {
+                id: "27b124c0-b21d-4ec7-aeb9-b068ec828030",
+              },
+              {
+                id: "db602b06-ef2b-4e2a-a287-101f93430a44",
+              },
+              {
+                id: "71301728-14aa-45be-abb5-2a30659e6c27",
+              },
+              {
+                id: "6701a33b-147d-445e-b18a-8be15b5b5e35",
+              },
+              {
+                id: "8bba037f-03b5-45ec-977c-d9ddf763b9f7",
+              },
+              {
+                id: "244107d0-5ade-4418-8f3d-9ccad2b690b4",
+              },
+              {
+                id: "690b62bb-9302-46b1-943c-d366142ac79e",
+              },
+              {
+                id: "fff1b1e1-d8b5-485e-9d65-57350a991f09",
+              },
+              {
+                id: "e879cda1-00d5-4fcc-af37-c37965ee3bc1",
+              },
+              {
+                id: "ba5dfbfb-c2b2-4301-8d5d-c8e5e75122cb",
+              },
+              {
+                id: "27b76e52-5591-450d-ab30-e7522a626f8d",
+              },
+              {
+                id: "14afa921-f239-48e4-8649-9448826a5803",
+              },
+              {
+                id: "6ef0dbe3-761d-4ab3-b5a2-c681b75b5a50",
+              },
+              {
+                id: "7b0a8d5d-4c81-4496-90cd-25da0977e433",
+              },
+              {
+                id: "11e409b5-c39d-498b-ac75-a5375880fa7d",
+              },
+              {
+                id: "38ac6855-4974-465f-a11d-869e8a9532f8",
+              },
+              {
+                id: "55df68b0-d042-404f-bc1a-d89310b2d5dc",
+              },
+              {
+                id: "ab607b1b-729e-4218-8e78-5961f2b0ae34",
+              },
+              {
+                id: "93d05de1-e452-4a25-9aeb-39fc49ed86be",
+              },
+              {
+                id: "e331fed8-4dd3-4f8c-8866-1fd1644f69a0",
+              },
+              {
+                id: "472e95d8-606e-469d-8bbb-b82fbefb95b3",
+              },
+              {
+                id: "89f21470-15ea-431b-85ce-1116e54085b4",
+              },
+              {
+                id: "73c1786f-e77a-45ac-8053-4ce97072ae41",
+              },
+              {
+                id: "ddb9d4ce-b649-401c-bb2e-6a0aabaf906d",
+              },
+              {
+                id: "9e722431-5d7e-4600-94ac-a3b4055df34d",
+              },
+              {
+                id: "9e3647a2-a651-4096-9ba3-391d7480c44d",
+              },
+              {
+                id: "f9a68536-3e13-472d-b6a9-17ea6293c486",
+              },
+              {
+                id: "a3bb8e4e-2331-467e-a1ea-12b8e98b9e3c",
+              },
+              {
+                id: "c563289e-530a-424a-a764-2fe940a14351",
+              },
+              {
+                id: "7b900b30-db39-4b46-8d82-c8ea4c35f971",
+              },
+              {
+                id: "19a0c6de-8de7-46d7-b417-55ef581feba2",
+              },
+              {
+                id: "5a4ae0bf-32af-42cb-956b-9b2157b8c55b",
+              },
+              {
+                id: "f0ec4277-d030-4c61-b45b-7c0ae3752cfe",
+              },
+              {
+                id: "4e5427df-07c2-4574-97a5-7e0b9c533894",
+              },
+              {
+                id: "58e77d16-4b15-4f71-abfe-30eed87600f0",
+              },
+              {
+                id: "23b8c1b2-648c-46b8-b6e1-ab58139bbb68",
+              },
+              {
+                id: "442d013c-d64a-4035-931a-cfe22699424d",
+              },
+              {
+                id: "8503171f-fbf7-472a-a491-bec499e5b52c",
+              },
+              {
+                id: "8f61f4a6-420b-4353-b09b-d80fbe94e984",
+              },
+              {
+                id: "1006cc7b-50e8-4072-8963-79b46a0a1c78",
+              },
+              {
+                id: "6388ccfa-5828-4b36-9b02-2762d471fc0c",
+              },
+              {
+                id: "2c11e618-1198-4e25-8f21-96982f19fcd0",
+              },
+              {
+                id: "5a7949d8-b380-43a5-ab23-f29d18710a73",
+              },
+              {
+                id: "5d371843-88d9-4f27-a1a0-01b967455bff",
+              },
+              {
+                id: "642b1594-d880-4bfe-80d7-50e7903a944d",
+              },
+              {
+                id: "7596a910-134a-41fd-b069-521793783ce1",
+              },
+              {
+                id: "1d72e591-c9c3-4a2b-a3a9-0cec41a7d2d1",
+              },
+              {
+                id: "b399ad16-f5fa-43b3-bef8-4a9063592df4",
+              },
+              {
+                id: "ea5f2f22-03ea-40d3-a92c-033670dc1f2c",
+              },
+              {
+                id: "46b2843b-690b-42d8-91b6-c2045684039f",
+              },
+              {
+                id: "10aa07fe-a7ee-46f7-9c62-d2f2562d96bd",
+              },
+              {
+                id: "505c23c7-88cc-4f94-8d5b-757dde00717c",
+              },
+              {
+                id: "983eb478-ff91-42f0-a02e-a1f50b1b7bc9",
+              },
+              {
+                id: "f684f1f6-fa54-417a-a20b-d47f83061b44",
+              },
+              {
+                id: "0e4e3f43-a724-428f-a2fb-9d7745c7504e",
+              },
+              {
+                id: "7f710663-ebd1-4f8a-8c17-7be38dc6605a",
+              },
+              {
+                id: "602bef1a-89a7-4889-8240-54df9ef84d8c",
+              },
+              {
+                id: "9d932a1b-878c-4c81-ac79-cd2b4809a2df",
+              },
+              {
+                id: "32005341-be25-4792-b928-156f4f53f2ba",
+              },
+              {
+                id: "bc310dcc-128c-4ba2-8452-a5b76e9ad1fb",
+              },
+              {
+                id: "e193256b-4324-45ff-ae81-acfa926090f5",
+              },
+              {
+                id: "f922e848-dc99-4805-86ce-d418ec7aeb89",
+              },
+              {
+                id: "70cd1a54-fbd1-4c64-9f56-003f11bbfc07",
+              },
+              {
+                id: "e4c3c330-1c7e-4cf2-a32f-21617407369b",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
               connectOrCreate: [
                 {
-                  where: { id: "72e29818-f2ad-45f7-bac6-1c6e6919afed" },
+                  where: { id: "5a2f7654-849c-4f6b-abfb-16e37bd808a0" },
                   create: {
-                    id: "72e29818-f2ad-45f7-bac6-1c6e6919afed",
-                    name: "Neox Scanlator",
-                    description: null,
-                    website:
-                      "https://web.archive.org/web/20240217201147/https://nexoscans.com/",
-                    discord: "https://discord.gg/neoxscan",
+                    id: "5a2f7654-849c-4f6b-abfb-16e37bd808a0",
+                    name: "Origines Trad",
+                    description:
+                      "Team française officiel de Mangas Origines.\nRetrouvez nos chapitres en avant-premières sur notre site !\n\n## Rebaptisé [PhoenixScans](https://mangadex.org/group/fd31b508-aa7c-469f-9f1b-ff4122b4b6c3/phoenixscans)",
+                    website: "https://mangas-origines.fr/",
+                    email: null,
+                    discord: "https://discord.gg/origines",
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
                   },
@@ -2234,41 +5042,101 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "5633a5d5-33ab-468b-a91b-c4998fe07fc2",
+            id: "6aa49dac-2ce0-4482-a04f-cf8a09efabbe",
             number: 163,
             volume: "5",
             language: "pt_br",
             pages: [
-              { id: "db0ce40b-e808-485b-a34d-93954aadaf45" },
-              { id: "82e595f9-942c-49cc-8c27-ceac58302f57" },
-              { id: "7d4b71c1-42b3-4c18-97f3-03db82f4e8ec" },
-              { id: "6c39bea8-63ed-4b1a-a051-e0afd24f4d61" },
-              { id: "56a83af3-13af-40d8-bcd4-c0380c7053e3" },
-              { id: "b1d3a18a-adba-4f94-8133-efb1aaea1189" },
-              { id: "59ec9b6a-91f1-4292-96e8-9ad9f0768987" },
-              { id: "17396f48-6f3d-442e-b0f5-0d59b83e233d" },
-              { id: "d2a2ac34-8440-4a7d-82d0-a823e58fb341" },
-              { id: "3c48c5e6-0cef-4fcb-a879-d0905be021a9" },
-              { id: "b3064e5c-c5a9-4029-82ca-b98040ff34c4" },
-              { id: "fd84d4f1-3f2b-4307-a76f-a4f43a291b8c" },
-              { id: "7228778c-80e2-4a77-930c-1239383c0e9c" },
-              { id: "7906f719-aeb2-4cc3-800f-5ed20c5c5a19" },
-              { id: "87c731f5-8ca3-45fc-803c-2272308775c4" },
-              { id: "8feb02ac-6e44-4735-ab62-5e42823d37ea" },
-              { id: "f255c2b4-9474-450b-a32b-4a1879178baa" },
-              { id: "ae3cc67a-ce34-4805-a8e1-fe7087244f30" },
-              { id: "8a6ca265-0e3c-4f7e-a9a7-c8525fd37dd6" },
-              { id: "cd1505b7-0646-4e87-ba10-2b1f4c2d82b8" },
-              { id: "521bae2b-b8d3-4887-93f3-2a7c2628cb05" },
-              { id: "1f29d5b5-d99f-4fd1-b3ed-1a0046489506" },
-              { id: "4133fd47-aa0d-402f-ab4b-7ad919d16678" },
-              { id: "c38a0d2c-ada5-40cb-8bcb-a088bb9e1924" },
-              { id: "c3857bad-119d-4863-8ada-a2145466c7db" },
-              { id: "16f03c7c-3aa3-40f6-a498-67e1007585bb" },
-              { id: "5a6b3040-5f57-462b-a91a-6dd8490ed9a9" },
-              { id: "f6f94590-01bf-4a97-bfe2-baf553cf1133" },
-              { id: "8832a574-f3cf-4564-844d-76c67d937ba2" },
-              { id: "7de4b6a1-c5f4-4793-9744-2a582c1579f3" },
+              {
+                id: "22e90e74-988c-48e9-a9a7-4047888e457f",
+              },
+              {
+                id: "90043afc-7ca9-4de0-8ce8-320be6929805",
+              },
+              {
+                id: "1f6b779c-9bf2-4b0c-9040-765001819b80",
+              },
+              {
+                id: "2efae614-a1d3-4e31-9bc6-87daab1ff960",
+              },
+              {
+                id: "1f05522e-4f38-415f-9ec8-6d2dcc166567",
+              },
+              {
+                id: "acad999d-e259-4f68-b847-41e1d558a972",
+              },
+              {
+                id: "9e46ce2f-52d6-4e90-a823-6ddbe0cdb559",
+              },
+              {
+                id: "6ec23ee8-dd18-44ed-8f13-be303588bea5",
+              },
+              {
+                id: "0c09637d-7ef5-4f0f-8fc5-255c1d7880e8",
+              },
+              {
+                id: "49a7e370-5a40-4082-8c23-ec1f9521aaa4",
+              },
+              {
+                id: "192d60e6-08c7-4819-a907-39a8c1128ef1",
+              },
+              {
+                id: "3a19ea7b-9ea3-44a2-a079-dc9a0f0de224",
+              },
+              {
+                id: "d84cd8cf-d3a1-48db-b40c-f25318d8f68e",
+              },
+              {
+                id: "61088112-42dd-4124-8f6f-f16ec7cdca56",
+              },
+              {
+                id: "9cb78e26-cacc-4698-a128-478ff5bca38a",
+              },
+              {
+                id: "a5e1d823-3b8e-4abf-aec0-e53bdcb591b6",
+              },
+              {
+                id: "fe35705a-680a-4113-b6e5-3e3331c3acc2",
+              },
+              {
+                id: "cf0a6b3c-f9a1-41c9-a069-7bf3aaa222ec",
+              },
+              {
+                id: "d656e5aa-9c22-48e8-8d20-75506a0f6376",
+              },
+              {
+                id: "862a823e-45bd-4655-9446-e73707915a7e",
+              },
+              {
+                id: "69c471b8-2475-4f7f-b57b-8ca8d89a6e07",
+              },
+              {
+                id: "3167bed0-2f39-4232-ae26-cb9c10ad03b1",
+              },
+              {
+                id: "d3e6dc0c-598d-48e2-b5c2-cd0708279722",
+              },
+              {
+                id: "5e6e22e8-d503-48a5-8df0-3a5f1c0a4f5b",
+              },
+              {
+                id: "c8e55245-0efa-4101-9d96-4ee283a2dda0",
+              },
+              {
+                id: "64f6082f-663e-4455-88aa-166d6a762b0a",
+              },
+              {
+                id: "acc61c74-3594-4739-afe0-fd7405fd350f",
+              },
+              {
+                id: "802615e4-43c0-4b5f-9320-bdfceafe54ba",
+              },
+              {
+                id: "4f89733c-f2f4-4d24-9a85-9f95bfc6cace",
+              },
+              {
+                id: "4e5dc600-9140-4442-91a2-5f3d97acf41d",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -2281,6 +5149,7 @@ const execute = async (db: PrismaClient) => {
                     description: null,
                     website:
                       "https://web.archive.org/web/20240217201147/https://nexoscans.com/",
+                    email: null,
                     discord: "https://discord.gg/neoxscan",
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -2290,28 +5159,62 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "f6f517a5-6679-4fd5-80e2-3d8f4377beab",
+            id: "628494a1-2c4b-4925-8f4d-4f116b0a6004",
             number: 175.7,
             volume: "5",
             language: "fr",
             pages: [
-              { id: "f2b66f27-579e-4228-82a7-62909a19226c" },
-              { id: "34496379-47c9-4fc9-8df1-41139c0b44c9" },
-              { id: "1847d5b4-0f45-455b-adc8-479092fbf4d7" },
-              { id: "1e71729c-03de-423c-afcb-d004e8aebd81" },
-              { id: "629b4ae7-6f60-4b19-8149-f4a1a77ef358" },
-              { id: "8f200134-2bdf-4cf6-a86b-7d8b7ee92b2f" },
-              { id: "ac559cb5-6855-45ce-9e4d-e064735b4f2e" },
-              { id: "8f488763-0e78-4144-9df9-2e771b4d7fa1" },
-              { id: "7ebc3b5a-a1bc-47e4-8ee8-0187440c1d1f" },
-              { id: "f48fc16e-e1b8-4732-bccf-22d59442de19" },
-              { id: "f23e7a26-2cd8-4d68-878c-91b6647938af" },
-              { id: "4765595f-7b3c-4b03-9cf5-bfb30e4a5230" },
-              { id: "48be11aa-9308-499f-9942-4b01ac9b284f" },
-              { id: "83655f70-528a-4723-8d25-9cc7eb341e36" },
-              { id: "f93d4891-62bd-403c-b90b-d88c0057260e" },
-              { id: "ef884e70-e359-4513-9496-e74d48aba5cb" },
-              { id: "10368a8d-7618-4c5d-8a6f-bd2cff79da3a" },
+              {
+                id: "70671660-b682-43d5-ab7a-f384e745bb69",
+              },
+              {
+                id: "6fd8506d-db61-41eb-a297-b96c4eb3cef7",
+              },
+              {
+                id: "631d028e-bc86-42c0-8f14-0908ed621967",
+              },
+              {
+                id: "67a7c0c2-fc74-4cdd-a848-be4f7b93eec2",
+              },
+              {
+                id: "93412e5f-aeac-41d8-bb58-dfcf68c21da0",
+              },
+              {
+                id: "ca054b73-b559-4cdf-bf55-3bc6bfe7eb74",
+              },
+              {
+                id: "90da5e49-bddf-4f9a-ab8f-c504ef297206",
+              },
+              {
+                id: "e6bd9726-ff5b-4176-b124-dedd084e3652",
+              },
+              {
+                id: "9157255b-ba24-44dc-a0f6-a33ce89dc4d9",
+              },
+              {
+                id: "1f4627c8-7351-482e-b240-6e503528ac81",
+              },
+              {
+                id: "40eaef23-b065-48cd-82d8-b3c99b6423fd",
+              },
+              {
+                id: "d92300f8-be98-4332-987a-26766fee879b",
+              },
+              {
+                id: "c2003e7b-739d-499e-889d-cb96558c93cf",
+              },
+              {
+                id: "1d6b00aa-6eef-4739-90ce-261fa6807a4b",
+              },
+              {
+                id: "06ef0b3e-88bf-46de-8a72-d0456e79a304",
+              },
+              {
+                id: "3d01088d-3dca-48cd-a8ee-8d310145553b",
+              },
+              {
+                id: "868a758f-8f6e-4b1b-8092-6d1ccf9040bc",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -2324,6 +5227,7 @@ const execute = async (db: PrismaClient) => {
                     description:
                       "Team française officiel de PhenixScans. Anciennement appelé Mangas Origines",
                     website: "https://phenix-scans.com/",
+                    email: null,
                     discord: "https://discord.gg/phenixscans",
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -2333,80 +5237,218 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "0352e597-1827-46ee-a700-df039fbfc4f7",
+            id: "9bcd2832-f7fb-4ece-9427-692f56da918b",
             number: 182,
             volume: "6",
             language: "pt_br",
             pages: [
-              { id: "daf4f95c-854e-4978-9ceb-24d134b21373" },
-              { id: "366b287e-38c8-4c43-97d1-a0b728880b63" },
-              { id: "5093928a-385a-417e-9d0d-6d9fddb6f203" },
-              { id: "fb7a7682-6e7c-49e0-bb02-56ba31d3c15a" },
-              { id: "14523a58-61a0-4f5e-b86a-b8e985e9fd94" },
-              { id: "52828e74-fcdb-496b-9536-3dd7c20b9ee5" },
-              { id: "802cdd88-a591-4556-9d9e-40b95987145e" },
-              { id: "aa9741ab-0d15-4d62-8bcd-b989f12ba8fe" },
-              { id: "0da4528c-490e-469e-9f75-4ea8548a3074" },
-              { id: "657a7da8-8ef7-4010-a977-eb286656fec0" },
-              { id: "db52f9c8-cf68-43e7-ba75-c180bc172b4e" },
-              { id: "40619b04-5874-414d-89e5-954048e37081" },
-              { id: "61c50ebd-cbb4-4396-9886-84edca598711" },
-              { id: "d1228963-e9fe-42fc-abce-ccd2e9d40dcd" },
-              { id: "afcd0251-2dfa-4142-a1f1-2ee0a5b8e93a" },
-              { id: "f1660340-a52e-49f9-b742-134856896439" },
-              { id: "5864f77d-7243-4afa-a986-d1e176b1af6d" },
-              { id: "f3f19e6f-3eca-4da9-af43-868b3bedd4a0" },
-              { id: "ea5511b5-09d6-428b-b480-1571c91b43a0" },
-              { id: "babbc396-ca44-41c1-a721-2a103c8ad053" },
-              { id: "10697e43-e8ca-4832-93d5-29107bde8862" },
-              { id: "b61bf0ce-4b87-4f53-8c38-fe140321a1b8" },
-              { id: "abad0f9a-4abf-4d18-b34c-77d2a4487df7" },
-              { id: "1ebe5588-c895-43fe-aaa3-2320d6b827e9" },
-              { id: "7346d83e-68a2-4630-b577-755b61dda7d8" },
-              { id: "ebc87a18-606a-4045-8f1e-89711c99e343" },
-              { id: "7a0b8585-a202-4d87-a557-42cf2a6523e3" },
-              { id: "e3945515-c744-47e0-9de8-432cb2153a40" },
-              { id: "9a6aef61-7bad-420d-b68f-856409582a23" },
-              { id: "04c14e38-96a9-41a4-a9f1-329f52071eee" },
-              { id: "7cec575d-9719-4e04-a908-94f0d88316b9" },
-              { id: "910581ed-5ad0-49b0-98e2-b2c95e121807" },
-              { id: "7438114e-3cb9-4420-a0aa-66495b4123d1" },
-              { id: "720271cf-fd93-4098-9174-d9a53316bbde" },
-              { id: "841fc703-6a12-46c7-88da-5ccc08d324af" },
-              { id: "4ae4bb90-0098-4e44-b980-070156ce2a28" },
-              { id: "88aa61e6-5cdb-461f-9b34-8a55804a7313" },
-              { id: "5901592c-725e-4196-a034-3ebf574d54da" },
-              { id: "fb312498-b47e-4c66-a669-54b335cdeab8" },
-              { id: "ebaed6f8-7d57-4f3f-bfbc-59a924438ed1" },
-              { id: "a5c407c8-e998-47eb-9db7-60639b6fb849" },
-              { id: "d3720c4e-17f1-4811-bb7e-778e1de30e1e" },
-              { id: "157765c7-e2a5-4418-bd9f-cd4f58cc39a2" },
-              { id: "cb8c5625-f977-4ba8-aa9a-15de2f4c32be" },
-              { id: "3b705c05-e87a-44ed-96e2-2070cc4adaef" },
-              { id: "dc1482e0-33d0-4d1e-af9c-3393c01787fb" },
-              { id: "a2a20d5a-d3a6-4069-8e09-89cb6b2d135f" },
-              { id: "b98ad46d-c715-491f-b902-8d17478e8ce6" },
-              { id: "1ee3ce23-f0a9-41f2-9f92-e6df1bb25c59" },
-              { id: "0e417b97-2f5e-49fb-a172-1dcf910471f9" },
-              { id: "ad3a0d26-7307-4193-9af8-af6c2f954476" },
-              { id: "912d9998-e111-4427-b309-4541ee6f3547" },
-              { id: "814f272f-a256-4942-8a36-68d366427363" },
-              { id: "ef911873-66c6-4f5c-8467-015b3accc30a" },
-              { id: "1b66b229-7da9-4b4f-9982-0da4ff1c0d54" },
-              { id: "18f3660b-7520-41d6-9682-84e742fa7548" },
-              { id: "2d85b0b4-545b-4866-a9bb-82cbea302648" },
-              { id: "d7a52515-4819-4e43-81ad-5c120a3748ff" },
-              { id: "3f06c08c-f1fe-4a0c-9760-7c235eef9305" },
-              { id: "b22c9adf-5c0a-4a0b-9a21-74502d54688a" },
-              { id: "87b7b772-4262-4666-8c0c-f0b94d0e8719" },
-              { id: "4e0774a0-6fd0-4413-8f74-2a151e491d4b" },
-              { id: "225bccb5-74b4-4fb5-b9d0-51afb65ba847" },
-              { id: "8b13125d-1e25-4326-8720-e53405ddca7f" },
-              { id: "f69b063c-7f19-4489-80b4-1a84a9b61403" },
-              { id: "312db630-b089-4f95-8550-ed1084594902" },
-              { id: "ad84be90-2856-4f95-8d8d-25935dbe0113" },
-              { id: "6d7a28dd-ab0a-4613-ab1e-abfd45263f88" },
-              { id: "76457470-9156-4f84-b37e-abe42b49921d" },
+              {
+                id: "54b7313a-b68f-454a-834d-c12907b98194",
+              },
+              {
+                id: "5121b6de-1ecf-4ae1-b6d6-7a453a9b47a0",
+              },
+              {
+                id: "de3c8dd5-ed94-467a-9778-edddcc5343ba",
+              },
+              {
+                id: "4a2fc093-5ddb-4cf2-9976-36b45bae8033",
+              },
+              {
+                id: "b0a9aaa1-5718-4819-b476-279c8cc4bb99",
+              },
+              {
+                id: "3b1ea9e8-7bea-4d8a-bef4-c457b3400310",
+              },
+              {
+                id: "9f9e3a80-684e-4b3c-aafe-a0c68208af72",
+              },
+              {
+                id: "b4977df5-76a8-4f71-9abe-e186d0f19402",
+              },
+              {
+                id: "525945ef-279f-4e94-9e50-40b163a9d727",
+              },
+              {
+                id: "90ed4554-768b-4bc7-90b6-724eac9660b8",
+              },
+              {
+                id: "77fe7ebb-89d9-4c63-bb0f-34225acfb8bd",
+              },
+              {
+                id: "743c506e-9d77-4052-a638-d35cc0f26235",
+              },
+              {
+                id: "bee49470-21de-4bea-9a53-eb7c8e901abd",
+              },
+              {
+                id: "a763bfd9-cb66-4d95-ae0d-fba3e23ab2ae",
+              },
+              {
+                id: "a4537480-ec02-4ac3-a7d2-6bfbb2bf0236",
+              },
+              {
+                id: "d593e69e-f332-4428-bd7a-bd258ac03a14",
+              },
+              {
+                id: "9354861c-4974-436b-88c0-3b5b937aaf26",
+              },
+              {
+                id: "b1b7fa49-fca4-4090-b34d-600ec735ae05",
+              },
+              {
+                id: "a3c783c5-b9b3-4674-a5bd-6fbc44fa3ab9",
+              },
+              {
+                id: "dadc033d-0571-4080-b68e-3accd1ad4e9c",
+              },
+              {
+                id: "1715e2c1-8766-4eec-801d-a572967952e9",
+              },
+              {
+                id: "41ea4925-a8e6-4da0-8f2d-0f7eede0474b",
+              },
+              {
+                id: "63e8a4ce-71c6-49cc-aa19-2eeecab5c8ce",
+              },
+              {
+                id: "b972492e-9799-42d2-be62-15e9c4a54784",
+              },
+              {
+                id: "4a62f074-2bd4-4b18-8ada-cbf6b78c1076",
+              },
+              {
+                id: "c081189c-ee7d-433f-9435-56914ca25680",
+              },
+              {
+                id: "083d6b68-c8f7-41c7-b6d3-9c68621f5600",
+              },
+              {
+                id: "5f958726-db69-4f5f-8c5f-efcfbe5358d2",
+              },
+              {
+                id: "7f6089dd-43f3-4c22-954c-15618b59433c",
+              },
+              {
+                id: "25af2f82-632d-4167-97ef-6de359673725",
+              },
+              {
+                id: "47a164aa-92a8-42e7-b633-31cd38bcc427",
+              },
+              {
+                id: "d8dc64d4-f6a0-4c9c-9920-abb47f02c5db",
+              },
+              {
+                id: "1f12eb58-e5d6-41e3-9220-bb7ad9b311fa",
+              },
+              {
+                id: "ff6219c8-9c0f-42d6-b922-e54133714dcd",
+              },
+              {
+                id: "4df9eb3d-50b9-427e-a2f1-ed75ab8fdef8",
+              },
+              {
+                id: "532afe8c-d428-41aa-9aba-ea0e34ff2fb1",
+              },
+              {
+                id: "a1597704-94bb-4cdc-bca1-c2fd3025d80a",
+              },
+              {
+                id: "d2fcf6a8-1823-4c29-9b68-8e600280018f",
+              },
+              {
+                id: "8fb1b341-b04a-483d-a455-72c80a0f0d7a",
+              },
+              {
+                id: "e7bb2721-9199-4fc1-98c3-dcba1f182941",
+              },
+              {
+                id: "bbdb1d42-9d4e-48fd-91be-47baf1f4d743",
+              },
+              {
+                id: "5c4da6cd-78d8-4b81-b626-5e90b3b9ae00",
+              },
+              {
+                id: "904a7ba2-cf8a-41db-becb-e2dad62e249d",
+              },
+              {
+                id: "f7f57f75-91a0-4ada-ae91-a037d613af25",
+              },
+              {
+                id: "faf35341-262d-49a0-b6d2-6be2acc36035",
+              },
+              {
+                id: "8cd1a98b-2a95-4ca0-b637-905f55c89429",
+              },
+              {
+                id: "f61df9a5-c9db-46b5-900f-d880b966085f",
+              },
+              {
+                id: "9852a95c-b14d-4df7-a04f-2ce71ad489bc",
+              },
+              {
+                id: "3bb3cd45-f9f8-49d9-836d-4e83e4c2ebe6",
+              },
+              {
+                id: "a12c1c7d-153e-46e4-aab3-b81e73cb2850",
+              },
+              {
+                id: "313f0764-2def-4df7-a2f8-d0acbbb130ca",
+              },
+              {
+                id: "3b09d2eb-85a1-41de-b4fb-c1276af951f2",
+              },
+              {
+                id: "cec2dfac-df00-45cc-89c3-ef05055143aa",
+              },
+              {
+                id: "4fff01c6-340f-42d8-b9d2-1f936077fa94",
+              },
+              {
+                id: "d801a40f-aec8-490d-9d62-912196bf2787",
+              },
+              {
+                id: "3cc2baa5-0d9c-4c7a-9e89-4bed274c1318",
+              },
+              {
+                id: "4b0221e8-01f7-4668-8323-30ff15f6b8d0",
+              },
+              {
+                id: "fb9ea7de-5ae1-4900-b5f8-74e4bda2a9a6",
+              },
+              {
+                id: "448974c0-d1d2-48b0-a3eb-d6d85d7f485d",
+              },
+              {
+                id: "5c11aee4-2b68-405e-8863-7c0ae93c8de3",
+              },
+              {
+                id: "b38abb59-5815-4c95-b049-67dcbe529684",
+              },
+              {
+                id: "565953f6-dcd2-4eb7-bd18-6d33a573a4fe",
+              },
+              {
+                id: "82b9c5a2-ba64-4f29-8698-d78dd0c031b4",
+              },
+              {
+                id: "9069b471-517f-4879-b5a6-a80cd95646ae",
+              },
+              {
+                id: "06789487-8fcd-42ea-868c-8d1ba03c9b7e",
+              },
+              {
+                id: "907d387f-f772-43e3-baba-a263ab591df5",
+              },
+              {
+                id: "863e9dd1-5a0d-409e-b3ce-ac8266e40074",
+              },
+              {
+                id: "d48a5a29-b3d0-4244-b046-85a069bcf55d",
+              },
+              {
+                id: "5f82b755-8bb3-4eed-a38c-fe80c5c299b3",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -2420,6 +5462,7 @@ const execute = async (db: PrismaClient) => {
                       "Demon Sect is an aggregator that steals chapters and removes credit pages, do not upload anything from their website.\r\n-\r\nUm Lindo e majestoso Grupo que realiza tradução de fã para fã de Manhuas, Manhwas, Mangás, Webtoons e Rucomics. \r\n\r\n**Nota:** Mudamos o nome de *'Prisma'* para *'Demon Sect'*.\r\n\r\n**Note:** We have changed our name from *'Prisma'* to *'Demon Sect'*.",
                     website:
                       "https://web.archive.org/web/20240106225730/https://demonsect.com.br/",
+                    email: null,
                     discord: "https://discord.gg/ce75Uv3",
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -2429,90 +5472,248 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "2b52b5ea-1dd3-47a3-984e-d8319c58117b",
+            id: "9e16b1fb-faba-4666-a404-7bc38697effa",
             number: 206,
             volume: "6",
             language: "pt_br",
             pages: [
-              { id: "c34d96f8-0dee-4f90-bc01-b3bf0a6a395a" },
-              { id: "c13be174-4624-48b1-b756-9e7dc58c922e" },
-              { id: "4393cc33-b978-45d0-88f5-a67e327bbf04" },
-              { id: "e8310789-2bda-4494-a083-874818bc4a63" },
-              { id: "5f392726-bb4a-4f58-a5bf-ac11703d7cd4" },
-              { id: "5c59c590-473e-4748-b557-5e1182066b4e" },
-              { id: "7dcea4e5-9cfe-4f60-bf70-725e61e309f9" },
-              { id: "2d27d8bd-802f-402f-b87c-cfa73cac46fa" },
-              { id: "5d331eca-c7dc-41f9-abb1-5bb5daf03bfa" },
-              { id: "edaac521-a0b3-4a9c-90e1-4a90ca06a08c" },
-              { id: "e91604ac-6c75-46de-86c9-0799a13b561c" },
-              { id: "cabfc5ba-6b02-4606-8b0b-3c9602064ace" },
-              { id: "93f5d448-e1b5-4b74-8f20-895bda2b7ab7" },
-              { id: "7a16e843-acef-43c6-9898-cab051298c5d" },
-              { id: "83a11e1a-98e9-4161-ade4-42d005e6c517" },
-              { id: "6ea972d2-0005-4a88-85fc-bb9838b22093" },
-              { id: "b5267334-3451-4739-b1b5-e2e7c3d2b765" },
-              { id: "f49b7784-4e41-4063-b0d0-c0a5ba643921" },
-              { id: "f91cf5b6-4f49-4be6-b29f-516623edb3c6" },
-              { id: "19136f14-d086-450b-8e23-2a4f3f3c6fb3" },
-              { id: "ad01bde3-5b58-471d-b79b-01007d501ecb" },
-              { id: "4a708079-fe05-4acd-be1f-89be6efd529d" },
-              { id: "6111a266-dd18-4bba-a8e6-23e9232fd1bf" },
-              { id: "9c8aa0c4-f9ec-4566-9045-ae20e3c2d092" },
-              { id: "fbd1a0f0-1cfc-443f-8a6e-8e4cbe20e381" },
-              { id: "4746897e-756d-42e9-a960-c47b28f71fba" },
-              { id: "e4b6b3c1-4275-4348-80e5-33528c5d2e1f" },
-              { id: "fff0f22f-d52f-442c-872b-cda6011df8a6" },
-              { id: "ee394dc9-18af-4205-8240-5835655a1a5b" },
-              { id: "7caa1eae-cb27-496f-b51f-70a5a55df8de" },
-              { id: "9120e11c-4e63-4b90-85a6-c5806d4abe38" },
-              { id: "b6c39b66-9e7c-4f57-8153-f4f0db4afe8f" },
-              { id: "e3c591de-0df9-4b5b-b5e7-6d3ac09f1979" },
-              { id: "6da20585-29bc-417a-8e74-f0320c073064" },
-              { id: "db98d1c1-6133-44e1-9fe1-47faf8f1ba20" },
-              { id: "2f9f0a3c-e7fa-45e6-8e4b-01e24a96831a" },
-              { id: "0b2a7967-225e-4202-813d-428da78ece95" },
-              { id: "729f0b16-9123-43f6-a935-c657123495a7" },
-              { id: "6814cef5-0851-4bcc-81f1-e9e1f797c86f" },
-              { id: "7e1bfb52-3719-4479-a5ff-a5053feb822c" },
-              { id: "7f0daa2f-5e48-444c-856b-e167c32472bd" },
-              { id: "502d80e1-5ba9-43dd-a6f9-34011cde939e" },
-              { id: "d8288130-0f6d-4f5f-9e17-2901a229abde" },
-              { id: "f4f823ca-b95f-47a0-9af0-a29fcf795c5f" },
-              { id: "8db59d19-ea5a-4581-ad99-2b9666fd1c9e" },
-              { id: "61b1cd5c-13e9-4c77-86d6-5915c38c2cec" },
-              { id: "09faafdc-ee3e-40f0-8435-666d452aedc2" },
-              { id: "24a4c854-4fa2-4211-ba23-54313f64826b" },
-              { id: "ad536b84-2028-4e41-8ddb-14b8f8d9be70" },
-              { id: "a2a52155-8a29-4bcf-a0c6-045416a11dee" },
-              { id: "5a08ef42-859d-4d77-8866-75b05286654f" },
-              { id: "fc981b97-5db0-4286-8acf-96cfe6af89d5" },
-              { id: "c2e0d3c2-851b-41ae-8a13-e347f69642bc" },
-              { id: "bb03454a-b72a-497e-a4d5-81bf317308e5" },
-              { id: "56d94d9f-c26f-4d0c-bdbe-d16fc8953cc2" },
-              { id: "44e4f55d-6d9d-431e-909e-158e545a7484" },
-              { id: "0cd53795-41f2-4e81-bda7-3f67008672ee" },
-              { id: "d2eb2840-eee7-4212-8670-a045d7efc3b1" },
-              { id: "1b76fa8b-3fe0-408e-9902-3cfa3da72803" },
-              { id: "8de32faa-45b8-4369-9698-12f4fc442d05" },
-              { id: "d03e1b24-9e56-46ea-895b-d2956a7c27ab" },
-              { id: "840efadd-2f9a-4f73-85fa-8a788ebd6a4a" },
-              { id: "ca4575c5-e7d5-4f92-b695-84db896eaad4" },
-              { id: "a484f9a6-8033-4abb-97b0-9143fd68fde9" },
-              { id: "e10b0dd2-b2c8-4ef6-ad00-16f838558083" },
-              { id: "b7bb00c3-beae-4b7e-b0fe-4c6346086e66" },
-              { id: "320083db-e915-4701-8c0a-2484c53e81a5" },
-              { id: "8c3ffecc-a37e-4e4f-9359-9ff12cb5d2c0" },
-              { id: "5b891282-ba38-4f91-be33-c6be34477055" },
-              { id: "9c626751-4a9f-4f4a-a420-be638a196162" },
-              { id: "2ef6d7ef-a9fd-48c1-b755-61eb27550a48" },
-              { id: "019db1c8-5c09-47f3-93ed-f1fcbeadfb79" },
-              { id: "cd9bab39-bf69-486c-a064-90cd0cfc5214" },
-              { id: "ef8ba683-9617-4076-878c-4afe7edf41e5" },
-              { id: "cf933ffa-df92-4956-aa4d-ea262cba72eb" },
-              { id: "52f2669c-2ee0-426f-82da-c0bee7318c8b" },
-              { id: "d6b7deca-98cb-458f-a061-ffeeb40aacd6" },
-              { id: "4be66458-4634-42b5-858a-d4bdef310b66" },
-              { id: "a5128ebe-b0b7-4cca-9ace-e13170f563df" },
+              {
+                id: "3949836d-5688-483c-b249-a278c89bf475",
+              },
+              {
+                id: "bee698a1-0b6b-4b18-baa4-7c065b67e3b8",
+              },
+              {
+                id: "7feec2c6-a797-4261-a040-c721da49fbe2",
+              },
+              {
+                id: "cd038433-27b8-4b2d-8e22-f63b7c4247b8",
+              },
+              {
+                id: "2b4a0d97-046f-4d8d-b38e-643203a89adb",
+              },
+              {
+                id: "33fbab49-a79d-444a-8bb5-bc91fe9703be",
+              },
+              {
+                id: "8adf7ac2-e571-43e0-aa7e-f54f81f30551",
+              },
+              {
+                id: "d0cd8e9a-d2eb-43a5-9518-d903eaf34e91",
+              },
+              {
+                id: "13462f3a-3aff-4663-815a-ec8192b6292a",
+              },
+              {
+                id: "2414c746-5898-4f03-894b-15b3a0e879d8",
+              },
+              {
+                id: "c29f5e27-6c7d-4456-88d3-3428c3adf9e2",
+              },
+              {
+                id: "acfee4f9-bd3c-4330-987b-4ba30cf611d0",
+              },
+              {
+                id: "25bbc444-2c4c-4f09-b666-793b60e33368",
+              },
+              {
+                id: "cb8dd62a-b8ba-4a7f-a71e-3fdf40b59e27",
+              },
+              {
+                id: "22bba1f1-57cb-4bd2-9f4e-eb636572e571",
+              },
+              {
+                id: "d38f131d-8632-43b8-806e-08fe1784cd33",
+              },
+              {
+                id: "3f2bfbcb-56c7-40c3-bf45-b74a3e6d0230",
+              },
+              {
+                id: "c5f1c2fb-5d49-47f7-a9dc-5a4b9d56740b",
+              },
+              {
+                id: "a010b74a-57ba-4bab-b0d5-b0a398f7d2fa",
+              },
+              {
+                id: "72d143c9-dd38-4403-af17-011b5084e8cb",
+              },
+              {
+                id: "f218db18-4c9e-4dc6-b271-aa5aafb13a4c",
+              },
+              {
+                id: "54aefdd7-6bef-47c9-9d39-989f0bf7b927",
+              },
+              {
+                id: "a04c950d-6008-4dea-a27e-7001f2279164",
+              },
+              {
+                id: "b3e1cf97-549e-4dc0-b306-804862208e1a",
+              },
+              {
+                id: "41fc7007-7a17-46e5-9dac-296a94d897c3",
+              },
+              {
+                id: "a26872f9-5c84-498d-9ddb-dd6b901aeba9",
+              },
+              {
+                id: "7f011bbe-0189-4674-a9fd-59353e516cd8",
+              },
+              {
+                id: "c6293698-7796-4c77-9e41-a07fe7144ac5",
+              },
+              {
+                id: "c2385a80-f8cd-4264-baaa-9a87194469f2",
+              },
+              {
+                id: "2c882c86-5521-4e15-87a3-c259996e5bde",
+              },
+              {
+                id: "93073acd-06e6-4953-b818-e1e78b611b8d",
+              },
+              {
+                id: "e87d2dfc-3d82-452e-9de1-ce057a056ee9",
+              },
+              {
+                id: "a610a7c0-6c8f-4d88-83f8-4fa5e72a28e3",
+              },
+              {
+                id: "1617d37a-2690-4336-a10c-f36b387ed222",
+              },
+              {
+                id: "737c0e98-7d19-4767-8781-88c373062019",
+              },
+              {
+                id: "d4f44e51-dcce-424d-93ca-154504dd7894",
+              },
+              {
+                id: "f2a75593-69b2-48cc-92c5-988387395071",
+              },
+              {
+                id: "93fe0274-81ee-49b4-b574-6c79e3eeb48a",
+              },
+              {
+                id: "d2998d5f-58d7-414c-922c-8719384031f9",
+              },
+              {
+                id: "49ee4c4c-0b75-4d74-a7ef-b252b2bdb04a",
+              },
+              {
+                id: "4ddacc32-2356-47e9-87f5-31ec3c264d39",
+              },
+              {
+                id: "083d2a9c-c4fa-484d-9fe0-84aec276a851",
+              },
+              {
+                id: "3f301ea0-fce9-4fc2-9535-bc782331c5f5",
+              },
+              {
+                id: "13f398ed-810d-42a1-b5aa-4904ae4e26db",
+              },
+              {
+                id: "6f1d61a5-049f-4425-9431-33952aa90464",
+              },
+              {
+                id: "bb743a15-c63e-424d-b13c-d39b73e6e559",
+              },
+              {
+                id: "a87f0d5c-65aa-4ea9-83d1-4421b6db9c69",
+              },
+              {
+                id: "b2beba39-9744-4bd5-adee-7d26bc631f14",
+              },
+              {
+                id: "0d7b64f5-1560-4379-ba55-950dcc356e64",
+              },
+              {
+                id: "a95ee591-89f8-4e40-9411-a3c242e11def",
+              },
+              {
+                id: "9ea3c6ff-eb8d-46fd-99c2-5f116b10087b",
+              },
+              {
+                id: "a48fb32e-fdba-4307-ab6e-319be422ef6a",
+              },
+              {
+                id: "20535887-31d1-47cf-a80f-1ed4723db9c5",
+              },
+              {
+                id: "365b37ac-e825-4aa9-9453-c51e63d2a6f1",
+              },
+              {
+                id: "8ef41260-36a0-42ac-8af9-488fd0345bb4",
+              },
+              {
+                id: "5499038e-805f-4a32-b00c-b88d78c718f6",
+              },
+              {
+                id: "03a22a99-7110-4dfd-9de8-a0e5e99e31d1",
+              },
+              {
+                id: "141da6e9-baad-4e53-a6d5-a75c27a62943",
+              },
+              {
+                id: "d051eac4-889c-4b4d-b3bf-437b7cd8c19a",
+              },
+              {
+                id: "38df41e6-fbe4-4119-ba72-c378ab085764",
+              },
+              {
+                id: "bdeaead0-949b-4e64-b480-e00460a8333a",
+              },
+              {
+                id: "f62289a6-c723-4bdf-8a25-a904b752e10f",
+              },
+              {
+                id: "340753dc-710b-430f-be0a-6c74838256a6",
+              },
+              {
+                id: "91321e37-7a2e-42c7-87e0-119fa32620fd",
+              },
+              {
+                id: "c563448f-7ee1-4f9f-8f62-c26bec8a80cc",
+              },
+              {
+                id: "ae318763-ef02-4e8d-934d-bc6cb5d5a6a1",
+              },
+              {
+                id: "7b05894f-e85c-4069-a238-6ba6da68de70",
+              },
+              {
+                id: "17f03fed-bdff-4c8a-8b99-5ad963b8cc95",
+              },
+              {
+                id: "29150e58-c23e-4ab1-8f6e-8f265a1b8e11",
+              },
+              {
+                id: "04a83818-85b9-4b7d-bf2c-177de51c08d0",
+              },
+              {
+                id: "71f3374c-1da0-410d-9ccd-310bc52e32a8",
+              },
+              {
+                id: "32ecd21c-5b47-4760-8726-74fe58f5c2b0",
+              },
+              {
+                id: "eedfbf34-900b-444e-8ba6-2aaf22e4583d",
+              },
+              {
+                id: "1853ac6a-4a68-40ef-8689-7b92666475c0",
+              },
+              {
+                id: "651da157-32ed-4894-9b3d-0df60738ef50",
+              },
+              {
+                id: "d6170273-6f06-405b-9e2c-e3b805ae3d40",
+              },
+              {
+                id: "723ae1df-5f6a-4982-809e-2d45408b3910",
+              },
+              {
+                id: "4e2d649e-904c-41c1-ab74-04ce01d70f0c",
+              },
+              {
+                id: "d1d5de66-4e82-42ef-90ad-38625c69e405",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -2524,6 +5725,7 @@ const execute = async (db: PrismaClient) => {
                     name: "Sagrado Império da Britannia",
                     description: null,
                     website: "https://imperiodabritannia.com/",
+                    email: "sagradoimperiodabritannia@gmail.com",
                     discord: "https://discord.gg/rypuz3wnwf",
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -2533,105 +5735,293 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "85ab6b55-910c-47b1-8507-b0674faddcde",
+            id: "4fbe09cb-9c23-4832-a438-2c88d20b20ff",
             number: 207,
             volume: "6",
             language: "pt_br",
             pages: [
-              { id: "5640618e-caf9-4ba7-ac77-9d5ccf204041" },
-              { id: "50bf8275-25e4-461b-98bb-9b7f964ade88" },
-              { id: "7ac2f674-5952-4e10-832d-dac6e17b9b9b" },
-              { id: "256c273b-2ec6-4ee7-9070-f12317ffa480" },
-              { id: "0513c402-472c-4099-9d12-3faa261f32f2" },
-              { id: "2215bd94-3190-4fd3-b4f4-c51fea4a475b" },
-              { id: "e8cb4d26-4919-4259-b813-a1d681485a6f" },
-              { id: "ca90a55a-d4b5-4f4a-b841-acc793be7487" },
-              { id: "a14e459a-551e-42a5-aeb4-577f856139ba" },
-              { id: "25349610-e6d7-43a4-8af6-d95e90c45841" },
-              { id: "03d43d19-e3b6-4cb1-be2a-37cfbf32b6ad" },
-              { id: "4e4fb2a0-bdd3-4dd5-97df-8080256cd11d" },
-              { id: "2010125a-f82b-47ce-8607-a902fc08b535" },
-              { id: "18c28726-318a-403c-b305-7e6297c076a5" },
-              { id: "8b89f3b6-b579-4c91-b5d9-b190b05627ca" },
-              { id: "4603b720-3693-411e-9641-fbcf2ecbf4c9" },
-              { id: "e9b17524-eedc-42f0-b6c5-8ea4ad690068" },
-              { id: "d8281ced-e33a-470e-b228-81d2451878dd" },
-              { id: "66868a03-4fa6-4cae-ab9d-a401739f41a5" },
-              { id: "8574b5e9-2bca-464a-b83d-366c81621323" },
-              { id: "9bff8e25-8d50-47eb-b46e-54d5a701adb5" },
-              { id: "e292704e-cb0c-4af3-b3b8-caca9f87869c" },
-              { id: "aa3dccab-9935-41f4-a0c7-e54ae3dc31ee" },
-              { id: "2c7ad890-5fb6-4174-b1a8-5904bc3cf5d9" },
-              { id: "5fa5bbba-ad92-463c-9d13-0ec507ecbf28" },
-              { id: "b5809b32-a27c-47d8-a6c1-0e451a27ad9e" },
-              { id: "449e925a-87ae-4dff-9689-34a67ac816ac" },
-              { id: "0ee9b92e-5235-4c76-961e-cf5f83f3f3d6" },
-              { id: "cd1d8cfc-fb72-40d8-ba3b-787e88c18965" },
-              { id: "3c392913-0781-496a-8e48-88e169599c5f" },
-              { id: "188332cf-9c5c-48a7-9d59-303c46f8f184" },
-              { id: "e5cf7a56-c7be-4b73-bf09-b2ad26baa4c7" },
-              { id: "39ecdbb4-0260-4244-a73d-a1a6d7a97d31" },
-              { id: "90c40a73-2639-4ce2-9f28-91859aa9c5fb" },
-              { id: "ca19f03a-779f-401b-80b4-ec7e1e4dead3" },
-              { id: "b0de2d83-5c20-4515-a92c-6de59c223d37" },
-              { id: "c02d4743-cd3e-464f-9103-a85a29c3826a" },
-              { id: "eacfc0c5-6a67-48fe-9801-ed4851338ade" },
-              { id: "e874a308-3f34-436e-8439-a63c17b0d6de" },
-              { id: "63e8c720-0fa7-41c5-b492-e53b2acc174a" },
-              { id: "ab5b8e8a-349c-49c9-b0ee-3ec2f56c4a1d" },
-              { id: "2735f348-de76-4604-847f-dab11dbbbb83" },
-              { id: "9b422ef9-2709-46d8-9160-22f187ec9ffa" },
-              { id: "0533c674-1ee6-4b79-bee2-b50dbd191e1f" },
-              { id: "5d253135-f63d-4deb-b692-872905b0fd36" },
-              { id: "b2184e09-cf39-48bf-85e4-af02964c7f0f" },
-              { id: "5477642f-bfe7-495c-bdad-89dc08feec72" },
-              { id: "de13840a-c056-46f6-bc3d-47b18cd26e13" },
-              { id: "a3491a2e-15c2-45d9-8d42-48b0bbc5b956" },
-              { id: "31870364-83be-449b-a928-1e7a4e0f36b7" },
-              { id: "fd2dad33-b0e6-467f-8b96-4e137ea1a189" },
-              { id: "e8e6f7b7-1996-4363-9951-784ce1291503" },
-              { id: "8933e01c-c00c-41e7-a086-d2d627c77485" },
-              { id: "b9d03ea8-a831-424e-aee2-33ffa7427630" },
-              { id: "e191af1c-a1f6-44f8-8bfe-9ebeea7620b1" },
-              { id: "314b2960-bbad-4684-b130-afeb7ce8e446" },
-              { id: "baaa052d-269c-4472-8170-0a9054d4738e" },
-              { id: "b4fb36aa-76cd-449f-aee8-e08dbcb6c0e4" },
-              { id: "3831fb29-4721-4f22-bc33-3593a8085b89" },
-              { id: "3a24bfa0-e1a0-42d3-aad5-4c121f7064b1" },
-              { id: "6634f89f-e857-46f2-826d-4c6c19dca787" },
-              { id: "36507ae4-1ff7-43e9-8ead-a40362a52ca7" },
-              { id: "6b407502-0803-4667-a72e-56f37d01a1b8" },
-              { id: "3d205803-f338-4696-bf3e-c609d82044aa" },
-              { id: "1d829a1b-12a1-4b1c-9dba-cfd7ad6e44a6" },
-              { id: "36cebd29-6a3a-4944-bfc0-925ab9063b2a" },
-              { id: "4598fc45-cb25-4ade-95bf-dd3ffa17fa6c" },
-              { id: "b5578b3f-18eb-4969-aea4-c705a4dc5c68" },
-              { id: "7da22af5-5729-4fd7-ba4c-125ceefcf79a" },
-              { id: "44832905-ae6a-4c03-a7e8-2ed40784446e" },
-              { id: "e335285f-21b9-4356-8dc4-e4fd5b698408" },
-              { id: "3177d727-b7de-42b7-87c8-a063bc08ac81" },
-              { id: "49d89991-18df-44ac-92f3-1aa3645f46ca" },
-              { id: "bb89ffd1-2f1f-4173-9cb9-bdb8e6075ac9" },
-              { id: "c1ecc8e5-f1c3-426c-9600-6e3208f4fe32" },
-              { id: "04fcede6-bf5d-4f76-9b07-f7655bacdfdf" },
-              { id: "de0379bf-4bf9-407f-82a1-6f4d85ab2e0d" },
-              { id: "fab10edb-f2fd-42c8-bd60-c186f88096cc" },
-              { id: "79cb59c7-b1da-4e39-a3f5-0446cf3edf52" },
-              { id: "c6afdcfa-e905-41c0-a714-3c9c3a190b81" },
-              { id: "3482ee52-5c95-458a-bd43-6b5dfec26400" },
-              { id: "6c4fae4c-db86-4eda-b4ff-097d49559b46" },
-              { id: "9d2109ee-7966-44ec-a1a4-e1c8eb6d6743" },
-              { id: "63fd7754-9e8e-43f2-9251-bfa522bde559" },
-              { id: "86170ed0-542e-448f-a064-67f444ab5ceb" },
-              { id: "48ed08c3-eecb-4ff9-9183-38010d792e3d" },
-              { id: "eeecf92c-344c-4985-89d6-a2b34c1bd48c" },
-              { id: "3c2c99f9-162f-4941-bf14-963e93de6188" },
-              { id: "52fb9bd1-8801-48b5-8de3-d7ba85f3de5e" },
-              { id: "132e3f3d-cfff-4dc7-ace2-f9145b6af068" },
-              { id: "198590af-5cac-4dd0-baf1-ae089e305178" },
-              { id: "211d286d-1cd0-46d2-b64b-680107ace01f" },
-              { id: "8dc4ba93-c54c-452c-924c-8ac17baf91e5" },
-              { id: "664e2616-411e-473c-b0e5-1a939841e3cb" },
+              {
+                id: "a1d54029-8ed0-4223-b966-adf6741e8b22",
+              },
+              {
+                id: "102cd09c-98ba-463d-9b22-1f441ec52385",
+              },
+              {
+                id: "25ef4bd6-725d-4b6c-b27e-c7d71c7d85fd",
+              },
+              {
+                id: "e393cb81-dc4b-4f64-b054-ff443b50ccff",
+              },
+              {
+                id: "c5a46321-318c-4846-bd8a-8afa9f235415",
+              },
+              {
+                id: "ff5b1389-d8fc-4f53-8f3f-374428304b76",
+              },
+              {
+                id: "f5bf3b5e-9713-4b04-aabb-927dd794fca9",
+              },
+              {
+                id: "5c4faf21-84ec-4e2c-bd2b-28fba5cd1690",
+              },
+              {
+                id: "50f0e0bd-1a8c-43be-9e3f-2fc8099189f4",
+              },
+              {
+                id: "933110ae-0b18-4917-ba68-ccb040653b87",
+              },
+              {
+                id: "0208704c-e897-463f-a7c8-b0904ceb61a8",
+              },
+              {
+                id: "b6e45072-5cf3-4b46-a7e6-02056b2170e5",
+              },
+              {
+                id: "c9fb8c66-0bdf-4895-932b-17147e0bb930",
+              },
+              {
+                id: "9b02b26c-f230-414b-a53e-2c57b3372a34",
+              },
+              {
+                id: "a5ccbee2-e7e1-4204-bfc7-3e73d96944c2",
+              },
+              {
+                id: "d1278bbf-4475-427c-b4c0-fe558165b390",
+              },
+              {
+                id: "ee5b35f5-184a-4c39-983d-fd89525743e0",
+              },
+              {
+                id: "683d4ceb-6821-4cfb-88f5-777864bfea35",
+              },
+              {
+                id: "34caf132-6c74-48d4-9da7-caee7889c244",
+              },
+              {
+                id: "bb4b42c9-94b6-48c7-b709-09f040c6efc7",
+              },
+              {
+                id: "276cef24-634a-4018-8710-3cf7ff2ccfae",
+              },
+              {
+                id: "bfdf4221-61b4-44ea-bf14-d9ca45d1d222",
+              },
+              {
+                id: "aec1a5b0-8645-4aac-a4a5-2bf658d6a918",
+              },
+              {
+                id: "5264af8a-41dc-4b03-ba09-77675bd95abd",
+              },
+              {
+                id: "e1aeb71c-85df-4aa2-88c8-3246b4a035fc",
+              },
+              {
+                id: "38b47e81-c9b8-4472-a3a2-7a2dd698e244",
+              },
+              {
+                id: "11f49a95-fccb-49e9-aaa9-e2990452ff42",
+              },
+              {
+                id: "8947abc0-bd41-4b18-8213-4c0e94b44c07",
+              },
+              {
+                id: "f7ef559d-0c8d-4858-9983-fd98d4a7b5e2",
+              },
+              {
+                id: "5eb5471e-6c8e-4099-89e0-df8abba87964",
+              },
+              {
+                id: "fdaf1231-b28b-49d6-bc33-37dcdcdd20bb",
+              },
+              {
+                id: "0f791b41-e296-4a02-96a5-1673980788ef",
+              },
+              {
+                id: "6798aa7e-c6d0-4c16-9c11-d3646edb9db3",
+              },
+              {
+                id: "427f38db-32a7-4df4-9cf2-c59ce02c423c",
+              },
+              {
+                id: "aa222861-fbb5-4f2c-960a-1504b2c32f41",
+              },
+              {
+                id: "a86e6712-0cc2-484b-8506-5852eb1b44bf",
+              },
+              {
+                id: "7ba238d7-9203-4ee8-b2a7-0c402930374b",
+              },
+              {
+                id: "1b7bd477-b3ec-4a94-b0ce-6dec4be08c8f",
+              },
+              {
+                id: "e3839777-a65f-40d0-b076-80ba20e0635b",
+              },
+              {
+                id: "b9300edc-3bed-4474-b5c6-3b23308841ef",
+              },
+              {
+                id: "becdcda2-e97e-40a2-8887-ceca750b3567",
+              },
+              {
+                id: "43496ccc-aef6-4cdf-b416-18ad700cf97e",
+              },
+              {
+                id: "f888054b-7f17-4f73-9096-c2249657bf18",
+              },
+              {
+                id: "da23281b-9bf2-4e8a-8afd-d8be81452641",
+              },
+              {
+                id: "b279f7a8-65ad-437b-8473-32a861990246",
+              },
+              {
+                id: "889b5a5d-fab5-45fc-99bf-f81330458bd4",
+              },
+              {
+                id: "bdf06b22-3305-490d-ad0e-c25700caa567",
+              },
+              {
+                id: "877ddbbc-7bd5-41cd-a33e-42365cad2c47",
+              },
+              {
+                id: "4cf71060-1600-48d7-925a-3a7bc8e1a6a8",
+              },
+              {
+                id: "4c1a15d4-8522-449a-aa91-1f10c2e63457",
+              },
+              {
+                id: "86060f23-06e0-4747-a544-9286db9821a9",
+              },
+              {
+                id: "a99a452b-74a3-4d87-ba2d-a9ffdb279e0e",
+              },
+              {
+                id: "308e203a-7cb0-40d6-a0fa-d40e9d5e60c9",
+              },
+              {
+                id: "7f2fefc7-0e53-4392-ac26-aa7d53bb7863",
+              },
+              {
+                id: "64fa44c6-cdd2-4054-9f86-5d89ba9e2166",
+              },
+              {
+                id: "7702e1ee-481c-4899-a28a-89c29658aaab",
+              },
+              {
+                id: "a8adf96d-fdee-4a03-b39a-aec16987ccb9",
+              },
+              {
+                id: "2c7e88d9-3ad6-448c-abf4-8741fc40ad61",
+              },
+              {
+                id: "16bf7b91-336b-462d-b06b-48362532dafa",
+              },
+              {
+                id: "138811ad-3075-4f1f-b718-9a1640245862",
+              },
+              {
+                id: "ebb87003-b3f7-477b-8f64-f30cbba6ec76",
+              },
+              {
+                id: "97041cf3-8e1d-4459-9f0d-61350950e127",
+              },
+              {
+                id: "821efefe-90d7-48d4-a6e3-6fafec8912fb",
+              },
+              {
+                id: "afcb3d27-5853-4319-8b2f-4b087867d59d",
+              },
+              {
+                id: "382e70f5-a559-4531-8247-323932f4bd10",
+              },
+              {
+                id: "b83d4a9b-7b61-4c6c-ad4b-0b26a0a251c1",
+              },
+              {
+                id: "a62d9859-1320-466c-a9a3-2a1fcb589568",
+              },
+              {
+                id: "b6a75808-8368-45f6-9544-94b3e55a0f5d",
+              },
+              {
+                id: "441a3485-ccad-4724-b3ea-436394cacdc0",
+              },
+              {
+                id: "54413da3-aeab-48a1-8baf-19c91e3dde5c",
+              },
+              {
+                id: "0296acb3-b9fb-4e98-9d09-39e34b59f1d4",
+              },
+              {
+                id: "35ce34ad-7e55-4e9d-b890-57a8f4c3c3b0",
+              },
+              {
+                id: "a591d142-ac77-4400-b4d1-d7411274a4f1",
+              },
+              {
+                id: "a27fe462-773b-4c6f-b920-699839560c1a",
+              },
+              {
+                id: "7c0f1e5d-1372-43e9-9059-096d824df7fc",
+              },
+              {
+                id: "2fde9d24-0e08-4077-9d2e-6bb19eebdab3",
+              },
+              {
+                id: "2f207f6a-e314-4c41-8cfa-cdc5aa18ce40",
+              },
+              {
+                id: "0cd57ac5-4742-4377-aff9-fe7c0b4318f0",
+              },
+              {
+                id: "58f9fe43-6b04-485a-bcbd-3fc4d3b35b66",
+              },
+              {
+                id: "909bfb52-4914-4d58-a50c-c95995e12024",
+              },
+              {
+                id: "318d2312-313d-403d-8441-6527a45e5716",
+              },
+              {
+                id: "3c985f6f-1858-4cdd-9cae-858d24571f6e",
+              },
+              {
+                id: "57248b4b-9a36-418d-9aed-d2a4664ed951",
+              },
+              {
+                id: "9ca02ebc-8af3-4b0f-90b0-e4997ba58e76",
+              },
+              {
+                id: "d16c5c24-cff1-4d86-a6db-fc2e7f98b8c7",
+              },
+              {
+                id: "9d8c8a90-7373-4c2a-b121-732958a2df9f",
+              },
+              {
+                id: "d21f71b8-2e9a-436a-8cf1-da75dc74301d",
+              },
+              {
+                id: "cb721254-e188-4db1-9d3c-f1aae2919e94",
+              },
+              {
+                id: "64a7099d-26b3-44dd-a86f-1b7453f51c17",
+              },
+              {
+                id: "38b2bae6-d045-4615-ba41-b605fe85082b",
+              },
+              {
+                id: "2e4e3049-f525-49e9-81d5-9fbaef0d8946",
+              },
+              {
+                id: "81af897b-c10e-430c-a56c-d1bc568d22a8",
+              },
+              {
+                id: "cb511470-7706-4076-8184-e897503b0aaf",
+              },
+              {
+                id: "071e76b9-7870-42e5-998f-922416be759b",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -2643,6 +6033,7 @@ const execute = async (db: PrismaClient) => {
                     name: "Sagrado Império da Britannia",
                     description: null,
                     website: "https://imperiodabritannia.com/",
+                    email: "sagradoimperiodabritannia@gmail.com",
                     discord: "https://discord.gg/rypuz3wnwf",
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -2652,67 +6043,179 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "603b8a8e-0876-40c6-a46a-ef08f1e7a68d",
+            id: "ef29add3-6688-4d42-b874-4447f0980d60",
             number: 208,
             volume: "6",
             language: "pt_br",
             pages: [
-              { id: "f22e6903-e499-4c95-95f3-8b47655f9b38" },
-              { id: "b5b1b7fa-189b-4c18-ba26-46f9e39e397a" },
-              { id: "f902b0e6-e38a-4ee6-bb0b-66f9b993d6f2" },
-              { id: "ac583565-11e8-446c-bf02-5819b0a69667" },
-              { id: "bb55fe7c-169f-4d4a-b9bb-6beeec31fccc" },
-              { id: "6f353831-dbae-429b-9e11-25cb9f1b358f" },
-              { id: "c9b48575-3278-49bc-9f11-bc0f10383044" },
-              { id: "f22f810c-2b61-4537-8ac5-e55337908786" },
-              { id: "063eb517-7c60-4d02-9573-83a9e5894932" },
-              { id: "65ed2421-9721-4852-94c8-2fa39ba610b1" },
-              { id: "28097991-98c6-4e14-bb4a-47311c598783" },
-              { id: "2f396b93-d625-4ecf-8c6e-d4af15d60f0a" },
-              { id: "17c4a784-1fea-480d-b7fb-228ad8cb37cc" },
-              { id: "57a85c65-3d40-43b4-abad-ee1a59e6028c" },
-              { id: "cd33730b-9e68-4ade-bd61-2254a6c64113" },
-              { id: "763c4a89-ed9f-4265-9f49-fbd950978dff" },
-              { id: "bcd7cdb8-bb05-470a-8a48-3efbcadef7c0" },
-              { id: "26587372-fde0-454f-84ba-28307a55c66f" },
-              { id: "d4437a85-8b1a-4042-b65d-e5fe1d136627" },
-              { id: "d14c654d-499b-4baf-90de-779cdc15ba82" },
-              { id: "1a45e64d-43d5-4bda-b85a-5e8276fdbf7f" },
-              { id: "b0ee8b6f-46da-4ead-ab0e-77ece6a50e57" },
-              { id: "cdf6a0a8-44c3-48f1-817a-957f95e6c5f7" },
-              { id: "804b3a2c-4acd-467c-a310-7e1bd466dd0b" },
-              { id: "ac91d3e0-31be-4e81-9bf1-0d0746ab933c" },
-              { id: "0237663e-86f3-4625-8a04-c4f911dc378b" },
-              { id: "f1e84712-86f5-4098-8af7-82d99e5d1b7a" },
-              { id: "e7f8fa67-f4f7-43da-9ac3-78b62b0091d0" },
-              { id: "6d25690e-b652-4782-86b6-6ac36989b784" },
-              { id: "64404639-298e-44f3-bea7-26f5babba602" },
-              { id: "2534fd0d-8f6f-42b2-9c94-931198dba69d" },
-              { id: "612450ac-2675-4ffa-a080-1c872add0e6d" },
-              { id: "78763a3d-ffcc-4999-aac0-6107dc2b6870" },
-              { id: "c0aa7c96-2bbb-4b95-b890-0d7ef7ab51b7" },
-              { id: "11897688-cd52-4f80-826b-5163e5715e01" },
-              { id: "c31a4605-d0c8-4d12-8876-7eb900634d37" },
-              { id: "2cb9ddb2-2418-4350-a786-5b683511629d" },
-              { id: "8322cb45-1b23-489e-8467-d57bc0a52a93" },
-              { id: "fd2ee1a6-e635-4303-8946-85f22d5864fa" },
-              { id: "38f8c787-6549-435a-9175-840d4a503822" },
-              { id: "cdd1ab8d-67c4-4c9d-8394-99142d4fa4d1" },
-              { id: "c01dcea1-fad2-4ba6-92f9-94dc6411b031" },
-              { id: "4aa07e68-5984-4cd0-85ad-79f38483c684" },
-              { id: "86f0f375-917e-4964-ab33-148429436ee9" },
-              { id: "b1379779-fe33-42cd-a5a9-0bfb24b98037" },
-              { id: "a6c57b07-22be-46bc-ac14-4e556b09c609" },
-              { id: "a059f666-125d-4c6b-84cf-35c88a2c5065" },
-              { id: "d7e99e62-f198-46a6-b1f3-ed13a10ab943" },
-              { id: "e07e25fa-bd85-4069-8664-d8b43b9a9563" },
-              { id: "209b5535-676a-4b90-8c3e-aa1d3955bae1" },
-              { id: "2a971c3a-4e45-474f-8141-ada8762de697" },
-              { id: "4c080f11-d061-4d54-9da1-e956f1e83e3c" },
-              { id: "8b8431d3-4377-4601-b7bf-6ddeecf81979" },
-              { id: "e0aa53f7-f2e2-414a-95ba-e3050545e2e8" },
-              { id: "522dde0f-a24d-48e4-83d8-999b76cd211d" },
-              { id: "5561e632-8c66-4603-a4cf-959bfbe4d926" },
+              {
+                id: "728a1beb-c130-4e68-9d4b-93537b438dac",
+              },
+              {
+                id: "f76df336-5539-4a2d-9b0a-e3619d221b3d",
+              },
+              {
+                id: "872dabe1-b229-4cfb-b982-e66f16c8dc93",
+              },
+              {
+                id: "4fa7be37-f110-48c9-928c-9efb9ec627a0",
+              },
+              {
+                id: "3248f11b-3e4b-46ef-b69a-f6bddcec5954",
+              },
+              {
+                id: "51d005d7-3f8d-40f4-9119-9f1cbbd6f079",
+              },
+              {
+                id: "7df42f51-53af-43bb-b711-b9a2a27c6c07",
+              },
+              {
+                id: "c8601084-4476-4e4d-be8b-ad15a028053f",
+              },
+              {
+                id: "af5df9a1-e5f4-4fba-8226-3db92a213723",
+              },
+              {
+                id: "f863f4a4-1839-410f-a982-bf8cd8cbc8a9",
+              },
+              {
+                id: "23806669-1e72-444b-b5d7-7bd81a346f61",
+              },
+              {
+                id: "9d49f45d-9200-4b11-97ca-0b3d536b1bf6",
+              },
+              {
+                id: "ee08d76d-8574-4510-bd5b-81cec17afffe",
+              },
+              {
+                id: "dbfb9371-5296-4e21-a9c9-3d197ea32fd4",
+              },
+              {
+                id: "cdf20926-2ac0-41d0-b3c2-c869ae368851",
+              },
+              {
+                id: "d7f69b38-fad1-46da-8a61-d3c3468d88f2",
+              },
+              {
+                id: "59963bad-0e7b-4e16-9930-4af96fae7c07",
+              },
+              {
+                id: "36e3ee02-ff69-47cb-8020-ce7f463c15c9",
+              },
+              {
+                id: "07e1c31a-60f9-4429-b36d-0b9d7e60d1fd",
+              },
+              {
+                id: "8a4ccfd7-761b-4908-b709-d55351eb7563",
+              },
+              {
+                id: "c7b2e3fe-44ba-4d4e-b163-53e1913ec967",
+              },
+              {
+                id: "1fe90028-2caf-4fb2-8cfd-97abf76fc849",
+              },
+              {
+                id: "f1d4293f-f106-4e52-871d-5ac9c86b7b15",
+              },
+              {
+                id: "5c0163de-ae59-485d-b924-9d3140ebe24c",
+              },
+              {
+                id: "38b4471b-05b5-4d64-ae34-0831be3895df",
+              },
+              {
+                id: "c47167ac-e2d1-4e98-b73b-9d87aee8f8c7",
+              },
+              {
+                id: "63747a6c-0741-464c-9566-25455df203f9",
+              },
+              {
+                id: "b632fc5f-0195-49c2-b24b-9f34a9eccfc8",
+              },
+              {
+                id: "e05c1e53-cc52-4ab8-94ba-c74e2c57a364",
+              },
+              {
+                id: "36da6611-77ab-4795-8d3c-9674f99998d2",
+              },
+              {
+                id: "3c81dc04-6b92-4c2c-aed5-253097a28579",
+              },
+              {
+                id: "7f4d3a36-9789-4696-a9a9-0c02662e7021",
+              },
+              {
+                id: "657ae3ec-5b85-4a12-addd-704adb492e13",
+              },
+              {
+                id: "aef014ef-9cfc-4bf4-9491-7c48e6ed9b45",
+              },
+              {
+                id: "2c574173-f720-404a-9aed-6eefc9ca1d32",
+              },
+              {
+                id: "17e52645-b82f-4d3b-ae70-32e625cb15f8",
+              },
+              {
+                id: "917bff70-df88-4d72-966f-ed1bd7ec9607",
+              },
+              {
+                id: "57886c52-9f8f-4f44-9ec5-251c218e9230",
+              },
+              {
+                id: "8bcc34d4-5b88-43a4-a85d-3427c4d6a9a1",
+              },
+              {
+                id: "b55d7ef9-08d0-44d4-92af-50539c9f8406",
+              },
+              {
+                id: "37c039ee-e437-41be-8a4d-7f8fafc251f0",
+              },
+              {
+                id: "bf835d79-12e0-44a0-a722-1bd2ad9c3494",
+              },
+              {
+                id: "c1acf286-e3a2-442f-a6cb-23434cb55799",
+              },
+              {
+                id: "03b5cdb5-5509-4f71-8792-d3d504c5603c",
+              },
+              {
+                id: "d3bb4a6a-f2ca-4f54-9bdf-6608df4723e3",
+              },
+              {
+                id: "6ba1736a-a1b7-4c88-bf92-6f8a4235f114",
+              },
+              {
+                id: "0f4055e6-dceb-4c33-8078-451ad5b3fc2f",
+              },
+              {
+                id: "ec4d4aa2-3426-4853-900b-a23cb24f19d6",
+              },
+              {
+                id: "64f2cf38-dd74-4a7f-b44f-0388914eec6a",
+              },
+              {
+                id: "648cddb0-6331-4a22-9d6f-1cb7df9508ba",
+              },
+              {
+                id: "7ae39dcc-bb6c-4a75-9745-822a5a73c48a",
+              },
+              {
+                id: "3e7aa694-2a86-413a-bd48-7e767e5364ca",
+              },
+              {
+                id: "de9bef61-81da-403a-a69f-3bd0267fa331",
+              },
+              {
+                id: "ad54c1bc-d76a-4f13-8d51-08d462b790aa",
+              },
+              {
+                id: "fb42ddd9-fa43-4def-9ec6-826104eef14f",
+              },
+              {
+                id: "b22ec393-281f-4b1d-a052-e273d0a5f455",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -2724,6 +6227,7 @@ const execute = async (db: PrismaClient) => {
                     name: "Sagrado Império da Britannia",
                     description: null,
                     website: "https://imperiodabritannia.com/",
+                    email: "sagradoimperiodabritannia@gmail.com",
                     discord: "https://discord.gg/rypuz3wnwf",
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -2733,105 +6237,293 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "be217145-6e9d-4c8f-8f1b-8c2f6d54370f",
+            id: "b85b02d4-a8eb-4c0b-b839-2b0fae6ac2a7",
             number: 209,
             volume: "6",
             language: "pt_br",
             pages: [
-              { id: "8e8735a8-9b03-4f35-b5d5-6dbfdf251586" },
-              { id: "618f0b0d-581b-43e7-9457-2b1ff64d78a6" },
-              { id: "bcce81ad-4490-4468-a124-5661d8a613ac" },
-              { id: "bd77a22c-b69a-477f-9ef3-2806830a953e" },
-              { id: "4fa92c35-13cc-44a2-b7dd-dfbb05db21f7" },
-              { id: "3e3cee86-4e38-414d-95ef-9282aa7b17e7" },
-              { id: "a19169ff-ffbe-45aa-917d-19cd5040dac3" },
-              { id: "6666d526-32a0-4eaf-9ca1-a7d4182e0d11" },
-              { id: "e8312e7f-04dd-410a-b560-b52bd76dfcb5" },
-              { id: "4d33734c-2d01-4547-bf52-6d32dd9efac5" },
-              { id: "ed0946ed-a4b4-49cc-abd2-d96605088429" },
-              { id: "c033d321-1801-4c0e-b43d-8dbe2e83b1be" },
-              { id: "0ec9ef9e-cf67-4507-aaff-b679ae8b0976" },
-              { id: "4a67f7a5-dd1a-4cff-89e1-65ec37d80bc9" },
-              { id: "fbe1fca5-6c4b-466f-acd6-60ac6dd1c1dc" },
-              { id: "82405ae8-987b-4baf-8175-19d9aa51d25f" },
-              { id: "d219d2d9-8029-4659-b202-f4c0062ab4e3" },
-              { id: "7fc2e5c4-316c-44fd-bc1f-8e7da96718d8" },
-              { id: "760e096f-ad30-4991-b601-3a2385cb5a32" },
-              { id: "08ece243-21ff-45e5-8d6c-0d201cf7720b" },
-              { id: "2fac8bef-d8b7-48af-9e22-32b37275839f" },
-              { id: "22faf4e1-3c74-4d49-98c2-a158d584d620" },
-              { id: "925d95f2-6986-4497-9899-883644b5b010" },
-              { id: "e8d1db51-c146-4c95-a883-3213f731b789" },
-              { id: "5451f5d6-994d-471f-93cc-2c8a9f8a9ac5" },
-              { id: "225eaab5-cc24-4d3c-b3f5-2ca0a099c819" },
-              { id: "34846b9d-3907-4c8d-9c72-acf001f360de" },
-              { id: "7f5007de-ba96-47be-8887-e4fe2b877f58" },
-              { id: "c63f8fc3-e0ed-4d91-ba28-9ca0ff0b5d08" },
-              { id: "faa57854-75de-442a-ae20-752051e587ad" },
-              { id: "3a7fd1ab-58c5-459d-b55a-5ced6b97903f" },
-              { id: "835825af-2d2a-4adc-b5d7-58c3c73c89bc" },
-              { id: "85046e8f-c48d-4442-b22a-94d4f5e4998c" },
-              { id: "99dea3b3-210b-4b89-a53f-b5fc36aeb40e" },
-              { id: "8cca4136-e761-4b3f-a607-d075561dd488" },
-              { id: "1b14e632-091f-44bb-864a-60b6a8ce4a34" },
-              { id: "60a6a54d-1263-496f-80e0-a328e332b586" },
-              { id: "13a58635-5810-4168-9db8-ea72e4b5348e" },
-              { id: "2d1412db-3cbd-4b79-91a7-c17d29e5ede0" },
-              { id: "c8b5f7a5-548f-48d5-9fd7-fd4a339fae70" },
-              { id: "18375a2d-4a27-47ee-965f-7184cec5d605" },
-              { id: "fa65dfcf-e696-4a55-a651-a46c6ce9ea37" },
-              { id: "6ee4568d-ef31-482a-8d03-e5393263573f" },
-              { id: "bd5468b5-7202-451b-90ec-3d68340d45a5" },
-              { id: "f762d202-c87a-463d-bf8d-abd345680913" },
-              { id: "b558d73f-5bf4-47a3-9076-7a581040480f" },
-              { id: "f1218a8f-084b-4b80-acce-a26112e0e576" },
-              { id: "f7b17392-7bdd-4d5a-b773-dfb89c67c591" },
-              { id: "06dfe80f-85b1-465e-baf5-b9cac715f5a2" },
-              { id: "5ddd295a-bef3-4d63-a47e-ab48e9f084b4" },
-              { id: "5f8b1e5b-32e3-46d5-b451-7a93104ada0b" },
-              { id: "4b5276aa-fa43-4a75-acee-9a0d1cee3f94" },
-              { id: "a7e83f6a-f90c-49d8-b34a-34c91c88a005" },
-              { id: "77898066-2635-48aa-8d98-46a7f33c70e5" },
-              { id: "4075539b-7e33-4f9d-8922-987067b880a4" },
-              { id: "9f85385f-69c0-498b-bd0b-430c3ea627a3" },
-              { id: "fb4f3a19-c4be-4523-b831-2ee549c1b4b0" },
-              { id: "e18b97aa-9757-4a84-8d06-79dc88063764" },
-              { id: "f95afc3b-e82a-4b8e-b96b-d11e0b0f4952" },
-              { id: "43c1f18a-4d54-4e77-a0cd-840fdd612052" },
-              { id: "70cb75b5-6206-46f6-b2a9-9ec91e5fa5c7" },
-              { id: "0d48a7ee-3a2e-4fe9-b514-37f520dbf473" },
-              { id: "5d36c178-fa15-4809-a47f-6de5b86c1e2c" },
-              { id: "3801e19d-064f-492a-ab1a-2655e4dc11fa" },
-              { id: "7a906b48-9cb3-4a60-b8bf-1136680a82ba" },
-              { id: "529af3f3-3d96-4d23-bdb5-3721d78a28ec" },
-              { id: "148e30e0-3726-450e-87e7-c5364c3ca137" },
-              { id: "18b9928f-c6ea-47d5-aee2-f300833e7794" },
-              { id: "79dd1921-7a7d-4d34-856e-4e8150f27561" },
-              { id: "c477a457-9a09-4a6b-a66d-5c2445aa7cb0" },
-              { id: "4393efc9-eaed-4842-a688-07a5b8c6d333" },
-              { id: "0805a118-0eb1-41c9-91e1-0fbe05d8cec6" },
-              { id: "49f77f59-166d-4c29-98ea-4511fabbfc4b" },
-              { id: "24b46057-5f05-465d-a70d-368e8335b32b" },
-              { id: "77ff2c2e-0856-49c6-8948-c2d5644953a2" },
-              { id: "b12a998c-a647-42c0-80ae-64180a610d25" },
-              { id: "ec88dc66-bb45-44d5-ba9a-ec71ba019e02" },
-              { id: "ca71d070-a7b7-4477-bf83-164f76c21b7f" },
-              { id: "2bd26288-2830-448a-85a0-442cdb2d0135" },
-              { id: "89d870f0-44d0-4acc-8950-52d33e987d91" },
-              { id: "ca542fb9-aad2-4bea-84e1-06287dd7323a" },
-              { id: "c8db482d-77d4-4e0b-add4-2bba5b0856d8" },
-              { id: "6afc17bd-28db-476c-b540-505d04841080" },
-              { id: "7653747d-7db4-41b1-8b20-36e4c81d4704" },
-              { id: "3fd4aafb-78a6-4dfa-96a2-de5d77116644" },
-              { id: "0ee24860-e880-4330-9e3f-cd3d78a8a81b" },
-              { id: "06d5e400-df47-42ec-9c74-7af74e368a8f" },
-              { id: "6e01b8dd-bcac-40d7-ad8d-aa5d1f7392b1" },
-              { id: "ab05506a-0973-4456-bc8c-9befa640a432" },
-              { id: "ee88f335-bce0-4709-8e93-32e88159ecbb" },
-              { id: "5c338ba4-bcf6-4d9c-ab48-51b2e39ea873" },
-              { id: "579ee06b-5ca9-420a-bdcd-83f7667008b2" },
-              { id: "8dff0c96-c920-4088-bef2-89249ec22445" },
-              { id: "82bc18d4-bf7a-48f6-bc17-d6dd9b30781d" },
+              {
+                id: "fc25528f-2a1d-4fa2-9595-335d662b07f8",
+              },
+              {
+                id: "b1d5a570-d4a3-473e-b3be-e98b6ca9280f",
+              },
+              {
+                id: "76932c3a-1d0f-4c1e-bc74-13095eb71460",
+              },
+              {
+                id: "1fdb7652-668c-49eb-8dd9-762d83403d17",
+              },
+              {
+                id: "4a11f969-7b5d-4f25-b50b-e90d59ae2577",
+              },
+              {
+                id: "e10d49ed-3940-4b6f-9887-0e42ef8b158e",
+              },
+              {
+                id: "a47b09bc-a249-4090-a2e2-d3198f41765e",
+              },
+              {
+                id: "68788787-f2d1-4667-be3f-1f39ed675b2e",
+              },
+              {
+                id: "560815f2-d477-4e29-ac75-c89e5f7720f0",
+              },
+              {
+                id: "e4f0acc1-bd94-45a1-90d4-52f6fb8dc734",
+              },
+              {
+                id: "bb94e2cf-f8ef-429d-9c0a-5db7f5db7ba7",
+              },
+              {
+                id: "6ea7ae5f-0b21-4747-80fb-40415b2f4ff4",
+              },
+              {
+                id: "d0396ebf-1c98-42ea-9b2e-3e49d20a5960",
+              },
+              {
+                id: "ecfb692a-49e5-491e-8bbb-f6f42077f26c",
+              },
+              {
+                id: "25618645-a924-4dda-8362-d568caa1337e",
+              },
+              {
+                id: "0b1dcc9f-1243-46a9-beeb-8447549fa1ea",
+              },
+              {
+                id: "59a4e822-6b40-466d-a305-420d552497aa",
+              },
+              {
+                id: "6db08c71-fdb4-4fe9-ae55-bf872e212d38",
+              },
+              {
+                id: "8226cc72-aa87-4349-901a-2850de29f8aa",
+              },
+              {
+                id: "fdd694ed-4576-4ee6-bbff-c9839622713d",
+              },
+              {
+                id: "1ca45349-e7f9-4101-850f-94f15261ce70",
+              },
+              {
+                id: "2ed18097-e7a7-4db8-b659-a259c1507f48",
+              },
+              {
+                id: "4a943f46-bae0-4877-84aa-3f0543b40df6",
+              },
+              {
+                id: "d8497f89-9990-4491-b2e6-61bdef886aae",
+              },
+              {
+                id: "9baa71ee-9710-4b92-841d-ddece2e9d88a",
+              },
+              {
+                id: "5bd49875-dd96-46d6-b2c4-55823f3e5bee",
+              },
+              {
+                id: "57f9c7cd-6ebd-48e8-a754-e7f2deef0bfa",
+              },
+              {
+                id: "07aaf655-79f6-4dd4-b0fb-341fdb6f2aa1",
+              },
+              {
+                id: "dc5e5945-aa25-40de-9411-70efb9a95484",
+              },
+              {
+                id: "f1763f49-d7e6-4c98-a58b-652698a6e70e",
+              },
+              {
+                id: "21bb244a-1e26-426a-913c-5aa4bbfd7e21",
+              },
+              {
+                id: "b3c74e64-e6eb-41f4-a4f9-bda5eee69eb1",
+              },
+              {
+                id: "f80bd78c-768b-484e-82e9-3b28b6177d49",
+              },
+              {
+                id: "6ce18007-3093-48d7-96b1-392ac99d70dc",
+              },
+              {
+                id: "68b4d7ef-d1b7-42d0-977a-3b3d2e139495",
+              },
+              {
+                id: "065a31a7-8a7c-4a03-8684-e5a57630a510",
+              },
+              {
+                id: "dc6ea5da-c261-4bdc-8900-4a68c7e89d61",
+              },
+              {
+                id: "4dc07345-0219-4559-9609-a364e9f507a8",
+              },
+              {
+                id: "a297a463-2fd5-4ca5-8655-ce5467893196",
+              },
+              {
+                id: "a4ce8458-6f98-44f0-9091-ed4b393012ff",
+              },
+              {
+                id: "45afed58-ed23-4609-bf6b-fe2fe8f9f0be",
+              },
+              {
+                id: "ba400ad1-eeca-4452-8732-adcde6606c65",
+              },
+              {
+                id: "9268e623-c3b1-4726-84b5-3a2ed913cc16",
+              },
+              {
+                id: "39be9094-060d-450f-b92c-36677d9c19bc",
+              },
+              {
+                id: "28207ebc-e397-4259-8178-770fdb1bbda3",
+              },
+              {
+                id: "4d2a3ddb-f69f-4973-9295-71e6aee241d4",
+              },
+              {
+                id: "ea319f31-0f47-4fc9-b039-ebf8313013a9",
+              },
+              {
+                id: "3835568e-8ef2-45ad-9c55-8cf1c93de570",
+              },
+              {
+                id: "5ef12344-82a1-4e39-acdf-80dcc7b899b5",
+              },
+              {
+                id: "2d0310e0-ecf5-4e94-85ba-75f32a98864a",
+              },
+              {
+                id: "4227a94e-f30c-424e-9651-77dfaaa06ce0",
+              },
+              {
+                id: "023d3198-0646-44fc-a8d2-2aa8f75f93c8",
+              },
+              {
+                id: "ada96a8c-1ddb-4387-92c7-394b6e8e2ddb",
+              },
+              {
+                id: "43b70b18-560d-4eee-b999-54a06cd033cc",
+              },
+              {
+                id: "b7d0c96b-85f6-4875-8b3c-efd9eb39b7cc",
+              },
+              {
+                id: "558a1845-610c-45be-959a-8d8ab1c2dcb0",
+              },
+              {
+                id: "b31b13ce-9754-4e5f-866e-e13bd1208da7",
+              },
+              {
+                id: "38cfe21f-ca51-4bfe-8fd5-c4ff4c7b8655",
+              },
+              {
+                id: "00de5d49-f21a-4b46-b7d6-b01ffc5f0377",
+              },
+              {
+                id: "24c7b3c1-6f3c-48b9-a3d3-77c743e828fa",
+              },
+              {
+                id: "66bacd36-c016-4f2a-b033-d21330cbed12",
+              },
+              {
+                id: "b1570c91-07e9-4647-82d3-a1cc7cf5792e",
+              },
+              {
+                id: "71fb090b-576f-4de1-9143-9da7a53cf208",
+              },
+              {
+                id: "1fa44fd5-66df-4d26-944f-4e797b4f3468",
+              },
+              {
+                id: "5bf16fbc-a179-45ab-b19c-a77fa5a7576f",
+              },
+              {
+                id: "131a7ae3-f46c-4b35-8e6b-748241ffd958",
+              },
+              {
+                id: "524fc9eb-af75-4002-bc66-1b52147bcc65",
+              },
+              {
+                id: "143c9b14-1c7c-4614-bb38-1b1f4c59cd3a",
+              },
+              {
+                id: "afb64af6-c050-405d-9a95-a080021e9f86",
+              },
+              {
+                id: "15490d55-8b95-4843-ab43-fe666bbe2be0",
+              },
+              {
+                id: "3958ac4b-8c42-4f59-851e-3741de9e550e",
+              },
+              {
+                id: "7c508f15-1451-48cc-a666-23ae2bb66e59",
+              },
+              {
+                id: "ac3f6169-5dfd-4b85-b207-066c6557f8ef",
+              },
+              {
+                id: "46ad4ee8-5a86-4c4a-b636-6a9dd24c4b9c",
+              },
+              {
+                id: "679d54d7-b174-419b-af6d-84f8a744ebd4",
+              },
+              {
+                id: "f67b25d7-6d92-498f-a7f5-fac643896af5",
+              },
+              {
+                id: "8b6f4bbc-40e3-45a6-b30e-786858203190",
+              },
+              {
+                id: "b4f9e640-97c5-4b57-adea-2a002e4992a9",
+              },
+              {
+                id: "1df2b71a-418c-47e3-9e06-669c120ffbf9",
+              },
+              {
+                id: "20b596a7-ad15-4beb-a4ac-57a38a52a7d9",
+              },
+              {
+                id: "8be276ab-89ad-48f7-a326-00a9a5fd8d04",
+              },
+              {
+                id: "edcb1ab6-02ab-4626-a721-114494340b01",
+              },
+              {
+                id: "d591c3a0-57b2-4961-b70f-cae58ccf17d8",
+              },
+              {
+                id: "ccd359b9-46c6-4b3d-9eff-1f4fcce1eabf",
+              },
+              {
+                id: "43f4fc28-7488-47ae-88a0-5728ce9db260",
+              },
+              {
+                id: "caadab2a-859c-4138-98df-c19680128880",
+              },
+              {
+                id: "aa4b108d-8c09-40eb-aa83-bbbacad9da57",
+              },
+              {
+                id: "b7c5fb43-8a33-4e03-86e1-8188237543aa",
+              },
+              {
+                id: "a4e3b042-fe71-4f77-b862-cf8e1b83b853",
+              },
+              {
+                id: "a27b1aa6-f67b-4960-820f-dc496a126a90",
+              },
+              {
+                id: "d0b433cf-6bba-4b0b-8091-59f3c086ef45",
+              },
+              {
+                id: "e98f1f1a-1c52-4dc0-bf12-e656d5d1cede",
+              },
+              {
+                id: "5459156c-070e-4493-a2a9-141967aa6738",
+              },
+              {
+                id: "fa2f05a5-e998-4958-82ca-e73c0a2a01ef",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -2843,6 +6535,7 @@ const execute = async (db: PrismaClient) => {
                     name: "Sagrado Império da Britannia",
                     description: null,
                     website: "https://imperiodabritannia.com/",
+                    email: "sagradoimperiodabritannia@gmail.com",
                     discord: "https://discord.gg/rypuz3wnwf",
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -2852,86 +6545,236 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "390b0d4f-8df3-4278-abee-8c863bfba0ba",
+            id: "f4c84353-ed8f-4d65-836d-f59832abc9fa",
             number: 210,
             volume: "6",
             language: "pt_br",
             pages: [
-              { id: "2f69003c-547a-40f4-b4a3-4b6f0a8bd787" },
-              { id: "6c011a4c-ddbd-4254-9fc2-13d4c17c9f9e" },
-              { id: "1cc0581c-c69c-425a-8bfb-846603eed6d1" },
-              { id: "3e5429fd-f5fd-4339-85b1-321db2489d80" },
-              { id: "3b56dd54-d7bf-4b83-bba3-cc0018d50dcc" },
-              { id: "5e53df6a-62a2-49c9-95da-255987a0a97c" },
-              { id: "81f98874-3df0-4469-9220-bd852c867580" },
-              { id: "ffe0f444-2747-4ee5-8efe-27173c4650b2" },
-              { id: "0e961bd7-a4af-49a0-8ec4-28f88f1c5a31" },
-              { id: "3ee6e311-e125-47d0-bcaf-2559edbdab54" },
-              { id: "1565e00f-ed38-4eeb-b0d5-3b7c157715d1" },
-              { id: "c109cea5-1f70-45d8-9787-fe3298d58a7d" },
-              { id: "d064b534-821a-40f7-8a2e-023662fa2230" },
-              { id: "9f4ea5b8-fc99-4af6-8df1-5335f706d6b1" },
-              { id: "42bb301d-640f-444c-b0fd-792a13d9cbc9" },
-              { id: "d57c50bc-6db7-4aeb-857f-c3c5e606ac71" },
-              { id: "47edb2de-c38d-4ee5-b09f-174e2e3d3531" },
-              { id: "a4e9f493-b1cf-4f16-96ad-9be8f3a6f62a" },
-              { id: "9c297b58-243f-480b-b74e-3d0d9a047b57" },
-              { id: "cc3698d5-b23a-4dc0-b736-d973449469ce" },
-              { id: "b043824e-abc0-4a6b-9cb3-bc2cb09ce571" },
-              { id: "b4691c66-1ca5-4124-8c1c-d351c67156fa" },
-              { id: "e8c9d22b-4f84-490e-87f3-7b49ce79399e" },
-              { id: "93b10b1b-73e6-4d14-ab7d-8390462c5e8a" },
-              { id: "b6ae06ee-5d5e-4bfa-9147-2621b1b4f229" },
-              { id: "2ea7f68c-9d03-44ce-907b-09a1143b9adc" },
-              { id: "1263a184-9271-42cd-b781-c8eefc17d04f" },
-              { id: "409e8475-f693-425c-9aa1-4ecebe51bd5a" },
-              { id: "a00e2339-132e-4fd0-8c7c-d01df695081c" },
-              { id: "7854d432-1bcc-4a9f-a350-111ed3f7730c" },
-              { id: "cec297f9-51a1-440c-98b3-1ed1f147eacc" },
-              { id: "b1d2b014-1b08-4ac0-97cb-0ffd91898166" },
-              { id: "48f39014-4b93-4df2-93c0-74665b613310" },
-              { id: "01582eba-92d3-4c6b-b8f1-13621f1b489b" },
-              { id: "96fbaa1c-3370-4855-80d3-d6b5b6a34072" },
-              { id: "d4807875-a677-4eea-ac47-1c059a27c597" },
-              { id: "0f698d7b-db7c-4b65-90d5-9fae5483ebc9" },
-              { id: "47bdf15d-36f2-4390-a4b1-24450bde92ab" },
-              { id: "ab88f396-d5e9-40e0-8af0-1f6e7d2f5bb4" },
-              { id: "d443601e-f67c-479b-91db-a18b9688cc82" },
-              { id: "277fa0a5-43bf-499d-8ae5-791a022e52bb" },
-              { id: "6d3dff7d-ea1d-4d28-8851-a5a3e5a1243b" },
-              { id: "cd4dd86e-9a61-4006-8a86-08ff5968f376" },
-              { id: "3dc67579-d07d-45b5-b656-5160f517dc0c" },
-              { id: "d195a0da-0753-4e5c-a9b2-5629bb9f58d8" },
-              { id: "a19d9bd9-84dd-4157-ab93-240ca455d1c0" },
-              { id: "709086c4-f8cb-4aa7-ace0-f70f8abb87b0" },
-              { id: "e07a65da-b982-4adf-ad49-67df3e52298b" },
-              { id: "2054c0fd-c8f5-4bd9-bc8c-2e6252a61447" },
-              { id: "8bd27273-309b-4cb4-ba58-8b0c3786ac44" },
-              { id: "96904f05-184e-4efe-8399-8fb350ae6e90" },
-              { id: "4dda832c-167e-4007-ad19-d2336cec991a" },
-              { id: "2d992f92-b535-4233-9d63-abbcd46fe80d" },
-              { id: "b4f53413-c3d1-4018-aae1-a608053de894" },
-              { id: "edcf2642-6cdd-425d-9bf9-481a6cc5b5d7" },
-              { id: "e295e84a-0567-434a-bfdd-5b18848d142b" },
-              { id: "11a97017-f2d6-40c3-b129-6d7db9ee1e7c" },
-              { id: "ecc1df38-ff3b-47fb-8b7e-43c8325eaa8d" },
-              { id: "95e7831f-2309-4107-af4e-438024b80e1b" },
-              { id: "374e85b7-bf61-4ea2-b788-7ca4eaed1bc6" },
-              { id: "410d57f1-79dd-4a93-88e7-c8783a13b454" },
-              { id: "5a8de819-cfb4-471f-8e53-fcb47fd4343a" },
-              { id: "8bce39db-b627-4c6f-bcd8-679f46408a8e" },
-              { id: "f9e2b301-6803-496e-8740-7ba80da3f95d" },
-              { id: "635bd502-e969-495f-87a6-38583916a1e0" },
-              { id: "e10daf81-b28b-4557-b304-f1b54c122b6b" },
-              { id: "13d8338a-7d46-4614-87ca-b68bcb49f593" },
-              { id: "8c37211a-d69a-4b90-a901-e36210d2eecc" },
-              { id: "0013f0d7-f45b-4219-b24b-dd9fab678018" },
-              { id: "f71985ba-8d76-4d26-b5a3-f44060ee79f1" },
-              { id: "9a79b481-a2d7-4df9-ba27-3a4fef15d2ca" },
-              { id: "cc6429f3-efb7-4dee-aef5-b8b3a965665b" },
-              { id: "cec951e4-6f7c-4a5f-a013-70088facdef7" },
-              { id: "5f088efb-ac21-4489-96cb-4a0d8d4ecd20" },
-              { id: "b3b6e6aa-b94a-40a4-9ae8-54fd9ced6743" },
+              {
+                id: "865c52da-ff54-4bbc-853c-0d0386b0b090",
+              },
+              {
+                id: "1a43fb54-0934-453f-87b0-5b0a44da700c",
+              },
+              {
+                id: "7ef14c54-36ce-4597-aa02-641012c0f8a6",
+              },
+              {
+                id: "29b736b4-7313-41ed-a5cf-856fa6516dae",
+              },
+              {
+                id: "db4fb84f-daa8-4b6b-b5d4-35df87edd5cc",
+              },
+              {
+                id: "828ca981-a735-4e92-9265-eeace641cd0f",
+              },
+              {
+                id: "08a97be0-c564-457f-9f62-58fa5a3a80ef",
+              },
+              {
+                id: "467cacc1-7730-4146-930e-28e1629a7774",
+              },
+              {
+                id: "500e818b-89db-4a1c-a5bd-7b5777d3c7ab",
+              },
+              {
+                id: "f6cb7d54-4d6a-4a8a-880f-c4cc02d60595",
+              },
+              {
+                id: "7331f703-1366-4f75-8c06-c17c746bfd0d",
+              },
+              {
+                id: "b2a5aa40-ba68-4638-9d3c-dd380ce753f1",
+              },
+              {
+                id: "d0f6874c-1cf4-449f-8413-8f2248db19f2",
+              },
+              {
+                id: "16d5c9e6-999e-4689-b309-0914c2493d75",
+              },
+              {
+                id: "7c911c49-bf53-4e93-ae83-d99ab121a39b",
+              },
+              {
+                id: "f62f2e9d-f184-4608-9222-c95f1ea7969a",
+              },
+              {
+                id: "4706b5b3-5db8-4c5f-8fff-1792a03578fa",
+              },
+              {
+                id: "a00918f1-af86-4404-8a54-c3b26f0a8ffe",
+              },
+              {
+                id: "c5ed629e-e65c-4e91-9b3c-a975f6af1a53",
+              },
+              {
+                id: "911f2331-9819-40e9-9d96-217f1c4ea404",
+              },
+              {
+                id: "2a04c355-6336-4d31-b3ff-a570f2d6f51e",
+              },
+              {
+                id: "e692f958-485e-4dbf-b965-fca65e650a0d",
+              },
+              {
+                id: "6f3beb27-925e-431d-b8f3-d8b556e1a4f1",
+              },
+              {
+                id: "fdfade0f-d8ac-46ba-ae01-8570bd8b18fe",
+              },
+              {
+                id: "fee6ea3c-a512-420a-b81f-12649ce9f5c5",
+              },
+              {
+                id: "e1428304-928d-48ca-a5d5-78480427f5f4",
+              },
+              {
+                id: "cf99cf89-254d-4ce7-97aa-208dfe5bc6c4",
+              },
+              {
+                id: "e66bb3b1-f186-4ff8-b356-b68dbeb3561d",
+              },
+              {
+                id: "0f276e8f-e92c-4beb-bf61-921a423efe8e",
+              },
+              {
+                id: "948907e0-a7b8-4306-ba5e-0a9766e32e3b",
+              },
+              {
+                id: "8646b722-6ef8-4d53-a477-f25ce7284862",
+              },
+              {
+                id: "e6c1d915-2535-4b5e-9bf1-f025a39facc2",
+              },
+              {
+                id: "9745d5ec-3567-41b8-aea0-62cc92d0960f",
+              },
+              {
+                id: "9ba6364f-da66-4181-b624-afa4d358f027",
+              },
+              {
+                id: "c6192397-4035-4c3e-a3b3-0a623b2ca821",
+              },
+              {
+                id: "9e872450-70e6-48fc-950d-06b57de9371b",
+              },
+              {
+                id: "2b31df1e-38dd-40a9-8de3-adf69fb366bd",
+              },
+              {
+                id: "304a1776-4f57-4586-bcdc-f264c4a74472",
+              },
+              {
+                id: "17a27be6-98b8-42d3-9f73-390091d2a5b8",
+              },
+              {
+                id: "f662e394-ef1f-4172-8b8b-135c962b73dc",
+              },
+              {
+                id: "c8ecea94-8d91-4b57-bf59-84e8e7c56ba5",
+              },
+              {
+                id: "e4ada023-5eb3-4b28-a609-16d7b3f773a7",
+              },
+              {
+                id: "584cb389-1b11-4a38-8221-4b3e0e6bb483",
+              },
+              {
+                id: "1685d34d-b072-40b8-8f03-9ac079abba17",
+              },
+              {
+                id: "a76af598-07db-473c-a5cc-9978b1752165",
+              },
+              {
+                id: "e7c51247-b48e-48cd-bf88-0e1a9c4db2b4",
+              },
+              {
+                id: "23cd375f-7c5d-48e2-961a-428752f0dd82",
+              },
+              {
+                id: "ece406dc-101b-4538-b03b-f7fc360e57ef",
+              },
+              {
+                id: "7baf205f-599d-4a95-be3d-25da786ddb98",
+              },
+              {
+                id: "c1157d8a-43e6-4bf1-a41f-fda561e7fa84",
+              },
+              {
+                id: "7866b5d8-e9ef-4a40-be64-243d7b22b915",
+              },
+              {
+                id: "a887fe54-1547-4575-a130-910195467c6c",
+              },
+              {
+                id: "26f5a1bc-8581-4171-80b9-ca45dd67e534",
+              },
+              {
+                id: "e38e624f-1904-4c6e-a9a6-36b25f1d652c",
+              },
+              {
+                id: "c167671a-ea7f-4fc5-bc50-8b5c921bc1a8",
+              },
+              {
+                id: "92be2779-7f26-4b6d-89b5-12374460ee42",
+              },
+              {
+                id: "635b4ccd-526a-4abf-928d-856db5667de6",
+              },
+              {
+                id: "53014bf7-dbb3-45d5-8f0f-8be009704c43",
+              },
+              {
+                id: "2abcdf2f-f872-42b5-8e2d-244abaa20559",
+              },
+              {
+                id: "6f359dcb-a449-4ea8-9d22-2aabcd73b4a6",
+              },
+              {
+                id: "fdd85b23-84d5-4b38-bce7-8c48c8e67820",
+              },
+              {
+                id: "e14ccf88-2c7d-41b6-901c-4abe8196e93b",
+              },
+              {
+                id: "e8ac2b38-0ba1-4e1a-b67c-08dede4dfd02",
+              },
+              {
+                id: "4904c616-1f8d-4a91-a8e2-3ba8a7a17bf4",
+              },
+              {
+                id: "30099fc3-8508-4d8e-bd1f-5ef8a4c30023",
+              },
+              {
+                id: "22b72909-5d44-4d3e-9cab-f47d446fc90b",
+              },
+              {
+                id: "5ed7e985-8621-46d9-a7f1-cd9fb0181f5e",
+              },
+              {
+                id: "fbc0cce4-62f9-4f18-87a7-d0bd73b0cbd7",
+              },
+              {
+                id: "0a21eeb8-c23c-4dfe-9c19-9e1df68909b7",
+              },
+              {
+                id: "fb5fd960-3e1b-4806-8078-762a969a106a",
+              },
+              {
+                id: "6dca7765-5395-49e7-8364-c5d0706f5aee",
+              },
+              {
+                id: "80ba511b-d5b5-4405-a2cc-5769446c0471",
+              },
+              {
+                id: "1e64444f-ff45-4466-bb0b-38256c8f42c1",
+              },
+              {
+                id: "5d247718-158b-4d43-8bc3-7319eede268d",
+              },
+              {
+                id: "8bc7777d-1f68-497a-80e5-ad75d6160442",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -2943,6 +6786,7 @@ const execute = async (db: PrismaClient) => {
                     name: "Sagrado Império da Britannia",
                     description: null,
                     website: "https://imperiodabritannia.com/",
+                    email: "sagradoimperiodabritannia@gmail.com",
                     discord: "https://discord.gg/rypuz3wnwf",
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -2952,101 +6796,281 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "a5bb38da-5aaa-4da3-b1eb-51498b1061c3",
+            id: "46eaf50e-6e56-4745-aee9-67c148842217",
             number: 211,
             volume: "6",
             language: "pt_br",
             pages: [
-              { id: "86aa525c-c953-4b85-b7f7-5409697f41b2" },
-              { id: "fd7214f4-7104-4e92-8f96-ac624c027f78" },
-              { id: "9da677f8-e9dd-4db5-9cdb-8a74cce3410b" },
-              { id: "272008db-4977-4903-ad43-7b9ff6b7665b" },
-              { id: "2f5db480-39ae-46c0-ae49-4907a8f43589" },
-              { id: "bf0e594d-2130-4bc5-a721-df4eb4dbc602" },
-              { id: "e214a2d5-8896-469e-a691-abe64b6e6d9e" },
-              { id: "bb06f1f0-51ca-4bce-b0fa-68149a1976a8" },
-              { id: "b299995f-6990-4cdb-9b27-4f8439c63ba4" },
-              { id: "1bf174ea-0975-4957-abb3-c937e9505e2c" },
-              { id: "0038d531-ffde-4a3f-a76d-0ad782d08a77" },
-              { id: "d2652ce5-e57b-4976-a3ad-09cca07b4f78" },
-              { id: "21efb4e2-d3dd-46ba-b625-bdb1b5f9747a" },
-              { id: "79aec061-0715-4970-a9ee-6324409331db" },
-              { id: "29e94264-73a5-4c9a-81fd-eec0e1752327" },
-              { id: "33cc7a13-e3ea-47f2-ab77-bae6eff2a38e" },
-              { id: "368e5e41-51e6-4be0-9bf6-3147b7350ec2" },
-              { id: "84b32d7f-4df4-4edf-8d9b-b978bd5a7a90" },
-              { id: "dc9568a5-6b92-499b-9a17-8e38a7bc347d" },
-              { id: "a2a26aca-e111-4578-adab-a2a067c7d7f4" },
-              { id: "2a638922-ac95-469f-a273-4148f421b150" },
-              { id: "35056ff1-6975-406a-b0fe-cd9ea78a00a1" },
-              { id: "7d84b15c-a691-47a1-a9c9-eefb83a5f3b4" },
-              { id: "7c99993c-d74e-4acf-abc5-a771df7291bc" },
-              { id: "38c9ee37-f994-470e-a1e4-04254f928b85" },
-              { id: "905792d1-cd71-4828-86ce-866bd504c10a" },
-              { id: "dde283aa-db97-4e5c-af26-3930d8a6816a" },
-              { id: "e8d27e15-5690-4bd0-abe4-cc99277cdade" },
-              { id: "294fb999-b85e-4088-98eb-0ffc3978844f" },
-              { id: "c4fffa21-6967-4e1d-a4ff-43a593f9aaa8" },
-              { id: "80a46a4b-02a4-4098-9bda-3fad2519764a" },
-              { id: "fc42dd94-db0a-474d-91fd-8813e14250c8" },
-              { id: "16032303-e134-433e-9d9f-5d685cac390f" },
-              { id: "22c7aead-7bfc-42bf-b01c-b67dbd7d5887" },
-              { id: "085aad43-b6c9-40a0-ba4a-371bcf51c45b" },
-              { id: "f2cd9aa5-f58a-4241-bb2a-8682bcc7b5d2" },
-              { id: "7d81993a-ec6e-4d06-9338-f56f1f1d4dee" },
-              { id: "b8085c90-33cc-4ccf-bca1-12fd7bf55db3" },
-              { id: "15fdefbb-9943-4c8b-b179-1a34342d61b6" },
-              { id: "c66ea514-8542-4648-b65f-3696b376b91a" },
-              { id: "46886aef-6368-4773-8266-3eeba7074c47" },
-              { id: "06c27325-dba3-460f-8658-135fa13e73b5" },
-              { id: "dd51d437-af2d-41af-a2d6-d3e02b33fa2c" },
-              { id: "88078ecf-41cb-4431-ba6c-bb046e4ce02c" },
-              { id: "24c297e5-7adc-4fce-afe0-4b2ddec8d43b" },
-              { id: "167e23cd-8a60-43f3-a47d-3659c729fcff" },
-              { id: "de4c3541-ae95-42d5-8965-37e1ae337617" },
-              { id: "00c05806-38b2-4cbe-b2fb-1bcd5f6e7663" },
-              { id: "3942daa6-37bb-4a99-bc0b-4b0a88936497" },
-              { id: "bc54e5df-0d4c-42e9-95a0-2c12d4988d6c" },
-              { id: "1500e52e-e54c-4911-8ff4-2736b3cbaf12" },
-              { id: "c522f29f-d4dc-4fc1-8d7d-7fe18a46f999" },
-              { id: "9bf5fa18-ce0c-4d71-bd65-ceecebf2e725" },
-              { id: "17743209-5800-4f80-ab22-e1b8f378234a" },
-              { id: "1f312de6-09b4-4ecb-ba17-83638355dc13" },
-              { id: "10c03832-319c-4c61-a7b5-a2131b7b173d" },
-              { id: "2bfc9a3a-92ea-422f-be75-cad5a945ce33" },
-              { id: "23366239-e324-43b4-902f-a04d8b65b309" },
-              { id: "710ca433-0ab5-4908-a765-d481d332b9e2" },
-              { id: "03f5afa4-d312-4785-81ab-81c1ed0a2c30" },
-              { id: "956748e7-4852-4736-a2c8-fee921cf898d" },
-              { id: "7492d621-426a-4669-8f83-d65df1bfeddf" },
-              { id: "4dc2aa99-1b17-42b6-9821-3077f3170d1c" },
-              { id: "7c9f0e1a-c59d-4ed5-9a85-9647d114e945" },
-              { id: "39dbc72f-2a37-409a-b6a6-bf035954c8bf" },
-              { id: "2546f9f1-b66e-4c59-899d-71133694bf4d" },
-              { id: "bc9d6d97-91c7-4209-a7a7-002a463aec3c" },
-              { id: "a14b1080-f05f-4267-a515-f0acc1b6adee" },
-              { id: "fe1484f9-6709-4d37-bb8b-ec2c4dcbf626" },
-              { id: "0dd01826-05c1-4cad-8102-97b5d40ce84f" },
-              { id: "40dcdf0f-362e-4bd2-93e6-b4f4bc0ad4cf" },
-              { id: "130167c6-5a3d-4d6c-9042-fcc3365ff156" },
-              { id: "cbfc0b12-91bc-43fc-9d65-d3931796838b" },
-              { id: "51ee82a8-6004-40b9-902a-e26709b02550" },
-              { id: "82dffe09-d658-4b19-8714-062d21c855cc" },
-              { id: "afb16357-ee95-4c6d-8bf0-c6614f13d77c" },
-              { id: "226f497f-81c3-45b4-b0b7-a42ae06dddb5" },
-              { id: "4404fc14-eb3d-4b9c-a55f-86ff6ccdf9a2" },
-              { id: "baa2d643-1ae5-42e5-aaf6-71c9f7dc26d6" },
-              { id: "2f7f0c16-dd4a-4f0b-b2a6-20df4c7fd0b0" },
-              { id: "07d195a0-c78b-4c8a-b698-0df0220a5a05" },
-              { id: "84567f5f-e922-408e-8eaa-29e359929fbf" },
-              { id: "10fa20d1-33a7-4a2e-ba96-4635186ed1ed" },
-              { id: "023f658b-0350-4cf3-b728-46b31c01f9bb" },
-              { id: "5910e5dd-33b4-4e79-9a18-34166844f2b7" },
-              { id: "54a36b6d-eb24-4d8d-ac7b-7a7c3473784f" },
-              { id: "ed77c38d-75a4-4c8f-b07b-d130a0d36836" },
-              { id: "a88765e5-a228-451b-a535-469b8592774a" },
-              { id: "def63626-395a-49b4-bdb7-bc30e3f86d60" },
-              { id: "b34220da-4628-4df9-a085-285f6ddee03b" },
+              {
+                id: "b98f0d04-78ac-4237-a3ac-7b460b36a19c",
+              },
+              {
+                id: "ffd7f884-c2c3-4724-a734-7d3ae191d2ab",
+              },
+              {
+                id: "a47bb44a-2023-4206-ac0b-5ff83f02ddd7",
+              },
+              {
+                id: "06622a72-1ffb-4d83-9b5c-a78cb9e6df54",
+              },
+              {
+                id: "99f01b21-2291-479d-8128-dede0485f750",
+              },
+              {
+                id: "7a2e9dd6-b79e-45e3-9f5f-8960813e0d91",
+              },
+              {
+                id: "6bc9ce97-a8c3-4432-8ee8-8d8ce49c7556",
+              },
+              {
+                id: "136bd9c1-8dc0-4fdb-a88b-8887897e38c8",
+              },
+              {
+                id: "38e0921c-5c46-4320-bd09-5431199d0459",
+              },
+              {
+                id: "7b117c37-d13a-4336-92b8-946359f6c6b2",
+              },
+              {
+                id: "0172560e-b8dd-4763-b399-541c7f5da655",
+              },
+              {
+                id: "75fcc2e7-4095-43dd-84c8-483de162be0b",
+              },
+              {
+                id: "60ddd8bd-bf1a-4f11-a060-7976fab3cb08",
+              },
+              {
+                id: "67323fbe-5614-4216-8177-4b90bca4762d",
+              },
+              {
+                id: "319bed9e-bc69-4766-bc26-43b7df2fdf85",
+              },
+              {
+                id: "34fb17c0-4ba2-47a1-8897-40f284cb37fc",
+              },
+              {
+                id: "6d0de223-4b05-41b5-8393-9730d7d4f33c",
+              },
+              {
+                id: "7df79ef1-63ba-4ea4-806d-c8ca8e3c8b30",
+              },
+              {
+                id: "1fd33679-455d-4eef-b5cc-de68c9f14764",
+              },
+              {
+                id: "727277a3-9dda-4184-b313-92c29d5b61a9",
+              },
+              {
+                id: "9943b7cc-8273-41dd-984f-90ad0d16672a",
+              },
+              {
+                id: "4feccfb9-aaaf-4a76-ba44-8bc94c457882",
+              },
+              {
+                id: "0dc216fb-2d3a-4757-8475-34ffa659f2d0",
+              },
+              {
+                id: "063f6ce9-f7e5-47f4-b6be-def40b0fde04",
+              },
+              {
+                id: "fca872f8-cc0a-4a98-bfff-f913ec7a2491",
+              },
+              {
+                id: "5350559f-5c9e-41d4-8315-f69d27781a37",
+              },
+              {
+                id: "82f913ef-6bf5-4a87-9a27-d18496d1c4ee",
+              },
+              {
+                id: "22829cac-906b-4e65-bd95-415884c95b9b",
+              },
+              {
+                id: "d36077f4-979f-4a6c-9acc-9970651ecb03",
+              },
+              {
+                id: "635f71bb-5dba-4a60-8180-62f6838f108a",
+              },
+              {
+                id: "5ea408aa-eedb-4f9a-941f-6ca30dba09c6",
+              },
+              {
+                id: "cc040e07-a95e-402a-9814-404510f82b9e",
+              },
+              {
+                id: "9925f583-68f0-453e-9c95-de8134018ed8",
+              },
+              {
+                id: "0233a3d6-8bb7-4298-ab2c-38c0123de5a0",
+              },
+              {
+                id: "ba2e072d-54af-4e18-adc1-2690d908e897",
+              },
+              {
+                id: "1631ac7a-890c-4c10-a2b7-647596c9bad3",
+              },
+              {
+                id: "6a9328b3-8caf-4067-b1c1-a417f18c8dba",
+              },
+              {
+                id: "c3feffc4-8dee-4c59-a010-c641446dfd62",
+              },
+              {
+                id: "6a799ce9-e720-4212-8c79-137371a96525",
+              },
+              {
+                id: "1fae8383-a72e-4b55-a31c-e7b808508418",
+              },
+              {
+                id: "61e7af80-11bc-4caf-b6e3-6d4c1a740480",
+              },
+              {
+                id: "b45759db-8c78-4bf5-80a1-36c7f0746761",
+              },
+              {
+                id: "eced7075-2e86-44c1-9045-e2cd5cae98e2",
+              },
+              {
+                id: "9bb759e1-a853-4dd0-9db8-206b5ad09585",
+              },
+              {
+                id: "9346208b-0a3a-445a-ab4c-1a647436e76e",
+              },
+              {
+                id: "5ab119dd-2176-4334-9244-9a3ada20cacb",
+              },
+              {
+                id: "bb37fcb0-37d2-4cdf-9418-6155c1cf07f5",
+              },
+              {
+                id: "67d752b2-f60e-409f-854c-110af58a59ea",
+              },
+              {
+                id: "743eec64-298d-4817-a356-71b46757b2a1",
+              },
+              {
+                id: "3a9db831-8396-48b2-8b27-47729166c3c5",
+              },
+              {
+                id: "208fb456-00f8-47eb-997b-bb29f472ff6e",
+              },
+              {
+                id: "0f38f3b1-0c7d-45eb-a2f4-98ec4857e47b",
+              },
+              {
+                id: "cd0a6752-9432-48af-acb7-3e63a90472bc",
+              },
+              {
+                id: "78ea5290-e68c-447d-91d7-b22564353f32",
+              },
+              {
+                id: "6c93a3cd-3cc1-4472-a9fc-2181627f670c",
+              },
+              {
+                id: "4c713afd-8aed-4052-9c48-454407eabefc",
+              },
+              {
+                id: "0a32db92-3566-478c-b369-b5539a151740",
+              },
+              {
+                id: "1cd17c31-7396-4dcd-bccf-87094b134cf9",
+              },
+              {
+                id: "f6453681-a8ae-435c-9142-3e00a9c65db1",
+              },
+              {
+                id: "43cd8742-e7e5-4be1-af0d-a38c4dab8455",
+              },
+              {
+                id: "b9f3037e-d42d-4cbc-a120-1d50609a0d0b",
+              },
+              {
+                id: "b1fb1efe-f550-473c-85b8-431f67e3ddc4",
+              },
+              {
+                id: "c839ba6c-f233-43e7-80a0-aeb19597e2e2",
+              },
+              {
+                id: "d9af1506-2cb2-410b-b0cf-69e1650da32e",
+              },
+              {
+                id: "b604cf53-baa9-49c6-a176-af45b3bdd9e6",
+              },
+              {
+                id: "4b9fb2fd-b286-48a1-a7b6-3fa5298be6ea",
+              },
+              {
+                id: "cdd1402a-2e30-4d93-9421-9d4df52d8748",
+              },
+              {
+                id: "89844b0c-80be-4bfc-b20c-e3479dcc54cf",
+              },
+              {
+                id: "e041f27c-fb44-4bc1-87d8-c93955da35bd",
+              },
+              {
+                id: "ea2aecb7-adb4-4158-a8cd-1440245484eb",
+              },
+              {
+                id: "fae511ca-b517-43c6-beae-afbbaa3ebc7e",
+              },
+              {
+                id: "444e58ca-a92f-4a0d-a984-37147e6504dc",
+              },
+              {
+                id: "791271a7-7916-4255-a5c7-357b18c249c6",
+              },
+              {
+                id: "2b6f2c37-e9fb-4451-9261-6176f242b462",
+              },
+              {
+                id: "4506a2d3-5ac8-4511-b4df-5f8ae38398c1",
+              },
+              {
+                id: "90d77615-f355-4a16-8138-f117bb785f5c",
+              },
+              {
+                id: "7682892b-76c4-4cc9-be85-f321f16d7086",
+              },
+              {
+                id: "f4ba3b5e-00f3-4ab2-9e65-3573cf8e6a53",
+              },
+              {
+                id: "c1868429-d438-4dc6-af63-29b8b33c8c53",
+              },
+              {
+                id: "1145d822-21bd-4006-b9b8-f8c1bdafe008",
+              },
+              {
+                id: "fce7e75d-6160-4289-ac0a-2251d2ac321d",
+              },
+              {
+                id: "a523d607-f6f4-482d-b951-9c59816d7ed5",
+              },
+              {
+                id: "a2acff2d-b839-4ac6-864c-0bcb69ef5ca8",
+              },
+              {
+                id: "a0fc3ae0-2099-4c7b-946e-fc077050f328",
+              },
+              {
+                id: "aa679031-dbc1-4e21-9899-41ff8c82314c",
+              },
+              {
+                id: "c70ecfc9-8054-431b-a806-d4f7b99139e7",
+              },
+              {
+                id: "c034d26e-fe84-4c3d-a389-7dcd245519a2",
+              },
+              {
+                id: "c6725091-45fb-4a0a-bf64-a8042f3b1f6c",
+              },
+              {
+                id: "c994551d-01b2-435b-8bd3-aca9d5374d95",
+              },
+              {
+                id: "6c85a191-d255-4afc-9bf9-9fbe0bbfdef6",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -3058,6 +7082,7 @@ const execute = async (db: PrismaClient) => {
                     name: "Sagrado Império da Britannia",
                     description: null,
                     website: "https://imperiodabritannia.com/",
+                    email: "sagradoimperiodabritannia@gmail.com",
                     discord: "https://discord.gg/rypuz3wnwf",
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -3067,80 +7092,218 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "085d9ebe-c411-435a-b5cf-7bb2847fea77",
+            id: "4a77c237-50e2-46ea-a0e9-7a13bc6a0618",
             number: 212,
             volume: "6",
             language: "pt_br",
             pages: [
-              { id: "d6ae7e87-d6f0-4cac-b5f9-b6476424d53e" },
-              { id: "b846a52a-a2e3-43ab-82a9-7c67ca08f13d" },
-              { id: "3ee8f847-dee8-4ce8-b83e-be40148d0dab" },
-              { id: "b090cd1a-0dab-4de3-8110-43c199f3303d" },
-              { id: "72f82406-0564-49f1-92ae-cb3543ac17d9" },
-              { id: "6126a2bc-cb07-4dbb-9876-bc509bd6ce59" },
-              { id: "6be558b9-ec7c-4526-accd-60e2132f4c6b" },
-              { id: "1a8d635b-1ac4-4e7c-821e-0eaaf3292d56" },
-              { id: "93554cd4-61b1-410b-88a9-0d2cffa6f37e" },
-              { id: "191f0ddb-fbf5-445f-a778-bfbdb4f20c0c" },
-              { id: "cc6f5e99-3798-49cb-9db5-9401df9a0e1e" },
-              { id: "bc87e117-4068-427d-8955-8f0287610a89" },
-              { id: "f65586ea-f111-465b-845f-5490c5210d19" },
-              { id: "e057aed2-5ad6-457d-b396-2685cd4722e7" },
-              { id: "8c37d7d0-998f-4280-8f45-edd60ea91f10" },
-              { id: "b8b2e6c1-a485-4c4e-87dd-8ff998868220" },
-              { id: "1fe86f55-d010-4996-b4a2-943bedb90757" },
-              { id: "ea5185b2-0d0e-4261-84cb-87ca60d2ef29" },
-              { id: "148553ca-365c-4573-8cec-93399293b314" },
-              { id: "b0632326-1415-4e78-8610-56c2372261f2" },
-              { id: "5cc9d3e5-a5d0-446a-88f9-93457fa0f2d4" },
-              { id: "30c2fb0c-161d-44f3-8937-55b3358e2bcc" },
-              { id: "37699f06-2bb6-4fcd-bd78-b094d1e65642" },
-              { id: "d3105580-a0bc-4aa6-89fb-7edaf62f736f" },
-              { id: "dad03347-2ede-4dbf-a55e-70f7fc630cbc" },
-              { id: "a044f355-b38f-468b-b099-6a4427b30c76" },
-              { id: "c5f9d5bd-08fb-4e82-b8d0-df984548d526" },
-              { id: "1ac78222-6578-483c-a6af-91eae6ff80d6" },
-              { id: "c9aaa96c-0d4f-4d5d-b6b6-0d152eb8111e" },
-              { id: "fd5bdbe5-a84e-4fbe-9850-abc5bcbc5f88" },
-              { id: "e8e0eaec-ff05-41f5-961d-546cb1634653" },
-              { id: "02a2f159-f45e-4183-8edf-da36414124c0" },
-              { id: "49424711-ba1c-4eee-a1ea-60395de78f78" },
-              { id: "b91be4cc-0c86-4a88-a16d-6a25834215bc" },
-              { id: "16801f46-203c-4bb0-9019-e35dae2f01e0" },
-              { id: "cf02171e-635c-4892-b0cf-3c8e900e5b49" },
-              { id: "2d947e1b-8502-47c3-8182-feef8e66c017" },
-              { id: "67ccf3ab-d0cb-48fa-a751-5906dc6d8bf5" },
-              { id: "a48ff657-7919-43ab-bc46-73e21d6962b7" },
-              { id: "fadd0862-6667-4544-af23-32eff88b9029" },
-              { id: "4ea08a24-6d0e-48cf-bda9-c39339f5703e" },
-              { id: "ef61c60b-6ea4-4540-adeb-c558a4450d76" },
-              { id: "1ed52a88-41b0-4b20-b6a1-ea83679e46f3" },
-              { id: "f2bf9d1e-1dae-4b6f-a56f-0f320f671c8e" },
-              { id: "0497c240-51ee-41f2-b5e5-ccacbcc132e4" },
-              { id: "9a824172-50e6-4473-9816-640682fab24a" },
-              { id: "f2891538-d997-463d-8b62-fd45073f1c3c" },
-              { id: "751d2e01-9889-41db-a2c4-929c8626da7e" },
-              { id: "83c61882-e431-41c5-ade6-949b5f2db641" },
-              { id: "8e7aafdd-7653-4f20-beda-ddecceb58750" },
-              { id: "06f92f6f-4592-47b2-a672-98b3807e6d79" },
-              { id: "a2fdaaa4-a6b4-40e6-b6c1-b028a93d87c2" },
-              { id: "1a7cb410-33b6-4089-aa19-941576d526c9" },
-              { id: "a124f505-4f6d-42ce-a7d2-0b670035b6ea" },
-              { id: "d11e5424-67ce-492c-adec-b54182f75c19" },
-              { id: "bdd5bb01-94cf-4a18-9aec-c922030530e5" },
-              { id: "c71122f0-20c8-4c03-87e3-37089719fc64" },
-              { id: "482320d4-5b6a-444e-8fec-a9d9e2db426a" },
-              { id: "8a91b02c-9105-4d15-a290-eee891be255b" },
-              { id: "2f19a84d-5084-4cb2-861b-6d62b5d8e041" },
-              { id: "68c87381-a28d-4613-9984-f1fe40389d24" },
-              { id: "882fe2e4-adea-43b7-992f-741f9ddd26cf" },
-              { id: "7b94a15c-f9b5-4c94-9517-eb450f98967f" },
-              { id: "47c39edc-ba56-417d-9a9f-75409727aeb6" },
-              { id: "cd7d1daf-8390-4dd9-aaea-98eb2291c6ec" },
-              { id: "e16bc694-db5e-4f64-b1b3-ff3e9ffcf28a" },
-              { id: "661a76b5-2926-4be4-b72e-e186bbd47260" },
-              { id: "6fe55571-c751-48af-a512-9f79139d88ff" },
-              { id: "ee1d068c-f88d-4b5c-957c-902b32614068" },
+              {
+                id: "ca7d224e-14aa-4033-82e3-6a17114f5c1c",
+              },
+              {
+                id: "ea1ed51d-71af-452c-9f6b-6cd17c526d61",
+              },
+              {
+                id: "7f03244d-6736-4b82-bcf3-21786de823fa",
+              },
+              {
+                id: "e4c943bd-af91-4b52-a3c1-abae10bb91df",
+              },
+              {
+                id: "21b0d395-652b-439e-b463-540a88accc4c",
+              },
+              {
+                id: "4cdbdf30-05e0-4b9a-b84c-defadb63d56b",
+              },
+              {
+                id: "372438cc-5365-49b2-8769-180d96ccb3bc",
+              },
+              {
+                id: "25e953e4-c1bd-4747-817c-aa95aad78e25",
+              },
+              {
+                id: "72a085ed-aa13-4074-a3f2-7691326bf3c0",
+              },
+              {
+                id: "6ddac7f1-0f6e-4e17-887e-bacb927d3d59",
+              },
+              {
+                id: "295eef20-2f0a-46d4-9528-93c7b02da0cf",
+              },
+              {
+                id: "ad0f87aa-61c8-41e6-bc78-349aa179467b",
+              },
+              {
+                id: "3c18f1af-30c2-4c5e-8bfa-d88f62d97523",
+              },
+              {
+                id: "70bbc1c0-b806-4104-a210-96f2672e9b45",
+              },
+              {
+                id: "8dc82632-edb4-4544-902c-cafe4dc23cc5",
+              },
+              {
+                id: "176c670a-835b-4ccd-aebc-612d1a5c5be4",
+              },
+              {
+                id: "72956806-39a0-4c7b-a2bb-0e39ab11e119",
+              },
+              {
+                id: "0137285d-e7a9-4d89-819b-ba4cf184fbbc",
+              },
+              {
+                id: "f004b527-074c-4ef5-9b92-0fddc95c1e9f",
+              },
+              {
+                id: "1a302a62-f2f9-4cbf-a724-31f7f725600e",
+              },
+              {
+                id: "3ca71f9f-31fb-46d9-86c0-3cee28f2f6e1",
+              },
+              {
+                id: "1c314a03-d77a-4ae7-a140-ea5baf88902a",
+              },
+              {
+                id: "d96dcc9c-edaf-4fa9-be12-c0236ea239a8",
+              },
+              {
+                id: "1c00d164-2df7-414e-b15a-ca890e113e31",
+              },
+              {
+                id: "816ba135-eabb-453d-9e4c-22121e278a48",
+              },
+              {
+                id: "b7d98a63-7ec6-47da-ab43-1b6aec71b1f9",
+              },
+              {
+                id: "58c2b4fa-e8be-4302-a43a-d81ed2f221a5",
+              },
+              {
+                id: "ae4cbd41-9fe4-4bdd-822b-44a770657c21",
+              },
+              {
+                id: "a9c62cf2-8e82-42b1-a312-b81abc8913dd",
+              },
+              {
+                id: "3d05bd4c-ca25-48df-a4cb-03ad2c6c9141",
+              },
+              {
+                id: "9a249228-1198-4ea0-a99d-ed56a7da6652",
+              },
+              {
+                id: "eca53c1d-477f-4f3e-96b0-f8d250f6c98e",
+              },
+              {
+                id: "bb411922-fe45-4060-9973-648447288a87",
+              },
+              {
+                id: "667bc318-0d1c-4f7b-9dc1-6a4af1abf427",
+              },
+              {
+                id: "03e9a79f-7828-4159-aee0-b54cf71828ba",
+              },
+              {
+                id: "b620ccc2-68a1-439d-93db-59197a1eb2aa",
+              },
+              {
+                id: "ee29620b-f7e5-4b16-a106-71e49f8bbd7b",
+              },
+              {
+                id: "b0e74b8e-69ce-4f62-aef5-98bf02297adb",
+              },
+              {
+                id: "ebd3014a-641e-4d95-bc1c-fa460e8f486e",
+              },
+              {
+                id: "819f5bfa-0cea-4ec7-8649-2f9945a70b5b",
+              },
+              {
+                id: "137f96f9-e261-40c0-9e65-0e81a4221523",
+              },
+              {
+                id: "50268e54-8d80-48e1-8aff-fb977b467ad3",
+              },
+              {
+                id: "8ab93dca-275c-46b2-ae7e-5312f922e317",
+              },
+              {
+                id: "51c7db88-8e8d-46f3-a87c-5a38b2be377f",
+              },
+              {
+                id: "eb8a194d-f2ac-422c-9ec8-2f2cb42bdb40",
+              },
+              {
+                id: "a54d824e-dcd5-4921-96a7-b316961bf373",
+              },
+              {
+                id: "9b2467c6-3d79-43b1-b836-08f008e72551",
+              },
+              {
+                id: "f571d70e-5aa9-494a-b888-0a14cb66d84a",
+              },
+              {
+                id: "8736af25-7008-4f8b-ab77-8df4ee1bb54a",
+              },
+              {
+                id: "3efcc661-2ba5-46ee-a19c-86ef411036fc",
+              },
+              {
+                id: "753b1c55-ea06-4c06-928c-36b46fb69562",
+              },
+              {
+                id: "8a7fa1a1-ad4a-4705-aaef-f7c74339c23e",
+              },
+              {
+                id: "dbc0db49-6728-4bc8-8e85-7e6606dc268b",
+              },
+              {
+                id: "ea8bc486-39bb-4cf7-afc4-eba01cba3121",
+              },
+              {
+                id: "d6125c4e-95c3-40de-bbf0-267207aea7d6",
+              },
+              {
+                id: "aa91b03e-fafc-401d-b3d4-8e82cfef7cfb",
+              },
+              {
+                id: "4b329e8c-33e1-4e31-ad79-41ab7b714ab2",
+              },
+              {
+                id: "a277e2db-6792-434b-bfcb-a52e1470e3df",
+              },
+              {
+                id: "2dedf522-bda7-4b71-8dbb-eb5d4b6ec2f9",
+              },
+              {
+                id: "f1509114-a68e-4b9d-9f19-c39892b299ca",
+              },
+              {
+                id: "23269c39-489b-472a-ac5d-cb857fd304bf",
+              },
+              {
+                id: "2b942ca1-8572-4ef2-9a89-2851b70873a9",
+              },
+              {
+                id: "b234f8ca-99c2-4cbb-b544-243b948a28dc",
+              },
+              {
+                id: "5c392323-88cc-44c7-aeeb-9eaae168e78f",
+              },
+              {
+                id: "38b773f8-e094-4a35-8bef-b645bb68675e",
+              },
+              {
+                id: "91f9b657-2874-46de-9692-582bea5985b0",
+              },
+              {
+                id: "97a55f72-968e-49cf-b23d-202ad1bf919c",
+              },
+              {
+                id: "38346eb3-2d84-4eca-8cde-c7aa7bcd5597",
+              },
+              {
+                id: "3f1e6a9a-5102-4259-b599-489a25f62815",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -3152,6 +7315,7 @@ const execute = async (db: PrismaClient) => {
                     name: "Sagrado Império da Britannia",
                     description: null,
                     website: "https://imperiodabritannia.com/",
+                    email: "sagradoimperiodabritannia@gmail.com",
                     discord: "https://discord.gg/rypuz3wnwf",
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -3161,89 +7325,245 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "336c1099-b770-4771-99fd-0b690af33264",
+            id: "11e7e6de-a105-4481-903f-bf94817e1e4b",
             number: 213,
             volume: "6",
             language: "pt_br",
             pages: [
-              { id: "afcac81f-ab0b-4fa6-904f-09ecb6ae9b50" },
-              { id: "7e690f27-adfe-4d35-b905-9a987b708b1b" },
-              { id: "4a278699-d4a9-4946-9c20-684932cf91af" },
-              { id: "d25e82bb-74ae-4dec-adce-12c2ad1c58c6" },
-              { id: "cf9de706-5a27-498a-8a90-b66baa26e425" },
-              { id: "dacb4a4f-8253-4c4b-b785-051571e6f304" },
-              { id: "c9aaddd3-575e-4603-8537-ab7cdfff1cb1" },
-              { id: "c5edcffc-c52d-458d-98eb-93bd3d6ccd1d" },
-              { id: "a8589ad7-bc80-4b45-b8f9-eae36bc6e638" },
-              { id: "0038c0e3-e0d7-4879-ae0c-588995c61a58" },
-              { id: "05b48747-c171-41c1-921a-36136731cbdf" },
-              { id: "5ed38b72-a00a-4c5a-ab10-e5ece2337921" },
-              { id: "254e792a-4e59-4b45-8268-e5d12deb0e49" },
-              { id: "50038adf-eabd-4a78-9cfe-71dd07a7f56a" },
-              { id: "8fa88e18-28eb-4bef-ac56-9a261e389032" },
-              { id: "d9438e97-bf54-4351-8341-979f14b9f863" },
-              { id: "cb39d64a-5b1a-4077-85ef-8bb8764e8ef6" },
-              { id: "6a3e92b6-cb8c-4d87-b5f9-822057d9f1b3" },
-              { id: "b6002cda-d0d5-45ca-9b66-f029df909884" },
-              { id: "654ae997-488f-414f-ae13-798acc800f86" },
-              { id: "04f13011-8bb4-4b74-bfb1-6e71c0c92fb4" },
-              { id: "f5844980-725d-4dd3-81ae-49c3c4e5b6e4" },
-              { id: "7d523c97-b81e-4278-9ea9-1a0be3029bc3" },
-              { id: "d5ee0bd2-83df-4992-9eaa-732fd5b37a9a" },
-              { id: "a9631938-8b83-46e2-a576-28ff6f7f98ff" },
-              { id: "a58135e5-bb84-4bfb-8129-364ef1fe2f21" },
-              { id: "77b6d1b8-ca74-4d45-a359-7d8ecc44ff95" },
-              { id: "875f4ec1-643b-4d4a-aa41-b2638c1652fd" },
-              { id: "6fd1f574-0f8b-4419-b58f-952dbfe58717" },
-              { id: "2a138385-2b78-4e22-8e24-0e2086c43a72" },
-              { id: "4f4c158f-f345-4a17-b37c-5c2ca45d37ba" },
-              { id: "ed29410b-392e-4baa-88a9-67a0b64de119" },
-              { id: "177f325e-ee25-49ed-8124-da529f53de5b" },
-              { id: "fb4459f2-38a2-4b65-9477-ebc641deb5d2" },
-              { id: "237bbb84-1cae-4e26-bbfa-5b9f56b8607d" },
-              { id: "085738ba-cd82-463d-9e06-87fe00abc888" },
-              { id: "c1d433da-c0c7-4f85-85ec-6a38067bd182" },
-              { id: "6924d2ea-1c03-4f14-ba1e-5eb486a27bcc" },
-              { id: "877fcc2f-be9c-4ebd-ae5f-6fbfab434d7f" },
-              { id: "0401599f-6238-4738-a5bd-0090ad11d85a" },
-              { id: "cffd445e-9806-4df1-8ec0-587ce9ddb487" },
-              { id: "4cca4993-1d0a-44ce-a38b-4e498adb031d" },
-              { id: "49605a92-effa-4145-b200-47c9e96b8379" },
-              { id: "b815be2b-d295-4663-bdc9-eefcf6f595b8" },
-              { id: "fa6c6461-a120-4db3-94ee-1303b73a2944" },
-              { id: "5cacc146-95af-4838-806f-896ec20989bf" },
-              { id: "01411953-c78a-414b-95fa-a5cce732ab08" },
-              { id: "f3d2d7dc-6bd8-4b9e-a6df-fbe7ff58e1e6" },
-              { id: "393f7b44-2ecf-48d0-bba4-22dea8540023" },
-              { id: "abd16746-41ba-4b10-85e5-4fc77bd1ddd9" },
-              { id: "9569ab0c-8d03-497a-8afb-db099fc0147f" },
-              { id: "fd7bf452-38be-4a77-a170-c3565ebb658b" },
-              { id: "c8ba51e0-25be-4b88-9abe-85d58aa0f3a0" },
-              { id: "205c1d25-27ec-4d1a-a4b0-27943fdb3239" },
-              { id: "b5f3e1b3-dc4d-462d-84ce-4708c1cb3771" },
-              { id: "44ab8211-c497-4eb2-8e5e-9c041196bf01" },
-              { id: "8d3ede1a-f440-46ae-bac3-48cab814f124" },
-              { id: "941185d2-d9ac-400e-85a1-093d64179eda" },
-              { id: "9865f328-dd7e-4a92-a6d7-5f539ee8fa18" },
-              { id: "94848b9b-a0b2-4124-a10d-ec6e577cd1c8" },
-              { id: "2b440190-bd9b-4673-9caf-f189f3182aa7" },
-              { id: "686ed8b0-3389-4c3c-9c7c-b652b502c190" },
-              { id: "81963445-be25-432b-9029-f7b6716a622c" },
-              { id: "03d6df0c-1c65-4110-aff1-03260e7a2a63" },
-              { id: "376b8c35-8148-4d68-9795-154445421256" },
-              { id: "a910c94a-879e-4809-b2b1-bb3da8123cde" },
-              { id: "23438a1d-9dd9-4d3e-8297-77af876601c2" },
-              { id: "dabd6a3b-78bd-4cec-967a-ce37256fdf20" },
-              { id: "f94ea17a-cf17-4136-aa55-5938e1ea0acf" },
-              { id: "9a2f380e-437a-4a3c-ad8b-2f45123a19df" },
-              { id: "35e456dd-d48b-42de-8bd7-85f79d50ee55" },
-              { id: "b099fb9a-7599-4485-b545-489b0252c7e7" },
-              { id: "c1ad551e-ae6e-46ff-8b5e-5cf3115f9d34" },
-              { id: "18245d3f-a1de-4b72-b397-5f7de08bcef1" },
-              { id: "5ab772ea-05b2-4e44-9419-cb4064ea05ba" },
-              { id: "7c65905d-c478-4081-9551-97ca068b6180" },
-              { id: "fe6f6035-6054-4b22-bf8c-3b176228bf03" },
-              { id: "c8fa337e-6ad2-4f45-80f7-1dc2cac47534" },
+              {
+                id: "6e664bf1-5559-4c11-8caf-9b750c697d22",
+              },
+              {
+                id: "5bfe356e-00be-4d67-86c8-97a5931ee23a",
+              },
+              {
+                id: "e3d3e7ab-3c79-478b-a7e8-5ef1549cbc13",
+              },
+              {
+                id: "178adccf-5b5c-4337-aa82-ddc17dee1c32",
+              },
+              {
+                id: "65cdb88a-e859-4af1-ab97-c5bb538d1d95",
+              },
+              {
+                id: "9d39e4e8-035a-4b61-9f82-3edf7e5d4cc5",
+              },
+              {
+                id: "c7468e1a-ade1-4e06-84d7-af1d3e24e6da",
+              },
+              {
+                id: "0d75e862-7c8f-453d-8b71-df4114337231",
+              },
+              {
+                id: "620b10f5-f070-4c6a-8566-72b525871730",
+              },
+              {
+                id: "9d0d86a6-5b67-4c1d-971f-39cd53f563af",
+              },
+              {
+                id: "0dc4e0db-f3b9-4e3f-b845-27551f7a3e4b",
+              },
+              {
+                id: "f2a44e24-c6c4-4530-8aa1-e6d689ca5cf1",
+              },
+              {
+                id: "1d2cbc14-ba83-4784-885b-eb6b43c1d313",
+              },
+              {
+                id: "5016d1bb-040c-41bf-8eed-7826ba8fc122",
+              },
+              {
+                id: "70aef40e-46b2-471d-a347-31584f2d22e1",
+              },
+              {
+                id: "d1174a67-1224-48d2-b120-f27e3051d562",
+              },
+              {
+                id: "1ef7fd1b-75cd-4436-bc8f-b2ad4ae550af",
+              },
+              {
+                id: "85693aa9-08af-40d2-87b6-3203ceb2450a",
+              },
+              {
+                id: "51c60ff0-b29a-4e0a-bc23-073180f51564",
+              },
+              {
+                id: "833cedac-3eee-4313-aa3d-12d6419f0166",
+              },
+              {
+                id: "543e3352-788c-4b4c-bb83-7bf91a9162f9",
+              },
+              {
+                id: "65b5371c-8770-465b-ad0a-416a4e149e25",
+              },
+              {
+                id: "12e11a27-f465-40f6-96f2-a8645c0fe716",
+              },
+              {
+                id: "07e2dcb3-0556-478f-8240-2c48b4570d34",
+              },
+              {
+                id: "216b76be-0bd8-4cd9-b333-33202d675a5a",
+              },
+              {
+                id: "89abb2da-7979-4698-a871-6fe587922f72",
+              },
+              {
+                id: "89ef2015-f805-4121-b823-aafc23bc788e",
+              },
+              {
+                id: "aaa5708e-5c93-4b6d-81e4-65809c197321",
+              },
+              {
+                id: "60931e58-ce81-4790-8e1f-1a82de96f3c3",
+              },
+              {
+                id: "3006ee57-2cad-4cb2-954d-a0f4eca4ebd3",
+              },
+              {
+                id: "83cddedb-a9cb-4ea3-a111-549de22cedd8",
+              },
+              {
+                id: "eb14c4e9-10a4-4a79-805e-ddf547815e6b",
+              },
+              {
+                id: "9ad00f33-d711-4916-9528-1525bb6e2408",
+              },
+              {
+                id: "9cc3c13b-9a7d-4575-a21e-e6c93bd912ef",
+              },
+              {
+                id: "479d22a5-6d02-4733-a3f6-7e032add4aa1",
+              },
+              {
+                id: "223fb564-4378-439d-93ef-487a8008e259",
+              },
+              {
+                id: "5ef3bcef-0e8a-4c12-9283-f743b2f8f733",
+              },
+              {
+                id: "49dd915e-b31d-4598-a7d6-1176c4a22748",
+              },
+              {
+                id: "cd39fb0b-34b6-48a4-ba44-9ceb43bdceee",
+              },
+              {
+                id: "74ca486a-2ebb-4128-9122-881b41d0aa67",
+              },
+              {
+                id: "0d770226-6599-48cf-ac68-82864d4fc447",
+              },
+              {
+                id: "2f624574-3f49-4dd2-ac9c-fbb0f253a9fc",
+              },
+              {
+                id: "b20454f6-1f11-4101-9243-72d659289f0f",
+              },
+              {
+                id: "bbd354fa-1ff2-44da-a073-8044d2bc79a7",
+              },
+              {
+                id: "80e57eb5-ccd0-49e6-9bf3-1834b286d4c7",
+              },
+              {
+                id: "a1191699-9d0c-43d7-ba21-8789055ddec6",
+              },
+              {
+                id: "3f938d5e-14a7-44a8-b814-7ae15ffe3e2f",
+              },
+              {
+                id: "ff678663-1523-4ce0-a502-b5bddfefc650",
+              },
+              {
+                id: "f22a1f15-5a30-4ad5-bc2c-dd14194e40df",
+              },
+              {
+                id: "c0cdf464-5d25-4f9d-96f1-ef805528a719",
+              },
+              {
+                id: "dd379ed9-1649-4e87-b690-3d4d158aea1f",
+              },
+              {
+                id: "e2a91786-4c04-4ec5-9d89-68ea4b83cd5e",
+              },
+              {
+                id: "555a5947-bf27-4453-a4cf-dcc669777858",
+              },
+              {
+                id: "9777d970-3875-482a-a56e-dff386dd4ab4",
+              },
+              {
+                id: "87ffef36-cfe8-4e22-b4fd-95a50b50f659",
+              },
+              {
+                id: "81e3a806-8ecc-4447-bd48-149e67a1392a",
+              },
+              {
+                id: "b933bc9e-77d0-43c5-a099-c0abd42fac22",
+              },
+              {
+                id: "4744ad27-d4ea-4fc1-af30-e514eb07a803",
+              },
+              {
+                id: "83f3435c-2681-4807-bd0b-37bbc81ba6cb",
+              },
+              {
+                id: "5fe79b9f-f714-47fd-9392-fd579b7cfc54",
+              },
+              {
+                id: "bb1a0a14-c17f-4ead-af14-28e4d1098c7e",
+              },
+              {
+                id: "068ba908-4d52-4949-8488-b8cc79ab0e70",
+              },
+              {
+                id: "edc766ef-7c99-4c43-abea-bbc1afc4ab13",
+              },
+              {
+                id: "5a617ed7-82f1-4aec-9704-f83064561cb2",
+              },
+              {
+                id: "f3080893-af5c-447f-9ef4-ccfbd37f3c0f",
+              },
+              {
+                id: "c375d921-ff71-4b32-b11f-c2b707f640ad",
+              },
+              {
+                id: "337a2e2c-9b8a-4a13-904d-863503935786",
+              },
+              {
+                id: "93175832-fbec-4f15-9305-eb071e6196f9",
+              },
+              {
+                id: "b729aa77-1f1b-45c9-beff-e1c39d31ec4f",
+              },
+              {
+                id: "2000c303-7aef-419f-be27-dbf046673061",
+              },
+              {
+                id: "e1bc0059-f2a4-4d85-8c5f-a415c25d8840",
+              },
+              {
+                id: "1f2c3e79-136d-45a4-b6a3-f67f45d80ff5",
+              },
+              {
+                id: "35d1cae8-8a6d-4733-acf5-b79bde35aaae",
+              },
+              {
+                id: "daf1df2c-dc2f-4313-ae59-bad00b61967d",
+              },
+              {
+                id: "505575f5-28ef-4e04-ba70-0695617a74ca",
+              },
+              {
+                id: "06ea036b-58c2-4245-be3b-fb5bb2f74754",
+              },
+              {
+                id: "ae81dda8-b209-4787-877a-47428d479c35",
+              },
+              {
+                id: "2571949c-d1bd-45b4-b92c-2378a98e96e7",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -3255,6 +7575,7 @@ const execute = async (db: PrismaClient) => {
                     name: "Sagrado Império da Britannia",
                     description: null,
                     website: "https://imperiodabritannia.com/",
+                    email: "sagradoimperiodabritannia@gmail.com",
                     discord: "https://discord.gg/rypuz3wnwf",
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -3264,88 +7585,242 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "823309de-9bd1-4ce8-b514-5a106da5a06f",
+            id: "8a041f79-8b6b-4850-bc35-290ba476a158",
             number: 214,
             volume: "6",
             language: "pt_br",
             pages: [
-              { id: "d237258b-1404-4a26-beb1-491b29a9e4ce" },
-              { id: "8992080f-12fa-4f14-a49f-0eee99ee429b" },
-              { id: "6090c45b-3ed8-4a1a-b91b-9091f780a17e" },
-              { id: "240f7340-c094-4f63-b1bf-b082bc0031a4" },
-              { id: "b19e0f40-a79f-4cc5-b24a-6e5ce8dd83e1" },
-              { id: "95002220-f888-4755-805b-6f872af1b989" },
-              { id: "68efe070-63e2-437c-8bf2-3cff9054a172" },
-              { id: "3d856d2a-3684-45be-8431-cbd135c4f17c" },
-              { id: "88eafcbf-cf50-4180-90b4-7c2fcbdbdbd2" },
-              { id: "4ffc8b49-b29e-4ad4-b127-571cf7991c0b" },
-              { id: "036f75ae-cff3-4b75-9202-b9f8f5b2177d" },
-              { id: "62582766-bc60-4645-b287-a545b8358cae" },
-              { id: "af1781fa-69b3-443f-883b-17863b4b5f71" },
-              { id: "db883fce-9135-4312-93d8-b97d5b9af134" },
-              { id: "693b7783-7fa2-47b6-aaff-8ddab9f39cfd" },
-              { id: "1e683f63-8ba1-429a-b282-11b16433c42e" },
-              { id: "104dcbe9-2f73-4d4f-8a11-5da5ec024839" },
-              { id: "8d5c541c-6b8b-4cbc-8537-4e9df603ba32" },
-              { id: "4ade42db-7cf4-4cb0-b405-464ab78cb86c" },
-              { id: "e11952b0-9f5d-4380-9eee-df4d2980362a" },
-              { id: "2b49cf77-3d9d-4e53-a027-5c776eb704f4" },
-              { id: "5c5a7c77-5987-40ad-83b2-54f6a83db2ed" },
-              { id: "f502dd43-03e6-4f1c-bfbd-a0ebaa63de94" },
-              { id: "fa8e0f53-d9d1-46f5-af31-784daea9cc83" },
-              { id: "4d3d12a7-f987-4290-82af-f5193bbd1d28" },
-              { id: "529f2fd5-c115-4379-bc6f-67bd74c28289" },
-              { id: "02dc827b-bdae-4dc3-aa88-be80bedd108b" },
-              { id: "8d50a33a-3fc6-4ca8-8104-2f6aa2e1fc08" },
-              { id: "b87874df-9e9e-446e-adf4-17cc813b3a1e" },
-              { id: "6982864e-45da-40c3-a48a-4f208303a54f" },
-              { id: "c8a1a72c-fed4-4b19-9d00-5dc24698194d" },
-              { id: "b8f0611c-a01d-4f87-af85-de6dda5d55bf" },
-              { id: "4d180968-c612-43eb-9d84-332bbc26c991" },
-              { id: "d39e7a5a-d6f2-4134-9522-46f6cec6b4b9" },
-              { id: "c535028b-1b14-4966-ad53-b7beb6ec2efb" },
-              { id: "79ad0483-ca1d-490b-80f6-87dd86b29a1f" },
-              { id: "3caa890f-979c-46e5-b588-5137c482313a" },
-              { id: "928f716e-1b2b-4033-941d-1885b71c48c6" },
-              { id: "abfbe868-a5c6-46cf-8327-a9a61678f773" },
-              { id: "28124083-d444-48af-925d-eff774ab4aac" },
-              { id: "c96324a1-8f8d-4f53-8343-cfc63a820d2c" },
-              { id: "88c670a9-6605-47ff-8bf1-4a8ddd92fb36" },
-              { id: "049de076-9053-4bc7-8c99-6f0e2d9108bd" },
-              { id: "752c2579-eb42-44f1-a582-19e0788ca570" },
-              { id: "a0fb6847-7b3c-4819-a541-25ca2327448d" },
-              { id: "03ec62cd-7ec7-4866-a3d9-b6fd5b331cae" },
-              { id: "706e045a-6dbf-4180-85eb-a389d129ad8f" },
-              { id: "b7f73948-904d-4fad-8da8-604d0e8e1336" },
-              { id: "56e5f882-df4e-4f81-8a7c-6a8f3d46731e" },
-              { id: "ea14f733-1b82-4717-8965-6a3172adede6" },
-              { id: "b8a88071-b5ac-44cb-8692-7c5f02083b86" },
-              { id: "a7a5b66d-cc32-4e73-9269-3fb83b9723f4" },
-              { id: "e22868c7-ece7-4c2e-8998-f556816afe1d" },
-              { id: "7fb37eba-322d-4d98-8d74-a1cc62b57b2f" },
-              { id: "b953ecd1-fd89-42d8-87c1-3b008d010f8e" },
-              { id: "4480adcf-c275-42d8-80ce-4ed92314b22f" },
-              { id: "e2f1bee9-94c0-4001-b862-0cf45a7cdbc5" },
-              { id: "846aecfa-2a35-4942-8253-c3cef445e6c2" },
-              { id: "83c4226a-96b2-4e8f-9e5b-7dd649ce60b0" },
-              { id: "474d6a93-34ea-4618-ba15-a04913587497" },
-              { id: "12b41375-4fd3-4b48-bac1-c07abdd856fa" },
-              { id: "f6f5e169-59fb-4ab2-a5ba-a8f2ea1f7b4b" },
-              { id: "27ea4c8d-ccec-4395-af74-e8753617001b" },
-              { id: "ab373556-aa56-4a91-9858-406c02bfc2cc" },
-              { id: "3d920737-f2f9-422e-840a-b1078c64ec92" },
-              { id: "6ec3611b-c1d4-4e1e-9b45-7ffa16291d5a" },
-              { id: "b8538c1d-c6be-4dd4-b93c-6a79ea55a554" },
-              { id: "22b5a68c-014e-4e1e-b283-c0b06497a649" },
-              { id: "56483110-8722-4963-b727-c2e6ae782ec0" },
-              { id: "236ebcca-0a97-44ca-a8e7-97fa744ed91b" },
-              { id: "515432c9-d837-4be6-b8fe-447b2e5df739" },
-              { id: "06c9db65-95ff-4aa3-aa73-2e878461ade5" },
-              { id: "9e108731-1185-431a-a93a-1266a4de24ea" },
-              { id: "e4a12451-f641-4912-98b6-b2b1e81894f7" },
-              { id: "951061a0-e5fb-41bb-ab82-9d94be27fbdf" },
-              { id: "317e01f9-a682-4174-98b2-b0504c57f667" },
-              { id: "93b33cd0-7b43-4dde-96ea-aba6c142f2f6" },
+              {
+                id: "00e7d457-f041-463a-a909-3dd71dc1bb35",
+              },
+              {
+                id: "059449a2-7983-4b70-87da-85b900168e77",
+              },
+              {
+                id: "652d4334-cf0a-41a9-933e-0f246b9e00fc",
+              },
+              {
+                id: "81e839fc-9107-41aa-95ec-0a2c9222243d",
+              },
+              {
+                id: "a04fc2fc-334e-42e5-9403-a598d0d28f30",
+              },
+              {
+                id: "4483824a-8f4a-45c6-8fcb-c04b1d31fcdd",
+              },
+              {
+                id: "3cfe9068-11b7-48e3-9918-9f090dca1c48",
+              },
+              {
+                id: "3e64edef-7205-4988-b69b-0aa1dbd4990e",
+              },
+              {
+                id: "c6bb65dd-e378-432d-a1f1-7c7e11aa94bb",
+              },
+              {
+                id: "915ca9e0-0ced-4179-a13e-5e8b531fcce9",
+              },
+              {
+                id: "0c6fc797-9ff1-4eb3-9a88-044d7c64fbfd",
+              },
+              {
+                id: "b345aa15-71a2-4f9a-b78c-a5db4716e3c5",
+              },
+              {
+                id: "62c3fe05-1519-4918-b26f-4c72df019334",
+              },
+              {
+                id: "bc9a08d2-203e-4b4f-a0a7-e9c55b0dd583",
+              },
+              {
+                id: "1d4ab154-8853-4f20-afae-4e7ca842a724",
+              },
+              {
+                id: "783d4b0e-8a44-448c-8f98-4eb53954902a",
+              },
+              {
+                id: "0ebc2a18-8483-4039-8228-9a91aeb51fe0",
+              },
+              {
+                id: "d51a379c-d598-4629-b03d-6363201271e1",
+              },
+              {
+                id: "6080e409-9d43-4002-ae5f-c3c1e8e2bdcd",
+              },
+              {
+                id: "0b1e3292-5061-4707-a004-f29bf0565215",
+              },
+              {
+                id: "f8dcf2fa-2615-4dd1-b7fa-91858c597689",
+              },
+              {
+                id: "6e57ede8-d0a4-4fce-b172-28ae15922fe9",
+              },
+              {
+                id: "51b83950-faa7-4b17-a57c-ca4d3776cbe2",
+              },
+              {
+                id: "0596ca2e-0e09-44db-a4c4-d651c0d0086b",
+              },
+              {
+                id: "f5d7fdab-2ad5-4aaa-b286-60a63469cd91",
+              },
+              {
+                id: "33690447-b578-452d-b942-e02588d94b32",
+              },
+              {
+                id: "55609dfa-8275-41e6-b071-78ed66a54df5",
+              },
+              {
+                id: "f249c3bd-99c7-46d3-b7f7-108d90e9bfbc",
+              },
+              {
+                id: "2779b78a-1234-4db8-9aa0-0ca7883b0f73",
+              },
+              {
+                id: "a163d066-d54d-4299-8020-bd11fe9a8f27",
+              },
+              {
+                id: "cbf31e11-f445-4685-8430-09d8b32fdc68",
+              },
+              {
+                id: "45fad1cf-23f4-4a33-9074-aad37e83663d",
+              },
+              {
+                id: "12e731ae-f730-48d0-95c7-f4399fd4febf",
+              },
+              {
+                id: "85595007-0cf6-4111-a730-9cfc934a2ce3",
+              },
+              {
+                id: "a27a8c6c-ba25-4079-9e38-5976b8ba14d3",
+              },
+              {
+                id: "ed5b0c49-908e-4a0d-ab8a-8e8dc8e7a12f",
+              },
+              {
+                id: "70e0b31f-0e60-4c0a-b462-ba761ae2dd03",
+              },
+              {
+                id: "edae3161-868d-4846-89de-c731decc09cf",
+              },
+              {
+                id: "3e409f70-ed8a-4fb0-bc29-1c3e4a82e8a1",
+              },
+              {
+                id: "f9799e83-0967-4336-9c44-2e56dae4d49c",
+              },
+              {
+                id: "7214f58c-0aa4-40af-9ba3-9f062cc9f246",
+              },
+              {
+                id: "251c1c3e-0b0a-4c28-9c18-b72328bd3c90",
+              },
+              {
+                id: "f15d59be-3681-49ca-9024-231f9341a814",
+              },
+              {
+                id: "cde791d9-f76c-4436-85ae-8c0b9ab078ae",
+              },
+              {
+                id: "4c784398-7b04-4cb5-987c-677c91eca769",
+              },
+              {
+                id: "bc349395-a242-4df6-a429-b64cc1799ef1",
+              },
+              {
+                id: "5e8ba12b-a470-47df-bfe0-3a5570b46b89",
+              },
+              {
+                id: "f16e5088-194c-4530-9fef-c3aa3a0e5488",
+              },
+              {
+                id: "1daa5494-c6cd-4212-95ea-6ab0ec41068d",
+              },
+              {
+                id: "a2ef6eba-ab74-48b6-bf6f-d99696d2adb2",
+              },
+              {
+                id: "ed170aae-8fd0-474a-b352-11cf804442b7",
+              },
+              {
+                id: "3c46c7c4-6534-4098-98eb-9529e2d17225",
+              },
+              {
+                id: "b103a525-fd79-4bdf-b9b6-de2ce304c6af",
+              },
+              {
+                id: "9591c600-00fc-4174-8fba-efd850c8850e",
+              },
+              {
+                id: "c9fe8911-fc3f-404a-b2d2-f3524a59cf39",
+              },
+              {
+                id: "583fde0c-653f-4c7f-afea-839d3ab04053",
+              },
+              {
+                id: "8cadf44c-d216-4125-bada-a00f68bd2263",
+              },
+              {
+                id: "6baaf8cf-c080-4ecc-b059-6d6e5af21113",
+              },
+              {
+                id: "4d7e778a-c937-432e-951d-57b1cb87ba7c",
+              },
+              {
+                id: "7be6b8d2-9037-4ae9-a984-41223aaf1cbd",
+              },
+              {
+                id: "dfa30fb6-e1ce-4529-b089-9178d77507c8",
+              },
+              {
+                id: "b27840da-33a2-490e-a386-41379c095b84",
+              },
+              {
+                id: "1d785838-73b0-4789-910e-22956764e75a",
+              },
+              {
+                id: "37638db1-ae6f-4efa-8d41-087bfb7922c5",
+              },
+              {
+                id: "ac089607-18c6-4bf3-b26d-f59709691fc4",
+              },
+              {
+                id: "75b70a26-448b-404a-a760-15be1fcdad31",
+              },
+              {
+                id: "8c1d602d-a0d1-4f2b-8801-21dea0d31e3a",
+              },
+              {
+                id: "78e856ab-94bc-4f1a-9edd-3e2a1ed894a8",
+              },
+              {
+                id: "4de1b387-c867-4c34-874c-a5f1e7412150",
+              },
+              {
+                id: "146c0297-27c5-43da-ae45-cbacb6937abe",
+              },
+              {
+                id: "05464237-a411-4cd1-825a-1e50a5bff948",
+              },
+              {
+                id: "8b2986da-2e68-4328-9437-05dff1cd324a",
+              },
+              {
+                id: "b25aa2d8-d3db-4e81-8a8a-2355d771d0cc",
+              },
+              {
+                id: "a2cd0ed8-e7fc-45eb-a48b-694d9c64b5bd",
+              },
+              {
+                id: "344ab4ea-1776-4709-ac87-02232c1bda74",
+              },
+              {
+                id: "fa5ed7fb-e083-4b20-b7cc-1bc095c1ecd9",
+              },
+              {
+                id: "433f6de8-54c4-4bca-a068-5c9bf5395e9a",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -3357,6 +7832,7 @@ const execute = async (db: PrismaClient) => {
                     name: "Sagrado Império da Britannia",
                     description: null,
                     website: "https://imperiodabritannia.com/",
+                    email: "sagradoimperiodabritannia@gmail.com",
                     discord: "https://discord.gg/rypuz3wnwf",
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -3366,77 +7842,209 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "e4c9abcc-2da0-41c7-9ef9-1619ce8795b6",
+            id: "92c74ac2-5286-45ec-b617-c83b0ab0c49d",
             number: 215,
             volume: "6",
             language: "pt_br",
             pages: [
-              { id: "e1d68c10-a857-4e8c-9df8-c23c63929815" },
-              { id: "787cbdde-2ffb-4827-8315-1a184ff1a4fd" },
-              { id: "ee78987a-f101-4110-8727-72f5e3c583f4" },
-              { id: "6b6a7188-096e-4bff-bd39-1309b16611e0" },
-              { id: "ce79b3cc-6483-4882-92b0-0201d4ca1ba0" },
-              { id: "394a9066-771c-4f9a-8519-aa8eb1c8355b" },
-              { id: "6e46a117-deb0-4475-9cf1-ba662f3c94d1" },
-              { id: "17879373-46ad-49be-ab0b-0bed481b546d" },
-              { id: "f167f93a-111c-4652-b0c6-bf3053bc9add" },
-              { id: "42bb5a88-bc67-4da6-8f1b-228fc7755aa9" },
-              { id: "fb36fe9d-069e-4400-b87f-3f4d20a9ae41" },
-              { id: "68a4d75b-dd5d-469f-bc5d-feadb986f57d" },
-              { id: "914ff0f5-2900-4bfb-8b5d-2c1582e89a83" },
-              { id: "b0d07883-539a-446c-9e3b-d8d8b422a92d" },
-              { id: "e6f23f61-0254-4989-b1f8-fe8bc818ab4b" },
-              { id: "5eb41d4b-968b-448d-98e5-d71814260f16" },
-              { id: "cf11828b-874f-4f02-944f-5fb659f59844" },
-              { id: "29630d18-97d4-4bcc-999d-d8c586d44564" },
-              { id: "129c1e60-baee-491a-9b00-763c20c52e8d" },
-              { id: "3c3c4dca-fb64-4643-9c56-9abd80090e70" },
-              { id: "f169cd04-1a1e-46f9-bab6-a594e296ed0d" },
-              { id: "b04b0aea-9cb5-4a37-ba99-39bee397086e" },
-              { id: "9cb4c592-da3a-40ea-8d7a-ad91814fd8c7" },
-              { id: "c600bae6-1aff-41c3-aa1f-671ed3d7776e" },
-              { id: "7d864309-482f-4f75-a7c3-7c5f6d571b79" },
-              { id: "9d2aa8f0-66d9-47fc-bf94-2f3f1b828336" },
-              { id: "62e4ea2e-fc91-4446-9627-b389f9e7ae67" },
-              { id: "b3ca9ba1-c30f-484d-bf78-23b18b5cad47" },
-              { id: "5c903a10-2e8b-461f-ba7f-d0004ba98b99" },
-              { id: "898b780f-cc18-4380-af01-47fc8651d388" },
-              { id: "aa7d0ac5-c16d-4f53-b3d2-0ea85c567d78" },
-              { id: "2eb36c3d-0ee6-44d7-8468-037bf0ede184" },
-              { id: "6b6e1240-b92c-46f9-9965-8582ad73b393" },
-              { id: "dd1927fe-9ff1-4f70-9039-da89157ddfd2" },
-              { id: "a2843a7d-ab80-4772-839b-6ce20c1f1f50" },
-              { id: "185f92c0-6fb0-4c94-a87e-f6fac1c8deb9" },
-              { id: "f4a9ddcd-bf1c-43c5-bddd-90a898fbee33" },
-              { id: "8c53f231-6172-4b3a-97b1-4004e1793ecb" },
-              { id: "3d775ede-7470-46d1-a1e8-ee31a1dc294c" },
-              { id: "3cfc8eca-b73e-43ab-aa26-8fb5a7e32f83" },
-              { id: "6e24555a-12e7-4c85-ba89-99c554867719" },
-              { id: "22f5cc5c-3591-4c21-b9b6-1f1cd29fc081" },
-              { id: "b17372a2-1517-40ed-ba30-97ee4b5e7fa8" },
-              { id: "75357f73-2cc6-4e6a-b871-375cccaa40e2" },
-              { id: "92c91f64-bcbc-4cee-9dab-d379b25eb80f" },
-              { id: "cdc8286c-01f7-4206-bd56-031edf27f666" },
-              { id: "7cfdc836-75e0-4c11-a5e3-c556715cfc0c" },
-              { id: "5397aaac-04fa-4cb3-bc39-fb5738c5085f" },
-              { id: "e5cdf4f6-17b7-49e7-aa22-1694835ec9f8" },
-              { id: "5e0aea1e-ae8c-4769-a9c5-88e15fa1486c" },
-              { id: "a4736026-8be4-4f37-8b6e-c1133142f780" },
-              { id: "97fbb000-c0a9-47cf-8c61-54a73b922cc3" },
-              { id: "930425ac-9103-46f4-9204-3d854bfe1327" },
-              { id: "2e215e06-be1c-45a3-a995-8f2844628b51" },
-              { id: "568f1527-e7eb-48f4-892c-61c2d7fdb137" },
-              { id: "4567285b-b9e7-4278-a34b-8819fc653556" },
-              { id: "eeca6a4d-0a23-4af8-a961-db455621c4ef" },
-              { id: "2983a21f-4e55-4198-a312-e40ed8e559eb" },
-              { id: "2aa02106-f7ef-4917-8803-ed47503df558" },
-              { id: "666fe68e-1ef9-4344-b114-e622bc118889" },
-              { id: "d76e22b6-ebf8-4728-ac2e-9fbcf6579fb2" },
-              { id: "bcab5aac-4a55-4154-b849-d6056c26cc93" },
-              { id: "83d35329-5b58-4830-adfa-b0dcd9664bf4" },
-              { id: "b6040b03-0432-4721-b8f3-5564291df468" },
-              { id: "1b8e5da9-cfff-4826-a5b9-3f7ad35e3c06" },
-              { id: "51d447fd-153c-42cf-a33d-6573d5e9a681" },
+              {
+                id: "f038d292-028a-40e7-88ad-723389d9fd64",
+              },
+              {
+                id: "ccc508af-32ba-40af-ad71-beb8fbdeb16d",
+              },
+              {
+                id: "a6eac82e-08a1-4431-9c02-68935df2d19a",
+              },
+              {
+                id: "48c0cb68-230f-4c64-bec5-374d377e48ce",
+              },
+              {
+                id: "fead3680-fea8-42c9-af43-2ee252079b11",
+              },
+              {
+                id: "dd931865-6cc3-4eb5-9cad-cfbac033b866",
+              },
+              {
+                id: "194723cd-37b7-4707-847f-3400f39e7589",
+              },
+              {
+                id: "57221afa-61e7-439f-8c22-891ed40fb716",
+              },
+              {
+                id: "ff1340ed-85e8-4e89-9298-503d06a0df9c",
+              },
+              {
+                id: "7feee297-9a7f-4fa5-a8aa-49f42d1fc911",
+              },
+              {
+                id: "8cbe4e53-f627-40fd-b5e5-a93d42539f0b",
+              },
+              {
+                id: "78079467-d2e0-4afc-a685-b9c4263272cd",
+              },
+              {
+                id: "d3556a6d-c8db-4798-b3a0-79c48308e605",
+              },
+              {
+                id: "aca4fc6e-696e-45e1-b002-abff67e738ec",
+              },
+              {
+                id: "9d334343-bcc2-434c-9334-1bd42dcba7d3",
+              },
+              {
+                id: "59bbe8ab-bc29-48b0-80ba-8f7d43a3d3be",
+              },
+              {
+                id: "e1874768-7170-4ce4-a02f-a282758d96bc",
+              },
+              {
+                id: "8cca1835-ac2b-40e0-9fca-a71a1d458ed8",
+              },
+              {
+                id: "96a3cee5-e5d9-4f93-9654-c70fa4ccf45b",
+              },
+              {
+                id: "978be574-aabc-4f61-b8cc-24f204989867",
+              },
+              {
+                id: "13c41df5-2877-4731-88c8-8ddadf1ef7de",
+              },
+              {
+                id: "57b54a2e-e3b4-408f-a604-5356fa7da115",
+              },
+              {
+                id: "98710ac1-0a43-4771-8db0-94f790852911",
+              },
+              {
+                id: "3f20ae69-461e-4cf1-9736-6abd349af55d",
+              },
+              {
+                id: "779224e6-8f3c-4629-8c52-2960bd57eb15",
+              },
+              {
+                id: "10b80113-6371-47e0-885e-53d0da509311",
+              },
+              {
+                id: "2c60c853-b527-4717-a6fa-4f2660f7b989",
+              },
+              {
+                id: "19d5e7c3-68be-46e6-88c2-b526785dbdd2",
+              },
+              {
+                id: "b61c9fd9-19a1-4463-b280-e0906eef073e",
+              },
+              {
+                id: "07b428f9-3b84-496e-89ff-6277e68a301c",
+              },
+              {
+                id: "fd45161a-f044-4e80-b95e-266de03eadd4",
+              },
+              {
+                id: "76dae94e-e3fc-48bc-86c3-010dc92feacf",
+              },
+              {
+                id: "17e12eb7-418c-4e54-aa49-a54988fc9ff5",
+              },
+              {
+                id: "61255026-ce48-4c1e-a84f-339d9c1b10ac",
+              },
+              {
+                id: "91702344-bcf2-478b-88f2-a25c4f5c439c",
+              },
+              {
+                id: "7330578a-4e0b-49cc-907e-00aa926338ed",
+              },
+              {
+                id: "f7ddbce8-2c83-464f-8656-c3f3dbc2f85c",
+              },
+              {
+                id: "86d369cc-399d-47b9-85b8-1a2d9cdf8cf4",
+              },
+              {
+                id: "8ce73f18-7871-4cdc-8906-138d4a1346ca",
+              },
+              {
+                id: "05622843-a741-481a-99ac-f07b1c6893f8",
+              },
+              {
+                id: "becf0797-c60e-4314-ad89-b4c2645b6a6b",
+              },
+              {
+                id: "64ff4b64-6a15-4389-abd2-20802ddff5c9",
+              },
+              {
+                id: "6f11585e-c5e8-4702-8845-dc65a28443a2",
+              },
+              {
+                id: "48ae6de9-178d-42ad-b72e-c2f912a93e7a",
+              },
+              {
+                id: "056f0f84-00d5-49f9-a313-f36785c02b79",
+              },
+              {
+                id: "5013a4ef-0090-44c8-9a1a-ed00e1e200d9",
+              },
+              {
+                id: "8e3e0af6-b8ae-4bb7-af50-c356a871d1b0",
+              },
+              {
+                id: "5ffba029-9837-4ac0-a3d5-0e80c2877f84",
+              },
+              {
+                id: "6302c513-3644-4264-8e61-d84887b4f8ef",
+              },
+              {
+                id: "7b002a74-e268-41ba-ae83-85b472177450",
+              },
+              {
+                id: "c76ebfbf-bb78-4b2f-9d65-64e81c976c51",
+              },
+              {
+                id: "e0e69248-e57e-4cbe-9d49-8a9bc765c26e",
+              },
+              {
+                id: "5c50ec0b-e3df-4af7-aaa8-6859f9d22831",
+              },
+              {
+                id: "b727b52a-143f-41d9-adc8-900db4e16b50",
+              },
+              {
+                id: "9e0ee493-99d1-4edc-97a1-0a0468ad616b",
+              },
+              {
+                id: "9cbc61ce-61d5-467d-9c5a-52b961ca53dc",
+              },
+              {
+                id: "46aa5f16-0719-4ad2-a22e-3a1ac7af074b",
+              },
+              {
+                id: "eb022daf-21d1-4948-bb32-9d48f61fa5bc",
+              },
+              {
+                id: "ce65b40d-eaa7-4bbd-8d43-f53117921726",
+              },
+              {
+                id: "0faac2b8-4e66-4764-931c-f0233f8b3313",
+              },
+              {
+                id: "8383e751-4725-4a89-9d8f-ae1a8e25df2b",
+              },
+              {
+                id: "0658bfb0-ac69-4da6-8deb-d92fd1830280",
+              },
+              {
+                id: "79328d05-4831-4e99-933d-3bc0dd99d3a8",
+              },
+              {
+                id: "9c385866-265e-4b88-af14-d7978343747f",
+              },
+              {
+                id: "93319720-5e69-439b-a182-63fe55c43f0a",
+              },
+              {
+                id: "f01ec6da-b02a-4518-9ea7-3501e3b3b07a",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -3449,6 +8057,7 @@ const execute = async (db: PrismaClient) => {
                     description:
                       "yeah this is where sussy stuff goes basically",
                     website: null,
+                    email: null,
                     discord: null,
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -3458,72 +8067,194 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "d8218158-0c4a-4cfb-a6a3-8a041120139b",
+            id: "5feaa95f-d0b6-433b-9fed-ba0b7dc9f839",
             number: 216,
             volume: "6",
             language: "pt_br",
             pages: [
-              { id: "7bee31b8-e402-4e9e-9a2f-8d7c3b7ff60e" },
-              { id: "8dd43a44-c19a-43df-b14c-eee9cac0e7a3" },
-              { id: "68624df3-431e-4e14-ba42-af09658ed97e" },
-              { id: "e967f9c3-28af-4766-a458-a05f64a61b4f" },
-              { id: "05d1b274-4fa3-4e6d-8552-f8489a72bcf5" },
-              { id: "cf7afd42-f337-4d59-87dd-6c437a90ba22" },
-              { id: "1b6b7c64-7dbd-4a34-8491-2ec75be85aeb" },
-              { id: "c427e41f-aba9-47ac-9dc1-d8aabe96b154" },
-              { id: "e2ca7d5b-c4de-4d1e-b3e2-b642d0692236" },
-              { id: "0dd2afea-4cf7-4a50-bb96-816b00dcd247" },
-              { id: "d6bacaee-5632-4128-87b5-72329754180e" },
-              { id: "208928b6-c0d7-48ed-88b6-eea0c63c0da6" },
-              { id: "e08fa611-58ad-4639-a063-d499013ba272" },
-              { id: "54ceb3c4-3375-4d66-9f6f-4b1d49b63d5f" },
-              { id: "6466cf53-7d68-4883-ab4f-4ca8a7cee7b9" },
-              { id: "7d9aa2c0-3c04-4534-8a54-c928d130b0aa" },
-              { id: "642b750e-f0eb-4af0-90ec-84c080dbf082" },
-              { id: "acbe5352-9cc1-4bf6-96f7-e3380a938d9a" },
-              { id: "cc3d08d6-53e4-484a-a4f4-63f3270fb3db" },
-              { id: "98372d8d-be14-4922-8357-c0af0d430ec2" },
-              { id: "d3507a1d-e5dd-4fe6-be1d-9d5adafd78f6" },
-              { id: "326b5ffa-2a7e-4c67-a62f-ef031958ed91" },
-              { id: "d101b5f9-a8ab-4949-a4b8-0d8bbb0e02ce" },
-              { id: "429fba4a-881f-4989-9dfb-b4fb7914a59e" },
-              { id: "f46d5537-3703-4d57-a70d-2e39d6fb97c4" },
-              { id: "a80c2f60-24b3-45f5-9b36-185e578fa140" },
-              { id: "2b0e5816-cf9b-4bbd-89f2-b303a30cff5a" },
-              { id: "975fce66-c3cf-4586-8cb1-9e7b69caa59b" },
-              { id: "887f7375-2f82-43a5-a50e-814e3f18e852" },
-              { id: "e4a92fba-d467-4882-b2cb-0b99399ce2c9" },
-              { id: "6f63a73d-970b-4fd5-b225-141157f07afa" },
-              { id: "3b3b4748-2e0e-4758-a023-f12f9612075c" },
-              { id: "86daa304-4912-41ea-9230-f443e19e26ac" },
-              { id: "570f7e6d-5053-46ac-8dac-825674db97b7" },
-              { id: "fe5496b8-1a75-418d-805a-d904087a6bf3" },
-              { id: "854a532e-389c-40c4-b1ab-95a3fe953808" },
-              { id: "09b4c65f-3a34-45d4-9afa-f53c90004963" },
-              { id: "5a03a364-28ce-419a-9c92-9a8aa41d6782" },
-              { id: "729ae48c-b29c-4aa0-87b0-e66d783a769c" },
-              { id: "4db90364-f0a0-4fef-9a28-a84324ab546b" },
-              { id: "b0e6729f-ce13-4614-b96f-2a25bdf0a34e" },
-              { id: "9c4304cc-b9a8-4311-a10a-fd288fe59419" },
-              { id: "76f4f445-30a6-45bc-ad5a-95550966c4b0" },
-              { id: "6849ed25-b045-453a-9c9c-0f179a41b92b" },
-              { id: "2c6edd47-86d8-4f7e-ae77-97207884e207" },
-              { id: "7b64bd8f-b9d6-41ca-954b-53db773d555f" },
-              { id: "f3a0168d-1896-4be0-a00e-83a7c646b717" },
-              { id: "0b6ded9b-1992-4cc8-a0c1-4f19d452a5fc" },
-              { id: "94f7719a-ec9b-4a31-8a9f-813ccbbf4055" },
-              { id: "9c5f4458-fdcc-4d8c-b152-cf78fd0b1651" },
-              { id: "9844b822-4aa7-47a3-9ad0-b5f1713a5d2c" },
-              { id: "e3d05be8-3fbc-4224-adb8-3660769cec0f" },
-              { id: "529fe57a-dfa7-4955-9481-988407faadce" },
-              { id: "aa92a185-e448-446f-b310-5beb0b91112f" },
-              { id: "8285754f-52e3-49b5-9e56-fdb4ed71cc17" },
-              { id: "5dd2426d-a037-4716-8892-9aed323ccad1" },
-              { id: "fb6ba981-2d10-46e1-9db6-95bf22fa7928" },
-              { id: "66bd4b19-a848-4b43-a660-0c5591d2912b" },
-              { id: "145d65d3-22af-485e-9b08-fd5d98020fdc" },
-              { id: "f4123fa5-daf5-4043-80e1-13950194b417" },
-              { id: "1bc25fb8-aa60-4de0-bc24-bc96351d2b59" },
+              {
+                id: "e6c33368-8a5b-41fe-b13d-9f7d0cea52a5",
+              },
+              {
+                id: "cee93eef-ff1b-4d5c-89d6-9c8854662711",
+              },
+              {
+                id: "862d4fb8-a6d5-44cf-93ac-8d1a45e547cf",
+              },
+              {
+                id: "672ed918-70a1-4ea3-98ad-d9be64f698f4",
+              },
+              {
+                id: "883a5d64-16b7-4607-aa3e-f8f6ff019d80",
+              },
+              {
+                id: "ec81354c-0e1a-4a91-9648-7f207e04130d",
+              },
+              {
+                id: "52cb6ce3-31c8-4d0d-9a86-f1c8a31d2f04",
+              },
+              {
+                id: "f13d72ca-9d2f-4061-9d91-c5fd5ce592c5",
+              },
+              {
+                id: "8b852c06-c4b2-49ee-860b-3e19a308aba3",
+              },
+              {
+                id: "93f66aa9-0ee8-42b8-95d2-c52e06eed7ee",
+              },
+              {
+                id: "70c9e1f1-3a97-4d2d-bb4e-fd13515959f3",
+              },
+              {
+                id: "f2fc577f-3777-4726-8d59-aca6b31b9c9d",
+              },
+              {
+                id: "9c9ddbce-8700-4a3d-abd1-0035c5cf3a15",
+              },
+              {
+                id: "086737f5-d3fa-446e-9d0d-3b2982f2a116",
+              },
+              {
+                id: "dff890c5-c1ec-43bb-97b9-7ea151854d12",
+              },
+              {
+                id: "f680b01e-2d98-400a-9868-d77c972432ee",
+              },
+              {
+                id: "e39ac1eb-6d87-4aba-b0da-69ace5e70a36",
+              },
+              {
+                id: "15315ec1-e78c-4e1c-9c97-87f91dcdeb51",
+              },
+              {
+                id: "1378f312-1e2c-430c-b305-caf7467eb3f1",
+              },
+              {
+                id: "af7e711b-6238-43b1-9e4d-19316568ada4",
+              },
+              {
+                id: "12d5ea00-bd40-4f80-9b71-6f38b88786d8",
+              },
+              {
+                id: "10f86f96-f85d-45fa-b1c4-522202cde10c",
+              },
+              {
+                id: "55135b2c-1d69-4740-a2fa-d8dcf794b739",
+              },
+              {
+                id: "f0c58778-3c56-4264-ace2-4b9de62d5732",
+              },
+              {
+                id: "6299e24b-8e7b-48e8-85d8-e80ce3699197",
+              },
+              {
+                id: "afff16bd-ce20-4387-a677-4e6117ee7be5",
+              },
+              {
+                id: "5fb030ad-b57f-43c7-a78f-ab8c1fd284ec",
+              },
+              {
+                id: "0ba263b7-4947-40a2-9f56-303f4299d21f",
+              },
+              {
+                id: "780d6caa-37b1-434a-b707-e55454703907",
+              },
+              {
+                id: "141a52eb-24a3-416f-893d-2645349208f8",
+              },
+              {
+                id: "2f134723-387b-400a-be7d-564ed3569026",
+              },
+              {
+                id: "925d6056-9b88-4ddd-bf98-babc32c03521",
+              },
+              {
+                id: "c6645a80-34ff-437e-beb1-8a3a8f8c9bec",
+              },
+              {
+                id: "889fe20e-be61-40d4-9cd6-6874eb2d99ea",
+              },
+              {
+                id: "435fd3d0-2a42-4df2-b8dd-ba305ba8c76f",
+              },
+              {
+                id: "85b58a6a-196a-4228-afbe-90a70b9bccdd",
+              },
+              {
+                id: "6c4a135a-cd1f-4dda-876d-0c83f29d1421",
+              },
+              {
+                id: "e57c12c6-f386-42dc-8387-8a8073a67a9f",
+              },
+              {
+                id: "e268f5a7-e409-4c94-b8e8-85b7622251f0",
+              },
+              {
+                id: "4b98cbbc-1f47-4292-97fb-ff8de6792fc4",
+              },
+              {
+                id: "6341cf2f-b78f-4b7d-acce-53646b1ef624",
+              },
+              {
+                id: "0b021440-9146-4bb2-bbff-c997a243a757",
+              },
+              {
+                id: "45652f8d-28e4-480d-8e9c-6f132ea5f36a",
+              },
+              {
+                id: "cdd22ded-d6e9-46f6-ae21-6ad8a5fd2dff",
+              },
+              {
+                id: "b1f3abef-b9c9-438e-8328-966cdeddef62",
+              },
+              {
+                id: "444b48e9-3df0-4f2d-a186-6d598005709e",
+              },
+              {
+                id: "56d76df0-42da-4490-bbd6-559795d6c0d0",
+              },
+              {
+                id: "cb8ee2c6-8167-417e-be1a-3e70233bda23",
+              },
+              {
+                id: "c76c5b16-b596-4e67-ba1e-4d66a47f2eee",
+              },
+              {
+                id: "8a9adc1f-87cf-4d6d-bf05-5cc1ace649f7",
+              },
+              {
+                id: "012ecb51-e0aa-4bc8-9d05-aa815cd7b035",
+              },
+              {
+                id: "5b1c4c53-86c2-4c35-b18c-c987781a685e",
+              },
+              {
+                id: "a356929c-981d-4a9a-9bf3-c684a9e7c75c",
+              },
+              {
+                id: "0c548d53-1d19-4bed-a0b6-bf106b1515d2",
+              },
+              {
+                id: "b0fb02b0-4bce-4694-b5d1-e5293bc9a4ef",
+              },
+              {
+                id: "fda0db9f-369d-4d92-9d6b-370245c89dff",
+              },
+              {
+                id: "fc6fd538-542b-4c7c-bfcf-e76e8c66ff0e",
+              },
+              {
+                id: "41d1e9af-db88-4d13-ac9f-89810e30b6d2",
+              },
+              {
+                id: "cc009222-b37b-4f5e-ae1b-fdb57327c62d",
+              },
+              {
+                id: "3b402f33-2418-45ec-a4b6-ed731deb29e8",
+              },
+              {
+                id: "0c9b051e-bb19-4342-862b-58c7089a3ec0",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -3536,6 +8267,7 @@ const execute = async (db: PrismaClient) => {
                     description:
                       "yeah this is where sussy stuff goes basically",
                     website: null,
+                    email: null,
                     discord: null,
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -3545,92 +8277,254 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "3cefbb38-fc83-41dc-bce7-f52510f91c98",
+            id: "21e5d79e-d902-463a-8eba-e390d94baaa3",
             number: 217,
             volume: "6",
             language: "pt_br",
             pages: [
-              { id: "5f3ee3bd-3a7b-4520-a78f-0d946927652e" },
-              { id: "95726ebf-9026-456e-9201-b65f928f54fa" },
-              { id: "387ea055-7ac7-4eca-8379-37f937087105" },
-              { id: "b944ec36-5517-45bd-aa58-68771ee87727" },
-              { id: "690455b8-182e-44e7-9243-3b16bf90e200" },
-              { id: "45059ee5-dbde-4f80-a4d8-eeda93ebb955" },
-              { id: "1c0cdf6e-0f7e-47e2-b80f-b4b266d508bb" },
-              { id: "82d7b421-f568-4b05-86ae-11adb9e75733" },
-              { id: "b80a06ff-b25e-4edf-a283-43ea2f1c3b70" },
-              { id: "2595d16c-cbb4-4e9d-9fae-5643d8cf6de2" },
-              { id: "01913c03-5107-4d68-ac7f-b3c628dc25a7" },
-              { id: "ed34889b-2f1e-44d2-9b0b-b6a6597ba1c0" },
-              { id: "d9997c22-330e-4441-9e07-4bb306089168" },
-              { id: "ee776d1d-f567-4930-85a5-2eb0bc3f208b" },
-              { id: "ad58174e-4b08-4cee-a812-16f008081a9b" },
-              { id: "ad6091a5-10be-4179-8483-378af94f9e5c" },
-              { id: "ffe30828-3534-4f91-993b-ebb058999d5c" },
-              { id: "97e95a3d-e8f0-434c-8945-04759dba7ccc" },
-              { id: "c0dff2d5-d768-4aba-86b8-3c3db891c88f" },
-              { id: "3273c06d-821b-4781-b00e-3c517d1f14e2" },
-              { id: "6c4c19e1-6ccc-408a-8367-94794fb0b894" },
-              { id: "d3e07c94-1795-4a46-b190-e380f522c417" },
-              { id: "0db27b85-b05b-4e32-8804-23eadce04e12" },
-              { id: "ff7ff5a4-b7e4-4d2b-95d3-75ff3c4c89b6" },
-              { id: "251fbceb-3858-4bd4-bc9e-6a518d629e20" },
-              { id: "a269e2cd-21ff-46d7-95d5-c2ea3d418b2d" },
-              { id: "12f832d7-cde6-4f4f-85fa-5294a6d49f06" },
-              { id: "3405c4f4-ac55-45e0-95bb-3f32f4ba67a2" },
-              { id: "056b01a0-a002-4365-adea-70e67752c847" },
-              { id: "3693882a-870c-40f4-a89f-b665625b18c5" },
-              { id: "c11cdc68-f59d-4f0a-b776-7402c36ef3d4" },
-              { id: "b05f439b-c056-443d-a3a3-8bbf61d61129" },
-              { id: "79bde212-5a2d-4128-ad51-bf76813ccbdf" },
-              { id: "39777364-5b05-47ac-a307-858fb0c34eac" },
-              { id: "254cf0e7-be8d-4aae-be06-267eb4d8c724" },
-              { id: "68431fc1-808e-4388-ac36-87af17c00611" },
-              { id: "0b2856da-294b-4a77-a5ad-5d3d65a028ee" },
-              { id: "927596a1-b8ae-4c3c-84d3-7c1ba42ac1c1" },
-              { id: "58d5f519-bfc2-42b6-9840-085eb148344a" },
-              { id: "85a2b7fc-3a9e-403d-bc7b-44b40dfeae1d" },
-              { id: "e20dfbd9-837e-41c4-bdff-283bcbdddec3" },
-              { id: "156e8577-6c4b-4001-b1de-8b710a972a0d" },
-              { id: "42c1f525-e2fb-4ab9-a0a3-7838d3e9024c" },
-              { id: "ff03628c-438d-491d-bdc5-9a76c29a6d21" },
-              { id: "cb56d61c-6501-43d9-b557-a30f84845afe" },
-              { id: "aef91a67-9e9b-4fba-8547-24df2dcc0fe1" },
-              { id: "71d0be6a-5c2c-4fae-8d50-37a5d1fc2224" },
-              { id: "63db98d1-9413-42ce-ad46-241ed92792f0" },
-              { id: "1eb9ed22-5f67-4b39-a328-cb1f713e30dd" },
-              { id: "1bc52b98-39d5-4f04-ae72-2b4b2a11755c" },
-              { id: "7a06d595-4037-49dd-b359-a5ac254dcbf7" },
-              { id: "c737da86-8fc1-4fa4-8316-75e34719a5f7" },
-              { id: "c6b95336-c87b-463a-a6f7-9a38a9d37dad" },
-              { id: "8c8d7418-d317-401a-8573-a25dcef78527" },
-              { id: "63b8654d-75ef-43cf-9f80-ad0cf66a7a0b" },
-              { id: "d6a863ed-5131-4edc-8fc4-aa9f82a70cfd" },
-              { id: "40e4c055-cba0-4fc9-9dbf-02a544c86e84" },
-              { id: "7ca7cac5-298e-4152-9506-0d1024ba3112" },
-              { id: "f418799c-a279-4457-adaf-dcb370e5d069" },
-              { id: "78be5d62-082b-49b7-9495-514f77356745" },
-              { id: "e93d5891-29f8-4ade-894c-103243ef055c" },
-              { id: "f406a506-46f9-4594-a696-093e70ef6dc6" },
-              { id: "9ce2159e-3515-4242-b43e-4b55ead3175c" },
-              { id: "794e9124-4e45-4084-8d5b-e2fd13c9b624" },
-              { id: "8254a4c2-a2b4-4c22-a4cb-6c3e548a50fe" },
-              { id: "9a823bed-7409-4c8b-8280-468f64d7d423" },
-              { id: "89e5e49f-d09f-4609-a284-d8aa32d961f1" },
-              { id: "db311ebc-2b2c-4ccd-a726-c3d267117dd2" },
-              { id: "ed11908b-f589-44cf-9522-53696e6f5cbf" },
-              { id: "8ded93af-c6ec-449e-b9c2-ec9bf8ffbaba" },
-              { id: "e2bde8c2-f8e2-4352-9f3c-79ee1277bfd2" },
-              { id: "df43d844-aebc-4831-9590-0f933480a66e" },
-              { id: "9f46c12d-4f66-4d4c-a0df-a5b9d3f1aa98" },
-              { id: "08d9abf0-cbc3-40f6-b2ec-b6808eb01876" },
-              { id: "e138234e-c885-4838-9be7-a02660265587" },
-              { id: "6cd766d7-7289-4fa5-ad3d-97a4a710bb4d" },
-              { id: "c3c4efe8-63e0-4a37-b822-838099b7b277" },
-              { id: "c7fe36ab-4188-41d1-b4c8-985d64491523" },
-              { id: "cde1fded-e1f8-4121-add0-0057c50512b0" },
-              { id: "f02c66d2-9cab-4036-9bb5-b583d67d621f" },
-              { id: "7f5c018f-5b71-4e33-9aae-ee85d368e3c8" },
+              {
+                id: "8804f6e6-15cc-4c01-b7b3-b48e1f07caae",
+              },
+              {
+                id: "eadc465f-34aa-48cc-b6f1-9938158ff781",
+              },
+              {
+                id: "5333fcd9-b468-4a20-be1e-9ac1131c6f4a",
+              },
+              {
+                id: "1e301a71-ebe0-48f4-a4bb-3f6d382fc400",
+              },
+              {
+                id: "fc6aa174-501d-4b4d-b690-13ac1e168809",
+              },
+              {
+                id: "3b616eb8-50dc-4b3d-9304-fbec904f8bce",
+              },
+              {
+                id: "db4dc369-5484-4d4b-8446-6e9c24748fed",
+              },
+              {
+                id: "2ab84738-35ce-4611-95cb-c5316f02198f",
+              },
+              {
+                id: "ea97c44f-c6ed-4169-a1fb-fabd4103fe82",
+              },
+              {
+                id: "464c80c5-faed-4e98-a2fb-46933169e563",
+              },
+              {
+                id: "e7edd9b8-70c3-4291-a269-eed4a2e86b72",
+              },
+              {
+                id: "5b4cdcf9-c8de-4e33-bee4-c4e96682fcc8",
+              },
+              {
+                id: "58d0cfe2-ce4d-4b57-adeb-3fd358c9c1d7",
+              },
+              {
+                id: "8068f3d8-a520-4bf2-bfbc-1ca196198fdf",
+              },
+              {
+                id: "0988ef50-d325-454e-a57e-eac0ae817c1f",
+              },
+              {
+                id: "87349ca8-13c3-4ad8-9e8e-884bf7b851f5",
+              },
+              {
+                id: "f925bd54-e13b-45c8-9d15-84a33213c11f",
+              },
+              {
+                id: "b3ce6a3f-2e21-4b0e-910b-6ea389ddb495",
+              },
+              {
+                id: "09a38c74-eb85-4d79-a864-0fa0ec514772",
+              },
+              {
+                id: "a0700d82-1940-4db6-af39-c5a66476a716",
+              },
+              {
+                id: "a1a80fa8-3881-42e4-badb-8e5835d54171",
+              },
+              {
+                id: "1613a8ef-1a87-46f3-9cef-a1b39f5568fe",
+              },
+              {
+                id: "61cd9c85-6ba9-4248-af9a-44d4838c2d00",
+              },
+              {
+                id: "dd54ccce-98e3-4b85-a474-975a086c1c7a",
+              },
+              {
+                id: "76ca8410-d0d0-431a-8855-7e502e75dde7",
+              },
+              {
+                id: "1ef327bc-ceab-4b95-947f-4ece879739cc",
+              },
+              {
+                id: "e02d784c-6823-4941-b260-95ea9c24bf7b",
+              },
+              {
+                id: "40d3a288-8081-481b-baa7-cb90817dce38",
+              },
+              {
+                id: "f1e96888-3af8-4b53-83d2-0c2db61cde1a",
+              },
+              {
+                id: "e17a1cfd-ef37-45e0-a149-c726091b39eb",
+              },
+              {
+                id: "7d1b5dac-c4a9-47cf-968a-6430c95bd05d",
+              },
+              {
+                id: "c025680f-d2c7-4262-bb04-9eee71121c89",
+              },
+              {
+                id: "1da330d5-d628-4688-b1a2-084d1d55a960",
+              },
+              {
+                id: "eb21f148-60eb-4e63-97b6-73db20c0fcd0",
+              },
+              {
+                id: "d2afed8b-77a5-4c25-b557-c3c0df7a5eaa",
+              },
+              {
+                id: "3d09e9ee-0cb0-42a8-8083-2325dc6d3359",
+              },
+              {
+                id: "1f19643f-5bf2-4052-a6b4-27a4c429a715",
+              },
+              {
+                id: "d7ed8c13-5531-45bd-956a-8429ef5a683b",
+              },
+              {
+                id: "c4d8b6ee-b06d-4356-8e6a-afef9ba69a17",
+              },
+              {
+                id: "5a101792-051a-4071-8e41-188041de9668",
+              },
+              {
+                id: "d9122b2e-efc9-4699-802f-ee4b15b02195",
+              },
+              {
+                id: "1ae42758-739b-4162-80ff-4c56db02e5f7",
+              },
+              {
+                id: "529d09b1-b290-4a9a-a6d2-f247f7dcd90f",
+              },
+              {
+                id: "c53a238d-1e0c-4cbe-8c4e-0aca768257a5",
+              },
+              {
+                id: "4e2298e0-293a-4b0d-8ceb-c99c59baa333",
+              },
+              {
+                id: "d99ed790-9fd2-4523-a988-304b1deceb2c",
+              },
+              {
+                id: "f9b7d8e1-6252-47c1-9b7d-232bd84de719",
+              },
+              {
+                id: "4a7cc4bf-cfac-4acf-8d42-edf45557e96f",
+              },
+              {
+                id: "4073c194-c84b-4cc7-809b-c171c5cb9d33",
+              },
+              {
+                id: "b5686626-ebfa-44ab-a051-89e82b0b8a44",
+              },
+              {
+                id: "efd82bea-3ddf-412a-9ae8-01aeb7603520",
+              },
+              {
+                id: "4dae9336-b492-4f11-bb69-2b0a8eb53d2d",
+              },
+              {
+                id: "780484e0-6785-4c8e-846e-4c7cff27ca8f",
+              },
+              {
+                id: "38c58369-71f8-4b36-aa43-b50620788b2e",
+              },
+              {
+                id: "fc2182d3-8fe1-42fe-8929-e183b994f727",
+              },
+              {
+                id: "5c8d0cb8-f49f-4b7f-ae62-2bd20e7b63de",
+              },
+              {
+                id: "0f4fe9f5-4e77-414d-b9d5-d710df43a5fa",
+              },
+              {
+                id: "5f38109a-17b2-4158-b030-c467371473d0",
+              },
+              {
+                id: "6e7b99b2-fe01-4ab1-9dd8-7dc13bf6463f",
+              },
+              {
+                id: "9b4729f2-68fc-4d75-ab16-f159cc7de27e",
+              },
+              {
+                id: "af71cd18-3aed-4c5c-af26-7e17287525b0",
+              },
+              {
+                id: "ba560668-e4ff-4780-99b1-a4d83985fd7d",
+              },
+              {
+                id: "a264a7be-1727-48a7-86d9-0e0566ff960c",
+              },
+              {
+                id: "706eb023-e3dd-4d1c-83f3-7409c5b3b720",
+              },
+              {
+                id: "0df57109-c87b-40f1-aa30-45db0be56354",
+              },
+              {
+                id: "9f49a228-5644-4f92-8323-59dc271fb7b1",
+              },
+              {
+                id: "0bb24049-508c-4727-bd74-a0b83aad845e",
+              },
+              {
+                id: "77cbbf34-2d91-466e-a655-90c5ca46f2f7",
+              },
+              {
+                id: "a521c76b-84a1-4227-a6ab-d4cc61259d6b",
+              },
+              {
+                id: "7167f7a2-7453-438c-b226-088285d60bf5",
+              },
+              {
+                id: "13ae0068-9be4-48dd-b732-1bee8304076d",
+              },
+              {
+                id: "5115b3a3-e58c-45d5-b4eb-d51acf7bb0c2",
+              },
+              {
+                id: "6fbfa5d7-38ec-40be-a691-107d29870e3c",
+              },
+              {
+                id: "082920a3-c7ba-4092-a04c-d2b50326ef69",
+              },
+              {
+                id: "a4467cfb-56e6-45f2-9066-0a3dc765a068",
+              },
+              {
+                id: "32509ed1-1664-4a75-bfd5-0fe07c545f92",
+              },
+              {
+                id: "2fffc0f8-7917-4966-9503-183c66187851",
+              },
+              {
+                id: "8b56a286-5466-436b-96b9-9d789d89afdd",
+              },
+              {
+                id: "ba2c4276-ee48-499f-af20-ade7905492ff",
+              },
+              {
+                id: "7b9fbfe1-1fe4-4f34-9642-899d4022679d",
+              },
+              {
+                id: "e85bf56e-2afe-48e0-beb5-eeda1bccb34d",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -3642,6 +8536,7 @@ const execute = async (db: PrismaClient) => {
                     name: "Sagrado Império da Britannia",
                     description: null,
                     website: "https://imperiodabritannia.com/",
+                    email: "sagradoimperiodabritannia@gmail.com",
                     discord: "https://discord.gg/rypuz3wnwf",
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -3651,73 +8546,197 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "58a3164c-6e70-4f86-aeca-f6c07bb0f18d",
+            id: "566df571-6199-482e-bf4b-5b0c6e141bac",
             number: 218,
             volume: "6",
             language: "pt_br",
             pages: [
-              { id: "b94ddac4-3f24-46ac-a484-24ed8f1e7fd9" },
-              { id: "0f4545e7-ff1f-4571-abb6-5be52e328e70" },
-              { id: "5961beac-51bc-4d4c-8489-880efc4a024c" },
-              { id: "5caf2e29-7aa2-4db0-b945-bba4f6496920" },
-              { id: "6f168b92-9ccd-4ff1-8a9c-c72b7de2ab3d" },
-              { id: "a0e23870-f632-4715-9f43-766c11b67e16" },
-              { id: "a6667c9c-0dcd-429c-9d90-98feb7d54575" },
-              { id: "7b1bf5fd-129a-44d9-acc9-e2158373165a" },
-              { id: "d8262159-d3b6-4ccc-b12d-1b96e4c4700a" },
-              { id: "c020e90e-f85b-492f-a0fb-d76a23fdcfed" },
-              { id: "adcce9a7-1f75-4791-b633-35885a567106" },
-              { id: "5e67c9c8-8447-4190-9030-b36c526ece6b" },
-              { id: "5a0c0b97-c087-4858-88cd-126fd952e2d4" },
-              { id: "2658c588-ea61-4260-b5ca-cf379433ce02" },
-              { id: "d4d45f12-fb3c-4514-9141-28333d1d237d" },
-              { id: "9f622ead-49db-4f2a-b744-37acc2c3d89f" },
-              { id: "47adc32d-af3a-45b1-aad2-9de266c125c2" },
-              { id: "b5a1123f-3756-4cd6-b509-c46ac5c03198" },
-              { id: "990d02e9-baa1-48e3-ad98-70f72d9337b0" },
-              { id: "0aa80d77-da6b-464d-ac27-112bfeca5620" },
-              { id: "a24362b5-c956-4df8-b56a-0d126c364722" },
-              { id: "5c7ca0b0-8169-4018-ac0d-c96da608dea5" },
-              { id: "93b55397-f9d2-4a9b-8e5a-a6404d606183" },
-              { id: "be15b3a4-94b9-4613-8e77-bcab5417fec9" },
-              { id: "e99f3476-8feb-465d-8788-9648420e89a7" },
-              { id: "5bb79679-7bc9-47c8-a67e-ff564e88845c" },
-              { id: "469afade-392d-44ae-ab8a-fe9fe6852804" },
-              { id: "e1e41ba9-af20-48d2-b2ad-6a268223f37a" },
-              { id: "6ed9475a-dfff-4616-a1e2-feeb828b56e5" },
-              { id: "16dcee3a-fcc9-49fe-8b9a-2f09372fa967" },
-              { id: "d1f01d37-63f1-4423-9ab5-c7bd637bbacc" },
-              { id: "4da26f43-b2f2-41ea-8998-5cac92bbc01e" },
-              { id: "1770529f-0529-411c-9f46-0c11fa626796" },
-              { id: "031beebe-badc-4f78-bcc2-51bdc593ab06" },
-              { id: "d1edb46d-d48f-43b1-8229-c9cff941b7af" },
-              { id: "3c315bb3-f622-4130-b399-3eabc2e778e4" },
-              { id: "22a1b127-4ae4-427c-b3c8-55084e738c79" },
-              { id: "04a2b672-9d0a-4aab-8a23-b42b7fe80d90" },
-              { id: "7707e984-8d9f-4a16-a592-e1a494de95f1" },
-              { id: "85982e64-f768-4408-ba89-f26d143d422e" },
-              { id: "044b4797-0a34-44b8-844d-aeaa257f4a17" },
-              { id: "1f04d465-9a0d-4254-8f6c-691ca9272c4b" },
-              { id: "d3ba21cd-d1af-4447-b5a1-492018363dd2" },
-              { id: "cd9e9c2f-3818-4221-bc56-62b6f5a4ee8b" },
-              { id: "6b8f16c8-0d3a-4b0a-a5d8-e54a234429e2" },
-              { id: "f641d4f4-82c3-451b-91e6-a78b84c7fe87" },
-              { id: "70896bf8-8091-4af2-b3ab-78dd368ba9b9" },
-              { id: "6cce6986-0999-455c-a5e1-13e969206240" },
-              { id: "ef6aac27-af77-445e-8b1f-0f8fb33675fc" },
-              { id: "f734afcb-737b-409b-9d18-9252a7f2eb2d" },
-              { id: "9e883220-c513-45ba-aa52-4e45de3580c7" },
-              { id: "7cd0f41e-5b7d-473c-abbd-73737414df6b" },
-              { id: "8b1dc4a4-3e17-47d7-abcf-57434685d93e" },
-              { id: "4de93645-4fc5-4be5-8c1d-85c1001ad49a" },
-              { id: "dd3b4c88-d581-4f3f-b716-979bb9f25efd" },
-              { id: "2ed0200a-e08f-4234-9d8a-075f21fa17e3" },
-              { id: "7aecc1d4-a0cf-4ef8-8f62-5357c2550eae" },
-              { id: "70b9d242-4d88-4c46-a7f4-ad6c42803cb8" },
-              { id: "6112e1ed-9e6f-4e3c-b788-5ade2d598065" },
-              { id: "c04aae6a-76da-4387-9427-d982af136927" },
-              { id: "34556717-5b09-4e6f-aa07-e481d42364e9" },
-              { id: "622e446e-37f0-47da-baaf-92cc9cd42579" },
+              {
+                id: "28c92017-cc44-4f16-9a09-77b9e661ba4d",
+              },
+              {
+                id: "96354a7d-edfa-42c3-93fc-90358221ed71",
+              },
+              {
+                id: "aaeaff0d-a411-4a3f-91e7-dc24aed02148",
+              },
+              {
+                id: "37f61b11-f676-43ae-84b1-1aa7966e5642",
+              },
+              {
+                id: "8cd05f9d-fcfb-4b7a-aca9-933ae2e0ecd5",
+              },
+              {
+                id: "b453585a-5d4e-4dda-b102-2668bbf2a0e4",
+              },
+              {
+                id: "943b8d86-0116-4f6a-90d3-e9d0186f880c",
+              },
+              {
+                id: "1d9e05f7-5561-4476-9e1f-b273faee3199",
+              },
+              {
+                id: "3dc6eae8-1467-4abc-a814-4b2145958490",
+              },
+              {
+                id: "3f2ec4eb-2bb3-453a-9505-a9977180d0a9",
+              },
+              {
+                id: "41339e06-57a8-444f-8fa9-e7939b2c5083",
+              },
+              {
+                id: "fba59fc0-07f9-49ca-b8b8-fa592b41fcb7",
+              },
+              {
+                id: "711de72e-20da-46c5-a059-82b5500a920e",
+              },
+              {
+                id: "a86cc031-2893-4fe0-ac90-b744146d8356",
+              },
+              {
+                id: "cc7762db-23c7-4724-a551-bb7085824669",
+              },
+              {
+                id: "89291b05-81df-4261-8c24-8750f2431b21",
+              },
+              {
+                id: "395ef59a-1d84-4a9a-8bc0-d4afc875d4c6",
+              },
+              {
+                id: "5f4da378-ab03-4752-81b3-6f8fbba9202f",
+              },
+              {
+                id: "ebbc3e6f-a2bb-4fdb-ac2c-e8e7be0b8e51",
+              },
+              {
+                id: "ba3549e1-c212-427f-a0d9-d41830a3fac0",
+              },
+              {
+                id: "2ffd9504-2752-4f87-89ed-75f787a9cfd3",
+              },
+              {
+                id: "ff262af8-a22a-4300-b892-d8ce8bd379bd",
+              },
+              {
+                id: "d7250858-ed0d-4360-b51b-82a30849e359",
+              },
+              {
+                id: "8381f829-bba5-449d-b604-70084740ea1b",
+              },
+              {
+                id: "b9e348ec-629d-4c2e-bca4-6e64aa26215e",
+              },
+              {
+                id: "fdb656c1-1a9e-468a-aa43-ad0286fec4e3",
+              },
+              {
+                id: "d46dca24-b616-41a6-ad3e-1bfe9dd79d00",
+              },
+              {
+                id: "6690ecf5-bd3d-4649-8543-f26aa59d3d15",
+              },
+              {
+                id: "d08ed05b-a778-4fdc-866d-4a00ccd8168a",
+              },
+              {
+                id: "dfb35bc1-c7d6-497a-ad54-616ec507ba1a",
+              },
+              {
+                id: "520bd9c8-971e-41de-a688-0252bfc792f4",
+              },
+              {
+                id: "f3991f37-c223-4721-b6bd-b8b3d86f4a1e",
+              },
+              {
+                id: "ab911047-8418-4575-86d4-6a7a798d00f0",
+              },
+              {
+                id: "ebf9f391-b0d9-4a19-8bb5-8b26160fa5bd",
+              },
+              {
+                id: "be859305-b5eb-43ea-bb26-99f8ff39478e",
+              },
+              {
+                id: "478b1920-3926-46b3-8700-30de97409eef",
+              },
+              {
+                id: "cf3ce5b7-2d15-4502-a82f-88e8a6e6c742",
+              },
+              {
+                id: "9575611e-2c57-443a-85b6-52952a92c6bd",
+              },
+              {
+                id: "9c5a325f-469a-459e-b55a-92d451ab4b08",
+              },
+              {
+                id: "02810ffc-1b7d-45d3-bfdf-9fbde9319b6e",
+              },
+              {
+                id: "aa44ee1a-8fc4-4b57-aa19-9b8ade03b23e",
+              },
+              {
+                id: "6d74ff34-45c2-431f-a142-64f03a1bc4d8",
+              },
+              {
+                id: "785a0162-9610-4f52-abec-b9dd81560ed8",
+              },
+              {
+                id: "f0f7d201-ba57-4069-b156-2fe864a176b7",
+              },
+              {
+                id: "ab0088f4-5d0e-432a-a3a8-be7e60ccda2d",
+              },
+              {
+                id: "aa78b004-e58d-49de-8f29-f220a13d0fc5",
+              },
+              {
+                id: "1fe2bebd-cb0d-445d-81b2-4dc431becb46",
+              },
+              {
+                id: "102f305a-4aaa-4238-a7c7-bad79ae11b1c",
+              },
+              {
+                id: "b85eff93-1e21-4a63-8f08-f2e8d00cbf52",
+              },
+              {
+                id: "819717aa-7341-4b9c-a162-6dcd464d3122",
+              },
+              {
+                id: "6ae4bc10-3dbe-4700-a6fd-de4c7f1b38d4",
+              },
+              {
+                id: "7e7d23ec-9fba-41fb-b6fb-dcb0440526ad",
+              },
+              {
+                id: "d85fc32e-81c9-4ac9-b20f-2fe568018d1b",
+              },
+              {
+                id: "b34b93a9-2a36-497f-a598-2975fc122a79",
+              },
+              {
+                id: "3592937c-5b36-439b-bd78-218d12aab002",
+              },
+              {
+                id: "7167e96b-dc00-426d-ba85-1d4d80aecafa",
+              },
+              {
+                id: "b7e4bf58-3add-4fed-96c1-8264f177f8dc",
+              },
+              {
+                id: "1efbe6c6-980d-45f0-b8bb-7e38537fd0c9",
+              },
+              {
+                id: "6d097fb2-35ff-4dab-8107-bb2312fc2a89",
+              },
+              {
+                id: "55d94d60-9182-4280-a829-41b993e576a4",
+              },
+              {
+                id: "92e0360a-6f15-479a-8e1f-b57fdcfbbc2e",
+              },
+              {
+                id: "128b9a34-67a9-4048-a8c8-d84cab627ab7",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -3730,6 +8749,7 @@ const execute = async (db: PrismaClient) => {
                     description:
                       "yeah this is where sussy stuff goes basically",
                     website: null,
+                    email: null,
                     discord: null,
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -3739,81 +8759,221 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "8faac407-d981-484a-9ee0-51e7591a7c37",
+            id: "56446f16-c158-4069-9ba7-6e913357de25",
             number: 219,
             volume: "6",
             language: "pt_br",
             pages: [
-              { id: "32e27b14-8c09-48de-9bd3-cfcfb66fb982" },
-              { id: "36e14268-8a97-46b7-8efd-3b50b5e0f142" },
-              { id: "1cbc68c1-0f4a-425f-a01a-a84fdac1bef3" },
-              { id: "0c3e7b68-6af3-4899-aad0-84acf66c3515" },
-              { id: "5355bafa-ea0f-4ee3-b036-718d77444d72" },
-              { id: "1e73563d-cbcd-4f8c-b182-689f56246cf7" },
-              { id: "7a5a2278-4807-4383-afa8-4f78c200f632" },
-              { id: "5b594b70-81bd-447e-b609-b514bf26b983" },
-              { id: "f2bc8ed6-b415-4063-a7a8-354569286830" },
-              { id: "3ca7a769-a5bc-4bbe-9090-08c34e62c654" },
-              { id: "aac803eb-d0ab-4240-b881-69cd0be22fa6" },
-              { id: "685f4cba-d7f6-4af5-b11d-37da06698f98" },
-              { id: "9ba89e14-f213-4bec-ad23-74f8335a05a0" },
-              { id: "374e9047-ba9c-4ef5-a785-7a83a59c4788" },
-              { id: "c1491f08-1886-4f2e-a171-1fe5dc720519" },
-              { id: "ad503430-9f61-431a-89f4-68641ebe6c54" },
-              { id: "ce270fd5-4b53-4215-bb6e-22f455861367" },
-              { id: "92139c46-255c-49a9-a057-261b4b0f3731" },
-              { id: "9d6a1306-e853-4a28-bcce-10c7f2e73e7c" },
-              { id: "d7b5b78c-1c6c-4581-b09c-0786ae2672b3" },
-              { id: "f779a80e-95ee-41bb-afc6-4705e06bb092" },
-              { id: "d28887a7-207a-429c-afcc-8a5e3016429f" },
-              { id: "87ece783-a7ea-428c-9dcc-c2e4de6fcc39" },
-              { id: "22d7b090-88d6-4138-8eb9-2c3adff08a8f" },
-              { id: "8c47761d-06f4-43c7-b87d-d3024ed14bd2" },
-              { id: "76a22d69-3dd0-445f-8a18-0a7d3209b7d3" },
-              { id: "46c7a08a-6efd-40ba-a613-ccc46afefbff" },
-              { id: "175476c5-963e-43cf-8da6-2446f80c04af" },
-              { id: "55b082ef-dc63-45ce-996e-c0a53f78fb32" },
-              { id: "9e6ab01e-0385-44fb-8eec-57fa3e75d919" },
-              { id: "52100e81-68e4-4bd6-972b-9e5529003ea2" },
-              { id: "0137a37d-13d4-4399-9b73-672bec3b1daf" },
-              { id: "d5ea7803-dc81-42af-87f7-858785dfd761" },
-              { id: "4ccd9f81-a321-4828-b278-850695e02505" },
-              { id: "b4b7d639-5329-45ed-a0a1-318722a80cd0" },
-              { id: "ea50ded3-27d8-49e9-ab45-4df765362af2" },
-              { id: "c2e835ce-2206-4a4f-8695-bb0f14449db4" },
-              { id: "bde1ee77-4ecd-4d9e-925d-db5858d37048" },
-              { id: "33710e75-6fb1-405d-8da3-6921a05055e5" },
-              { id: "e2b910cc-d9c9-4573-b43f-5a503ec8318a" },
-              { id: "f02a4230-6aec-4bef-a66c-1b0891a648b7" },
-              { id: "a93c6f01-1f5f-4f6c-98ac-4f61781c749c" },
-              { id: "4ecf4658-e687-40df-b976-73e90cb856fe" },
-              { id: "496655f6-d624-4f7b-a6f4-9e9f10cf6774" },
-              { id: "930d7bbc-d556-49d3-982b-5f64a8ac8d91" },
-              { id: "e2a29822-3d77-4f7d-bbff-79e40cb9940e" },
-              { id: "604c1520-b4ae-4277-b851-5607f9f5bbf3" },
-              { id: "863e522c-c176-4665-93c1-349881918591" },
-              { id: "60646f50-ea3e-4ae3-a8dd-82f1a3620fd5" },
-              { id: "49b52a13-fb02-487c-ad7c-3ebaaba6d838" },
-              { id: "59ffb1d8-5b08-4209-8b6b-7b58614b4220" },
-              { id: "1a6bf46a-5230-4257-aa0a-2e90afcf42a2" },
-              { id: "d2949401-a4cb-47b0-af0a-c4f4a3efdb3f" },
-              { id: "e3ffd397-2016-4dbb-8f7e-a19fb352be5b" },
-              { id: "06801583-cee6-4aca-ae85-e09b4accfb26" },
-              { id: "c2406aa5-614d-471f-a866-45df8e911225" },
-              { id: "1751e624-9cb9-4673-bd1d-8e5c5c056658" },
-              { id: "d5bfa37a-d59a-4173-bc28-7bc3072341d3" },
-              { id: "d55020b0-f01b-4684-bc32-7af609796b37" },
-              { id: "0c56bb30-dfd2-477c-b778-b0133462c4ab" },
-              { id: "99ca58b4-59c6-40d9-8e03-5c5cb25f1e2f" },
-              { id: "17d5d95d-e34b-49d9-a828-87aff4c01ef1" },
-              { id: "01c08ad0-6732-447b-9911-ab3a0cf8b9ef" },
-              { id: "12f91b4d-7fe0-41a2-946e-115612d44ac7" },
-              { id: "180d3d80-7c01-43dd-b38e-5d02c17c5a98" },
-              { id: "8550cf97-8f45-44a7-802e-fe1a81c0c23a" },
-              { id: "0bad8568-dfb3-4704-8cb8-81b3cb422e27" },
-              { id: "6406c1c7-d0ad-4d63-a239-84f1442cfee1" },
-              { id: "72f19c75-3a70-41ac-a201-763762e18f18" },
-              { id: "a0adf705-d312-42d3-8ac7-19319df23a9a" },
+              {
+                id: "2c6e59ec-38ab-403a-9c31-1571d9eb8020",
+              },
+              {
+                id: "6953c610-d70a-4937-bc4e-2f4fe0726cb3",
+              },
+              {
+                id: "d6f2e6cc-115c-41a1-abbe-c1123265d964",
+              },
+              {
+                id: "fb3063a0-9013-48bf-9a6f-f22991d7b9fb",
+              },
+              {
+                id: "000a1db3-437f-47b1-8d85-26d6e0da3d70",
+              },
+              {
+                id: "02a72ff4-0f6b-4491-9871-db2465ddfe2b",
+              },
+              {
+                id: "2a9ef703-1e98-4215-a817-7aac8b9387d8",
+              },
+              {
+                id: "8f263f7a-98ea-4186-aec9-12789486a0bc",
+              },
+              {
+                id: "7468b99e-0346-4748-abce-22c8d381dffe",
+              },
+              {
+                id: "ea7e7bd6-045d-42e1-bb73-5841faafc805",
+              },
+              {
+                id: "d06e8aa1-296a-4a78-8072-3c8756afd306",
+              },
+              {
+                id: "8e9ae40b-ca02-4775-8aed-a286e7e99aa3",
+              },
+              {
+                id: "a1aded1d-104f-4688-bd16-debce6cd9719",
+              },
+              {
+                id: "5af88a44-7a62-4ed4-9d9d-352c253992b7",
+              },
+              {
+                id: "7d5d56db-fdc7-4c36-ab8d-ff863aa82d5f",
+              },
+              {
+                id: "005f2801-f2a9-4fcc-8876-d075cb9f4fb4",
+              },
+              {
+                id: "2bb31dcf-d689-4e00-a222-2f20cdb78282",
+              },
+              {
+                id: "75d3b709-4f7f-4ee0-a782-0519e1b455c2",
+              },
+              {
+                id: "abfe07c1-7b25-4cec-ae34-6d3b533f0567",
+              },
+              {
+                id: "7325aa80-9aaa-4224-8131-979fb342e142",
+              },
+              {
+                id: "8c23d8a7-78cd-466e-a538-a22540f73fcd",
+              },
+              {
+                id: "39327e13-311f-4499-a044-80e1571071ee",
+              },
+              {
+                id: "721923f7-026b-4db8-8984-c533b153aacf",
+              },
+              {
+                id: "f60e9e0b-4323-40dc-9424-21fcd528452c",
+              },
+              {
+                id: "affe951f-a7ef-4ca5-90fd-56c6af238499",
+              },
+              {
+                id: "5d9b4ef8-74d1-48b4-a382-f63779283eeb",
+              },
+              {
+                id: "818f474a-9377-4b39-bfbc-6847d0c18cca",
+              },
+              {
+                id: "ffc11536-2523-4d71-b4f1-b6deb743a5be",
+              },
+              {
+                id: "e63f493a-efd9-45e1-aabf-692e706be29b",
+              },
+              {
+                id: "e8505bf7-2335-47f2-97da-8706e5ea331e",
+              },
+              {
+                id: "a3652e74-0a6f-42bf-8186-a517fe89433d",
+              },
+              {
+                id: "f2ca6fea-7f00-4cba-96cc-619e2dea5adf",
+              },
+              {
+                id: "2acb4cd2-002a-4855-84a9-8b9a2de547ab",
+              },
+              {
+                id: "4e17171e-5147-4947-9431-4c702932b6df",
+              },
+              {
+                id: "320f5215-7b1e-4b60-b195-adff24ac3a13",
+              },
+              {
+                id: "dd0a09d1-b28e-4692-9560-59cde792835c",
+              },
+              {
+                id: "2ce62528-1e7b-4214-ac17-b9baa096c567",
+              },
+              {
+                id: "5c9828b6-3298-40bc-8d0c-c33ca8fe69cf",
+              },
+              {
+                id: "827a833c-1094-41e7-9e44-a04be3e05e20",
+              },
+              {
+                id: "6a2d58a2-c325-4632-87b0-a58d737f9d4f",
+              },
+              {
+                id: "a372a8d2-5a7d-4d82-aea1-d35c4ee9e986",
+              },
+              {
+                id: "39eeeb34-686b-4591-889e-697ce78bef96",
+              },
+              {
+                id: "2da7be5b-9996-429e-ad21-35b7eac19fc7",
+              },
+              {
+                id: "896b0393-c908-46dc-acd5-4daf48fd6125",
+              },
+              {
+                id: "192693b1-e966-43b4-bf1b-ae2a2c3296fe",
+              },
+              {
+                id: "db61e4d9-dd3c-49fe-827a-8ee851661553",
+              },
+              {
+                id: "cd8281c8-791b-47d5-8efa-6de13846aec2",
+              },
+              {
+                id: "e0e30434-568c-4216-abc6-f67084973bc3",
+              },
+              {
+                id: "bc9d7a16-b99a-4640-b0a6-fe754cc7438e",
+              },
+              {
+                id: "fe6804e5-1b6d-4d0d-87ce-86cd98146a7a",
+              },
+              {
+                id: "f1c8fa6f-b7e0-4c39-93a4-99531ba48a5e",
+              },
+              {
+                id: "19014b14-c0c3-4d75-bbb2-9a4bd1e5d658",
+              },
+              {
+                id: "6d58e208-24c1-424f-9bec-d8c49919b0bc",
+              },
+              {
+                id: "5d3c572e-8eab-4285-ac5f-9e23dddb8f5c",
+              },
+              {
+                id: "b7cafd34-3611-4c77-8d35-caeee4448508",
+              },
+              {
+                id: "442171ba-0dea-4a39-8bd6-3f3548c0a273",
+              },
+              {
+                id: "105b4d98-4212-44d1-84ad-84bc163ea1d4",
+              },
+              {
+                id: "9163d7b3-1224-4a32-9c00-856b81607102",
+              },
+              {
+                id: "62453bd1-2279-49f9-9ca6-d70462f29719",
+              },
+              {
+                id: "d0f2f594-b21f-4b91-9ea7-95bfd0841d85",
+              },
+              {
+                id: "6c7babcb-fea4-4ef1-a354-7abb04924730",
+              },
+              {
+                id: "1dc761f3-3e57-49f9-ba2c-3d866f6915de",
+              },
+              {
+                id: "6b1e1164-a30f-48ad-9457-2fac572daa35",
+              },
+              {
+                id: "e230b697-f496-48ce-ba79-b21fce6cd626",
+              },
+              {
+                id: "f3701126-4982-4906-a460-88586f3aecf6",
+              },
+              {
+                id: "aef94cb6-7d72-42b5-8ca7-1dfac692a624",
+              },
+              {
+                id: "c5876b93-9094-4dc9-a662-72c090d3e512",
+              },
+              {
+                id: "611b3248-ac9f-4f06-bab9-110f05799a03",
+              },
+              {
+                id: "e26b11f3-a3ac-4585-abf2-e9dc8d18305a",
+              },
+              {
+                id: "3c1a0c08-12db-4b73-bea8-8d6bf15161b6",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -3826,6 +8986,7 @@ const execute = async (db: PrismaClient) => {
                     description:
                       "yeah this is where sussy stuff goes basically",
                     website: null,
+                    email: null,
                     discord: null,
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
@@ -3835,74 +8996,200 @@ const execute = async (db: PrismaClient) => {
             },
           },
           {
-            id: "356289ad-9cce-46fa-9a93-ebebe78fb4af",
+            id: "47409293-66e8-4a57-946e-184f9a7a8af2",
             number: 220,
             volume: "6",
             language: "pt_br",
             pages: [
-              { id: "aa699154-8ef8-4f34-a3ff-014612c90c98" },
-              { id: "d7b391f1-5a7d-4e46-9896-f59aacd566d4" },
-              { id: "236ac907-049f-4f53-8c5e-97ae1440d956" },
-              { id: "2905ec87-1289-43b7-b9e1-a4c403e691e3" },
-              { id: "3cd3dd04-d0c1-4475-b763-a4a5f089f593" },
-              { id: "b9e8a0ab-5d62-4b94-b326-72f91faf253f" },
-              { id: "0581906a-3c23-47bd-9864-d5fbd51553a4" },
-              { id: "4f14d973-7e69-4f48-aad7-f900b62bacfa" },
-              { id: "df245729-1258-4f24-aa88-0fbca103453b" },
-              { id: "80b7e084-0e4a-4024-916a-b10810b821bc" },
-              { id: "8bca9506-8a4e-4265-a741-9a8b8ae4c491" },
-              { id: "762b6e73-c463-41c7-9241-b7f1d1fc2137" },
-              { id: "19d224e3-b708-44f0-984a-a61fa6aa855f" },
-              { id: "0fa8511e-62dd-407a-8d88-aa1f905b564b" },
-              { id: "3037e084-a77e-4e35-996e-b6349831d05e" },
-              { id: "e046bbb3-4f70-4091-b00e-129f8dcee466" },
-              { id: "bf06d9e4-fa70-441b-8122-84f9c5e215cf" },
-              { id: "29cdfc3a-d444-4f53-9e6f-98d863f7f141" },
-              { id: "cef9ffd3-bd0a-4b9e-8736-68b0f2ea7a26" },
-              { id: "c8ef6f95-576a-4561-9b0c-df446cfb9543" },
-              { id: "312ed590-2756-4af2-a865-495c4a0e5690" },
-              { id: "0dc96e7d-9162-4834-a256-f222cf672f4f" },
-              { id: "f26a79c8-27d6-43f9-9868-2380e0f482c1" },
-              { id: "95e3c13a-3bda-4a0d-8b50-8d396da831ad" },
-              { id: "3d0682d8-741a-4633-9aab-ee0eb9d96c55" },
-              { id: "491349d2-5a1e-4c28-b09b-b6aaa18d9017" },
-              { id: "56ea9660-3519-4334-89ea-dc387b3907dc" },
-              { id: "d3adbc4e-1455-46de-af7d-ceba0eaefa45" },
-              { id: "b0ceacf2-56b4-4db6-a3f3-ad539d06072f" },
-              { id: "77a86130-4d6a-4bd9-9102-250bbbe14d81" },
-              { id: "6365d652-d51c-401e-a1b3-7ecab9920791" },
-              { id: "6a8ece6a-b5cf-4858-969d-03c720d5cf84" },
-              { id: "33c5ac64-201c-446f-98b6-7946abe8a2b9" },
-              { id: "846fdd25-240b-4c23-a56c-e585984f3dd0" },
-              { id: "0e358c64-0db9-4acd-bfba-8c14c6e88ccc" },
-              { id: "02224f1f-2736-46c7-a33d-112507fcd205" },
-              { id: "22673a5e-bf6c-4af3-b5c0-c8a5a2a92c29" },
-              { id: "9a7a5b34-cff4-4110-9df4-56238e1fa0ce" },
-              { id: "571d655b-c395-482e-a92d-256006bd4884" },
-              { id: "2a3eae7e-cc47-4079-9c25-429b8444656f" },
-              { id: "d4bd7425-2041-41de-9ab4-76ed861e1e35" },
-              { id: "299923c3-bba0-46d3-b30e-b27ec2a400f4" },
-              { id: "98547e22-a558-4f28-a7b0-d277440a8e10" },
-              { id: "ddc3ac03-9caf-44ae-9ba9-6946b519decd" },
-              { id: "8c422dd3-5b08-4263-a767-f374eac57fd3" },
-              { id: "f5735963-b4f1-4e99-8ba7-0b8f4e12ef0e" },
-              { id: "b32b9e96-4f11-43c0-b0bb-39ea4fb8655f" },
-              { id: "084bf6ce-cea5-44b5-9d3a-700b23ee017e" },
-              { id: "92c429f9-b7ca-4fe5-852f-a5afebc46fcd" },
-              { id: "f126f141-e3e8-49e1-97a4-0db2c693ed46" },
-              { id: "c6687186-5ed9-4f02-b1cb-c3c2f2df7582" },
-              { id: "19189d38-4f20-4db5-b4c0-88a3a13b334f" },
-              { id: "fb0f4a4d-3b77-47a3-981f-f980b0342fd1" },
-              { id: "7ec54e2d-c3a0-48cf-be23-1b0931d9c4cc" },
-              { id: "56f1676c-ecaf-4cf1-bf2e-edadc741d2a0" },
-              { id: "1978bd4b-e615-4b70-8500-f8bc964fb65e" },
-              { id: "5f90b48f-ab78-49d3-9c09-afbbbc655606" },
-              { id: "9698035e-8d0a-4e46-a0ef-9679975b4c4b" },
-              { id: "a9378c70-5f22-4405-8087-4d6d688c7f77" },
-              { id: "db66cd3e-530c-4031-a1ba-432853659c38" },
-              { id: "f280cf9a-c2b7-4628-966c-1ba12f871d2e" },
-              { id: "a8843085-eeb4-4cd9-a733-b41b3d2c6b01" },
-              { id: "74653251-b25a-463e-95bd-ee1aadf236e6" },
+              {
+                id: "0988b9fc-2c53-4cec-b9f3-9579f888a123",
+              },
+              {
+                id: "43c61e93-6eb8-40d8-b751-5916e57c8993",
+              },
+              {
+                id: "57571fe9-71d4-4d76-9f06-b520379082a8",
+              },
+              {
+                id: "17fcfbe4-a71e-42a2-96ac-3d010cdbf5ce",
+              },
+              {
+                id: "fa8be5fa-3989-4507-b80e-b1cdf9ba5fd8",
+              },
+              {
+                id: "46dcdde2-29e9-4061-9bdf-9b043f401fa5",
+              },
+              {
+                id: "757159a4-46c3-49c9-9f17-bd58f2804503",
+              },
+              {
+                id: "d4a417c8-e884-43c5-a6ca-ef33dc53ee6c",
+              },
+              {
+                id: "6ad94d82-1d12-47b1-b338-51f918e71689",
+              },
+              {
+                id: "7fd5fa76-49ac-46ab-ac8b-5e10faa6f30c",
+              },
+              {
+                id: "53f6cdc9-4e4a-4465-86d7-283742ff947b",
+              },
+              {
+                id: "cfcc09b1-ef71-47b5-8a34-07074282d2a8",
+              },
+              {
+                id: "cc133d37-040d-4d61-9fa7-8509d61dcd17",
+              },
+              {
+                id: "2fbc9093-dee7-43ae-90d7-671b8fdb2a5d",
+              },
+              {
+                id: "90bc33f1-778a-42fe-9551-1fcd81803498",
+              },
+              {
+                id: "7fb69c83-40de-449c-8bb6-bb593a758958",
+              },
+              {
+                id: "e81b1073-7d48-4807-871c-692c34d8ee9b",
+              },
+              {
+                id: "99e96340-dbad-4c02-b8ac-c4a9b4e56158",
+              },
+              {
+                id: "a406d993-ac6f-49a9-899c-ac06118127b3",
+              },
+              {
+                id: "e0c5af79-1390-462d-b000-b23b1932cde9",
+              },
+              {
+                id: "7757b717-1c99-4e69-9180-3be105199302",
+              },
+              {
+                id: "003816cc-8eb9-4b21-a5b7-fb6c1c433c11",
+              },
+              {
+                id: "a4d17201-b96a-471b-8271-4cdfe6d65f0f",
+              },
+              {
+                id: "d8d1b6ca-5b7c-4a7e-bdd8-9d130f9ddec7",
+              },
+              {
+                id: "d4712fda-b2b5-4816-82be-ad0dc1f16ddc",
+              },
+              {
+                id: "1737d823-59fa-40a9-97a9-9799298e19a8",
+              },
+              {
+                id: "11b049a9-f181-4de5-990a-082d3da51e7c",
+              },
+              {
+                id: "6ba40df9-de05-4690-82f0-a5082ce93dd6",
+              },
+              {
+                id: "f13a08a8-3b81-4fff-8bf5-7b607f51747e",
+              },
+              {
+                id: "0cfde0c1-f996-4901-86ed-a2608f5959d3",
+              },
+              {
+                id: "167ac95f-fac9-4fa0-9704-c8565b0b5a60",
+              },
+              {
+                id: "66dbe42c-6a03-4e16-9a73-eef662c22045",
+              },
+              {
+                id: "b55ec725-e0c0-4860-9434-1072686fe9e4",
+              },
+              {
+                id: "21cb333c-18d2-4682-b3e0-a8f23b0ef4dc",
+              },
+              {
+                id: "67554aa9-6a7c-40d5-bdb6-3ae335416054",
+              },
+              {
+                id: "8c992d6f-b467-4ce5-9be6-65c5fe64db8f",
+              },
+              {
+                id: "3f22b105-ec42-4871-804f-b732e72cddb9",
+              },
+              {
+                id: "1e11c5ad-3e68-424a-a8d1-d164f92ea998",
+              },
+              {
+                id: "ed5f92f3-e8e8-4e30-9a13-22676e698220",
+              },
+              {
+                id: "df1f9607-9c6f-4e75-a9b1-e73380a2511a",
+              },
+              {
+                id: "f2142e99-ccfb-4410-872c-7226e042384a",
+              },
+              {
+                id: "bfea7e83-9020-44f4-b719-8573f14fe0c9",
+              },
+              {
+                id: "7734f32e-f21b-4752-8619-85f6da08dd00",
+              },
+              {
+                id: "a2dcf74b-6c26-4c43-a45a-ff87181a936b",
+              },
+              {
+                id: "3484cb59-e32a-4e18-b953-af519a6944a8",
+              },
+              {
+                id: "c4bdbece-d7ba-4fb4-a6d3-a1cdedd5846c",
+              },
+              {
+                id: "81da3906-7e22-467b-a3da-bd17afcef0a4",
+              },
+              {
+                id: "af51bf33-a552-461e-9575-d174a6a5eb52",
+              },
+              {
+                id: "1f264fd8-652e-4a3d-83e9-e72816ce6e4b",
+              },
+              {
+                id: "3370ff15-e877-48c0-ba1c-840f72512877",
+              },
+              {
+                id: "a3262d56-8ae7-457e-887f-6c3bce570185",
+              },
+              {
+                id: "5309dbcd-b9d1-4ac1-bce3-9a1a5012b4b7",
+              },
+              {
+                id: "a9e0c301-a2f9-49e2-9fab-31b364d3d861",
+              },
+              {
+                id: "996b1d0a-f95a-4f02-ad6d-bf7d9b3c0801",
+              },
+              {
+                id: "5e311664-85b8-4221-966e-06b6540cac6d",
+              },
+              {
+                id: "c571ef88-63de-41c4-8c86-e75551db95c4",
+              },
+              {
+                id: "0fd888b3-e92b-4e16-abfe-4e94593fbd07",
+              },
+              {
+                id: "e6d0c9a9-fc0c-4cfb-b9d5-2eb12bb138e8",
+              },
+              {
+                id: "43dae470-3606-4fb4-a8f8-387672af3304",
+              },
+              {
+                id: "fb530c7b-ffb3-4089-b27c-af95c75e2c5e",
+              },
+              {
+                id: "8c1340f7-7f06-4791-8448-678fc4fd5f24",
+              },
+              {
+                id: "7286c1b0-7d00-451a-b154-4a2a2511cffd",
+              },
+              {
+                id: "15b8c0d4-f88a-4a7d-8d73-c5b297eb40d6",
+              },
             ],
             uploaderId: "db852a04-7406-4a6a-87f2-1b494e810a29",
             groups: {
@@ -3915,6 +9202,7 @@ const execute = async (db: PrismaClient) => {
                     description:
                       "yeah this is where sussy stuff goes basically",
                     website: null,
+                    email: null,
                     discord: null,
                     x: null,
                     creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
