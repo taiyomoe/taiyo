@@ -1,3 +1,5 @@
+import { mkdir, readdir, readFile, writeFile } from "node:fs/promises"
+import { join } from "node:path"
 import type { Prisma } from "@taiyomoe/db"
 import {
   toContentRating,
@@ -13,8 +15,6 @@ import {
 } from "@taiyomoe/utils"
 import { Command } from "commander"
 import { Cover, Manga } from "mangadex-full-api"
-import { mkdir, readdir, readFile, writeFile } from "node:fs/promises"
-import { join } from "node:path"
 import { group, map, mapValues, pick, sleep } from "radashi"
 import {
   CREATOR_ID,
