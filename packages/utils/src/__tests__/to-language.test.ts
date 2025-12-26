@@ -59,4 +59,3 @@ describe("toLanguage", () => {
     expect(toLanguage("zh_ro")).toBe("zh_ro")
   })
 })
-
