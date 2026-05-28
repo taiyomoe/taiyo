@@ -12,12 +12,12 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@faker-js/faker": "^10.1.0",
+    "@faker-js/faker": "^10.4.0",
     "@taiyomoe/config": "workspace:^",
-    "zod": "^4.2.1"
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@taiyomoe/typescript": "workspace:^",
-    "typescript": "5.9.3"
+    "typescript": "6.0.3"
   }
 }

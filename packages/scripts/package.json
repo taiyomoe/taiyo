@@ -17,11 +17,11 @@
     "@taiyomoe/utils": "workspace:^",
     "commander": "^12.1.0",
     "mangadex-full-api": "^6.2.0",
-    "radashi": "^12.7.1",
-    "tsx": "^4.21.0"
+    "radashi": "^12.9.1",
+    "tsx": "^4.22.3"
   },
   "devDependencies": {
     "@taiyomoe/typescript": "workspace:^",
-    "typescript": "5.9.3"
+    "typescript": "6.0.3"
   }
 }

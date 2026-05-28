@@ -10,28 +10,28 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@tailwindcss/postcss": "^4.1.18",
+    "@tailwindcss/postcss": "^4.3.0",
     "@taiyomoe/ui": "workspace:^",
     "lucide-react": "^0.554.0",
-    "next": "^16.1.1",
-    "postcss": "^8.5.6",
-    "react": "^19.2.3"
+    "next": "^16.2.6",
+    "postcss": "^8.5.15",
+    "react": "^19.2.6"
   },
   "devDependencies": {
-    "@storybook/addon-a11y": "^10.1.10",
-    "@storybook/addon-docs": "^10.1.10",
-    "@storybook/addon-onboarding": "^10.1.10",
-    "@storybook/addon-themes": "^10.1.10",
-    "@storybook/addon-vitest": "^10.1.10",
-    "@storybook/nextjs-vite": "^10.1.10",
+    "@storybook/addon-a11y": "^10.4.0",
+    "@storybook/addon-docs": "^10.4.0",
+    "@storybook/addon-onboarding": "^10.4.0",
+    "@storybook/addon-themes": "^10.4.0",
+    "@storybook/addon-vitest": "^10.4.0",
+    "@storybook/nextjs-vite": "^10.4.0",
     "@taiyomoe/typescript": "workspace:^",
-    "@types/react": "^19.2.7",
+    "@types/react": "^19.2.15",
     "@types/react-dom": "^19.2.3",
-    "@vitest/browser": "^4.0.16",
-    "@vitest/coverage-v8": "^4.0.16",
-    "playwright": "^1.57.0",
-    "storybook": "^10.1.10",
-    "typescript": "5.9.3",
-    "vitest": "^4.0.16"
+    "@vitest/browser": "^4.1.7",
+    "@vitest/coverage-v8": "^4.1.7",
+    "playwright": "^1.60.0",
+    "storybook": "^10.4.0",
+    "typescript": "6.0.3",
+    "vitest": "^4.1.7"
   }
 }

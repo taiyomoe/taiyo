@@ -14,20 +14,20 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@t3-oss/env-core": "^0.13.10",
+    "@t3-oss/env-core": "^0.13.11",
     "@taiyomoe/cache": "workspace:^",
     "@taiyomoe/config": "workspace:^",
     "@taiyomoe/db": "workspace:^",
     "@taiyomoe/email": "workspace:^",
     "@taiyomoe/utils": "workspace:^",
-    "better-auth": "^1.4.9",
-    "better-auth-harmony": "^1.2.5",
+    "better-auth": "^1.6.11",
+    "better-auth-harmony": "^1.3.2",
     "luxon": "^3.7.2",
-    "zod": "^4.2.1"
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@taiyomoe/typescript": "workspace:^",
     "@types/luxon": "^3.7.1",
-    "typescript": "5.9.3"
+    "typescript": "6.0.3"
   }
 }

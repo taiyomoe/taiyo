@@ -4,7 +4,7 @@
   "engines": {
     "node": "24.11.1"
   },
-  "packageManager": "pnpm@10.26.2",
+  "packageManager": "pnpm@10.33.4",
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev --parallel",
@@ -22,11 +22,11 @@
     "test:integration:watch": "vitest --config vitest.config.integration.ts"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.3.10",
+    "@biomejs/biome": "^2.4.15",
     "@types/global-types": "workspace:^",
-    "@types/node": "^24.10.4",
-    "knip": "^5.77.0",
-    "turbo": "^2.7.2",
-    "vitest": "^4.0.16"
+    "@types/node": "^24.12.4",
+    "knip": "^5.88.1",
+    "turbo": "^2.9.14",
+    "vitest": "^4.1.7"
   }
 }
