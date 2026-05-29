@@ -46,3 +46,6 @@ storybook-static
 
 # env
 .env*
+
+# claude
+.claude/settings.local.json
