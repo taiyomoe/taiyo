@@ -23,7 +23,6 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.15",
-    "@types/global-types": "workspace:^",
     "@types/node": "^24.12.4",
     "knip": "^5.88.1",
     "turbo": "^2.9.14",

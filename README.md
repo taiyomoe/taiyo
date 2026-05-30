@@ -37,7 +37,6 @@ taiyo/
 │   ├── config/            # Shared configuration
 │   ├── db/                # Database layer
 │   ├── email/             # Email templates and utilities
-│   ├── global-types/      # Global TypeScript types
 │   ├── logger/            # Logging layer
 │   ├── logs/              # Logs configuration
 │   ├── ui/                # Shared UI components
@@ -218,7 +217,6 @@ There are 30+ environment variables that are used in the project. You can find t
 ### Configuration Packages
 
 - **`@taiyomoe/config`**: Shared configuration and constants
-- **`@taiyomoe/global-types`**: Global TypeScript type definitions
 - **`@taiyomoe/logs`**: Logs configuration
 
 ## 🚀 Deployment

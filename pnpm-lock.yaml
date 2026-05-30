@@ -11,9 +11,6 @@ importers:
       '@biomejs/biome':
         specifier: ^2.4.15
         version: 2.4.16
-      '@types/global-types':
-        specifier: workspace:^
-        version: link:packages/global-types
       '@types/node':
         specifier: ^24.12.4
         version: 24.12.4
@@ -81,9 +78,6 @@ importers:
       '@taiyomoe/typescript':
         specifier: workspace:^
         version: link:../../tooling/typescript
-      '@types/global-types':
-        specifier: workspace:^
-        version: link:../../packages/global-types
       '@types/node':
         specifier: ^24.12.4
         version: 24.12.4
@@ -247,12 +241,6 @@ importers:
       '@t3-oss/env-core':
         specifier: ^0.13.11
         version: 0.13.11(typescript@6.0.3)(valibot@1.2.0(typescript@6.0.3))(zod@4.4.3)
-      '@taiyomoe/config':
-        specifier: workspace:^
-        version: link:../config
-      '@taiyomoe/utils':
-        specifier: workspace:^
-        version: link:../utils
       kysely:
         specifier: ^0.28.10
         version: 0.28.17
@@ -266,9 +254,6 @@ importers:
       '@taiyomoe/typescript':
         specifier: workspace:^
         version: link:../../tooling/typescript
-      '@types/global-types':
-        specifier: workspace:^
-        version: link:../global-types
       '@types/pg':
         specifier: ^8.15.7
         version: 8.20.0
@@ -312,12 +297,6 @@ importers:
       typescript:
         specifier: 6.0.3
         version: 6.0.3
-
-  packages/global-types:
-    devDependencies:
-      '@total-typescript/ts-reset':
-        specifier: ^0.6.1
-        version: 0.6.1
 
   packages/logger:
     dependencies:
@@ -3458,9 +3437,6 @@ packages:
     engines: {node: '>=12', npm: '>=6'}
     peerDependencies:
       '@testing-library/dom': '>=7.21.4'
-
-  '@total-typescript/ts-reset@0.6.1':
-    resolution: {integrity: sha512-cka47fVSo6lfQDIATYqb/vO1nvFfbPw7uWLayIXIhGETj0wcOOlrlkobOMDNQOFr9QOafegUPq13V2+6vtD7yg==}
 
   '@turbo/darwin-64@2.9.16':
     resolution: {integrity: sha512-jLjApWTSNd7JZ5JaLYfelW1ytnGQOvB7ivl+2RD1xQvJTbi8I9gBjzcga7tDZVPyaxpl10YTfJt3BrYXR18KDw==}
@@ -8697,8 +8673,6 @@ snapshots:
   '@testing-library/user-event@14.6.1(@testing-library/dom@10.4.1)':
     dependencies:
       '@testing-library/dom': 10.4.1
-
-  '@total-typescript/ts-reset@0.6.1': {}
 
   '@turbo/darwin-64@2.9.16':
     optional: true

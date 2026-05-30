@@ -33,7 +33,6 @@
   },
   "devDependencies": {
     "@taiyomoe/typescript": "workspace:^",
-    "@types/global-types": "workspace:^",
     "@types/node": "^24.12.4",
     "tsx": "^4.22.3",
     "typescript": "6.0.3"
