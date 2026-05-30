@@ -9,7 +9,6 @@
     "./env": "./src/env.ts"
   },
   "scripts": {
-    "clean": "rm -rf .turbo node_modules",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {

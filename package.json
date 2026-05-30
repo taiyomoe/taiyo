@@ -8,8 +8,6 @@
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev --parallel",
-    "clean": "git clean -xdf node_modules",
-    "clean:ws": "turbo clean",
     "check:ws": "biome check .",
     "check:ws:ci": "biome ci .",
     "lint:ws": "pnpm dlx sherif@latest",

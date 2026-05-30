@@ -6,7 +6,6 @@
   "scripts": {
     "dev": "storybook dev -p 6006",
     "build": "storybook build",
-    "clean": "rm -rf .turbo node_modules",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
