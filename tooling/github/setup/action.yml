@@ -1,15 +1,6 @@
 name: "Setup and install"
 description: "Common setup steps for Actions"
 
-inputs:
-  prisma-generate:
-    description: "Whether to generate Prisma client and SQL files"
-    required: false
-    default: "false"
-  database-url:
-    description: "The URL of the database"
-    required: false
-
 runs:
   using: composite
   steps:
@@ -24,9 +15,3 @@ runs:
 
     - shell: bash
       run: pnpm install
-
-    - shell: bash
-      if: inputs.prisma-generate == 'true'
-      env:
-        DATABASE_URL: ${{ inputs.database-url }}
-      run: pnpm -F db prisma generate && pnpm -F db prisma generate --sql

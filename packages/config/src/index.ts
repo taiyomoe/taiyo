@@ -1,3 +1,4 @@
+import type { MediaLinks, StaffLink, UserSettings } from "@taiyomoe/db"
 import { tags } from "./tags"
 
 export const config = {
@@ -35,7 +36,7 @@ export const config = {
     showFollowing: true,
     showLibrary: true,
     homeLayout: "ROWS",
-  } satisfies Required<PrismaJson.UserSettings>,
+  } satisfies Required<UserSettings>,
   images: {
     /** Default maximum image size in bytes (5MB) */
     maxSizeBytes: 5 * 1024 * 1024,
@@ -60,7 +61,7 @@ export const config = {
       "officialFRTranslation",
       "officialPTBRTranslation",
       "cdJapan",
-    ] satisfies (keyof PrismaJson.MediaLinks)[],
+    ] satisfies (keyof MediaLinks)[],
   },
   staff: {
     links: [
@@ -79,7 +80,7 @@ export const config = {
       "skeb",
       "weibo",
       "booth",
-    ] satisfies (keyof PrismaJson.StaffLink)[],
+    ] satisfies (keyof StaffLink)[],
   },
   tags,
   pagination: {

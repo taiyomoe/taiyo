@@ -7,7 +7,11 @@ export const sendMagicLink = async (data: {
   url: string
   token: string
 }) => {
-  const user = await db.user.findUnique({ where: { email: data.email } })
+  const user = await db
+    .selectFrom("users")
+    .selectAll()
+    .where("email", "=", data.email)
+    .executeTakeFirst()
 
   if (!user || !user.email) {
     throw new APIError("BAD_REQUEST", { message: "Failed to send magic link" })

@@ -1,9 +1,10 @@
 import { config } from "@taiyomoe/config"
+import type { MediaLinks } from "@taiyomoe/db"
 
 export const toMediaLinks = (
   input: Record<string, unknown>,
-): PrismaJson.MediaLinks => {
-  const links: PrismaJson.MediaLinks = {}
+): MediaLinks => {
+  const links: MediaLinks = {}
 
   for (const [key, value] of Object.entries(input)) {
     if (!value || typeof value !== "string") {
@@ -28,7 +29,7 @@ export const toMediaLinks = (
     if (config.medias.links.includes(key)) {
       links[
         key as keyof Omit<
-          PrismaJson.MediaLinks,
+          MediaLinks,
           "myAnimeList" | "anilist" | "officialENTranslation"
         >
       ] = value

@@ -11,6 +11,9 @@
     "clean": "rm -rf .turbo node_modules",
     "typecheck": "tsc --noEmit"
   },
+  "dependencies": {
+    "@taiyomoe/db": "workspace:^"
+  },
   "devDependencies": {
     "@taiyomoe/typescript": "workspace:^",
     "typescript": "6.0.3"

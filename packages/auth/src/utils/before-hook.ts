@@ -22,17 +22,25 @@ export const beforeHook = createAuthMiddleware(async (ctx) => {
    * 2. If the user is trying to sign in to an account that is not verified and which has a pending verification email
    */
   if (ctx.path === "/sign-in/email" || ctx.path === "/sign-in/username") {
-    const user = await db.user.findFirst({
-      where: ctx.body.email
-        ? { email: ctx.body.email }
-        : { username: ctx.body.username },
-    })
+    const user = await db
+      .selectFrom("users")
+      .selectAll()
+      .where(
+        ctx.body.email ? "email" : "username",
+        "=",
+        ctx.body.email ?? ctx.body.username,
+      )
+      .executeTakeFirst()
 
     if (!user) {
       return
     }
 
-    const accounts = await db.account.findMany({ where: { userId: user.id } })
+    const accounts = await db
+      .selectFrom("accounts")
+      .selectAll()
+      .where("userId", "=", user.id)
+      .execute()
 
     // Tried logging in with an email or username from a non-credential provider
     if (!accounts.some((a) => a.providerId === "credential")) {

@@ -1,4 +1,7 @@
-import { Languages } from "../../db/src/index"
+import { LANGUAGES, type Language } from "@taiyomoe/db"
+
+const isLanguage = (s: string): s is Language =>
+  (LANGUAGES as readonly string[]).includes(s)
 
 export const toLanguage = (input?: string | null) => {
   switch (input) {
@@ -17,8 +20,8 @@ export const toLanguage = (input?: string | null) => {
     case "es-la":
       return "es_la"
     default: {
-      if (input && input in Languages) {
-        return input as Languages
+      if (input && isLanguage(input)) {
+        return input
       }
 
       console.warn(`Invalid language key "${input}", skipping...`)

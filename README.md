@@ -40,7 +40,6 @@ taiyo/
 │   ├── global-types/      # Global TypeScript types
 │   ├── logger/            # Logging layer
 │   ├── logs/              # Logs configuration
-│   ├── scripts/           # CLI scripts for database operations
 │   ├── ui/                # Shared UI components
 │   └── utils/             # Shared utilities
 └── tooling/             # Development tools
@@ -64,7 +63,7 @@ taiyo/
 **Backend:**
 
 - [Hono](https://hono.dev/) for type-safe APIs
-- [Prisma](https://www.prisma.io/) as ORM
+- [Kysely](https://kysely.dev/) as the typed SQL query builder
 - [Better Auth](https://www.better-auth.com/) for authentication
 - [BullMQ](https://bullmq.io/) for job queues
 - [Zod](https://zod.dev/) for schema validation
@@ -118,19 +117,19 @@ taiyo/
 5. **Run database migrations**
 
    ```bash
-   infisical run -- pnpm -F scripts start migrate
+   pnpm -F db kysely migrate latest
    ```
 
 6. **Seed the database with sample data**
 
    ```bash
-   infisical run -- pnpm -F scripts start seed
+   pnpm -F db kysely seed run
    ```
 
 7. **Start development servers**
 
    ```bash
-   infisical run -- pnpm dev
+   pnpm dev
    ```
 
 The application will be available at:
@@ -163,13 +162,13 @@ pnpm knip               # Check for unused dependencies and dead code
 ### Package-Specific Commands
 
 ```bash
-# Database Scripts
-pnpm -F scripts start migrate  # Run database migrations
-pnpm -F scripts start seed     # Seed database with sample data
+# Database
+pnpm -F db kysely migrate latest   # Run database migrations
+pnpm -F db kysely seed run         # Seed database with sample data
 
 # Storybook
-pnpm -F storybook run dev      # Start Storybook dev server
-pnpm -F storybook run build   # Build static Storybook
+pnpm -F storybook run dev          # Start Storybook dev server
+pnpm -F storybook run build        # Build static Storybook
 ```
 
 ## 🔧 Development
@@ -205,7 +204,7 @@ There are 30+ environment variables that are used in the project. You can find t
 
 ### Core Packages
 
-- **`@taiyomoe/db`**: Database layer with Prisma ORM, migrations, and data models
+- **`@taiyomoe/db`**: Database layer with Kysely (typed SQL query builder), migrations, seeds, and per-table model types
 - **`@taiyomoe/auth`**: Authentication system with Better Auth integration
 - **`@taiyomoe/utils`**: Shared utility functions and helpers
 - **`@taiyomoe/ui`**: Shared UI components built with React and Tailwind CSS
@@ -220,7 +219,6 @@ There are 30+ environment variables that are used in the project. You can find t
 
 - **`@taiyomoe/config`**: Shared configuration and constants
 - **`@taiyomoe/global-types`**: Global TypeScript type definitions
-- **`@taiyomoe/scripts`**: CLI scripts for database operations (migrations, seeding)
 - **`@taiyomoe/logs`**: Logs configuration
 
 ## 🚀 Deployment

@@ -1,5 +1,5 @@
 {
   "extends": "@taiyomoe/typescript/base.json",
-  "include": ["src", "prisma.config.ts"],
+  "include": ["src"],
   "exclude": ["node_modules"]
 }

@@ -1,12 +1,12 @@
-import type { PrismaClient } from "@taiyomoe/db"
-import { db } from "@taiyomoe/db"
+import { type DB, db } from "@taiyomoe/db"
 import { s3Client } from "@taiyomoe/s3"
 import { createMiddleware } from "hono/factory"
+import type { Kysely } from "kysely"
 import { type ErrorCode, errors } from "../utils/errors"
 import { logger } from "../utils/logger"
 
 export type AppContext = {
-  db: PrismaClient
+  db: Kysely<DB>
   logger: typeof logger
   s3: typeof s3Client
   ok: <T>(data: T) => Response

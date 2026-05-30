@@ -1,7 +1,8 @@
 import { config } from "@taiyomoe/config"
+import type { MediaTags } from "@taiyomoe/db"
 
-export const toTags = (input: string[] | null): PrismaJson.MediaTags[] => {
-  const tags: PrismaJson.MediaTags[] = []
+export const toTags = (input: string[] | null): MediaTags[] => {
+  const tags: MediaTags[] = []
 
   for (const tag of input ?? []) {
     const normalizedTag = tag

@@ -1,9 +1,8 @@
 import { cacheClient } from "@taiyomoe/cache"
 import { config } from "@taiyomoe/config"
 import { db } from "@taiyomoe/db"
-import type { Roles } from "@taiyomoe/db/browser"
+import type { Role, UserSettings } from "@taiyomoe/db"
 import { betterAuth } from "better-auth"
-import { prismaAdapter } from "better-auth/adapters/prisma"
 import {
   admin,
   captcha,
@@ -24,7 +23,7 @@ import { sendVerificationEmail } from "./utils/send-verification-email"
 
 export const auth = betterAuth({
   appName: "Taiyō",
-  database: prismaAdapter(db, { provider: "postgresql" }),
+  database: { db, type: "postgres" },
   emailAndPassword: {
     enabled: true,
     minPasswordLength: config.auth.password.minLength,
@@ -103,8 +102,8 @@ export const auth = betterAuth({
           banned: boolean | null | undefined
           banReason: string | null | undefined
           banExpires: Date | null | undefined
-          role: Roles
-          settings: PrismaJson.UserSettings
+          role: Role
+          settings: UserSettings
         }),
       },
     })),
@@ -112,8 +111,8 @@ export const auth = betterAuth({
 })
 
 export type User = Omit<typeof auth.$Infer.Session.user, "settings"> & {
-  role: Roles
-  settings: PrismaJson.UserSettings
+  role: Role
+  settings: UserSettings
 }
 
 export type Session = Omit<typeof auth.$Infer.Session, "user"> & {

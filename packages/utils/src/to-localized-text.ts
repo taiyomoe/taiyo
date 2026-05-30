@@ -1,8 +1,9 @@
+import type { LocalizedText } from "@taiyomoe/db"
 import { toLanguage } from "./to-language"
 
 export const toLocalizedText = (
   input: Record<string, unknown>,
-): PrismaJson.LocalizedText => {
+): LocalizedText => {
   const result: Record<string, string> = {}
 
   for (const [key, value] of Object.entries(input)) {

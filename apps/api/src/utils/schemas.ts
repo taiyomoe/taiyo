@@ -1,11 +1,11 @@
-import { ContentRating, Languages } from "@taiyomoe/db"
+import { CONTENT_RATINGS, LANGUAGES } from "@taiyomoe/db"
 import z from "zod"
 
 export const languageSchema = (description: string) =>
-  z.enum(Languages).meta({ description, example: "en" })
+  z.enum(LANGUAGES).meta({ description, example: "en" })
 
 export const contentRatingSchema = (description: string) =>
-  z.enum(ContentRating).meta({ description, example: "NORMAL" })
+  z.enum(CONTENT_RATINGS).meta({ description, example: "NORMAL" })
 
 export const fileSchema = (description: string) =>
   z

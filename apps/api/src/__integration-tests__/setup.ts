@@ -1,29 +1,36 @@
 import { execSync } from "node:child_process"
-import { db, PrismaClient, PrismaPg } from "@taiyomoe/db"
+import { type DB, db } from "@taiyomoe/db"
 import { env } from "@taiyomoe/db/env"
+import { Kysely, PostgresDialect, sql } from "kysely"
+import pg from "pg"
 import { test as baseTest } from "vitest"
 
 type Fixtures = {
-  db: PrismaClient
+  db: Kysely<DB>
 }
 
 const getTestDbName = (taskId: string) => `test_integration_${taskId}`
 
 const dropTestDatabase = async (taskId: string) => {
-  await db.$executeRawUnsafe(
-    `DROP DATABASE IF EXISTS "${getTestDbName(taskId)}"`,
-  )
+  await sql.raw(`DROP DATABASE IF EXISTS "${getTestDbName(taskId)}"`).execute(db)
+}
+
+const buildTestDatabaseUrl = (dbName: string): string => {
+  const url = new URL(env.DATABASE_URL)
+  url.pathname = `/${dbName}`
+  return url.toString()
 }
 
 const createTestDatabase = async (taskId: string): Promise<string> => {
   const dbName = getTestDbName(taskId)
 
   await dropTestDatabase(taskId)
-  await db.$executeRawUnsafe(`CREATE DATABASE "${dbName}"`)
+  await sql.raw(`CREATE DATABASE "${dbName}"`).execute(db)
 
-  execSync(`pnpm -F scripts start migrate --db ${dbName}`)
+  const childEnv = { ...process.env, DATABASE_URL: buildTestDatabaseUrl(dbName) }
 
-  execSync(`pnpm -F scripts start seed --db ${dbName}`)
+  execSync("pnpm -F db kysely migrate latest", { env: childEnv })
+  execSync("pnpm -F db kysely seed run", { env: childEnv })
 
   return dbName
 }
@@ -32,14 +39,15 @@ export const test = baseTest.extend<Fixtures>({
   db: async ({ task }, use) => {
     await createTestDatabase(task.id)
 
-    const adapter = new PrismaPg({
-      connectionString: env.DATABASE_URL,
-      database: task.id,
+    const testDb = new Kysely<DB>({
+      dialect: new PostgresDialect({
+        pool: new pg.Pool({ connectionString: buildTestDatabaseUrl(task.id) }),
+      }),
     })
-    const db = new PrismaClient({ adapter })
 
-    await use(db)
+    await use(testDb)
 
+    await testDb.destroy()
     await dropTestDatabase(task.id)
   },
 })

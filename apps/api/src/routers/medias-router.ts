@@ -1,10 +1,10 @@
 import { config } from "@taiyomoe/config"
 import {
-  MediaCountryOfOrigin,
-  MediaDemography,
-  MediaSource,
-  MediaStatus,
-  MediaType,
+  MEDIA_COUNTRIES_OF_ORIGIN,
+  MEDIA_DEMOGRAPHIES,
+  MEDIA_SOURCES,
+  MEDIA_STATUSES,
+  MEDIA_TYPES,
 } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
@@ -137,20 +137,20 @@ const createMediaSchema = z.object({
       ],
     }),
   contentRating: contentRatingSchema("The content rating of the media."),
-  type: z.enum(MediaType).meta({ description: "The type of the media." }),
-  status: z.enum(MediaStatus).meta({
+  type: z.enum(MEDIA_TYPES).meta({ description: "The type of the media." }),
+  status: z.enum(MEDIA_STATUSES).meta({
     description: "The current release status of the media.",
     example: "RELEASING",
   }),
-  source: z.enum(MediaSource).meta({
+  source: z.enum(MEDIA_SOURCES).meta({
     description: "The original source of the media.",
     example: "ORIGINAL",
   }),
-  demography: z.enum(MediaDemography).meta({
+  demography: z.enum(MEDIA_DEMOGRAPHIES).meta({
     description: "The target audience of the media.",
     example: "SHOUNEN",
   }),
-  countryOfOrigin: z.enum(MediaCountryOfOrigin).meta({
+  countryOfOrigin: z.enum(MEDIA_COUNTRIES_OF_ORIGIN).meta({
     description: "The country where the media was originally created.",
     example: "JAPAN",
   }),

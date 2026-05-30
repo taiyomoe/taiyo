@@ -36,10 +36,6 @@ data/
 # turbo
 .turbo
 
-# prisma
-generated
-.prisma-zod-generator-manifest.json
-
 # storybook
 *storybook.log
 storybook-static
