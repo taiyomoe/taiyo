@@ -20,7 +20,7 @@
     "@base-ui-components/react": "1.0.0-beta.6",
     "@radix-ui/react-slot": "^1.2.4",
     "clsx": "^2.1.1",
-    "lucide-react": "^0.554.0",
+    "lucide-react": "^1.16.0",
     "motion": "^12.40.0",
     "tailwind-merge": "^3.6.0",
     "tailwind-variants": "^3.2.2"

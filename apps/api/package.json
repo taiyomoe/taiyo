@@ -14,17 +14,17 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@hono/node-server": "^1.19.14",
+    "@hono/node-server": "^2.0.3",
     "@hono/standard-validator": "^0.2.2",
     "@hyperdx/node-opentelemetry": "^0.10.5",
-    "@scalar/hono-api-reference": "^0.9.48",
+    "@scalar/hono-api-reference": "^0.10.19",
     "@t3-oss/env-core": "^0.13.11",
     "@taiyomoe/config": "workspace:^",
     "@taiyomoe/db": "workspace:^",
     "@taiyomoe/logger": "workspace:^",
     "@taiyomoe/s3": "workspace:^",
     "@taiyomoe/utils": "workspace:^",
-    "hono": "^4.12.21",
+    "hono": "^4.12.22",
     "hono-openapi": "^1.3.0",
     "magic-bytes.js": "^1.13.0",
     "radashi": "^12.9.1",
@@ -33,7 +33,7 @@
   },
   "devDependencies": {
     "@taiyomoe/typescript": "workspace:^",
-    "@types/node": "^24.12.4",
+    "@types/node": "^25.9.1",
     "tsx": "^4.22.3",
     "typescript": "6.0.3"
   }

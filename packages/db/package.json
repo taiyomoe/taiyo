@@ -17,15 +17,15 @@
   "dependencies": {
     "@faker-js/faker": "^10.4.0",
     "@t3-oss/env-core": "^0.13.11",
-    "kysely": "^0.28.10",
-    "pg": "^8.16.5",
+    "kysely": "^0.29.2",
+    "pg": "^8.21.0",
     "zod": "^4.4.3"
   },
   "devDependencies": {
     "@taiyomoe/typescript": "workspace:^",
-    "@types/pg": "^8.15.7",
+    "@types/pg": "^8.20.0",
     "dotenv-cli": "^11.0.0",
-    "kysely-ctl": "^0.13.1",
+    "kysely-ctl": "^0.21.0",
     "typescript": "6.0.3"
   }
 }

@@ -3,4 +3,9 @@ packages:
   - packages/*
   - tooling/*
 
-minimumReleaseAge: 10080 # 7 days
+allowBuilds:
+  esbuild: false
+  protobufjs: false
+  sharp: true
+
+  minimumReleaseAge: 10080 # 7 days

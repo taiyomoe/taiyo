@@ -12,25 +12,25 @@
   "dependencies": {
     "@tailwindcss/postcss": "^4.3.0",
     "@taiyomoe/ui": "workspace:^",
-    "lucide-react": "^0.554.0",
+    "lucide-react": "^1.16.0",
     "next": "^16.2.6",
     "postcss": "^8.5.15",
     "react": "^19.2.6"
   },
   "devDependencies": {
-    "@storybook/addon-a11y": "^10.4.0",
-    "@storybook/addon-docs": "^10.4.0",
-    "@storybook/addon-onboarding": "^10.4.0",
-    "@storybook/addon-themes": "^10.4.0",
-    "@storybook/addon-vitest": "^10.4.0",
-    "@storybook/nextjs-vite": "^10.4.0",
+    "@storybook/addon-a11y": "^10.4.1",
+    "@storybook/addon-docs": "^10.4.1",
+    "@storybook/addon-onboarding": "^10.4.1",
+    "@storybook/addon-themes": "^10.4.1",
+    "@storybook/addon-vitest": "^10.4.1",
+    "@storybook/nextjs-vite": "^10.4.1",
     "@taiyomoe/typescript": "workspace:^",
     "@types/react": "^19.2.15",
     "@types/react-dom": "^19.2.3",
     "@vitest/browser": "^4.1.7",
     "@vitest/coverage-v8": "^4.1.7",
     "playwright": "^1.60.0",
-    "storybook": "^10.4.0",
+    "storybook": "^10.4.1",
     "typescript": "6.0.3",
     "vitest": "^4.1.7"
   }
