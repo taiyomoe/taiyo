@@ -7,9 +7,6 @@
   "exports": {
     ".": "./src/index.ts"
   },
-  "scripts": {
-    "typecheck": "tsc --noEmit"
-  },
   "dependencies": {
     "@faker-js/faker": "^10.4.0",
     "@taiyomoe/config": "workspace:^",

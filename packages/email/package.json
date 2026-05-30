@@ -9,8 +9,7 @@
     "./env": "./src/env.ts"
   },
   "scripts": {
-    "start": "email dev --dir ./src/templates",
-    "typecheck": "tsc --noEmit"
+    "start": "email dev --dir ./src/templates"
   },
   "dependencies": {
     "@react-email/components": "^1.0.2",

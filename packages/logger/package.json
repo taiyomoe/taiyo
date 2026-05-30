@@ -8,9 +8,6 @@
     ".": "./src/index.ts",
     "./env": "./src/env.ts"
   },
-  "scripts": {
-    "typecheck": "tsc --noEmit"
-  },
   "devDependencies": {
     "@taiyomoe/typescript": "workspace:^",
     "typescript": "^6.0.3"

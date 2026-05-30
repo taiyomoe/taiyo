@@ -9,9 +9,6 @@
     "./server": "./src/server.ts",
     "./env": "./src/env.ts"
   },
-  "scripts": {
-    "typecheck": "tsc --noEmit"
-  },
   "dependencies": {
     "@t3-oss/env-core": "^0.13.11",
     "@taiyomoe/cache": "workspace:^",

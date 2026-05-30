@@ -8,10 +8,11 @@
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev --parallel",
-    "check:ws": "biome check .",
-    "check:ws:ci": "biome ci .",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
+    "format": "oxfmt --check",
+    "format:fix": "oxfmt --write",
     "lint:ws": "pnpm dlx sherif@latest",
-    "typecheck": "turbo typecheck",
     "postinstall": "pnpm lint:ws",
     "knip": "knip",
     "test:unit": "vitest run --config vitest.config.unit.ts",
@@ -20,9 +21,13 @@
     "test:integration:watch": "vitest --config vitest.config.integration.ts"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.4.15",
+    "@stylistic/eslint-plugin": "^5.10.0",
     "@types/node": "^25.9.1",
     "knip": "^6.14.2",
+    "oxfmt": "^0.52.0",
+    "oxlint": "^1.67.0",
+    "oxlint-tailwindcss": "^1.1.0",
+    "oxlint-tsgolint": "^0.23.0",
     "turbo": "^2.9.14",
     "vitest": "^4.1.7"
   }

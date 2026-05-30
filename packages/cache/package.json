@@ -8,9 +8,6 @@
     ".": "./src/index.ts",
     "./env": "./src/env.ts"
   },
-  "scripts": {
-    "typecheck": "tsc --noEmit"
-  },
   "dependencies": {
     "@t3-oss/env-core": "^0.13.11",
     "ioredis": "^5.10.1",

@@ -7,9 +7,6 @@
   "exports": {
     ".": "./src/index.ts"
   },
-  "scripts": {
-    "typecheck": "tsc --noEmit"
-  },
   "dependencies": {
     "@taiyomoe/db": "workspace:^"
   },

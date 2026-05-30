@@ -1,8 +1,3 @@
 {
-  "recommendations": [
-    "bradlc.vscode-tailwindcss",
-    "yoavbls.pretty-ts-errors",
-    "biomejs.biome",
-    "esbenp.prettier-vscode"
-  ]
+  "recommendations": ["bradlc.vscode-tailwindcss", "yoavbls.pretty-ts-errors", "oxc.oxc-vscode"]
 }

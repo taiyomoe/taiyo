@@ -10,8 +10,7 @@
   },
   "scripts": {
     "with-env": "dotenv -e ../../.env --",
-    "kysely": "pnpm with-env kysely",
-    "typecheck": "tsc --noEmit"
+    "kysely": "pnpm with-env kysely"
   },
   "dependencies": {
     "@faker-js/faker": "^10.4.0",

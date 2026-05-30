@@ -5,8 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "storybook dev -p 6006",
-    "build": "storybook build",
-    "typecheck": "tsc --noEmit"
+    "build": "storybook build"
   },
   "dependencies": {
     "@tailwindcss/postcss": "^4.3.0",
