@@ -18,7 +18,7 @@ export const Slider = ({
   return (
     <BaseSlider.Root
       className={cn(
-        "relative flex vertical:h-full vertical:min-h-64 vertical:w-auto w-full horizontal:min-w-64 touch-none select-none vertical:flex-col items-center disabled:cursor-not-allowed disabled:opacity-50",
+        "relative flex w-full touch-none items-center select-none disabled:cursor-not-allowed disabled:opacity-50 vertical:h-full vertical:min-h-64 vertical:w-auto vertical:flex-col horizontal:min-w-64",
         className,
       )}
       defaultValue={defaultValue}
@@ -29,22 +29,22 @@ export const Slider = ({
       {...props}
     >
       <BaseSlider.Control
-        className="grid horizontal:h-2 vertical:h-full horizontal:w-full vertical:w-2 grow"
+        className="grid grow vertical:h-full vertical:w-2 horizontal:h-2 horizontal:w-full"
         data-slot="slider-control"
       >
         <BaseSlider.Track
-          className="relative horizontal:h-full vertical:w-full overflow-hidden rounded-full bg-muted shadow-[inset_0_0_0_1px] shadow-subtle"
+          className="relative overflow-hidden rounded-full bg-muted shadow-[inset_0_0_0_1px] shadow-subtle vertical:w-full horizontal:h-full"
           data-slot="slider-track"
         >
           <BaseSlider.Indicator
-            className="absolute horizontal:h-full vertical:w-full bg-primary"
+            className="absolute bg-primary vertical:w-full horizontal:h-full"
             data-slot="slider-range"
           />
         </BaseSlider.Track>
         {Array.from({ length: _values.length }, (_, i) => (
           <BaseSlider.Thumb
             key={i}
-            className="block size-4 shrink-0 rounded-full border bg-subtle shadow-sm ring-primary transition-[color,box-shadow] hover:not-disabled:ring-3 focus-visible:outline-hidden focus-visible:ring-3 active:not-disabled:ring-3"
+            className="block size-4 shrink-0 rounded-full border bg-subtle shadow-sm ring-primary transition-[color,box-shadow] hover:not-disabled:ring-3 focus-visible:ring-3 focus-visible:outline-hidden active:not-disabled:ring-3"
             data-slot="slider-thumb"
           />
         ))}

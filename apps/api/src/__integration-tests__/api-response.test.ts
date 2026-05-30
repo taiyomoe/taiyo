@@ -44,6 +44,7 @@ describe("API Response Standardization", () => {
         validateFormData(z.object({ name: z.string().min(1), email: z.email() })),
         (c) => {
           const data = c.get("formData")
+
           return c.ok(data)
         },
       )
@@ -174,6 +175,7 @@ describe("API Response Standardization", () => {
   describe("Form Data Validation", () => {
     it("should return validated data on successful validation", async () => {
       const formData = new FormData()
+
       formData.append("name", "John Doe")
       formData.append("email", "john@example.com")
 
@@ -195,6 +197,7 @@ describe("API Response Standardization", () => {
 
     it("should return validation error with details on failed validation", async () => {
       const formData = new FormData()
+
       formData.append("name", "")
       formData.append("email", "invalid-email")
 

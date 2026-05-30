@@ -5,21 +5,20 @@ import type { DB } from "../database"
 // Inlined to keep @taiyomoe/db a leaf package (no workspace cycle with @taiyomoe/utils).
 const USERNAME = { minLength: 3, maxLength: 30 }
 const DISPLAY_NAME = { minLength: 3, maxLength: 30 }
-
 const normalizeUsername = (input: string) => {
   const normalized = input
     .slice(0, USERNAME.maxLength)
     .replaceAll(" ", "_")
     .replace(/[^a-zA-Z0-9_.]/g, "")
     .toLowerCase()
+
   return normalized.length < USERNAME.minLength ? faker.internet.username() : normalized
 }
-
 const normalizeDisplayName = (input: string) => {
   const normalized = input.slice(0, DISPLAY_NAME.maxLength).replace(/[^a-zA-Z0-9_.\s]/g, "")
+
   return normalized.length < DISPLAY_NAME.minLength ? faker.internet.username() : normalized
 }
-
 const LANGUAGES = [
   "en",
   "pt_br",
@@ -37,7 +36,6 @@ const LANGUAGES = [
   "zh_ro",
 ] as const
 const GENDERS = ["MALE", "FEMALE", "OTHER", "NOT_SPECIFIED"] as const
-
 const USERS = [
   // Drope Scan
   {
@@ -191,19 +189,16 @@ export async function seed(db: Kysely<DB>): Promise<void> {
         username: normalizeUsername(u.name),
         displayUsername: normalizeDisplayName(u.name),
         emailVerified: true,
-        image: fakerPT_BR.datatype.boolean({ probability: 0.7 })
-          ? null
-          : fakerPT_BR.image.avatarGitHub(),
+        image: faker.datatype.boolean({ probability: 0.7 }) ? null : faker.image.avatarGitHub(),
         settings: {
-          contentRating: fakerPT_BR.helpers.weightedArrayElement([
-            { value: "NORMAL", weight: 70 },
-            { value: "SUGGESTIVE", weight: 10 },
-            { value: "NSFW", weight: 10 },
-            { value: "NSFL", weight: 10 },
+          contentRating: faker.helpers.weightedArrayElement([
+            { value: ["NORMAL", "SUGGESTIVE"], weight: 70 },
+            { value: ["NORMAL", "SUGGESTIVE", "NSFW"], weight: 15 },
+            { value: ["NORMAL", "SUGGESTIVE", "NSFW", "NSFL"], weight: 15 },
           ]),
-          preferredTitles: fakerPT_BR.helpers.arrayElement(LANGUAGES),
-          showFollowing: fakerPT_BR.datatype.boolean({ probability: 0.7 }),
-          showLibrary: fakerPT_BR.datatype.boolean({ probability: 0.7 }),
+          preferredTitles: faker.helpers.arrayElement(LANGUAGES),
+          showFollowing: faker.datatype.boolean({ probability: 0.7 }),
+          showLibrary: faker.datatype.boolean({ probability: 0.7 }),
         },
       })),
     )
@@ -211,11 +206,12 @@ export async function seed(db: Kysely<DB>): Promise<void> {
 
   // Follow relationships (_userFollows: A follows B)
   const followRows: { A: string; B: string }[] = []
+
   for (const user of USERS) {
-    const followers = fakerPT_BR.helpers
+    const followers = faker.helpers
       .arrayElements([...USERS], { min: 0, max: 15 })
       .filter((u) => u.id !== user.id)
-    const following = fakerPT_BR.helpers
+    const following = faker.helpers
       .arrayElements([...USERS], { min: 0, max: 15 })
       .filter((u) => u.id !== user.id)
 
@@ -227,8 +223,11 @@ export async function seed(db: Kysely<DB>): Promise<void> {
   const seen = new Set<string>()
   const uniqueFollows = followRows.filter((r) => {
     const k = `${r.A}|${r.B}`
+
     if (seen.has(k)) return false
+
     seen.add(k)
+
     return true
   })
 
@@ -240,18 +239,18 @@ export async function seed(db: Kysely<DB>): Promise<void> {
     .insertInto("userProfiles")
     .values(
       USERS.map((u) => ({
-        banner: fakerPT_BR.datatype.boolean({ probability: 0.7 })
+        banner: faker.datatype.boolean({ probability: 0.7 })
           ? null
-          : fakerPT_BR.image.url({ width: 1920, height: 350 }),
-        birthDate: fakerPT_BR.date.birthdate(),
-        gender: fakerPT_BR.helpers.arrayElement(GENDERS),
+          : faker.image.url({ width: 1920, height: 350 }),
+        birthDate: faker.date.birthdate(),
+        gender: faker.helpers.arrayElement(GENDERS),
         city: fakerPT_BR.location.city(),
         country: "br",
         about: {
           en: fakerEN.lorem.sentence(),
           pt_br: fakerPT_BR.lorem.sentence(),
         },
-        points: fakerPT_BR.number.int({ min: 0, max: 1000 }),
+        points: faker.number.int({ min: 0, max: 1000 }),
         userId: u.id,
       })),
     )

@@ -19,6 +19,7 @@ const meta = {
 } satisfies Meta<typeof Slider>
 
 export default meta
+
 type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
@@ -58,7 +59,7 @@ export const Range: Story = {
   },
   render: (args) => (
     <div
-      className="flex vertical:flex-row flex-col gap-2 vertical:[&>div]:flex-col-reverse"
+      className="flex flex-col gap-2 vertical:flex-row vertical:[&>div]:flex-col-reverse"
       data-orientation={args.orientation}
     >
       <div className="flex justify-between">

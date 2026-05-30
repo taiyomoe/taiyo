@@ -21,6 +21,7 @@
   "devDependencies": {
     "@react-email/preview-server": "^5.0.5",
     "@taiyomoe/typescript": "workspace:^",
+    "@types/node": "^25.9.1",
     "react-email": "^6.3.2",
     "typescript": "^6.0.3"
   }

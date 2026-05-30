@@ -21,6 +21,7 @@
   },
   "devDependencies": {
     "@taiyomoe/typescript": "workspace:^",
+    "@types/node": "^25.9.1",
     "@types/pg": "^8.20.0",
     "dotenv-cli": "^11.0.0",
     "kysely-ctl": "^0.21.0",

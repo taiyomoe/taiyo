@@ -41,6 +41,7 @@ const meta = {
 } satisfies Meta<SheetStoryProps>
 
 export default meta
+
 type Story = StoryObj<SheetStoryProps>
 
 export const Default: Story = {

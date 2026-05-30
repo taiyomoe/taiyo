@@ -1,5 +1,4 @@
-import { config } from "@taiyomoe/config"
-import type { MediaLinks } from "@taiyomoe/db"
+import { isMediaLink, type MediaLinks } from "@taiyomoe/db"
 
 export const toMediaLinks = (input: Record<string, unknown>): MediaLinks => {
   const links: MediaLinks = {}
@@ -21,7 +20,7 @@ export const toMediaLinks = (input: Record<string, unknown>): MediaLinks => {
       continue
     }
 
-    if (config.medias.links.includes(key)) {
+    if (isMediaLink(key)) {
       links[key as keyof Omit<MediaLinks, "myAnimeList" | "anilist" | "officialENTranslation">] =
         value
 

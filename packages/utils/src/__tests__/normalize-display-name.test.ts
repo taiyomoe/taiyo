@@ -5,7 +5,7 @@ import { normalizeDisplayName } from "../normalize-display-name"
 vi.mock("@faker-js/faker", () => ({
   faker: {
     internet: {
-      username: vi.fn(() => "generated_username"),
+      username: vi.fn<() => string>(() => "generated_username"),
     },
   },
 }))

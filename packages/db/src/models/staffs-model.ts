@@ -1,5 +1,5 @@
 import type { Generated, Insertable } from "kysely"
-import type { LocalizedText, StaffLink } from "../json-types"
+import type { LocalizedText, StaffLinks } from "../json-types"
 import type { Timestamp } from "../types"
 
 export interface Staffs {
@@ -9,7 +9,7 @@ export interface Staffs {
   deletedAt: Timestamp | null
   name: string
   bio: Generated<LocalizedText>
-  links: Generated<StaffLink>
+  links: Generated<StaffLinks>
   image: string | null
   creatorId: string
   deleterId: string | null

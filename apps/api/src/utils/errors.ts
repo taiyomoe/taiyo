@@ -28,7 +28,6 @@ const genericErrors = {
     code: 500,
   },
 } as const
-
 const mediaErrors = {
   MEDIA_TITLE_CONFLICT: {
     message: "A media with this title already exists.",
@@ -48,7 +47,6 @@ const mediaErrors = {
     code: 422,
   },
 } as const
-
 const imageErrors = {
   INVALID_IMAGE: {
     message: "The file is not a valid image.",

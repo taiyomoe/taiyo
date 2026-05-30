@@ -1,4 +1,4 @@
-import type { MediaLinks, StaffLink, UserSettings } from "@taiyomoe/db"
+import type { UserSettings } from "@taiyomoe/db"
 import { tags } from "./tags"
 
 export const config = {
@@ -42,45 +42,6 @@ export const config = {
     maxSizeBytes: 5 * 1024 * 1024,
     /** JPEG quality for processed images (1-100) */
     quality: 85,
-    /** Allowed image mime types */
-    allowedMimeTypes: ["image/jpeg", "image/png", "image/webp", "image/gif"],
-  },
-  medias: {
-    links: [
-      "anilist",
-      "animePlanet",
-      "bookWalker",
-      "mangaUpdates",
-      "novelUpdates",
-      "myAnimeList",
-      "kitsu",
-      "amazon",
-      "eBookJapan",
-      "raw",
-      "officialENTranslation",
-      "officialFRTranslation",
-      "officialPTBRTranslation",
-      "cdJapan",
-    ] satisfies (keyof MediaLinks)[],
-  },
-  staff: {
-    links: [
-      "website",
-      "twitter",
-      "youtube",
-      "tumblr",
-      "discord",
-      "fanbox",
-      "fantia",
-      "pixiv",
-      "melonBooks",
-      "namicomi",
-      "naver",
-      "nicoVideo",
-      "skeb",
-      "weibo",
-      "booth",
-    ] satisfies (keyof StaffLink)[],
   },
   tags,
   pagination: {

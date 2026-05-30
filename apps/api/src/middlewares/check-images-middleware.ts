@@ -1,18 +1,8 @@
 import { config } from "@taiyomoe/config"
+import { IMAGE_MIME_TYPES, type ImageMimeType } from "@taiyomoe/db"
 import { createMiddleware } from "hono/factory"
 import { filetypeinfo } from "magic-bytes.js"
 import sharp from "sharp"
-
-const VALID_IMAGE_MIMES = ["image/jpeg", "image/png", "image/webp", "image/gif"] as const
-
-type ValidImageMime = (typeof VALID_IMAGE_MIMES)[number]
-
-const MIME_TO_FORMAT: Record<ValidImageMime, string> = {
-  "image/jpeg": "jpeg",
-  "image/png": "png",
-  "image/webp": "webp",
-  "image/gif": "gif",
-}
 
 /**
  * Middleware that validates and processes images from FormData.
@@ -58,22 +48,20 @@ export const checkImages = (maxSizeBytes: number = config.images.maxSizeBytes) =
       }
 
       const buffer = Buffer.from(await value.arrayBuffer())
-
       // Validate image format via magic bytes
       const fileTypes = filetypeinfo(Array.from(buffer.subarray(0, 100)))
-      const detectedType = fileTypes.find((ft) => ft.mime && VALID_IMAGE_MIMES.includes(ft.mime))
+      const detectedType = fileTypes.find((ft) => !!ft.mime && ft.mime in IMAGE_MIME_TYPES)
 
       if (!detectedType?.mime) {
         return c.fail("INVALID_IMAGE", {
           path: key.split("."),
-          message: `Invalid image format detected. Allowed mime types are: ${VALID_IMAGE_MIMES.join(", ")}`,
+          message: `Invalid image format detected. Allowed mime types are: ${Object.keys(IMAGE_MIME_TYPES).join(", ")}`,
           detectedMimeType: fileTypes[0]?.mime ?? "unknown",
         })
       }
 
-      const detectedMime = detectedType.mime as ValidImageMime
-      const detectedFormat = MIME_TO_FORMAT[detectedMime]
-
+      const detectedMime = detectedType.mime as ImageMimeType
+      const detectedFormat = IMAGE_MIME_TYPES[detectedMime]
       // Process the image and strip all metadata
       const { processedBuffer, mimeType, extension } = await (async () => {
         if (detectedFormat === "gif") {
@@ -99,7 +87,6 @@ export const checkImages = (maxSizeBytes: number = config.images.maxSizeBytes) =
           extension: "jpg",
         }
       })()
-
       // Create a new File with the processed image
       const originalName = value.name || "image"
       const baseName = originalName.replace(/\.[^/.]+$/, "")

@@ -1,19 +1,25 @@
 export const CONTENT_RATINGS = ["NORMAL", "SUGGESTIVE", "NSFW", "NSFL"] as const
+
 export type ContentRating = (typeof CONTENT_RATINGS)[number]
 
 export const FLAGS = ["OK", "STAFF_ONLY", "VIP_ONLY", "LOCKED"] as const
+
 export type Flag = (typeof FLAGS)[number]
 
 export const GENDERS = ["MALE", "FEMALE", "OTHER", "NOT_SPECIFIED"] as const
+
 export type Gender = (typeof GENDERS)[number]
 
 export const ROLES = ["USER", "MODERATOR", "UPLOADER_INTERN", "UPLOADER", "ADMIN"] as const
+
 export type Role = (typeof ROLES)[number]
 
 export const STAFF_ROLES = ["AUTHOR", "ARTIST"] as const
+
 export type StaffRole = (typeof STAFF_ROLES)[number]
 
 export const MEDIA_TYPES = ["MANGA", "MANHWA", "MANHUA", "LIGHT_NOVEL", "OTHER"] as const
+
 export type MediaType = (typeof MEDIA_TYPES)[number]
 
 export const MEDIA_STATUSES = [
@@ -23,6 +29,7 @@ export const MEDIA_STATUSES = [
   "CANCELLED",
   "HIATUS",
 ] as const
+
 export type MediaStatus = (typeof MEDIA_STATUSES)[number]
 
 export const MEDIA_SOURCES = [
@@ -32,9 +39,11 @@ export const MEDIA_SOURCES = [
   "WEB_NOVEL",
   "VIDEO_GAME",
 ] as const
+
 export type MediaSource = (typeof MEDIA_SOURCES)[number]
 
 export const MEDIA_DEMOGRAPHIES = ["SHOUNEN", "SHOUJO", "SEINEN", "JOSEI"] as const
+
 export type MediaDemography = (typeof MEDIA_DEMOGRAPHIES)[number]
 
 export const MEDIA_COUNTRIES_OF_ORIGIN = [
@@ -45,6 +54,7 @@ export const MEDIA_COUNTRIES_OF_ORIGIN = [
   "FRANCE",
   "BRAZIL",
 ] as const
+
 export type MediaCountryOfOrigin = (typeof MEDIA_COUNTRIES_OF_ORIGIN)[number]
 
 export const TASK_TYPES = [
@@ -56,9 +66,11 @@ export const TASK_TYPES = [
   "UPLOAD_COVER",
   "UPLOAD_BANNER",
 ] as const
+
 export type TaskType = (typeof TASK_TYPES)[number]
 
 export const TASK_STATUSES = ["PENDING", "DOWNLOADING", "UPLOADING", "FINISHED", "FAILED"] as const
+
 export type TaskStatus = (typeof TASK_STATUSES)[number]
 
 export const LANGUAGES = [
@@ -252,6 +264,7 @@ export const LANGUAGES = [
   "zh_ro",
   "zu",
 ] as const
+
 export type Language = (typeof LANGUAGES)[number]
 
 export const COUNTRIES = [
@@ -506,4 +519,64 @@ export const COUNTRIES = [
   "zm",
   "zw",
 ] as const
+
 export type Country = (typeof COUNTRIES)[number]
+
+export const MEDIA_LINK_KEYS = [
+  "mangaDex",
+  "anilist",
+  "myAnimeList",
+  "animePlanet",
+  "bookWalker",
+  "mangaUpdates",
+  "novelUpdates",
+  "kitsu",
+  "amazon",
+  "eBookJapan",
+  "raw",
+  "officialENTranslation",
+  "officialFRTranslation",
+  "officialPTBRTranslation",
+  "cdJapan",
+] as const
+
+export type MediaLink = (typeof MEDIA_LINK_KEYS)[number]
+
+export const MEDIA_LINK_NUMBER_KEYS = ["anilist", "myAnimeList"] as const satisfies MediaLink[]
+
+export type MediaLinkNumberKey = (typeof MEDIA_LINK_NUMBER_KEYS)[number]
+
+export const isMediaLink = (k: string): k is MediaLink =>
+  (MEDIA_LINK_KEYS as readonly string[]).includes(k)
+
+export const STAFF_LINK_KEYS = [
+  "website",
+  "twitter",
+  "youtube",
+  "tumblr",
+  "discord",
+  "fanbox",
+  "fantia",
+  "pixiv",
+  "melonBooks",
+  "namicomi",
+  "naver",
+  "nicoVideo",
+  "skeb",
+  "weibo",
+  "booth",
+] as const
+
+export type StaffLink = (typeof STAFF_LINK_KEYS)[number]
+
+export const isStaffLink = (k: string): k is StaffLink =>
+  (STAFF_LINK_KEYS as readonly string[]).includes(k)
+
+export const IMAGE_MIME_TYPES = {
+  "image/jpeg": "jpeg",
+  "image/png": "png",
+  "image/webp": "webp",
+  "image/gif": "gif",
+} as const
+
+export type ImageMimeType = keyof typeof IMAGE_MIME_TYPES

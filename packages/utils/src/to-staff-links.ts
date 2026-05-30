@@ -1,8 +1,7 @@
-import { config } from "@taiyomoe/config"
-import type { StaffLink } from "@taiyomoe/db"
+import { isStaffLink, type StaffLinks } from "@taiyomoe/db"
 
-export const toStaffLinks = (input: Record<string, unknown>): StaffLink => {
-  const links: StaffLink = {}
+export const toStaffLinks = (input: Record<string, unknown>): StaffLinks => {
+  const links: StaffLinks = {}
 
   for (const [key, value] of Object.entries(input)) {
     if (!value || typeof value !== "string") {
@@ -15,8 +14,8 @@ export const toStaffLinks = (input: Record<string, unknown>): StaffLink => {
       continue
     }
 
-    if (config.staff.links.includes(key)) {
-      links[key as keyof StaffLink] = value
+    if (isStaffLink(key)) {
+      links[key as keyof StaffLinks] = value
 
       continue
     }

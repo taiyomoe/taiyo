@@ -9,8 +9,8 @@ export type InputProps = ComponentProps<typeof BaseInput>
 export const Input = ({ className, ...props }: InputProps) => (
   <BaseInput
     className={cn(
-      "flex h-9 w-full rounded border border-subtle bg-muted px-3 py-2 text-primary text-sm transition placeholder:select-none placeholder:text-subtle hover:not-disabled:border-emphasis",
-      "focus:outline-hidden focus:ring-2 focus:ring-primary",
+      "flex h-9 w-full rounded border border-subtle bg-muted px-3 py-2 text-sm text-primary transition placeholder:text-subtle placeholder:select-none hover:not-disabled:border-emphasis",
+      "focus:ring-2 focus:ring-primary focus:outline-hidden",
       "disabled:cursor-not-allowed disabled:opacity-50",
       className,
     )}

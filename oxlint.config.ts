@@ -83,6 +83,10 @@ export default defineConfig({
     "tailwindcss/enforce-negative-arbitrary-values": "error",
     "tailwindcss/enforce-consistent-variable-syntax": "error",
     "tailwindcss/no-unnecessary-whitespace": "error",
+
+    // Vitest rules
+    // Buggy: misfires on tests that import `test` from a custom setup helper.
+    "vitest/no-standalone-expect": "off",
   },
   settings: {
     tailwindcss: {

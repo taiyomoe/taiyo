@@ -33,7 +33,10 @@
   "devDependencies": {
     "@taiyomoe/typescript": "workspace:^",
     "@types/node": "^25.9.1",
+    "@types/pg": "^8.20.0",
     "dotenv-cli": "^11.0.0",
+    "kysely": "^0.29.2",
+    "pg": "^8.21.0",
     "tsx": "^4.22.3",
     "typescript": "^6.0.3"
   }

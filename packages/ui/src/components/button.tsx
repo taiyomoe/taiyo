@@ -5,7 +5,7 @@ import { tv, type VariantProps } from "tailwind-variants"
 
 export const buttonVariants = tv({
   base: [
-    "inline-flex w-full shrink-0 select-none items-center justify-center gap-2 whitespace-nowrap rounded px-3 py-2 font-medium text-sm transition-[background,scale,border] duration-300 active:scale-[0.98]",
+    "inline-flex w-full shrink-0 items-center justify-center gap-2 rounded px-3 py-2 text-sm font-medium whitespace-nowrap transition-[background,scale,border] duration-300 select-none active:scale-[0.98]",
     "outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-default",
     "disabled:cursor-not-allowed disabled:opacity-50",
     "[&_svg]:size-4 [&_svg]:shrink-0 [&_svg]:transition-transform",

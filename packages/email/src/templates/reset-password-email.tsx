@@ -34,7 +34,7 @@ const ResetPasswordEmail = ({ name, url }: Props) => (
   >
     <Html lang="en" className="bg-subtle">
       <Preview>Reset your password on Taiyō</Preview>
-      <Section className="mt-[32px]">
+      <Section className="mt-8">
         <Img
           src="https://cdn.taiyo.moe/assets/logo.png"
           width={96}
@@ -42,12 +42,12 @@ const ResetPasswordEmail = ({ name, url }: Props) => (
           className="mx-auto my-0"
         />
       </Section>
-      <Heading className="mx-0 my-4 p-0 text-center font-semibold text-[24px] text-black">
+      <Heading className="mx-0 my-4 p-0 text-center text-[24px] font-semibold text-black">
         Taiyō
       </Heading>
-      <Container className="my-12 rounded-lg border border-subtle border-solid bg-default">
+      <Container className="my-12 rounded-lg border border-solid border-subtle bg-default">
         <Container className="px-8 py-4">
-          <Text className="font-bold text-2xl">Reset your password</Text>
+          <Text className="text-2xl font-bold">Reset your password</Text>
           <Text>
             Hi {name}, we received a request to reset your password. Please click the button below
             to reset it. This link will be valid for 1 hour.
@@ -61,7 +61,7 @@ const ResetPasswordEmail = ({ name, url }: Props) => (
             If the button does not work, copy and paste the link below into your browser: {url}
           </Text>
         </Container>
-        <Container className="border-subtle border-t border-solid px-8">
+        <Container className="border-t border-solid border-subtle px-8">
           <Text>
             If you did not request this email, please ignore it as nothing will be changed.
           </Text>

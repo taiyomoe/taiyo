@@ -15,7 +15,6 @@ const items = [
   { label: "Monospace", value: "mono" },
   { label: "Cursive", value: "cursive" },
 ]
-
 const meta = {
   title: "UI/Select",
   component: Select,
@@ -28,6 +27,7 @@ const meta = {
 } satisfies Meta<typeof Select>
 
 export default meta
+
 type Story = StoryObj<typeof meta>
 
 export const Default: Story = {

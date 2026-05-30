@@ -2,8 +2,6 @@ import type { Kysely } from "kysely"
 import type { DB } from "../../database"
 
 export const execute = async (db: Kysely<DB>): Promise<void> => {
-  const now = new Date()
-
   await db
     .insertInto("medias")
     .values({

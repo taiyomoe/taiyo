@@ -5,7 +5,7 @@ import { normalizeUsername } from "../normalize-username"
 vi.mock("@faker-js/faker", () => ({
   faker: {
     internet: {
-      username: vi.fn(() => "generated_username"),
+      username: vi.fn<() => string>(() => "generated_username"),
     },
   },
 }))
