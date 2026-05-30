@@ -27,6 +27,6 @@
   "devDependencies": {
     "@taiyomoe/typescript": "workspace:^",
     "@types/luxon": "^3.7.1",
-    "typescript": "6.0.3"
+    "typescript": "^6.0.3"
   }
 }

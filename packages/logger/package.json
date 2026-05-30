@@ -13,7 +13,7 @@
   },
   "devDependencies": {
     "@taiyomoe/typescript": "workspace:^",
-    "typescript": "6.0.3"
+    "typescript": "^6.0.3"
   },
   "dependencies": {
     "@hyperdx/node-opentelemetry": "^0.10.5",
