@@ -8,6 +8,5 @@ export type JsonArray = JsonValue[]
 export type JsonValue = JsonArray | JsonObject | JsonPrimitive
 export type Json = JsonValue
 
-export type ArrayType<T> = T extends ColumnType<infer S, infer I, infer U>
-  ? ColumnType<S[], I[], U[]>
-  : T[]
+export type ArrayType<T> =
+  T extends ColumnType<infer S, infer I, infer U> ? ColumnType<S[], I[], U[]> : T[]

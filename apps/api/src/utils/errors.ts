@@ -39,8 +39,7 @@ const mediaErrors = {
     code: 404,
   },
   MEDIA_INVALID_TITLES: {
-    message:
-      "Invalid titles configuration. Exactly one main title is required.",
+    message: "Invalid titles configuration. Exactly one main title is required.",
     code: 422,
   },
   MEDIA_INVALID_COVERS: {

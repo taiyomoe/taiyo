@@ -3,13 +3,7 @@ import { config } from "@taiyomoe/config"
 import { db } from "@taiyomoe/db"
 import type { Role, UserSettings } from "@taiyomoe/db"
 import { betterAuth } from "better-auth"
-import {
-  admin,
-  captcha,
-  customSession,
-  magicLink,
-  username,
-} from "better-auth/plugins"
+import { admin, captcha, customSession, magicLink, username } from "better-auth/plugins"
 import { emailHarmony } from "better-auth-harmony"
 import { env } from "./env"
 import { afterHook } from "./utils/after-hook"

@@ -58,8 +58,7 @@ export const Default: Story = {
           <SheetHeader>
             <SheetTitle>Edit profile</SheetTitle>
             <SheetDescription>
-              Make changes to your profile here. Click save when you&apos;re
-              done.
+              Make changes to your profile here. Click save when you&apos;re done.
             </SheetDescription>
           </SheetHeader>
           <div className="grid flex-1 auto-rows-min gap-6 px-4">
@@ -76,9 +75,7 @@ export const Default: Story = {
             <Button className="w-2/3" type="submit">
               Save changes
             </Button>
-            <SheetClose render={<Button className="w-1/3" variant="outline" />}>
-              Close
-            </SheetClose>
+            <SheetClose render={<Button className="w-1/3" variant="outline" />}>Close</SheetClose>
           </SheetFooter>
         </SheetContent>
       </Sheet>
@@ -101,8 +98,7 @@ export const Dismissible: Story = {
           <SheetHeader>
             <SheetTitle>Edit profile</SheetTitle>
             <SheetDescription>
-              Make changes to your profile here. Click save when you&apos;re
-              done.
+              Make changes to your profile here. Click save when you&apos;re done.
             </SheetDescription>
           </SheetHeader>
           <div className="grid flex-1 auto-rows-min gap-6 px-4">
@@ -119,9 +115,7 @@ export const Dismissible: Story = {
             <Button className="w-2/3" type="submit">
               Save changes
             </Button>
-            <SheetClose render={<Button className="w-1/3" variant="outline" />}>
-              Close
-            </SheetClose>
+            <SheetClose render={<Button className="w-1/3" variant="outline" />}>Close</SheetClose>
           </SheetFooter>
         </SheetContent>
       </Sheet>
@@ -139,15 +133,12 @@ export const Sides: Story = {
 
     return (
       <Sheet {...args} open={open} onOpenChange={setOpen}>
-        <SheetTrigger render={<Button variant="outline" />}>
-          Open {side}
-        </SheetTrigger>
+        <SheetTrigger render={<Button variant="outline" />}>Open {side}</SheetTrigger>
         <SheetContent open={open} side={side}>
           <SheetHeader>
             <SheetTitle>Edit profile</SheetTitle>
             <SheetDescription>
-              Make changes to your profile here. Click save when you&apos;re
-              done.
+              Make changes to your profile here. Click save when you&apos;re done.
             </SheetDescription>
           </SheetHeader>
           <div className="grid flex-1 auto-rows-min gap-6 px-4">
@@ -164,9 +155,7 @@ export const Sides: Story = {
             <Button className="w-2/3" type="submit">
               Save changes
             </Button>
-            <SheetClose render={<Button className="w-1/3" variant="outline" />}>
-              Close
-            </SheetClose>
+            <SheetClose render={<Button className="w-1/3" variant="outline" />}>Close</SheetClose>
           </SheetFooter>
         </SheetContent>
       </Sheet>

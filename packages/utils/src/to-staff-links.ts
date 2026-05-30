@@ -1,9 +1,7 @@
 import { config } from "@taiyomoe/config"
 import type { StaffLink } from "@taiyomoe/db"
 
-export const toStaffLinks = (
-  input: Record<string, unknown>,
-): StaffLink => {
+export const toStaffLinks = (input: Record<string, unknown>): StaffLink => {
   const links: StaffLink = {}
 
   for (const [key, value] of Object.entries(input)) {

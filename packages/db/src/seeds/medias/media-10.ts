@@ -38,8 +38,7 @@ export const execute = async (db: Kysely<DB>): Promise<void> => {
       links: {
         mangaDex: "8bc61f6d-5b33-4c6b-bfdc-589daa4a4d78",
         anilist: 99465,
-        animePlanet:
-          "https://www.anime-planet.com/manga/in-another-world-with-my-smartphone",
+        animePlanet: "https://www.anime-planet.com/manga/in-another-world-with-my-smartphone",
         bookWalker: "https://bookwalker.jp/series/116421/list",
         mangaUpdates: "https://www.mangaupdates.com/series.html?id=lyudjc9",
         myAnimeList: 105645,

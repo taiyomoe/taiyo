@@ -3879,8 +3879,7 @@ export const execute = async (db: Kysely<DB>): Promise<void> => {
       {
         id: "ba83b2a6-7b2f-431b-9cae-4436cd8cce42",
         name: "Anima Regia",
-        description:
-          "| AnimaRegia Scantrad |  Since June 2007 | Scan Brasileira de Mangás",
+        description: "| AnimaRegia Scantrad |  Since June 2007 | Scan Brasileira de Mangás",
         logo: null,
         banner: null,
         website: null,

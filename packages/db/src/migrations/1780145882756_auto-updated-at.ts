@@ -16,7 +16,6 @@ const TABLES = [
   "tasks",
 ] as const
 
-// biome-ignore lint/suspicious/noExplicitAny: migrations are frozen in time
 export async function up(db: Kysely<any>): Promise<void> {
   await sql`
     CREATE OR REPLACE FUNCTION set_updated_at()
@@ -43,7 +42,6 @@ export async function up(db: Kysely<any>): Promise<void> {
   }
 }
 
-// biome-ignore lint/suspicious/noExplicitAny: migrations are frozen in time
 export async function down(db: Kysely<any>): Promise<void> {
   for (const table of [...TABLES].reverse()) {
     await sql`DROP TRIGGER IF EXISTS ${sql.raw(`"${table}_set_updated_at"`)} ON ${sql.id(table)}`.execute(

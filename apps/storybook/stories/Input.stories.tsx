@@ -37,9 +37,7 @@ export const Hover: Story = {
         <p className="min-w-24 text-primary">Hover</p>
         <Input placeholder="Hover over me..." />
       </div>
-      <p className="text-muted text-sm">
-        Hover over the input to see the hover state
-      </p>
+      <p className="text-muted text-sm">Hover over the input to see the hover state</p>
     </div>
   ),
   parameters: {
@@ -66,9 +64,7 @@ export const Focused: Story = {
             className={isFocused ? "ring-2 ring-primary" : ""}
           />
         </div>
-        <p className="text-muted text-sm">
-          Status: {isFocused ? "Focused" : "Not focused"}
-        </p>
+        <p className="text-muted text-sm">Status: {isFocused ? "Focused" : "Not focused"}</p>
       </div>
     )
   },

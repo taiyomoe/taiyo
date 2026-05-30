@@ -5,7 +5,7 @@ This package provides email functionality using Resend.
 ## Usage
 
 ```ts
-import { resend, MagicLinkEmail } from "@taiyomoe/email";
+import { resend, MagicLinkEmail } from "@taiyomoe/email"
 
 // Send email
 await resend.emails.send({
@@ -13,5 +13,5 @@ await resend.emails.send({
   to: user.email,
   subject: "Magic Link",
   react: MagicLinkEmail({ url: magicLink }),
-});
+})
 ```

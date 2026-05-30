@@ -2625,8 +2625,7 @@ export const execute = async (db: Kysely<DB>): Promise<void> => {
       {
         id: "fd31b508-aa7c-469f-9f1b-ff4122b4b6c3",
         name: "PhenixScans",
-        description:
-          "Team française officiel de PhenixScans. Anciennement appelé Mangas Origines",
+        description: "Team française officiel de PhenixScans. Anciennement appelé Mangas Origines",
         logo: null,
         banner: null,
         website: "https://phenix-scans.com/",

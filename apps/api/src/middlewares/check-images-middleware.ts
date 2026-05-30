@@ -3,12 +3,7 @@ import { createMiddleware } from "hono/factory"
 import { filetypeinfo } from "magic-bytes.js"
 import sharp from "sharp"
 
-const VALID_IMAGE_MIMES = [
-  "image/jpeg",
-  "image/png",
-  "image/webp",
-  "image/gif",
-] as const
+const VALID_IMAGE_MIMES = ["image/jpeg", "image/png", "image/webp", "image/gif"] as const
 
 type ValidImageMime = (typeof VALID_IMAGE_MIMES)[number]
 
@@ -31,9 +26,7 @@ const MIME_TO_FORMAT: Record<ValidImageMime, string> = {
  *
  * The FormData is updated with the processed images in-place.
  */
-export const checkImages = (
-  maxSizeBytes: number = config.images.maxSizeBytes,
-) =>
+export const checkImages = (maxSizeBytes: number = config.images.maxSizeBytes) =>
   createMiddleware(async (c, next) => {
     const contentType = c.req.header("content-type")
 
@@ -68,9 +61,7 @@ export const checkImages = (
 
       // Validate image format via magic bytes
       const fileTypes = filetypeinfo(Array.from(buffer.subarray(0, 100)))
-      const detectedType = fileTypes.find(
-        (ft) => ft.mime && VALID_IMAGE_MIMES.includes(ft.mime),
-      )
+      const detectedType = fileTypes.find((ft) => ft.mime && VALID_IMAGE_MIMES.includes(ft.mime))
 
       if (!detectedType?.mime) {
         return c.fail("INVALID_IMAGE", {
@@ -87,9 +78,7 @@ export const checkImages = (
       const { processedBuffer, mimeType, extension } = await (async () => {
         if (detectedFormat === "gif") {
           // For GIFs, re-encode to strip metadata while preserving animation
-          const processedBuffer = await sharp(buffer, { animated: true })
-            .gif()
-            .toBuffer()
+          const processedBuffer = await sharp(buffer, { animated: true }).gif().toBuffer()
 
           return {
             processedBuffer,

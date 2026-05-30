@@ -1,7 +1,6 @@
 import { LANGUAGES, type Language } from "@taiyomoe/db"
 
-const isLanguage = (s: string): s is Language =>
-  (LANGUAGES as readonly string[]).includes(s)
+const isLanguage = (s: string): s is Language => (LANGUAGES as readonly string[]).includes(s)
 
 export const toLanguage = (input?: string | null) => {
   switch (input) {

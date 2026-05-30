@@ -7,10 +7,7 @@ import { requestId } from "hono/request-id"
 import { openAPIRouteHandler } from "hono-openapi"
 import packageJson from "../package.json"
 import { env } from "./env"
-import {
-  type AppContext,
-  contextMiddleware,
-} from "./middlewares/context-middleware"
+import { type AppContext, contextMiddleware } from "./middlewares/context-middleware"
 import { errorHandler } from "./middlewares/error-handler-middleware"
 import { requestLogger } from "./middlewares/request-logger-middleware"
 import { mediasRouter } from "./routers/medias-router"

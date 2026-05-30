@@ -7,25 +7,13 @@ export type Flag = (typeof FLAGS)[number]
 export const GENDERS = ["MALE", "FEMALE", "OTHER", "NOT_SPECIFIED"] as const
 export type Gender = (typeof GENDERS)[number]
 
-export const ROLES = [
-  "USER",
-  "MODERATOR",
-  "UPLOADER_INTERN",
-  "UPLOADER",
-  "ADMIN",
-] as const
+export const ROLES = ["USER", "MODERATOR", "UPLOADER_INTERN", "UPLOADER", "ADMIN"] as const
 export type Role = (typeof ROLES)[number]
 
 export const STAFF_ROLES = ["AUTHOR", "ARTIST"] as const
 export type StaffRole = (typeof STAFF_ROLES)[number]
 
-export const MEDIA_TYPES = [
-  "MANGA",
-  "MANHWA",
-  "MANHUA",
-  "LIGHT_NOVEL",
-  "OTHER",
-] as const
+export const MEDIA_TYPES = ["MANGA", "MANHWA", "MANHUA", "LIGHT_NOVEL", "OTHER"] as const
 export type MediaType = (typeof MEDIA_TYPES)[number]
 
 export const MEDIA_STATUSES = [
@@ -46,12 +34,7 @@ export const MEDIA_SOURCES = [
 ] as const
 export type MediaSource = (typeof MEDIA_SOURCES)[number]
 
-export const MEDIA_DEMOGRAPHIES = [
-  "SHOUNEN",
-  "SHOUJO",
-  "SEINEN",
-  "JOSEI",
-] as const
+export const MEDIA_DEMOGRAPHIES = ["SHOUNEN", "SHOUJO", "SEINEN", "JOSEI"] as const
 export type MediaDemography = (typeof MEDIA_DEMOGRAPHIES)[number]
 
 export const MEDIA_COUNTRIES_OF_ORIGIN = [
@@ -75,13 +58,7 @@ export const TASK_TYPES = [
 ] as const
 export type TaskType = (typeof TASK_TYPES)[number]
 
-export const TASK_STATUSES = [
-  "PENDING",
-  "DOWNLOADING",
-  "UPLOADING",
-  "FINISHED",
-  "FAILED",
-] as const
+export const TASK_STATUSES = ["PENDING", "DOWNLOADING", "UPLOADING", "FINISHED", "FAILED"] as const
 export type TaskStatus = (typeof TASK_STATUSES)[number]
 
 export const LANGUAGES = [

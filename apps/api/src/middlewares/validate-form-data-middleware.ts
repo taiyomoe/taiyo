@@ -9,9 +9,7 @@ type Env<TSchema extends z.ZodType> = {
   }
 }
 
-export const validateFormData = <TSchema extends z.ZodType>(
-  schema: TSchema,
-) => {
+export const validateFormData = <TSchema extends z.ZodType>(schema: TSchema) => {
   return createMiddleware<Env<TSchema>>(async (c, next) => {
     const contentType = c.req.header("content-type") || ""
     let json: Record<string, unknown> = {}

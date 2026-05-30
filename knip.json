@@ -1,9 +1,5 @@
 {
   "$schema": "./node_modules/knip/schema.json",
-  "ignoreDependencies": [
-    "playwright",
-    "@vitest/coverage-v8",
-    "@react-email/preview-server"
-  ],
+  "ignoreDependencies": ["playwright", "@vitest/coverage-v8", "@react-email/preview-server"],
   "ignore": ["./packages/ui/src/styles/globals.css"]
 }

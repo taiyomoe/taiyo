@@ -11,11 +11,7 @@ import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
 import { checkImages } from "../middlewares/check-images-middleware"
 import { validateFormData } from "../middlewares/validate-form-data-middleware"
-import {
-  contentRatingSchema,
-  fileSchema,
-  languageSchema,
-} from "../utils/schemas"
+import { contentRatingSchema, fileSchema, languageSchema } from "../utils/schemas"
 
 const createMediaSchema = z.object({
   titles: z
@@ -168,8 +164,7 @@ const createMediaSchema = z.object({
     .default([])
     .optional()
     .meta({
-      description:
-        "List of tags that describe elements and themes of the media.",
+      description: "List of tags that describe elements and themes of the media.",
       examples: [
         { name: "Cowboys", isSpoiler: false },
         { name: "Table Tennis", isSpoiler: false },
@@ -184,8 +179,7 @@ export const mediasRouter = new Hono().post(
     tags: ["Media"],
     requestBody: {
       content: {
-        "multipart/form-data":
-          await resolver(createMediaSchema).toOpenAPISchema(),
+        "multipart/form-data": await resolver(createMediaSchema).toOpenAPISchema(),
       },
     },
     responses: {

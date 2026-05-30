@@ -5,16 +5,12 @@ This package contains the database schema, migrations, seeds, and a typed Kysely
 ## Usage
 
 ```ts
-import { db } from "@taiyomoe/db2";
+import { db } from "@taiyomoe/db2"
 
 // Query database
-const user = await db
-  .selectFrom("users")
-  .selectAll()
-  .where("id", "=", userId)
-  .executeTakeFirst();
+const user = await db.selectFrom("users").selectAll().where("id", "=", userId).executeTakeFirst()
 
-const users = await db.selectFrom("users").selectAll().limit(10).execute();
+const users = await db.selectFrom("users").selectAll().limit(10).execute()
 
 // Insert
 await db
@@ -22,13 +18,13 @@ await db
   .values({
     /* ... */
   })
-  .execute();
+  .execute()
 ```
 
 Per-table types, JSON column types, enum constants, and the Kysely query builder are all re-exported from the package root:
 
 ```ts
-import type { Users, NewUsers, UserSettings, Role } from "@taiyomoe/db2";
+import type { Users, NewUsers, UserSettings, Role } from "@taiyomoe/db2"
 ```
 
 ## Migrations

@@ -25,10 +25,7 @@ export const SelectTrigger = ({
     {...props}
   >
     {children}
-    <BaseSelect.Icon
-      className="flex items-center justify-center"
-      data-slot="select-icon"
-    >
+    <BaseSelect.Icon className="flex items-center justify-center" data-slot="select-icon">
       <ChevronDownIcon className="size-4 text-subtle transition-transform duration-300 group-open:rotate-180" />
     </BaseSelect.Icon>
   </BaseSelect.Trigger>
@@ -84,10 +81,7 @@ export const SelectItem = ({
     <BaseSelect.ItemText className="col-start-1" data-slot="select-item-text">
       {children}
     </BaseSelect.ItemText>
-    <BaseSelect.ItemIndicator
-      className="col-start-2"
-      data-slot="select-item-indicator"
-    >
+    <BaseSelect.ItemIndicator className="col-start-2" data-slot="select-item-indicator">
       <CheckIcon className="size-3" />
     </BaseSelect.ItemIndicator>
   </BaseSelect.Item>

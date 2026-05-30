@@ -2,8 +2,8 @@
   "name": "@taiyomoe/email",
   "version": "0.1.0",
   "private": true,
-  "type": "module",
   "license": "MIT",
+  "type": "module",
   "exports": {
     ".": "./src/index.ts",
     "./env": "./src/env.ts"

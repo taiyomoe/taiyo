@@ -26,14 +26,14 @@ docker exec -it taiyo-minio-1 mc mb -p local/default
 ## Usage
 
 ```typescript
-import { s3Client } from "@taiyomoe/s3";
-import { PutObjectCommand } from "@aws-sdk/client-s3";
+import { s3Client } from "@taiyomoe/s3"
+import { PutObjectCommand } from "@aws-sdk/client-s3"
 
 await s3Client.send(
   new PutObjectCommand({
     Bucket: "my-bucket",
     Key: "path/to/file.txt",
     Body: "Hello, World!",
-  })
-);
+  }),
+)
 ```

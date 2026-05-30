@@ -5,12 +5,8 @@ import { DateTime } from "luxon"
 
 const throwInvalidCredsError = (isEmail: boolean) => {
   throw new APIError("FORBIDDEN", {
-    code: isEmail
-      ? "INVALID_EMAIL_OR_PASSWORD"
-      : "INVALID_USERNAME_OR_PASSWORD",
-    message: isEmail
-      ? "Invalid email or password"
-      : "Invalid username or password",
+    code: isEmail ? "INVALID_EMAIL_OR_PASSWORD" : "INVALID_USERNAME_OR_PASSWORD",
+    message: isEmail ? "Invalid email or password" : "Invalid username or password",
   })
 }
 
@@ -25,11 +21,7 @@ export const beforeHook = createAuthMiddleware(async (ctx) => {
     const user = await db
       .selectFrom("users")
       .selectAll()
-      .where(
-        ctx.body.email ? "email" : "username",
-        "=",
-        ctx.body.email ?? ctx.body.username,
-      )
+      .where(ctx.body.email ? "email" : "username", "=", ctx.body.email ?? ctx.body.username)
       .executeTakeFirst()
 
     if (!user) {
@@ -66,9 +58,7 @@ export const beforeHook = createAuthMiddleware(async (ctx) => {
 
     // Prevent sending emails too often
     if (verificationEmailSentAt) {
-      const lastVerificationSentAt = DateTime.fromJSDate(
-        verificationEmailSentAt,
-      )
+      const lastVerificationSentAt = DateTime.fromJSDate(verificationEmailSentAt)
       const timeLimit = DateTime.now().minus({ hours: 1 })
 
       if (lastVerificationSentAt > timeLimit) {

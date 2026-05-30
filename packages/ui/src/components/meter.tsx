@@ -3,11 +3,7 @@ import type { ComponentProps } from "react"
 import { cn } from "../utils/cn"
 import { labelVariants } from "./label"
 
-export const Meter = ({
-  className,
-  children,
-  ...props
-}: ComponentProps<typeof BaseMeter.Root>) => (
+export const Meter = ({ className, children, ...props }: ComponentProps<typeof BaseMeter.Root>) => (
   <BaseMeter.Root
     className={cn("box-border grid w-48 grid-cols-2 gap-y-2", className)}
     data-slot="meter"

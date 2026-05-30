@@ -38,8 +38,7 @@ export const tags = {
     },
     description: {
       en: "Prominently features fast-paced sequences, physical combat, and intense confrontations.",
-      pt_br:
-        "Apresenta sequências de ritmo acelerado, combate físico e confrontos intensos.",
+      pt_br: "Apresenta sequências de ritmo acelerado, combate físico e confrontos intensos.",
     },
     category: "Genre",
     isAdult: false,
@@ -51,8 +50,7 @@ export const tags = {
     },
     description: {
       en: "Centers around exploration, journeys, and discovery of new places or experiences.",
-      pt_br:
-        "Gira em torno de exploração, jornadas e descoberta de novos lugares ou experiências.",
+      pt_br: "Gira em torno de exploração, jornadas e descoberta de novos lugares ou experiências.",
     },
     category: "Genre",
     isAdult: false,
@@ -89,8 +87,7 @@ export const tags = {
     },
     description: {
       en: "Centers around unlawful activities punishable by the state or other authority.",
-      pt_br:
-        "Gira em torno de atividades ilegais puníveis pelo estado ou outra autoridade.",
+      pt_br: "Gira em torno de atividades ilegais puníveis pelo estado ou outra autoridade.",
     },
     category: "Genre",
     isAdult: false,
@@ -115,8 +112,7 @@ export const tags = {
     },
     description: {
       en: "Set in worlds with magic, mythical creatures, or supernatural elements.",
-      pt_br:
-        "Ambientado em mundos com magia, criaturas míticas ou elementos sobrenaturais.",
+      pt_br: "Ambientado em mundos com magia, criaturas míticas ou elementos sobrenaturais.",
     },
     category: "Genre",
     isAdult: false,
@@ -128,8 +124,7 @@ export const tags = {
     },
     description: {
       en: "Prominently features romance between two females, not inherently sexual.",
-      pt_br:
-        "Apresenta romance entre duas mulheres, não necessariamente sexual.",
+      pt_br: "Apresenta romance entre duas mulheres, não necessariamente sexual.",
     },
     category: "Genre",
     isAdult: false,
@@ -141,8 +136,7 @@ export const tags = {
     },
     description: {
       en: "Partly or completely set during a real period of world history.",
-      pt_br:
-        "Parcialmente ou completamente ambientado em um período real da história mundial.",
+      pt_br: "Parcialmente ou completamente ambientado em um período real da história mundial.",
     },
     category: "Genre",
     isAdult: false,
@@ -180,8 +174,7 @@ export const tags = {
     },
     description: {
       en: "Prominently features magical girls who aim to serve the greater good.",
-      pt_br:
-        "Apresenta garotas mágicas que têm como objetivo servir o bem maior.",
+      pt_br: "Apresenta garotas mágicas que têm como objetivo servir o bem maior.",
     },
     category: "Genre",
     isAdult: false,
@@ -193,8 +186,7 @@ export const tags = {
     },
     description: {
       en: "Prominently features piloted or autonomous giant robots and mechanical suits.",
-      pt_br:
-        "Apresenta robôs gigantes pilotados ou autônomos e trajes mecânicos.",
+      pt_br: "Apresenta robôs gigantes pilotados ou autônomos e trajes mecânicos.",
     },
     category: "Genre",
     isAdult: false,
@@ -206,8 +198,7 @@ export const tags = {
     },
     description: {
       en: "Centered around the activities of people working in the field of medicine.",
-      pt_br:
-        "Centrado nas atividades de pessoas que trabalham na área da medicina.",
+      pt_br: "Centrado nas atividades de pessoas que trabalham na área da medicina.",
     },
     category: "Genre",
     isAdult: false,
@@ -284,8 +275,7 @@ export const tags = {
     },
     description: {
       en: "Depicts everyday experiences and mundane aspects of ordinary life.",
-      pt_br:
-        "Retrata experiências cotidianas e aspectos mundanos da vida comum.",
+      pt_br: "Retrata experiências cotidianas e aspectos mundanos da vida comum.",
     },
     category: "Genre",
     isAdult: false,
@@ -297,8 +287,7 @@ export const tags = {
     },
     description: {
       en: "Centers around athletic competitions, training, and the world of sports.",
-      pt_br:
-        "Gira em torno de competições atléticas, treinamento e o mundo dos esportes.",
+      pt_br: "Gira em torno de competições atléticas, treinamento e o mundo dos esportes.",
     },
     category: "Genre",
     isAdult: false,
@@ -310,8 +299,7 @@ export const tags = {
     },
     description: {
       en: "Prominently features super-powered humans who aim to serve the greater good.",
-      pt_br:
-        "Apresenta humanos com superpoderes que têm como objetivo servir o bem maior.",
+      pt_br: "Apresenta humanos com superpoderes que têm como objetivo servir o bem maior.",
     },
     category: "Genre",
     isAdult: false,
@@ -361,8 +349,7 @@ export const tags = {
     },
     description: {
       en: "Chinese fiction concerning the adventures of martial artists in Ancient China.",
-      pt_br:
-        "Ficção chinesa sobre as aventuras de artistas marciais na China Antiga.",
+      pt_br: "Ficção chinesa sobre as aventuras de artistas marciais na China Antiga.",
     },
     category: "Genre",
     isAdult: false,
@@ -425,8 +412,7 @@ export const tags = {
     },
     description: {
       en: "A collection of separate works collated into a single release.",
-      pt_br:
-        "Uma coleção de obras separadas compiladas em um único lançamento.",
+      pt_br: "Uma coleção de obras separadas compiladas em um único lançamento.",
     },
     category: "Technical",
     isAdult: false,
@@ -629,8 +615,7 @@ export const tags = {
     },
     description: {
       en: "Prominently features a character who was returned to a younger state.",
-      pt_br:
-        "Apresenta um personagem que foi retornado a um estado mais jovem.",
+      pt_br: "Apresenta um personagem que foi retornado a um estado mais jovem.",
     },
     category: "Cast-Traits",
     isAdult: false,
@@ -666,8 +651,7 @@ export const tags = {
     },
     description: {
       en: "Features a character making an exaggerated orgasm face.",
-      pt_br:
-        "Apresenta um personagem fazendo uma expressão de orgasmo exagerada.",
+      pt_br: "Apresenta um personagem fazendo uma expressão de orgasmo exagerada.",
     },
     category: "Sexual Content",
     isAdult: true,
@@ -788,8 +772,7 @@ export const tags = {
     },
     description: {
       en: "Setting in ancient china, does not apply to fantasy settings.",
-      pt_br:
-        "Ambientado na China antiga, não se aplica a cenários de fantasia.",
+      pt_br: "Ambientado na China antiga, não se aplica a cenários de fantasia.",
     },
     category: "Setting-Time",
     isAdult: false,
@@ -865,8 +848,7 @@ export const tags = {
     },
     description: {
       en: "Features the sexual depiction or stimulation of a character's armpits.",
-      pt_br:
-        "Apresenta a representação sexual ou estimulação das axilas de um personagem.",
+      pt_br: "Apresenta a representação sexual ou estimulação das axilas de um personagem.",
     },
     category: "Sexual Content",
     isAdult: true,
@@ -878,8 +860,7 @@ export const tags = {
     },
     description: {
       en: "Features a character who experiences little to no romantic attraction.",
-      pt_br:
-        "Apresenta um personagem que experimenta pouca ou nenhuma atração romântica.",
+      pt_br: "Apresenta um personagem que experimenta pouca ou nenhuma atração romântica.",
     },
     category: "Cast-Traits",
     isAdult: false,
@@ -891,8 +872,7 @@ export const tags = {
     },
     description: {
       en: "Features two characters made to marry each other, usually by their family.",
-      pt_br:
-        "Apresenta dois personagens obrigados a se casarem, geralmente por suas famílias.",
+      pt_br: "Apresenta dois personagens obrigados a se casarem, geralmente por suas famílias.",
     },
     category: "Cast-Traits",
     isAdult: false,
@@ -992,8 +972,7 @@ export const tags = {
     },
     description: {
       en: "Prominently features events with augmented reality as the main setting.",
-      pt_br:
-        "Apresenta eventos com realidade aumentada como cenário principal.",
+      pt_br: "Apresenta eventos com realidade aumentada como cenário principal.",
     },
     category: "Setting-Universe",
     isAdult: false,
@@ -1005,8 +984,7 @@ export const tags = {
     },
     description: {
       en: "Real stories and anecdotes written by the author about their own life.",
-      pt_br:
-        "Histórias reais e anedotas escritas pelo autor sobre sua própria vida.",
+      pt_br: "Histórias reais e anedotas escritas pelo autor sobre sua própria vida.",
     },
     category: "Theme-Other",
     isAdult: false,
@@ -1042,8 +1020,7 @@ export const tags = {
     },
     description: {
       en: "Prominently features the dance art of ballet. Both traditional and contemporary styles.",
-      pt_br:
-        "Apresenta a arte da dança do balé. Tanto estilos tradicionais quanto contemporâneos.",
+      pt_br: "Apresenta a arte da dança do balé. Tanto estilos tradicionais quanto contemporâneos.",
     },
     category: "Theme-Arts",
     isAdult: false,
@@ -1116,8 +1093,7 @@ export const tags = {
     },
     description: {
       en: "Based on true stories of real persons living or dead, written by another.",
-      pt_br:
-        "Baseado em histórias reais de pessoas reais vivas ou mortas, escrito por outro.",
+      pt_br: "Baseado em histórias reais de pessoas reais vivas ou mortas, escrito por outro.",
     },
     category: "Theme-Other",
     isAdult: false,
@@ -1204,8 +1180,7 @@ export const tags = {
     },
     description: {
       en: "Centers around individuals swapping bodies with one another.",
-      pt_br:
-        "Gira em torno de indivíduos trocando de corpos uns com os outros.",
+      pt_br: "Gira em torno de indivíduos trocando de corpos uns com os outros.",
     },
     category: "Theme-Fantasy",
     isAdult: false,
@@ -1265,8 +1240,7 @@ export const tags = {
     },
     description: {
       en: "Prominently features the use of force for intimidation, often in a school setting.",
-      pt_br:
-        "Apresenta o uso de força para intimidação, frequentemente em um ambiente escolar.",
+      pt_br: "Apresenta o uso de força para intimidação, frequentemente em um ambiente escolar.",
     },
     category: "Theme-Drama",
     isAdult: false,
@@ -1315,8 +1289,7 @@ export const tags = {
     },
     description: {
       en: "Prominently features the act of consuming another member of the same species as food.",
-      pt_br:
-        "Apresenta o ato de consumir outro membro da mesma espécie como alimento.",
+      pt_br: "Apresenta o ato de consumir outro membro da mesma espécie como alimento.",
     },
     category: "Theme-Other",
     isAdult: false,
@@ -1427,8 +1400,7 @@ export const tags = {
     },
     description: {
       en: "Features a beast made by combining animals, usually with humans.",
-      pt_br:
-        "Apresenta uma fera feita pela combinação de animais, geralmente com humanos.",
+      pt_br: "Apresenta uma fera feita pela combinação de animais, geralmente com humanos.",
     },
     category: "Cast-Traits",
     isAdult: false,
@@ -1503,8 +1475,7 @@ export const tags = {
     },
     description: {
       en: "Prominently features a character who is an artificial exact copy of another organism.",
-      pt_br:
-        "Apresenta um personagem que é uma cópia artificial exata de outro organismo.",
+      pt_br: "Apresenta um personagem que é uma cópia artificial exata de outro organismo.",
     },
     category: "Cast-Traits",
     isAdult: false,
@@ -1542,8 +1513,7 @@ export const tags = {
     },
     description: {
       en: "Partly or completely set in a college or university.",
-      pt_br:
-        "Parcialmente ou completamente ambientado em uma faculdade ou universidade.",
+      pt_br: "Parcialmente ou completamente ambientado em uma faculdade ou universidade.",
     },
     category: "Setting-Scene",
     isAdult: false,
@@ -1555,8 +1525,7 @@ export const tags = {
     },
     description: {
       en: "Centers around a character's transition from childhood to adulthood.",
-      pt_br:
-        "Gira em torno da transição de um personagem da infância para a vida adulta.",
+      pt_br: "Gira em torno da transição de um personagem da infância para a vida adulta.",
     },
     category: "Theme-Drama",
     isAdult: false,
@@ -1568,8 +1537,7 @@ export const tags = {
     },
     description: {
       en: "Contains one or more factions controlling or attempting to control the world from the shadows.",
-      pt_br:
-        "Contém uma ou mais facções controlando ou tentando controlar o mundo nas sombras.",
+      pt_br: "Contém uma ou mais facções controlando ou tentando controlar o mundo nas sombras.",
     },
     category: "Theme-Drama",
     isAdult: false,
@@ -1618,8 +1586,7 @@ export const tags = {
     },
     description: {
       en: "Features the taming of animals, monsters, or other creatures.",
-      pt_br:
-        "Apresenta a domesticação de animais, monstros ou outras criaturas.",
+      pt_br: "Apresenta a domesticação de animais, monstros ou outras criaturas.",
     },
     category: "Theme-Other",
     isAdult: false,
@@ -1631,8 +1598,7 @@ export const tags = {
     },
     description: {
       en: "Prominently features a group of people who commit crimes for illicit or violent purposes.",
-      pt_br:
-        "Apresenta um grupo de pessoas que cometem crimes para fins ilícitos ou violentos.",
+      pt_br: "Apresenta um grupo de pessoas que cometem crimes para fins ilícitos ou violentos.",
     },
     category: "Theme-Other-Organisations",
     isAdult: false,
@@ -1809,8 +1775,7 @@ export const tags = {
     },
     description: {
       en: "Features characters participating in a game, where failure results in death.",
-      pt_br:
-        "Apresenta personagens participando de um jogo, onde a falha resulta em morte.",
+      pt_br: "Apresenta personagens participando de um jogo, onde a falha resulta em morte.",
     },
     category: "Theme-Other",
     isAdult: false,
@@ -1835,8 +1800,7 @@ export const tags = {
     },
     description: {
       en: "Features a female character who has never had sexual relations (until now).",
-      pt_br:
-        "Apresenta uma personagem feminina que nunca teve relações sexuais (até agora).",
+      pt_br: "Apresenta uma personagem feminina que nunca teve relações sexuais (até agora).",
     },
     category: "Sexual Content",
     isAdult: true,
@@ -1922,8 +1886,7 @@ export const tags = {
     },
     description: {
       en: "Prominently features Dinosaurs, prehistoric reptiles that went extinct millions of years ago.",
-      pt_br:
-        "Apresenta dinossauros, répteis pré-históricos que foram extintos há milhões de anos.",
+      pt_br: "Apresenta dinossauros, répteis pré-históricos que foram extintos há milhões de anos.",
     },
     category: "Cast-Traits",
     isAdult: false,
@@ -1960,8 +1923,7 @@ export const tags = {
     },
     description: {
       en: "A sexual act in which the vagina/anus are penetrated by two penises/toys.",
-      pt_br:
-        "Um ato sexual em que a vagina/ânus são penetrados por dois pênis/brinquedos.",
+      pt_br: "Um ato sexual em que a vagina/ânus são penetrados por dois pênis/brinquedos.",
     },
     category: "Sexual Content",
     isAdult: true,
@@ -1973,8 +1935,7 @@ export const tags = {
     },
     description: {
       en: "Prominently features mythical reptiles which generally have wings and can breathe fire.",
-      pt_br:
-        "Apresenta répteis míticos que geralmente têm asas e podem cuspir fogo.",
+      pt_br: "Apresenta répteis míticos que geralmente têm asas e podem cuspir fogo.",
     },
     category: "Cast-Traits",
     isAdult: false,
@@ -1998,8 +1959,7 @@ export const tags = {
     },
     description: {
       en: "Prominently features the usage of drugs such as opioids, stimulants, hallucinogens etc.",
-      pt_br:
-        "Apresenta o uso de drogas como opioides, estimulantes, alucinógenos etc.",
+      pt_br: "Apresenta o uso de drogas como opioides, estimulantes, alucinógenos etc.",
     },
     category: "Theme-Other",
     isAdult: false,
@@ -2049,8 +2009,7 @@ export const tags = {
     },
     description: {
       en: "Prominently features professional video game competitions, tournaments, players, etc.",
-      pt_br:
-        "Apresenta competições profissionais de videogame, torneios, jogadores, etc.",
+      pt_br: "Apresenta competições profissionais de videogame, torneios, jogadores, etc.",
     },
     category: "Theme-Game",
     isAdult: false,
@@ -2137,8 +2096,7 @@ export const tags = {
     },
     description: {
       en: "Concern with the state of the natural world and how humans interact with it.",
-      pt_br:
-        "Preocupação com o estado do mundo natural e como os humanos interagem com ele.",
+      pt_br: "Preocupação com o estado do mundo natural e como os humanos interagem com ele.",
     },
     category: "Theme-Other",
     isAdult: false,
@@ -2150,8 +2108,7 @@ export const tags = {
     },
     description: {
       en: "Features story arcs that are loosely tied or lack an overarching plot.",
-      pt_br:
-        "Apresenta arcos de história fracamente conectados ou sem um enredo abrangente.",
+      pt_br: "Apresenta arcos de história fracamente conectados ou sem um enredo abrangente.",
     },
     category: "Technical",
     isAdult: false,
@@ -2314,8 +2271,7 @@ export const tags = {
     },
     description: {
       en: "Features the sexual depiction or stimulation of a character's feet.",
-      pt_br:
-        "Apresenta a representação sexual ou estimulação dos pés de um personagem.",
+      pt_br: "Apresenta a representação sexual ou estimulação dos pés de um personagem.",
     },
     category: "Sexual Content",
     isAdult: true,
@@ -2377,8 +2333,7 @@ export const tags = {
     },
     description: {
       en: "Female Dominance. Features sexual acts with a woman in a dominant position.",
-      pt_br:
-        "Dominação Feminina. Apresenta atos sexuais com uma mulher em posição dominante.",
+      pt_br: "Dominação Feminina. Apresenta atos sexuais com uma mulher em posição dominante.",
     },
     category: "Sexual Content",
     isAdult: true,
@@ -2426,8 +2381,7 @@ export const tags = {
     },
     description: {
       en: "Centered around the life and activities of rescuers specialised in firefighting.",
-      pt_br:
-        "Centrado na vida e atividades de socorristas especializados em combate a incêndios.",
+      pt_br: "Centrado na vida e atividades de socorristas especializados em combate a incêndios.",
     },
     category: "Theme-Other-Organisations",
     isAdult: false,
@@ -2451,8 +2405,7 @@ export const tags = {
     },
     description: {
       en: "A sexual activity that involves inserting one or more hands into the vagina or rectum.",
-      pt_br:
-        "Uma atividade sexual que envolve inserir uma ou mais mãos na vagina ou reto.",
+      pt_br: "Uma atividade sexual que envolve inserir uma ou mais mãos na vagina ou reto.",
     },
     category: "Sexual Content",
     isAdult: true,
@@ -2464,8 +2417,7 @@ export const tags = {
     },
     description: {
       en: "Centers around exercise with the aim of improving physical health.",
-      pt_br:
-        "Gira em torno de exercícios com o objetivo de melhorar a saúde física.",
+      pt_br: "Gira em torno de exercícios com o objetivo de melhorar a saúde física.",
     },
     category: "Theme-Game-Sport",
     isAdult: false,
@@ -2513,8 +2465,7 @@ export const tags = {
     },
     description: {
       en: 'Centers around the sport of football (known in the USA as "soccer").',
-      pt_br:
-        'Gira em torno do esporte de futebol (conhecido nos EUA como "soccer").',
+      pt_br: 'Gira em torno do esporte de futebol (conhecido nos EUA como "soccer").',
     },
     category: "Theme-Game-Sport",
     isAdult: false,
@@ -2526,8 +2477,7 @@ export const tags = {
     },
     description: {
       en: "Partly or completely set in a country outside the country of origin.",
-      pt_br:
-        "Parcialmente ou completamente ambientado em um país fora do país de origem.",
+      pt_br: "Parcialmente ou completamente ambientado em um país fora do país de origem.",
     },
     category: "Setting-Scene",
     isAdult: false,
@@ -2552,8 +2502,7 @@ export const tags = {
     },
     description: {
       en: "Prominently features a character evading capture by an individual or organization.",
-      pt_br:
-        "Apresenta um personagem evadindo a captura por um indivíduo ou organização.",
+      pt_br: "Apresenta um personagem evadindo a captura por um indivíduo ou organização.",
     },
     category: "Theme-Action",
     isAdult: false,
@@ -2699,8 +2648,7 @@ export const tags = {
     },
     description: {
       en: "Features more than two participants engaged in sex simultaneously.",
-      pt_br:
-        "Apresenta mais de dois participantes envolvidos em sexo simultaneamente.",
+      pt_br: "Apresenta mais de dois participantes envolvidos em sexo simultaneamente.",
     },
     category: "Sexual Content",
     isAdult: true,
@@ -2787,8 +2735,7 @@ export const tags = {
     },
     description: {
       en: "Prominently features a romance between a man and a woman, not inherently sexual.",
-      pt_br:
-        "Apresenta um romance entre um homem e uma mulher, não necessariamente sexual.",
+      pt_br: "Apresenta um romance entre um homem e uma mulher, não necessariamente sexual.",
     },
     category: "Theme-Romance",
     isAdult: false,
@@ -2925,8 +2872,7 @@ export const tags = {
     },
     description: {
       en: "Partially or completely set in an Inn or Hotel.",
-      pt_br:
-        "Parcialmente ou completamente ambientado em uma pousada ou hotel.",
+      pt_br: "Parcialmente ou completamente ambientado em uma pousada ou hotel.",
     },
     category: "Setting-Scene",
     isAdult: false,
@@ -3136,8 +3082,7 @@ export const tags = {
     },
     description: {
       en: "A barrier to communication between people who are unable to speak a common language.",
-      pt_br:
-        "Uma barreira à comunicação entre pessoas que não conseguem falar uma língua comum.",
+      pt_br: "Uma barreira à comunicação entre pessoas que não conseguem falar uma língua comum.",
     },
     category: "Theme-Other",
     isAdult: false,
@@ -3297,8 +3242,7 @@ export const tags = {
     },
     description: {
       en: "Prominently features an act of traditional Japanese comedy that involves two performers.",
-      pt_br:
-        "Apresenta um ato de comédia tradicional japonesa que envolve dois artistas.",
+      pt_br: "Apresenta um ato de comédia tradicional japonesa que envolve dois artistas.",
     },
     category: "Theme-Arts",
     isAdult: false,
@@ -3347,8 +3291,7 @@ export const tags = {
     },
     description: {
       en: "Features erotic stimulation of one's own genitalia or other erogenous regions.",
-      pt_br:
-        "Apresenta estimulação erótica da própria genitália ou outras regiões erógenas.",
+      pt_br: "Apresenta estimulação erótica da própria genitália ou outras regiões erógenas.",
     },
     category: "Sexual Content",
     isAdult: true,
@@ -3424,8 +3367,7 @@ export const tags = {
     },
     description: {
       en: "A mythological creature with the body of a human and the tail of a fish.",
-      pt_br:
-        "Uma criatura mitológica com o corpo de um humano e a cauda de um peixe.",
+      pt_br: "Uma criatura mitológica com o corpo de um humano e a cauda de um peixe.",
     },
     category: "Cast-Traits",
     isAdult: false,
@@ -3598,8 +3540,7 @@ export const tags = {
     },
     description: {
       en: "Features a performance that combines songs, spoken dialogue, acting, and dance.",
-      pt_br:
-        "Apresenta uma performance que combina canções, diálogos falados, atuação e dança.",
+      pt_br: "Apresenta uma performance que combina canções, diálogos falados, atuação e dança.",
     },
     category: "Theme-Arts-Music",
     isAdult: false,
@@ -3663,8 +3604,7 @@ export const tags = {
     },
     description: {
       en: "Humanoid characters with cat-like features such as cat ears and a tail.",
-      pt_br:
-        "Personagens humanoides com características felinas como orelhas de gato e cauda.",
+      pt_br: "Personagens humanoides com características felinas como orelhas de gato e cauda.",
     },
     category: "Cast-Traits",
     isAdult: false,
@@ -3702,8 +3642,7 @@ export const tags = {
     },
     description: {
       en: "Features the protagonist stealing the partner of someone else. The opposite of netorare.",
-      pt_br:
-        "Apresenta o protagonista roubando o parceiro de outra pessoa. O oposto de netorare.",
+      pt_br: "Apresenta o protagonista roubando o parceiro de outra pessoa. O oposto de netorare.",
     },
     category: "Sexual Content",
     isAdult: true,
@@ -3765,8 +3704,7 @@ export const tags = {
     },
     description: {
       en: "Features a character wearing no clothing or exposing intimate body parts.",
-      pt_br:
-        "Apresenta um personagem sem roupas ou expondo partes íntimas do corpo.",
+      pt_br: "Apresenta um personagem sem roupas ou expondo partes íntimas do corpo.",
     },
     category: "Cast-Traits",
     isAdult: false,
@@ -3876,8 +3814,7 @@ export const tags = {
     },
     description: {
       en: "Centers around hiking, camping or other outdoor activities.",
-      pt_br:
-        "Gira em torno de caminhadas, acampamentos ou outras atividades ao ar livre.",
+      pt_br: "Gira em torno de caminhadas, acampamentos ou outras atividades ao ar livre.",
     },
     category: "Setting-Scene",
     isAdult: false,
@@ -3889,8 +3826,7 @@ export const tags = {
     },
     description: {
       en: "Features a character who has sexual relations with both the mother and her daughter.",
-      pt_br:
-        "Apresenta um personagem que tem relações sexuais tanto com a mãe quanto com a filha.",
+      pt_br: "Apresenta um personagem que tem relações sexuais tanto com a mãe quanto com a filha.",
     },
     category: "Sexual Content",
     isAdult: true,
@@ -3976,8 +3912,7 @@ export const tags = {
     },
     description: {
       en: "Prominently features sea-faring adventurers branded as criminals by the law.",
-      pt_br:
-        "Apresenta aventureiros marítimos rotulados como criminosos pela lei.",
+      pt_br: "Apresenta aventureiros marítimos rotulados como criminosos pela lei.",
     },
     category: "Cast-Traits",
     isAdult: false,
@@ -4013,8 +3948,7 @@ export const tags = {
     },
     description: {
       en: "Centers around politics, politicians, or government activities.",
-      pt_br:
-        "Gira em torno da política, políticos ou atividades governamentais.",
+      pt_br: "Gira em torno da política, políticos ou atividades governamentais.",
     },
     category: "Theme-Other",
     isAdult: false,
@@ -4052,8 +3986,7 @@ export const tags = {
     },
     description: {
       en: "Point of View; features scenes shown from the perspective of the series protagonist.",
-      pt_br:
-        "Ponto de Vista; apresenta cenas mostradas da perspectiva do protagonista da série.",
+      pt_br: "Ponto de Vista; apresenta cenas mostradas da perspectiva do protagonista da série.",
     },
     category: "Technical",
     isAdult: false,
@@ -4065,8 +3998,7 @@ export const tags = {
     },
     description: {
       en: "Features pregnant female characters or discusses the topic of pregnancy.",
-      pt_br:
-        "Apresenta personagens femininas grávidas ou discute o tema da gravidez.",
+      pt_br: "Apresenta personagens femininas grávidas ou discute o tema da gravidez.",
     },
     category: "Theme-Other",
     isAdult: false,
@@ -4117,8 +4049,7 @@ export const tags = {
     },
     description: {
       en: "Main cast is mostly composed of female characters.",
-      pt_br:
-        "O elenco principal é composto principalmente por personagens femininas.",
+      pt_br: "O elenco principal é composto principalmente por personagens femininas.",
     },
     category: "Cast-Main Cast",
     isAdult: false,
@@ -4130,8 +4061,7 @@ export const tags = {
     },
     description: {
       en: "Main cast is mostly composed of male characters.",
-      pt_br:
-        "O elenco principal é composto principalmente por personagens masculinos.",
+      pt_br: "O elenco principal é composto principalmente por personagens masculinos.",
     },
     category: "Cast-Main Cast",
     isAdult: false,
@@ -4143,8 +4073,7 @@ export const tags = {
     },
     description: {
       en: "Main cast is mostly composed of teen characters.",
-      pt_br:
-        "O elenco principal é composto principalmente por personagens adolescentes.",
+      pt_br: "O elenco principal é composto principalmente por personagens adolescentes.",
     },
     category: "Cast-Main Cast",
     isAdult: false,
@@ -4217,8 +4146,7 @@ export const tags = {
     },
     description: {
       en: "Animation style involving the manipulation of puppets to act out scenes.",
-      pt_br:
-        "Estilo de animação que envolve a manipulação de marionetes para encenar cenas.",
+      pt_br: "Estilo de animação que envolve a manipulação de marionetes para encenar cenas.",
     },
     category: "Technical",
     isAdult: false,
@@ -4230,8 +4158,7 @@ export const tags = {
     },
     description: {
       en: "Rakugo is the traditional Japanese performance art of comic storytelling.",
-      pt_br:
-        "Rakugo é a arte performática tradicional japonesa de contar histórias cômicas.",
+      pt_br: "Rakugo é a arte performática tradicional japonesa de contar histórias cômicas.",
     },
     category: "Theme-Arts",
     isAdult: false,
@@ -4255,8 +4182,7 @@ export const tags = {
     },
     description: {
       en: "Prominently features mechanical designs loosely influenced by real-world robotics.",
-      pt_br:
-        "Apresenta designs mecânicos vagamente influenciados pela robótica do mundo real.",
+      pt_br: "Apresenta designs mecânicos vagamente influenciados pela robótica do mundo real.",
     },
     category: "Theme-Sci-Fi-Mecha",
     isAdult: false,
@@ -4333,8 +4259,7 @@ export const tags = {
     },
     description: {
       en: "Prominently features a character who aims to exact punishment in a resentful or vindictive manner.",
-      pt_br:
-        "Apresenta um personagem que visa aplicar punição de maneira ressentida ou vingativa.",
+      pt_br: "Apresenta um personagem que visa aplicar punição de maneira ressentida ou vingativa.",
     },
     category: "Theme-Drama",
     isAdult: false,
@@ -4459,8 +4384,7 @@ export const tags = {
     },
     description: {
       en: "Prominently features warriors of medieval Japanese nobility bound by a code of honor.",
-      pt_br:
-        "Apresenta guerreiros da nobreza japonesa medieval ligados por um código de honra.",
+      pt_br: "Apresenta guerreiros da nobreza japonesa medieval ligados por um código de honra.",
     },
     category: "Cast-Traits",
     isAdult: false,
@@ -4510,8 +4434,7 @@ export const tags = {
     },
     description: {
       en: "Partly or completely set in a school club scene.",
-      pt_br:
-        "Parcial ou completamente ambientado em um cenário de clube escolar.",
+      pt_br: "Parcial ou completamente ambientado em um cenário de clube escolar.",
     },
     category: "Setting-Scene",
     isAdult: false,
@@ -4536,8 +4459,7 @@ export const tags = {
     },
     description: {
       en: "Prominently features characters diving with the aid of special breathing equipment.",
-      pt_br:
-        "Apresenta personagens mergulhando com a ajuda de equipamento especial de respiração.",
+      pt_br: "Apresenta personagens mergulhando com a ajuda de equipamento especial de respiração.",
     },
     category: "Theme-Game-Sport",
     isAdult: false,
@@ -4706,8 +4628,7 @@ export const tags = {
     },
     description: {
       en: "Prominently or partially set in a snowy environment.",
-      pt_br:
-        "Proeminentemente ou parcialmente ambientado em um ambiente nevado.",
+      pt_br: "Proeminentemente ou parcialmente ambientado em um ambiente nevado.",
     },
     category: "Setting-Scene",
     isAdult: false,
@@ -4769,8 +4690,7 @@ export const tags = {
     },
     description: {
       en: "Female ejaculation; features the expulsion of liquid from the female genitalia.",
-      pt_br:
-        "Ejaculação feminina; apresenta a expulsão de líquido da genitália feminina.",
+      pt_br: "Ejaculação feminina; apresenta a expulsão de líquido da genitália feminina.",
     },
     category: "Sexual Content",
     isAdult: true,
@@ -4872,8 +4792,7 @@ export const tags = {
     },
     description: {
       en: "Prominently features large robots often piloted by hot-blooded protagonists.",
-      pt_br:
-        "Apresenta grandes robôs frequentemente pilotados por protagonistas impetuosos.",
+      pt_br: "Apresenta grandes robôs frequentemente pilotados por protagonistas impetuosos.",
     },
     category: "Theme-Sci-Fi-Mecha",
     isAdult: false,
@@ -4922,8 +4841,7 @@ export const tags = {
     },
     description: {
       en: "Features consensual partner swapping between couples during sexual activities.",
-      pt_br:
-        "Apresenta troca consensual de parceiros entre casais durante atividades sexuais.",
+      pt_br: "Apresenta troca consensual de parceiros entre casais durante atividades sexuais.",
     },
     category: "Sexual Content",
     isAdult: true,
@@ -4971,8 +4889,7 @@ export const tags = {
     },
     description: {
       en: 'Centers around the sport of table tennis (also known as "ping pong").',
-      pt_br:
-        'Gira em torno do esporte de tênis de mesa (também conhecido como "ping pong").',
+      pt_br: 'Gira em torno do esporte de tênis de mesa (também conhecido como "ping pong").',
     },
     category: "Theme-Game-Sport",
     isAdult: false,
@@ -5058,8 +4975,7 @@ export const tags = {
     },
     description: {
       en: "Centers around the activities of a terrorist or terrorist organization.",
-      pt_br:
-        "Gira em torno das atividades de um terrorista ou organização terrorista.",
+      pt_br: "Gira em torno das atividades de um terrorista ou organização terrorista.",
     },
     category: "Theme-Other",
     isAdult: false,
@@ -5096,8 +5012,7 @@ export const tags = {
     },
     description: {
       en: "Prominently features time-traveling or other time-warping phenomena.",
-      pt_br:
-        "Apresenta viagem no tempo ou outros fenômenos de distorção temporal.",
+      pt_br: "Apresenta viagem no tempo ou outros fenômenos de distorção temporal.",
     },
     category: "Theme-Sci-Fi",
     isAdult: false,
@@ -5298,8 +5213,7 @@ export const tags = {
     },
     description: {
       en: "Prominently features a veterinarian or one of the main characters is a veterinarian.",
-      pt_br:
-        "Apresenta um veterinário ou um dos personagens principais é veterinário.",
+      pt_br: "Apresenta um veterinário ou um dos personagens principais é veterinário.",
     },
     category: "Cast-Traits",
     isAdult: false,
@@ -5347,8 +5261,7 @@ export const tags = {
     },
     description: {
       en: "Features a male character who has never had sexual relations (until now).",
-      pt_br:
-        "Apresenta um personagem masculino que nunca teve relações sexuais (até agora).",
+      pt_br: "Apresenta um personagem masculino que nunca teve relações sexuais (até agora).",
     },
     category: "Sexual Content",
     isAdult: true,
@@ -5360,8 +5273,7 @@ export const tags = {
     },
     description: {
       en: "Partly or completely set in the world inside a video game.",
-      pt_br:
-        "Parcial ou completamente ambientado no mundo dentro de um videogame.",
+      pt_br: "Parcial ou completamente ambientado no mundo dentro de um videogame.",
     },
     category: "Setting-Universe",
     isAdult: false,
@@ -5398,8 +5310,7 @@ export const tags = {
     },
     description: {
       en: "Features a character being swallowed or swallowing another creature whole.",
-      pt_br:
-        "Apresenta um personagem sendo engolido ou engolindo outra criatura inteira.",
+      pt_br: "Apresenta um personagem sendo engolido ou engolindo outra criatura inteira.",
     },
     category: "Sexual Content",
     isAdult: true,
@@ -5596,8 +5507,7 @@ export const tags = {
     },
     description: {
       en: "Features a character who has a sexual attraction for non-human animals.",
-      pt_br:
-        "Apresenta um personagem que tem atração sexual por animais não humanos.",
+      pt_br: "Apresenta um personagem que tem atração sexual por animais não humanos.",
     },
     category: "Sexual Content",
     isAdult: true,

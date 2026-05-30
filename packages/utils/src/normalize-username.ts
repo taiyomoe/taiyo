@@ -8,7 +8,5 @@ export const normalizeUsername = (input: string) => {
     .replace(/[^a-zA-Z0-9_.]/g, "")
     .toLowerCase()
 
-  return normalized.length < config.auth.username.minLength
-    ? faker.internet.username()
-    : normalized
+  return normalized.length < config.auth.username.minLength ? faker.internet.username() : normalized
 }

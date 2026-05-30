@@ -8,7 +8,4 @@ export const contentRatingSchema = (description: string) =>
   z.enum(CONTENT_RATINGS).meta({ description, example: "NORMAL" })
 
 export const fileSchema = (description: string) =>
-  z
-    .file()
-    .mime(["image/png", "image/jpeg", "image/gif", "image/webp"])
-    .meta({ description })
+  z.file().mime(["image/png", "image/jpeg", "image/gif", "image/webp"]).meta({ description })

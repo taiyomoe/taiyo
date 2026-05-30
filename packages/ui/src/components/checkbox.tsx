@@ -3,10 +3,7 @@ import { CheckIcon } from "lucide-react"
 import type { ComponentProps } from "react"
 import { cn } from "../utils/cn"
 
-export const Checkbox = ({
-  className,
-  ...props
-}: ComponentProps<typeof BaseCheckbox.Root>) => (
+export const Checkbox = ({ className, ...props }: ComponentProps<typeof BaseCheckbox.Root>) => (
   <BaseCheckbox.Root
     className={cn(
       "group peer flex size-5 items-center justify-center gap-2 rounded-[0.25rem] border bg-muted transition checked:border-primary checked:bg-primary hover:cursor-pointer hover:not-disabled:not-checked:border-emphasis active:scale-[0.98]",

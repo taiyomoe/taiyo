@@ -15,9 +15,7 @@ export const format = winston.format.printf(
       (s) => s.description === "splat",
     )
     const metadata =
-      splatSymbol && Array.isArray(rawMetadata[splatSymbol])
-        ? rawMetadata[splatSymbol][0]
-        : null
+      splatSymbol && Array.isArray(rawMetadata[splatSymbol]) ? rawMetadata[splatSymbol][0] : null
 
     return `${timestamp} ${level}: ${message} ${metadata ? colorize(metadata) : ""}`.trim()
   },

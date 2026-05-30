@@ -36,8 +36,7 @@ export const execute = async (db: Kysely<DB>): Promise<void> => {
         mangaUpdates: "https://www.mangaupdates.com/series.html?id=0mtuya9",
         myAnimeList: 141120,
         kitsu: "https://kitsu.io/api/edge/manga/57103",
-        officialENTranslation:
-          "https://www.webtoons.com/en/action/the-boxer/list?title_no=2027",
+        officialENTranslation: "https://www.webtoons.com/en/action/the-boxer/list?title_no=2027",
       },
       creatorId: "db852a04-7406-4a6a-87f2-1b494e810a29",
       startDate: null,

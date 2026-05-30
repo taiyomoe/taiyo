@@ -35,8 +35,7 @@ export const execute = async (db: Kysely<DB>): Promise<void> => {
       links: {
         mangaDex: "0ca1627e-95dd-4118-892a-f144adf02256",
         anilist: 31224,
-        animePlanet:
-          "https://www.anime-planet.com/manga/march-comes-in-like-a-lion",
+        animePlanet: "https://www.anime-planet.com/manga/march-comes-in-like-a-lion",
         bookWalker: "https://bookwalker.jp/series/16608/list",
         mangaUpdates: "https://www.mangaupdates.com/series.html?id=t2uekcf",
         myAnimeList: 1224,
@@ -1689,8 +1688,7 @@ export const execute = async (db: Kysely<DB>): Promise<void> => {
       {
         id: "ac802676-06a2-400b-aba8-581897549d4e",
         name: "Abnormal Scanlator",
-        description:
-          " [Facebook](https://www.facebook.com/Abnormal-Scanlator-110043972516265)",
+        description: " [Facebook](https://www.facebook.com/Abnormal-Scanlator-110043972516265)",
         logo: null,
         banner: null,
         website: "http://abnormalscanlator.wordpress.com/",

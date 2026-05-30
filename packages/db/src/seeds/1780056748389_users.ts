@@ -12,18 +12,12 @@ const normalizeUsername = (input: string) => {
     .replaceAll(" ", "_")
     .replace(/[^a-zA-Z0-9_.]/g, "")
     .toLowerCase()
-  return normalized.length < USERNAME.minLength
-    ? faker.internet.username()
-    : normalized
+  return normalized.length < USERNAME.minLength ? faker.internet.username() : normalized
 }
 
 const normalizeDisplayName = (input: string) => {
-  const normalized = input
-    .slice(0, DISPLAY_NAME.maxLength)
-    .replace(/[^a-zA-Z0-9_.\s]/g, "")
-  return normalized.length < DISPLAY_NAME.minLength
-    ? faker.internet.username()
-    : normalized
+  const normalized = input.slice(0, DISPLAY_NAME.maxLength).replace(/[^a-zA-Z0-9_.\s]/g, "")
+  return normalized.length < DISPLAY_NAME.minLength ? faker.internet.username() : normalized
 }
 
 const LANGUAGES = [

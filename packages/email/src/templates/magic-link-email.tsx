@@ -49,20 +49,16 @@ const MagicLinkEmail = ({ name, url }: Props) => (
         <Container className="px-8 py-4">
           <Text className="font-bold text-2xl">Your magic link</Text>
           <Text>
-            Hi {name}, your will find the magic link your requested below. This
-            link will be valid for 1 hour.
+            Hi {name}, your will find the magic link your requested below. This link will be valid
+            for 1 hour.
           </Text>
           <Section>
-            <Button
-              href={url}
-              className="rounded-md bg-brand px-3 py-1.5 text-sm text-white"
-            >
+            <Button href={url} className="rounded-md bg-brand px-3 py-1.5 text-sm text-white">
               Click here
             </Button>
           </Section>
           <Text>
-            If the button does not work, copy and paste the link below into your
-            browser: {url}
+            If the button does not work, copy and paste the link below into your browser: {url}
           </Text>
         </Container>
         <Container className="border-subtle border-t border-solid px-8">

@@ -49,27 +49,21 @@ const ResetPasswordEmail = ({ name, url }: Props) => (
         <Container className="px-8 py-4">
           <Text className="font-bold text-2xl">Reset your password</Text>
           <Text>
-            Hi {name}, we received a request to reset your password. Please
-            click the button below to reset it. This link will be valid for 1
-            hour.
+            Hi {name}, we received a request to reset your password. Please click the button below
+            to reset it. This link will be valid for 1 hour.
           </Text>
           <Section>
-            <Button
-              href={url}
-              className="rounded-md bg-brand px-3 py-1.5 text-sm text-white"
-            >
+            <Button href={url} className="rounded-md bg-brand px-3 py-1.5 text-sm text-white">
               Click here
             </Button>
           </Section>
           <Text>
-            If the button does not work, copy and paste the link below into your
-            browser: {url}
+            If the button does not work, copy and paste the link below into your browser: {url}
           </Text>
         </Container>
         <Container className="border-subtle border-t border-solid px-8">
           <Text>
-            If you did not request this email, please ignore it as nothing will
-            be changed.
+            If you did not request this email, please ignore it as nothing will be changed.
           </Text>
         </Container>
       </Container>

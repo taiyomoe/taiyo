@@ -30,9 +30,7 @@ export const toTags = (input: string[] | null): MediaTags[] => {
 
     if (normalizedTag in tagsMap) {
       tags.push({
-        key: tagsMap[
-          normalizedTag as keyof typeof tagsMap
-        ] as keyof typeof config.tags,
+        key: tagsMap[normalizedTag as keyof typeof tagsMap] as keyof typeof config.tags,
         isSpoiler: false,
       })
 

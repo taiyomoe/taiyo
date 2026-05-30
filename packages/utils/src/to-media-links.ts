@@ -1,9 +1,7 @@
 import { config } from "@taiyomoe/config"
 import type { MediaLinks } from "@taiyomoe/db"
 
-export const toMediaLinks = (
-  input: Record<string, unknown>,
-): MediaLinks => {
+export const toMediaLinks = (input: Record<string, unknown>): MediaLinks => {
   const links: MediaLinks = {}
 
   for (const [key, value] of Object.entries(input)) {
@@ -12,10 +10,7 @@ export const toMediaLinks = (
     }
 
     if (key === "myAnimeList" || key === "anilist") {
-      links[key] = Number.parseInt(
-        value.split("/").find((part) => /^\d+$/.test(part)) ?? "",
-        10,
-      )
+      links[key] = Number.parseInt(value.split("/").find((part) => /^\d+$/.test(part)) ?? "", 10)
 
       continue
     }
@@ -27,12 +22,8 @@ export const toMediaLinks = (
     }
 
     if (config.medias.links.includes(key)) {
-      links[
-        key as keyof Omit<
-          MediaLinks,
-          "myAnimeList" | "anilist" | "officialENTranslation"
-        >
-      ] = value
+      links[key as keyof Omit<MediaLinks, "myAnimeList" | "anilist" | "officialENTranslation">] =
+        value
 
       continue
     }

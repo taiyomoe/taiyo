@@ -29,8 +29,7 @@ export const buttonVariants = tv({
     {
       color: "default",
       variant: "solid",
-      className:
-        "bg-primary text-inverted hover:not-disabled:bg-primary-emphasis",
+      className: "bg-primary text-inverted hover:not-disabled:bg-primary-emphasis",
     },
     {
       color: "default",
@@ -41,8 +40,7 @@ export const buttonVariants = tv({
     {
       color: "default",
       variant: "ghost",
-      className:
-        "text-subtle transition-colors hover:not-disabled:text-primary",
+      className: "text-subtle transition-colors hover:not-disabled:text-primary",
     },
     {
       color: "secondary",

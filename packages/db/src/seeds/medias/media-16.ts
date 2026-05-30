@@ -45,8 +45,7 @@ export const execute = async (db: Kysely<DB>): Promise<void> => {
       flag: "OK",
       links: {
         mangaDex: "4ada20eb-085a-491a-8c49-477ab42014d7",
-        animePlanet:
-          "https://www.anime-planet.com/manga/the-beginning-after-the-end",
+        animePlanet: "https://www.anime-planet.com/manga/the-beginning-after-the-end",
         bookWalker: "https://bookwalker.jp/series/316257",
         mangaUpdates: "https://www.mangaupdates.com/series.html?id=rwg23en",
         kitsu: "https://kitsu.io/api/edge/manga/54597",
@@ -3623,8 +3622,7 @@ export const execute = async (db: Kysely<DB>): Promise<void> => {
         description: null,
         logo: null,
         banner: null,
-        website:
-          "https://web.archive.org/web/20240217201147/https://nexoscans.com/",
+        website: "https://web.archive.org/web/20240217201147/https://nexoscans.com/",
         discord: "https://discord.gg/neoxscan",
         x: null,
         facebook: null,
@@ -3670,8 +3668,7 @@ export const execute = async (db: Kysely<DB>): Promise<void> => {
       {
         id: "fd31b508-aa7c-469f-9f1b-ff4122b4b6c3",
         name: "PhenixScans",
-        description:
-          "Team française officiel de PhenixScans. Anciennement appelé Mangas Origines",
+        description: "Team française officiel de PhenixScans. Anciennement appelé Mangas Origines",
         logo: null,
         banner: null,
         website: "https://phenix-scans.com/",
@@ -3691,8 +3688,7 @@ export const execute = async (db: Kysely<DB>): Promise<void> => {
           "Demon Sect is an aggregator that steals chapters and removes credit pages, do not upload anything from their website.\r\n-\r\nUm Lindo e majestoso Grupo que realiza tradução de fã para fã de Manhuas, Manhwas, Mangás, Webtoons e Rucomics. \r\n\r\n**Nota:** Mudamos o nome de *'Prisma'* para *'Demon Sect'*.\r\n\r\n**Note:** We have changed our name from *'Prisma'* to *'Demon Sect'*.",
         logo: null,
         banner: null,
-        website:
-          "https://web.archive.org/web/20240106225730/https://demonsect.com.br/",
+        website: "https://web.archive.org/web/20240106225730/https://demonsect.com.br/",
         discord: "https://discord.gg/ce75Uv3",
         x: null,
         facebook: null,

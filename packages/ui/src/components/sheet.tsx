@@ -10,17 +10,17 @@ export const Sheet = (props: ComponentProps<typeof SheetPrimitive.Root>) => (
   <SheetPrimitive.Root data-slot="sheet" {...props} />
 )
 
-export const SheetTrigger = (
-  props: ComponentProps<typeof SheetPrimitive.Trigger>,
-) => <SheetPrimitive.Trigger data-slot="sheet-trigger" {...props} />
+export const SheetTrigger = (props: ComponentProps<typeof SheetPrimitive.Trigger>) => (
+  <SheetPrimitive.Trigger data-slot="sheet-trigger" {...props} />
+)
 
-export const SheetClose = (
-  props: ComponentProps<typeof SheetPrimitive.Close>,
-) => <SheetPrimitive.Close data-slot="sheet-close" {...props} />
+export const SheetClose = (props: ComponentProps<typeof SheetPrimitive.Close>) => (
+  <SheetPrimitive.Close data-slot="sheet-close" {...props} />
+)
 
-export const SheetPortal = (
-  props: ComponentProps<typeof SheetPrimitive.Portal>,
-) => <SheetPrimitive.Portal data-slot="sheet-portal" {...props} />
+export const SheetPortal = (props: ComponentProps<typeof SheetPrimitive.Portal>) => (
+  <SheetPrimitive.Portal data-slot="sheet-portal" {...props} />
+)
 
 export const SheetOverlay = ({
   className,
@@ -70,10 +70,8 @@ export const SheetContent = ({
               <motion.div
                 className={cn(
                   "fixed z-50 m-1.5 flex flex-col gap-4 rounded border bg-muted shadow-lg",
-                  side === "right" &&
-                    "inset-y-0 right-0 h-auto w-3/4 sm:max-w-sm",
-                  side === "left" &&
-                    "inset-y-0 left-0 h-auto w-3/4 sm:max-w-sm",
+                  side === "right" && "inset-y-0 right-0 h-auto w-3/4 sm:max-w-sm",
+                  side === "left" && "inset-y-0 left-0 h-auto w-3/4 sm:max-w-sm",
                   side === "top" && "inset-x-0 top-0 h-auto",
                   side === "bottom" && "inset-x-0 bottom-0 h-auto",
                   className,
@@ -102,11 +100,7 @@ export const SheetContent = ({
 }
 
 export const SheetHeader = ({ className, ...props }: ComponentProps<"div">) => (
-  <div
-    data-slot="sheet-header"
-    className={cn("flex flex-col gap-1.5 p-4", className)}
-    {...props}
-  />
+  <div data-slot="sheet-header" className={cn("flex flex-col gap-1.5 p-4", className)} {...props} />
 )
 
 export const SheetFooter = ({ className, ...props }: ComponentProps<"div">) => (

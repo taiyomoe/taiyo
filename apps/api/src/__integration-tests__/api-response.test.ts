@@ -1,13 +1,5 @@
 import type { Hono } from "hono"
-import {
-  afterEach,
-  beforeAll,
-  beforeEach,
-  describe,
-  expect,
-  it,
-  vi,
-} from "vitest"
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest"
 import z from "zod"
 import { app } from "../index"
 import { validateFormData } from "../middlewares/validate-form-data-middleware"
@@ -49,9 +41,7 @@ describe("API Response Standardization", () => {
       })
       .post(
         "/test-validation",
-        validateFormData(
-          z.object({ name: z.string().min(1), email: z.email() }),
-        ),
+        validateFormData(z.object({ name: z.string().min(1), email: z.email() })),
         (c) => {
           const data = c.get("formData")
           return c.ok(data)

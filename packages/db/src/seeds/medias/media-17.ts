@@ -48,11 +48,9 @@ export const execute = async (db: Kysely<DB>): Promise<void> => {
       links: {
         mangaDex: "9a414441-bbad-43f1-a3a7-dc262ca790a3",
         anilist: 119257,
-        animePlanet:
-          "https://www.anime-planet.com/manga/omniscient-readers-viewpoint",
+        animePlanet: "https://www.anime-planet.com/manga/omniscient-readers-viewpoint",
         mangaUpdates: "https://www.mangaupdates.com/series.html?id=n50wl4o",
-        novelUpdates:
-          "https://www.novelupdates.com/series/omniscient-readers-viewpoint",
+        novelUpdates: "https://www.novelupdates.com/series/omniscient-readers-viewpoint",
         myAnimeList: 132214,
         kitsu: "https://kitsu.io/api/edge/manga/56452",
         raw: "https://comic.naver.com/webtoon/list?titleId=747269",
@@ -3108,8 +3106,7 @@ export const execute = async (db: Kysely<DB>): Promise<void> => {
         description: null,
         logo: null,
         banner: null,
-        website:
-          "https://web.archive.org/web/20240217201147/https://nexoscans.com/",
+        website: "https://web.archive.org/web/20240217201147/https://nexoscans.com/",
         discord: "https://discord.gg/neoxscan",
         x: null,
         facebook: null,
@@ -3138,8 +3135,7 @@ export const execute = async (db: Kysely<DB>): Promise<void> => {
       {
         id: "fd31b508-aa7c-469f-9f1b-ff4122b4b6c3",
         name: "PhenixScans",
-        description:
-          "Team française officiel de PhenixScans. Anciennement appelé Mangas Origines",
+        description: "Team française officiel de PhenixScans. Anciennement appelé Mangas Origines",
         logo: null,
         banner: null,
         website: "https://phenix-scans.com/",

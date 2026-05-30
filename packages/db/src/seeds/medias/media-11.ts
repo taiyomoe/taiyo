@@ -38,11 +38,9 @@ export const execute = async (db: Kysely<DB>): Promise<void> => {
       links: {
         mangaDex: "77bee52c-d2d6-44ad-a33a-1734c1fe696a",
         anilist: 106758,
-        animePlanet:
-          "https://www.anime-planet.com/manga/the-eminence-in-shadow",
+        animePlanet: "https://www.anime-planet.com/manga/the-eminence-in-shadow",
         mangaUpdates: "https://www.mangaupdates.com/series.html?id=ug5qy4o",
-        novelUpdates:
-          "https://www.novelupdates.com/series/to-be-a-power-in-the-shadows-ln",
+        novelUpdates: "https://www.novelupdates.com/series/to-be-a-power-in-the-shadows-ln",
         myAnimeList: 119022,
         kitsu: "https://kitsu.io/api/edge/manga/54238",
         raw: "https://comic-walker.com/contents/detail/KDCW_KS04200967010000_68/",

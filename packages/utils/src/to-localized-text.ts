@@ -1,9 +1,7 @@
 import type { LocalizedText } from "@taiyomoe/db"
 import { toLanguage } from "./to-language"
 
-export const toLocalizedText = (
-  input: Record<string, unknown>,
-): LocalizedText => {
+export const toLocalizedText = (input: Record<string, unknown>): LocalizedText => {
   const result: Record<string, string> = {}
 
   for (const [key, value] of Object.entries(input)) {

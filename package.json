@@ -1,17 +1,14 @@
 {
   "name": "taiyo",
   "private": true,
-  "engines": {
-    "node": "24.11.1"
-  },
-  "packageManager": "pnpm@11.2.2",
+  "type": "module",
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev --parallel",
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",
     "format": "oxfmt --check",
-    "format:fix": "oxfmt --write",
+    "format:fix": "oxfmt",
     "lint:ws": "pnpm dlx sherif@latest",
     "postinstall": "pnpm lint:ws",
     "knip": "knip",
@@ -30,5 +27,9 @@
     "oxlint-tsgolint": "^0.23.0",
     "turbo": "^2.9.14",
     "vitest": "^4.1.7"
-  }
+  },
+  "engines": {
+    "node": "24.11.1"
+  },
+  "packageManager": "pnpm@11.2.2"
 }

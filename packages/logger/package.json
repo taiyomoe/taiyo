@@ -2,15 +2,11 @@
   "name": "@taiyomoe/logger",
   "version": "0.1.0",
   "private": true,
-  "type": "module",
   "license": "MIT",
+  "type": "module",
   "exports": {
     ".": "./src/index.ts",
     "./env": "./src/env.ts"
-  },
-  "devDependencies": {
-    "@taiyomoe/typescript": "workspace:^",
-    "typescript": "^6.0.3"
   },
   "dependencies": {
     "@hyperdx/node-opentelemetry": "^0.10.5",
@@ -19,5 +15,9 @@
     "json-colorizer": "^3.0.1",
     "winston": "^3.19.0",
     "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@taiyomoe/typescript": "workspace:^",
+    "typescript": "^6.0.3"
   }
 }

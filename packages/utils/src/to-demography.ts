@@ -12,9 +12,7 @@ export const toDemography = (input: string | null): MediaDemography => {
       return "SEINEN"
     default:
       if (input) {
-        console.warn(
-          `Invalid demography key "${input}", defaulting to SHOUNEN...`,
-        )
+        console.warn(`Invalid demography key "${input}", defaulting to SHOUNEN...`)
       }
 
       return "SHOUNEN"

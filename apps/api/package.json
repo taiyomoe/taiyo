@@ -2,8 +2,8 @@
   "name": "@taiyomoe/api",
   "version": "5.0.0",
   "private": true,
-  "type": "module",
   "license": "MIT",
+  "type": "module",
   "exports": {
     ".": "./src/index.ts",
     "./env": "./src/env.ts"

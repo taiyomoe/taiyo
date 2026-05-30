@@ -5,14 +5,14 @@ This package provides logging functionality using Winston and HyperDX. Everythin
 ## Usage
 
 ```ts
-import { createLogger } from "@taiyomoe/logger";
+import { createLogger } from "@taiyomoe/logger"
 
 // Create a logger for a specific service
-const logger = createLogger("api");
+const logger = createLogger("api")
 
 // Log messages
-logger.debug("Debug message"); // NOT sent to HyperDX
-logger.info("Info message"); // Sent to HyperDX
-logger.warn("Warning message"); // Sent to HyperDX
-logger.error("Error message"); // Sent to HyperDX
+logger.debug("Debug message") // NOT sent to HyperDX
+logger.info("Info message") // Sent to HyperDX
+logger.warn("Warning message") // Sent to HyperDX
+logger.error("Error message") // Sent to HyperDX
 ```
