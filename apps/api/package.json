@@ -20,7 +20,6 @@
     "@t3-oss/env-core": "^0.13.11",
     "@taiyomoe/config": "workspace:^",
     "@taiyomoe/db": "workspace:^",
-    "@taiyomoe/logger": "workspace:^",
     "@taiyomoe/s3": "workspace:^",
     "@taiyomoe/utils": "workspace:^",
     "hono": "^4.12.22",

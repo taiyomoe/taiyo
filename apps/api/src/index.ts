@@ -11,7 +11,6 @@ import { type AppContext, contextMiddleware } from "./middlewares/context-middle
 import { errorHandler } from "./middlewares/error-handler-middleware"
 import { requestLogger } from "./middlewares/request-logger-middleware"
 import { mediasRouter } from "./routers/medias-router"
-import { logger } from "./utils/logger"
 
 declare module "hono" {
   interface Context extends AppContext {}
@@ -20,7 +19,7 @@ declare module "hono" {
 if (!process.env.TEST) {
   HyperDX.init({
     apiKey: env.HYPERDX_INGESTION_KEY,
-    service: config.logger.services.api,
+    service: "api",
     disableStartupLogs: true,
     consoleCapture: false,
     instrumentations: {
@@ -61,6 +60,6 @@ app
 
 if (!process.env.TEST) {
   serve({ fetch: app.fetch, port: 3002 }, ({ port }) => {
-    logger.debug(`Server is running on http://localhost:${port}`)
+    console.debug(`Server is running on http://localhost:${port}`)
   })
 }

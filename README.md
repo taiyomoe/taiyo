@@ -37,8 +37,6 @@ taiyo/
 │   ├── config/            # Shared configuration
 │   ├── db/                # Database layer
 │   ├── email/             # Email templates and utilities
-│   ├── logger/            # Logging layer
-│   ├── logs/              # Logs configuration
 │   ├── ui/                # Shared UI components
 │   └── utils/             # Shared utilities
 └── tooling/             # Development tools
@@ -212,12 +210,10 @@ There are 30+ environment variables that are used in the project. You can find t
 
 - **`@taiyomoe/cache`**: Caching layer with Dragonfly integration
 - **`@taiyomoe/email`**: Email templates and sending utilities
-- **`@taiyomoe/logger`**: Logging layer with ClickHouse integration
 
 ### Configuration Packages
 
 - **`@taiyomoe/config`**: Shared configuration and constants
-- **`@taiyomoe/logs`**: Logs configuration
 
 ## 🚀 Deployment
 

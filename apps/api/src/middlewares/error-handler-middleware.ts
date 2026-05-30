@@ -1,5 +1,4 @@
 import type { ErrorHandler } from "hono"
-import { logger } from "../utils/logger"
 
 export const errorHandler: ErrorHandler = async (err, c) => {
   const requestId = c.get("requestId")
@@ -9,7 +8,7 @@ export const errorHandler: ErrorHandler = async (err, c) => {
     stack: err.stack,
   }
 
-  logger.error("Uncaught exception", {
+  console.error("Uncaught exception", {
     path: c.req.path,
     method: c.req.method,
     requestId,

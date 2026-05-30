@@ -2,13 +2,6 @@ import type { UserSettings } from "@taiyomoe/db"
 import { tags } from "./tags"
 
 export const config = {
-  logger: {
-    services: {
-      api: "api",
-    },
-    defaultLevel: "info",
-    minimumIntervalInMs: 1000,
-  },
   openapi: {
     title: "Taiyō API",
     description:
