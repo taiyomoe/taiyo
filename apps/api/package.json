@@ -9,7 +9,8 @@
     "./env": "./src/env.ts"
   },
   "scripts": {
-    "dev": "tsx watch src/index.ts",
+    "with-env": "dotenv -e ../../.env --",
+    "dev": "pnpm with-env tsx watch src/index.ts",
     "clean": "rm -rf .turbo node_modules",
     "typecheck": "tsc --noEmit"
   },
@@ -34,6 +35,7 @@
   "devDependencies": {
     "@taiyomoe/typescript": "workspace:^",
     "@types/node": "^25.9.1",
+    "dotenv-cli": "^11.0.0",
     "tsx": "^4.22.3",
     "typescript": "6.0.3"
   }
