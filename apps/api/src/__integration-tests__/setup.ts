@@ -10,15 +10,15 @@ type Fixtures = {
 }
 
 const getTestDbName = (taskId: string) => `test_integration_${taskId}`
-const dropTestDatabase = async (taskId: string) => {
-  await sql.raw(`DROP DATABASE IF EXISTS "${getTestDbName(taskId)}"`).execute(db)
-}
-const buildTestDatabaseUrl = (dbName: string): string => {
+const getDatabaseUrl = (dbName: string): string => {
   const url = new URL(env.DATABASE_URL)
 
   url.pathname = `/${dbName}`
 
   return url.toString()
+}
+const dropTestDatabase = async (taskId: string) => {
+  await sql.raw(`DROP DATABASE IF EXISTS "${getTestDbName(taskId)}"`).execute(db)
 }
 const createTestDatabase = async (taskId: string): Promise<string> => {
   const dbName = getTestDbName(taskId)
@@ -26,7 +26,7 @@ const createTestDatabase = async (taskId: string): Promise<string> => {
   await dropTestDatabase(taskId)
   await sql.raw(`CREATE DATABASE "${dbName}"`).execute(db)
 
-  const childEnv = { ...process.env, DATABASE_URL: buildTestDatabaseUrl(dbName) }
+  const childEnv = { ...process.env, DATABASE_URL: getDatabaseUrl(dbName) }
 
   execSync("pnpm -F db kysely migrate latest", { env: childEnv })
   execSync("pnpm -F db kysely seed run", { env: childEnv })
@@ -38,15 +38,15 @@ export const test = baseTest.extend<Fixtures>({
   db: async ({ task }, use) => {
     await createTestDatabase(task.id)
 
-    const testDb = new Kysely<DB>({
+    const db = new Kysely<DB>({
       dialect: new PostgresDialect({
-        pool: new pg.Pool({ connectionString: buildTestDatabaseUrl(task.id) }),
+        pool: new pg.Pool({ connectionString: getDatabaseUrl(task.id) }),
       }),
     })
 
-    await use(testDb)
+    await use(db)
 
-    await testDb.destroy()
+    await db.destroy()
     await dropTestDatabase(task.id)
   },
 })
