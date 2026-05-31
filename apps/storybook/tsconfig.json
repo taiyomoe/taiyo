@@ -2,11 +2,12 @@
   "extends": "@taiyomoe/typescript/base.json",
   "compilerOptions": {
     "jsx": "preserve",
+    "noUncheckedSideEffectImports": false,
     "paths": {
       "@/storybook/*": ["./.storybook/*"],
       "@/*": ["./src/*"]
     }
   },
-  "include": [".storybook", "stories"],
+  "include": [".storybook/**/*", "./src/**/*"],
   "exclude": ["node_modules"]
 }

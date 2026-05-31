@@ -26,6 +26,7 @@
     "oxlint-tailwindcss": "^1.1.0",
     "oxlint-tsgolint": "^0.23.0",
     "turbo": "^2.9.14",
+    "typescript": "^6.0.3",
     "vitest": "^4.1.7"
   },
   "engines": {

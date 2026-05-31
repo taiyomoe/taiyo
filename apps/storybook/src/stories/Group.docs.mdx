@@ -1,0 +1,51 @@
+import { Canvas, Meta } from "@storybook/addon-docs/blocks"
+import * as GroupStories from "./Group.stories"
+
+<Meta title="UI/Group" />
+
+# Group
+
+[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/ui/group.tsx)
+
+## Table of Contents
+
+- [Overview](#overview)
+  - [Vertical](#vertical)
+  - [With Separator](#with-separator)
+  - [With Text](#with-text)
+  - [Split Button](#split-button)
+- [Feedback](#feedback)
+
+## Overview
+
+`Group` is a layout primitive that joins adjacent controls (buttons, inputs, selects) into a single connected unit. It strips the inner borders and radii so the controls visually fuse, much like a segmented control or a browser-style input/button combo.
+
+<Canvas of={GroupStories.Default} />
+
+### Vertical
+
+Pass `orientation="vertical"` to stack controls top-to-bottom while still merging their borders.
+
+<Canvas of={GroupStories.Vertical} />
+
+### With Separator
+
+`GroupSeparator` inserts a thin divider between joined controls, useful when grouping icon-only actions that would otherwise read as a single rectangle.
+
+<Canvas of={GroupStories.WithSeparator} />
+
+### With Text
+
+`GroupText` renders a non-interactive label cell — handy for prefixing inputs with a protocol, currency, or unit.
+
+<Canvas of={GroupStories.WithText} />
+
+### Split Button
+
+A common pattern: pair a primary action with an adjacent icon button that opens a menu of related options.
+
+<Canvas of={GroupStories.SplitButton} />
+
+## Feedback
+
+Help us improve this component by providing feedback, asking questions on [Discord](https://discord.gg/RYbnyeWcM2), or updating this file directly on [GitHub](https://github.com/taiyomoe/taiyo). Your feedback helps us create better components! 🚀

@@ -1,0 +1,37 @@
+import { Canvas, Meta } from "@storybook/addon-docs/blocks"
+import * as AlertDialogStories from "./AlertDialog.stories"
+
+<Meta title="UI/AlertDialog" />
+
+# AlertDialog
+
+[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/ui/alert-dialog.tsx)
+
+## Table of Contents
+
+- [Overview](#overview)
+  - [Bare Footer](#bare-footer)
+  - [No Mobile Stick](#no-mobile-stick)
+- [Feedback](#feedback)
+
+## Overview
+
+Alert dialogs interrupt the user with a critical, blocking choice — typically a destructive or irreversible action that needs explicit confirmation. Unlike a regular dialog, they cannot be dismissed by clicking outside; the user must pick one of the available actions.
+
+<Canvas of={AlertDialogStories.Default} />
+
+### Bare Footer
+
+`AlertDialogFooter` accepts a `variant` prop. The default footer renders a separator and a muted background; `bare` removes them for a flush look.
+
+<Canvas of={AlertDialogStories.BareFooter} />
+
+### No Mobile Stick
+
+By default the popup sticks to the bottom of the viewport on mobile widths. Disable this with `bottomStickOnMobile={false}` to keep the centered desktop layout on all screens.
+
+<Canvas of={AlertDialogStories.NoMobileStick} />
+
+## Feedback
+
+Help us improve this component by providing feedback, asking questions on [Discord](https://discord.gg/RYbnyeWcM2), or updating this file directly on [GitHub](https://github.com/taiyomoe/taiyo). Your feedback helps us create better components! 🚀

@@ -1,0 +1,58 @@
+import { Canvas, Meta } from "@storybook/addon-docs/blocks"
+import * as ComboboxStories from "./Combobox.stories"
+
+<Meta title="UI/Combobox" />
+
+# Combobox
+
+[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/ui/combobox.tsx)
+
+## Table of Contents
+
+- [Overview](#overview)
+  - [Selected by default](#selected-by-default)
+  - [Disabled](#disabled)
+  - [Read only](#read-only)
+  - [With groups](#with-groups)
+  - [Multiple](#multiple)
+- [Feedback](#feedback)
+
+## Overview
+
+Comboboxes pair a text input with a filterable popup, letting users either type freely or pick from a curated list. Reach for them when the option set is too large for a Select but still finite enough to enumerate.
+
+<Canvas of={ComboboxStories.Default} />
+
+### Selected by default
+
+Pass `defaultValue` to hydrate the input with an item on mount while keeping the combobox uncontrolled.
+
+<Canvas of={ComboboxStories.SelectedByDefault} />
+
+### Disabled
+
+When `disabled` is set, the input becomes non-interactive and the popup cannot be opened.
+
+<Canvas of={ComboboxStories.Disabled} />
+
+### Read only
+
+`readOnly` keeps the current selection visible and the popup browsable but prevents value changes.
+
+<Canvas of={ComboboxStories.ReadOnly} />
+
+### With groups
+
+Combine `ComboboxGroup`, `ComboboxGroupLabel`, and `ComboboxSeparator` to organize a longer list of items into labeled sections.
+
+<Canvas of={ComboboxStories.WithGroups} />
+
+### Multiple
+
+Set `multiple` to let users pick several values at once — each selection is reflected via `ComboboxItem` indicators in the popup.
+
+<Canvas of={ComboboxStories.Multiple} />
+
+## Feedback
+
+Help us improve this component by providing feedback, asking questions on [Discord](https://discord.gg/RYbnyeWcM2), or updating this file directly on [GitHub](https://github.com/taiyomoe/taiyo). Your feedback helps us create better components! 🚀

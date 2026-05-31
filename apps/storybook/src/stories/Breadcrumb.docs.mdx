@@ -1,0 +1,37 @@
+import { Canvas, Meta } from "@storybook/addon-docs/blocks"
+import * as BreadcrumbStories from "./Breadcrumb.stories"
+
+<Meta title="UI/Breadcrumb" />
+
+# Breadcrumb
+
+[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/ui/breadcrumb.tsx)
+
+## Table of Contents
+
+- [Overview](#overview)
+  - [With Custom Separator](#with-custom-separator)
+  - [With Ellipsis](#with-ellipsis)
+- [Feedback](#feedback)
+
+## Overview
+
+Breadcrumbs help users understand where they are in a hierarchical navigation tree and provide a quick way to jump back up the path. They are composed from `BreadcrumbList`, `BreadcrumbItem`, `BreadcrumbLink`, `BreadcrumbPage`, and `BreadcrumbSeparator` parts.
+
+<Canvas of={BreadcrumbStories.Default} />
+
+### With Custom Separator
+
+`BreadcrumbSeparator` accepts children to override the default chevron — pass any icon to brand the separator.
+
+<Canvas of={BreadcrumbStories.WithCustomSeparator} />
+
+### With Ellipsis
+
+Use `BreadcrumbEllipsis` to collapse a long trail when there isn't room to render every intermediate step.
+
+<Canvas of={BreadcrumbStories.WithEllipsis} />
+
+## Feedback
+
+Help us improve this component by providing feedback, asking questions on [Discord](https://discord.gg/RYbnyeWcM2), or updating this file directly on [GitHub](https://github.com/taiyomoe/taiyo). Your feedback helps us create better components! 🚀

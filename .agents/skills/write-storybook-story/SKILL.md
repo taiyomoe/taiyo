@@ -141,14 +141,44 @@ A good story file demonstrates the component's real surface area. Cover both **s
 
 For each prop that meaningfully changes the rendering, create one showcase story that renders every option side-by-side. Common axes:
 
-- **Variants** (`variant: "default" | "secondary" | "destructive" | …`) → a `Variants` story
-- **Sizes** (`size: "xs" | "sm" | "default" | "lg" | …`) → a `Sizes` story
-- **Colors / tones** (when separate from variant) → a `Colors` story
-- **Orientation** (`orientation: "horizontal" | "vertical"`) → a `Vertical` story (the default direction doesn't need its own)
-- **Side / placement** (`side: "top" | "right" | …`) → individual stories per side or a single `Sides` showcase
+- **Variants** (`variant: "default" | "secondary" | "destructive" | …`) → a single `Variants` story
+- **Sizes** (`size: "xs" | "sm" | "default" | "lg" | …`) → a single `Sizes` story
+- **Colors / tones** (when separate from variant) → a single `Colors` story
+- **Orientation** (`orientation: "horizontal" | "vertical"`) → a single `Vertical` story (the default direction doesn't need its own)
+- **Side / placement** (`side: "top" | "right" | …`, `position`, `align`) → a single `Sides` / `Positions` / `Alignment` showcase
 - **Layout modifiers** (`inset`, `bare`, density variants) → one story per non-default value
 
 For each shape story, render real instances with hardcoded values inside a flex/grid wrapper (see "Composing showcase stories" below) rather than relying on controls. The goal is a visual catalog at a glance.
+
+#### One story per axis — not per value
+
+**Never create N stories that differ only by a single inner-prop value.** Four stories named `Top`/`Right`/`Bottom`/`Left` (each setting just `side`) is the same prop axis duplicated four times. Collapse into one `Sides` showcase that renders all four side-by-side in a flex wrapper. Same rule for `Positions` (Drawer/Toast), `Alignment` (Popover/Tooltip), and any future axis.
+
+For trigger-based components, render one trigger per value in the showcase — each opens its own popover/sheet/drawer/etc.:
+
+```tsx
+// ❌ Don't — four stories, each setting one side
+export const Top = meta.story({ args: { side: "top" } })
+export const Right = meta.story({ args: { side: "right" } })
+export const Bottom = meta.story({ args: { side: "bottom" } })
+export const Left = meta.story({ args: { side: "left" } })
+
+// ✅ Do — one Sides story with all four triggers
+export const Sides = meta.story({
+  render: () => (
+    <div className="flex gap-2">
+      {(["top", "right", "bottom", "left"] as const).map((side) => (
+        <Sheet key={side}>
+          <SheetTrigger render={<Button variant="outline" />}>{side}</SheetTrigger>
+          <SheetContent side={side}>…</SheetContent>
+        </Sheet>
+      ))}
+    </div>
+  ),
+})
+```
+
+A single non-default direction (e.g. `Vertical` on a horizontal-by-default Slider) is fine as a one-off story — the rule only kicks in when you'd otherwise need 2+ stories on the same axis.
 
 ### 2. State stories — one per applicable runtime state
 
@@ -208,29 +238,139 @@ const meta = preview.meta({
 })
 ```
 
-## Stateful / trigger-based stories (Sheet, Dialog, Menu)
+## Inline everything — no top-of-file helpers
 
-These need a wrapper component because they're driven by a trigger and have multiple parts. Declare the wrapper ABOVE the meta:
+Every story must be self-contained. Do NOT extract:
+
+- Wrapper components (`ProfileSheet`, `CommandPalette`, `TooltipDemo`, etc.)
+- Render helper functions (`renderItem`, `renderGroup`, etc.)
+- Sub-layout components (`PaletteFooter`, `Inner`, `PositionTrigger`, etc.)
+
+The full JSX lives inside each story's own `render` function. Duplication across stories is preferred over shared helpers — a reader should be able to understand a story end-to-end without jumping to a top-of-file definition.
+
+Same rule applies to the meta-level `render`: don't define a default render that delegates to a wrapper component. Each story owns its render. Meta-level `args`/`argTypes` are still fine for controls.
 
 ```tsx
-const ProfileSheet = ({ side, ...args }: Props) => (
+// ❌ Don't — top-of-file helper consumed by every story
+const ProfileSheet = ({ side, ...args }: SheetStoryProps) => (
   <Sheet {...args}>
     <SheetTrigger render={<Button variant="outline" />}>Open</SheetTrigger>
-    <SheetContent side={side}>
-      {/* ... */}
-    </SheetContent>
+    <SheetContent side={side}>{/* … */}</SheetContent>
   </Sheet>
 )
 
 const meta = preview.meta({
-  title: "UI/Sheet",
-  component: Sheet,
-  // ...
-  render: (args: Props) => <ProfileSheet {...args} />,
+  // …
+  render: (args) => <ProfileSheet {...args} />,
 })
 
-export const Right = meta.story({ args: { side: "right" } })
-export const Left = meta.story({ args: { side: "left" } })
+export const Default = meta.story({ args: { side: "right" } })
+export const Sides = meta.story({
+  render: () => (/* uses ProfileSheet again? Or duplicates? */),
+})
+
+// ✅ Do — each story renders its own JSX, no shared wrapper
+const meta = preview.meta({
+  title: "UI/Sheet",
+  component: Sheet,
+  parameters: { layout: "centered" },
+  argTypes: { /* controls only */ },
+})
+
+export const Default = meta.story({
+  render: () => (
+    <Sheet>
+      <SheetTrigger render={<Button variant="outline" />}>Open</SheetTrigger>
+      <SheetContent side="right">{/* … */}</SheetContent>
+    </Sheet>
+  ),
+})
+
+export const Sides = meta.story({
+  render: () => (
+    <div className="flex gap-2">
+      {(["top", "right", "bottom", "left"] as const).map((side) => (
+        <Sheet key={side}>
+          <SheetTrigger render={<Button variant="outline" />}>Open {side}</SheetTrigger>
+          <SheetContent side={side}>{/* … */}</SheetContent>
+        </Sheet>
+      ))}
+    </div>
+  ),
+})
+```
+
+The only exception: small `const` arrays/objects of demo data (e.g. `const fruits = [...]`) used as `items` props or to drive `.map()` — those aren't components, they're just data.
+
+### Component-specific composition invariants
+
+Some primitives require structural wrappers that aren't visually obvious. Read the component source and respect these even when they look ceremonial:
+
+- **`Menu`** — every `MenuItem` / `MenuCheckboxItem` / `MenuRadioGroup` / `MenuSub` must live inside a `MenuGroup`, even when the group has no `MenuGroupLabel`. Don't put items directly inside `MenuPopup` or `MenuSubPopup`. When you'd write a `<MenuSeparator />`, split the surrounding items into two `MenuGroup`s with the separator between them.
+- **`Command`** — `CommandEmpty` goes immediately after `CommandInput`, NOT inside `CommandList`. `CommandFooter` goes inside `<Command>` after `<CommandPanel>`, NOT outside in `CommandDialogPopup`.
+- **`Combobox`** — multiple-selection variant uses the chips composition: `<ComboboxChips><ComboboxValue>{(value) => …chip per value… + <ComboboxChipsInput />}</ComboboxValue></ComboboxChips>`. Don't reuse the single-select `<ComboboxInput />` for `multiple`.
+- **`Autocomplete`** — `AutocompleteEmpty` goes directly inside `AutocompletePopup`, BEFORE `AutocompleteList` (NOT inside the list). The root accepts an `items` prop with the data array; render via function-children on `AutocompleteList` using the `{ value, label }` item shape: `<AutocompleteList>{(item) => <AutocompleteItem key={item.value} value={item}>{item.label}</AutocompleteItem>}</AutocompleteList>`. `defaultValue` is the input string, not a selected item object.
+
+When in doubt, look for a "particle"-like example in the source comments or check how the component's docs example composes it — these invariants are easy to miss when reading types alone.
+
+### Never auto-open full-page modal overlays
+
+For components that render a **modal overlay covering the entire viewport** (Command palette, Dialog, AlertDialog, Drawer, Sheet, and any other full-screen modal), **never pass `defaultOpen={true}` or `open={true}` in any story — not even a dedicated showcase, not even an empty-state demo.** Every story must render the trigger in its closed state and let the viewer click to open it.
+
+Why: Storybook's docs view renders every story in its own iframe simultaneously. A full-page modal that opens on mount leaks out of its canvas, overlaps neighbouring stories, blocks the controls/a11y addon panels, and produces noisy visual regressions on every snapshot. Even a single auto-opened modal story in the file breaks the docs page layout.
+
+If you need to demonstrate inner content of the open state (e.g. the empty result of a Command palette), keep the trigger pattern (so the story stays consistent with the others) and **pre-seed the relevant control** so the inner state is visible the moment the user opens the modal. For Command, that means pre-typing a non-matching query via `<CommandInput defaultValue="zzz" />`:
+
+```tsx
+// ❌ Don't — auto-opens the dialog, breaks docs view
+export const EmptyState = meta.story({
+  render: () => (
+    <CommandDialog defaultOpen>
+      …
+    </CommandDialog>
+  ),
+})
+
+// ✅ Do — same trigger pattern as every other story, just with a pre-seeded query
+export const EmptyState = meta.story({
+  render: () => (
+    <CommandDialog>
+      <CommandDialogTrigger render={<Button variant="outline" />}>
+        Open empty palette
+      </CommandDialogTrigger>
+      <CommandDialogPopup>
+        <CommandPanel>
+          <Command>
+            <CommandInput defaultValue="zzz" placeholder="Type to search…" />
+            <CommandEmpty>No results.</CommandEmpty>
+            <CommandList>…</CommandList>
+          </Command>
+        </CommandPanel>
+      </CommandDialogPopup>
+    </CommandDialog>
+  ),
+})
+```
+
+### Out of scope (these CAN open by default)
+
+This rule does **not** apply to:
+
+- **Popover-style hovers / tethered popups**: Tooltip, Popover, PreviewCard, Menu, Select, Combobox — these anchor to a trigger and don't cover the viewport. A `DefaultOpen` showcase story is fine for these.
+- **Inline expand/collapse**: Collapsible, Accordion — the panel just pushes content below it, doesn't overlay. `OpenByDefault` is fine.
+- **Layout primitives**: Sidebar — "open" means "expanded with labels" as part of the page layout, not a popup. Default expanded is the canonical state.
+
+For these, an explicit `DefaultOpen` / `OpenByDefault` showcase story is welcome.
+
+```tsx
+// ❌ Don't (full-page modals only)
+export const Default = meta.story({ args: { defaultOpen: true } })
+
+// ✅ Do (full-page modals only)
+export const Default = meta.story({})
+
+// ✅ Fine (tooltips, popovers, collapsibles, sidebars)
+export const DefaultOpen = meta.story({ args: { defaultOpen: true } })
 ```
 
 ## Output checklist
@@ -246,4 +386,6 @@ Before returning a new/edited story or docs file:
 - [ ] For showcase stories, options arrays mirror the real variant union (no stale/removed values).
 - [ ] Docs file's `<Canvas of={...} />` references all resolve to exported stories.
 - [ ] Source link path uses `packages/ui/src/components/ui/<name>.tsx`.
+- [ ] No top-of-file wrapper components, render helpers, or sub-layout helpers. Each story's JSX is fully inlined in its own `render`. Meta has no `render` field. (Demo-data consts like `const fruits = [...]` are fine.)
+- [ ] No story on a full-page modal (Command, Dialog, AlertDialog, Drawer, Sheet, etc.) passes `defaultOpen`/`open={true}` — including dedicated showcases. For inner-state demos, render the inner component inline without its modal wrapper. Tooltip/Popover/Collapsible/Sidebar etc. are exempt.
 - [ ] `pnpm lint` clean (ignoring pre-existing primitive-package errors).

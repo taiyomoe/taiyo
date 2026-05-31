@@ -1,0 +1,37 @@
+import { Canvas, Meta } from "@storybook/addon-docs/blocks"
+import * as SkeletonStories from "./Skeleton.stories"
+
+<Meta title="UI/Skeleton" />
+
+# Skeleton
+
+[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/ui/skeleton.tsx)
+
+## Table of Contents
+
+- [Overview](#overview)
+  - [Composition](#composition)
+  - [Card](#card)
+- [Feedback](#feedback)
+
+## Overview
+
+`Skeleton` is a low-level placeholder used while async content is loading. Size and shape it with utility classes to match the element it stands in for.
+
+<Canvas of={SkeletonStories.Default} />
+
+### Composition
+
+Skeletons compose naturally — combine multiple blocks with utility classes to mirror the layout of the content they replace.
+
+<Canvas of={SkeletonStories.Composition} />
+
+### Card
+
+A typical card placeholder built from stacked skeletons of varying widths.
+
+<Canvas of={SkeletonStories.Card} />
+
+## Feedback
+
+Help us improve this component by providing feedback, asking questions on [Discord](https://discord.gg/RYbnyeWcM2), or updating this file directly on [GitHub](https://github.com/taiyomoe/taiyo). Your feedback helps us create better components! 🚀

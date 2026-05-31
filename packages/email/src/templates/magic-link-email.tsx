@@ -1,14 +1,5 @@
-import {
-  Button,
-  Container,
-  Heading,
-  Html,
-  Img,
-  Preview,
-  Section,
-  Tailwind,
-  Text,
-} from "@react-email/components"
+import { Button, Container, Section, Text } from "@react-email/components"
+import EmailBase from "../components/email-base"
 
 type Props = {
   name: string
@@ -16,57 +7,26 @@ type Props = {
 }
 
 const MagicLinkEmail = ({ name, url }: Props) => (
-  <Tailwind
-    config={{
-      theme: {
-        extend: {
-          colors: {
-            default: "#ffffff",
-            subtle: "#f3f4f6",
-            brand: "#FF4F4F",
-          },
-          borderColor: {
-            subtle: "#e5e7eb",
-          },
-        },
-      },
-    }}
-  >
-    <Html lang="en" className="bg-subtle">
-      <Preview>Your magic link for Taiyō</Preview>
-      <Section className="mt-8">
-        <Img
-          src="https://cdn.taiyo.moe/assets/logo.png"
-          width={96}
-          alt="Taiyō"
-          className="mx-auto my-0"
-        />
+  <EmailBase preview="Your magic link for Taiyō">
+    <Container className="px-8 py-4">
+      <Text className="text-2xl font-bold">Your magic link</Text>
+      <Text>
+        Hi {name}, your will find the magic link your requested below. This link will be valid for 1
+        hour.
+      </Text>
+      <Section>
+        <Button href={url} className="rounded-md bg-primary px-3 py-1.5 text-sm text-white">
+          Click here
+        </Button>
       </Section>
-      <Heading className="mx-0 my-4 p-0 text-center text-[24px] font-semibold text-black">
-        Taiyō
-      </Heading>
-      <Container className="my-12 rounded-lg border border-solid border-subtle bg-default">
-        <Container className="px-8 py-4">
-          <Text className="text-2xl font-bold">Your magic link</Text>
-          <Text>
-            Hi {name}, your will find the magic link your requested below. This link will be valid
-            for 1 hour.
-          </Text>
-          <Section>
-            <Button href={url} className="rounded-md bg-brand px-3 py-1.5 text-sm text-white">
-              Click here
-            </Button>
-          </Section>
-          <Text>
-            If the button does not work, copy and paste the link below into your browser: {url}
-          </Text>
-        </Container>
-        <Container className="border-t border-solid border-subtle px-8">
-          <Text>If you did not request this email, please ignore it.</Text>
-        </Container>
-      </Container>
-    </Html>
-  </Tailwind>
+      <Text>
+        If the button does not work, copy and paste the link below into your browser: {url}
+      </Text>
+    </Container>
+    <Container className="border-t border-solid border-border px-8">
+      <Text>If you did not request this email, please ignore it.</Text>
+    </Container>
+  </EmailBase>
 )
 
 export default MagicLinkEmail

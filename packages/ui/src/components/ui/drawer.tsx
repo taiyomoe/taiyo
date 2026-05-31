@@ -1,68 +1,56 @@
-"use client";
+"use client"
 
-import { Checkbox as CheckboxPrimitive } from "@base-ui/react/checkbox";
-import { Drawer as DrawerPrimitive } from "@base-ui/react/drawer";
-import { mergeProps } from "@base-ui/react/merge-props";
-import { Radio as RadioPrimitive } from "@base-ui/react/radio";
-import { RadioGroup as RadioGroupPrimitive } from "@base-ui/react/radio-group";
-import { useRender } from "@base-ui/react/use-render";
-import { ChevronRightIcon, XIcon } from "lucide-react";
-import type React from "react";
-import { createContext, useContext } from "react";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { Checkbox as CheckboxPrimitive } from "@base-ui/react/checkbox"
+import { Drawer as DrawerPrimitive } from "@base-ui/react/drawer"
+import { mergeProps } from "@base-ui/react/merge-props"
+import { Radio as RadioPrimitive } from "@base-ui/react/radio"
+import { RadioGroup as RadioGroupPrimitive } from "@base-ui/react/radio-group"
+import { useRender } from "@base-ui/react/use-render"
+import { ChevronRightIcon, XIcon } from "lucide-react"
+import type React from "react"
+import { createContext, useContext } from "react"
+import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
+import { ScrollArea } from "@/components/ui/scroll-area"
 
-type DrawerPosition = "right" | "left" | "top" | "bottom";
+type DrawerPosition = "right" | "left" | "top" | "bottom"
 
-const DrawerContext: React.Context<{ position: DrawerPosition }> =
-  createContext<{ position: DrawerPosition }>({
-    position: "bottom",
-  });
-
-const directionMap: Record<
-  DrawerPosition,
-  DrawerPrimitive.Root.Props["swipeDirection"]
-> = {
+const DrawerContext: React.Context<{ position: DrawerPosition }> = createContext<{
+  position: DrawerPosition
+}>({
+  position: "bottom",
+})
+const directionMap: Record<DrawerPosition, DrawerPrimitive.Root.Props["swipeDirection"]> = {
   bottom: "down",
   left: "left",
   right: "right",
   top: "up",
-};
+}
 
-export const DrawerCreateHandle: typeof DrawerPrimitive.createHandle =
-  DrawerPrimitive.createHandle;
+export const DrawerCreateHandle: typeof DrawerPrimitive.createHandle = DrawerPrimitive.createHandle
 
 export function Drawer({
   swipeDirection,
   position = "bottom",
   ...props
 }: DrawerPrimitive.Root.Props & {
-  position?: DrawerPosition;
+  position?: DrawerPosition
 }): React.ReactElement {
   return (
     <DrawerContext.Provider value={{ position }}>
-      <DrawerPrimitive.Root
-        swipeDirection={swipeDirection ?? directionMap[position]}
-        {...props}
-      />
+      <DrawerPrimitive.Root swipeDirection={swipeDirection ?? directionMap[position]} {...props} />
     </DrawerContext.Provider>
-  );
+  )
 }
 
-export const DrawerPortal: typeof DrawerPrimitive.Portal =
-  DrawerPrimitive.Portal;
+export const DrawerPortal: typeof DrawerPrimitive.Portal = DrawerPrimitive.Portal
 
-export function DrawerTrigger(
-  props: DrawerPrimitive.Trigger.Props,
-): React.ReactElement {
-  return <DrawerPrimitive.Trigger data-slot="drawer-trigger" {...props} />;
+export function DrawerTrigger(props: DrawerPrimitive.Trigger.Props): React.ReactElement {
+  return <DrawerPrimitive.Trigger data-slot="drawer-trigger" {...props} />
 }
 
-export function DrawerClose(
-  props: DrawerPrimitive.Close.Props,
-): React.ReactElement {
-  return <DrawerPrimitive.Close data-slot="drawer-close" {...props} />;
+export function DrawerClose(props: DrawerPrimitive.Close.Props): React.ReactElement {
+  return <DrawerPrimitive.Close data-slot="drawer-close" {...props} />
 }
 
 export function DrawerSwipeArea({
@@ -70,10 +58,10 @@ export function DrawerSwipeArea({
   position: positionProp,
   ...props
 }: DrawerPrimitive.SwipeArea.Props & {
-  position?: DrawerPosition;
+  position?: DrawerPosition
 }): React.ReactElement {
-  const { position: contextPosition } = useContext(DrawerContext);
-  const position = positionProp ?? contextPosition;
+  const { position: contextPosition } = useContext(DrawerContext)
+  const position = positionProp ?? contextPosition
 
   return (
     <DrawerPrimitive.SwipeArea
@@ -88,7 +76,7 @@ export function DrawerSwipeArea({
       data-slot="drawer-swipe-area"
       {...props}
     />
-  );
+  )
 }
 
 export function DrawerBackdrop({
@@ -98,13 +86,13 @@ export function DrawerBackdrop({
   return (
     <DrawerPrimitive.Backdrop
       className={cn(
-        "fixed inset-0 z-50 bg-black/32 opacity-[calc(1-var(--drawer-swipe-progress))] backdrop-blur-sm transition-opacity duration-450 ease-[cubic-bezier(0.32,0.72,0,1)] data-ending-style:opacity-0 data-starting-style:opacity-0 data-ending-style:duration-[calc(var(--drawer-swipe-strength)*400ms)] data-swiping:duration-0 supports-[-webkit-touch-callout:none]:absolute",
+        "fixed inset-0 z-50 bg-black/32 opacity-[calc(1-var(--drawer-swipe-progress))] backdrop-blur-sm transition-opacity duration-450 ease-[cubic-bezier(0.32,0.72,0,1)] data-ending-style:opacity-0 data-ending-style:duration-[calc(var(--drawer-swipe-strength)*400ms)] data-starting-style:opacity-0 data-swiping:duration-0 supports-[-webkit-touch-callout:none]:absolute",
         className,
       )}
       data-slot="drawer-backdrop"
       {...props}
     />
-  );
+  )
 }
 
 export function DrawerViewport({
@@ -113,8 +101,8 @@ export function DrawerViewport({
   variant = "default",
   ...props
 }: DrawerPrimitive.Viewport.Props & {
-  position?: DrawerPosition;
-  variant?: "default" | "straight" | "inset";
+  position?: DrawerPosition
+  variant?: "default" | "straight" | "inset"
 }): React.ReactElement {
   return (
     <DrawerPrimitive.Viewport
@@ -133,7 +121,7 @@ export function DrawerViewport({
       data-slot="drawer-viewport"
       {...props}
     />
-  );
+  )
 }
 
 export function DrawerPopup({
@@ -146,14 +134,14 @@ export function DrawerPopup({
   portalProps,
   ...props
 }: DrawerPrimitive.Popup.Props & {
-  showCloseButton?: boolean;
-  position?: DrawerPosition;
-  variant?: "default" | "straight" | "inset";
-  showBar?: boolean;
-  portalProps?: DrawerPrimitive.Portal.Props;
+  showCloseButton?: boolean
+  position?: DrawerPosition
+  variant?: "default" | "straight" | "inset"
+  showBar?: boolean
+  portalProps?: DrawerPrimitive.Portal.Props
 }): React.ReactElement {
-  const { position: contextPosition } = useContext(DrawerContext);
-  const position = positionProp ?? contextPosition;
+  const { position: contextPosition } = useContext(DrawerContext)
+  const position = positionProp ?? contextPosition
 
   return (
     <DrawerPortal {...portalProps}>
@@ -161,50 +149,46 @@ export function DrawerPopup({
       <DrawerViewport position={position} variant={variant}>
         <DrawerPrimitive.Popup
           className={cn(
-            "relative flex max-h-full min-h-0 w-full min-w-0 flex-col bg-popover not-dark:bg-clip-padding text-popover-foreground shadow-lg/5 outline-none transition-[transform,box-shadow,height,background-color] duration-450 ease-[cubic-bezier(0.32,0.72,0,1)] will-change-transform [--peek:calc(--spacing(6)-1px)] [--scale-base:calc(max(0,1-(var(--nested-drawers)*var(--stack-step))))] [--scale:clamp(0,calc(var(--scale-base)+(var(--stack-step)*var(--stack-progress))),1)] [--shrink:calc(1-var(--scale))] [--stack-peek-offset:max(0px,calc((var(--nested-drawers)-var(--stack-progress))*var(--peek)))] [--stack-progress:clamp(0,var(--drawer-swipe-progress),1)] [--stack-step:0.05] before:pointer-events-none before:absolute before:inset-0 before:shadow-[0_1px_--theme(--color-black/4%)] after:pointer-events-none after:absolute after:bg-popover data-swiping:select-none data-nested-drawer-open:overflow-hidden data-nested-drawer-open:bg-[color-mix(in_srgb,var(--popover),var(--color-black)_calc(2%*(var(--nested-drawers)-var(--stack-progress))))] data-ending-style:shadow-transparent data-starting-style:shadow-transparent data-ending-style:duration-[calc(var(--drawer-swipe-strength)*400ms)] dark:data-nested-drawer-open:bg-[color-mix(in_srgb,var(--popover),var(--color-black)_calc(6%*(var(--nested-drawers)-var(--stack-progress))))] dark:before:shadow-[0_-1px_--theme(--color-white/6%)]",
+            "relative flex max-h-full min-h-0 w-full min-w-0 flex-col bg-popover text-popover-foreground shadow-lg/5 transition-[transform,box-shadow,height,background-color] duration-450 ease-[cubic-bezier(0.32,0.72,0,1)] will-change-transform outline-none [--peek:calc(--spacing(6)-1px)] [--scale-base:calc(max(0,1-(var(--nested-drawers)*var(--stack-step))))] [--scale:clamp(0,calc(var(--scale-base)+(var(--stack-step)*var(--stack-progress))),1)] [--shrink:calc(1-var(--scale))] [--stack-peek-offset:max(0px,calc((var(--nested-drawers)-var(--stack-progress))*var(--peek)))] [--stack-progress:clamp(0,var(--drawer-swipe-progress),1)] [--stack-step:0.05] not-dark:bg-clip-padding before:pointer-events-none before:absolute before:inset-0 before:shadow-[0_1px_--theme(--color-black/4%)] after:pointer-events-none after:absolute after:bg-popover data-ending-style:shadow-transparent data-ending-style:duration-[calc(var(--drawer-swipe-strength)*400ms)] data-nested-drawer-open:overflow-hidden data-nested-drawer-open:bg-[color-mix(in_srgb,var(--popover),var(--color-black)_calc(2%*(var(--nested-drawers)-var(--stack-progress))))] data-starting-style:shadow-transparent data-swiping:select-none dark:before:shadow-[0_-1px_--theme(--color-white/6%)] dark:data-nested-drawer-open:bg-[color-mix(in_srgb,var(--popover),var(--color-black)_calc(6%*(var(--nested-drawers)-var(--stack-progress))))]",
             "touch-none",
             position === "bottom" &&
-              "transform-[translateY(calc(var(--drawer-snap-point-offset)+var(--drawer-swipe-movement-y)))] data-ending-style:transform-[translateY(calc(100%+env(safe-area-inset-bottom,0px)+var(--inset)))] data-starting-style:transform-[translateY(calc(100%+env(safe-area-inset-bottom,0px)+var(--inset)))] row-start-2 -mb-[max(0px,calc(var(--drawer-snap-point-offset,0px)+clamp(0,1,var(--drawer-snap-point-offset,0px)/1px)*var(--drawer-swipe-movement-y,0px)))] border-t pb-[max(0px,calc(env(safe-area-inset-bottom,0px)+var(--drawer-snap-point-offset,0px)+clamp(0,1,var(--drawer-snap-point-offset,0px)/1px)*var(--drawer-swipe-movement-y,0px)))] not-data-starting-style:not-data-ending-style:transition-[transform,box-shadow,height,background-color,margin,padding] after:inset-x-0 after:top-full after:h-(--bleed) has-data-[slot=drawer-bar]:pt-2 data-ending-style:mb-0 data-starting-style:mb-0 data-ending-style:pb-0 data-starting-style:pb-0",
+              "row-start-2 mb-[-max(0px,calc(var(--drawer-snap-point-offset,0px)+clamp(0,1,var(--drawer-snap-point-offset,0px)/1px)*var(--drawer-swipe-movement-y,0px)))] transform-[translateY(calc(var(--drawer-snap-point-offset)+var(--drawer-swipe-movement-y)))] border-t pb-[max(0px,calc(env(safe-area-inset-bottom,0px)+var(--drawer-snap-point-offset,0px)+clamp(0,1,var(--drawer-snap-point-offset,0px)/1px)*var(--drawer-swipe-movement-y,0px)))] not-data-starting-style:not-data-ending-style:transition-[transform,box-shadow,height,background-color,margin,padding] after:inset-x-0 after:top-full after:h-(--bleed) has-data-[slot=drawer-bar]:pt-2 data-ending-style:mb-0 data-ending-style:transform-[translateY(calc(100%+env(safe-area-inset-bottom,0px)+var(--inset)))] data-ending-style:pb-0 data-starting-style:mb-0 data-starting-style:transform-[translateY(calc(100%+env(safe-area-inset-bottom,0px)+var(--inset)))] data-starting-style:pb-0",
             position === "top" &&
-              "data-starting-style:transform-[translateY(calc(-100%-var(--inset)))] data-ending-style:transform-[translateY(calc(-100%-var(--inset)))] transform-[translateY(var(--drawer-swipe-movement-y))] border-b after:inset-x-0 after:bottom-full after:h-(--bleed) has-data-[slot=drawer-bar]:pb-2",
+              "transform-[translateY(var(--drawer-swipe-movement-y))] border-b after:inset-x-0 after:bottom-full after:h-(--bleed) has-data-[slot=drawer-bar]:pb-2 data-ending-style:transform-[translateY(calc(-100%-var(--inset)))] data-starting-style:transform-[translateY(calc(-100%-var(--inset)))]",
             position === "left" &&
-              "data-starting-style:transform-[translateX(calc(-100%-var(--inset)))] data-ending-style:transform-[translateX(calc(-100%-var(--inset)))] transform-[translateX(var(--drawer-swipe-movement-x))] w-[calc(100%-(--spacing(12)))] max-w-md border-e after:inset-y-0 after:end-full after:w-(--bleed) has-data-[slot=drawer-bar]:pe-2",
+              "w-[calc(100%-(--spacing(12)))] max-w-md transform-[translateX(var(--drawer-swipe-movement-x))] border-r after:inset-y-0 after:right-full after:w-(--bleed) has-data-[slot=drawer-bar]:pr-2 data-ending-style:transform-[translateX(calc(-100%-var(--inset)))] data-starting-style:transform-[translateX(calc(-100%-var(--inset)))]",
             position === "right" &&
-              "transform-[translateX(var(--drawer-swipe-movement-x))] data-ending-style:transform-[translateX(calc(100%+var(--inset)))] data-starting-style:transform-[translateX(calc(100%+var(--inset)))] col-start-2 w-[calc(100%-(--spacing(12)))] max-w-md border-s after:inset-y-0 after:start-full after:w-(--bleed) has-data-[slot=drawer-bar]:ps-2",
+              "col-start-2 w-[calc(100%-(--spacing(12)))] max-w-md transform-[translateX(var(--drawer-swipe-movement-x))] border-l after:inset-y-0 after:inset-s-full after:w-(--bleed) has-data-[slot=drawer-bar]:pl-2 data-ending-style:transform-[translateX(calc(100%+var(--inset)))] data-starting-style:transform-[translateX(calc(100%+var(--inset)))]",
             variant !== "straight" &&
               cn(
                 position === "bottom" && "rounded-t-2xl",
                 position === "top" &&
                   "rounded-b-2xl **:data-[slot=drawer-footer]:rounded-b-[calc(var(--radius-2xl)-1px)]",
                 position === "left" &&
-                  "rounded-e-2xl **:data-[slot=drawer-footer]:rounded-ee-[calc(var(--radius-2xl)-1px)]",
+                  "rounded-r-2xl **:data-[slot=drawer-footer]:rounded-br-[calc(var(--radius-2xl)-1px)]",
                 position === "right" &&
-                  "rounded-s-2xl **:data-[slot=drawer-footer]:rounded-es-[calc(var(--radius-2xl)-1px)]",
+                  "rounded-l-2xl **:data-[slot=drawer-footer]:rounded-bl-[calc(var(--radius-2xl)-1px)]",
               ),
             variant === "default" &&
               cn(
-                position === "bottom" &&
-                  "before:rounded-t-[calc(var(--radius-2xl)-1px)]",
-                position === "top" &&
-                  "before:rounded-b-[calc(var(--radius-2xl)-1px)]",
-                position === "left" &&
-                  "before:rounded-e-[calc(var(--radius-2xl)-1px)]",
-                position === "right" &&
-                  "before:rounded-s-[calc(var(--radius-2xl)-1px)]",
+                position === "bottom" && "before:rounded-t-[calc(var(--radius-2xl)-1px)]",
+                position === "top" && "before:rounded-b-[calc(var(--radius-2xl)-1px)]",
+                position === "left" && "before:rounded-r-[calc(var(--radius-2xl)-1px)]",
+                position === "right" && "before:rounded-l-[calc(var(--radius-2xl)-1px)]",
               ),
             variant === "inset" &&
-              "before:hidden sm:rounded-2xl sm:border sm:after:bg-transparent sm:before:rounded-[calc(var(--radius-2xl)-1px)] sm:**:data-[slot=drawer-footer]:rounded-b-[calc(var(--radius-2xl)-1px)]",
+              "before:hidden sm:rounded-2xl sm:border sm:before:rounded-[calc(var(--radius-2xl)-1px)] sm:after:bg-transparent **:sm:data-[slot=drawer-footer]:rounded-b-[calc(var(--radius-2xl)-1px)]",
             variant === "straight" && "[--stack-step:0]",
             (position === "bottom" || position === "top") &&
               "h-(--drawer-height,auto) [--height:max(0px,calc(var(--drawer-frontmost-height,var(--drawer-height))))] data-nested-drawer-open:h-(--height)",
             position === "bottom" &&
-              "data-nested-drawer-open:transform-[translateY(calc(var(--drawer-swipe-movement-y)-var(--stack-peek-offset)-(var(--shrink)*var(--height))))_scale(var(--scale))] origin-[50%_calc(100%-var(--inset))]",
+              "origin-[50%_calc(100%-var(--inset))] data-nested-drawer-open:transform-[translateY(calc(var(--drawer-swipe-movement-y)-var(--stack-peek-offset)-(var(--shrink)*var(--height))))_scale(var(--scale))]",
             position === "top" &&
-              "data-nested-drawer-open:transform-[translateY(calc(var(--drawer-swipe-movement-y)+var(--stack-peek-offset)+(var(--shrink)*var(--height))))_scale(var(--scale))] origin-[50%_var(--inset)]",
+              "origin-[50%_var(--inset)] data-nested-drawer-open:transform-[translateY(calc(var(--drawer-swipe-movement-y)+var(--stack-peek-offset)+(var(--shrink)*var(--height))))_scale(var(--scale))]",
             position === "left" &&
-              "data-nested-drawer-open:transform-[translateX(calc(var(--drawer-swipe-movement-x)+var(--stack-peek-offset)))_scale(var(--scale))] origin-right",
+              "origin-right data-nested-drawer-open:transform-[translateX(calc(var(--drawer-swipe-movement-x)+var(--stack-peek-offset)))_scale(var(--scale))]",
             position === "right" &&
-              "data-nested-drawer-open:transform-[translateX(calc(var(--drawer-swipe-movement-x)-var(--stack-peek-offset)))_scale(var(--scale))] origin-left",
+              "origin-left data-nested-drawer-open:transform-[translateX(calc(var(--drawer-swipe-movement-x)-var(--stack-peek-offset)))_scale(var(--scale))]",
             className,
           )}
           data-slot="drawer-popup"
@@ -214,7 +198,7 @@ export function DrawerPopup({
           {showCloseButton && (
             <DrawerPrimitive.Close
               aria-label="Close"
-              className="absolute end-2 top-2"
+              className="absolute inset-e-2 top-2"
               render={<Button size="icon" variant="ghost" />}
             >
               <XIcon />
@@ -224,7 +208,7 @@ export function DrawerPopup({
         </DrawerPrimitive.Popup>
       </DrawerViewport>
     </DrawerPortal>
-  );
+  )
 }
 
 export function DrawerHeader({
@@ -233,7 +217,7 @@ export function DrawerHeader({
   render,
   ...props
 }: useRender.ComponentProps<"div"> & {
-  allowSelection?: boolean;
+  allowSelection?: boolean
 }): React.ReactElement {
   const defaultProps = {
     className: cn(
@@ -242,13 +226,13 @@ export function DrawerHeader({
       className,
     ),
     "data-slot": "drawer-header",
-  };
+  }
 
   return useRender({
     defaultTagName: "div",
     props: mergeProps<"div">(defaultProps, props),
     render: allowSelection ? <DrawerContent render={render} /> : render,
-  });
+  })
 }
 
 export function DrawerFooter({
@@ -258,27 +242,27 @@ export function DrawerFooter({
   render,
   ...props
 }: useRender.ComponentProps<"div"> & {
-  variant?: "default" | "bare";
-  allowSelection?: boolean;
+  variant?: "default" | "bare"
+  allowSelection?: boolean
 }): React.ReactElement {
   const defaultProps = {
     className: cn(
       "flex flex-col-reverse gap-2 px-6 pb-(--safe-area-inset-bottom,0px) sm:flex-row sm:justify-end",
       !allowSelection && "cursor-default",
       variant === "default" &&
-        "border-t bg-muted/72 pt-4 pb-[calc(env(safe-area-inset-bottom,0px)+--spacing(4))]",
+        "border-t bg-muted/72 pt-4 pb-[calc(env(safe-area-inset-bottom,0)+(--spacing(4)))]",
       variant === "bare" &&
-        "in-[[data-slot=drawer-popup]:has([data-slot=drawer-panel])]:pt-3 pt-4 pb-[calc(env(safe-area-inset-bottom,0px)+--spacing(6))]",
+        "pt-4 pb-[calc(env(safe-area-inset-bottom,0)+(--spacing(6)))] in-[[data-slot=drawer-popup]:has([data-slot=drawer-panel])]:pt-3",
       className,
     ),
     "data-slot": "drawer-footer",
-  };
+  }
 
   return useRender({
     defaultTagName: "div",
     props: mergeProps<"div">(defaultProps, props),
     render: allowSelection ? <DrawerContent render={render} /> : render,
-  });
+  })
 }
 
 export function DrawerTitle({
@@ -287,14 +271,11 @@ export function DrawerTitle({
 }: DrawerPrimitive.Title.Props): React.ReactElement {
   return (
     <DrawerPrimitive.Title
-      className={cn(
-        "font-heading font-semibold text-xl leading-none",
-        className,
-      )}
+      className={cn("font-heading text-xl leading-none font-semibold", className)}
       data-slot="drawer-title"
       {...props}
     />
-  );
+  )
 }
 
 export function DrawerDescription({
@@ -303,11 +284,11 @@ export function DrawerDescription({
 }: DrawerPrimitive.Description.Props): React.ReactElement {
   return (
     <DrawerPrimitive.Description
-      className={cn("text-muted-foreground text-sm", className)}
+      className={cn("text-sm text-muted-foreground", className)}
       data-slot="drawer-description"
       {...props}
     />
-  );
+  )
 }
 
 export function DrawerPanel({
@@ -318,34 +299,33 @@ export function DrawerPanel({
   render,
   ...props
 }: useRender.ComponentProps<"div"> & {
-  scrollFade?: boolean;
-  scrollable?: boolean;
-  allowSelection?: boolean;
+  scrollFade?: boolean
+  scrollable?: boolean
+  allowSelection?: boolean
 }): React.ReactElement {
   const defaultProps = {
     className: cn(
-      "p-6 in-[[data-slot=drawer-popup]:has([data-slot=drawer-header])]:pt-1 in-[[data-slot=drawer-popup]:has([data-slot=drawer-footer]:not(.border-t))]:pb-1",
+      "p-6 in-[[data-slot=drawer-popup]:has([data-slot=drawer-footer]:not(.border-t))]:pb-1 in-[[data-slot=drawer-popup]:has([data-slot=drawer-header])]:pt-1",
       !allowSelection && "cursor-default",
       className,
     ),
     "data-slot": "drawer-panel",
-  };
-
+  }
   const content = useRender({
     defaultTagName: "div",
     props: mergeProps<"div">(defaultProps, props),
     render: allowSelection ? <DrawerContent render={render} /> : render,
-  });
+  })
 
   if (scrollable) {
     return (
       <ScrollArea className="touch-auto" scrollFade={scrollFade}>
         {content}
       </ScrollArea>
-    );
+    )
   }
 
-  return content;
+  return content
 }
 
 export function DrawerBar({
@@ -354,18 +334,16 @@ export function DrawerBar({
   render,
   ...props
 }: useRender.ComponentProps<"div"> & {
-  position?: DrawerPosition;
+  position?: DrawerPosition
 }): React.ReactElement {
-  const { position: contextPosition } = useContext(DrawerContext);
-  const position = positionProp ?? contextPosition;
-  const horizontal = position === "left" || position === "right";
+  const { position: contextPosition } = useContext(DrawerContext)
+  const position = positionProp ?? contextPosition
+  const horizontal = position === "left" || position === "right"
   const defaultProps = {
     "aria-hidden": true as const,
     className: cn(
       "absolute flex touch-none items-center justify-center p-3 before:rounded-full before:bg-input",
-      horizontal
-        ? "inset-y-0 before:h-12 before:w-1"
-        : "inset-x-0 before:h-1 before:w-12",
+      horizontal ? "inset-y-0 before:h-12 before:w-1" : "inset-x-0 before:h-1 before:w-12",
       position === "top" && "bottom-0",
       position === "bottom" && "top-0",
       position === "left" && "right-0",
@@ -373,17 +351,16 @@ export function DrawerBar({
       className,
     ),
     "data-slot": "drawer-bar",
-  };
+  }
 
   return useRender({
     defaultTagName: "div",
     props: mergeProps<"div">(defaultProps, props),
     render,
-  });
+  })
 }
 
-export const DrawerContent: typeof DrawerPrimitive.Content =
-  DrawerPrimitive.Content;
+export const DrawerContent: typeof DrawerPrimitive.Content = DrawerPrimitive.Content
 
 export function DrawerMenu({
   className,
@@ -393,13 +370,13 @@ export function DrawerMenu({
   const defaultProps = {
     className: cn("-m-2 flex flex-col", className),
     "data-slot": "drawer-menu",
-  };
+  }
 
   return useRender({
     defaultTagName: "nav",
     props: mergeProps<"nav">(defaultProps, props),
     render,
-  });
+  })
 }
 
 export function DrawerMenuItem({
@@ -409,24 +386,24 @@ export function DrawerMenuItem({
   disabled,
   ...props
 }: useRender.ComponentProps<"button"> & {
-  variant?: "default" | "destructive";
+  variant?: "default" | "destructive"
 }): React.ReactElement {
   const defaultProps = {
     className: cn(
-      "flex min-h-9 w-full cursor-default select-none items-center gap-2 rounded-sm px-2 py-1 text-base text-foreground outline-none hover:bg-accent hover:text-accent-foreground disabled:pointer-events-none disabled:opacity-64 data-[variant=destructive]:text-destructive-foreground sm:min-h-8 sm:text-sm [&>svg:not([class*='opacity-'])]:opacity-80 [&>svg:not([class*='size-'])]:size-4.5 sm:[&>svg:not([class*='size-'])]:size-4 [&>svg]:pointer-events-none [&>svg]:-mx-0.5 [&>svg]:shrink-0",
+      "flex min-h-9 w-full cursor-default items-center gap-2 rounded-sm px-2 py-1 text-base text-foreground outline-none select-none hover:bg-accent hover:text-accent-foreground disabled:pointer-events-none disabled:opacity-64 data-[variant=destructive]:text-destructive-foreground sm:min-h-8 sm:text-sm [&>svg]:pointer-events-none [&>svg]:-mx-0.5 [&>svg]:shrink-0 [&>svg:not([class*='opacity-'])]:opacity-80 [&>svg:not([class*='size-'])]:size-4.5 sm:[&>svg:not([class*='size-'])]:size-4",
       className,
     ),
     "data-slot": "drawer-menu-item",
     "data-variant": variant,
     disabled,
     type: "button" as const,
-  };
+  }
 
   return useRender({
     defaultTagName: "button",
     props: mergeProps<"button">(defaultProps, props),
     render,
-  });
+  })
 }
 
 export function DrawerMenuSeparator({
@@ -437,13 +414,13 @@ export function DrawerMenuSeparator({
   const defaultProps = {
     className: cn("mx-2 my-1 h-px bg-border", className),
     "data-slot": "drawer-menu-separator",
-  };
+  }
 
   return useRender({
     defaultTagName: "div",
     props: mergeProps<"div">(defaultProps, props),
     render,
-  });
+  })
 }
 
 export function DrawerMenuGroup({
@@ -454,13 +431,13 @@ export function DrawerMenuGroup({
   const defaultProps = {
     className: cn("flex flex-col", className),
     "data-slot": "drawer-menu-group",
-  };
+  }
 
   return useRender({
     defaultTagName: "div",
     props: mergeProps<"div">(defaultProps, props),
     render,
-  });
+  })
 }
 
 export function DrawerMenuGroupLabel({
@@ -469,18 +446,15 @@ export function DrawerMenuGroupLabel({
   ...props
 }: useRender.ComponentProps<"div">): React.ReactElement {
   const defaultProps = {
-    className: cn(
-      "px-2 py-1.5 font-medium text-muted-foreground text-xs",
-      className,
-    ),
+    className: cn("px-2 py-1.5 text-xs font-medium text-muted-foreground", className),
     "data-slot": "drawer-menu-group-label",
-  };
+  }
 
   return useRender({
     defaultTagName: "div",
     props: mergeProps<"div">(defaultProps, props),
     render,
-  });
+  })
 }
 
 export function DrawerMenuTrigger({
@@ -491,16 +465,16 @@ export function DrawerMenuTrigger({
   return (
     <DrawerTrigger
       className={cn(
-        "flex min-h-9 w-full cursor-default select-none items-center gap-2 rounded-sm px-2 py-1 text-base text-foreground outline-none hover:bg-accent hover:text-accent-foreground sm:min-h-8 sm:text-sm [&_svg:not([class*='size-'])]:size-4.5 sm:[&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+        "flex min-h-9 w-full cursor-default items-center gap-2 rounded-sm px-2 py-1 text-base text-foreground outline-none select-none hover:bg-accent hover:text-accent-foreground sm:min-h-8 sm:text-sm [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4.5 sm:[&_svg:not([class*='size-'])]:size-4",
         className,
       )}
       data-slot="drawer-menu-trigger"
       {...props}
     >
       {children}
-      <ChevronRightIcon className="ms-auto -me-0.5 opacity-80" />
+      <ChevronRightIcon className="-me-0.5 ml-auto opacity-80" />
     </DrawerTrigger>
-  );
+  )
 }
 
 export function DrawerMenuCheckboxItem({
@@ -514,17 +488,15 @@ export function DrawerMenuCheckboxItem({
   render,
   ...props
 }: CheckboxPrimitive.Root.Props & {
-  variant?: "default" | "switch";
-  render?: React.ReactElement;
+  variant?: "default" | "switch"
+  render?: React.ReactElement
 }): React.ReactElement {
   return (
     <CheckboxPrimitive.Root
       checked={checked}
       className={cn(
-        "grid min-h-9 w-full cursor-default select-none items-center gap-2 rounded-sm px-2 py-1 text-base text-foreground outline-none hover:bg-accent hover:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-64 sm:min-h-8 sm:text-sm [&_svg:not([class*='opacity-'])]:opacity-80 [&_svg:not([class*='size-'])]:size-4.5 sm:[&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:-mx-0.5 [&_svg]:shrink-0",
-        variant === "switch"
-          ? "grid-cols-[1fr_auto] gap-4 pe-1.5"
-          : "grid-cols-[1rem_1fr] pe-4",
+        "grid min-h-9 w-full cursor-default items-center gap-2 rounded-sm px-2 py-1 text-base text-foreground outline-none select-none hover:bg-accent hover:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-64 sm:min-h-8 sm:text-sm [&_svg]:pointer-events-none [&_svg]:-mx-0.5 [&_svg]:shrink-0 [&_svg:not([class*='opacity-'])]:opacity-80 [&_svg:not([class*='size-'])]:size-4.5 sm:[&_svg:not([class*='size-'])]:size-4",
+        variant === "switch" ? "grid-cols-[1fr_auto] gap-4 pr-1.5" : "grid-cols-[1rem_1fr] pr-4",
         className,
       )}
       data-slot="drawer-menu-checkbox-item"
@@ -538,10 +510,10 @@ export function DrawerMenuCheckboxItem({
         <>
           <span className="col-start-1">{children}</span>
           <CheckboxPrimitive.Indicator
-            className="inset-shadow-[0_1px_--theme(--color-black/4%)] col-start-2 inline-flex h-[calc(var(--thumb-size)+2px)] w-[calc(var(--thumb-size)*2-2px)] shrink-0 items-center rounded-full p-px outline-none transition-[background-color,box-shadow] duration-200 [--thumb-size:--spacing(4)] focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background data-checked:bg-primary data-unchecked:bg-input data-disabled:opacity-64 sm:[--thumb-size:--spacing(3)]"
+            className="col-start-2 inline-flex h-[calc(var(--thumb-size)+2px)] w-[calc(var(--thumb-size)*2-2px)] shrink-0 items-center rounded-full p-px inset-shadow-[0_1px_--theme(--color-black/4%)] transition-[background-color,box-shadow] duration-200 outline-none [--thumb-size:--spacing(4)] focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background data-checked:bg-primary data-disabled:opacity-64 data-unchecked:bg-input sm:[--thumb-size:--spacing(3)]"
             keepMounted
           >
-            <span className="pointer-events-none block aspect-square h-full in-[[data-slot=drawer-menu-checkbox-item][data-checked]]:origin-[var(--thumb-size)_50%] origin-left in-[[data-slot=drawer-menu-checkbox-item][data-checked]]:translate-x-[calc(var(--thumb-size)-4px)] in-[[data-slot=drawer-menu-checkbox-item]:active]:not-data-disabled:scale-x-110 in-[[data-slot=drawer-menu-checkbox-item]:active]:rounded-[var(--thumb-size)/calc(var(--thumb-size)*1.10)] rounded-(--thumb-size) bg-background shadow-sm/5 will-change-transform [transition:translate_.15s,border-radius_.15s,scale_.1s_.1s,transform-origin_.15s]" />
+            <span className="pointer-events-none block aspect-square h-full origin-left rounded-(--thumb-size) bg-background shadow-sm/5 will-change-transform [transition:translate_.15s,border-radius_.15s,scale_.1s_.1s,transform-origin_.15s] in-[[data-slot=drawer-menu-checkbox-item]:active]:rounded-[var(--thumb-size)/calc(var(--thumb-size)*1.10)] in-[[data-slot=drawer-menu-checkbox-item]:active]:not-data-disabled:scale-x-110 in-[[data-slot=drawer-menu-checkbox-item][data-checked]]:origin-[var(--thumb-size)_50%] in-[[data-slot=drawer-menu-checkbox-item][data-checked]]:translate-x-[calc(var(--thumb-size)-4px)]" />
           </CheckboxPrimitive.Indicator>
         </>
       ) : (
@@ -565,7 +537,7 @@ export function DrawerMenuCheckboxItem({
         </>
       )}
     </CheckboxPrimitive.Root>
-  );
+  )
 }
 
 export function DrawerMenuRadioGroup({
@@ -578,7 +550,7 @@ export function DrawerMenuRadioGroup({
       data-slot="drawer-menu-radio-group"
       {...props}
     />
-  );
+  )
 }
 
 export function DrawerMenuRadioItem({
@@ -589,14 +561,14 @@ export function DrawerMenuRadioItem({
   render,
   ...props
 }: RadioPrimitive.Root.Props & {
-  value: string;
-  render?: React.ReactElement;
+  value: string
+  render?: React.ReactElement
 }): React.ReactElement {
   return (
     <RadioPrimitive.Root
       className={cn(
-        "grid min-h-9 w-full cursor-default select-none items-center gap-2 rounded-sm px-2 py-1 text-base text-foreground outline-none hover:bg-accent hover:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-64 sm:min-h-8 sm:text-sm [&_svg:not([class*='opacity-'])]:opacity-80 [&_svg:not([class*='size-'])]:size-4.5 sm:[&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:-mx-0.5 [&_svg]:shrink-0",
-        "grid-cols-[1rem_1fr] items-center pe-4",
+        "grid min-h-9 w-full cursor-default items-center gap-2 rounded-sm px-2 py-1 text-base text-foreground outline-none select-none hover:bg-accent hover:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-64 sm:min-h-8 sm:text-sm [&_svg]:pointer-events-none [&_svg]:-mx-0.5 [&_svg]:shrink-0 [&_svg:not([class*='opacity-'])]:opacity-80 [&_svg:not([class*='size-'])]:size-4.5 sm:[&_svg:not([class*='size-'])]:size-4",
+        "grid-cols-[1rem_1fr] items-center pr-4",
         className,
       )}
       data-slot="drawer-menu-radio-item"
@@ -622,7 +594,7 @@ export function DrawerMenuRadioItem({
       </RadioPrimitive.Indicator>
       <span className="col-start-2">{children}</span>
     </RadioPrimitive.Root>
-  );
+  )
 }
 
-export { DrawerPrimitive };
+export { DrawerPrimitive }

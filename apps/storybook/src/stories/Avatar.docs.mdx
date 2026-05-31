@@ -1,0 +1,44 @@
+import { Canvas, Meta } from "@storybook/addon-docs/blocks"
+import * as AvatarStories from "./Avatar.stories"
+
+<Meta title="UI/Avatar" />
+
+# Avatar
+
+[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/ui/avatar.tsx)
+
+## Table of Contents
+
+- [Overview](#overview)
+  - [Sizes](#sizes)
+  - [Fallback](#fallback)
+  - [Group](#group)
+- [Feedback](#feedback)
+
+## Overview
+
+Avatars are small visual identifiers for a user, account, or entity. They render a profile image when available and gracefully fall back to initials (or any custom node) when it's missing or still loading.
+
+<Canvas of={AvatarStories.Default} />
+
+### Sizes
+
+The avatar's size is controlled by className utilities — override the default `size-8` with any Tailwind `size-*` value to scale.
+
+<Canvas of={AvatarStories.Sizes} />
+
+### Fallback
+
+When the image fails to load (or no `src` is provided), `AvatarFallback` is rendered in its place. Use it for initials or a placeholder icon.
+
+<Canvas of={AvatarStories.Fallback} />
+
+### Group
+
+Combine multiple avatars with negative spacing and a background ring to compose a stacked group, useful for surfacing collaborators or recent activity.
+
+<Canvas of={AvatarStories.Group} />
+
+## Feedback
+
+Help us improve this component by providing feedback, asking questions on [Discord](https://discord.gg/RYbnyeWcM2), or updating this file directly on [GitHub](https://github.com/taiyomoe/taiyo). Your feedback helps us create better components! 🚀

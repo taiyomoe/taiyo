@@ -1,0 +1,37 @@
+import { Canvas, Meta } from "@storybook/addon-docs/blocks"
+import * as FieldsetStories from "./Fieldset.stories"
+
+<Meta title="UI/Fieldset" />
+
+# Fieldset
+
+[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/ui/fieldset.tsx)
+
+## Table of Contents
+
+- [Overview](#overview)
+  - [Composition](#composition)
+  - [Disabled](#disabled)
+- [Feedback](#feedback)
+
+## Overview
+
+Fieldset groups related `Field`s under a common `FieldsetLegend`. It renders a native `<fieldset>` so the `disabled` attribute cascades to all nested form controls and assistive tech announces the legend alongside each label.
+
+<Canvas of={FieldsetStories.Default} />
+
+### Composition
+
+A typical Fieldset contains a legend and multiple `Field`s, each with their own label, control, and optional description.
+
+<Canvas of={FieldsetStories.Composition} />
+
+### Disabled
+
+Disabling the Fieldset disables every nested control in one go — useful while a form section is loading or waiting on another value.
+
+<Canvas of={FieldsetStories.Disabled} />
+
+## Feedback
+
+Help us improve this component by providing feedback, asking questions on [Discord](https://discord.gg/RYbnyeWcM2), or updating this file directly on [GitHub](https://github.com/taiyomoe/taiyo). Your feedback helps us create better components! 🚀

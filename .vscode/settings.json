@@ -7,5 +7,6 @@
   },
   "files.associations": {
     "*.css": "tailwindcss"
-  }
+  },
+  "typescript.tsdk": "node_modules/typescript/lib"
 }
