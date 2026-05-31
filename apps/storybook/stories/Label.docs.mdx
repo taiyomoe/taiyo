@@ -5,13 +5,12 @@ import * as LabelStories from "./Label.stories"
 
 # Label
 
-[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/label.tsx)
+[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/ui/label.tsx)
 
 ## Table of Contents
 
 - [Overview](#overview)
-  - [Default](#default)
-  - [Disabled](#disabled)
+  - [With Checkbox](#with-checkbox)
 - [Feedback](#feedback)
 
 ## Overview
@@ -20,11 +19,11 @@ Labels provide accessible text descriptions for form controls and interactive el
 
 <Canvas of={LabelStories.Default} />
 
-### Disabled
+### With Checkbox
 
-Disabled labels are associated with disabled form controls, providing visual feedback that the option is not available while maintaining proper accessibility relationships.
+Labels wrap their associated control to extend the click target and keep the visual/accessible association obvious. Pair with any form control using `htmlFor`.
 
-<Canvas of={LabelStories.Disabled} />
+<Canvas of={LabelStories.WithCheckbox} />
 
 ## Feedback
 

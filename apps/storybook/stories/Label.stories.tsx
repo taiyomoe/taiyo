@@ -1,41 +1,22 @@
-import type { Meta, StoryObj } from "@storybook/nextjs-vite"
-import { Checkbox } from "@taiyomoe/ui/components/checkbox"
-import { Label } from "@taiyomoe/ui/components/label"
+import preview from "@/storybook/preview"
+import { Checkbox } from "@taiyomoe/ui/components/ui/checkbox"
+import { Label } from "@taiyomoe/ui/components/ui/label"
 import { fn } from "storybook/test"
 
-const meta = {
+const meta = preview.meta({
   title: "UI/Label",
-  component: Checkbox,
-  subcomponents: { Label },
+  component: Label,
   parameters: { layout: "centered" },
-  argTypes: {
-    disabled: { control: "boolean" },
-  },
-  args: { onCheckedChange: fn() },
-} satisfies Meta<typeof Checkbox>
+  args: { children: "Accept terms and conditions" },
+})
 
-export default meta
+export const Default = meta.story({})
 
-type Story = StoryObj<typeof meta>
-
-export const Default: Story = {
-  args: {},
-  render: (args) => (
-    <div className="flex items-center gap-2">
-      <Checkbox id="checkbox-default" {...args} />
-      <Label htmlFor="checkbox-default">Accept terms and conditions</Label>
-    </div>
+export const WithCheckbox = meta.story({
+  render: () => (
+    <Label htmlFor="checkbox-terms">
+      <Checkbox id="checkbox-terms" onCheckedChange={fn()} />
+      Accept terms and conditions
+    </Label>
   ),
-}
-
-export const Disabled: Story = {
-  args: {
-    disabled: true,
-  },
-  render: (args) => (
-    <div className="flex items-center gap-2">
-      <Checkbox id="checkbox-disabled" {...args} />
-      <Label htmlFor="checkbox-disabled">Disabled option</Label>
-    </div>
-  ),
-}
+})

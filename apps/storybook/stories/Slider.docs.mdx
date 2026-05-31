@@ -5,14 +5,15 @@ import * as SliderStories from "./Slider.stories"
 
 # Slider
 
-[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/slider.tsx)
+[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/ui/slider.tsx)
 
 ## Table of Contents
 
 - [Overview](#overview)
-  - [Default](#default)
   - [Range](#range)
+  - [Vertical](#vertical)
   - [Disabled](#disabled)
+  - [With Value](#with-value)
 - [Feedback](#feedback)
 
 ## Overview
@@ -23,15 +24,27 @@ Sliders allow users to select a value or range of values from a continuous range
 
 ### Range
 
-Range sliders enable users to select a range of values with two handles, perfect for filtering data or setting min/max boundaries.
+Passing an array with two values to `defaultValue` (or `value`) turns the slider into a range picker with two handles — useful for filtering data or setting min/max bounds.
 
 <Canvas of={SliderStories.Range} />
 
+### Vertical
+
+Setting `orientation="vertical"` flips the slider on its side, which suits stacked layouts and volume-style controls.
+
+<Canvas of={SliderStories.Vertical} />
+
 ### Disabled
 
-Disabled sliders prevent user interaction and provide visual feedback that the control is not available.
+Setting `disabled` prevents user interaction and dims the track and handle to signal the control is unavailable.
 
 <Canvas of={SliderStories.Disabled} />
+
+### With Value
+
+Drop a `SliderValue` inside the slider to render the current value alongside the track.
+
+<Canvas of={SliderStories.WithValue} />
 
 ## Feedback
 

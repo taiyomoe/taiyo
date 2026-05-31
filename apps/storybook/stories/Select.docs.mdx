@@ -5,21 +5,36 @@ import * as SelectStories from "./Select.stories"
 
 # Select
 
-[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/select.tsx)
+[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/ui/select.tsx)
 
 ## Table of Contents
 
 - [Overview](#overview)
-  - [Default](#default)
+  - [Sizes](#sizes)
+  - [Selected by default](#selected-by-default)
   - [Disabled](#disabled)
-  - [Multiple Selection](#multiple-selection)
+  - [Read only](#read-only)
+  - [Multiple](#multiple)
+  - [With groups](#with-groups)
 - [Feedback](#feedback)
 
 ## Overview
 
-Select components allow users to choose from a list of options. They provide a clean, accessible interface for single or multiple selections with clear visual feedback. The select component is perfect for forms where users need to pick from predefined choices.
+Select components allow users to choose from a list of options. They provide a clean, accessible interface for single or multiple selections with clear visual feedback, and are well suited for forms where users pick from predefined choices.
 
 <Canvas of={SelectStories.Default} />
+
+### Sizes
+
+`SelectTrigger` exposes three sizes — `sm`, `default`, and `lg` — to align with surrounding form density.
+
+<Canvas of={SelectStories.Sizes} />
+
+### Selected by default
+
+Pass `defaultValue` on the root `Select` to pre-select an item on mount.
+
+<Canvas of={SelectStories.SelectedByDefault} />
 
 ### Disabled
 
@@ -27,11 +42,23 @@ Disabled selects prevent user interaction and provide visual feedback that the f
 
 <Canvas of={SelectStories.Disabled} />
 
-### Multiple Selection
+### Read only
+
+Read-only selects display their current value but disallow changes; focus and keyboard navigation are preserved.
+
+<Canvas of={SelectStories.ReadOnly} />
+
+### Multiple
 
 Multiple selection allows users to choose several options at once, with each selected item clearly indicated with a checkmark.
 
 <Canvas of={SelectStories.Multiple} />
+
+### With groups
+
+Compose `SelectGroup`, `SelectGroupLabel`, and `SelectSeparator` to organize a long list of options into labelled sections.
+
+<Canvas of={SelectStories.WithGroups} />
 
 ## Feedback
 

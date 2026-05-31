@@ -1,8 +1,8 @@
-import type { Meta, StoryObj } from "@storybook/nextjs-vite"
-import { Slider } from "@taiyomoe/ui/components/slider"
+import preview from "@/storybook/preview"
+import { Slider, SliderValue } from "@taiyomoe/ui/components/ui/slider"
 import { fn } from "storybook/test"
 
-const meta = {
+const meta = preview.meta({
   title: "UI/Slider",
   component: Slider,
   parameters: { layout: "centered" },
@@ -12,70 +12,45 @@ const meta = {
       options: ["horizontal", "vertical"],
     },
     disabled: { control: "boolean" },
-    min: { control: { type: "number" } },
-    max: { control: { type: "number" } },
+    min: { control: "number" },
+    max: { control: "number" },
   },
-  args: { onValueCommitted: fn() },
-} satisfies Meta<typeof Slider>
+  args: { onValueChange: fn(), onValueCommitted: fn() },
+  render: (args) => (
+    <div className="w-72">
+      <Slider {...args} />
+    </div>
+  ),
+})
 
-export default meta
+export const Default = meta.story({
+  args: { defaultValue: [50] },
+})
 
-type Story = StoryObj<typeof meta>
+export const Range = meta.story({
+  args: { defaultValue: [25, 75] },
+})
 
-export const Default: Story = {
-  args: {
-    defaultValue: [50],
-    min: 0,
-    max: 100,
-  },
-}
-
-export const Orientation: Story = {
-  args: {
-    defaultValue: [30],
-    orientation: "vertical",
-    min: 0,
-    max: 100,
-  },
+export const Vertical = meta.story({
+  args: { defaultValue: [30], orientation: "vertical" },
   render: (args) => (
     <div className="flex h-64 items-center">
       <Slider {...args} />
     </div>
   ),
-  parameters: {
-    docs: {
-      description: {
-        story: "Vertical slider orientation demonstration",
-      },
-    },
-  },
-}
+})
 
-export const Range: Story = {
-  args: {
-    defaultValue: [50, 75],
-    min: 30,
-    max: 80,
-  },
+export const Disabled = meta.story({
+  args: { defaultValue: [75], disabled: true },
+})
+
+export const WithValue = meta.story({
+  args: { defaultValue: [42] },
   render: (args) => (
-    <div
-      className="flex flex-col gap-2 vertical:flex-row vertical:[&>div]:flex-col-reverse"
-      data-orientation={args.orientation}
-    >
-      <div className="flex justify-between">
-        <p>{args.min}</p>
-        <p>{args.max}</p>
-      </div>
-      <Slider {...args} />
+    <div className="flex w-72 flex-col gap-2">
+      <Slider {...args}>
+        <SliderValue />
+      </Slider>
     </div>
   ),
-}
-
-export const Disabled: Story = {
-  args: {
-    defaultValue: [75],
-    disabled: true,
-    min: 0,
-    max: 100,
-  },
-}
+})

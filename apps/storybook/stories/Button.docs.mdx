@@ -1,18 +1,22 @@
-import { Meta, Canvas } from "@storybook/addon-docs/blocks"
+import { Canvas, Meta } from "@storybook/addon-docs/blocks"
 import * as ButtonStories from "./Button.stories"
 
 <Meta title="UI/Button" />
 
 # Button
 
-[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/button.tsx)
+[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/ui/button.tsx)
 
 ## Table of Contents
 
 - [Overview](#overview)
-  - [Default](#default)
+  - [Variants](#variants)
+  - [Sizes](#sizes)
+  - [Icon Sizes](#icon-sizes)
   - [Disabled](#disabled)
-  - [Pending](#pending)
+  - [Loading](#loading)
+  - [With Icon](#with-icon)
+  - [Icon Only](#icon-only)
 - [Feedback](#feedback)
 
 ## Overview
@@ -21,23 +25,41 @@ Buttons are clickable elements that are used to trigger actions. They communicat
 
 <Canvas of={ButtonStories.Default} />
 
+### Variants
+
+Buttons come in several visual variants to communicate intent: a primary `default`, a muted `secondary`, low-emphasis `outline`/`ghost`/`link`, and the destructive pair for irreversible actions.
+
+<Canvas of={ButtonStories.Variants} />
+
+### Sizes
+
+Text buttons scale from `xs` to `xl` to fit different layout densities.
+
+<Canvas of={ButtonStories.Sizes} />
+
+### Icon Sizes
+
+Square `icon-*` sizes are reserved for icon-only buttons and mirror the text sizes from `icon-xs` to `icon-xl`.
+
+<Canvas of={ButtonStories.IconSizes} />
+
 ### Disabled
 
 Disabled buttons prevent user interaction and provide visual feedback that the action is not available.
 
 <Canvas of={ButtonStories.Disabled} />
 
-### Pending
+### Loading
 
-Pending buttons show a loading spinner and prevent interaction while an action is being processed.
+Loading buttons show a spinner and prevent interaction while an action is being processed.
 
-<Canvas of={ButtonStories.Pending} />
+<Canvas of={ButtonStories.Loading} />
 
-### Icons
+### With Icon
 
 Buttons can include icons alongside text to enhance visual communication and help users quickly understand the action. Icons should be relevant to the action and placed consistently (typically to the left of the text).
 
-<Canvas of={ButtonStories.Icons} />
+<Canvas of={ButtonStories.WithIcon} />
 
 ### Icon Only
 

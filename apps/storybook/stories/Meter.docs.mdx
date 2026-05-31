@@ -5,19 +5,60 @@ import * as MeterStories from "./Meter.stories"
 
 # Meter
 
-[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/meter.tsx)
+[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/ui/meter.tsx)
 
 ## Table of Contents
 
 - [Overview](#overview)
-  - [Default](#default)
+  - [Empty](#empty)
+  - [Full](#full)
+  - [With Label](#with-label)
+  - [With Value](#with-value)
+  - [Formatted](#formatted)
+  - [Custom Range](#custom-range)
 - [Feedback](#feedback)
 
 ## Overview
 
-Meters display the current value of a measurement within a known range, providing a visual representation of progress or status. They're commonly used to show completion percentages, or any other measurable quantity that users need to monitor at a glance.
+Meters display the current value of a measurement within a known range, providing a visual representation of progress or status. They're commonly used to show completion percentages, disk usage, ratings, or any other measurable quantity that users need to monitor at a glance.
 
 <Canvas of={MeterStories.Default} />
+
+### Empty
+
+A meter at `0` renders an empty track — useful as a baseline state.
+
+<Canvas of={MeterStories.Empty} />
+
+### Full
+
+A meter at `max` (default `100`) fills the track entirely.
+
+<Canvas of={MeterStories.Full} />
+
+### With Label
+
+Compose `MeterLabel` and `MeterTrack` to render a labelled meter.
+
+<Canvas of={MeterStories.WithLabel} />
+
+### With Value
+
+Add `MeterValue` next to the label to display the formatted current value alongside the track.
+
+<Canvas of={MeterStories.WithValue} />
+
+### Formatted
+
+Use the `format` prop to pass `Intl.NumberFormat` options — here the value is rendered as a percentage.
+
+<Canvas of={MeterStories.Formatted} />
+
+### Custom Range
+
+Override `min` and `max` to use the meter for non-percentage scales, such as a rating out of 10.
+
+<Canvas of={MeterStories.CustomRange} />
 
 ## Feedback
 

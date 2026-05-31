@@ -4,5 +4,8 @@
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
     "source.fixAll.oxc": "always"
+  },
+  "files.associations": {
+    "*.css": "tailwindcss"
   }
 }

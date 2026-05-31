@@ -1,79 +1,70 @@
-import type { Meta, StoryObj } from "@storybook/nextjs-vite"
-import { Input } from "@taiyomoe/ui/components/input"
-import { useState } from "react"
+import preview from "@/storybook/preview"
+import { Input } from "@taiyomoe/ui/components/ui/input"
 import { fn } from "storybook/test"
 
-const meta = {
+const meta = preview.meta({
   title: "UI/Input",
   component: Input,
   parameters: { layout: "centered" },
   argTypes: {
+    size: { control: "select", options: ["sm", "default", "lg"] },
+    type: {
+      control: "select",
+      options: ["text", "email", "password", "number", "search", "file"],
+    },
     placeholder: { control: "text" },
     disabled: { control: "boolean" },
+    "aria-invalid": { control: "boolean" },
+    unstyled: { control: "boolean" },
+    nativeInput: { control: "boolean" },
   },
   args: { onChange: fn() },
-} satisfies Meta<typeof Input>
-
-export default meta
-
-type Story = StoryObj<typeof meta>
-
-export const Default: Story = {
-  args: {
-    placeholder: "Enter text...",
-  },
-}
-
-export const Disabled: Story = {
-  args: {
-    placeholder: "Disabled input",
-    disabled: true,
-  },
-}
-
-export const Hover: Story = {
-  render: () => (
-    <div className="space-y-4">
-      <div className="flex items-center gap-6">
-        <p className="min-w-24 text-primary">Hover</p>
-        <Input placeholder="Hover over me..." />
-      </div>
-      <p className="text-sm text-muted">Hover over the input to see the hover state</p>
+  render: (args) => (
+    <div className="w-72">
+      <Input {...args} />
     </div>
   ),
-  parameters: {
-    docs: {
-      description: {
-        story: "Input hover state demonstration",
-      },
-    },
-  },
-}
+})
 
-export const Focused: Story = {
-  render: () => {
-    const [isFocused, setIsFocused] = useState(false)
+export const Default = meta.story({
+  args: { placeholder: "Enter text..." },
+})
 
-    return (
-      <div className="space-y-4">
-        <div className="flex items-center gap-6">
-          <p className="min-w-24 text-primary">Focused</p>
-          <Input
-            placeholder="Click to focus..."
-            onFocus={() => setIsFocused(true)}
-            onBlur={() => setIsFocused(false)}
-            className={isFocused ? "ring-2 ring-primary" : ""}
-          />
-        </div>
-        <p className="text-sm text-muted">Status: {isFocused ? "Focused" : "Not focused"}</p>
-      </div>
-    )
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: "Input in focused state with visual feedback",
-      },
-    },
-  },
-}
+export const Sizes = meta.story({
+  render: () => (
+    <div className="flex w-72 flex-col gap-3">
+      <Input placeholder="Small" size="sm" />
+      <Input placeholder="Default" size="default" />
+      <Input placeholder="Large" size="lg" />
+    </div>
+  ),
+})
+
+export const Types = meta.story({
+  render: () => (
+    <div className="flex w-72 flex-col gap-3">
+      <Input placeholder="Text" type="text" />
+      <Input placeholder="you@example.com" type="email" />
+      <Input placeholder="Password" type="password" />
+      <Input placeholder="Number" type="number" />
+      <Input placeholder="Search…" type="search" />
+      <Input type="file" />
+    </div>
+  ),
+})
+
+export const Disabled = meta.story({
+  args: { placeholder: "Disabled input", disabled: true },
+})
+
+export const Invalid = meta.story({
+  args: { placeholder: "Invalid input", "aria-invalid": true },
+})
+
+export const Unstyled = meta.story({
+  args: { placeholder: "Unstyled input", unstyled: true },
+})
+
+export const NativeInput = meta.story({
+  args: { placeholder: "Native input element", nativeInput: true },
+})

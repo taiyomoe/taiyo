@@ -1,27 +1,24 @@
-import type { Meta, StoryObj } from "@storybook/nextjs-vite"
-import { Checkbox } from "@taiyomoe/ui/components/checkbox"
+import preview from "@/storybook/preview"
+import { Checkbox } from "@taiyomoe/ui/components/ui/checkbox"
 import { fn } from "storybook/test"
 
-const meta = {
+const meta = preview.meta({
   title: "UI/Checkbox",
   component: Checkbox,
   parameters: { layout: "centered" },
   argTypes: {
     disabled: { control: "boolean" },
+    indeterminate: { control: "boolean" },
   },
-  args: { title: "Checkbox", onCheckedChange: fn() },
-} satisfies Meta<typeof Checkbox>
+  args: { onCheckedChange: fn() },
+})
 
-export default meta
+export const Default = meta.story({})
 
-type Story = StoryObj<typeof meta>
+export const Checked = meta.story({ args: { defaultChecked: true } })
 
-export const Default: Story = {
-  args: {},
-}
+export const Indeterminate = meta.story({ args: { indeterminate: true } })
 
-export const Disabled: Story = {
-  args: {
-    disabled: true,
-  },
-}
+export const Disabled = meta.story({ args: { disabled: true } })
+
+export const Invalid = meta.story({ args: { "aria-invalid": true } })

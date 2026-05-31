@@ -1,8 +1,10 @@
+import addonDocs from "@storybook/addon-docs"
 import { withThemeByClassName } from "@storybook/addon-themes"
-import type { Preview } from "@storybook/nextjs-vite"
-import "../../../packages/ui/src/styles/globals.css"
+import { definePreview } from "@storybook/react-vite"
+import "@taiyomoe/ui/globals.css"
 
-export default {
+export default definePreview({
+  addons: [addonDocs()],
   parameters: {
     backgrounds: { disable: true },
     controls: {
@@ -12,11 +14,10 @@ export default {
       },
     },
   },
-} satisfies Preview
-
-export const decorators = [
-  withThemeByClassName({
-    themes: { light: "light bg-default", dark: "dark bg-default" },
-    defaultTheme: "light",
-  }),
-]
+  decorators: [
+    withThemeByClassName({
+      themes: { light: "light bg-default", dark: "dark bg-default" },
+      defaultTheme: "light",
+    }),
+  ],
+})
