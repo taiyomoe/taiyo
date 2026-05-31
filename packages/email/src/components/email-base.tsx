@@ -1,5 +1,5 @@
-import { Container, Heading, Html, Img, Preview, Section, Tailwind } from "@react-email/components"
 import type { ReactNode } from "react"
+import { Container, Heading, Html, Img, Preview, Section, Tailwind } from "react-email"
 
 type Props = {
   preview: string

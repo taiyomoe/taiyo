@@ -1,4 +1,4 @@
-import { Button, Container, Section, Text } from "@react-email/components"
+import { Button, Container, Section, Text } from "react-email"
 import EmailBase from "../components/email-base"
 
 type Props = {
