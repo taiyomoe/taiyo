@@ -19,6 +19,8 @@ export default defineConfig({
     "vitest",
   ],
   rules: {
+    "no-console": "warn",
+
     // Stylistic rules
     "@stylistic/padding-line-between-statements": [
       "error",

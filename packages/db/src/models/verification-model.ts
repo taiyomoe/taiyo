@@ -1,7 +1,7 @@
 import type { Generated, Insertable } from "kysely"
 import type { Timestamp } from "../types"
 
-export interface Verifications {
+export interface Verification {
   id: Generated<string>
   createdAt: Generated<Timestamp>
   updatedAt: Generated<Timestamp>
@@ -10,4 +10,4 @@ export interface Verifications {
   expiresAt: Timestamp
 }
 
-export type NewVerifications = Insertable<Verifications>
+export type NewVerification = Insertable<Verification>

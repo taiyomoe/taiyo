@@ -1,39 +1,39 @@
-import type { Accounts } from "./models/accounts-model"
-import type { Banners } from "./models/banners-model"
-import type { ChapterToGroups } from "./models/chapter-to-groups-model"
-import type { Chapters } from "./models/chapters-model"
-import type { Covers } from "./models/covers-model"
-import type { Groups } from "./models/groups-model"
-import type { Medias } from "./models/medias-model"
-import type { Sessions } from "./models/sessions-model"
-import type { StaffOnMedias } from "./models/staff-on-medias-model"
-import type { Staffs } from "./models/staffs-model"
-import type { Tasks } from "./models/tasks-model"
-import type { Titles } from "./models/titles-model"
-import type { UserFollows } from "./models/user-follows-model"
-import type { UserHistories } from "./models/user-histories-model"
-import type { UserLibraries } from "./models/user-libraries-model"
-import type { UserProfiles } from "./models/user-profiles-model"
-import type { Users } from "./models/users-model"
-import type { Verifications } from "./models/verifications-model"
+import type { Account } from "./models/account-model"
+import type { Banner } from "./models/banner-model"
+import type { ChapterToGroup } from "./models/chapter-to-group-model"
+import type { Chapter } from "./models/chapter-model"
+import type { Cover } from "./models/cover-model"
+import type { Group } from "./models/group-model"
+import type { Media } from "./models/media-model"
+import type { Session } from "./models/session-model"
+import type { StaffOnMedia } from "./models/staff-on-media-model"
+import type { Staff } from "./models/staff-model"
+import type { Task } from "./models/task-model"
+import type { Title } from "./models/title-model"
+import type { UserFollow } from "./models/user-follow-model"
+import type { UserHistory } from "./models/user-history-model"
+import type { UserLibrary } from "./models/user-library-model"
+import type { UserProfile } from "./models/user-profile-model"
+import type { User } from "./models/user-model"
+import type { Verification } from "./models/verification-model"
 
 export interface DB {
-  _chapterToGroups: ChapterToGroups
-  _userFollows: UserFollows
-  accounts: Accounts
-  banners: Banners
-  chapters: Chapters
-  covers: Covers
-  groups: Groups
-  medias: Medias
-  sessions: Sessions
-  staffOnMedias: StaffOnMedias
-  staffs: Staffs
-  tasks: Tasks
-  titles: Titles
-  userHistories: UserHistories
-  userLibraries: UserLibraries
-  userProfiles: UserProfiles
-  users: Users
-  verifications: Verifications
+  _chapterToGroups: ChapterToGroup
+  _userFollows: UserFollow
+  accounts: Account
+  banners: Banner
+  chapters: Chapter
+  covers: Cover
+  groups: Group
+  medias: Media
+  sessions: Session
+  staffOnMedias: StaffOnMedia
+  staffs: Staff
+  tasks: Task
+  titles: Title
+  userHistories: UserHistory
+  userLibraries: UserLibrary
+  userProfiles: UserProfile
+  users: User
+  verifications: Verification
 }

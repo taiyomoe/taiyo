@@ -2,10 +2,10 @@ import type { Insertable } from "kysely"
 import type { UserHistoryProgression } from "../json-types"
 import type { ArrayType } from "../types"
 
-export interface UserHistories {
+export interface UserHistory {
   userId: string
   mediaId: string
   progression: ArrayType<UserHistoryProgression> | null
 }
 
-export type NewUserHistories = Insertable<UserHistories>
+export type NewUserHistory = Insertable<UserHistory>

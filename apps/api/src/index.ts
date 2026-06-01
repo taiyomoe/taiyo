@@ -1,5 +1,6 @@
 import { serve } from "@hono/node-server"
 import { Scalar } from "@scalar/hono-api-reference"
+import { auth } from "@taiyomoe/auth/server"
 import { config } from "@taiyomoe/config"
 import { evlog } from "evlog/hono"
 import { createHyperDXDrain } from "evlog/hyperdx"
@@ -34,6 +35,7 @@ export const app = new Hono()
   .use(contextMiddleware)
   .notFound((c) => c.fail("NOT_FOUND"))
   .onError(errorHandler)
+  .on(["GET", "POST"], "/api/auth/**", (c) => auth.handler(c.req.raw))
   .get("/ping", (c) => c.json({ version: packageJson.version }))
   .route("/medias", mediasRouter)
 
@@ -47,6 +49,13 @@ app
           version: packageJson.version,
           description: config.openapi.description,
         },
+        tags: [
+          {
+            name: "Medias",
+            description:
+              "Manga, manhwa, manhua, light novels and other long-form comics. These endpoints create and curate the entries themselves along with everything attached to them — titles, covers, banners, external links and staff credits.",
+          },
+        ],
       },
     }),
   )

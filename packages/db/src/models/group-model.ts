@@ -1,7 +1,7 @@
 import type { Generated, Insertable } from "kysely"
 import type { Timestamp } from "../types"
 
-export interface Groups {
+export interface Group {
   id: Generated<string>
   createdAt: Generated<Timestamp>
   updatedAt: Generated<Timestamp>
@@ -22,4 +22,4 @@ export interface Groups {
   deleterId: string | null
 }
 
-export type NewGroups = Insertable<Groups>
+export type NewGroup = Insertable<Group>

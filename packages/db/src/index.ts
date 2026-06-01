@@ -23,40 +23,40 @@ export type { DB } from "./database"
 
 export * from "./json-types"
 
-export * from "./models/accounts-model"
+export * from "./models/account-model"
 
-export * from "./models/banners-model"
+export * from "./models/banner-model"
 
-export * from "./models/chapter-to-groups-model"
+export * from "./models/chapter-to-group-model"
 
-export * from "./models/chapters-model"
+export * from "./models/chapter-model"
 
-export * from "./models/covers-model"
+export * from "./models/cover-model"
 
-export * from "./models/groups-model"
+export * from "./models/group-model"
 
-export * from "./models/medias-model"
+export * from "./models/media-model"
 
-export * from "./models/sessions-model"
+export * from "./models/session-model"
 
-export * from "./models/staff-on-medias-model"
+export * from "./models/staff-on-media-model"
 
-export * from "./models/staffs-model"
+export * from "./models/staff-model"
 
-export * from "./models/tasks-model"
+export * from "./models/task-model"
 
-export * from "./models/titles-model"
+export * from "./models/title-model"
 
-export * from "./models/user-follows-model"
+export * from "./models/user-follow-model"
 
-export * from "./models/user-histories-model"
+export * from "./models/user-history-model"
 
-export * from "./models/user-libraries-model"
+export * from "./models/user-library-model"
 
-export * from "./models/user-profiles-model"
+export * from "./models/user-profile-model"
 
-export * from "./models/users-model"
+export * from "./models/user-model"
 
-export * from "./models/verifications-model"
+export * from "./models/verification-model"
 
 export * from "./types"

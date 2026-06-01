@@ -3,7 +3,7 @@ import type { Country, Gender } from "../constants"
 import type { LocalizedText } from "../json-types"
 import type { Timestamp } from "../types"
 
-export interface UserProfiles {
+export interface UserProfile {
   id: Generated<string>
   createdAt: Generated<Timestamp>
   updatedAt: Generated<Timestamp>
@@ -17,4 +17,4 @@ export interface UserProfiles {
   userId: string
 }
 
-export type NewUserProfiles = Insertable<UserProfiles>
+export type NewUserProfile = Insertable<UserProfile>

@@ -21,8 +21,8 @@ source .env && docker exec -it taiyo-rustfs-1 sh -lc '
   wget https://github.com/rustfs/cli/releases/download/v0.1.11/rustfs-cli-linux-amd64-v0.1.11.tar.gz &&
   tar -zxvf rustfs-cli-linux-amd64-v0.1.11.tar.gz &&
   chmod +x rc &&
-  ./rc alias set '"$S3_BUCKET_NAME"' http://localhost:9000 '"$RUSTFS_ACCESS_KEY"' '"$RUSTFS_SECRET_KEY"' &&
-  ./rc mb -p '"$S3_BUCKET_NAME"'/default
+  ./rc alias set local http://localhost:9000 '"$RUSTFS_ACCESS_KEY"' '"$RUSTFS_SECRET_KEY"' &&
+  ./rc mb -p local/'"$S3_BUCKET_NAME"'
 '
 ```
 

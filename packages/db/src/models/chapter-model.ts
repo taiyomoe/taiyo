@@ -3,7 +3,7 @@ import type { ContentRating, Flag, Language } from "../constants"
 import type { ChapterPage } from "../json-types"
 import type { ArrayType, Timestamp } from "../types"
 
-export interface Chapters {
+export interface Chapter {
   id: Generated<string>
   createdAt: Generated<Timestamp>
   updatedAt: Generated<Timestamp>
@@ -20,4 +20,4 @@ export interface Chapters {
   deleterId: string | null
 }
 
-export type NewChapters = Insertable<Chapters>
+export type NewChapter = Insertable<Chapter>

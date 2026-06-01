@@ -2,7 +2,7 @@ import type { Generated, Insertable } from "kysely"
 import type { UserLibraryEntry } from "../json-types"
 import type { ArrayType } from "../types"
 
-export interface UserLibraries {
+export interface UserLibrary {
   userId: string
   reading: Generated<ArrayType<UserLibraryEntry> | null>
   rereading: Generated<ArrayType<UserLibraryEntry> | null>
@@ -12,4 +12,4 @@ export interface UserLibraries {
   dropped: Generated<ArrayType<UserLibraryEntry> | null>
 }
 
-export type NewUserLibraries = Insertable<UserLibraries>
+export type NewUserLibrary = Insertable<UserLibrary>

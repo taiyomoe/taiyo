@@ -1,3 +1,4 @@
+import type { Session, User } from "@taiyomoe/auth/server"
 import { type DB, db } from "@taiyomoe/db"
 import { s3Client } from "@taiyomoe/s3"
 import { EvlogVariables } from "evlog/hono"
@@ -13,6 +14,8 @@ export type AppContext = {
 export type AppContextVariables = EvlogVariables["Variables"] & {
   db: Kysely<DB>
   s3: typeof s3Client
+  user?: User
+  session?: Session["session"]
 }
 
 export const contextMiddleware = createMiddleware(async (c, next) => {

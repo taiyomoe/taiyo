@@ -13,10 +13,12 @@
     "dev": "pnpm with-env tsx watch src/index.ts"
   },
   "dependencies": {
+    "@casl/ability": "^7.0.0",
     "@hono/node-server": "^2.0.3",
     "@hono/standard-validator": "^0.2.2",
     "@scalar/hono-api-reference": "^0.10.19",
     "@t3-oss/env-core": "^0.13.11",
+    "@taiyomoe/auth": "workspace:^",
     "@taiyomoe/config": "workspace:^",
     "@taiyomoe/db": "workspace:^",
     "@taiyomoe/s3": "workspace:^",

@@ -1,7 +1,7 @@
 import type { Generated, Insertable } from "kysely"
 import type { Timestamp } from "../types"
 
-export interface Accounts {
+export interface Account {
   id: Generated<string>
   createdAt: Generated<Timestamp>
   updatedAt: Generated<Timestamp>
@@ -17,4 +17,4 @@ export interface Accounts {
   idToken: string | null
 }
 
-export type NewAccounts = Insertable<Accounts>
+export type NewAccount = Insertable<Account>

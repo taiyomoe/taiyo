@@ -1,7 +1,7 @@
 import type { Generated, Insertable } from "kysely"
 import type { Timestamp } from "../types"
 
-export interface Sessions {
+export interface Session {
   id: Generated<string>
   createdAt: Generated<Timestamp>
   updatedAt: Generated<Timestamp>
@@ -13,4 +13,4 @@ export interface Sessions {
   userAgent: string | null
 }
 
-export type NewSessions = Insertable<Sessions>
+export type NewSession = Insertable<Session>

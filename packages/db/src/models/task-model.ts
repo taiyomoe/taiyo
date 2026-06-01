@@ -2,7 +2,7 @@ import type { Generated, Insertable } from "kysely"
 import type { TaskStatus, TaskType } from "../constants"
 import type { Json, Timestamp } from "../types"
 
-export interface Tasks {
+export interface Task {
   id: Generated<string>
   createdAt: Generated<Timestamp>
   updatedAt: Generated<Timestamp>
@@ -12,4 +12,4 @@ export interface Tasks {
   sessionId: string
 }
 
-export type NewTasks = Insertable<Tasks>
+export type NewTask = Insertable<Task>

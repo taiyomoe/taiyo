@@ -33,6 +33,10 @@ const mediaErrors = {
     message: "A media with this title already exists.",
     code: 409,
   },
+  MEDIA_LINK_CONFLICT: {
+    message: "One or more of the provided links already belong to an existing media.",
+    code: 409,
+  },
   MEDIA_NOT_FOUND: {
     message: "The requested media was not found.",
     code: 404,
@@ -44,6 +48,12 @@ const mediaErrors = {
   MEDIA_INVALID_COVERS: {
     message:
       "Invalid covers configuration. At least one cover with exactly one main cover is required.",
+    code: 422,
+  },
+} as const
+const staffErrors = {
+  STAFF_NOT_FOUND: {
+    message: "One or more of the referenced staff members do not exist.",
     code: 422,
   },
 } as const
@@ -61,6 +71,7 @@ const imageErrors = {
 export const errors = {
   ...genericErrors,
   ...mediaErrors,
+  ...staffErrors,
   ...imageErrors,
 } as const
 

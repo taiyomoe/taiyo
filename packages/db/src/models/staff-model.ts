@@ -2,7 +2,7 @@ import type { Generated, Insertable } from "kysely"
 import type { LocalizedText, StaffLinks } from "../json-types"
 import type { Timestamp } from "../types"
 
-export interface Staffs {
+export interface Staff {
   id: Generated<string>
   createdAt: Generated<Timestamp>
   updatedAt: Generated<Timestamp>
@@ -15,4 +15,4 @@ export interface Staffs {
   deleterId: string | null
 }
 
-export type NewStaffs = Insertable<Staffs>
+export type NewStaff = Insertable<Staff>

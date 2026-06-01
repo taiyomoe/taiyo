@@ -11,7 +11,7 @@ import type {
 import type { LocalizedText, MediaLinks, MediaTags } from "../json-types"
 import type { ArrayType, Timestamp } from "../types"
 
-export interface Medias {
+export interface Media {
   id: Generated<string>
   createdAt: Generated<Timestamp>
   updatedAt: Generated<Timestamp>
@@ -32,4 +32,4 @@ export interface Medias {
   deleterId: string | null
 }
 
-export type NewMedias = Insertable<Medias>
+export type NewMedia = Insertable<Media>

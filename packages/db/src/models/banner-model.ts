@@ -1,20 +1,16 @@
 import type { Generated, Insertable } from "kysely"
-import type { Language } from "../constants"
+import type { ContentRating } from "../constants"
 import type { Timestamp } from "../types"
 
-export interface Titles {
+export interface Banner {
   id: Generated<string>
   createdAt: Generated<Timestamp>
   updatedAt: Generated<Timestamp>
   deletedAt: Timestamp | null
-  title: string
-  language: Language
-  priority: number
-  isAcronym: Generated<boolean>
-  isMainTitle: Generated<boolean>
+  contentRating: Generated<ContentRating>
   mediaId: string
-  creatorId: string
+  uploaderId: string
   deleterId: string | null
 }
 
-export type NewTitles = Insertable<Titles>
+export type NewBanner = Insertable<Banner>
