@@ -5,8 +5,6 @@ export const errorHandler: ErrorHandler = async (err, c) => {
 
   return c.fail(
     "INTERNAL_SERVER_ERROR",
-    process.env.NODE_ENV === "production"
-      ? undefined
-      : { error: err.message, stack: err.stack },
+    process.env.NODE_ENV === "production" ? undefined : { error: err.message, stack: err.stack },
   )
 }
