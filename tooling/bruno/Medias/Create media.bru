@@ -5,13 +5,9 @@ meta {
 }
 
 post {
-  url: {{url}}/medias?hello=query
+  url: {{url}}/medias
   body: multipartForm
   auth: inherit
-}
-
-params:query {
-  hello: query
 }
 
 headers {
@@ -49,8 +45,6 @@ body:multipart-form {
   genres[0]: ACTION
   genres[1]: COMEDY
   genres[2]: SUPERNATURAL
-  covers.0.file: @file()
-  covers.1.file: @file()
 }
 
 settings {

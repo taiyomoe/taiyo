@@ -1,38 +1,38 @@
 import { serve } from "@hono/node-server"
-import HyperDX from "@hyperdx/node-opentelemetry"
 import { Scalar } from "@scalar/hono-api-reference"
 import { config } from "@taiyomoe/config"
+import { evlog } from "evlog/hono"
+import { createHyperDXDrain } from "evlog/hyperdx"
 import { Hono } from "hono"
-import { requestId } from "hono/request-id"
 import { openAPIRouteHandler } from "hono-openapi"
 import packageJson from "../package.json"
 import { env } from "./env"
-import { type AppContext, contextMiddleware } from "./middlewares/context-middleware"
+import {
+  type AppContext,
+  AppContextVariables,
+  contextMiddleware,
+} from "./middlewares/context-middleware"
 import { errorHandler } from "./middlewares/error-handler-middleware"
-import { requestLogger } from "./middlewares/request-logger-middleware"
 import { mediasRouter } from "./routers/medias-router"
 
 declare module "hono" {
   interface Context extends AppContext {}
-}
-
-if (!process.env.TEST) {
-  HyperDX.init({
-    apiKey: env.HYPERDX_INGESTION_KEY,
-    service: "api",
-    disableStartupLogs: true,
-    consoleCapture: false,
-    instrumentations: {
-      "@opentelemetry/instrumentation-dns": { enabled: false },
-      "@opentelemetry/instrumentation-net": { enabled: false },
-    },
-  })
+  interface ContextVariableMap extends AppContextVariables {}
 }
 
 export const app = new Hono()
-  .use(requestId())
-  .use(requestLogger)
+  .use(
+    evlog({
+      drain: process.env.TEST
+        ? undefined
+        : createHyperDXDrain({
+            endpoint: env.HYPERDX_ENDPOINT,
+            apiKey: env.HYPERDX_INGESTION_KEY,
+          }),
+    }),
+  )
   .use(contextMiddleware)
+  .notFound((c) => c.fail("NOT_FOUND"))
   .onError(errorHandler)
   .get("/ping", (c) => c.json({ version: packageJson.version }))
   .route("/medias", mediasRouter)

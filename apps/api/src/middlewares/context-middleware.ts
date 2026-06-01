@@ -1,19 +1,23 @@
 import { type DB, db } from "@taiyomoe/db"
 import { s3Client } from "@taiyomoe/s3"
+import { EvlogVariables } from "evlog/hono"
 import { createMiddleware } from "hono/factory"
 import type { Kysely } from "kysely"
 import { type ErrorCode, errors } from "../utils/errors"
 
 export type AppContext = {
-  db: Kysely<DB>
-  s3: typeof s3Client
   ok: <T>(data: T) => Response
   fail: (errorCode: ErrorCode, details?: unknown) => Response
 }
 
+export type AppContextVariables = EvlogVariables["Variables"] & {
+  db: Kysely<DB>
+  s3: typeof s3Client
+}
+
 export const contextMiddleware = createMiddleware(async (c, next) => {
   const timestamp = new Date().toISOString()
-  const requestId = c.req.header("x-request-id") || crypto.randomUUID()
+  const requestId = (c.get("log").getContext().requestId as string) || crypto.randomUUID()
 
   c.set("db", db)
   c.set("s3", s3Client)

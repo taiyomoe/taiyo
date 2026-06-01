@@ -1,11 +1,21 @@
 {
   "version": 1,
   "skills": {
+    "build-audit-logs": {
+      "source": "evlog.dev",
+      "sourceType": "well-known",
+      "computedHash": "3b87c33bc858bfe0349a1f3dcf362416c311fb184c9ad35148d5f9d010488ab9"
+    },
     "coss": {
       "source": "cosscom/coss",
       "sourceType": "github",
       "skillPath": "apps/ui/skills/coss/SKILL.md",
       "computedHash": "3a0e6c19e77dca10df588e8c886742eb60f7c34a4850933d0ed1aa04aff3fbd9"
+    },
+    "review-logging-patterns": {
+      "source": "evlog.dev",
+      "sourceType": "well-known",
+      "computedHash": "4d42fe1804c0026f44ba26243f8e0593edf2cc60a7e8035e25956e983918287f"
     }
   }
 }

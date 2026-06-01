@@ -31,7 +31,7 @@ export const Default = meta.story({
         <div className="flex flex-col gap-2">
           <div className="size-10 rounded-full bg-muted" />
           <div className="flex flex-col gap-0.5">
-            <p className="leading-none font-semibold">Taiyo</p>
+            <p className="leading-none font-semibold">Taiyō</p>
             <p className="text-xs text-muted-foreground">@taiyomoe</p>
           </div>
           <p className="text-sm">
@@ -77,7 +77,7 @@ export const InstantOpen = meta.story({
         <div className="flex flex-col gap-2">
           <div className="size-10 rounded-full bg-muted" />
           <div className="flex flex-col gap-0.5">
-            <p className="leading-none font-semibold">Taiyo</p>
+            <p className="leading-none font-semibold">Taiyō</p>
             <p className="text-xs text-muted-foreground">@taiyomoe</p>
           </div>
           <p className="text-sm">

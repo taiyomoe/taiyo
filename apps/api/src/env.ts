@@ -16,7 +16,8 @@ export const env = createEnv({
    * This way you can ensure the app isn't built with invalid env vars.
    */
   server: {
-    HYPERDX_INGESTION_KEY: z.string(),
+    HYPERDX_ENDPOINT: z.url(),
+    HYPERDX_INGESTION_KEY: z.string().nonempty(),
   },
 
   /**
