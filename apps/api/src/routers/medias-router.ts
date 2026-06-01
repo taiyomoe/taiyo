@@ -361,7 +361,7 @@ export const mediasRouter = new Hono().post(
 
     if (body.staffs.length > 0) {
       await db
-        .insertInto("staffOnMedias")
+        .insertInto("mediaStaffs")
         .values(body.staffs.map((staff) => ({ mediaId, ...staff })))
         .execute()
     }

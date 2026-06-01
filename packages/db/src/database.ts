@@ -1,12 +1,12 @@
 import type { Account } from "./models/account-model"
 import type { Banner } from "./models/banner-model"
-import type { ChapterToGroup } from "./models/chapter-to-group-model"
+import type { ChapterGroup } from "./models/chapter-group-model"
 import type { Chapter } from "./models/chapter-model"
 import type { Cover } from "./models/cover-model"
 import type { Group } from "./models/group-model"
+import type { MediaStaff } from "./models/media-staff-model"
 import type { Media } from "./models/media-model"
 import type { Session } from "./models/session-model"
-import type { StaffOnMedia } from "./models/staff-on-media-model"
 import type { Staff } from "./models/staff-model"
 import type { Task } from "./models/task-model"
 import type { Title } from "./models/title-model"
@@ -18,19 +18,19 @@ import type { User } from "./models/user-model"
 import type { Verification } from "./models/verification-model"
 
 export interface DB {
-  _chapterToGroups: ChapterToGroup
-  _userFollows: UserFollow
   accounts: Account
   banners: Banner
+  chapterGroups: ChapterGroup
   chapters: Chapter
   covers: Cover
   groups: Group
+  mediaStaffs: MediaStaff
   medias: Media
   sessions: Session
-  staffOnMedias: StaffOnMedia
   staffs: Staff
   tasks: Task
   titles: Title
+  userFollows: UserFollow
   userHistories: UserHistory
   userLibraries: UserLibrary
   userProfiles: UserProfile

@@ -27,7 +27,7 @@ export * from "./models/account-model"
 
 export * from "./models/banner-model"
 
-export * from "./models/chapter-to-group-model"
+export * from "./models/chapter-group-model"
 
 export * from "./models/chapter-model"
 
@@ -39,7 +39,7 @@ export * from "./models/media-model"
 
 export * from "./models/session-model"
 
-export * from "./models/staff-on-media-model"
+export * from "./models/media-staff-model"
 
 export * from "./models/staff-model"
 

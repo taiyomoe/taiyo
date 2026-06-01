@@ -142,7 +142,7 @@ export const execute = async (db: Kysely<DB>): Promise<void> => {
     .execute()
 
   await db
-    .insertInto("staffOnMedias")
+    .insertInto("mediaStaffs")
     .values([
       {
         mediaId: "104a9efc-ef2a-4bf4-807b-2d949d78e3b6",
@@ -1563,223 +1563,223 @@ export const execute = async (db: Kysely<DB>): Promise<void> => {
     .execute()
 
   await db
-    .insertInto("_chapterToGroups")
+    .insertInto("chapterGroups")
     .values([
       {
-        A: "1d8724d1-a730-4479-a42e-22f59303c329",
-        B: "12131c70-9eed-4d18-926d-6837e4c01c46",
+        chapterId: "1d8724d1-a730-4479-a42e-22f59303c329",
+        groupId: "12131c70-9eed-4d18-926d-6837e4c01c46",
       },
       {
-        A: "8be9b49a-0367-4228-88b8-32d9638c82e0",
-        B: "57c45e3b-3c6e-42a1-ae72-366ab5342d95",
+        chapterId: "8be9b49a-0367-4228-88b8-32d9638c82e0",
+        groupId: "57c45e3b-3c6e-42a1-ae72-366ab5342d95",
       },
       {
-        A: "8be9b49a-0367-4228-88b8-32d9638c82e0",
-        B: "eba89677-c709-47a6-9153-7a9420b9c6a3",
+        chapterId: "8be9b49a-0367-4228-88b8-32d9638c82e0",
+        groupId: "eba89677-c709-47a6-9153-7a9420b9c6a3",
       },
       {
-        A: "91669cc0-c2c1-4484-905f-92b583dbfd47",
-        B: "12131c70-9eed-4d18-926d-6837e4c01c46",
+        chapterId: "91669cc0-c2c1-4484-905f-92b583dbfd47",
+        groupId: "12131c70-9eed-4d18-926d-6837e4c01c46",
       },
       {
-        A: "37c76c44-5685-46a2-9dd1-131638c89677",
-        B: "57c45e3b-3c6e-42a1-ae72-366ab5342d95",
+        chapterId: "37c76c44-5685-46a2-9dd1-131638c89677",
+        groupId: "57c45e3b-3c6e-42a1-ae72-366ab5342d95",
       },
       {
-        A: "37c76c44-5685-46a2-9dd1-131638c89677",
-        B: "eba89677-c709-47a6-9153-7a9420b9c6a3",
+        chapterId: "37c76c44-5685-46a2-9dd1-131638c89677",
+        groupId: "eba89677-c709-47a6-9153-7a9420b9c6a3",
       },
       {
-        A: "e7fbe4cf-f4e9-4532-bb51-62f408c4177d",
-        B: "57c45e3b-3c6e-42a1-ae72-366ab5342d95",
+        chapterId: "e7fbe4cf-f4e9-4532-bb51-62f408c4177d",
+        groupId: "57c45e3b-3c6e-42a1-ae72-366ab5342d95",
       },
       {
-        A: "e7fbe4cf-f4e9-4532-bb51-62f408c4177d",
-        B: "eba89677-c709-47a6-9153-7a9420b9c6a3",
+        chapterId: "e7fbe4cf-f4e9-4532-bb51-62f408c4177d",
+        groupId: "eba89677-c709-47a6-9153-7a9420b9c6a3",
       },
       {
-        A: "d0f9bc47-9299-477f-8bab-47f6f1fc0649",
-        B: "12131c70-9eed-4d18-926d-6837e4c01c46",
+        chapterId: "d0f9bc47-9299-477f-8bab-47f6f1fc0649",
+        groupId: "12131c70-9eed-4d18-926d-6837e4c01c46",
       },
       {
-        A: "12ff3300-1006-4f26-ad66-b93611762e65",
-        B: "12131c70-9eed-4d18-926d-6837e4c01c46",
+        chapterId: "12ff3300-1006-4f26-ad66-b93611762e65",
+        groupId: "12131c70-9eed-4d18-926d-6837e4c01c46",
       },
       {
-        A: "41e768e6-4a95-407e-9e92-9595d64b4509",
-        B: "57c45e3b-3c6e-42a1-ae72-366ab5342d95",
+        chapterId: "41e768e6-4a95-407e-9e92-9595d64b4509",
+        groupId: "57c45e3b-3c6e-42a1-ae72-366ab5342d95",
       },
       {
-        A: "41e768e6-4a95-407e-9e92-9595d64b4509",
-        B: "eba89677-c709-47a6-9153-7a9420b9c6a3",
+        chapterId: "41e768e6-4a95-407e-9e92-9595d64b4509",
+        groupId: "eba89677-c709-47a6-9153-7a9420b9c6a3",
       },
       {
-        A: "4a35be0e-75e4-4445-87f2-f5566a71cb1b",
-        B: "57c45e3b-3c6e-42a1-ae72-366ab5342d95",
+        chapterId: "4a35be0e-75e4-4445-87f2-f5566a71cb1b",
+        groupId: "57c45e3b-3c6e-42a1-ae72-366ab5342d95",
       },
       {
-        A: "4a35be0e-75e4-4445-87f2-f5566a71cb1b",
-        B: "eba89677-c709-47a6-9153-7a9420b9c6a3",
+        chapterId: "4a35be0e-75e4-4445-87f2-f5566a71cb1b",
+        groupId: "eba89677-c709-47a6-9153-7a9420b9c6a3",
       },
       {
-        A: "2c47cb64-0785-4528-a235-f78583987c85",
-        B: "12131c70-9eed-4d18-926d-6837e4c01c46",
+        chapterId: "2c47cb64-0785-4528-a235-f78583987c85",
+        groupId: "12131c70-9eed-4d18-926d-6837e4c01c46",
       },
       {
-        A: "56840d76-f0f2-46cd-a54a-c988aed9a9a8",
-        B: "12131c70-9eed-4d18-926d-6837e4c01c46",
+        chapterId: "56840d76-f0f2-46cd-a54a-c988aed9a9a8",
+        groupId: "12131c70-9eed-4d18-926d-6837e4c01c46",
       },
       {
-        A: "37f839a9-8837-4dae-8fe9-37e91a87b222",
-        B: "57c45e3b-3c6e-42a1-ae72-366ab5342d95",
+        chapterId: "37f839a9-8837-4dae-8fe9-37e91a87b222",
+        groupId: "57c45e3b-3c6e-42a1-ae72-366ab5342d95",
       },
       {
-        A: "37f839a9-8837-4dae-8fe9-37e91a87b222",
-        B: "eba89677-c709-47a6-9153-7a9420b9c6a3",
+        chapterId: "37f839a9-8837-4dae-8fe9-37e91a87b222",
+        groupId: "eba89677-c709-47a6-9153-7a9420b9c6a3",
       },
       {
-        A: "1a4c8c3a-2efe-4dd0-b90a-8dc3fa6f90bb",
-        B: "57c45e3b-3c6e-42a1-ae72-366ab5342d95",
+        chapterId: "1a4c8c3a-2efe-4dd0-b90a-8dc3fa6f90bb",
+        groupId: "57c45e3b-3c6e-42a1-ae72-366ab5342d95",
       },
       {
-        A: "1a4c8c3a-2efe-4dd0-b90a-8dc3fa6f90bb",
-        B: "eba89677-c709-47a6-9153-7a9420b9c6a3",
+        chapterId: "1a4c8c3a-2efe-4dd0-b90a-8dc3fa6f90bb",
+        groupId: "eba89677-c709-47a6-9153-7a9420b9c6a3",
       },
       {
-        A: "69681f35-08be-4367-a63c-13a5b8c152cf",
-        B: "12131c70-9eed-4d18-926d-6837e4c01c46",
+        chapterId: "69681f35-08be-4367-a63c-13a5b8c152cf",
+        groupId: "12131c70-9eed-4d18-926d-6837e4c01c46",
       },
       {
-        A: "4390add2-76dc-409b-91ff-1dbda89160ea",
-        B: "57c45e3b-3c6e-42a1-ae72-366ab5342d95",
+        chapterId: "4390add2-76dc-409b-91ff-1dbda89160ea",
+        groupId: "57c45e3b-3c6e-42a1-ae72-366ab5342d95",
       },
       {
-        A: "4390add2-76dc-409b-91ff-1dbda89160ea",
-        B: "eba89677-c709-47a6-9153-7a9420b9c6a3",
+        chapterId: "4390add2-76dc-409b-91ff-1dbda89160ea",
+        groupId: "eba89677-c709-47a6-9153-7a9420b9c6a3",
       },
       {
-        A: "584b1466-556d-4fdc-8897-5d1c59d758a9",
-        B: "12131c70-9eed-4d18-926d-6837e4c01c46",
+        chapterId: "584b1466-556d-4fdc-8897-5d1c59d758a9",
+        groupId: "12131c70-9eed-4d18-926d-6837e4c01c46",
       },
       {
-        A: "41f3c62a-139c-4932-91bb-db0360c21c19",
-        B: "57c45e3b-3c6e-42a1-ae72-366ab5342d95",
+        chapterId: "41f3c62a-139c-4932-91bb-db0360c21c19",
+        groupId: "57c45e3b-3c6e-42a1-ae72-366ab5342d95",
       },
       {
-        A: "41f3c62a-139c-4932-91bb-db0360c21c19",
-        B: "eba89677-c709-47a6-9153-7a9420b9c6a3",
+        chapterId: "41f3c62a-139c-4932-91bb-db0360c21c19",
+        groupId: "eba89677-c709-47a6-9153-7a9420b9c6a3",
       },
       {
-        A: "8d506717-6501-45ae-8f07-d49041da6266",
-        B: "12131c70-9eed-4d18-926d-6837e4c01c46",
+        chapterId: "8d506717-6501-45ae-8f07-d49041da6266",
+        groupId: "12131c70-9eed-4d18-926d-6837e4c01c46",
       },
       {
-        A: "0d194698-c1da-4b3c-b174-4d3213e0241b",
-        B: "12131c70-9eed-4d18-926d-6837e4c01c46",
+        chapterId: "0d194698-c1da-4b3c-b174-4d3213e0241b",
+        groupId: "12131c70-9eed-4d18-926d-6837e4c01c46",
       },
       {
-        A: "1055de32-ba52-4c1a-b899-73298d36c95d",
-        B: "12131c70-9eed-4d18-926d-6837e4c01c46",
+        chapterId: "1055de32-ba52-4c1a-b899-73298d36c95d",
+        groupId: "12131c70-9eed-4d18-926d-6837e4c01c46",
       },
       {
-        A: "fb283ee9-748d-4ff1-950c-8adf97f86bac",
-        B: "12131c70-9eed-4d18-926d-6837e4c01c46",
+        chapterId: "fb283ee9-748d-4ff1-950c-8adf97f86bac",
+        groupId: "12131c70-9eed-4d18-926d-6837e4c01c46",
       },
       {
-        A: "f0c32d4d-4b6a-466b-b0de-884fd98c9069",
-        B: "12131c70-9eed-4d18-926d-6837e4c01c46",
+        chapterId: "f0c32d4d-4b6a-466b-b0de-884fd98c9069",
+        groupId: "12131c70-9eed-4d18-926d-6837e4c01c46",
       },
       {
-        A: "47b4cd76-94d0-43bd-ab1b-f8d20300eff1",
-        B: "12131c70-9eed-4d18-926d-6837e4c01c46",
+        chapterId: "47b4cd76-94d0-43bd-ab1b-f8d20300eff1",
+        groupId: "12131c70-9eed-4d18-926d-6837e4c01c46",
       },
       {
-        A: "2ab7ce60-41a8-4f86-8970-5cb4d52383db",
-        B: "12131c70-9eed-4d18-926d-6837e4c01c46",
+        chapterId: "2ab7ce60-41a8-4f86-8970-5cb4d52383db",
+        groupId: "12131c70-9eed-4d18-926d-6837e4c01c46",
       },
       {
-        A: "12ceb37d-8217-44a8-8d54-5cb44bcceef3",
-        B: "12131c70-9eed-4d18-926d-6837e4c01c46",
+        chapterId: "12ceb37d-8217-44a8-8d54-5cb44bcceef3",
+        groupId: "12131c70-9eed-4d18-926d-6837e4c01c46",
       },
       {
-        A: "827ae8ab-40d0-4f02-aa18-07bbfd439f50",
-        B: "12131c70-9eed-4d18-926d-6837e4c01c46",
+        chapterId: "827ae8ab-40d0-4f02-aa18-07bbfd439f50",
+        groupId: "12131c70-9eed-4d18-926d-6837e4c01c46",
       },
       {
-        A: "490ba41f-b6e3-42d0-adb1-1bfd6f8d2a82",
-        B: "12131c70-9eed-4d18-926d-6837e4c01c46",
+        chapterId: "490ba41f-b6e3-42d0-adb1-1bfd6f8d2a82",
+        groupId: "12131c70-9eed-4d18-926d-6837e4c01c46",
       },
       {
-        A: "54f18493-6448-4d2b-b28a-7792f9e33fb8",
-        B: "12131c70-9eed-4d18-926d-6837e4c01c46",
+        chapterId: "54f18493-6448-4d2b-b28a-7792f9e33fb8",
+        groupId: "12131c70-9eed-4d18-926d-6837e4c01c46",
       },
       {
-        A: "7c7f1738-13fa-4ca3-b4c1-271a8c06b6ea",
-        B: "12131c70-9eed-4d18-926d-6837e4c01c46",
+        chapterId: "7c7f1738-13fa-4ca3-b4c1-271a8c06b6ea",
+        groupId: "12131c70-9eed-4d18-926d-6837e4c01c46",
       },
       {
-        A: "94c84cd2-d680-4670-a8cc-3f7d58fb0610",
-        B: "12131c70-9eed-4d18-926d-6837e4c01c46",
+        chapterId: "94c84cd2-d680-4670-a8cc-3f7d58fb0610",
+        groupId: "12131c70-9eed-4d18-926d-6837e4c01c46",
       },
       {
-        A: "ca3c84b9-5cd8-4547-ba9a-93116a2a55bf",
-        B: "12131c70-9eed-4d18-926d-6837e4c01c46",
+        chapterId: "ca3c84b9-5cd8-4547-ba9a-93116a2a55bf",
+        groupId: "12131c70-9eed-4d18-926d-6837e4c01c46",
       },
       {
-        A: "64cd0e29-2655-44d9-9262-20d5b7cec18f",
-        B: "12131c70-9eed-4d18-926d-6837e4c01c46",
+        chapterId: "64cd0e29-2655-44d9-9262-20d5b7cec18f",
+        groupId: "12131c70-9eed-4d18-926d-6837e4c01c46",
       },
       {
-        A: "94dd56f6-7a06-476f-9c13-f7b18accfb56",
-        B: "12131c70-9eed-4d18-926d-6837e4c01c46",
+        chapterId: "94dd56f6-7a06-476f-9c13-f7b18accfb56",
+        groupId: "12131c70-9eed-4d18-926d-6837e4c01c46",
       },
       {
-        A: "5d1dae93-1c66-43df-8f4b-120df9dee39b",
-        B: "12131c70-9eed-4d18-926d-6837e4c01c46",
+        chapterId: "5d1dae93-1c66-43df-8f4b-120df9dee39b",
+        groupId: "12131c70-9eed-4d18-926d-6837e4c01c46",
       },
       {
-        A: "31cb88b3-193b-4a12-99cc-b01c9724ad11",
-        B: "12131c70-9eed-4d18-926d-6837e4c01c46",
+        chapterId: "31cb88b3-193b-4a12-99cc-b01c9724ad11",
+        groupId: "12131c70-9eed-4d18-926d-6837e4c01c46",
       },
       {
-        A: "b78da6b4-6cc0-4efe-b569-642d055cf933",
-        B: "12131c70-9eed-4d18-926d-6837e4c01c46",
+        chapterId: "b78da6b4-6cc0-4efe-b569-642d055cf933",
+        groupId: "12131c70-9eed-4d18-926d-6837e4c01c46",
       },
       {
-        A: "16b225cf-1b33-432a-b2c7-8f5ab6f279c1",
-        B: "12131c70-9eed-4d18-926d-6837e4c01c46",
+        chapterId: "16b225cf-1b33-432a-b2c7-8f5ab6f279c1",
+        groupId: "12131c70-9eed-4d18-926d-6837e4c01c46",
       },
       {
-        A: "3ebbf994-96f2-4d18-82a1-1741e9052b92",
-        B: "12131c70-9eed-4d18-926d-6837e4c01c46",
+        chapterId: "3ebbf994-96f2-4d18-82a1-1741e9052b92",
+        groupId: "12131c70-9eed-4d18-926d-6837e4c01c46",
       },
       {
-        A: "dc34f833-7149-4035-84df-bcdc92a38f53",
-        B: "12131c70-9eed-4d18-926d-6837e4c01c46",
+        chapterId: "dc34f833-7149-4035-84df-bcdc92a38f53",
+        groupId: "12131c70-9eed-4d18-926d-6837e4c01c46",
       },
       {
-        A: "4bddee9d-baa4-4a42-b2c9-7e8e8a2a7f75",
-        B: "12131c70-9eed-4d18-926d-6837e4c01c46",
+        chapterId: "4bddee9d-baa4-4a42-b2c9-7e8e8a2a7f75",
+        groupId: "12131c70-9eed-4d18-926d-6837e4c01c46",
       },
       {
-        A: "199e6d5c-6a59-4fa9-9ab5-bff8dc507cda",
-        B: "12131c70-9eed-4d18-926d-6837e4c01c46",
+        chapterId: "199e6d5c-6a59-4fa9-9ab5-bff8dc507cda",
+        groupId: "12131c70-9eed-4d18-926d-6837e4c01c46",
       },
       {
-        A: "2812b0ae-5fda-4e9e-967d-40aa9e9f8d84",
-        B: "12131c70-9eed-4d18-926d-6837e4c01c46",
+        chapterId: "2812b0ae-5fda-4e9e-967d-40aa9e9f8d84",
+        groupId: "12131c70-9eed-4d18-926d-6837e4c01c46",
       },
       {
-        A: "09e81331-a418-4e4a-a2c2-cefeac7f05b2",
-        B: "12131c70-9eed-4d18-926d-6837e4c01c46",
+        chapterId: "09e81331-a418-4e4a-a2c2-cefeac7f05b2",
+        groupId: "12131c70-9eed-4d18-926d-6837e4c01c46",
       },
       {
-        A: "d6325c58-e325-4f2f-b42d-37a247712492",
-        B: "12131c70-9eed-4d18-926d-6837e4c01c46",
+        chapterId: "d6325c58-e325-4f2f-b42d-37a247712492",
+        groupId: "12131c70-9eed-4d18-926d-6837e4c01c46",
       },
       {
-        A: "3093cd70-4748-425b-92aa-bfeb25da621f",
-        B: "12131c70-9eed-4d18-926d-6837e4c01c46",
+        chapterId: "3093cd70-4748-425b-92aa-bfeb25da621f",
+        groupId: "12131c70-9eed-4d18-926d-6837e4c01c46",
       },
     ])
     .execute()

@@ -114,7 +114,7 @@ export const execute = async (db: Kysely<DB>): Promise<void> => {
     .execute()
 
   await db
-    .insertInto("staffOnMedias")
+    .insertInto("mediaStaffs")
     .values([
       {
         mediaId: "35a1efbe-9bdc-45f1-8483-220995449eaa",
@@ -405,31 +405,31 @@ export const execute = async (db: Kysely<DB>): Promise<void> => {
     .execute()
 
   await db
-    .insertInto("_chapterToGroups")
+    .insertInto("chapterGroups")
     .values([
       {
-        A: "c72b0642-0dc4-478f-b226-647bae417db4",
-        B: "487c518d-c81a-47fe-9fc4-3c0f6c48a977",
+        chapterId: "c72b0642-0dc4-478f-b226-647bae417db4",
+        groupId: "487c518d-c81a-47fe-9fc4-3c0f6c48a977",
       },
       {
-        A: "e0d82a10-7a6d-4dcb-965a-0b1aee50f2e6",
-        B: "487c518d-c81a-47fe-9fc4-3c0f6c48a977",
+        chapterId: "e0d82a10-7a6d-4dcb-965a-0b1aee50f2e6",
+        groupId: "487c518d-c81a-47fe-9fc4-3c0f6c48a977",
       },
       {
-        A: "f0f58bfa-df1d-45e7-986c-793523786d3a",
-        B: "0774019a-d4cc-48e3-a6ca-c9fd6cc5b6d6",
+        chapterId: "f0f58bfa-df1d-45e7-986c-793523786d3a",
+        groupId: "0774019a-d4cc-48e3-a6ca-c9fd6cc5b6d6",
       },
       {
-        A: "638743b8-dd54-454c-affa-105978461280",
-        B: "487c518d-c81a-47fe-9fc4-3c0f6c48a977",
+        chapterId: "638743b8-dd54-454c-affa-105978461280",
+        groupId: "487c518d-c81a-47fe-9fc4-3c0f6c48a977",
       },
       {
-        A: "8f28fd11-f220-43fd-b421-54b86e9aca8e",
-        B: "487c518d-c81a-47fe-9fc4-3c0f6c48a977",
+        chapterId: "8f28fd11-f220-43fd-b421-54b86e9aca8e",
+        groupId: "487c518d-c81a-47fe-9fc4-3c0f6c48a977",
       },
       {
-        A: "f492ff87-f5b6-4aaa-b6de-eda3f3bbed10",
-        B: "487c518d-c81a-47fe-9fc4-3c0f6c48a977",
+        chapterId: "f492ff87-f5b6-4aaa-b6de-eda3f3bbed10",
+        groupId: "487c518d-c81a-47fe-9fc4-3c0f6c48a977",
       },
     ])
     .execute()

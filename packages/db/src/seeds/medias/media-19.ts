@@ -205,7 +205,7 @@ export const execute = async (db: Kysely<DB>): Promise<void> => {
     .execute()
 
   await db
-    .insertInto("staffOnMedias")
+    .insertInto("mediaStaffs")
     .values([
       {
         mediaId: "d22a95ca-be76-4d65-97c4-a1bb5d46d32c",
@@ -359,11 +359,11 @@ export const execute = async (db: Kysely<DB>): Promise<void> => {
     .execute()
 
   await db
-    .insertInto("_chapterToGroups")
+    .insertInto("chapterGroups")
     .values([
       {
-        A: "8a487658-150e-4256-ba48-80228496880c",
-        B: "3f55c48b-f866-41c7-af71-99add8dc2d0a",
+        chapterId: "8a487658-150e-4256-ba48-80228496880c",
+        groupId: "3f55c48b-f866-41c7-af71-99add8dc2d0a",
       },
     ])
     .execute()

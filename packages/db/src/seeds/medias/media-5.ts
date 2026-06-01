@@ -185,7 +185,7 @@ export const execute = async (db: Kysely<DB>): Promise<void> => {
     .execute()
 
   await db
-    .insertInto("staffOnMedias")
+    .insertInto("mediaStaffs")
     .values([
       {
         mediaId: "dcc9c577-c9ab-47db-ac54-709ac11c07b8",
@@ -994,67 +994,67 @@ export const execute = async (db: Kysely<DB>): Promise<void> => {
     .execute()
 
   await db
-    .insertInto("_chapterToGroups")
+    .insertInto("chapterGroups")
     .values([
       {
-        A: "8474fe06-cdd7-4065-ad29-82900a722036",
-        B: "8c153b84-51fb-40b3-80c8-89f20008d280",
+        chapterId: "8474fe06-cdd7-4065-ad29-82900a722036",
+        groupId: "8c153b84-51fb-40b3-80c8-89f20008d280",
       },
       {
-        A: "d5f8abb1-c3b4-4aa8-ad4a-ca4268c7c9b5",
-        B: "8c153b84-51fb-40b3-80c8-89f20008d280",
+        chapterId: "d5f8abb1-c3b4-4aa8-ad4a-ca4268c7c9b5",
+        groupId: "8c153b84-51fb-40b3-80c8-89f20008d280",
       },
       {
-        A: "c8b965e0-9e6d-498c-9ba6-99dc1da24987",
-        B: "8c153b84-51fb-40b3-80c8-89f20008d280",
+        chapterId: "c8b965e0-9e6d-498c-9ba6-99dc1da24987",
+        groupId: "8c153b84-51fb-40b3-80c8-89f20008d280",
       },
       {
-        A: "3b028812-f3b8-47b5-bf0b-345c31d6328a",
-        B: "8c153b84-51fb-40b3-80c8-89f20008d280",
+        chapterId: "3b028812-f3b8-47b5-bf0b-345c31d6328a",
+        groupId: "8c153b84-51fb-40b3-80c8-89f20008d280",
       },
       {
-        A: "304ee6cf-92ec-4d9d-8163-1a509fc54ebe",
-        B: "8c153b84-51fb-40b3-80c8-89f20008d280",
+        chapterId: "304ee6cf-92ec-4d9d-8163-1a509fc54ebe",
+        groupId: "8c153b84-51fb-40b3-80c8-89f20008d280",
       },
       {
-        A: "45c9ec4e-a57a-48d6-b265-ee1742dcd793",
-        B: "8c153b84-51fb-40b3-80c8-89f20008d280",
+        chapterId: "45c9ec4e-a57a-48d6-b265-ee1742dcd793",
+        groupId: "8c153b84-51fb-40b3-80c8-89f20008d280",
       },
       {
-        A: "1b1ceca8-8c2f-4b4e-b379-327b98a44a24",
-        B: "8c153b84-51fb-40b3-80c8-89f20008d280",
+        chapterId: "1b1ceca8-8c2f-4b4e-b379-327b98a44a24",
+        groupId: "8c153b84-51fb-40b3-80c8-89f20008d280",
       },
       {
-        A: "2cb48a16-6ea2-40a5-9a75-c6cd8cfb0ee1",
-        B: "8c153b84-51fb-40b3-80c8-89f20008d280",
+        chapterId: "2cb48a16-6ea2-40a5-9a75-c6cd8cfb0ee1",
+        groupId: "8c153b84-51fb-40b3-80c8-89f20008d280",
       },
       {
-        A: "89df7677-3c76-4347-b205-ae2aa8d3304b",
-        B: "8c153b84-51fb-40b3-80c8-89f20008d280",
+        chapterId: "89df7677-3c76-4347-b205-ae2aa8d3304b",
+        groupId: "8c153b84-51fb-40b3-80c8-89f20008d280",
       },
       {
-        A: "3a59a1dd-f870-48a4-9d5a-49b1b0c9380b",
-        B: "af06e6e9-d5da-4e18-ab89-edf57298c669",
+        chapterId: "3a59a1dd-f870-48a4-9d5a-49b1b0c9380b",
+        groupId: "af06e6e9-d5da-4e18-ab89-edf57298c669",
       },
       {
-        A: "886bc0b7-d83a-4d3d-81e8-a0287c90d45f",
-        B: "8c153b84-51fb-40b3-80c8-89f20008d280",
+        chapterId: "886bc0b7-d83a-4d3d-81e8-a0287c90d45f",
+        groupId: "8c153b84-51fb-40b3-80c8-89f20008d280",
       },
       {
-        A: "2d20ff19-0efd-4959-98d5-95fc5fed4074",
-        B: "af06e6e9-d5da-4e18-ab89-edf57298c669",
+        chapterId: "2d20ff19-0efd-4959-98d5-95fc5fed4074",
+        groupId: "af06e6e9-d5da-4e18-ab89-edf57298c669",
       },
       {
-        A: "20b67f72-420c-4b50-9240-5c9f7a849687",
-        B: "af06e6e9-d5da-4e18-ab89-edf57298c669",
+        chapterId: "20b67f72-420c-4b50-9240-5c9f7a849687",
+        groupId: "af06e6e9-d5da-4e18-ab89-edf57298c669",
       },
       {
-        A: "35ce99b4-e940-4be1-8c62-d4ead3b8eca9",
-        B: "af06e6e9-d5da-4e18-ab89-edf57298c669",
+        chapterId: "35ce99b4-e940-4be1-8c62-d4ead3b8eca9",
+        groupId: "af06e6e9-d5da-4e18-ab89-edf57298c669",
       },
       {
-        A: "f07c272e-f226-44ba-8e9c-94fe8e4b8f66",
-        B: "af06e6e9-d5da-4e18-ab89-edf57298c669",
+        chapterId: "f07c272e-f226-44ba-8e9c-94fe8e4b8f66",
+        groupId: "af06e6e9-d5da-4e18-ab89-edf57298c669",
       },
     ])
     .execute()

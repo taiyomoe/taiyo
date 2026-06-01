@@ -204,8 +204,8 @@ export async function seed(db: Kysely<DB>): Promise<void> {
     )
     .execute()
 
-  // Follow relationships (_userFollows: A follows B)
-  const followRows: { A: string; B: string }[] = []
+  // Follow relationships: followerId follows followingId.
+  const followRows: { followerId: string; followingId: string }[] = []
 
   for (const user of USERS) {
     const followers = faker.helpers
@@ -215,14 +215,14 @@ export async function seed(db: Kysely<DB>): Promise<void> {
       .arrayElements([...USERS], { min: 0, max: 15 })
       .filter((u) => u.id !== user.id)
 
-    for (const f of followers) followRows.push({ A: f.id, B: user.id })
-    for (const f of following) followRows.push({ A: user.id, B: f.id })
+    for (const f of followers) followRows.push({ followerId: f.id, followingId: user.id })
+    for (const f of following) followRows.push({ followerId: user.id, followingId: f.id })
   }
 
-  // Deduplicate (A,B) pairs
+  // Deduplicate (followerId, followingId) pairs
   const seen = new Set<string>()
   const uniqueFollows = followRows.filter((r) => {
-    const k = `${r.A}|${r.B}`
+    const k = `${r.followerId}|${r.followingId}`
 
     if (seen.has(k)) return false
 
@@ -232,7 +232,7 @@ export async function seed(db: Kysely<DB>): Promise<void> {
   })
 
   if (uniqueFollows.length > 0) {
-    await db.insertInto("_userFollows").values(uniqueFollows).execute()
+    await db.insertInto("userFollows").values(uniqueFollows).execute()
   }
 
   await db

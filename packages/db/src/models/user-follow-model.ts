@@ -1,8 +1,8 @@
 import type { Insertable } from "kysely"
 
 export interface UserFollow {
-  A: string
-  B: string
+  followerId: string
+  followingId: string
 }
 
 export type NewUserFollow = Insertable<UserFollow>
