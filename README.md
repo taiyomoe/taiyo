@@ -111,19 +111,23 @@ taiyo/
    docker-compose up -d
    ```
 
-5. **Run database migrations**
+5. **Configure the S3 client**
+
+Please refer to the [@taiyomoe/s3](./packages/s3/README.md) package documentation for more details.
+
+6. **Run database migrations**
 
    ```bash
    pnpm -F db kysely migrate latest
    ```
 
-6. **Seed the database with sample data**
+7. **Seed the database with sample data**
 
    ```bash
    pnpm -F db kysely seed run
    ```
 
-7. **Start development servers**
+8. **Start development servers**
 
    ```bash
    pnpm dev

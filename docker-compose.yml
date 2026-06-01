@@ -31,14 +31,20 @@ services:
       - "$HYPERDX_PORT:8080"
       - "$HYPERDX_OTLP_PORT:4318"
 
-  minio:
-    image: minio/minio:latest
-    command: server /data --console-address ":${MINIO_CONSOLE_PORT}"
+  rustfs:
+    image: rustfs/rustfs:latest
+    restart: unless-stopped
     environment:
-      - MINIO_ROOT_USER=$MINIO_ROOT_USER
-      - MINIO_ROOT_PASSWORD=$MINIO_ROOT_PASSWORD
+      - RUSTFS_ACCESS_KEY=$RUSTFS_ACCESS_KEY
+      - RUSTFS_SECRET_KEY=$RUSTFS_SECRET_KEY
+      - RUSTFS_VOLUMES=/data
     ports:
-      - "$MINIO_PORT:9000"
-      - "$MINIO_CONSOLE_PORT:9001"
+      - "$RUSTFS_PORT:9000"
+      - "$RUSTFS_CONSOLE_PORT:9001"
     volumes:
-      - "./data/minio:/data"
+      - "./data/rustfs:/data"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:9000/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 30

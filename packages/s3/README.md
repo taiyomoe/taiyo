@@ -1,6 +1,6 @@
 # @taiyomoe/s3
 
-S3 client configuration for the Taiyo monorepo.
+S3 client configuration for the Taiyō monorepo.
 
 ## Environment Variables
 
@@ -13,14 +13,17 @@ S3 client configuration for the Taiyo monorepo.
 
 ## Development
 
-After starting MinIO via Docker Compose, run these commands to configure the MinIO client and create the default bucket:
+After starting RustFS via Docker Compose, run these commands to configure the MinIO client (RustFS is S3-compatible and works with `mc`) and create the default bucket:
 
 ```bash
-# Configure the local alias
-source .env && docker exec -it taiyo-minio-1 mc alias set local http://localhost:$MINIO_PORT $MINIO_ROOT_USER $MINIO_ROOT_PASSWORD
-
-# Create the "default" bucket
-docker exec -it taiyo-minio-1 mc mb -p local/default
+source .env && docker exec -it taiyo-rustfs-1 sh -lc '
+  cd /home/rustfs &&
+  wget https://github.com/rustfs/cli/releases/download/v0.1.11/rustfs-cli-linux-amd64-v0.1.11.tar.gz &&
+  tar -zxvf rustfs-cli-linux-amd64-v0.1.11.tar.gz &&
+  chmod +x rc &&
+  ./rc alias set '"$S3_BUCKET_NAME"' http://localhost:9000 '"$RUSTFS_ACCESS_KEY"' '"$RUSTFS_SECRET_KEY"' &&
+  ./rc mb -p '"$S3_BUCKET_NAME"'/default
+'
 ```
 
 ## Usage
