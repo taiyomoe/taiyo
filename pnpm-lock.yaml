@@ -268,9 +268,15 @@ importers:
       kysely:
         specifier: ^0.29.2
         version: 0.29.2
+      mangadex-full-api:
+        specifier: ^6.2.0
+        version: 6.2.0
       pg:
         specifier: ^8.21.0
         version: 8.21.0
+      radashi:
+        specifier: ^12.9.1
+        version: 12.9.1
       zod:
         specifier: ^4.4.3
         version: 4.4.3
@@ -284,6 +290,9 @@ importers:
       '@types/pg':
         specifier: ^8.20.0
         version: 8.20.0
+      '@types/validator':
+        specifier: ^13.15.10
+        version: 13.15.10
       dotenv-cli:
         specifier: ^11.0.0
         version: 11.0.0
@@ -293,6 +302,9 @@ importers:
       typescript:
         specifier: ^6.0.3
         version: 6.0.3
+      validator:
+        specifier: ^13.15.35
+        version: 13.15.35
 
   packages/email:
     dependencies:
@@ -2641,6 +2653,9 @@ packages:
   '@types/resolve@1.20.6':
     resolution: {integrity: sha512-A4STmOXPhMUtHH+S6ymgE2GiBSMqf4oTvcQZMcHzokuTLVYzXTB8ttjcgxOVaAp2lGwEdzZ0J+cRbbeevQj1UQ==}
 
+  '@types/validator@13.15.10':
+    resolution: {integrity: sha512-T8L6i7wCuyoK8A/ZeLYt1+q0ty3Zb9+qbSSvrIVitzT3YjZqkTZ40IbRsPanlB4h1QB3JVL1SYCdR6ngtFYcuA==}
+
   '@types/ws@8.18.1':
     resolution: {integrity: sha512-ThVF6DCVhA8kUGy+aazFQ4kXQ7E1Ty7A3ypFOe0IcJV8O/M511G99AW24irKrW56Wt44yG9+ij8FaqoBGkuBXg==}
 
@@ -3622,6 +3637,10 @@ packages:
   mailchecker@6.0.20:
     resolution: {integrity: sha512-mZ3kmtfXzGj06prtNm6d8an7D++Kf1G4jEkPZ1QQyhknYNLkmGoMtfaNPNHJU6E8J+Bm3AcZlIIfq5D6L4MS2g==}
     engines: {node: '>=0.10'}
+
+  mangadex-full-api@6.2.0:
+    resolution: {integrity: sha512-jUOVqwnT2jYyyG6M/C3XPDIfbBMUjrwv6/gvktQmWTJO1UBKezyUG0DMETlcl0EENF3TOxVhGGjTKtX8OQSvOg==}
+    engines: {node: '>=19.0.0'}
 
   marked@15.0.12:
     resolution: {integrity: sha512-8dD6FusOQSrpv9Z1rdNMdlSgQOIP880DHqnohobOmYLElGEqAL/JvxvuxZO16r4HtjTlfPRDC1hbvxC9dPN2nA==}
@@ -6188,6 +6207,8 @@ snapshots:
 
   '@types/resolve@1.20.6': {}
 
+  '@types/validator@13.15.10': {}
+
   '@types/ws@8.18.1':
     dependencies:
       '@types/node': 25.9.1
@@ -7077,6 +7098,8 @@ snapshots:
       '@jridgewell/sourcemap-codec': 1.5.5
 
   mailchecker@6.0.20: {}
+
+  mangadex-full-api@6.2.0: {}
 
   marked@15.0.12: {}
 

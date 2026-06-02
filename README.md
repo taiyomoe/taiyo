@@ -186,7 +186,8 @@ This project uses [git-flow](https://git-flow.readthedocs.io/en/latest/presentat
 
 ### Code Quality
 
-- **Linting**: [Biome](https://biomejs.dev/) for fast linting and formatting
+- **Linting**: [Oxlint](https://oxc.rs/) for fast linting
+- **Formatting**: [Oxfmt](https://oxc.rs/) for fast formatting
 - **Type Checking**: TypeScript with strict configuration
 - **Dependency Validation**: [Sherif](https://github.com/QuiiBz/sherif) for workspace consistency
 - **Unused Code Detection**: [Knip](https://knip.dev/) for finding unused dependencies
