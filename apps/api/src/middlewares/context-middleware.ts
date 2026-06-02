@@ -7,7 +7,7 @@ import type { Kysely } from "kysely"
 import { type ErrorCode, errors } from "../utils/errors"
 
 export type AppContext = {
-  ok: <T>(data: T) => Response
+  ok: <T>(data: T, meta?: Record<string, unknown>) => Response
   fail: (errorCode: ErrorCode, details?: unknown) => Response
 }
 
@@ -25,12 +25,13 @@ export const contextMiddleware = createMiddleware(async (c, next) => {
   c.set("db", db)
   c.set("s3", s3Client)
 
-  c.ok = <T>(data: T) => {
+  c.ok = <T>(data: T, meta?: Record<string, unknown>) => {
     c.status(c.req.method === "POST" ? 201 : 200)
 
     return c.json({
       success: true,
       data,
+      ...(meta !== undefined ? { meta } : {}),
       timestamp,
       requestId,
     })
