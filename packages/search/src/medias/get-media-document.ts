@@ -48,7 +48,9 @@ export const getMediaDocument = async (db: Kysely<DB>, mediaId: string) => {
     .where("deletedAt", "is", null)
     .executeTakeFirst()
 
-  if (!media) return null
+  if (!media) {
+    return null
+  }
 
   const [titles, covers, staffs, chapterLanguageRows] = await Promise.all([
     db

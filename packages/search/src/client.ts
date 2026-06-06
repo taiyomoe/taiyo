@@ -12,7 +12,9 @@ export const meiliClient =
     apiKey: env.MEILISEARCH_API_KEY,
   })
 
-if (process.env.NODE_ENV !== "production") globalThis.meilisearch = meiliClient
+if (process.env.NODE_ENV !== "production") {
+  globalThis.meilisearch = meiliClient
+}
 
 export const SEARCH_INDEXES = {
   MEDIAS: "medias",

@@ -13,7 +13,9 @@ const dialect = new PostgresDialect({
 
 export const db = globalThis.kysely ?? new Kysely<DB>({ dialect })
 
-if (process.env.NODE_ENV !== "production") globalThis.kysely = db
+if (process.env.NODE_ENV !== "production") {
+  globalThis.kysely = db
+}
 
 export * from "kysely"
 

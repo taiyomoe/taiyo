@@ -479,7 +479,9 @@ export async function up(db: Kysely<any>): Promise<void> {
     const newTags: MediaTag[] = []
     const seen = new Set<string>()
     const push = (tag: MediaTag) => {
-      if (seen.has(tag.key)) return
+      if (seen.has(tag.key)) {
+        return
+      }
 
       seen.add(tag.key)
       newTags.push(tag)

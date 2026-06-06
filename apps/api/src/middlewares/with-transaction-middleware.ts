@@ -52,7 +52,9 @@ export const withTransaction = createMiddleware<{
   } catch (err) {
     await cleanupUploadedFiles(c)
 
-    if (!(err instanceof RollbackResponseError)) throw err
+    if (!(err instanceof RollbackResponseError)) {
+      throw err
+    }
   } finally {
     c.set("db", previous)
   }
@@ -71,7 +73,9 @@ export const withTransaction = createMiddleware<{
 const cleanupUploadedFiles = async (c: Context) => {
   const keys = (c.get("log").getContext().uploadedKeys ?? []) as string[]
 
-  if (keys.length === 0) return
+  if (keys.length === 0) {
+    return
+  }
 
   await c
     .get("s3")

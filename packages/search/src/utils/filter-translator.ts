@@ -12,13 +12,21 @@ type DateOps = {
 const fromEnum = (attr: string, ops: EnumOps) => {
   const clauses: string[] = []
 
-  if (ops.eq !== undefined) clauses.push(`${attr} = ${quote(ops.eq)}`)
+  if (ops.eq !== undefined) {
+    clauses.push(`${attr} = ${quote(ops.eq)}`)
+  }
 
-  if (ops.neq !== undefined) clauses.push(`${attr} != ${quote(ops.neq)}`)
+  if (ops.neq !== undefined) {
+    clauses.push(`${attr} != ${quote(ops.neq)}`)
+  }
 
-  if (ops.in?.length) clauses.push(`${attr} IN [${ops.in.map(quote).join(", ")}]`)
+  if (ops.in?.length) {
+    clauses.push(`${attr} IN [${ops.in.map(quote).join(", ")}]`)
+  }
 
-  if (ops.notIn?.length) clauses.push(`${attr} NOT IN [${ops.notIn.map(quote).join(", ")}]`)
+  if (ops.notIn?.length) {
+    clauses.push(`${attr} NOT IN [${ops.notIn.map(quote).join(", ")}]`)
+  }
 
   return clauses
 }
@@ -28,12 +36,18 @@ const fromArray = (attr: string, ops: ArrayOps) => {
   // hasAll → one equality per value; Meilisearch matches each against any
   // element of the array, so chaining with AND enforces "contains every".
   if (ops.hasAll?.length) {
-    for (const value of ops.hasAll) clauses.push(`${attr} = ${quote(value)}`)
+    for (const value of ops.hasAll) {
+      clauses.push(`${attr} = ${quote(value)}`)
+    }
   }
 
-  if (ops.hasAny?.length) clauses.push(`${attr} IN [${ops.hasAny.map(quote).join(", ")}]`)
+  if (ops.hasAny?.length) {
+    clauses.push(`${attr} IN [${ops.hasAny.map(quote).join(", ")}]`)
+  }
 
-  if (ops.hasNone?.length) clauses.push(`${attr} NOT IN [${ops.hasNone.map(quote).join(", ")}]`)
+  if (ops.hasNone?.length) {
+    clauses.push(`${attr} NOT IN [${ops.hasNone.map(quote).join(", ")}]`)
+  }
 
   return clauses
 }
@@ -41,17 +55,25 @@ const fromDate = (attr: string, ops: DateOps) => {
   const clauses: string[] = []
   const ts = (iso: string) => new Date(iso).getTime()
 
-  if (ops.before !== undefined) clauses.push(`${attr} < ${ts(ops.before)}`)
+  if (ops.before !== undefined) {
+    clauses.push(`${attr} < ${ts(ops.before)}`)
+  }
 
-  if (ops.after !== undefined) clauses.push(`${attr} > ${ts(ops.after)}`)
+  if (ops.after !== undefined) {
+    clauses.push(`${attr} > ${ts(ops.after)}`)
+  }
 
   if (ops.between !== undefined) {
     clauses.push(`${attr} ${ts(ops.between[0])} TO ${ts(ops.between[1])}`)
   }
 
-  if (ops.isNull === true) clauses.push(`${attr} IS NULL`)
+  if (ops.isNull === true) {
+    clauses.push(`${attr} IS NULL`)
+  }
 
-  if (ops.isNull === false) clauses.push(`${attr} IS NOT NULL`)
+  if (ops.isNull === false) {
+    clauses.push(`${attr} IS NOT NULL`)
+  }
 
   return clauses
 }
@@ -82,7 +104,9 @@ export const translateFilter = (
   for (const [field, fieldSpec] of Object.entries(spec)) {
     const ops = filter[field]
 
-    if (ops === undefined) continue
+    if (ops === undefined) {
+      continue
+    }
 
     switch (fieldSpec.kind) {
       case "enum":

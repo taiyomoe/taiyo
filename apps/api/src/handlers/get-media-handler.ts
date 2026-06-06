@@ -135,7 +135,9 @@ export const getMediaHandler = new Hono().get(
       .where("deletedAt", "is", null)
       .executeTakeFirst()
 
-    if (!media) return c.fail("MEDIA_NOT_FOUND")
+    if (!media) {
+      return c.fail("MEDIA_NOT_FOUND")
+    }
 
     log.set({ media })
 

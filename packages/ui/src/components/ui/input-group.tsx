@@ -60,7 +60,9 @@ export function InputGroupAddon({
           "button, a, input, select, textarea, [role='button'], [role='combobox'], [role='listbox'], [data-slot='select-trigger']",
         )
 
-        if (isInteractive) return
+        if (isInteractive) {
+          return
+        }
 
         e.preventDefault()
         const parent = e.currentTarget.parentElement

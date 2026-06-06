@@ -215,8 +215,12 @@ export async function seed(db: Kysely<DB>): Promise<void> {
       .arrayElements([...USERS], { min: 0, max: 15 })
       .filter((u) => u.id !== user.id)
 
-    for (const f of followers) followRows.push({ followerId: f.id, followingId: user.id })
-    for (const f of following) followRows.push({ followerId: user.id, followingId: f.id })
+    for (const f of followers) {
+      followRows.push({ followerId: f.id, followingId: user.id })
+    }
+    for (const f of following) {
+      followRows.push({ followerId: user.id, followingId: f.id })
+    }
   }
 
   // Deduplicate (followerId, followingId) pairs
@@ -224,7 +228,9 @@ export async function seed(db: Kysely<DB>): Promise<void> {
   const uniqueFollows = followRows.filter((r) => {
     const k = `${r.followerId}|${r.followingId}`
 
-    if (seen.has(k)) return false
+    if (seen.has(k)) {
+      return false
+    }
 
     seen.add(k)
 

@@ -17,11 +17,15 @@ export const withAuth = (action: Actions, subject: Subjects) =>
   }>(async (c, next) => {
     const result = await auth.api.getSession({ headers: c.req.raw.headers })
 
-    if (!result) return c.fail("UNAUTHORIZED")
+    if (!result) {
+      return c.fail("UNAUTHORIZED")
+    }
 
     const ability = defineAbilitiesFor(result.user)
 
-    if (ability.cannot(action, subject)) return c.fail("FORBIDDEN")
+    if (ability.cannot(action, subject)) {
+      return c.fail("FORBIDDEN")
+    }
 
     c.set("user", result.user)
     c.set("session", result.session)

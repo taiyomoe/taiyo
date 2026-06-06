@@ -47,7 +47,9 @@ function getSwipeDirection(position: ToastPosition): SwipeDirection[] {
 function upsertReplayClassName(toast: { type?: string; updateKey?: number }): string | undefined {
   const k = toast.updateKey ?? 0
 
-  if (k <= 0) return undefined
+  if (k <= 0) {
+    return undefined
+  }
 
   const isEven = k % 2 === 0
 

@@ -10,11 +10,17 @@ export type AppAbility = MongoAbility<[Actions, Subjects]>
 export const defineAbilitiesFor = (user: User): AppAbility => {
   const { can, build } = new AbilityBuilder<AppAbility>(createMongoAbility)
 
-  if (user.banned) return build()
+  if (user.banned) {
+    return build()
+  }
 
-  if (user.role === "ADMIN") can("manage", "all")
+  if (user.role === "ADMIN") {
+    can("manage", "all")
+  }
 
-  if (user.role === "UPLOADER" || user.role === "UPLOADER_INTERN") can("create", "Media")
+  if (user.role === "UPLOADER" || user.role === "UPLOADER_INTERN") {
+    can("create", "Media")
+  }
 
   return build()
 }
