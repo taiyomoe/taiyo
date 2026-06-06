@@ -1,0 +1,17 @@
+{
+  "name": "@taiyomoe/schemas",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@taiyomoe/typescript": "workspace:^",
+    "typescript": "^6.0.3"
+  }
+}

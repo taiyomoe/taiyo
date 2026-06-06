@@ -68,6 +68,9 @@ importers:
       '@taiyomoe/s3':
         specifier: workspace:^
         version: link:../../packages/s3
+      '@taiyomoe/schemas':
+        specifier: workspace:^
+        version: link:../../packages/schemas
       '@taiyomoe/utils':
         specifier: workspace:^
         version: link:../../packages/utils
