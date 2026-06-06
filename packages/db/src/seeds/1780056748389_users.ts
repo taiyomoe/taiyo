@@ -218,6 +218,7 @@ export async function seed(db: Kysely<DB>): Promise<void> {
     for (const f of followers) {
       followRows.push({ followerId: f.id, followingId: user.id })
     }
+
     for (const f of following) {
       followRows.push({ followerId: user.id, followingId: f.id })
     }
