@@ -31,6 +31,17 @@ services:
       - "$HYPERDX_PORT:8080"
       - "$HYPERDX_OTLP_PORT:4318"
 
+  meilisearch:
+    image: "getmeili/meilisearch:latest"
+    restart: unless-stopped
+    environment:
+      - MEILI_MASTER_KEY=$MEILISEARCH_MASTER_KEY
+      - MEILI_NO_ANALYTICS=true
+    ports:
+      - "$MEILISEARCH_PORT:7700"
+    volumes:
+      - "./data/meilisearch:/meili_data"
+
   rustfs:
     image: rustfs/rustfs:latest
     restart: unless-stopped

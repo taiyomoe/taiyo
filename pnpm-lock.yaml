@@ -371,6 +371,40 @@ importers:
         specifier: ^6.0.3
         version: 6.0.3
 
+  packages/search:
+    dependencies:
+      '@t3-oss/env-core':
+        specifier: ^0.13.11
+        version: 0.13.11(typescript@6.0.3)(zod@4.4.3)
+      '@taiyomoe/db':
+        specifier: workspace:^
+        version: link:../db
+      '@taiyomoe/schemas':
+        specifier: workspace:^
+        version: link:../schemas
+      '@taiyomoe/utils':
+        specifier: workspace:^
+        version: link:../utils
+      meilisearch:
+        specifier: ^0.51.0
+        version: 0.51.0
+      radashi:
+        specifier: ^12.9.1
+        version: 12.9.1
+      zod:
+        specifier: ^4.4.3
+        version: 4.4.3
+    devDependencies:
+      '@taiyomoe/typescript':
+        specifier: workspace:^
+        version: link:../../tooling/typescript
+      '@types/node':
+        specifier: ^25.9.1
+        version: 25.9.1
+      typescript:
+        specifier: ^6.0.3
+        version: 6.0.3
+
   packages/ui:
     dependencies:
       '@base-ui/react':
