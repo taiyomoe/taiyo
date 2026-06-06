@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@casl/ability": "^7.0.0",
-    "@hono/node-server": "^2.0.3",
+    "@hono/node-server": "^2.0.4",
     "@hono/standard-validator": "^0.2.2",
     "@scalar/hono-api-reference": "^0.10.19",
     "@t3-oss/env-core": "^0.13.11",
@@ -26,7 +26,7 @@
     "@taiyomoe/search": "workspace:^",
     "@taiyomoe/utils": "workspace:^",
     "evlog": "^2.18.1",
-    "hono": "^4.12.22",
+    "hono": "^4.12.23",
     "hono-openapi": "^1.3.0",
     "magic-bytes.js": "^1.13.0",
     "radashi": "^12.9.1",

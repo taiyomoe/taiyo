@@ -13,7 +13,7 @@
     "@taiyomoe/db": "workspace:^",
     "@taiyomoe/schemas": "workspace:^",
     "@taiyomoe/utils": "workspace:^",
-    "meilisearch": "^0.51.0",
+    "meilisearch": "^0.58.0",
     "radashi": "^12.9.1",
     "zod": "^4.4.3"
   },

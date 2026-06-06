@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@t3-oss/env-core": "^0.13.11",
-    "ioredis": "^5.10.1",
+    "ioredis": "^5.11.0",
     "superjson": "^2.2.6",
     "zod": "^4.4.3"
   },
