@@ -13,6 +13,11 @@ class RollbackResponseError extends Error {
  *
  *   - DB writes go through a Kysely transaction (`c.get("db")` is the trx)
  *   - S3 uploads tracked on `log.uploadedKeys` are deleted on failure
+ *   - Side-effects registered via `c.var.afterCommit(cb)` run only after
+ *     the transaction commits successfully — used to push search-index
+ *     updates, enqueue jobs, etc. without tying that work to a rolled-back
+ *     write. Callback failures are logged, never thrown: a successful
+ *     write must not be reported as failed because a downstream hiccuped.
  *
  * Routes append to the upload list with `log.set({ uploadedKeys: [key] })`
  * after each successful `PutObject`; evlog merges arrays by concatenation.
@@ -21,10 +26,16 @@ class RollbackResponseError extends Error {
  *   - the handler throws — the error is re-thrown to the global error handler
  *   - the handler responds with status >= 400 — the response is preserved
  */
-export const withTransaction = createMiddleware(async (c, next) => {
+export const withTransaction = createMiddleware<{
+  Variables: { afterCommit: (cb: () => Promise<void>) => void }
+}>(async (c, next) => {
   const previous = c.get("db")
+  const afterCommitCallbacks: (() => Promise<void>)[] = []
+  const logger = c.get("log")
 
   c.get("log").set({ uploadedKeys: [] })
+
+  let committed = false
 
   try {
     await previous.transaction().execute(async (trx) => {
@@ -36,12 +47,24 @@ export const withTransaction = createMiddleware(async (c, next) => {
         throw new RollbackResponseError()
       }
     })
+
+    committed = true
   } catch (err) {
     await cleanupUploadedFiles(c)
 
     if (!(err instanceof RollbackResponseError)) throw err
   } finally {
     c.set("db", previous)
+  }
+
+  if (committed) {
+    for (const cb of afterCommitCallbacks) {
+      try {
+        await cb()
+      } catch (cbErr) {
+        c.get("log").error(cbErr as Error)
+      }
+    }
   }
 })
 
