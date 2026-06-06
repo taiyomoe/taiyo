@@ -371,6 +371,41 @@ importers:
         specifier: ^6.0.3
         version: 6.0.3
 
+  packages/schemas:
+    dependencies:
+      zod:
+        specifier: ^4.4.3
+        version: 4.4.3
+    devDependencies:
+      '@taiyomoe/typescript':
+        specifier: workspace:^
+        version: link:../../tooling/typescript
+      typescript:
+        specifier: ^6.0.3
+        version: 6.0.3
+
+  packages/scripts:
+    dependencies:
+      '@taiyomoe/search':
+        specifier: workspace:^
+        version: link:../search
+    devDependencies:
+      '@taiyomoe/typescript':
+        specifier: workspace:^
+        version: link:../../tooling/typescript
+      '@types/node':
+        specifier: ^25.9.1
+        version: 25.9.1
+      dotenv-cli:
+        specifier: ^11.0.0
+        version: 11.0.0
+      tsx:
+        specifier: ^4.22.3
+        version: 4.22.3
+      typescript:
+        specifier: ^6.0.3
+        version: 6.0.3
+
   packages/search:
     dependencies:
       '@t3-oss/env-core':
