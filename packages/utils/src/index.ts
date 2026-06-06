@@ -25,3 +25,5 @@ export * from "./to-status"
 export * from "./to-tags"
 
 export * from "./to-type"
+
+export * from "./to-unix-ms"
