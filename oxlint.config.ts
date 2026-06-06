@@ -18,8 +18,17 @@ export default defineConfig({
     "promise",
     "vitest",
   ],
+  overrides: [
+    {
+      files: ["./packages/scripts/src/**/*.ts"],
+      rules: {
+        "no-console": "off",
+      },
+    },
+  ],
   rules: {
     "no-console": "warn",
+    curly: ["error", "all"],
 
     // Stylistic rules
     "@stylistic/padding-line-between-statements": [

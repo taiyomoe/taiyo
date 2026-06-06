@@ -1,10 +1,11 @@
 import { createEnv } from "@t3-oss/env-core"
 import { env as dbEnv } from "@taiyomoe/db/env"
 import { env as s3Env } from "@taiyomoe/s3/env"
+import { env as searchEnv } from "@taiyomoe/search/env"
 import { z } from "zod"
 
 export const env = createEnv({
-  extends: [dbEnv, s3Env],
+  extends: [dbEnv, s3Env, searchEnv],
 
   /**
    * Specify your shared environment variables schema here.

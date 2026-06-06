@@ -23,6 +23,7 @@
     "@taiyomoe/db": "workspace:^",
     "@taiyomoe/s3": "workspace:^",
     "@taiyomoe/schemas": "workspace:^",
+    "@taiyomoe/search": "workspace:^",
     "@taiyomoe/utils": "workspace:^",
     "evlog": "^2.18.1",
     "hono": "^4.12.22",

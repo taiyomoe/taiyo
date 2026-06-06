@@ -71,6 +71,9 @@ importers:
       '@taiyomoe/schemas':
         specifier: workspace:^
         version: link:../../packages/schemas
+      '@taiyomoe/search':
+        specifier: workspace:^
+        version: link:../../packages/search
       '@taiyomoe/utils':
         specifier: workspace:^
         version: link:../../packages/utils
@@ -3722,6 +3725,9 @@ packages:
   mdn-data@2.27.1:
     resolution: {integrity: sha512-9Yubnt3e8A0OKwxYSXyhLymGW4sCufcLG6VdiDdUGVkPhpqLxlvP5vl1983gQjJl3tqbrM731mjaZaP68AgosQ==}
 
+  meilisearch@0.51.0:
+    resolution: {integrity: sha512-IuNsYyT8r/QLhU33XDZdXWUT6cA/nACCHHZc+NHkNuaU55LELRxff1uBJhpJcwjYaAPEEmeWrzBhYl2XlhJdAg==}
+
   mime-db@1.52.0:
     resolution: {integrity: sha512-sPU4uV7dYlvtWJxwwxHD0PuihVNiE7TyAbQ5SWxDCB9mUYvOgroQOwYQQOKPJ8CIbE+1ETVlOoK1UC2nU3gYvg==}
     engines: {node: '>= 0.6'}
@@ -7176,6 +7182,8 @@ snapshots:
   marked@15.0.12: {}
 
   mdn-data@2.27.1: {}
+
+  meilisearch@0.51.0: {}
 
   mime-db@1.52.0: {}
 
