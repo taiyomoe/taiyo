@@ -25,13 +25,40 @@ const filterableAttributes = [
   "authorIds",
   "artistIds",
 ] satisfies (keyof MediaDocument)[]
-const searchableAttributes = ["titles", "synopsis", "staffNames"] satisfies (keyof MediaDocument)[]
+const searchableAttributes = ["mainTitle.title", "titles", "synopsis", "staffNames"]
 const sortableAttributes = [
   "createdAt",
   "updatedAt",
   "startDate",
   "endDate",
   "_sortMainTitle",
+] satisfies (keyof MediaDocument)[]
+const displayedAttributes = [
+  "id",
+  "type",
+  "status",
+  "source",
+  "demography",
+  "countryOfOrigin",
+  "contentRating",
+  "flag",
+  "createdAt",
+  "updatedAt",
+  "startDate",
+  "endDate",
+  "tagKeys",
+  "spoilerTagKeys",
+  "linkProviders",
+  "titleLanguages",
+  "chapterLanguages",
+  "coverLanguages",
+  "titles",
+  "synopsis",
+  "staffNames",
+  "authorIds",
+  "artistIds",
+  "mainTitle",
+  "mainCoverId",
 ] satisfies (keyof MediaDocument)[]
 
 export const initMediasIndex = async () => {
@@ -43,6 +70,7 @@ export const initMediasIndex = async () => {
     searchableAttributes,
     filterableAttributes,
     sortableAttributes,
+    displayedAttributes,
   })
 
   const ids = await db.selectFrom("medias").select("id").where("deletedAt", "is", null).execute()

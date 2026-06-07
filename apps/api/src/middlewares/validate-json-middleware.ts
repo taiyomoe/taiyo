@@ -3,7 +3,7 @@ import type z from "zod"
 
 type Env<TSchema extends z.ZodType> = {
   Variables: {
-    json?: z.infer<TSchema>
+    json: z.infer<TSchema>
   }
 }
 

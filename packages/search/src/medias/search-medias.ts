@@ -39,7 +39,7 @@ const mediaFilterSpec = {
 } satisfies FilterSpec<MediaDocument>
 
 export const searchMedias = async (input: SearchMediasInput) => {
-  const filter = translateFilter(mediaFilterSpec, input)
+  const filter = translateFilter(mediaFilterSpec, input.filter)
   const sort = input.sort.map((s) => `${sortFieldToAttribute[s.field]}:${s.direction}`)
   const result = await meiliClient.index<MediaDocument>(SEARCH_INDEXES.MEDIAS).search(input.q, {
     filter,
