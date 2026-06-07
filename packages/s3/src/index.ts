@@ -13,7 +13,7 @@ export const s3Client = new S3Client({
 
 export const s3Bucket = env.S3_BUCKET_NAME
 
-export { DeleteObjectsCommand, PutObjectCommand } from "@aws-sdk/client-s3"
+export { DeleteObjectsCommand, ListObjectsV2Command, PutObjectCommand } from "@aws-sdk/client-s3"
 
 export const getCoverKey = (mediaId: string, fileName: string) =>
   `medias/${mediaId}/covers/${fileName}`

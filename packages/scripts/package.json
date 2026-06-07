@@ -9,8 +9,11 @@
     "cli": "pnpm with-env tsx src/index.ts"
   },
   "dependencies": {
+    "@taiyomoe/db": "workspace:^",
+    "@taiyomoe/s3": "workspace:^",
     "@taiyomoe/search": "workspace:^",
-    "citty": "^0.2.2"
+    "citty": "^0.2.2",
+    "dotenv": "^17.4.2"
   },
   "devDependencies": {
     "@taiyomoe/typescript": "workspace:^",

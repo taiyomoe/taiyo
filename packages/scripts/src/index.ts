@@ -7,6 +7,7 @@ const main = defineCommand({
   },
   subCommands: {
     "init-meilisearch": () => import("./init-meilisearch").then((m) => m.default),
+    "delete-media": () => import("./delete-media").then((m) => m.default),
   },
 })
 

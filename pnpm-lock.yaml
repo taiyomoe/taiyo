@@ -392,12 +392,21 @@ importers:
 
   packages/scripts:
     dependencies:
+      '@taiyomoe/db':
+        specifier: workspace:^
+        version: link:../db
+      '@taiyomoe/s3':
+        specifier: workspace:^
+        version: link:../s3
       '@taiyomoe/search':
         specifier: workspace:^
         version: link:../search
       citty:
         specifier: ^0.2.2
         version: 0.2.2
+      dotenv:
+        specifier: ^17.4.2
+        version: 17.4.2
     devDependencies:
       '@taiyomoe/typescript':
         specifier: workspace:^
