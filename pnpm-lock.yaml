@@ -395,6 +395,9 @@ importers:
       '@taiyomoe/search':
         specifier: workspace:^
         version: link:../search
+      citty:
+        specifier: ^0.2.2
+        version: 0.2.2
     devDependencies:
       '@taiyomoe/typescript':
         specifier: workspace:^

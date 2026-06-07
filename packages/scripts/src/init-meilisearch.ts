@@ -1,16 +1,38 @@
 import { indexInitializers } from "@taiyomoe/search"
+import { defineCommand } from "citty"
 
-const main = async () => {
-  for (const { name, init } of indexInitializers) {
-    console.log(`Initializing ${name} index...`)
-    await init()
-  }
+const indexNames = indexInitializers.map((i) => i.name)
 
-  console.log("Done.")
-  process.exit(0)
-}
+export default defineCommand({
+  meta: {
+    name: "init-meilisearch",
+    description: "Initialize Meilisearch indexes.",
+  },
+  args: {
+    index: {
+      type: "string",
+      description: `Only initialize the given index. Defaults to all indexes.`,
+      valueHint: indexNames.join("|"),
+      required: false,
+    },
+  },
+  run: async ({ args }) => {
+    const targets = args.index
+      ? indexInitializers.filter((i) => i.name === args.index)
+      : indexInitializers
 
-main().catch((err) => {
-  console.error(err)
-  process.exit(1)
+    if (args.index && targets.length === 0) {
+      console.error(`Unknown index "${args.index}". Available: ${indexNames.join(", ")}.`)
+      process.exit(1)
+    }
+
+    for (const { name, init } of targets) {
+      console.log(`Initializing ${name} index...`)
+
+      await init()
+    }
+
+    console.log("Done.")
+    process.exit(0)
+  },
 })

@@ -31,7 +31,6 @@ export const withTransaction = createMiddleware<{
 }>(async (c, next) => {
   const previous = c.get("db")
   const afterCommitCallbacks: (() => Promise<void>)[] = []
-  const logger = c.get("log")
 
   c.get("log").set({ uploadedKeys: [] })
 

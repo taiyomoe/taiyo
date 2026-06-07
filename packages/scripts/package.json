@@ -6,10 +6,11 @@
   "type": "module",
   "scripts": {
     "with-env": "dotenv -e ../../.env --",
-    "init-meilisearch": "pnpm with-env tsx src/init-meilisearch.ts"
+    "cli": "pnpm with-env tsx src/index.ts"
   },
   "dependencies": {
-    "@taiyomoe/search": "workspace:^"
+    "@taiyomoe/search": "workspace:^",
+    "citty": "^0.2.2"
   },
   "devDependencies": {
     "@taiyomoe/typescript": "workspace:^",
