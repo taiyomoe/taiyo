@@ -19,12 +19,14 @@
     "better-auth": "^1.6.12",
     "better-auth-harmony": "^1.3.2",
     "luxon": "^3.7.2",
+    "react": "^19.2.6",
     "zod": "^4.4.3"
   },
   "devDependencies": {
     "@taiyomoe/typescript": "workspace:^",
     "@types/luxon": "^3.7.1",
     "@types/node": "^25.9.1",
+    "@types/react": "^19.2.15",
     "typescript": "^6.0.3"
   }
 }

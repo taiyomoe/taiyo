@@ -1,6 +1,10 @@
+import react from "@vitejs/plugin-react"
 import { defineConfig } from "vitest/config"
 
+process.loadEnvFile()
+
 export default defineConfig({
+  plugins: [react()],
   test: {
     include: ["**/__integration-tests__/**/*.test.ts", "**/__integration-tests__/**/*.spec.ts"],
     setupFiles: ["./apps/api/src/__integration-tests__/setup.ts"],
