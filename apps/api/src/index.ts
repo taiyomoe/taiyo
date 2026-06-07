@@ -69,6 +69,7 @@ app
 
 if (!process.env.TEST) {
   serve({ fetch: app.fetch, port: 3002 }, ({ port }) => {
+    // oxlint-disable-next-line no-console
     console.debug(`Server is running on http://localhost:${port}`)
   })
 }
