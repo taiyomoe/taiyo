@@ -11,12 +11,13 @@ import { apiSuccessEnvelope } from "../utils/schemas"
 export const restoreMediaHandler = new Hono().post(
   "/:id/restore",
   describeRoute({
-    summary: "Restore a soft-deleted media",
-    description: "Reverses a prior soft-delete, making the media visible again.",
+    summary: "Restore a deleted media",
+    description:
+      "Restores a previously deleted media so that it appears in listings, search results, and detail endpoints again.\n\n**Required roles:** moderator, admin.",
     tags: ["Medias"],
     responses: {
       200: {
-        description: "Media restored successfully.",
+        description: "Media restored.",
         content: {
           "application/json": {
             schema: resolver(

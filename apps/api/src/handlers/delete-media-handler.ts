@@ -11,13 +11,13 @@ import { apiSuccessEnvelope } from "../utils/schemas"
 export const deleteMediaHandler = new Hono().delete(
   "/:id",
   describeRoute({
-    summary: "Soft-delete a media",
+    summary: "Delete a media",
     description:
-      "Marks the media as deleted. It will no longer appear in searches or detail endpoints, but it can be restored later. To permanently remove all associated data, use the dedicated administrative tooling.",
+      "Removes a media from listings, search results, and detail endpoints. The media can be restored later.\n\n**Required roles:** uploader, moderator, admin.",
     tags: ["Medias"],
     responses: {
       200: {
-        description: "Media soft-deleted successfully.",
+        description: "Media deleted.",
         content: {
           "application/json": {
             schema: resolver(

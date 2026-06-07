@@ -10,13 +10,13 @@ import { apiSuccessEnvelope } from "../utils/schemas"
 export const reindexMediaHandler = new Hono().post(
   "/:id/reindex",
   describeRoute({
-    summary: "Force a media to be reindexed in search",
+    summary: "Refresh a media in search",
     description:
-      "Recomputes the media's search document and pushes it to the search index. Use this when search results look stale after a backfill or out-of-band data fix.",
+      "Refreshes the media's representation in search so that results reflect its current state.\n\n**Required roles:** uploader, moderator, admin.",
     tags: ["Medias"],
     responses: {
       200: {
-        description: "Media reindexed successfully.",
+        description: "Search representation refreshed.",
         content: {
           "application/json": {
             schema: resolver(

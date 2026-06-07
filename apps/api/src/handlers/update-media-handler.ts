@@ -64,16 +64,16 @@ const updateMediaSchema = z
 export const updateMediaHandler = new Hono().patch(
   "/:id",
   describeRoute({
-    summary: "Update a media's metadata",
+    summary: "Update a media",
     description:
-      "Patches the metadata of an existing media. Any field omitted from the request body is left unchanged. To clear `startDate` or `endDate`, send `null` explicitly.",
+      "Updates the metadata of a media. Omitted fields are kept as-is. Send `null` explicitly to clear `startDate` or `endDate`.\n\n**Required roles:** uploader, moderator, admin.",
     tags: ["Medias"],
     requestBody: {
       content: { "application/json": await resolver(updateMediaSchema).toOpenAPISchema() },
     },
     responses: {
       200: {
-        description: "Media updated successfully.",
+        description: "Media updated.",
         content: {
           "application/json": {
             schema: resolver(

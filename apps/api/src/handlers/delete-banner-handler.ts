@@ -11,13 +11,13 @@ import { apiSuccessEnvelope } from "../utils/schemas"
 export const deleteBannerHandler = new Hono().delete(
   "/:id/banners/:bannerId",
   describeRoute({
-    summary: "Soft-delete a banner",
+    summary: "Delete a banner",
     description:
-      "Marks the banner as deleted. It will no longer appear in listings, but the underlying file is retained so it can be restored later.",
+      "Removes a banner from a media. The banner can be restored later.\n\n**Required roles:** uploader, moderator, admin.",
     tags: ["Medias"],
     responses: {
       200: {
-        description: "Banner soft-deleted successfully.",
+        description: "Banner deleted.",
         content: {
           "application/json": {
             schema: resolver(

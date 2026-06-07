@@ -31,7 +31,8 @@ export const createBannersHandler = new Hono().post(
   "/:id/banners",
   describeRoute({
     summary: "Add banners to a media",
-    description: "Uploads one or more banners and attaches them to the media.",
+    description:
+      "Adds one or more banners to a media.\n\n**Required roles:** uploader, moderator, admin.",
     tags: ["Medias"],
     requestBody: {
       content: {
@@ -40,7 +41,7 @@ export const createBannersHandler = new Hono().post(
     },
     responses: {
       201: {
-        description: "Banners added successfully.",
+        description: "Banners added.",
         content: {
           "application/json": {
             schema: resolver(

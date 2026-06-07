@@ -192,9 +192,9 @@ const createMediaSchema = z.object({
 export const createMediaHandler = new Hono().post(
   "/",
   describeRoute({
-    summary: "Create a new media",
+    summary: "Create a media",
     description:
-      "Registers a media entry in a single multipart request, alongside its titles, covers, banners, tags, external links and staff credits.",
+      "Creates a new media with its titles, covers, banners, tags, external links, and staff credits.\n\n**Required roles:** uploader, moderator, admin.",
     tags: ["Medias"],
     requestBody: {
       content: {
@@ -203,7 +203,7 @@ export const createMediaHandler = new Hono().post(
     },
     responses: {
       201: {
-        description: "Media created successfully",
+        description: "Media created.",
         content: {
           "application/json": {
             schema: resolver(

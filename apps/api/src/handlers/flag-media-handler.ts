@@ -16,7 +16,7 @@ const flagMediaSchema = z.object({
     example: "STAFF_ONLY",
   }),
   reason: z.string().min(1).max(500).meta({
-    description: "A short explanation for the flag change. Stored for moderation audit.",
+    description: "A short explanation for the change.",
     example: "Locked while we wait for a takedown response.",
   }),
 })
@@ -26,14 +26,14 @@ export const flagMediaHandler = new Hono().post(
   describeRoute({
     summary: "Set a media's moderation flag",
     description:
-      "Updates the moderation flag attached to a media. A reason must be provided alongside the new flag. Restricted to moderators and administrators.",
+      "Sets the moderation flag on a media. A reason must accompany the new flag.\n\n**Required roles:** moderator, admin.",
     tags: ["Medias"],
     requestBody: {
       content: { "application/json": await resolver(flagMediaSchema).toOpenAPISchema() },
     },
     responses: {
       200: {
-        description: "Flag updated successfully.",
+        description: "Flag updated.",
         content: {
           "application/json": {
             schema: resolver(

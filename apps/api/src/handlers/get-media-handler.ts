@@ -87,13 +87,13 @@ const mediaDetailSchema = z.object({
 export const getMediaHandler = new Hono().get(
   "/:id",
   describeRoute({
-    summary: "Get a media by id",
+    summary: "Get a media",
     description:
-      "Returns a single media along with its titles, covers, banners, external links and staff credits.",
+      "Fetches a media with its titles, covers, banners, external links, and staff credits.\n\n**Authentication:** none.",
     tags: ["Medias"],
     responses: {
       200: {
-        description: "Media retrieved successfully.",
+        description: "Media details.",
         content: {
           "application/json": { schema: resolver(apiSuccessEnvelope(mediaDetailSchema)) },
         },

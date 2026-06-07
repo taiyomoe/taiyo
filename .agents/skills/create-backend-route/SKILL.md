@@ -34,6 +34,43 @@ Rules:
 - Every field gets `.meta({ description, example })`. Array fields also get `.meta({ description, examples: [...] })` on the array itself. Examples must be realistic and varied.
 - Wrap success bodies in `apiSuccessEnvelope(dataSchema)`. For paginated lists, pass a `meta` schema as the second argument: `apiSuccessEnvelope(itemSchema.array(), paginationMetaSchema)`.
 - Build error responses with `getOpenApiResponses({ <status>: "<description>" })`. 401/403/500 are added automatically. **Every `c.fail(code)` you can emit must be represented here.**
+- `tags`: exactly one tag per route, matching the resource (`["Medias"]`).
+
+### Prose conventions
+
+Write for the API consumer. They don't care about implementation. Specifically:
+
+- **Summary**: short, verb-first, no "a new" filler. ✅ `"Create a media"`, `"Update a cover"`, `"Delete a banner"`, `"Set the main cover"`, `"Refresh a media in search"`. ❌ `"Create a new media"`, `"Force a media to be reindexed in search"`, `"Update a cover's metadata"`.
+- **Description**: state what the endpoint does and any consumer-visible constraints (e.g. "the main cover cannot be deleted"). Keep it to 1–3 sentences. Markdown is rendered (Scalar UI).
+- **Response 200 description**: noun-form, one short phrase, period. ✅ `"Media updated."`, `"Covers of the media."`, `"Matching medias."` ❌ `"Media updated successfully."`, `"Returns the covers of the media."`
+- **Banned phrasing** (these leak internals):
+  - `soft-delete` / `soft-deleted` → just `delete` / `deleted`. If reversibility matters to the consumer, say "can be restored later".
+  - `non-deleted` / `not yet deleted` → don't mention; consumers assume listings show current state.
+  - `Marks the X as deleted` / `Sets deletedAt` → say "Removes X from listings" or "Deletes X".
+  - `the underlying file is retained` / `kept in storage` → drop. Say "can be restored later" if relevant.
+  - `Recomputes the search document` / `pushes to the index` / `after a backfill` → describe the user-visible effect, e.g. "so that search reflects the current state".
+  - `Stored for moderation audit` / `Stored for compliance` → drop. The field is just "A short explanation for the change."
+  - `Restricted to moderators` (in description body) → move to the **Required roles** footer (see below).
+  - `Patches the metadata of an existing X` → `Updates the metadata of X`. (`Patches` and `existing` add nothing.)
+
+### Permissions footer
+
+Every route's `description` ends with **one line** stating who can call it. Derive from `withAuth(action, subject)` and the role table in `abilities.ts`. Current mapping for `Media`:
+
+| `withAuth(...)` | Footer |
+|---|---|
+| (none, public route) | `**Authentication:** none.` |
+| `("create" \| "update" \| "delete", "Media")` | `**Required roles:** uploader, moderator, admin.` |
+| `("manage", "Media")` | `**Required roles:** moderator, admin.` |
+
+Format inside `describeRoute({ description: ... })`:
+
+```ts
+description:
+  "Updates the metadata of a media. Omitted fields are kept as-is.\n\n**Required roles:** uploader, moderator, admin.",
+```
+
+Footer is a blank line + bolded label + values. Always match the actual `withAuth(...)` line beneath — when you change one, change the other.
 
 ## Auth
 
@@ -112,6 +149,9 @@ Response shape: `apiSuccessEnvelope(itemSchema.array(), paginationMetaSchema)`.
 
 - [ ] Handler in `src/handlers/`, mounted in the right router (router registered in `src/index.ts` if new).
 - [ ] `describeRoute` includes summary, description (no internals), tags, request schema, **every possible response** including each `c.fail` code.
+- [ ] Summary is verb-first and short; response 200 description is noun-form; no "successfully" / "soft-delete" / "non-deleted" / "underlying file" anywhere in the prose.
+- [ ] `description` ends with a permissions footer (`**Authentication:** none.` or `**Required roles:** …`) that matches the actual `withAuth(...)` call.
+- [ ] `tags` is a single-element array matching the resource (no slash-grouped tags).
 - [ ] `withAuth(action, resource)` with a real ability pair (asked if unsure).
 - [ ] Schemas reused from `utils/schemas.ts`; shared inline schemas hoisted.
 - [ ] Mutations wrapped in `withTransaction`.

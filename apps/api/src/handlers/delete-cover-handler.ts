@@ -12,13 +12,13 @@ import { apiSuccessEnvelope } from "../utils/schemas"
 export const deleteCoverHandler = new Hono().delete(
   "/:id/covers/:coverId",
   describeRoute({
-    summary: "Soft-delete a cover",
+    summary: "Delete a cover",
     description:
-      "Marks the cover as deleted. It will no longer appear in listings or detail endpoints, but the underlying file is retained so it can be restored later. The main cover cannot be deleted; promote another cover first.",
+      "Removes a cover from a media. The cover can be restored later. The main cover cannot be deleted — promote another cover to main first.\n\n**Required roles:** uploader, moderator, admin.",
     tags: ["Medias"],
     responses: {
       200: {
-        description: "Cover soft-deleted successfully.",
+        description: "Cover deleted.",
         content: {
           "application/json": {
             schema: resolver(

@@ -15,13 +15,13 @@ const bannerSchema = z.object({
 export const listBannersHandler = new Hono().get(
   "/:id/banners",
   describeRoute({
-    summary: "List the banners of a media",
+    summary: "List a media's banners",
     description:
-      "Returns every non-deleted banner belonging to the media, along with its content rating.",
+      "Lists the banners attached to a media, with their content rating.\n\n**Authentication:** none.",
     tags: ["Medias"],
     responses: {
       200: {
-        description: "Banners listed successfully.",
+        description: "Banners of the media.",
         content: {
           "application/json": {
             schema: resolver(apiSuccessEnvelope(bannerSchema.array())),

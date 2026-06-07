@@ -12,13 +12,13 @@ import { apiSuccessEnvelope } from "../utils/schemas"
 export const setMainCoverHandler = new Hono().post(
   "/:id/covers/:coverId/set-main",
   describeRoute({
-    summary: "Set the main cover of a media",
+    summary: "Set the main cover",
     description:
-      "Promotes the given cover to be the main cover, demoting any previous main cover at the same time.",
+      "Makes the given cover the main cover for the media, replacing any previous main cover.\n\n**Required roles:** uploader, moderator, admin.",
     tags: ["Medias"],
     responses: {
       200: {
-        description: "Main cover updated successfully.",
+        description: "Main cover updated.",
         content: {
           "application/json": {
             schema: resolver(

@@ -27,7 +27,7 @@ const createCoversSchema = z.object({
       contentRating: contentRatingSchema("The content rating of the cover."),
       main: z.boolean().default(false).meta({
         description:
-          "Whether this cover should become the main cover. If true, demotes any existing main cover.",
+          "Whether this cover should become the main cover. If true, the previous main cover is replaced.",
         example: false,
       }),
       volume: z.number().min(1).optional().meta({
@@ -59,7 +59,7 @@ export const createCoversHandler = new Hono().post(
   describeRoute({
     summary: "Add covers to a media",
     description:
-      "Uploads one or more covers and attaches them to the media. At most one of the uploaded covers may be marked as the new main cover; if so, the previous main cover is demoted.",
+      "Adds one or more covers to a media. At most one of the uploaded covers may be marked as the new main cover; if so, it replaces the previous main cover.\n\n**Required roles:** uploader, moderator, admin.",
     tags: ["Medias"],
     requestBody: {
       content: {
@@ -68,7 +68,7 @@ export const createCoversHandler = new Hono().post(
     },
     responses: {
       201: {
-        description: "Covers added successfully.",
+        description: "Covers added.",
         content: {
           "application/json": {
             schema: resolver(

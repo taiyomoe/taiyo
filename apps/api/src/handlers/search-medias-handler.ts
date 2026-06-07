@@ -78,7 +78,7 @@ export const searchMediasHandler = new Hono().post(
   describeRoute({
     summary: "Search medias",
     description:
-      "Returns a paginated, typo-tolerant list of medias matching a free-text query and a typed filter expression. Pass `q` for full-text search across titles, synopsis and credited staff names; pass `filter` to constrain the result set by enum, array and date fields; pass `sort` to override the default ordering. Each hit carries the media's core metadata, its main title and main cover ID — fetch the per-media detail endpoint for full relations.",
+      "Paginated, typo-tolerant search over medias. Use `q` for full-text search across titles, synopsis, and staff names. Use `filter` to narrow by enum, array, or date fields. Use `sort` to override the default ordering. Each result carries core metadata, the main title, and the main cover id — fetch the detail endpoint for full relations.\n\n**Authentication:** none.",
     tags: ["Medias"],
     requestBody: {
       content: {
@@ -87,7 +87,7 @@ export const searchMediasHandler = new Hono().post(
     },
     responses: {
       200: {
-        description: "Medias matched successfully.",
+        description: "Matching medias.",
         content: {
           "application/json": {
             schema: resolver(apiSuccessEnvelope(mediaHitSchema.array(), paginationMetaSchema)),

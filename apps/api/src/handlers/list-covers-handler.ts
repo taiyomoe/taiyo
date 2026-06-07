@@ -23,13 +23,13 @@ const coverSchema = z.object({
 export const listCoversHandler = new Hono().get(
   "/:id/covers",
   describeRoute({
-    summary: "List the covers of a media",
+    summary: "List a media's covers",
     description:
-      "Returns every non-deleted cover belonging to the media, including the volume, language, content rating and main-cover flag.",
+      "Lists the covers attached to a media, with volume, language, content rating, and main-cover flag.\n\n**Authentication:** none.",
     tags: ["Medias"],
     responses: {
       200: {
-        description: "Covers listed successfully.",
+        description: "Covers of the media.",
         content: {
           "application/json": {
             schema: resolver(apiSuccessEnvelope(coverSchema.array())),

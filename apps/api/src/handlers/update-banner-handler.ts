@@ -16,15 +16,16 @@ const updateBannerSchema = z.object({
 export const updateBannerHandler = new Hono().patch(
   "/:id/banners/:bannerId",
   describeRoute({
-    summary: "Update a banner's metadata",
-    description: "Updates the content rating of an existing banner.",
-    tags: ["Medias/Banners"],
+    summary: "Update a banner",
+    description:
+      "Updates the content rating of a banner.\n\n**Required roles:** uploader, moderator, admin.",
+    tags: ["Medias"],
     requestBody: {
       content: { "application/json": await resolver(updateBannerSchema).toOpenAPISchema() },
     },
     responses: {
       200: {
-        description: "Banner updated successfully.",
+        description: "Banner updated.",
         content: {
           "application/json": {
             schema: resolver(
