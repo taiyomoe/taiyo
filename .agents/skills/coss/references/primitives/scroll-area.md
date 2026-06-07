@@ -79,6 +79,8 @@ Fill viewport for flex layouts (e.g. sidebar footers with `mt-auto`):
 
 `ScrollArea` always renders both scrollbars internally -- horizontal scroll is driven by inner content width exceeding the container, not by a prop. Also supports `scrollbarGutter` for reserving scrollbar space.
 
+`clampContentMinWidth` defaults to `true` and sets `minWidth: 0` on the content wrapper to avoid spurious horizontal scroll in vertical layouts (Base UI uses `min-width: fit-content`). Wide children (`w-max`, table min-width) still scroll horizontally. Set `clampContentMinWidth={false}` only if horizontal scroll breaks and the child has no explicit width.
+
 ### More examples
 
 See `p-scroll-area-1` through `p-scroll-area-5` for vertical, horizontal, both axes, fade, and gutter patterns.
@@ -89,6 +91,7 @@ See `p-scroll-area-1` through `p-scroll-area-5` for vertical, horizontal, both a
 - Nesting multiple scroll areas that compete for wheel/touch events.
 - Using scroll area where native page scrolling is simpler and clearer.
 - Using `fill` on every scroll area—default is `false`; opt in only for flex layouts that need full viewport height (e.g. `mt-auto` footers). Pair with `flex-1 min-h-0` on the root and `h-full flex-col` on the inner wrapper.
+- Disabling `clampContentMinWidth` unless horizontal scroll actually regresses—default `true` fixes spurious horizontal bars in vertical-first layouts.
 
 ## Useful particle references
 

@@ -10,7 +10,7 @@
       "source": "cosscom/coss",
       "sourceType": "github",
       "skillPath": "apps/ui/skills/coss/SKILL.md",
-      "computedHash": "3a0e6c19e77dca10df588e8c886742eb60f7c34a4850933d0ed1aa04aff3fbd9"
+      "computedHash": "d38dc6e0df3191b9a5b9f2c4b6984793d689922b49f8af78d4e1876645bac836"
     },
     "review-logging-patterns": {
       "source": "evlog.dev",
