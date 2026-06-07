@@ -1,4 +1,3 @@
-import { config } from "@taiyomoe/config"
 import {
   MEDIA_COUNTRIES_OF_ORIGIN,
   MEDIA_DEMOGRAPHIES,
@@ -27,6 +26,8 @@ import {
   contentRatingSchema,
   fileSchema,
   languageSchema,
+  mediaLinksSchema,
+  mediaTagsSchema,
 } from "../utils/schemas"
 import { uploadFile } from "../utils/upload-file"
 
@@ -169,65 +170,8 @@ const createMediaSchema = z.object({
     description: "The country where the media was originally created.",
     example: "JAPAN",
   }),
-  tags: z
-    .object({
-      key: z
-        .enum(Object.keys(config.tags))
-        .meta({ description: "The key of the tag.", example: "COWBOYS" }),
-      isSpoiler: z
-        .boolean()
-        .default(false)
-        .meta({ description: "Whether the tag is a spoiler.", example: false }),
-    })
-    .array()
-    .default([])
-    .meta({
-      description: "List of tags that describe elements and themes of the media.",
-      examples: [
-        { key: "COWBOYS", isSpoiler: false },
-        { key: "AWARD_WINNING", isSpoiler: false },
-      ],
-    }),
-  links: z
-    .object({
-      mangaDex: z.uuid().optional().meta({ description: "MangaDex series UUID." }),
-      anilist: z.int().positive().optional().meta({ description: "AniList numeric media ID." }),
-      myAnimeList: z
-        .int()
-        .positive()
-        .optional()
-        .meta({ description: "MyAnimeList numeric media ID." }),
-      animePlanet: z.url().optional().meta({ description: "Anime-Planet URL." }),
-      bookWalker: z.url().optional().meta({ description: "BookWalker series URL." }),
-      mangaUpdates: z.url().optional().meta({ description: "MangaUpdates series URL." }),
-      novelUpdates: z.url().optional().meta({ description: "NovelUpdates series URL." }),
-      kitsu: z.url().optional().meta({ description: "Kitsu manga URL." }),
-      amazon: z.url().optional().meta({ description: "Amazon product URL." }),
-      eBookJapan: z.url().optional().meta({ description: "eBookJapan product URL." }),
-      raw: z.url().optional().meta({ description: "URL to the original raw publication." }),
-      officialENTranslation: z
-        .url()
-        .optional()
-        .meta({ description: "URL to the official English translation." }),
-      officialFRTranslation: z
-        .url()
-        .optional()
-        .meta({ description: "URL to the official French translation." }),
-      officialPTBRTranslation: z
-        .url()
-        .optional()
-        .meta({ description: "URL to the official Brazilian Portuguese translation." }),
-      cdJapan: z.url().optional().meta({ description: "CDJapan product URL." }),
-    })
-    .default({})
-    .meta({
-      description: "External references for this media.",
-      example: {
-        mangaDex: "0ca1627e-95dd-4118-892a-f144adf02256",
-        anilist: 31224,
-        myAnimeList: 1224,
-      },
-    }),
+  tags: mediaTagsSchema.default([]),
+  links: mediaLinksSchema.default({}),
   staffs: z
     .object({
       staffId: z

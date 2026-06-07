@@ -50,6 +50,14 @@ const mediaErrors = {
       "Invalid covers configuration. At least one cover with exactly one main cover is required.",
     code: 422,
   },
+  MEDIA_ALREADY_DELETED: {
+    message: "The media has already been deleted.",
+    code: 409,
+  },
+  MEDIA_NOT_DELETED: {
+    message: "The media is not in a deleted state.",
+    code: 409,
+  },
 } as const
 const staffErrors = {
   STAFF_NOT_FOUND: {

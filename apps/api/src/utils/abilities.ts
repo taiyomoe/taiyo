@@ -18,8 +18,12 @@ export const defineAbilitiesFor = (user: User): AppAbility => {
     can("manage", "all")
   }
 
+  if (user.role === "MODERATOR") {
+    can("manage", "Media")
+  }
+
   if (user.role === "UPLOADER" || user.role === "UPLOADER_INTERN") {
-    can("create", "Media")
+    can(["create", "update", "delete"], "Media")
   }
 
   return build()

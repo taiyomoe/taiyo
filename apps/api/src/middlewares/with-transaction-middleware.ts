@@ -32,6 +32,7 @@ export const withTransaction = createMiddleware<{
   const previous = c.get("db")
   const afterCommitCallbacks: (() => Promise<void>)[] = []
 
+  c.set("afterCommit", (cb) => afterCommitCallbacks.push(cb))
   c.get("log").set({ uploadedKeys: [] })
 
   let committed = false
