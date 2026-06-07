@@ -1,0 +1,37 @@
+meta {
+  name: Create covers
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{url}}/medias/:id/covers
+  body: multipartForm
+  auth: inherit
+}
+
+headers {
+  Content-Type: multipart/form-data
+}
+
+params:path {
+  id: 00000000-0000-0000-0000-000000000000
+}
+
+body:multipart-form {
+  covers[0].file:
+  covers[0].language: en
+  covers[0].contentRating: NORMAL
+  covers[0].main: false
+  covers[0].volume: 3
+  covers[1].file:
+  covers[1].language: ja
+  covers[1].contentRating: NORMAL
+  covers[1].main: false
+  covers[1].volume: 4
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

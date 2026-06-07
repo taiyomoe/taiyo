@@ -59,6 +59,16 @@ const mediaErrors = {
     code: 409,
   },
 } as const
+const coverErrors = {
+  COVER_NOT_FOUND: {
+    message: "The requested cover was not found.",
+    code: 404,
+  },
+  COVER_IS_MAIN: {
+    message: "The main cover cannot be deleted. Promote another cover to main first.",
+    code: 409,
+  },
+} as const
 const staffErrors = {
   STAFF_NOT_FOUND: {
     message: "One or more of the referenced staff members do not exist.",
@@ -79,6 +89,7 @@ const imageErrors = {
 export const errors = {
   ...genericErrors,
   ...mediaErrors,
+  ...coverErrors,
   ...staffErrors,
   ...imageErrors,
 } as const

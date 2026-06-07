@@ -12,7 +12,16 @@ post {
 
 body:json {
   {
-    "q": "ragnarok"
+    "q": "solo leveling",
+    "filter": {
+      "type": { "eq": "MANGA" },
+      "status": { "eq": "FINISHED" }
+    },
+    "sort": [
+      { "field": "createdAt", "direction": "desc" }
+    ],
+    "page": 1,
+    "perPage": 20
   }
 }
 
