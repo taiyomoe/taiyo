@@ -69,6 +69,12 @@ const coverErrors = {
     code: 409,
   },
 } as const
+const bannerErrors = {
+  BANNER_NOT_FOUND: {
+    message: "The requested banner was not found.",
+    code: 404,
+  },
+} as const
 const staffErrors = {
   STAFF_NOT_FOUND: {
     message: "One or more of the referenced staff members do not exist.",
@@ -90,6 +96,7 @@ export const errors = {
   ...genericErrors,
   ...mediaErrors,
   ...coverErrors,
+  ...bannerErrors,
   ...staffErrors,
   ...imageErrors,
 } as const
