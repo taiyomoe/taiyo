@@ -1,7 +1,9 @@
 import react from "@vitejs/plugin-react"
 import { defineConfig } from "vitest/config"
 
-process.loadEnvFile()
+if (process.env.NODE_ENV === "development") {
+  process.loadEnvFile()
+}
 
 export default defineConfig({
   plugins: [react()],
