@@ -9,6 +9,7 @@ export const toContentRating = (input: string): ContentRating => {
       return "SUGGESTIVE"
 
     default:
+      // oxlint-disable-next-line no-console
       console.warn(`Invalid content rating key "${input}", defaulting to NSFW...`)
 
       return "NSFW"

@@ -16,6 +16,7 @@ export const toDemography = (input: string | null): MediaDemography => {
 
     default:
       if (input) {
+        // oxlint-disable-next-line no-console
         console.warn(`Invalid demography key "${input}", defaulting to SHOUNEN...`)
       }
 

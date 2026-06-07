@@ -20,6 +20,7 @@ export const toStaffLinks = (input: Record<string, unknown>): StaffLinks => {
       continue
     }
 
+    // oxlint-disable-next-line no-console
     console.warn(`Invalid staff link key "${key}", skipping...`)
   }
 

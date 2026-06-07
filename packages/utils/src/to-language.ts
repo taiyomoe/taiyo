@@ -30,6 +30,7 @@ export const toLanguage = (input?: string | null) => {
         return input
       }
 
+      // oxlint-disable-next-line no-console
       console.warn(`Invalid language key "${input}", skipping...`)
 
       return null

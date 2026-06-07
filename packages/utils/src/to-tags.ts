@@ -37,6 +37,7 @@ export const toTags = (input: string[] | null): MediaTags[] => {
       continue
     }
 
+    // oxlint-disable-next-line no-console
     console.warn(`Invalid tag key "${tag}", skipping...`)
   }
 

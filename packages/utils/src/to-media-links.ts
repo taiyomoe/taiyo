@@ -27,6 +27,7 @@ export const toMediaLinks = (input: Record<string, unknown>): MediaLinks => {
       continue
     }
 
+    // oxlint-disable-next-line no-console
     console.warn(`Invalid media link key "${key}", skipping...`)
   }
 

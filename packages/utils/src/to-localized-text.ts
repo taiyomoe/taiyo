@@ -9,9 +9,12 @@ export const toLocalizedText = (input: Record<string, unknown>): LocalizedText =
 
     if (language && typeof value === "string") {
       result[language] = value.replaceAll("，", ", ")
-    } else {
-      console.warn(`Invalid language key "${key}", skipping...`)
+
+      continue
     }
+
+    // oxlint-disable-next-line no-console
+    console.warn(`Invalid language key "${key}", skipping...`)
   }
 
   return result

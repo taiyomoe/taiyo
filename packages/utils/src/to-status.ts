@@ -15,6 +15,7 @@ export const toStatus = (input: string): MediaStatus => {
       return "CANCELLED"
 
     default:
+      // oxlint-disable-next-line no-console
       console.warn(`Invalid status key "${input}", defaulting to CANCELLED...`)
 
       return "CANCELLED"
