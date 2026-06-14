@@ -145,6 +145,99 @@ Response shape: `apiSuccessEnvelope(itemSchema.array(), paginationMetaSchema)`.
 - Success: `return c.ok(data)` (201 on POST, 200 otherwise — handled by the middleware). With pagination: `return c.ok(items, { page, perPage, total })`.
 - Failure: `return c.fail("CODE", details?)`.
 
+## Testing
+
+Every new route gets a co-located integration test that hits real Postgres / S3 / Meilisearch (via docker-compose). No mocks.
+
+### File layout
+
+- One file per handler: `src/__integration-tests__/<resource>/<verb>-<resource>.test.ts`. Folder structure mirrors `src/handlers/`.
+- Import `test` from `../setup` — **never** from `vitest` directly. The setup-provided `test` is `baseTest.extend<{ services, app }>` and gives each test a fully isolated stack.
+
+### Per-test isolation is automatic
+
+For each test the fixture provides:
+
+- A fresh Postgres database, cloned from a template that already has migrations + `pnpm -F db kysely seed run` applied.
+- A fresh S3 bucket.
+- A `services` bundle: `{ db, s3, s3Bucket, meili, auth }`.
+- An `app` built via `createApp(services)`.
+
+Everything is torn down at the end of the test. **Do not** add `beforeEach`/`afterEach` for cleanup, do not truncate tables, do not manage state across tests.
+
+### Read everything off the fixture
+
+```ts
+test("does the thing", async ({ app, services }) => {
+  const { headers } = await signInAs(services, { role: "ADMIN" })
+  const res = await api(app, "/path", { method: "POST", headers, json: {...} })
+  // assert against services.db / services.s3 / services.meili
+})
+```
+
+**Never** import `db`, `s3Client`, `meiliClient`, or `auth` from `@taiyomoe/*` packages or from `../services`. The route handlers get their dependencies from `c.var`; the tests get them from the fixture. There is no other source.
+
+### Helpers (in `src/__integration-tests__/helpers/`)
+
+- `signInAs(services, { role?, banned?, email? })` — inserts a user + session row and returns `{ userId, headers: { Cookie } }` with a signed cookie. Default role is `"USER"`.
+- `api(app, path, { method?, headers?, json?, form? })` — wraps `app.request` and parses the envelope. Returns `{ status, body }`. Always use this; do not call `app.request` directly.
+- `getPng()`, `invalidImage()`, `oversizedImage()` from `helpers/fixtures.ts` — real `File` objects for multipart routes.
+- `waitForMeiliMediaDoc(services, id)` — polls until a doc is indexed (Meili indexing is async). Use it after routes that schedule a search sync via `c.var.afterCommit(...)`.
+
+### Using seeded data
+
+The template DB is pre-seeded — your test starts with whatever the kysely seed files (`packages/db/src/seeds/`) inserted. For read-side tests (`GET /<resource>/:id`, `GET /<resource>`), reference seeded entities directly by their hardcoded id from the seed file. **Do not write custom seed helpers** like `seedMedia` / `seedStaff`; the kysely seeds are the single source of truth, and adding test-only seeding routes around them just creates drift.
+
+### Cases to cover
+
+**Baseline (every route using `withAuth`):**
+
+- `UNAUTHORIZED` — request with no `Cookie` header.
+- `FORBIDDEN` — signed in as a banned user.
+- `FORBIDDEN` — signed in as a role too weak for the ability (only when the route requires more than `USER`).
+- One `VALIDATION_ERROR` — a single representative missing/invalid field. **Don't enumerate every zod rule** — that's library-tested.
+
+**Route-specific:**
+
+- **Happy path** — drive the route to success and assert end-state on **every** surface it touches:
+  - DB rows: `services.db.selectFrom(...).executeTakeFirst()`.
+  - S3 objects (for uploads): `services.s3.send(new ListObjectsV2Command({ Bucket: services.s3Bucket, Prefix: ... }))`.
+  - Search docs (when the route schedules `syncMedia` via `afterCommit`): `await waitForMeiliMediaDoc(services, id)` and assert it's not null.
+- **One test per `c.fail("…")` code** listed in `getOpenApiResponses`. If you declared `409: "…"` in the OpenAPI spec, there must be a test that triggers that 409.
+- **Rollback** — for any route wrapping mutations in `withTransaction` that also uploads files: force a mid-handler failure (a `c.fail` from a pre-check that runs after the upload) and assert nothing leaked — no DB row, no S3 object.
+
+### Assertion patterns
+
+Discriminate on the envelope to narrow the body type:
+
+```ts
+const res = await api<{ id: string }>(app, "/path", { method: "POST", headers, form })
+expect(res.status).toBe(201)
+if (!res.body.success) throw new Error(`Expected success: ${JSON.stringify(res.body)}`)
+// res.body.data is now typed
+```
+
+For DB count assertions, snapshot before and compare the delta — seeded data is present, so absolute counts (`toHaveLength(1)`) will be wrong:
+
+```ts
+const before = await services.db.selectFrom("<table>").select("id").execute()
+// ... act ...
+const after = await services.db.selectFrom("<table>").select("id").execute()
+expect(after).toHaveLength(before.length + 1)  // or +0 for rollback
+```
+
+### Things to skip
+
+- Exhaustive zod validation tests — one 422 per route is enough.
+- Re-testing the response envelope shape — covered once globally.
+- Permutations of roles per route — test the boundary, not every role.
+- Mocks of external services — the test stack is real. If docker isn't running, the user needs to run `docker compose up -d`, not the test needs a mock.
+
+### Style rules (match the rest of the codebase)
+
+- Helpers used only once are inlined. Helpers used 2+ times sit at the top of the test file.
+- Functions that return a value use the `get` prefix (e.g. `getForm`, `getPng`) — matching the package-level `getDb` / `getS3Bucket` convention.
+
 ## Final checklist
 
 - [ ] Handler in `src/handlers/`, mounted in the right router (router registered in `src/index.ts` if new).
@@ -158,3 +251,10 @@ Response shape: `apiSuccessEnvelope(itemSchema.array(), paginationMetaSchema)`.
 - [ ] Pre-checks for referenced ids and conflicts, each mapped to a real code in `errors.ts`.
 - [ ] evlog context set at the natural points.
 - [ ] No internal leakage in OpenAPI descriptions or error messages.
+- [ ] Test file at `src/__integration-tests__/<resource>/<verb>-<resource>.test.ts`, importing `test` from `../setup`.
+- [ ] Baseline auth cases: 401 unauthenticated, 403 banned, 403 too-weak-role (when applicable).
+- [ ] One representative 422 `VALIDATION_ERROR` case.
+- [ ] Happy path asserts end-state on every surface the route touches (DB, S3, Meili).
+- [ ] One test per `c.fail` code declared in `getOpenApiResponses`.
+- [ ] Rollback test for any `withTransaction` route that uploads files.
+- [ ] No runtime imports from `@taiyomoe/*` packages or `../services` in the test — only `services` + `app` from the fixture.
