@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "@taiyomoe/typescript": "workspace:^",
-    "@types/react": "^19.2.15",
+    "@types/react": "^19.2.17",
     "tailwindcss": "^4.3.0",
     "typescript": "^6.0.3"
   },

@@ -10,13 +10,13 @@
   },
   "dependencies": {
     "@t3-oss/env-core": "^0.13.11",
-    "ioredis": "^5.11.0",
+    "ioredis": "^5.11.1",
     "superjson": "^2.2.6",
     "zod": "^4.4.3"
   },
   "devDependencies": {
     "@taiyomoe/typescript": "workspace:^",
-    "@types/node": "^25.9.1",
+    "@types/node": "^25.9.2",
     "typescript": "^6.0.3"
   }
 }

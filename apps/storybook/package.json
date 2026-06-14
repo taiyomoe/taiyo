@@ -8,23 +8,23 @@
     "build": "storybook build"
   },
   "dependencies": {
-    "@storybook/addon-a11y": "^10.4.1",
-    "@storybook/addon-docs": "^10.4.1",
-    "@storybook/addon-themes": "^10.4.1",
-    "@storybook/react-vite": "^10.4.1",
+    "@storybook/addon-a11y": "^10.4.2",
+    "@storybook/addon-docs": "^10.4.2",
+    "@storybook/addon-themes": "^10.4.2",
+    "@storybook/react-vite": "^10.4.2",
     "@tailwindcss/vite": "^4.3.0",
     "@taiyomoe/ui": "workspace:^",
     "@vitejs/plugin-react": "^6.0.2",
     "lucide-react": "^1.17.0",
-    "react": "^19.2.6",
-    "react-dom": "^19.2.6",
-    "storybook": "^10.4.1",
-    "vite": "^8.0.14"
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "storybook": "^10.4.2",
+    "vite": "^8.0.16"
   },
   "devDependencies": {
     "@taiyomoe/typescript": "workspace:^",
-    "@types/node": "^25.9.1",
-    "@types/react": "^19.2.15",
+    "@types/node": "^25.9.2",
+    "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "typescript": "^6.0.3"
   }

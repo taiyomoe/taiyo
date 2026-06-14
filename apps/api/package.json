@@ -16,7 +16,7 @@
     "@casl/ability": "^7.0.0",
     "@hono/node-server": "^2.0.4",
     "@hono/standard-validator": "^0.2.2",
-    "@scalar/hono-api-reference": "^0.10.19",
+    "@scalar/hono-api-reference": "^0.10.20",
     "@t3-oss/env-core": "^0.13.11",
     "@taiyomoe/auth": "workspace:^",
     "@taiyomoe/config": "workspace:^",
@@ -34,15 +34,15 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@aws-sdk/client-s3": "^3.1057.0",
+    "@aws-sdk/client-s3": "^3.1063.0",
     "@taiyomoe/cache": "workspace:^",
     "@taiyomoe/typescript": "workspace:^",
-    "@types/node": "^25.9.1",
+    "@types/node": "^25.9.2",
     "@types/pg": "^8.20.0",
     "dotenv-cli": "^11.0.0",
     "kysely": "^0.29.2",
     "pg": "^8.21.0",
-    "tsx": "^4.22.3",
+    "tsx": "^4.22.4",
     "typescript": "^6.0.3"
   }
 }
