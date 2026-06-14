@@ -29,8 +29,8 @@ export const invalidImage = (name = "fake.png"): File => {
   return new File([new Uint8Array([0xff, 0xfe, 0xfd, 0xfc])], name, { type: "image/png" })
 }
 
-export const oversizedImage = async (name = "huge.png"): Promise<File> => {
-  const buf = await getPng(4096)
+// export const oversizedImage = async (name = "huge.png"): Promise<File> => {
+//   const buf = await getPng(4096)
 
-  return new File([new Uint8Array(buf)], name, { type: "image/png" })
-}
+//   return new File([new Uint8Array(buf)], name, { type: "image/png" })
+// }
