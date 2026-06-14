@@ -1,12 +1,34 @@
 import type { Hono } from "hono"
-import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest"
+import { afterEach, beforeEach, describe, expect, vi } from "vitest"
 import z from "zod"
-import { app } from "../index"
 import { validateFormData } from "../middlewares/validate-form-data-middleware"
+import { test } from "./setup"
+
+const getTestApp = (app: Hono): Hono =>
+  app
+    .get("/test-get", (c) => c.ok({ test: "data" }))
+    .post("/test-post", (c) => c.ok({ id: "123" }))
+    .get("/test-error", (c) => c.fail("NOT_FOUND"))
+    .get("/test-error-details", (c) =>
+      c.fail("VALIDATION_ERROR", { field: "email", issue: "invalid" }),
+    )
+    .get("/test-error-no-details", (c) => c.fail("INTERNAL_SERVER_ERROR"))
+    .get("/test-unauthorized", (c) => c.fail("UNAUTHORIZED"))
+    .get("/test-bad-request", (c) => c.fail("BAD_REQUEST"))
+    .get("/test-exception", () => {
+      throw new Error("Test error message")
+    })
+    .post(
+      "/test-validation",
+      validateFormData(z.object({ name: z.string().min(1), email: z.email() })),
+      (c) => {
+        const data = c.get("formData")
+
+        return c.ok(data)
+      },
+    )
 
 describe("API Response Standardization", () => {
-  let testApp: Hono
-
   beforeEach(({ task }) => {
     if (task.name === "should include error details in development mode") {
       vi.stubEnv("NODE_ENV", "development")
@@ -17,45 +39,13 @@ describe("API Response Standardization", () => {
     }
   })
 
-  beforeAll(() => {
-    testApp = app
-      .get("/test-get", (c) => {
-        return c.ok({ test: "data" })
-      })
-      .post("/test-post", (c) => {
-        return c.ok({ id: "123" })
-      })
-      .get("/test-error", (c) => {
-        return c.fail("NOT_FOUND")
-      })
-      .get("/test-error-details", (c) => {
-        return c.fail("VALIDATION_ERROR", { field: "email", issue: "invalid" })
-      })
-      .get("/test-error-no-details", (c) => {
-        return c.fail("INTERNAL_SERVER_ERROR")
-      })
-      .get("/test-unauthorized", (c) => c.fail("UNAUTHORIZED"))
-      .get("/test-bad-request", (c) => c.fail("BAD_REQUEST"))
-      .get("/test-exception", () => {
-        throw new Error("Test error message")
-      })
-      .post(
-        "/test-validation",
-        validateFormData(z.object({ name: z.string().min(1), email: z.email() })),
-        (c) => {
-          const data = c.get("formData")
-
-          return c.ok(data)
-        },
-      )
-  })
-
   afterEach(() => {
     vi.unstubAllEnvs()
   })
 
   describe("Success Responses", () => {
-    it("should return standardized success response format", async () => {
+    test("should return standardized success response format", async ({ app }) => {
+      const testApp = getTestApp(app)
       const res = await testApp.request("/test-get")
       const json = await res.json()
 
@@ -67,15 +57,15 @@ describe("API Response Standardization", () => {
       })
     })
 
-    it("should return 201 status for POST requests", async () => {
-      const res = await testApp.request("/test-post", {
-        method: "POST",
-      })
+    test("should return 201 status for POST requests", async ({ app }) => {
+      const testApp = getTestApp(app)
+      const res = await testApp.request("/test-post", { method: "POST" })
 
       expect(res.status).toBe(201)
     })
 
-    it("should return 200 status for non-POST requests", async () => {
+    test("should return 200 status for non-POST requests", async ({ app }) => {
+      const testApp = getTestApp(app)
       const res = await testApp.request("/test-get")
 
       expect(res.status).toBe(200)
@@ -83,7 +73,8 @@ describe("API Response Standardization", () => {
   })
 
   describe("Error Responses", () => {
-    it("should return standardized error response format", async () => {
+    test("should return standardized error response format", async ({ app }) => {
+      const testApp = getTestApp(app)
       const res = await testApp.request("/test-error")
       const json = await res.json()
 
@@ -96,26 +87,28 @@ describe("API Response Standardization", () => {
       })
     })
 
-    it("should include details when provided", async () => {
+    test("should include details when provided", async ({ app }) => {
+      const testApp = getTestApp(app)
       const res = await testApp.request("/test-error-details")
       const json = await res.json()
 
       expect(json).toMatchObject({
-        details: {
-          field: "email",
-          issue: "invalid",
-        },
+        details: { field: "email", issue: "invalid" },
       })
     })
 
-    it("should not include details when not provided", async () => {
+    test("should not include details when not provided", async ({ app }) => {
+      const testApp = getTestApp(app)
       const res = await testApp.request("/test-error-no-details")
       const json = await res.json()
 
       expect(json).not.toHaveProperty("details")
     })
 
-    it("should return correct status code and error messages for different error types", async () => {
+    test("should return correct status code and error messages for different error types", async ({
+      app,
+    }) => {
+      const testApp = getTestApp(app)
       const unauthorizedReq = await testApp.request("/test-unauthorized")
       const badRequestReq = await testApp.request("/test-bad-request")
       const unauthorizedJson = await unauthorizedReq.json()
@@ -135,7 +128,8 @@ describe("API Response Standardization", () => {
       })
     })
 
-    it("should catch uncaught exceptions and return standardized error", async () => {
+    test("should catch uncaught exceptions and return standardized error", async ({ app }) => {
+      const testApp = getTestApp(app)
       const res = await testApp.request("/test-exception")
       const json = await res.json()
 
@@ -150,20 +144,19 @@ describe("API Response Standardization", () => {
       })
     })
 
-    it("should include error details in development mode", async () => {
+    test("should include error details in development mode", async ({ app }) => {
+      const testApp = getTestApp(app)
       const res = await testApp.request("/test-exception")
       const json = await res.json()
 
       expect(res.status).toBe(500)
       expect(json).toMatchObject({
-        details: {
-          error: "Test error message",
-          stack: expect.any(String),
-        },
+        details: { error: "Test error message", stack: expect.any(String) },
       })
     })
 
-    it("should not include error details in production mode", async () => {
+    test("should not include error details in production mode", async ({ app }) => {
+      const testApp = getTestApp(app)
       const res = await testApp.request("/test-exception")
       const json = await res.json()
 
@@ -173,38 +166,31 @@ describe("API Response Standardization", () => {
   })
 
   describe("Form Data Validation", () => {
-    it("should return validated data on successful validation", async () => {
+    test("should return validated data on successful validation", async ({ app }) => {
+      const testApp = getTestApp(app)
       const formData = new FormData()
 
       formData.append("name", "John Doe")
       formData.append("email", "john@example.com")
 
-      const res = await testApp.request("/test-validation", {
-        method: "POST",
-        body: formData,
-      })
+      const res = await testApp.request("/test-validation", { method: "POST", body: formData })
       const json = await res.json()
 
       expect(res.status).toBe(201)
       expect(json).toMatchObject({
         success: true,
-        data: {
-          name: "John Doe",
-          email: "john@example.com",
-        },
+        data: { name: "John Doe", email: "john@example.com" },
       })
     })
 
-    it("should return validation error with details on failed validation", async () => {
+    test("should return validation error with details on failed validation", async ({ app }) => {
+      const testApp = getTestApp(app)
       const formData = new FormData()
 
       formData.append("name", "")
       formData.append("email", "invalid-email")
 
-      const res = await testApp.request("/test-validation", {
-        method: "POST",
-        body: formData,
-      })
+      const res = await testApp.request("/test-validation", { method: "POST", body: formData })
       const json = (await res.json()) as {
         details: { path: string[]; code: string }[]
       }
@@ -215,14 +201,8 @@ describe("API Response Standardization", () => {
         code: "VALIDATION_ERROR",
         message: "The request data failed validation.",
         details: expect.arrayContaining([
-          expect.objectContaining({
-            path: ["name"],
-            code: "too_small",
-          }),
-          expect.objectContaining({
-            path: ["email"],
-            code: "invalid_format",
-          }),
+          expect.objectContaining({ path: ["name"], code: "too_small" }),
+          expect.objectContaining({ path: ["email"], code: "invalid_format" }),
         ]),
       })
     })

@@ -1,7 +1,9 @@
 import { SEARCH_INDEXES } from "./client"
 import { initMediasIndex } from "./medias/init-medias-index"
 
-export { SEARCH_INDEXES, meiliClient } from "./client"
+export { getMeiliClient, SEARCH_INDEXES } from "./client"
+
+export type { Meilisearch } from "meilisearch"
 
 export * from "./medias/sync-media"
 

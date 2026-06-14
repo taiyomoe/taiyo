@@ -69,14 +69,14 @@ export const createBannersHandler = new Hono().post(
   checkMedia(),
   withTransaction,
   async (c) => {
-    const { db, s3, log, media, user } = c.var
+    const { db, s3, s3Bucket, log, media, user } = c.var
     const body = c.var.formData!
     const bannerRows = await Promise.all(
       body.banners.map(async (banner) => {
         const id = crypto.randomUUID()
 
         await uploadFile(
-          { s3, log },
+          { s3, s3Bucket, log },
           getBannerKey(media.id, `${id}.${extensionForMimeType(banner.file.type)}`),
           banner.file,
         )

@@ -39,17 +39,22 @@ export async function up(db: Kysely<any>): Promise<void> {
     .column("staffId")
     .execute()
 
+  const medias = await db
+    .selectFrom("Media")
+    .select(["id", "links"])
+    .where(sql<boolean>`"links" ? 'mangaDex'`)
+    .execute()
+
+  if (medias.length === 0) {
+    return
+  }
+
   const admin = await db
     .selectFrom("User")
     .select("id")
     .where("role", "=", "ADMIN")
     .orderBy("createdAt", "asc")
     .executeTakeFirstOrThrow()
-  const medias = await db
-    .selectFrom("Media")
-    .select(["id", "links"])
-    .where(sql<boolean>`"links" ? 'mangaDex'`)
-    .execute()
   const staffCache = new Map<string, string>()
   let processed = 0
 

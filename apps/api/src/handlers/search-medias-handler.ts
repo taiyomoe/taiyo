@@ -106,7 +106,7 @@ export const searchMediasHandler = new Hono().post(
   }),
   validateJson(searchMediasInputSchema),
   async (c) => {
-    const { hits, page, perPage, total } = await searchMedias(c.var.json)
+    const { hits, page, perPage, total } = await searchMedias({ meili: c.var.meili }, c.var.json)
 
     return c.ok(hits, { page, perPage, total })
   },

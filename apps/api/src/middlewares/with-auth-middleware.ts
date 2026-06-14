@@ -1,4 +1,4 @@
-import { auth, Session, User } from "@taiyomoe/auth/server"
+import { Session, User } from "@taiyomoe/auth/server"
 import { createMiddleware } from "hono/factory"
 import { type Actions, defineAbilitiesFor, type Subjects } from "../utils/abilities"
 
@@ -15,7 +15,7 @@ export const withAuth = (action: Actions, subject: Subjects) =>
   createMiddleware<{
     Variables: { user: User; session: Session["session"] }
   }>(async (c, next) => {
-    const result = await auth.api.getSession({ headers: c.req.raw.headers })
+    const result = await c.var.auth.api.getSession({ headers: c.req.raw.headers })
 
     if (!result) {
       return c.fail("UNAUTHORIZED")

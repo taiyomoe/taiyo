@@ -227,7 +227,7 @@ export const createMediaHandler = new Hono().post(
   checkImages(),
   withTransaction,
   async (c) => {
-    const { db, s3, log } = c.var
+    const { db, s3, s3Bucket, log } = c.var
     const body = c.var.formData!
     const mediaId = crypto.randomUUID()
     const links = Object.entries(body.links)
@@ -317,7 +317,7 @@ export const createMediaHandler = new Hono().post(
         const id = crypto.randomUUID()
 
         await uploadFile(
-          { s3, log },
+          { s3, s3Bucket, log },
           getCoverKey(mediaId, `${id}.${extensionForMimeType(cover.file.type)}`),
           cover.file,
         )
@@ -342,7 +342,7 @@ export const createMediaHandler = new Hono().post(
           const id = crypto.randomUUID()
 
           await uploadFile(
-            { s3, log },
+            { s3, s3Bucket, log },
             getBannerKey(mediaId, `${id}.${extensionForMimeType(banner.file.type)}`),
             banner.file,
           )
@@ -359,7 +359,7 @@ export const createMediaHandler = new Hono().post(
       await db.insertInto("banners").values(bannerRows).execute()
     }
 
-    c.var.afterCommit(() => syncMedia(c.var.db, mediaId))
+    c.var.afterCommit(() => syncMedia({ db: c.var.db, meili: c.var.meili }, mediaId))
 
     return c.ok({ id: mediaId })
   },

@@ -96,14 +96,14 @@ export const createCoversHandler = new Hono().post(
   checkMedia(),
   withTransaction,
   async (c) => {
-    const { db, s3, log, media, user } = c.var
+    const { db, s3, s3Bucket, log, media, user } = c.var
     const body = c.var.formData!
     const coverRows = await Promise.all(
       body.covers.map(async (cover) => {
         const id = crypto.randomUUID()
 
         await uploadFile(
-          { s3, log },
+          { s3, s3Bucket, log },
           getCoverKey(media.id, `${id}.${extensionForMimeType(cover.file.type)}`),
           cover.file,
         )
@@ -134,7 +134,7 @@ export const createCoversHandler = new Hono().post(
         .execute()
     }
 
-    c.var.afterCommit(() => syncMedia(c.var.db, media.id))
+    c.var.afterCommit(() => syncMedia({ db: c.var.db, meili: c.var.meili }, media.id))
 
     return c.ok({ ids: coverRows.map((row) => row.id) })
   },

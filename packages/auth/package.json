@@ -10,6 +10,7 @@
     "./env": "./src/env.ts"
   },
   "dependencies": {
+    "@better-auth/kysely-adapter": "^1.6.12",
     "@t3-oss/env-core": "^0.13.11",
     "@taiyomoe/cache": "workspace:^",
     "@taiyomoe/config": "workspace:^",

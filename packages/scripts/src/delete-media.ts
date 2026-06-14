@@ -35,10 +35,13 @@ export default defineCommand({
       process.exit(1)
     }
 
-    const { db, sql } = await import("@taiyomoe/db")
-    const { DeleteObjectsCommand, ListObjectsV2Command, s3Bucket, s3Client } =
+    const { getDb, sql } = await import("@taiyomoe/db")
+    const { DeleteObjectsCommand, getS3Bucket, getS3Client, ListObjectsV2Command } =
       await import("@taiyomoe/s3")
-    const { SEARCH_INDEXES, meiliClient } = await import("@taiyomoe/search")
+    const { getMeiliClient, SEARCH_INDEXES } = await import("@taiyomoe/search")
+    const db = getDb()
+    const s3Client = getS3Client()
+    const meiliClient = getMeiliClient()
     const { mediaId } = args
     const prefix = `medias/${mediaId}/`
 
@@ -86,7 +89,7 @@ export default defineCommand({
     do {
       const list = await s3Client.send(
         new ListObjectsV2Command({
-          Bucket: s3Bucket,
+          Bucket: getS3Bucket(),
           Prefix: prefix,
           ContinuationToken: continuationToken,
         }),
@@ -96,7 +99,7 @@ export default defineCommand({
       if (objects.length > 0) {
         await s3Client.send(
           new DeleteObjectsCommand({
-            Bucket: s3Bucket,
+            Bucket: getS3Bucket(),
             Delete: { Objects: objects.map((o) => ({ Key: o.Key! })) },
           }),
         )

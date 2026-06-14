@@ -1,4 +1,4 @@
-import { DeleteObjectsCommand, s3Bucket } from "@taiyomoe/s3"
+import { DeleteObjectsCommand } from "@taiyomoe/s3"
 import type { Context } from "hono"
 import { createMiddleware } from "hono/factory"
 
@@ -81,7 +81,7 @@ const cleanupUploadedFiles = async (c: Context) => {
     .get("s3")
     .send(
       new DeleteObjectsCommand({
-        Bucket: s3Bucket,
+        Bucket: c.get("s3Bucket"),
         Delete: { Objects: keys.map((Key) => ({ Key })) },
       }),
     )

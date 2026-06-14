@@ -3,19 +3,12 @@ import pg from "pg"
 import type { DB } from "./database"
 import { env } from "./env"
 
-declare global {
-  var kysely: Kysely<DB> | undefined
-}
-
-const dialect = new PostgresDialect({
-  pool: new pg.Pool({ connectionString: env.DATABASE_URL }),
-})
-
-export const db = globalThis.kysely ?? new Kysely<DB>({ dialect })
-
-if (process.env.NODE_ENV !== "production") {
-  globalThis.kysely = db
-}
+export const getDb = (connectionString = env.DATABASE_URL) =>
+  new Kysely<DB>({
+    dialect: new PostgresDialect({
+      pool: new pg.Pool({ connectionString }),
+    }),
+  })
 
 export * from "kysely"
 

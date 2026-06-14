@@ -55,7 +55,7 @@ export const deleteCoverHandler = new Hono().delete(
       .where("id", "=", cover.id)
       .execute()
 
-    c.var.afterCommit(() => syncMedia(c.var.db, media.id))
+    c.var.afterCommit(() => syncMedia({ db: c.var.db, meili: c.var.meili }, media.id))
 
     return c.ok({ id: cover.id })
   },

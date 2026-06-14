@@ -38,9 +38,9 @@ export const reindexMediaHandler = new Hono().post(
   withAuth("update", "Media"),
   checkMedia(),
   async (c) => {
-    const { db, media } = c.var
+    const { db, meili, media } = c.var
 
-    await syncMedia(db, media.id)
+    await syncMedia({ db, meili }, media.id)
 
     return c.ok({ id: media.id })
   },

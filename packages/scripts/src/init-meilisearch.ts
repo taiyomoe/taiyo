@@ -1,4 +1,5 @@
-import { indexInitializers } from "@taiyomoe/search"
+import { getDb } from "@taiyomoe/db"
+import { getMeiliClient, indexInitializers } from "@taiyomoe/search"
 import { defineCommand } from "citty"
 
 const indexNames = indexInitializers.map((i) => i.name)
@@ -26,10 +27,13 @@ export default defineCommand({
       process.exit(1)
     }
 
+    const db = getDb()
+    const meili = getMeiliClient()
+
     for (const { name, init } of targets) {
       console.log(`Initializing ${name} index...`)
 
-      await init()
+      await init({ db, meili })
     }
 
     console.log("Done.")

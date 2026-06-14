@@ -11,5 +11,6 @@ export default defineConfig({
     include: ["**/__integration-tests__/**/*.test.ts", "**/__integration-tests__/**/*.spec.ts"],
     setupFiles: ["./apps/api/src/__integration-tests__/setup.ts"],
     silent: "passed-only",
+    fileParallelism: false,
   },
 })
