@@ -16,6 +16,7 @@ import { errorHandler } from "./middlewares/error-handler-middleware"
 import { bannersRouter } from "./routers/banners-router"
 import { chaptersRouter } from "./routers/chapters-router"
 import { coversRouter } from "./routers/covers-router"
+import { groupsRouter } from "./routers/groups-router"
 import { mediasRouter } from "./routers/medias-router"
 import { staffsRouter } from "./routers/staffs-router"
 import { createServices, type Services } from "./services"
@@ -47,6 +48,7 @@ export const createApp = (services: Services) => {
     .route("/banners", bannersRouter)
     .route("/staffs", staffsRouter)
     .route("/chapters", chaptersRouter)
+    .route("/groups", groupsRouter)
 
   app
     .get(
@@ -88,6 +90,11 @@ export const createApp = (services: Services) => {
               name: "Media staff",
               description:
                 "Links between a media and the staff members credited on it. Each link carries a role (AUTHOR / ARTIST).",
+            },
+            {
+              name: "Groups",
+              description:
+                "Translation / scanlation groups. Top-level resource that can be linked to chapters via `chapterGroups`.",
             },
           ],
         },
