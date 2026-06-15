@@ -47,7 +47,7 @@ beforeAll(async () => {
   execSync("pnpm -F db kysely seed run", { stdio: "pipe", env: childEnv })
 
   if (process.env.CI) {
-    execSync("pnpm -F scripts init-meilisearch", { stdio: "pipe", env: childEnv })
+    execSync("pnpm -F scripts cli init-meilisearch", { env: childEnv })
   }
 })
 
