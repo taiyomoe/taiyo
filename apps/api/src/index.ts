@@ -13,6 +13,7 @@ import {
   createContextMiddleware,
 } from "./middlewares/context-middleware"
 import { errorHandler } from "./middlewares/error-handler-middleware"
+import { bannersRouter } from "./routers/banners-router"
 import { coversRouter } from "./routers/covers-router"
 import { mediasRouter } from "./routers/medias-router"
 import { createServices, type Services } from "./services"
@@ -41,6 +42,7 @@ export const createApp = (services: Services) => {
     .get("/ping", (c) => c.json({ version: packageJson.version }))
     .route("/medias", mediasRouter)
     .route("/covers", coversRouter)
+    .route("/banners", bannersRouter)
 
   app
     .get(
@@ -62,6 +64,11 @@ export const createApp = (services: Services) => {
               name: "Covers",
               description:
                 "Cover images attached to a media. List and create are scoped under the parent media; get/update/delete/set-main operate on the cover by its own id.",
+            },
+            {
+              name: "Banners",
+              description:
+                "Banner images attached to a media. List and create are scoped under the parent media; get/update/delete operate on the banner by its own id.",
             },
           ],
         },

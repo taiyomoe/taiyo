@@ -2,7 +2,6 @@ import { Hono } from "hono"
 import { createBannersHandler } from "../handlers/create-banners-handler"
 import { createCoversHandler } from "../handlers/create-covers-handler"
 import { createMediaHandler } from "../handlers/create-media-handler"
-import { deleteBannerHandler } from "../handlers/delete-banner-handler"
 import { deleteMediaHandler } from "../handlers/delete-media-handler"
 import { flagMediaHandler } from "../handlers/flag-media-handler"
 import { getMediaHandler } from "../handlers/get-media-handler"
@@ -11,7 +10,6 @@ import { listCoversHandler } from "../handlers/list-covers-handler"
 import { reindexMediaHandler } from "../handlers/reindex-media-handler"
 import { restoreMediaHandler } from "../handlers/restore-media-handler"
 import { searchMediasHandler } from "../handlers/search-medias-handler"
-import { updateBannerHandler } from "../handlers/update-banner-handler"
 import { updateMediaHandler } from "../handlers/update-media-handler"
 
 export const mediasRouter = new Hono()
@@ -27,5 +25,3 @@ export const mediasRouter = new Hono()
   .route("/", createCoversHandler)
   .route("/", listBannersHandler)
   .route("/", createBannersHandler)
-  .route("/", updateBannerHandler)
-  .route("/", deleteBannerHandler)

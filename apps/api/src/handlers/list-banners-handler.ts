@@ -18,7 +18,7 @@ export const listBannersHandler = new Hono().get(
     summary: "List a media's banners",
     description:
       "Lists the banners attached to a media, with their content rating.\n\n**Authentication:** none.",
-    tags: ["Medias"],
+    tags: ["Banners"],
     responses: {
       200: {
         description: "Banners of the media.",

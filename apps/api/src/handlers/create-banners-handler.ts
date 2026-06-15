@@ -33,7 +33,7 @@ export const createBannersHandler = new Hono().post(
     summary: "Add banners to a media",
     description:
       "Adds one or more banners to a media.\n\n**Required roles:** uploader, moderator, admin.",
-    tags: ["Medias"],
+    tags: ["Banners"],
     requestBody: {
       content: {
         "multipart/form-data": await resolver(createBannersSchema).toOpenAPISchema(),

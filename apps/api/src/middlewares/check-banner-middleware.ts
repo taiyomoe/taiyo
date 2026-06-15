@@ -4,16 +4,16 @@ import z from "zod"
 
 const paramSchema = z.object({
   id: z.uuid(),
-  bannerId: z.uuid(),
 })
 
 /**
- * Resolves the `:bannerId` path parameter to a banner row scoped to the
- * `:id` media and exposes it on the context as `c.var.banner`.
+ * Resolves the `:id` path parameter to a banner row and exposes it on the
+ * context as `c.var.banner`. The banner's `mediaId` is on the row for any
+ * downstream handler that needs to act on the parent media.
  *
  * Rejects with:
- *   - `VALIDATION_ERROR` when either id is not a UUID
- *   - `BANNER_NOT_FOUND` when no matching banner exists under that media
+ *   - `VALIDATION_ERROR` when the id is not a UUID
+ *   - `BANNER_NOT_FOUND` when no matching banner exists
  *
  * Pass `{ includeDeleted: true }` for routes that operate on soft-deleted
  * banners. The default excludes soft-deleted rows.
@@ -22,25 +22,18 @@ export const checkBanner = (opts: { includeDeleted?: boolean } = {}) =>
   createMiddleware<{
     Variables: { banner: Selectable<Banner> }
   }>(async (c, next) => {
-    const parsed = paramSchema.safeParse({
-      id: c.req.param("id"),
-      bannerId: c.req.param("bannerId"),
-    })
+    const parsed = paramSchema.safeParse({ id: c.req.param("id") })
 
     if (!parsed.success) {
       return c.fail("VALIDATION_ERROR", parsed.error.issues)
     }
 
-    const { id, bannerId } = parsed.data
+    const { id } = parsed.data
     const { db, log } = c.var
 
-    log.set({ banner: { id: bannerId } })
+    log.set({ banner: { id } })
 
-    const base = db
-      .selectFrom("banners")
-      .selectAll()
-      .where("id", "=", bannerId)
-      .where("mediaId", "=", id)
+    const base = db.selectFrom("banners").selectAll().where("id", "=", id)
     const query = opts.includeDeleted ? base : base.where("deletedAt", "is", null)
     const banner = await query.executeTakeFirst()
 

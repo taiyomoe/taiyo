@@ -2,19 +2,18 @@ import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
 import { checkBanner } from "../middlewares/check-banner-middleware"
-import { checkMedia } from "../middlewares/check-media-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
 export const deleteBannerHandler = new Hono().delete(
-  "/:id/banners/:bannerId",
+  "/:id",
   describeRoute({
     summary: "Delete a banner",
     description:
-      "Removes a banner from a media. The banner can be restored later.\n\n**Required roles:** uploader, moderator, admin.",
-    tags: ["Medias"],
+      "Removes a banner. The banner can be restored later.\n\n**Required roles:** uploader, moderator, admin.",
+    tags: ["Banners"],
     responses: {
       200: {
         description: "Banner deleted.",
@@ -31,13 +30,12 @@ export const deleteBannerHandler = new Hono().delete(
         },
       },
       ...getOpenApiResponses({
-        404: "No banner with the given id exists under that media.",
+        404: "No banner with the given id exists.",
         422: "The provided id is not a valid UUID.",
       }),
     },
   }),
   withAuth("delete", "Media"),
-  checkMedia(),
   checkBanner(),
   withTransaction,
   async (c) => {

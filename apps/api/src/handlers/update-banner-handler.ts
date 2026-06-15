@@ -2,7 +2,6 @@ import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
 import { checkBanner } from "../middlewares/check-banner-middleware"
-import { checkMedia } from "../middlewares/check-media-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
@@ -14,12 +13,12 @@ const updateBannerSchema = z.object({
 })
 
 export const updateBannerHandler = new Hono().patch(
-  "/:id/banners/:bannerId",
+  "/:id",
   describeRoute({
     summary: "Update a banner",
     description:
       "Updates the content rating of a banner.\n\n**Required roles:** uploader, moderator, admin.",
-    tags: ["Medias"],
+    tags: ["Banners"],
     requestBody: {
       content: { "application/json": await resolver(updateBannerSchema).toOpenAPISchema() },
     },
@@ -39,14 +38,13 @@ export const updateBannerHandler = new Hono().patch(
         },
       },
       ...getOpenApiResponses({
-        404: "No banner with the given id exists under that media.",
+        404: "No banner with the given id exists.",
         422: "The request data failed validation.",
       }),
     },
   }),
   withAuth("update", "Media"),
   validateJson(updateBannerSchema),
-  checkMedia(),
   checkBanner(),
   withTransaction,
   async (c) => {
