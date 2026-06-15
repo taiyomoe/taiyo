@@ -84,6 +84,11 @@ export const createApp = (services: Services) => {
               description:
                 "Chapters of a media. List and create are scoped under the parent media; get/update/delete operate on the chapter by its own id.",
             },
+            {
+              name: "Media staff",
+              description:
+                "Links between a media and the staff members credited on it. Each link carries a role (AUTHOR / ARTIST).",
+            },
           ],
         },
       }),
