@@ -96,6 +96,10 @@ export const createApp = (services: Services) => {
               description:
                 "Translation / scanlation groups. Top-level resource that can be linked to chapters via `chapterGroups`.",
             },
+            {
+              name: "Chapter groups",
+              description: "Links between a chapter and the groups that worked on it.",
+            },
           ],
         },
       }),
