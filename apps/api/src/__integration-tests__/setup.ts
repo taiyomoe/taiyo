@@ -33,23 +33,26 @@ const getBucketName = (taskId: string) => `taiyo-test-${sanitize(taskId).replace
 let adminClient: pg.Client
 const sharedS3 = getS3Client()
 const sharedMeili = getMeiliClient()
-const adminQuery = (sql: string) => adminClient.query(sql)
 
 beforeAll(async () => {
   adminClient = new pg.Client({ connectionString: getDbUrl("postgres") })
 
   await adminClient.connect()
-  await adminQuery(`DROP DATABASE IF EXISTS "${TEMPLATE_DB}"`)
-  await adminQuery(`CREATE DATABASE "${TEMPLATE_DB}"`)
+  await adminClient.query(`DROP DATABASE IF EXISTS "${TEMPLATE_DB}"`)
+  await adminClient.query(`CREATE DATABASE "${TEMPLATE_DB}"`)
 
   const childEnv = { ...process.env, DATABASE_URL: getDbUrl(TEMPLATE_DB) }
 
   execSync("pnpm -F db kysely migrate latest", { stdio: "pipe", env: childEnv })
   execSync("pnpm -F db kysely seed run", { stdio: "pipe", env: childEnv })
+
+  if (process.env.CI) {
+    execSync("pnpm -F scripts init-meilisearch", { stdio: "pipe", env: childEnv })
+  }
 })
 
 afterAll(async () => {
-  await adminQuery(`DROP DATABASE IF EXISTS "${TEMPLATE_DB}"`)
+  await adminClient.query(`DROP DATABASE IF EXISTS "${TEMPLATE_DB}"`)
   await adminClient.end()
   await cacheClient.clear()
 })
@@ -64,8 +67,8 @@ export const test = baseTest.extend<Fixtures>({
     const dbName = getDbName(task.id)
     const bucketName = getBucketName(task.id)
 
-    await adminQuery(`DROP DATABASE IF EXISTS "${dbName}"`)
-    await adminQuery(`CREATE DATABASE "${dbName}" WITH TEMPLATE "${TEMPLATE_DB}"`)
+    await adminClient.query(`DROP DATABASE IF EXISTS "${dbName}"`)
+    await adminClient.query(`CREATE DATABASE "${dbName}" WITH TEMPLATE "${TEMPLATE_DB}"`)
 
     const db = getDb(getDbUrl(dbName))
 
@@ -87,7 +90,7 @@ export const test = baseTest.extend<Fixtures>({
     await use(services)
 
     await db.destroy()
-    await adminQuery(`DROP DATABASE IF EXISTS "${dbName}"`)
+    await adminClient.query(`DROP DATABASE IF EXISTS "${dbName}"`)
 
     const listed = await sharedS3.send(new ListObjectsV2Command({ Bucket: bucketName }))
 
