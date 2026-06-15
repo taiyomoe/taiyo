@@ -14,6 +14,7 @@ import {
 } from "./middlewares/context-middleware"
 import { errorHandler } from "./middlewares/error-handler-middleware"
 import { bannersRouter } from "./routers/banners-router"
+import { chaptersRouter } from "./routers/chapters-router"
 import { coversRouter } from "./routers/covers-router"
 import { mediasRouter } from "./routers/medias-router"
 import { staffsRouter } from "./routers/staffs-router"
@@ -45,6 +46,7 @@ export const createApp = (services: Services) => {
     .route("/covers", coversRouter)
     .route("/banners", bannersRouter)
     .route("/staffs", staffsRouter)
+    .route("/chapters", chaptersRouter)
 
   app
     .get(
@@ -76,6 +78,11 @@ export const createApp = (services: Services) => {
               name: "Staffs",
               description:
                 "Authors, artists and other staff members. Top-level resource referenced by medias via `mediaStaffs`.",
+            },
+            {
+              name: "Chapters",
+              description:
+                "Chapters of a media. List and create are scoped under the parent media; get/update/delete operate on the chapter by its own id.",
             },
           ],
         },

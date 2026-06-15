@@ -81,6 +81,43 @@ const staffErrors = {
     code: 404,
   },
 } as const
+const chapterErrors = {
+  CHAPTER_NOT_FOUND: {
+    message: "The requested chapter was not found.",
+    code: 404,
+  },
+  CHAPTER_DUPLICATE: {
+    message:
+      "A chapter with the same media, language and number already exists. Update or delete the existing chapter first.",
+    code: 409,
+  },
+} as const
+const groupErrors = {
+  GROUP_NOT_FOUND: {
+    message: "The requested group was not found.",
+    code: 404,
+  },
+} as const
+const mediaStaffErrors = {
+  MEDIA_STAFF_EXISTS: {
+    message: "This staff is already linked to the media with that role.",
+    code: 409,
+  },
+  MEDIA_STAFF_NOT_FOUND: {
+    message: "The given media has no staff with that id and role.",
+    code: 404,
+  },
+} as const
+const chapterGroupErrors = {
+  CHAPTER_GROUP_EXISTS: {
+    message: "This group is already linked to the chapter.",
+    code: 409,
+  },
+  CHAPTER_GROUP_NOT_FOUND: {
+    message: "The given chapter has no group with that id.",
+    code: 404,
+  },
+} as const
 const imageErrors = {
   INVALID_IMAGE: {
     message: "The file is not a valid image.",
@@ -98,6 +135,10 @@ export const errors = {
   ...coverErrors,
   ...bannerErrors,
   ...staffErrors,
+  ...chapterErrors,
+  ...groupErrors,
+  ...mediaStaffErrors,
+  ...chapterGroupErrors,
   ...imageErrors,
 } as const
 
