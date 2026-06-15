@@ -4,16 +4,16 @@ import z from "zod"
 
 const paramSchema = z.object({
   id: z.uuid(),
-  coverId: z.uuid(),
 })
 
 /**
- * Resolves the `:coverId` path parameter to a cover row scoped to the
- * `:id` media and exposes it on the context as `c.var.cover`.
+ * Resolves the `:id` path parameter to a cover row and exposes it on the
+ * context as `c.var.cover`. The cover's `mediaId` is on the row for any
+ * downstream handler that needs to act on the parent media (e.g. syncMedia).
  *
  * Rejects with:
- *   - `VALIDATION_ERROR` when either id is not a UUID
- *   - `COVER_NOT_FOUND` when no matching cover exists under that media
+ *   - `VALIDATION_ERROR` when the id is not a UUID
+ *   - `COVER_NOT_FOUND` when no matching cover exists
  *
  * Pass `{ includeDeleted: true }` for routes that operate on soft-deleted
  * covers. The default excludes soft-deleted rows.
@@ -22,25 +22,18 @@ export const checkCover = (opts: { includeDeleted?: boolean } = {}) =>
   createMiddleware<{
     Variables: { cover: Selectable<Cover> }
   }>(async (c, next) => {
-    const parsed = paramSchema.safeParse({
-      id: c.req.param("id"),
-      coverId: c.req.param("coverId"),
-    })
+    const parsed = paramSchema.safeParse({ id: c.req.param("id") })
 
     if (!parsed.success) {
       return c.fail("VALIDATION_ERROR", parsed.error.issues)
     }
 
-    const { id, coverId } = parsed.data
+    const { id } = parsed.data
     const { db, log } = c.var
 
-    log.set({ cover: { id: coverId } })
+    log.set({ cover: { id } })
 
-    const base = db
-      .selectFrom("covers")
-      .selectAll()
-      .where("id", "=", coverId)
-      .where("mediaId", "=", id)
+    const base = db.selectFrom("covers").selectAll().where("id", "=", id)
     const query = opts.includeDeleted ? base : base.where("deletedAt", "is", null)
     const cover = await query.executeTakeFirst()
 

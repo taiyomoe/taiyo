@@ -26,7 +26,7 @@ export const listCoversHandler = new Hono().get(
     summary: "List a media's covers",
     description:
       "Lists the covers attached to a media, with volume, language, content rating, and main-cover flag.\n\n**Authentication:** none.",
-    tags: ["Medias"],
+    tags: ["Covers"],
     responses: {
       200: {
         description: "Covers of the media.",

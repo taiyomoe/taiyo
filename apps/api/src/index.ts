@@ -13,6 +13,7 @@ import {
   createContextMiddleware,
 } from "./middlewares/context-middleware"
 import { errorHandler } from "./middlewares/error-handler-middleware"
+import { coversRouter } from "./routers/covers-router"
 import { mediasRouter } from "./routers/medias-router"
 import { createServices, type Services } from "./services"
 
@@ -39,6 +40,7 @@ export const createApp = (services: Services) => {
     .on(["GET", "POST"], "/api/auth/**", (c) => services.auth.handler(c.req.raw))
     .get("/ping", (c) => c.json({ version: packageJson.version }))
     .route("/medias", mediasRouter)
+    .route("/covers", coversRouter)
 
   app
     .get(
@@ -55,6 +57,11 @@ export const createApp = (services: Services) => {
               name: "Medias",
               description:
                 "Manga, manhwa, manhua, light novels and other long-form comics. These endpoints create and curate the entries themselves along with everything attached to them — titles, covers, banners, external links and staff credits.",
+            },
+            {
+              name: "Covers",
+              description:
+                "Cover images attached to a media. List and create are scoped under the parent media; get/update/delete/set-main operate on the cover by its own id.",
             },
           ],
         },

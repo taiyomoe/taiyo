@@ -60,7 +60,7 @@ export const createCoversHandler = new Hono().post(
     summary: "Add covers to a media",
     description:
       "Adds one or more covers to a media. At most one of the uploaded covers may be marked as the new main cover; if so, it replaces the previous main cover.\n\n**Required roles:** uploader, moderator, admin.",
-    tags: ["Medias"],
+    tags: ["Covers"],
     requestBody: {
       content: {
         "multipart/form-data": await resolver(createCoversSchema).toOpenAPISchema(),

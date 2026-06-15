@@ -3,7 +3,6 @@ import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
 import { checkCover } from "../middlewares/check-cover-middleware"
-import { checkMedia } from "../middlewares/check-media-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
@@ -26,12 +25,12 @@ const updateCoverSchema = z
   })
 
 export const updateCoverHandler = new Hono().patch(
-  "/:id/covers/:coverId",
+  "/:id",
   describeRoute({
     summary: "Update a cover",
     description:
       "Updates the metadata of a cover. Omitted fields are kept as-is. Send `null` explicitly to clear `volume`. Promoting a cover to main is done through the dedicated set-main endpoint.\n\n**Required roles:** uploader, moderator, admin.",
-    tags: ["Medias"],
+    tags: ["Covers"],
     requestBody: {
       content: { "application/json": await resolver(updateCoverSchema).toOpenAPISchema() },
     },
@@ -51,18 +50,17 @@ export const updateCoverHandler = new Hono().patch(
         },
       },
       ...getOpenApiResponses({
-        404: "No cover with the given id exists under that media.",
+        404: "No cover with the given id exists.",
         422: "The request data failed validation.",
       }),
     },
   }),
   withAuth("update", "Media"),
   validateJson(updateCoverSchema),
-  checkMedia(),
   checkCover(),
   withTransaction,
   async (c) => {
-    const { db, cover, media } = c.var
+    const { db, cover } = c.var
     const body = c.var.json
     const updates: Record<string, unknown> = {}
 
@@ -80,7 +78,7 @@ export const updateCoverHandler = new Hono().patch(
 
     await db.updateTable("covers").set(updates).where("id", "=", cover.id).execute()
 
-    c.var.afterCommit(() => syncMedia({ db: c.var.db, meili: c.var.meili }, media.id))
+    c.var.afterCommit(() => syncMedia({ db: c.var.db, meili: c.var.meili }, cover.mediaId))
 
     return c.ok({ id: cover.id })
   },
