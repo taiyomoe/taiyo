@@ -66,6 +66,61 @@ jobs:
   integration-tests:
     runs-on: ubuntu-latest
     needs: [knip, format, lint]
+    services:
+      postgres:
+        image: postgres:18-alpine
+        ports: ["5432:5432"]
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: taiyo
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s --health-timeout 3s --health-retries 10
+
+      dragonfly:
+        image: docker.dragonflydb.io/dragonflydb/dragonfly:latest
+        ports: ["6379:6379"]
+        env:
+          DFLY_cluster_mode: emulated
+          DFLY_lock_on_hashtags: 1
+        options: >-
+          --ulimit memlock=-1
+          --health-cmd "redis-cli ping"
+          --health-interval 5s --health-timeout 3s --health-retries 10
+
+      meilisearch:
+        image: getmeili/meilisearch:latest
+        ports: ["7700:7700"]
+        env:
+          MEILI_MASTER_KEY: ci-master-key
+          MEILI_NO_ANALYTICS: "true"
+        options: >-
+          --health-cmd "wget -qO- http://localhost:7700/health || exit 1"
+          --health-interval 5s --health-timeout 3s --health-retries 20
+
+      rustfs:
+        image: rustfs/rustfs:latest
+        ports: ["9000:9000"]
+        env:
+          RUSTFS_ACCESS_KEY: ci-access-key
+          RUSTFS_SECRET_KEY: ci-secret-key
+          RUSTFS_VOLUMES: /data
+        options: >-
+          --health-cmd "curl -f http://127.0.0.1:9000/health"
+          --health-interval 5s --health-timeout 3s --health-retries 30
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/taiyo
+      DRAGONFLY_URL: redis://localhost:6379
+      MEILISEARCH_HOST: http://localhost:7700
+      MEILISEARCH_API_KEY: ci-master-key
+      S3_ENDPOINT: http://localhost:9000
+      S3_ACCESS_KEY_ID: ci-access-key
+      S3_SECRET_ACCESS_KEY: ci-secret-key
+      S3_BUCKET_NAME: taiyo-ci
+      BETTER_AUTH_URL: http://localhost:3002
+      BETTER_AUTH_SECRET: ci-better-auth-secret-not-actually-secret-in-ci
+      RESEND_API_KEY: re_dummy
     steps:
       - uses: actions/checkout@v6
 
@@ -73,6 +128,4 @@ jobs:
         uses: ./tooling/github/setup
 
       - name: Run Integration Tests
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: pnpm test:integration
