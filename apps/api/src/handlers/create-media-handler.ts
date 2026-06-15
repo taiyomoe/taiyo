@@ -217,8 +217,9 @@ export const createMediaHandler = new Hono().post(
         },
       },
       ...getOpenApiResponses({
+        404: "One or more of the referenced staff members do not exist.",
         409: "One or more of the provided links already belong to an existing media.",
-        422: "The request data failed validation, an uploaded image is invalid, or a referenced staff member does not exist.",
+        422: "The request data failed validation or an uploaded image is invalid.",
       }),
     },
   }),

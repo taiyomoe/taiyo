@@ -16,6 +16,7 @@ import { errorHandler } from "./middlewares/error-handler-middleware"
 import { bannersRouter } from "./routers/banners-router"
 import { coversRouter } from "./routers/covers-router"
 import { mediasRouter } from "./routers/medias-router"
+import { staffsRouter } from "./routers/staffs-router"
 import { createServices, type Services } from "./services"
 
 declare module "hono" {
@@ -43,6 +44,7 @@ export const createApp = (services: Services) => {
     .route("/medias", mediasRouter)
     .route("/covers", coversRouter)
     .route("/banners", bannersRouter)
+    .route("/staffs", staffsRouter)
 
   app
     .get(
@@ -69,6 +71,11 @@ export const createApp = (services: Services) => {
               name: "Banners",
               description:
                 "Banner images attached to a media. List and create are scoped under the parent media; get/update/delete operate on the banner by its own id.",
+            },
+            {
+              name: "Staffs",
+              description:
+                "Authors, artists and other staff members. Top-level resource referenced by medias via `mediaStaffs`.",
             },
           ],
         },

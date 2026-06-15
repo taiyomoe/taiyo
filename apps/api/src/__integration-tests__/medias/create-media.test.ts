@@ -166,7 +166,7 @@ describe("POST /medias", () => {
     const countBefore = await services.db.selectFrom("medias").select("id").execute()
     const res = await api(app, "/medias", { method: "POST", headers, form })
 
-    expect(res.status).toBe(422)
+    expect(res.status).toBe(404)
 
     if (res.body.success) {
       throw new Error("Expected failure")

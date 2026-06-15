@@ -77,8 +77,8 @@ const bannerErrors = {
 } as const
 const staffErrors = {
   STAFF_NOT_FOUND: {
-    message: "One or more of the referenced staff members do not exist.",
-    code: 422,
+    message: "The requested staff was not found.",
+    code: 404,
   },
 } as const
 const imageErrors = {

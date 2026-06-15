@@ -91,7 +91,36 @@ export const mediaLinksSchema = z
     },
   })
 
-export const mediaSynopsisSchema = z.record(z.enum(LANGUAGES), z.string()).meta({
+export const mediaSynopsisSchema = z.partialRecord(z.enum(LANGUAGES), z.string()).meta({
   description: "Synopsis text keyed by language code.",
   example: { en: "After defeating monsters in one punch, Saitama searches for a real challenge." },
 })
+
+export const localizedTextSchema = z.partialRecord(z.enum(LANGUAGES), z.string()).meta({
+  description: "Localized text keyed by language code. Send empty string to clear a key.",
+  example: { en: "Manga artist known for ...", ja: "..." },
+})
+
+export const staffLinksSchema = z
+  .object({
+    website: z.string().optional().meta({ description: "Personal website URL." }),
+    twitter: z.string().optional().meta({ description: "Twitter / X handle URL." }),
+    youtube: z.string().optional().meta({ description: "YouTube channel URL." }),
+    tumblr: z.string().optional().meta({ description: "Tumblr URL." }),
+    discord: z.string().optional().meta({ description: "Discord server / profile URL." }),
+    fanbox: z.string().optional().meta({ description: "Pixiv Fanbox URL." }),
+    fantia: z.string().optional().meta({ description: "Fantia URL." }),
+    pixiv: z.string().optional().meta({ description: "Pixiv URL." }),
+    melonBooks: z.string().optional().meta({ description: "Melonbooks URL." }),
+    namicomi: z.string().optional().meta({ description: "NamiComi URL." }),
+    naver: z.string().optional().meta({ description: "Naver blog / page URL." }),
+    nicoVideo: z.string().optional().meta({ description: "NicoNico Video URL." }),
+    skeb: z.string().optional().meta({ description: "Skeb URL." }),
+    weibo: z.string().optional().meta({ description: "Weibo URL." }),
+    booth: z.string().optional().meta({ description: "Booth URL." }),
+  })
+  .meta({
+    description:
+      "Provider links for the staff. Send empty string for a provider to clear it. Omit a provider to leave it unchanged.",
+    example: { twitter: "https://x.com/example", pixiv: "https://www.pixiv.net/users/123" },
+  })

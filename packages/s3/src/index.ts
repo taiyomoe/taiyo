@@ -21,3 +21,6 @@ export const getCoverKey = (mediaId: string, fileName: string) =>
 
 export const getBannerKey = (mediaId: string, fileName: string) =>
   `medias/${mediaId}/banners/${fileName}`
+
+export const getStaffImageKey = (staffId: string, fileName: string) =>
+  `staffs/${staffId}/${fileName}`
