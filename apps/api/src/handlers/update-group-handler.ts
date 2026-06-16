@@ -1,3 +1,4 @@
+import { config } from "@taiyomoe/config"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
@@ -9,20 +10,21 @@ import { withTransaction } from "../middlewares/with-transaction-middleware"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
+const urlField = () => z.string().max(config.input.maxUrlLength).nullable().optional()
 const updateGroupSchema = z
   .object({
-    name: z.string().min(1).optional(),
-    description: z.string().nullable().optional(),
-    logo: z.string().nullable().optional(),
-    banner: z.string().nullable().optional(),
-    website: z.string().nullable().optional(),
-    discord: z.string().nullable().optional(),
-    x: z.string().nullable().optional(),
-    facebook: z.string().nullable().optional(),
-    instagram: z.string().nullable().optional(),
-    telegram: z.string().nullable().optional(),
-    youtube: z.string().nullable().optional(),
-    email: z.string().nullable().optional(),
+    name: z.string().min(1).max(config.input.maxNameLength).optional(),
+    description: z.string().max(config.input.maxDescriptionLength).nullable().optional(),
+    logo: urlField(),
+    banner: urlField(),
+    website: urlField(),
+    discord: urlField(),
+    x: urlField(),
+    facebook: urlField(),
+    instagram: urlField(),
+    telegram: urlField(),
+    youtube: urlField(),
+    email: urlField(),
   })
   .refine((data) => Object.keys(data).length > 0, {
     message: "At least one field must be provided.",

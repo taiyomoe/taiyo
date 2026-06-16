@@ -1,3 +1,4 @@
+import { config } from "@taiyomoe/config"
 import { NewStaff } from "@taiyomoe/db"
 import { getStaffImageKey } from "@taiyomoe/s3"
 import { extensionForMimeType } from "@taiyomoe/utils"
@@ -18,7 +19,7 @@ import {
 import { uploadFile } from "../utils/upload-file"
 
 const createStaffSchema = z.object({
-  name: z.string().min(1).meta({
+  name: z.string().min(1).max(config.input.maxNameLength).meta({
     description: "Name of the staff member.",
     example: "Kishimoto Masashi",
   }),

@@ -1,3 +1,4 @@
+import { config } from "@taiyomoe/config"
 import { CONTENT_RATINGS, FLAGS } from "@taiyomoe/db"
 import { syncMedia } from "@taiyomoe/search"
 import { Hono } from "hono"
@@ -13,11 +14,18 @@ import { apiSuccessEnvelope, languageSchema } from "../utils/schemas"
 
 const updateChapterSchema = z
   .object({
-    title: z.string().min(1).nullable().optional().meta({ description: "Title or null to clear." }),
+    title: z
+      .string()
+      .min(1)
+      .max(config.input.maxChapterTitleLength)
+      .nullable()
+      .optional()
+      .meta({ description: "Title or null to clear." }),
     number: z.number().nonnegative().optional().meta({ description: "Chapter number." }),
     volume: z
       .string()
       .min(1)
+      .max(config.input.maxVolumeLength)
       .nullable()
       .optional()
       .meta({ description: "Volume or null to clear." }),

@@ -1,3 +1,4 @@
+import { config } from "@taiyomoe/config"
 import { getStaffImageKey } from "@taiyomoe/s3"
 import { extensionForMimeType } from "@taiyomoe/utils"
 import { Hono } from "hono"
@@ -22,6 +23,7 @@ const updateStaffSchema = z
     name: z
       .string()
       .min(1)
+      .max(config.input.maxNameLength)
       .optional()
       .meta({ description: "New name of the staff.", example: "Kishimoto Masashi" }),
     bio: localizedTextSchema.optional(),

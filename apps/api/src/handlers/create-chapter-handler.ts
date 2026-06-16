@@ -1,3 +1,4 @@
+import { config } from "@taiyomoe/config"
 import { CONTENT_RATINGS, FLAGS, type NewChapter } from "@taiyomoe/db"
 import { syncMedia } from "@taiyomoe/search"
 import { Hono } from "hono"
@@ -14,6 +15,7 @@ const createChapterSchema = z.object({
   title: z
     .string()
     .min(1)
+    .max(config.input.maxChapterTitleLength)
     .nullable()
     .optional()
     .meta({ description: "Title of the chapter, if any.", example: "The Beginning" }),
@@ -21,6 +23,7 @@ const createChapterSchema = z.object({
   volume: z
     .string()
     .min(1)
+    .max(config.input.maxVolumeLength)
     .nullable()
     .optional()
     .meta({ description: "Volume of the chapter, if any.", example: "1" }),

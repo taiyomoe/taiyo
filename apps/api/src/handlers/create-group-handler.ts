@@ -1,3 +1,4 @@
+import { config } from "@taiyomoe/config"
 import type { NewGroup } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
@@ -8,23 +9,35 @@ import { withTransaction } from "../middlewares/with-transaction-middleware"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
+const urlField = (description: string) =>
+  z.string().max(config.input.maxUrlLength).nullable().optional().meta({ description })
 const createGroupSchema = z.object({
-  name: z.string().min(1).meta({ description: "Name of the group.", example: "Akira Scans" }),
-  description: z.string().nullable().optional().meta({ description: "Description of the group." }),
-  logo: z.string().nullable().optional().meta({ description: "Storage key of the group logo." }),
-  banner: z
+  name: z
     .string()
+    .min(1)
+    .max(config.input.maxNameLength)
+    .meta({ description: "Name of the group.", example: "Akira Scans" }),
+  description: z
+    .string()
+    .max(config.input.maxDescriptionLength)
     .nullable()
     .optional()
-    .meta({ description: "Storage key of the group banner." }),
-  website: z.string().nullable().optional().meta({ description: "Website URL." }),
-  discord: z.string().nullable().optional().meta({ description: "Discord invite or server URL." }),
-  x: z.string().nullable().optional().meta({ description: "X / Twitter URL." }),
-  facebook: z.string().nullable().optional().meta({ description: "Facebook URL." }),
-  instagram: z.string().nullable().optional().meta({ description: "Instagram URL." }),
-  telegram: z.string().nullable().optional().meta({ description: "Telegram URL." }),
-  youtube: z.string().nullable().optional().meta({ description: "YouTube URL." }),
-  email: z.string().nullable().optional().meta({ description: "Contact email." }),
+    .meta({ description: "Description of the group." }),
+  logo: urlField("Storage key of the group logo."),
+  banner: urlField("Storage key of the group banner."),
+  website: urlField("Website URL."),
+  discord: urlField("Discord invite or server URL."),
+  x: urlField("X / Twitter URL."),
+  facebook: urlField("Facebook URL."),
+  instagram: urlField("Instagram URL."),
+  telegram: urlField("Telegram URL."),
+  youtube: urlField("YouTube URL."),
+  email: z
+    .string()
+    .max(config.input.maxUrlLength)
+    .nullable()
+    .optional()
+    .meta({ description: "Contact email." }),
 })
 
 export const createGroupHandler = new Hono().post(

@@ -91,33 +91,42 @@ export const mediaLinksSchema = z
     },
   })
 
-export const mediaSynopsisSchema = z.partialRecord(z.enum(LANGUAGES), z.string()).meta({
-  description: "Synopsis text keyed by language code.",
-  example: { en: "After defeating monsters in one punch, Saitama searches for a real challenge." },
-})
+export const mediaSynopsisSchema = z
+  .partialRecord(z.enum(LANGUAGES), z.string().max(config.input.maxSynopsisLength))
+  .meta({
+    description: "Synopsis text keyed by language code.",
+    example: {
+      en: "After defeating monsters in one punch, Saitama searches for a real challenge.",
+    },
+  })
 
-export const localizedTextSchema = z.partialRecord(z.enum(LANGUAGES), z.string()).meta({
-  description: "Localized text keyed by language code. Send empty string to clear a key.",
-  example: { en: "Manga artist known for ...", ja: "..." },
-})
+export const localizedTextSchema = z
+  .partialRecord(z.enum(LANGUAGES), z.string().max(config.input.maxDescriptionLength))
+  .meta({
+    description: "Localized text keyed by language code. Send empty string to clear a key.",
+    example: { en: "Manga artist known for ...", ja: "..." },
+  })
+
+const linkUrlField = (description: string) =>
+  z.string().max(config.input.maxUrlLength).optional().meta({ description })
 
 export const staffLinksSchema = z
   .object({
-    website: z.string().optional().meta({ description: "Personal website URL." }),
-    twitter: z.string().optional().meta({ description: "Twitter / X handle URL." }),
-    youtube: z.string().optional().meta({ description: "YouTube channel URL." }),
-    tumblr: z.string().optional().meta({ description: "Tumblr URL." }),
-    discord: z.string().optional().meta({ description: "Discord server / profile URL." }),
-    fanbox: z.string().optional().meta({ description: "Pixiv Fanbox URL." }),
-    fantia: z.string().optional().meta({ description: "Fantia URL." }),
-    pixiv: z.string().optional().meta({ description: "Pixiv URL." }),
-    melonBooks: z.string().optional().meta({ description: "Melonbooks URL." }),
-    namicomi: z.string().optional().meta({ description: "NamiComi URL." }),
-    naver: z.string().optional().meta({ description: "Naver blog / page URL." }),
-    nicoVideo: z.string().optional().meta({ description: "NicoNico Video URL." }),
-    skeb: z.string().optional().meta({ description: "Skeb URL." }),
-    weibo: z.string().optional().meta({ description: "Weibo URL." }),
-    booth: z.string().optional().meta({ description: "Booth URL." }),
+    website: linkUrlField("Personal website URL."),
+    twitter: linkUrlField("Twitter / X handle URL."),
+    youtube: linkUrlField("YouTube channel URL."),
+    tumblr: linkUrlField("Tumblr URL."),
+    discord: linkUrlField("Discord server / profile URL."),
+    fanbox: linkUrlField("Pixiv Fanbox URL."),
+    fantia: linkUrlField("Fantia URL."),
+    pixiv: linkUrlField("Pixiv URL."),
+    melonBooks: linkUrlField("Melonbooks URL."),
+    namicomi: linkUrlField("NamiComi URL."),
+    naver: linkUrlField("Naver blog / page URL."),
+    nicoVideo: linkUrlField("NicoNico Video URL."),
+    skeb: linkUrlField("Skeb URL."),
+    weibo: linkUrlField("Weibo URL."),
+    booth: linkUrlField("Booth URL."),
   })
   .meta({
     description:

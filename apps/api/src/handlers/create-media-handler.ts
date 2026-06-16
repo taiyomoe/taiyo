@@ -9,6 +9,7 @@ import {
   STAFF_ROLES,
   sql,
 } from "@taiyomoe/db"
+import { config } from "@taiyomoe/config"
 import { getBannerKey, getCoverKey } from "@taiyomoe/s3"
 import { syncMedia } from "@taiyomoe/search"
 import { extensionForMimeType } from "@taiyomoe/utils"
@@ -34,7 +35,7 @@ import { uploadFile } from "../utils/upload-file"
 const createMediaSchema = z.object({
   titles: z
     .object({
-      title: z.string().meta({
+      title: z.string().min(1).max(config.input.maxNameLength).meta({
         description: "The title of the media for the given language.",
         example: "One Punch Man",
       }),

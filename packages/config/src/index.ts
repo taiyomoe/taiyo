@@ -42,4 +42,18 @@ export const config = {
     defaultPerPage: 20,
     perPageOptions: [10, 20, 50, 100],
   },
+  input: {
+    /** Names: group name, staff name, media title. */
+    maxNameLength: 200,
+    /** Chapter title — kept short to align with reader UI. */
+    maxChapterTitleLength: 200,
+    /** Chapter volume tag — short label like "1", "1.5", "Special". */
+    maxVolumeLength: 50,
+    /** URL fields: websites, social handles, storage keys. */
+    maxUrlLength: 500,
+    /** Free-form descriptions: group description, staff description. */
+    maxDescriptionLength: 5000,
+    /** Per-language synopsis. */
+    maxSynopsisLength: 10000,
+  },
 } as const
