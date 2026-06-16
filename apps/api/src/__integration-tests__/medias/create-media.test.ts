@@ -1,8 +1,9 @@
-import { ListObjectsV2Command } from "@aws-sdk/client-s3"
+import { GetObjectCommand, ListObjectsV2Command } from "@aws-sdk/client-s3"
 import { randomUUID } from "node:crypto"
+import sharp from "sharp"
 import { describe, expect } from "vitest"
 import { signInAs } from "../helpers/auth"
-import { invalidImage, tinyPng } from "../helpers/fixtures"
+import { invalidImage, jpegWithExif, tinyPng } from "../helpers/fixtures"
 import { api } from "../helpers/request"
 import { waitForMeiliMediaDoc } from "../helpers/wait"
 import { test } from "../setup"
@@ -154,6 +155,43 @@ describe("POST /medias", () => {
     }
 
     expect(res.body.code).toBe("INVALID_IMAGE")
+  })
+
+  test("strips EXIF metadata from uploaded covers", async ({ app, services }) => {
+    const { headers } = await signInAs(services, { role: "ADMIN" })
+    const form = await getForm()
+
+    form.set("covers.0.file", await jpegWithExif())
+
+    const res = await api<{ id: string }>(app, "/medias", { method: "POST", headers, form })
+
+    expect(res.status).toBe(201)
+
+    if (!res.body.success) {
+      throw new Error(`Expected success: ${JSON.stringify(res.body)}`)
+    }
+
+    const mediaId = res.body.data.id
+    const s3Listing = await services.s3.send(
+      new ListObjectsV2Command({
+        Bucket: services.s3Bucket,
+        Prefix: `medias/${mediaId}/covers/`,
+      }),
+    )
+    const key = s3Listing.Contents?.[0]?.Key
+
+    if (!key) {
+      throw new Error("Expected one cover object in S3")
+    }
+
+    const object = await services.s3.send(
+      new GetObjectCommand({ Bucket: services.s3Bucket, Key: key }),
+    )
+    const bytes = Buffer.from(await object.Body!.transformToByteArray())
+    const metadata = await sharp(bytes).metadata()
+
+    expect(metadata.format).toBe("jpeg")
+    expect(metadata.exif).toBeUndefined()
   })
 
   test("rolls back DB + S3 when staff is missing", async ({ app, services }) => {

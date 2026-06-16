@@ -4,6 +4,32 @@ import { createMiddleware } from "hono/factory"
 import { filetypeinfo } from "magic-bytes.js"
 import sharp from "sharp"
 
+// Walks a dot-separated FormData key (e.g. "covers.0.file") into the nested
+// object that validateFormData built and replaces the leaf. We need this
+// because handlers read processed files from `c.var.formData`, not from the
+// underlying FormData object; without this write the original (unprocessed)
+// File ref persists and the route uploads raw user bytes.
+const setByPath = (root: unknown, key: string, value: File) => {
+  if (root === null || typeof root !== "object") {
+    return
+  }
+
+  const segments = key.split(".")
+  let cur: unknown = root
+
+  for (let i = 0; i < segments.length - 1; i++) {
+    if (cur === null || typeof cur !== "object") {
+      return
+    }
+
+    cur = (cur as Record<string, unknown>)[segments[i]!]
+  }
+
+  if (cur !== null && typeof cur === "object") {
+    ;(cur as Record<string, unknown>)[segments.at(-1)!] = value
+  }
+}
+
 /**
  * Middleware that validates and processes images from FormData.
  *
@@ -14,7 +40,9 @@ import sharp from "sharp"
  * - Applies quality compression
  * - Removes all metadata
  *
- * The FormData is updated with the processed images in-place.
+ * Must run AFTER `validateFormData(...)`. The processed File is written back
+ * to both the underlying FormData and `c.var.formData` so downstream handlers
+ * read the stripped/transcoded bytes.
  */
 export const checkImages = (maxSizeBytes: number = config.images.maxSizeBytes) =>
   createMiddleware(async (c, next) => {
@@ -27,6 +55,7 @@ export const checkImages = (maxSizeBytes: number = config.images.maxSizeBytes) =
     }
 
     const formData = await c.req.formData()
+    const validated = c.get("formData") as unknown
 
     for (const [key, value] of formData.entries()) {
       if (!(value instanceof File)) {
@@ -96,8 +125,10 @@ export const checkImages = (maxSizeBytes: number = config.images.maxSizeBytes) =
         { type: mimeType },
       )
 
-      // Update formData with processed image
+      // Update FormData and the Zod-validated nested object so downstream
+      // handlers (which read `c.var.formData`) upload the processed bytes.
       formData.set(key, processedFile)
+      setByPath(validated, key, processedFile)
     }
 
     await next()
