@@ -2,6 +2,21 @@ import { RedisStore, type RedisClient } from "@hono-rate-limiter/redis"
 import { rawCacheClient } from "@taiyomoe/cache"
 import { rateLimiter } from "hono-rate-limiter"
 
+// hono-rate-limiter/redis expects an Upstash-style client; ioredis exposes
+// the same primitives under different method names. Wrap once at module load.
+const adapter: RedisClient = {
+  scriptLoad: (script) => rawCacheClient.script("LOAD", script) as Promise<string>,
+  evalsha: <TArgs extends unknown[], TData = unknown>(sha1: string, keys: string[], args: TArgs) =>
+    rawCacheClient.evalsha(
+      sha1,
+      keys.length,
+      ...keys,
+      ...(args as (string | number)[]),
+    ) as Promise<TData>,
+  decr: (key) => rawCacheClient.decr(key),
+  del: (key) => rawCacheClient.del(key),
+}
+
 /**
  * Builds a rate-limit middleware backed by the shared Dragonfly client.
  *
@@ -22,10 +37,7 @@ export const rateLimit = ({
   limit: number
 }) =>
   rateLimiter({
-    store: new RedisStore({
-      client: rawCacheClient as unknown as RedisClient,
-      prefix: `rl:${prefix}:`,
-    }),
+    store: new RedisStore({ client: adapter, prefix: `rl:${prefix}:` }),
     windowMs,
     limit: (c) => (c.var.user?.role === "ADMIN" ? Number.POSITIVE_INFINITY : limit),
     standardHeaders: "draft-7",
