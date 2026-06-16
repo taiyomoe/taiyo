@@ -86,11 +86,6 @@ const chapterErrors = {
     message: "The requested chapter was not found.",
     code: 404,
   },
-  CHAPTER_DUPLICATE: {
-    message:
-      "A chapter with the same media, language and number already exists. Update or delete the existing chapter first.",
-    code: 409,
-  },
 } as const
 const groupErrors = {
   GROUP_NOT_FOUND: {

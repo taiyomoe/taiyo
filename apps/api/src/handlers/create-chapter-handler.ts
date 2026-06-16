@@ -62,7 +62,6 @@ export const createChapterHandler = new Hono().post(
       },
       ...getOpenApiResponses({
         404: "No media with the given id exists.",
-        409: "A chapter with the same media, language and number already exists.",
         422: "The request data failed validation.",
       }),
     },
@@ -74,19 +73,6 @@ export const createChapterHandler = new Hono().post(
   async (c) => {
     const { db, log, media, user } = c.var
     const body = c.var.json
-    const duplicate = await db
-      .selectFrom("chapters")
-      .select("id")
-      .where("mediaId", "=", media.id)
-      .where("language", "=", body.language)
-      .where("number", "=", body.number)
-      .where("deletedAt", "is", null)
-      .executeTakeFirst()
-
-    if (duplicate) {
-      return c.fail("CHAPTER_DUPLICATE", { existingChapterId: duplicate.id })
-    }
-
     const id = crypto.randomUUID()
 
     log.set({ chapter: { id } })

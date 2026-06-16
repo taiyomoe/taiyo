@@ -64,7 +64,6 @@ export const updateChapterHandler = new Hono().patch(
       },
       ...getOpenApiResponses({
         404: "No chapter with the given id exists.",
-        409: "A chapter with the same media, language and number already exists.",
         422: "The request data failed validation.",
       }),
     },
@@ -77,28 +76,6 @@ export const updateChapterHandler = new Hono().patch(
   async (c) => {
     const { db, chapter } = c.var
     const body = c.var.json
-    const targetLanguage = body.language ?? chapter.language
-    const targetNumber = body.number ?? chapter.number
-
-    if (
-      (body.language !== undefined && body.language !== chapter.language) ||
-      (body.number !== undefined && body.number !== chapter.number)
-    ) {
-      const duplicate = await db
-        .selectFrom("chapters")
-        .select("id")
-        .where("mediaId", "=", chapter.mediaId)
-        .where("language", "=", targetLanguage)
-        .where("number", "=", targetNumber)
-        .where("id", "!=", chapter.id)
-        .where("deletedAt", "is", null)
-        .executeTakeFirst()
-
-      if (duplicate) {
-        return c.fail("CHAPTER_DUPLICATE", { existingChapterId: duplicate.id })
-      }
-    }
-
     const updates: Record<string, unknown> = {}
 
     for (const key of ["title", "number", "volume", "language", "contentRating", "flag"] as const) {

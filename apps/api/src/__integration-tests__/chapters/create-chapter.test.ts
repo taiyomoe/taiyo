@@ -113,24 +113,4 @@ describe("POST /medias/:id/chapters", () => {
 
     expect(res.body.code).toBe("MEDIA_NOT_FOUND")
   })
-
-  test("returns CHAPTER_DUPLICATE for an existing (media, language, number) triple", async ({
-    app,
-    services,
-  }) => {
-    const { headers } = await signInAs(services, { role: "ADMIN" })
-    const res = await api(app, `/medias/${SEEDED_MEDIA_ID}/chapters`, {
-      method: "POST",
-      headers,
-      json: { number: 1, language: "pt_br" },
-    })
-
-    expect(res.status).toBe(409)
-
-    if (res.body.success) {
-      throw new Error("Expected failure")
-    }
-
-    expect(res.body.code).toBe("CHAPTER_DUPLICATE")
-  })
 })
