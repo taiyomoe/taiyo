@@ -18,6 +18,7 @@ export type AppContextVariables = EvlogVariables["Variables"] & {
   s3: S3Client
   s3Bucket: string
   meili: Meilisearch
+  mediasIndex: string
   auth: Auth
   user?: User
   session?: Session["session"]
@@ -32,6 +33,7 @@ export const createContextMiddleware = (services: Services) =>
     c.set("s3", services.s3)
     c.set("s3Bucket", services.s3Bucket)
     c.set("meili", services.meili)
+    c.set("mediasIndex", services.mediasIndex)
     c.set("auth", services.auth)
 
     c.ok = <T>(data: T, meta?: Record<string, unknown>) => {

@@ -78,7 +78,12 @@ export const updateCoverHandler = new Hono().patch(
 
     await db.updateTable("covers").set(updates).where("id", "=", cover.id).execute()
 
-    c.var.afterCommit(() => syncMedia({ db: c.var.db, meili: c.var.meili }, cover.mediaId))
+    c.var.afterCommit(() =>
+      syncMedia(
+        { db: c.var.db, meili: c.var.meili, mediasIndex: c.var.mediasIndex },
+        cover.mediaId,
+      ),
+    )
 
     return c.ok({ id: cover.id })
   },

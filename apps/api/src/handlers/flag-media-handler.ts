@@ -65,7 +65,9 @@ export const flagMediaHandler = new Hono().post(
 
     await db.updateTable("medias").set({ flag }).where("id", "=", media.id).execute()
 
-    c.var.afterCommit(() => syncMedia({ db: c.var.db, meili: c.var.meili }, media.id))
+    c.var.afterCommit(() =>
+      syncMedia({ db: c.var.db, meili: c.var.meili, mediasIndex: c.var.mediasIndex }, media.id),
+    )
 
     return c.ok({ id: media.id, flag })
   },

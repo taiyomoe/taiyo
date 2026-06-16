@@ -134,7 +134,9 @@ export const createCoversHandler = new Hono().post(
         .execute()
     }
 
-    c.var.afterCommit(() => syncMedia({ db: c.var.db, meili: c.var.meili }, media.id))
+    c.var.afterCommit(() =>
+      syncMedia({ db: c.var.db, meili: c.var.meili, mediasIndex: c.var.mediasIndex }, media.id),
+    )
 
     return c.ok({ ids: coverRows.map((row) => row.id) })
   },

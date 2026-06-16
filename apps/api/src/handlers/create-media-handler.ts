@@ -361,7 +361,9 @@ export const createMediaHandler = new Hono().post(
       await db.insertInto("banners").values(bannerRows).execute()
     }
 
-    c.var.afterCommit(() => syncMedia({ db: c.var.db, meili: c.var.meili }, mediaId))
+    c.var.afterCommit(() =>
+      syncMedia({ db: c.var.db, meili: c.var.meili, mediasIndex: c.var.mediasIndex }, mediaId),
+    )
 
     return c.ok({ id: mediaId })
   },

@@ -1,14 +1,13 @@
-import { SEARCH_INDEXES } from "@taiyomoe/search"
 import type { Services } from "../../services"
 
 export const waitForMeiliMediaDoc = async (
-  { meili }: Services,
+  { meili, mediasIndex }: Services,
   mediaId: string,
   { attempts = 20, intervalMs = 100 } = {},
 ) => {
   for (let i = 0; i < attempts; i++) {
     const doc = await meili
-      .index(SEARCH_INDEXES.MEDIAS)
+      .index(mediasIndex)
       .getDocument(mediaId)
       .catch(() => null)
 

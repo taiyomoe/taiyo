@@ -1,5 +1,4 @@
 import type { Meilisearch } from "meilisearch"
-import { SEARCH_INDEXES } from "../client"
 import { FilterSpec, translateFilter } from "../utils/filter-translator"
 import { MediaDocument } from "./get-media-document"
 import { SearchMediasInput, type MediaSort } from "./media-search-schemas"
@@ -39,10 +38,13 @@ const mediaFilterSpec = {
   endDate: { kind: "date", attr: "endDate" },
 } satisfies FilterSpec<MediaDocument>
 
-export const searchMedias = async ({ meili }: { meili: Meilisearch }, input: SearchMediasInput) => {
+export const searchMedias = async (
+  { meili, mediasIndex }: { meili: Meilisearch; mediasIndex: string },
+  input: SearchMediasInput,
+) => {
   const filter = translateFilter(mediaFilterSpec, input.filter)
   const sort = input.sort.map((s) => `${sortFieldToAttribute[s.field]}:${s.direction}`)
-  const result = await meili.index<MediaDocument>(SEARCH_INDEXES.MEDIAS).search(input.q, {
+  const result = await meili.index<MediaDocument>(mediasIndex).search(input.q, {
     filter,
     sort,
     page: input.page,

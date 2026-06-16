@@ -108,9 +108,6 @@ importers:
       '@aws-sdk/client-s3':
         specifier: ^3.1064.0
         version: 3.1064.0
-      '@taiyomoe/cache':
-        specifier: workspace:^
-        version: link:../../packages/cache
       '@taiyomoe/typescript':
         specifier: workspace:^
         version: link:../../tooling/typescript

@@ -111,7 +111,9 @@ export const createChapterHandler = new Hono().post(
 
     await db.insertInto("chapters").values(values).execute()
 
-    c.var.afterCommit(() => syncMedia({ db: c.var.db, meili: c.var.meili }, media.id))
+    c.var.afterCommit(() =>
+      syncMedia({ db: c.var.db, meili: c.var.meili, mediasIndex: c.var.mediasIndex }, media.id),
+    )
 
     return c.ok({ id })
   },

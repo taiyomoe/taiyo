@@ -65,7 +65,9 @@ export const unlinkMediaStaffHandler = new Hono().delete(
       return c.fail("MEDIA_STAFF_NOT_FOUND")
     }
 
-    c.var.afterCommit(() => syncMedia({ db: c.var.db, meili: c.var.meili }, media.id))
+    c.var.afterCommit(() =>
+      syncMedia({ db: c.var.db, meili: c.var.meili, mediasIndex: c.var.mediasIndex }, media.id),
+    )
 
     return c.ok({ mediaId: media.id, staffId, role })
   },

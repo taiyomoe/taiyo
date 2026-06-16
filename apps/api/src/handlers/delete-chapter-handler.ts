@@ -50,7 +50,12 @@ export const deleteChapterHandler = new Hono().delete(
       .where("id", "=", chapter.id)
       .execute()
 
-    c.var.afterCommit(() => syncMedia({ db: c.var.db, meili: c.var.meili }, chapter.mediaId))
+    c.var.afterCommit(() =>
+      syncMedia(
+        { db: c.var.db, meili: c.var.meili, mediasIndex: c.var.mediasIndex },
+        chapter.mediaId,
+      ),
+    )
 
     return c.ok({ id: chapter.id })
   },

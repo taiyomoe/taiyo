@@ -7,15 +7,13 @@ import {
   ListObjectsV2Command,
 } from "@aws-sdk/client-s3"
 import { createAuth } from "@taiyomoe/auth/server"
-import { cacheClient } from "@taiyomoe/cache"
 import { getDb } from "@taiyomoe/db"
 import { env as dbEnv } from "@taiyomoe/db/env"
 import { getS3Client } from "@taiyomoe/s3"
-import { getMeiliClient, SEARCH_INDEXES } from "@taiyomoe/search"
+import { getMeiliClient, initMediasIndex } from "@taiyomoe/search"
 import type { Hono } from "hono"
-import { execSync } from "node:child_process"
 import pg from "pg"
-import { afterAll, test as baseTest, beforeAll } from "vitest"
+import { afterAll, test as baseTest } from "vitest"
 import { createApp } from "../index"
 import { type Services } from "../services"
 
@@ -30,31 +28,16 @@ const getDbUrl = (name: string) => {
 const sanitize = (raw: string) => raw.replace(/[^a-z0-9]/gi, "_").toLowerCase()
 const getDbName = (taskId: string) => `integration_${sanitize(taskId)}`
 const getBucketName = (taskId: string) => `taiyo-test-${sanitize(taskId).replace(/_/g, "-")}`
-let adminClient: pg.Client
+const getMediasIndex = (taskId: string) => `medias_${sanitize(taskId)}`
+// Per-worker admin client. The template DB itself is provisioned in
+// `global-setup.ts` so it exists across every worker before any test runs.
+const adminClient = new pg.Client({ connectionString: getDbUrl("postgres") })
+const adminClientReady = adminClient.connect()
 const sharedS3 = getS3Client()
 const sharedMeili = getMeiliClient()
 
-beforeAll(async () => {
-  adminClient = new pg.Client({ connectionString: getDbUrl("postgres") })
-
-  await adminClient.connect()
-  await adminClient.query(`DROP DATABASE IF EXISTS "${TEMPLATE_DB}"`)
-  await adminClient.query(`CREATE DATABASE "${TEMPLATE_DB}"`)
-
-  const childEnv = { ...process.env, DATABASE_URL: getDbUrl(TEMPLATE_DB) }
-
-  execSync("pnpm -F db kysely migrate latest", { stdio: "pipe", env: childEnv })
-  execSync("pnpm -F db kysely seed run", { stdio: "pipe", env: childEnv })
-
-  if (process.env.CI) {
-    execSync("pnpm -F scripts cli init-meilisearch", { env: childEnv })
-  }
-})
-
 afterAll(async () => {
-  await adminClient.query(`DROP DATABASE IF EXISTS "${TEMPLATE_DB}"`)
   await adminClient.end()
-  await cacheClient.clear()
 })
 
 type Fixtures = {
@@ -64,8 +47,11 @@ type Fixtures = {
 
 export const test = baseTest.extend<Fixtures>({
   services: async ({ task }, use) => {
+    await adminClientReady
+
     const dbName = getDbName(task.id)
     const bucketName = getBucketName(task.id)
+    const mediasIndex = getMediasIndex(task.id)
 
     await adminClient.query(`DROP DATABASE IF EXISTS "${dbName}"`)
     await adminClient.query(`CREATE DATABASE "${dbName}" WITH TEMPLATE "${TEMPLATE_DB}"`)
@@ -73,17 +59,14 @@ export const test = baseTest.extend<Fixtures>({
     const db = getDb(getDbUrl(dbName))
 
     await sharedS3.send(new CreateBucketCommand({ Bucket: bucketName }))
-
-    await Promise.all([
-      sharedMeili.index(SEARCH_INDEXES.MEDIAS).deleteAllDocuments(),
-      cacheClient.clear(),
-    ])
+    await initMediasIndex({ db, meili: sharedMeili, mediasIndex })
 
     const services: Services = {
       db,
       s3: sharedS3,
       s3Bucket: bucketName,
       meili: sharedMeili,
+      mediasIndex,
       auth: createAuth({ db }),
     }
 
@@ -104,6 +87,9 @@ export const test = baseTest.extend<Fixtures>({
     }
 
     await sharedS3.send(new DeleteBucketCommand({ Bucket: bucketName }))
+    await sharedMeili.deleteIndex(mediasIndex).catch(() => {
+      // Index might not exist if init failed; swallow.
+    })
   },
   app: async ({ services }, use) => {
     await use(createApp(services))

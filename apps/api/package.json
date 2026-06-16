@@ -35,7 +35,6 @@
   },
   "devDependencies": {
     "@aws-sdk/client-s3": "^3.1064.0",
-    "@taiyomoe/cache": "workspace:^",
     "@taiyomoe/typescript": "workspace:^",
     "@types/node": "^25.9.2",
     "@types/pg": "^8.20.0",
