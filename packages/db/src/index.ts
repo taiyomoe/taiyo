@@ -28,7 +28,11 @@ export * from "./models/chapter-model"
 
 export * from "./models/cover-model"
 
+export * from "./models/group-membership-model"
+
 export * from "./models/group-model"
+
+export * from "./models/group-ownership-request-model"
 
 export * from "./models/media-model"
 

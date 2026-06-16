@@ -3,7 +3,9 @@ import type { Banner } from "./models/banner-model"
 import type { ChapterGroup } from "./models/chapter-group-model"
 import type { Chapter } from "./models/chapter-model"
 import type { Cover } from "./models/cover-model"
+import type { GroupMembership } from "./models/group-membership-model"
 import type { Group } from "./models/group-model"
+import type { GroupOwnershipRequest } from "./models/group-ownership-request-model"
 import type { MediaStaff } from "./models/media-staff-model"
 import type { Media } from "./models/media-model"
 import type { Session } from "./models/session-model"
@@ -23,6 +25,8 @@ export interface DB {
   chapterGroups: ChapterGroup
   chapters: Chapter
   covers: Cover
+  groupMemberships: GroupMembership
+  groupOwnershipRequests: GroupOwnershipRequest
   groups: Group
   mediaStaffs: MediaStaff
   medias: Media

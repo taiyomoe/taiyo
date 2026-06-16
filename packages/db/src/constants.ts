@@ -18,6 +18,19 @@ export const STAFF_ROLES = ["AUTHOR", "ARTIST"] as const
 
 export type StaffRole = (typeof STAFF_ROLES)[number]
 
+export const GROUP_MEMBERSHIP_ROLES = ["OWNER", "MEMBER"] as const
+
+export type GroupMembershipRole = (typeof GROUP_MEMBERSHIP_ROLES)[number]
+
+export const GROUP_OWNERSHIP_REQUEST_STATUSES = [
+  "PENDING",
+  "APPROVED",
+  "REJECTED",
+  "CANCELLED",
+] as const
+
+export type GroupOwnershipRequestStatus = (typeof GROUP_OWNERSHIP_REQUEST_STATUSES)[number]
+
 export const MEDIA_TYPES = ["MANGA", "MANHWA", "MANHUA", "LIGHT_NOVEL", "OTHER"] as const
 
 export type MediaType = (typeof MEDIA_TYPES)[number]
