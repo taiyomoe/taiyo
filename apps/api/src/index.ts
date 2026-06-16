@@ -22,6 +22,7 @@ import { groupsRouter } from "./routers/groups-router"
 import { mediasRouter } from "./routers/medias-router"
 import { ownershipRequestsRouter } from "./routers/ownership-requests-router"
 import { staffsRouter } from "./routers/staffs-router"
+import { usersRouter } from "./routers/users-router"
 import { createServices, type Services } from "./services"
 
 declare module "hono" {
@@ -68,6 +69,7 @@ export const createApp = (services: Services) => {
     .route("/chapters", chaptersRouter)
     .route("/groups", groupsRouter)
     .route("/ownership-requests", ownershipRequestsRouter)
+    .route("/users", usersRouter)
 
   app
     .get(
@@ -128,6 +130,11 @@ export const createApp = (services: Services) => {
               name: "Group members",
               description:
                 "Managing the membership of a group: list, add, remove, promote/demote, leave.",
+            },
+            {
+              name: "Follows",
+              description:
+                "Following relationships between users. Each follow is a one-directional edge (A → B); reciprocity is two edges.",
             },
           ],
         },

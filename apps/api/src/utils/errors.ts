@@ -148,6 +148,26 @@ const ownershipErrors = {
     code: 409,
   },
 } as const
+const userErrors = {
+  USER_NOT_FOUND: {
+    message: "The requested user was not found.",
+    code: 404,
+  },
+} as const
+const followErrors = {
+  FOLLOW_SELF: {
+    message: "You can't follow yourself.",
+    code: 409,
+  },
+  ALREADY_FOLLOWING: {
+    message: "You already follow this user.",
+    code: 409,
+  },
+  NOT_FOLLOWING: {
+    message: "You don't follow this user.",
+    code: 404,
+  },
+} as const
 const imageErrors = {
   INVALID_IMAGE: {
     message: "The file is not a valid image.",
@@ -170,6 +190,8 @@ export const errors = {
   ...mediaStaffErrors,
   ...chapterGroupErrors,
   ...ownershipErrors,
+  ...userErrors,
+  ...followErrors,
   ...imageErrors,
 } as const
 

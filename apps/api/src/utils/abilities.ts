@@ -3,7 +3,14 @@ import type { User } from "@taiyomoe/auth/server"
 
 export type Actions = "create" | "read" | "update" | "delete" | "manage"
 
-export type Subjects = "Media" | "Staff" | "Chapter" | "Group" | "OwnershipRequest" | "all"
+export type Subjects =
+  | "Media"
+  | "Staff"
+  | "Chapter"
+  | "Group"
+  | "OwnershipRequest"
+  | "Follow"
+  | "all"
 
 export type AppAbility = MongoAbility<[Actions, Subjects]>
 
@@ -17,6 +24,9 @@ export const defineAbilitiesFor = (user: User): AppAbility => {
   // Any non-banned user can ask to own a group, view their requests, or
   // cancel their own. The handler enforces ownership of the request row.
   can(["create", "read", "delete"], "OwnershipRequest")
+
+  // Any non-banned user can follow / unfollow others. Read is unauth.
+  can(["create", "delete"], "Follow")
 
   if (user.role === "ADMIN") {
     can("manage", "all")
