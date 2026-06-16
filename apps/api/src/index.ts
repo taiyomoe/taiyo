@@ -140,6 +140,11 @@ export const createApp = (services: Services) => {
               name: "Reading history",
               description: "Per-chapter reading-progress records, scoped to the signed-in user.",
             },
+            {
+              name: "Library",
+              description:
+                "Per-user library — manga the user is reading / has read / etc., scoped to the signed-in user.",
+            },
           ],
         },
       }),

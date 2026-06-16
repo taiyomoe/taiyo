@@ -174,6 +174,12 @@ const historyErrors = {
     code: 404,
   },
 } as const
+const libraryErrors = {
+  LIBRARY_ENTRY_NOT_FOUND: {
+    message: "No library entry exists for this media.",
+    code: 404,
+  },
+} as const
 const imageErrors = {
   INVALID_IMAGE: {
     message: "The file is not a valid image.",
@@ -199,6 +205,7 @@ export const errors = {
   ...userErrors,
   ...followErrors,
   ...historyErrors,
+  ...libraryErrors,
   ...imageErrors,
 } as const
 

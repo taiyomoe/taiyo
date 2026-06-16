@@ -11,6 +11,7 @@ export type Subjects =
   | "OwnershipRequest"
   | "Follow"
   | "History"
+  | "Library"
   | "all"
 
 export type AppAbility = MongoAbility<[Actions, Subjects]>
@@ -31,6 +32,9 @@ export const defineAbilitiesFor = (user: User): AppAbility => {
 
   // Any non-banned user manages their own reading history.
   can(["create", "read", "update", "delete"], "History")
+
+  // Any non-banned user manages their own library.
+  can(["create", "read", "update", "delete"], "Library")
 
   if (user.role === "ADMIN") {
     can("manage", "all")
