@@ -2,266 +2,212 @@
 
 ![Taiyō's banner](https://cdn.taiyo.moe/assets/banner-red.png)
 
-A modern, full-stack manga reading platform built with Next.js, TypeScript, and a comprehensive monorepo architecture. Taiyō provides a seamless experience for discovering, reading, and managing manga, manhwa, manhua, and light novels.
+A manga reading platform — manga, manhwa, manhua, light novels — being rebuilt from scratch on the `rewrite` branch. This branch currently ships the backend (Hono API) and a Storybook component playground; the Next.js web app and background workers are planned but not yet checked in.
 
 ## 🌟 Features
 
-- **Multi-format Support**: Manga, Manhwa, Manhua, and Light Novels
-- **Multi-language Support**: Official support for Portuguese and French, with technical capability for 100+ languages
-- **Advanced Search**: Powered by Meilisearch for fast, relevant results
-- **User Management**: Complete authentication system with Better Auth
-- **Content Rating System**: Flexible content filtering (Normal, Suggestive, NSFW, NSFL)
-- **Real-time Updates**: Latest releases and trending content
-- **Responsive Design**: Optimized for desktop and mobile devices
-- **Dark/Light Theme**: User preference-based theming
-- **Advanced customizations**: Page-by-page, brightness, horizontal/vertical, and more
-- **Chapter Management**: Upload, organize, and read chapters with page-by-page navigation
-- **Group Management**: Scanlation group support with role-based permissions
-- **Logs**: Comprehensive logging system with ClickHouse
-- **Monitoring**: Real-time monitoring with Grafana
-- **Analytics**: Comprehensive analytics and performance monitoring with PostHog
+- **Multi-format support**: manga, manhwa, manhua, light novels
+- **Multi-language**: official Portuguese / French, technical capability for 100+ languages
+- **Typo-tolerant search**: Meilisearch-backed `/medias/search`
+- **Authentication**: email + magic-link + Discord/Google via Better Auth, with Turnstile captcha and Dragonfly-backed rate limits
+- **Content rating system**: Normal / Suggestive / NSFW / NSFL
+- **Image pipeline**: server-side magic-byte validation, EXIF stripping, JPEG transcoding via sharp
+- **Group ownership workflow**: scanlation groups can be claimed by their actual owners through a request/approval flow; chapter and group mutations gate on membership (additive model — uploaders/mods/admins keep unconditional access)
+- **Observability**: HyperDX (OpenTelemetry) drains via evlog
+
+Not yet in this branch (planned): Next.js frontend, user library / history / follows routes (schemas exist, routes don't), chapter page upload, audit log instrumentation, BullMQ job workers.
 
 ## 🏗️ Architecture
 
-This project uses a **monorepo architecture** powered by [Turborepo](https://turbo.build/) and [pnpm workspaces](https://pnpm.io/workspaces).
+Monorepo powered by [Turborepo](https://turbo.build/) and [pnpm workspaces](https://pnpm.io/workspaces).
 
-### 📁 Project Structure
+### 📁 Project structure
 
 ```no-highlight
 taiyo/
-├── apps/                # Applications
-│   └── storybook/         # Component documentation
-├── packages/            # Shared packages
-│   ├── auth/              # Authentication utilities
-│   ├── cache/             # Caching layer
-│   ├── config/            # Shared configuration
-│   ├── db/                # Database layer
-│   ├── email/             # Email templates and utilities
-│   ├── ui/                # Shared UI components
-│   └── utils/             # Shared utilities
-└── tooling/             # Development tools
-    ├── github/            # GitHub Actions
-    └── typescript/        # TypeScript configuration
+├── apps/
+│   ├── api/               # Hono + hono-openapi backend, port 3002
+│   └── storybook/         # @taiyomoe/ui component playground, port 6006
+├── packages/
+│   ├── auth/              # Better Auth config + plugins + lifecycle hooks
+│   ├── cache/             # Dragonfly (Redis-compatible) client
+│   ├── config/            # Shared configuration constants
+│   ├── db/                # Kysely setup, migrations, seeds, model types
+│   ├── email/             # Email templates (react-email)
+│   ├── s3/                # S3 client + key helpers (works with RustFS / Garage / AWS)
+│   ├── schemas/           # Cross-package Zod schemas (pagination, etc.)
+│   ├── scripts/           # One-shot CLI scripts (init-meilisearch, etc.)
+│   ├── search/            # Meilisearch client + media sync + filter translator
+│   ├── ui/                # Shared React components (Tailwind 4 + Base UI)
+│   └── utils/             # Pure utility helpers (unit-tested)
+├── docs/                  # Design proposals (group-ownership.md, …)
+└── tooling/
+    ├── bruno/             # API request collections
+    ├── github/            # CI setup composite action
+    └── typescript/        # tsconfig presets
 ```
 
-### 🛠️ Tech Stack
+### 🛠️ Tech stack
 
-**Frontend:**
+**API (`apps/api`):**
 
-- [Next.js 16](https://nextjs.org/) with App Router
+- [Hono](https://hono.dev/) + [hono-openapi](https://github.com/honojs/middleware/tree/main/packages/openapi-spec) for routes and a Scalar-rendered `/docs` UI
+- [Kysely](https://kysely.dev/) (typed SQL query builder) on [PostgreSQL](https://www.postgresql.org/)
+- [Better Auth](https://www.better-auth.com/) (email/password + magic link + OAuth, with CASL-based ability checks)
+- [Zod 4](https://zod.dev/) for input validation
+- [sharp](https://sharp.pixelplumbing.com/) + [magic-bytes.js](https://github.com/LarsKoelpin/magic-bytes) for upload validation
+- [evlog](https://github.com/evlog/evlog) → HyperDX (OpenTelemetry) for structured logs
+
+**UI (`apps/storybook` + `packages/ui`):**
+
 - [React 19](https://react.dev/)
-- [TypeScript](https://www.typescriptlang.org/)
 - [Tailwind CSS 4](https://tailwindcss.com/)
-- [Base UI](https://www.baseui.com/) for accessible components
-- [Framer Motion](https://www.framer.com/motion/) for animations
-- [Next Intl](https://next-intl-docs.vercel.app/) for internationalization
-- [PostHog](https://posthog.com/) for analytics
+- [Base UI](https://base-ui.com/) for accessible primitives
+- Storybook 10 for component documentation
 
-**Backend:**
+**Infrastructure (`docker-compose.yml`):**
 
-- [Hono](https://hono.dev/) for type-safe APIs
-- [Kysely](https://kysely.dev/) as the typed SQL query builder
-- [Better Auth](https://www.better-auth.com/) for authentication
-- [BullMQ](https://bullmq.io/) for job queues
-- [Zod](https://zod.dev/) for schema validation
-- [ClickHouse](https://clickhouse.com/) for logging
+- [PostgreSQL 18](https://www.postgresql.org/) — primary database
+- [Meilisearch](https://www.meilisearch.com/) — search index
+- [Dragonfly](https://www.dragonflydb.io/) — Redis-compatible cache (Better Auth secondary storage, rate limits)
+- [RustFS](https://rustfs.com/) — S3-compatible object store for cover/banner/staff images
+- [HyperDX](https://www.hyperdx.io/) — observability stack
 
-**Infrastructure:**
-
-- [PostgreSQL](https://www.postgresql.org/) - Primary database
-- [Meilisearch](https://www.meilisearch.com/) - Search engine
-- [Dragonfly](https://www.dragonflydb.io/) - Redis-compatible cache
-- [HyperDX](https://www.hyperdx.io/) - Observability and monitoring
-- [ClickHouse](https://clickhouse.com/) - Analytics database
-- [S3-compatible storage](https://aws.amazon.com/s3/) - File storage
-
-## 🚀 Getting Started
+## 🚀 Getting started
 
 ### Prerequisites
 
-- **Node.js**: 24.11.1 (specified in `.nvmrc`)
-- **pnpm**: 10.23.0 (specified in `package.json`)
-- **Docker & Docker Compose**: For local infrastructure
+- **Node.js**: see `engines.node` in `package.json` (`pnpm` will warn if mismatched)
+- **pnpm**: see `packageManager` in `package.json`
+- **Docker & Docker Compose** for local infrastructure
 
-### Installation
+### Setup
 
-1. **Clone the repository**
-
+1. Clone and install
    ```bash
    git clone https://github.com/taiyomoe/taiyo.git
    cd taiyo
-   ```
-
-2. **Install dependencies**
-
-   ```bash
    pnpm install
    ```
-
-3. **Set up environment variables**
-
+2. Copy env template and fill in values
    ```bash
    cp .env.example .env
-   # Edit .env with your configuration
    ```
-
-4. **Start infrastructure services**
-
+   `BETTER_AUTH_SECRET` is the only var you must set yourself (`npx auth secret` generates one); social OAuth and Turnstile work without credentials but those flows will be disabled.
+3. Start infrastructure
    ```bash
-   docker-compose up -d
+   docker compose up -d
    ```
-
-5. **Configure the S3 client**
-
-Please refer to the [@taiyomoe/s3](./packages/s3/README.md) package documentation for more details.
-
-6. **Run database migrations**
-
+4. Initialize storage — see [`packages/s3/README.md`](./packages/s3/README.md) for first-run RustFS bucket setup.
+5. Migrate + seed the database
    ```bash
    pnpm -F db kysely migrate latest
-   ```
-
-7. **Seed the database with sample data**
-
-   ```bash
    pnpm -F db kysely seed run
    ```
-
-8. **Start development servers**
-
+6. Run dev
    ```bash
    pnpm dev
    ```
 
-The application will be available at:
+   - API: <http://localhost:3002> (`/docs` for the OpenAPI viewer, `/ping` for a health check)
+   - Storybook: <http://localhost:6006>
 
-- **Web App**: <http://localhost:3000>
-- **Storybook**: <http://localhost:6006>
+## 📝 Available scripts
 
-## 📝 Available Scripts
-
-### Root Level Commands
+Root-level:
 
 ```bash
-# Development
-pnpm dev                 # Start all apps in development mode
-pnpm build              # Build all packages and apps
-pnpm typecheck          # Run TypeScript type checking
-pnpm clean              # Clean all node_modules
-pnpm clean:ws           # Clean workspace build artifacts
-
-# Testing
-pnpm test               # Run tests
-pnpm test:watch         # Run tests in watch mode
-
-# Code Quality
-pnpm check:ws           # Run Biome linting and formatting
-pnpm lint:ws            # Run Sherif for dependency validation
-pnpm knip               # Check for unused dependencies and dead code
+pnpm dev                # turbo dev --parallel — runs every app's dev script
+pnpm build              # turbo build
+pnpm format             # oxfmt --check
+pnpm format:fix         # oxfmt (in place)
+pnpm lint               # oxlint (type-aware; doubles as the typecheck gate)
+pnpm lint:fix           # oxlint --fix
+pnpm lint:ws            # sherif — workspace dependency validation
+pnpm knip               # unused exports + dead deps
+pnpm test:unit          # vitest (vitest.config.unit.ts)
+pnpm test:integration   # vitest (vitest.config.integration.ts) — requires docker compose up
 ```
 
-### Package-Specific Commands
+Package-specific:
 
 ```bash
-# Database
-pnpm -F db kysely migrate latest   # Run database migrations
-pnpm -F db kysely seed run         # Seed database with sample data
-
-# Storybook
-pnpm -F storybook run dev          # Start Storybook dev server
-pnpm -F storybook run build        # Build static Storybook
+pnpm -F db kysely migrate latest   # apply migrations
+pnpm -F db kysely seed run         # seed sample data
+pnpm -F storybook dev              # storybook dev server
+pnpm -F storybook build            # static storybook build
+pnpm -F api dev                    # tsx-watch the API
 ```
 
 ## 🔧 Development
 
-### Git Flow
+### Branches
 
-This project uses [git-flow](https://git-flow.readthedocs.io/en/latest/presentation.html) for branch management:
+- `main` — production code
+- `develop` — integration branch for features
+- `rewrite` — current full-stack rebuild (this branch)
+- `feature/*`, `hotfix/*`, `release/*` — see git-flow
 
-- `main` - Production-ready code
-- `develop` - Integration branch for features
-- `feature/*` - Feature development branches
-- `hotfix/*` - Critical production fixes
-- `release/*` - Release preparation branches
+### Code quality
 
-### Code Quality
+- **Linting + typecheck**: [oxlint](https://oxc.rs/docs/guide/usage/linter.html) with `typeAware: true` + `typeCheck: true` — this is the type gate; there's no separate `tsc --noEmit` step
+- **Formatting**: [oxfmt](https://oxc.rs/docs/guide/usage/formatter.html)
+- **Workspace deps**: [sherif](https://github.com/QuiiBz/sherif)
+- **Dead code**: [knip](https://knip.dev/)
+- **Pre-commit**: [lefthook](https://github.com/evilmartians/lefthook) runs `format` + `lint` on staged files
 
-- **Linting**: [Oxlint](https://oxc.rs/) for fast linting
-- **Formatting**: [Oxfmt](https://oxc.rs/) for fast formatting
-- **Type Checking**: TypeScript with strict configuration
-- **Dependency Validation**: [Sherif](https://github.com/QuiiBz/sherif) for workspace consistency
-- **Unused Code Detection**: [Knip](https://knip.dev/) for finding unused dependencies
+### Package management
 
-### Package Management
+- Internal packages: `workspace:^`
+- Always `pnpm` (never `npm`/`yarn`)
+- Renovate is currently disabled while the rewrite stabilizes
 
-- **Workspace Dependencies**: Use `workspace:^` for internal packages
-- **Version Management**: All packages use semantic versioning
-- **Dependency Installation**: Always use `pnpm` (not npm or yarn)
+### Testing
 
-## 🌐 Environment Variables
+- Unit tests live next to source under `__tests__/` (Vitest, fast)
+- Integration tests live under `apps/api/src/__integration-tests__/` and hit real Postgres / S3 / Meilisearch / Dragonfly via Docker. Each test gets a freshly-cloned Postgres database (`CREATE DATABASE … TEMPLATE …`) and a fresh S3 bucket for isolation. See `.agents/skills/create-backend-route/SKILL.md` for the conventions.
 
-There are 30+ environment variables that are used in the project. You can find them in the `.env.example` file.
+## 🌐 Environment variables
 
-## 📦 Package Overview
+See `.env.example` for the full list. Validation is centralized via [`@t3-oss/env-core`](https://env.t3.gg/) in each package's `env.ts`.
 
-### Core Packages
+## 📦 Package overview
 
-- **`@taiyomoe/db`**: Database layer with Kysely (typed SQL query builder), migrations, seeds, and per-table model types
-- **`@taiyomoe/auth`**: Authentication system with Better Auth integration
-- **`@taiyomoe/utils`**: Shared utility functions and helpers
-- **`@taiyomoe/ui`**: Shared UI components built with React and Tailwind CSS
-
-### Service Packages
-
-- **`@taiyomoe/cache`**: Caching layer with Dragonfly integration
-- **`@taiyomoe/email`**: Email templates and sending utilities
-
-### Configuration Packages
-
-- **`@taiyomoe/config`**: Shared configuration and constants
+- **`@taiyomoe/db`** — Kysely + migrations + seeds + per-table model types
+- **`@taiyomoe/auth`** — Better Auth config, lifecycle hooks, server + client exports
+- **`@taiyomoe/cache`** — Dragonfly (ioredis) client, namespaced cache helpers
+- **`@taiyomoe/config`** — runtime constants (image limits, auth limits, OpenAPI metadata)
+- **`@taiyomoe/email`** — react-email templates + send helpers
+- **`@taiyomoe/s3`** — typed S3 client + key derivation
+- **`@taiyomoe/schemas`** — shared Zod schemas (pagination meta, etc.)
+- **`@taiyomoe/scripts`** — CLI scripts (init-meilisearch, etc.)
+- **`@taiyomoe/search`** — Meilisearch client + media sync + search input schema
+- **`@taiyomoe/ui`** — React components on Tailwind 4 + Base UI
+- **`@taiyomoe/utils`** — pure helpers (unit-tested)
 
 ## 🚀 Deployment
 
-### Production Build
-
-```bash
-# Build all packages and applications
-pnpm build
-```
-
-### Docker Deployment
-
-```bash
-# Build and start all services
-docker-compose up -d
-```
+The repo expects deployment via [Coolify](https://coolify.io/) onto S3-compatible storage (RustFS for `taiyo-ci`, Garage for production), with Cloudflare in front. Production secrets are not committed; `.env.prod` is gitignored.
 
 ## 🤝 Contributing
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feat/amazing-feature`)
+1. Fork the repo
+2. Branch off `develop` (or `rewrite` while the rewrite is active)
 3. Make your changes
-4. Run tests and linting (`pnpm check:ws`)
-5. Commit your changes (`git commit -m 'Add amazing feature'`)
-6. Push to the branch (`git push origin feat/amazing-feature`)
-7. Open a Pull Request
+4. Run `pnpm format:fix && pnpm lint:fix && pnpm test:unit && pnpm test:integration`
+5. Open a PR
 
-### Development Guidelines
+### Guidelines
 
-- Follow the existing code style and patterns
-- Write meaningful commit messages
-- Add tests for new features
-- Update documentation as needed
-- Ensure all checks pass before submitting PRs
+- Match existing patterns (especially handler / middleware / router structure under `apps/api`)
+- Conventional Commits style for messages
+- Add or update tests for any behavior change
+- Update docs when the public surface changes
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+MIT — see [LICENSE](LICENSE).
 
 ## 🙏 Acknowledgments
 
 - [MangaDex](https://mangadex.org/) for UI inspiration and manga data
-
----
-
-**Taiyō** - Bringing manga to life with modern technology 🌅
