@@ -136,6 +136,10 @@ export const createApp = (services: Services) => {
               description:
                 "Following relationships between users. Each follow is a one-directional edge (A → B); reciprocity is two edges.",
             },
+            {
+              name: "Reading history",
+              description: "Per-chapter reading-progress records, scoped to the signed-in user.",
+            },
           ],
         },
       }),

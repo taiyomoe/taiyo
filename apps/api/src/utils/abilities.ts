@@ -10,6 +10,7 @@ export type Subjects =
   | "Group"
   | "OwnershipRequest"
   | "Follow"
+  | "History"
   | "all"
 
 export type AppAbility = MongoAbility<[Actions, Subjects]>
@@ -27,6 +28,9 @@ export const defineAbilitiesFor = (user: User): AppAbility => {
 
   // Any non-banned user can follow / unfollow others. Read is unauth.
   can(["create", "delete"], "Follow")
+
+  // Any non-banned user manages their own reading history.
+  can(["create", "read", "update", "delete"], "History")
 
   if (user.role === "ADMIN") {
     can("manage", "all")

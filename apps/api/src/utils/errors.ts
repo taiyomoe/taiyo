@@ -168,6 +168,12 @@ const followErrors = {
     code: 404,
   },
 } as const
+const historyErrors = {
+  HISTORY_ENTRY_NOT_FOUND: {
+    message: "No history entry exists for this chapter.",
+    code: 404,
+  },
+} as const
 const imageErrors = {
   INVALID_IMAGE: {
     message: "The file is not a valid image.",
@@ -192,6 +198,7 @@ export const errors = {
   ...ownershipErrors,
   ...userErrors,
   ...followErrors,
+  ...historyErrors,
   ...imageErrors,
 } as const
 
