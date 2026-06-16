@@ -180,6 +180,20 @@ const libraryErrors = {
     code: 404,
   },
 } as const
+const listErrors = {
+  LIST_NOT_FOUND: {
+    message: "The requested list was not found.",
+    code: 404,
+  },
+  LIST_ITEM_NOT_FOUND: {
+    message: "No item with that media id exists on this list.",
+    code: 404,
+  },
+  LIST_ITEM_EXISTS: {
+    message: "This media is already on the list.",
+    code: 409,
+  },
+} as const
 const imageErrors = {
   INVALID_IMAGE: {
     message: "The file is not a valid image.",
@@ -206,6 +220,7 @@ export const errors = {
   ...followErrors,
   ...historyErrors,
   ...libraryErrors,
+  ...listErrors,
   ...imageErrors,
 } as const
 

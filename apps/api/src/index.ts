@@ -19,6 +19,7 @@ import { bannersRouter } from "./routers/banners-router"
 import { chaptersRouter } from "./routers/chapters-router"
 import { coversRouter } from "./routers/covers-router"
 import { groupsRouter } from "./routers/groups-router"
+import { listsRouter } from "./routers/lists-router"
 import { mediasRouter } from "./routers/medias-router"
 import { ownershipRequestsRouter } from "./routers/ownership-requests-router"
 import { staffsRouter } from "./routers/staffs-router"
@@ -70,6 +71,7 @@ export const createApp = (services: Services) => {
     .route("/groups", groupsRouter)
     .route("/ownership-requests", ownershipRequestsRouter)
     .route("/users", usersRouter)
+    .route("/lists", listsRouter)
 
   app
     .get(
@@ -144,6 +146,11 @@ export const createApp = (services: Services) => {
               name: "Library",
               description:
                 "Per-user library — manga the user is reading / has read / etc., scoped to the signed-in user.",
+            },
+            {
+              name: "Custom lists",
+              description:
+                "User-created reading lists. Each list is owned by one user, has a PUBLIC or PRIVATE visibility, and contains an ordered set of medias.",
             },
           ],
         },

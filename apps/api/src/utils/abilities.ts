@@ -12,6 +12,7 @@ export type Subjects =
   | "Follow"
   | "History"
   | "Library"
+  | "List"
   | "all"
 
 export type AppAbility = MongoAbility<[Actions, Subjects]>
@@ -35,6 +36,10 @@ export const defineAbilitiesFor = (user: User): AppAbility => {
 
   // Any non-banned user manages their own library.
   can(["create", "read", "update", "delete"], "Library")
+
+  // Any non-banned user manages their own custom lists. Moderators don't
+  // get manage — lists are personal.
+  can(["create", "read", "update", "delete"], "List")
 
   if (user.role === "ADMIN") {
     can("manage", "all")
