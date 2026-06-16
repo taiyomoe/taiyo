@@ -31,6 +31,21 @@ export const GROUP_OWNERSHIP_REQUEST_STATUSES = [
 
 export type GroupOwnershipRequestStatus = (typeof GROUP_OWNERSHIP_REQUEST_STATUSES)[number]
 
+export const USER_LIBRARY_STATUSES = [
+  "READING",
+  "REREADING",
+  "PLAN_TO_READ",
+  "COMPLETED",
+  "ON_HOLD",
+  "DROPPED",
+] as const
+
+export type UserLibraryStatus = (typeof USER_LIBRARY_STATUSES)[number]
+
+export const USER_LIST_VISIBILITIES = ["PUBLIC", "PRIVATE"] as const
+
+export type UserListVisibility = (typeof USER_LIST_VISIBILITIES)[number]
+
 export const MEDIA_TYPES = ["MANGA", "MANHWA", "MANHUA", "LIGHT_NOVEL", "OTHER"] as const
 
 export type MediaType = (typeof MEDIA_TYPES)[number]

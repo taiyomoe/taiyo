@@ -1,11 +1,13 @@
-import type { Insertable } from "kysely"
-import type { UserHistoryProgression } from "../json-types"
-import type { ArrayType } from "../types"
+import type { Generated, Insertable } from "kysely"
+import type { Timestamp } from "../types"
 
 export interface UserHistory {
   userId: string
-  mediaId: string
-  progression: ArrayType<UserHistoryProgression> | null
+  chapterId: string
+  pageId: string | null
+  completed: Generated<boolean>
+  createdAt: Generated<Timestamp>
+  updatedAt: Generated<Timestamp>
 }
 
 export type NewUserHistory = Insertable<UserHistory>

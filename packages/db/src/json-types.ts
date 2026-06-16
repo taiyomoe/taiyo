@@ -22,15 +22,3 @@ export type UserSettings = {
   showLibrary?: boolean
   homeLayout?: "ROWS" | "COLUMNS"
 }
-
-export type UserLibraryEntry = {
-  mediaId: string
-  updatedAt: string
-}
-
-export type UserHistoryProgression = {
-  updatedAt: string
-  chapterId: string
-  pageId: string | null
-  completed: boolean
-}

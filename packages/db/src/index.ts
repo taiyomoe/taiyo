@@ -50,7 +50,11 @@ export * from "./models/user-follow-model"
 
 export * from "./models/user-history-model"
 
-export * from "./models/user-library-model"
+export * from "./models/user-library-entry-model"
+
+export * from "./models/user-list-item-model"
+
+export * from "./models/user-list-model"
 
 export * from "./models/user-profile-model"
 
