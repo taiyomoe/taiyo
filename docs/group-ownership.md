@@ -29,13 +29,13 @@ Two new tables.
 
 A many-to-many between users and groups, carrying a role.
 
-| Column      | Type                                                 | Notes                                                     |
-| ----------- | ---------------------------------------------------- | --------------------------------------------------------- |
-| `userId`    | `uuid` references `users(id)` `ON DELETE CASCADE`    | composite primary key                                     |
-| `groupId`   | `uuid` references `groups(id)` `ON DELETE CASCADE`   | composite primary key                                     |
-| `role`      | `text` check (`'OWNER'` | `'MEMBER'`)                 | application-enforced: at least one OWNER per owned group |
-| `addedBy`   | `uuid` references `users(id)`                        | who created the membership (audit)                        |
-| `createdAt` | `timestamp(3)` default `current_timestamp`           |                                                           |
+| Column      | Type                                               | Notes                              |
+| ----------- | -------------------------------------------------- | ---------------------------------- | -------------------------------------------------------- |
+| `userId`    | `uuid` references `users(id)` `ON DELETE CASCADE`  | composite primary key              |
+| `groupId`   | `uuid` references `groups(id)` `ON DELETE CASCADE` | composite primary key              |
+| `role`      | `text` check (`'OWNER'`                            | `'MEMBER'`)                        | application-enforced: at least one OWNER per owned group |
+| `addedBy`   | `uuid` references `users(id)`                      | who created the membership (audit) |
+| `createdAt` | `timestamp(3)` default `current_timestamp`         |                                    |
 
 Indexes:
 
@@ -50,17 +50,17 @@ A group is **owned** when at least one such row exists.
 
 Audit + workflow trail for claim requests.
 
-| Column         | Type                                                | Notes                                                                     |
-| -------------- | --------------------------------------------------- | ------------------------------------------------------------------------- |
-| `id`           | `uuid` primary key                                  |                                                                           |
-| `userId`       | `uuid` references `users(id)`                       | the requester                                                             |
-| `groupId`      | `uuid` references `groups(id)`                      |                                                                           |
-| `status`       | enum (`PENDING` / `APPROVED` / `REJECTED` / `CANCELLED`) | default `PENDING`                                                         |
-| `message`      | `text` nullable                                     | requester's pitch                                                         |
-| `reviewerId`   | `uuid` references `users(id)` nullable              | mod/admin who acted on it                                                 |
-| `reviewerNote` | `text` nullable                                     | required when status = `REJECTED`                                         |
-| `createdAt`    | `timestamp(3)` default `current_timestamp`          |                                                                           |
-| `updatedAt`    | `timestamp(3)` default `current_timestamp`          |                                                                           |
+| Column         | Type                                                     | Notes                             |
+| -------------- | -------------------------------------------------------- | --------------------------------- |
+| `id`           | `uuid` primary key                                       |                                   |
+| `userId`       | `uuid` references `users(id)`                            | the requester                     |
+| `groupId`      | `uuid` references `groups(id)`                           |                                   |
+| `status`       | enum (`PENDING` / `APPROVED` / `REJECTED` / `CANCELLED`) | default `PENDING`                 |
+| `message`      | `text` nullable                                          | requester's pitch                 |
+| `reviewerId`   | `uuid` references `users(id)` nullable                   | mod/admin who acted on it         |
+| `reviewerNote` | `text` nullable                                          | required when status = `REJECTED` |
+| `createdAt`    | `timestamp(3)` default `current_timestamp`               |                                   |
+| `updatedAt`    | `timestamp(3)` default `current_timestamp`               |                                   |
 
 Partial unique index so a single user can have at most one pending request per
 group at a time:
@@ -127,26 +127,26 @@ group is owned, the chapter is editable by uploaders like today.
 
 ### Ownership requests
 
-| Method | Path                                          | Auth                             | Notes                                                                |
-| ------ | --------------------------------------------- | -------------------------------- | -------------------------------------------------------------------- |
-| POST   | `/groups/:id/ownership-requests`              | any signed-in user, not banned   | body `{ message? }`. Fails if group is already owned or pending exists. |
-| GET    | `/groups/:id/ownership-requests`              | mod/admin, or the requester      | list (filtered by status optional).                                 |
-| GET    | `/users/me/ownership-requests`                | self                              | requester's own requests across groups.                              |
-| DELETE | `/ownership-requests/:id`                     | the requester                    | cancel a pending request.                                            |
-| POST   | `/ownership-requests/:id/approve`             | mod/admin                        | creates OWNER membership; auto-cancels other pending requests for the same group. |
-| POST   | `/ownership-requests/:id/reject`              | mod/admin                        | body `{ note }`.                                                     |
+| Method | Path                              | Auth                           | Notes                                                                             |
+| ------ | --------------------------------- | ------------------------------ | --------------------------------------------------------------------------------- |
+| POST   | `/groups/:id/ownership-requests`  | any signed-in user, not banned | body `{ message? }`. Fails if group is already owned or pending exists.           |
+| GET    | `/groups/:id/ownership-requests`  | mod/admin, or the requester    | list (filtered by status optional).                                               |
+| GET    | `/users/me/ownership-requests`    | self                           | requester's own requests across groups.                                           |
+| DELETE | `/ownership-requests/:id`         | the requester                  | cancel a pending request.                                                         |
+| POST   | `/ownership-requests/:id/approve` | mod/admin                      | creates OWNER membership; auto-cancels other pending requests for the same group. |
+| POST   | `/ownership-requests/:id/reject`  | mod/admin                      | body `{ note }`.                                                                  |
 
 ### Memberships
 
-| Method | Path                                              | Auth                                            | Notes                                                          |
-| ------ | ------------------------------------------------- | ----------------------------------------------- | -------------------------------------------------------------- |
-| GET    | `/groups/:id/members`                             | public                                          | list owners + members.                                        |
-| POST   | `/groups/:id/members`                             | any OWNER of the group, mod/admin              | body `{ userId, role }`.                                       |
-| DELETE | `/groups/:id/members/:userId`                     | any OWNER, mod/admin                            | refuses last-owner case.                                       |
-| POST   | `/groups/:id/members/:userId/promote`             | any OWNER, mod/admin                            | MEMBER → OWNER.                                                |
-| POST   | `/groups/:id/members/:userId/demote`              | any OWNER, mod/admin                            | OWNER → MEMBER. Refuses last-owner.                            |
-| POST   | `/groups/:id/leave`                               | self                                            | refuses last-owner case (must promote / transfer first).      |
-| POST   | `/groups/:id/transfer`                            | any OWNER                                       | body `{ toUserId }`. Atomic promote-target + demote-self.     |
+| Method | Path                                  | Auth                              | Notes                                                     |
+| ------ | ------------------------------------- | --------------------------------- | --------------------------------------------------------- |
+| GET    | `/groups/:id/members`                 | public                            | list owners + members.                                    |
+| POST   | `/groups/:id/members`                 | any OWNER of the group, mod/admin | body `{ userId, role }`.                                  |
+| DELETE | `/groups/:id/members/:userId`         | any OWNER, mod/admin              | refuses last-owner case.                                  |
+| POST   | `/groups/:id/members/:userId/promote` | any OWNER, mod/admin              | MEMBER → OWNER.                                           |
+| POST   | `/groups/:id/members/:userId/demote`  | any OWNER, mod/admin              | OWNER → MEMBER. Refuses last-owner.                       |
+| POST   | `/groups/:id/leave`                   | self                              | refuses last-owner case (must promote / transfer first).  |
+| POST   | `/groups/:id/transfer`                | any OWNER                         | body `{ toUserId }`. Atomic promote-target + demote-self. |
 
 ### Existing routes that gain ownership awareness
 
@@ -202,15 +202,15 @@ The query stays cheap because both tables are indexed on the keys we filter on.
 
 ## Error codes to add
 
-| Code                              | Status | Used when                                                            |
-| --------------------------------- | ------ | -------------------------------------------------------------------- |
-| `GROUP_ALREADY_OWNED`             | 409    | trying to claim a group that already has an owner                    |
-| `OWNERSHIP_REQUEST_EXISTS`        | 409    | user already has a pending request for the same group                |
-| `OWNERSHIP_REQUEST_NOT_FOUND`     | 404    | targeting an unknown request id                                      |
-| `OWNERSHIP_REQUEST_NOT_PENDING`   | 409    | trying to approve / reject / cancel a non-pending request            |
-| `GROUP_MEMBER_NOT_FOUND`          | 404    | targeting a (group, user) that has no membership                     |
-| `GROUP_MEMBER_EXISTS`             | 409    | adding a (group, user) that's already a member                       |
-| `GROUP_LAST_OWNER`                | 409    | demote / leave / remove would leave the group ownerless              |
+| Code                            | Status | Used when                                                 |
+| ------------------------------- | ------ | --------------------------------------------------------- |
+| `GROUP_ALREADY_OWNED`           | 409    | trying to claim a group that already has an owner         |
+| `OWNERSHIP_REQUEST_EXISTS`      | 409    | user already has a pending request for the same group     |
+| `OWNERSHIP_REQUEST_NOT_FOUND`   | 404    | targeting an unknown request id                           |
+| `OWNERSHIP_REQUEST_NOT_PENDING` | 409    | trying to approve / reject / cancel a non-pending request |
+| `GROUP_MEMBER_NOT_FOUND`        | 404    | targeting a (group, user) that has no membership          |
+| `GROUP_MEMBER_EXISTS`           | 409    | adding a (group, user) that's already a member            |
+| `GROUP_LAST_OWNER`              | 409    | demote / leave / remove would leave the group ownerless   |
 
 ## Phasing
 
@@ -225,7 +225,7 @@ migration shape.
 `/groups/:id/ownership-requests`, `/ownership-requests/:id/(approve|reject)`,
 `/groups/:id/members*`, etc. Existing routes still use the plain `withAuth`
 gates. Approving a request creates an OWNER membership but no other route
-*reads* it yet. Tests cover the workflow in isolation.
+_reads_ it yet. Tests cover the workflow in isolation.
 
 **Phase 3 — enforce ownership.** Replace `withAuth(...)` with the new
 `requireGroupAccess` / `requireChapterAccess` middlewares on the routes that
