@@ -170,4 +170,40 @@ describe("POST /ownership-requests/:id/approve", () => {
 
     expect(res.status).toBe(403)
   })
+
+  test("concurrent approvals for the same group serialize — only one wins", async ({
+    app,
+    services,
+  }) => {
+    const { headers } = await signInAs(services, { role: "MODERATOR" })
+    const { userId: userA } = await signInAs(services)
+    const { userId: userB } = await signInAs(services)
+    const groupId = await seedGroup(services, userA)
+    const requestA = await seedRequest(services, { userId: userA, groupId })
+    const requestB = await seedRequest(services, { userId: userB, groupId })
+    const [resA, resB] = await Promise.all([
+      api(app, `/ownership-requests/${requestA}/approve`, { method: "POST", headers }),
+      api(app, `/ownership-requests/${requestB}/approve`, { method: "POST", headers }),
+    ])
+    const statuses = [resA.status, resB.status].sort((a, b) => a - b)
+
+    expect(statuses).toEqual([201, 409])
+
+    const loser = resA.status === 409 ? resA : resB
+
+    if (loser.body.success) {
+      throw new Error("Expected the losing approval to fail")
+    }
+
+    expect(loser.body.code).toBe("GROUP_ALREADY_OWNED")
+
+    const owners = await services.db
+      .selectFrom("groupMemberships")
+      .select("userId")
+      .where("groupId", "=", groupId)
+      .where("role", "=", "OWNER")
+      .execute()
+
+    expect(owners).toHaveLength(1)
+  })
 })
