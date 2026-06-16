@@ -19,6 +19,11 @@ export const env = createEnv({
   server: {
     HYPERDX_ENDPOINT: z.url(),
     HYPERDX_INGESTION_KEY: z.string().nonempty(),
+    /**
+     * Comma-separated list of origins allowed to call the API with credentials.
+     * Empty / unset → CORS middleware disabled (same-origin only).
+     */
+    CORS_ALLOWED_ORIGINS: z.string().default(""),
   },
 
   /**

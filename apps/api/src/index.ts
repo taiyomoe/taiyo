@@ -4,6 +4,8 @@ import { config } from "@taiyomoe/config"
 import { evlog } from "evlog/hono"
 import { createHyperDXDrain } from "evlog/hyperdx"
 import { Hono } from "hono"
+import { cors } from "hono/cors"
+import { secureHeaders } from "hono/secure-headers"
 import { openAPIRouteHandler } from "hono-openapi"
 import packageJson from "../package.json"
 import { env } from "./env"
@@ -27,6 +29,11 @@ declare module "hono" {
   interface ContextVariableMap extends AppContextVariables {}
 }
 
+const corsOrigins = (env.CORS_ALLOWED_ORIGINS ?? "")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean)
+
 export const createApp = (services: Services) => {
   const app = new Hono()
     .use(
@@ -37,6 +44,16 @@ export const createApp = (services: Services) => {
               endpoint: env.HYPERDX_ENDPOINT,
               apiKey: env.HYPERDX_INGESTION_KEY,
             }),
+      }),
+    )
+    .use(secureHeaders())
+    .use(
+      cors({
+        origin: corsOrigins.length > 0 ? corsOrigins : [],
+        credentials: corsOrigins.length > 0,
+        allowMethods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
+        allowHeaders: ["Content-Type", "Authorization", "Cookie"],
+        maxAge: 600,
       }),
     )
     .use(createContextMiddleware(services))
