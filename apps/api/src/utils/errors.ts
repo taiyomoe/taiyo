@@ -118,6 +118,37 @@ const chapterGroupErrors = {
     code: 404,
   },
 } as const
+const ownershipErrors = {
+  OWNERSHIP_REQUEST_NOT_FOUND: {
+    message: "The requested ownership request was not found.",
+    code: 404,
+  },
+  OWNERSHIP_REQUEST_EXISTS: {
+    message: "You already have a pending ownership request for this group.",
+    code: 409,
+  },
+  OWNERSHIP_REQUEST_NOT_PENDING: {
+    message: "The ownership request is no longer pending.",
+    code: 409,
+  },
+  GROUP_ALREADY_OWNED: {
+    message: "This group already has an owner.",
+    code: 409,
+  },
+  GROUP_MEMBER_NOT_FOUND: {
+    message: "The given user has no membership on this group.",
+    code: 404,
+  },
+  GROUP_MEMBER_EXISTS: {
+    message: "The given user is already a member of this group.",
+    code: 409,
+  },
+  GROUP_LAST_OWNER: {
+    message:
+      "This action would leave the group without an owner. Promote another member to OWNER first.",
+    code: 409,
+  },
+} as const
 const imageErrors = {
   INVALID_IMAGE: {
     message: "The file is not a valid image.",
@@ -139,6 +170,7 @@ export const errors = {
   ...groupErrors,
   ...mediaStaffErrors,
   ...chapterGroupErrors,
+  ...ownershipErrors,
   ...imageErrors,
 } as const
 

@@ -18,6 +18,7 @@ import { chaptersRouter } from "./routers/chapters-router"
 import { coversRouter } from "./routers/covers-router"
 import { groupsRouter } from "./routers/groups-router"
 import { mediasRouter } from "./routers/medias-router"
+import { ownershipRequestsRouter } from "./routers/ownership-requests-router"
 import { staffsRouter } from "./routers/staffs-router"
 import { createServices, type Services } from "./services"
 
@@ -49,6 +50,7 @@ export const createApp = (services: Services) => {
     .route("/staffs", staffsRouter)
     .route("/chapters", chaptersRouter)
     .route("/groups", groupsRouter)
+    .route("/ownership-requests", ownershipRequestsRouter)
 
   app
     .get(
@@ -99,6 +101,16 @@ export const createApp = (services: Services) => {
             {
               name: "Chapter groups",
               description: "Links between a chapter and the groups that worked on it.",
+            },
+            {
+              name: "Group ownership",
+              description:
+                "Workflow for users to claim ownership of a group: request, approval, rejection, cancellation.",
+            },
+            {
+              name: "Group members",
+              description:
+                "Managing the membership of a group: list, add, remove, promote/demote, leave.",
             },
           ],
         },
