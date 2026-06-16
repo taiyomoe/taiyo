@@ -4,6 +4,7 @@ import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
 import { checkChapter } from "../middlewares/check-chapter-middleware"
+import { requireChapterAccess } from "../middlewares/require-chapter-access-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
@@ -33,7 +34,7 @@ export const updateChapterHandler = new Hono().patch(
   describeRoute({
     summary: "Update a chapter",
     description:
-      "Updates the metadata of a chapter. Omitted fields are kept as-is. Send `null` for `title` or `volume` to clear them.\n\n**Required roles:** uploader intern, uploader, moderator, admin.",
+      "Updates the metadata of a chapter. Omitted fields are kept as-is. Send `null` for `title` or `volume` to clear them.\n\n**Authentication:** uploader intern, uploader, moderator, admin — or any signed-in member of a group linked to the chapter.",
     tags: ["Chapters"],
     requestBody: {
       content: { "application/json": await resolver(updateChapterSchema).toOpenAPISchema() },
@@ -60,9 +61,10 @@ export const updateChapterHandler = new Hono().patch(
       }),
     },
   }),
-  withAuth("update", "Chapter"),
+  withAuth("read", "OwnershipRequest"),
   validateJson(updateChapterSchema),
   checkChapter(),
+  requireChapterAccess,
   withTransaction,
   async (c) => {
     const { db, chapter } = c.var

@@ -81,4 +81,37 @@ describe("PATCH /groups/:id", () => {
 
     expect(res.status).toBe(404)
   })
+
+  test("a USER who is a member of the group can update it", async ({ app, services }) => {
+    const { headers, userId } = await signInAs(services)
+
+    await services.db
+      .insertInto("groupMemberships")
+      .values({
+        userId,
+        groupId: SEEDED_GROUP_ID,
+        role: "MEMBER",
+        addedBy: userId,
+      })
+      .execute()
+
+    const res = await api(app, `/groups/${SEEDED_GROUP_ID}`, {
+      method: "PATCH",
+      headers,
+      json: { description: "Updated by member" },
+    })
+
+    expect(res.status).toBe(200)
+  })
+
+  test("a USER who is not a member is FORBIDDEN", async ({ app, services }) => {
+    const { headers } = await signInAs(services)
+    const res = await api(app, `/groups/${SEEDED_GROUP_ID}`, {
+      method: "PATCH",
+      headers,
+      json: { description: "x" },
+    })
+
+    expect(res.status).toBe(403)
+  })
 })

@@ -2,6 +2,7 @@ import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
 import { checkGroup } from "../middlewares/check-group-middleware"
+import { requireGroupAccess } from "../middlewares/require-group-access-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
@@ -32,7 +33,7 @@ export const updateGroupHandler = new Hono().patch(
   describeRoute({
     summary: "Update a group",
     description:
-      "Updates a group. Omitted fields are kept as-is. Send `null` to clear a nullable field.\n\n**Required roles:** uploader intern, uploader, moderator, admin.",
+      "Updates a group. Omitted fields are kept as-is. Send `null` to clear a nullable field.\n\n**Authentication:** uploader intern, uploader, moderator, admin — or any signed-in member of the group.",
     tags: ["Groups"],
     requestBody: {
       content: { "application/json": await resolver(updateGroupSchema).toOpenAPISchema() },
@@ -58,9 +59,10 @@ export const updateGroupHandler = new Hono().patch(
       }),
     },
   }),
-  withAuth("update", "Group"),
+  withAuth("read", "OwnershipRequest"),
   validateJson(updateGroupSchema),
   checkGroup(),
+  requireGroupAccess,
   withTransaction,
   async (c) => {
     const { db, group } = c.var

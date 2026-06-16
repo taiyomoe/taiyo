@@ -18,8 +18,9 @@ without breaking existing routes.
      flag, title; later, page uploads).
    - Invite other users as members, promote members to co-owners, transfer
      ownership, leave the group.
-4. Uploaders / uploader-interns lose edit access to a group once it is owned,
-   unless they are members of it. Mods/admins always retain access.
+4. Uploaders / uploader-interns and mods / admins always retain edit access to
+   every group and chapter — ownership is **additive** for regular `USER`s,
+   not a transfer of power away from the uploader role.
 
 ## Data model
 
@@ -76,52 +77,40 @@ user can re-request later if needed.
 
 ## Permission model
 
-Two derived predicates power everything.
+The model is **additive**: ownership only ever _grants_ extra access — it never
+strips access from uploaders. Two predicates power everything.
 
 ### `canEditGroup(user, group, memberships)`
 
 `memberships` = the user's set of `groupMemberships` rows.
 
-- `true` if `user.role` ∈ `{ADMIN, MODERATOR}`.
-- Otherwise let `owned = group has at least one OWNER membership`.
-  - If **unowned**: `true` if `user.role` ∈ `{UPLOADER, UPLOADER_INTERN}`.
-  - If **owned**: `true` if `(user.id, group.id)` is in `memberships`
-    (regardless of OWNER vs MEMBER).
+- `true` if `user.role` ∈ `{ADMIN, MODERATOR, UPLOADER, UPLOADER_INTERN}`.
+- `true` if `(user.id, group.id)` is in `memberships` (regardless of OWNER vs
+  MEMBER).
 - Otherwise `false`.
 
-In plain English: uploaders can edit unowned groups freely; once a group is
-owned, only its members and mods/admins can touch it.
+In plain English: uploaders / mods / admins can always edit any group;
+ownership lets regular users (`USER` role) edit the specific groups they're
+members of.
 
 ### `canEditChapter(user, chapter, linkedGroups, memberships)`
 
-`linkedGroups` = `chapterGroups` rows for the chapter, joined to the group's
-ownership state (so we know which are "owned").
+`linkedGroups` = `chapterGroups` rows for the chapter.
 
-- `true` if `user.role` ∈ `{ADMIN, MODERATOR}`.
-- Let `ownedLinkedGroups = linkedGroups.filter(g => g.owned)`.
-- If `ownedLinkedGroups.length === 0` (the chapter has no owned groups linked —
-  including the case where the chapter has no group links at all):
-  - `true` if `user.role` ∈ `{UPLOADER, UPLOADER_INTERN}`.
-- Else (at least one linked group is owned):
-  - `true` if the user is a member of any of `ownedLinkedGroups`.
-  - `false` otherwise — even uploaders are locked out.
+- `true` if `user.role` ∈ `{ADMIN, MODERATOR, UPLOADER, UPLOADER_INTERN}`.
+- `true` if the user is a member of any group in `linkedGroups`.
+- Otherwise `false`.
 
-In plain English: a chapter belongs to its owners. If any of its linked groups
-is owned, only those owners' people and mods/admins can edit it. If no linked
-group is owned, the chapter is editable by uploaders like today.
+In plain English: uploaders / mods / admins can always edit any chapter;
+ownership lets regular users edit the chapters of groups they belong to.
 
 ### Edge cases
 
-- **Multiple owned groups on one chapter** (union model): if the chapter is
-  linked to GroupA (owned by Alice) and GroupB (owned by Bob), both Alice's
-  members and Bob's members can edit. This is intentional — chapters often
-  involve multiple groups collaborating.
-- **Mixed owned / unowned**: if linked to GroupA (owned) and GroupB (unowned),
-  the chapter is **claimed** (because GroupA is owned). Uploaders are locked
-  out; only Alice's members and mods/admins can edit. GroupB membership alone
-  is not enough because GroupB has no members.
-- **Last-owner removal**: refuse to demote/remove the only OWNER. The owner
-  must promote or invite someone else first, or transfer ownership in one shot.
+- **Multiple groups on one chapter** (union model): membership in any one of
+  the linked groups grants access. Reflects how collaborations actually work.
+- **Last-owner removal**: refuse to demote/remove/leave the only OWNER. The
+  owner must promote or invite someone else first, or transfer ownership in
+  one shot.
 
 ## Routes
 
@@ -151,16 +140,17 @@ group is owned, the chapter is editable by uploaders like today.
 ### Existing routes that gain ownership awareness
 
 These currently use `withAuth("update" | "delete", "Group")` or
-`withAuth("update" | "delete", "Chapter")`. They'd switch to a new
-ownership-aware middleware:
+`withAuth("update" | "delete", "Chapter")`. They switch to a baseline signed-in
+gate (`withAuth("read", "OwnershipRequest")`) plus a new ownership-aware
+middleware:
 
 - `PATCH /groups/:id`, `DELETE /groups/:id` → `requireGroupAccess`
 - `PATCH /chapters/:id`, `DELETE /chapters/:id` → `requireChapterAccess`
 - `POST/DELETE /chapters/:id/groups/...` (linking) → `requireChapterAccess`
 - Later: `POST /chapters/:id/pages` (when page upload lands) → `requireChapterAccess`
 
-The new middlewares run **after** `withAuth("...", "Chapter")` /
-`withAuth("...", "Group")`. The base `withAuth` still gates on
+The new middlewares run **after** the baseline `withAuth(...)` and the
+`checkGroup()` / `checkChapter()` resolvers. The baseline `withAuth` gates on
 authenticated-and-not-banned; the new middleware refines "can this specific
 user edit this specific resource."
 
@@ -169,31 +159,26 @@ Implementation sketch:
 ```ts
 export const requireChapterAccess = createMiddleware(async (c, next) => {
   const { db, user, chapter } = c.var
-  if (user.role === "ADMIN" || user.role === "MODERATOR") return next()
 
-  // linked groups + ownership
-  const linkedOwned = await db
-    .selectFrom("chapterGroups")
-    .innerJoin("groupMemberships", "groupMemberships.groupId", "chapterGroups.groupId")
-    .where("chapterGroups.chapterId", "=", chapter.id)
-    .where("groupMemberships.role", "=", "OWNER")
-    .select("groupMemberships.groupId")
-    .execute()
-
-  if (linkedOwned.length === 0) {
-    // unclaimed — fall back to base RBAC
-    if (user.role === "UPLOADER" || user.role === "UPLOADER_INTERN") return next()
-    return c.fail("FORBIDDEN")
+  if (
+    user.role === "ADMIN" ||
+    user.role === "MODERATOR" ||
+    user.role === "UPLOADER" ||
+    user.role === "UPLOADER_INTERN"
+  ) {
+    return next()
   }
 
-  const ownedGroupIds = new Set(linkedOwned.map((r) => r.groupId))
-  const myGroups = await db
-    .selectFrom("groupMemberships")
-    .select("groupId")
-    .where("userId", "=", user.id)
-    .execute()
+  const membership = await db
+    .selectFrom("chapterGroups")
+    .innerJoin("groupMemberships", "groupMemberships.groupId", "chapterGroups.groupId")
+    .select("groupMemberships.groupId")
+    .where("chapterGroups.chapterId", "=", chapter.id)
+    .where("groupMemberships.userId", "=", user.id)
+    .limit(1)
+    .executeTakeFirst()
 
-  if (myGroups.some((m) => ownedGroupIds.has(m.groupId))) return next()
+  if (membership) return next()
   return c.fail("FORBIDDEN")
 })
 ```
@@ -243,11 +228,10 @@ them should be revisited:
   in `groupMemberships`. Real scanlation groups have co-leads.
 - **Auto-approval vs. mod review**: chose mod review. Auto-approval would let
   users squat groups. Mod review costs latency but is reversible.
-- **Uploaders kept out of owned groups**: chose yes (Interpretation B in my
-  notes). Maintains the "this group is mine" guarantee that makes ownership
-  meaningful.
+- **Uploaders kept out of owned groups**: chose no (additive model — uploaders
+  always retain access). Ownership only grants extra capability to `USER`s;
+  the uploader/mod/admin role table is unchanged.
 - **Union vs. intersection across multiple linked groups**: chose union.
   Reflects how collaborations actually work.
-- **Multi-group chapter, one owned**: claimed. The owned group dominates.
 - **Last-owner protection**: enforced in the app layer, not the DB. A `DEFER`-
   able trigger would be stronger but adds friction.

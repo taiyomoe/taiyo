@@ -2,6 +2,7 @@ import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
 import { checkChapter } from "../middlewares/check-chapter-middleware"
+import { requireChapterAccess } from "../middlewares/require-chapter-access-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
@@ -17,7 +18,7 @@ export const linkChapterGroupHandler = new Hono().post(
   describeRoute({
     summary: "Link a group to a chapter",
     description:
-      "Adds a group to a chapter.\n\n**Required roles:** uploader intern, uploader, moderator, admin.",
+      "Adds a group to a chapter.\n\n**Authentication:** uploader intern, uploader, moderator, admin — or any signed-in member of a group already linked to the chapter.",
     tags: ["Chapter groups"],
     requestBody: {
       content: { "application/json": await resolver(linkChapterGroupSchema).toOpenAPISchema() },
@@ -40,9 +41,10 @@ export const linkChapterGroupHandler = new Hono().post(
       }),
     },
   }),
-  withAuth("update", "Chapter"),
+  withAuth("read", "OwnershipRequest"),
   validateJson(linkChapterGroupSchema),
   checkChapter(),
+  requireChapterAccess,
   withTransaction,
   async (c) => {
     const { db, chapter } = c.var

@@ -95,4 +95,47 @@ describe("POST /chapters/:id/groups", () => {
 
     expect(res.status).toBe(401)
   })
+
+  test("a USER who is a member of a linked group can add another group", async ({
+    app,
+    services,
+  }) => {
+    const { headers, userId } = await signInAs(services)
+
+    await services.db
+      .insertInto("groupMemberships")
+      .values({
+        userId,
+        groupId: SEEDED_LINKED_GROUP_ID,
+        role: "MEMBER",
+        addedBy: userId,
+      })
+      .execute()
+
+    const newGroupId = randomUUID()
+
+    await services.db
+      .insertInto("groups")
+      .values({ id: newGroupId, name: `Co-Group ${newGroupId}`, creatorId: userId })
+      .execute()
+
+    const res = await api(app, `/chapters/${SEEDED_CHAPTER_ID}/groups`, {
+      method: "POST",
+      headers,
+      json: { groupId: newGroupId },
+    })
+
+    expect(res.status).toBe(201)
+  })
+
+  test("a USER who is not a member of any linked group is FORBIDDEN", async ({ app, services }) => {
+    const { headers } = await signInAs(services)
+    const res = await api(app, `/chapters/${SEEDED_CHAPTER_ID}/groups`, {
+      method: "POST",
+      headers,
+      json: { groupId: randomUUID() },
+    })
+
+    expect(res.status).toBe(403)
+  })
 })

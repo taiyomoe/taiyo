@@ -2,6 +2,7 @@ import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
 import { checkGroup } from "../middlewares/check-group-middleware"
+import { requireGroupAccess } from "../middlewares/require-group-access-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
 import { getOpenApiResponses } from "../utils/openapi-helper"
@@ -12,7 +13,7 @@ export const deleteGroupHandler = new Hono().delete(
   describeRoute({
     summary: "Delete a group",
     description:
-      "Removes a group. The group can be restored later.\n\n**Required roles:** uploader intern, uploader, moderator, admin.",
+      "Removes a group. The group can be restored later.\n\n**Authentication:** uploader intern, uploader, moderator, admin — or any signed-in member of the group.",
     tags: ["Groups"],
     responses: {
       200: {
@@ -35,8 +36,9 @@ export const deleteGroupHandler = new Hono().delete(
       }),
     },
   }),
-  withAuth("delete", "Group"),
+  withAuth("read", "OwnershipRequest"),
   checkGroup(),
+  requireGroupAccess,
   withTransaction,
   async (c) => {
     const { db, group, user } = c.var

@@ -37,4 +37,29 @@ describe("DELETE /groups/:id", () => {
 
     expect(res.status).toBe(404)
   })
+
+  test("a USER who is a member of the group can delete it", async ({ app, services }) => {
+    const { headers, userId } = await signInAs(services)
+
+    await services.db
+      .insertInto("groupMemberships")
+      .values({
+        userId,
+        groupId: SEEDED_GROUP_ID,
+        role: "OWNER",
+        addedBy: userId,
+      })
+      .execute()
+
+    const res = await api(app, `/groups/${SEEDED_GROUP_ID}`, { method: "DELETE", headers })
+
+    expect(res.status).toBe(200)
+  })
+
+  test("a USER who is not a member is FORBIDDEN", async ({ app, services }) => {
+    const { headers } = await signInAs(services)
+    const res = await api(app, `/groups/${SEEDED_GROUP_ID}`, { method: "DELETE", headers })
+
+    expect(res.status).toBe(403)
+  })
 })

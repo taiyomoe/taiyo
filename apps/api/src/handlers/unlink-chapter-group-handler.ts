@@ -2,6 +2,7 @@ import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
 import { checkChapter } from "../middlewares/check-chapter-middleware"
+import { requireChapterAccess } from "../middlewares/require-chapter-access-middleware"
 import { validateParam } from "../middlewares/validate-param-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
@@ -18,7 +19,7 @@ export const unlinkChapterGroupHandler = new Hono().delete(
   describeRoute({
     summary: "Unlink a group from a chapter",
     description:
-      "Removes a group link from the chapter.\n\n**Required roles:** uploader intern, uploader, moderator, admin.",
+      "Removes a group link from the chapter.\n\n**Authentication:** uploader intern, uploader, moderator, admin — or any signed-in member of a group linked to the chapter.",
     tags: ["Chapter groups"],
     responses: {
       200: {
@@ -37,9 +38,10 @@ export const unlinkChapterGroupHandler = new Hono().delete(
       }),
     },
   }),
-  withAuth("update", "Chapter"),
+  withAuth("read", "OwnershipRequest"),
   validateParam(paramSchema),
   checkChapter(),
+  requireChapterAccess,
   withTransaction,
   async (c) => {
     const { db, chapter } = c.var

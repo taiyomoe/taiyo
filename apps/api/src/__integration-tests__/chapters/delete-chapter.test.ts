@@ -79,4 +79,30 @@ describe("DELETE /chapters/:id", () => {
 
     expect(res.body.code).toBe("CHAPTER_NOT_FOUND")
   })
+
+  test("a USER who is a member of a linked group can delete the chapter", async ({
+    app,
+    services,
+  }) => {
+    const { headers, userId } = await signInAs(services)
+    const linked = await services.db
+      .selectFrom("chapterGroups")
+      .select("groupId")
+      .where("chapterId", "=", SEEDED_CHAPTER_ID)
+      .executeTakeFirstOrThrow()
+
+    await services.db
+      .insertInto("groupMemberships")
+      .values({
+        userId,
+        groupId: linked.groupId,
+        role: "MEMBER",
+        addedBy: userId,
+      })
+      .execute()
+
+    const res = await api(app, `/chapters/${SEEDED_CHAPTER_ID}`, { method: "DELETE", headers })
+
+    expect(res.status).toBe(200)
+  })
 })

@@ -67,4 +67,38 @@ describe("DELETE /chapters/:id/groups/:groupId", () => {
 
     expect(res.status).toBe(401)
   })
+
+  test("a USER who is a member of a linked group can unlink another group", async ({
+    app,
+    services,
+  }) => {
+    const { headers, userId } = await signInAs(services)
+
+    await services.db
+      .insertInto("groupMemberships")
+      .values({
+        userId,
+        groupId: SEEDED_GROUP_ID,
+        role: "MEMBER",
+        addedBy: userId,
+      })
+      .execute()
+
+    const res = await api(app, `/chapters/${SEEDED_CHAPTER_ID}/groups/${SEEDED_GROUP_ID}`, {
+      method: "DELETE",
+      headers,
+    })
+
+    expect(res.status).toBe(200)
+  })
+
+  test("a USER who is not a member of any linked group is FORBIDDEN", async ({ app, services }) => {
+    const { headers } = await signInAs(services)
+    const res = await api(app, `/chapters/${SEEDED_CHAPTER_ID}/groups/${SEEDED_GROUP_ID}`, {
+      method: "DELETE",
+      headers,
+    })
+
+    expect(res.status).toBe(403)
+  })
 })
