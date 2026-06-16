@@ -10,7 +10,7 @@ const client = new DF(env.DRAGONFLY_URL)
 // Raw ioredis instance. Reserved for callers that need it directly
 // (e.g. rate-limit / queue libraries that own their own key schema).
 // Prefer `cacheClient` for app data.
-export const cacheRedis = client
+export const rawCacheClient = client
 
 export const cacheClient = {
   users: {
