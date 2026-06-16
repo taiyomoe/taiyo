@@ -7,6 +7,11 @@ const HOUR = 60 * 60
 // const DAY = 60 * 60 * 24
 const client = new DF(env.DRAGONFLY_URL)
 
+// Raw ioredis instance. Reserved for callers that need it directly
+// (e.g. rate-limit / queue libraries that own their own key schema).
+// Prefer `cacheClient` for app data.
+export const cacheRedis = client
+
 export const cacheClient = {
   users: {
     /**

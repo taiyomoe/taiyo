@@ -12,6 +12,7 @@ import { searchMedias, searchMediasInputSchema } from "@taiyomoe/search"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { rateLimit } from "../middlewares/rate-limit-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import {
   apiErrorEnvelope,
@@ -98,12 +99,17 @@ export const searchMediasHandler = new Hono().post(
         description: "The request data failed validation.",
         content: { "application/json": { schema: resolver(apiErrorEnvelope) } },
       },
+      429: {
+        description: "Too many requests — slow down.",
+        content: { "application/json": { schema: resolver(apiErrorEnvelope) } },
+      },
       500: {
         description: "An internal server error occurred.",
         content: { "application/json": { schema: resolver(apiErrorEnvelope) } },
       },
     },
   }),
+  rateLimit({ prefix: "search-medias", windowMs: 60_000, limit: 60 }),
   validateJson(searchMediasInputSchema),
   async (c) => {
     const { hits, page, perPage, total } = await searchMedias(

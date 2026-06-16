@@ -3,6 +3,7 @@ import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
 import { checkMedia } from "../middlewares/check-media-middleware"
+import { rateLimit } from "../middlewares/rate-limit-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
@@ -32,10 +33,12 @@ export const reindexMediaHandler = new Hono().post(
       ...getOpenApiResponses({
         404: "No media with the given id exists.",
         422: "The provided id is not a valid UUID.",
+        429: "Too many requests — slow down.",
       }),
     },
   }),
   withAuth("update", "Media"),
+  rateLimit({ prefix: "reindex-media", windowMs: 60_000, limit: 30 }),
   checkMedia(),
   async (c) => {
     const { db, meili, mediasIndex, media } = c.var

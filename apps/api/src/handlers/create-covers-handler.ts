@@ -7,6 +7,7 @@ import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
 import { checkImages } from "../middlewares/check-images-middleware"
 import { checkMedia } from "../middlewares/check-media-middleware"
+import { rateLimit } from "../middlewares/rate-limit-middleware"
 import { validateFormData } from "../middlewares/validate-form-data-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
@@ -87,10 +88,12 @@ export const createCoversHandler = new Hono().post(
       ...getOpenApiResponses({
         404: "No media with the given id exists.",
         422: "The request data failed validation or an uploaded image is invalid.",
+        429: "Too many requests — slow down.",
       }),
     },
   }),
   withAuth("update", "Media"),
+  rateLimit({ prefix: "create-covers", windowMs: 60_000, limit: 10 }),
   validateFormData(createCoversSchema),
   checkImages(),
   checkMedia(),

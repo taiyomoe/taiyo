@@ -6,6 +6,7 @@ import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
 import { checkImages } from "../middlewares/check-images-middleware"
+import { rateLimit } from "../middlewares/rate-limit-middleware"
 import { validateFormData } from "../middlewares/validate-form-data-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
@@ -57,10 +58,12 @@ export const createStaffHandler = new Hono().post(
       },
       ...getOpenApiResponses({
         422: "The request data failed validation or the uploaded image is invalid.",
+        429: "Too many requests — slow down.",
       }),
     },
   }),
   withAuth("create", "Staff"),
+  rateLimit({ prefix: "create-staff", windowMs: 60_000, limit: 30 }),
   validateFormData(createStaffSchema),
   checkImages(),
   withTransaction,

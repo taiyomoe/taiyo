@@ -23,6 +23,10 @@ const genericErrors = {
     message: "The request data failed validation.",
     code: 422,
   },
+  RATE_LIMITED: {
+    message: "Too many requests. Please slow down.",
+    code: 429,
+  },
   INTERNAL_SERVER_ERROR: {
     message: "An internal server error occurred.",
     code: 500,

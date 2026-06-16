@@ -18,6 +18,7 @@ import { describeRoute, resolver } from "hono-openapi"
 import { pick } from "radashi"
 import z from "zod"
 import { checkImages } from "../middlewares/check-images-middleware"
+import { rateLimit } from "../middlewares/rate-limit-middleware"
 import { validateFormData } from "../middlewares/validate-form-data-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
@@ -221,10 +222,12 @@ export const createMediaHandler = new Hono().post(
         404: "One or more of the referenced staff members do not exist.",
         409: "One or more of the provided links already belong to an existing media.",
         422: "The request data failed validation or an uploaded image is invalid.",
+        429: "Too many requests — slow down.",
       }),
     },
   }),
   withAuth("create", "Media"),
+  rateLimit({ prefix: "create-media", windowMs: 60_000, limit: 10 }),
   validateFormData(createMediaSchema),
   checkImages(),
   withTransaction,
