@@ -42,16 +42,19 @@ export const setMainCoverHandler = new Hono().post(
   async (c) => {
     const { db, cover } = c.var
 
-    if (!cover.isMainCover) {
-      await db
-        .updateTable("covers")
-        .set({ isMainCover: false })
-        .where("mediaId", "=", cover.mediaId)
-        .where("isMainCover", "=", true)
-        .execute()
+    // Unset any other current main cover first, then promote this one. The
+    // unique partial index on covers(mediaId) WHERE isMainCover guarantees
+    // the invariant; doing the unset before the set keeps the transaction
+    // from violating it mid-flight under concurrent calls.
+    await db
+      .updateTable("covers")
+      .set({ isMainCover: false })
+      .where("mediaId", "=", cover.mediaId)
+      .where("id", "!=", cover.id)
+      .where("isMainCover", "=", true)
+      .execute()
 
-      await db.updateTable("covers").set({ isMainCover: true }).where("id", "=", cover.id).execute()
-    }
+    await db.updateTable("covers").set({ isMainCover: true }).where("id", "=", cover.id).execute()
 
     c.var.afterCommit(() => syncMedia({ db: c.var.db, meili: c.var.meili }, cover.mediaId))
 
