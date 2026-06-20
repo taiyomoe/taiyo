@@ -2,7 +2,7 @@
 
 ![Taiyō's banner](https://cdn.taiyo.moe/assets/banner-red.png)
 
-A manga reading platform — manga, manhwa, manhua, light novels — being rebuilt from scratch on the `rewrite` branch. This branch currently ships the backend (Hono API) and a Storybook component playground; the Next.js web app and background workers are planned but not yet checked in.
+A manga reading platform — manga, manhwa, manhua, light novels — being rebuilt from scratch on the `rewrite` branch. This branch currently ships the backend (Hono API), a Storybook component playground, and a blank TanStack Start web app; background workers are planned but not yet checked in.
 
 ## 🌟 Features
 
@@ -15,7 +15,9 @@ A manga reading platform — manga, manhwa, manhua, light novels — being rebui
 - **Group ownership workflow**: scanlation groups can be claimed by their actual owners through a request/approval flow; chapter and group mutations gate on membership (additive model — uploaders/mods/admins keep unconditional access)
 - **Observability**: HyperDX (OpenTelemetry) drains via evlog
 
-Not yet in this branch (planned): Next.js frontend, user library / history / follows routes (schemas exist, routes don't), chapter page upload, audit log instrumentation, BullMQ job workers.
+The web app (`apps/web`) is currently a blank TanStack Start (React) shell — the frontend itself is still to be built on top of it.
+
+Not yet in this branch (planned): the actual web frontend, user library / history / follows routes (schemas exist, routes don't), chapter page upload, audit log instrumentation, BullMQ job workers.
 
 ## 🏗️ Architecture
 
@@ -27,7 +29,8 @@ Monorepo powered by [Turborepo](https://turbo.build/) and [pnpm workspaces](http
 taiyo/
 ├── apps/
 │   ├── api/               # Hono + hono-openapi backend, port 3002
-│   └── storybook/         # @taiyomoe/ui component playground, port 6006
+│   ├── storybook/         # @taiyomoe/ui component playground, port 6006
+│   └── web/               # TanStack Start (React) web app, port 3000
 ├── packages/
 │   ├── auth/              # Better Auth config + plugins + lifecycle hooks
 │   ├── cache/             # Dragonfly (Redis-compatible) client
@@ -64,6 +67,13 @@ taiyo/
 - [Tailwind CSS 4](https://tailwindcss.com/)
 - [Base UI](https://base-ui.com/) for accessible primitives
 - Storybook 10 for component documentation
+
+**Web (`apps/web`):**
+
+- [TanStack Start](https://tanstack.com/start) (React) — SSR + file-based routing on [TanStack Router](https://tanstack.com/router)
+- [Vite 8](https://vite.dev/) with the `tanstackStart()` plugin
+- [Tailwind CSS 4](https://tailwindcss.com/) via `@tailwindcss/vite`
+- Scaffolded with the TanStack CLI; per-app context (including [TanStack Intent](https://tanstack.com/intent) skill mappings) lives in [`apps/web/AGENTS.md`](./apps/web/AGENTS.md)
 
 **Infrastructure (`docker-compose.yml`):**
 
@@ -112,6 +122,7 @@ taiyo/
 
    - API: <http://localhost:3002> (`/docs` for the OpenAPI viewer, `/ping` for a health check)
    - Storybook: <http://localhost:6006>
+   - Web: <http://localhost:3000>
 
 ## 📝 Available scripts
 
@@ -138,6 +149,8 @@ pnpm -F db kysely seed run         # seed sample data
 pnpm -F storybook dev              # storybook dev server
 pnpm -F storybook build            # static storybook build
 pnpm -F api dev                    # tsx-watch the API
+pnpm -F web dev                    # TanStack Start dev server (port 3000)
+pnpm -F web build                  # production build (client + SSR)
 ```
 
 ## 🔧 Development

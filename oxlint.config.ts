@@ -102,4 +102,5 @@ export default defineConfig({
       entryPoint: "packages/ui/src/styles/globals.css",
     },
   },
+  ignorePatterns: ["./apps/web/src/routeTree.gen.ts"],
 })

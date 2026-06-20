@@ -40,6 +40,13 @@ data/
 *storybook.log
 storybook-static
 
+# tanstack start (apps/web)
+.tanstack
+.nitro
+.output
+.vinxi
+*.local
+
 # env
 .env*
 
