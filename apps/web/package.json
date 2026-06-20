@@ -11,6 +11,8 @@
     "generate-routes": "tsr generate"
   },
   "dependencies": {
+    "@hugeicons/core-free-icons": "^4.2.0",
+    "@hugeicons/react": "^1.1.6",
     "@tailwindcss/vite": "^4.3.0",
     "@tanstack/react-devtools": "^0.10.5",
     "@tanstack/react-router": "^1.170.15",
