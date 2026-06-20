@@ -1,5 +1,5 @@
 {
-  "name": "@taiyomoe/s3",
+  "name": "@taiyomoe/chapter-processing",
   "version": "0.1.0",
   "private": true,
   "license": "MIT",
@@ -10,8 +10,15 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1064.0",
-    "@aws-sdk/s3-request-presigner": "^3.1064.0",
     "@t3-oss/env-core": "^0.13.11",
+    "@taiyomoe/config": "workspace:^",
+    "@taiyomoe/db": "workspace:^",
+    "@taiyomoe/s3": "workspace:^",
+    "bullmq": "^5.66.0",
+    "ioredis": "^5.11.1",
+    "kysely": "^0.29.2",
+    "magic-bytes.js": "^1.13.0",
+    "sharp": "^0.34.5",
     "zod": "^4.4.3"
   },
   "devDependencies": {

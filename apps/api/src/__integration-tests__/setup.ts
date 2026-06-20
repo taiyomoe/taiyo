@@ -68,6 +68,7 @@ export const test = baseTest.extend<Fixtures>({
       meili: sharedMeili,
       mediasIndex,
       auth: createAuth({ db }),
+      chapterUploadQueue: { enqueue: async () => {} },
     }
 
     await use(services)

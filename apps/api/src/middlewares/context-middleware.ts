@@ -1,5 +1,6 @@
 import type { S3Client } from "@aws-sdk/client-s3"
 import type { Auth, Session, User } from "@taiyomoe/auth/server"
+import type { ChapterUploadProducer } from "@taiyomoe/chapter-processing"
 import type { DB } from "@taiyomoe/db"
 import type { Meilisearch } from "@taiyomoe/search"
 import { EvlogVariables } from "evlog/hono"
@@ -22,6 +23,7 @@ export type AppContextVariables = EvlogVariables["Variables"] & {
   auth: Auth
   user?: User
   session?: Session["session"]
+  chapterUploadQueue: ChapterUploadProducer
 }
 
 export const createContextMiddleware = (services: Services) =>
@@ -35,6 +37,7 @@ export const createContextMiddleware = (services: Services) =>
     c.set("meili", services.meili)
     c.set("mediasIndex", services.mediasIndex)
     c.set("auth", services.auth)
+    c.set("chapterUploadQueue", services.chapterUploadQueue)
 
     c.ok = <T>(data: T, meta?: Record<string, unknown>) => {
       c.status(c.req.method === "POST" ? 201 : 200)

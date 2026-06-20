@@ -1,5 +1,6 @@
 import type { S3Client } from "@aws-sdk/client-s3"
 import { type Auth, createAuth } from "@taiyomoe/auth/server"
+import { getChapterUploadProducer, type ChapterUploadProducer } from "@taiyomoe/chapter-processing"
 import { type DB, getDb } from "@taiyomoe/db"
 import { getS3Bucket, getS3Client } from "@taiyomoe/s3"
 import { getMeiliClient, type Meilisearch, SEARCH_INDEXES } from "@taiyomoe/search"
@@ -12,6 +13,7 @@ export type Services = {
   meili: Meilisearch
   mediasIndex: string
   auth: Auth
+  chapterUploadQueue: ChapterUploadProducer
 }
 
 export const createServices = (): Services => {
@@ -24,5 +26,6 @@ export const createServices = (): Services => {
     meili: getMeiliClient(),
     mediasIndex: SEARCH_INDEXES.MEDIAS,
     auth: createAuth({ db }),
+    chapterUploadQueue: getChapterUploadProducer(),
   }
 }

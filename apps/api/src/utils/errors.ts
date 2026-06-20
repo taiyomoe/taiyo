@@ -204,6 +204,16 @@ const imageErrors = {
     code: 422,
   },
 } as const
+const chapterUploadErrors = {
+  CHAPTER_PAGES_ALREADY_UPLOADED: {
+    message: "This chapter already has pages.",
+    code: 409,
+  },
+  CHAPTER_UPLOAD_SESSION_NOT_FOUND: {
+    message: "No pending upload session was found for this chapter.",
+    code: 404,
+  },
+} as const
 
 export const errors = {
   ...genericErrors,
@@ -222,6 +232,7 @@ export const errors = {
   ...libraryErrors,
   ...listErrors,
   ...imageErrors,
+  ...chapterUploadErrors,
 } as const
 
 export type ErrorCode = keyof typeof errors

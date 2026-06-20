@@ -6,9 +6,9 @@ packages:
 allowBuilds:
   esbuild: false
   lefthook: true
+  msgpackr-extract: true
   msw: false
   protobufjs: false
   sharp: true
 
 minimumReleaseAge: 10080 # 7 days
-
