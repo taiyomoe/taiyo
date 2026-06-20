@@ -21,6 +21,7 @@
     "tailwindcss": "^4.3.0"
   },
   "devDependencies": {
+    "@inlang/paraglide-js": "^2.19.0",
     "@taiyomoe/typescript": "workspace:^",
     "@tanstack/devtools-vite": "^0.7.0",
     "@tanstack/router-cli": "^1.167.17",
