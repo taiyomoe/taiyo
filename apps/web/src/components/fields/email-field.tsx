@@ -1,6 +1,13 @@
 import { m } from "@/paraglide/messages"
+import { Mail01Icon } from "@hugeicons/core-free-icons"
+import { HugeiconsIcon } from "@hugeicons/react"
 import { Field, FieldDescription, FieldError, FieldLabel } from "@taiyomoe/ui/components/ui/field"
-import { Input, type InputProps } from "@taiyomoe/ui/components/ui/input"
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "@taiyomoe/ui/components/ui/input-group"
+import { ComponentProps } from "react"
 import type { Control, FieldPath, FieldValues } from "react-hook-form"
 import { Controller } from "react-hook-form"
 
@@ -13,7 +20,7 @@ export const EmailField = <
   label,
   description,
   ...props
-}: Omit<InputProps, "name" | "type"> & {
+}: Omit<ComponentProps<typeof InputGroupInput>, "name" | "type"> & {
   name: TName
   control: Control<TFieldValues>
   label?: string
@@ -29,15 +36,20 @@ export const EmailField = <
       }) => (
         <Field>
           <FieldLabel>{label ? label : m.global_email()}</FieldLabel>
-          <Input
-            type="email"
-            value={value ?? ""}
-            aria-invalid={invalid || undefined}
-            data-touched={isTouched || undefined}
-            data-dirty={isDirty || undefined}
-            {...field}
-            {...props}
-          />
+          <InputGroup>
+            <InputGroupInput
+              type="email"
+              value={value ?? ""}
+              aria-invalid={invalid || undefined}
+              data-touched={isTouched || undefined}
+              data-dirty={isDirty || undefined}
+              {...field}
+              {...props}
+            />
+            <InputGroupAddon align="inline-start">
+              <HugeiconsIcon icon={Mail01Icon} />
+            </InputGroupAddon>
+          </InputGroup>
           {description && <FieldDescription>{description}</FieldDescription>}
           {error && <FieldError>{error.message}</FieldError>}
         </Field>

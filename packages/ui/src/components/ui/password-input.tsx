@@ -9,14 +9,16 @@ import { ComponentProps, useState } from "react"
 
 export type PasswordInputProps = Omit<ComponentProps<typeof InputGroupInput>, "type"> & {
   containerClassName?: string
+  startIcon?: React.ReactNode
 }
 
-export const PasswordInput = ({ containerClassName, ...props }: PasswordInputProps) => {
+export const PasswordInput = ({ startIcon, containerClassName, ...props }: PasswordInputProps) => {
   const [showPassword, setShowPassword] = useState(false)
 
   return (
     <InputGroup className={containerClassName}>
       <InputGroupInput type={showPassword ? "text" : "password"} {...props} />
+      {startIcon && <InputGroupAddon align="inline-start">{startIcon}</InputGroupAddon>}
       <InputGroupAddon align="inline-end">
         <Tooltip>
           <TooltipTrigger

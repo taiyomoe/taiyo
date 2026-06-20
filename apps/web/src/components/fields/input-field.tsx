@@ -1,5 +1,10 @@
 import { Field, FieldDescription, FieldError, FieldLabel } from "@taiyomoe/ui/components/ui/field"
-import { Input, InputProps } from "@taiyomoe/ui/components/ui/input"
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "@taiyomoe/ui/components/ui/input-group"
+import { ComponentProps } from "react"
 import type { Control, FieldPath, FieldValues } from "react-hook-form"
 import { Controller } from "react-hook-form"
 
@@ -11,12 +16,16 @@ export const InputField = <
   control,
   label,
   description,
+  startIcon,
+  endIcon,
   ...props
-}: Omit<InputProps, "name"> & {
+}: Omit<ComponentProps<typeof InputGroupInput>, "name"> & {
   name: TName
   control: Control<TFieldValues>
   label: string
   description?: string
+  startIcon?: React.ReactNode
+  endIcon?: React.ReactNode
 }) => {
   return (
     <Controller
@@ -28,14 +37,19 @@ export const InputField = <
       }) => (
         <Field>
           <FieldLabel>{label}</FieldLabel>
-          <Input
-            value={value ?? ""}
-            aria-invalid={invalid || undefined}
-            data-touched={isTouched || undefined}
-            data-dirty={isDirty || undefined}
-            {...field}
-            {...props}
-          />
+          <InputGroup>
+            <InputGroupInput
+              type="email"
+              value={value ?? ""}
+              aria-invalid={invalid || undefined}
+              data-touched={isTouched || undefined}
+              data-dirty={isDirty || undefined}
+              {...field}
+              {...props}
+            />
+            {startIcon && <InputGroupAddon align="inline-start">{startIcon}</InputGroupAddon>}
+            {endIcon && <InputGroupAddon align="inline-end">{endIcon}</InputGroupAddon>}
+          </InputGroup>
           {description && <FieldDescription>{description}</FieldDescription>}
           {error && <FieldError>{error.message}</FieldError>}
         </Field>
