@@ -24,12 +24,17 @@ export const CheckboxField = <
     <Controller
       name={name}
       control={control}
-      render={({ field: { value, onChange, ...field }, fieldState: { invalid, error } }) => (
+      render={({
+        field: { value, onChange, ...field },
+        fieldState: { invalid, error },
+        formState: { disabled },
+      }) => (
         <Field>
           <FieldLabel>
             <Checkbox
               checked={value ?? false}
               onCheckedChange={(checked) => onChange(checked === true)}
+              disabled={disabled || undefined}
               aria-invalid={invalid || undefined}
               {...field}
               {...props}

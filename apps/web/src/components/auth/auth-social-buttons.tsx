@@ -17,13 +17,13 @@ export const AuthSocialButtons = ({
   <div className="flex flex-col gap-5">
     <div className="grid grid-cols-2 gap-3">
       <GoogleButton
-        className="h-12! gap-3 text-lg! font-semibold"
+        className="h-12! gap-3 text-lg! font-medium"
         loading={pending === "google"}
         disabled={disabled}
         onClick={() => onSelect("google")}
       />
       <DiscordButton
-        className="h-12! gap-3 text-lg! font-semibold"
+        className="h-12! gap-3 text-lg! font-medium"
         loading={pending === "discord"}
         disabled={disabled}
         onClick={() => onSelect("discord")}

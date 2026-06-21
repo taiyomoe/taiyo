@@ -17,20 +17,21 @@ import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
+const signInSchema = z.object({
+  email: z.email(m.global_invalid_email()),
+  password: z.string().min(1, m.auth_enter_password()),
+  rememberMe: z.boolean(),
+})
+
 export const SignInForm = () => {
   const navigate = useNavigate()
-  // Built in render (not module scope) so paraglide messages resolve in the request locale.
-  const signInSchema = z.object({
-    email: z.email(m.global_invalid_email()),
-    password: z.string().min(1, m.auth_enter_password()),
-    rememberMe: z.boolean(),
-  })
   const [formError, setFormError] = useState<string | null>(null)
   const [socialPending, setSocialPending] = useState<SocialProvider | null>(null)
-  const form = useForm<z.infer<typeof signInSchema>>({
+  const form = useForm({
     resolver: zodResolver(signInSchema),
     mode: "onTouched",
     defaultValues: { email: "", password: "", rememberMe: true },
+    disabled: socialPending !== null,
   })
   const isSubmitting = form.formState.isSubmitting
   const isBusy = isSubmitting || socialPending !== null
@@ -84,7 +85,7 @@ export const SignInForm = () => {
           onSelect={onSocial}
         />
         <Form
-          className="flex flex-col gap-4 **:data-[slot=input]:h-12 **:data-[slot=input]:p-0 **:data-[slot=input]:leading-12 **:data-[slot=input-group-addon]:px-4 **:data-[slot=input-group-addon]:[&_svg]:size-5!"
+          className="flex flex-col gap-4 **:data-[slot=input]:h-12 **:data-[slot=input]:p-0 **:data-[slot=input]:leading-12 **:data-[slot=input-group-addon]:px-4 **:data-[slot=input-group-addon]:[&_svg]:size-5! **:data-[slot=input-group-addon]:[&_svg]:text-muted-foreground/72"
           onSubmit={onSubmit}
           noValidate
         >
@@ -94,7 +95,6 @@ export const SignInForm = () => {
             size="lg"
             autoComplete="email"
             placeholder={m.auth_email_placeholder()}
-            disabled={isBusy}
           />
           <PasswordField
             startIcon={<HugeiconsIcon icon={LockPasswordIcon} />}
@@ -103,15 +103,9 @@ export const SignInForm = () => {
             size="lg"
             autoComplete="current-password"
             placeholder="••••••••"
-            disabled={isBusy}
           />
           <div className="flex items-center justify-between gap-3">
-            <CheckboxField
-              control={form.control}
-              name="rememberMe"
-              label={m.auth_remember_me()}
-              disabled={isBusy}
-            />
+            <CheckboxField control={form.control} name="rememberMe" label={m.auth_remember_me()} />
             <a
               href="/forgot-password"
               className="text-sm font-bold whitespace-nowrap text-[#FFC94D] hover:underline"

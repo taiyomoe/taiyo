@@ -34,6 +34,7 @@ export const InputField = <
       render={({
         field: { value, ...field },
         fieldState: { invalid, isTouched, isDirty, error },
+        formState: { disabled },
       }) => (
         <Field>
           <FieldLabel>{label}</FieldLabel>
@@ -41,6 +42,7 @@ export const InputField = <
             <InputGroupInput
               type="email"
               value={value ?? ""}
+              disabled={disabled || undefined}
               aria-invalid={invalid || undefined}
               data-touched={isTouched || undefined}
               data-dirty={isDirty || undefined}

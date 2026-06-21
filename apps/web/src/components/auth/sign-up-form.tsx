@@ -5,6 +5,7 @@ import { CheckboxField } from "@/components/fields/checkbox-field"
 import { EmailField } from "@/components/fields/email-field"
 import { InputField } from "@/components/fields/input-field"
 import { PasswordField } from "@/components/fields/password-field"
+import { env } from "@/env/client"
 import { m } from "@/paraglide/messages"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { LockPasswordIcon, UserAccountIcon } from "@hugeicons/core-free-icons"
@@ -22,9 +23,6 @@ import { useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
-// The /sign-up endpoint is protected by Cloudflare Turnstile (see packages/auth/src/config.ts).
-// When a site key is configured, the widget renders and its token is forwarded to better-auth.
-const turnstileSiteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY
 const signUpSchema = z.object({
   name: z
     .string()
@@ -62,6 +60,7 @@ export const SignUpForm = () => {
     resolver: zodResolver(signUpSchema),
     mode: "onTouched",
     defaultValues: { name: "", email: "", password: "", agree: false },
+    disabled: socialPending !== null,
   })
   const isSubmitting = form.formState.isSubmitting
   const isBusy = isSubmitting || socialPending !== null
@@ -152,7 +151,7 @@ export const SignUpForm = () => {
           onSelect={onSocial}
         />
         <Form
-          className="flex flex-col gap-4 **:data-[slot=input]:h-12 **:data-[slot=input]:p-0 **:data-[slot=input]:leading-12 **:data-[slot=input-group-addon]:px-4 **:data-[slot=input-group-addon]:[&_svg]:size-5!"
+          className="flex flex-col gap-4 **:data-[slot=input]:h-12 **:data-[slot=input]:p-0 **:data-[slot=input]:leading-12 **:data-[slot=input-group-addon]:px-4 **:data-[slot=input-group-addon]:[&_svg]:size-5! **:data-[slot=input-group-addon]:[&_svg]:text-muted-foreground/72"
           onSubmit={onSubmit}
           noValidate
         >
@@ -163,7 +162,6 @@ export const SignUpForm = () => {
             startIcon={<HugeiconsIcon icon={UserAccountIcon} />}
             size="lg"
             placeholder={m.auth_display_name_placeholder()}
-            disabled={isBusy}
             autoComplete="name"
           />
           <EmailField
@@ -171,7 +169,6 @@ export const SignUpForm = () => {
             control={form.control}
             size="lg"
             placeholder={m.auth_email_placeholder()}
-            disabled={isBusy}
             autoComplete="email"
           />
           <PasswordField
@@ -180,13 +177,11 @@ export const SignUpForm = () => {
             size="lg"
             startIcon={<HugeiconsIcon icon={LockPasswordIcon} />}
             placeholder="••••••••"
-            disabled={isBusy}
             autoComplete="new-password"
           />
           <CheckboxField
             control={form.control}
             name="agree"
-            disabled={isBusy}
             label={
               <ParaglideMessage
                 message={m.auth_agree}
@@ -210,10 +205,10 @@ export const SignUpForm = () => {
           {/* Turnstile + submit kept as one tight group so the button doesn't read
               as detached from the form when the captcha widget sits above it. */}
           <div className="mt-2 flex flex-col gap-3">
-            {turnstileSiteKey ? (
+            {env.VITE_TURNSTILE_SITE_KEY ? (
               <Turnstile
                 ref={turnstileRef}
-                siteKey={turnstileSiteKey}
+                siteKey={env.VITE_TURNSTILE_SITE_KEY}
                 onSuccess={(token) => setCaptchaToken(token)}
                 onExpire={() => setCaptchaToken(null)}
                 onError={() => setCaptchaToken(null)}
@@ -224,7 +219,7 @@ export const SignUpForm = () => {
             <SunButton
               type="submit"
               loading={isSubmitting}
-              disabled={isBusy || (Boolean(turnstileSiteKey) && !captchaToken)}
+              disabled={isBusy || (Boolean(env.VITE_TURNSTILE_SITE_KEY) && !captchaToken)}
             >
               {m.auth_create_account()}
             </SunButton>

@@ -26,11 +26,13 @@ export const PasswordField = <
       render={({
         field: { value, ...field },
         fieldState: { invalid, isTouched, isDirty, error },
+        formState: { disabled },
       }) => (
         <Field>
           <FieldLabel>{label ? label : m.global_password()}</FieldLabel>
           <PasswordInput
             value={value ?? ""}
+            disabled={disabled || undefined}
             aria-invalid={invalid || undefined}
             data-touched={isTouched || undefined}
             data-dirty={isDirty || undefined}
