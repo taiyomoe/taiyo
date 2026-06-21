@@ -5,7 +5,7 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "with-env": "dotenv -e ../../.env --",
+    "with-env": "dotenv -e ../../apps/api/.env --",
     "cli": "pnpm with-env tsx src/index.ts"
   },
   "dependencies": {

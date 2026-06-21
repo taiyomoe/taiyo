@@ -99,11 +99,13 @@ taiyo/
    cd taiyo
    pnpm install
    ```
-2. Copy env template and fill in values
+2. Copy the env templates and fill in values. Env is split per app — the root `.env` holds only the Docker infrastructure variables.
    ```bash
-   cp .env.example .env
+   cp .env.example .env                    # Docker infra: container ports & credentials
+   cp apps/api/.env.example apps/api/.env   # API + all server-side packages
+   cp apps/web/.env.example apps/web/.env   # web client (VITE_* vars)
    ```
-   `BETTER_AUTH_SECRET` is the only var you must set yourself (`npx auth secret` generates one); social OAuth and Turnstile work without credentials but those flows will be disabled.
+   `BETTER_AUTH_SECRET` (in `apps/api/.env`) is the only var you must set yourself (`npx auth secret` generates one); social OAuth and Turnstile work without credentials but those flows will be disabled. Backend tooling (`pnpm -F db kysely …`, `pnpm -F scripts cli`) reads `apps/api/.env`.
 3. Start infrastructure
    ```bash
    docker compose up -d
@@ -117,20 +119,20 @@ taiyo/
 6. Run dev
 
    ```bash
-   pnpm dev
+   pnpm dev                  # API + web (Storybook is excluded)
    ```
 
    - API: <http://localhost:3002> (`/docs` for the OpenAPI viewer, `/ping` for a health check)
-   - Storybook: <http://localhost:6006>
    - Web: <http://localhost:3000>
+   - Storybook (run separately): `pnpm -F storybook dev` → <http://localhost:6006>
 
 ## 📝 Available scripts
 
 Root-level:
 
 ```bash
-pnpm dev                # turbo dev --parallel — runs every app's dev script
-pnpm build              # turbo build
+pnpm dev                # turbo run dev — API + web dev servers (excludes Storybook)
+pnpm build              # turbo run build
 pnpm format             # oxfmt --check
 pnpm format:fix         # oxfmt (in place)
 pnpm lint               # oxlint (type-aware; doubles as the typecheck gate)
@@ -183,7 +185,17 @@ pnpm -F web build                  # production build (client + SSR)
 
 ## 🌐 Environment variables
 
-See `.env.example` for the full list. Validation is centralized via [`@t3-oss/env-core`](https://env.t3.gg/) in each package's `env.ts`.
+Env vars are split per app rather than living in one root file:
+
+| File            | Owns                                                                                                                     | Loaded by                                                                                                    |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ |
+| `.env`          | Docker Compose infra only — container ports & credentials (`DATABASE_USERNAME`, `RUSTFS_*`, `MEILISEARCH_MASTER_KEY`, …) | `docker compose`                                                                                             |
+| `apps/api/.env` | All server-side vars — DB / cache / S3 / search / auth / email                                                           | `apps/api`, plus the backend tooling in `packages/db` & `packages/scripts` (`dotenv -e ../../apps/api/.env`) |
+| `apps/web/.env` | `VITE_*` client vars only                                                                                                | Vite (`apps/web` is its own `envDir`)                                                                        |
+
+Each `.env.example` documents its own file's variables. Validation is centralized via [`@t3-oss/env-core`](https://env.t3.gg/) in each package's `env.ts`.
+
+A few `apps/api` values are derived from the Docker infra in the root `.env` and must be kept in sync: `DATABASE_URL` (postgres credentials/port), `S3_ACCESS_KEY_ID` / `S3_SECRET_ACCESS_KEY` (`RUSTFS_*`), and `MEILISEARCH_API_KEY` (`MEILISEARCH_MASTER_KEY`). `apps/storybook` needs no env vars.
 
 ## 📦 Package overview
 

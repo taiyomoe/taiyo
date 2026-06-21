@@ -9,7 +9,7 @@
     "./env": "./src/env.ts"
   },
   "scripts": {
-    "with-env": "dotenv -e ../../.env --",
+    "with-env": "dotenv -e ../../apps/api/.env --",
     "kysely": "pnpm with-env kysely"
   },
   "dependencies": {

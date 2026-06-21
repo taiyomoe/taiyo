@@ -3,8 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "turbo build",
-    "dev": "turbo dev --parallel",
+    "build": "turbo run build",
+    "dev": "turbo run dev --filter='!@taiyomoe/storybook'",
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",
     "format": "oxfmt --check",

@@ -9,7 +9,7 @@
     "./env": "./src/env.ts"
   },
   "scripts": {
-    "with-env": "dotenv -e ../../.env --",
+    "with-env": "dotenv -e .env --",
     "dev": "pnpm with-env tsx watch src/index.ts"
   },
   "dependencies": {
