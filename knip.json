@@ -1,5 +1,6 @@
 {
   "$schema": "./node_modules/knip/schema.json",
   "ignoreWorkspaces": ["./packages/db"],
-  "ignoreDependencies": ["tsx"]
+  "ignoreDependencies": ["tsx"],
+  "ignore": [".claude/**", "apps/web/src/paraglide/**"]
 }
