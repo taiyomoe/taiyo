@@ -1,5 +1,5 @@
 import { createEnv } from "@t3-oss/env-core"
-import { env as authEnv } from "@taiyomoe/auth/env-client"
+import { clientEnv as authEnv } from "@taiyomoe/auth/env-client"
 
 export const env = createEnv({
   extends: [authEnv],

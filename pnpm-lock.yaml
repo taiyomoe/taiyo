@@ -30,8 +30,8 @@ importers:
         specifier: ^1.69.0
         version: 1.69.0(oxlint-tsgolint@0.23.0)
       oxlint-tailwindcss:
-        specifier: ^1.2.0
-        version: 1.2.0(@oxlint/plugins@1.67.0)
+        specifier: ^1.3.2
+        version: 1.3.2(@oxlint/plugins@1.67.0)
       oxlint-tsgolint:
         specifier: ^0.23.0
         version: 0.23.0
@@ -2887,6 +2887,9 @@ packages:
   '@tailwindcss/node@4.3.0':
     resolution: {integrity: sha512-aFb4gUhFOgdh9AXo4IzBEOzBkkAxm9VigwDJnMIYv3lcfXCJVesNfbEaBl4BNgVRyid92AmdviqwBUBRKSeY3g==}
 
+  '@tailwindcss/node@4.3.1':
+    resolution: {integrity: sha512-6NDaqRoAMSXD1mr/RXu0HBvNE9a2n5tHPsxu9XHLws8o4Twes5rBM2205SUUiJ9goAtadrN6xTGX0UDEwp/N4A==}
+
   '@tailwindcss/oxide-android-arm64@4.3.0':
     resolution: {integrity: sha512-TJPiq67tKlLuObP6RkwvVGDoxCMBVtDgKkLfa/uyj7/FyxvQwHS+UOnVrXXgbEsfUaMgiVvC4KbJnRr26ho4Ng==}
     engines: {node: '>= 20'}
@@ -3783,6 +3786,10 @@ packages:
     resolution: {integrity: sha512-2agL3ueZhqxoVrfmntO8yuVj+uNSlIOnhykYHk3Cq0ShYPdUjjUiSJrQvXjq01I9jAuI0Zl2YO8Evv5Mqytm5g==}
     engines: {node: '>=10.2.0'}
 
+  enhanced-resolve@5.21.6:
+    resolution: {integrity: sha512-aNnGCvbJ/RIyWo1IuhNdVjnNF+EjH9wpzpNHt+ci/m9He9LJvUN8wrCcXjp9cWsGNAuvSpVFTx/vraAFQ8qGjQ==}
+    engines: {node: '>=10.13.0'}
+
   enhanced-resolve@5.22.1:
     resolution: {integrity: sha512-6QEuw3zoX1SJQc7b87aBXke/no+mG2bTBgw29gWMQonLmpEkWoCAVkl+M49e48AZlWzxiDzDZzYdp6kobcyLww==}
     engines: {node: '>=10.13.0'}
@@ -4579,11 +4586,11 @@ packages:
       vite-plus:
         optional: true
 
-  oxlint-tailwindcss@1.2.0:
-    resolution: {integrity: sha512-qUAguxH9aPmzQI3GyDwqqKqxXv6U/QrxohKnF9s1dKvv2x/3mSwOQajT1+ZvCw9DFBVeMbXGagMBoe5v5nhl0Q==}
+  oxlint-tailwindcss@1.3.2:
+    resolution: {integrity: sha512-AMppUaoGVXBHbS8DaQH6SeNDyq1txcPiUew/l0eUTLvKu9fizBCkbJl8y+fb+EzQJJmJN0IYrC7tZA2LiezAwQ==}
     engines: {node: '>=20'}
     peerDependencies:
-      '@oxlint/plugins': '>=1.43.0'
+      '@oxlint/plugins': '>=1.43.0 <2'
 
   oxlint-tsgolint@0.23.0:
     resolution: {integrity: sha512-3mBv3CoPbh8dFbzfDGIWa2ytZjn2v+3EX4aKRXjIhsoGFzG8GCjfRirz3rwZf1wYbZzsNLTSgpw8VjQuWdp/jA==}
@@ -5039,6 +5046,9 @@ packages:
 
   tailwindcss@4.3.0:
     resolution: {integrity: sha512-y6nxMGB1nMW9R6k96e5gdIFzcfL/gTJRNaqGes1YvkLnPVXzWgbqFF2yLC0T8G774n24cx3Pe8XrKoniCOAH+Q==}
+
+  tailwindcss@4.3.1:
+    resolution: {integrity: sha512-hk+TB1m+K8CYNrP6rjQaq/Y+4Zylwpa87mLYBKCunwnnQ9p+fHb7kmSfGqyEJoxF/O6CDyABWVFEafNSYKll+Q==}
 
   tapable@2.3.3:
     resolution: {integrity: sha512-uxc/zpqFg6x7C8vOE7lh6Lbda8eEL9zmVm/PLeTPBRhh1xCgdWaQ+J1CUieGpIfm2HdtsUpRv+HshiasBMcc6A==}
@@ -7056,6 +7066,16 @@ snapshots:
       source-map-js: 1.2.1
       tailwindcss: 4.3.0
 
+  '@tailwindcss/node@4.3.1':
+    dependencies:
+      '@jridgewell/remapping': 2.3.5
+      enhanced-resolve: 5.21.6
+      jiti: 2.7.0
+      lightningcss: 1.32.0
+      magic-string: 0.30.21
+      source-map-js: 1.2.1
+      tailwindcss: 4.3.1
+
   '@tailwindcss/oxide-android-arm64@4.3.0':
     optional: true
 
@@ -7958,6 +7978,11 @@ snapshots:
       - supports-color
       - utf-8-validate
 
+  enhanced-resolve@5.21.6:
+    dependencies:
+      graceful-fs: 4.2.11
+      tapable: 2.3.3
+
   enhanced-resolve@5.22.1:
     dependencies:
       graceful-fs: 4.2.11
@@ -8742,11 +8767,11 @@ snapshots:
       '@oxfmt/binding-win32-ia32-msvc': 0.54.0
       '@oxfmt/binding-win32-x64-msvc': 0.54.0
 
-  oxlint-tailwindcss@1.2.0(@oxlint/plugins@1.67.0):
+  oxlint-tailwindcss@1.3.2(@oxlint/plugins@1.67.0):
     dependencies:
       '@oxlint/plugins': 1.67.0
-      '@tailwindcss/node': 4.3.0
-      tailwindcss: 4.3.0
+      '@tailwindcss/node': 4.3.1
+      tailwindcss: 4.3.1
 
   oxlint-tsgolint@0.23.0:
     optionalDependencies:
@@ -9240,6 +9265,8 @@ snapshots:
   tailwind-merge@3.6.0: {}
 
   tailwindcss@4.3.0: {}
+
+  tailwindcss@4.3.1: {}
 
   tapable@2.3.3: {}
 

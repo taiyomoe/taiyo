@@ -359,7 +359,7 @@ export function ComboboxChips({
       {startAddon && (
         <div
           aria-hidden="true"
-          className="flex shrink-0 items-center pl-2 opacity-80 has-[+[data-slot=combobox-chip]]:pr-2 has-[~[data-size=sm]]:pl-1.5 has-[~[data-size=sm]]:has-[+[data-slot=combobox-chip]]:pr-1.5 [&_svg]:pointer-events-none [&_svg]:-ms-0.5 [&_svg]:-me-1.5 [&_svg:not([class*='size-'])]:size-4.5 sm:[&_svg:not([class*='size-'])]:size-4"
+          className="flex shrink-0 items-center pl-2 opacity-80 has-[+[data-slot=combobox-chip]]:pr-2 has-[~[data-size=sm]]:pl-1.5 has-[~[data-size=sm]]:has-[+[data-slot=combobox-chip]]:pr-1.5 [&_svg]:pointer-events-none [&_svg]:-mr-1.5 [&_svg]:-ml-0.5 [&_svg:not([class*='size-'])]:size-4.5 sm:[&_svg:not([class*='size-'])]:size-4"
           data-slot="combobox-start-addon"
         >
           {startAddon}

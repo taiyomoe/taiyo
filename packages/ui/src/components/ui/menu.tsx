@@ -126,7 +126,7 @@ export function MenuCheckboxItem({
         </>
       ) : (
         <>
-          <MenuPrimitive.CheckboxItemIndicator className="col-start-1 -ms-0.5">
+          <MenuPrimitive.CheckboxItemIndicator className="col-start-1 -ml-0.5">
             <svg
               aria-hidden="true"
               fill="none"
@@ -167,7 +167,7 @@ export function MenuRadioItem({
       data-slot="menu-radio-item"
       {...props}
     >
-      <MenuPrimitive.RadioItemIndicator className="col-start-1 -ms-0.5">
+      <MenuPrimitive.RadioItemIndicator className="col-start-1 -ml-0.5">
         <svg
           aria-hidden="true"
           fill="none"
@@ -260,7 +260,7 @@ export function MenuSubTrigger({
       {...props}
     >
       {children}
-      <ChevronRightIcon className="-me-0.5 ml-auto opacity-80" />
+      <ChevronRightIcon className="-mr-0.5 ml-auto opacity-80" />
     </MenuPrimitive.SubmenuTrigger>
   )
 }

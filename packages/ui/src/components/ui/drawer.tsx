@@ -472,7 +472,7 @@ export function DrawerMenuTrigger({
       {...props}
     >
       {children}
-      <ChevronRightIcon className="-me-0.5 ml-auto opacity-80" />
+      <ChevronRightIcon className="-mr-0.5 ml-auto opacity-80" />
     </DrawerTrigger>
   )
 }

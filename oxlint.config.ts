@@ -1,11 +1,6 @@
 import { defineConfig } from "oxlint"
 
 export default defineConfig({
-  jsPlugins: ["@stylistic/eslint-plugin", "oxlint-tailwindcss"],
-  options: {
-    typeAware: true,
-    typeCheck: true,
-  },
   plugins: [
     "eslint",
     "typescript",
@@ -18,6 +13,12 @@ export default defineConfig({
     "promise",
     "vitest",
   ],
+  jsPlugins: ["@stylistic/eslint-plugin", "oxlint-tailwindcss"],
+  options: {
+    typeAware: true,
+    typeCheck: true,
+  },
+  ignorePatterns: [".claude/**", "apps/web/src/routeTree.gen.ts"],
   overrides: [
     {
       files: ["./packages/scripts/src/**/*.ts"],
@@ -81,7 +82,7 @@ export default defineConfig({
     "tailwindcss/no-conflicting-classes": "error",
     "tailwindcss/no-deprecated-classes": "error",
     "tailwindcss/no-duplicate-classes": "error",
-    "tailwindcss/no-unknown-classes": "error",
+    "tailwindcss/no-unknown-classes": ["error", { allowlist: ["dark"] }],
     "tailwindcss/enforce-canonical": "error",
     "tailwindcss/no-unnecessary-arbitrary-value": "error",
     "tailwindcss/enforce-sort-order": "error",
@@ -99,8 +100,12 @@ export default defineConfig({
   },
   settings: {
     tailwindcss: {
-      entryPoint: "packages/ui/src/styles/globals.css",
+      entryPoint: [
+        { files: "apps/web/**", use: "apps/web/src/styles.css" },
+        { files: "apps/storybook/**", use: "packages/ui/src/styles/globals.css" },
+        { files: "packages/ui/**", use: "packages/ui/src/styles/globals.css" },
+        { files: "packages/email/**", use: "packages/ui/src/styles/globals.css" },
+      ],
     },
   },
-  ignorePatterns: [".claude/**", "apps/web/src/routeTree.gen.ts"],
 })

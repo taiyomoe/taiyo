@@ -1,4 +1,4 @@
-import { env as authEnv } from "@taiyomoe/auth/env"
+import { serverEnv as authEnv } from "@taiyomoe/auth/env-server"
 import type { Role } from "@taiyomoe/db"
 import { createHmac, randomBytes, randomUUID } from "node:crypto"
 import type { Services } from "../../services"
