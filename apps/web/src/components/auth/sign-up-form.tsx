@@ -205,22 +205,16 @@ export const SignUpForm = () => {
           {/* Turnstile + submit kept as one tight group so the button doesn't read
               as detached from the form when the captcha widget sits above it. */}
           <div className="mt-2 flex flex-col gap-3">
-            {env.VITE_TURNSTILE_SITE_KEY ? (
-              <Turnstile
-                ref={turnstileRef}
-                siteKey={env.VITE_TURNSTILE_SITE_KEY}
-                onSuccess={(token) => setCaptchaToken(token)}
-                onExpire={() => setCaptchaToken(null)}
-                onError={() => setCaptchaToken(null)}
-                options={{ theme: "dark", size: "flexible" }}
-              />
-            ) : null}
+            <Turnstile
+              ref={turnstileRef}
+              siteKey={env.VITE_TURNSTILE_SITE_KEY}
+              onSuccess={(token) => setCaptchaToken(token)}
+              onExpire={() => setCaptchaToken(null)}
+              onError={() => setCaptchaToken(null)}
+              options={{ theme: "dark", size: "flexible" }}
+            />
 
-            <SunButton
-              type="submit"
-              loading={isSubmitting}
-              disabled={isBusy || (Boolean(env.VITE_TURNSTILE_SITE_KEY) && !captchaToken)}
-            >
+            <SunButton type="submit" loading={isSubmitting} disabled={isBusy || !captchaToken}>
               {m.auth_create_account()}
             </SunButton>
           </div>

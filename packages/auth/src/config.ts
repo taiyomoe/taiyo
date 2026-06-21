@@ -5,7 +5,8 @@ import type { DB, Kysely, Role, UserSettings } from "@taiyomoe/db"
 import { betterAuth } from "better-auth"
 import { emailHarmony } from "better-auth-harmony"
 import { admin, captcha, customSession, magicLink, username } from "better-auth/plugins"
-import { env } from "./env"
+import { clientEnv } from "./env/client"
+import { serverEnv } from "./env/server"
 import { afterHook } from "./utils/after-hook"
 import { createAfterUserCreatedHook } from "./utils/after-user-created-hook"
 import { createBeforeHook } from "./utils/before-hook"
@@ -17,6 +18,7 @@ import { sendVerificationEmail } from "./utils/send-verification-email"
 export const createAuth = ({ db }: { db: Kysely<DB> }) =>
   betterAuth({
     appName: "Taiyō",
+    baseURL: clientEnv.VITE_BETTER_AUTH_URL,
     database: kyselyAdapter(db, { type: "postgres", usePlural: true }),
     emailAndPassword: {
       enabled: true,
@@ -36,12 +38,12 @@ export const createAuth = ({ db }: { db: Kysely<DB> }) =>
     },
     socialProviders: {
       discord: {
-        clientId: env.DISCORD_CLIENT_ID,
-        clientSecret: env.DISCORD_CLIENT_SECRET,
+        clientId: serverEnv.DISCORD_CLIENT_ID,
+        clientSecret: serverEnv.DISCORD_CLIENT_SECRET,
       },
       google: {
-        clientId: env.GOOGLE_CLIENT_ID,
-        clientSecret: env.GOOGLE_CLIENT_SECRET,
+        clientId: serverEnv.GOOGLE_CLIENT_ID,
+        clientSecret: serverEnv.GOOGLE_CLIENT_SECRET,
       },
     },
     secondaryStorage: {
@@ -81,7 +83,7 @@ export const createAuth = ({ db }: { db: Kysely<DB> }) =>
       magicLink({ disableSignUp: true, sendMagicLink: createSendMagicLink({ db }) }),
       captcha({
         provider: "cloudflare-turnstile",
-        secretKey: env.TURNSTILE_SECRET_KEY,
+        secretKey: serverEnv.TURNSTILE_SECRET_KEY,
         endpoints: ["/sign-up", "/forget-password"],
       }),
       admin({ defaultRole: "USER" }),
