@@ -1,7 +1,7 @@
 @import "tailwindcss";
-@import "@fontsource-variable/geist-mono";
-@import "@calcom/cal-sans-ui/ui.css";
-@import "@calcom/cal-sans-ui/text.css";
+@import "@fontsource-variable/jetbrains-mono";
+@import "@fontsource-variable/plus-jakarta-sans";
+@import "@fontsource/pt-serif";
 @source "../components";
 
 @custom-variant dark (&:is(.dark *));
@@ -13,9 +13,9 @@
   --animate-toast-success-even: toast-success-even 0.32s cubic-bezier(0.5, 1, 0.89, 1);
   --animate-toast-error-odd: toast-error-odd 0.28s cubic-bezier(0.5, 1, 0.89, 1);
   --animate-toast-error-even: toast-error-even 0.28s cubic-bezier(0.5, 1, 0.89, 1);
-  --font-heading: "Cal Sans UI", sans-serif;
-  --font-mono: "Geist Mono Variable", monospace;
-  --font-sans: "Cal Sans Text", sans-serif;
+  --font-heading: "PT Serif", serif;
+  --font-mono: "JetBrains Mono", monospace;
+  --font-sans: "Plus Jakarta Sans", sans-serif;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
@@ -178,7 +178,7 @@
   --code: var(--color-white);
   --code-foreground: var(--foreground);
   --code-highlight: --alpha(var(--color-black) / 4%);
-  --radius: 0.625rem;
+  --radius: 0.8rem;
   --sidebar: var(--color-neutral-50);
   --sidebar-accent: --alpha(var(--color-black) / 4%);
   --sidebar-accent-foreground: var(--color-neutral-800);
