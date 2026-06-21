@@ -1,1 +1,95 @@
 @import "@taiyomoe/ui/style.css";
+
+/* ── Auth screen animations (sign-up / sign-in brand scene) ────────────── */
+@keyframes auth-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Each ray scales along its own length from its base at the sun's center
+   (transform-origin: top center), so it breathes outward. Per-ray duration/delay
+   stagger these so the rays don't pulse in unison. */
+@keyframes auth-ray-pulse {
+  0%,
+  100% {
+    transform: scaleY(0.84);
+    opacity: 1;
+  }
+  50% {
+    transform: scaleY(1.04);
+    opacity: 1;
+  }
+}
+
+@keyframes auth-sun-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.04);
+  }
+}
+
+@keyframes auth-aurora {
+  0% {
+    transform: translate(-10%, 0);
+  }
+  50% {
+    transform: translate(10%, -4%);
+  }
+  100% {
+    transform: translate(-10%, 0);
+  }
+}
+
+@keyframes auth-ember-rise {
+  0% {
+    transform: translateY(0) translateX(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.9;
+  }
+  90% {
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateY(-78vh) translateX(var(--drift));
+    opacity: 0;
+  }
+}
+
+/* Quick diagonal glint (0–26%) then a long rest off-screen (26–100%), so the
+   button shines periodically instead of constantly. Both ends are off-screen. */
+@keyframes auth-sheen {
+  0% {
+    transform: translateX(-130%) skewX(-18deg);
+  }
+  26%,
+  100% {
+    transform: translateX(330%) skewX(-18deg);
+  }
+}
+
+/* Form swap between /sign-up and /sign-in. Default fill-mode means the form rests at
+   its natural (visible) state — it is never left hidden if the animation doesn't run. */
+@keyframes auth-form-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-auth-screen] *,
+  [data-auth-screen] *::before,
+  [data-auth-screen] *::after {
+    animation: none !important;
+  }
+}
