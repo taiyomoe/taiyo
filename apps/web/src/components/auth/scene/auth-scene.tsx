@@ -9,10 +9,7 @@ export const AuthScene = () => (
   <div className="relative hidden flex-col justify-between overflow-hidden bg-[#120a07] px-14 py-11 lg:flex">
     <AuthSun />
     <AuthEmbers />
-    <Link
-      to="/"
-      className="relative z-3 w-fit transition-opacity hover:opacity-80"
-    >
+    <Link to="/" className="relative z-3 w-fit transition-opacity hover:opacity-80">
       <TaiyoLogoLockup className="gap-3 text-[26px] font-bold tracking-[-0.02em]" />
     </Link>
     <AuthCitations />

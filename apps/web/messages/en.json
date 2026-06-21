@@ -11,6 +11,8 @@
   "auth_sign_up": "Sign up",
   "auth_sign_in": "Sign in",
   "auth_create_account": "Create account",
+  "auth_sign_in_meta_title": "Taiyō — Sign in",
+  "auth_sign_up_meta_title": "Taiyō — Sign up",
   "auth_create_an_account": "Create an account",
   "auth_back_to_sign_up": "Back to sign up",
   "auth_display_name": "Display name",
