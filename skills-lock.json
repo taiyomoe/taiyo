@@ -22,6 +22,12 @@
       "source": "evlog.dev",
       "sourceType": "well-known",
       "computedHash": "4d42fe1804c0026f44ba26243f8e0593edf2cc60a7e8035e25956e983918287f"
+    },
+    "turborepo": {
+      "source": "vercel/turborepo",
+      "sourceType": "github",
+      "skillPath": "skills/turborepo/SKILL.md",
+      "computedHash": "b7c3165ae67a2892d6195a5b2cba15c8d96341f5c64ddd0d3ce4225c94a2ae83"
     }
   }
 }
