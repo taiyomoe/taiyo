@@ -3,31 +3,17 @@
   "skills": {
     "build-audit-logs": {
       "source": "evlog.dev",
+      "sourceUrl": "https://www.evlog.dev/",
       "sourceType": "well-known",
-      "computedHash": "3b87c33bc858bfe0349a1f3dcf362416c311fb184c9ad35148d5f9d010488ab9"
-    },
-    "coss": {
-      "source": "cosscom/coss",
-      "sourceType": "github",
-      "skillPath": "apps/ui/skills/coss/SKILL.md",
-      "computedHash": "d38dc6e0df3191b9a5b9f2c4b6984793d689922b49f8af78d4e1876645bac836"
-    },
-    "improve": {
-      "source": "shadcn/improve",
-      "sourceType": "github",
-      "skillPath": "skills/improve/SKILL.md",
-      "computedHash": "39a9358732dcff385e9e4d3e60b4547856f834e54a58b35e455aa9bd49928c13"
+      "computedHash": "e25e1f96b10200cb80dd47a9785f0dbbb4c45d4e4ac5102b3c2789ce1fc9b8e3",
+      "wellKnownDigest": "sha256:6046a45bec2a825ca6fcb293a8f7f94518d3e158819be4d5876ffc78271927f7"
     },
     "review-logging-patterns": {
       "source": "evlog.dev",
+      "sourceUrl": "https://www.evlog.dev/",
       "sourceType": "well-known",
-      "computedHash": "4d42fe1804c0026f44ba26243f8e0593edf2cc60a7e8035e25956e983918287f"
-    },
-    "turborepo": {
-      "source": "vercel/turborepo",
-      "sourceType": "github",
-      "skillPath": "skills/turborepo/SKILL.md",
-      "computedHash": "b7c3165ae67a2892d6195a5b2cba15c8d96341f5c64ddd0d3ce4225c94a2ae83"
+      "computedHash": "ecad5d6ced2ce0a7f556a803d89c71b540dd8417dc980bb6d447fe73b5363265",
+      "wellKnownDigest": "sha256:9fefc4315be00f55db017be3670850d0e137d0d5f4679c0766620e2960d676f8"
     }
   }
 }

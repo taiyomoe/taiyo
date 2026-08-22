@@ -4,6 +4,9 @@ Use this file to quickly identify the right coss primitive for a UI task. Each e
 
 For optional **`portalProps`** on composed `*Popup` components and **toast** providers (Base UI portal forwarding), see `./references/portal-props.md`.
 
+## Cross-component patterns
+- **Segmented Control** — Shared visual treatment for radio choices, navigation links, exclusive toggles, or tabbed panels; choose semantics first. `./references/segmented-control.md`
+
 ## Overlays & Popups
 - **Dialog** — Centered modal requiring user focus. `./references/primitives/dialog.md`
 - **AlertDialog** — Destructive/critical confirmation modal. `./references/primitives/alert-dialog.md`
@@ -13,6 +16,7 @@ For optional **`portalProps`** on composed `*Popup` components and **toast** pro
 - **Tooltip** — Short hover/focus hint text. `./references/primitives/tooltip.md`
 - **PreviewCard** — Hover-triggered rich entity preview. `./references/primitives/preview-card.md`
 - **Menu** — Dropdown action list with groups/submenus. `./references/primitives/menu.md`
+- **ContextMenu** — Right-click/long-press action menu at the pointer. `./references/primitives/context-menu.md`
 - **Command** — Searchable command palette (not cmdk). `./references/primitives/command.md`
 
 ## Selection & Input

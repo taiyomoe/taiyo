@@ -14,7 +14,7 @@ npx shadcn@latest add @coss/calendar
 Manual deps from docs:
 
 ```bash
-npm install react-day-picker
+npm install @daypicker/react
 ```
 
 ## Canonical imports
@@ -66,3 +66,4 @@ See `p-calendar-1` through `p-calendar-6` for single, range, dropdown navigation
 - dropdown navigation: `p-calendar-4`
 - select dropdown for month/year: `p-calendar-5`
 - combobox dropdown for month/year: `p-calendar-6`
+- date plus a validated 24-hour autocomplete time input: `p-calendar-25`
