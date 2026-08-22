@@ -2,7 +2,6 @@ import { createBullConnection, reapStaleChapterUploads, type ReaperDeps } from "
 import { Queue, Worker } from "bullmq"
 
 const CHAPTER_MAINTENANCE_QUEUE = "chapter-maintenance"
-
 const REAP_JOB = "reap-stale-uploads"
 
 // Idempotent: safe to call on every boot and from every replica — BullMQ
