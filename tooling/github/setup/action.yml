@@ -15,3 +15,10 @@ runs:
 
     - shell: bash
       run: pnpm install
+
+    # Paraglide output is generated (self-ignored via src/paraglide/.gitignore),
+    # so it is never committed. Both `lint` and `knip` resolve @/paraglide/messages,
+    # and neither job builds -- compile it here so every job gets a complete tree.
+    - name: Compile Paraglide messages
+      shell: bash
+      run: pnpm -F @taiyomoe/web run compile:messages
