@@ -18,6 +18,11 @@ export default defineConfig({
     typeAware: true,
     typeCheck: true,
   },
+  // React Compiler rules ship in oxlint's `correctness` category (aligned with
+  // the upstream ESLint presets), so enabling the category turns them on.
+  categories: {
+    correctness: "error",
+  },
   ignorePatterns: [".claude/**", "apps/web/src/routeTree.gen.ts"],
   overrides: [
     {
@@ -30,6 +35,12 @@ export default defineConfig({
   rules: {
     "no-console": "warn",
     curly: ["error", "all"],
+
+    // React Compiler. oxlint >=1.79 replaces this single nursery rule with
+    // granular rules (purity, refs, preserve-manual-memoization, ...) in the
+    // `correctness` category enabled above; drop this line on that upgrade.
+    // 1.79 is currently held back by minimumReleaseAge in pnpm-workspace.yaml.
+    "react/react-compiler": "error",
 
     // Stylistic rules
     "@stylistic/padding-line-between-statements": [

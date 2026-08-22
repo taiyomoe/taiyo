@@ -19,7 +19,7 @@ import { Button } from "@taiyomoe/ui/components/ui/button"
 import { Form } from "@taiyomoe/ui/components/ui/form"
 import { Link, useNavigate } from "@tanstack/react-router"
 import { ArrowLeft, CircleAlert, MailCheck } from "lucide-react"
-import { useRef, useState } from "react"
+import { type FormEvent, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
@@ -65,23 +65,27 @@ export const SignUpForm = () => {
   const isSubmitting = form.formState.isSubmitting
   const isBusy = isSubmitting || socialPending !== null
   const navigate = useNavigate()
-  const onSubmit = form.handleSubmit(async (values) => {
-    setFormError(null)
+  // handleSubmit() is invoked at event time rather than during render: its
+  // callback reads turnstileRef.current, and the React Compiler must assume a
+  // function passed to a call made during render may itself run during render.
+  const onSubmit = (event: FormEvent<HTMLFormElement>) =>
+    form.handleSubmit(async (values) => {
+      setFormError(null)
 
-    await authClient.signUp.email(
-      { name: values.name, email: values.email, password: values.password, callbackURL: "/" },
-      {
-        headers: captchaToken ? { "x-captcha-response": captchaToken } : undefined,
-        onError: ({ error }) => {
-          setFormError(error.message || m.auth_error_generic())
-          // Turnstile tokens are single-use — reset the widget so the user can retry.
-          turnstileRef.current?.reset()
-          setCaptchaToken(null)
+      await authClient.signUp.email(
+        { name: values.name, email: values.email, password: values.password, callbackURL: "/" },
+        {
+          headers: captchaToken ? { "x-captcha-response": captchaToken } : undefined,
+          onError: ({ error }) => {
+            setFormError(error.message || m.auth_error_generic())
+            // Turnstile tokens are single-use — reset the widget so the user can retry.
+            turnstileRef.current?.reset()
+            setCaptchaToken(null)
+          },
+          onSuccess: () => setPendingEmail(values.email),
         },
-        onSuccess: () => setPendingEmail(values.email),
-      },
-    )
-  })
+      )
+    })(event)
   const onSocial = async (provider: SocialProvider) => {
     setFormError(null)
     setSocialPending(provider)

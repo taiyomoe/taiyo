@@ -625,10 +625,19 @@ export function SidebarMenuSkeleton({
 }: React.ComponentProps<"div"> & {
   showIcon?: boolean
 }): React.ReactElement {
-  // Random width between 50 to 90%.
+  // Width between 50 and 90%, derived deterministically from this instance's id.
+  // Math.random() during render is impure -- the React Compiler may recompute it,
+  // and it produces a server/client hydration mismatch.
+  const id = React.useId()
   const width = React.useMemo(() => {
-    return `${Math.floor(Math.random() * 40) + 50}%`
-  }, [])
+    let hash = 0
+
+    for (const char of id) {
+      hash = (Math.imul(hash, 31) + char.charCodeAt(0)) | 0
+    }
+
+    return `${(Math.abs(hash) % 41) + 50}%`
+  }, [id])
 
   return (
     <div
