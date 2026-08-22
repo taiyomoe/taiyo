@@ -18,6 +18,7 @@
     "test:integration:watch": "vitest --config vitest.config.integration.ts"
   },
   "devDependencies": {
+    "@stylexjs/eslint-plugin": "^0.19.0",
     "@stylistic/eslint-plugin": "^5.10.0",
     "@types/node": "^26.2.0",
     "@vitejs/plugin-react": "^6.0.5",

@@ -13,7 +13,7 @@ export default defineConfig({
     "promise",
     "vitest",
   ],
-  jsPlugins: ["@stylistic/eslint-plugin", "oxlint-tailwindcss"],
+  jsPlugins: ["@stylistic/eslint-plugin", "@stylexjs/eslint-plugin", "oxlint-tailwindcss"],
   options: {
     typeAware: true,
     typeCheck: true,
@@ -88,6 +88,16 @@ export default defineConfig({
       },
     ],
     "@stylistic/wrap-iife": ["error", "inside"],
+
+    // StyleX rules
+    "@stylexjs/valid-styles": "error",
+    "@stylexjs/no-conflicting-props": "error",
+    "@stylexjs/no-nonstandard-styles": "error",
+    "@stylexjs/no-legacy-contextual-styles": "error",
+    "@stylexjs/no-lookahead-selectors": "error",
+    "@stylexjs/valid-shorthands": "error",
+    "@stylexjs/no-unused": "error",
+    "@stylexjs/sort-keys": "error",
 
     // Tailwind CSS rules
     "tailwindcss/no-conflicting-classes": "error",
