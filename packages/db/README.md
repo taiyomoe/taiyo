@@ -13,12 +13,7 @@ const user = await db.selectFrom("users").selectAll().where("id", "=", userId).e
 const users = await db.selectFrom("users").selectAll().limit(10).execute()
 
 // Insert
-await db
-  .insertInto("medias")
-  .values({
-    /* ... */
-  })
-  .execute()
+await db.insertInto("medias").values({/* ... */}).execute()
 ```
 
 Per-table types, JSON column types, enum constants, and the Kysely query builder are all re-exported from the package root:

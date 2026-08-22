@@ -30,13 +30,13 @@ Two new tables.
 
 A many-to-many between users and groups, carrying a role.
 
-| Column      | Type                                               | Notes                              |
+| Column | Type | Notes |
 | ----------- | -------------------------------------------------- | ---------------------------------- | -------------------------------------------------------- |
-| `userId`    | `uuid` references `users(id)` `ON DELETE CASCADE`  | composite primary key              |
-| `groupId`   | `uuid` references `groups(id)` `ON DELETE CASCADE` | composite primary key              |
-| `role`      | `text` check (`'OWNER'`                            | `'MEMBER'`)                        | application-enforced: at least one OWNER per owned group |
-| `addedBy`   | `uuid` references `users(id)`                      | who created the membership (audit) |
-| `createdAt` | `timestamp(3)` default `current_timestamp`         |                                    |
+| `userId` | `uuid` references `users(id)` `ON DELETE CASCADE` | composite primary key |
+| `groupId` | `uuid` references `groups(id)` `ON DELETE CASCADE` | composite primary key |
+| `role` | `text` check (`'OWNER'` | `'MEMBER'`) | application-enforced: at least one OWNER per owned group |
+| `addedBy` | `uuid` references `users(id)` | who created the membership (audit) |
+| `createdAt` | `timestamp(3)` default `current_timestamp` | |
 
 Indexes:
 
