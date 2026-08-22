@@ -18,6 +18,8 @@
     "@t3-oss/env-core": "^0.13.11",
     "@tailwindcss/vite": "^4.3.0",
     "@taiyomoe/auth": "workspace:^",
+    "@taiyomoe/config": "workspace:^",
+    "@taiyomoe/ui": "workspace:^",
     "@tanstack/react-devtools": "^0.10.5",
     "@tanstack/react-router": "^1.170.15",
     "@tanstack/react-router-devtools": "^1.167.0",
