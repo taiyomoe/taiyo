@@ -71,15 +71,15 @@ importers:
       '@taiyomoe/cache':
         specifier: workspace:^
         version: link:../../packages/cache
-      '@taiyomoe/chapter-processing':
-        specifier: workspace:^
-        version: link:../../packages/chapter-processing
       '@taiyomoe/config':
         specifier: workspace:^
         version: link:../../packages/config
       '@taiyomoe/db':
         specifier: workspace:^
         version: link:../../packages/db
+      '@taiyomoe/queue':
+        specifier: workspace:^
+        version: link:../../packages/queue
       '@taiyomoe/s3':
         specifier: workspace:^
         version: link:../../packages/s3
@@ -284,18 +284,27 @@ importers:
 
   apps/worker:
     dependencies:
-      '@taiyomoe/chapter-processing':
-        specifier: workspace:^
-        version: link:../../packages/chapter-processing
+      '@t3-oss/env-core':
+        specifier: ^0.13.11
+        version: 0.13.11(typescript@6.0.3)(zod@4.4.3)
       '@taiyomoe/config':
         specifier: workspace:^
         version: link:../../packages/config
       '@taiyomoe/db':
         specifier: workspace:^
         version: link:../../packages/db
+      '@taiyomoe/queue':
+        specifier: workspace:^
+        version: link:../../packages/queue
       '@taiyomoe/s3':
         specifier: workspace:^
         version: link:../../packages/s3
+      bullmq:
+        specifier: ^5.66.0
+        version: 5.78.0
+      zod:
+        specifier: ^4.4.3
+        version: 4.4.3
     devDependencies:
       '@taiyomoe/typescript':
         specifier: workspace:^
@@ -306,12 +315,6 @@ importers:
       dotenv-cli:
         specifier: ^11.0.0
         version: 11.0.0
-      kysely:
-        specifier: ^0.29.2
-        version: 0.29.2
-      pg:
-        specifier: ^8.21.0
-        version: 8.21.0
       tsx:
         specifier: ^4.22.4
         version: 4.22.4
@@ -385,52 +388,6 @@ importers:
       superjson:
         specifier: ^2.2.6
         version: 2.2.6
-      zod:
-        specifier: ^4.4.3
-        version: 4.4.3
-    devDependencies:
-      '@taiyomoe/typescript':
-        specifier: workspace:^
-        version: link:../../tooling/typescript
-      '@types/node':
-        specifier: ^25.9.2
-        version: 25.9.2
-      typescript:
-        specifier: ^6.0.3
-        version: 6.0.3
-
-  packages/chapter-processing:
-    dependencies:
-      '@aws-sdk/client-s3':
-        specifier: ^3.1064.0
-        version: 3.1064.0
-      '@t3-oss/env-core':
-        specifier: ^0.13.11
-        version: 0.13.11(typescript@6.0.3)(zod@4.4.3)
-      '@taiyomoe/config':
-        specifier: workspace:^
-        version: link:../config
-      '@taiyomoe/db':
-        specifier: workspace:^
-        version: link:../db
-      '@taiyomoe/s3':
-        specifier: workspace:^
-        version: link:../s3
-      bullmq:
-        specifier: ^5.66.0
-        version: 5.78.0
-      ioredis:
-        specifier: ^5.11.1
-        version: 5.11.1
-      kysely:
-        specifier: ^0.29.2
-        version: 0.29.2
-      magic-bytes.js:
-        specifier: ^1.13.0
-        version: 1.13.0
-      sharp:
-        specifier: ^0.34.5
-        version: 0.34.5
       zod:
         specifier: ^4.4.3
         version: 4.4.3
@@ -543,6 +500,46 @@ importers:
       '@types/react-dom':
         specifier: ^19.2.3
         version: 19.2.3(@types/react@19.2.17)
+      typescript:
+        specifier: ^6.0.3
+        version: 6.0.3
+
+  packages/queue:
+    dependencies:
+      '@t3-oss/env-core':
+        specifier: ^0.13.11
+        version: 0.13.11(typescript@6.0.3)(zod@4.4.3)
+      '@taiyomoe/config':
+        specifier: workspace:^
+        version: link:../config
+      '@taiyomoe/db':
+        specifier: workspace:^
+        version: link:../db
+      '@taiyomoe/s3':
+        specifier: workspace:^
+        version: link:../s3
+      bullmq:
+        specifier: ^5.66.0
+        version: 5.78.0
+      kysely:
+        specifier: ^0.29.2
+        version: 0.29.2
+      magic-bytes.js:
+        specifier: ^1.13.0
+        version: 1.13.0
+      sharp:
+        specifier: ^0.34.5
+        version: 0.34.5
+      zod:
+        specifier: ^4.4.3
+        version: 4.4.3
+    devDependencies:
+      '@taiyomoe/typescript':
+        specifier: workspace:^
+        version: link:../../tooling/typescript
+      '@types/node':
+        specifier: ^25.9.2
+        version: 25.9.2
       typescript:
         specifier: ^6.0.3
         version: 6.0.3

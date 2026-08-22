@@ -1,4 +1,4 @@
-import type { ChapterUploadManifest } from "@taiyomoe/chapter-processing"
+import type { ChapterUploadManifest } from "@taiyomoe/queue"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"

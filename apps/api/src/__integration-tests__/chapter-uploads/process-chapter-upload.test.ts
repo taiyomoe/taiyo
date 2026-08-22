@@ -1,4 +1,4 @@
-import { processChapterUpload } from "@taiyomoe/chapter-processing"
+import { processChapterUpload } from "@taiyomoe/queue"
 import { ListObjectsV2Command, PutObjectCommand } from "@aws-sdk/client-s3"
 import sharp from "sharp"
 import { describe, expect } from "vitest"

@@ -1,4 +1,4 @@
-import { reapStaleChapterUploads } from "@taiyomoe/chapter-processing"
+import { reapStaleChapterUploads } from "@taiyomoe/queue"
 import { PutObjectCommand } from "@aws-sdk/client-s3"
 import { describe, expect } from "vitest"
 

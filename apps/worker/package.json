@@ -11,17 +11,18 @@
     "clean": "rm -rf .turbo node_modules"
   },
   "dependencies": {
-    "@taiyomoe/chapter-processing": "workspace:^",
+    "@t3-oss/env-core": "^0.13.11",
     "@taiyomoe/config": "workspace:^",
     "@taiyomoe/db": "workspace:^",
-    "@taiyomoe/s3": "workspace:^"
+    "@taiyomoe/queue": "workspace:^",
+    "@taiyomoe/s3": "workspace:^",
+    "bullmq": "^5.66.0",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@taiyomoe/typescript": "workspace:^",
     "@types/node": "^25.9.2",
     "dotenv-cli": "^11.0.0",
-    "kysely": "^0.29.2",
-    "pg": "^8.21.0",
     "tsx": "^4.22.4",
     "typescript": "^6.0.3"
   }

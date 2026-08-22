@@ -1,8 +1,4 @@
-export {
-  CHAPTER_MAINTENANCE_QUEUE,
-  scheduleChapterMaintenance,
-  startChapterMaintenanceWorker,
-} from "./maintenance"
+export { createBullConnection } from "./connection"
 
 export { processChapterUpload, type ProcessorDeps } from "./processor"
 
@@ -11,5 +7,3 @@ export { CHAPTER_UPLOAD_QUEUE, getChapterUploadProducer, type ChapterUploadProdu
 export { reapStaleChapterUploads, type ReaperDeps } from "./reaper"
 
 export type { ChapterUploadJobData, ChapterUploadManifest } from "./types"
-
-export { startChapterProcessingWorker } from "./worker"

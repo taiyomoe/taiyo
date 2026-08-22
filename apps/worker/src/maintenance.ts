@@ -1,8 +1,7 @@
+import { createBullConnection, reapStaleChapterUploads, type ReaperDeps } from "@taiyomoe/queue"
 import { Queue, Worker } from "bullmq"
-import { createBullConnection } from "./connection"
-import { reapStaleChapterUploads, type ReaperDeps } from "./reaper"
 
-export const CHAPTER_MAINTENANCE_QUEUE = "chapter-maintenance"
+const CHAPTER_MAINTENANCE_QUEUE = "chapter-maintenance"
 
 const REAP_JOB = "reap-stale-uploads"
 

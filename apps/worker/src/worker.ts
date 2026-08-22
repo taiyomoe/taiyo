@@ -1,10 +1,12 @@
+import {
+  CHAPTER_UPLOAD_QUEUE,
+  type ChapterUploadJobData,
+  createBullConnection,
+  processChapterUpload,
+  type ProcessorDeps,
+} from "@taiyomoe/queue"
 import { Worker } from "bullmq"
-import { createBullConnection } from "./connection"
 import { env } from "./env"
-import { processChapterUpload } from "./processor"
-import type { ProcessorDeps } from "./processor"
-import { CHAPTER_UPLOAD_QUEUE } from "./queue"
-import type { ChapterUploadJobData } from "./types"
 
 export const startChapterProcessingWorker = (deps: ProcessorDeps) =>
   new Worker<ChapterUploadJobData>(

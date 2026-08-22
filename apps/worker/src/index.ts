@@ -1,11 +1,8 @@
-import {
-  scheduleChapterMaintenance,
-  startChapterMaintenanceWorker,
-  startChapterProcessingWorker,
-} from "@taiyomoe/chapter-processing"
 import { config } from "@taiyomoe/config"
 import { getDb } from "@taiyomoe/db"
 import { ensureStagingLifecycle, getS3Bucket, getS3Client } from "@taiyomoe/s3"
+import { scheduleChapterMaintenance, startChapterMaintenanceWorker } from "./maintenance"
+import { startChapterProcessingWorker } from "./worker"
 
 const deps = { db: getDb(), s3: getS3Client(), s3Bucket: getS3Bucket() }
 
