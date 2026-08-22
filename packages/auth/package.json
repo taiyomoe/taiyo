@@ -11,24 +11,24 @@
     "./env-server": "./src/env/server.ts"
   },
   "dependencies": {
-    "@better-auth/kysely-adapter": "^1.6.15",
+    "@better-auth/kysely-adapter": "^1.6.29",
     "@t3-oss/env-core": "^0.13.11",
     "@taiyomoe/cache": "workspace:^",
     "@taiyomoe/config": "workspace:^",
     "@taiyomoe/db": "workspace:^",
     "@taiyomoe/email": "workspace:^",
     "@taiyomoe/utils": "workspace:^",
-    "better-auth": "^1.6.15",
+    "better-auth": "^1.6.29",
     "better-auth-harmony": "^1.3.2",
     "luxon": "^3.7.2",
-    "react": "^19.2.7",
+    "react": "^19.2.8",
     "zod": "^4.4.3"
   },
   "devDependencies": {
     "@taiyomoe/typescript": "workspace:^",
-    "@types/luxon": "^3.7.1",
-    "@types/node": "^25.9.2",
-    "@types/react": "^19.2.17",
-    "typescript": "^6.0.3"
+    "@types/luxon": "^3.7.4",
+    "@types/node": "^26.2.0",
+    "@types/react": "^19.2.18",
+    "typescript": "^7.0.2"
   }
 }

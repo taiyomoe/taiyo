@@ -12,3 +12,9 @@ allowBuilds:
   sharp: true
 
 minimumReleaseAge: 10080 # 7 days
+
+# @better-auth/kysely-adapter pins its own kysely, which resolved to a different
+# copy than packages/db. Two copies means Kysely<DB> is not assignable to the
+# adapter's Kysely<any>. Force a single copy.
+overrides:
+  kysely: ^0.29.5

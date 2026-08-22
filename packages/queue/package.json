@@ -12,15 +12,15 @@
     "@taiyomoe/config": "workspace:^",
     "@taiyomoe/db": "workspace:^",
     "@taiyomoe/s3": "workspace:^",
-    "bullmq": "^5.66.0",
-    "kysely": "^0.29.2",
-    "magic-bytes.js": "^1.13.0",
-    "sharp": "^0.34.5",
+    "bullmq": "^6.1.1",
+    "kysely": "^0.29.5",
+    "magic-bytes.js": "^1.13.1",
+    "sharp": "^0.35.3",
     "zod": "^4.4.3"
   },
   "devDependencies": {
     "@taiyomoe/typescript": "workspace:^",
-    "@types/node": "^25.9.2",
-    "typescript": "^6.0.3"
+    "@types/node": "^26.2.0",
+    "typescript": "^7.0.2"
   }
 }

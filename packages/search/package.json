@@ -13,13 +13,13 @@
     "@taiyomoe/db": "workspace:^",
     "@taiyomoe/schemas": "workspace:^",
     "@taiyomoe/utils": "workspace:^",
-    "meilisearch": "^0.58.0",
+    "meilisearch": "^0.60.0",
     "radashi": "^12.9.1",
     "zod": "^4.4.3"
   },
   "devDependencies": {
     "@taiyomoe/typescript": "workspace:^",
-    "@types/node": "^25.9.2",
-    "typescript": "^6.0.3"
+    "@types/node": "^26.2.0",
+    "typescript": "^7.0.2"
   }
 }

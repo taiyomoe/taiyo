@@ -158,7 +158,7 @@ export function DrawerPopup({
             position === "left" &&
               "w-[calc(100%-(--spacing(12)))] max-w-md transform-[translateX(var(--drawer-swipe-movement-x))] border-r after:inset-y-0 after:right-full after:w-(--bleed) has-data-[slot=drawer-bar]:pr-2 data-ending-style:transform-[translateX(calc(-100%-var(--inset)))] data-starting-style:transform-[translateX(calc(-100%-var(--inset)))]",
             position === "right" &&
-              "col-start-2 w-[calc(100%-(--spacing(12)))] max-w-md transform-[translateX(var(--drawer-swipe-movement-x))] border-l after:inset-y-0 after:inset-s-full after:w-(--bleed) has-data-[slot=drawer-bar]:pl-2 data-ending-style:transform-[translateX(calc(100%+var(--inset)))] data-starting-style:transform-[translateX(calc(100%+var(--inset)))]",
+              "col-start-2 w-[calc(100%-(--spacing(12)))] max-w-md transform-[translateX(var(--drawer-swipe-movement-x))] border-l after:inset-y-0 after:left-full after:w-(--bleed) has-data-[slot=drawer-bar]:pl-2 data-ending-style:transform-[translateX(calc(100%+var(--inset)))] data-starting-style:transform-[translateX(calc(100%+var(--inset)))]",
             variant !== "straight" &&
               cn(
                 position === "bottom" && "rounded-t-2xl",
@@ -198,7 +198,7 @@ export function DrawerPopup({
           {showCloseButton && (
             <DrawerPrimitive.Close
               aria-label="Close"
-              className="absolute inset-e-2 top-2"
+              className="absolute top-2 right-2"
               render={<Button size="icon" variant="ghost" />}
             >
               <XIcon />

@@ -9,9 +9,10 @@ const REAP_JOB = "reap-stale-uploads"
 export const scheduleChapterMaintenance = async () => {
   const queue = new Queue(CHAPTER_MAINTENANCE_QUEUE, { connection: createBullConnection() })
 
-  // Use the older repeat API for broader Redis-compatible store compatibility.
-  // BullMQ de-dupes by jobId so multiple boots don't multiply the schedule.
-  await queue.add(REAP_JOB, {}, { repeat: { pattern: "0 * * * *" }, jobId: REAP_JOB })
+  // BullMQ v6 removed `repeat` from JobsOptions; the job scheduler API replaces it.
+  // upsertJobScheduler is keyed by scheduler id, so multiple boots don't multiply
+  // the schedule.
+  await queue.upsertJobScheduler(REAP_JOB, { pattern: "0 * * * *" }, { name: REAP_JOB })
   await queue.close()
 }
 

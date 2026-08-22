@@ -8,24 +8,24 @@
     "build": "storybook build"
   },
   "dependencies": {
-    "@storybook/addon-a11y": "^10.4.2",
-    "@storybook/addon-docs": "^10.4.2",
-    "@storybook/addon-themes": "^10.4.2",
-    "@storybook/react-vite": "^10.4.2",
-    "@tailwindcss/vite": "^4.3.0",
+    "@storybook/addon-a11y": "^10.5.8",
+    "@storybook/addon-docs": "^10.5.8",
+    "@storybook/addon-themes": "^10.5.8",
+    "@storybook/react-vite": "^10.5.8",
+    "@tailwindcss/vite": "^4.3.3",
     "@taiyomoe/ui": "workspace:^",
-    "@vitejs/plugin-react": "^6.0.2",
-    "lucide-react": "^1.17.0",
-    "react": "^19.2.7",
-    "react-dom": "^19.2.7",
-    "storybook": "^10.4.2",
-    "vite": "^8.0.16"
+    "@vitejs/plugin-react": "^6.0.5",
+    "lucide-react": "^1.31.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "storybook": "^10.5.8",
+    "vite": "^8.2.1"
   },
   "devDependencies": {
     "@taiyomoe/typescript": "workspace:^",
-    "@types/node": "^25.9.2",
-    "@types/react": "^19.2.17",
-    "@types/react-dom": "^19.2.3",
-    "typescript": "^6.0.3"
+    "@types/node": "^26.2.0",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
+    "typescript": "^7.0.2"
   }
 }

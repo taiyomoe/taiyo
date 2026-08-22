@@ -13,18 +13,18 @@
   },
   "dependencies": {
     "@t3-oss/env-core": "^0.13.11",
-    "react": "^19.2.7",
-    "react-dom": "^19.2.7",
-    "react-email": "^6.5.0",
-    "resend": "^6.12.4",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "react-email": "^6.9.2",
+    "resend": "^6.20.0",
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@react-email/ui": "^6.5.0",
+    "@react-email/ui": "^6.9.2",
     "@taiyomoe/typescript": "workspace:^",
-    "@types/node": "^25.9.2",
-    "@types/react": "^19.2.17",
-    "@types/react-dom": "^19.2.3",
-    "typescript": "^6.0.3"
+    "@types/node": "^26.2.0",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
+    "typescript": "^7.0.2"
   }
 }

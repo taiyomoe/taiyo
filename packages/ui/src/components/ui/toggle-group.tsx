@@ -32,7 +32,7 @@ export function ToggleGroup({
         variant === "default"
           ? "gap-0.5"
           : orientation === "horizontal"
-            ? "*:not-first:rounded-l-none *:not-first:border-l-0 *:not-last:rounded-r-none *:not-last:border-r-0 *:not-first:before:rounded-l-none *:not-last:before:rounded-r-none *:not-first:not-data-[slot=separator]:before:inset-s-[-0.5px] *:not-last:not-data-[slot=separator]:before:inset-e-[-0.5px]"
+            ? "*:not-first:rounded-l-none *:not-first:border-l-0 *:not-last:rounded-r-none *:not-last:border-r-0 *:not-first:before:rounded-l-none *:not-last:before:rounded-r-none *:not-first:not-data-[slot=separator]:before:left-[-0.5px] *:not-last:not-data-[slot=separator]:before:right-[-0.5px]"
             : "flex-col *:not-first:rounded-t-none *:not-first:border-t-0 *:not-last:rounded-b-none *:not-last:border-b-0 *:not-first:before:rounded-t-none *:not-last:before:rounded-b-none *:not-first:not-data-[slot=separator]:before:top-[-0.5px] *:not-last:not-data-[slot=separator]:before:bottom-[-0.5px] *:data-[slot=toggle]:not-last:before:hidden *:first:dark:before:block *:last:dark:before:hidden",
         className,
       )}

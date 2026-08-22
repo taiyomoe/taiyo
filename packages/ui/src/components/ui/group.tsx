@@ -16,7 +16,7 @@ export const groupVariants = cva(
     variants: {
       orientation: {
         horizontal:
-          "*:data-slot:has-[~[data-slot]]:rounded-r-none *:data-slot:has-[~[data-slot]]:border-r-0 *:data-slot:has-[~[data-slot]]:before:rounded-r-none *:data-slot:not-data-[slot=separator]:has-[~[data-slot]]:before:inset-e-[-0.5px] *:pointer-coarse:after:min-w-auto *:[[data-slot]~[data-slot]]:rounded-l-none *:[[data-slot]~[data-slot]]:border-l-0 *:[[data-slot]~[data-slot]]:before:rounded-l-none *:[[data-slot]~[data-slot]:not([data-slot=separator])]:before:inset-s-[-0.5px]",
+          "*:data-slot:has-[~[data-slot]]:rounded-r-none *:data-slot:has-[~[data-slot]]:border-r-0 *:data-slot:has-[~[data-slot]]:before:rounded-r-none *:data-slot:not-data-[slot=separator]:has-[~[data-slot]]:before:right-[-0.5px] *:pointer-coarse:after:min-w-auto *:[[data-slot]~[data-slot]]:rounded-l-none *:[[data-slot]~[data-slot]]:border-l-0 *:[[data-slot]~[data-slot]]:before:rounded-l-none *:[[data-slot]~[data-slot]:not([data-slot=separator])]:before:left-[-0.5px]",
         vertical:
           "flex-col *:data-slot:has-[~[data-slot]]:rounded-b-none *:data-slot:has-[~[data-slot]]:border-b-0 *:data-slot:has-[~[data-slot]]:before:rounded-b-none *:data-slot:not-data-[slot=separator]:has-[~[data-slot]]:before:bottom-[-0.5px] *:data-slot:not-data-[slot=separator]:has-[~[data-slot]]:before:hidden *:first:dark:before:block *:last:dark:before:hidden *:pointer-coarse:after:min-h-auto *:[[data-slot]~[data-slot]]:rounded-t-none *:[[data-slot]~[data-slot]]:border-t-0 *:[[data-slot]~[data-slot]]:before:rounded-t-none *:[[data-slot]~[data-slot]:not([data-slot=separator])]:before:top-[-0.5px]",
       },

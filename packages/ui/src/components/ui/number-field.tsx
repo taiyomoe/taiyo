@@ -129,7 +129,7 @@ export function NumberFieldScrubArea({
         {label}
       </Label>
       {/* oxlint-disable-next-line tailwindcss/no-unknown-classes */}
-      <NumberFieldPrimitive.ScrubAreaCursor className="drop-shadow-[0_1px_1px_#0008] filter">
+      <NumberFieldPrimitive.ScrubAreaCursor className="drop-shadow-[0_1px_1px_#0008]">
         <CursorGrowIcon />
       </NumberFieldPrimitive.ScrubAreaCursor>
     </NumberFieldPrimitive.ScrubArea>

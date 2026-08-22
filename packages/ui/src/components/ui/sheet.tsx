@@ -105,7 +105,7 @@ export function SheetPopup({
           {showCloseButton && (
             <SheetPrimitive.Close
               aria-label="Close"
-              className="absolute inset-e-2 top-2"
+              className="absolute top-2 right-2"
               render={<Button size="icon" variant="ghost" />}
               {...closeProps}
             >
