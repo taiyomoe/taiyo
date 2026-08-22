@@ -10,7 +10,8 @@
   "exports": {
     "./components/*": "./src/components/*.tsx",
     "./utils/*": "./src/utils/*.ts",
-    "./style.css": "./src/styles/globals.css"
+    "./style.css": "./src/styles/globals.css",
+    "./styles/*": "./src/styles/*.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",
@@ -19,6 +20,7 @@
     "@fontsource/pt-serif": "^5.3.0",
     "@hugeicons/core-free-icons": "^4.2.3",
     "@hugeicons/react": "^1.1.9",
+    "@stylexjs/stylex": "^0.19.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^1.31.0",

@@ -691,6 +691,9 @@ importers:
       '@hugeicons/react':
         specifier: ^1.1.9
         version: 1.1.9(react@19.2.8)
+      '@stylexjs/stylex':
+        specifier: ^0.19.0
+        version: 0.19.0
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1

@@ -1,5 +1,5 @@
 import { Navbar } from "@/components/layout/navbar"
-import { font, spacing, text } from "@/styles/tokens.stylex"
+import { font, spacing, text } from "@taiyomoe/ui/styles/tokens.stylex"
 import * as stylex from "@stylexjs/stylex"
 import { createFileRoute } from "@tanstack/react-router"
 

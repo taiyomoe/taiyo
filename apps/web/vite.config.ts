@@ -20,7 +20,12 @@ const config = defineConfig({
       // same "@/*" alias the bundler and tsconfig use.
       unstable_moduleResolution: { type: "commonJS", rootDir: import.meta.dirname },
       aliases: { "@/*": [`${import.meta.dirname}/src/*`] },
-    }),
+      // @taiyomoe/ui is a workspace package resolved through node_modules and
+      // ships StyleX source, so it must be compiled as app code.
+      // externalPackages is implemented in @stylexjs/unplugin's core but is
+      // missing from its UserOptions type in 0.19.0; cast until upstream adds it.
+      externalPackages: ["@taiyomoe/ui"],
+    } as Parameters<typeof stylex.vite>[0]),
     tailwindcss(),
     tanstackStart(),
     // React Compiler via plugin-react's native `compiler` option, backed by
