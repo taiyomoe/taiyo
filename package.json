@@ -1,27 +1,39 @@
 {
   "name": "taiyo",
   "private": true,
-  "engines": {
-    "node": "24.11.1"
-  },
-  "packageManager": "pnpm@10.23.0",
+  "type": "module",
   "scripts": {
-    "build": "turbo build",
-    "dev": "turbo dev --parallel",
-    "clean": "git clean -xdf node_modules",
-    "clean:ws": "turbo clean",
-    "check:ws": "biome check apps/ packages/ tooling/",
+    "build": "turbo run build",
+    "dev": "turbo run dev --filter='!@taiyomoe/storybook'",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
+    "format": "oxfmt --check",
+    "format:fix": "oxfmt",
     "lint:ws": "pnpm dlx sherif@latest",
-    "typecheck": "turbo typecheck",
-    "postinstall": "pnpm lint:ws",
-    "knip": "knip"
+    "postinstall": "pnpm lint:ws && lefthook install",
+    "knip": "knip",
+    "test:unit": "vitest run --config vitest.config.unit.ts",
+    "test:unit:watch": "vitest --config vitest.config.unit.ts",
+    "test:integration": "vitest run --config vitest.config.integration.ts",
+    "test:integration:watch": "vitest --config vitest.config.integration.ts"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.3.7",
-    "@types/global-types": "workspace:^",
-    "@types/node": "^24.10.1",
-    "knip": "^5.70.1",
-    "turbo": "^2.6.1",
-    "typescript": "^5.9.3"
-  }
+    "@stylexjs/eslint-plugin": "^0.19.0",
+    "@stylistic/eslint-plugin": "^5.10.0",
+    "@types/node": "^26.2.0",
+    "@vitejs/plugin-react": "^6.1.0",
+    "knip": "^6.32.2",
+    "lefthook": "^2.1.10",
+    "oxfmt": "^0.64.0",
+    "oxlint": "^1.79.0",
+    "oxlint-tailwindcss": "^1.9.0",
+    "oxlint-tsgolint": "^7.0.2001",
+    "turbo": "^2.10.10",
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.10"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "packageManager": "pnpm@11.21.0"
 }

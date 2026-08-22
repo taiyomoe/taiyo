@@ -1,36 +1,49 @@
-import { Checkbox } from "@taiyomoe/ui/components/checkbox"
-import { Label } from "@taiyomoe/ui/components/label"
-import type { ControllerProps, FieldPath, FieldValues } from "react-hook-form"
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "~/components/ui/form"
+import { Checkbox } from "@taiyomoe/ui/components/ui/checkbox"
+import { Field, FieldError, FieldLabel } from "@taiyomoe/ui/components/ui/field"
+import { type ComponentProps, type ReactNode } from "react"
+import type { Control, FieldPath, FieldValues } from "react-hook-form"
+import { Controller } from "react-hook-form"
 
 export const CheckboxField = <
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 >({
+  name,
+  control,
   label,
-  placeholder,
-  className,
   ...props
-}: Omit<ControllerProps<TFieldValues, TName>, "render"> & {
-  label: string
-  placeholder?: string
-  className?: string
-}) => (
-  <FormField
-    {...props}
-    render={({ field }) => (
-      <FormItem className={className}>
-        <FormControl>
-          <Checkbox id={field.name} checked={field.value} {...field} />
-          <Label htmlFor={field.name}>{label}</Label>
-        </FormControl>
-        <FormMessage />
-      </FormItem>
-    )}
-  />
-)
+}: Omit<
+  ComponentProps<typeof Checkbox>,
+  "name" | "checked" | "defaultChecked" | "onCheckedChange"
+> & {
+  name: TName
+  control: Control<TFieldValues>
+  label: ReactNode
+}) => {
+  return (
+    <Controller
+      name={name}
+      control={control}
+      render={({
+        field: { value, onChange, ...field },
+        fieldState: { invalid, error },
+        formState: { disabled },
+      }) => (
+        <Field>
+          <FieldLabel>
+            <Checkbox
+              checked={value ?? false}
+              onCheckedChange={(checked) => onChange(checked === true)}
+              disabled={disabled || undefined}
+              aria-invalid={invalid || undefined}
+              {...field}
+              {...props}
+            />
+            {label}
+          </FieldLabel>
+          {error && <FieldError>{error.message}</FieldError>}
+        </Field>
+      )}
+    />
+  )
+}

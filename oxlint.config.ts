@@ -1,0 +1,130 @@
+import { defineConfig } from "oxlint"
+
+export default defineConfig({
+  plugins: [
+    "eslint",
+    "typescript",
+    "unicorn",
+    "react",
+    "react-perf",
+    "oxc",
+    "import",
+    "node",
+    "promise",
+    "vitest",
+  ],
+  jsPlugins: ["@stylistic/eslint-plugin", "@stylexjs/eslint-plugin", "oxlint-tailwindcss"],
+  options: {
+    typeAware: true,
+    typeCheck: true,
+  },
+  // React Compiler rules ship in oxlint's `correctness` category (aligned with
+  // the upstream ESLint presets), so enabling the category turns them on:
+  // react/purity, react/refs, react/immutability, react/preserve-manual-memoization,
+  // react/set-state-in-render, react/set-state-in-effect, react/static-components,
+  // react/use-memo, react/void-use-memo, react/error-boundaries, react/globals.
+  // These replaced the single react/react-compiler nursery rule in oxlint 1.79.
+  categories: {
+    correctness: "error",
+  },
+  ignorePatterns: [".claude/**", "apps/web/src/routeTree.gen.ts"],
+  overrides: [
+    {
+      files: ["./packages/scripts/src/**/*.ts"],
+      rules: {
+        "no-console": "off",
+      },
+    },
+  ],
+  rules: {
+    "no-console": "warn",
+    curly: ["error", "all"],
+
+    // Stylistic rules
+    "@stylistic/padding-line-between-statements": [
+      "error",
+      {
+        blankLine: "always",
+        prev: "*",
+        next: [
+          "break",
+          "case",
+          "cjs-export",
+          "class",
+          "continue",
+          "do",
+          "export",
+          "for",
+          "if",
+          "return",
+          "switch",
+          "try",
+          "while",
+        ],
+      },
+      {
+        blankLine: "always",
+        prev: [
+          "cjs-export",
+          "class",
+          "const",
+          "do",
+          "export",
+          "for",
+          "if",
+          "let",
+          "switch",
+          "try",
+          "while",
+        ],
+        next: "*",
+      },
+      {
+        blankLine: "never",
+        prev: ["const", "let"],
+        next: ["const", "let"],
+      },
+    ],
+    "@stylistic/wrap-iife": ["error", "inside"],
+
+    // StyleX rules
+    "@stylexjs/valid-styles": "error",
+    "@stylexjs/no-conflicting-props": "error",
+    "@stylexjs/no-nonstandard-styles": "error",
+    "@stylexjs/no-legacy-contextual-styles": "error",
+    "@stylexjs/no-lookahead-selectors": "error",
+    "@stylexjs/valid-shorthands": "error",
+    "@stylexjs/no-unused": "error",
+    "@stylexjs/sort-keys": "error",
+
+    // Tailwind CSS rules
+    "tailwindcss/no-conflicting-classes": "error",
+    "tailwindcss/no-deprecated-classes": "error",
+    "tailwindcss/no-duplicate-classes": "error",
+    "tailwindcss/no-unknown-classes": ["error", { allowlist: ["dark"] }],
+    "tailwindcss/enforce-canonical": "error",
+    "tailwindcss/no-unnecessary-arbitrary-value": "error",
+    "tailwindcss/enforce-sort-order": "error",
+    "tailwindcss/enforce-shorthand": "error",
+    "tailwindcss/enforce-physical": "error",
+    "tailwindcss/consistent-variant-order": "error",
+    "tailwindcss/enforce-consistent-important-position": "error",
+    "tailwindcss/enforce-negative-arbitrary-values": "error",
+    "tailwindcss/enforce-consistent-variable-syntax": "error",
+    "tailwindcss/no-unnecessary-whitespace": "error",
+
+    // Vitest rules
+    // Buggy: misfires on tests that import `test` from a custom setup helper.
+    "vitest/no-standalone-expect": "off",
+  },
+  settings: {
+    tailwindcss: {
+      entryPoint: [
+        { files: "apps/web/**", use: "apps/web/src/styles.css" },
+        { files: "apps/storybook/**", use: "packages/ui/src/styles/globals.css" },
+        { files: "packages/ui/**", use: "packages/ui/src/styles/globals.css" },
+        { files: "packages/email/**", use: "packages/ui/src/styles/globals.css" },
+      ],
+    },
+  },
+})

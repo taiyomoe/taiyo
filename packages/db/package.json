@@ -2,37 +2,33 @@
   "name": "@taiyomoe/db",
   "version": "0.1.0",
   "private": true,
-  "type": "module",
   "license": "MIT",
+  "type": "module",
   "exports": {
     ".": "./src/index.ts",
-    "./sql/*": "./src/generated/prisma/sql/*",
-    "./browser": "./src/generated/prisma/browser.ts",
     "./env": "./src/env.ts"
   },
   "scripts": {
-    "clean": "rm -rf .turbo node_modules",
-    "typecheck": "tsc --noEmit",
-    "seed": "prisma migrate reset && pnpm -F @taiyomoe/logs run migrate",
-    "db": "prisma",
-    "migrate": "tsx ./src/migrations-handler.ts"
+    "with-env": "dotenv -e ../../apps/api/.env --",
+    "kysely": "pnpm with-env kysely"
   },
   "dependencies": {
-    "@faker-js/faker": "^10.1.0",
-    "@prisma/adapter-pg": "^7.0.0",
-    "@prisma/client": "^7.0.0",
-    "@t3-oss/env-core": "^0.13.8",
-    "@taiyomoe/utils": "workspace:^",
-    "prisma-json-types-generator": "4.0.0-beta.1",
-    "prisma-zod-generator": "^2.1.2",
-    "validator": "^13.15.23",
-    "zod": "^4.1.12"
+    "@faker-js/faker": "^10.6.0",
+    "@t3-oss/env-core": "^0.13.11",
+    "kysely": "^0.29.5",
+    "mangadex-full-api": "^6.2.0",
+    "pg": "^8.23.0",
+    "radashi": "^12.9.1",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@taiyomoe/typescript": "workspace:^",
+    "@types/node": "^26.2.0",
+    "@types/pg": "^8.21.0",
     "@types/validator": "^13.15.10",
-    "prisma": "^7.0.0",
-    "tsx": "^4.20.6",
-    "typescript": "^5.9.3"
+    "dotenv-cli": "^11.0.0",
+    "kysely-ctl": "^0.21.0",
+    "typescript": "^7.0.2",
+    "validator": "^13.15.35"
   }
 }

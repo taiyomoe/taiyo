@@ -1,0 +1,25 @@
+{
+  "name": "@taiyomoe/scripts",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "with-env": "dotenv -e ../../apps/api/.env --",
+    "cli": "pnpm with-env tsx src/index.ts"
+  },
+  "dependencies": {
+    "@taiyomoe/db": "workspace:^",
+    "@taiyomoe/s3": "workspace:^",
+    "@taiyomoe/search": "workspace:^",
+    "citty": "^0.2.2",
+    "dotenv": "^17.4.2"
+  },
+  "devDependencies": {
+    "@taiyomoe/typescript": "workspace:^",
+    "@types/node": "^26.2.0",
+    "dotenv-cli": "^11.0.0",
+    "tsx": "^4.23.12",
+    "typescript": "^7.0.2"
+  }
+}

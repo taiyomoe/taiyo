@@ -1,0 +1,37 @@
+import { Canvas, Meta } from "@storybook/addon-docs/blocks"
+import * as BadgeStories from "./Badge.stories"
+
+<Meta title="UI/Badge" />
+
+# Badge
+
+[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/ui/badge.tsx)
+
+## Table of Contents
+
+- [Overview](#overview)
+  - [Variants](#variants)
+  - [Sizes](#sizes)
+- [Feedback](#feedback)
+
+## Overview
+
+Badges are compact labels that highlight status, metadata, or counts next to other UI. They are passive by default but can render as buttons or links via the `render` prop when interactive.
+
+<Canvas of={BadgeStories.Default} />
+
+### Variants
+
+Badges come in several semantic variants — a primary `default`, a muted `secondary`, an `outline`, `destructive`, and the tonal `error`/`info`/`success`/`warning` family for status surfaces.
+
+<Canvas of={BadgeStories.Variants} />
+
+### Sizes
+
+Badges scale from `sm` to `lg` to fit different layout densities.
+
+<Canvas of={BadgeStories.Sizes} />
+
+## Feedback
+
+Help us improve this component by providing feedback, asking questions on [Discord](https://discord.gg/RYbnyeWcM2), or updating this file directly on [GitHub](https://github.com/taiyomoe/taiyo). Your feedback helps us create better components! 🚀

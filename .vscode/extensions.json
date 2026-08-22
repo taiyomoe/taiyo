@@ -2,7 +2,7 @@
   "recommendations": [
     "bradlc.vscode-tailwindcss",
     "yoavbls.pretty-ts-errors",
-    "biomejs.biome",
-    "esbenp.prettier-vscode"
+    "oxc.oxc-vscode",
+    "inlang.vs-code-extension"
   ]
 }

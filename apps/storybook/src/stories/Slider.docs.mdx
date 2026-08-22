@@ -1,0 +1,51 @@
+import { Meta, Canvas } from "@storybook/addon-docs/blocks"
+import * as SliderStories from "./Slider.stories"
+
+<Meta title="UI/Slider" />
+
+# Slider
+
+[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/ui/slider.tsx)
+
+## Table of Contents
+
+- [Overview](#overview)
+  - [Range](#range)
+  - [Vertical](#vertical)
+  - [Disabled](#disabled)
+  - [With Value](#with-value)
+- [Feedback](#feedback)
+
+## Overview
+
+Sliders allow users to select a value or range of values from a continuous range by dragging a handle along a track. They're perfect for adjusting settings like volume, brightness, or any numeric value where precise control is needed.
+
+<Canvas of={SliderStories.Default} />
+
+### Range
+
+Passing an array with two values to `defaultValue` (or `value`) turns the slider into a range picker with two handles — useful for filtering data or setting min/max bounds.
+
+<Canvas of={SliderStories.Range} />
+
+### Vertical
+
+Setting `orientation="vertical"` flips the slider on its side, which suits stacked layouts and volume-style controls.
+
+<Canvas of={SliderStories.Vertical} />
+
+### Disabled
+
+Setting `disabled` prevents user interaction and dims the track and handle to signal the control is unavailable.
+
+<Canvas of={SliderStories.Disabled} />
+
+### With Value
+
+Drop a `SliderValue` inside the slider to render the current value alongside the track.
+
+<Canvas of={SliderStories.WithValue} />
+
+## Feedback
+
+Help us improve this component by providing feedback, asking questions on [Discord](https://discord.gg/RYbnyeWcM2), or updating this file directly on [GitHub](https://github.com/taiyomoe/taiyo). Your feedback helps us create better components! 🚀

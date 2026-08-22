@@ -1,40 +1,60 @@
-import { Input } from "@taiyomoe/ui/components/input"
-import { useTranslations } from "next-intl"
-import type { ControllerProps, FieldPath, FieldValues } from "react-hook-form"
+import { m } from "@/paraglide/messages"
+import { Mail01Icon } from "@hugeicons/core-free-icons"
+import { HugeiconsIcon } from "@hugeicons/react"
+import { Field, FieldDescription, FieldError, FieldLabel } from "@taiyomoe/ui/components/ui/field"
 import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "~/components/ui/form"
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "@taiyomoe/ui/components/ui/input-group"
+import { ComponentProps } from "react"
+import type { Control, FieldPath, FieldValues } from "react-hook-form"
+import { Controller } from "react-hook-form"
 
 export const EmailField = <
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 >({
-  className,
+  name,
+  control,
+  label,
+  description,
   ...props
-}: Omit<ControllerProps<TFieldValues, TName>, "render"> & {
-  className?: string
+}: Omit<ComponentProps<typeof InputGroupInput>, "name" | "type"> & {
+  name: TName
+  control: Control<TFieldValues>
+  label?: string
+  description?: string
 }) => {
-  const t = useTranslations("global")
-
   return (
-    <FormField
-      {...props}
-      render={({ field }) => (
-        <FormItem className={className}>
-          <FormLabel>{t("email")}</FormLabel>
-          <FormControl>
-            <Input
-              placeholder="galho-preto-pra-caralho@gmail.com"
+    <Controller
+      name={name}
+      control={control}
+      render={({
+        field: { value, ...field },
+        fieldState: { invalid, isTouched, isDirty, error },
+        formState: { disabled },
+      }) => (
+        <Field>
+          <FieldLabel>{label ? label : m.global_email()}</FieldLabel>
+          <InputGroup>
+            <InputGroupInput
               type="email"
+              value={value ?? ""}
+              disabled={disabled || undefined}
+              aria-invalid={invalid || undefined}
+              data-touched={isTouched || undefined}
+              data-dirty={isDirty || undefined}
               {...field}
+              {...props}
             />
-          </FormControl>
-          <FormMessage />
-        </FormItem>
+            <InputGroupAddon align="inline-start">
+              <HugeiconsIcon icon={Mail01Icon} />
+            </InputGroupAddon>
+          </InputGroup>
+          {description && <FieldDescription>{description}</FieldDescription>}
+          {error && <FieldError>{error.message}</FieldError>}
+        </Field>
       )}
     />
   )

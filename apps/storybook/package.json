@@ -4,34 +4,28 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "clean": "git clean -xdf .next .turbo node_modules",
-    "typecheck": "tsc --noEmit",
-    "dev": "storybook dev -p 6006",
+    "dev": "storybook dev -p 6006 --no-open",
     "build": "storybook build"
   },
   "dependencies": {
-    "@tailwindcss/postcss": "^4.1.17",
+    "@storybook/addon-a11y": "^10.5.8",
+    "@storybook/addon-docs": "^10.5.8",
+    "@storybook/addon-themes": "^10.5.8",
+    "@storybook/react-vite": "^10.5.8",
+    "@tailwindcss/vite": "^4.3.3",
     "@taiyomoe/ui": "workspace:^",
-    "lucide-react": "^0.554.0",
-    "next": "^16.0.3",
-    "postcss": "^8.5.6",
-    "react": "^19.2.0"
+    "@vitejs/plugin-react": "^6.1.0",
+    "lucide-react": "^1.31.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "storybook": "^10.5.8",
+    "vite": "^8.2.1"
   },
   "devDependencies": {
-    "@storybook/addon-a11y": "^10.0.8",
-    "@storybook/addon-docs": "^10.0.8",
-    "@storybook/addon-onboarding": "^10.0.8",
-    "@storybook/addon-themes": "^10.0.8",
-    "@storybook/addon-vitest": "^10.0.8",
-    "@storybook/nextjs-vite": "^10.0.8",
-    "@taiyomoe/types": "workspace:^",
     "@taiyomoe/typescript": "workspace:^",
-    "@types/react": "^19.2.6",
-    "@types/react-dom": "^19.2.3",
-    "@vitest/browser": "^4.0.13",
-    "@vitest/coverage-v8": "^4.0.13",
-    "playwright": "^1.56.1",
-    "storybook": "^10.0.8",
-    "vitest": "^4.0.13"
+    "@types/node": "^26.2.0",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
+    "typescript": "^7.0.2"
   }
 }

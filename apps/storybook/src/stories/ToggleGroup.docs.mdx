@@ -1,0 +1,65 @@
+import { Canvas, Meta } from "@storybook/addon-docs/blocks"
+import * as ToggleGroupStories from "./ToggleGroup.stories"
+
+<Meta title="UI/ToggleGroup" />
+
+# ToggleGroup
+
+[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/ui/toggle-group.tsx)
+
+## Table of Contents
+
+- [Overview](#overview)
+  - [Multiple](#multiple)
+  - [Variants](#variants)
+  - [Sizes](#sizes)
+  - [Vertical](#vertical)
+  - [With Separator](#with-separator)
+  - [Disabled](#disabled)
+- [Feedback](#feedback)
+
+## Overview
+
+`ToggleGroup` coordinates a row of `ToggleGroupItem` controls under a shared `value` / `defaultValue`. By default it behaves like a radio group — only one item can be pressed at a time. Use it for alignment pickers, view switchers, or any other set of mutually related toggles.
+
+<Canvas of={ToggleGroupStories.Default} />
+
+### Multiple
+
+Pass `multiple` to allow several items to be pressed at once — ideal for text-formatting toolbars where bold, italic, and underline can all be active.
+
+<Canvas of={ToggleGroupStories.Multiple} />
+
+### Variants
+
+The `default` variant renders items with spacing between them; the `outline` variant flattens adjacent borders to form a segmented control.
+
+<Canvas of={ToggleGroupStories.Variants} />
+
+### Sizes
+
+The group's `size` propagates to every `ToggleGroupItem` through context.
+
+<Canvas of={ToggleGroupStories.Sizes} />
+
+### Vertical
+
+Pass `orientation="vertical"` to stack items into a vertical segmented control.
+
+<Canvas of={ToggleGroupStories.Vertical} />
+
+### With Separator
+
+Drop a `ToggleGroupSeparator` between items to visually partition them inside an outline-style group.
+
+<Canvas of={ToggleGroupStories.WithSeparator} />
+
+### Disabled
+
+A disabled group dims every item and blocks all interactions.
+
+<Canvas of={ToggleGroupStories.Disabled} />
+
+## Feedback
+
+Help us improve this component by providing feedback, asking questions on [Discord](https://discord.gg/RYbnyeWcM2), or updating this file directly on [GitHub](https://github.com/taiyomoe/taiyo). Your feedback helps us create better components! 🚀

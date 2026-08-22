@@ -1,0 +1,27 @@
+meta {
+  name: Flag media
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{url}}/medias/:id/flag
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: 00000000-0000-0000-0000-000000000000
+}
+
+body:json {
+  {
+    "flag": "STAFF_ONLY",
+    "reason": "Locked while we wait for a takedown response."
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

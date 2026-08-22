@@ -1,45 +1,47 @@
-import { useTranslations } from "next-intl"
-import type { ControllerProps, FieldPath, FieldValues } from "react-hook-form"
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "~/components/ui/form"
-import { PasswordInput } from "~/components/ui/password-input"
-import { PasswordStrength } from "~/components/ui/password-strength"
+import { m } from "@/paraglide/messages"
+import { Field, FieldDescription, FieldError, FieldLabel } from "@taiyomoe/ui/components/ui/field"
+import { PasswordInput, type PasswordInputProps } from "@taiyomoe/ui/components/ui/password-input"
+import type { Control, FieldPath, FieldValues } from "react-hook-form"
+import { Controller } from "react-hook-form"
 
 export const PasswordField = <
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 >({
+  name,
+  control,
   label,
-  showStrength,
-  children,
+  description,
   ...props
-}: Omit<ControllerProps<TFieldValues, TName>, "render"> & {
+}: Omit<PasswordInputProps, "name"> & {
+  name: TName
+  control: Control<TFieldValues>
   label?: string
-  showStrength?: boolean
-  children?: React.ReactNode
+  description?: string
 }) => {
-  const t = useTranslations("global")
-
   return (
-    <FormField
-      {...props}
-      render={({ field }) => (
-        <FormItem>
-          <div className="flex items-center justify-between text-sm leading-none">
-            <FormLabel className="only">{label ?? t("password")}</FormLabel>
-            {children}
-          </div>
-          <FormControl>
-            <PasswordInput placeholder="•••••••••••••" {...field} />
-          </FormControl>
-          {showStrength && <PasswordStrength value={field.value} />}
-          {!showStrength && <FormMessage />}
-        </FormItem>
+    <Controller
+      name={name}
+      control={control}
+      render={({
+        field: { value, ...field },
+        fieldState: { invalid, isTouched, isDirty, error },
+        formState: { disabled },
+      }) => (
+        <Field>
+          <FieldLabel>{label ? label : m.global_password()}</FieldLabel>
+          <PasswordInput
+            value={value ?? ""}
+            disabled={disabled || undefined}
+            aria-invalid={invalid || undefined}
+            data-touched={isTouched || undefined}
+            data-dirty={isDirty || undefined}
+            {...field}
+            {...props}
+          />
+          {description && <FieldDescription>{description}</FieldDescription>}
+          {error && <FieldError>{error.message}</FieldError>}
+        </Field>
       )}
     />
   )
