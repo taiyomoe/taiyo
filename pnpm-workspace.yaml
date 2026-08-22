@@ -13,6 +13,23 @@ allowBuilds:
 
 minimumReleaseAge: 10080 # 7 days
 
+# Toolchain packages tracked at latest, exempt from the delay above. These ship
+# the lint/compile capabilities we want as soon as they land -- oxlint's React
+# Compiler rule set, matching oxfmt releases, and React Compiler support in the
+# Vite React plugin. They are dev-time only: none ship code to production.
+# The @oxlint/* and @oxfmt/* entries cover the per-platform binary packages and
+# @oxlint/plugins, which are versioned in lockstep with their parent and are
+# gated separately.
+minimumReleaseAgeExclude:
+  - oxlint
+  - "@oxlint/*"
+  - oxfmt
+  - "@oxfmt/*"
+  - "@vitejs/plugin-react"
+  # Rust React Compiler backing @vitejs/plugin-react's `compiler` option.
+  - oxc-transform-react
+  - "@oxc-transform-react/*"
+
 # @better-auth/kysely-adapter pins its own kysely, which resolved to a different
 # copy than packages/db. Two copies means Kysely<DB> is not assignable to the
 # adapter's Kysely<any>. Force a single copy.

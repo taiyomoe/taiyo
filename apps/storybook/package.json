@@ -14,7 +14,7 @@
     "@storybook/react-vite": "^10.5.8",
     "@tailwindcss/vite": "^4.3.3",
     "@taiyomoe/ui": "workspace:^",
-    "@vitejs/plugin-react": "^6.0.5",
+    "@vitejs/plugin-react": "^6.1.0",
     "lucide-react": "^1.31.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",

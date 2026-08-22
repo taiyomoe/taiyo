@@ -19,7 +19,11 @@ export default defineConfig({
     typeCheck: true,
   },
   // React Compiler rules ship in oxlint's `correctness` category (aligned with
-  // the upstream ESLint presets), so enabling the category turns them on.
+  // the upstream ESLint presets), so enabling the category turns them on:
+  // react/purity, react/refs, react/immutability, react/preserve-manual-memoization,
+  // react/set-state-in-render, react/set-state-in-effect, react/static-components,
+  // react/use-memo, react/void-use-memo, react/error-boundaries, react/globals.
+  // These replaced the single react/react-compiler nursery rule in oxlint 1.79.
   categories: {
     correctness: "error",
   },
@@ -35,12 +39,6 @@ export default defineConfig({
   rules: {
     "no-console": "warn",
     curly: ["error", "all"],
-
-    // React Compiler. oxlint >=1.79 replaces this single nursery rule with
-    // granular rules (purity, refs, preserve-manual-memoization, ...) in the
-    // `correctness` category enabled above; drop this line on that upgrade.
-    // 1.79 is currently held back by minimumReleaseAge in pnpm-workspace.yaml.
-    "react/react-compiler": "error",
 
     // Stylistic rules
     "@stylistic/padding-line-between-statements": [
