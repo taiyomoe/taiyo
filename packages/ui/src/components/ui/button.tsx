@@ -2,84 +2,416 @@
 
 import { mergeProps } from "@base-ui/react/merge-props"
 import { useRender } from "@base-ui/react/use-render"
-import { cva, type VariantProps } from "class-variance-authority"
+import * as stylex from "@stylexjs/stylex"
 import type * as React from "react"
 import { cn } from "@/lib/utils"
 import { Spinner } from "@/components/ui/spinner"
+import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
+import type { Sx } from "../../styles/sx"
 
-export const buttonVariants = cva(
-  "relative inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 rounded-lg border text-base font-medium whitespace-nowrap transition-shadow outline-none before:pointer-events-none before:absolute before:inset-0 before:rounded-[calc(var(--radius-lg)-1px)] focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-64 data-loading:text-transparent data-loading:select-none sm:text-sm pointer-coarse:after:absolute pointer-coarse:after:size-full pointer-coarse:after:min-h-11 pointer-coarse:after:min-w-11 [&_svg]:pointer-events-none [&_svg]:-mx-0.5 [&_svg]:shrink-0 [&_svg:not([class*='opacity-'])]:opacity-80 [&_svg:not([class*='size-'])]:size-4.5 sm:[&_svg:not([class*='size-'])]:size-4",
-  {
-    defaultVariants: {
-      size: "default",
-      variant: "default",
+export type ButtonVariant =
+  | "default"
+  | "destructive"
+  | "destructive-outline"
+  | "ghost"
+  | "link"
+  | "outline"
+  | "secondary"
+
+export type ButtonSize =
+  | "default"
+  | "icon"
+  | "icon-lg"
+  | "icon-sm"
+  | "icon-xl"
+  | "icon-xs"
+  | "lg"
+  | "sm"
+  | "xl"
+  | "xs"
+
+const styles = stylex.create({
+  base: {
+    borderRadius: radius.full,
+    borderStyle: "solid",
+    borderWidth: 1,
+    gap: "0.5rem",
+    alignItems: "center",
+    cursor: "pointer",
+    display: "inline-flex",
+    flexShrink: 0,
+    fontSize: {
+      default: "1rem",
+      [consts.sm]: "0.875rem",
     },
-    variants: {
-      size: {
-        default: "h-9 px-[calc(--spacing(3)-1px)] sm:h-8",
-        icon: "size-9 sm:size-8",
-        "icon-lg": "size-10 sm:size-9",
-        "icon-sm": "size-8 sm:size-7",
-        "icon-xl":
-          "size-11 sm:size-10 [&_svg:not([class*='size-'])]:size-5 sm:[&_svg:not([class*='size-'])]:size-4.5",
-        "icon-xs":
-          "size-7 rounded-md before:rounded-[calc(var(--radius-md)-1px)] sm:size-6 not-in-data-[slot=input-group]:[&_svg:not([class*='size-'])]:size-4 sm:not-in-data-[slot=input-group]:[&_svg:not([class*='size-'])]:size-3.5",
-        lg: "h-10 px-[calc(--spacing(3.5)-1px)] sm:h-9",
-        sm: "h-8 gap-1.5 px-[calc(--spacing(2.5)-1px)] sm:h-7",
-        xl: "h-11 px-[calc(--spacing(4)-1px)] text-lg sm:h-10 sm:text-base [&_svg:not([class*='size-'])]:size-5 sm:[&_svg:not([class*='size-'])]:size-4.5",
-        xs: "h-7 gap-1 rounded-md px-[calc(--spacing(2)-1px)] text-sm before:rounded-[calc(var(--radius-md)-1px)] sm:h-6 sm:text-xs [&_svg:not([class*='size-'])]:size-4 sm:[&_svg:not([class*='size-'])]:size-3.5",
+    fontWeight: 500,
+    justifyContent: "center",
+    opacity: {
+      default: 1,
+      ":disabled": 0.64,
+    },
+    outlineColor: colors.ring,
+    outlineOffset: 1,
+    outlineStyle: {
+      default: "none",
+      ":focus-visible": "solid",
+    },
+    outlineWidth: 2,
+    pointerEvents: {
+      default: null,
+      ":disabled": "none",
+    },
+    position: "relative",
+    transitionProperty: "box-shadow, background-color, border-color",
+    whiteSpace: "nowrap",
+    "::after": {
+      content: {
+        default: "none",
+        [consts.pointerCoarse]: '""',
       },
-      variant: {
-        default:
-          "border-primary bg-primary text-primary-foreground shadow-xs shadow-primary/24 not-disabled:inset-shadow-[0_1px_--theme(--color-white/16%)] hover:bg-primary/90 data-pressed:bg-primary/90 *:data-[slot=button-loading-indicator]:text-primary-foreground [:active,[data-pressed]]:inset-shadow-[0_1px_--theme(--color-black/8%)] [:disabled,:active,[data-pressed]]:shadow-none",
-        destructive:
-          "border-destructive bg-destructive text-white shadow-xs shadow-destructive/24 not-disabled:inset-shadow-[0_1px_--theme(--color-white/16%)] hover:bg-destructive/90 data-pressed:bg-destructive/90 *:data-[slot=button-loading-indicator]:text-white [:active,[data-pressed]]:inset-shadow-[0_1px_--theme(--color-black/8%)] [:disabled,:active,[data-pressed]]:shadow-none",
-        "destructive-outline":
-          "border-input bg-popover text-destructive-foreground shadow-xs/5 not-dark:bg-clip-padding not-disabled:not-active:not-data-pressed:before:shadow-[0_1px_--theme(--color-black/4%)] hover:border-destructive/32 hover:bg-destructive/4 data-pressed:border-destructive/32 data-pressed:bg-destructive/4 *:data-[slot=button-loading-indicator]:text-foreground dark:bg-input/32 dark:not-disabled:before:shadow-[0_-1px_--theme(--color-white/2%)] dark:not-disabled:not-active:not-data-pressed:before:shadow-[0_-1px_--theme(--color-white/6%)] [:disabled,:active,[data-pressed]]:shadow-none",
-        ghost:
-          "border-transparent text-foreground hover:bg-accent data-pressed:bg-accent *:data-[slot=button-loading-indicator]:text-foreground",
-        link: "border-transparent text-foreground underline-offset-4 hover:underline data-pressed:underline *:data-[slot=button-loading-indicator]:text-foreground",
-        outline:
-          "border-input bg-popover text-foreground shadow-xs/5 not-dark:bg-clip-padding not-disabled:not-active:not-data-pressed:before:shadow-[0_1px_--theme(--color-black/4%)] hover:bg-accent/50 data-pressed:bg-accent/50 *:data-[slot=button-loading-indicator]:text-foreground dark:bg-input/32 dark:not-disabled:before:shadow-[0_-1px_--theme(--color-white/2%)] dark:not-disabled:not-active:not-data-pressed:before:shadow-[0_-1px_--theme(--color-white/6%)] hover:dark:bg-input/64 dark:data-pressed:bg-input/64 [:disabled,:active,[data-pressed]]:shadow-none",
-        secondary:
-          "border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/90 data-pressed:bg-secondary/90 *:data-[slot=button-loading-indicator]:text-secondary-foreground [:active,[data-pressed]]:bg-secondary/80",
-      },
+      position: "absolute",
+      height: "100%",
+      minHeight: "2.75rem",
+      minWidth: "2.75rem",
+      width: "100%",
     },
   },
-)
+  loading: {
+    color: "transparent",
+    userSelect: "none",
+  },
+  spinnerWrap: {
+    pointerEvents: "none",
+    position: "absolute",
+  },
+})
+const raised = stylex.create({
+  before: {
+    "::before": {
+      inset: 0,
+      borderRadius: "inherit",
+      boxShadow: {
+        "[data-pressed]": "none",
+        default: shadows.edge,
+        ":disabled": "none",
+        ":active": "none",
+      },
+      content: '""',
+      pointerEvents: "none",
+      position: "absolute",
+    },
+  },
+})
+const variantStyles = stylex.create({
+  default: {
+    borderColor: colors.primary,
+    backgroundColor: {
+      "[data-pressed]": `color-mix(in srgb, ${colors.primary} 90%, transparent)`,
+      default: colors.primary,
+      ":hover": `color-mix(in srgb, ${colors.primary} 90%, transparent)`,
+    },
+    boxShadow: {
+      "[data-pressed]": shadows.pressed,
+      default: `${shadows.emboss}, 0 1px 2px 0 color-mix(in srgb, ${colors.primary} 24%, transparent)`,
+      ":disabled": "none",
+      ":active": shadows.pressed,
+    },
+    color: colors.primaryForeground,
+  },
+  destructive: {
+    borderColor: colors.destructive,
+    backgroundColor: {
+      "[data-pressed]": `color-mix(in srgb, ${colors.destructive} 90%, transparent)`,
+      default: colors.destructive,
+      ":hover": `color-mix(in srgb, ${colors.destructive} 90%, transparent)`,
+    },
+    boxShadow: {
+      "[data-pressed]": shadows.pressed,
+      default: `${shadows.emboss}, 0 1px 2px 0 color-mix(in srgb, ${colors.destructive} 24%, transparent)`,
+      ":disabled": "none",
+      ":active": shadows.pressed,
+    },
+    color: "#fff",
+  },
+  destructiveOutline: {
+    borderColor: {
+      "[data-pressed]": `color-mix(in srgb, ${colors.destructive} 32%, transparent)`,
+      default: colors.input,
+      ":hover": `color-mix(in srgb, ${colors.destructive} 32%, transparent)`,
+    },
+    backgroundClip: "padding-box",
+    backgroundColor: {
+      "[data-pressed]": `color-mix(in srgb, ${colors.destructive} 4%, transparent)`,
+      default: colors.chip,
+      ":hover": `color-mix(in srgb, ${colors.destructive} 4%, transparent)`,
+    },
+    boxShadow: {
+      "[data-pressed]": "none",
+      default: "0 1px 2px 0 rgb(0 0 0 / 5%)",
+      ":disabled": "none",
+      ":active": "none",
+    },
+    color: colors.destructiveForeground,
+  },
+  ghost: {
+    borderColor: "transparent",
+    backgroundColor: {
+      "[data-pressed]": colors.accent,
+      default: "transparent",
+      ":hover": colors.accent,
+    },
+    color: colors.foreground,
+  },
+  link: {
+    borderColor: "transparent",
+    backgroundColor: "transparent",
+    color: colors.foreground,
+    textDecorationLine: {
+      "[data-pressed]": "underline",
+      default: "none",
+      ":hover": "underline",
+    },
+    textUnderlineOffset: 4,
+  },
+  outline: {
+    borderColor: colors.input,
+    backgroundClip: "padding-box",
+    backgroundColor: {
+      "[data-pressed]": colors.chipHover,
+      default: colors.chip,
+      ":hover": colors.chipHover,
+    },
+    boxShadow: {
+      "[data-pressed]": "none",
+      default: "0 1px 2px 0 rgb(0 0 0 / 5%)",
+      ":disabled": "none",
+      ":active": "none",
+    },
+    color: colors.foreground,
+  },
+  secondary: {
+    borderColor: "transparent",
+    backgroundColor: {
+      "[data-pressed]": `color-mix(in srgb, ${colors.secondary} 80%, transparent)`,
+      default: colors.secondary,
+      ":hover": `color-mix(in srgb, ${colors.secondary} 90%, transparent)`,
+      ":active": `color-mix(in srgb, ${colors.secondary} 80%, transparent)`,
+    },
+    color: colors.secondaryForeground,
+  },
+})
+const sizeStyles = stylex.create({
+  default: {
+    paddingInline: "calc(1rem - 1px)",
+    height: {
+      default: "2.25rem",
+      [consts.sm]: "2rem",
+    },
+  },
+  icon: {
+    height: {
+      default: "2.25rem",
+      [consts.sm]: "2rem",
+    },
+    width: {
+      default: "2.25rem",
+      [consts.sm]: "2rem",
+    },
+  },
+  iconLg: {
+    height: {
+      default: "2.5rem",
+      [consts.sm]: "2.25rem",
+    },
+    width: {
+      default: "2.5rem",
+      [consts.sm]: "2.25rem",
+    },
+  },
+  iconSm: {
+    height: {
+      default: "2rem",
+      [consts.sm]: "1.75rem",
+    },
+    width: {
+      default: "2rem",
+      [consts.sm]: "1.75rem",
+    },
+  },
+  iconXl: {
+    height: {
+      default: "2.75rem",
+      [consts.sm]: "2.5rem",
+    },
+    width: {
+      default: "2.75rem",
+      [consts.sm]: "2.5rem",
+    },
+  },
+  iconXs: {
+    height: {
+      default: "1.75rem",
+      [consts.sm]: "1.5rem",
+    },
+    width: {
+      default: "1.75rem",
+      [consts.sm]: "1.5rem",
+    },
+  },
+  lg: {
+    paddingInline: "calc(1.125rem - 1px)",
+    height: {
+      default: "2.5rem",
+      [consts.sm]: "2.25rem",
+    },
+  },
+  sm: {
+    gap: "0.375rem",
+    paddingInline: "calc(0.75rem - 1px)",
+    height: {
+      default: "2rem",
+      [consts.sm]: "1.75rem",
+    },
+  },
+  xl: {
+    paddingInline: "calc(1.25rem - 1px)",
+    fontSize: {
+      default: "1.125rem",
+      [consts.sm]: "1rem",
+    },
+    height: {
+      default: "2.75rem",
+      [consts.sm]: "2.5rem",
+    },
+  },
+  xs: {
+    gap: "0.25rem",
+    paddingInline: "calc(0.625rem - 1px)",
+    fontSize: {
+      default: "0.875rem",
+      [consts.sm]: "0.75rem",
+    },
+    height: {
+      default: "1.75rem",
+      [consts.sm]: "1.5rem",
+    },
+  },
+})
+const spinnerColor = stylex.create({
+  default: { color: colors.primaryForeground },
+  destructive: { color: "#fff" },
+  foreground: { color: colors.foreground },
+  secondary: { color: colors.secondaryForeground },
+})
+const VARIANT_STYLE = {
+  default: variantStyles.default,
+  destructive: variantStyles.destructive,
+  "destructive-outline": variantStyles.destructiveOutline,
+  ghost: variantStyles.ghost,
+  link: variantStyles.link,
+  outline: variantStyles.outline,
+  secondary: variantStyles.secondary,
+} as const
+const SIZE_STYLE = {
+  default: sizeStyles.default,
+  icon: sizeStyles.icon,
+  "icon-lg": sizeStyles.iconLg,
+  "icon-sm": sizeStyles.iconSm,
+  "icon-xl": sizeStyles.iconXl,
+  "icon-xs": sizeStyles.iconXs,
+  lg: sizeStyles.lg,
+  sm: sizeStyles.sm,
+  xl: sizeStyles.xl,
+  xs: sizeStyles.xs,
+} as const
+const SPINNER_COLOR = {
+  default: spinnerColor.default,
+  destructive: spinnerColor.destructive,
+  "destructive-outline": spinnerColor.foreground,
+  ghost: spinnerColor.foreground,
+  link: spinnerColor.foreground,
+  outline: spinnerColor.foreground,
+  secondary: spinnerColor.secondary,
+} as const
+/** Variants that draw the raised chip edge on their ::before layer. */
+const EDGE_VARIANTS: ReadonlySet<ButtonVariant> = new Set(["destructive-outline", "outline"])
+
+export interface ButtonStyleOptions {
+  variant?: ButtonVariant | null
+  size?: ButtonSize | null
+  className?: string
+}
+
+/**
+ * Legacy escape hatch, kept API-compatible with the old cva export: returns
+ * the compiled class string for callers that style a foreign element as a
+ * button (e.g. ToolbarLink). Prefer `sx` composition where possible.
+ */
+export function buttonVariants({
+  variant = "default",
+  size = "default",
+  className,
+}: ButtonStyleOptions = {}): string {
+  const resolvedVariant: ButtonVariant = variant ?? "default"
+  const props = stylex.props(
+    styles.base,
+    VARIANT_STYLE[resolvedVariant],
+    SIZE_STYLE[size ?? "default"],
+    EDGE_VARIANTS.has(resolvedVariant) && raised.before,
+  )
+
+  return cn(props.className, className)
+}
 
 export interface ButtonProps extends useRender.ComponentProps<"button"> {
-  variant?: VariantProps<typeof buttonVariants>["variant"]
-  size?: VariantProps<typeof buttonVariants>["size"]
+  variant?: ButtonVariant
+  size?: ButtonSize
   loading?: boolean
+  sx?: Sx
 }
 
 export function Button({
   className,
-  variant,
-  size,
+  variant = "default",
+  size = "default",
   render,
   children,
   loading = false,
   disabled: disabledProp,
+  sx,
   ...props
 }: ButtonProps): React.ReactElement {
   const isDisabled: boolean = Boolean(loading || disabledProp)
   const typeValue: React.ButtonHTMLAttributes<HTMLButtonElement>["type"] = render
     ? undefined
     : "button"
+  const styleProps = stylex.props(
+    styles.base,
+    VARIANT_STYLE[variant],
+    SIZE_STYLE[size],
+    EDGE_VARIANTS.has(variant) && raised.before,
+    loading && styles.loading,
+    sx,
+  )
   const defaultProps = {
     children: (
       <>
         {children}
         {loading && (
-          <Spinner className="pointer-events-none absolute" data-slot="button-loading-indicator" />
+          <span
+            {...stylex.props(styles.spinnerWrap, SPINNER_COLOR[variant])}
+            data-slot="button-loading-indicator"
+          >
+            <Spinner />
+          </span>
         )}
       </>
     ),
-    className: cn(buttonVariants({ className, size, variant })),
+    className: cn(styleProps.className, className),
+    style: styleProps.style,
     "aria-disabled": loading || undefined,
     "data-loading": loading ? "" : undefined,
+    "data-size": size,
     "data-slot": "button",
     disabled: isDisabled,
     type: typeValue,

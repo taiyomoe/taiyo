@@ -1,10 +1,15 @@
 "use client"
 
+import { NumberField as NumberFieldPrimitive } from "@base-ui/react/number-field"
+import * as stylex from "@stylexjs/stylex"
+import * as React from "react"
 import { Label } from "@/components/ui/label"
 import { cn } from "@/lib/utils"
-import { NumberField as NumberFieldPrimitive } from "@base-ui/react/number-field"
-import { MinusIcon, PlusIcon } from "lucide-react"
-import * as React from "react"
+import { Minus, Plus } from "@/components/icons"
+import type { Sx } from "../../styles/sx"
+import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
+
+export type NumberFieldSize = "sm" | "default" | "lg"
 
 export const NumberFieldContext: React.Context<{
   fieldId: string
@@ -12,41 +17,212 @@ export const NumberFieldContext: React.Context<{
   fieldId: string
 } | null>(null)
 
+/** Size travels down to the input and the steppers, as it did through the
+ * Tailwind `in-data-[size=…]` ancestor selectors. */
+const NumberFieldSizeContext = React.createContext<NumberFieldSize>("default")
+const styles = stylex.create({
+  root: {
+    gap: "0.5rem",
+    alignItems: "flex-start",
+    display: "flex",
+    flexDirection: "column",
+    width: "100%",
+  },
+  group: {
+    borderColor: {
+      default: colors.input,
+      ":focus-within": colors.ring,
+    },
+    borderRadius: radius.xl,
+    borderStyle: "solid",
+    borderWidth: 1,
+    backgroundClip: "padding-box",
+    backgroundColor: colors.field,
+    boxShadow: {
+      default: "0 1px 2px 0 rgb(0 0 0 / 5%)",
+      ":focus-within": "none",
+    },
+    color: colors.foreground,
+    display: "flex",
+    fontSize: {
+      default: "1rem",
+      [consts.sm]: "0.875rem",
+    },
+    justifyContent: "space-between",
+    opacity: {
+      "[data-disabled]": 0.64,
+      default: null,
+    },
+    outlineColor: `color-mix(in srgb, ${colors.ring} 24%, transparent)`,
+    outlineStyle: {
+      default: "none",
+      ":focus-within": "solid",
+    },
+    outlineWidth: 3,
+    pointerEvents: {
+      "[data-disabled]": "none",
+      default: null,
+    },
+    position: "relative",
+    transitionProperty: "box-shadow, border-color",
+    width: "100%",
+    "::before": {
+      inset: 0,
+      borderRadius: "inherit",
+      boxShadow: {
+        default: shadows.edge,
+        ":focus-within": "none",
+      },
+      content: '""',
+      pointerEvents: "none",
+      position: "absolute",
+    },
+  },
+  groupInvalid: {
+    borderColor: {
+      default: `color-mix(in srgb, ${colors.destructive} 36%, transparent)`,
+      ":focus-within": `color-mix(in srgb, ${colors.destructive} 64%, transparent)`,
+    },
+    outlineColor: `color-mix(in srgb, ${colors.destructive} 16%, transparent)`,
+  },
+  stepper: {
+    paddingInline: "calc(0.75rem - 1px)",
+    alignItems: "center",
+    backgroundColor: {
+      default: null,
+      ":hover": colors.accent,
+    },
+    cursor: "pointer",
+    display: "flex",
+    flexShrink: 0,
+    justifyContent: "center",
+    position: "relative",
+    transitionProperty: "background-color",
+    "::after": {
+      content: {
+        default: "none",
+        [consts.pointerCoarse]: '""',
+      },
+      position: "absolute",
+      height: "100%",
+      minHeight: "2.75rem",
+      minWidth: "2.75rem",
+      width: "100%",
+    },
+  },
+  stepperSm: {
+    paddingInline: "calc(0.625rem - 1px)",
+  },
+  decrement: {
+    borderEndStartRadius: "calc(1.225rem - 1px)",
+    borderStartStartRadius: "calc(1.225rem - 1px)",
+  },
+  increment: {
+    borderEndEndRadius: "calc(1.225rem - 1px)",
+    borderStartEndRadius: "calc(1.225rem - 1px)",
+  },
+  input: {
+    paddingInline: "calc(0.75rem - 1px)",
+    backgroundColor: "transparent",
+    flexGrow: 1,
+    fontVariantNumeric: "tabular-nums",
+    lineHeight: {
+      default: "2.625rem",
+      [consts.sm]: "2.375rem",
+    },
+    outlineStyle: "none",
+    textAlign: "center",
+    // Suppresses Chrome's autofill background animation (see input.tsx).
+    transitionDuration: "5000000s",
+    transitionProperty: "background-color",
+    transitionTimingFunction: "ease-in-out",
+    height: {
+      default: "2.625rem",
+      [consts.sm]: "2.375rem",
+    },
+    minWidth: 0,
+    width: "100%",
+  },
+  inputSm: {
+    paddingInline: "calc(0.625rem - 1px)",
+    lineHeight: {
+      default: "2.125rem",
+      [consts.sm]: "1.875rem",
+    },
+    height: {
+      default: "2.125rem",
+      [consts.sm]: "1.875rem",
+    },
+  },
+  inputLg: {
+    lineHeight: {
+      default: "3.125rem",
+      [consts.sm]: "2.875rem",
+    },
+    height: {
+      default: "3.125rem",
+      [consts.sm]: "2.875rem",
+    },
+  },
+  scrubArea: {
+    cursor: "ew-resize",
+    display: "flex",
+  },
+  scrubLabel: {
+    cursor: "ew-resize",
+  },
+  scrubCursor: {
+    filter: "drop-shadow(0 1px 1px #0008)",
+  },
+})
+
 export function NumberField({
   id,
   className,
   size = "default",
+  sx,
   ...props
 }: NumberFieldPrimitive.Root.Props & {
-  size?: "sm" | "default" | "lg"
+  size?: NumberFieldSize
+  sx?: Sx
 }): React.ReactElement {
   const generatedId = React.useId()
   const fieldId = id ?? generatedId
+  const contextValue = React.useMemo(() => ({ fieldId }), [fieldId])
+  const styleProps = stylex.props(styles.root, sx)
 
   return (
-    <NumberFieldContext.Provider value={{ fieldId }}>
-      <NumberFieldPrimitive.Root
-        className={cn("flex w-full flex-col items-start gap-2", className)}
-        data-size={size}
-        data-slot="number-field"
-        id={fieldId}
-        {...props}
-      />
+    <NumberFieldContext.Provider value={contextValue}>
+      <NumberFieldSizeContext value={size}>
+        <NumberFieldPrimitive.Root
+          className={cn(styleProps.className, className)}
+          data-size={size}
+          data-slot="number-field"
+          id={fieldId}
+          style={styleProps.style}
+          {...props}
+        />
+      </NumberFieldSizeContext>
     </NumberFieldContext.Provider>
   )
 }
 
 export function NumberFieldGroup({
   className,
+  sx,
   ...props
-}: NumberFieldPrimitive.Group.Props): React.ReactElement {
+}: NumberFieldPrimitive.Group.Props & { sx?: Sx }): React.ReactElement {
+  const styleProps = stylex.props(
+    styles.group,
+    props["aria-invalid"] !== undefined && styles.groupInvalid,
+    sx,
+  )
+
   return (
     <NumberFieldPrimitive.Group
-      className={cn(
-        "relative flex w-full justify-between rounded-lg border border-input bg-background text-base text-foreground shadow-xs/5 ring-ring/24 transition-shadow not-dark:bg-clip-padding before:pointer-events-none before:absolute before:inset-0 before:rounded-[calc(var(--radius-lg)-1px)] not-data-disabled:not-focus-within:not-aria-invalid:before:shadow-[0_1px_--theme(--color-black/4%)] focus-within:border-ring focus-within:ring-[3px] has-autofill:bg-foreground/4 has-aria-invalid:border-destructive/36 focus-within:has-aria-invalid:border-destructive/64 focus-within:has-aria-invalid:ring-destructive/16 data-disabled:pointer-events-none data-disabled:opacity-64 sm:text-sm dark:bg-input/32 dark:not-data-disabled:not-focus-within:not-aria-invalid:before:shadow-[0_-1px_--theme(--color-white/6%)] dark:has-autofill:bg-foreground/8 dark:has-aria-invalid:ring-destructive/24 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4.5 sm:[&_svg:not([class*='size-'])]:size-4 [[data-disabled],:focus-within,[aria-invalid]]:shadow-none",
-        className,
-      )}
+      className={cn(styleProps.className, className)}
       data-slot="number-field-group"
+      style={styleProps.style}
       {...props}
     />
   )
@@ -54,51 +230,72 @@ export function NumberFieldGroup({
 
 export function NumberFieldDecrement({
   className,
+  sx,
   ...props
-}: NumberFieldPrimitive.Decrement.Props): React.ReactElement {
+}: NumberFieldPrimitive.Decrement.Props & { sx?: Sx }): React.ReactElement {
+  const size = React.useContext(NumberFieldSizeContext)
+  const styleProps = stylex.props(
+    styles.stepper,
+    styles.decrement,
+    size === "sm" && styles.stepperSm,
+    sx,
+  )
+
   return (
     <NumberFieldPrimitive.Decrement
-      className={cn(
-        "relative flex shrink-0 cursor-pointer items-center justify-center rounded-l-[calc(var(--radius-lg)-1px)] px-[calc(--spacing(3)-1px)] transition-colors hover:bg-accent in-data-[size=sm]:px-[calc(--spacing(2.5)-1px)] pointer-coarse:after:absolute pointer-coarse:after:size-full pointer-coarse:after:min-h-11 pointer-coarse:after:min-w-11",
-        className,
-      )}
+      className={cn(styleProps.className, className)}
       data-slot="number-field-decrement"
+      style={styleProps.style}
       {...props}
     >
-      <MinusIcon />
+      <Minus />
     </NumberFieldPrimitive.Decrement>
   )
 }
 
 export function NumberFieldIncrement({
   className,
+  sx,
   ...props
-}: NumberFieldPrimitive.Increment.Props): React.ReactElement {
+}: NumberFieldPrimitive.Increment.Props & { sx?: Sx }): React.ReactElement {
+  const size = React.useContext(NumberFieldSizeContext)
+  const styleProps = stylex.props(
+    styles.stepper,
+    styles.increment,
+    size === "sm" && styles.stepperSm,
+    sx,
+  )
+
   return (
     <NumberFieldPrimitive.Increment
-      className={cn(
-        "relative flex shrink-0 cursor-pointer items-center justify-center rounded-r-[calc(var(--radius-lg)-1px)] px-[calc(--spacing(3)-1px)] transition-colors hover:bg-accent in-data-[size=sm]:px-[calc(--spacing(2.5)-1px)] pointer-coarse:after:absolute pointer-coarse:after:size-full pointer-coarse:after:min-h-11 pointer-coarse:after:min-w-11",
-        className,
-      )}
+      className={cn(styleProps.className, className)}
       data-slot="number-field-increment"
+      style={styleProps.style}
       {...props}
     >
-      <PlusIcon />
+      <Plus />
     </NumberFieldPrimitive.Increment>
   )
 }
 
 export function NumberFieldInput({
   className,
+  sx,
   ...props
-}: NumberFieldPrimitive.Input.Props): React.ReactElement {
+}: NumberFieldPrimitive.Input.Props & { sx?: Sx }): React.ReactElement {
+  const size = React.useContext(NumberFieldSizeContext)
+  const styleProps = stylex.props(
+    styles.input,
+    size === "sm" && styles.inputSm,
+    size === "lg" && styles.inputLg,
+    sx,
+  )
+
   return (
     <NumberFieldPrimitive.Input
-      className={cn(
-        "h-8.5 w-full min-w-0 grow bg-transparent px-[calc(--spacing(3)-1px)] text-center leading-8.5 tabular-nums outline-none [transition:background-color_5000000s_ease-in-out_0s] in-data-[size=lg]:h-9.5 in-data-[size=lg]:leading-9.5 in-data-[size=sm]:h-7.5 in-data-[size=sm]:px-[calc(--spacing(2.5)-1px)] in-data-[size=sm]:leading-7.5 sm:h-7.5 sm:leading-7.5 sm:in-data-[size=lg]:h-8.5 sm:in-data-[size=lg]:leading-8.5 sm:in-data-[size=sm]:h-6.5 sm:in-data-[size=sm]:leading-8.5",
-        className,
-      )}
+      className={cn(styleProps.className, className)}
       data-slot="number-field-input"
+      style={styleProps.style}
       {...props}
     />
   )
@@ -107,11 +304,15 @@ export function NumberFieldInput({
 export function NumberFieldScrubArea({
   className,
   label,
+  sx,
   ...props
 }: NumberFieldPrimitive.ScrubArea.Props & {
   label: string
+  sx?: Sx
 }): React.ReactElement {
   const context = React.useContext(NumberFieldContext)
+  const styleProps = stylex.props(styles.scrubArea, sx)
+  const cursorProps = stylex.props(styles.scrubCursor)
 
   if (!context) {
     throw new Error(
@@ -121,15 +322,18 @@ export function NumberFieldScrubArea({
 
   return (
     <NumberFieldPrimitive.ScrubArea
-      className={cn("flex cursor-ew-resize", className)}
+      className={cn(styleProps.className, className)}
       data-slot="number-field-scrub-area"
+      style={styleProps.style}
       {...props}
     >
-      <Label className="cursor-ew-resize" htmlFor={context.fieldId}>
+      <Label htmlFor={context.fieldId} sx={styles.scrubLabel}>
         {label}
       </Label>
-      {/* oxlint-disable-next-line tailwindcss/no-unknown-classes */}
-      <NumberFieldPrimitive.ScrubAreaCursor className="drop-shadow-[0_1px_1px_#0008]">
+      <NumberFieldPrimitive.ScrubAreaCursor
+        className={cursorProps.className}
+        style={cursorProps.style}
+      >
         <CursorGrowIcon />
       </NumberFieldPrimitive.ScrubAreaCursor>
     </NumberFieldPrimitive.ScrubArea>

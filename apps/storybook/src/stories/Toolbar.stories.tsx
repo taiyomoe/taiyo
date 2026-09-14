@@ -1,3 +1,13 @@
+import {
+  Link02Icon,
+  TextAlignCenterIcon,
+  TextAlignLeftIcon,
+  TextAlignRightIcon,
+  TextBoldIcon,
+  TextItalicIcon,
+  TextUnderlineIcon,
+} from "@hugeicons/core-free-icons"
+import { HugeiconsIcon } from "@hugeicons/react"
 import preview from "@/storybook/preview"
 import { Button, buttonVariants } from "@taiyomoe/ui/components/ui/button"
 import { Input } from "@taiyomoe/ui/components/ui/input"
@@ -9,15 +19,6 @@ import {
   ToolbarLink,
   ToolbarSeparator,
 } from "@taiyomoe/ui/components/ui/toolbar"
-import {
-  AlignCenterIcon,
-  AlignLeftIcon,
-  AlignRightIcon,
-  BoldIcon,
-  ItalicIcon,
-  Link2Icon,
-  UnderlineIcon,
-} from "lucide-react"
 
 const meta = preview.meta({
   title: "UI/Toolbar",
@@ -44,13 +45,13 @@ export const Default = meta.story({
   render: (args) => (
     <Toolbar {...args}>
       <ToolbarButton render={<Button variant="ghost" />}>
-        <BoldIcon /> Bold
+        <HugeiconsIcon icon={TextBoldIcon} /> Bold
       </ToolbarButton>
       <ToolbarButton render={<Button variant="ghost" />}>
-        <ItalicIcon /> Italic
+        <HugeiconsIcon icon={TextItalicIcon} /> Italic
       </ToolbarButton>
       <ToolbarButton render={<Button variant="ghost" />}>
-        <UnderlineIcon /> Underline
+        <HugeiconsIcon icon={TextUnderlineIcon} /> Underline
       </ToolbarButton>
     </Toolbar>
   ),
@@ -60,23 +61,23 @@ export const WithSeparator = meta.story({
   render: (args) => (
     <Toolbar {...args}>
       <ToolbarButton aria-label="Align left" render={<Button size="icon-sm" variant="ghost" />}>
-        <AlignLeftIcon />
+        <HugeiconsIcon icon={TextAlignLeftIcon} />
       </ToolbarButton>
       <ToolbarButton aria-label="Align center" render={<Button size="icon-sm" variant="ghost" />}>
-        <AlignCenterIcon />
+        <HugeiconsIcon icon={TextAlignCenterIcon} />
       </ToolbarButton>
       <ToolbarButton aria-label="Align right" render={<Button size="icon-sm" variant="ghost" />}>
-        <AlignRightIcon />
+        <HugeiconsIcon icon={TextAlignRightIcon} />
       </ToolbarButton>
       <ToolbarSeparator orientation="vertical" />
       <ToolbarButton aria-label="Bold" render={<Button size="icon-sm" variant="ghost" />}>
-        <BoldIcon />
+        <HugeiconsIcon icon={TextBoldIcon} />
       </ToolbarButton>
       <ToolbarButton aria-label="Italic" render={<Button size="icon-sm" variant="ghost" />}>
-        <ItalicIcon />
+        <HugeiconsIcon icon={TextItalicIcon} />
       </ToolbarButton>
       <ToolbarButton aria-label="Underline" render={<Button size="icon-sm" variant="ghost" />}>
-        <UnderlineIcon />
+        <HugeiconsIcon icon={TextUnderlineIcon} />
       </ToolbarButton>
     </Toolbar>
   ),
@@ -87,19 +88,19 @@ export const WithGroup = meta.story({
     <Toolbar {...args}>
       <ToolbarGroup>
         <ToolbarButton aria-label="Bold" render={<Button size="icon-sm" variant="ghost" />}>
-          <BoldIcon />
+          <HugeiconsIcon icon={TextBoldIcon} />
         </ToolbarButton>
         <ToolbarButton aria-label="Italic" render={<Button size="icon-sm" variant="ghost" />}>
-          <ItalicIcon />
+          <HugeiconsIcon icon={TextItalicIcon} />
         </ToolbarButton>
       </ToolbarGroup>
       <ToolbarSeparator orientation="vertical" />
       <ToolbarGroup>
         <ToolbarButton aria-label="Align left" render={<Button size="icon-sm" variant="ghost" />}>
-          <AlignLeftIcon />
+          <HugeiconsIcon icon={TextAlignLeftIcon} />
         </ToolbarButton>
         <ToolbarButton aria-label="Align center" render={<Button size="icon-sm" variant="ghost" />}>
-          <AlignCenterIcon />
+          <HugeiconsIcon icon={TextAlignCenterIcon} />
         </ToolbarButton>
       </ToolbarGroup>
     </Toolbar>
@@ -112,7 +113,7 @@ export const WithInputAndLink = meta.story({
       <ToolbarInput placeholder="Search…" render={<Input />} />
       <ToolbarSeparator orientation="vertical" />
       <ToolbarLink className={buttonVariants({ size: "sm", variant: "ghost" })} href="#">
-        <Link2Icon /> Docs
+        <HugeiconsIcon icon={Link02Icon} /> Docs
       </ToolbarLink>
     </Toolbar>
   ),
@@ -123,14 +124,14 @@ export const Vertical = meta.story({
   render: (args) => (
     <Toolbar {...args} className="flex-col">
       <ToolbarButton aria-label="Bold" render={<Button size="icon-sm" variant="ghost" />}>
-        <BoldIcon />
+        <HugeiconsIcon icon={TextBoldIcon} />
       </ToolbarButton>
       <ToolbarButton aria-label="Italic" render={<Button size="icon-sm" variant="ghost" />}>
-        <ItalicIcon />
+        <HugeiconsIcon icon={TextItalicIcon} />
       </ToolbarButton>
       <ToolbarSeparator orientation="horizontal" />
       <ToolbarButton aria-label="Underline" render={<Button size="icon-sm" variant="ghost" />}>
-        <UnderlineIcon />
+        <HugeiconsIcon icon={TextUnderlineIcon} />
       </ToolbarButton>
     </Toolbar>
   ),
@@ -141,13 +142,13 @@ export const Disabled = meta.story({
   render: (args) => (
     <Toolbar {...args}>
       <ToolbarButton render={<Button variant="ghost" />}>
-        <BoldIcon /> Bold
+        <HugeiconsIcon icon={TextBoldIcon} /> Bold
       </ToolbarButton>
       <ToolbarButton render={<Button variant="ghost" />}>
-        <ItalicIcon /> Italic
+        <HugeiconsIcon icon={TextItalicIcon} /> Italic
       </ToolbarButton>
       <ToolbarButton render={<Button variant="ghost" />}>
-        <UnderlineIcon /> Underline
+        <HugeiconsIcon icon={TextUnderlineIcon} /> Underline
       </ToolbarButton>
     </Toolbar>
   ),

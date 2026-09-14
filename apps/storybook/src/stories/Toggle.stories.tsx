@@ -1,6 +1,7 @@
+import { TextBoldIcon, TextItalicIcon, TextUnderlineIcon } from "@hugeicons/core-free-icons"
+import { HugeiconsIcon } from "@hugeicons/react"
 import preview from "@/storybook/preview"
 import { Toggle } from "@taiyomoe/ui/components/ui/toggle"
-import { BoldIcon, ItalicIcon, UnderlineIcon } from "lucide-react"
 import { fn } from "storybook/test"
 
 const meta = preview.meta({
@@ -63,13 +64,13 @@ export const WithIcon = meta.story({
   render: () => (
     <div className="flex flex-wrap items-center gap-2">
       <Toggle aria-label="Bold" variant="outline">
-        <BoldIcon />
+        <HugeiconsIcon icon={TextBoldIcon} />
       </Toggle>
       <Toggle aria-label="Italic" variant="outline">
-        <ItalicIcon />
+        <HugeiconsIcon icon={TextItalicIcon} />
       </Toggle>
       <Toggle aria-label="Underline" variant="outline">
-        <UnderlineIcon />
+        <HugeiconsIcon icon={TextUnderlineIcon} />
       </Toggle>
     </div>
   ),

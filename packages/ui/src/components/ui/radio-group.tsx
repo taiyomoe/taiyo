@@ -2,32 +2,163 @@
 
 import { Radio as RadioPrimitive } from "@base-ui/react/radio"
 import { RadioGroup as RadioGroupPrimitive } from "@base-ui/react/radio-group"
+import * as stylex from "@stylexjs/stylex"
 import type React from "react"
 import { cn } from "@/lib/utils"
+import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
+import type { Sx } from "../../styles/sx"
 
-export function RadioGroup({ className, ...props }: RadioGroupPrimitive.Props): React.ReactElement {
+const styles = stylex.create({
+  group: {
+    gap: "0.75rem",
+    display: "flex",
+    flexDirection: "column",
+  },
+  radio: {
+    borderColor: {
+      "[aria-invalid]": {
+        default: `color-mix(in srgb, ${colors.destructive} 36%, transparent)`,
+        ":focus-visible": `color-mix(in srgb, ${colors.destructive} 64%, transparent)`,
+      },
+      default: colors.input,
+    },
+    borderRadius: radius.full,
+    borderStyle: "solid",
+    borderWidth: 1,
+    alignItems: "center",
+    backgroundClip: "padding-box",
+    // The Tailwind original used `bg-background` + `dark:not-data-checked:bg-input/32`.
+    // `colors.field` (the input surface token) matches both values, and when
+    // checked the indicator covers the root entirely, so the distinction is moot.
+    backgroundColor: colors.field,
+    boxShadow: {
+      "[aria-invalid]": "none",
+      "[data-checked]": "none",
+      "[data-disabled]": "none",
+      default: "0 1px 2px 0 rgb(0 0 0 / 5%)",
+    },
+    cursor: {
+      "[data-disabled]": "not-allowed",
+      default: null,
+    },
+    display: "inline-flex",
+    flexShrink: 0,
+    justifyContent: "center",
+    opacity: {
+      "[data-disabled]": 0.64,
+      default: 1,
+    },
+    outlineColor: {
+      "[aria-invalid]": `color-mix(in srgb, ${colors.destructive} 48%, transparent)`,
+      default: colors.ring,
+    },
+    outlineOffset: 1,
+    outlineStyle: {
+      default: "none",
+      ":focus-visible": "solid",
+    },
+    outlineWidth: 2,
+    position: "relative",
+    transitionDuration: "150ms",
+    transitionProperty: "box-shadow",
+    transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+    height: {
+      default: "1.125rem",
+      [consts.sm]: "1rem",
+    },
+    width: {
+      default: "1.125rem",
+      [consts.sm]: "1rem",
+    },
+    "::before": {
+      inset: 0,
+      borderRadius: "inherit",
+      boxShadow: {
+        "[aria-invalid]": "none",
+        "[data-checked]": "none",
+        "[data-disabled]": "none",
+        default: shadows.edge,
+      },
+      content: '""',
+      pointerEvents: "none",
+      position: "absolute",
+    },
+  },
+  indicator: {
+    inset: -1,
+    borderRadius: radius.full,
+    alignItems: "center",
+    backgroundColor: {
+      "[data-checked]": colors.primary,
+      default: null,
+    },
+    display: {
+      "[data-unchecked]": "none",
+      default: "flex",
+    },
+    justifyContent: "center",
+    position: "absolute",
+    height: {
+      default: "1.125rem",
+      [consts.sm]: "1rem",
+    },
+    width: {
+      default: "1.125rem",
+      [consts.sm]: "1rem",
+    },
+    "::before": {
+      borderRadius: radius.full,
+      backgroundColor: colors.primaryForeground,
+      content: '""',
+      height: {
+        default: "0.5rem",
+        [consts.sm]: "0.375rem",
+      },
+      width: {
+        default: "0.5rem",
+        [consts.sm]: "0.375rem",
+      },
+    },
+  },
+})
+
+/** See the note on SeparatorProps: `className` stays until callers migrate. */
+export type RadioGroupProps = RadioGroupPrimitive.Props & {
+  sx?: Sx
+}
+
+export function RadioGroup({ className, sx, ...props }: RadioGroupProps): React.ReactElement {
+  const styleProps = stylex.props(styles.group, sx)
+
   return (
     <RadioGroupPrimitive
-      className={cn("flex flex-col gap-3", className)}
+      className={cn(styleProps.className, className)}
       data-slot="radio-group"
+      style={styleProps.style}
       {...props}
     />
   )
 }
 
-export function Radio({ className, ...props }: RadioPrimitive.Root.Props): React.ReactElement {
+export type RadioProps = RadioPrimitive.Root.Props & {
+  sx?: Sx
+}
+
+export function Radio({ className, sx, ...props }: RadioProps): React.ReactElement {
+  const styleProps = stylex.props(styles.radio, sx)
+  const indicatorProps = stylex.props(styles.indicator)
+
   return (
     <RadioPrimitive.Root
-      className={cn(
-        "relative inline-flex size-4.5 shrink-0 items-center justify-center rounded-full border border-input bg-background shadow-xs/5 transition-shadow outline-none not-dark:bg-clip-padding before:pointer-events-none before:absolute before:inset-0 before:rounded-full not-data-disabled:not-data-checked:not-aria-invalid:before:shadow-[0_1px_--theme(--color-black/4%)] focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background aria-invalid:border-destructive/36 focus-visible:aria-invalid:border-destructive/64 focus-visible:aria-invalid:ring-destructive/48 data-disabled:cursor-not-allowed data-disabled:opacity-64 sm:size-4 dark:not-data-checked:bg-input/32 dark:not-data-disabled:not-data-checked:not-aria-invalid:before:shadow-[0_-1px_--theme(--color-white/6%)] dark:aria-invalid:ring-destructive/24 [[data-disabled],[data-checked],[aria-invalid]]:shadow-none",
-        className,
-      )}
+      className={cn(styleProps.className, className)}
       data-slot="radio"
+      style={styleProps.style}
       {...props}
     >
       <RadioPrimitive.Indicator
-        className="absolute -inset-px flex size-4.5 items-center justify-center rounded-full before:size-2 before:rounded-full before:bg-primary-foreground data-checked:bg-primary data-unchecked:hidden sm:size-4 sm:before:size-1.5"
+        className={indicatorProps.className}
         data-slot="radio-indicator"
+        style={indicatorProps.style}
       />
     </RadioPrimitive.Root>
   )

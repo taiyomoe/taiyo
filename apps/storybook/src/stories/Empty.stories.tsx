@@ -1,3 +1,5 @@
+import { FileSearchIcon as FileSearchGlyph, PlusSignIcon } from "@hugeicons/core-free-icons"
+import { HugeiconsIcon } from "@hugeicons/react"
 import preview from "@/storybook/preview"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import {
@@ -8,7 +10,6 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@taiyomoe/ui/components/ui/empty"
-import { FileSearchIcon, PlusIcon } from "lucide-react"
 import { fn } from "storybook/test"
 
 const meta = preview.meta({
@@ -19,7 +20,7 @@ const meta = preview.meta({
     <Empty>
       <EmptyHeader>
         <EmptyMedia variant="icon">
-          <FileSearchIcon />
+          <HugeiconsIcon icon={FileSearchGlyph} />
         </EmptyMedia>
         <EmptyTitle>No results found</EmptyTitle>
         <EmptyDescription>
@@ -37,7 +38,7 @@ export const WithAction = meta.story({
     <Empty>
       <EmptyHeader>
         <EmptyMedia variant="icon">
-          <FileSearchIcon />
+          <HugeiconsIcon icon={FileSearchGlyph} />
         </EmptyMedia>
         <EmptyTitle>No projects yet</EmptyTitle>
         <EmptyDescription>
@@ -46,7 +47,7 @@ export const WithAction = meta.story({
       </EmptyHeader>
       <EmptyContent>
         <Button onClick={fn()}>
-          <PlusIcon />
+          <HugeiconsIcon icon={PlusSignIcon} />
           New project
         </Button>
       </EmptyContent>
@@ -60,7 +61,7 @@ export const MediaVariants = meta.story({
       <Empty>
         <EmptyHeader>
           <EmptyMedia variant="default">
-            <FileSearchIcon className="size-10 text-muted-foreground" />
+            <HugeiconsIcon icon={FileSearchGlyph} className="size-10 text-muted-foreground" />
           </EmptyMedia>
           <EmptyTitle>Default media</EmptyTitle>
           <EmptyDescription>Bare icon, no decorative container.</EmptyDescription>
@@ -69,7 +70,7 @@ export const MediaVariants = meta.story({
       <Empty>
         <EmptyHeader>
           <EmptyMedia variant="icon">
-            <FileSearchIcon />
+            <HugeiconsIcon icon={FileSearchGlyph} />
           </EmptyMedia>
           <EmptyTitle>Icon media</EmptyTitle>
           <EmptyDescription>Icon wrapped in a card with stacked back layers.</EmptyDescription>

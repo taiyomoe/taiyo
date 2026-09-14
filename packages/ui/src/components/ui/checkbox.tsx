@@ -1,31 +1,141 @@
 "use client"
 
-import { cn } from "@/lib/utils"
 import { Checkbox as CheckboxPrimitive } from "@base-ui/react/checkbox"
+import * as stylex from "@stylexjs/stylex"
 import type React from "react"
+import { cn } from "@/lib/utils"
+import { colors, consts, shadows } from "../../styles/tokens.stylex"
+import type { Sx } from "../../styles/sx"
 
-export function Checkbox({
-  className,
-  ...props
-}: CheckboxPrimitive.Root.Props): React.ReactElement {
+const styles = stylex.create({
+  base: {
+    borderColor: {
+      "[aria-invalid]": {
+        default: `color-mix(in srgb, ${colors.destructive} 36%, transparent)`,
+        ":focus-visible": `color-mix(in srgb, ${colors.destructive} 64%, transparent)`,
+      },
+      default: colors.input,
+    },
+    borderRadius: "0.25rem",
+    borderStyle: "solid",
+    borderWidth: 1,
+    alignItems: "center",
+    backgroundClip: "padding-box",
+    // The Tailwind original used `bg-background` + `dark:not-data-checked:bg-input/32`.
+    // `colors.field` (the input surface token) matches both values, and when
+    // checked the indicator covers the root entirely, so the distinction is moot.
+    backgroundColor: colors.field,
+    boxShadow: {
+      "[aria-invalid]": "none",
+      "[data-checked]": "none",
+      "[data-disabled]": "none",
+      default: "0 1px 2px 0 rgb(0 0 0 / 5%)",
+    },
+    cursor: {
+      "[data-disabled]": "not-allowed",
+      default: null,
+    },
+    display: "inline-flex",
+    flexShrink: 0,
+    justifyContent: "center",
+    opacity: {
+      "[data-disabled]": 0.64,
+      default: 1,
+    },
+    outlineColor: {
+      "[aria-invalid]": `color-mix(in srgb, ${colors.destructive} 48%, transparent)`,
+      default: colors.ring,
+    },
+    outlineOffset: 1,
+    outlineStyle: {
+      default: "none",
+      ":focus-visible": "solid",
+    },
+    outlineWidth: 2,
+    position: "relative",
+    transitionDuration: "150ms",
+    transitionProperty: "box-shadow",
+    transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+    height: {
+      default: "1.125rem",
+      [consts.sm]: "1rem",
+    },
+    width: {
+      default: "1.125rem",
+      [consts.sm]: "1rem",
+    },
+    "::before": {
+      inset: 0,
+      borderRadius: "inherit",
+      boxShadow: {
+        "[aria-invalid]": "none",
+        "[data-checked]": "none",
+        "[data-disabled]": "none",
+        default: shadows.edge,
+      },
+      content: '""',
+      pointerEvents: "none",
+      position: "absolute",
+    },
+  },
+  indicator: {
+    inset: -1,
+    borderRadius: "0.25rem",
+    alignItems: "center",
+    backgroundColor: {
+      "[data-checked]": colors.primary,
+      default: null,
+    },
+    color: {
+      "[data-indeterminate]": colors.foreground,
+      default: colors.primaryForeground,
+    },
+    display: {
+      "[data-unchecked]": "none",
+      default: "flex",
+    },
+    justifyContent: "center",
+    position: "absolute",
+  },
+  icon: {
+    height: {
+      default: "0.875rem",
+      [consts.sm]: "0.75rem",
+    },
+    width: {
+      default: "0.875rem",
+      [consts.sm]: "0.75rem",
+    },
+  },
+})
+
+/** See the note on SeparatorProps: `className` stays until callers migrate. */
+export type CheckboxProps = CheckboxPrimitive.Root.Props & {
+  sx?: Sx
+}
+
+export function Checkbox({ className, sx, ...props }: CheckboxProps): React.ReactElement {
+  const styleProps = stylex.props(styles.base, sx)
+  const indicatorProps = stylex.props(styles.indicator)
+
   return (
     <CheckboxPrimitive.Root
-      className={cn(
-        "relative inline-flex size-4.5 shrink-0 items-center justify-center rounded border border-input bg-background shadow-xs/5 ring-ring transition-shadow outline-none not-dark:bg-clip-padding before:pointer-events-none before:absolute before:inset-0 before:rounded-[3px] not-data-disabled:not-data-checked:not-aria-invalid:before:shadow-[0_1px_--theme(--color-black/4%)] focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-offset-background aria-invalid:border-destructive/36 focus-visible:aria-invalid:border-destructive/64 focus-visible:aria-invalid:ring-destructive/48 data-disabled:cursor-not-allowed data-disabled:opacity-64 sm:size-4 dark:not-data-checked:bg-input/32 dark:not-data-disabled:not-data-checked:not-aria-invalid:before:shadow-[0_-1px_--theme(--color-white/6%)] dark:aria-invalid:ring-destructive/24 [[data-disabled],[data-checked],[aria-invalid]]:shadow-none",
-        className,
-      )}
+      className={cn(styleProps.className, className)}
       data-slot="checkbox"
+      style={styleProps.style}
       {...props}
     >
       <CheckboxPrimitive.Indicator
-        className="absolute -inset-px flex items-center justify-center rounded text-primary-foreground data-checked:bg-primary data-indeterminate:text-foreground data-unchecked:hidden"
+        className={indicatorProps.className}
         data-slot="checkbox-indicator"
-        render={(props: React.ComponentProps<"span">, state: CheckboxPrimitive.Indicator.State) => (
-          <span {...props}>
+        render={(
+          renderProps: React.ComponentProps<"span">,
+          state: CheckboxPrimitive.Indicator.State,
+        ) => (
+          <span {...renderProps}>
             {state.indeterminate ? (
               <svg
                 aria-hidden="true"
-                className="size-3.5 sm:size-3"
                 fill="none"
                 height="24"
                 stroke="currentColor"
@@ -35,13 +145,13 @@ export function Checkbox({
                 viewBox="0 0 24 24"
                 width="24"
                 xmlns="http://www.w3.org/2000/svg"
+                {...stylex.props(styles.icon)}
               >
                 <path d="M5.252 12h13.496" />
               </svg>
             ) : (
               <svg
                 aria-hidden="true"
-                className="size-3.5 sm:size-3"
                 fill="none"
                 height="24"
                 stroke="currentColor"
@@ -51,12 +161,14 @@ export function Checkbox({
                 viewBox="0 0 24 24"
                 width="24"
                 xmlns="http://www.w3.org/2000/svg"
+                {...stylex.props(styles.icon)}
               >
                 <path d="M5.252 12.7 10.2 18.63 18.748 5.37" />
               </svg>
             )}
           </span>
         )}
+        style={indicatorProps.style}
       />
     </CheckboxPrimitive.Root>
   )

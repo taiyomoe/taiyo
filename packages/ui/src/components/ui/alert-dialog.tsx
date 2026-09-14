@@ -1,8 +1,194 @@
 "use client"
 
 import { AlertDialog as AlertDialogPrimitive } from "@base-ui/react/alert-dialog"
+import * as stylex from "@stylexjs/stylex"
 import type React from "react"
 import { cn } from "@/lib/utils"
+import { colors, consts, font, radius, shadows, text } from "../../styles/tokens.stylex"
+import type { Sx } from "../../styles/sx"
+
+const styles = stylex.create({
+  backdrop: {
+    inset: 0,
+    backdropFilter: "blur(8px)",
+    backgroundColor: "rgb(0 0 0 / 32%)",
+    opacity: {
+      "[data-ending-style]": 0,
+      "[data-starting-style]": 0,
+      default: 1,
+    },
+    position: "fixed",
+    transitionDuration: "200ms",
+    transitionProperty: "all",
+    transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+    zIndex: 50,
+  },
+  viewport: {
+    inset: 0,
+    padding: "1rem",
+    display: "grid",
+    gridTemplateRows: "1fr auto 3fr",
+    justifyItems: "center",
+    position: "fixed",
+    zIndex: 50,
+  },
+  viewportBottomStick: {
+    padding: {
+      default: "1rem",
+      "@media (width < 40rem)": 0,
+    },
+    gridTemplateRows: {
+      default: "1fr auto 3fr",
+      "@media (width < 40rem)": "1fr auto",
+    },
+    paddingTop: {
+      default: null,
+      "@media (width < 40rem)": "3rem",
+    },
+  },
+  popup: {
+    borderColor: colors.border,
+    borderRadius: radius.xxl,
+    borderStyle: "solid",
+    borderWidth: 1,
+    backgroundClip: "padding-box",
+    backgroundColor: colors.popover,
+    boxShadow: shadows.overlay,
+    color: colors.popoverForeground,
+    display: "flex",
+    flexDirection: "column",
+    gridRowStart: "2",
+    // Base UI sets --nested-dialogs; keep the calc verbatim.
+    opacity: {
+      "[data-ending-style]": 0,
+      "[data-starting-style]": 0,
+      default: "calc(1-var(--nested-dialogs))",
+    },
+    position: "relative",
+    scale: {
+      default: null,
+      [consts.sm]: {
+        "[data-ending-style]": "98%",
+        "[data-starting-style]": "98%",
+        default: "calc(1-0.1*var(--nested-dialogs))",
+      },
+    },
+    transformOrigin: "center",
+    transitionDuration: "200ms",
+    transitionProperty: "scale, opacity, translate",
+    transitionTimingFunction: "ease-in-out",
+    willChange: "transform",
+    maxHeight: "100%",
+    maxWidth: "32rem",
+    minHeight: 0,
+    minWidth: 0,
+    width: "100%",
+    "::before": {
+      inset: 0,
+      borderRadius: "inherit",
+      boxShadow: shadows.edge,
+      content: '""',
+      pointerEvents: "none",
+      position: "absolute",
+    },
+  },
+  popupBottomStick: {
+    borderRadius: {
+      default: radius.xxl,
+      "@media (width < 40rem)": 0,
+    },
+    transformOrigin: {
+      default: "center",
+      "@media (width < 40rem)": "bottom",
+    },
+    translate: {
+      default: null,
+      "@media (width < 40rem)": {
+        "[data-ending-style]": "0 1rem",
+        "[data-starting-style]": "0 1rem",
+        default: null,
+      },
+    },
+    borderBottomWidth: {
+      default: null,
+      "@media (width < 40rem)": 0,
+    },
+    borderLeftWidth: {
+      default: null,
+      "@media (width < 40rem)": 0,
+    },
+    borderRightWidth: {
+      default: null,
+      "@media (width < 40rem)": 0,
+    },
+    maxWidth: {
+      default: "32rem",
+      "@media (width < 40rem)": "none",
+    },
+    "::before": {
+      display: {
+        default: null,
+        "@media (width < 40rem)": "none",
+      },
+    },
+  },
+  header: {
+    padding: "1.5rem",
+    gap: "0.5rem",
+    display: "flex",
+    flexDirection: "column",
+    textAlign: {
+      default: "center",
+      [consts.sm]: "left",
+    },
+    paddingBottom: {
+      default: "1rem",
+      [consts.sm]: "1.5rem",
+    },
+  },
+  footer: {
+    gap: "0.5rem",
+    paddingInline: "1.5rem",
+    display: "flex",
+    flexDirection: {
+      default: "column-reverse",
+      [consts.sm]: "row",
+    },
+    justifyContent: {
+      default: null,
+      [consts.sm]: "flex-end",
+    },
+    borderBottomLeftRadius: {
+      default: null,
+      [consts.sm]: `calc(${radius.xxl} - 1px)`,
+    },
+    borderBottomRightRadius: {
+      default: null,
+      [consts.sm]: `calc(${radius.xxl} - 1px)`,
+    },
+  },
+  footerDefault: {
+    paddingBlock: "1rem",
+    backgroundColor: `color-mix(in srgb, ${colors.muted} 72%, transparent)`,
+    borderTopColor: colors.border,
+    borderTopStyle: "solid",
+    borderTopWidth: 1,
+  },
+  footerBare: {
+    paddingBottom: "1.5rem",
+  },
+  title: {
+    fontFamily: font.heading,
+    fontSize: text.xl,
+    fontWeight: 600,
+    lineHeight: 1,
+  },
+  description: {
+    color: colors.mutedForeground,
+    fontSize: "0.875rem",
+    lineHeight: "1.25rem",
+  },
+})
 
 export const AlertDialogCreateHandle: typeof AlertDialogPrimitive.createHandle =
   AlertDialogPrimitive.createHandle
@@ -17,15 +203,18 @@ export function AlertDialogTrigger(props: AlertDialogPrimitive.Trigger.Props): R
 
 export function AlertDialogBackdrop({
   className,
+  sx,
   ...props
-}: AlertDialogPrimitive.Backdrop.Props): React.ReactElement {
+}: AlertDialogPrimitive.Backdrop.Props & {
+  sx?: Sx
+}): React.ReactElement {
+  const styleProps = stylex.props(styles.backdrop, sx)
+
   return (
     <AlertDialogPrimitive.Backdrop
-      className={cn(
-        "fixed inset-0 z-50 bg-black/32 backdrop-blur-sm transition-all duration-200 data-ending-style:opacity-0 data-starting-style:opacity-0",
-        className,
-      )}
+      className={cn(styleProps.className, className)}
       data-slot="alert-dialog-backdrop"
+      style={styleProps.style}
       {...props}
     />
   )
@@ -33,15 +222,18 @@ export function AlertDialogBackdrop({
 
 export function AlertDialogViewport({
   className,
+  sx,
   ...props
-}: AlertDialogPrimitive.Viewport.Props): React.ReactElement {
+}: AlertDialogPrimitive.Viewport.Props & {
+  sx?: Sx
+}): React.ReactElement {
+  const styleProps = stylex.props(styles.viewport, sx)
+
   return (
     <AlertDialogPrimitive.Viewport
-      className={cn(
-        "fixed inset-0 z-50 grid grid-rows-[1fr_auto_3fr] justify-items-center p-4",
-        className,
-      )}
+      className={cn(styleProps.className, className)}
       data-slot="alert-dialog-viewport"
+      style={styleProps.style}
       {...props}
     />
   )
@@ -51,25 +243,23 @@ export function AlertDialogPopup({
   className,
   bottomStickOnMobile = true,
   portalProps,
+  sx,
   ...props
 }: AlertDialogPrimitive.Popup.Props & {
   bottomStickOnMobile?: boolean
   portalProps?: AlertDialogPrimitive.Portal.Props
+  sx?: Sx
 }): React.ReactElement {
+  const styleProps = stylex.props(styles.popup, bottomStickOnMobile && styles.popupBottomStick, sx)
+
   return (
     <AlertDialogPortal {...portalProps}>
       <AlertDialogBackdrop />
-      <AlertDialogViewport
-        className={cn(bottomStickOnMobile && "max-sm:grid-rows-[1fr_auto] max-sm:p-0 max-sm:pt-12")}
-      >
+      <AlertDialogViewport sx={bottomStickOnMobile ? styles.viewportBottomStick : undefined}>
         <AlertDialogPrimitive.Popup
-          className={cn(
-            "relative row-start-2 flex max-h-full min-h-0 w-full max-w-lg min-w-0 origin-center flex-col rounded-2xl border bg-popover text-popover-foreground opacity-[calc(1-var(--nested-dialogs))] shadow-lg/5 transition-[scale,opacity,translate] duration-200 ease-in-out will-change-transform not-dark:bg-clip-padding before:pointer-events-none before:absolute before:inset-0 before:rounded-[calc(var(--radius-2xl)-1px)] before:shadow-[0_1px_--theme(--color-black/4%)] data-ending-style:opacity-0 data-starting-style:opacity-0 sm:scale-[calc(1-0.1*var(--nested-dialogs))] sm:data-ending-style:scale-98 sm:data-starting-style:scale-98 dark:before:shadow-[0_-1px_--theme(--color-white/6%)]",
-            bottomStickOnMobile &&
-              "max-sm:max-w-none max-sm:origin-bottom max-sm:rounded-none max-sm:border-x-0 max-sm:border-t max-sm:border-b-0 max-sm:before:hidden max-sm:before:rounded-none max-sm:data-ending-style:translate-y-4 max-sm:data-starting-style:translate-y-4",
-            className,
-          )}
+          className={cn(styleProps.className, className)}
           data-slot="alert-dialog-popup"
+          style={styleProps.style}
           {...props}
         />
       </AlertDialogViewport>
@@ -79,12 +269,18 @@ export function AlertDialogPopup({
 
 export function AlertDialogHeader({
   className,
+  sx,
   ...props
-}: React.ComponentProps<"div">): React.ReactElement {
+}: React.ComponentProps<"div"> & {
+  sx?: Sx
+}): React.ReactElement {
+  const styleProps = stylex.props(styles.header, sx)
+
   return (
     <div
-      className={cn("flex flex-col gap-2 p-6 text-center max-sm:pb-4 sm:text-left", className)}
+      className={cn(styleProps.className, className)}
       data-slot="alert-dialog-header"
+      style={styleProps.style}
       {...props}
     />
   )
@@ -93,19 +289,25 @@ export function AlertDialogHeader({
 export function AlertDialogFooter({
   className,
   variant = "default",
+  sx,
   ...props
 }: React.ComponentProps<"div"> & {
   variant?: "default" | "bare"
+  sx?: Sx
 }): React.ReactElement {
+  const styleProps = stylex.props(
+    styles.footer,
+    variant === "default" && styles.footerDefault,
+    variant === "bare" && styles.footerBare,
+    sx,
+  )
+
   return (
     <div
-      className={cn(
-        "flex flex-col-reverse gap-2 px-6 sm:flex-row sm:justify-end sm:rounded-b-[calc(var(--radius-2xl)-1px)]",
-        variant === "default" && "border-t bg-muted/72 py-4",
-        variant === "bare" && "pb-6",
-        className,
-      )}
+      className={cn(styleProps.className, className)}
       data-slot="alert-dialog-footer"
+      data-variant={variant}
+      style={styleProps.style}
       {...props}
     />
   )
@@ -113,12 +315,18 @@ export function AlertDialogFooter({
 
 export function AlertDialogTitle({
   className,
+  sx,
   ...props
-}: AlertDialogPrimitive.Title.Props): React.ReactElement {
+}: AlertDialogPrimitive.Title.Props & {
+  sx?: Sx
+}): React.ReactElement {
+  const styleProps = stylex.props(styles.title, sx)
+
   return (
     <AlertDialogPrimitive.Title
-      className={cn("font-heading text-xl leading-none font-semibold", className)}
+      className={cn(styleProps.className, className)}
       data-slot="alert-dialog-title"
+      style={styleProps.style}
       {...props}
     />
   )
@@ -126,12 +334,18 @@ export function AlertDialogTitle({
 
 export function AlertDialogDescription({
   className,
+  sx,
   ...props
-}: AlertDialogPrimitive.Description.Props): React.ReactElement {
+}: AlertDialogPrimitive.Description.Props & {
+  sx?: Sx
+}): React.ReactElement {
+  const styleProps = stylex.props(styles.description, sx)
+
   return (
     <AlertDialogPrimitive.Description
-      className={cn("text-sm text-muted-foreground", className)}
+      className={cn(styleProps.className, className)}
       data-slot="alert-dialog-description"
+      style={styleProps.style}
       {...props}
     />
   )

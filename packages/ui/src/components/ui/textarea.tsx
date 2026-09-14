@@ -2,13 +2,106 @@
 
 import { Field as FieldPrimitive } from "@base-ui/react/field"
 import { mergeProps } from "@base-ui/react/merge-props"
+import * as stylex from "@stylexjs/stylex"
 import type * as React from "react"
 import { cn } from "@/lib/utils"
+import type { Sx } from "../../styles/sx"
+import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
+
+const styles = stylex.create({
+  control: {
+    borderColor: {
+      default: colors.input,
+      ":focus-within": colors.ring,
+    },
+    borderRadius: radius.xl,
+    borderStyle: "solid",
+    borderWidth: 1,
+    backgroundClip: "padding-box",
+    backgroundColor: colors.field,
+    boxShadow: {
+      default: "0 1px 2px 0 rgb(0 0 0 / 5%)",
+      ":focus-within": "none",
+    },
+    color: colors.foreground,
+    display: "inline-flex",
+    fontSize: {
+      default: "1rem",
+      [consts.sm]: "0.875rem",
+    },
+    outlineColor: `color-mix(in srgb, ${colors.ring} 24%, transparent)`,
+    outlineOffset: 0,
+    outlineStyle: {
+      default: "none",
+      ":focus-within": "solid",
+    },
+    outlineWidth: 3,
+    position: "relative",
+    transitionProperty: "box-shadow, border-color",
+    width: "100%",
+    "::before": {
+      inset: 0,
+      borderRadius: "inherit",
+      boxShadow: {
+        default: shadows.edge,
+        ":focus-within": "none",
+      },
+      content: '""',
+      pointerEvents: "none",
+      position: "absolute",
+    },
+  },
+  // `has-disabled:` / `has-aria-invalid:` replacements — see input.tsx.
+  controlDisabled: {
+    opacity: 0.64,
+  },
+  controlInvalid: {
+    borderColor: {
+      default: `color-mix(in srgb, ${colors.destructive} 36%, transparent)`,
+      ":focus-within": `color-mix(in srgb, ${colors.destructive} 64%, transparent)`,
+    },
+    outlineColor: `color-mix(in srgb, ${colors.destructive} 16%, transparent)`,
+  },
+  textarea: {
+    fieldSizing: "content",
+    borderRadius: "inherit",
+    paddingBlock: "calc(0.375rem - 1px)",
+    paddingInline: "calc(0.75rem - 1px)",
+    backgroundColor: "transparent",
+    color: "inherit",
+    fontSize: "inherit",
+    outlineStyle: "none",
+    minHeight: {
+      default: "5.125rem",
+      [consts.sm]: "4.375rem",
+    },
+    width: "100%",
+    "::placeholder": {
+      color: `color-mix(in srgb, ${colors.mutedForeground} 72%, transparent)`,
+    },
+  },
+  textareaSm: {
+    paddingBlock: "calc(0.25rem - 1px)",
+    paddingInline: "calc(0.625rem - 1px)",
+    minHeight: {
+      default: "4.875rem",
+      [consts.sm]: "4.125rem",
+    },
+  },
+  textareaLg: {
+    paddingBlock: "calc(0.5rem - 1px)",
+    minHeight: {
+      default: "5.375rem",
+      [consts.sm]: "4.625rem",
+    },
+  },
+})
 
 export type TextareaProps = React.ComponentPropsWithoutRef<"textarea"> &
   React.RefAttributes<HTMLTextAreaElement> & {
     size?: "sm" | "default" | "lg" | number
     unstyled?: boolean
+    sx?: Sx
   }
 
 export function Textarea({
@@ -16,19 +109,29 @@ export function Textarea({
   size = "default",
   unstyled = false,
   ref,
+  sx,
   ...props
 }: TextareaProps): React.ReactElement {
+  const controlProps = stylex.props(
+    !unstyled && styles.control,
+    !unstyled && props.disabled === true && styles.controlDisabled,
+    !unstyled && props["aria-invalid"] !== undefined && styles.controlInvalid,
+    sx,
+  )
+  const textareaProps = stylex.props(
+    styles.textarea,
+    size === "sm" && styles.textareaSm,
+    size === "lg" && styles.textareaLg,
+  )
+
   return (
     <span
-      className={
-        cn(
-          !unstyled &&
-            "relative inline-flex w-full rounded-lg border border-input bg-background text-base text-foreground shadow-xs/5 ring-ring/24 transition-shadow not-dark:bg-clip-padding before:pointer-events-none before:absolute before:inset-0 before:rounded-[calc(var(--radius-lg)-1px)] not-has-disabled:has-not-focus-visible:not-has-aria-invalid:before:shadow-[0_1px_--theme(--color-black/4%)] has-focus-visible:border-ring has-focus-visible:ring-[3px] has-disabled:opacity-64 has-aria-invalid:border-destructive/36 has-focus-visible:has-aria-invalid:border-destructive/64 has-focus-visible:has-aria-invalid:ring-destructive/16 has-[:disabled,:focus-visible,[aria-invalid]]:shadow-none sm:text-sm dark:bg-input/32 dark:not-has-disabled:has-not-focus-visible:not-has-aria-invalid:before:shadow-[0_-1px_--theme(--color-white/6%)] dark:has-aria-invalid:ring-destructive/24",
-          className,
-        ) || undefined
-      }
+      aria-invalid={props["aria-invalid"]}
+      className={cn(controlProps.className, className) || undefined}
+      data-disabled={props.disabled ? "" : undefined}
       data-size={size}
       data-slot="textarea-control"
+      style={controlProps.style}
     >
       <FieldPrimitive.Control
         ref={ref}
@@ -39,13 +142,9 @@ export function Textarea({
         name={props.name}
         render={(defaultProps: React.ComponentProps<"textarea">) => (
           <textarea
-            className={cn(
-              "field-sizing-content min-h-17.5 w-full rounded-[inherit] px-[calc(--spacing(3)-1px)] py-[calc(--spacing(1.5)-1px)] outline-none max-sm:min-h-20.5",
-              size === "sm" &&
-                "min-h-16.5 px-[calc(--spacing(2.5)-1px)] py-[calc(--spacing(1)-1px)] max-sm:min-h-19.5",
-              size === "lg" && "min-h-18.5 py-[calc(--spacing(2)-1px)] max-sm:min-h-21.5",
-            )}
+            className={textareaProps.className}
             data-slot="textarea"
+            style={textareaProps.style}
             {...mergeProps(defaultProps, props)}
           />
         )}

@@ -1,5 +1,9 @@
 "use client"
 
+import { mergeProps } from "@base-ui/react/merge-props"
+import { useRender } from "@base-ui/react/use-render"
+import * as stylex from "@stylexjs/stylex"
+import * as React from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
@@ -9,11 +13,9 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { Tooltip, TooltipPopup, TooltipTrigger } from "@/components/ui/tooltip"
 import { useMediaQuery } from "@/hooks/use-media-query"
 import { cn } from "@/lib/utils"
-import { mergeProps } from "@base-ui/react/merge-props"
-import { useRender } from "@base-ui/react/use-render"
-import { cva, type VariantProps } from "class-variance-authority"
-import { PanelLeftIcon } from "lucide-react"
-import * as React from "react"
+import { PanelLeft } from "@/components/icons"
+import type { Sx } from "../../styles/sx"
+import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
 
 const SIDEBAR_COOKIE_NAME: string = "sidebar_state"
 const SIDEBAR_COOKIE_MAX_AGE: number = 60 * 60 * 24 * 7
@@ -21,27 +23,603 @@ const SIDEBAR_WIDTH: string = "16rem"
 const SIDEBAR_WIDTH_MOBILE: string = "18rem"
 const SIDEBAR_WIDTH_ICON: string = "3rem"
 const SIDEBAR_KEYBOARD_SHORTCUT: string = "b"
-const sidebarMenuButtonVariants = cva(
-  "peer/menu-button flex w-full items-center gap-2 overflow-hidden rounded-lg p-2 text-left text-sm ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground hover:data-[state=open]:bg-sidebar-accent hover:data-[state=open]:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:shrink-0 [&>svg:not([class*='size-'])]:size-4",
-  {
-    defaultVariants: {
-      size: "default",
-      variant: "default",
-    },
-    variants: {
-      size: {
-        default: "h-8 text-sm",
-        lg: "h-12 text-sm group-data-[collapsible=icon]:p-0!",
-        sm: "h-7 text-xs",
-      },
-      variant: {
-        default: "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
-        outline:
-          "bg-background shadow-[0_0_0_1px_hsl(var(--sidebar-border))] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground hover:shadow-[0_0_0_1px_hsl(var(--sidebar-accent))]",
-      },
+
+export type SidebarSide = "left" | "right"
+
+export type SidebarVariant = "sidebar" | "floating" | "inset"
+
+export type SidebarCollapsible = "offcanvas" | "icon" | "none"
+
+export type SidebarMenuButtonSize = "default" | "sm" | "lg"
+
+export type SidebarMenuButtonVariant = "default" | "outline"
+
+/**
+ * The Tailwind original reached every descendant with
+ * `group-data-[collapsible=icon]` / `peer-data-[variant=inset]` selectors on
+ * the sidebar root. StyleX has no such selectors, so `Sidebar` publishes its
+ * layout props and each part decides for itself.
+ */
+const SidebarLayoutContext = React.createContext<{
+  collapsible: SidebarCollapsible
+  side: SidebarSide
+  variant: SidebarVariant
+}>({
+  collapsible: "offcanvas",
+  side: "left",
+  variant: "sidebar",
+})
+
+/** True while the sidebar is collapsed to its icon rail. */
+function useIconCollapsed(): boolean {
+  const { collapsible } = React.useContext(SidebarLayoutContext)
+  const context = React.useContext(SidebarContext)
+
+  return collapsible === "icon" && context?.state === "collapsed"
+}
+
+const styles = stylex.create({
+  wrapper: {
+    display: "flex",
+    minHeight: "100svh",
+    width: "100%",
+  },
+  staticSidebar: {
+    backgroundColor: colors.sidebar,
+    color: colors.sidebarForeground,
+    display: "flex",
+    flexDirection: "column",
+    height: "100svh",
+    width: "var(--sidebar-width)",
+  },
+  mobileSheet: {
+    padding: 0,
+    backgroundColor: colors.sidebar,
+    color: colors.sidebarForeground,
+    width: "var(--sidebar-width)",
+  },
+  mobileInner: {
+    display: "flex",
+    flexDirection: "column",
+    height: "100%",
+    width: "100%",
+  },
+  srOnly: {
+    margin: -1,
+    padding: 0,
+    borderWidth: 0,
+    overflow: "hidden",
+    clipPath: "inset(50%)",
+    position: "absolute",
+    whiteSpace: "nowrap",
+    height: "1px",
+    width: "1px",
+  },
+  root: {
+    color: colors.sidebarForeground,
+    display: {
+      default: "none",
+      "@media (width >= 48rem)": "block",
     },
   },
-)
+  // The gap element reserves the sidebar's track in the page flow.
+  gap: {
+    backgroundColor: "transparent",
+    position: "relative",
+    transitionDuration: "200ms",
+    transitionProperty: "width",
+    transitionTimingFunction: "linear",
+    width: "var(--sidebar-width)",
+  },
+  gapRight: {
+    rotate: "180deg",
+  },
+  gapOffcanvas: {
+    width: 0,
+  },
+  gapIcon: {
+    width: "var(--sidebar-width-icon)",
+  },
+  gapIconFloating: {
+    width: "calc(var(--sidebar-width-icon) + 1rem)",
+  },
+  container: {
+    insetBlock: 0,
+    display: {
+      default: "none",
+      "@media (width >= 48rem)": "flex",
+    },
+    position: "fixed",
+    transitionDuration: "200ms",
+    transitionProperty: "left, right, width",
+    transitionTimingFunction: "linear",
+    zIndex: 10,
+    height: "100svh",
+    width: "var(--sidebar-width)",
+  },
+  containerLeft: { left: 0 },
+  containerRight: { right: 0 },
+  containerLeftOffcanvas: { left: "calc(-1 * var(--sidebar-width))" },
+  containerRightOffcanvas: { right: "calc(-1 * var(--sidebar-width))" },
+  containerFloating: {
+    padding: "0.5rem",
+  },
+  containerFloatingIcon: {
+    width: "calc(var(--sidebar-width-icon) + 1rem + 2px)",
+  },
+  containerIcon: {
+    width: "var(--sidebar-width-icon)",
+  },
+  containerBorderLeft: {
+    borderLeftColor: colors.sidebarBorder,
+    borderLeftStyle: "solid",
+    borderLeftWidth: 1,
+  },
+  containerBorderRight: {
+    borderRightColor: colors.sidebarBorder,
+    borderRightStyle: "solid",
+    borderRightWidth: 1,
+  },
+  inner: {
+    backgroundColor: colors.sidebar,
+    display: "flex",
+    flexDirection: "column",
+    height: "100%",
+    width: "100%",
+  },
+  innerFloating: {
+    borderColor: colors.sidebarBorder,
+    borderRadius: radius.lg,
+    borderStyle: "solid",
+    borderWidth: 1,
+    boxShadow: shadows.raised,
+  },
+  trigger: {
+    height: "1.75rem",
+    width: "1.75rem",
+  },
+  rail: {
+    insetBlock: 0,
+    display: {
+      default: "none",
+      [consts.sm]: "flex",
+    },
+    position: "absolute",
+    transitionProperty: "all",
+    transitionTimingFunction: "linear",
+    translate: "-50%",
+    zIndex: 20,
+    width: "1rem",
+    "::after": {
+      insetBlock: 0,
+      backgroundColor: {
+        default: null,
+        ":hover": colors.sidebarBorder,
+      },
+      content: '""',
+      position: "absolute",
+      left: "50%",
+      width: "2px",
+    },
+  },
+  railLeft: {
+    cursor: "w-resize",
+    right: "-1rem",
+  },
+  railRight: {
+    cursor: "e-resize",
+    left: 0,
+  },
+  railLeftCollapsed: { cursor: "e-resize" },
+  railRightCollapsed: { cursor: "w-resize" },
+  railOffcanvas: {
+    backgroundColor: {
+      default: null,
+      ":hover": colors.sidebar,
+    },
+    translate: 0,
+    "::after": {
+      left: "100%",
+    },
+  },
+  railLeftOffcanvas: { right: "-0.5rem" },
+  railRightOffcanvas: { left: "-0.5rem" },
+  inset: {
+    flex: "1",
+    backgroundColor: colors.background,
+    display: "flex",
+    flexDirection: "column",
+    position: "relative",
+    width: "100%",
+  },
+  insetFloating: {
+    margin: {
+      default: null,
+      "@media (width >= 48rem)": "0.5rem",
+    },
+    borderRadius: {
+      default: null,
+      "@media (width >= 48rem)": radius.xl,
+    },
+    boxShadow: {
+      default: null,
+      "@media (width >= 48rem)": shadows.raised,
+    },
+    marginLeft: {
+      default: null,
+      "@media (width >= 48rem)": 0,
+    },
+  },
+  insetFloatingCollapsed: {
+    marginLeft: {
+      default: null,
+      "@media (width >= 48rem)": "0.5rem",
+    },
+  },
+  input: {
+    backgroundColor: colors.background,
+    boxShadow: "none",
+    height: "2rem",
+    width: "100%",
+  },
+  stack: {
+    padding: "0.5rem",
+    gap: "0.5rem",
+    display: "flex",
+    flexDirection: "column",
+  },
+  separator: {
+    backgroundColor: colors.sidebarBorder,
+    width: "auto",
+  },
+  content: {
+    gap: "0.5rem",
+    display: "flex",
+    flexDirection: "column",
+    height: "100%",
+  },
+  contentIcon: {
+    overflow: "hidden",
+  },
+  scrollArea: {
+    flex: "1",
+    minHeight: 0,
+  },
+  group: {
+    padding: "0.5rem",
+    display: "flex",
+    flexDirection: "column",
+    position: "relative",
+    minWidth: 0,
+    width: "100%",
+  },
+  groupLabel: {
+    borderRadius: radius.lg,
+    paddingInline: "0.5rem",
+    alignItems: "center",
+    color: colors.sidebarForeground,
+    display: "flex",
+    flexShrink: 0,
+    fontSize: "0.75rem",
+    fontWeight: 500,
+    lineHeight: "1rem",
+    outlineColor: colors.sidebarRing,
+    outlineStyle: {
+      default: "none",
+      ":focus-visible": "solid",
+    },
+    outlineWidth: 2,
+    transitionDuration: "200ms",
+    transitionProperty: "margin, opacity",
+    transitionTimingFunction: "linear",
+    height: "2rem",
+  },
+  groupLabelIcon: {
+    opacity: 0,
+    marginTop: "-2rem",
+  },
+  groupAction: {
+    padding: 0,
+    borderRadius: radius.lg,
+    alignItems: "center",
+    aspectRatio: "1",
+    backgroundColor: {
+      default: null,
+      ":hover": colors.sidebarAccent,
+    },
+    color: {
+      default: colors.sidebarForeground,
+      ":hover": colors.sidebarAccentForeground,
+    },
+    display: "flex",
+    justifyContent: "center",
+    outlineColor: colors.sidebarRing,
+    outlineStyle: {
+      default: "none",
+      ":focus-visible": "solid",
+    },
+    outlineWidth: 2,
+    position: "absolute",
+    transitionProperty: "transform",
+    right: "0.75rem",
+    top: "0.875rem",
+    width: "1.25rem",
+    // Widens the tap target on touch layouts only.
+    "::after": {
+      inset: "-0.5rem",
+      content: {
+        default: '""',
+        "@media (width >= 48rem)": "none",
+      },
+      position: "absolute",
+    },
+  },
+  hidden: {
+    display: "none",
+  },
+  groupContent: {
+    fontSize: "0.875rem",
+    lineHeight: "1.25rem",
+    width: "100%",
+  },
+  menu: {
+    gap: "0.25rem",
+    display: "flex",
+    flexDirection: "column",
+    minWidth: 0,
+    width: "100%",
+  },
+  menuItem: {
+    position: "relative",
+  },
+  menuButton: {
+    padding: "0.5rem",
+    borderRadius: radius.lg,
+    gap: "0.5rem",
+    overflow: "hidden",
+    alignItems: "center",
+    backgroundColor: {
+      '[data-active="true"]': colors.sidebarAccent,
+      '[data-state="open"]': colors.sidebarAccent,
+      default: null,
+      ":hover": colors.sidebarAccent,
+      ":active": colors.sidebarAccent,
+    },
+    color: {
+      '[data-active="true"]': colors.sidebarAccentForeground,
+      default: null,
+      ":hover": colors.sidebarAccentForeground,
+      ":active": colors.sidebarAccentForeground,
+    },
+    display: "flex",
+    fontWeight: {
+      '[data-active="true"]': 500,
+      default: null,
+    },
+    opacity: {
+      '[aria-disabled="true"]': 0.5,
+      default: null,
+      ":disabled": 0.5,
+    },
+    outlineColor: colors.sidebarRing,
+    outlineStyle: {
+      default: "none",
+      ":focus-visible": "solid",
+    },
+    outlineWidth: 2,
+    pointerEvents: {
+      '[aria-disabled="true"]': "none",
+      default: null,
+      ":disabled": "none",
+    },
+    textAlign: "left",
+    transitionProperty: "width, height, padding",
+    width: "100%",
+  },
+  menuButtonOutline: {
+    backgroundColor: {
+      default: colors.background,
+      ":hover": colors.sidebarAccent,
+    },
+    boxShadow: {
+      default: `0 0 0 1px ${colors.sidebarBorder}`,
+      ":hover": `0 0 0 1px ${colors.sidebarAccent}`,
+    },
+  },
+  menuButtonDefaultSize: {
+    fontSize: "0.875rem",
+    lineHeight: "1.25rem",
+    height: "2rem",
+  },
+  menuButtonSm: {
+    fontSize: "0.75rem",
+    lineHeight: "1rem",
+    height: "1.75rem",
+  },
+  menuButtonLg: {
+    fontSize: "0.875rem",
+    lineHeight: "1.25rem",
+    height: "3rem",
+  },
+  // Collapsed to the icon rail: the button becomes a square.
+  menuButtonIcon: {
+    padding: "0.5rem",
+    height: "2rem",
+    width: "2rem",
+  },
+  menuButtonIconLg: {
+    padding: 0,
+  },
+  menuAction: {
+    padding: 0,
+    borderRadius: radius.lg,
+    alignItems: "center",
+    aspectRatio: "1",
+    backgroundColor: {
+      default: null,
+      ":hover": colors.sidebarAccent,
+    },
+    color: {
+      default: colors.sidebarForeground,
+      ":hover": colors.sidebarAccentForeground,
+    },
+    display: "flex",
+    justifyContent: "center",
+    outlineColor: colors.sidebarRing,
+    outlineStyle: {
+      default: "none",
+      ":focus-visible": "solid",
+    },
+    outlineWidth: 2,
+    position: "absolute",
+    transitionProperty: "transform",
+    right: "0.25rem",
+    width: "1.25rem",
+    "::after": {
+      inset: "-0.5rem",
+      content: {
+        default: '""',
+        "@media (width >= 48rem)": "none",
+      },
+      position: "absolute",
+    },
+  },
+  menuActionOnHover: {
+    opacity: {
+      '[data-state="open"]': 1,
+      default: null,
+      "@media (width >= 48rem)": 0,
+    },
+  },
+  menuBadge: {
+    borderRadius: radius.lg,
+    paddingInline: "0.25rem",
+    alignItems: "center",
+    color: colors.sidebarForeground,
+    display: "flex",
+    fontSize: "0.75rem",
+    fontVariantNumeric: "tabular-nums",
+    fontWeight: 500,
+    justifyContent: "center",
+    lineHeight: "1rem",
+    pointerEvents: "none",
+    position: "absolute",
+    userSelect: "none",
+    height: "1.25rem",
+    minWidth: "1.25rem",
+    right: "0.25rem",
+  },
+  menuSkeleton: {
+    borderRadius: radius.lg,
+    gap: "0.5rem",
+    paddingInline: "0.5rem",
+    alignItems: "center",
+    display: "flex",
+    height: "2rem",
+  },
+  menuSkeletonIcon: {
+    borderRadius: radius.lg,
+    height: "1rem",
+    width: "1rem",
+  },
+  menuSkeletonText: {
+    flex: "1",
+    height: "1rem",
+    maxWidth: "var(--skeleton-width)",
+  },
+  menuSub: {
+    gap: "0.25rem",
+    marginInline: "0.875rem",
+    paddingBlock: "0.125rem",
+    paddingInline: "0.625rem",
+    display: "flex",
+    flexDirection: "column",
+    translate: "1px",
+    borderLeftColor: colors.sidebarBorder,
+    borderLeftStyle: "solid",
+    borderLeftWidth: 1,
+    minWidth: 0,
+  },
+  menuSubItem: {
+    position: "relative",
+  },
+  menuSubButton: {
+    borderRadius: radius.lg,
+    gap: "0.5rem",
+    overflow: "hidden",
+    paddingInline: "0.5rem",
+    alignItems: "center",
+    backgroundColor: {
+      '[data-active="true"]': colors.sidebarAccent,
+      default: null,
+      ":hover": colors.sidebarAccent,
+      ":active": colors.sidebarAccent,
+    },
+    color: {
+      '[data-active="true"]': colors.sidebarAccentForeground,
+      default: colors.sidebarForeground,
+      ":hover": colors.sidebarAccentForeground,
+      ":active": colors.sidebarAccentForeground,
+    },
+    display: "flex",
+    opacity: {
+      '[aria-disabled="true"]': 0.5,
+      default: null,
+      ":disabled": 0.5,
+    },
+    outlineColor: colors.sidebarRing,
+    outlineStyle: {
+      default: "none",
+      ":focus-visible": "solid",
+    },
+    outlineWidth: 2,
+    pointerEvents: {
+      '[aria-disabled="true"]': "none",
+      default: null,
+      ":disabled": "none",
+    },
+    translate: "-1px",
+    height: {
+      default: "2rem",
+      [consts.sm]: "1.75rem",
+    },
+    minWidth: 0,
+  },
+  menuSubButtonSm: {
+    fontSize: "0.75rem",
+    lineHeight: "1rem",
+  },
+  menuSubButtonMd: {
+    fontSize: "0.875rem",
+    lineHeight: "1.25rem",
+  },
+})
+const MENU_BUTTON_SIZE_STYLE = {
+  default: styles.menuButtonDefaultSize,
+  lg: styles.menuButtonLg,
+  sm: styles.menuButtonSm,
+} as const
+
+export interface SidebarMenuButtonStyleOptions {
+  size?: SidebarMenuButtonSize | null
+  variant?: SidebarMenuButtonVariant | null
+  className?: string
+}
+
+/** Legacy escape hatch, kept API-compatible with the old cva export. */
+export function sidebarMenuButtonVariants({
+  size = "default",
+  variant = "default",
+  className,
+}: SidebarMenuButtonStyleOptions = {}): string {
+  const props = stylex.props(
+    styles.menuButton,
+    MENU_BUTTON_SIZE_STYLE[size ?? "default"],
+    variant === "outline" && styles.menuButtonOutline,
+  )
+
+  return cn(props.className, className)
+}
 
 export type SidebarContextProps = {
   state: "expanded" | "collapsed"
@@ -73,11 +651,13 @@ export function SidebarProvider({
   className,
   style,
   children,
+  sx,
   ...props
 }: React.ComponentProps<"div"> & {
   defaultOpen?: boolean
   open?: boolean
   onOpenChange?: (open: boolean) => void
+  sx?: Sx
 }): React.ReactElement {
   const isMobile = useMediaQuery("max-md")
   const [openMobile, setOpenMobile] = React.useState(false)
@@ -125,7 +705,6 @@ export function SidebarProvider({
   }, [toggleSidebar])
 
   // We add a state so that we can do data-state="expanded" or "collapsed".
-  // This makes it easier to style the sidebar with Tailwind classes.
   const state = open ? "expanded" : "collapsed"
   const contextValue = React.useMemo<SidebarContextProps>(
     () => ({
@@ -139,19 +718,18 @@ export function SidebarProvider({
     }),
     [state, open, setOpen, isMobile, openMobile, toggleSidebar],
   )
+  const styleProps = stylex.props(styles.wrapper, sx)
 
   return (
     <SidebarContext.Provider value={contextValue}>
       <div
-        className={cn(
-          "group/sidebar-wrapper flex min-h-svh w-full has-data-[variant=inset]:bg-sidebar",
-          className,
-        )}
+        className={cn(styleProps.className, className)}
         data-slot="sidebar-wrapper"
         style={
           {
             "--sidebar-width": SIDEBAR_WIDTH,
             "--sidebar-width-icon": SIDEBAR_WIDTH_ICON,
+            ...styleProps.style,
             ...style,
           } as React.CSSProperties
         }
@@ -169,112 +747,136 @@ export function Sidebar({
   collapsible = "offcanvas",
   className,
   children,
+  sx,
   ...props
 }: React.ComponentProps<"div"> & {
-  side?: "left" | "right"
-  variant?: "sidebar" | "floating" | "inset"
-  collapsible?: "offcanvas" | "icon" | "none"
+  side?: SidebarSide
+  variant?: SidebarVariant
+  collapsible?: SidebarCollapsible
+  sx?: Sx
 }): React.ReactElement {
   const { isMobile, state, openMobile, setOpenMobile } = useSidebar()
+  const layoutValue = React.useMemo(
+    () => ({ collapsible, side, variant }),
+    [collapsible, side, variant],
+  )
+  const collapsed = state === "collapsed"
+  const isOffcanvas = collapsed && collapsible === "offcanvas"
+  const isIcon = collapsed && collapsible === "icon"
+  const floats = variant === "floating" || variant === "inset"
+  const staticProps = stylex.props(styles.staticSidebar, sx)
+  const rootProps = stylex.props(styles.root)
+  const gapProps = stylex.props(
+    styles.gap,
+    side === "right" && styles.gapRight,
+    isIcon && (floats ? styles.gapIconFloating : styles.gapIcon),
+    isOffcanvas && styles.gapOffcanvas,
+  )
+  const containerProps = stylex.props(
+    styles.container,
+    side === "left" ? styles.containerLeft : styles.containerRight,
+    isOffcanvas &&
+      (side === "left" ? styles.containerLeftOffcanvas : styles.containerRightOffcanvas),
+    floats && styles.containerFloating,
+    floats && isIcon && styles.containerFloatingIcon,
+    !floats && isIcon && styles.containerIcon,
+    !floats && (side === "left" ? styles.containerBorderRight : styles.containerBorderLeft),
+    sx,
+  )
+  const innerProps = stylex.props(styles.inner, variant === "floating" && styles.innerFloating)
+  const mobileInnerProps = stylex.props(styles.mobileInner)
+  const srOnlyProps = stylex.props(styles.srOnly)
 
   if (collapsible === "none") {
     return (
-      <div
-        className={cn(
-          "flex h-svh w-(--sidebar-width) flex-col bg-sidebar text-sidebar-foreground",
-          className,
-        )}
-        data-slot="sidebar"
-        {...props}
-      >
-        {children}
-      </div>
+      <SidebarLayoutContext value={layoutValue}>
+        <div
+          className={cn(staticProps.className, className)}
+          data-slot="sidebar"
+          style={staticProps.style}
+          {...props}
+        >
+          {children}
+        </div>
+      </SidebarLayoutContext>
     )
   }
 
   if (isMobile) {
     return (
-      <Sheet onOpenChange={setOpenMobile} open={openMobile} {...props}>
-        <SheetPopup
-          className="w-(--sidebar-width) bg-sidebar p-0 text-sidebar-foreground [&>button]:hidden"
-          data-mobile="true"
-          data-sidebar="sidebar"
-          data-slot="sidebar"
-          side={side}
-          style={
-            {
-              "--sidebar-width": SIDEBAR_WIDTH_MOBILE,
-            } as React.CSSProperties
-          }
-        >
-          <SheetHeader className="sr-only">
-            <SheetTitle>Sidebar</SheetTitle>
-            <SheetDescription>Displays the mobile sidebar.</SheetDescription>
-          </SheetHeader>
-          <div className="flex size-full flex-col">{children}</div>
-        </SheetPopup>
-      </Sheet>
+      <SidebarLayoutContext value={layoutValue}>
+        <Sheet onOpenChange={setOpenMobile} open={openMobile} {...props}>
+          <SheetPopup
+            data-mobile="true"
+            data-sidebar="sidebar"
+            data-slot="sidebar"
+            side={side}
+            style={
+              {
+                "--sidebar-width": SIDEBAR_WIDTH_MOBILE,
+              } as React.CSSProperties
+            }
+            sx={styles.mobileSheet}
+          >
+            <SheetHeader sx={styles.srOnly}>
+              <SheetTitle>Sidebar</SheetTitle>
+              <SheetDescription>Displays the mobile sidebar.</SheetDescription>
+            </SheetHeader>
+            <div className={mobileInnerProps.className} style={mobileInnerProps.style}>
+              {children}
+            </div>
+          </SheetPopup>
+        </Sheet>
+      </SidebarLayoutContext>
     )
   }
 
   return (
-    <div
-      className="group peer hidden text-sidebar-foreground md:block"
-      data-collapsible={state === "collapsed" ? collapsible : ""}
-      data-side={side}
-      data-slot="sidebar"
-      data-state={state}
-      data-variant={variant}
-    >
-      {/* This is what handles the sidebar gap on desktop */}
+    <SidebarLayoutContext value={layoutValue}>
       <div
-        className={cn(
-          "relative w-(--sidebar-width) bg-transparent transition-[width] duration-200 ease-linear",
-          "group-data-[collapsible=offcanvas]:w-0",
-          "group-data-[side=right]:rotate-180",
-          variant === "floating" || variant === "inset"
-            ? "group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4)))]"
-            : "group-data-[collapsible=icon]:w-(--sidebar-width-icon)",
-        )}
-        data-slot="sidebar-gap"
-      />
-      <div
-        className={cn(
-          "fixed inset-y-0 z-10 hidden h-svh w-(--sidebar-width) transition-[left,right,width] duration-200 ease-linear md:flex",
-          side === "left"
-            ? "left-0 group-data-[collapsible=offcanvas]:-left-(--sidebar-width)"
-            : "right-0 group-data-[collapsible=offcanvas]:-right-(--sidebar-width)",
-          // Adjust the padding for floating and inset variants.
-          variant === "floating" || variant === "inset"
-            ? "p-2 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4))+2px)]"
-            : "group-data-[collapsible=icon]:w-(--sidebar-width-icon) group-data-[side=left]:border-r group-data-[side=right]:border-l",
-          className,
-        )}
-        data-slot="sidebar-container"
-        {...props}
+        className={rootProps.className}
+        data-collapsible={collapsed ? collapsible : ""}
+        data-side={side}
+        data-slot="sidebar"
+        data-state={state}
+        data-variant={variant}
+        style={rootProps.style}
       >
+        {/* Reserves the sidebar's track in the page flow. */}
+        <div className={gapProps.className} data-slot="sidebar-gap" style={gapProps.style} />
         <div
-          className="flex size-full flex-col bg-sidebar group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:border-sidebar-border group-data-[variant=floating]:shadow-sm/5"
-          data-sidebar="sidebar"
-          data-slot="sidebar-inner"
+          className={cn(containerProps.className, className)}
+          data-slot="sidebar-container"
+          style={containerProps.style}
+          {...props}
         >
-          {children}
+          <div
+            className={innerProps.className}
+            data-sidebar="sidebar"
+            data-slot="sidebar-inner"
+            style={innerProps.style}
+          >
+            {children}
+          </div>
         </div>
       </div>
-    </div>
+      <span className={srOnlyProps.className} style={srOnlyProps.style} />
+    </SidebarLayoutContext>
   )
 }
 
 export function SidebarTrigger({
   className,
   onClick,
+  sx,
   ...props
-}: React.ComponentProps<typeof Button>): React.ReactElement {
+}: React.ComponentProps<typeof Button> & { sx?: Sx }): React.ReactElement {
   const { toggleSidebar } = useSidebar()
+  const srOnlyProps = stylex.props(styles.srOnly)
 
   return (
     <Button
-      className={cn("size-7", className)}
+      className={className}
       data-sidebar="trigger"
       data-slot="sidebar-trigger"
       onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
@@ -282,36 +884,44 @@ export function SidebarTrigger({
         toggleSidebar()
       }}
       size="icon"
+      sx={[styles.trigger, sx]}
       variant="ghost"
       {...props}
     >
-      <PanelLeftIcon />
-      <span className="sr-only">Toggle Sidebar</span>
+      <PanelLeft />
+      <span className={srOnlyProps.className} style={srOnlyProps.style}>
+        Toggle Sidebar
+      </span>
     </Button>
   )
 }
 
 export function SidebarRail({
   className,
+  sx,
   ...props
-}: React.ComponentProps<"button">): React.ReactElement {
-  const { toggleSidebar } = useSidebar()
+}: React.ComponentProps<"button"> & { sx?: Sx }): React.ReactElement {
+  const { toggleSidebar, state } = useSidebar()
+  const { collapsible, side } = React.useContext(SidebarLayoutContext)
+  const collapsed = state === "collapsed"
+  const isOffcanvas = collapsed && collapsible === "offcanvas"
+  const styleProps = stylex.props(
+    styles.rail,
+    side === "left" ? styles.railLeft : styles.railRight,
+    collapsed && (side === "left" ? styles.railLeftCollapsed : styles.railRightCollapsed),
+    isOffcanvas && styles.railOffcanvas,
+    isOffcanvas && (side === "left" ? styles.railLeftOffcanvas : styles.railRightOffcanvas),
+    sx,
+  )
 
   return (
     <button
       aria-label="Toggle Sidebar"
-      className={cn(
-        "absolute inset-y-0 z-20 hidden w-4 -translate-x-1/2 transition-all ease-linear group-data-[side=left]:-right-4 group-data-[side=right]:left-0 after:absolute after:inset-y-0 after:left-1/2 after:w-0.5 hover:after:bg-sidebar-border sm:flex",
-        "in-data-[side=left]:cursor-w-resize in-data-[side=right]:cursor-e-resize",
-        "[[data-side=left][data-state=collapsed]_&]:cursor-e-resize [[data-side=right][data-state=collapsed]_&]:cursor-w-resize",
-        "group-data-[collapsible=offcanvas]:translate-x-0 group-data-[collapsible=offcanvas]:after:left-full hover:group-data-[collapsible=offcanvas]:bg-sidebar",
-        "[[data-side=left][data-collapsible=offcanvas]_&]:-right-2",
-        "[[data-side=right][data-collapsible=offcanvas]_&]:-left-2",
-        className,
-      )}
+      className={cn(styleProps.className, className)}
       data-sidebar="rail"
       data-slot="sidebar-rail"
       onClick={toggleSidebar}
+      style={styleProps.style}
       tabIndex={-1}
       title="Toggle Sidebar"
       type="button"
@@ -322,16 +932,24 @@ export function SidebarRail({
 
 export function SidebarInset({
   className,
+  sx,
   ...props
-}: React.ComponentProps<"main">): React.ReactElement {
+}: React.ComponentProps<"main"> & { sx?: Sx }): React.ReactElement {
+  const { variant } = React.useContext(SidebarLayoutContext)
+  const context = React.useContext(SidebarContext)
+  const isInset = variant === "inset"
+  const styleProps = stylex.props(
+    styles.inset,
+    isInset && styles.insetFloating,
+    isInset && context?.state === "collapsed" && styles.insetFloatingCollapsed,
+    sx,
+  )
+
   return (
     <main
-      className={cn(
-        "relative flex w-full flex-1 flex-col bg-background",
-        "md:peer-data-[variant=inset]:m-2 md:peer-data-[variant=inset]:ml-0 md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow-sm/5 md:peer-data-[variant=inset]:peer-data-[state=collapsed]:ml-2",
-        className,
-      )}
+      className={cn(styleProps.className, className)}
       data-slot="sidebar-inset"
+      style={styleProps.style}
       {...props}
     />
   )
@@ -339,13 +957,15 @@ export function SidebarInset({
 
 export function SidebarInput({
   className,
+  sx,
   ...props
-}: React.ComponentProps<typeof Input>): React.ReactElement {
+}: React.ComponentProps<typeof Input> & { sx?: Sx }): React.ReactElement {
   return (
     <Input
-      className={cn("h-8 w-full bg-background shadow-none", className)}
+      className={className}
       data-sidebar="input"
       data-slot="sidebar-input"
+      sx={[styles.input, sx]}
       {...props}
     />
   )
@@ -353,13 +973,17 @@ export function SidebarInput({
 
 export function SidebarHeader({
   className,
+  sx,
   ...props
-}: React.ComponentProps<"div">): React.ReactElement {
+}: React.ComponentProps<"div"> & { sx?: Sx }): React.ReactElement {
+  const styleProps = stylex.props(styles.stack, sx)
+
   return (
     <div
-      className={cn("flex flex-col gap-2 p-2", className)}
+      className={cn(styleProps.className, className)}
       data-sidebar="header"
       data-slot="sidebar-header"
+      style={styleProps.style}
       {...props}
     />
   )
@@ -367,13 +991,17 @@ export function SidebarHeader({
 
 export function SidebarFooter({
   className,
+  sx,
   ...props
-}: React.ComponentProps<"div">): React.ReactElement {
+}: React.ComponentProps<"div"> & { sx?: Sx }): React.ReactElement {
+  const styleProps = stylex.props(styles.stack, sx)
+
   return (
     <div
-      className={cn("flex flex-col gap-2 p-2", className)}
+      className={cn(styleProps.className, className)}
       data-sidebar="footer"
       data-slot="sidebar-footer"
+      style={styleProps.style}
       {...props}
     />
   )
@@ -381,13 +1009,15 @@ export function SidebarFooter({
 
 export function SidebarSeparator({
   className,
+  sx,
   ...props
-}: React.ComponentProps<typeof Separator>): React.ReactElement {
+}: React.ComponentProps<typeof Separator> & { sx?: Sx }): React.ReactElement {
   return (
     <Separator
-      className={cn("w-auto bg-sidebar-border", className)}
+      className={className}
       data-sidebar="separator"
       data-slot="sidebar-separator"
+      sx={[styles.separator, sx]}
       {...props}
     />
   )
@@ -395,17 +1025,19 @@ export function SidebarSeparator({
 
 export function SidebarContent({
   className,
+  sx,
   ...props
-}: React.ComponentProps<"div">): React.ReactElement {
+}: React.ComponentProps<"div"> & { sx?: Sx }): React.ReactElement {
+  const iconCollapsed = useIconCollapsed()
+  const styleProps = stylex.props(styles.content, iconCollapsed && styles.contentIcon, sx)
+
   return (
-    <ScrollArea className="min-h-0 flex-1" fill scrollFade>
+    <ScrollArea fill scrollFade sx={styles.scrollArea}>
       <div
-        className={cn(
-          "flex h-full flex-col gap-2 group-data-[collapsible=icon]:overflow-hidden",
-          className,
-        )}
+        className={cn(styleProps.className, className)}
         data-sidebar="content"
         data-slot="sidebar-content"
+        style={styleProps.style}
         {...props}
       />
     </ScrollArea>
@@ -414,13 +1046,17 @@ export function SidebarContent({
 
 export function SidebarGroup({
   className,
+  sx,
   ...props
-}: React.ComponentProps<"div">): React.ReactElement {
+}: React.ComponentProps<"div"> & { sx?: Sx }): React.ReactElement {
+  const styleProps = stylex.props(styles.group, sx)
+
   return (
     <div
-      className={cn("relative flex w-full min-w-0 flex-col p-2", className)}
+      className={cn(styleProps.className, className)}
       data-sidebar="group"
       data-slot="sidebar-group"
+      style={styleProps.style}
       {...props}
     />
   )
@@ -429,16 +1065,16 @@ export function SidebarGroup({
 export function SidebarGroupLabel({
   className,
   render,
+  sx,
   ...props
-}: useRender.ComponentProps<"div">): React.ReactElement {
+}: useRender.ComponentProps<"div"> & { sx?: Sx }): React.ReactElement {
+  const iconCollapsed = useIconCollapsed()
+  const styleProps = stylex.props(styles.groupLabel, iconCollapsed && styles.groupLabelIcon, sx)
   const defaultProps = {
-    className: cn(
-      "flex h-8 shrink-0 items-center rounded-lg px-2 text-xs font-medium text-sidebar-foreground ring-sidebar-ring outline-hidden transition-[margin,opacity] duration-200 ease-linear focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0",
-      "group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0",
-      className,
-    ),
+    className: cn(styleProps.className, className),
     "data-sidebar": "group-label",
     "data-slot": "sidebar-group-label",
+    style: styleProps.style,
   }
 
   return useRender({
@@ -451,18 +1087,16 @@ export function SidebarGroupLabel({
 export function SidebarGroupAction({
   className,
   render,
+  sx,
   ...props
-}: useRender.ComponentProps<"button">): React.ReactElement {
+}: useRender.ComponentProps<"button"> & { sx?: Sx }): React.ReactElement {
+  const iconCollapsed = useIconCollapsed()
+  const styleProps = stylex.props(styles.groupAction, iconCollapsed && styles.hidden, sx)
   const defaultProps = {
-    className: cn(
-      "absolute top-3.5 right-3 flex aspect-square w-5 items-center justify-center rounded-lg p-0 text-sidebar-foreground ring-sidebar-ring outline-hidden transition-transform hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 [&>svg]:shrink-0 [&>svg:not([class*='size-'])]:size-4",
-      // Increases the hit area of the button on mobile.
-      "after:absolute after:-inset-2 md:after:hidden",
-      "group-data-[collapsible=icon]:hidden",
-      className,
-    ),
+    className: cn(styleProps.className, className),
     "data-sidebar": "group-action",
     "data-slot": "sidebar-group-action",
+    style: styleProps.style,
   }
 
   return useRender({
@@ -474,13 +1108,17 @@ export function SidebarGroupAction({
 
 export function SidebarGroupContent({
   className,
+  sx,
   ...props
-}: React.ComponentProps<"div">): React.ReactElement {
+}: React.ComponentProps<"div"> & { sx?: Sx }): React.ReactElement {
+  const styleProps = stylex.props(styles.groupContent, sx)
+
   return (
     <div
-      className={cn("w-full text-sm", className)}
+      className={cn(styleProps.className, className)}
       data-sidebar="group-content"
       data-slot="sidebar-group-content"
+      style={styleProps.style}
       {...props}
     />
   )
@@ -488,13 +1126,17 @@ export function SidebarGroupContent({
 
 export function SidebarMenu({
   className,
+  sx,
   ...props
-}: React.ComponentProps<"ul">): React.ReactElement {
+}: React.ComponentProps<"ul"> & { sx?: Sx }): React.ReactElement {
+  const styleProps = stylex.props(styles.menu, sx)
+
   return (
     <ul
-      className={cn("flex w-full min-w-0 flex-col gap-1", className)}
+      className={cn(styleProps.className, className)}
       data-sidebar="menu"
       data-slot="sidebar-menu"
+      style={styleProps.style}
       {...props}
     />
   )
@@ -502,13 +1144,17 @@ export function SidebarMenu({
 
 export function SidebarMenuItem({
   className,
+  sx,
   ...props
-}: React.ComponentProps<"li">): React.ReactElement {
+}: React.ComponentProps<"li"> & { sx?: Sx }): React.ReactElement {
+  const styleProps = stylex.props(styles.menuItem, sx)
+
   return (
     <li
-      className={cn("group/menu-item relative", className)}
+      className={cn(styleProps.className, className)}
       data-sidebar="menu-item"
       data-slot="sidebar-menu-item"
+      style={styleProps.style}
       {...props}
     />
   )
@@ -521,18 +1167,32 @@ export function SidebarMenuButton({
   tooltip,
   className,
   render,
+  sx,
   ...props
 }: useRender.ComponentProps<"button"> & {
   isActive?: boolean
   tooltip?: string | React.ComponentProps<typeof TooltipPopup>
-} & VariantProps<typeof sidebarMenuButtonVariants>): React.ReactElement {
+  size?: SidebarMenuButtonSize
+  variant?: SidebarMenuButtonVariant
+  sx?: Sx
+}): React.ReactElement {
   const { isMobile, state } = useSidebar()
+  const iconCollapsed = useIconCollapsed()
+  const styleProps = stylex.props(
+    styles.menuButton,
+    MENU_BUTTON_SIZE_STYLE[size],
+    variant === "outline" && styles.menuButtonOutline,
+    iconCollapsed && styles.menuButtonIcon,
+    iconCollapsed && size === "lg" && styles.menuButtonIconLg,
+    sx,
+  )
   const defaultProps = {
-    className: cn(sidebarMenuButtonVariants({ size, variant }), className),
+    className: cn(styleProps.className, className),
     "data-active": isActive,
     "data-sidebar": "menu-button",
     "data-size": size,
     "data-slot": "sidebar-menu-button",
+    style: styleProps.style,
   }
   const buttonProps = mergeProps<"button">(defaultProps, props)
   const buttonElement = useRender({
@@ -545,11 +1205,7 @@ export function SidebarMenuButton({
     return buttonElement
   }
 
-  if (typeof tooltip === "string") {
-    tooltip = {
-      children: tooltip,
-    }
-  }
+  const tooltipProps = typeof tooltip === "string" ? { children: tooltip } : tooltip
 
   return (
     <Tooltip>
@@ -558,7 +1214,7 @@ export function SidebarMenuButton({
         align="center"
         hidden={state !== "collapsed" || isMobile}
         side="right"
-        {...tooltip}
+        {...tooltipProps}
       />
     </Tooltip>
   )
@@ -568,25 +1224,24 @@ export function SidebarMenuAction({
   className,
   showOnHover = false,
   render,
+  sx,
   ...props
 }: useRender.ComponentProps<"button"> & {
   showOnHover?: boolean
+  sx?: Sx
 }): React.ReactElement {
+  const iconCollapsed = useIconCollapsed()
+  const styleProps = stylex.props(
+    styles.menuAction,
+    showOnHover && styles.menuActionOnHover,
+    iconCollapsed && styles.hidden,
+    sx,
+  )
   const defaultProps = {
-    className: cn(
-      "absolute top-1.5 right-1 flex aspect-square w-5 items-center justify-center rounded-lg p-0 text-sidebar-foreground ring-sidebar-ring outline-hidden transition-transform peer-hover/menu-button:text-sidebar-accent-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 [&>svg]:shrink-0 [&>svg:not([class*='size-'])]:size-4",
-      // Increases the hit area of the button on mobile.
-      "after:absolute after:-inset-2 md:after:hidden",
-      "peer-data-[size=sm]/menu-button:top-1",
-      "peer-data-[size=default]/menu-button:top-1.5",
-      "peer-data-[size=lg]/menu-button:top-2.5",
-      "group-data-[collapsible=icon]:hidden",
-      showOnHover &&
-        "group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100 peer-data-[active=true]/menu-button:text-sidebar-accent-foreground data-[state=open]:opacity-100 md:opacity-0",
-      className,
-    ),
+    className: cn(styleProps.className, className),
     "data-sidebar": "menu-action",
     "data-slot": "sidebar-menu-action",
+    style: styleProps.style,
   }
 
   return useRender({
@@ -598,21 +1253,18 @@ export function SidebarMenuAction({
 
 export function SidebarMenuBadge({
   className,
+  sx,
   ...props
-}: React.ComponentProps<"div">): React.ReactElement {
+}: React.ComponentProps<"div"> & { sx?: Sx }): React.ReactElement {
+  const iconCollapsed = useIconCollapsed()
+  const styleProps = stylex.props(styles.menuBadge, iconCollapsed && styles.hidden, sx)
+
   return (
     <div
-      className={cn(
-        "pointer-events-none absolute right-1 flex h-5 min-w-5 items-center justify-center rounded-lg px-1 text-xs font-medium text-sidebar-foreground tabular-nums select-none",
-        "peer-hover/menu-button:text-sidebar-accent-foreground peer-data-[active=true]/menu-button:text-sidebar-accent-foreground",
-        "peer-data-[size=sm]/menu-button:top-1",
-        "peer-data-[size=default]/menu-button:top-1.5",
-        "peer-data-[size=lg]/menu-button:top-2.5",
-        "group-data-[collapsible=icon]:hidden",
-        className,
-      )}
+      className={cn(styleProps.className, className)}
       data-sidebar="menu-badge"
       data-slot="sidebar-menu-badge"
+      style={styleProps.style}
       {...props}
     />
   )
@@ -621,9 +1273,11 @@ export function SidebarMenuBadge({
 export function SidebarMenuSkeleton({
   className,
   showIcon = false,
+  sx,
   ...props
 }: React.ComponentProps<"div"> & {
   showIcon?: boolean
+  sx?: Sx
 }): React.ReactElement {
   // Width between 50 and 90%, derived deterministically from this instance's id.
   // Math.random() during render is impure -- the React Compiler may recompute it,
@@ -638,23 +1292,25 @@ export function SidebarMenuSkeleton({
 
     return `${(Math.abs(hash) % 41) + 50}%`
   }, [id])
+  const styleProps = stylex.props(styles.menuSkeleton, sx)
 
   return (
     <div
-      className={cn("flex h-8 items-center gap-2 rounded-lg px-2", className)}
+      className={cn(styleProps.className, className)}
       data-sidebar="menu-skeleton"
       data-slot="sidebar-menu-skeleton"
+      style={styleProps.style}
       {...props}
     >
-      {showIcon && <Skeleton className="size-4 rounded-lg" data-sidebar="menu-skeleton-icon" />}
+      {showIcon && <Skeleton data-sidebar="menu-skeleton-icon" sx={styles.menuSkeletonIcon} />}
       <Skeleton
-        className="h-4 max-w-(--skeleton-width) flex-1"
         data-sidebar="menu-skeleton-text"
         style={
           {
             "--skeleton-width": width,
           } as React.CSSProperties
         }
+        sx={styles.menuSkeletonText}
       />
     </div>
   )
@@ -662,17 +1318,18 @@ export function SidebarMenuSkeleton({
 
 export function SidebarMenuSub({
   className,
+  sx,
   ...props
-}: React.ComponentProps<"ul">): React.ReactElement {
+}: React.ComponentProps<"ul"> & { sx?: Sx }): React.ReactElement {
+  const iconCollapsed = useIconCollapsed()
+  const styleProps = stylex.props(styles.menuSub, iconCollapsed && styles.hidden, sx)
+
   return (
     <ul
-      className={cn(
-        "mx-3.5 flex min-w-0 translate-x-px flex-col gap-1 border-l border-sidebar-border px-2.5 py-0.5",
-        "group-data-[collapsible=icon]:hidden",
-        className,
-      )}
+      className={cn(styleProps.className, className)}
       data-sidebar="menu-sub"
       data-slot="sidebar-menu-sub"
+      style={styleProps.style}
       {...props}
     />
   )
@@ -680,13 +1337,17 @@ export function SidebarMenuSub({
 
 export function SidebarMenuSubItem({
   className,
+  sx,
   ...props
-}: React.ComponentProps<"li">): React.ReactElement {
+}: React.ComponentProps<"li"> & { sx?: Sx }): React.ReactElement {
+  const styleProps = stylex.props(styles.menuSubItem, sx)
+
   return (
     <li
-      className={cn("group/menu-sub-item relative", className)}
+      className={cn(styleProps.className, className)}
       data-sidebar="menu-sub-item"
       data-slot="sidebar-menu-sub-item"
+      style={styleProps.style}
       {...props}
     />
   )
@@ -697,24 +1358,27 @@ export function SidebarMenuSubButton({
   isActive = false,
   className,
   render,
+  sx,
   ...props
 }: useRender.ComponentProps<"a"> & {
   size?: "sm" | "md"
   isActive?: boolean
+  sx?: Sx
 }): React.ReactElement {
+  const iconCollapsed = useIconCollapsed()
+  const styleProps = stylex.props(
+    styles.menuSubButton,
+    size === "sm" ? styles.menuSubButtonSm : styles.menuSubButtonMd,
+    iconCollapsed && styles.hidden,
+    sx,
+  )
   const defaultProps = {
-    className: cn(
-      "flex h-8 min-w-0 -translate-x-px items-center gap-2 overflow-hidden rounded-lg px-2 text-sidebar-foreground ring-sidebar-ring outline-hidden hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 sm:h-7 [&>span:last-child]:truncate [&>svg]:shrink-0 [&>svg]:text-sidebar-accent-foreground [&>svg:not([class*='size-'])]:size-4",
-      "data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground",
-      size === "sm" && "text-xs",
-      size === "md" && "text-sm",
-      "group-data-[collapsible=icon]:hidden",
-      className,
-    ),
+    className: cn(styleProps.className, className),
     "data-active": isActive,
     "data-sidebar": "menu-sub-button",
     "data-size": size,
     "data-slot": "sidebar-menu-sub-button",
+    style: styleProps.style,
   }
 
   return useRender({

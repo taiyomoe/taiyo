@@ -1,3 +1,5 @@
+import { ArrowDown01Icon } from "@hugeicons/core-free-icons"
+import { HugeiconsIcon } from "@hugeicons/react"
 import preview from "@/storybook/preview"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import {
@@ -5,7 +7,6 @@ import {
   CollapsiblePanel,
   CollapsibleTrigger,
 } from "@taiyomoe/ui/components/ui/collapsible"
-import { ChevronDownIcon } from "lucide-react"
 import { fn } from "storybook/test"
 
 const meta = preview.meta({
@@ -27,7 +28,10 @@ export const Default = meta.story({
         render={
           <Button className="w-full justify-between" variant="outline">
             <span>Recent activity</span>
-            <ChevronDownIcon className="transition-transform data-[panel-open]:rotate-180" />
+            <HugeiconsIcon
+              icon={ArrowDown01Icon}
+              className="transition-transform data-[panel-open]:rotate-180"
+            />
           </Button>
         }
       />
@@ -50,7 +54,10 @@ export const OpenByDefault = meta.story({
         render={
           <Button className="w-full justify-between" variant="outline">
             <span>Recent activity</span>
-            <ChevronDownIcon className="transition-transform data-[panel-open]:rotate-180" />
+            <HugeiconsIcon
+              icon={ArrowDown01Icon}
+              className="transition-transform data-[panel-open]:rotate-180"
+            />
           </Button>
         }
       />
@@ -73,7 +80,10 @@ export const Disabled = meta.story({
         render={
           <Button className="w-full justify-between" variant="outline">
             <span>Recent activity</span>
-            <ChevronDownIcon className="transition-transform data-[panel-open]:rotate-180" />
+            <HugeiconsIcon
+              icon={ArrowDown01Icon}
+              className="transition-transform data-[panel-open]:rotate-180"
+            />
           </Button>
         }
       />

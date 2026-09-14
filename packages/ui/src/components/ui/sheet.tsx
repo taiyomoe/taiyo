@@ -3,11 +3,233 @@
 import { Dialog as SheetPrimitive } from "@base-ui/react/dialog"
 import { mergeProps } from "@base-ui/react/merge-props"
 import { useRender } from "@base-ui/react/use-render"
-import { XIcon } from "lucide-react"
+import * as stylex from "@stylexjs/stylex"
 import type React from "react"
 import { cn } from "@/lib/utils"
+import { Close } from "@/components/icons"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { colors, consts, font, radius, shadows, text } from "../../styles/tokens.stylex"
+import type { Sx } from "../../styles/sx"
+
+type SheetSide = "right" | "left" | "top" | "bottom"
+type SheetVariant = "default" | "inset"
+
+const styles = stylex.create({
+  backdrop: {
+    inset: 0,
+    backdropFilter: "blur(8px)",
+    backgroundColor: "rgb(0 0 0 / 32%)",
+    opacity: {
+      "[data-ending-style]": 0,
+      "[data-starting-style]": 0,
+      default: 1,
+    },
+    position: "fixed",
+    transitionDuration: "200ms",
+    transitionProperty: "all",
+    transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+    zIndex: 50,
+  },
+  viewport: {
+    inset: 0,
+    display: "grid",
+    position: "fixed",
+    zIndex: 50,
+  },
+  popup: {
+    backgroundClip: "padding-box",
+    backgroundColor: colors.popover,
+    boxShadow: shadows.overlay,
+    color: colors.popoverForeground,
+    display: "flex",
+    flexDirection: "column",
+    opacity: {
+      "[data-ending-style]": 0,
+      "[data-starting-style]": 0,
+      default: 1,
+    },
+    position: "relative",
+    transitionDuration: "200ms",
+    transitionProperty: "opacity, translate",
+    transitionTimingFunction: "ease-in-out",
+    willChange: "transform",
+    maxHeight: "100%",
+    minHeight: 0,
+    minWidth: 0,
+    width: "100%",
+    "::before": {
+      inset: 0,
+      borderRadius: "inherit",
+      boxShadow: shadows.edge,
+      content: '""',
+      display: {
+        default: null,
+        "@media (width < 40rem)": "none",
+      },
+      pointerEvents: "none",
+      position: "absolute",
+    },
+  },
+  closeButton: {
+    position: "absolute",
+    right: "0.5rem",
+    top: "0.5rem",
+  },
+  header: {
+    padding: "1.5rem",
+    gap: "0.5rem",
+    display: "flex",
+    flexDirection: "column",
+    // pb shrinks further to 0.75rem when the popup contains a panel — see
+    // structural.css (cross-element :has() rule).
+    paddingBottom: {
+      default: "1rem",
+      [consts.sm]: "1.5rem",
+    },
+  },
+  footer: {
+    gap: "0.5rem",
+    paddingInline: "1.5rem",
+    display: "flex",
+    flexDirection: {
+      default: "column-reverse",
+      [consts.sm]: "row",
+    },
+    justifyContent: {
+      default: null,
+      [consts.sm]: "flex-end",
+    },
+  },
+  footerDefault: {
+    paddingBlock: "1rem",
+    backgroundColor: `color-mix(in srgb, ${colors.muted} 72%, transparent)`,
+    borderTopColor: colors.border,
+    borderTopStyle: "solid",
+    borderTopWidth: 1,
+  },
+  footerBare: {
+    paddingBottom: "1.5rem",
+    // pt shrinks to 0.75rem when the popup contains a panel — structural.css.
+    paddingTop: "1rem",
+  },
+  title: {
+    fontFamily: font.heading,
+    fontSize: text.xl,
+    fontWeight: 600,
+    lineHeight: 1,
+  },
+  description: {
+    color: colors.mutedForeground,
+    fontSize: "0.875rem",
+    lineHeight: "1.25rem",
+  },
+  panel: {
+    // pt/pb shrink to 0.25rem next to a header / bare footer — structural.css.
+    padding: "1.5rem",
+  },
+})
+const viewportSideStyles = stylex.create({
+  bottom: {
+    display: "grid",
+    gridTemplateRows: "1fr auto",
+    paddingTop: "3rem",
+  },
+  top: {
+    display: "grid",
+    gridTemplateRows: "auto 1fr",
+    paddingBottom: "3rem",
+  },
+  left: {
+    display: "flex",
+    justifyContent: "flex-start",
+  },
+  right: {
+    display: "flex",
+    justifyContent: "flex-end",
+  },
+})
+const viewportVariantStyles = stylex.create({
+  inset: {
+    padding: {
+      default: null,
+      [consts.sm]: "1rem",
+    },
+  },
+})
+const popupSideStyles = stylex.create({
+  bottom: {
+    gridRowStart: "2",
+    translate: {
+      "[data-ending-style]": "0 2rem",
+      "[data-starting-style]": "0 2rem",
+      default: null,
+    },
+    borderTopColor: colors.border,
+    borderTopStyle: "solid",
+    borderTopWidth: 1,
+  },
+  top: {
+    translate: {
+      "[data-ending-style]": "0 -2rem",
+      "[data-starting-style]": "0 -2rem",
+      default: null,
+    },
+    borderBottomColor: colors.border,
+    borderBottomStyle: "solid",
+    borderBottomWidth: 1,
+  },
+  left: {
+    translate: {
+      "[data-ending-style]": "-2rem 0",
+      "[data-starting-style]": "-2rem 0",
+      default: null,
+    },
+    borderRightColor: colors.border,
+    borderRightStyle: "solid",
+    borderRightWidth: 1,
+    maxWidth: "28rem",
+    width: "calc(100% - 3rem)",
+  },
+  right: {
+    gridColumnStart: "2",
+    translate: {
+      "[data-ending-style]": "2rem 0",
+      "[data-starting-style]": "2rem 0",
+      default: null,
+    },
+    borderLeftColor: colors.border,
+    borderLeftStyle: "solid",
+    borderLeftWidth: 1,
+    maxWidth: "28rem",
+    width: "calc(100% - 3rem)",
+  },
+})
+const popupVariantStyles = stylex.create({
+  inset: {
+    borderColor: {
+      default: null,
+      [consts.sm]: colors.border,
+    },
+    borderRadius: {
+      default: null,
+      [consts.sm]: radius.xxl,
+    },
+    borderStyle: {
+      default: null,
+      [consts.sm]: "solid",
+    },
+    borderWidth: {
+      default: null,
+      [consts.sm]: 1,
+    },
+    // The Tailwind source hid the ::before edge for inset sheets entirely
+    // (`before:hidden`); reproduced faithfully.
+    "::before": {
+      display: "none",
+    },
+  },
+})
 
 export const Sheet: typeof SheetPrimitive.Root = SheetPrimitive.Root
 
@@ -23,15 +245,18 @@ export function SheetClose(props: SheetPrimitive.Close.Props): React.ReactElemen
 
 export function SheetBackdrop({
   className,
+  sx,
   ...props
-}: SheetPrimitive.Backdrop.Props): React.ReactElement {
+}: SheetPrimitive.Backdrop.Props & {
+  sx?: Sx
+}): React.ReactElement {
+  const styleProps = stylex.props(styles.backdrop, sx)
+
   return (
     <SheetPrimitive.Backdrop
-      className={cn(
-        "fixed inset-0 z-50 bg-black/32 backdrop-blur-sm transition-all duration-200 data-ending-style:opacity-0 data-starting-style:opacity-0",
-        className,
-      )}
+      className={cn(styleProps.className, className)}
       data-slot="sheet-backdrop"
+      style={styleProps.style}
       {...props}
     />
   )
@@ -41,23 +266,25 @@ export function SheetViewport({
   className,
   side,
   variant = "default",
+  sx,
   ...props
 }: SheetPrimitive.Viewport.Props & {
-  side?: "right" | "left" | "top" | "bottom"
-  variant?: "default" | "inset"
+  side?: SheetSide
+  variant?: SheetVariant
+  sx?: Sx
 }): React.ReactElement {
+  const styleProps = stylex.props(
+    styles.viewport,
+    side && viewportSideStyles[side],
+    variant === "inset" && viewportVariantStyles.inset,
+    sx,
+  )
+
   return (
     <SheetPrimitive.Viewport
-      className={cn(
-        "fixed inset-0 z-50 grid",
-        side === "bottom" && "grid grid-rows-[1fr_auto] pt-12",
-        side === "top" && "grid grid-rows-[auto_1fr] pb-12",
-        side === "left" && "flex justify-start",
-        side === "right" && "flex justify-end",
-        variant === "inset" && "sm:p-4",
-        className,
-      )}
+      className={cn(styleProps.className, className)}
       data-slot="sheet-viewport"
+      style={styleProps.style}
       {...props}
     />
   )
@@ -71,45 +298,42 @@ export function SheetPopup({
   variant = "default",
   closeProps,
   portalProps,
+  sx,
   ...props
 }: SheetPrimitive.Popup.Props & {
   showCloseButton?: boolean
-  side?: "right" | "left" | "top" | "bottom"
-  variant?: "default" | "inset"
+  side?: SheetSide
+  variant?: SheetVariant
   closeProps?: SheetPrimitive.Close.Props
   portalProps?: SheetPrimitive.Portal.Props
+  sx?: Sx
 }): React.ReactElement {
+  const styleProps = stylex.props(
+    styles.popup,
+    popupSideStyles[side],
+    variant === "inset" && popupVariantStyles.inset,
+    sx,
+  )
+
   return (
     <SheetPortal {...portalProps}>
       <SheetBackdrop />
       <SheetViewport side={side} variant={variant}>
         <SheetPrimitive.Popup
-          className={cn(
-            "relative flex max-h-full min-h-0 w-full min-w-0 flex-col bg-popover text-popover-foreground shadow-lg/5 transition-[opacity,translate] duration-200 ease-in-out will-change-transform not-dark:bg-clip-padding before:pointer-events-none before:absolute before:inset-0 before:shadow-[0_1px_--theme(--color-black/4%)] data-ending-style:opacity-0 data-starting-style:opacity-0 max-sm:before:hidden dark:before:shadow-[0_-1px_--theme(--color-white/6%)]",
-            side === "bottom" &&
-              "row-start-2 border-t data-ending-style:translate-y-8 data-starting-style:translate-y-8",
-            side === "top" &&
-              "border-b data-ending-style:-translate-y-8 data-starting-style:-translate-y-8",
-            side === "left" &&
-              "w-[calc(100%-(--spacing(12)))] max-w-md border-r data-ending-style:-translate-x-8 data-starting-style:-translate-x-8",
-            side === "right" &&
-              "col-start-2 w-[calc(100%-(--spacing(12)))] max-w-md border-l data-ending-style:translate-x-8 data-starting-style:translate-x-8",
-            variant === "inset" &&
-              "before:hidden sm:rounded-2xl sm:border sm:before:rounded-[calc(var(--radius-2xl)-1px)] **:sm:data-[slot=sheet-footer]:rounded-b-[calc(var(--radius-2xl)-1px)]",
-            className,
-          )}
+          className={cn(styleProps.className, className)}
           data-slot="sheet-popup"
+          data-variant={variant}
+          style={styleProps.style}
           {...props}
         >
           {children}
           {showCloseButton && (
             <SheetPrimitive.Close
               aria-label="Close"
-              className="absolute top-2 right-2"
-              render={<Button size="icon" variant="ghost" />}
+              render={<Button size="icon" sx={styles.closeButton} variant="ghost" />}
               {...closeProps}
             >
-              <XIcon />
+              <Close />
             </SheetPrimitive.Close>
           )}
         </SheetPrimitive.Popup>
@@ -121,14 +345,16 @@ export function SheetPopup({
 export function SheetHeader({
   className,
   render,
+  sx,
   ...props
-}: useRender.ComponentProps<"div">): React.ReactElement {
+}: useRender.ComponentProps<"div"> & {
+  sx?: Sx
+}): React.ReactElement {
+  const styleProps = stylex.props(styles.header, sx)
   const defaultProps = {
-    className: cn(
-      "flex flex-col gap-2 p-6 in-[[data-slot=sheet-popup]:has([data-slot=sheet-panel])]:pb-3 max-sm:pb-4",
-      className,
-    ),
+    className: cn(styleProps.className, className),
     "data-slot": "sheet-header",
+    style: styleProps.style,
   }
 
   return useRender({
@@ -142,19 +368,23 @@ export function SheetFooter({
   className,
   variant = "default",
   render,
+  sx,
   ...props
 }: useRender.ComponentProps<"div"> & {
   variant?: "default" | "bare"
+  sx?: Sx
 }): React.ReactElement {
+  const styleProps = stylex.props(
+    styles.footer,
+    variant === "default" && styles.footerDefault,
+    variant === "bare" && styles.footerBare,
+    sx,
+  )
   const defaultProps = {
-    className: cn(
-      "flex flex-col-reverse gap-2 px-6 sm:flex-row sm:justify-end",
-      variant === "default" && "border-t bg-muted/72 py-4",
-      variant === "bare" &&
-        "pt-4 pb-6 in-[[data-slot=sheet-popup]:has([data-slot=sheet-panel])]:pt-3",
-      className,
-    ),
+    className: cn(styleProps.className, className),
     "data-slot": "sheet-footer",
+    "data-variant": variant,
+    style: styleProps.style,
   }
 
   return useRender({
@@ -166,12 +396,18 @@ export function SheetFooter({
 
 export function SheetTitle({
   className,
+  sx,
   ...props
-}: SheetPrimitive.Title.Props): React.ReactElement {
+}: SheetPrimitive.Title.Props & {
+  sx?: Sx
+}): React.ReactElement {
+  const styleProps = stylex.props(styles.title, sx)
+
   return (
     <SheetPrimitive.Title
-      className={cn("font-heading text-xl leading-none font-semibold", className)}
+      className={cn(styleProps.className, className)}
       data-slot="sheet-title"
+      style={styleProps.style}
       {...props}
     />
   )
@@ -179,12 +415,18 @@ export function SheetTitle({
 
 export function SheetDescription({
   className,
+  sx,
   ...props
-}: SheetPrimitive.Description.Props): React.ReactElement {
+}: SheetPrimitive.Description.Props & {
+  sx?: Sx
+}): React.ReactElement {
+  const styleProps = stylex.props(styles.description, sx)
+
   return (
     <SheetPrimitive.Description
-      className={cn("text-sm text-muted-foreground", className)}
+      className={cn(styleProps.className, className)}
       data-slot="sheet-description"
+      style={styleProps.style}
       {...props}
     />
   )
@@ -194,16 +436,17 @@ export function SheetPanel({
   className,
   scrollFade = true,
   render,
+  sx,
   ...props
 }: useRender.ComponentProps<"div"> & {
   scrollFade?: boolean
+  sx?: Sx
 }): React.ReactElement {
+  const styleProps = stylex.props(styles.panel, sx)
   const defaultProps = {
-    className: cn(
-      "p-6 in-[[data-slot=sheet-popup]:has([data-slot=sheet-footer]:not(.border-t))]:pb-1 in-[[data-slot=sheet-popup]:has([data-slot=sheet-header])]:pt-1",
-      className,
-    ),
+    className: cn(styleProps.className, className),
     "data-slot": "sheet-panel",
+    style: styleProps.style,
   }
 
   return (

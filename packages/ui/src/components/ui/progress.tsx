@@ -1,18 +1,58 @@
 "use client"
 
 import { Progress as ProgressPrimitive } from "@base-ui/react/progress"
+import * as stylex from "@stylexjs/stylex"
 import type React from "react"
 import { cn } from "@/lib/utils"
+import type { Sx } from "../../styles/sx"
+import { colors, radius, shadows } from "../../styles/tokens.stylex"
+
+const styles = stylex.create({
+  root: {
+    gap: "0.5rem",
+    display: "flex",
+    flexDirection: "column",
+    width: "100%",
+  },
+  label: {
+    fontSize: "0.875rem",
+    fontWeight: 500,
+    lineHeight: "1.25rem",
+  },
+  track: {
+    borderRadius: radius.full,
+    overflow: "hidden",
+    backgroundColor: colors.well,
+    boxShadow: shadows.sunken,
+    display: "block",
+    height: "0.375rem",
+    width: "100%",
+  },
+  indicator: {
+    backgroundColor: colors.primary,
+    transitionDuration: "500ms",
+    transitionProperty: "all",
+  },
+  value: {
+    fontSize: "0.875rem",
+    fontVariantNumeric: "tabular-nums",
+    lineHeight: "1.25rem",
+  },
+})
 
 export function Progress({
   className,
   children,
+  sx,
   ...props
-}: ProgressPrimitive.Root.Props): React.ReactElement {
+}: ProgressPrimitive.Root.Props & { sx?: Sx }): React.ReactElement {
+  const styleProps = stylex.props(styles.root, sx)
+
   return (
     <ProgressPrimitive.Root
-      className={cn("flex w-full flex-col gap-2", className)}
+      className={cn(styleProps.className, className)}
       data-slot="progress"
+      style={styleProps.style}
       {...props}
     >
       {children ? (
@@ -28,12 +68,16 @@ export function Progress({
 
 export function ProgressLabel({
   className,
+  sx,
   ...props
-}: ProgressPrimitive.Label.Props): React.ReactElement {
+}: ProgressPrimitive.Label.Props & { sx?: Sx }): React.ReactElement {
+  const styleProps = stylex.props(styles.label, sx)
+
   return (
     <ProgressPrimitive.Label
-      className={cn("text-sm font-medium", className)}
+      className={cn(styleProps.className, className)}
       data-slot="progress-label"
+      style={styleProps.style}
       {...props}
     />
   )
@@ -41,12 +85,16 @@ export function ProgressLabel({
 
 export function ProgressTrack({
   className,
+  sx,
   ...props
-}: ProgressPrimitive.Track.Props): React.ReactElement {
+}: ProgressPrimitive.Track.Props & { sx?: Sx }): React.ReactElement {
+  const styleProps = stylex.props(styles.track, sx)
+
   return (
     <ProgressPrimitive.Track
-      className={cn("block h-1.5 w-full overflow-hidden rounded-full bg-input", className)}
+      className={cn(styleProps.className, className)}
       data-slot="progress-track"
+      style={styleProps.style}
       {...props}
     />
   )
@@ -54,12 +102,16 @@ export function ProgressTrack({
 
 export function ProgressIndicator({
   className,
+  sx,
   ...props
-}: ProgressPrimitive.Indicator.Props): React.ReactElement {
+}: ProgressPrimitive.Indicator.Props & { sx?: Sx }): React.ReactElement {
+  const styleProps = stylex.props(styles.indicator, sx)
+
   return (
     <ProgressPrimitive.Indicator
-      className={cn("bg-primary transition-all duration-500", className)}
+      className={cn(styleProps.className, className)}
       data-slot="progress-indicator"
+      style={styleProps.style}
       {...props}
     />
   )
@@ -67,12 +119,16 @@ export function ProgressIndicator({
 
 export function ProgressValue({
   className,
+  sx,
   ...props
-}: ProgressPrimitive.Value.Props): React.ReactElement {
+}: ProgressPrimitive.Value.Props & { sx?: Sx }): React.ReactElement {
+  const styleProps = stylex.props(styles.value, sx)
+
   return (
     <ProgressPrimitive.Value
-      className={cn("text-sm tabular-nums", className)}
+      className={cn(styleProps.className, className)}
       data-slot="progress-value"
+      style={styleProps.style}
       {...props}
     />
   )

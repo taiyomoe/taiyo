@@ -1,8 +1,14 @@
+import {
+  Archive02Icon,
+  ArrowDown01Icon,
+  Copy01Icon,
+  Delete02Icon,
+} from "@hugeicons/core-free-icons"
+import { HugeiconsIcon } from "@hugeicons/react"
 import preview from "@/storybook/preview"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { Group, GroupSeparator, GroupText } from "@taiyomoe/ui/components/ui/group"
 import { Input } from "@taiyomoe/ui/components/ui/input"
-import { ArchiveIcon, ChevronDownIcon, CopyIcon, TrashIcon } from "lucide-react"
 
 const meta = preview.meta({
   title: "UI/Group",
@@ -35,15 +41,15 @@ export const WithSeparator = meta.story({
   render: () => (
     <Group>
       <Button variant="outline" aria-label="Archive">
-        <ArchiveIcon />
+        <HugeiconsIcon icon={Archive02Icon} />
       </Button>
       <GroupSeparator />
       <Button variant="outline" aria-label="Copy">
-        <CopyIcon />
+        <HugeiconsIcon icon={Copy01Icon} />
       </Button>
       <GroupSeparator />
       <Button variant="outline" aria-label="Delete">
-        <TrashIcon />
+        <HugeiconsIcon icon={Delete02Icon} />
       </Button>
     </Group>
   ),
@@ -56,7 +62,7 @@ export const WithText = meta.story({
       <Input placeholder="example.com" />
       <Button variant="outline">
         Go
-        <ChevronDownIcon />
+        <HugeiconsIcon icon={ArrowDown01Icon} />
       </Button>
     </Group>
   ),
@@ -67,7 +73,7 @@ export const SplitButton = meta.story({
     <Group>
       <Button>Save</Button>
       <Button size="icon" aria-label="More options">
-        <ChevronDownIcon />
+        <HugeiconsIcon icon={ArrowDown01Icon} />
       </Button>
     </Group>
   ),

@@ -1,16 +1,173 @@
 "use client"
 
 import { Tabs as TabsPrimitive } from "@base-ui/react/tabs"
-import type React from "react"
+import * as stylex from "@stylexjs/stylex"
+import * as React from "react"
 import { cn } from "@/lib/utils"
+import type { Sx } from "../../styles/sx"
+import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
 
 export type TabsVariant = "default" | "underline"
 
-export function Tabs({ className, ...props }: TabsPrimitive.Root.Props): React.ReactElement {
+/**
+ * The Tailwind original reached tabs from the list with
+ * `*:hover:data-[slot=tabs-tab]:bg-accent`. StyleX has no child selectors, so
+ * the list publishes its variant and each tab styles itself.
+ */
+const TabsListContext = React.createContext<TabsVariant>("default")
+const styles = stylex.create({
+  root: {
+    gap: "0.5rem",
+    display: "flex",
+    flexDirection: {
+      '[data-orientation="vertical"]': "row",
+      default: "column",
+    },
+  },
+  list: {
+    alignItems: "center",
+    color: colors.mutedForeground,
+    columnGap: "0.125rem",
+    display: "flex",
+    flexDirection: {
+      '[data-orientation="vertical"]': "column",
+      default: null,
+    },
+    justifyContent: "center",
+    position: "relative",
+    zIndex: 0,
+    width: "fit-content",
+  },
+  listDefault: {
+    padding: "0.25rem",
+    borderRadius: radius.full,
+    backgroundColor: colors.well,
+    boxShadow: shadows.sunken,
+    color: `color-mix(in srgb, ${colors.mutedForeground} 72%, transparent)`,
+  },
+  listUnderline: {
+    paddingBlock: {
+      '[data-orientation="horizontal"]': "0.25rem",
+      default: null,
+    },
+    paddingInline: {
+      '[data-orientation="vertical"]': "0.25rem",
+      default: null,
+    },
+  },
+  indicator: {
+    position: "absolute",
+    transitionDuration: "200ms",
+    transitionProperty: "width, translate",
+    transitionTimingFunction: "ease-in-out",
+    translate: "var(--active-tab-left) calc(-1 * var(--active-tab-bottom))",
+    bottom: 0,
+    height: "var(--active-tab-height)",
+    left: 0,
+    width: "var(--active-tab-width)",
+  },
+  // The raised pill that rides over the sunken rail.
+  indicatorDefault: {
+    borderRadius: radius.full,
+    backgroundColor: colors.wellRaised,
+    boxShadow: shadows.raised,
+    zIndex: -1,
+  },
+  indicatorUnderline: {
+    backgroundColor: colors.primary,
+    translate: {
+      '[data-orientation="horizontal"]':
+        "var(--active-tab-left) calc(1px - var(--active-tab-bottom))",
+      '[data-orientation="vertical"]':
+        "calc(var(--active-tab-left) - 1px) calc(-1 * var(--active-tab-bottom))",
+      default: "var(--active-tab-left) calc(-1 * var(--active-tab-bottom))",
+    },
+    zIndex: 10,
+    height: {
+      '[data-orientation="horizontal"]': "2px",
+      default: null,
+    },
+    width: {
+      '[data-orientation="vertical"]': "2px",
+      default: null,
+    },
+  },
+  tab: {
+    borderColor: "transparent",
+    borderRadius: radius.full,
+    borderStyle: "solid",
+    borderWidth: 1,
+    gap: "0.375rem",
+    paddingInline: "calc(0.75rem - 1px)",
+    alignItems: "center",
+    color: {
+      "[data-active]": colors.foreground,
+      default: null,
+      ":hover": colors.mutedForeground,
+    },
+    cursor: "pointer",
+    display: "flex",
+    flexGrow: 1,
+    flexShrink: 0,
+    fontSize: {
+      default: "1rem",
+      [consts.sm]: "0.875rem",
+    },
+    fontWeight: 500,
+    justifyContent: {
+      '[data-orientation="vertical"]': "flex-start",
+      default: "center",
+    },
+    opacity: {
+      "[data-disabled]": 0.64,
+      default: null,
+    },
+    outlineColor: colors.ring,
+    outlineStyle: {
+      default: "none",
+      ":focus-visible": "solid",
+    },
+    outlineWidth: 2,
+    pointerEvents: {
+      "[data-disabled]": "none",
+      default: null,
+    },
+    position: "relative",
+    transitionProperty: "color, background-color, box-shadow",
+    whiteSpace: "nowrap",
+    height: {
+      default: "2.25rem",
+      [consts.sm]: "2rem",
+    },
+    width: {
+      '[data-orientation="vertical"]': "100%",
+      default: null,
+    },
+  },
+  tabUnderline: {
+    backgroundColor: {
+      default: null,
+      ":hover": colors.accent,
+    },
+  },
+  panel: {
+    flex: "1",
+    outlineStyle: "none",
+  },
+})
+
+export function Tabs({
+  className,
+  sx,
+  ...props
+}: TabsPrimitive.Root.Props & { sx?: Sx }): React.ReactElement {
+  const styleProps = stylex.props(styles.root, sx)
+
   return (
     <TabsPrimitive.Root
-      className={cn("flex flex-col gap-2 data-[orientation=vertical]:flex-row", className)}
+      className={cn(styleProps.className, className)}
       data-slot="tabs"
+      style={styleProps.style}
       {...props}
     />
   )
@@ -20,55 +177,71 @@ export function TabsList({
   variant = "default",
   className,
   children,
+  sx,
   ...props
 }: TabsPrimitive.List.Props & {
   variant?: TabsVariant
+  sx?: Sx
 }): React.ReactElement {
+  const styleProps = stylex.props(
+    styles.list,
+    variant === "default" ? styles.listDefault : styles.listUnderline,
+    sx,
+  )
+  const indicatorProps = stylex.props(
+    styles.indicator,
+    variant === "underline" ? styles.indicatorUnderline : styles.indicatorDefault,
+  )
+
   return (
-    <TabsPrimitive.List
-      className={cn(
-        "relative z-0 flex w-fit items-center justify-center gap-x-0.5 text-muted-foreground",
-        "data-[orientation=vertical]:flex-col",
-        variant === "default"
-          ? "rounded-lg bg-muted p-0.5 text-muted-foreground/72"
-          : "data-[orientation=horizontal]:py-1 data-[orientation=vertical]:px-1 *:hover:data-[slot=tabs-tab]:bg-accent",
-        className,
-      )}
-      data-slot="tabs-list"
-      {...props}
-    >
-      {children}
-      <TabsPrimitive.Indicator
-        className={cn(
-          "absolute bottom-0 left-0 h-(--active-tab-height) w-(--active-tab-width) translate-x-(--active-tab-left) -translate-y-(--active-tab-bottom) transition-[width,translate] duration-200 ease-in-out",
-          variant === "underline"
-            ? "z-10 bg-primary data-[orientation=horizontal]:h-0.5 data-[orientation=horizontal]:translate-y-px data-[orientation=vertical]:w-0.5 data-[orientation=vertical]:-translate-x-px"
-            : "-z-1 rounded-md bg-background shadow-sm/5 dark:bg-input",
-        )}
-        data-slot="tab-indicator"
-      />
-    </TabsPrimitive.List>
+    <TabsListContext value={variant}>
+      <TabsPrimitive.List
+        className={cn(styleProps.className, className)}
+        data-slot="tabs-list"
+        style={styleProps.style}
+        {...props}
+      >
+        {children}
+        <TabsPrimitive.Indicator
+          className={indicatorProps.className}
+          data-slot="tab-indicator"
+          style={indicatorProps.style}
+        />
+      </TabsPrimitive.List>
+    </TabsListContext>
   )
 }
 
-export function TabsTab({ className, ...props }: TabsPrimitive.Tab.Props): React.ReactElement {
+export function TabsTab({
+  className,
+  sx,
+  ...props
+}: TabsPrimitive.Tab.Props & { sx?: Sx }): React.ReactElement {
+  const variant = React.useContext(TabsListContext)
+  const styleProps = stylex.props(styles.tab, variant === "underline" && styles.tabUnderline, sx)
+
   return (
     <TabsPrimitive.Tab
-      className={cn(
-        "relative flex h-9 shrink-0 grow cursor-pointer items-center justify-center gap-1.5 rounded-md border border-transparent px-[calc(--spacing(2.5)-1px)] text-base font-medium whitespace-nowrap transition-[color,background-color,box-shadow] outline-none hover:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring data-active:text-foreground data-disabled:pointer-events-none data-disabled:opacity-64 data-[orientation=vertical]:w-full data-[orientation=vertical]:justify-start sm:h-8 sm:text-sm [&_svg]:pointer-events-none [&_svg]:-mx-0.5 [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4.5 sm:[&_svg:not([class*='size-'])]:size-4",
-        className,
-      )}
+      className={cn(styleProps.className, className)}
       data-slot="tabs-tab"
+      style={styleProps.style}
       {...props}
     />
   )
 }
 
-export function TabsPanel({ className, ...props }: TabsPrimitive.Panel.Props): React.ReactElement {
+export function TabsPanel({
+  className,
+  sx,
+  ...props
+}: TabsPrimitive.Panel.Props & { sx?: Sx }): React.ReactElement {
+  const styleProps = stylex.props(styles.panel, sx)
+
   return (
     <TabsPrimitive.Panel
-      className={cn("flex-1 outline-none", className)}
+      className={cn(styleProps.className, className)}
       data-slot="tabs-content"
+      style={styleProps.style}
       {...props}
     />
   )

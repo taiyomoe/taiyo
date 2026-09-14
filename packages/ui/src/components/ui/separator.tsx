@@ -2,7 +2,8 @@ import { Separator as SeparatorPrimitive } from "@base-ui/react/separator"
 import * as stylex from "@stylexjs/stylex"
 import type React from "react"
 import { cn } from "@/lib/utils"
-import { colors } from "@/styles/tokens.stylex"
+import { colors } from "../../styles/tokens.stylex"
+import type { Sx } from "../../styles/sx"
 
 const styles = stylex.create({
   base: {
@@ -33,7 +34,7 @@ const styles = stylex.create({
  * passes `className`.
  */
 export type SeparatorProps = SeparatorPrimitive.Props & {
-  sx?: stylex.StyleXStyles
+  sx?: Sx
 }
 
 export function Separator({

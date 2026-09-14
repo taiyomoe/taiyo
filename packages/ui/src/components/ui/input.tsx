@@ -1,8 +1,126 @@
 "use client"
 
 import { Input as InputPrimitive } from "@base-ui/react/input"
+import * as stylex from "@stylexjs/stylex"
 import type * as React from "react"
 import { cn } from "@/lib/utils"
+import type { Sx } from "../../styles/sx"
+import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
+
+const styles = stylex.create({
+  control: {
+    borderColor: {
+      default: colors.input,
+      ":focus-within": colors.ring,
+    },
+    borderRadius: radius.xl,
+    borderStyle: "solid",
+    borderWidth: 1,
+    backgroundClip: "padding-box",
+    backgroundColor: colors.field,
+    boxShadow: {
+      default: "0 1px 2px 0 rgb(0 0 0 / 5%)",
+      ":focus-within": "none",
+    },
+    color: colors.foreground,
+    display: "inline-flex",
+    fontSize: {
+      default: "1rem",
+      [consts.sm]: "0.875rem",
+    },
+    outlineColor: `color-mix(in srgb, ${colors.ring} 24%, transparent)`,
+    outlineOffset: 0,
+    outlineStyle: {
+      default: "none",
+      ":focus-within": "solid",
+    },
+    outlineWidth: 3,
+    position: "relative",
+    transitionProperty: "box-shadow, border-color",
+    width: "100%",
+    "::before": {
+      inset: 0,
+      borderRadius: "inherit",
+      boxShadow: {
+        default: shadows.edge,
+        ":focus-within": "none",
+      },
+      content: '""',
+      pointerEvents: "none",
+      position: "absolute",
+    },
+  },
+  // The Tailwind original reached these through `has-disabled:`/
+  // `has-aria-invalid:` on the wrapper. `:has()` is lint-banned, so the
+  // component mirrors what it already knows onto the wrapper element.
+  controlDisabled: {
+    opacity: 0.64,
+  },
+  controlInvalid: {
+    borderColor: {
+      default: `color-mix(in srgb, ${colors.destructive} 36%, transparent)`,
+      ":focus-within": `color-mix(in srgb, ${colors.destructive} 64%, transparent)`,
+    },
+    outlineColor: `color-mix(in srgb, ${colors.destructive} 16%, transparent)`,
+  },
+  input: {
+    borderRadius: "inherit",
+    paddingInline: "calc(0.75rem - 1px)",
+    backgroundColor: "transparent",
+    color: "inherit",
+    fontSize: "inherit",
+    lineHeight: {
+      default: "2.625rem",
+      [consts.sm]: "2.375rem",
+    },
+    outlineStyle: "none",
+    // Chrome paints its autofill background on a transition; the absurd
+    // duration is the standard trick for suppressing it.
+    transitionDuration: "5000000s",
+    transitionProperty: "background-color",
+    transitionTimingFunction: "ease-in-out",
+    height: {
+      default: "2.625rem",
+      [consts.sm]: "2.375rem",
+    },
+    minWidth: 0,
+    width: "100%",
+    "::placeholder": {
+      color: `color-mix(in srgb, ${colors.mutedForeground} 72%, transparent)`,
+    },
+  },
+  inputSm: {
+    paddingInline: "calc(0.625rem - 1px)",
+    lineHeight: {
+      default: "2.125rem",
+      [consts.sm]: "1.875rem",
+    },
+    height: {
+      default: "2.125rem",
+      [consts.sm]: "1.875rem",
+    },
+  },
+  inputLg: {
+    lineHeight: {
+      default: "3.125rem",
+      [consts.sm]: "2.875rem",
+    },
+    height: {
+      default: "3.125rem",
+      [consts.sm]: "2.875rem",
+    },
+  },
+  inputFile: {
+    color: colors.mutedForeground,
+    "::file-selector-button": {
+      backgroundColor: "transparent",
+      color: colors.foreground,
+      fontSize: "0.875rem",
+      fontWeight: 500,
+      marginRight: "0.75rem",
+    },
+  },
+})
 
 export type InputProps = Omit<
   InputPrimitive.Props & React.RefAttributes<HTMLInputElement>,
@@ -11,6 +129,7 @@ export type InputProps = Omit<
   size?: "sm" | "default" | "lg" | number
   unstyled?: boolean
   nativeInput?: boolean
+  sx?: Sx
 }
 
 export function Input({
@@ -19,44 +138,48 @@ export function Input({
   unstyled = false,
   nativeInput = false,
   style,
+  sx,
   ...props
 }: InputProps): React.ReactElement {
-  const inputClassName = cn(
-    "h-8.5 w-full min-w-0 rounded-[inherit] px-[calc(--spacing(3)-1px)] leading-8.5 outline-none [transition:background-color_5000000s_ease-in-out_0s] placeholder:text-muted-foreground/72 sm:h-7.5 sm:leading-7.5",
-    size === "sm" && "h-7.5 px-[calc(--spacing(2.5)-1px)] leading-7.5 sm:h-6.5 sm:leading-6.5",
-    size === "lg" && "h-9.5 leading-9.5 sm:h-8.5 sm:leading-8.5",
-    props.type === "search" &&
-      "[&::-webkit-search-cancel-button]:appearance-none [&::-webkit-search-decoration]:appearance-none [&::-webkit-search-results-button]:appearance-none [&::-webkit-search-results-decoration]:appearance-none",
-    props.type === "file" &&
-      "text-muted-foreground file:mr-3 file:bg-transparent file:text-sm file:font-medium file:text-foreground",
+  const inputProps = stylex.props(
+    styles.input,
+    size === "sm" && styles.inputSm,
+    size === "lg" && styles.inputLg,
+    props.type === "file" && styles.inputFile,
+  )
+  const controlProps = stylex.props(
+    !unstyled && styles.control,
+    !unstyled && props.disabled === true && styles.controlDisabled,
+    !unstyled && props["aria-invalid"] !== undefined && styles.controlInvalid,
+    sx,
   )
 
   return (
     <span
-      className={
-        cn(
-          !unstyled &&
-            "relative inline-flex w-full rounded-lg border border-input bg-background text-base text-foreground shadow-xs/5 ring-ring/24 transition-shadow not-dark:bg-clip-padding before:pointer-events-none before:absolute before:inset-0 before:rounded-[calc(var(--radius-lg)-1px)] not-has-disabled:not-has-focus-visible:not-has-aria-invalid:before:shadow-[0_1px_--theme(--color-black/4%)] has-autofill:bg-foreground/4 has-focus-visible:border-ring has-focus-visible:ring-[3px] has-disabled:opacity-64 has-aria-invalid:border-destructive/36 has-focus-visible:has-aria-invalid:border-destructive/64 has-focus-visible:has-aria-invalid:ring-destructive/16 has-[:disabled,:focus-visible,[aria-invalid]]:shadow-none sm:text-sm dark:bg-input/32 dark:not-has-disabled:not-has-focus-visible:not-has-aria-invalid:before:shadow-[0_-1px_--theme(--color-white/6%)] dark:has-autofill:bg-foreground/8 dark:has-aria-invalid:ring-destructive/24",
-          className,
-        ) || undefined
-      }
+      aria-invalid={props["aria-invalid"]}
+      className={cn(controlProps.className, className) || undefined}
+      data-disabled={props.disabled ? "" : undefined}
       data-size={size}
       data-slot="input-control"
+      style={controlProps.style}
     >
       {nativeInput ? (
         <input
-          className={inputClassName}
+          className={inputProps.className}
           data-slot="input"
           size={typeof size === "number" ? size : undefined}
-          style={typeof style === "function" ? undefined : style}
+          style={{
+            ...inputProps.style,
+            ...(typeof style === "function" ? undefined : style),
+          }}
           {...props}
         />
       ) : (
         <InputPrimitive
-          className={inputClassName}
+          className={inputProps.className}
           data-slot="input"
           size={typeof size === "number" ? size : undefined}
-          style={style}
+          style={style ?? inputProps.style}
           {...props}
         />
       )}

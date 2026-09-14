@@ -3,56 +3,369 @@
 import { mergeProps } from "@base-ui/react/merge-props"
 import { Select as SelectPrimitive } from "@base-ui/react/select"
 import { useRender } from "@base-ui/react/use-render"
-import { cva, type VariantProps } from "class-variance-authority"
-import { ChevronDownIcon, ChevronsUpDownIcon, ChevronUpIcon } from "lucide-react"
+import * as stylex from "@stylexjs/stylex"
 import type * as React from "react"
 import { cn } from "@/lib/utils"
+import { ChevronDown, ChevronUp, ChevronsUpDown } from "@/components/icons"
+import { selectPopupMarker } from "../../styles/markers.stylex"
+import type { Sx } from "../../styles/sx"
+import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
 
 export const Select: typeof SelectPrimitive.Root = SelectPrimitive.Root
 
-export const selectTriggerVariants = cva(
-  "relative inline-flex min-h-9 w-full min-w-36 items-center justify-between gap-2 rounded-lg border border-input bg-background px-[calc(--spacing(3)-1px)] text-left text-base text-foreground shadow-xs/5 ring-ring/24 transition-shadow outline-none select-none not-dark:bg-clip-padding before:pointer-events-none before:absolute before:inset-0 before:rounded-[calc(var(--radius-lg)-1px)] not-data-disabled:not-focus-visible:not-aria-invalid:not-data-pressed:before:shadow-[0_1px_--theme(--color-black/4%)] focus-visible:border-ring focus-visible:ring-[3px] aria-invalid:border-destructive/36 focus-visible:aria-invalid:border-destructive/64 focus-visible:aria-invalid:ring-destructive/16 data-disabled:pointer-events-none data-disabled:opacity-64 sm:min-h-8 sm:text-sm dark:bg-input/32 dark:not-data-disabled:not-focus-visible:not-aria-invalid:not-data-pressed:before:shadow-[0_-1px_--theme(--color-white/6%)] dark:aria-invalid:ring-destructive/24 pointer-coarse:after:absolute pointer-coarse:after:size-full pointer-coarse:after:min-h-11 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='opacity-'])]:opacity-80 [&_svg:not([class*='size-'])]:size-4.5 sm:[&_svg:not([class*='size-'])]:size-4 [[data-disabled],:focus-visible,[aria-invalid],[data-pressed]]:shadow-none",
-  {
-    defaultVariants: {
-      size: "default",
+export type SelectSize = "sm" | "default" | "lg"
+
+const styles = stylex.create({
+  trigger: {
+    borderColor: {
+      "[aria-invalid]": `color-mix(in srgb, ${colors.destructive} 36%, transparent)`,
+      default: colors.input,
+      ":focus-visible": colors.ring,
     },
-    variants: {
-      size: {
-        default: "",
-        lg: "min-h-10 sm:min-h-9",
-        sm: "min-h-8 gap-1.5 px-[calc(--spacing(2.5)-1px)] sm:min-h-7",
+    borderRadius: radius.xl,
+    borderStyle: "solid",
+    borderWidth: 1,
+    gap: "0.5rem",
+    paddingInline: "calc(0.75rem - 1px)",
+    alignItems: "center",
+    backgroundClip: "padding-box",
+    backgroundColor: colors.field,
+    boxShadow: {
+      "[data-disabled]": "none",
+      "[data-pressed]": "none",
+      default: "0 1px 2px 0 rgb(0 0 0 / 5%)",
+      ":focus-visible": "none",
+    },
+    color: colors.foreground,
+    display: "inline-flex",
+    fontSize: {
+      default: "1rem",
+      [consts.sm]: "0.875rem",
+    },
+    justifyContent: "space-between",
+    opacity: {
+      "[data-disabled]": 0.64,
+      default: null,
+    },
+    outlineColor: `color-mix(in srgb, ${colors.ring} 24%, transparent)`,
+    outlineStyle: {
+      default: "none",
+      ":focus-visible": "solid",
+    },
+    outlineWidth: 3,
+    pointerEvents: {
+      "[data-disabled]": "none",
+      default: null,
+    },
+    position: "relative",
+    textAlign: "left",
+    transitionProperty: "box-shadow, border-color",
+    userSelect: "none",
+    minHeight: {
+      default: "2.75rem",
+      [consts.sm]: "2.5rem",
+    },
+    minWidth: "9rem",
+    width: "100%",
+    "::after": {
+      content: {
+        default: "none",
+        [consts.pointerCoarse]: '""',
       },
+      position: "absolute",
+      height: "100%",
+      minHeight: "2.75rem",
+      width: "100%",
+    },
+    "::before": {
+      inset: 0,
+      borderRadius: "inherit",
+      boxShadow: {
+        default: shadows.edge,
+        ":focus-visible": "none",
+      },
+      content: '""',
+      pointerEvents: "none",
+      position: "absolute",
     },
   },
-)
+  triggerInvalid: {
+    borderColor: {
+      default: `color-mix(in srgb, ${colors.destructive} 36%, transparent)`,
+      ":focus-visible": `color-mix(in srgb, ${colors.destructive} 64%, transparent)`,
+    },
+    outlineColor: `color-mix(in srgb, ${colors.destructive} 16%, transparent)`,
+  },
+  triggerSm: {
+    gap: "0.375rem",
+    paddingInline: "calc(0.625rem - 1px)",
+    minHeight: {
+      default: "2.25rem",
+      [consts.sm]: "2rem",
+    },
+  },
+  triggerLg: {
+    minHeight: {
+      default: "3.25rem",
+      [consts.sm]: "3rem",
+    },
+  },
+  buttonMinWidth: {
+    minWidth: 0,
+  },
+  triggerIcon: {
+    color: colors.mutedForeground,
+    marginInlineEnd: "-0.25rem",
+    height: {
+      default: "0.875rem",
+      [consts.sm]: "0.75rem",
+    },
+    width: {
+      default: "0.875rem",
+      [consts.sm]: "0.75rem",
+    },
+  },
+  buttonLabel: {
+    flex: "1",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap",
+  },
+  value: {
+    flex: "1",
+    overflow: "hidden",
+    color: {
+      "[data-placeholder]": colors.mutedForeground,
+      default: null,
+    },
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap",
+  },
+  positioner: {
+    userSelect: "none",
+    zIndex: 50,
+  },
+  popup: {
+    color: colors.foreground,
+    outlineStyle: "none",
+    transformOrigin: "var(--transform-origin)",
+  },
+  surface: {
+    borderColor: colors.border,
+    borderRadius: radius.xl,
+    borderStyle: "solid",
+    borderWidth: 1,
+    backgroundClip: "padding-box",
+    backgroundColor: colors.popover,
+    boxShadow: shadows.overlay,
+    position: "relative",
+    height: "100%",
+    minWidth: "var(--anchor-width)",
+    "::before": {
+      inset: 0,
+      borderRadius: "inherit",
+      boxShadow: shadows.edge,
+      content: '""',
+      pointerEvents: "none",
+      position: "absolute",
+    },
+  },
+  list: {
+    padding: "0.375rem",
+    maxHeight: "var(--available-height)",
+    overflowY: "auto",
+  },
+  // Fade strips that sit over the list while it scrolls.
+  scrollArrow: {
+    alignItems: "center",
+    cursor: "default",
+    display: "flex",
+    justifyContent: "center",
+    zIndex: 50,
+    height: "1.5rem",
+    width: "100%",
+  },
+  scrollArrowUp: {
+    top: 0,
+    "::before": {
+      insetInline: "1px",
+      backgroundImage: `linear-gradient(to bottom, ${colors.popover} 50%, transparent)`,
+      borderStartEndRadius: "calc(1.225rem - 1px)",
+      borderStartStartRadius: "calc(1.225rem - 1px)",
+      content: '""',
+      pointerEvents: "none",
+      position: "absolute",
+      height: "200%",
+      top: "1px",
+    },
+  },
+  scrollArrowDown: {
+    bottom: 0,
+    "::before": {
+      insetInline: "1px",
+      backgroundImage: `linear-gradient(to top, ${colors.popover} 50%, transparent)`,
+      borderEndEndRadius: "calc(1.225rem - 1px)",
+      borderEndStartRadius: "calc(1.225rem - 1px)",
+      content: '""',
+      pointerEvents: "none",
+      position: "absolute",
+      bottom: "1px",
+      height: "200%",
+    },
+  },
+  scrollArrowIcon: {
+    position: "relative",
+    height: {
+      default: "1.125rem",
+      [consts.sm]: "1rem",
+    },
+    width: {
+      default: "1.125rem",
+      [consts.sm]: "1rem",
+    },
+  },
+  item: {
+    borderRadius: `calc(${radius.xl} - 0.375rem)`,
+    gap: "0.625rem",
+    paddingBlock: "0.375rem",
+    alignItems: "center",
+    backgroundColor: {
+      "[data-highlighted]": colors.accent,
+      default: null,
+    },
+    color: {
+      "[data-highlighted]": colors.accentForeground,
+      default: null,
+    },
+    cursor: "default",
+    display: "grid",
+    fontSize: {
+      default: "1rem",
+      [consts.sm]: "0.875rem",
+    },
+    gridTemplateColumns: "1rem 1fr",
+    opacity: {
+      "[data-disabled]": 0.64,
+      default: null,
+    },
+    outlineStyle: "none",
+    pointerEvents: {
+      "[data-disabled]": "none",
+      default: null,
+    },
+    minHeight: {
+      default: "2.5rem",
+      [consts.sm]: "2.25rem",
+    },
+    minWidth: {
+      default: null,
+      [stylex.when.ancestor('[data-side="none"]', selectPopupMarker)]:
+        "calc(var(--anchor-width) + 1.25rem)",
+    },
+    paddingLeft: "0.75rem",
+    paddingRight: "1.25rem",
+  },
+  itemIndicator: {
+    gridColumnStart: "1",
+  },
+  itemIndicatorIcon: {
+    height: {
+      default: "1.125rem",
+      [consts.sm]: "1rem",
+    },
+    width: {
+      default: "1.125rem",
+      [consts.sm]: "1rem",
+    },
+  },
+  itemText: {
+    gridColumnStart: "2",
+    minWidth: 0,
+  },
+  separator: {
+    marginBlock: "0.375rem",
+    marginInline: "0.75rem",
+    backgroundColor: colors.border,
+    height: "1px",
+  },
+  label: {
+    gap: "0.5rem",
+    alignItems: "center",
+    color: colors.foreground,
+    cursor: "default",
+    display: "inline-flex",
+    fontSize: {
+      default: "1rem",
+      [consts.sm]: "0.875rem",
+    },
+    fontWeight: 500,
+    lineHeight: {
+      default: "1.125rem",
+      [consts.sm]: "1rem",
+    },
+    marginBottom: "0.5rem",
+  },
+  groupLabel: {
+    paddingBlock: "0.375rem",
+    paddingInline: "0.5rem",
+    color: colors.mutedForeground,
+    fontSize: "0.75rem",
+    fontWeight: 500,
+    lineHeight: "1rem",
+  },
+})
+const SIZE_STYLE = {
+  default: null,
+  lg: styles.triggerLg,
+  sm: styles.triggerSm,
+} as const
 
-export const selectTriggerIconClassName = "-me-1 size-4.5 opacity-80 sm:size-4"
+export interface SelectTriggerStyleOptions {
+  size?: SelectSize | null
+  className?: string
+}
+
+/** Legacy escape hatch, kept API-compatible with the old cva export. */
+export function selectTriggerVariants({
+  size = "default",
+  className,
+}: SelectTriggerStyleOptions = {}): string {
+  const props = stylex.props(styles.trigger, SIZE_STYLE[size ?? "default"])
+
+  return cn(props.className, className)
+}
 
 export interface SelectButtonProps extends useRender.ComponentProps<"button"> {
-  size?: VariantProps<typeof selectTriggerVariants>["size"]
+  size?: SelectSize
+  sx?: Sx
 }
 
 export function SelectButton({
   className,
-  size,
+  size = "default",
   render,
   children,
+  sx,
   ...props
 }: SelectButtonProps): React.ReactElement {
   const typeValue: React.ButtonHTMLAttributes<HTMLButtonElement>["type"] = render
     ? undefined
     : "button"
+  const styleProps = stylex.props(styles.trigger, SIZE_STYLE[size], styles.buttonMinWidth, sx)
+  const labelProps = stylex.props(styles.buttonLabel)
+  const iconProps = stylex.props(styles.triggerIcon)
   const defaultProps = {
     children: (
       <>
-        <span className="flex-1 truncate in-data-placeholder:text-muted-foreground/72">
+        <span className={labelProps.className} style={labelProps.style}>
           {children}
         </span>
-        <ChevronsUpDownIcon className={selectTriggerIconClassName} />
+        <ChevronsUpDown className={iconProps.className} style={iconProps.style} />
       </>
     ),
-    className: cn(selectTriggerVariants({ size }), "min-w-0", className),
+    className: cn(styleProps.className, className),
     "data-slot": "select-button",
+    style: styleProps.style,
     type: typeValue,
   }
 
@@ -67,17 +380,30 @@ export function SelectTrigger({
   className,
   size = "default",
   children,
+  sx,
   ...props
-}: SelectPrimitive.Trigger.Props & VariantProps<typeof selectTriggerVariants>): React.ReactElement {
+}: SelectPrimitive.Trigger.Props & {
+  size?: SelectSize
+  sx?: Sx
+}): React.ReactElement {
+  const styleProps = stylex.props(
+    styles.trigger,
+    SIZE_STYLE[size],
+    props["aria-invalid"] !== undefined && styles.triggerInvalid,
+    sx,
+  )
+  const iconProps = stylex.props(styles.triggerIcon)
+
   return (
     <SelectPrimitive.Trigger
-      className={cn(selectTriggerVariants({ size }), className)}
+      className={cn(styleProps.className, className)}
       data-slot="select-trigger"
+      style={styleProps.style}
       {...props}
     >
       {children}
       <SelectPrimitive.Icon data-slot="select-icon">
-        <ChevronsUpDownIcon className={selectTriggerIconClassName} />
+        <ChevronsUpDown className={iconProps.className} style={iconProps.style} />
       </SelectPrimitive.Icon>
     </SelectPrimitive.Trigger>
   )
@@ -85,12 +411,16 @@ export function SelectTrigger({
 
 export function SelectValue({
   className,
+  sx,
   ...props
-}: SelectPrimitive.Value.Props): React.ReactElement {
+}: SelectPrimitive.Value.Props & { sx?: Sx }): React.ReactElement {
+  const styleProps = stylex.props(styles.value, sx)
+
   return (
     <SelectPrimitive.Value
-      className={cn("flex-1 truncate data-placeholder:text-muted-foreground", className)}
+      className={cn(styleProps.className, className)}
       data-slot="select-value"
+      style={styleProps.style}
       {...props}
     />
   )
@@ -106,6 +436,7 @@ export function SelectPopup({
   alignItemWithTrigger = true,
   anchor,
   portalProps,
+  sx,
   ...props
 }: SelectPrimitive.Popup.Props & {
   portalProps?: SelectPrimitive.Portal.Props
@@ -115,7 +446,16 @@ export function SelectPopup({
   alignOffset?: SelectPrimitive.Positioner.Props["alignOffset"]
   alignItemWithTrigger?: SelectPrimitive.Positioner.Props["alignItemWithTrigger"]
   anchor?: SelectPrimitive.Positioner.Props["anchor"]
+  sx?: Sx
 }): React.ReactElement {
+  const positionerProps = stylex.props(styles.positioner)
+  const popupProps = stylex.props(styles.popup, stylex.defaultMarker(), selectPopupMarker, sx)
+  const surfaceProps = stylex.props(styles.surface)
+  const listProps = stylex.props(styles.list)
+  const upArrowProps = stylex.props(styles.scrollArrow, styles.scrollArrowUp)
+  const downArrowProps = stylex.props(styles.scrollArrow, styles.scrollArrowDown)
+  const arrowIconProps = stylex.props(styles.scrollArrowIcon)
+
   return (
     <SelectPrimitive.Portal {...portalProps}>
       <SelectPrimitive.Positioner
@@ -123,35 +463,40 @@ export function SelectPopup({
         alignItemWithTrigger={alignItemWithTrigger}
         alignOffset={alignOffset}
         anchor={anchor}
-        className="z-50 select-none"
+        className={positionerProps.className}
         data-slot="select-positioner"
         side={side}
         sideOffset={sideOffset}
+        style={positionerProps.style}
       >
         <SelectPrimitive.Popup
-          className="origin-(--transform-origin) text-foreground outline-none"
+          className={popupProps.className}
           data-slot="select-popup"
+          style={popupProps.style}
           {...props}
         >
           <SelectPrimitive.ScrollUpArrow
-            className="top-0 z-50 flex h-6 w-full cursor-default items-center justify-center before:pointer-events-none before:absolute before:inset-x-px before:top-px before:h-[200%] before:rounded-t-[calc(var(--radius-lg)-1px)] before:bg-linear-to-b before:from-popover before:from-50%"
+            className={upArrowProps.className}
             data-slot="select-scroll-up-arrow"
+            style={upArrowProps.style}
           >
-            <ChevronUpIcon className="relative size-4.5 sm:size-4" />
+            <ChevronUp className={arrowIconProps.className} style={arrowIconProps.style} />
           </SelectPrimitive.ScrollUpArrow>
-          <div className="relative h-full min-w-(--anchor-width) rounded-lg border bg-popover shadow-lg/5 not-dark:bg-clip-padding before:pointer-events-none before:absolute before:inset-0 before:rounded-[calc(var(--radius-lg)-1px)] before:shadow-[0_1px_--theme(--color-black/4%)] dark:before:shadow-[0_-1px_--theme(--color-white/6%)]">
+          <div className={surfaceProps.className} style={surfaceProps.style}>
             <SelectPrimitive.List
-              className={cn("max-h-(--available-height) overflow-y-auto p-1", className)}
+              className={cn(listProps.className, className)}
               data-slot="select-list"
+              style={listProps.style}
             >
               {children}
             </SelectPrimitive.List>
           </div>
           <SelectPrimitive.ScrollDownArrow
-            className="bottom-0 z-50 flex h-6 w-full cursor-default items-center justify-center before:pointer-events-none before:absolute before:inset-x-px before:bottom-px before:h-[200%] before:rounded-b-[calc(var(--radius-lg)-1px)] before:bg-linear-to-t before:from-popover before:from-50%"
+            className={downArrowProps.className}
             data-slot="select-scroll-down-arrow"
+            style={downArrowProps.style}
           >
-            <ChevronDownIcon className="relative size-4.5 sm:size-4" />
+            <ChevronDown className={arrowIconProps.className} style={arrowIconProps.style} />
           </SelectPrimitive.ScrollDownArrow>
         </SelectPrimitive.Popup>
       </SelectPrimitive.Positioner>
@@ -162,26 +507,35 @@ export function SelectPopup({
 export function SelectItem({
   className,
   children,
+  sx,
   ...props
-}: SelectPrimitive.Item.Props): React.ReactElement {
+}: SelectPrimitive.Item.Props & { sx?: Sx }): React.ReactElement {
+  const styleProps = stylex.props(styles.item, sx)
+  const indicatorProps = stylex.props(styles.itemIndicator)
+  const iconProps = stylex.props(styles.itemIndicatorIcon)
+  const textProps = stylex.props(styles.itemText)
+
   return (
     <SelectPrimitive.Item
-      className={cn(
-        "grid min-h-8 cursor-default grid-cols-[1rem_1fr] items-center gap-2 rounded-sm py-1 pr-4 pl-2 text-base outline-none in-data-[side=none]:min-w-[calc(var(--anchor-width)+1.25rem)] data-disabled:pointer-events-none data-disabled:opacity-64 data-highlighted:bg-accent data-highlighted:text-accent-foreground sm:min-h-7 sm:text-sm [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4.5 sm:[&_svg:not([class*='size-'])]:size-4",
-        className,
-      )}
+      className={cn(styleProps.className, className)}
       data-slot="select-item"
+      style={styleProps.style}
       {...props}
     >
-      <SelectPrimitive.ItemIndicator className="col-start-1">
+      <SelectPrimitive.ItemIndicator
+        className={indicatorProps.className}
+        style={indicatorProps.style}
+      >
         <svg
           aria-hidden="true"
+          className={iconProps.className}
           fill="none"
           height="24"
           stroke="currentColor"
           strokeLinecap="round"
           strokeLinejoin="round"
           strokeWidth="2"
+          style={iconProps.style}
           viewBox="0 0 24 24"
           width="24"
           xmlns="http://www.w3.org/2000/svg"
@@ -189,7 +543,7 @@ export function SelectItem({
           <path d="M5.252 12.7 10.2 18.63 18.748 5.37" />
         </svg>
       </SelectPrimitive.ItemIndicator>
-      <SelectPrimitive.ItemText className="col-start-2 min-w-0">
+      <SelectPrimitive.ItemText className={textProps.className} style={textProps.style}>
         {children}
       </SelectPrimitive.ItemText>
     </SelectPrimitive.Item>
@@ -198,12 +552,16 @@ export function SelectItem({
 
 export function SelectSeparator({
   className,
+  sx,
   ...props
-}: SelectPrimitive.Separator.Props): React.ReactElement {
+}: SelectPrimitive.Separator.Props & { sx?: Sx }): React.ReactElement {
+  const styleProps = stylex.props(styles.separator, sx)
+
   return (
     <SelectPrimitive.Separator
-      className={cn("mx-2 my-1 h-px bg-border", className)}
+      className={cn(styleProps.className, className)}
       data-slot="select-separator"
+      style={styleProps.style}
       {...props}
     />
   )
@@ -215,25 +573,33 @@ export function SelectGroup(props: SelectPrimitive.Group.Props): React.ReactElem
 
 export function SelectLabel({
   className,
+  sx,
   ...props
-}: SelectPrimitive.Label.Props): React.ReactElement {
+}: SelectPrimitive.Label.Props & { sx?: Sx }): React.ReactElement {
+  const styleProps = stylex.props(styles.label, sx)
+
   return (
     <SelectPrimitive.Label
-      className={cn(
-        "inline-flex cursor-default items-center gap-2 text-base/4.5 font-medium text-foreground not-in-data-[slot=field]:mb-2 sm:text-sm/4",
-        className,
-      )}
+      className={cn(styleProps.className, className)}
       data-slot="select-label"
+      style={styleProps.style}
       {...props}
     />
   )
 }
 
-export function SelectGroupLabel(props: SelectPrimitive.GroupLabel.Props): React.ReactElement {
+export function SelectGroupLabel({
+  className,
+  sx,
+  ...props
+}: SelectPrimitive.GroupLabel.Props & { sx?: Sx }): React.ReactElement {
+  const styleProps = stylex.props(styles.groupLabel, sx)
+
   return (
     <SelectPrimitive.GroupLabel
-      className="px-2 py-1.5 text-xs font-medium text-muted-foreground"
+      className={cn(styleProps.className, className)}
       data-slot="select-group-label"
+      style={styleProps.style}
       {...props}
     />
   )

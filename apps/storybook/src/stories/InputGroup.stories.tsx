@@ -1,3 +1,10 @@
+import {
+  Cancel01Icon,
+  CreditCardIcon as CreditCardGlyph,
+  Mail01Icon,
+  Search01Icon,
+} from "@hugeicons/core-free-icons"
+import { HugeiconsIcon } from "@hugeicons/react"
 import preview from "@/storybook/preview"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import {
@@ -8,7 +15,6 @@ import {
   InputGroupTextarea,
 } from "@taiyomoe/ui/components/ui/input-group"
 import { Kbd } from "@taiyomoe/ui/components/ui/kbd"
-import { CreditCardIcon, MailIcon, SearchIcon, XIcon } from "lucide-react"
 
 const meta = preview.meta({
   title: "UI/InputGroup",
@@ -24,7 +30,7 @@ const meta = preview.meta({
     <div className="w-80">
       <InputGroup {...args}>
         <InputGroupAddon>
-          <SearchIcon />
+          <HugeiconsIcon icon={Search01Icon} />
         </InputGroupAddon>
         <InputGroupInput placeholder="Search…" />
       </InputGroup>
@@ -39,7 +45,7 @@ export const LeadingIcon = meta.story({
     <div className="w-80">
       <InputGroup>
         <InputGroupAddon>
-          <MailIcon />
+          <HugeiconsIcon icon={Mail01Icon} />
         </InputGroupAddon>
         <InputGroupInput placeholder="you@example.com" type="email" />
       </InputGroup>
@@ -53,7 +59,7 @@ export const TrailingIcon = meta.story({
       <InputGroup>
         <InputGroupInput placeholder="Card number" />
         <InputGroupAddon align="inline-end">
-          <CreditCardIcon />
+          <HugeiconsIcon icon={CreditCardGlyph} />
         </InputGroupAddon>
       </InputGroup>
     </div>
@@ -81,12 +87,12 @@ export const WithButton = meta.story({
     <div className="w-80">
       <InputGroup>
         <InputGroupAddon>
-          <SearchIcon />
+          <HugeiconsIcon icon={Search01Icon} />
         </InputGroupAddon>
         <InputGroupInput placeholder="Search…" defaultValue="taiyo" />
         <InputGroupAddon align="inline-end">
           <Button size="icon-xs" variant="ghost" aria-label="Clear">
-            <XIcon />
+            <HugeiconsIcon icon={Cancel01Icon} />
           </Button>
         </InputGroupAddon>
       </InputGroup>
@@ -99,7 +105,7 @@ export const WithKbd = meta.story({
     <div className="w-80">
       <InputGroup>
         <InputGroupAddon>
-          <SearchIcon />
+          <HugeiconsIcon icon={Search01Icon} />
         </InputGroupAddon>
         <InputGroupInput placeholder="Search…" />
         <InputGroupAddon align="inline-end">
@@ -143,7 +149,7 @@ export const Disabled = meta.story({
     <div className="w-80">
       <InputGroup>
         <InputGroupAddon>
-          <SearchIcon />
+          <HugeiconsIcon icon={Search01Icon} />
         </InputGroupAddon>
         <InputGroupInput placeholder="Search…" disabled />
       </InputGroup>
@@ -156,7 +162,7 @@ export const Invalid = meta.story({
     <div className="w-80">
       <InputGroup>
         <InputGroupAddon>
-          <MailIcon />
+          <HugeiconsIcon icon={Mail01Icon} />
         </InputGroupAddon>
         <InputGroupInput aria-invalid defaultValue="not-an-email" type="email" />
       </InputGroup>

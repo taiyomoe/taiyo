@@ -2,44 +2,97 @@
 
 import { mergeProps } from "@base-ui/react/merge-props"
 import { useRender } from "@base-ui/react/use-render"
-import { cva, type VariantProps } from "class-variance-authority"
+import * as stylex from "@stylexjs/stylex"
 import type * as React from "react"
 import { Separator } from "@/components/ui/separator"
 import { cn } from "@/lib/utils"
+import type { Sx } from "../../styles/sx"
+import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
 
-export const groupVariants = cva(
-  "flex w-fit *:focus-visible:z-1 *:has-focus-visible:z-1 has-[>[data-slot=group]]:gap-2 *:dark:[[data-slot=separator]:has(~button:hover):not(:has(~[data-slot=separator]~[data-slot]:hover)),[data-slot=separator]:has(~[data-slot][data-pressed]):not(:has(~[data-slot=separator]~[data-slot][data-pressed]))]:before:bg-input/64 *:dark:[button:hover~[data-slot=separator]:not([data-slot]:hover~[data-slot=separator]~[data-slot=separator]),[data-slot][data-pressed]~[data-slot=separator]:not([data-slot][data-pressed]~[data-slot=separator]~[data-slot=separator])]:before:bg-input/64",
-  {
-    defaultVariants: {
-      orientation: "horizontal",
+export type GroupOrientation = "horizontal" | "vertical"
+
+const styles = stylex.create({
+  group: {
+    display: "flex",
+    width: "fit-content",
+  },
+  vertical: {
+    flexDirection: "column",
+  },
+  text: {
+    borderColor: colors.input,
+    borderRadius: radius.lg,
+    borderStyle: "solid",
+    borderWidth: 1,
+    gap: "0.5rem",
+    paddingInline: "calc(0.75rem - 1px)",
+    alignItems: "center",
+    backgroundClip: "padding-box",
+    backgroundColor: colors.muted,
+    boxShadow: "0 1px 2px 0 rgb(0 0 0 / 5%)",
+    color: colors.mutedForeground,
+    display: "inline-flex",
+    fontSize: {
+      default: "1rem",
+      [consts.sm]: "0.875rem",
     },
-    variants: {
-      orientation: {
-        horizontal:
-          "*:data-slot:has-[~[data-slot]]:rounded-r-none *:data-slot:has-[~[data-slot]]:border-r-0 *:data-slot:has-[~[data-slot]]:before:rounded-r-none *:data-slot:not-data-[slot=separator]:has-[~[data-slot]]:before:right-[-0.5px] *:pointer-coarse:after:min-w-auto *:[[data-slot]~[data-slot]]:rounded-l-none *:[[data-slot]~[data-slot]]:border-l-0 *:[[data-slot]~[data-slot]]:before:rounded-l-none *:[[data-slot]~[data-slot]:not([data-slot=separator])]:before:left-[-0.5px]",
-        vertical:
-          "flex-col *:data-slot:has-[~[data-slot]]:rounded-b-none *:data-slot:has-[~[data-slot]]:border-b-0 *:data-slot:has-[~[data-slot]]:before:rounded-b-none *:data-slot:not-data-[slot=separator]:has-[~[data-slot]]:before:bottom-[-0.5px] *:data-slot:not-data-[slot=separator]:has-[~[data-slot]]:before:hidden *:first:dark:before:block *:last:dark:before:hidden *:pointer-coarse:after:min-h-auto *:[[data-slot]~[data-slot]]:rounded-t-none *:[[data-slot]~[data-slot]]:border-t-0 *:[[data-slot]~[data-slot]]:before:rounded-t-none *:[[data-slot]~[data-slot]:not([data-slot=separator])]:before:top-[-0.5px]",
-      },
+    outlineStyle: "none",
+    position: "relative",
+    transitionProperty: "box-shadow",
+    whiteSpace: "nowrap",
+    "::before": {
+      inset: 0,
+      borderRadius: "inherit",
+      boxShadow: shadows.edge,
+      content: '""',
+      pointerEvents: "none",
+      position: "absolute",
     },
   },
-)
+  separator: {
+    backgroundColor: colors.input,
+    pointerEvents: "none",
+    position: "relative",
+    zIndex: 2,
+  },
+})
+
+export interface GroupStyleOptions {
+  orientation?: GroupOrientation | null
+  className?: string
+}
+
+/** Legacy escape hatch, kept API-compatible with the old cva export. */
+export function groupVariants({
+  orientation = "horizontal",
+  className,
+}: GroupStyleOptions = {}): string {
+  const props = stylex.props(styles.group, orientation === "vertical" && styles.vertical)
+
+  return cn(props.className, className)
+}
 
 export function Group({
   className,
-  orientation,
+  orientation = "horizontal",
   children,
+  sx,
   ...props
 }: {
   className?: string
-  orientation?: VariantProps<typeof groupVariants>["orientation"]
+  orientation?: GroupOrientation
   children: React.ReactNode
+  sx?: Sx
 } & React.ComponentProps<"div">): React.ReactElement {
+  const styleProps = stylex.props(styles.group, orientation === "vertical" && styles.vertical, sx)
+
   return (
     <div
-      className={cn(groupVariants({ orientation }), className)}
+      className={cn(styleProps.className, className)}
       data-orientation={orientation}
       data-slot="group"
       role="group"
+      style={styleProps.style}
       {...props}
     >
       {children}
@@ -50,14 +103,14 @@ export function Group({
 export function GroupText({
   className,
   render,
+  sx,
   ...props
-}: useRender.ComponentProps<"div">): React.ReactElement {
+}: useRender.ComponentProps<"div"> & { sx?: Sx }): React.ReactElement {
+  const styleProps = stylex.props(styles.text, sx)
   const defaultProps = {
-    className: cn(
-      "relative inline-flex items-center gap-2 rounded-lg border border-input bg-muted px-[calc(--spacing(3)-1px)] text-base whitespace-nowrap text-muted-foreground shadow-xs/5 transition-shadow outline-none not-dark:bg-clip-padding before:pointer-events-none before:absolute before:inset-0 before:rounded-[calc(var(--radius-lg)-1px)] before:shadow-[0_1px_--theme(--color-black/6%)] sm:text-sm dark:bg-input/64 dark:before:shadow-[0_-1px_--theme(--color-white/6%)] [&_svg]:-mx-0.5 [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4.5 sm:[&_svg:not([class*='size-'])]:size-4",
-      className,
-    ),
+    className: cn(styleProps.className, className),
     "data-slot": "group-text",
+    style: styleProps.style,
   }
 
   return useRender({
@@ -70,17 +123,17 @@ export function GroupText({
 export function GroupSeparator({
   className,
   orientation = "vertical",
+  sx,
   ...props
 }: {
   className?: string
+  sx?: Sx
 } & React.ComponentProps<typeof Separator>): React.ReactElement {
   return (
     <Separator
-      className={cn(
-        "pointer-events-none relative z-2 bg-input before:absolute before:inset-0 has-[+[data-slot=input-control]:focus-within,+[data-slot=input-group]:focus-within,+[data-slot=select-trigger]:focus-visible+*,+[data-slot=number-field]:focus-within]:translate-x-px has-[+[data-slot=input-control]:focus-within,+[data-slot=input-group]:focus-within,+[data-slot=select-trigger]:focus-visible+*,+[data-slot=number-field]:focus-within]:bg-ring dark:before:bg-input/32 [[data-slot=input-control]:focus-within+&,[data-slot=input-group]:focus-within+&,[data-slot=select-trigger]:focus-visible+*+&,[data-slot=number-field]:focus-within+&,[data-slot=number-field]:focus-within+input+&]:bg-ring [[data-slot=input-control]:focus-within+&,[data-slot=input-group]:focus-within+&,[data-slot=select-trigger]:focus-visible+*+&,[data-slot=number-field]:focus-within+input+&]:-translate-x-px",
-        className,
-      )}
+      className={className}
       orientation={orientation}
+      sx={[styles.separator, sx]}
       {...props}
     />
   )

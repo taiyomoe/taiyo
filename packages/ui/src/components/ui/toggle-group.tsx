@@ -2,17 +2,162 @@
 
 import type { Toggle as TogglePrimitive } from "@base-ui/react/toggle"
 import { ToggleGroup as ToggleGroupPrimitive } from "@base-ui/react/toggle-group"
-import type { VariantProps } from "class-variance-authority"
+import * as stylex from "@stylexjs/stylex"
 import * as React from "react"
 import { cn } from "@/lib/utils"
 import { Separator } from "@/components/ui/separator"
-import { Toggle as ToggleComponent, type toggleVariants } from "@/components/ui/toggle"
+import {
+  Toggle as ToggleComponent,
+  type ToggleSize,
+  type ToggleVariant,
+} from "@/components/ui/toggle"
+import { colors, radius, shadows } from "../../styles/tokens.stylex"
+import type { Sx } from "../../styles/sx"
 
-export const ToggleGroupContext: React.Context<VariantProps<typeof toggleVariants>> =
-  React.createContext<VariantProps<typeof toggleVariants>>({
+const rootStyles = stylex.create({
+  base: {
+    display: "flex",
+    width: "fit-content",
+  },
+  gapped: {
+    gap: "0.125rem",
+  },
+  vertical: {
+    flexDirection: "column",
+  },
+})
+/**
+ * Styles the group hands to its items through context (StyleX cannot style
+ * arbitrary children from the parent). First/last detection uses the allowed
+ * `:first-child`/`:last-child` conditions, so separators count as siblings —
+ * exactly like the old `*:not-first:` Tailwind rules.
+ *
+ * Dropped from the Tailwind source (needed `:has()` + theme knowledge, both
+ * unavailable): the dark-only rules brightening a separator when its
+ * neighbouring toggle is hovered or pressed.
+ */
+const itemStyles = stylex.create({
+  common: {
+    zIndex: {
+      default: null,
+      ":focus-visible": 10,
+    },
+  },
+  collapseTapHeight: {
+    "::after": {
+      minHeight: "auto",
+    },
+  },
+  collapseTapWidth: {
+    "::after": {
+      minWidth: "auto",
+    },
+  },
+  joinedHorizontal: {
+    borderBottomLeftRadius: {
+      default: 0,
+      ":first-child": radius.lg,
+    },
+    borderBottomRightRadius: {
+      default: 0,
+      ":last-child": radius.lg,
+    },
+    borderLeftWidth: {
+      default: 0,
+      ":first-child": 1,
+    },
+    borderRightWidth: {
+      default: 0,
+      ":last-child": 1,
+    },
+    borderTopLeftRadius: {
+      default: 0,
+      ":first-child": radius.lg,
+    },
+    borderTopRightRadius: {
+      default: 0,
+      ":last-child": radius.lg,
+    },
+    // The ::before edge stretches 0.5px over each shared seam.
+    "::before": {
+      inset: {
+        default: "0 -0.5px",
+        ":first-child": "0 -0.5px 0 0",
+        ":last-child": "0 0 0 -0.5px",
+        ":only-child": 0,
+      },
+    },
+  },
+  joinedVertical: {
+    borderBottomLeftRadius: {
+      default: 0,
+      ":last-child": radius.lg,
+    },
+    borderBottomRightRadius: {
+      default: 0,
+      ":last-child": radius.lg,
+    },
+    borderBottomWidth: {
+      default: 0,
+      ":last-child": 1,
+    },
+    borderTopLeftRadius: {
+      default: 0,
+      ":first-child": radius.lg,
+    },
+    borderTopRightRadius: {
+      default: 0,
+      ":first-child": radius.lg,
+    },
+    borderTopWidth: {
+      default: 0,
+      ":first-child": 1,
+    },
+    // The Tailwind source showed the edge only on the last item in light and
+    // only on the first in dark. Components cannot know the theme, so both
+    // ends keep the edge (the token flips direction per theme); middle items
+    // drop it, as before.
+    "::before": {
+      inset: {
+        default: "-0.5px 0",
+        ":first-child": "0 0 -0.5px 0",
+        ":last-child": "-0.5px 0 0 0",
+        ":only-child": 0,
+      },
+      boxShadow: {
+        default: "none",
+        ":first-child": shadows.edge,
+        ":last-child": shadows.edge,
+      },
+    },
+  },
+})
+const separatorStyles = stylex.create({
+  base: {
+    backgroundColor: colors.input,
+    pointerEvents: "none",
+    position: "relative",
+  },
+})
+
+export interface ToggleGroupContextValue {
+  size?: ToggleSize | null
+  variant?: ToggleVariant | null
+  orientation?: "horizontal" | "vertical"
+}
+
+export const ToggleGroupContext: React.Context<ToggleGroupContextValue> =
+  React.createContext<ToggleGroupContextValue>({
+    orientation: "horizontal",
     size: "default",
     variant: "default",
   })
+
+export interface ToggleGroupProps extends ToggleGroupPrimitive.Props {
+  variant?: ToggleVariant
+  size?: ToggleSize
+  sx?: Sx
+}
 
 export function ToggleGroup({
   className,
@@ -20,33 +165,39 @@ export function ToggleGroup({
   size = "default",
   orientation = "horizontal",
   children,
+  sx,
   ...props
-}: ToggleGroupPrimitive.Props & VariantProps<typeof toggleVariants>): React.ReactElement {
+}: ToggleGroupProps): React.ReactElement {
+  const contextValue = React.useMemo<ToggleGroupContextValue>(
+    () => ({ orientation, size, variant }),
+    [orientation, size, variant],
+  )
+  const styleProps = stylex.props(
+    rootStyles.base,
+    orientation === "vertical" && rootStyles.vertical,
+    variant === "default" && rootStyles.gapped,
+    sx,
+  )
+
   return (
     <ToggleGroupPrimitive
-      className={cn(
-        "flex w-fit *:focus-visible:z-10 *:dark:[[data-slot=separator]:has(+[data-slot=toggle]:hover)]:before:bg-input/64 *:dark:[[data-slot=separator]:has(+[data-slot=toggle][data-pressed])]:before:bg-input *:dark:[[data-slot=toggle]:hover+[data-slot=separator]]:before:bg-input/64 *:dark:[[data-slot=toggle][data-pressed]+[data-slot=separator]]:before:bg-input",
-        orientation === "horizontal"
-          ? "*:pointer-coarse:after:min-w-auto"
-          : "*:pointer-coarse:after:min-h-auto",
-        variant === "default"
-          ? "gap-0.5"
-          : orientation === "horizontal"
-            ? "*:not-first:rounded-l-none *:not-first:border-l-0 *:not-last:rounded-r-none *:not-last:border-r-0 *:not-first:before:rounded-l-none *:not-last:before:rounded-r-none *:not-first:not-data-[slot=separator]:before:left-[-0.5px] *:not-last:not-data-[slot=separator]:before:right-[-0.5px]"
-            : "flex-col *:not-first:rounded-t-none *:not-first:border-t-0 *:not-last:rounded-b-none *:not-last:border-b-0 *:not-first:before:rounded-t-none *:not-last:before:rounded-b-none *:not-first:not-data-[slot=separator]:before:top-[-0.5px] *:not-last:not-data-[slot=separator]:before:bottom-[-0.5px] *:data-[slot=toggle]:not-last:before:hidden *:first:dark:before:block *:last:dark:before:hidden",
-        className,
-      )}
+      className={cn(styleProps.className, className)}
       data-size={size}
       data-slot="toggle-group"
       data-variant={variant}
       orientation={orientation}
+      style={styleProps.style}
       {...props}
     >
-      <ToggleGroupContext.Provider value={{ size, variant }}>
-        {children}
-      </ToggleGroupContext.Provider>
+      <ToggleGroupContext.Provider value={contextValue}>{children}</ToggleGroupContext.Provider>
     </ToggleGroupPrimitive>
   )
+}
+
+export interface ToggleGroupItemProps extends TogglePrimitive.Props {
+  variant?: ToggleVariant
+  size?: ToggleSize
+  sx?: Sx
 }
 
 export function ToggleGroupItem({
@@ -54,11 +205,14 @@ export function ToggleGroupItem({
   children,
   variant,
   size,
+  sx,
   ...props
-}: TogglePrimitive.Props & VariantProps<typeof toggleVariants>): React.ReactElement {
+}: ToggleGroupItemProps): React.ReactElement {
   const context = React.useContext(ToggleGroupContext)
-  const resolvedVariant = context.variant || variant
-  const resolvedSize = context.size || size
+  const resolvedVariant: ToggleVariant = context.variant || variant || "default"
+  const resolvedSize: ToggleSize = context.size || size || "default"
+  const orientation = context.orientation ?? "horizontal"
+  const joined: boolean = resolvedVariant === "outline"
 
   return (
     <ToggleComponent
@@ -66,6 +220,13 @@ export function ToggleGroupItem({
       data-size={resolvedSize}
       data-variant={resolvedVariant}
       size={resolvedSize}
+      sx={[
+        itemStyles.common,
+        orientation === "horizontal" ? itemStyles.collapseTapWidth : itemStyles.collapseTapHeight,
+        joined &&
+          (orientation === "horizontal" ? itemStyles.joinedHorizontal : itemStyles.joinedVertical),
+        sx,
+      ]}
       variant={resolvedVariant}
       {...props}
     >
@@ -74,20 +235,24 @@ export function ToggleGroupItem({
   )
 }
 
+/**
+ * The old dark-only `before:bg-input/32` tint layer is dropped: the `input`
+ * token already themes itself, and the extra layer only existed so the
+ * (also dropped) neighbour-hover rules could recolour it.
+ */
 export function ToggleGroupSeparator({
   className,
   orientation = "vertical",
+  sx,
   ...props
 }: {
   className?: string
 } & React.ComponentProps<typeof Separator>): React.ReactElement {
   return (
     <Separator
-      className={cn(
-        "pointer-events-none relative bg-input before:absolute before:inset-0 dark:before:bg-input/32",
-        className,
-      )}
+      className={className}
       orientation={orientation}
+      sx={[separatorStyles.base, sx]}
       {...props}
     />
   )

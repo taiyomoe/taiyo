@@ -1,17 +1,18 @@
+import {
+  TextAlignCenterIcon,
+  TextAlignLeftIcon,
+  TextAlignRightIcon,
+  TextBoldIcon,
+  TextItalicIcon,
+  TextUnderlineIcon,
+} from "@hugeicons/core-free-icons"
+import { HugeiconsIcon } from "@hugeicons/react"
 import preview from "@/storybook/preview"
 import {
   ToggleGroup,
   ToggleGroupItem,
   ToggleGroupSeparator,
 } from "@taiyomoe/ui/components/ui/toggle-group"
-import {
-  AlignCenterIcon,
-  AlignLeftIcon,
-  AlignRightIcon,
-  BoldIcon,
-  ItalicIcon,
-  UnderlineIcon,
-} from "lucide-react"
 import { fn } from "storybook/test"
 
 const meta = preview.meta({
@@ -43,13 +44,13 @@ export const Default = meta.story({
   render: (args) => (
     <ToggleGroup {...args} defaultValue={["left"]}>
       <ToggleGroupItem aria-label="Align left" value="left">
-        <AlignLeftIcon />
+        <HugeiconsIcon icon={TextAlignLeftIcon} />
       </ToggleGroupItem>
       <ToggleGroupItem aria-label="Align center" value="center">
-        <AlignCenterIcon />
+        <HugeiconsIcon icon={TextAlignCenterIcon} />
       </ToggleGroupItem>
       <ToggleGroupItem aria-label="Align right" value="right">
-        <AlignRightIcon />
+        <HugeiconsIcon icon={TextAlignRightIcon} />
       </ToggleGroupItem>
     </ToggleGroup>
   ),
@@ -60,13 +61,13 @@ export const Multiple = meta.story({
   render: (args) => (
     <ToggleGroup {...args} defaultValue={["bold", "italic"]}>
       <ToggleGroupItem aria-label="Bold" value="bold">
-        <BoldIcon />
+        <HugeiconsIcon icon={TextBoldIcon} />
       </ToggleGroupItem>
       <ToggleGroupItem aria-label="Italic" value="italic">
-        <ItalicIcon />
+        <HugeiconsIcon icon={TextItalicIcon} />
       </ToggleGroupItem>
       <ToggleGroupItem aria-label="Underline" value="underline">
-        <UnderlineIcon />
+        <HugeiconsIcon icon={TextUnderlineIcon} />
       </ToggleGroupItem>
     </ToggleGroup>
   ),
@@ -77,24 +78,24 @@ export const Variants = meta.story({
     <div className="flex flex-col items-start gap-4">
       <ToggleGroup defaultValue={["left"]} variant="default">
         <ToggleGroupItem aria-label="Align left" value="left">
-          <AlignLeftIcon />
+          <HugeiconsIcon icon={TextAlignLeftIcon} />
         </ToggleGroupItem>
         <ToggleGroupItem aria-label="Align center" value="center">
-          <AlignCenterIcon />
+          <HugeiconsIcon icon={TextAlignCenterIcon} />
         </ToggleGroupItem>
         <ToggleGroupItem aria-label="Align right" value="right">
-          <AlignRightIcon />
+          <HugeiconsIcon icon={TextAlignRightIcon} />
         </ToggleGroupItem>
       </ToggleGroup>
       <ToggleGroup defaultValue={["left"]} variant="outline">
         <ToggleGroupItem aria-label="Align left" value="left">
-          <AlignLeftIcon />
+          <HugeiconsIcon icon={TextAlignLeftIcon} />
         </ToggleGroupItem>
         <ToggleGroupItem aria-label="Align center" value="center">
-          <AlignCenterIcon />
+          <HugeiconsIcon icon={TextAlignCenterIcon} />
         </ToggleGroupItem>
         <ToggleGroupItem aria-label="Align right" value="right">
-          <AlignRightIcon />
+          <HugeiconsIcon icon={TextAlignRightIcon} />
         </ToggleGroupItem>
       </ToggleGroup>
     </div>
@@ -106,35 +107,35 @@ export const Sizes = meta.story({
     <div className="flex flex-col items-start gap-4">
       <ToggleGroup defaultValue={["left"]} size="sm" variant="outline">
         <ToggleGroupItem aria-label="Align left" value="left">
-          <AlignLeftIcon />
+          <HugeiconsIcon icon={TextAlignLeftIcon} />
         </ToggleGroupItem>
         <ToggleGroupItem aria-label="Align center" value="center">
-          <AlignCenterIcon />
+          <HugeiconsIcon icon={TextAlignCenterIcon} />
         </ToggleGroupItem>
         <ToggleGroupItem aria-label="Align right" value="right">
-          <AlignRightIcon />
+          <HugeiconsIcon icon={TextAlignRightIcon} />
         </ToggleGroupItem>
       </ToggleGroup>
       <ToggleGroup defaultValue={["left"]} size="default" variant="outline">
         <ToggleGroupItem aria-label="Align left" value="left">
-          <AlignLeftIcon />
+          <HugeiconsIcon icon={TextAlignLeftIcon} />
         </ToggleGroupItem>
         <ToggleGroupItem aria-label="Align center" value="center">
-          <AlignCenterIcon />
+          <HugeiconsIcon icon={TextAlignCenterIcon} />
         </ToggleGroupItem>
         <ToggleGroupItem aria-label="Align right" value="right">
-          <AlignRightIcon />
+          <HugeiconsIcon icon={TextAlignRightIcon} />
         </ToggleGroupItem>
       </ToggleGroup>
       <ToggleGroup defaultValue={["left"]} size="lg" variant="outline">
         <ToggleGroupItem aria-label="Align left" value="left">
-          <AlignLeftIcon />
+          <HugeiconsIcon icon={TextAlignLeftIcon} />
         </ToggleGroupItem>
         <ToggleGroupItem aria-label="Align center" value="center">
-          <AlignCenterIcon />
+          <HugeiconsIcon icon={TextAlignCenterIcon} />
         </ToggleGroupItem>
         <ToggleGroupItem aria-label="Align right" value="right">
-          <AlignRightIcon />
+          <HugeiconsIcon icon={TextAlignRightIcon} />
         </ToggleGroupItem>
       </ToggleGroup>
     </div>
@@ -146,13 +147,13 @@ export const Vertical = meta.story({
   render: (args) => (
     <ToggleGroup {...args} defaultValue={["left"]}>
       <ToggleGroupItem aria-label="Align left" value="left">
-        <AlignLeftIcon />
+        <HugeiconsIcon icon={TextAlignLeftIcon} />
       </ToggleGroupItem>
       <ToggleGroupItem aria-label="Align center" value="center">
-        <AlignCenterIcon />
+        <HugeiconsIcon icon={TextAlignCenterIcon} />
       </ToggleGroupItem>
       <ToggleGroupItem aria-label="Align right" value="right">
-        <AlignRightIcon />
+        <HugeiconsIcon icon={TextAlignRightIcon} />
       </ToggleGroupItem>
     </ToggleGroup>
   ),
@@ -163,14 +164,14 @@ export const WithSeparator = meta.story({
   render: (args) => (
     <ToggleGroup {...args} defaultValue={["bold"]}>
       <ToggleGroupItem aria-label="Bold" value="bold">
-        <BoldIcon />
+        <HugeiconsIcon icon={TextBoldIcon} />
       </ToggleGroupItem>
       <ToggleGroupItem aria-label="Italic" value="italic">
-        <ItalicIcon />
+        <HugeiconsIcon icon={TextItalicIcon} />
       </ToggleGroupItem>
       <ToggleGroupSeparator />
       <ToggleGroupItem aria-label="Underline" value="underline">
-        <UnderlineIcon />
+        <HugeiconsIcon icon={TextUnderlineIcon} />
       </ToggleGroupItem>
     </ToggleGroup>
   ),
@@ -181,13 +182,13 @@ export const Disabled = meta.story({
   render: (args) => (
     <ToggleGroup {...args} defaultValue={["left"]}>
       <ToggleGroupItem aria-label="Align left" value="left">
-        <AlignLeftIcon />
+        <HugeiconsIcon icon={TextAlignLeftIcon} />
       </ToggleGroupItem>
       <ToggleGroupItem aria-label="Align center" value="center">
-        <AlignCenterIcon />
+        <HugeiconsIcon icon={TextAlignCenterIcon} />
       </ToggleGroupItem>
       <ToggleGroupItem aria-label="Align right" value="right">
-        <AlignRightIcon />
+        <HugeiconsIcon icon={TextAlignRightIcon} />
       </ToggleGroupItem>
     </ToggleGroup>
   ),

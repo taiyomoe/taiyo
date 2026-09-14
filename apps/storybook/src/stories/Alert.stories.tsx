@@ -1,7 +1,12 @@
+import {
+  Alert02Icon,
+  CheckmarkCircle02Icon,
+  InformationCircleIcon,
+} from "@hugeicons/core-free-icons"
+import { HugeiconsIcon } from "@hugeicons/react"
 import preview from "@/storybook/preview"
 import { Alert, AlertAction, AlertDescription, AlertTitle } from "@taiyomoe/ui/components/ui/alert"
 import { Button } from "@taiyomoe/ui/components/ui/button"
-import { CheckCircle2Icon, InfoIcon, TriangleAlertIcon } from "lucide-react"
 
 const meta = preview.meta({
   title: "UI/Alert",
@@ -17,7 +22,7 @@ const meta = preview.meta({
   render: (args) => (
     <div className="w-96">
       <Alert {...args}>
-        <InfoIcon />
+        <HugeiconsIcon icon={InformationCircleIcon} />
         <AlertTitle>New update available</AlertTitle>
         <AlertDescription>
           A new version of Taiyō is ready to install. Restart the app to apply the update.
@@ -33,27 +38,27 @@ export const Variants = meta.story({
   render: () => (
     <div className="flex w-96 flex-col gap-3">
       <Alert variant="default">
-        <InfoIcon />
+        <HugeiconsIcon icon={InformationCircleIcon} />
         <AlertTitle>Default</AlertTitle>
         <AlertDescription>A neutral message with no particular emphasis.</AlertDescription>
       </Alert>
       <Alert variant="info">
-        <InfoIcon />
+        <HugeiconsIcon icon={InformationCircleIcon} />
         <AlertTitle>Info</AlertTitle>
         <AlertDescription>Informational message that does not require action.</AlertDescription>
       </Alert>
       <Alert variant="success">
-        <CheckCircle2Icon />
+        <HugeiconsIcon icon={CheckmarkCircle02Icon} />
         <AlertTitle>Success</AlertTitle>
         <AlertDescription>Your changes have been saved successfully.</AlertDescription>
       </Alert>
       <Alert variant="warning">
-        <TriangleAlertIcon />
+        <HugeiconsIcon icon={Alert02Icon} />
         <AlertTitle>Warning</AlertTitle>
         <AlertDescription>This action may have unintended side effects.</AlertDescription>
       </Alert>
       <Alert variant="error">
-        <TriangleAlertIcon />
+        <HugeiconsIcon icon={Alert02Icon} />
         <AlertTitle>Error</AlertTitle>
         <AlertDescription>Something went wrong while saving your changes.</AlertDescription>
       </Alert>
@@ -64,7 +69,7 @@ export const Variants = meta.story({
 export const WithAction = meta.story({
   render: () => (
     <Alert className="w-md" variant="warning">
-      <TriangleAlertIcon />
+      <HugeiconsIcon icon={Alert02Icon} />
       <AlertTitle>Unsaved changes</AlertTitle>
       <AlertDescription>
         You have unsaved changes. Save them before leaving this page.
@@ -81,7 +86,7 @@ export const WithAction = meta.story({
 export const TitleOnly = meta.story({
   render: () => (
     <Alert className="w-96" variant="info">
-      <InfoIcon />
+      <HugeiconsIcon icon={InformationCircleIcon} />
       <AlertTitle>Sync completed</AlertTitle>
     </Alert>
   ),

@@ -1,6 +1,7 @@
+import { Delete02Icon, Settings01Icon } from "@hugeicons/core-free-icons"
+import { HugeiconsIcon } from "@hugeicons/react"
 import preview from "@/storybook/preview"
 import { Button } from "@taiyomoe/ui/components/ui/button"
-import { SettingsIcon, TrashIcon } from "lucide-react"
 import { fn } from "storybook/test"
 
 const meta = preview.meta({
@@ -75,19 +76,19 @@ export const IconSizes = meta.story({
   render: () => (
     <div className="flex flex-wrap items-center gap-2">
       <Button size="icon-xs" aria-label="Settings">
-        <SettingsIcon />
+        <HugeiconsIcon icon={Settings01Icon} />
       </Button>
       <Button size="icon-sm" aria-label="Settings">
-        <SettingsIcon />
+        <HugeiconsIcon icon={Settings01Icon} />
       </Button>
       <Button size="icon" aria-label="Settings">
-        <SettingsIcon />
+        <HugeiconsIcon icon={Settings01Icon} />
       </Button>
       <Button size="icon-lg" aria-label="Settings">
-        <SettingsIcon />
+        <HugeiconsIcon icon={Settings01Icon} />
       </Button>
       <Button size="icon-xl" aria-label="Settings">
-        <SettingsIcon />
+        <HugeiconsIcon icon={Settings01Icon} />
       </Button>
     </div>
   ),
@@ -105,7 +106,7 @@ export const WithIcon = meta.story({
   args: {
     children: (
       <>
-        <SettingsIcon />
+        <HugeiconsIcon icon={Settings01Icon} />
         Settings
       </>
     ),
@@ -116,6 +117,6 @@ export const IconOnly = meta.story({
   args: {
     size: "icon",
     "aria-label": "Delete",
-    children: <TrashIcon />,
+    children: <HugeiconsIcon icon={Delete02Icon} />,
   },
 })

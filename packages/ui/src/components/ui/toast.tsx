@@ -1,23 +1,19 @@
 "use client"
 
 import { Toast } from "@base-ui/react/toast"
-import {
-  CircleAlertIcon,
-  CircleCheckIcon,
-  InfoIcon,
-  LoaderCircleIcon,
-  TriangleAlertIcon,
-} from "lucide-react"
+import * as stylex from "@stylexjs/stylex"
 import type React from "react"
-import { cn } from "@/lib/utils"
+
+import { AlertCircle, AlertTriangle, CheckCircle, Info, Spinner } from "@/components/icons"
 import { buttonVariants } from "@/components/ui/button"
+import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
 
 const TOAST_ICONS = {
-  error: CircleAlertIcon,
-  info: InfoIcon,
-  loading: LoaderCircleIcon,
-  success: CircleCheckIcon,
-  warning: TriangleAlertIcon,
+  error: AlertCircle,
+  info: Info,
+  loading: Spinner,
+  success: CheckCircle,
+  warning: AlertTriangle,
 } as const
 
 type SwipeDirection = "up" | "down" | "left" | "right"
@@ -29,6 +25,282 @@ type ToastData = {
   >
   tooltipStyle?: boolean
 }
+
+/** Port of the toast replay keyframes that lived in globals.css. */
+const successPulse = stylex.keyframes({
+  "0%": { scale: "1" },
+  "30%": { scale: "1.025" },
+  "60%": { scale: "0.99" },
+  "100%": { scale: "1" },
+})
+const errorShake = stylex.keyframes({
+  "0%": { translate: "0 0" },
+  "25%": { translate: "-3px 0" },
+  "50%": { translate: "3px 0" },
+  "75%": { translate: "-3px 0" },
+  "100%": { translate: "0 0" },
+})
+const spin = stylex.keyframes({
+  to: { rotate: "360deg" },
+})
+const styles = stylex.create({
+  viewport: {
+    // The inset is the gutter between the stack and the window edge.
+    "--toast-inset": {
+      default: "1rem",
+      [consts.sm]: "2rem",
+    },
+    marginInline: "auto",
+    display: "flex",
+    position: "fixed",
+    zIndex: 60,
+    maxWidth: "22.5rem",
+    width: "calc(100% - var(--toast-inset) * 2)",
+  },
+  viewportTop: {
+    top: "var(--toast-inset)",
+  },
+  viewportBottom: {
+    bottom: "var(--toast-inset)",
+  },
+  viewportLeft: {
+    left: "var(--toast-inset)",
+  },
+  viewportRight: {
+    right: "var(--toast-inset)",
+  },
+  viewportCenter: {
+    translate: "-50%",
+    left: "50%",
+  },
+  root: {
+    // Stack geometry, shared by both vertical anchors.
+    "--toast-calc-height": "var(--toast-frontmost-height, var(--toast-height))",
+    "--toast-gap": "0.75rem",
+    "--toast-peek": "0.75rem",
+    "--toast-scale": "calc(max(0, 1 - (var(--toast-index) * .1)))",
+    "--toast-shrink": "calc(1 - var(--toast-scale))",
+    borderColor: colors.border,
+    borderRadius: radius.lg,
+    borderStyle: "solid",
+    borderWidth: 1,
+    // Toasts behind the frontmost one darken slightly as they stack.
+    backgroundClip: "padding-box",
+    backgroundColor: {
+      "[data-expanded]": colors.popover,
+      default: `color-mix(in srgb, ${colors.popover}, #000 calc(4% * max(0, var(--toast-index, 0))))`,
+    },
+    boxShadow: shadows.overlay,
+    color: colors.popoverForeground,
+    opacity: {
+      "[data-ending-style]": 0,
+      "[data-limited]": 0,
+      default: null,
+    },
+    position: "absolute",
+    // z-index is set inline: it depends on --toast-index, and StyleX only
+    // accepts numeric z-index values.
+    transitionDuration: "0.5s, 0.5s, 0.15s, 0.5s",
+    transitionProperty: "transform, opacity, height, background-color",
+    transitionTimingFunction: "cubic-bezier(.22,1,.36,1)",
+    userSelect: "none",
+    height: {
+      "[data-expanded]": "var(--toast-height)",
+      default: "var(--toast-calc-height)",
+    },
+    width: "100%",
+    // Fills the gap between stacked toasts so hovering the stack is seamless.
+    "::after": {
+      content: '""',
+      position: "absolute",
+      height: "calc(var(--toast-gap) + 1px)",
+      left: 0,
+      width: "100%",
+    },
+    "::before": {
+      inset: 0,
+      borderRadius: "inherit",
+      boxShadow: shadows.edge,
+      content: '""',
+      pointerEvents: "none",
+      position: "absolute",
+    },
+  },
+  rootTop: {
+    "--toast-calc-offset-y":
+      "calc(var(--toast-offset-y) + var(--toast-index) * var(--toast-gap) + var(--toast-swipe-movement-y))",
+    transform: {
+      "[data-expanded]":
+        "translateX(var(--toast-swipe-movement-x)) translateY(var(--toast-calc-offset-y))",
+      "[data-starting-style]": "translateY(calc(-100% - var(--toast-inset)))",
+      default:
+        "translateX(var(--toast-swipe-movement-x)) translateY(calc(var(--toast-swipe-movement-y) + (var(--toast-index) * var(--toast-peek)) + (var(--toast-shrink) * var(--toast-calc-height)))) scale(var(--toast-scale))",
+    },
+    transformOrigin: "50% calc(50% - 50% * min(var(--toast-index, 0), 1))",
+    bottom: "auto",
+    top: 0,
+    "::after": {
+      top: "100%",
+    },
+  },
+  rootBottom: {
+    "--toast-calc-offset-y":
+      "calc(var(--toast-offset-y) * -1 + var(--toast-index) * var(--toast-gap) * -1 + var(--toast-swipe-movement-y))",
+    transform: {
+      "[data-expanded]":
+        "translateX(var(--toast-swipe-movement-x)) translateY(var(--toast-calc-offset-y))",
+      "[data-starting-style]": "translateY(calc(100% + var(--toast-inset)))",
+      default:
+        "translateX(var(--toast-swipe-movement-x)) translateY(calc(var(--toast-swipe-movement-y) - (var(--toast-index) * var(--toast-peek)) - (var(--toast-shrink) * var(--toast-calc-height)))) scale(var(--toast-scale))",
+    },
+    transformOrigin: "50% calc(50% + 50% * min(var(--toast-index, 0), 1))",
+    bottom: 0,
+    top: "auto",
+    "::after": {
+      bottom: "100%",
+    },
+  },
+  rootLeft: {
+    left: 0,
+    right: "auto",
+  },
+  rootRight: {
+    left: "auto",
+    right: 0,
+  },
+  rootCenter: {
+    insetInline: 0,
+  },
+  // Swipe-aware exits. Attribute order matters: these come after the anchor
+  // styles so they win over the default transform.
+  rootExit: {
+    transform: {
+      '[data-ending-style][data-swipe-direction="down"]':
+        "translateY(calc(var(--toast-swipe-movement-y) + 100% + var(--toast-inset)))",
+      '[data-ending-style][data-swipe-direction="left"]':
+        "translateX(calc(var(--toast-swipe-movement-x) - 100% - var(--toast-inset))) translateY(var(--toast-calc-offset-y))",
+      '[data-ending-style][data-swipe-direction="right"]':
+        "translateX(calc(var(--toast-swipe-movement-x) + 100% + var(--toast-inset))) translateY(var(--toast-calc-offset-y))",
+      '[data-ending-style][data-swipe-direction="up"]':
+        "translateY(calc(var(--toast-swipe-movement-y) - 100% - var(--toast-inset)))",
+      default: null,
+    },
+  },
+  replaySuccess: {
+    animationDuration: "0.32s",
+    animationName: successPulse,
+    animationTimingFunction: "cubic-bezier(0.5, 1, 0.89, 1)",
+  },
+  replayError: {
+    animationDuration: "0.28s",
+    animationName: errorShake,
+    animationTimingFunction: "cubic-bezier(0.5, 1, 0.89, 1)",
+  },
+  content: {
+    gap: "0.375rem",
+    overflow: "hidden",
+    paddingBlock: "0.75rem",
+    paddingInline: "0.875rem",
+    alignItems: "center",
+    display: "flex",
+    fontSize: "0.875rem",
+    justifyContent: "space-between",
+    lineHeight: "1.25rem",
+    opacity: {
+      "[data-behind]": 0,
+      "[data-expanded]": 1,
+      default: null,
+    },
+    pointerEvents: "auto",
+    transitionDuration: "250ms",
+    transitionProperty: "opacity",
+  },
+  contentTooltip: {
+    paddingBlock: "0.25rem",
+    paddingInline: "0.5rem",
+    pointerEvents: "auto",
+  },
+  body: {
+    gap: "0.5rem",
+    display: "flex",
+  },
+  text: {
+    gap: "0.125rem",
+    display: "flex",
+    flexDirection: "column",
+  },
+  title: {
+    fontWeight: 500,
+  },
+  description: {
+    color: colors.mutedForeground,
+  },
+  icon: {
+    height: "1lh",
+    width: "1rem",
+  },
+  iconError: { color: colors.destructive },
+  iconInfo: { color: colors.info },
+  iconSuccess: { color: colors.success },
+  iconWarning: { color: colors.warning },
+  iconLoading: {
+    animationDuration: "1s",
+    animationIterationCount: "infinite",
+    animationName: spin,
+    animationTimingFunction: "linear",
+    opacity: 0.8,
+  },
+  anchoredViewport: {
+    outlineStyle: "none",
+  },
+  positioner: {
+    zIndex: 50,
+    maxWidth: "min(16rem, var(--available-width))",
+  },
+  anchoredRoot: {
+    borderColor: colors.border,
+    borderRadius: radius.lg,
+    borderStyle: "solid",
+    borderWidth: 1,
+    backgroundClip: "padding-box",
+    backgroundColor: colors.popover,
+    boxShadow: shadows.overlay,
+    color: colors.popoverForeground,
+    fontSize: "0.75rem",
+    lineHeight: "1rem",
+    opacity: {
+      "[data-ending-style]": 0,
+      "[data-starting-style]": 0,
+      default: null,
+    },
+    position: "relative",
+    scale: {
+      "[data-ending-style]": "0.98",
+      "[data-starting-style]": "0.98",
+      default: null,
+    },
+    textWrap: "balance",
+    transitionProperty: "scale, opacity",
+    "::before": {
+      inset: 0,
+      borderRadius: "inherit",
+      boxShadow: shadows.edge,
+      content: '""',
+      pointerEvents: "none",
+      position: "absolute",
+    },
+  },
+  anchoredRootTooltip: {
+    borderRadius: radius.md,
+  },
+})
+const ICON_TYPE_STYLE = {
+  error: styles.iconError,
+  info: styles.iconInfo,
+  loading: styles.iconLoading,
+  success: styles.iconSuccess,
+  warning: styles.iconWarning,
+} as const
 
 function getSwipeDirection(position: ToastPosition): SwipeDirection[] {
   const verticalDirection: SwipeDirection = position.startsWith("top") ? "up" : "down"
@@ -44,20 +316,72 @@ function getSwipeDirection(position: ToastPosition): SwipeDirection[] {
   return ["right", verticalDirection]
 }
 
-function upsertReplayClassName(toast: { type?: string; updateKey?: number }): string | undefined {
+/** Re-fires the attention animation when an existing toast is updated. */
+function replayStyle(toast: { type?: string; updateKey?: number }): stylex.StyleXStyles | false {
   const k = toast.updateKey ?? 0
 
   if (k <= 0) {
-    return undefined
+    return false
   }
 
-  const isEven = k % 2 === 0
+  return toast.type === "error" ? styles.replayError : styles.replaySuccess
+}
 
-  if (toast.type === "error") {
-    return isEven ? "animate-toast-error-even" : "animate-toast-error-odd"
-  }
+function ToastIcon({
+  type,
+  Icon,
+}: {
+  type: string | undefined
+  Icon: (typeof TOAST_ICONS)[keyof typeof TOAST_ICONS]
+}): React.ReactElement {
+  const typeStyle = type ? ICON_TYPE_STYLE[type as keyof typeof ICON_TYPE_STYLE] : undefined
+  const iconProps = stylex.props(styles.icon, typeStyle)
 
-  return isEven ? "animate-toast-success-even" : "animate-toast-success-odd"
+  return (
+    <div data-slot="toast-icon">
+      <Icon className={iconProps.className} style={iconProps.style} />
+    </div>
+  )
+}
+
+function ToastBody({
+  Icon,
+  type,
+  actionChildren,
+}: {
+  Icon: (typeof TOAST_ICONS)[keyof typeof TOAST_ICONS] | null
+  type: string | undefined
+  actionChildren?: React.ReactNode
+}): React.ReactElement {
+  const bodyProps = stylex.props(styles.body)
+  const textProps = stylex.props(styles.text)
+  const titleProps = stylex.props(styles.title)
+  const descriptionProps = stylex.props(styles.description)
+
+  return (
+    <>
+      <div className={bodyProps.className} style={bodyProps.style}>
+        {Icon && <ToastIcon Icon={Icon} type={type} />}
+        <div className={textProps.className} style={textProps.style}>
+          <Toast.Title
+            className={titleProps.className}
+            data-slot="toast-title"
+            style={titleProps.style}
+          />
+          <Toast.Description
+            className={descriptionProps.className}
+            data-slot="toast-description"
+            style={descriptionProps.style}
+          />
+        </div>
+      </div>
+      {actionChildren !== undefined && (
+        <Toast.Action className={buttonVariants({ size: "xs" })} data-slot="toast-action">
+          {actionChildren}
+        </Toast.Action>
+      )}
+    </>
+  )
 }
 
 function Toasts({
@@ -69,101 +393,56 @@ function Toasts({
 }): React.ReactElement {
   const { toasts } = Toast.useToastManager()
   const swipeDirection = getSwipeDirection(position)
+  const isTop = position.startsWith("top")
+  const isCenter = position.includes("center")
+  const isLeft = position.includes("left")
+  const viewportProps = stylex.props(
+    styles.viewport,
+    isTop ? styles.viewportTop : styles.viewportBottom,
+    isCenter ? styles.viewportCenter : isLeft ? styles.viewportLeft : styles.viewportRight,
+  )
+  const contentProps = stylex.props(styles.content)
 
   return (
     <Toast.Portal data-slot="toast-portal" {...portalProps}>
       <Toast.Viewport
-        className={cn(
-          "fixed z-60 mx-auto flex w-[calc(100%-var(--toast-inset)*2)] max-w-90 [--toast-inset:--spacing(4)] sm:[--toast-inset:--spacing(8)]",
-          // Vertical positioning
-          "data-[position*=top]:top-(--toast-inset)",
-          "data-[position*=bottom]:bottom-(--toast-inset)",
-          // Horizontal positioning
-          "data-[position*=left]:left-(--toast-inset)",
-          "data-[position*=right]:right-(--toast-inset)",
-          "data-[position*=center]:left-1/2 data-[position*=center]:-translate-x-1/2",
-        )}
+        className={viewportProps.className}
         data-position={position}
         data-slot="toast-viewport"
+        style={viewportProps.style}
       >
         {toasts.map((toast) => {
           const Icon = toast.type ? TOAST_ICONS[toast.type as keyof typeof TOAST_ICONS] : null
           const toastData = toast.data as ToastData | undefined
+          const rootProps = stylex.props(
+            styles.root,
+            isTop ? styles.rootTop : styles.rootBottom,
+            isCenter ? styles.rootCenter : isLeft ? styles.rootLeft : styles.rootRight,
+            styles.rootExit,
+            replayStyle(toast),
+          )
 
           return (
             <Toast.Root
               key={toast.id}
-              className={cn(
-                "absolute z-[calc(9999-var(--toast-index))] h-(--toast-calc-height) w-full rounded-lg border bg-[color-mix(in_srgb,var(--popover),var(--color-black)_calc(1%*max(0,var(--toast-index,0))))] text-popover-foreground shadow-lg/5 select-none [transition:transform_.5s_cubic-bezier(.22,1,.36,1),opacity_.5s,height_.15s,background-color_.5s] not-dark:bg-clip-padding before:pointer-events-none before:absolute before:inset-0 before:rounded-[calc(var(--radius-lg)-1px)] before:shadow-[0_1px_--theme(--color-black/4%)] data-expanded:bg-popover dark:bg-[color-mix(in_srgb,var(--popover),var(--color-black)_calc(6%*max(0,var(--toast-index,0))))] dark:before:shadow-[0_-1px_--theme(--color-white/6%)] dark:data-expanded:bg-popover",
-                // Base positioning using data-position
-                "data-[position*=right]:right-0 data-[position*=right]:left-auto",
-                "data-[position*=left]:right-auto data-[position*=left]:left-0",
-                "data-[position*=center]:inset-x-0",
-                "data-[position*=top]:top-0 data-[position*=top]:bottom-auto data-[position*=top]:origin-[50%_calc(50%-50%*min(var(--toast-index,0),1))]",
-                "data-[position*=bottom]:top-auto data-[position*=bottom]:bottom-0 data-[position*=bottom]:origin-[50%_calc(50%+50%*min(var(--toast-index,0),1))]",
-                // Gap fill for hover
-                "after:absolute after:left-0 after:h-[calc(var(--toast-gap)+1px)] after:w-full",
-                "data-[position*=top]:after:top-full",
-                "data-[position*=bottom]:after:bottom-full",
-                // Define some variables
-                "[--toast-calc-height:var(--toast-frontmost-height,var(--toast-height))] [--toast-gap:--spacing(3)] [--toast-peek:--spacing(3)] [--toast-scale:calc(max(0,1-(var(--toast-index)*.1)))] [--toast-shrink:calc(1-var(--toast-scale))]",
-                // Define offset-y variable
-                "data-[position*=top]:[--toast-calc-offset-y:calc(var(--toast-offset-y)+var(--toast-index)*var(--toast-gap)+var(--toast-swipe-movement-y))]",
-                "data-[position*=bottom]:[--toast-calc-offset-y:calc(var(--toast-offset-y)*-1+var(--toast-index)*var(--toast-gap)*-1+var(--toast-swipe-movement-y))]",
-                // Default state transform
-                "data-[position*=top]:transform-[translateX(var(--toast-swipe-movement-x))_translateY(calc(var(--toast-swipe-movement-y)+(var(--toast-index)*var(--toast-peek))+(var(--toast-shrink)*var(--toast-calc-height))))_scale(var(--toast-scale))]",
-                "data-[position*=bottom]:transform-[translateX(var(--toast-swipe-movement-x))_translateY(calc(var(--toast-swipe-movement-y)-(var(--toast-index)*var(--toast-peek))-(var(--toast-shrink)*var(--toast-calc-height))))_scale(var(--toast-scale))]",
-                // Limited state
-                "data-limited:opacity-0",
-                // Expanded state
-                "data-expanded:h-(--toast-height)",
-                "data-position:data-expanded:transform-[translateX(var(--toast-swipe-movement-x))_translateY(var(--toast-calc-offset-y))]",
-                // Starting and ending animations
-                "data-[position*=top]:data-starting-style:transform-[translateY(calc(-100%-var(--toast-inset)))]",
-                "data-[position*=bottom]:data-starting-style:transform-[translateY(calc(100%+var(--toast-inset)))]",
-                "data-ending-style:opacity-0",
-                // Ending animations (direction-aware)
-                "data-ending-style:not-data-limited:not-data-swipe-direction:transform-[translateY(calc(100%+var(--toast-inset)))]",
-                "data-ending-style:data-[swipe-direction=left]:transform-[translateX(calc(var(--toast-swipe-movement-x)-100%-var(--toast-inset)))_translateY(var(--toast-calc-offset-y))]",
-                "data-ending-style:data-[swipe-direction=right]:transform-[translateX(calc(var(--toast-swipe-movement-x)+100%+var(--toast-inset)))_translateY(var(--toast-calc-offset-y))]",
-                "data-ending-style:data-[swipe-direction=up]:transform-[translateY(calc(var(--toast-swipe-movement-y)-100%-var(--toast-inset)))]",
-                "data-ending-style:data-[swipe-direction=down]:transform-[translateY(calc(var(--toast-swipe-movement-y)+100%+var(--toast-inset)))]",
-                // Ending animations (expanded)
-                "data-expanded:data-ending-style:data-[swipe-direction=left]:transform-[translateX(calc(var(--toast-swipe-movement-x)-100%-var(--toast-inset)))_translateY(var(--toast-calc-offset-y))]",
-                "data-expanded:data-ending-style:data-[swipe-direction=right]:transform-[translateX(calc(var(--toast-swipe-movement-x)+100%+var(--toast-inset)))_translateY(var(--toast-calc-offset-y))]",
-                "data-expanded:data-ending-style:data-[swipe-direction=up]:transform-[translateY(calc(var(--toast-swipe-movement-y)-100%-var(--toast-inset)))]",
-                "data-expanded:data-ending-style:data-[swipe-direction=down]:transform-[translateY(calc(var(--toast-swipe-movement-y)+100%+var(--toast-inset)))]",
-                upsertReplayClassName(toast),
-              )}
+              className={rootProps.className}
+              style={
+                {
+                  ...rootProps.style,
+                  zIndex: "calc(9999 - var(--toast-index))",
+                } as React.CSSProperties
+              }
               {...toastData?.rootProps}
               data-position={position}
               swipeDirection={swipeDirection}
               toast={toast}
             >
-              <Toast.Content className="pointer-events-auto flex items-center justify-between gap-1.5 overflow-hidden px-3.5 py-3 text-sm transition-opacity duration-250 data-behind:opacity-0 data-behind:not-data-expanded:pointer-events-none data-expanded:opacity-100">
-                <div className="flex gap-2">
-                  {Icon && (
-                    <div
-                      className="[&_svg]:pointer-events-none [&_svg]:shrink-0 [&>svg]:h-lh [&>svg]:w-4"
-                      data-slot="toast-icon"
-                    >
-                      <Icon className="in-data-[type=error]:text-destructive in-data-[type=info]:text-info in-data-[type=loading]:animate-spin in-data-[type=loading]:opacity-80 in-data-[type=success]:text-success in-data-[type=warning]:text-warning" />
-                    </div>
-                  )}
-
-                  <div className="flex flex-col gap-0.5">
-                    <Toast.Title className="font-medium" data-slot="toast-title" />
-                    <Toast.Description
-                      className="text-muted-foreground"
-                      data-slot="toast-description"
-                    />
-                  </div>
-                </div>
-                {toast.actionProps && (
-                  <Toast.Action className={buttonVariants({ size: "xs" })} data-slot="toast-action">
-                    {toast.actionProps.children}
-                  </Toast.Action>
-                )}
+              <Toast.Content className={contentProps.className} style={contentProps.style}>
+                <ToastBody
+                  Icon={Icon}
+                  actionChildren={toast.actionProps?.children}
+                  type={toast.type}
+                />
               </Toast.Content>
             </Toast.Root>
           )
@@ -179,10 +458,16 @@ function AnchoredToasts({
   portalProps?: React.ComponentProps<typeof Toast.Portal>
 }): React.ReactElement {
   const { toasts } = Toast.useToastManager()
+  const viewportProps = stylex.props(styles.anchoredViewport)
+  const positionerProps2 = stylex.props(styles.positioner)
 
   return (
     <Toast.Portal data-slot="toast-portal-anchored" {...portalProps}>
-      <Toast.Viewport className="outline-none" data-slot="toast-viewport-anchored">
+      <Toast.Viewport
+        className={viewportProps.className}
+        data-slot="toast-viewport-anchored"
+        style={viewportProps.style}
+      >
         {toasts.map((toast) => {
           const Icon = toast.type ? TOAST_ICONS[toast.type as keyof typeof TOAST_ICONS] : null
           const toastData = toast.data as ToastData | undefined
@@ -193,60 +478,40 @@ function AnchoredToasts({
             return null
           }
 
+          const rootProps = stylex.props(
+            styles.anchoredRoot,
+            tooltipStyle && styles.anchoredRootTooltip,
+            replayStyle(toast),
+          )
+          const contentProps = stylex.props(tooltipStyle ? styles.contentTooltip : styles.content)
+
           return (
             <Toast.Positioner
               key={toast.id}
-              className="z-50 max-w-[min(--spacing(64),var(--available-width))]"
+              className={positionerProps2.className}
               data-slot="toast-positioner"
               sideOffset={positionerProps.sideOffset ?? 4}
+              style={positionerProps2.style}
               toast={toast}
             >
               <Toast.Root
-                className={cn(
-                  "relative border bg-popover text-xs text-balance text-popover-foreground transition-[scale,opacity] not-dark:bg-clip-padding before:pointer-events-none before:absolute before:inset-0 before:shadow-[0_1px_--theme(--color-black/4%)] data-ending-style:scale-98 data-ending-style:opacity-0 data-starting-style:scale-98 data-starting-style:opacity-0 dark:before:shadow-[0_-1px_--theme(--color-white/6%)]",
-                  tooltipStyle
-                    ? "rounded-md shadow-md/5 before:rounded-[calc(var(--radius-md)-1px)]"
-                    : "rounded-lg shadow-lg/5 before:rounded-[calc(var(--radius-lg)-1px)]",
-                  upsertReplayClassName(toast),
-                )}
+                className={rootProps.className}
+                style={rootProps.style}
                 {...toastData?.rootProps}
                 data-slot="toast-popup"
                 toast={toast}
               >
-                {tooltipStyle ? (
-                  <Toast.Content className="pointer-events-auto px-2 py-1">
+                <Toast.Content className={contentProps.className} style={contentProps.style}>
+                  {tooltipStyle ? (
                     <Toast.Title data-slot="toast-title" />
-                  </Toast.Content>
-                ) : (
-                  <Toast.Content className="pointer-events-auto flex items-center justify-between gap-1.5 overflow-hidden px-3.5 py-3 text-sm">
-                    <div className="flex gap-2">
-                      {Icon && (
-                        <div
-                          className="[&_svg]:pointer-events-none [&_svg]:shrink-0 [&>svg]:h-lh [&>svg]:w-4"
-                          data-slot="toast-icon"
-                        >
-                          <Icon className="in-data-[type=error]:text-destructive in-data-[type=info]:text-info in-data-[type=loading]:animate-spin in-data-[type=loading]:opacity-80 in-data-[type=success]:text-success in-data-[type=warning]:text-warning" />
-                        </div>
-                      )}
-
-                      <div className="flex flex-col gap-0.5">
-                        <Toast.Title className="font-medium" data-slot="toast-title" />
-                        <Toast.Description
-                          className="text-muted-foreground"
-                          data-slot="toast-description"
-                        />
-                      </div>
-                    </div>
-                    {toast.actionProps && (
-                      <Toast.Action
-                        className={buttonVariants({ size: "xs" })}
-                        data-slot="toast-action"
-                      >
-                        {toast.actionProps.children}
-                      </Toast.Action>
-                    )}
-                  </Toast.Content>
-                )}
+                  ) : (
+                    <ToastBody
+                      Icon={Icon}
+                      actionChildren={toast.actionProps?.children}
+                      type={toast.type}
+                    />
+                  )}
+                </Toast.Content>
               </Toast.Root>
             </Toast.Positioner>
           )

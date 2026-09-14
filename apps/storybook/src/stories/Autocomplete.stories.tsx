@@ -1,3 +1,5 @@
+import { Search01Icon } from "@hugeicons/core-free-icons"
+import { HugeiconsIcon } from "@hugeicons/react"
 import preview from "@/storybook/preview"
 import {
   Autocomplete,
@@ -11,7 +13,6 @@ import {
   AutocompletePopup,
   AutocompleteSeparator,
 } from "@taiyomoe/ui/components/ui/autocomplete"
-import { SearchIcon } from "lucide-react"
 import { Fragment } from "react"
 import { fn } from "storybook/test"
 
@@ -159,7 +160,10 @@ export const WithStartAddon = meta.story({
   render: () => (
     <div className="w-72">
       <Autocomplete items={fruits}>
-        <AutocompleteInput placeholder="Search fruits..." startAddon={<SearchIcon />} />
+        <AutocompleteInput
+          placeholder="Search fruits..."
+          startAddon={<HugeiconsIcon icon={Search01Icon} />}
+        />
         <AutocompletePopup>
           <AutocompleteEmpty>No fruits found.</AutocompleteEmpty>
           <AutocompleteList>

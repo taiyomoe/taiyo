@@ -1,11 +1,15 @@
 "use client"
 
 import { Combobox as ComboboxPrimitive } from "@base-ui/react/combobox"
-import { ChevronsUpDownIcon, XIcon } from "lucide-react"
+import * as stylex from "@stylexjs/stylex"
 import * as React from "react"
 import { cn } from "@/lib/utils"
+import { ChevronsUpDown, Close } from "@/components/icons"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { comboboxPopupMarker } from "../../styles/markers.stylex"
+import type { Sx } from "../../styles/sx"
+import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
 
 export const ComboboxContext: React.Context<{
   chipsRef: React.RefObject<Element | null> | null
@@ -18,13 +22,354 @@ export const ComboboxContext: React.Context<{
   multiple: false,
 })
 
+const styles = stylex.create({
+  inputGroup: {
+    color: colors.foreground,
+    position: "relative",
+    width: "100%",
+  },
+  startAddon: {
+    insetBlock: 0,
+    alignItems: "center",
+    color: colors.mutedForeground,
+    display: "flex",
+    opacity: 0.8,
+    pointerEvents: "none",
+    position: "absolute",
+    zIndex: 10,
+    left: "1px",
+    paddingLeft: "calc(0.75rem - 1px)",
+  },
+  startAddonSm: {
+    paddingLeft: "calc(0.625rem - 1px)",
+  },
+  inputWithStartAddon: {
+    paddingLeft: {
+      default: "calc(2.125rem - 1px)",
+      [consts.sm]: "calc(2rem - 1px)",
+    },
+  },
+  inputWithStartAddonSm: {
+    paddingLeft: {
+      default: "calc(1.875rem - 1px)",
+      [consts.sm]: "calc(1.75rem - 1px)",
+    },
+  },
+  inputWithEndButton: {
+    paddingRight: "1.75rem",
+  },
+  inputWithEndButtonSm: {
+    paddingRight: "1.625rem",
+  },
+  inputKeepOpacity: {
+    opacity: 1,
+  },
+  endButton: {
+    borderColor: "transparent",
+    borderRadius: radius.md,
+    borderStyle: "solid",
+    borderWidth: 1,
+    alignItems: "center",
+    cursor: "pointer",
+    display: "inline-flex",
+    flexShrink: 0,
+    justifyContent: "center",
+    opacity: {
+      default: 0.8,
+      ":hover": 1,
+    },
+    outlineStyle: "none",
+    position: "absolute",
+    transitionProperty: "opacity",
+    translate: "0 -50%",
+    height: {
+      default: "2rem",
+      [consts.sm]: "1.75rem",
+    },
+    right: "0.125rem",
+    top: "50%",
+    width: {
+      default: "2rem",
+      [consts.sm]: "1.75rem",
+    },
+    "::after": {
+      content: {
+        default: "none",
+        [consts.pointerCoarse]: '""',
+      },
+      position: "absolute",
+      minHeight: "2.75rem",
+      minWidth: "2.75rem",
+    },
+  },
+  endButtonSm: {
+    right: 0,
+  },
+  icon: {
+    color: colors.mutedForeground,
+    flexShrink: 0,
+    pointerEvents: "none",
+    height: {
+      default: "0.875rem",
+      [consts.sm]: "0.75rem",
+    },
+    width: {
+      default: "0.875rem",
+      [consts.sm]: "0.75rem",
+    },
+  },
+  chipsInput: {
+    flex: "1",
+    backgroundColor: "transparent",
+    fontSize: {
+      default: "1rem",
+      [consts.sm]: "0.875rem",
+    },
+    outlineStyle: "none",
+    minWidth: "3rem",
+    paddingLeft: "0.5rem",
+  },
+  chipsInputSm: {
+    paddingLeft: "0.375rem",
+  },
+  positioner: {
+    userSelect: "none",
+    zIndex: 50,
+  },
+  surface: {
+    borderColor: colors.border,
+    borderRadius: radius.xl,
+    borderStyle: "solid",
+    borderWidth: 1,
+    backgroundClip: "padding-box",
+    backgroundColor: colors.popover,
+    boxShadow: shadows.overlay,
+    display: "flex",
+    position: "relative",
+    transformOrigin: "var(--transform-origin)",
+    transitionProperty: "scale, opacity",
+    maxHeight: "100%",
+    maxWidth: "var(--available-width)",
+    minWidth: "var(--anchor-width)",
+    "::before": {
+      inset: 0,
+      borderRadius: "inherit",
+      boxShadow: shadows.edge,
+      content: '""',
+      pointerEvents: "none",
+      position: "absolute",
+    },
+  },
+  popup: {
+    flex: "1",
+    color: colors.foreground,
+    display: "flex",
+    flexDirection: "column",
+    maxHeight: "min(var(--available-height), 23rem)",
+  },
+  item: {
+    borderRadius: `calc(${radius.xl} - 0.375rem)`,
+    gap: "0.625rem",
+    paddingBlock: "0.375rem",
+    alignItems: "center",
+    backgroundColor: {
+      "[data-highlighted]": colors.accent,
+      default: null,
+    },
+    color: {
+      "[data-highlighted]": colors.accentForeground,
+      default: null,
+    },
+    cursor: "default",
+    display: "grid",
+    fontSize: {
+      default: "1rem",
+      [consts.sm]: "0.875rem",
+    },
+    gridTemplateColumns: "1rem 1fr",
+    opacity: {
+      "[data-disabled]": 0.64,
+      default: null,
+    },
+    outlineStyle: "none",
+    pointerEvents: {
+      "[data-disabled]": "none",
+      default: null,
+    },
+    minHeight: {
+      default: "2.5rem",
+      [consts.sm]: "2.25rem",
+    },
+    minWidth: {
+      default: null,
+      [stylex.when.ancestor('[data-side="none"]', comboboxPopupMarker)]:
+        "calc(var(--anchor-width) + 1.25rem)",
+    },
+    paddingLeft: "0.75rem",
+    paddingRight: "1.25rem",
+  },
+  itemIndicator: {
+    gridColumnStart: "1",
+  },
+  itemContent: {
+    gridColumnStart: "2",
+  },
+  separator: {
+    marginBlock: "0.375rem",
+    marginInline: "0.75rem",
+    backgroundColor: colors.border,
+    display: {
+      default: null,
+      ":last-child": "none",
+    },
+    height: "1px",
+  },
+  groupLabel: {
+    paddingBlock: "0.375rem",
+    paddingInline: "0.5rem",
+    color: colors.mutedForeground,
+    fontSize: "0.75rem",
+    fontWeight: 500,
+    lineHeight: "1rem",
+  },
+  empty: {
+    padding: {
+      default: "0.5rem",
+      ":empty": 0,
+    },
+    color: colors.mutedForeground,
+    fontSize: {
+      default: "1rem",
+      [consts.sm]: "0.875rem",
+    },
+    textAlign: "center",
+  },
+  list: {
+    padding: {
+      default: "0.375rem",
+      ":empty": 0,
+    },
+    scrollPaddingBottom: "0.25rem",
+    scrollPaddingTop: "0.25rem",
+  },
+  status: {
+    margin: {
+      default: null,
+      ":empty": 0,
+    },
+    paddingBlock: "0.5rem",
+    paddingInline: "0.75rem",
+    color: colors.mutedForeground,
+    fontSize: "0.75rem",
+    fontWeight: 500,
+    lineHeight: "1rem",
+  },
+  // The chips field is the multi-select variant of the field surface.
+  chips: {
+    padding: "calc(0.25rem - 1px)",
+    borderColor: {
+      default: colors.input,
+      ":focus-within": colors.ring,
+    },
+    borderRadius: radius.xl,
+    borderStyle: "solid",
+    borderWidth: 1,
+    gap: "0.25rem",
+    backgroundClip: "padding-box",
+    backgroundColor: colors.field,
+    boxShadow: {
+      default: "0 1px 2px 0 rgb(0 0 0 / 5%)",
+      ":focus-within": "none",
+    },
+    display: "inline-flex",
+    flexWrap: "wrap",
+    fontSize: {
+      default: "1rem",
+      [consts.sm]: "0.875rem",
+    },
+    outlineColor: `color-mix(in srgb, ${colors.ring} 24%, transparent)`,
+    outlineStyle: {
+      default: "none",
+      ":focus-within": "solid",
+    },
+    outlineWidth: 3,
+    position: "relative",
+    transitionProperty: "box-shadow, border-color",
+    minHeight: {
+      default: "2.75rem",
+      [consts.sm]: "2.5rem",
+    },
+    width: "100%",
+    "::before": {
+      inset: 0,
+      borderRadius: "inherit",
+      boxShadow: {
+        default: shadows.edge,
+        ":focus-within": "none",
+      },
+      content: '""',
+      pointerEvents: "none",
+      position: "absolute",
+    },
+  },
+  chipsStartAddon: {
+    alignItems: "center",
+    display: "flex",
+    flexShrink: 0,
+    opacity: 0.8,
+    paddingLeft: "0.5rem",
+  },
+  chip: {
+    borderRadius: "calc(0.7rem - 1px)",
+    alignItems: "center",
+    backgroundColor: colors.accent,
+    color: colors.accentForeground,
+    display: "flex",
+    fontSize: {
+      default: "0.875rem",
+      [consts.sm]: "0.75rem",
+    },
+    fontWeight: 500,
+    outlineStyle: "none",
+    minHeight: {
+      default: "1.75rem",
+      [consts.sm]: "1.5rem",
+    },
+    paddingLeft: "0.5rem",
+  },
+  chipRemove: {
+    paddingInline: "0.375rem",
+    cursor: "pointer",
+    flexShrink: 0,
+    opacity: {
+      default: 0.8,
+      ":hover": 1,
+    },
+    height: "100%",
+  },
+  chipIcon: {
+    height: {
+      default: "1rem",
+      [consts.sm]: "0.875rem",
+    },
+    width: {
+      default: "1rem",
+      [consts.sm]: "0.875rem",
+    },
+  },
+})
+
 export function Combobox<Value, Multiple extends boolean | undefined = false>(
   props: ComboboxPrimitive.Root.Props<Value, Multiple>,
 ): React.ReactElement {
   const chipsRef = React.useRef<Element | null>(null)
+  const contextValue = React.useMemo(
+    () => ({ chipsRef, multiple: !!props.multiple }),
+    [props.multiple],
+  )
 
   return (
-    <ComboboxContext.Provider value={{ chipsRef, multiple: !!props.multiple }}>
+    <ComboboxContext.Provider value={contextValue}>
       <ComboboxPrimitive.Root {...props} />
     </ComboboxContext.Provider>
   )
@@ -33,23 +378,23 @@ export function Combobox<Value, Multiple extends boolean | undefined = false>(
 export function ComboboxChipsInput({
   className,
   size,
+  sx,
   ...props
 }: Omit<ComboboxPrimitive.Input.Props, "size"> & {
   size?: "sm" | "default" | "lg" | number
   ref?: React.Ref<HTMLInputElement>
+  sx?: Sx
 }): React.ReactElement {
   const sizeValue = (size ?? "default") as "sm" | "default" | "lg" | number
+  const styleProps = stylex.props(styles.chipsInput, sizeValue === "sm" && styles.chipsInputSm, sx)
 
   return (
     <ComboboxPrimitive.Input
-      className={cn(
-        "min-w-12 flex-1 text-base outline-none sm:text-sm [[data-slot=combobox-chip]+&]:pl-0.5",
-        sizeValue === "sm" ? "pl-1.5" : "pl-2",
-        className,
-      )}
+      className={cn(styleProps.className, className)}
       data-size={typeof sizeValue === "string" ? sizeValue : undefined}
       data-slot="combobox-chips-input"
       size={typeof sizeValue === "number" ? sizeValue : undefined}
+      style={styleProps.style}
       {...props}
     />
   )
@@ -63,6 +408,7 @@ export function ComboboxInput({
   size,
   triggerProps,
   clearProps,
+  sx,
   ...props
 }: Omit<ComboboxPrimitive.Input.Props, "size"> & {
   showTrigger?: boolean
@@ -72,58 +418,62 @@ export function ComboboxInput({
   ref?: React.Ref<HTMLInputElement>
   triggerProps?: ComboboxPrimitive.Trigger.Props
   clearProps?: ComboboxPrimitive.Clear.Props
+  sx?: Sx
 }): React.ReactElement {
   const sizeValue = (size ?? "default") as "sm" | "default" | "lg" | number
+  const isSm = sizeValue === "sm"
+  const groupProps = stylex.props(styles.inputGroup)
+  const addonProps = stylex.props(styles.startAddon, isSm && styles.startAddonSm)
+  const hasEndButton = showTrigger || showClear
+  const inputSx: Sx = [
+    styles.inputKeepOpacity,
+    Boolean(startAddon) && (isSm ? styles.inputWithStartAddonSm : styles.inputWithStartAddon),
+    hasEndButton && (isSm ? styles.inputWithEndButtonSm : styles.inputWithEndButton),
+    sx,
+  ]
+  const endButtonProps = stylex.props(styles.endButton, isSm && styles.endButtonSm)
+  const iconProps = stylex.props(styles.icon)
 
   return (
     <ComboboxPrimitive.InputGroup
-      className="relative w-full text-foreground not-has-[>*.w-full]:w-fit has-disabled:opacity-64"
+      className={groupProps.className}
       data-slot="combobox-input-group"
+      style={groupProps.style}
     >
       {startAddon && (
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-y-0 left-px z-10 flex items-center pl-[calc(--spacing(3)-1px)] opacity-80 has-[+[data-size=sm]]:pl-[calc(--spacing(2.5)-1px)] [&_svg]:-mx-0.5 [&_svg:not([class*='size-'])]:size-4.5 sm:[&_svg:not([class*='size-'])]:size-4"
+          className={addonProps.className}
           data-slot="combobox-start-addon"
+          style={addonProps.style}
         >
           {startAddon}
         </div>
       )}
       <ComboboxPrimitive.Input
-        className={cn(
-          startAddon &&
-            "*:data-[slot=combobox-input]:pl-[calc(--spacing(8.5)-1px)] *:data-[size=sm]:data-[slot=combobox-input]:pl-[calc(--spacing(7.5)-1px)] *:sm:data-[slot=combobox-input]:pl-[calc(--spacing(8)-1px)] *:sm:data-[size=sm]:data-[slot=combobox-input]:pl-[calc(--spacing(7)-1px)]",
-          sizeValue === "sm"
-            ? "*:has-[+[data-slot=combobox-trigger],+[data-slot=combobox-clear]]:data-[slot=combobox-input]:pr-6.5"
-            : "*:has-[+[data-slot=combobox-trigger],+[data-slot=combobox-clear]]:data-[slot=combobox-input]:pr-7",
-          className,
-        )}
+        className={className}
         data-slot="combobox-input"
-        render={<Input className="has-disabled:opacity-100" nativeInput size={sizeValue} />}
+        render={<Input nativeInput size={sizeValue} sx={inputSx} />}
         {...props}
       />
-      {showTrigger && (
+      {showTrigger && !showClear && (
         <ComboboxTrigger
-          className={cn(
-            "absolute top-1/2 inline-flex size-8 shrink-0 -translate-y-1/2 cursor-pointer items-center justify-center rounded-md border border-transparent opacity-80 transition-opacity outline-none hover:opacity-100 has-[+[data-slot=combobox-clear]]:hidden sm:size-7 pointer-coarse:after:absolute pointer-coarse:after:min-h-11 pointer-coarse:after:min-w-11 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4.5 sm:[&_svg:not([class*='size-'])]:size-4",
-            sizeValue === "sm" ? "right-0" : "right-0.5",
-          )}
+          className={endButtonProps.className}
+          style={endButtonProps.style}
           {...triggerProps}
         >
           <ComboboxPrimitive.Icon data-slot="combobox-icon">
-            <ChevronsUpDownIcon />
+            <ChevronsUpDown className={iconProps.className} style={iconProps.style} />
           </ComboboxPrimitive.Icon>
         </ComboboxTrigger>
       )}
       {showClear && (
         <ComboboxClear
-          className={cn(
-            "absolute top-1/2 inline-flex size-8 shrink-0 -translate-y-1/2 cursor-pointer items-center justify-center rounded-md border border-transparent opacity-80 transition-opacity outline-none hover:opacity-100 has-[+[data-slot=combobox-clear]]:hidden sm:size-7 pointer-coarse:after:absolute pointer-coarse:after:min-h-11 pointer-coarse:after:min-w-11 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4.5 sm:[&_svg:not([class*='size-'])]:size-4",
-            sizeValue === "sm" ? "right-0" : "right-0.5",
-          )}
+          className={endButtonProps.className}
+          style={endButtonProps.style}
           {...clearProps}
         >
-          <XIcon />
+          <Close className={iconProps.className} style={iconProps.style} />
         </ComboboxClear>
       )}
     </ComboboxPrimitive.InputGroup>
@@ -133,10 +483,19 @@ export function ComboboxInput({
 export function ComboboxTrigger({
   className,
   children,
+  style,
+  sx,
   ...props
-}: ComboboxPrimitive.Trigger.Props): React.ReactElement {
+}: ComboboxPrimitive.Trigger.Props & { sx?: Sx }): React.ReactElement {
+  const styleProps = stylex.props(sx)
+
   return (
-    <ComboboxPrimitive.Trigger className={className} data-slot="combobox-trigger" {...props}>
+    <ComboboxPrimitive.Trigger
+      className={cn(styleProps.className, className)}
+      data-slot="combobox-trigger"
+      style={{ ...styleProps.style, ...(style as React.CSSProperties) }}
+      {...props}
+    >
       {children}
     </ComboboxPrimitive.Trigger>
   )
@@ -151,6 +510,7 @@ export function ComboboxPopup({
   align = "start",
   anchor: anchorProp,
   portalProps,
+  sx,
   ...props
 }: ComboboxPrimitive.Popup.Props & {
   align?: ComboboxPrimitive.Positioner.Props["align"]
@@ -159,9 +519,13 @@ export function ComboboxPopup({
   side?: ComboboxPrimitive.Positioner.Props["side"]
   anchor?: ComboboxPrimitive.Positioner.Props["anchor"]
   portalProps?: ComboboxPrimitive.Portal.Props
+  sx?: Sx
 }): React.ReactElement {
   const { chipsRef } = React.useContext(ComboboxContext)
   const anchor = anchorProp ?? chipsRef
+  const positionerProps = stylex.props(styles.positioner)
+  const surfaceProps = stylex.props(styles.surface, sx)
+  const popupProps = stylex.props(styles.popup, stylex.defaultMarker(), comboboxPopupMarker)
 
   return (
     <ComboboxPrimitive.Portal {...portalProps}>
@@ -169,20 +533,17 @@ export function ComboboxPopup({
         align={align}
         alignOffset={alignOffset}
         anchor={anchor}
-        className="z-50 select-none"
+        className={positionerProps.className}
         data-slot="combobox-positioner"
         side={side}
         sideOffset={sideOffset}
+        style={positionerProps.style}
       >
-        <span
-          className={cn(
-            "relative flex max-h-full max-w-(--available-width) min-w-(--anchor-width) origin-(--transform-origin) rounded-lg border bg-popover shadow-lg/5 transition-[scale,opacity] not-dark:bg-clip-padding before:pointer-events-none before:absolute before:inset-0 before:rounded-[calc(var(--radius-lg)-1px)] before:shadow-[0_1px_--theme(--color-black/4%)] dark:before:shadow-[0_-1px_--theme(--color-white/6%)]",
-            className,
-          )}
-        >
+        <span className={cn(surfaceProps.className, className)} style={surfaceProps.style}>
           <ComboboxPrimitive.Popup
-            className="flex max-h-[min(var(--available-height),23rem)] flex-1 flex-col text-foreground"
+            className={popupProps.className}
             data-slot="combobox-popup"
+            style={popupProps.style}
             {...props}
           >
             {children}
@@ -196,26 +557,35 @@ export function ComboboxPopup({
 export function ComboboxItem({
   className,
   children,
+  sx,
   ...props
-}: ComboboxPrimitive.Item.Props): React.ReactElement {
+}: ComboboxPrimitive.Item.Props & { sx?: Sx }): React.ReactElement {
+  const styleProps = stylex.props(styles.item, sx)
+  const indicatorProps = stylex.props(styles.itemIndicator)
+  const contentProps = stylex.props(styles.itemContent)
+  const iconProps = stylex.props(styles.icon)
+
   return (
     <ComboboxPrimitive.Item
-      className={cn(
-        "grid min-h-8 cursor-default grid-cols-[1rem_1fr] items-center gap-2 rounded-sm py-1 pr-4 pl-2 text-base outline-none in-data-[side=none]:min-w-[calc(var(--anchor-width)+1.25rem)] data-disabled:pointer-events-none data-disabled:opacity-64 data-highlighted:bg-accent data-highlighted:text-accent-foreground sm:min-h-7 sm:text-sm [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4.5 sm:[&_svg:not([class*='size-'])]:size-4",
-        className,
-      )}
+      className={cn(styleProps.className, className)}
       data-slot="combobox-item"
+      style={styleProps.style}
       {...props}
     >
-      <ComboboxPrimitive.ItemIndicator className="col-start-1">
+      <ComboboxPrimitive.ItemIndicator
+        className={indicatorProps.className}
+        style={indicatorProps.style}
+      >
         <svg
           aria-hidden="true"
+          className={iconProps.className}
           fill="none"
           height="24"
           stroke="currentColor"
           strokeLinecap="round"
           strokeLinejoin="round"
           strokeWidth="2"
+          style={iconProps.style}
           viewBox="0 0 24 24"
           width="24"
           xmlns="http://www.w3.org/2000/svg"
@@ -223,19 +593,25 @@ export function ComboboxItem({
           <path d="M5.252 12.7 10.2 18.63 18.748 5.37" />
         </svg>
       </ComboboxPrimitive.ItemIndicator>
-      <div className="col-start-2">{children}</div>
+      <div className={contentProps.className} style={contentProps.style}>
+        {children}
+      </div>
     </ComboboxPrimitive.Item>
   )
 }
 
 export function ComboboxSeparator({
   className,
+  sx,
   ...props
-}: ComboboxPrimitive.Separator.Props): React.ReactElement {
+}: ComboboxPrimitive.Separator.Props & { sx?: Sx }): React.ReactElement {
+  const styleProps = stylex.props(styles.separator, sx)
+
   return (
     <ComboboxPrimitive.Separator
-      className={cn("mx-2 my-1 h-px bg-border last:hidden", className)}
+      className={cn(styleProps.className, className)}
       data-slot="combobox-separator"
+      style={styleProps.style}
       {...props}
     />
   )
@@ -243,12 +619,16 @@ export function ComboboxSeparator({
 
 export function ComboboxGroup({
   className,
+  sx,
   ...props
-}: ComboboxPrimitive.Group.Props): React.ReactElement {
+}: ComboboxPrimitive.Group.Props & { sx?: Sx }): React.ReactElement {
+  const styleProps = stylex.props(sx)
+
   return (
     <ComboboxPrimitive.Group
-      className={cn("[[role=group]+&]:mt-1.5", className)}
+      className={cn(styleProps.className, className)}
       data-slot="combobox-group"
+      style={styleProps.style}
       {...props}
     />
   )
@@ -256,12 +636,16 @@ export function ComboboxGroup({
 
 export function ComboboxGroupLabel({
   className,
+  sx,
   ...props
-}: ComboboxPrimitive.GroupLabel.Props): React.ReactElement {
+}: ComboboxPrimitive.GroupLabel.Props & { sx?: Sx }): React.ReactElement {
+  const styleProps = stylex.props(styles.groupLabel, sx)
+
   return (
     <ComboboxPrimitive.GroupLabel
-      className={cn("px-2 py-1.5 text-xs font-medium text-muted-foreground", className)}
+      className={cn(styleProps.className, className)}
       data-slot="combobox-group-label"
+      style={styleProps.style}
       {...props}
     />
   )
@@ -269,15 +653,16 @@ export function ComboboxGroupLabel({
 
 export function ComboboxEmpty({
   className,
+  sx,
   ...props
-}: ComboboxPrimitive.Empty.Props): React.ReactElement {
+}: ComboboxPrimitive.Empty.Props & { sx?: Sx }): React.ReactElement {
+  const styleProps = stylex.props(styles.empty, sx)
+
   return (
     <ComboboxPrimitive.Empty
-      className={cn(
-        "text-center text-base text-muted-foreground not-empty:p-2 sm:text-sm",
-        className,
-      )}
+      className={cn(styleProps.className, className)}
       data-slot="combobox-empty"
+      style={styleProps.style}
       {...props}
     />
   )
@@ -285,9 +670,19 @@ export function ComboboxEmpty({
 
 export function ComboboxRow({
   className,
+  sx,
   ...props
-}: ComboboxPrimitive.Row.Props): React.ReactElement {
-  return <ComboboxPrimitive.Row className={className} data-slot="combobox-row" {...props} />
+}: ComboboxPrimitive.Row.Props & { sx?: Sx }): React.ReactElement {
+  const styleProps = stylex.props(sx)
+
+  return (
+    <ComboboxPrimitive.Row
+      className={cn(styleProps.className, className)}
+      data-slot="combobox-row"
+      style={styleProps.style}
+      {...props}
+    />
+  )
 }
 
 export function ComboboxValue({ ...props }: ComboboxPrimitive.Value.Props): React.ReactElement {
@@ -296,13 +691,17 @@ export function ComboboxValue({ ...props }: ComboboxPrimitive.Value.Props): Reac
 
 export function ComboboxList({
   className,
+  sx,
   ...props
-}: ComboboxPrimitive.List.Props): React.ReactElement {
+}: ComboboxPrimitive.List.Props & { sx?: Sx }): React.ReactElement {
+  const styleProps = stylex.props(styles.list, sx)
+
   return (
     <ScrollArea scrollbarGutter scrollFade>
       <ComboboxPrimitive.List
-        className={cn("not-empty:scroll-py-1 not-empty:p-1 in-data-has-overflow-y:pr-3", className)}
+        className={cn(styleProps.className, className)}
         data-slot="combobox-list"
+        style={styleProps.style}
         {...props}
       />
     </ScrollArea>
@@ -311,22 +710,38 @@ export function ComboboxList({
 
 export function ComboboxClear({
   className,
+  children,
+  style,
+  sx,
   ...props
-}: ComboboxPrimitive.Clear.Props): React.ReactElement {
-  return <ComboboxPrimitive.Clear className={className} data-slot="combobox-clear" {...props} />
+}: ComboboxPrimitive.Clear.Props & { sx?: Sx }): React.ReactElement {
+  const styleProps = stylex.props(sx)
+  const iconProps = stylex.props(styles.icon)
+
+  return (
+    <ComboboxPrimitive.Clear
+      className={cn(styleProps.className, className)}
+      data-slot="combobox-clear"
+      style={{ ...styleProps.style, ...(style as React.CSSProperties) }}
+      {...props}
+    >
+      {children ?? <Close className={iconProps.className} style={iconProps.style} />}
+    </ComboboxPrimitive.Clear>
+  )
 }
 
 export function ComboboxStatus({
   className,
+  sx,
   ...props
-}: ComboboxPrimitive.Status.Props): React.ReactElement {
+}: ComboboxPrimitive.Status.Props & { sx?: Sx }): React.ReactElement {
+  const styleProps = stylex.props(styles.status, sx)
+
   return (
     <ComboboxPrimitive.Status
-      className={cn(
-        "px-3 py-2 text-xs font-medium text-muted-foreground empty:m-0 empty:p-0",
-        className,
-      )}
+      className={cn(styleProps.className, className)}
       data-slot="combobox-status"
+      style={styleProps.style}
       {...props}
     />
   )
@@ -340,27 +755,30 @@ export function ComboboxChips({
   className,
   children,
   startAddon,
+  sx,
   ...props
 }: ComboboxPrimitive.Chips.Props & {
   startAddon?: React.ReactNode
+  sx?: Sx
 }): React.ReactElement {
   const { chipsRef } = React.useContext(ComboboxContext)
+  const styleProps = stylex.props(styles.chips, sx)
+  const addonProps = stylex.props(styles.chipsStartAddon)
 
   return (
     <ComboboxPrimitive.Chips
-      className={cn(
-        "relative inline-flex min-h-9 w-full flex-wrap gap-1 rounded-lg border border-input bg-background p-[calc(--spacing(1)-1px)] text-base shadow-xs/5 ring-ring/24 transition-shadow outline-none *:min-h-7 not-dark:bg-clip-padding before:pointer-events-none before:absolute before:inset-0 before:rounded-[calc(var(--radius-lg)-1px)] not-has-disabled:not-focus-within:not-aria-invalid:before:shadow-[0_1px_--theme(--color-black/4%)] focus-within:border-ring focus-within:ring-[3px] has-autofill:bg-foreground/4 has-disabled:pointer-events-none has-disabled:opacity-64 has-aria-invalid:border-destructive/36 focus-within:has-aria-invalid:border-destructive/64 focus-within:has-aria-invalid:ring-destructive/16 has-data-[size=lg]:min-h-10 *:has-data-[size=lg]:min-h-8 has-data-[size=sm]:min-h-8 *:has-data-[size=sm]:min-h-6 has-[:disabled,:focus-within,[aria-invalid]]:shadow-none sm:min-h-8 sm:text-sm *:sm:min-h-6 sm:has-data-[size=lg]:min-h-9 *:sm:has-data-[size=lg]:min-h-7 sm:has-data-[size=sm]:min-h-7 *:sm:has-data-[size=sm]:min-h-5 dark:not-has-disabled:bg-input/32 dark:not-has-disabled:not-focus-within:not-aria-invalid:before:shadow-[0_-1px_--theme(--color-white/6%)] dark:has-autofill:bg-foreground/8 dark:has-aria-invalid:ring-destructive/24",
-        className,
-      )}
+      className={cn(styleProps.className, className)}
       data-slot="combobox-chips"
       ref={chipsRef as React.Ref<HTMLDivElement> | null}
+      style={styleProps.style}
       {...props}
     >
       {startAddon && (
         <div
           aria-hidden="true"
-          className="flex shrink-0 items-center pl-2 opacity-80 has-[+[data-slot=combobox-chip]]:pr-2 has-[~[data-size=sm]]:pl-1.5 has-[~[data-size=sm]]:has-[+[data-slot=combobox-chip]]:pr-1.5 [&_svg]:pointer-events-none [&_svg]:-mr-1.5 [&_svg]:-ml-0.5 [&_svg:not([class*='size-'])]:size-4.5 sm:[&_svg:not([class*='size-'])]:size-4"
+          className={addonProps.className}
           data-slot="combobox-start-addon"
+          style={addonProps.style}
         >
           {startAddon}
         </div>
@@ -373,14 +791,19 @@ export function ComboboxChips({
 export function ComboboxChip({
   children,
   removeProps,
+  sx,
   ...props
 }: ComboboxPrimitive.Chip.Props & {
   removeProps?: ComboboxPrimitive.ChipRemove.Props
+  sx?: Sx
 }): React.ReactElement {
+  const styleProps = stylex.props(styles.chip, sx)
+
   return (
     <ComboboxPrimitive.Chip
-      className="flex items-center rounded-[calc(var(--radius-md)-1px)] bg-accent pl-2 text-sm font-medium text-accent-foreground outline-none sm:text-xs/(--text-xs--line-height) [&_svg:not([class*='size-'])]:size-4 sm:[&_svg:not([class*='size-'])]:size-3.5"
+      className={styleProps.className}
       data-slot="combobox-chip"
+      style={styleProps.style}
       {...props}
     >
       {children}
@@ -389,15 +812,22 @@ export function ComboboxChip({
   )
 }
 
-export function ComboboxChipRemove(props: ComboboxPrimitive.ChipRemove.Props): React.ReactElement {
+export function ComboboxChipRemove({
+  sx,
+  ...props
+}: ComboboxPrimitive.ChipRemove.Props & { sx?: Sx }): React.ReactElement {
+  const styleProps = stylex.props(styles.chipRemove, sx)
+  const iconProps = stylex.props(styles.chipIcon)
+
   return (
     <ComboboxPrimitive.ChipRemove
       aria-label="Remove"
-      className="h-full shrink-0 cursor-pointer px-1.5 opacity-80 hover:opacity-100 [&_svg:not([class*='size-'])]:size-4 sm:[&_svg:not([class*='size-'])]:size-3.5"
+      className={styleProps.className}
       data-slot="combobox-chip-remove"
+      style={styleProps.style}
       {...props}
     >
-      <XIcon />
+      <Close className={iconProps.className} style={iconProps.style} />
     </ComboboxPrimitive.ChipRemove>
   )
 }

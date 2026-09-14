@@ -1,16 +1,32 @@
 "use client"
 
 import { CheckboxGroup as CheckboxGroupPrimitive } from "@base-ui/react/checkbox-group"
+import * as stylex from "@stylexjs/stylex"
 import type React from "react"
 import { cn } from "@/lib/utils"
+import type { Sx } from "../../styles/sx"
 
-export function CheckboxGroup({
-  className,
-  ...props
-}: CheckboxGroupPrimitive.Props): React.ReactElement {
+const styles = stylex.create({
+  base: {
+    gap: "0.75rem",
+    alignItems: "flex-start",
+    display: "flex",
+    flexDirection: "column",
+  },
+})
+
+/** See the note on SeparatorProps: `className` stays until callers migrate. */
+export type CheckboxGroupProps = CheckboxGroupPrimitive.Props & {
+  sx?: Sx
+}
+
+export function CheckboxGroup({ className, sx, ...props }: CheckboxGroupProps): React.ReactElement {
+  const styleProps = stylex.props(styles.base, sx)
+
   return (
     <CheckboxGroupPrimitive
-      className={cn("flex flex-col items-start gap-3", className)}
+      className={cn(styleProps.className, className)}
+      style={styleProps.style}
       {...props}
     />
   )

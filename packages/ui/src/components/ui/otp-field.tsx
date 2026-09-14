@@ -1,42 +1,166 @@
 "use client"
 
 import { OTPField as OTPFieldPrimitive } from "@base-ui/react/otp-field"
-import type * as React from "react"
+import * as React from "react"
+import * as stylex from "@stylexjs/stylex"
+
 import { cn } from "@/lib/utils"
 import { Separator } from "@/components/ui/separator"
+import type { Sx } from "../../styles/sx"
+import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
+
+export type OTPFieldSize = "default" | "lg"
+
+const styles = stylex.create({
+  root: {
+    gap: "0.5rem",
+    alignItems: "center",
+    display: "flex",
+  },
+  rootDisabled: {
+    opacity: 0.64,
+  },
+  input: {
+    borderColor: {
+      "[aria-invalid]": `color-mix(in srgb, ${colors.destructive} 36%, transparent)`,
+      default: colors.input,
+      ":focus-visible": colors.ring,
+    },
+    borderRadius: radius.lg,
+    borderStyle: "solid",
+    borderWidth: 1,
+    backgroundClip: "padding-box",
+    backgroundColor: colors.field,
+    boxShadow: {
+      "[aria-invalid]": "none",
+      default: "0 1px 2px 0 rgb(0 0 0 / 5%)",
+      ":focus-visible": "none",
+    },
+    color: colors.foreground,
+    fontSize: {
+      default: "1rem",
+      [consts.sm]: "0.875rem",
+    },
+    lineHeight: {
+      default: "2.25rem",
+      [consts.sm]: "2rem",
+    },
+    outlineColor: `color-mix(in srgb, ${colors.ring} 24%, transparent)`,
+    outlineStyle: {
+      default: "none",
+      ":focus-visible": "solid",
+    },
+    outlineWidth: 3,
+    position: "relative",
+    textAlign: "center",
+    transitionProperty: "box-shadow, border-color",
+    zIndex: {
+      default: null,
+      ":focus-visible": 10,
+    },
+    height: {
+      default: "2.25rem",
+      [consts.sm]: "2rem",
+    },
+    minWidth: 0,
+    width: {
+      default: "2.25rem",
+      [consts.sm]: "2rem",
+    },
+    "::before": {
+      inset: 0,
+      borderRadius: "inherit",
+      boxShadow: {
+        default: shadows.edge,
+        ":focus-visible": "none",
+      },
+      content: '""',
+      pointerEvents: "none",
+      position: "absolute",
+    },
+  },
+  inputLg: {
+    fontSize: {
+      default: "1.125rem",
+      [consts.sm]: "1rem",
+    },
+    lineHeight: {
+      default: "2.5rem",
+      [consts.sm]: "2.25rem",
+    },
+    height: {
+      default: "2.5rem",
+      [consts.sm]: "2.25rem",
+    },
+    width: {
+      default: "2.5rem",
+      [consts.sm]: "2.25rem",
+    },
+  },
+  inputInvalid: {
+    borderColor: {
+      default: `color-mix(in srgb, ${colors.destructive} 36%, transparent)`,
+      ":focus-visible": `color-mix(in srgb, ${colors.destructive} 64%, transparent)`,
+    },
+    outlineColor: `color-mix(in srgb, ${colors.destructive} 16%, transparent)`,
+  },
+  separator: {
+    borderRadius: radius.full,
+    backgroundColor: colors.input,
+    height: "0.125rem",
+    width: "0.75rem",
+  },
+})
+/**
+ * The `size` prop is read by every cell, so it is published on the root and
+ * consumed through a context rather than the Tailwind `in-[…]` ancestor
+ * selectors the original used.
+ */
+const OTPFieldSizeContext = React.createContext<OTPFieldSize>("default")
 
 export function OTPField({
   className,
   size = "default",
+  sx,
   ...props
 }: React.ComponentProps<typeof OTPFieldPrimitive.Root> & {
-  size?: "default" | "lg"
+  size?: OTPFieldSize
+  sx?: Sx
 }): React.ReactElement {
+  const styleProps = stylex.props(styles.root, props.disabled === true && styles.rootDisabled, sx)
+
   return (
-    <OTPFieldPrimitive.Root
-      className={cn(
-        "flex items-center gap-2 has-disabled:opacity-64 **:has-disabled:data-[slot=otp-field-input]:shadow-none **:has-disabled:data-[slot=otp-field-input]:before:shadow-none!",
-        className,
-      )}
-      data-size={size}
-      data-slot="otp-field"
-      {...props}
-    />
+    <OTPFieldSizeContext value={size}>
+      <OTPFieldPrimitive.Root
+        className={cn(styleProps.className, className)}
+        data-size={size}
+        data-slot="otp-field"
+        style={styleProps.style}
+        {...props}
+      />
+    </OTPFieldSizeContext>
   )
 }
 
 export function OTPFieldInput({
   className,
+  sx,
   ...props
-}: React.ComponentProps<typeof OTPFieldPrimitive.Input>): React.ReactElement {
+}: React.ComponentProps<typeof OTPFieldPrimitive.Input> & { sx?: Sx }): React.ReactElement {
+  const size = React.useContext(OTPFieldSizeContext)
+  const styleProps = stylex.props(
+    styles.input,
+    size === "lg" && styles.inputLg,
+    props["aria-invalid"] !== undefined && styles.inputInvalid,
+    sx,
+  )
+
   return (
     <OTPFieldPrimitive.Input
-      className={cn(
-        "relative size-9 min-w-0 rounded-lg border border-input bg-background text-center text-base leading-9 text-foreground shadow-xs/5 ring-ring/24 transition-shadow outline-none not-dark:bg-clip-padding before:pointer-events-none before:absolute before:inset-0 before:rounded-[calc(var(--radius-lg)-1px)] not-focus-visible:not-aria-invalid:before:shadow-[0_1px_--theme(--color-black/4%)] focus-visible:z-10 focus-visible:border-ring focus-visible:shadow-none focus-visible:ring-[3px] focus-visible:ring-ring/24 in-[[data-slot=otp-field][data-size=lg]]:size-10 in-[[data-slot=otp-field][data-size=lg]]:text-lg in-[[data-slot=otp-field][data-size=lg]]:leading-10 aria-invalid:border-destructive/36 aria-invalid:shadow-none focus-visible:aria-invalid:border-destructive/64 focus-visible:aria-invalid:ring-destructive/16 sm:size-8 sm:text-sm sm:leading-8 sm:in-[[data-slot=otp-field][data-size=lg]]:size-9 sm:in-[[data-slot=otp-field][data-size=lg]]:text-base sm:in-[[data-slot=otp-field][data-size=lg]]:leading-9 dark:bg-input/32 dark:not-focus-visible:not-aria-invalid:before:shadow-[0_-1px_--theme(--color-white/6%)] focus-visible:dark:aria-invalid:ring-destructive/24",
-        className,
-      )}
+      className={cn(styleProps.className, className)}
       data-slot="otp-field-input"
       spellCheck={false}
+      style={styleProps.style}
       {...props}
     />
   )
@@ -44,17 +168,16 @@ export function OTPFieldInput({
 
 export function OTPFieldSeparator({
   className,
+  sx,
   ...props
-}: React.ComponentProps<typeof Separator>): React.ReactElement {
+}: React.ComponentProps<typeof Separator> & { sx?: Sx }): React.ReactElement {
   return (
     <OTPFieldPrimitive.Separator
       render={
         <Separator
-          className={cn(
-            "rounded-full bg-input data-[orientation=horizontal]:h-0.5 data-[orientation=horizontal]:w-3",
-            className,
-          )}
+          className={className}
           orientation="horizontal"
+          sx={[styles.separator, sx]}
           {...props}
         />
       }

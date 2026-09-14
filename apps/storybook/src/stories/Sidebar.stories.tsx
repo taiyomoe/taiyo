@@ -1,3 +1,12 @@
+import {
+  BookOpen01Icon,
+  Home01Icon,
+  InboxIcon as InboxGlyph,
+  Search01Icon,
+  Settings01Icon,
+  UserGroupIcon,
+} from "@hugeicons/core-free-icons"
+import { HugeiconsIcon } from "@hugeicons/react"
 import preview from "@/storybook/preview"
 import {
   Sidebar,
@@ -20,21 +29,13 @@ import {
   SidebarSeparator,
   SidebarTrigger,
 } from "@taiyomoe/ui/components/ui/sidebar"
-import {
-  BookOpenIcon,
-  HomeIcon,
-  InboxIcon,
-  SearchIcon,
-  SettingsIcon,
-  UsersIcon,
-} from "lucide-react"
 
 const NAV_ITEMS = [
-  { title: "Home", icon: HomeIcon, isActive: true },
-  { title: "Inbox", icon: InboxIcon, badge: "12" },
-  { title: "Search", icon: SearchIcon },
-  { title: "Library", icon: BookOpenIcon },
-  { title: "Members", icon: UsersIcon },
+  { title: "Home", icon: Home01Icon, isActive: true },
+  { title: "Inbox", icon: InboxGlyph, badge: "12" },
+  { title: "Search", icon: Search01Icon },
+  { title: "Library", icon: BookOpen01Icon },
+  { title: "Members", icon: UserGroupIcon },
 ] as const
 const meta = preview.meta({
   title: "UI/Sidebar",
@@ -86,7 +87,7 @@ export const Default = meta.story({
                       isActive={"isActive" in item ? item.isActive : false}
                       tooltip={item.title}
                     >
-                      <item.icon />
+                      <HugeiconsIcon icon={item.icon} />
                       <span>{item.title}</span>
                     </SidebarMenuButton>
                     {"badge" in item && item.badge ? (
@@ -127,7 +128,7 @@ export const Default = meta.story({
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton tooltip="Settings">
-                <SettingsIcon />
+                <HugeiconsIcon icon={Settings01Icon} />
                 <span>Settings</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
@@ -175,7 +176,7 @@ export const Floating = meta.story({
                       isActive={"isActive" in item ? item.isActive : false}
                       tooltip={item.title}
                     >
-                      <item.icon />
+                      <HugeiconsIcon icon={item.icon} />
                       <span>{item.title}</span>
                     </SidebarMenuButton>
                     {"badge" in item && item.badge ? (
@@ -191,7 +192,7 @@ export const Floating = meta.story({
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton tooltip="Settings">
-                <SettingsIcon />
+                <HugeiconsIcon icon={Settings01Icon} />
                 <span>Settings</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
@@ -236,7 +237,7 @@ export const Inset = meta.story({
                       isActive={"isActive" in item ? item.isActive : false}
                       tooltip={item.title}
                     >
-                      <item.icon />
+                      <HugeiconsIcon icon={item.icon} />
                       <span>{item.title}</span>
                     </SidebarMenuButton>
                     {"badge" in item && item.badge ? (
@@ -252,7 +253,7 @@ export const Inset = meta.story({
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton tooltip="Settings">
-                <SettingsIcon />
+                <HugeiconsIcon icon={Settings01Icon} />
                 <span>Settings</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
@@ -297,7 +298,7 @@ export const CollapsibleIcon = meta.story({
                       isActive={"isActive" in item ? item.isActive : false}
                       tooltip={item.title}
                     >
-                      <item.icon />
+                      <HugeiconsIcon icon={item.icon} />
                       <span>{item.title}</span>
                     </SidebarMenuButton>
                     {"badge" in item && item.badge ? (
@@ -313,7 +314,7 @@ export const CollapsibleIcon = meta.story({
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton tooltip="Settings">
-                <SettingsIcon />
+                <HugeiconsIcon icon={Settings01Icon} />
                 <span>Settings</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
@@ -360,7 +361,7 @@ export const NonCollapsible = meta.story({
                       isActive={"isActive" in item ? item.isActive : false}
                       tooltip={item.title}
                     >
-                      <item.icon />
+                      <HugeiconsIcon icon={item.icon} />
                       <span>{item.title}</span>
                     </SidebarMenuButton>
                     {"badge" in item && item.badge ? (
@@ -376,7 +377,7 @@ export const NonCollapsible = meta.story({
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton tooltip="Settings">
-                <SettingsIcon />
+                <HugeiconsIcon icon={Settings01Icon} />
                 <span>Settings</span>
               </SidebarMenuButton>
             </SidebarMenuItem>

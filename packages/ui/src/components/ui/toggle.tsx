@@ -1,42 +1,211 @@
 "use client"
 
 import { Toggle as TogglePrimitive } from "@base-ui/react/toggle"
-import { cva, type VariantProps } from "class-variance-authority"
+import * as stylex from "@stylexjs/stylex"
 import type React from "react"
 import { cn } from "@/lib/utils"
+import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
+import type { Sx } from "../../styles/sx"
 
-export const toggleVariants = cva(
-  "relative inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 rounded-lg border text-base font-medium whitespace-nowrap text-foreground transition-shadow outline-none select-none before:pointer-events-none before:absolute before:inset-0 before:rounded-[calc(var(--radius-lg)-1px)] hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-64 data-pressed:bg-input/64 data-pressed:text-accent-foreground sm:text-sm pointer-coarse:after:absolute pointer-coarse:after:size-full pointer-coarse:after:min-h-11 pointer-coarse:after:min-w-11 [&_svg]:pointer-events-none [&_svg]:-mx-0.5 [&_svg]:shrink-0 [&_svg:not([class*='opacity-'])]:opacity-80 [&_svg:not([class*='size-'])]:size-4.5 sm:[&_svg:not([class*='size-'])]:size-4",
-  {
-    defaultVariants: {
-      size: "default",
-      variant: "default",
+export type ToggleVariant = "default" | "outline"
+
+export type ToggleSize = "default" | "lg" | "sm"
+
+const styles = stylex.create({
+  base: {
+    borderRadius: radius.lg,
+    borderStyle: "solid",
+    borderWidth: 1,
+    gap: "0.5rem",
+    alignItems: "center",
+    backgroundColor: {
+      "[data-pressed]": `color-mix(in srgb, ${colors.input} 64%, transparent)`,
+      default: "transparent",
+      ":hover": colors.accent,
     },
-    variants: {
-      size: {
-        default: "h-9 min-w-9 px-[calc(--spacing(2)-1px)] sm:h-8 sm:min-w-8",
-        lg: "h-10 min-w-10 px-[calc(--spacing(2.5)-1px)] sm:h-9 sm:min-w-9",
-        sm: "h-8 min-w-8 px-[calc(--spacing(1.5)-1px)] sm:h-7 sm:min-w-7",
+    color: {
+      "[data-pressed]": colors.accentForeground,
+      default: colors.foreground,
+    },
+    cursor: "pointer",
+    display: "inline-flex",
+    flexShrink: 0,
+    fontSize: {
+      default: "1rem",
+      [consts.sm]: "0.875rem",
+    },
+    fontWeight: 500,
+    justifyContent: "center",
+    opacity: {
+      default: 1,
+      ":disabled": 0.64,
+    },
+    outlineColor: colors.ring,
+    outlineOffset: 1,
+    outlineStyle: {
+      default: "none",
+      ":focus-visible": "solid",
+    },
+    outlineWidth: 2,
+    pointerEvents: {
+      default: null,
+      ":disabled": "none",
+    },
+    position: "relative",
+    transitionProperty: "box-shadow, background-color, border-color",
+    userSelect: "none",
+    whiteSpace: "nowrap",
+    "::after": {
+      content: {
+        default: "none",
+        [consts.pointerCoarse]: '""',
       },
-      variant: {
-        default: "border-transparent",
-        outline:
-          "border-input bg-background shadow-xs/5 not-dark:bg-clip-padding not-disabled:not-active:not-data-pressed:before:shadow-[0_1px_--theme(--color-black/4%)] dark:bg-input/32 dark:not-disabled:not-data-pressed:before:shadow-[0_-1px_--theme(--color-white/2%)] dark:not-disabled:not-active:not-data-pressed:before:shadow-[0_-1px_--theme(--color-white/6%)] hover:dark:bg-input/64 dark:data-pressed:bg-input [:disabled,:active,[data-pressed]]:shadow-none",
-      },
+      position: "absolute",
+      height: "100%",
+      minHeight: "2.75rem",
+      minWidth: "2.75rem",
+      width: "100%",
     },
   },
-)
+})
+const raised = stylex.create({
+  before: {
+    "::before": {
+      inset: 0,
+      borderRadius: "inherit",
+      boxShadow: {
+        "[data-pressed]": "none",
+        default: shadows.edge,
+        ":disabled": "none",
+        ":active": "none",
+      },
+      content: '""',
+      pointerEvents: "none",
+      position: "absolute",
+    },
+  },
+})
+const variantStyles = stylex.create({
+  default: {
+    borderColor: "transparent",
+  },
+  // The old `bg-background dark:bg-input/32` surface maps onto the raised
+  // chip tokens (`chip`/`chipHover`), matching the outline button. The dark
+  // pressed `bg-input` deepens to the theme-agnostic `input` wash.
+  outline: {
+    borderColor: colors.input,
+    backgroundClip: "padding-box",
+    backgroundColor: {
+      "[data-pressed]": `color-mix(in srgb, ${colors.input} 64%, transparent)`,
+      default: colors.chip,
+      ":hover": colors.chipHover,
+    },
+    boxShadow: {
+      "[data-pressed]": "none",
+      default: "0 1px 2px 0 rgb(0 0 0 / 5%)",
+      ":disabled": "none",
+      ":active": "none",
+    },
+  },
+})
+const sizeStyles = stylex.create({
+  default: {
+    paddingInline: "calc(0.5rem - 1px)",
+    height: {
+      default: "2.25rem",
+      [consts.sm]: "2rem",
+    },
+    minWidth: {
+      default: "2.25rem",
+      [consts.sm]: "2rem",
+    },
+  },
+  lg: {
+    paddingInline: "calc(0.625rem - 1px)",
+    height: {
+      default: "2.5rem",
+      [consts.sm]: "2.25rem",
+    },
+    minWidth: {
+      default: "2.5rem",
+      [consts.sm]: "2.25rem",
+    },
+  },
+  sm: {
+    paddingInline: "calc(0.375rem - 1px)",
+    height: {
+      default: "2rem",
+      [consts.sm]: "1.75rem",
+    },
+    minWidth: {
+      default: "2rem",
+      [consts.sm]: "1.75rem",
+    },
+  },
+})
+const VARIANT_STYLE = {
+  default: variantStyles.default,
+  outline: variantStyles.outline,
+} as const
+const SIZE_STYLE = {
+  default: sizeStyles.default,
+  lg: sizeStyles.lg,
+  sm: sizeStyles.sm,
+} as const
+
+export interface ToggleStyleOptions {
+  variant?: ToggleVariant | null
+  size?: ToggleSize | null
+  className?: string
+}
+
+/**
+ * Legacy escape hatch, kept API-compatible with the old cva export: returns
+ * the compiled class string for callers that style a foreign element as a
+ * toggle. Prefer `sx` composition where possible.
+ */
+export function toggleVariants({
+  variant = "default",
+  size = "default",
+  className,
+}: ToggleStyleOptions = {}): string {
+  const resolvedVariant: ToggleVariant = variant ?? "default"
+  const props = stylex.props(
+    styles.base,
+    VARIANT_STYLE[resolvedVariant],
+    SIZE_STYLE[size ?? "default"],
+    resolvedVariant === "outline" && raised.before,
+  )
+
+  return cn(props.className, className)
+}
+
+export interface ToggleProps extends TogglePrimitive.Props {
+  variant?: ToggleVariant
+  size?: ToggleSize
+  sx?: Sx
+}
 
 export function Toggle({
   className,
-  variant,
-  size,
+  variant = "default",
+  size = "default",
+  sx,
   ...props
-}: TogglePrimitive.Props & VariantProps<typeof toggleVariants>): React.ReactElement {
+}: ToggleProps): React.ReactElement {
+  const styleProps = stylex.props(
+    styles.base,
+    VARIANT_STYLE[variant],
+    SIZE_STYLE[size],
+    variant === "outline" && raised.before,
+    sx,
+  )
+
   return (
     <TogglePrimitive
-      className={cn(toggleVariants({ className, size, variant }))}
+      className={cn(styleProps.className, className)}
       data-slot="toggle"
+      style={styleProps.style}
       {...props}
     />
   )

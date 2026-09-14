@@ -8,7 +8,6 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@taiyomoe/ui/components/ui/breadcrumb"
-import { SlashIcon } from "lucide-react"
 
 const meta = preview.meta({
   title: "UI/Breadcrumb",
@@ -52,13 +51,13 @@ export const WithCustomSeparator = meta.story({
           <BreadcrumbLink href="/">Home</BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator>
-          <SlashIcon />
+          <span aria-hidden="true">/</span>
         </BreadcrumbSeparator>
         <BreadcrumbItem>
           <BreadcrumbLink href="/library">Library</BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator>
-          <SlashIcon />
+          <span aria-hidden="true">/</span>
         </BreadcrumbSeparator>
         <BreadcrumbItem>
           <BreadcrumbPage>Current page</BreadcrumbPage>

@@ -1,3 +1,15 @@
+import {
+  ArrowDown01Icon,
+  ArrowTurnDownIcon,
+  ArrowUp01Icon,
+  CalculatorIcon as CalculatorGlyph,
+  Calendar01Icon,
+  Mail01Icon,
+  Settings01Icon,
+  SmileIcon as SmileGlyph,
+  UserIcon as UserGlyph,
+} from "@hugeicons/core-free-icons"
+import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react"
 import preview from "@/storybook/preview"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import {
@@ -18,24 +30,13 @@ import {
   CommandShortcut,
 } from "@taiyomoe/ui/components/ui/command"
 import { Kbd, KbdGroup } from "@taiyomoe/ui/components/ui/kbd"
-import {
-  ArrowDownIcon,
-  ArrowUpIcon,
-  CalculatorIcon,
-  CalendarIcon,
-  CornerDownLeftIcon,
-  MailIcon,
-  SettingsIcon,
-  SmileIcon,
-  UserIcon,
-} from "lucide-react"
 import { Fragment } from "react"
 import { fn } from "storybook/test"
 
 type Item = {
   value: string
   label: string
-  icon?: typeof CalendarIcon
+  icon?: IconSvgElement
   shortcut?: string
 }
 
@@ -45,17 +46,17 @@ const defaultGroups: Group[] = [
   {
     value: "Suggestions",
     items: [
-      { value: "calendar", label: "Calendar", icon: CalendarIcon },
-      { value: "search-emoji", label: "Search emoji", icon: SmileIcon },
-      { value: "calculator", label: "Calculator", icon: CalculatorIcon },
+      { value: "calendar", label: "Calendar", icon: Calendar01Icon },
+      { value: "search-emoji", label: "Search emoji", icon: SmileGlyph },
+      { value: "calculator", label: "Calculator", icon: CalculatorGlyph },
     ],
   },
   {
     value: "Settings",
     items: [
-      { value: "profile", label: "Profile", icon: UserIcon, shortcut: "⌘P" },
-      { value: "mail", label: "Mail", icon: MailIcon, shortcut: "⌘M" },
-      { value: "settings", label: "Settings", icon: SettingsIcon, shortcut: "⌘S" },
+      { value: "profile", label: "Profile", icon: UserGlyph, shortcut: "⌘P" },
+      { value: "mail", label: "Mail", icon: Mail01Icon, shortcut: "⌘M" },
+      { value: "settings", label: "Settings", icon: Settings01Icon, shortcut: "⌘S" },
     ],
   },
 ]
@@ -105,7 +106,7 @@ export const Default = meta.story({
                     <CommandCollection>
                       {(item: Item) => (
                         <CommandItem key={item.value} value={item.value}>
-                          {item.icon ? <item.icon /> : null}
+                          {item.icon ? <HugeiconsIcon icon={item.icon} /> : null}
                           <span className="flex-1">{item.label}</span>
                           {item.shortcut ? (
                             <CommandShortcut>{item.shortcut}</CommandShortcut>
@@ -124,17 +125,17 @@ export const Default = meta.story({
               <div className="flex items-center gap-2">
                 <KbdGroup>
                   <Kbd>
-                    <ArrowUpIcon />
+                    <HugeiconsIcon icon={ArrowUp01Icon} />
                   </Kbd>
                   <Kbd>
-                    <ArrowDownIcon />
+                    <HugeiconsIcon icon={ArrowDown01Icon} />
                   </Kbd>
                 </KbdGroup>
                 <span>Navigate</span>
               </div>
               <div className="flex items-center gap-2">
                 <Kbd>
-                  <CornerDownLeftIcon />
+                  <HugeiconsIcon icon={ArrowTurnDownIcon} />
                 </Kbd>
                 <span>Open</span>
               </div>
@@ -169,7 +170,7 @@ export const EmptyState = meta.story({
                     <CommandCollection>
                       {(item: Item) => (
                         <CommandItem key={item.value} value={item.value}>
-                          {item.icon ? <item.icon /> : null}
+                          {item.icon ? <HugeiconsIcon icon={item.icon} /> : null}
                           <span className="flex-1">{item.label}</span>
                           {item.shortcut ? (
                             <CommandShortcut>{item.shortcut}</CommandShortcut>
@@ -188,17 +189,17 @@ export const EmptyState = meta.story({
               <div className="flex items-center gap-2">
                 <KbdGroup>
                   <Kbd>
-                    <ArrowUpIcon />
+                    <HugeiconsIcon icon={ArrowUp01Icon} />
                   </Kbd>
                   <Kbd>
-                    <ArrowDownIcon />
+                    <HugeiconsIcon icon={ArrowDown01Icon} />
                   </Kbd>
                 </KbdGroup>
                 <span>Navigate</span>
               </div>
               <div className="flex items-center gap-2">
                 <Kbd>
-                  <CornerDownLeftIcon />
+                  <HugeiconsIcon icon={ArrowTurnDownIcon} />
                 </Kbd>
                 <span>Open</span>
               </div>
@@ -233,7 +234,7 @@ export const WithoutFooter = meta.story({
                     <CommandCollection>
                       {(item: Item) => (
                         <CommandItem key={item.value} value={item.value}>
-                          {item.icon ? <item.icon /> : null}
+                          {item.icon ? <HugeiconsIcon icon={item.icon} /> : null}
                           <span className="flex-1">{item.label}</span>
                           {item.shortcut ? (
                             <CommandShortcut>{item.shortcut}</CommandShortcut>

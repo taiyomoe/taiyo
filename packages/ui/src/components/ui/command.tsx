@@ -1,5 +1,8 @@
 "use client"
 
+import { Dialog as CommandDialogPrimitive } from "@base-ui/react/dialog"
+import * as stylex from "@stylexjs/stylex"
+import type * as React from "react"
 import {
   Autocomplete,
   AutocompleteCollection,
@@ -12,9 +15,9 @@ import {
   AutocompleteSeparator,
 } from "@/components/ui/autocomplete"
 import { cn } from "@/lib/utils"
-import { Dialog as CommandDialogPrimitive } from "@base-ui/react/dialog"
-import { SearchIcon } from "lucide-react"
-import type * as React from "react"
+import { Search } from "@/components/icons"
+import type { Sx } from "../../styles/sx"
+import { colors, consts, font, radius, shadows } from "../../styles/tokens.stylex"
 
 export const CommandDialog: typeof CommandDialogPrimitive.Root = CommandDialogPrimitive.Root
 
@@ -24,6 +27,174 @@ export const CommandDialogPortal: typeof CommandDialogPrimitive.Portal =
 export const CommandCreateHandle: typeof CommandDialogPrimitive.createHandle =
   CommandDialogPrimitive.createHandle
 
+const styles = stylex.create({
+  backdrop: {
+    inset: 0,
+    backdropFilter: "blur(4px)",
+    backgroundColor: "rgb(0 0 0 / 32%)",
+    opacity: {
+      "[data-ending-style]": 0,
+      "[data-starting-style]": 0,
+      default: null,
+    },
+    position: "fixed",
+    transitionDuration: "200ms",
+    transitionProperty: "all",
+    zIndex: 50,
+  },
+  viewport: {
+    inset: 0,
+    paddingBlock: {
+      default: "max(1rem, 4vh)",
+      [consts.sm]: "10vh",
+    },
+    paddingInline: "1rem",
+    alignItems: "center",
+    display: "flex",
+    flexDirection: "column",
+    position: "fixed",
+    zIndex: 50,
+  },
+  popup: {
+    borderColor: colors.border,
+    borderRadius: radius.xxl,
+    borderStyle: "solid",
+    borderWidth: 1,
+    backgroundClip: "padding-box",
+    backgroundColor: colors.popover,
+    boxShadow: shadows.overlay,
+    color: colors.popoverForeground,
+    display: "flex",
+    flexDirection: "column",
+    opacity: {
+      "[data-ending-style]": 0,
+      "[data-starting-style]": 0,
+      default: "calc(1 - 0.1 * var(--nested-dialogs))",
+    },
+    outlineStyle: "none",
+    position: "relative",
+    scale: {
+      "[data-ending-style]": "0.98",
+      "[data-starting-style]": "0.98",
+      default: "calc(1 - 0.1 * var(--nested-dialogs))",
+    },
+    transformOrigin: {
+      "[data-nested-dialog-open]": "top",
+      default: null,
+    },
+    transitionDuration: "200ms",
+    transitionProperty: "scale, opacity, translate",
+    transitionTimingFunction: "ease-in-out",
+    translate: "0 calc(-1.25rem * var(--nested-dialogs))",
+    willChange: "transform",
+    maxHeight: "26.25rem",
+    maxWidth: "36rem",
+    minHeight: 0,
+    minWidth: 0,
+    width: "100%",
+    // The muted wash behind the panel is what separates the search row from
+    // the results surface.
+    "::before": {
+      inset: 0,
+      borderRadius: "inherit",
+      backgroundColor: `color-mix(in srgb, ${colors.muted} 72%, transparent)`,
+      boxShadow: shadows.edge,
+      content: '""',
+      pointerEvents: "none",
+      position: "absolute",
+    },
+  },
+  inputRow: {
+    paddingBlock: "0.375rem",
+    paddingInline: "0.625rem",
+    position: "relative",
+  },
+  input: {
+    borderColor: "transparent",
+    backgroundColor: "transparent",
+    boxShadow: "none",
+    outlineStyle: "none",
+    "::before": {
+      display: "none",
+    },
+  },
+  list: {
+    padding: {
+      default: "0.5rem",
+      ":empty": 0,
+    },
+    scrollPaddingBottom: "0.5rem",
+    scrollPaddingTop: "0.5rem",
+  },
+  empty: {
+    paddingBlock: {
+      default: "1.5rem",
+      ":empty": 0,
+    },
+  },
+  panel: {
+    borderColor: colors.border,
+    borderStyle: "solid",
+    borderWidth: 1,
+    marginInline: "-1px",
+    backgroundClip: "padding-box",
+    backgroundColor: colors.popover,
+    borderStartEndRadius: radius.xl,
+    borderStartStartRadius: radius.xl,
+    boxShadow: "0 1px 2px 0 rgb(0 0 0 / 5%)",
+    clipPath: "inset(0 1px)",
+    position: "relative",
+    borderBottomWidth: 0,
+    minHeight: 0,
+    "::before": {
+      inset: 0,
+      borderStartEndRadius: "calc(1.225rem - 1px)",
+      borderStartStartRadius: "calc(1.225rem - 1px)",
+      content: '""',
+      pointerEvents: "none",
+      position: "absolute",
+    },
+  },
+  item: {
+    // The command list is padded 0.5rem inside a radius.xl panel, so the row's
+    // corners must be concentric with that, not with the 0.25rem-padded lists
+    // the autocomplete item style is tuned for.
+    borderRadius: `calc(${radius.xl} - 0.5rem)`,
+    gap: "0.5rem",
+    paddingBlock: "0.375rem",
+    display: "inline-flex",
+    width: "100%",
+  },
+  separator: {
+    marginBlock: "0.5rem",
+  },
+  shortcut: {
+    color: `color-mix(in srgb, ${colors.mutedForeground} 72%, transparent)`,
+    fontFamily: font.sans,
+    fontSize: "0.75rem",
+    fontWeight: 500,
+    letterSpacing: "0.1em",
+    lineHeight: "1rem",
+    marginLeft: "auto",
+  },
+  footer: {
+    gap: "0.5rem",
+    paddingBlock: "0.75rem",
+    paddingInline: "1.25rem",
+    alignItems: "center",
+    borderEndEndRadius: "calc(1.575rem - 1px)",
+    borderEndStartRadius: "calc(1.575rem - 1px)",
+    color: colors.mutedForeground,
+    display: "flex",
+    fontSize: "0.75rem",
+    justifyContent: "space-between",
+    lineHeight: "1rem",
+    borderTopColor: colors.border,
+    borderTopStyle: "solid",
+    borderTopWidth: 1,
+  },
+})
+
 export function CommandDialogTrigger(
   props: CommandDialogPrimitive.Trigger.Props,
 ): React.ReactElement {
@@ -32,15 +203,16 @@ export function CommandDialogTrigger(
 
 export function CommandDialogBackdrop({
   className,
+  sx,
   ...props
-}: CommandDialogPrimitive.Backdrop.Props): React.ReactElement {
+}: CommandDialogPrimitive.Backdrop.Props & { sx?: Sx }): React.ReactElement {
+  const styleProps = stylex.props(styles.backdrop, sx)
+
   return (
     <CommandDialogPrimitive.Backdrop
-      className={cn(
-        "fixed inset-0 z-50 bg-black/32 backdrop-blur-sm transition-all duration-200 data-ending-style:opacity-0 data-starting-style:opacity-0",
-        className,
-      )}
+      className={cn(styleProps.className, className)}
       data-slot="command-dialog-backdrop"
+      style={styleProps.style}
       {...props}
     />
   )
@@ -48,15 +220,16 @@ export function CommandDialogBackdrop({
 
 export function CommandDialogViewport({
   className,
+  sx,
   ...props
-}: CommandDialogPrimitive.Viewport.Props): React.ReactElement {
+}: CommandDialogPrimitive.Viewport.Props & { sx?: Sx }): React.ReactElement {
+  const styleProps = stylex.props(styles.viewport, sx)
+
   return (
     <CommandDialogPrimitive.Viewport
-      className={cn(
-        "fixed inset-0 z-50 flex flex-col items-center px-4 py-[max(--spacing(4),4vh)] sm:py-[10vh]",
-        className,
-      )}
+      className={cn(styleProps.className, className)}
       data-slot="command-dialog-viewport"
+      style={styleProps.style}
       {...props}
     />
   )
@@ -66,20 +239,22 @@ export function CommandDialogPopup({
   className,
   children,
   portalProps,
+  sx,
   ...props
 }: CommandDialogPrimitive.Popup.Props & {
   portalProps?: CommandDialogPrimitive.Portal.Props
+  sx?: Sx
 }): React.ReactElement {
+  const styleProps = stylex.props(styles.popup, sx)
+
   return (
     <CommandDialogPortal {...portalProps}>
       <CommandDialogBackdrop />
       <CommandDialogViewport>
         <CommandDialogPrimitive.Popup
-          className={cn(
-            "relative row-start-2 flex max-h-105 min-h-0 w-full max-w-xl min-w-0 translate-y-[calc(-1.25rem*var(--nested-dialogs))] scale-[calc(1-0.1*var(--nested-dialogs))] flex-col rounded-2xl border bg-popover text-popover-foreground opacity-[calc(1-0.1*var(--nested-dialogs))] shadow-lg/5 transition-[scale,opacity,translate] duration-200 ease-in-out will-change-transform outline-none not-dark:bg-clip-padding before:pointer-events-none before:absolute before:inset-0 before:rounded-[calc(var(--radius-2xl)-1px)] before:bg-muted/72 before:shadow-[0_1px_--theme(--color-black/4%)] data-ending-style:scale-98 data-ending-style:opacity-0 data-nested:data-ending-style:translate-y-8 data-nested-dialog-open:origin-top data-starting-style:scale-98 data-starting-style:opacity-0 data-nested:data-starting-style:translate-y-8 **:data-[slot=scroll-area-viewport]:data-has-overflow-y:pr-1 dark:before:shadow-[0_-1px_--theme(--color-white/6%)]",
-            className,
-          )}
+          className={cn(styleProps.className, className)}
           data-slot="command-dialog-popup"
+          style={styleProps.style}
           {...props}
         >
           {children}
@@ -108,19 +283,20 @@ export function Command({
 export function CommandInput({
   className,
   placeholder,
+  sx,
   ...props
-}: React.ComponentProps<typeof AutocompleteInput>): React.ReactElement {
+}: React.ComponentProps<typeof AutocompleteInput> & { sx?: Sx }): React.ReactElement {
+  const rowProps = stylex.props(styles.inputRow)
+
   return (
-    <div className="px-2.5 py-1.5">
+    <div className={rowProps.className} style={rowProps.style}>
       <AutocompleteInput
         autoFocus
-        className={cn(
-          "border-transparent! bg-transparent! shadow-none before:hidden has-focus-visible:ring-0",
-          className,
-        )}
+        className={className}
         placeholder={placeholder}
         size="lg"
-        startAddon={<SearchIcon />}
+        startAddon={<Search />}
+        sx={[styles.input, sx]}
         {...props}
       />
     </div>
@@ -129,12 +305,14 @@ export function CommandInput({
 
 export function CommandList({
   className,
+  sx,
   ...props
-}: React.ComponentProps<typeof AutocompleteList>): React.ReactElement {
+}: React.ComponentProps<typeof AutocompleteList> & { sx?: Sx }): React.ReactElement {
   return (
     <AutocompleteList
-      className={cn("not-empty:scroll-py-2 not-empty:p-2", className)}
+      className={className}
       data-slot="command-list"
+      sx={[styles.list, sx]}
       {...props}
     />
   )
@@ -142,12 +320,14 @@ export function CommandList({
 
 export function CommandEmpty({
   className,
+  sx,
   ...props
-}: React.ComponentProps<typeof AutocompleteEmpty>): React.ReactElement {
+}: React.ComponentProps<typeof AutocompleteEmpty> & { sx?: Sx }): React.ReactElement {
   return (
     <AutocompleteEmpty
-      className={cn("not-empty:py-6", className)}
+      className={className}
       data-slot="command-empty"
+      sx={[styles.empty, sx]}
       {...props}
     />
   )
@@ -155,14 +335,16 @@ export function CommandEmpty({
 
 export function CommandPanel({
   className,
+  sx,
   ...props
-}: React.ComponentProps<"div">): React.ReactElement {
+}: React.ComponentProps<"div"> & { sx?: Sx }): React.ReactElement {
+  const styleProps = stylex.props(styles.panel, sx)
+
   return (
     <div
-      className={cn(
-        "relative -mx-px min-h-0 rounded-t-xl border border-b-0 bg-popover bg-clip-padding shadow-xs/5 [clip-path:inset(0_1px)] not-has-[+[data-slot=command-footer]]:-mb-px not-has-[+[data-slot=command-footer]]:rounded-b-2xl not-has-[+[data-slot=command-footer]]:[clip-path:inset(0_1px_1px_1px_round_0_0_calc(var(--radius-2xl)-1px)_calc(var(--radius-2xl)-1px))] before:pointer-events-none before:absolute before:inset-0 before:rounded-t-[calc(var(--radius-xl)-1px)] **:data-[slot=scroll-area-scrollbar]:mt-2",
-        className,
-      )}
+      className={cn(styleProps.className, className)}
+      data-slot="command-panel"
+      style={styleProps.style}
       {...props}
     />
   )
@@ -190,15 +372,14 @@ export function CommandCollection({
 
 export function CommandItem({
   className,
+  sx,
   ...props
-}: React.ComponentProps<typeof AutocompleteItem>): React.ReactElement {
+}: React.ComponentProps<typeof AutocompleteItem> & { sx?: Sx }): React.ReactElement {
   return (
     <AutocompleteItem
-      className={cn(
-        "inline-flex w-full gap-2 py-1.5 [&_svg]:pointer-events-none [&_svg]:-mx-0.5 [&_svg]:shrink-0 [&_svg:not([class*='opacity-'])]:opacity-80 [&_svg:not([class*='size-'])]:size-4 sm:[&_svg:not([class*='size-'])]:size-3.5",
-        className,
-      )}
+      className={className}
       data-slot="command-item"
+      sx={[styles.item, sx]}
       {...props}
     />
   )
@@ -206,12 +387,14 @@ export function CommandItem({
 
 export function CommandSeparator({
   className,
+  sx,
   ...props
-}: React.ComponentProps<typeof AutocompleteSeparator>): React.ReactElement {
+}: React.ComponentProps<typeof AutocompleteSeparator> & { sx?: Sx }): React.ReactElement {
   return (
     <AutocompleteSeparator
-      className={cn("my-2", className)}
+      className={className}
       data-slot="command-separator"
+      sx={[styles.separator, sx]}
       {...props}
     />
   )
@@ -219,15 +402,16 @@ export function CommandSeparator({
 
 export function CommandShortcut({
   className,
+  sx,
   ...props
-}: React.ComponentProps<"kbd">): React.ReactElement {
+}: React.ComponentProps<"kbd"> & { sx?: Sx }): React.ReactElement {
+  const styleProps = stylex.props(styles.shortcut, sx)
+
   return (
     <kbd
-      className={cn(
-        "ml-auto font-sans text-xs font-medium tracking-widest text-muted-foreground/72",
-        className,
-      )}
+      className={cn(styleProps.className, className)}
       data-slot="command-shortcut"
+      style={styleProps.style}
       {...props}
     />
   )
@@ -235,15 +419,16 @@ export function CommandShortcut({
 
 export function CommandFooter({
   className,
+  sx,
   ...props
-}: React.ComponentProps<"div">): React.ReactElement {
+}: React.ComponentProps<"div"> & { sx?: Sx }): React.ReactElement {
+  const styleProps = stylex.props(styles.footer, sx)
+
   return (
     <div
-      className={cn(
-        "flex items-center justify-between gap-2 rounded-b-[calc(var(--radius-2xl)-1px)] border-t px-5 py-3 text-xs text-muted-foreground",
-        className,
-      )}
+      className={cn(styleProps.className, className)}
       data-slot="command-footer"
+      style={styleProps.style}
       {...props}
     />
   )

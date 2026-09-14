@@ -1,7 +1,8 @@
 import * as stylex from "@stylexjs/stylex"
 import type React from "react"
 import { cn } from "@/lib/utils"
-import { colors, radius } from "@/styles/tokens.stylex"
+import { colors, radius } from "../../styles/tokens.stylex"
+import type { Sx } from "../../styles/sx"
 
 /** Port of the `skeleton` keyframes in globals.css. */
 const shimmer = stylex.keyframes({
@@ -22,7 +23,7 @@ const styles = stylex.create({
 
 /** See the note on SeparatorProps: `className` stays until callers migrate. */
 export type SkeletonProps = React.ComponentProps<"div"> & {
-  sx?: stylex.StyleXStyles
+  sx?: Sx
 }
 
 export function Skeleton({ className, sx, ...props }: SkeletonProps): React.ReactElement {

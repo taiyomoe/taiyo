@@ -1,64 +1,163 @@
 "use client"
 
 import { Accordion as AccordionPrimitive } from "@base-ui/react/accordion"
-import { ChevronDownIcon } from "lucide-react"
+import * as stylex from "@stylexjs/stylex"
 import type React from "react"
 import { cn } from "@/lib/utils"
+import { ChevronDown } from "@/components/icons"
+import { colors, radius } from "../../styles/tokens.stylex"
+import { accordionTriggerMarker } from "../../styles/markers.stylex"
+import type { Sx } from "../../styles/sx"
+
+const styles = stylex.create({
+  item: {
+    borderBottomColor: colors.border,
+    borderBottomStyle: "solid",
+    borderBottomWidth: {
+      default: 1,
+      ":last-child": 0,
+    },
+  },
+  header: {
+    display: "flex",
+  },
+  trigger: {
+    borderRadius: radius.md,
+    gap: "1rem",
+    paddingBlock: "1rem",
+    alignItems: "flex-start",
+    cursor: "pointer",
+    display: "flex",
+    flexBasis: "0%",
+    flexGrow: 1,
+    flexShrink: 1,
+    fontSize: "0.875rem",
+    fontWeight: 500,
+    justifyContent: "space-between",
+    opacity: {
+      default: 1,
+      ":disabled": 0.64,
+    },
+    outlineColor: colors.ring,
+    outlineStyle: {
+      default: "none",
+      ":focus-visible": "solid",
+    },
+    outlineWidth: 3,
+    pointerEvents: {
+      default: null,
+      ":disabled": "none",
+    },
+    textAlign: "left",
+    transitionProperty: "all",
+  },
+  indicator: {
+    flexShrink: 0,
+    opacity: 0.8,
+    pointerEvents: "none",
+    rotate: {
+      default: null,
+      [stylex.when.ancestor("[data-panel-open]", accordionTriggerMarker)]: "180deg",
+    },
+    transitionDuration: "200ms",
+    transitionProperty: "rotate",
+    transitionTimingFunction: "ease-in-out",
+    translate: "0 0.125rem",
+    height: "1rem",
+    width: "1rem",
+  },
+  panel: {
+    overflow: "hidden",
+    color: colors.mutedForeground,
+    fontSize: "0.875rem",
+    transitionDuration: "200ms",
+    transitionProperty: "height",
+    transitionTimingFunction: "ease-in-out",
+    // Base UI drives the open/close animation through this custom property.
+    height: {
+      "[data-ending-style]": 0,
+      "[data-starting-style]": 0,
+      default: "var(--accordion-panel-height)",
+    },
+  },
+  panelInner: {
+    paddingBottom: "1rem",
+    paddingTop: 0,
+  },
+})
 
 export function Accordion(props: AccordionPrimitive.Root.Props): React.ReactElement {
   return <AccordionPrimitive.Root data-slot="accordion" {...props} />
 }
 
-export function AccordionItem({
-  className,
-  ...props
-}: AccordionPrimitive.Item.Props): React.ReactElement {
+/** See the note on SeparatorProps: `className` stays until callers migrate. */
+export type AccordionItemProps = AccordionPrimitive.Item.Props & {
+  sx?: Sx
+}
+
+export function AccordionItem({ className, sx, ...props }: AccordionItemProps): React.ReactElement {
+  const styleProps = stylex.props(styles.item, sx)
+
   return (
     <AccordionPrimitive.Item
-      className={cn("border-b last:border-b-0", className)}
+      className={cn(styleProps.className, className)}
       data-slot="accordion-item"
+      style={styleProps.style}
       {...props}
     />
   )
 }
 
+export type AccordionTriggerProps = AccordionPrimitive.Trigger.Props & {
+  sx?: Sx
+}
+
 export function AccordionTrigger({
   className,
   children,
+  sx,
   ...props
-}: AccordionPrimitive.Trigger.Props): React.ReactElement {
+}: AccordionTriggerProps): React.ReactElement {
+  const styleProps = stylex.props(styles.trigger, accordionTriggerMarker, sx)
+
   return (
-    <AccordionPrimitive.Header className="flex">
+    <AccordionPrimitive.Header {...stylex.props(styles.header)}>
       <AccordionPrimitive.Trigger
-        className={cn(
-          "flex flex-1 cursor-pointer items-start justify-between gap-4 rounded-md py-4 text-left text-sm font-medium transition-all outline-none focus-visible:ring-[3px] focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-64 *:data-panel-open:data-[slot=accordion-indicator]:rotate-180",
-          className,
-        )}
+        className={cn(styleProps.className, className)}
         data-slot="accordion-trigger"
+        style={styleProps.style}
         {...props}
       >
         {children}
-        <ChevronDownIcon
-          className="pointer-events-none size-4 shrink-0 translate-y-0.5 opacity-80 transition-transform duration-200 ease-in-out"
-          data-slot="accordion-indicator"
-        />
+        <ChevronDown {...stylex.props(styles.indicator)} data-slot="accordion-indicator" />
       </AccordionPrimitive.Trigger>
     </AccordionPrimitive.Header>
   )
 }
 
+export type AccordionPanelProps = AccordionPrimitive.Panel.Props & {
+  sx?: Sx
+}
+
 export function AccordionPanel({
   className,
   children,
+  sx,
   ...props
-}: AccordionPrimitive.Panel.Props): React.ReactElement {
+}: AccordionPanelProps): React.ReactElement {
+  // As in the Tailwind original, caller styling lands on the padded inner
+  // wrapper, not the animated panel element.
+  const innerProps = stylex.props(styles.panelInner, sx)
+
   return (
     <AccordionPrimitive.Panel
-      className="h-(--accordion-panel-height) overflow-hidden text-sm text-muted-foreground transition-[height] duration-200 ease-in-out data-ending-style:h-0 data-starting-style:h-0"
+      {...stylex.props(styles.panel)}
       data-slot="accordion-panel"
       {...props}
     >
-      <div className={cn("pt-0 pb-4", className)}>{children}</div>
+      <div className={cn(innerProps.className, className)} style={innerProps.style}>
+        {children}
+      </div>
     </AccordionPrimitive.Panel>
   )
 }
