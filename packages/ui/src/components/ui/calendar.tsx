@@ -55,7 +55,9 @@ const styles = stylex.create({
     height: "100%",
   },
   day: {
-    borderRadius: radius.lg,
+    // A day is a square cell, so `radius.full` gives a disc — and a range,
+    // whose inner corners are squared in structural.css, gets round caps.
+    borderRadius: radius.full,
     paddingBlock: "1px",
     fontSize: "0.875rem",
     height: "var(--cell-size)",

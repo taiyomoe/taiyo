@@ -26,7 +26,9 @@ const styles = stylex.create({
       default: colors.input,
       ":focus-visible": colors.ring,
     },
-    borderRadius: radius.lg,
+    // The chip rule (radius ~= 0.35x the height) was measured on a WIDE chip;
+    // on a square slot the same ratio reads as a bubble rather than a field.
+    borderRadius: radius.md,
     borderStyle: "solid",
     borderWidth: 1,
     backgroundClip: "padding-box",

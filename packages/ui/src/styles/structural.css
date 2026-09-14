@@ -508,7 +508,28 @@
 }
 
 .calendar-today[data-selected]:not(.range-middle) > *::after {
-  background-color: var(--background);
+  background-color: var(--primary-foreground);
+}
+
+/* A selected range has to read as ONE continuous band, so the days inside it
+   square the corners that face their neighbours. The rounded background is
+   painted by the button, not the cell that carries the range modifier, so the
+   rule has to reach the child — which StyleX cannot express.
+
+   `!important` is required, not sloppiness: with `useCSSLayers: false` StyleX
+   emits its atoms as `.xxx:not(#\#):not(#\#)`, specificity (2,1,0), which no
+   plain selector can outrank. A rule here can ADD a declaration StyleX does
+   not set, but overriding one always needs `!important`. */
+[data-slot="calendar"] .range-start > * {
+  border-end-end-radius: 0 !important;
+  border-start-end-radius: 0 !important;
+}
+[data-slot="calendar"] .range-end > * {
+  border-end-start-radius: 0 !important;
+  border-start-start-radius: 0 !important;
+}
+[data-slot="calendar"] .range-middle > * {
+  border-radius: 0 !important;
 }
 
 .calendar-today[data-disabled] > *::after {

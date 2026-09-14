@@ -139,6 +139,20 @@ same as looking the same:
 - The `sx` prop is typed `Sx` (from `../../styles/sx`), NOT
   `stylex.StyleXStyles` — the latter rejects any style whose pseudo-element
   layer carries conditions. See that file for the reasoning.
+- **`structural.css` cannot override a StyleX declaration without
+  `!important`.** With `useCSSLayers: false`, StyleX emits every atom as
+  `.xxx:not(#\#):not(#\#)` — specificity (2,1,0), which no plain selector can
+  outrank. A rule there can freely ADD a declaration StyleX does not set (that
+  is the normal case), but overriding one always needs `!important`. The
+  symptom is silent: the rule matches, `document.querySelectorAll` finds the
+  element, and the computed value is still StyleX's.
+- **Two StyleX styles merged as separate className STRINGS do not respect
+  source order.** `stylex.props(a, b)` resolves conflicts so `b` wins, but when
+  a third party concatenates the two class strings (react-day-picker's
+  `classNames` map, for instance) StyleX's resolution never runs and plain CSS
+  order decides. Longhands still beat shorthands, so `borderStartStartRadius`
+  overrides `borderRadius`, but shorthand-vs-shorthand is a coin flip. Put the
+  conflicting declaration in `structural.css` with `!important` instead.
 - `oxlint` enforces `@stylexjs/sort-keys` (a CSS-priority order, NOT
   alphabetical). Don't hand-sort: write the styles, then run
   `pnpm lint:fix` from the repo root REPEATEDLY until the error count stops

@@ -19,7 +19,7 @@ const styles = stylex.create({
     gap: "0.5rem",
     alignItems: "center",
     backgroundColor: {
-      "[data-pressed]": `color-mix(in srgb, ${colors.input} 64%, transparent)`,
+      "[data-pressed]": colors.input,
       default: "transparent",
       ":hover": colors.accent,
     },
@@ -96,7 +96,7 @@ const variantStyles = stylex.create({
     borderColor: colors.input,
     backgroundClip: "padding-box",
     backgroundColor: {
-      "[data-pressed]": `color-mix(in srgb, ${colors.input} 64%, transparent)`,
+      "[data-pressed]": colors.input,
       default: colors.chip,
       ":hover": colors.chipHover,
     },
