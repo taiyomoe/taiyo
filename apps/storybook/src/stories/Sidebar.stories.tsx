@@ -21,6 +21,7 @@ import {
   SidebarMenuBadge,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSkeleton,
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
@@ -53,6 +54,7 @@ const meta = preview.meta({
     SidebarMenuItem,
     SidebarMenuButton,
     SidebarMenuBadge,
+    SidebarMenuSkeleton,
     SidebarMenuSub,
     SidebarMenuSubItem,
     SidebarMenuSubButton,
@@ -391,6 +393,127 @@ export const NonCollapsible = meta.story({
         <main className="flex-1 p-6">
           <p className="text-sm text-muted-foreground">
             With `collapsible="none"` the sidebar is fixed-width and the trigger has no effect.
+          </p>
+        </main>
+      </SidebarInset>
+    </SidebarProvider>
+  ),
+})
+
+export const InitiallyCollapsed = meta.story({
+  render: () => (
+    <SidebarProvider defaultOpen={false}>
+      <Sidebar collapsible="icon">
+        <SidebarHeader>
+          <div className="flex h-10 items-center gap-2 px-2">
+            <div className="grid size-7 shrink-0 place-items-center rounded-md bg-primary text-sm font-semibold text-primary-foreground">
+              T
+            </div>
+            <span className="text-sm font-medium group-data-[collapsible=icon]:hidden">Taiyō</span>
+          </div>
+        </SidebarHeader>
+        <SidebarSeparator className="-mt-px" />
+        <SidebarContent>
+          <SidebarGroup>
+            <SidebarGroupLabel>Navigation</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {NAV_ITEMS.map((item) => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton
+                      isActive={"isActive" in item ? item.isActive : false}
+                      tooltip={item.title}
+                    >
+                      <HugeiconsIcon icon={item.icon} />
+                      <span>{item.title}</span>
+                    </SidebarMenuButton>
+                    {"badge" in item && item.badge ? (
+                      <SidebarMenuBadge>{item.badge}</SidebarMenuBadge>
+                    ) : null}
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        </SidebarContent>
+        <SidebarFooter>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton tooltip="Settings">
+                <HugeiconsIcon icon={Settings01Icon} />
+                <span>Settings</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarFooter>
+        <SidebarRail />
+      </Sidebar>
+      <SidebarInset>
+        <header className="flex h-14 items-center gap-2 border-b px-4">
+          <SidebarTrigger />
+          <span className="text-sm font-medium">Dashboard</span>
+        </header>
+        <main className="flex-1 p-6">
+          <p className="text-sm text-muted-foreground">
+            The provider starts closed, so the sidebar mounts as an icon rail. Use the trigger to
+            expand it.
+          </p>
+        </main>
+      </SidebarInset>
+    </SidebarProvider>
+  ),
+})
+
+export const Loading = meta.story({
+  render: () => (
+    <SidebarProvider defaultOpen>
+      <Sidebar>
+        <SidebarHeader>
+          <div className="flex h-10 items-center gap-2 px-2">
+            <div className="grid size-7 place-items-center rounded-md bg-primary text-sm font-semibold text-primary-foreground">
+              T
+            </div>
+            <span className="text-sm font-medium">Taiyō</span>
+          </div>
+        </SidebarHeader>
+        <SidebarSeparator className="-mt-px" />
+        <SidebarContent>
+          <SidebarGroup>
+            <SidebarGroupLabel>Navigation</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {Array.from({ length: 5 }, (_, index) => (
+                  <SidebarMenuItem key={`nav-${index}`}>
+                    <SidebarMenuSkeleton showIcon />
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+          <SidebarGroup>
+            <SidebarGroupLabel>Projects</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {Array.from({ length: 3 }, (_, index) => (
+                  <SidebarMenuItem key={`project-${index}`}>
+                    <SidebarMenuSkeleton />
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        </SidebarContent>
+        <SidebarRail />
+      </Sidebar>
+      <SidebarInset>
+        <header className="flex h-14 items-center gap-2 border-b px-4">
+          <SidebarTrigger />
+          <span className="text-sm font-medium">Dashboard</span>
+        </header>
+        <main className="flex-1 p-6">
+          <p className="text-sm text-muted-foreground">
+            Map over `SidebarMenuSkeleton` while the navigation data loads. Each placeholder picks a
+            deterministic width, so the rows do not all end at the same point.
           </p>
         </main>
       </SidebarInset>

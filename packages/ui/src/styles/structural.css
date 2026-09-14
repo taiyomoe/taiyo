@@ -17,6 +17,11 @@
 [data-slot="select-button"] svg,
 [data-slot="menu-item"] > svg,
 [data-slot="menu-sub-trigger"] svg,
+[data-slot="pagination-link"] svg,
+[data-slot="sidebar-trigger"] svg,
+[data-slot="toolbar-button"] svg,
+[data-slot="toolbar-link"] svg,
+[data-slot="collapsible-trigger"] svg,
 [data-slot="badge"] svg {
   flex-shrink: 0;
   pointer-events: none;
@@ -43,7 +48,12 @@
 [data-slot="select-trigger"] svg:not([class*="size-"]),
 [data-slot="select-button"] svg:not([class*="size-"]),
 [data-slot="menu-item"] > svg:not([class*="size-"]),
-[data-slot="menu-sub-trigger"] svg:not([class*="size-"]) {
+[data-slot="menu-sub-trigger"] svg:not([class*="size-"]),
+[data-slot="pagination-link"] svg:not([class*="size-"]),
+[data-slot="sidebar-trigger"] svg:not([class*="size-"]),
+[data-slot="toolbar-button"] svg:not([class*="size-"]),
+[data-slot="toolbar-link"] svg:not([class*="size-"]),
+[data-slot="collapsible-trigger"] svg:not([class*="size-"]) {
   height: 1.125rem;
   width: 1.125rem;
 }

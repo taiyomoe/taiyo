@@ -18,7 +18,6 @@ import {
   Search01Icon,
   SidebarLeft01Icon,
   Tick02Icon,
-  UnfoldMoreIcon,
 } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react"
 import type * as React from "react"
@@ -48,7 +47,13 @@ export const ChevronLeft: (props: IconProps) => React.ReactElement = icon(ArrowL
 export const ChevronRight: (props: IconProps) => React.ReactElement = icon(ArrowRight01Icon)
 
 /** The up/down pair a select or combobox trigger shows. */
-export const ChevronsUpDown: (props: IconProps) => React.ReactElement = icon(UnfoldMoreIcon)
+/**
+ * Hugeicons' `UnfoldMore` is a pair of CURVED chevrons that collapse into a
+ * rhombus below ~16px — unreadable at the 12px a select trigger uses. Every
+ * trigger uses the plain chevron instead, which is also the conventional
+ * affordance for a control that opens a list downwards.
+ */
+export const ChevronsUpDown: (props: IconProps) => React.ReactElement = icon(ArrowDown01Icon)
 
 export const Close: (props: IconProps) => React.ReactElement = icon(Cancel01Icon)
 

@@ -40,7 +40,13 @@ const styles = stylex.create({
   },
   listDefault: {
     padding: "0.25rem",
-    borderRadius: radius.full,
+    // `radius.full` is a pill on a horizontal bar; on a vertical column the
+    // same value turns the rail into a blob that swallows the first and last
+    // rows. Vertical gets a real corner, with concentric rows inside it.
+    borderRadius: {
+      '[data-orientation="vertical"]': radius.xl,
+      default: radius.full,
+    },
     backgroundColor: colors.well,
     boxShadow: shadows.sunken,
     color: `color-mix(in srgb, ${colors.mutedForeground} 72%, transparent)`,
@@ -68,7 +74,10 @@ const styles = stylex.create({
   },
   // The raised pill that rides over the sunken rail.
   indicatorDefault: {
-    borderRadius: radius.full,
+    borderRadius: {
+      '[data-orientation="vertical"]': `calc(${radius.xl} - 0.25rem)`,
+      default: radius.full,
+    },
     backgroundColor: colors.wellRaised,
     boxShadow: shadows.raised,
     zIndex: -1,
@@ -97,7 +106,10 @@ const styles = stylex.create({
   },
   tab: {
     borderColor: "transparent",
-    borderRadius: radius.full,
+    borderRadius: {
+      '[data-orientation="vertical"]': `calc(${radius.xl} - 0.25rem)`,
+      default: radius.full,
+    },
     borderStyle: "solid",
     borderWidth: 1,
     gap: "0.375rem",

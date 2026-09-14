@@ -139,6 +139,13 @@ same as looking the same:
 - The `sx` prop is typed `Sx` (from `../../styles/sx`), NOT
   `stylex.StyleXStyles` — the latter rejects any style whose pseudo-element
   layer carries conditions. See that file for the reasoning.
+- **Icon sizing is an explicit allowlist in `structural.css`.** An icon
+  component with no size rule falls back to its intrinsic 24px, which overflows
+  every control we build. When you add a component that accepts consumer icon
+  children, add its `data-slot` to the two `svg` blocks at the top of that file
+  (`flex-shrink`/`pointer-events`, then the `height`/`width` pair). Audit for
+  misses by walking every story and flagging any `svg` that renders at exactly
+  24px — that number never appears on purpose.
 - **`default: null` in a MODIFIER style silently erases the base style's
   value.** `stylex.props(styles.base, styles.modifier)` merges per property, so
   a modifier that declares `height: { default: null, "[x]": "2px" }` overrides
