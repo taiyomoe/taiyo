@@ -8,6 +8,8 @@
     "build": "storybook build"
   },
   "dependencies": {
+    "@hugeicons/core-free-icons": "^4.2.3",
+    "@hugeicons/react": "^1.1.9",
     "@storybook/addon-a11y": "^10.5.8",
     "@storybook/addon-docs": "^10.5.8",
     "@storybook/addon-themes": "^10.5.8",
@@ -15,13 +17,14 @@
     "@tailwindcss/vite": "^4.3.3",
     "@taiyomoe/ui": "workspace:^",
     "@vitejs/plugin-react": "^6.1.0",
-    "lucide-react": "^1.31.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "storybook": "^10.5.8",
     "vite": "^8.2.1"
   },
   "devDependencies": {
+    "@stylexjs/stylex": "^0.19.0",
+    "@stylexjs/unplugin": "^0.19.0",
     "@taiyomoe/typescript": "workspace:^",
     "@types/node": "^26.2.0",
     "@types/react": "^19.2.18",
