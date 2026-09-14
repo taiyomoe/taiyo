@@ -798,3 +798,12 @@
 [data-mobile="true"][data-slot="sidebar"] > button {
   display: none;
 }
+
+/* A keycap may hold a glyph instead of a letter (the arrow keys, the return
+   key). Icon components default to 24px, which overflows a 22px cap and
+   stretches it into a lozenge, so the glyph is sized like the cap's text. */
+[data-slot="kbd"] svg:not([class*="size-"]),
+[data-slot="kbd-group"] svg:not([class*="size-"]) {
+  height: 0.875rem;
+  width: 0.875rem;
+}

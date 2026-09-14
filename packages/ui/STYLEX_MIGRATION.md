@@ -139,6 +139,17 @@ same as looking the same:
 - The `sx` prop is typed `Sx` (from `../../styles/sx`), NOT
   `stylex.StyleXStyles` — the latter rejects any style whose pseudo-element
   layer carries conditions. See that file for the reasoning.
+- **`default: null` in a MODIFIER style silently erases the base style's
+  value.** `stylex.props(styles.base, styles.modifier)` merges per property, so
+  a modifier that declares `height: { default: null, "[x]": "2px" }` overrides
+  `base`'s height with nothing whenever `[x]` does not match. `null` means "no
+  declaration for this branch", not "inherit what came before". It is fine in a
+  base style (the property simply goes unset); in a modifier the default must
+  REPEAT the base's value. This has caused three separate silent bugs: table
+  rows with no separator, toasts with `transform: none` stacked on top of each
+  other, and a 0px-wide tab underline. Detect them by listing, for every
+  `stylex.props()` call, the properties a later argument nulls that an earlier
+  one sets.
 - **`structural.css` cannot override a StyleX declaration without
   `!important`.** With `useCSSLayers: false`, StyleX emits every atom as
   `.xxx:not(#\#):not(#\#)` — specificity (2,1,0), which no plain selector can

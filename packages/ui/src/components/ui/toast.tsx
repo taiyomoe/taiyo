@@ -130,6 +130,14 @@ const styles = stylex.create({
     "--toast-calc-offset-y":
       "calc(var(--toast-offset-y) + var(--toast-index) * var(--toast-gap) + var(--toast-swipe-movement-y))",
     transform: {
+      '[data-ending-style][data-swipe-direction="down"]':
+        "translateY(calc(var(--toast-swipe-movement-y) + 100% + var(--toast-inset)))",
+      '[data-ending-style][data-swipe-direction="left"]':
+        "translateX(calc(var(--toast-swipe-movement-x) - 100% - var(--toast-inset))) translateY(var(--toast-calc-offset-y))",
+      '[data-ending-style][data-swipe-direction="right"]':
+        "translateX(calc(var(--toast-swipe-movement-x) + 100% + var(--toast-inset))) translateY(var(--toast-calc-offset-y))",
+      '[data-ending-style][data-swipe-direction="up"]':
+        "translateY(calc(var(--toast-swipe-movement-y) - 100% - var(--toast-inset)))",
       "[data-expanded]":
         "translateX(var(--toast-swipe-movement-x)) translateY(var(--toast-calc-offset-y))",
       "[data-starting-style]": "translateY(calc(-100% - var(--toast-inset)))",
@@ -147,6 +155,14 @@ const styles = stylex.create({
     "--toast-calc-offset-y":
       "calc(var(--toast-offset-y) * -1 + var(--toast-index) * var(--toast-gap) * -1 + var(--toast-swipe-movement-y))",
     transform: {
+      '[data-ending-style][data-swipe-direction="down"]':
+        "translateY(calc(var(--toast-swipe-movement-y) + 100% + var(--toast-inset)))",
+      '[data-ending-style][data-swipe-direction="left"]':
+        "translateX(calc(var(--toast-swipe-movement-x) - 100% - var(--toast-inset))) translateY(var(--toast-calc-offset-y))",
+      '[data-ending-style][data-swipe-direction="right"]':
+        "translateX(calc(var(--toast-swipe-movement-x) + 100% + var(--toast-inset))) translateY(var(--toast-calc-offset-y))",
+      '[data-ending-style][data-swipe-direction="up"]':
+        "translateY(calc(var(--toast-swipe-movement-y) - 100% - var(--toast-inset)))",
       "[data-expanded]":
         "translateX(var(--toast-swipe-movement-x)) translateY(var(--toast-calc-offset-y))",
       "[data-starting-style]": "translateY(calc(100% + var(--toast-inset)))",
@@ -170,21 +186,6 @@ const styles = stylex.create({
   },
   rootCenter: {
     insetInline: 0,
-  },
-  // Swipe-aware exits. Attribute order matters: these come after the anchor
-  // styles so they win over the default transform.
-  rootExit: {
-    transform: {
-      '[data-ending-style][data-swipe-direction="down"]':
-        "translateY(calc(var(--toast-swipe-movement-y) + 100% + var(--toast-inset)))",
-      '[data-ending-style][data-swipe-direction="left"]':
-        "translateX(calc(var(--toast-swipe-movement-x) - 100% - var(--toast-inset))) translateY(var(--toast-calc-offset-y))",
-      '[data-ending-style][data-swipe-direction="right"]':
-        "translateX(calc(var(--toast-swipe-movement-x) + 100% + var(--toast-inset))) translateY(var(--toast-calc-offset-y))",
-      '[data-ending-style][data-swipe-direction="up"]':
-        "translateY(calc(var(--toast-swipe-movement-y) - 100% - var(--toast-inset)))",
-      default: null,
-    },
   },
   replaySuccess: {
     animationDuration: "0.32s",
@@ -418,7 +419,6 @@ function Toasts({
             styles.root,
             isTop ? styles.rootTop : styles.rootBottom,
             isCenter ? styles.rootCenter : isLeft ? styles.rootLeft : styles.rootRight,
-            styles.rootExit,
             replayStyle(toast),
           )
 

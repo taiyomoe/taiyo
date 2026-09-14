@@ -83,13 +83,16 @@ const styles = stylex.create({
       default: "var(--active-tab-left) calc(-1 * var(--active-tab-bottom))",
     },
     zIndex: 10,
+    // The defaults have to repeat `indicator`'s values: a `null` default is
+    // still a declaration and it overrode them, which left the underline
+    // 0px wide (horizontal) — invisible.
     height: {
       '[data-orientation="horizontal"]': "2px",
-      default: null,
+      default: "var(--active-tab-height)",
     },
     width: {
       '[data-orientation="vertical"]': "2px",
-      default: null,
+      default: "var(--active-tab-width)",
     },
   },
   tab: {

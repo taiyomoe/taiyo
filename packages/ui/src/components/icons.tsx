@@ -8,6 +8,7 @@ import {
   ArrowRight01Icon,
   ArrowUp01Icon,
   Cancel01Icon,
+  CornerDownLeftIcon,
   CheckmarkCircle02Icon,
   InformationCircleIcon,
   Loading03Icon,
@@ -62,6 +63,9 @@ export const Ellipsis: (props: IconProps) => React.ReactElement = icon(MoreHoriz
 export const PanelLeft: (props: IconProps) => React.ReactElement = icon(SidebarLeft01Icon)
 
 export const Check: (props: IconProps) => React.ReactElement = icon(Tick02Icon)
+
+/** The return-key symbol used in keyboard hints. */
+export const Enter: (props: IconProps) => React.ReactElement = icon(CornerDownLeftIcon)
 
 export const Spinner: (props: IconProps) => React.ReactElement = icon(Loading03Icon)
 

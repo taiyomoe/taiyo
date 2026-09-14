@@ -1,7 +1,4 @@
 import {
-  ArrowDown01Icon,
-  ArrowTurnDownIcon,
-  ArrowUp01Icon,
   CalculatorIcon as CalculatorGlyph,
   Calendar01Icon,
   Mail01Icon,
@@ -11,6 +8,7 @@ import {
 } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react"
 import preview from "@/storybook/preview"
+import { ChevronDown, ChevronUp, Enter } from "@taiyomoe/ui/components/icons"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import {
   Command,
@@ -125,17 +123,17 @@ export const Default = meta.story({
               <div className="flex items-center gap-2">
                 <KbdGroup>
                   <Kbd>
-                    <HugeiconsIcon icon={ArrowUp01Icon} />
+                    <ChevronUp />
                   </Kbd>
                   <Kbd>
-                    <HugeiconsIcon icon={ArrowDown01Icon} />
+                    <ChevronDown />
                   </Kbd>
                 </KbdGroup>
                 <span>Navigate</span>
               </div>
               <div className="flex items-center gap-2">
                 <Kbd>
-                  <HugeiconsIcon icon={ArrowTurnDownIcon} />
+                  <Enter />
                 </Kbd>
                 <span>Open</span>
               </div>
@@ -189,17 +187,17 @@ export const EmptyState = meta.story({
               <div className="flex items-center gap-2">
                 <KbdGroup>
                   <Kbd>
-                    <HugeiconsIcon icon={ArrowUp01Icon} />
+                    <ChevronUp />
                   </Kbd>
                   <Kbd>
-                    <HugeiconsIcon icon={ArrowDown01Icon} />
+                    <ChevronDown />
                   </Kbd>
                 </KbdGroup>
                 <span>Navigate</span>
               </div>
               <div className="flex items-center gap-2">
                 <Kbd>
-                  <HugeiconsIcon icon={ArrowTurnDownIcon} />
+                  <Enter />
                 </Kbd>
                 <span>Open</span>
               </div>
