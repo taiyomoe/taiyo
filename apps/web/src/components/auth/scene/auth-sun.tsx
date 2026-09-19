@@ -1,4 +1,4 @@
-import { AuthSunRays } from "@/components/auth/scene/auth-sun-rays"
+import { SunRays } from "@/components/scene/sun-rays"
 
 export const AuthSun = () => (
   <div className="absolute inset-0 overflow-hidden">
@@ -9,21 +9,21 @@ export const AuthSun = () => (
         inset: "-20% -20% 30% -20%",
         background: "radial-gradient(60% 80% at 50% 100%, rgba(242,69,45,0.42), transparent 70%)",
         filter: "blur(20px)",
-        animation: "auth-aurora 14s ease-in-out infinite",
+        animation: "scene-aurora 14s ease-in-out infinite",
       }}
     />
 
     {/* Sun system: rays and disk are children of one box so they stay concentric.
-        Both are absolutely positioned and AuthSunRays comes first → painted behind the disk. */}
+        Both are absolutely positioned and SunRays comes first → painted behind the disk. */}
     <div className="absolute bottom-[-38%] left-1/2 size-110 -translate-x-1/2">
-      <AuthSunRays />
+      <SunRays />
       <div
         className="absolute inset-0 rounded-full"
         style={{
           background:
             "radial-gradient(circle at 50% 42%, #FFE3A0 0%, #FFB820 30%, #F2452D 64%, #B5281A 100%)",
           boxShadow: "0 0 120px 30px rgba(242,69,45,0.5), 0 0 220px 80px rgba(255,184,32,0.25)",
-          animation: "auth-sun-breathe 7s ease-in-out infinite",
+          animation: "scene-sun-breathe 7s ease-in-out infinite",
         }}
       />
     </div>

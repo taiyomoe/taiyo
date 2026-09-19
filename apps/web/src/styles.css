@@ -1,28 +1,47 @@
 @import "@taiyomoe/ui/style.css";
 
-/* ── Auth screen animations (sign-up / sign-in brand scene) ────────────── */
-@keyframes auth-spin {
+/* PT Serif — the landing page's display face, and the only place a serif is
+   used. It lives here rather than in @taiyomoe/ui because the design system is
+   deliberately Inter-only: this is brand typography for the marketing page, not
+   a component token. 700 upright for headings, 700 italic for review quotes. */
+@import "@fontsource/pt-serif/700.css";
+@import "@fontsource/pt-serif/700-italic.css";
+@import "@fontsource/pt-serif/400.css";
+
+/* The landing page navigates by in-page anchor (#titles, #languages, #reviews),
+   so the jump is animated rather than instant. Reverted under reduced motion. */
+html {
+  scroll-behavior: smooth;
+}
+
+/* ── Brand scene animations ───────────────────────────────────────────────
+   Shared by the auth screen and the landing page: both render the same dark
+   world (sun, rays, embers) and the same gradient CTA, so the keyframes live
+   here under one `scene-` namespace rather than being duplicated per screen. */
+@keyframes scene-spin {
   to {
     transform: rotate(360deg);
   }
 }
 
 /* Each ray scales along its own length from its base at the sun's center
-   (transform-origin: top center), so it breathes outward. Per-ray duration/delay
-   stagger these so the rays don't pulse in unison. */
-@keyframes auth-ray-pulse {
+   (transform-origin: top center), so it breathes outward.
+
+   The rest and peak scales come from per-ray custom properties rather than
+   being baked in here: every spoke sets its own `--ray-rest` / `--ray-peak`,
+   so no two rays grow by the same amount. With per-ray duration and delay on
+   top, nothing in the cluster is ever in phase with anything else. */
+@keyframes scene-ray-pulse {
   0%,
   100% {
-    transform: scaleY(0.84);
-    opacity: 1;
+    transform: scaleY(var(--ray-rest));
   }
   50% {
-    transform: scaleY(1.04);
-    opacity: 1;
+    transform: scaleY(var(--ray-peak));
   }
 }
 
-@keyframes auth-sun-breathe {
+@keyframes scene-sun-breathe {
   0%,
   100% {
     transform: scale(1);
@@ -32,7 +51,7 @@
   }
 }
 
-@keyframes auth-aurora {
+@keyframes scene-aurora {
   0% {
     transform: translate(-10%, 0);
   }
@@ -44,7 +63,7 @@
   }
 }
 
-@keyframes auth-ember-rise {
+@keyframes scene-ember-rise {
   0% {
     transform: translateY(0) translateX(0);
     opacity: 0;
@@ -61,17 +80,30 @@
   }
 }
 
-/* Quick diagonal glint (0–26%) then a long rest off-screen (26–100%), so the
-   button shines periodically instead of constantly. Both ends are off-screen. */
-@keyframes auth-sheen {
-  0% {
-    transform: translateX(-130%) skewX(-18deg);
+/* The cover strip renders its list twice; translating exactly -50% lands the
+   second copy where the first started, so the loop has no seam. */
+@keyframes scene-marquee {
+  from {
+    transform: translateX(0);
   }
-  26%,
-  100% {
-    transform: translateX(330%) skewX(-18deg);
+  to {
+    transform: translateX(-50%);
   }
 }
+
+/* Scroll cue at the bottom of the hero. Centering is done by a wrapper so this
+   keyframe stays a pure translateY and doesn't fight the -50% centring. */
+@keyframes scene-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(7px);
+  }
+}
+
+/* ── Auth screen animations ───────────────────────────────────────────────── */
 
 /* Form swap between /sign-up and /sign-in. Default fill-mode means the form rests at
    its natural (visible) state — it is never left hidden if the animation doesn't run. */
@@ -89,7 +121,14 @@
 @media (prefers-reduced-motion: reduce) {
   [data-auth-screen] *,
   [data-auth-screen] *::before,
-  [data-auth-screen] *::after {
+  [data-auth-screen] *::after,
+  [data-landing] *,
+  [data-landing] *::before,
+  [data-landing] *::after {
     animation: none !important;
+  }
+
+  html {
+    scroll-behavior: auto;
   }
 }

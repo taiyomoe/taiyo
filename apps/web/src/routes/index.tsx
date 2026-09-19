@@ -1,32 +1,53 @@
-import { Navbar } from "@/components/layout/navbar"
-import { font, spacing, text } from "@taiyomoe/ui/styles/tokens.stylex"
 import * as stylex from "@stylexjs/stylex"
 import { createFileRoute } from "@tanstack/react-router"
 
-export const Route = createFileRoute("/")({ component: Home })
+import { LandingCta } from "@/components/landing/landing-cta"
+import { LandingFlaws } from "@/components/landing/landing-flaws"
+import { LandingFooter } from "@/components/landing/landing-footer"
+import { LandingHero } from "@/components/landing/landing-hero"
+import { LandingMarquee } from "@/components/landing/landing-marquee"
+import { LandingNav } from "@/components/landing/landing-nav"
+import { LandingReviews } from "@/components/landing/landing-reviews"
+import { LandingStats } from "@/components/landing/landing-stats"
+import { scene } from "@/components/scene/scene.stylex"
+import { m } from "@/paraglide/messages"
+
+export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: m.landing_meta_title() },
+      { name: "description", content: m.landing_meta_description() },
+    ],
+  }),
+  component: Home,
+})
 
 const styles = stylex.create({
   page: {
-    padding: spacing.xl,
-  },
-  heading: {
-    fontSize: text.xxxl,
-    fontWeight: font.weightBold,
-  },
-  body: {
-    fontSize: text.lg,
-    marginTop: spacing.md,
+    backgroundColor: scene.night,
+    // The scene is always night, in both themes — the sections paint their own
+    // ground, and this catches overscroll and any sub-pixel seam between them.
+    color: scene.paper,
+    overflowX: "hidden",
   },
 })
 
+/**
+ * The marketing page. `data-landing` is what the reduced-motion block in
+ * styles.css keys off, so the sun, the embers and the cover strip all stop
+ * together rather than one at a time.
+ */
 function Home() {
   return (
-    <div {...stylex.props(styles.page)}>
-      <Navbar />
-      <h1 {...stylex.props(styles.heading)}>Welcome to TanStack Start</h1>
-      <p {...stylex.props(styles.body)}>
-        Edit <code>src/routes/index.tsx</code> to get started.
-      </p>
+    <div data-landing {...stylex.props(styles.page)}>
+      <LandingNav />
+      <LandingHero />
+      <LandingMarquee />
+      <LandingFlaws />
+      <LandingStats />
+      <LandingReviews />
+      <LandingCta />
+      <LandingFooter />
     </div>
   )
 }

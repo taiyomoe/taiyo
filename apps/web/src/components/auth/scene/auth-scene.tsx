@@ -1,6 +1,6 @@
 import { AuthCitations } from "@/components/auth/scene/auth-citations"
-import { AuthEmbers } from "@/components/auth/scene/auth-embers"
 import { AuthSun } from "@/components/auth/scene/auth-sun"
+import { Embers } from "@/components/scene/embers"
 import { m } from "@/paraglide/messages"
 import { Link } from "@tanstack/react-router"
 import { TaiyoLogoLockup } from "@taiyomoe/ui/components/logos/taiyo-logo-lockup"
@@ -8,7 +8,7 @@ import { TaiyoLogoLockup } from "@taiyomoe/ui/components/logos/taiyo-logo-lockup
 export const AuthScene = () => (
   <div className="relative hidden flex-col justify-between overflow-hidden bg-[#120a07] px-14 py-11 lg:flex">
     <AuthSun />
-    <AuthEmbers />
+    <Embers />
     <Link to="/" className="relative z-3 w-fit transition-opacity hover:opacity-80">
       <TaiyoLogoLockup className="gap-3 text-[26px] font-bold tracking-[-0.02em]" />
     </Link>

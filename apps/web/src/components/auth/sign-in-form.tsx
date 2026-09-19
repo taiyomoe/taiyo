@@ -1,6 +1,6 @@
 import { AuthHeading } from "@/components/auth/auth-heading"
 import { AuthSocialButtons, type SocialProvider } from "@/components/auth/auth-social-buttons"
-import { SunButton } from "@/components/auth/sun-button"
+import { SunButton } from "@/components/buttons/sun-button"
 import { CheckboxField } from "@/components/fields/checkbox-field"
 import { EmailField } from "@/components/fields/email-field"
 import { PasswordField } from "@/components/fields/password-field"
@@ -113,7 +113,7 @@ export const SignInForm = () => {
               {m.auth_forgot_password()}
             </a>
           </div>
-          <SunButton type="submit" className="mt-2" loading={isSubmitting} disabled={isBusy}>
+          <SunButton block type="submit" className="mt-2" loading={isSubmitting} disabled={isBusy}>
             {m.auth_sign_in()}
           </SunButton>
         </Form>

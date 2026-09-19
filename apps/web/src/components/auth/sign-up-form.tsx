@@ -1,6 +1,6 @@
 import { AuthHeading } from "@/components/auth/auth-heading"
 import { AuthSocialButtons, type SocialProvider } from "@/components/auth/auth-social-buttons"
-import { SunButton } from "@/components/auth/sun-button"
+import { SunButton } from "@/components/buttons/sun-button"
 import { CheckboxField } from "@/components/fields/checkbox-field"
 import { EmailField } from "@/components/fields/email-field"
 import { InputField } from "@/components/fields/input-field"
@@ -218,7 +218,12 @@ export const SignUpForm = () => {
               options={{ theme: "dark", size: "flexible" }}
             />
 
-            <SunButton type="submit" loading={isSubmitting} disabled={isBusy || !captchaToken}>
+            <SunButton
+              block
+              type="submit"
+              loading={isSubmitting}
+              disabled={isBusy || !captchaToken}
+            >
               {m.auth_create_account()}
             </SunButton>
           </div>
