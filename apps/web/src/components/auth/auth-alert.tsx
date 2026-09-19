@@ -1,10 +1,11 @@
+import { AlertCircleIcon } from "@hugeicons/core-free-icons"
+import { HugeiconsIcon } from "@hugeicons/react"
 import { Alert, AlertTitle } from "@taiyomoe/ui/components/ui/alert"
-import { CircleAlert } from "lucide-react"
 
 export const AuthAlert = ({ message }: { message: string | null }) =>
   message ? (
     <Alert variant="error">
-      <CircleAlert />
+      <HugeiconsIcon icon={AlertCircleIcon} />
       <AlertTitle>{message}</AlertTitle>
     </Alert>
   ) : null

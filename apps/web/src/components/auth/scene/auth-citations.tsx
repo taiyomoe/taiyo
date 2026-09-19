@@ -1,6 +1,7 @@
+import { QuoteDownIcon } from "@hugeicons/core-free-icons"
+import { HugeiconsIcon } from "@hugeicons/react"
 import * as stylex from "@stylexjs/stylex"
 import { font, radius, text } from "@taiyomoe/ui/styles/tokens.stylex"
-import { Quote } from "lucide-react"
 import { useEffect, useState } from "react"
 
 import { scene } from "@/components/scene/scene.stylex"
@@ -154,7 +155,7 @@ export const AuthCitations = () => {
     >
       <div sx={styles.scrim} />
       <div sx={styles.badge}>
-        <Quote {...stylex.props(styles.badgeIcon)} />
+        <HugeiconsIcon icon={QuoteDownIcon} {...stylex.props(styles.badgeIcon)} />
         {m.auth_reviews_badge()}
       </div>
       <div key={index} sx={styles.slide}>

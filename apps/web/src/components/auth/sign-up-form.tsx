@@ -11,7 +11,13 @@ import { CheckboxField, InputField, PasswordField } from "@/components/fields/fo
 import { env } from "@/env/client"
 import { m } from "@/paraglide/messages"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { LockPasswordIcon, Mail01Icon, UserAccountIcon } from "@hugeicons/core-free-icons"
+import {
+  ArrowLeft01Icon,
+  LockPasswordIcon,
+  Mail01Icon,
+  MailValidation01Icon,
+  UserAccountIcon,
+} from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { ParaglideMessage } from "@inlang/paraglide-js-react"
 import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile"
@@ -20,7 +26,6 @@ import { config } from "@taiyomoe/config"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { Form } from "@taiyomoe/ui/components/ui/form"
 import { Link } from "@tanstack/react-router"
-import { ArrowLeft, MailCheck } from "lucide-react"
 import { type FormEvent, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -93,7 +98,7 @@ export const SignUpForm = () => {
         <AuthHeading title={m.auth_check_inbox_title()} subtitle={m.auth_check_inbox_subtitle()} />
         <div sx={sx.confirmation}>
           <div sx={sx.confirmationBadge}>
-            <MailCheck {...stylex.props(sx.confirmationIcon)} />
+            <HugeiconsIcon icon={MailValidation01Icon} {...stylex.props(sx.confirmationIcon)} />
           </div>
           <p sx={sx.confirmationText}>{m.auth_verification_sent({ email: pendingEmail })}</p>
           <Button
@@ -105,7 +110,7 @@ export const SignUpForm = () => {
               auth.setError(null)
             }}
           >
-            <ArrowLeft />
+            <HugeiconsIcon icon={ArrowLeft01Icon} />
             {m.auth_back_to_sign_up()}
           </Button>
         </div>
