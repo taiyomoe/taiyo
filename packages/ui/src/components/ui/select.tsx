@@ -1,6 +1,5 @@
-"use client"
-
 import { Select as SelectPrimitive } from "@base-ui/react/select"
+import { mergeProps } from "@base-ui/react/merge-props"
 import { useRender } from "@base-ui/react/use-render"
 import * as stylex from "@stylexjs/stylex"
 import type * as React from "react"
@@ -109,6 +108,15 @@ const styles = stylex.create({
       default: "3.25rem",
       [consts.sm]: "3rem",
     },
+  },
+  buttonMinWidth: {
+    minWidth: 0,
+  },
+  buttonLabel: {
+    flex: "1",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap",
   },
   triggerIcon: {
     color: colors.mutedForeground,
@@ -305,6 +313,48 @@ const SIZE_STYLE = {
 export interface SelectButtonProps extends useRender.ComponentProps<"button"> {
   size?: SelectSize
   sx?: Sx
+}
+
+export interface SelectButtonProps extends useRender.ComponentProps<"button"> {
+  size?: SelectSize
+  sx?: Sx
+}
+
+/** A select-shaped trigger for a caller that owns the popup itself. */
+export function SelectButton({
+  className,
+  size = "default",
+  render,
+  children,
+  sx,
+  ...props
+}: SelectButtonProps): React.ReactElement {
+  const typeValue: React.ButtonHTMLAttributes<HTMLButtonElement>["type"] = render
+    ? undefined
+    : "button"
+  const styleProps = stylex.props(styles.trigger, SIZE_STYLE[size], styles.buttonMinWidth, sx)
+  const labelProps = stylex.props(styles.buttonLabel)
+  const iconProps = stylex.props(styles.triggerIcon)
+  const defaultProps = {
+    children: (
+      <>
+        <span className={labelProps.className} style={labelProps.style}>
+          {children}
+        </span>
+        <ChevronsUpDown className={iconProps.className} style={iconProps.style} />
+      </>
+    ),
+    className: cn(styleProps.className, className),
+    "data-slot": "select-button",
+    style: styleProps.style,
+    type: typeValue,
+  }
+
+  return useRender({
+    defaultTagName: "button",
+    props: mergeProps<"button">(defaultProps, props),
+    render,
+  })
 }
 
 export function SelectTrigger({

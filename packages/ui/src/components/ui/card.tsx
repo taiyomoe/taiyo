@@ -1,5 +1,3 @@
-"use client"
-
 import { mergeProps } from "@base-ui/react/merge-props"
 import { useRender } from "@base-ui/react/use-render"
 import * as stylex from "@stylexjs/stylex"
@@ -95,6 +93,16 @@ const styles = stylex.create({
     padding: "1.5rem",
     alignItems: "center",
     display: "flex",
+  },
+  frameAction: {
+    gridRow: {
+      default: null,
+      ":nth-child(3)": "1 / span 2",
+    },
+    alignSelf: "center",
+    display: "inline-flex",
+    gridColumnStart: "2",
+    justifySelf: "end",
   },
 })
 
@@ -194,6 +202,26 @@ export function CardFrameDescription({
   const defaultProps = {
     className: cn(styleProps.className, className),
     "data-slot": "card-frame-description",
+    style: styleProps.style,
+  }
+
+  return useRender({
+    defaultTagName: "div",
+    props: mergeProps<"div">(defaultProps, props),
+    render,
+  })
+}
+
+export function CardFrameAction({
+  className,
+  render,
+  sx,
+  ...props
+}: CardComponentProps): React.ReactElement {
+  const styleProps = stylex.props(styles.frameAction, sx)
+  const defaultProps = {
+    className: cn(styleProps.className, className),
+    "data-slot": "card-frame-action",
     style: styleProps.style,
   }
 

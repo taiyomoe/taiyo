@@ -1,5 +1,3 @@
-"use client"
-
 import { Toast } from "@base-ui/react/toast"
 import * as stylex from "@stylexjs/stylex"
 import type React from "react"
@@ -235,6 +233,54 @@ const styles = stylex.create({
     animationTimingFunction: "linear",
     opacity: 0.8,
   },
+  anchoredViewport: {
+    outlineStyle: "none",
+  },
+  anchoredRoot: {
+    borderColor: colors.border,
+    borderRadius: radius.lg,
+    borderStyle: "solid",
+    borderWidth: 1,
+    backgroundClip: "padding-box",
+    backgroundColor: colors.popover,
+    boxShadow: shadows.overlay,
+    color: colors.popoverForeground,
+    fontSize: "0.75rem",
+    lineHeight: "1rem",
+    opacity: {
+      "[data-ending-style]": 0,
+      "[data-starting-style]": 0,
+      default: null,
+    },
+    position: "relative",
+    scale: {
+      "[data-ending-style]": "0.98",
+      "[data-starting-style]": "0.98",
+      default: null,
+    },
+    textWrap: "balance",
+    transitionProperty: "scale, opacity",
+    "::before": {
+      inset: 0,
+      borderRadius: "inherit",
+      boxShadow: shadows.edge,
+      content: '""',
+      pointerEvents: "none",
+      position: "absolute",
+    },
+  },
+  anchoredRootTooltip: {
+    borderRadius: radius.md,
+  },
+  contentTooltip: {
+    paddingBlock: "0.25rem",
+    paddingInline: "0.5rem",
+    pointerEvents: "auto",
+  },
+  positioner: {
+    zIndex: 50,
+    maxWidth: "min(16rem, var(--available-width))",
+  },
 })
 const ICON_TYPE_STYLE = {
   error: styles.iconError,
@@ -393,6 +439,75 @@ function Toasts({
   )
 }
 
+function AnchoredToasts({
+  portalProps,
+}: {
+  portalProps?: React.ComponentProps<typeof Toast.Portal>
+}): React.ReactElement {
+  const { toasts } = Toast.useToastManager()
+  const viewportProps = stylex.props(styles.anchoredViewport)
+  const positionerProps2 = stylex.props(styles.positioner)
+
+  return (
+    <Toast.Portal data-slot="toast-portal-anchored" {...portalProps}>
+      <Toast.Viewport
+        className={viewportProps.className}
+        data-slot="toast-viewport-anchored"
+        style={viewportProps.style}
+      >
+        {toasts.map((toast) => {
+          const Icon = toast.type ? TOAST_ICONS[toast.type as keyof typeof TOAST_ICONS] : null
+          const toastData = toast.data as ToastData | undefined
+          const tooltipStyle = toastData?.tooltipStyle ?? false
+          const positionerProps = toast.positionerProps
+
+          if (!positionerProps?.anchor) {
+            return null
+          }
+
+          const rootProps = stylex.props(
+            styles.anchoredRoot,
+            tooltipStyle && styles.anchoredRootTooltip,
+            replayStyle(toast),
+          )
+          const contentProps = stylex.props(tooltipStyle ? styles.contentTooltip : styles.content)
+
+          return (
+            <Toast.Positioner
+              key={toast.id}
+              className={positionerProps2.className}
+              data-slot="toast-positioner"
+              sideOffset={positionerProps.sideOffset ?? 4}
+              style={positionerProps2.style}
+              toast={toast}
+            >
+              <Toast.Root
+                className={rootProps.className}
+                style={rootProps.style}
+                {...toastData?.rootProps}
+                data-slot="toast-popup"
+                toast={toast}
+              >
+                <Toast.Content className={contentProps.className} style={contentProps.style}>
+                  {tooltipStyle ? (
+                    <Toast.Title data-slot="toast-title" />
+                  ) : (
+                    <ToastBody
+                      Icon={Icon}
+                      actionChildren={toast.actionProps?.children}
+                      type={toast.type}
+                    />
+                  )}
+                </Toast.Content>
+              </Toast.Root>
+            </Toast.Positioner>
+          )
+        })}
+      </Toast.Viewport>
+    </Toast.Portal>
+  )
+}
+
 export const toastManager: ReturnType<typeof Toast.createToastManager> = Toast.createToastManager()
 
 export type ToastPosition =
@@ -418,6 +533,26 @@ export function ToastProvider({
     <Toast.Provider toastManager={toastManager} {...props}>
       {children}
       <Toasts portalProps={portalProps} position={position} />
+    </Toast.Provider>
+  )
+}
+
+export const anchoredToastManager: ReturnType<typeof Toast.createToastManager> =
+  Toast.createToastManager()
+
+export interface AnchoredToastProviderProps extends Toast.Provider.Props {
+  portalProps?: React.ComponentProps<typeof Toast.Portal>
+}
+
+export function AnchoredToastProvider({
+  children,
+  portalProps,
+  ...props
+}: AnchoredToastProviderProps): React.ReactElement {
+  return (
+    <Toast.Provider toastManager={anchoredToastManager} {...props}>
+      {children}
+      <AnchoredToasts portalProps={portalProps} />
     </Toast.Provider>
   )
 }

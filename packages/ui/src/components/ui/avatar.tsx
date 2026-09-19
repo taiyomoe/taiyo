@@ -1,5 +1,3 @@
-"use client"
-
 import { Avatar as AvatarPrimitive } from "@base-ui/react/avatar"
 import * as stylex from "@stylexjs/stylex"
 import type React from "react"

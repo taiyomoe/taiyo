@@ -1,5 +1,3 @@
-"use client"
-
 import { NumberField as NumberFieldPrimitive } from "@base-ui/react/number-field"
 import * as stylex from "@stylexjs/stylex"
 import * as React from "react"

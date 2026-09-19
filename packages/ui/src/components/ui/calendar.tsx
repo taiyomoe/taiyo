@@ -1,5 +1,3 @@
-"use client"
-
 import * as stylex from "@stylexjs/stylex"
 import type * as React from "react"
 import { DayPicker } from "react-day-picker"

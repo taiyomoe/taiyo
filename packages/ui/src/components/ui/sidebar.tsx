@@ -1,10 +1,9 @@
-"use client"
-
 import { mergeProps } from "@base-ui/react/merge-props"
 import { useRender } from "@base-ui/react/use-render"
 import * as stylex from "@stylexjs/stylex"
 import * as React from "react"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
 import { Sheet, SheetDescription, SheetHeader, SheetPopup, SheetTitle } from "@/components/ui/sheet"
@@ -498,6 +497,89 @@ const styles = stylex.create({
     fontSize: "0.875rem",
     lineHeight: "1.25rem",
   },
+  input: {
+    backgroundColor: colors.background,
+    boxShadow: "none",
+    height: "2rem",
+    width: "100%",
+  },
+  groupAction: {
+    padding: 0,
+    borderRadius: radius.lg,
+    alignItems: "center",
+    aspectRatio: "1",
+    backgroundColor: {
+      default: null,
+      ":hover": colors.sidebarAccent,
+    },
+    color: {
+      default: colors.sidebarForeground,
+      ":hover": colors.sidebarAccentForeground,
+    },
+    display: "flex",
+    justifyContent: "center",
+    outlineColor: colors.sidebarRing,
+    outlineStyle: {
+      default: "none",
+      ":focus-visible": "solid",
+    },
+    outlineWidth: 2,
+    position: "absolute",
+    transitionProperty: "transform",
+    right: "0.75rem",
+    top: "0.875rem",
+    width: "1.25rem",
+    // Widens the tap target on touch layouts only.
+    "::after": {
+      inset: "-0.5rem",
+      content: {
+        default: '""',
+        "@media (width >= 48rem)": "none",
+      },
+      position: "absolute",
+    },
+  },
+  menuAction: {
+    padding: 0,
+    borderRadius: radius.lg,
+    alignItems: "center",
+    aspectRatio: "1",
+    backgroundColor: {
+      default: null,
+      ":hover": colors.sidebarAccent,
+    },
+    color: {
+      default: colors.sidebarForeground,
+      ":hover": colors.sidebarAccentForeground,
+    },
+    display: "flex",
+    justifyContent: "center",
+    outlineColor: colors.sidebarRing,
+    outlineStyle: {
+      default: "none",
+      ":focus-visible": "solid",
+    },
+    outlineWidth: 2,
+    position: "absolute",
+    transitionProperty: "transform",
+    right: "0.25rem",
+    width: "1.25rem",
+    "::after": {
+      inset: "-0.5rem",
+      content: {
+        default: '""',
+        "@media (width >= 48rem)": "none",
+      },
+      position: "absolute",
+    },
+  },
+  menuActionOnHover: {
+    opacity: {
+      '[data-state="open"]': 1,
+      default: null,
+      "@media (width >= 48rem)": 0,
+    },
+  },
 })
 const MENU_BUTTON_SIZE_STYLE = {
   default: styles.menuButtonDefaultSize,
@@ -831,6 +913,22 @@ export function SidebarInset({
   )
 }
 
+export function SidebarInput({
+  className,
+  sx,
+  ...props
+}: React.ComponentProps<typeof Input> & { sx?: Sx }): React.ReactElement {
+  return (
+    <Input
+      className={className}
+      data-sidebar="input"
+      data-slot="sidebar-input"
+      sx={[styles.input, sx]}
+      {...props}
+    />
+  )
+}
+
 export function SidebarHeader({
   className,
   sx,
@@ -939,6 +1037,28 @@ export function SidebarGroupLabel({
 
   return useRender({
     defaultTagName: "div",
+    props: mergeProps(defaultProps, props),
+    render,
+  })
+}
+
+export function SidebarGroupAction({
+  className,
+  render,
+  sx,
+  ...props
+}: useRender.ComponentProps<"button"> & { sx?: Sx }): React.ReactElement {
+  const iconCollapsed = useIconCollapsed()
+  const styleProps = stylex.props(styles.groupAction, iconCollapsed && styles.hidden, sx)
+  const defaultProps = {
+    className: cn(styleProps.className, className),
+    "data-sidebar": "group-action",
+    "data-slot": "sidebar-group-action",
+    style: styleProps.style,
+  }
+
+  return useRender({
+    defaultTagName: "button",
     props: mergeProps(defaultProps, props),
     render,
   })
@@ -1056,6 +1176,37 @@ export function SidebarMenuButton({
       />
     </Tooltip>
   )
+}
+
+export function SidebarMenuAction({
+  className,
+  showOnHover = false,
+  render,
+  sx,
+  ...props
+}: useRender.ComponentProps<"button"> & {
+  showOnHover?: boolean
+  sx?: Sx
+}): React.ReactElement {
+  const iconCollapsed = useIconCollapsed()
+  const styleProps = stylex.props(
+    styles.menuAction,
+    showOnHover && styles.menuActionOnHover,
+    iconCollapsed && styles.hidden,
+    sx,
+  )
+  const defaultProps = {
+    className: cn(styleProps.className, className),
+    "data-sidebar": "menu-action",
+    "data-slot": "sidebar-menu-action",
+    style: styleProps.style,
+  }
+
+  return useRender({
+    defaultTagName: "button",
+    props: mergeProps<"button">(defaultProps, props),
+    render,
+  })
 }
 
 export function SidebarMenuBadge({

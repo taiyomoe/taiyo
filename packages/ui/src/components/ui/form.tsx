@@ -1,5 +1,3 @@
-"use client"
-
 import { Form as FormPrimitive } from "@base-ui/react/form"
 import * as stylex from "@stylexjs/stylex"
 import type React from "react"

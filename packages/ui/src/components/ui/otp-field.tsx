@@ -1,5 +1,3 @@
-"use client"
-
 import { OTPField as OTPFieldPrimitive } from "@base-ui/react/otp-field"
 import * as React from "react"
 import * as stylex from "@stylexjs/stylex"

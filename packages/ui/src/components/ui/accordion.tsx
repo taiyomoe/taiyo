@@ -1,5 +1,3 @@
-"use client"
-
 import { Accordion as AccordionPrimitive } from "@base-ui/react/accordion"
 import * as stylex from "@stylexjs/stylex"
 import type React from "react"

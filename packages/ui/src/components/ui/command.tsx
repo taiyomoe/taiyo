@@ -1,5 +1,3 @@
-"use client"
-
 import { Dialog as CommandDialogPrimitive } from "@base-ui/react/dialog"
 import * as stylex from "@stylexjs/stylex"
 import type * as React from "react"

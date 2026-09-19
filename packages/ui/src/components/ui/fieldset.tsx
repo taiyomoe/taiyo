@@ -1,5 +1,3 @@
-"use client"
-
 import { Fieldset as FieldsetPrimitive } from "@base-ui/react/fieldset"
 import * as stylex from "@stylexjs/stylex"
 import type React from "react"

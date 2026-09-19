@@ -1,5 +1,3 @@
-"use client"
-
 import { Field as FieldPrimitive } from "@base-ui/react/field"
 import * as stylex from "@stylexjs/stylex"
 import type React from "react"

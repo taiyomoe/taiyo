@@ -1,5 +1,3 @@
-"use client"
-
 import { PreviewCard as PreviewCardPrimitive } from "@base-ui/react/preview-card"
 import * as stylex from "@stylexjs/stylex"
 import type React from "react"

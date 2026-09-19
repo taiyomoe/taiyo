@@ -1,5 +1,3 @@
-"use client"
-
 import { Combobox as ComboboxPrimitive } from "@base-ui/react/combobox"
 import * as stylex from "@stylexjs/stylex"
 import * as React from "react"
@@ -331,6 +329,18 @@ const styles = stylex.create({
       [consts.sm]: "0.875rem",
     },
   },
+  status: {
+    margin: {
+      default: null,
+      ":empty": 0,
+    },
+    paddingBlock: "0.5rem",
+    paddingInline: "0.75rem",
+    color: colors.mutedForeground,
+    fontSize: "0.75rem",
+    fontWeight: 500,
+    lineHeight: "1rem",
+  },
 })
 
 export function Combobox<Value, Multiple extends boolean | undefined = false>(
@@ -627,6 +637,23 @@ export function ComboboxEmpty({
   )
 }
 
+export function ComboboxRow({
+  className,
+  sx,
+  ...props
+}: ComboboxPrimitive.Row.Props & { sx?: Sx }): React.ReactElement {
+  const styleProps = stylex.props(sx)
+
+  return (
+    <ComboboxPrimitive.Row
+      className={cn(styleProps.className, className)}
+      data-slot="combobox-row"
+      style={styleProps.style}
+      {...props}
+    />
+  )
+}
+
 export function ComboboxValue({ ...props }: ComboboxPrimitive.Value.Props): React.ReactElement {
   return <ComboboxPrimitive.Value data-slot="combobox-value" {...props} />
 }
@@ -670,6 +697,27 @@ export function ComboboxClear({
       {children ?? <Close className={iconProps.className} style={iconProps.style} />}
     </ComboboxPrimitive.Clear>
   )
+}
+
+export function ComboboxStatus({
+  className,
+  sx,
+  ...props
+}: ComboboxPrimitive.Status.Props & { sx?: Sx }): React.ReactElement {
+  const styleProps = stylex.props(styles.status, sx)
+
+  return (
+    <ComboboxPrimitive.Status
+      className={cn(styleProps.className, className)}
+      data-slot="combobox-status"
+      style={styleProps.style}
+      {...props}
+    />
+  )
+}
+
+export function ComboboxCollection(props: ComboboxPrimitive.Collection.Props): React.ReactElement {
+  return <ComboboxPrimitive.Collection data-slot="combobox-collection" {...props} />
 }
 
 export function ComboboxChips({
