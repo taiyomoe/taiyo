@@ -1,30 +1,20 @@
 @import "@taiyomoe/ui/style.css";
 
-/* PT Serif — the landing page's display face, and the only place a serif is
-   used. It lives here rather than in @taiyomoe/ui because the design system is
-   deliberately Inter-only: this is brand typography for the marketing page, not
-   a component token. 700 upright for headings, 700 italic for review quotes. */
+/* Brand typography for the marketing page, not a component token — the design
+   system itself is deliberately Inter-only. */
 @import "@fontsource/pt-serif/700.css";
 @import "@fontsource/pt-serif/700-italic.css";
 @import "@fontsource/pt-serif/400.css";
 
-/* The landing page navigates by in-page anchor (#titles, #languages, #reviews),
-   so the jump is animated rather than instant. Reverted under reduced motion. */
+/* The landing page navigates by in-page anchor. Reverted under reduced motion. */
 html {
   scroll-behavior: smooth;
 }
 
-/* ── Auth field density ───────────────────────────────────────────────────
-   The auth screen runs its fields taller and roomier than the rest of the
-   product: they are the only thing on the page, and they have to balance the
-   scene beside them. The targets are descendants @taiyomoe/ui renders inside
-   Field/InputGroup, which is out of reach for StyleX (no descendant
-   selectors) and for `sx` (it lands on the wrapper, not the control), so the
-   override lives here, scoped to the form that opts in with `data-auth-fields`.
-
-   The `!important` on the icon is required: @taiyomoe/ui's structural.css
-   already sizes addon icons, and StyleX emits its atoms at a specificity no
-   plain selector can outrank. */
+/* Auth field density. These targets are descendants @taiyomoe/ui renders inside
+   Field/InputGroup, out of reach for StyleX (no descendant selectors) and for
+   `sx` (it lands on the wrapper). The `!important` is required: structural.css
+   already sizes addon icons at a specificity no plain selector can outrank. */
 [data-auth-fields] [data-slot="input"] {
   height: 3rem;
   line-height: 3rem;
@@ -41,23 +31,15 @@ html {
   width: 1.25rem !important;
 }
 
-/* ── Brand scene animations ───────────────────────────────────────────────
-   Shared by the auth screen and the landing page: both render the same dark
-   world (sun, rays, embers) and the same gradient CTA, so the keyframes live
-   here under one `scene-` namespace rather than being duplicated per screen. */
+/* Scene animations, shared by the auth screen and the landing page — which is
+   why they are global keyframes rather than per-component stylex.keyframes(). */
 @keyframes scene-spin {
   to {
     transform: rotate(360deg);
   }
 }
 
-/* Each ray scales along its own length from its base at the sun's center
-   (transform-origin: top center), so it breathes outward.
-
-   The rest and peak scales come from per-ray custom properties rather than
-   being baked in here: every spoke sets its own `--ray-rest` / `--ray-peak`,
-   so no two rays grow by the same amount. With per-ray duration and delay on
-   top, nothing in the cluster is ever in phase with anything else. */
+/* Scales read from per-ray custom properties, so no two rays grow alike. */
 @keyframes scene-ray-pulse {
   0%,
   100% {
@@ -127,21 +109,6 @@ html {
   }
   50% {
     transform: translateY(7px);
-  }
-}
-
-/* ── Auth screen animations ───────────────────────────────────────────────── */
-
-/* Form swap between /sign-up and /sign-in. Default fill-mode means the form rests at
-   its natural (visible) state — it is never left hidden if the animation doesn't run. */
-@keyframes auth-form-in {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
   }
 }
 

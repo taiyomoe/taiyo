@@ -2,8 +2,8 @@ import * as stylex from "@stylexjs/stylex"
 import { font } from "@taiyomoe/ui/styles/tokens.stylex"
 
 import { CoverArt } from "@/components/landing/cover-art"
-import { Stars } from "@/components/landing/landing-atoms"
 import { TITLES } from "@/components/landing/landing-data"
+import { Stars } from "@/components/scene/stars"
 import { scene } from "@/components/scene/scene.stylex"
 
 // Rendered twice so the -50% translate lands the copy exactly where the

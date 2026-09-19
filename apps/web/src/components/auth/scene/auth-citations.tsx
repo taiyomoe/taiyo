@@ -3,8 +3,8 @@ import { font, radius, text } from "@taiyomoe/ui/styles/tokens.stylex"
 import { Quote } from "lucide-react"
 import { useEffect, useState } from "react"
 
-import { AuthCitationsRating } from "@/components/auth/scene/auth-citations-rating"
 import { scene } from "@/components/scene/scene.stylex"
+import { Stars } from "@/components/scene/stars"
 import { m } from "@/paraglide/messages"
 
 type Citation = {
@@ -28,8 +28,6 @@ const styles = stylex.create({
     zIndex: 3,
     maxWidth: "32.5rem",
   },
-  // A soft dark pool behind the quote so it stays readable wherever the sun
-  // and the embers happen to be. Bleeds well past the text on every side.
   scrim: {
     background:
       "radial-gradient(58% 72% at 32% 52%, rgba(8,4,2,0.82), rgba(8,4,2,0.45) 55%, transparent 78%)",
@@ -62,8 +60,6 @@ const styles = stylex.create({
     height: "0.875rem",
     width: "0.875rem",
   },
-  // Reserves the tallest quote's height so the dots below do not jump as the
-  // carousel advances.
   slide: {
     textShadow: "0 2px 18px rgba(10,5,3,0.7)",
     minHeight: "11.75rem",
@@ -162,7 +158,7 @@ export const AuthCitations = () => {
         {m.auth_reviews_badge()}
       </div>
       <div key={index} sx={styles.slide}>
-        <AuthCitationsRating count={citation.rating} />
+        <Stars filled={citation.rating} />
         <p sx={styles.quote}>{`“${citation.quote()}”`}</p>
         <div sx={styles.author}>
           <span sx={styles.avatar}>{citation.who.charAt(0).toUpperCase()}</span>

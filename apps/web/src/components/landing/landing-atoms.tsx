@@ -5,8 +5,6 @@ import { type ReactNode, useEffect, useRef, useState } from "react"
 import { scene, sceneFont } from "@/components/scene/scene.stylex"
 
 const styles = stylex.create({
-  // The page's one content measure. Every band is full-bleed; only the text
-  // inside it is constrained, so the section backgrounds still run edge to edge.
   section: {
     marginInline: "auto",
     paddingInline: "clamp(1.25rem,4vw,2.5rem)",
@@ -41,10 +39,6 @@ const styles = stylex.create({
     fontWeight: 800,
     letterSpacing: "0.14em",
     textTransform: "uppercase",
-  },
-  stars: {
-    gap: "0.1875rem",
-    display: "inline-flex",
   },
   head: {
     gap: "1rem",
@@ -85,7 +79,6 @@ export const Section = ({ children }: { children: ReactNode }) => (
   <div sx={styles.section}>{children}</div>
 )
 
-/** Letter-spaced caps with a glowing gold dot — the page's section marker. */
 export const Eyebrow = ({
   children,
   centered = false,
@@ -97,27 +90,6 @@ export const Eyebrow = ({
     <span sx={styles.eyebrowDot} />
     <span sx={styles.eyebrowLabel}>{children}</span>
   </div>
-)
-
-/**
- * Rating stars. Hand-drawn rather than pulled from the icon set: hugeicons'
- * free tier is stroke-only, and a rating needs a SOLID star to read the
- * filled/empty split at 12–16px.
- */
-export const Stars = ({ filled, size = 15 }: { filled: number; size?: number }) => (
-  <span sx={styles.stars} aria-hidden>
-    {Array.from({ length: 5 }).map((_, i) => (
-      <svg
-        key={i}
-        width={size}
-        height={size}
-        viewBox="0 0 24 24"
-        fill={i < filled ? scene.gold : `color-mix(in srgb, ${scene.paper} 16%, transparent)`}
-      >
-        <path d="M12 2.6l2.7 5.9 6.4.7-4.8 4.3 1.3 6.3L12 16.9 6.2 20.1l1.3-6.3L2.7 9.2l6.4-.7L12 2.6z" />
-      </svg>
-    ))}
-  </span>
 )
 
 export const SectionHead = ({
@@ -155,8 +127,6 @@ export const Reveal = ({ children, delay = 0 }: { children: ReactNode; delay?: n
       return
     }
 
-    // No observer (very old browser, some test runners): reveal on the next
-    // tick rather than synchronously, which would cascade an extra render.
     if (typeof IntersectionObserver === "undefined") {
       const immediate = setTimeout(() => setSeen(true), 0)
 

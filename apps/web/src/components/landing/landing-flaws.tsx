@@ -15,20 +15,43 @@ import { Reveal, Section, SectionHead } from "@/components/landing/landing-atoms
 import { scene, sceneFont } from "@/components/scene/scene.stylex"
 import { m } from "@/paraglide/messages"
 
-// The anti-pitch. Where a landing page normally sells its features, this one
-// talks the reader out of signing up — including, sincerely, a card pointing at
-// a competitor. It is the same joke the reviews section runs on.
 const FLAWS = [
-  { icon: ConstructionIcon, title: m.landing_flaw_broken_title, body: m.landing_flaw_broken_body },
-  { icon: LibraryIcon, title: m.landing_flaw_catalog_title, body: m.landing_flaw_catalog_body },
-  { icon: LinkSquare02Icon, title: m.landing_flaw_kuro_title, body: m.landing_flaw_kuro_body },
   {
+    id: "broken",
+    icon: ConstructionIcon,
+    title: m.landing_flaw_broken_title,
+    body: m.landing_flaw_broken_body,
+  },
+  {
+    id: "catalog",
+    icon: LibraryIcon,
+    title: m.landing_flaw_catalog_title,
+    body: m.landing_flaw_catalog_body,
+  },
+  {
+    id: "kuro",
+    icon: LinkSquare02Icon,
+    title: m.landing_flaw_kuro_title,
+    body: m.landing_flaw_kuro_body,
+  },
+  {
+    id: "servers",
     icon: ServerStack01Icon,
     title: m.landing_flaw_servers_title,
     body: m.landing_flaw_servers_body,
   },
-  { icon: UserGroupIcon, title: m.landing_flaw_team_title, body: m.landing_flaw_team_body },
-  { icon: SmartPhone01Icon, title: m.landing_flaw_app_title, body: m.landing_flaw_app_body },
+  {
+    id: "team",
+    icon: UserGroupIcon,
+    title: m.landing_flaw_team_title,
+    body: m.landing_flaw_team_body,
+  },
+  {
+    id: "app",
+    icon: SmartPhone01Icon,
+    title: m.landing_flaw_app_title,
+    body: m.landing_flaw_app_body,
+  },
 ]
 const styles = stylex.create({
   band: {
@@ -146,7 +169,7 @@ export const LandingFlaws = () => (
       </Reveal>
       <div sx={styles.grid}>
         {FLAWS.map((flaw, i) => (
-          <Reveal key={flaw.title()} delay={i * 90}>
+          <Reveal key={flaw.id} delay={i * 90}>
             <FlawCard icon={flaw.icon} title={flaw.title()} body={flaw.body()} />
           </Reveal>
         ))}

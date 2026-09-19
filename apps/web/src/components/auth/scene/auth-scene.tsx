@@ -9,8 +9,6 @@ import { Embers } from "@/components/scene/embers"
 import { scene } from "@/components/scene/scene.stylex"
 import { m } from "@/paraglide/messages"
 
-// The scene is decoration: below `lg` there is no room for it beside the form,
-// so it is not rendered at all rather than stacked.
 const LG = "@media (width >= 64rem)"
 const styles = stylex.create({
   root: {
@@ -23,8 +21,6 @@ const styles = stylex.create({
     justifyContent: "space-between",
     position: "relative",
   },
-  // z-3 lifts the foreground clear of the sun, the embers and the vignette,
-  // all of which are absolutely positioned children of the same box.
   logo: {
     opacity: { default: 1, ":hover": 0.8 },
     position: "relative",

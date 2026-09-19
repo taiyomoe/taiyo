@@ -6,10 +6,8 @@ import { darkShadows, darkTheme } from "@taiyomoe/ui/styles/themes"
 
 import appCss from "../styles.css?url"
 
-// Dark is the design system's flagship theme. Two halves have to agree on it:
-// the `dark` class drives the plain CSS custom properties in globals.css that
-// structural.css reads, and the StyleX theme classes re-declare the same
-// tokens for the components. Both live on <html> so portals inherit them.
+// Both halves live on <html> so portals inherit them: the `dark` class drives
+// globals.css's custom properties, the StyleX theme classes drive the components.
 const darkModeClassName = `dark ${stylex.props(darkTheme, darkShadows).className ?? ""}`.trim()
 
 export const Route = createRootRoute({
@@ -43,15 +41,8 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <body>
         {children}
         <TanStackDevtools
-          config={{
-            position: "bottom-right",
-          }}
-          plugins={[
-            {
-              name: "Tanstack Router",
-              render: <TanStackRouterDevtoolsPanel />,
-            },
-          ]}
+          config={{ position: "bottom-right" }}
+          plugins={[{ name: "Tanstack Router", render: <TanStackRouterDevtoolsPanel /> }]}
         />
         <Scripts />
       </body>

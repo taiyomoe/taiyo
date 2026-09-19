@@ -1,7 +1,6 @@
 import * as stylex from "@stylexjs/stylex"
 import { font, radius } from "@taiyomoe/ui/styles/tokens.stylex"
-import { useNavigate } from "@tanstack/react-router"
-import { useState } from "react"
+import { Link } from "@tanstack/react-router"
 
 import { AuthScene } from "@/components/auth/scene/auth-scene"
 import { SignInForm } from "@/components/auth/sign-in-form"
@@ -13,8 +12,6 @@ const TABS = [
   { type: "sign-up", label: m.auth_sign_up, to: "/auth/sign-up" },
   { type: "sign-in", label: m.auth_sign_in, to: "/auth/sign-in" },
 ] as const
-// Below `lg` the scene is hidden and the form takes the whole viewport, so the
-// screen stays a single-column grid until there is room for both.
 const LG = "@media (width >= 64rem)"
 const styles = stylex.create({
   screen: {
@@ -25,8 +22,6 @@ const styles = stylex.create({
     gridTemplateColumns: { [LG]: "1.05fr 0.95fr", default: null },
     height: "100svh",
   },
-  // Its own scroller so a tall form scrolls without moving the scene beside
-  // it. The scrollbar is hidden because the panel is edge-to-edge artwork.
   panel: {
     paddingBlock: "2rem",
     paddingInline: "clamp(28px,5vw,76px)",
@@ -67,6 +62,7 @@ const styles = stylex.create({
     fontFamily: font.sans,
     fontSize: "0.875rem",
     fontWeight: 700,
+    textDecorationLine: "none",
     transitionDuration: "150ms",
     transitionProperty: "background-color, color",
   },
@@ -79,35 +75,25 @@ const styles = stylex.create({
   },
 })
 
-export const AuthForm = ({ type: initialType }: { type: "sign-in" | "sign-up" }) => {
-  const [type, setType] = useState(initialType)
-  const navigate = useNavigate()
-  const handleTabClick = async (type: "sign-in" | "sign-up") => {
-    setType(type)
-
-    await navigate({ to: `/auth/${type}` })
-  }
-
-  return (
-    <div data-auth-screen sx={styles.screen}>
-      <AuthScene />
-      <div sx={styles.panel}>
-        <div sx={styles.column}>
-          <div sx={styles.tabs}>
-            {TABS.map((tab) => (
-              <button
-                key={tab.type}
-                onClick={() => handleTabClick(tab.type)}
-                data-active={tab.type === type}
-                sx={[styles.tab, tab.type === type && styles.tabActive]}
-              >
-                {tab.label()}
-              </button>
-            ))}
-          </div>
-          {type === "sign-in" ? <SignInForm /> : <SignUpForm />}
+export const AuthForm = ({ type }: { type: "sign-in" | "sign-up" }) => (
+  <div data-auth-screen sx={styles.screen}>
+    <AuthScene />
+    <div sx={styles.panel}>
+      <div sx={styles.column}>
+        <div sx={styles.tabs}>
+          {TABS.map((tab) => (
+            <Link
+              key={tab.type}
+              to={tab.to}
+              data-active={tab.type === type}
+              sx={[styles.tab, tab.type === type && styles.tabActive]}
+            >
+              {tab.label()}
+            </Link>
+          ))}
         </div>
+        {type === "sign-in" ? <SignInForm /> : <SignUpForm />}
       </div>
     </div>
-  )
-}
+  </div>
+)

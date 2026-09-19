@@ -2,10 +2,6 @@ import * as stylex from "@stylexjs/stylex"
 
 import { scene } from "@/components/scene/scene.stylex"
 
-/**
- * Styles shared by the sign-in and sign-up forms, so the two screens cannot
- * drift apart as they are edited.
- */
 export const authFormStyles = stylex.create({
   stack: {
     gap: "1.25rem",
@@ -23,7 +19,6 @@ export const authFormStyles = stylex.create({
     display: "flex",
     justifyContent: "space-between",
   },
-  /** The gold in-scene link: "forgot password", "create an account", terms. */
   link: {
     color: scene.goldLight,
     fontWeight: 700,
@@ -32,13 +27,6 @@ export const authFormStyles = stylex.create({
   linkNoWrap: {
     fontSize: "0.875rem",
     whiteSpace: "nowrap",
-  },
-  /** Plain <button> that has to read as the link next to it. */
-  linkButton: {
-    borderStyle: "none",
-    backgroundColor: "transparent",
-    cursor: "pointer",
-    fontSize: "inherit",
   },
   footer: {
     color: `color-mix(in srgb, ${scene.paper} 55%, transparent)`,
@@ -49,7 +37,6 @@ export const authFormStyles = stylex.create({
   submit: {
     marginTop: "0.5rem",
   },
-  /** Sign-up's "check your inbox" state. */
   confirmation: {
     gap: "1rem",
     alignItems: "center",
@@ -79,7 +66,6 @@ export const authFormStyles = stylex.create({
     height: "3rem",
     width: "100%",
   },
-  /** Turnstile and submit read as one group rather than two stacked blocks. */
   captchaGroup: {
     gap: "0.75rem",
     display: "flex",

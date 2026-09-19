@@ -7,8 +7,6 @@ const styles = stylex.create({
   title: {
     color: scene.paper,
     fontFamily: font.heading,
-    // Scales with the viewport so the heading keeps its weight against the
-    // scene beside it without a breakpoint step.
     fontSize: "clamp(30px, 3.4vw, 42px)",
     fontWeight: 700,
     letterSpacing: "-0.02em",

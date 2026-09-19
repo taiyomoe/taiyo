@@ -18,9 +18,6 @@ const styles = stylex.create({
     display: "grid",
     gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
   },
-  // Taller and larger than the default outline button: on this screen the two
-  // providers are the primary path, and they have to hold their own against
-  // the gradient submit below.
   provider: {
     gap: "0.75rem",
     fontSize: text.lg,

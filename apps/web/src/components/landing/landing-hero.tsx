@@ -6,9 +6,10 @@ import { type MouseEvent, useState } from "react"
 
 import { GhostAnchor } from "@/components/buttons/ghost-anchor"
 import { SunLink } from "@/components/buttons/sun-button"
-import { Eyebrow, Stars } from "@/components/landing/landing-atoms"
+import { Eyebrow } from "@/components/landing/landing-atoms"
 import { LandingSun, type Parallax } from "@/components/landing/landing-sun"
 import { Embers } from "@/components/scene/embers"
+import { Stars } from "@/components/scene/stars"
 import { scene, sceneFont } from "@/components/scene/scene.stylex"
 import { m } from "@/paraglide/messages"
 
@@ -24,8 +25,6 @@ const styles = stylex.create({
     position: "relative",
     textAlign: "center",
     minHeight: "100vh",
-    // Asymmetric on purpose: the copy is centred in what's left after the
-    // padding, so reserving the bottom lifts it clear of the sun's arc.
     paddingBottom: "clamp(10rem, 28vh, 20rem)",
     paddingTop: "7.5rem",
   },
@@ -38,10 +37,6 @@ const styles = stylex.create({
     zIndex: 3,
     maxWidth: "55rem",
   },
-  // A soft pool of shade behind the copy, settling it into the sky above the
-  // sun. On its own layer (z-index 1, under the copy's 3) rather than on the
-  // copy block, so its edges never track the text box — and kept clear of the
-  // disc, whose brightness would otherwise reveal the ellipse as a seam.
   scrim: {
     backgroundImage:
       "radial-gradient(60% 56% at 50% 46%, rgba(14,7,4,0.62), rgba(14,7,4,0.28) 60%, transparent 78%)",
@@ -106,11 +101,6 @@ const styles = stylex.create({
   },
 })
 
-/**
- * The hero. The sun crests from below the fold and the copy sits on the sky
- * above it, staged as in the mockup. Layers, back to front: LandingSun (0) →
- * scrim (1) → copy (3). Anything readable belongs on 3.
- */
 export const LandingHero = () => {
   const [parallax, setParallax] = useState<Parallax>({ x: 0, y: 0 })
   const onMouseMove = (event: MouseEvent<HTMLElement>) => {

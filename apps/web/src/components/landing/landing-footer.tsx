@@ -7,35 +7,37 @@ import { Section } from "@/components/landing/landing-atoms"
 import { scene } from "@/components/scene/scene.stylex"
 import { m } from "@/paraglide/messages"
 
-// `href: "#titles"` is the in-page cover strip — a real destination until the
-// catalog, community and company routes exist. Nothing here points at a route
-// that has not been built.
+// `#titles` is the in-page cover strip. The `#` links are placeholders: the
+// company and community routes do not exist yet.
 const COLUMNS = [
   {
+    id: "read",
     heading: m.landing_footer_col_read,
     links: [
-      { label: m.landing_footer_browse, href: "#titles" },
-      { label: m.landing_footer_latest, href: "#titles" },
-      { label: m.landing_footer_popular, href: "#titles" },
-      { label: m.landing_footer_random, href: "#titles" },
+      { id: "browse", label: m.landing_footer_browse, href: "#titles" },
+      { id: "latest", label: m.landing_footer_latest, href: "#titles" },
+      { id: "popular", label: m.landing_footer_popular, href: "#titles" },
+      { id: "random", label: m.landing_footer_random, href: "#titles" },
     ],
   },
   {
+    id: "taiyo",
     heading: m.landing_footer_col_taiyo,
     links: [
-      { label: m.landing_footer_about, href: "#" },
-      { label: m.landing_footer_careers, href: "#" },
-      { label: m.landing_footer_press, href: "#" },
-      { label: m.landing_footer_sun, href: "#" },
+      { id: "about", label: m.landing_footer_about, href: "#" },
+      { id: "careers", label: m.landing_footer_careers, href: "#" },
+      { id: "press", label: m.landing_footer_press, href: "#" },
+      { id: "sun", label: m.landing_footer_sun, href: "#" },
     ],
   },
   {
+    id: "community",
     heading: m.landing_footer_col_community,
     links: [
-      { label: m.landing_footer_discord, href: "#" },
-      { label: m.landing_footer_translator, href: "#" },
-      { label: m.landing_footer_guidelines, href: "#" },
-      { label: m.landing_footer_report, href: "#" },
+      { id: "discord", label: m.landing_footer_discord, href: "#" },
+      { id: "translator", label: m.landing_footer_translator, href: "#" },
+      { id: "guidelines", label: m.landing_footer_guidelines, href: "#" },
+      { id: "report", label: m.landing_footer_report, href: "#" },
     ],
   },
 ]
@@ -138,11 +140,11 @@ export const LandingFooter = () => (
           <p sx={styles.tagline}>{m.landing_footer_tagline()}</p>
         </div>
         {COLUMNS.map((column) => (
-          <div key={column.heading()}>
+          <div key={column.id}>
             <div sx={styles.heading}>{column.heading()}</div>
             <div sx={styles.links}>
               {column.links.map((link) => (
-                <a key={link.label()} href={link.href} sx={styles.link}>
+                <a key={link.id} href={link.href} sx={styles.link}>
                   {link.label()}
                 </a>
               ))}

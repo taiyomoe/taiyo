@@ -25,18 +25,12 @@ export const Route = createFileRoute("/")({
 const styles = stylex.create({
   page: {
     backgroundColor: scene.night,
-    // The scene is always night, in both themes — the sections paint their own
-    // ground, and this catches overscroll and any sub-pixel seam between them.
     color: scene.paper,
     overflowX: "hidden",
   },
 })
 
-/**
- * The marketing page. `data-landing` is what the reduced-motion block in
- * styles.css keys off, so the sun, the embers and the cover strip all stop
- * together rather than one at a time.
- */
+/** `data-landing` is the hook the reduced-motion block in styles.css keys off. */
 function Home() {
   return (
     <div data-landing sx={styles.page}>

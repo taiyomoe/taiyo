@@ -4,23 +4,21 @@
 // stops applying. See packages/ui/STYLEX.md.
 // oxlint-disable-next-line no-unused-vars
 import * as stylex from "@stylexjs/stylex"
+import { AuthAlert } from "@/components/auth/auth-alert"
 import { authFormStyles as sx } from "@/components/auth/auth-form-styles"
 import { AuthHeading } from "@/components/auth/auth-heading"
-import { AuthSocialButtons, type SocialProvider } from "@/components/auth/auth-social-buttons"
+import { AuthSocialButtons } from "@/components/auth/auth-social-buttons"
+import { AuthSwitchLink } from "@/components/auth/auth-switch-link"
+import { useAuthForm } from "@/components/auth/use-auth-form"
 import { SunButton } from "@/components/buttons/sun-button"
-import { CheckboxField } from "@/components/fields/checkbox-field"
-import { EmailField } from "@/components/fields/email-field"
-import { PasswordField } from "@/components/fields/password-field"
+import { CheckboxField, InputField, PasswordField } from "@/components/fields/form-field"
 import { m } from "@/paraglide/messages"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { LockPasswordIcon } from "@hugeicons/core-free-icons"
+import { LockPasswordIcon, Mail01Icon } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { authClient } from "@taiyomoe/auth/client"
-import { Alert, AlertTitle } from "@taiyomoe/ui/components/ui/alert"
 import { Form } from "@taiyomoe/ui/components/ui/form"
 import { useNavigate } from "@tanstack/react-router"
-import { CircleAlert } from "lucide-react"
-import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
@@ -32,18 +30,17 @@ const signInSchema = z.object({
 
 export const SignInForm = () => {
   const navigate = useNavigate()
-  const [formError, setFormError] = useState<string | null>(null)
-  const [socialPending, setSocialPending] = useState<SocialProvider | null>(null)
+  const auth = useAuthForm()
   const form = useForm({
     resolver: zodResolver(signInSchema),
     mode: "onTouched",
     defaultValues: { email: "", password: "", rememberMe: true },
-    disabled: socialPending !== null,
+    disabled: auth.disabled,
   })
   const isSubmitting = form.formState.isSubmitting
-  const isBusy = isSubmitting || socialPending !== null
+  const isBusy = isSubmitting || auth.disabled
   const onSubmit = form.handleSubmit(async (values) => {
-    setFormError(null)
+    auth.setError(null)
 
     await authClient.signIn.email(
       {
@@ -54,47 +51,31 @@ export const SignInForm = () => {
       },
       {
         onError: ({ error }) => {
-          setFormError(error.message || m.auth_error_generic())
+          auth.setError(error.message || m.auth_error_generic())
         },
         onSuccess: () => navigate({ to: "/" }),
       },
     )
   })
-  const onSocial = async (provider: SocialProvider) => {
-    setFormError(null)
-    setSocialPending(provider)
-
-    await authClient.signIn.social(
-      { provider, callbackURL: "/" },
-      {
-        onError: ({ error }) => {
-          setFormError(error.message || m.auth_error_generic())
-          setSocialPending(null)
-        },
-      },
-    )
-  }
 
   return (
     <>
       <AuthHeading title={m.auth_sign_in_title()} subtitle={m.auth_sign_in_subtitle()} />
       <div sx={sx.stack}>
-        {formError ? (
-          <Alert variant="error">
-            <CircleAlert />
-            <AlertTitle>{formError}</AlertTitle>
-          </Alert>
-        ) : null}
+        <AuthAlert message={auth.error} />
         <AuthSocialButtons
           label={m.auth_divider_sign_in()}
-          pending={socialPending}
+          pending={auth.socialPending}
           disabled={isBusy}
-          onSelect={onSocial}
+          onSelect={auth.onSocial}
         />
         <Form data-auth-fields sx={sx.fields} onSubmit={onSubmit} noValidate>
-          <EmailField
+          <InputField
             name="email"
             control={form.control}
+            label={m.global_email()}
+            type="email"
+            startIcon={<HugeiconsIcon icon={Mail01Icon} />}
             size="lg"
             autoComplete="email"
             placeholder={m.auth_email_placeholder()}
@@ -118,12 +99,11 @@ export const SignInForm = () => {
           </SunButton>
         </Form>
       </div>
-      <p sx={sx.footer}>
-        {m.auth_footer_no_account()}{" "}
-        <button onClick={() => navigate({ to: "/auth/sign-up" })} sx={[sx.link, sx.linkButton]}>
-          {m.auth_create_an_account()}
-        </button>
-      </p>
+      <AuthSwitchLink
+        prompt={m.auth_footer_no_account()}
+        label={m.auth_create_an_account()}
+        to="/auth/sign-up"
+      />
     </>
   )
 }

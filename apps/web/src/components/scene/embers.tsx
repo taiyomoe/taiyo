@@ -1,19 +1,8 @@
 import * as stylex from "@stylexjs/stylex"
 import { type CSSProperties, useMemo } from "react"
 
+import { rand, round } from "./deterministic"
 import { scene } from "./scene.stylex"
-
-// Deterministic pseudo-random so SSR and client render identically (no hydration
-// mismatch). Math.random() would diverge between server and browser.
-const rand = (seed: number) => {
-  const x = Math.sin(seed * 12.9898) * 43758.5453
-
-  return x - Math.floor(x)
-}
-// Round to 2 decimals so the serialized SSR style string and the client's float
-// carry identical precision — otherwise the browser rounds long floats
-// (5.721816935692914% -> 5.72182%) and React flags a hydration mismatch.
-const round = (n: number) => Math.round(n * 100) / 100
 const build = (count: number) =>
   Array.from({ length: count }).map((_, i) => {
     const size = round(2 + rand(i + 100) * 4)

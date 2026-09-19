@@ -8,15 +8,10 @@ import type { ComponentProps, CSSProperties, ReactNode } from "react"
 
 import { scene } from "@/components/scene/scene.stylex"
 
-// Quick diagonal glint (0–26%) then a long rest off-screen (26–100%), so the
-// button shines periodically instead of constantly. Both ends are off-screen.
 const sheenSweep = stylex.keyframes({
   "0%": { transform: "translateX(-130%) skewX(-18deg)" },
   "26%, 100%": { transform: "translateX(330%) skewX(-18deg)" },
 })
-// The signature gradient CTA with an animated sheen. Custom (not a @taiyomoe/ui
-// Button variant) because of the gradient fill + sheen overlay: it belongs to
-// the brand scene, not to the themed component set.
 const styles = stylex.create({
   base: {
     borderRadius: radius.full,
@@ -58,7 +53,6 @@ const styles = stylex.create({
   block: {
     width: "100%",
   },
-  // A <button> centres its content by default; an <a> does not.
   link: {
     alignItems: "center",
     display: "inline-flex",
@@ -84,8 +78,6 @@ const styles = stylex.create({
     position: "absolute",
     zIndex: 2,
   },
-  // Anchored at left-0 so the translate (relative to its own width) clears the
-  // whole button; `backwards` keeps it off-screen before the first sweep.
   sheen: {
     animationDuration: "5s",
     animationFillMode: "backwards",
@@ -110,7 +102,6 @@ type SunSkinProps = {
   sx?: Sx
 }
 
-/** The label + sheen layers every sun-skinned element renders. */
 const SunBody = ({ children, loading }: { children: ReactNode; loading?: boolean }) => (
   <>
     <span sx={[styles.label, loading && styles.labelLoading]}>{children}</span>
@@ -162,8 +153,6 @@ export const SunButton = ({
   )
 }
 
-// TanStack's Link accepts a render-prop child; the sun skin wraps its children
-// in layout spans, so only plain nodes make sense here.
 export type SunLinkProps = Omit<ComponentProps<typeof Link>, "children"> &
   SunSkinProps & {
     children?: ReactNode
