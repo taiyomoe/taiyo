@@ -161,9 +161,9 @@ export const LandingFooter = () => (
           <Link to="/privacy" {...stylex.props(styles.legalLink)}>
             {m.landing_footer_privacy()}
           </Link>
-          <a href="#" sx={styles.legalLink}>
+          <Link to="/dmca" {...stylex.props(styles.legalLink)}>
             {m.landing_footer_content_policy()}
-          </a>
+          </Link>
         </div>
       </div>
     </Section>
