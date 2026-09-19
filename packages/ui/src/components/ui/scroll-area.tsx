@@ -6,6 +6,7 @@ import type React from "react"
 import { cn } from "@/utils/cn"
 import type { Sx } from "../../styles/sx"
 import { colors, radius } from "../../styles/tokens.stylex"
+import { focus } from "../../styles/recipes"
 
 const styles = stylex.create({
   root: {
@@ -15,13 +16,6 @@ const styles = stylex.create({
   },
   viewport: {
     borderRadius: "inherit",
-    outlineColor: colors.ring,
-    outlineOffset: 1,
-    outlineStyle: {
-      default: "none",
-      ":focus-visible": "solid",
-    },
-    outlineWidth: 2,
     height: "100%",
     overscrollBehaviorX: {
       "[data-has-overflow-x]": "contain",
@@ -108,6 +102,7 @@ export function ScrollArea({
 }): React.ReactElement {
   const rootProps = stylex.props(styles.root, sx)
   const viewportProps = stylex.props(
+    focus.control,
     styles.viewport,
     scrollFade && styles.viewportFade,
     scrollbarGutter && styles.viewportGutter,

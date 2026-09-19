@@ -10,6 +10,7 @@ import { Close } from "@/components/icons"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { colors, consts, font, radius, shadows, text } from "../../styles/tokens.stylex"
+import { surface } from "../../styles/recipes"
 import type { Sx } from "../../styles/sx"
 
 const styles = stylex.create({
@@ -90,14 +91,6 @@ const styles = stylex.create({
     minHeight: 0,
     minWidth: 0,
     width: "100%",
-    "::before": {
-      inset: 0,
-      borderRadius: "inherit",
-      boxShadow: shadows.edge,
-      content: '""',
-      pointerEvents: "none",
-      position: "absolute",
-    },
   },
   popupBottomStick: {
     borderRadius: {
@@ -274,7 +267,12 @@ export function DialogPopup({
   portalProps?: DialogPrimitive.Portal.Props
   sx?: Sx
 }): React.ReactElement {
-  const styleProps = stylex.props(styles.popup, bottomStickOnMobile && styles.popupBottomStick, sx)
+  const styleProps = stylex.props(
+    surface.raisedEdge,
+    styles.popup,
+    bottomStickOnMobile && styles.popupBottomStick,
+    sx,
+  )
 
   return (
     <DialogPortal {...portalProps}>

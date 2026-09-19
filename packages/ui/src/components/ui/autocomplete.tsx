@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import type { Sx } from "../../styles/sx"
 import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
+import { surface } from "../../styles/recipes"
 
 export const Autocomplete: typeof AutocompletePrimitive.Root = AutocompletePrimitive.Root
 
@@ -125,14 +126,6 @@ const styles = stylex.create({
     maxHeight: "100%",
     maxWidth: "var(--available-width)",
     minWidth: "var(--anchor-width)",
-    "::before": {
-      inset: 0,
-      borderRadius: "inherit",
-      boxShadow: shadows.edge,
-      content: '""',
-      pointerEvents: "none",
-      position: "absolute",
-    },
   },
   popup: {
     flex: "1",
@@ -313,7 +306,7 @@ export function AutocompletePopup({
   sx?: Sx
 }): React.ReactElement {
   const positionerProps = stylex.props(styles.positioner)
-  const surfaceProps = stylex.props(styles.surface, sx)
+  const surfaceProps = stylex.props(surface.raisedEdge, styles.surface, sx)
   const popupProps = stylex.props(styles.popup)
 
   return (

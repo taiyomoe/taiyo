@@ -19,7 +19,7 @@ const styles = stylex.create({
     backgroundClip: "padding-box",
     backgroundColor: colors.field,
     boxShadow: {
-      default: "0 1px 2px 0 rgb(0 0 0 / 5%)",
+      default: shadows.chip,
       ":focus-within": "none",
     },
     color: colors.foreground,

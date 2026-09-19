@@ -6,6 +6,7 @@ import * as React from "react"
 import { cn } from "@/utils/cn"
 import type { Sx } from "../../styles/sx"
 import { colors, radius, shadows } from "../../styles/tokens.stylex"
+import { focus } from "../../styles/recipes"
 
 const styles = stylex.create({
   root: {
@@ -105,12 +106,6 @@ const styles = stylex.create({
     },
     display: "block",
     flexShrink: 0,
-    outlineColor: `color-mix(in srgb, ${colors.ring} 24%, transparent)`,
-    outlineStyle: {
-      default: "none",
-      ":focus-within": "solid",
-    },
-    outlineWidth: 3,
     scale: {
       "[data-dragging]": "1.2",
       default: null,
@@ -160,7 +155,7 @@ export function Slider({
   const controlProps = stylex.props(styles.control)
   const trackProps = stylex.props(styles.track)
   const indicatorProps = stylex.props(styles.indicator)
-  const thumbProps = stylex.props(styles.thumb)
+  const thumbProps = stylex.props(focus.field, styles.thumb)
 
   return (
     <SliderPrimitive.Root

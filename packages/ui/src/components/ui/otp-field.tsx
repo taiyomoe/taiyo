@@ -35,7 +35,7 @@ const styles = stylex.create({
     backgroundColor: colors.field,
     boxShadow: {
       "[aria-invalid]": "none",
-      default: "0 1px 2px 0 rgb(0 0 0 / 5%)",
+      default: shadows.chip,
       ":focus-visible": "none",
     },
     color: colors.foreground,

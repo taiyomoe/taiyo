@@ -75,6 +75,7 @@ export const darkShadows = stylex.createTheme(shadows, {
   overlay: "0 4px 12px rgb(0 0 0 / 40%), 0 32px 64px -16px rgb(0 0 0 / 56%)",
   sunken: "inset 0 1px 2px rgb(0 0 0 / 48%), inset 0 0 0 1px rgb(255 255 255 / 2%)",
   edge: "0 -1px rgb(255 255 255 / 8%)",
+  chip: "0 1px 2px 0 rgb(0 0 0 / 5%)",
   emboss: "inset 0 1px rgb(255 255 255 / 16%)",
   pressed: "inset 0 1px rgb(0 0 0 / 8%)",
   thumb: "0 1px 2px rgb(0 0 0 / 40%)",

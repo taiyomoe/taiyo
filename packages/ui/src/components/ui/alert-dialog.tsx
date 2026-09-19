@@ -5,6 +5,7 @@ import * as stylex from "@stylexjs/stylex"
 import type React from "react"
 import { cn } from "@/utils/cn"
 import { colors, consts, font, radius, shadows, text } from "../../styles/tokens.stylex"
+import { surface } from "../../styles/recipes"
 import type { Sx } from "../../styles/sx"
 
 const styles = stylex.create({
@@ -84,14 +85,6 @@ const styles = stylex.create({
     minHeight: 0,
     minWidth: 0,
     width: "100%",
-    "::before": {
-      inset: 0,
-      borderRadius: "inherit",
-      boxShadow: shadows.edge,
-      content: '""',
-      pointerEvents: "none",
-      position: "absolute",
-    },
   },
   popupBottomStick: {
     borderRadius: {
@@ -251,7 +244,12 @@ export function AlertDialogPopup({
   portalProps?: AlertDialogPrimitive.Portal.Props
   sx?: Sx
 }): React.ReactElement {
-  const styleProps = stylex.props(styles.popup, bottomStickOnMobile && styles.popupBottomStick, sx)
+  const styleProps = stylex.props(
+    surface.raisedEdge,
+    styles.popup,
+    bottomStickOnMobile && styles.popupBottomStick,
+    sx,
+  )
 
   return (
     <AlertDialogPortal {...portalProps}>

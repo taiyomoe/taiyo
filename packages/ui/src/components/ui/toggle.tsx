@@ -5,6 +5,7 @@ import * as stylex from "@stylexjs/stylex"
 import type React from "react"
 import { cn } from "@/utils/cn"
 import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
+import { focus, tap } from "../../styles/recipes"
 import type { Sx } from "../../styles/sx"
 
 export type ToggleVariant = "default" | "outline"
@@ -40,13 +41,6 @@ const styles = stylex.create({
       default: 1,
       ":disabled": 0.64,
     },
-    outlineColor: colors.ring,
-    outlineOffset: 1,
-    outlineStyle: {
-      default: "none",
-      ":focus-visible": "solid",
-    },
-    outlineWidth: 2,
     pointerEvents: {
       default: null,
       ":disabled": "none",
@@ -55,17 +49,6 @@ const styles = stylex.create({
     transitionProperty: "box-shadow, background-color, border-color",
     userSelect: "none",
     whiteSpace: "nowrap",
-    "::after": {
-      content: {
-        default: "none",
-        [consts.pointerCoarse]: '""',
-      },
-      position: "absolute",
-      height: "100%",
-      minHeight: "2.75rem",
-      minWidth: "2.75rem",
-      width: "100%",
-    },
   },
 })
 const raised = stylex.create({
@@ -99,7 +82,7 @@ const variantStyles = stylex.create({
     },
     boxShadow: {
       "[data-pressed]": "none",
-      default: "0 1px 2px 0 rgb(0 0 0 / 5%)",
+      default: shadows.chip,
       ":disabled": "none",
       ":active": "none",
     },
@@ -164,6 +147,8 @@ export function Toggle({
   ...props
 }: ToggleProps): React.ReactElement {
   const styleProps = stylex.props(
+    tap.target,
+    focus.control,
     styles.base,
     VARIANT_STYLE[variant],
     SIZE_STYLE[size],

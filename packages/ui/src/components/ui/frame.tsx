@@ -3,6 +3,7 @@ import type * as React from "react"
 import { cn } from "@/utils/cn"
 import type { Sx } from "../../styles/sx"
 import { colors, radius, shadows } from "../../styles/tokens.stylex"
+import { surface } from "../../styles/recipes"
 
 const styles = stylex.create({
   frame: {
@@ -26,14 +27,6 @@ const styles = stylex.create({
     backgroundColor: colors.card,
     boxShadow: shadows.raised,
     position: "relative",
-    "::before": {
-      inset: 0,
-      borderRadius: "inherit",
-      boxShadow: shadows.edge,
-      content: '""',
-      pointerEvents: "none",
-      position: "absolute",
-    },
   },
   header: {
     paddingBlock: "1rem",
@@ -79,7 +72,7 @@ export function FramePanel({
   sx,
   ...props
 }: React.ComponentProps<"div"> & { sx?: Sx }): React.ReactElement {
-  const styleProps = stylex.props(styles.panel, sx)
+  const styleProps = stylex.props(surface.raisedEdge, styles.panel, sx)
 
   return (
     <div

@@ -8,6 +8,7 @@ import { Separator } from "@/components/ui/separator"
 import { cn } from "@/utils/cn"
 import type { Sx } from "../../styles/sx"
 import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
+import { surface } from "../../styles/recipes"
 
 export type GroupOrientation = "horizontal" | "vertical"
 
@@ -29,7 +30,7 @@ const styles = stylex.create({
     alignItems: "center",
     backgroundClip: "padding-box",
     backgroundColor: colors.muted,
-    boxShadow: "0 1px 2px 0 rgb(0 0 0 / 5%)",
+    boxShadow: shadows.chip,
     color: colors.mutedForeground,
     display: "inline-flex",
     fontSize: {
@@ -40,14 +41,6 @@ const styles = stylex.create({
     position: "relative",
     transitionProperty: "box-shadow",
     whiteSpace: "nowrap",
-    "::before": {
-      inset: 0,
-      borderRadius: "inherit",
-      boxShadow: shadows.edge,
-      content: '""',
-      pointerEvents: "none",
-      position: "absolute",
-    },
   },
   separator: {
     backgroundColor: colors.input,
@@ -91,7 +84,7 @@ export function GroupText({
   sx,
   ...props
 }: useRender.ComponentProps<"div"> & { sx?: Sx }): React.ReactElement {
-  const styleProps = stylex.props(styles.text, sx)
+  const styleProps = stylex.props(surface.raisedEdge, styles.text, sx)
   const defaultProps = {
     className: cn(styleProps.className, className),
     "data-slot": "group-text",

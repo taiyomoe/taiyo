@@ -5,6 +5,7 @@ import * as stylex from "@stylexjs/stylex"
 import type React from "react"
 import { cn } from "@/utils/cn"
 import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
+import { focus } from "../../styles/recipes"
 import type { Sx } from "../../styles/sx"
 // Marker for the root so the thumb can squish when the track is pressed.
 // The same squish on an enclosing label is not expressible — a marker cannot
@@ -43,13 +44,6 @@ const styles = stylex.create({
       "[data-disabled]": 0.64,
       default: 1,
     },
-    outlineColor: colors.ring,
-    outlineOffset: 1,
-    outlineStyle: {
-      default: "none",
-      ":focus-visible": "solid",
-    },
-    outlineWidth: 2,
     transitionDuration: "200ms",
     transitionProperty: "background-color, box-shadow",
     transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
@@ -94,7 +88,7 @@ export type SwitchProps = SwitchPrimitive.Root.Props & {
 }
 
 export function Switch({ className, sx, ...props }: SwitchProps): React.ReactElement {
-  const styleProps = stylex.props(styles.root, switchRootMarker, sx)
+  const styleProps = stylex.props(focus.control, styles.root, switchRootMarker, sx)
   const thumbProps = stylex.props(styles.thumb)
 
   return (

@@ -7,6 +7,7 @@ import { Input, type InputProps } from "@/components/ui/input"
 import { Textarea, type TextareaProps } from "@/components/ui/textarea"
 import type { Sx } from "../../styles/sx"
 import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
+import { focus } from "../../styles/recipes"
 
 export type InputGroupAddonAlign = "block-end" | "block-start" | "inline-end" | "inline-start"
 
@@ -23,7 +24,7 @@ const styles = stylex.create({
     backgroundClip: "padding-box",
     backgroundColor: colors.field,
     boxShadow: {
-      default: "0 1px 2px 0 rgb(0 0 0 / 5%)",
+      default: shadows.chip,
       ":focus-within": "none",
     },
     color: colors.foreground,
@@ -32,12 +33,6 @@ const styles = stylex.create({
       default: "1rem",
       [consts.sm]: "0.875rem",
     },
-    outlineColor: `color-mix(in srgb, ${colors.ring} 24%, transparent)`,
-    outlineStyle: {
-      default: "none",
-      ":focus-within": "solid",
-    },
-    outlineWidth: 3,
     position: "relative",
     transitionProperty: "box-shadow, border-color",
     minWidth: 0,
@@ -108,7 +103,7 @@ export function InputGroup({
   sx,
   ...props
 }: React.ComponentProps<"div"> & { sx?: Sx }): React.ReactElement {
-  const styleProps = stylex.props(styles.group, sx)
+  const styleProps = stylex.props(focus.field, styles.group, sx)
 
   return (
     <div

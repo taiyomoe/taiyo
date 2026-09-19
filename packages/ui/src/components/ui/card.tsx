@@ -6,6 +6,7 @@ import * as stylex from "@stylexjs/stylex"
 import type React from "react"
 import { cn } from "@/utils/cn"
 import { colors, radius, shadows, text } from "../../styles/tokens.stylex"
+import { surface } from "../../styles/recipes"
 import type { Sx } from "../../styles/sx"
 
 const styles = stylex.create({
@@ -21,14 +22,6 @@ const styles = stylex.create({
     display: "flex",
     flexDirection: "column",
     position: "relative",
-    "::before": {
-      inset: 0,
-      borderRadius: "inherit",
-      boxShadow: shadows.edge,
-      content: '""',
-      pointerEvents: "none",
-      position: "absolute",
-    },
   },
   /**
    * CardFrame is a card whose ::before also lays a muted wash over the frame
@@ -110,7 +103,7 @@ type CardComponentProps = useRender.ComponentProps<"div"> & {
 }
 
 export function Card({ className, render, sx, ...props }: CardComponentProps): React.ReactElement {
-  const styleProps = stylex.props(styles.card, sx)
+  const styleProps = stylex.props(surface.raisedEdge, styles.card, sx)
   const defaultProps = {
     className: cn(styleProps.className, className),
     "data-slot": "card",
@@ -130,7 +123,7 @@ export function CardFrame({
   sx,
   ...props
 }: CardComponentProps): React.ReactElement {
-  const styleProps = stylex.props(styles.card, styles.frameOverlay, sx)
+  const styleProps = stylex.props(surface.raisedEdge, styles.card, styles.frameOverlay, sx)
   const defaultProps = {
     className: cn(styleProps.className, className),
     "data-slot": "card-frame",

@@ -139,7 +139,7 @@ const styles = stylex.create({
     backgroundColor: colors.popover,
     borderStartEndRadius: radius.xl,
     borderStartStartRadius: radius.xl,
-    boxShadow: "0 1px 2px 0 rgb(0 0 0 / 5%)",
+    boxShadow: shadows.chip,
     clipPath: "inset(0 1px)",
     position: "relative",
     borderBottomWidth: 0,

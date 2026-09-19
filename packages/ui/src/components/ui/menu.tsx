@@ -7,6 +7,7 @@ import { cn } from "@/utils/cn"
 import { Check, ChevronRight } from "@/components/icons"
 import { KbdSurface } from "@/components/ui/kbd"
 import { colors, consts, font, radius, shadows } from "../../styles/tokens.stylex"
+import { focus, surface } from "../../styles/recipes"
 import { menuPopupMarker, menuSwitchItemMarker } from "../../styles/markers.stylex"
 import type { Sx } from "../../styles/sx"
 
@@ -27,14 +28,6 @@ const styles = stylex.create({
     position: "relative",
     transformOrigin: "var(--transform-origin)",
     minWidth: "8rem",
-    "::before": {
-      inset: 0,
-      borderRadius: "inherit",
-      boxShadow: shadows.edge,
-      content: '""',
-      pointerEvents: "none",
-      position: "absolute",
-    },
   },
   scroller: {
     padding: "0.375rem",
@@ -178,13 +171,6 @@ const styles = stylex.create({
       "[data-disabled]": 0.64,
       default: null,
     },
-    outlineColor: colors.ring,
-    outlineOffset: 1,
-    outlineStyle: {
-      default: "none",
-      ":focus-visible": "solid",
-    },
-    outlineWidth: 2,
     transitionDuration: "200ms",
     transitionProperty: "background-color, box-shadow",
     height: "calc(var(--thumb-size) + 2px)",
@@ -352,7 +338,7 @@ export function MenuPopup({
   sx?: Sx
 }): React.ReactElement {
   const positionerProps = stylex.props(styles.positioner)
-  const popupProps = stylex.props(styles.popup, menuPopupMarker, sx)
+  const popupProps = stylex.props(surface.raisedEdge, styles.popup, menuPopupMarker, sx)
 
   return (
     <MenuPortal {...portalProps}>
@@ -437,7 +423,10 @@ export function MenuCheckboxItem({
       {variant === "switch" ? (
         <>
           <span sx={styles.switchLabelColumn}>{children}</span>
-          <MenuPrimitive.CheckboxItemIndicator {...stylex.props(styles.switchTrack)} keepMounted>
+          <MenuPrimitive.CheckboxItemIndicator
+            {...stylex.props(focus.control, styles.switchTrack)}
+            keepMounted
+          >
             <span sx={styles.switchThumb} />
           </MenuPrimitive.CheckboxItemIndicator>
         </>

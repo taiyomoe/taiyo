@@ -5,6 +5,7 @@ import * as stylex from "@stylexjs/stylex"
 import type React from "react"
 import { cn } from "@/utils/cn"
 import { colors, radius, shadows, text } from "../../styles/tokens.stylex"
+import { surface } from "../../styles/recipes"
 import type { Sx } from "../../styles/sx"
 
 const styles = stylex.create({
@@ -46,14 +47,6 @@ const styles = stylex.create({
     transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
     height: "var(--popup-height, auto)",
     width: "var(--popup-width, auto)",
-    "::before": {
-      inset: 0,
-      borderRadius: "inherit",
-      boxShadow: shadows.edge,
-      content: '""',
-      pointerEvents: "none",
-      position: "absolute",
-    },
   },
   popupTooltipStyle: {
     borderRadius: radius.md,
@@ -145,7 +138,12 @@ export function PopoverPopup({
   sx?: Sx
 }): React.ReactElement {
   const positionerProps = stylex.props(styles.positioner)
-  const popupProps = stylex.props(styles.popup, tooltipStyle && styles.popupTooltipStyle, sx)
+  const popupProps = stylex.props(
+    surface.raisedEdge,
+    styles.popup,
+    tooltipStyle && styles.popupTooltipStyle,
+    sx,
+  )
   const viewportProps = stylex.props(styles.viewport, tooltipStyle && styles.viewportTooltipStyle)
   // `--viewport-inline-padding` is read back by the viewport's own padding and
   // by the [data-current]/[data-previous] width rules in structural.css.

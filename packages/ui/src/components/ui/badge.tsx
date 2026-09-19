@@ -6,6 +6,7 @@ import * as stylex from "@stylexjs/stylex"
 import type React from "react"
 import { cn } from "@/utils/cn"
 import { colors, consts, radius } from "../../styles/tokens.stylex"
+import { focus, tap } from "../../styles/recipes"
 import type { Sx } from "../../styles/sx"
 
 export type BadgeVariant =
@@ -36,13 +37,6 @@ const styles = stylex.create({
       default: 1,
       ":disabled": 0.64,
     },
-    outlineColor: colors.ring,
-    outlineOffset: 1,
-    outlineStyle: {
-      default: "none",
-      ":focus-visible": "solid",
-    },
-    outlineWidth: 2,
     pointerEvents: {
       default: null,
       ":disabled": "none",
@@ -59,17 +53,6 @@ const styles = stylex.create({
    */
   interactive: {
     cursor: "pointer",
-    "::after": {
-      content: {
-        default: "none",
-        [consts.pointerCoarse]: '""',
-      },
-      position: "absolute",
-      height: "100%",
-      minHeight: "2.75rem",
-      minWidth: "2.75rem",
-      width: "100%",
-    },
   },
 })
 /**
@@ -225,9 +208,11 @@ export function Badge({
 }: BadgeProps): React.ReactElement {
   const interactive: boolean = Boolean(render)
   const styleProps = stylex.props(
+    focus.control,
     styles.base,
     VARIANT_STYLE[variant],
     SIZE_STYLE[size],
+    interactive && tap.target,
     interactive && styles.interactive,
     interactive && HOVER_STYLE[variant],
     sx,

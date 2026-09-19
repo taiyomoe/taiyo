@@ -6,7 +6,7 @@ import { DayPicker } from "react-day-picker"
 import { cn } from "@/utils/cn"
 import { ChevronLeft, ChevronRight, ChevronsUpDown } from "@/components/icons"
 import { calendarDayMarker } from "../../styles/markers.stylex"
-import { colors, consts, radius } from "../../styles/tokens.stylex"
+import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
 
 const styles = stylex.create({
   root: {
@@ -137,7 +137,7 @@ const styles = stylex.create({
     borderStyle: "solid",
     borderWidth: 1,
     paddingInline: "calc(0.75rem - 1px)",
-    boxShadow: "0 1px 2px 0 rgb(0 0 0 / 5%)",
+    boxShadow: shadows.chip,
     outlineColor: `color-mix(in srgb, ${colors.ring} 50%, transparent)`,
     outlineStyle: {
       default: "none",

@@ -8,6 +8,7 @@ import { cn } from "@/utils/cn"
 import { ChevronRight, Ellipsis } from "@/components/icons"
 import type { Sx } from "../../styles/sx"
 import { colors, consts } from "../../styles/tokens.stylex"
+import { a11y } from "../../styles/recipes"
 
 const styles = stylex.create({
   list: {
@@ -45,17 +46,6 @@ const styles = stylex.create({
   icon: {
     height: "1rem",
     width: "1rem",
-  },
-  srOnly: {
-    margin: -1,
-    padding: 0,
-    borderWidth: 0,
-    overflow: "hidden",
-    clipPath: "inset(50%)",
-    position: "absolute",
-    whiteSpace: "nowrap",
-    height: "1px",
-    width: "1px",
   },
 })
 
@@ -165,7 +155,7 @@ export function BreadcrumbEllipsis({
 }: React.ComponentProps<"span"> & { sx?: Sx }): React.ReactElement {
   const styleProps = stylex.props(sx)
   const iconProps = stylex.props(styles.icon)
-  const srOnlyProps = stylex.props(styles.srOnly)
+  const srOnlyProps = stylex.props(a11y.srOnly)
 
   return (
     <span

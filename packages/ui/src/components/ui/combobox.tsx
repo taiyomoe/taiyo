@@ -10,6 +10,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { comboboxPopupMarker } from "../../styles/markers.stylex"
 import type { Sx } from "../../styles/sx"
 import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
+import { focus, surface } from "../../styles/recipes"
 
 export const ComboboxContext: React.Context<{
   chipsRef: React.RefObject<Element | null> | null
@@ -151,14 +152,6 @@ const styles = stylex.create({
     maxHeight: "100%",
     maxWidth: "var(--available-width)",
     minWidth: "var(--anchor-width)",
-    "::before": {
-      inset: 0,
-      borderRadius: "inherit",
-      boxShadow: shadows.edge,
-      content: '""',
-      pointerEvents: "none",
-      position: "absolute",
-    },
   },
   popup: {
     flex: "1",
@@ -265,7 +258,7 @@ const styles = stylex.create({
     backgroundClip: "padding-box",
     backgroundColor: colors.field,
     boxShadow: {
-      default: "0 1px 2px 0 rgb(0 0 0 / 5%)",
+      default: shadows.chip,
       ":focus-within": "none",
     },
     display: "inline-flex",
@@ -274,12 +267,6 @@ const styles = stylex.create({
       default: "1rem",
       [consts.sm]: "0.875rem",
     },
-    outlineColor: `color-mix(in srgb, ${colors.ring} 24%, transparent)`,
-    outlineStyle: {
-      default: "none",
-      ":focus-within": "solid",
-    },
-    outlineWidth: 3,
     position: "relative",
     transitionProperty: "box-shadow, border-color",
     minHeight: {
@@ -511,7 +498,7 @@ export function ComboboxPopup({
   const { chipsRef } = React.useContext(ComboboxContext)
   const anchor = anchorProp ?? chipsRef
   const positionerProps = stylex.props(styles.positioner)
-  const surfaceProps = stylex.props(styles.surface, sx)
+  const surfaceProps = stylex.props(surface.raisedEdge, styles.surface, sx)
   const popupProps = stylex.props(styles.popup, stylex.defaultMarker(), comboboxPopupMarker)
 
   return (
@@ -696,7 +683,7 @@ export function ComboboxChips({
   sx?: Sx
 }): React.ReactElement {
   const { chipsRef } = React.useContext(ComboboxContext)
-  const styleProps = stylex.props(styles.chips, sx)
+  const styleProps = stylex.props(focus.field, styles.chips, sx)
   const addonProps = stylex.props(styles.chipsStartAddon)
 
   return (

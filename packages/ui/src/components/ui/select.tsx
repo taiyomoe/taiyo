@@ -9,6 +9,7 @@ import { Check, ChevronDown, ChevronUp, ChevronsUpDown } from "@/components/icon
 import { selectPopupMarker } from "../../styles/markers.stylex"
 import type { Sx } from "../../styles/sx"
 import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
+import { surface } from "../../styles/recipes"
 
 export const Select: typeof SelectPrimitive.Root = SelectPrimitive.Root
 
@@ -32,7 +33,7 @@ const styles = stylex.create({
     boxShadow: {
       "[data-disabled]": "none",
       "[data-pressed]": "none",
-      default: "0 1px 2px 0 rgb(0 0 0 / 5%)",
+      default: shadows.chip,
       ":focus-visible": "none",
     },
     color: colors.foreground,
@@ -151,14 +152,6 @@ const styles = stylex.create({
     position: "relative",
     height: "100%",
     minWidth: "var(--anchor-width)",
-    "::before": {
-      inset: 0,
-      borderRadius: "inherit",
-      boxShadow: shadows.edge,
-      content: '""',
-      pointerEvents: "none",
-      position: "absolute",
-    },
   },
   list: {
     padding: "0.375rem",
@@ -388,7 +381,7 @@ export function SelectPopup({
 }): React.ReactElement {
   const positionerProps = stylex.props(styles.positioner)
   const popupProps = stylex.props(styles.popup, stylex.defaultMarker(), selectPopupMarker, sx)
-  const surfaceProps = stylex.props(styles.surface)
+  const surfaceProps = stylex.props(surface.raisedEdge, styles.surface)
   const listProps = stylex.props(styles.list)
   const upArrowProps = stylex.props(styles.scrollArrow, styles.scrollArrowUp)
   const downArrowProps = stylex.props(styles.scrollArrow, styles.scrollArrowDown)

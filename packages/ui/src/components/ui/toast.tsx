@@ -7,6 +7,7 @@ import type React from "react"
 import { AlertCircle, AlertTriangle, CheckCircle, Info, Spinner } from "@/components/icons"
 import { buttonVariants } from "@/components/ui/button"
 import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
+import { surface } from "../../styles/recipes"
 
 const TOAST_ICONS = {
   error: AlertCircle,
@@ -112,14 +113,6 @@ const styles = stylex.create({
       height: "calc(var(--toast-gap) + 1px)",
       left: 0,
       width: "100%",
-    },
-    "::before": {
-      inset: 0,
-      borderRadius: "inherit",
-      boxShadow: shadows.edge,
-      content: '""',
-      pointerEvents: "none",
-      position: "absolute",
     },
   },
   rootTop: {
@@ -363,6 +356,7 @@ function Toasts({
           const Icon = toast.type ? TOAST_ICONS[toast.type as keyof typeof TOAST_ICONS] : null
           const toastData = toast.data as ToastData | undefined
           const rootProps = stylex.props(
+            surface.raisedEdge,
             styles.root,
             isTop ? styles.rootTop : styles.rootBottom,
             isCenter ? styles.rootCenter : isLeft ? styles.rootLeft : styles.rootRight,

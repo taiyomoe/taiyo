@@ -15,6 +15,7 @@ import { cn } from "@/utils/cn"
 import { PanelLeft } from "@/components/icons"
 import type { Sx } from "../../styles/sx"
 import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
+import { a11y } from "../../styles/recipes"
 
 const SIDEBAR_COOKIE_NAME: string = "sidebar_state"
 const SIDEBAR_COOKIE_MAX_AGE: number = 60 * 60 * 24 * 7
@@ -82,17 +83,6 @@ const styles = stylex.create({
     flexDirection: "column",
     height: "100%",
     width: "100%",
-  },
-  srOnly: {
-    margin: -1,
-    padding: 0,
-    borderWidth: 0,
-    overflow: "hidden",
-    clipPath: "inset(50%)",
-    position: "absolute",
-    whiteSpace: "nowrap",
-    height: "1px",
-    width: "1px",
   },
   root: {
     color: colors.sidebarForeground,
@@ -673,7 +663,6 @@ export function Sidebar({
   )
   const innerProps = stylex.props(styles.inner, variant === "floating" && styles.innerFloating)
   const mobileInnerProps = stylex.props(styles.mobileInner)
-  const srOnlyProps = stylex.props(styles.srOnly)
 
   if (collapsible === "none") {
     return (
@@ -706,7 +695,7 @@ export function Sidebar({
             }
             sx={styles.mobileSheet}
           >
-            <SheetHeader sx={styles.srOnly}>
+            <SheetHeader sx={a11y.srOnly}>
               <SheetTitle>Sidebar</SheetTitle>
               <SheetDescription>Displays the mobile sidebar.</SheetDescription>
             </SheetHeader>
@@ -748,7 +737,6 @@ export function Sidebar({
           </div>
         </div>
       </div>
-      <span className={srOnlyProps.className} style={srOnlyProps.style} />
     </SidebarLayoutContext>
   )
 }
@@ -760,7 +748,7 @@ export function SidebarTrigger({
   ...props
 }: React.ComponentProps<typeof Button> & { sx?: Sx }): React.ReactElement {
   const { toggleSidebar } = useSidebar()
-  const srOnlyProps = stylex.props(styles.srOnly)
+  const srOnlyProps = stylex.props(a11y.srOnly)
 
   return (
     <Button

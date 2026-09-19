@@ -8,6 +8,7 @@ import { cn } from "@/utils/cn"
 import { Minus, Plus } from "@/components/icons"
 import type { Sx } from "../../styles/sx"
 import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
+import { focus, tap } from "../../styles/recipes"
 
 export type NumberFieldSize = "sm" | "default" | "lg"
 
@@ -39,7 +40,7 @@ const styles = stylex.create({
     backgroundClip: "padding-box",
     backgroundColor: colors.field,
     boxShadow: {
-      default: "0 1px 2px 0 rgb(0 0 0 / 5%)",
+      default: shadows.chip,
       ":focus-within": "none",
     },
     color: colors.foreground,
@@ -53,12 +54,6 @@ const styles = stylex.create({
       "[data-disabled]": 0.64,
       default: null,
     },
-    outlineColor: `color-mix(in srgb, ${colors.ring} 24%, transparent)`,
-    outlineStyle: {
-      default: "none",
-      ":focus-within": "solid",
-    },
-    outlineWidth: 3,
     pointerEvents: {
       "[data-disabled]": "none",
       default: null,
@@ -98,17 +93,6 @@ const styles = stylex.create({
     justifyContent: "center",
     position: "relative",
     transitionProperty: "background-color",
-    "::after": {
-      content: {
-        default: "none",
-        [consts.pointerCoarse]: '""',
-      },
-      position: "absolute",
-      height: "100%",
-      minHeight: "2.75rem",
-      minWidth: "2.75rem",
-      width: "100%",
-    },
   },
   stepperSm: {
     paddingInline: "calc(0.625rem - 1px)",
@@ -213,6 +197,7 @@ export function NumberFieldGroup({
   ...props
 }: NumberFieldPrimitive.Group.Props & { sx?: Sx }): React.ReactElement {
   const styleProps = stylex.props(
+    focus.field,
     styles.group,
     props["aria-invalid"] !== undefined && styles.groupInvalid,
     sx,
@@ -235,6 +220,7 @@ export function NumberFieldDecrement({
 }: NumberFieldPrimitive.Decrement.Props & { sx?: Sx }): React.ReactElement {
   const size = React.useContext(NumberFieldSizeContext)
   const styleProps = stylex.props(
+    tap.target,
     styles.stepper,
     styles.decrement,
     size === "sm" && styles.stepperSm,
@@ -260,6 +246,7 @@ export function NumberFieldIncrement({
 }: NumberFieldPrimitive.Increment.Props & { sx?: Sx }): React.ReactElement {
   const size = React.useContext(NumberFieldSizeContext)
   const styleProps = stylex.props(
+    tap.target,
     styles.stepper,
     styles.increment,
     size === "sm" && styles.stepperSm,

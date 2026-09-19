@@ -29,7 +29,7 @@ const styles = stylex.create({
       "[aria-invalid]": "none",
       "[data-checked]": "none",
       "[data-disabled]": "none",
-      default: "0 1px 2px 0 rgb(0 0 0 / 5%)",
+      default: shadows.chip,
     },
     cursor: {
       "[data-disabled]": "not-allowed",

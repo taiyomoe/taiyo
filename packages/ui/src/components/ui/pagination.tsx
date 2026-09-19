@@ -9,6 +9,7 @@ import { ChevronLeft, ChevronRight, Ellipsis } from "@/components/icons"
 import { type Button, buttonVariants } from "@/components/ui/button"
 import type { Sx } from "../../styles/sx"
 import { consts } from "../../styles/tokens.stylex"
+import { a11y } from "../../styles/recipes"
 
 const styles = stylex.create({
   nav: {
@@ -65,17 +66,6 @@ const styles = stylex.create({
       default: "1.25rem",
       [consts.sm]: "1rem",
     },
-  },
-  srOnly: {
-    margin: -1,
-    padding: 0,
-    borderWidth: 0,
-    overflow: "hidden",
-    clipPath: "inset(50%)",
-    position: "absolute",
-    whiteSpace: "nowrap",
-    height: "1px",
-    width: "1px",
   },
 })
 
@@ -212,7 +202,7 @@ export function PaginationEllipsis({
 }: React.ComponentProps<"span"> & { sx?: Sx }): React.ReactElement {
   const styleProps = stylex.props(styles.ellipsis, sx)
   const iconProps = stylex.props(styles.ellipsisIcon)
-  const srOnlyProps = stylex.props(styles.srOnly)
+  const srOnlyProps = stylex.props(a11y.srOnly)
 
   return (
     <span

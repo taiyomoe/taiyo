@@ -3,6 +3,7 @@ import type React from "react"
 import { cn } from "@/utils/cn"
 import type { Sx } from "../../styles/sx"
 import { colors, font, radius, shadows, text } from "../../styles/tokens.stylex"
+import { surface } from "../../styles/recipes"
 
 export type EmptyMediaVariant = "default" | "icon"
 
@@ -54,14 +55,6 @@ const styles = stylex.create({
     position: "relative",
     height: "2.25rem",
     width: "2.25rem",
-    "::before": {
-      inset: 0,
-      borderRadius: "inherit",
-      boxShadow: shadows.edge,
-      content: '""',
-      pointerEvents: "none",
-      position: "absolute",
-    },
   },
   mediaGhost: {
     boxShadow: "none",
@@ -149,15 +142,21 @@ export function EmptyMedia({
   sx?: Sx
 }): React.ReactElement {
   const wrapperProps = stylex.props(styles.media, sx)
-  const innerProps = stylex.props(styles.mediaInner, variant === "icon" && styles.mediaIcon)
+  const innerProps = stylex.props(
+    styles.mediaInner,
+    variant === "icon" && surface.raisedEdge,
+    variant === "icon" && styles.mediaIcon,
+  )
   const ghostLeftProps = stylex.props(
     styles.mediaInner,
+    surface.raisedEdge,
     styles.mediaIcon,
     styles.mediaGhost,
     styles.mediaGhostLeft,
   )
   const ghostRightProps = stylex.props(
     styles.mediaInner,
+    surface.raisedEdge,
     styles.mediaIcon,
     styles.mediaGhost,
     styles.mediaGhostRight,
