@@ -4,7 +4,6 @@ import { cn } from "@/utils/cn"
 import { colors, radius } from "../../styles/tokens.stylex"
 import type { Sx } from "../../styles/sx"
 
-/** The travelling highlight that reads as "loading". */
 const shimmer = stylex.keyframes({
   to: { backgroundPosition: "-200% 0" },
 })
@@ -12,7 +11,7 @@ const styles = stylex.create({
   base: {
     background: `linear-gradient(120deg, transparent 40%, ${colors.skeletonHighlight}, transparent 60%) ${colors.muted} 0 0 / 200% 100% fixed`,
     borderRadius: radius.sm,
-    // `-1s` starts the shimmer mid-cycle, as the original did.
+    // Negative delay starts the shimmer mid-cycle rather than from the edge.
     animationDelay: "-1s",
     animationDuration: "2s",
     animationIterationCount: "infinite",
@@ -21,7 +20,6 @@ const styles = stylex.create({
   },
 })
 
-/** See the note on SeparatorProps for why `className` sits alongside `sx`. */
 export type SkeletonProps = React.ComponentProps<"div"> & {
   sx?: Sx
 }

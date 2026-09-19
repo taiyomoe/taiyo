@@ -58,11 +58,12 @@ const styles = stylex.create({
     display: "flex",
     flexDirection: "column",
     gridRowStart: "2",
-    // Base UI sets --nested-dialogs; keep the calc verbatim.
+    // CSS calc() requires whitespace around the operators; without it the
+    // whole declaration is dropped and the nested-dialog dim never runs.
     opacity: {
       "[data-ending-style]": 0,
       "[data-starting-style]": 0,
-      default: "calc(1-var(--nested-dialogs))",
+      default: "calc(1 - var(--nested-dialogs))",
     },
     position: "relative",
     scale: {
@@ -70,7 +71,7 @@ const styles = stylex.create({
       [consts.sm]: {
         "[data-ending-style]": "98%",
         "[data-starting-style]": "98%",
-        default: "calc(1-0.1*var(--nested-dialogs))",
+        default: "calc(1 - 0.1 * var(--nested-dialogs))",
       },
     },
     transformOrigin: "center",

@@ -18,7 +18,6 @@ import { colors, shadows } from "./tokens.stylex"
  * class it emits redeclares the whole group, so every value you did not
  * override is reset to its default — the light theme — under that element.
  */
-/** Dark theme. Apply via `stylex.props(darkTheme)`, alongside `darkShadows`. */
 export const darkTheme = stylex.createTheme(colors, {
   background: surface.darkBackground,
   foreground: palette.neutral100,
@@ -71,7 +70,6 @@ export const darkTheme = stylex.createTheme(colors, {
   skeletonHighlight: `rgb(255 255 255 / 4%)`,
 })
 
-/** Dark elevation. Apply alongside `darkTheme`. */
 export const darkShadows = stylex.createTheme(shadows, {
   raised: "0 1px 2px rgb(0 0 0 / 32%), 0 16px 40px -16px rgb(0 0 0 / 48%)",
   overlay: "0 4px 12px rgb(0 0 0 / 40%), 0 32px 64px -16px rgb(0 0 0 / 56%)",

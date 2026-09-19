@@ -14,7 +14,6 @@ const styles = stylex.create({
   },
 })
 
-/** See the note on SeparatorProps for why `className` sits alongside `sx`. */
 export type FieldsetProps = FieldsetPrimitive.Root.Props & {
   sx?: Sx
 }

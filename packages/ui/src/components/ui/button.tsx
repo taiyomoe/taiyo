@@ -333,7 +333,6 @@ const SPINNER_COLOR = {
   outline: spinnerColor.foreground,
   secondary: spinnerColor.secondary,
 } as const
-/** Variants that draw the raised chip edge on their ::before layer. */
 const EDGE_VARIANTS: ReadonlySet<ButtonVariant> = new Set(["destructive-outline", "outline"])
 
 export interface ButtonStyleOptions {
@@ -343,7 +342,7 @@ export interface ButtonStyleOptions {
 }
 
 /**
- * Legacy escape hatch, kept API-compatible with the old cva export: returns
+ * Returns
  * the compiled class string for callers that style a foreign element as a
  * button (e.g. ToolbarLink). Prefer `sx` composition where possible.
  */

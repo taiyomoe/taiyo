@@ -51,7 +51,6 @@ const styles = stylex.create({
       position: "absolute",
     },
   },
-  // `has-disabled:` / `has-aria-invalid:` replacements — see input.tsx.
   controlDisabled: {
     opacity: 0.64,
   },

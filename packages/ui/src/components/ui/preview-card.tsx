@@ -54,7 +54,6 @@ const styles = stylex.create({
 
 export const PreviewCard: typeof PreviewCardPrimitive.Root = PreviewCardPrimitive.Root
 
-/** See the note on SeparatorProps for why `className` sits alongside `sx`. */
 export type PreviewCardTriggerProps = PreviewCardPrimitive.Trigger.Props & {
   sx?: Sx
 }

@@ -21,7 +21,6 @@ const styles = stylex.create({
   },
 })
 
-/** See the note on SeparatorProps for why `className` sits alongside `sx`. */
 export type CollapsibleProps = CollapsiblePrimitive.Root.Props & {
   sx?: Sx
 }
@@ -39,7 +38,6 @@ export function Collapsible({ className, sx, ...props }: CollapsibleProps): Reac
   )
 }
 
-/** See the note on SeparatorProps for why `className` sits alongside `sx`. */
 export type CollapsibleTriggerProps = CollapsiblePrimitive.Trigger.Props & {
   sx?: Sx
 }

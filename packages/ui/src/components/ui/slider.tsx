@@ -47,7 +47,6 @@ const styles = stylex.create({
       default: null,
     },
   },
-  // The rail is the sunken well the red indicator rides in.
   track: {
     flexGrow: 1,
     position: "relative",

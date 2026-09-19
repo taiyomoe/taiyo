@@ -15,7 +15,6 @@ const styles = stylex.create({
   },
 })
 
-/** See the note on SeparatorProps for why `className` sits alongside `sx`. */
 export type CheckboxGroupProps = CheckboxGroupPrimitive.Props & {
   sx?: Sx
 }

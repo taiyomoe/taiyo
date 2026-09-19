@@ -9,11 +9,6 @@ import { colors, radius, shadows, text } from "../../styles/tokens.stylex"
 import type { Sx } from "../../styles/sx"
 
 const styles = stylex.create({
-  /**
-   * The flagship raised surface: card background, hairline border, xxl
-   * corners, the resting elevation shadow and a ::before overlay that draws
-   * the 1px light edge of the design language.
-   */
   card: {
     borderColor: colors.border,
     borderRadius: radius.xxl,
@@ -67,16 +62,6 @@ const styles = stylex.create({
     fontSize: "0.875rem",
     lineHeight: "1.25rem",
   },
-  frameAction: {
-    gridRow: {
-      default: null,
-      ":nth-child(3)": "1 / span 2",
-    },
-    alignSelf: "center",
-    display: "inline-flex",
-    gridColumnStart: "2",
-    justifySelf: "end",
-  },
   frameFooter: {
     paddingBlock: "1rem",
     paddingInline: "1.5rem",
@@ -120,7 +105,6 @@ const styles = stylex.create({
   },
 })
 
-/** See SeparatorProps for why `className` sits alongside `sx`. */
 type CardComponentProps = useRender.ComponentProps<"div"> & {
   sx?: Sx
 }
@@ -217,26 +201,6 @@ export function CardFrameDescription({
   const defaultProps = {
     className: cn(styleProps.className, className),
     "data-slot": "card-frame-description",
-    style: styleProps.style,
-  }
-
-  return useRender({
-    defaultTagName: "div",
-    props: mergeProps<"div">(defaultProps, props),
-    render,
-  })
-}
-
-export function CardFrameAction({
-  className,
-  render,
-  sx,
-  ...props
-}: CardComponentProps): React.ReactElement {
-  const styleProps = stylex.props(styles.frameAction, sx)
-  const defaultProps = {
-    className: cn(styleProps.className, className),
-    "data-slot": "card-frame-action",
     style: styleProps.style,
   }
 

@@ -261,8 +261,8 @@ same as looking the same:
   style itself. StyleX has no ancestor selector that reaches arbitrary depth.
 - **Variant maps**: a plain `styles`/`variantStyles` object +
   `stylex.props(styles.base, variantStyles[variant], sizeStyles[size], …, sx)`.
-  Where a `xxxVariants` export exists for legacy callers, it is a function with
-  the same signature returning `stylex.props(...).className ?? ""`.
+  `buttonVariants()` is the one exception: it returns a class string, for the
+  handful of places that style a foreign element as a button.
 - **Animations**: `stylex.keyframes` (see `skeleton.tsx`). Transitions: plain
   `transitionProperty`/`transitionDuration`/`transitionTimingFunction`.
 - **CSS custom properties from Base UI** (`var(--anchor-width)`,

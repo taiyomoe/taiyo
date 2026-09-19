@@ -4,7 +4,7 @@ import { Menu as MenuPrimitive } from "@base-ui/react/menu"
 import * as stylex from "@stylexjs/stylex"
 import type * as React from "react"
 import { cn } from "@/utils/cn"
-import { ChevronRight } from "@/components/icons"
+import { Check, ChevronRight } from "@/components/icons"
 import { KbdSurface } from "@/components/ui/kbd"
 import { colors, consts, font, radius, shadows } from "../../styles/tokens.stylex"
 import { menuPopupMarker, menuSwitchItemMarker } from "../../styles/markers.stylex"
@@ -26,8 +26,6 @@ const styles = stylex.create({
     outlineStyle: "none",
     position: "relative",
     transformOrigin: "var(--transform-origin)",
-    // Caller styles arrive through `sx`, which merges last and overrides
-    // this directly — no escape hatch needed.
     minWidth: "8rem",
     "::before": {
       inset: 0,
@@ -195,7 +193,6 @@ const styles = stylex.create({
   switchThumb: {
     borderRadius: {
       default: "var(--thumb-size)",
-      // Pressed squish: the thumb goes slightly oval while the item is held.
       [stylex.when.ancestor(":active", menuSwitchItemMarker)]:
         "var(--thumb-size) / calc(var(--thumb-size) * 1.1)",
     },
@@ -447,20 +444,7 @@ export function MenuCheckboxItem({
       ) : (
         <>
           <MenuPrimitive.CheckboxItemIndicator {...stylex.props(styles.checkIndicator)}>
-            <svg
-              aria-hidden="true"
-              fill="none"
-              height="24"
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              viewBox="0 0 24 24"
-              width="24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M5.252 12.7 10.2 18.63 18.748 5.37" />
-            </svg>
+            <Check />
           </MenuPrimitive.CheckboxItemIndicator>
           <span sx={styles.labelColumn}>{children}</span>
         </>
@@ -491,20 +475,7 @@ export function MenuRadioItem({
       {...props}
     >
       <MenuPrimitive.RadioItemIndicator {...stylex.props(styles.checkIndicator)}>
-        <svg
-          aria-hidden="true"
-          fill="none"
-          height="24"
-          stroke="currentColor"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="2"
-          viewBox="0 0 24 24"
-          width="24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path d="M5.252 12.7 10.2 18.63 18.748 5.37" />
-        </svg>
+        <Check />
       </MenuPrimitive.RadioItemIndicator>
       <span sx={styles.labelColumn}>{children}</span>
     </MenuPrimitive.RadioItem>
@@ -569,7 +540,6 @@ export function MenuShortcut({
       style={styleProps.style}
       {...props}
     >
-      {/* A shortcut reads as one chord, so the keys inside drop their chips. */}
       <KbdSurface>{children}</KbdSurface>
     </kbd>
   )

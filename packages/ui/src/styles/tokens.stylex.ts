@@ -86,9 +86,7 @@ export const shadows = stylex.defineVars({
    * from above) — the signature soft-emboss cue of the design language.
    */
   edge: "0 1px rgb(0 0 0 / 5%)",
-  /** Inset highlight for solid (primary/destructive) raised controls. */
   emboss: "inset 0 1px rgb(255 255 255 / 16%)",
-  /** Pressed-in replacement for `emboss`. */
   pressed: "inset 0 1px rgb(0 0 0 / 8%)",
   /**
    * Raised knob sitting in a sunken track (switch thumb). The knob is white in
@@ -111,7 +109,6 @@ export const radius = stylex.defineVars({
   full: "9999px",
 })
 
-/** Spacing scale. */
 export const spacing = stylex.defineVars({
   sm: "0.5rem",
   md: "1rem",
@@ -119,7 +116,6 @@ export const spacing = stylex.defineVars({
   xl: "2rem",
 })
 
-/** Type scale. */
 export const text = stylex.defineVars({
   base: "1rem",
   lg: "1.125rem",

@@ -32,7 +32,6 @@ const styles = stylex.create({
       default: null,
     },
   },
-  // Soft edges that appear only on the sides that actually overflow.
   viewportFade: {
     "--fade-size": "1.5rem",
     maskComposite: "intersect",

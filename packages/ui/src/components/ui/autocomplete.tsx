@@ -213,18 +213,6 @@ const styles = stylex.create({
     scrollPaddingBottom: "0.25rem",
     scrollPaddingTop: "0.25rem",
   },
-  status: {
-    margin: {
-      default: null,
-      ":empty": 0,
-    },
-    paddingBlock: "0.5rem",
-    paddingInline: "0.75rem",
-    color: colors.mutedForeground,
-    fontSize: "0.75rem",
-    fontWeight: 500,
-    lineHeight: "1rem",
-  },
 })
 
 export function AutocompleteInput({
@@ -443,29 +431,6 @@ export function AutocompleteEmpty({
   )
 }
 
-export function AutocompleteRow({
-  className,
-  sx,
-  ...props
-}: AutocompletePrimitive.Row.Props & { sx?: Sx }): React.ReactElement {
-  const styleProps = stylex.props(sx)
-
-  return (
-    <AutocompletePrimitive.Row
-      className={cn(styleProps.className, className)}
-      data-slot="autocomplete-row"
-      style={styleProps.style}
-      {...props}
-    />
-  )
-}
-
-export function AutocompleteValue({
-  ...props
-}: AutocompletePrimitive.Value.Props): React.ReactElement {
-  return <AutocompletePrimitive.Value data-slot="autocomplete-value" {...props} />
-}
-
 export function AutocompleteList({
   className,
   sx,
@@ -503,23 +468,6 @@ export function AutocompleteClear({
     >
       <Close className={iconProps.className} style={iconProps.style} />
     </AutocompletePrimitive.Clear>
-  )
-}
-
-export function AutocompleteStatus({
-  className,
-  sx,
-  ...props
-}: AutocompletePrimitive.Status.Props & { sx?: Sx }): React.ReactElement {
-  const styleProps = stylex.props(styles.status, sx)
-
-  return (
-    <AutocompletePrimitive.Status
-      className={cn(styleProps.className, className)}
-      data-slot="autocomplete-status"
-      style={styleProps.style}
-      {...props}
-    />
   )
 }
 

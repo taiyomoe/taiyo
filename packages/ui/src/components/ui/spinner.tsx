@@ -4,7 +4,6 @@ import { cn } from "@/utils/cn"
 import { type IconProps, Spinner as SpinnerIcon } from "@/components/icons"
 import type { Sx } from "../../styles/sx"
 
-/** One continuous revolution per second. */
 const spin = stylex.keyframes({
   from: { transform: "rotate(0deg)" },
   to: { transform: "rotate(360deg)" },
@@ -15,12 +14,10 @@ const styles = stylex.create({
     animationIterationCount: "infinite",
     animationName: spin,
     animationTimingFunction: "linear",
-    // Inherits whatever the wrapper sets (e.g. Button's loading indicator).
     color: "currentColor",
   },
 })
 
-/** See the note on SeparatorProps for why `className` sits alongside `sx`. */
 export type SpinnerProps = IconProps & {
   sx?: Sx
 }

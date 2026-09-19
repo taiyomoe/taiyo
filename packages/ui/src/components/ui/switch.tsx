@@ -25,7 +25,6 @@ const styles = stylex.create({
     padding: "1px",
     borderRadius: radius.full,
     alignItems: "center",
-    // Sunken track when unchecked, brand fill when checked.
     backgroundColor: {
       "[data-checked]": colors.primary,
       default: colors.well,
@@ -58,7 +57,6 @@ const styles = stylex.create({
     width: "calc(var(--thumb-size) * 2 - 2px)",
   },
   thumb: {
-    // Capsule at rest; squishes into an ellipse while the track is pressed.
     borderRadius: {
       default: "var(--thumb-size)",
       [stylex.when.ancestor(":active", switchRootMarker)]:
@@ -69,8 +67,8 @@ const styles = stylex.create({
     boxShadow: shadows.thumb,
     display: "block",
     pointerEvents: "none",
-    // A disabled root never matches `:active` (Base UI renders a disabled
-    // button), so the original's `not-data-disabled` guard is redundant.
+    // A disabled root never matches `:active` — Base UI renders it as a
+    // disabled button — so no extra guard is needed here.
     scale: {
       default: null,
       [stylex.when.ancestor(":active", switchRootMarker)]: "1.1 1",
@@ -91,7 +89,6 @@ const styles = stylex.create({
   },
 })
 
-/** See the note on SeparatorProps for why `className` sits alongside `sx`. */
 export type SwitchProps = SwitchPrimitive.Root.Props & {
   sx?: Sx
 }

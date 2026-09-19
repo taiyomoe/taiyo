@@ -1,19 +1,15 @@
 "use client"
 
-import { Checkbox as CheckboxPrimitive } from "@base-ui/react/checkbox"
 import { Drawer as DrawerPrimitive } from "@base-ui/react/drawer"
 import { mergeProps } from "@base-ui/react/merge-props"
-import { Radio as RadioPrimitive } from "@base-ui/react/radio"
-import { RadioGroup as RadioGroupPrimitive } from "@base-ui/react/radio-group"
 import { useRender } from "@base-ui/react/use-render"
 import * as stylex from "@stylexjs/stylex"
 import type React from "react"
 import { createContext, useContext, useMemo } from "react"
 import { cn } from "@/utils/cn"
-import { ChevronRight, Close } from "@/components/icons"
+import { Close } from "@/components/icons"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { drawerSwitchItemMarker } from "../../styles/markers.stylex"
 import type { Sx } from "../../styles/sx"
 import { colors, consts, font, radius, shadows, text } from "../../styles/tokens.stylex"
 
@@ -32,15 +28,6 @@ const directionMap: Record<DrawerPosition, DrawerPrimitive.Root.Props["swipeDire
   top: "up",
 }
 const styles = stylex.create({
-  swipeArea: {
-    position: "fixed",
-    touchAction: "none",
-    zIndex: 50,
-  },
-  swipeAreaBottom: { insetInline: 0, bottom: 0, height: "2rem" },
-  swipeAreaTop: { insetInline: 0, height: "2rem", top: 0 },
-  swipeAreaLeft: { insetBlock: 0, left: 0, width: "2rem" },
-  swipeAreaRight: { insetBlock: 0, right: 0, width: "2rem" },
   backdrop: {
     inset: 0,
     backdropFilter: "blur(4px)",
@@ -61,8 +48,6 @@ const styles = stylex.create({
     zIndex: 50,
   },
   viewport: {
-    // How far the popup's bleed layer extends past the edge, and the gutter
-    // the `inset` variant leaves around the drawer.
     "--bleed": "3rem",
     "--inset": "0px",
     inset: 0,
@@ -92,7 +77,6 @@ const styles = stylex.create({
   viewportInsetTop: { paddingTop: "var(--inset)" },
   viewportInsetBottom: { paddingBottom: "var(--inset)" },
   popup: {
-    // Stacking maths for nested drawers.
     "--peek": "calc(1.5rem - 1px)",
     "--scale": "clamp(0, calc(var(--scale-base) + (var(--stack-step) * var(--stack-progress))), 1)",
     "--scale-base": "calc(max(0, 1 - (var(--nested-drawers) * var(--stack-step))))",
@@ -289,8 +273,6 @@ const styles = stylex.create({
       borderStartStartRadius: "calc(1.575rem - 1px)",
     },
   },
-  // The inset variant floats: full radius and a border on every side once
-  // there is room for the gutter.
   popupInset: {
     borderRadius: {
       default: null,
@@ -399,167 +381,7 @@ const styles = stylex.create({
   barBottom: { top: 0 },
   barLeft: { right: 0 },
   barRight: { left: 0 },
-  menu: {
-    margin: "-0.5rem",
-    display: "flex",
-    flexDirection: "column",
-  },
-  menuItem: {
-    borderRadius: radius.sm,
-    gap: "0.5rem",
-    paddingBlock: "0.25rem",
-    paddingInline: "0.5rem",
-    alignItems: "center",
-    backgroundColor: {
-      default: null,
-      ":hover": colors.accent,
-    },
-    color: {
-      '[data-variant="destructive"]': colors.destructiveForeground,
-      default: colors.foreground,
-      ":hover": colors.accentForeground,
-    },
-    cursor: "default",
-    display: "flex",
-    fontSize: {
-      default: "1rem",
-      [consts.sm]: "0.875rem",
-    },
-    opacity: {
-      "[data-disabled]": 0.64,
-      default: null,
-      ":disabled": 0.64,
-    },
-    outlineStyle: "none",
-    pointerEvents: {
-      "[data-disabled]": "none",
-      default: null,
-      ":disabled": "none",
-    },
-    userSelect: "none",
-    minHeight: {
-      default: "2.25rem",
-      [consts.sm]: "2rem",
-    },
-    width: "100%",
-  },
-  menuItemCheckbox: {
-    display: "grid",
-    gridTemplateColumns: "1rem 1fr",
-    paddingRight: "1rem",
-  },
-  menuItemSwitch: {
-    gap: "1rem",
-    display: "grid",
-    gridTemplateColumns: "1fr auto",
-    paddingRight: "0.375rem",
-  },
-  menuSeparator: {
-    marginBlock: "0.25rem",
-    marginInline: "0.5rem",
-    backgroundColor: colors.border,
-    height: "1px",
-  },
-  menuGroup: {
-    display: "flex",
-    flexDirection: "column",
-  },
-  menuGroupLabel: {
-    paddingBlock: "0.375rem",
-    paddingInline: "0.5rem",
-    color: colors.mutedForeground,
-    fontSize: "0.75rem",
-    fontWeight: 500,
-    lineHeight: "1rem",
-  },
-  menuTriggerChevron: {
-    opacity: 0.8,
-    marginLeft: "auto",
-    marginRight: "-0.125rem",
-  },
-  columnOne: { gridColumnStart: "1" },
-  columnTwo: { gridColumnStart: "2" },
-  switchTrack: {
-    // The thumb reads --thumb-size back; see menu.tsx for why the breakpoint
-    // has to live on the track.
-    "--thumb-size": {
-      default: "1rem",
-      [consts.sm]: "0.75rem",
-    },
-    padding: "1px",
-    borderRadius: radius.full,
-    alignItems: "center",
-    backgroundColor: {
-      "[data-checked]": colors.primary,
-      "[data-unchecked]": colors.well,
-      default: null,
-    },
-    boxShadow: {
-      "[data-unchecked]": `inset 0 1px rgb(0 0 0 / 4%), ${shadows.sunken}`,
-      default: "inset 0 1px rgb(0 0 0 / 4%)",
-    },
-    display: "inline-flex",
-    flexShrink: 0,
-    gridColumnStart: "2",
-    opacity: {
-      "[data-disabled]": 0.64,
-      default: null,
-    },
-    outlineColor: colors.ring,
-    outlineOffset: 1,
-    outlineStyle: {
-      default: "none",
-      ":focus-visible": "solid",
-    },
-    outlineWidth: 2,
-    transitionDuration: "200ms",
-    transitionProperty: "background-color, box-shadow",
-    height: "calc(var(--thumb-size) + 2px)",
-    width: "calc(var(--thumb-size) * 2 - 2px)",
-  },
-  switchThumb: {
-    borderRadius: {
-      default: "var(--thumb-size)",
-      [stylex.when.ancestor(":active", drawerSwitchItemMarker)]:
-        "var(--thumb-size) / calc(var(--thumb-size) * 1.1)",
-    },
-    aspectRatio: "1",
-    backgroundColor: "#fff",
-    boxShadow: shadows.thumb,
-    display: "block",
-    pointerEvents: "none",
-    scale: {
-      default: null,
-      [stylex.when.ancestor(":active", drawerSwitchItemMarker)]: "1.1 1",
-    },
-    transformOrigin: {
-      default: "left",
-      [stylex.when.ancestor("[data-checked]", drawerSwitchItemMarker)]: "var(--thumb-size) 50%",
-    },
-    transitionDelay: "0s, 0s, 0.1s, 0s",
-    transitionDuration: "0.15s, 0.15s, 0.1s, 0.15s",
-    transitionProperty: "translate, border-radius, scale, transform-origin",
-    translate: {
-      default: null,
-      [stylex.when.ancestor("[data-checked]", drawerSwitchItemMarker)]:
-        "calc(var(--thumb-size) - 4px)",
-    },
-    willChange: "transform",
-    height: "100%",
-  },
-  indicatorIcon: {
-    height: {
-      default: "1.125rem",
-      [consts.sm]: "1rem",
-    },
-    width: {
-      default: "1.125rem",
-      [consts.sm]: "1rem",
-    },
-  },
 })
-
-export const DrawerCreateHandle: typeof DrawerPrimitive.createHandle = DrawerPrimitive.createHandle
 
 export function Drawer({
   swipeDirection,
@@ -585,36 +407,6 @@ export function DrawerTrigger(props: DrawerPrimitive.Trigger.Props): React.React
 
 export function DrawerClose(props: DrawerPrimitive.Close.Props): React.ReactElement {
   return <DrawerPrimitive.Close data-slot="drawer-close" {...props} />
-}
-
-const SWIPE_AREA_STYLE = {
-  bottom: styles.swipeAreaBottom,
-  left: styles.swipeAreaLeft,
-  right: styles.swipeAreaRight,
-  top: styles.swipeAreaTop,
-} as const
-
-export function DrawerSwipeArea({
-  className,
-  position: positionProp,
-  sx,
-  ...props
-}: DrawerPrimitive.SwipeArea.Props & {
-  position?: DrawerPosition
-  sx?: Sx
-}): React.ReactElement {
-  const { position: contextPosition } = useContext(DrawerContext)
-  const position = positionProp ?? contextPosition
-  const styleProps = stylex.props(styles.swipeArea, SWIPE_AREA_STYLE[position], sx)
-
-  return (
-    <DrawerPrimitive.SwipeArea
-      className={cn(styleProps.className, className)}
-      data-slot="drawer-swipe-area"
-      style={styleProps.style}
-      {...props}
-    />
-  )
 }
 
 export function DrawerBackdrop({
@@ -919,290 +711,5 @@ export function DrawerBar({
 }
 
 export const DrawerContent: typeof DrawerPrimitive.Content = DrawerPrimitive.Content
-
-export function DrawerMenu({
-  className,
-  render,
-  sx,
-  ...props
-}: useRender.ComponentProps<"nav"> & { sx?: Sx }): React.ReactElement {
-  const styleProps = stylex.props(styles.menu, sx)
-  const defaultProps = {
-    className: cn(styleProps.className, className),
-    "data-slot": "drawer-menu",
-    style: styleProps.style,
-  }
-
-  return useRender({
-    defaultTagName: "nav",
-    props: mergeProps<"nav">(defaultProps, props),
-    render,
-  })
-}
-
-export function DrawerMenuItem({
-  className,
-  variant = "default",
-  render,
-  disabled,
-  sx,
-  ...props
-}: useRender.ComponentProps<"button"> & {
-  variant?: "default" | "destructive"
-  sx?: Sx
-}): React.ReactElement {
-  const styleProps = stylex.props(styles.menuItem, sx)
-  const defaultProps = {
-    className: cn(styleProps.className, className),
-    "data-slot": "drawer-menu-item",
-    "data-variant": variant,
-    disabled,
-    style: styleProps.style,
-    type: "button" as const,
-  }
-
-  return useRender({
-    defaultTagName: "button",
-    props: mergeProps<"button">(defaultProps, props),
-    render,
-  })
-}
-
-export function DrawerMenuSeparator({
-  className,
-  render,
-  sx,
-  ...props
-}: useRender.ComponentProps<"div"> & { sx?: Sx }): React.ReactElement {
-  const styleProps = stylex.props(styles.menuSeparator, sx)
-  const defaultProps = {
-    className: cn(styleProps.className, className),
-    "data-slot": "drawer-menu-separator",
-    style: styleProps.style,
-  }
-
-  return useRender({
-    defaultTagName: "div",
-    props: mergeProps<"div">(defaultProps, props),
-    render,
-  })
-}
-
-export function DrawerMenuGroup({
-  className,
-  render,
-  sx,
-  ...props
-}: useRender.ComponentProps<"div"> & { sx?: Sx }): React.ReactElement {
-  const styleProps = stylex.props(styles.menuGroup, sx)
-  const defaultProps = {
-    className: cn(styleProps.className, className),
-    "data-slot": "drawer-menu-group",
-    style: styleProps.style,
-  }
-
-  return useRender({
-    defaultTagName: "div",
-    props: mergeProps<"div">(defaultProps, props),
-    render,
-  })
-}
-
-export function DrawerMenuGroupLabel({
-  className,
-  render,
-  sx,
-  ...props
-}: useRender.ComponentProps<"div"> & { sx?: Sx }): React.ReactElement {
-  const styleProps = stylex.props(styles.menuGroupLabel, sx)
-  const defaultProps = {
-    className: cn(styleProps.className, className),
-    "data-slot": "drawer-menu-group-label",
-    style: styleProps.style,
-  }
-
-  return useRender({
-    defaultTagName: "div",
-    props: mergeProps<"div">(defaultProps, props),
-    render,
-  })
-}
-
-export function DrawerMenuTrigger({
-  className,
-  children,
-  sx,
-  ...props
-}: DrawerPrimitive.Trigger.Props & { sx?: Sx }): React.ReactElement {
-  const styleProps = stylex.props(styles.menuItem, sx)
-  const chevronProps = stylex.props(styles.menuTriggerChevron, styles.indicatorIcon)
-
-  return (
-    <DrawerTrigger
-      className={cn(styleProps.className, className)}
-      data-slot="drawer-menu-trigger"
-      style={styleProps.style}
-      {...props}
-    >
-      {children}
-      <ChevronRight className={chevronProps.className} style={chevronProps.style} />
-    </DrawerTrigger>
-  )
-}
-
-export function DrawerMenuCheckboxItem({
-  className,
-  children,
-  checked,
-  defaultChecked,
-  onCheckedChange,
-  variant = "default",
-  disabled,
-  render,
-  sx,
-  ...props
-}: CheckboxPrimitive.Root.Props & {
-  variant?: "default" | "switch"
-  render?: React.ReactElement
-  sx?: Sx
-}): React.ReactElement {
-  const isSwitch = variant === "switch"
-  const styleProps = stylex.props(
-    styles.menuItem,
-    isSwitch ? styles.menuItemSwitch : styles.menuItemCheckbox,
-    isSwitch && drawerSwitchItemMarker,
-    isSwitch && stylex.defaultMarker(),
-    sx,
-  )
-  const labelProps = stylex.props(isSwitch ? styles.columnOne : styles.columnTwo)
-  const trackProps = stylex.props(styles.switchTrack)
-  const thumbProps = stylex.props(styles.switchThumb)
-  const indicatorProps = stylex.props(styles.columnOne)
-  const iconProps = stylex.props(styles.indicatorIcon)
-
-  return (
-    <CheckboxPrimitive.Root
-      checked={checked}
-      className={cn(styleProps.className, className)}
-      data-slot="drawer-menu-checkbox-item"
-      defaultChecked={defaultChecked}
-      disabled={disabled}
-      onCheckedChange={onCheckedChange}
-      render={render}
-      style={styleProps.style}
-      {...props}
-    >
-      {isSwitch ? (
-        <>
-          <span className={labelProps.className} style={labelProps.style}>
-            {children}
-          </span>
-          <CheckboxPrimitive.Indicator
-            className={trackProps.className}
-            keepMounted
-            style={trackProps.style}
-          >
-            <span className={thumbProps.className} style={thumbProps.style} />
-          </CheckboxPrimitive.Indicator>
-        </>
-      ) : (
-        <>
-          <CheckboxPrimitive.Indicator
-            className={indicatorProps.className}
-            style={indicatorProps.style}
-          >
-            <svg
-              className={iconProps.className}
-              fill="none"
-              height="24"
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              style={iconProps.style}
-              viewBox="0 0 24 24"
-              width="24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M5.252 12.7 10.2 18.63 18.748 5.37" />
-            </svg>
-          </CheckboxPrimitive.Indicator>
-          <span className={labelProps.className} style={labelProps.style}>
-            {children}
-          </span>
-        </>
-      )}
-    </CheckboxPrimitive.Root>
-  )
-}
-
-export function DrawerMenuRadioGroup({
-  className,
-  sx,
-  ...props
-}: RadioGroupPrimitive.Props & { sx?: Sx }): React.ReactElement {
-  const styleProps = stylex.props(styles.menuGroup, sx)
-
-  return (
-    <RadioGroupPrimitive
-      className={cn(styleProps.className, className)}
-      data-slot="drawer-menu-radio-group"
-      style={styleProps.style}
-      {...props}
-    />
-  )
-}
-
-export function DrawerMenuRadioItem({
-  className,
-  children,
-  value,
-  disabled,
-  render,
-  sx,
-  ...props
-}: RadioPrimitive.Root.Props & {
-  value: string
-  render?: React.ReactElement
-  sx?: Sx
-}): React.ReactElement {
-  const styleProps = stylex.props(styles.menuItem, styles.menuItemCheckbox, sx)
-  const indicatorProps = stylex.props(styles.columnOne)
-  const labelProps = stylex.props(styles.columnTwo)
-  const iconProps = stylex.props(styles.indicatorIcon)
-
-  return (
-    <RadioPrimitive.Root
-      className={cn(styleProps.className, className)}
-      data-slot="drawer-menu-radio-item"
-      disabled={disabled}
-      render={render}
-      style={styleProps.style}
-      value={value}
-      {...props}
-    >
-      <RadioPrimitive.Indicator className={indicatorProps.className} style={indicatorProps.style}>
-        <svg
-          className={iconProps.className}
-          fill="none"
-          height="24"
-          stroke="currentColor"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="2"
-          style={iconProps.style}
-          viewBox="0 0 24 24"
-          width="24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path d="M5.252 12.7 10.2 18.63 18.748 5.37" />
-        </svg>
-      </RadioPrimitive.Indicator>
-      <span className={labelProps.className} style={labelProps.style}>
-        {children}
-      </span>
-    </RadioPrimitive.Root>
-  )
-}
 
 export { DrawerPrimitive }

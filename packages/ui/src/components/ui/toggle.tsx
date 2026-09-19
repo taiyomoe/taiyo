@@ -89,9 +89,6 @@ const variantStyles = stylex.create({
   default: {
     borderColor: "transparent",
   },
-  // The old `bg-background dark:bg-input/32` surface maps onto the raised
-  // chip tokens (`chip`/`chipHover`), matching the outline button. The dark
-  // pressed `bg-input` deepens to the theme-agnostic `input` wash.
   outline: {
     borderColor: colors.input,
     backgroundClip: "padding-box",
@@ -152,33 +149,6 @@ const SIZE_STYLE = {
   lg: sizeStyles.lg,
   sm: sizeStyles.sm,
 } as const
-
-export interface ToggleStyleOptions {
-  variant?: ToggleVariant | null
-  size?: ToggleSize | null
-  className?: string
-}
-
-/**
- * Legacy escape hatch, kept API-compatible with the old cva export: returns
- * the compiled class string for callers that style a foreign element as a
- * toggle. Prefer `sx` composition where possible.
- */
-export function toggleVariants({
-  variant = "default",
-  size = "default",
-  className,
-}: ToggleStyleOptions = {}): string {
-  const resolvedVariant: ToggleVariant = variant ?? "default"
-  const props = stylex.props(
-    styles.base,
-    VARIANT_STYLE[resolvedVariant],
-    SIZE_STYLE[size ?? "default"],
-    resolvedVariant === "outline" && raised.before,
-  )
-
-  return cn(props.className, className)
-}
 
 export interface ToggleProps extends TogglePrimitive.Props {
   variant?: ToggleVariant

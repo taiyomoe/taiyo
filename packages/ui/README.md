@@ -1,14 +1,20 @@
 # `@taiyomoe/ui`
 
-This package contains React UI components.
+React components, styled with StyleX. See [STYLEX.md](./STYLEX.md) for the
+design language and the compiler's constraints.
 
-## Usage
+Components are imported by path — there is no root barrel:
 
-```ts
-import { Button } from "@taiyomoe/ui";
+```tsx
+import { Button } from "@taiyomoe/ui/components/ui/button"
 
-// Use components
-<Button variant="solid" color="default">
+;<Button variant="default" size="lg">
   Click me
 </Button>
+```
+
+Caller styles go through `sx`, which merges last and therefore wins:
+
+```tsx
+<Button sx={styles.submit}>Save</Button>
 ```

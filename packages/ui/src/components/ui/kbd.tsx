@@ -21,7 +21,6 @@ export function KbdSurface({ children }: { children: React.ReactNode }): React.R
 }
 
 const styles = stylex.create({
-  // The key surface: one chip, whether it holds one glyph or a whole chord.
   surface: {
     // Measured off the reference: the chip is a lighter fill ringed by an even
     // lighter hairline, which is what makes it read as a physical keycap
@@ -48,7 +47,6 @@ const styles = stylex.create({
     height: "1.375rem",
     minWidth: "1.375rem",
   },
-  // A key inside a surface carries no box of its own.
   glyph: {
     backgroundColor: "transparent",
     color: "inherit",
@@ -60,7 +58,6 @@ const styles = stylex.create({
   },
 })
 
-/** See the note on SeparatorProps for why `className` sits alongside `sx`. */
 export type KbdProps = React.ComponentProps<"kbd"> & {
   sx?: Sx
 }

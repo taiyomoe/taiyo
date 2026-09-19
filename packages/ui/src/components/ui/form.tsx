@@ -6,7 +6,6 @@ import type React from "react"
 import { cn } from "@/utils/cn"
 import type { Sx } from "../../styles/sx"
 
-/** See the note on SeparatorProps for why `className` sits alongside `sx`. */
 export type FormProps = FormPrimitive.Props & {
   sx?: Sx
 }

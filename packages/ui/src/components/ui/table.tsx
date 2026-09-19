@@ -77,8 +77,6 @@ const styles = stylex.create({
       ":last-child": 0,
     },
   },
-  // In the card variant the cells carry the border/background so the body
-  // reads as one rounded surface.
   rowCard: {
     position: "relative",
     borderBottomWidth: 0,

@@ -233,11 +233,6 @@ export function ToggleGroupItem({
   )
 }
 
-/**
- * The old dark-only `before:bg-input/32` tint layer is dropped: the `input`
- * token already themes itself, and the extra layer only existed so the
- * (also dropped) neighbour-hover rules could recolour it.
- */
 export function ToggleGroupSeparator({
   className,
   orientation = "vertical",

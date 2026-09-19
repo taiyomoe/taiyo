@@ -26,7 +26,6 @@ const styles = stylex.create({
   },
 })
 
-/** See the note on SeparatorProps for why `className` sits alongside `sx`. */
 export type LabelProps = useRender.ComponentProps<"label"> & {
   sx?: Sx
 }

@@ -5,7 +5,6 @@ import { useRender } from "@base-ui/react/use-render"
 import * as stylex from "@stylexjs/stylex"
 import * as React from "react"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
 import { Sheet, SheetDescription, SheetHeader, SheetPopup, SheetTitle } from "@/components/ui/sheet"
@@ -23,6 +22,8 @@ const SIDEBAR_WIDTH: string = "16rem"
 const SIDEBAR_WIDTH_MOBILE: string = "18rem"
 const SIDEBAR_WIDTH_ICON: string = "3rem"
 const SIDEBAR_KEYBOARD_SHORTCUT: string = "b"
+/** Below this the sidebar becomes a sheet rather than a rail. */
+const MOBILE_QUERY: string = "(max-width: 799px)"
 
 export type SidebarSide = "left" | "right"
 
@@ -49,7 +50,6 @@ const SidebarLayoutContext = React.createContext<{
   variant: "sidebar",
 })
 
-/** True while the sidebar is collapsed to its icon rail. */
 function useIconCollapsed(): boolean {
   const { collapsible } = React.useContext(SidebarLayoutContext)
   const context = React.useContext(SidebarContext)
@@ -255,12 +255,6 @@ const styles = stylex.create({
       "@media (width >= 48rem)": "0.5rem",
     },
   },
-  input: {
-    backgroundColor: colors.background,
-    boxShadow: "none",
-    height: "2rem",
-    width: "100%",
-  },
   stack: {
     padding: "0.5rem",
     gap: "0.5rem",
@@ -316,42 +310,6 @@ const styles = stylex.create({
   groupLabelIcon: {
     opacity: 0,
     marginTop: "-2rem",
-  },
-  groupAction: {
-    padding: 0,
-    borderRadius: radius.lg,
-    alignItems: "center",
-    aspectRatio: "1",
-    backgroundColor: {
-      default: null,
-      ":hover": colors.sidebarAccent,
-    },
-    color: {
-      default: colors.sidebarForeground,
-      ":hover": colors.sidebarAccentForeground,
-    },
-    display: "flex",
-    justifyContent: "center",
-    outlineColor: colors.sidebarRing,
-    outlineStyle: {
-      default: "none",
-      ":focus-visible": "solid",
-    },
-    outlineWidth: 2,
-    position: "absolute",
-    transitionProperty: "transform",
-    right: "0.75rem",
-    top: "0.875rem",
-    width: "1.25rem",
-    // Widens the tap target on touch layouts only.
-    "::after": {
-      inset: "-0.5rem",
-      content: {
-        default: '""',
-        "@media (width >= 48rem)": "none",
-      },
-      position: "absolute",
-    },
   },
   hidden: {
     display: "none",
@@ -440,7 +398,6 @@ const styles = stylex.create({
     lineHeight: "1.25rem",
     height: "3rem",
   },
-  // Collapsed to the icon rail: the button becomes a square.
   menuButtonIcon: {
     padding: "0.5rem",
     height: "2rem",
@@ -448,47 +405,6 @@ const styles = stylex.create({
   },
   menuButtonIconLg: {
     padding: 0,
-  },
-  menuAction: {
-    padding: 0,
-    borderRadius: radius.lg,
-    alignItems: "center",
-    aspectRatio: "1",
-    backgroundColor: {
-      default: null,
-      ":hover": colors.sidebarAccent,
-    },
-    color: {
-      default: colors.sidebarForeground,
-      ":hover": colors.sidebarAccentForeground,
-    },
-    display: "flex",
-    justifyContent: "center",
-    outlineColor: colors.sidebarRing,
-    outlineStyle: {
-      default: "none",
-      ":focus-visible": "solid",
-    },
-    outlineWidth: 2,
-    position: "absolute",
-    transitionProperty: "transform",
-    right: "0.25rem",
-    width: "1.25rem",
-    "::after": {
-      inset: "-0.5rem",
-      content: {
-        default: '""',
-        "@media (width >= 48rem)": "none",
-      },
-      position: "absolute",
-    },
-  },
-  menuActionOnHover: {
-    opacity: {
-      '[data-state="open"]': 1,
-      default: null,
-      "@media (width >= 48rem)": 0,
-    },
   },
   menuBadge: {
     borderRadius: radius.lg,
@@ -599,27 +515,6 @@ const MENU_BUTTON_SIZE_STYLE = {
   sm: styles.menuButtonSm,
 } as const
 
-export interface SidebarMenuButtonStyleOptions {
-  size?: SidebarMenuButtonSize | null
-  variant?: SidebarMenuButtonVariant | null
-  className?: string
-}
-
-/** Legacy escape hatch, kept API-compatible with the old cva export. */
-export function sidebarMenuButtonVariants({
-  size = "default",
-  variant = "default",
-  className,
-}: SidebarMenuButtonStyleOptions = {}): string {
-  const props = stylex.props(
-    styles.menuButton,
-    MENU_BUTTON_SIZE_STYLE[size ?? "default"],
-    variant === "outline" && styles.menuButtonOutline,
-  )
-
-  return cn(props.className, className)
-}
-
 export type SidebarContextProps = {
   state: "expanded" | "collapsed"
   open: boolean
@@ -658,10 +553,8 @@ export function SidebarProvider({
   onOpenChange?: (open: boolean) => void
   sx?: Sx
 }): React.ReactElement {
-  const isMobile = useMediaQuery("max-md")
+  const isMobile = useMediaQuery(MOBILE_QUERY)
   const [openMobile, setOpenMobile] = React.useState(false)
-  // This is the internal state of the sidebar.
-  // We use openProp and setOpenProp for control from outside the component.
   const [_open, _setOpen] = React.useState(defaultOpen)
   const open = openProp ?? _open
   const setOpen = React.useCallback(
@@ -674,7 +567,6 @@ export function SidebarProvider({
         _setOpen(openState)
       }
 
-      // This sets the cookie to keep the sidebar state.
       await cookieStore.set({
         expires: Date.now() + SIDEBAR_COOKIE_MAX_AGE * 1000,
         name: SIDEBAR_COOKIE_NAME,
@@ -684,12 +576,10 @@ export function SidebarProvider({
     },
     [setOpenProp, open],
   )
-  // Helper to toggle the sidebar.
   const toggleSidebar = React.useCallback(() => {
     return isMobile ? setOpenMobile((open) => !open) : setOpen((open) => !open)
   }, [isMobile, setOpen])
 
-  // Adds a keyboard shortcut to toggle the sidebar.
   React.useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent): void => {
       if (event.key === SIDEBAR_KEYBOARD_SHORTCUT && (event.metaKey || event.ctrlKey)) {
@@ -703,7 +593,6 @@ export function SidebarProvider({
     return () => window.removeEventListener("keydown", handleKeyDown)
   }, [toggleSidebar])
 
-  // We add a state so that we can do data-state="expanded" or "collapsed".
   const state = open ? "expanded" : "collapsed"
   const contextValue = React.useMemo<SidebarContextProps>(
     () => ({
@@ -954,22 +843,6 @@ export function SidebarInset({
   )
 }
 
-export function SidebarInput({
-  className,
-  sx,
-  ...props
-}: React.ComponentProps<typeof Input> & { sx?: Sx }): React.ReactElement {
-  return (
-    <Input
-      className={className}
-      data-sidebar="input"
-      data-slot="sidebar-input"
-      sx={[styles.input, sx]}
-      {...props}
-    />
-  )
-}
-
 export function SidebarHeader({
   className,
   sx,
@@ -1078,28 +951,6 @@ export function SidebarGroupLabel({
 
   return useRender({
     defaultTagName: "div",
-    props: mergeProps(defaultProps, props),
-    render,
-  })
-}
-
-export function SidebarGroupAction({
-  className,
-  render,
-  sx,
-  ...props
-}: useRender.ComponentProps<"button"> & { sx?: Sx }): React.ReactElement {
-  const iconCollapsed = useIconCollapsed()
-  const styleProps = stylex.props(styles.groupAction, iconCollapsed && styles.hidden, sx)
-  const defaultProps = {
-    className: cn(styleProps.className, className),
-    "data-sidebar": "group-action",
-    "data-slot": "sidebar-group-action",
-    style: styleProps.style,
-  }
-
-  return useRender({
-    defaultTagName: "button",
     props: mergeProps(defaultProps, props),
     render,
   })
@@ -1217,37 +1068,6 @@ export function SidebarMenuButton({
       />
     </Tooltip>
   )
-}
-
-export function SidebarMenuAction({
-  className,
-  showOnHover = false,
-  render,
-  sx,
-  ...props
-}: useRender.ComponentProps<"button"> & {
-  showOnHover?: boolean
-  sx?: Sx
-}): React.ReactElement {
-  const iconCollapsed = useIconCollapsed()
-  const styleProps = stylex.props(
-    styles.menuAction,
-    showOnHover && styles.menuActionOnHover,
-    iconCollapsed && styles.hidden,
-    sx,
-  )
-  const defaultProps = {
-    className: cn(styleProps.className, className),
-    "data-sidebar": "menu-action",
-    "data-slot": "sidebar-menu-action",
-    style: styleProps.style,
-  }
-
-  return useRender({
-    defaultTagName: "button",
-    props: mergeProps<"button">(defaultProps, props),
-    render,
-  })
 }
 
 export function SidebarMenuBadge({

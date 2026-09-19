@@ -54,7 +54,6 @@ const styles = stylex.create({
     },
   },
 })
-// The semantic variants are a 32% border over a 4% wash of their own colour.
 const variantStyles = stylex.create({
   default: {
     backgroundColor: "transparent",
@@ -83,18 +82,6 @@ const VARIANT_STYLE = {
   success: variantStyles.success,
   warning: variantStyles.warning,
 } as const
-
-export interface AlertStyleOptions {
-  variant?: AlertVariant | null
-  className?: string
-}
-
-/** Legacy escape hatch, kept API-compatible with the old cva export. */
-export function alertVariants({ variant = "default", className }: AlertStyleOptions = {}): string {
-  const props = stylex.props(styles.base, VARIANT_STYLE[variant ?? "default"])
-
-  return cn(props.className, className)
-}
 
 export function Alert({
   className,

@@ -121,7 +121,6 @@ const styles = stylex.create({
   },
 })
 
-/** See the note on SeparatorProps for why `className` sits alongside `sx`. */
 export type RadioGroupProps = RadioGroupPrimitive.Props & {
   sx?: Sx
 }

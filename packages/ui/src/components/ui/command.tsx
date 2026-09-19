@@ -92,8 +92,6 @@ const styles = stylex.create({
     minHeight: 0,
     minWidth: 0,
     width: "100%",
-    // The muted wash behind the panel is what separates the search row from
-    // the results surface.
     "::before": {
       inset: 0,
       borderRadius: "inherit",

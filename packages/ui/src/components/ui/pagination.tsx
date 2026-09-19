@@ -23,7 +23,6 @@ const styles = stylex.create({
     display: "flex",
     flexDirection: "row",
   },
-  // Below `sm` the previous/next links collapse to a square icon button.
   edgeLink: {
     padding: {
       default: 0,

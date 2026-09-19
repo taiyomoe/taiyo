@@ -23,8 +23,6 @@
  * as unstyled boxes. The layer is what makes "reset, then components" work.
  */
 @layer base {
-  /* Border-box everywhere, no implicit margins/padding, borders start at 0 so a
-     component only pays for the edges it declares. */
   *,
   ::after,
   ::before,
@@ -55,7 +53,6 @@
     text-decoration: underline dotted;
   }
 
-  /* Headings are sized by the component that renders them, never by the tag. */
   h1,
   h2,
   h3,
@@ -66,7 +63,6 @@
     font-weight: inherit;
   }
 
-  /* Links opt in to styling rather than out of it. */
   a {
     color: inherit;
     text-decoration: inherit;
@@ -148,7 +144,6 @@
     max-width: 100%;
   }
 
-  /* Form controls inherit typography and come in unstyled. */
   button,
   input,
   select,

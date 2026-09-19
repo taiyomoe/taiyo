@@ -3,6 +3,7 @@
 import { Checkbox as CheckboxPrimitive } from "@base-ui/react/checkbox"
 import * as stylex from "@stylexjs/stylex"
 import type React from "react"
+import { Check } from "@/components/icons"
 import { cn } from "@/utils/cn"
 import { colors, consts, shadows } from "../../styles/tokens.stylex"
 import type { Sx } from "../../styles/sx"
@@ -108,7 +109,6 @@ const styles = stylex.create({
   },
 })
 
-/** See the note on SeparatorProps for why `className` sits alongside `sx`. */
 export type CheckboxProps = CheckboxPrimitive.Root.Props & {
   sx?: Sx
 }
@@ -149,21 +149,7 @@ export function Checkbox({ className, sx, ...props }: CheckboxProps): React.Reac
                 <path d="M5.252 12h13.496" />
               </svg>
             ) : (
-              <svg
-                aria-hidden="true"
-                fill="none"
-                height="24"
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="3"
-                viewBox="0 0 24 24"
-                width="24"
-                xmlns="http://www.w3.org/2000/svg"
-                sx={styles.icon}
-              >
-                <path d="M5.252 12.7 10.2 18.63 18.748 5.37" />
-              </svg>
+              <Check strokeWidth={3} sx={styles.icon} />
             )}
           </span>
         )}

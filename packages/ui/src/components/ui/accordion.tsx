@@ -90,7 +90,6 @@ export function Accordion(props: AccordionPrimitive.Root.Props): React.ReactElem
   return <AccordionPrimitive.Root data-slot="accordion" {...props} />
 }
 
-/** See the note on SeparatorProps for why `className` sits alongside `sx`. */
 export type AccordionItemProps = AccordionPrimitive.Item.Props & {
   sx?: Sx
 }

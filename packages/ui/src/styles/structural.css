@@ -13,53 +13,10 @@
  * case — and needs `!important` to override one.
  */
 @layer structural {
-  /* Buttons, toggles, tabs, select triggers: icon children. */
-  [data-slot="button"] svg,
-  [data-slot="toggle"] svg,
-  [data-slot="tabs-tab"] svg,
-  [data-slot="select-trigger"] svg,
-  [data-slot="select-button"] svg,
-  [data-slot="menu-item"] > svg,
-  [data-slot="menu-sub-trigger"] svg,
-  [data-slot="pagination-link"] svg,
-  [data-slot="sidebar-trigger"] svg,
-  [data-slot="toolbar-button"] svg,
-  [data-slot="toolbar-link"] svg,
-  [data-slot="collapsible-trigger"] svg,
-  [data-slot="badge"] svg {
-    flex-shrink: 0;
-    pointer-events: none;
-  }
-
   [data-slot="button"] svg,
   [data-slot="tabs-tab"] svg,
   [data-slot="menu-item"] > svg {
     margin-inline: -0.125rem;
-  }
-
-  [data-slot="button"] svg,
-  [data-slot="toggle"] svg,
-  [data-slot="select-trigger"] svg,
-  [data-slot="select-button"] svg,
-  [data-slot="menu-item"] > svg,
-  [data-slot="badge"] svg {
-    opacity: 0.8;
-  }
-
-  [data-slot="button"] svg,
-  [data-slot="toggle"] svg,
-  [data-slot="tabs-tab"] svg,
-  [data-slot="select-trigger"] svg,
-  [data-slot="select-button"] svg,
-  [data-slot="menu-item"] > svg,
-  [data-slot="menu-sub-trigger"] svg,
-  [data-slot="pagination-link"] svg,
-  [data-slot="sidebar-trigger"] svg,
-  [data-slot="toolbar-button"] svg,
-  [data-slot="toolbar-link"] svg,
-  [data-slot="collapsible-trigger"] svg {
-    height: 1.125rem;
-    width: 1.125rem;
   }
 
   [data-slot="badge"] svg {
@@ -81,7 +38,6 @@
     width: 1.125rem;
   }
 
-  /* Consumer icons before the sub-trigger's chevron hug like menu-item icons. */
   [data-slot="menu-sub-trigger"] > svg:not(:last-child) {
     margin-inline: -0.125rem;
   }
@@ -112,7 +68,6 @@
     opacity: 0;
   }
 
-  /* The outgoing tooltip content truncates while it fades. */
   [data-slot="tooltip-viewport"] [data-previous] {
     overflow: hidden;
     text-overflow: ellipsis;
@@ -144,17 +99,6 @@
   }
 
   @media (width >= 40rem) {
-    [data-slot="button"] svg,
-    [data-slot="toggle"] svg,
-    [data-slot="tabs-tab"] svg,
-    [data-slot="select-trigger"] svg,
-    [data-slot="select-button"] svg,
-    [data-slot="menu-item"] > svg,
-    [data-slot="menu-sub-trigger"] svg {
-      height: 1rem;
-      width: 1rem;
-    }
-
     [data-slot="badge"] svg {
       height: 0.75rem;
       width: 0.75rem;
@@ -221,7 +165,6 @@
     color: var(--warning);
   }
 
-  /* A leading icon pushes the title/description into the second column. */
   [data-slot="alert"] > svg ~ [data-slot="alert-title"],
   [data-slot="alert"] > svg ~ [data-slot="alert-description"] {
     grid-column-start: 2;
@@ -366,7 +309,6 @@
     background-color: color-mix(in srgb, var(--card), var(--foreground) 4%);
   }
 
-  /* Header rows draw the rule under the head, and checkbox columns collapse. */
   [data-slot="table-header"] tr {
     border-bottom: 1px solid var(--border);
   }
@@ -394,7 +336,6 @@
     border-bottom-width: 0;
   }
 
-  /* Number field steppers render lucide icons the component does not size. */
   [data-slot="number-field-decrement"] svg,
   [data-slot="number-field-increment"] svg {
     flex-shrink: 0;
@@ -426,7 +367,6 @@
     display: none;
   }
 
-  /* Block-aligned addons stack the group vertically. */
   [data-slot="input-group"]:has([data-align="block-start"]),
   [data-slot="input-group"]:has([data-align="block-end"]),
   [data-slot="input-group"]:has(textarea) {
@@ -439,7 +379,6 @@
     height: auto;
   }
 
-  /* An addon on one side takes over that side's padding from the input. */
   [data-slot="input-group"]:has([data-align="inline-start"]) input {
     padding-left: 0.5rem;
   }
@@ -468,7 +407,6 @@
     }
   }
 
-  /* Disabled / invalid states live on the inner control. */
   [data-slot="input-group"]:has(input:disabled, textarea:disabled) {
     opacity: 0.64;
   }
@@ -482,7 +420,6 @@
     border-color: color-mix(in srgb, var(--destructive) 64%, transparent);
   }
 
-  /* Buttons, badges and kbd inside an addon hug the group's edge. */
   [data-slot="input-group-addon"]:has(> button) {
     margin-inline: -0.5rem;
   }
@@ -577,7 +514,6 @@
     margin-top: 0.375rem;
   }
 
-  /* The scroll area reserves the scrollbar gutter for the list it wraps. */
   [data-has-overflow-y] [data-slot="autocomplete-list"] {
     padding-right: 0.75rem;
   }
@@ -692,7 +628,6 @@
     padding-bottom: 0.25rem;
   }
 
-  /* The footer sits flush against the popup's rounded corner. */
   [data-position="top"] [data-slot="drawer-footer"] {
     border-end-end-radius: calc(1.575rem - 1px);
     border-end-start-radius: calc(1.575rem - 1px);
@@ -711,38 +646,6 @@
     }
   }
 
-  /* Drawer menu rows size the consumer's leading icons. */
-  [data-slot="drawer-menu-item"] > svg,
-  [data-slot="drawer-menu-trigger"] svg,
-  [data-slot="drawer-menu-checkbox-item"] > svg,
-  [data-slot="drawer-menu-radio-item"] > svg {
-    flex-shrink: 0;
-    margin-inline: -0.125rem;
-    pointer-events: none;
-  }
-
-  [data-slot="drawer-menu-item"] > svg,
-  [data-slot="drawer-menu-checkbox-item"] > svg,
-  [data-slot="drawer-menu-radio-item"] > svg {
-    opacity: 0.8;
-  }
-
-  [data-slot="drawer-menu-item"] > svg,
-  [data-slot="drawer-menu-checkbox-item"] > svg,
-  [data-slot="drawer-menu-radio-item"] > svg {
-    height: 1.125rem;
-    width: 1.125rem;
-  }
-
-  @media (width >= 40rem) {
-    [data-slot="drawer-menu-item"] > svg,
-    [data-slot="drawer-menu-checkbox-item"] > svg,
-    [data-slot="drawer-menu-radio-item"] > svg {
-      height: 1rem;
-      width: 1rem;
-    }
-  }
-
   /* Sidebar: rows size and truncate whatever the consumer puts in them, and the
      action/badge slots align to the height of the sibling menu button. */
   [data-slot="sidebar-menu-button"] > span:last-child,
@@ -752,63 +655,13 @@
     white-space: nowrap;
   }
 
-  [data-slot="sidebar-menu-button"] > svg,
-  [data-slot="sidebar-menu-sub-button"] > svg,
-  [data-slot="sidebar-group-label"] > svg,
-  [data-slot="sidebar-group-action"] > svg,
-  [data-slot="sidebar-menu-action"] > svg {
-    flex-shrink: 0;
-  }
-
-  [data-slot="sidebar-menu-button"] > svg,
-  [data-slot="sidebar-menu-sub-button"] > svg,
-  [data-slot="sidebar-group-label"] > svg,
-  [data-slot="sidebar-group-action"] > svg,
-  [data-slot="sidebar-menu-action"] > svg {
-    height: 1rem;
-    width: 1rem;
-  }
-
   [data-slot="sidebar-menu-sub-button"] > svg {
     color: var(--sidebar-accent-foreground);
   }
 
-  /* An action button shifts the row's padding so the label never runs under it. */
-  [data-slot="sidebar-menu-item"]:has([data-slot="sidebar-menu-action"])
-    [data-slot="sidebar-menu-button"] {
-    padding-right: 2rem;
-  }
-
-  [data-slot="sidebar-menu-button"][data-size="sm"] ~ [data-slot="sidebar-menu-action"],
-  [data-slot="sidebar-menu-button"][data-size="sm"] ~ [data-slot="sidebar-menu-badge"] {
-    top: 0.25rem;
-  }
-
-  [data-slot="sidebar-menu-button"][data-size="default"] ~ [data-slot="sidebar-menu-action"],
-  [data-slot="sidebar-menu-button"][data-size="default"] ~ [data-slot="sidebar-menu-badge"] {
-    top: 0.375rem;
-  }
-
-  [data-slot="sidebar-menu-button"][data-size="lg"] ~ [data-slot="sidebar-menu-action"],
-  [data-slot="sidebar-menu-button"][data-size="lg"] ~ [data-slot="sidebar-menu-badge"] {
-    top: 0.625rem;
-  }
-
-  [data-slot="sidebar-menu-button"]:hover ~ [data-slot="sidebar-menu-action"],
-  [data-slot="sidebar-menu-button"]:hover ~ [data-slot="sidebar-menu-badge"],
-  [data-slot="sidebar-menu-button"][data-active="true"] ~ [data-slot="sidebar-menu-action"],
-  [data-slot="sidebar-menu-button"][data-active="true"] ~ [data-slot="sidebar-menu-badge"] {
-    color: var(--sidebar-accent-foreground);
-  }
-
   @media (width >= 48rem) {
-    [data-slot="sidebar-menu-item"]:hover [data-slot="sidebar-menu-action"],
-    [data-slot="sidebar-menu-item"]:focus-within [data-slot="sidebar-menu-action"] {
-      opacity: 1;
-    }
   }
 
-  /* The mobile sidebar sheet hides the sheet's own close button. */
   [data-mobile="true"][data-slot="sidebar"] > button {
     display: none;
   }

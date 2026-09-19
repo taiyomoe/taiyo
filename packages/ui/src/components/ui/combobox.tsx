@@ -4,7 +4,7 @@ import { Combobox as ComboboxPrimitive } from "@base-ui/react/combobox"
 import * as stylex from "@stylexjs/stylex"
 import * as React from "react"
 import { cn } from "@/utils/cn"
-import { ChevronsUpDown, Close } from "@/components/icons"
+import { Check, ChevronsUpDown, Close } from "@/components/icons"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { comboboxPopupMarker } from "../../styles/markers.stylex"
@@ -252,19 +252,6 @@ const styles = stylex.create({
     scrollPaddingBottom: "0.25rem",
     scrollPaddingTop: "0.25rem",
   },
-  status: {
-    margin: {
-      default: null,
-      ":empty": 0,
-    },
-    paddingBlock: "0.5rem",
-    paddingInline: "0.75rem",
-    color: colors.mutedForeground,
-    fontSize: "0.75rem",
-    fontWeight: 500,
-    lineHeight: "1rem",
-  },
-  // The chips field is the multi-select variant of the field surface.
   chips: {
     padding: "calc(0.25rem - 1px)",
     borderColor: {
@@ -576,22 +563,7 @@ export function ComboboxItem({
         className={indicatorProps.className}
         style={indicatorProps.style}
       >
-        <svg
-          aria-hidden="true"
-          className={iconProps.className}
-          fill="none"
-          height="24"
-          stroke="currentColor"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="2"
-          style={iconProps.style}
-          viewBox="0 0 24 24"
-          width="24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path d="M5.252 12.7 10.2 18.63 18.748 5.37" />
-        </svg>
+        <Check className={iconProps.className} style={iconProps.style} />
       </ComboboxPrimitive.ItemIndicator>
       <div className={contentProps.className} style={contentProps.style}>
         {children}
@@ -668,23 +640,6 @@ export function ComboboxEmpty({
   )
 }
 
-export function ComboboxRow({
-  className,
-  sx,
-  ...props
-}: ComboboxPrimitive.Row.Props & { sx?: Sx }): React.ReactElement {
-  const styleProps = stylex.props(sx)
-
-  return (
-    <ComboboxPrimitive.Row
-      className={cn(styleProps.className, className)}
-      data-slot="combobox-row"
-      style={styleProps.style}
-      {...props}
-    />
-  )
-}
-
 export function ComboboxValue({ ...props }: ComboboxPrimitive.Value.Props): React.ReactElement {
   return <ComboboxPrimitive.Value data-slot="combobox-value" {...props} />
 }
@@ -728,27 +683,6 @@ export function ComboboxClear({
       {children ?? <Close className={iconProps.className} style={iconProps.style} />}
     </ComboboxPrimitive.Clear>
   )
-}
-
-export function ComboboxStatus({
-  className,
-  sx,
-  ...props
-}: ComboboxPrimitive.Status.Props & { sx?: Sx }): React.ReactElement {
-  const styleProps = stylex.props(styles.status, sx)
-
-  return (
-    <ComboboxPrimitive.Status
-      className={cn(styleProps.className, className)}
-      data-slot="combobox-status"
-      style={styleProps.style}
-      {...props}
-    />
-  )
-}
-
-export function ComboboxCollection(props: ComboboxPrimitive.Collection.Props): React.ReactElement {
-  return <ComboboxPrimitive.Collection data-slot="combobox-collection" {...props} />
 }
 
 export function ComboboxChips({

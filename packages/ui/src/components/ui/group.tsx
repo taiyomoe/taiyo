@@ -57,21 +57,6 @@ const styles = stylex.create({
   },
 })
 
-export interface GroupStyleOptions {
-  orientation?: GroupOrientation | null
-  className?: string
-}
-
-/** Legacy escape hatch, kept API-compatible with the old cva export. */
-export function groupVariants({
-  orientation = "horizontal",
-  className,
-}: GroupStyleOptions = {}): string {
-  const props = stylex.props(styles.group, orientation === "vertical" && styles.vertical)
-
-  return cn(props.className, className)
-}
-
 export function Group({
   className,
   orientation = "horizontal",

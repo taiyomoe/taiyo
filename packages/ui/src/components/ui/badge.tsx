@@ -95,8 +95,6 @@ const variantStyles = stylex.create({
     backgroundColor: `color-mix(in srgb, ${colors.info} 8%, transparent)`,
     color: colors.infoForeground,
   },
-  // The old `bg-background dark:bg-input/32` pair maps onto the raised chip
-  // surface tokens (`chip`/`chipHover`), matching the outline button.
   outline: {
     borderColor: colors.input,
     backgroundClip: "padding-box",
@@ -116,7 +114,6 @@ const variantStyles = stylex.create({
     color: colors.warningForeground,
   },
 })
-/** Hover feedback, only for the variants that had it — interactive badges only. */
 const hoverStyles = stylex.create({
   default: {
     backgroundColor: {
@@ -211,35 +208,6 @@ const SIZE_STYLE = {
   lg: sizeStyles.lg,
   sm: sizeStyles.sm,
 } as const
-
-export interface BadgeStyleOptions {
-  variant?: BadgeVariant | null
-  size?: BadgeSize | null
-  className?: string
-}
-
-/**
- * Legacy escape hatch, kept API-compatible with the old cva export: returns
- * the compiled class string for callers that style a foreign element as a
- * badge. The interactive (hover/tap-target) styles are always included here
- * because manual callers style buttons and links. Prefer `sx` composition.
- */
-export function badgeVariants({
-  variant = "default",
-  size = "default",
-  className,
-}: BadgeStyleOptions = {}): string {
-  const resolvedVariant: BadgeVariant = variant ?? "default"
-  const props = stylex.props(
-    styles.base,
-    VARIANT_STYLE[resolvedVariant],
-    SIZE_STYLE[size ?? "default"],
-    styles.interactive,
-    HOVER_STYLE[resolvedVariant],
-  )
-
-  return cn(props.className, className)
-}
 
 export interface BadgeProps extends useRender.ComponentProps<"span"> {
   variant?: BadgeVariant

@@ -71,7 +71,6 @@ const styles = stylex.create({
     left: 0,
     width: "var(--active-tab-width)",
   },
-  // The raised pill that rides over the sunken rail.
   indicatorDefault: {
     borderRadius: {
       '[data-orientation="vertical"]': `calc(${radius.xl} - 0.25rem)`,

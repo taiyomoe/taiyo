@@ -1,12 +1,11 @@
 "use client"
 
-import { mergeProps } from "@base-ui/react/merge-props"
 import { Select as SelectPrimitive } from "@base-ui/react/select"
 import { useRender } from "@base-ui/react/use-render"
 import * as stylex from "@stylexjs/stylex"
 import type * as React from "react"
 import { cn } from "@/utils/cn"
-import { ChevronDown, ChevronUp, ChevronsUpDown } from "@/components/icons"
+import { Check, ChevronDown, ChevronUp, ChevronsUpDown } from "@/components/icons"
 import { selectPopupMarker } from "../../styles/markers.stylex"
 import type { Sx } from "../../styles/sx"
 import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
@@ -110,9 +109,6 @@ const styles = stylex.create({
       [consts.sm]: "3rem",
     },
   },
-  buttonMinWidth: {
-    minWidth: 0,
-  },
   triggerIcon: {
     color: colors.mutedForeground,
     marginInlineEnd: "-0.25rem",
@@ -124,12 +120,6 @@ const styles = stylex.create({
       default: "0.875rem",
       [consts.sm]: "0.75rem",
     },
-  },
-  buttonLabel: {
-    flex: "1",
-    overflow: "hidden",
-    textOverflow: "ellipsis",
-    whiteSpace: "nowrap",
   },
   value: {
     flex: "1",
@@ -175,7 +165,6 @@ const styles = stylex.create({
     maxHeight: "var(--available-height)",
     overflowY: "auto",
   },
-  // Fade strips that sit over the list while it scrolls.
   scrollArrow: {
     alignItems: "center",
     cursor: "default",
@@ -320,60 +309,9 @@ const SIZE_STYLE = {
   sm: styles.triggerSm,
 } as const
 
-export interface SelectTriggerStyleOptions {
-  size?: SelectSize | null
-  className?: string
-}
-
-/** Legacy escape hatch, kept API-compatible with the old cva export. */
-export function selectTriggerVariants({
-  size = "default",
-  className,
-}: SelectTriggerStyleOptions = {}): string {
-  const props = stylex.props(styles.trigger, SIZE_STYLE[size ?? "default"])
-
-  return cn(props.className, className)
-}
-
 export interface SelectButtonProps extends useRender.ComponentProps<"button"> {
   size?: SelectSize
   sx?: Sx
-}
-
-export function SelectButton({
-  className,
-  size = "default",
-  render,
-  children,
-  sx,
-  ...props
-}: SelectButtonProps): React.ReactElement {
-  const typeValue: React.ButtonHTMLAttributes<HTMLButtonElement>["type"] = render
-    ? undefined
-    : "button"
-  const styleProps = stylex.props(styles.trigger, SIZE_STYLE[size], styles.buttonMinWidth, sx)
-  const labelProps = stylex.props(styles.buttonLabel)
-  const iconProps = stylex.props(styles.triggerIcon)
-  const defaultProps = {
-    children: (
-      <>
-        <span className={labelProps.className} style={labelProps.style}>
-          {children}
-        </span>
-        <ChevronsUpDown className={iconProps.className} style={iconProps.style} />
-      </>
-    ),
-    className: cn(styleProps.className, className),
-    "data-slot": "select-button",
-    style: styleProps.style,
-    type: typeValue,
-  }
-
-  return useRender({
-    defaultTagName: "button",
-    props: mergeProps<"button">(defaultProps, props),
-    render,
-  })
 }
 
 export function SelectTrigger({
@@ -526,22 +464,7 @@ export function SelectItem({
         className={indicatorProps.className}
         style={indicatorProps.style}
       >
-        <svg
-          aria-hidden="true"
-          className={iconProps.className}
-          fill="none"
-          height="24"
-          stroke="currentColor"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="2"
-          style={iconProps.style}
-          viewBox="0 0 24 24"
-          width="24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path d="M5.252 12.7 10.2 18.63 18.748 5.37" />
-        </svg>
+        <Check className={iconProps.className} style={iconProps.style} />
       </SelectPrimitive.ItemIndicator>
       <SelectPrimitive.ItemText className={textProps.className} style={textProps.style}>
         {children}
