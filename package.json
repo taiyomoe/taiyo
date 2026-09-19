@@ -26,7 +26,6 @@
     "lefthook": "^2.1.10",
     "oxfmt": "^0.64.0",
     "oxlint": "^1.79.0",
-    "oxlint-tailwindcss": "^1.9.0",
     "oxlint-tsgolint": "^7.0.2001",
     "turbo": "^2.10.10",
     "typescript": "^7.0.2",

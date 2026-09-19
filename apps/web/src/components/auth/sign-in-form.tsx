@@ -1,3 +1,10 @@
+// Required even though nothing here calls `stylex.*`: the compiler only
+// processes a file that imports StyleX, and the `sx` props below are compiled,
+// not runtime props. Drop this import and every style in this file silently
+// stops applying. See packages/ui/STYLEX.md.
+// oxlint-disable-next-line no-unused-vars
+import * as stylex from "@stylexjs/stylex"
+import { authFormStyles as sx } from "@/components/auth/auth-form-styles"
 import { AuthHeading } from "@/components/auth/auth-heading"
 import { AuthSocialButtons, type SocialProvider } from "@/components/auth/auth-social-buttons"
 import { SunButton } from "@/components/buttons/sun-button"
@@ -71,7 +78,7 @@ export const SignInForm = () => {
   return (
     <>
       <AuthHeading title={m.auth_sign_in_title()} subtitle={m.auth_sign_in_subtitle()} />
-      <div className="flex flex-col gap-5">
+      <div sx={sx.stack}>
         {formError ? (
           <Alert variant="error">
             <CircleAlert />
@@ -84,11 +91,7 @@ export const SignInForm = () => {
           disabled={isBusy}
           onSelect={onSocial}
         />
-        <Form
-          className="flex flex-col gap-4 **:data-[slot=input]:h-12 **:data-[slot=input]:p-0 **:data-[slot=input]:leading-12 **:data-[slot=input-group-addon]:px-4 **:data-[slot=input-group-addon]:[&_svg]:size-5! **:data-[slot=input-group-addon]:[&_svg]:text-muted-foreground/72"
-          onSubmit={onSubmit}
-          noValidate
-        >
+        <Form data-auth-fields sx={sx.fields} onSubmit={onSubmit} noValidate>
           <EmailField
             name="email"
             control={form.control}
@@ -104,26 +107,20 @@ export const SignInForm = () => {
             autoComplete="current-password"
             placeholder="••••••••"
           />
-          <div className="flex items-center justify-between gap-3">
+          <div sx={sx.row}>
             <CheckboxField control={form.control} name="rememberMe" label={m.auth_remember_me()} />
-            <a
-              href="/forgot-password"
-              className="text-sm font-bold whitespace-nowrap text-[#FFC94D] hover:underline"
-            >
+            <a href="/forgot-password" sx={[sx.link, sx.linkNoWrap]}>
               {m.auth_forgot_password()}
             </a>
           </div>
-          <SunButton block type="submit" className="mt-2" loading={isSubmitting} disabled={isBusy}>
+          <SunButton block type="submit" sx={sx.submit} loading={isSubmitting} disabled={isBusy}>
             {m.auth_sign_in()}
           </SunButton>
         </Form>
       </div>
-      <p className="mt-6 text-center text-sm text-white/55">
+      <p sx={sx.footer}>
         {m.auth_footer_no_account()}{" "}
-        <button
-          className="font-bold text-[#FFC94D] hover:underline"
-          onClick={() => navigate({ to: "/auth/sign-up" })}
-        >
+        <button onClick={() => navigate({ to: "/auth/sign-up" })} sx={[sx.link, sx.linkButton]}>
           {m.auth_create_an_account()}
         </button>
       </p>

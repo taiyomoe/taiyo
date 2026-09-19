@@ -1,3 +1,4 @@
+import * as stylex from "@stylexjs/stylex"
 import {
   TextAlignCenterIcon,
   TextAlignLeftIcon,
@@ -15,6 +16,14 @@ import {
 } from "@taiyomoe/ui/components/ui/toggle-group"
 import { fn } from "storybook/test"
 
+const styles = stylex.create({
+  column: {
+    gap: "1rem",
+    alignItems: "flex-start",
+    display: "flex",
+    flexDirection: "column",
+  },
+})
 const meta = preview.meta({
   title: "UI/ToggleGroup",
   component: ToggleGroup,
@@ -75,7 +84,7 @@ export const Multiple = meta.story({
 
 export const Variants = meta.story({
   render: () => (
-    <div className="flex flex-col items-start gap-4">
+    <div sx={styles.column}>
       <ToggleGroup defaultValue={["left"]} variant="default">
         <ToggleGroupItem aria-label="Align left" value="left">
           <HugeiconsIcon icon={TextAlignLeftIcon} />
@@ -104,7 +113,7 @@ export const Variants = meta.story({
 
 export const Sizes = meta.story({
   render: () => (
-    <div className="flex flex-col items-start gap-4">
+    <div sx={styles.column}>
       <ToggleGroup defaultValue={["left"]} size="sm" variant="outline">
         <ToggleGroupItem aria-label="Align left" value="left">
           <HugeiconsIcon icon={TextAlignLeftIcon} />

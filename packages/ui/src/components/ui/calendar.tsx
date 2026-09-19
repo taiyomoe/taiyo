@@ -3,7 +3,7 @@
 import * as stylex from "@stylexjs/stylex"
 import type * as React from "react"
 import { DayPicker } from "react-day-picker"
-import { cn } from "@/lib/utils"
+import { cn } from "@/utils/cn"
 import { ChevronLeft, ChevronRight, ChevronsUpDown } from "@/components/icons"
 import { calendarDayMarker } from "../../styles/markers.stylex"
 import { colors, consts, radius } from "../../styles/tokens.stylex"
@@ -254,10 +254,8 @@ export function Calendar({
     outside: stylex.props(styles.outside).className ?? "",
     // `range-*` stay as plain hooks: structural.css uses them for the "today"
     // dot, which has to reach the day button's ::after layer.
-    // oxlint-disable-next-line tailwindcss/no-unknown-classes -- react-day-picker range hooks
     range_end: cn("range-end", stylex.props(styles.rangeEnd).className),
     range_middle: cn("range-middle", stylex.props(styles.rangeMiddle).className),
-    // oxlint-disable-next-line tailwindcss/no-unknown-classes -- react-day-picker range hooks
     range_start: cn("range-start", stylex.props(styles.rangeStart).className),
     today: "calendar-today",
     week_number: stylex.props(styles.weekday).className ?? "",

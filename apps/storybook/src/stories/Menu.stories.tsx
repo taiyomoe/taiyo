@@ -1,3 +1,4 @@
+import * as stylex from "@stylexjs/stylex"
 import preview from "@/storybook/preview"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { Kbd } from "@taiyomoe/ui/components/ui/kbd"
@@ -19,6 +20,17 @@ import {
 } from "@taiyomoe/ui/components/ui/menu"
 import { fn } from "storybook/test"
 
+const styles = stylex.create({
+  anchor: {
+    minWidth: "14rem",
+  },
+  anchor2: {
+    minWidth: "16rem",
+  },
+  anchor3: {
+    minWidth: "12rem",
+  },
+})
 const meta = preview.meta({
   title: "UI/Menu",
   component: Menu,
@@ -45,7 +57,7 @@ export const Default = meta.story({
   render: () => (
     <Menu>
       <MenuTrigger render={<Button variant="outline" />}>Open menu</MenuTrigger>
-      <MenuPopup className="min-w-56">
+      <MenuPopup sx={styles.anchor}>
         <MenuGroup>
           <MenuItem>
             Profile
@@ -76,7 +88,7 @@ export const WithGroupsAndLabels = meta.story({
   render: () => (
     <Menu>
       <MenuTrigger render={<Button variant="outline" />}>Account</MenuTrigger>
-      <MenuPopup className="min-w-56">
+      <MenuPopup sx={styles.anchor}>
         <MenuGroup>
           <MenuGroupLabel>My account</MenuGroupLabel>
           <MenuItem>Profile</MenuItem>
@@ -102,7 +114,7 @@ export const WithCheckboxItems = meta.story({
   render: () => (
     <Menu>
       <MenuTrigger render={<Button variant="outline" />}>View</MenuTrigger>
-      <MenuPopup className="min-w-56">
+      <MenuPopup sx={styles.anchor}>
         <MenuGroup>
           <MenuGroupLabel>Appearance</MenuGroupLabel>
           <MenuCheckboxItem defaultChecked>Status bar</MenuCheckboxItem>
@@ -118,7 +130,7 @@ export const WithSwitchCheckboxItems = meta.story({
   render: () => (
     <Menu>
       <MenuTrigger render={<Button variant="outline" />}>Settings</MenuTrigger>
-      <MenuPopup className="min-w-64">
+      <MenuPopup sx={styles.anchor2}>
         <MenuGroup>
           <MenuGroupLabel>Notifications</MenuGroupLabel>
           <MenuCheckboxItem defaultChecked variant="switch">
@@ -138,7 +150,7 @@ export const WithRadioItems = meta.story({
   render: () => (
     <Menu>
       <MenuTrigger render={<Button variant="outline" />}>Sort by</MenuTrigger>
-      <MenuPopup className="min-w-48">
+      <MenuPopup sx={styles.anchor3}>
         <MenuGroup>
           <MenuGroupLabel>Sort by</MenuGroupLabel>
           <MenuRadioGroup defaultValue="recent">
@@ -156,13 +168,13 @@ export const WithSubmenu = meta.story({
   render: () => (
     <Menu>
       <MenuTrigger render={<Button variant="outline" />}>File</MenuTrigger>
-      <MenuPopup className="min-w-56">
+      <MenuPopup sx={styles.anchor}>
         <MenuGroup>
           <MenuItem>New file</MenuItem>
           <MenuItem>Open…</MenuItem>
           <MenuSub>
             <MenuSubTrigger>Open recent</MenuSubTrigger>
-            <MenuSubPopup className="min-w-48">
+            <MenuSubPopup sx={styles.anchor3}>
               <MenuGroup>
                 <MenuItem>project-a.tsx</MenuItem>
                 <MenuItem>project-b.tsx</MenuItem>
@@ -188,7 +200,7 @@ export const WithDisabledItems = meta.story({
   render: () => (
     <Menu>
       <MenuTrigger render={<Button variant="outline" />}>Edit</MenuTrigger>
-      <MenuPopup className="min-w-48">
+      <MenuPopup sx={styles.anchor3}>
         <MenuGroup>
           <MenuItem>Undo</MenuItem>
           <MenuItem disabled>Redo</MenuItem>
@@ -208,7 +220,7 @@ export const Inset = meta.story({
   render: () => (
     <Menu>
       <MenuTrigger render={<Button variant="outline" />}>More</MenuTrigger>
-      <MenuPopup className="min-w-56">
+      <MenuPopup sx={styles.anchor}>
         <MenuGroup>
           <MenuGroupLabel inset>Workspace</MenuGroupLabel>
           <MenuItem inset>Overview</MenuItem>

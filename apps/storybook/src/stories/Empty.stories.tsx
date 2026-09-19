@@ -1,3 +1,5 @@
+import * as stylex from "@stylexjs/stylex"
+import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
 import { FileSearchIcon as FileSearchGlyph, PlusSignIcon } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 import preview from "@/storybook/preview"
@@ -12,6 +14,21 @@ import {
 } from "@taiyomoe/ui/components/ui/empty"
 import { fn } from "storybook/test"
 
+const styles = stylex.create({
+  grid: {
+    gap: "1.5rem",
+    display: "grid",
+    gridTemplateColumns: {
+      default: "repeat(1, minmax(0, 1fr))",
+      "@media (width >= 48rem)": "repeat(2, minmax(0, 1fr))",
+    },
+  },
+  box: {
+    color: colors.mutedForeground,
+    height: "2.5rem",
+    width: "2.5rem",
+  },
+})
 const meta = preview.meta({
   title: "UI/Empty",
   component: Empty,
@@ -57,11 +74,11 @@ export const WithAction = meta.story({
 
 export const MediaVariants = meta.story({
   render: () => (
-    <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+    <div sx={styles.grid}>
       <Empty>
         <EmptyHeader>
           <EmptyMedia variant="default">
-            <HugeiconsIcon icon={FileSearchGlyph} className="size-10 text-muted-foreground" />
+            <HugeiconsIcon icon={FileSearchGlyph} {...stylex.props(styles.box)} />
           </EmptyMedia>
           <EmptyTitle>Default media</EmptyTitle>
           <EmptyDescription>Bare icon, no decorative container.</EmptyDescription>

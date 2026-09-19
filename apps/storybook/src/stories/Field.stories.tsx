@@ -1,3 +1,4 @@
+import * as stylex from "@stylexjs/stylex"
 import preview from "@/storybook/preview"
 import {
   Field,
@@ -8,6 +9,11 @@ import {
 } from "@taiyomoe/ui/components/ui/field"
 import { Input } from "@taiyomoe/ui/components/ui/input"
 
+const styles = stylex.create({
+  anchor: {
+    width: "18rem",
+  },
+})
 const meta = preview.meta({
   title: "UI/Field",
   component: Field,
@@ -18,7 +24,7 @@ const meta = preview.meta({
     name: { control: "text" },
   },
   render: (args) => (
-    <div className="w-72">
+    <div sx={styles.anchor}>
       <Field {...args}>
         <FieldLabel>Email</FieldLabel>
         <FieldControl render={<Input placeholder="you@example.com" />} />
@@ -32,7 +38,7 @@ export const Default = meta.story({})
 
 export const Composition = meta.story({
   render: () => (
-    <div className="w-72">
+    <div sx={styles.anchor}>
       <Field name="email">
         <FieldLabel>Email</FieldLabel>
         <FieldControl render={<Input placeholder="you@example.com" type="email" />} required />
@@ -50,7 +56,7 @@ export const Disabled = meta.story({
 
 export const Invalid = meta.story({
   render: () => (
-    <div className="w-72">
+    <div sx={styles.anchor}>
       <Field invalid name="email">
         <FieldLabel>Email</FieldLabel>
         <FieldControl render={<Input defaultValue="not-an-email" type="email" />} />
@@ -62,7 +68,7 @@ export const Invalid = meta.story({
 
 export const WithDescription = meta.story({
   render: () => (
-    <div className="w-72">
+    <div sx={styles.anchor}>
       <Field>
         <FieldLabel>Username</FieldLabel>
         <FieldControl render={<Input placeholder="taiyo_user" />} />

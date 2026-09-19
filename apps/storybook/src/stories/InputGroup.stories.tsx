@@ -1,3 +1,5 @@
+import * as stylex from "@stylexjs/stylex"
+import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
 import {
   Cancel01Icon,
   CreditCardIcon as CreditCardGlyph,
@@ -16,6 +18,24 @@ import {
 } from "@taiyomoe/ui/components/ui/input-group"
 import { Kbd } from "@taiyomoe/ui/components/ui/kbd"
 
+const styles = stylex.create({
+  anchor: {
+    width: "20rem",
+  },
+  surface: {
+    borderBottomColor: colors.border,
+    borderBottomStyle: "solid",
+    borderBottomWidth: 1,
+  },
+  surface2: {
+    borderTopColor: colors.border,
+    borderTopStyle: "solid",
+    borderTopWidth: 1,
+  },
+  spacing: {
+    marginLeft: "auto",
+  },
+})
 const meta = preview.meta({
   title: "UI/InputGroup",
   component: InputGroup,
@@ -27,7 +47,7 @@ const meta = preview.meta({
   },
   parameters: { layout: "centered" },
   render: (args) => (
-    <div className="w-80">
+    <div sx={styles.anchor}>
       <InputGroup {...args}>
         <InputGroupAddon>
           <HugeiconsIcon icon={Search01Icon} />
@@ -42,7 +62,7 @@ export const Default = meta.story({})
 
 export const LeadingIcon = meta.story({
   render: () => (
-    <div className="w-80">
+    <div sx={styles.anchor}>
       <InputGroup>
         <InputGroupAddon>
           <HugeiconsIcon icon={Mail01Icon} />
@@ -55,7 +75,7 @@ export const LeadingIcon = meta.story({
 
 export const TrailingIcon = meta.story({
   render: () => (
-    <div className="w-80">
+    <div sx={styles.anchor}>
       <InputGroup>
         <InputGroupInput placeholder="Card number" />
         <InputGroupAddon align="inline-end">
@@ -68,7 +88,7 @@ export const TrailingIcon = meta.story({
 
 export const WithText = meta.story({
   render: () => (
-    <div className="w-80">
+    <div sx={styles.anchor}>
       <InputGroup>
         <InputGroupAddon>
           <InputGroupText>https://</InputGroupText>
@@ -84,7 +104,7 @@ export const WithText = meta.story({
 
 export const WithButton = meta.story({
   render: () => (
-    <div className="w-80">
+    <div sx={styles.anchor}>
       <InputGroup>
         <InputGroupAddon>
           <HugeiconsIcon icon={Search01Icon} />
@@ -102,7 +122,7 @@ export const WithButton = meta.story({
 
 export const WithKbd = meta.story({
   render: () => (
-    <div className="w-80">
+    <div sx={styles.anchor}>
       <InputGroup>
         <InputGroupAddon>
           <HugeiconsIcon icon={Search01Icon} />
@@ -118,9 +138,9 @@ export const WithKbd = meta.story({
 
 export const BlockStart = meta.story({
   render: () => (
-    <div className="w-80">
+    <div sx={styles.anchor}>
       <InputGroup>
-        <InputGroupAddon align="block-start" className="border-b">
+        <InputGroupAddon align="block-start" sx={styles.surface}>
           <InputGroupText>Compose</InputGroupText>
         </InputGroupAddon>
         <InputGroupTextarea placeholder="Write a message…" />
@@ -131,11 +151,11 @@ export const BlockStart = meta.story({
 
 export const BlockEnd = meta.story({
   render: () => (
-    <div className="w-80">
+    <div sx={styles.anchor}>
       <InputGroup>
         <InputGroupTextarea placeholder="Write a message…" />
-        <InputGroupAddon align="block-end" className="border-t">
-          <Button size="sm" className="ml-auto">
+        <InputGroupAddon align="block-end" sx={styles.surface2}>
+          <Button size="sm" sx={styles.spacing}>
             Send
           </Button>
         </InputGroupAddon>
@@ -146,7 +166,7 @@ export const BlockEnd = meta.story({
 
 export const Disabled = meta.story({
   render: () => (
-    <div className="w-80">
+    <div sx={styles.anchor}>
       <InputGroup>
         <InputGroupAddon>
           <HugeiconsIcon icon={Search01Icon} />
@@ -159,7 +179,7 @@ export const Disabled = meta.story({
 
 export const Invalid = meta.story({
   render: () => (
-    <div className="w-80">
+    <div sx={styles.anchor}>
       <InputGroup>
         <InputGroupAddon>
           <HugeiconsIcon icon={Mail01Icon} />

@@ -52,27 +52,27 @@ export const LandingMarquee = () => {
   const trackProps = stylex.props(styles.track)
 
   return (
-    <section id="titles" {...stylex.props(styles.band)}>
-      <div {...stylex.props(styles.fade)} />
+    <section id="titles" sx={styles.band}>
+      <div sx={styles.fade} />
       <div
         className={trackProps.className}
         style={{ ...trackProps.style, animation: "scene-marquee 48s linear infinite" }}
       >
         {STRIP.map((title, i) => (
-          <div key={`${title.id}-${i}`} {...stylex.props(styles.slot)}>
+          <div key={`${title.id}-${i}`} sx={styles.slot}>
             <CoverArt
               title={title.title}
               style={{ boxShadow: "0 10px 30px rgba(0,0,0,0.5)" }}
               footer={
                 <div>
                   <Stars filled={Math.round(title.rating)} size={12} />
-                  <div {...stylex.props(styles.metaLine)}>
+                  <div sx={styles.metaLine}>
                     {title.chapters} ch · {title.tag}
                   </div>
                 </div>
               }
             >
-              <div {...stylex.props(styles.scrim)} />
+              <div sx={styles.scrim} />
             </CoverArt>
           </div>
         ))}

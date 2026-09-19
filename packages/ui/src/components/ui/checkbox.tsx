@@ -3,7 +3,7 @@
 import { Checkbox as CheckboxPrimitive } from "@base-ui/react/checkbox"
 import * as stylex from "@stylexjs/stylex"
 import type React from "react"
-import { cn } from "@/lib/utils"
+import { cn } from "@/utils/cn"
 import { colors, consts, shadows } from "../../styles/tokens.stylex"
 import type { Sx } from "../../styles/sx"
 
@@ -21,9 +21,8 @@ const styles = stylex.create({
     borderWidth: 1,
     alignItems: "center",
     backgroundClip: "padding-box",
-    // The Tailwind original used `bg-background` + `dark:not-data-checked:bg-input/32`.
-    // `colors.field` (the input surface token) matches both values, and when
-    // checked the indicator covers the root entirely, so the distinction is moot.
+    // The input-surface token: a checkbox is a field, and once checked the
+    // indicator covers the root entirely, so only the unchecked fill shows.
     backgroundColor: colors.field,
     boxShadow: {
       "[aria-invalid]": "none",
@@ -109,7 +108,7 @@ const styles = stylex.create({
   },
 })
 
-/** See the note on SeparatorProps: `className` stays until callers migrate. */
+/** See the note on SeparatorProps for why `className` sits alongside `sx`. */
 export type CheckboxProps = CheckboxPrimitive.Root.Props & {
   sx?: Sx
 }
@@ -145,7 +144,7 @@ export function Checkbox({ className, sx, ...props }: CheckboxProps): React.Reac
                 viewBox="0 0 24 24"
                 width="24"
                 xmlns="http://www.w3.org/2000/svg"
-                {...stylex.props(styles.icon)}
+                sx={styles.icon}
               >
                 <path d="M5.252 12h13.496" />
               </svg>
@@ -161,7 +160,7 @@ export function Checkbox({ className, sx, ...props }: CheckboxProps): React.Reac
                 viewBox="0 0 24 24"
                 width="24"
                 xmlns="http://www.w3.org/2000/svg"
-                {...stylex.props(styles.icon)}
+                sx={styles.icon}
               >
                 <path d="M5.252 12.7 10.2 18.63 18.748 5.37" />
               </svg>

@@ -1,7 +1,19 @@
+import * as stylex from "@stylexjs/stylex"
 import preview from "@/storybook/preview"
 import { Input } from "@taiyomoe/ui/components/ui/input"
 import { fn } from "storybook/test"
 
+const styles = stylex.create({
+  anchor: {
+    width: "18rem",
+  },
+  column: {
+    gap: "0.75rem",
+    display: "flex",
+    flexDirection: "column",
+    width: "18rem",
+  },
+})
 const meta = preview.meta({
   title: "UI/Input",
   component: Input,
@@ -20,7 +32,7 @@ const meta = preview.meta({
   },
   args: { onChange: fn() },
   render: (args) => (
-    <div className="w-72">
+    <div sx={styles.anchor}>
       <Input {...args} />
     </div>
   ),
@@ -32,7 +44,7 @@ export const Default = meta.story({
 
 export const Sizes = meta.story({
   render: () => (
-    <div className="flex w-72 flex-col gap-3">
+    <div sx={styles.column}>
       <Input placeholder="Small" size="sm" />
       <Input placeholder="Default" size="default" />
       <Input placeholder="Large" size="lg" />
@@ -42,7 +54,7 @@ export const Sizes = meta.story({
 
 export const Types = meta.story({
   render: () => (
-    <div className="flex w-72 flex-col gap-3">
+    <div sx={styles.column}>
       <Input placeholder="Text" type="text" />
       <Input placeholder="you@example.com" type="email" />
       <Input placeholder="Password" type="password" />

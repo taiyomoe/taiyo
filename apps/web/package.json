@@ -19,7 +19,6 @@
     "@marsidev/react-turnstile": "^1.6.0",
     "@stylexjs/stylex": "^0.19.0",
     "@t3-oss/env-core": "^0.13.11",
-    "@tailwindcss/vite": "^4.3.3",
     "@taiyomoe/auth": "workspace:^",
     "@taiyomoe/config": "workspace:^",
     "@taiyomoe/ui": "workspace:^",

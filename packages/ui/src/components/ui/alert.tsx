@@ -1,6 +1,6 @@
 import * as stylex from "@stylexjs/stylex"
 import type * as React from "react"
-import { cn } from "@/lib/utils"
+import { cn } from "@/utils/cn"
 import type { Sx } from "../../styles/sx"
 import { colors, consts, radius } from "../../styles/tokens.stylex"
 
@@ -54,7 +54,7 @@ const styles = stylex.create({
     },
   },
 })
-// The semantic variants keep the Tailwind tints: a 32% border and a 4% wash.
+// The semantic variants are a 32% border over a 4% wash of their own colour.
 const variantStyles = stylex.create({
   default: {
     backgroundColor: "transparent",

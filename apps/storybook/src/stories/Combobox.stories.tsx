@@ -1,3 +1,4 @@
+import * as stylex from "@stylexjs/stylex"
 import preview from "@/storybook/preview"
 import {
   Combobox,
@@ -29,6 +30,11 @@ const fruits: Fruit[] = [
   { value: "raspberry", label: "Raspberry", category: "berry" },
   { value: "strawberry", label: "Strawberry", category: "berry" },
 ]
+const styles = stylex.create({
+  anchor: {
+    width: "18rem",
+  },
+})
 const meta = preview.meta({
   title: "UI/Combobox",
   component: Combobox,
@@ -49,7 +55,7 @@ const meta = preview.meta({
 export const Default = meta.story({
   render: () => (
     <Combobox<Fruit, false> items={fruits}>
-      <div className="w-72">
+      <div sx={styles.anchor}>
         <ComboboxInput placeholder="Search fruit..." />
       </div>
       <ComboboxPopup>
@@ -69,7 +75,7 @@ export const Default = meta.story({
 export const SelectedByDefault = meta.story({
   render: () => (
     <Combobox<Fruit, false> items={fruits} defaultValue={fruits[0]}>
-      <div className="w-72">
+      <div sx={styles.anchor}>
         <ComboboxInput placeholder="Search fruit..." />
       </div>
       <ComboboxPopup>
@@ -89,7 +95,7 @@ export const SelectedByDefault = meta.story({
 export const Disabled = meta.story({
   render: () => (
     <Combobox<Fruit, false> items={fruits} disabled>
-      <div className="w-72">
+      <div sx={styles.anchor}>
         <ComboboxInput placeholder="Search fruit..." />
       </div>
       <ComboboxPopup>
@@ -109,7 +115,7 @@ export const Disabled = meta.story({
 export const ReadOnly = meta.story({
   render: () => (
     <Combobox<Fruit, false> items={fruits} readOnly>
-      <div className="w-72">
+      <div sx={styles.anchor}>
         <ComboboxInput placeholder="Search fruit..." />
       </div>
       <ComboboxPopup>
@@ -129,7 +135,7 @@ export const ReadOnly = meta.story({
 export const WithGroups = meta.story({
   render: () => (
     <Combobox<Fruit, false> items={fruits}>
-      <div className="w-72">
+      <div sx={styles.anchor}>
         <ComboboxInput placeholder="Search fruit..." />
       </div>
       <ComboboxPopup>
@@ -165,7 +171,7 @@ export const WithGroups = meta.story({
 export const Multiple = meta.story({
   render: () => (
     <Combobox<Fruit, true> items={fruits} multiple>
-      <div className="w-72">
+      <div sx={styles.anchor}>
         <ComboboxChips>
           <ComboboxValue>
             {(value: Fruit[]) => (

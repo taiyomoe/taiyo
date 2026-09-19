@@ -175,7 +175,7 @@ packages/
 ├── config/
 │   ├── eslint/
 │   ├── typescript/
-│   └── tailwind/
+│   └── styles/
 └── features/
     ├── auth/
     └── payments/

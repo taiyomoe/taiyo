@@ -79,8 +79,8 @@ export const CoverArt = ({ title, children, footer, style }: CoverArtProps) => {
       }}
     >
       {children}
-      <div {...stylex.props(styles.caption)}>
-        <span {...stylex.props(styles.title)}>{title}</span>
+      <div sx={styles.caption}>
+        <span sx={styles.title}>{title}</span>
         {footer}
       </div>
     </div>

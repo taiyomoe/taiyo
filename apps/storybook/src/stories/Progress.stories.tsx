@@ -1,3 +1,4 @@
+import * as stylex from "@stylexjs/stylex"
 import preview from "@/storybook/preview"
 import {
   Progress,
@@ -7,6 +8,16 @@ import {
   ProgressValue,
 } from "@taiyomoe/ui/components/ui/progress"
 
+const styles = stylex.create({
+  anchor: {
+    width: "18rem",
+  },
+  row: {
+    alignItems: "center",
+    display: "flex",
+    justifyContent: "space-between",
+  },
+})
 const meta = preview.meta({
   title: "UI/Progress",
   component: Progress,
@@ -24,7 +35,7 @@ const meta = preview.meta({
   },
   args: { value: 60 },
   render: (args) => (
-    <div className="w-72">
+    <div sx={styles.anchor}>
       <Progress {...args} />
     </div>
   ),
@@ -43,7 +54,7 @@ export const Indeterminate = meta.story({ args: { value: null } })
 export const WithLabel = meta.story({
   args: { value: 42 },
   render: (args) => (
-    <div className="w-72">
+    <div sx={styles.anchor}>
       <Progress {...args}>
         <ProgressLabel>Uploading</ProgressLabel>
         <ProgressTrack>
@@ -57,9 +68,9 @@ export const WithLabel = meta.story({
 export const WithValue = meta.story({
   args: { value: 42 },
   render: (args) => (
-    <div className="w-72">
+    <div sx={styles.anchor}>
       <Progress {...args}>
-        <div className="flex items-center justify-between">
+        <div sx={styles.row}>
           <ProgressLabel>Uploading</ProgressLabel>
           <ProgressValue />
         </div>
@@ -74,9 +85,9 @@ export const WithValue = meta.story({
 export const CustomRange = meta.story({
   args: { value: 6, min: 0, max: 10 },
   render: (args) => (
-    <div className="w-72">
+    <div sx={styles.anchor}>
       <Progress {...args}>
-        <div className="flex items-center justify-between">
+        <div sx={styles.row}>
           <ProgressLabel>Steps</ProgressLabel>
           <ProgressValue />
         </div>

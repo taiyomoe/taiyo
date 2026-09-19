@@ -38,13 +38,13 @@ const styles = stylex.create({
 })
 
 export const LandingStats = () => (
-  <section {...stylex.props(styles.band)}>
+  <section sx={styles.band}>
     <Section>
-      <div {...stylex.props(styles.grid)}>
+      <div sx={styles.grid}>
         {STATS.map((stat, i) => (
           <Reveal key={stat.value} delay={i * 70}>
-            <div {...stylex.props(styles.value)}>{stat.value}</div>
-            <div {...stylex.props(styles.label)}>{stat.label()}</div>
+            <div sx={styles.value}>{stat.value}</div>
+            <div sx={styles.label}>{stat.label()}</div>
           </Reveal>
         ))}
       </div>

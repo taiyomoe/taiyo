@@ -3,7 +3,7 @@
 import { Input as InputPrimitive } from "@base-ui/react/input"
 import * as stylex from "@stylexjs/stylex"
 import type * as React from "react"
-import { cn } from "@/lib/utils"
+import { cn } from "@/utils/cn"
 import type { Sx } from "../../styles/sx"
 import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
 
@@ -50,9 +50,9 @@ const styles = stylex.create({
       position: "absolute",
     },
   },
-  // The Tailwind original reached these through `has-disabled:`/
-  // `has-aria-invalid:` on the wrapper. `:has()` is lint-banned, so the
-  // component mirrors what it already knows onto the wrapper element.
+  // `:has()` is lint-banned, so the wrapper cannot read the state of the
+  // control inside it. The component already knows both from its props and
+  // mirrors them onto the wrapper element as attributes instead.
   controlDisabled: {
     opacity: 0.64,
   },

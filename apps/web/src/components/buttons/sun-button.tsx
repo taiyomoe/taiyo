@@ -1,6 +1,7 @@
 import * as stylex from "@stylexjs/stylex"
 import { Link } from "@tanstack/react-router"
 import { Spinner } from "@taiyomoe/ui/components/ui/spinner"
+import type { Sx } from "@taiyomoe/ui/styles/sx"
 import { font, radius, text } from "@taiyomoe/ui/styles/tokens.stylex"
 import { cn } from "@taiyomoe/ui/utils/cn"
 import type { ComponentProps, CSSProperties, ReactNode } from "react"
@@ -106,18 +107,19 @@ type SunSkinProps = {
   size?: "md" | "lg"
   /** Stretch to the container width (the auth forms do). */
   block?: boolean
+  sx?: Sx
 }
 
 /** The label + sheen layers every sun-skinned element renders. */
 const SunBody = ({ children, loading }: { children: ReactNode; loading?: boolean }) => (
   <>
-    <span {...stylex.props(styles.label, loading && styles.labelLoading)}>{children}</span>
+    <span sx={[styles.label, loading && styles.labelLoading]}>{children}</span>
     {loading ? (
-      <span {...stylex.props(styles.loader)}>
+      <span sx={styles.loader}>
         <Spinner />
       </span>
     ) : null}
-    <span aria-hidden {...stylex.props(styles.sheen)} />
+    <span aria-hidden sx={styles.sheen} />
   </>
 )
 
@@ -134,6 +136,7 @@ export const SunButton = ({
   block = false,
   disabled,
   style,
+  sx,
   type = "button",
   ...props
 }: SunButtonProps) => {
@@ -143,6 +146,7 @@ export const SunButton = ({
     styles[size],
     block && styles.block,
     isDisabled && styles.disabled,
+    sx,
   )
 
   return (
@@ -176,9 +180,10 @@ export const SunLink = ({
   size = "lg",
   block = false,
   style,
+  sx,
   ...props
 }: SunLinkProps) => {
-  const styleProps = stylex.props(styles.base, styles.link, styles[size], block && styles.block)
+  const styleProps = stylex.props(styles.base, styles.link, styles[size], block && styles.block, sx)
 
   return (
     <Link

@@ -21,3 +21,22 @@ export type Sx = stylex.StyleXArray<
   | stylex.CompiledStyles
   | Readonly<[stylex.CompiledStyles, stylex.InlineStyles]>
 >
+
+/**
+ * Teaches TypeScript about the `sx` prop on host elements.
+ *
+ * The StyleX compiler rewrites `<div sx={styles.x} />` into
+ * `<div {...stylex.props(styles.x)} />` for any lowercase JSX element — that
+ * is the `sxPropName` option, which defaults to `"sx"`. It ships no types for
+ * it, so without this augmentation every such element is a type error.
+ *
+ * `DOMAttributes` is the narrowest shared ancestor of both `HTMLAttributes`
+ * and `SVGAttributes`, so one declaration covers `<div>` and `<svg>` alike.
+ * Our own components declare `sx` on their own props; this is only for the
+ * host elements underneath them.
+ */
+declare module "react" {
+  interface DOMAttributes<T> {
+    sx?: Sx
+  }
+}

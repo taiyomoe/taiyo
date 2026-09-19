@@ -89,17 +89,17 @@ const styles = stylex.create({
 })
 
 export const LandingCta = () => (
-  <section {...stylex.props(styles.band)}>
-    <div {...stylex.props(styles.banner)}>
-      <div {...stylex.props(styles.corona)} />
-      <div aria-hidden {...stylex.props(styles.kanji)}>
+  <section sx={styles.band}>
+    <div sx={styles.banner}>
+      <div sx={styles.corona} />
+      <div aria-hidden sx={styles.kanji}>
         太
       </div>
-      <div {...stylex.props(styles.content)}>
+      <div sx={styles.content}>
         <Eyebrow>{m.landing_cta_eyebrow()}</Eyebrow>
-        <h2 {...stylex.props(styles.title)}>{m.landing_cta_title()}</h2>
-        <p {...stylex.props(styles.body)}>{m.landing_cta_body()}</p>
-        <div {...stylex.props(styles.actions)}>
+        <h2 sx={styles.title}>{m.landing_cta_title()}</h2>
+        <p sx={styles.body}>{m.landing_cta_body()}</p>
+        <div sx={styles.actions}>
           <SunLink to="/auth/sign-up">
             <HugeiconsIcon icon={Sun03Icon} size={20} />
             {m.landing_cta_primary()}

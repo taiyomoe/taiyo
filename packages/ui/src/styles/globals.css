@@ -1,280 +1,73 @@
-@import "tailwindcss";
+/**
+ * The design system's one global stylesheet.
+ *
+ * Components are styled entirely in StyleX and read their tokens from
+ * `./tokens.stylex.ts`, which is the single source of truth for the palette.
+ * This file exists for the three things StyleX cannot own:
+ *
+ *   1. the base element reset (`./reset.css`);
+ *   2. the cross-element rules in `./structural.css`, which are plain CSS and
+ *      therefore need plain CSS custom properties to read colours from;
+ *   3. the document-level defaults (page background, text colour, fonts).
+ *
+ * The `:root` / `.dark` blocks below are deliberately NOT a second copy of the
+ * palette — they carry only the handful of semantic colours `structural.css`
+ * consumes, plus the fonts. Every value here mirrors the identically named
+ * token in `tokens.stylex.ts`; change one and change the other.
+ *
+ * The `.dark` class and the StyleX dark theme classes are applied together on
+ * `<html>` by each app, so the two halves always agree on which theme is live.
+ */
+
 @import "@fontsource-variable/inter";
 @import "@fontsource-variable/jetbrains-mono";
+@import "./reset.css";
 @import "./structural.css";
-@source "../components";
 
-@custom-variant dark (&:is(.dark *));
-
-@theme inline {
-  --animate-skeleton: skeleton 2s -1s infinite linear;
-  --animate-caret-blink: 1s ease-out infinite caret-blink;
-  --animate-toast-success-odd: toast-success-odd 0.32s cubic-bezier(0.5, 1, 0.89, 1);
-  --animate-toast-success-even: toast-success-even 0.32s cubic-bezier(0.5, 1, 0.89, 1);
-  --animate-toast-error-odd: toast-error-odd 0.28s cubic-bezier(0.5, 1, 0.89, 1);
-  --animate-toast-error-even: toast-error-even 0.28s cubic-bezier(0.5, 1, 0.89, 1);
+:root {
   --font-heading: "Inter Variable", system-ui, sans-serif;
   --font-mono: "JetBrains Mono Variable", monospace;
   --font-sans: "Inter Variable", system-ui, sans-serif;
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar: var(--sidebar);
-  --color-code-highlight: var(--code-highlight);
-  --code-foreground: var(--code-foreground);
-  --color-code: var(--code);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-secondary: var(--secondary);
-  --color-ring: var(--ring);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-primary: var(--primary);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-popover: var(--popover);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-muted: var(--muted);
-  --color-input: var(--input);
-  --color-foreground: var(--foreground);
-  --color-destructive: var(--destructive);
-  --color-card-foreground: var(--card-foreground);
-  --color-card: var(--card);
-  --color-border: var(--border);
-  --color-background: var(--background);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-accent: var(--accent);
-  --color-well: var(--well);
-  --color-well-raised: var(--well-raised);
-  --color-keycap: var(--keycap);
-  --color-keycap-border: var(--keycap-border);
-  --color-warning-foreground: var(--warning-foreground);
-  --color-warning: var(--warning);
-  --color-success-foreground: var(--success-foreground);
-  --color-success: var(--success);
-  --color-info-foreground: var(--info-foreground);
-  --color-info: var(--info);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.4);
-  --radius-2xl: calc(var(--radius) * 1.8);
-  --radius-3xl: calc(var(--radius) * 2.2);
-  --radius-4xl: calc(var(--radius) * 2.6);
-  @keyframes skeleton {
-    to {
-      background-position: -200% 0;
-    }
-  }
-  @keyframes caret-blink {
-    0%,
-    70%,
-    to {
-      opacity: 1;
-    }
-    20%,
-    50% {
-      opacity: 0;
-    }
-  }
-  @keyframes toast-success-odd {
-    0% {
-      scale: 1;
-    }
-    30% {
-      scale: 1.025;
-    }
-    60% {
-      scale: 0.99;
-    }
-    100% {
-      scale: 1;
-    }
-  }
-  @keyframes toast-error-odd {
-    0% {
-      translate: 0 0;
-    }
-    25% {
-      translate: -3px 0;
-    }
-    50% {
-      translate: 3px 0;
-    }
-    75% {
-      translate: -3px 0;
-    }
-    100% {
-      translate: 0 0;
-    }
-  }
-  @keyframes toast-success-even {
-    0% {
-      scale: 1;
-    }
-    30% {
-      scale: 1.025;
-    }
-    60% {
-      scale: 0.99;
-    }
-    100% {
-      scale: 1;
-    }
-  }
-  @keyframes toast-error-even {
-    0% {
-      translate: 0 0;
-    }
-    25% {
-      translate: -3px 0;
-    }
-    50% {
-      translate: 3px 0;
-    }
-    75% {
-      translate: -3px 0;
-    }
-    100% {
-      translate: 0 0;
-    }
-  }
-}
 
-:root {
-  --brand: #f2452d;
-  --destructive-foreground: var(--color-red-700);
-  --info: var(--color-blue-500);
-  --info-foreground: var(--color-blue-700);
-  --success: var(--color-emerald-500);
-  --success-foreground: var(--color-emerald-700);
-  --warning: var(--color-amber-500);
-  --warning-foreground: var(--color-amber-700);
-  --accent: --alpha(var(--color-black) / 8%);
-  --accent-foreground: var(--color-neutral-900);
   --background: oklch(94.2% 0 0);
-  --border: --alpha(var(--color-black) / 9%);
+  --foreground: oklch(20.5% 0 0);
   --card: oklch(99.3% 0 0);
-  --card-foreground: var(--color-neutral-900);
-  --destructive: var(--color-red-500);
-  --foreground: var(--color-neutral-900);
-  --input: --alpha(var(--color-black) / 12%);
-  --muted: --alpha(var(--color-black) / 6%);
   --muted-foreground: oklch(47.7% 0 0);
-  --popover: var(--color-white);
-  --popover-foreground: var(--color-neutral-900);
-  --primary: var(--brand);
-  --primary-foreground: var(--color-white);
-  --ring: var(--brand);
-  --secondary: --alpha(var(--color-black) / 8%);
-  --secondary-foreground: var(--color-neutral-900);
-  --chart-1: var(--brand);
-  --chart-2: var(--color-emerald-500);
-  --chart-3: var(--color-violet-500);
-  --chart-4: var(--color-pink-500);
-  --chart-5: var(--color-amber-500);
-  --code: var(--color-white);
-  --code-foreground: var(--foreground);
-  --code-highlight: --alpha(var(--color-black) / 6%);
-  --radius: 0.875rem;
-  --shadow-raised:
-    0 1px 2px --alpha(var(--color-black) / 6%), 0 12px 32px -12px --alpha(var(--color-black) / 14%);
-  --shadow-overlay:
-    0 4px 12px --alpha(var(--color-black) / 8%), 0 32px 64px -16px --alpha(var(--color-black) / 20%);
-  --shadow-sunken:
-    inset 0 1px 2px --alpha(var(--color-black) / 10%),
-    inset 0 0 0 1px --alpha(var(--color-black) / 3%);
-  --well: oklch(92.7% 0 0);
-  --well-raised: var(--color-white);
-  --keycap: var(--color-white);
-  --keycap-border: oklch(88.7% 0 0);
-  --sidebar: oklch(95.7% 0 0);
-  --sidebar-accent: --alpha(var(--color-black) / 8%);
-  --sidebar-accent-foreground: var(--color-neutral-900);
-  --sidebar-border: --alpha(var(--color-black) / 6%);
-  --sidebar-foreground: color-mix(in srgb, var(--color-neutral-900) 64%, var(--sidebar));
-  --sidebar-primary: var(--brand);
-  --sidebar-primary-foreground: var(--color-white);
-  --sidebar-ring: var(--brand);
+  --border: rgb(0 0 0 / 9%);
+  --primary: #f2452d;
+  --primary-foreground: #fff;
+  --ring: #f2452d;
+  --destructive: oklch(63.7% 0.237 25.331);
+  --info: oklch(62.3% 0.214 259.815);
+  --success: oklch(69.6% 0.17 162.48);
+  --warning: oklch(76.9% 0.188 70.08);
+  --sidebar-accent-foreground: oklch(20.5% 0 0);
 }
 
 .dark {
-  --destructive-foreground: var(--color-red-400);
-  --info: var(--color-blue-500);
-  --info-foreground: var(--color-blue-400);
-  --success: var(--color-emerald-500);
-  --success-foreground: var(--color-emerald-400);
-  --warning: var(--color-amber-500);
-  --warning-foreground: var(--color-amber-400);
-  --accent: --alpha(var(--color-white) / 6%);
-  --accent-foreground: var(--color-neutral-100);
-  --background: color-mix(in srgb, var(--color-neutral-950) 99%, var(--color-white));
-  --border: --alpha(var(--color-white) / 8%);
-  --card: color-mix(in srgb, var(--color-neutral-950) 92%, var(--color-white));
-  --card-foreground: var(--color-neutral-100);
-  --destructive: color-mix(in srgb, var(--color-red-500) 90%, var(--color-white));
-  --foreground: var(--color-neutral-100);
-  --input: --alpha(var(--color-white) / 9%);
-  --muted: --alpha(var(--color-white) / 5%);
+  --background: color-mix(in srgb, oklch(14.5% 0 0) 99%, #fff);
+  --foreground: oklch(97% 0 0);
+  --card: color-mix(in srgb, oklch(14.5% 0 0) 92%, #fff);
   --muted-foreground: oklch(64% 0 0);
-  --popover: color-mix(in srgb, var(--color-neutral-950) 91%, var(--color-white));
-  --popover-foreground: var(--color-neutral-100);
-  --primary: var(--brand);
-  --primary-foreground: var(--color-white);
-  --ring: var(--brand);
-  --secondary: --alpha(var(--color-white) / 6%);
-  --secondary-foreground: var(--color-neutral-100);
-  --chart-1: var(--brand);
-  --chart-2: var(--color-emerald-400);
-  --chart-3: var(--color-violet-400);
-  --chart-4: var(--color-pink-500);
-  --chart-5: var(--color-amber-400);
-  --code: color-mix(in srgb, var(--color-neutral-950) 91%, var(--color-white));
-  --code-foreground: var(--foreground);
-  --code-highlight: --alpha(var(--color-white) / 5%);
-  --shadow-raised:
-    0 1px 2px --alpha(var(--color-black) / 32%), 0 16px 40px -16px --alpha(var(--color-black) / 48%);
-  --shadow-overlay:
-    0 4px 12px --alpha(var(--color-black) / 40%),
-    0 32px 64px -16px --alpha(var(--color-black) / 56%);
-  --shadow-sunken:
-    inset 0 1px 2px --alpha(var(--color-black) / 48%),
-    inset 0 0 0 1px --alpha(var(--color-white) / 2%);
-  --well: color-mix(in srgb, var(--color-neutral-950) 94%, var(--color-white));
-  --well-raised: --alpha(var(--color-white) / 10%);
-  --keycap: color-mix(in srgb, var(--color-neutral-950) 84%, var(--color-white));
-  --keycap-border: color-mix(in srgb, var(--color-neutral-950) 72%, var(--color-white));
-  --sidebar: color-mix(in srgb, var(--color-neutral-950) 98%, var(--color-white));
-  --sidebar-accent: --alpha(var(--color-white) / 6%);
-  --sidebar-accent-foreground: var(--color-neutral-100);
-  --sidebar-border: --alpha(var(--color-white) / 6%);
-  --sidebar-foreground: color-mix(in srgb, var(--color-neutral-100) 70%, var(--sidebar));
-  --sidebar-primary: var(--brand);
-  --sidebar-primary-foreground: var(--color-white);
-  --sidebar-ring: var(--brand);
+  --border: rgb(255 255 255 / 8%);
+  --destructive: color-mix(in srgb, oklch(63.7% 0.237 25.331) 90%, #fff);
+  --sidebar-accent-foreground: oklch(97% 0 0);
 }
 
+/* Document defaults. In `@layer base` for the same reason as ./reset.css:
+   a component's own colours must outrank them, and unlayered StyleX atoms
+   beat anything in a layer. */
 @layer base {
+  /* A default border colour so a component that declares only a width still
+     gets the hairline the design language expects, and a default outline
+     colour for anything focused that does not draw its own ring. */
   * {
-    @apply border-border outline-ring/50;
+    border-color: var(--border);
+    outline-color: color-mix(in srgb, var(--ring) 50%, transparent);
   }
+
   body {
-    @apply bg-background text-foreground;
-  }
-  code,
-  kbd,
-  samp,
-  pre {
-    font-family: var(--font-mono);
-  }
-  html {
-    @apply font-sans;
+    background-color: var(--background);
+    color: var(--foreground);
   }
 }

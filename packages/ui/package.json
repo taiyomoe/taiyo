@@ -23,13 +23,11 @@
     "clsx": "^2.1.1",
     "react": "^19.2.8",
     "react-day-picker": "^10.0.1",
-    "react-dom": "^19.2.8",
-    "tailwind-merge": "^3.6.0"
+    "react-dom": "^19.2.8"
   },
   "devDependencies": {
     "@taiyomoe/typescript": "workspace:^",
     "@types/react": "^19.2.18",
-    "tailwindcss": "^4.3.3",
     "typescript": "^7.0.2"
   }
 }

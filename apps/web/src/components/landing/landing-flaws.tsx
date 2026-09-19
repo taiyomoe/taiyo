@@ -117,24 +117,24 @@ const FlawCard = ({ icon, title, body }: { icon: IconSvgElement; title: string; 
 
   return (
     <div
-      {...stylex.props(styles.card, hovered && styles.cardHovered)}
+      sx={[styles.card, hovered && styles.cardHovered]}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      <div {...stylex.props(styles.corona, hovered && styles.coronaHovered)} />
-      <div {...stylex.props(styles.body)}>
-        <div {...stylex.props(styles.glyph)}>
+      <div sx={[styles.corona, hovered && styles.coronaHovered]} />
+      <div sx={styles.body}>
+        <div sx={styles.glyph}>
           <HugeiconsIcon icon={icon} size={26} />
         </div>
-        <h3 {...stylex.props(styles.title)}>{title}</h3>
-        <p {...stylex.props(styles.text)}>{body}</p>
+        <h3 sx={styles.title}>{title}</h3>
+        <p sx={styles.text}>{body}</p>
       </div>
     </div>
   )
 }
 
 export const LandingFlaws = () => (
-  <section {...stylex.props(styles.band)}>
+  <section sx={styles.band}>
     <Section>
       <Reveal>
         <SectionHead
@@ -144,7 +144,7 @@ export const LandingFlaws = () => (
           sub={m.landing_flaws_subtitle()}
         />
       </Reveal>
-      <div {...stylex.props(styles.grid)}>
+      <div sx={styles.grid}>
         {FLAWS.map((flaw, i) => (
           <Reveal key={flaw.title()} delay={i * 90}>
             <FlawCard icon={flaw.icon} title={flaw.title()} body={flaw.body()} />

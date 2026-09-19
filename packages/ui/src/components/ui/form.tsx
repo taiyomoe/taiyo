@@ -3,10 +3,10 @@
 import { Form as FormPrimitive } from "@base-ui/react/form"
 import * as stylex from "@stylexjs/stylex"
 import type React from "react"
-import { cn } from "@/lib/utils"
+import { cn } from "@/utils/cn"
 import type { Sx } from "../../styles/sx"
 
-/** See the note on SeparatorProps: `className` stays until callers migrate. */
+/** See the note on SeparatorProps for why `className` sits alongside `sx`. */
 export type FormProps = FormPrimitive.Props & {
   sx?: Sx
 }

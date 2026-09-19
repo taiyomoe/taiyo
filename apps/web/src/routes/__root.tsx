@@ -2,14 +2,14 @@ import * as stylex from "@stylexjs/stylex"
 import { TanStackDevtools } from "@tanstack/react-devtools"
 import { HeadContent, Scripts, createRootRoute } from "@tanstack/react-router"
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools"
-import { darkShadows, darkTheme } from "@taiyomoe/ui/styles/tokens.stylex"
+import { darkShadows, darkTheme } from "@taiyomoe/ui/styles/themes"
 
 import appCss from "../styles.css?url"
 
-// Dark is the design system's flagship theme. The `dark` class drives the
-// Tailwind-side tokens (globals.css); the StyleX theme classes re-declare the
-// StyleX token variables for the migrated components. Both live on <html> so
-// portals inherit them.
+// Dark is the design system's flagship theme. Two halves have to agree on it:
+// the `dark` class drives the plain CSS custom properties in globals.css that
+// structural.css reads, and the StyleX theme classes re-declare the same
+// tokens for the components. Both live on <html> so portals inherit them.
 const darkModeClassName = `dark ${stylex.props(darkTheme, darkShadows).className ?? ""}`.trim()
 
 export const Route = createRootRoute({

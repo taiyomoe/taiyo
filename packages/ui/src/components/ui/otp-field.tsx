@@ -4,7 +4,7 @@ import { OTPField as OTPFieldPrimitive } from "@base-ui/react/otp-field"
 import * as React from "react"
 import * as stylex from "@stylexjs/stylex"
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/utils/cn"
 import { Separator } from "@/components/ui/separator"
 import type { Sx } from "../../styles/sx"
 import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
@@ -114,9 +114,8 @@ const styles = stylex.create({
   },
 })
 /**
- * The `size` prop is read by every cell, so it is published on the root and
- * consumed through a context rather than the Tailwind `in-[…]` ancestor
- * selectors the original used.
+ * The `size` prop is read by every cell. StyleX has no ancestor selector that
+ * reaches arbitrary depth, so the root publishes the size through context.
  */
 const OTPFieldSizeContext = React.createContext<OTPFieldSize>("default")
 

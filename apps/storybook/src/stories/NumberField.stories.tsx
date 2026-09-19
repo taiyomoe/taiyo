@@ -1,3 +1,4 @@
+import * as stylex from "@stylexjs/stylex"
 import preview from "@/storybook/preview"
 import { Label } from "@taiyomoe/ui/components/ui/label"
 import {
@@ -12,6 +13,17 @@ import { fn } from "storybook/test"
 
 type NumberFieldStoryProps = React.ComponentProps<typeof NumberField>
 
+const styles = stylex.create({
+  anchor: {
+    width: "14rem",
+  },
+  column: {
+    gap: "0.75rem",
+    display: "flex",
+    flexDirection: "column",
+    width: "14rem",
+  },
+})
 const meta = preview.meta({
   title: "UI/NumberField",
   component: NumberField,
@@ -34,7 +46,7 @@ const meta = preview.meta({
   },
   args: { onValueChange: fn() },
   render: (args: NumberFieldStoryProps) => (
-    <div className="w-56">
+    <div sx={styles.anchor}>
       <NumberField {...args}>
         <NumberFieldGroup>
           <NumberFieldDecrement />
@@ -52,7 +64,7 @@ export const Default = meta.story({
 
 export const Sizes = meta.story({
   render: () => (
-    <div className="flex w-56 flex-col gap-3">
+    <div sx={styles.column}>
       <NumberField defaultValue={1} size="sm">
         <NumberFieldGroup>
           <NumberFieldDecrement />
@@ -96,7 +108,7 @@ export const ReadOnly = meta.story({
 
 export const Invalid = meta.story({
   render: () => (
-    <div className="w-56">
+    <div sx={styles.anchor}>
       <NumberField defaultValue={-1}>
         <NumberFieldGroup>
           <NumberFieldDecrement />
@@ -110,7 +122,7 @@ export const Invalid = meta.story({
 
 export const WithLabel = meta.story({
   render: () => (
-    <div className="w-56">
+    <div sx={styles.anchor}>
       <NumberField defaultValue={1}>
         <Label htmlFor="quantity">Quantity</Label>
         <NumberFieldGroup>
@@ -125,7 +137,7 @@ export const WithLabel = meta.story({
 
 export const WithScrubArea = meta.story({
   render: () => (
-    <div className="w-56">
+    <div sx={styles.anchor}>
       <NumberField defaultValue={50}>
         <NumberFieldScrubArea label="Volume" />
         <NumberFieldGroup>

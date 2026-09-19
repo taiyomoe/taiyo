@@ -82,7 +82,7 @@ const styles = stylex.create({
 })
 
 export const Section = ({ children }: { children: ReactNode }) => (
-  <div {...stylex.props(styles.section)}>{children}</div>
+  <div sx={styles.section}>{children}</div>
 )
 
 /** Letter-spaced caps with a glowing gold dot — the page's section marker. */
@@ -93,9 +93,9 @@ export const Eyebrow = ({
   children: ReactNode
   centered?: boolean
 }) => (
-  <div {...stylex.props(styles.eyebrow, centered && styles.eyebrowCentered)}>
-    <span {...stylex.props(styles.eyebrowDot)} />
-    <span {...stylex.props(styles.eyebrowLabel)}>{children}</span>
+  <div sx={[styles.eyebrow, centered && styles.eyebrowCentered]}>
+    <span sx={styles.eyebrowDot} />
+    <span sx={styles.eyebrowLabel}>{children}</span>
   </div>
 )
 
@@ -105,7 +105,7 @@ export const Eyebrow = ({
  * filled/empty split at 12–16px.
  */
 export const Stars = ({ filled, size = 15 }: { filled: number; size?: number }) => (
-  <span {...stylex.props(styles.stars)} aria-hidden>
+  <span sx={styles.stars} aria-hidden>
     {Array.from({ length: 5 }).map((_, i) => (
       <svg
         key={i}
@@ -131,10 +131,10 @@ export const SectionHead = ({
   sub?: string
   centered?: boolean
 }) => (
-  <div {...stylex.props(styles.head, centered && styles.headCentered)}>
+  <div sx={[styles.head, centered && styles.headCentered]}>
     <Eyebrow centered={centered}>{eyebrow}</Eyebrow>
-    <h2 {...stylex.props(styles.headTitle)}>{title}</h2>
-    {sub ? <p {...stylex.props(styles.headSub)}>{sub}</p> : null}
+    <h2 sx={styles.headTitle}>{title}</h2>
+    {sub ? <p sx={styles.headSub}>{sub}</p> : null}
   </div>
 )
 

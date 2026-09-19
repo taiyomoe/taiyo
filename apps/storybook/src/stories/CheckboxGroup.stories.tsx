@@ -1,3 +1,4 @@
+import * as stylex from "@stylexjs/stylex"
 import preview from "@/storybook/preview"
 import { Checkbox } from "@taiyomoe/ui/components/ui/checkbox"
 import { CheckboxGroup } from "@taiyomoe/ui/components/ui/checkbox-group"
@@ -9,6 +10,13 @@ const options = [
   { name: "manhwa", label: "Manhwa" },
   { name: "manhua", label: "Manhua" },
 ] as const
+const styles = stylex.create({
+  row: {
+    gap: "0.5rem",
+    alignItems: "center",
+    display: "flex",
+  },
+})
 const meta = preview.meta({
   title: "UI/CheckboxGroup",
   component: CheckboxGroup,
@@ -17,7 +25,7 @@ const meta = preview.meta({
   render: (args) => (
     <CheckboxGroup {...args}>
       {options.map((option) => (
-        <div className="flex items-center gap-2" key={option.name}>
+        <div sx={styles.row} key={option.name}>
           <Checkbox id={option.name} name={option.name} />
           <Label htmlFor={option.name}>{option.label}</Label>
         </div>

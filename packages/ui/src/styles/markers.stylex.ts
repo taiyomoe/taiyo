@@ -4,8 +4,8 @@ import * as stylex from "@stylexjs/stylex"
  * Contextual-style markers.
  *
  * `stylex.when.ancestor(selector, marker)` lets a descendant react to an
- * ancestor's state — the replacement for Tailwind's `group-*` variants. The
- * marker has to be spread onto the ancestor with `stylex.props()`.
+ * ancestor's state. The marker has to be spread onto the ancestor with
+ * `stylex.props()`.
  *
  * They live here, and not next to the components that use them, because the
  * compiler hashes a marker from its file name plus export name and only does
@@ -15,6 +15,10 @@ import * as stylex from "@stylexjs/stylex"
 
 /** Accordion trigger, so the chevron can rotate when the panel opens. */
 export const accordionTriggerMarker: ReturnType<typeof stylex.defineMarker> = stylex.defineMarker()
+
+/** Collapsible trigger, so a chevron inside it can turn when the panel opens. */
+export const collapsibleTriggerMarker: ReturnType<typeof stylex.defineMarker> =
+  stylex.defineMarker()
 
 /** Calendar day cell, which carries `data-selected` / `data-disabled`. */
 export const calendarDayMarker: ReturnType<typeof stylex.defineMarker> = stylex.defineMarker()

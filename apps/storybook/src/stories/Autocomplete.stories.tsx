@@ -1,3 +1,4 @@
+import * as stylex from "@stylexjs/stylex"
 import { Search01Icon } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 import preview from "@/storybook/preview"
@@ -33,6 +34,17 @@ const fruits: Fruit[] = [
   { value: "strawberry", label: "Strawberry" },
   { value: "watermelon", label: "Watermelon" },
 ]
+const styles = stylex.create({
+  anchor: {
+    width: "18rem",
+  },
+  column: {
+    gap: "0.5rem",
+    display: "flex",
+    flexDirection: "column",
+    width: "18rem",
+  },
+})
 const meta = preview.meta({
   title: "UI/Autocomplete",
   component: Autocomplete,
@@ -52,7 +64,7 @@ const meta = preview.meta({
 
 export const Default = meta.story({
   render: () => (
-    <div className="w-72">
+    <div sx={styles.anchor}>
       <Autocomplete items={fruits}>
         <AutocompleteInput placeholder="Search fruits..." />
         <AutocompletePopup>
@@ -72,7 +84,7 @@ export const Default = meta.story({
 
 export const Sizes = meta.story({
   render: () => (
-    <div className="flex w-72 flex-col gap-2">
+    <div sx={styles.column}>
       <Autocomplete items={fruits}>
         <AutocompleteInput placeholder="Search fruits..." size="sm" />
         <AutocompletePopup>
@@ -118,7 +130,7 @@ export const Sizes = meta.story({
 
 export const WithTrigger = meta.story({
   render: () => (
-    <div className="w-72">
+    <div sx={styles.anchor}>
       <Autocomplete items={fruits} openOnInputClick>
         <AutocompleteInput placeholder="Search fruits..." showTrigger />
         <AutocompletePopup>
@@ -138,7 +150,7 @@ export const WithTrigger = meta.story({
 
 export const WithClear = meta.story({
   render: () => (
-    <div className="w-72">
+    <div sx={styles.anchor}>
       <Autocomplete defaultValue="Apple" items={fruits}>
         <AutocompleteInput placeholder="Search fruits..." showClear />
         <AutocompletePopup>
@@ -158,7 +170,7 @@ export const WithClear = meta.story({
 
 export const WithStartAddon = meta.story({
   render: () => (
-    <div className="w-72">
+    <div sx={styles.anchor}>
       <Autocomplete items={fruits}>
         <AutocompleteInput
           placeholder="Search fruits..."
@@ -181,7 +193,7 @@ export const WithStartAddon = meta.story({
 
 export const Disabled = meta.story({
   render: () => (
-    <div className="w-72">
+    <div sx={styles.anchor}>
       <Autocomplete disabled items={fruits}>
         <AutocompleteInput placeholder="Search fruits..." />
         <AutocompletePopup>
@@ -201,7 +213,7 @@ export const Disabled = meta.story({
 
 export const ReadOnly = meta.story({
   render: () => (
-    <div className="w-72">
+    <div sx={styles.anchor}>
       <Autocomplete defaultValue="Apple" items={fruits} readOnly>
         <AutocompleteInput placeholder="Search fruits..." />
         <AutocompletePopup>
@@ -242,7 +254,7 @@ const groupedFruits: FruitGroup[] = [
 
 export const WithGroups = meta.story({
   render: () => (
-    <div className="w-72">
+    <div sx={styles.anchor}>
       <Autocomplete items={groupedFruits}>
         <AutocompleteInput placeholder="Search..." />
         <AutocompletePopup>

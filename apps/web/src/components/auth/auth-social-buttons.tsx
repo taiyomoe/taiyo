@@ -1,7 +1,50 @@
+import * as stylex from "@stylexjs/stylex"
+import { text } from "@taiyomoe/ui/styles/tokens.stylex"
+
 import { DiscordButton } from "@/components/buttons/discord-button"
 import { GoogleButton } from "@/components/buttons/google-button"
+import { scene } from "@/components/scene/scene.stylex"
 
 export type SocialProvider = "discord" | "google"
+
+const styles = stylex.create({
+  root: {
+    gap: "1.25rem",
+    display: "flex",
+    flexDirection: "column",
+  },
+  providers: {
+    gap: "0.75rem",
+    display: "grid",
+    gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+  },
+  // Taller and larger than the default outline button: on this screen the two
+  // providers are the primary path, and they have to hold their own against
+  // the gradient submit below.
+  provider: {
+    gap: "0.75rem",
+    fontSize: text.lg,
+    fontWeight: 500,
+    height: "3rem",
+  },
+  divider: {
+    gap: "0.875rem",
+    alignItems: "center",
+    display: "flex",
+  },
+  rule: {
+    flex: "1",
+    backgroundColor: `color-mix(in srgb, ${scene.paper} 10%, transparent)`,
+    height: 1,
+  },
+  label: {
+    color: `color-mix(in srgb, ${scene.paper} 40%, transparent)`,
+    fontSize: "0.75rem",
+    fontWeight: 700,
+    letterSpacing: "0.08em",
+    textTransform: "uppercase",
+  },
+})
 
 export const AuthSocialButtons = ({
   label,
@@ -14,25 +57,25 @@ export const AuthSocialButtons = ({
   disabled: boolean
   onSelect: (provider: SocialProvider) => void
 }) => (
-  <div className="flex flex-col gap-5">
-    <div className="grid grid-cols-2 gap-3">
+  <div sx={styles.root}>
+    <div sx={styles.providers}>
       <GoogleButton
-        className="h-12! gap-3 text-lg! font-medium"
+        sx={styles.provider}
         loading={pending === "google"}
         disabled={disabled}
         onClick={() => onSelect("google")}
       />
       <DiscordButton
-        className="h-12! gap-3 text-lg! font-medium"
+        sx={styles.provider}
         loading={pending === "discord"}
         disabled={disabled}
         onClick={() => onSelect("discord")}
       />
     </div>
-    <div className="flex items-center gap-3.5">
-      <span className="h-px flex-1 bg-white/10" />
-      <span className="text-xs font-bold tracking-[0.08em] text-white/40 uppercase">{label}</span>
-      <span className="h-px flex-1 bg-white/10" />
+    <div sx={styles.divider}>
+      <span sx={styles.rule} />
+      <span sx={styles.label}>{label}</span>
+      <span sx={styles.rule} />
     </div>
   </div>
 )

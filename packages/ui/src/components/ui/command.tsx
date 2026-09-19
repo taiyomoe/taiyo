@@ -14,7 +14,7 @@ import {
   AutocompleteList,
   AutocompleteSeparator,
 } from "@/components/ui/autocomplete"
-import { cn } from "@/lib/utils"
+import { cn } from "@/utils/cn"
 import { Search } from "@/components/icons"
 import type { Sx } from "../../styles/sx"
 import { colors, consts, font, radius, shadows } from "../../styles/tokens.stylex"

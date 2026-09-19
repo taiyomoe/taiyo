@@ -1,3 +1,4 @@
+import * as stylex from "@stylexjs/stylex"
 import {
   Alert02Icon,
   CheckmarkCircle02Icon,
@@ -8,6 +9,20 @@ import preview from "@/storybook/preview"
 import { Alert, AlertAction, AlertDescription, AlertTitle } from "@taiyomoe/ui/components/ui/alert"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 
+const styles = stylex.create({
+  anchor: {
+    width: "24rem",
+  },
+  column: {
+    gap: "0.75rem",
+    display: "flex",
+    flexDirection: "column",
+    width: "24rem",
+  },
+  anchor2: {
+    width: "28rem",
+  },
+})
 const meta = preview.meta({
   title: "UI/Alert",
   component: Alert,
@@ -20,7 +35,7 @@ const meta = preview.meta({
     },
   },
   render: (args) => (
-    <div className="w-96">
+    <div sx={styles.anchor}>
       <Alert {...args}>
         <HugeiconsIcon icon={InformationCircleIcon} />
         <AlertTitle>New update available</AlertTitle>
@@ -36,7 +51,7 @@ export const Default = meta.story({})
 
 export const Variants = meta.story({
   render: () => (
-    <div className="flex w-96 flex-col gap-3">
+    <div sx={styles.column}>
       <Alert variant="default">
         <HugeiconsIcon icon={InformationCircleIcon} />
         <AlertTitle>Default</AlertTitle>
@@ -68,7 +83,7 @@ export const Variants = meta.story({
 
 export const WithAction = meta.story({
   render: () => (
-    <Alert className="w-md" variant="warning">
+    <Alert sx={styles.anchor2} variant="warning">
       <HugeiconsIcon icon={Alert02Icon} />
       <AlertTitle>Unsaved changes</AlertTitle>
       <AlertDescription>
@@ -85,7 +100,7 @@ export const WithAction = meta.story({
 
 export const TitleOnly = meta.story({
   render: () => (
-    <Alert className="w-96" variant="info">
+    <Alert sx={styles.anchor} variant="info">
       <HugeiconsIcon icon={InformationCircleIcon} />
       <AlertTitle>Sync completed</AlertTitle>
     </Alert>

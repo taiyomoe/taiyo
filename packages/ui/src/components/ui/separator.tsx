@@ -1,7 +1,7 @@
 import { Separator as SeparatorPrimitive } from "@base-ui/react/separator"
 import * as stylex from "@stylexjs/stylex"
 import type React from "react"
-import { cn } from "@/lib/utils"
+import { cn } from "@/utils/cn"
 import { colors } from "../../styles/tokens.stylex"
 import type { Sx } from "../../styles/sx"
 
@@ -15,10 +15,6 @@ const styles = stylex.create({
     width: "100%",
   },
   vertical: {
-    // The Tailwind original guarded this with
-    // `not-[[class^='h-']]:not-[[class*='_h-']]` so a caller-supplied height
-    // class could win. StyleX merges caller styles last, so they override
-    // directly and the guard is unnecessary.
     alignSelf: "stretch",
     width: 1,
   },
@@ -28,10 +24,10 @@ const styles = stylex.create({
  * StyleX styles arrive via `sx`, not `style`: `style` stays bound to React's
  * inline-CSS prop, which callers still use for CSS custom properties.
  *
- * `className` is retained for the duration of the Tailwind -> StyleX migration.
- * Un-migrated callers still pass Tailwind classes, and dropping the prop would
- * force every consumer to migrate in the same commit. Remove it once no caller
- * passes `className`.
+ * `className` is kept as a plain DOM pass-through. Nothing in this package
+ * styles through it — that is what `sx` is for — but third-party libraries
+ * hand components a class name to render (react-day-picker's `classNames` map,
+ * for one), and tests and animation hooks target them.
  */
 export type SeparatorProps = SeparatorPrimitive.Props & {
   sx?: Sx

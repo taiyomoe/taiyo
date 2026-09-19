@@ -4,7 +4,7 @@ import { Field as FieldPrimitive } from "@base-ui/react/field"
 import { mergeProps } from "@base-ui/react/merge-props"
 import * as stylex from "@stylexjs/stylex"
 import type * as React from "react"
-import { cn } from "@/lib/utils"
+import { cn } from "@/utils/cn"
 import type { Sx } from "../../styles/sx"
 import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
 

@@ -1,3 +1,4 @@
+import * as stylex from "@stylexjs/stylex"
 import preview from "@/storybook/preview"
 import {
   Accordion,
@@ -27,6 +28,11 @@ const items = [
       "Yes — Taiyō is free and open source under a permissive license. Contributions are welcome on GitHub.",
   },
 ]
+const styles = stylex.create({
+  anchor: {
+    width: "24rem",
+  },
+})
 const meta = preview.meta({
   title: "UI/Accordion",
   component: Accordion,
@@ -42,7 +48,7 @@ const meta = preview.meta({
   },
   args: { onValueChange: fn() },
   render: (args) => (
-    <div className="w-96">
+    <div sx={styles.anchor}>
       <Accordion {...args}>
         {items.map((item) => (
           <AccordionItem key={item.value} value={item.value}>

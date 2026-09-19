@@ -1,3 +1,4 @@
+import * as stylex from "@stylexjs/stylex"
 import {
   CalculatorIcon as CalculatorGlyph,
   Calendar01Icon,
@@ -58,6 +59,21 @@ const defaultGroups: Group[] = [
     ],
   },
 ]
+const styles = stylex.create({
+  cell: {
+    flex: "1",
+  },
+  row: {
+    gap: "1rem",
+    alignItems: "center",
+    display: "flex",
+  },
+  row2: {
+    gap: "0.5rem",
+    alignItems: "center",
+    display: "flex",
+  },
+})
 const meta = preview.meta({
   title: "UI/Command",
   component: CommandDialog,
@@ -105,7 +121,7 @@ export const Default = meta.story({
                       {(item: Item) => (
                         <CommandItem key={item.value} value={item.value}>
                           {item.icon ? <HugeiconsIcon icon={item.icon} /> : null}
-                          <span className="flex-1">{item.label}</span>
+                          <span sx={styles.cell}>{item.label}</span>
                           {item.shortcut ? (
                             <CommandShortcut>{item.shortcut}</CommandShortcut>
                           ) : null}
@@ -119,8 +135,8 @@ export const Default = meta.story({
             </CommandList>
           </CommandPanel>
           <CommandFooter>
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2">
+            <div sx={styles.row}>
+              <div sx={styles.row2}>
                 <KbdGroup>
                   <Kbd>
                     <ChevronUp />
@@ -131,14 +147,14 @@ export const Default = meta.story({
                 </KbdGroup>
                 <span>Navigate</span>
               </div>
-              <div className="flex items-center gap-2">
+              <div sx={styles.row2}>
                 <Kbd>
                   <Enter />
                 </Kbd>
                 <span>Open</span>
               </div>
             </div>
-            <div className="flex items-center gap-2">
+            <div sx={styles.row2}>
               <Kbd>Esc</Kbd>
               <span>Close</span>
             </div>
@@ -169,7 +185,7 @@ export const EmptyState = meta.story({
                       {(item: Item) => (
                         <CommandItem key={item.value} value={item.value}>
                           {item.icon ? <HugeiconsIcon icon={item.icon} /> : null}
-                          <span className="flex-1">{item.label}</span>
+                          <span sx={styles.cell}>{item.label}</span>
                           {item.shortcut ? (
                             <CommandShortcut>{item.shortcut}</CommandShortcut>
                           ) : null}
@@ -183,8 +199,8 @@ export const EmptyState = meta.story({
             </CommandList>
           </CommandPanel>
           <CommandFooter>
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2">
+            <div sx={styles.row}>
+              <div sx={styles.row2}>
                 <KbdGroup>
                   <Kbd>
                     <ChevronUp />
@@ -195,14 +211,14 @@ export const EmptyState = meta.story({
                 </KbdGroup>
                 <span>Navigate</span>
               </div>
-              <div className="flex items-center gap-2">
+              <div sx={styles.row2}>
                 <Kbd>
                   <Enter />
                 </Kbd>
                 <span>Open</span>
               </div>
             </div>
-            <div className="flex items-center gap-2">
+            <div sx={styles.row2}>
               <Kbd>Esc</Kbd>
               <span>Close</span>
             </div>
@@ -233,7 +249,7 @@ export const WithoutFooter = meta.story({
                       {(item: Item) => (
                         <CommandItem key={item.value} value={item.value}>
                           {item.icon ? <HugeiconsIcon icon={item.icon} /> : null}
-                          <span className="flex-1">{item.label}</span>
+                          <span sx={styles.cell}>{item.label}</span>
                           {item.shortcut ? (
                             <CommandShortcut>{item.shortcut}</CommandShortcut>
                           ) : null}

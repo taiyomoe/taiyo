@@ -1,3 +1,5 @@
+import * as stylex from "@stylexjs/stylex"
+import { colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import {
   BookOpen01Icon,
   Home01Icon,
@@ -38,6 +40,58 @@ const NAV_ITEMS = [
   { title: "Library", icon: BookOpen01Icon },
   { title: "Members", icon: UserGroupIcon },
 ] as const
+const styles = stylex.create({
+  /** The square product mark the sidebar header shows next to the name. */
+  brandTile: {
+    borderRadius: radius.md,
+    placeItems: "center",
+    alignItems: "center",
+    backgroundColor: colors.primary,
+    color: colors.primaryForeground,
+    display: "grid",
+    fontSize: "0.875rem",
+    fontWeight: 600,
+    height: "1.75rem",
+    width: "1.75rem",
+  },
+  noShrink: {
+    flexShrink: 0,
+  },
+  row: {
+    gap: "0.5rem",
+    paddingInline: "0.5rem",
+    alignItems: "center",
+    display: "flex",
+    height: "2.5rem",
+  },
+  label: {
+    fontSize: "0.875rem",
+    fontWeight: 500,
+    lineHeight: "1.25rem",
+  },
+  spacing: {
+    marginTop: "-1px",
+  },
+  row2: {
+    gap: "0.5rem",
+    paddingInline: "1rem",
+    alignItems: "center",
+    display: "flex",
+    borderBottomColor: colors.border,
+    borderBottomStyle: "solid",
+    borderBottomWidth: 1,
+    height: "3.5rem",
+  },
+  cell: {
+    padding: "1.5rem",
+    flex: "1",
+  },
+  caption: {
+    color: colors.mutedForeground,
+    fontSize: "0.875rem",
+    lineHeight: "1.25rem",
+  },
+})
 const meta = preview.meta({
   title: "UI/Sidebar",
   component: Sidebar,
@@ -70,14 +124,12 @@ export const Default = meta.story({
     <SidebarProvider defaultOpen>
       <Sidebar>
         <SidebarHeader>
-          <div className="flex h-10 items-center gap-2 px-2">
-            <div className="grid size-7 place-items-center rounded-md bg-primary text-sm font-semibold text-primary-foreground">
-              T
-            </div>
-            <span className="text-sm font-medium">Taiyō</span>
+          <div sx={styles.row}>
+            <div sx={styles.brandTile}>T</div>
+            <span sx={styles.label}>Taiyō</span>
           </div>
         </SidebarHeader>
-        <SidebarSeparator className="-mt-px" />
+        <SidebarSeparator sx={styles.spacing} />
         <SidebarContent>
           <SidebarGroup>
             <SidebarGroupLabel>Navigation</SidebarGroupLabel>
@@ -139,12 +191,12 @@ export const Default = meta.story({
         <SidebarRail />
       </Sidebar>
       <SidebarInset>
-        <header className="flex h-14 items-center gap-2 border-b px-4">
+        <header sx={styles.row2}>
           <SidebarTrigger />
-          <span className="text-sm font-medium">Dashboard</span>
+          <span sx={styles.label}>Dashboard</span>
         </header>
-        <main className="flex-1 p-6">
-          <p className="text-sm text-muted-foreground">
+        <main sx={styles.cell}>
+          <p sx={styles.caption}>
             Resize the canvas or toggle the trigger to see the sidebar collapse behaviour. Press{" "}
             <kbd>Cmd/Ctrl + B</kbd> to toggle.
           </p>
@@ -159,14 +211,12 @@ export const Floating = meta.story({
     <SidebarProvider defaultOpen>
       <Sidebar variant="floating">
         <SidebarHeader>
-          <div className="flex h-10 items-center gap-2 px-2">
-            <div className="grid size-7 place-items-center rounded-md bg-primary text-sm font-semibold text-primary-foreground">
-              T
-            </div>
-            <span className="text-sm font-medium">Taiyō</span>
+          <div sx={styles.row}>
+            <div sx={styles.brandTile}>T</div>
+            <span sx={styles.label}>Taiyō</span>
           </div>
         </SidebarHeader>
-        <SidebarSeparator className="-mt-px" />
+        <SidebarSeparator sx={styles.spacing} />
         <SidebarContent>
           <SidebarGroup>
             <SidebarGroupLabel>Navigation</SidebarGroupLabel>
@@ -203,12 +253,12 @@ export const Floating = meta.story({
         <SidebarRail />
       </Sidebar>
       <SidebarInset>
-        <header className="flex h-14 items-center gap-2 border-b px-4">
+        <header sx={styles.row2}>
           <SidebarTrigger />
-          <span className="text-sm font-medium">Dashboard</span>
+          <span sx={styles.label}>Dashboard</span>
         </header>
-        <main className="flex-1 p-6">
-          <p className="text-sm text-muted-foreground">Floating sidebar variant.</p>
+        <main sx={styles.cell}>
+          <p sx={styles.caption}>Floating sidebar variant.</p>
         </main>
       </SidebarInset>
     </SidebarProvider>
@@ -220,14 +270,12 @@ export const Inset = meta.story({
     <SidebarProvider defaultOpen>
       <Sidebar variant="inset">
         <SidebarHeader>
-          <div className="flex h-10 items-center gap-2 px-2">
-            <div className="grid size-7 place-items-center rounded-md bg-primary text-sm font-semibold text-primary-foreground">
-              T
-            </div>
-            <span className="text-sm font-medium">Taiyō</span>
+          <div sx={styles.row}>
+            <div sx={styles.brandTile}>T</div>
+            <span sx={styles.label}>Taiyō</span>
           </div>
         </SidebarHeader>
-        <SidebarSeparator className="-mt-px" />
+        <SidebarSeparator sx={styles.spacing} />
         <SidebarContent>
           <SidebarGroup>
             <SidebarGroupLabel>Navigation</SidebarGroupLabel>
@@ -264,12 +312,12 @@ export const Inset = meta.story({
         <SidebarRail />
       </Sidebar>
       <SidebarInset>
-        <header className="flex h-14 items-center gap-2 border-b px-4">
+        <header sx={styles.row2}>
           <SidebarTrigger />
-          <span className="text-sm font-medium">Dashboard</span>
+          <span sx={styles.label}>Dashboard</span>
         </header>
-        <main className="flex-1 p-6">
-          <p className="text-sm text-muted-foreground">Inset sidebar variant.</p>
+        <main sx={styles.cell}>
+          <p sx={styles.caption}>Inset sidebar variant.</p>
         </main>
       </SidebarInset>
     </SidebarProvider>
@@ -281,14 +329,12 @@ export const CollapsibleIcon = meta.story({
     <SidebarProvider defaultOpen>
       <Sidebar collapsible="icon">
         <SidebarHeader>
-          <div className="flex h-10 items-center gap-2 px-2">
-            <div className="grid size-7 place-items-center rounded-md bg-primary text-sm font-semibold text-primary-foreground">
-              T
-            </div>
-            <span className="text-sm font-medium">Taiyō</span>
+          <div sx={styles.row}>
+            <div sx={styles.brandTile}>T</div>
+            <span sx={styles.label}>Taiyō</span>
           </div>
         </SidebarHeader>
-        <SidebarSeparator className="-mt-px" />
+        <SidebarSeparator sx={styles.spacing} />
         <SidebarContent>
           <SidebarGroup>
             <SidebarGroupLabel>Navigation</SidebarGroupLabel>
@@ -325,12 +371,12 @@ export const CollapsibleIcon = meta.story({
         <SidebarRail />
       </Sidebar>
       <SidebarInset>
-        <header className="flex h-14 items-center gap-2 border-b px-4">
+        <header sx={styles.row2}>
           <SidebarTrigger />
-          <span className="text-sm font-medium">Dashboard</span>
+          <span sx={styles.label}>Dashboard</span>
         </header>
-        <main className="flex-1 p-6">
-          <p className="text-sm text-muted-foreground">
+        <main sx={styles.cell}>
+          <p sx={styles.caption}>
             Collapsing the sidebar shrinks it to an icon rail; menu labels become tooltips.
           </p>
         </main>
@@ -344,14 +390,12 @@ export const NonCollapsible = meta.story({
     <SidebarProvider defaultOpen>
       <Sidebar collapsible="none">
         <SidebarHeader>
-          <div className="flex h-10 items-center gap-2 px-2">
-            <div className="grid size-7 place-items-center rounded-md bg-primary text-sm font-semibold text-primary-foreground">
-              T
-            </div>
-            <span className="text-sm font-medium">Taiyō</span>
+          <div sx={styles.row}>
+            <div sx={styles.brandTile}>T</div>
+            <span sx={styles.label}>Taiyō</span>
           </div>
         </SidebarHeader>
-        <SidebarSeparator className="-mt-px" />
+        <SidebarSeparator sx={styles.spacing} />
         <SidebarContent>
           <SidebarGroup>
             <SidebarGroupLabel>Navigation</SidebarGroupLabel>
@@ -387,11 +431,11 @@ export const NonCollapsible = meta.story({
         </SidebarFooter>
       </Sidebar>
       <SidebarInset>
-        <header className="flex h-14 items-center gap-2 border-b px-4">
-          <span className="text-sm font-medium">Dashboard</span>
+        <header sx={styles.row2}>
+          <span sx={styles.label}>Dashboard</span>
         </header>
-        <main className="flex-1 p-6">
-          <p className="text-sm text-muted-foreground">
+        <main sx={styles.cell}>
+          <p sx={styles.caption}>
             With `collapsible="none"` the sidebar is fixed-width and the trigger has no effect.
           </p>
         </main>
@@ -405,14 +449,14 @@ export const InitiallyCollapsed = meta.story({
     <SidebarProvider defaultOpen={false}>
       <Sidebar collapsible="icon">
         <SidebarHeader>
-          <div className="flex h-10 items-center gap-2 px-2">
-            <div className="grid size-7 shrink-0 place-items-center rounded-md bg-primary text-sm font-semibold text-primary-foreground">
-              T
-            </div>
-            <span className="text-sm font-medium group-data-[collapsible=icon]:hidden">Taiyō</span>
+          <div sx={styles.row}>
+            <div sx={[styles.brandTile, styles.noShrink]}>T</div>
+            <span data-hide-when-collapsed sx={styles.label}>
+              Taiyō
+            </span>
           </div>
         </SidebarHeader>
-        <SidebarSeparator className="-mt-px" />
+        <SidebarSeparator sx={styles.spacing} />
         <SidebarContent>
           <SidebarGroup>
             <SidebarGroupLabel>Navigation</SidebarGroupLabel>
@@ -449,12 +493,12 @@ export const InitiallyCollapsed = meta.story({
         <SidebarRail />
       </Sidebar>
       <SidebarInset>
-        <header className="flex h-14 items-center gap-2 border-b px-4">
+        <header sx={styles.row2}>
           <SidebarTrigger />
-          <span className="text-sm font-medium">Dashboard</span>
+          <span sx={styles.label}>Dashboard</span>
         </header>
-        <main className="flex-1 p-6">
-          <p className="text-sm text-muted-foreground">
+        <main sx={styles.cell}>
+          <p sx={styles.caption}>
             The provider starts closed, so the sidebar mounts as an icon rail. Use the trigger to
             expand it.
           </p>
@@ -469,14 +513,12 @@ export const Loading = meta.story({
     <SidebarProvider defaultOpen>
       <Sidebar>
         <SidebarHeader>
-          <div className="flex h-10 items-center gap-2 px-2">
-            <div className="grid size-7 place-items-center rounded-md bg-primary text-sm font-semibold text-primary-foreground">
-              T
-            </div>
-            <span className="text-sm font-medium">Taiyō</span>
+          <div sx={styles.row}>
+            <div sx={styles.brandTile}>T</div>
+            <span sx={styles.label}>Taiyō</span>
           </div>
         </SidebarHeader>
-        <SidebarSeparator className="-mt-px" />
+        <SidebarSeparator sx={styles.spacing} />
         <SidebarContent>
           <SidebarGroup>
             <SidebarGroupLabel>Navigation</SidebarGroupLabel>
@@ -506,12 +548,12 @@ export const Loading = meta.story({
         <SidebarRail />
       </Sidebar>
       <SidebarInset>
-        <header className="flex h-14 items-center gap-2 border-b px-4">
+        <header sx={styles.row2}>
           <SidebarTrigger />
-          <span className="text-sm font-medium">Dashboard</span>
+          <span sx={styles.label}>Dashboard</span>
         </header>
-        <main className="flex-1 p-6">
-          <p className="text-sm text-muted-foreground">
+        <main sx={styles.cell}>
+          <p sx={styles.caption}>
             Map over `SidebarMenuSkeleton` while the navigation data loads. Each placeholder picks a
             deterministic width, so the rows do not all end at the same point.
           </p>

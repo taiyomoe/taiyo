@@ -1,10 +1,10 @@
 import * as stylex from "@stylexjs/stylex"
 import type React from "react"
-import { cn } from "@/lib/utils"
+import { cn } from "@/utils/cn"
 import { colors, radius } from "../../styles/tokens.stylex"
 import type { Sx } from "../../styles/sx"
 
-/** Port of the `skeleton` keyframes in globals.css. */
+/** The travelling highlight that reads as "loading". */
 const shimmer = stylex.keyframes({
   to: { backgroundPosition: "-200% 0" },
 })
@@ -21,7 +21,7 @@ const styles = stylex.create({
   },
 })
 
-/** See the note on SeparatorProps: `className` stays until callers migrate. */
+/** See the note on SeparatorProps for why `className` sits alongside `sx`. */
 export type SkeletonProps = React.ComponentProps<"div"> & {
   sx?: Sx
 }

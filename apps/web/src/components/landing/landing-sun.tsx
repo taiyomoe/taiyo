@@ -76,7 +76,7 @@ export const LandingSun = ({ parallax }: { parallax: Parallax }) => {
   const auroraProps = stylex.props(styles.aurora)
 
   return (
-    <div {...stylex.props(styles.field)}>
+    <div sx={styles.field}>
       <div
         className={auroraProps.className}
         style={{ ...auroraProps.style, animation: "scene-aurora 16s ease-in-out infinite" }}
@@ -104,7 +104,7 @@ export const LandingSun = ({ parallax }: { parallax: Parallax }) => {
           style={{ ...discProps.style, animation: "scene-sun-breathe 7s ease-in-out infinite" }}
         />
       </div>
-      <div {...stylex.props(styles.vignette)} />
+      <div sx={styles.vignette} />
     </div>
   )
 }

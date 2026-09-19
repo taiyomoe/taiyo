@@ -1,3 +1,4 @@
+import * as stylex from "@stylexjs/stylex"
 import preview from "@/storybook/preview"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { Input } from "@taiyomoe/ui/components/ui/input"
@@ -11,6 +12,43 @@ import {
 } from "@taiyomoe/ui/components/ui/popover"
 import { fn } from "storybook/test"
 
+const styles = stylex.create({
+  column: {
+    gap: "1rem",
+    display: "flex",
+    flexDirection: "column",
+    width: "18rem",
+  },
+  column2: {
+    gap: "0.25rem",
+    display: "flex",
+    flexDirection: "column",
+  },
+  grid: {
+    gap: "0.75rem",
+    display: "grid",
+  },
+  grid2: {
+    gap: "0.75rem",
+    alignItems: "center",
+    display: "grid",
+    gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+  },
+  cell: {
+    gridColumnEnd: "span 2",
+    gridColumnStart: "span 2",
+  },
+  wrap: {
+    gap: "4rem",
+    display: "flex",
+    flexWrap: "wrap",
+  },
+  wrap2: {
+    gap: "3rem",
+    display: "flex",
+    flexWrap: "wrap",
+  },
+})
 const meta = preview.meta({
   title: "UI/Popover",
   component: Popover,
@@ -29,19 +67,19 @@ export const Default = meta.story({
     <Popover>
       <PopoverTrigger render={<Button variant="outline" />}>Open popover</PopoverTrigger>
       <PopoverPopup align="center" side="bottom">
-        <div className="flex w-72 flex-col gap-4">
-          <div className="flex flex-col gap-1">
+        <div sx={styles.column}>
+          <div sx={styles.column2}>
             <PopoverTitle>Dimensions</PopoverTitle>
             <PopoverDescription>Set the dimensions for the layer.</PopoverDescription>
           </div>
-          <div className="grid gap-3">
-            <div className="grid grid-cols-3 items-center gap-3">
+          <div sx={styles.grid}>
+            <div sx={styles.grid2}>
               <Label htmlFor="popover-width">Width</Label>
-              <Input className="col-span-2" defaultValue="100%" id="popover-width" />
+              <Input sx={styles.cell} defaultValue="100%" id="popover-width" />
             </div>
-            <div className="grid grid-cols-3 items-center gap-3">
+            <div sx={styles.grid2}>
               <Label htmlFor="popover-height">Height</Label>
-              <Input className="col-span-2" defaultValue="25px" id="popover-height" />
+              <Input sx={styles.cell} defaultValue="25px" id="popover-height" />
             </div>
           </div>
         </div>
@@ -52,7 +90,7 @@ export const Default = meta.story({
 
 export const Sides = meta.story({
   render: () => (
-    <div className="flex flex-wrap gap-16">
+    <div sx={styles.wrap}>
       {(["top", "right", "bottom", "left"] as const).map((side) => (
         <Popover defaultOpen key={side}>
           <PopoverTrigger render={<Button variant="outline" />}>{side}</PopoverTrigger>
@@ -67,7 +105,7 @@ export const Sides = meta.story({
 
 export const Alignment = meta.story({
   render: () => (
-    <div className="flex flex-wrap gap-12">
+    <div sx={styles.wrap2}>
       {(["start", "center", "end"] as const).map((align) => (
         <Popover defaultOpen key={align}>
           <PopoverTrigger render={<Button variant="outline" />}>{align}</PopoverTrigger>
@@ -96,19 +134,19 @@ export const Modal = meta.story({
     <Popover modal>
       <PopoverTrigger render={<Button variant="outline" />}>Open popover</PopoverTrigger>
       <PopoverPopup align="center" side="bottom">
-        <div className="flex w-72 flex-col gap-4">
-          <div className="flex flex-col gap-1">
+        <div sx={styles.column}>
+          <div sx={styles.column2}>
             <PopoverTitle>Dimensions</PopoverTitle>
             <PopoverDescription>Set the dimensions for the layer.</PopoverDescription>
           </div>
-          <div className="grid gap-3">
-            <div className="grid grid-cols-3 items-center gap-3">
+          <div sx={styles.grid}>
+            <div sx={styles.grid2}>
               <Label htmlFor="popover-width-modal">Width</Label>
-              <Input className="col-span-2" defaultValue="100%" id="popover-width-modal" />
+              <Input sx={styles.cell} defaultValue="100%" id="popover-width-modal" />
             </div>
-            <div className="grid grid-cols-3 items-center gap-3">
+            <div sx={styles.grid2}>
               <Label htmlFor="popover-height-modal">Height</Label>
-              <Input className="col-span-2" defaultValue="25px" id="popover-height-modal" />
+              <Input sx={styles.cell} defaultValue="25px" id="popover-height-modal" />
             </div>
           </div>
         </div>

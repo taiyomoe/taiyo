@@ -1,3 +1,4 @@
+import * as stylex from "@stylexjs/stylex"
 import {
   Link02Icon,
   TextAlignCenterIcon,
@@ -20,6 +21,11 @@ import {
   ToolbarSeparator,
 } from "@taiyomoe/ui/components/ui/toolbar"
 
+const styles = stylex.create({
+  column: {
+    flexDirection: "column",
+  },
+})
 const meta = preview.meta({
   title: "UI/Toolbar",
   component: Toolbar,
@@ -122,7 +128,7 @@ export const WithInputAndLink = meta.story({
 export const Vertical = meta.story({
   args: { orientation: "vertical" },
   render: (args) => (
-    <Toolbar {...args} className="flex-col">
+    <Toolbar {...args} sx={styles.column}>
       <ToolbarButton aria-label="Bold" render={<Button size="icon-sm" variant="ghost" />}>
         <HugeiconsIcon icon={TextBoldIcon} />
       </ToolbarButton>

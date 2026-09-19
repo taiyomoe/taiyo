@@ -4,7 +4,7 @@ import { mergeProps } from "@base-ui/react/merge-props"
 import { useRender } from "@base-ui/react/use-render"
 import * as stylex from "@stylexjs/stylex"
 import type React from "react"
-import { cn } from "@/lib/utils"
+import { cn } from "@/utils/cn"
 import { colors, consts, radius } from "../../styles/tokens.stylex"
 import type { Sx } from "../../styles/sx"
 
@@ -52,9 +52,10 @@ const styles = stylex.create({
     whiteSpace: "nowrap",
   },
   /**
-   * The Tailwind source gated cursor/hover/tap-target on `[button&,a&]`.
-   * StyleX cannot select on the tag, so interactivity is inferred from the
-   * `render` prop instead (a plain span badge stays inert).
+   * Cursor, hover and the coarse-pointer tap target only apply to a badge
+   * that is actually actionable. StyleX cannot select on the tag name, so
+   * interactivity is inferred from the `render` prop instead (a plain span
+   * badge stays inert).
    */
   interactive: {
     cursor: "pointer",
@@ -72,10 +73,10 @@ const styles = stylex.create({
   },
 })
 /**
- * Washes for the semantic variants: the Tailwind source used an 8% tint in
- * light and a 16% tint in dark. Components cannot know the theme, so the 8%
- * wash is kept for both — on the dark charcoal stack it reads slightly
- * softer than before, which suits the design language.
+ * Washes for the semantic variants: an 8% tint of the variant's own colour.
+ * A component must never know which theme is live, so the one wash serves
+ * both; on the dark charcoal stack it reads softly, which suits the design
+ * language.
  */
 const variantStyles = stylex.create({
   default: {

@@ -1,7 +1,7 @@
 ---
 name: coss
-description: Helps implement coss UI components correctly. Use when building UIs with coss primitives and patterns (buttons, dialogs, selects, forms, menus, tabs, segmented controls, inputs, toasts, etc.), migrating from shadcn/Radix to coss/Base UI, composing trigger-based overlays, or troubleshooting coss component behavior. Covers imports, accessibility, Tailwind styling, and common pitfalls.
-compatibility: Requires Tailwind CSS v4 and @base-ui/react. Designed for React projects using the coss component registry.
+description: Helps implement coss UI components correctly. Use when building UIs with coss primitives and patterns (buttons, dialogs, selects, forms, menus, tabs, segmented controls, inputs, toasts, etc.), migrating from shadcn/Radix to coss/Base UI, composing trigger-based overlays, or troubleshooting coss component behavior. Covers imports, accessibility, StyleX styling, and common pitfalls.
+compatibility: Requires @base-ui/react. Adapted for this repo, which styles every coss-derived component in StyleX rather than with utility classes.
 license: MIT
 metadata:
   author: cosscom
@@ -41,7 +41,8 @@ Use this skill to:
 3. Follow coss naming and APIs from docs exactly.
 4. Keep examples accessible and production-realistic.
 5. Prefer concise code that mirrors coss docs/particles conventions.
-6. Assume Tailwind CSS v4 conventions in coss examples and setup guidance.
+6. Translate upstream coss examples into StyleX — take their structure and
+   composition, never their class strings. See `packages/ui/STYLEX.md`.
 
 ## Critical usage rules
 
@@ -56,7 +57,7 @@ Always apply before returning coss code:
 
 Rule references (read on demand when the task touches these areas):
 
-- `./references/rules/styling.md` — Tailwind tokens, icon conventions, data-slot selectors
+- `./references/rules/styling.md` — StyleX tokens, icon conventions, data-slot selectors
 - `./references/rules/forms.md` — Field composition, validation, input patterns
 - `./references/rules/composition.md` — Trigger/popup hierarchies, grouped controls
 - `./references/rules/migration.md` — shadcn/Radix to coss/Base UI migration patterns

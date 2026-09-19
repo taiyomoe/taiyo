@@ -5,7 +5,7 @@ import { mergeProps } from "@base-ui/react/merge-props"
 import { useRender } from "@base-ui/react/use-render"
 import * as stylex from "@stylexjs/stylex"
 import type React from "react"
-import { cn } from "@/lib/utils"
+import { cn } from "@/utils/cn"
 import { Close } from "@/components/icons"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
@@ -223,8 +223,8 @@ const popupVariantStyles = stylex.create({
       default: null,
       [consts.sm]: 1,
     },
-    // The Tailwind source hid the ::before edge for inset sheets entirely
-    // (`before:hidden`); reproduced faithfully.
+    // Inset sheets float clear of the viewport edge and already read as
+    // raised, so they drop the ::before hairline entirely.
     "::before": {
       display: "none",
     },

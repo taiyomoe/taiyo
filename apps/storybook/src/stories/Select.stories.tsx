@@ -1,3 +1,4 @@
+import * as stylex from "@stylexjs/stylex"
 import preview from "@/storybook/preview"
 import {
   Select,
@@ -17,6 +18,14 @@ const items = [
   { value: "mono", label: "Monospace" },
   { value: "cursive", label: "Cursive" },
 ]
+const styles = stylex.create({
+  column: {
+    gap: "0.5rem",
+    alignItems: "stretch",
+    display: "flex",
+    flexDirection: "column",
+  },
+})
 const meta = preview.meta({
   title: "UI/Select",
   component: Select,
@@ -48,7 +57,7 @@ export const Default = meta.story({})
 
 export const Sizes = meta.story({
   render: (args) => (
-    <div className="flex flex-col items-stretch gap-2">
+    <div sx={styles.column}>
       <Select {...args}>
         <SelectTrigger size="sm">
           <SelectValue placeholder="Small" />

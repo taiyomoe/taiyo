@@ -1,4 +1,0 @@
-{
-  "$schema": "./node_modules/knip/schema.json",
-  "ignoreWorkspaces": ["./packages/db"]
-}

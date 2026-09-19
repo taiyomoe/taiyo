@@ -4,7 +4,7 @@ import { NumberField as NumberFieldPrimitive } from "@base-ui/react/number-field
 import * as stylex from "@stylexjs/stylex"
 import * as React from "react"
 import { Label } from "@/components/ui/label"
-import { cn } from "@/lib/utils"
+import { cn } from "@/utils/cn"
 import { Minus, Plus } from "@/components/icons"
 import type { Sx } from "../../styles/sx"
 import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
@@ -17,8 +17,8 @@ export const NumberFieldContext: React.Context<{
   fieldId: string
 } | null>(null)
 
-/** Size travels down to the input and the steppers, as it did through the
- * Tailwind `in-data-[size=…]` ancestor selectors. */
+/** Size travels down to the input and the steppers, which are nested too
+ * deep for any selector StyleX offers to reach. */
 const NumberFieldSizeContext = React.createContext<NumberFieldSize>("default")
 const styles = stylex.create({
   root: {

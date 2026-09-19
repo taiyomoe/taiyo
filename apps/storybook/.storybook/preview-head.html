@@ -3,4 +3,12 @@
   body {
     position: relative;
   }
+
+  /* Sidebar stories: a label that has to disappear when the rail collapses to
+     icons. The state lives on the sidebar root, several levels above, which is
+     out of reach for StyleX (no descendant selectors) — so it is a plain rule,
+     scoped to the opt-in attribute the story puts on the label. */
+  [data-collapsible="icon"] [data-hide-when-collapsed] {
+    display: none;
+  }
 </style>

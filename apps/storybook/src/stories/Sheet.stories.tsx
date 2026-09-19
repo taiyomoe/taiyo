@@ -1,3 +1,4 @@
+import * as stylex from "@stylexjs/stylex"
 import preview from "@/storybook/preview"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { Input } from "@taiyomoe/ui/components/ui/input"
@@ -14,6 +15,32 @@ import {
   SheetTrigger,
 } from "@taiyomoe/ui/components/ui/sheet"
 
+const styles = stylex.create({
+  grid: {
+    gap: "1.5rem",
+    display: "grid",
+    gridAutoRows: "min-content",
+  },
+  grid2: {
+    gap: "0.75rem",
+    display: "grid",
+  },
+  row: {
+    gap: "0.5rem",
+    flexDirection: "row",
+  },
+  anchor: {
+    width: "66.666667%",
+  },
+  anchor2: {
+    width: "33.333333%",
+  },
+  wrap: {
+    gap: "0.5rem",
+    display: "flex",
+    flexWrap: "wrap",
+  },
+})
 const meta = preview.meta({
   title: "UI/Sheet",
   component: Sheet,
@@ -45,22 +72,22 @@ export const Default = meta.story({
           </SheetDescription>
         </SheetHeader>
         <SheetPanel>
-          <div className="grid auto-rows-min gap-6">
-            <div className="grid gap-3">
+          <div sx={styles.grid}>
+            <div sx={styles.grid2}>
               <Label htmlFor="sheet-name">Name</Label>
               <Input defaultValue="John Doe" id="sheet-name" />
             </div>
-            <div className="grid gap-3">
+            <div sx={styles.grid2}>
               <Label htmlFor="sheet-username">Username</Label>
               <Input defaultValue="@john-doe" id="sheet-username" />
             </div>
           </div>
         </SheetPanel>
-        <SheetFooter className="flex-row gap-2">
-          <Button className="w-2/3" type="submit">
+        <SheetFooter sx={styles.row}>
+          <Button sx={styles.anchor} type="submit">
             Save changes
           </Button>
-          <SheetClose render={<Button className="w-1/3" variant="outline" />}>Close</SheetClose>
+          <SheetClose render={<Button sx={styles.anchor2} variant="outline" />}>Close</SheetClose>
         </SheetFooter>
       </SheetContent>
     </Sheet>
@@ -69,7 +96,7 @@ export const Default = meta.story({
 
 export const Sides = meta.story({
   render: () => (
-    <div className="flex flex-wrap gap-2">
+    <div sx={styles.wrap}>
       {(["top", "right", "bottom", "left"] as const).map((side) => (
         <Sheet key={side}>
           <SheetTrigger render={<Button variant="outline" />}>Open {side}</SheetTrigger>
@@ -97,22 +124,22 @@ export const Inset = meta.story({
           </SheetDescription>
         </SheetHeader>
         <SheetPanel>
-          <div className="grid auto-rows-min gap-6">
-            <div className="grid gap-3">
+          <div sx={styles.grid}>
+            <div sx={styles.grid2}>
               <Label htmlFor="sheet-name">Name</Label>
               <Input defaultValue="John Doe" id="sheet-name" />
             </div>
-            <div className="grid gap-3">
+            <div sx={styles.grid2}>
               <Label htmlFor="sheet-username">Username</Label>
               <Input defaultValue="@john-doe" id="sheet-username" />
             </div>
           </div>
         </SheetPanel>
-        <SheetFooter className="flex-row gap-2">
-          <Button className="w-2/3" type="submit">
+        <SheetFooter sx={styles.row}>
+          <Button sx={styles.anchor} type="submit">
             Save changes
           </Button>
-          <SheetClose render={<Button className="w-1/3" variant="outline" />}>Close</SheetClose>
+          <SheetClose render={<Button sx={styles.anchor2} variant="outline" />}>Close</SheetClose>
         </SheetFooter>
       </SheetContent>
     </Sheet>
@@ -131,22 +158,22 @@ export const WithoutCloseButton = meta.story({
           </SheetDescription>
         </SheetHeader>
         <SheetPanel>
-          <div className="grid auto-rows-min gap-6">
-            <div className="grid gap-3">
+          <div sx={styles.grid}>
+            <div sx={styles.grid2}>
               <Label htmlFor="sheet-name">Name</Label>
               <Input defaultValue="John Doe" id="sheet-name" />
             </div>
-            <div className="grid gap-3">
+            <div sx={styles.grid2}>
               <Label htmlFor="sheet-username">Username</Label>
               <Input defaultValue="@john-doe" id="sheet-username" />
             </div>
           </div>
         </SheetPanel>
-        <SheetFooter className="flex-row gap-2">
-          <Button className="w-2/3" type="submit">
+        <SheetFooter sx={styles.row}>
+          <Button sx={styles.anchor} type="submit">
             Save changes
           </Button>
-          <SheetClose render={<Button className="w-1/3" variant="outline" />}>Close</SheetClose>
+          <SheetClose render={<Button sx={styles.anchor2} variant="outline" />}>Close</SheetClose>
         </SheetFooter>
       </SheetContent>
     </Sheet>
@@ -165,22 +192,22 @@ export const NonDismissible = meta.story({
           </SheetDescription>
         </SheetHeader>
         <SheetPanel>
-          <div className="grid auto-rows-min gap-6">
-            <div className="grid gap-3">
+          <div sx={styles.grid}>
+            <div sx={styles.grid2}>
               <Label htmlFor="sheet-name">Name</Label>
               <Input defaultValue="John Doe" id="sheet-name" />
             </div>
-            <div className="grid gap-3">
+            <div sx={styles.grid2}>
               <Label htmlFor="sheet-username">Username</Label>
               <Input defaultValue="@john-doe" id="sheet-username" />
             </div>
           </div>
         </SheetPanel>
-        <SheetFooter className="flex-row gap-2">
-          <Button className="w-2/3" type="submit">
+        <SheetFooter sx={styles.row}>
+          <Button sx={styles.anchor} type="submit">
             Save changes
           </Button>
-          <SheetClose render={<Button className="w-1/3" variant="outline" />}>Close</SheetClose>
+          <SheetClose render={<Button sx={styles.anchor2} variant="outline" />}>Close</SheetClose>
         </SheetFooter>
       </SheetContent>
     </Sheet>

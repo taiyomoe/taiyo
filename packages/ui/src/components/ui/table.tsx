@@ -4,17 +4,15 @@ import { mergeProps } from "@base-ui/react/merge-props"
 import { useRender } from "@base-ui/react/use-render"
 import * as stylex from "@stylexjs/stylex"
 import * as React from "react"
-import { cn } from "@/lib/utils"
+import { cn } from "@/utils/cn"
 import type { Sx } from "../../styles/sx"
 import { colors, radius, shadows } from "../../styles/tokens.stylex"
 
 export type TableVariant = "default" | "card"
 
 /**
- * The Tailwind original pushed the variant down with `in-data-[variant=card]`
- * ancestor selectors. StyleX has no ancestor selectors that reach arbitrary
- * depth, and every element in this file is ours, so the variant travels
- * through context instead.
+ * StyleX has no ancestor selector that reaches arbitrary depth, and every
+ * element in this file is ours, so the variant travels through context.
  */
 const TableVariantContext = React.createContext<TableVariant>("default")
 const styles = stylex.create({

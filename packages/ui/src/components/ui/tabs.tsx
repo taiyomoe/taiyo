@@ -3,16 +3,15 @@
 import { Tabs as TabsPrimitive } from "@base-ui/react/tabs"
 import * as stylex from "@stylexjs/stylex"
 import * as React from "react"
-import { cn } from "@/lib/utils"
+import { cn } from "@/utils/cn"
 import type { Sx } from "../../styles/sx"
 import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
 
 export type TabsVariant = "default" | "underline"
 
 /**
- * The Tailwind original reached tabs from the list with
- * `*:hover:data-[slot=tabs-tab]:bg-accent`. StyleX has no child selectors, so
- * the list publishes its variant and each tab styles itself.
+ * StyleX has no child selectors, so the list cannot reach its tabs. It
+ * publishes its variant through context instead and each tab styles itself.
  */
 const TabsListContext = React.createContext<TabsVariant>("default")
 const styles = stylex.create({

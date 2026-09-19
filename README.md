@@ -41,7 +41,7 @@ taiyo/
 │   ├── schemas/           # Cross-package Zod schemas (pagination, etc.)
 │   ├── scripts/           # One-shot CLI scripts (init-meilisearch, etc.)
 │   ├── search/            # Meilisearch client + media sync + filter translator
-│   ├── ui/                # Shared React components (Tailwind 4 + Base UI)
+│   ├── ui/                # Shared React components (StyleX + Base UI)
 │   └── utils/             # Pure utility helpers (unit-tested)
 ├── docs/                  # Design proposals (group-ownership.md, …)
 └── tooling/
@@ -64,7 +64,7 @@ taiyo/
 **UI (`apps/storybook` + `packages/ui`):**
 
 - [React 19](https://react.dev/)
-- [Tailwind CSS 4](https://tailwindcss.com/)
+- [StyleX](https://stylexjs.com/) — compile-time atomic CSS; the only styling layer in the repo
 - [Base UI](https://base-ui.com/) for accessible primitives
 - Storybook 10 for component documentation
 
@@ -72,7 +72,7 @@ taiyo/
 
 - [TanStack Start](https://tanstack.com/start) (React) — SSR + file-based routing on [TanStack Router](https://tanstack.com/router)
 - [Vite 8](https://vite.dev/) with the `tanstackStart()` plugin
-- [Tailwind CSS 4](https://tailwindcss.com/) via `@tailwindcss/vite`
+- [StyleX](https://stylexjs.com/) via `@stylexjs/unplugin`
 - Scaffolded with the TanStack CLI; per-app context (including [TanStack Intent](https://tanstack.com/intent) skill mappings) lives in [`apps/web/AGENTS.md`](./apps/web/AGENTS.md)
 
 **Infrastructure (`docker-compose.yml`):**
@@ -208,7 +208,7 @@ A few `apps/api` values are derived from the Docker infra in the root `.env` and
 - **`@taiyomoe/schemas`** — shared Zod schemas (pagination meta, etc.)
 - **`@taiyomoe/scripts`** — CLI scripts (init-meilisearch, etc.)
 - **`@taiyomoe/search`** — Meilisearch client + media sync + search input schema
-- **`@taiyomoe/ui`** — React components on Tailwind 4 + Base UI
+- **`@taiyomoe/ui`** — React components on StyleX + Base UI
 - **`@taiyomoe/utils`** — pure helpers (unit-tested)
 
 ## 🚀 Deployment

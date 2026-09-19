@@ -1,6 +1,21 @@
+import * as stylex from "@stylexjs/stylex"
+import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
 import preview from "@/storybook/preview"
 import { Kbd, KbdGroup } from "@taiyomoe/ui/components/ui/kbd"
 
+const styles = stylex.create({
+  column: {
+    gap: "0.75rem",
+    alignItems: "flex-start",
+    display: "flex",
+    flexDirection: "column",
+  },
+  caption: {
+    color: colors.mutedForeground,
+    fontSize: "0.75rem",
+    lineHeight: "1rem",
+  },
+})
 const meta = preview.meta({
   title: "UI/Kbd",
   component: Kbd,
@@ -23,7 +38,7 @@ export const WithModifiers = meta.story({
 
 export const Combinations = meta.story({
   render: () => (
-    <div className="flex flex-col items-start gap-3">
+    <div sx={styles.column}>
       <KbdGroup>
         <Kbd>⌘</Kbd>
         <Kbd>K</Kbd>
@@ -35,9 +50,9 @@ export const Combinations = meta.story({
       </KbdGroup>
       <KbdGroup>
         <Kbd>Ctrl</Kbd>
-        <span className="text-xs text-muted-foreground">+</span>
+        <span sx={styles.caption}>+</span>
         <Kbd>Alt</Kbd>
-        <span className="text-xs text-muted-foreground">+</span>
+        <span sx={styles.caption}>+</span>
         <Kbd>Del</Kbd>
       </KbdGroup>
     </div>

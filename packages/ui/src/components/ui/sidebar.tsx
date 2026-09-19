@@ -12,7 +12,7 @@ import { Sheet, SheetDescription, SheetHeader, SheetPopup, SheetTitle } from "@/
 import { Skeleton } from "@/components/ui/skeleton"
 import { Tooltip, TooltipPopup, TooltipTrigger } from "@/components/ui/tooltip"
 import { useMediaQuery } from "@/hooks/use-media-query"
-import { cn } from "@/lib/utils"
+import { cn } from "@/utils/cn"
 import { PanelLeft } from "@/components/icons"
 import type { Sx } from "../../styles/sx"
 import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
@@ -35,10 +35,9 @@ export type SidebarMenuButtonSize = "default" | "sm" | "lg"
 export type SidebarMenuButtonVariant = "default" | "outline"
 
 /**
- * The Tailwind original reached every descendant with
- * `group-data-[collapsible=icon]` / `peer-data-[variant=inset]` selectors on
- * the sidebar root. StyleX has no such selectors, so `Sidebar` publishes its
- * layout props and each part decides for itself.
+ * StyleX has no ancestor or sibling selector that reaches every descendant of
+ * the sidebar root, so `Sidebar` publishes its layout props through context
+ * and each part decides for itself how to render.
  */
 const SidebarLayoutContext = React.createContext<{
   collapsible: SidebarCollapsible

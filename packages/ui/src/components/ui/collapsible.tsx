@@ -3,7 +3,8 @@
 import { Collapsible as CollapsiblePrimitive } from "@base-ui/react/collapsible"
 import * as stylex from "@stylexjs/stylex"
 import type React from "react"
-import { cn } from "@/lib/utils"
+import { cn } from "@/utils/cn"
+import { collapsibleTriggerMarker } from "../../styles/markers.stylex"
 import type { Sx } from "../../styles/sx"
 
 const styles = stylex.create({
@@ -20,11 +21,25 @@ const styles = stylex.create({
   },
 })
 
-export function Collapsible({ ...props }: CollapsiblePrimitive.Root.Props): React.ReactElement {
-  return <CollapsiblePrimitive.Root data-slot="collapsible" {...props} />
+/** See the note on SeparatorProps for why `className` sits alongside `sx`. */
+export type CollapsibleProps = CollapsiblePrimitive.Root.Props & {
+  sx?: Sx
 }
 
-/** See the note on SeparatorProps: `className` stays until callers migrate. */
+export function Collapsible({ className, sx, ...props }: CollapsibleProps): React.ReactElement {
+  const styleProps = stylex.props(sx)
+
+  return (
+    <CollapsiblePrimitive.Root
+      className={cn(styleProps.className, className)}
+      data-slot="collapsible"
+      style={styleProps.style}
+      {...props}
+    />
+  )
+}
+
+/** See the note on SeparatorProps for why `className` sits alongside `sx`. */
 export type CollapsibleTriggerProps = CollapsiblePrimitive.Trigger.Props & {
   sx?: Sx
 }
@@ -34,7 +49,9 @@ export function CollapsibleTrigger({
   sx,
   ...props
 }: CollapsibleTriggerProps): React.ReactElement {
-  const styleProps = stylex.props(sx)
+  // The marker lets a caller's chevron react to the panel opening: Base UI
+  // puts `data-panel-open` on this trigger, not on the icon inside it.
+  const styleProps = stylex.props(collapsibleTriggerMarker, sx)
 
   return (
     <CollapsiblePrimitive.Trigger

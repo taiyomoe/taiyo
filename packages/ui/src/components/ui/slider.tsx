@@ -3,7 +3,7 @@
 import { Slider as SliderPrimitive } from "@base-ui/react/slider"
 import * as stylex from "@stylexjs/stylex"
 import * as React from "react"
-import { cn } from "@/lib/utils"
+import { cn } from "@/utils/cn"
 import type { Sx } from "../../styles/sx"
 import { colors, radius, shadows } from "../../styles/tokens.stylex"
 

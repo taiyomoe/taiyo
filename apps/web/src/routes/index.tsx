@@ -39,7 +39,7 @@ const styles = stylex.create({
  */
 function Home() {
   return (
-    <div data-landing {...stylex.props(styles.page)}>
+    <div data-landing sx={styles.page}>
       <LandingNav />
       <LandingHero />
       <LandingMarquee />

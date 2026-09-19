@@ -1,7 +1,19 @@
+import * as stylex from "@stylexjs/stylex"
 import preview from "@/storybook/preview"
 import { Textarea } from "@taiyomoe/ui/components/ui/textarea"
 import { fn } from "storybook/test"
 
+const styles = stylex.create({
+  anchor: {
+    width: "20rem",
+  },
+  column: {
+    gap: "0.75rem",
+    display: "flex",
+    flexDirection: "column",
+    width: "20rem",
+  },
+})
 const meta = preview.meta({
   title: "UI/Textarea",
   component: Textarea,
@@ -16,7 +28,7 @@ const meta = preview.meta({
     onChange: fn(),
   },
   render: (args) => (
-    <div className="w-80">
+    <div sx={styles.anchor}>
       <Textarea {...args} />
     </div>
   ),
@@ -26,7 +38,7 @@ export const Default = meta.story({})
 
 export const Sizes = meta.story({
   render: () => (
-    <div className="flex w-80 flex-col gap-3">
+    <div sx={styles.column}>
       <Textarea placeholder="Small textarea" size="sm" />
       <Textarea placeholder="Default textarea" size="default" />
       <Textarea placeholder="Large textarea" size="lg" />

@@ -1,17 +1,23 @@
 import stylex from "@stylexjs/unplugin"
-import tailwindcss from "@tailwindcss/vite"
 import react from "@vitejs/plugin-react"
 import { defineConfig } from "vite"
 
 export default defineConfig({
   plugins: [
-    // StyleX compiles ahead of the React transform. Tailwind still runs for
-    // the stories themselves and any not-yet-migrated component.
+    // StyleX compiles ahead of the React transform.
     stylex.vite({
-      // Unlayered on purpose: the dev CSS is injected in racy order with
-      // Tailwind's sheets, and unlayered StyleX atoms always beat Tailwind's
-      // layered preflight/utilities regardless of injection order.
-      useCSSLayers: false,
+      // An explicit, identical cascade in both apps:
+      //
+      //   base        @taiyomoe/ui's reset.css + document defaults
+      //   structural  its structural.css, the cross-element rules StyleX
+      //               cannot express
+      //   stylex.*    every component's own styles
+      //
+      // Naming the first two in `before` is what makes that order a decision
+      // rather than a side effect of import order. It also keeps the contract
+      // structural.css is written against: it may freely ADD a declaration
+      // StyleX does not set, and needs `!important` to override one.
+      useCSSLayers: { before: ["base", "structural"] },
       dev: process.env.NODE_ENV === "development",
       runtimeInjection: false,
       unstable_moduleResolution: { type: "commonJS", rootDir: import.meta.dirname },
@@ -21,7 +27,6 @@ export default defineConfig({
       // missing from its UserOptions type in 0.19.0; cast until upstream adds it.
       externalPackages: ["@taiyomoe/ui"],
     } as Parameters<typeof stylex.vite>[0]),
-    tailwindcss(),
     react(),
   ],
   resolve: { tsconfigPaths: true },

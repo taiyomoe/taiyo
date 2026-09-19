@@ -25,8 +25,9 @@ run in a throwaway scratch directory and its output was merged in here.
 - **Exact CLI command (as requested):**
   `npx @tanstack/cli@latest create my-tanstack-app --agent`
   - `--agent` runs non-interactively and auto-wires TanStack Intent. It resolved to
-    `@tanstack/cli@0.69.3` and defaulted to `framework: react`, `tailwind: true`,
+    `@tanstack/cli@0.69.3` and defaulted to `framework: react`,
     `includeExamples: true`, `chosenAddOns: []`, no toolchain (no Biome/ESLint).
+    Its CSS-framework default was later removed outright — see **Styling** below.
 - **Re-run for a truly blank app:** the command above defaulted to
   `includeExamples: true`, which emits demo pages + themed `Header`/`Footer`/
   `ThemeToggle` components — i.e. feature scaffolding. To honor the "blank starter,
@@ -44,13 +45,19 @@ run in a throwaway scratch directory and its output was merged in here.
   - `npx @tanstack/intent@latest load <package>#<skill>` → loads a specific
     `SKILL.md` (e.g. `@tanstack/start-client-core#start-core`). **Load the relevant
     skill before architectural or library-specific changes — don't guess.**
-- `.cta.json` records the CLI's choices verbatim for provenance.
 
 ## Stack & integrations
 
 - **Framework:** TanStack Start (React) — SSR + file-based routing via TanStack Router.
 - **Build:** Vite 8 with the `tanstackStart()` plugin (must precede `viteReact()`).
-- **Styling:** Tailwind CSS v4 via `@tailwindcss/vite` (`@import "tailwindcss"` in `src/styles.css`).
+- **Styling:** StyleX via `@stylexjs/unplugin`, and nothing else — the repo has no
+  utility-class framework. Components style themselves with `stylex.create`, read
+  tokens from `@taiyomoe/ui/styles/tokens.stylex`, and accept caller overrides
+  through an `sx` prop. `src/styles.css` is reserved for what StyleX cannot own:
+  global `@keyframes` the scene animations share, and the handful of descendant
+  rules that reach into `@taiyomoe/ui`'s internals (see `[data-auth-fields]`).
+  The brand-scene palette — always night, in both themes — lives in
+  `src/components/scene/scene.stylex.ts`, deliberately outside the semantic tokens.
 - **Devtools:** `@tanstack/react-devtools` + router devtools panel + `@tanstack/devtools-vite`.
 - **Routing:** `src/routes/*` → `src/routeTree.gen.ts` (generated; committed).
 - **Toolchain:** kept the CLI default (no Biome/ESLint). Lint/format are handled at
@@ -61,8 +68,8 @@ run in a throwaway scratch directory and its output was merged in here.
 
 ## Environment variables
 
-**None.** The blank starter reads no environment variables (`.cta.json envVarValues`
-is empty). The monorepo's shared `.env` (see root `.env.example`) is unrelated to
+**None.** The blank starter reads no environment variables — the scaffold recorded
+none. The monorepo's shared `.env` (see root `.env.example`) is unrelated to
 this app today. If you later add server functions that need secrets, follow the
 `apps/api` pattern (`dotenv -e ../../.env --` via a `with-env` script) and register
 any new keys in root `turbo.json` `globalEnv`.
@@ -97,14 +104,14 @@ react-jsx`, DOM libs, `vite/client` types, and a single `@/*` path alias. The CL
 4. **Versions pinned & aligned with the workspace.** The CLI emitted several deps as
    `latest`; these were pinned to the resolved versions and aligned with the
    versions already used by `apps/storybook` / root (react 19.2.7, vite 8.0.16,
-   typescript 6.0.3, @tailwindcss/vite 4.3.0, etc.) so the `postinstall` **sherif**
+   typescript 6.0.3, @stylexjs/unplugin 0.19.0, etc.) so the `postinstall` **sherif**
    workspace check passes.
 
 ## Deviations from raw CLI output (and why)
 
 - **Dropped unused deps** to satisfy the monorepo's `knip`/`sherif` tooling — none
-  are imported by the blank starter: `lucide-react` (icons), `@tailwindcss/typography`
-  (prose), `@tanstack/react-router-ssr-query` (TanStack Query↔Router SSR; no
+  are imported by the blank starter: `lucide-react` (icons), the CSS framework's
+  typography plugin, `@tanstack/react-router-ssr-query` (TanStack Query↔Router SSR; no
   QueryClient here), and the test stack (`vitest`, `@testing-library/*`, `jsdom`)
   plus the `test` script (root owns testing).
 - **Dropped the app-level `pnpm.onlyBuiltDependencies` field** — build-script

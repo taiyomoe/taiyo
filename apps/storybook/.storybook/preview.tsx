@@ -2,7 +2,7 @@ import addonDocs from "@storybook/addon-docs"
 import { withThemeByClassName } from "@storybook/addon-themes"
 import { definePreview } from "@storybook/react-vite"
 import * as stylex from "@stylexjs/stylex"
-import { darkShadows, darkTheme } from "@taiyomoe/ui/styles/tokens.stylex"
+import { darkShadows, darkTheme } from "@taiyomoe/ui/styles/themes"
 import { useEffect } from "react"
 import "@taiyomoe/ui/style.css"
 
@@ -12,6 +12,20 @@ import "@taiyomoe/ui/style.css"
 const darkClassNames = (stylex.props(darkTheme, darkShadows).className ?? "")
   .split(" ")
   .filter(Boolean)
+// Every story renders into this. `isolate` gives popups and backdrops a
+// stacking context of their own, so one story's overlay cannot paint over
+// Storybook's chrome.
+const styles = stylex.create({
+  canvas: {
+    alignItems: "center",
+    display: "flex",
+    flexDirection: "column",
+    isolation: "isolate",
+    justifyContent: "center",
+    position: "relative",
+    height: "100%",
+  },
+})
 
 export default definePreview({
   addons: [addonDocs()],
@@ -38,7 +52,7 @@ export default definePreview({
       }, [isDark])
 
       return (
-        <div className="relative isolate flex h-full flex-col items-center justify-center">
+        <div {...stylex.props(styles.canvas)}>
           <Story />
         </div>
       )

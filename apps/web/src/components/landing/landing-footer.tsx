@@ -40,6 +40,11 @@ const COLUMNS = [
   },
 ]
 const styles = stylex.create({
+  lockup: {
+    gap: "0.75rem",
+    fontSize: "21px",
+    fontWeight: 700,
+  },
   footer: {
     backgroundColor: scene.nightDeep,
     borderTopColor: `color-mix(in srgb, ${scene.paper} 7%, transparent)`,
@@ -123,21 +128,21 @@ const styles = stylex.create({
 })
 
 export const LandingFooter = () => (
-  <footer {...stylex.props(styles.footer)}>
+  <footer sx={styles.footer}>
     <Section>
-      <div {...stylex.props(styles.grid)}>
+      <div sx={styles.grid}>
         <div>
           <Link to="/" {...stylex.props(styles.brand)}>
-            <TaiyoLogoLockup className="gap-3 text-[21px] font-bold" />
+            <TaiyoLogoLockup sx={styles.lockup} />
           </Link>
-          <p {...stylex.props(styles.tagline)}>{m.landing_footer_tagline()}</p>
+          <p sx={styles.tagline}>{m.landing_footer_tagline()}</p>
         </div>
         {COLUMNS.map((column) => (
           <div key={column.heading()}>
-            <div {...stylex.props(styles.heading)}>{column.heading()}</div>
-            <div {...stylex.props(styles.links)}>
+            <div sx={styles.heading}>{column.heading()}</div>
+            <div sx={styles.links}>
               {column.links.map((link) => (
-                <a key={link.label()} href={link.href} {...stylex.props(styles.link)}>
+                <a key={link.label()} href={link.href} sx={styles.link}>
                   {link.label()}
                 </a>
               ))}
@@ -145,16 +150,16 @@ export const LandingFooter = () => (
           </div>
         ))}
       </div>
-      <div {...stylex.props(styles.base)}>
-        <span {...stylex.props(styles.copyright)}>{m.landing_footer_copyright()}</span>
-        <div {...stylex.props(styles.legal)}>
+      <div sx={styles.base}>
+        <span sx={styles.copyright}>{m.landing_footer_copyright()}</span>
+        <div sx={styles.legal}>
           <Link to="/terms" {...stylex.props(styles.legalLink)}>
             {m.landing_footer_terms()}
           </Link>
           <Link to="/privacy" {...stylex.props(styles.legalLink)}>
             {m.landing_footer_privacy()}
           </Link>
-          <a href="#" {...stylex.props(styles.legalLink)}>
+          <a href="#" sx={styles.legalLink}>
             {m.landing_footer_content_policy()}
           </a>
         </div>

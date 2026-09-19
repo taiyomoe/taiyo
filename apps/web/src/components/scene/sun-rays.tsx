@@ -125,7 +125,7 @@ export const SunRays = ({
   const bandProps = stylex.props(styles.band)
 
   return (
-    <div {...stylex.props(styles.field)}>
+    <div sx={styles.field}>
       <div
         className={spinnerProps.className}
         style={{

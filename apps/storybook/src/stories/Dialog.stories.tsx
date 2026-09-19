@@ -1,3 +1,4 @@
+import * as stylex from "@stylexjs/stylex"
 import preview from "@/storybook/preview"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import {
@@ -15,6 +16,17 @@ import { Input } from "@taiyomoe/ui/components/ui/input"
 import { Label } from "@taiyomoe/ui/components/ui/label"
 import { fn } from "storybook/test"
 
+const styles = stylex.create({
+  grid: {
+    gap: "1.5rem",
+    display: "grid",
+    gridAutoRows: "min-content",
+  },
+  grid2: {
+    gap: "0.75rem",
+    display: "grid",
+  },
+})
 const meta = preview.meta({
   title: "UI/Dialog",
   component: Dialog,
@@ -44,12 +56,12 @@ export const Default = meta.story({
           </DialogDescription>
         </DialogHeader>
         <DialogPanel>
-          <div className="grid auto-rows-min gap-6">
-            <div className="grid gap-3">
+          <div sx={styles.grid}>
+            <div sx={styles.grid2}>
               <Label htmlFor="dialog-name">Name</Label>
               <Input defaultValue="John Doe" id="dialog-name" />
             </div>
-            <div className="grid gap-3">
+            <div sx={styles.grid2}>
               <Label htmlFor="dialog-username">Username</Label>
               <Input defaultValue="@john-doe" id="dialog-username" />
             </div>
@@ -76,12 +88,12 @@ export const WithoutCloseButton = meta.story({
           </DialogDescription>
         </DialogHeader>
         <DialogPanel>
-          <div className="grid auto-rows-min gap-6">
-            <div className="grid gap-3">
+          <div sx={styles.grid}>
+            <div sx={styles.grid2}>
               <Label htmlFor="dialog-name">Name</Label>
               <Input defaultValue="John Doe" id="dialog-name" />
             </div>
-            <div className="grid gap-3">
+            <div sx={styles.grid2}>
               <Label htmlFor="dialog-username">Username</Label>
               <Input defaultValue="@john-doe" id="dialog-username" />
             </div>
@@ -108,12 +120,12 @@ export const BareFooter = meta.story({
           </DialogDescription>
         </DialogHeader>
         <DialogPanel>
-          <div className="grid auto-rows-min gap-6">
-            <div className="grid gap-3">
+          <div sx={styles.grid}>
+            <div sx={styles.grid2}>
               <Label htmlFor="dialog-name">Name</Label>
               <Input defaultValue="John Doe" id="dialog-name" />
             </div>
-            <div className="grid gap-3">
+            <div sx={styles.grid2}>
               <Label htmlFor="dialog-username">Username</Label>
               <Input defaultValue="@john-doe" id="dialog-username" />
             </div>
@@ -140,12 +152,12 @@ export const NoMobileStick = meta.story({
           </DialogDescription>
         </DialogHeader>
         <DialogPanel>
-          <div className="grid auto-rows-min gap-6">
-            <div className="grid gap-3">
+          <div sx={styles.grid}>
+            <div sx={styles.grid2}>
               <Label htmlFor="dialog-name">Name</Label>
               <Input defaultValue="John Doe" id="dialog-name" />
             </div>
-            <div className="grid gap-3">
+            <div sx={styles.grid2}>
               <Label htmlFor="dialog-username">Username</Label>
               <Input defaultValue="@john-doe" id="dialog-username" />
             </div>

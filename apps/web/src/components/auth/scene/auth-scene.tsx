@@ -1,18 +1,61 @@
+import * as stylex from "@stylexjs/stylex"
+import { TaiyoLogoLockup } from "@taiyomoe/ui/components/logos/taiyo-logo-lockup"
+import { font } from "@taiyomoe/ui/styles/tokens.stylex"
+import { Link } from "@tanstack/react-router"
+
 import { AuthCitations } from "@/components/auth/scene/auth-citations"
 import { AuthSun } from "@/components/auth/scene/auth-sun"
 import { Embers } from "@/components/scene/embers"
+import { scene } from "@/components/scene/scene.stylex"
 import { m } from "@/paraglide/messages"
-import { Link } from "@tanstack/react-router"
-import { TaiyoLogoLockup } from "@taiyomoe/ui/components/logos/taiyo-logo-lockup"
+
+// The scene is decoration: below `lg` there is no room for it beside the form,
+// so it is not rendered at all rather than stacked.
+const LG = "@media (width >= 64rem)"
+const styles = stylex.create({
+  root: {
+    overflow: "hidden",
+    paddingBlock: "2.75rem",
+    paddingInline: "3.5rem",
+    backgroundColor: scene.night,
+    display: { [LG]: "flex", default: "none" },
+    flexDirection: "column",
+    justifyContent: "space-between",
+    position: "relative",
+  },
+  // z-3 lifts the foreground clear of the sun, the embers and the vignette,
+  // all of which are absolutely positioned children of the same box.
+  logo: {
+    opacity: { default: 1, ":hover": 0.8 },
+    position: "relative",
+    transitionDuration: "150ms",
+    transitionProperty: "opacity",
+    zIndex: 3,
+    width: "fit-content",
+  },
+  lockup: {
+    gap: "0.75rem",
+    fontSize: "26px",
+    fontWeight: 700,
+    letterSpacing: "-0.02em",
+  },
+  tagline: {
+    color: `color-mix(in srgb, ${scene.paper} 40%, transparent)`,
+    fontFamily: font.mono,
+    fontSize: "13px",
+    position: "relative",
+    zIndex: 3,
+  },
+})
 
 export const AuthScene = () => (
-  <div className="relative hidden flex-col justify-between overflow-hidden bg-[#120a07] px-14 py-11 lg:flex">
+  <div sx={styles.root}>
     <AuthSun />
     <Embers />
-    <Link to="/" className="relative z-3 w-fit transition-opacity hover:opacity-80">
-      <TaiyoLogoLockup className="gap-3 text-[26px] font-bold tracking-[-0.02em]" />
+    <Link to="/" {...stylex.props(styles.logo)}>
+      <TaiyoLogoLockup sx={styles.lockup} />
     </Link>
     <AuthCitations />
-    <div className="relative z-3 font-mono text-[13px] text-white/40">{m.auth_tagline()}</div>
+    <div sx={styles.tagline}>{m.auth_tagline()}</div>
   </div>
 )

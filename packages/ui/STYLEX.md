@@ -1,26 +1,51 @@
-# Tailwind → StyleX conversion guide (packages/ui)
+# Authoring components with StyleX (packages/ui)
 
-Every component in `src/components/ui` is being rewritten from Tailwind class
-strings to StyleX. `button.tsx`, `separator.tsx` and `skeleton.tsx` are the
-reference conversions — read them before converting anything.
+Every component in `src/components/ui` is styled in StyleX and nothing else —
+there is no utility-class framework anywhere in the monorepo. `button.tsx`,
+`separator.tsx` and `skeleton.tsx` are the reference files; read them before
+writing a new component.
 
 ## Non-negotiable conventions
 
-1. **Component API is preserved.** Same exports, same props, same `data-slot`
-   attributes, same DOM structure, same Base UI primitives. Consumers must not
-   need changes (exception: `*Variants` cva exports become plain functions that
-   return a className string — keep the export name).
-2. **`sx` prop** (`sx?: Sx`, imported from `../../styles/sx`) is the StyleX channel for callers.
-   It is always the LAST argument to `stylex.props()` so caller overrides win.
-   `className` stays as a legacy Tailwind shim: `className={cn(styleProps.className, className)}`.
+1. **`sx` prop** (`sx?: Sx`, imported from `../../styles/sx`) is the StyleX
+   channel for callers. It is always the LAST argument to `stylex.props()` so
+   caller overrides win. `className` stays as a plain DOM pass-through —
+   nothing in this package styles through it, but third-party libraries hand
+   components a class name to render (react-day-picker's `classNames` map, for
+   one) and tests target them: `className={cn(styleProps.className, className)}`.
    `style` stays React's inline-style prop: `style={{ ...styleProps.style, ...style }}`
-   when the component previously accepted `style`, else `style={styleProps.style}`.
+   when the component accepts `style`, else `style={styleProps.style}`.
+2. **`sx` on a host element is a compiler feature; on a component it is just a
+   prop.** `sxPropName` (default `"sx"`) makes the compiler rewrite
+   `<div sx={styles.x} />` into `<div {...stylex.props(styles.x)} />` — but
+   only for LOWERCASE JSX names. On a component, `sx` is an ordinary prop that
+   works if and only if that component plumbs it into its own
+   `stylex.props()`. Every component in this package does. A third-party one
+   (`HugeiconsIcon`, a lucide icon) does NOT: pass it `{...stylex.props(…)}`
+   instead.
+
+   **A file using `sx` on a host element MUST import `@stylexjs/stylex`**, even
+   if nothing in it calls `stylex.*`. The bundler plugin only processes files
+   that import StyleX; without the import the file is skipped whole, `sx` stays
+   a meaningless DOM attribute, and every style in it silently stops applying.
+   `oxlint` will report that import as unused — keep it, with an
+   `oxlint-disable-next-line no-unused-vars` and a note saying why.
+
+   TypeScript will not catch either mistake. `src/styles/sx.ts` augments React's
+   `DOMAttributes` so `sx` type-checks on host elements, and that augmentation
+   is inherited by any component whose props extend `HTMLAttributes` or
+   `SVGAttributes` — which is most of them. `sx` on a third-party icon
+   type-checks and silently does nothing. The symptom is a style that simply
+   never applies; check the rendered DOM for the atom class before assuming
+   the style itself is wrong.
+
 3. **Tokens only.** Colors, radii, shadows, fonts come from
-   `../../styles/tokens.stylex` (relative import — the StyleX compiler cannot resolve tsconfig aliases for token files) (`colors`, `radius`, `shadows`, `spacing`, `text`,
-   `font`, `consts`). Never hardcode a color. If the Tailwind source used a
-   `dark:` variant that is not just a token swap, add a semantic token pair to
-   `tokens.stylex.ts` (light value in `colors`/`shadows`, dark value in
-   `darkTheme`/`darkShadows`) instead — components must never know about themes.
+   `../../styles/tokens.stylex` — a relative import, because the StyleX
+   compiler cannot resolve tsconfig aliases for token files (`colors`, `radius`,
+   `shadows`, `spacing`, `text`, `font`, `consts`). Never hardcode a color. A
+   component must never know which theme is live: if light and dark need
+   different values, add a semantic token pair (light value in `colors`/
+   `shadows`, dark value in `darkTheme`/`darkShadows`) instead of branching.
    Existing semantic tokens: `chip` (raised chip surface), `chipHover`, `field`
    (input surface), `well` (sunken panel), and shadows `raised`, `overlay`,
    `sunken`, `edge` (1px surface edge for ::before), `emboss`, `pressed`.
@@ -107,18 +132,23 @@ same as looking the same:
   `"[data-checked]"`, `"[data-disabled]"`, `"[aria-invalid]"`,
   `"[data-popup-open]"`, `'[data-orientation="vertical"]'`… This is how Base UI
   state gets styled. They have no specificity priority (all equal), so when two
-  could match at once, later source order wins — order them accordingly.
+  could match at once, later source order wins — order them accordingly. When
+  an attribute condition would have to beat a pseudo-class on the same
+  property, don't rely on ordering: split the winner into its own style and
+  pass it as a later argument to `stylex.props()`.
 - **Banned by lint** (do not use): `:has()`, `:not()`, `:is()`, `:checked`,
   `:nth-child(2n)` (parameterized), `stylex.when.descendant`,
   `stylex.when.siblingAfter`, `stylex.when.anySibling`.
 - Allowed contextual: `stylex.when.ancestor(selector, marker)` and
   `stylex.when.siblingBefore(...)` with `stylex.defineMarker()` /
-  `stylex.defaultMarker()` spread on the ancestor. Use for `group-*` patterns
-  between OUR components (e.g. drawer nesting).
+  `stylex.defaultMarker()` spread on the ancestor. Use it to let one of OUR
+  components react to another's state (e.g. drawer nesting).
 - Pseudo-elements (`"::before"`, `"::after"`, `"::placeholder"`) are namespace-
   level keys inside a style object.
 - Breakpoints: `consts.sm` / `consts.pointerCoarse` / `consts.pointerFine` from
   tokens — use computed keys: `height: { default: "2.25rem", [consts.sm]: "2rem" }`.
+  Anything outside that set is an inline media-query string:
+  `{ default: "1fr", "@media (width >= 54rem)": "1.4fr repeat(3, 1fr)" }`.
 - **`stylex.when.*` keys are only legal at the FIRST level of a condition
   object.** `color: { default: x, [stylex.when.ancestor(":active", m)]: y }` is
   fine; nesting one level deeper (a media query under the `when` key, or a
@@ -127,6 +157,13 @@ same as looking the same:
   into a CSS custom property on the ancestor (`"--thumb-size": { default: …,
 [consts.sm]: … }`) and have the descendant read `var(--thumb-size)`.
   `consts.*` keys are exempt and work at any depth.
+- **`stylex.createTheme()` is all-or-nothing, even with a partial override.**
+  The types accept `createTheme(colors, { ring: gold })`, but the class it
+  produces re-declares the WHOLE group: applying it resets every other colour
+  on that subtree to the group's defaults (i.e. the light theme), silently
+  undoing `darkTheme` from `<html>`. Use it only for a complete theme. To
+  re-point one value for a subtree, set the plain CSS custom property that
+  consumes it (`"--ring": scene.gold` in a `stylex.create`) instead.
 - **`stylex.defineMarker()` only compiles inside a `*.stylex.ts` file, bound
   to a named export.** In a component file it fails the build with "must be
   bound to a named export" or "Unable to generate hash for defineMarker()" —
@@ -135,7 +172,12 @@ same as looking the same:
 - A given `stylex.when.*` key may appear only ONCE per property. Writing it in
   two branches of a nested value object fails the build with "The same pseudo
   selector or at-rule cannot be used more than once".
-- Grid line numbers must be strings: `gridColumnStart: "2"`, not `2`.
+- Grid line numbers must be strings: `gridColumnStart: "2"`, not `2`. So must
+  `flex`: `flex: "1"`, not `1`.
+- **`animationName` only accepts a `stylex.keyframes()` handle.** To drive an
+  element from a global `@keyframes` (the brand-scene animations in
+  `apps/web/src/styles.css`), set `animation` through the inline `style` prop
+  and merge it with `stylex.props(...).style`.
 - The `sx` prop is typed `Sx` (from `../../styles/sx`), NOT
   `stylex.StyleXStyles` — the latter rejects any style whose pseudo-element
   layer carries conditions. See that file for the reasoning.
@@ -157,13 +199,24 @@ same as looking the same:
   other, and a 0px-wide tab underline. Detect them by listing, for every
   `stylex.props()` call, the properties a later argument nulls that an earlier
   one sets.
-- **`structural.css` cannot override a StyleX declaration without
-  `!important`.** With `useCSSLayers: false`, StyleX emits every atom as
-  `.xxx:not(#\#):not(#\#)` — specificity (2,1,0), which no plain selector can
-  outrank. A rule there can freely ADD a declaration StyleX does not set (that
-  is the normal case), but overriding one always needs `!important`. The
-  symptom is silent: the rule matches, `document.querySelectorAll` finds the
-  element, and the computed value is still StyleX's.
+- **The cascade is three declared layers, identical in both apps.** Each app's
+  `stylex.vite()` names them with `useCSSLayers: { before: ["base",
+"structural"] }`, which emits `@layer base, structural, priority1, …`:
+  - `base` — `reset.css` and the document defaults in `globals.css`. It has to
+    lose to everything: an unlayered `* { margin: 0; padding: 0 }` would
+    outrank every padding a component declares and the system would render as
+    unstyled boxes.
+  - `structural` — `structural.css`. It may freely ADD a declaration StyleX
+    does not set (the normal case) and needs `!important` to override one.
+    Forgetting that is silent: the rule matches, `querySelectorAll` finds the
+    element, and the computed value is still StyleX's.
+  - `stylex.priority*` — every component's own styles, which win by default.
+
+  Anything left unlayered (an app's own `styles.css`) beats all three, which is
+  why `apps/web`'s `[data-auth-fields]` block can reach into @taiyomoe/ui.
+  Don't change the `before` list without re-checking both apps visually — it
+  decides which of two colliding declarations you actually see.
+
 - **Two StyleX styles merged as separate className STRINGS do not respect
   source order.** `stylex.props(a, b)` resolves conflicts so `b` wins, but when
   a third party concatenates the two class strings (react-day-picker's
@@ -176,56 +229,47 @@ same as looking the same:
   `pnpm lint:fix` from the repo root REPEATEDLY until the error count stops
   shrinking (the fixer moves one key per pass), then `pnpm format:fix`.
 
-## Translation recipes
+## Recipes
 
-- `sm:*` → `[consts.sm]` condition (mobile-first, exactly like Tailwind).
-- `pointer-coarse:after:*` tap targets → `"::after"` namespace with
-  `content: { default: "none", [consts.pointerCoarse]: '""' }` plus the
-  geometry (`position: "absolute"`, `minHeight: "2.75rem"`, …).
-- Focus rings: **use `outline`, not box-shadow rings** (avoids composing with
-  the elevation shadows):
+- **Focus rings: use `outline`, not a box-shadow ring** — a ring would compose
+  with the elevation shadows and muddy them.
   - buttons/toggles: `outline: { default: "none", ":focus-visible": "2px solid <ring>" }`, `outlineOffset: 1`.
-  - fields (Tailwind `ring-[3px] ring-ring/24` + border change):
-    `outline: { default: "none", ":focus-within": "3px solid color-mix(in srgb, <ring> 24%, transparent)" }`
+  - fields: `outline: { default: "none", ":focus-within": "3px solid color-mix(in srgb, <ring> 24%, transparent)" }`
     plus `borderColor: { ..., ":focus-within": colors.ring }`. Invalid fields
     swap the ring color for destructive at 16–24%.
-- Tailwind `has-focus-visible:` on wrappers → `":focus-within"` (accepted
-  divergence). Tailwind `has-disabled:`/`has-aria-invalid:` on wrappers → put
-  a `data-disabled`/`aria-invalid` attribute on the wrapper element itself in
-  JSX (the component already knows the state via props) and match
-  `"[data-disabled]"` — do NOT try `:has()`.
-- Opacity-modified colors `bg-primary/90` →
-  `color-mix(in srgb, ${colors.primary} 90%, transparent)` (template string —
-  token interpolation is supported).
-- `bg-clip-padding` (`not-dark:bg-clip-padding`) → `backgroundClip: "padding-box"`
-  unconditionally (harmless in dark).
-- The `before:` overlay pattern: `"::before"` namespace with
-  `borderRadius: "inherit"` — do not replicate the
-  `rounded-[calc(var(--radius-lg)-1px)]` dance; `inherit` + `inset: 0` is
-  equivalent and simpler. Give it `boxShadow: shadows.edge`,
+- **Coarse-pointer tap targets**: an `"::after"` namespace with
+  `content: { default: "none", [consts.pointerCoarse]: '""' }` plus the
+  geometry (`position: "absolute"`, `minHeight: "2.75rem"`, …).
+- **A wrapper that must react to the control inside it**: `:has()` is banned,
+  so put a `data-disabled`/`aria-invalid` attribute on the wrapper element in
+  JSX (the component already knows the state from its props) and match
+  `"[data-disabled]"`.
+- **Tinted colours**: `color-mix(in srgb, ${colors.primary} 90%, transparent)` —
+  a template string, since token interpolation is supported.
+- **The `::before` edge overlay**: a `"::before"` namespace with
+  `borderRadius: "inherit"`, `inset: 0`, `boxShadow: shadows.edge`,
   `content: '""'`, `pointerEvents: "none"`, `position: "absolute"`.
-- Descendant styling of ARBITRARY children (`[&_svg]:size-4`,
-  `*:data-[slot=x]:*` where x is consumer content): move the rule to
-  `src/styles/structural.css`, scoped under `[data-slot="…"]`, using plain CSS
-  and the `--taiyo-*` hooks documented there. Add a `data-size`/`data-variant`
-  attribute to the component root when the rule varies by size/variant. Keep
-  structural.css MINIMAL — anything expressible on the element itself belongs
-  in StyleX. Styling of children that the component itself renders is done in
-  StyleX directly on that child.
-- `cva` variants → a plain `styles`/`variantStyles` map +
+- **Descendant styling of ARBITRARY children** (a consumer's icon, a slot we do
+  not render): move the rule to `src/styles/structural.css`, scoped under
+  `[data-slot="…"]`, using plain CSS and the `--taiyo-*` hooks documented
+  there. Add a `data-size`/`data-variant` attribute to the component root when
+  the rule varies. Keep structural.css MINIMAL — anything expressible on the
+  element itself belongs in StyleX, and styling of children the component
+  itself renders is done in StyleX directly on that child.
+- **State that every part needs** (a `size` on a compound component, a
+  `variant` on a table): publish it through React context and let each part
+  style itself. StyleX has no ancestor selector that reaches arbitrary depth.
+- **Variant maps**: a plain `styles`/`variantStyles` object +
   `stylex.props(styles.base, variantStyles[variant], sizeStyles[size], …, sx)`.
-  If a `xxxVariants` export existed, re-export a function with the same
-  signature returning `stylex.props(...).className ?? ""` so legacy callers
-  keep working.
-- Animations: `stylex.keyframes` (see skeleton.tsx). Transitions: plain
+  Where a `xxxVariants` export exists for legacy callers, it is a function with
+  the same signature returning `stylex.props(...).className ?? ""`.
+- **Animations**: `stylex.keyframes` (see `skeleton.tsx`). Transitions: plain
   `transitionProperty`/`transitionDuration`/`transitionTimingFunction`.
-- CSS custom properties consumed from Base UI (e.g.
-  `var(--anchor-width)`, `var(--available-height)`, `--thumb-size`) are plain
-  strings in values: `minWidth: "var(--anchor-width)"`. Defining local custom
-  props: use the style value on the element via the `style` prop or keep the
-  computation in CSS vars only when Base UI sets them.
+- **CSS custom properties from Base UI** (`var(--anchor-width)`,
+  `var(--available-height)`, `--thumb-size`) are plain strings in values:
+  `minWidth: "var(--anchor-width)"`.
 
-## Verification for every converted file
+## Verification for every file you touch
 
 `oxlint` and `tsc` do NOT see StyleX compile errors — the compiler only runs
 in the bundler. A file can pass both and still fail to build. Always finish
@@ -235,6 +279,7 @@ with the Storybook check.
 2. The component's story renders in Storybook (already wired with the StyleX
    compiler): `curl -sf "http://localhost:6006/iframe.html?id=<story-id>"`
    returns HTML, and no `Unexpected 'stylex.create' call` appears in the
-   Storybook terminal log.
-3. Visual parity with the pre-conversion Tailwind rendering in BOTH themes is
-   the acceptance bar (the design language above, not the old flat look).
+   Storybook terminal log. `pnpm build` in `apps/storybook` is the thorough
+   version.
+3. The component looks right in BOTH themes — the design language above, not
+   just "it renders".

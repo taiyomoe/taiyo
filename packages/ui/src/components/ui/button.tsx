@@ -4,7 +4,7 @@ import { mergeProps } from "@base-ui/react/merge-props"
 import { useRender } from "@base-ui/react/use-render"
 import * as stylex from "@stylexjs/stylex"
 import type * as React from "react"
-import { cn } from "@/lib/utils"
+import { cn } from "@/utils/cn"
 import { Spinner } from "@/components/ui/spinner"
 import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
 import type { Sx } from "../../styles/sx"
@@ -399,7 +399,7 @@ export function Button({
         {children}
         {loading && (
           <span
-            {...stylex.props(styles.spinnerWrap, SPINNER_COLOR[variant])}
+            sx={[styles.spinnerWrap, SPINNER_COLOR[variant]]}
             data-slot="button-loading-indicator"
           >
             <Spinner />

@@ -1,3 +1,5 @@
+import * as stylex from "@stylexjs/stylex"
+import { colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import preview from "@/storybook/preview"
 import {
   PreviewCard,
@@ -6,6 +8,47 @@ import {
 } from "@taiyomoe/ui/components/ui/preview-card"
 import { fn } from "storybook/test"
 
+const styles = stylex.create({
+  link: {
+    fontWeight: 500,
+    textDecorationLine: { default: "none", ":hover": "underline" },
+    textUnderlineOffset: "4px",
+  },
+  column: {
+    gap: "0.5rem",
+    display: "flex",
+    flexDirection: "column",
+  },
+  surface: {
+    borderRadius: radius.full,
+    backgroundColor: colors.muted,
+    height: "2.5rem",
+    width: "2.5rem",
+  },
+  column2: {
+    gap: "0.125rem",
+    display: "flex",
+    flexDirection: "column",
+  },
+  title: {
+    fontWeight: 600,
+    lineHeight: 1,
+  },
+  caption: {
+    color: colors.mutedForeground,
+    fontSize: "0.75rem",
+    lineHeight: "1rem",
+  },
+  text: {
+    fontSize: "0.875rem",
+    lineHeight: "1.25rem",
+  },
+  wrap: {
+    gap: "3rem",
+    display: "flex",
+    flexWrap: "wrap",
+  },
+})
 const meta = preview.meta({
   title: "UI/PreviewCard",
   component: PreviewCard,
@@ -20,7 +63,7 @@ export const Default = meta.story({
   render: (args) => (
     <PreviewCard {...args}>
       <PreviewCardTrigger
-        className="font-medium underline-offset-4 hover:underline"
+        sx={styles.link}
         href="https://github.com/taiyomoe"
         rel="noreferrer"
         target="_blank"
@@ -28,13 +71,13 @@ export const Default = meta.story({
         @taiyomoe
       </PreviewCardTrigger>
       <PreviewCardPopup align="center">
-        <div className="flex flex-col gap-2">
-          <div className="size-10 rounded-full bg-muted" />
-          <div className="flex flex-col gap-0.5">
-            <p className="leading-none font-semibold">Taiyō</p>
-            <p className="text-xs text-muted-foreground">@taiyomoe</p>
+        <div sx={styles.column}>
+          <div sx={styles.surface} />
+          <div sx={styles.column2}>
+            <p sx={styles.title}>Taiyō</p>
+            <p sx={styles.caption}>@taiyomoe</p>
           </div>
-          <p className="text-sm">
+          <p sx={styles.text}>
             A community-built reading platform — manga, manhwa, and more, all in one place.
           </p>
         </div>
@@ -45,14 +88,12 @@ export const Default = meta.story({
 
 export const Alignment = meta.story({
   render: () => (
-    <div className="flex flex-wrap gap-12">
+    <div sx={styles.wrap}>
       {(["start", "center", "end"] as const).map((align) => (
         <PreviewCard defaultOpen key={align}>
-          <PreviewCardTrigger className="font-medium underline-offset-4 hover:underline">
-            {align}
-          </PreviewCardTrigger>
+          <PreviewCardTrigger sx={styles.link}>{align}</PreviewCardTrigger>
           <PreviewCardPopup align={align}>
-            <p className="text-sm">Aligned to {align}</p>
+            <p sx={styles.text}>Aligned to {align}</p>
           </PreviewCardPopup>
         </PreviewCard>
       ))}
@@ -64,7 +105,7 @@ export const InstantOpen = meta.story({
   render: (args) => (
     <PreviewCard {...args}>
       <PreviewCardTrigger
-        className="font-medium underline-offset-4 hover:underline"
+        sx={styles.link}
         closeDelay={0}
         delay={0}
         href="https://github.com/taiyomoe"
@@ -74,13 +115,13 @@ export const InstantOpen = meta.story({
         @taiyomoe
       </PreviewCardTrigger>
       <PreviewCardPopup align="center">
-        <div className="flex flex-col gap-2">
-          <div className="size-10 rounded-full bg-muted" />
-          <div className="flex flex-col gap-0.5">
-            <p className="leading-none font-semibold">Taiyō</p>
-            <p className="text-xs text-muted-foreground">@taiyomoe</p>
+        <div sx={styles.column}>
+          <div sx={styles.surface} />
+          <div sx={styles.column2}>
+            <p sx={styles.title}>Taiyō</p>
+            <p sx={styles.caption}>@taiyomoe</p>
           </div>
-          <p className="text-sm">
+          <p sx={styles.text}>
             A community-built reading platform — manga, manhwa, and more, all in one place.
           </p>
         </div>

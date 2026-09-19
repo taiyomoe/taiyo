@@ -123,16 +123,16 @@ export const LandingHero = () => {
   }
 
   return (
-    <section {...stylex.props(styles.hero)} onMouseMove={onMouseMove}>
+    <section sx={styles.hero} onMouseMove={onMouseMove}>
       <LandingSun parallax={parallax} />
       <Embers count={30} />
-      <div {...stylex.props(styles.scrim)} />
+      <div sx={styles.scrim} />
 
-      <div {...stylex.props(styles.content)}>
+      <div sx={styles.content}>
         <Eyebrow centered>{m.landing_hero_eyebrow()}</Eyebrow>
-        <h1 {...stylex.props(styles.title)}>{m.landing_hero_title()}</h1>
-        <p {...stylex.props(styles.subtitle)}>{m.landing_hero_subtitle()}</p>
-        <div {...stylex.props(styles.actions)}>
+        <h1 sx={styles.title}>{m.landing_hero_title()}</h1>
+        <p sx={styles.subtitle}>{m.landing_hero_subtitle()}</p>
+        <div sx={styles.actions}>
           <SunLink to="/auth/sign-up">
             <HugeiconsIcon icon={Sun03Icon} size={20} />
             {m.landing_hero_cta_primary()}
@@ -142,20 +142,16 @@ export const LandingHero = () => {
             {m.landing_hero_cta_secondary()}
           </GhostAnchor>
         </div>
-        <div {...stylex.props(styles.rating)}>
+        <div sx={styles.rating}>
           <Stars filled={5} size={16} />
-          <span {...stylex.props(styles.ratingLabel)}>
-            <b {...stylex.props(styles.ratingScore)}>{m.landing_hero_rating_score()}</b>{" "}
+          <span sx={styles.ratingLabel}>
+            <b sx={styles.ratingScore}>{m.landing_hero_rating_score()}</b>{" "}
             {m.landing_hero_rating_label()}
           </span>
         </div>
       </div>
 
-      <a
-        href="#titles"
-        aria-label={m.landing_hero_scroll_hint()}
-        {...stylex.props(styles.scrollCue)}
-      >
+      <a href="#titles" aria-label={m.landing_hero_scroll_hint()} sx={styles.scrollCue}>
         <HugeiconsIcon
           icon={ArrowDown01Icon}
           size={22}

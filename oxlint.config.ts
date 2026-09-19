@@ -13,7 +13,7 @@ export default defineConfig({
     "promise",
     "vitest",
   ],
-  jsPlugins: ["@stylistic/eslint-plugin", "@stylexjs/eslint-plugin", "oxlint-tailwindcss"],
+  jsPlugins: ["@stylistic/eslint-plugin", "@stylexjs/eslint-plugin"],
   options: {
     typeAware: true,
     typeCheck: true,
@@ -87,7 +87,9 @@ export default defineConfig({
     ],
     "@stylistic/wrap-iife": ["error", "inside"],
 
-    // StyleX rules
+    // StyleX rules — the plugin's full rule set, all at error, all on their
+    // documented defaults.
+    "@stylexjs/enforce-extension": "error",
     "@stylexjs/valid-styles": "error",
     "@stylexjs/no-conflicting-props": "error",
     "@stylexjs/no-nonstandard-styles": "error",
@@ -97,34 +99,8 @@ export default defineConfig({
     "@stylexjs/no-unused": "error",
     "@stylexjs/sort-keys": "error",
 
-    // Tailwind CSS rules
-    "tailwindcss/no-conflicting-classes": "error",
-    "tailwindcss/no-deprecated-classes": "error",
-    "tailwindcss/no-duplicate-classes": "error",
-    "tailwindcss/no-unknown-classes": ["error", { allowlist: ["dark"] }],
-    "tailwindcss/enforce-canonical": "error",
-    "tailwindcss/no-unnecessary-arbitrary-value": "error",
-    "tailwindcss/enforce-sort-order": "error",
-    "tailwindcss/enforce-shorthand": "error",
-    "tailwindcss/enforce-physical": "error",
-    "tailwindcss/consistent-variant-order": "error",
-    "tailwindcss/enforce-consistent-important-position": "error",
-    "tailwindcss/enforce-negative-arbitrary-values": "error",
-    "tailwindcss/enforce-consistent-variable-syntax": "error",
-    "tailwindcss/no-unnecessary-whitespace": "error",
-
     // Vitest rules
     // Buggy: misfires on tests that import `test` from a custom setup helper.
     "vitest/no-standalone-expect": "off",
-  },
-  settings: {
-    tailwindcss: {
-      entryPoint: [
-        { files: "apps/web/**", use: "apps/web/src/styles.css" },
-        { files: "apps/storybook/**", use: "packages/ui/src/styles/globals.css" },
-        { files: "packages/ui/**", use: "packages/ui/src/styles/globals.css" },
-        { files: "packages/email/**", use: "packages/ui/src/styles/globals.css" },
-      ],
-    },
   },
 })

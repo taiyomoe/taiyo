@@ -1,3 +1,5 @@
+import * as stylex from "@stylexjs/stylex"
+import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
 import preview from "@/storybook/preview"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import {
@@ -15,6 +17,20 @@ import {
   CardTitle,
 } from "@taiyomoe/ui/components/ui/card"
 
+const styles = stylex.create({
+  anchor: {
+    width: "20rem",
+  },
+  caption: {
+    color: colors.mutedForeground,
+    fontSize: "0.875rem",
+    lineHeight: "1.25rem",
+  },
+  box: {
+    gap: "0.5rem",
+    justifyContent: "flex-end",
+  },
+})
 const meta = preview.meta({
   title: "UI/Card",
   component: Card,
@@ -36,17 +52,17 @@ const meta = preview.meta({
 
 export const Default = meta.story({
   render: () => (
-    <Card className="w-80">
+    <Card sx={styles.anchor}>
       <CardHeader>
         <CardTitle>Welcome back</CardTitle>
         <CardDescription>Sign in to continue to your library.</CardDescription>
       </CardHeader>
       <CardContent>
-        <p className="text-sm text-muted-foreground">
+        <p sx={styles.caption}>
           Use the form below to access your account and pick up where you left off.
         </p>
       </CardContent>
-      <CardFooter className="justify-end gap-2">
+      <CardFooter sx={styles.box}>
         <Button variant="outline">Cancel</Button>
         <Button>Sign in</Button>
       </CardFooter>
@@ -56,7 +72,7 @@ export const Default = meta.story({
 
 export const WithAction = meta.story({
   render: () => (
-    <Card className="w-80">
+    <Card sx={styles.anchor}>
       <CardHeader>
         <CardTitle>Notifications</CardTitle>
         <CardDescription>Manage how you receive updates.</CardDescription>
@@ -67,7 +83,7 @@ export const WithAction = meta.story({
         </CardAction>
       </CardHeader>
       <CardContent>
-        <p className="text-sm text-muted-foreground">You have 3 unread notifications.</p>
+        <p sx={styles.caption}>You have 3 unread notifications.</p>
       </CardContent>
     </Card>
   ),
@@ -75,7 +91,7 @@ export const WithAction = meta.story({
 
 export const Frame = meta.story({
   render: () => (
-    <CardFrame className="w-80">
+    <CardFrame sx={styles.anchor}>
       <CardFrameHeader>
         <CardFrameTitle>Frame title</CardFrameTitle>
         <CardFrameDescription>
@@ -89,7 +105,7 @@ export const Frame = meta.story({
         </CardHeader>
       </Card>
       <CardFrameFooter>
-        <p className="text-sm text-muted-foreground">Frame footer area</p>
+        <p sx={styles.caption}>Frame footer area</p>
       </CardFrameFooter>
     </CardFrame>
   ),

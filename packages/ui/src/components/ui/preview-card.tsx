@@ -3,7 +3,7 @@
 import { PreviewCard as PreviewCardPrimitive } from "@base-ui/react/preview-card"
 import * as stylex from "@stylexjs/stylex"
 import type React from "react"
-import { cn } from "@/lib/utils"
+import { cn } from "@/utils/cn"
 import { colors, radius, shadows } from "../../styles/tokens.stylex"
 import type { Sx } from "../../styles/sx"
 
@@ -54,10 +54,26 @@ const styles = stylex.create({
 
 export const PreviewCard: typeof PreviewCardPrimitive.Root = PreviewCardPrimitive.Root
 
+/** See the note on SeparatorProps for why `className` sits alongside `sx`. */
+export type PreviewCardTriggerProps = PreviewCardPrimitive.Trigger.Props & {
+  sx?: Sx
+}
+
 export function PreviewCardTrigger({
+  className,
+  sx,
   ...props
-}: PreviewCardPrimitive.Trigger.Props): React.ReactElement {
-  return <PreviewCardPrimitive.Trigger data-slot="preview-card-trigger" {...props} />
+}: PreviewCardTriggerProps): React.ReactElement {
+  const styleProps = stylex.props(sx)
+
+  return (
+    <PreviewCardPrimitive.Trigger
+      className={cn(styleProps.className, className)}
+      data-slot="preview-card-trigger"
+      style={styleProps.style}
+      {...props}
+    />
+  )
 }
 
 export function PreviewCardPopup({

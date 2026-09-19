@@ -3,7 +3,7 @@
 import { Menu as MenuPrimitive } from "@base-ui/react/menu"
 import * as stylex from "@stylexjs/stylex"
 import type * as React from "react"
-import { cn } from "@/lib/utils"
+import { cn } from "@/utils/cn"
 import { ChevronRight } from "@/components/icons"
 import { KbdSurface } from "@/components/ui/kbd"
 import { colors, consts, font, radius, shadows } from "../../styles/tokens.stylex"
@@ -26,9 +26,8 @@ const styles = stylex.create({
     outlineStyle: "none",
     position: "relative",
     transformOrigin: "var(--transform-origin)",
-    // The Tailwind original guarded this with `not-[class*='w-']` so a
-    // caller-supplied width class could win. StyleX caller styles (sx) merge
-    // last and override directly, so the guard is unnecessary.
+    // Caller styles arrive through `sx`, which merges last and overrides
+    // this directly — no escape hatch needed.
     minWidth: "8rem",
     "::before": {
       inset: 0,
@@ -376,7 +375,7 @@ export function MenuPopup({
           style={popupProps.style}
           {...props}
         >
-          <div {...stylex.props(styles.scroller)}>{children}</div>
+          <div sx={styles.scroller}>{children}</div>
         </MenuPrimitive.Popup>
       </MenuPrimitive.Positioner>
     </MenuPortal>
@@ -440,9 +439,9 @@ export function MenuCheckboxItem({
     >
       {variant === "switch" ? (
         <>
-          <span {...stylex.props(styles.switchLabelColumn)}>{children}</span>
+          <span sx={styles.switchLabelColumn}>{children}</span>
           <MenuPrimitive.CheckboxItemIndicator {...stylex.props(styles.switchTrack)} keepMounted>
-            <span {...stylex.props(styles.switchThumb)} />
+            <span sx={styles.switchThumb} />
           </MenuPrimitive.CheckboxItemIndicator>
         </>
       ) : (
@@ -463,7 +462,7 @@ export function MenuCheckboxItem({
               <path d="M5.252 12.7 10.2 18.63 18.748 5.37" />
             </svg>
           </MenuPrimitive.CheckboxItemIndicator>
-          <span {...stylex.props(styles.labelColumn)}>{children}</span>
+          <span sx={styles.labelColumn}>{children}</span>
         </>
       )}
     </MenuPrimitive.CheckboxItem>
@@ -507,7 +506,7 @@ export function MenuRadioItem({
           <path d="M5.252 12.7 10.2 18.63 18.748 5.37" />
         </svg>
       </MenuPrimitive.RadioItemIndicator>
-      <span {...stylex.props(styles.labelColumn)}>{children}</span>
+      <span sx={styles.labelColumn}>{children}</span>
     </MenuPrimitive.RadioItem>
   )
 }

@@ -6,9 +6,6 @@
     "source.fixAll.oxc": "always"
   },
   "typescript.tsdk": "node_modules/typescript/lib",
-  "files.associations": {
-    "*.css": "tailwindcss"
-  },
   "files.watcherExclude": {
     "**/routeTree.gen.ts": true
   },

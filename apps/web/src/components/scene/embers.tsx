@@ -56,7 +56,7 @@ export const Embers = ({ count = 26 }: EmbersProps) => {
   const emberProps = stylex.props(styles.ember)
 
   return (
-    <div {...stylex.props(styles.field)}>
+    <div sx={styles.field}>
       {embers.map((ember, i) => (
         <span
           key={i}

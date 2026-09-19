@@ -3,7 +3,7 @@
 import { Accordion as AccordionPrimitive } from "@base-ui/react/accordion"
 import * as stylex from "@stylexjs/stylex"
 import type React from "react"
-import { cn } from "@/lib/utils"
+import { cn } from "@/utils/cn"
 import { ChevronDown } from "@/components/icons"
 import { colors, radius } from "../../styles/tokens.stylex"
 import { accordionTriggerMarker } from "../../styles/markers.stylex"
@@ -90,7 +90,7 @@ export function Accordion(props: AccordionPrimitive.Root.Props): React.ReactElem
   return <AccordionPrimitive.Root data-slot="accordion" {...props} />
 }
 
-/** See the note on SeparatorProps: `className` stays until callers migrate. */
+/** See the note on SeparatorProps for why `className` sits alongside `sx`. */
 export type AccordionItemProps = AccordionPrimitive.Item.Props & {
   sx?: Sx
 }
@@ -145,8 +145,8 @@ export function AccordionPanel({
   sx,
   ...props
 }: AccordionPanelProps): React.ReactElement {
-  // As in the Tailwind original, caller styling lands on the padded inner
-  // wrapper, not the animated panel element.
+  // Caller styling lands on the padded inner wrapper, not the animated panel
+  // element, which owns the height transition and must stay unstyled.
   const innerProps = stylex.props(styles.panelInner, sx)
 
   return (

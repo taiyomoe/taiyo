@@ -1,5 +1,6 @@
 import { Button, Container, Section, Text } from "react-email"
 import EmailBase from "../components/email-base"
+import { emailStyles } from "../theme"
 
 type Props = {
   name: string
@@ -8,14 +9,14 @@ type Props = {
 
 const ResetPasswordEmail = ({ name, url }: Props) => (
   <EmailBase preview="Reset your password on Taiyō">
-    <Container className="px-8 py-4">
-      <Text className="text-2xl font-bold">Reset your password</Text>
+    <Container style={emailStyles.body}>
+      <Text style={emailStyles.title}>Reset your password</Text>
       <Text>
         Hi {name}, we received a request to reset your password. Please click the button below to
         reset it. This link will be valid for 1 hour.
       </Text>
       <Section>
-        <Button href={url} className="rounded-md bg-primary px-3 py-1.5 text-sm text-white">
+        <Button href={url} style={emailStyles.button}>
           Click here
         </Button>
       </Section>
@@ -23,7 +24,7 @@ const ResetPasswordEmail = ({ name, url }: Props) => (
         If the button does not work, copy and paste the link below into your browser: {url}
       </Text>
     </Container>
-    <Container className="border-t border-solid border-border px-8">
+    <Container style={emailStyles.footer}>
       <Text>If you did not request this email, please ignore it as nothing will be changed.</Text>
     </Container>
   </EmailBase>

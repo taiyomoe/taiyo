@@ -4,7 +4,7 @@ import { Radio as RadioPrimitive } from "@base-ui/react/radio"
 import { RadioGroup as RadioGroupPrimitive } from "@base-ui/react/radio-group"
 import * as stylex from "@stylexjs/stylex"
 import type React from "react"
-import { cn } from "@/lib/utils"
+import { cn } from "@/utils/cn"
 import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
 import type { Sx } from "../../styles/sx"
 
@@ -27,9 +27,8 @@ const styles = stylex.create({
     borderWidth: 1,
     alignItems: "center",
     backgroundClip: "padding-box",
-    // The Tailwind original used `bg-background` + `dark:not-data-checked:bg-input/32`.
-    // `colors.field` (the input surface token) matches both values, and when
-    // checked the indicator covers the root entirely, so the distinction is moot.
+    // The input-surface token: a radio is a field, and once checked the
+    // indicator covers the root entirely, so only the unchecked fill shows.
     backgroundColor: colors.field,
     boxShadow: {
       "[aria-invalid]": "none",
@@ -122,7 +121,7 @@ const styles = stylex.create({
   },
 })
 
-/** See the note on SeparatorProps: `className` stays until callers migrate. */
+/** See the note on SeparatorProps for why `className` sits alongside `sx`. */
 export type RadioGroupProps = RadioGroupPrimitive.Props & {
   sx?: Sx
 }

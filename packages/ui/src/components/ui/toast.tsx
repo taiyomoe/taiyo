@@ -26,7 +26,7 @@ type ToastData = {
   tooltipStyle?: boolean
 }
 
-/** Port of the toast replay keyframes that lived in globals.css. */
+/** Replay animations, fired when a toast is raised again while visible. */
 const successPulse = stylex.keyframes({
   "0%": { scale: "1" },
   "30%": { scale: "1.025" },

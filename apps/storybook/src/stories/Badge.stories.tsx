@@ -1,6 +1,15 @@
+import * as stylex from "@stylexjs/stylex"
 import preview from "@/storybook/preview"
 import { Badge } from "@taiyomoe/ui/components/ui/badge"
 
+const styles = stylex.create({
+  wrap: {
+    gap: "0.5rem",
+    alignItems: "center",
+    display: "flex",
+    flexWrap: "wrap",
+  },
+})
 const meta = preview.meta({
   title: "UI/Badge",
   component: Badge,
@@ -28,7 +37,7 @@ export const Default = meta.story({})
 
 export const Variants = meta.story({
   render: () => (
-    <div className="flex flex-wrap items-center gap-2">
+    <div sx={styles.wrap}>
       <Badge variant="default">Default</Badge>
       <Badge variant="secondary">Secondary</Badge>
       <Badge variant="destructive">Destructive</Badge>
@@ -43,7 +52,7 @@ export const Variants = meta.story({
 
 export const Sizes = meta.story({
   render: () => (
-    <div className="flex flex-wrap items-center gap-2">
+    <div sx={styles.wrap}>
       <Badge size="sm">Small</Badge>
       <Badge size="default">Default</Badge>
       <Badge size="lg">Large</Badge>

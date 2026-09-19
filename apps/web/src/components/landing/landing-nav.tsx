@@ -9,6 +9,12 @@ import { scene } from "@/components/scene/scene.stylex"
 import { m } from "@/paraglide/messages"
 
 const styles = stylex.create({
+  lockup: {
+    gap: "0.75rem",
+    fontSize: "23px",
+    fontWeight: 700,
+    letterSpacing: "-0.02em",
+  },
   header: {
     insetInline: 0,
     position: "fixed",
@@ -90,20 +96,20 @@ export const LandingNav = () => {
   }, [])
 
   return (
-    <header {...stylex.props(styles.header, scrolled ? styles.headerScrolled : styles.headerAtTop)}>
-      <div {...stylex.props(styles.bar)}>
+    <header sx={[styles.header, scrolled ? styles.headerScrolled : styles.headerAtTop]}>
+      <div sx={styles.bar}>
         <Link to="/" {...stylex.props(styles.brand)}>
-          <TaiyoLogoLockup className="gap-3 text-[23px] font-bold tracking-[-0.02em]" />
+          <TaiyoLogoLockup sx={styles.lockup} />
         </Link>
-        <nav {...stylex.props(styles.links)}>
-          <a href="#titles" {...stylex.props(styles.link)}>
+        <nav sx={styles.links}>
+          <a href="#titles" sx={styles.link}>
             {m.landing_nav_browse()}
           </a>
-          <a href="#reviews" {...stylex.props(styles.link)}>
+          <a href="#reviews" sx={styles.link}>
             {m.landing_nav_reviews()}
           </a>
         </nav>
-        <div {...stylex.props(styles.actions)}>
+        <div sx={styles.actions}>
           <Link to="/auth/sign-in" {...stylex.props(styles.signIn)}>
             {m.auth_sign_in()}
           </Link>

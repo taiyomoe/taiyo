@@ -1,9 +1,23 @@
+import * as stylex from "@stylexjs/stylex"
 import { Delete02Icon, Settings01Icon } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 import preview from "@/storybook/preview"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { fn } from "storybook/test"
 
+const styles = stylex.create({
+  wrap: {
+    gap: "0.5rem",
+    display: "flex",
+    flexWrap: "wrap",
+  },
+  wrap2: {
+    gap: "0.5rem",
+    alignItems: "center",
+    display: "flex",
+    flexWrap: "wrap",
+  },
+})
 const meta = preview.meta({
   title: "UI/Button",
   component: Button,
@@ -48,7 +62,7 @@ export const Default = meta.story({
 
 export const Variants = meta.story({
   render: () => (
-    <div className="flex flex-wrap gap-2">
+    <div sx={styles.wrap}>
       <Button variant="default">Default</Button>
       <Button variant="secondary">Secondary</Button>
       <Button variant="outline">Outline</Button>
@@ -62,7 +76,7 @@ export const Variants = meta.story({
 
 export const Sizes = meta.story({
   render: () => (
-    <div className="flex flex-wrap items-center gap-2">
+    <div sx={styles.wrap2}>
       <Button size="xs">XS</Button>
       <Button size="sm">SM</Button>
       <Button size="default">Default</Button>
@@ -74,7 +88,7 @@ export const Sizes = meta.story({
 
 export const IconSizes = meta.story({
   render: () => (
-    <div className="flex flex-wrap items-center gap-2">
+    <div sx={styles.wrap2}>
       <Button size="icon-xs" aria-label="Settings">
         <HugeiconsIcon icon={Settings01Icon} />
       </Button>

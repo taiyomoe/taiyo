@@ -36,10 +36,10 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 ### Key patterns
 
-Custom size via Tailwind class:
+Custom size via `sx`:
 
 ```tsx
-<Avatar className="size-16">
+<Avatar sx={styles.large}>
   <AvatarImage src="/avatar.png" alt="User avatar" />
   <AvatarFallback>JD</AvatarFallback>
 </Avatar>

@@ -1,7 +1,15 @@
+import * as stylex from "@stylexjs/stylex"
 import preview from "@/storybook/preview"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { type ToastPosition, ToastPrimitive, ToastProvider } from "@taiyomoe/ui/components/ui/toast"
 
+const styles = stylex.create({
+  wrap: {
+    gap: "0.5rem",
+    display: "flex",
+    flexWrap: "wrap",
+  },
+})
 const meta = preview.meta({
   title: "UI/Toast",
   component: ToastProvider,
@@ -219,7 +227,7 @@ export const Positions = meta.story({
     }
 
     return (
-      <div className="flex flex-wrap gap-2">
+      <div sx={styles.wrap}>
         {POSITIONS.map((position) => (
           <ToastProvider key={position} position={position}>
             <Trigger position={position} />

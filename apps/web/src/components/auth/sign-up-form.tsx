@@ -1,3 +1,6 @@
+import * as stylex from "@stylexjs/stylex"
+
+import { authFormStyles as sx } from "@/components/auth/auth-form-styles"
 import { AuthHeading } from "@/components/auth/auth-heading"
 import { AuthSocialButtons, type SocialProvider } from "@/components/auth/auth-social-buttons"
 import { SunButton } from "@/components/buttons/sun-button"
@@ -105,17 +108,15 @@ export const SignUpForm = () => {
     return (
       <>
         <AuthHeading title={m.auth_check_inbox_title()} subtitle={m.auth_check_inbox_subtitle()} />
-        <div className="flex flex-col items-center gap-4 text-center">
-          <div className="flex size-12 items-center justify-center rounded-full bg-[#FFB820]/10 text-[#FFB820]">
-            <MailCheck className="size-6" />
+        <div sx={sx.confirmation}>
+          <div sx={sx.confirmationBadge}>
+            <MailCheck {...stylex.props(sx.confirmationIcon)} />
           </div>
-          <p className="text-sm text-white/60">
-            {m.auth_verification_sent({ email: pendingEmail })}
-          </p>
+          <p sx={sx.confirmationText}>{m.auth_verification_sent({ email: pendingEmail })}</p>
           <Button
             type="button"
             variant="outline"
-            className="h-12 w-full sm:h-12"
+            sx={sx.confirmationAction}
             onClick={() => {
               setPendingEmail(null)
               setFormError(null)
@@ -125,12 +126,9 @@ export const SignUpForm = () => {
             {m.auth_back_to_sign_up()}
           </Button>
         </div>
-        <p className="mt-6 text-center text-sm text-white/55">
+        <p sx={sx.footer}>
           {m.auth_footer_have_account()}{" "}
-          <button
-            className="font-bold text-[#FFC94D] hover:underline"
-            onClick={() => navigate({ to: "/auth/sign-in" })}
-          >
+          <button onClick={() => navigate({ to: "/auth/sign-in" })} sx={[sx.link, sx.linkButton]}>
             {m.auth_sign_in()}
           </button>
         </p>
@@ -141,7 +139,7 @@ export const SignUpForm = () => {
   return (
     <>
       <AuthHeading title={m.auth_sign_up_title()} subtitle={m.auth_sign_up_subtitle()} />
-      <div className="flex flex-col gap-5">
+      <div sx={sx.stack}>
         {formError ? (
           <Alert variant="error">
             <CircleAlert />
@@ -154,11 +152,7 @@ export const SignUpForm = () => {
           disabled={isBusy}
           onSelect={onSocial}
         />
-        <Form
-          className="flex flex-col gap-4 **:data-[slot=input]:h-12 **:data-[slot=input]:p-0 **:data-[slot=input]:leading-12 **:data-[slot=input-group-addon]:px-4 **:data-[slot=input-group-addon]:[&_svg]:size-5! **:data-[slot=input-group-addon]:[&_svg]:text-muted-foreground/72"
-          onSubmit={onSubmit}
-          noValidate
-        >
+        <Form data-auth-fields sx={sx.fields} onSubmit={onSubmit} noValidate>
           <InputField
             name="name"
             control={form.control}
@@ -192,12 +186,12 @@ export const SignUpForm = () => {
                 inputs={{}}
                 markup={{
                   terms: ({ children }) => (
-                    <Link to="/terms" className="font-bold text-[#FFC94D] hover:underline">
+                    <Link to="/terms" {...stylex.props(sx.link)}>
                       {children}
                     </Link>
                   ),
                   privacy: ({ children }) => (
-                    <Link to="/privacy" className="font-bold text-[#FFC94D] hover:underline">
+                    <Link to="/privacy" {...stylex.props(sx.link)}>
                       {children}
                     </Link>
                   ),
@@ -208,7 +202,7 @@ export const SignUpForm = () => {
 
           {/* Turnstile + submit kept as one tight group so the button doesn't read
               as detached from the form when the captcha widget sits above it. */}
-          <div className="mt-2 flex flex-col gap-3">
+          <div sx={sx.captchaGroup}>
             <Turnstile
               ref={turnstileRef}
               siteKey={env.VITE_TURNSTILE_SITE_KEY}
@@ -229,12 +223,9 @@ export const SignUpForm = () => {
           </div>
         </Form>
       </div>
-      <p className="mt-6 text-center text-sm text-white/55">
+      <p sx={sx.footer}>
         {m.auth_footer_have_account()}{" "}
-        <button
-          className="font-bold text-[#FFC94D] hover:underline"
-          onClick={() => navigate({ to: "/auth/sign-in" })}
-        >
+        <button onClick={() => navigate({ to: "/auth/sign-in" })} sx={[sx.link, sx.linkButton]}>
           {m.auth_sign_in()}
         </button>
       </p>

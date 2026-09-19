@@ -1,3 +1,4 @@
+import * as stylex from "@stylexjs/stylex"
 import preview from "@/storybook/preview"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import {
@@ -15,6 +16,22 @@ import { Input } from "@taiyomoe/ui/components/ui/input"
 import { Label } from "@taiyomoe/ui/components/ui/label"
 import { fn } from "storybook/test"
 
+const styles = stylex.create({
+  grid: {
+    gap: "1.5rem",
+    display: "grid",
+    gridAutoRows: "min-content",
+  },
+  grid2: {
+    gap: "0.75rem",
+    display: "grid",
+  },
+  wrap: {
+    gap: "0.5rem",
+    display: "flex",
+    flexWrap: "wrap",
+  },
+})
 const meta = preview.meta({
   title: "UI/Drawer",
   component: Drawer,
@@ -44,12 +61,12 @@ export const Default = meta.story({
           </DrawerDescription>
         </DrawerHeader>
         <DrawerPanel>
-          <div className="grid auto-rows-min gap-6">
-            <div className="grid gap-3">
+          <div sx={styles.grid}>
+            <div sx={styles.grid2}>
               <Label htmlFor="drawer-name">Name</Label>
               <Input defaultValue="John Doe" id="drawer-name" />
             </div>
-            <div className="grid gap-3">
+            <div sx={styles.grid2}>
               <Label htmlFor="drawer-username">Username</Label>
               <Input defaultValue="@john-doe" id="drawer-username" />
             </div>
@@ -66,7 +83,7 @@ export const Default = meta.story({
 
 export const Positions = meta.story({
   render: () => (
-    <div className="flex flex-wrap gap-2">
+    <div sx={styles.wrap}>
       {(["top", "right", "bottom", "left"] as const).map((position) => (
         <Drawer key={position} position={position}>
           <DrawerTrigger render={<Button variant="outline" />}>Open {position}</DrawerTrigger>
@@ -94,12 +111,12 @@ export const Straight = meta.story({
           </DrawerDescription>
         </DrawerHeader>
         <DrawerPanel>
-          <div className="grid auto-rows-min gap-6">
-            <div className="grid gap-3">
+          <div sx={styles.grid}>
+            <div sx={styles.grid2}>
               <Label htmlFor="drawer-name">Name</Label>
               <Input defaultValue="John Doe" id="drawer-name" />
             </div>
-            <div className="grid gap-3">
+            <div sx={styles.grid2}>
               <Label htmlFor="drawer-username">Username</Label>
               <Input defaultValue="@john-doe" id="drawer-username" />
             </div>
@@ -126,12 +143,12 @@ export const Inset = meta.story({
           </DrawerDescription>
         </DrawerHeader>
         <DrawerPanel>
-          <div className="grid auto-rows-min gap-6">
-            <div className="grid gap-3">
+          <div sx={styles.grid}>
+            <div sx={styles.grid2}>
               <Label htmlFor="drawer-name">Name</Label>
               <Input defaultValue="John Doe" id="drawer-name" />
             </div>
-            <div className="grid gap-3">
+            <div sx={styles.grid2}>
               <Label htmlFor="drawer-username">Username</Label>
               <Input defaultValue="@john-doe" id="drawer-username" />
             </div>
@@ -158,12 +175,12 @@ export const WithBar = meta.story({
           </DrawerDescription>
         </DrawerHeader>
         <DrawerPanel>
-          <div className="grid auto-rows-min gap-6">
-            <div className="grid gap-3">
+          <div sx={styles.grid}>
+            <div sx={styles.grid2}>
               <Label htmlFor="drawer-name">Name</Label>
               <Input defaultValue="John Doe" id="drawer-name" />
             </div>
-            <div className="grid gap-3">
+            <div sx={styles.grid2}>
               <Label htmlFor="drawer-username">Username</Label>
               <Input defaultValue="@john-doe" id="drawer-username" />
             </div>
@@ -190,12 +207,12 @@ export const WithCloseButton = meta.story({
           </DrawerDescription>
         </DrawerHeader>
         <DrawerPanel>
-          <div className="grid auto-rows-min gap-6">
-            <div className="grid gap-3">
+          <div sx={styles.grid}>
+            <div sx={styles.grid2}>
               <Label htmlFor="drawer-name">Name</Label>
               <Input defaultValue="John Doe" id="drawer-name" />
             </div>
-            <div className="grid gap-3">
+            <div sx={styles.grid2}>
               <Label htmlFor="drawer-username">Username</Label>
               <Input defaultValue="@john-doe" id="drawer-username" />
             </div>

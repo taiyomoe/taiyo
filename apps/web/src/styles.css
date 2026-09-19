@@ -14,6 +14,33 @@ html {
   scroll-behavior: smooth;
 }
 
+/* ── Auth field density ───────────────────────────────────────────────────
+   The auth screen runs its fields taller and roomier than the rest of the
+   product: they are the only thing on the page, and they have to balance the
+   scene beside them. The targets are descendants @taiyomoe/ui renders inside
+   Field/InputGroup, which is out of reach for StyleX (no descendant
+   selectors) and for `sx` (it lands on the wrapper, not the control), so the
+   override lives here, scoped to the form that opts in with `data-auth-fields`.
+
+   The `!important` on the icon is required: @taiyomoe/ui's structural.css
+   already sizes addon icons, and StyleX emits its atoms at a specificity no
+   plain selector can outrank. */
+[data-auth-fields] [data-slot="input"] {
+  height: 3rem;
+  line-height: 3rem;
+  padding: 0;
+}
+
+[data-auth-fields] [data-slot="input-group-addon"] {
+  padding-inline: 1rem;
+}
+
+[data-auth-fields] [data-slot="input-group-addon"] svg {
+  color: color-mix(in srgb, var(--muted-foreground) 72%, transparent);
+  height: 1.25rem !important;
+  width: 1.25rem !important;
+}
+
 /* ── Brand scene animations ───────────────────────────────────────────────
    Shared by the auth screen and the landing page: both render the same dark
    world (sun, rays, embers) and the same gradient CTA, so the keyframes live

@@ -1,8 +1,17 @@
+import * as stylex from "@stylexjs/stylex"
 import preview from "@/storybook/preview"
 import { Field, FieldControl, FieldDescription, FieldLabel } from "@taiyomoe/ui/components/ui/field"
 import { Fieldset, FieldsetLegend } from "@taiyomoe/ui/components/ui/fieldset"
 import { Input } from "@taiyomoe/ui/components/ui/input"
 
+const styles = stylex.create({
+  column: {
+    gap: "1rem",
+    display: "flex",
+    flexDirection: "column",
+    width: "20rem",
+  },
+})
 const meta = preview.meta({
   title: "UI/Fieldset",
   component: Fieldset,
@@ -11,7 +20,7 @@ const meta = preview.meta({
     disabled: { control: "boolean" },
   },
   render: (args) => (
-    <Fieldset {...args} className="flex w-80 flex-col gap-4">
+    <Fieldset {...args} sx={styles.column}>
       <FieldsetLegend>Profile</FieldsetLegend>
       <Field>
         <FieldLabel>First name</FieldLabel>
@@ -29,7 +38,7 @@ export const Default = meta.story({})
 
 export const Composition = meta.story({
   render: () => (
-    <Fieldset className="flex w-80 flex-col gap-4">
+    <Fieldset sx={styles.column}>
       <FieldsetLegend>Contact information</FieldsetLegend>
       <Field name="email">
         <FieldLabel>Email</FieldLabel>

@@ -2,7 +2,7 @@
 
 import * as stylex from "@stylexjs/stylex"
 import * as React from "react"
-import { cn } from "@/lib/utils"
+import { cn } from "@/utils/cn"
 import { colors, font, radius } from "../../styles/tokens.stylex"
 import type { Sx } from "../../styles/sx"
 
@@ -60,7 +60,7 @@ const styles = stylex.create({
   },
 })
 
-/** See the note on SeparatorProps: `className` stays until callers migrate. */
+/** See the note on SeparatorProps for why `className` sits alongside `sx`. */
 export type KbdProps = React.ComponentProps<"kbd"> & {
   sx?: Sx
 }

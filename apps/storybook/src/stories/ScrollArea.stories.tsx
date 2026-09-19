@@ -1,8 +1,62 @@
+import * as stylex from "@stylexjs/stylex"
+import { colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import preview from "@/storybook/preview"
 import { ScrollArea } from "@taiyomoe/ui/components/ui/scroll-area"
 import { Separator } from "@taiyomoe/ui/components/ui/separator"
 
 const TAGS = Array.from({ length: 50 }).map((_, i) => `Tag ${i + 1}`)
+const styles = stylex.create({
+  /** Stand-in for cover art, so each row has something with weight in it. */
+  thumbnail: {
+    borderRadius: radius.md,
+    alignItems: "center",
+    backgroundColor: colors.muted,
+    display: "flex",
+    flexShrink: 0,
+    fontSize: "0.875rem",
+    justifyContent: "center",
+    height: "6rem",
+    width: "6rem",
+  },
+  surface: {
+    padding: "1rem",
+    borderColor: colors.border,
+    borderRadius: radius.md,
+    borderStyle: "solid",
+    borderWidth: 1,
+    backgroundColor: colors.background,
+    height: "16rem",
+    width: "14rem",
+  },
+  box: {
+    fontSize: "0.875rem",
+    fontWeight: 500,
+    lineHeight: 1,
+    marginBottom: "1rem",
+  },
+  text: {
+    fontSize: "0.875rem",
+    lineHeight: "1.25rem",
+  },
+  spacing: {
+    marginBlock: "0.5rem",
+  },
+  surface2: {
+    borderColor: colors.border,
+    borderRadius: radius.md,
+    borderStyle: "solid",
+    borderWidth: 1,
+    backgroundColor: colors.background,
+    whiteSpace: "nowrap",
+    width: "18rem",
+  },
+  row: {
+    padding: "1rem",
+    gap: "0.5rem",
+    display: "flex",
+    width: "max-content",
+  },
+})
 const meta = preview.meta({
   title: "UI/ScrollArea",
   component: ScrollArea,
@@ -13,12 +67,12 @@ const meta = preview.meta({
     fill: { control: "boolean" },
   },
   render: (args) => (
-    <ScrollArea {...args} className="h-64 w-56 rounded-md border bg-background p-4">
-      <h4 className="mb-4 text-sm leading-none font-medium">Tags</h4>
+    <ScrollArea {...args} sx={styles.surface}>
+      <h4 sx={styles.box}>Tags</h4>
       {TAGS.map((tag) => (
         <div key={tag}>
-          <div className="text-sm">{tag}</div>
-          <Separator className="my-2" />
+          <div sx={styles.text}>{tag}</div>
+          <Separator sx={styles.spacing} />
         </div>
       ))}
     </ScrollArea>
@@ -35,13 +89,13 @@ export const WithScrollbarGutter = meta.story({
 
 export const Horizontal = meta.story({
   render: () => (
-    <ScrollArea className="w-72 rounded-md border bg-background whitespace-nowrap">
-      <div className="flex w-max gap-2 p-4">
+    <ScrollArea sx={styles.surface2}>
+      <div sx={styles.row}>
         {Array.from({ length: 20 }).map((_, i) => (
           <div
             // biome-ignore lint/suspicious/noArrayIndexKey: showcase content
             key={i}
-            className="flex size-24 shrink-0 items-center justify-center rounded-md bg-muted text-sm"
+            sx={styles.thumbnail}
           >
             Item {i + 1}
           </div>

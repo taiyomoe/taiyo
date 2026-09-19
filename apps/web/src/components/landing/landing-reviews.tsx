@@ -77,7 +77,7 @@ const styles = stylex.create({
 })
 
 export const LandingReviews = () => (
-  <section id="reviews" {...stylex.props(styles.band)}>
+  <section id="reviews" sx={styles.band}>
     <Section>
       <Reveal>
         <SectionHead
@@ -87,21 +87,21 @@ export const LandingReviews = () => (
           sub={m.landing_reviews_subtitle()}
         />
       </Reveal>
-      <div {...stylex.props(styles.columns)}>
+      <div sx={styles.columns}>
         {REVIEWS.map((review, i) => {
           const who = review.who()
 
           return (
-            <div key={who} {...stylex.props(styles.item)}>
+            <div key={who} sx={styles.item}>
               <Reveal delay={(i % 3) * 80}>
-                <div {...stylex.props(styles.card)}>
+                <div sx={styles.card}>
                   <Stars filled={1} />
-                  <p {...stylex.props(styles.quote)}>“{review.quote()}”</p>
-                  <div {...stylex.props(styles.author)}>
-                    <span {...stylex.props(styles.avatar)}>{who.charAt(0).toUpperCase()}</span>
+                  <p sx={styles.quote}>“{review.quote()}”</p>
+                  <div sx={styles.author}>
+                    <span sx={styles.avatar}>{who.charAt(0).toUpperCase()}</span>
                     <div>
-                      <div {...stylex.props(styles.who)}>{who}</div>
-                      <div {...stylex.props(styles.role)}>{review.role()}</div>
+                      <div sx={styles.who}>{who}</div>
+                      <div sx={styles.role}>{review.role()}</div>
                     </div>
                   </div>
                 </div>

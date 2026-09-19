@@ -1,9 +1,18 @@
+import * as stylex from "@stylexjs/stylex"
 import { TextBoldIcon, TextItalicIcon, TextUnderlineIcon } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 import preview from "@/storybook/preview"
 import { Toggle } from "@taiyomoe/ui/components/ui/toggle"
 import { fn } from "storybook/test"
 
+const styles = stylex.create({
+  wrap: {
+    gap: "0.5rem",
+    alignItems: "center",
+    display: "flex",
+    flexWrap: "wrap",
+  },
+})
 const meta = preview.meta({
   title: "UI/Toggle",
   component: Toggle,
@@ -29,7 +38,7 @@ export const Default = meta.story({
 
 export const Variants = meta.story({
   render: () => (
-    <div className="flex flex-wrap items-center gap-2">
+    <div sx={styles.wrap}>
       <Toggle variant="default">Default</Toggle>
       <Toggle variant="outline">Outline</Toggle>
     </div>
@@ -38,7 +47,7 @@ export const Variants = meta.story({
 
 export const Sizes = meta.story({
   render: () => (
-    <div className="flex flex-wrap items-center gap-2">
+    <div sx={styles.wrap}>
       <Toggle size="sm" variant="outline">
         Small
       </Toggle>
@@ -62,7 +71,7 @@ export const Disabled = meta.story({
 
 export const WithIcon = meta.story({
   render: () => (
-    <div className="flex flex-wrap items-center gap-2">
+    <div sx={styles.wrap}>
       <Toggle aria-label="Bold" variant="outline">
         <HugeiconsIcon icon={TextBoldIcon} />
       </Toggle>

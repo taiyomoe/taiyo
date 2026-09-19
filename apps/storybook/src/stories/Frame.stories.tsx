@@ -1,3 +1,5 @@
+import * as stylex from "@stylexjs/stylex"
+import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
 import preview from "@/storybook/preview"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import {
@@ -9,12 +11,29 @@ import {
   FrameTitle,
 } from "@taiyomoe/ui/components/ui/frame"
 
+const styles = stylex.create({
+  anchor: {
+    width: "24rem",
+  },
+  spacing: {
+    padding: 0,
+  },
+  row: {
+    alignItems: "center",
+    backgroundColor: `color-mix(in srgb, ${colors.muted} 40%, transparent)`,
+    display: "flex",
+    justifyContent: "space-between",
+    borderTopColor: colors.border,
+    borderTopStyle: "solid",
+    borderTopWidth: 1,
+  },
+})
 const meta = preview.meta({
   title: "UI/Frame",
   component: Frame,
   parameters: { layout: "centered" },
   render: () => (
-    <Frame className="w-96">
+    <Frame sx={styles.anchor}>
       <FramePanel>
         <FrameHeader>
           <FrameTitle>Account</FrameTitle>
@@ -29,7 +48,7 @@ export const Default = meta.story({})
 
 export const MultiplePanels = meta.story({
   render: () => (
-    <Frame className="w-96">
+    <Frame sx={styles.anchor}>
       <FramePanel>
         <FrameHeader>
           <FrameTitle>Profile</FrameTitle>
@@ -54,13 +73,13 @@ export const MultiplePanels = meta.story({
 
 export const WithFooter = meta.story({
   render: () => (
-    <Frame className="w-96">
-      <FramePanel className="p-0">
+    <Frame sx={styles.anchor}>
+      <FramePanel sx={styles.spacing}>
         <FrameHeader>
           <FrameTitle>Display name</FrameTitle>
           <FrameDescription>This is the name that will be shown to other users.</FrameDescription>
         </FrameHeader>
-        <FrameFooter className="flex items-center justify-between border-t bg-muted/40">
+        <FrameFooter sx={styles.row}>
           <FrameDescription>Max 32 characters.</FrameDescription>
           <Button size="sm">Save</Button>
         </FrameFooter>

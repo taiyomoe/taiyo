@@ -3,17 +3,16 @@
 import { Switch as SwitchPrimitive } from "@base-ui/react/switch"
 import * as stylex from "@stylexjs/stylex"
 import type React from "react"
-import { cn } from "@/lib/utils"
+import { cn } from "@/utils/cn"
 import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
 import type { Sx } from "../../styles/sx"
-// Marker for the root so the thumb can react to the track being pressed (the
-// Tailwind original's `in-[[role=switch]:active]` squish). The label-active
-// variants (`[data-slot=label]:active`, `[data-slot=field-label]:active`)
-// cannot cross component files and were dropped — a minor animation nicety.
+// Marker for the root so the thumb can squish when the track is pressed.
+// The same squish on an enclosing label is not expressible — a marker cannot
+// cross component files — so pressing the label alone does not animate.
 import { switchRootMarker } from "../../styles/markers.stylex"
-// The thumb is 1.25rem (1rem from `sm:` up). The Tailwind original derived
-// every dimension from a `--thumb-size` custom property; the sizes are
-// expanded inline here instead, with `consts.sm` conditions on each.
+// The thumb is 1.25rem (1rem from `sm` up). Every dimension that depends on
+// it is expanded inline with its own `consts.sm` condition rather than being
+// derived from the custom property, which only the thumb itself reads back.
 const styles = stylex.create({
   root: {
     // The thumb reads `--thumb-size` back: a `stylex.when` key is only legal
@@ -92,7 +91,7 @@ const styles = stylex.create({
   },
 })
 
-/** See the note on SeparatorProps: `className` stays until callers migrate. */
+/** See the note on SeparatorProps for why `className` sits alongside `sx`. */
 export type SwitchProps = SwitchPrimitive.Root.Props & {
   sx?: Sx
 }

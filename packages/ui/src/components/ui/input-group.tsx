@@ -2,7 +2,7 @@
 
 import * as stylex from "@stylexjs/stylex"
 import type * as React from "react"
-import { cn } from "@/lib/utils"
+import { cn } from "@/utils/cn"
 import { Input, type InputProps } from "@/components/ui/input"
 import { Textarea, type TextareaProps } from "@/components/ui/textarea"
 import type { Sx } from "../../styles/sx"

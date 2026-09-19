@@ -23,7 +23,7 @@ Avatars are small visual identifiers for a user, account, or entity. They render
 
 ### Sizes
 
-The avatar's size is controlled by className utilities — override the default `size-8` with any Tailwind `size-*` value to scale.
+The avatar defaults to 2rem square. Pass `sx` with a `height`/`width` pair to scale it — caller styles are the last argument to `stylex.props()`, so they win.
 
 <Canvas of={AvatarStories.Sizes} />
 

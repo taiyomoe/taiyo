@@ -22,13 +22,13 @@ The Spinner communicates an indeterminate loading state. It renders a continuous
 
 ### Sizes
 
-The spinner has no built-in size variants — sizing is controlled through Tailwind utility classes (`size-*` or `h-*`/`w-*`) passed via `className`.
+The spinner has no built-in size variants — pass `sx` with a `height`/`width` pair to size it.
 
 <Canvas of={SpinnerStories.Sizes} />
 
 ### Colors
 
-The icon inherits `currentColor`, so its tone is set with text-color utilities (`text-primary`, `text-muted-foreground`, etc.).
+The icon inherits `currentColor`, so it takes its tone from whatever it sits in — set `color` on the spinner itself, or on any ancestor, from the `colors` tokens.
 
 <Canvas of={SpinnerStories.Colors} />
 
