@@ -1,0 +1,20 @@
+meta {
+  name: List banners
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{url}}/medias/:id/banners
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: 00000000-0000-0000-0000-000000000000
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

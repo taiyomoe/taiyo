@@ -1,227 +1,73 @@
-@import "tailwindcss";
-@import "tw-animate-css";
-@source "../../../../apps/**/*.{ts,tsx}";
-@source "../components/*.{ts,tsx}";
+/**
+ * The design system's one global stylesheet.
+ *
+ * Components are styled entirely in StyleX and read their tokens from
+ * `./tokens.stylex.ts`, which is the single source of truth for the palette.
+ * This file exists for the three things StyleX cannot own:
+ *
+ *   1. the base element reset (`./reset.css`);
+ *   2. the cross-element rules in `./structural.css`, which are plain CSS and
+ *      therefore need plain CSS custom properties to read colours from;
+ *   3. the document-level defaults (page background, text colour, fonts).
+ *
+ * The `:root` / `.dark` blocks below are deliberately NOT a second copy of the
+ * palette — they carry only the handful of semantic colours `structural.css`
+ * consumes, plus the fonts. Every value here mirrors the identically named
+ * token in `tokens.stylex.ts`; change one and change the other.
+ *
+ * The `.dark` class and the StyleX dark theme classes are applied together on
+ * `<html>` by each app, so the two halves always agree on which theme is live.
+ */
 
-@custom-variant dark (&:is(.dark *));
-@custom-variant pressed (&:is([data-pressed]));
-@custom-variant open (&:is([data-popup-open], [data-open]));
-@custom-variant closed (&:is([data-popup-closed], [data-closed]));
-@custom-variant highlighted (&:is([data-highlighted]));
-@custom-variant selected (&:is([data-selected]));
-@custom-variant disabled (&:is([data-disabled], :disabled)) *;
-@custom-variant checked (&:is([data-checked]));
-@custom-variant vertical (&:is([data-orientation=vertical]));
-@custom-variant horizontal (&:is([data-orientation=horizontal]));
+@import "@fontsource-variable/inter";
+@import "@fontsource-variable/jetbrains-mono";
+@import "./reset.css";
+@import "./structural.css";
 
 :root {
-  /* Background Standard */
-  --background: 0, 0%, 100%; /* white - default background */
-  --background-subtle: 220, 14%, 94%; /* gray.100 - hovering on items, subtle raising */
-  --background-muted: 210, 20%, 97%; /* gray.50 - large items, sidebar, sections */
-  --background-emphasis: 220, 13%, 91%; /* gray.200 - active items and emphasising */
+  --font-heading: "Inter Variable", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono Variable", monospace;
+  --font-sans: "Inter Variable", system-ui, sans-serif;
 
-  /* Background Semantic */
-  --background-semantic-info: 212, 88%, 97%; /* blue.100 */
-  --background-semantic-info-subtle: 212, 88%, 89%;
-  --background-semantic-success: 167, 54%, 93%; /* green.100 */
-  --background-semantic-success-subtle: 167, 54%, 85%;
-  --background-semantic-warning: 34, 100%, 92%; /* orange.100 */
-  --background-semantic-warning-subtle: 34, 100%, 84%;
-  --background-semantic-error: 0, 93%, 94%; /* red.100 */
-  --background-semantic-error-subtle: 0, 93%, 86%;
-
-  /* Background Primary */
-  --background-primary: 214, 30%, 16%; /* stone.100 */
-  --background-primary-emphasis: 220, 6%, 25%; /* stone.800 */
-  --background-primary-muted: 220, 14%, 94%; /* stone.400 */
-
-  /* Background Secondary */
-  --background-secondary: 250, 7.5%, 95%;
-  --background-secondary-emphasis: 250, 7.5%, 90%;
-  --background-secondary-muted: 0, 0%, 92%;
-
-  /* Border Standard */
-  --border: 216, 12%, 84%; /* gray.300 - inputs */
-  --border-subtle: 220, 13%, 91%; /* gray.200 - container borders */
-  --border-muted: 220, 14%, 94%; /* gray.100 */
-  --border-emphasis: 218, 11%, 65%; /* gray.400 - input:hover */
-
-  /* Border Semantic */
-  --border-semantic-warning-subtle: 32, 98%, 83%;
-  --border-semantic-error-subtle: 0, 96%, 89%;
-  --border-semantic-error: 0, 63%, 24%; /* red.800 */
-
-  /* Content/Text Standard */
-  --text: 220, 6%, 25%; /* gray.700 */
-  --text-subtle: 220, 9%, 46%; /* gray.500 */
-  --text-muted: 218, 11%, 65%; /* gray.400 */
-  --text-emphasis: 210, 30%, 4%; /* gray.900 */
-  --text-inverted: 0, 0%, 100%; /* white */
-
-  /* Content/Text Semantic */
-  --text-semantic-info: 236, 80%, 25%; /* blue-800 */
-  --text-semantic-info-subtle: 236, 80%, 25%; /* blue.100/80 */
-  --text-semantic-success: 150, 84%, 22%; /* green-800 */
-  --text-semantic-success-subtle: 150, 84%, 22%; /* green.100/80 */
-  --text-semantic-attention: 15, 79%, 34%; /* orange-800 */
-  --text-semantic-warning-subtle: 15, 79%, 34%; /* orange.100/80 */
-  --text-semantic-error: 0, 63%, 24%; /* red-800 */
-  --text-semantic-error-subtle: 0, 63%, 24%; /* red.100/80 */
-
-  /* Brand */
-  --brand: 0, 100%, 65.49%;
-  --brand-muted: 0, 97%, 71%;
-  --brand-emphasis: 0, 98%, 55%;
-
-  /* Defaults */
-  --radius: 0.75rem;
-  --default-transition-duration: 0.2s;
+  --background: oklch(94.2% 0 0);
+  --foreground: oklch(20.5% 0 0);
+  --card: oklch(99.3% 0 0);
+  --muted-foreground: oklch(47.7% 0 0);
+  --border: rgb(0 0 0 / 9%);
+  --primary: #f2452d;
+  --primary-foreground: #fff;
+  --ring: #f2452d;
+  --destructive: oklch(63.7% 0.237 25.331);
+  --info: oklch(62.3% 0.214 259.815);
+  --success: oklch(69.6% 0.17 162.48);
+  --warning: oklch(76.9% 0.188 70.08);
+  --sidebar-accent-foreground: oklch(20.5% 0 0);
 }
 
 .dark {
-  /* Background Standard */
-  --background: 240, 0%, 5%;
-  --background-subtle: 330, 0%, 11.75%;
-  --background-muted: 0, 0%, 7%;
-  --background-emphasis: 0, 0%, 25%;
-
-  /* Background Semantic */
-  --background-semantic-info: 234, 18%, 13%;
-  --background-semantic-info-subtle: 234, 18%, 21%;
-  --background-semantic-success: 157, 22%, 11%;
-  --background-semantic-success-subtle: 157, 22%, 19%;
-  --background-semantic-warning: 24, 32%, 11%;
-  --background-semantic-warning-subtle: 24, 32%, 19%;
-  --background-semantic-error: 359, 23%, 12%;
-  --background-semantic-error-subtle: 359, 23%, 20%;
-
-  /* Background Primary */
-  --background-primary: 0, 0%, 96%; /* stone.100 */
-  --background-primary-emphasis: 0, 0%, 64%; /* stone.800 */
-  --background-primary-muted: 0, 0%, 15%; /* stone.400 */
-
-  /* Background Secondary */
-  --background-secondary: 250, 7.5%, 11%;
-  --background-secondary-emphasis: 250, 7.5%, 15%;
-  --background-secondary-muted: 0, 0%, 15%;
-
-  /* Border Standard */
-  --border: 330, 0%, 14%;
-  --border-subtle: 240, 0%, 10.5%;
-  --border-muted: 0, 0%, 9%;
-  --border-emphasis: 0, 0%, 20%;
-
-  /* Border Semantic */
-  --border-semantic-warning-subtle: 15, 75%, 23%;
-  --border-semantic-error-subtle: 0, 63%, 24%;
-  --border-semantic-error: 0, 63%, 24%; /* red.800 */
-
-  /* Content/Text Standard */
-  --text: 0, 0%, 83%; /* stone.300 */
-  --text-subtle: 0, 0%, 64%; /* stone.400 */
-  --text-muted: 0, 0%, 64%; /* stone.400 */
-  --text-emphasis: 0, 0%, 98%; /* stone.50 */
-  --text-inverted: 0, 0%, 0%; /* black */
-
-  /* Content/Text Semantic */
-  --text-semantic-info: 229, 90%, 74%; /* blue.100 */
-  --text-semantic-info-subtle: 229, 90%, 74%; /* blue.100/80 */
-  --text-semantic-success: 161, 49%, 54%; /* green.100 */
-  --text-semantic-success-subtle: 161, 49%, 54%; /* green.100/80 */
-  --text-semantic-warning: 27, 96%, 61%; /* orange.100 */
-  --text-semantic-warning-subtle: 27, 96%, 61%; /* orange.100/80 */
-  --text-semantic-error: 0, 91%, 71%; /* red.100 */
-  --text-semantic-error-subtle: 0, 91%, 71%; /* red.100/80 */
-
-  /* Brand */
-  --brand: 0, 100%, 65.49%;
-  --brand-muted: 0, 97%, 71%;
-  --brand-emphasis: 0, 98%, 55%;
+  --background: color-mix(in srgb, oklch(14.5% 0 0) 99%, #fff);
+  --foreground: oklch(97% 0 0);
+  --card: color-mix(in srgb, oklch(14.5% 0 0) 92%, #fff);
+  --muted-foreground: oklch(64% 0 0);
+  --border: rgb(255 255 255 / 8%);
+  --destructive: color-mix(in srgb, oklch(63.7% 0.237 25.331) 90%, #fff);
+  --sidebar-accent-foreground: oklch(97% 0 0);
 }
 
-@theme inline {
-  /* Background Standard */
-  --color-default: hsla(var(--background), 1);
-  --color-subtle: hsla(var(--background-subtle), 1);
-  --color-muted: hsla(var(--background-muted), 1);
-  --color-emphasis: hsla(var(--background-emphasis), 1);
-
-  /* Background Semantic */
-  --color-info: hsla(var(--background-semantic-info), 1);
-  --color-info-subtle: hsla(var(--background-semantic-info-subtle), 1);
-  --color-success: hsla(var(--background-semantic-success), 1);
-  --color-success-subtle: hsla(var(--background-semantic-success-subtle), 1);
-  --color-warning: hsla(var(--background-semantic-warning), 1);
-  --color-warning-subtle: hsla(var(--background-semantic-warning-subtle), 1);
-  --color-error: hsla(var(--background-semantic-error), 1);
-  --color-error-subtle: hsla(var(--background-semantic-error-subtle), 1);
-
-  /* Background Primary */
-  --color-primary: hsla(var(--background-primary), 1);
-  --color-primary-emphasis: hsla(var(--background-primary-emphasis), 1);
-  --color-primary-muted: hsla(var(--background-primary-muted), 1);
-
-  /* Background Secondary */
-  --color-secondary: hsla(var(--background-secondary), 1);
-  --color-secondary-emphasis: hsla(var(--background-secondary-emphasis), 1);
-  --color-secondary-muted: hsla(var(--background-secondary-muted), 1);
-
-  /* Border Standard */
-  --border-color-default: hsla(var(--border), 1);
-  --border-color-subtle: hsla(var(--border-subtle), 1);
-  --border-color-muted: hsla(var(--border-muted), 1);
-  --border-color-emphasis: hsla(var(--border-emphasis), 1);
-
-  /* Border Semantic */
-  --border-color-warning-subtle: hsla(var(--border-semantic-warning-subtle), 1);
-  --border-color-error-subtle: hsla(var(--border-semantic-error-subtle), 1);
-  --border-color-error: hsla(var(--border-semantic-error), 1);
-
-  /* Content/Text Standard */
-  --text-color-default: hsla(var(--text), 1);
-  --text-color-subtle: hsla(var(--text-subtle), 1);
-  --text-color-muted: hsla(var(--text-muted), 1);
-  --text-color-inverted: hsla(var(--text-inverted), 1);
-
-  /* Content/Text Semantic */
-  --text-color-info: hsla(var(--text-semantic-info), 1);
-  --text-color-info-subtle: hsla(var(--text-semantic-info-subtle), 0.8);
-  --text-color-success: hsla(var(--text-semantic-success), 1);
-  --text-color-success-subtle: hsla(var(--text-semantic-success-subtle), 0.8);
-  --text-color-warning: hsla(var(--text-semantic-warning), 1);
-  --text-color-warning-subtle: hsla(var(--text-semantic-warning-subtle), 0.8);
-  --text-color-error: hsla(var(--text-semantic-error), 1);
-  --text-color-error-subtle: hsla(var(--text-semantic-error-subtle), 0.8);
-
-  /* Brand */
-  --color-brand: hsla(var(--brand), 1);
-  --color-brand-muted: hsla(var(--brand-muted), 1);
-  --color-brand-emphasis: hsla(var(--brand-emphasis), 1);
-
-  /* Defaults */
-  --radius: calc(var(--radius) - 2px);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-
-  /* Container sizes */
-  --container-8xl: 88rem;
-  --container-9xl: 96rem;
-}
-
+/* Document defaults. In `@layer base` for the same reason as ./reset.css:
+   a component's own colours must outrank them, and unlayered StyleX atoms
+   beat anything in a layer. */
 @layer base {
+  /* A default border colour so a component that declares only a width still
+     gets the hairline the design language expects, and a default outline
+     colour for anything focused that does not draw its own ring. */
   * {
-    @apply border-default;
+    border-color: var(--border);
+    outline-color: color-mix(in srgb, var(--ring) 50%, transparent);
   }
 
-  button {
-    @apply hover:cursor-pointer;
-  }
-
-  html body[data-scroll-locked] {
-    overflow-y: scroll !important;
-    --removed-body-scroll-bar-size: 0 !important;
-    margin-right: 0 !important;
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
   }
 }

@@ -1,6 +1,6 @@
 services:
   postgres:
-    image: "postgres:17-alpine"
+    image: "postgres:18-alpine"
     restart: unless-stopped
     environment:
       - POSTGRES_USER=$DATABASE_USERNAME
@@ -11,45 +11,51 @@ services:
     volumes:
       - "./data/postgres:/var/lib/postgresql/data"
 
-  meilisearch:
-    image: "getmeili/meilisearch:v1.10"
-    restart: unless-stopped
-    environment:
-      - MEILI_MASTER_KEY=$MEILISEARCH_MASTER_KEY
-      - MEILI_ENV=$NODE_ENV
-    ports:
-      - "$MEILISEARCH_PORT:7700"
-    volumes:
-      - "./data/meilisearch:/meili_data"
-
   dragonfly:
     image: "docker.dragonflydb.io/dragonflydb/dragonfly"
     restart: unless-stopped
     ulimits:
       memlock: -1
     environment:
-      - "DFLY_cluster_mode=emulated"
-      - "DFLY_lock_on_hashtags=1"
+      - DFLY_cluster_mode=emulated
+      - DFLY_lock_on_hashtags=1
     ports:
       - "$DRAGONFLY_PORT:6379"
     volumes:
       - "./data/dragonfly:/data"
-
-  clickhouse:
-    image: "clickhouse:24"
-    restart: unless-stopped
-    environment:
-      - CLICKHOUSE_ADMIN_USER=$CLICKHOUSE_USERNAME
-      - CLICKHOUSE_ADMIN_PASSWORD=$CLICKHOUSE_PASSWORD
-    ports:
-      - "$CLICKHOUSE_HTTP_PORT:8123"
-      - "$CLICKHOUSE_TCP_PORT:9000"
-    volumes:
-      - "./data/clickhouse:/bitnami/clickhouse"
-      - "./packages/logs/config.xml:/bitnami/clickhouse/etc/conf.d/override.xml:ro"
 
   hyperdx:
     image: "docker.hyperdx.io/hyperdx/hyperdx-all-in-one"
     restart: unless-stopped
     ports:
       - "$HYPERDX_PORT:8080"
+      - "$HYPERDX_OTLP_PORT:4318"
+
+  meilisearch:
+    image: "getmeili/meilisearch:latest"
+    restart: unless-stopped
+    environment:
+      - MEILI_MASTER_KEY=$MEILISEARCH_MASTER_KEY
+      - MEILI_NO_ANALYTICS=true
+    ports:
+      - "$MEILISEARCH_PORT:7700"
+    volumes:
+      - "./data/meilisearch:/meili_data"
+
+  rustfs:
+    image: rustfs/rustfs:latest
+    restart: unless-stopped
+    environment:
+      - RUSTFS_ACCESS_KEY=$RUSTFS_ACCESS_KEY
+      - RUSTFS_SECRET_KEY=$RUSTFS_SECRET_KEY
+      - RUSTFS_VOLUMES=/data
+    ports:
+      - "$RUSTFS_PORT:9000"
+      - "$RUSTFS_CONSOLE_PORT:9001"
+    volumes:
+      - "./data/rustfs:/data"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:9000/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 30

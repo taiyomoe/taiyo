@@ -1,0 +1,72 @@
+import { Canvas, Meta } from "@storybook/addon-docs/blocks"
+import * as AutocompleteStories from "./Autocomplete.stories"
+
+<Meta title="UI/Autocomplete" />
+
+# Autocomplete
+
+[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/ui/autocomplete.tsx)
+
+## Table of Contents
+
+- [Overview](#overview)
+  - [Sizes](#sizes)
+  - [With Trigger](#with-trigger)
+  - [With Clear](#with-clear)
+  - [With Start Addon](#with-start-addon)
+  - [Disabled](#disabled)
+  - [Read Only](#read-only)
+  - [With Groups](#with-groups)
+- [Feedback](#feedback)
+
+## Overview
+
+Autocomplete combines a free-form text input with a filtered suggestion popup. It's the right primitive when users mostly know what they want to type but benefit from quick recognition of valid options — search boxes, tag pickers, command palettes.
+
+<Canvas of={AutocompleteStories.Default} />
+
+### Sizes
+
+The `size` prop on `AutocompleteInput` matches the underlying `Input` sizing: `sm`, `default`, and `lg`.
+
+<Canvas of={AutocompleteStories.Sizes} />
+
+### With Trigger
+
+Pass `showTrigger` to render a chevron button that opens the popup independently of typing. Often paired with `openOnInputClick` for a select-like feel.
+
+<Canvas of={AutocompleteStories.WithTrigger} />
+
+### With Clear
+
+Pass `showClear` to expose a clear button that wipes the current input value.
+
+<Canvas of={AutocompleteStories.WithClear} />
+
+### With Start Addon
+
+Use `startAddon` to render an icon (or other content) inside the input's leading edge — handy for hinting at the search intent.
+
+<Canvas of={AutocompleteStories.WithStartAddon} />
+
+### Disabled
+
+Pass `disabled` on the root to prevent all interaction with the input and popup.
+
+<Canvas of={AutocompleteStories.Disabled} />
+
+### Read Only
+
+`readOnly` keeps the current value visible but blocks edits — useful when the field's value is derived from another source.
+
+<Canvas of={AutocompleteStories.ReadOnly} />
+
+### With Groups
+
+`AutocompleteGroup`, `AutocompleteGroupLabel`, and `AutocompleteSeparator` let you organize long suggestion lists into labeled sections.
+
+<Canvas of={AutocompleteStories.WithGroups} />
+
+## Feedback
+
+Help us improve this component by providing feedback, asking questions on [Discord](https://discord.gg/RYbnyeWcM2), or updating this file directly on [GitHub](https://github.com/taiyomoe/taiyo). Your feedback helps us create better components! 🚀

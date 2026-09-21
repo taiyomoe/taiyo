@@ -1,0 +1,37 @@
+import { Canvas, Meta } from "@storybook/addon-docs/blocks"
+import * as CollapsibleStories from "./Collapsible.stories"
+
+<Meta title="UI/Collapsible" />
+
+# Collapsible
+
+[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/ui/collapsible.tsx)
+
+## Table of Contents
+
+- [Overview](#overview)
+  - [Open by default](#open-by-default)
+  - [Disabled](#disabled)
+- [Feedback](#feedback)
+
+## Overview
+
+Collapsibles let users hide and reveal a region of content under a trigger. Use them to compress secondary content, expandable settings, or progressive disclosure within a page without taking the user out of context.
+
+<Canvas of={CollapsibleStories.Default} />
+
+### Open by default
+
+Pass `defaultOpen` to render the panel expanded on mount while keeping the component uncontrolled.
+
+<Canvas of={CollapsibleStories.OpenByDefault} />
+
+### Disabled
+
+When `disabled` is set, the trigger no longer toggles the panel and is styled as inactive.
+
+<Canvas of={CollapsibleStories.Disabled} />
+
+## Feedback
+
+Help us improve this component by providing feedback, asking questions on [Discord](https://discord.gg/RYbnyeWcM2), or updating this file directly on [GitHub](https://github.com/taiyomoe/taiyo). Your feedback helps us create better components! 🚀

@@ -1,0 +1,58 @@
+import { Canvas, Meta } from "@storybook/addon-docs/blocks"
+import * as CalendarStories from "./Calendar.stories"
+
+<Meta title="UI/Calendar" />
+
+# Calendar
+
+[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/ui/calendar.tsx)
+
+## Table of Contents
+
+- [Overview](#overview)
+  - [Multiple](#multiple)
+  - [Range](#range)
+  - [With Dropdown Navigation](#with-dropdown-navigation)
+  - [Without Outside Days](#without-outside-days)
+  - [Disabled](#disabled)
+- [Feedback](#feedback)
+
+## Overview
+
+The Calendar is a styled wrapper around [react-day-picker](https://react-day-picker.js.org/) that exposes its full API while applying the project's tokens. It supports single, multiple, and range selection modes.
+
+<Canvas of={CalendarStories.Default} />
+
+### Multiple
+
+Set `mode="multiple"` to let users toggle several discrete dates on and off.
+
+<Canvas of={CalendarStories.Multiple} />
+
+### Range
+
+Set `mode="range"` to select a continuous span. The styled `range-start`, `range-middle`, and `range-end` slots connect the selected cells visually.
+
+<Canvas of={CalendarStories.Range} />
+
+### With Dropdown Navigation
+
+Pass `captionLayout="dropdown"` to swap the chevron nav for month/year dropdowns.
+
+<Canvas of={CalendarStories.WithDropdownNavigation} />
+
+### Without Outside Days
+
+By default the Calendar shows trailing/leading days from neighbouring months. Set `showOutsideDays={false}` to hide them.
+
+<Canvas of={CalendarStories.WithoutOutsideDays} />
+
+### Disabled
+
+Pass `disabled` to prevent any date from being selected.
+
+<Canvas of={CalendarStories.Disabled} />
+
+## Feedback
+
+Help us improve this component by providing feedback, asking questions on [Discord](https://discord.gg/RYbnyeWcM2), or updating this file directly on [GitHub](https://github.com/taiyomoe/taiyo). Your feedback helps us create better components! 🚀

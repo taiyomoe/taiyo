@@ -1,0 +1,86 @@
+import { Canvas, Meta } from "@storybook/addon-docs/blocks"
+import * as OtpFieldStories from "./OtpField.stories"
+
+<Meta title="UI/OtpField" />
+
+# OtpField
+
+[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/ui/otp-field.tsx)
+
+## Table of Contents
+
+- [Overview](#overview)
+  - [Large](#large)
+  - [Four Digits](#four-digits)
+  - [Eight Digits](#eight-digits)
+  - [Masked](#masked)
+  - [Alphanumeric](#alphanumeric)
+  - [With Default Value](#with-default-value)
+  - [With Separator](#with-separator)
+  - [Disabled](#disabled)
+  - [Read Only](#read-only)
+- [Feedback](#feedback)
+
+## Overview
+
+OTP fields are specialized inputs for one-time passcodes and similar short, fixed-length tokens. Each slot is a discrete input with automatic focus management, paste handling, and validation tuned for the configured character set.
+
+<Canvas of={OtpFieldStories.Default} />
+
+### Large
+
+The `lg` size produces taller slots and bigger text — useful for sign-in surfaces where the OTP is the primary affordance.
+
+<Canvas of={OtpFieldStories.Large} />
+
+### Four Digits
+
+Pass `length={4}` to render a four-slot field, the most common short-code layout.
+
+<Canvas of={OtpFieldStories.FourDigits} />
+
+### Eight Digits
+
+Longer codes (e.g. backup codes) use higher `length` values.
+
+<Canvas of={OtpFieldStories.EightDigits} />
+
+### Masked
+
+Pass `mask` to hide entered characters, like a password input.
+
+<Canvas of={OtpFieldStories.Masked} />
+
+### Alphanumeric
+
+Override `validationType` to accept letters in addition to digits — the default is `numeric`.
+
+<Canvas of={OtpFieldStories.Alphanumeric} />
+
+### With Default Value
+
+Provide `defaultValue` to render the field with a pre-filled, uncontrolled code.
+
+<Canvas of={OtpFieldStories.WithDefaultValue} />
+
+### With Separator
+
+Insert `OTPFieldSeparator` between slots to visually group the code into chunks.
+
+<Canvas of={OtpFieldStories.WithSeparator} />
+
+### Disabled
+
+Disabled OTP fields prevent user interaction and visually communicate the field is unavailable.
+
+<Canvas of={OtpFieldStories.Disabled} />
+
+### Read Only
+
+Read-only fields display a value without allowing edits — useful for showing a recovery code that can still be copied.
+
+<Canvas of={OtpFieldStories.ReadOnly} />
+
+## Feedback
+
+Help us improve this component by providing feedback, asking questions on [Discord](https://discord.gg/RYbnyeWcM2), or updating this file directly on [GitHub](https://github.com/taiyomoe/taiyo). Your feedback helps us create better components! 🚀

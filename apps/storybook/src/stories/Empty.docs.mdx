@@ -1,0 +1,44 @@
+import { Canvas, Meta } from "@storybook/addon-docs/blocks"
+import * as EmptyStories from "./Empty.stories"
+
+<Meta title="UI/Empty" />
+
+# Empty
+
+[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/ui/empty.tsx)
+
+## Table of Contents
+
+- [Overview](#overview)
+  - [With Action](#with-action)
+  - [Media Variants](#media-variants)
+  - [Title Only](#title-only)
+- [Feedback](#feedback)
+
+## Overview
+
+Empty is a compositional primitive for empty states — typically rendered when a list, search, or section has no data to show. Compose `EmptyHeader`, `EmptyMedia`, `EmptyTitle`, `EmptyDescription` and an optional `EmptyContent` slot for a call-to-action.
+
+<Canvas of={EmptyStories.Default} />
+
+### With Action
+
+An empty state can include an `EmptyContent` block that hosts a primary action button to help the user move forward.
+
+<Canvas of={EmptyStories.WithAction} />
+
+### Media Variants
+
+`EmptyMedia` accepts a `variant` prop: `default` renders the icon inline, while `icon` wraps it in a small card with decorative stacked back layers to evoke an empty stack.
+
+<Canvas of={EmptyStories.MediaVariants} />
+
+### Title Only
+
+The smallest useful composition: a header with just a title, when no media or description is needed.
+
+<Canvas of={EmptyStories.TitleOnly} />
+
+## Feedback
+
+Help us improve this component by providing feedback, asking questions on [Discord](https://discord.gg/RYbnyeWcM2), or updating this file directly on [GitHub](https://github.com/taiyomoe/taiyo). Your feedback helps us create better components! 🚀

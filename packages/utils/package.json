@@ -2,20 +2,19 @@
   "name": "@taiyomoe/utils",
   "version": "0.1.0",
   "private": true,
-  "type": "module",
   "license": "MIT",
+  "type": "module",
   "exports": {
     ".": "./src/index.ts"
   },
-  "scripts": {
-    "clean": "rm -rf .turbo node_modules",
-    "typecheck": "tsc --noEmit"
-  },
   "dependencies": {
-    "@faker-js/faker": "^10.1.0"
+    "@faker-js/faker": "^10.6.0",
+    "@taiyomoe/config": "workspace:^",
+    "@taiyomoe/db": "workspace:^",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@taiyomoe/typescript": "workspace:^",
-    "typescript": "^5.9.3"
+    "typescript": "^7.0.2"
   }
 }

@@ -1,0 +1,51 @@
+{
+  "name": "@taiyomoe/api",
+  "version": "5.0.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./env": "./src/env.ts"
+  },
+  "scripts": {
+    "with-env": "dotenv -e .env --",
+    "dev": "pnpm with-env tsx watch src/index.ts"
+  },
+  "dependencies": {
+    "@casl/ability": "^7.0.1",
+    "@hono-rate-limiter/redis": "^0.1.4",
+    "@hono/node-server": "^2.1.1",
+    "@hono/standard-validator": "^0.4.0",
+    "@scalar/hono-api-reference": "^0.11.14",
+    "@t3-oss/env-core": "^0.13.11",
+    "@taiyomoe/auth": "workspace:^",
+    "@taiyomoe/cache": "workspace:^",
+    "@taiyomoe/config": "workspace:^",
+    "@taiyomoe/db": "workspace:^",
+    "@taiyomoe/queue": "workspace:^",
+    "@taiyomoe/s3": "workspace:^",
+    "@taiyomoe/schemas": "workspace:^",
+    "@taiyomoe/search": "workspace:^",
+    "@taiyomoe/utils": "workspace:^",
+    "evlog": "^2.26.0",
+    "hono": "^4.13.2",
+    "hono-openapi": "^1.3.1",
+    "hono-rate-limiter": "^0.5.3",
+    "magic-bytes.js": "^1.13.1",
+    "radashi": "^12.9.1",
+    "sharp": "^0.35.3",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@aws-sdk/client-s3": "^3.1111.0",
+    "@taiyomoe/typescript": "workspace:^",
+    "@types/node": "^26.2.0",
+    "@types/pg": "^8.21.0",
+    "dotenv-cli": "^11.0.0",
+    "kysely": "^0.29.5",
+    "pg": "^8.23.0",
+    "tsx": "^4.23.12",
+    "typescript": "^7.0.2"
+  }
+}

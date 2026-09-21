@@ -1,0 +1,21 @@
+meta {
+  name: Delete banner
+  type: http
+  seq: 4
+}
+
+delete {
+  url: {{url}}/medias/:id/banners/:bannerId
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: 00000000-0000-0000-0000-000000000000
+  bannerId: 00000000-0000-0000-0000-000000000000
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

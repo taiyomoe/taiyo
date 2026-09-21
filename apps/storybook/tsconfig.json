@@ -1,10 +1,14 @@
 {
   "extends": "@taiyomoe/typescript/base.json",
   "compilerOptions": {
-    "baseUrl": ".",
     "jsx": "preserve",
-    "paths": { "~/*": ["./src/*"] }
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "noUncheckedSideEffectImports": false,
+    "paths": {
+      "@/storybook/*": ["./.storybook/*"],
+      "@/*": ["./src/*"]
+    }
   },
-  "include": [".storybook", "stories"],
+  "include": [".storybook/**/*", "./src/**/*"],
   "exclude": ["node_modules"]
 }

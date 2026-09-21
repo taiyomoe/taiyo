@@ -1,15 +1,12 @@
 import { faker } from "@faker-js/faker"
-
-export const DISPLAYNAME_REGEX = /^[a-zA-Z0-9_.\s]{3,30}$/
-export const DISPLAYNAME_MIN_LENGTH = 3
-export const DISPLAYNAME_MAX_LENGTH = 30
+import { config } from "@taiyomoe/config"
 
 export const normalizeDisplayName = (input: string) => {
   const normalized = input
-    .slice(0, DISPLAYNAME_MAX_LENGTH)
+    .slice(0, config.auth.displayName.maxLength)
     .replace(/[^a-zA-Z0-9_.\s]/g, "")
 
-  return normalized.length < DISPLAYNAME_MIN_LENGTH
+  return normalized.length < config.auth.displayName.minLength
     ? faker.internet.username()
     : normalized
 }

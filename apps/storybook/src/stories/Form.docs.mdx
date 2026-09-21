@@ -1,0 +1,37 @@
+import { Canvas, Meta } from "@storybook/addon-docs/blocks"
+import * as FormStories from "./Form.stories"
+
+<Meta title="UI/Form" />
+
+# Form
+
+[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/ui/form.tsx)
+
+## Table of Contents
+
+- [Overview](#overview)
+  - [Composition](#composition)
+  - [With Server Errors](#with-server-errors)
+- [Feedback](#feedback)
+
+## Overview
+
+Form is a thin wrapper over the native `<form>` element with consolidated validation. It owns the `validationMode` for nested `Field`s, surfaces a strongly-typed `onFormSubmit` handler, and accepts externally-provided `errors` (e.g. from a server action) keyed by field `name`.
+
+<Canvas of={FormStories.Default} />
+
+### Composition
+
+A real-world signup form built from `Form`, multiple `Field`s, and `Button`s for submit/reset.
+
+<Canvas of={FormStories.Composition} />
+
+### With Server Errors
+
+Pass an `errors` object keyed by field `name` to display validation messages returned by a server. Each Field's `FieldError` will render the matching message until the user edits the value.
+
+<Canvas of={FormStories.WithServerErrors} />
+
+## Feedback
+
+Help us improve this component by providing feedback, asking questions on [Discord](https://discord.gg/RYbnyeWcM2), or updating this file directly on [GitHub](https://github.com/taiyomoe/taiyo). Your feedback helps us create better components! 🚀

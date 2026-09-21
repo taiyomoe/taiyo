@@ -12,11 +12,10 @@ export const env = createEnv({
    * This way you can ensure the app isn't built with invalid env vars.
    */
   server: {
-    S3_URL: z.url(),
-    S3_ACCESS_KEY_ID: z.string(),
-    S3_SECRET_ACCESS_KEY: z.string(),
-    S3_CDN_BUCKET_NAME: z.string(),
-    S3_UPLOADS_BUCKET_NAME: z.string(),
+    S3_ENDPOINT: z.url(),
+    S3_ACCESS_KEY_ID: z.string().min(1),
+    S3_SECRET_ACCESS_KEY: z.string().min(1),
+    S3_BUCKET_NAME: z.string().min(1),
   },
 
   /**
@@ -28,5 +27,5 @@ export const env = createEnv({
 
   runtimeEnv: process.env,
   skipValidation:
-    !!process.env.CI || process.env.npm_lifecycle_event === "lint",
+    !!process.env.CI || !!process.env.TEST || process.env.npm_lifecycle_event === "lint",
 })

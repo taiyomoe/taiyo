@@ -1,0 +1,37 @@
+import { Canvas, Meta } from "@storybook/addon-docs/blocks"
+import * as TableStories from "./Table.stories"
+
+<Meta title="UI/Table" />
+
+# Table
+
+[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/ui/table.tsx)
+
+## Table of Contents
+
+- [Overview](#overview)
+  - [Card](#card)
+  - [Selected Row](#selected-row)
+- [Feedback](#feedback)
+
+## Overview
+
+The Table is a compositional set of primitives — `Table`, `TableHeader`, `TableBody`, `TableFooter`, `TableRow`, `TableHead`, `TableCell`, and `TableCaption` — for rendering tabular data with consistent typography, spacing, and hover/selection states.
+
+<Canvas of={TableStories.Default} />
+
+### Card
+
+Set `variant="card"` to render the table inside a rounded, bordered card surface — useful when the table sits on a colored page background.
+
+<Canvas of={TableStories.Card} />
+
+### Selected Row
+
+Set `data-state="selected"` on a `TableRow` to surface a persistent selection background.
+
+<Canvas of={TableStories.SelectedRow} />
+
+## Feedback
+
+Help us improve this component by providing feedback, asking questions on [Discord](https://discord.gg/RYbnyeWcM2), or updating this file directly on [GitHub](https://github.com/taiyomoe/taiyo). Your feedback helps us create better components! 🚀

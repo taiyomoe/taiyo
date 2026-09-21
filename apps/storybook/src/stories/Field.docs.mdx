@@ -1,0 +1,51 @@
+import { Canvas, Meta } from "@storybook/addon-docs/blocks"
+import * as FieldStories from "./Field.stories"
+
+<Meta title="UI/Field" />
+
+# Field
+
+[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/ui/field.tsx)
+
+## Table of Contents
+
+- [Overview](#overview)
+  - [Composition](#composition)
+  - [Disabled](#disabled)
+  - [Invalid](#invalid)
+  - [With Description](#with-description)
+- [Feedback](#feedback)
+
+## Overview
+
+Field is the accessibility wrapper around a single form control. It wires up a `FieldLabel`, `FieldControl`, `FieldDescription` and `FieldError` to the same `name`, propagates `disabled` / `invalid` state to its children, and integrates with `Form` for validation.
+
+<Canvas of={FieldStories.Default} />
+
+### Composition
+
+A full Field composition: label, control, helper description, and one `FieldError` per native validity reason. Errors only render when the matching `ValidityState` flag is set on the control.
+
+<Canvas of={FieldStories.Composition} />
+
+### Disabled
+
+Setting `disabled` on the Field disables the underlying control and dims the label.
+
+<Canvas of={FieldStories.Disabled} />
+
+### Invalid
+
+When the field is invalid (either from controlled `invalid`, from native validity, or from a `validate` callback), `FieldError` blocks render and the control receives `data-invalid`. Use `match={true}` to display an error regardless of native validity state.
+
+<Canvas of={FieldStories.Invalid} />
+
+### With Description
+
+A description provides supplemental guidance and is automatically associated with the control via `aria-describedby`.
+
+<Canvas of={FieldStories.WithDescription} />
+
+## Feedback
+
+Help us improve this component by providing feedback, asking questions on [Discord](https://discord.gg/RYbnyeWcM2), or updating this file directly on [GitHub](https://github.com/taiyomoe/taiyo). Your feedback helps us create better components! 🚀

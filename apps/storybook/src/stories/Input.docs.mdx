@@ -1,0 +1,65 @@
+import { Meta, Canvas } from "@storybook/addon-docs/blocks"
+import * as InputStories from "./Input.stories"
+
+<Meta title="UI/Input" />
+
+# Input
+
+[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/ui/input.tsx)
+
+## Table of Contents
+
+- [Overview](#overview)
+  - [Sizes](#sizes)
+  - [Types](#types)
+  - [Disabled](#disabled)
+  - [Invalid](#invalid)
+  - [Unstyled](#unstyled)
+  - [Native Input](#native-input)
+- [Feedback](#feedback)
+
+## Overview
+
+Text inputs enable users to enter free-form text data. The type of text field used should reflect the length of the content you expect the user to enter. The default text input is for short, one-line content.
+
+<Canvas of={InputStories.Default} />
+
+### Sizes
+
+Inputs come in three height presets — `sm`, `default`, and `lg` — to fit different layout densities.
+
+<Canvas of={InputStories.Sizes} />
+
+### Types
+
+The `type` prop forwards to the underlying input element. Special handling is applied for `search` (strips platform-default cancel/results buttons) and `file` (styles the file selector to match the design system).
+
+<Canvas of={InputStories.Types} />
+
+### Disabled
+
+Disabled inputs prevent user interaction and provide visual feedback that the field is not available.
+
+<Canvas of={InputStories.Disabled} />
+
+### Invalid
+
+Setting `aria-invalid` switches the input to its destructive style, signalling a validation error.
+
+<Canvas of={InputStories.Invalid} />
+
+### Unstyled
+
+Passing `unstyled` strips the wrapper's border, background, and focus ring while keeping the inner input element intact — useful when embedding the input inside a composed control that brings its own chrome.
+
+<Canvas of={InputStories.Unstyled} />
+
+### Native Input
+
+Setting `nativeInput` swaps the Base UI `Input` primitive for a plain `<input>` element. Use this when the Base UI behavior conflicts with a third-party integration (e.g. a controlled form library that needs direct DOM access).
+
+<Canvas of={InputStories.NativeInput} />
+
+## Feedback
+
+Help us improve this component by providing feedback, asking questions on [Discord](https://discord.gg/RYbnyeWcM2), or updating this file directly on [GitHub](https://github.com/taiyomoe/taiyo). Your feedback helps us create better components! 🚀

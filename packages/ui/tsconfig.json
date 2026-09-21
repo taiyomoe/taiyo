@@ -1,6 +1,12 @@
 {
   "extends": "@taiyomoe/typescript/base.json",
-  "compilerOptions": { "jsx": "preserve" },
-  "include": ["src"],
+  "compilerOptions": {
+    "jsx": "preserve",
+    "lib": ["DOM"],
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["./src/**/*"],
   "exclude": ["node_modules"]
 }

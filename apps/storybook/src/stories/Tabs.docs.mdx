@@ -1,0 +1,44 @@
+import { Canvas, Meta } from "@storybook/addon-docs/blocks"
+import * as TabsStories from "./Tabs.stories"
+
+<Meta title="UI/Tabs" />
+
+# Tabs
+
+[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/ui/tabs.tsx)
+
+## Table of Contents
+
+- [Overview](#overview)
+  - [Underline](#underline)
+  - [Vertical](#vertical)
+  - [Disabled](#disabled)
+- [Feedback](#feedback)
+
+## Overview
+
+Tabs organize content into multiple panels that share the same screen real estate, letting users switch between related views without navigating away. The set is composed of `Tabs`, `TabsList`, `TabsTrigger`, and `TabsContent`.
+
+<Canvas of={TabsStories.Default} />
+
+### Underline
+
+`TabsList` accepts a `variant` prop. The `underline` variant swaps the pill-style indicator for a thin bar that sits on the active tab's edge.
+
+<Canvas of={TabsStories.Underline} />
+
+### Vertical
+
+Set `orientation="vertical"` on the root `Tabs` to lay triggers in a column alongside the panels.
+
+<Canvas of={TabsStories.Vertical} />
+
+### Disabled
+
+Individual triggers can be disabled by passing `disabled` to `TabsTrigger`; the tab becomes unfocusable and unactivatable.
+
+<Canvas of={TabsStories.Disabled} />
+
+## Feedback
+
+Help us improve this component by providing feedback, asking questions on [Discord](https://discord.gg/RYbnyeWcM2), or updating this file directly on [GitHub](https://github.com/taiyomoe/taiyo). Your feedback helps us create better components! 🚀

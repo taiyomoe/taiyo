@@ -1,0 +1,44 @@
+import { Canvas, Meta } from "@storybook/addon-docs/blocks"
+import * as ScrollAreaStories from "./ScrollArea.stories"
+
+<Meta title="UI/ScrollArea" />
+
+# ScrollArea
+
+[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/ui/scroll-area.tsx)
+
+## Table of Contents
+
+- [Overview](#overview)
+  - [With Scroll Fade](#with-scroll-fade)
+  - [With Scrollbar Gutter](#with-scrollbar-gutter)
+  - [Horizontal](#horizontal)
+- [Feedback](#feedback)
+
+## Overview
+
+`ScrollArea` is a passive container that adds a styled, auto-hiding scrollbar to overflowing content while preserving native keyboard and pointer behaviour.
+
+<Canvas of={ScrollAreaStories.Default} />
+
+### With Scroll Fade
+
+Toggling `scrollFade` masks the edges of the viewport so content gracefully fades into view at the start and end of the scrollable axis.
+
+<Canvas of={ScrollAreaStories.WithScrollFade} />
+
+### With Scrollbar Gutter
+
+Enable `scrollbarGutter` to reserve space for the scrollbar so content does not shift when overflow appears.
+
+<Canvas of={ScrollAreaStories.WithScrollbarGutter} />
+
+### Horizontal
+
+`ScrollArea` handles both axes automatically — any horizontally overflowing content gets a matching horizontal scrollbar.
+
+<Canvas of={ScrollAreaStories.Horizontal} />
+
+## Feedback
+
+Help us improve this component by providing feedback, asking questions on [Discord](https://discord.gg/RYbnyeWcM2), or updating this file directly on [GitHub](https://github.com/taiyomoe/taiyo). Your feedback helps us create better components! 🚀

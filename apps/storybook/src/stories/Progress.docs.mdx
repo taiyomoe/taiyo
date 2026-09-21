@@ -1,0 +1,72 @@
+import { Canvas, Meta } from "@storybook/addon-docs/blocks"
+import * as ProgressStories from "./Progress.stories"
+
+<Meta title="UI/Progress" />
+
+# Progress
+
+[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/ui/progress.tsx)
+
+## Table of Contents
+
+- [Overview](#overview)
+  - [Empty](#empty)
+  - [Half](#half)
+  - [Full](#full)
+  - [Indeterminate](#indeterminate)
+  - [With Label](#with-label)
+  - [With Value](#with-value)
+  - [Custom Range](#custom-range)
+- [Feedback](#feedback)
+
+## Overview
+
+Progress bars communicate the completion of an ongoing task. Unlike a meter, they're tied to a determinate, time-bound operation — e.g. an upload or a multi-step flow.
+
+<Canvas of={ProgressStories.Default} />
+
+### Empty
+
+A progress at `0` renders an empty track — useful as the starting state of an operation.
+
+<Canvas of={ProgressStories.Empty} />
+
+### Half
+
+A progress at `50` fills half the track.
+
+<Canvas of={ProgressStories.Half} />
+
+### Full
+
+A progress at `max` (default `100`) fills the track entirely.
+
+<Canvas of={ProgressStories.Full} />
+
+### Indeterminate
+
+Pass `value={null}` to render the indeterminate state when progress is unknown.
+
+<Canvas of={ProgressStories.Indeterminate} />
+
+### With Label
+
+Compose `ProgressLabel` and `ProgressTrack` to render a labelled progress bar.
+
+<Canvas of={ProgressStories.WithLabel} />
+
+### With Value
+
+Add `ProgressValue` next to the label to display the formatted current value alongside the track.
+
+<Canvas of={ProgressStories.WithValue} />
+
+### Custom Range
+
+Override `min` and `max` to use the progress for non-percentage scales, such as multi-step flows.
+
+<Canvas of={ProgressStories.CustomRange} />
+
+## Feedback
+
+Help us improve this component by providing feedback, asking questions on [Discord](https://discord.gg/RYbnyeWcM2), or updating this file directly on [GitHub](https://github.com/taiyomoe/taiyo). Your feedback helps us create better components! 🚀

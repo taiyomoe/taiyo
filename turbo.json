@@ -1,52 +1,32 @@
 {
   "$schema": "https://turborepo.org/schema.json",
+  "ui": "tui",
   "tasks": {
-    "topo": {
-      "dependsOn": ["^topo"]
-    },
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [".cache/tsbuildinfo.json", "dist/**"]
+      "inputs": ["$TURBO_DEFAULT$", ".env*", "!.env.example"],
+      "outputs": [".cache/tsbuildinfo.json", "dist/**", "storybook-static/**"]
     },
     "dev": {
-      "dependsOn": ["^dev"],
       "cache": false,
-      "persistent": false
-    },
-    "typecheck": {
-      "dependsOn": ["^topo", "^build"],
-      "outputs": [".cache/tsbuildinfo.json"]
-    },
-    "clean": {
-      "cache": false
-    },
-    "//#clean": {
-      "cache": false
+      "persistent": true
     }
   },
   "globalEnv": [
     "DATABASE_URL",
-    "BETTER_AUTH_URL",
+    "VITE_BETTER_AUTH_URL",
     "BETTER_AUTH_SECRET",
     "DISCORD_CLIENT_ID",
     "DISCORD_CLIENT_SECRET",
     "GOOGLE_CLIENT_ID",
     "GOOGLE_CLIENT_SECRET",
     "TURNSTILE_SECRET_KEY",
-    "MEILISEARCH_ADMIN_KEY",
+    "VITE_TURNSTILE_SITE_KEY",
     "DRAGONFLY_URL",
-    "S3_URL",
-    "S3_ACCESS_KEY_ID",
-    "S3_SECRET_ACCESS_KEY",
-    "S3_CDN_BUCKET_NAME",
-    "S3_UPLOADS_BUCKET_NAME",
-    "CLICKHOUSE_URL",
-    "UMAMI_USER_ID",
-    "UMAMI_SECRET",
-    "GRAFANA_USERNAME",
-    "GRAFANA_PASSWORD",
-    "GRAFANA_LOKI_URL",
-    "RESEND_API_KEY"
+    "CHAPTER_PROCESSING_CONCURRENCY",
+    "HYPERDX_INGESTION_KEY",
+    "RESEND_API_KEY",
+    "NODE_ENV"
   ],
-  "globalPassThroughEnv": ["NODE_ENV", "CI", "npm_lifecycle_event"]
+  "globalPassThroughEnv": ["CI", "npm_lifecycle_event"]
 }

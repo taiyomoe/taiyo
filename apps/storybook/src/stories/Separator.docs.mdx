@@ -1,0 +1,30 @@
+import { Canvas, Meta } from "@storybook/addon-docs/blocks"
+import * as SeparatorStories from "./Separator.stories"
+
+<Meta title="UI/Separator" />
+
+# Separator
+
+[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/ui/separator.tsx)
+
+## Table of Contents
+
+- [Overview](#overview)
+  - [Orientations](#orientations)
+- [Feedback](#feedback)
+
+## Overview
+
+Separators visually and semantically divide related groups of content, like sections of a list, navigation links, or paragraphs of text.
+
+<Canvas of={SeparatorStories.Default} />
+
+### Orientations
+
+Use `orientation="horizontal"` (the default) to split stacked content and `orientation="vertical"` to divide inline elements; vertical separators stretch to the height of their container.
+
+<Canvas of={SeparatorStories.Orientations} />
+
+## Feedback
+
+Help us improve this component by providing feedback, asking questions on [Discord](https://discord.gg/RYbnyeWcM2), or updating this file directly on [GitHub](https://github.com/taiyomoe/taiyo). Your feedback helps us create better components! 🚀
