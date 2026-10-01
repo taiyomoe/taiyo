@@ -12,6 +12,16 @@
 > mismatch, treat it as a STOP condition. Note that plans 001–004 are expected
 > to have changed the API side — that is not drift, that is their output.
 
+> **Repo convention — no source comments.** This repo is moving to a
+> comment-free source tree: rationale lives in docs, not in `//` lines. See
+> `plans/006-comment-free-codebase.md`, whose steps 1–3 harvest existing
+> comments into `packages/ui/STYLEX.md`, `docs/engineering-notes.md` and
+> `apps/web/AGENTS.md`. **Do not add explanatory comments to the source files
+> you write in this plan.** If a "why" genuinely needs recording, put it in the
+> matching doc: `packages/ui/STYLEX.md` for UI/StyleX, `apps/web/AGENTS.md` for
+> the web app, `docs/engineering-notes.md` for backend and infra (create it
+> with a single `# Engineering notes` heading if plan 006 has not run yet).
+
 ## Status
 
 - **Priority**: P1
@@ -43,7 +53,7 @@ URLs, a typed client, feed endpoints). This plan spends them.
 ```bash
 grep -rn "getChapterPageUrl" packages/s3/src/index.ts          # plan 001
 grep -rn "getCoverUrl"       packages/s3/src/index.ts          # plan 002
-ls apps/web/src/lib/api.ts apps/web/src/lib/api-types.d.ts     # plan 003
+grep -rn "hc<AppType>"      apps/web/src/lib/api.ts        # plan 003
 grep -rn "listLatestChaptersHandler" apps/api/src/routers/chapters-router.ts  # plan 004
 ```
 
@@ -68,11 +78,11 @@ hand-edit it.
   bridge. The only generic form glue; do not write a second one.
 - `src/components/legal/legal-page.tsx` — exports a `prose` StyleX style set.
 - `src/components/landing/**` — the landing page. **Do not modify it.** Its
-  `landing-nav.tsx` is landing-specific and reads from the brand *scene*
+  `landing-nav.tsx` is landing-specific and reads from the brand _scene_
   palette (`src/components/scene/scene.stylex.ts`), which is deliberately
   outside the semantic tokens. Your app nav is a different component.
-- `src/components/landing/cover-art.tsx:7` — *"Deterministic gradient
-  placeholders until real cover images are wired in."* That comment describes
+- `src/components/landing/cover-art.tsx:7` — _"Deterministic gradient
+  placeholders until real cover images are wired in."_ That comment describes
   exactly what this plan retires for the app surfaces. Leave the landing page's
   own usage alone.
 
@@ -145,21 +155,21 @@ that here; just don't make it worse by adding untranslated strings.
 
 ## Commands you will need
 
-| Purpose | Command | Expected on success |
-|---|---|---|
-| Install | `pnpm install` | exit 0 |
-| Lint + typecheck | `pnpm lint` | exit 0 |
-| Format check / fix | `pnpm format` / `pnpm format:fix` | exit 0 |
-| Workspace deps | `pnpm lint:ws` | exit 0 |
-| Dead code | `pnpm knip` | exit 0 |
-| Compile messages | `pnpm -F web compile:messages` | exit 0 |
-| Start infra | `docker compose up -d` | services healthy |
-| Migrate + seed | `pnpm -F db kysely migrate latest && pnpm -F db kysely seed run` | exit 0 |
-| Run API | `pnpm -F api dev` | listening on :3002 |
-| Run web | `pnpm -F web dev` | listening on :3000 |
-| **Build web (the real StyleX gate)** | `pnpm -F web build` | exit 0 |
-| Storybook (only if you touch `packages/ui`) | `pnpm -F storybook build` | exit 0 |
-| Unit tests | `pnpm test:unit` | all pass |
+| Purpose                                     | Command                                                          | Expected on success |
+| ------------------------------------------- | ---------------------------------------------------------------- | ------------------- |
+| Install                                     | `pnpm install`                                                   | exit 0              |
+| Lint + typecheck                            | `pnpm lint`                                                      | exit 0              |
+| Format check / fix                          | `pnpm format` / `pnpm format:fix`                                | exit 0              |
+| Workspace deps                              | `pnpm lint:ws`                                                   | exit 0              |
+| Dead code                                   | `pnpm knip`                                                      | exit 0              |
+| Compile messages                            | `pnpm -F web compile:messages`                                   | exit 0              |
+| Start infra                                 | `docker compose up -d`                                           | services healthy    |
+| Migrate + seed                              | `pnpm -F db kysely migrate latest && pnpm -F db kysely seed run` | exit 0              |
+| Run API                                     | `pnpm -F api dev`                                                | listening on :3002  |
+| Run web                                     | `pnpm -F web dev`                                                | listening on :3000  |
+| **Build web (the real StyleX gate)**        | `pnpm -F web build`                                              | exit 0              |
+| Storybook (only if you touch `packages/ui`) | `pnpm -F storybook build`                                        | exit 0              |
+| Unit tests                                  | `pnpm test:unit`                                                 | all pass            |
 
 ## Scope
 
@@ -170,7 +180,7 @@ that here; just don't make it worse by adding untranslated strings.
   throwaway `titles.tsx` — delete that file)
 - `apps/web/src/routes/_app/titles.$mediaId.tsx` (media detail)
 - `apps/web/src/routes/read.$mediaId.$chapterId.tsx` (reader — deliberately
-  *outside* `_app`, see step 5)
+  _outside_ `_app`, see step 5)
 - `apps/web/src/components/app/**` (create — app nav, user menu placeholder)
 - `apps/web/src/components/media/**` (create — media card, cover grid, chapter row)
 - `apps/web/src/components/reader/**` (create — reader viewport and chrome)
@@ -242,8 +252,9 @@ landing page unchanged; `pnpm -F web build` → exit 0.
 Create `apps/web/src/routes/_app/titles.tsx`, replacing plan 003's throwaway
 route (delete `apps/web/src/routes/titles.tsx`).
 
-- Loader calls `POST /medias/search` through the typed client with pagination
-  from search params, so the URL is shareable and back/forward works.
+- Loader calls `api.medias.search.$post(...)` (the Hono RPC client from plan 003) with pagination from search params, so the URL is shareable and
+  back/forward works. Responses go through plan 003's `unwrap` helper — do not
+  re-narrow the envelope by hand.
 - Renders a responsive cover grid of `MediaCard`s
   (`apps/web/src/components/media/media-card.tsx`): cover image from the `url`
   field plan 002 added, main title, type and status badges (`Badge`), and a
@@ -367,7 +378,7 @@ Vitest runs from the root (`vitest.config.unit.ts` globs `**/__tests__/**`);
     null-volume and null-title cases),
   - the reader's page-preloading index math (which indices are preloaded at
     position N, including at the first and last page).
-  Test the pure logic; do not attempt to render a full route.
+    Test the pure logic; do not attempt to render a full route.
 - **Structural pattern**: `packages/utils/src/__tests__/extension-for-mime-type.test.ts`.
 - **Not unit-tested**: SSR, layout, and image loading. Those are covered by the
   `curl` assertions in steps 3 and 6 and the manual pass in step 8. Report
@@ -435,7 +446,7 @@ Stop and report back (do not improvise) if:
 - **Deliberately deferred — the filter panel.** `POST /medias/search` accepts
   21 filter fields and 5 sort keys, and `packages/search` ships the filter
   translator. A faceted browse UI is the obvious next feature, and it would be
-  much better with facet *counts* — which the API does not return today
+  much better with facet _counts_ — which the API does not return today
   (no `facetDistribution`; recorded in `plans/README.md`).
 - **Deliberately deferred — content-rating gating.** The API returns
   `contentRating` (up to `NSFL`) and `flag` on medias, covers and chapters, and

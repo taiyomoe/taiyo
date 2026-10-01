@@ -11,6 +11,16 @@
 > "Current state" excerpts against the live code before proceeding; on a
 > mismatch, treat it as a STOP condition.
 
+> **Repo convention — no source comments.** This repo is moving to a
+> comment-free source tree: rationale lives in docs, not in `//` lines. See
+> `plans/006-comment-free-codebase.md`, whose steps 1–3 harvest existing
+> comments into `packages/ui/STYLEX.md`, `docs/engineering-notes.md` and
+> `apps/web/AGENTS.md`. **Do not add explanatory comments to the source files
+> you write in this plan.** If a "why" genuinely needs recording, put it in the
+> matching doc: `packages/ui/STYLEX.md` for UI/StyleX, `apps/web/AGENTS.md` for
+> the web app, `docs/engineering-notes.md` for backend and infra (create it
+> with a single `# Engineering notes` heading if plan 006 has not run yet).
+
 ## Status
 
 - **Priority**: P1
@@ -59,27 +69,27 @@ Two possible extensions. This is the fact that forces the migration.
 ### `apps/api/src/handlers/create-covers-handler.ts:105-121` (the write path)
 
 ```ts
-    const coverRows = await Promise.all(
-      body.covers.map(async (cover) => {
-        const id = crypto.randomUUID()
+const coverRows = await Promise.all(
+  body.covers.map(async (cover) => {
+    const id = crypto.randomUUID()
 
-        await uploadFile(
-          { s3, s3Bucket, log },
-          getCoverKey(media.id, `${id}.${extensionForMimeType(cover.file.type)}`),
-          cover.file,
-        )
-
-        return {
-          id,
-          mediaId: media.id,
-          volume: cover.volume !== undefined ? String(cover.volume) : null,
-          language: cover.language,
-          contentRating: cover.contentRating,
-          isMainCover: cover.main,
-          uploaderId: user.id,
-        } satisfies NewCover
-      }),
+    await uploadFile(
+      { s3, s3Bucket, log },
+      getCoverKey(media.id, `${id}.${extensionForMimeType(cover.file.type)}`),
+      cover.file,
     )
+
+    return {
+      id,
+      mediaId: media.id,
+      volume: cover.volume !== undefined ? String(cover.volume) : null,
+      language: cover.language,
+      contentRating: cover.contentRating,
+      isMainCover: cover.main,
+      uploaderId: user.id,
+    } satisfies NewCover
+  }),
+)
 ```
 
 The extension is computed, used for the S3 key, and then thrown away.
@@ -136,16 +146,16 @@ naming (`<table>_<cols>_idx`).
 
 ## Commands you will need
 
-| Purpose | Command | Expected on success |
-|---|---|---|
-| Install | `pnpm install` | exit 0 |
-| Lint + typecheck | `pnpm lint` | exit 0, no errors |
-| Format check / fix | `pnpm format` / `pnpm format:fix` | exit 0 |
-| Apply migrations | `pnpm -F db kysely migrate latest` | exit 0 |
-| Roll back one migration | `pnpm -F db kysely migrate down` | exit 0 |
-| Re-seed | `pnpm -F db kysely seed run` | exit 0 |
-| Unit tests | `pnpm test:unit` | all pass |
-| Integration tests (needs `docker compose up -d`) | `pnpm test:integration` | all pass |
+| Purpose                                          | Command                            | Expected on success |
+| ------------------------------------------------ | ---------------------------------- | ------------------- |
+| Install                                          | `pnpm install`                     | exit 0              |
+| Lint + typecheck                                 | `pnpm lint`                        | exit 0, no errors   |
+| Format check / fix                               | `pnpm format` / `pnpm format:fix`  | exit 0              |
+| Apply migrations                                 | `pnpm -F db kysely migrate latest` | exit 0              |
+| Roll back one migration                          | `pnpm -F db kysely migrate down`   | exit 0              |
+| Re-seed                                          | `pnpm -F db kysely seed run`       | exit 0              |
+| Unit tests                                       | `pnpm test:unit`                   | all pass            |
+| Integration tests (needs `docker compose up -d`) | `pnpm test:integration`            | all pass            |
 
 ## Scope
 
@@ -174,7 +184,7 @@ naming (`<table>_<cols>_idx`).
 - Staff images (`getStaffImageKey`) — same class of problem, but staff images
   are a secondary surface. Record it, do not fix it here.
 - `packages/search/src/medias/get-media-document.ts` — the search document
-  carries a main-cover *id*. Changing the document shape forces a full
+  carries a main-cover _id_. Changing the document shape forces a full
   reindex and is a separate decision.
 - Any change to `extensionForMimeType` or the `checkImages` middleware.
 
@@ -209,6 +219,7 @@ using a timestamp greater than `1781700000000`. Match the `up`/`down` shape of
 `1781700000000_refactor-user-features.ts` exactly.
 
 `up`:
+
 - Add `extension text not null default 'jpg'` to `covers`.
 - Add `extension text not null default 'jpg'` to `banners`.
 - Add a check constraint on each allowing only `'jpg'` and `'gif'`, so the
@@ -230,7 +241,7 @@ The migration must be reversible.
 In `packages/db/src/models/cover-model.ts` and `banner-model.ts`, add:
 
 ```ts
-  extension: Generated<"gif" | "jpg">
+extension: Generated<"gif" | "jpg">
 ```
 
 `Generated<>` because the column has a database default — this keeps it
@@ -261,28 +272,24 @@ If `publicBase` does not exist in the file, plan 001 has not landed — STOP.
 ### Step 5: Persist the extension on upload
 
 In `create-covers-handler.ts`, hoist the computed extension so it is used
-*twice* — once for the key, once for the row:
+_twice_ — once for the key, once for the row:
 
 ```ts
-        const id = crypto.randomUUID()
-        const extension = extensionForMimeType(cover.file.type)
+const id = crypto.randomUUID()
+const extension = extensionForMimeType(cover.file.type)
 
-        await uploadFile(
-          { s3, s3Bucket, log },
-          getCoverKey(media.id, `${id}.${extension}`),
-          cover.file,
-        )
+await uploadFile({ s3, s3Bucket, log }, getCoverKey(media.id, `${id}.${extension}`), cover.file)
 
-        return {
-          id,
-          mediaId: media.id,
-          extension,
-          volume: cover.volume !== undefined ? String(cover.volume) : null,
-          language: cover.language,
-          contentRating: cover.contentRating,
-          isMainCover: cover.main,
-          uploaderId: user.id,
-        } satisfies NewCover
+return {
+  id,
+  mediaId: media.id,
+  extension,
+  volume: cover.volume !== undefined ? String(cover.volume) : null,
+  language: cover.language,
+  contentRating: cover.contentRating,
+  isMainCover: cover.main,
+  uploaderId: user.id,
+} satisfies NewCover
 ```
 
 Apply the same change to `create-banners-handler.ts` around its
@@ -387,9 +394,9 @@ Stop and report back (do not improvise) if:
 
 - **For the reviewer**: the one thing worth real scrutiny is step 5 — the
   extension used for the S3 key and the extension written to the row must come
-  from the *same* expression. If they are computed twice, a future edit can
+  from the _same_ expression. If they are computed twice, a future edit can
   desynchronize them and produce rows whose URL 404s. The hoisted `const
-  extension` is the guard; check it did not get duplicated back.
+extension` is the guard; check it did not get duplicated back.
 - **Interaction**: staff images (`getStaffImageKey`, `create-staff-handler.ts:80`)
   have the identical latent bug and are deliberately not fixed here. When
   someone builds a staff page, this plan is the template.

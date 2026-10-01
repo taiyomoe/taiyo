@@ -11,6 +11,16 @@
 > "Current state" excerpts against the live code before proceeding; on a
 > mismatch, treat it as a STOP condition.
 
+> **Repo convention — no source comments.** This repo is moving to a
+> comment-free source tree: rationale lives in docs, not in `//` lines. See
+> `plans/006-comment-free-codebase.md`, whose steps 1–3 harvest existing
+> comments into `packages/ui/STYLEX.md`, `docs/engineering-notes.md` and
+> `apps/web/AGENTS.md`. **Do not add explanatory comments to source files in
+> this plan.** Where this plan needs a "why" recorded, it says which doc to
+> write it to. If `docs/engineering-notes.md` does not exist yet (plan 006 has
+> not run), create it with a single `# Engineering notes` heading and add your
+> section under it.
+
 ## Status
 
 - **Priority**: P1
@@ -22,13 +32,13 @@
 
 ## Why this matters
 
-A manga platform's home page is made of two queries: *"what chapters were
-released recently across the site"* and *"what's new in the series I follow"*.
+A manga platform's home page is made of two queries: _"what chapters were
+released recently across the site"_ and _"what's new in the series I follow"_.
 **Neither has an endpoint.**
 
 The only chapter-listing route is `GET /medias/:id/chapters`
 (`apps/api/src/handlers/list-chapters-handler.ts`), which is scoped to a single
-media and ordered by chapter *number* ascending — the right shape for a
+media and ordered by chapter _number_ ascending — the right shape for a
 media detail page, the wrong shape for a feed. There is no global
 reverse-chronological listing and no library-scoped one.
 
@@ -60,7 +70,7 @@ export const chaptersRouter = new Hono()
 ```
 
 **Routing order matters here and it is the one real trap in this plan.**
-`getChapterHandler` registers `GET /:id` and is mounted *first*. A request to
+`getChapterHandler` registers `GET /:id` and is mounted _first_. A request to
 `GET /chapters/latest` would match `/:id` with `id = "latest"`, and
 `checkChapter()` would reject it with a 422 "not a valid UUID" before your new
 handler ever ran. The new handler **must be mounted before
@@ -132,7 +142,7 @@ Your feed handlers must do the same.
 ### Relevant tables
 
 From `packages/db/src/database.ts`: `chapters`, `medias`, `titles`,
-`userLibraryEntries`. A feed row needs the chapter *and* enough of its media to
+`userLibraryEntries`. A feed row needs the chapter _and_ enough of its media to
 render a row (media id and its main title), so both handlers join `titles`
 where `isMainTitle` is true. Read `apps/api/src/handlers/get-media-handler.ts:144-172`
 for how titles are joined and selected elsewhere before inventing your own.
@@ -164,16 +174,16 @@ bite you:
 
 ## Commands you will need
 
-| Purpose | Command | Expected on success |
-|---|---|---|
-| Install | `pnpm install` | exit 0 |
-| Lint + typecheck | `pnpm lint` | exit 0 |
-| Format check / fix | `pnpm format` / `pnpm format:fix` | exit 0 |
-| Start infra | `docker compose up -d` | services healthy |
-| Migrate + seed | `pnpm -F db kysely migrate latest && pnpm -F db kysely seed run` | exit 0 |
-| Unit tests | `pnpm test:unit` | all pass |
-| Integration tests | `pnpm test:integration` | all pass |
-| One suite | `pnpm test:integration -- chapters/list-latest-chapters` | all pass |
+| Purpose            | Command                                                          | Expected on success |
+| ------------------ | ---------------------------------------------------------------- | ------------------- |
+| Install            | `pnpm install`                                                   | exit 0              |
+| Lint + typecheck   | `pnpm lint`                                                      | exit 0              |
+| Format check / fix | `pnpm format` / `pnpm format:fix`                                | exit 0              |
+| Start infra        | `docker compose up -d`                                           | services healthy    |
+| Migrate + seed     | `pnpm -F db kysely migrate latest && pnpm -F db kysely seed run` | exit 0              |
+| Unit tests         | `pnpm test:unit`                                                 | all pass            |
+| Integration tests  | `pnpm test:integration`                                          | all pass            |
+| One suite          | `pnpm test:integration -- chapters/list-latest-chapters`         | all pass            |
 
 ## Scope
 
@@ -185,6 +195,7 @@ bite you:
 - `apps/api/src/routers/users-router.ts` (mount)
 - `apps/api/src/__integration-tests__/chapters/list-latest-chapters.test.ts` (create)
 - `apps/api/src/__integration-tests__/library/list-my-feed.test.ts` (create)
+- `docs/engineering-notes.md` (create or append — the mount-order rationale)
 
 **Out of scope** (do NOT touch):
 
@@ -193,7 +204,7 @@ bite you:
 - `apps/api/src/index.ts` — both routers are already registered; you are adding
   handlers to existing routers, not new routers.
 - Any change that returns `pages` from a listing endpoint.
-- RSS/Atom serialization — a feed *format* is a separate decision. Ship JSON.
+- RSS/Atom serialization — a feed _format_ is a separate decision. Ship JSON.
 - `packages/search` / the Meilisearch document — do not add a "latest" index.
 - Notifications, follows-based feeds, or "new chapter" push. Out of scope.
 
@@ -230,16 +241,19 @@ In `apps/api/src/routers/chapters-router.ts`, add
 `.route("/", listLatestChaptersHandler)` **as the first `.route(...)` call**,
 above `getChapterHandler`.
 
-Add a short comment explaining why, so nobody reorders it later:
-
 ```ts
 export const chaptersRouter = new Hono()
-  // Must precede getChapterHandler: its `/:id` pattern would otherwise
-  // swallow `/latest` and reject it as an invalid UUID.
   .route("/", listLatestChaptersHandler)
   .route("/", getChapterHandler)
-  // …
+// …the remaining routes, unchanged
 ```
+
+The ordering is load-bearing and invisible — record _why_ in
+`docs/engineering-notes.md` (not in a source comment; see the repo convention
+above): `/latest` must be registered before `getChapterHandler`, because its
+`/:id` pattern would otherwise match `latest` and `checkChapter()` would
+reject it as an invalid UUID. Note there that only the integration test in
+step 4 catches a regression here.
 
 **Verify**: with infra up and `pnpm -F api dev` running,
 `curl -s "http://localhost:3002/chapters/latest?page=1&perPage=5" | head -c 200`
@@ -275,16 +289,18 @@ same `describe` / `test` imports from `../helpers/request` and `../setup`, same
 `res.body.success` narrowing before touching `res.body.data`.
 
 `chapters/list-latest-chapters.test.ts`:
+
 - 200 with a populated `data` array and a `meta` carrying `page`, `perPage`, `total`.
 - Results are ordered `createdAt` descending — assert on adjacent pairs.
 - No soft-deleted chapter appears. Use the seeded data; if no seeded chapter is
-  soft-deleted, soft-delete one *inside the test* via the test's db handle
+  soft-deleted, soft-delete one _inside the test_ via the test's db handle
   (each test gets a freshly-cloned database, so this is safe) rather than
   editing the shared seeds.
 - No item carries a `pages` field.
 - `perPage` is honoured.
 
 `library/list-my-feed.test.ts`:
+
 - 401 when unauthenticated.
 - 200 for a signed-in seeded user, returning only chapters whose media is in
   that user's library.
@@ -339,7 +355,7 @@ ALL must hold:
 - [ ] `curl -s http://localhost:3002/openapi.json | grep -c "/chapters/latest"` ≥ 1
 - [ ] `curl -s http://localhost:3002/openapi.json | grep -c "/users/me/feed"` ≥ 1
 - [ ] `grep -n "listLatestChaptersHandler" apps/api/src/routers/chapters-router.ts`
-      shows it on a line *before* `getChapterHandler`
+      shows it on a line _before_ `getChapterHandler`
 - [ ] `grep -n "pages" apps/api/src/handlers/list-latest-chapters-handler.ts apps/api/src/handlers/list-my-feed-handler.ts`
       returns no matches
 - [ ] `git status --porcelain` lists only files from the In-scope list

@@ -11,6 +11,16 @@
 > "Current state" excerpts against the live code before proceeding; on a
 > mismatch, treat it as a STOP condition.
 
+> **Repo convention — no source comments.** This repo is moving to a
+> comment-free source tree: rationale lives in docs, not in `//` lines. See
+> `plans/006-comment-free-codebase.md`, whose steps 1–3 harvest existing
+> comments into `packages/ui/STYLEX.md`, `docs/engineering-notes.md` and
+> `apps/web/AGENTS.md`. **Do not add explanatory comments to the source files
+> you write in this plan.** If a "why" genuinely needs recording, put it in the
+> matching doc: `packages/ui/STYLEX.md` for UI/StyleX, `apps/web/AGENTS.md` for
+> the web app, `docs/engineering-notes.md` for backend and infra (create it
+> with a single `# Engineering notes` heading if plan 006 has not run yet).
+
 ## Status
 
 - **Priority**: P1
@@ -22,7 +32,7 @@
 
 ## Why this matters
 
-Taiyō is a manga *reading* platform. The chapter-page upload pipeline is
+Taiyō is a manga _reading_ platform. The chapter-page upload pipeline is
 complete and integration-tested: pages are validated, transcoded to JPEG by
 `sharp`, and written to S3 at a canonical key. But **nothing can read them
 back**. `GET /chapters/:id` returns `pages` as bare UUIDs, and there is no
@@ -133,15 +143,15 @@ Exemplar to match for schema style: `apps/api/src/handlers/get-media-handler.ts`
 
 ## Commands you will need
 
-| Purpose | Command | Expected on success |
-|---|---|---|
-| Install | `pnpm install` | exit 0 |
-| Lint + typecheck (this repo has no separate `tsc`) | `pnpm lint` | exit 0, no errors |
-| Format check | `pnpm format` | exit 0 |
-| Format fix | `pnpm format:fix` | rewrites in place |
-| Unit tests | `pnpm test:unit` | all pass |
-| Integration tests (needs `docker compose up -d`) | `pnpm test:integration` | all pass |
-| Single integration file | `pnpm test:integration -- chapters/get-chapter` | all pass |
+| Purpose                                            | Command                                         | Expected on success |
+| -------------------------------------------------- | ----------------------------------------------- | ------------------- |
+| Install                                            | `pnpm install`                                  | exit 0              |
+| Lint + typecheck (this repo has no separate `tsc`) | `pnpm lint`                                     | exit 0, no errors   |
+| Format check                                       | `pnpm format`                                   | exit 0              |
+| Format fix                                         | `pnpm format:fix`                               | rewrites in place   |
+| Unit tests                                         | `pnpm test:unit`                                | all pass            |
+| Integration tests (needs `docker compose up -d`)   | `pnpm test:integration`                         | all pass            |
+| Single integration file                            | `pnpm test:integration -- chapters/get-chapter` | all pass            |
 
 `pnpm lint` is the type gate — oxlint runs with `typeAware: true` and
 `typeCheck: true`. There is no `tsc --noEmit` step.
@@ -308,26 +318,26 @@ Extend the `ChapterDetail` type in that file to include
 `pages: { id: string; url: string }[] | null`, then add one test:
 
 ```ts
-  test("returns a resolvable url for every page", async ({ app }) => {
-    const res = await api<ChapterDetail>(app, `/chapters/${SEEDED_CHAPTER_ID}`)
+test("returns a resolvable url for every page", async ({ app }) => {
+  const res = await api<ChapterDetail>(app, `/chapters/${SEEDED_CHAPTER_ID}`)
 
-    expect(res.status).toBe(200)
+  expect(res.status).toBe(200)
 
-    if (!res.body.success) {
-      throw new Error(`Expected success: ${JSON.stringify(res.body)}`)
-    }
+  if (!res.body.success) {
+    throw new Error(`Expected success: ${JSON.stringify(res.body)}`)
+  }
 
-    const { pages } = res.body.data
+  const { pages } = res.body.data
 
-    expect(pages).not.toBeNull()
-    expect(pages!.length).toBeGreaterThan(0)
+  expect(pages).not.toBeNull()
+  expect(pages!.length).toBeGreaterThan(0)
 
-    for (const page of pages!) {
-      expect(page.url).toContain(
-        `/medias/${SEEDED_MEDIA_ID}/chapters/${SEEDED_CHAPTER_ID}/${page.id}.jpg`,
-      )
-    }
-  })
+  for (const page of pages!) {
+    expect(page.url).toContain(
+      `/medias/${SEEDED_MEDIA_ID}/chapters/${SEEDED_CHAPTER_ID}/${page.id}.jpg`,
+    )
+  }
+})
 ```
 
 The seeded chapter `13548c83-8d1a-4163-8830-c8f16fcd2eb7` is defined at
