@@ -10,6 +10,7 @@ type ChapterDetail = {
   mediaId: string
   number: number
   language: string
+  pages: { id: string; url: string }[] | null
 }
 
 describe("GET /chapters/:id", () => {
@@ -24,6 +25,27 @@ describe("GET /chapters/:id", () => {
 
     expect(res.body.data.id).toBe(SEEDED_CHAPTER_ID)
     expect(res.body.data.mediaId).toBe(SEEDED_MEDIA_ID)
+  })
+
+  test("returns a resolvable url for every page", async ({ app }) => {
+    const res = await api<ChapterDetail>(app, `/chapters/${SEEDED_CHAPTER_ID}`)
+
+    expect(res.status).toBe(200)
+
+    if (!res.body.success) {
+      throw new Error(`Expected success: ${JSON.stringify(res.body)}`)
+    }
+
+    const { pages } = res.body.data
+
+    expect(pages).not.toBeNull()
+    expect(pages!.length).toBeGreaterThan(0)
+
+    for (const page of pages!) {
+      expect(page.url).toContain(
+        `/medias/${SEEDED_MEDIA_ID}/chapters/${SEEDED_CHAPTER_ID}/${page.id}.jpg`,
+      )
+    }
   })
 
   test("returns CHAPTER_NOT_FOUND for an unknown id", async ({ app }) => {

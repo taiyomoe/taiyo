@@ -26,6 +26,7 @@
     "CHAPTER_PROCESSING_CONCURRENCY",
     "HYPERDX_INGESTION_KEY",
     "RESEND_API_KEY",
+    "S3_PUBLIC_URL",
     "NODE_ENV"
   ],
   "globalPassThroughEnv": ["CI", "npm_lifecycle_event"]
