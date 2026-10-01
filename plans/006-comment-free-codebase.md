@@ -32,14 +32,14 @@ trains readers to skim. This repo has **1005 comment lines across 155 TypeScript
 files**, plus 92 in CSS and 22 in root config files.
 
 A blanket deletion would be cheap but destructive here, because this repo is
-unusual: most of its comments record *why*, not *what* — StyleX compiler
+unusual: most of its comments record _why_, not _what_ — StyleX compiler
 workarounds that neither `oxlint` nor `tsc` can catch, the reason a Postgres
 advisory lock exists, how the light palette was derived from the dark one. That
 knowledge is not re-derivable from the code, and the next agent to touch these
 files will silently re-break what the comments prevent.
 
 So this plan does it in two movements: **harvest first, then purge**. Every
-non-obvious constraint moves into a document that is *designed* to be read
+non-obvious constraint moves into a document that is _designed_ to be read
 (`packages/ui/STYLEX.md`, `docs/engineering-notes.md`, `apps/web/AGENTS.md`),
 and only then does every comment leave the code. The result is a source tree
 with zero comments outside compiler/lint directives, and no lost knowledge.
@@ -53,26 +53,26 @@ proportions. Step 1 only adds what is genuinely missing from it.
 
 ### Baseline (all green at `458557fb` — re-verify before you start)
 
-| Check | Command | Result |
-|---|---|---|
-| Lint + typecheck | `pnpm lint` | exit 0, silent |
-| Format | `pnpm format` | exit 0, "All matched files use the correct format", 639 files |
-| Unit tests | `pnpm test:unit` | 15 files, 148 tests, all pass |
+| Check            | Command          | Result                                                        |
+| ---------------- | ---------------- | ------------------------------------------------------------- |
+| Lint + typecheck | `pnpm lint`      | exit 0, silent                                                |
+| Format           | `pnpm format`    | exit 0, "All matched files use the correct format", 639 files |
+| Unit tests       | `pnpm test:unit` | 15 files, 148 tests, all pass                                 |
 
 `pnpm lint` runs `oxlint` with `typeAware: true, typeCheck: true`, so it is
 also the repo's typecheck. There is no separate `typecheck` script.
 
 ### The comment inventory, by area
 
-| Area | Files | Comment lines | Step |
-|---|---|---|---|
-| `packages/ui/src` | 42 | ~300 | 3 |
-| `apps/api/src` + `apps/worker/src` | 39 | ~300 | 4 |
-| `apps/web/src` + `apps/web/vite.config.ts` + `apps/storybook` | 36 | ~230 | 5 |
-| `packages/{auth,cache,config,email,queue,s3,search,utils}` | 20 | ~175 | 6 |
-| root `*.ts` configs | 5 | 22 | 7 |
-| `*.css` | 4 | 92 | 8 |
-| **`packages/db/src/{migrations,seeds}`** | 11 | ~120 | **OUT OF SCOPE** |
+| Area                                                          | Files | Comment lines | Step             |
+| ------------------------------------------------------------- | ----- | ------------- | ---------------- |
+| `packages/ui/src`                                             | 42    | ~300          | 3                |
+| `apps/api/src` + `apps/worker/src`                            | 39    | ~300          | 4                |
+| `apps/web/src` + `apps/web/vite.config.ts` + `apps/storybook` | 36    | ~230          | 5                |
+| `packages/{auth,cache,config,email,queue,s3,search,utils}`    | 20    | ~175          | 6                |
+| root `*.ts` configs                                           | 5     | 22            | 7                |
+| `*.css`                                                       | 4     | 92            | 8                |
+| **`packages/db/src/{migrations,seeds}`**                      | 11    | ~120          | **OUT OF SCOPE** |
 
 ### Directives that MUST survive (20 occurrences)
 
@@ -100,7 +100,7 @@ anyway if the drift check shows one appeared.
 - `@stylistic/padding-line-between-statements` is an **error** and enforces
   blank lines around `const`/`if`/`return`/`export`/… Deleting a comment that
   sat between two statements can leave the blank-line shape wrong. `pnpm
-  lint:fix` repairs this; that is why every step runs it.
+lint:fix` repairs this; that is why every step runs it.
 - `@stylexjs/sort-keys` is an error and its fixer moves **one key per pass** —
   run `pnpm lint:fix` repeatedly until the error count stops shrinking.
   (You should not trigger it, but you will run `lint:fix` anyway.)
@@ -125,7 +125,7 @@ Each looks like this (`processor.ts:95-97`):
 
 Collapse each to `.catch(() => {})` on one line. This was verified to pass
 `oxlint` with the repo's `correctness` category (an empty arrow body is not
-flagged). If lint *does* flag it after your edit, use `.catch(() => undefined)`
+flagged). If lint _does_ flag it after your edit, use `.catch(() => undefined)`
 and note it in your report.
 
 ### The one doc instruction that contradicts this plan
@@ -133,8 +133,8 @@ and note it in your report.
 `packages/ui/STYLEX.md`, inside convention 2, currently ends with:
 
 ```md
-   `oxlint` will report that import as unused — keep it, with an
-   `oxlint-disable-next-line no-unused-vars` and a note saying why.
+`oxlint` will report that import as unused — keep it, with an
+`oxlint-disable-next-line no-unused-vars` and a note saying why.
 ```
 
 That "and a note saying why" is what produced
@@ -142,15 +142,15 @@ That "and a note saying why" is what produced
 
 ## Commands you will need
 
-| Purpose | Command | Expected on success |
-|---|---|---|
-| Lint + typecheck | `pnpm lint` | exit 0, no output |
-| Lint autofix | `pnpm lint:fix` | exit 0 |
-| Format check | `pnpm format` | exit 0, "All matched files use the correct format" |
-| Format autofix | `pnpm format:fix` | exit 0 |
-| Unit tests | `pnpm test:unit` | 15 files, 148 tests passed |
-| Dead-code check | `pnpm knip` | exit 0 |
-| Comment detector (TS) | see below | 0 lines once the purge is complete |
+| Purpose               | Command           | Expected on success                                |
+| --------------------- | ----------------- | -------------------------------------------------- |
+| Lint + typecheck      | `pnpm lint`       | exit 0, no output                                  |
+| Lint autofix          | `pnpm lint:fix`   | exit 0                                             |
+| Format check          | `pnpm format`     | exit 0, "All matched files use the correct format" |
+| Format autofix        | `pnpm format:fix` | exit 0                                             |
+| Unit tests            | `pnpm test:unit`  | 15 files, 148 tests passed                         |
+| Dead-code check       | `pnpm knip`       | exit 0                                             |
+| Comment detector (TS) | see below         | 0 lines once the purge is complete                 |
 
 Run every command from the repo root (`/home/ntet56z81w/taiyo`).
 
@@ -253,7 +253,7 @@ duplicate any of it.
 **1a.** Append this section immediately before the existing
 `## Verification for every file you touch` heading:
 
-````md
+```md
 ## Component-specific gotchas
 
 Each of these cost a debugging session and none of them is visible from the
@@ -275,7 +275,7 @@ code. They are listed with the file that depends on them.
   long `transitionDuration` on `backgroundColor` is the standard suppression
   trick (`input.tsx`, mirrored in `number-field.tsx`).
 - **A marker cannot cross a component file.** `stylex.when.ancestor(sel,
-  marker)` only reaches an ancestor inside the same component tree we render,
+marker)` only reaches an ancestor inside the same component tree we render,
   so e.g. pressing a `<label>` that wraps a `Switch` cannot squish the thumb —
   the label is the consumer's element. Don't try; the constraint is structural.
 - **The keycap radius ratio (0.35 × height) was measured on a WIDE chip.** On a
@@ -300,19 +300,19 @@ Every row here is a rule that lives in `src/styles/structural.css` and a
 component that depends on it. Changing one side without the other is silent:
 the rule still matches, the computed value is just wrong.
 
-| Component | What `structural.css` owns | Breaks if removed |
-|---|---|---|
-| `card.tsx` | nested-card `clip-path`; child cards clip 1rem past the frame, first/last pull in to 1px | `CardFrame`'s muted wash paints over nested cards |
-| `dialog.tsx`, `sheet.tsx` | `:has()`-driven padding: header/footer padding shrinks to 0.75rem (0.25rem next to a bare footer) when the popup contains a panel | doubled padding around panels |
-| `popover.tsx`, `tooltip.tsx` | `[data-current]` / `[data-previous]` width rules, which read `--viewport-inline-padding` | mis-sized viewport during a transition |
-| `calendar.tsx` | squares the inner corners of a selected range; draws the "today" dot on the day button's `::after` | a range reads as separate discs |
-| `table.tsx` | rounds the outer corners of the body grid in the card variant | square corners inside a rounded card |
-| every component with consumer icon children | the two `svg` allowlist blocks at the top of the file | icons fall back to their intrinsic 24px |
+| Component                                   | What `structural.css` owns                                                                                                        | Breaks if removed                                 |
+| ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- |
+| `card.tsx`                                  | nested-card `clip-path`; child cards clip 1rem past the frame, first/last pull in to 1px                                          | `CardFrame`'s muted wash paints over nested cards |
+| `dialog.tsx`, `sheet.tsx`                   | `:has()`-driven padding: header/footer padding shrinks to 0.75rem (0.25rem next to a bare footer) when the popup contains a panel | doubled padding around panels                     |
+| `popover.tsx`, `tooltip.tsx`                | `[data-current]` / `[data-previous]` width rules, which read `--viewport-inline-padding`                                          | mis-sized viewport during a transition            |
+| `calendar.tsx`                              | squares the inner corners of a selected range; draws the "today" dot on the day button's `::after`                                | a range reads as separate discs                   |
+| `table.tsx`                                 | rounds the outer corners of the body grid in the card variant                                                                     | square corners inside a rounded card              |
+| every component with consumer icon children | the two `svg` allowlist blocks at the top of the file                                                                             | icons fall back to their intrinsic 24px           |
 
 The `--taiyo-*` custom-property hooks those rules read are declared in
 `globals.css`, which mirrors a subset of `tokens.stylex.ts` by hand. Changing a
 value in one means changing it in the other.
-````
+```
 
 **1b.** In the same file, in the `## What StyleX 0.19 + this repo's lint allow`
 section, the existing bullet that begins "**Icon sizing is an explicit
@@ -320,28 +320,29 @@ allowlist in `structural.css`**" stays as is — the new table complements it.
 
 **1c.** Append to `## Verification for every file you touch`, as a new item 4:
 
-````md
+```md
 4. **No comments.** This package is comment-free by policy; the reasoning lives
    in this file. The only `//` lines allowed in `src/` are `oxlint-disable`
    directives. See `plans/006-comment-free-codebase.md`.
-````
+```
 
 **1d.** Rewrite the tail of convention 2. Replace exactly:
 
 ```md
-   `oxlint` will report that import as unused — keep it, with an
-   `oxlint-disable-next-line no-unused-vars` and a note saying why.
+`oxlint` will report that import as unused — keep it, with an
+`oxlint-disable-next-line no-unused-vars` and a note saying why.
 ```
 
 with:
 
 ```md
-   `oxlint` will report that import as unused — keep it, with an
-   `oxlint-disable-next-line no-unused-vars` above it. Do not add an
-   explanatory comment: the reason is this document.
+`oxlint` will report that import as unused — keep it, with an
+`oxlint-disable-next-line no-unused-vars` above it. Do not add an
+explanatory comment: the reason is this document.
 ```
 
 **Verify**:
+
 - `grep -c "and a note saying why" packages/ui/STYLEX.md` → `0`
 - `grep -c "^## Component-specific gotchas" packages/ui/STYLEX.md` → `1`
 - `grep -c "^## Cross-file couplings" packages/ui/STYLEX.md` → `1`
@@ -353,7 +354,7 @@ with:
 Create `docs/engineering-notes.md`. Follow the heading style of
 `docs/group-ownership.md` (`# Title`, then `##` sections). Write exactly this:
 
-````md
+```md
 # Engineering notes
 
 Invariants and non-obvious decisions that the code cannot express on its own.
@@ -404,8 +405,8 @@ enforces it:
 
 Handlers read processed files from `c.var.formData`, not from the underlying
 `FormData`. The middleware therefore walks the dot-separated key
-(`covers.0.file`) into the nested object Zod built and replaces the leaf, *as
-well as* calling `formData.set(key, processedFile)`. Without the nested write
+(`covers.0.file`) into the nested object Zod built and replaces the leaf, _as
+well as_ calling `formData.set(key, processedFile)`. Without the nested write
 the original unprocessed `File` reference survives and the route uploads raw
 user bytes. The pipeline validates size, confirms the format by magic bytes,
 re-encodes GIFs to strip metadata while preserving animation, and otherwise
@@ -559,9 +560,10 @@ their own key schema (the rate limiter, BullMQ). Application data goes through
   read as dead. The matcher skips specifiers with a URL scheme or a
   protocol-relative host — those are fetched at runtime, not resolved from
   `node_modules`.
-````
+```
 
 **Verify**:
+
 - `test -f docs/engineering-notes.md && wc -l docs/engineering-notes.md` →
   file exists, well over 150 lines
 - `grep -c "pg_advisory_xact_lock" docs/engineering-notes.md` → `1`
@@ -571,7 +573,7 @@ their own key schema (the rate limiter, BullMQ). Application data goes through
 Append to `apps/web/AGENTS.md`, after the existing `## Known gotchas` section
 and before `## Next steps`:
 
-````md
+```md
 ## Scene & landing gotchas
 
 The source tree carries no comments (see
@@ -589,7 +591,7 @@ is here; StyleX rules live in `packages/ui/STYLEX.md`.
   design system departs from Inter-everywhere, and it is loaded from
   `src/styles.css`.
 - **Scene geometry must be deterministic.** `src/components/scene/
-  deterministic.ts` exists because `Math.random()` would diverge between server
+deterministic.ts` exists because `Math.random()` would diverge between server
   and browser and React would flag a hydration mismatch. Its `round` helper is
   needed for the same reason: the browser re-serialises long floats
   (`5.721816935692914%` → `5.72182%`), so both sides have to carry the same
@@ -667,13 +669,13 @@ is here; StyleX rules live in `packages/ui/STYLEX.md`.
   unpinned, on narrow screens.
 - **`VITE_SUPPORT_EMAIL` is where copyright notices, privacy requests and
   general support mail go** (`src/env/client.ts`).
-````
+```
 
 Also append to `apps/storybook`-relevant knowledge — there is no
 `apps/storybook/AGENTS.md`, so put the two Storybook facts in
 `docs/engineering-notes.md` under `## Tooling` instead:
 
-````md
+```md
 - **Storybook's `getAbsolutePath` helper** resolves a package's absolute path;
   it is needed in Yarn PnP setups and inside a monorepo.
 - **Storybook themes go on `<html>`**, next to the addon's `dark` class, so
@@ -694,9 +696,10 @@ Also append to `apps/storybook`-relevant knowledge — there is no
   `*.stylex.ts` variable imports itself. In `apps/web`, `stylex()` must come
   before the React transform, and React Compiler runs through
   `plugin-react`'s native `compiler` option backed by `oxc-transform-react`.
-````
+```
 
 **Verify**:
+
 - `grep -c "^## Scene & landing gotchas" apps/web/AGENTS.md` → `1`
 - `grep -c "cloudflared" docs/engineering-notes.md` → `1`
 
@@ -710,6 +713,7 @@ Keep nothing but the directives listed in "Current state" (there are none in
 this package today — verify with the grep below before you start).
 
 Rules:
+
 - Delete the comment lines entirely, not just their text.
 - When a JSDoc block sat directly above a declaration, the declaration keeps
   its position; do not insert a replacement blank line.
@@ -717,6 +721,7 @@ Rules:
 - Do not rename, reorder or restructure anything.
 
 **Verify**:
+
 - `grep -rnE 'oxlint-disable|biome-ignore' packages/ui/src` → no output
   (confirms you removed no directive, because there were none)
 - `/tmp/detect-comments.sh | grep -c '^packages/ui/'` → `0`
@@ -740,6 +745,7 @@ Rules:
   - `.rotate()`
 
 **Verify**:
+
 - `grep -rc 'oxlint-disable-next-line no-console' apps/api/src/index.ts` → `1`
 - `grep -rc 'oxlint-disable-next-line no-console' apps/worker/src/index.ts` → `3`
 - `/tmp/detect-comments.sh | grep -cE '^apps/(api|worker)/'` → `0`
@@ -764,6 +770,7 @@ Rules:
 - Do not touch `*.docs.mdx` files.
 
 **Verify**:
+
 - `head -3 apps/web/src/components/auth/sign-in-form.tsx` → the
   `oxlint-disable-next-line` line, then `import * as stylex from "@stylexjs/stylex"`
 - `grep -c 'biome-ignore' apps/storybook/src/stories/ScrollArea.stories.tsx` → `1`
@@ -801,6 +808,7 @@ lines) plus `knip.ts`, `oxlint.config.ts`, `oxfmt.config.ts`,
   directories is in scope if it has comments.
 
 **Verify**:
+
 - `grep -rc 'oxlint-disable-next-line no-console' packages/utils/src | grep -c ':1$'` → `8`
 - `git status --porcelain packages/db` → no output at all
 - `/tmp/detect-comments.sh` → `0` lines
@@ -833,6 +841,7 @@ lines) plus `knip.ts`, `oxlint.config.ts`, `oxfmt.config.ts`,
 - Do not change a single selector, declaration or `@layer` statement.
 
 **Verify**:
+
 - `grep -rnE '/\*|^[[:space:]]*\*' packages/ui/src/styles/*.css apps/web/src/styles.css` → no output
 - `git diff --stat -- '*.css'` → deletions only, zero insertions
 - `pnpm --filter @taiyomoe/storybook build` → exit 0
@@ -843,7 +852,7 @@ lines) plus `knip.ts`, `oxlint.config.ts`, `oxfmt.config.ts`,
 Add a `### Comments` subsection to the root `README.md`, immediately after the
 `### Code quality` subsection:
 
-````md
+```md
 ### Comments
 
 The source tree carries no comments. Code is expected to be self-explanatory;
@@ -860,7 +869,7 @@ is recorded in a document instead:
 
 `packages/db/src/migrations/` and `packages/db/src/seeds/` are exempt: they are
 applied, frozen history.
-````
+```
 
 **Verify**: `grep -c '^### Comments' README.md` → `1`
 
@@ -944,7 +953,7 @@ For the human or agent who owns this code afterwards:
   plus a skim of `git diff -- '*.ts' '*.tsx' | grep '^+' | grep -v '^+++'`
   (which should show only blank-line adjustments made by `lint:fix`) is the
   fast way to check that.
-- **Deferred out of this plan**: an `oxlint` rule that would *enforce*
+- **Deferred out of this plan**: an `oxlint` rule that would _enforce_
   comment-freedom. `oxlint` has no such rule today, so the policy in
   `README.md` and the detector script are what hold the line. If a
   `no-comments`-style rule appears upstream, wire it up and delete the
