@@ -4,6 +4,7 @@ import { deleteChapterHistoryHandler } from "../handlers/delete-chapter-history-
 import { followUserHandler } from "../handlers/follow-user-handler"
 import { listFollowersHandler } from "../handlers/list-followers-handler"
 import { listFollowingHandler } from "../handlers/list-following-handler"
+import { listMyFeedHandler } from "../handlers/list-my-feed-handler"
 import { listMyHistoryHandler } from "../handlers/list-my-history-handler"
 import { listMyLibraryHandler } from "../handlers/list-my-library-handler"
 import { listMyListsHandler } from "../handlers/list-my-lists-handler"
@@ -21,5 +22,6 @@ export const usersRouter = new Hono()
   .route("/", upsertLibraryEntryHandler)
   .route("/", removeLibraryEntryHandler)
   .route("/", listMyLibraryHandler)
+  .route("/", listMyFeedHandler)
   .route("/", createListHandler)
   .route("/", listMyListsHandler)

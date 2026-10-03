@@ -133,3 +133,33 @@ export const staffLinksSchema = z
       "Provider links for the staff. Send empty string for a provider to clear it. Omit a provider to leave it unchanged.",
     example: { twitter: "https://x.com/example", pixiv: "https://www.pixiv.net/users/123" },
   })
+
+export const chapterFeedItemSchema = z.object({
+  id: z.uuid().meta({
+    description: "The ID of the chapter.",
+    example: "13548c83-8d1a-4163-8830-c8f16fcd2eb7",
+  }),
+  title: z.string().nullable().meta({
+    description: "The title of the chapter, if any.",
+    example: "The Boy with the Sharingan",
+  }),
+  number: z.number().meta({ description: "The chapter number.", example: 112 }),
+  volume: z
+    .string()
+    .nullable()
+    .meta({ description: "The volume of the chapter, if any.", example: "12" }),
+  language: languageSchema("The language of the chapter."),
+  contentRating: contentRatingSchema("The content rating of the chapter."),
+  createdAt: z.iso.datetime().meta({
+    description: "When the chapter was released.",
+    example: "2026-09-21T14:03:11.221Z",
+  }),
+  mediaId: z.uuid().meta({
+    description: "The ID of the media the chapter belongs to.",
+    example: "4e26b80f-6661-4f5f-93b4-6dfed052bbed",
+  }),
+  mediaTitle: z.string().nullable().meta({
+    description: "The main title of the media the chapter belongs to.",
+    example: "Boruto: Naruto Next Generations",
+  }),
+})
