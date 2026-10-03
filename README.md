@@ -103,9 +103,10 @@ taiyo/
    ```
 2. Copy the env templates. Env is split per app — the root `.env` holds only the Docker infrastructure variables.
    ```bash
-   cp .env.example .env                     # Docker infra: container ports & credentials
-   cp apps/api/.env.example apps/api/.env   # API + all server-side packages
-   cp apps/web/.env.example apps/web/.env   # web client (VITE_* vars)
+   cp .env.example .env                           # Docker infra: container ports & credentials
+   cp apps/api/.env.example apps/api/.env         # API + all server-side packages
+   cp apps/web/.env.example apps/web/.env         # web client (VITE_* vars)
+   cp apps/worker/.env.example apps/worker/.env   # chapter-processing worker
    ```
    The templates are a working local setup as-copied — no value needs editing to
    boot the stack, run the test suites, or `pnpm dev`. Replace
@@ -133,7 +134,7 @@ taiyo/
 6. Run dev
 
    ```bash
-   pnpm dev                  # API + web (Storybook is excluded)
+   pnpm dev                  # API + web + worker (Storybook is excluded)
    ```
 
    - API: <http://localhost:3002> (`/docs` for the OpenAPI viewer, `/ping` for a health check)
@@ -145,7 +146,7 @@ taiyo/
 Root-level:
 
 ```bash
-pnpm dev                # turbo run dev — API + web dev servers (excludes Storybook)
+pnpm dev                # turbo run dev — API + web + worker (excludes Storybook)
 pnpm build              # turbo run build
 pnpm format             # oxfmt --check
 pnpm format:fix         # oxfmt (in place)
@@ -217,15 +218,16 @@ runs, since `oxfmt` formats markdown too.
 
 Env vars are split per app rather than living in one root file:
 
-| File            | Owns                                                                                                                     | Loaded by                                                                                                                            |
-| --------------- | ------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `.env`          | Docker Compose infra only — container ports & credentials (`DATABASE_USERNAME`, `RUSTFS_*`, `MEILISEARCH_MASTER_KEY`, …) | `docker compose`                                                                                                                     |
-| `apps/api/.env` | All server-side vars — DB / cache / S3 / search / auth / email                                                           | `apps/api`, the backend tooling in `packages/db` & `packages/scripts` (`dotenv -e ../../apps/api/.env`), and `pnpm test:integration` |
-| `apps/web/.env` | `VITE_*` client vars only                                                                                                | Vite (`apps/web` is its own `envDir`)                                                                                                |
+| File               | Owns                                                                                                                     | Loaded by                                                                                                                            |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `.env`             | Docker Compose infra only — container ports & credentials (`DATABASE_USERNAME`, `RUSTFS_*`, `MEILISEARCH_MASTER_KEY`, …) | `docker compose`                                                                                                                     |
+| `apps/api/.env`    | All server-side vars — DB / cache / S3 / search / auth / email                                                           | `apps/api`, the backend tooling in `packages/db` & `packages/scripts` (`dotenv -e ../../apps/api/.env`), and `pnpm test:integration` |
+| `apps/web/.env`    | `VITE_*` client vars only                                                                                                | Vite (`apps/web` is its own `envDir`)                                                                                                |
+| `apps/worker/.env` | DB / cache / S3 plus `CHAPTER_PROCESSING_CONCURRENCY` — a subset of `apps/api/.env`                                      | `apps/worker` (`dotenv -e .env`)                                                                                                     |
 
 Each `.env.example` documents its own file's variables. Validation is centralized via [`@t3-oss/env-core`](https://env.t3.gg/) in each package's `env.ts`.
 
-A few `apps/api` values are derived from the Docker infra in the root `.env` and must be kept in sync: `DATABASE_URL` (postgres credentials/port), `S3_ACCESS_KEY_ID` / `S3_SECRET_ACCESS_KEY` (`RUSTFS_*`), and `MEILISEARCH_API_KEY` (`MEILISEARCH_MASTER_KEY`). `apps/storybook` needs no env vars.
+A few `apps/api` values are derived from the Docker infra in the root `.env` and must be kept in sync: `DATABASE_URL` (postgres credentials/port), `S3_ACCESS_KEY_ID` / `S3_SECRET_ACCESS_KEY` (`RUSTFS_*`), and `MEILISEARCH_API_KEY` (`MEILISEARCH_MASTER_KEY`). `apps/worker/.env` repeats the DB / cache / S3 subset and must match too. `apps/storybook` needs no env vars.
 
 ## 📦 Package overview
 
