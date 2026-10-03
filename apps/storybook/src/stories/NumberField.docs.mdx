@@ -1,0 +1,79 @@
+import { Canvas, Meta } from "@storybook/addon-docs/blocks"
+import * as NumberFieldStories from "./NumberField.stories"
+
+<Meta title="UI/NumberField" />
+
+# NumberField
+
+[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/ui/number-field.tsx)
+
+## Table of Contents
+
+- [Overview](#overview)
+  - [Sizes](#sizes)
+  - [With Min and Max](#with-min-and-max)
+  - [With Step](#with-step)
+  - [Disabled](#disabled)
+  - [Read Only](#read-only)
+  - [Invalid](#invalid)
+  - [With Label](#with-label)
+  - [With Scrub Area](#with-scrub-area)
+- [Feedback](#feedback)
+
+## Overview
+
+`NumberField` is a numeric input with built-in increment and decrement buttons, keyboard-arrow stepping, and constraint support. Compose it from `NumberFieldGroup`, `NumberFieldDecrement`, `NumberFieldInput`, and `NumberFieldIncrement`.
+
+<Canvas of={NumberFieldStories.Default} />
+
+### Sizes
+
+`NumberField` accepts a `size` prop with `sm`, `default`, and `lg` variants that adjust input height and stepper button padding.
+
+<Canvas of={NumberFieldStories.Sizes} />
+
+### With Min and Max
+
+Constrain the accepted range with `min` and `max`; the steppers disable themselves at the boundaries.
+
+<Canvas of={NumberFieldStories.WithMinMax} />
+
+### With Step
+
+The `step` prop controls the increment per stepper click or arrow-key press, including fractional values.
+
+<Canvas of={NumberFieldStories.WithStep} />
+
+### Disabled
+
+Disabled fields prevent interaction and dim the entire group.
+
+<Canvas of={NumberFieldStories.Disabled} />
+
+### Read Only
+
+Read-only fields display a value that cannot be edited but remain focusable for selection and copying.
+
+<Canvas of={NumberFieldStories.ReadOnly} />
+
+### Invalid
+
+Setting `aria-invalid` on the inner input switches the group to the destructive border and ring.
+
+<Canvas of={NumberFieldStories.Invalid} />
+
+### With Label
+
+Pair the field with a `Label` (linked via `htmlFor`/`id`) for accessible labelling.
+
+<Canvas of={NumberFieldStories.WithLabel} />
+
+### With Scrub Area
+
+`NumberFieldScrubArea` renders a draggable label that scrubs the value horizontally — a power-user input for design tools.
+
+<Canvas of={NumberFieldStories.WithScrubArea} />
+
+## Feedback
+
+Help us improve this component by providing feedback, asking questions on [Discord](https://discord.gg/RYbnyeWcM2), or updating this file directly on [GitHub](https://github.com/taiyomoe/taiyo). Your feedback helps us create better components! 🚀

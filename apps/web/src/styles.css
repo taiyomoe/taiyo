@@ -1,0 +1,128 @@
+@import "@taiyomoe/ui/style.css";
+
+/* Brand typography for the marketing page, not a component token — the design
+   system itself is deliberately Inter-only. */
+@import "@fontsource/pt-serif/700.css";
+@import "@fontsource/pt-serif/700-italic.css";
+@import "@fontsource/pt-serif/400.css";
+
+/* The landing page navigates by in-page anchor. Reverted under reduced motion. */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Auth field density. These targets are descendants @taiyomoe/ui renders inside
+   Field/InputGroup, out of reach for StyleX (no descendant selectors) and for
+   `sx` (it lands on the wrapper). The `!important` is required: structural.css
+   already sizes addon icons at a specificity no plain selector can outrank. */
+[data-auth-fields] [data-slot="input"] {
+  height: 3rem;
+  line-height: 3rem;
+  padding: 0;
+}
+
+[data-auth-fields] [data-slot="input-group-addon"] {
+  padding-inline: 1rem;
+}
+
+[data-auth-fields] [data-slot="input-group-addon"] svg {
+  color: color-mix(in srgb, var(--muted-foreground) 72%, transparent);
+  height: 1.25rem !important;
+  width: 1.25rem !important;
+}
+
+/* Scene animations, shared by the auth screen and the landing page — which is
+   why they are global keyframes rather than per-component stylex.keyframes(). */
+@keyframes scene-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Scales read from per-ray custom properties, so no two rays grow alike. */
+@keyframes scene-ray-pulse {
+  0%,
+  100% {
+    transform: scaleY(var(--ray-rest));
+  }
+  50% {
+    transform: scaleY(var(--ray-peak));
+  }
+}
+
+@keyframes scene-sun-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.04);
+  }
+}
+
+@keyframes scene-aurora {
+  0% {
+    transform: translate(-10%, 0);
+  }
+  50% {
+    transform: translate(10%, -4%);
+  }
+  100% {
+    transform: translate(-10%, 0);
+  }
+}
+
+@keyframes scene-ember-rise {
+  0% {
+    transform: translateY(0) translateX(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.9;
+  }
+  90% {
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateY(-78vh) translateX(var(--drift));
+    opacity: 0;
+  }
+}
+
+/* The cover strip renders its list twice; translating exactly -50% lands the
+   second copy where the first started, so the loop has no seam. */
+@keyframes scene-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Scroll cue at the bottom of the hero. Centering is done by a wrapper so this
+   keyframe stays a pure translateY and doesn't fight the -50% centring. */
+@keyframes scene-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(7px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-auth-screen] *,
+  [data-auth-screen] *::before,
+  [data-auth-screen] *::after,
+  [data-landing] *,
+  [data-landing] *::before,
+  [data-landing] *::after {
+    animation: none !important;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+}

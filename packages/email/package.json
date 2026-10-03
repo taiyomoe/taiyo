@@ -2,28 +2,29 @@
   "name": "@taiyomoe/email",
   "version": "0.1.0",
   "private": true,
-  "type": "module",
   "license": "MIT",
+  "type": "module",
   "exports": {
     ".": "./src/index.ts",
     "./env": "./src/env.ts"
   },
   "scripts": {
-    "start": "email dev --dir ./src/templates",
-    "clean": "rm -rf .turbo node_modules",
-    "typecheck": "tsc --noEmit"
+    "start": "email dev --dir ./src/templates"
   },
   "dependencies": {
-    "@react-email/components": "^1.0.1",
-    "@t3-oss/env-core": "^0.13.8",
-    "react": "^19.2.0",
-    "resend": "^6.5.2",
-    "zod": "^4.1.12"
+    "@t3-oss/env-core": "^0.13.11",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "react-email": "^6.9.2",
+    "resend": "^6.20.0",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@react-email/preview-server": "5.0.5",
+    "@react-email/ui": "^6.9.2",
     "@taiyomoe/typescript": "workspace:^",
-    "react-email": "^5.0.5",
-    "typescript": "^5.9.3"
+    "@types/node": "^26.2.0",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
+    "typescript": "^7.0.2"
   }
 }

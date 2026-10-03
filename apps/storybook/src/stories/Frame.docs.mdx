@@ -1,0 +1,37 @@
+import { Canvas, Meta } from "@storybook/addon-docs/blocks"
+import * as FrameStories from "./Frame.stories"
+
+<Meta title="UI/Frame" />
+
+# Frame
+
+[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/ui/frame.tsx)
+
+## Table of Contents
+
+- [Overview](#overview)
+  - [Multiple Panels](#multiple-panels)
+  - [With Footer](#with-footer)
+- [Feedback](#feedback)
+
+## Overview
+
+Frame is a layout container for stacked card-like panels — used for settings pages, dashboards, and any "list of grouped sections" UI. The outer `Frame` provides a muted padded surface and inserts a small gap between consecutive `FramePanel`s. `FrameHeader`, `FrameTitle`, `FrameDescription` and `FrameFooter` are typographic slots for the panel's content.
+
+<Canvas of={FrameStories.Default} />
+
+### Multiple Panels
+
+Multiple `FramePanel`s stack vertically inside the same Frame with a consistent gap.
+
+<Canvas of={FrameStories.MultiplePanels} />
+
+### With Footer
+
+A `FrameFooter` sits at the bottom of a panel — typically a divider row that hosts a primary action like Save.
+
+<Canvas of={FrameStories.WithFooter} />
+
+## Feedback
+
+Help us improve this component by providing feedback, asking questions on [Discord](https://discord.gg/RYbnyeWcM2), or updating this file directly on [GitHub](https://github.com/taiyomoe/taiyo). Your feedback helps us create better components! 🚀

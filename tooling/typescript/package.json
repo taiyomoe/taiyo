@@ -4,6 +4,7 @@
   "private": true,
   "license": "MIT",
   "files": [
-    "base.jsonc"
-  ]
+    "base.json"
+  ],
+  "type": "module"
 }

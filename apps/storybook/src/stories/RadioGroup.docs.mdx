@@ -1,0 +1,58 @@
+import { Canvas, Meta } from "@storybook/addon-docs/blocks"
+import * as RadioGroupStories from "./RadioGroup.stories"
+
+<Meta title="UI/RadioGroup" />
+
+# RadioGroup
+
+[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/ui/radio-group.tsx)
+
+## Table of Contents
+
+- [Overview](#overview)
+  - [Selected By Default](#selected-by-default)
+  - [Disabled](#disabled)
+  - [Read Only](#read-only)
+  - [Invalid](#invalid)
+  - [Horizontal](#horizontal)
+- [Feedback](#feedback)
+
+## Overview
+
+Radio groups let users pick a single option from a small set of mutually exclusive choices. Compose a `RadioGroup` with one `RadioGroupItem` per option; pair each item with a `Label` for accessibility.
+
+<Canvas of={RadioGroupStories.Default} />
+
+### Selected By Default
+
+Pass `defaultValue` to pre-select an option in an uncontrolled group (use `value` + `onValueChange` for the controlled variant).
+
+<Canvas of={RadioGroupStories.SelectedByDefault} />
+
+### Disabled
+
+Disabled radio groups prevent user interaction and dim every item in the group.
+
+<Canvas of={RadioGroupStories.Disabled} />
+
+### Read Only
+
+Read-only groups keep the current selection visible and focusable but reject changes.
+
+<Canvas of={RadioGroupStories.ReadOnly} />
+
+### Invalid
+
+Setting `aria-invalid` on the items surfaces a destructive border, signalling a validation error.
+
+<Canvas of={RadioGroupStories.Invalid} />
+
+### Horizontal
+
+The default layout is a vertical stack; override the className with `flex-row` to lay the options out horizontally.
+
+<Canvas of={RadioGroupStories.Horizontal} />
+
+## Feedback
+
+Help us improve this component by providing feedback, asking questions on [Discord](https://discord.gg/RYbnyeWcM2), or updating this file directly on [GitHub](https://github.com/taiyomoe/taiyo). Your feedback helps us create better components! 🚀

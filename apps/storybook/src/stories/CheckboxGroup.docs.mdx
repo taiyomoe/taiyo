@@ -1,0 +1,37 @@
+import { Canvas, Meta } from "@storybook/addon-docs/blocks"
+import * as CheckboxGroupStories from "./CheckboxGroup.stories"
+
+<Meta title="UI/CheckboxGroup" />
+
+# CheckboxGroup
+
+[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/ui/checkbox-group.tsx)
+
+## Table of Contents
+
+- [Overview](#overview)
+  - [With Default Value](#with-default-value)
+  - [Disabled](#disabled)
+- [Feedback](#feedback)
+
+## Overview
+
+`CheckboxGroup` co-ordinates a set of `Checkbox` items so their values can be read together. Each child `Checkbox` is matched to the group via its `name` prop, and the group surfaces the selected names through `value`/`defaultValue`.
+
+<Canvas of={CheckboxGroupStories.Default} />
+
+### With Default Value
+
+Pass `defaultValue` (uncontrolled) or `value` (controlled) as an array of checkbox `name`s to pre-select members of the group.
+
+<Canvas of={CheckboxGroupStories.WithDefaultValue} />
+
+### Disabled
+
+Setting `disabled` on the group disables every checkbox it contains.
+
+<Canvas of={CheckboxGroupStories.Disabled} />
+
+## Feedback
+
+Help us improve this component by providing feedback, asking questions on [Discord](https://discord.gg/RYbnyeWcM2), or updating this file directly on [GitHub](https://github.com/taiyomoe/taiyo). Your feedback helps us create better components! 🚀

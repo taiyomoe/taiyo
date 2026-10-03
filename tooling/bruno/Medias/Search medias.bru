@@ -1,0 +1,31 @@
+meta {
+  name: Search medias
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{url}}/medias/search
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "q": "solo leveling",
+    "filter": {
+      "type": { "eq": "MANGA" },
+      "status": { "eq": "FINISHED" }
+    },
+    "sort": [
+      { "field": "createdAt", "direction": "desc" }
+    ],
+    "page": 1,
+    "perPage": 20
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,15 +1,11 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "enabled": false,
-  "extends": [
-    "config:recommended"
-  ],
+  "extends": ["config:recommended"],
   "packageRules": [
     {
       "enabled": false,
-      "matchPackageNames": [
-        "/^@taiyomoe//"
-      ]
+      "matchPackageNames": ["/^@taiyomoe//"]
     }
   ],
   "docker-compose": {

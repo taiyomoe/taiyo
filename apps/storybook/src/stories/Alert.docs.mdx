@@ -1,0 +1,44 @@
+import { Canvas, Meta } from "@storybook/addon-docs/blocks"
+import * as AlertStories from "./Alert.stories"
+
+<Meta title="UI/Alert" />
+
+# Alert
+
+[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/ui/alert.tsx)
+
+## Table of Contents
+
+- [Overview](#overview)
+  - [Variants](#variants)
+  - [With Action](#with-action)
+  - [Title Only](#title-only)
+- [Feedback](#feedback)
+
+## Overview
+
+Alerts surface short, contextual messages — status updates, validation results, or system notices — without interrupting the user's flow. They support an optional leading icon, a title, a description, and an action slot.
+
+<Canvas of={AlertStories.Default} />
+
+### Variants
+
+The `variant` prop tunes the alert's color treatment to match the message's intent: `default` for neutral, `info`, `success`, `warning`, and `error`.
+
+<Canvas of={AlertStories.Variants} />
+
+### With Action
+
+Use `AlertAction` to attach a primary action (e.g. a `Button`) inline with the message.
+
+<Canvas of={AlertStories.WithAction} />
+
+### Title Only
+
+Both `AlertTitle` and `AlertDescription` are optional — render just the title for terse notices.
+
+<Canvas of={AlertStories.TitleOnly} />
+
+## Feedback
+
+Help us improve this component by providing feedback, asking questions on [Discord](https://discord.gg/RYbnyeWcM2), or updating this file directly on [GitHub](https://github.com/taiyomoe/taiyo). Your feedback helps us create better components! 🚀

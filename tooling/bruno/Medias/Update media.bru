@@ -1,0 +1,30 @@
+meta {
+  name: Update media
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{url}}/medias/:id
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: 00000000-0000-0000-0000-000000000000
+}
+
+body:json {
+  {
+    "status": "FINISHED",
+    "synopsis": {
+      "en": "After defeating monsters in one punch, Saitama searches for a real challenge."
+    },
+    "endDate": "2024-12-31T00:00:00.000Z"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

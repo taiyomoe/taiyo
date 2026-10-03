@@ -1,9 +1,0 @@
-{
-  "extends": "@taiyomoe/typescript/base.json",
-  "compilerOptions": {
-    "composite": true,
-    "declaration": true
-  },
-  "include": ["src"],
-  "exclude": ["node_modules"]
-}

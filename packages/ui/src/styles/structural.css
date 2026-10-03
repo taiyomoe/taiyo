@@ -1,0 +1,840 @@
+/**
+ * Cross-element rules that StyleX cannot express (descendant selectors are
+ * excluded from StyleX by design, and the repo lint bans :has()/lookahead
+ * selectors). Everything here targets consumer-provided children — typically
+ * icons — under a [data-slot] scope. Keep this file minimal: any rule that
+ * can live on the element itself belongs in the component's stylex.create.
+ */
+
+/*
+ * `@layer structural` places this file between the reset and the components:
+ * base < structural < stylex.*, declared in each app's stylex.vite() config.
+ * So a rule here can freely ADD a declaration StyleX does not set — the normal
+ * case — and needs `!important` to override one.
+ */
+@layer structural {
+  [data-slot="button"] svg,
+  [data-slot="tabs-tab"] svg,
+  [data-slot="menu-item"] > svg {
+    margin-inline: -0.125rem;
+  }
+
+  [data-slot="badge"] svg {
+    height: 0.875rem;
+    width: 0.875rem;
+  }
+
+  /* Menu checkbox/radio items: consumer icon children (mirrors the menu-item
+     rules above; also sizes the check indicator svg the component renders). */
+  [data-slot="menu-checkbox-item"] svg,
+  [data-slot="menu-radio-item"] svg {
+    flex-shrink: 0;
+    pointer-events: none;
+  }
+
+  [data-slot="menu-checkbox-item"] svg,
+  [data-slot="menu-radio-item"] svg {
+    height: 1.125rem;
+    width: 1.125rem;
+  }
+
+  [data-slot="menu-sub-trigger"] > svg:not(:last-child) {
+    margin-inline: -0.125rem;
+  }
+
+  /* Popover/tooltip viewports: Base UI renders [data-current]/[data-previous]
+     wrappers around the content while it transitions between anchors. These are
+     descendants StyleX cannot reach. `--viewport-inline-padding` is set inline
+     by the components. */
+  [data-slot="popover-viewport"] [data-current],
+  [data-slot="popover-viewport"] [data-previous],
+  [data-slot="tooltip-viewport"] [data-current],
+  [data-slot="tooltip-viewport"] [data-previous] {
+    opacity: 1;
+    transition-duration: 0.15s;
+    transition-property: opacity;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    width: calc(var(--popup-width) - 2 * var(--viewport-inline-padding) - 2px);
+  }
+
+  [data-slot="popover-viewport"] [data-current][data-starting-style],
+  [data-slot="popover-viewport"] [data-current][data-ending-style],
+  [data-slot="popover-viewport"] [data-previous][data-starting-style],
+  [data-slot="popover-viewport"] [data-previous][data-ending-style],
+  [data-slot="tooltip-viewport"] [data-current][data-starting-style],
+  [data-slot="tooltip-viewport"] [data-current][data-ending-style],
+  [data-slot="tooltip-viewport"] [data-previous][data-starting-style],
+  [data-slot="tooltip-viewport"] [data-previous][data-ending-style] {
+    opacity: 0;
+  }
+
+  [data-slot="tooltip-viewport"] [data-previous] {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Calendar-in-popover: :has() is banned in StyleX by the repo lint but is
+     fine in plain CSS. The doubled attribute
+     selector outweighs StyleX's single-class specificity. 1.225rem = radius.xl
+     (restores the popover radius when tooltipStyle shrank it to radius.md). */
+  [data-slot="popover-popup"]:has([data-slot="calendar"]) {
+    border-radius: 1.225rem;
+  }
+
+  [data-slot="popover-viewport"]:has([data-slot="calendar"]) {
+    padding: 0.5rem;
+  }
+
+  [data-slot="button"][data-size="xl"] svg,
+  [data-slot="button"][data-size="icon-xl"] svg {
+    height: 1.25rem;
+    width: 1.25rem;
+  }
+
+  [data-slot="button"][data-size="xs"] svg,
+  [data-slot="button"][data-size="icon-xs"] svg {
+    height: 1rem;
+    width: 1rem;
+  }
+
+  @media (width >= 40rem) {
+    [data-slot="badge"] svg {
+      height: 0.75rem;
+      width: 0.75rem;
+    }
+
+    [data-slot="menu-checkbox-item"] svg,
+    [data-slot="menu-radio-item"] svg {
+      height: 1rem;
+      width: 1rem;
+    }
+
+    [data-slot="button"][data-size="xl"] svg,
+    [data-slot="button"][data-size="icon-xl"] svg {
+      height: 1.125rem;
+      width: 1.125rem;
+    }
+
+    [data-slot="button"][data-size="xs"] svg,
+    [data-slot="button"][data-size="icon-xs"] svg {
+      height: 0.875rem;
+      width: 0.875rem;
+    }
+  }
+
+  /* Frame stacks its panels with a 1px gutter. The rule is a sibling selector
+     over children the consumer arranges, which StyleX cannot express. */
+  [data-slot="frame-panel"] + [data-slot="frame-panel"] {
+    margin-top: 0.25rem;
+  }
+
+  /* Alert's column layout depends on what the consumer put inside it (a leading
+     icon, an action, or both), so it is driven by :has() and sibling selectors
+     that StyleX has no equivalent for. The icon itself is consumer content too. */
+  [data-slot="alert"]:has(> svg) {
+    grid-template-columns: 1rem 1fr;
+  }
+
+  [data-slot="alert"]:has([data-slot="alert-action"]) {
+    grid-template-columns: 1fr auto;
+  }
+
+  [data-slot="alert"]:has(> svg):has([data-slot="alert-action"]) {
+    grid-template-columns: 1rem 1fr auto;
+  }
+
+  [data-slot="alert"] > svg {
+    height: 1lh;
+    width: 1rem;
+  }
+
+  [data-slot="alert"][data-variant="default"] > svg {
+    color: var(--muted-foreground);
+  }
+  [data-slot="alert"][data-variant="error"] > svg {
+    color: var(--destructive);
+  }
+  [data-slot="alert"][data-variant="info"] > svg {
+    color: var(--info);
+  }
+  [data-slot="alert"][data-variant="success"] > svg {
+    color: var(--success);
+  }
+  [data-slot="alert"][data-variant="warning"] > svg {
+    color: var(--warning);
+  }
+
+  [data-slot="alert"] > svg ~ [data-slot="alert-title"],
+  [data-slot="alert"] > svg ~ [data-slot="alert-description"] {
+    grid-column-start: 2;
+  }
+
+  @media (width < 40rem) {
+    [data-slot="alert"] > [data-slot="alert-action"] {
+      grid-column-start: 2;
+    }
+  }
+
+  @media (width >= 40rem) {
+    [data-slot="alert"] > [data-slot="alert-title"] ~ [data-slot="alert-action"],
+    [data-slot="alert"] > [data-slot="alert-description"] ~ [data-slot="alert-action"] {
+      grid-column-start: 2;
+    }
+
+    [data-slot="alert"] > svg ~ [data-slot="alert-title"] ~ [data-slot="alert-action"],
+    [data-slot="alert"] > svg ~ [data-slot="alert-description"] ~ [data-slot="alert-action"] {
+      grid-column-start: 3;
+    }
+  }
+
+  /* Group welds whatever controls the consumer puts inside it into one pill:
+     inner corners are squared, the shared border is collapsed, and the raised
+     ::before edge is clipped at the seam. Every rule is a sibling/:has()
+     selector over children the component does not render, so none of it can
+     live in StyleX. */
+  [data-slot="group"] > * > :focus-visible,
+  [data-slot="group"] > :focus-visible,
+  [data-slot="group"] > :has(:focus-visible) {
+    z-index: 1;
+  }
+
+  [data-slot="group"]:has(> [data-slot="group"]) {
+    gap: 0.5rem;
+  }
+
+  [data-orientation="horizontal"][data-slot="group"] > [data-slot]:has(~ [data-slot]) {
+    border-end-end-radius: 0;
+    border-right-width: 0;
+    border-start-end-radius: 0;
+  }
+
+  [data-orientation="horizontal"][data-slot="group"] > [data-slot]:has(~ [data-slot])::before {
+    border-end-end-radius: 0;
+    border-start-end-radius: 0;
+    right: -0.5px;
+  }
+
+  [data-orientation="horizontal"][data-slot="group"] > [data-slot] ~ [data-slot] {
+    border-end-start-radius: 0;
+    border-left-width: 0;
+    border-start-start-radius: 0;
+  }
+
+  [data-orientation="horizontal"][data-slot="group"] > [data-slot] ~ [data-slot]::before {
+    border-end-start-radius: 0;
+    border-start-start-radius: 0;
+    left: -0.5px;
+  }
+
+  [data-orientation="vertical"][data-slot="group"] > [data-slot]:has(~ [data-slot]) {
+    border-bottom-width: 0;
+    border-end-end-radius: 0;
+    border-end-start-radius: 0;
+  }
+
+  [data-orientation="vertical"][data-slot="group"] > [data-slot]:has(~ [data-slot])::before {
+    border-end-end-radius: 0;
+    border-end-start-radius: 0;
+    bottom: -0.5px;
+  }
+
+  [data-orientation="vertical"][data-slot="group"] > [data-slot] ~ [data-slot] {
+    border-start-end-radius: 0;
+    border-start-start-radius: 0;
+    border-top-width: 0;
+  }
+
+  [data-orientation="vertical"][data-slot="group"] > [data-slot] ~ [data-slot]::before {
+    border-start-end-radius: 0;
+    border-start-start-radius: 0;
+    top: -0.5px;
+  }
+
+  /* The separator borrows the focus ring colour from whichever neighbour is
+     focused, so the joined pill reads as one focused control. */
+  [data-slot="group"] > [data-slot="input-control"]:focus-within + [data-slot="separator"],
+  [data-slot="group"] > [data-slot="input-group"]:focus-within + [data-slot="separator"],
+  [data-slot="group"] > [data-slot="number-field"]:focus-within + [data-slot="separator"],
+  [data-slot="group"] > [data-slot="separator"]:has(+ [data-slot="input-control"]:focus-within),
+  [data-slot="group"] > [data-slot="separator"]:has(+ [data-slot="input-group"]:focus-within),
+  [data-slot="group"] > [data-slot="separator"]:has(+ [data-slot="number-field"]:focus-within) {
+    background-color: var(--ring);
+  }
+
+  /* Empty's media slot sizes consumer icons; the description styles consumer
+     links and reacts to a preceding title. */
+  [data-slot="empty-media"] svg {
+    flex-shrink: 0;
+    pointer-events: none;
+  }
+
+  [data-slot="empty-media"][data-variant="icon"] svg {
+    height: 1.125rem;
+    width: 1.125rem;
+  }
+
+  [data-slot="empty-description"] > a {
+    text-decoration-line: underline;
+    text-underline-offset: 4px;
+  }
+
+  [data-slot="empty-description"] > a:hover {
+    color: var(--primary);
+  }
+
+  [data-slot="empty-title"] + [data-slot="empty-description"] {
+    margin-top: 0.25rem;
+  }
+
+  /* Table, card variant: the outer corners of the body grid are rounded on the
+     corner cells. Which cell is a corner depends on the rows the consumer
+     renders, so it needs :first-child/:last-child on both axes at once. */
+  [data-variant="card"] [data-slot="table-body"] > tr:first-child > td:first-child {
+    border-start-start-radius: 1.225rem;
+  }
+  [data-variant="card"] [data-slot="table-body"] > tr:first-child > td:last-child {
+    border-start-end-radius: 1.225rem;
+  }
+  [data-variant="card"] [data-slot="table-body"] > tr:last-child > td:first-child {
+    border-end-start-radius: 1.225rem;
+  }
+  [data-variant="card"] [data-slot="table-body"] > tr:last-child > td:last-child {
+    border-end-end-radius: 1.225rem;
+  }
+  [data-variant="card"] [data-slot="table-body"] > tr:not(:first-child) > td {
+    border-top-width: 0;
+  }
+  [data-variant="card"] [data-slot="table-body"] > tr[data-state="selected"] > td {
+    background-color: color-mix(in srgb, var(--card), var(--foreground) 4%);
+  }
+
+  [data-slot="table-header"] tr {
+    border-bottom: 1px solid var(--border);
+  }
+
+  [data-slot="table-head"]:has([role="checkbox"]),
+  [data-slot="table-cell"]:has([role="checkbox"]) {
+    width: 1px;
+  }
+
+  [data-slot="table-head"]:first-child:has([role="checkbox"]),
+  [data-slot="table-cell"]:first-child:has([role="checkbox"]) {
+    padding-right: 0;
+  }
+
+  [data-slot="table-head"]:last-child:has([role="checkbox"]),
+  [data-slot="table-cell"]:last-child:has([role="checkbox"]) {
+    padding-left: 0;
+  }
+
+  [data-slot="table-footer"] [data-slot="table-cell"] {
+    padding-block: 0.875rem;
+  }
+
+  [data-slot="table-footer"]:last-child > tr {
+    border-bottom-width: 0;
+  }
+
+  [data-slot="number-field-decrement"] svg,
+  [data-slot="number-field-increment"] svg {
+    flex-shrink: 0;
+    height: 1.125rem;
+    pointer-events: none;
+    width: 1.125rem;
+  }
+
+  @media (width >= 40rem) {
+    [data-slot="number-field-decrement"] svg,
+    [data-slot="number-field-increment"] svg {
+      height: 1rem;
+      width: 1rem;
+    }
+  }
+
+  /* Input group coordinates a wrapped Input/Textarea with its addons. All of it
+     reaches across elements the group does not render itself (the field is a
+     child component, the addons are consumer-ordered), so it stays in CSS.
+     The wrapped control's own wrapper collapses to `display: contents` so the
+     inner <input> becomes a direct flex child of the group. */
+  [data-slot="input-group"] > [data-slot="input-control"],
+  [data-slot="input-group"] > [data-slot="textarea-control"] {
+    display: contents;
+  }
+
+  [data-slot="input-group"] > [data-slot="input-control"]::before,
+  [data-slot="input-group"] > [data-slot="textarea-control"]::before {
+    display: none;
+  }
+
+  [data-slot="input-group"]:has([data-align="block-start"]),
+  [data-slot="input-group"]:has([data-align="block-end"]),
+  [data-slot="input-group"]:has(textarea) {
+    flex-direction: column;
+    height: auto;
+  }
+
+  [data-slot="input-group"]:has([data-align="block-start"]) input,
+  [data-slot="input-group"]:has([data-align="block-end"]) input {
+    height: auto;
+  }
+
+  [data-slot="input-group"]:has([data-align="inline-start"]) input {
+    padding-left: 0.5rem;
+  }
+
+  [data-slot="input-group"]:has([data-align="inline-end"]) input {
+    padding-right: 0.5rem;
+  }
+
+  [data-slot="input-group"]:has([data-align="block-start"]) input {
+    padding-bottom: 0.375rem;
+  }
+
+  [data-slot="input-group"]:has([data-align="block-end"]) input {
+    padding-top: 0.375rem;
+  }
+
+  [data-slot="input-group"] textarea {
+    min-height: 5.875rem;
+    padding-block: calc(0.75rem - 1px);
+    resize: none;
+  }
+
+  @media (width >= 40rem) {
+    [data-slot="input-group"] textarea {
+      min-height: 5.125rem;
+    }
+  }
+
+  [data-slot="input-group"]:has(input:disabled, textarea:disabled) {
+    opacity: 0.64;
+  }
+
+  [data-slot="input-group"]:has(input[aria-invalid], textarea[aria-invalid]) {
+    border-color: color-mix(in srgb, var(--destructive) 36%, transparent);
+    outline-color: color-mix(in srgb, var(--destructive) 16%, transparent);
+  }
+
+  [data-slot="input-group"]:has(input[aria-invalid], textarea[aria-invalid]):focus-within {
+    border-color: color-mix(in srgb, var(--destructive) 64%, transparent);
+  }
+
+  [data-slot="input-group-addon"]:has(> button) {
+    margin-inline: -0.5rem;
+  }
+
+  [data-slot="input-group-addon"] svg {
+    margin-inline: -0.125rem;
+  }
+
+  [data-slot="input-group-addon"] svg {
+    height: 0.875rem;
+    width: 0.875rem;
+  }
+
+  @media (width >= 40rem) {
+    [data-slot="input-group-addon"] svg {
+      height: 0.75rem;
+      width: 0.75rem;
+    }
+  }
+
+  /* The "today" marker is a dot drawn on the day button's ::after layer, and
+     the cell that owns the state is the button's parent — a descendant
+     pseudo-element rule StyleX cannot express. */
+  .calendar-today > *::after {
+    background-color: var(--primary);
+    border-radius: 9999px;
+    bottom: 0.25rem;
+    content: "";
+    height: 3px;
+    inset-inline-start: 50%;
+    pointer-events: none;
+    position: absolute;
+    transition-property: background-color;
+    translate: -50%;
+    width: 3px;
+    z-index: 1;
+  }
+
+  .calendar-today[data-selected]:not(.range-middle) > *::after {
+    background-color: var(--primary-foreground);
+  }
+
+  /* A selected range has to read as ONE continuous band, so the days inside it
+     square the corners that face their neighbours. The rounded background is
+     painted by the button, not the cell that carries the range modifier, so the
+     rule has to reach the child — which StyleX cannot express.
+
+     `!important` is required, not sloppiness: with `useCSSLayers: false` StyleX
+     emits its atoms as `.xxx:not(#\#):not(#\#)`, specificity (2,1,0), which no
+     plain selector can outrank. A rule here can ADD a declaration StyleX does
+     not set, but overriding one always needs `!important`. */
+  [data-slot="calendar"] .range-start > * {
+    border-end-end-radius: 0 !important;
+    border-start-end-radius: 0 !important;
+  }
+  [data-slot="calendar"] .range-end > * {
+    border-end-start-radius: 0 !important;
+    border-start-start-radius: 0 !important;
+  }
+  [data-slot="calendar"] .range-middle > * {
+    border-radius: 0 !important;
+  }
+
+  .calendar-today[data-disabled] > *::after {
+    background-color: color-mix(in srgb, var(--foreground) 30%, transparent);
+  }
+
+  /* Month dropdowns render their label in a nested span. */
+  [data-slot="calendar"] .rdp-dropdowns span {
+    font-weight: 500;
+  }
+
+  /* Autocomplete: the leading icon is consumer content, and groups after the
+     first get a gutter (a sibling rule over items the consumer renders). */
+  [data-slot="autocomplete-start-addon"] svg {
+    margin-inline: -0.125rem;
+  }
+
+  [data-slot="autocomplete-start-addon"] svg {
+    height: 0.875rem;
+    width: 0.875rem;
+  }
+
+  @media (width >= 40rem) {
+    [data-slot="autocomplete-start-addon"] svg {
+      height: 0.75rem;
+      width: 0.75rem;
+    }
+  }
+
+  [role="group"] + [data-slot="autocomplete-group"] {
+    margin-top: 0.375rem;
+  }
+
+  [data-has-overflow-y] [data-slot="autocomplete-list"] {
+    padding-right: 0.75rem;
+  }
+
+  /* Command palette: the panel rounds its bottom corners only when no footer
+     follows it, and command items size consumer icons. */
+  [data-slot="command-panel"]:not(:has(+ [data-slot="command-footer"])) {
+    border-end-end-radius: 1.575rem;
+    border-end-start-radius: 1.575rem;
+    clip-path: inset(0 1px 1px 1px round 0 0 calc(1.575rem - 1px) calc(1.575rem - 1px));
+    margin-bottom: -1px;
+  }
+
+  [data-slot="command-item"] svg {
+    flex-shrink: 0;
+    margin-inline: -0.125rem;
+    pointer-events: none;
+  }
+
+  [data-slot="command-item"] svg {
+    opacity: 0.8;
+  }
+
+  [data-slot="command-item"] svg {
+    height: 1rem;
+    width: 1rem;
+  }
+
+  @media (width >= 40rem) {
+    [data-slot="command-item"] svg {
+      height: 0.875rem;
+      width: 0.875rem;
+    }
+  }
+
+  [data-slot="command-panel"] [data-slot="scroll-area-scrollbar"] {
+    margin-top: 0.5rem;
+  }
+
+  /* Combobox: the leading icon is consumer content, chips hug the input, and
+     groups after the first get a gutter. */
+  [data-slot="combobox-start-addon"] svg {
+    margin-left: -0.125rem;
+    margin-right: -0.375rem;
+    pointer-events: none;
+  }
+
+  [data-slot="combobox-start-addon"] svg {
+    height: 0.875rem;
+    width: 0.875rem;
+  }
+
+  @media (width >= 40rem) {
+    [data-slot="combobox-start-addon"] svg {
+      height: 0.75rem;
+      width: 0.75rem;
+    }
+  }
+
+  [role="group"] + [data-slot="combobox-group"] {
+    margin-top: 0.375rem;
+  }
+
+  [data-slot="combobox-chip"] + [data-slot="combobox-chips-input"] {
+    padding-left: 0.125rem;
+  }
+
+  [data-has-overflow-y] [data-slot="combobox-list"] {
+    padding-right: 0.75rem;
+  }
+
+  [data-slot="combobox-chips"]:has(input:disabled) {
+    opacity: 0.64;
+    pointer-events: none;
+  }
+
+  [data-slot="combobox-chips"]:has(input[aria-invalid]) {
+    border-color: color-mix(in srgb, var(--destructive) 36%, transparent);
+    outline-color: color-mix(in srgb, var(--destructive) 16%, transparent);
+  }
+
+  /* Drawer: padding and corner rounding depend on which slots the consumer
+     composed inside the popup, which only :has()/descendant selectors can see. */
+  [data-slot="drawer-popup"]:has([data-slot="drawer-bar"])[data-position="bottom"] {
+    padding-top: 0.5rem;
+  }
+  [data-slot="drawer-popup"]:has([data-slot="drawer-bar"])[data-position="top"] {
+    padding-bottom: 0.5rem;
+  }
+  [data-slot="drawer-popup"]:has([data-slot="drawer-bar"])[data-position="left"] {
+    padding-right: 0.5rem;
+  }
+  [data-slot="drawer-popup"]:has([data-slot="drawer-bar"])[data-position="right"] {
+    padding-left: 0.5rem;
+  }
+
+  [data-slot="drawer-popup"]:has([data-slot="drawer-panel"]) [data-slot="drawer-header"] {
+    padding-bottom: 0.75rem;
+  }
+
+  [data-slot="drawer-popup"]:has([data-slot="drawer-panel"])
+    [data-slot="drawer-footer"][data-variant="bare"] {
+    padding-top: 0.75rem;
+  }
+
+  [data-slot="drawer-popup"]:has([data-slot="drawer-header"]) [data-slot="drawer-panel"] {
+    padding-top: 0.25rem;
+  }
+
+  [data-slot="drawer-popup"]:has([data-slot="drawer-footer"][data-variant="bare"])
+    [data-slot="drawer-panel"] {
+    padding-bottom: 0.25rem;
+  }
+
+  [data-position="top"] [data-slot="drawer-footer"] {
+    border-end-end-radius: calc(1.575rem - 1px);
+    border-end-start-radius: calc(1.575rem - 1px);
+  }
+  [data-position="left"] [data-slot="drawer-footer"] {
+    border-end-end-radius: calc(1.575rem - 1px);
+  }
+  [data-position="right"] [data-slot="drawer-footer"] {
+    border-end-start-radius: calc(1.575rem - 1px);
+  }
+
+  @media (width >= 40rem) {
+    [data-variant="inset"][data-slot="drawer-popup"] [data-slot="drawer-footer"] {
+      border-end-end-radius: calc(1.575rem - 1px);
+      border-end-start-radius: calc(1.575rem - 1px);
+    }
+  }
+
+  /* Sidebar: rows size and truncate whatever the consumer puts in them, and the
+     action/badge slots align to the height of the sibling menu button. */
+  [data-slot="sidebar-menu-button"] > span:last-child,
+  [data-slot="sidebar-menu-sub-button"] > span:last-child {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  [data-slot="sidebar-menu-sub-button"] > svg {
+    color: var(--sidebar-accent-foreground);
+  }
+
+  @media (width >= 48rem) {
+  }
+
+  [data-mobile="true"][data-slot="sidebar"] > button {
+    display: none;
+  }
+
+  /* A keycap may hold a glyph instead of a letter (the arrow keys, the return
+     key). Icon components default to 24px, which overflows a 22px cap and
+     stretches it into a lozenge, so the glyph is sized like the cap's text. */
+  [data-slot="kbd"] svg,
+  [data-slot="kbd-group"] svg {
+    height: 0.875rem;
+    width: 0.875rem;
+  }
+
+  /* Buttons, toggles, tabs, select triggers: icon children. */
+  [data-slot="button"] svg,
+  [data-slot="toggle"] svg,
+  [data-slot="tabs-tab"] svg,
+  [data-slot="select-trigger"] svg,
+  [data-slot="select-button"] svg,
+  [data-slot="menu-item"] > svg,
+  [data-slot="menu-sub-trigger"] svg,
+  [data-slot="pagination-link"] svg,
+  [data-slot="sidebar-trigger"] svg,
+  [data-slot="toolbar-button"] svg,
+  [data-slot="toolbar-link"] svg,
+  [data-slot="collapsible-trigger"] svg,
+  [data-slot="badge"] svg {
+    flex-shrink: 0;
+    pointer-events: none;
+  }
+
+  [data-slot="button"] svg,
+  [data-slot="toggle"] svg,
+  [data-slot="select-trigger"] svg,
+  [data-slot="select-button"] svg,
+  [data-slot="menu-item"] > svg,
+  [data-slot="badge"] svg {
+    opacity: 0.8;
+  }
+
+  [data-slot="button"] svg,
+  [data-slot="toggle"] svg,
+  [data-slot="tabs-tab"] svg,
+  [data-slot="select-trigger"] svg,
+  [data-slot="select-button"] svg,
+  [data-slot="menu-item"] > svg,
+  [data-slot="menu-sub-trigger"] svg,
+  [data-slot="pagination-link"] svg,
+  [data-slot="sidebar-trigger"] svg,
+  [data-slot="toolbar-button"] svg,
+  [data-slot="toolbar-link"] svg,
+  [data-slot="collapsible-trigger"] svg {
+    height: 1.125rem;
+    width: 1.125rem;
+  }
+
+  @media (width >= 40rem) {
+    [data-slot="button"] svg,
+    [data-slot="toggle"] svg,
+    [data-slot="tabs-tab"] svg,
+    [data-slot="select-trigger"] svg,
+    [data-slot="select-button"] svg,
+    [data-slot="menu-item"] > svg,
+    [data-slot="menu-sub-trigger"] svg {
+      height: 1rem;
+      width: 1rem;
+    }
+
+    [data-slot="badge"] svg {
+      height: 0.75rem;
+      width: 0.75rem;
+    }
+
+    [data-slot="menu-checkbox-item"] svg,
+    [data-slot="menu-radio-item"] svg {
+      height: 1rem;
+      width: 1rem;
+    }
+
+    [data-slot="button"][data-size="xl"] svg,
+    [data-slot="button"][data-size="icon-xl"] svg {
+      height: 1.125rem;
+      width: 1.125rem;
+    }
+
+    [data-slot="button"][data-size="xs"] svg,
+    [data-slot="button"][data-size="icon-xs"] svg {
+      height: 0.875rem;
+      width: 0.875rem;
+    }
+  }
+
+  /* Drawer menu rows size the consumer's leading icons. */
+  [data-slot="drawer-menu-item"] > svg,
+  [data-slot="drawer-menu-trigger"] svg,
+  [data-slot="drawer-menu-checkbox-item"] > svg,
+  [data-slot="drawer-menu-radio-item"] > svg {
+    flex-shrink: 0;
+    margin-inline: -0.125rem;
+    pointer-events: none;
+  }
+
+  [data-slot="drawer-menu-item"] > svg,
+  [data-slot="drawer-menu-checkbox-item"] > svg,
+  [data-slot="drawer-menu-radio-item"] > svg {
+    opacity: 0.8;
+  }
+
+  [data-slot="drawer-menu-item"] > svg,
+  [data-slot="drawer-menu-checkbox-item"] > svg,
+  [data-slot="drawer-menu-radio-item"] > svg {
+    height: 1.125rem;
+    width: 1.125rem;
+  }
+
+  @media (width >= 40rem) {
+    [data-slot="drawer-menu-item"] > svg,
+    [data-slot="drawer-menu-checkbox-item"] > svg,
+    [data-slot="drawer-menu-radio-item"] > svg {
+      height: 1rem;
+      width: 1rem;
+    }
+  }
+
+  [data-slot="sidebar-menu-button"] > svg,
+  [data-slot="sidebar-menu-sub-button"] > svg,
+  [data-slot="sidebar-group-label"] > svg,
+  [data-slot="sidebar-group-action"] > svg,
+  [data-slot="sidebar-menu-action"] > svg {
+    flex-shrink: 0;
+  }
+
+  [data-slot="sidebar-menu-button"] > svg,
+  [data-slot="sidebar-menu-sub-button"] > svg,
+  [data-slot="sidebar-group-label"] > svg,
+  [data-slot="sidebar-group-action"] > svg,
+  [data-slot="sidebar-menu-action"] > svg {
+    height: 1rem;
+    width: 1rem;
+  }
+
+  /* An action button shifts the row's padding so the label never runs under it. */
+  [data-slot="sidebar-menu-item"]:has([data-slot="sidebar-menu-action"])
+    [data-slot="sidebar-menu-button"] {
+    padding-right: 2rem;
+  }
+
+  [data-slot="sidebar-menu-button"][data-size="sm"] ~ [data-slot="sidebar-menu-action"],
+  [data-slot="sidebar-menu-button"][data-size="sm"] ~ [data-slot="sidebar-menu-badge"] {
+    top: 0.25rem;
+  }
+
+  [data-slot="sidebar-menu-button"][data-size="default"] ~ [data-slot="sidebar-menu-action"],
+  [data-slot="sidebar-menu-button"][data-size="default"] ~ [data-slot="sidebar-menu-badge"] {
+    top: 0.375rem;
+  }
+
+  [data-slot="sidebar-menu-button"][data-size="lg"] ~ [data-slot="sidebar-menu-action"],
+  [data-slot="sidebar-menu-button"][data-size="lg"] ~ [data-slot="sidebar-menu-badge"] {
+    top: 0.625rem;
+  }
+
+  [data-slot="sidebar-menu-button"]:hover ~ [data-slot="sidebar-menu-action"],
+  [data-slot="sidebar-menu-button"]:hover ~ [data-slot="sidebar-menu-badge"],
+  [data-slot="sidebar-menu-button"][data-active="true"] ~ [data-slot="sidebar-menu-action"],
+  [data-slot="sidebar-menu-button"][data-active="true"] ~ [data-slot="sidebar-menu-badge"] {
+    color: var(--sidebar-accent-foreground);
+  }
+
+  @media (width >= 48rem) {
+    [data-slot="sidebar-menu-item"]:hover [data-slot="sidebar-menu-action"],
+    [data-slot="sidebar-menu-item"]:focus-within [data-slot="sidebar-menu-action"] {
+      opacity: 1;
+    }
+  }
+}

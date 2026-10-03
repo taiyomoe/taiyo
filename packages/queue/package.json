@@ -1,0 +1,26 @@
+{
+  "name": "@taiyomoe/queue",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@t3-oss/env-core": "^0.13.11",
+    "@taiyomoe/config": "workspace:^",
+    "@taiyomoe/db": "workspace:^",
+    "@taiyomoe/s3": "workspace:^",
+    "bullmq": "^6.1.1",
+    "kysely": "^0.29.5",
+    "magic-bytes.js": "^1.13.1",
+    "sharp": "^0.35.3",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@taiyomoe/typescript": "workspace:^",
+    "@types/node": "^26.2.0",
+    "typescript": "^7.0.2"
+  }
+}

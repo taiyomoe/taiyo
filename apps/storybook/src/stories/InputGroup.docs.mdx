@@ -1,0 +1,86 @@
+import { Canvas, Meta } from "@storybook/addon-docs/blocks"
+import * as InputGroupStories from "./InputGroup.stories"
+
+<Meta title="UI/InputGroup" />
+
+# InputGroup
+
+[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/ui/input-group.tsx)
+
+## Table of Contents
+
+- [Overview](#overview)
+  - [Leading Icon](#leading-icon)
+  - [Trailing Icon](#trailing-icon)
+  - [With Text](#with-text)
+  - [With Button](#with-button)
+  - [With Kbd](#with-kbd)
+  - [Block Start](#block-start)
+  - [Block End](#block-end)
+  - [Disabled](#disabled)
+  - [Invalid](#invalid)
+- [Feedback](#feedback)
+
+## Overview
+
+`InputGroup` wraps an `InputGroupInput` or `InputGroupTextarea` and decorates it with addons — icons, text affixes, buttons, or keyboard shortcuts — that sit inside the same focus ring as the input itself.
+
+<Canvas of={InputGroupStories.Default} />
+
+### Leading Icon
+
+A common pattern: place an icon on the leading edge to hint at the input's purpose (search, email, etc.).
+
+<Canvas of={InputGroupStories.LeadingIcon} />
+
+### Trailing Icon
+
+Use `align="inline-end"` on an `InputGroupAddon` to anchor decorations to the trailing edge.
+
+<Canvas of={InputGroupStories.TrailingIcon} />
+
+### With Text
+
+`InputGroupText` renders a non-interactive textual affix, perfect for protocols, units, or domains.
+
+<Canvas of={InputGroupStories.WithText} />
+
+### With Button
+
+Addons can host real interactive controls — typically a small ghost button for inline actions like clearing the input.
+
+<Canvas of={InputGroupStories.WithButton} />
+
+### With Kbd
+
+Pair a search input with a `Kbd` shortcut indicator to signal the keyboard accelerator.
+
+<Canvas of={InputGroupStories.WithKbd} />
+
+### Block Start
+
+Addons aligned to `block-start` stack the affix above the input, useful for composer-style fields.
+
+<Canvas of={InputGroupStories.BlockStart} />
+
+### Block End
+
+`block-end` puts the addon below the input — commonly a footer row with a submit button.
+
+<Canvas of={InputGroupStories.BlockEnd} />
+
+### Disabled
+
+Disabling the inner input dims the entire group.
+
+<Canvas of={InputGroupStories.Disabled} />
+
+### Invalid
+
+When the input is `aria-invalid`, the group adopts the destructive border and ring.
+
+<Canvas of={InputGroupStories.Invalid} />
+
+## Feedback
+
+Help us improve this component by providing feedback, asking questions on [Discord](https://discord.gg/RYbnyeWcM2), or updating this file directly on [GitHub](https://github.com/taiyomoe/taiyo). Your feedback helps us create better components! 🚀

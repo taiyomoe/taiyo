@@ -2,22 +2,16 @@
   "name": "@taiyomoe/schemas",
   "version": "0.1.0",
   "private": true,
-  "type": "module",
   "license": "MIT",
+  "type": "module",
   "exports": {
-    ".": "./src/index.ts",
-    "./db": "./src/prisma/index.ts"
-  },
-  "scripts": {
-    "clean": "rm -rf .turbo node_modules",
-    "typecheck": "tsc --noEmit"
+    ".": "./src/index.ts"
   },
   "dependencies": {
-    "@taiyomoe/config": "workspace:^",
-    "zod": "^4.1.12"
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@taiyomoe/typescript": "workspace:^",
-    "typescript": "^5.9.3"
+    "typescript": "^7.0.2"
   }
 }

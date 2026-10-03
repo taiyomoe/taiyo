@@ -2,24 +2,21 @@
   "name": "@taiyomoe/cache",
   "version": "0.1.0",
   "private": true,
-  "type": "module",
   "license": "MIT",
+  "type": "module",
   "exports": {
     ".": "./src/index.ts",
     "./env": "./src/env.ts"
   },
-  "scripts": {
-    "clean": "rm -rf .turbo node_modules",
-    "typecheck": "tsc --noEmit"
-  },
   "dependencies": {
-    "@t3-oss/env-core": "^0.13.8",
-    "ioredis": "^5.8.2",
-    "superjson": "^2.2.5",
-    "zod": "^4.1.12"
+    "@t3-oss/env-core": "^0.13.11",
+    "ioredis": "^6.0.0",
+    "superjson": "^2.2.6",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@taiyomoe/typescript": "workspace:^",
-    "typescript": "^5.9.3"
+    "@types/node": "^26.2.0",
+    "typescript": "^7.0.2"
   }
 }

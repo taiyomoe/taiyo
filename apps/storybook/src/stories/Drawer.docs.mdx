@@ -1,0 +1,58 @@
+import { Canvas, Meta } from "@storybook/addon-docs/blocks"
+import * as DrawerStories from "./Drawer.stories"
+
+<Meta title="UI/Drawer" />
+
+# Drawer
+
+[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/ui/drawer.tsx)
+
+## Table of Contents
+
+- [Overview](#overview)
+  - [Positions](#positions)
+  - [Straight](#straight)
+  - [Inset](#inset)
+  - [With bar](#with-bar)
+  - [With close button](#with-close-button)
+- [Feedback](#feedback)
+
+## Overview
+
+Drawers are swipeable, edge-anchored overlays that work especially well on touch devices. Use them for mobile-friendly forms, filters, navigation, or contextual settings that should slide in over the current view.
+
+<Canvas of={DrawerStories.Default} />
+
+### Positions
+
+Drawers can be anchored to any edge of the viewport via the `position` prop. The swipe direction is inferred automatically from the position.
+
+<Canvas of={DrawerStories.Positions} />
+
+### Straight
+
+The `straight` variant keeps the drawer flush with the viewport edge and drops the corner radius, making it feel like a docked panel rather than a sliding sheet.
+
+<Canvas of={DrawerStories.Straight} />
+
+### Inset
+
+The `inset` variant detaches the drawer from the viewport edges with a margin and rounds every corner, mirroring the inset sheet treatment.
+
+<Canvas of={DrawerStories.Inset} />
+
+### With bar
+
+Pass `showBar` to render a drag handle along the leading edge, signaling that the drawer can be dismissed via swipe.
+
+<Canvas of={DrawerStories.WithBar} />
+
+### With close button
+
+By default the drawer is dismissed via swipe or backdrop click. Pass `showCloseButton` to expose an explicit close affordance in the top-right corner.
+
+<Canvas of={DrawerStories.WithCloseButton} />
+
+## Feedback
+
+Help us improve this component by providing feedback, asking questions on [Discord](https://discord.gg/RYbnyeWcM2), or updating this file directly on [GitHub](https://github.com/taiyomoe/taiyo). Your feedback helps us create better components! 🚀

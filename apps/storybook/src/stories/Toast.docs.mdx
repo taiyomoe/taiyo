@@ -1,0 +1,52 @@
+import { Canvas, Meta } from "@storybook/addon-docs/blocks"
+import * as ToastStories from "./Toast.stories"
+
+<Meta title="UI/Toast" />
+
+# Toast
+
+[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/ui/toast.tsx)
+
+## Table of Contents
+
+- [Overview](#overview)
+  - [Types](#types)
+  - [Positions](#positions)
+  - [With Action](#with-action)
+- [Feedback](#feedback)
+
+## Overview
+
+Toasts are short, transient messages that surface the outcome of an action — saved, failed, syncing — without interrupting the user's flow. Wrap your app in `ToastProvider` and dispatch toasts imperatively through the `Toast.useToastManager()` hook or the exported `toastManager`.
+
+<Canvas of={ToastStories.Default} />
+
+### Types
+
+The `type` field on a toast applies semantic styling and renders the matching icon: `success`, `error`, `info`, `warning`, and `loading` (with an animated spinner).
+
+<Canvas of={ToastStories.Success} />
+
+<Canvas of={ToastStories.Error} />
+
+<Canvas of={ToastStories.Info} />
+
+<Canvas of={ToastStories.Warning} />
+
+<Canvas of={ToastStories.Loading} />
+
+### Positions
+
+The `position` prop on `ToastProvider` pins the viewport to one of six anchor points. Vertical and horizontal swipe-to-dismiss directions are derived automatically.
+
+<Canvas of={ToastStories.Positions} />
+
+### With Action
+
+Pass `actionProps` to surface a single follow-up affordance such as "Undo" or "Retry" next to the message.
+
+<Canvas of={ToastStories.WithAction} />
+
+## Feedback
+
+Help us improve this component by providing feedback, asking questions on [Discord](https://discord.gg/RYbnyeWcM2), or updating this file directly on [GitHub](https://github.com/taiyomoe/taiyo). Your feedback helps us create better components! 🚀

@@ -1,0 +1,72 @@
+import { Canvas, Meta } from "@storybook/addon-docs/blocks"
+import * as MenuStories from "./Menu.stories"
+
+<Meta title="UI/Menu" />
+
+# Menu
+
+[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/ui/menu.tsx)
+
+## Table of Contents
+
+- [Overview](#overview)
+  - [With Groups and Labels](#with-groups-and-labels)
+  - [With Checkbox Items](#with-checkbox-items)
+  - [With Switch Checkbox Items](#with-switch-checkbox-items)
+  - [With Radio Items](#with-radio-items)
+  - [With Submenu](#with-submenu)
+  - [With Disabled Items](#with-disabled-items)
+  - [Inset](#inset)
+- [Feedback](#feedback)
+
+## Overview
+
+`Menu` is a trigger-driven dropdown built on Base UI's menu primitive. Compose a `MenuTrigger` with a `MenuPopup` and any combination of items, separators, group labels, checkbox or radio selections, and nested submenus.
+
+<Canvas of={MenuStories.Default} />
+
+### With Groups and Labels
+
+Use `MenuGroup` + `MenuGroupLabel` to partition the menu into titled sections separated by `MenuSeparator`.
+
+<Canvas of={MenuStories.WithGroupsAndLabels} />
+
+### With Checkbox Items
+
+`MenuCheckboxItem` toggles a boolean and renders a check indicator when active.
+
+<Canvas of={MenuStories.WithCheckboxItems} />
+
+### With Switch Checkbox Items
+
+Set `variant="switch"` on `MenuCheckboxItem` to render the toggle as a switch on the trailing edge, ideal for inline settings.
+
+<Canvas of={MenuStories.WithSwitchCheckboxItems} />
+
+### With Radio Items
+
+`MenuRadioGroup` + `MenuRadioItem` create a single-select group within the menu.
+
+<Canvas of={MenuStories.WithRadioItems} />
+
+### With Submenu
+
+`MenuSub`, `MenuSubTrigger`, and `MenuSubPopup` nest a menu inside another, opening to the inline-end of the parent item.
+
+<Canvas of={MenuStories.WithSubmenu} />
+
+### With Disabled Items
+
+Pass `disabled` to any `MenuItem` to make it unselectable while staying visible.
+
+<Canvas of={MenuStories.WithDisabledItems} />
+
+### Inset
+
+The `inset` prop on `MenuItem` and `MenuGroupLabel` reserves leading space, useful for aligning text in menus that mix items with and without leading icons or indicators.
+
+<Canvas of={MenuStories.Inset} />
+
+## Feedback
+
+Help us improve this component by providing feedback, asking questions on [Discord](https://discord.gg/RYbnyeWcM2), or updating this file directly on [GitHub](https://github.com/taiyomoe/taiyo). Your feedback helps us create better components! 🚀

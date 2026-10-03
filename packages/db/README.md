@@ -1,19 +1,55 @@
-# @taiyomoe/db
+# `@taiyomoe/db2`
 
-This package contains the database schema and migrations for the project.
+This package contains the database schema, migrations, seeds, and a typed Kysely client for the project.
+
+## Usage
+
+```ts
+import { db } from "@taiyomoe/db2"
+
+// Query database
+const user = await db.selectFrom("users").selectAll().where("id", "=", userId).executeTakeFirst()
+
+const users = await db.selectFrom("users").selectAll().limit(10).execute()
+
+// Insert
+await db.insertInto("medias").values({/* ... */}).execute()
+```
+
+Per-table types, JSON column types, enum constants, and the Kysely query builder are all re-exported from the package root:
+
+```ts
+import type { Users, NewUsers, UserSettings, Role } from "@taiyomoe/db2"
+```
 
 ## Migrations
 
-Migrations are created by PrismaORM but managed with a custom script.
+Migrations live in `src/migrations` and are managed with [`kysely-ctl`](https://github.com/kysely-org/kysely-ctl). Each file exports `up`/`down`.
 
-To create a new migration or apply pending ones, run `infisical run -- pnpm -F @taiyomoe/db db migrate dev --create-only` at the root of the project.
+```bash
+# Create a new migration file
+pnpm -F db2 kysely migrate make <name>
 
-### Data Migrations
+# Run all pending migrations
+pnpm -F db2 kysely migrate latest
 
-Data migrations are migrations that have to process data with real code. They are usually bound to a specific migration.
+# Roll back the last applied migration
+pnpm -F db2 kysely migrate down
 
-### Applying migrations
+# Show migration status
+pnpm -F db2 kysely migrate list
+```
 
-To apply migrations, run `infisical run -- pnpm -F @taiyomoe/db migrate`. We have a custom migrations handler that ensures migrations and data migrations are applied in the correct order.
+## Seeds
 
-After migrating, don't forget to generate the Prisma client again with `pnpm -F @taiyomoe/db db generate`.
+Seeds live in `src/seeds`. Each file exports a `seed(db)` function and is run in filename order.
+
+```bash
+# Create a new seed file
+pnpm -F db2 kysely seed make <name>
+
+# Run all seeds
+pnpm -F db2 kysely seed run
+```
+
+The `medias` seed delegates to one file per media (`src/seeds/medias/media-N.ts`), each exporting an `execute(db)` function that performs the inserts for a single media and its children (titles, covers, chapters, staff, groups).

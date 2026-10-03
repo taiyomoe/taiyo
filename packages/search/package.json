@@ -1,0 +1,25 @@
+{
+  "name": "@taiyomoe/search",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./env": "./src/env.ts"
+  },
+  "dependencies": {
+    "@t3-oss/env-core": "^0.13.11",
+    "@taiyomoe/db": "workspace:^",
+    "@taiyomoe/schemas": "workspace:^",
+    "@taiyomoe/utils": "workspace:^",
+    "meilisearch": "^0.60.0",
+    "radashi": "^12.9.1",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@taiyomoe/typescript": "workspace:^",
+    "@types/node": "^26.2.0",
+    "typescript": "^7.0.2"
+  }
+}

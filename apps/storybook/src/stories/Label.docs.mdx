@@ -1,0 +1,30 @@
+import { Meta, Canvas } from "@storybook/addon-docs/blocks"
+import * as LabelStories from "./Label.stories"
+
+<Meta title="UI/Label" />
+
+# Label
+
+[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/ui/label.tsx)
+
+## Table of Contents
+
+- [Overview](#overview)
+  - [With Checkbox](#with-checkbox)
+- [Feedback](#feedback)
+
+## Overview
+
+Labels provide accessible text descriptions for form controls and interactive elements. They improve usability by clearly identifying what each control does and ensure proper accessibility for screen readers and other assistive technologies.
+
+<Canvas of={LabelStories.Default} />
+
+### With Checkbox
+
+Labels wrap their associated control to extend the click target and keep the visual/accessible association obvious. Pair with any form control using `htmlFor`.
+
+<Canvas of={LabelStories.WithCheckbox} />
+
+## Feedback
+
+Help us improve this component by providing feedback, asking questions on [Discord](https://discord.gg/RYbnyeWcM2), or updating this file directly on [GitHub](https://github.com/taiyomoe/taiyo). Your feedback helps us create better components! 🚀

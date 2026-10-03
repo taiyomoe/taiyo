@@ -18,7 +18,8 @@
     "checkJs": true,
     "module": "ESNext",
     "moduleResolution": "Bundler",
-    "noEmit": true
+    "noEmit": true,
+    "types": ["node"]
   },
   "exclude": ["node_modules", "build", "dist", ".next"]
 }

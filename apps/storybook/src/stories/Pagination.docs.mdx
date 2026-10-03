@@ -1,0 +1,51 @@
+import { Canvas, Meta } from "@storybook/addon-docs/blocks"
+import * as PaginationStories from "./Pagination.stories"
+
+<Meta title="UI/Pagination" />
+
+# Pagination
+
+[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/ui/pagination.tsx)
+
+## Table of Contents
+
+- [Overview](#overview)
+  - [First Page](#first-page)
+  - [With Ellipsis](#with-ellipsis)
+  - [Long Range](#long-range)
+  - [Compact](#compact)
+- [Feedback](#feedback)
+
+## Overview
+
+Pagination splits long lists across multiple pages and lets users navigate between them. It's a purely presentational primitive — bring your own routing or state, then mark the current page with `isActive` on `PaginationLink`.
+
+<Canvas of={PaginationStories.Default} />
+
+### First Page
+
+When the user lands on the first page, mark the previous control as disabled and highlight page 1 as active.
+
+<Canvas of={PaginationStories.FirstPage} />
+
+### With Ellipsis
+
+Use `PaginationEllipsis` to compress long page ranges around the current page, keeping endpoints visible without showing every number.
+
+<Canvas of={PaginationStories.WithEllipsis} />
+
+### Long Range
+
+Smaller datasets can show the full page range without ellipses.
+
+<Canvas of={PaginationStories.LongRange} />
+
+### Compact
+
+Trim the control down to just previous and next when the total page count is unknown or doesn't need to be shown.
+
+<Canvas of={PaginationStories.Compact} />
+
+## Feedback
+
+Help us improve this component by providing feedback, asking questions on [Discord](https://discord.gg/RYbnyeWcM2), or updating this file directly on [GitHub](https://github.com/taiyomoe/taiyo). Your feedback helps us create better components! 🚀

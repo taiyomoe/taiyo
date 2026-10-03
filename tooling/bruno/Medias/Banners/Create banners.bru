@@ -1,0 +1,31 @@
+meta {
+  name: Create banners
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{url}}/medias/:id/banners
+  body: multipartForm
+  auth: inherit
+}
+
+headers {
+  Content-Type: multipart/form-data
+}
+
+params:path {
+  id: 00000000-0000-0000-0000-000000000000
+}
+
+body:multipart-form {
+  banners[0].file:
+  banners[0].contentRating: NORMAL
+  banners[1].file:
+  banners[1].contentRating: SUGGESTIVE
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

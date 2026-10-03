@@ -1,0 +1,44 @@
+import { Canvas, Meta } from "@storybook/addon-docs/blocks"
+import * as AccordionStories from "./Accordion.stories"
+
+<Meta title="UI/Accordion" />
+
+# Accordion
+
+[Source code](https://github.com/taiyomoe/taiyo/blob/develop/packages/ui/src/components/ui/accordion.tsx)
+
+## Table of Contents
+
+- [Overview](#overview)
+  - [Single](#single)
+  - [Multiple](#multiple)
+  - [Disabled](#disabled)
+- [Feedback](#feedback)
+
+## Overview
+
+Accordions are vertically stacked, expandable sections used to show and hide related content. They help reduce visual noise on dense pages — like FAQs or settings panels — by letting users focus on one section at a time.
+
+<Canvas of={AccordionStories.Default} />
+
+### Single
+
+By default a single panel may be open at a time. Opening another collapses the previous one.
+
+<Canvas of={AccordionStories.Single} />
+
+### Multiple
+
+Pass `multiple` to allow several panels to stay open simultaneously.
+
+<Canvas of={AccordionStories.Multiple} />
+
+### Disabled
+
+Pass `disabled` on the root (or an individual item) to prevent interaction.
+
+<Canvas of={AccordionStories.Disabled} />
+
+## Feedback
+
+Help us improve this component by providing feedback, asking questions on [Discord](https://discord.gg/RYbnyeWcM2), or updating this file directly on [GitHub](https://github.com/taiyomoe/taiyo). Your feedback helps us create better components! 🚀

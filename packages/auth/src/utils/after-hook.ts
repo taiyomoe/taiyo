@@ -5,12 +5,8 @@ export const afterHook = createAuthMiddleware(async (ctx) => {
   if (ctx.path === "/sign-out") {
     const session = await getSessionFromHeaders(ctx)
 
-    if (!session) return
-
-    // await logsClient.users.auth.insert({
-    //   type: "signedOut",
-    //   ip: session.session.ipAddress,
-    //   userId: session.user.id,
-    // })
+    if (!session) {
+      return
+    }
   }
 })
