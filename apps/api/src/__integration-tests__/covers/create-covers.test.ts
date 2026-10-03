@@ -1,7 +1,7 @@
 import { ListObjectsV2Command } from "@aws-sdk/client-s3"
 import { describe, expect } from "vitest"
 import { signInAs } from "../helpers/auth"
-import { invalidImage, tinyPng } from "../helpers/fixtures"
+import { invalidImage, tinyGif, tinyPng } from "../helpers/fixtures"
 import { api } from "../helpers/request"
 import { waitForMeiliMediaDoc } from "../helpers/wait"
 import { test } from "../setup"
@@ -59,6 +59,57 @@ describe("POST /medias/:id/covers", () => {
     const meiliDoc = await waitForMeiliMediaDoc(services, SEEDED_MEDIA_ID)
 
     expect(meiliDoc).not.toBeNull()
+  })
+
+  test("stores a gif upload as .gif and serves it under that url", async ({ app, services }) => {
+    const { headers } = await signInAs(services, { role: "ADMIN" })
+    const form = new FormData()
+
+    form.append("covers.0.file", await tinyGif())
+    form.append("covers.0.language", "en")
+    form.append("covers.0.contentRating", "NORMAL")
+
+    const res = await api<{ ids: string[] }>(app, `/medias/${SEEDED_MEDIA_ID}/covers`, {
+      method: "POST",
+      headers,
+      form,
+    })
+
+    expect(res.status).toBe(201)
+
+    if (!res.body.success) {
+      throw new Error(`Expected success: ${JSON.stringify(res.body)}`)
+    }
+
+    const [coverId] = res.body.data.ids
+    const row = await services.db
+      .selectFrom("covers")
+      .select("extension")
+      .where("id", "=", coverId!)
+      .executeTakeFirstOrThrow()
+
+    expect(row.extension).toBe("gif")
+
+    const s3Listing = await services.s3.send(
+      new ListObjectsV2Command({
+        Bucket: services.s3Bucket,
+        Prefix: `medias/${SEEDED_MEDIA_ID}/covers/${coverId}`,
+      }),
+    )
+
+    expect(s3Listing.Contents?.map(({ Key }) => Key)).toEqual([
+      `medias/${SEEDED_MEDIA_ID}/covers/${coverId}.gif`,
+    ])
+
+    const detail = await api<{ url: string }>(app, `/covers/${coverId}`)
+
+    expect(detail.status).toBe(200)
+
+    if (!detail.body.success) {
+      throw new Error(`Expected success: ${JSON.stringify(detail.body)}`)
+    }
+
+    expect(detail.body.data.url).toContain(`/medias/${SEEDED_MEDIA_ID}/covers/${coverId}.gif`)
   })
 
   test("rejects unauthenticated requests with UNAUTHORIZED", async ({ app }) => {

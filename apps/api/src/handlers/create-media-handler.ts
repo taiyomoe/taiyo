@@ -320,16 +320,18 @@ export const createMediaHandler = new Hono().post(
     const coverRows = await Promise.all(
       body.covers.map(async (cover) => {
         const id = crypto.randomUUID()
+        const extension = extensionForMimeType(cover.file.type)
 
         await uploadFile(
           { s3, s3Bucket, log },
-          getCoverKey(mediaId, `${id}.${extensionForMimeType(cover.file.type)}`),
+          getCoverKey(mediaId, `${id}.${extension}`),
           cover.file,
         )
 
         return {
           id,
           mediaId,
+          extension,
           volume: cover.volume !== undefined ? String(cover.volume) : null,
           language: cover.language,
           contentRating: cover.contentRating,
@@ -345,16 +347,18 @@ export const createMediaHandler = new Hono().post(
       const bannerRows = await Promise.all(
         body.banners.map(async (banner) => {
           const id = crypto.randomUUID()
+          const extension = extensionForMimeType(banner.file.type)
 
           await uploadFile(
             { s3, s3Bucket, log },
-            getBannerKey(mediaId, `${id}.${extensionForMimeType(banner.file.type)}`),
+            getBannerKey(mediaId, `${id}.${extension}`),
             banner.file,
           )
 
           return {
             id,
             mediaId,
+            extension,
             contentRating: banner.contentRating,
             uploaderId: c.var.user.id,
           } satisfies NewBanner

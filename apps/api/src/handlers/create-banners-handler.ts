@@ -77,16 +77,18 @@ export const createBannersHandler = new Hono().post(
     const bannerRows = await Promise.all(
       body.banners.map(async (banner) => {
         const id = crypto.randomUUID()
+        const extension = extensionForMimeType(banner.file.type)
 
         await uploadFile(
           { s3, s3Bucket, log },
-          getBannerKey(media.id, `${id}.${extensionForMimeType(banner.file.type)}`),
+          getBannerKey(media.id, `${id}.${extension}`),
           banner.file,
         )
 
         return {
           id,
           mediaId: media.id,
+          extension,
           contentRating: banner.contentRating,
           uploaderId: user.id,
         } satisfies NewBanner

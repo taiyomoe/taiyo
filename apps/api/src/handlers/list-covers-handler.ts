@@ -1,3 +1,4 @@
+import { getCoverUrl } from "@taiyomoe/s3"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
@@ -7,6 +8,11 @@ import { apiSuccessEnvelope, contentRatingSchema, languageSchema } from "../util
 
 const coverSchema = z.object({
   id: z.uuid().meta({ description: "The ID of the cover." }),
+  url: z.url().meta({
+    description: "URL of the cover image.",
+    example:
+      "https://cdn.taiyo.moe/medias/4e26b80f-6661-4f5f-93b4-6dfed052bbed/covers/a56cc54d-7776-4787-9b21-97a4674b80bc.jpg",
+  }),
   volume: z
     .string()
     .nullable()
@@ -49,6 +55,7 @@ export const listCoversHandler = new Hono().get(
       .selectFrom("covers")
       .select([
         "id",
+        "extension",
         "volume",
         "language",
         "contentRating",
@@ -60,6 +67,11 @@ export const listCoversHandler = new Hono().get(
       .where("deletedAt", "is", null)
       .execute()
 
-    return c.ok(covers)
+    return c.ok(
+      covers.map(({ extension, ...cover }) => ({
+        ...cover,
+        url: getCoverUrl(media.id, cover.id, extension),
+      })),
+    )
   },
 )

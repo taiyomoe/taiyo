@@ -104,16 +104,18 @@ export const createCoversHandler = new Hono().post(
     const coverRows = await Promise.all(
       body.covers.map(async (cover) => {
         const id = crypto.randomUUID()
+        const extension = extensionForMimeType(cover.file.type)
 
         await uploadFile(
           { s3, s3Bucket, log },
-          getCoverKey(media.id, `${id}.${extensionForMimeType(cover.file.type)}`),
+          getCoverKey(media.id, `${id}.${extension}`),
           cover.file,
         )
 
         return {
           id,
           mediaId: media.id,
+          extension,
           volume: cover.volume !== undefined ? String(cover.volume) : null,
           language: cover.language,
           contentRating: cover.contentRating,

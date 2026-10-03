@@ -58,6 +58,12 @@ const publicBase = env.S3_PUBLIC_URL.replace(/\/+$/, "")
 export const getChapterPageUrl = (mediaId: string, chapterId: string, pageId: string) =>
   `${publicBase}/${getChapterPageKey(mediaId, chapterId, pageId)}`
 
+export const getCoverUrl = (mediaId: string, coverId: string, extension: string) =>
+  `${publicBase}/${getCoverKey(mediaId, `${coverId}.${extension}`)}`
+
+export const getBannerUrl = (mediaId: string, bannerId: string, extension: string) =>
+  `${publicBase}/${getBannerKey(mediaId, `${bannerId}.${extension}`)}`
+
 /** Staging key for a raw, not-yet-processed upload. Reaped after processing. */
 export const getChapterStagingKey = (chapterId: string, uploadId: string, index: number) =>
   `staging/chapters/${chapterId}/${uploadId}/${index}`
