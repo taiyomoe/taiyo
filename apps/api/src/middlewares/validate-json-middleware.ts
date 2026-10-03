@@ -8,7 +8,11 @@ type Env<TSchema extends z.ZodType> = {
 }
 
 export const validateJson = <TSchema extends z.ZodType>(schema: TSchema) => {
-  return createMiddleware<Env<TSchema>>(async (c, next) => {
+  return createMiddleware<
+    Env<TSchema>,
+    string,
+    { in: { json: z.input<TSchema> }; out: { json: z.output<TSchema> } }
+  >(async (c, next) => {
     let raw: unknown
 
     try {
