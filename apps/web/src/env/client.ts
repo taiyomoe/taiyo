@@ -6,8 +6,8 @@ export const env = createEnv({
   extends: [authEnv],
   clientPrefix: "VITE_",
   client: {
-    /** Where copyright notices, privacy requests and general support mail go. */
     VITE_SUPPORT_EMAIL: z.email().default("support@taiyo.moe"),
+    VITE_API_URL: z.url(),
   },
   runtimeEnv: import.meta.env,
 })

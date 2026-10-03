@@ -1,6 +1,8 @@
 import * as stylex from "@stylexjs/stylex"
 import { TanStackDevtools } from "@tanstack/react-devtools"
-import { HeadContent, Scripts, createRootRoute } from "@tanstack/react-router"
+import type { QueryClient } from "@tanstack/react-query"
+import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools"
+import { HeadContent, Scripts, createRootRouteWithContext } from "@tanstack/react-router"
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools"
 import { darkShadows, darkTheme } from "@taiyomoe/ui/styles/themes"
 
@@ -10,7 +12,7 @@ import appCss from "../styles.css?url"
 // globals.css's custom properties, the StyleX theme classes drive the components.
 const darkModeClassName = `dark ${stylex.props(darkTheme, darkShadows).className ?? ""}`.trim()
 
-export const Route = createRootRoute({
+export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   head: () => ({
     meta: [
       { charSet: "utf-8" },
@@ -42,7 +44,10 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         {children}
         <TanStackDevtools
           config={{ position: "bottom-right" }}
-          plugins={[{ name: "Tanstack Router", render: <TanStackRouterDevtoolsPanel /> }]}
+          plugins={[
+            { name: "Tanstack Router", render: <TanStackRouterDevtoolsPanel /> },
+            { name: "Tanstack Query", render: <ReactQueryDevtoolsPanel /> },
+          ]}
         />
         <Scripts />
       </body>
