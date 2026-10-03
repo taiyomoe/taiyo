@@ -2,6 +2,7 @@ services:
   postgres:
     image: "postgres:18-alpine"
     restart: unless-stopped
+    command: ["postgres", "-c", "max_connections=500"]
     environment:
       - POSTGRES_USER=$DATABASE_USERNAME
       - POSTGRES_PASSWORD=$DATABASE_PASSWORD

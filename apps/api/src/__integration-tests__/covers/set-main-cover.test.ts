@@ -35,7 +35,7 @@ describe("POST /covers/:id/set-main", () => {
     const meiliDoc = await waitForMeiliMediaDoc(services, SEEDED_MEDIA_ID)
 
     expect(meiliDoc).not.toBeNull()
-  })
+  }, 30_000)
 
   test("rejects unauthenticated requests with UNAUTHORIZED", async ({ app }) => {
     const res = await api(app, `/covers/${SEEDED_NON_MAIN_COVER_ID}/set-main`, {

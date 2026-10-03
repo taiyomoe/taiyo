@@ -59,7 +59,7 @@ describe("POST /medias/:id/covers", () => {
     const meiliDoc = await waitForMeiliMediaDoc(services, SEEDED_MEDIA_ID)
 
     expect(meiliDoc).not.toBeNull()
-  })
+  }, 30_000)
 
   test("stores a gif upload as .gif and serves it under that url", async ({ app, services }) => {
     const { headers } = await signInAs(services, { role: "ADMIN" })
