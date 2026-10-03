@@ -30,7 +30,7 @@ that unblocks the most work soonest.
 | 004  | Add the "latest chapters" and personal feed endpoints                                            | P1       | S      | LOW  | —                  | TODO   |
 | 005  | Build the browse → detail → read vertical slice in `apps/web`                                    | P1       | L      | MED  | 001, 002, 003, 004 | TODO   |
 | 006  | Remove every comment from the source tree, after harvesting the load-bearing rationale into docs | P2       | L      | MED  | —                  | TODO   |
-| 007  | Make medias sortable by popularity                                                               | P2       | M      | MED  | —                  | TODO   |
+| 007  | Make medias sortable by popularity                                                               | P2       | M      | MED  | —                  | DONE   |
 | 008  | Make the privacy policy describe what Taiyō actually collects                                    | P2       | S      | LOW  | —                  | TODO   |
 
 Status values: TODO | IN PROGRESS | DONE | BLOCKED (with one-line reason) |

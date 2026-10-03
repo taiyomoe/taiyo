@@ -37,6 +37,8 @@ export type MediaDocument = {
   artistIds: string[]
   mainTitle: { title: string; language: Language } | null
   mainCoverId: string | null
+  libraryCount: number
+  chapterCount: number
   _sortMainTitle: string
 }
 
@@ -52,7 +54,7 @@ export const getMediaDocument = async (db: Kysely<DB>, mediaId: string) => {
     return null
   }
 
-  const [titles, covers, staffs, chapterLanguageRows] = await Promise.all([
+  const [titles, covers, staffs, chapterRows, libraryCountRow] = await Promise.all([
     db
       .selectFrom("titles")
       .select(["title", "language", "isMainTitle"])
@@ -75,10 +77,14 @@ export const getMediaDocument = async (db: Kysely<DB>, mediaId: string) => {
     db
       .selectFrom("chapters")
       .select("language")
-      .distinct()
       .where("mediaId", "=", mediaId)
       .where("deletedAt", "is", null)
       .execute(),
+    db
+      .selectFrom("userLibraryEntries")
+      .select(db.fn.countAll<number>().as("count"))
+      .where("mediaId", "=", mediaId)
+      .executeTakeFirstOrThrow(),
   ])
   const mainTitle = titles.find((t) => t.isMainTitle)
   const mainCover = covers.find((c) => c.isMainCover)
@@ -110,13 +116,15 @@ export const getMediaDocument = async (db: Kysely<DB>, mediaId: string) => {
     spoilerTagKeys: tags.filter((t) => t.isSpoiler).map((t) => t.key),
     linkProviders: Object.keys(links),
     titleLanguages: Array.from(new Set(titles.map((t) => t.language))),
-    chapterLanguages: chapterLanguageRows.map((r) => r.language),
+    chapterLanguages: Array.from(new Set(chapterRows.map((r) => r.language))),
     coverLanguages: Array.from(new Set(covers.map((c) => c.language))),
     titles: titles.map((t) => t.title),
     synopsis: media.synopsis ?? {},
     staffNames: staffs.map((s) => s.name),
     mainTitle: mainTitle ? { title: mainTitle.title, language: mainTitle.language } : null,
     mainCoverId: mainCover?.id ?? null,
+    libraryCount: Number(libraryCountRow.count),
+    chapterCount: chapterRows.length,
     _sortMainTitle: mainTitle ? mainTitle.title.toLowerCase() : "",
     authorIds,
     artistIds,
