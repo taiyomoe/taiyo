@@ -72,6 +72,14 @@ const mediaHitSchema = z.object({
     .uuid()
     .nullable()
     .meta({ description: "The ID of the main cover, if one exists." }),
+  libraryCount: z.number().int().meta({
+    description: "How many readers have this media in their library.",
+    example: 12_400,
+  }),
+  chapterCount: z
+    .number()
+    .int()
+    .meta({ description: "How many chapters this media has.", example: 214 }),
 })
 
 export const searchMediasHandler = new Hono().post(
@@ -79,7 +87,7 @@ export const searchMediasHandler = new Hono().post(
   describeRoute({
     summary: "Search medias",
     description:
-      "Paginated, typo-tolerant search over medias. Use `q` for full-text search across titles, synopsis, and staff names. Use `filter` to narrow by enum, array, or date fields. Use `sort` to override the default ordering. Each result carries core metadata, the main title, and the main cover id — fetch the detail endpoint for full relations.\n\n**Authentication:** none.",
+      "Paginated, typo-tolerant search over medias. Use `q` for full-text search across titles, synopsis, and staff names. Use `filter` to narrow by enum, array, date, or count fields. Use `sort` to order by recency, title, chapter count, or how many readers have it in their library. Each result carries core metadata, the main title, the main cover id, and both popularity counts — fetch the detail endpoint for full relations.\n\n**Authentication:** none.",
     tags: ["Medias"],
     requestBody: {
       content: {
