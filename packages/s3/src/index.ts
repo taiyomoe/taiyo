@@ -20,6 +20,7 @@ export const getS3Client = () =>
 export const getS3Bucket = () => env.S3_BUCKET_NAME
 
 export {
+  CreateBucketCommand,
   DeleteObjectsCommand,
   GetObjectCommand,
   ListObjectsV2Command,

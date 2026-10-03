@@ -39,7 +39,7 @@ taiyo/
 │   ├── email/             # Email templates (react-email)
 │   ├── s3/                # S3 client + key helpers (works with RustFS / Garage / AWS)
 │   ├── schemas/           # Cross-package Zod schemas (pagination, etc.)
-│   ├── scripts/           # One-shot CLI scripts (init-meilisearch, etc.)
+│   ├── scripts/           # One-shot CLI scripts (init-s3, init-meilisearch, etc.)
 │   ├── search/            # Meilisearch client + media sync + filter translator
 │   ├── ui/                # Shared React components (StyleX + Base UI)
 │   └── utils/             # Pure utility helpers (unit-tested)
@@ -101,18 +101,30 @@ taiyo/
    cd taiyo
    pnpm install
    ```
-2. Copy the env templates and fill in values. Env is split per app — the root `.env` holds only the Docker infrastructure variables.
+2. Copy the env templates. Env is split per app — the root `.env` holds only the Docker infrastructure variables.
    ```bash
-   cp .env.example .env                    # Docker infra: container ports & credentials
+   cp .env.example .env                     # Docker infra: container ports & credentials
    cp apps/api/.env.example apps/api/.env   # API + all server-side packages
    cp apps/web/.env.example apps/web/.env   # web client (VITE_* vars)
    ```
-   `BETTER_AUTH_SECRET` (in `apps/api/.env`) is the only var you must set yourself (`npx auth secret` generates one); social OAuth and Turnstile work without credentials but those flows will be disabled. Backend tooling (`pnpm -F db kysely …`, `pnpm -F scripts cli`) reads `apps/api/.env`.
+   The templates are a working local setup as-copied — no value needs editing to
+   boot the stack, run the test suites, or `pnpm dev`. Replace
+   `BETTER_AUTH_SECRET` with your own (`npx auth secret`) for anything beyond
+   local dev; social OAuth and Turnstile work without credentials, but those
+   flows stay disabled. Backend tooling (`pnpm -F db kysely …`,
+   `pnpm -F scripts cli`) and the integration tests all read `apps/api/.env`.
 3. Start infrastructure
    ```bash
-   docker compose up -d
+   docker compose up -d --wait
    ```
-4. Initialize storage — see [`packages/s3/README.md`](./packages/s3/README.md) for first-run RustFS bucket setup.
+   Ports are published on 127.0.0.1 and sit outside each service's default, so a
+   Postgres or Redis you already run locally will not collide. Running two
+   checkouts at once does collide on host ports — shift the block in `.env` and
+   the matching URLs in `apps/api/.env`.
+4. Create the S3 bucket
+   ```bash
+   pnpm -F scripts cli init-s3
+   ```
 5. Migrate + seed the database
    ```bash
    pnpm -F db kysely migrate latest
@@ -142,7 +154,7 @@ pnpm lint:fix           # oxlint --fix
 pnpm lint:ws            # sherif — workspace dependency validation
 pnpm knip               # unused exports + dead deps
 pnpm test:unit          # vitest (vitest.config.unit.ts)
-pnpm test:integration   # vitest (vitest.config.integration.ts) — requires docker compose up
+pnpm test:integration   # vitest (vitest.config.integration.ts) — requires docker compose up --wait
 ```
 
 Package-specific:
@@ -205,11 +217,11 @@ runs, since `oxfmt` formats markdown too.
 
 Env vars are split per app rather than living in one root file:
 
-| File            | Owns                                                                                                                     | Loaded by                                                                                                    |
-| --------------- | ------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ |
-| `.env`          | Docker Compose infra only — container ports & credentials (`DATABASE_USERNAME`, `RUSTFS_*`, `MEILISEARCH_MASTER_KEY`, …) | `docker compose`                                                                                             |
-| `apps/api/.env` | All server-side vars — DB / cache / S3 / search / auth / email                                                           | `apps/api`, plus the backend tooling in `packages/db` & `packages/scripts` (`dotenv -e ../../apps/api/.env`) |
-| `apps/web/.env` | `VITE_*` client vars only                                                                                                | Vite (`apps/web` is its own `envDir`)                                                                        |
+| File            | Owns                                                                                                                     | Loaded by                                                                                                                            |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `.env`          | Docker Compose infra only — container ports & credentials (`DATABASE_USERNAME`, `RUSTFS_*`, `MEILISEARCH_MASTER_KEY`, …) | `docker compose`                                                                                                                     |
+| `apps/api/.env` | All server-side vars — DB / cache / S3 / search / auth / email                                                           | `apps/api`, the backend tooling in `packages/db` & `packages/scripts` (`dotenv -e ../../apps/api/.env`), and `pnpm test:integration` |
+| `apps/web/.env` | `VITE_*` client vars only                                                                                                | Vite (`apps/web` is its own `envDir`)                                                                                                |
 
 Each `.env.example` documents its own file's variables. Validation is centralized via [`@t3-oss/env-core`](https://env.t3.gg/) in each package's `env.ts`.
 
@@ -224,7 +236,7 @@ A few `apps/api` values are derived from the Docker infra in the root `.env` and
 - **`@taiyomoe/email`** — react-email templates + send helpers
 - **`@taiyomoe/s3`** — typed S3 client + key derivation
 - **`@taiyomoe/schemas`** — shared Zod schemas (pagination meta, etc.)
-- **`@taiyomoe/scripts`** — CLI scripts (init-meilisearch, etc.)
+- **`@taiyomoe/scripts`** — CLI scripts (init-s3, init-meilisearch, etc.)
 - **`@taiyomoe/search`** — Meilisearch client + media sync + search input schema
 - **`@taiyomoe/ui`** — React components on StyleX + Base UI
 - **`@taiyomoe/utils`** — pure helpers (unit-tested)
