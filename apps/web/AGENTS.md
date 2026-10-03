@@ -13,9 +13,11 @@ Before substantial work:
 
 # @taiyomoe/web — Project Context
 
-A **blank TanStack Start (React)** app scaffolded with the TanStack CLI and merged
-into the `taiyo` pnpm monorepo as a workspace app under `apps/`. No partner
-add-ons, no feature scaffolding — intentionally minimal, with room to grow.
+A **TanStack Start (React)** app scaffolded with the TanStack CLI and merged into
+the `taiyo` pnpm monorepo as a workspace app under `apps/`. It started as a blank
+starter; it now ships a landing page, two auth forms, three legal routes, and a
+data layer that talks to `apps/api` over Hono RPC. No partner CLI add-ons were
+selected — everything beyond the starter was added by hand.
 
 ## Scaffold provenance
 
@@ -68,11 +70,20 @@ run in a throwaway scratch directory and its output was merged in here.
 
 ## Environment variables
 
-**None.** The blank starter reads no environment variables — the scaffold recorded
-none. The monorepo's shared `.env` (see root `.env.example`) is unrelated to
-this app today. If you later add server functions that need secrets, follow the
-`apps/api` pattern (`dotenv -e ../../.env --` via a `with-env` script) and register
-any new keys in root `turbo.json` `globalEnv`.
+Four, all client-side and all validated in `src/env/client.ts` (`@t3-oss/env-core`,
+`clientPrefix: "VITE_"`). See `.env.example`:
+
+| Variable                  | Source                      | Purpose                                       |
+| ------------------------- | --------------------------- | --------------------------------------------- |
+| `VITE_BETTER_AUTH_URL`    | `@taiyomoe/auth/env-client` | Where the Better Auth handler lives.          |
+| `VITE_TURNSTILE_SITE_KEY` | `@taiyomoe/auth/env-client` | Turnstile widget key for auth forms.          |
+| `VITE_SUPPORT_EMAIL`      | this app (defaulted)        | Contact address in legal copy.                |
+| `VITE_API_URL`            | this app (required)         | Base URL of the Taiyō API, no trailing slash. |
+
+Every key is registered in root `turbo.json` `globalEnv`; add new ones there too,
+or Turbo's cache will not notice them. If you later add server functions that need
+secrets, follow the `apps/api` pattern (`dotenv -e ../../.env --` via a `with-env`
+script) rather than reading `process.env` directly.
 
 ## Deployment
 
@@ -110,12 +121,135 @@ react-jsx`, DOM libs, `vite/client` types, and a single `@/*` path alias. The CL
 ## Deviations from raw CLI output (and why)
 
 - **Dropped unused deps** to satisfy the monorepo's `knip`/`sherif` tooling — none
-  are imported by the blank starter: `lucide-react` (icons), the CSS framework's
-  typography plugin, `@tanstack/react-router-ssr-query` (TanStack Query↔Router SSR; no
-  QueryClient here), and the test stack (`vitest`, `@testing-library/*`, `jsdom`)
+  were imported by the blank starter: `lucide-react` (icons), the CSS framework's
+  typography plugin, and the test stack (`vitest`, `@testing-library/*`, `jsdom`)
   plus the `test` script (root owns testing).
+  - **`@tanstack/react-router-ssr-query` was dropped and has since been re-added.**
+    It was removed because the blank starter had no `QueryClient` to integrate.
+    The data layer introduced one, and `setupRouterSsrQueryIntegration` is what
+    dehydrates server-fetched query data into the client cache — without it every
+    SSR'd route would refetch on hydration. See **Data layer** below.
 - **Dropped the app-level `pnpm.onlyBuiltDependencies` field** — build-script
   approvals are governed by the root `pnpm-workspace.yaml` `allowBuilds` in a workspace.
+
+## Data layer
+
+The app reads `apps/api` through **Hono RPC**, not `fetch` and not an
+OpenAPI-generated client.
+
+- **The client** is `src/lib/api.ts`: `hc<AppType>(env.VITE_API_URL, { init: {
+credentials: "include" } })`, where `AppType` comes from
+  `@taiyomoe/api/app`. `@taiyomoe/api` is a **devDependency** and must only ever
+  be reached with `import type` — importing it as a value would pull a module
+  containing a live `serve()` call into the client graph.
+- **Every response is an envelope.** Success is `{ success: true, data, timestamp,
+requestId }` plus `meta` on paginated routes; failure is `{ success: false,
+code, message, … }`. `unwrap(res)` in the same file narrows that union, returns
+  `data`, and throws an `ApiError` carrying the API's own `code` and HTTP
+  `status` otherwise. Route loaders and query functions call `unwrap`; they do
+  not narrow by hand.
+- **`apps/api`'s `ok`/`fail` must keep returning `Response &
+TypedResponse<…>`, and the validators must keep declaring their `Input`
+  generic.** If either is simplified away, this whole client silently degrades to
+  `any` and no test in the repo fails. The full rationale is in
+  `docs/engineering-notes.md`.
+- **Query options live in `src/lib/queries/`**, one `queryOptions` factory per
+  endpoint, and are handed to routes through the route's `context` function —
+  never duplicated between a loader and a component. See **Router, query and
+  prefetching** below.
+- **CORS.** The API only honours `credentials: "include"` for origins listed in
+  its `CORS_ALLOWED_ORIGINS`. `apps/api/.env.example` ships
+  `http://localhost:3000` for this reason; a browser request that fails with no
+  response headers at all is almost always this.
+
+## Router, query and prefetching
+
+`src/router.tsx` owns the wiring. The shape follows TanStack's own guidance
+(<https://tkdodo.eu/blog/tan-stack-router-and-query> and
+<https://tkdodo.eu/blog/reliable-query-prefetching-with-tanstack-router>):
+
+- **One `QueryClient` per router instance**, created inside `getRouter()` and
+  passed both to router `context` and to `QueryClientProvider` in `__root.tsx`.
+  Two instances would mean two caches and no hydration. Creating it per-request
+  rather than at module scope is what keeps one user's cache off another's SSR
+  response.
+- **`defaultPreloadStaleTime: 0`** turns off the router's own
+  stale-while-revalidate cache. With TanStack Query in the picture there must be
+  exactly one cache; the router's would shadow it.
+- **A non-zero `staleTime`** on the QueryClient defaults is load-bearing, not
+  taste. `defaultPreload: "intent"` fires loaders on hover, and
+  `POST /medias/search` is rate-limited to 60 requests/minute — a grid of
+  hoverable cards burns that budget in seconds with `staleTime: 0`.
+- **`defaultPendingComponent` / `defaultErrorComponent`** are set globally so
+  routes can be written for the success case only. Prefer extending those over
+  adding per-route boundaries.
+- **`setupRouterSsrQueryIntegration({ router, queryClient })`** dehydrates
+  server-fetched query data and rehydrates it on the client.
+- **Query options go in the route's `context` function, not inline in the
+  loader.** `context` runs once per unique `params` + `loaderDeps` combination,
+  so the loader and the component read the _same_ options object:
+
+  ```tsx
+  export const Route = createFileRoute("/titles")({
+    validateSearch: …,
+    loaderDeps: ({ search }) => ({ page: search.page }),
+    context: ({ deps }) => ({ titlesQueryOptions: titlesQueryOptions(deps) }),
+    loader: ({ context }) => context.queryClient.ensureQueryData(context.titlesQueryOptions),
+    component: Titles,
+  })
+  ```
+
+  Building the options twice — once in the loader, once in the component — is the
+  bug this guards against: the two drift, the loader prefetches the wrong key,
+  and the component re-suspends on a second request. Nothing type-checks that
+  for you.
+
+- **Always read data through `useSuspenseQuery` / `useQuery`, never through
+  `Route.useLoaderData()` alone.** The loader only primes the cache. Without a
+  hook subscription the query counts as inactive: no refetch on
+  invalidation, no window-focus refetch, and it is eligible for garbage
+  collection. Treat the loader as fire-and-forget — the page must still work if
+  you delete it.
+- **Loaders use `prefetchQuery` and do not `await`.** `ensureQueryData` would
+  make the loader the thing that blocks and the thing that throws; an unawaited
+  `prefetchQuery` primes the cache and swallows its own rejection, leaving
+  `useSuspenseQuery` to own both loading and errors. Note that oxlint's
+  `no-floating-promises` requires the explicit `void` operator on that call.
+- **`retry: 1`, not the React Query default of 3.** With the default, a
+  completely unreachable API sits on the pending component for ~10 seconds
+  before the error boundary ever renders, because of the exponential backoff.
+  One retry still absorbs a transient blip and surfaces a real outage in about
+  two seconds.
+
+### Two things about errors here that are not obvious
+
+- **Detect API errors structurally, not with `instanceof`.** Use
+  `getApiErrorCode(error)` from `src/lib/envelope.ts`. When a query fails
+  _during SSR_, TanStack Start serialises the error to the client, which strips
+  its prototype — so `error instanceof ApiError` is `false` in precisely the
+  case you most want to render a useful message. `getApiErrorCode` checks
+  `name === "ApiError"` plus a string `code`, which survives that round trip.
+- **An unreachable API is not an `ApiError`.** No server means no envelope and
+  no error code, so `fetch` throws a `TypeError` and the boundary correctly
+  falls back to the generic message. Only a `success: false` response produces a
+  code. When testing this, remember that a stub API must send CORS headers or
+  the client-side refetch fails as a `TypeError` before `unwrap` is ever
+  reached, and you will misread the result.
+
+### SSR does not stream a pending state on a first load
+
+With a data route like this, a hard `GET /titles` blocks until the query
+resolves and then returns complete HTML — the list is in the initial response
+and `pendingComponent` never appears. That is true whether the loader awaits
+`ensureQueryData` or fires `prefetchQuery`, because `useSuspenseQuery` is what
+holds the render back. The pending component does render when the query is slow
+or failing, and on client-side navigation.
+
+One consequence worth knowing: a slow API shows up as time-to-first-byte, not as
+a spinner. Measured against a deliberately delayed API, TTFB tracked the API
+latency almost exactly (a 3 s delay produced a ~3.9 s TTFB). If a route ever
+needs the shell to paint first, that route's data has to move to a
+non-suspending `useQuery` with its own inline skeleton.
 
 ## Known gotchas
 
