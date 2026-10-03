@@ -197,6 +197,8 @@ pnpm -F web build                  # production build (client + SSR)
 
 - Unit tests live next to source under `__tests__/` (Vitest, fast)
 - Integration tests live under `apps/api/src/__integration-tests__/` and hit real Postgres / S3 / Meilisearch / Dragonfly via Docker. Each test gets a freshly-cloned Postgres database (`CREATE DATABASE … TEMPLATE …`) and a fresh S3 bucket for isolation. See `.agents/skills/create-backend-route/SKILL.md` for the conventions.
+- That isolation is expensive, so on a busy machine the suite can saturate the box and produce a scattering of bare `Test timed out in 5000ms` failures in suites unrelated to whatever you changed — a different handful each run. That pattern is contention, not a regression. Re-run with `npx vitest run --config vitest.config.integration.ts --maxWorkers=2` before reading anything into it.
+- Tests that wait on an external clock (Meilisearch indexes asynchronously; the rate-limit test fires 61 sequential requests) carry an explicit per-test timeout. Prefer that over raising the global `testTimeout`, so suites that should be fast still fail fast.
 
 ### Continuous integration
 
