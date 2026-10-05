@@ -31,8 +31,8 @@ export const config = {
     homeLayout: "ROWS",
   } satisfies Required<UserSettings>,
   images: {
-    /** Default maximum image size in bytes (5MB) */
-    maxSizeBytes: 5 * 1024 * 1024,
+    /** Default maximum image size in bytes (10MB) */
+    maxSizeBytes: 10 * 1024 * 1024,
     /** JPEG quality for processed images (1-100) */
     quality: 85,
     /** JPEG quality for chapter pages (slightly lower than covers to save storage). */
