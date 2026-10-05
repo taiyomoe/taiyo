@@ -131,6 +131,19 @@ react-jsx`, DOM libs, `vite/client` types, and a single `@/*` path alias. The CL
 - **Port 3000** is hardcoded in the `dev` script; currently free in this repo
   (api is separate, storybook uses 6006).
 
+## Legal pages
+
+`src/routes/{privacy,terms,dmca}.tsx` must describe only what the Service actually
+does. The "What we collect" section of `privacy.tsx` lists data categories and is
+only correct as long as the tables behind them exist. When a feature that stores new
+user content ships (comments, reports, ratings, profile fields), update that section
+in the same change; when one is removed, the same rule applies in reverse — that
+paragraph was wrong because `MediaChapterComment` was dropped and the copy was never
+revisited.
+
+The same goes for `privacy.tsx`'s processor list in "Who else sees it": adding a
+third-party service that receives personal data is a change to that list.
+
 ## Next steps
 
 - `pnpm install` at the root, then `pnpm --filter @taiyomoe/web dev`.

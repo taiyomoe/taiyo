@@ -52,8 +52,10 @@ function RouteComponent() {
                 address and basic profile information from them, not your password.
               </p>
               <p sx={prose.p}>
-                <strong sx={prose.strong}>Content you submit.</strong> Anything you upload or write
-                — library entries, reading progress, uploaded pages, comments, and reports.
+                <strong sx={prose.strong}>Content you submit.</strong> Your library entries and
+                reading progress, the custom lists you create and the titles you add to them, the
+                users you follow, the chapter pages you upload, and the message you write when you
+                ask to take ownership of a group.
               </p>
               <p sx={prose.p}>
                 <strong sx={prose.strong}>Technical information.</strong> Your IP address, browser
@@ -110,9 +112,9 @@ function RouteComponent() {
           heading: "4. Cookies",
           body: (
             <p sx={prose.p}>
-              We use a small number of strictly necessary cookies: a session cookie that keeps you
-              signed in, and preference cookies that remember things like your theme. These are
-              required for the Service to work, so they are not subject to consent. We do not use
+              We use one strictly necessary cookie: a session cookie that keeps you signed in. It is
+              required for the Service to work, so it is not subject to consent. Your display
+              preferences are stored on your account rather than in a cookie. We do not use
               advertising or cross-site tracking cookies.
             </p>
           ),
@@ -129,6 +131,7 @@ function RouteComponent() {
               <ul sx={prose.ul}>
                 <li>our hosting and storage providers, who run the servers and store uploads;</li>
                 <li>Cloudflare, for network protection and bot detection;</li>
+                <li>our logging and monitoring provider, which receives our server logs;</li>
                 <li>our transactional email provider, for verification and password-reset mail;</li>
                 <li>Google and Discord, if and only if you choose to sign in with one of them.</li>
               </ul>
