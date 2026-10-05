@@ -227,7 +227,7 @@ Env vars are split per app rather than living in one root file:
 | `apps/web/.env`    | `VITE_*` client vars only                                                                                                | Vite (`apps/web` is its own `envDir`)                                                                                                |
 | `apps/worker/.env` | DB / cache / S3 plus `CHAPTER_PROCESSING_CONCURRENCY` — a subset of `apps/api/.env`                                      | `apps/worker` (`dotenv -e .env`)                                                                                                     |
 
-Each `.env.example` documents its own file's variables. Validation is centralized via [`@t3-oss/env-core`](https://env.t3.gg/) in each package's `env.ts`.
+Each `.env.example` lists its own file's variables, with local-development defaults. Validation is centralized via [`@t3-oss/env-core`](https://env.t3.gg/) in each package's `env.ts`, which is where a variable's shape and whether it is required are defined.
 
 A few `apps/api` values are derived from the Docker infra in the root `.env` and must be kept in sync: `DATABASE_URL` (postgres credentials/port), `S3_ACCESS_KEY_ID` / `S3_SECRET_ACCESS_KEY` (`RUSTFS_*`), and `MEILISEARCH_API_KEY` (`MEILISEARCH_MASTER_KEY`). `apps/worker/.env` repeats the DB / cache / S3 subset and must match too. `apps/storybook` needs no env vars.
 
