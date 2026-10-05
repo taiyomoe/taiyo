@@ -1,0 +1,48 @@
+name: CI / Static analysis
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+on:
+  pull_request:
+    paths-ignore:
+      - "**.md"
+      - "docs/**"
+      - "plans/**"
+      - ".github/ISSUE_TEMPLATE/**"
+      - "LICENSE"
+  push:
+    branches: ["main"]
+  merge_group:
+  workflow_dispatch:
+
+env:
+  FORCE_COLOR: 3
+
+jobs:
+  static-analysis:
+    name: Lint, format, dead code & workspace deps
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup
+        uses: ./.github/actions/setup
+
+      - name: Lint
+        if: ${{ !cancelled() }}
+        run: pnpm lint
+
+      - name: Format
+        if: ${{ !cancelled() }}
+        run: pnpm format
+
+      - name: Workspace deps
+        if: ${{ !cancelled() }}
+        run: pnpm lint:ws
+
+      - name: Knip
+        if: ${{ !cancelled() }}
+        run: pnpm knip

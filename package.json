@@ -9,8 +9,8 @@
     "lint:fix": "oxlint --fix",
     "format": "oxfmt --check",
     "format:fix": "oxfmt",
-    "lint:ws": "pnpm dlx sherif@latest",
-    "postinstall": "pnpm -F @taiyomoe/web compile:messages; pnpm lint:ws; lefthook install",
+    "lint:ws": "sherif",
+    "postinstall": "pnpm -F @taiyomoe/web compile:messages; lefthook install",
     "knip": "knip",
     "test:unit": "vitest run --config vitest.config.unit.ts",
     "test:unit:watch": "vitest --config vitest.config.unit.ts",
@@ -27,6 +27,7 @@
     "oxfmt": "^0.64.0",
     "oxlint": "^1.79.0",
     "oxlint-tsgolint": "^7.0.2001",
+    "sherif": "^1.13.0",
     "turbo": "^2.10.10",
     "typescript": "^7.0.2",
     "vitest": "^4.1.10"

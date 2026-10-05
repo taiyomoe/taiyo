@@ -1,0 +1,35 @@
+name: CI / Unit tests
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+on:
+  pull_request:
+    paths-ignore:
+      - "**.md"
+      - "docs/**"
+      - "plans/**"
+      - ".github/ISSUE_TEMPLATE/**"
+      - "LICENSE"
+  push:
+    branches: ["main"]
+  merge_group:
+  workflow_dispatch:
+
+env:
+  FORCE_COLOR: 3
+
+jobs:
+  unit-tests:
+    name: Vitest
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup
+        uses: ./.github/actions/setup
+
+      - name: Unit tests
+        run: pnpm test:unit
