@@ -64,8 +64,5 @@ export const jpegWithExif = async (name = "with-exif.jpg"): Promise<File> => {
   return new File([new Uint8Array(buf)], name, { type: "image/jpeg" })
 }
 
-// export const oversizedImage = async (name = "huge.png"): Promise<File> => {
-//   const buf = await getPng(4096)
-
-//   return new File([new Uint8Array(buf)], name, { type: "image/png" })
-// }
+export const fakeImageOfSize = (bytes: number, name = "sized.jpg"): File =>
+  new File([new Uint8Array(bytes)], name, { type: "image/jpeg" })

@@ -1,7 +1,8 @@
 import { ListObjectsV2Command } from "@aws-sdk/client-s3"
 import { describe, expect } from "vitest"
 import { signInAs } from "../helpers/auth"
-import { invalidImage, tinyGif, tinyPng } from "../helpers/fixtures"
+import { config } from "@taiyomoe/config"
+import { fakeImageOfSize, invalidImage, tinyGif, tinyPng } from "../helpers/fixtures"
 import { api } from "../helpers/request"
 import { waitForMeiliMediaDoc } from "../helpers/wait"
 import { test } from "../setup"
@@ -194,6 +195,48 @@ describe("POST /medias/:id/covers", () => {
     }
 
     expect(res.body.code).toBe("MEDIA_NOT_FOUND")
+  })
+
+  test("returns IMAGE_TOO_LARGE one byte over the size limit", async ({ app, services }) => {
+    const { headers } = await signInAs(services, { role: "ADMIN" })
+    const form = await getForm()
+
+    form.set("covers.0.file", fakeImageOfSize(config.images.maxSizeBytes + 1))
+
+    const res = await api(app, `/medias/${SEEDED_MEDIA_ID}/covers`, {
+      method: "POST",
+      headers,
+      form,
+    })
+
+    expect(res.status).toBe(422)
+
+    if (res.body.success) {
+      throw new Error("Expected failure")
+    }
+
+    expect(res.body.code).toBe("IMAGE_TOO_LARGE")
+  })
+
+  test("accepts the size limit exactly, failing later on content", async ({ app, services }) => {
+    const { headers } = await signInAs(services, { role: "ADMIN" })
+    const form = await getForm()
+
+    form.set("covers.0.file", fakeImageOfSize(config.images.maxSizeBytes))
+
+    const res = await api(app, `/medias/${SEEDED_MEDIA_ID}/covers`, {
+      method: "POST",
+      headers,
+      form,
+    })
+
+    expect(res.status).toBe(422)
+
+    if (res.body.success) {
+      throw new Error("Expected failure")
+    }
+
+    expect(res.body.code).toBe("INVALID_IMAGE")
   })
 
   test("returns INVALID_IMAGE for a fake image file", async ({ app, services }) => {

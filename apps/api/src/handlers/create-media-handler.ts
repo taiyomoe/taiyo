@@ -221,7 +221,7 @@ export const createMediaHandler = new Hono().post(
       ...getOpenApiResponses({
         404: "One or more of the referenced staff members do not exist.",
         409: "One or more of the provided links already belong to an existing media.",
-        422: "The request data failed validation or an uploaded image is invalid.",
+        422: `The request data failed validation, or an uploaded image is invalid or larger than ${config.images.maxSizeBytes / 1024 / 1024} MB.`,
         429: "Too many requests — slow down.",
       }),
     },

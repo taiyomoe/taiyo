@@ -1,3 +1,4 @@
+import { config } from "@taiyomoe/config"
 import { NewCover } from "@taiyomoe/db"
 import { getCoverKey } from "@taiyomoe/s3"
 import { syncMedia } from "@taiyomoe/search"
@@ -87,7 +88,7 @@ export const createCoversHandler = new Hono().post(
       },
       ...getOpenApiResponses({
         404: "No media with the given id exists.",
-        422: "The request data failed validation or an uploaded image is invalid.",
+        422: `The request data failed validation, or an uploaded image is invalid or larger than ${config.images.maxSizeBytes / 1024 / 1024} MB.`,
         429: "Too many requests — slow down.",
       }),
     },
