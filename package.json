@@ -10,7 +10,7 @@
     "format": "oxfmt --check",
     "format:fix": "oxfmt",
     "lint:ws": "pnpm dlx sherif@latest",
-    "postinstall": "pnpm lint:ws && lefthook install",
+    "postinstall": "pnpm -F @taiyomoe/web compile:messages && pnpm lint:ws && lefthook install",
     "knip": "knip",
     "test:unit": "vitest run --config vitest.config.unit.ts",
     "test:unit:watch": "vitest --config vitest.config.unit.ts",
