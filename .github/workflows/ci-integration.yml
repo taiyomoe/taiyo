@@ -22,9 +22,9 @@ env:
 
 jobs:
   integration-tests:
-    name: Vitest
+    name: Vitest (integration)
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 20
     services:
       postgres:
         image: postgres:18-alpine

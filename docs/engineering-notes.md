@@ -83,13 +83,35 @@ made **required** status checks, every doc-only PR will sit forever on a pending
 check. The fix at that point is a `paths-filter` job that always runs and
 reports success, not removing `paths-ignore`.
 
-### Timeouts
+### Timeouts and measured baselines
 
-`ci-static` and `ci-unit` cap at 10 minutes; `ci-integration` at 30. The default
-is 6 hours, which turns a hung service container into a wasted runner-hour
-budget. The integration cap is the loose one on purpose — the suite gives each
-of its ~72 files a freshly cloned Postgres database, a new S3 bucket and a full
-`initMediasIndex` reindex, and a 2-vCPU GitHub runner has little parallelism to
-absorb that. If it starts brushing the cap, the next lever is sharding
-(`--shard=i/n` across a matrix), accepting n× the service-container and install
-cost in exchange for roughly 1/n the wall clock.
+`ci-static` and `ci-unit` cap at 10 minutes, `ci-integration` at 20. The default
+is 6 hours, which turns one hung service container into a wasted runner-hour
+budget.
+
+First green run on `ubuntu-latest`, cold pnpm store cache:
+
+| Workflow         | Duration |
+| ---------------- | -------- |
+| `ci-unit`        | 0m39s    |
+| `ci-static`      | 0m46s    |
+| `ci-integration` | 3m32s    |
+
+Wall clock is therefore ~3m30s, the slowest of the three, against roughly
+4m20s plus two extra setups under the old `needs`-gated shape.
+
+Integration is the one to watch: it gives each of its ~72 files a freshly cloned
+Postgres database, a new S3 bucket and a full `initMediasIndex` reindex, and a
+2-vCPU runner has little parallelism to absorb that. 3m32s leaves ~5x headroom
+under the cap, so the cap is there to catch a hang, not to bound normal growth.
+If it ever starts brushing it, the next lever is sharding (`--shard=i/n` across a
+matrix), accepting n x the service-container and install cost in exchange for
+roughly 1/n the wall clock.
+
+### Job names
+
+Both test workflows run a job called `Vitest`, so they are named
+`Vitest (unit)` and `Vitest (integration)`. The workflow name disambiguates them
+in the PR checks UI, but the bare job name is what the checks API and
+`gh pr checks` report, and what a required-status-check rule would match — two
+entries called `Vitest` would be ambiguous there.

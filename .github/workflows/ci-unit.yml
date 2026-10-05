@@ -22,7 +22,7 @@ env:
 
 jobs:
   unit-tests:
-    name: Vitest
+    name: Vitest (unit)
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
