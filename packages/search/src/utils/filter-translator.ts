@@ -8,6 +8,12 @@ type DateOps = {
   between?: [string, string]
   isNull?: boolean
 }
+type CountOps = {
+  eq?: number
+  gte?: number
+  lte?: number
+  between?: [number, number]
+}
 
 const fromEnum = (attr: string, ops: EnumOps) => {
   const clauses: string[] = []
@@ -77,12 +83,34 @@ const fromDate = (attr: string, ops: DateOps) => {
 
   return clauses
 }
+const fromCount = (attr: string, ops: CountOps) => {
+  const clauses: string[] = []
+
+  if (ops.eq !== undefined) {
+    clauses.push(`${attr} = ${ops.eq}`)
+  }
+
+  if (ops.gte !== undefined) {
+    clauses.push(`${attr} >= ${ops.gte}`)
+  }
+
+  if (ops.lte !== undefined) {
+    clauses.push(`${attr} <= ${ops.lte}`)
+  }
+
+  if (ops.between !== undefined) {
+    clauses.push(`${attr} ${ops.between[0]} TO ${ops.between[1]}`)
+  }
+
+  return clauses
+}
 
 export type FilterSpec<TDocument> = Record<
   string,
   | { kind: "enum"; attr: keyof TDocument }
   | { kind: "array"; attr: keyof TDocument }
   | { kind: "date"; attr: keyof TDocument }
+  | { kind: "count"; attr: keyof TDocument }
 >
 
 /**
@@ -121,6 +149,11 @@ export const translateFilter = (
 
       case "date":
         clauses.push(...fromDate(fieldSpec.attr, ops as DateOps))
+
+        break
+
+      case "count":
+        clauses.push(...fromCount(fieldSpec.attr, ops as CountOps))
 
         break
     }

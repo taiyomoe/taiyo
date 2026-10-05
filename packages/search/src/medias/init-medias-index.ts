@@ -24,6 +24,8 @@ const filterableAttributes = [
   "coverLanguages",
   "authorIds",
   "artistIds",
+  "libraryCount",
+  "chapterCount",
 ] satisfies (keyof MediaDocument)[]
 const searchableAttributes = ["mainTitle.title", "titles", "synopsis", "staffNames"]
 const sortableAttributes = [
@@ -32,6 +34,8 @@ const sortableAttributes = [
   "startDate",
   "endDate",
   "_sortMainTitle",
+  "libraryCount",
+  "chapterCount",
 ] satisfies (keyof MediaDocument)[]
 const displayedAttributes = [
   "id",
@@ -59,6 +63,8 @@ const displayedAttributes = [
   "artistIds",
   "mainTitle",
   "mainCoverId",
+  "libraryCount",
+  "chapterCount",
 ] satisfies (keyof MediaDocument)[]
 
 export const initMediasIndex = async ({

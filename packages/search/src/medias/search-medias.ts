@@ -15,6 +15,8 @@ const sortFieldToAttribute = {
   startDate: "startDate",
   endDate: "endDate",
   mainTitle: "_sortMainTitle",
+  libraryCount: "libraryCount",
+  chapterCount: "chapterCount",
 } satisfies Record<MediaSort[number]["field"], string>
 const mediaFilterSpec = {
   type: { kind: "enum", attr: "type" },
@@ -36,6 +38,8 @@ const mediaFilterSpec = {
   updatedAt: { kind: "date", attr: "updatedAt" },
   startDate: { kind: "date", attr: "startDate" },
   endDate: { kind: "date", attr: "endDate" },
+  libraryCount: { kind: "count", attr: "libraryCount" },
+  chapterCount: { kind: "count", attr: "chapterCount" },
 } satisfies FilterSpec<MediaDocument>
 
 export const searchMedias = async (

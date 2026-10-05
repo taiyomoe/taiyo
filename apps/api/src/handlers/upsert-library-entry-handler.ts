@@ -1,4 +1,5 @@
 import { USER_LIBRARY_STATUSES } from "@taiyomoe/db"
+import { syncMedia } from "@taiyomoe/search"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
@@ -74,6 +75,10 @@ export const upsertLibraryEntryHandler = new Hono().put(
       .values({ userId: user.id, mediaId, status })
       .onConflict((oc) => oc.columns(["userId", "mediaId"]).doUpdateSet({ status }))
       .execute()
+
+    c.var.afterCommit(() =>
+      syncMedia({ db: c.var.db, meili: c.var.meili, mediasIndex: c.var.mediasIndex }, mediaId),
+    )
 
     return c.ok({ userId: user.id, mediaId, status })
   },

@@ -1,3 +1,4 @@
+import { syncMedia } from "@taiyomoe/search"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
@@ -46,6 +47,10 @@ export const removeLibraryEntryHandler = new Hono().delete(
     if (result.numDeletedRows === 0n) {
       return c.fail("LIBRARY_ENTRY_NOT_FOUND")
     }
+
+    c.var.afterCommit(() =>
+      syncMedia({ db: c.var.db, meili: c.var.meili, mediasIndex: c.var.mediasIndex }, mediaId),
+    )
 
     return c.ok({ mediaId })
   },

@@ -11,6 +11,7 @@ import {
 import { paginationQuerySchema, sortDirectionSchema } from "@taiyomoe/schemas"
 import { z } from "zod"
 import {
+  countFilter,
   dateFilter,
   enumArrayFilter,
   enumFilter,
@@ -39,12 +40,22 @@ export const mediaFilterSchema = z
     updatedAt: dateFilter.optional(),
     startDate: dateFilter.optional(),
     endDate: dateFilter.optional(),
+    libraryCount: countFilter.optional(),
+    chapterCount: countFilter.optional(),
   })
   .strict()
 
 export const mediaSortSchema = z
   .object({
-    field: z.enum(["createdAt", "updatedAt", "startDate", "endDate", "mainTitle"]),
+    field: z.enum([
+      "createdAt",
+      "updatedAt",
+      "startDate",
+      "endDate",
+      "mainTitle",
+      "libraryCount",
+      "chapterCount",
+    ]),
     direction: sortDirectionSchema.default("desc"),
   })
   .array()
