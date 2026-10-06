@@ -2,12 +2,12 @@ name: CI / Static analysis
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 on:
   pull_request:
   push:
-    branches: ["main"]
+    branches: ["main", "develop"]
   merge_group:
   workflow_dispatch:
 

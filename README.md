@@ -196,9 +196,10 @@ all running in parallel:
 | `.github/workflows/ci-unit.yml`        | `test:unit`                                    |
 | `.github/workflows/ci-integration.yml` | `test:integration`, against service containers |
 
-Each one installs via the shared `.github/actions/setup` composite action. The
-two test workflows skip doc-only changes via `paths-ignore`; static analysis
-always runs, since `oxfmt` formats markdown too.
+All three run on pull requests and on direct pushes to `main` and `develop`,
+and install via the shared `.github/actions/setup` composite action. The two
+test workflows skip doc-only changes via `paths-ignore`; static analysis always
+runs, since `oxfmt` formats markdown too.
 
 ## 🌐 Environment variables
 
