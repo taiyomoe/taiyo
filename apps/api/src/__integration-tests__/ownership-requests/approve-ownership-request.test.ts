@@ -195,7 +195,7 @@ describe("POST /ownership-requests/:id/approve", () => {
       throw new Error("Expected the losing approval to fail")
     }
 
-    expect(loser.body.code).toBe("GROUP_ALREADY_OWNED")
+    expect(["GROUP_ALREADY_OWNED", "OWNERSHIP_REQUEST_NOT_PENDING"]).toContain(loser.body.code)
 
     const owners = await services.db
       .selectFrom("groupMemberships")

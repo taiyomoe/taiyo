@@ -44,9 +44,11 @@ taiyo/
 │   ├── ui/                # Shared React components (StyleX + Base UI)
 │   └── utils/             # Pure utility helpers (unit-tested)
 ├── docs/                  # Design proposals (group-ownership.md, …)
+├── .github/
+│   ├── actions/setup/     # pnpm + Node + install composite action
+│   └── workflows/         # ci-static, ci-unit, ci-integration
 └── tooling/
     ├── bruno/             # API request collections
-    ├── github/            # CI setup composite action
     └── typescript/        # tsconfig presets
 ```
 
@@ -182,6 +184,21 @@ pnpm -F web build                  # production build (client + SSR)
 
 - Unit tests live next to source under `__tests__/` (Vitest, fast)
 - Integration tests live under `apps/api/src/__integration-tests__/` and hit real Postgres / S3 / Meilisearch / Dragonfly via Docker. Each test gets a freshly-cloned Postgres database (`CREATE DATABASE … TEMPLATE …`) and a fresh S3 bucket for isolation. See `.agents/skills/create-backend-route/SKILL.md` for the conventions.
+
+### Continuous integration
+
+Three independent workflows, one job each, all triggered on the same events and
+all running in parallel:
+
+| Workflow                               | Runs                                           |
+| -------------------------------------- | ---------------------------------------------- |
+| `.github/workflows/ci-static.yml`      | `lint`, `format`, `lint:ws`, `knip`            |
+| `.github/workflows/ci-unit.yml`        | `test:unit`                                    |
+| `.github/workflows/ci-integration.yml` | `test:integration`, against service containers |
+
+Each one installs via the shared `.github/actions/setup` composite action. The
+two test workflows skip doc-only changes via `paths-ignore`; static analysis
+always runs, since `oxfmt` formats markdown too.
 
 ## 🌐 Environment variables
 
