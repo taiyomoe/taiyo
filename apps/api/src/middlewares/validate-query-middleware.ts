@@ -8,7 +8,14 @@ type Env<TSchema extends z.ZodType> = {
 }
 
 export const validateQuery = <TSchema extends z.ZodType>(schema: TSchema) => {
-  return createMiddleware<Env<TSchema>>(async (c, next) => {
+  return createMiddleware<
+    Env<TSchema>,
+    string,
+    {
+      in: { query: Record<string, string | string[]> }
+      out: { query: z.output<TSchema> }
+    }
+  >(async (c, next) => {
     const validation = schema.safeParse(c.req.query())
 
     if (!validation.success) {

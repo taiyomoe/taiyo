@@ -14,7 +14,7 @@ import { getMeiliClient, initMediasIndex } from "@taiyomoe/search"
 import type { Hono } from "hono"
 import pg from "pg"
 import { afterAll, test as baseTest } from "vitest"
-import { createApp } from "../index"
+import { createApp } from "../app"
 import { type Services } from "../services"
 
 const TEMPLATE_DB = "taiyo_test_template"

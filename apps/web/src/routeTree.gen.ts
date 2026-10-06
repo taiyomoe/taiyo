@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as DmcaRouteImport } from './routes/dmca'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as TermsRouteImport } from './routes/terms'
+import { Route as TitlesRouteImport } from './routes/titles'
 import { Route as AuthSignInRouteImport } from './routes/auth/sign-in'
 import { Route as AuthSignUpRouteImport } from './routes/auth/sign-up'
 
@@ -36,6 +37,11 @@ const TermsRoute = TermsRouteImport.update({
   path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TitlesRoute = TitlesRouteImport.update({
+  id: '/titles',
+  path: '/titles',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthSignInRoute = AuthSignInRouteImport.update({
   id: '/auth/sign-in',
   path: '/auth/sign-in',
@@ -52,6 +58,7 @@ export interface FileRoutesByFullPath {
   '/dmca': typeof DmcaRoute
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
+  '/titles': typeof TitlesRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
 }
@@ -60,6 +67,7 @@ export interface FileRoutesByTo {
   '/dmca': typeof DmcaRoute
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
+  '/titles': typeof TitlesRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
 }
@@ -69,6 +77,7 @@ export interface FileRoutesById {
   '/dmca': typeof DmcaRoute
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
+  '/titles': typeof TitlesRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
 }
@@ -79,16 +88,25 @@ export interface FileRouteTypes {
     | '/dmca'
     | '/privacy'
     | '/terms'
+    | '/titles'
     | '/auth/sign-in'
     | '/auth/sign-up'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dmca' | '/privacy' | '/terms' | '/auth/sign-in' | '/auth/sign-up'
+  to:
+    | '/'
+    | '/dmca'
+    | '/privacy'
+    | '/terms'
+    | '/titles'
+    | '/auth/sign-in'
+    | '/auth/sign-up'
   id:
     | '__root__'
     | '/'
     | '/dmca'
     | '/privacy'
     | '/terms'
+    | '/titles'
     | '/auth/sign-in'
     | '/auth/sign-up'
   fileRoutesById: FileRoutesById
@@ -98,6 +116,7 @@ export interface RootRouteChildren {
   DmcaRoute: typeof DmcaRoute
   PrivacyRoute: typeof PrivacyRoute
   TermsRoute: typeof TermsRoute
+  TitlesRoute: typeof TitlesRoute
   AuthSignInRoute: typeof AuthSignInRoute
   AuthSignUpRoute: typeof AuthSignUpRoute
 }
@@ -132,6 +151,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/titles': {
+      id: '/titles'
+      path: '/titles'
+      fullPath: '/titles'
+      preLoaderRoute: typeof TitlesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth/sign-in': {
       id: '/auth/sign-in'
       path: '/auth/sign-in'
@@ -154,6 +180,7 @@ const rootRouteChildren: RootRouteChildren = {
   DmcaRoute: DmcaRoute,
   PrivacyRoute: PrivacyRoute,
   TermsRoute: TermsRoute,
+  TitlesRoute: TitlesRoute,
   AuthSignInRoute: AuthSignInRoute,
   AuthSignUpRoute: AuthSignUpRoute,
 }

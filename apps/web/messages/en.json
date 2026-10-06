@@ -127,5 +127,14 @@
   "landing_footer_copyright": "© 2026 Taiyō. All rights reserved.",
   "landing_footer_terms": "Terms",
   "landing_footer_privacy": "Privacy",
-  "landing_footer_content_policy": "Content policy"
+  "landing_footer_content_policy": "Content policy",
+  "titles_meta_title": "Taiyō — Titles",
+  "titles_meta_description": "Browse every series on Taiyō.",
+  "titles_heading": "Titles",
+  "titles_count": "{count} series",
+  "titles_empty": "No series yet.",
+  "error_heading": "Something went wrong",
+  "error_api_code": "The API responded with {code}.",
+  "error_unknown": "An unexpected error occurred.",
+  "loading": "Loading…"
 }
