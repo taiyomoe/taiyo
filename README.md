@@ -43,7 +43,7 @@ taiyo/
 │   ├── search/            # Meilisearch client + media sync + filter translator
 │   ├── ui/                # Shared React components (StyleX + Base UI)
 │   └── utils/             # Pure utility helpers (unit-tested)
-├── docs/                  # Design proposals, engineering notes
+├── docs/                  # Design proposals (group-ownership.md, …)
 ├── .github/
 │   ├── actions/setup/     # pnpm + Node + install composite action
 │   └── workflows/         # ci-static, ci-unit, ci-integration
@@ -196,10 +196,9 @@ all running in parallel:
 | `.github/workflows/ci-unit.yml`        | `test:unit`                                    |
 | `.github/workflows/ci-integration.yml` | `test:integration`, against service containers |
 
-Each one installs via the shared `.github/actions/setup` composite action. Doc-only
-changes are skipped via `paths-ignore`. See
-[`docs/engineering-notes.md`](./docs/engineering-notes.md) for why the split looks
-like this.
+Each one installs via the shared `.github/actions/setup` composite action. The
+two test workflows skip doc-only changes via `paths-ignore`; static analysis
+always runs, since `oxfmt` formats markdown too.
 
 ## 🌐 Environment variables
 

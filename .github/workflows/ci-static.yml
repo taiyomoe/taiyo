@@ -6,12 +6,6 @@ concurrency:
 
 on:
   pull_request:
-    paths-ignore:
-      - "**.md"
-      - "docs/**"
-      - "plans/**"
-      - ".github/ISSUE_TEMPLATE/**"
-      - "LICENSE"
   push:
     branches: ["main"]
   merge_group:
