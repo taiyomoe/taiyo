@@ -39,7 +39,7 @@ taiyo/
 │   ├── email/             # Email templates (react-email)
 │   ├── s3/                # S3 client + key helpers (works with RustFS / Garage / AWS)
 │   ├── schemas/           # Cross-package Zod schemas (pagination, etc.)
-│   ├── scripts/           # One-shot CLI scripts (init-meilisearch, etc.)
+│   ├── scripts/           # One-shot CLI scripts (init-s3, init-meilisearch, etc.)
 │   ├── search/            # Meilisearch client + media sync + filter translator
 │   ├── ui/                # Shared React components (StyleX + Base UI)
 │   └── utils/             # Pure utility helpers (unit-tested)
@@ -101,18 +101,31 @@ taiyo/
    cd taiyo
    pnpm install
    ```
-2. Copy the env templates and fill in values. Env is split per app — the root `.env` holds only the Docker infrastructure variables.
+2. Copy the env templates. Env is split per app — the root `.env` holds only the Docker infrastructure variables.
    ```bash
-   cp .env.example .env                    # Docker infra: container ports & credentials
-   cp apps/api/.env.example apps/api/.env   # API + all server-side packages
-   cp apps/web/.env.example apps/web/.env   # web client (VITE_* vars)
+   cp .env.example .env                           # Docker infra: container ports & credentials
+   cp apps/api/.env.example apps/api/.env         # API + all server-side packages
+   cp apps/web/.env.example apps/web/.env         # web client (VITE_* vars)
+   cp apps/worker/.env.example apps/worker/.env   # chapter-processing worker
    ```
-   `BETTER_AUTH_SECRET` (in `apps/api/.env`) is the only var you must set yourself (`npx auth secret` generates one); social OAuth and Turnstile work without credentials but those flows will be disabled. Backend tooling (`pnpm -F db kysely …`, `pnpm -F scripts cli`) reads `apps/api/.env`.
+   The templates are a working local setup as-copied — no value needs editing to
+   boot the stack, run the test suites, or `pnpm dev`. Replace
+   `BETTER_AUTH_SECRET` with your own (`npx auth secret`) for anything beyond
+   local dev; social OAuth and Turnstile work without credentials, but those
+   flows stay disabled. Backend tooling (`pnpm -F db kysely …`,
+   `pnpm -F scripts cli`) and the integration tests all read `apps/api/.env`.
 3. Start infrastructure
    ```bash
-   docker compose up -d
+   docker compose up -d --wait
    ```
-4. Initialize storage — see [`packages/s3/README.md`](./packages/s3/README.md) for first-run RustFS bucket setup.
+   Ports are published on 127.0.0.1 and sit outside each service's default, so a
+   Postgres or Redis you already run locally will not collide. Running two
+   checkouts at once does collide on host ports — shift the block in `.env` and
+   the matching URLs in `apps/api/.env`.
+4. Create the S3 bucket
+   ```bash
+   pnpm -F scripts cli init-s3
+   ```
 5. Migrate + seed the database
    ```bash
    pnpm -F db kysely migrate latest
@@ -121,7 +134,7 @@ taiyo/
 6. Run dev
 
    ```bash
-   pnpm dev                  # API + web (Storybook is excluded)
+   pnpm dev                  # API + web + worker (Storybook is excluded)
    ```
 
    - API: <http://localhost:3002> (`/docs` for the OpenAPI viewer, `/ping` for a health check)
@@ -133,7 +146,7 @@ taiyo/
 Root-level:
 
 ```bash
-pnpm dev                # turbo run dev — API + web dev servers (excludes Storybook)
+pnpm dev                # turbo run dev — API + web + worker (excludes Storybook)
 pnpm build              # turbo run build
 pnpm format             # oxfmt --check
 pnpm format:fix         # oxfmt (in place)
@@ -142,7 +155,7 @@ pnpm lint:fix           # oxlint --fix
 pnpm lint:ws            # sherif — workspace dependency validation
 pnpm knip               # unused exports + dead deps
 pnpm test:unit          # vitest (vitest.config.unit.ts)
-pnpm test:integration   # vitest (vitest.config.integration.ts) — requires docker compose up
+pnpm test:integration   # vitest (vitest.config.integration.ts) — requires docker compose up --wait
 ```
 
 Package-specific:
@@ -184,6 +197,8 @@ pnpm -F web build                  # production build (client + SSR)
 
 - Unit tests live next to source under `__tests__/` (Vitest, fast)
 - Integration tests live under `apps/api/src/__integration-tests__/` and hit real Postgres / S3 / Meilisearch / Dragonfly via Docker. Each test gets a freshly-cloned Postgres database (`CREATE DATABASE … TEMPLATE …`) and a fresh S3 bucket for isolation. See `.agents/skills/create-backend-route/SKILL.md` for the conventions.
+- That isolation is expensive, so on a busy machine the suite can saturate the box and produce a scattering of bare `Test timed out in 5000ms` failures in suites unrelated to whatever you changed — a different handful each run. That pattern is contention, not a regression. Re-run with `npx vitest run --config vitest.config.integration.ts --maxWorkers=2` before reading anything into it.
+- Tests that wait on an external clock (Meilisearch indexes asynchronously; the rate-limit test fires 61 sequential requests) carry an explicit per-test timeout. Prefer that over raising the global `testTimeout`, so suites that should be fast still fail fast.
 
 ### Continuous integration
 
@@ -205,15 +220,16 @@ runs, since `oxfmt` formats markdown too.
 
 Env vars are split per app rather than living in one root file:
 
-| File            | Owns                                                                                                                     | Loaded by                                                                                                    |
-| --------------- | ------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ |
-| `.env`          | Docker Compose infra only — container ports & credentials (`DATABASE_USERNAME`, `RUSTFS_*`, `MEILISEARCH_MASTER_KEY`, …) | `docker compose`                                                                                             |
-| `apps/api/.env` | All server-side vars — DB / cache / S3 / search / auth / email                                                           | `apps/api`, plus the backend tooling in `packages/db` & `packages/scripts` (`dotenv -e ../../apps/api/.env`) |
-| `apps/web/.env` | `VITE_*` client vars only                                                                                                | Vite (`apps/web` is its own `envDir`)                                                                        |
+| File               | Owns                                                                                                                     | Loaded by                                                                                                                            |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `.env`             | Docker Compose infra only — container ports & credentials (`DATABASE_USERNAME`, `RUSTFS_*`, `MEILISEARCH_MASTER_KEY`, …) | `docker compose`                                                                                                                     |
+| `apps/api/.env`    | All server-side vars — DB / cache / S3 / search / auth / email                                                           | `apps/api`, the backend tooling in `packages/db` & `packages/scripts` (`dotenv -e ../../apps/api/.env`), and `pnpm test:integration` |
+| `apps/web/.env`    | `VITE_*` client vars only                                                                                                | Vite (`apps/web` is its own `envDir`)                                                                                                |
+| `apps/worker/.env` | DB / cache / S3 plus `CHAPTER_PROCESSING_CONCURRENCY` — a subset of `apps/api/.env`                                      | `apps/worker` (`dotenv -e .env`)                                                                                                     |
 
-Each `.env.example` documents its own file's variables. Validation is centralized via [`@t3-oss/env-core`](https://env.t3.gg/) in each package's `env.ts`.
+Each `.env.example` lists its own file's variables, with local-development defaults. Validation is centralized via [`@t3-oss/env-core`](https://env.t3.gg/) in each package's `env.ts`, which is where a variable's shape and whether it is required are defined.
 
-A few `apps/api` values are derived from the Docker infra in the root `.env` and must be kept in sync: `DATABASE_URL` (postgres credentials/port), `S3_ACCESS_KEY_ID` / `S3_SECRET_ACCESS_KEY` (`RUSTFS_*`), and `MEILISEARCH_API_KEY` (`MEILISEARCH_MASTER_KEY`). `apps/storybook` needs no env vars.
+A few `apps/api` values are derived from the Docker infra in the root `.env` and must be kept in sync: `DATABASE_URL` (postgres credentials/port), `S3_ACCESS_KEY_ID` / `S3_SECRET_ACCESS_KEY` (`RUSTFS_*`), and `MEILISEARCH_API_KEY` (`MEILISEARCH_MASTER_KEY`). `apps/worker/.env` repeats the DB / cache / S3 subset and must match too. `apps/storybook` needs no env vars.
 
 ## 📦 Package overview
 
@@ -224,7 +240,7 @@ A few `apps/api` values are derived from the Docker infra in the root `.env` and
 - **`@taiyomoe/email`** — react-email templates + send helpers
 - **`@taiyomoe/s3`** — typed S3 client + key derivation
 - **`@taiyomoe/schemas`** — shared Zod schemas (pagination meta, etc.)
-- **`@taiyomoe/scripts`** — CLI scripts (init-meilisearch, etc.)
+- **`@taiyomoe/scripts`** — CLI scripts (init-s3, init-meilisearch, etc.)
 - **`@taiyomoe/search`** — Meilisearch client + media sync + search input schema
 - **`@taiyomoe/ui`** — React components on StyleX + Base UI
 - **`@taiyomoe/utils`** — pure helpers (unit-tested)

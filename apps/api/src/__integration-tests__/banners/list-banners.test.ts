@@ -8,6 +8,7 @@ const SEEDED_MEDIA_ID = "4e26b80f-6661-4f5f-93b4-6dfed052bbed"
 
 type BannerRow = {
   id: string
+  url: string
   contentRating: string
 }
 
@@ -35,6 +36,35 @@ describe("GET /medias/:id/banners", () => {
     }
 
     expect(res.body.data.some((b) => b.id === bannerId)).toBe(true)
+  })
+
+  test("returns a resolvable url for every banner", async ({ app, services }) => {
+    const { userId } = await signInAs(services, { role: "ADMIN" })
+    const bannerId = randomUUID()
+
+    await services.db
+      .insertInto("banners")
+      .values({
+        id: bannerId,
+        mediaId: SEEDED_MEDIA_ID,
+        uploaderId: userId,
+        contentRating: "NORMAL",
+      })
+      .execute()
+
+    const res = await api<BannerRow[]>(app, `/medias/${SEEDED_MEDIA_ID}/banners`)
+
+    expect(res.status).toBe(200)
+
+    if (!res.body.success) {
+      throw new Error(`Expected success: ${JSON.stringify(res.body)}`)
+    }
+
+    expect(res.body.data.length).toBeGreaterThan(0)
+
+    for (const banner of res.body.data) {
+      expect(banner.url).toContain(`/medias/${SEEDED_MEDIA_ID}/banners/${banner.id}.`)
+    }
   })
 
   test("returns MEDIA_NOT_FOUND for an unknown media id", async ({ app }) => {

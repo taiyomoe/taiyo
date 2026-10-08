@@ -8,6 +8,7 @@ const SEEDED_MAIN_COVER_ID = "a56cc54d-7776-4787-9b21-97a4674b80bc"
 type CoverDetail = {
   id: string
   mediaId: string
+  url: string
   volume: string | null
   language: string
   contentRating: string
@@ -29,6 +30,20 @@ describe("GET /covers/:id", () => {
     expect(res.body.data.id).toBe(SEEDED_MAIN_COVER_ID)
     expect(res.body.data.mediaId).toBe(SEEDED_MEDIA_ID)
     expect(res.body.data.isMainCover).toBe(true)
+  })
+
+  test("returns a resolvable url for the cover", async ({ app }) => {
+    const res = await api<CoverDetail>(app, `/covers/${SEEDED_MAIN_COVER_ID}`)
+
+    expect(res.status).toBe(200)
+
+    if (!res.body.success) {
+      throw new Error(`Expected success: ${JSON.stringify(res.body)}`)
+    }
+
+    expect(res.body.data.url).toContain(
+      `/medias/${SEEDED_MEDIA_ID}/covers/${SEEDED_MAIN_COVER_ID}.jpg`,
+    )
   })
 
   test("returns COVER_NOT_FOUND for an unknown id", async ({ app }) => {

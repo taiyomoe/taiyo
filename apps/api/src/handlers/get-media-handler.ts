@@ -6,6 +6,7 @@ import {
   MEDIA_TYPES,
   STAFF_ROLES,
 } from "@taiyomoe/db"
+import { getBannerUrl, getCoverUrl } from "@taiyomoe/s3"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
@@ -28,6 +29,11 @@ const titleSchema = z.object({
 })
 const coverSchema = z.object({
   id: z.uuid().meta({ description: "The ID of the cover." }),
+  url: z.url().meta({
+    description: "URL of the cover image.",
+    example:
+      "https://cdn.taiyo.moe/medias/4e26b80f-6661-4f5f-93b4-6dfed052bbed/covers/a56cc54d-7776-4787-9b21-97a4674b80bc.jpg",
+  }),
   volume: z
     .string()
     .nullable()
@@ -40,6 +46,11 @@ const coverSchema = z.object({
 })
 const bannerSchema = z.object({
   id: z.uuid().meta({ description: "The ID of the banner." }),
+  url: z.url().meta({
+    description: "URL of the banner image.",
+    example:
+      "https://cdn.taiyo.moe/medias/4e26b80f-6661-4f5f-93b4-6dfed052bbed/banners/8f2c1d7e-5a3b-4c9d-b1e0-6a7f8d9c0b1a.jpg",
+  }),
   contentRating: contentRatingSchema("The content rating of the banner."),
 })
 const staffSchema = z.object({
@@ -150,13 +161,13 @@ export const getMediaHandler = new Hono().get(
         .execute(),
       db
         .selectFrom("covers")
-        .select(["id", "volume", "language", "contentRating", "isMainCover"])
+        .select(["id", "extension", "volume", "language", "contentRating", "isMainCover"])
         .where("mediaId", "=", id)
         .where("deletedAt", "is", null)
         .execute(),
       db
         .selectFrom("banners")
-        .select(["id", "contentRating"])
+        .select(["id", "extension", "contentRating"])
         .where("mediaId", "=", id)
         .where("deletedAt", "is", null)
         .execute(),
@@ -169,6 +180,18 @@ export const getMediaHandler = new Hono().get(
         .execute(),
     ])
 
-    return c.ok({ ...media, titles, covers, banners, staffs })
+    return c.ok({
+      ...media,
+      titles,
+      covers: covers.map(({ extension, ...cover }) => ({
+        ...cover,
+        url: getCoverUrl(id, cover.id, extension),
+      })),
+      banners: banners.map(({ extension, ...banner }) => ({
+        ...banner,
+        url: getBannerUrl(id, banner.id, extension),
+      })),
+      staffs,
+    })
   },
 )

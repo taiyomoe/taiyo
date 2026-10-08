@@ -57,7 +57,7 @@ export const createStaffHandler = new Hono().post(
         },
       },
       ...getOpenApiResponses({
-        422: "The request data failed validation or the uploaded image is invalid.",
+        422: `The request data failed validation, or the uploaded image is invalid or larger than ${config.images.maxSizeBytes / 1024 / 1024} MB.`,
         429: "Too many requests — slow down.",
       }),
     },

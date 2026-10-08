@@ -528,7 +528,7 @@ their own key schema (the rate limiter, BullMQ). Application data goes through
 
 ## Config
 
-- `config.images` bounds the upload pipeline: 5 MB per image, JPEG quality 85
+- `config.images` bounds the upload pipeline: 10 MB per image, JPEG quality 85
   for covers and 82 for chapter pages (lower, to save storage), 15 MB and 500
   pages per chapter, a 600 s presigned-URL lifetime, 3 days before `staging/`
   objects expire by lifecycle rule, and 24 hours before a PENDING/FAILED upload

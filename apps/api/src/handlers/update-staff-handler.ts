@@ -63,7 +63,7 @@ export const updateStaffHandler = new Hono().patch(
       },
       ...getOpenApiResponses({
         404: "No staff with the given id exists.",
-        422: "The request data failed validation or the uploaded image is invalid.",
+        422: `The request data failed validation, or the uploaded image is invalid or larger than ${config.images.maxSizeBytes / 1024 / 1024} MB.`,
       }),
     },
   }),
