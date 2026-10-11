@@ -83,8 +83,6 @@ const styles = stylex.create({
     boxShadow: "0 24px 50px rgba(0,0,0,0.45)",
     transform: "translateY(-5px)",
   },
-  // A corona bleeding in from the top-right corner, brighter on hover — the
-  // card's only tie back to the sun.
   corona: {
     borderRadius: "50%",
     backgroundImage: `radial-gradient(circle, color-mix(in srgb, ${scene.brand} 50%, transparent), transparent 70%)`,

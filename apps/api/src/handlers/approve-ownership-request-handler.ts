@@ -81,7 +81,6 @@ export const approveOwnershipRequestHandler = new Hono().post(
       .where("id", "=", ownershipRequest.id)
       .execute()
 
-    // Auto-cancel any other pending request on the same group.
     await db
       .updateTable("groupOwnershipRequests")
       .set({ status: "CANCELLED" })

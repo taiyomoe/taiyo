@@ -8,10 +8,6 @@ import { colors, radius, shadows } from "../../styles/tokens.stylex"
 
 export type TableVariant = "default" | "card"
 
-/**
- * StyleX has no ancestor selector that reaches arbitrary depth, and every
- * element in this file is ours, so the variant travels through context.
- */
 const TableVariantContext = React.createContext<TableVariant>("default")
 const styles = stylex.create({
   container: {
@@ -67,9 +63,6 @@ const styles = stylex.create({
     borderBottomWidth: 1,
   },
   rowLast: {
-    // `default` has to repeat the 1px from `row`: a `null` default is still a
-    // declaration, and it won `row`'s, leaving every plain-variant row with no
-    // separator at all.
     borderBottomWidth: {
       default: 1,
       ":last-child": 0,

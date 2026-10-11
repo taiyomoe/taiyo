@@ -104,7 +104,6 @@ const styles = stylex.create({
       default: "var(--toast-calc-height)",
     },
     width: "100%",
-    // Fills the gap between stacked toasts so hovering the stack is seamless.
     "::after": {
       content: '""',
       position: "absolute",

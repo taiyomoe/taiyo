@@ -139,14 +139,7 @@ const styles = stylex.create({
   switchLabelColumn: {
     gridColumnStart: "1",
   },
-  // The switch-style checkbox track: sunken well when unchecked, brand
-  // primary when checked (same treatment as the standalone switch, one
-  // spacing step smaller: thumb 1rem, 0.75rem at `sm`).
   switchTrack: {
-    // The thumb reads `--thumb-size` back, so the responsive step lives here
-    // once instead of on every thumb property (the lint only accepts a
-    // `stylex.when` key at the first level of a condition, so the thumb
-    // cannot nest a media query under its ancestor states).
     "--thumb-size": {
       default: "1rem",
       [consts.sm]: "0.75rem",

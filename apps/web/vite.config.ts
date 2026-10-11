@@ -24,17 +24,6 @@ const config = defineConfig(({ mode }) => {
       devtools(),
       // StyleX compiles ahead of the React transform.
       stylex.vite({
-        // An explicit, identical cascade in both apps:
-        //
-        //   base        @taiyomoe/ui's reset.css + document defaults
-        //   structural  its structural.css, the cross-element rules StyleX
-        //               cannot express
-        //   stylex.*    every component's own styles
-        //
-        // Naming the first two in `before` is what makes that order a decision
-        // rather than a side effect of import order. It also keeps the contract
-        // structural.css is written against: it may freely ADD a declaration
-        // StyleX does not set, and needs `!important` to override one.
         useCSSLayers: { before: ["base", "structural"] },
         dev: process.env.NODE_ENV === "development",
         runtimeInjection: false,
@@ -49,8 +38,6 @@ const config = defineConfig(({ mode }) => {
         externalPackages: ["@taiyomoe/ui"],
       } as Parameters<typeof stylex.vite>[0]),
       tanstackStart(),
-      // React Compiler via plugin-react's native `compiler` option, backed by
-      // oxc-transform-react (Rust). Replaces the Babel preset wiring.
       viteReact({ compiler: true }),
       paraglideVitePlugin({
         project: "./project.inlang",

@@ -110,11 +110,6 @@ export const SectionHead = ({
   </div>
 )
 
-/**
- * Fades content up as it scrolls into view. The timeout is a deliberate safety
- * net: if the observer never fires — no scroll, a reduced-motion browser, a
- * prerender — the content reveals itself anyway rather than staying invisible.
- */
 export const Reveal = ({ children, delay = 0 }: { children: ReactNode; delay?: number }) => {
   const ref = useRef<HTMLDivElement>(null)
   const [seen, setSeen] = useState(false)

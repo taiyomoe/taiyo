@@ -24,21 +24,14 @@ export const defineAbilitiesFor = (user: User): AppAbility => {
     return build()
   }
 
-  // Any non-banned user can ask to own a group, view their requests, or
-  // cancel their own. The handler enforces ownership of the request row.
   can(["create", "read", "delete"], "OwnershipRequest")
 
-  // Any non-banned user can follow / unfollow others. Read is unauth.
   can(["create", "delete"], "Follow")
 
-  // Any non-banned user manages their own reading history.
   can(["create", "read", "update", "delete"], "History")
 
-  // Any non-banned user manages their own library.
   can(["create", "read", "update", "delete"], "Library")
 
-  // Any non-banned user manages their own custom lists. Moderators don't
-  // get manage — lists are personal.
   can(["create", "read", "update", "delete"], "List")
 
   if (user.role === "ADMIN") {

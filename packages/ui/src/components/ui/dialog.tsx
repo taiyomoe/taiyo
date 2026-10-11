@@ -140,8 +140,6 @@ const styles = stylex.create({
     gap: "0.5rem",
     display: "flex",
     flexDirection: "column",
-    // pb shrinks further to 0.75rem when the popup contains a panel — see
-    // structural.css (cross-element :has() rule).
     paddingBottom: {
       default: "1rem",
       [consts.sm]: "1.5rem",
@@ -177,7 +175,6 @@ const styles = stylex.create({
   },
   footerBare: {
     paddingBottom: "1.5rem",
-    // pt shrinks to 0.75rem when the popup contains a panel — structural.css.
     paddingTop: "1rem",
   },
   title: {
@@ -192,7 +189,6 @@ const styles = stylex.create({
     lineHeight: "1.25rem",
   },
   panel: {
-    // pt/pb shrink to 0.25rem next to a header / bare footer — structural.css.
     padding: "1.5rem",
   },
 })

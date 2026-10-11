@@ -52,8 +52,6 @@ const styles = stylex.create({
   links: {
     gap: "1.875rem",
     alignItems: "center",
-    // The three section links are the first thing to go on a narrow screen —
-    // the logo and the CTA are what a phone visitor actually needs.
     display: { default: "none", [consts.sm]: "flex" },
   },
   link: {

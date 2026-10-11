@@ -48,9 +48,6 @@ const styles = stylex.create({
       position: "absolute",
     },
   },
-  // `:has()` is lint-banned, so the wrapper cannot read the state of the
-  // control inside it. The component already knows both from its props and
-  // mirrors them onto the wrapper element as attributes instead.
   controlDisabled: {
     opacity: 0.64,
   },

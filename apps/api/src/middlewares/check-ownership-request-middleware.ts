@@ -4,14 +4,6 @@ import z from "zod"
 
 const paramSchema = z.object({ id: z.uuid() })
 
-/**
- * Resolves the `:id` path parameter to a groupOwnershipRequests row and exposes
- * it on the context as `c.var.ownershipRequest`.
- *
- * Rejects with:
- *   - `VALIDATION_ERROR` when the id is not a UUID
- *   - `OWNERSHIP_REQUEST_NOT_FOUND` when no matching request exists
- */
 export const checkOwnershipRequest = () =>
   createMiddleware<{
     Variables: { ownershipRequest: Selectable<GroupOwnershipRequest> }

@@ -35,11 +35,6 @@ type EmbersProps = {
   count?: number
 }
 
-/**
- * Sparks drifting up off the sun. Shared by the auth scene and the landing
- * hero — the per-spark size/drift/clock is what keeps them from reading as a
- * single looping sprite, so each one carries its own inline style.
- */
 export const Embers = ({ count = 26 }: EmbersProps) => {
   const embers = useMemo(() => build(count), [count])
   const emberProps = stylex.props(styles.ember)

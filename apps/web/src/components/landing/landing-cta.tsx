@@ -9,9 +9,6 @@ import { Eyebrow } from "@/components/landing/landing-atoms"
 import { scene, sceneFont } from "@/components/scene/scene.stylex"
 import { m } from "@/paraglide/messages"
 
-// Deliberately NOT another sun scene — the hero already owns that. This is a
-// maroon-to-red banner with the corona pushed off one corner and the kanji as a
-// watermark, so the page ends on the same warmth without repeating itself.
 const styles = stylex.create({
   band: {
     paddingBlock: "clamp(4.375rem,10vw,7.5rem)",

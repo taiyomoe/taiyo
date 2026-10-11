@@ -6,14 +6,6 @@ const paramSchema = z.object({
   id: z.uuid(),
 })
 
-/**
- * Resolves the `:id` path parameter to a `userLists` row and exposes it on the
- * context as `c.var.list`. Soft-deleted rows are excluded.
- *
- * Rejects with:
- *   - `VALIDATION_ERROR` when the id is not a UUID
- *   - `LIST_NOT_FOUND` when no matching list exists or it is soft-deleted
- */
 export const checkList = () =>
   createMiddleware<{
     Variables: { list: Selectable<UserList> }

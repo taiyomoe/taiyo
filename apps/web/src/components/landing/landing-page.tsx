@@ -18,7 +18,6 @@ const styles = stylex.create({
   },
 })
 
-/** `data-landing` is the hook the reduced-motion block in styles.css keys off. */
 export function LandingPage() {
   return (
     <div data-landing sx={styles.page}>

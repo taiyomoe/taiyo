@@ -6,8 +6,6 @@ import { TITLES } from "@/components/landing/landing-data"
 import { Stars } from "@/components/scene/stars"
 import { scene } from "@/components/scene/scene.stylex"
 
-// Rendered twice so the -50% translate lands the copy exactly where the
-// original started — that is what makes the loop seamless.
 const STRIP = [...TITLES, ...TITLES]
 const styles = stylex.create({
   band: {
@@ -17,8 +15,6 @@ const styles = stylex.create({
     paddingBottom: "0.625rem",
     paddingTop: "2.5rem",
   },
-  // Fades the strip into the page background at both ends instead of letting
-  // covers get chopped off at the viewport edge.
   fade: {
     inset: 0,
     backgroundImage: `linear-gradient(90deg, ${scene.night} 0%, transparent 12%, transparent 88%, ${scene.night} 100%)`,

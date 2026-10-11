@@ -1,23 +1,6 @@
 import * as stylex from "@stylexjs/stylex"
 import { palette, surface } from "./palette.stylex"
 
-/**
- * The design system's semantic tokens: the variables every component reads.
- *
- * Raw values live in `./palette.stylex`, the dark overrides in `./themes`.
- * This file holds nothing but `defineVars`/`defineConsts` results, because
- * that is all a `*.stylex.ts` file may export — StyleX's own rule, enforced by
- * `@stylexjs/enforce-extension`.
- *
- * `./globals.css` mirrors the handful of these that `./structural.css` needs
- * to read from plain CSS — change a value here and change it there too.
- *
- * The visual language is a soft dark "charcoal stack": layered surfaces that
- * step up in lightness (background -> card -> popover), hairline borders at
- * white/8%, wide soft drop shadows, and the Taiyo brand red as the single
- * accent for actions, controls, focus and charts.
- */
-/** Semantic colours. The defaults are the light theme. */
 export const colors = stylex.defineVars({
   background: surface.lightBackground,
   foreground: palette.neutral900,
@@ -70,36 +53,17 @@ export const colors = stylex.defineVars({
   skeletonHighlight: `rgb(255 255 255 / 64%)`,
 })
 
-/**
- * Elevation shadows. `raised` is for resting surfaces (cards), `overlay` for
- * floating ones
- * (dialogs, popovers, menus). Both pair with the 1px top light inset the
- * components draw via their `::before` layer.
- */
 export const shadows = stylex.defineVars({
   raised: "0 1px 2px rgb(0 0 0 / 6%), 0 12px 32px -12px rgb(0 0 0 / 14%)",
   overlay: "0 4px 12px rgb(0 0 0 / 8%), 0 32px 64px -16px rgb(0 0 0 / 20%)",
   sunken: "inset 0 1px 2px rgb(0 0 0 / 10%), inset 0 0 0 1px rgb(0 0 0 / 3%)",
-  /**
-   * 1px light edge drawn on a surface's ::before layer. Light theme lights
-   * the bottom edge (shadow below), dark theme lights the top edge (light
-   * from above) — the signature soft-emboss cue of the design language.
-   */
   edge: "0 1px rgb(0 0 0 / 5%)",
-  /** Resting drop shadow on a raised control (button, field, chip). */
   chip: "0 1px 2px 0 rgb(0 0 0 / 5%)",
   emboss: "inset 0 1px rgb(255 255 255 / 16%)",
   pressed: "inset 0 1px rgb(0 0 0 / 8%)",
-  /**
-   * Raised knob sitting in a sunken track (switch thumb). The knob is white in
-   * both themes, so in dark it separates from the track by lightness alone and
-   * barely needs a shadow; in light it is white-on-light-grey and the shadow is
-   * the only thing holding it off the track.
-   */
   thumb: "0 1px 2px rgb(0 0 0 / 18%), 0 0 0 1px rgb(0 0 0 / 5%)",
 })
 
-/** Corner radii. Every step is derived from a 0.875rem base. */
 export const radius = stylex.defineVars({
   sm: "0.525rem",
   md: "0.7rem",
@@ -125,10 +89,6 @@ export const text = stylex.defineVars({
   xxxl: "2.25rem",
 })
 
-/**
- * Compile-time constants (inlined, not CSS variables). Components are authored
- * mobile-first and tighten up at `sm` and above.
- */
 export const consts = stylex.defineConsts({
   sm: "@media (width >= 40rem)",
   pointerCoarse: "@media (pointer: coarse)",

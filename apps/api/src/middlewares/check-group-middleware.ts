@@ -6,17 +6,6 @@ const paramSchema = z.object({
   id: z.uuid(),
 })
 
-/**
- * Resolves the `:id` path parameter to a group row and exposes it on the
- * context as `c.var.group`.
- *
- * Rejects with:
- *   - `VALIDATION_ERROR` when the id is not a UUID
- *   - `GROUP_NOT_FOUND` when no matching group exists
- *
- * Pass `{ includeDeleted: true }` for routes that operate on soft-deleted
- * groups. The default excludes soft-deleted rows.
- */
 export const checkGroup = (opts: { includeDeleted?: boolean } = {}) =>
   createMiddleware<{
     Variables: { group: Selectable<Group> }

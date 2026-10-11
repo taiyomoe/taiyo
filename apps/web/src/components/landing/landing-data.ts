@@ -1,11 +1,5 @@
 import { m } from "@/paraglide/messages"
 
-/**
- * Placeholder catalogue for the marketing page. Title and author names are
- * invented and stay literal — they are sample data, not UI copy, so they are
- * not translated. Everything the reader is actually being told goes through
- * paraglide.
- */
 export type LandingTitle = {
   id: string
   title: string
@@ -82,7 +76,6 @@ export const TITLES: LandingTitle[] = [
   },
 ]
 
-/** One star, deliberately — the joke is that every review is a 1-star rave. */
 export const REVIEWS = [
   { quote: m.landing_review_1_quote, who: m.landing_review_1_who, role: m.landing_review_1_role },
   { quote: m.landing_review_2_quote, who: m.landing_review_2_who, role: m.landing_review_2_role },

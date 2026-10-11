@@ -25,7 +25,6 @@ const getQueue = () => {
   return queue
 }
 
-// Singleton producer injected into the API's Services bundle.
 export const getChapterUploadProducer = () =>
   ({
     enqueue: async (data) => {

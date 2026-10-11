@@ -99,8 +99,6 @@ export function TooltipPopup({
   const positionerProps = stylex.props(styles.positioner)
   const popupProps = stylex.props(surface.raisedEdge, styles.popup, sx)
   const viewportProps = stylex.props(styles.viewport)
-  // `--viewport-inline-padding` is read back by the viewport's own padding and
-  // by the [data-current]/[data-previous] width rules in structural.css.
   const viewportStyle = {
     ...viewportProps.style,
     "--viewport-inline-padding": "0.5rem",

@@ -66,7 +66,6 @@ const styles = stylex.create({
     paddingBottom: "clamp(5rem,9vw,7.5rem)",
     paddingTop: "clamp(2.5rem,5vw,3.75rem)",
   },
-  // Sticks beside the prose on desktop; above it, unpinned, on narrow screens.
   toc: {
     position: { default: "static", "@media (width >= 64rem)": "sticky" },
     top: "6.5rem",
@@ -127,7 +126,6 @@ const styles = stylex.create({
   },
 })
 
-/** Shared prose styles, so the three legal pages cannot drift apart. */
 export const prose = stylex.create({
   p: {
     margin: 0,
@@ -219,7 +217,6 @@ export const LegalPage = ({
   </div>
 )
 
-/** The bordered "how to reach us" block each policy closes on. */
 export const LegalContact = ({ children }: { children: ReactNode }) => (
   <div sx={styles.contact}>{children}</div>
 )

@@ -20,15 +20,6 @@ const styles = stylex.create({
   },
 })
 
-/**
- * StyleX styles arrive via `sx`, not `style`: `style` stays bound to React's
- * inline-CSS prop, which callers still use for CSS custom properties.
- *
- * `className` is kept as a plain DOM pass-through. Nothing in this package
- * styles through it — that is what `sx` is for — but third-party libraries
- * hand components a class name to render (react-day-picker's `classNames` map,
- * for one), and tests and animation hooks target them.
- */
 export type SeparatorProps = SeparatorPrimitive.Props & {
   sx?: Sx
 }

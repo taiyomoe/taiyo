@@ -12,8 +12,6 @@ const styles = stylex.create({
     display: "flex",
     fontSize: text.xl,
   },
-  // The mark is sized off the lockup's own font size so the two scale
-  // together: set `fontSize` on the root and the glyph follows.
   mark: {
     height: "1.4em",
     width: "auto",

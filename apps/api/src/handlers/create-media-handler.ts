@@ -239,11 +239,6 @@ export const createMediaHandler = new Hono().post(
 
     log.set({ media: { id: mediaId } })
 
-    /**
-     * Block creation if any of the provided links already belong to another media.
-     *
-     * It probably means we're re-creating a media someone else already imported.
-     */
     if (links.length > 0) {
       const existing = await db
         .selectFrom("medias")

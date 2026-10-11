@@ -42,10 +42,6 @@ export const setMainCoverHandler = new Hono().post(
   async (c) => {
     const { db, cover } = c.var
 
-    // Unset any other current main cover first, then promote this one. The
-    // unique partial index on covers(mediaId) WHERE isMainCover guarantees
-    // the invariant; doing the unset before the set keeps the transaction
-    // from violating it mid-flight under concurrent calls.
     await db
       .updateTable("covers")
       .set({ isMainCover: false })

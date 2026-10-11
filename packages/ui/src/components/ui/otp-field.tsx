@@ -24,8 +24,6 @@ const styles = stylex.create({
       default: colors.input,
       ":focus-visible": colors.ring,
     },
-    // The chip rule (radius ~= 0.35x the height) was measured on a WIDE chip;
-    // on a square slot the same ratio reads as a bubble rather than a field.
     borderRadius: radius.md,
     borderStyle: "solid",
     borderWidth: 1,
@@ -111,10 +109,6 @@ const styles = stylex.create({
     width: "0.75rem",
   },
 })
-/**
- * The `size` prop is read by every cell. StyleX has no ancestor selector that
- * reaches arbitrary depth, so the root publishes the size through context.
- */
 const OTPFieldSizeContext = React.createContext<OTPFieldSize>("default")
 
 export function OTPField({

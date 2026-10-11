@@ -12,12 +12,6 @@ const throwInvalidCredsError = (isEmail: boolean) => {
 
 export const createBeforeHook = ({ db }: { db: Kysely<DB> }) =>
   createAuthMiddleware(async (ctx) => {
-    /**
-     * Before signing-in with email or username, we need to check 2 things:
-     *
-     * 1. If the user is trying to sign in using an email or username from a non-credential provider
-     * 2. If the user is trying to sign in to an account that is not verified and which has a pending verification email
-     */
     if (ctx.path === "/sign-in/email" || ctx.path === "/sign-in/username") {
       const user = await db
         .selectFrom("users")
@@ -35,7 +29,6 @@ export const createBeforeHook = ({ db }: { db: Kysely<DB> }) =>
         .where("userId", "=", user.id)
         .execute()
 
-      // Tried logging in with an email or username from a non-credential provider
       if (!accounts.some((a) => a.providerId === "credential")) {
         throwInvalidCredsError(ctx.body.email !== undefined)
       }
@@ -57,7 +50,6 @@ export const createBeforeHook = ({ db }: { db: Kysely<DB> }) =>
       const cacheController = cacheClient.users.verificationEmailSentAt
       const verificationEmailSentAt = await cacheController.get(user.id)
 
-      // Prevent sending emails too often
       if (verificationEmailSentAt) {
         const lastVerificationSentAt = DateTime.fromJSDate(verificationEmailSentAt)
         const timeLimit = DateTime.now().minus({ hours: 1 })

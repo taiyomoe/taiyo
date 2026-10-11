@@ -5,7 +5,6 @@ import { api } from "../helpers/request"
 import { test } from "../setup"
 
 const SEEDED_CHAPTER_ID = "13548c83-8d1a-4163-8830-c8f16fcd2eb7"
-// scansPROJECT — already linked to this chapter
 const SEEDED_LINKED_GROUP_ID = "4d8a22ba-d8a0-4a98-b4f3-1d630fbd7de1"
 
 describe("POST /chapters/:id/groups", () => {

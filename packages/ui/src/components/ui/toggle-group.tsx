@@ -24,15 +24,6 @@ const rootStyles = stylex.create({
     flexDirection: "column",
   },
 })
-/**
- * Styles the group hands to its items through context (StyleX cannot style
- * arbitrary children from the parent). First/last detection uses the allowed
- * `:first-child`/`:last-child` conditions, so separators count as siblings.
- *
- * Not expressible, and therefore absent: brightening a separator while the
- * toggle next to it is hovered or pressed. It needs `:has()` (lint-banned)
- * and a dark-only rule (a component may not know the theme).
- */
 const itemStyles = stylex.create({
   common: {
     zIndex: {
@@ -75,7 +66,6 @@ const itemStyles = stylex.create({
       default: 0,
       ":last-child": radius.lg,
     },
-    // The ::before edge stretches 0.5px over each shared seam.
     "::before": {
       inset: {
         default: "0 -0.5px",
@@ -110,9 +100,6 @@ const itemStyles = stylex.create({
       default: 0,
       ":first-child": 1,
     },
-    // Both ends keep the ::before edge and middle items drop it. Which end
-    // it visually lights is already handled by `shadows.edge`, which flips
-    // direction per theme — the component itself must not know which.
     "::before": {
       inset: {
         default: "-0.5px 0",

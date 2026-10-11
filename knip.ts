@@ -16,8 +16,6 @@ const config: KnipConfig = {
   compilers: {
     css: (text: string) =>
       Array.from(text.matchAll(importMatcher), ([, specifier], index) =>
-        // Skip anything with a URL scheme or a protocol-relative host: those
-        // are fetched at runtime, not resolved from node_modules.
         /^(?:[a-z][a-z\d+.-]*:|\/\/)/i.test(specifier)
           ? ""
           : `import _${index} from "${specifier}"`,

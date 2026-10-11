@@ -7,8 +7,6 @@ import { Section } from "@/components/landing/landing-atoms"
 import { scene } from "@/components/scene/scene.stylex"
 import { m } from "@/paraglide/messages"
 
-// `#titles` is the in-page cover strip. The `#` links are placeholders: the
-// company and community routes do not exist yet.
 const COLUMNS = [
   {
     id: "read",

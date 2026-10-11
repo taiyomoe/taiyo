@@ -83,7 +83,6 @@ export const SignUpForm = () => {
           headers: captchaToken ? { "x-captcha-response": captchaToken } : undefined,
           onError: ({ error }) => {
             auth.setError(error.message || m.auth_error_generic())
-            // Turnstile tokens are single-use — reset the widget so the user can retry.
             turnstileRef.current?.reset()
             setCaptchaToken(null)
           },

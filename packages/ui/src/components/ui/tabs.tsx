@@ -7,10 +7,6 @@ import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
 
 export type TabsVariant = "default" | "underline"
 
-/**
- * StyleX has no child selectors, so the list cannot reach its tabs. It
- * publishes its variant through context instead and each tab styles itself.
- */
 const TabsListContext = React.createContext<TabsVariant>("default")
 const styles = stylex.create({
   root: {
@@ -37,9 +33,6 @@ const styles = stylex.create({
   },
   listDefault: {
     padding: "0.25rem",
-    // `radius.full` is a pill on a horizontal bar; on a vertical column the
-    // same value turns the rail into a blob that swallows the first and last
-    // rows. Vertical gets a real corner, with concentric rows inside it.
     borderRadius: {
       '[data-orientation="vertical"]': radius.xl,
       default: radius.full,
@@ -88,9 +81,6 @@ const styles = stylex.create({
       default: "var(--active-tab-left) calc(-1 * var(--active-tab-bottom))",
     },
     zIndex: 10,
-    // The defaults have to repeat `indicator`'s values: a `null` default is
-    // still a declaration and it overrode them, which left the underline
-    // 0px wide (horizontal) — invisible.
     height: {
       '[data-orientation="horizontal"]': "2px",
       default: "var(--active-tab-height)",

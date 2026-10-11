@@ -76,9 +76,7 @@ export const initMediasIndex = async ({
   meili: Meilisearch
   mediasIndex: string
 }) => {
-  await meili.createIndex(mediasIndex, { primaryKey: "id" }).catch(() => {
-    // Index already exists. Meilisearch returns an error we deliberately ignore.
-  })
+  await meili.createIndex(mediasIndex, { primaryKey: "id" }).catch(() => {})
 
   await meili
     .index(mediasIndex)

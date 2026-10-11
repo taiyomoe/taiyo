@@ -143,8 +143,6 @@ export function PopoverPopup({
     sx,
   )
   const viewportProps = stylex.props(styles.viewport, tooltipStyle && styles.viewportTooltipStyle)
-  // `--viewport-inline-padding` is read back by the viewport's own padding and
-  // by the [data-current]/[data-previous] width rules in structural.css.
   const viewportStyle = {
     ...viewportProps.style,
     "--viewport-inline-padding": tooltipStyle ? "0.5rem" : "1rem",

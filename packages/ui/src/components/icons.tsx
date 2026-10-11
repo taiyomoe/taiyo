@@ -22,14 +22,6 @@ import type * as React from "react"
 import { cn } from "@/utils/cn"
 import type { Sx } from "../styles/sx"
 
-/**
- * The icon set. Hugeicons is the only icon dependency: components import a
- * semantic name from here rather than reaching for the icon library, so the
- * set can be swapped or a glyph re-mapped in one place.
- *
- * Hugeicons strokes at 1.5, which is what gives the lighter, more precise line
- * the design language is after.
- */
 export type IconProps = Omit<React.ComponentProps<typeof HugeiconsIcon>, "icon">
 
 function icon(glyph: IconSvgElement): (props: IconProps) => React.ReactElement {
@@ -46,12 +38,6 @@ export const ChevronLeft: (props: IconProps) => React.ReactElement = icon(ArrowL
 
 export const ChevronRight: (props: IconProps) => React.ReactElement = icon(ArrowRight01Icon)
 
-/**
- * Hugeicons' `UnfoldMore` is a pair of CURVED chevrons that collapse into a
- * rhombus below ~16px — unreadable at the 12px a select trigger uses. Every
- * trigger uses the plain chevron instead, which is also the conventional
- * affordance for a control that opens a list downwards.
- */
 export const ChevronsUpDown: (props: IconProps) => React.ReactElement = icon(ArrowDown01Icon)
 
 export const Close: (props: IconProps) => React.ReactElement = icon(Cancel01Icon)
@@ -66,11 +52,6 @@ export const Ellipsis: (props: IconProps) => React.ReactElement = icon(MoreHoriz
 
 export const PanelLeft: (props: IconProps) => React.ReactElement = icon(SidebarLeft01Icon)
 
-/**
- * The indicator tick. Hand-drawn rather than taken from Hugeicons: selection
- * indicators need a heavier, blunter stroke than the 1.5 the set draws at, and
- * they scale down to 12px inside menu and select rows.
- */
 export function Check({
   className,
   strokeWidth = 2,

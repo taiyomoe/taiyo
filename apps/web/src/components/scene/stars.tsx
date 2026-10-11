@@ -1,14 +1,6 @@
 import { scene } from "@/components/scene/scene.stylex"
 import * as stylex from "@stylexjs/stylex"
 
-/**
- * Hand-drawn rather than pulled from the icon set: hugeicons' free tier is
- * stroke-only, and a rating needs a SOLID star to read the filled/empty split
- * at 12–16px.
- *
- * `fill` is a StyleX style, not the SVG presentation attribute — an attribute
- * cannot resolve `var(...)`, and these colours are tokens.
- */
 const styles = stylex.create({
   root: {
     gap: "0.1875rem",

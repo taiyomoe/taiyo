@@ -152,9 +152,6 @@ const styles = stylex.create({
     },
   },
   item: {
-    // The command list is padded 0.5rem inside a radius.xl panel, so the row's
-    // corners must be concentric with that, not with the 0.25rem-padded lists
-    // the autocomplete item style is tuned for.
     borderRadius: `calc(${radius.xl} - 0.5rem)`,
     gap: "0.5rem",
     paddingBlock: "0.375rem",

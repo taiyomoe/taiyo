@@ -17,16 +17,6 @@ const adapter: RedisClient = {
   del: (key) => rawCacheClient.del(key),
 }
 
-/**
- * Builds a rate-limit middleware backed by the shared Dragonfly client.
- *
- * Routes share one Dragonfly DB with better-auth's secondary storage; the
- * `prefix` parameter keeps the per-route counter namespaces from colliding.
- *
- * Admins are exempt — moderation work isn't bounded by these per-route
- * budgets. Authenticated USER+ get keyed on user id; anonymous requests
- * fall back to the client IP.
- */
 export const rateLimit = ({
   prefix,
   windowMs,

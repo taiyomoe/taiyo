@@ -10,8 +10,6 @@ import { sessionQueryOptions } from "@/lib/queries/session"
 
 import appCss from "../styles.css?url"
 
-// Both halves live on <html> so portals inherit them: the `dark` class drives
-// globals.css's custom properties, the StyleX theme classes drive the components.
 const darkModeClassName = `dark ${stylex.props(darkTheme, darkShadows).className ?? ""}`.trim()
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({

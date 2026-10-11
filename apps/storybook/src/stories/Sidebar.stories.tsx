@@ -41,7 +41,6 @@ const NAV_ITEMS = [
   { title: "Members", icon: UserGroupIcon },
 ] as const
 const styles = stylex.create({
-  /** The square product mark the sidebar header shows next to the name. */
   brandTile: {
     borderRadius: radius.md,
     placeItems: "center",

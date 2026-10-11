@@ -320,7 +320,6 @@ export interface SelectButtonProps extends useRender.ComponentProps<"button"> {
   sx?: Sx
 }
 
-/** A select-shaped trigger for a caller that owns the popup itself. */
 export function SelectButton({
   className,
   size = "default",

@@ -6,15 +6,9 @@ import { darkShadows, darkTheme } from "@taiyomoe/ui/styles/themes"
 import { useEffect } from "react"
 import "@taiyomoe/ui/style.css"
 
-// StyleX themes are classes that re-declare the token variables. They go on
-// <html> (like the addon's `dark` class) so components rendered in portals
-// inherit the dark tokens too.
 const darkClassNames = (stylex.props(darkTheme, darkShadows).className ?? "")
   .split(" ")
   .filter(Boolean)
-// Every story renders into this. `isolate` gives popups and backdrops a
-// stacking context of their own, so one story's overlay cannot paint over
-// Storybook's chrome.
 const styles = stylex.create({
   canvas: {
     alignItems: "center",

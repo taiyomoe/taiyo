@@ -13,11 +13,6 @@ import {
 import { fn } from "storybook/test"
 
 const styles = stylex.create({
-  /**
-   * Turns over when the panel opens. Base UI puts `data-panel-open` on the
-   * trigger, not on this icon, so the rotation reaches up to it through the
-   * marker CollapsibleTrigger spreads on itself.
-   */
   chevron: {
     rotate: {
       default: null,
@@ -26,7 +21,6 @@ const styles = stylex.create({
     transitionDuration: "200ms",
     transitionProperty: "rotate",
   },
-  /** The disclosed content, echoing the surface of the trigger above it. */
   panel: {
     padding: "0.75rem",
     borderColor: colors.border,

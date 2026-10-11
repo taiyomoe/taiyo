@@ -1,7 +1,6 @@
 import { describe, expect, it, vi } from "vitest"
 import { normalizeDisplayName } from "../normalize-display-name"
 
-// Mock faker to return a predictable value
 vi.mock("@faker-js/faker", () => ({
   faker: {
     internet: {

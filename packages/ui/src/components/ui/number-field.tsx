@@ -16,8 +16,6 @@ export const NumberFieldContext: React.Context<{
   fieldId: string
 } | null>(null)
 
-/** Size travels down to the input and the steppers, which are nested too
- * deep for any selector StyleX offers to reach. */
 const NumberFieldSizeContext = React.createContext<NumberFieldSize>("default")
 const styles = stylex.create({
   root: {
@@ -114,7 +112,6 @@ const styles = stylex.create({
     },
     outlineStyle: "none",
     textAlign: "center",
-    // Suppresses Chrome's autofill background animation (see input.tsx).
     transitionDuration: "5000000s",
     transitionProperty: "background-color",
     transitionTimingFunction: "ease-in-out",

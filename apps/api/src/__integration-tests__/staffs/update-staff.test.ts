@@ -3,8 +3,8 @@ import { signInAs } from "../helpers/auth"
 import { api } from "../helpers/request"
 import { test } from "../setup"
 
-const KODACHI_ID = "54d2c255-f4a9-4bd5-b927-587ef9c4e3d2" // bio = {}, links = {}
-const KISHIMOTO_ID = "7f718dfa-e5be-45ea-a5cb-0fcd3ed52d5f" // bio.en is non-empty
+const KODACHI_ID = "54d2c255-f4a9-4bd5-b927-587ef9c4e3d2"
+const KISHIMOTO_ID = "7f718dfa-e5be-45ea-a5cb-0fcd3ed52d5f"
 
 describe("PATCH /staffs/:id", () => {
   test("updates name", async ({ app, services }) => {
@@ -52,7 +52,7 @@ describe("PATCH /staffs/:id", () => {
     const bio = row?.bio as Record<string, string>
 
     expect(bio.ja).toBe("日本語のバイオ")
-    expect(bio.en).toBeTruthy() // existing en bio is preserved
+    expect(bio.en).toBeTruthy()
   })
 
   test("merges bio per-key (clear with empty value)", async ({ app, services }) => {

@@ -6,15 +6,6 @@ const paramSchema = z.object({
   id: z.uuid(),
 })
 
-/**
- * Resolves the `:id` path parameter to a users row and exposes it on the
- * context as `c.var.targetUser`. Distinct from `c.var.user` which is the
- * authenticated caller.
- *
- * Rejects with:
- *   - `VALIDATION_ERROR` when the id is not a UUID
- *   - `USER_NOT_FOUND` when no matching user exists or the user is banned
- */
 export const checkUser = () =>
   createMiddleware<{
     Variables: { targetUser: Selectable<User> }

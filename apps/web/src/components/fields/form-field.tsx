@@ -39,11 +39,6 @@ const toControlProps = <TFieldValues extends FieldValues, TName extends FieldPat
 
 type ControlProps = ReturnType<typeof toControlProps>
 
-/**
- * Owns the envelope every bound field shares: the Controller subscription, the
- * label/description/error frame, and the mapping from react-hook-form state
- * onto the `data-*` and `aria-*` attributes @taiyomoe/ui styles against.
- */
 const BoundField = <TFieldValues extends FieldValues, TName extends FieldPath<TFieldValues>>({
   name,
   control,

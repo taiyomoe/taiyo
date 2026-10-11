@@ -191,6 +191,16 @@ pnpm -F web build                  # production build (client + SSR)
 - **Dead code**: [knip](https://knip.dev/)
 - **Pre-commit**: [lefthook](https://github.com/evilmartians/lefthook) runs `format` + `lint` on staged files
 
+### Comments
+
+Code is expected to be self-explanatory, so the source tree carries almost no
+comments. Write one only when the reason cannot be read from the code and getting
+it wrong would break silently — a compiler quirk, a lock that prevents a race, a
+required-but-unused import. Never restate what the next line does.
+
+`packages/db/src/migrations/` and `packages/db/src/seeds/` are exempt: they are
+applied, frozen history.
+
 ### Package management
 
 - Internal packages: `workspace:^`

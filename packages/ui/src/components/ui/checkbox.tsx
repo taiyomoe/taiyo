@@ -20,8 +20,6 @@ const styles = stylex.create({
     borderWidth: 1,
     alignItems: "center",
     backgroundClip: "padding-box",
-    // The input-surface token: a checkbox is a field, and once checked the
-    // indicator covers the root entirely, so only the unchecked fill shows.
     backgroundColor: colors.field,
     boxShadow: {
       "[aria-invalid]": "none",

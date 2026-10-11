@@ -8,24 +8,6 @@ class RollbackResponseError extends Error {
   }
 }
 
-/**
- * Runs the downstream handler atomically:
- *
- *   - DB writes go through a Kysely transaction (`c.get("db")` is the trx)
- *   - S3 uploads tracked on `log.uploadedKeys` are deleted on failure
- *   - Side-effects registered via `c.var.afterCommit(cb)` run only after
- *     the transaction commits successfully — used to push search-index
- *     updates, enqueue jobs, etc. without tying that work to a rolled-back
- *     write. Callback failures are logged, never thrown: a successful
- *     write must not be reported as failed because a downstream hiccuped.
- *
- * Routes append to the upload list with `log.set({ uploadedKeys: [key] })`
- * after each successful `PutObject`; evlog merges arrays by concatenation.
- *
- * Rolls back (DB) and cleans up (S3) when:
- *   - the handler throws — the error is re-thrown to the global error handler
- *   - the handler responds with status >= 400 — the response is preserved
- */
 export const withTransaction = createMiddleware<{
   Variables: { afterCommit: (cb: () => Promise<void>) => void }
 }>(async (c, next) => {

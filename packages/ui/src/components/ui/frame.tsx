@@ -17,13 +17,10 @@ const styles = stylex.create({
   panel: {
     padding: "1.25rem",
     borderColor: colors.border,
-    // Concentric with the frame: the frame is radius.xxl and pads 0.25rem.
     borderRadius: `calc(${radius.xxl} - 0.25rem)`,
     borderStyle: "solid",
     borderWidth: 1,
     backgroundClip: "padding-box",
-    // The panel is the raised surface sitting in the frame's wash, so it takes
-    // the card colour; `background` made it the same value as the page behind.
     backgroundColor: colors.card,
     boxShadow: shadows.raised,
     position: "relative",

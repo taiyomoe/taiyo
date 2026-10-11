@@ -4,14 +4,6 @@ import { cn } from "@/utils/cn"
 import { colors, font, radius } from "../../styles/tokens.stylex"
 import type { Sx } from "../../styles/sx"
 
-/**
- * True when a `Kbd` is rendered inside something that already paints the key
- * surface — `KbdGroup`, or a menu shortcut.
- *
- * A shortcut is one object ("⇧⌘P"), not three. Giving every key its own chip
- * produced a row of disconnected boxes whose borders fought each other, so the
- * container owns the surface and the keys inside it are plain glyphs.
- */
 const KbdSurfaceContext = React.createContext(false)
 
 export function KbdSurface({ children }: { children: React.ReactNode }): React.ReactElement {
@@ -20,12 +12,7 @@ export function KbdSurface({ children }: { children: React.ReactNode }): React.R
 
 const styles = stylex.create({
   surface: {
-    // Measured off the reference: the chip is a lighter fill ringed by an even
-    // lighter hairline, which is what makes it read as a physical keycap
-    // rather than a flat tint.
     borderColor: colors.keycapBorder,
-    // Measured at ~0.35x the chip height in the reference: a rounded rect, not
-    // a pill. radius.md turned it into a stadium at this size.
     borderRadius: radius.sm,
     borderStyle: "solid",
     borderWidth: 1,

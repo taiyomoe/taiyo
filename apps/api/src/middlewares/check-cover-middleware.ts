@@ -6,18 +6,6 @@ const paramSchema = z.object({
   id: z.uuid(),
 })
 
-/**
- * Resolves the `:id` path parameter to a cover row and exposes it on the
- * context as `c.var.cover`. The cover's `mediaId` is on the row for any
- * downstream handler that needs to act on the parent media (e.g. syncMedia).
- *
- * Rejects with:
- *   - `VALIDATION_ERROR` when the id is not a UUID
- *   - `COVER_NOT_FOUND` when no matching cover exists
- *
- * Pass `{ includeDeleted: true }` for routes that operate on soft-deleted
- * covers. The default excludes soft-deleted rows.
- */
 export const checkCover = (opts: { includeDeleted?: boolean } = {}) =>
   createMiddleware<{
     Variables: { cover: Selectable<Cover> }

@@ -5,7 +5,6 @@ import { api } from "../helpers/request"
 import { test } from "../setup"
 
 const SEEDED_MEDIA_ID = "4e26b80f-6661-4f5f-93b4-6dfed052bbed"
-// Seeded chapter that already has pages — must be rejected.
 const SEEDED_CHAPTER_WITH_PAGES_ID = "13548c83-8d1a-4163-8830-c8f16fcd2eb7"
 const makePages = (n = 2) =>
   Array.from({ length: n }, () => ({ contentType: "image/jpeg" as const, size: 512_000 }))
