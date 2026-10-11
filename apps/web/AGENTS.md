@@ -270,40 +270,6 @@ non-suspending `useQuery` with its own inline skeleton.
   plugin's own dev injection never runs; `__root.tsx` links
   `/virtual:stylex.css` and its HMR runtime itself in dev.
 
-## App shell
-
-`src/components/shell/` is the signed-in frame: a fixed, translucent navbar
-(logo, search with a ⌘K/Ctrl+K focus shortcut, account menu) over
-`@taiyomoe/ui`'s `Sidebar`, whose fixed container is pushed below the navbar by
-the `--navbar-height` custom property the shell sets on its provider.
-
-- **The page scrolls the window, and neither bar is `sticky`.** On macOS a
-  `sticky` header rides the document's elastic overscroll, so it visibly bounces
-  at the top and bottom of the page. Both bars are `position: fixed`, and
-  `styles.css` sets `overscroll-behavior: none` on `html` and `body` whenever a
-  `[data-app-shell]` element is mounted, which turns the rubber-band off for the
-  shell only. The landing page keeps the native bounce.
-- **Width and open state live in cookies.** `SidebarProvider` writes
-  `sidebar_width` and `sidebar_state`, and the root route's `beforeLoad` reads
-  them through `getSidebarPrefs()` during SSR, so the first paint already has
-  the user's width and no expand-then-collapse flash. Dragging the edge past
-  the minimum width by more than `collapseOffset` collapses the sidebar
-  entirely; the navbar's burger appears only in that state (and always below
-  50rem, where it opens the sheet).
-- **Sidebar items without a `to` render as buttons.** Only Home has a route so
-  far; give an item a `to` in `SECTIONS` once its page exists and it becomes a
-  `Link` with active-state styling.
-
-## Theme
-
-The preference (`light`, `dark` or `system`, default `dark`) is a `theme`
-cookie read in the root `beforeLoad`, so SSR puts the right classes on
-`<html>`. `system` cannot be resolved on the server: `__root.tsx` inlines a
-one-line script that applies the dark classes before first paint when the OS
-prefers dark, and `suppressHydrationWarning` on `<html>` covers the attribute
-it changed. Switching disables transitions for one frame, otherwise every
-surface would animate its colour change.
-
 ## Legal pages
 
 `src/routes/{privacy,terms,dmca}.tsx` must describe only what the Service actually
