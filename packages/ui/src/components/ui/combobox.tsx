@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { comboboxPopupMarker } from "../../styles/markers.stylex"
 import type { Sx } from "../../styles/sx"
-import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
+import { colors, consts, motion, radius, shadows } from "../../styles/tokens.stylex"
 import { focus, surface, transitions } from "../../styles/recipes"
 
 export const ComboboxContext: React.Context<{
@@ -22,6 +22,15 @@ export const ComboboxContext: React.Context<{
 })
 
 const styles = stylex.create({
+  triggerChevron: {
+    rotate: {
+      default: "0deg",
+      [stylex.when.ancestor("[data-popup-open]")]: "180deg",
+    },
+    transitionDuration: motion.enter,
+    transitionProperty: "rotate",
+    transitionTimingFunction: motion.easeOut,
+  },
   inputGroup: {
     color: colors.foreground,
     position: "relative",
@@ -174,7 +183,7 @@ const styles = stylex.create({
       default: "1rem",
       [consts.sm]: "0.875rem",
     },
-    gridTemplateColumns: "1rem 1fr",
+    gridTemplateColumns: "1fr 1rem",
     opacity: {
       "[data-disabled]": 0.64,
       default: null,
@@ -194,13 +203,16 @@ const styles = stylex.create({
         "calc(var(--anchor-width) + 1.25rem)",
     },
     paddingLeft: "0.75rem",
-    paddingRight: "1.25rem",
+    paddingRight: "0.75rem",
   },
   itemIndicator: {
-    gridColumnStart: "1",
+    display: "flex",
+    gridColumnStart: "2",
+    justifyContent: "flex-end",
   },
   itemContent: {
-    gridColumnStart: "2",
+    gridColumnStart: "1",
+    minWidth: 0,
   },
   separator: {
     marginBlock: "0.375rem",
@@ -412,8 +424,12 @@ export function ComboboxInput({
     hasEndButton && (isSm ? styles.inputWithEndButtonSm : styles.inputWithEndButton),
     sx,
   ]
-  const endButtonProps = stylex.props(styles.endButton, isSm && styles.endButtonSm)
-  const iconProps = stylex.props(styles.icon)
+  const endButtonProps = stylex.props(
+    styles.endButton,
+    isSm && styles.endButtonSm,
+    stylex.defaultMarker(),
+  )
+  const iconProps = stylex.props(styles.icon, styles.triggerChevron)
 
   return (
     <ComboboxPrimitive.InputGroup
@@ -558,15 +574,15 @@ export function ComboboxItem({
       style={styleProps.style}
       {...props}
     >
+      <div className={contentProps.className} style={contentProps.style}>
+        {children}
+      </div>
       <ComboboxPrimitive.ItemIndicator
         className={indicatorProps.className}
         style={indicatorProps.style}
       >
         <Check className={iconProps.className} style={iconProps.style} />
       </ComboboxPrimitive.ItemIndicator>
-      <div className={contentProps.className} style={contentProps.style}>
-        {children}
-      </div>
     </ComboboxPrimitive.Item>
   )
 }

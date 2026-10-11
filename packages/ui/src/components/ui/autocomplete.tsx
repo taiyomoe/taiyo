@@ -6,12 +6,21 @@ import { ChevronsUpDown, Close } from "@/components/icons"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import type { Sx } from "../../styles/sx"
-import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
+import { colors, consts, motion, radius, shadows } from "../../styles/tokens.stylex"
 import { surface, transitions } from "../../styles/recipes"
 
 export const Autocomplete: typeof AutocompletePrimitive.Root = AutocompletePrimitive.Root
 
 const styles = stylex.create({
+  triggerChevron: {
+    rotate: {
+      default: "0deg",
+      [stylex.when.ancestor("[data-popup-open]")]: "180deg",
+    },
+    transitionDuration: motion.enter,
+    transitionProperty: "rotate",
+    transitionTimingFunction: motion.easeOut,
+  },
   inputGroup: {
     color: colors.foreground,
     position: "relative",
@@ -244,8 +253,12 @@ export function AutocompleteInput({
     hasEndButton && (isSm ? styles.inputWithEndButtonSm : styles.inputWithEndButton),
     sx,
   ]
-  const endButtonProps = stylex.props(styles.endButton, isSm && styles.endButtonSm)
-  const iconProps = stylex.props(styles.endButtonIcon)
+  const endButtonProps = stylex.props(
+    styles.endButton,
+    isSm && styles.endButtonSm,
+    stylex.defaultMarker(),
+  )
+  const iconProps = stylex.props(styles.endButtonIcon, styles.triggerChevron)
 
   return (
     <AutocompletePrimitive.InputGroup

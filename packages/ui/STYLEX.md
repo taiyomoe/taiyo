@@ -94,6 +94,21 @@ on (the `Popup` part) — Base UI waits for that element's transitions before
 unmounting, and a wrapper around it would never animate out. That is why the
 combobox and autocomplete paint their surface on the popup itself.
 
+## Selection indicators and disclosure chevrons
+
+- **The check goes on the right**, in every list that marks a selection (menu
+  checkbox and radio items, select, combobox, drawer menu items). The left
+  edge belongs to the item's own icon; a check there renders as
+  `[check] [icon] Label`. The indicator column is a fixed `1rem` so the popup
+  does not change width when the selection moves. The indicator comes AFTER
+  the label in the DOM: placed first with `gridColumnStart: "2"`, grid
+  auto-placement pushes the label onto a second row.
+- **Chevrons react to their popup.** A trigger spreads `stylex.defaultMarker()`
+  and its chevron keys off `stylex.when.ancestor("[data-popup-open]")`: down
+  chevrons (select, combobox, autocomplete) flip 180°, side chevrons (submenu,
+  drawer menu triggers) slide `0.125rem` toward the panel they opened, both on
+  `motion.enter` / `motion.easeOut`.
+
 ## Proportions, measured off the reference
 
 These are not taste calls — they were measured pixel-wise on the reference

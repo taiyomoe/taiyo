@@ -4,7 +4,7 @@ import type * as React from "react"
 import { cn } from "@/utils/cn"
 import { Check, ChevronRight } from "@/components/icons"
 import { KbdSurface } from "@/components/ui/kbd"
-import { colors, consts, font, radius, shadows } from "../../styles/tokens.stylex"
+import { colors, consts, font, motion, radius, shadows } from "../../styles/tokens.stylex"
 import { focus, surface, transitions } from "../../styles/recipes"
 import { menuPopupMarker, menuSwitchItemMarker } from "../../styles/markers.stylex"
 import type { Sx } from "../../styles/sx"
@@ -121,8 +121,8 @@ const styles = stylex.create({
     paddingLeft: "0.75rem",
   },
   checkItemCheckbox: {
-    gridTemplateColumns: "0.75rem 1fr",
-    paddingRight: "1.25rem",
+    gridTemplateColumns: "1fr 1rem",
+    paddingRight: "0.75rem",
   },
   checkItemSwitch: {
     gap: "1.25rem",
@@ -130,11 +130,14 @@ const styles = stylex.create({
     paddingRight: "0.5rem",
   },
   checkIndicator: {
-    gridColumnStart: "1",
-    marginLeft: "-0.125rem",
+    display: "flex",
+    gridColumnStart: "2",
+    justifyContent: "flex-end",
+    marginRight: "-0.125rem",
   },
   labelColumn: {
-    gridColumnStart: "2",
+    gridColumnStart: "1",
+    minWidth: 0,
   },
   switchLabelColumn: {
     gridColumnStart: "1",
@@ -274,7 +277,17 @@ const styles = stylex.create({
     paddingRight: "0.75rem",
   },
   subTriggerChevron: {
-    opacity: 0.8,
+    opacity: {
+      default: 0.8,
+      [stylex.when.ancestor("[data-popup-open]")]: 1,
+    },
+    transitionDuration: motion.enter,
+    transitionProperty: "translate, opacity",
+    transitionTimingFunction: motion.easeOut,
+    translate: {
+      default: "0",
+      [stylex.when.ancestor("[data-popup-open]")]: "0.125rem 0",
+    },
     marginLeft: "auto",
     marginRight: "-0.125rem",
   },
@@ -429,10 +442,10 @@ export function MenuCheckboxItem({
         </>
       ) : (
         <>
+          <span sx={styles.labelColumn}>{children}</span>
           <MenuPrimitive.CheckboxItemIndicator {...stylex.props(styles.checkIndicator)}>
             <Check />
           </MenuPrimitive.CheckboxItemIndicator>
-          <span sx={styles.labelColumn}>{children}</span>
         </>
       )}
     </MenuPrimitive.CheckboxItem>
@@ -460,10 +473,10 @@ export function MenuRadioItem({
       style={styleProps.style}
       {...props}
     >
+      <span sx={styles.labelColumn}>{children}</span>
       <MenuPrimitive.RadioItemIndicator {...stylex.props(styles.checkIndicator)}>
         <Check />
       </MenuPrimitive.RadioItemIndicator>
-      <span sx={styles.labelColumn}>{children}</span>
     </MenuPrimitive.RadioItem>
   )
 }
@@ -545,7 +558,7 @@ export function MenuSubTrigger({
   inset?: boolean
   sx?: Sx
 }): React.ReactElement {
-  const styleProps = stylex.props(styles.subTrigger, sx)
+  const styleProps = stylex.props(styles.subTrigger, stylex.defaultMarker(), sx)
 
   return (
     <MenuPrimitive.SubmenuTrigger
