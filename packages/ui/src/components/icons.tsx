@@ -5,9 +5,12 @@ import {
   ArrowLeft01Icon,
   ArrowRight01Icon,
   ArrowUp01Icon,
+  Book02Icon,
   Cancel01Icon,
+  Clock01Icon,
   CornerDownLeftIcon,
   CheckmarkCircle02Icon,
+  Home01Icon,
   InformationCircleIcon,
   Loading03Icon,
   MinusSignIcon,
@@ -15,6 +18,7 @@ import {
   PlusSignIcon,
   Search01Icon,
   SidebarLeft01Icon,
+  UserIcon,
 } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react"
 import * as stylex from "@stylexjs/stylex"
@@ -112,3 +116,11 @@ export const AlertTriangle: (props: IconProps) => React.ReactElement = icon(Aler
 export const CheckCircle: (props: IconProps) => React.ReactElement = icon(CheckmarkCircle02Icon)
 
 export const Info: (props: IconProps) => React.ReactElement = icon(InformationCircleIcon)
+
+export const Home: (props: IconProps) => React.ReactElement = icon(Home01Icon)
+
+export const Book: (props: IconProps) => React.ReactElement = icon(Book02Icon)
+
+export const Clock: (props: IconProps) => React.ReactElement = icon(Clock01Icon)
+
+export const User: (props: IconProps) => React.ReactElement = icon(UserIcon)
