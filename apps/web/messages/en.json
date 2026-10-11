@@ -156,5 +156,11 @@
   "shell_nav_groups": "Groups",
   "shell_nav_forums": "Forums",
   "shell_nav_users": "Users",
-  "shell_user_menu": "Account menu"
+  "shell_user_menu": "Account menu",
+  "shell_theme": "Theme",
+  "shell_theme_light": "Light",
+  "shell_theme_dark": "Dark",
+  "shell_theme_system": "System",
+  "shell_language": "Language",
+  "shell_language_english": "English"
 }

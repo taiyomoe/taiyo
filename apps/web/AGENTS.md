@@ -294,6 +294,16 @@ the `--navbar-height` custom property the shell sets on its provider.
   far; give an item a `to` in `SECTIONS` once its page exists and it becomes a
   `Link` with active-state styling.
 
+## Theme
+
+The preference (`light`, `dark` or `system`, default `dark`) is a `theme`
+cookie read in the root `beforeLoad`, so SSR puts the right classes on
+`<html>`. `system` cannot be resolved on the server: `__root.tsx` inlines a
+one-line script that applies the dark classes before first paint when the OS
+prefers dark, and `suppressHydrationWarning` on `<html>` covers the attribute
+it changed. Switching disables transitions for one frame, otherwise every
+surface would animate its colour change.
+
 ## Legal pages
 
 `src/routes/{privacy,terms,dmca}.tsx` must describe only what the Service actually

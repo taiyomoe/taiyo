@@ -1,21 +1,38 @@
 import * as stylex from "@stylexjs/stylex"
 import { authClient } from "@taiyomoe/auth/client"
-import { Logout } from "@taiyomoe/ui/components/icons"
+import { type IconProps, Logout, Monitor, Moon, Sun } from "@taiyomoe/ui/components/icons"
 import { Avatar, AvatarFallback, AvatarImage } from "@taiyomoe/ui/components/ui/avatar"
 import {
   Menu,
   MenuItem,
   MenuPopup,
+  MenuRadioGroup,
+  MenuRadioItem,
   MenuSeparator,
+  MenuSub,
+  MenuSubPopup,
+  MenuSubTrigger,
   MenuTrigger,
 } from "@taiyomoe/ui/components/ui/menu"
-import { colors, font, radius } from "@taiyomoe/ui/styles/tokens.stylex"
+import { colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useRouter } from "@tanstack/react-router"
+import UnitedStatesFlag from "country-flag-icons/react/3x2/US"
+import type { ReactElement } from "react"
 
 import { type Session, sessionQueryOptions } from "@/lib/queries/session"
+import { type ThemePreference, useTheme } from "@/lib/theme"
 import { m } from "@/paraglide/messages"
 
+const THEMES: {
+  value: ThemePreference
+  label: () => string
+  icon: (props: IconProps) => ReactElement
+}[] = [
+  { value: "light", label: m.shell_theme_light, icon: Sun },
+  { value: "dark", label: m.shell_theme_dark, icon: Moon },
+  { value: "system", label: m.shell_theme_system, icon: Monitor },
+]
 const styles = stylex.create({
   trigger: {
     padding: 0,
@@ -43,32 +60,33 @@ const styles = stylex.create({
     color: colors.primaryForeground,
   },
   popup: {
-    minWidth: "15rem",
+    minWidth: "14rem",
   },
-  identity: {
-    gap: "0.125rem",
-    paddingBlock: "0.5rem",
-    paddingInline: "0.75rem",
+  subPopup: {
+    minWidth: "10rem",
+  },
+  radioLabel: {
+    gap: "0.625rem",
+    alignItems: "center",
     display: "flex",
-    flexDirection: "column",
-    minWidth: 0,
   },
-  name: {
+  flag: {
+    borderRadius: "0.1875rem",
     overflow: "hidden",
-    color: colors.foreground,
-    fontFamily: font.sans,
-    fontSize: "0.875rem",
-    fontWeight: 600,
-    textOverflow: "ellipsis",
-    whiteSpace: "nowrap",
+    boxShadow: `0 0 0 1px ${colors.border}`,
+    display: "inline-flex",
+    flexShrink: 0,
+    height: "0.75rem",
+    width: "1.125rem",
   },
-  email: {
-    overflow: "hidden",
+  flagSvg: {
+    display: "block",
+    height: "100%",
+    width: "100%",
+  },
+  trailing: {
     color: colors.mutedForeground,
-    fontFamily: font.sans,
-    fontSize: "0.8125rem",
-    textOverflow: "ellipsis",
-    whiteSpace: "nowrap",
+    marginLeft: "auto",
   },
 })
 const initialsOf = (name: string) =>
@@ -82,6 +100,7 @@ const initialsOf = (name: string) =>
 export function UserMenu({ user }: { user: Session["user"] }) {
   const router = useRouter()
   const queryClient = useQueryClient()
+  const theme = useTheme()
   const signOut = useMutation({
     mutationFn: () => authClient.signOut(),
     onSuccess: async () => {
@@ -89,6 +108,7 @@ export function UserMenu({ user }: { user: Session["user"] }) {
       await router.invalidate()
     },
   })
+  const ThemeIcon = THEMES.find(({ value }) => value === theme.preference)?.icon ?? Moon
 
   return (
     <Menu>
@@ -99,10 +119,34 @@ export function UserMenu({ user }: { user: Session["user"] }) {
         </Avatar>
       </MenuTrigger>
       <MenuPopup align="end" sideOffset={8} sx={styles.popup}>
-        <div sx={styles.identity}>
-          <span sx={styles.name}>{user.name}</span>
-          <span sx={styles.email}>{user.email}</span>
-        </div>
+        <MenuSub>
+          <MenuSubTrigger>
+            <ThemeIcon />
+            {m.shell_theme()}
+          </MenuSubTrigger>
+          <MenuSubPopup sx={styles.subPopup}>
+            <MenuRadioGroup
+              onValueChange={(value: ThemePreference) => theme.setPreference(value)}
+              value={theme.preference}
+            >
+              {THEMES.map(({ value, label, icon: Icon }) => (
+                <MenuRadioItem closeOnClick={false} key={value} value={value}>
+                  <span sx={styles.radioLabel}>
+                    <Icon />
+                    {label()}
+                  </span>
+                </MenuRadioItem>
+              ))}
+            </MenuRadioGroup>
+          </MenuSubPopup>
+        </MenuSub>
+        <MenuItem disabled>
+          <span sx={styles.flag}>
+            <UnitedStatesFlag {...stylex.props(styles.flagSvg)} />
+          </span>
+          {m.shell_language()}
+          <span sx={styles.trailing}>{m.shell_language_english()}</span>
+        </MenuItem>
         <MenuSeparator />
         <MenuItem
           disabled={signOut.isPending}

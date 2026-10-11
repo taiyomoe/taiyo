@@ -12,6 +12,7 @@ import {
   ShuffleIcon,
   SlidersHorizontalIcon,
   SparklesIcon,
+  Sun03Icon,
   UserGroupIcon,
   UserIcon,
   ArrowDown01Icon,
@@ -19,11 +20,13 @@ import {
   ArrowRight01Icon,
   ArrowUp01Icon,
   Cancel01Icon,
+  ComputerIcon,
   CornerDownLeftIcon,
   CheckmarkCircle02Icon,
   InformationCircleIcon,
   Loading03Icon,
   MinusSignIcon,
+  Moon02Icon,
   MoreHorizontalIcon,
   PlusSignIcon,
   Search01Icon,
@@ -132,3 +135,9 @@ export const User: (props: IconProps) => React.ReactElement = icon(UserIcon)
 export const Logout: (props: IconProps) => React.ReactElement = icon(Logout01Icon)
 
 export const Menu: (props: IconProps) => React.ReactElement = icon(Menu01Icon)
+
+export const Sun: (props: IconProps) => React.ReactElement = icon(Sun03Icon)
+
+export const Moon: (props: IconProps) => React.ReactElement = icon(Moon02Icon)
+
+export const Monitor: (props: IconProps) => React.ReactElement = icon(ComputerIcon)

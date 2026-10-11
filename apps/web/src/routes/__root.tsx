@@ -1,22 +1,26 @@
-import * as stylex from "@stylexjs/stylex"
 import { TanStackDevtools } from "@tanstack/react-devtools"
 import type { QueryClient } from "@tanstack/react-query"
 import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools"
 import { HeadContent, Scripts, createRootRouteWithContext } from "@tanstack/react-router"
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools"
-import { darkShadows, darkTheme } from "@taiyomoe/ui/styles/themes"
 
 import { sessionQueryOptions } from "@/lib/queries/session"
 import { getSidebarPrefs } from "@/lib/sidebar-prefs"
+import {
+  ThemeContext,
+  darkThemeClassName,
+  getThemePreference,
+  systemThemeScript,
+  useThemeState,
+} from "@/lib/theme"
 
 import appCss from "../styles.css?url"
-
-const darkModeClassName = `dark ${stylex.props(darkTheme, darkShadows).className ?? ""}`.trim()
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   beforeLoad: async ({ context }) => ({
     session: await context.queryClient.ensureQueryData(sessionQueryOptions),
     sidebarPrefs: getSidebarPrefs(),
+    themePreference: getThemePreference(),
   }),
   head: () => ({
     meta: [
@@ -42,13 +46,23 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 })
 
 function RootDocument({ children }: { children: React.ReactNode }) {
+  const { themePreference } = Route.useRouteContext()
+  const theme = useThemeState(themePreference)
+
   return (
-    <html className={darkModeClassName} lang="en">
+    <html
+      className={theme.dark ? darkThemeClassName : undefined}
+      lang="en"
+      suppressHydrationWarning
+    >
       <head>
+        {theme.preference === "system" ? (
+          <script dangerouslySetInnerHTML={{ __html: systemThemeScript }} />
+        ) : null}
         <HeadContent />
       </head>
       <body>
-        {children}
+        <ThemeContext value={theme}>{children}</ThemeContext>
         <TanStackDevtools
           config={{ position: "bottom-right" }}
           plugins={[
