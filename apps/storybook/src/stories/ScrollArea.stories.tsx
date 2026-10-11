@@ -6,7 +6,6 @@ import { Separator } from "@taiyomoe/ui/components/ui/separator"
 
 const TAGS = Array.from({ length: 50 }).map((_, i) => `Tag ${i + 1}`)
 const styles = stylex.create({
-  /** Stand-in for cover art, so each row has something with weight in it. */
   thumbnail: {
     borderRadius: radius.md,
     alignItems: "center",

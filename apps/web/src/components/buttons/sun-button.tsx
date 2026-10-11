@@ -34,9 +34,6 @@ const styles = stylex.create({
     transitionProperty: "transform, box-shadow",
     whiteSpace: "nowrap",
   },
-  // `:active` on the base would still fire while disabled. Nulling the whole
-  // property here drops the base's conditional transform with it, which is
-  // exactly what a disabled button wants.
   disabled: {
     transform: null,
   },
@@ -97,7 +94,6 @@ const styles = stylex.create({
 
 type SunSkinProps = {
   size?: "md" | "lg"
-  /** Stretch to the container width (the auth forms do). */
   block?: boolean
   sx?: Sx
 }
@@ -158,11 +154,6 @@ export type SunLinkProps = Omit<ComponentProps<typeof Link>, "children"> &
     children?: ReactNode
   }
 
-/**
- * The same CTA as a router link. A `<button>` nested in an `<a>` is invalid
- * HTML and loses middle-click and "copy link address", so anything that
- * navigates uses this instead of wrapping SunButton.
- */
 export const SunLink = ({
   className,
   children,

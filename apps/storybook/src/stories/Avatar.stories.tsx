@@ -4,14 +4,9 @@ import preview from "@/storybook/preview"
 import { Avatar, AvatarFallback, AvatarImage } from "@taiyomoe/ui/components/ui/avatar"
 
 const styles = stylex.create({
-  /** Overlapping avatars: each one is pulled back over the last. */
   stack: {
     display: "flex",
   },
-  /**
-   * Each avatar is pulled back over the one before it, and a ring in the page
-   * colour is what keeps the two readable where they overlap.
-   */
   stacked: {
     boxShadow: `0 0 0 2px ${colors.background}`,
     marginLeft: { default: "-0.5rem", ":first-child": 0 },

@@ -66,9 +66,6 @@ const styles = stylex.create({
     transitionDuration: "150ms",
     transitionProperty: "background-color, color",
   },
-  // Applied after `tab` rather than through a `[data-active]` condition:
-  // a later argument to stylex.props() always wins, whereas an attribute
-  // condition and the `:hover` above could resolve either way.
   tabActive: {
     backgroundColor: scene.paper,
     color: "#1b0f0a",

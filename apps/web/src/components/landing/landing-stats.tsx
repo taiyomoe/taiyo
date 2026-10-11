@@ -20,7 +20,6 @@ const styles = stylex.create({
     rowGap: "2.5rem",
     textAlign: "center",
   },
-  // Gradient-clipped numerals: the figure itself becomes a sliver of sunlight.
   value: {
     backgroundClip: "text",
     backgroundImage: `linear-gradient(180deg, ${scene.goldPale}, ${scene.gold})`,

@@ -22,8 +22,6 @@ type Project = {
   budget: string
 }
 
-// The dot that precedes a status in its badge. Semantic colours come from the
-// design tokens; "Unpaid" is deliberately neutral rather than a fifth hue.
 const dot = stylex.create({
   base: {
     borderRadius: radius.full,

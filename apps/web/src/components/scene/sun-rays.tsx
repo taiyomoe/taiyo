@@ -5,10 +5,6 @@ import { Animated } from "./animated"
 import { lerp, rand, round } from "./deterministic"
 import { scene } from "./scene.stylex"
 
-// Every ray is measured from the DISK's edge outward, as a multiple of its
-// radius. Measuring from the sun's centre instead would make the colour's start
-// point depend on the ray's own length and current breath, so long rays would
-// begin outside the disk and visibly detach from it.
 const build = (
   count: number,
   minReach: number,
@@ -30,7 +26,6 @@ const build = (
       gold: rand(seed + 7) > 0.38,
     }
   })
-/** Px each band is tucked behind the disk so its base is never a visible edge. */
 const OVERLAP = 20
 const styles = stylex.create({
   field: {
@@ -42,8 +37,6 @@ const styles = stylex.create({
     inset: 0,
     position: "absolute",
   },
-  // A zero-height rotation anchor at the sun's centre: the band hangs off it, so
-  // scaling the band never moves where the ray starts.
   spoke: {
     position: "absolute",
     transformOrigin: "top center",
@@ -65,7 +58,6 @@ const styles = stylex.create({
 
 type SunRaysProps = {
   count?: number
-  /** Radius of the disk the rays sit behind — pass a calc() when the disk is fluid. */
   innerRadius?: string
   minReach?: number
   maxReach?: number
@@ -74,7 +66,6 @@ type SunRaysProps = {
   spinSeconds?: number
 }
 
-/** Defaults are the auth screen's calibration; the landing hero's sun is larger. */
 export const SunRays = ({
   count = 40,
   innerRadius = "13.75rem",
@@ -112,8 +103,6 @@ export const SunRays = ({
             >
               <Animated
                 sx={styles.band}
-                // `backwards` so a ray shows its retracted 0% keyframe during its
-                // start delay rather than snapping down once the delay elapses.
                 animation={`scene-ray-pulse ${ray.duration}s ease-in-out ${ray.delay}s infinite backwards`}
                 style={
                   {

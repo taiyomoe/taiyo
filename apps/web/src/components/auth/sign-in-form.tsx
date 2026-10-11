@@ -1,7 +1,3 @@
-// Required even though nothing here calls `stylex.*`: the compiler only
-// processes a file that imports StyleX, and the `sx` props below are compiled,
-// not runtime props. Drop this import and every style in this file silently
-// stops applying. See packages/ui/STYLEX.md.
 // oxlint-disable-next-line no-unused-vars
 import * as stylex from "@stylexjs/stylex"
 import { AuthAlert } from "@/components/auth/auth-alert"

@@ -12,8 +12,6 @@ const styles = stylex.create({
     paddingBlock: "clamp(5rem,11vw,8.75rem)",
     backgroundColor: scene.night,
   },
-  // A masonry column flow rather than a grid: the quotes are wildly uneven in
-  // length, and a grid would leave a ragged band of empty card under each row.
   columns: {
     columnGap: "1.25rem",
     columnWidth: "21.25rem",

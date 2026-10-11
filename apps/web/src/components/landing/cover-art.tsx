@@ -4,9 +4,6 @@ import type { CSSProperties, ReactNode } from "react"
 
 import { scene, sceneFont } from "@/components/scene/scene.stylex"
 
-// Deterministic gradient placeholders until real cover images are wired in.
-// Hashing the title means a given series always gets the same colours, on the
-// server and in the browser, so the strip never flickers on hydration.
 const GRADIENTS: [string, string][] = [
   ["#f2452d", "#ffb820"],
   ["#2e7de0", "#9333ea"],
@@ -58,9 +55,7 @@ const styles = stylex.create({
 
 type CoverArtProps = {
   title: string
-  /** Full-bleed layers painted BEHIND the caption (a gradient scrim, say). */
   children?: ReactNode
-  /** Stacked under the title inside the caption, so the two never collide. */
   footer?: ReactNode
   style?: CSSProperties
 }

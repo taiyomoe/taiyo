@@ -5,9 +5,6 @@ import type { ComponentProps } from "react"
 
 import { scene } from "@/components/scene/scene.stylex"
 
-// The quiet half of the landing page's CTA pairs: same pill geometry as
-// SunButton so the two sit on one baseline, but a translucent fill instead of
-// the gradient, so only one call to action carries the sun.
 const styles = stylex.create({
   base: {
     borderColor: `color-mix(in srgb, ${scene.paper} 18%, transparent)`,
@@ -36,7 +33,6 @@ const styles = stylex.create({
   },
 })
 
-/** In-page jump styled to sit beside SunLink on the same baseline. */
 export const GhostAnchor = ({ className, style, ...props }: ComponentProps<"a">) => {
   const styleProps = stylex.props(styles.base)
 
