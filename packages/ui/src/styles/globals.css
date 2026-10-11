@@ -1,24 +1,3 @@
-/**
- * The design system's one global stylesheet.
- *
- * Components are styled entirely in StyleX and read their tokens from
- * `./tokens.stylex.ts`, which is the single source of truth for the palette.
- * This file exists for the three things StyleX cannot own:
- *
- *   1. the base element reset (`./reset.css`);
- *   2. the cross-element rules in `./structural.css`, which are plain CSS and
- *      therefore need plain CSS custom properties to read colours from;
- *   3. the document-level defaults (page background, text colour, fonts).
- *
- * The `:root` / `.dark` blocks below are deliberately NOT a second copy of the
- * palette — they carry only the handful of semantic colours `structural.css`
- * consumes, plus the fonts. Every value here mirrors the identically named
- * token in `tokens.stylex.ts`; change one and change the other.
- *
- * The `.dark` class and the StyleX dark theme classes are applied together on
- * `<html>` by each app, so the two halves always agree on which theme is live.
- */
-
 @import "@fontsource-variable/inter";
 @import "@fontsource-variable/jetbrains-mono";
 @import "./reset.css";
@@ -54,13 +33,7 @@
   --sidebar-accent-foreground: oklch(97% 0 0);
 }
 
-/* Document defaults. In `@layer base` for the same reason as ./reset.css:
-   a component's own colours must outrank them, and unlayered StyleX atoms
-   beat anything in a layer. */
 @layer base {
-  /* A default border colour so a component that declares only a width still
-     gets the hairline the design language expects, and a default outline
-     colour for anything focused that does not draw its own ring. */
   * {
     border-color: var(--border);
     outline-color: color-mix(in srgb, var(--ring) 50%, transparent);

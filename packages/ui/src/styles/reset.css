@@ -1,27 +1,3 @@
-/**
- * Base element reset.
- *
- * StyleX only emits the atoms a component asks for — it ships no reset — so
- * user-agent defaults (body margins, `h1` sizing, list bullets, inline images,
- * form controls that ignore the inherited font) would otherwise show through
- * every screen. This file is the project's own normalize layer: it is a direct
- * port of the preflight that used to arrive with the CSS framework, with the
- * theme lookups resolved to this design system's font stacks.
- *
- * Nothing here is opinionated styling — it only levels the playing field.
- * Anything that expresses the design language belongs in `tokens.stylex.ts`
- * and the components.
- */
-
-/*
- * Everything below sits in `@layer base`, and that is load-bearing.
- *
- * StyleX emits its atoms unlayered, and an unlayered rule beats a layered one
- * no matter how specific the layered one is. Without the layer, `* { margin:
- * 0; padding: 0 }` and the form-control reset would outrank every padding and
- * background a component declares, and the whole design system would render
- * as unstyled boxes. The layer is what makes "reset, then components" work.
- */
 @layer base {
   *,
   ::after,
@@ -125,7 +101,6 @@
     list-style: none;
   }
 
-  /* Replaced elements are blocks: no mystery descender gap under an icon. */
   img,
   svg,
   video,
@@ -176,7 +151,6 @@
     opacity: 1;
   }
 
-  /* Guarded because `color-mix()` with `currentcolor` crashes older Safari. */
   @supports (not (-webkit-appearance: -apple-pay-button)) or (contain-intrinsic-size: 1px) {
     ::placeholder {
       color: color-mix(in oklab, currentcolor 50%, transparent);
@@ -191,7 +165,6 @@
     -webkit-appearance: none;
   }
 
-  /* Date/time inputs: match heights when empty and honour text-align on iOS. */
   ::-webkit-date-and-time-value {
     min-height: 1lh;
     text-align: inherit;
