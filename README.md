@@ -2,7 +2,7 @@
 
 ![Taiyō's banner](https://cdn.taiyo.moe/assets/banner-red.png)
 
-A manga reading platform — manga, manhwa, manhua, light novels — being rebuilt from scratch on the `rewrite` branch. This branch currently ships the backend (Hono API), a Storybook component playground, and a blank TanStack Start web app; background workers are planned but not yet checked in.
+A manga reading platform — manga, manhwa, manhua, light novels — being rebuilt from scratch. The repo currently ships the backend (Hono API), a BullMQ worker that processes uploaded chapters, a Storybook component playground, and a TanStack Start web app with a landing page, auth forms and legal pages.
 
 ## 🌟 Features
 
@@ -11,13 +11,15 @@ A manga reading platform — manga, manhwa, manhua, light novels — being rebui
 - **Typo-tolerant search**: Meilisearch-backed `/medias/search`
 - **Authentication**: email + magic-link + Discord/Google via Better Auth, with Turnstile captcha and Dragonfly-backed rate limits
 - **Content rating system**: Normal / Suggestive / NSFW / NSFL
+- **Library, history and follows**: per-user reading library, chapter history and user follows
+- **Chapter uploads**: upload sessions with background processing in a BullMQ worker
 - **Image pipeline**: server-side magic-byte validation, EXIF stripping, JPEG transcoding via sharp
 - **Group ownership workflow**: scanlation groups can be claimed by their actual owners through a request/approval flow; chapter and group mutations gate on membership (additive model — uploaders/mods/admins keep unconditional access)
 - **Observability**: HyperDX (OpenTelemetry) drains via evlog
 
-The web app (`apps/web`) is currently a blank TanStack Start (React) shell — the frontend itself is still to be built on top of it.
+The web app (`apps/web`) does not browse, display or read manga yet — that frontend is still to be built.
 
-Not yet in this branch (planned): the actual web frontend, user library / history / follows routes (schemas exist, routes don't), chapter page upload, audit log instrumentation, BullMQ job workers.
+Not yet built (planned): the browse / detail / reader frontend and audit log instrumentation.
 
 ## 🏗️ Architecture
 
@@ -30,13 +32,15 @@ taiyo/
 ├── apps/
 │   ├── api/               # Hono + hono-openapi backend, port 3002
 │   ├── storybook/         # @taiyomoe/ui component playground, port 6006
-│   └── web/               # TanStack Start (React) web app, port 3000
+│   ├── web/               # TanStack Start (React) web app, port 3000
+│   └── worker/            # BullMQ worker that processes chapter uploads
 ├── packages/
 │   ├── auth/              # Better Auth config + plugins + lifecycle hooks
 │   ├── cache/             # Dragonfly (Redis-compatible) client
 │   ├── config/            # Shared configuration constants
 │   ├── db/                # Kysely setup, migrations, seeds, model types
 │   ├── email/             # Email templates (react-email)
+│   ├── queue/             # BullMQ queue, chapter processor and reaper
 │   ├── s3/                # S3 client + key helpers (works with RustFS / Garage / AWS)
 │   ├── schemas/           # Cross-package Zod schemas (pagination, etc.)
 │   ├── scripts/           # One-shot CLI scripts (init-s3, init-meilisearch, etc.)
@@ -58,6 +62,7 @@ taiyo/
 
 - [Hono](https://hono.dev/) + [hono-openapi](https://github.com/honojs/middleware/tree/main/packages/openapi-spec) for routes and a Scalar-rendered `/docs` UI
 - [Kysely](https://kysely.dev/) (typed SQL query builder) on [PostgreSQL](https://www.postgresql.org/)
+- [BullMQ](https://bullmq.io/) queues chapter processing for `apps/worker`
 - [Better Auth](https://www.better-auth.com/) (email/password + magic link + OAuth, with CASL-based ability checks)
 - [Zod 4](https://zod.dev/) for input validation
 - [sharp](https://sharp.pixelplumbing.com/) + [magic-bytes.js](https://github.com/LarsKoelpin/magic-bytes) for upload validation
@@ -175,7 +180,6 @@ pnpm -F web build                  # production build (client + SSR)
 ### Branches
 
 - `main` — production code
-- `develop` — integration branch for features
 - `rewrite` — current full-stack rebuild (this branch)
 - `feature/*`, `hotfix/*`, `release/*` — see git-flow
 
@@ -238,6 +242,7 @@ A few `apps/api` values are derived from the Docker infra in the root `.env` and
 - **`@taiyomoe/cache`** — Dragonfly (ioredis) client, namespaced cache helpers
 - **`@taiyomoe/config`** — runtime constants (image limits, auth limits, OpenAPI metadata)
 - **`@taiyomoe/email`** — react-email templates + send helpers
+- **`@taiyomoe/queue`** — BullMQ queue, chapter-upload processor and stale-task reaper
 - **`@taiyomoe/s3`** — typed S3 client + key derivation
 - **`@taiyomoe/schemas`** — shared Zod schemas (pagination meta, etc.)
 - **`@taiyomoe/scripts`** — CLI scripts (init-s3, init-meilisearch, etc.)
@@ -252,7 +257,7 @@ The repo expects deployment via [Coolify](https://coolify.io/) onto S3-compatibl
 ## 🤝 Contributing
 
 1. Fork the repo
-2. Branch off `develop` (or `rewrite` while the rewrite is active)
+2. Branch off `develop`
 3. Make your changes
 4. Run `pnpm format:fix && pnpm lint:fix && pnpm test:unit && pnpm test:integration`
 5. Open a PR
