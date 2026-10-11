@@ -378,6 +378,17 @@ deterministic.ts` exists because `Math.random()` would diverge between server
   unpinned, on narrow screens.
 - **`VITE_SUPPORT_EMAIL` is where copyright notices, privacy requests and
   general support mail go** (`src/env/client.ts`).
+- **`src/styles.css` carries what StyleX cannot express.** The display serif is
+  brand typography for the marketing page, not a component token. The landing
+  page smooth-scrolls to in-page anchors, reverted under reduced motion. The
+  auth field density rules target descendants `@taiyomoe/ui` renders inside
+  Field/InputGroup — out of reach for StyleX (no descendant selectors) and for
+  `sx` (which lands on the wrapper) — and need `!important` because
+  `structural.css` already sizes addon icons at a specificity no plain selector
+  can outrank. The scene keyframes are shared, so they are global. Rays read
+  their scale from per-ray custom properties so no two grow alike. The scroll
+  cue at the bottom of the hero is centred by a wrapper so its keyframe stays a
+  pure `translateY` and does not fight the `-50%` centring.
 
 ## Next steps
 

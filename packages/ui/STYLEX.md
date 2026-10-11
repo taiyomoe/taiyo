@@ -329,6 +329,86 @@ The `--taiyo-*` custom-property hooks those rules read are declared in
 `globals.css`, which mirrors a subset of `tokens.stylex.ts` by hand. Changing a
 value in one means changing it in the other.
 
+### What `structural.css` is for, block by block
+
+The file exists because StyleX excludes descendant selectors by design and the
+repo lint bans `:has()` and lookahead selectors inside StyleX. Everything in it
+targets consumer-provided children — typically icons — under a `[data-slot]`
+scope. Keep it minimal: any rule that can live on the element itself belongs in
+the component's `stylex.create`. A rule there can freely ADD a declaration
+StyleX does not set; overriding one always needs `!important`, because StyleX
+emits its atoms at a specificity no plain selector can outrank.
+
+- **Menu checkbox/radio items** mirror the menu-item icon rules and also size
+  the check indicator `svg` the component renders.
+- **Popover/tooltip viewports**: Base UI renders `[data-current]` /
+  `[data-previous]` wrappers around the content while it transitions between
+  anchors; the components set `--viewport-inline-padding` inline for them.
+- **Calendar-in-popover** uses `:has()`; the doubled attribute selector
+  outweighs StyleX's single-class specificity. `1.225rem` is `radius.xl`,
+  restoring the popover radius when the tooltip style shrank it to `radius.md`.
+- **Frame** stacks its panels with a 1px gutter via a sibling selector over
+  children the consumer arranges.
+- **Alert's column layout** depends on what the consumer put inside it (a
+  leading icon, an action, or both), so it is driven by `:has()` and sibling
+  selectors; the icon itself is consumer content too.
+- **Group** welds whatever controls the consumer puts in it into one pill:
+  inner corners squared, the shared border collapsed, the raised `::before`
+  edge clipped at the seam. The separator borrows the focus-ring colour from
+  whichever neighbour is focused, so the joined pill reads as one focused
+  control.
+- **Empty**'s media slot sizes consumer icons; its description styles consumer
+  links and reacts to a preceding title.
+- **Table, card variant**: which cell is a corner depends on the rows the
+  consumer renders, so the outer corners need `:first-child` / `:last-child` on
+  both axes at once.
+- **Input group** reaches across elements it does not render itself (the field
+  is a child component, the addons are consumer-ordered). The wrapped control's
+  own wrapper collapses to `display: contents` so the inner `<input>` becomes a
+  direct flex child of the group.
+- **Calendar**: the "today" marker is a dot on the day button's `::after`, while
+  the cell that owns the state is the button's parent. A selected range must
+  read as ONE continuous band, so days inside it square the corners facing
+  their neighbours — the rounded background is painted by the button, not the
+  cell that carries the range modifier. Month dropdowns render their label in a
+  nested span.
+- **Autocomplete, Combobox, Command**: the leading icon is consumer content,
+  and groups after the first get a gutter. Combobox chips hug the input; the
+  command panel rounds its bottom corners only when no footer follows it.
+- **Drawer**: padding and corner rounding depend on which slots the consumer
+  composed inside the popup, which only `:has()` / descendant selectors can see.
+  Its menu rows size the consumer's leading icons.
+- **Sidebar**: rows size and truncate whatever the consumer puts in them, and
+  the action/badge slots align to the height of the sibling menu button. An
+  action button shifts the row's padding so the label never runs under it.
+- **Keycap** may hold a glyph (arrow keys, return) instead of a letter. Icon
+  components default to 24px, which overflows a 22px cap and stretches it into
+  a lozenge, so the glyph is sized like the cap's text.
+- **Buttons, toggles, tabs, select triggers** size icon children here.
+
+### `reset.css` and `globals.css`
+
+- `reset.css` is the project's own normalize layer — a direct port of the
+  preflight that used to arrive with the CSS framework, with theme lookups
+  resolved to this design system's font stacks. StyleX ships no reset, so
+  user-agent defaults would otherwise show through. It is not opinionated
+  styling: anything expressing the design language belongs in
+  `tokens.stylex.ts` and the components. Replaced elements are blocks (no
+  descender gap under an icon). The `color-mix()` rule is guarded because
+  `color-mix()` with `currentcolor` crashes older Safari. Date/time inputs
+  match heights when empty and honour `text-align` on iOS.
+- Everything in both files sits in `@layer base`, which is load-bearing:
+  StyleX emits atoms unlayered and an unlayered rule beats a layered one
+  however specific the layered one is. Without the layer the reset would
+  outrank every padding and background a component declares.
+- `globals.css` owns only what StyleX cannot: the reset import, the
+  `structural.css` import, and document defaults (page background, text colour,
+  fonts). Its `:root` / `.dark` blocks are deliberately NOT a second copy of the
+  palette — they carry the few semantic colours `structural.css` consumes. The
+  default border colour gives a component that declares only a border width
+  the hairline the design language expects, and the default outline colour
+  covers anything focused that draws no ring of its own.
+
 ## Verification for every file you touch
 
 `oxlint` and `tsc` do NOT see StyleX compile errors — the compiler only runs

@@ -388,8 +388,8 @@ their own key schema (the rate limiter, BullMQ). Application data goes through
 - Reaper tests pass a `now` 25 hours in the future, because
   `staleUploadReapHours` is 24.
 - Fixtures reference seeded rows by name (`media-1` is Boruto, `scansPROJECT`
-  is already linked, Kodachi is already an AUTHOR) so inserts do not
-  FK-violate. The seeds are in `packages/db/src/seeds/`.
+  is already linked, Kodachi is already an AUTHOR with an empty `bio` and `links`,
+  Kishimoto has a non-empty `bio.en`) so inserts do not FK-violate. The seeds are in `packages/db/src/seeds/`.
 
 ## Config
 
