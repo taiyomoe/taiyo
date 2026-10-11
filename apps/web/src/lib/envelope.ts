@@ -27,21 +27,24 @@ export class ApiError extends Error {
   }
 }
 
-export const unwrapEnvelope = async <TBody extends SuccessBody | FailureBody>(
-  response: EnvelopeResponse<TBody>,
-): Promise<Extract<TBody, { success: true }>> => {
+type SuccessOf<TResponse> =
+  TResponse extends EnvelopeResponse<infer TBody> ? Extract<TBody, { success: true }> : never
+
+export const unwrapEnvelope = async <TResponse extends EnvelopeResponse<SuccessBody | FailureBody>>(
+  response: TResponse,
+): Promise<SuccessOf<TResponse>> => {
   const body = await response.json()
 
   if (!body.success) {
     throw new ApiError(body, response.status)
   }
 
-  return body as Extract<TBody, { success: true }>
+  return body as SuccessOf<TResponse>
 }
 
-export const unwrap = async <TBody extends SuccessBody | FailureBody>(
-  response: EnvelopeResponse<TBody>,
-): Promise<Extract<TBody, { success: true }>["data"]> => (await unwrapEnvelope(response)).data
+export const unwrap = async <TResponse extends EnvelopeResponse<SuccessBody | FailureBody>>(
+  response: TResponse,
+): Promise<SuccessOf<TResponse>["data"]> => (await unwrapEnvelope(response)).data
 
 export const getApiErrorCode = (error: unknown): string | undefined => {
   if (typeof error !== "object" || error === null) {
