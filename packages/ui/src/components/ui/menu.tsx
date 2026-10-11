@@ -4,7 +4,7 @@ import type * as React from "react"
 import { cn } from "@/utils/cn"
 import { Check, ChevronRight } from "@/components/icons"
 import { KbdSurface } from "@/components/ui/kbd"
-import { colors, consts, font, motion, radius, shadows } from "../../styles/tokens.stylex"
+import { colors, consts, font, radius, shadows } from "../../styles/tokens.stylex"
 import { focus, surface, transitions } from "../../styles/recipes"
 import { menuPopupMarker, menuSwitchItemMarker } from "../../styles/markers.stylex"
 import type { Sx } from "../../styles/sx"
@@ -277,17 +277,6 @@ const styles = stylex.create({
     paddingRight: "0.75rem",
   },
   subTriggerChevron: {
-    opacity: {
-      default: 0.8,
-      [stylex.when.ancestor("[data-popup-open]")]: 1,
-    },
-    rotate: {
-      default: "0deg",
-      [stylex.when.ancestor("[data-popup-open]")]: "90deg",
-    },
-    transitionDuration: motion.enter,
-    transitionProperty: "rotate, opacity",
-    transitionTimingFunction: motion.easeOut,
     marginLeft: "auto",
     marginRight: "-0.125rem",
   },
@@ -569,7 +558,7 @@ export function MenuSubTrigger({
       {...props}
     >
       {children}
-      <ChevronRight {...stylex.props(styles.subTriggerChevron)} />
+      <ChevronRight {...stylex.props(transitions.chevronTurn, styles.subTriggerChevron)} />
     </MenuPrimitive.SubmenuTrigger>
   )
 }

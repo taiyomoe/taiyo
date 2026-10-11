@@ -1,6 +1,6 @@
 import * as stylex from "@stylexjs/stylex"
 import { authClient } from "@taiyomoe/auth/client"
-import { type IconProps, Logout, Monitor, Moon, Sun } from "@taiyomoe/ui/components/icons"
+import { Logout, Monitor, Moon, Sun } from "@taiyomoe/ui/components/icons"
 import { Avatar, AvatarFallback, AvatarImage } from "@taiyomoe/ui/components/ui/avatar"
 import {
   Menu,
@@ -18,21 +18,18 @@ import { colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useRouter } from "@tanstack/react-router"
 import UnitedStatesFlag from "country-flag-icons/react/3x2/US"
-import type { ReactElement } from "react"
+import { use } from "react"
+import { filter, isTruthy, join, map, pipe, take } from "remeda"
 
 import { type Session, sessionQueryOptions } from "@/lib/queries/session"
-import { type ThemePreference, useTheme } from "@/lib/theme"
+import { ThemeContext } from "@/lib/theme"
 import { m } from "@/paraglide/messages"
 
-const THEMES: {
-  value: ThemePreference
-  label: () => string
-  icon: (props: IconProps) => ReactElement
-}[] = [
+const THEMES = [
   { value: "light", label: m.shell_theme_light, icon: Sun },
   { value: "dark", label: m.shell_theme_dark, icon: Moon },
   { value: "system", label: m.shell_theme_system, icon: Monitor },
-]
+] as const
 const styles = stylex.create({
   trigger: {
     padding: 0,
@@ -89,18 +86,11 @@ const styles = stylex.create({
     marginLeft: "auto",
   },
 })
-const initialsOf = (name: string) =>
-  name
-    .split(/\s+/)
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((part) => part[0]?.toUpperCase())
-    .join("")
 
 export function UserMenu({ user }: { user: Session["user"] }) {
   const router = useRouter()
   const queryClient = useQueryClient()
-  const theme = useTheme()
+  const theme = use(ThemeContext)
   const signOut = useMutation({
     mutationFn: () => authClient.signOut(),
     onSuccess: async () => {
@@ -115,7 +105,15 @@ export function UserMenu({ user }: { user: Session["user"] }) {
       <MenuTrigger aria-label={m.shell_user_menu()} sx={styles.trigger}>
         <Avatar sx={styles.avatar}>
           {user.image ? <AvatarImage alt="" src={user.image} /> : null}
-          <AvatarFallback sx={styles.fallback}>{initialsOf(user.name)}</AvatarFallback>
+          <AvatarFallback sx={styles.fallback}>
+            {pipe(
+              user.name.split(/\s+/),
+              filter(isTruthy),
+              take(2),
+              map((part) => part.charAt(0).toUpperCase()),
+              join(""),
+            )}
+          </AvatarFallback>
         </Avatar>
       </MenuTrigger>
       <MenuPopup align="end" sideOffset={8} sx={styles.popup}>
@@ -125,10 +123,7 @@ export function UserMenu({ user }: { user: Session["user"] }) {
             {m.shell_theme()}
           </MenuSubTrigger>
           <MenuSubPopup sx={styles.subPopup}>
-            <MenuRadioGroup
-              onValueChange={(value: ThemePreference) => theme.setPreference(value)}
-              value={theme.preference}
-            >
+            <MenuRadioGroup onValueChange={theme.setPreference} value={theme.preference}>
               {THEMES.map(({ value, label, icon: Icon }) => (
                 <MenuRadioItem closeOnClick={false} key={value} value={value}>
                   <span sx={styles.radioLabel}>

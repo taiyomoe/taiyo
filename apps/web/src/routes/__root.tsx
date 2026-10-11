@@ -3,25 +3,46 @@ import type { QueryClient } from "@tanstack/react-query"
 import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools"
 import { HeadContent, Scripts, createRootRouteWithContext } from "@tanstack/react-router"
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools"
+import { createIsomorphicFn } from "@tanstack/react-start"
+import { getCookies } from "@tanstack/react-start/server"
+import { readSidebarCookies } from "@taiyomoe/ui/components/ui/sidebar"
+import { fromEntries, map, pipe } from "remeda"
 
 import { sessionQueryOptions } from "@/lib/queries/session"
-import { getSidebarPrefs } from "@/lib/sidebar-prefs"
 import {
+  THEME_COOKIE,
   ThemeContext,
+  type ThemePreference,
   darkThemeClassName,
-  getThemePreference,
   systemThemeScript,
   useThemeState,
 } from "@/lib/theme"
 
 import appCss from "../styles.css?url"
 
+const readCookies = createIsomorphicFn()
+  .server(() => getCookies())
+  .client(() =>
+    pipe(
+      document.cookie.split("; "),
+      map((cookie) => cookie.split("=") as [string, string]),
+      fromEntries(),
+    ),
+  )
+
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
-  beforeLoad: async ({ context }) => ({
-    session: await context.queryClient.ensureQueryData(sessionQueryOptions),
-    sidebarPrefs: getSidebarPrefs(),
-    themePreference: getThemePreference(),
-  }),
+  beforeLoad: async ({ context }) => {
+    const cookies = readCookies()
+    const theme = cookies[THEME_COOKIE]
+    const themePreference: ThemePreference =
+      theme === "light" || theme === "system" ? theme : "dark"
+
+    return {
+      session: await context.queryClient.ensureQueryData(sessionQueryOptions),
+      sidebarPrefs: readSidebarCookies(cookies),
+      themePreference,
+    }
+  },
   head: () => ({
     meta: [
       { charSet: "utf-8" },

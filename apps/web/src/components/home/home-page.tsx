@@ -3,10 +3,11 @@ import { colors, font, radius, text } from "@taiyomoe/ui/styles/tokens.stylex"
 
 import { AppShell } from "@/components/shell/app-shell"
 import type { Session } from "@/lib/queries/session"
+import { range } from "remeda"
+
 import { m } from "@/paraglide/messages"
 
-const SHELVES = Array.from({ length: 6 }, (_, shelf) => shelf)
-const COVERS = Array.from({ length: 6 }, (_, cover) => cover)
+const PLACEHOLDERS = range(0, 6)
 const styles = stylex.create({
   page: {
     gap: "3rem",
@@ -57,11 +58,11 @@ export function HomePage({ user }: { user: Session["user"] }) {
     <AppShell user={user}>
       <div sx={styles.page}>
         <h1 sx={styles.heading}>{m.home_greeting({ name: user.name })}</h1>
-        {SHELVES.map((shelf) => (
+        {PLACEHOLDERS.map((shelf) => (
           <section key={shelf} sx={styles.shelf}>
             <div sx={styles.shelfTitle} />
             <div sx={styles.covers}>
-              {COVERS.map((cover) => (
+              {PLACEHOLDERS.map((cover) => (
                 <div key={cover} sx={styles.cover} />
               ))}
             </div>

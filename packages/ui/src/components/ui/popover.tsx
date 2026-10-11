@@ -3,7 +3,7 @@ import * as stylex from "@stylexjs/stylex"
 import type React from "react"
 import { cn } from "@/utils/cn"
 import { colors, motion, radius, shadows, text } from "../../styles/tokens.stylex"
-import { surface } from "../../styles/recipes"
+import { surface, transitions } from "../../styles/recipes"
 import type { Sx } from "../../styles/sx"
 
 const styles = stylex.create({
@@ -29,25 +29,9 @@ const styles = stylex.create({
     boxShadow: shadows.overlay,
     color: colors.popoverForeground,
     display: "flex",
-    opacity: {
-      "[data-ending-style]": 0,
-      "[data-starting-style]": 0,
-      default: null,
-    },
     outlineStyle: "none",
     position: "relative",
-    scale: {
-      "[data-ending-style]": "0.96",
-      "[data-starting-style]": "0.96",
-      default: null,
-    },
-    transformOrigin: "var(--transform-origin)",
-    transitionDuration: {
-      "[data-ending-style]": motion.exit,
-      default: motion.enter,
-    },
     transitionProperty: "width, height, scale, opacity",
-    transitionTimingFunction: motion.easeOut,
     height: "var(--popup-height, auto)",
     width: "var(--popup-width, auto)",
   },
@@ -142,6 +126,7 @@ export function PopoverPopup({
 }): React.ReactElement {
   const positionerProps = stylex.props(styles.positioner)
   const popupProps = stylex.props(
+    transitions.popup,
     surface.raisedEdge,
     styles.popup,
     tooltipStyle && styles.popupTooltipStyle,

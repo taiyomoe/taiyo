@@ -3,7 +3,7 @@ import * as stylex from "@stylexjs/stylex"
 import type React from "react"
 import { cn } from "@/utils/cn"
 import { colors, motion, radius, shadows } from "../../styles/tokens.stylex"
-import { surface } from "../../styles/recipes"
+import { surface, transitions } from "../../styles/recipes"
 import type { Sx } from "../../styles/sx"
 
 const styles = stylex.create({
@@ -31,26 +31,14 @@ const styles = stylex.create({
     display: "flex",
     fontSize: "0.75rem",
     lineHeight: "1rem",
-    opacity: {
-      "[data-ending-style]": 0,
-      "[data-starting-style]": 0,
-      default: null,
-    },
     position: "relative",
-    scale: {
-      "[data-ending-style]": "0.97",
-      "[data-starting-style]": "0.97",
-      default: null,
-    },
     textWrap: "balance",
-    transformOrigin: "var(--transform-origin)",
     transitionDuration: {
       "[data-ending-style]": motion.exit,
       "[data-instant]": "0s",
       default: motion.enter,
     },
     transitionProperty: "width, height, scale, opacity",
-    transitionTimingFunction: motion.easeOut,
     height: "var(--popup-height, auto)",
     width: "var(--popup-width, auto)",
   },
@@ -98,7 +86,7 @@ export function TooltipPopup({
   sx?: Sx
 }): React.ReactElement {
   const positionerProps = stylex.props(styles.positioner)
-  const popupProps = stylex.props(surface.raisedEdge, styles.popup, sx)
+  const popupProps = stylex.props(transitions.popup, surface.raisedEdge, styles.popup, sx)
   const viewportProps = stylex.props(styles.viewport)
   const viewportStyle = {
     ...viewportProps.style,

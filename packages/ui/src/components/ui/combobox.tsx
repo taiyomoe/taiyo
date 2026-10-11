@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { comboboxPopupMarker } from "../../styles/markers.stylex"
 import type { Sx } from "../../styles/sx"
-import { colors, consts, motion, radius, shadows } from "../../styles/tokens.stylex"
+import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
 import { focus, surface, transitions } from "../../styles/recipes"
 
 export const ComboboxContext: React.Context<{
@@ -22,15 +22,6 @@ export const ComboboxContext: React.Context<{
 })
 
 const styles = stylex.create({
-  triggerChevron: {
-    rotate: {
-      default: "0deg",
-      [stylex.when.ancestor("[data-popup-open]")]: "180deg",
-    },
-    transitionDuration: motion.enter,
-    transitionProperty: "rotate",
-    transitionTimingFunction: motion.easeOut,
-  },
   inputGroup: {
     color: colors.foreground,
     position: "relative",
@@ -429,7 +420,7 @@ export function ComboboxInput({
     isSm && styles.endButtonSm,
     stylex.defaultMarker(),
   )
-  const iconProps = stylex.props(styles.icon, styles.triggerChevron)
+  const iconProps = stylex.props(transitions.chevronFlip, styles.icon)
 
   return (
     <ComboboxPrimitive.InputGroup

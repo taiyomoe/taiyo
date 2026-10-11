@@ -85,4 +85,26 @@ export const transitions = stylex.create({
     transitionProperty: "opacity, scale",
     transitionTimingFunction: motion.easeOut,
   },
+  chevronFlip: {
+    rotate: {
+      default: "0deg",
+      [stylex.when.ancestor("[data-popup-open]")]: "180deg",
+    },
+    transitionDuration: motion.enter,
+    transitionProperty: "rotate",
+    transitionTimingFunction: motion.easeOut,
+  },
+  chevronTurn: {
+    opacity: {
+      default: 0.8,
+      [stylex.when.ancestor("[data-popup-open]")]: 1,
+    },
+    rotate: {
+      default: "0deg",
+      [stylex.when.ancestor("[data-popup-open]")]: "90deg",
+    },
+    transitionDuration: motion.enter,
+    transitionProperty: "rotate, opacity",
+    transitionTimingFunction: motion.easeOut,
+  },
 })

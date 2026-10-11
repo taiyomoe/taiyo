@@ -7,7 +7,7 @@ import { cn } from "@/utils/cn"
 import { Check, ChevronDown, ChevronUp, ChevronsUpDown } from "@/components/icons"
 import { selectPopupMarker } from "../../styles/markers.stylex"
 import type { Sx } from "../../styles/sx"
-import { colors, consts, motion, radius, shadows } from "../../styles/tokens.stylex"
+import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
 import { surface, transitions } from "../../styles/recipes"
 
 export const Select: typeof SelectPrimitive.Root = SelectPrimitive.Root
@@ -121,13 +121,6 @@ const styles = stylex.create({
   triggerIcon: {
     color: colors.mutedForeground,
     marginInlineEnd: "-0.25rem",
-    rotate: {
-      default: "0deg",
-      [stylex.when.ancestor("[data-popup-open]")]: "180deg",
-    },
-    transitionDuration: motion.enter,
-    transitionProperty: "rotate",
-    transitionTimingFunction: motion.easeOut,
     height: {
       default: "0.875rem",
       [consts.sm]: "0.75rem",
@@ -348,7 +341,7 @@ export function SelectButton({
     sx,
   )
   const labelProps = stylex.props(styles.buttonLabel)
-  const iconProps = stylex.props(styles.triggerIcon)
+  const iconProps = stylex.props(transitions.chevronFlip, styles.triggerIcon)
   const defaultProps = {
     children: (
       <>
@@ -388,7 +381,7 @@ export function SelectTrigger({
     stylex.defaultMarker(),
     sx,
   )
-  const iconProps = stylex.props(styles.triggerIcon)
+  const iconProps = stylex.props(transitions.chevronFlip, styles.triggerIcon)
 
   return (
     <SelectPrimitive.Trigger

@@ -5,7 +5,6 @@ import {
   Forum,
   History,
   Home,
-  type IconProps,
   List,
   Shuffle,
   Sliders,
@@ -26,27 +25,15 @@ import {
   useSidebar,
 } from "@taiyomoe/ui/components/ui/sidebar"
 import { colors, font, radius } from "@taiyomoe/ui/styles/tokens.stylex"
-import { Link, type LinkProps, useMatchRoute } from "@tanstack/react-router"
-import type { ReactElement } from "react"
+import { Link, useMatchRoute } from "@tanstack/react-router"
 
 import { m } from "@/paraglide/messages"
 
-type NavItem = {
-  label: () => string
-  icon: (props: IconProps) => ReactElement
-  to?: LinkProps["to"]
-}
-
-type NavSection = {
-  label: () => string
-  items: NavItem[]
-}
-
-const SECTIONS: NavSection[] = [
+const SECTIONS = [
   {
     label: m.shell_nav_browse,
     items: [
-      { label: m.shell_nav_home, icon: Home, to: "/" },
+      { label: m.shell_nav_home, icon: Home, to: "/" as const },
       { label: m.shell_nav_advanced_search, icon: Sliders },
       { label: m.shell_nav_recently_added, icon: Sparkles },
       { label: m.shell_nav_popular_titles, icon: Flame },
@@ -128,12 +115,7 @@ const styles = stylex.create({
 
 export function AppSidebar() {
   const matchRoute = useMatchRoute()
-  const { isMobile, setOpenMobile } = useSidebar()
-  const closeOnMobile = () => {
-    if (isMobile) {
-      setOpenMobile(false)
-    }
-  }
+  const { setOpenMobile } = useSidebar()
 
   return (
     <Sidebar sx={styles.container}>
@@ -150,7 +132,7 @@ export function AppSidebar() {
                     <SidebarMenuItem key={label()}>
                       <SidebarMenuButton
                         isActive={isActive}
-                        onClick={closeOnMobile}
+                        onClick={() => setOpenMobile(false)}
                         render={to === undefined ? undefined : <Link to={to} />}
                         sx={[styles.button, isActive && styles.buttonActive]}
                       >

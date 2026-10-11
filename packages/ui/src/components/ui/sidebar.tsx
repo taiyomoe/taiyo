@@ -2,6 +2,7 @@ import { mergeProps } from "@base-ui/react/merge-props"
 import { useRender } from "@base-ui/react/use-render"
 import * as stylex from "@stylexjs/stylex"
 import * as React from "react"
+import { clamp } from "remeda"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
@@ -24,7 +25,6 @@ const SIDEBAR_WIDTH_MOBILE: string = "18rem"
 const SIDEBAR_WIDTH_ICON: string = "3rem"
 const SIDEBAR_KEYBOARD_SHORTCUT: string = "b"
 const MOBILE_QUERY: string = "(max-width: 799px)"
-const SIDEBAR_SLIDE_MS: number = 300
 
 export type SidebarSide = "left" | "right"
 
@@ -204,7 +204,6 @@ const styles = stylex.create({
   },
   resizeHandle: {
     insetBlock: 0,
-    cursor: "col-resize",
     position: "absolute",
     touchAction: "none",
     zIndex: 20,
@@ -237,8 +236,6 @@ const styles = stylex.create({
       transitionDelay: "0s",
     },
   },
-  resizeHandleMin: { cursor: "e-resize" },
-  resizeHandleMax: { cursor: "w-resize" },
   railLeftCollapsed: { cursor: "e-resize" },
   railRightCollapsed: { cursor: "w-resize" },
   railOffcanvas: {
@@ -667,22 +664,16 @@ function persistCookie(name: string, value: string): void {
   })
 }
 
-export function readSidebarCookies(cookieHeader: string): {
+export function readSidebarCookies(cookies: Record<string, string | undefined>): {
   defaultOpen?: boolean
   defaultWidth?: number
 } {
-  const cookies = new Map(
-    cookieHeader
-      .split(";")
-      .map((pair) => pair.trim().split("=") as [string, string | undefined])
-      .filter(([name]) => name !== ""),
-  )
-  const state = cookies.get(SIDEBAR_STATE_COOKIE)
-  const width = Number(cookies.get(SIDEBAR_WIDTH_COOKIE))
+  const state = cookies[SIDEBAR_STATE_COOKIE]
+  const width = Number(cookies[SIDEBAR_WIDTH_COOKIE])
 
   return {
     defaultOpen: state === undefined ? undefined : state === "true",
-    defaultWidth: Number.isFinite(width) && width > 0 ? width : undefined,
+    defaultWidth: width > 0 ? width : undefined,
   }
 }
 
@@ -993,9 +984,8 @@ export function SidebarResizeHandle({
   const { isMobile, width, setWidth, setOpen, resizing, setResizing } = useSidebar()
   const { side } = React.useContext(SidebarLayoutContext)
   const drag = React.useRef<{ startX: number; startWidth: number } | null>(null)
-  const [edge, setEdge] = React.useState<"min" | "max" | null>(null)
-  const clamp = (value: number): number => Math.min(maxWidth, Math.max(minWidth, value))
-  const cursor = edge === "min" ? "e-resize" : edge === "max" ? "w-resize" : "col-resize"
+  const bounds = { max: maxWidth, min: minWidth }
+  const cursor = width <= minWidth ? "e-resize" : width >= maxWidth ? "w-resize" : "col-resize"
 
   React.useEffect(() => {
     if (!resizing) {
@@ -1024,15 +1014,12 @@ export function SidebarResizeHandle({
     }
 
     drag.current = null
-    setEdge(null)
     setResizing(false)
   }
   const styleProps = stylex.props(
     styles.resizeHandle,
     side === "left" ? styles.resizeHandleLeft : styles.resizeHandleRight,
     resizing && styles.resizeHandleActive,
-    width <= minWidth && styles.resizeHandleMin,
-    width >= maxWidth && styles.resizeHandleMax,
     sx,
   )
 
@@ -1053,7 +1040,7 @@ export function SidebarResizeHandle({
 
         if (event.key === grow || event.key === shrink) {
           event.preventDefault()
-          setWidth(clamp(width + (event.key === grow ? step : -step)))
+          setWidth(clamp(width + (event.key === grow ? step : -step), bounds))
         }
       }}
       onLostPointerCapture={endDrag}
@@ -1081,17 +1068,16 @@ export function SidebarResizeHandle({
         if (next < minWidth - collapseOffset) {
           endDrag(event)
           setOpen(false)
-          window.setTimeout(() => setWidth(current.startWidth), SIDEBAR_SLIDE_MS)
+          window.setTimeout(() => setWidth(current.startWidth), 300)
 
           return
         }
 
-        setEdge(next <= minWidth ? "min" : next >= maxWidth ? "max" : null)
-        setWidth(clamp(next))
+        setWidth(clamp(next, bounds))
       }}
       onPointerUp={endDrag}
       role="separator"
-      style={styleProps.style}
+      style={{ ...styleProps.style, cursor }}
       tabIndex={0}
       {...props}
     />

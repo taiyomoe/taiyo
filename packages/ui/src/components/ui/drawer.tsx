@@ -12,8 +12,9 @@ import { ChevronRight, Close } from "@/components/icons"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { drawerSwitchItemMarker } from "../../styles/markers.stylex"
+import { transitions } from "../../styles/recipes"
 import type { Sx } from "../../styles/sx"
-import { colors, consts, font, motion, radius, shadows, text } from "../../styles/tokens.stylex"
+import { colors, consts, font, radius, shadows, text } from "../../styles/tokens.stylex"
 
 type DrawerPosition = "right" | "left" | "top" | "bottom"
 type DrawerVariant = "default" | "straight" | "inset"
@@ -464,17 +465,6 @@ const styles = stylex.create({
     lineHeight: "1rem",
   },
   menuTriggerChevron: {
-    opacity: {
-      default: 0.8,
-      [stylex.when.ancestor("[data-popup-open]")]: 1,
-    },
-    rotate: {
-      default: "0deg",
-      [stylex.when.ancestor("[data-popup-open]")]: "90deg",
-    },
-    transitionDuration: motion.enter,
-    transitionProperty: "rotate, opacity",
-    transitionTimingFunction: motion.easeOut,
     marginLeft: "auto",
     marginRight: "-0.125rem",
   },
@@ -1034,7 +1024,11 @@ export function DrawerMenuTrigger({
   ...props
 }: DrawerPrimitive.Trigger.Props & { sx?: Sx }): React.ReactElement {
   const styleProps = stylex.props(styles.menuItem, stylex.defaultMarker(), sx)
-  const chevronProps = stylex.props(styles.menuTriggerChevron, styles.indicatorIcon)
+  const chevronProps = stylex.props(
+    transitions.chevronTurn,
+    styles.menuTriggerChevron,
+    styles.indicatorIcon,
+  )
 
   return (
     <DrawerTrigger
