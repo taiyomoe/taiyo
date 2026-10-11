@@ -2,22 +2,6 @@ import * as stylex from "@stylexjs/stylex"
 import { palette, surface } from "./palette.stylex"
 import { colors, shadows } from "./tokens.stylex"
 
-/**
- * The dark theme, as one `createTheme` override per variable group.
- *
- * Themes live outside `*.stylex.ts` files: those may only export variable and
- * constant definitions. Apply both of these together, on the same element:
- *
- *     stylex.props(darkTheme, darkShadows)
- *
- * Both apps put them on `<html>`, so components rendered into portals inherit
- * the dark tokens too, next to the `dark` class that drives the plain CSS
- * custom properties in `./globals.css`.
- *
- * Do NOT reach for `createTheme` to re-point a single token for a subtree: the
- * class it emits redeclares the whole group, so every value you did not
- * override is reset to its default — the light theme — under that element.
- */
 export const darkTheme = stylex.createTheme(colors, {
   background: surface.darkBackground,
   foreground: palette.neutral100,

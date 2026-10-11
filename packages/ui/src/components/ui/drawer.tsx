@@ -125,8 +125,6 @@ const styles = stylex.create({
     minHeight: 0,
     minWidth: 0,
     width: "100%",
-    // The bleed layer paints past the edge so an overscroll never shows the
-    // page behind the drawer.
     "::after": {
       backgroundColor: colors.popover,
       content: '""',
@@ -473,8 +471,6 @@ const styles = stylex.create({
   columnOne: { gridColumnStart: "1" },
   columnTwo: { gridColumnStart: "2" },
   switchTrack: {
-    // The thumb reads --thumb-size back; see menu.tsx for why the breakpoint
-    // has to live on the track.
     "--thumb-size": {
       default: "1rem",
       [consts.sm]: "0.75rem",

@@ -32,7 +32,6 @@ const styles = stylex.create({
   startAddonSm: {
     paddingLeft: "calc(0.625rem - 1px)",
   },
-  // Room for the leading icon and for the trailing trigger/clear button.
   inputWithStartAddon: {
     paddingLeft: {
       default: "calc(2.125rem - 1px)",

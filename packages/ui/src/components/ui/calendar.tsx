@@ -8,7 +8,6 @@ import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
 
 const styles = stylex.create({
   root: {
-    // The cell size drives every grid track below.
     "--cell-size": {
       default: "2.5rem",
       [consts.sm]: "2.25rem",
@@ -53,8 +52,6 @@ const styles = stylex.create({
     height: "100%",
   },
   day: {
-    // A day is a square cell, so `radius.full` gives a disc — and a range,
-    // whose inner corners are squared in structural.css, gets round caps.
     borderRadius: radius.full,
     paddingBlock: "1px",
     fontSize: "0.875rem",
@@ -106,7 +103,6 @@ const styles = stylex.create({
     height: "var(--cell-size)",
     width: "var(--cell-size)",
   },
-  // Range pieces square the inner corners; the button inherits the radius.
   rangeStart: {
     borderEndEndRadius: 0,
     borderStartEndRadius: 0,
@@ -250,8 +246,6 @@ export function Calendar({
     months: stylex.props(styles.months).className ?? "",
     nav: stylex.props(styles.nav).className ?? "",
     outside: stylex.props(styles.outside).className ?? "",
-    // `range-*` stay as plain hooks: structural.css uses them for the "today"
-    // dot, which has to reach the day button's ::after layer.
     range_end: cn("range-end", stylex.props(styles.rangeEnd).className),
     range_middle: cn("range-middle", stylex.props(styles.rangeMiddle).className),
     range_start: cn("range-start", stylex.props(styles.rangeStart).className),

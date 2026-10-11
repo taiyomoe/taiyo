@@ -48,9 +48,6 @@ const styles = stylex.create({
       position: "absolute",
     },
   },
-  // `:has()` is lint-banned, so the wrapper cannot read the state of the
-  // control inside it. The component already knows both from its props and
-  // mirrors them onto the wrapper element as attributes instead.
   controlDisabled: {
     opacity: 0.64,
   },
@@ -72,8 +69,6 @@ const styles = stylex.create({
       [consts.sm]: "2.375rem",
     },
     outlineStyle: "none",
-    // Chrome paints its autofill background on a transition; the absurd
-    // duration is the standard trick for suppressing it.
     transitionDuration: "5000000s",
     transitionProperty: "background-color",
     transitionTimingFunction: "ease-in-out",

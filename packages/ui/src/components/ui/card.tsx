@@ -21,11 +21,6 @@ const styles = stylex.create({
     flexDirection: "column",
     position: "relative",
   },
-  /**
-   * CardFrame is a card whose ::before also lays a muted wash over the frame
-   * body; nested cards punch through it via the clip-path rules in
-   * structural.css (StyleX cannot style children).
-   */
   frameOverlay: {
     "::before": {
       backgroundColor: `color-mix(in srgb, ${colors.muted} 72%, transparent)`,
@@ -135,9 +130,6 @@ export function CardFrame({
   const defaultProps = {
     className: cn(styleProps.className, className),
     "data-slot": "card-frame",
-    // The clip geometry consumed by the nested-card rules in structural.css:
-    // child cards clip themselves 1rem past the frame on top/bottom by
-    // default; the first/last card pulls that in to 1px (see structural.css).
     style: {
       "--clip-bottom": "-1rem",
       "--clip-top": "-1rem",

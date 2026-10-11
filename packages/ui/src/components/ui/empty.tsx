@@ -41,8 +41,6 @@ const styles = stylex.create({
     flexShrink: 0,
     justifyContent: "center",
   },
-  // The icon variant is a small raised card, stacked with two rotated
-  // shadows behind it to read as a deck.
   mediaIcon: {
     borderColor: colors.border,
     borderRadius: radius.md,

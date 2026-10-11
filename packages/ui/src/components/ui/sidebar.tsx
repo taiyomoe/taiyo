@@ -22,7 +22,6 @@ const SIDEBAR_WIDTH: string = "16rem"
 const SIDEBAR_WIDTH_MOBILE: string = "18rem"
 const SIDEBAR_WIDTH_ICON: string = "3rem"
 const SIDEBAR_KEYBOARD_SHORTCUT: string = "b"
-/** Below this the sidebar becomes a sheet rather than a rail. */
 const MOBILE_QUERY: string = "(max-width: 799px)"
 
 export type SidebarSide = "left" | "right"
@@ -35,11 +34,6 @@ export type SidebarMenuButtonSize = "default" | "sm" | "lg"
 
 export type SidebarMenuButtonVariant = "default" | "outline"
 
-/**
- * StyleX has no ancestor or sibling selector that reaches every descendant of
- * the sidebar root, so `Sidebar` publishes its layout props through context
- * and each part decides for itself how to render.
- */
 const SidebarLayoutContext = React.createContext<{
   collapsible: SidebarCollapsible
   side: SidebarSide
@@ -90,7 +84,6 @@ const styles = stylex.create({
       "@media (width >= 48rem)": "block",
     },
   },
-  // The gap element reserves the sidebar's track in the page flow.
   gap: {
     backgroundColor: "transparent",
     position: "relative",
@@ -529,7 +522,6 @@ const styles = stylex.create({
     right: "0.75rem",
     top: "0.875rem",
     width: "1.25rem",
-    // Widens the tap target on touch layouts only.
     "::after": {
       inset: "-0.5rem",
       content: {
@@ -801,7 +793,6 @@ export function Sidebar({
         data-variant={variant}
         style={rootProps.style}
       >
-        {/* Reserves the sidebar's track in the page flow. */}
         <div className={gapProps.className} data-slot="sidebar-gap" style={gapProps.style} />
         <div
           className={cn(containerProps.className, className)}
@@ -1237,9 +1228,6 @@ export function SidebarMenuSkeleton({
   showIcon?: boolean
   sx?: Sx
 }): React.ReactElement {
-  // Width between 50 and 90%, derived deterministically from this instance's id.
-  // Math.random() during render is impure -- the React Compiler may recompute it,
-  // and it produces a server/client hydration mismatch.
   const id = React.useId()
   const width = React.useMemo(() => {
     let hash = 0

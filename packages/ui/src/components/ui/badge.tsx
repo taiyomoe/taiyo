@@ -43,22 +43,10 @@ const styles = stylex.create({
     transitionProperty: "box-shadow, background-color, border-color",
     whiteSpace: "nowrap",
   },
-  /**
-   * Cursor, hover and the coarse-pointer tap target only apply to a badge
-   * that is actually actionable. StyleX cannot select on the tag name, so
-   * interactivity is inferred from the `render` prop instead (a plain span
-   * badge stays inert).
-   */
   interactive: {
     cursor: "pointer",
   },
 })
-/**
- * Washes for the semantic variants: an 8% tint of the variant's own colour.
- * A component must never know which theme is live, so the one wash serves
- * both; on the dark charcoal stack it reads softly, which suits the design
- * language.
- */
 const variantStyles = stylex.create({
   default: {
     backgroundColor: colors.primary,

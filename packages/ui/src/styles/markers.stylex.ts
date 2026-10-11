@@ -1,14 +1,5 @@
 import * as stylex from "@stylexjs/stylex"
 
-/**
- * Contextual-style markers for `stylex.when.ancestor(selector, marker)`, spread
- * onto the ancestor with `stylex.props()`.
- *
- * They live here rather than beside their components because the compiler
- * hashes a marker from its file name plus export name, and only does so for
- * `*.stylex.ts` files: a `defineMarker()` in a component file fails to build
- * with "Unable to generate hash for defineMarker()".
- */
 type Marker = ReturnType<typeof stylex.defineMarker>
 
 export const accordionTriggerMarker: Marker = stylex.defineMarker()

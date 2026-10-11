@@ -322,11 +322,6 @@ export interface ButtonStyleOptions {
   className?: string
 }
 
-/**
- * Returns
- * the compiled class string for callers that style a foreign element as a
- * button (e.g. ToolbarLink). Prefer `sx` composition where possible.
- */
 export function buttonVariants({
   variant = "default",
   size = "default",

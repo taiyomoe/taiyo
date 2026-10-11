@@ -93,8 +93,6 @@ const styles = stylex.create({
       default: null,
     },
     position: "absolute",
-    // z-index is set inline: it depends on --toast-index, and StyleX only
-    // accepts numeric z-index values.
     transitionDuration: "0.5s, 0.5s, 0.15s, 0.5s",
     transitionProperty: "transform, opacity, height, background-color",
     transitionTimingFunction: "cubic-bezier(.22,1,.36,1)",
@@ -104,7 +102,6 @@ const styles = stylex.create({
       default: "var(--toast-calc-height)",
     },
     width: "100%",
-    // Fills the gap between stacked toasts so hovering the stack is seamless.
     "::after": {
       content: '""',
       position: "absolute",

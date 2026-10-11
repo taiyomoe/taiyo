@@ -10,7 +10,6 @@ const styles = stylex.create({
     overflow: "hidden",
     transitionDuration: "200ms",
     transitionProperty: "height",
-    // Base UI drives the open/close animation through this custom property.
     height: {
       "[data-ending-style]": 0,
       "[data-starting-style]": 0,
@@ -45,8 +44,6 @@ export function CollapsibleTrigger({
   sx,
   ...props
 }: CollapsibleTriggerProps): React.ReactElement {
-  // The marker lets a caller's chevron react to the panel opening: Base UI
-  // puts `data-panel-open` on this trigger, not on the icon inside it.
   const styleProps = stylex.props(collapsibleTriggerMarker, sx)
 
   return (

@@ -5,18 +5,9 @@ import { cn } from "@/utils/cn"
 import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
 import { focus } from "../../styles/recipes"
 import type { Sx } from "../../styles/sx"
-// Marker for the root so the thumb can squish when the track is pressed.
-// The same squish on an enclosing label is not expressible — a marker cannot
-// cross component files — so pressing the label alone does not animate.
 import { switchRootMarker } from "../../styles/markers.stylex"
-// The thumb is 1.25rem (1rem from `sm` up). Every dimension that depends on
-// it is expanded inline with its own `consts.sm` condition rather than being
-// derived from the custom property, which only the thumb itself reads back.
 const styles = stylex.create({
   root: {
-    // The thumb reads `--thumb-size` back: a `stylex.when` key is only legal
-    // at the first level of a condition, so the breakpoint cannot nest under
-    // the thumb's ancestor states and lives here instead.
     "--thumb-size": {
       default: "1.25rem",
       [consts.sm]: "1rem",
@@ -59,8 +50,6 @@ const styles = stylex.create({
     boxShadow: shadows.thumb,
     display: "block",
     pointerEvents: "none",
-    // A disabled root never matches `:active` — Base UI renders it as a
-    // disabled button — so no extra guard is needed here.
     scale: {
       default: null,
       [stylex.when.ancestor(":active", switchRootMarker)]: "1.1 1",

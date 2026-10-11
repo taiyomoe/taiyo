@@ -71,7 +71,6 @@ const styles = stylex.create({
     transitionDuration: "200ms",
     transitionProperty: "height",
     transitionTimingFunction: "ease-in-out",
-    // Base UI drives the open/close animation through this custom property.
     height: {
       "[data-ending-style]": 0,
       "[data-starting-style]": 0,
@@ -142,8 +141,6 @@ export function AccordionPanel({
   sx,
   ...props
 }: AccordionPanelProps): React.ReactElement {
-  // Caller styling lands on the padded inner wrapper, not the animated panel
-  // element, which owns the height transition and must stay unstyled.
   const innerProps = stylex.props(styles.panelInner, sx)
 
   return (
