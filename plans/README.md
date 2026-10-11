@@ -306,11 +306,9 @@ notifications producer exists` — the repo's only TODO marker. (Plan 006
   but S-effort cosmetic completeness with no downstream unblock. Worth doing in
   a spare five minutes, not worth a plan file.
 
-- **Renovate being disabled** (`.github/renovate.json:3`) and the
-  `NEXT_PUBLIC_` `clientPrefix` left in `packages/s3/src/env.ts`. The first is
-  a deliberate, documented decision for the duration of the rewrite
-  (`README.md` §"Package management"); the second is inert scaffold residue
-  behind a `clientPrefix` with an empty `client: {}`. Neither is a finding.
+- **The `NEXT_PUBLIC_` `clientPrefix`** left in `packages/s3/src/env.ts`. It is
+  inert scaffold residue behind a `clientPrefix` with an empty `client: {}`,
+  not a finding.
 
 ## What this audit did not cover
 

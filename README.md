@@ -191,7 +191,7 @@ pnpm -F web build                  # production build (client + SSR)
 
 - Internal packages: `workspace:^`
 - Always `pnpm` (never `npm`/`yarn`)
-- Renovate is currently disabled while the rewrite stabilizes
+- Dependencies are updated by Dependabot (`.github/dependabot.yml`), with a 7-day cooldown
 
 ### Testing
 
