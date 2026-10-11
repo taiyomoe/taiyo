@@ -12,7 +12,7 @@ export const env = createEnv({
    * This way you can ensure the app isn't built with invalid env vars.
    */
   server: {
-    RESEND_API_KEY: z.string(),
+    RESEND_API_KEY: z.string().nonempty(),
   },
 
   /**

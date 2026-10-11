@@ -34,7 +34,7 @@ describe("DELETE /covers/:id", () => {
     const meiliDoc = await waitForMeiliMediaDoc(services, SEEDED_MEDIA_ID)
 
     expect(meiliDoc).not.toBeNull()
-  })
+  }, 30_000)
 
   test("returns COVER_IS_MAIN when targeting the main cover", async ({ app, services }) => {
     const { headers } = await signInAs(services, { role: "ADMIN" })

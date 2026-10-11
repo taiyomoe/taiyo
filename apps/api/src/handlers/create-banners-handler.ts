@@ -1,3 +1,4 @@
+import { config } from "@taiyomoe/config"
 import { NewBanner } from "@taiyomoe/db"
 import { getBannerKey } from "@taiyomoe/s3"
 import { extensionForMimeType } from "@taiyomoe/utils"
@@ -60,7 +61,7 @@ export const createBannersHandler = new Hono().post(
       },
       ...getOpenApiResponses({
         404: "No media with the given id exists.",
-        422: "The request data failed validation or an uploaded image is invalid.",
+        422: `The request data failed validation, or an uploaded image is invalid or larger than ${config.images.maxSizeBytes / 1024 / 1024} MB.`,
         429: "Too many requests — slow down.",
       }),
     },
@@ -77,16 +78,18 @@ export const createBannersHandler = new Hono().post(
     const bannerRows = await Promise.all(
       body.banners.map(async (banner) => {
         const id = crypto.randomUUID()
+        const extension = extensionForMimeType(banner.file.type)
 
         await uploadFile(
           { s3, s3Bucket, log },
-          getBannerKey(media.id, `${id}.${extensionForMimeType(banner.file.type)}`),
+          getBannerKey(media.id, `${id}.${extension}`),
           banner.file,
         )
 
         return {
           id,
           mediaId: media.id,
+          extension,
           contentRating: banner.contentRating,
           uploaderId: user.id,
         } satisfies NewBanner

@@ -8,6 +8,7 @@ export interface Banner {
   updatedAt: Generated<Timestamp>
   deletedAt: Timestamp | null
   contentRating: Generated<ContentRating>
+  extension: Generated<"gif" | "jpg">
   mediaId: string
   uploaderId: string
   deleterId: string | null

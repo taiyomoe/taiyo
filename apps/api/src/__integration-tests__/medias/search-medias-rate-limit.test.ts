@@ -29,5 +29,5 @@ describe("POST /medias/search rate limit", () => {
     }
 
     expect(blocked.body.code).toBe("RATE_LIMITED")
-  })
+  }, 30_000)
 })

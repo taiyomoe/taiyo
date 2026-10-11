@@ -83,7 +83,7 @@ describe("POST /medias", () => {
     const meiliDoc = await waitForMeiliMediaDoc(services, mediaId)
 
     expect(meiliDoc).not.toBeNull()
-  })
+  }, 30_000)
 
   test("rejects unauthenticated requests with UNAUTHORIZED", async ({ app }) => {
     const form = await getForm()

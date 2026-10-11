@@ -1,3 +1,4 @@
+import { config } from "@taiyomoe/config"
 import { NewCover } from "@taiyomoe/db"
 import { getCoverKey } from "@taiyomoe/s3"
 import { syncMedia } from "@taiyomoe/search"
@@ -87,7 +88,7 @@ export const createCoversHandler = new Hono().post(
       },
       ...getOpenApiResponses({
         404: "No media with the given id exists.",
-        422: "The request data failed validation or an uploaded image is invalid.",
+        422: `The request data failed validation, or an uploaded image is invalid or larger than ${config.images.maxSizeBytes / 1024 / 1024} MB.`,
         429: "Too many requests — slow down.",
       }),
     },
@@ -104,16 +105,18 @@ export const createCoversHandler = new Hono().post(
     const coverRows = await Promise.all(
       body.covers.map(async (cover) => {
         const id = crypto.randomUUID()
+        const extension = extensionForMimeType(cover.file.type)
 
         await uploadFile(
           { s3, s3Bucket, log },
-          getCoverKey(media.id, `${id}.${extensionForMimeType(cover.file.type)}`),
+          getCoverKey(media.id, `${id}.${extension}`),
           cover.file,
         )
 
         return {
           id,
           mediaId: media.id,
+          extension,
           volume: cover.volume !== undefined ? String(cover.volume) : null,
           language: cover.language,
           contentRating: cover.contentRating,

@@ -10,6 +10,7 @@ export interface Cover {
   volume: string | null
   contentRating: Generated<ContentRating>
   isMainCover: Generated<boolean>
+  extension: Generated<"gif" | "jpg">
   language: Language
   mediaId: string
   uploaderId: string

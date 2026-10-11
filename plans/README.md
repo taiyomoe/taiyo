@@ -25,7 +25,7 @@ that unblocks the most work soonest.
 | Plan | Title                                                                                            | Priority | Effort | Risk | Depends on         | Status |
 | ---- | ------------------------------------------------------------------------------------------------ | -------- | ------ | ---- | ------------------ | ------ |
 | 001  | Return resolvable page image URLs from `GET /chapters/:id`                                       | P1       | S      | LOW  | —                  | DONE   |
-| 002  | Persist image file extensions and return cover/banner URLs                                       | P1       | M      | MED  | 001                | TODO   |
+| 002  | Persist image file extensions and return cover/banner URLs                                       | P1       | M      | MED  | 001                | DONE   |
 | 003  | Make Hono RPC work end to end, and wire it into `apps/web`                                       | P1       | M      | MED  | —                  | TODO   |
 | 004  | Add the "latest chapters" and personal feed endpoints                                            | P1       | S      | LOW  | —                  | DONE   |
 | 005  | Build the browse → detail → read vertical slice in `apps/web`                                    | P1       | L      | MED  | 001, 002, 003, 004 | TODO   |

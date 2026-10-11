@@ -1,3 +1,4 @@
+import { getCoverUrl } from "@taiyomoe/s3"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
@@ -8,6 +9,11 @@ import { apiSuccessEnvelope, contentRatingSchema, languageSchema } from "../util
 const coverDetailSchema = z.object({
   id: z.uuid().meta({ description: "The ID of the cover." }),
   mediaId: z.uuid().meta({ description: "The ID of the media this cover belongs to." }),
+  url: z.url().meta({
+    description: "URL of the cover image.",
+    example:
+      "https://cdn.taiyo.moe/medias/4e26b80f-6661-4f5f-93b4-6dfed052bbed/covers/a56cc54d-7776-4787-9b21-97a4674b80bc.jpg",
+  }),
   volume: z
     .string()
     .nullable()
@@ -47,6 +53,7 @@ export const getCoverHandler = new Hono().get(
     return c.ok({
       id: cover.id,
       mediaId: cover.mediaId,
+      url: getCoverUrl(cover.mediaId, cover.id, cover.extension),
       volume: cover.volume,
       language: cover.language,
       contentRating: cover.contentRating,
