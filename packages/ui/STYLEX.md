@@ -29,7 +29,8 @@ writing a new component.
    that import StyleX; without the import the file is skipped whole, `sx` stays
    a meaningless DOM attribute, and every style in it silently stops applying.
    `oxlint` will report that import as unused — keep it, with an
-   `oxlint-disable-next-line no-unused-vars` and a note saying why.
+   `oxlint-disable-next-line no-unused-vars` above it. Do not add an
+   explanatory comment: the reason is this document.
 
    TypeScript will not catch either mistake. `src/styles/sx.ts` augments React's
    `DOMAttributes` so `sx` type-checks on host elements, and that augmentation
@@ -269,6 +270,65 @@ same as looking the same:
   `var(--available-height)`, `--thumb-size`) are plain strings in values:
   `minWidth: "var(--anchor-width)"`.
 
+## Component-specific gotchas
+
+Each of these cost a debugging session and none of them is visible from the
+code. They are listed with the file that depends on them.
+
+- **`calc()` needs whitespace around its operators** (`dialog.tsx`). Without
+  it the whole declaration is dropped silently and the nested-dialog dim never
+  runs.
+- **`z-index` must be a plain number in StyleX**, so a z-index that depends on
+  a custom property (`--toast-index`) has to ride the inline `style` prop
+  instead (`toast.tsx`).
+- **`backgroundClip` defaults to the padding box on a clipped cell, which
+  breaks translucent hairlines** (`table.tsx`, card variant). A translucent
+  separator then composites over the PAGE rather than over the card fill — in
+  dark that turned a white/8% line into a 1-value difference and the
+  separators effectively vanished. The card variant sets
+  `backgroundClip: "border-box"` for exactly this.
+- **Chrome paints its autofill background on a transition**, so an absurdly
+  long `transitionDuration` on `backgroundColor` is the standard suppression
+  trick (`input.tsx`, mirrored in `number-field.tsx`).
+- **A marker cannot cross a component file.** `stylex.when.ancestor(sel,
+marker)` only reaches an ancestor inside the same component tree we render,
+  so e.g. pressing a `<label>` that wraps a `Switch` cannot squish the thumb —
+  the label is the consumer's element. Don't try; the constraint is structural.
+- **The keycap radius ratio (0.35 × height) was measured on a WIDE chip.** On a
+  square slot the same ratio reads as a bubble rather than a field — see
+  `otp-field.tsx`, which deliberately departs from the table in
+  "Proportions, measured off the reference".
+- **Row radii are concentric with their own container's padding, not with the
+  nearest similar component.** The command palette pads its list 0.5rem inside
+  a `radius.xl` panel, the autocomplete pads 0.25rem; their rows therefore
+  cannot share a radius (`command.tsx`).
+- **Inset sheets drop the `::before` hairline entirely** — they float clear of
+  the viewport edge and already read as raised (`sheet.tsx`).
+- **A later argument to `stylex.props()` beats an attribute condition
+  deterministically; two conditions on the same property do not.** When an
+  active-tab style has to beat a `:hover` on the same property, pass it as a
+  later argument rather than expressing it as `[data-active]`
+  (`apps/web/src/components/auth/auth-form.tsx`).
+
+## Cross-file couplings with `structural.css`
+
+Every row here is a rule that lives in `src/styles/structural.css` and a
+component that depends on it. Changing one side without the other is silent:
+the rule still matches, the computed value is just wrong.
+
+| Component                                   | What `structural.css` owns                                                                                                        | Breaks if removed                                 |
+| ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- |
+| `card.tsx`                                  | nested-card `clip-path`; child cards clip 1rem past the frame, first/last pull in to 1px                                          | `CardFrame`'s muted wash paints over nested cards |
+| `dialog.tsx`, `sheet.tsx`                   | `:has()`-driven padding: header/footer padding shrinks to 0.75rem (0.25rem next to a bare footer) when the popup contains a panel | doubled padding around panels                     |
+| `popover.tsx`, `tooltip.tsx`                | `[data-current]` / `[data-previous]` width rules, which read `--viewport-inline-padding`                                          | mis-sized viewport during a transition            |
+| `calendar.tsx`                              | squares the inner corners of a selected range; draws the "today" dot on the day button's `::after`                                | a range reads as separate discs                   |
+| `table.tsx`                                 | rounds the outer corners of the body grid in the card variant                                                                     | square corners inside a rounded card              |
+| every component with consumer icon children | the two `svg` allowlist blocks at the top of the file                                                                             | icons fall back to their intrinsic 24px           |
+
+The `--taiyo-*` custom-property hooks those rules read are declared in
+`globals.css`, which mirrors a subset of `tokens.stylex.ts` by hand. Changing a
+value in one means changing it in the other.
+
 ## Verification for every file you touch
 
 `oxlint` and `tsc` do NOT see StyleX compile errors — the compiler only runs
@@ -283,3 +343,6 @@ with the Storybook check.
    version.
 3. The component looks right in BOTH themes — the design language above, not
    just "it renders".
+4. **No comments.** This package is comment-free by policy; the reasoning lives
+   in this file. The only `//` lines allowed in `src/` are `oxlint-disable`
+   directives. See `README.md` (§ Comments).

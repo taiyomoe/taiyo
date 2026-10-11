@@ -1,7 +1,9 @@
 # Engineering notes
 
 Backend and infrastructure rationale that would otherwise live in source
-comments. See `packages/ui/STYLEX.md` for UI/StyleX and `apps/web/AGENTS.md`
+comments. The source tree carries no comments (see `README.md`, § Comments), so
+this file is where the "why" lives for everything outside `packages/ui` and
+`apps/web`. See `packages/ui/STYLEX.md` for UI/StyleX and `apps/web/AGENTS.md`
 for the web app.
 
 ## `GET /chapters/latest` must be mounted before `getChapterHandler`
@@ -215,3 +217,231 @@ Neither count is content-rating aware, and search currently returns every
 content rating unconditionally. Once per-user content-rating filtering lands,
 decide whether "popular" is computed per-audience or globally — a globally
 ranked NSFW title surfacing on a filtered browse page is the failure mode.
+
+## API request pipeline
+
+### Middleware ordering is a hard dependency
+
+Middlewares communicate through `c.var`, so order is load-bearing and nothing
+enforces it:
+
+- `checkMedia()` / `checkChapter()` / `checkCover()` / `checkBanner()` /
+  `checkGroup()` / `checkStaff()` / `checkList()` / `checkUser()` /
+  `checkOwnershipRequest()` resolve `:id` to a row and publish it on `c.var`.
+  Each rejects `VALIDATION_ERROR` when the id is not a UUID and a typed
+  `*_NOT_FOUND` otherwise. They exclude soft-deleted rows unless passed
+  `{ includeDeleted: true }` — which is what restore routes use.
+  `checkUser()` publishes `c.var.targetUser`, deliberately distinct from
+  `c.var.user` (the authenticated caller), and treats a banned user as absent.
+- `requireChapterAccess()` / `requireGroupAccess()` /
+  `requireGroupOwnerOrMod()` / `requireListOwner()` must run **after**
+  `withAuth(...)` and the matching `check*`, because they read both vars. They
+  fail `FORBIDDEN`. The access model itself is documented in
+  `docs/group-ownership.md`.
+- `checkImages()` must run **after** `validateFormData(...)`.
+
+### `withTransaction()` is the atomicity contract
+
+- DB writes go through a Kysely transaction; `c.get("db")` is the trx.
+- S3 uploads recorded on `log.uploadedKeys` are deleted if the request fails.
+  Routes append with `log.set({ uploadedKeys: [key] })` after each successful
+  `PutObject`; evlog merges arrays by concatenation.
+- `c.var.afterCommit(cb)` defers a side-effect (search-index push, job enqueue)
+  until the transaction has actually committed, so that work is never tied to a
+  rolled-back write. Callback failures are logged, never thrown — a successful
+  write must not be reported as failed because a downstream hiccuped.
+- It rolls back and cleans up both when the handler throws (the error is
+  re-thrown to the global error handler) and when the handler responds with
+  status >= 400 (the response is preserved).
+- The S3 cleanup itself swallows its own errors, so a cleanup failure cannot
+  mask the original one. Orphans are reaped manually or by the lifecycle rule.
+
+### `checkImages()` writes back to two places
+
+Handlers read processed files from `c.var.formData`, not from the underlying
+`FormData`. The middleware therefore walks the dot-separated key
+(`covers.0.file`) into the nested object Zod built and replaces the leaf, _as
+well as_ calling `formData.set(key, processedFile)`. Without the nested write
+the original unprocessed `File` reference survives and the route uploads raw
+user bytes. The pipeline validates size, confirms the format by magic bytes,
+re-encodes GIFs to strip metadata while preserving animation, and otherwise
+auto-rotates by EXIF then transcodes to JPEG — rotation must happen before the
+strip or the orientation is lost.
+
+`packages/utils/extension-for-mime-type` mirrors that normalisation (JPEG for
+everything that is not a GIF); the two must stay in agreement.
+
+### CORS
+
+`CORS_ALLOWED_ORIGINS` is a comma-separated list of origins allowed to call the
+API with credentials. Empty or unset disables the CORS middleware entirely, so
+only same-origin requests work — which is how the web app's dev proxy reaches
+the API.
+
+### Rate limits
+
+`hono-rate-limiter/redis` expects an Upstash-style client and `ioredis` exposes
+the same primitives under different names, so the wrapper is built once at
+module load. Routes share one Dragonfly DB with better-auth's secondary
+storage — the `prefix` argument is what keeps per-route counters from
+colliding. Admins are exempt (moderation is not bounded by per-route budgets);
+authenticated users are keyed on user id, anonymous requests on client IP.
+
+## Concurrency invariants
+
+- **Approving a group-ownership request takes a Postgres advisory lock**
+  (`pg_advisory_xact_lock(hashtextextended(groupId, 0))`). Without it, two
+  concurrent approvals both `SELECT` no OWNER, both `INSERT`, and the workflow
+  produces two OWNERs — against the intent of "first approval wins, the rest
+  are auto-cancelled". The lock is transaction-scoped and keyed on the group,
+  so approvals for different groups still run in parallel.
+- **Setting a main cover unsets the previous one first, then promotes.** The
+  unique partial index on `covers(mediaId) WHERE isMainCover` guarantees the
+  invariant; doing the unset first is what keeps the transaction from violating
+  it mid-flight under concurrent calls.
+- **`isUniqueViolation()` (`apps/api/src/utils/pg-errors.ts`) exists because
+  some pre-checks are racy by nature** — a TOCTOU window between `SELECT` and
+  `INSERT`/`UPDATE` inside a transaction. It lets the losing caller surface a
+  typed conflict instead of an opaque 500.
+- **Creating a media rejects links that already belong to another media.** It
+  almost always means someone is re-importing a media that was already
+  imported.
+
+## Queue, worker and staging lifecycle
+
+- **BullMQ requires `maxRetriesPerRequest: null`.** Pass raw connection options
+  rather than a pre-built `ioredis` instance so BullMQ creates its own
+  connection per queue/worker — the documented best practice.
+- **BullMQ v6 removed `repeat` from `JobsOptions`**; `upsertJobScheduler` is
+  the replacement and is keyed by scheduler id, so repeated boots and multiple
+  replicas do not multiply the schedule. Scheduling maintenance on every boot
+  is therefore idempotent by construction.
+- **The page processor walks pages sequentially** to bound memory. Concurrency
+  across chapters is governed by the BullMQ worker concurrency setting, never
+  here.
+- **A job with nothing actionable returns cleanly** rather than throwing, so it
+  is not retried forever. Real failures re-throw so BullMQ retries per
+  `defaultJobOptions`.
+- **Staged originals leak from two sources**, both handled by the reaper:
+  sessions opened but never finalized (Task stuck `PENDING`), and jobs that
+  exhausted their retries (Task `FAILED` — the worker only deletes staging on
+  success). It deletes the staged objects and the Task rows once older than
+  `config.images.staleUploadReapHours`. It is pure and injectable; pass `now`
+  in tests.
+- **`DeleteObjects` caps at 1000 keys per call**, so the reaper chunks.
+  Deleting an absent key is a no-op, and a delete hiccup never fails the reap —
+  the bucket lifecycle rule is the backstop.
+- **The bucket lifecycle rule is best-effort.** Some S3-compatible stores
+  (RustFS, Garage) do not implement the lifecycle API, so callers catch and log
+  rather than crash the worker. It is a backstop for the reaper, not a
+  replacement for it.
+
+## Search
+
+- **`mainTitle` sorts on `_sortMainTitle`**, a lowercased mirror, so
+  alphabetical ordering is case-insensitive. The internal field is excluded
+  from `displayedAttributes`, so consumers never see it.
+- **`hasAll` compiles to one equality per value, chained with AND.**
+  Meilisearch matches each equality against any element of the array, so the
+  chain is what enforces "contains every".
+- **Index creation ignores its own error**: Meilisearch fails when the index
+  already exists, and that is the expected steady state.
+- The filter translator is resource-agnostic — each resource ships its own
+  `FilterSpec` plus a Zod schema producing compatible input, and the translator
+  returns `undefined` when there are no clauses so callers can omit `filter`.
+
+## Auth
+
+The before-hook on sign-in checks two things that the credential provider
+cannot: whether the email/username belongs to a **non-credential** provider
+(the user should be sent to OAuth instead), and whether the account is
+unverified with a verification mail already pending (so verification mail is
+not re-sent too often).
+
+## Email
+
+Email styling is inline styles, not classes. Mail clients strip or ignore
+stylesheets to wildly different degrees, so every declaration has to travel on
+the element's `style` attribute. That rules out the design system's StyleX
+tokens, which compile to classes plus a stylesheet — hence `theme.ts`'s small
+self-contained palette, shared by the templates so the three of them cannot
+drift.
+
+## Cache
+
+`rawCacheClient` is the raw `ioredis` instance, reserved for callers that own
+their own key schema (the rate limiter, BullMQ). Application data goes through
+`cacheClient`.
+
+## Integration-test harness
+
+- `global-setup.ts` runs **once per `vitest` invocation**, not once per worker.
+  It provisions the template database that the per-test fixture in `setup.ts`
+  clones. Without it every worker would race on `DROP`/`CREATE` of the same
+  template DB.
+- Teardown ignores a missing Meilisearch index — init may have failed.
+- `jpegWithExif` builds a JPEG carrying an EXIF block so the image tests can
+  assert that `checkImages` strips the metadata and transcodes: the object that
+  lands in S3 must report no EXIF.
+- Rate-limit tests send a fresh UUID as `X-Forwarded-For` per invocation so the
+  counter starts empty regardless of leftover Dragonfly state from prior runs.
+- Reaper tests pass a `now` 25 hours in the future, because
+  `staleUploadReapHours` is 24.
+- Fixtures reference seeded rows by name (`media-1` is Boruto, `scansPROJECT`
+  is already linked, Kodachi is already an AUTHOR) so inserts do not
+  FK-violate. The seeds are in `packages/db/src/seeds/`.
+
+## Config
+
+- `config.images` bounds the upload pipeline: 10 MB per image, JPEG quality 85
+  for covers and 82 for chapter pages (lower, to save storage), 15 MB and 500
+  pages per chapter, a 600 s presigned-URL lifetime, 3 days before `staging/`
+  objects expire by lifecycle rule, and 24 hours before a PENDING/FAILED upload
+  Task and its staged objects are reaped.
+- `config.limits` bounds user text: 200 for names (group, staff, media title)
+  and chapter titles, 50 for a volume tag, 500 for URL fields, 5000 for
+  descriptions, 10000 for a per-language synopsis.
+- `tags.ts` mirrors the MangaDex genre and format lists as of 25 December 2025
+  and the AniList tag list as of 3 December 2025. The AniList set deliberately
+  omits Boys' Love, Crime, Historical, Isekai, Medecine, Philosophy, Superhero,
+  Tragedy and Wuxia, which the other two sources already cover.
+
+## Tooling
+
+- **`oxlint`'s React Compiler rules ship inside the `correctness` category**
+  (aligned with the upstream ESLint presets), so enabling that category turns
+  on `react/purity`, `react/refs`, `react/immutability`,
+  `react/preserve-manual-memoization`, `react/set-state-in-render`,
+  `react/set-state-in-effect`, `react/static-components`, `react/use-memo`,
+  `react/void-use-memo`, `react/error-boundaries` and `react/globals`. These
+  replaced the single `react/react-compiler` nursery rule in oxlint 1.79.
+- **`vitest/no-standalone-expect` is disabled** because it misfires on tests
+  that import `test` from a custom setup helper.
+- **`knip.ts` registers a CSS compiler** so `@import` in a stylesheet counts as
+  a dependency edge. That used to come free from the CSS framework's knip
+  plugin; with the framework gone, nothing registers it, and every CSS-only
+  dependency (the font packages imported from
+  `packages/ui/src/styles/globals.css` and `apps/web/src/styles.css`) would
+  read as dead. The matcher skips specifiers with a URL scheme or a
+  protocol-relative host — those are fetched at runtime, not resolved from
+  `node_modules`.
+- **Storybook's `getAbsolutePath` helper** resolves a package's absolute path;
+  it is needed in Yarn PnP setups and inside a monorepo.
+- **Storybook themes go on `<html>`**, next to the addon's `dark` class, so
+  components rendered into portals inherit the dark tokens. Every story renders
+  into a decorator that sets `isolate`, giving popups and backdrops their own
+  stacking context so one story's overlay cannot paint over Storybook's chrome.
+- **`apps/storybook/vite.config.ts` names the cloudflared quick-tunnel domain
+  in `allowedHosts`** so `cloudflared tunnel --url http://localhost:6006` can
+  serve the dev server for a design review without disabling Vite's Host
+  check.
+- **Both apps declare the same three-layer cascade** via
+  `stylex.vite({ useCSSLayers: { before: ["base", "structural"] } })`, and
+  `@taiyomoe/ui` must be listed in `externalPackages` because it is a workspace
+  package resolved through `node_modules` that ships StyleX source. That option
+  is implemented in `@stylexjs/unplugin`'s core but missing from its
+  `UserOptions` type in 0.19.0, hence the cast. StyleX also needs the same
+  `@/*` alias the bundler and tsconfig use, because it resolves
+  `*.stylex.ts` variable imports itself. In `apps/web`, `stylex()` must come
+  before the React transform, and React Compiler runs through
+  `plugin-react`'s native `compiler` option backed by `oxc-transform-react`.
