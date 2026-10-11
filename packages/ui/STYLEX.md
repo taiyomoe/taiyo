@@ -66,6 +66,12 @@ writing a new component.
      tabs list): `backgroundColor: colors.well` + `boxShadow: shadows.sunken`.
    - pills: buttons/badges/tabs use `borderRadius: radius.full`; fields, menus
      and popovers use `radius.xl`; cards/dialogs `radius.xxl`.
+   - floating surfaces (menus, popovers, select/combobox/autocomplete popups,
+     tooltips, toasts, dialogs, drawers, sheets) use
+     `backgroundClip: "border-box"`. Their `colors.border` hairline is
+     translucent, so with `padding-box` whatever sits behind the popup — a
+     navbar's bottom border, say — shows through the 1px ring. Resting surfaces
+     (fields, cards) keep `padding-box`; they sit on a solid background.
 
 ## Proportions, measured off the reference
 

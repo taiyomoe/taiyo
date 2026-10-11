@@ -140,7 +140,7 @@ const styles = stylex.create({
     borderRadius: radius.xl,
     borderStyle: "solid",
     borderWidth: 1,
-    backgroundClip: "padding-box",
+    backgroundClip: "border-box",
     backgroundColor: colors.popover,
     boxShadow: shadows.overlay,
     display: "flex",

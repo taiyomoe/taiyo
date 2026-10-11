@@ -36,7 +36,7 @@ const styles = stylex.create({
     zIndex: 50,
   },
   popup: {
-    backgroundClip: "padding-box",
+    backgroundClip: "border-box",
     backgroundColor: colors.popover,
     boxShadow: shadows.overlay,
     color: colors.popoverForeground,

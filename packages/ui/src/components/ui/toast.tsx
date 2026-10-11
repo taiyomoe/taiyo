@@ -80,7 +80,7 @@ const styles = stylex.create({
     borderRadius: radius.lg,
     borderStyle: "solid",
     borderWidth: 1,
-    backgroundClip: "padding-box",
+    backgroundClip: "border-box",
     backgroundColor: {
       "[data-expanded]": colors.popover,
       default: `color-mix(in srgb, ${colors.popover}, #000 calc(4% * max(0, var(--toast-index, 0))))`,
@@ -240,7 +240,7 @@ const styles = stylex.create({
     borderRadius: radius.lg,
     borderStyle: "solid",
     borderWidth: 1,
-    backgroundClip: "padding-box",
+    backgroundClip: "border-box",
     backgroundColor: colors.popover,
     boxShadow: shadows.overlay,
     color: colors.popoverForeground,

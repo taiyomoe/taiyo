@@ -104,7 +104,11 @@ export function UserMenu({ user }: { user: Session["user"] }) {
           <span sx={styles.email}>{user.email}</span>
         </div>
         <MenuSeparator />
-        <MenuItem disabled={signOut.isPending} onClick={() => signOut.mutate()}>
+        <MenuItem
+          disabled={signOut.isPending}
+          onClick={() => signOut.mutate()}
+          variant="destructive"
+        >
           <Logout />
           {m.home_sign_out()}
         </MenuItem>

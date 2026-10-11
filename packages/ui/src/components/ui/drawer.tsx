@@ -94,7 +94,7 @@ const styles = stylex.create({
       "[data-nested-drawer-open]": "hidden",
       default: null,
     },
-    backgroundClip: "padding-box",
+    backgroundClip: "border-box",
     backgroundColor: {
       "[data-nested-drawer-open]": `color-mix(in srgb, ${colors.popover}, #000 calc(4% * (var(--nested-drawers) - var(--stack-progress))))`,
       default: colors.popover,
