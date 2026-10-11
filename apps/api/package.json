@@ -10,8 +10,7 @@
     "./env": "./src/env.ts"
   },
   "scripts": {
-    "with-env": "dotenv -e .env --",
-    "dev": "pnpm with-env tsx watch src/index.ts"
+    "dev": "tsx watch --env-file-if-exists=.env src/index.ts"
   },
   "dependencies": {
     "@casl/ability": "^7.0.1",
@@ -42,7 +41,6 @@
     "@taiyomoe/typescript": "workspace:^",
     "@types/node": "^26.6.4",
     "@types/pg": "^8.23.1",
-    "dotenv-cli": "^11.0.0",
     "kysely": "^0.29.6",
     "pg": "^8.23.1",
     "tsx": "^4.23.15",
