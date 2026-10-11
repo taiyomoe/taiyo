@@ -16,7 +16,7 @@
     "@taiyomoe/db": "workspace:^",
     "@taiyomoe/queue": "workspace:^",
     "@taiyomoe/s3": "workspace:^",
-    "bullmq": "^6.1.1",
+    "bullmq": "^6.3.11",
     "zod": "^4.4.3"
   },
   "devDependencies": {
