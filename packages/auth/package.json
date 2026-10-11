@@ -18,7 +18,7 @@
     "@taiyomoe/db": "workspace:^",
     "@taiyomoe/email": "workspace:^",
     "@taiyomoe/utils": "workspace:^",
-    "better-auth": "^1.6.29",
+    "better-auth": "^1.7.7",
     "better-auth-harmony": "^1.3.2",
     "luxon": "^3.7.2",
     "react": "^19.3.0",
