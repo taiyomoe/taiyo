@@ -163,8 +163,8 @@ importers:
         specifier: ^10.5.8
         version: 10.5.8(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(esbuild@0.28.2)(storybook@10.5.8(@types/react@19.2.18)(prettier@3.9.9)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(vite@8.2.1(@types/node@26.6.4)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
       '@storybook/addon-themes':
-        specifier: ^10.5.8
-        version: 10.5.8(storybook@10.5.8(@types/react@19.2.18)(prettier@3.9.9)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))
+        specifier: ^10.6.1
+        version: 10.6.1(storybook@10.5.8(@types/react@19.2.18)(prettier@3.9.9)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))
       '@storybook/react-vite':
         specifier: ^10.5.8
         version: 10.5.8(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(esbuild@0.28.2)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(storybook@10.5.8(@types/react@19.2.18)(prettier@3.9.9)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(typescript@7.0.2)(vite@8.2.1(@types/node@26.6.4)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
@@ -3482,10 +3482,10 @@ packages:
       '@types/react':
         optional: true
 
-  '@storybook/addon-themes@10.5.8':
-    resolution: {integrity: sha512-MYTLkN/5t02R0DJikVJUIRWnoyDqDwJprXnagUEFRT5aiO75glG7rY3uikB8n+7vXL/N9fTkgjIxER0SShkvYg==}
+  '@storybook/addon-themes@10.6.1':
+    resolution: {integrity: sha512-SVZSM+mIiyK56d/3mRpRwPkAlpr9fdSSz/XpkT6fzI1PYFWDGSdElu2YmauzhaFGnlmAKL//tmXVvHXD4qCkIQ==}
     peerDependencies:
-      storybook: ^10.5.8
+      storybook: ^10.6.1
 
   '@storybook/builder-vite@10.5.8':
     resolution: {integrity: sha512-UeRnn7yT55WmBlHNOQzLrvN7vsHEvVgIukhKDO+4cMbGXN87wZkbxhx6NstpuXRH8OxGqwKS0SZNVp+SC1ftLQ==}
@@ -5984,6 +5984,10 @@ packages:
     resolution: {integrity: sha512-q5W7tVM71e2xjHZTlgfTDoPF/SmqKG5hddq9SzR49CH2hayqRKJtQ4mtRlSxKaJlR/+9rEM+mnBHf7I2/BQcpQ==}
     engines: {node: '>=6.10'}
 
+  ts-dedent@2.3.0:
+    resolution: {integrity: sha512-JfJeIHke7y2egdGGgRAvpCwYFUsHlM2gPcrVOxFkznt/4uzQ7HFmvE63iFHVLBJNDuyDOQgijDK/tXH/f6Msjg==}
+    engines: {node: '>=6.10'}
+
   tsconfig-paths@4.2.0:
     resolution: {integrity: sha512-NoZ4roiN7LnbKn9QqE1amc9DJfzvZXxF4xDavcOWt1BPkdx+m+0gJuPM+S0vCe7zTJMYUP0R8pO2XMr+Y8oLIg==}
     engines: {node: '>=6'}
@@ -8278,10 +8282,10 @@ snapshots:
       - vite
       - webpack
 
-  '@storybook/addon-themes@10.5.8(storybook@10.5.8(@types/react@19.2.18)(prettier@3.9.9)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))':
+  '@storybook/addon-themes@10.6.1(storybook@10.5.8(@types/react@19.2.18)(prettier@3.9.9)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))':
     dependencies:
       storybook: 10.5.8(@types/react@19.2.18)(prettier@3.9.9)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
-      ts-dedent: 2.2.0
+      ts-dedent: 2.3.0
 
   '@storybook/builder-vite@10.5.8(esbuild@0.28.2)(storybook@10.5.8(@types/react@19.2.18)(prettier@3.9.9)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(vite@8.2.1(@types/node@26.6.4)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))':
     dependencies:
@@ -10882,6 +10886,8 @@ snapshots:
       is-number: 7.0.0
 
   ts-dedent@2.2.0: {}
+
+  ts-dedent@2.3.0: {}
 
   tsconfig-paths@4.2.0:
     dependencies:
