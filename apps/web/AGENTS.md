@@ -283,7 +283,13 @@ the `--navbar-height` custom property the shell sets on its provider.
   `styles.css` sets `overscroll-behavior: none` on `html` and `body` whenever a
   `[data-app-shell]` element is mounted, which turns the rubber-band off for the
   shell only. The landing page keeps the native bounce.
-
+- **Width and open state live in cookies.** `SidebarProvider` writes
+  `sidebar_width` and `sidebar_state`, and the root route's `beforeLoad` reads
+  them through `getSidebarPrefs()` during SSR, so the first paint already has
+  the user's width and no expand-then-collapse flash. Dragging the edge past
+  the minimum width by more than `collapseOffset` collapses the sidebar
+  entirely; the navbar's burger appears only in that state (and always below
+  50rem, where it opens the sheet).
 - **Sidebar items without a `to` render as buttons.** Only Home has a route so
   far; give an item a `to` in `SECTIONS` once its page exists and it becomes a
   `Link` with active-state styling.

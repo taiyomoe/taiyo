@@ -9,7 +9,7 @@ import {
 } from "@taiyomoe/ui/components/ui/input-group"
 import { Kbd, KbdGroup } from "@taiyomoe/ui/components/ui/kbd"
 import { useSidebar } from "@taiyomoe/ui/components/ui/sidebar"
-import { colors, consts } from "@taiyomoe/ui/styles/tokens.stylex"
+import { colors, consts, motion } from "@taiyomoe/ui/styles/tokens.stylex"
 import { Link } from "@tanstack/react-router"
 import { useEffect, useRef } from "react"
 
@@ -33,18 +33,63 @@ const styles = stylex.create({
     top: 0,
   },
   brand: {
-    gap: "0.5rem",
-    paddingInline: "0.75rem",
+    paddingInline: "1rem",
     alignItems: "center",
     display: "flex",
     flexShrink: 0,
+    transitionDuration: {
+      default: motion.slide,
+      "@media (prefers-reduced-motion: reduce)": "0s",
+    },
+    transitionProperty: "width",
+    transitionTimingFunction: motion.easeOut,
     width: {
       default: "auto",
-      "@media (width >= 48rem)": "var(--sidebar-width)",
+      "@media (width >= 50rem)": "var(--sidebar-width)",
+    },
+  },
+  brandCollapsed: {
+    width: {
+      default: "auto",
+      "@media (width >= 50rem)": "12.5rem",
+    },
+  },
+  instant: {
+    transitionDuration: "0s",
+  },
+  toggleSlot: {
+    overflow: "hidden",
+    display: "flex",
+    flexShrink: 0,
+    opacity: 1,
+    transitionDuration: {
+      default: motion.slide,
+      "@media (prefers-reduced-motion: reduce)": "0s",
+    },
+    transitionProperty: "width, margin-right, opacity",
+    transitionTimingFunction: motion.easeOut,
+    marginRight: "0.375rem",
+    width: "2.25rem",
+  },
+  toggleSlotHidden: {
+    opacity: {
+      default: 1,
+      "@media (width >= 50rem)": 0,
+    },
+    marginRight: {
+      default: "0.375rem",
+      "@media (width >= 50rem)": 0,
+    },
+    width: {
+      default: "2.25rem",
+      "@media (width >= 50rem)": 0,
     },
   },
   toggle: {
     color: colors.mutedForeground,
+    flexShrink: 0,
+    height: "2.25rem",
+    width: "2.25rem",
   },
   toggleIcon: {
     height: "1.25rem",
@@ -93,7 +138,8 @@ const styles = stylex.create({
 })
 
 export function AppNavbar({ user }: { user: Session["user"] }) {
-  const { toggleSidebar } = useSidebar()
+  const { isMobile, open, resizing, toggleSidebar } = useSidebar()
+  const toggleHidden = open && !isMobile
   const searchRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
@@ -111,16 +157,18 @@ export function AppNavbar({ user }: { user: Session["user"] }) {
 
   return (
     <header sx={styles.header}>
-      <div sx={styles.brand}>
-        <Button
-          aria-label={m.shell_toggle_sidebar()}
-          onClick={toggleSidebar}
-          size="icon-lg"
-          sx={styles.toggle}
-          variant="ghost"
-        >
-          <Menu {...stylex.props(styles.toggleIcon)} />
-        </Button>
+      <div sx={[styles.brand, !open && styles.brandCollapsed, resizing && styles.instant]}>
+        <div inert={toggleHidden} sx={[styles.toggleSlot, toggleHidden && styles.toggleSlotHidden]}>
+          <Button
+            aria-label={m.shell_toggle_sidebar()}
+            onClick={toggleSidebar}
+            size="icon-lg"
+            sx={styles.toggle}
+            variant="ghost"
+          >
+            <Menu {...stylex.props(styles.toggleIcon)} />
+          </Button>
+        </div>
         <Link to="/" {...stylex.props(styles.home)}>
           <TaiyoLogoLockup sx={styles.lockup} />
         </Link>

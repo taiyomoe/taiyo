@@ -7,6 +7,7 @@ import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools"
 import { darkShadows, darkTheme } from "@taiyomoe/ui/styles/themes"
 
 import { sessionQueryOptions } from "@/lib/queries/session"
+import { getSidebarPrefs } from "@/lib/sidebar-prefs"
 
 import appCss from "../styles.css?url"
 
@@ -15,6 +16,7 @@ const darkModeClassName = `dark ${stylex.props(darkTheme, darkShadows).className
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   beforeLoad: async ({ context }) => ({
     session: await context.queryClient.ensureQueryData(sessionQueryOptions),
+    sidebarPrefs: getSidebarPrefs(),
   }),
   head: () => ({
     meta: [

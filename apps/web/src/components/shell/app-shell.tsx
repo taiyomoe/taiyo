@@ -1,6 +1,7 @@
 import * as stylex from "@stylexjs/stylex"
 import { SidebarInset, SidebarProvider } from "@taiyomoe/ui/components/ui/sidebar"
-import type { CSSProperties, ReactNode } from "react"
+import { useRouteContext } from "@tanstack/react-router"
+import type { ReactNode } from "react"
 
 import { AppNavbar } from "@/components/shell/app-navbar"
 import { AppSidebar } from "@/components/shell/app-sidebar"
@@ -21,11 +22,17 @@ const styles = stylex.create({
     minWidth: 0,
   },
 })
-const layoutVars = { "--sidebar-width": "15.5rem" } as CSSProperties
 
 export function AppShell({ user, children }: { user: Session["user"]; children: ReactNode }) {
+  const { sidebarPrefs } = useRouteContext({ from: "__root__" })
+
   return (
-    <SidebarProvider data-app-shell="" style={layoutVars} sx={styles.provider}>
+    <SidebarProvider
+      data-app-shell=""
+      defaultOpen={sidebarPrefs.defaultOpen}
+      defaultWidth={sidebarPrefs.defaultWidth ?? 248}
+      sx={styles.provider}
+    >
       <AppNavbar user={user} />
       <div sx={styles.body}>
         <AppSidebar />

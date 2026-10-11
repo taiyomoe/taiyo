@@ -22,6 +22,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarResizeHandle,
   useSidebar,
 } from "@taiyomoe/ui/components/ui/sidebar"
 import { colors, font, radius } from "@taiyomoe/ui/styles/tokens.stylex"
@@ -167,6 +168,7 @@ export function AppSidebar() {
           </SidebarGroup>
         ))}
       </SidebarContent>
+      <SidebarResizeHandle maxWidth={384} minWidth={208} />
     </Sidebar>
   )
 }
