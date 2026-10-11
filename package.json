@@ -20,7 +20,7 @@
   "devDependencies": {
     "@stylexjs/eslint-plugin": "^0.19.1",
     "@stylistic/eslint-plugin": "^5.10.0",
-    "@types/node": "^26.2.0",
+    "@types/node": "^26.6.4",
     "@vitejs/plugin-react": "^6.1.1",
     "knip": "^6.32.2",
     "lefthook": "^2.1.16",
