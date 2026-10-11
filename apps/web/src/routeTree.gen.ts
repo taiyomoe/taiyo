@@ -10,16 +10,23 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppRouteImport } from './routes/_app'
 import { Route as DmcaRouteImport } from './routes/dmca'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as TermsRouteImport } from './routes/terms'
-import { Route as TitlesRouteImport } from './routes/titles'
 import { Route as AuthSignInRouteImport } from './routes/auth/sign-in'
 import { Route as AuthSignUpRouteImport } from './routes/auth/sign-up'
+import { Route as AppTitlesIndexRouteImport } from './routes/_app/titles.index'
+import { Route as AppTitlesMediaIdRouteImport } from './routes/_app/titles.$mediaId'
+import { Route as ReadMediaIdChapterIdRouteImport } from './routes/read.$mediaId.$chapterId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppRoute = AppRouteImport.update({
+  id: '/_app',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DmcaRoute = DmcaRouteImport.update({
@@ -37,11 +44,6 @@ const TermsRoute = TermsRouteImport.update({
   path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
-const TitlesRoute = TitlesRouteImport.update({
-  id: '/titles',
-  path: '/titles',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AuthSignInRoute = AuthSignInRouteImport.update({
   id: '/auth/sign-in',
   path: '/auth/sign-in',
@@ -52,34 +54,56 @@ const AuthSignUpRoute = AuthSignUpRouteImport.update({
   path: '/auth/sign-up',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppTitlesIndexRoute = AppTitlesIndexRouteImport.update({
+  id: '/titles/',
+  path: '/titles/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppTitlesMediaIdRoute = AppTitlesMediaIdRouteImport.update({
+  id: '/titles/$mediaId',
+  path: '/titles/$mediaId',
+  getParentRoute: () => AppRoute,
+} as any)
+const ReadMediaIdChapterIdRoute = ReadMediaIdChapterIdRouteImport.update({
+  id: '/read/$mediaId/$chapterId',
+  path: '/read/$mediaId/$chapterId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dmca': typeof DmcaRoute
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
-  '/titles': typeof TitlesRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
+  '/titles/$mediaId': typeof AppTitlesMediaIdRoute
+  '/read/$mediaId/$chapterId': typeof ReadMediaIdChapterIdRoute
+  '/titles/': typeof AppTitlesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dmca': typeof DmcaRoute
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
-  '/titles': typeof TitlesRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
+  '/titles/$mediaId': typeof AppTitlesMediaIdRoute
+  '/read/$mediaId/$chapterId': typeof ReadMediaIdChapterIdRoute
+  '/titles': typeof AppTitlesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_app': typeof AppRouteWithChildren
   '/dmca': typeof DmcaRoute
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
-  '/titles': typeof TitlesRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
+  '/_app/titles/$mediaId': typeof AppTitlesMediaIdRoute
+  '/read/$mediaId/$chapterId': typeof ReadMediaIdChapterIdRoute
+  '/_app/titles/': typeof AppTitlesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -88,37 +112,45 @@ export interface FileRouteTypes {
     | '/dmca'
     | '/privacy'
     | '/terms'
-    | '/titles'
     | '/auth/sign-in'
     | '/auth/sign-up'
+    | '/titles/$mediaId'
+    | '/read/$mediaId/$chapterId'
+    | '/titles/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/dmca'
     | '/privacy'
     | '/terms'
-    | '/titles'
     | '/auth/sign-in'
     | '/auth/sign-up'
+    | '/titles/$mediaId'
+    | '/read/$mediaId/$chapterId'
+    | '/titles'
   id:
     | '__root__'
     | '/'
+    | '/_app'
     | '/dmca'
     | '/privacy'
     | '/terms'
-    | '/titles'
     | '/auth/sign-in'
     | '/auth/sign-up'
+    | '/_app/titles/$mediaId'
+    | '/read/$mediaId/$chapterId'
+    | '/_app/titles/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AppRoute: typeof AppRouteWithChildren
   DmcaRoute: typeof DmcaRoute
   PrivacyRoute: typeof PrivacyRoute
   TermsRoute: typeof TermsRoute
-  TitlesRoute: typeof TitlesRoute
   AuthSignInRoute: typeof AuthSignInRoute
   AuthSignUpRoute: typeof AuthSignUpRoute
+  ReadMediaIdChapterIdRoute: typeof ReadMediaIdChapterIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -128,6 +160,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_app': {
+      id: '/_app'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AppRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dmca': {
@@ -151,13 +190,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/titles': {
-      id: '/titles'
-      path: '/titles'
-      fullPath: '/titles'
-      preLoaderRoute: typeof TitlesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/auth/sign-in': {
       id: '/auth/sign-in'
       path: '/auth/sign-in'
@@ -172,17 +204,51 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthSignUpRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_app/titles/': {
+      id: '/_app/titles/'
+      path: '/titles'
+      fullPath: '/titles/'
+      preLoaderRoute: typeof AppTitlesIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/titles/$mediaId': {
+      id: '/_app/titles/$mediaId'
+      path: '/titles/$mediaId'
+      fullPath: '/titles/$mediaId'
+      preLoaderRoute: typeof AppTitlesMediaIdRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/read/$mediaId/$chapterId': {
+      id: '/read/$mediaId/$chapterId'
+      path: '/read/$mediaId/$chapterId'
+      fullPath: '/read/$mediaId/$chapterId'
+      preLoaderRoute: typeof ReadMediaIdChapterIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
+interface AppRouteChildren {
+  AppTitlesMediaIdRoute: typeof AppTitlesMediaIdRoute
+  AppTitlesIndexRoute: typeof AppTitlesIndexRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppTitlesMediaIdRoute: AppTitlesMediaIdRoute,
+  AppTitlesIndexRoute: AppTitlesIndexRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AppRoute: AppRouteWithChildren,
   DmcaRoute: DmcaRoute,
   PrivacyRoute: PrivacyRoute,
   TermsRoute: TermsRoute,
-  TitlesRoute: TitlesRoute,
   AuthSignInRoute: AuthSignInRoute,
   AuthSignUpRoute: AuthSignUpRoute,
+  ReadMediaIdChapterIdRoute: ReadMediaIdChapterIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
