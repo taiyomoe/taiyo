@@ -80,12 +80,15 @@ export const initMediasIndex = async ({
     // Index already exists. Meilisearch returns an error we deliberately ignore.
   })
 
-  await meili.index(mediasIndex).updateSettings({
-    searchableAttributes,
-    filterableAttributes,
-    sortableAttributes,
-    displayedAttributes,
-  })
+  await meili
+    .index(mediasIndex)
+    .updateSettings({
+      searchableAttributes,
+      filterableAttributes,
+      sortableAttributes,
+      displayedAttributes,
+    })
+    .waitTask()
 
   const ids = await db.selectFrom("medias").select("id").where("deletedAt", "is", null).execute()
 
