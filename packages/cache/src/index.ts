@@ -6,6 +6,11 @@ import { parseCache } from "./utils/parse-cache"
 const HOUR = 60 * 60
 // const DAY = 60 * 60 * 24
 const client = new DF(env.DRAGONFLY_URL)
+const INCREMENT_WITH_TTL = `
+local value = redis.call('INCR', KEYS[1])
+if value == 1 then redis.call('EXPIRE', KEYS[1], ARGV[1]) end
+return value
+`
 
 // Raw ioredis instance. Reserved for callers that need it directly
 // (e.g. rate-limit / queue libraries that own their own key schema).
@@ -21,6 +26,9 @@ export const cacheClient = {
       set: (id: string, value: string, ttl = 60) => client.setex(`users:auth:${id}`, ttl, value),
       get: (id: string) => client.get(`users:auth:${id}`),
       invalidate: (id: string) => client.del(`users:auth:${id}`).then(() => null),
+      getAndDelete: (id: string) => client.getdel(`users:auth:${id}`),
+      increment: (id: string, ttl: number) =>
+        client.eval(INCREMENT_WITH_TTL, 1, `users:auth:${id}`, ttl) as Promise<number>,
     },
     verificationEmailSentAt: {
       set: (id: string, value: Date) =>
