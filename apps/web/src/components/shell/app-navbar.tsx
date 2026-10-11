@@ -19,12 +19,13 @@ import { m } from "@/paraglide/messages"
 
 const styles = stylex.create({
   header: {
+    insetInline: 0,
     alignItems: "center",
-    backgroundColor: colors.sidebar,
+    backdropFilter: "blur(16px) saturate(180%)",
+    backgroundColor: `color-mix(in srgb, ${colors.background} 72%, transparent)`,
     display: "flex",
-    flexShrink: 0,
-    position: "sticky",
-    zIndex: 20,
+    position: "fixed",
+    zIndex: 30,
     borderBottomColor: colors.sidebarBorder,
     borderBottomStyle: "solid",
     borderBottomWidth: 1,

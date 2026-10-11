@@ -270,6 +270,24 @@ non-suspending `useQuery` with its own inline skeleton.
   plugin's own dev injection never runs; `__root.tsx` links
   `/virtual:stylex.css` and its HMR runtime itself in dev.
 
+## App shell
+
+`src/components/shell/` is the signed-in frame: a fixed, translucent navbar
+(logo, search with a ⌘K/Ctrl+K focus shortcut, account menu) over
+`@taiyomoe/ui`'s `Sidebar`, whose fixed container is pushed below the navbar by
+the `--navbar-height` custom property the shell sets on its provider.
+
+- **The page scrolls the window, and neither bar is `sticky`.** On macOS a
+  `sticky` header rides the document's elastic overscroll, so it visibly bounces
+  at the top and bottom of the page. Both bars are `position: fixed`, and
+  `styles.css` sets `overscroll-behavior: none` on `html` and `body` whenever a
+  `[data-app-shell]` element is mounted, which turns the rubber-band off for the
+  shell only. The landing page keeps the native bounce.
+
+- **Sidebar items without a `to` render as buttons.** Only Home has a route so
+  far; give an item a `to` in `SECTIONS` once its page exists and it becomes a
+  `Link` with active-state styling.
+
 ## Legal pages
 
 `src/routes/{privacy,terms,dmca}.tsx` must describe only what the Service actually

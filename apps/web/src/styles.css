@@ -8,6 +8,11 @@ html {
   scroll-behavior: smooth;
 }
 
+html:has([data-app-shell]),
+html:has([data-app-shell]) body {
+  overscroll-behavior: none;
+}
+
 [data-auth-fields] [data-slot="input"] {
   height: 3rem;
   line-height: 3rem;

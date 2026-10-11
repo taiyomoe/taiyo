@@ -15,6 +15,7 @@ const styles = stylex.create({
     flex: "1",
     display: "flex",
     minHeight: 0,
+    paddingTop: "var(--navbar-height)",
   },
   inset: {
     minWidth: 0,
@@ -24,7 +25,7 @@ const layoutVars = { "--sidebar-width": "15.5rem" } as CSSProperties
 
 export function AppShell({ user, children }: { user: Session["user"]; children: ReactNode }) {
   return (
-    <SidebarProvider style={layoutVars} sx={styles.provider}>
+    <SidebarProvider data-app-shell="" style={layoutVars} sx={styles.provider}>
       <AppNavbar user={user} />
       <div sx={styles.body}>
         <AppSidebar />
