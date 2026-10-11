@@ -50,6 +50,8 @@ export const createAuth = ({ db }: { db: Kysely<DB> }) =>
       set: cacheClient.users.auth.set,
       get: cacheClient.users.auth.get,
       delete: cacheClient.users.auth.invalidate,
+      getAndDelete: cacheClient.users.auth.getAndDelete,
+      increment: cacheClient.users.auth.increment,
     },
     rateLimit: {
       enabled: true,
