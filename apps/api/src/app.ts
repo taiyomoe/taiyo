@@ -39,12 +39,13 @@ export const createApp = (services: Services) => {
   const app = new Hono()
     .use(
       evlog({
-        drain: process.env.TEST
-          ? undefined
-          : createHyperDXDrain({
-              endpoint: env.HYPERDX_ENDPOINT,
-              apiKey: env.HYPERDX_INGESTION_KEY,
-            }),
+        drain:
+          process.env.TEST || !env.HYPERDX_ENDPOINT || !env.HYPERDX_INGESTION_KEY
+            ? undefined
+            : createHyperDXDrain({
+                endpoint: env.HYPERDX_ENDPOINT,
+                apiKey: env.HYPERDX_INGESTION_KEY,
+              }),
       }),
     )
     .use(secureHeaders())
@@ -60,7 +61,7 @@ export const createApp = (services: Services) => {
     .use(createContextMiddleware(services))
     .notFound((c) => c.fail("NOT_FOUND"))
     .onError(errorHandler)
-    .on(["GET", "POST"], "/api/auth/**", (c) => services.auth.handler(c.req.raw))
+    .on(["GET", "POST"], "/api/auth/*", (c) => services.auth.handler(c.req.raw))
     .get("/ping", (c) => c.json({ version: packageJson.version }))
     .route("/medias", mediasRouter)
     .route("/covers", coversRouter)

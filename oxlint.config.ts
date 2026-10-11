@@ -30,7 +30,7 @@ export default defineConfig({
   ignorePatterns: [".claude/**", "apps/web/src/routeTree.gen.ts"],
   overrides: [
     {
-      files: ["./packages/scripts/src/**/*.ts"],
+      files: ["./packages/scripts/src/**/*.ts", "./tooling/dev/src/**/*.ts"],
       rules: {
         "no-console": "off",
       },

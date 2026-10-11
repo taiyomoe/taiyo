@@ -5,9 +5,8 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "with-env": "dotenv -e .env --",
-    "dev": "pnpm with-env tsx watch src/index.ts",
-    "start": "pnpm with-env tsx src/index.ts",
+    "dev": "tsx watch --env-file-if-exists=.env src/index.ts",
+    "start": "tsx --env-file-if-exists=.env src/index.ts",
     "clean": "rm -rf .turbo node_modules"
   },
   "dependencies": {
@@ -22,7 +21,6 @@
   "devDependencies": {
     "@taiyomoe/typescript": "workspace:^",
     "@types/node": "^26.6.4",
-    "dotenv-cli": "^11.0.0",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2"
   }

@@ -5,8 +5,7 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "with-env": "dotenv -e ../../apps/api/.env --",
-    "cli": "pnpm with-env tsx src/index.ts"
+    "cli": "tsx --env-file-if-exists=../../apps/api/.env src/index.ts"
   },
   "dependencies": {
     "@taiyomoe/db": "workspace:^",
@@ -18,7 +17,6 @@
   "devDependencies": {
     "@taiyomoe/typescript": "workspace:^",
     "@types/node": "^26.6.4",
-    "dotenv-cli": "^11.0.0",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2"
   }
