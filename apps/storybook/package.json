@@ -25,7 +25,7 @@
     "@stylexjs/stylex": "^0.19.1",
     "@stylexjs/unplugin": "^0.19.1",
     "@taiyomoe/typescript": "workspace:^",
-    "@types/node": "^26.2.0",
+    "@types/node": "^26.6.4",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.4",
     "typescript": "^7.0.2"
