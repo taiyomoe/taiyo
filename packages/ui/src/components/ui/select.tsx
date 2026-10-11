@@ -8,7 +8,7 @@ import { Check, ChevronDown, ChevronUp, ChevronsUpDown } from "@/components/icon
 import { selectPopupMarker } from "../../styles/markers.stylex"
 import type { Sx } from "../../styles/sx"
 import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
-import { surface } from "../../styles/recipes"
+import { surface, transitions } from "../../styles/recipes"
 
 export const Select: typeof SelectPrimitive.Root = SelectPrimitive.Root
 
@@ -429,7 +429,13 @@ export function SelectPopup({
   sx?: Sx
 }): React.ReactElement {
   const positionerProps = stylex.props(styles.positioner)
-  const popupProps = stylex.props(styles.popup, stylex.defaultMarker(), selectPopupMarker, sx)
+  const popupProps = stylex.props(
+    transitions.popup,
+    styles.popup,
+    stylex.defaultMarker(),
+    selectPopupMarker,
+    sx,
+  )
   const surfaceProps = stylex.props(surface.raisedEdge, styles.surface)
   const listProps = stylex.props(styles.list)
   const upArrowProps = stylex.props(styles.scrollArrow, styles.scrollArrowUp)

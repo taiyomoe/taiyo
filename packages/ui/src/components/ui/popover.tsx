@@ -2,18 +2,18 @@ import { Popover as PopoverPrimitive } from "@base-ui/react/popover"
 import * as stylex from "@stylexjs/stylex"
 import type React from "react"
 import { cn } from "@/utils/cn"
-import { colors, radius, shadows, text } from "../../styles/tokens.stylex"
+import { colors, motion, radius, shadows, text } from "../../styles/tokens.stylex"
 import { surface } from "../../styles/recipes"
 import type { Sx } from "../../styles/sx"
 
 const styles = stylex.create({
   positioner: {
-    transitionDuration: "150ms",
+    transitionDuration: motion.enter,
     transitionProperty: {
       "[data-instant]": "none",
       default: "top, left, right, bottom, transform",
     },
-    transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+    transitionTimingFunction: motion.easeOut,
     zIndex: 50,
     height: "var(--positioner-height)",
     maxWidth: "var(--available-width)",
@@ -30,19 +30,24 @@ const styles = stylex.create({
     color: colors.popoverForeground,
     display: "flex",
     opacity: {
+      "[data-ending-style]": 0,
       "[data-starting-style]": 0,
       default: null,
     },
     outlineStyle: "none",
     position: "relative",
     scale: {
-      "[data-starting-style]": "0.98",
+      "[data-ending-style]": "0.96",
+      "[data-starting-style]": "0.96",
       default: null,
     },
     transformOrigin: "var(--transform-origin)",
-    transitionDuration: "150ms",
+    transitionDuration: {
+      "[data-ending-style]": motion.exit,
+      default: motion.enter,
+    },
     transitionProperty: "width, height, scale, opacity",
-    transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+    transitionTimingFunction: motion.easeOut,
     height: "var(--popup-height, auto)",
     width: "var(--popup-width, auto)",
   },

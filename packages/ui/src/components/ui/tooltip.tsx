@@ -2,18 +2,18 @@ import { Tooltip as TooltipPrimitive } from "@base-ui/react/tooltip"
 import * as stylex from "@stylexjs/stylex"
 import type React from "react"
 import { cn } from "@/utils/cn"
-import { colors, radius, shadows } from "../../styles/tokens.stylex"
+import { colors, motion, radius, shadows } from "../../styles/tokens.stylex"
 import { surface } from "../../styles/recipes"
 import type { Sx } from "../../styles/sx"
 
 const styles = stylex.create({
   positioner: {
-    transitionDuration: "150ms",
+    transitionDuration: motion.enter,
     transitionProperty: {
       "[data-instant]": "none",
       default: "top, left, right, bottom, transform",
     },
-    transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+    transitionTimingFunction: motion.easeOut,
     zIndex: 50,
     height: "var(--positioner-height)",
     maxWidth: "var(--available-width)",
@@ -38,18 +38,19 @@ const styles = stylex.create({
     },
     position: "relative",
     scale: {
-      "[data-ending-style]": "0.98",
-      "[data-starting-style]": "0.98",
+      "[data-ending-style]": "0.97",
+      "[data-starting-style]": "0.97",
       default: null,
     },
     textWrap: "balance",
     transformOrigin: "var(--transform-origin)",
     transitionDuration: {
+      "[data-ending-style]": motion.exit,
       "[data-instant]": "0s",
-      default: "150ms",
+      default: motion.enter,
     },
     transitionProperty: "width, height, scale, opacity",
-    transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+    transitionTimingFunction: motion.easeOut,
     height: "var(--popup-height, auto)",
     width: "var(--popup-width, auto)",
   },

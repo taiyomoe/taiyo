@@ -5,7 +5,7 @@ import { cn } from "@/utils/cn"
 import { Check, ChevronRight } from "@/components/icons"
 import { KbdSurface } from "@/components/ui/kbd"
 import { colors, consts, font, radius, shadows } from "../../styles/tokens.stylex"
-import { focus, surface } from "../../styles/recipes"
+import { focus, surface, transitions } from "../../styles/recipes"
 import { menuPopupMarker, menuSwitchItemMarker } from "../../styles/markers.stylex"
 import type { Sx } from "../../styles/sx"
 
@@ -329,7 +329,13 @@ export function MenuPopup({
   sx?: Sx
 }): React.ReactElement {
   const positionerProps = stylex.props(styles.positioner)
-  const popupProps = stylex.props(surface.raisedEdge, styles.popup, menuPopupMarker, sx)
+  const popupProps = stylex.props(
+    transitions.popup,
+    surface.raisedEdge,
+    styles.popup,
+    menuPopupMarker,
+    sx,
+  )
 
   return (
     <MenuPortal {...portalProps}>

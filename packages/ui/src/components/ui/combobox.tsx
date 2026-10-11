@@ -8,7 +8,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { comboboxPopupMarker } from "../../styles/markers.stylex"
 import type { Sx } from "../../styles/sx"
 import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
-import { focus, surface } from "../../styles/recipes"
+import { focus, surface, transitions } from "../../styles/recipes"
 
 export const ComboboxContext: React.Context<{
   chipsRef: React.RefObject<Element | null> | null
@@ -145,9 +145,6 @@ const styles = stylex.create({
     boxShadow: shadows.overlay,
     display: "flex",
     position: "relative",
-    transformOrigin: "var(--transform-origin)",
-    transitionProperty: "scale, opacity",
-    maxHeight: "100%",
     maxWidth: "var(--available-width)",
     minWidth: "var(--anchor-width)",
   },
@@ -508,8 +505,15 @@ export function ComboboxPopup({
   const { chipsRef } = React.useContext(ComboboxContext)
   const anchor = anchorProp ?? chipsRef
   const positionerProps = stylex.props(styles.positioner)
-  const surfaceProps = stylex.props(surface.raisedEdge, styles.surface, sx)
-  const popupProps = stylex.props(styles.popup, stylex.defaultMarker(), comboboxPopupMarker)
+  const popupProps = stylex.props(
+    transitions.popup,
+    surface.raisedEdge,
+    styles.surface,
+    styles.popup,
+    stylex.defaultMarker(),
+    comboboxPopupMarker,
+    sx,
+  )
 
   return (
     <ComboboxPrimitive.Portal {...portalProps}>
@@ -523,16 +527,14 @@ export function ComboboxPopup({
         sideOffset={sideOffset}
         style={positionerProps.style}
       >
-        <span className={cn(surfaceProps.className, className)} style={surfaceProps.style}>
-          <ComboboxPrimitive.Popup
-            className={popupProps.className}
-            data-slot="combobox-popup"
-            style={popupProps.style}
-            {...props}
-          >
-            {children}
-          </ComboboxPrimitive.Popup>
-        </span>
+        <ComboboxPrimitive.Popup
+          className={cn(popupProps.className, className)}
+          data-slot="combobox-popup"
+          style={popupProps.style}
+          {...props}
+        >
+          {children}
+        </ComboboxPrimitive.Popup>
       </ComboboxPrimitive.Positioner>
     </ComboboxPrimitive.Portal>
   )

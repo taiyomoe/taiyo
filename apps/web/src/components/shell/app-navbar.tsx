@@ -114,26 +114,28 @@ const styles = stylex.create({
     letterSpacing: "-0.02em",
   },
   search: {
-    flex: "1",
-    paddingInline: {
-      default: "0.75rem",
-      "@media (width >= 48rem)": "2rem",
-    },
     display: { default: "none", [consts.sm]: "flex" },
+    flexBasis: "22rem",
+    flexGrow: "0",
+    flexShrink: "1",
     minWidth: 0,
   },
   field: {
-    maxWidth: "30rem",
+    width: "100%",
   },
   searchIcon: {
     height: "1.125rem",
     width: "1.125rem",
   },
   actions: {
-    paddingInline: "1.25rem",
+    flex: "1",
+    gap: "0.75rem",
     alignItems: "center",
     display: "flex",
-    marginLeft: "auto",
+    justifyContent: "flex-end",
+    paddingInlineEnd: "1.25rem",
+    paddingInlineStart: "1rem",
+    minWidth: 0,
   },
 })
 
@@ -173,25 +175,25 @@ export function AppNavbar({ user }: { user: Session["user"] }) {
           <TaiyoLogoLockup sx={styles.lockup} />
         </Link>
       </div>
-      <div role="search" sx={styles.search}>
-        <InputGroup sx={styles.field}>
-          <InputGroupAddon>
-            <Search {...stylex.props(styles.searchIcon)} />
-          </InputGroupAddon>
-          <InputGroupInput
-            aria-label={m.shell_search_label()}
-            placeholder={m.shell_search_placeholder()}
-            ref={searchRef}
-          />
-          <InputGroupAddon align="inline-end">
-            <KbdGroup>
-              <Kbd>⌘</Kbd>
-              <Kbd>K</Kbd>
-            </KbdGroup>
-          </InputGroupAddon>
-        </InputGroup>
-      </div>
       <div sx={styles.actions}>
+        <div role="search" sx={styles.search}>
+          <InputGroup sx={styles.field}>
+            <InputGroupAddon>
+              <Search {...stylex.props(styles.searchIcon)} />
+            </InputGroupAddon>
+            <InputGroupInput
+              aria-label={m.shell_search_label()}
+              placeholder={m.shell_search_placeholder()}
+              ref={searchRef}
+            />
+            <InputGroupAddon align="inline-end">
+              <KbdGroup>
+                <Kbd>⌘</Kbd>
+                <Kbd>K</Kbd>
+              </KbdGroup>
+            </InputGroupAddon>
+          </InputGroup>
+        </div>
         <UserMenu user={user} />
       </div>
     </header>

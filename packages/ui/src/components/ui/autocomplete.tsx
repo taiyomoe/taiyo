@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import type { Sx } from "../../styles/sx"
 import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
-import { surface } from "../../styles/recipes"
+import { surface, transitions } from "../../styles/recipes"
 
 export const Autocomplete: typeof AutocompletePrimitive.Root = AutocompletePrimitive.Root
 
@@ -118,9 +118,6 @@ const styles = stylex.create({
     boxShadow: shadows.overlay,
     display: "flex",
     position: "relative",
-    transformOrigin: "var(--transform-origin)",
-    transitionProperty: "scale, opacity",
-    maxHeight: "100%",
     maxWidth: "var(--available-width)",
     minWidth: "var(--anchor-width)",
   },
@@ -315,8 +312,13 @@ export function AutocompletePopup({
   sx?: Sx
 }): React.ReactElement {
   const positionerProps = stylex.props(styles.positioner)
-  const surfaceProps = stylex.props(surface.raisedEdge, styles.surface, sx)
-  const popupProps = stylex.props(styles.popup)
+  const popupProps = stylex.props(
+    transitions.popup,
+    surface.raisedEdge,
+    styles.surface,
+    styles.popup,
+    sx,
+  )
 
   return (
     <AutocompletePrimitive.Portal {...portalProps}>
@@ -330,16 +332,14 @@ export function AutocompletePopup({
         sideOffset={sideOffset}
         style={positionerProps.style}
       >
-        <span className={cn(surfaceProps.className, className)} style={surfaceProps.style}>
-          <AutocompletePrimitive.Popup
-            className={popupProps.className}
-            data-slot="autocomplete-popup"
-            style={popupProps.style}
-            {...props}
-          >
-            {children}
-          </AutocompletePrimitive.Popup>
-        </span>
+        <AutocompletePrimitive.Popup
+          className={cn(popupProps.className, className)}
+          data-slot="autocomplete-popup"
+          style={popupProps.style}
+          {...props}
+        >
+          {children}
+        </AutocompletePrimitive.Popup>
       </AutocompletePrimitive.Positioner>
     </AutocompletePrimitive.Portal>
   )

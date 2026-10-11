@@ -73,6 +73,27 @@ writing a new component.
      navbar's bottom border, say — shows through the 1px ring. Resting surfaces
      (fields, cards) keep `padding-box`; they sit on a solid background.
 
+## Motion
+
+Every component that opens and closes animates, with timings from `motion` in
+`tokens.stylex.ts`, never literals. Entrances are longer than exits: the user
+is waiting for something to appear, but wants it gone the moment they dismiss
+it. All of them use the same strong ease-out (`motion.easeOut`).
+
+| Surface                                                       | Enter               | Exit               |
+| ------------------------------------------------------------- | ------------------- | ------------------ |
+| Anchored popups (menu, select, combobox, popover, tooltip, …) | `motion.enter`      | `motion.exit`      |
+| Dialogs, sheets, the command palette, accordion/collapsible   | `motion.enterLarge` | `motion.exitLarge` |
+| The sidebar's slide and the navbar parts that follow it       | `motion.slide`      | `motion.slide`     |
+
+Anchored popups take `transitions.popup` from `recipes.ts` as the first
+argument to `stylex.props()`: a fade plus a scale from 96% around
+`--transform-origin`, so the popup grows out of its trigger. The animated
+element must be the one Base UI puts `data-starting-style`/`data-ending-style`
+on (the `Popup` part) — Base UI waits for that element's transitions before
+unmounting, and a wrapper around it would never animate out. That is why the
+combobox and autocomplete paint their surface on the popup itself.
+
 ## Proportions, measured off the reference
 
 These are not taste calls — they were measured pixel-wise on the reference
