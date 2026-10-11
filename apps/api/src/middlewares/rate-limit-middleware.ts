@@ -2,6 +2,8 @@ import { RedisStore, type RedisClient } from "@hono-rate-limiter/redis"
 import { rawCacheClient } from "@taiyomoe/cache"
 import { rateLimiter } from "hono-rate-limiter"
 
+// hono-rate-limiter/redis expects an Upstash-style client; ioredis exposes
+// the same primitives under different method names. Wrap once at module load.
 const adapter: RedisClient = {
   scriptLoad: (script) => rawCacheClient.script("LOAD", script) as Promise<string>,
   evalsha: <TArgs extends unknown[], TData = unknown>(sha1: string, keys: string[], args: TArgs) =>

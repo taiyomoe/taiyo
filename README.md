@@ -193,17 +193,10 @@ pnpm -F web build                  # production build (client + SSR)
 
 ### Comments
 
-The source tree carries no comments. Code is expected to be self-explanatory;
-the only `//` lines in `apps/` and `packages/` are `oxlint-disable` /
-`biome-ignore` directives. Anything a reader could not derive from the code
-is recorded in a document instead:
-
-- `packages/ui/STYLEX.md` — StyleX authoring rules, the design language, the
-  compiler gotchas, and the couplings between components and `structural.css`.
-- `docs/engineering-notes.md` — API, queue, search, auth and tooling
-  invariants.
-- `apps/web/AGENTS.md` — the web app's scene and landing internals.
-- `docs/group-ownership.md` — the permission model.
+Code is expected to be self-explanatory, so the source tree carries almost no
+comments. Write one only when the reason cannot be read from the code and getting
+it wrong would break silently — a compiler quirk, a lock that prevents a race, a
+required-but-unused import. Never restate what the next line does.
 
 `packages/db/src/migrations/` and `packages/db/src/seeds/` are exempt: they are
 applied, frozen history.

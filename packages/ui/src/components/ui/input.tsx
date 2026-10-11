@@ -69,6 +69,8 @@ const styles = stylex.create({
       [consts.sm]: "2.375rem",
     },
     outlineStyle: "none",
+    // Chrome paints its autofill background on a transition; the absurd
+    // duration is the standard trick for suppressing it.
     transitionDuration: "5000000s",
     transitionProperty: "background-color",
     transitionTimingFunction: "ease-in-out",

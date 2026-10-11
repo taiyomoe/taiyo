@@ -90,6 +90,11 @@ const styles = stylex.create({
     whiteSpace: "nowrap",
   },
   cellCard: {
+    // `cell` clips the background to the padding box, which is right for the
+    // plain variant but wrong here: the hairline separators are translucent,
+    // so clipping made them composite over the PAGE instead of over the card
+    // fill. In dark that turned a white/8% line into a 1-value difference —
+    // the separators effectively disappeared.
     backgroundClip: "border-box",
     backgroundColor: {
       default: colors.card,

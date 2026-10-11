@@ -68,6 +68,8 @@ const cleanupUploadedFiles = async (c: Context) => {
       }),
     )
     .catch((cleanupErr: unknown) => {
+      // Swallow — we don't want a cleanup failure to mask the original
+      // error. Log it so the orphans can be reaped manually.
       c.get("log").error(cleanupErr as Error)
     })
 }

@@ -1228,6 +1228,9 @@ export function SidebarMenuSkeleton({
   showIcon?: boolean
   sx?: Sx
 }): React.ReactElement {
+  // Width between 50 and 90%, derived deterministically from this instance's id.
+  // Math.random() during render is impure -- the React Compiler may recompute it,
+  // and it produces a server/client hydration mismatch.
   const id = React.useId()
   const width = React.useMemo(() => {
     let hash = 0

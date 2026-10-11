@@ -29,8 +29,7 @@ writing a new component.
    that import StyleX; without the import the file is skipped whole, `sx` stays
    a meaningless DOM attribute, and every style in it silently stops applying.
    `oxlint` will report that import as unused — keep it, with an
-   `oxlint-disable-next-line no-unused-vars` above it. Do not add an
-   explanatory comment: the reason is this document.
+   `oxlint-disable-next-line no-unused-vars` and a note saying why.
 
    TypeScript will not catch either mistake. `src/styles/sx.ts` augments React's
    `DOMAttributes` so `sx` type-checks on host elements, and that augmentation
@@ -270,145 +269,6 @@ same as looking the same:
   `var(--available-height)`, `--thumb-size`) are plain strings in values:
   `minWidth: "var(--anchor-width)"`.
 
-## Component-specific gotchas
-
-Each of these cost a debugging session and none of them is visible from the
-code. They are listed with the file that depends on them.
-
-- **`calc()` needs whitespace around its operators** (`dialog.tsx`). Without
-  it the whole declaration is dropped silently and the nested-dialog dim never
-  runs.
-- **`z-index` must be a plain number in StyleX**, so a z-index that depends on
-  a custom property (`--toast-index`) has to ride the inline `style` prop
-  instead (`toast.tsx`).
-- **`backgroundClip` defaults to the padding box on a clipped cell, which
-  breaks translucent hairlines** (`table.tsx`, card variant). A translucent
-  separator then composites over the PAGE rather than over the card fill — in
-  dark that turned a white/8% line into a 1-value difference and the
-  separators effectively vanished. The card variant sets
-  `backgroundClip: "border-box"` for exactly this.
-- **Chrome paints its autofill background on a transition**, so an absurdly
-  long `transitionDuration` on `backgroundColor` is the standard suppression
-  trick (`input.tsx`, mirrored in `number-field.tsx`).
-- **A marker cannot cross a component file.** `stylex.when.ancestor(sel,
-marker)` only reaches an ancestor inside the same component tree we render,
-  so e.g. pressing a `<label>` that wraps a `Switch` cannot squish the thumb —
-  the label is the consumer's element. Don't try; the constraint is structural.
-- **The keycap radius ratio (0.35 × height) was measured on a WIDE chip.** On a
-  square slot the same ratio reads as a bubble rather than a field — see
-  `otp-field.tsx`, which deliberately departs from the table in
-  "Proportions, measured off the reference".
-- **Row radii are concentric with their own container's padding, not with the
-  nearest similar component.** The command palette pads its list 0.5rem inside
-  a `radius.xl` panel, the autocomplete pads 0.25rem; their rows therefore
-  cannot share a radius (`command.tsx`).
-- **Inset sheets drop the `::before` hairline entirely** — they float clear of
-  the viewport edge and already read as raised (`sheet.tsx`).
-- **A later argument to `stylex.props()` beats an attribute condition
-  deterministically; two conditions on the same property do not.** When an
-  active-tab style has to beat a `:hover` on the same property, pass it as a
-  later argument rather than expressing it as `[data-active]`
-  (`apps/web/src/components/auth/auth-form.tsx`).
-
-## Cross-file couplings with `structural.css`
-
-Every row here is a rule that lives in `src/styles/structural.css` and a
-component that depends on it. Changing one side without the other is silent:
-the rule still matches, the computed value is just wrong.
-
-| Component                                   | What `structural.css` owns                                                                                                        | Breaks if removed                                 |
-| ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- |
-| `card.tsx`                                  | nested-card `clip-path`; child cards clip 1rem past the frame, first/last pull in to 1px                                          | `CardFrame`'s muted wash paints over nested cards |
-| `dialog.tsx`, `sheet.tsx`                   | `:has()`-driven padding: header/footer padding shrinks to 0.75rem (0.25rem next to a bare footer) when the popup contains a panel | doubled padding around panels                     |
-| `popover.tsx`, `tooltip.tsx`                | `[data-current]` / `[data-previous]` width rules, which read `--viewport-inline-padding`                                          | mis-sized viewport during a transition            |
-| `calendar.tsx`                              | squares the inner corners of a selected range; draws the "today" dot on the day button's `::after`                                | a range reads as separate discs                   |
-| `table.tsx`                                 | rounds the outer corners of the body grid in the card variant                                                                     | square corners inside a rounded card              |
-| every component with consumer icon children | the two `svg` allowlist blocks at the top of the file                                                                             | icons fall back to their intrinsic 24px           |
-
-The `--taiyo-*` custom-property hooks those rules read are declared in
-`globals.css`, which mirrors a subset of `tokens.stylex.ts` by hand. Changing a
-value in one means changing it in the other.
-
-### What `structural.css` is for, block by block
-
-The file exists because StyleX excludes descendant selectors by design and the
-repo lint bans `:has()` and lookahead selectors inside StyleX. Everything in it
-targets consumer-provided children — typically icons — under a `[data-slot]`
-scope. Keep it minimal: any rule that can live on the element itself belongs in
-the component's `stylex.create`. A rule there can freely ADD a declaration
-StyleX does not set; overriding one always needs `!important`, because StyleX
-emits its atoms at a specificity no plain selector can outrank.
-
-- **Menu checkbox/radio items** mirror the menu-item icon rules and also size
-  the check indicator `svg` the component renders.
-- **Popover/tooltip viewports**: Base UI renders `[data-current]` /
-  `[data-previous]` wrappers around the content while it transitions between
-  anchors; the components set `--viewport-inline-padding` inline for them.
-- **Calendar-in-popover** uses `:has()`; the doubled attribute selector
-  outweighs StyleX's single-class specificity. `1.225rem` is `radius.xl`,
-  restoring the popover radius when the tooltip style shrank it to `radius.md`.
-- **Frame** stacks its panels with a 1px gutter via a sibling selector over
-  children the consumer arranges.
-- **Alert's column layout** depends on what the consumer put inside it (a
-  leading icon, an action, or both), so it is driven by `:has()` and sibling
-  selectors; the icon itself is consumer content too.
-- **Group** welds whatever controls the consumer puts in it into one pill:
-  inner corners squared, the shared border collapsed, the raised `::before`
-  edge clipped at the seam. The separator borrows the focus-ring colour from
-  whichever neighbour is focused, so the joined pill reads as one focused
-  control.
-- **Empty**'s media slot sizes consumer icons; its description styles consumer
-  links and reacts to a preceding title.
-- **Table, card variant**: which cell is a corner depends on the rows the
-  consumer renders, so the outer corners need `:first-child` / `:last-child` on
-  both axes at once.
-- **Input group** reaches across elements it does not render itself (the field
-  is a child component, the addons are consumer-ordered). The wrapped control's
-  own wrapper collapses to `display: contents` so the inner `<input>` becomes a
-  direct flex child of the group.
-- **Calendar**: the "today" marker is a dot on the day button's `::after`, while
-  the cell that owns the state is the button's parent. A selected range must
-  read as ONE continuous band, so days inside it square the corners facing
-  their neighbours — the rounded background is painted by the button, not the
-  cell that carries the range modifier. Month dropdowns render their label in a
-  nested span.
-- **Autocomplete, Combobox, Command**: the leading icon is consumer content,
-  and groups after the first get a gutter. Combobox chips hug the input; the
-  command panel rounds its bottom corners only when no footer follows it.
-- **Drawer**: padding and corner rounding depend on which slots the consumer
-  composed inside the popup, which only `:has()` / descendant selectors can see.
-  Its menu rows size the consumer's leading icons.
-- **Sidebar**: rows size and truncate whatever the consumer puts in them, and
-  the action/badge slots align to the height of the sibling menu button. An
-  action button shifts the row's padding so the label never runs under it.
-- **Keycap** may hold a glyph (arrow keys, return) instead of a letter. Icon
-  components default to 24px, which overflows a 22px cap and stretches it into
-  a lozenge, so the glyph is sized like the cap's text.
-- **Buttons, toggles, tabs, select triggers** size icon children here.
-
-### `reset.css` and `globals.css`
-
-- `reset.css` is the project's own normalize layer — a direct port of the
-  preflight that used to arrive with the CSS framework, with theme lookups
-  resolved to this design system's font stacks. StyleX ships no reset, so
-  user-agent defaults would otherwise show through. It is not opinionated
-  styling: anything expressing the design language belongs in
-  `tokens.stylex.ts` and the components. Replaced elements are blocks (no
-  descender gap under an icon). The `color-mix()` rule is guarded because
-  `color-mix()` with `currentcolor` crashes older Safari. Date/time inputs
-  match heights when empty and honour `text-align` on iOS.
-- Everything in both files sits in `@layer base`, which is load-bearing:
-  StyleX emits atoms unlayered and an unlayered rule beats a layered one
-  however specific the layered one is. Without the layer the reset would
-  outrank every padding and background a component declares.
-- `globals.css` owns only what StyleX cannot: the reset import, the
-  `structural.css` import, and document defaults (page background, text colour,
-  fonts). Its `:root` / `.dark` blocks are deliberately NOT a second copy of the
-  palette — they carry the few semantic colours `structural.css` consumes. The
-  default border colour gives a component that declares only a border width
-  the hairline the design language expects, and the default outline colour
-  covers anything focused that draws no ring of its own.
-
 ## Verification for every file you touch
 
 `oxlint` and `tsc` do NOT see StyleX compile errors — the compiler only runs
@@ -423,6 +283,3 @@ with the Storybook check.
    version.
 3. The component looks right in BOTH themes — the design language above, not
    just "it renders".
-4. **No comments.** This package is comment-free by policy; the reasoning lives
-   in this file. The only `//` lines allowed in `src/` are `oxlint-disable`
-   directives. See `README.md` (§ Comments).

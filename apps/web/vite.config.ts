@@ -22,12 +22,19 @@ const config = defineConfig(({ mode }) => {
     },
     plugins: [
       devtools(),
+      // StyleX compiles ahead of the React transform.
       stylex.vite({
         useCSSLayers: { before: ["base", "structural"] },
         dev: process.env.NODE_ENV === "development",
         runtimeInjection: false,
+        // StyleX resolves *.stylex.ts variable imports itself, so it needs the
+        // same "@/*" alias the bundler and tsconfig use.
         unstable_moduleResolution: { type: "commonJS", rootDir: import.meta.dirname },
         aliases: { "@/*": [`${import.meta.dirname}/src/*`] },
+        // @taiyomoe/ui is a workspace package resolved through node_modules and
+        // ships StyleX source, so it must be compiled as app code.
+        // externalPackages is implemented in @stylexjs/unplugin's core but is
+        // missing from its UserOptions type in 0.19.0; cast until upstream adds it.
         externalPackages: ["@taiyomoe/ui"],
       } as Parameters<typeof stylex.vite>[0]),
       tanstackStart(),

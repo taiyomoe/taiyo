@@ -30,6 +30,7 @@ type TagCategories =
   | "Demographic"
 
 export const tags = {
+  // MangaDex genres (December 25, 2025)
   ACTION: {
     name: {
       en: "Action",
@@ -354,6 +355,7 @@ export const tags = {
     isAdult: false,
   },
 
+  // MangaDex formats (December 25, 2025)
   ONESHOT: {
     name: {
       en: "Oneshot",
@@ -501,6 +503,12 @@ export const tags = {
     isAdult: false,
   },
 
+  /**
+   * AniList tags (December 3, 2025)
+   *
+   * Does not include Boys' Love, Crime, Historical, Isekai,
+   * Medecine, Philosophy, Superhero, Tragedy and Wuxia.
+   */
   ACHROMATIC: {
     name: {
       en: "Achromatic",

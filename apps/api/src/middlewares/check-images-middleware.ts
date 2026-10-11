@@ -4,6 +4,11 @@ import { createMiddleware } from "hono/factory"
 import { filetypeinfo } from "magic-bytes.js"
 import sharp from "sharp"
 
+// Walks a dot-separated FormData key (e.g. "covers.0.file") into the nested
+// object that validateFormData built and replaces the leaf. We need this
+// because handlers read processed files from `c.var.formData`, not from the
+// underlying FormData object; without this write the original (unprocessed)
+// File ref persists and the route uploads raw user bytes.
 const setByPath = (root: unknown, key: string, value: File) => {
   if (root === null || typeof root !== "object") {
     return
@@ -81,7 +86,7 @@ export const checkImages = (maxSizeBytes: number = config.images.maxSizeBytes) =
         }
 
         const processedBuffer = await sharp(buffer)
-          .rotate()
+          .rotate() // Auto-rotate based on EXIF orientation before stripping
           .jpeg({ quality: config.images.quality })
           .toBuffer()
 

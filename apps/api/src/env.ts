@@ -16,6 +16,10 @@ export const env = createEnv({
     PORT: z.coerce.number().int().positive().default(3002),
     HYPERDX_ENDPOINT: isProduction ? z.url() : z.url().optional(),
     HYPERDX_INGESTION_KEY: isProduction ? z.string().nonempty() : z.string().optional(),
+    /**
+     * Comma-separated list of origins allowed to call the API with credentials.
+     * Empty / unset → CORS middleware disabled (same-origin only).
+     */
     CORS_ALLOWED_ORIGINS: z.string().default(""),
   },
 

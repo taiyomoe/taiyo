@@ -70,6 +70,9 @@ export const SignUpForm = () => {
   })
   const isSubmitting = form.formState.isSubmitting
   const isBusy = isSubmitting || auth.disabled
+  // handleSubmit() is invoked at event time rather than during render: its
+  // callback reads turnstileRef.current, and the React Compiler must assume a
+  // function passed to a call made during render may itself run during render.
   const onSubmit = (event: FormEvent<HTMLFormElement>) =>
     form.handleSubmit(async (values) => {
       auth.setError(null)

@@ -90,6 +90,7 @@ export default defineConfig({
     "@stylexjs/no-unused": "error",
     "@stylexjs/sort-keys": "error",
 
+    // Buggy: misfires on tests that import `test` from a custom setup helper.
     "vitest/no-standalone-expect": "off",
   },
 })

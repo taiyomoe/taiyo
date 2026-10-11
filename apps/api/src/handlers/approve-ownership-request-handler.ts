@@ -43,6 +43,12 @@ export const approveOwnershipRequestHandler = new Hono().post(
       return c.fail("OWNERSHIP_REQUEST_NOT_PENDING")
     }
 
+    // Serialize concurrent approvals on the same group. Without this lock the
+    // SELECT below and the INSERT can both run in parallel transactions, both
+    // see no OWNER, and both insert — producing two OWNERs from the request
+    // workflow even though the intent is "first approval wins, the rest are
+    // auto-cancelled below". The lock is transaction-scoped and keyed on the
+    // group, so approvals for different groups still proceed in parallel.
     await sql`SELECT pg_advisory_xact_lock(hashtextextended(${ownershipRequest.groupId}::text, 0))`.execute(
       db,
     )

@@ -31,6 +31,7 @@ export const reapStaleChapterUploads = async (
     (t.payload as ChapterUploadManifest).pages.map((p) => ({ Key: p.stagingKey })),
   )
 
+  // DeleteObjects caps at 1000 keys/call; chunk. Deleting absent keys is a no-op.
   for (let i = 0; i < keys.length; i += 1000) {
     await s3
       .send(

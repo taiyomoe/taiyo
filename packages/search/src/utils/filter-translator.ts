@@ -39,6 +39,8 @@ const fromEnum = (attr: string, ops: EnumOps) => {
 const fromArray = (attr: string, ops: ArrayOps) => {
   const clauses: string[] = []
 
+  // hasAll → one equality per value; Meilisearch matches each against any
+  // element of the array, so chaining with AND enforces "contains every".
   if (ops.hasAll?.length) {
     for (const value of ops.hasAll) {
       clauses.push(`${attr} = ${quote(value)}`)
