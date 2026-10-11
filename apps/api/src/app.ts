@@ -39,12 +39,13 @@ export const createApp = (services: Services) => {
   const app = new Hono()
     .use(
       evlog({
-        drain: process.env.TEST
-          ? undefined
-          : createHyperDXDrain({
-              endpoint: env.HYPERDX_ENDPOINT,
-              apiKey: env.HYPERDX_INGESTION_KEY,
-            }),
+        drain:
+          process.env.TEST || !env.HYPERDX_ENDPOINT || !env.HYPERDX_INGESTION_KEY
+            ? undefined
+            : createHyperDXDrain({
+                endpoint: env.HYPERDX_ENDPOINT,
+                apiKey: env.HYPERDX_INGESTION_KEY,
+              }),
       }),
     )
     .use(secureHeaders())
