@@ -13,9 +13,9 @@
     "@taiyomoe/db": "workspace:^",
     "@taiyomoe/s3": "workspace:^",
     "bullmq": "^6.1.1",
-    "kysely": "^0.29.5",
+    "kysely": "^0.29.6",
     "magic-bytes.js": "^1.13.1",
-    "sharp": "^0.35.3",
+    "sharp": "^0.35.5",
     "zod": "^4.4.3"
   },
   "devDependencies": {

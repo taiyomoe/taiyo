@@ -14,7 +14,7 @@
     "@taiyomoe/schemas": "workspace:^",
     "@taiyomoe/utils": "workspace:^",
     "meilisearch": "^0.60.0",
-    "radashi": "^12.9.1",
+    "radashi": "^12.9.6",
     "zod": "^4.4.3"
   },
   "devDependencies": {
