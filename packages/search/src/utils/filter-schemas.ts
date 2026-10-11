@@ -43,3 +43,12 @@ export const dateFilter = z
     isNull: z.boolean().optional(),
   })
   .strict()
+
+export const countFilter = z
+  .object({
+    eq: z.number().int().nonnegative().optional(),
+    gte: z.number().int().nonnegative().optional(),
+    lte: z.number().int().nonnegative().optional(),
+    between: z.tuple([z.number().int().nonnegative(), z.number().int().nonnegative()]).optional(),
+  })
+  .strict()
