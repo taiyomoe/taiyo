@@ -20,7 +20,7 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@react-email/ui": "^6.9.2",
+    "@react-email/ui": "^6.11.0",
     "@taiyomoe/typescript": "workspace:^",
     "@types/node": "^26.2.0",
     "@types/react": "^19.2.18",
