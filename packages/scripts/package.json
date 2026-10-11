@@ -13,7 +13,7 @@
     "@taiyomoe/s3": "workspace:^",
     "@taiyomoe/search": "workspace:^",
     "citty": "^0.2.2",
-    "dotenv": "^17.4.2"
+    "dotenv": "^18.0.5"
   },
   "devDependencies": {
     "@taiyomoe/typescript": "workspace:^",
