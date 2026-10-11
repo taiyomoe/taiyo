@@ -39,8 +39,6 @@ const fromEnum = (attr: string, ops: EnumOps) => {
 const fromArray = (attr: string, ops: ArrayOps) => {
   const clauses: string[] = []
 
-  // hasAll → one equality per value; Meilisearch matches each against any
-  // element of the array, so chaining with AND enforces "contains every".
   if (ops.hasAll?.length) {
     for (const value of ops.hasAll) {
       clauses.push(`${attr} = ${quote(value)}`)
@@ -113,16 +111,6 @@ export type FilterSpec<TDocument> = Record<
   | { kind: "count"; attr: keyof TDocument }
 >
 
-/**
- * Translates a validated filter DSL into a Meilisearch filter string.
- *
- * `spec` declares, per DSL field, which document attribute the clause
- * targets and which operator family to apply. Returns `undefined` when no
- * clauses are present so callers can omit the `filter` argument entirely.
- *
- * Resource-agnostic: each resource (medias, chapters, ...) ships its own
- * `FilterSpec` and the typed Zod schema that produces compatible inputs.
- */
 export const translateFilter = (
   spec: FilterSpec<Record<string, unknown>>,
   filter: Record<string, unknown>,

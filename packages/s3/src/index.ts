@@ -38,7 +38,6 @@ export const getBannerKey = (mediaId: string, fileName: string) =>
 export const getStaffImageKey = (staffId: string, fileName: string) =>
   `staffs/${staffId}/${fileName}`
 
-/** Presigned PUT URL a client uses to upload one raw page directly to S3. */
 export const getPresignedUploadUrl = (
   s3: S3Client,
   bucket: string,
@@ -50,7 +49,6 @@ export const getPresignedUploadUrl = (
     expiresIn,
   })
 
-/** Canonical key for a finished, processed chapter page. Always .jpg. */
 export const getChapterPageKey = (mediaId: string, chapterId: string, pageId: string) =>
   `medias/${mediaId}/chapters/${chapterId}/${pageId}.jpg`
 
@@ -65,16 +63,9 @@ export const getCoverUrl = (mediaId: string, coverId: string, extension: string)
 export const getBannerUrl = (mediaId: string, bannerId: string, extension: string) =>
   `${publicBase}/${getBannerKey(mediaId, `${bannerId}.${extension}`)}`
 
-/** Staging key for a raw, not-yet-processed upload. Reaped after processing. */
 export const getChapterStagingKey = (chapterId: string, uploadId: string, index: number) =>
   `staging/chapters/${chapterId}/${uploadId}/${index}`
 
-/**
- * Idempotent: tells the bucket to expire raw objects under `staging/` after
- * `expiryDays`. Best-effort — some S3-compatible stores (RustFS / Garage) may
- * not implement the lifecycle API, so callers should catch + log, never crash.
- * This is the backstop for the reaper, not a replacement for it.
- */
 export const ensureStagingLifecycle = (s3: S3Client, bucket: string, expiryDays: number) =>
   s3.send(
     new PutBucketLifecycleConfigurationCommand({

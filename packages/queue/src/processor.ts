@@ -26,7 +26,6 @@ export const processChapterUpload = async (
     .executeTakeFirst()
 
   if (!task) {
-    // Nothing actionable; do not retry forever. Return cleanly.
     return
   }
 
@@ -39,8 +38,6 @@ export const processChapterUpload = async (
       .where("id", "=", taskId)
       .execute()
 
-    // Process pages sequentially (bounded memory). Concurrency across
-    // chapters is governed by the BullMQ worker concurrency, NOT here.
     for (const { pageId, stagingKey } of manifest.pages) {
       const obj = await s3.send(new GetObjectCommand({ Bucket: s3Bucket, Key: stagingKey }))
       const buffer = Buffer.from(await obj.Body!.transformToByteArray())
@@ -84,7 +81,6 @@ export const processChapterUpload = async (
       .where("id", "=", taskId)
       .execute()
 
-    // Best-effort cleanup of staged originals.
     await s3
       .send(
         new DeleteObjectsCommand({
@@ -92,12 +88,7 @@ export const processChapterUpload = async (
           Delete: { Objects: manifest.pages.map(({ stagingKey }) => ({ Key: stagingKey })) },
         }),
       )
-      .catch(() => {
-        // Orphans are reaped by the staging lifecycle rule; don't fail the job.
-      })
-
-    // TODO(plan-001): emit chapter-published notification here once the
-    // notifications producer exists. Out of scope for this plan.
+      .catch(() => {})
   } catch (err) {
     await db
       .updateTable("tasks")
@@ -105,6 +96,6 @@ export const processChapterUpload = async (
       .where("id", "=", taskId)
       .execute()
 
-    throw err // let BullMQ retry per defaultJobOptions
+    throw err
   }
 }

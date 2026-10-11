@@ -18,12 +18,6 @@ export default defineConfig({
     typeAware: true,
     typeCheck: true,
   },
-  // React Compiler rules ship in oxlint's `correctness` category (aligned with
-  // the upstream ESLint presets), so enabling the category turns them on:
-  // react/purity, react/refs, react/immutability, react/preserve-manual-memoization,
-  // react/set-state-in-render, react/set-state-in-effect, react/static-components,
-  // react/use-memo, react/void-use-memo, react/error-boundaries, react/globals.
-  // These replaced the single react/react-compiler nursery rule in oxlint 1.79.
   categories: {
     correctness: "error",
   },
@@ -40,7 +34,6 @@ export default defineConfig({
     "no-console": "warn",
     curly: ["error", "all"],
 
-    // Stylistic rules
     "@stylistic/padding-line-between-statements": [
       "error",
       {
@@ -87,8 +80,6 @@ export default defineConfig({
     ],
     "@stylistic/wrap-iife": ["error", "inside"],
 
-    // StyleX rules — the plugin's full rule set, all at error, all on their
-    // documented defaults.
     "@stylexjs/enforce-extension": "error",
     "@stylexjs/valid-styles": "error",
     "@stylexjs/no-conflicting-props": "error",
@@ -99,8 +90,6 @@ export default defineConfig({
     "@stylexjs/no-unused": "error",
     "@stylexjs/sort-keys": "error",
 
-    // Vitest rules
-    // Buggy: misfires on tests that import `test` from a custom setup helper.
     "vitest/no-standalone-expect": "off",
   },
 })

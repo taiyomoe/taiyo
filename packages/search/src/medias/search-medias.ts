@@ -3,12 +3,6 @@ import { FilterSpec, translateFilter } from "../utils/filter-translator"
 import { MediaDocument } from "./get-media-document"
 import { SearchMediasInput, type MediaSort } from "./media-search-schemas"
 
-/**
- * Public sort field → internal Meilisearch attribute. `mainTitle` maps to
- * `_sortMainTitle` (a lowercased mirror) so alphabetical ordering is
- * case-insensitive; the internal field is excluded from `displayedAttributes`
- * so consumers never see it.
- */
 const sortFieldToAttribute = {
   createdAt: "createdAt",
   updatedAt: "updatedAt",

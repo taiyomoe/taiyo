@@ -6,14 +6,6 @@ import type { ChapterUploadManifest } from "./types"
 
 export type ReaperDeps = { db: Kysely<DB>; s3: S3Client; s3Bucket: string }
 
-/**
- * Cleans up the two staging-leak sources:
- *   1. sessions opened but never finalized  → Task stuck PENDING
- *   2. jobs that exhausted their retries     → Task FAILED (worker only deletes
- *      staging on SUCCESS, so failed jobs leave their staged originals behind)
- * Deletes the staged objects AND the Task rows once older than
- * config.images.staleUploadReapHours. Pure + injectable; pass `now` in tests.
- */
 export const reapStaleChapterUploads = async (
   { db, s3, s3Bucket }: ReaperDeps,
   now = new Date(),
@@ -39,7 +31,6 @@ export const reapStaleChapterUploads = async (
     (t.payload as ChapterUploadManifest).pages.map((p) => ({ Key: p.stagingKey })),
   )
 
-  // DeleteObjects caps at 1000 keys/call; chunk. Deleting absent keys is a no-op.
   for (let i = 0; i < keys.length; i += 1000) {
     await s3
       .send(
@@ -48,9 +39,7 @@ export const reapStaleChapterUploads = async (
           Delete: { Objects: keys.slice(i, i + 1000) },
         }),
       )
-      .catch(() => {
-        // The lifecycle rule is the backstop; don't fail the reap on a delete hiccup.
-      })
+      .catch(() => {})
   }
 
   await db
