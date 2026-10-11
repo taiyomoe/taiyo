@@ -58,6 +58,14 @@ and `create-media-handler.ts`; each hoists `const extension` above the
 Handlers select `extension` and drop it from the response: consumers get `url`,
 not the storage detail behind it.
 
+`POST /medias/search` follows the same rule through the Meilisearch document:
+`getMediaDocument` stores the main cover's `mainCoverExtension` next to
+`mainCoverId`, and the handler swaps it for `mainCoverUrl`. The document holds
+the extension rather than the finished URL so that changing `S3_PUBLIC_URL`
+never requires a reindex. Adding the field did: documents indexed before it
+existed return `mainCoverUrl: null` until
+`pnpm -F scripts cli init-meilisearch` rewrites them.
+
 Staff images (`getStaffImageKey`, used by `create-staff-handler.ts` and
 `update-staff-handler.ts`) have the same latent problem and no persisted
 extension. When a staff surface needs image URLs, the covers/banners change is

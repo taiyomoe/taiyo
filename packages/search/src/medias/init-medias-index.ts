@@ -63,6 +63,7 @@ const displayedAttributes = [
   "artistIds",
   "mainTitle",
   "mainCoverId",
+  "mainCoverExtension",
   "libraryCount",
   "chapterCount",
 ] satisfies (keyof MediaDocument)[]

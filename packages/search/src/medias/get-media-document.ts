@@ -37,6 +37,7 @@ export type MediaDocument = {
   artistIds: string[]
   mainTitle: { title: string; language: Language } | null
   mainCoverId: string | null
+  mainCoverExtension: string | null
   libraryCount: number
   chapterCount: number
   _sortMainTitle: string
@@ -63,7 +64,7 @@ export const getMediaDocument = async (db: Kysely<DB>, mediaId: string) => {
       .execute(),
     db
       .selectFrom("covers")
-      .select(["id", "language", "isMainCover"])
+      .select(["id", "extension", "language", "isMainCover"])
       .where("mediaId", "=", mediaId)
       .where("deletedAt", "is", null)
       .execute(),
@@ -123,6 +124,7 @@ export const getMediaDocument = async (db: Kysely<DB>, mediaId: string) => {
     staffNames: staffs.map((s) => s.name),
     mainTitle: mainTitle ? { title: mainTitle.title, language: mainTitle.language } : null,
     mainCoverId: mainCover?.id ?? null,
+    mainCoverExtension: mainCover?.extension ?? null,
     libraryCount: Number(libraryCountRow.count),
     chapterCount: chapterRows.length,
     _sortMainTitle: mainTitle ? mainTitle.title.toLowerCase() : "",

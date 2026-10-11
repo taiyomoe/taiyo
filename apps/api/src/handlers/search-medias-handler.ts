@@ -7,6 +7,7 @@ import {
   MEDIA_STATUSES,
   MEDIA_TYPES,
 } from "@taiyomoe/db"
+import { getCoverUrl } from "@taiyomoe/s3"
 import { paginationMetaSchema } from "@taiyomoe/schemas"
 import { searchMedias, searchMediasInputSchema } from "@taiyomoe/search"
 import { Hono } from "hono"
@@ -72,6 +73,11 @@ const mediaHitSchema = z.object({
     .uuid()
     .nullable()
     .meta({ description: "The ID of the main cover, if one exists." }),
+  mainCoverUrl: z.url().nullable().meta({
+    description: "Public URL of the main cover image, if one exists.",
+    example:
+      "https://cdn.taiyo.moe/medias/4e26b80f-6661-4f5f-93b4-6dfed052bbed/covers/a56cc54d-7776-4787-9b21-97a4674b80bc.jpg",
+  }),
   libraryCount: z.number().int().meta({
     description: "How many readers have this media in their library.",
     example: 12_400,
@@ -87,7 +93,7 @@ export const searchMediasHandler = new Hono().post(
   describeRoute({
     summary: "Search medias",
     description:
-      "Paginated, typo-tolerant search over medias. Use `q` for full-text search across titles, synopsis, and staff names. Use `filter` to narrow by enum, array, date, or count fields. Use `sort` to order by recency, title, chapter count, or how many readers have it in their library. Each result carries core metadata, the main title, the main cover id, and both popularity counts — fetch the detail endpoint for full relations.\n\n**Authentication:** none.",
+      "Paginated, typo-tolerant search over medias. Use `q` for full-text search across titles, synopsis, and staff names. Use `filter` to narrow by enum, array, date, or count fields. Use `sort` to order by recency, title, chapter count, or how many readers have it in their library. Each result carries core metadata, the main title, the main cover id and URL, and both popularity counts — fetch the detail endpoint for full relations.\n\n**Authentication:** none.",
     tags: ["Medias"],
     requestBody: {
       content: {
@@ -125,6 +131,15 @@ export const searchMediasHandler = new Hono().post(
       c.var.json,
     )
 
-    return c.ok(hits, { page, perPage, total })
+    return c.ok(
+      hits.map(({ mainCoverExtension, ...hit }) => ({
+        ...hit,
+        mainCoverUrl:
+          hit.mainCoverId && mainCoverExtension
+            ? getCoverUrl(hit.id, hit.mainCoverId, mainCoverExtension)
+            : null,
+      })),
+      { page, perPage, total },
+    )
   },
 )
