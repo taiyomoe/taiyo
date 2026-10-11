@@ -6,6 +6,8 @@ import { HeadContent, Scripts, createRootRouteWithContext } from "@tanstack/reac
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools"
 import { darkShadows, darkTheme } from "@taiyomoe/ui/styles/themes"
 
+import { sessionQueryOptions } from "@/lib/queries/session"
+
 import appCss from "../styles.css?url"
 
 // Both halves live on <html> so portals inherit them: the `dark` class drives
@@ -13,6 +15,9 @@ import appCss from "../styles.css?url"
 const darkModeClassName = `dark ${stylex.props(darkTheme, darkShadows).className ?? ""}`.trim()
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
+  beforeLoad: async ({ context }) => ({
+    session: await context.queryClient.ensureQueryData(sessionQueryOptions),
+  }),
   head: () => ({
     meta: [
       { charSet: "utf-8" },

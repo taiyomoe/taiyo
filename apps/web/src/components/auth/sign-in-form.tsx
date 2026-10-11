@@ -12,12 +12,14 @@ import { AuthSwitchLink } from "@/components/auth/auth-switch-link"
 import { useAuthForm } from "@/components/auth/use-auth-form"
 import { SunButton } from "@/components/buttons/sun-button"
 import { CheckboxField, InputField, PasswordField } from "@/components/fields/form-field"
+import { sessionQueryOptions } from "@/lib/queries/session"
 import { m } from "@/paraglide/messages"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { LockPasswordIcon, Mail01Icon } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { authClient } from "@taiyomoe/auth/client"
 import { Form } from "@taiyomoe/ui/components/ui/form"
+import { useQueryClient } from "@tanstack/react-query"
 import { useNavigate } from "@tanstack/react-router"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -30,6 +32,7 @@ const signInSchema = z.object({
 
 export const SignInForm = () => {
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
   const auth = useAuthForm()
   const form = useForm({
     resolver: zodResolver(signInSchema),
@@ -53,7 +56,10 @@ export const SignInForm = () => {
         onError: ({ error }) => {
           auth.setError(error.message || m.auth_error_generic())
         },
-        onSuccess: () => navigate({ to: "/" }),
+        onSuccess: async () => {
+          queryClient.removeQueries({ queryKey: sessionQueryOptions.queryKey })
+          await navigate({ to: "/" })
+        },
       },
     )
   })

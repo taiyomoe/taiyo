@@ -115,6 +115,10 @@ sync. It prints the local URLs when it finishes. For the first checkout these ar
 - API: <http://localhost:3002> (`/docs` for the OpenAPI viewer, `/ping` for a health check)
 - Storybook (run separately): `pnpm -F storybook dev` → <http://localhost:6006>
 
+**Dev accounts.** The seed creates `user@gmail.com` (role `USER`) and
+`admin@gmail.com` (role `ADMIN`), both with the password `password123`. The
+other seeded users have no password and cannot sign in.
+
 **Env files.** The root `.env` holds every local port and credential, and
 `bootstrap` derives the connection URLs in `apps/*/.env` from it. To change a
 port or a credential, edit the root `.env` and rerun `pnpm bootstrap`. Leave

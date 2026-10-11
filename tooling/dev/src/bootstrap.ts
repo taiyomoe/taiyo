@@ -230,6 +230,8 @@ const printSummary = () => {
   API docs       ${url("API_PORT")}/docs
   HyperDX        ${url("HYPERDX_PORT")}
   RustFS console ${url("RUSTFS_CONSOLE_PORT")}
+
+  Sign in as user@gmail.com or admin@gmail.com, password "password123".
 `)
 }
 const main = async () => {
@@ -259,7 +261,16 @@ const main = async () => {
     step("Seeding the database")
     run("pnpm", ["-F", "@taiyomoe/db", "kysely", "seed", "run"])
   } else {
-    step("Database already has data, skipping the seed")
+    step("Database already has data, seeding only the dev accounts")
+    run("pnpm", [
+      "-F",
+      "@taiyomoe/db",
+      "kysely",
+      "seed",
+      "run",
+      "--specific",
+      "1780056748390_dev-accounts",
+    ])
   }
 
   step("Indexing medias in Meilisearch")
