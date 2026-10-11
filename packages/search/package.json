@@ -15,7 +15,7 @@
     "@taiyomoe/utils": "workspace:^",
     "meilisearch": "^0.60.0",
     "radashi": "^12.9.1",
-    "zod": "^4.4.3"
+    "zod": "^4.6.5"
   },
   "devDependencies": {
     "@taiyomoe/typescript": "workspace:^",

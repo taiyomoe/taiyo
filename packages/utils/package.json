@@ -11,7 +11,7 @@
     "@faker-js/faker": "^10.6.0",
     "@taiyomoe/config": "workspace:^",
     "@taiyomoe/db": "workspace:^",
-    "zod": "^4.4.3"
+    "zod": "^4.6.5"
   },
   "devDependencies": {
     "@taiyomoe/typescript": "workspace:^",

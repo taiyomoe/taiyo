@@ -19,7 +19,7 @@
     "mangadex-full-api": "^6.2.0",
     "pg": "^8.23.0",
     "radashi": "^12.9.1",
-    "zod": "^4.4.3"
+    "zod": "^4.6.5"
   },
   "devDependencies": {
     "@taiyomoe/typescript": "workspace:^",

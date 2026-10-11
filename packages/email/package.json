@@ -17,7 +17,7 @@
     "react-dom": "^19.2.8",
     "react-email": "^6.9.2",
     "resend": "^6.32.0",
-    "zod": "^4.4.3"
+    "zod": "^4.6.5"
   },
   "devDependencies": {
     "@react-email/ui": "^6.11.0",
