@@ -16,8 +16,8 @@
     "@storybook/react-vite": "^10.6.1",
     "@taiyomoe/ui": "workspace:^",
     "@vitejs/plugin-react": "^6.1.1",
-    "react": "^19.2.8",
-    "react-dom": "^19.2.8",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
     "storybook": "^10.6.1",
     "vite": "^8.3.2"
   },
@@ -26,8 +26,8 @@
     "@stylexjs/unplugin": "^0.19.1",
     "@taiyomoe/typescript": "workspace:^",
     "@types/node": "^26.6.4",
-    "@types/react": "^19.2.18",
-    "@types/react-dom": "^19.2.4",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
     "typescript": "^7.0.2"
   }
 }

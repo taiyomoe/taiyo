@@ -21,13 +21,13 @@
     "@hugeicons/react": "^1.1.10",
     "@stylexjs/stylex": "^0.19.1",
     "clsx": "^2.1.1",
-    "react": "^19.2.8",
+    "react": "^19.3.0",
     "react-day-picker": "^10.0.2",
-    "react-dom": "^19.2.8"
+    "react-dom": "^19.3.0"
   },
   "devDependencies": {
     "@taiyomoe/typescript": "workspace:^",
-    "@types/react": "^19.2.18",
+    "@types/react": "^19.3.0",
     "typescript": "^7.0.2"
   }
 }
