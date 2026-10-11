@@ -655,8 +655,8 @@ importers:
         specifier: workspace:^
         version: link:../utils
       meilisearch:
-        specifier: ^0.60.0
-        version: 0.60.0
+        specifier: ^0.62.0
+        version: 0.62.0
       radashi:
         specifier: ^12.9.6
         version: 12.9.6
@@ -5280,8 +5280,8 @@ packages:
   mdn-data@2.27.1:
     resolution: {integrity: sha512-9Yubnt3e8A0OKwxYSXyhLymGW4sCufcLG6VdiDdUGVkPhpqLxlvP5vl1983gQjJl3tqbrM731mjaZaP68AgosQ==}
 
-  meilisearch@0.60.0:
-    resolution: {integrity: sha512-z32KgxE6/7hRzbVfzUgzlmNl2OS7TwGE6wSWs2tVEuAY9DWrX6zAmt0s7wTyelH36orIaZ3/t1mQsCsExGtVDQ==}
+  meilisearch@0.62.0:
+    resolution: {integrity: sha512-/ETDW7mmWI2NcSmtJdTPhbjsIbs3VcuapszX5X6JhdHB0XbszPOhqd3EB2bEylL0HK7dgwh/4Z3MdyuycWVf5A==}
     engines: {node: ^20.19.0 || >=22.12.0}
 
   micromatch@4.0.8:
@@ -10041,7 +10041,7 @@ snapshots:
 
   mdn-data@2.27.1: {}
 
-  meilisearch@0.60.0: {}
+  meilisearch@0.62.0: {}
 
   micromatch@4.0.8:
     dependencies:
