@@ -13,7 +13,7 @@
   "dependencies": {
     "@fontsource/pt-serif": "^5.3.0",
     "@hookform/resolvers": "^5.9.1",
-    "@hugeicons/core-free-icons": "^4.2.3",
+    "@hugeicons/core-free-icons": "^4.3.5",
     "@hugeicons/react": "^1.1.10",
     "@inlang/paraglide-js-react": "^1.0.3",
     "@marsidev/react-turnstile": "^1.6.1",
@@ -32,7 +32,7 @@
     "hono": "^4.13.13",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
-    "react-hook-form": "^7.85.0",
+    "react-hook-form": "^7.89.0",
     "zod": "^4.4.3"
   },
   "devDependencies": {
