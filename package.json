@@ -28,7 +28,7 @@
     "oxlint": "^1.79.0",
     "oxlint-tsgolint": "^7.0.2001",
     "sherif": "^1.13.0",
-    "turbo": "^2.10.10",
+    "turbo": "^2.11.7",
     "typescript": "^7.0.2",
     "vitest": "^4.1.10"
   },
