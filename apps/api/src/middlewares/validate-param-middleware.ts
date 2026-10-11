@@ -8,7 +8,11 @@ type Env<TSchema extends z.ZodType> = {
 }
 
 export const validateParam = <TSchema extends z.ZodType>(schema: TSchema) => {
-  return createMiddleware<Env<TSchema>>(async (c, next) => {
+  return createMiddleware<
+    Env<TSchema>,
+    string,
+    { in: { param: Record<string, string> }; out: { param: z.output<TSchema> } }
+  >(async (c, next) => {
     const validation = schema.safeParse(c.req.param())
 
     if (!validation.success) {
