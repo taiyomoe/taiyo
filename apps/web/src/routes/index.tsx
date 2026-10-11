@@ -9,8 +9,12 @@ import { LandingMarquee } from "@/components/landing/landing-marquee"
 import { LandingNav } from "@/components/landing/landing-nav"
 import { LandingReviews } from "@/components/landing/landing-reviews"
 import { LandingStats } from "@/components/landing/landing-stats"
+import { LatestChapters } from "@/components/media/latest-chapters"
 import { scene } from "@/components/scene/scene.stylex"
+import { latestChaptersQueryOptions } from "@/lib/queries/chapters"
 import { m } from "@/paraglide/messages"
+
+const LATEST_CHAPTERS = 8
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -19,6 +23,12 @@ export const Route = createFileRoute("/")({
       { name: "description", content: m.landing_meta_description() },
     ],
   }),
+  context: () => ({
+    latestChaptersQueryOptions: latestChaptersQueryOptions({ page: 1, perPage: LATEST_CHAPTERS }),
+  }),
+  loader: ({ context }) => {
+    void context.queryClient.prefetchQuery(context.latestChaptersQueryOptions)
+  },
   component: Home,
 })
 
@@ -32,10 +42,13 @@ const styles = stylex.create({
 
 /** `data-landing` is the hook the reduced-motion block in styles.css keys off. */
 function Home() {
+  const { latestChaptersQueryOptions } = Route.useRouteContext()
+
   return (
     <div data-landing sx={styles.page}>
       <LandingNav />
       <LandingHero />
+      <LatestChapters queryOptions={latestChaptersQueryOptions} />
       <LandingMarquee />
       <LandingFlaws />
       <LandingStats />
