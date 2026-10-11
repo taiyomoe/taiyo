@@ -106,7 +106,7 @@ combobox and autocomplete paint their surface on the popup itself.
 - **Chevrons react to their popup.** A trigger spreads `stylex.defaultMarker()`
   and its chevron keys off `stylex.when.ancestor("[data-popup-open]")`: down
   chevrons (select, combobox, autocomplete) flip 180°, side chevrons (submenu,
-  drawer menu triggers) slide `0.125rem` toward the panel they opened, both on
+  drawer menu triggers) rotate 90° to point down, both on
   `motion.enter` / `motion.easeOut`.
 
 ## Proportions, measured off the reference
