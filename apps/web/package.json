@@ -13,7 +13,7 @@
   "dependencies": {
     "@fontsource/pt-serif": "^5.3.0",
     "@hookform/resolvers": "^5.9.0",
-    "@hugeicons/core-free-icons": "^4.2.3",
+    "@hugeicons/core-free-icons": "^4.3.5",
     "@hugeicons/react": "^1.1.9",
     "@inlang/paraglide-js-react": "^1.0.3",
     "@marsidev/react-turnstile": "^1.6.0",
