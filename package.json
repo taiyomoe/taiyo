@@ -4,7 +4,9 @@
   "type": "module",
   "scripts": {
     "build": "turbo run build",
+    "bootstrap": "node tooling/dev/src/bootstrap.ts",
     "dev": "turbo run dev --filter='!@taiyomoe/storybook'",
+    "dev:tunnel": "node tooling/dev/src/tunnel.ts",
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",
     "format": "oxfmt --check",

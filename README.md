@@ -30,9 +30,9 @@ Monorepo powered by [Turborepo](https://turbo.build/) and [pnpm workspaces](http
 ```no-highlight
 taiyo/
 ├── apps/
-│   ├── api/               # Hono + hono-openapi backend, port 3002
+│   ├── api/               # Hono + hono-openapi backend, API_PORT (3002)
 │   ├── storybook/         # @taiyomoe/ui component playground, port 6006
-│   ├── web/               # TanStack Start (React) web app, port 3000
+│   ├── web/               # TanStack Start (React) web app, WEB_PORT (3000)
 │   └── worker/            # BullMQ worker that processes chapter uploads
 ├── packages/
 │   ├── auth/              # Better Auth config + plugins + lifecycle hooks
@@ -100,58 +100,54 @@ taiyo/
 
 ### Setup
 
-1. Clone and install
-   ```bash
-   git clone https://github.com/taiyomoe/taiyo.git
-   cd taiyo
-   pnpm install
-   ```
-2. Copy the env templates. Env is split per app — the root `.env` holds only the Docker infrastructure variables.
-   ```bash
-   cp .env.example .env                           # Docker infra: container ports & credentials
-   cp apps/api/.env.example apps/api/.env         # API + all server-side packages
-   cp apps/web/.env.example apps/web/.env         # web client (VITE_* vars)
-   cp apps/worker/.env.example apps/worker/.env   # chapter-processing worker
-   ```
-   The templates are a working local setup as-copied — no value needs editing to
-   boot the stack, run the test suites, or `pnpm dev`. Replace
-   `BETTER_AUTH_SECRET` with your own (`npx auth secret`) for anything beyond
-   local dev; social OAuth and Turnstile work without credentials, but those
-   flows stay disabled. Backend tooling (`pnpm -F db kysely …`,
-   `pnpm -F scripts cli`) and the integration tests all read `apps/api/.env`.
-3. Start infrastructure
-   ```bash
-   docker compose up -d --wait
-   ```
-   Ports are published on 127.0.0.1 and sit outside each service's default, so a
-   Postgres or Redis you already run locally will not collide. Running two
-   checkouts at once does collide on host ports — shift the block in `.env` and
-   the matching URLs in `apps/api/.env`.
-4. Create the S3 bucket
-   ```bash
-   pnpm -F scripts cli init-s3
-   ```
-5. Migrate + seed the database
-   ```bash
-   pnpm -F db kysely migrate latest
-   pnpm -F db kysely seed run
-   ```
-6. Run dev
+```bash
+git clone https://github.com/taiyomoe/taiyo.git
+cd taiyo
+pnpm install
+pnpm bootstrap   # env files, Docker infra, S3 bucket, migrations, seed, search index
+pnpm dev         # API + web + worker (Storybook is excluded)
+```
 
-   ```bash
-   pnpm dev                  # API + web + worker (Storybook is excluded)
-   ```
+`pnpm bootstrap` is idempotent, so rerun it whenever something feels out of
+sync. It prints the local URLs when it finishes. For the first checkout these are:
 
-   - API: <http://localhost:3002> (`/docs` for the OpenAPI viewer, `/ping` for a health check)
-   - Web: <http://localhost:3000>
-   - Storybook (run separately): `pnpm -F storybook dev` → <http://localhost:6006>
+- Web: <http://localhost:3000>
+- API: <http://localhost:3002> (`/docs` for the OpenAPI viewer, `/ping` for a health check)
+- Storybook (run separately): `pnpm -F storybook dev` → <http://localhost:6006>
+
+**Env files.** The root `.env` holds every local port and credential, and
+`bootstrap` derives the connection URLs in `apps/*/.env` from it. To change a
+port or a credential, edit the root `.env` and rerun `pnpm bootstrap`. Leave
+the rest of the app env files alone. Replace `BETTER_AUTH_SECRET` with your own
+(`npx auth secret`) for anything beyond local dev; social OAuth and Turnstile
+work without credentials, but those flows stay disabled. Backend tooling
+(`pnpm -F db kysely …`, `pnpm -F scripts cli`) and the integration tests all
+read `apps/api/.env`.
+
+**Several checkouts at once.** Every port is published on 127.0.0.1 only. Each
+checkout (a git worktree, say) claims a port slot: slot N shifts every port by
+10 × N. `bootstrap` picks the first slot that no other worktree claims and that
+is free on this machine, so two checkouts never collide. Pass `--slot N` to
+choose one yourself.
+
+**Public URLs.** `pnpm dev:tunnel` opens two [cloudflared](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/downloads/)
+quick tunnels and starts `pnpm dev` behind them. One tunnel serves the web app
+and one serves the API docs. The web app reaches the API through its own origin
+(`/_api` and `/api/auth` are proxied by Vite), so sign-in cookies work over the
+tunnel too. The URLs change on every run and are never written to disk.
+
+**HyperDX** runs locally, but its collector only accepts logs after you sign up
+in its UI. Copy the ingestion key into `HYPERDX_INGESTION_KEY` in
+`apps/api/.env` to turn log shipping on; until then the API logs to stdout only.
 
 ## 📝 Available scripts
 
 Root-level:
 
 ```bash
+pnpm bootstrap          # set up or resync the local environment (idempotent)
 pnpm dev                # turbo run dev — API + web + worker (excludes Storybook)
+pnpm dev:tunnel         # pnpm dev behind cloudflared quick tunnels
 pnpm build              # turbo run build
 pnpm format             # oxfmt --check
 pnpm format:fix         # oxfmt (in place)
@@ -160,7 +156,7 @@ pnpm lint:fix           # oxlint --fix
 pnpm lint:ws            # sherif — workspace dependency validation
 pnpm knip               # unused exports + dead deps
 pnpm test:unit          # vitest (vitest.config.unit.ts)
-pnpm test:integration   # vitest (vitest.config.integration.ts) — requires docker compose up --wait
+pnpm test:integration   # vitest (vitest.config.integration.ts) — requires pnpm bootstrap
 ```
 
 Package-specific:
@@ -171,7 +167,7 @@ pnpm -F db kysely seed run         # seed sample data
 pnpm -F storybook dev              # storybook dev server
 pnpm -F storybook build            # static storybook build
 pnpm -F api dev                    # tsx-watch the API
-pnpm -F web dev                    # TanStack Start dev server (port 3000)
+pnpm -F web dev                    # TanStack Start dev server (WEB_PORT)
 pnpm -F web build                  # production build (client + SSR)
 ```
 
@@ -224,16 +220,16 @@ runs, since `oxfmt` formats markdown too.
 
 Env vars are split per app rather than living in one root file:
 
-| File               | Owns                                                                                                                     | Loaded by                                                                                                                            |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `.env`             | Docker Compose infra only — container ports & credentials (`DATABASE_USERNAME`, `RUSTFS_*`, `MEILISEARCH_MASTER_KEY`, …) | `docker compose`                                                                                                                     |
-| `apps/api/.env`    | All server-side vars — DB / cache / S3 / search / auth / email                                                           | `apps/api`, the backend tooling in `packages/db` & `packages/scripts` (`dotenv -e ../../apps/api/.env`), and `pnpm test:integration` |
-| `apps/web/.env`    | `VITE_*` client vars only                                                                                                | Vite (`apps/web` is its own `envDir`)                                                                                                |
-| `apps/worker/.env` | DB / cache / S3 plus `CHAPTER_PROCESSING_CONCURRENCY` — a subset of `apps/api/.env`                                      | `apps/worker` (`dotenv -e .env`)                                                                                                     |
+| File               | Owns                                                                                                       | Loaded by                                                                                                                             |
+| ------------------ | ---------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `.env`             | Every local port and credential (`WEB_PORT`, `DATABASE_USERNAME`, `RUSTFS_*`, `MEILISEARCH_MASTER_KEY`, …) | `docker compose`, `pnpm bootstrap`                                                                                                    |
+| `apps/api/.env`    | All server-side vars — DB / cache / S3 / search / auth / email                                             | `apps/api`, the backend tooling in `packages/db` & `packages/scripts` (`--env-file=../../apps/api/.env`), and `pnpm test:integration` |
+| `apps/web/.env`    | `VITE_*` client vars, plus the dev server's `PORT` and `API_PORT`                                          | Vite (`apps/web` is its own `envDir`)                                                                                                 |
+| `apps/worker/.env` | DB / cache / S3 plus `CHAPTER_PROCESSING_CONCURRENCY` — a subset of `apps/api/.env`                        | `apps/worker` (`--env-file=.env`)                                                                                                     |
 
 Each `.env.example` documents its own file's variables, with local-development defaults. Validation is centralized via [`@t3-oss/env-core`](https://env.t3.gg/) in each package's `env.ts`, which is where a variable's shape and whether it is required are defined.
 
-A few `apps/api` values are derived from the Docker infra in the root `.env` and must be kept in sync: `DATABASE_URL` (postgres credentials/port), `S3_ACCESS_KEY_ID` / `S3_SECRET_ACCESS_KEY` (`RUSTFS_*`), and `MEILISEARCH_API_KEY` (`MEILISEARCH_MASTER_KEY`). `apps/worker/.env` repeats the DB / cache / S3 subset and must match too. `apps/storybook` needs no env vars.
+`pnpm bootstrap` writes every value in `apps/*/.env` that points at local infrastructure (ports, connection URLs, the S3 and Meilisearch credentials) from the root `.env`, so those never need syncing by hand. `apps/storybook` needs no env vars.
 
 ## 📦 Package overview
 

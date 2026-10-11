@@ -741,6 +741,18 @@ importers:
 
   tooling/bruno: {}
 
+  tooling/dev:
+    devDependencies:
+      '@taiyomoe/typescript':
+        specifier: workspace:^
+        version: link:../typescript
+      '@types/node':
+        specifier: ^26.6.4
+        version: 26.6.4
+      typescript:
+        specifier: ^7.0.2
+        version: 7.0.2
+
   tooling/typescript: {}
 
 packages:

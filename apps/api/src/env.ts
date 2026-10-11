@@ -20,6 +20,7 @@ export const env = createEnv({
    * This way you can ensure the app isn't built with invalid env vars.
    */
   server: {
+    PORT: z.coerce.number().int().positive().default(3002),
     HYPERDX_ENDPOINT: isProduction ? z.url() : z.url().optional(),
     HYPERDX_INGESTION_KEY: isProduction ? z.string().nonempty() : z.string().optional(),
     /**

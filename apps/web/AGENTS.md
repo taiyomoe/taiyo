@@ -158,9 +158,9 @@ TypedResponse<…>`, and the validators must keep declaring their `Input`
   never duplicated between a loader and a component. See **Router, query and
   prefetching** below.
 - **CORS.** The API only honours `credentials: "include"` for origins listed in
-  its `CORS_ALLOWED_ORIGINS`. `apps/api/.env.example` ships
-  `http://localhost:3000` for this reason; a browser request that fails with no
-  response headers at all is almost always this.
+  its `CORS_ALLOWED_ORIGINS`, which `pnpm bootstrap` points at this checkout's
+  web origin. A browser request that fails with no response headers at all is
+  almost always this.
 
 ## Router, query and prefetching
 
@@ -262,8 +262,13 @@ non-suspending `useQuery` with its own inline skeleton.
   you later add a Nitro deployment preset that emits `.output/**` / `.nitro/**`
   (already git-ignored via the root `.gitignore`), add those globs to the root
   `build` task outputs too.
-- **Port 3000** is hardcoded in the `dev` script; currently free in this repo
-  (api is separate, storybook uses 6006).
+- **Dev server.** `PORT` and `API_PORT` in `.env` set the port and the
+  `/_api` + `/api/auth` proxy target (see `vite.config.ts`); `pnpm bootstrap`
+  writes both. The proxy is what lets `pnpm dev:tunnel` serve the web app and
+  the API from one origin.
+- **StyleX in dev.** TanStack Start renders no `index.html`, so the StyleX
+  plugin's own dev injection never runs; `__root.tsx` links
+  `/virtual:stylex.css` and its HMR runtime itself in dev.
 
 ## Legal pages
 
@@ -280,7 +285,6 @@ third-party service that receives personal data is a change to that list.
 
 ## Next steps
 
-- `pnpm install` at the root, then `pnpm --filter @taiyomoe/web dev`.
 - Add routes under `src/routes/`; load `@tanstack/router-core#router-core` skills as needed.
 - Decide on a deployment adapter (likely Cloudflare, to match the rest of the repo).
 - If tests are wanted, add a `__tests__/` dir (picked up by the root vitest config).
