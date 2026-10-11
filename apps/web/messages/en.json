@@ -136,5 +136,7 @@
   "error_heading": "Something went wrong",
   "error_api_code": "The API responded with {code}.",
   "error_unknown": "An unexpected error occurred.",
-  "loading": "Loading…"
+  "loading": "Loading…",
+  "home_greeting": "Hello, {name}!",
+  "home_sign_out": "Sign out"
 }
