@@ -4,10 +4,6 @@ import { env as dbEnv } from "@taiyomoe/db/env"
 import { execSync } from "node:child_process"
 import pg from "pg"
 
-// Runs ONCE per `vitest` invocation — not once per worker. Provisions the
-// template database the per-test fixture in `setup.ts` clones from. Without
-// this every worker would race on DROP/CREATE of the same template DB.
-
 const TEMPLATE_DB = "taiyo_test_template"
 const getDbUrl = (name: string) => {
   const url = new URL(dbEnv.DATABASE_URL)

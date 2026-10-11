@@ -2,17 +2,6 @@ import type { Media, Selectable } from "@taiyomoe/db"
 import { createMiddleware } from "hono/factory"
 import z from "zod"
 
-/**
- * Resolves the `:id` path parameter to a media row and exposes it on the
- * context as `c.var.media`.
- *
- * Rejects with:
- *   - `VALIDATION_ERROR` when `:id` is not a UUID
- *   - `MEDIA_NOT_FOUND` when no matching media exists
- *
- * Pass `{ includeDeleted: true }` for routes that operate on soft-deleted
- * media (e.g. restore). The default excludes soft-deleted rows.
- */
 export const checkMedia = (opts: { includeDeleted?: boolean } = {}) =>
   createMiddleware<{
     Variables: { media: Selectable<Media> }

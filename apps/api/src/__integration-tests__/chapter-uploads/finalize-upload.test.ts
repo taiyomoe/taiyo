@@ -96,7 +96,6 @@ describe("POST /chapters/:id/pages/finalize", () => {
     const uploadId = crypto.randomUUID()
     const taskId = crypto.randomUUID()
 
-    // Task is for chapterA, but we finalize against chapterB.
     await services.db
       .insertInto("tasks")
       .values({

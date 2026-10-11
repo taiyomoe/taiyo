@@ -3,8 +3,6 @@ import { signInAs } from "../helpers/auth"
 import { api } from "../helpers/request"
 import { test } from "../setup"
 
-// Three seeded media — picked for variety. Their existence is checked via the
-// seed files (media-1, media-2, media-3) so the inserts don't FK-violate.
 const SEEDED_MEDIA_IDS = [
   "4e26b80f-6661-4f5f-93b4-6dfed052bbed",
   "7a99da64-56e7-4bf6-8159-8db0d3b4f231",

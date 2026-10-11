@@ -2,15 +2,6 @@ import { Session, User } from "@taiyomoe/auth/server"
 import { createMiddleware } from "hono/factory"
 import { type Actions, defineAbilitiesFor, type Subjects } from "../utils/abilities"
 
-/**
- * Resolves the better-auth session and enforces an ability check on it.
- *
- * Rejects with:
- *   - `UNAUTHORIZED` when there is no session at all
- *   - `FORBIDDEN` when the authenticated user lacks the required ability
- *
- * On success the user and session are exposed on the context.
- */
 export const withAuth = (action: Actions, subject: Subjects) =>
   createMiddleware<{
     Variables: { user: User; session: Session["session"] }

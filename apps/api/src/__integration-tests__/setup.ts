@@ -29,8 +29,6 @@ const sanitize = (raw: string) => raw.replace(/[^a-z0-9]/gi, "_").toLowerCase()
 const getDbName = (taskId: string) => `integration_${sanitize(taskId)}`
 const getBucketName = (taskId: string) => `taiyo-test-${sanitize(taskId).replace(/_/g, "-")}`
 const getMediasIndex = (taskId: string) => `medias_${sanitize(taskId)}`
-// Per-worker admin client. The template DB itself is provisioned in
-// `global-setup.ts` so it exists across every worker before any test runs.
 const adminClient = new pg.Client({ connectionString: getDbUrl("postgres") })
 const adminClientReady = adminClient.connect()
 const sharedS3 = getS3Client()
@@ -88,9 +86,7 @@ export const test = baseTest.extend<Fixtures>({
     }
 
     await sharedS3.send(new DeleteBucketCommand({ Bucket: bucketName }))
-    await sharedMeili.deleteIndex(mediasIndex).catch(() => {
-      // Index might not exist if init failed; swallow.
-    })
+    await sharedMeili.deleteIndex(mediasIndex).catch(() => {})
   },
   app: async ({ services }, use) => {
     await use(createApp(services))

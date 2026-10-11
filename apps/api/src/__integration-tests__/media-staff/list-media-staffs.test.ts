@@ -3,7 +3,7 @@ import { api } from "../helpers/request"
 import { test } from "../setup"
 
 const SEEDED_MEDIA_ID = "4e26b80f-6661-4f5f-93b4-6dfed052bbed"
-const SEEDED_STAFF_ID = "54d2c255-f4a9-4bd5-b927-587ef9c4e3d2" // Kodachi, AUTHOR
+const SEEDED_STAFF_ID = "54d2c255-f4a9-4bd5-b927-587ef9c4e3d2"
 
 type LinkItem = { staffId: string; name: string; image: string | null; role: string }
 

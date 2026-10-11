@@ -2,7 +2,6 @@ import { describe, expect } from "vitest"
 import { api } from "../helpers/request"
 import { test } from "../setup"
 
-// Boruto, seeded in packages/db/src/seeds/medias/media-1.ts
 const SEEDED_MEDIA_ID = "4e26b80f-6661-4f5f-93b4-6dfed052bbed"
 
 type CoverRow = {

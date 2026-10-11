@@ -2,7 +2,7 @@ import { describe, expect } from "vitest"
 import { api } from "../helpers/request"
 import { test } from "../setup"
 
-const SEEDED_STAFF_ID = "54d2c255-f4a9-4bd5-b927-587ef9c4e3d2" // Kodachi Ukyou
+const SEEDED_STAFF_ID = "54d2c255-f4a9-4bd5-b927-587ef9c4e3d2"
 
 type StaffDetail = {
   id: string

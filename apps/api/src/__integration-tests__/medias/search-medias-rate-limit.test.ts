@@ -3,11 +3,6 @@ import { describe, expect } from "vitest"
 import { api } from "../helpers/request"
 import { test } from "../setup"
 
-// /medias/search has the most permissive budget in the first pass — 60/min
-// — because it's the one public mutation. Verify the gate trips at all and
-// the 429 keeps the standard envelope. The X-Forwarded-For is a fresh UUID
-// per test invocation so the counter starts empty regardless of leftover
-// Dragonfly state from prior runs.
 describe("POST /medias/search rate limit", () => {
   test("returns 429 after the per-IP budget is exhausted", async ({ app }) => {
     const headers = { "x-forwarded-for": `203.0.113.${randomUUID()}` }

@@ -6,8 +6,6 @@ import { test } from "../setup"
 
 const SEEDED_MEDIA_ID = "4e26b80f-6661-4f5f-93b4-6dfed052bbed"
 const SEEDED_UPLOADER_ID = "db852a04-7406-4a6a-87f2-1b494e810a29"
-// staleUploadReapHours = 24; pass a "now" 25 hours in the future so that tasks
-// created "now" appear stale from the reaper's perspective.
 const futureNow = () => new Date(Date.now() + 25 * 60 * 60 * 1000)
 
 describe("reapStaleChapterUploads", () => {
@@ -30,7 +28,6 @@ describe("reapStaleChapterUploads", () => {
       })
       .execute()
 
-    // Put a fake staged object so we can verify it gets deleted.
     await s3.send(
       new PutObjectCommand({
         Bucket: s3Bucket,
@@ -56,7 +53,6 @@ describe("reapStaleChapterUploads", () => {
       })
       .execute()
 
-    // Advance `now` 25 h into the future so the task is older than the 24 h cutoff.
     const result = await reapStaleChapterUploads({ db, s3, s3Bucket }, futureNow())
 
     expect(result.reaped).toBe(1)
@@ -139,7 +135,6 @@ describe("reapStaleChapterUploads", () => {
       })
       .execute()
 
-    // Use real now — task was just created so it must NOT be reaped.
     const result = await reapStaleChapterUploads({ db, s3, s3Bucket }, new Date())
 
     expect(result.reaped).toBe(0)

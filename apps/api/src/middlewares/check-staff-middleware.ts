@@ -6,17 +6,6 @@ const paramSchema = z.object({
   id: z.uuid(),
 })
 
-/**
- * Resolves the `:id` path parameter to a staff row and exposes it on the
- * context as `c.var.staff`.
- *
- * Rejects with:
- *   - `VALIDATION_ERROR` when the id is not a UUID
- *   - `STAFF_NOT_FOUND` when no matching staff exists
- *
- * Pass `{ includeDeleted: true }` for routes that operate on soft-deleted
- * staffs. The default excludes soft-deleted rows.
- */
 export const checkStaff = (opts: { includeDeleted?: boolean } = {}) =>
   createMiddleware<{
     Variables: { staff: Selectable<Staff> }

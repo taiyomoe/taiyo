@@ -6,8 +6,6 @@ import { startChapterProcessingWorker } from "./worker"
 
 const deps = { db: getDb(), s3: getS3Client(), s3Bucket: getS3Bucket() }
 
-// Backstop for the reaper. Best-effort: some S3-compatible stores don't
-// implement the lifecycle API — log and continue rather than crash the worker.
 await ensureStagingLifecycle(deps.s3, deps.s3Bucket, config.images.stagingExpiryDays).catch(
   (err) => {
     // oxlint-disable-next-line no-console
