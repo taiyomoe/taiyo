@@ -60,7 +60,7 @@ export const createApp = (services: Services) => {
     .use(createContextMiddleware(services))
     .notFound((c) => c.fail("NOT_FOUND"))
     .onError(errorHandler)
-    .on(["GET", "POST"], "/api/auth/**", (c) => services.auth.handler(c.req.raw))
+    .on(["GET", "POST"], "/api/auth/*", (c) => services.auth.handler(c.req.raw))
     .get("/ping", (c) => c.json({ version: packageJson.version }))
     .route("/medias", mediasRouter)
     .route("/covers", coversRouter)
