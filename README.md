@@ -191,6 +191,23 @@ pnpm -F web build                  # production build (client + SSR)
 - **Dead code**: [knip](https://knip.dev/)
 - **Pre-commit**: [lefthook](https://github.com/evilmartians/lefthook) runs `format` + `lint` on staged files
 
+### Comments
+
+The source tree carries no comments. Code is expected to be self-explanatory;
+the only `//` lines in `apps/` and `packages/` are `oxlint-disable` /
+`biome-ignore` directives. Anything a reader could not derive from the code
+is recorded in a document instead:
+
+- `packages/ui/STYLEX.md` — StyleX authoring rules, the design language, the
+  compiler gotchas, and the couplings between components and `structural.css`.
+- `docs/engineering-notes.md` — API, queue, search, auth and tooling
+  invariants.
+- `apps/web/AGENTS.md` — the web app's scene and landing internals.
+- `docs/group-ownership.md` — the permission model.
+
+`packages/db/src/migrations/` and `packages/db/src/seeds/` are exempt: they are
+applied, frozen history.
+
 ### Package management
 
 - Internal packages: `workspace:^`

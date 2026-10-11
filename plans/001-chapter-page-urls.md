@@ -416,3 +416,6 @@ Stop and report back (do not improvise) if:
 - **Deferred deliberately**: signed URLs. This plan assumes a public bucket /
   CDN. If the deployment later needs per-request signing, `getChapterPageUrl`
   is the single seam to change.
+- **Notification hook**: when the notifications producer exists, the
+  chapter-published notification belongs at the end of the `try` block in
+  `packages/queue/src/processor.ts`, after the task is marked finished.

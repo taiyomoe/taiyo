@@ -29,7 +29,7 @@ that unblocks the most work soonest.
 | 003  | Make Hono RPC work end to end, and wire it into `apps/web`                                       | P1       | M      | MED  | —                  | DONE   |
 | 004  | Add the "latest chapters" and personal feed endpoints                                            | P1       | S      | LOW  | —                  | DONE   |
 | 005  | Build the browse → detail → read vertical slice in `apps/web`                                    | P1       | L      | MED  | 001, 002, 003, 004 | TODO   |
-| 006  | Remove every comment from the source tree, after harvesting the load-bearing rationale into docs | P2       | L      | MED  | —                  | TODO   |
+| 006  | Remove every comment from the source tree, after harvesting the load-bearing rationale into docs | P2       | L      | MED  | —                  | DONE   |
 | 007  | Make medias sortable by popularity                                                               | P2       | M      | MED  | —                  | DONE   |
 | 008  | Make the privacy policy describe what Taiyō actually collects                                    | P2       | S      | LOW  | —                  | DONE   |
 
