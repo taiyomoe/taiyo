@@ -28,7 +28,7 @@ that unblocks the most work soonest.
 | 002  | Persist image file extensions and return cover/banner URLs                                       | P1       | M      | MED  | 001                | DONE   |
 | 003  | Make Hono RPC work end to end, and wire it into `apps/web`                                       | P1       | M      | MED  | —                  | DONE   |
 | 004  | Add the "latest chapters" and personal feed endpoints                                            | P1       | S      | LOW  | —                  | DONE   |
-| 005  | Build the browse → detail → read vertical slice in `apps/web`                                    | P1       | L      | MED  | 001, 002, 003, 004 | TODO   |
+| 005  | Build the browse → detail → read vertical slice in `apps/web`                                    | P1       | L      | MED  | 001, 002, 003, 004 | DONE   |
 | 006  | Remove every comment from the source tree, after harvesting the load-bearing rationale into docs | P2       | L      | MED  | —                  | TODO   |
 | 007  | Make medias sortable by popularity                                                               | P2       | M      | MED  | —                  | DONE   |
 | 008  | Make the privacy policy describe what Taiyō actually collects                                    | P2       | S      | LOW  | —                  | DONE   |
@@ -245,6 +245,22 @@ notifications producer exists` — the repo's only TODO marker. (Plan 006
   land on. **Deliberately on hold**: the maintainer intends a larger design here
   and work has not started for that reason. Do not write a plan for this without
   that design.
+
+- **Gaps found while building plan 005** (2026-10-11). `apps/web` works around
+  each of these; none is blocking, all are API-side:
+  - `GET /medias/:id/chapters` returns no scanlation groups, so chapter rows
+    cannot show them without one `GET /chapters/:id/groups` per row. Effort S.
+  - `GET /chapters/:id` returns no previous/next chapter ids. The reader pages
+    through the whole chapter list (100 per request) to find neighbours, which
+    is fine at seed scale and wasteful at 1,000+ chapters. Effort S.
+  - Chapter pages carry no width/height, so the reader reserves a 2:3 box per
+    page and shifts once each page loads. The worker already decodes every page
+    with `sharp`; persisting dimensions there is the cheap fix. Effort S–M.
+  - Local `init-s3` creates the bucket without a public-read policy, so every
+    `S3_PUBLIC_URL` image 403s in development. Seeded rows also have no image
+    objects at all. Effort S.
+  - Largest seeded chapter is 190 pages; the reader renders naively. Revisit
+    virtualization if real chapters go well past ~200.
 
 ## Findings considered and rejected
 

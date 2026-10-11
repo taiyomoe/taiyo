@@ -15,8 +15,9 @@ Before substantial work:
 
 A **TanStack Start (React)** app scaffolded with the TanStack CLI and merged into
 the `taiyo` pnpm monorepo as a workspace app under `apps/`. It started as a blank
-starter; it now ships a landing page, two auth forms, three legal routes, and a
-data layer that talks to `apps/api` over Hono RPC. No partner CLI add-ons were
+starter; it now ships a landing page (with a latest-chapters feed), two auth
+forms, three legal routes, a browse grid, a media detail page and a long-strip
+reader, all reading `apps/api` over Hono RPC. No partner CLI add-ons were
 selected — everything beyond the starter was added by hand.
 
 ## Scaffold provenance
@@ -251,6 +252,49 @@ latency almost exactly (a 3 s delay produced a ~3.9 s TTFB). If a route ever
 needs the shell to paint first, that route's data has to move to a
 non-suspending `useQuery` with its own inline skeleton.
 
+## App surfaces
+
+The browse, detail and reader routes, and the rules they rely on:
+
+- **Two layouts.** `src/routes/_app.tsx` is a pathless layout carrying the app
+  shell (`AppNav` + `AppSidebar` in `src/components/app/`); `/titles` and
+  `/titles/$mediaId` live under it. `/read/$mediaId/$chapterId` is
+  deliberately a top-level route **outside** `_app`: the reader is full-bleed
+  and must not inherit the nav and sidebar. Do not "tidy" it into `_app`. The
+  landing page (`/`) also stays outside and keeps its own `LandingNav`.
+- **`titles.index.tsx` + `titles.$mediaId.tsx`, not `titles.tsx`.** A flat
+  `titles.tsx` would become the _parent_ of `titles.$mediaId.tsx`, and the
+  detail page would only render inside an `<Outlet />` on the grid. The index
+  file keeps the two as siblings.
+- **Not-found is decided in the loader.** `/titles/$mediaId` and the reader
+  `await ensureQueryData` for the record whose absence means 404, and convert
+  `MEDIA_NOT_FOUND` / `CHAPTER_NOT_FOUND` / `VALIDATION_ERROR` into
+  `notFound()` via `rethrowAsNotFound` (`src/lib/not-found.ts`). That is the
+  one exception to "loaders prefetch and do not await": `notFound()` has to be
+  thrown from the loader for SSR to answer with a real 404 status, and the
+  awaited result also feeds `head()` with the page title. Everything else in
+  those loaders is still an unawaited `prefetchQuery`.
+- **Pagination is URL state.** `PagePagination` links to `to="."` with a search
+  reducer, so any route with a `page` search param gets shareable,
+  back/forward-friendly pages for free. Page 1 drops the param.
+- **The search box is `/titles?q=`.** It is a plain form that navigates; there
+  is no filter panel yet (the API returns no facet counts to drive one).
+- **Images reserve their box.** Covers and reader pages carry explicit
+  `width`/`height` attributes and `height: auto`, so the browser reserves a
+  2:3 box before the image loads and the real ratio takes over after. The API
+  does not return page dimensions; if it ever does, pass them through.
+- **Reader navigation.** Prev/next chapter comes from
+  `allMediaChaptersQueryOptions`, which pages through `GET /medias/:id/chapters`
+  at 100 per request, then `getAdjacentChapters` picks the nearest number in the
+  same language. `←`/`k` previous, `→`/`j` next, `Esc` back to the series. The
+  next 3 pages past the one in view are preloaded with `new Image()`.
+- **Unit-tested modules import paraglide relatively**
+  (`../../paraglide/messages`), not through `@/`. The root
+  `vitest.config.unit.ts` has no `@` alias, so a value import through it fails
+  to resolve under Vitest. Type-only `@/` imports are fine; they are erased.
+- **Rendered as given.** Nothing here filters by `contentRating`; the API does
+  not enforce it either. That has to close on the API side before launch.
+
 ## Known gotchas
 
 - **Vite plugin order matters:** `tanstackStart()` must come _before_ `viteReact()`
@@ -262,6 +306,9 @@ non-suspending `useQuery` with its own inline skeleton.
   you later add a Nitro deployment preset that emits `.output/**` / `.nitro/**`
   (already git-ignored via the root `.gitignore`), add those globs to the root
   `build` task outputs too.
+- **`grep -c "<img"` against an SSR response reports "binary file matches".**
+  TanStack's dehydrated match ids contain a NUL byte (`"__root__\x00"`), so
+  GNU grep treats every page as binary. Use `grep -a` when asserting on HTML.
 - **Port 3000** is hardcoded in the `dev` script; currently free in this repo
   (api is separate, storybook uses 6006).
 
