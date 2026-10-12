@@ -3,7 +3,7 @@ import type { ContentRating, Flag, Language } from "../constants"
 import type { ChapterPage } from "../json-types"
 import type { ArrayType, Timestamp } from "../types"
 
-export interface Chapter {
+export type Chapter = {
   id: Generated<string>
   createdAt: Generated<Timestamp>
   updatedAt: Generated<Timestamp>

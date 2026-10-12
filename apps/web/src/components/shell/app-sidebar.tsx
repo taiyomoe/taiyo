@@ -132,7 +132,9 @@ export function AppSidebar() {
                     <SidebarMenuItem key={label()}>
                       <SidebarMenuButton
                         isActive={isActive}
-                        onClick={() => setOpenMobile(false)}
+                        onClick={() => {
+                          setOpenMobile(false)
+                        }}
                         render={to === undefined ? undefined : <Link to={to} />}
                         sx={[styles.button, isActive && styles.buttonActive]}
                       >

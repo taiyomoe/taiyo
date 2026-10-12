@@ -2,7 +2,7 @@ import { config } from "@taiyomoe/config"
 import type { DB } from "@taiyomoe/db"
 import { DeleteObjectsCommand, type S3Client } from "@taiyomoe/s3"
 import { sql, type Kysely } from "kysely"
-import type { ChapterUploadManifest } from "./types"
+import { chapterUploadManifestSchema } from "./types"
 
 export type ReaperDeps = { db: Kysely<DB>; s3: S3Client; s3Bucket: string }
 
@@ -28,7 +28,7 @@ export const reapStaleChapterUploads = async (
   }
 
   const keys = stale.flatMap((t) =>
-    (t.payload as ChapterUploadManifest).pages.map((p) => ({ Key: p.stagingKey })),
+    chapterUploadManifestSchema.parse(t.payload).pages.map((p) => ({ Key: p.stagingKey })),
   )
 
   // DeleteObjects caps at 1000 keys/call; chunk. Deleting absent keys is a no-op.

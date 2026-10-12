@@ -26,7 +26,7 @@ const filterableAttributes = [
   "artistIds",
   "libraryCount",
   "chapterCount",
-] satisfies (keyof MediaDocument)[]
+] satisfies Array<keyof MediaDocument>
 const searchableAttributes = ["mainTitle.title", "titles", "synopsis", "staffNames"]
 const sortableAttributes = [
   "createdAt",
@@ -36,7 +36,7 @@ const sortableAttributes = [
   "_sortMainTitle",
   "libraryCount",
   "chapterCount",
-] satisfies (keyof MediaDocument)[]
+] satisfies Array<keyof MediaDocument>
 const displayedAttributes = [
   "id",
   "type",
@@ -65,7 +65,7 @@ const displayedAttributes = [
   "mainCoverId",
   "libraryCount",
   "chapterCount",
-] satisfies (keyof MediaDocument)[]
+] satisfies Array<keyof MediaDocument>
 
 export const initMediasIndex = async ({
   db,

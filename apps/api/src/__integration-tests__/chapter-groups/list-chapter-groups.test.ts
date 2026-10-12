@@ -5,7 +5,11 @@ import { test } from "../setup"
 const SEEDED_CHAPTER_ID = "13548c83-8d1a-4163-8830-c8f16fcd2eb7"
 const SEEDED_GROUP_ID = "4d8a22ba-d8a0-4a98-b4f3-1d630fbd7de1"
 
-type Item = { groupId: string; name: string; logo: string | null }
+type Item = {
+  groupId: string
+  name: string
+  logo: string | null
+}
 
 describe("GET /chapters/:id/groups", () => {
   test("returns the groups linked to a chapter", async ({ app }) => {

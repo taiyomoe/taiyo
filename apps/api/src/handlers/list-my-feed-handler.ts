@@ -72,7 +72,7 @@ export const listMyFeedHandler = new Hono().get(
         .where("userLibraryEntries.userId", "=", user.id)
         .where("chapters.deletedAt", "is", null)
         .where("medias.deletedAt", "is", null)
-        .select(db.fn.countAll<number>().as("count"))
+        .select(db.fn.countAll().as("count"))
         .executeTakeFirstOrThrow(),
     ])
 

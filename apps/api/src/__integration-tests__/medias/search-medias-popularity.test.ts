@@ -2,6 +2,7 @@ import type { Hono } from "hono"
 import { randomUUID } from "node:crypto"
 import { describe, expect } from "vitest"
 import type { Services } from "../../services"
+import { defined } from "../helpers/assert"
 import { signInAs } from "../helpers/auth"
 import { api } from "../helpers/request"
 import { test } from "../setup"
@@ -9,7 +10,11 @@ import { test } from "../setup"
 const SEEDED_MEDIA_ID = "4e26b80f-6661-4f5f-93b4-6dfed052bbed"
 const TIMEOUT = 30_000
 
-type MediaHit = { id: string; libraryCount: number; chapterCount: number }
+type MediaHit = {
+  id: string
+  libraryCount: number
+  chapterCount: number
+}
 type CountField = "libraryCount" | "chapterCount"
 
 const getSearchHeaders = () => ({ "x-forwarded-for": `198.51.100.${randomUUID()}` })
@@ -44,7 +49,9 @@ const waitForCount = async (
       return
     }
 
-    await new Promise<void>((r) => setTimeout(r, intervalMs))
+    await new Promise<void>((r) => {
+      setTimeout(r, intervalMs)
+    })
   }
 
   throw new Error(`${field} for ${mediaId} settled at ${last}, expected ${expected}`)
@@ -77,12 +84,12 @@ const getDbCounts = async ({ db }: Services, mediaId: string) => {
   const [library, chapters] = await Promise.all([
     db
       .selectFrom("userLibraryEntries")
-      .select(db.fn.countAll<number>().as("count"))
+      .select(db.fn.countAll().as("count"))
       .where("mediaId", "=", mediaId)
       .executeTakeFirstOrThrow(),
     db
       .selectFrom("chapters")
-      .select(db.fn.countAll<number>().as("count"))
+      .select(db.fn.countAll().as("count"))
       .where("mediaId", "=", mediaId)
       .where("deletedAt", "is", null)
       .executeTakeFirstOrThrow(),
@@ -111,7 +118,7 @@ describe("POST /medias/search popularity sorts", () => {
         (hit) => hit.id,
       )
 
-      if (!mostPopular || !lessPopular) {
+      if (mostPopular === undefined || lessPopular === undefined) {
         throw new Error("Expected at least two indexed medias")
       }
 
@@ -159,7 +166,7 @@ describe("POST /medias/search popularity sorts", () => {
       await waitForCount(services, SEEDED_MEDIA_ID, "libraryCount", 0)
 
       const all = (await searchSorted(app, "chapterCount", "desc")).map((hit) => hit.chapterCount)
-      const threshold = all[Math.floor(all.length / 2)]!
+      const threshold = defined(all[Math.floor(all.length / 2)])
       const filtered = await search(app, { filter: { chapterCount: { gte: threshold } } })
 
       expect(filtered.length).toBeGreaterThan(0)

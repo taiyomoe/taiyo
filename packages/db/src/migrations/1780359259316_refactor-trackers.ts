@@ -1,13 +1,26 @@
 import { type Kysely, sql } from "kysely"
 
-export async function up(db: Kysely<any>): Promise<void> {
+type MigrationDb = {
+  Media: {
+    id: string
+    trailer: string | null
+    links: unknown
+  }
+  Tracker: {
+    tracker: string
+    externalId: string
+    mediaId: string
+  }
+}
+
+export async function up(db: Kysely<MigrationDb>): Promise<void> {
   await db.schema
     .alterTable("Media")
     .addColumn("links", "jsonb", (c) => c.notNull().defaultTo(sql`'{}'::jsonb`))
     .execute()
 
   const rows = await db.selectFrom("Tracker").select(["tracker", "externalId", "mediaId"]).execute()
-  const grouped = new Map<string, { tracker: string; externalId: string }[]>()
+  const grouped = new Map<string, Array<{ tracker: string; externalId: string }>>()
 
   for (const row of rows) {
     const existing = grouped.get(row.mediaId)
@@ -48,7 +61,7 @@ export async function up(db: Kysely<any>): Promise<void> {
 
     const trailer = trailerById.get(mediaId)
 
-    if (trailer) {
+    if (trailer !== undefined && trailer !== null && trailer !== "") {
       payload.trailer = `https://www.youtube.com/watch?v=${trailer}`
     }
 
@@ -70,6 +83,8 @@ export async function up(db: Kysely<any>): Promise<void> {
   await db.schema.dropType("Trackers").execute()
 }
 
-export async function down(): Promise<void> {
-  throw new Error("refactor-trackers is a destructive data-type migration and cannot be reversed")
+export function down(): Promise<void> {
+  return Promise.reject(
+    new Error("refactor-trackers is a destructive data-type migration and cannot be reversed"),
+  )
 }

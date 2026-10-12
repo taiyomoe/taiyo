@@ -2,7 +2,7 @@ import type { Generated, Insertable } from "kysely"
 import type { ContentRating } from "../constants"
 import type { Timestamp } from "../types"
 
-export interface Banner {
+export type Banner = {
   id: Generated<string>
   createdAt: Generated<Timestamp>
   updatedAt: Generated<Timestamp>

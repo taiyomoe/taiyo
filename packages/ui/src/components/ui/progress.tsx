@@ -45,6 +45,7 @@ export function Progress({
   ...props
 }: ProgressPrimitive.Root.Props & { sx?: Sx }): React.ReactElement {
   const styleProps = stylex.props(styles.root, sx)
+  const hasChildren = Boolean(children)
 
   return (
     <ProgressPrimitive.Root
@@ -53,7 +54,7 @@ export function Progress({
       style={styleProps.style}
       {...props}
     >
-      {children ? (
+      {hasChildren ? (
         children
       ) : (
         <ProgressTrack>

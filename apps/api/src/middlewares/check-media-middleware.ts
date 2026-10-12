@@ -18,7 +18,7 @@ export const checkMedia = (opts: { includeDeleted?: boolean } = {}) =>
     log.set({ media: { id } })
 
     const base = db.selectFrom("medias").selectAll().where("id", "=", id)
-    const query = opts.includeDeleted ? base : base.where("deletedAt", "is", null)
+    const query = opts.includeDeleted === true ? base : base.where("deletedAt", "is", null)
     const media = await query.executeTakeFirst()
 
     if (!media) {

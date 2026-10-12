@@ -56,7 +56,7 @@ export const listFollowingHandler = new Hono().get(
         .innerJoin("users", "users.id", "userFollows.followingId")
         .where("userFollows.followerId", "=", targetUser.id)
         .where((eb) => eb.or([eb("users.banned", "is", null), eb("users.banned", "=", false)]))
-        .select(db.fn.countAll<number>().as("count"))
+        .select(db.fn.countAll().as("count"))
         .executeTakeFirstOrThrow(),
     ])
 

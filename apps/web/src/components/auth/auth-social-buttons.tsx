@@ -60,13 +60,17 @@ export const AuthSocialButtons = ({
         sx={styles.provider}
         loading={pending === "google"}
         disabled={disabled}
-        onClick={() => onSelect("google")}
+        onClick={() => {
+          onSelect("google")
+        }}
       />
       <DiscordButton
         sx={styles.provider}
         loading={pending === "discord"}
         disabled={disabled}
-        onClick={() => onSelect("discord")}
+        onClick={() => {
+          onSelect("discord")
+        }}
       />
     </div>
     <div sx={styles.divider}>

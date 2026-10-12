@@ -43,7 +43,7 @@ export const getGroupHandler = new Hono().get(
     },
   }),
   checkGroup(),
-  async (c) => {
+  (c) => {
     const { group } = c.var
 
     return c.ok({

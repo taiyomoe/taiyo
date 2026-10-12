@@ -2,21 +2,39 @@ import { cacheClient } from "@taiyomoe/cache"
 import type { DB, Kysely } from "@taiyomoe/db"
 import { APIError, createAuthMiddleware } from "better-auth/api"
 import { DateTime } from "luxon"
+import { z } from "zod"
 
-const throwInvalidCredsError = (isEmail: boolean) => {
-  throw new APIError("FORBIDDEN", {
+const signInBodySchema = z.object({
+  email: z.string().optional(),
+  username: z.string().optional(),
+  password: z.string(),
+})
+const createInvalidCredsError = (isEmail: boolean) =>
+  new APIError("FORBIDDEN", {
     code: isEmail ? "INVALID_EMAIL_OR_PASSWORD" : "INVALID_USERNAME_OR_PASSWORD",
     message: isEmail ? "Invalid email or password" : "Invalid username or password",
   })
-}
 
 export const createBeforeHook = ({ db }: { db: Kysely<DB> }) =>
   createAuthMiddleware(async (ctx) => {
     if (ctx.path === "/sign-in/email" || ctx.path === "/sign-in/username") {
+      const body = signInBodySchema.safeParse(ctx.body)
+
+      if (!body.success) {
+        return
+      }
+
+      const { email, username, password } = body.data
+      const identifier = email ?? username
+
+      if (identifier === undefined) {
+        return
+      }
+
       const user = await db
         .selectFrom("users")
         .selectAll()
-        .where(ctx.body.email ? "email" : "username", "=", ctx.body.email ?? ctx.body.username)
+        .where(email !== undefined && email !== "" ? "email" : "username", "=", identifier)
         .executeTakeFirst()
 
       if (!user) {
@@ -28,19 +46,19 @@ export const createBeforeHook = ({ db }: { db: Kysely<DB> }) =>
         .selectAll()
         .where("userId", "=", user.id)
         .execute()
+      const hash = accounts.find((a) => a.providerId === "credential")?.password
 
-      if (!accounts.some((a) => a.providerId === "credential")) {
-        throwInvalidCredsError(ctx.body.email !== undefined)
+      if (typeof hash !== "string") {
+        throw createInvalidCredsError(email !== undefined)
       }
 
-      const account = accounts.find((a) => a.providerId === "credential")!
       const isCorrectPassword = await ctx.context.password.verify({
-        password: ctx.body.password,
-        hash: account.password!,
+        password,
+        hash,
       })
 
       if (!isCorrectPassword) {
-        throwInvalidCredsError(ctx.body.email !== undefined)
+        throw createInvalidCredsError(email !== undefined)
       }
 
       if (user.emailVerified) {

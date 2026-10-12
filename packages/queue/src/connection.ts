@@ -5,7 +5,7 @@ import { env } from "./env"
 // per queue/worker — the documented best practice.
 export const createBullConnection = () => ({
   ...parseRedisUrl(env.DRAGONFLY_URL),
-  maxRetriesPerRequest: null as null,
+  maxRetriesPerRequest: null,
 })
 
 function parseRedisUrl(url: string) {

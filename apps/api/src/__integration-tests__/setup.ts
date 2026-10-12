@@ -15,7 +15,8 @@ import type { Hono } from "hono"
 import pg from "pg"
 import { afterAll, test as baseTest } from "vitest"
 import { createApp } from "../app"
-import { type Services } from "../services"
+import type { Services } from "../services"
+import { defined } from "./helpers/assert"
 
 const TEMPLATE_DB = "taiyo_test_template"
 const getDbUrl = (name: string) => {
@@ -76,11 +77,11 @@ export const test = baseTest.extend<Fixtures>({
 
     const listed = await sharedS3.send(new ListObjectsV2Command({ Bucket: bucketName }))
 
-    if (listed.Contents?.length) {
+    if (listed.Contents !== undefined && listed.Contents.length > 0) {
       await sharedS3.send(
         new DeleteObjectsCommand({
           Bucket: bucketName,
-          Delete: { Objects: listed.Contents.map(({ Key }) => ({ Key: Key! })) },
+          Delete: { Objects: listed.Contents.map(({ Key }) => ({ Key: defined(Key) })) },
         }),
       )
     }

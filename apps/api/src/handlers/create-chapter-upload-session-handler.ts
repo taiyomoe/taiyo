@@ -10,13 +10,11 @@ import { requireChapterAccess } from "../middlewares/require-chapter-access-midd
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
+import { isImageMimeType } from "../utils/is-image-mime-type"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
-const imageMimeKeys = Object.keys(IMAGE_MIME_TYPES) as [
-  keyof typeof IMAGE_MIME_TYPES,
-  ...Array<keyof typeof IMAGE_MIME_TYPES>,
-]
+const imageMimeKeys = Object.keys(IMAGE_MIME_TYPES).filter(isImageMimeType)
 const createChapterUploadSessionSchema = z.object({
   pages: z
     .array(
@@ -64,7 +62,6 @@ export const createChapterUploadSessionHandler = new Hono().post(
                           .nonnegative()
                           .meta({ description: "Zero-based page index." }),
                         uploadUrl: z
-                          .string()
                           .url()
                           .meta({ description: "One-time upload URL for this page." }),
                       }),
@@ -99,11 +96,10 @@ export const createChapterUploadSessionHandler = new Hono().post(
 
     const uploadId = crypto.randomUUID()
     const taskId = crypto.randomUUID()
-    const manifestPages: { pageId: string; stagingKey: string }[] = []
-    const responsePages: { index: number; uploadUrl: string }[] = []
+    const manifestPages: Array<{ pageId: string; stagingKey: string }> = []
+    const responsePages: Array<{ index: number; uploadUrl: string }> = []
 
-    for (let i = 0; i < body.pages.length; i++) {
-      const page = body.pages[i]!
+    for (const [i, page] of body.pages.entries()) {
       const pageId = crypto.randomUUID()
       const stagingKey = getChapterStagingKey(chapter.id, uploadId, i)
       const uploadUrl = await getPresignedUploadUrl(

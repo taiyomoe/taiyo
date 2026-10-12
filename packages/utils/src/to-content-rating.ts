@@ -1,4 +1,4 @@
-import type { ContentRating } from "../../db/src/index"
+import type { ContentRating } from "@taiyomoe/db"
 
 export const toContentRating = (input: string): ContentRating => {
   switch (input.toLowerCase()) {

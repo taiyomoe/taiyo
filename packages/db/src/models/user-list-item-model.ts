@@ -1,7 +1,7 @@
 import type { Generated, Insertable } from "kysely"
 import type { Timestamp } from "../types"
 
-export interface UserListItem {
+export type UserListItem = {
   listId: string
   mediaId: string
   position: number

@@ -22,7 +22,7 @@ export const checkCover = (opts: { includeDeleted?: boolean } = {}) =>
     log.set({ cover: { id } })
 
     const base = db.selectFrom("covers").selectAll().where("id", "=", id)
-    const query = opts.includeDeleted ? base : base.where("deletedAt", "is", null)
+    const query = opts.includeDeleted === true ? base : base.where("deletedAt", "is", null)
     const cover = await query.executeTakeFirst()
 
     if (!cover) {

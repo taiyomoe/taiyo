@@ -18,12 +18,12 @@ export default defineCommand({
     },
   },
   run: async ({ args }) => {
-    const targets = args.index
-      ? indexInitializers.filter((i) => i.name === args.index)
-      : indexInitializers
+    const { index } = args
+    const hasIndex = index !== undefined && index !== ""
+    const targets = hasIndex ? indexInitializers.filter((i) => i.name === index) : indexInitializers
 
-    if (args.index && targets.length === 0) {
-      console.error(`Unknown index "${args.index}". Available: ${indexNames.join(", ")}.`)
+    if (hasIndex && targets.length === 0) {
+      console.error(`Unknown index "${index}". Available: ${indexNames.join(", ")}.`)
       process.exit(1)
     }
 

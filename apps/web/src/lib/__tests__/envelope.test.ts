@@ -45,7 +45,7 @@ describe("unwrap", () => {
     ).catch((e: unknown) => e)
 
     expect(error).toBeInstanceOf(ApiError)
-    expect((error as ApiError).details).toEqual(details)
+    expect(error).toHaveProperty("details", details)
   })
 
   it("discards meta, which is what unwrapEnvelope is for", async () => {

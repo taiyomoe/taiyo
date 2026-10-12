@@ -1,6 +1,6 @@
 import * as stylex from "@stylexjs/stylex"
 import type * as React from "react"
-import { DayPicker } from "react-day-picker"
+import { DayPicker, type DayPickerProps } from "react-day-picker"
 import { cn } from "../../utils/cn"
 import { ChevronLeft, ChevronRight, ChevronsUpDown } from "../icons"
 import { calendarDayMarker } from "../../styles/markers.stylex"
@@ -220,17 +220,65 @@ const styles = stylex.create({
   },
 })
 
-export function Calendar({
+function mergeClassNames<K extends string>(
+  base: Record<K, string>,
+  overrides: NoInfer<Partial<Record<K, string>>> | undefined,
+): Record<K, string> {
+  const merged = { ...base }
+
+  for (const key in base) {
+    if (overrides?.[key] !== undefined && overrides[key] !== "") {
+      merged[key] = cn(base[key], overrides[key])
+    }
+  }
+
+  return merged
+}
+
+function withDefaultMode(props: DayPickerProps): DayPickerProps {
+  if (props.mode === undefined) {
+    return { ...props, mode: "single" }
+  }
+
+  return props
+}
+
+function CalendarChevron({
   className,
-  classNames,
-  showOutsideDays = true,
-  components: userComponents,
-  mode = "single",
-  ...props
-}: React.ComponentProps<typeof DayPicker>): React.ReactElement {
+  orientation,
+  ...rest
+}: {
+  className?: string
+  orientation?: "left" | "right" | "up" | "down"
+}): React.ReactElement {
+  const chevronProps = stylex.props(styles.chevron)
+  const merged = cn(chevronProps.className, className)
+
+  if (orientation === "left") {
+    return (
+      <ChevronLeft className={merged} style={chevronProps.style} {...rest} aria-hidden="true" />
+    )
+  }
+
+  if (orientation === "right") {
+    return (
+      <ChevronRight className={merged} style={chevronProps.style} {...rest} aria-hidden="true" />
+    )
+  }
+
+  return (
+    <ChevronsUpDown className={merged} style={chevronProps.style} {...rest} aria-hidden="true" />
+  )
+}
+
+const calendarFormatters: NonNullable<DayPickerProps["formatters"]> = {
+  formatMonthDropdown: (date: Date) => date.toLocaleString("default", { month: "short" }),
+}
+
+export function Calendar(props: DayPickerProps): React.ReactElement {
+  const { className, classNames, showOutsideDays = true, components: userComponents } = props
   const rootProps = stylex.props(styles.root)
   const navButtonClassName = stylex.props(styles.navButton).className ?? ""
-  const chevronProps = stylex.props(styles.chevron)
   const defaultClassNames = {
     button_next: navButtonClassName,
     button_previous: navButtonClassName,
@@ -253,77 +301,22 @@ export function Calendar({
     week_number: stylex.props(styles.weekday).className ?? "",
     weekday: stylex.props(styles.weekday).className ?? "",
   }
-  const mergedClassNames: typeof defaultClassNames = Object.keys(defaultClassNames).reduce(
-    (acc, key) => {
-      const userClass = classNames?.[key as keyof typeof classNames]
-      const baseClass = defaultClassNames[key as keyof typeof defaultClassNames]
-
-      acc[key as keyof typeof defaultClassNames] = userClass ? cn(baseClass, userClass) : baseClass
-
-      return acc
-    },
-    { ...defaultClassNames } as typeof defaultClassNames,
-  )
-  const defaultComponents = {
-    Chevron: ({
-      className: chevronClassName,
-      orientation,
-      ...chevronRest
-    }: {
-      className?: string
-      orientation?: "left" | "right" | "up" | "down"
-    }): React.ReactElement => {
-      const merged = cn(chevronProps.className, chevronClassName)
-
-      if (orientation === "left") {
-        return (
-          <ChevronLeft
-            className={merged}
-            style={chevronProps.style}
-            {...chevronRest}
-            aria-hidden="true"
-          />
-        )
-      }
-
-      if (orientation === "right") {
-        return (
-          <ChevronRight
-            className={merged}
-            style={chevronProps.style}
-            {...chevronRest}
-            aria-hidden="true"
-          />
-        )
-      }
-
-      return (
-        <ChevronsUpDown
-          className={merged}
-          style={chevronProps.style}
-          {...chevronRest}
-          aria-hidden="true"
-        />
-      )
-    },
-  }
+  const mergedClassNames = mergeClassNames(defaultClassNames, classNames)
   const mergedComponents = {
-    ...defaultComponents,
+    Chevron: CalendarChevron,
     ...userComponents,
   }
-  const dayPickerProps = {
-    className: cn(rootProps.className, className),
-    classNames: mergedClassNames,
-    components: mergedComponents,
-    "data-slot": "calendar",
-    formatters: {
-      formatMonthDropdown: (date: Date) => date.toLocaleString("default", { month: "short" }),
-    } as React.ComponentProps<typeof DayPicker>["formatters"],
-    mode,
-    showOutsideDays,
-    style: rootProps.style,
-    ...props,
-  }
 
-  return <DayPicker {...(dayPickerProps as React.ComponentProps<typeof DayPicker>)} />
+  return (
+    <DayPicker
+      data-slot="calendar"
+      formatters={calendarFormatters}
+      style={rootProps.style ?? {}}
+      {...withDefaultMode(props)}
+      className={cn(rootProps.className, className)}
+      classNames={mergedClassNames}
+      components={mergedComponents}
+      showOutsideDays={showOutsideDays}
+    />
+  )
 }

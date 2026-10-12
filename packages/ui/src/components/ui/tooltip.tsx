@@ -4,7 +4,7 @@ import type React from "react"
 import { cn } from "../../utils/cn"
 import { colors, motion, radius, shadows } from "../../styles/tokens.stylex"
 import { surface, transitions } from "../../styles/recipes"
-import type { Sx } from "../../styles/sx"
+import type { CSSVariables, Sx } from "../../styles/sx"
 
 const styles = stylex.create({
   positioner: {
@@ -88,10 +88,10 @@ export function TooltipPopup({
   const positionerProps = stylex.props(styles.positioner)
   const popupProps = stylex.props(transitions.popup, surface.raisedEdge, styles.popup, sx)
   const viewportProps = stylex.props(styles.viewport)
-  const viewportStyle = {
+  const viewportStyle: CSSVariables = {
     ...viewportProps.style,
     "--viewport-inline-padding": "0.5rem",
-  } as React.CSSProperties
+  }
 
   return (
     <TooltipPrimitive.Portal {...portalProps}>

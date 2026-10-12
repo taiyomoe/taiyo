@@ -22,7 +22,7 @@ export const checkStaff = (opts: { includeDeleted?: boolean } = {}) =>
     log.set({ staff: { id } })
 
     const base = db.selectFrom("staffs").selectAll().where("id", "=", id)
-    const query = opts.includeDeleted ? base : base.where("deletedAt", "is", null)
+    const query = opts.includeDeleted === true ? base : base.where("deletedAt", "is", null)
     const staff = await query.executeTakeFirst()
 
     if (!staff) {

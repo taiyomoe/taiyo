@@ -106,7 +106,7 @@ export const SectionHead = ({
   <div sx={[styles.head, centered && styles.headCentered]}>
     <Eyebrow centered={centered}>{eyebrow}</Eyebrow>
     <h2 sx={styles.headTitle}>{title}</h2>
-    {sub ? <p sx={styles.headSub}>{sub}</p> : null}
+    {sub !== undefined && sub !== "" ? <p sx={styles.headSub}>{sub}</p> : null}
   </div>
 )
 
@@ -119,13 +119,17 @@ export const Reveal = ({ children, delay = 0 }: { children: ReactNode; delay?: n
     const el = ref.current
 
     if (!el) {
-      return
+      return undefined
     }
 
     if (typeof IntersectionObserver === "undefined") {
-      const immediate = setTimeout(() => setSeen(true), 0)
+      const immediate = setTimeout(() => {
+        setSeen(true)
+      }, 0)
 
-      return () => clearTimeout(immediate)
+      return () => {
+        clearTimeout(immediate)
+      }
     }
 
     const observer = new IntersectionObserver(
@@ -142,7 +146,9 @@ export const Reveal = ({ children, delay = 0 }: { children: ReactNode; delay?: n
 
     observer.observe(el)
 
-    const fallback = setTimeout(() => setSeen(true), 1600)
+    const fallback = setTimeout(() => {
+      setSeen(true)
+    }, 1600)
 
     return () => {
       observer.disconnect()

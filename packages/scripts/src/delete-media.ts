@@ -30,7 +30,7 @@ export default defineCommand({
 
     const webhookUrl = process.env.DISCORD_WEBHOOK_DMCA
 
-    if (!webhookUrl) {
+    if (webhookUrl === undefined || webhookUrl === "") {
       console.error("DISCORD_WEBHOOK_DMCA is not set in the env file.")
       process.exit(1)
     }
@@ -78,7 +78,12 @@ export default defineCommand({
           + (SELECT COUNT(*) FROM "UserLibrary", unnest(dropped) e WHERE e->>'mediaId' = ${mediaId})
         ) AS "userLibrary"
     `.execute(db)
-    const stats = statsResult.rows[0]!
+    const stats = statsResult.rows[0]
+
+    if (stats === undefined) {
+      throw new Error("The pre-deletion stats query returned no rows.")
+    }
+
     const mainTitle = stats.mainTitle ?? "(unknown)"
 
     console.log(`Deleting S3 objects under ${prefix}...`)
@@ -100,15 +105,15 @@ export default defineCommand({
         await s3Client.send(
           new DeleteObjectsCommand({
             Bucket: getS3Bucket(),
-            Delete: { Objects: objects.map((o) => ({ Key: o.Key! })) },
+            Delete: { Objects: objects.map((o) => ({ Key: o.Key })) },
           }),
         )
 
         deletedObjects += objects.length
       }
 
-      continuationToken = list.IsTruncated ? list.NextContinuationToken : undefined
-    } while (continuationToken)
+      continuationToken = list.IsTruncated === true ? list.NextContinuationToken : undefined
+    } while (continuationToken !== undefined && continuationToken !== "")
 
     console.log(`Deleted ${deletedObjects} S3 object(s).`)
 

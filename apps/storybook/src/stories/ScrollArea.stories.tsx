@@ -5,6 +5,7 @@ import { ScrollArea } from "@taiyomoe/ui/components/ui/scroll-area"
 import { Separator } from "@taiyomoe/ui/components/ui/separator"
 
 const TAGS = Array.from({ length: 50 }).map((_, i) => `Tag ${i + 1}`)
+const ITEM_NUMBERS = Array.from({ length: 20 }, (_, i) => i + 1)
 const styles = stylex.create({
   thumbnail: {
     borderRadius: radius.md,
@@ -90,13 +91,9 @@ export const Horizontal = meta.story({
   render: () => (
     <ScrollArea sx={styles.surface2}>
       <div sx={styles.row}>
-        {Array.from({ length: 20 }).map((_, i) => (
-          <div
-            // biome-ignore lint/suspicious/noArrayIndexKey: showcase content
-            key={i}
-            sx={styles.thumbnail}
-          >
-            Item {i + 1}
+        {ITEM_NUMBERS.map((itemNumber) => (
+          <div key={itemNumber} sx={styles.thumbnail}>
+            Item {itemNumber}
           </div>
         ))}
       </div>

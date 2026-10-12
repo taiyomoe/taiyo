@@ -20,7 +20,7 @@ describe("GET /users/:id/followers", () => {
       ])
       .execute()
 
-    const res = await api<{ id: string }[]>(app, `/users/${targetId}/followers`)
+    const res = await api<Array<{ id: string }>>(app, `/users/${targetId}/followers`)
 
     expect(res.status).toBe(200)
 
@@ -46,7 +46,7 @@ describe("GET /users/:id/followers", () => {
       ])
       .execute()
 
-    const res = await api<{ id: string }[]>(app, `/users/${targetId}/followers?perPage=2`)
+    const res = await api<Array<{ id: string }>>(app, `/users/${targetId}/followers?perPage=2`)
 
     expect(res.status).toBe(200)
 

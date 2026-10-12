@@ -16,6 +16,7 @@ const build = (
     const seed = i * 8
 
     return {
+      id: i,
       deg: round((360 / count) * i),
       width: lerp(minWidth, maxWidth, rand(seed + 1)),
       reach: lerp(minReach, maxReach, rand(seed + 2)),
@@ -83,7 +84,7 @@ export const SunRays = ({
   return (
     <div sx={styles.field}>
       <Animated sx={styles.spinner} animation={`scene-spin ${spinSeconds}s linear infinite`}>
-        {rays.map((ray, i) => {
+        {rays.map((ray) => {
           const peak = ray.gold
             ? `color-mix(in srgb, ${scene.goldLight} 70%, transparent)`
             : `color-mix(in srgb, ${scene.ember} 60%, transparent)`
@@ -93,7 +94,7 @@ export const SunRays = ({
 
           return (
             <Animated
-              key={i}
+              key={ray.id}
               sx={styles.spoke}
               style={{
                 width: ray.width,

@@ -20,7 +20,7 @@ export const env = createEnv({
      * Comma-separated list of origins allowed to call the API with credentials.
      * Empty / unset → CORS middleware disabled (same-origin only).
      */
-    CORS_ALLOWED_ORIGINS: z.string().default(""),
+    CORS_ALLOWED_ORIGINS: z.string().optional(),
   },
 
   clientPrefix: "NEXT_PUBLIC_",
@@ -29,5 +29,7 @@ export const env = createEnv({
   runtimeEnv: process.env,
   emptyStringAsUndefined: true,
   skipValidation:
-    !!process.env.CI || !!process.env.TEST || process.env.npm_lifecycle_event === "lint",
+    Boolean(process.env.CI) ||
+    Boolean(process.env.TEST) ||
+    process.env.npm_lifecycle_event === "lint",
 })

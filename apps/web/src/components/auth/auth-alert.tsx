@@ -3,7 +3,7 @@ import { HugeiconsIcon } from "@hugeicons/react"
 import { Alert, AlertTitle } from "@taiyomoe/ui/components/ui/alert"
 
 export const AuthAlert = ({ message }: { message: string | null }) =>
-  message ? (
+  message !== null && message !== "" ? (
     <Alert variant="error">
       <HugeiconsIcon icon={AlertCircleIcon} />
       <AlertTitle>{message}</AlertTitle>

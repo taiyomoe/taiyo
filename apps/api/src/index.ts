@@ -1,13 +1,13 @@
 import { serve } from "@hono/node-server"
-import { createApp } from "./app"
+import { type AppType, createApp } from "./app"
 import { env } from "./env"
 import { createServices } from "./services"
 
-export { createApp } from "./app"
+export { createApp }
 
-export type { AppType } from "./app"
+export type { AppType }
 
-if (!process.env.TEST) {
+if ((process.env.TEST ?? "") === "") {
   const app = createApp(createServices())
 
   serve({ fetch: app.fetch, port: env.PORT }, ({ port }) => {

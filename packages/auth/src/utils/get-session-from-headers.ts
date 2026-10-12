@@ -4,9 +4,9 @@ import { parseCookies } from "better-auth/cookies"
 export const getSessionFromHeaders = (
   ctx: Pick<HookEndpointContext, "context"> & { request?: Request | undefined },
 ) => {
-  const cookies = ctx.request?.headers.get("Cookie")
+  const cookies = ctx.request?.headers.get("Cookie") ?? ""
 
-  if (!cookies) {
+  if (cookies === "") {
     return null
   }
 
@@ -14,7 +14,7 @@ export const getSessionFromHeaders = (
     .get(ctx.context.authCookies.sessionToken.name)
     ?.split(".")[0]
 
-  if (!sessionToken) {
+  if (sessionToken === undefined || sessionToken === "") {
     return null
   }
 

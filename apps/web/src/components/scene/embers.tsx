@@ -8,6 +8,7 @@ const build = (count: number) =>
     const size = round(2 + rand(i + 100) * 4)
 
     return {
+      id: i,
       left: round(rand(i) * 100),
       size,
       delay: round(rand(i + 200) * 9),
@@ -41,9 +42,9 @@ export const Embers = ({ count = 26 }: EmbersProps) => {
 
   return (
     <div sx={styles.field}>
-      {embers.map((ember, i) => (
+      {embers.map((ember) => (
         <span
-          key={i}
+          key={ember.id}
           className={emberProps.className}
           style={
             {

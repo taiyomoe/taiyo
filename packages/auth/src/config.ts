@@ -89,21 +89,24 @@ export const createAuth = ({ db }: { db: Kysely<DB> }) =>
         endpoints: ["/sign-up", "/forget-password"],
       }),
       admin({ defaultRole: "USER" }),
-      customSession(async ({ session, user }) => ({
-        session,
-        user: {
-          ...user,
-          ...(user as unknown as {
-            username: string | null | undefined
-            displayUsername: string | null | undefined
-            banned: boolean | null | undefined
-            banReason: string | null | undefined
-            banExpires: Date | null | undefined
-            role: Role
-            settings: UserSettings
-          }),
-        },
-      })),
+      customSession(({ session, user }) =>
+        Promise.resolve({
+          session,
+          user: {
+            ...user,
+            // oxlint-disable-next-line typescript/no-unsafe-type-assertion
+            ...(user as unknown as {
+              username: string | null | undefined
+              displayUsername: string | null | undefined
+              banned: boolean | null | undefined
+              banReason: string | null | undefined
+              banExpires: Date | null | undefined
+              role: Role
+              settings: UserSettings
+            }),
+          },
+        }),
+      ),
     ],
   })
 

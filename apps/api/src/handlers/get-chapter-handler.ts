@@ -56,7 +56,7 @@ export const getChapterHandler = new Hono().get(
     },
   }),
   checkChapter(),
-  async (c) => {
+  (c) => {
     const { chapter } = c.var
 
     return c.ok({

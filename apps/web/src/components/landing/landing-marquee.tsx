@@ -6,7 +6,9 @@ import { TITLES } from "@/components/landing/landing-data"
 import { Stars } from "@/components/scene/stars"
 import { scene } from "@/components/scene/scene.stylex"
 
-const STRIP = [...TITLES, ...TITLES]
+const STRIP = ["a", "b"].flatMap((copy) =>
+  TITLES.map((title) => ({ ...title, key: `${title.id}-${copy}` })),
+)
 const styles = stylex.create({
   band: {
     overflow: "hidden",
@@ -54,8 +56,8 @@ export const LandingMarquee = () => {
         className={trackProps.className}
         style={{ ...trackProps.style, animation: "scene-marquee 48s linear infinite" }}
       >
-        {STRIP.map((title, i) => (
-          <div key={`${title.id}-${i}`} sx={styles.slot}>
+        {STRIP.map((title) => (
+          <div key={title.key} sx={styles.slot}>
             <CoverArt
               title={title.title}
               style={{ boxShadow: "0 10px 30px rgba(0,0,0,0.5)" }}

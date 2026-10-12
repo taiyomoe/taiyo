@@ -5,7 +5,12 @@ import { test } from "../setup"
 const SEEDED_MEDIA_ID = "4e26b80f-6661-4f5f-93b4-6dfed052bbed"
 const SEEDED_STAFF_ID = "54d2c255-f4a9-4bd5-b927-587ef9c4e3d2"
 
-type LinkItem = { staffId: string; name: string; image: string | null; role: string }
+type LinkItem = {
+  staffId: string
+  name: string
+  image: string | null
+  role: string
+}
 
 describe("GET /medias/:id/staffs", () => {
   test("returns the staff linked to a media", async ({ app }) => {

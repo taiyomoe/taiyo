@@ -18,7 +18,7 @@ describe("GET /users/:id/following", () => {
       ])
       .execute()
 
-    const res = await api<{ id: string }[]>(app, `/users/${targetId}/following`)
+    const res = await api<Array<{ id: string }>>(app, `/users/${targetId}/following`)
 
     expect(res.status).toBe(200)
 

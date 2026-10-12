@@ -15,7 +15,11 @@ const TOAST_ICONS = {
   warning: AlertTriangle,
 } as const
 
+type ToastIconComponent = (typeof TOAST_ICONS)[keyof typeof TOAST_ICONS]
+
 type SwipeDirection = "up" | "down" | "left" | "right"
+
+type ToastAlign = "center" | "left" | "right"
 
 type ToastData = {
   rootProps?: Omit<
@@ -288,6 +292,36 @@ const ICON_TYPE_STYLE = {
   success: styles.iconSuccess,
   warning: styles.iconWarning,
 } as const
+const VIEWPORT_ALIGN_STYLE = {
+  center: styles.viewportCenter,
+  left: styles.viewportLeft,
+  right: styles.viewportRight,
+} as const
+const ROOT_ALIGN_STYLE = {
+  center: styles.rootCenter,
+  left: styles.rootLeft,
+  right: styles.rootRight,
+} as const
+
+function isToastType(type: string | undefined): type is keyof typeof TOAST_ICONS {
+  return type !== undefined && Object.hasOwn(TOAST_ICONS, type)
+}
+
+function getToastIcon(type: string | undefined): ToastIconComponent | null {
+  return isToastType(type) ? TOAST_ICONS[type] : null
+}
+
+function getAlign(position: ToastPosition): ToastAlign {
+  if (position.includes("center")) {
+    return "center"
+  }
+
+  if (position.includes("left")) {
+    return "left"
+  }
+
+  return "right"
+}
 
 function getSwipeDirection(position: ToastPosition): SwipeDirection[] {
   const verticalDirection: SwipeDirection = position.startsWith("top") ? "up" : "down"
@@ -321,9 +355,9 @@ function ToastIcon({
   Icon,
 }: {
   type: string | undefined
-  Icon: (typeof TOAST_ICONS)[keyof typeof TOAST_ICONS]
+  Icon: ToastIconComponent
 }): React.ReactElement {
-  const typeStyle = type ? ICON_TYPE_STYLE[type as keyof typeof ICON_TYPE_STYLE] : undefined
+  const typeStyle = isToastType(type) ? ICON_TYPE_STYLE[type] : undefined
   const iconProps = stylex.props(styles.icon, typeStyle)
 
   return (
@@ -338,7 +372,7 @@ function ToastBody({
   type,
   actionChildren,
 }: {
-  Icon: (typeof TOAST_ICONS)[keyof typeof TOAST_ICONS] | null
+  Icon: ToastIconComponent | null
   type: string | undefined
   actionChildren?: React.ReactNode
 }): React.ReactElement {
@@ -380,15 +414,14 @@ function Toasts({
   position: ToastPosition
   portalProps?: React.ComponentProps<typeof Toast.Portal> | undefined
 }): React.ReactElement {
-  const { toasts } = Toast.useToastManager()
+  const { toasts } = Toast.useToastManager<ToastData>()
   const swipeDirection = getSwipeDirection(position)
   const isTop = position.startsWith("top")
-  const isCenter = position.includes("center")
-  const isLeft = position.includes("left")
+  const align = getAlign(position)
   const viewportProps = stylex.props(
     styles.viewport,
     isTop ? styles.viewportTop : styles.viewportBottom,
-    isCenter ? styles.viewportCenter : isLeft ? styles.viewportLeft : styles.viewportRight,
+    VIEWPORT_ALIGN_STYLE[align],
   )
   const contentProps = stylex.props(styles.content)
 
@@ -401,13 +434,13 @@ function Toasts({
         style={viewportProps.style}
       >
         {toasts.map((toast) => {
-          const Icon = toast.type ? TOAST_ICONS[toast.type as keyof typeof TOAST_ICONS] : null
-          const toastData = toast.data as ToastData | undefined
+          const Icon = getToastIcon(toast.type)
+          const toastData = toast.data
           const rootProps = stylex.props(
             surface.raisedEdge,
             styles.root,
             isTop ? styles.rootTop : styles.rootBottom,
-            isCenter ? styles.rootCenter : isLeft ? styles.rootLeft : styles.rootRight,
+            ROOT_ALIGN_STYLE[align],
             replayStyle(toast),
           )
 
@@ -415,12 +448,10 @@ function Toasts({
             <Toast.Root
               key={toast.id}
               className={rootProps.className}
-              style={
-                {
-                  ...rootProps.style,
-                  zIndex: "calc(9999 - var(--toast-index))",
-                } as React.CSSProperties
-              }
+              style={{
+                ...rootProps.style,
+                zIndex: "calc(9999 - var(--toast-index))",
+              }}
               {...toastData?.rootProps}
               data-position={position}
               swipeDirection={swipeDirection}
@@ -446,7 +477,7 @@ function AnchoredToasts({
 }: {
   portalProps?: React.ComponentProps<typeof Toast.Portal> | undefined
 }): React.ReactElement {
-  const { toasts } = Toast.useToastManager()
+  const { toasts } = Toast.useToastManager<ToastData>()
   const viewportProps = stylex.props(styles.anchoredViewport)
   const positionerProps2 = stylex.props(styles.positioner)
 
@@ -458,8 +489,8 @@ function AnchoredToasts({
         style={viewportProps.style}
       >
         {toasts.map((toast) => {
-          const Icon = toast.type ? TOAST_ICONS[toast.type as keyof typeof TOAST_ICONS] : null
-          const toastData = toast.data as ToastData | undefined
+          const Icon = getToastIcon(toast.type)
+          const toastData = toast.data
           const tooltipStyle = toastData?.tooltipStyle ?? false
           const positionerProps = toast.positionerProps
 
@@ -520,7 +551,7 @@ export type ToastPosition =
   | "bottom-center"
   | "bottom-right"
 
-export interface ToastProviderProps extends Toast.Provider.Props {
+export type ToastProviderProps = Toast.Provider.Props & {
   position?: ToastPosition
   portalProps?: React.ComponentProps<typeof Toast.Portal>
 }
@@ -542,7 +573,7 @@ export function ToastProvider({
 export const anchoredToastManager: ReturnType<typeof Toast.createToastManager> =
   Toast.createToastManager()
 
-export interface AnchoredToastProviderProps extends Toast.Provider.Props {
+export type AnchoredToastProviderProps = Toast.Provider.Props & {
   portalProps?: React.ComponentProps<typeof Toast.Portal>
 }
 

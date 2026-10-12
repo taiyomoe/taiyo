@@ -1,12 +1,14 @@
+import type { Language } from "@taiyomoe/db"
 import { describe, expect } from "vitest"
+import type { Services } from "../../services"
 import { signInAs } from "../helpers/auth"
 import { api } from "../helpers/request"
 import { test } from "../setup"
 
 const SEEDED_MEDIA_ID = "4e26b80f-6661-4f5f-93b4-6dfed052bbed"
 const seedChapter = async (
-  services: { db: any },
-  overrides: { uploaderId: string; number: number; language: string },
+  services: Services,
+  overrides: { uploaderId: string; number: number; language: Language },
 ) => {
   const id = crypto.randomUUID()
 
@@ -40,7 +42,7 @@ describe("GET /users/me/history", () => {
       ])
       .execute()
 
-    const res = await api<{ chapterId: string }[]>(app, `/users/me/history`, { headers })
+    const res = await api<Array<{ chapterId: string }>>(app, `/users/me/history`, { headers })
 
     expect(res.status).toBe(200)
 
@@ -66,7 +68,9 @@ describe("GET /users/me/history", () => {
       ])
       .execute()
 
-    const res = await api<{ chapterId: string }[]>(app, `/users/me/history?perPage=2`, { headers })
+    const res = await api<Array<{ chapterId: string }>>(app, `/users/me/history?perPage=2`, {
+      headers,
+    })
 
     expect(res.status).toBe(200)
 
@@ -97,7 +101,7 @@ describe("GET /users/me/history", () => {
       .where("id", "=", gone)
       .execute()
 
-    const res = await api<{ chapterId: string }[]>(app, `/users/me/history`, { headers })
+    const res = await api<Array<{ chapterId: string }>>(app, `/users/me/history`, { headers })
 
     expect(res.status).toBe(200)
 

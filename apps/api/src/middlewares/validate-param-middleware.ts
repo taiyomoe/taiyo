@@ -7,8 +7,8 @@ type Env<TSchema extends z.ZodType> = {
   }
 }
 
-export const validateParam = <TSchema extends z.ZodType>(schema: TSchema) => {
-  return createMiddleware<
+export const validateParam = <TSchema extends z.ZodType>(schema: TSchema) =>
+  createMiddleware<
     Env<TSchema>,
     string,
     { in: { param: Record<string, string> }; out: { param: z.output<TSchema> } }
@@ -23,4 +23,3 @@ export const validateParam = <TSchema extends z.ZodType>(schema: TSchema) => {
 
     return next()
   })
-}

@@ -1,10 +1,11 @@
 import { randomUUID } from "node:crypto"
 import { describe, expect } from "vitest"
+import type { Services } from "../../services"
 import { signInAs } from "../helpers/auth"
 import { api } from "../helpers/request"
 import { test } from "../setup"
 
-const seedGroup = async (services: { db: any }, creatorId: string) => {
+const seedGroup = async (services: Services, creatorId: string) => {
   const id = randomUUID()
 
   await services.db
@@ -30,7 +31,7 @@ describe("GET /ownership-requests/mine", () => {
       ])
       .execute()
 
-    const res = await api<{ message: string | null }[]>(app, `/ownership-requests/mine`, {
+    const res = await api<Array<{ message: string | null }>>(app, `/ownership-requests/mine`, {
       headers,
     })
 
@@ -57,9 +58,13 @@ describe("GET /ownership-requests/mine", () => {
       ])
       .execute()
 
-    const res = await api<{ status: string }[]>(app, `/ownership-requests/mine?status=REJECTED`, {
-      headers,
-    })
+    const res = await api<Array<{ status: string }>>(
+      app,
+      `/ownership-requests/mine?status=REJECTED`,
+      {
+        headers,
+      },
+    )
 
     expect(res.status).toBe(200)
 

@@ -316,7 +316,7 @@ const SPINNER_COLOR = {
 } as const
 const EDGE_VARIANTS: ReadonlySet<ButtonVariant> = new Set(["destructive-outline", "outline"])
 
-export interface ButtonStyleOptions {
+export type ButtonStyleOptions = {
   variant?: ButtonVariant | null
   size?: ButtonSize | null
   className?: string
@@ -340,7 +340,7 @@ export function buttonVariants({
   return cn(props.className, className)
 }
 
-export interface ButtonProps extends useRender.ComponentProps<"button"> {
+export type ButtonProps = useRender.ComponentProps<"button"> & {
   variant?: ButtonVariant
   size?: ButtonSize
   loading?: boolean
@@ -358,7 +358,7 @@ export function Button({
   sx,
   ...props
 }: ButtonProps): React.ReactElement {
-  const isDisabled: boolean = Boolean(loading || disabledProp)
+  const isDisabled = Boolean(loading || disabledProp)
   const typeValue: React.ButtonHTMLAttributes<HTMLButtonElement>["type"] = render
     ? undefined
     : "button"

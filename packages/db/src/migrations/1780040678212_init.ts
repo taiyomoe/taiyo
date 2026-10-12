@@ -444,7 +444,7 @@ const COUNTRIES = [
   "zw",
 ] as const
 
-export async function up(db: Kysely<any>): Promise<void> {
+export async function up(db: Kysely<unknown>): Promise<void> {
   // Enums
   await db.schema
     .createType("Roles")
@@ -1007,7 +1007,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .execute()
 }
 
-export async function down(db: Kysely<any>): Promise<void> {
+export async function down(db: Kysely<unknown>): Promise<void> {
   await db.schema.dropTable("UserSetting").execute()
   await db.schema.dropTable("Task").execute()
   await db.schema.dropTable("_ScanToScanMember").execute()

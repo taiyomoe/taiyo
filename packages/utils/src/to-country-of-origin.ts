@@ -1,4 +1,4 @@
-import type { MediaCountryOfOrigin } from "../../db/src/index"
+import type { MediaCountryOfOrigin } from "@taiyomoe/db"
 
 export const toCountryOfOrigin = (input: string): MediaCountryOfOrigin => {
   switch (input.toLowerCase()) {

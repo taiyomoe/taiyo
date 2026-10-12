@@ -74,7 +74,7 @@ export const updateStaffHandler = new Hono().patch(
   withTransaction,
   async (c) => {
     const { db, s3, s3Bucket, log, staff } = c.var
-    const body = c.var.formData!
+    const body = c.var.formData
     const updates: Record<string, unknown> = {}
 
     if (body.file) {
@@ -89,31 +89,31 @@ export const updateStaffHandler = new Hono().patch(
     }
 
     if (body.bio !== undefined) {
-      const merged: Record<string, string> = { ...(staff.bio as Record<string, string>) }
+      const merged = new Map(Object.entries(staff.bio as Record<string, string>))
 
       for (const [lang, value] of Object.entries(body.bio)) {
         if (value === "") {
-          delete merged[lang]
+          merged.delete(lang)
         } else if (typeof value === "string") {
-          merged[lang] = value
+          merged.set(lang, value)
         }
       }
 
-      updates.bio = merged
+      updates.bio = Object.fromEntries(merged)
     }
 
     if (body.links !== undefined) {
-      const merged: Record<string, string> = { ...(staff.links as Record<string, string>) }
+      const merged = new Map(Object.entries(staff.links as Record<string, string>))
 
       for (const [provider, value] of Object.entries(body.links)) {
         if (value === "") {
-          delete merged[provider]
+          merged.delete(provider)
         } else if (typeof value === "string") {
-          merged[provider] = value
+          merged.set(provider, value)
         }
       }
 
-      updates.links = merged
+      updates.links = Object.fromEntries(merged)
     }
 
     await db.updateTable("staffs").set(updates).where("id", "=", staff.id).execute()

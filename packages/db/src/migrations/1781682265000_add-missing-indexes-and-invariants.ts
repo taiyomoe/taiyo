@@ -1,6 +1,6 @@
 import { type Kysely, sql } from "kysely"
 
-export async function up(db: Kysely<any>): Promise<void> {
+export async function up(db: Kysely<unknown>): Promise<void> {
   // Indexes on FK columns that every list endpoint filters by. Postgres
   // doesn't auto-create indexes for foreign keys; without these, list-by-
   // media is a sequential scan.
@@ -28,6 +28,6 @@ export async function up(db: Kysely<any>): Promise<void> {
   `.execute(db)
 }
 
-export async function down(): Promise<void> {
-  throw new Error("add-missing-indexes-and-invariants cannot be reversed")
+export function down(): Promise<void> {
+  return Promise.reject(new Error("add-missing-indexes-and-invariants cannot be reversed"))
 }

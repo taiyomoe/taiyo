@@ -1,9 +1,26 @@
-export { createBullConnection } from "./connection"
+import { createBullConnection } from "./connection"
+import { processChapterUpload, type ProcessorDeps } from "./processor"
+import { CHAPTER_UPLOAD_QUEUE, type ChapterUploadProducer, getChapterUploadProducer } from "./queue"
+import { reapStaleChapterUploads, type ReaperDeps } from "./reaper"
+import {
+  type ChapterUploadJobData,
+  type ChapterUploadManifest,
+  chapterUploadManifestSchema,
+} from "./types"
 
-export { processChapterUpload, type ProcessorDeps } from "./processor"
+export {
+  CHAPTER_UPLOAD_QUEUE,
+  chapterUploadManifestSchema,
+  createBullConnection,
+  getChapterUploadProducer,
+  processChapterUpload,
+  reapStaleChapterUploads,
+}
 
-export { CHAPTER_UPLOAD_QUEUE, getChapterUploadProducer, type ChapterUploadProducer } from "./queue"
-
-export { reapStaleChapterUploads, type ReaperDeps } from "./reaper"
-
-export type { ChapterUploadJobData, ChapterUploadManifest } from "./types"
+export type {
+  ChapterUploadJobData,
+  ChapterUploadManifest,
+  ChapterUploadProducer,
+  ProcessorDeps,
+  ReaperDeps,
+}

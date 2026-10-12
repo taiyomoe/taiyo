@@ -1,7 +1,7 @@
 import * as stylex from "@stylexjs/stylex"
 import { GoogleLogo } from "@taiyomoe/ui/components/logos/google-logo"
 import { Button } from "@taiyomoe/ui/components/ui/button"
-import { ComponentProps } from "react"
+import type { ComponentProps } from "react"
 import { m } from "@/paraglide/messages"
 
 const styles = stylex.create({

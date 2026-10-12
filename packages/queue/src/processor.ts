@@ -10,7 +10,7 @@ import {
 import { sql, type Kysely } from "kysely"
 import { filetypeinfo } from "magic-bytes.js"
 import sharp from "sharp"
-import type { ChapterUploadJobData, ChapterUploadManifest } from "./types"
+import { type ChapterUploadJobData, chapterUploadManifestSchema } from "./types"
 
 export type ProcessorDeps = { db: Kysely<DB>; s3: S3Client; s3Bucket: string }
 
@@ -29,8 +29,6 @@ export const processChapterUpload = async (
     return
   }
 
-  const manifest = task.payload as ChapterUploadManifest
-
   try {
     await db
       .updateTable("tasks")
@@ -38,19 +36,26 @@ export const processChapterUpload = async (
       .where("id", "=", taskId)
       .execute()
 
+    const manifest = chapterUploadManifestSchema.parse(task.payload)
+
     for (const { pageId, stagingKey } of manifest.pages) {
       const obj = await s3.send(new GetObjectCommand({ Bucket: s3Bucket, Key: stagingKey }))
-      const buffer = Buffer.from(await obj.Body!.transformToByteArray())
+
+      if (obj.Body === undefined) {
+        throw new Error(`page ${pageId} has no body`)
+      }
+
+      const buffer = Buffer.from(await obj.Body.transformToByteArray())
 
       if (buffer.byteLength > config.images.maxChapterPageSizeBytes) {
         throw new Error(`page ${pageId} exceeds max size`)
       }
 
-      const detected = filetypeinfo(Array.from(buffer.subarray(0, 100))).find(
-        (ft) => !!ft.mime && ft.mime in IMAGE_MIME_TYPES,
+      const isImage = filetypeinfo(Array.from(buffer.subarray(0, 100))).some(
+        (ft) => ft.mime !== undefined && ft.mime in IMAGE_MIME_TYPES,
       )
 
-      if (!detected?.mime) {
+      if (!isImage) {
         throw new Error(`page ${pageId} is not a valid image`)
       }
 

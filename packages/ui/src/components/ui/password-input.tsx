@@ -25,14 +25,16 @@ export const PasswordInput = ({ startIcon, containerClassName, ...props }: Passw
   return (
     <InputGroup className={containerClassName}>
       <InputGroupInput type={showPassword ? "text" : "password"} {...props} />
-      {startIcon && <InputGroupAddon align="inline-start">{startIcon}</InputGroupAddon>}
+      {Boolean(startIcon) && <InputGroupAddon align="inline-start">{startIcon}</InputGroupAddon>}
       <InputGroupAddon align="inline-end">
         <Tooltip>
           <TooltipTrigger
             render={
               <Button
                 aria-label={showPassword ? "Hide password" : "Show password"}
-                onClick={() => setShowPassword(!showPassword)}
+                onClick={() => {
+                  setShowPassword(!showPassword)
+                }}
                 size="icon-xs"
                 variant="ghost"
               />

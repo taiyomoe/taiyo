@@ -1,4 +1,5 @@
 import { describe, expect } from "vitest"
+import { defined } from "../helpers/assert"
 import { signInAs } from "../helpers/auth"
 import { api } from "../helpers/request"
 import { test } from "../setup"
@@ -49,7 +50,7 @@ describe("PATCH /staffs/:id", () => {
       .select(["bio"])
       .where("id", "=", KISHIMOTO_ID)
       .executeTakeFirst()
-    const bio = row?.bio as Record<string, string>
+    const { bio } = defined(row)
 
     expect(bio.ja).toBe("日本語のバイオ")
     expect(bio.en).toBeTruthy()
@@ -70,7 +71,7 @@ describe("PATCH /staffs/:id", () => {
       .select(["bio"])
       .where("id", "=", KISHIMOTO_ID)
       .executeTakeFirst()
-    const bio = row?.bio as Record<string, string>
+    const { bio } = defined(row)
 
     expect(bio.en).toBeUndefined()
   })

@@ -2,6 +2,26 @@ import { faker } from "@faker-js/faker"
 import { type Kysely, sql } from "kysely"
 import normalizeEmail from "validator/lib/normalizeEmail"
 
+type MigrationDb = {
+  User: {
+    id: string
+    createdAt: Date
+    name: string
+    email: string | null
+    normalizedEmail: string | null
+    username: string
+    displayUsername: string
+    settings: unknown
+  }
+  UserSetting: {
+    userId: string
+    preferredTitles: string | null
+    showFollowing: boolean
+    showLibrary: boolean
+    homeLayout: string
+  }
+}
+
 const USERNAME_MIN = 3
 const USERNAME_MAX = 30
 const DISPLAY_NAME_MIN = 3
@@ -21,7 +41,7 @@ const normalizeDisplayName = (input: string) => {
   return normalized.length < DISPLAY_NAME_MIN ? faker.internet.username() : normalized
 }
 
-export async function up(db: Kysely<any>): Promise<void> {
+export async function up(db: Kysely<MigrationDb>): Promise<void> {
   /**
    * Phase 1: better-auth migration (Account/Session/Verification + bans).
    */
@@ -117,7 +137,7 @@ export async function up(db: Kysely<any>): Promise<void> {
   const usersForEmail = await db.selectFrom("User").select(["id", "email"]).execute()
 
   for (const user of usersForEmail) {
-    const normalized = user.email ? normalizeEmail(user.email) : null
+    const normalized = user.email !== null && user.email !== "" ? normalizeEmail(user.email) : null
 
     if (normalized === false) {
       throw new Error(`Failed to normalize email for user ${user.id}`)
@@ -246,6 +266,8 @@ export async function up(db: Kysely<any>): Promise<void> {
     .execute()
 }
 
-export async function down(): Promise<void> {
-  throw new Error("refactor-users is a destructive data-type migration and cannot be reversed")
+export function down(): Promise<void> {
+  return Promise.reject(
+    new Error("refactor-users is a destructive data-type migration and cannot be reversed"),
+  )
 }

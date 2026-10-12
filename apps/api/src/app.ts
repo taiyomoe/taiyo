@@ -26,7 +26,9 @@ import { usersRouter } from "./routers/users-router"
 import type { Services } from "./services"
 
 declare module "hono" {
+  // oxlint-disable-next-line typescript/consistent-type-definitions
   interface Context extends AppContext {}
+  // oxlint-disable-next-line typescript/consistent-type-definitions
   interface ContextVariableMap extends AppContextVariables {}
 }
 
@@ -34,17 +36,19 @@ const corsOrigins = (env.CORS_ALLOWED_ORIGINS ?? "")
   .split(",")
   .map((origin) => origin.trim())
   .filter(Boolean)
+const hyperdxEndpoint = env.HYPERDX_ENDPOINT ?? ""
+const hyperdxIngestionKey = env.HYPERDX_INGESTION_KEY ?? ""
 
 export const createApp = (services: Services) => {
   const app = new Hono()
     .use(
       evlog(
-        process.env.TEST || !env.HYPERDX_ENDPOINT || !env.HYPERDX_INGESTION_KEY
+        (process.env.TEST ?? "") !== "" || hyperdxEndpoint === "" || hyperdxIngestionKey === ""
           ? {}
           : {
               drain: createHyperDXDrain({
-                endpoint: env.HYPERDX_ENDPOINT,
-                apiKey: env.HYPERDX_INGESTION_KEY,
+                endpoint: hyperdxEndpoint,
+                apiKey: hyperdxIngestionKey,
               }),
             },
       ),

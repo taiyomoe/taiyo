@@ -40,9 +40,8 @@ export const tinyGif = async (name = "tiny.gif"): Promise<File> => {
   return new File([new Uint8Array(buf)], name, { type: "image/gif" })
 }
 
-export const invalidImage = (name = "fake.png"): File => {
-  return new File([new Uint8Array([0xff, 0xfe, 0xfd, 0xfc])], name, { type: "image/png" })
-}
+export const invalidImage = (name = "fake.png"): File =>
+  new File([new Uint8Array([0xff, 0xfe, 0xfd, 0xfc])], name, { type: "image/png" })
 
 export const jpegWithExif = async (name = "with-exif.jpg"): Promise<File> => {
   const cached = cache.get("jpeg-exif")

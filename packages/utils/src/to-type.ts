@@ -1,4 +1,4 @@
-import type { MediaType } from "../../db/src/index"
+import type { MediaType } from "@taiyomoe/db"
 
 export const toType = (input: string): MediaType => {
   switch (input.toLowerCase()) {

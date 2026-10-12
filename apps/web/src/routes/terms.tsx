@@ -1,5 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router"
-import { Link } from "@tanstack/react-router"
+import { createFileRoute, Link } from "@tanstack/react-router"
 import * as stylex from "@stylexjs/stylex"
 
 import { LegalContact, LegalPage, prose } from "@/components/legal/legal-page"

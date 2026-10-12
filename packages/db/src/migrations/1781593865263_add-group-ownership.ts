@@ -1,6 +1,6 @@
 import { type Kysely, sql } from "kysely"
 
-export async function up(db: Kysely<any>): Promise<void> {
+export async function up(db: Kysely<unknown>): Promise<void> {
   await db.schema.createType("GroupMembershipRole").asEnum(["OWNER", "MEMBER"]).execute()
 
   await db.schema
@@ -68,6 +68,6 @@ export async function up(db: Kysely<any>): Promise<void> {
   `.execute(db)
 }
 
-export async function down(): Promise<void> {
-  throw new Error("add-group-ownership cannot be reversed")
+export function down(): Promise<void> {
+  return Promise.reject(new Error("add-group-ownership cannot be reversed"))
 }

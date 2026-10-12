@@ -1,6 +1,6 @@
 import type { ErrorHandler } from "hono"
 
-export const errorHandler: ErrorHandler = async (err, c) => {
+export const errorHandler: ErrorHandler = (err, c) => {
   c.get("log").error(err)
 
   return c.fail(

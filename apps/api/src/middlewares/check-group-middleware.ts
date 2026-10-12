@@ -22,7 +22,7 @@ export const checkGroup = (opts: { includeDeleted?: boolean } = {}) =>
     log.set({ group: { id } })
 
     const base = db.selectFrom("groups").selectAll().where("id", "=", id)
-    const query = opts.includeDeleted ? base : base.where("deletedAt", "is", null)
+    const query = opts.includeDeleted === true ? base : base.where("deletedAt", "is", null)
     const group = await query.executeTakeFirst()
 
     if (!group) {

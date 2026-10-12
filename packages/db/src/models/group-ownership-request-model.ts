@@ -2,7 +2,7 @@ import type { Generated, Insertable } from "kysely"
 import type { GroupOwnershipRequestStatus } from "../constants"
 import type { Timestamp } from "../types"
 
-export interface GroupOwnershipRequest {
+export type GroupOwnershipRequest = {
   id: Generated<string>
   userId: string
   groupId: string

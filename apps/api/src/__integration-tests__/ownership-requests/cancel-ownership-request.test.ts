@@ -1,10 +1,11 @@
 import { randomUUID } from "node:crypto"
 import { describe, expect } from "vitest"
+import type { Services } from "../../services"
 import { signInAs } from "../helpers/auth"
 import { api } from "../helpers/request"
 import { test } from "../setup"
 
-const seedGroup = async (services: { db: any }, creatorId: string) => {
+const seedGroup = async (services: Services, creatorId: string) => {
   const id = randomUUID()
 
   await services.db
@@ -15,7 +16,7 @@ const seedGroup = async (services: { db: any }, creatorId: string) => {
   return id
 }
 const seedRequest = async (
-  services: { db: any },
+  services: Services,
   opts: {
     userId: string
     groupId: string
@@ -33,7 +34,7 @@ const seedRequest = async (
     .returning("id")
     .executeTakeFirstOrThrow()
 
-  return row.id as string
+  return row.id
 }
 
 describe("DELETE /ownership-requests/:id", () => {

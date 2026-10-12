@@ -131,10 +131,11 @@ export function InputGroupAddon({
       data-align={align}
       data-slot="input-group-addon"
       onMouseDown={(e: React.MouseEvent<HTMLDivElement>) => {
-        const target = e.target as HTMLElement
-        const isInteractive = target.closest(
-          "button, a, input, select, textarea, [role='button'], [role='combobox'], [role='listbox'], [data-slot='select-trigger']",
-        )
+        const isInteractive =
+          e.target instanceof Element &&
+          e.target.closest(
+            "button, a, input, select, textarea, [role='button'], [role='combobox'], [role='listbox'], [data-slot='select-trigger']",
+          ) !== null
 
         if (isInteractive) {
           return

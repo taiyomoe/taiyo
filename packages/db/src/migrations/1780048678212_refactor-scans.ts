@@ -1,6 +1,6 @@
 import { type Kysely, sql } from "kysely"
 
-export async function up(db: Kysely<any>): Promise<void> {
+export async function up(db: Kysely<unknown>): Promise<void> {
   /**
    * Phase 0: Drop unused tables (MediaChapterComment, ScanMember, _ScanToScanMember).
    */
@@ -168,6 +168,8 @@ export async function up(db: Kysely<any>): Promise<void> {
     .execute()
 }
 
-export async function down(): Promise<void> {
-  throw new Error("refactor-scans is a destructive data-type migration and cannot be reversed")
+export function down(): Promise<void> {
+  return Promise.reject(
+    new Error("refactor-scans is a destructive data-type migration and cannot be reversed"),
+  )
 }

@@ -4,7 +4,7 @@ export const toStaffLinks = (input: Record<string, unknown>): StaffLinks => {
   const links: StaffLinks = {}
 
   for (const [key, value] of Object.entries(input)) {
-    if (!value || typeof value !== "string") {
+    if (typeof value !== "string" || value === "") {
       continue
     }
 
@@ -15,7 +15,7 @@ export const toStaffLinks = (input: Record<string, unknown>): StaffLinks => {
     }
 
     if (isStaffLink(key)) {
-      links[key as keyof StaffLinks] = value
+      links[key] = value
 
       continue
     }

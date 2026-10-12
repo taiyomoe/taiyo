@@ -234,7 +234,7 @@ export function AutocompleteInput({
   clearProps?: AutocompletePrimitive.Clear.Props
   sx?: Sx
 }): React.ReactElement {
-  const sizeValue = (size ?? "default") as "sm" | "default" | "lg" | number
+  const sizeValue = size ?? "default"
   const isSm = sizeValue === "sm"
   const groupProps = stylex.props(styles.inputGroup)
   const addonProps = stylex.props(styles.startAddon, isSm && styles.startAddonSm)
@@ -257,7 +257,7 @@ export function AutocompleteInput({
       data-slot="autocomplete-input-group"
       style={groupProps.style}
     >
-      {startAddon && (
+      {Boolean(startAddon) && (
         <div
           aria-hidden="true"
           className={addonProps.className}
@@ -492,7 +492,7 @@ export function AutocompleteClear({
     <AutocompletePrimitive.Clear
       className={cn(styleProps.className, className)}
       data-slot="autocomplete-clear"
-      style={{ ...styleProps.style, ...(style as React.CSSProperties) }}
+      style={{ ...styleProps.style, ...(typeof style === "function" ? undefined : style) }}
       {...props}
     >
       <Close className={iconProps.className} style={iconProps.style} />
@@ -536,7 +536,7 @@ export function AutocompleteTrigger({
     <AutocompletePrimitive.Trigger
       className={cn(styleProps.className, className)}
       data-slot="autocomplete-trigger"
-      style={{ ...styleProps.style, ...(style as React.CSSProperties) }}
+      style={{ ...styleProps.style, ...(typeof style === "function" ? undefined : style) }}
       {...props}
     >
       {children}

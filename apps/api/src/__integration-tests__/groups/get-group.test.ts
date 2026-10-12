@@ -4,7 +4,10 @@ import { test } from "../setup"
 
 const SEEDED_GROUP_ID = "4d8a22ba-d8a0-4a98-b4f3-1d630fbd7de1"
 
-type GroupDetail = { id: string; name: string }
+type GroupDetail = {
+  id: string
+  name: string
+}
 
 describe("GET /groups/:id", () => {
   test("returns the group detail", async ({ app }) => {

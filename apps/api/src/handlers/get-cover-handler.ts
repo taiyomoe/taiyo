@@ -47,7 +47,7 @@ export const getCoverHandler = new Hono().get(
     },
   }),
   checkCover(),
-  async (c) => {
+  (c) => {
     const { cover } = c.var
 
     return c.ok({

@@ -32,7 +32,9 @@ const { values: flags } = parseArgs({
     "env-only": { type: "boolean", default: false },
   },
 })
-const step = (message: string) => console.log(`\n\u001B[1m→ ${message}\u001B[0m`)
+const step = (message: string) => {
+  console.log(`\n\u001B[1m→ ${message}\u001B[0m`)
+}
 const run = (command: string, args: string[]) => {
   const result = spawnSync(command, args, { cwd: repoRoot, stdio: "inherit" })
 
@@ -50,8 +52,14 @@ const isPortFree = (port: number) =>
   new Promise<boolean>((resolvePort) => {
     const server = createServer()
 
-    server.once("error", () => resolvePort(false))
-    server.listen(port, "127.0.0.1", () => server.close(() => resolvePort(true)))
+    server.once("error", () => {
+      resolvePort(false)
+    })
+    server.listen(port, "127.0.0.1", () => {
+      server.close(() => {
+        resolvePort(true)
+      })
+    })
   })
 const slotPorts = (base: EnvValues, slot: number) =>
   Object.fromEntries(
@@ -72,8 +80,10 @@ const portsClaimedByOtherCheckouts = () => {
     const values = readEnvFile(join(worktree, ".env"))
 
     for (const key of PORT_KEYS) {
-      if (values[key]) {
-        claimed.add(values[key])
+      const value = values[key]
+
+      if (value !== undefined && value !== "") {
+        claimed.add(value)
       }
     }
   }
@@ -107,7 +117,7 @@ const ensureRootEnv = async () => {
 
   if (exists && flags.slot === undefined) {
     const current = readEnvFile(rootEnvPath)
-    const missing = PORT_KEYS.filter((key) => !current[key])
+    const missing = PORT_KEYS.filter((key) => current[key] === undefined || current[key] === "")
 
     if (missing.length === 0) {
       console.log(".env exists, keeping its ports")
@@ -171,12 +181,16 @@ const syncAppEnvs = () => {
   const databaseUrl = `postgresql://${credentials}@localhost:${get("DATABASE_PORT")}/${get("DATABASE_NAME")}`
   const s3Endpoint = localUrl(get("RUSTFS_PORT"))
   const apiUrl = localUrl(get("API_PORT"))
-  const s3 = (current: EnvValues) => ({
-    S3_ENDPOINT: s3Endpoint,
-    S3_ACCESS_KEY_ID: get("RUSTFS_ACCESS_KEY"),
-    S3_SECRET_ACCESS_KEY: get("RUSTFS_SECRET_KEY"),
-    S3_PUBLIC_URL: `${s3Endpoint}/${current.S3_BUCKET_NAME || "taiyo"}`,
-  })
+  const s3 = (current: EnvValues) => {
+    const bucket = current.S3_BUCKET_NAME
+
+    return {
+      S3_ENDPOINT: s3Endpoint,
+      S3_ACCESS_KEY_ID: get("RUSTFS_ACCESS_KEY"),
+      S3_SECRET_ACCESS_KEY: get("RUSTFS_SECRET_KEY"),
+      S3_PUBLIC_URL: `${s3Endpoint}/${bucket === undefined || bucket === "" ? "taiyo" : bucket}`,
+    }
+  }
 
   syncAppEnv("api", (current) => ({
     PORT: get("API_PORT"),

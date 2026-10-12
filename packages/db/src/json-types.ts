@@ -2,7 +2,9 @@ import type { ContentRating, Language, MediaLink, MediaLinkNumberKey, StaffLink 
 
 export type LocalizedText = Partial<Record<Language, string>>
 
-export type ChapterPage = { id: string }
+export type ChapterPage = {
+  id: string
+}
 
 export type MediaTags = {
   key: string

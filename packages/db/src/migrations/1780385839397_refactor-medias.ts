@@ -1,4 +1,4 @@
-import { type Kysely, sql } from "kysely"
+import { type ColumnType, type Kysely, sql } from "kysely"
 
 const TAG_KEYS = new Set([
   "ACTION",
@@ -446,9 +446,21 @@ const TAG_KEYS = new Set([
   "ZOOPHILIA",
 ])
 
-type MediaTag = { key: string; isSpoiler: boolean }
+type MediaTag = {
+  key: string
+  isSpoiler: boolean
+}
 
-export async function up(db: Kysely<any>): Promise<void> {
+type MigrationDb = {
+  Media: {
+    id: string
+    genres: string[] | null
+    tags: ColumnType<Array<{ key: string; isSpoiler?: boolean | null }> | null, never, unknown>
+    oneShot: boolean
+  }
+}
+
+export async function up(db: Kysely<MigrationDb>): Promise<void> {
   /**
    * Phase 1: Convert synopsis from TEXT to JSONB.
    */
@@ -487,7 +499,7 @@ export async function up(db: Kysely<any>): Promise<void> {
       newTags.push(tag)
     }
 
-    if (row.oneShot === true) {
+    if (row.oneShot) {
       push({ key: "ONESHOT", isSpoiler: false })
     }
 
@@ -560,6 +572,8 @@ export async function up(db: Kysely<any>): Promise<void> {
   await sql`ALTER TABLE "Chapter" ALTER COLUMN "volume" TYPE TEXT USING "volume"::TEXT`.execute(db)
 }
 
-export async function down(): Promise<void> {
-  throw new Error("refactor-medias is a destructive data-type migration and cannot be reversed")
+export function down(): Promise<void> {
+  return Promise.reject(
+    new Error("refactor-medias is a destructive data-type migration and cannot be reversed"),
+  )
 }

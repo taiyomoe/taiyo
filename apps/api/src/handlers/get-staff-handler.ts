@@ -35,7 +35,7 @@ export const getStaffHandler = new Hono().get(
     },
   }),
   checkStaff(),
-  async (c) => {
+  (c) => {
     const { staff } = c.var
 
     return c.ok({

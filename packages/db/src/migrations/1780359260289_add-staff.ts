@@ -1,8 +1,34 @@
-import { type Kysely, sql } from "kysely"
+import { type Generated, type Kysely, sql } from "kysely"
 import { Manga } from "mangadex-full-api"
 import { shake } from "radashi"
 
-export async function up(db: Kysely<any>): Promise<void> {
+type MigrationDb = {
+  Media: {
+    id: string
+    links: { mangaDex?: string; [key: string]: unknown }
+  }
+  User: {
+    id: string
+    role: string
+    createdAt: Date
+  }
+  Staff: {
+    id: Generated<string>
+    name: string
+    bio: unknown
+    links: unknown
+    creatorId: string
+    createdAt: unknown
+    updatedAt: unknown
+  }
+  StaffOnMedia: {
+    mediaId: string
+    staffId: string
+    role: unknown
+  }
+}
+
+export async function up(db: Kysely<MigrationDb>): Promise<void> {
   await db.schema.createType("StaffRole").asEnum(["AUTHOR", "ARTIST"]).execute()
 
   await db.schema
@@ -61,7 +87,7 @@ export async function up(db: Kysely<any>): Promise<void> {
   for (const media of medias) {
     const mdId = media.links.mangaDex
 
-    if (!mdId) {
+    if (mdId === undefined || mdId === "") {
       continue
     }
 
@@ -81,7 +107,9 @@ export async function up(db: Kysely<any>): Promise<void> {
         .where("id", "=", media.id)
         .execute()
 
-      await new Promise((r) => setTimeout(r, 50))
+      await new Promise((r) => {
+        setTimeout(r, 50)
+      })
 
       continue
     }
@@ -93,7 +121,7 @@ export async function up(db: Kysely<any>): Promise<void> {
       const mdStaffId = s.id
       let staffId = staffCache.get(mdStaffId)
 
-      if (!staffId) {
+      if (staffId === undefined || staffId === "") {
         const relation = await s.resolve().catch(() => null)
 
         if (!relation) {
@@ -117,11 +145,10 @@ export async function up(db: Kysely<any>): Promise<void> {
             weibo: relation.weibo,
             booth: relation.booth,
           },
-          (v) => !v,
+          (v) => v === null || v === undefined || v === "",
         )
-        const bioPayload = relation.biography?.localString
-          ? { en: relation.biography.localString }
-          : {}
+        const bioPayload =
+          relation.biography.localString !== "" ? { en: relation.biography.localString } : {}
         const inserted = await db
           .insertInto("Staff")
           .values({
@@ -137,7 +164,7 @@ export async function up(db: Kysely<any>): Promise<void> {
 
         staffId = inserted?.id
 
-        if (!staffId) {
+        if (staffId === undefined || staffId === "") {
           continue
         }
 
@@ -162,11 +189,13 @@ export async function up(db: Kysely<any>): Promise<void> {
       console.log(`Processed ${processed}/${medias.length} medias`)
     }
 
-    await new Promise((r) => setTimeout(r, 50))
+    await new Promise((r) => {
+      setTimeout(r, 50)
+    })
   }
 }
 
-export async function down(db: Kysely<any>): Promise<void> {
+export async function down(db: Kysely<unknown>): Promise<void> {
   await db.schema.dropTable("StaffOnMedia").execute()
 
   await db.schema.dropTable("Staff").execute()

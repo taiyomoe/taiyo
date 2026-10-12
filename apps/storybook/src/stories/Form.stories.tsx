@@ -53,7 +53,7 @@ export const Default = meta.story({})
 
 export const Composition = meta.story({
   render: () => (
-    <Form sx={styles.column} onFormSubmit={fn()}>
+    <Form sx={styles.column} onFormSubmit={fn<() => void>()}>
       <Field name="username">
         <FieldLabel>Username</FieldLabel>
         <FieldControl render={<Input placeholder="taiyo_user" />} required />
@@ -78,7 +78,11 @@ export const Composition = meta.story({
 
 export const WithServerErrors = meta.story({
   render: () => (
-    <Form sx={styles.column} errors={{ email: "This email is already taken." }} onFormSubmit={fn()}>
+    <Form
+      sx={styles.column}
+      errors={{ email: "This email is already taken." }}
+      onFormSubmit={fn<() => void>()}
+    >
       <Field name="email">
         <FieldLabel>Email</FieldLabel>
         <FieldControl render={<Input defaultValue="ada@example.com" type="email" />} />

@@ -20,7 +20,7 @@ export type AppAbility = MongoAbility<[Actions, Subjects]>
 export const defineAbilitiesFor = (user: User): AppAbility => {
   const { can, build } = new AbilityBuilder<AppAbility>(createMongoAbility)
 
-  if (user.banned) {
+  if (user.banned === true) {
     return build()
   }
 

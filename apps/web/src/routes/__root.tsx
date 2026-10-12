@@ -25,7 +25,11 @@ const readCookies = createIsomorphicFn()
   .client(() =>
     pipe(
       document.cookie.split("; "),
-      map((cookie) => cookie.split("=") as [string, string]),
+      map((cookie): [string, string | undefined] => {
+        const [name = "", value] = cookie.split("=")
+
+        return [name, value]
+      }),
       fromEntries(),
     ),
   )
@@ -38,7 +42,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       theme === "light" || theme === "system" ? theme : "dark"
 
     return {
-      session: await context.queryClient.ensureQueryData(sessionQueryOptions),
+      session: await context.queryClient.query({ ...sessionQueryOptions, staleTime: "static" }),
       sidebarPrefs: readSidebarCookies(cookies),
       themePreference,
     }

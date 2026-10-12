@@ -4,7 +4,9 @@ export type Timestamp = ColumnType<Date, Date | string, Date | string>
 
 export type JsonPrimitive = boolean | number | string | null
 
-export type JsonObject = { [x: string]: JsonValue | undefined }
+export type JsonObject = {
+  [x: string]: JsonValue | undefined
+}
 
 export type JsonArray = JsonValue[]
 

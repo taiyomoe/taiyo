@@ -56,7 +56,7 @@ export const ReadOnly = meta.story({ args: { readOnly: true } })
 
 export const Invalid = meta.story({
   render: () => (
-    <RadioGroup aria-invalid defaultValue="comfortable" onValueChange={fn()}>
+    <RadioGroup aria-invalid defaultValue="comfortable" onValueChange={fn<() => void>()}>
       <Label sx={styles.row}>
         <RadioGroupItem aria-invalid value="default" />
         Default
@@ -75,7 +75,7 @@ export const Invalid = meta.story({
 
 export const Horizontal = meta.story({
   render: () => (
-    <RadioGroup sx={styles.row2} defaultValue="comfortable" onValueChange={fn()}>
+    <RadioGroup sx={styles.row2} defaultValue="comfortable" onValueChange={fn<() => void>()}>
       <Label sx={styles.row}>
         <RadioGroupItem value="default" />
         Default

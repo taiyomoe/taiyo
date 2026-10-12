@@ -131,7 +131,7 @@ const SIZE_STYLE = {
   sm: sizeStyles.sm,
 } as const
 
-export interface ToggleProps extends TogglePrimitive.Props {
+export type ToggleProps = TogglePrimitive.Props & {
   variant?: ToggleVariant
   size?: ToggleSize
   sx?: Sx

@@ -1,5 +1,5 @@
 import * as stylex from "@stylexjs/stylex"
-import { useSuspenseQuery } from "@tanstack/react-query"
+import { noop, useSuspenseQuery } from "@tanstack/react-query"
 import { createFileRoute, getRouteApi } from "@tanstack/react-router"
 import { colors, font, radius, text } from "@taiyomoe/ui/styles/tokens.stylex"
 import { z } from "zod"
@@ -25,7 +25,7 @@ export const Route = createFileRoute("/titles")({
     titlesQueryOptions: searchMediasQueryOptions({ page: page ?? FIRST_PAGE, perPage: PER_PAGE }),
   }),
   loader: ({ context }) => {
-    void context.queryClient.prefetchQuery(context.titlesQueryOptions)
+    void context.queryClient.query(context.titlesQueryOptions).catch(noop)
   },
   component: Titles,
 })

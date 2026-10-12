@@ -1,6 +1,14 @@
 import { config } from "@taiyomoe/config"
 import type { MediaTags } from "@taiyomoe/db"
 
+const TAGS_MAP = new Map([
+  ["COOKING", "FOOD"],
+  ["SCHOOL_LIFE", "SCHOOL"],
+  ["HAREM", "FEMALE_HAREM"],
+  ["REVERSE_HAREM", "MALE_HAREM"],
+  ["VAMPIRES", "VAMPIRE"],
+])
+
 export const toTags = (input: string[] | null): MediaTags[] => {
   const tags: MediaTags[] = []
 
@@ -13,24 +21,18 @@ export const toTags = (input: string[] | null): MediaTags[] => {
 
     if (normalizedTag in config.tags) {
       tags.push({
-        key: normalizedTag as keyof typeof config.tags,
+        key: normalizedTag,
         isSpoiler: false,
       })
 
       continue
     }
 
-    const tagsMap = {
-      COOKING: "FOOD",
-      SCHOOL_LIFE: "SCHOOL",
-      HAREM: "FEMALE_HAREM",
-      REVERSE_HAREM: "MALE_HAREM",
-      VAMPIRES: "VAMPIRE",
-    }
+    const mappedTag = TAGS_MAP.get(normalizedTag)
 
-    if (normalizedTag in tagsMap) {
+    if (mappedTag !== undefined) {
       tags.push({
-        key: tagsMap[normalizedTag as keyof typeof tagsMap] as keyof typeof config.tags,
+        key: mappedTag,
         isSpoiler: false,
       })
 

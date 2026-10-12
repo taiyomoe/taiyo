@@ -74,7 +74,7 @@ export const createBannersHandler = new Hono().post(
   withTransaction,
   async (c) => {
     const { db, s3, s3Bucket, log, media, user } = c.var
-    const body = c.var.formData!
+    const body = c.var.formData
     const bannerRows = await Promise.all(
       body.banners.map(async (banner) => {
         const id = crypto.randomUUID()

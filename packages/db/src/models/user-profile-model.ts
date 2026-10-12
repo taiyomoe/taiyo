@@ -3,7 +3,7 @@ import type { Country, Gender } from "../constants"
 import type { LocalizedText } from "../json-types"
 import type { Timestamp } from "../types"
 
-export interface UserProfile {
+export type UserProfile = {
   id: Generated<string>
   createdAt: Generated<Timestamp>
   updatedAt: Generated<Timestamp>
