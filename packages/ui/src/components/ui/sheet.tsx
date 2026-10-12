@@ -7,7 +7,7 @@ import { cn } from "@/utils/cn"
 import { Close } from "@/components/icons"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { colors, consts, font, radius, shadows, text } from "../../styles/tokens.stylex"
+import { colors, consts, font, motion, radius, shadows, text } from "../../styles/tokens.stylex"
 import type { Sx } from "../../styles/sx"
 
 type SheetSide = "right" | "left" | "top" | "bottom"
@@ -24,9 +24,12 @@ const styles = stylex.create({
       default: 1,
     },
     position: "fixed",
-    transitionDuration: "200ms",
+    transitionDuration: {
+      "[data-ending-style]": motion.exitLarge,
+      default: motion.enterLarge,
+    },
     transitionProperty: "all",
-    transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+    transitionTimingFunction: motion.easeOut,
     zIndex: 50,
   },
   viewport: {
@@ -36,7 +39,7 @@ const styles = stylex.create({
     zIndex: 50,
   },
   popup: {
-    backgroundClip: "padding-box",
+    backgroundClip: "border-box",
     backgroundColor: colors.popover,
     boxShadow: shadows.overlay,
     color: colors.popoverForeground,
@@ -48,9 +51,12 @@ const styles = stylex.create({
       default: 1,
     },
     position: "relative",
-    transitionDuration: "200ms",
+    transitionDuration: {
+      "[data-ending-style]": motion.exitLarge,
+      default: motion.enterLarge,
+    },
     transitionProperty: "opacity, translate",
-    transitionTimingFunction: "ease-in-out",
+    transitionTimingFunction: motion.easeOut,
     willChange: "transform",
     maxHeight: "100%",
     minHeight: 0,

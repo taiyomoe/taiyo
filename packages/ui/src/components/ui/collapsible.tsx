@@ -4,12 +4,17 @@ import type React from "react"
 import { cn } from "@/utils/cn"
 import { collapsibleTriggerMarker } from "../../styles/markers.stylex"
 import type { Sx } from "../../styles/sx"
+import { motion } from "../../styles/tokens.stylex"
 
 const styles = stylex.create({
   panel: {
     overflow: "hidden",
-    transitionDuration: "200ms",
+    transitionDuration: {
+      "[data-ending-style]": motion.exitLarge,
+      default: motion.enterLarge,
+    },
     transitionProperty: "height",
+    transitionTimingFunction: motion.easeOut,
     height: {
       "[data-ending-style]": 0,
       "[data-starting-style]": 0,

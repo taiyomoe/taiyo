@@ -95,6 +95,15 @@ export const consts = stylex.defineConsts({
   pointerFine: "@media (pointer: fine)",
 })
 
+export const motion = stylex.defineConsts({
+  easeOut: "cubic-bezier(0.23, 1, 0.32, 1)",
+  enter: "180ms",
+  exit: "120ms",
+  enterLarge: "240ms",
+  exitLarge: "160ms",
+  slide: "300ms",
+})
+
 export const font = stylex.defineVars({
   heading: '"Inter Variable", system-ui, sans-serif',
   mono: '"JetBrains Mono Variable", monospace',

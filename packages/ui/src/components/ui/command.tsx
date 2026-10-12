@@ -15,7 +15,7 @@ import {
 import { cn } from "@/utils/cn"
 import { Search } from "@/components/icons"
 import type { Sx } from "../../styles/sx"
-import { colors, consts, font, radius, shadows } from "../../styles/tokens.stylex"
+import { colors, consts, font, motion, radius, shadows } from "../../styles/tokens.stylex"
 
 export const CommandDialog: typeof CommandDialogPrimitive.Root = CommandDialogPrimitive.Root
 
@@ -36,8 +36,12 @@ const styles = stylex.create({
       default: null,
     },
     position: "fixed",
-    transitionDuration: "200ms",
+    transitionDuration: {
+      "[data-ending-style]": motion.exitLarge,
+      default: motion.enterLarge,
+    },
     transitionProperty: "all",
+    transitionTimingFunction: motion.easeOut,
     zIndex: 50,
   },
   viewport: {
@@ -58,7 +62,7 @@ const styles = stylex.create({
     borderRadius: radius.xxl,
     borderStyle: "solid",
     borderWidth: 1,
-    backgroundClip: "padding-box",
+    backgroundClip: "border-box",
     backgroundColor: colors.popover,
     boxShadow: shadows.overlay,
     color: colors.popoverForeground,
@@ -80,9 +84,12 @@ const styles = stylex.create({
       "[data-nested-dialog-open]": "top",
       default: null,
     },
-    transitionDuration: "200ms",
+    transitionDuration: {
+      "[data-ending-style]": motion.exitLarge,
+      default: motion.enterLarge,
+    },
     transitionProperty: "scale, opacity, translate",
-    transitionTimingFunction: "ease-in-out",
+    transitionTimingFunction: motion.easeOut,
     translate: "0 calc(-1.25rem * var(--nested-dialogs))",
     willChange: "transform",
     maxHeight: "26.25rem",

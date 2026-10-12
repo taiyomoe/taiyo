@@ -3,7 +3,7 @@ import * as stylex from "@stylexjs/stylex"
 import type React from "react"
 import { cn } from "@/utils/cn"
 import { colors, radius, shadows } from "../../styles/tokens.stylex"
-import { surface } from "../../styles/recipes"
+import { surface, transitions } from "../../styles/recipes"
 import type { Sx } from "../../styles/sx"
 
 const styles = stylex.create({
@@ -16,29 +16,15 @@ const styles = stylex.create({
     borderRadius: radius.xl,
     borderStyle: "solid",
     borderWidth: 1,
-    backgroundClip: "padding-box",
+    backgroundClip: "border-box",
     backgroundColor: colors.popover,
     boxShadow: shadows.overlay,
     color: colors.popoverForeground,
     display: "flex",
     fontSize: "0.875rem",
     lineHeight: "1.25rem",
-    opacity: {
-      "[data-ending-style]": 0,
-      "[data-starting-style]": 0,
-      default: null,
-    },
     position: "relative",
-    scale: {
-      "[data-ending-style]": "0.98",
-      "[data-starting-style]": "0.98",
-      default: null,
-    },
     textWrap: "balance",
-    transformOrigin: "var(--transform-origin)",
-    transitionDuration: "150ms",
-    transitionProperty: "scale, opacity",
-    transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
     width: "16rem",
   },
 })
@@ -83,7 +69,7 @@ export function PreviewCardPopup({
   sx?: Sx
 }): React.ReactElement {
   const positionerProps = stylex.props(styles.positioner)
-  const popupProps = stylex.props(surface.raisedEdge, styles.popup, sx)
+  const popupProps = stylex.props(transitions.popup, surface.raisedEdge, styles.popup, sx)
 
   return (
     <PreviewCardPrimitive.Portal {...portalProps}>

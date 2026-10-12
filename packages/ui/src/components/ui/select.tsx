@@ -8,7 +8,7 @@ import { Check, ChevronDown, ChevronUp, ChevronsUpDown } from "@/components/icon
 import { selectPopupMarker } from "../../styles/markers.stylex"
 import type { Sx } from "../../styles/sx"
 import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
-import { surface } from "../../styles/recipes"
+import { surface, transitions } from "../../styles/recipes"
 
 export const Select: typeof SelectPrimitive.Root = SelectPrimitive.Root
 
@@ -154,7 +154,7 @@ const styles = stylex.create({
     borderRadius: radius.xl,
     borderStyle: "solid",
     borderWidth: 1,
-    backgroundClip: "padding-box",
+    backgroundClip: "border-box",
     backgroundColor: colors.popover,
     boxShadow: shadows.overlay,
     position: "relative",
@@ -233,7 +233,7 @@ const styles = stylex.create({
       default: "1rem",
       [consts.sm]: "0.875rem",
     },
-    gridTemplateColumns: "1rem 1fr",
+    gridTemplateColumns: "1fr 1rem",
     opacity: {
       "[data-disabled]": 0.64,
       default: null,
@@ -253,10 +253,12 @@ const styles = stylex.create({
         "calc(var(--anchor-width) + 1.25rem)",
     },
     paddingLeft: "0.75rem",
-    paddingRight: "1.25rem",
+    paddingRight: "0.75rem",
   },
   itemIndicator: {
-    gridColumnStart: "1",
+    display: "flex",
+    gridColumnStart: "2",
+    justifyContent: "flex-end",
   },
   itemIndicatorIcon: {
     height: {
@@ -269,7 +271,7 @@ const styles = stylex.create({
     },
   },
   itemText: {
-    gridColumnStart: "2",
+    gridColumnStart: "1",
     minWidth: 0,
   },
   separator: {
@@ -331,9 +333,15 @@ export function SelectButton({
   const typeValue: React.ButtonHTMLAttributes<HTMLButtonElement>["type"] = render
     ? undefined
     : "button"
-  const styleProps = stylex.props(styles.trigger, SIZE_STYLE[size], styles.buttonMinWidth, sx)
+  const styleProps = stylex.props(
+    styles.trigger,
+    SIZE_STYLE[size],
+    styles.buttonMinWidth,
+    stylex.defaultMarker(),
+    sx,
+  )
   const labelProps = stylex.props(styles.buttonLabel)
-  const iconProps = stylex.props(styles.triggerIcon)
+  const iconProps = stylex.props(transitions.chevronFlip, styles.triggerIcon)
   const defaultProps = {
     children: (
       <>
@@ -370,9 +378,10 @@ export function SelectTrigger({
     styles.trigger,
     SIZE_STYLE[size],
     props["aria-invalid"] !== undefined && styles.triggerInvalid,
+    stylex.defaultMarker(),
     sx,
   )
-  const iconProps = stylex.props(styles.triggerIcon)
+  const iconProps = stylex.props(transitions.chevronFlip, styles.triggerIcon)
 
   return (
     <SelectPrimitive.Trigger
@@ -429,7 +438,13 @@ export function SelectPopup({
   sx?: Sx
 }): React.ReactElement {
   const positionerProps = stylex.props(styles.positioner)
-  const popupProps = stylex.props(styles.popup, stylex.defaultMarker(), selectPopupMarker, sx)
+  const popupProps = stylex.props(
+    transitions.popup,
+    styles.popup,
+    stylex.defaultMarker(),
+    selectPopupMarker,
+    sx,
+  )
   const surfaceProps = stylex.props(surface.raisedEdge, styles.surface)
   const listProps = stylex.props(styles.list)
   const upArrowProps = stylex.props(styles.scrollArrow, styles.scrollArrowUp)
@@ -502,15 +517,15 @@ export function SelectItem({
       style={styleProps.style}
       {...props}
     >
+      <SelectPrimitive.ItemText className={textProps.className} style={textProps.style}>
+        {children}
+      </SelectPrimitive.ItemText>
       <SelectPrimitive.ItemIndicator
         className={indicatorProps.className}
         style={indicatorProps.style}
       >
         <Check className={iconProps.className} style={iconProps.style} />
       </SelectPrimitive.ItemIndicator>
-      <SelectPrimitive.ItemText className={textProps.className} style={textProps.style}>
-        {children}
-      </SelectPrimitive.ItemText>
     </SelectPrimitive.Item>
   )
 }

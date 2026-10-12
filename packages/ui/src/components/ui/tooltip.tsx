@@ -2,18 +2,18 @@ import { Tooltip as TooltipPrimitive } from "@base-ui/react/tooltip"
 import * as stylex from "@stylexjs/stylex"
 import type React from "react"
 import { cn } from "@/utils/cn"
-import { colors, radius, shadows } from "../../styles/tokens.stylex"
-import { surface } from "../../styles/recipes"
+import { colors, motion, radius, shadows } from "../../styles/tokens.stylex"
+import { surface, transitions } from "../../styles/recipes"
 import type { Sx } from "../../styles/sx"
 
 const styles = stylex.create({
   positioner: {
-    transitionDuration: "150ms",
+    transitionDuration: motion.enter,
     transitionProperty: {
       "[data-instant]": "none",
       default: "top, left, right, bottom, transform",
     },
-    transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+    transitionTimingFunction: motion.easeOut,
     zIndex: 50,
     height: "var(--positioner-height)",
     maxWidth: "var(--available-width)",
@@ -24,32 +24,21 @@ const styles = stylex.create({
     borderRadius: radius.md,
     borderStyle: "solid",
     borderWidth: 1,
-    backgroundClip: "padding-box",
+    backgroundClip: "border-box",
     backgroundColor: colors.popover,
     boxShadow: shadows.overlay,
     color: colors.popoverForeground,
     display: "flex",
     fontSize: "0.75rem",
     lineHeight: "1rem",
-    opacity: {
-      "[data-ending-style]": 0,
-      "[data-starting-style]": 0,
-      default: null,
-    },
     position: "relative",
-    scale: {
-      "[data-ending-style]": "0.98",
-      "[data-starting-style]": "0.98",
-      default: null,
-    },
     textWrap: "balance",
-    transformOrigin: "var(--transform-origin)",
     transitionDuration: {
+      "[data-ending-style]": motion.exit,
       "[data-instant]": "0s",
-      default: "150ms",
+      default: motion.enter,
     },
     transitionProperty: "width, height, scale, opacity",
-    transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
     height: "var(--popup-height, auto)",
     width: "var(--popup-width, auto)",
   },
@@ -97,7 +86,7 @@ export function TooltipPopup({
   sx?: Sx
 }): React.ReactElement {
   const positionerProps = stylex.props(styles.positioner)
-  const popupProps = stylex.props(surface.raisedEdge, styles.popup, sx)
+  const popupProps = stylex.props(transitions.popup, surface.raisedEdge, styles.popup, sx)
   const viewportProps = stylex.props(styles.viewport)
   const viewportStyle = {
     ...viewportProps.style,

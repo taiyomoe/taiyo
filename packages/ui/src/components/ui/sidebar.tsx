@@ -2,6 +2,7 @@ import { mergeProps } from "@base-ui/react/merge-props"
 import { useRender } from "@base-ui/react/use-render"
 import * as stylex from "@stylexjs/stylex"
 import * as React from "react"
+import { clamp } from "remeda"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
@@ -13,12 +14,13 @@ import { useMediaQuery } from "@/hooks/use-media-query"
 import { cn } from "@/utils/cn"
 import { PanelLeft } from "@/components/icons"
 import type { Sx } from "../../styles/sx"
-import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
+import { colors, consts, motion, radius, shadows } from "../../styles/tokens.stylex"
 import { a11y } from "../../styles/recipes"
 
-const SIDEBAR_COOKIE_NAME: string = "sidebar_state"
-const SIDEBAR_COOKIE_MAX_AGE: number = 60 * 60 * 24 * 7
-const SIDEBAR_WIDTH: string = "16rem"
+const SIDEBAR_STATE_COOKIE: string = "sidebar_state"
+const SIDEBAR_WIDTH_COOKIE: string = "sidebar_width"
+const SIDEBAR_COOKIE_MAX_AGE: number = 60 * 60 * 24 * 365
+const SIDEBAR_WIDTH: number = 256
 const SIDEBAR_WIDTH_MOBILE: string = "18rem"
 const SIDEBAR_WIDTH_ICON: string = "3rem"
 const SIDEBAR_KEYBOARD_SHORTCUT: string = "b"
@@ -87,9 +89,12 @@ const styles = stylex.create({
   gap: {
     backgroundColor: "transparent",
     position: "relative",
-    transitionDuration: "200ms",
+    transitionDuration: {
+      default: motion.slide,
+      "@media (prefers-reduced-motion: reduce)": "0s",
+    },
     transitionProperty: "width",
-    transitionTimingFunction: "linear",
+    transitionTimingFunction: motion.easeOut,
     width: "var(--sidebar-width)",
   },
   gapRight: {
@@ -111,17 +116,23 @@ const styles = stylex.create({
       "@media (width >= 48rem)": "flex",
     },
     position: "fixed",
-    transitionDuration: "200ms",
-    transitionProperty: "left, right, width",
-    transitionTimingFunction: "linear",
+    transitionDuration: {
+      default: motion.slide,
+      "@media (prefers-reduced-motion: reduce)": "0s",
+    },
+    transitionProperty: "translate, width",
+    transitionTimingFunction: motion.easeOut,
     zIndex: 10,
     height: "100svh",
     width: "var(--sidebar-width)",
   },
   containerLeft: { left: 0 },
   containerRight: { right: 0 },
-  containerLeftOffcanvas: { left: "calc(-1 * var(--sidebar-width))" },
-  containerRightOffcanvas: { right: "calc(-1 * var(--sidebar-width))" },
+  containerLeftOffcanvas: { translate: "-100%" },
+  containerRightOffcanvas: { translate: "100%" },
+  instant: {
+    transitionDuration: "0s",
+  },
   containerFloating: {
     padding: "0.5rem",
   },
@@ -190,6 +201,40 @@ const styles = stylex.create({
   railRight: {
     cursor: "e-resize",
     left: 0,
+  },
+  resizeHandle: {
+    insetBlock: 0,
+    position: "absolute",
+    touchAction: "none",
+    zIndex: 20,
+    width: "0.5rem",
+    "::after": {
+      insetBlock: 0,
+      backgroundColor: `color-mix(in srgb, ${colors.sidebarForeground} 32%, transparent)`,
+      content: '""',
+      opacity: {
+        default: 0,
+        ":focus-visible": 1,
+        ":hover": 1,
+      },
+      position: "absolute",
+      transitionDelay: {
+        default: "0s",
+        ":hover": "120ms",
+      },
+      transitionDuration: "150ms",
+      transitionProperty: "opacity",
+      left: "calc(50% - 1px)",
+      width: "2px",
+    },
+  },
+  resizeHandleLeft: { right: "-0.25rem" },
+  resizeHandleRight: { left: "-0.25rem" },
+  resizeHandleActive: {
+    "::after": {
+      opacity: 1,
+      transitionDelay: "0s",
+    },
   },
   railLeftCollapsed: { cursor: "e-resize" },
   railRightCollapsed: { cursor: "w-resize" },
@@ -583,6 +628,10 @@ export type SidebarContextProps = {
   state: "expanded" | "collapsed"
   open: boolean
   setOpen: (open: boolean) => void
+  width: number
+  setWidth: (width: number) => void
+  resizing: boolean
+  setResizing: (resizing: boolean) => void
   openMobile: boolean
   setOpenMobile: (open: boolean) => void
   isMobile: boolean
@@ -602,8 +651,35 @@ export function useSidebar(): SidebarContextProps {
   return context
 }
 
+function persistCookie(name: string, value: string): void {
+  if (typeof cookieStore === "undefined") {
+    return
+  }
+
+  void cookieStore.set({
+    expires: Date.now() + SIDEBAR_COOKIE_MAX_AGE * 1000,
+    name,
+    path: "/",
+    value,
+  })
+}
+
+export function readSidebarCookies(cookies: Record<string, string | undefined>): {
+  defaultOpen?: boolean
+  defaultWidth?: number
+} {
+  const state = cookies[SIDEBAR_STATE_COOKIE]
+  const width = Number(cookies[SIDEBAR_WIDTH_COOKIE])
+
+  return {
+    defaultOpen: state === undefined ? undefined : state === "true",
+    defaultWidth: width > 0 ? width : undefined,
+  }
+}
+
 export function SidebarProvider({
   defaultOpen = true,
+  defaultWidth = SIDEBAR_WIDTH,
   open: openProp,
   onOpenChange: setOpenProp,
   className,
@@ -613,6 +689,7 @@ export function SidebarProvider({
   ...props
 }: React.ComponentProps<"div"> & {
   defaultOpen?: boolean
+  defaultWidth?: number
   open?: boolean
   onOpenChange?: (open: boolean) => void
   sx?: Sx
@@ -620,9 +697,11 @@ export function SidebarProvider({
   const isMobile = useMediaQuery(MOBILE_QUERY)
   const [openMobile, setOpenMobile] = React.useState(false)
   const [_open, _setOpen] = React.useState(defaultOpen)
+  const [width, setWidth] = React.useState(defaultWidth)
+  const [resizing, setResizing] = React.useState(false)
   const open = openProp ?? _open
   const setOpen = React.useCallback(
-    async (value: boolean | ((value: boolean) => boolean)) => {
+    (value: boolean | ((value: boolean) => boolean)) => {
       const openState = typeof value === "function" ? value(open) : value
 
       if (setOpenProp) {
@@ -631,15 +710,18 @@ export function SidebarProvider({
         _setOpen(openState)
       }
 
-      await cookieStore.set({
-        expires: Date.now() + SIDEBAR_COOKIE_MAX_AGE * 1000,
-        name: SIDEBAR_COOKIE_NAME,
-        path: "/",
-        value: String(openState),
-      })
+      persistCookie(SIDEBAR_STATE_COOKIE, String(openState))
     },
     [setOpenProp, open],
   )
+  const persistedWidth = React.useRef(defaultWidth)
+
+  React.useEffect(() => {
+    if (!resizing && width !== persistedWidth.current) {
+      persistedWidth.current = width
+      persistCookie(SIDEBAR_WIDTH_COOKIE, String(Math.round(width)))
+    }
+  }, [resizing, width])
   const toggleSidebar = React.useCallback(() => {
     return isMobile ? setOpenMobile((open) => !open) : setOpen((open) => !open)
   }, [isMobile, setOpen])
@@ -648,7 +730,7 @@ export function SidebarProvider({
     const handleKeyDown = (event: KeyboardEvent): void => {
       if (event.key === SIDEBAR_KEYBOARD_SHORTCUT && (event.metaKey || event.ctrlKey)) {
         event.preventDefault()
-        void toggleSidebar()
+        toggleSidebar()
       }
     }
 
@@ -663,12 +745,16 @@ export function SidebarProvider({
       isMobile,
       open,
       openMobile,
+      resizing,
       setOpen,
       setOpenMobile,
+      setResizing,
+      setWidth,
       state,
       toggleSidebar,
+      width,
     }),
-    [state, open, setOpen, isMobile, openMobile, toggleSidebar],
+    [state, open, setOpen, isMobile, openMobile, toggleSidebar, width, resizing],
   )
   const styleProps = stylex.props(styles.wrapper, sx)
 
@@ -676,10 +762,11 @@ export function SidebarProvider({
     <SidebarContext.Provider value={contextValue}>
       <div
         className={cn(styleProps.className, className)}
+        data-resizing={resizing ? "" : undefined}
         data-slot="sidebar-wrapper"
         style={
           {
-            "--sidebar-width": SIDEBAR_WIDTH,
+            "--sidebar-width": `${width}px`,
             "--sidebar-width-icon": SIDEBAR_WIDTH_ICON,
             ...styleProps.style,
             ...style,
@@ -707,7 +794,7 @@ export function Sidebar({
   collapsible?: SidebarCollapsible
   sx?: Sx
 }): React.ReactElement {
-  const { isMobile, state, openMobile, setOpenMobile } = useSidebar()
+  const { isMobile, state, openMobile, setOpenMobile, resizing } = useSidebar()
   const layoutValue = React.useMemo(
     () => ({ collapsible, side, variant }),
     [collapsible, side, variant],
@@ -723,6 +810,7 @@ export function Sidebar({
     side === "right" && styles.gapRight,
     isIcon && (floats ? styles.gapIconFloating : styles.gapIcon),
     isOffcanvas && styles.gapOffcanvas,
+    resizing && styles.instant,
   )
   const containerProps = stylex.props(
     styles.container,
@@ -733,6 +821,7 @@ export function Sidebar({
     floats && isIcon && styles.containerFloatingIcon,
     !floats && isIcon && styles.containerIcon,
     !floats && (side === "left" ? styles.containerBorderRight : styles.containerBorderLeft),
+    resizing && styles.instant,
     sx,
   )
   const innerProps = stylex.props(styles.inner, variant === "floating" && styles.innerFloating)
@@ -874,6 +963,122 @@ export function SidebarRail({
       tabIndex={-1}
       title="Toggle Sidebar"
       type="button"
+      {...props}
+    />
+  )
+}
+
+export function SidebarResizeHandle({
+  minWidth = 208,
+  maxWidth = 384,
+  collapseOffset = 64,
+  className,
+  sx,
+  ...props
+}: React.ComponentProps<"div"> & {
+  minWidth?: number
+  maxWidth?: number
+  collapseOffset?: number
+  sx?: Sx
+}): React.ReactElement | null {
+  const { isMobile, width, setWidth, setOpen, resizing, setResizing } = useSidebar()
+  const { side } = React.useContext(SidebarLayoutContext)
+  const drag = React.useRef<{ startX: number; startWidth: number } | null>(null)
+  const bounds = { max: maxWidth, min: minWidth }
+  const cursor = width <= minWidth ? "e-resize" : width >= maxWidth ? "w-resize" : "col-resize"
+
+  React.useEffect(() => {
+    if (!resizing) {
+      return
+    }
+
+    const root = document.documentElement
+    const previous = { cursor: root.style.cursor, userSelect: root.style.userSelect }
+
+    root.style.cursor = cursor
+    root.style.userSelect = "none"
+
+    return () => {
+      root.style.cursor = previous.cursor
+      root.style.userSelect = previous.userSelect
+    }
+  }, [resizing, cursor])
+
+  if (isMobile) {
+    return null
+  }
+
+  const endDrag = (event: React.PointerEvent<HTMLDivElement>): void => {
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId)
+    }
+
+    drag.current = null
+    setResizing(false)
+  }
+  const styleProps = stylex.props(
+    styles.resizeHandle,
+    side === "left" ? styles.resizeHandleLeft : styles.resizeHandleRight,
+    resizing && styles.resizeHandleActive,
+    sx,
+  )
+
+  return (
+    <div
+      aria-label="Resize sidebar"
+      aria-orientation="vertical"
+      aria-valuemax={maxWidth}
+      aria-valuemin={minWidth}
+      aria-valuenow={Math.round(width)}
+      className={cn(styleProps.className, className)}
+      data-sidebar="resize-handle"
+      data-slot="sidebar-resize-handle"
+      onKeyDown={(event) => {
+        const step = event.shiftKey ? 64 : 16
+        const grow = side === "left" ? "ArrowRight" : "ArrowLeft"
+        const shrink = side === "left" ? "ArrowLeft" : "ArrowRight"
+
+        if (event.key === grow || event.key === shrink) {
+          event.preventDefault()
+          setWidth(clamp(width + (event.key === grow ? step : -step), bounds))
+        }
+      }}
+      onLostPointerCapture={endDrag}
+      onPointerCancel={endDrag}
+      onPointerDown={(event) => {
+        if (event.button !== 0) {
+          return
+        }
+
+        event.preventDefault()
+        event.currentTarget.setPointerCapture(event.pointerId)
+        drag.current = { startWidth: width, startX: event.clientX }
+        setResizing(true)
+      }}
+      onPointerMove={(event) => {
+        const current = drag.current
+
+        if (!current) {
+          return
+        }
+
+        const delta = event.clientX - current.startX
+        const next = current.startWidth + (side === "left" ? delta : -delta)
+
+        if (next < minWidth - collapseOffset) {
+          endDrag(event)
+          setOpen(false)
+          window.setTimeout(() => setWidth(current.startWidth), 300)
+
+          return
+        }
+
+        setWidth(clamp(next, bounds))
+      }}
+      onPointerUp={endDrag}
+      role="separator"
+      style={{ ...styleProps.style, cursor }}
+      tabIndex={0}
       {...props}
     />
   )

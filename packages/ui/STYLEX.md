@@ -66,6 +66,48 @@ writing a new component.
      tabs list): `backgroundColor: colors.well` + `boxShadow: shadows.sunken`.
    - pills: buttons/badges/tabs use `borderRadius: radius.full`; fields, menus
      and popovers use `radius.xl`; cards/dialogs `radius.xxl`.
+   - floating surfaces (menus, popovers, select/combobox/autocomplete popups,
+     tooltips, toasts, dialogs, drawers, sheets) use
+     `backgroundClip: "border-box"`. Their `colors.border` hairline is
+     translucent, so with `padding-box` whatever sits behind the popup — a
+     navbar's bottom border, say — shows through the 1px ring. Resting surfaces
+     (fields, cards) keep `padding-box`; they sit on a solid background.
+
+## Motion
+
+Every component that opens and closes animates, with timings from `motion` in
+`tokens.stylex.ts`, never literals. Entrances are longer than exits: the user
+is waiting for something to appear, but wants it gone the moment they dismiss
+it. All of them use the same strong ease-out (`motion.easeOut`).
+
+| Surface                                                       | Enter               | Exit               |
+| ------------------------------------------------------------- | ------------------- | ------------------ |
+| Anchored popups (menu, select, combobox, popover, tooltip, …) | `motion.enter`      | `motion.exit`      |
+| Dialogs, sheets, the command palette, accordion/collapsible   | `motion.enterLarge` | `motion.exitLarge` |
+| The sidebar's slide and the navbar parts that follow it       | `motion.slide`      | `motion.slide`     |
+
+Anchored popups take `transitions.popup` from `recipes.ts` as the first
+argument to `stylex.props()`: a fade plus a scale from 96% around
+`--transform-origin`, so the popup grows out of its trigger. The animated
+element must be the one Base UI puts `data-starting-style`/`data-ending-style`
+on (the `Popup` part) — Base UI waits for that element's transitions before
+unmounting, and a wrapper around it would never animate out. That is why the
+combobox and autocomplete paint their surface on the popup itself.
+
+## Selection indicators and disclosure chevrons
+
+- **The check goes on the right**, in every list that marks a selection (menu
+  checkbox and radio items, select, combobox, drawer menu items). The left
+  edge belongs to the item's own icon; a check there renders as
+  `[check] [icon] Label`. The indicator column is a fixed `1rem` so the popup
+  does not change width when the selection moves. The indicator comes AFTER
+  the label in the DOM: placed first with `gridColumnStart: "2"`, grid
+  auto-placement pushes the label onto a second row.
+- **Chevrons react to their popup.** A trigger spreads `stylex.defaultMarker()`
+  and its chevron keys off `stylex.when.ancestor("[data-popup-open]")`: down
+  chevrons (select, combobox, autocomplete) flip 180°, side chevrons (submenu,
+  drawer menu triggers) rotate 90° to point down, both on
+  `motion.enter` / `motion.easeOut`.
 
 ## Proportions, measured off the reference
 

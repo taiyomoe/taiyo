@@ -12,6 +12,7 @@ import { ChevronRight, Close } from "@/components/icons"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { drawerSwitchItemMarker } from "../../styles/markers.stylex"
+import { transitions } from "../../styles/recipes"
 import type { Sx } from "../../styles/sx"
 import { colors, consts, font, radius, shadows, text } from "../../styles/tokens.stylex"
 
@@ -94,7 +95,7 @@ const styles = stylex.create({
       "[data-nested-drawer-open]": "hidden",
       default: null,
     },
-    backgroundClip: "padding-box",
+    backgroundClip: "border-box",
     backgroundColor: {
       "[data-nested-drawer-open]": `color-mix(in srgb, ${colors.popover}, #000 calc(4% * (var(--nested-drawers) - var(--stack-progress))))`,
       default: colors.popover,
@@ -436,8 +437,8 @@ const styles = stylex.create({
   },
   menuItemCheckbox: {
     display: "grid",
-    gridTemplateColumns: "1rem 1fr",
-    paddingRight: "1rem",
+    gridTemplateColumns: "1fr 1rem",
+    paddingRight: "0.5rem",
   },
   menuItemSwitch: {
     gap: "1rem",
@@ -464,7 +465,6 @@ const styles = stylex.create({
     lineHeight: "1rem",
   },
   menuTriggerChevron: {
-    opacity: 0.8,
     marginLeft: "auto",
     marginRight: "-0.125rem",
   },
@@ -1023,8 +1023,12 @@ export function DrawerMenuTrigger({
   sx,
   ...props
 }: DrawerPrimitive.Trigger.Props & { sx?: Sx }): React.ReactElement {
-  const styleProps = stylex.props(styles.menuItem, sx)
-  const chevronProps = stylex.props(styles.menuTriggerChevron, styles.indicatorIcon)
+  const styleProps = stylex.props(styles.menuItem, stylex.defaultMarker(), sx)
+  const chevronProps = stylex.props(
+    transitions.chevronTurn,
+    styles.menuTriggerChevron,
+    styles.indicatorIcon,
+  )
 
   return (
     <DrawerTrigger
@@ -1063,10 +1067,10 @@ export function DrawerMenuCheckboxItem({
     isSwitch && stylex.defaultMarker(),
     sx,
   )
-  const labelProps = stylex.props(isSwitch ? styles.columnOne : styles.columnTwo)
+  const labelProps = stylex.props(styles.columnOne)
   const trackProps = stylex.props(styles.switchTrack)
   const thumbProps = stylex.props(styles.switchThumb)
-  const indicatorProps = stylex.props(styles.columnOne)
+  const indicatorProps = stylex.props(styles.columnTwo)
   const iconProps = stylex.props(styles.indicatorIcon)
 
   return (
@@ -1096,6 +1100,9 @@ export function DrawerMenuCheckboxItem({
         </>
       ) : (
         <>
+          <span className={labelProps.className} style={labelProps.style}>
+            {children}
+          </span>
           <CheckboxPrimitive.Indicator
             className={indicatorProps.className}
             style={indicatorProps.style}
@@ -1116,9 +1123,6 @@ export function DrawerMenuCheckboxItem({
               <path d="M5.252 12.7 10.2 18.63 18.748 5.37" />
             </svg>
           </CheckboxPrimitive.Indicator>
-          <span className={labelProps.className} style={labelProps.style}>
-            {children}
-          </span>
         </>
       )}
     </CheckboxPrimitive.Root>
@@ -1156,8 +1160,8 @@ export function DrawerMenuRadioItem({
   sx?: Sx
 }): React.ReactElement {
   const styleProps = stylex.props(styles.menuItem, styles.menuItemCheckbox, sx)
-  const indicatorProps = stylex.props(styles.columnOne)
-  const labelProps = stylex.props(styles.columnTwo)
+  const indicatorProps = stylex.props(styles.columnTwo)
+  const labelProps = stylex.props(styles.columnOne)
   const iconProps = stylex.props(styles.indicatorIcon)
 
   return (
@@ -1170,6 +1174,9 @@ export function DrawerMenuRadioItem({
       value={value}
       {...props}
     >
+      <span className={labelProps.className} style={labelProps.style}>
+        {children}
+      </span>
       <RadioPrimitive.Indicator className={indicatorProps.className} style={indicatorProps.style}>
         <svg
           className={iconProps.className}
@@ -1187,9 +1194,6 @@ export function DrawerMenuRadioItem({
           <path d="M5.252 12.7 10.2 18.63 18.748 5.37" />
         </svg>
       </RadioPrimitive.Indicator>
-      <span className={labelProps.className} style={labelProps.style}>
-        {children}
-      </span>
     </RadioPrimitive.Root>
   )
 }

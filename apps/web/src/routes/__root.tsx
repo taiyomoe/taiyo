@@ -1,21 +1,48 @@
-import * as stylex from "@stylexjs/stylex"
 import { TanStackDevtools } from "@tanstack/react-devtools"
 import type { QueryClient } from "@tanstack/react-query"
 import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools"
 import { HeadContent, Scripts, createRootRouteWithContext } from "@tanstack/react-router"
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools"
-import { darkShadows, darkTheme } from "@taiyomoe/ui/styles/themes"
+import { createIsomorphicFn } from "@tanstack/react-start"
+import { getCookies } from "@tanstack/react-start/server"
+import { readSidebarCookies } from "@taiyomoe/ui/components/ui/sidebar"
+import { fromEntries, map, pipe } from "remeda"
 
 import { sessionQueryOptions } from "@/lib/queries/session"
+import {
+  THEME_COOKIE,
+  ThemeContext,
+  type ThemePreference,
+  darkThemeClassName,
+  systemThemeScript,
+  useThemeState,
+} from "@/lib/theme"
 
 import appCss from "../styles.css?url"
 
-const darkModeClassName = `dark ${stylex.props(darkTheme, darkShadows).className ?? ""}`.trim()
+const readCookies = createIsomorphicFn()
+  .server(() => getCookies())
+  .client(() =>
+    pipe(
+      document.cookie.split("; "),
+      map((cookie) => cookie.split("=") as [string, string]),
+      fromEntries(),
+    ),
+  )
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
-  beforeLoad: async ({ context }) => ({
-    session: await context.queryClient.ensureQueryData(sessionQueryOptions),
-  }),
+  beforeLoad: async ({ context }) => {
+    const cookies = readCookies()
+    const theme = cookies[THEME_COOKIE]
+    const themePreference: ThemePreference =
+      theme === "light" || theme === "system" ? theme : "dark"
+
+    return {
+      session: await context.queryClient.ensureQueryData(sessionQueryOptions),
+      sidebarPrefs: readSidebarCookies(cookies),
+      themePreference,
+    }
+  },
   head: () => ({
     meta: [
       { charSet: "utf-8" },
@@ -40,13 +67,23 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 })
 
 function RootDocument({ children }: { children: React.ReactNode }) {
+  const { themePreference } = Route.useRouteContext()
+  const theme = useThemeState(themePreference)
+
   return (
-    <html className={darkModeClassName} lang="en">
+    <html
+      className={theme.dark ? darkThemeClassName : undefined}
+      lang="en"
+      suppressHydrationWarning
+    >
       <head>
+        {theme.preference === "system" ? (
+          <script dangerouslySetInnerHTML={{ __html: systemThemeScript }} />
+        ) : null}
         <HeadContent />
       </head>
       <body>
-        {children}
+        <ThemeContext value={theme}>{children}</ThemeContext>
         <TanStackDevtools
           config={{ position: "bottom-right" }}
           plugins={[

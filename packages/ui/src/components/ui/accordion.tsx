@@ -3,7 +3,7 @@ import * as stylex from "@stylexjs/stylex"
 import type React from "react"
 import { cn } from "@/utils/cn"
 import { ChevronDown } from "@/components/icons"
-import { colors, radius } from "../../styles/tokens.stylex"
+import { colors, motion, radius } from "../../styles/tokens.stylex"
 import { accordionTriggerMarker } from "../../styles/markers.stylex"
 import type { Sx } from "../../styles/sx"
 
@@ -57,9 +57,12 @@ const styles = stylex.create({
       default: null,
       [stylex.when.ancestor("[data-panel-open]", accordionTriggerMarker)]: "180deg",
     },
-    transitionDuration: "200ms",
+    transitionDuration: {
+      "[data-ending-style]": motion.exitLarge,
+      default: motion.enterLarge,
+    },
     transitionProperty: "rotate",
-    transitionTimingFunction: "ease-in-out",
+    transitionTimingFunction: motion.easeOut,
     translate: "0 0.125rem",
     height: "1rem",
     width: "1rem",
@@ -68,9 +71,12 @@ const styles = stylex.create({
     overflow: "hidden",
     color: colors.mutedForeground,
     fontSize: "0.875rem",
-    transitionDuration: "200ms",
+    transitionDuration: {
+      "[data-ending-style]": motion.exitLarge,
+      default: motion.enterLarge,
+    },
     transitionProperty: "height",
-    transitionTimingFunction: "ease-in-out",
+    transitionTimingFunction: motion.easeOut,
     height: {
       "[data-ending-style]": 0,
       "[data-starting-style]": 0,

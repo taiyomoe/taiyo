@@ -1,16 +1,32 @@
 import {
   Alert02Icon,
   AlertCircleIcon,
+  Bookmark02Icon,
+  BubbleChatIcon,
+  FireIcon,
+  HistoryIcon,
+  Home01Icon,
+  LeftToRightListBulletIcon,
+  Logout01Icon,
+  Menu01Icon,
+  ShuffleIcon,
+  SlidersHorizontalIcon,
+  SparklesIcon,
+  Sun03Icon,
+  UserGroupIcon,
+  UserIcon,
   ArrowDown01Icon,
   ArrowLeft01Icon,
   ArrowRight01Icon,
   ArrowUp01Icon,
   Cancel01Icon,
+  ComputerIcon,
   CornerDownLeftIcon,
   CheckmarkCircle02Icon,
   InformationCircleIcon,
   Loading03Icon,
   MinusSignIcon,
+  Moon02Icon,
   MoreHorizontalIcon,
   PlusSignIcon,
   Search01Icon,
@@ -93,3 +109,35 @@ export const AlertTriangle: (props: IconProps) => React.ReactElement = icon(Aler
 export const CheckCircle: (props: IconProps) => React.ReactElement = icon(CheckmarkCircle02Icon)
 
 export const Info: (props: IconProps) => React.ReactElement = icon(InformationCircleIcon)
+
+export const Home: (props: IconProps) => React.ReactElement = icon(Home01Icon)
+
+export const Sliders: (props: IconProps) => React.ReactElement = icon(SlidersHorizontalIcon)
+
+export const Sparkles: (props: IconProps) => React.ReactElement = icon(SparklesIcon)
+
+export const Flame: (props: IconProps) => React.ReactElement = icon(FireIcon)
+
+export const Shuffle: (props: IconProps) => React.ReactElement = icon(ShuffleIcon)
+
+export const Bookmark: (props: IconProps) => React.ReactElement = icon(Bookmark02Icon)
+
+export const History: (props: IconProps) => React.ReactElement = icon(HistoryIcon)
+
+export const List: (props: IconProps) => React.ReactElement = icon(LeftToRightListBulletIcon)
+
+export const Users: (props: IconProps) => React.ReactElement = icon(UserGroupIcon)
+
+export const Forum: (props: IconProps) => React.ReactElement = icon(BubbleChatIcon)
+
+export const User: (props: IconProps) => React.ReactElement = icon(UserIcon)
+
+export const Logout: (props: IconProps) => React.ReactElement = icon(Logout01Icon)
+
+export const Menu: (props: IconProps) => React.ReactElement = icon(Menu01Icon)
+
+export const Sun: (props: IconProps) => React.ReactElement = icon(Sun03Icon)
+
+export const Moon: (props: IconProps) => React.ReactElement = icon(Moon02Icon)
+
+export const Monitor: (props: IconProps) => React.ReactElement = icon(ComputerIcon)

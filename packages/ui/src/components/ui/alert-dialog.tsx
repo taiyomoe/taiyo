@@ -2,7 +2,7 @@ import { AlertDialog as AlertDialogPrimitive } from "@base-ui/react/alert-dialog
 import * as stylex from "@stylexjs/stylex"
 import type React from "react"
 import { cn } from "@/utils/cn"
-import { colors, consts, font, radius, shadows, text } from "../../styles/tokens.stylex"
+import { colors, consts, font, motion, radius, shadows, text } from "../../styles/tokens.stylex"
 import { surface } from "../../styles/recipes"
 import type { Sx } from "../../styles/sx"
 
@@ -17,9 +17,12 @@ const styles = stylex.create({
       default: 1,
     },
     position: "fixed",
-    transitionDuration: "200ms",
+    transitionDuration: {
+      "[data-ending-style]": motion.exitLarge,
+      default: motion.enterLarge,
+    },
     transitionProperty: "all",
-    transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+    transitionTimingFunction: motion.easeOut,
     zIndex: 50,
   },
   viewport: {
@@ -50,7 +53,7 @@ const styles = stylex.create({
     borderRadius: radius.xxl,
     borderStyle: "solid",
     borderWidth: 1,
-    backgroundClip: "padding-box",
+    backgroundClip: "border-box",
     backgroundColor: colors.popover,
     boxShadow: shadows.overlay,
     color: colors.popoverForeground,
@@ -74,9 +77,12 @@ const styles = stylex.create({
       },
     },
     transformOrigin: "center",
-    transitionDuration: "200ms",
+    transitionDuration: {
+      "[data-ending-style]": motion.exitLarge,
+      default: motion.enterLarge,
+    },
     transitionProperty: "scale, opacity, translate",
-    transitionTimingFunction: "ease-in-out",
+    transitionTimingFunction: motion.easeOut,
     willChange: "transform",
     maxHeight: "100%",
     maxWidth: "32rem",
