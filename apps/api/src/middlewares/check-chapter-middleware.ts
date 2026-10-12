@@ -33,5 +33,5 @@ export const checkChapter = (opts: { includeDeleted?: boolean } = {}) =>
 
     c.set("chapter", chapter)
 
-    await next()
+    return next()
   })

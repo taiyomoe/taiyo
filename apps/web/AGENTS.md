@@ -102,12 +102,13 @@ and configure the Nitro preset. Default `vite build` + `vite preview` works loca
    `README.md` were also dropped — build-artifact ignores live in the **root**
    `.gitignore` (`.tanstack`, `.nitro`, `.output`, `.vinxi`, `*.local`), and the app
    is documented in the **root** `README.md`.
-2. **`tsconfig.json` extends `@taiyomoe/typescript/base.json`** (the shared base)
-   instead of the CLI's standalone config, then layers on what Start needs: `jsx:
-react-jsx`, DOM libs, `vite/client` types, and a single `@/*` path alias. The CLI
+2. **`tsconfig.json` extends the root `tsconfig.json`** instead of the CLI's
+   standalone config, then layers on what Start needs: the DOM lib, `vite/client`
+   types, `allowJs` (the paraglide plugin emits JSDoc-typed `.js` without `.d.ts`),
+   and a single `@/*` path alias. The CLI
    also shipped a `#/*` alias (and a matching `package.json#imports` entry); both
    were removed in favor of `@/*` only.
-3. **`verbatimModuleSyntax` forced to `false`.** The CLI's generated tsconfig set it
+3. **`verbatimModuleSyntax` left off.** The CLI's generated tsconfig set it
    to `true`, but the shipped `@tanstack/start-client-core#start-core` skill flags
    that as a HIGH-severity mistake ("causes server bundles to leak into client
    bundles. Keep it disabled"). Per the skill, it is disabled here. Revisit if a

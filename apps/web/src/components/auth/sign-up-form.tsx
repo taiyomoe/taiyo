@@ -80,7 +80,7 @@ export const SignUpForm = () => {
       await authClient.signUp.email(
         { name: values.name, email: values.email, password: values.password, callbackURL: "/" },
         {
-          headers: captchaToken ? { "x-captcha-response": captchaToken } : undefined,
+          ...(captchaToken ? { headers: { "x-captcha-response": captchaToken } } : {}),
           onError: ({ error }) => {
             auth.setError(error.message || m.auth_error_generic())
             turnstileRef.current?.reset()

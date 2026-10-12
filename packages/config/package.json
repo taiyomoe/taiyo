@@ -9,9 +9,5 @@
   },
   "dependencies": {
     "@taiyomoe/db": "workspace:^"
-  },
-  "devDependencies": {
-    "@taiyomoe/typescript": "workspace:^",
-    "typescript": "^7.0.2"
   }
 }

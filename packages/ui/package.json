@@ -27,8 +27,6 @@
     "remeda": "^2.51.0"
   },
   "devDependencies": {
-    "@taiyomoe/typescript": "workspace:^",
-    "@types/react": "^19.3.0",
-    "typescript": "^7.0.2"
+    "@types/react": "^19.3.0"
   }
 }

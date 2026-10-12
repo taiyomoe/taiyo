@@ -16,7 +16,7 @@ const config: KnipConfig = {
   compilers: {
     css: (text: string) =>
       Array.from(text.matchAll(importMatcher), ([, specifier], index) =>
-        /^(?:[a-z][a-z\d+.-]*:|\/\/)/i.test(specifier)
+        !specifier || /^(?:[a-z][a-z\d+.-]*:|\/\/)/i.test(specifier)
           ? ""
           : `import _${index} from "${specifier}"`,
       )

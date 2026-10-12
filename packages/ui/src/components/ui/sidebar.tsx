@@ -3,16 +3,16 @@ import { useRender } from "@base-ui/react/use-render"
 import * as stylex from "@stylexjs/stylex"
 import * as React from "react"
 import { clamp } from "remeda"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Separator } from "@/components/ui/separator"
-import { Sheet, SheetDescription, SheetHeader, SheetPopup, SheetTitle } from "@/components/ui/sheet"
-import { Skeleton } from "@/components/ui/skeleton"
-import { Tooltip, TooltipPopup, TooltipTrigger } from "@/components/ui/tooltip"
-import { useMediaQuery } from "@/hooks/use-media-query"
-import { cn } from "@/utils/cn"
-import { PanelLeft } from "@/components/icons"
+import { Button } from "./button"
+import { Input } from "./input"
+import { ScrollArea } from "./scroll-area"
+import { Separator } from "./separator"
+import { Sheet, SheetDescription, SheetHeader, SheetPopup, SheetTitle } from "./sheet"
+import { Skeleton } from "./skeleton"
+import { Tooltip, TooltipPopup, TooltipTrigger } from "./tooltip"
+import { useMediaQuery } from "../../hooks/use-media-query"
+import { cn } from "../../utils/cn"
+import { PanelLeft } from "../icons"
 import type { Sx } from "../../styles/sx"
 import { colors, consts, motion, radius, shadows } from "../../styles/tokens.stylex"
 import { a11y } from "../../styles/recipes"
@@ -665,8 +665,8 @@ function persistCookie(name: string, value: string): void {
 }
 
 export function readSidebarCookies(cookies: Record<string, string | undefined>): {
-  defaultOpen?: boolean
-  defaultWidth?: number
+  defaultOpen?: boolean | undefined
+  defaultWidth?: number | undefined
 } {
   const state = cookies[SIDEBAR_STATE_COOKIE]
   const width = Number(cookies[SIDEBAR_WIDTH_COOKIE])
@@ -688,8 +688,8 @@ export function SidebarProvider({
   sx,
   ...props
 }: React.ComponentProps<"div"> & {
-  defaultOpen?: boolean
-  defaultWidth?: number
+  defaultOpen?: boolean | undefined
+  defaultWidth?: number | undefined
   open?: boolean
   onOpenChange?: (open: boolean) => void
   sx?: Sx

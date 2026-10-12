@@ -19,8 +19,6 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@taiyomoe/typescript": "workspace:^",
-    "@types/node": "^26.6.4",
-    "typescript": "^7.0.2"
+    "@types/node": "^26.6.4"
   }
 }

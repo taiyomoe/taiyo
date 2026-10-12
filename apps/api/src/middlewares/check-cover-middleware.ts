@@ -33,5 +33,5 @@ export const checkCover = (opts: { includeDeleted?: boolean } = {}) =>
 
     c.set("cover", cover)
 
-    await next()
+    return next()
   })

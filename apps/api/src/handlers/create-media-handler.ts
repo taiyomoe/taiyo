@@ -4,8 +4,8 @@ import {
   MEDIA_SOURCES,
   MEDIA_STATUSES,
   MEDIA_TYPES,
-  NewBanner,
-  NewCover,
+  type NewBanner,
+  type NewCover,
   STAFF_ROLES,
   sql,
 } from "@taiyomoe/db"

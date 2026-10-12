@@ -1,11 +1,12 @@
 {
   "$schema": "https://turborepo.org/schema.json",
   "ui": "tui",
+  "agentGuidance": false,
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*", "!.env.example"],
-      "outputs": [".cache/tsbuildinfo.json", "dist/**", "storybook-static/**"]
+      "outputs": ["dist/**", "storybook-static/**"]
     },
     "dev": {
       "cache": false,

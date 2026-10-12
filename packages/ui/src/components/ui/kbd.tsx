@@ -1,6 +1,6 @@
 import * as stylex from "@stylexjs/stylex"
 import * as React from "react"
-import { cn } from "@/utils/cn"
+import { cn } from "../../utils/cn"
 import { colors, font, radius } from "../../styles/tokens.stylex"
 import type { Sx } from "../../styles/sx"
 

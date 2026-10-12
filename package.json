@@ -4,9 +4,9 @@
   "type": "module",
   "scripts": {
     "build": "turbo run build",
-    "bootstrap": "node tooling/dev/src/bootstrap.ts",
+    "bootstrap": "node packages/scripts/src/bootstrap.ts",
     "dev": "turbo run dev --filter='!@taiyomoe/storybook'",
-    "dev:tunnel": "node tooling/dev/src/tunnel.ts",
+    "dev:tunnel": "node packages/scripts/src/tunnel.ts",
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",
     "format": "oxfmt --check",
@@ -35,7 +35,7 @@
     "vitest": "^5.0.3"
   },
   "engines": {
-    "node": ">=24"
+    "node": ">=26"
   },
   "packageManager": "pnpm@11.21.0"
 }

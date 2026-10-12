@@ -33,5 +33,5 @@ export const checkStaff = (opts: { includeDeleted?: boolean } = {}) =>
 
     c.set("staff", staff)
 
-    await next()
+    return next()
   })

@@ -1,5 +1,1 @@
-{
-  "extends": "@taiyomoe/typescript/base.json",
-  "include": ["src"],
-  "exclude": ["node_modules"]
-}
+{ "extends": "../../tsconfig.json" }

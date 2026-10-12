@@ -24,10 +24,8 @@
   "devDependencies": {
     "@stylexjs/stylex": "^0.19.1",
     "@stylexjs/unplugin": "^0.19.1",
-    "@taiyomoe/typescript": "workspace:^",
     "@types/node": "^26.6.4",
     "@types/react": "^19.3.0",
-    "@types/react-dom": "^19.3.0",
-    "typescript": "^7.0.2"
+    "@types/react-dom": "^19.3.0"
   }
 }

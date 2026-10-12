@@ -2,7 +2,7 @@ import type { DB, Kysely } from "@taiyomoe/db"
 import type { Meilisearch } from "meilisearch"
 import { isNullish } from "radashi"
 import { INDEXES_BATCH_SIZE } from "../utils/constants"
-import { getMediaDocument, MediaDocument } from "./get-media-document"
+import { getMediaDocument, type MediaDocument } from "./get-media-document"
 
 const filterableAttributes = [
   "type",

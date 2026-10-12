@@ -1,9 +1,0 @@
-{
-  "extends": "@taiyomoe/typescript/base.json",
-  "compilerOptions": {
-    "allowImportingTsExtensions": true,
-    "erasableSyntaxOnly": true
-  },
-  "include": ["src"],
-  "exclude": ["node_modules"]
-}

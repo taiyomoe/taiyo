@@ -1,14 +1,12 @@
 {
-  "extends": "@taiyomoe/typescript/base.json",
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "jsx": "preserve",
-    "lib": ["ES2022", "DOM", "DOM.Iterable"],
-    "noUncheckedSideEffectImports": false,
+    "lib": ["ES2022", "DOM"],
+    "types": ["node", "vite/client"],
     "paths": {
       "@/storybook/*": ["./.storybook/*"],
       "@/*": ["./src/*"]
     }
   },
-  "include": [".storybook/**/*", "./src/**/*"],
-  "exclude": ["node_modules"]
+  "include": ["*.ts", "src", ".storybook/*"]
 }

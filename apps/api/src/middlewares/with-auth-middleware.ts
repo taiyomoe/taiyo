@@ -1,4 +1,4 @@
-import { Session, User } from "@taiyomoe/auth/server"
+import type { Session, User } from "@taiyomoe/auth/server"
 import { createMiddleware } from "hono/factory"
 import { type Actions, defineAbilitiesFor, type Subjects } from "../utils/abilities"
 
@@ -21,5 +21,5 @@ export const withAuth = (action: Actions, subject: Subjects) =>
     c.set("user", result.user)
     c.set("session", result.session)
 
-    await next()
+    return next()
   })

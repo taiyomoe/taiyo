@@ -29,5 +29,5 @@ export const checkMedia = (opts: { includeDeleted?: boolean } = {}) =>
 
     c.set("media", media)
 
-    await next()
+    return next()
   })

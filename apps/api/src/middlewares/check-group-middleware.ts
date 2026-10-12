@@ -33,5 +33,5 @@ export const checkGroup = (opts: { includeDeleted?: boolean } = {}) =>
 
     c.set("group", group)
 
-    await next()
+    return next()
   })

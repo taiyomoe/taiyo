@@ -36,5 +36,5 @@ export const checkUser = () =>
 
     c.set("targetUser", targetUser)
 
-    await next()
+    return next()
   })

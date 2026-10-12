@@ -1,6 +1,4 @@
 {
-  "extends": "@taiyomoe/typescript/base.json",
-  "compilerOptions": { "jsx": "preserve" },
-  "include": ["src"],
-  "exclude": ["node_modules"]
+  "extends": "../../tsconfig.json",
+  "include": ["src", "../../packages/auth/src", "../../packages/email/src"]
 }

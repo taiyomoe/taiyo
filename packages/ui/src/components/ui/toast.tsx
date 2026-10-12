@@ -2,8 +2,8 @@ import { Toast } from "@base-ui/react/toast"
 import * as stylex from "@stylexjs/stylex"
 import type React from "react"
 
-import { AlertCircle, AlertTriangle, CheckCircle, Info, Spinner } from "@/components/icons"
-import { buttonVariants } from "@/components/ui/button"
+import { AlertCircle, AlertTriangle, CheckCircle, Info, Spinner } from "../icons"
+import { buttonVariants } from "./button"
 import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
 import { surface } from "../../styles/recipes"
 
@@ -303,7 +303,10 @@ function getSwipeDirection(position: ToastPosition): SwipeDirection[] {
   return ["right", verticalDirection]
 }
 
-function replayStyle(toast: { type?: string; updateKey?: number }): stylex.StyleXStyles | false {
+function replayStyle(toast: {
+  type?: string | undefined
+  updateKey?: number | undefined
+}): stylex.StyleXStyles | false {
   const k = toast.updateKey ?? 0
 
   if (k <= 0) {
@@ -375,7 +378,7 @@ function Toasts({
   portalProps,
 }: {
   position: ToastPosition
-  portalProps?: React.ComponentProps<typeof Toast.Portal>
+  portalProps?: React.ComponentProps<typeof Toast.Portal> | undefined
 }): React.ReactElement {
   const { toasts } = Toast.useToastManager()
   const swipeDirection = getSwipeDirection(position)
@@ -441,7 +444,7 @@ function Toasts({
 function AnchoredToasts({
   portalProps,
 }: {
-  portalProps?: React.ComponentProps<typeof Toast.Portal>
+  portalProps?: React.ComponentProps<typeof Toast.Portal> | undefined
 }): React.ReactElement {
   const { toasts } = Toast.useToastManager()
   const viewportProps = stylex.props(styles.anchoredViewport)

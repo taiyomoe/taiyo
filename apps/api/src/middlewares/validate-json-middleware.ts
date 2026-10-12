@@ -29,6 +29,6 @@ export const validateJson = <TSchema extends z.ZodType>(schema: TSchema) => {
 
     c.set("json", validation.data)
 
-    await next()
+    return next()
   })
 }

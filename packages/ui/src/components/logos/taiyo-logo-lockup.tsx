@@ -1,7 +1,7 @@
 import * as stylex from "@stylexjs/stylex"
-import { ComponentProps } from "react"
-import { TaiyoLogo } from "@/components/logos/taiyo-logo"
-import { cn } from "@/utils/cn"
+import type { ComponentProps } from "react"
+import { TaiyoLogo } from "./taiyo-logo"
+import { cn } from "../../utils/cn"
 import type { Sx } from "../../styles/sx"
 import { font, text } from "../../styles/tokens.stylex"
 

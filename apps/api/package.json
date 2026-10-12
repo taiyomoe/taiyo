@@ -38,12 +38,10 @@
   },
   "devDependencies": {
     "@aws-sdk/client-s3": "^3.1146.0",
-    "@taiyomoe/typescript": "workspace:^",
     "@types/node": "^26.6.4",
     "@types/pg": "^8.23.1",
     "kysely": "^0.29.6",
     "pg": "^8.23.1",
-    "tsx": "^4.23.15",
-    "typescript": "^7.0.2"
+    "tsx": "^4.23.15"
   }
 }

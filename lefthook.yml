@@ -6,4 +6,4 @@ pre-commit:
       run: pnpm format {staged_files}
     lint:
       glob: "*.{ts,tsx,js,jsx,mjs,cjs}"
-      run: pnpm lint {staged_files}
+      run: pnpm -F @taiyomoe/web compile:messages && pnpm lint {staged_files}

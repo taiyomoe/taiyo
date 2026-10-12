@@ -1,7 +1,7 @@
 import type { Meilisearch } from "meilisearch"
-import { FilterSpec, translateFilter } from "../utils/filter-translator"
-import { MediaDocument } from "./get-media-document"
-import { SearchMediasInput, type MediaSort } from "./media-search-schemas"
+import { type FilterSpec, translateFilter } from "../utils/filter-translator"
+import type { MediaDocument } from "./get-media-document"
+import type { MediaSort, SearchMediasInput } from "./media-search-schemas"
 
 const sortFieldToAttribute = {
   createdAt: "createdAt",
@@ -43,7 +43,7 @@ export const searchMedias = async (
   const filter = translateFilter(mediaFilterSpec, input.filter)
   const sort = input.sort.map((s) => `${sortFieldToAttribute[s.field]}:${s.direction}`)
   const result = await meili.index<MediaDocument>(mediasIndex).search(input.q, {
-    filter,
+    ...(filter ? { filter } : {}),
     sort,
     page: input.page,
     hitsPerPage: input.perPage,
