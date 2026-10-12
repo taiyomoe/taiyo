@@ -38,15 +38,16 @@ const corsOrigins = (env.CORS_ALLOWED_ORIGINS ?? "")
 export const createApp = (services: Services) => {
   const app = new Hono()
     .use(
-      evlog({
-        drain:
-          process.env.TEST || !env.HYPERDX_ENDPOINT || !env.HYPERDX_INGESTION_KEY
-            ? undefined
-            : createHyperDXDrain({
+      evlog(
+        process.env.TEST || !env.HYPERDX_ENDPOINT || !env.HYPERDX_INGESTION_KEY
+          ? {}
+          : {
+              drain: createHyperDXDrain({
                 endpoint: env.HYPERDX_ENDPOINT,
                 apiKey: env.HYPERDX_INGESTION_KEY,
               }),
-      }),
+            },
+      ),
     )
     .use(secureHeaders())
     .use(

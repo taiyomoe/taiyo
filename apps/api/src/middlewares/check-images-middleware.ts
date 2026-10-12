@@ -35,9 +35,7 @@ export const checkImages = (maxSizeBytes: number = config.images.maxSizeBytes) =
     const contentType = c.req.header("content-type")
 
     if (!contentType?.includes("multipart/form-data")) {
-      await next()
-
-      return
+      return next()
     }
 
     const formData = await c.req.formData()
@@ -108,5 +106,5 @@ export const checkImages = (maxSizeBytes: number = config.images.maxSizeBytes) =
       setByPath(validated, key, processedFile)
     }
 
-    await next()
+    return next()
   })

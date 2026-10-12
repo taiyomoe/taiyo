@@ -43,7 +43,7 @@ export const searchMedias = async (
   const filter = translateFilter(mediaFilterSpec, input.filter)
   const sort = input.sort.map((s) => `${sortFieldToAttribute[s.field]}:${s.direction}`)
   const result = await meili.index<MediaDocument>(mediasIndex).search(input.q, {
-    filter,
+    ...(filter ? { filter } : {}),
     sort,
     page: input.page,
     hitsPerPage: input.perPage,

@@ -172,8 +172,8 @@ export const EmptyState = meta.story({
         Open empty palette
       </CommandDialogTrigger>
       <CommandDialogPopup>
-        <Command items={[]}>
-          <CommandInput defaultValue="zzzzz" placeholder="Search for apps and commands..." />
+        <Command defaultValue="zzzzz" items={[]}>
+          <CommandInput placeholder="Search for apps and commands..." />
           <CommandPanel>
             <CommandEmpty>No results found.</CommandEmpty>
             <CommandList>

@@ -1,7 +1,7 @@
 import { CheckboxGroup as CheckboxGroupPrimitive } from "@base-ui/react/checkbox-group"
 import * as stylex from "@stylexjs/stylex"
 import type React from "react"
-import { cn } from "@/utils/cn"
+import { cn } from "../../utils/cn"
 import type { Sx } from "../../styles/sx"
 
 const styles = stylex.create({

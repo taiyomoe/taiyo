@@ -2,8 +2,8 @@ import { OTPField as OTPFieldPrimitive } from "@base-ui/react/otp-field"
 import * as React from "react"
 import * as stylex from "@stylexjs/stylex"
 
-import { cn } from "@/utils/cn"
-import { Separator } from "@/components/ui/separator"
+import { cn } from "../../utils/cn"
+import { Separator } from "./separator"
 import type { Sx } from "../../styles/sx"
 import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
 

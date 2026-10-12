@@ -21,7 +21,7 @@ type Bound<TFieldValues extends FieldValues, TName extends FieldPath<TFieldValue
   name: TName
   control: Control<TFieldValues>
   label?: ReactNode
-  description?: string
+  description?: string | undefined
 }
 
 const toControlProps = <TFieldValues extends FieldValues, TName extends FieldPath<TFieldValues>>(

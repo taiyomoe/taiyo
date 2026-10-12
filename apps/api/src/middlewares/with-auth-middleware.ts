@@ -21,5 +21,5 @@ export const withAuth = (action: Actions, subject: Subjects) =>
     c.set("user", result.user)
     c.set("session", result.session)
 
-    await next()
+    return next()
   })

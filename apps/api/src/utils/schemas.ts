@@ -108,7 +108,7 @@ export const localizedTextSchema = z
   })
 
 const linkUrlField = (description: string) =>
-  z.string().max(config.input.maxUrlLength).optional().meta({ description })
+  z.string().max(config.input.maxUrlLength).exactOptional().meta({ description })
 
 export const staffLinksSchema = z
   .object({

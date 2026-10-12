@@ -15,9 +15,7 @@
     "dotenv": "^18.0.5"
   },
   "devDependencies": {
-    "@taiyomoe/typescript": "workspace:^",
     "@types/node": "^26.6.4",
-    "tsx": "^4.23.15",
-    "typescript": "^7.0.2"
+    "tsx": "^4.23.15"
   }
 }

@@ -1,15 +1,9 @@
 {
-  "extends": "@taiyomoe/typescript/base.json",
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "jsx": "react-jsx",
-    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "lib": ["ES2022", "DOM"],
     "types": ["node", "vite/client"],
-    "allowImportingTsExtensions": true,
-    "verbatimModuleSyntax": false,
-    "paths": {
-      "@/*": ["./src/*"]
-    }
-  },
-  "include": ["**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"]
+    "allowJs": true,
+    "paths": { "@/*": ["./src/*"] }
+  }
 }

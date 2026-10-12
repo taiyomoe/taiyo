@@ -36,5 +36,5 @@ export const checkList = () =>
 
     c.set("list", list)
 
-    await next()
+    return next()
   })

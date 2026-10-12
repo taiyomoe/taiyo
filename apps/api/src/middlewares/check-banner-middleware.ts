@@ -33,5 +33,5 @@ export const checkBanner = (opts: { includeDeleted?: boolean } = {}) =>
 
     c.set("banner", banner)
 
-    await next()
+    return next()
   })

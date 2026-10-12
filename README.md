@@ -52,8 +52,7 @@ taiyo/
 │   ├── actions/setup/     # pnpm + Node + install composite action
 │   └── workflows/         # ci-static, ci-unit, ci-integration
 └── tooling/
-    ├── bruno/             # API request collections
-    └── typescript/        # tsconfig presets
+    └── bruno/             # API request collections
 ```
 
 ### 🛠️ Tech stack

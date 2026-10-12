@@ -1,12 +1,7 @@
 {
-  "extends": "@taiyomoe/typescript/base.json",
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "jsx": "preserve",
-    "lib": ["DOM"],
-    "paths": {
-      "@/*": ["./src/*"]
-    }
-  },
-  "include": ["./src/**/*"],
-  "exclude": ["node_modules"]
+    "lib": ["ES2022", "DOM"],
+    "types": []
+  }
 }

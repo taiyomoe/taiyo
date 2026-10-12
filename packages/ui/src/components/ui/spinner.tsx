@@ -1,7 +1,7 @@
 import * as stylex from "@stylexjs/stylex"
 import type React from "react"
-import { cn } from "@/utils/cn"
-import { type IconProps, Spinner as SpinnerIcon } from "@/components/icons"
+import { cn } from "../../utils/cn"
+import { type IconProps, Spinner as SpinnerIcon } from "../icons"
 import type { Sx } from "../../styles/sx"
 
 const spin = stylex.keyframes({

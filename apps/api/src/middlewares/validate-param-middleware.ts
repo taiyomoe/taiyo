@@ -21,6 +21,6 @@ export const validateParam = <TSchema extends z.ZodType>(schema: TSchema) => {
 
     c.set("param", validation.data)
 
-    await next()
+    return next()
   })
 }

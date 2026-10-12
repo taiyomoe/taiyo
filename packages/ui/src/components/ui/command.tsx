@@ -11,9 +11,9 @@ import {
   AutocompleteItem,
   AutocompleteList,
   AutocompleteSeparator,
-} from "@/components/ui/autocomplete"
-import { cn } from "@/utils/cn"
-import { Search } from "@/components/icons"
+} from "./autocomplete"
+import { cn } from "../../utils/cn"
+import { Search } from "../icons"
 import type { Sx } from "../../styles/sx"
 import { colors, consts, font, motion, radius, shadows } from "../../styles/tokens.stylex"
 

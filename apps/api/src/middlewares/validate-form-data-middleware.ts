@@ -32,6 +32,6 @@ export const validateFormData = <TSchema extends z.ZodType>(schema: TSchema) => 
 
     c.set("formData", validation.data)
 
-    await next()
+    return next()
   })
 }

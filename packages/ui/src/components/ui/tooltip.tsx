@@ -1,7 +1,7 @@
 import { Tooltip as TooltipPrimitive } from "@base-ui/react/tooltip"
 import * as stylex from "@stylexjs/stylex"
 import type React from "react"
-import { cn } from "@/utils/cn"
+import { cn } from "../../utils/cn"
 import { colors, motion, radius, shadows } from "../../styles/tokens.stylex"
 import { surface, transitions } from "../../styles/recipes"
 import type { Sx } from "../../styles/sx"

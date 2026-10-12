@@ -2,13 +2,9 @@ import type { Toggle as TogglePrimitive } from "@base-ui/react/toggle"
 import { ToggleGroup as ToggleGroupPrimitive } from "@base-ui/react/toggle-group"
 import * as stylex from "@stylexjs/stylex"
 import * as React from "react"
-import { cn } from "@/utils/cn"
-import { Separator } from "@/components/ui/separator"
-import {
-  Toggle as ToggleComponent,
-  type ToggleSize,
-  type ToggleVariant,
-} from "@/components/ui/toggle"
+import { cn } from "../../utils/cn"
+import { Separator } from "./separator"
+import { Toggle as ToggleComponent, type ToggleSize, type ToggleVariant } from "./toggle"
 import { colors, radius, shadows } from "../../styles/tokens.stylex"
 import type { Sx } from "../../styles/sx"
 

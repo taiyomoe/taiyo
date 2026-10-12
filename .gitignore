@@ -11,9 +11,6 @@ dist
 *.pem
 output/
 
-# typescript
-tsbuildinfo.json
-
 # docker
 data/
 

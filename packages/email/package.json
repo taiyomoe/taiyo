@@ -21,10 +21,8 @@
   },
   "devDependencies": {
     "@react-email/ui": "^6.11.0",
-    "@taiyomoe/typescript": "workspace:^",
     "@types/node": "^26.6.4",
     "@types/react": "^19.3.0",
-    "@types/react-dom": "^19.3.0",
-    "typescript": "^7.0.2"
+    "@types/react-dom": "^19.3.0"
   }
 }

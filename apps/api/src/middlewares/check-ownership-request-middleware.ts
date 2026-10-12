@@ -33,5 +33,5 @@ export const checkOwnershipRequest = () =>
 
     c.set("ownershipRequest", ownershipRequest)
 
-    await next()
+    return next()
   })

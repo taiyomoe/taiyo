@@ -123,9 +123,6 @@ importers:
       '@aws-sdk/client-s3':
         specifier: ^3.1146.0
         version: 3.1146.0
-      '@taiyomoe/typescript':
-        specifier: workspace:^
-        version: link:../../tooling/typescript
       '@types/node':
         specifier: ^26.6.4
         version: 26.6.4
@@ -141,9 +138,6 @@ importers:
       tsx:
         specifier: ^4.23.15
         version: 4.23.15
-      typescript:
-        specifier: ^7.0.2
-        version: 7.0.2
 
   apps/storybook:
     dependencies:
@@ -170,7 +164,7 @@ importers:
         version: link:../../packages/ui
       '@vitejs/plugin-react':
         specifier: ^6.1.1
-        version: 6.1.2(@rolldown/plugin-babel@0.2.3(@babel/core@8.0.1)(@babel/runtime@7.29.7)(rolldown@1.2.12)(vite@8.3.2(@types/node@26.6.4)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1)))(babel-plugin-react-compiler@1.0.0)(oxc-transform-react@0.152.0)(vite@8.3.2(@types/node@26.6.4)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
+        version: 6.1.2(@rolldown/plugin-babel@0.2.3(@babel/core@7.29.7)(@babel/runtime@7.29.7)(rolldown@1.2.12)(vite@8.3.2(@types/node@26.6.4)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1)))(babel-plugin-react-compiler@1.0.0)(oxc-transform-react@0.152.0)(vite@8.3.2(@types/node@26.6.4)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
       react:
         specifier: ^19.3.0
         version: 19.3.0
@@ -190,9 +184,6 @@ importers:
       '@stylexjs/unplugin':
         specifier: ^0.19.1
         version: 0.19.1(unplugin@2.3.11)
-      '@taiyomoe/typescript':
-        specifier: workspace:^
-        version: link:../../tooling/typescript
       '@types/node':
         specifier: ^26.6.4
         version: 26.6.4
@@ -202,9 +193,6 @@ importers:
       '@types/react-dom':
         specifier: ^19.3.0
         version: 19.3.0(@types/react@19.3.0)
-      typescript:
-        specifier: ^7.0.2
-        version: 7.0.2
 
   apps/web:
     dependencies:
@@ -293,9 +281,6 @@ importers:
       '@taiyomoe/api':
         specifier: workspace:^
         version: link:../api
-      '@taiyomoe/typescript':
-        specifier: workspace:^
-        version: link:../../tooling/typescript
       '@tanstack/devtools-vite':
         specifier: ^0.8.5
         version: 0.8.5(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.3)(vite@8.3.2(@types/node@26.6.4)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
@@ -310,13 +295,10 @@ importers:
         version: 19.3.0(@types/react@19.3.0)
       '@vitejs/plugin-react':
         specifier: ^6.1.1
-        version: 6.1.2(@rolldown/plugin-babel@0.2.3(@babel/core@7.29.7)(@babel/runtime@7.29.7)(rolldown@1.2.12)(vite@8.3.2(@types/node@26.6.4)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1)))(babel-plugin-react-compiler@1.0.0)(oxc-transform-react@0.152.0)(vite@8.3.2(@types/node@26.6.4)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
+        version: 6.1.2(@rolldown/plugin-babel@0.2.3(@babel/core@8.0.1)(@babel/runtime@7.29.7)(rolldown@1.2.12)(vite@8.3.2(@types/node@26.6.4)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1)))(babel-plugin-react-compiler@1.0.0)(oxc-transform-react@0.152.0)(vite@8.3.2(@types/node@26.6.4)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
       oxc-transform-react:
         specifier: ^0.152.0
         version: 0.152.0
-      typescript:
-        specifier: ^7.0.2
-        version: 7.0.2
       vite:
         specifier: ^8.3.2
         version: 8.3.2(@types/node@26.6.4)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1)
@@ -345,18 +327,12 @@ importers:
         specifier: ^4.4.3
         version: 4.6.5
     devDependencies:
-      '@taiyomoe/typescript':
-        specifier: workspace:^
-        version: link:../../tooling/typescript
       '@types/node':
         specifier: ^26.6.4
         version: 26.6.4
       tsx:
         specifier: ^4.23.15
         version: 4.23.15
-      typescript:
-        specifier: ^7.0.2
-        version: 7.0.2
 
   packages/auth:
     dependencies:
@@ -397,9 +373,6 @@ importers:
         specifier: ^4.4.3
         version: 4.6.5
     devDependencies:
-      '@taiyomoe/typescript':
-        specifier: workspace:^
-        version: link:../../tooling/typescript
       '@types/luxon':
         specifier: ^3.7.6
         version: 3.7.6
@@ -409,9 +382,6 @@ importers:
       '@types/react':
         specifier: ^19.3.0
         version: 19.3.0
-      typescript:
-        specifier: ^7.0.2
-        version: 7.0.2
 
   packages/cache:
     dependencies:
@@ -428,28 +398,15 @@ importers:
         specifier: ^4.4.3
         version: 4.6.5
     devDependencies:
-      '@taiyomoe/typescript':
-        specifier: workspace:^
-        version: link:../../tooling/typescript
       '@types/node':
         specifier: ^26.6.4
         version: 26.6.4
-      typescript:
-        specifier: ^7.0.2
-        version: 7.0.2
 
   packages/config:
     dependencies:
       '@taiyomoe/db':
         specifier: workspace:^
         version: link:../db
-    devDependencies:
-      '@taiyomoe/typescript':
-        specifier: workspace:^
-        version: link:../../tooling/typescript
-      typescript:
-        specifier: ^7.0.2
-        version: 7.0.2
 
   packages/db:
     dependencies:
@@ -478,9 +435,6 @@ importers:
         specifier: ^4.4.3
         version: 4.6.5
     devDependencies:
-      '@taiyomoe/typescript':
-        specifier: workspace:^
-        version: link:../../tooling/typescript
       '@types/node':
         specifier: ^26.6.4
         version: 26.6.4
@@ -493,9 +447,6 @@ importers:
       kysely-ctl:
         specifier: ^0.21.0
         version: 0.21.0(kysely@0.29.6)
-      typescript:
-        specifier: ^7.0.2
-        version: 7.0.2
       validator:
         specifier: ^13.15.35
         version: 13.15.35
@@ -524,9 +475,6 @@ importers:
       '@react-email/ui':
         specifier: ^6.11.0
         version: 6.11.0(@babel/core@8.0.1)(@types/node@26.6.4)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
-      '@taiyomoe/typescript':
-        specifier: workspace:^
-        version: link:../../tooling/typescript
       '@types/node':
         specifier: ^26.6.4
         version: 26.6.4
@@ -536,9 +484,6 @@ importers:
       '@types/react-dom':
         specifier: ^19.3.0
         version: 19.3.0(@types/react@19.3.0)
-      typescript:
-        specifier: ^7.0.2
-        version: 7.0.2
 
   packages/queue:
     dependencies:
@@ -570,15 +515,9 @@ importers:
         specifier: ^4.4.3
         version: 4.6.5
     devDependencies:
-      '@taiyomoe/typescript':
-        specifier: workspace:^
-        version: link:../../tooling/typescript
       '@types/node':
         specifier: ^26.6.4
         version: 26.6.4
-      typescript:
-        specifier: ^7.0.2
-        version: 7.0.2
 
   packages/s3:
     dependencies:
@@ -595,28 +534,15 @@ importers:
         specifier: ^4.4.3
         version: 4.6.5
     devDependencies:
-      '@taiyomoe/typescript':
-        specifier: workspace:^
-        version: link:../../tooling/typescript
       '@types/node':
         specifier: ^26.6.4
         version: 26.6.4
-      typescript:
-        specifier: ^7.0.2
-        version: 7.0.2
 
   packages/schemas:
     dependencies:
       zod:
         specifier: ^4.4.3
         version: 4.6.5
-    devDependencies:
-      '@taiyomoe/typescript':
-        specifier: workspace:^
-        version: link:../../tooling/typescript
-      typescript:
-        specifier: ^7.0.2
-        version: 7.0.2
 
   packages/scripts:
     dependencies:
@@ -636,18 +562,12 @@ importers:
         specifier: ^18.0.5
         version: 18.0.5
     devDependencies:
-      '@taiyomoe/typescript':
-        specifier: workspace:^
-        version: link:../../tooling/typescript
       '@types/node':
         specifier: ^26.6.4
         version: 26.6.4
       tsx:
         specifier: ^4.23.15
         version: 4.23.15
-      typescript:
-        specifier: ^7.0.2
-        version: 7.0.2
 
   packages/search:
     dependencies:
@@ -673,15 +593,9 @@ importers:
         specifier: ^4.4.3
         version: 4.6.5
     devDependencies:
-      '@taiyomoe/typescript':
-        specifier: workspace:^
-        version: link:../../tooling/typescript
       '@types/node':
         specifier: ^26.6.4
         version: 26.6.4
-      typescript:
-        specifier: ^7.0.2
-        version: 7.0.2
 
   packages/ui:
     dependencies:
@@ -719,15 +633,9 @@ importers:
         specifier: ^2.51.0
         version: 2.51.0
     devDependencies:
-      '@taiyomoe/typescript':
-        specifier: workspace:^
-        version: link:../../tooling/typescript
       '@types/react':
         specifier: ^19.3.0
         version: 19.3.0
-      typescript:
-        specifier: ^7.0.2
-        version: 7.0.2
 
   packages/utils:
     dependencies:
@@ -743,29 +651,14 @@ importers:
       zod:
         specifier: ^4.4.3
         version: 4.6.5
-    devDependencies:
-      '@taiyomoe/typescript':
-        specifier: workspace:^
-        version: link:../../tooling/typescript
-      typescript:
-        specifier: ^7.0.2
-        version: 7.0.2
 
   tooling/bruno: {}
 
   tooling/dev:
     devDependencies:
-      '@taiyomoe/typescript':
-        specifier: workspace:^
-        version: link:../typescript
       '@types/node':
         specifier: ^26.6.4
         version: 26.6.4
-      typescript:
-        specifier: ^7.0.2
-        version: 7.0.2
-
-  tooling/typescript: {}
 
 packages:
 

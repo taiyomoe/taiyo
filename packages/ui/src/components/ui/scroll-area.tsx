@@ -1,7 +1,7 @@
 import { ScrollArea as ScrollAreaPrimitive } from "@base-ui/react/scroll-area"
 import * as stylex from "@stylexjs/stylex"
 import type React from "react"
-import { cn } from "@/utils/cn"
+import { cn } from "../../utils/cn"
 import type { Sx } from "../../styles/sx"
 import { colors, radius } from "../../styles/tokens.stylex"
 import { focus } from "../../styles/recipes"

@@ -24,6 +24,6 @@ export const validateQuery = <TSchema extends z.ZodType>(schema: TSchema) => {
 
     c.set("query", validation.data)
 
-    await next()
+    return next()
   })
 }

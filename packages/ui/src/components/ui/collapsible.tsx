@@ -1,7 +1,7 @@
 import { Collapsible as CollapsiblePrimitive } from "@base-ui/react/collapsible"
 import * as stylex from "@stylexjs/stylex"
 import type React from "react"
-import { cn } from "@/utils/cn"
+import { cn } from "../../utils/cn"
 import { collapsibleTriggerMarker } from "../../styles/markers.stylex"
 import type { Sx } from "../../styles/sx"
 import { motion } from "../../styles/tokens.stylex"

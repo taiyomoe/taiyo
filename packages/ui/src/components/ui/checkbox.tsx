@@ -1,8 +1,8 @@
 import { Checkbox as CheckboxPrimitive } from "@base-ui/react/checkbox"
 import * as stylex from "@stylexjs/stylex"
 import type React from "react"
-import { Check } from "@/components/icons"
-import { cn } from "@/utils/cn"
+import { Check } from "../icons"
+import { cn } from "../../utils/cn"
 import { colors, consts, shadows } from "../../styles/tokens.stylex"
 import type { Sx } from "../../styles/sx"
 
