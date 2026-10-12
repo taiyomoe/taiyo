@@ -43,7 +43,7 @@ taiyo/
 │   ├── queue/             # BullMQ queue, chapter processor and reaper
 │   ├── s3/                # S3 client + key helpers (works with RustFS / Garage / AWS)
 │   ├── schemas/           # Cross-package Zod schemas (pagination, etc.)
-│   ├── scripts/           # One-shot CLI scripts (init-s3, init-meilisearch, etc.)
+│   ├── scripts/           # Bootstrap, tunnel and one-shot CLI scripts (init-s3, …)
 │   ├── search/            # Meilisearch client + media sync + filter translator
 │   ├── ui/                # Shared React components (StyleX + Base UI)
 │   └── utils/             # Pure utility helpers (unit-tested)

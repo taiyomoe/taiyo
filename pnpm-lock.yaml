@@ -654,12 +654,6 @@ importers:
 
   tooling/bruno: {}
 
-  tooling/dev:
-    devDependencies:
-      '@types/node':
-        specifier: ^26.6.4
-        version: 26.6.4
-
 packages:
 
   '@adobe/css-tools@4.5.0':
