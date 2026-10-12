@@ -4,6 +4,10 @@
     "lib": ["ES2022", "DOM"],
     "types": ["node", "vite/client"],
     "allowJs": true,
-    "paths": { "@/*": ["./src/*"] }
+    "verbatimModuleSyntax": false,
+    "isolatedModules": true,
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   }
 }

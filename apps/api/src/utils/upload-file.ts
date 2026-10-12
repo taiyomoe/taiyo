@@ -1,5 +1,5 @@
 import { PutObjectCommand } from "@taiyomoe/s3"
-import { AppContextVariables } from "../middlewares/context-middleware"
+import type { AppContextVariables } from "../middlewares/context-middleware"
 
 export const uploadFile = async (
   { s3, s3Bucket, log }: Pick<AppContextVariables, "s3" | "s3Bucket" | "log">,

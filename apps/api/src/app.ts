@@ -10,7 +10,7 @@ import packageJson from "../package.json"
 import { env } from "./env"
 import {
   type AppContext,
-  AppContextVariables,
+  type AppContextVariables,
   createContextMiddleware,
 } from "./middlewares/context-middleware"
 import { errorHandler } from "./middlewares/error-handler-middleware"
