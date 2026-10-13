@@ -4,6 +4,7 @@ import { processChapterUpload } from "@taiyomoe/queue"
 import { getChapterPageKey } from "@taiyomoe/s3"
 import sharp from "sharp"
 import { describe, expect } from "vitest"
+import type { Services } from "../../services"
 import { test } from "../setup"
 
 const SEEDED_MEDIA_ID = "4e26b80f-6661-4f5f-93b4-6dfed052bbed"
@@ -15,6 +16,75 @@ const makeTinyJpeg = async () =>
   })
     .jpeg()
     .toBuffer()
+const seedStagedUpload = async ({ db, s3, s3Bucket }: Services, number: number) => {
+  const chapterId = crypto.randomUUID()
+  const uploadId = crypto.randomUUID()
+  const taskId = crypto.randomUUID()
+  const pageId = crypto.randomUUID()
+  const stagingKey = `staging/chapters/${chapterId}/${uploadId}/0`
+
+  await db
+    .insertInto("chapters")
+    .values({
+      id: chapterId,
+      mediaId: SEEDED_MEDIA_ID,
+      number,
+      language: "en",
+      uploaderId: SEEDED_UPLOADER_ID,
+    })
+    .execute()
+
+  await s3.send(
+    new PutObjectCommand({
+      Bucket: s3Bucket,
+      Key: stagingKey,
+      Body: await makeTinyJpeg(),
+      ContentType: "image/jpeg",
+    }),
+  )
+
+  await db
+    .insertInto("tasks")
+    .values({
+      id: taskId,
+      type: "UPLOAD_CHAPTER",
+      status: "PENDING",
+      sessionId: uploadId,
+      payload: {
+        chapterId,
+        mediaId: SEEDED_MEDIA_ID,
+        uploadId,
+        pages: [{ pageId, stagingKey }],
+      },
+    })
+    .execute()
+
+  return {
+    chapterId,
+    taskId,
+    pageId,
+    stagingKey,
+    pageKey: getChapterPageKey(SEEDED_MEDIA_ID, chapterId, pageId),
+  }
+}
+const readUploadState = async (
+  { db, s3, s3Bucket }: Services,
+  { chapterId, taskId, pageKey }: { chapterId: string; taskId: string; pageKey: string },
+) => {
+  const task = await db
+    .selectFrom("tasks")
+    .select(["status"])
+    .where("id", "=", taskId)
+    .executeTakeFirstOrThrow()
+  const chapter = await db
+    .selectFrom("chapters")
+    .select(["pages"])
+    .where("id", "=", chapterId)
+    .executeTakeFirstOrThrow()
+  const listed = await s3.send(new ListObjectsV2Command({ Bucket: s3Bucket, Prefix: pageKey }))
+
+  return { status: task.status, pages: chapter.pages, pageObjects: listed.Contents ?? [] }
+}
 
 describe("processChapterUpload", () => {
   test("downloads staged pages, compresses them, writes final objects, and marks task FINISHED", async ({
@@ -372,6 +442,72 @@ describe("processChapterUpload", () => {
     )
 
     expect(listed.Contents ?? []).toHaveLength(0)
+  })
+
+  test("keeps committed pages when a finished task is redelivered", async ({ services }) => {
+    const { db, s3, s3Bucket } = services
+    const upload = await seedStagedUpload(services, 96_006)
+
+    await processChapterUpload({ db, s3, s3Bucket }, { taskId: upload.taskId })
+    await processChapterUpload({ db, s3, s3Bucket }, { taskId: upload.taskId })
+
+    const state = await readUploadState(services, upload)
+
+    expect(state.status).toBe("FINISHED")
+    expect(state.pages).toEqual([{ id: upload.pageId }])
+    expect(state.pageObjects).toHaveLength(1)
+  })
+
+  test("finishes when an earlier attempt committed the pages but never marked the task FINISHED", async ({
+    services,
+  }) => {
+    const { db, s3, s3Bucket } = services
+    const upload = await seedStagedUpload(services, 96_007)
+
+    await processChapterUpload({ db, s3, s3Bucket }, { taskId: upload.taskId })
+    await db
+      .updateTable("tasks")
+      .set({ status: "DOWNLOADING" })
+      .where("id", "=", upload.taskId)
+      .execute()
+    await s3.send(
+      new PutObjectCommand({
+        Bucket: s3Bucket,
+        Key: upload.stagingKey,
+        Body: await makeTinyJpeg(),
+        ContentType: "image/jpeg",
+      }),
+    )
+
+    await processChapterUpload({ db, s3, s3Bucket }, { taskId: upload.taskId })
+
+    const state = await readUploadState(services, upload)
+
+    expect(state.status).toBe("FINISHED")
+    expect(state.pages).toEqual([{ id: upload.pageId }])
+    expect(state.pageObjects).toHaveLength(1)
+  })
+
+  test("keeps committed pages when a redelivered final attempt fails", async ({ services }) => {
+    const { db, s3, s3Bucket } = services
+    const upload = await seedStagedUpload(services, 96_008)
+
+    await processChapterUpload({ db, s3, s3Bucket }, { taskId: upload.taskId })
+    await db
+      .updateTable("tasks")
+      .set({ status: "DOWNLOADING" })
+      .where("id", "=", upload.taskId)
+      .execute()
+
+    await expect(
+      processChapterUpload({ db, s3, s3Bucket }, { taskId: upload.taskId }),
+    ).rejects.toThrow(Error)
+
+    const state = await readUploadState(services, upload)
+
+    expect(state.status).toBe("FAILED")
+    expect(state.pages).toEqual([{ id: upload.pageId }])
+    expect(state.pageObjects).toHaveLength(1)
   })
 
   test("returns silently when task does not exist", async ({ services }) => {

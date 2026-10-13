@@ -19,6 +19,20 @@ import {
 
 export type ProcessorDeps = { db: Kysely<DB>; s3: S3Client; s3Bucket: string }
 
+const chapterReferencesManifest = async (
+  db: Kysely<DB>,
+  { chapterId, pages }: ChapterUploadManifest,
+) => {
+  const chapter = await db
+    .selectFrom("chapters")
+    .select("pages")
+    .where("id", "=", chapterId)
+    .executeTakeFirst()
+  const referenced = new Set((chapter?.pages ?? []).map(({ id }) => id))
+
+  return pages.some(({ pageId }) => referenced.has(pageId))
+}
+
 export const processChapterUpload = async (
   { db, s3, s3Bucket }: ProcessorDeps,
   { taskId }: ChapterUploadJobData,
@@ -31,7 +45,7 @@ export const processChapterUpload = async (
     .where("type", "=", "UPLOAD_CHAPTER")
     .executeTakeFirst()
 
-  if (!task) {
+  if (!task || task.status === "FINISHED") {
     return
   }
 
@@ -98,7 +112,7 @@ export const processChapterUpload = async (
       .where(sql<boolean>`("pages" IS NULL OR cardinality("pages") = 0)`)
       .executeTakeFirst()
 
-    if (written.numUpdatedRows === 0n) {
+    if (written.numUpdatedRows === 0n && !(await chapterReferencesManifest(db, manifest))) {
       throw new Error(`chapter ${manifest.chapterId} already has pages`)
     }
 
@@ -129,7 +143,11 @@ export const processChapterUpload = async (
       .where("id", "=", taskId)
       .execute()
 
-    if (manifest !== undefined && !pagesCommitted) {
+    if (
+      manifest !== undefined &&
+      !pagesCommitted &&
+      !(await chapterReferencesManifest(db, manifest))
+    ) {
       const { mediaId, chapterId, pages } = manifest
       const pageKeys = pages.map(({ pageId }) => ({
         Key: getChapterPageKey(mediaId, chapterId, pageId),
