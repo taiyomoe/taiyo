@@ -7,7 +7,9 @@ export { getMeiliClient, SEARCH_INDEXES }
 
 export type { Meilisearch }
 
-export * from "./medias/sync-media"
+export * from "./medias/drain-search-outbox"
+
+export type { MediaDocument } from "./medias/get-media-document"
 
 export * from "./medias/init-medias-index"
 

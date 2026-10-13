@@ -1,15 +1,13 @@
 import { describe, expect } from "vitest"
 import { signInAs } from "../helpers/auth"
 import { api } from "../helpers/request"
-import { waitForMeiliMediaDoc } from "../helpers/wait"
 import { test } from "../setup"
 
-const SEEDED_MEDIA_ID = "4e26b80f-6661-4f5f-93b4-6dfed052bbed"
 const SEEDED_MAIN_COVER_ID = "a56cc54d-7776-4787-9b21-97a4674b80bc"
 const SEEDED_NON_MAIN_COVER_ID = "7bfc322a-cd61-4546-b1e5-aaabdaf7524c"
 
 describe("DELETE /covers/:id", () => {
-  test("deletes a non-main cover (DB + Meili)", async ({ app, services }) => {
+  test("deletes a non-main cover (DB)", async ({ app, services }) => {
     const { headers, userId } = await signInAs(services, { role: "ADMIN" })
     const res = await api<{ id: string }>(app, `/covers/${SEEDED_NON_MAIN_COVER_ID}`, {
       method: "DELETE",
@@ -30,10 +28,6 @@ describe("DELETE /covers/:id", () => {
 
     expect(row?.deletedAt).not.toBeNull()
     expect(row?.deleterId).toBe(userId)
-
-    const meiliDoc = await waitForMeiliMediaDoc(services, SEEDED_MEDIA_ID)
-
-    expect(meiliDoc).not.toBeNull()
   }, 30_000)
 
   test("returns COVER_IS_MAIN when targeting the main cover", async ({ app, services }) => {

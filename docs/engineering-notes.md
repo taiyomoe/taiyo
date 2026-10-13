@@ -165,49 +165,56 @@ that honours Zod's declared input types would do better. The fix, if it matters,
 is the same one: a string-shaped input schema plus an explicit coercion step,
 rather than `z.coerce` in the schema the client is derived from.
 
-## Library writes touch the search index
+## Search freshness lives in Postgres, not in handlers
 
-`PUT /users/me/library/:mediaId` and `DELETE /users/me/library/:mediaId` both
-register an `afterCommit(syncMedia)` callback. This looks out of place — a
-bookmark is a user-scoped write and has nothing to do with the media itself —
-but it is load-bearing.
+A media document (see `CONTEXT.md`) is built by `getMediaDocument` from six
+tables: `medias`, `titles`, `covers`, `mediaStaffs` + `staffs`, `chapters` and
+`userLibraryEntries`. Handlers do not sync search. Row-level triggers on those
+tables (migration `add-search-outbox`) append the affected mediaIds to
+`searchOutbox` inside the writing transaction, and `drainSearchOutbox`
+rebuilds them:
 
-`MediaDocument` carries two popularity signals:
+- `withTransaction` drains up to 100 rows right after every commit.
+- The worker's `search-maintenance` queue drains everything every minute, so a
+  drain that failed (Meilisearch down, process crash) is retried rather than
+  lost.
 
-- `libraryCount` — how many rows `userLibraryEntries` holds for the media.
-- `chapterCount` — how many non-deleted `chapters` rows it has, across every
-  language.
+A staff update or delete enqueues every media that credits the staff, through
+`mediaStaffs`. A chapter moved between medias enqueues both.
 
-Both are derived at document-build time by `getMediaDocument`, not stored on
-`medias`. They are registered as sortable, filterable and displayed attributes
-in `init-medias-index.ts`, and `mediaSortSchema` exposes them as public sort
+The triggers are deliberately coarse — any row change enqueues — so a new
+document field read from an already-watched table needs no migration. A field
+read from a **new** table does: add a trigger for it in the same change, or the
+field goes stale silently. `search-outbox/triggers.test.ts` lists the watched
+tables.
+
+Two invariants keep the drain correct, and both are easy to break while
+"simplifying" `drain-search-outbox.ts`:
+
+- **Rows are deleted only after the push, in the claiming transaction.** A
+  row's visibility implies its write committed, so a claimed row is always
+  rebuilt from data that includes the change; a new write during the push
+  inserts a new row that the next drain picks up. Upserting into a unique
+  `mediaId` instead would let that write be absorbed by a row already being
+  drained.
+- **Each mediaId is advisory-locked from build to push.** Two drainers holding
+  rows for the same media otherwise race, and the one that read older data can
+  push last.
+
+`initMediasIndex` clears the outbox rows that existed when the full rebuild
+started, for the medias it pushed; rows for medias it skipped (deleted, or
+missing a main title or cover) stay so their removal still reaches Meilisearch.
+
+### Popularity signals
+
+`libraryCount` and `chapterCount` are derived at document-build time, not
+stored on `medias`. They are sortable, filterable and displayed attributes in
+`init-medias-index.ts`, and `mediaSortSchema` exposes them as public sort
 fields, so "popular" and "most chapters" browse orderings read straight off
-them.
-
-`chapterCount` needs no extra wiring: chapter create, update and delete already
-sync the media. `libraryCount` did — nothing on the library path touched search
-before, so the count would have been correct the moment a document was built
-and stale from the next bookmark onwards.
-
-**Do not delete those two `afterCommit` calls.** They are not a stray search
-write in a library handler; removing them silently freezes popularity ranking
-at whatever the last media-side edit produced. The integration test in
-`apps/api/src/__integration-tests__/library/library-search-freshness.test.ts`
-exists to catch exactly that.
-
-### The scaling trade-off
-
-`syncMedia` rebuilds the whole document — it re-queries titles, covers, staff
-and chapters and re-serializes all of it — to change one integer. That is
-accepted deliberately: it is the same call the other 13 mutation handlers make,
-it needs no new infrastructure, and bookmark volume is low.
-
-When it becomes hot, prefer a partial Meilisearch update (`updateDocuments`
-with just `{ id, libraryCount }`) over moving the recompute onto a schedule.
-The partial update keeps the count exact; an hourly job on
-`apps/worker/src/maintenance.ts` would make popularity lag by up to an hour and
-would cost a new `@taiyomoe/search` dependency edge for `apps/worker`, which it
-does not have today.
+them. A bookmark therefore rebuilds the whole document to change one integer;
+that is accepted while bookmark volume is low. When it becomes hot, prefer a
+partial Meilisearch update (`updateDocuments` with just `{ id, libraryCount }`)
+for `userLibraryEntries` rows over a slower schedule.
 
 ### Known gap
 

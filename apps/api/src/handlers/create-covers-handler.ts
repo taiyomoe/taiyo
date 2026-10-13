@@ -1,7 +1,6 @@
 import { config } from "@taiyomoe/config"
 import type { NewCover } from "@taiyomoe/db"
 import { getCoverKey } from "@taiyomoe/s3"
-import { syncMedia } from "@taiyomoe/search"
 import { extensionForMimeType } from "@taiyomoe/utils"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
@@ -139,10 +138,6 @@ export const createCoversHandler = new Hono().post(
         .where("isMainCover", "=", true)
         .execute()
     }
-
-    c.var.afterCommit(() =>
-      syncMedia({ db: c.var.db, meili: c.var.meili, mediasIndex: c.var.mediasIndex }, media.id),
-    )
 
     return c.ok({ ids: coverRows.map((row) => row.id) })
   },

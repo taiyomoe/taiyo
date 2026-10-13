@@ -320,6 +320,9 @@ importers:
       '@taiyomoe/s3':
         specifier: workspace:^
         version: link:../../packages/s3
+      '@taiyomoe/search':
+        specifier: workspace:^
+        version: link:../../packages/search
       bullmq:
         specifier: ^6.3.11
         version: 6.3.11(ioredis@6.0.0)(pg@8.23.1)

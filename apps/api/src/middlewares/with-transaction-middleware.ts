@@ -1,4 +1,5 @@
 import { DeleteObjectsCommand } from "@taiyomoe/s3"
+import { drainSearchOutbox } from "@taiyomoe/search"
 import type { Context } from "hono"
 import { createMiddleware } from "hono/factory"
 
@@ -53,6 +54,14 @@ export const withTransaction = createMiddleware<{
         c.get("log").error(toLoggableError(cbErr))
       }
     }
+
+    await drainSearchOutbox({
+      db: previous,
+      meili: c.get("meili"),
+      mediasIndex: c.get("mediasIndex"),
+    }).catch((drainErr: unknown) => {
+      c.get("log").error(toLoggableError(drainErr))
+    })
   }
 })
 

@@ -1,7 +1,9 @@
 import { config } from "@taiyomoe/config"
 import { getDb } from "@taiyomoe/db"
 import { ensureStagingLifecycle, getS3Bucket, getS3Client } from "@taiyomoe/s3"
+import { getMeiliClient, SEARCH_INDEXES } from "@taiyomoe/search"
 import { scheduleChapterMaintenance, startChapterMaintenanceWorker } from "./maintenance"
+import { scheduleSearchMaintenance, startSearchMaintenanceWorker } from "./search-maintenance"
 import { startChapterProcessingWorker } from "./worker"
 
 const deps = { db: getDb(), s3: getS3Client(), s3Bucket: getS3Bucket() }
@@ -15,6 +17,11 @@ await ensureStagingLifecycle(deps.s3, deps.s3Bucket, config.images.stagingExpiry
 
 const chapterWorker = startChapterProcessingWorker(deps)
 const maintenanceWorker = startChapterMaintenanceWorker(deps)
+const searchWorker = startSearchMaintenanceWorker({
+  db: deps.db,
+  meili: getMeiliClient(),
+  mediasIndex: SEARCH_INDEXES.MEDIAS,
+})
 
 chapterWorker.on("ready", () => {
   // oxlint-disable-next-line no-console
@@ -26,8 +33,13 @@ await scheduleChapterMaintenance().catch((err: unknown) => {
   console.warn("chapter maintenance schedule not applied (store may not support it):", err)
 })
 
+await scheduleSearchMaintenance().catch((err: unknown) => {
+  // oxlint-disable-next-line no-console
+  console.warn("search maintenance schedule not applied (store may not support it):", err)
+})
+
 const shutdown = async () => {
-  await Promise.all([chapterWorker.close(), maintenanceWorker.close()])
+  await Promise.all([chapterWorker.close(), maintenanceWorker.close(), searchWorker.close()])
   process.exit(0)
 }
 const handleShutdownSignal = () => {

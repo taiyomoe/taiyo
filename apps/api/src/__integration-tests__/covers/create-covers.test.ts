@@ -5,7 +5,6 @@ import { signInAs } from "../helpers/auth"
 import { config } from "@taiyomoe/config"
 import { fakeImageOfSize, invalidImage, tinyGif, tinyPng } from "../helpers/fixtures"
 import { api } from "../helpers/request"
-import { waitForMeiliMediaDoc } from "../helpers/wait"
 import { test } from "../setup"
 
 const SEEDED_MEDIA_ID = "4e26b80f-6661-4f5f-93b4-6dfed052bbed"
@@ -20,7 +19,7 @@ const getForm = async () => {
 }
 
 describe("POST /medias/:id/covers", () => {
-  test("adds a cover (DB + S3 + Meili)", async ({ app, services }) => {
+  test("adds a cover (DB + S3)", async ({ app, services }) => {
     const { headers } = await signInAs(services, { role: "ADMIN" })
     const coversBefore = await services.db
       .selectFrom("covers")
@@ -57,10 +56,6 @@ describe("POST /medias/:id/covers", () => {
     )
 
     expect(s3Listing.Contents).toHaveLength(1)
-
-    const meiliDoc = await waitForMeiliMediaDoc(services, SEEDED_MEDIA_ID)
-
-    expect(meiliDoc).not.toBeNull()
   }, 30_000)
 
   test("stores a gif upload as .gif and serves it under that url", async ({ app, services }) => {

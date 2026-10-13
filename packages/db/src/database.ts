@@ -8,6 +8,7 @@ import type { Group } from "./models/group-model"
 import type { GroupOwnershipRequest } from "./models/group-ownership-request-model"
 import type { MediaStaff } from "./models/media-staff-model"
 import type { Media } from "./models/media-model"
+import type { SearchOutboxEntry } from "./models/search-outbox-model"
 import type { Session } from "./models/session-model"
 import type { Staff } from "./models/staff-model"
 import type { Task } from "./models/task-model"
@@ -32,6 +33,7 @@ export type DB = {
   groups: Group
   mediaStaffs: MediaStaff
   medias: Media
+  searchOutbox: SearchOutboxEntry
   sessions: Session
   staffs: Staff
   tasks: Task

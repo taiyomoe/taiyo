@@ -1,4 +1,3 @@
-import { syncMedia } from "@taiyomoe/search"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
@@ -52,13 +51,6 @@ export const deleteCoverHandler = new Hono().delete(
       .set({ deletedAt: new Date(), deleterId: user.id })
       .where("id", "=", cover.id)
       .execute()
-
-    c.var.afterCommit(() =>
-      syncMedia(
-        { db: c.var.db, meili: c.var.meili, mediasIndex: c.var.mediasIndex },
-        cover.mediaId,
-      ),
-    )
 
     return c.ok({ id: cover.id })
   },

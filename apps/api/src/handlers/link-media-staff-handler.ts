@@ -1,5 +1,4 @@
 import { STAFF_ROLES } from "@taiyomoe/db"
-import { syncMedia } from "@taiyomoe/search"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
@@ -82,10 +81,6 @@ export const linkMediaStaffHandler = new Hono().post(
     }
 
     await db.insertInto("mediaStaffs").values({ mediaId: media.id, staffId, role }).execute()
-
-    c.var.afterCommit(() =>
-      syncMedia({ db: c.var.db, meili: c.var.meili, mediasIndex: c.var.mediasIndex }, media.id),
-    )
 
     return c.ok({ mediaId: media.id, staffId, role })
   },
