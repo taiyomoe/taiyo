@@ -25,10 +25,17 @@ export const rateLimitRules = {
   "/request-password-reset": { window: 120, max: 1 },
 }
 
-export const createAuth = ({ db }: { db: Kysely<DB> }) =>
+export const createAuth = ({
+  db,
+  trustedOrigins = [],
+}: {
+  db: Kysely<DB>
+  trustedOrigins?: string[]
+}) =>
   betterAuth({
     appName: "Taiyō",
     baseURL: clientEnv.VITE_BETTER_AUTH_URL,
+    trustedOrigins,
     database: kyselyAdapter(db, { type: "postgres", usePlural: true }),
     emailAndPassword: {
       enabled: true,
@@ -69,7 +76,7 @@ export const createAuth = ({ db }: { db: Kysely<DB> }) =>
       customRules: rateLimitRules,
     },
     session: { storeSessionInDatabase: true },
-    advanced: { database: { generateId: "uuid" } },
+    advanced: { database: { generateId: "uuid" }, disableOriginCheck: false },
     hooks: { before: createBeforeHook({ db }), after: afterHook },
     databaseHooks: {
       user: {
