@@ -86,7 +86,7 @@ export const AuthForm = ({ type }: { type: "sign-in" | "sign-up" }) => (
               key={tab.type}
               to={tab.to}
               data-active={tab.type === type}
-              sx={[styles.tab, tab.type === type && styles.tabActive]}
+              {...stylex.props(styles.tab, tab.type === type && styles.tabActive)}
             >
               {tab.label()}
             </Link>
