@@ -1,5 +1,5 @@
-import type { Generated, Insertable } from "kysely"
-import type { Timestamp } from "../types"
+import type { Insertable } from "kysely"
+import type { Generated, Timestamp } from "../types"
 
 export type Verification = {
   id: Generated<string>

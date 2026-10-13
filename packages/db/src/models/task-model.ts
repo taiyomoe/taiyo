@@ -1,6 +1,6 @@
-import type { Generated, Insertable } from "kysely"
+import type { Insertable } from "kysely"
 import type { TaskStatus, TaskType } from "../constants"
-import type { Json, Timestamp } from "../types"
+import type { Generated, Json, Timestamp } from "../types"
 
 export type Task = {
   id: Generated<string>

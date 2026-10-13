@@ -1,4 +1,4 @@
-import type { Generated, Insertable } from "kysely"
+import type { Insertable } from "kysely"
 import type {
   ContentRating,
   Flag,
@@ -9,7 +9,7 @@ import type {
   MediaType,
 } from "../constants"
 import type { LocalizedText, MediaLinks, MediaTags } from "../json-types"
-import type { ArrayType, Timestamp } from "../types"
+import type { ArrayType, Generated, Timestamp } from "../types"
 
 export type Media = {
   id: Generated<string>
