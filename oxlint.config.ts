@@ -13,7 +13,7 @@ export default defineConfig({
     "promise",
     "vitest",
   ],
-  jsPlugins: ["@stylistic/eslint-plugin", "@stylexjs/eslint-plugin"],
+  jsPlugins: ["@stylistic/eslint-plugin", "@stylexjs/eslint-plugin", "./tooling/oxlint/plugin.ts"],
   options: {
     typeAware: true,
     typeCheck: true,
@@ -182,6 +182,8 @@ export default defineConfig({
     "@stylexjs/valid-shorthands": "error",
     "@stylexjs/no-unused": "error",
     "@stylexjs/sort-keys": "error",
+
+    "taiyo/no-sx-on-third-party": "error",
 
     "import/first": "error",
     "import/namespace": ["error", { allowComputed: true }],
