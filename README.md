@@ -116,7 +116,10 @@ sync. It prints the local URLs when it finishes. For the first checkout these ar
 
 **Dev accounts.** The seed creates `user@gmail.com` (role `USER`) and
 `admin@gmail.com` (role `ADMIN`), both with the password `password123`. The
-other seeded users have no password and cannot sign in.
+other seeded users have no password and cannot sign in. `pnpm bootstrap` also
+prints a ready-made session cookie for each, valid for 30 days and reused on
+later runs, to skip the sign-in form in scripts and headless browsers. Under
+`pnpm dev:tunnel`, send it as `__Secure-better-auth.session_token`.
 
 **Env files.** The root `.env` holds every local port and credential, and
 `bootstrap` derives the connection URLs in `apps/*/.env` from it. To change a

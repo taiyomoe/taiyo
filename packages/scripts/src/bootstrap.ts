@@ -235,9 +235,32 @@ const databaseIsEmpty = () => {
 
   return count === "0"
 }
-const printSummary = () => {
+const createDevSessions = () =>
+  capture("pnpm", ["--silent", "-F", "@taiyomoe/scripts", "cli", "dev-sessions"])
+    .split("\n")
+    .filter((line) => line.startsWith("{"))
+    .map((line) => {
+      const session: unknown = JSON.parse(line)
+
+      if (
+        typeof session !== "object" ||
+        session === null ||
+        !("username" in session) ||
+        !("cookie" in session) ||
+        typeof session.username !== "string" ||
+        typeof session.cookie !== "string"
+      ) {
+        throw new Error(`Unexpected dev-sessions output: ${line}`)
+      }
+
+      return { username: session.username, cookie: session.cookie }
+    })
+const printSummary = (sessions: Array<{ username: string; cookie: string }>) => {
   const root = readEnvFile(rootEnvPath)
   const url = (key: string) => localUrl(requireEnvValue(root, key, rootEnvPath))
+  const cookies = sessions
+    .map(({ username, cookie }) => `    ${username.padEnd(6)} ${cookie}`)
+    .join("\n")
 
   console.log(`
 \u001B[1mReady.\u001B[0m Start the apps with \`pnpm dev\`, or \`pnpm dev:tunnel\` for public URLs.
@@ -248,6 +271,10 @@ const printSummary = () => {
   RustFS console ${url("RUSTFS_CONSOLE_PORT")}
 
   Sign in as user@gmail.com or admin@gmail.com, password "password123".
+
+  Or skip the form with a ready-made session cookie (valid 30 days, reused on
+  later runs). Under \`pnpm dev:tunnel\`, name it __Secure-better-auth.session_token.
+${cookies}
 `)
 }
 const main = async () => {
@@ -287,7 +314,10 @@ const main = async () => {
   step("Indexing medias in Meilisearch")
   run("pnpm", ["-F", "@taiyomoe/scripts", "cli", "init-meilisearch"])
 
-  printSummary()
+  step("Creating dev sign-in sessions")
+  const sessions = createDevSessions()
+
+  printSummary(sessions)
 }
 
 main().catch((error: unknown) => {

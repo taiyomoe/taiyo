@@ -9,6 +9,7 @@ const main = defineCommand({
     "init-meilisearch": () => import("./init-meilisearch").then((m) => m.default),
     "init-s3": () => import("./init-s3").then((m) => m.default),
     "delete-media": () => import("./delete-media").then((m) => m.default),
+    "dev-sessions": () => import("./dev-sessions").then((m) => m.default),
   },
 })
 
