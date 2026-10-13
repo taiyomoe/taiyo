@@ -1,3 +1,4 @@
+import { getStaffImageUrl } from "@taiyomoe/s3"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
@@ -10,7 +11,7 @@ const staffDetailSchema = z.object({
   name: z.string().meta({ description: "Name of the staff.", example: "Kishimoto Masashi" }),
   bio: localizedTextSchema,
   links: staffLinksSchema,
-  image: z.string().nullable().meta({ description: "Storage key of the staff image, if any." }),
+  imageUrl: z.url().nullable().meta({ description: "Public URL of the staff image, if any." }),
   createdAt: z.iso.datetime().meta({ description: "When the staff was created." }),
   updatedAt: z.iso.datetime().meta({ description: "When the staff was last updated." }),
 })
@@ -43,7 +44,7 @@ export const getStaffHandler = new Hono().get(
       name: staff.name,
       bio: staff.bio,
       links: staff.links,
-      image: staff.image,
+      imageUrl: staff.image === null ? null : getStaffImageUrl(staff.image),
       createdAt: staff.createdAt,
       updatedAt: staff.updatedAt,
     })

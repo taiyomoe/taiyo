@@ -19,3 +19,9 @@
 **Claim**: making the first owner of an unowned group, which happens when a moderator approves an ownership request. It fails if the group became owned in the meantime.
 
 **Transfer**: an owner making another existing member an owner and stepping down to MEMBER in one step.
+
+## Images
+
+**Stored image**: a cover, banner or staff image, as written by `putImage`. It is always a `gif` (animated uploads) or a `jpg` (everything else); the extension is decided while transcoding and stored with the row, never re-derived.
+
+**Replacement**: storing a new image in place of an existing one (today only staff images). The new image gets a fresh key; the old object is deleted only once the transaction commits.

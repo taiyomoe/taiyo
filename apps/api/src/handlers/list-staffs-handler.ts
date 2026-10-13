@@ -1,4 +1,5 @@
 import { sql } from "@taiyomoe/db"
+import { getStaffImageUrl } from "@taiyomoe/s3"
 import { paginationMetaSchema, paginationQuerySchema } from "@taiyomoe/schemas"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
@@ -11,10 +12,10 @@ const querySchema = paginationQuerySchema
 const staffListItemSchema = z.object({
   id: z.uuid().meta({ description: "The ID of the staff." }),
   name: z.string().meta({ description: "Name of the staff.", example: "Kishimoto Masashi" }),
-  image: z
-    .string()
+  imageUrl: z
+    .url()
     .nullable()
-    .meta({ description: "Storage key of the staff image, if any.", example: null }),
+    .meta({ description: "Public URL of the staff image, if any.", example: null }),
 })
 
 export const listStaffsHandler = new Hono().get(
@@ -55,6 +56,12 @@ export const listStaffsHandler = new Hono().get(
         .executeTakeFirstOrThrow(),
     ])
 
-    return c.ok(items, { page, perPage, total: Number(totalRow.count) })
+    return c.ok(
+      items.map(({ image, ...staff }) => ({
+        ...staff,
+        imageUrl: image === null ? null : getStaffImageUrl(image),
+      })),
+      { page, perPage, total: Number(totalRow.count) },
+    )
   },
 )

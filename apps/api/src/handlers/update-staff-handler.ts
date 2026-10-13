@@ -1,9 +1,8 @@
 import { config } from "@taiyomoe/config"
-import { getStaffImageKey } from "@taiyomoe/s3"
-import { extensionForMimeType } from "@taiyomoe/utils"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { putImage } from "../image-store"
 import { checkImages } from "../middlewares/check-images-middleware"
 import { checkStaff } from "../middlewares/check-staff-middleware"
 import { validateFormData } from "../middlewares/validate-form-data-middleware"
@@ -16,7 +15,6 @@ import {
   localizedTextSchema,
   staffLinksSchema,
 } from "../utils/schemas"
-import { uploadFile } from "../utils/upload-file"
 
 const updateStaffSchema = z
   .object({
@@ -73,15 +71,16 @@ export const updateStaffHandler = new Hono().patch(
   checkStaff(),
   withTransaction,
   async (c) => {
-    const { db, s3, s3Bucket, log, staff } = c.var
+    const { db, staff } = c.var
     const body = c.var.formData
     const updates: Record<string, unknown> = {}
 
     if (body.file) {
-      const imageKey = getStaffImageKey(staff.id, `image.${extensionForMimeType(body.file.type)}`)
+      const { key } = await putImage(c.var, { kind: "staff", staffId: staff.id }, body.file, {
+        replaces: staff.image,
+      })
 
-      await uploadFile({ s3, s3Bucket, log }, imageKey, body.file)
-      updates.image = imageKey
+      updates.image = key
     }
 
     if (body.name !== undefined) {
