@@ -4,12 +4,13 @@ import { consts, font, text } from "@taiyomoe/ui/styles/tokens.stylex"
 import { Link } from "@tanstack/react-router"
 import { useEffect, useState } from "react"
 import { SunLink } from "@/components/buttons/sun-button"
-import { scene } from "@/components/scene/scene.stylex"
+import { scene, sceneFont } from "@/components/scene/scene.stylex"
 import { m } from "@/paraglide/messages"
 
 const styles = stylex.create({
   lockup: {
     gap: "0.75rem",
+    fontFamily: sceneFont.display,
     fontSize: "23px",
     fontWeight: 700,
     letterSpacing: "-0.02em",

@@ -2,6 +2,7 @@ import type * as React from "react"
 import {
   Alert02Icon,
   AlertCircleIcon,
+  Book02Icon,
   Bookmark02Icon,
   BubbleChatIcon,
   FireIcon,
@@ -119,6 +120,8 @@ export const Sparkles: (props: IconProps) => React.ReactElement = icon(SparklesI
 export const Flame: (props: IconProps) => React.ReactElement = icon(FireIcon)
 
 export const Shuffle: (props: IconProps) => React.ReactElement = icon(ShuffleIcon)
+
+export const Book: (props: IconProps) => React.ReactElement = icon(Book02Icon)
 
 export const Bookmark: (props: IconProps) => React.ReactElement = icon(Bookmark02Icon)
 

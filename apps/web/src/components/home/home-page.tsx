@@ -1,7 +1,10 @@
 import * as stylex from "@stylexjs/stylex"
 import { colors, font, radius, text } from "@taiyomoe/ui/styles/tokens.stylex"
+import { CatchBoundary } from "@tanstack/react-router"
+import { Suspense } from "react"
 import { range } from "remeda"
 import type { Session } from "@/lib/queries/session"
+import { FeaturedCarousel, FeaturedCarouselSkeleton } from "@/components/home/featured-carousel"
 import { AppShell } from "@/components/shell/app-shell"
 import { m } from "@/paraglide/messages"
 
@@ -53,7 +56,12 @@ const styles = stylex.create({
 
 export function HomePage({ user }: { user: Session["user"] }) {
   return (
-    <AppShell user={user}>
+    <AppShell overlayNavbar user={user}>
+      <CatchBoundary errorComponent={() => null} getResetKey={() => "featured"}>
+        <Suspense fallback={<FeaturedCarouselSkeleton />}>
+          <FeaturedCarousel />
+        </Suspense>
+      </CatchBoundary>
       <div sx={styles.page}>
         <h1 sx={styles.heading}>{m.home_greeting({ name: user.name })}</h1>
         {PLACEHOLDERS.map((shelf) => (

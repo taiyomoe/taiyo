@@ -22,7 +22,13 @@ const styles = stylex.create({
   },
 })
 
-export function AppShell({ user, children }: { user: Session["user"]; children: ReactNode }) {
+type AppShellProps = {
+  user: Session["user"]
+  overlayNavbar?: boolean
+  children: ReactNode
+}
+
+export function AppShell({ user, overlayNavbar = false, children }: AppShellProps) {
   const { sidebarPrefs } = useRouteContext({ from: "__root__" })
 
   return (
@@ -32,7 +38,7 @@ export function AppShell({ user, children }: { user: Session["user"]; children: 
       defaultWidth={sidebarPrefs.defaultWidth ?? 248}
       sx={styles.provider}
     >
-      <AppNavbar user={user} />
+      <AppNavbar overlay={overlayNavbar} user={user} />
       <div sx={styles.body}>
         <AppSidebar />
         <SidebarInset sx={styles.inset}>{children}</SidebarInset>

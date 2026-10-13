@@ -1,4 +1,7 @@
 import type { QueryClient } from "@tanstack/react-query"
+import interLatin from "@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url"
+import ptSerifLatinBold from "@fontsource/pt-serif/files/pt-serif-latin-700-normal.woff2?url"
+import ptSerifLatinExtBold from "@fontsource/pt-serif/files/pt-serif-latin-ext-700-normal.woff2?url"
 import { readSidebarCookies } from "@taiyomoe/ui/components/ui/sidebar"
 import { TanStackDevtools } from "@tanstack/react-devtools"
 import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools"
@@ -55,6 +58,27 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "theme-color", content: "#120a07" },
     ],
     links: [
+      {
+        rel: "preload",
+        href: interLatin,
+        as: "font",
+        type: "font/woff2",
+        crossOrigin: "anonymous",
+      },
+      {
+        rel: "preload",
+        href: ptSerifLatinBold,
+        as: "font",
+        type: "font/woff2",
+        crossOrigin: "anonymous",
+      },
+      {
+        rel: "preload",
+        href: ptSerifLatinExtBold,
+        as: "font",
+        type: "font/woff2",
+        crossOrigin: "anonymous",
+      },
       { rel: "stylesheet", href: appCss },
       ...(import.meta.env.DEV ? [{ rel: "stylesheet", href: "/virtual:stylex.css" }] : []),
       { rel: "icon", type: "image/png", href: "/favicon-96x96.png", sizes: "96x96" },
