@@ -10,7 +10,6 @@ import { HugeiconsIcon } from "@hugeicons/react"
 import { ParaglideMessage } from "@inlang/paraglide-js-react"
 import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile"
 import * as stylex from "@stylexjs/stylex"
-import { authClient } from "@taiyomoe/auth/client"
 import { config } from "@taiyomoe/config"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { Form } from "@taiyomoe/ui/components/ui/form"
@@ -84,24 +83,17 @@ export const SignUpForm = () => {
   // function passed to a call made during render may itself run during render.
   const onSubmit = (event: SubmitEvent<HTMLFormElement>) => {
     void form.handleSubmit(async (values) => {
-      auth.setError(null)
-
-      await authClient.signUp.email(
-        { name: values.name, email: values.email, password: values.password, callbackURL: "/" },
-        {
-          ...(captchaToken !== null && captchaToken !== ""
-            ? { headers: { "x-captcha-response": captchaToken } }
-            : {}),
-          onError: ({ error }) => {
-            auth.setError(error.message || m.auth_error_generic())
-            turnstileRef.current?.reset()
-            setCaptchaToken(null)
-          },
-          onSuccess: () => {
-            setPendingEmail(values.email)
-          },
-        },
+      const result = await auth.signUp(
+        { name: values.name, email: values.email, password: values.password },
+        { captchaToken },
       )
+
+      if (result.ok) {
+        setPendingEmail(values.email)
+      } else {
+        turnstileRef.current?.reset()
+        setCaptchaToken(null)
+      }
     })(event)
   }
 
@@ -120,7 +112,7 @@ export const SignUpForm = () => {
             sx={sx.confirmationAction}
             onClick={() => {
               setPendingEmail(null)
-              auth.setError(null)
+              auth.clearError()
             }}
           >
             <HugeiconsIcon icon={ArrowLeft01Icon} />

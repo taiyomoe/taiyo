@@ -1,28 +1,40 @@
-import { authClient } from "@taiyomoe/auth/client"
 import { useState } from "react"
-import type { SocialProvider } from "@/components/auth/auth-social-buttons"
-import { m } from "@/paraglide/messages"
+import type { AuthResult, SocialProvider } from "@/lib/auth"
+import { useAuthActions } from "@/lib/use-auth-actions"
 
 export const useAuthForm = () => {
+  const actions = useAuthActions()
   const [error, setError] = useState<string | null>(null)
   const [socialPending, setSocialPending] = useState<SocialProvider | null>(null)
-  const signInSocial = async (provider: SocialProvider) => {
+  const run = async (action: () => Promise<AuthResult>) => {
     setError(null)
-    setSocialPending(provider)
 
-    await authClient.signIn.social(
-      { provider, callbackURL: "/" },
-      {
-        onError: ({ error: socialError }) => {
-          setError(socialError.message || m.auth_error_generic())
-          setSocialPending(null)
-        },
-      },
-    )
+    const result = await action()
+
+    if (!result.ok) {
+      setError(result.message)
+    }
+
+    return result
   }
   const onSocial = (provider: SocialProvider) => {
-    void signInSocial(provider)
+    setSocialPending(provider)
+    void run(() => actions.signInSocial(provider)).then((result) => {
+      if (!result.ok) {
+        setSocialPending(null)
+      }
+    })
   }
 
-  return { error, setError, socialPending, onSocial, disabled: socialPending !== null }
+  return {
+    error,
+    clearError: () => {
+      setError(null)
+    },
+    socialPending,
+    onSocial,
+    disabled: socialPending !== null,
+    signIn: (values: Parameters<typeof actions.signIn>[0]) => run(() => actions.signIn(values)),
+    signUp: (...args: Parameters<typeof actions.signUp>) => run(() => actions.signUp(...args)),
+  }
 }
