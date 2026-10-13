@@ -1,11 +1,11 @@
-import type { Generated, Insertable } from "kysely"
+import type { Insertable } from "kysely"
 import type { Language } from "../constants"
-import type { GeneratedTimestamp, Timestamp } from "../types"
+import type { Generated, Timestamp } from "../types"
 
 export type Title = {
   id: Generated<string>
-  createdAt: GeneratedTimestamp
-  updatedAt: GeneratedTimestamp
+  createdAt: Generated<Timestamp>
+  updatedAt: Generated<Timestamp>
   deletedAt: Timestamp | null
   title: string
   language: Language

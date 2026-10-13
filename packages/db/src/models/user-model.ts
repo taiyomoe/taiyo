@@ -1,12 +1,12 @@
-import type { Generated, Insertable } from "kysely"
+import type { Insertable } from "kysely"
 import type { Role } from "../constants"
 import type { UserSettings } from "../json-types"
-import type { GeneratedTimestamp, Timestamp } from "../types"
+import type { Generated, Timestamp } from "../types"
 
 export type User = {
   id: Generated<string>
-  createdAt: GeneratedTimestamp
-  updatedAt: GeneratedTimestamp
+  createdAt: Generated<Timestamp>
+  updatedAt: Generated<Timestamp>
   name: string
   email: string | null
   normalizedEmail: string | null

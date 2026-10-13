@@ -1,11 +1,11 @@
 import type { Insertable } from "kysely"
-import type { GeneratedTimestamp } from "../types"
+import type { Generated, Timestamp } from "../types"
 
 export type FeaturedMedia = {
   mediaId: string
   position: number
-  createdAt: GeneratedTimestamp
-  updatedAt: GeneratedTimestamp
+  createdAt: Generated<Timestamp>
+  updatedAt: Generated<Timestamp>
 }
 
 export type NewFeaturedMedia = Insertable<FeaturedMedia>

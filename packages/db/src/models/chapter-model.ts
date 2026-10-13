@@ -1,12 +1,12 @@
-import type { Generated, Insertable } from "kysely"
+import type { Insertable } from "kysely"
 import type { ContentRating, Flag, Language } from "../constants"
 import type { ChapterPage } from "../json-types"
-import type { ArrayType, GeneratedTimestamp, Timestamp } from "../types"
+import type { ArrayType, Generated, Timestamp } from "../types"
 
 export type Chapter = {
   id: Generated<string>
-  createdAt: GeneratedTimestamp
-  updatedAt: GeneratedTimestamp
+  createdAt: Generated<Timestamp>
+  updatedAt: Generated<Timestamp>
   deletedAt: Timestamp | null
   title: string | null
   number: number

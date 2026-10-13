@@ -1,11 +1,11 @@
 import type { Insertable } from "kysely"
-import type { GeneratedTimestamp } from "../types"
+import type { Generated, Timestamp } from "../types"
 
 export type UserListItem = {
   listId: string
   mediaId: string
   position: number
-  addedAt: GeneratedTimestamp
+  addedAt: Generated<Timestamp>
 }
 
 export type NewUserListItem = Insertable<UserListItem>

@@ -1,13 +1,13 @@
 import type { Insertable } from "kysely"
 import type { UserLibraryStatus } from "../constants"
-import type { GeneratedTimestamp } from "../types"
+import type { Generated, Timestamp } from "../types"
 
 export type UserLibraryEntry = {
   userId: string
   mediaId: string
   status: UserLibraryStatus
-  createdAt: GeneratedTimestamp
-  updatedAt: GeneratedTimestamp
+  createdAt: Generated<Timestamp>
+  updatedAt: Generated<Timestamp>
 }
 
 export type NewUserLibraryEntry = Insertable<UserLibraryEntry>
