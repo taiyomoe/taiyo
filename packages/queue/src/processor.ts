@@ -4,6 +4,7 @@ import {
   DeleteObjectsCommand,
   GetObjectCommand,
   getChapterPageKey,
+  HeadObjectCommand,
   PutObjectCommand,
   type S3Client,
 } from "@taiyomoe/s3"
@@ -47,6 +48,14 @@ export const processChapterUpload = async (
     manifest = chapterUploadManifestSchema.parse(task.payload)
 
     for (const { pageId, stagingKey } of manifest.pages) {
+      const { ContentLength } = await s3.send(
+        new HeadObjectCommand({ Bucket: s3Bucket, Key: stagingKey }),
+      )
+
+      if (ContentLength === undefined || ContentLength > config.images.maxChapterPageSizeBytes) {
+        throw new Error(`page ${pageId} exceeds max size`)
+      }
+
       const obj = await s3.send(new GetObjectCommand({ Bucket: s3Bucket, Key: stagingKey }))
 
       if (obj.Body === undefined) {

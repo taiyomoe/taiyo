@@ -1,4 +1,5 @@
 import { ListObjectsV2Command, PutObjectCommand } from "@aws-sdk/client-s3"
+import { config } from "@taiyomoe/config"
 import { processChapterUpload } from "@taiyomoe/queue"
 import sharp from "sharp"
 import { describe, expect } from "vitest"
@@ -249,6 +250,67 @@ describe("processChapterUpload", () => {
 
     expect(chapter.pages).toBeNull()
   })
+
+  test(
+    "fails without downloading when a staged page is over the size limit",
+    { timeout: 30_000 },
+    async ({ services }) => {
+      const { db, s3, s3Bucket } = services
+      const chapterId = crypto.randomUUID()
+      const uploadId = crypto.randomUUID()
+      const taskId = crypto.randomUUID()
+      const pageId = crypto.randomUUID()
+      const stagingKey = `staging/chapters/${chapterId}/${uploadId}/0`
+
+      await db
+        .insertInto("chapters")
+        .values({
+          id: chapterId,
+          mediaId: SEEDED_MEDIA_ID,
+          number: 96_005,
+          language: "en",
+          uploaderId: SEEDED_UPLOADER_ID,
+        })
+        .execute()
+
+      await s3.send(
+        new PutObjectCommand({
+          Bucket: s3Bucket,
+          Key: stagingKey,
+          Body: Buffer.alloc(config.images.maxChapterPageSizeBytes + 1),
+          ContentType: "image/jpeg",
+        }),
+      )
+
+      await db
+        .insertInto("tasks")
+        .values({
+          id: taskId,
+          type: "UPLOAD_CHAPTER",
+          status: "PENDING",
+          sessionId: uploadId,
+          payload: {
+            chapterId,
+            mediaId: SEEDED_MEDIA_ID,
+            uploadId,
+            pages: [{ pageId, stagingKey }],
+          },
+        })
+        .execute()
+
+      await expect(processChapterUpload({ db, s3, s3Bucket }, { taskId })).rejects.toThrow(
+        "exceeds max size",
+      )
+
+      const task = await db
+        .selectFrom("tasks")
+        .select(["status"])
+        .where("id", "=", taskId)
+        .executeTakeFirstOrThrow()
+
+      expect(task.status).toBe("FAILED")
+    },
+  )
 
   test("returns silently when task does not exist", async ({ services }) => {
     const { db, s3, s3Bucket } = services
