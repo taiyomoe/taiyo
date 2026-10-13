@@ -44,7 +44,7 @@ export const createAuth = ({ db }: { db: Kysely<DB> }) =>
     },
     account: { accountLinking: { enabled: false } },
     user: {
-      additionalFields: { settings: { fieldName: "settings", type: "string" } },
+      additionalFields: { settings: { fieldName: "settings", type: "string", input: false } },
     },
     socialProviders: {
       discord: {
