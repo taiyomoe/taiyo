@@ -15,6 +15,16 @@ import { createSendMagicLink } from "./utils/send-magic-link"
 import { sendResetPassword } from "./utils/send-reset-password"
 import { sendVerificationEmail } from "./utils/send-verification-email"
 
+export const captchaEndpoints = ["/sign-up/email", "/request-password-reset"]
+
+export const rateLimitRules = {
+  "/sign-in/email": { window: 60, max: 3 },
+  "/sign-in/username": { window: 60, max: 3 },
+  "/sign-in/magic-link": { window: 60, max: 1 },
+  "/sign-up/email": { window: 120, max: 1 },
+  "/request-password-reset": { window: 120, max: 1 },
+}
+
 export const createAuth = ({ db }: { db: Kysely<DB> }) =>
   betterAuth({
     appName: "Taiyō",
@@ -56,13 +66,7 @@ export const createAuth = ({ db }: { db: Kysely<DB> }) =>
     rateLimit: {
       enabled: true,
       storage: "secondary-storage",
-      customRules: {
-        "/sign-in/email": { window: 60, max: 3 },
-        "/sign-in/username": { window: 60, max: 3 },
-        "/sign-in/magic-link": { window: 60, max: 1 },
-        "/sign-up": { window: 120, max: 1 },
-        "/forget-password": { window: 120, max: 1 },
-      },
+      customRules: rateLimitRules,
     },
     session: { storeSessionInDatabase: true },
     advanced: { database: { generateId: "uuid" } },
@@ -86,7 +90,7 @@ export const createAuth = ({ db }: { db: Kysely<DB> }) =>
       captcha({
         provider: "cloudflare-turnstile",
         secretKey: serverEnv.TURNSTILE_SECRET_KEY,
-        endpoints: ["/sign-up", "/forget-password"],
+        endpoints: captchaEndpoints,
       }),
       admin({ defaultRole: "USER" }),
       customSession(({ session, user }) =>
