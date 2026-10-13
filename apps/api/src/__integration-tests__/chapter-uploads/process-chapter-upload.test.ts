@@ -1,9 +1,9 @@
 import { ListObjectsV2Command, PutObjectCommand } from "@aws-sdk/client-s3"
 import { config } from "@taiyomoe/config"
 import { processChapterUpload } from "@taiyomoe/queue"
-import { getChapterPageKey } from "@taiyomoe/s3"
+import { GetObjectCommand, getChapterPageKey, HeadObjectCommand } from "@taiyomoe/s3"
 import sharp from "sharp"
-import { describe, expect } from "vitest"
+import { describe, expect, vi } from "vitest"
 import type { Services } from "../../services"
 import { test } from "../setup"
 
@@ -370,9 +370,26 @@ describe("processChapterUpload", () => {
         })
         .execute()
 
-      await expect(processChapterUpload({ db, s3, s3Bucket }, { taskId })).rejects.toThrow(
-        "exceeds max size",
-      )
+      const send = vi.spyOn(s3, "send")
+
+      try {
+        await expect(processChapterUpload({ db, s3, s3Bucket }, { taskId })).rejects.toThrow(
+          "exceeds max size",
+        )
+
+        const sentFor = (command: typeof GetObjectCommand | typeof HeadObjectCommand) =>
+          send.mock.calls.filter(
+            ([sent]) =>
+              sent instanceof command &&
+              sent.input.Bucket === s3Bucket &&
+              sent.input.Key === stagingKey,
+          )
+
+        expect(sentFor(HeadObjectCommand)).toHaveLength(1)
+        expect(sentFor(GetObjectCommand)).toHaveLength(0)
+      } finally {
+        send.mockRestore()
+      }
 
       const task = await db
         .selectFrom("tasks")
