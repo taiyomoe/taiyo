@@ -91,11 +91,16 @@ export const processChapterUpload = async (
       )
     }
 
-    await db
+    const written = await db
       .updateTable("chapters")
       .set({ pages: manifest.pages.map(({ pageId }) => ({ id: pageId })) })
       .where("id", "=", manifest.chapterId)
-      .execute()
+      .where(sql<boolean>`("pages" IS NULL OR cardinality("pages") = 0)`)
+      .executeTakeFirst()
+
+    if (written.numUpdatedRows === 0n) {
+      throw new Error(`chapter ${manifest.chapterId} already has pages`)
+    }
 
     pagesCommitted = true
 

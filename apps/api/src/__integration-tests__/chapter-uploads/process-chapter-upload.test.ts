@@ -1,12 +1,14 @@
 import { ListObjectsV2Command, PutObjectCommand } from "@aws-sdk/client-s3"
 import { config } from "@taiyomoe/config"
 import { processChapterUpload } from "@taiyomoe/queue"
+import { getChapterPageKey } from "@taiyomoe/s3"
 import sharp from "sharp"
 import { describe, expect } from "vitest"
 import { test } from "../setup"
 
 const SEEDED_MEDIA_ID = "4e26b80f-6661-4f5f-93b4-6dfed052bbed"
 const SEEDED_UPLOADER_ID = "db852a04-7406-4a6a-87f2-1b494e810a29"
+const SEEDED_CHAPTER_WITH_PAGES_ID = "13548c83-8d1a-4163-8830-c8f16fcd2eb7"
 const makeTinyJpeg = async () =>
   sharp({
     create: { width: 4, height: 4, channels: 3, background: { r: 100, g: 150, b: 200 } },
@@ -311,6 +313,66 @@ describe("processChapterUpload", () => {
       expect(task.status).toBe("FAILED")
     },
   )
+
+  test("does not overwrite pages written by another upload", async ({ services }) => {
+    const { db, s3, s3Bucket } = services
+    const chapterId = SEEDED_CHAPTER_WITH_PAGES_ID
+    const uploadId = crypto.randomUUID()
+    const taskId = crypto.randomUUID()
+    const pageId = crypto.randomUUID()
+    const stagingKey = `staging/chapters/${chapterId}/${uploadId}/0`
+    const before = await db
+      .selectFrom("chapters")
+      .select(["mediaId", "pages"])
+      .where("id", "=", chapterId)
+      .executeTakeFirstOrThrow()
+
+    await s3.send(
+      new PutObjectCommand({
+        Bucket: s3Bucket,
+        Key: stagingKey,
+        Body: await makeTinyJpeg(),
+        ContentType: "image/jpeg",
+      }),
+    )
+
+    await db
+      .insertInto("tasks")
+      .values({
+        id: taskId,
+        type: "UPLOAD_CHAPTER",
+        status: "PENDING",
+        sessionId: uploadId,
+        payload: {
+          chapterId,
+          mediaId: before.mediaId,
+          uploadId,
+          pages: [{ pageId, stagingKey }],
+        },
+      })
+      .execute()
+
+    await expect(processChapterUpload({ db, s3, s3Bucket }, { taskId })).rejects.toThrow(
+      "already has pages",
+    )
+
+    const after = await db
+      .selectFrom("chapters")
+      .select(["pages"])
+      .where("id", "=", chapterId)
+      .executeTakeFirstOrThrow()
+
+    expect(after.pages).toEqual(before.pages)
+
+    const listed = await s3.send(
+      new ListObjectsV2Command({
+        Bucket: s3Bucket,
+        Prefix: getChapterPageKey(before.mediaId, chapterId, pageId),
+      }),
+    )
+
+    expect(listed.Contents ?? []).toHaveLength(0)
+  })
 
   test("returns silently when task does not exist", async ({ services }) => {
     const { db, s3, s3Bucket } = services
