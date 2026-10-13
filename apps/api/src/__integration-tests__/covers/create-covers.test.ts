@@ -8,6 +8,7 @@ import { api } from "../helpers/request"
 import { test } from "../setup"
 
 const SEEDED_MEDIA_ID = "4e26b80f-6661-4f5f-93b4-6dfed052bbed"
+const SEEDED_MAIN_COVER_ID = "a56cc54d-7776-4787-9b21-97a4674b80bc"
 const getForm = async () => {
   const form = new FormData()
 
@@ -56,6 +57,47 @@ describe("POST /medias/:id/covers", () => {
     )
 
     expect(s3Listing.Contents).toHaveLength(1)
+  }, 30_000)
+
+  test("replaces the main cover when a new cover is uploaded with main=true", async ({
+    app,
+    services,
+  }) => {
+    const { headers } = await signInAs(services, { role: "ADMIN" })
+    const form = await getForm()
+
+    form.append("covers.0.main", "true")
+
+    const res = await api<{ ids: string[] }>(app, `/medias/${SEEDED_MEDIA_ID}/covers`, {
+      method: "POST",
+      headers,
+      form,
+    })
+
+    expect(res.status).toBe(201)
+
+    if (!res.body.success) {
+      throw new Error(`Expected success: ${JSON.stringify(res.body)}`)
+    }
+
+    const mainCovers = await services.db
+      .selectFrom("covers")
+      .select("id")
+      .where("mediaId", "=", SEEDED_MEDIA_ID)
+      .where("isMainCover", "=", true)
+      .where("deletedAt", "is", null)
+      .execute()
+
+    expect(mainCovers).toHaveLength(1)
+    expect(mainCovers[0]?.id).toBe(res.body.data.ids[0])
+
+    const previousMain = await services.db
+      .selectFrom("covers")
+      .select("isMainCover")
+      .where("id", "=", SEEDED_MAIN_COVER_ID)
+      .executeTakeFirstOrThrow()
+
+    expect(previousMain.isMainCover).toBe(false)
   }, 30_000)
 
   test("stores a gif upload as .gif and serves it under that url", async ({ app, services }) => {

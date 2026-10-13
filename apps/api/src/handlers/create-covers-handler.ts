@@ -125,19 +125,16 @@ export const createCoversHandler = new Hono().post(
       }),
     )
 
-    await db.insertInto("covers").values(coverRows).execute()
-
-    const newMain = coverRows.find((row) => row.isMainCover)
-
-    if (newMain) {
+    if (coverRows.some((row) => row.isMainCover)) {
       await db
         .updateTable("covers")
         .set({ isMainCover: false })
         .where("mediaId", "=", media.id)
-        .where("id", "!=", newMain.id)
         .where("isMainCover", "=", true)
         .execute()
     }
+
+    await db.insertInto("covers").values(coverRows).execute()
 
     return c.ok({ ids: coverRows.map((row) => row.id) })
   },
