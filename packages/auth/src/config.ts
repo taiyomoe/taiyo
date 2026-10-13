@@ -10,7 +10,7 @@ import { serverEnv } from "./env/server"
 import { afterHook } from "./utils/after-hook"
 import { createAfterUserCreatedHook } from "./utils/after-user-created-hook"
 import { createBeforeHook } from "./utils/before-hook"
-import { beforeUserCreatedHook } from "./utils/before-user-created-hook"
+import { createBeforeUserCreatedHook } from "./utils/before-user-created-hook"
 import { createSendMagicLink } from "./utils/send-magic-link"
 import { sendResetPassword } from "./utils/send-reset-password"
 import { sendVerificationEmail } from "./utils/send-verification-email"
@@ -74,7 +74,7 @@ export const createAuth = ({ db }: { db: Kysely<DB> }) =>
     databaseHooks: {
       user: {
         create: {
-          before: beforeUserCreatedHook,
+          before: createBeforeUserCreatedHook({ db }),
           after: createAfterUserCreatedHook({ db }),
         },
       },
