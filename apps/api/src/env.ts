@@ -28,8 +28,5 @@ export const env = createEnv({
 
   runtimeEnv: process.env,
   emptyStringAsUndefined: true,
-  skipValidation:
-    Boolean(process.env.CI) ||
-    Boolean(process.env.TEST) ||
-    process.env.npm_lifecycle_event === "lint",
+  skipValidation: Boolean(process.env.TEST),
 })

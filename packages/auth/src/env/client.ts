@@ -13,5 +13,5 @@ export const clientEnv = createEnv({
   },
   runtimeEnv:
     viteEnvSchema.parse((import.meta as { url: string; env?: unknown }).env) ?? process.env,
-  skipValidation: Boolean(process.env.CI) || Boolean(process.env.TEST),
+  skipValidation: Boolean(process.env.TEST),
 })

@@ -11,5 +11,5 @@ export const serverEnv = createEnv({
     TURNSTILE_SECRET_KEY: z.string(),
   },
   runtimeEnv: process.env,
-  skipValidation: Boolean(process.env.CI) || Boolean(process.env.TEST),
+  skipValidation: Boolean(process.env.TEST),
 })

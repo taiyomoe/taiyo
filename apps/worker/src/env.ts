@@ -6,8 +6,5 @@ export const env = createEnv({
     CHAPTER_PROCESSING_CONCURRENCY: z.coerce.number().int().positive().default(4),
   },
   runtimeEnv: process.env,
-  skipValidation:
-    Boolean(process.env.CI) ||
-    Boolean(process.env.TEST) ||
-    process.env.npm_lifecycle_event === "lint",
+  skipValidation: Boolean(process.env.TEST),
 })

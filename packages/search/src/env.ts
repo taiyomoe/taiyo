@@ -10,8 +10,5 @@ export const env = createEnv({
   clientPrefix: "NEXT_PUBLIC_",
   client: {},
   runtimeEnv: process.env,
-  skipValidation:
-    Boolean(process.env.CI) ||
-    Boolean(process.env.TEST) ||
-    process.env.npm_lifecycle_event === "lint",
+  skipValidation: Boolean(process.env.TEST),
 })
