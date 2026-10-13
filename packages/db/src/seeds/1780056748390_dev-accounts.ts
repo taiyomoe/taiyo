@@ -1,5 +1,5 @@
-import { hashPassword } from "@better-auth/utils/password"
 import type { Kysely } from "kysely"
+import { hashPassword } from "@better-auth/utils/password"
 import type { DB } from "../database"
 
 const PASSWORD = "password123"

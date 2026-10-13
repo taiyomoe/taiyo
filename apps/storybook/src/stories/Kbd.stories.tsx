@@ -1,7 +1,7 @@
 import * as stylex from "@stylexjs/stylex"
+import { Kbd, KbdGroup } from "@taiyomoe/ui/components/ui/kbd"
 import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
 import preview from "@/storybook/preview"
-import { Kbd, KbdGroup } from "@taiyomoe/ui/components/ui/kbd"
 
 const styles = stylex.create({
   column: {

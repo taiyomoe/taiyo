@@ -3,14 +3,13 @@ import { HugeiconsIcon } from "@hugeicons/react"
 import * as stylex from "@stylexjs/stylex"
 import { font, text } from "@taiyomoe/ui/styles/tokens.stylex"
 import { type MouseEvent, useState } from "react"
-
 import { GhostAnchor } from "@/components/buttons/ghost-anchor"
 import { SunLink } from "@/components/buttons/sun-button"
 import { Eyebrow } from "@/components/landing/landing-atoms"
 import { LandingSun, type Parallax } from "@/components/landing/landing-sun"
 import { Embers } from "@/components/scene/embers"
-import { Stars } from "@/components/scene/stars"
 import { scene, sceneFont } from "@/components/scene/scene.stylex"
+import { Stars } from "@/components/scene/stars"
 import { m } from "@/paraglide/messages"
 
 const styles = stylex.create({

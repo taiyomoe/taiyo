@@ -1,6 +1,6 @@
-import preview from "@/storybook/preview"
 import { OTPField, OTPFieldInput, OTPFieldSeparator } from "@taiyomoe/ui/components/ui/otp-field"
 import { fn } from "storybook/test"
+import preview from "@/storybook/preview"
 
 const meta = preview.meta({
   title: "UI/OtpField",

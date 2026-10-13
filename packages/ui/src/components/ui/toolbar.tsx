@@ -1,9 +1,9 @@
+import type React from "react"
 import { Toolbar as ToolbarPrimitive } from "@base-ui/react/toolbar"
 import * as stylex from "@stylexjs/stylex"
-import type React from "react"
-import { cn } from "../../utils/cn"
 import type { Sx } from "../../styles/sx"
 import { colors, radius } from "../../styles/tokens.stylex"
+import { cn } from "../../utils/cn"
 
 const styles = stylex.create({
   root: {

@@ -1,14 +1,14 @@
 import { Combobox as ComboboxPrimitive } from "@base-ui/react/combobox"
 import * as stylex from "@stylexjs/stylex"
 import * as React from "react"
+import type { Sx } from "../../styles/sx"
+import { comboboxPopupMarker } from "../../styles/markers.stylex"
+import { focus, surface, transitions } from "../../styles/recipes"
+import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
 import { cn } from "../../utils/cn"
 import { Check, ChevronsUpDown, Close } from "../icons"
 import { Input } from "./input"
 import { ScrollArea } from "./scroll-area"
-import { comboboxPopupMarker } from "../../styles/markers.stylex"
-import type { Sx } from "../../styles/sx"
-import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
-import { focus, surface, transitions } from "../../styles/recipes"
 
 export const ComboboxContext: React.Context<{
   chipsRef: React.RefObject<HTMLDivElement | null> | null

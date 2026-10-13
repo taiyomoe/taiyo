@@ -1,13 +1,13 @@
+import type * as React from "react"
 import { mergeProps } from "@base-ui/react/merge-props"
 import { useRender } from "@base-ui/react/use-render"
 import * as stylex from "@stylexjs/stylex"
-import type * as React from "react"
+import type { Sx } from "../../styles/sx"
+import { a11y } from "../../styles/recipes"
+import { consts } from "../../styles/tokens.stylex"
 import { cn } from "../../utils/cn"
 import { ChevronLeft, ChevronRight, Ellipsis } from "../icons"
 import { type Button, buttonVariants } from "./button"
-import type { Sx } from "../../styles/sx"
-import { consts } from "../../styles/tokens.stylex"
-import { a11y } from "../../styles/recipes"
 
 const styles = stylex.create({
   nav: {

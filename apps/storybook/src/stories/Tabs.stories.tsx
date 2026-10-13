@@ -1,7 +1,7 @@
 import * as stylex from "@stylexjs/stylex"
-import preview from "@/storybook/preview"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@taiyomoe/ui/components/ui/tabs"
 import { fn } from "storybook/test"
+import preview from "@/storybook/preview"
 
 const styles = stylex.create({
   anchor: {

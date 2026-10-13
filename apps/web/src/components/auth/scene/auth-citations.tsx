@@ -3,7 +3,6 @@ import { HugeiconsIcon } from "@hugeicons/react"
 import * as stylex from "@stylexjs/stylex"
 import { font, radius, text } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useEffect, useState } from "react"
-
 import { scene } from "@/components/scene/scene.stylex"
 import { Stars } from "@/components/scene/stars"
 import { m } from "@/paraglide/messages"

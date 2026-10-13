@@ -2,7 +2,6 @@ import { Sun03Icon } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 import * as stylex from "@stylexjs/stylex"
 import { font, radius, text } from "@taiyomoe/ui/styles/tokens.stylex"
-
 import { GhostAnchor } from "@/components/buttons/ghost-anchor"
 import { SunLink } from "@/components/buttons/sun-button"
 import { Eyebrow } from "@/components/landing/landing-atoms"

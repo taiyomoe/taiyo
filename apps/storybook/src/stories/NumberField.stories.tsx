@@ -1,5 +1,4 @@
 import * as stylex from "@stylexjs/stylex"
-import preview from "@/storybook/preview"
 import { Label } from "@taiyomoe/ui/components/ui/label"
 import {
   NumberField,
@@ -10,6 +9,7 @@ import {
   NumberFieldScrubArea,
 } from "@taiyomoe/ui/components/ui/number-field"
 import { fn } from "storybook/test"
+import preview from "@/storybook/preview"
 
 type NumberFieldStoryProps = React.ComponentProps<typeof NumberField>
 

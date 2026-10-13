@@ -1,6 +1,5 @@
 import * as stylex from "@stylexjs/stylex"
 import { font } from "@taiyomoe/ui/styles/tokens.stylex"
-
 import { Reveal, Section } from "@/components/landing/landing-atoms"
 import { STATS } from "@/components/landing/landing-data"
 import { scene, sceneFont } from "@/components/scene/scene.stylex"

@@ -1,5 +1,4 @@
 import * as stylex from "@stylexjs/stylex"
-import preview from "@/storybook/preview"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import {
   Tooltip,
@@ -8,6 +7,7 @@ import {
   TooltipTrigger,
 } from "@taiyomoe/ui/components/ui/tooltip"
 import { fn } from "storybook/test"
+import preview from "@/storybook/preview"
 
 const styles = stylex.create({
   wrap: {

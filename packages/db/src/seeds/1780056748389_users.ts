@@ -1,5 +1,5 @@
-import { faker, fakerEN, fakerPT_BR } from "@faker-js/faker"
 import type { Kysely } from "kysely"
+import { faker, fakerEN, fakerPT_BR } from "@faker-js/faker"
 import type { DB } from "../database"
 
 // Inlined to keep @taiyomoe/db a leaf package (no workspace cycle with @taiyomoe/utils).

@@ -1,8 +1,8 @@
+import type React from "react"
 import { Form as FormPrimitive } from "@base-ui/react/form"
 import * as stylex from "@stylexjs/stylex"
-import type React from "react"
-import { cn } from "../../utils/cn"
 import type { Sx } from "../../styles/sx"
+import { cn } from "../../utils/cn"
 
 export type FormProps = FormPrimitive.Props & {
   sx?: Sx

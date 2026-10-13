@@ -1,6 +1,4 @@
 import * as stylex from "@stylexjs/stylex"
-import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
-import preview from "@/storybook/preview"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import {
   Frame,
@@ -10,6 +8,8 @@ import {
   FramePanel,
   FrameTitle,
 } from "@taiyomoe/ui/components/ui/frame"
+import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
+import preview from "@/storybook/preview"
 
 const styles = stylex.create({
   anchor: {

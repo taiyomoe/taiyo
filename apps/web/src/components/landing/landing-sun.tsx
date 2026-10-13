@@ -1,8 +1,6 @@
-import * as stylex from "@stylexjs/stylex"
 import type { CSSProperties } from "react"
-
+import * as stylex from "@stylexjs/stylex"
 import { consts } from "@taiyomoe/ui/styles/tokens.stylex"
-
 import { Animated } from "@/components/scene/animated"
 import { scene } from "@/components/scene/scene.stylex"
 import { SunRays } from "@/components/scene/sun-rays"

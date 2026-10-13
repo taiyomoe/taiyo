@@ -1,5 +1,4 @@
 import * as stylex from "@stylexjs/stylex"
-import preview from "@/storybook/preview"
 import {
   Progress,
   ProgressIndicator,
@@ -7,6 +6,7 @@ import {
   ProgressTrack,
   ProgressValue,
 } from "@taiyomoe/ui/components/ui/progress"
+import preview from "@/storybook/preview"
 
 const styles = stylex.create({
   anchor: {

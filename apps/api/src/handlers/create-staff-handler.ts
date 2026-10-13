@@ -1,5 +1,5 @@
-import { config } from "@taiyomoe/config"
 import type { NewStaff } from "@taiyomoe/db"
+import { config } from "@taiyomoe/config"
 import { getStaffImageKey } from "@taiyomoe/s3"
 import { extensionForMimeType } from "@taiyomoe/utils"
 import { Hono } from "hono"

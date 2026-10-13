@@ -1,13 +1,12 @@
-import { TanStackDevtools } from "@tanstack/react-devtools"
 import type { QueryClient } from "@tanstack/react-query"
+import { readSidebarCookies } from "@taiyomoe/ui/components/ui/sidebar"
+import { TanStackDevtools } from "@tanstack/react-devtools"
 import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools"
 import { HeadContent, Scripts, createRootRouteWithContext } from "@tanstack/react-router"
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools"
 import { createIsomorphicFn } from "@tanstack/react-start"
 import { getCookies } from "@tanstack/react-start/server"
-import { readSidebarCookies } from "@taiyomoe/ui/components/ui/sidebar"
 import { fromEntries, map, pipe } from "remeda"
-
 import { sessionQueryOptions } from "@/lib/queries/session"
 import {
   THEME_COOKIE,
@@ -17,7 +16,6 @@ import {
   systemThemeScript,
   useThemeState,
 } from "@/lib/theme"
-
 import appCss from "../styles.css?url"
 
 const readCookies = createIsomorphicFn()

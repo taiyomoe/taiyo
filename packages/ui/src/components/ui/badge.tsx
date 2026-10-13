@@ -1,11 +1,11 @@
+import type React from "react"
 import { mergeProps } from "@base-ui/react/merge-props"
 import { useRender } from "@base-ui/react/use-render"
 import * as stylex from "@stylexjs/stylex"
-import type React from "react"
-import { cn } from "../../utils/cn"
-import { colors, consts, radius } from "../../styles/tokens.stylex"
-import { focus, tap } from "../../styles/recipes"
 import type { Sx } from "../../styles/sx"
+import { focus, tap } from "../../styles/recipes"
+import { colors, consts, radius } from "../../styles/tokens.stylex"
+import { cn } from "../../utils/cn"
 
 export type BadgeVariant =
   | "default"

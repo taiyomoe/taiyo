@@ -1,10 +1,10 @@
+import type React from "react"
 import { Popover as PopoverPrimitive } from "@base-ui/react/popover"
 import * as stylex from "@stylexjs/stylex"
-import type React from "react"
-import { cn } from "../../utils/cn"
-import { colors, motion, radius, shadows, text } from "../../styles/tokens.stylex"
-import { surface, transitions } from "../../styles/recipes"
 import type { CSSVariables, Sx } from "../../styles/sx"
+import { surface, transitions } from "../../styles/recipes"
+import { colors, motion, radius, shadows, text } from "../../styles/tokens.stylex"
+import { cn } from "../../utils/cn"
 
 const styles = stylex.create({
   positioner: {

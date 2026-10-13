@@ -1,6 +1,5 @@
 import * as stylex from "@stylexjs/stylex"
 import { type CSSProperties, useMemo } from "react"
-
 import { Animated } from "./animated"
 import { lerp, rand, round } from "./deterministic"
 import { scene } from "./scene.stylex"

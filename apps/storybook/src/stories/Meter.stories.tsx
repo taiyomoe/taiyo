@@ -1,5 +1,4 @@
 import * as stylex from "@stylexjs/stylex"
-import preview from "@/storybook/preview"
 import {
   Meter,
   MeterIndicator,
@@ -7,6 +6,7 @@ import {
   MeterTrack,
   MeterValue,
 } from "@taiyomoe/ui/components/ui/meter"
+import preview from "@/storybook/preview"
 
 const styles = stylex.create({
   anchor: {

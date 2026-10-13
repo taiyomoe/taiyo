@@ -1,9 +1,9 @@
-import * as stylex from "@stylexjs/stylex"
 import { TextBoldIcon, TextItalicIcon, TextUnderlineIcon } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
-import preview from "@/storybook/preview"
+import * as stylex from "@stylexjs/stylex"
 import { Toggle } from "@taiyomoe/ui/components/ui/toggle"
 import { fn } from "storybook/test"
+import preview from "@/storybook/preview"
 
 const styles = stylex.create({
   wrap: {

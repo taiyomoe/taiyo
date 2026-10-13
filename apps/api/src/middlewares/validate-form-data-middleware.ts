@@ -1,7 +1,7 @@
+import type z from "zod"
 import { coerceFormDataValue } from "@taiyomoe/utils"
 import { createMiddleware } from "hono/factory"
 import { construct } from "radashi"
-import type z from "zod"
 
 type Env<TSchema extends z.ZodType> = {
   Variables: {

@@ -1,5 +1,3 @@
-import * as stylex from "@stylexjs/stylex"
-import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
 import {
   Cancel01Icon,
   CreditCardIcon as CreditCardGlyph,
@@ -7,7 +5,7 @@ import {
   Search01Icon,
 } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
-import preview from "@/storybook/preview"
+import * as stylex from "@stylexjs/stylex"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import {
   InputGroup,
@@ -17,6 +15,8 @@ import {
   InputGroupTextarea,
 } from "@taiyomoe/ui/components/ui/input-group"
 import { Kbd } from "@taiyomoe/ui/components/ui/kbd"
+import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
+import preview from "@/storybook/preview"
 
 const styles = stylex.create({
   anchor: {

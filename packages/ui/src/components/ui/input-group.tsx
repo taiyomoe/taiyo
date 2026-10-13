@@ -1,11 +1,11 @@
-import * as stylex from "@stylexjs/stylex"
 import type * as React from "react"
+import * as stylex from "@stylexjs/stylex"
+import type { Sx } from "../../styles/sx"
+import { focus } from "../../styles/recipes"
+import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
 import { cn } from "../../utils/cn"
 import { Input, type InputProps } from "./input"
 import { Textarea, type TextareaProps } from "./textarea"
-import type { Sx } from "../../styles/sx"
-import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
-import { focus } from "../../styles/recipes"
 
 export type InputGroupAddonAlign = "block-end" | "block-start" | "inline-end" | "inline-start"
 

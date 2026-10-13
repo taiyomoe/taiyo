@@ -2,9 +2,9 @@ import { mergeProps } from "@base-ui/react/merge-props"
 import { useRender } from "@base-ui/react/use-render"
 import * as stylex from "@stylexjs/stylex"
 import * as React from "react"
-import { cn } from "../../utils/cn"
 import type { Sx } from "../../styles/sx"
 import { colors, radius, shadows } from "../../styles/tokens.stylex"
+import { cn } from "../../utils/cn"
 
 export type TableVariant = "default" | "card"
 

@@ -1,9 +1,9 @@
-import * as stylex from "@stylexjs/stylex"
 import type { ComponentProps } from "react"
-import { TaiyoLogo } from "./taiyo-logo"
-import { cn } from "../../utils/cn"
+import * as stylex from "@stylexjs/stylex"
 import type { Sx } from "../../styles/sx"
 import { font, text } from "../../styles/tokens.stylex"
+import { cn } from "../../utils/cn"
+import { TaiyoLogo } from "./taiyo-logo"
 
 const styles = stylex.create({
   root: {

@@ -1,5 +1,4 @@
 import * as stylex from "@stylexjs/stylex"
-
 import { Animated } from "@/components/scene/animated"
 import { scene } from "@/components/scene/scene.stylex"
 import { SunRays } from "@/components/scene/sun-rays"

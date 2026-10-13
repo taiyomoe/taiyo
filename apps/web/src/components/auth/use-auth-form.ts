@@ -1,7 +1,7 @@
-import type { SocialProvider } from "@/components/auth/auth-social-buttons"
-import { m } from "@/paraglide/messages"
 import { authClient } from "@taiyomoe/auth/client"
 import { useState } from "react"
+import type { SocialProvider } from "@/components/auth/auth-social-buttons"
+import { m } from "@/paraglide/messages"
 
 export const useAuthForm = () => {
   const [error, setError] = useState<string | null>(null)

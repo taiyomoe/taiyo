@@ -1,5 +1,5 @@
-import { type DB, type Kysely, sql, type Transaction } from "@taiyomoe/db"
 import type { Meilisearch } from "meilisearch"
+import { type DB, type Kysely, sql, type Transaction } from "@taiyomoe/db"
 import { isNullish } from "radashi"
 import { INDEXES_BATCH_SIZE } from "../utils/constants"
 import { getMediaDocument } from "./get-media-document"

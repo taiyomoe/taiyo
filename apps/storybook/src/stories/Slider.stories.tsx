@@ -1,7 +1,7 @@
 import * as stylex from "@stylexjs/stylex"
-import preview from "@/storybook/preview"
 import { Slider, SliderValue } from "@taiyomoe/ui/components/ui/slider"
 import { fn } from "storybook/test"
+import preview from "@/storybook/preview"
 
 const styles = stylex.create({
   anchor: {

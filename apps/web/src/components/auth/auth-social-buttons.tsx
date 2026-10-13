@@ -1,6 +1,5 @@
 import * as stylex from "@stylexjs/stylex"
 import { text } from "@taiyomoe/ui/styles/tokens.stylex"
-
 import { DiscordButton } from "@/components/buttons/discord-button"
 import { GoogleButton } from "@/components/buttons/google-button"
 import { scene } from "@/components/scene/scene.stylex"

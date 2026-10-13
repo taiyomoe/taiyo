@@ -1,7 +1,7 @@
+import type { DB, Kysely, Role, UserSettings } from "@taiyomoe/db"
 import { kyselyAdapter } from "@better-auth/kysely-adapter"
 import { cacheClient } from "@taiyomoe/cache"
 import { config } from "@taiyomoe/config"
-import type { DB, Kysely, Role, UserSettings } from "@taiyomoe/db"
 import { betterAuth } from "better-auth"
 import { emailHarmony } from "better-auth-harmony"
 import { admin, captcha, customSession, magicLink, username } from "better-auth/plugins"

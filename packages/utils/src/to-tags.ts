@@ -1,5 +1,5 @@
-import { config } from "@taiyomoe/config"
 import type { MediaTags } from "@taiyomoe/db"
+import { config } from "@taiyomoe/config"
 
 const TAGS_MAP = new Map([
   ["COOKING", "FOOD"],

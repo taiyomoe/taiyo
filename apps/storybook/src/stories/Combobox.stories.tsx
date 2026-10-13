@@ -1,5 +1,4 @@
 import * as stylex from "@stylexjs/stylex"
-import preview from "@/storybook/preview"
 import {
   Combobox,
   ComboboxChip,
@@ -16,6 +15,7 @@ import {
   ComboboxValue,
 } from "@taiyomoe/ui/components/ui/combobox"
 import { fn } from "storybook/test"
+import preview from "@/storybook/preview"
 
 type Fruit = {
   value: string

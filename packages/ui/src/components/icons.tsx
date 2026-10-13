@@ -1,3 +1,4 @@
+import type * as React from "react"
 import {
   Alert02Icon,
   AlertCircleIcon,
@@ -34,9 +35,8 @@ import {
 } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react"
 import * as stylex from "@stylexjs/stylex"
-import type * as React from "react"
-import { cn } from "../utils/cn"
 import type { Sx } from "../styles/sx"
+import { cn } from "../utils/cn"
 
 export type IconProps = Omit<React.ComponentProps<typeof HugeiconsIcon>, "icon">
 

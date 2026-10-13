@@ -20,7 +20,6 @@ import { useRouter } from "@tanstack/react-router"
 import UnitedStatesFlag from "country-flag-icons/react/3x2/US"
 import { use } from "react"
 import { filter, isTruthy, join, map, pipe, take } from "remeda"
-
 import { type Session, sessionQueryOptions } from "@/lib/queries/session"
 import { ThemeContext } from "@/lib/theme"
 import { m } from "@/paraglide/messages"

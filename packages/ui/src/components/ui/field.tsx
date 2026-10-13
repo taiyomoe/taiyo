@@ -1,9 +1,9 @@
+import type React from "react"
 import { Field as FieldPrimitive } from "@base-ui/react/field"
 import * as stylex from "@stylexjs/stylex"
-import type React from "react"
-import { cn } from "../../utils/cn"
-import { colors, consts } from "../../styles/tokens.stylex"
 import type { Sx } from "../../styles/sx"
+import { colors, consts } from "../../styles/tokens.stylex"
+import { cn } from "../../utils/cn"
 
 const styles = stylex.create({
   root: {

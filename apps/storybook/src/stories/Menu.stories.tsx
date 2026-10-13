@@ -1,5 +1,4 @@
 import * as stylex from "@stylexjs/stylex"
-import preview from "@/storybook/preview"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { Kbd } from "@taiyomoe/ui/components/ui/kbd"
 import {
@@ -19,6 +18,7 @@ import {
   MenuTrigger,
 } from "@taiyomoe/ui/components/ui/menu"
 import { fn } from "storybook/test"
+import preview from "@/storybook/preview"
 
 const styles = stylex.create({
   anchor: {

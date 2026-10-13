@@ -1,10 +1,10 @@
+import type React from "react"
 import { Toggle as TogglePrimitive } from "@base-ui/react/toggle"
 import * as stylex from "@stylexjs/stylex"
-import type React from "react"
-import { cn } from "../../utils/cn"
-import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
-import { focus, tap } from "../../styles/recipes"
 import type { Sx } from "../../styles/sx"
+import { focus, tap } from "../../styles/recipes"
+import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
+import { cn } from "../../utils/cn"
 
 export type ToggleVariant = "default" | "outline"
 

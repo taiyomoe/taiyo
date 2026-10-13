@@ -1,5 +1,5 @@
-import { createMiddleware } from "hono/factory"
 import type z from "zod"
+import { createMiddleware } from "hono/factory"
 
 type Env<TSchema extends z.ZodType> = {
   Variables: {

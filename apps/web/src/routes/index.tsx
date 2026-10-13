@@ -1,5 +1,4 @@
 import { createFileRoute } from "@tanstack/react-router"
-
 import { HomePage } from "@/components/home/home-page"
 import { LandingPage } from "@/components/landing/landing-page"
 import { m } from "@/paraglide/messages"

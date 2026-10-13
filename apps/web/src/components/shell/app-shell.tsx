@@ -1,11 +1,10 @@
+import type { ReactNode } from "react"
 import * as stylex from "@stylexjs/stylex"
 import { SidebarInset, SidebarProvider } from "@taiyomoe/ui/components/ui/sidebar"
 import { useRouteContext } from "@tanstack/react-router"
-import type { ReactNode } from "react"
-
+import type { Session } from "@/lib/queries/session"
 import { AppNavbar } from "@/components/shell/app-navbar"
 import { AppSidebar } from "@/components/shell/app-sidebar"
-import type { Session } from "@/lib/queries/session"
 
 const styles = stylex.create({
   provider: {

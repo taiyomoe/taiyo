@@ -1,8 +1,7 @@
-import { processChapterUpload } from "@taiyomoe/queue"
 import { ListObjectsV2Command, PutObjectCommand } from "@aws-sdk/client-s3"
+import { processChapterUpload } from "@taiyomoe/queue"
 import sharp from "sharp"
 import { describe, expect } from "vitest"
-
 import { test } from "../setup"
 
 const SEEDED_MEDIA_ID = "4e26b80f-6661-4f5f-93b4-6dfed052bbed"

@@ -1,4 +1,3 @@
-import * as stylex from "@stylexjs/stylex"
 import {
   Link02Icon,
   TextAlignCenterIcon,
@@ -9,7 +8,7 @@ import {
   TextUnderlineIcon,
 } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
-import preview from "@/storybook/preview"
+import * as stylex from "@stylexjs/stylex"
 import { Button, buttonVariants } from "@taiyomoe/ui/components/ui/button"
 import { Input } from "@taiyomoe/ui/components/ui/input"
 import {
@@ -20,6 +19,7 @@ import {
   ToolbarLink,
   ToolbarSeparator,
 } from "@taiyomoe/ui/components/ui/toolbar"
+import preview from "@/storybook/preview"
 
 const styles = stylex.create({
   column: {

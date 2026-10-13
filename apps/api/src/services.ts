@@ -1,10 +1,10 @@
 import type { S3Client } from "@aws-sdk/client-s3"
+import type { Kysely } from "kysely"
 import { type Auth, createAuth } from "@taiyomoe/auth/server"
-import { getChapterUploadProducer, type ChapterUploadProducer } from "@taiyomoe/queue"
 import { type DB, getDb } from "@taiyomoe/db"
+import { getChapterUploadProducer, type ChapterUploadProducer } from "@taiyomoe/queue"
 import { getS3Bucket, getS3Client } from "@taiyomoe/s3"
 import { getMeiliClient, type Meilisearch, SEARCH_INDEXES } from "@taiyomoe/search"
-import type { Kysely } from "kysely"
 
 export type Services = {
   db: Kysely<DB>

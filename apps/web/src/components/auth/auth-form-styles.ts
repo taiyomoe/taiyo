@@ -1,5 +1,4 @@
 import * as stylex from "@stylexjs/stylex"
-
 import { scene } from "@/components/scene/scene.stylex"
 
 export const authFormStyles = stylex.create({

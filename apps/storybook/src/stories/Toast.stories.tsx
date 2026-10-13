@@ -1,7 +1,7 @@
 import * as stylex from "@stylexjs/stylex"
-import preview from "@/storybook/preview"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { type ToastPosition, ToastPrimitive, ToastProvider } from "@taiyomoe/ui/components/ui/toast"
+import preview from "@/storybook/preview"
 
 const styles = stylex.create({
   wrap: {

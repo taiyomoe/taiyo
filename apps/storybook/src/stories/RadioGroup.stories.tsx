@@ -1,8 +1,8 @@
 import * as stylex from "@stylexjs/stylex"
-import preview from "@/storybook/preview"
 import { Label } from "@taiyomoe/ui/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@taiyomoe/ui/components/ui/radio-group"
 import { fn } from "storybook/test"
+import preview from "@/storybook/preview"
 
 const styles = stylex.create({
   row: {

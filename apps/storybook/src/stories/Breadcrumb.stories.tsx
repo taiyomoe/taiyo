@@ -1,4 +1,3 @@
-import preview from "@/storybook/preview"
 import {
   Breadcrumb,
   BreadcrumbEllipsis,
@@ -8,6 +7,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@taiyomoe/ui/components/ui/breadcrumb"
+import preview from "@/storybook/preview"
 
 const meta = preview.meta({
   title: "UI/Breadcrumb",

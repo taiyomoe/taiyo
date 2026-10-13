@@ -1,7 +1,6 @@
-import * as stylex from "@stylexjs/stylex"
 import type { ErrorComponentProps } from "@tanstack/react-router"
+import * as stylex from "@stylexjs/stylex"
 import { Alert, AlertDescription, AlertTitle } from "@taiyomoe/ui/components/ui/alert"
-
 import { getApiErrorCode } from "@/lib/envelope"
 import { m } from "@/paraglide/messages"
 

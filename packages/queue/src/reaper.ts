@@ -1,5 +1,5 @@
-import { config } from "@taiyomoe/config"
 import type { DB } from "@taiyomoe/db"
+import { config } from "@taiyomoe/config"
 import { DeleteObjectsCommand, type S3Client } from "@taiyomoe/s3"
 import { sql, type Kysely } from "kysely"
 import { chapterUploadManifestSchema } from "./types"

@@ -1,6 +1,6 @@
-import { authFormStyles as sx } from "@/components/auth/auth-form-styles"
 import * as stylex from "@stylexjs/stylex"
 import { Link } from "@tanstack/react-router"
+import { authFormStyles as sx } from "@/components/auth/auth-form-styles"
 
 export const AuthSwitchLink = ({
   prompt,

@@ -1,7 +1,7 @@
 import * as stylex from "@stylexjs/stylex"
+import { Skeleton } from "@taiyomoe/ui/components/ui/skeleton"
 import { radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import preview from "@/storybook/preview"
-import { Skeleton } from "@taiyomoe/ui/components/ui/skeleton"
 
 const styles = stylex.create({
   block: {

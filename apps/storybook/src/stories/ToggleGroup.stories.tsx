@@ -1,4 +1,3 @@
-import * as stylex from "@stylexjs/stylex"
 import {
   TextAlignCenterIcon,
   TextAlignLeftIcon,
@@ -8,13 +7,14 @@ import {
   TextUnderlineIcon,
 } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
-import preview from "@/storybook/preview"
+import * as stylex from "@stylexjs/stylex"
 import {
   ToggleGroup,
   ToggleGroupItem,
   ToggleGroupSeparator,
 } from "@taiyomoe/ui/components/ui/toggle-group"
 import { fn } from "storybook/test"
+import preview from "@/storybook/preview"
 
 const styles = stylex.create({
   column: {

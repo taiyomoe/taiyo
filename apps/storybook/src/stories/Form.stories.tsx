@@ -1,5 +1,4 @@
 import * as stylex from "@stylexjs/stylex"
-import preview from "@/storybook/preview"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import {
   Field,
@@ -11,6 +10,7 @@ import {
 import { Form } from "@taiyomoe/ui/components/ui/form"
 import { Input } from "@taiyomoe/ui/components/ui/input"
 import { fn } from "storybook/test"
+import preview from "@/storybook/preview"
 
 const styles = stylex.create({
   column: {

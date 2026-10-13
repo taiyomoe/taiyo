@@ -1,6 +1,10 @@
+import type * as React from "react"
 import { Dialog as CommandDialogPrimitive } from "@base-ui/react/dialog"
 import * as stylex from "@stylexjs/stylex"
-import type * as React from "react"
+import type { Sx } from "../../styles/sx"
+import { colors, consts, font, motion, radius, shadows } from "../../styles/tokens.stylex"
+import { cn } from "../../utils/cn"
+import { Search } from "../icons"
 import {
   Autocomplete,
   AutocompleteCollection,
@@ -12,10 +16,6 @@ import {
   AutocompleteList,
   AutocompleteSeparator,
 } from "./autocomplete"
-import { cn } from "../../utils/cn"
-import { Search } from "../icons"
-import type { Sx } from "../../styles/sx"
-import { colors, consts, font, motion, radius, shadows } from "../../styles/tokens.stylex"
 
 export const CommandDialog: typeof CommandDialogPrimitive.Root = CommandDialogPrimitive.Root
 

@@ -1,7 +1,7 @@
+import type { ComponentProps } from "react"
 import * as stylex from "@stylexjs/stylex"
 import { DiscordLogo } from "@taiyomoe/ui/components/logos/discord-logo"
 import { Button } from "@taiyomoe/ui/components/ui/button"
-import type { ComponentProps } from "react"
 import { m } from "@/paraglide/messages"
 
 const styles = stylex.create({

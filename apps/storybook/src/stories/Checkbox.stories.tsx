@@ -1,6 +1,6 @@
-import preview from "@/storybook/preview"
 import { Checkbox } from "@taiyomoe/ui/components/ui/checkbox"
 import { fn } from "storybook/test"
+import preview from "@/storybook/preview"
 
 const meta = preview.meta({
   title: "UI/Checkbox",

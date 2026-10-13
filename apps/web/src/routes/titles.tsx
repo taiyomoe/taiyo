@@ -1,7 +1,7 @@
 import * as stylex from "@stylexjs/stylex"
+import { colors, font, radius, text } from "@taiyomoe/ui/styles/tokens.stylex"
 import { noop, useSuspenseQuery } from "@tanstack/react-query"
 import { createFileRoute, getRouteApi } from "@tanstack/react-router"
-import { colors, font, radius, text } from "@taiyomoe/ui/styles/tokens.stylex"
 import { z } from "zod"
 import { searchMediasQueryOptions } from "@/lib/queries/medias"
 import { m } from "@/paraglide/messages"

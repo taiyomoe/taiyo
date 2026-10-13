@@ -1,7 +1,6 @@
 import * as stylex from "@stylexjs/stylex"
 import { font, radius, text } from "@taiyomoe/ui/styles/tokens.stylex"
 import { type ReactNode, useEffect, useRef, useState } from "react"
-
 import { scene, sceneFont } from "@/components/scene/scene.stylex"
 
 const styles = stylex.create({

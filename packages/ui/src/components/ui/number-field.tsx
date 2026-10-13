@@ -1,12 +1,12 @@
 import { NumberField as NumberFieldPrimitive } from "@base-ui/react/number-field"
 import * as stylex from "@stylexjs/stylex"
 import * as React from "react"
-import { Label } from "./label"
+import type { Sx } from "../../styles/sx"
+import { focus, tap } from "../../styles/recipes"
+import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
 import { cn } from "../../utils/cn"
 import { Minus, Plus } from "../icons"
-import type { Sx } from "../../styles/sx"
-import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
-import { focus, tap } from "../../styles/recipes"
+import { Label } from "./label"
 
 export type NumberFieldSize = "sm" | "default" | "lg"
 

@@ -1,5 +1,4 @@
 import "./setup-env"
-
 import { env as dbEnv } from "@taiyomoe/db/env"
 import { execSync } from "node:child_process"
 import pg from "pg"

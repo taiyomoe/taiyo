@@ -1,11 +1,11 @@
+import type React from "react"
 import { Accordion as AccordionPrimitive } from "@base-ui/react/accordion"
 import * as stylex from "@stylexjs/stylex"
-import type React from "react"
+import type { Sx } from "../../styles/sx"
+import { accordionTriggerMarker } from "../../styles/markers.stylex"
+import { colors, motion, radius } from "../../styles/tokens.stylex"
 import { cn } from "../../utils/cn"
 import { ChevronDown } from "../icons"
-import { colors, motion, radius } from "../../styles/tokens.stylex"
-import { accordionTriggerMarker } from "../../styles/markers.stylex"
-import type { Sx } from "../../styles/sx"
 
 const styles = stylex.create({
   item: {
