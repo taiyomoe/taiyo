@@ -1,7 +1,5 @@
 export * from "./coerce-form-data-value"
 
-export * from "./extension-for-mime-type"
-
 export * from "./normalize-display-name"
 
 export * from "./normalize-username"

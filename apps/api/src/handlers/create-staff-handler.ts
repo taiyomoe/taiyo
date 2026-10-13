@@ -1,10 +1,9 @@
 import type { NewStaff } from "@taiyomoe/db"
 import { config } from "@taiyomoe/config"
-import { getStaffImageKey } from "@taiyomoe/s3"
-import { extensionForMimeType } from "@taiyomoe/utils"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { putImage } from "../image-store"
 import { checkImages } from "../middlewares/check-images-middleware"
 import { rateLimit } from "../middlewares/rate-limit-middleware"
 import { validateFormData } from "../middlewares/validate-form-data-middleware"
@@ -17,7 +16,6 @@ import {
   localizedTextSchema,
   staffLinksSchema,
 } from "../utils/schemas"
-import { uploadFile } from "../utils/upload-file"
 
 const createStaffSchema = z.object({
   name: z.string().min(1).max(config.input.maxNameLength).meta({
@@ -68,7 +66,7 @@ export const createStaffHandler = new Hono().post(
   checkImages(),
   withTransaction,
   async (c) => {
-    const { db, s3, s3Bucket, log, user } = c.var
+    const { db, log, user } = c.var
     const body = c.var.formData
     const id = crypto.randomUUID()
 
@@ -77,8 +75,7 @@ export const createStaffHandler = new Hono().post(
     let imageKey: string | null = null
 
     if (body.file) {
-      imageKey = getStaffImageKey(id, `image.${extensionForMimeType(body.file.type)}`)
-      await uploadFile({ s3, s3Bucket, log }, imageKey, body.file)
+      imageKey = (await putImage(c.var, { kind: "staff", staffId: id }, body.file)).key
     }
 
     const values: NewStaff = { id, creatorId: user.id, name: body.name }

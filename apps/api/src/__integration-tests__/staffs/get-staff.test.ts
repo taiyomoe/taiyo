@@ -9,7 +9,7 @@ type StaffDetail = {
   name: string
   bio: Record<string, string>
   links: Record<string, string>
-  image: string | null
+  imageUrl: string | null
   createdAt: string
   updatedAt: string
 }

@@ -10,12 +10,11 @@ import {
   STAFF_ROLES,
   sql,
 } from "@taiyomoe/db"
-import { getBannerKey, getCoverKey } from "@taiyomoe/s3"
-import { extensionForMimeType } from "@taiyomoe/utils"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import { pick } from "radashi"
 import z from "zod"
+import { putImage } from "../image-store"
 import { checkImages } from "../middlewares/check-images-middleware"
 import { rateLimit } from "../middlewares/rate-limit-middleware"
 import { validateFormData } from "../middlewares/validate-form-data-middleware"
@@ -30,7 +29,6 @@ import {
   mediaLinksSchema,
   mediaTagsSchema,
 } from "../utils/schemas"
-import { uploadFile } from "../utils/upload-file"
 
 const createMediaSchema = z.object({
   titles: z
@@ -231,7 +229,7 @@ export const createMediaHandler = new Hono().post(
   checkImages(),
   withTransaction,
   async (c) => {
-    const { db, s3, s3Bucket, log } = c.var
+    const { db, log } = c.var
     const body = c.var.formData
     const mediaId = crypto.randomUUID()
     const links = Object.entries(body.links)
@@ -314,13 +312,7 @@ export const createMediaHandler = new Hono().post(
     const coverRows = await Promise.all(
       body.covers.map(async (cover) => {
         const id = crypto.randomUUID()
-        const extension = extensionForMimeType(cover.file.type)
-
-        await uploadFile(
-          { s3, s3Bucket, log },
-          getCoverKey(mediaId, `${id}.${extension}`),
-          cover.file,
-        )
+        const { extension } = await putImage(c.var, { kind: "cover", mediaId, id }, cover.file)
 
         return {
           id,
@@ -341,13 +333,7 @@ export const createMediaHandler = new Hono().post(
       const bannerRows = await Promise.all(
         body.banners.map(async (banner) => {
           const id = crypto.randomUUID()
-          const extension = extensionForMimeType(banner.file.type)
-
-          await uploadFile(
-            { s3, s3Bucket, log },
-            getBannerKey(mediaId, `${id}.${extension}`),
-            banner.file,
-          )
+          const { extension } = await putImage(c.var, { kind: "banner", mediaId, id }, banner.file)
 
           return {
             id,

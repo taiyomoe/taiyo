@@ -5,7 +5,7 @@ import { test } from "../setup"
 type StaffListItem = {
   id: string
   name: string
-  image: string | null
+  imageUrl: string | null
 }
 
 describe("GET /staffs", () => {

@@ -1,10 +1,9 @@
 import type { NewCover } from "@taiyomoe/db"
 import { config } from "@taiyomoe/config"
-import { getCoverKey } from "@taiyomoe/s3"
-import { extensionForMimeType } from "@taiyomoe/utils"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { putImage } from "../image-store"
 import { checkImages } from "../middlewares/check-images-middleware"
 import { checkMedia } from "../middlewares/check-media-middleware"
 import { rateLimit } from "../middlewares/rate-limit-middleware"
@@ -18,7 +17,6 @@ import {
   fileSchema,
   languageSchema,
 } from "../utils/schemas"
-import { uploadFile } from "../utils/upload-file"
 
 const createCoversSchema = z.object({
   covers: z
@@ -99,16 +97,14 @@ export const createCoversHandler = new Hono().post(
   checkMedia(),
   withTransaction,
   async (c) => {
-    const { db, s3, s3Bucket, log, media, user } = c.var
+    const { db, media, user } = c.var
     const body = c.var.formData
     const coverRows = await Promise.all(
       body.covers.map(async (cover) => {
         const id = crypto.randomUUID()
-        const extension = extensionForMimeType(cover.file.type)
-
-        await uploadFile(
-          { s3, s3Bucket, log },
-          getCoverKey(media.id, `${id}.${extension}`),
+        const { extension } = await putImage(
+          c.var,
+          { kind: "cover", mediaId: media.id, id },
           cover.file,
         )
 

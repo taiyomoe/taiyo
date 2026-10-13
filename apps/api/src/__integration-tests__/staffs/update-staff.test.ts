@@ -1,6 +1,8 @@
+import { ListObjectsV2Command } from "@aws-sdk/client-s3"
 import { describe, expect } from "vitest"
 import { defined } from "../helpers/assert"
 import { signInAs } from "../helpers/auth"
+import { tinyPng } from "../helpers/fixtures"
 import { api } from "../helpers/request"
 import { test } from "../setup"
 
@@ -8,6 +10,43 @@ const KODACHI_ID = "54d2c255-f4a9-4bd5-b927-587ef9c4e3d2"
 const KISHIMOTO_ID = "7f718dfa-e5be-45ea-a5cb-0fcd3ed52d5f"
 
 describe("PATCH /staffs/:id", () => {
+  test("replaces the image and deletes the previous one", async ({ app, services }) => {
+    const { headers } = await signInAs(services, { role: "ADMIN" })
+    const upload = async () => {
+      const form = new FormData()
+
+      form.append("file", await tinyPng())
+
+      const res = await api(app, `/staffs/${KODACHI_ID}`, { method: "PATCH", headers, form })
+
+      expect(res.status).toBe(200)
+
+      const row = await services.db
+        .selectFrom("staffs")
+        .select("image")
+        .where("id", "=", KODACHI_ID)
+        .executeTakeFirstOrThrow()
+
+      return defined(row.image)
+    }
+    const first = await upload()
+    const second = await upload()
+    const listed = await services.s3.send(
+      new ListObjectsV2Command({ Bucket: services.s3Bucket, Prefix: `staffs/${KODACHI_ID}/` }),
+    )
+
+    expect(second).not.toBe(first)
+    expect((listed.Contents ?? []).map((object) => object.Key)).toEqual([second])
+
+    const res = await api<{ imageUrl: string | null }>(app, `/staffs/${KODACHI_ID}`)
+
+    if (!res.body.success) {
+      throw new Error(`Expected success: ${JSON.stringify(res.body)}`)
+    }
+
+    expect(res.body.data.imageUrl).toMatch(new RegExp(`/${second}$`))
+  })
+
   test("updates name", async ({ app, services }) => {
     const { headers } = await signInAs(services, { role: "ADMIN" })
     const form = new FormData()

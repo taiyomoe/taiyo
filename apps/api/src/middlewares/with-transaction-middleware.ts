@@ -1,5 +1,4 @@
 import type { Context } from "hono"
-import { DeleteObjectsCommand } from "@taiyomoe/s3"
 import { drainSearchOutbox } from "@taiyomoe/search"
 import { createMiddleware } from "hono/factory"
 
@@ -11,16 +10,32 @@ class RollbackResponseError extends Error {
   }
 }
 
+const runCallbacks = async (c: Context, callbacks: Array<() => Promise<void>>) => {
+  for (const cb of callbacks) {
+    try {
+      await cb()
+    } catch (cbErr) {
+      c.get("log").error(toLoggableError(cbErr))
+    }
+  }
+}
+
 export const withTransaction = createMiddleware<{
-  Variables: { afterCommit: (cb: () => Promise<void>) => void }
+  Variables: {
+    afterCommit: (cb: () => Promise<void>) => void
+    onRollback: (cb: () => Promise<void>) => void
+  }
 }>(async (c, next) => {
   const previous = c.get("db")
   const afterCommitCallbacks: Array<() => Promise<void>> = []
+  const rollbackCallbacks: Array<() => Promise<void>> = []
 
   c.set("afterCommit", (cb) => {
     afterCommitCallbacks.push(cb)
   })
-  c.get("log").set({ uploadedKeys: [] })
+  c.set("onRollback", (cb) => {
+    rollbackCallbacks.push(cb)
+  })
 
   let committed = false
 
@@ -37,7 +52,7 @@ export const withTransaction = createMiddleware<{
 
     committed = true
   } catch (err) {
-    await cleanupUploadedFiles(c)
+    await runCallbacks(c, rollbackCallbacks)
 
     if (!(err instanceof RollbackResponseError)) {
       throw err
@@ -47,13 +62,7 @@ export const withTransaction = createMiddleware<{
   }
 
   if (committed) {
-    for (const cb of afterCommitCallbacks) {
-      try {
-        await cb()
-      } catch (cbErr) {
-        c.get("log").error(toLoggableError(cbErr))
-      }
-    }
+    await runCallbacks(c, afterCommitCallbacks)
 
     await drainSearchOutbox({
       db: previous,
@@ -64,28 +73,3 @@ export const withTransaction = createMiddleware<{
     })
   }
 })
-
-const cleanupUploadedFiles = async (c: Context) => {
-  const { uploadedKeys } = c.get("log").getContext()
-  const keys = Array.isArray(uploadedKeys)
-    ? uploadedKeys.filter((key): key is string => typeof key === "string")
-    : []
-
-  if (keys.length === 0) {
-    return
-  }
-
-  await c
-    .get("s3")
-    .send(
-      new DeleteObjectsCommand({
-        Bucket: c.get("s3Bucket"),
-        Delete: { Objects: keys.map((Key) => ({ Key })) },
-      }),
-    )
-    .catch((cleanupErr: unknown) => {
-      // Swallow — we don't want a cleanup failure to mask the original
-      // error. Log it so the orphans can be reaped manually.
-      c.get("log").error(toLoggableError(cleanupErr))
-    })
-}

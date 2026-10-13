@@ -63,7 +63,7 @@ describe("POST /staffs", () => {
       .where("id", "=", staffId)
       .executeTakeFirst()
 
-    expect(row?.image).toMatch(new RegExp(`^staffs/${staffId}/image\\.`))
+    expect(row?.image).toMatch(new RegExp(`^staffs/${staffId}/[0-9a-f-]{36}\\.jpg$`))
 
     const s3Listing = await services.s3.send(
       new ListObjectsV2Command({

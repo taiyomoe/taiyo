@@ -39,29 +39,32 @@ what makes offset pagination safe when two chapters share a `createdAt` to the
 millisecond — which is the normal case for a batch upload, and for the seeded
 data.
 
-## Image extensions on covers and banners
+## Images go through `putImage`
 
-Cover and banner objects are stored at `medias/{mediaId}/covers/{coverId}.{ext}`
-with `ext` either `gif` (animated uploads) or `jpg` (everything else, which
-`checkImages` transcodes). Because the extension is not derivable from the row's
-other columns, `covers.extension` and `banners.extension` persist it so that
-`getCoverUrl` / `getBannerUrl` can build a resolvable URL. A check constraint
-pins each column to `{'jpg', 'gif'}` — the codomain of `extensionForMimeType`.
+Every stored image (covers, banners, staff images) is written by `putImage` in
+`apps/api/src/image-store.ts`. It transcodes the upload (`gif` stays an
+animated `gif`; everything else becomes a `jpg`, auto-rotated and stripped of
+metadata), builds the S3 key from the resulting extension, uploads it, and
+returns `{ key, extension }`. Callers store what it returns rather than
+re-deriving either value, so a row's key and extension cannot drift apart.
 
-Every write path must derive the S3 key and the stored `extension` from a
-**single** expression. If the two are computed separately they can drift, and a
-drifted row yields a URL that 404s with nothing in the row to reveal it. The
-three write paths are `create-covers-handler.ts`, `create-banners-handler.ts`
-and `create-media-handler.ts`; each hoists `const extension` above the
-`uploadFile` call and reuses it in the inserted row.
+`checkImages` only validates (size limit, magic-byte type check) so that bad
+uploads fail with `IMAGE_TOO_LARGE` / `INVALID_IMAGE` before the handler runs.
+Transcoding happens inside the request's transaction.
 
-Handlers select `extension` and drop it from the response: consumers get `url`,
-not the storage detail behind it.
+Covers and banners live at `medias/{mediaId}/{covers|banners}/{id}.{ext}` and
+persist `extension` (check-constrained to `{'jpg', 'gif'}`) so `getCoverUrl` /
+`getBannerUrl` can rebuild the URL. Staff images get a fresh key per upload,
+`staffs/{staffId}/{uuid}.{ext}`, stored whole in `staffs.image`. Responses
+expose URLs (`url`, `imageUrl`), never keys.
 
-Staff images (`getStaffImageKey`, used by `create-staff-handler.ts` and
-`update-staff-handler.ts`) have the same latent problem and no persisted
-extension. When a staff surface needs image URLs, the covers/banners change is
-the template.
+`putImage` must run inside `withTransaction`; its deps require the
+`afterCommit` / `onRollback` hooks the middleware provides:
+
+- **Rollback** deletes every object the request uploaded.
+- **A replacement** (`replaces: oldKey`) deletes the old object only after
+  commit. Writing each upload to a fresh key is what makes this safe: a rolled
+  back replacement never touches the image the unchanged row still points to.
 
 ## `apps/api`'s response types are load-bearing for `apps/web`
 
