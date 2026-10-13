@@ -62,6 +62,9 @@ const styles = stylex.create({
   subPopup: {
     minWidth: "10rem",
   },
+  contentFilterPopup: {
+    minWidth: "12.5rem",
+  },
   radioLabel: {
     gap: "0.625rem",
     alignItems: "center",
@@ -142,7 +145,7 @@ export function UserMenu({ user }: { user: Session["user"] }) {
             <Eye />
             {m.content_filter()}
           </MenuSubTrigger>
-          <MenuSubPopup sx={styles.subPopup}>
+          <MenuSubPopup sx={styles.contentFilterPopup}>
             <ContentFilterItems />
           </MenuSubPopup>
         </MenuSub>

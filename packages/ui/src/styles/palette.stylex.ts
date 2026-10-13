@@ -26,6 +26,11 @@ export const palette = stylex.defineConsts({
   violet400: "oklch(70.2% 0.183 293.541)",
   violet500: "oklch(60.6% 0.25 292.717)",
   pink500: "oklch(65.6% 0.241 354.308)",
+  peach400: "#ffa24c",
+  pink400: "#ff4fa3",
+  pink700: "#c2185b",
+  crimson400: "#ff5468",
+  crimson700: "#b3122b",
 })
 
 export const surface = stylex.defineConsts({

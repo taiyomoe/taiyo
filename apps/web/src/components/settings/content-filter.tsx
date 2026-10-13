@@ -11,6 +11,7 @@ import {
   EmptyTitle,
 } from "@taiyomoe/ui/components/ui/empty"
 import { Menu, MenuCheckboxItem, MenuPopup, MenuTrigger } from "@taiyomoe/ui/components/ui/menu"
+import { ContentRatingLabel, contentRatingItemSx } from "@/components/settings/content-rating-label"
 import { type ContentRating, useSettings, useUpdateSettings } from "@/lib/settings"
 import { m } from "@/paraglide/messages"
 
@@ -23,7 +24,7 @@ const CONTENT_RATING_LABELS: Record<ContentRating, () => string> = {
 }
 const styles = stylex.create({
   popup: {
-    minWidth: "11rem",
+    minWidth: "12.5rem",
   },
 })
 
@@ -41,6 +42,7 @@ export function ContentFilterItems() {
         checked={checked}
         closeOnClick={false}
         disabled={last}
+        sx={contentRatingItemSx(rating)}
         onCheckedChange={(next) => {
           updateSettings.mutate({
             contentRating: CONTENT_RATINGS.filter((candidate) =>
@@ -50,7 +52,7 @@ export function ContentFilterItems() {
         }}
         title={last ? m.content_filter_last() : undefined}
       >
-        {CONTENT_RATING_LABELS[rating]()}
+        <ContentRatingLabel label={CONTENT_RATING_LABELS[rating]()} rating={rating} />
       </MenuCheckboxItem>
     )
   })
