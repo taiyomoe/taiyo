@@ -10,13 +10,18 @@ import {
 import { sql, type Kysely } from "kysely"
 import { filetypeinfo } from "magic-bytes.js"
 import sharp from "sharp"
-import { type ChapterUploadJobData, chapterUploadManifestSchema } from "./types"
+import {
+  type ChapterUploadJobData,
+  type ChapterUploadManifest,
+  chapterUploadManifestSchema,
+} from "./types"
 
 export type ProcessorDeps = { db: Kysely<DB>; s3: S3Client; s3Bucket: string }
 
 export const processChapterUpload = async (
   { db, s3, s3Bucket }: ProcessorDeps,
   { taskId }: ChapterUploadJobData,
+  { isFinalAttempt = true }: { isFinalAttempt?: boolean } = {},
 ) => {
   const task = await db
     .selectFrom("tasks")
@@ -29,6 +34,9 @@ export const processChapterUpload = async (
     return
   }
 
+  let manifest: ChapterUploadManifest | undefined
+  let pagesCommitted = false
+
   try {
     await db
       .updateTable("tasks")
@@ -36,7 +44,7 @@ export const processChapterUpload = async (
       .where("id", "=", taskId)
       .execute()
 
-    const manifest = chapterUploadManifestSchema.parse(task.payload)
+    manifest = chapterUploadManifestSchema.parse(task.payload)
 
     for (const { pageId, stagingKey } of manifest.pages) {
       const obj = await s3.send(new GetObjectCommand({ Bucket: s3Bucket, Key: stagingKey }))
@@ -80,6 +88,8 @@ export const processChapterUpload = async (
       .where("id", "=", manifest.chapterId)
       .execute()
 
+    pagesCommitted = true
+
     await db
       .updateTable("tasks")
       .set({ status: "FINISHED", updatedAt: sql`CURRENT_TIMESTAMP` })
@@ -95,11 +105,33 @@ export const processChapterUpload = async (
       )
       .catch(() => {})
   } catch (err) {
+    if (!isFinalAttempt) {
+      throw err
+    }
+
     await db
       .updateTable("tasks")
       .set({ status: "FAILED", updatedAt: sql`CURRENT_TIMESTAMP` })
       .where("id", "=", taskId)
       .execute()
+
+    if (manifest !== undefined && !pagesCommitted) {
+      const { mediaId, chapterId, pages } = manifest
+      const pageKeys = pages.map(({ pageId }) => ({
+        Key: getChapterPageKey(mediaId, chapterId, pageId),
+      }))
+
+      for (let i = 0; i < pageKeys.length; i += 1000) {
+        await s3
+          .send(
+            new DeleteObjectsCommand({
+              Bucket: s3Bucket,
+              Delete: { Objects: pageKeys.slice(i, i + 1000) },
+            }),
+          )
+          .catch(() => {})
+      }
+    }
 
     throw err
   }

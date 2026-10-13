@@ -11,6 +11,9 @@ import { env } from "./env"
 export const startChapterProcessingWorker = (deps: ProcessorDeps) =>
   new Worker<ChapterUploadJobData>(
     CHAPTER_UPLOAD_QUEUE,
-    async (job) => processChapterUpload(deps, job.data),
+    async (job) =>
+      processChapterUpload(deps, job.data, {
+        isFinalAttempt: job.attemptsMade + 1 >= (job.opts.attempts ?? 1),
+      }),
     { connection: createBullConnection(), concurrency: env.CHAPTER_PROCESSING_CONCURRENCY },
   )
