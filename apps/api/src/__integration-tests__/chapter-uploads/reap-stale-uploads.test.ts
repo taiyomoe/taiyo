@@ -113,6 +113,8 @@ describe("reapStaleChapterUploads", () => {
     const chapterId = crypto.randomUUID()
     const uploadId = crypto.randomUUID()
     const taskId = crypto.randomUUID()
+    const pageId = crypto.randomUUID()
+    const pageKey = getChapterPageKey(SEEDED_MEDIA_ID, chapterId, pageId)
 
     await db
       .insertInto("chapters")
@@ -124,6 +126,15 @@ describe("reapStaleChapterUploads", () => {
         uploaderId: SEEDED_UPLOADER_ID,
       })
       .execute()
+
+    await s3.send(
+      new PutObjectCommand({
+        Bucket: s3Bucket,
+        Key: pageKey,
+        Body: Buffer.from("fake"),
+        ContentType: "image/jpeg",
+      }),
+    )
 
     await db
       .insertInto("tasks")
@@ -137,12 +148,7 @@ describe("reapStaleChapterUploads", () => {
           chapterId,
           mediaId: SEEDED_MEDIA_ID,
           uploadId,
-          pages: [
-            {
-              pageId: crypto.randomUUID(),
-              stagingKey: `staging/chapters/${chapterId}/${uploadId}/0`,
-            },
-          ],
+          pages: [{ pageId, stagingKey: `staging/chapters/${chapterId}/${uploadId}/0` }],
         },
       })
       .execute()
@@ -158,6 +164,10 @@ describe("reapStaleChapterUploads", () => {
       .executeTakeFirst()
 
     expect(remaining).toBeUndefined()
+
+    const listed = await s3.send(new ListObjectsV2Command({ Bucket: s3Bucket, Prefix: pageKey }))
+
+    expect(listed.Contents ?? []).toHaveLength(0)
   })
 
   test("keeps processed pages that the chapter references", async ({ services }) => {
