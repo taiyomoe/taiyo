@@ -30,3 +30,8 @@ export const env = createEnv({
   emptyStringAsUndefined: true,
   skipValidation: Boolean(process.env.TEST),
 })
+
+export const corsAllowedOrigins = (env.CORS_ALLOWED_ORIGINS ?? "")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean)

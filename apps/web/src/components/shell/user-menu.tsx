@@ -1,5 +1,4 @@
 import * as stylex from "@stylexjs/stylex"
-import { authClient } from "@taiyomoe/auth/client"
 import { Eye, Logout, Monitor, Moon, Sun } from "@taiyomoe/ui/components/icons"
 import { Avatar, AvatarFallback, AvatarImage } from "@taiyomoe/ui/components/ui/avatar"
 import {
@@ -15,14 +14,14 @@ import {
   MenuTrigger,
 } from "@taiyomoe/ui/components/ui/menu"
 import { colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { useRouter } from "@tanstack/react-router"
+import { useMutation } from "@tanstack/react-query"
 import UnitedStatesFlag from "country-flag-icons/react/3x2/US"
 import { use } from "react"
 import { filter, isTruthy, join, map, pipe, take } from "remeda"
+import type { Session } from "@/lib/queries/session"
 import { ContentFilterItems } from "@/components/settings/content-filter"
-import { type Session, sessionQueryOptions } from "@/lib/queries/session"
 import { ThemeContext } from "@/lib/theme"
+import { useAuthActions } from "@/lib/use-auth-actions"
 import { m } from "@/paraglide/messages"
 
 const THEMES = [
@@ -91,15 +90,10 @@ const styles = stylex.create({
 })
 
 export function UserMenu({ user }: { user: Session["user"] }) {
-  const router = useRouter()
-  const queryClient = useQueryClient()
+  const auth = useAuthActions()
   const theme = use(ThemeContext)
   const signOut = useMutation({
-    mutationFn: () => authClient.signOut(),
-    onSuccess: async () => {
-      queryClient.setQueryData(sessionQueryOptions.queryKey, null)
-      await router.invalidate()
-    },
+    mutationFn: () => auth.signOut(),
   })
   const ThemeIcon = THEMES.find(({ value }) => value === theme.preference)?.icon ?? Moon
 

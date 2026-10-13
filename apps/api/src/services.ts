@@ -5,6 +5,7 @@ import { type DB, getDb } from "@taiyomoe/db"
 import { getChapterUploadProducer, type ChapterUploadProducer } from "@taiyomoe/queue"
 import { getS3Bucket, getS3Client } from "@taiyomoe/s3"
 import { getMeiliClient, type Meilisearch, SEARCH_INDEXES } from "@taiyomoe/search"
+import { corsAllowedOrigins } from "./env"
 
 export type Services = {
   db: Kysely<DB>
@@ -25,7 +26,7 @@ export const createServices = (): Services => {
     s3Bucket: getS3Bucket(),
     meili: getMeiliClient(),
     mediasIndex: SEARCH_INDEXES.MEDIAS,
-    auth: createAuth({ db }),
+    auth: createAuth({ db, trustedOrigins: corsAllowedOrigins }),
     chapterUploadQueue: getChapterUploadProducer(),
   }
 }
