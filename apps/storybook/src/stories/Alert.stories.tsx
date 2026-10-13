@@ -1,13 +1,13 @@
-import * as stylex from "@stylexjs/stylex"
 import {
   Alert02Icon,
   CheckmarkCircle02Icon,
   InformationCircleIcon,
 } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
-import preview from "@/storybook/preview"
+import * as stylex from "@stylexjs/stylex"
 import { Alert, AlertAction, AlertDescription, AlertTitle } from "@taiyomoe/ui/components/ui/alert"
 import { Button } from "@taiyomoe/ui/components/ui/button"
+import preview from "@/storybook/preview"
 
 const styles = stylex.create({
   anchor: {

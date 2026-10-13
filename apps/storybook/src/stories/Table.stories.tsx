@@ -1,6 +1,4 @@
 import * as stylex from "@stylexjs/stylex"
-import { colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
-import preview from "@/storybook/preview"
 import { Badge } from "@taiyomoe/ui/components/ui/badge"
 import {
   Table,
@@ -12,6 +10,8 @@ import {
   TableHeader,
   TableRow,
 } from "@taiyomoe/ui/components/ui/table"
+import { colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
+import preview from "@/storybook/preview"
 
 type Status = "Paid" | "Unpaid" | "Pending" | "Failed"
 

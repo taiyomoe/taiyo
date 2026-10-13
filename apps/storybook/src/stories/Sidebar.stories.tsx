@@ -1,5 +1,3 @@
-import * as stylex from "@stylexjs/stylex"
-import { colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import {
   BookOpen01Icon,
   Home01Icon,
@@ -9,7 +7,7 @@ import {
   UserGroupIcon,
 } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
-import preview from "@/storybook/preview"
+import * as stylex from "@stylexjs/stylex"
 import {
   Sidebar,
   SidebarContent,
@@ -32,6 +30,8 @@ import {
   SidebarSeparator,
   SidebarTrigger,
 } from "@taiyomoe/ui/components/ui/sidebar"
+import { colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
+import preview from "@/storybook/preview"
 
 const NAV_ITEMS = [
   { title: "Home", icon: Home01Icon, isActive: true },

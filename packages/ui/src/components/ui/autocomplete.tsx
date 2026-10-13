@@ -1,13 +1,13 @@
+import type React from "react"
 import { Autocomplete as AutocompletePrimitive } from "@base-ui/react/autocomplete"
 import * as stylex from "@stylexjs/stylex"
-import type React from "react"
+import type { Sx } from "../../styles/sx"
+import { surface, transitions } from "../../styles/recipes"
+import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
 import { cn } from "../../utils/cn"
 import { ChevronsUpDown, Close } from "../icons"
 import { Input } from "./input"
 import { ScrollArea } from "./scroll-area"
-import type { Sx } from "../../styles/sx"
-import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
-import { surface, transitions } from "../../styles/recipes"
 
 export const Autocomplete: typeof AutocompletePrimitive.Root = AutocompletePrimitive.Root
 

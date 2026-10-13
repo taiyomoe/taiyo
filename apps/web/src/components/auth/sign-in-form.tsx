@@ -1,9 +1,18 @@
+import { zodResolver } from "@hookform/resolvers/zod"
+import { LockPasswordIcon, Mail01Icon } from "@hugeicons/core-free-icons"
+import { HugeiconsIcon } from "@hugeicons/react"
 // Required even though nothing here calls `stylex.*`: the compiler only
 // processes a file that imports StyleX, and the `sx` props below are compiled,
 // not runtime props. Drop this import and every style in this file silently
 // stops applying. See packages/ui/STYLEX.md.
 // oxlint-disable-next-line no-unused-vars
 import * as stylex from "@stylexjs/stylex"
+import { authClient } from "@taiyomoe/auth/client"
+import { Form } from "@taiyomoe/ui/components/ui/form"
+import { useQueryClient } from "@tanstack/react-query"
+import { useNavigate } from "@tanstack/react-router"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
 import { AuthAlert } from "@/components/auth/auth-alert"
 import { authFormStyles as sx } from "@/components/auth/auth-form-styles"
 import { AuthHeading } from "@/components/auth/auth-heading"
@@ -14,15 +23,6 @@ import { SunButton } from "@/components/buttons/sun-button"
 import { CheckboxField, InputField, PasswordField } from "@/components/fields/form-field"
 import { sessionQueryOptions } from "@/lib/queries/session"
 import { m } from "@/paraglide/messages"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { LockPasswordIcon, Mail01Icon } from "@hugeicons/core-free-icons"
-import { HugeiconsIcon } from "@hugeicons/react"
-import { authClient } from "@taiyomoe/auth/client"
-import { Form } from "@taiyomoe/ui/components/ui/form"
-import { useQueryClient } from "@tanstack/react-query"
-import { useNavigate } from "@tanstack/react-router"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
 
 const signInSchema = z.object({
   email: z.email(m.global_invalid_email()),

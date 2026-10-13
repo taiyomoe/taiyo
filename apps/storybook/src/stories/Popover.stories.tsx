@@ -1,5 +1,4 @@
 import * as stylex from "@stylexjs/stylex"
-import preview from "@/storybook/preview"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { Input } from "@taiyomoe/ui/components/ui/input"
 import { Label } from "@taiyomoe/ui/components/ui/label"
@@ -11,6 +10,7 @@ import {
   PopoverTrigger,
 } from "@taiyomoe/ui/components/ui/popover"
 import { fn } from "storybook/test"
+import preview from "@/storybook/preview"
 
 const styles = stylex.create({
   column: {

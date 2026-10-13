@@ -1,6 +1,5 @@
 import * as stylex from "@stylexjs/stylex"
 import { Link, createFileRoute } from "@tanstack/react-router"
-
 import { LegalContact, LegalPage, prose } from "@/components/legal/legal-page"
 import { env } from "@/env/client"
 

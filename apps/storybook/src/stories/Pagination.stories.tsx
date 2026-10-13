@@ -1,4 +1,3 @@
-import preview from "@/storybook/preview"
 import {
   Pagination,
   PaginationContent,
@@ -8,6 +7,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@taiyomoe/ui/components/ui/pagination"
+import preview from "@/storybook/preview"
 
 const meta = preview.meta({
   title: "UI/Pagination",

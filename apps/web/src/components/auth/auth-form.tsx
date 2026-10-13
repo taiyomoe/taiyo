@@ -1,7 +1,6 @@
 import * as stylex from "@stylexjs/stylex"
 import { font, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { Link } from "@tanstack/react-router"
-
 import { AuthScene } from "@/components/auth/scene/auth-scene"
 import { SignInForm } from "@/components/auth/sign-in-form"
 import { SignUpForm } from "@/components/auth/sign-up-form"

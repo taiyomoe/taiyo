@@ -1,11 +1,10 @@
-import * as stylex from "@stylexjs/stylex"
-import { Link } from "@tanstack/react-router"
-import { Spinner } from "@taiyomoe/ui/components/ui/spinner"
 import type { Sx } from "@taiyomoe/ui/styles/sx"
+import type { ComponentProps, ReactNode } from "react"
+import * as stylex from "@stylexjs/stylex"
+import { Spinner } from "@taiyomoe/ui/components/ui/spinner"
 import { font, radius, text } from "@taiyomoe/ui/styles/tokens.stylex"
 import { cn } from "@taiyomoe/ui/utils/cn"
-import type { ComponentProps, ReactNode } from "react"
-
+import { Link } from "@tanstack/react-router"
 import { scene } from "@/components/scene/scene.stylex"
 
 const sheenSweep = stylex.keyframes({

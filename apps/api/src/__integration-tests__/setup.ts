@@ -1,5 +1,5 @@
 import "./setup-env"
-
+import type { Hono } from "hono"
 import {
   CreateBucketCommand,
   DeleteBucketCommand,
@@ -11,11 +11,10 @@ import { getDb } from "@taiyomoe/db"
 import { env as dbEnv } from "@taiyomoe/db/env"
 import { getS3Client } from "@taiyomoe/s3"
 import { getMeiliClient, initMediasIndex } from "@taiyomoe/search"
-import type { Hono } from "hono"
 import pg from "pg"
 import { afterAll, test as baseTest } from "vitest"
-import { createApp } from "../app"
 import type { Services } from "../services"
+import { createApp } from "../app"
 import { defined } from "./helpers/assert"
 
 const TEMPLATE_DB = "taiyo_test_template"

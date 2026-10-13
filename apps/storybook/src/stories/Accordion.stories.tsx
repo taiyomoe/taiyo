@@ -1,5 +1,4 @@
 import * as stylex from "@stylexjs/stylex"
-import preview from "@/storybook/preview"
 import {
   Accordion,
   AccordionItem,
@@ -7,6 +6,7 @@ import {
   AccordionTrigger,
 } from "@taiyomoe/ui/components/ui/accordion"
 import { fn } from "storybook/test"
+import preview from "@/storybook/preview"
 
 const items = [
   {

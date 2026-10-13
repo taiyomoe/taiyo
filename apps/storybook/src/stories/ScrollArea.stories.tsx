@@ -1,8 +1,8 @@
 import * as stylex from "@stylexjs/stylex"
-import { colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
-import preview from "@/storybook/preview"
 import { ScrollArea } from "@taiyomoe/ui/components/ui/scroll-area"
 import { Separator } from "@taiyomoe/ui/components/ui/separator"
+import { colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
+import preview from "@/storybook/preview"
 
 const TAGS = Array.from({ length: 50 }).map((_, i) => `Tag ${i + 1}`)
 const ITEM_NUMBERS = Array.from({ length: 20 }, (_, i) => i + 1)

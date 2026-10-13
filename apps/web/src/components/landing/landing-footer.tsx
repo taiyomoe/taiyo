@@ -1,8 +1,7 @@
 import * as stylex from "@stylexjs/stylex"
-import { Link } from "@tanstack/react-router"
 import { TaiyoLogoLockup } from "@taiyomoe/ui/components/logos/taiyo-logo-lockup"
 import { font } from "@taiyomoe/ui/styles/tokens.stylex"
-
+import { Link } from "@tanstack/react-router"
 import { Section } from "@/components/landing/landing-atoms"
 import { scene } from "@/components/scene/scene.stylex"
 import { m } from "@/paraglide/messages"

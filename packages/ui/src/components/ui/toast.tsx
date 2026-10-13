@@ -1,11 +1,10 @@
+import type React from "react"
 import { Toast } from "@base-ui/react/toast"
 import * as stylex from "@stylexjs/stylex"
-import type React from "react"
-
+import { surface } from "../../styles/recipes"
+import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
 import { AlertCircle, AlertTriangle, CheckCircle, Info, Spinner } from "../icons"
 import { buttonVariants } from "./button"
-import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
-import { surface } from "../../styles/recipes"
 
 const TOAST_ICONS = {
   error: AlertCircle,

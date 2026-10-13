@@ -1,7 +1,7 @@
 import * as stylex from "@stylexjs/stylex"
-import preview from "@/storybook/preview"
 import { Textarea } from "@taiyomoe/ui/components/ui/textarea"
 import { fn } from "storybook/test"
+import preview from "@/storybook/preview"
 
 const styles = stylex.create({
   anchor: {

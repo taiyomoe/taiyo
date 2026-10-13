@@ -1,10 +1,9 @@
 import * as stylex from "@stylexjs/stylex"
 import { font } from "@taiyomoe/ui/styles/tokens.stylex"
-
 import { CoverArt } from "@/components/landing/cover-art"
 import { TITLES } from "@/components/landing/landing-data"
-import { Stars } from "@/components/scene/stars"
 import { scene } from "@/components/scene/scene.stylex"
+import { Stars } from "@/components/scene/stars"
 
 const STRIP = ["a", "b"].flatMap((copy) =>
   TITLES.map((title) => ({ ...title, key: `${title.id}-${copy}` })),

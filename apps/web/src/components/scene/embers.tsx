@@ -1,6 +1,5 @@
 import * as stylex from "@stylexjs/stylex"
 import { type CSSProperties, useMemo } from "react"
-
 import { rand, round } from "./deterministic"
 import { scene } from "./scene.stylex"
 const build = (count: number) =>

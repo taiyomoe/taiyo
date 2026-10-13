@@ -1,5 +1,5 @@
-import { config } from "@taiyomoe/config"
 import type { NewCover } from "@taiyomoe/db"
+import { config } from "@taiyomoe/config"
 import { getCoverKey } from "@taiyomoe/s3"
 import { extensionForMimeType } from "@taiyomoe/utils"
 import { Hono } from "hono"

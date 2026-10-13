@@ -1,5 +1,5 @@
-import { config } from "@taiyomoe/config"
 import type { NewGroup } from "@taiyomoe/db"
+import { config } from "@taiyomoe/config"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"

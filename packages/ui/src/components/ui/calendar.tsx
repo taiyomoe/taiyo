@@ -1,10 +1,10 @@
-import * as stylex from "@stylexjs/stylex"
 import type * as React from "react"
+import * as stylex from "@stylexjs/stylex"
 import { DayPicker, type DayPickerProps } from "react-day-picker"
-import { cn } from "../../utils/cn"
-import { ChevronLeft, ChevronRight, ChevronsUpDown } from "../icons"
 import { calendarDayMarker } from "../../styles/markers.stylex"
 import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
+import { cn } from "../../utils/cn"
+import { ChevronLeft, ChevronRight, ChevronsUpDown } from "../icons"
 
 const styles = stylex.create({
   root: {

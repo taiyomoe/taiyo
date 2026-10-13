@@ -1,12 +1,12 @@
 import * as stylex from "@stylexjs/stylex"
-import { colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
-import preview from "@/storybook/preview"
 import {
   PreviewCard,
   PreviewCardPopup,
   PreviewCardTrigger,
 } from "@taiyomoe/ui/components/ui/preview-card"
+import { colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { fn } from "storybook/test"
+import preview from "@/storybook/preview"
 
 const styles = stylex.create({
   link: {

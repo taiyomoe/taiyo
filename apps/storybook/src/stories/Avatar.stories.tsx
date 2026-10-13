@@ -1,7 +1,7 @@
 import * as stylex from "@stylexjs/stylex"
+import { Avatar, AvatarFallback, AvatarImage } from "@taiyomoe/ui/components/ui/avatar"
 import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
 import preview from "@/storybook/preview"
-import { Avatar, AvatarFallback, AvatarImage } from "@taiyomoe/ui/components/ui/avatar"
 
 const styles = stylex.create({
   stack: {

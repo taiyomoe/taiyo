@@ -1,6 +1,4 @@
 import * as stylex from "@stylexjs/stylex"
-import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
-import preview from "@/storybook/preview"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import {
   Card,
@@ -16,6 +14,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@taiyomoe/ui/components/ui/card"
+import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
+import preview from "@/storybook/preview"
 
 const styles = stylex.create({
   anchor: {

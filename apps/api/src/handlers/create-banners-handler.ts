@@ -1,5 +1,5 @@
-import { config } from "@taiyomoe/config"
 import type { NewBanner } from "@taiyomoe/db"
+import { config } from "@taiyomoe/config"
 import { getBannerKey } from "@taiyomoe/s3"
 import { extensionForMimeType } from "@taiyomoe/utils"
 import { Hono } from "hono"

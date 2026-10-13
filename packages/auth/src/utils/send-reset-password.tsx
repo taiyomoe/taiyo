@@ -1,5 +1,5 @@
-import { ResetPasswordEmail, resend } from "@taiyomoe/email"
 import type { User } from "better-auth"
+import { ResetPasswordEmail, resend } from "@taiyomoe/email"
 
 export const sendResetPassword = async (data: { user: User; url: string; token: string }) => {
   await resend.emails.send({

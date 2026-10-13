@@ -1,11 +1,11 @@
+import type React from "react"
 import { Switch as SwitchPrimitive } from "@base-ui/react/switch"
 import * as stylex from "@stylexjs/stylex"
-import type React from "react"
-import { cn } from "../../utils/cn"
-import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
-import { focus } from "../../styles/recipes"
 import type { Sx } from "../../styles/sx"
 import { switchRootMarker } from "../../styles/markers.stylex"
+import { focus } from "../../styles/recipes"
+import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
+import { cn } from "../../utils/cn"
 const styles = stylex.create({
   root: {
     "--thumb-size": {

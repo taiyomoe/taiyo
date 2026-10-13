@@ -1,15 +1,3 @@
-import * as stylex from "@stylexjs/stylex"
-
-import { AuthAlert } from "@/components/auth/auth-alert"
-import { authFormStyles as sx } from "@/components/auth/auth-form-styles"
-import { AuthHeading } from "@/components/auth/auth-heading"
-import { AuthSocialButtons } from "@/components/auth/auth-social-buttons"
-import { AuthSwitchLink } from "@/components/auth/auth-switch-link"
-import { useAuthForm } from "@/components/auth/use-auth-form"
-import { SunButton } from "@/components/buttons/sun-button"
-import { CheckboxField, InputField, PasswordField } from "@/components/fields/form-field"
-import { env } from "@/env/client"
-import { m } from "@/paraglide/messages"
 import { zodResolver } from "@hookform/resolvers/zod"
 import {
   ArrowLeft01Icon,
@@ -21,6 +9,7 @@ import {
 import { HugeiconsIcon } from "@hugeicons/react"
 import { ParaglideMessage } from "@inlang/paraglide-js-react"
 import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile"
+import * as stylex from "@stylexjs/stylex"
 import { authClient } from "@taiyomoe/auth/client"
 import { config } from "@taiyomoe/config"
 import { Button } from "@taiyomoe/ui/components/ui/button"
@@ -29,6 +18,16 @@ import { Link } from "@tanstack/react-router"
 import { type ReactNode, type SubmitEvent, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
+import { AuthAlert } from "@/components/auth/auth-alert"
+import { authFormStyles as sx } from "@/components/auth/auth-form-styles"
+import { AuthHeading } from "@/components/auth/auth-heading"
+import { AuthSocialButtons } from "@/components/auth/auth-social-buttons"
+import { AuthSwitchLink } from "@/components/auth/auth-switch-link"
+import { useAuthForm } from "@/components/auth/use-auth-form"
+import { SunButton } from "@/components/buttons/sun-button"
+import { CheckboxField, InputField, PasswordField } from "@/components/fields/form-field"
+import { env } from "@/env/client"
+import { m } from "@/paraglide/messages"
 
 const signUpSchema = z.object({
   name: z

@@ -1,5 +1,4 @@
 import * as stylex from "@stylexjs/stylex"
-
 import { LandingCta } from "@/components/landing/landing-cta"
 import { LandingFlaws } from "@/components/landing/landing-flaws"
 import { LandingFooter } from "@/components/landing/landing-footer"

@@ -1,5 +1,4 @@
 import * as stylex from "@stylexjs/stylex"
-import preview from "@/storybook/preview"
 import {
   Field,
   FieldControl,
@@ -8,6 +7,7 @@ import {
   FieldLabel,
 } from "@taiyomoe/ui/components/ui/field"
 import { Input } from "@taiyomoe/ui/components/ui/input"
+import preview from "@/storybook/preview"
 
 const styles = stylex.create({
   anchor: {

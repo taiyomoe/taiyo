@@ -26,7 +26,6 @@ import {
 } from "@taiyomoe/ui/components/ui/sidebar"
 import { colors, font, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { Link, useMatchRoute } from "@tanstack/react-router"
-
 import { m } from "@/paraglide/messages"
 
 const SECTIONS = [

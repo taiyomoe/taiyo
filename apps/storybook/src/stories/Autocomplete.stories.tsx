@@ -1,7 +1,6 @@
-import * as stylex from "@stylexjs/stylex"
 import { Search01Icon } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
-import preview from "@/storybook/preview"
+import * as stylex from "@stylexjs/stylex"
 import {
   Autocomplete,
   AutocompleteCollection,
@@ -16,6 +15,7 @@ import {
 } from "@taiyomoe/ui/components/ui/autocomplete"
 import { Fragment } from "react"
 import { fn } from "storybook/test"
+import preview from "@/storybook/preview"
 
 type Fruit = {
   value: string

@@ -1,8 +1,8 @@
-import * as stylex from "@stylexjs/stylex"
 import type React from "react"
-import { cn } from "../../utils/cn"
-import { colors, radius } from "../../styles/tokens.stylex"
+import * as stylex from "@stylexjs/stylex"
 import type { Sx } from "../../styles/sx"
+import { colors, radius } from "../../styles/tokens.stylex"
+import { cn } from "../../utils/cn"
 
 const shimmer = stylex.keyframes({
   to: { backgroundPosition: "-200% 0" },

@@ -1,9 +1,9 @@
+import type React from "react"
 import { Fieldset as FieldsetPrimitive } from "@base-ui/react/fieldset"
 import * as stylex from "@stylexjs/stylex"
-import type React from "react"
-import { cn } from "../../utils/cn"
-import { colors } from "../../styles/tokens.stylex"
 import type { Sx } from "../../styles/sx"
+import { colors } from "../../styles/tokens.stylex"
+import { cn } from "../../utils/cn"
 
 const styles = stylex.create({
   legend: {

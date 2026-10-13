@@ -1,5 +1,5 @@
-import { AbilityBuilder, createMongoAbility, type MongoAbility } from "@casl/ability"
 import type { User } from "@taiyomoe/auth/server"
+import { AbilityBuilder, createMongoAbility, type MongoAbility } from "@casl/ability"
 
 export type Actions = "create" | "read" | "update" | "delete" | "manage"
 

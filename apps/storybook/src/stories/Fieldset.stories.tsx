@@ -1,8 +1,8 @@
 import * as stylex from "@stylexjs/stylex"
-import preview from "@/storybook/preview"
 import { Field, FieldControl, FieldDescription, FieldLabel } from "@taiyomoe/ui/components/ui/field"
 import { Fieldset, FieldsetLegend } from "@taiyomoe/ui/components/ui/fieldset"
 import { Input } from "@taiyomoe/ui/components/ui/input"
+import preview from "@/storybook/preview"
 
 const styles = stylex.create({
   column: {

@@ -1,6 +1,6 @@
 import * as stylex from "@stylexjs/stylex"
-import { TaiyoLogoLockup } from "@taiyomoe/ui/components/logos/taiyo-logo-lockup"
 import { Menu, Search } from "@taiyomoe/ui/components/icons"
+import { TaiyoLogoLockup } from "@taiyomoe/ui/components/logos/taiyo-logo-lockup"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import {
   InputGroup,
@@ -12,9 +12,8 @@ import { useSidebar } from "@taiyomoe/ui/components/ui/sidebar"
 import { colors, consts, motion } from "@taiyomoe/ui/styles/tokens.stylex"
 import { Link } from "@tanstack/react-router"
 import { useEffect, useRef } from "react"
-
-import { UserMenu } from "@/components/shell/user-menu"
 import type { Session } from "@/lib/queries/session"
+import { UserMenu } from "@/components/shell/user-menu"
 import { m } from "@/paraglide/messages"
 
 const styles = stylex.create({

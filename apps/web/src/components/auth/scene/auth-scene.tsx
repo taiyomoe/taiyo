@@ -2,7 +2,6 @@ import * as stylex from "@stylexjs/stylex"
 import { TaiyoLogoLockup } from "@taiyomoe/ui/components/logos/taiyo-logo-lockup"
 import { font } from "@taiyomoe/ui/styles/tokens.stylex"
 import { Link } from "@tanstack/react-router"
-
 import { AuthCitations } from "@/components/auth/scene/auth-citations"
 import { AuthSun } from "@/components/auth/scene/auth-sun"
 import { Embers } from "@/components/scene/embers"

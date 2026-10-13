@@ -1,3 +1,4 @@
+import { config } from "@taiyomoe/config"
 import {
   MEDIA_COUNTRIES_OF_ORIGIN,
   MEDIA_DEMOGRAPHIES,
@@ -9,7 +10,6 @@ import {
   STAFF_ROLES,
   sql,
 } from "@taiyomoe/db"
-import { config } from "@taiyomoe/config"
 import { getBannerKey, getCoverKey } from "@taiyomoe/s3"
 import { extensionForMimeType } from "@taiyomoe/utils"
 import { Hono } from "hono"

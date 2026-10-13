@@ -1,6 +1,6 @@
-import * as stylex from "@stylexjs/stylex"
 import type { Sx } from "@taiyomoe/ui/styles/sx"
 import type { CSSProperties, ReactNode } from "react"
+import * as stylex from "@stylexjs/stylex"
 
 /**
  * A scene layer driven by one of the global `scene-*` keyframes in styles.css.

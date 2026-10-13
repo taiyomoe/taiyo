@@ -1,12 +1,12 @@
+import type * as React from "react"
 import { mergeProps } from "@base-ui/react/merge-props"
 import { useRender } from "@base-ui/react/use-render"
 import * as stylex from "@stylexjs/stylex"
-import type * as React from "react"
+import type { Sx } from "../../styles/sx"
+import { focus, tap } from "../../styles/recipes"
+import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
 import { cn } from "../../utils/cn"
 import { Spinner } from "./spinner"
-import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
-import { focus, tap } from "../../styles/recipes"
-import type { Sx } from "../../styles/sx"
 
 export type ButtonVariant =
   | "default"

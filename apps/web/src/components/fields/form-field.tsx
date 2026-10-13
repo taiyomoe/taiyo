@@ -1,12 +1,3 @@
-import { m } from "@/paraglide/messages"
-import { Checkbox } from "@taiyomoe/ui/components/ui/checkbox"
-import { Field, FieldDescription, FieldError, FieldLabel } from "@taiyomoe/ui/components/ui/field"
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-} from "@taiyomoe/ui/components/ui/input-group"
-import { PasswordInput, type PasswordInputProps } from "@taiyomoe/ui/components/ui/password-input"
 import type { ComponentProps, ReactElement, ReactNode } from "react"
 import type {
   Control,
@@ -15,7 +6,16 @@ import type {
   FieldValues,
   UseFormStateReturn,
 } from "react-hook-form"
+import { Checkbox } from "@taiyomoe/ui/components/ui/checkbox"
+import { Field, FieldDescription, FieldError, FieldLabel } from "@taiyomoe/ui/components/ui/field"
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "@taiyomoe/ui/components/ui/input-group"
+import { PasswordInput, type PasswordInputProps } from "@taiyomoe/ui/components/ui/password-input"
 import { Controller } from "react-hook-form"
+import { m } from "@/paraglide/messages"
 
 type Bound<TFieldValues extends FieldValues, TName extends FieldPath<TFieldValues>> = {
   name: TName

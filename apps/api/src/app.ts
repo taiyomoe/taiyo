@@ -3,9 +3,10 @@ import { config } from "@taiyomoe/config"
 import { evlog } from "evlog/hono"
 import { createHyperDXDrain } from "evlog/hyperdx"
 import { Hono } from "hono"
+import { openAPIRouteHandler } from "hono-openapi"
 import { cors } from "hono/cors"
 import { secureHeaders } from "hono/secure-headers"
-import { openAPIRouteHandler } from "hono-openapi"
+import type { Services } from "./services"
 import packageJson from "../package.json"
 import { env } from "./env"
 import {
@@ -23,7 +24,6 @@ import { mediasRouter } from "./routers/medias-router"
 import { ownershipRequestsRouter } from "./routers/ownership-requests-router"
 import { staffsRouter } from "./routers/staffs-router"
 import { usersRouter } from "./routers/users-router"
-import type { Services } from "./services"
 
 declare module "hono" {
   // oxlint-disable-next-line typescript/consistent-type-definitions

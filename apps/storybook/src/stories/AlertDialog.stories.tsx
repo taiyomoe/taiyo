@@ -1,4 +1,3 @@
-import preview from "@/storybook/preview"
 import {
   AlertDialog,
   AlertDialogClose,
@@ -11,6 +10,7 @@ import {
 } from "@taiyomoe/ui/components/ui/alert-dialog"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { fn } from "storybook/test"
+import preview from "@/storybook/preview"
 
 const meta = preview.meta({
   title: "UI/AlertDialog",

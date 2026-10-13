@@ -1,7 +1,7 @@
 import * as stylex from "@stylexjs/stylex"
+import { Separator } from "@taiyomoe/ui/components/ui/separator"
 import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
 import preview from "@/storybook/preview"
-import { Separator } from "@taiyomoe/ui/components/ui/separator"
 
 const styles = stylex.create({
   anchor: {

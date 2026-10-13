@@ -1,14 +1,14 @@
-import { Select as SelectPrimitive } from "@base-ui/react/select"
+import type * as React from "react"
 import { mergeProps } from "@base-ui/react/merge-props"
+import { Select as SelectPrimitive } from "@base-ui/react/select"
 import { useRender } from "@base-ui/react/use-render"
 import * as stylex from "@stylexjs/stylex"
-import type * as React from "react"
+import type { Sx } from "../../styles/sx"
+import { selectPopupMarker } from "../../styles/markers.stylex"
+import { surface, transitions } from "../../styles/recipes"
+import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
 import { cn } from "../../utils/cn"
 import { Check, ChevronDown, ChevronUp, ChevronsUpDown } from "../icons"
-import { selectPopupMarker } from "../../styles/markers.stylex"
-import type { Sx } from "../../styles/sx"
-import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
-import { surface, transitions } from "../../styles/recipes"
 
 export const Select: typeof SelectPrimitive.Root = SelectPrimitive.Root
 

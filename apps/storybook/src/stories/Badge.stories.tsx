@@ -1,6 +1,6 @@
 import * as stylex from "@stylexjs/stylex"
-import preview from "@/storybook/preview"
 import { Badge } from "@taiyomoe/ui/components/ui/badge"
+import preview from "@/storybook/preview"
 
 const styles = stylex.create({
   wrap: {

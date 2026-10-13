@@ -5,10 +5,10 @@ import {
   Delete02Icon,
 } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
-import preview from "@/storybook/preview"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { Group, GroupSeparator, GroupText } from "@taiyomoe/ui/components/ui/group"
 import { Input } from "@taiyomoe/ui/components/ui/input"
+import preview from "@/storybook/preview"
 
 const meta = preview.meta({
   title: "UI/Group",

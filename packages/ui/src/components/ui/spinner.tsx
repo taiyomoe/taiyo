@@ -1,8 +1,8 @@
-import * as stylex from "@stylexjs/stylex"
 import type React from "react"
+import * as stylex from "@stylexjs/stylex"
+import type { Sx } from "../../styles/sx"
 import { cn } from "../../utils/cn"
 import { type IconProps, Spinner as SpinnerIcon } from "../icons"
-import type { Sx } from "../../styles/sx"
 
 const spin = stylex.keyframes({
   from: { transform: "rotate(0deg)" },

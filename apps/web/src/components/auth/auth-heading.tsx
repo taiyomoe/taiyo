@@ -1,6 +1,5 @@
 import * as stylex from "@stylexjs/stylex"
 import { font } from "@taiyomoe/ui/styles/tokens.stylex"
-
 import { scene } from "@/components/scene/scene.stylex"
 
 const styles = stylex.create({

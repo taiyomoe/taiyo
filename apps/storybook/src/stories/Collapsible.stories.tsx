@@ -1,16 +1,16 @@
-import * as stylex from "@stylexjs/stylex"
-import { colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { ArrowDown01Icon } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { collapsibleTriggerMarker } from "@taiyomoe/ui/styles/markers.stylex"
-import preview from "@/storybook/preview"
+import * as stylex from "@stylexjs/stylex"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import {
   Collapsible,
   CollapsiblePanel,
   CollapsibleTrigger,
 } from "@taiyomoe/ui/components/ui/collapsible"
+import { collapsibleTriggerMarker } from "@taiyomoe/ui/styles/markers.stylex"
+import { colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { fn } from "storybook/test"
+import preview from "@/storybook/preview"
 
 const styles = stylex.create({
   chevron: {

@@ -1,10 +1,9 @@
 import * as stylex from "@stylexjs/stylex"
 import { font, radius, text } from "@taiyomoe/ui/styles/tokens.stylex"
-
 import { Reveal, Section, SectionHead } from "@/components/landing/landing-atoms"
 import { REVIEWS } from "@/components/landing/landing-data"
-import { Stars } from "@/components/scene/stars"
 import { scene, sceneFont } from "@/components/scene/scene.stylex"
+import { Stars } from "@/components/scene/stars"
 import { m } from "@/paraglide/messages"
 
 const styles = stylex.create({

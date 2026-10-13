@@ -1,7 +1,7 @@
-import { config } from "@taiyomoe/config"
 import type { DB, Kysely } from "@taiyomoe/db"
-import { normalizeDisplayName, normalizeUsername } from "@taiyomoe/utils"
 import type { User } from "better-auth"
+import { config } from "@taiyomoe/config"
+import { normalizeDisplayName, normalizeUsername } from "@taiyomoe/utils"
 import { APIError } from "better-auth/api"
 import { randomInt } from "node:crypto"
 

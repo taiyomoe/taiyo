@@ -1,8 +1,8 @@
-import * as stylex from "@stylexjs/stylex"
 import type * as React from "react"
-import { cn } from "../../utils/cn"
+import * as stylex from "@stylexjs/stylex"
 import type { Sx } from "../../styles/sx"
 import { colors, consts, radius } from "../../styles/tokens.stylex"
+import { cn } from "../../utils/cn"
 
 export type AlertVariant = "default" | "error" | "info" | "success" | "warning"
 

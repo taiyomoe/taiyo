@@ -1,13 +1,13 @@
+import type * as React from "react"
 import { Menu as MenuPrimitive } from "@base-ui/react/menu"
 import * as stylex from "@stylexjs/stylex"
-import type * as React from "react"
+import type { Sx } from "../../styles/sx"
+import { menuPopupMarker, menuSwitchItemMarker } from "../../styles/markers.stylex"
+import { focus, surface, transitions } from "../../styles/recipes"
+import { colors, consts, font, radius, shadows } from "../../styles/tokens.stylex"
 import { cn } from "../../utils/cn"
 import { Check, ChevronRight } from "../icons"
 import { KbdSurface } from "./kbd"
-import { colors, consts, font, radius, shadows } from "../../styles/tokens.stylex"
-import { focus, surface, transitions } from "../../styles/recipes"
-import { menuPopupMarker, menuSwitchItemMarker } from "../../styles/markers.stylex"
-import type { Sx } from "../../styles/sx"
 
 const styles = stylex.create({
   positioner: {

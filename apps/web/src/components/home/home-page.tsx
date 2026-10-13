@@ -1,10 +1,8 @@
 import * as stylex from "@stylexjs/stylex"
 import { colors, font, radius, text } from "@taiyomoe/ui/styles/tokens.stylex"
-
-import { AppShell } from "@/components/shell/app-shell"
-import type { Session } from "@/lib/queries/session"
 import { range } from "remeda"
-
+import type { Session } from "@/lib/queries/session"
+import { AppShell } from "@/components/shell/app-shell"
 import { m } from "@/paraglide/messages"
 
 const PLACEHOLDERS = range(0, 6)

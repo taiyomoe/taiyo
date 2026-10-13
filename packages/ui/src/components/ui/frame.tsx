@@ -1,9 +1,9 @@
-import * as stylex from "@stylexjs/stylex"
 import type * as React from "react"
-import { cn } from "../../utils/cn"
+import * as stylex from "@stylexjs/stylex"
 import type { Sx } from "../../styles/sx"
-import { colors, radius, shadows } from "../../styles/tokens.stylex"
 import { surface } from "../../styles/recipes"
+import { colors, radius, shadows } from "../../styles/tokens.stylex"
+import { cn } from "../../utils/cn"
 
 const styles = stylex.create({
   frame: {

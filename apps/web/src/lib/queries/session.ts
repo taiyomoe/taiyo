@@ -1,7 +1,7 @@
 import { authClient } from "@taiyomoe/auth/client"
+import { queryOptions } from "@tanstack/react-query"
 import { createIsomorphicFn } from "@tanstack/react-start"
 import { getRequestHeader } from "@tanstack/react-start/server"
-import { queryOptions } from "@tanstack/react-query"
 
 export type Session = typeof authClient.$Infer.Session
 

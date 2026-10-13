@@ -10,7 +10,6 @@ import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react"
 import * as stylex from "@stylexjs/stylex"
 import { font, radius, text } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useState } from "react"
-
 import { Reveal, Section, SectionHead } from "@/components/landing/landing-atoms"
 import { scene, sceneFont } from "@/components/scene/scene.stylex"
 import { m } from "@/paraglide/messages"

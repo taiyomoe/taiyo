@@ -1,7 +1,6 @@
+import type { CSSProperties, ReactNode } from "react"
 import * as stylex from "@stylexjs/stylex"
 import { radius, text } from "@taiyomoe/ui/styles/tokens.stylex"
-import type { CSSProperties, ReactNode } from "react"
-
 import { scene, sceneFont } from "@/components/scene/scene.stylex"
 
 const DEFAULT_GRADIENT: [string, string] = ["#f2452d", "#ffb820"]

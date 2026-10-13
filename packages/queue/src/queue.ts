@@ -1,6 +1,6 @@
 import { Queue } from "bullmq"
-import { createBullConnection } from "./connection"
 import type { ChapterUploadJobData } from "./types"
+import { createBullConnection } from "./connection"
 
 export const CHAPTER_UPLOAD_QUEUE = "chapter-upload"
 

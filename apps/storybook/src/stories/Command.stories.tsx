@@ -1,4 +1,3 @@
-import * as stylex from "@stylexjs/stylex"
 import {
   CalculatorIcon as CalculatorGlyph,
   Calendar01Icon,
@@ -8,7 +7,7 @@ import {
   UserIcon as UserGlyph,
 } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react"
-import preview from "@/storybook/preview"
+import * as stylex from "@stylexjs/stylex"
 import { ChevronDown, ChevronUp, Enter } from "@taiyomoe/ui/components/icons"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import {
@@ -31,6 +30,7 @@ import {
 import { Kbd, KbdGroup } from "@taiyomoe/ui/components/ui/kbd"
 import { Fragment } from "react"
 import { fn } from "storybook/test"
+import preview from "@/storybook/preview"
 
 type Item = {
   value: string

@@ -1,6 +1,6 @@
+import type { Context } from "hono"
 import { DeleteObjectsCommand } from "@taiyomoe/s3"
 import { drainSearchOutbox } from "@taiyomoe/search"
-import type { Context } from "hono"
 import { createMiddleware } from "hono/factory"
 
 const toLoggableError = (err: unknown) => (err instanceof Error ? err : String(err))

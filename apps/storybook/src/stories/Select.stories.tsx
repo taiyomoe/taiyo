@@ -1,5 +1,4 @@
 import * as stylex from "@stylexjs/stylex"
-import preview from "@/storybook/preview"
 import {
   Select,
   SelectContent,
@@ -11,6 +10,7 @@ import {
   SelectValue,
 } from "@taiyomoe/ui/components/ui/select"
 import { fn } from "storybook/test"
+import preview from "@/storybook/preview"
 
 const items = [
   { value: "sans", label: "Sans-serif" },

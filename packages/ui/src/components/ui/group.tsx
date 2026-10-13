@@ -1,12 +1,12 @@
+import type * as React from "react"
 import { mergeProps } from "@base-ui/react/merge-props"
 import { useRender } from "@base-ui/react/use-render"
 import * as stylex from "@stylexjs/stylex"
-import type * as React from "react"
-import { Separator } from "./separator"
-import { cn } from "../../utils/cn"
 import type { Sx } from "../../styles/sx"
-import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
 import { surface } from "../../styles/recipes"
+import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
+import { cn } from "../../utils/cn"
+import { Separator } from "./separator"
 
 export type GroupOrientation = "horizontal" | "vertical"
 

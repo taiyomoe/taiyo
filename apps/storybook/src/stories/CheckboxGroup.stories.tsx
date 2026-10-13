@@ -1,9 +1,9 @@
 import * as stylex from "@stylexjs/stylex"
-import preview from "@/storybook/preview"
 import { Checkbox } from "@taiyomoe/ui/components/ui/checkbox"
 import { CheckboxGroup } from "@taiyomoe/ui/components/ui/checkbox-group"
 import { Label } from "@taiyomoe/ui/components/ui/label"
 import { fn } from "storybook/test"
+import preview from "@/storybook/preview"
 
 const options = [
   { name: "manga", label: "Manga" },
