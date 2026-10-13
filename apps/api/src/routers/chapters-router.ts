@@ -7,6 +7,7 @@ import { getChapterUploadStatusHandler } from "../handlers/get-chapter-upload-st
 import { linkChapterGroupHandler } from "../handlers/link-chapter-group-handler"
 import { listChapterGroupsHandler } from "../handlers/list-chapter-groups-handler"
 import { listLatestChaptersHandler } from "../handlers/list-latest-chapters-handler"
+import { listLatestMediaUpdatesHandler } from "../handlers/list-latest-media-updates-handler"
 import { openChapterHandler } from "../handlers/open-chapter-handler"
 import { unlinkChapterGroupHandler } from "../handlers/unlink-chapter-group-handler"
 import { updateChapterHandler } from "../handlers/update-chapter-handler"
@@ -14,6 +15,7 @@ import { updateChapterHistoryHandler } from "../handlers/update-chapter-history-
 
 export const chaptersRouter = new Hono()
   .route("/", listLatestChaptersHandler)
+  .route("/", listLatestMediaUpdatesHandler)
   .route("/", getChapterHandler)
   .route("/", updateChapterHandler)
   .route("/", deleteChapterHandler)

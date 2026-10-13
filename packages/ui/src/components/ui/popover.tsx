@@ -5,6 +5,7 @@ import type { CSSVariables, Sx } from "../../styles/sx"
 import { surface, transitions } from "../../styles/recipes"
 import { colors, motion, radius, shadows, text } from "../../styles/tokens.stylex"
 import { cn } from "../../utils/cn"
+import { PopupArrowSvg, popupArrowStyles, withArrowOffset } from "./popup-arrow"
 
 const styles = stylex.create({
   positioner: {
@@ -110,6 +111,7 @@ export function PopoverPopup({
   sideOffset = 4,
   alignOffset = 0,
   tooltipStyle = false,
+  arrow = false,
   anchor,
   portalProps,
   sx,
@@ -121,6 +123,7 @@ export function PopoverPopup({
   sideOffset?: PopoverPrimitive.Positioner.Props["sideOffset"]
   alignOffset?: PopoverPrimitive.Positioner.Props["alignOffset"]
   tooltipStyle?: boolean
+  arrow?: boolean
   anchor?: PopoverPrimitive.Positioner.Props["anchor"]
   sx?: Sx
 }): React.ReactElement {
@@ -144,10 +147,11 @@ export function PopoverPopup({
         align={align}
         alignOffset={alignOffset}
         anchor={anchor}
+        arrowPadding={arrow ? 20 : undefined}
         className={positionerProps.className}
         data-slot="popover-positioner"
         side={side}
-        sideOffset={sideOffset}
+        sideOffset={withArrowOffset(sideOffset, arrow)}
         style={positionerProps.style}
       >
         <PopoverPrimitive.Popup
@@ -156,6 +160,11 @@ export function PopoverPopup({
           style={popupProps.style}
           {...props}
         >
+          {arrow ? (
+            <PopoverPrimitive.Arrow {...stylex.props(popupArrowStyles.arrow)}>
+              <PopupArrowSvg />
+            </PopoverPrimitive.Arrow>
+          ) : null}
           <PopoverPrimitive.Viewport
             className={viewportProps.className}
             data-slot="popover-viewport"

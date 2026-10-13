@@ -3,8 +3,13 @@ import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import { group } from "radashi"
 import z from "zod"
+import { validateQuery } from "../middlewares/validate-query-middleware"
 import { getOpenApiResponses } from "../utils/openapi-helper"
-import { apiSuccessEnvelope, contentRatingSchema } from "../utils/schemas"
+import {
+  apiSuccessEnvelope,
+  contentRatingSchema,
+  contentRatingsQuerySchema,
+} from "../utils/schemas"
 
 const featuredMediaSchema = z.object({
   id: z.uuid().meta({ description: "The ID of the media." }),
@@ -30,13 +35,14 @@ const featuredMediaSchema = z.object({
   coverUrl: z.url().nullable().meta({ description: "URL of the media's main cover, if any." }),
   bannerUrl: z.url().nullable().meta({ description: "URL of the media's latest banner, if any." }),
 })
+const querySchema = z.object({ contentRating: contentRatingsQuerySchema })
 
 export const listFeaturedMediasHandler = new Hono().get(
   "/featured",
   describeRoute({
     summary: "List featured medias",
     description:
-      "Lists the medias curated for the home page carousel, in display order.\n\n**Authentication:** none.",
+      "Lists the medias curated for the home page carousel, in display order, filtered by content rating.\n\n**Authentication:** none.",
     tags: ["Medias"],
     responses: {
       200: {
@@ -47,11 +53,15 @@ export const listFeaturedMediasHandler = new Hono().get(
           },
         },
       },
-      ...getOpenApiResponses({}),
+      ...getOpenApiResponses({
+        422: "The query parameters failed validation.",
+      }),
     },
   }),
+  validateQuery(querySchema),
   async (c) => {
     const { db } = c.var
+    const { contentRating } = c.var.query
     const medias = await db
       .selectFrom("featuredMedias")
       .innerJoin("medias", "medias.id", "featuredMedias.mediaId")
@@ -80,6 +90,7 @@ export const listFeaturedMediasHandler = new Hono().get(
         (join) => join.onTrue(),
       )
       .where("medias.deletedAt", "is", null)
+      .where("medias.contentRating", "in", contentRating)
       .select((eb) => [
         "medias.id",
         "medias.synopsis",

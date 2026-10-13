@@ -123,16 +123,14 @@ export function PaginationLink({
   const styleProps = stylex.props(sx)
   const defaultProps = {
     "aria-current": isActive === true ? ("page" as const) : undefined,
-    className: render
-      ? cn(styleProps.className, className)
-      : cn(
-          buttonVariants({
-            size,
-            variant: isActive === true ? "outline" : "ghost",
-          }),
-          styleProps.className,
-          className,
-        ),
+    className: cn(
+      buttonVariants({
+        size,
+        variant: isActive === true ? "outline" : "ghost",
+      }),
+      styleProps.className,
+      className,
+    ),
     "data-active": isActive,
     "data-slot": "pagination-link",
     style: styleProps.style,

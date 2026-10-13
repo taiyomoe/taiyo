@@ -15,8 +15,8 @@ type FeaturedRow = {
   bannerUrl: string | null
 }
 
-const listFeatured = async (app: Parameters<typeof api>[0]) => {
-  const res = await api<FeaturedRow[]>(app, "/medias/featured")
+const listFeatured = async (app: Parameters<typeof api>[0], query = "") => {
+  const res = await api<FeaturedRow[]>(app, `/medias/featured?${query}`)
 
   expect(res.status).toBe(200)
 
@@ -105,5 +105,23 @@ describe("GET /medias/featured", () => {
     await services.db.deleteFrom("featuredMedias").execute()
 
     expect(await listFeatured(app)).toEqual([])
+  })
+
+  test("filters by content rating", async ({ app, services }) => {
+    const [first, ...rest] = await listFeatured(app)
+    const mediaId = defined(first).id
+
+    await services.db
+      .updateTable("medias")
+      .set({ contentRating: "NSFW" })
+      .where("id", "=", mediaId)
+      .execute()
+
+    expect((await listFeatured(app)).map((media) => media.id)).toEqual(
+      rest.map((media) => media.id),
+    )
+    expect((await listFeatured(app, "contentRating=NSFW")).map((media) => media.id)).toContain(
+      mediaId,
+    )
   })
 })

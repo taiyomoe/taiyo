@@ -153,6 +153,11 @@ export const createApp = (services: Services) => {
                 "Per-user library — manga the user is reading / has read / etc., scoped to the signed-in user.",
             },
             {
+              name: "Settings",
+              description:
+                "Preferences of the signed-in user, stored on their account so every device shares them.",
+            },
+            {
               name: "Custom lists",
               description:
                 "User-created reading lists. Each list is owned by one user, has a PUBLIC or PRIVATE visibility, and contains an ordered set of medias.",

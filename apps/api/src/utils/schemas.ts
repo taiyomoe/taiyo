@@ -1,5 +1,5 @@
 import { config } from "@taiyomoe/config"
-import { CONTENT_RATINGS, LANGUAGES } from "@taiyomoe/db"
+import { CONTENT_RATINGS, LANGUAGES, MEDIA_COUNTRIES_OF_ORIGIN } from "@taiyomoe/db"
 import z from "zod"
 
 export const apiSuccessEnvelope = <T extends z.ZodType, M extends z.ZodType = z.ZodNever>(
@@ -28,6 +28,17 @@ export const languageSchema = (description: string) =>
 
 export const contentRatingSchema = (description: string) =>
   z.enum(CONTENT_RATINGS).meta({ description, example: "NORMAL" })
+
+export const contentRatingsQuerySchema = z
+  .string()
+  .transform((value) => value.split(","))
+  .pipe(z.enum(CONTENT_RATINGS).array().min(1))
+  .default([...config.settings.contentRating])
+  .meta({
+    description:
+      "Comma-separated content ratings to include. A chapter counts as the stricter of its own rating and its media's. Defaults to the default user setting.",
+    example: "NORMAL,SUGGESTIVE",
+  })
 
 export const fileSchema = (description: string) =>
   z.file().mime(["image/png", "image/jpeg", "image/gif", "image/webp"]).meta({ description })
@@ -162,4 +173,50 @@ export const chapterFeedItemSchema = z.object({
     description: "The main title of the media the chapter belongs to.",
     example: "Boruto: Naruto Next Generations",
   }),
+})
+
+const latestChapterSchema = chapterFeedItemSchema.omit({ mediaId: true, mediaTitle: true }).extend({
+  groups: z
+    .object({
+      id: z.uuid().meta({ description: "The ID of the group." }),
+      name: z.string().meta({ description: "The name of the group.", example: "Sunray Scans" }),
+    })
+    .array()
+    .meta({ description: "The groups credited on the chapter." }),
+  uploader: z
+    .object({
+      id: z.uuid().meta({ description: "The ID of the user." }),
+      username: z.string().meta({ description: "The username of the user.", example: "kaito" }),
+      displayUsername: z
+        .string()
+        .meta({ description: "The display name of the user.", example: "Kaito" }),
+      image: z.string().nullable().meta({ description: "URL of the user's avatar, if any." }),
+    })
+    .meta({ description: "The user who uploaded the chapter." }),
+})
+
+export const latestChapterFeedItemSchema = latestChapterSchema.extend({
+  mediaId: chapterFeedItemSchema.shape.mediaId,
+  mediaTitle: chapterFeedItemSchema.shape.mediaTitle,
+  mediaCoverUrl: z
+    .url()
+    .nullable()
+    .meta({ description: "URL of the main cover of the media the chapter belongs to, if any." }),
+})
+
+export const latestMediaUpdateSchema = z.object({
+  id: z.uuid().meta({ description: "The ID of the media." }),
+  title: z.string().nullable().meta({ description: "The main title of the media." }),
+  coverUrl: z.url().nullable().meta({ description: "URL of the media's main cover, if any." }),
+  countryOfOrigin: z
+    .enum(MEDIA_COUNTRIES_OF_ORIGIN)
+    .meta({ description: "The country the media originates from.", example: "JAPAN" }),
+  contentRating: contentRatingSchema("The content rating of the media."),
+  chapterCount: z.int().meta({
+    description: "How many chapters of the media match the requested content ratings.",
+    example: 12,
+  }),
+  chapters: latestChapterSchema
+    .array()
+    .meta({ description: "The most recent matching chapters of the media, newest first." }),
 })
