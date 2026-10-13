@@ -133,4 +133,44 @@ describe("POST /ownership-requests/:id/reject", () => {
 
     expect(res.status).toBe(422)
   })
+
+  test("concurrent approve and reject: exactly one wins", async ({ app, services }) => {
+    const { headers, userId: reviewerId } = await signInAs(services, { role: "MODERATOR" })
+    const { userId: requesterId } = await signInAs(services)
+    const groupId = await seedGroup(services, reviewerId)
+    const requestId = await seedRequest(services, { userId: requesterId, groupId })
+    const [approveRes, rejectRes] = await Promise.all([
+      api(app, `/ownership-requests/${requestId}/approve`, { method: "POST", headers }),
+      api(app, `/ownership-requests/${requestId}/reject`, { method: "POST", headers, json: {} }),
+    ])
+    const statuses = [approveRes.status, rejectRes.status].sort((a, b) => a - b)
+
+    expect(statuses).toEqual([201, 409])
+
+    const loser = approveRes.status === 409 ? approveRes : rejectRes
+
+    if (loser.body.success) {
+      throw new Error("Expected the losing transition to fail")
+    }
+
+    expect(loser.body.code).toBe("OWNERSHIP_REQUEST_NOT_PENDING")
+
+    const request = await services.db
+      .selectFrom("groupOwnershipRequests")
+      .select("status")
+      .where("id", "=", requestId)
+      .executeTakeFirstOrThrow()
+    const membership = await services.db
+      .selectFrom("groupMemberships")
+      .select("role")
+      .where("groupId", "=", groupId)
+      .where("userId", "=", requesterId)
+      .executeTakeFirst()
+
+    expect({ status: request.status, role: membership?.role }).toEqual(
+      approveRes.status === 201
+        ? { status: "APPROVED", role: "OWNER" }
+        : { status: "REJECTED", role: undefined },
+    )
+  })
 })

@@ -38,11 +38,6 @@ export const approveOwnershipRequestHandler = new Hono().post(
   withTransaction,
   async (c) => {
     const { db, ownershipRequest, user } = c.var
-
-    if (ownershipRequest.status !== "PENDING") {
-      return c.fail("OWNERSHIP_REQUEST_NOT_PENDING")
-    }
-
     const result = await claimGroup(db, {
       groupId: ownershipRequest.groupId,
       userId: ownershipRequest.userId,
@@ -53,11 +48,17 @@ export const approveOwnershipRequestHandler = new Hono().post(
       return c.fail(result.error)
     }
 
-    await db
+    const transitioned = await db
       .updateTable("groupOwnershipRequests")
       .set({ status: "APPROVED", reviewerId: user.id })
       .where("id", "=", ownershipRequest.id)
-      .execute()
+      .where("status", "=", "PENDING")
+      .returning("id")
+      .executeTakeFirst()
+
+    if (transitioned === undefined) {
+      return c.fail("OWNERSHIP_REQUEST_NOT_PENDING")
+    }
 
     await db
       .updateTable("groupOwnershipRequests")

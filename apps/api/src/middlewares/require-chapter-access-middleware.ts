@@ -19,9 +19,11 @@ export const requireChapterAccess = createMiddleware<{
   const membership = await db
     .selectFrom("chapterGroups")
     .innerJoin("groupMemberships", "groupMemberships.groupId", "chapterGroups.groupId")
+    .innerJoin("groups", "groups.id", "chapterGroups.groupId")
     .select("groupMemberships.groupId")
     .where("chapterGroups.chapterId", "=", chapter.id)
     .where("groupMemberships.userId", "=", user.id)
+    .where("groups.deletedAt", "is", null)
     .limit(1)
     .executeTakeFirst()
 

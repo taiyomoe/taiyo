@@ -47,16 +47,17 @@ export const rejectOwnershipRequestHandler = new Hono().post(
   async (c) => {
     const { db, ownershipRequest, user } = c.var
     const { note } = c.var.json
-
-    if (ownershipRequest.status !== "PENDING") {
-      return c.fail("OWNERSHIP_REQUEST_NOT_PENDING")
-    }
-
-    await db
+    const transitioned = await db
       .updateTable("groupOwnershipRequests")
       .set({ status: "REJECTED", reviewerId: user.id, reviewerNote: note ?? null })
       .where("id", "=", ownershipRequest.id)
-      .execute()
+      .where("status", "=", "PENDING")
+      .returning("id")
+      .executeTakeFirst()
+
+    if (transitioned === undefined) {
+      return c.fail("OWNERSHIP_REQUEST_NOT_PENDING")
+    }
 
     return c.ok({ id: ownershipRequest.id })
   },

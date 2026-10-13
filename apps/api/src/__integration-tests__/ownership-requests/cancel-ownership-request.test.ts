@@ -120,4 +120,50 @@ describe("DELETE /ownership-requests/:id", () => {
 
     expect(res.status).toBe(422)
   })
+
+  test("concurrent approve and cancel: exactly one wins", async ({ app, services }) => {
+    const { headers: reviewerHeaders, userId: reviewerId } = await signInAs(services, {
+      role: "MODERATOR",
+    })
+    const { headers: requesterHeaders, userId: requesterId } = await signInAs(services)
+    const groupId = await seedGroup(services, reviewerId)
+    const requestId = await seedRequest(services, { userId: requesterId, groupId })
+    const [approveRes, cancelRes] = await Promise.all([
+      api(app, `/ownership-requests/${requestId}/approve`, {
+        method: "POST",
+        headers: reviewerHeaders,
+      }),
+      api(app, `/ownership-requests/${requestId}`, { method: "DELETE", headers: requesterHeaders }),
+    ])
+    const approved = approveRes.status === 201
+    const cancelled = cancelRes.status === 200
+
+    expect(approved !== cancelled).toBe(true)
+
+    const loser = approved ? cancelRes : approveRes
+
+    expect(loser.status).toBe(409)
+
+    if (loser.body.success) {
+      throw new Error("Expected the losing transition to fail")
+    }
+
+    expect(loser.body.code).toBe("OWNERSHIP_REQUEST_NOT_PENDING")
+
+    const request = await services.db
+      .selectFrom("groupOwnershipRequests")
+      .select("status")
+      .where("id", "=", requestId)
+      .executeTakeFirstOrThrow()
+    const membership = await services.db
+      .selectFrom("groupMemberships")
+      .select("role")
+      .where("groupId", "=", groupId)
+      .where("userId", "=", requesterId)
+      .executeTakeFirst()
+
+    expect({ status: request.status, role: membership?.role }).toEqual(
+      approved ? { status: "APPROVED", role: "OWNER" } : { status: "CANCELLED", role: undefined },
+    )
+  })
 })
