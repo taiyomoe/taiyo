@@ -84,6 +84,7 @@ jobs:
       BETTER_AUTH_URL: http://localhost:3002
       BETTER_AUTH_SECRET: ci-better-auth-secret-not-actually-secret-in-ci
       RESEND_API_KEY: re_dummy
+      TURNSTILE_SECRET_KEY: "1x0000000000000000000000000000000AA"
     steps:
       - uses: actions/checkout@v7
 
