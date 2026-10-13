@@ -1,4 +1,5 @@
 import { describe, expect } from "vitest"
+import { defined } from "../helpers/assert"
 import { signInAs } from "../helpers/auth"
 import { api } from "../helpers/request"
 import { test } from "../setup"
@@ -38,7 +39,9 @@ describe("POST /chapters/:id/open", () => {
       .where("chapterId", "=", SEEDED_CHAPTER_ID)
       .executeTakeFirstOrThrow()
 
-    await new Promise((r) => setTimeout(r, 10))
+    await new Promise((r) => {
+      setTimeout(r, 10)
+    })
 
     await api(app, `/chapters/${SEEDED_CHAPTER_ID}/open`, { method: "POST", headers })
 
@@ -50,7 +53,7 @@ describe("POST /chapters/:id/open", () => {
       .execute()
 
     expect(after).toHaveLength(1)
-    expect(after[0]!.updatedAt >= first.updatedAt).toBe(true)
+    expect(defined(after[0]).updatedAt >= first.updatedAt).toBe(true)
   })
 
   test("returns CHAPTER_NOT_FOUND for an unknown chapter", async ({ app, services }) => {

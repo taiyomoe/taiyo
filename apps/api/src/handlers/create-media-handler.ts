@@ -233,7 +233,7 @@ export const createMediaHandler = new Hono().post(
   withTransaction,
   async (c) => {
     const { db, s3, s3Bucket, log } = c.var
-    const body = c.var.formData!
+    const body = c.var.formData
     const mediaId = crypto.randomUUID()
     const links = Object.entries(body.links)
 

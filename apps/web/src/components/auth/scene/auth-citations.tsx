@@ -133,12 +133,16 @@ export const AuthCitations = () => {
 
   useEffect(() => {
     if (paused) {
-      return
+      return undefined
     }
 
-    const timer = setInterval(() => setIndex((prev) => (prev + 1) % CITATIONS.length), 4800)
+    const timer = setInterval(() => {
+      setIndex((prev) => (prev + 1) % CITATIONS.length)
+    }, 4800)
 
-    return () => clearInterval(timer)
+    return () => {
+      clearInterval(timer)
+    }
   }, [paused])
 
   const citation = CITATIONS[index]
@@ -149,8 +153,12 @@ export const AuthCitations = () => {
 
   return (
     <div
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
+      onMouseEnter={() => {
+        setPaused(true)
+      }}
+      onMouseLeave={() => {
+        setPaused(false)
+      }}
       sx={styles.root}
     >
       <div sx={styles.scrim} />
@@ -175,7 +183,9 @@ export const AuthCitations = () => {
             key={item.who}
             type="button"
             aria-label={m.auth_review_aria({ number: dot + 1 })}
-            onClick={() => setIndex(dot)}
+            onClick={() => {
+              setIndex(dot)
+            }}
             sx={[styles.dot, dot === index && styles.dotCurrent]}
           />
         ))}

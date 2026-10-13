@@ -3,7 +3,7 @@ import type { Role } from "../constants"
 import type { UserSettings } from "../json-types"
 import type { Timestamp } from "../types"
 
-export interface User {
+export type User = {
   id: Generated<string>
   createdAt: Generated<Timestamp>
   updatedAt: Generated<Timestamp>

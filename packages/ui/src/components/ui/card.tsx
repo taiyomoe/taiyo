@@ -5,7 +5,7 @@ import type React from "react"
 import { cn } from "../../utils/cn"
 import { colors, radius, shadows, text } from "../../styles/tokens.stylex"
 import { surface } from "../../styles/recipes"
-import type { Sx } from "../../styles/sx"
+import type { CSSVariables, Sx } from "../../styles/sx"
 
 const styles = stylex.create({
   card: {
@@ -127,14 +127,15 @@ export function CardFrame({
   ...props
 }: CardComponentProps): React.ReactElement {
   const styleProps = stylex.props(surface.raisedEdge, styles.card, styles.frameOverlay, sx)
+  const frameStyle: CSSVariables = {
+    "--clip-bottom": "-1rem",
+    "--clip-top": "-1rem",
+    ...styleProps.style,
+  }
   const defaultProps = {
     className: cn(styleProps.className, className),
     "data-slot": "card-frame",
-    style: {
-      "--clip-bottom": "-1rem",
-      "--clip-top": "-1rem",
-      ...styleProps.style,
-    } as React.CSSProperties,
+    style: frameStyle,
   }
 
   return useRender({

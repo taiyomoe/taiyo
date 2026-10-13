@@ -1,7 +1,7 @@
 import type { Insertable } from "kysely"
 import type { StaffRole } from "../constants"
 
-export interface MediaStaff {
+export type MediaStaff = {
   mediaId: string
   staffId: string
   role: StaffRole

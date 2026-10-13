@@ -1,4 +1,4 @@
-import type { ChapterUploadManifest } from "@taiyomoe/queue"
+import { chapterUploadManifestSchema } from "@taiyomoe/queue"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
@@ -64,10 +64,12 @@ export const finalizeChapterUploadHandler = new Hono().post(
       .where("id", "=", taskId)
       .where("type", "=", "UPLOAD_CHAPTER")
       .executeTakeFirst()
+    const manifest = chapterUploadManifestSchema.safeParse(task?.payload)
 
     if (
       !task ||
-      (task.payload as ChapterUploadManifest).chapterId !== chapter.id ||
+      !manifest.success ||
+      manifest.data.chapterId !== chapter.id ||
       task.status !== "PENDING"
     ) {
       return c.fail("CHAPTER_UPLOAD_SESSION_NOT_FOUND")

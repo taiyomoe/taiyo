@@ -9,7 +9,11 @@ import { test } from "../setup"
 const SEEDED_MEDIA_ID = "4e26b80f-6661-4f5f-93b4-6dfed052bbed"
 const TIMEOUT = 30_000
 
-type MediaHit = { id: string; libraryCount: number; chapterCount: number }
+type MediaHit = {
+  id: string
+  libraryCount: number
+  chapterCount: number
+}
 
 const waitForLibraryCount = async (
   { meili, mediasIndex }: Services,
@@ -31,7 +35,9 @@ const waitForLibraryCount = async (
       return
     }
 
-    await new Promise<void>((r) => setTimeout(r, intervalMs))
+    await new Promise<void>((r) => {
+      setTimeout(r, intervalMs)
+    })
   }
 
   throw new Error(`libraryCount for ${mediaId} settled at ${last}, expected ${expected}`)

@@ -1,6 +1,8 @@
 import type {
   ContentRating,
+  DB,
   Flag,
+  Kysely,
   Language,
   MediaCountryOfOrigin,
   MediaDemography,
@@ -8,7 +10,6 @@ import type {
   MediaStatus,
   MediaType,
 } from "@taiyomoe/db"
-import { type DB, type Kysely } from "@taiyomoe/db"
 import { toUnixMs } from "@taiyomoe/utils"
 
 export type MediaDocument = {
@@ -41,6 +42,9 @@ export type MediaDocument = {
   chapterCount: number
   _sortMainTitle: string
 }
+
+const isValidTimestamp = (value: number | null): value is number =>
+  value !== null && value !== 0 && !Number.isNaN(value)
 
 export const getMediaDocument = async (db: Kysely<DB>, mediaId: string) => {
   const media = await db
@@ -82,7 +86,7 @@ export const getMediaDocument = async (db: Kysely<DB>, mediaId: string) => {
       .execute(),
     db
       .selectFrom("userLibraryEntries")
-      .select(db.fn.countAll<number>().as("count"))
+      .select(db.fn.countAll().as("count"))
       .where("mediaId", "=", mediaId)
       .executeTakeFirstOrThrow(),
   ])
@@ -91,11 +95,15 @@ export const getMediaDocument = async (db: Kysely<DB>, mediaId: string) => {
   const authorIds = staffs.filter((s) => s.role === "AUTHOR").map((s) => s.staffId)
   const artistIds = staffs.filter((s) => s.role === "ARTIST").map((s) => s.staffId)
   const tags = media.tags ?? []
-  const links = media.links ?? {}
   const createdAt = toUnixMs(media.createdAt)
   const updatedAt = toUnixMs(media.updatedAt)
 
-  if (!mainTitle || !mainCover || !createdAt || !updatedAt) {
+  if (
+    mainTitle === undefined ||
+    mainCover === undefined ||
+    !isValidTimestamp(createdAt) ||
+    !isValidTimestamp(updatedAt)
+  ) {
     return null
   }
 
@@ -114,18 +122,18 @@ export const getMediaDocument = async (db: Kysely<DB>, mediaId: string) => {
     endDate: toUnixMs(media.endDate),
     tagKeys: tags.map((t) => t.key),
     spoilerTagKeys: tags.filter((t) => t.isSpoiler).map((t) => t.key),
-    linkProviders: Object.keys(links),
+    linkProviders: Object.keys(media.links),
     titleLanguages: Array.from(new Set(titles.map((t) => t.language))),
     chapterLanguages: Array.from(new Set(chapterRows.map((r) => r.language))),
     coverLanguages: Array.from(new Set(covers.map((c) => c.language))),
     titles: titles.map((t) => t.title),
-    synopsis: media.synopsis ?? {},
+    synopsis: media.synopsis,
     staffNames: staffs.map((s) => s.name),
-    mainTitle: mainTitle ? { title: mainTitle.title, language: mainTitle.language } : null,
-    mainCoverId: mainCover?.id ?? null,
+    mainTitle: { title: mainTitle.title, language: mainTitle.language },
+    mainCoverId: mainCover.id,
     libraryCount: Number(libraryCountRow.count),
     chapterCount: chapterRows.length,
-    _sortMainTitle: mainTitle ? mainTitle.title.toLowerCase() : "",
+    _sortMainTitle: mainTitle.title.toLowerCase(),
     authorIds,
     artistIds,
   } satisfies MediaDocument

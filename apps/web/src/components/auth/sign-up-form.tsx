@@ -26,7 +26,7 @@ import { config } from "@taiyomoe/config"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { Form } from "@taiyomoe/ui/components/ui/form"
 import { Link } from "@tanstack/react-router"
-import { type FormEvent, useRef, useState } from "react"
+import { type ReactNode, type SubmitEvent, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
@@ -56,6 +56,16 @@ const signUpSchema = z.object({
     ),
   agree: z.boolean().refine((value) => value, m.auth_accept_terms()),
 })
+const TermsLink = ({ children }: { children?: ReactNode }) => (
+  <Link to="/terms" {...stylex.props(sx.link)}>
+    {children}
+  </Link>
+)
+const PrivacyLink = ({ children }: { children?: ReactNode }) => (
+  <Link to="/privacy" {...stylex.props(sx.link)}>
+    {children}
+  </Link>
+)
 
 export const SignUpForm = () => {
   const auth = useAuthForm()
@@ -73,25 +83,30 @@ export const SignUpForm = () => {
   // handleSubmit() is invoked at event time rather than during render: its
   // callback reads turnstileRef.current, and the React Compiler must assume a
   // function passed to a call made during render may itself run during render.
-  const onSubmit = (event: FormEvent<HTMLFormElement>) =>
-    form.handleSubmit(async (values) => {
+  const onSubmit = (event: SubmitEvent<HTMLFormElement>) => {
+    void form.handleSubmit(async (values) => {
       auth.setError(null)
 
       await authClient.signUp.email(
         { name: values.name, email: values.email, password: values.password, callbackURL: "/" },
         {
-          ...(captchaToken ? { headers: { "x-captcha-response": captchaToken } } : {}),
+          ...(captchaToken !== null && captchaToken !== ""
+            ? { headers: { "x-captcha-response": captchaToken } }
+            : {}),
           onError: ({ error }) => {
             auth.setError(error.message || m.auth_error_generic())
             turnstileRef.current?.reset()
             setCaptchaToken(null)
           },
-          onSuccess: () => setPendingEmail(values.email),
+          onSuccess: () => {
+            setPendingEmail(values.email)
+          },
         },
       )
     })(event)
+  }
 
-  if (pendingEmail) {
+  if (pendingEmail !== null && pendingEmail !== "") {
     return (
       <>
         <AuthHeading title={m.auth_check_inbox_title()} subtitle={m.auth_check_inbox_subtitle()} />
@@ -168,18 +183,7 @@ export const SignUpForm = () => {
               <ParaglideMessage
                 message={m.auth_agree}
                 inputs={{}}
-                markup={{
-                  terms: ({ children }) => (
-                    <Link to="/terms" {...stylex.props(sx.link)}>
-                      {children}
-                    </Link>
-                  ),
-                  privacy: ({ children }) => (
-                    <Link to="/privacy" {...stylex.props(sx.link)}>
-                      {children}
-                    </Link>
-                  ),
-                }}
+                markup={{ terms: TermsLink, privacy: PrivacyLink }}
               />
             }
           />
@@ -188,9 +192,15 @@ export const SignUpForm = () => {
             <Turnstile
               ref={turnstileRef}
               siteKey={env.VITE_TURNSTILE_SITE_KEY}
-              onSuccess={(token) => setCaptchaToken(token)}
-              onExpire={() => setCaptchaToken(null)}
-              onError={() => setCaptchaToken(null)}
+              onSuccess={(token) => {
+                setCaptchaToken(token)
+              }}
+              onExpire={() => {
+                setCaptchaToken(null)
+              }}
+              onError={() => {
+                setCaptchaToken(null)
+              }}
               options={{ theme: "dark", size: "flexible" }}
             />
 
@@ -198,7 +208,7 @@ export const SignUpForm = () => {
               block
               type="submit"
               loading={isSubmitting}
-              disabled={isBusy || !captchaToken}
+              disabled={isBusy || captchaToken === null || captchaToken === ""}
             >
               {m.auth_create_account()}
             </SunButton>

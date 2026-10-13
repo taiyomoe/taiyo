@@ -11,10 +11,10 @@ import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
 import { focus, surface, transitions } from "../../styles/recipes"
 
 export const ComboboxContext: React.Context<{
-  chipsRef: React.RefObject<Element | null> | null
+  chipsRef: React.RefObject<HTMLDivElement | null> | null
   multiple: boolean
 }> = React.createContext<{
-  chipsRef: React.RefObject<Element | null> | null
+  chipsRef: React.RefObject<HTMLDivElement | null> | null
   multiple: boolean
 }>({
   chipsRef: null,
@@ -346,9 +346,9 @@ const styles = stylex.create({
 export function Combobox<Value, Multiple extends boolean | undefined = false>(
   props: ComboboxPrimitive.Root.Props<Value, Multiple>,
 ): React.ReactElement {
-  const chipsRef = React.useRef<Element | null>(null)
+  const chipsRef = React.useRef<HTMLDivElement | null>(null)
   const contextValue = React.useMemo(
-    () => ({ chipsRef, multiple: !!props.multiple }),
+    () => ({ chipsRef, multiple: Boolean(props.multiple) }),
     [props.multiple],
   )
 
@@ -369,7 +369,7 @@ export function ComboboxChipsInput({
   ref?: React.Ref<HTMLInputElement>
   sx?: Sx
 }): React.ReactElement {
-  const sizeValue = (size ?? "default") as "sm" | "default" | "lg" | number
+  const sizeValue = size ?? "default"
   const styleProps = stylex.props(styles.chipsInput, sizeValue === "sm" && styles.chipsInputSm, sx)
 
   return (
@@ -404,7 +404,7 @@ export function ComboboxInput({
   clearProps?: ComboboxPrimitive.Clear.Props
   sx?: Sx
 }): React.ReactElement {
-  const sizeValue = (size ?? "default") as "sm" | "default" | "lg" | number
+  const sizeValue = size ?? "default"
   const isSm = sizeValue === "sm"
   const groupProps = stylex.props(styles.inputGroup)
   const addonProps = stylex.props(styles.startAddon, isSm && styles.startAddonSm)
@@ -428,7 +428,7 @@ export function ComboboxInput({
       data-slot="combobox-input-group"
       style={groupProps.style}
     >
-      {startAddon && (
+      {Boolean(startAddon) && (
         <div
           aria-hidden="true"
           className={addonProps.className}
@@ -481,7 +481,7 @@ export function ComboboxTrigger({
     <ComboboxPrimitive.Trigger
       className={cn(styleProps.className, className)}
       data-slot="combobox-trigger"
-      style={{ ...styleProps.style, ...(style as React.CSSProperties) }}
+      style={{ ...styleProps.style, ...(typeof style === "function" ? undefined : style) }}
       {...props}
     >
       {children}
@@ -700,7 +700,7 @@ export function ComboboxClear({
     <ComboboxPrimitive.Clear
       className={cn(styleProps.className, className)}
       data-slot="combobox-clear"
-      style={{ ...styleProps.style, ...(style as React.CSSProperties) }}
+      style={{ ...styleProps.style, ...(typeof style === "function" ? undefined : style) }}
       {...props}
     >
       {children ?? <Close className={iconProps.className} style={iconProps.style} />}
@@ -747,11 +747,11 @@ export function ComboboxChips({
     <ComboboxPrimitive.Chips
       className={cn(styleProps.className, className)}
       data-slot="combobox-chips"
-      ref={chipsRef as React.Ref<HTMLDivElement> | null}
+      ref={chipsRef}
       style={styleProps.style}
       {...props}
     >
-      {startAddon && (
+      {Boolean(startAddon) && (
         <div
           aria-hidden="true"
           className={addonProps.className}

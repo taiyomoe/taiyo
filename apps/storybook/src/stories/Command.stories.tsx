@@ -39,7 +39,10 @@ type Item = {
   shortcut?: string
 }
 
-type Group = { value: string; items: Item[] }
+type Group = {
+  value: string
+  items: Item[]
+}
 
 const defaultGroups: Group[] = [
   {
@@ -122,7 +125,7 @@ export const Default = meta.story({
                         <CommandItem key={item.value} value={item.value}>
                           {item.icon ? <HugeiconsIcon icon={item.icon} /> : null}
                           <span sx={styles.cell}>{item.label}</span>
-                          {item.shortcut ? (
+                          {item.shortcut !== undefined && item.shortcut !== "" ? (
                             <CommandShortcut>{item.shortcut}</CommandShortcut>
                           ) : null}
                         </CommandItem>
@@ -186,7 +189,7 @@ export const EmptyState = meta.story({
                         <CommandItem key={item.value} value={item.value}>
                           {item.icon ? <HugeiconsIcon icon={item.icon} /> : null}
                           <span sx={styles.cell}>{item.label}</span>
-                          {item.shortcut ? (
+                          {item.shortcut !== undefined && item.shortcut !== "" ? (
                             <CommandShortcut>{item.shortcut}</CommandShortcut>
                           ) : null}
                         </CommandItem>
@@ -250,7 +253,7 @@ export const WithoutFooter = meta.story({
                         <CommandItem key={item.value} value={item.value}>
                           {item.icon ? <HugeiconsIcon icon={item.icon} /> : null}
                           <span sx={styles.cell}>{item.label}</span>
-                          {item.shortcut ? (
+                          {item.shortcut !== undefined && item.shortcut !== "" ? (
                             <CommandShortcut>{item.shortcut}</CommandShortcut>
                           ) : null}
                         </CommandItem>

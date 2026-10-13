@@ -205,7 +205,7 @@ export async function seed(db: Kysely<DB>): Promise<void> {
     .execute()
 
   // Follow relationships: followerId follows followingId.
-  const followRows: { followerId: string; followingId: string }[] = []
+  const followRows: Array<{ followerId: string; followingId: string }> = []
 
   for (const user of USERS) {
     const followers = faker.helpers

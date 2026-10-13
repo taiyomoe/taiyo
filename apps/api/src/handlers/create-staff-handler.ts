@@ -69,7 +69,7 @@ export const createStaffHandler = new Hono().post(
   withTransaction,
   async (c) => {
     const { db, s3, s3Bucket, log, user } = c.var
-    const body = c.var.formData!
+    const body = c.var.formData
     const id = crypto.randomUUID()
 
     log.set({ staff: { id } })

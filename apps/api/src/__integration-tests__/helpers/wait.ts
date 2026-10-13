@@ -15,7 +15,9 @@ export const waitForMeiliMediaDoc = async (
       return doc
     }
 
-    await new Promise<void>((r) => setTimeout(r, intervalMs))
+    await new Promise<void>((r) => {
+      setTimeout(r, intervalMs)
+    })
   }
 
   return null

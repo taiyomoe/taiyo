@@ -1,4 +1,8 @@
 import {
+  CreateBucketCommand,
+  DeleteObjectsCommand,
+  GetObjectCommand,
+  ListObjectsV2Command,
   PutBucketLifecycleConfigurationCommand,
   PutObjectCommand,
   S3Client,
@@ -27,7 +31,7 @@ export {
   PutBucketLifecycleConfigurationCommand,
   PutObjectCommand,
   S3Client,
-} from "@aws-sdk/client-s3"
+}
 
 export const getCoverKey = (mediaId: string, fileName: string) =>
   `medias/${mediaId}/covers/${fileName}`

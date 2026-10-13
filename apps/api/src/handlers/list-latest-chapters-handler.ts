@@ -66,7 +66,7 @@ export const listLatestChaptersHandler = new Hono().get(
         .innerJoin("medias", "medias.id", "chapters.mediaId")
         .where("chapters.deletedAt", "is", null)
         .where("medias.deletedAt", "is", null)
-        .select(db.fn.countAll<number>().as("count"))
+        .select(db.fn.countAll().as("count"))
         .executeTakeFirstOrThrow(),
     ])
 

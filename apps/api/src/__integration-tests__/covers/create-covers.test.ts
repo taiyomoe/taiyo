@@ -1,5 +1,6 @@
 import { ListObjectsV2Command } from "@aws-sdk/client-s3"
 import { describe, expect } from "vitest"
+import { defined } from "../helpers/assert"
 import { signInAs } from "../helpers/auth"
 import { config } from "@taiyomoe/config"
 import { fakeImageOfSize, invalidImage, tinyGif, tinyPng } from "../helpers/fixtures"
@@ -86,7 +87,7 @@ describe("POST /medias/:id/covers", () => {
     const row = await services.db
       .selectFrom("covers")
       .select("extension")
-      .where("id", "=", coverId!)
+      .where("id", "=", defined(coverId))
       .executeTakeFirstOrThrow()
 
     expect(row.extension).toBe("gif")

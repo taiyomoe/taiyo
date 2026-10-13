@@ -2,7 +2,7 @@ import type { Generated, Insertable } from "kysely"
 import type { Language } from "../constants"
 import type { Timestamp } from "../types"
 
-export interface Title {
+export type Title = {
   id: Generated<string>
   createdAt: Generated<Timestamp>
   updatedAt: Generated<Timestamp>

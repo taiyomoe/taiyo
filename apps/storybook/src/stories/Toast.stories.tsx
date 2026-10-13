@@ -36,12 +36,12 @@ export const Default = meta.story({
 
       return (
         <Button
-          onClick={() =>
+          onClick={() => {
             manager.add({
               title: "Notification",
               description: "Your changes have been saved.",
             })
-          }
+          }}
           variant="outline"
         >
           Show toast
@@ -64,13 +64,13 @@ export const Success = meta.story({
 
       return (
         <Button
-          onClick={() =>
+          onClick={() => {
             manager.add({
               type: "success",
               title: "Saved",
               description: "Your changes have been saved successfully.",
             })
-          }
+          }}
           variant="outline"
         >
           Show toast
@@ -93,13 +93,13 @@ export const Error = meta.story({
 
       return (
         <Button
-          onClick={() =>
+          onClick={() => {
             manager.add({
               type: "error",
               title: "Something went wrong",
               description: "We couldn't save your changes. Please try again.",
             })
-          }
+          }}
           variant="outline"
         >
           Show toast
@@ -122,13 +122,13 @@ export const Info = meta.story({
 
       return (
         <Button
-          onClick={() =>
+          onClick={() => {
             manager.add({
               type: "info",
               title: "Heads up",
               description: "A new version is available.",
             })
-          }
+          }}
           variant="outline"
         >
           Show toast
@@ -151,13 +151,13 @@ export const Warning = meta.story({
 
       return (
         <Button
-          onClick={() =>
+          onClick={() => {
             manager.add({
               type: "warning",
               title: "Be careful",
               description: "This action cannot be undone.",
             })
-          }
+          }}
           variant="outline"
         >
           Show toast
@@ -180,13 +180,13 @@ export const Loading = meta.story({
 
       return (
         <Button
-          onClick={() =>
+          onClick={() => {
             manager.add({
               type: "loading",
               title: "Saving",
               description: "Please wait while we save your changes.",
             })
-          }
+          }}
           variant="outline"
         >
           Show toast
@@ -218,7 +218,9 @@ export const Positions = meta.story({
 
       return (
         <Button
-          onClick={() => manager.add({ title: position, description: `Toast from ${position}` })}
+          onClick={() => {
+            manager.add({ title: position, description: `Toast from ${position}` })
+          }}
           variant="outline"
         >
           {position}
@@ -245,14 +247,14 @@ export const WithAction = meta.story({
 
       return (
         <Button
-          onClick={() =>
+          onClick={() => {
             manager.add({
               type: "success",
               title: "Item archived",
               description: "You can undo this action.",
               actionProps: { children: "Undo", onClick: () => undefined },
             })
-          }
+          }}
           variant="outline"
         >
           Show toast

@@ -4,8 +4,9 @@ import type { CSSProperties, ReactNode } from "react"
 
 import { scene, sceneFont } from "@/components/scene/scene.stylex"
 
-const GRADIENTS: [string, string][] = [
-  ["#f2452d", "#ffb820"],
+const DEFAULT_GRADIENT: [string, string] = ["#f2452d", "#ffb820"]
+const GRADIENTS: Array<[string, string]> = [
+  DEFAULT_GRADIENT,
   ["#2e7de0", "#9333ea"],
   ["#1fa85b", "#0ea5a5"],
   ["#8e2015", "#f2452d"],
@@ -61,7 +62,7 @@ type CoverArtProps = {
 }
 
 export const CoverArt = ({ title, children, footer, style }: CoverArtProps) => {
-  const [from, to] = GRADIENTS[hash(title) % GRADIENTS.length] as [string, string]
+  const [from, to] = GRADIENTS[hash(title) % GRADIENTS.length] ?? DEFAULT_GRADIENT
   const styleProps = stylex.props(styles.cover)
 
   return (

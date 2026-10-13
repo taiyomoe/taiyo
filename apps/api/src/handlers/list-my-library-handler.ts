@@ -59,7 +59,7 @@ export const listMyLibraryHandler = new Hono().get(
         .limit(perPage)
         .offset((page - 1) * perPage)
         .execute(),
-      base.select(db.fn.countAll<number>().as("count")).executeTakeFirstOrThrow(),
+      base.select(db.fn.countAll().as("count")).executeTakeFirstOrThrow(),
     ])
 
     return c.ok(items, { page, perPage, total: Number(totalRow.count) })

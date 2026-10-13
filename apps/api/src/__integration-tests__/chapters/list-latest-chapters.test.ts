@@ -1,4 +1,5 @@
 import { describe, expect } from "vitest"
+import { defined } from "../helpers/assert"
 import { api } from "../helpers/request"
 import { test } from "../setup"
 
@@ -17,13 +18,21 @@ const isDescending = (rows: FeedRow[]) =>
       return true
     }
 
-    const previous = rows[index - 1]!
+    const previous = defined(rows[index - 1])
 
     return previous.createdAt === row.createdAt
       ? previous.id > row.id
       : previous.createdAt > row.createdAt
   })
-const getTotal = (meta: Record<string, unknown> | undefined) => (meta as { total: number }).total
+const getTotal = (meta: Record<string, unknown> | undefined) => {
+  const total = meta?.total
+
+  if (typeof total !== "number") {
+    throw new Error("Expected a numeric total")
+  }
+
+  return total
+}
 
 describe("GET /chapters/latest", () => {
   test("returns the latest chapters", async ({ app }) => {
@@ -90,7 +99,7 @@ describe("GET /chapters/latest", () => {
       throw new Error("Expected success")
     }
 
-    const newest = before.body.data[0]!
+    const newest = defined(before.body.data[0])
 
     await services.db
       .updateTable("chapters")
@@ -115,7 +124,7 @@ describe("GET /chapters/latest", () => {
       throw new Error("Expected success")
     }
 
-    const { mediaId } = before.body.data[0]!
+    const { mediaId } = defined(before.body.data[0])
     const liveChapters = await services.db
       .selectFrom("chapters")
       .select("id")

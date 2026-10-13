@@ -39,7 +39,7 @@ export const getBannerHandler = new Hono().get(
     },
   }),
   checkBanner(),
-  async (c) => {
+  (c) => {
     const { banner } = c.var
 
     return c.ok({

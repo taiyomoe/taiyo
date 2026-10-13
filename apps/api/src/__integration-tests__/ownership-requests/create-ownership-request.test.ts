@@ -1,11 +1,12 @@
 import { randomUUID } from "node:crypto"
 import { describe, expect } from "vitest"
+import type { Services } from "../../services"
 import { signInAs } from "../helpers/auth"
 import { api } from "../helpers/request"
 import { test } from "../setup"
 
 const SEEDED_GROUP_ID = "4d8a22ba-d8a0-4a98-b4f3-1d630fbd7de1"
-const getUnownedGroup = async (services: { db: any; auth: any }, creatorId: string) => {
+const getUnownedGroup = async (services: Services, creatorId: string) => {
   const id = randomUUID()
 
   await services.db

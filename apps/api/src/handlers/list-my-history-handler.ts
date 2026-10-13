@@ -70,7 +70,7 @@ export const listMyHistoryHandler = new Hono().get(
         .innerJoin("chapters", "chapters.id", "userHistories.chapterId")
         .where("userHistories.userId", "=", user.id)
         .where("chapters.deletedAt", "is", null)
-        .select(db.fn.countAll<number>().as("count"))
+        .select(db.fn.countAll().as("count"))
         .executeTakeFirstOrThrow(),
     ])
 

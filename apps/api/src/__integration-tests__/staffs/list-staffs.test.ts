@@ -2,7 +2,11 @@ import { describe, expect } from "vitest"
 import { api } from "../helpers/request"
 import { test } from "../setup"
 
-type StaffListItem = { id: string; name: string; image: string | null }
+type StaffListItem = {
+  id: string
+  name: string
+  image: string | null
+}
 
 describe("GET /staffs", () => {
   test("returns a paginated list of staffs", async ({ app }) => {

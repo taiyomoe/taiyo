@@ -21,7 +21,7 @@ import type { UserProfile } from "./models/user-profile-model"
 import type { User } from "./models/user-model"
 import type { Verification } from "./models/verification-model"
 
-export interface DB {
+export type DB = {
   accounts: Account
   banners: Banner
   chapterGroups: ChapterGroup

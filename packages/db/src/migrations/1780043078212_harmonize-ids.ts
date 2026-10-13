@@ -1,6 +1,8 @@
 import { type Kysely, sql } from "kysely"
 
-export async function up(db: Kysely<any>): Promise<void> {
+type MigrationDb = Record<string, Record<string, unknown>>
+
+export async function up(db: Kysely<MigrationDb>): Promise<void> {
   /**
    * Phase 1: User-side conversions.
    */
@@ -933,6 +935,8 @@ export async function up(db: Kysely<any>): Promise<void> {
     .execute()
 }
 
-export async function down(): Promise<void> {
-  throw new Error("harmonize-ids is a destructive data-type migration and cannot be reversed")
+export function down(): Promise<void> {
+  return Promise.reject(
+    new Error("harmonize-ids is a destructive data-type migration and cannot be reversed"),
+  )
 }

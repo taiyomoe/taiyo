@@ -11,7 +11,7 @@ import type {
 import type { LocalizedText, MediaLinks, MediaTags } from "../json-types"
 import type { ArrayType, Timestamp } from "../types"
 
-export interface Media {
+export type Media = {
   id: Generated<string>
   createdAt: Generated<Timestamp>
   updatedAt: Generated<Timestamp>

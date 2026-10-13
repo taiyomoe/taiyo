@@ -11,7 +11,7 @@ export const createSendMagicLink =
       .where("email", "=", data.email)
       .executeTakeFirst()
 
-    if (!user || !user.email) {
+    if (user === undefined || user.email === null || user.email === "") {
       throw new APIError("BAD_REQUEST", { message: "Failed to send magic link" })
     }
 

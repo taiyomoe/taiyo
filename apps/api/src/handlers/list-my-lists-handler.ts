@@ -57,7 +57,7 @@ export const listMyListsHandler = new Hono().get(
           eb
             .selectFrom("userListItems")
             .whereRef("userListItems.listId", "=", "userLists.id")
-            .select(eb.fn.countAll<number>().as("count"))
+            .select(eb.fn.countAll().as("count"))
             .as("itemCount"),
         ])
         .orderBy("updatedAt", "desc")
@@ -68,7 +68,7 @@ export const listMyListsHandler = new Hono().get(
         .selectFrom("userLists")
         .where("userId", "=", user.id)
         .where("deletedAt", "is", null)
-        .select(db.fn.countAll<number>().as("count"))
+        .select(db.fn.countAll().as("count"))
         .executeTakeFirstOrThrow(),
     ])
 

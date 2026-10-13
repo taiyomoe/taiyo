@@ -1,6 +1,6 @@
 import type { Insertable } from "kysely"
 
-export interface ChapterGroup {
+export type ChapterGroup = {
   chapterId: string
   groupId: string
 }

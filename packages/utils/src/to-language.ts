@@ -25,15 +25,19 @@ export const toLanguage = (input?: string | null) => {
     case "es-la":
       return "es_la"
 
-    default: {
-      if (input && isLanguage(input)) {
+    case null:
+
+    case undefined:
+      break
+
+    default:
+      if (isLanguage(input)) {
         return input
       }
-
-      // oxlint-disable-next-line no-console
-      console.warn(`Invalid language key "${input}", skipping...`)
-
-      return null
-    }
   }
+
+  // oxlint-disable-next-line no-console
+  console.warn(`Invalid language key "${input}", skipping...`)
+
+  return null
 }

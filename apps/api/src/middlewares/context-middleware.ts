@@ -64,7 +64,9 @@ export type AppContextVariables = EvlogVariables["Variables"] & {
 export const createContextMiddleware = (services: Services) =>
   createMiddleware(async (c, next) => {
     const timestamp = new Date().toISOString()
-    const requestId = (c.get("log").getContext().requestId as string) || crypto.randomUUID()
+    const logRequestId = c.get("log").getContext().requestId
+    const requestId =
+      typeof logRequestId === "string" && logRequestId !== "" ? logRequestId : crypto.randomUUID()
 
     c.set("db", services.db)
     c.set("s3", services.s3)
@@ -74,7 +76,12 @@ export const createContextMiddleware = (services: Services) =>
     c.set("auth", services.auth)
     c.set("chapterUploadQueue", services.chapterUploadQueue)
 
-    c.ok = ((data: unknown, meta?: Record<string, unknown>) => {
+    function ok<T>(data: T): JsonResponse<SuccessEnvelope<T>, 200 | 201>
+    function ok<T, M extends Record<string, unknown>>(
+      data: T,
+      meta: M,
+    ): JsonResponse<PaginatedEnvelope<T, M>, 200 | 201>
+    function ok(data: unknown, meta?: Record<string, unknown>): Response {
       c.status(c.req.method === "POST" ? 201 : 200)
 
       return c.json({
@@ -84,9 +91,11 @@ export const createContextMiddleware = (services: Services) =>
         timestamp,
         requestId,
       })
-    }) as AppContext["ok"]
+    }
 
-    c.fail = ((errorCode: ErrorCode, details?: unknown) => {
+    c.ok = ok
+
+    c.fail = (errorCode: ErrorCode, details?: unknown) => {
       const error = errors[errorCode]
 
       c.status(error.code)
@@ -111,7 +120,7 @@ export const createContextMiddleware = (services: Services) =>
       }
 
       return c.json(response)
-    }) as AppContext["fail"]
+    }
 
     await next()
   })

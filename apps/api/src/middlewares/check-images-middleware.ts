@@ -1,8 +1,9 @@
 import { config } from "@taiyomoe/config"
-import { IMAGE_MIME_TYPES, type ImageMimeType } from "@taiyomoe/db"
+import { IMAGE_MIME_TYPES } from "@taiyomoe/db"
 import { createMiddleware } from "hono/factory"
 import { filetypeinfo } from "magic-bytes.js"
 import sharp from "sharp"
+import { isImageMimeType } from "../utils/is-image-mime-type"
 
 // Walks a dot-separated FormData key (e.g. "covers.0.file") into the nested
 // object that validateFormData built and replaces the leaf. We need this
@@ -10,23 +11,20 @@ import sharp from "sharp"
 // underlying FormData object; without this write the original (unprocessed)
 // File ref persists and the route uploads raw user bytes.
 const setByPath = (root: unknown, key: string, value: File) => {
-  if (root === null || typeof root !== "object") {
-    return
-  }
-
   const segments = key.split(".")
-  let cur: unknown = root
+  const leaf = segments.pop()
+  let cur = root
 
-  for (let i = 0; i < segments.length - 1; i++) {
+  for (const segment of segments) {
     if (cur === null || typeof cur !== "object") {
       return
     }
 
-    cur = (cur as Record<string, unknown>)[segments[i]!]
+    cur = Reflect.get(cur, segment)
   }
 
-  if (cur !== null && typeof cur === "object") {
-    ;(cur as Record<string, unknown>)[segments.at(-1)!] = value
+  if (leaf !== undefined && cur !== null && typeof cur === "object") {
+    Reflect.set(cur, leaf, value)
   }
 }
 
@@ -34,12 +32,12 @@ export const checkImages = (maxSizeBytes: number = config.images.maxSizeBytes) =
   createMiddleware(async (c, next) => {
     const contentType = c.req.header("content-type")
 
-    if (!contentType?.includes("multipart/form-data")) {
+    if (contentType?.includes("multipart/form-data") !== true) {
       return next()
     }
 
     const formData = await c.req.formData()
-    const validated = c.get("formData") as unknown
+    const validated: unknown = c.get("formData")
 
     for (const [key, value] of formData.entries()) {
       if (!(value instanceof File)) {
@@ -60,9 +58,9 @@ export const checkImages = (maxSizeBytes: number = config.images.maxSizeBytes) =
 
       const buffer = Buffer.from(await value.arrayBuffer())
       const fileTypes = filetypeinfo(Array.from(buffer.subarray(0, 100)))
-      const detectedType = fileTypes.find((ft) => !!ft.mime && ft.mime in IMAGE_MIME_TYPES)
+      const detectedMime = fileTypes.map((ft) => ft.mime).find(isImageMimeType)
 
-      if (!detectedType?.mime) {
+      if (detectedMime === undefined) {
         return c.fail("INVALID_IMAGE", {
           path: key.split("."),
           message: `Invalid image format detected. Allowed mime types are: ${Object.keys(IMAGE_MIME_TYPES).join(", ")}`,
@@ -70,26 +68,25 @@ export const checkImages = (maxSizeBytes: number = config.images.maxSizeBytes) =
         })
       }
 
-      const detectedMime = detectedType.mime as ImageMimeType
       const detectedFormat = IMAGE_MIME_TYPES[detectedMime]
       const { processedBuffer, mimeType, extension } = await (async () => {
         if (detectedFormat === "gif") {
-          const processedBuffer = await sharp(buffer, { animated: true }).gif().toBuffer()
+          const gifBuffer = await sharp(buffer, { animated: true }).gif().toBuffer()
 
           return {
-            processedBuffer,
+            processedBuffer: gifBuffer,
             mimeType: "image/gif",
             extension: "gif",
           }
         }
 
-        const processedBuffer = await sharp(buffer)
+        const jpegBuffer = await sharp(buffer)
           .rotate() // Auto-rotate based on EXIF orientation before stripping
           .jpeg({ quality: config.images.quality })
           .toBuffer()
 
         return {
-          processedBuffer,
+          processedBuffer: jpegBuffer,
           mimeType: "image/jpeg",
           extension: "jpg",
         }

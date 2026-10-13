@@ -7,7 +7,13 @@ export const repoRoot = resolve(import.meta.dirname, "../../..")
 export type EnvValues = Record<string, string>
 
 export const readEnvFile = (path: string): EnvValues =>
-  existsSync(path) ? (parseEnv(readFileSync(path, "utf8")) as EnvValues) : {}
+  existsSync(path)
+    ? Object.fromEntries(
+        Object.entries(parseEnv(readFileSync(path, "utf8"))).filter(
+          (entry): entry is [string, string] => entry[1] !== undefined,
+        ),
+      )
+    : {}
 
 export const requireEnvValue = (values: EnvValues, key: string, path: string) => {
   const value = values[key]
@@ -25,12 +31,11 @@ export const writeEnvValues = (path: string, values: EnvValues) => {
   const changed: string[] = []
   const next = lines.map((line) => {
     const key = /^\s*(?:export\s+)?([A-Za-z_][A-Za-z0-9_]*)\s*=/.exec(line)?.[1]
+    const value = key === undefined ? undefined : pending.get(key)
 
-    if (key === undefined || !pending.has(key)) {
+    if (key === undefined || value === undefined) {
       return line
     }
-
-    const value = pending.get(key) as string
 
     pending.delete(key)
     const current = parseEnv(line)[key]

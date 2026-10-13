@@ -1,11 +1,11 @@
 import type { DB, Kysely } from "@taiyomoe/db"
 import type { Meilisearch } from "meilisearch"
-import { SEARCH_INDEXES } from "./client"
+import { getMeiliClient, SEARCH_INDEXES } from "./client"
 import { initMediasIndex } from "./medias/init-medias-index"
 
-export { getMeiliClient, SEARCH_INDEXES } from "./client"
+export { getMeiliClient, SEARCH_INDEXES }
 
-export type { Meilisearch } from "meilisearch"
+export type { Meilisearch }
 
 export * from "./medias/sync-media"
 

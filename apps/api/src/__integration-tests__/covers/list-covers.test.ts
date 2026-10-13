@@ -24,7 +24,7 @@ describe("GET /medias/:id/covers", () => {
     }
 
     expect(res.body.data.length).toBeGreaterThan(0)
-    expect(res.body.data.some((c) => c.isMainCover === true)).toBe(true)
+    expect(res.body.data.some((c) => c.isMainCover)).toBe(true)
   })
 
   test("returns a resolvable url for every cover", async ({ app }) => {

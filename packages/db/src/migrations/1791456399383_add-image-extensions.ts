@@ -1,6 +1,6 @@
 import { type Kysely, sql } from "kysely"
 
-export async function up(db: Kysely<any>): Promise<void> {
+export async function up(db: Kysely<unknown>): Promise<void> {
   await db.schema
     .alterTable("covers")
     .addColumn("extension", "text", (c) => c.notNull().defaultTo("jpg"))
@@ -22,7 +22,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .execute()
 }
 
-export async function down(db: Kysely<any>): Promise<void> {
+export async function down(db: Kysely<unknown>): Promise<void> {
   await db.schema.alterTable("covers").dropConstraint("covers_extension_check").execute()
   await db.schema.alterTable("covers").dropColumn("extension").execute()
 

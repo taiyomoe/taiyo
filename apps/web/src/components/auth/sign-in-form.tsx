@@ -75,7 +75,14 @@ export const SignInForm = () => {
           disabled={isBusy}
           onSelect={auth.onSocial}
         />
-        <Form data-auth-fields sx={sx.fields} onSubmit={onSubmit} noValidate>
+        <Form
+          data-auth-fields
+          sx={sx.fields}
+          onSubmit={(event) => {
+            void onSubmit(event)
+          }}
+          noValidate
+        >
           <InputField
             name="email"
             control={form.control}

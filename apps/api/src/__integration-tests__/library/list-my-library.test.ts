@@ -7,7 +7,7 @@ const SEEDED_MEDIA_IDS = [
   "4e26b80f-6661-4f5f-93b4-6dfed052bbed",
   "7a99da64-56e7-4bf6-8159-8db0d3b4f231",
   "104a9efc-ef2a-4bf4-807b-2d949d78e3b6",
-]
+] as const
 
 describe("GET /users/me/library", () => {
   test("returns the user's library", async ({ app, services }) => {
@@ -16,9 +16,9 @@ describe("GET /users/me/library", () => {
     await services.db
       .insertInto("userLibraryEntries")
       .values([
-        { userId, mediaId: SEEDED_MEDIA_IDS[0]!, status: "READING" },
-        { userId, mediaId: SEEDED_MEDIA_IDS[1]!, status: "COMPLETED" },
-        { userId, mediaId: SEEDED_MEDIA_IDS[2]!, status: "DROPPED" },
+        { userId, mediaId: SEEDED_MEDIA_IDS[0], status: "READING" },
+        { userId, mediaId: SEEDED_MEDIA_IDS[1], status: "COMPLETED" },
+        { userId, mediaId: SEEDED_MEDIA_IDS[2], status: "DROPPED" },
       ])
       .execute()
 
@@ -39,13 +39,13 @@ describe("GET /users/me/library", () => {
     await services.db
       .insertInto("userLibraryEntries")
       .values([
-        { userId, mediaId: SEEDED_MEDIA_IDS[0]!, status: "READING" },
-        { userId, mediaId: SEEDED_MEDIA_IDS[1]!, status: "COMPLETED" },
-        { userId, mediaId: SEEDED_MEDIA_IDS[2]!, status: "READING" },
+        { userId, mediaId: SEEDED_MEDIA_IDS[0], status: "READING" },
+        { userId, mediaId: SEEDED_MEDIA_IDS[1], status: "COMPLETED" },
+        { userId, mediaId: SEEDED_MEDIA_IDS[2], status: "READING" },
       ])
       .execute()
 
-    const res = await api<{ status: string }[]>(app, `/users/me/library?status=READING`, {
+    const res = await api<Array<{ status: string }>>(app, `/users/me/library?status=READING`, {
       headers,
     })
 
@@ -65,9 +65,9 @@ describe("GET /users/me/library", () => {
     await services.db
       .insertInto("userLibraryEntries")
       .values([
-        { userId, mediaId: SEEDED_MEDIA_IDS[0]!, status: "READING" },
-        { userId, mediaId: SEEDED_MEDIA_IDS[1]!, status: "COMPLETED" },
-        { userId, mediaId: SEEDED_MEDIA_IDS[2]!, status: "READING" },
+        { userId, mediaId: SEEDED_MEDIA_IDS[0], status: "READING" },
+        { userId, mediaId: SEEDED_MEDIA_IDS[1], status: "COMPLETED" },
+        { userId, mediaId: SEEDED_MEDIA_IDS[2], status: "READING" },
       ])
       .execute()
 

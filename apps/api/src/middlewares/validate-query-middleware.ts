@@ -7,8 +7,8 @@ type Env<TSchema extends z.ZodType> = {
   }
 }
 
-export const validateQuery = <TSchema extends z.ZodType>(schema: TSchema) => {
-  return createMiddleware<
+export const validateQuery = <TSchema extends z.ZodType>(schema: TSchema) =>
+  createMiddleware<
     Env<TSchema>,
     string,
     {
@@ -26,4 +26,3 @@ export const validateQuery = <TSchema extends z.ZodType>(schema: TSchema) => {
 
     return next()
   })
-}

@@ -2,7 +2,11 @@ import { describe, expect } from "vitest"
 import { api } from "../helpers/request"
 import { test } from "../setup"
 
-type GroupItem = { id: string; name: string; logo: string | null }
+type GroupItem = {
+  id: string
+  name: string
+  logo: string | null
+}
 
 describe("GET /groups", () => {
   test("returns a paginated list of groups", async ({ app }) => {

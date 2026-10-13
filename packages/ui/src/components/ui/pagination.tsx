@@ -122,13 +122,13 @@ export function PaginationLink({
 }: PaginationLinkProps): React.ReactElement {
   const styleProps = stylex.props(sx)
   const defaultProps = {
-    "aria-current": isActive ? ("page" as const) : undefined,
+    "aria-current": isActive === true ? ("page" as const) : undefined,
     className: render
       ? cn(styleProps.className, className)
       : cn(
           buttonVariants({
             size,
-            variant: isActive ? "outline" : "ghost",
+            variant: isActive === true ? "outline" : "ghost",
           }),
           styleProps.className,
           className,

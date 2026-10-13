@@ -6,19 +6,22 @@ import { useState } from "react"
 export const useAuthForm = () => {
   const [error, setError] = useState<string | null>(null)
   const [socialPending, setSocialPending] = useState<SocialProvider | null>(null)
-  const onSocial = async (provider: SocialProvider) => {
+  const signInSocial = async (provider: SocialProvider) => {
     setError(null)
     setSocialPending(provider)
 
     await authClient.signIn.social(
       { provider, callbackURL: "/" },
       {
-        onError: ({ error }) => {
-          setError(error.message || m.auth_error_generic())
+        onError: ({ error: socialError }) => {
+          setError(socialError.message || m.auth_error_generic())
           setSocialPending(null)
         },
       },
     )
+  }
+  const onSocial = (provider: SocialProvider) => {
+    void signInSocial(provider)
   }
 
   return { error, setError, socialPending, onSocial, disabled: socialPending !== null }

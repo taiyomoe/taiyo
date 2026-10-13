@@ -46,6 +46,7 @@ export function Meter({
   ...props
 }: MeterPrimitive.Root.Props & { sx?: Sx }): React.ReactElement {
   const styleProps = stylex.props(styles.root, sx)
+  const hasChildren = Boolean(children)
 
   return (
     <MeterPrimitive.Root
@@ -54,7 +55,7 @@ export function Meter({
       style={styleProps.style}
       {...props}
     >
-      {children ? (
+      {hasChildren ? (
         children
       ) : (
         <MeterTrack>

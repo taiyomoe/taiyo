@@ -17,7 +17,10 @@ import {
 import { Fragment } from "react"
 import { fn } from "storybook/test"
 
-type Fruit = { value: string; label: string }
+type Fruit = {
+  value: string
+  label: string
+}
 
 const fruits: Fruit[] = [
   { value: "apple", label: "Apple" },
@@ -231,7 +234,10 @@ export const ReadOnly = meta.story({
   ),
 })
 
-type FruitGroup = { value: string; items: Fruit[] }
+type FruitGroup = {
+  value: string
+  items: Fruit[]
+}
 
 const groupedFruits: FruitGroup[] = [
   {

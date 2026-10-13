@@ -80,7 +80,7 @@ describe("processChapterUpload", () => {
       .executeTakeFirstOrThrow()
 
     expect(chapter.pages).toHaveLength(1)
-    expect((chapter.pages as { id: string }[])[0]?.id).toBe(pageId)
+    expect(chapter.pages?.[0]?.id).toBe(pageId)
 
     const finalKey = `medias/${SEEDED_MEDIA_ID}/chapters/${chapterId}/${pageId}.jpg`
     const listed = await s3.send(new ListObjectsV2Command({ Bucket: s3Bucket, Prefix: finalKey }))

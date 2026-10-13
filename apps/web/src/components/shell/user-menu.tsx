@@ -104,7 +104,9 @@ export function UserMenu({ user }: { user: Session["user"] }) {
     <Menu>
       <MenuTrigger aria-label={m.shell_user_menu()} sx={styles.trigger}>
         <Avatar sx={styles.avatar}>
-          {user.image ? <AvatarImage alt="" src={user.image} /> : null}
+          {user.image !== undefined && user.image !== null && user.image !== "" ? (
+            <AvatarImage alt="" src={user.image} />
+          ) : null}
           <AvatarFallback sx={styles.fallback}>
             {pipe(
               user.name.split(/\s+/),
@@ -145,7 +147,9 @@ export function UserMenu({ user }: { user: Session["user"] }) {
         <MenuSeparator />
         <MenuItem
           disabled={signOut.isPending}
-          onClick={() => signOut.mutate()}
+          onClick={() => {
+            signOut.mutate()
+          }}
           variant="destructive"
         >
           <Logout />

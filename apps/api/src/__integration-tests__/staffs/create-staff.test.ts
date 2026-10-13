@@ -8,7 +8,7 @@ import { test } from "../setup"
 const getForm = (overrides?: { withFile?: boolean; skipName?: boolean }) => {
   const form = new FormData()
 
-  if (!overrides?.skipName) {
+  if (overrides?.skipName !== true) {
     form.append("name", `Test Staff ${crypto.randomUUID()}`)
   }
 

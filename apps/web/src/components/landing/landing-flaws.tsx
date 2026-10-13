@@ -139,8 +139,12 @@ const FlawCard = ({ icon, title, body }: { icon: IconSvgElement; title: string; 
   return (
     <div
       sx={[styles.card, hovered && styles.cardHovered]}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      onMouseEnter={() => {
+        setHovered(true)
+      }}
+      onMouseLeave={() => {
+        setHovered(false)
+      }}
     >
       <div sx={[styles.corona, hovered && styles.coronaHovered]} />
       <div sx={styles.body}>

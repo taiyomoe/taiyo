@@ -18,7 +18,9 @@ const subscribeToSystemTheme = (onChange: () => void) => {
 
   query.addEventListener("change", onChange)
 
-  return () => query.removeEventListener("change", onChange)
+  return () => {
+    query.removeEventListener("change", onChange)
+  }
 }
 
 export function useThemeState(initial: ThemePreference) {
@@ -34,7 +36,11 @@ export function useThemeState(initial: ThemePreference) {
     freeze.textContent = "*,*::before,*::after{transition:none!important}"
     document.head.append(freeze)
     setPreferenceState(next)
-    requestAnimationFrame(() => requestAnimationFrame(() => freeze.remove()))
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        freeze.remove()
+      })
+    })
 
     if (typeof cookieStore !== "undefined") {
       void cookieStore.set({

@@ -1,6 +1,6 @@
 import { type Kysely, sql } from "kysely"
 
-export async function up(db: Kysely<any>): Promise<void> {
+export async function up(db: Kysely<unknown>): Promise<void> {
   await sql`
     CREATE OR REPLACE FUNCTION set_updated_at()
     RETURNS TRIGGER AS $$
@@ -312,6 +312,8 @@ export async function up(db: Kysely<any>): Promise<void> {
   await db.schema.dropTable("_prisma_migrations").ifExists().execute()
 }
 
-export async function down(): Promise<void> {
-  throw new Error("rename-tables is a destructive data-type migration and cannot be reversed")
+export function down(): Promise<void> {
+  return Promise.reject(
+    new Error("rename-tables is a destructive data-type migration and cannot be reversed"),
+  )
 }

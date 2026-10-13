@@ -15,7 +15,7 @@ export const Default = meta.story({})
 export const WithCheckbox = meta.story({
   render: () => (
     <Label htmlFor="checkbox-terms">
-      <Checkbox id="checkbox-terms" onCheckedChange={fn()} />
+      <Checkbox id="checkbox-terms" onCheckedChange={fn<() => void>()} />
       Accept terms and conditions
     </Label>
   ),

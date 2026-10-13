@@ -29,14 +29,13 @@ const openTunnel = (port: string) =>
 
     children.push(child)
 
-    const timer = setTimeout(
-      () => reject(new Error(`cloudflared gave no URL for port ${port} within 60s`)),
-      TUNNEL_TIMEOUT_MS,
-    )
+    const timer = setTimeout(() => {
+      reject(new Error(`cloudflared gave no URL for port ${port} within 60s`))
+    }, TUNNEL_TIMEOUT_MS)
     const onOutput = (chunk: Buffer) => {
       const url = TUNNEL_URL.exec(chunk.toString())?.[0]
 
-      if (url) {
+      if (url !== undefined) {
         clearTimeout(timer)
         resolveUrl(url)
       }

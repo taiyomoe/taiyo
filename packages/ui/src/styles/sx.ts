@@ -1,4 +1,5 @@
 import type * as stylex from "@stylexjs/stylex"
+import type * as React from "react"
 
 /**
  * Type of the `sx` prop every component in this package accepts.
@@ -22,7 +23,10 @@ export type Sx = stylex.StyleXArray<
   | Readonly<[stylex.CompiledStyles, stylex.InlineStyles]>
 >
 
+export type CSSVariables = React.CSSProperties & Record<`--${string}`, string | number | undefined>
+
 declare module "react" {
+  // oxlint-disable-next-line typescript/consistent-type-definitions
   interface DOMAttributes<T> {
     sx?: Sx
   }

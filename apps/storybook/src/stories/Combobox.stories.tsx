@@ -17,7 +17,11 @@ import {
 } from "@taiyomoe/ui/components/ui/combobox"
 import { fn } from "storybook/test"
 
-type Fruit = { value: string; label: string; category: "citrus" | "berry" }
+type Fruit = {
+  value: string
+  label: string
+  category: "citrus" | "berry"
+}
 
 const fruits: Fruit[] = [
   { value: "apple", label: "Apple", category: "berry" },
@@ -54,7 +58,7 @@ const meta = preview.meta({
 
 export const Default = meta.story({
   render: () => (
-    <Combobox<Fruit, false> items={fruits}>
+    <Combobox<Fruit> items={fruits}>
       <div sx={styles.anchor}>
         <ComboboxInput placeholder="Search fruit..." />
       </div>
@@ -74,7 +78,7 @@ export const Default = meta.story({
 
 export const SelectedByDefault = meta.story({
   render: () => (
-    <Combobox<Fruit, false> items={fruits} defaultValue={fruits[0]}>
+    <Combobox<Fruit> items={fruits} defaultValue={fruits[0]}>
       <div sx={styles.anchor}>
         <ComboboxInput placeholder="Search fruit..." />
       </div>
@@ -94,7 +98,7 @@ export const SelectedByDefault = meta.story({
 
 export const Disabled = meta.story({
   render: () => (
-    <Combobox<Fruit, false> items={fruits} disabled>
+    <Combobox<Fruit> items={fruits} disabled>
       <div sx={styles.anchor}>
         <ComboboxInput placeholder="Search fruit..." />
       </div>
@@ -114,7 +118,7 @@ export const Disabled = meta.story({
 
 export const ReadOnly = meta.story({
   render: () => (
-    <Combobox<Fruit, false> items={fruits} readOnly>
+    <Combobox<Fruit> items={fruits} readOnly>
       <div sx={styles.anchor}>
         <ComboboxInput placeholder="Search fruit..." />
       </div>
@@ -134,7 +138,7 @@ export const ReadOnly = meta.story({
 
 export const WithGroups = meta.story({
   render: () => (
-    <Combobox<Fruit, false> items={fruits}>
+    <Combobox<Fruit> items={fruits}>
       <div sx={styles.anchor}>
         <ComboboxInput placeholder="Search fruit..." />
       </div>
@@ -176,7 +180,7 @@ export const Multiple = meta.story({
           <ComboboxValue>
             {(value: Fruit[]) => (
               <>
-                {value?.map((item) => (
+                {value.map((item) => (
                   <ComboboxChip aria-label={item.value} key={item.value}>
                     {item.label}
                   </ComboboxChip>

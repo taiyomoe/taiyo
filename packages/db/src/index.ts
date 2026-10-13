@@ -14,7 +14,7 @@ export * from "kysely"
 
 export * from "./constants"
 
-export type { DB } from "./database"
+export type { DB }
 
 export * from "./json-types"
 

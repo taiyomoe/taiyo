@@ -1,4 +1,7 @@
-type SuccessBody = { success: true; data: unknown }
+type SuccessBody = {
+  success: true
+  data: unknown
+}
 
 type FailureBody = {
   success: false
@@ -27,16 +30,23 @@ export class ApiError extends Error {
   }
 }
 
+function assertSuccessBody<TBody extends SuccessBody | FailureBody>(
+  body: TBody,
+  status: number,
+): asserts body is Extract<TBody, { success: true }> {
+  if (!body.success) {
+    throw new ApiError(body, status)
+  }
+}
+
 export const unwrapEnvelope = async <TBody extends SuccessBody | FailureBody>(
   response: EnvelopeResponse<TBody>,
 ): Promise<Extract<TBody, { success: true }>> => {
   const body = await response.json()
 
-  if (!body.success) {
-    throw new ApiError(body, response.status)
-  }
+  assertSuccessBody(body, response.status)
 
-  return body as Extract<TBody, { success: true }>
+  return body
 }
 
 export const unwrap = async <TBody extends SuccessBody | FailureBody>(

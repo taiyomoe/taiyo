@@ -9,6 +9,9 @@ export type ApiResult<TData = unknown> = {
   body: ApiResponse<TData>
 }
 
+const isApiResponse = <TData>(value: unknown): value is ApiResponse<TData> =>
+  typeof value === "object" && value !== null && "success" in value
+
 type RequestOptions = {
   method?: string
   headers?: Record<string, string>
@@ -32,7 +35,11 @@ export const api = async <TData = unknown>(
   }
 
   const res = await app.request(path, { method, headers: finalHeaders, body: finalBody })
-  const parsed = (await res.json()) as ApiResponse<TData>
+  const parsed: unknown = await res.json()
+
+  if (!isApiResponse<TData>(parsed)) {
+    throw new Error(`Expected an API response envelope: ${JSON.stringify(parsed)}`)
+  }
 
   return { status: res.status, body: parsed }
 }

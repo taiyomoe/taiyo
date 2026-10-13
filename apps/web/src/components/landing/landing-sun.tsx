@@ -7,7 +7,10 @@ import { Animated } from "@/components/scene/animated"
 import { scene } from "@/components/scene/scene.stylex"
 import { SunRays } from "@/components/scene/sun-rays"
 
-export type Parallax = { x: number; y: number }
+export type Parallax = {
+  x: number
+  y: number
+}
 
 const styles = stylex.create({
   field: {

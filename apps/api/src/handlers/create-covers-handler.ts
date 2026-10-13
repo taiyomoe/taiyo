@@ -101,7 +101,7 @@ export const createCoversHandler = new Hono().post(
   withTransaction,
   async (c) => {
     const { db, s3, s3Bucket, log, media, user } = c.var
-    const body = c.var.formData!
+    const body = c.var.formData
     const coverRows = await Promise.all(
       body.covers.map(async (cover) => {
         const id = crypto.randomUUID()

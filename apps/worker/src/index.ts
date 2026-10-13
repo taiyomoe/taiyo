@@ -7,7 +7,7 @@ import { startChapterProcessingWorker } from "./worker"
 const deps = { db: getDb(), s3: getS3Client(), s3Bucket: getS3Bucket() }
 
 await ensureStagingLifecycle(deps.s3, deps.s3Bucket, config.images.stagingExpiryDays).catch(
-  (err) => {
+  (err: unknown) => {
     // oxlint-disable-next-line no-console
     console.warn("staging lifecycle rule not applied (store may not support it):", err)
   },
@@ -21,7 +21,7 @@ chapterWorker.on("ready", () => {
   console.debug("chapter-upload worker ready")
 })
 
-await scheduleChapterMaintenance().catch((err) => {
+await scheduleChapterMaintenance().catch((err: unknown) => {
   // oxlint-disable-next-line no-console
   console.warn("chapter maintenance schedule not applied (store may not support it):", err)
 })
@@ -30,6 +30,13 @@ const shutdown = async () => {
   await Promise.all([chapterWorker.close(), maintenanceWorker.close()])
   process.exit(0)
 }
+const handleShutdownSignal = () => {
+  shutdown().catch((err: unknown) => {
+    // oxlint-disable-next-line no-console
+    console.error("worker shutdown failed:", err)
+    process.exit(1)
+  })
+}
 
-process.on("SIGTERM", shutdown)
-process.on("SIGINT", shutdown)
+process.on("SIGTERM", handleShutdownSignal)
+process.on("SIGINT", handleShutdownSignal)

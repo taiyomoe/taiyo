@@ -1,4 +1,4 @@
-import type { MediaStatus } from "../../db/src/index"
+import type { MediaStatus } from "@taiyomoe/db"
 
 export const toStatus = (input: string): MediaStatus => {
   switch (input.toLowerCase()) {

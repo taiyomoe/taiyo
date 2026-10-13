@@ -4,7 +4,7 @@ import type React from "react"
 import { cn } from "../../utils/cn"
 import { colors, motion, radius, shadows, text } from "../../styles/tokens.stylex"
 import { surface, transitions } from "../../styles/recipes"
-import type { Sx } from "../../styles/sx"
+import type { CSSVariables, Sx } from "../../styles/sx"
 
 const styles = stylex.create({
   positioner: {
@@ -133,10 +133,10 @@ export function PopoverPopup({
     sx,
   )
   const viewportProps = stylex.props(styles.viewport, tooltipStyle && styles.viewportTooltipStyle)
-  const viewportStyle = {
+  const viewportStyle: CSSVariables = {
     ...viewportProps.style,
     "--viewport-inline-padding": tooltipStyle ? "0.5rem" : "1rem",
-  } as React.CSSProperties
+  }
 
   return (
     <PopoverPrimitive.Portal {...portalProps}>

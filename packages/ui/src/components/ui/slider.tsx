@@ -140,11 +140,11 @@ export function Slider({
 }: SliderPrimitive.Root.Props & { sx?: Sx }): React.ReactElement {
   const _values = React.useMemo(() => {
     if (value !== undefined) {
-      return Array.isArray(value) ? value : [value]
+      return typeof value === "number" ? [value] : value
     }
 
     if (defaultValue !== undefined) {
-      return Array.isArray(defaultValue) ? defaultValue : [defaultValue]
+      return typeof defaultValue === "number" ? [defaultValue] : defaultValue
     }
 
     return [min]

@@ -13,18 +13,18 @@ import { Tooltip, TooltipPopup, TooltipTrigger } from "./tooltip"
 import { useMediaQuery } from "../../hooks/use-media-query"
 import { cn } from "../../utils/cn"
 import { PanelLeft } from "../icons"
-import type { Sx } from "../../styles/sx"
+import type { CSSVariables, Sx } from "../../styles/sx"
 import { colors, consts, motion, radius, shadows } from "../../styles/tokens.stylex"
 import { a11y } from "../../styles/recipes"
 
-const SIDEBAR_STATE_COOKIE: string = "sidebar_state"
-const SIDEBAR_WIDTH_COOKIE: string = "sidebar_width"
-const SIDEBAR_COOKIE_MAX_AGE: number = 60 * 60 * 24 * 365
-const SIDEBAR_WIDTH: number = 256
-const SIDEBAR_WIDTH_MOBILE: string = "18rem"
-const SIDEBAR_WIDTH_ICON: string = "3rem"
-const SIDEBAR_KEYBOARD_SHORTCUT: string = "b"
-const MOBILE_QUERY: string = "(max-width: 799px)"
+const SIDEBAR_STATE_COOKIE = "sidebar_state"
+const SIDEBAR_WIDTH_COOKIE = "sidebar_width"
+const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 365
+const SIDEBAR_WIDTH = 256
+const SIDEBAR_WIDTH_MOBILE = "18rem"
+const SIDEBAR_WIDTH_ICON = "3rem"
+const SIDEBAR_KEYBOARD_SHORTCUT = "b"
+const MOBILE_QUERY = "(max-width: 799px)"
 
 export type SidebarSide = "left" | "right"
 
@@ -723,7 +723,11 @@ export function SidebarProvider({
     }
   }, [resizing, width])
   const toggleSidebar = React.useCallback(() => {
-    return isMobile ? setOpenMobile((open) => !open) : setOpen((open) => !open)
+    if (isMobile) {
+      setOpenMobile((value) => !value)
+    } else {
+      setOpen((value) => !value)
+    }
   }, [isMobile, setOpen])
 
   React.useEffect(() => {
@@ -736,7 +740,9 @@ export function SidebarProvider({
 
     window.addEventListener("keydown", handleKeyDown)
 
-    return () => window.removeEventListener("keydown", handleKeyDown)
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown)
+    }
   }, [toggleSidebar])
 
   const state = open ? "expanded" : "collapsed"
@@ -757,6 +763,12 @@ export function SidebarProvider({
     [state, open, setOpen, isMobile, openMobile, toggleSidebar, width, resizing],
   )
   const styleProps = stylex.props(styles.wrapper, sx)
+  const wrapperStyle: CSSVariables = {
+    "--sidebar-width": `${width}px`,
+    "--sidebar-width-icon": SIDEBAR_WIDTH_ICON,
+    ...styleProps.style,
+    ...style,
+  }
 
   return (
     <SidebarContext.Provider value={contextValue}>
@@ -764,14 +776,7 @@ export function SidebarProvider({
         className={cn(styleProps.className, className)}
         data-resizing={resizing ? "" : undefined}
         data-slot="sidebar-wrapper"
-        style={
-          {
-            "--sidebar-width": `${width}px`,
-            "--sidebar-width-icon": SIDEBAR_WIDTH_ICON,
-            ...styleProps.style,
-            ...style,
-          } as React.CSSProperties
-        }
+        style={wrapperStyle}
         {...props}
       >
         {children}
@@ -826,6 +831,7 @@ export function Sidebar({
   )
   const innerProps = stylex.props(styles.inner, variant === "floating" && styles.innerFloating)
   const mobileInnerProps = stylex.props(styles.mobileInner)
+  const mobileSheetStyle: CSSVariables = { "--sidebar-width": SIDEBAR_WIDTH_MOBILE }
 
   if (collapsible === "none") {
     return (
@@ -851,11 +857,7 @@ export function Sidebar({
             data-sidebar="sidebar"
             data-slot="sidebar"
             side={side}
-            style={
-              {
-                "--sidebar-width": SIDEBAR_WIDTH_MOBILE,
-              } as React.CSSProperties
-            }
+            style={mobileSheetStyle}
             sx={styles.mobileSheet}
           >
             <SheetHeader sx={a11y.srOnly}>
@@ -968,6 +970,18 @@ export function SidebarRail({
   )
 }
 
+function resizeCursor(width: number, minWidth: number, maxWidth: number): string {
+  if (width <= minWidth) {
+    return "e-resize"
+  }
+
+  if (width >= maxWidth) {
+    return "w-resize"
+  }
+
+  return "col-resize"
+}
+
 export function SidebarResizeHandle({
   minWidth = 208,
   maxWidth = 384,
@@ -985,11 +999,11 @@ export function SidebarResizeHandle({
   const { side } = React.useContext(SidebarLayoutContext)
   const drag = React.useRef<{ startX: number; startWidth: number } | null>(null)
   const bounds = { max: maxWidth, min: minWidth }
-  const cursor = width <= minWidth ? "e-resize" : width >= maxWidth ? "w-resize" : "col-resize"
+  const cursor = resizeCursor(width, minWidth, maxWidth)
 
   React.useEffect(() => {
     if (!resizing) {
-      return
+      return undefined
     }
 
     const root = document.documentElement
@@ -1068,7 +1082,9 @@ export function SidebarResizeHandle({
         if (next < minWidth - collapseOffset) {
           endDrag(event)
           setOpen(false)
-          window.setTimeout(() => setWidth(current.startWidth), 300)
+          window.setTimeout(() => {
+            setWidth(current.startWidth)
+          }, 300)
 
           return
         }
@@ -1355,7 +1371,7 @@ export function SidebarMenuButton({
     render,
   })
 
-  if (!tooltip) {
+  if (tooltip === undefined || tooltip === "") {
     return buttonElement
   }
 
@@ -1363,7 +1379,7 @@ export function SidebarMenuButton({
 
   return (
     <Tooltip>
-      <TooltipTrigger render={buttonElement as React.ReactElement<Record<string, unknown>>} />
+      <TooltipTrigger render={buttonElement} />
       <TooltipPopup
         align="center"
         hidden={state !== "collapsed" || isMobile}
@@ -1447,6 +1463,7 @@ export function SidebarMenuSkeleton({
     return `${(Math.abs(hash) % 41) + 50}%`
   }, [id])
   const styleProps = stylex.props(styles.menuSkeleton, sx)
+  const textStyle: CSSVariables = { "--skeleton-width": width }
 
   return (
     <div
@@ -1457,15 +1474,7 @@ export function SidebarMenuSkeleton({
       {...props}
     >
       {showIcon && <Skeleton data-sidebar="menu-skeleton-icon" sx={styles.menuSkeletonIcon} />}
-      <Skeleton
-        data-sidebar="menu-skeleton-text"
-        style={
-          {
-            "--skeleton-width": width,
-          } as React.CSSProperties
-        }
-        sx={styles.menuSkeletonText}
-      />
+      <Skeleton data-sidebar="menu-skeleton-text" style={textStyle} sx={styles.menuSkeletonText} />
     </div>
   )
 }

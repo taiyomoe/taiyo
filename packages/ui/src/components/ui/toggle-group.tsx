@@ -119,7 +119,7 @@ const separatorStyles = stylex.create({
   },
 })
 
-export interface ToggleGroupContextValue {
+export type ToggleGroupContextValue = {
   size?: ToggleSize | null
   variant?: ToggleVariant | null
   orientation?: "horizontal" | "vertical"
@@ -132,7 +132,7 @@ export const ToggleGroupContext: React.Context<ToggleGroupContextValue> =
     variant: "default",
   })
 
-export interface ToggleGroupProps extends ToggleGroupPrimitive.Props {
+export type ToggleGroupProps = ToggleGroupPrimitive.Props & {
   variant?: ToggleVariant
   size?: ToggleSize
   sx?: Sx
@@ -173,7 +173,7 @@ export function ToggleGroup({
   )
 }
 
-export interface ToggleGroupItemProps extends TogglePrimitive.Props {
+export type ToggleGroupItemProps = TogglePrimitive.Props & {
   variant?: ToggleVariant
   size?: ToggleSize
   sx?: Sx
@@ -188,8 +188,8 @@ export function ToggleGroupItem({
   ...props
 }: ToggleGroupItemProps): React.ReactElement {
   const context = React.useContext(ToggleGroupContext)
-  const resolvedVariant: ToggleVariant = context.variant || variant || "default"
-  const resolvedSize: ToggleSize = context.size || size || "default"
+  const resolvedVariant: ToggleVariant = context.variant ?? variant ?? "default"
+  const resolvedSize: ToggleSize = context.size ?? size ?? "default"
   const orientation = context.orientation ?? "horizontal"
   const joined: boolean = resolvedVariant === "outline"
 

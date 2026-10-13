@@ -7,7 +7,7 @@ import {
   InputGroupInput,
 } from "@taiyomoe/ui/components/ui/input-group"
 import { PasswordInput, type PasswordInputProps } from "@taiyomoe/ui/components/ui/password-input"
-import type { ComponentProps, ReactNode } from "react"
+import type { ComponentProps, ReactElement, ReactNode } from "react"
 import type {
   Control,
   ControllerRenderProps,
@@ -20,7 +20,7 @@ import { Controller } from "react-hook-form"
 type Bound<TFieldValues extends FieldValues, TName extends FieldPath<TFieldValues>> = {
   name: TName
   control: Control<TFieldValues>
-  label?: ReactNode
+  label?: string | undefined
   description?: string | undefined
 }
 
@@ -29,7 +29,7 @@ const toControlProps = <TFieldValues extends FieldValues, TName extends FieldPat
   state: { invalid: boolean; isTouched: boolean; isDirty: boolean },
   form: UseFormStateReturn<TFieldValues>,
 ) => ({
-  value: (value ?? "") as string,
+  value: typeof value === "string" || typeof value === "number" ? value : "",
   disabled: form.disabled || undefined,
   "aria-invalid": state.invalid || undefined,
   "data-touched": state.isTouched || undefined,
@@ -51,9 +51,11 @@ const BoundField = <TFieldValues extends FieldValues, TName extends FieldPath<TF
     control={control}
     render={({ field, fieldState, formState }) => (
       <Field>
-        {label ? <FieldLabel>{label}</FieldLabel> : null}
-        {children(toControlProps(field, fieldState, formState) as ControlProps)}
-        {description ? <FieldDescription>{description}</FieldDescription> : null}
+        {label !== undefined && label !== "" ? <FieldLabel>{label}</FieldLabel> : null}
+        {children(toControlProps(field, fieldState, formState))}
+        {description !== undefined && description !== "" ? (
+          <FieldDescription>{description}</FieldDescription>
+        ) : null}
         {fieldState.error ? <FieldError>{fieldState.error.message}</FieldError> : null}
       </Field>
     )}
@@ -73,15 +75,19 @@ export const InputField = <
   ...props
 }: Omit<ComponentProps<typeof InputGroupInput>, "name"> &
   Bound<TFieldValues, TName> & {
-    startIcon?: ReactNode
-    endIcon?: ReactNode
+    startIcon?: ReactElement | undefined
+    endIcon?: ReactElement | undefined
   }) => (
   <BoundField name={name} control={control} label={label} description={description}>
     {(field) => (
       <InputGroup>
         <InputGroupInput {...field} {...props} />
-        {startIcon ? <InputGroupAddon align="inline-start">{startIcon}</InputGroupAddon> : null}
-        {endIcon ? <InputGroupAddon align="inline-end">{endIcon}</InputGroupAddon> : null}
+        {startIcon !== undefined ? (
+          <InputGroupAddon align="inline-start">{startIcon}</InputGroupAddon>
+        ) : null}
+        {endIcon !== undefined ? (
+          <InputGroupAddon align="inline-end">{endIcon}</InputGroupAddon>
+        ) : null}
       </InputGroup>
     )}
   </BoundField>
@@ -119,7 +125,7 @@ export const CheckboxField = <
   ComponentProps<typeof Checkbox>,
   "name" | "checked" | "defaultChecked" | "onCheckedChange"
 > &
-  Omit<Bound<TFieldValues, TName>, "description"> & { label: ReactNode }) => (
+  Omit<Bound<TFieldValues, TName>, "description" | "label"> & { label: ReactNode }) => (
   <Controller
     name={name}
     control={control}
@@ -127,8 +133,10 @@ export const CheckboxField = <
       <Field>
         <FieldLabel>
           <Checkbox
-            checked={value ?? false}
-            onCheckedChange={(checked) => onChange(checked === true)}
+            checked={value === true}
+            onCheckedChange={(checked) => {
+              onChange(checked)
+            }}
             disabled={formState.disabled || undefined}
             aria-invalid={fieldState.invalid || undefined}
             {...field}

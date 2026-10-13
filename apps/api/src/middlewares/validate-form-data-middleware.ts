@@ -5,23 +5,24 @@ import type z from "zod"
 
 type Env<TSchema extends z.ZodType> = {
   Variables: {
-    formData?: z.infer<TSchema>
+    formData: z.infer<TSchema>
   }
 }
 
-export const validateFormData = <TSchema extends z.ZodType>(schema: TSchema) => {
-  return createMiddleware<Env<TSchema>>(async (c, next) => {
-    const contentType = c.req.header("content-type") || ""
-    let json: Record<string, unknown> = {}
+export const validateFormData = <TSchema extends z.ZodType>(schema: TSchema) =>
+  createMiddleware<Env<TSchema>>(async (c, next) => {
+    const contentType = c.req.header("content-type") ?? ""
+    let json: unknown = {}
 
     if (contentType.includes("multipart/form-data")) {
       const formData = await c.req.formData()
+      const flat: Record<string, unknown> = {}
 
-      formData.forEach((value, key) => {
-        json[key] = coerceFormDataValue(value)
-      })
+      for (const [key, value] of formData.entries()) {
+        flat[key] = coerceFormDataValue(value)
+      }
 
-      json = construct(json) as Record<string, unknown>
+      json = construct(flat)
     }
 
     const validation = schema.safeParse(json)
@@ -34,4 +35,3 @@ export const validateFormData = <TSchema extends z.ZodType>(schema: TSchema) => 
 
     return next()
   })
-}

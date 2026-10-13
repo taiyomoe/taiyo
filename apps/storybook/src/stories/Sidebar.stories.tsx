@@ -143,9 +143,7 @@ export const Default = meta.story({
                       <HugeiconsIcon icon={item.icon} />
                       <span>{item.title}</span>
                     </SidebarMenuButton>
-                    {"badge" in item && item.badge ? (
-                      <SidebarMenuBadge>{item.badge}</SidebarMenuBadge>
-                    ) : null}
+                    {"badge" in item ? <SidebarMenuBadge>{item.badge}</SidebarMenuBadge> : null}
                   </SidebarMenuItem>
                 ))}
               </SidebarMenu>
@@ -230,9 +228,7 @@ export const Floating = meta.story({
                       <HugeiconsIcon icon={item.icon} />
                       <span>{item.title}</span>
                     </SidebarMenuButton>
-                    {"badge" in item && item.badge ? (
-                      <SidebarMenuBadge>{item.badge}</SidebarMenuBadge>
-                    ) : null}
+                    {"badge" in item ? <SidebarMenuBadge>{item.badge}</SidebarMenuBadge> : null}
                   </SidebarMenuItem>
                 ))}
               </SidebarMenu>
@@ -289,9 +285,7 @@ export const Inset = meta.story({
                       <HugeiconsIcon icon={item.icon} />
                       <span>{item.title}</span>
                     </SidebarMenuButton>
-                    {"badge" in item && item.badge ? (
-                      <SidebarMenuBadge>{item.badge}</SidebarMenuBadge>
-                    ) : null}
+                    {"badge" in item ? <SidebarMenuBadge>{item.badge}</SidebarMenuBadge> : null}
                   </SidebarMenuItem>
                 ))}
               </SidebarMenu>
@@ -348,9 +342,7 @@ export const CollapsibleIcon = meta.story({
                       <HugeiconsIcon icon={item.icon} />
                       <span>{item.title}</span>
                     </SidebarMenuButton>
-                    {"badge" in item && item.badge ? (
-                      <SidebarMenuBadge>{item.badge}</SidebarMenuBadge>
-                    ) : null}
+                    {"badge" in item ? <SidebarMenuBadge>{item.badge}</SidebarMenuBadge> : null}
                   </SidebarMenuItem>
                 ))}
               </SidebarMenu>
@@ -409,9 +401,7 @@ export const NonCollapsible = meta.story({
                       <HugeiconsIcon icon={item.icon} />
                       <span>{item.title}</span>
                     </SidebarMenuButton>
-                    {"badge" in item && item.badge ? (
-                      <SidebarMenuBadge>{item.badge}</SidebarMenuBadge>
-                    ) : null}
+                    {"badge" in item ? <SidebarMenuBadge>{item.badge}</SidebarMenuBadge> : null}
                   </SidebarMenuItem>
                 ))}
               </SidebarMenu>
@@ -470,9 +460,7 @@ export const InitiallyCollapsed = meta.story({
                       <HugeiconsIcon icon={item.icon} />
                       <span>{item.title}</span>
                     </SidebarMenuButton>
-                    {"badge" in item && item.badge ? (
-                      <SidebarMenuBadge>{item.badge}</SidebarMenuBadge>
-                    ) : null}
+                    {"badge" in item ? <SidebarMenuBadge>{item.badge}</SidebarMenuBadge> : null}
                   </SidebarMenuItem>
                 ))}
               </SidebarMenu>

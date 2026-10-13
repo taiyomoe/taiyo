@@ -1,4 +1,5 @@
 import { describe, expect } from "vitest"
+import { defined } from "../helpers/assert"
 import { signInAs } from "../helpers/auth"
 import { api } from "../helpers/request"
 import { test } from "../setup"
@@ -22,7 +23,7 @@ const isDescending = (rows: FeedRow[]) =>
       return true
     }
 
-    const previous = rows[index - 1]!
+    const previous = defined(rows[index - 1])
 
     return previous.createdAt === row.createdAt
       ? previous.id > row.id

@@ -2,6 +2,7 @@ import { GetObjectCommand, ListObjectsV2Command } from "@aws-sdk/client-s3"
 import { randomUUID } from "node:crypto"
 import sharp from "sharp"
 import { describe, expect } from "vitest"
+import { defined } from "../helpers/assert"
 import { signInAs } from "../helpers/auth"
 import { invalidImage, jpegWithExif, tinyPng } from "../helpers/fixtures"
 import { api } from "../helpers/request"
@@ -11,7 +12,7 @@ import { test } from "../setup"
 const getForm = async (overrides?: Partial<{ skipTitle: boolean }>) => {
   const form = new FormData()
 
-  if (!overrides?.skipTitle) {
+  if (overrides?.skipTitle !== true) {
     form.append("titles.0.title", `Test ${randomUUID()}`)
     form.append("titles.0.language", "en")
     form.append("titles.0.main", "true")
@@ -180,14 +181,14 @@ describe("POST /medias", () => {
     )
     const key = s3Listing.Contents?.[0]?.Key
 
-    if (!key) {
+    if (key === undefined || key === "") {
       throw new Error("Expected one cover object in S3")
     }
 
     const object = await services.s3.send(
       new GetObjectCommand({ Bucket: services.s3Bucket, Key: key }),
     )
-    const bytes = Buffer.from(await object.Body!.transformToByteArray())
+    const bytes = Buffer.from(await defined(object.Body).transformToByteArray())
     const metadata = await sharp(bytes).metadata()
 
     expect(metadata.format).toBe("jpeg")

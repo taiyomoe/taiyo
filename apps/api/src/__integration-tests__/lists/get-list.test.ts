@@ -79,7 +79,7 @@ describe("GET /lists/:id", () => {
       ])
       .execute()
 
-    const res = await api<{ items: { mediaId: string; position: number }[] }>(
+    const res = await api<{ items: Array<{ mediaId: string; position: number }> }>(
       app,
       `/lists/${list.id}`,
     )

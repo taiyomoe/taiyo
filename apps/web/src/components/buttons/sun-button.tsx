@@ -4,7 +4,7 @@ import { Spinner } from "@taiyomoe/ui/components/ui/spinner"
 import type { Sx } from "@taiyomoe/ui/styles/sx"
 import { font, radius, text } from "@taiyomoe/ui/styles/tokens.stylex"
 import { cn } from "@taiyomoe/ui/utils/cn"
-import type { ComponentProps, CSSProperties, ReactNode } from "react"
+import type { ComponentProps, ReactNode } from "react"
 
 import { scene } from "@/components/scene/scene.stylex"
 
@@ -100,8 +100,8 @@ type SunSkinProps = {
 
 const SunBody = ({ children, loading }: { children: ReactNode; loading?: boolean }) => (
   <>
-    <span sx={[styles.label, loading && styles.labelLoading]}>{children}</span>
-    {loading ? (
+    <span sx={[styles.label, loading === true && styles.labelLoading]}>{children}</span>
+    {loading === true ? (
       <span sx={styles.loader}>
         <Spinner />
       </span>
@@ -127,7 +127,7 @@ export const SunButton = ({
   type = "button",
   ...props
 }: SunButtonProps) => {
-  const isDisabled = disabled || loading
+  const isDisabled = disabled === true || loading
   const styleProps = stylex.props(
     styles.base,
     styles[size],
@@ -168,7 +168,7 @@ export const SunLink = ({
   return (
     <Link
       className={cn(styleProps.className, className)}
-      style={{ ...styleProps.style, ...(style as CSSProperties) }}
+      style={{ ...styleProps.style, ...style }}
       {...props}
     >
       <SunBody>{children}</SunBody>

@@ -17,7 +17,7 @@ describe("POST /chapters/:id/pages/upload-session", () => {
       .values({ mediaId: SEEDED_MEDIA_ID, number: 99_001, language: "en", uploaderId: userId })
       .returning("id")
       .executeTakeFirstOrThrow()
-    const res = await api<{ taskId: string; pages: { index: number; uploadUrl: string }[] }>(
+    const res = await api<{ taskId: string; pages: Array<{ index: number; uploadUrl: string }> }>(
       app,
       `/chapters/${chapter.id}/pages/upload-session`,
       { method: "POST", headers, json: { pages: makePages(3) } },

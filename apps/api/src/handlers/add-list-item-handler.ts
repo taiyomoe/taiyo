@@ -73,7 +73,7 @@ export const addListItemHandler = new Hono().post(
     if (finalPosition === undefined) {
       const last = await db
         .selectFrom("userListItems")
-        .select((eb) => eb.fn.max<number>("position").as("max"))
+        .select((eb) => eb.fn.max<number | null>("position").as("max"))
         .where("listId", "=", list.id)
         .executeTakeFirst()
 

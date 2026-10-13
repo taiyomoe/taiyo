@@ -63,7 +63,7 @@ export const WithAction = meta.story({
         </EmptyDescription>
       </EmptyHeader>
       <EmptyContent>
-        <Button onClick={fn()}>
+        <Button onClick={fn<() => void>()}>
           <HugeiconsIcon icon={PlusSignIcon} />
           New project
         </Button>

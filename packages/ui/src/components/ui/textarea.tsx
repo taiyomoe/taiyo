@@ -125,7 +125,7 @@ export function Textarea({
     <span
       aria-invalid={props["aria-invalid"]}
       className={cn(controlProps.className, className) || undefined}
-      data-disabled={props.disabled ? "" : undefined}
+      data-disabled={props.disabled === true ? "" : undefined}
       data-size={size}
       data-slot="textarea-control"
       style={controlProps.style}

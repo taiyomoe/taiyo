@@ -312,12 +312,7 @@ const SIZE_STYLE = {
   sm: styles.triggerSm,
 } as const
 
-export interface SelectButtonProps extends useRender.ComponentProps<"button"> {
-  size?: SelectSize
-  sx?: Sx
-}
-
-export interface SelectButtonProps extends useRender.ComponentProps<"button"> {
+export type SelectButtonProps = useRender.ComponentProps<"button"> & {
   size?: SelectSize
   sx?: Sx
 }

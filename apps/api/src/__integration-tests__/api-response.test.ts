@@ -27,6 +27,8 @@ const getTestApp = (app: Hono): Hono =>
         return c.ok(data)
       },
     )
+const anyInstanceOf = (type: unknown): unknown => expect.any(type)
+const arrayContaining = (items: unknown[]): unknown => expect.arrayContaining(items)
 
 describe("API Response Standardization", () => {
   beforeEach(({ task }) => {
@@ -52,8 +54,8 @@ describe("API Response Standardization", () => {
       expect(json).toMatchObject({
         success: true,
         data: { test: "data" },
-        timestamp: expect.any(String),
-        requestId: expect.any(String),
+        timestamp: anyInstanceOf(String),
+        requestId: anyInstanceOf(String),
       })
     })
 
@@ -80,10 +82,10 @@ describe("API Response Standardization", () => {
 
       expect(json).toMatchObject({
         success: false,
-        code: expect.any(String),
-        message: expect.any(String),
-        timestamp: expect.any(String),
-        requestId: expect.any(String),
+        code: anyInstanceOf(String),
+        message: anyInstanceOf(String),
+        timestamp: anyInstanceOf(String),
+        requestId: anyInstanceOf(String),
       })
     })
 
@@ -136,11 +138,11 @@ describe("API Response Standardization", () => {
       expect(res.status).toBe(500)
       expect(json).toMatchObject({
         success: false,
-        code: expect.any(String),
-        message: expect.any(String),
-        timestamp: expect.any(String),
-        requestId: expect.any(String),
-        details: expect.any(Object),
+        code: anyInstanceOf(String),
+        message: anyInstanceOf(String),
+        timestamp: anyInstanceOf(String),
+        requestId: anyInstanceOf(String),
+        details: anyInstanceOf(Object),
       })
     })
 
@@ -151,7 +153,7 @@ describe("API Response Standardization", () => {
 
       expect(res.status).toBe(500)
       expect(json).toMatchObject({
-        details: { error: "Test error message", stack: expect.any(String) },
+        details: { error: "Test error message", stack: anyInstanceOf(String) },
       })
     })
 
@@ -191,16 +193,14 @@ describe("API Response Standardization", () => {
       formData.append("email", "invalid-email")
 
       const res = await testApp.request("/test-validation", { method: "POST", body: formData })
-      const json = (await res.json()) as {
-        details: { path: string[]; code: string }[]
-      }
+      const json = await res.json()
 
       expect(res.status).toBe(422)
       expect(json).toMatchObject({
         success: false,
         code: "VALIDATION_ERROR",
         message: "The request data failed validation.",
-        details: expect.arrayContaining([
+        details: arrayContaining([
           expect.objectContaining({ path: ["name"], code: "too_small" }),
           expect.objectContaining({ path: ["email"], code: "invalid_format" }),
         ]),

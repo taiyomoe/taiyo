@@ -1,4 +1,5 @@
 import { describe, expect } from "vitest"
+import { defined } from "../helpers/assert"
 import { api } from "../helpers/request"
 import { test } from "../setup"
 
@@ -10,7 +11,7 @@ type ChapterDetail = {
   mediaId: string
   number: number
   language: string
-  pages: { id: string; url: string }[] | null
+  pages: Array<{ id: string; url: string }> | null
 }
 
 describe("GET /chapters/:id", () => {
@@ -39,9 +40,12 @@ describe("GET /chapters/:id", () => {
     const { pages } = res.body.data
 
     expect(pages).not.toBeNull()
-    expect(pages!.length).toBeGreaterThan(0)
 
-    for (const page of pages!) {
+    const definedPages = defined(pages)
+
+    expect(definedPages.length).toBeGreaterThan(0)
+
+    for (const page of definedPages) {
       expect(page.url).toContain(
         `/medias/${SEEDED_MEDIA_ID}/chapters/${SEEDED_CHAPTER_ID}/${page.id}.jpg`,
       )

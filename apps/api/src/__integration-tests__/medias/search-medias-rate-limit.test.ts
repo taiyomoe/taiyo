@@ -7,7 +7,7 @@ describe("POST /medias/search rate limit", () => {
   test("returns 429 after the per-IP budget is exhausted", async ({ app }) => {
     const headers = { "x-forwarded-for": `203.0.113.${randomUUID()}` }
     const fire = () => api(app, "/medias/search", { method: "POST", headers, json: {} })
-    const first: { status: number }[] = []
+    const first: Array<{ status: number }> = []
 
     for (let i = 0; i < 60; i++) {
       first.push(await fire())

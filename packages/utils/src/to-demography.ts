@@ -1,4 +1,4 @@
-import type { MediaDemography } from "../../db/src/index"
+import type { MediaDemography } from "@taiyomoe/db"
 
 export const toDemography = (input: string | null): MediaDemography => {
   switch (input?.toLowerCase()) {
@@ -14,8 +14,11 @@ export const toDemography = (input: string | null): MediaDemography => {
     case "seinen":
       return "SEINEN"
 
+    case undefined:
+      return "SHOUNEN"
+
     default:
-      if (input) {
+      if (input !== null && input !== "") {
         // oxlint-disable-next-line no-console
         console.warn(`Invalid demography key "${input}", defaulting to SHOUNEN...`)
       }

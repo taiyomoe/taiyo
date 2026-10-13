@@ -24,7 +24,9 @@ describe("GET /users/me/lists", () => {
       .values({ listId: list1.id, mediaId: SEEDED_MEDIA_ID, position: 0 })
       .execute()
 
-    const res = await api<{ id: string; itemCount: number }[]>(app, `/users/me/lists`, { headers })
+    const res = await api<Array<{ id: string; itemCount: number }>>(app, `/users/me/lists`, {
+      headers,
+    })
 
     expect(res.status).toBe(200)
 

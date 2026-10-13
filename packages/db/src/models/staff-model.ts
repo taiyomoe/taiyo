@@ -2,7 +2,7 @@ import type { Generated, Insertable } from "kysely"
 import type { LocalizedText, StaffLinks } from "../json-types"
 import type { Timestamp } from "../types"
 
-export interface Staff {
+export type Staff = {
   id: Generated<string>
   createdAt: Generated<Timestamp>
   updatedAt: Generated<Timestamp>

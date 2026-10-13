@@ -1,19 +1,34 @@
-const quote = (value: string) => `"${value.replace(/"/g, '\\"')}"`
+import { z } from "zod"
 
-type EnumOps = { eq?: string; neq?: string; in?: string[]; notIn?: string[] }
-type ArrayOps = { hasAll?: string[]; hasAny?: string[]; hasNone?: string[] }
-type DateOps = {
-  before?: string
-  after?: string
-  between?: [string, string]
-  isNull?: boolean
-}
-type CountOps = {
-  eq?: number
-  gte?: number
-  lte?: number
-  between?: [number, number]
-}
+const quote = (value: string) => `"${value.replace(/"/g, '\\"')}"`
+const enumOpsSchema = z.object({
+  eq: z.string().optional(),
+  neq: z.string().optional(),
+  in: z.string().array().optional(),
+  notIn: z.string().array().optional(),
+})
+const arrayOpsSchema = z.object({
+  hasAll: z.string().array().optional(),
+  hasAny: z.string().array().optional(),
+  hasNone: z.string().array().optional(),
+})
+const dateOpsSchema = z.object({
+  before: z.string().optional(),
+  after: z.string().optional(),
+  between: z.tuple([z.string(), z.string()]).optional(),
+  isNull: z.boolean().optional(),
+})
+const countOpsSchema = z.object({
+  eq: z.number().optional(),
+  gte: z.number().optional(),
+  lte: z.number().optional(),
+  between: z.tuple([z.number(), z.number()]).optional(),
+})
+
+type EnumOps = z.infer<typeof enumOpsSchema>
+type ArrayOps = z.infer<typeof arrayOpsSchema>
+type DateOps = z.infer<typeof dateOpsSchema>
+type CountOps = z.infer<typeof countOpsSchema>
 
 const fromEnum = (attr: string, ops: EnumOps) => {
   const clauses: string[] = []
@@ -26,11 +41,11 @@ const fromEnum = (attr: string, ops: EnumOps) => {
     clauses.push(`${attr} != ${quote(ops.neq)}`)
   }
 
-  if (ops.in?.length) {
+  if (ops.in !== undefined && ops.in.length > 0) {
     clauses.push(`${attr} IN [${ops.in.map(quote).join(", ")}]`)
   }
 
-  if (ops.notIn?.length) {
+  if (ops.notIn !== undefined && ops.notIn.length > 0) {
     clauses.push(`${attr} NOT IN [${ops.notIn.map(quote).join(", ")}]`)
   }
 
@@ -41,17 +56,17 @@ const fromArray = (attr: string, ops: ArrayOps) => {
 
   // hasAll → one equality per value; Meilisearch matches each against any
   // element of the array, so chaining with AND enforces "contains every".
-  if (ops.hasAll?.length) {
+  if (ops.hasAll !== undefined && ops.hasAll.length > 0) {
     for (const value of ops.hasAll) {
       clauses.push(`${attr} = ${quote(value)}`)
     }
   }
 
-  if (ops.hasAny?.length) {
+  if (ops.hasAny !== undefined && ops.hasAny.length > 0) {
     clauses.push(`${attr} IN [${ops.hasAny.map(quote).join(", ")}]`)
   }
 
-  if (ops.hasNone?.length) {
+  if (ops.hasNone !== undefined && ops.hasNone.length > 0) {
     clauses.push(`${attr} NOT IN [${ops.hasNone.map(quote).join(", ")}]`)
   }
 
@@ -128,22 +143,22 @@ export const translateFilter = (
 
     switch (fieldSpec.kind) {
       case "enum":
-        clauses.push(...fromEnum(fieldSpec.attr, ops as EnumOps))
+        clauses.push(...fromEnum(fieldSpec.attr, enumOpsSchema.parse(ops)))
 
         break
 
       case "array":
-        clauses.push(...fromArray(fieldSpec.attr, ops as ArrayOps))
+        clauses.push(...fromArray(fieldSpec.attr, arrayOpsSchema.parse(ops)))
 
         break
 
       case "date":
-        clauses.push(...fromDate(fieldSpec.attr, ops as DateOps))
+        clauses.push(...fromDate(fieldSpec.attr, dateOpsSchema.parse(ops)))
 
         break
 
       case "count":
-        clauses.push(...fromCount(fieldSpec.attr, ops as CountOps))
+        clauses.push(...fromCount(fieldSpec.attr, countOpsSchema.parse(ops)))
 
         break
     }

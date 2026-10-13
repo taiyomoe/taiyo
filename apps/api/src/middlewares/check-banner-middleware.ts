@@ -22,7 +22,7 @@ export const checkBanner = (opts: { includeDeleted?: boolean } = {}) =>
     log.set({ banner: { id } })
 
     const base = db.selectFrom("banners").selectAll().where("id", "=", id)
-    const query = opts.includeDeleted ? base : base.where("deletedAt", "is", null)
+    const query = opts.includeDeleted === true ? base : base.where("deletedAt", "is", null)
     const banner = await query.executeTakeFirst()
 
     if (!banner) {

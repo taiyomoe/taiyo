@@ -22,7 +22,7 @@ export const checkChapter = (opts: { includeDeleted?: boolean } = {}) =>
     log.set({ chapter: { id } })
 
     const base = db.selectFrom("chapters").selectAll().where("id", "=", id)
-    const query = opts.includeDeleted ? base : base.where("deletedAt", "is", null)
+    const query = opts.includeDeleted === true ? base : base.where("deletedAt", "is", null)
     const chapter = await query.executeTakeFirst()
 
     if (!chapter) {

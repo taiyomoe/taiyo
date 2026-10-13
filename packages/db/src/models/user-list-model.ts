@@ -2,7 +2,7 @@ import type { Generated, Insertable } from "kysely"
 import type { UserListVisibility } from "../constants"
 import type { Timestamp } from "../types"
 
-export interface UserList {
+export type UserList = {
   id: Generated<string>
   userId: string
   name: string

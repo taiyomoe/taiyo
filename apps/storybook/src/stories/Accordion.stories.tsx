@@ -41,10 +41,6 @@ const meta = preview.meta({
   argTypes: {
     multiple: { control: "boolean" },
     disabled: { control: "boolean" },
-    orientation: {
-      control: { type: "select" },
-      options: ["horizontal", "vertical"],
-    },
   },
   args: { onValueChange: fn() },
   render: (args) => (
