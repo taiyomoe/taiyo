@@ -47,6 +47,7 @@ jobs:
         env:
           DFLY_cluster_mode: emulated
           DFLY_lock_on_hashtags: 1
+          DFLY_default_lua_flags: allow-undeclared-keys
         options: >-
           --ulimit memlock=-1 --health-cmd "redis-cli ping" --health-interval 5s
           --health-timeout 3s --health-retries 10
