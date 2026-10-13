@@ -1,4 +1,5 @@
 import { describe, expect } from "vitest"
+import { createApp } from "../../app"
 import { signInAs } from "../helpers/auth"
 import { api } from "../helpers/request"
 import { test } from "../setup"
@@ -6,7 +7,18 @@ import { test } from "../setup"
 const SEEDED_MEDIA_ID = "4e26b80f-6661-4f5f-93b4-6dfed052bbed"
 
 describe("POST /chapters/:id/pages/finalize", () => {
-  test("accepts a pending task and enqueues it", async ({ app, services }) => {
+  test("accepts a pending task and enqueues it", async ({ services }) => {
+    const enqueued: string[] = []
+    const app = createApp({
+      ...services,
+      chapterUploadQueue: {
+        enqueue: ({ taskId }) => {
+          enqueued.push(taskId)
+
+          return Promise.resolve()
+        },
+      },
+    })
     const { userId, headers } = await signInAs(services, { role: "ADMIN" })
     const chapter = await services.db
       .insertInto("chapters")
@@ -50,6 +62,64 @@ describe("POST /chapters/:id/pages/finalize", () => {
     }
 
     expect(res.body.data.taskId).toBe(taskId)
+    expect(enqueued).toEqual([taskId])
+  })
+
+  test("returns 500 and does not report success when the queue is unavailable", async ({
+    services,
+  }) => {
+    const app = createApp({
+      ...services,
+      chapterUploadQueue: {
+        enqueue: () => Promise.reject(new Error("redis down")),
+      },
+    })
+    const { userId, headers } = await signInAs(services, { role: "ADMIN" })
+    const chapter = await services.db
+      .insertInto("chapters")
+      .values({ mediaId: SEEDED_MEDIA_ID, number: 98_007, language: "en", uploaderId: userId })
+      .returning("id")
+      .executeTakeFirstOrThrow()
+    const uploadId = crypto.randomUUID()
+    const taskId = crypto.randomUUID()
+
+    await services.db
+      .insertInto("tasks")
+      .values({
+        id: taskId,
+        type: "UPLOAD_CHAPTER",
+        status: "PENDING",
+        sessionId: uploadId,
+        payload: {
+          chapterId: chapter.id,
+          mediaId: SEEDED_MEDIA_ID,
+          uploadId,
+          pages: [
+            {
+              pageId: crypto.randomUUID(),
+              stagingKey: `staging/chapters/${chapter.id}/${uploadId}/0`,
+            },
+          ],
+        },
+      })
+      .execute()
+
+    const res = await api(app, `/chapters/${chapter.id}/pages/finalize`, {
+      method: "POST",
+      headers,
+      json: { taskId },
+    })
+
+    expect(res.status).toBe(500)
+    expect(res.body.success).toBe(false)
+
+    const task = await services.db
+      .selectFrom("tasks")
+      .select("status")
+      .where("id", "=", taskId)
+      .executeTakeFirstOrThrow()
+
+    expect(task.status).toBe("PENDING")
   })
 
   test("returns CHAPTER_UPLOAD_SESSION_NOT_FOUND for an unknown taskId", async ({
