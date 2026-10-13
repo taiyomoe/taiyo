@@ -197,6 +197,19 @@ The query stays cheap because both tables are indexed on the keys we filter on.
 | `GROUP_MEMBER_EXISTS`           | 409    | adding a (group, user) that's already a member            |
 | `GROUP_LAST_OWNER`              | 409    | demote / leave / remove would leave the group ownerless   |
 
+### Where the ownership rules are enforced
+
+Every membership change (add, promote, demote, remove, leave, transfer, and the
+claim behind approving a request) goes through `apps/api/src/group-membership.ts`.
+Each operation locks the group's row (`SELECT … FOR UPDATE` on `groups`) before
+reading roles, so two concurrent changes on one group run one after the other
+and the second sees the first's result. That is what keeps "at least one OWNER"
+true when two owners leave or demote each other at the same moment.
+
+The rule covers membership operations only. Deleting a user cascades their
+memberships without the lock, so deleting the only owner's account turns the
+group back into an unowned group that can be claimed again.
+
 ### Which 409 a losing concurrent approval gets
 
 Two moderators approving two different pending requests on the same unowned
@@ -204,14 +217,14 @@ group both return 409 for the loser, but the code depends on the interleaving,
 and both are correct:
 
 - `GROUP_ALREADY_OWNED` — the loser read its request while it was still
-  `PENDING`, passed the status guard, then blocked on the group's advisory lock
-  and found an OWNER once the winner committed.
+  `PENDING`, passed the status guard, then blocked on the group's row lock in
+  `claimGroup` and found an OWNER once the winner committed.
 - `OWNERSHIP_REQUEST_NOT_PENDING` — the winner committed first, including the
   auto-cancel of every other pending request on the group, so the loser's own
   request was already `CANCELLED` when `checkOwnershipRequest` loaded it.
 
 `checkOwnershipRequest` resolves the row before `withTransaction` opens the
-transaction and before the advisory lock is taken, so which guard trips first is
+transaction and before the group lock is taken, so which guard trips first is
 a matter of timing. The invariant that matters — one 201, one 409, exactly one
 OWNER row — holds either way, which is what the integration test asserts.
 Tightening this to a single deterministic code would mean re-reading the

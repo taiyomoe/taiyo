@@ -1,6 +1,7 @@
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { removeGroupMember } from "../group-membership"
 import { checkGroup } from "../middlewares/check-group-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
@@ -35,37 +36,11 @@ export const leaveGroupHandler = new Hono().post(
   withTransaction,
   async (c) => {
     const { db, group, user } = c.var
-    const target = await db
-      .selectFrom("groupMemberships")
-      .select("role")
-      .where("groupId", "=", group.id)
-      .where("userId", "=", user.id)
-      .executeTakeFirst()
+    const result = await removeGroupMember(db, { groupId: group.id, userId: user.id })
 
-    if (!target) {
-      return c.fail("GROUP_MEMBER_NOT_FOUND")
+    if (!result.ok) {
+      return c.fail(result.error)
     }
-
-    if (target.role === "OWNER") {
-      const otherOwners = await db
-        .selectFrom("groupMemberships")
-        .select("userId")
-        .where("groupId", "=", group.id)
-        .where("role", "=", "OWNER")
-        .where("userId", "!=", user.id)
-        .limit(1)
-        .executeTakeFirst()
-
-      if (!otherOwners) {
-        return c.fail("GROUP_LAST_OWNER")
-      }
-    }
-
-    await db
-      .deleteFrom("groupMemberships")
-      .where("groupId", "=", group.id)
-      .where("userId", "=", user.id)
-      .execute()
 
     return c.ok({ groupId: group.id, userId: user.id })
   },

@@ -1,6 +1,7 @@
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { setGroupMemberRole } from "../group-membership"
 import { checkGroup } from "../middlewares/check-group-middleware"
 import { requireGroupOwnerOrMod } from "../middlewares/require-group-owner-or-mod-middleware"
 import { validateParam } from "../middlewares/validate-param-middleware"
@@ -41,24 +42,10 @@ export const promoteGroupMemberHandler = new Hono().post(
   async (c) => {
     const { db, group } = c.var
     const { userId } = c.var.param
-    const target = await db
-      .selectFrom("groupMemberships")
-      .select("role")
-      .where("groupId", "=", group.id)
-      .where("userId", "=", userId)
-      .executeTakeFirst()
+    const result = await setGroupMemberRole(db, { groupId: group.id, userId, role: "OWNER" })
 
-    if (!target) {
-      return c.fail("GROUP_MEMBER_NOT_FOUND")
-    }
-
-    if (target.role !== "OWNER") {
-      await db
-        .updateTable("groupMemberships")
-        .set({ role: "OWNER" })
-        .where("groupId", "=", group.id)
-        .where("userId", "=", userId)
-        .execute()
+    if (!result.ok) {
+      return c.fail(result.error)
     }
 
     return c.ok({ groupId: group.id, userId })

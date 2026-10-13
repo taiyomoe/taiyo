@@ -2,6 +2,7 @@ import { GROUP_MEMBERSHIP_ROLES } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { addGroupMember } from "../group-membership"
 import { checkGroup } from "../middlewares/check-group-middleware"
 import { requireGroupOwnerOrMod } from "../middlewares/require-group-owner-or-mod-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
@@ -67,21 +68,11 @@ export const addGroupMemberHandler = new Hono().post(
       return c.fail("NOT_FOUND", { resource: "user", id: userId })
     }
 
-    const existing = await db
-      .selectFrom("groupMemberships")
-      .select("userId")
-      .where("groupId", "=", group.id)
-      .where("userId", "=", userId)
-      .executeTakeFirst()
+    const result = await addGroupMember(db, { groupId: group.id, userId, role, addedBy: user.id })
 
-    if (existing) {
-      return c.fail("GROUP_MEMBER_EXISTS")
+    if (!result.ok) {
+      return c.fail(result.error)
     }
-
-    await db
-      .insertInto("groupMemberships")
-      .values({ groupId: group.id, userId, role, addedBy: user.id })
-      .execute()
 
     return c.ok({ groupId: group.id, userId, role })
   },

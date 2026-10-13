@@ -1,7 +1,7 @@
-import { sql } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { claimGroup } from "../group-membership"
 import { checkOwnershipRequest } from "../middlewares/check-ownership-request-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
@@ -43,37 +43,15 @@ export const approveOwnershipRequestHandler = new Hono().post(
       return c.fail("OWNERSHIP_REQUEST_NOT_PENDING")
     }
 
-    // Serialize concurrent approvals on the same group. Without this lock the
-    // SELECT below and the INSERT can both run in parallel transactions, both
-    // see no OWNER, and both insert — producing two OWNERs from the request
-    // workflow even though the intent is "first approval wins, the rest are
-    // auto-cancelled below". The lock is transaction-scoped and keyed on the
-    // group, so approvals for different groups still proceed in parallel.
-    await sql`SELECT pg_advisory_xact_lock(hashtextextended(${ownershipRequest.groupId}::text, 0))`.execute(
-      db,
-    )
+    const result = await claimGroup(db, {
+      groupId: ownershipRequest.groupId,
+      userId: ownershipRequest.userId,
+      addedBy: user.id,
+    })
 
-    const owned = await db
-      .selectFrom("groupMemberships")
-      .select("userId")
-      .where("groupId", "=", ownershipRequest.groupId)
-      .where("role", "=", "OWNER")
-      .limit(1)
-      .executeTakeFirst()
-
-    if (owned) {
-      return c.fail("GROUP_ALREADY_OWNED")
+    if (!result.ok) {
+      return c.fail(result.error)
     }
-
-    await db
-      .insertInto("groupMemberships")
-      .values({
-        userId: ownershipRequest.userId,
-        groupId: ownershipRequest.groupId,
-        role: "OWNER",
-        addedBy: user.id,
-      })
-      .execute()
 
     await db
       .updateTable("groupOwnershipRequests")
