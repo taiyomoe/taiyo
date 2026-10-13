@@ -9,13 +9,17 @@ const shimmer = stylex.keyframes({
 })
 const styles = stylex.create({
   base: {
-    background: `linear-gradient(120deg, transparent 40%, ${colors.skeletonHighlight}, transparent 60%) ${colors.muted} 0 0 / 200% 100% fixed`,
+    backgroundPosition: "0 0",
     borderRadius: radius.sm,
     animationDelay: "-1s",
     animationDuration: "2s",
     animationIterationCount: "infinite",
     animationName: shimmer,
     animationTimingFunction: "linear",
+    backgroundAttachment: "fixed",
+    backgroundColor: colors.skeleton,
+    backgroundImage: `linear-gradient(120deg, transparent 40%, ${colors.skeletonHighlight}, transparent 60%)`,
+    backgroundSize: "200% 100%",
   },
 })
 

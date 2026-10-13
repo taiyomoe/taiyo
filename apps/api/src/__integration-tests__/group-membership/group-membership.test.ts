@@ -1,6 +1,7 @@
 import type { GroupMembershipRole } from "@taiyomoe/db"
 import { randomUUID } from "node:crypto"
 import { describe, expect } from "vitest"
+import type { Services } from "../../services"
 import {
   addGroupMember,
   claimGroup,
@@ -8,7 +9,6 @@ import {
   setGroupMemberRole,
   transferGroupOwnership,
 } from "../../group-membership"
-import type { Services } from "../../services"
 import { signInAs } from "../helpers/auth"
 import { test } from "../setup"
 

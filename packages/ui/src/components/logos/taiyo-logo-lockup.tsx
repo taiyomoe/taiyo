@@ -10,14 +10,12 @@ const styles = stylex.create({
     gap: "0.5rem",
     alignItems: "center",
     display: "flex",
+    fontFamily: font.heading,
     fontSize: text.xl,
   },
   mark: {
     height: "1.4em",
     width: "auto",
-  },
-  wordmark: {
-    fontFamily: font.heading,
   },
 })
 
@@ -31,7 +29,7 @@ export const TaiyoLogoLockup = ({ className, sx, ...props }: TaiyoLogoLockupProp
   return (
     <div className={cn(styleProps.className, className)} style={styleProps.style} {...props}>
       <TaiyoLogo {...stylex.props(styles.mark)} />
-      <span sx={styles.wordmark}>Taiyō</span>
+      <span>Taiyō</span>
     </div>
   )
 }

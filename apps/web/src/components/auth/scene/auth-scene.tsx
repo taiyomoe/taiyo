@@ -5,7 +5,7 @@ import { Link } from "@tanstack/react-router"
 import { AuthCitations } from "@/components/auth/scene/auth-citations"
 import { AuthSun } from "@/components/auth/scene/auth-sun"
 import { Embers } from "@/components/scene/embers"
-import { scene } from "@/components/scene/scene.stylex"
+import { scene, sceneFont } from "@/components/scene/scene.stylex"
 import { m } from "@/paraglide/messages"
 
 const LG = "@media (width >= 64rem)"
@@ -30,6 +30,7 @@ const styles = stylex.create({
   },
   lockup: {
     gap: "0.75rem",
+    fontFamily: sceneFont.display,
     fontSize: "26px",
     fontWeight: 700,
     letterSpacing: "-0.02em",

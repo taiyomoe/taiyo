@@ -13,7 +13,9 @@ import { colors, consts, motion } from "@taiyomoe/ui/styles/tokens.stylex"
 import { Link } from "@tanstack/react-router"
 import { useEffect, useRef } from "react"
 import type { Session } from "@/lib/queries/session"
+import { sceneFont } from "@/components/scene/scene.stylex"
 import { UserMenu } from "@/components/shell/user-menu"
+import { useWindowScrolled } from "@/lib/use-window-scrolled"
 import { m } from "@/paraglide/messages"
 
 const styles = stylex.create({
@@ -24,12 +26,32 @@ const styles = stylex.create({
     backgroundColor: `color-mix(in srgb, ${colors.background} 72%, transparent)`,
     display: "flex",
     position: "fixed",
+    transitionDuration: {
+      default: motion.enterLarge,
+      "@media (prefers-reduced-motion: reduce)": "0s",
+    },
+    transitionProperty: "background-color, border-color, backdrop-filter",
+    transitionTimingFunction: motion.easeOut,
     zIndex: 30,
     borderBottomColor: colors.sidebarBorder,
     borderBottomStyle: "solid",
     borderBottomWidth: 1,
     height: "var(--navbar-height)",
     top: 0,
+  },
+  headerOverlay: {
+    backdropFilter: {
+      default: "blur(0px) saturate(100%)",
+      "@media (width >= 50rem)": "blur(16px) saturate(180%)",
+    },
+    backgroundColor: {
+      default: "transparent",
+      "@media (width >= 50rem)": `color-mix(in srgb, ${colors.background} 72%, transparent)`,
+    },
+    borderBottomColor: {
+      default: "transparent",
+      "@media (width >= 50rem)": colors.sidebarBorder,
+    },
   },
   brand: {
     paddingInline: "1rem",
@@ -108,6 +130,7 @@ const styles = stylex.create({
   },
   lockup: {
     gap: "0.625rem",
+    fontFamily: sceneFont.display,
     fontSize: "1.25rem",
     fontWeight: 700,
     letterSpacing: "-0.02em",
@@ -138,10 +161,16 @@ const styles = stylex.create({
   },
 })
 
-export function AppNavbar({ user }: { user: Session["user"] }) {
+type AppNavbarProps = {
+  user: Session["user"]
+  overlay?: boolean
+}
+
+export function AppNavbar({ user, overlay = false }: AppNavbarProps) {
   const { isMobile, open, resizing, toggleSidebar } = useSidebar()
   const toggleHidden = open && !isMobile
   const searchRef = useRef<HTMLInputElement>(null)
+  const scrolled = useWindowScrolled()
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -159,7 +188,7 @@ export function AppNavbar({ user }: { user: Session["user"] }) {
   }, [])
 
   return (
-    <header sx={styles.header}>
+    <header sx={[styles.header, overlay && !scrolled && styles.headerOverlay]}>
       <div sx={[styles.brand, !open && styles.brandCollapsed, resizing && styles.instant]}>
         <div inert={toggleHidden} sx={[styles.toggleSlot, toggleHidden && styles.toggleSlotHidden]}>
           <Button

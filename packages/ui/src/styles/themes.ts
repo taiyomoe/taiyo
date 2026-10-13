@@ -67,7 +67,8 @@ export const darkTheme = stylex.createTheme(colors, {
   sidebarAccentForeground: palette.neutral100,
   sidebarBorder: `rgb(255 255 255 / 6%)`,
   sidebarRing: palette.brand,
-  skeletonHighlight: `rgb(255 255 255 / 4%)`,
+  skeleton: `rgb(255 255 255 / 8%)`,
+  skeletonHighlight: `rgb(255 255 255 / 7%)`,
 })
 
 export const darkShadows = stylex.createTheme(shadows, {

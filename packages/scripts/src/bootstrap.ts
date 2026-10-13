@@ -277,16 +277,11 @@ const main = async () => {
     step("Seeding the database")
     run("pnpm", ["-F", "@taiyomoe/db", "kysely", "seed", "run"])
   } else {
-    step("Database already has data, seeding only the dev accounts")
-    run("pnpm", [
-      "-F",
-      "@taiyomoe/db",
-      "kysely",
-      "seed",
-      "run",
-      "--specific",
-      "1780056748390_dev-accounts",
-    ])
+    step("Database already has data, seeding only the dev accounts and featured medias")
+
+    for (const seed of ["1780056748390_dev-accounts", "1791888129084_featured-medias"]) {
+      run("pnpm", ["-F", "@taiyomoe/db", "kysely", "seed", "run", "--specific", seed])
+    }
   }
 
   step("Indexing medias in Meilisearch")

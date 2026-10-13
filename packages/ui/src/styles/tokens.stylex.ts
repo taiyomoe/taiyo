@@ -50,6 +50,7 @@ export const colors = stylex.defineVars({
   sidebarAccentForeground: palette.neutral900,
   sidebarBorder: `rgb(0 0 0 / 6%)`,
   sidebarRing: palette.brand,
+  skeleton: `rgb(0 0 0 / 6%)`,
   skeletonHighlight: `rgb(255 255 255 / 64%)`,
 })
 
