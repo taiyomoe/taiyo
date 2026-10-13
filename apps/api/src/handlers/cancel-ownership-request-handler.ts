@@ -40,15 +40,17 @@ export const cancelOwnershipRequestHandler = new Hono().delete(
       return c.fail("FORBIDDEN")
     }
 
-    if (ownershipRequest.status !== "PENDING") {
-      return c.fail("OWNERSHIP_REQUEST_NOT_PENDING")
-    }
-
-    await db
+    const transitioned = await db
       .updateTable("groupOwnershipRequests")
       .set({ status: "CANCELLED" })
       .where("id", "=", ownershipRequest.id)
-      .execute()
+      .where("status", "=", "PENDING")
+      .returning("id")
+      .executeTakeFirst()
+
+    if (transitioned === undefined) {
+      return c.fail("OWNERSHIP_REQUEST_NOT_PENDING")
+    }
 
     return c.ok({ id: ownershipRequest.id })
   },

@@ -128,6 +128,15 @@ describe("POST /ownership-requests/:id/approve", () => {
     }
 
     expect(res.body.code).toBe("OWNERSHIP_REQUEST_NOT_PENDING")
+
+    const membership = await services.db
+      .selectFrom("groupMemberships")
+      .select("role")
+      .where("groupId", "=", groupId)
+      .where("userId", "=", requesterId)
+      .executeTakeFirst()
+
+    expect(membership).toBeUndefined()
   })
 
   test("returns GROUP_ALREADY_OWNED when an OWNER already exists", async ({ app, services }) => {
