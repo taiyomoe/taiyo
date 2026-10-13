@@ -22,19 +22,17 @@ const styles = stylex.create({
     gap: { default: "0.125rem", "@media (width >= 40rem)": "0.25rem" },
     justifyContent: "center",
   },
-
   page: {
     paddingInline: "0.375rem",
     fontVariantNumeric: "tabular-nums",
-    height: { default: "2rem", "@media (width >= 40rem)": null },
-    minWidth: { default: "2rem", "@media (width >= 40rem)": "2.25rem" },
+    height: { default: null, "@media (width < 40rem)": "2rem" },
+    minWidth: { default: "2.25rem", "@media (width < 40rem)": "2rem" },
     width: "auto",
   },
   edge: {
-    height: { default: "2rem", "@media (width >= 40rem)": null },
-    width: { default: "2rem", "@media (width >= 40rem)": null },
+    height: { default: null, "@media (width < 40rem)": "2rem" },
+    width: { default: null, "@media (width < 40rem)": "2rem" },
   },
-
   disabled: {
     opacity: 0.4,
     pointerEvents: "none",
@@ -83,11 +81,11 @@ export function PagePagination({ page, pageCount, renderLink, onJump }: PagePagi
   return (
     <Pagination aria-label={m.pagination_label()}>
       <PaginationContent sx={styles.content}>
-        <PaginationItem>
+        <PaginationItem {...stylex.props(page <= 1 && styles.disabled)}>
           <PaginationPrevious
             aria-disabled={page <= 1 || undefined}
             render={page <= 1 ? <span /> : renderLink(page - 1)}
-            sx={[styles.edge, page <= 1 && styles.disabled]}
+            sx={styles.edge}
           />
         </PaginationItem>
         {getPageItems(page, pageCount).map((item) =>
@@ -108,11 +106,11 @@ export function PagePagination({ page, pageCount, renderLink, onJump }: PagePagi
             </PaginationItem>
           ),
         )}
-        <PaginationItem>
+        <PaginationItem {...stylex.props(page >= pageCount && styles.disabled)}>
           <PaginationNext
             aria-disabled={page >= pageCount || undefined}
             render={page >= pageCount ? <span /> : renderLink(page + 1)}
-            sx={[styles.edge, page >= pageCount && styles.disabled]}
+            sx={styles.edge}
           />
         </PaginationItem>
       </PaginationContent>

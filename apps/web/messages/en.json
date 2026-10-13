@@ -137,7 +137,6 @@
   "error_api_code": "The API responded with {code}.",
   "error_unknown": "An unexpected error occurred.",
   "loading": "Loading…",
-  "home_greeting": "Hello, {name}!",
   "home_sign_out": "Sign out",
   "home_featured_label": "Featured titles",
   "home_featured_slide": "{index} of {total}",

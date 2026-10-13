@@ -18,13 +18,13 @@ const UNITS = [
   { unit: "hour", seconds: 3600 },
   { unit: "minute", seconds: 60 },
 ] as const
+const TIME_ACTIVE_COLOR = `color-mix(in srgb, ${colors.mutedForeground} 60%, ${colors.foreground})`
 const styles = stylex.create({
   time: {
     color: {
-      '[aria-expanded="true"]': `color-mix(in srgb, ${colors.mutedForeground} 60%, ${colors.foreground})`,
-      "[data-popup-open]": `color-mix(in srgb, ${colors.mutedForeground} 60%, ${colors.foreground})`,
+      "[data-popup-open]": TIME_ACTIVE_COLOR,
       default: colors.mutedForeground,
-      ":hover": `color-mix(in srgb, ${colors.mutedForeground} 60%, ${colors.foreground})`,
+      ":hover": TIME_ACTIVE_COLOR,
     },
     cursor: "default",
     flexShrink: 0,
@@ -187,6 +187,7 @@ export function TimeAgo({ date, sx }: { date: string; sx?: Sx }) {
         {...hover.triggerProps}
         nativeButton={false}
         render={<time dateTime={date} suppressHydrationWarning />}
+        style={hover.open ? { color: TIME_ACTIVE_COLOR } : undefined}
         sx={[styles.time, sx]}
       >
         {formatTimeAgo(parsed, now, "narrow")}

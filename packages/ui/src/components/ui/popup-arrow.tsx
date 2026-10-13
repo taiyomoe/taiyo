@@ -32,6 +32,11 @@ export const popupArrowStyles = stylex.create({
   fill: {
     fill: colors.popover,
   },
+  backing: {
+    fill: "none",
+    stroke: colors.popover,
+    strokeWidth: 1,
+  },
   stroke: {
     fill: "none",
     stroke: colors.border,
@@ -50,6 +55,7 @@ export function PopupArrowSvg(): React.ReactElement {
     >
       <path d={`${OUTLINE}V10H0Z`} {...stylex.props(popupArrowStyles.fill)} />
       <path d="M0 9H20V10H0Z" {...stylex.props(popupArrowStyles.fill)} />
+      <path d={OUTLINE} {...stylex.props(popupArrowStyles.backing)} />
       <path d={OUTLINE} {...stylex.props(popupArrowStyles.stroke)} />
     </svg>
   )

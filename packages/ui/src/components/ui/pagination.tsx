@@ -4,7 +4,7 @@ import { useRender } from "@base-ui/react/use-render"
 import * as stylex from "@stylexjs/stylex"
 import type { Sx } from "../../styles/sx"
 import { a11y } from "../../styles/recipes"
-import { consts } from "../../styles/tokens.stylex"
+import { consts, motion } from "../../styles/tokens.stylex"
 import { cn } from "../../utils/cn"
 import { ChevronLeft, ChevronRight, Ellipsis } from "../icons"
 import { type Button, buttonVariants } from "./button"
@@ -38,13 +38,29 @@ const styles = stylex.create({
       [consts.sm]: "inline",
     },
   },
+  edgeIcon: {
+    transitionDuration: {
+      default: "200ms",
+      "@media (prefers-reduced-motion: reduce)": "0s",
+    },
+    transitionProperty: "translate",
+    transitionTimingFunction: motion.easeOut,
+  },
   previousIcon: {
+    translate: {
+      default: "0",
+      ":is(:hover > *)": "-0.1875rem",
+    },
     marginLeft: {
       default: null,
       [consts.sm]: "-0.25rem",
     },
   },
   nextIcon: {
+    translate: {
+      default: "0",
+      ":is(:hover > *)": "0.1875rem",
+    },
     marginRight: {
       default: null,
       [consts.sm]: "-0.25rem",
@@ -148,7 +164,7 @@ export function PaginationPrevious({
   sx,
   ...props
 }: React.ComponentProps<typeof PaginationLink>): React.ReactElement {
-  const iconProps = stylex.props(styles.previousIcon)
+  const iconProps = stylex.props(styles.edgeIcon, styles.previousIcon)
   const labelProps = stylex.props(styles.edgeLabel)
 
   return (
@@ -172,7 +188,7 @@ export function PaginationNext({
   sx,
   ...props
 }: React.ComponentProps<typeof PaginationLink>): React.ReactElement {
-  const iconProps = stylex.props(styles.nextIcon)
+  const iconProps = stylex.props(styles.edgeIcon, styles.nextIcon)
   const labelProps = stylex.props(styles.edgeLabel)
 
   return (
