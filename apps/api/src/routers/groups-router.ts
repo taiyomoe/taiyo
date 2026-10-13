@@ -11,6 +11,7 @@ import { listGroupOwnershipRequestsHandler } from "../handlers/list-group-owners
 import { listGroupsHandler } from "../handlers/list-groups-handler"
 import { promoteGroupMemberHandler } from "../handlers/promote-group-member-handler"
 import { removeGroupMemberHandler } from "../handlers/remove-group-member-handler"
+import { transferGroupOwnershipHandler } from "../handlers/transfer-group-ownership-handler"
 import { updateGroupHandler } from "../handlers/update-group-handler"
 
 export const groupsRouter = new Hono()
@@ -27,3 +28,4 @@ export const groupsRouter = new Hono()
   .route("/", promoteGroupMemberHandler)
   .route("/", demoteGroupMemberHandler)
   .route("/", leaveGroupHandler)
+  .route("/", transferGroupOwnershipHandler)

@@ -1,6 +1,7 @@
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { removeGroupMember } from "../group-membership"
 import { checkGroup } from "../middlewares/check-group-middleware"
 import { requireGroupOwnerOrMod } from "../middlewares/require-group-owner-or-mod-middleware"
 import { validateParam } from "../middlewares/validate-param-middleware"
@@ -42,37 +43,11 @@ export const removeGroupMemberHandler = new Hono().delete(
   async (c) => {
     const { db, group } = c.var
     const { userId } = c.var.param
-    const target = await db
-      .selectFrom("groupMemberships")
-      .select(["role"])
-      .where("groupId", "=", group.id)
-      .where("userId", "=", userId)
-      .executeTakeFirst()
+    const result = await removeGroupMember(db, { groupId: group.id, userId })
 
-    if (!target) {
-      return c.fail("GROUP_MEMBER_NOT_FOUND")
+    if (!result.ok) {
+      return c.fail(result.error)
     }
-
-    if (target.role === "OWNER") {
-      const otherOwners = await db
-        .selectFrom("groupMemberships")
-        .select("userId")
-        .where("groupId", "=", group.id)
-        .where("role", "=", "OWNER")
-        .where("userId", "!=", userId)
-        .limit(1)
-        .executeTakeFirst()
-
-      if (!otherOwners) {
-        return c.fail("GROUP_LAST_OWNER")
-      }
-    }
-
-    await db
-      .deleteFrom("groupMemberships")
-      .where("groupId", "=", group.id)
-      .where("userId", "=", userId)
-      .execute()
 
     return c.ok({ groupId: group.id, userId })
   },
