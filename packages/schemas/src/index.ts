@@ -5,8 +5,9 @@ export const paginationQuerySchema = z.object({
     .number()
     .int()
     .min(1)
+    .max(100_000)
     .default(1)
-    .meta({ description: "The page number to fetch, starting at 1.", example: 1 }),
+    .meta({ description: "The page number to fetch, from 1 to 100000.", example: 1 }),
   perPage: z.coerce
     .number()
     .int()

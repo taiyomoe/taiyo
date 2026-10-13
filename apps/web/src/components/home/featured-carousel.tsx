@@ -1,17 +1,19 @@
 import * as stylex from "@stylexjs/stylex"
 import { colors, motion } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useSuspenseQuery } from "@tanstack/react-query"
-import { getRouteApi } from "@tanstack/react-router"
 import useEmblaCarousel, { type UseEmblaCarouselType } from "embla-carousel-react"
 import {
   type FocusEvent,
   type PointerEvent,
+  useDeferredValue,
   useEffect,
   useState,
   useSyncExternalStore,
 } from "react"
-import type { FeaturedMedia } from "@/lib/queries/medias"
 import { FeaturedSlide, FeaturedSlideSkeleton } from "@/components/home/featured-slide"
+import { ContentFilterEmpty } from "@/components/settings/content-filter"
+import { type FeaturedMedia, featuredMediasQueryOptions } from "@/lib/queries/medias"
+import { useSettings } from "@/lib/settings"
 import { m } from "@/paraglide/messages"
 
 type EmblaApi = NonNullable<UseEmblaCarouselType[1]>
@@ -28,6 +30,12 @@ const styles = stylex.create({
   },
   viewport: {
     overflow: "hidden",
+  },
+  empty: {
+    borderBottomColor: colors.border,
+    borderBottomStyle: "solid",
+    borderBottomWidth: 1,
+    paddingTop: { default: "var(--navbar-height)", "@media (width >= 50rem)": 0 },
   },
   container: {
     display: "flex",
@@ -99,7 +107,6 @@ const styles = stylex.create({
     animationPlayState: "paused",
   },
 })
-const routeApi = getRouteApi("/")
 const subscribeToReducedMotion = (onChange: () => void) => {
   const query = matchMedia(REDUCED_MOTION_QUERY)
 
@@ -130,10 +137,21 @@ const useDocumentHidden = () =>
   )
 
 export function FeaturedCarousel() {
-  const { featuredMediasQueryOptions } = routeApi.useRouteContext()
-  const { data: medias } = useSuspenseQuery(featuredMediasQueryOptions)
+  const contentRatings = useDeferredValue(useSettings().contentRatings)
+  const { data: medias } = useSuspenseQuery(featuredMediasQueryOptions(contentRatings))
 
-  return medias.length === 0 ? null : <FeaturedCarouselView medias={medias} />
+  if (medias.length > 0) {
+    return <FeaturedCarouselView key={medias.map((media) => media.id).join()} medias={medias} />
+  }
+
+  return (
+    <div sx={[styles.root, styles.empty]}>
+      <ContentFilterEmpty
+        description={m.home_featured_empty_description()}
+        title={m.home_featured_empty_title()}
+      />
+    </div>
+  )
 }
 
 function FeaturedCarouselView({ medias }: { medias: FeaturedMedia[] }) {

@@ -24,6 +24,10 @@ const styles = stylex.create({
     inset: 0,
     display: "block",
     objectFit: "cover",
+    opacity: {
+      "[data-loaded]": 1,
+      default: 0,
+    },
     position: "absolute",
     transform: {
       default: "scale(1)",
@@ -31,10 +35,10 @@ const styles = stylex.create({
       ":is(:hover > *)": "scale(1.07)",
     },
     transitionDuration: {
-      default: "700ms",
+      default: "700ms, 200ms",
       "@media (prefers-reduced-motion: reduce)": "0s",
     },
-    transitionProperty: "transform",
+    transitionProperty: "transform, opacity",
     transitionTimingFunction: motion.easeOut,
     height: "100%",
     width: "100%",
@@ -107,6 +111,7 @@ function CoverImage({
       <img
         ref={ref}
         alt={alt}
+        data-loaded={loaded ? "" : undefined}
         decoding={priority === "high" ? "sync" : "async"}
         draggable={false}
         fetchPriority={priority}

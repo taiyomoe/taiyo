@@ -1,16 +1,33 @@
 import { paginationMetaSchema, paginationQuerySchema } from "@taiyomoe/schemas"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
+import z from "zod"
 import { validateQuery } from "../middlewares/validate-query-middleware"
+import {
+  getMainCoverUrls,
+  getMainTitles,
+  selectLatestChapters,
+  selectVisibleChapters,
+  withChapterDetails,
+} from "../utils/latest-chapters"
 import { getOpenApiResponses } from "../utils/openapi-helper"
-import { apiSuccessEnvelope, chapterFeedItemSchema } from "../utils/schemas"
+import {
+  apiSuccessEnvelope,
+  contentRatingsQuerySchema,
+  latestChapterFeedItemSchema,
+} from "../utils/schemas"
+
+const querySchema = paginationQuerySchema.extend({
+  contentRating: contentRatingsQuerySchema,
+  mediaId: z.uuid().optional().meta({ description: "Only list the chapters of this media." }),
+})
 
 export const listLatestChaptersHandler = new Hono().get(
   "/latest",
   describeRoute({
     summary: "List the latest chapters",
     description:
-      "Lists the most recently released chapters across every media, newest first.\n\n**Authentication:** none.",
+      "Lists the most recently released chapters across every media, newest first, filtered by content rating.\n\n**Authentication:** none.",
     tags: ["Chapters"],
     responses: {
       200: {
@@ -18,7 +35,7 @@ export const listLatestChaptersHandler = new Hono().get(
         content: {
           "application/json": {
             schema: resolver(
-              apiSuccessEnvelope(chapterFeedItemSchema.array(), paginationMetaSchema),
+              apiSuccessEnvelope(latestChapterFeedItemSchema.array(), paginationMetaSchema),
             ),
           },
         },
@@ -28,48 +45,35 @@ export const listLatestChaptersHandler = new Hono().get(
       }),
     },
   }),
-  validateQuery(paginationQuerySchema),
+  validateQuery(querySchema),
   async (c) => {
     const { db } = c.var
-    const { page, perPage } = c.var.query
-    const [items, totalRow] = await Promise.all([
-      db
-        .selectFrom("chapters")
-        .innerJoin("medias", "medias.id", "chapters.mediaId")
-        .where("chapters.deletedAt", "is", null)
-        .where("medias.deletedAt", "is", null)
-        .select((eb) => [
-          "chapters.id",
-          "chapters.title",
-          "chapters.number",
-          "chapters.volume",
-          "chapters.language",
-          "chapters.contentRating",
-          "chapters.createdAt",
-          "chapters.mediaId",
-          eb
-            .selectFrom("titles")
-            .whereRef("titles.mediaId", "=", "chapters.mediaId")
-            .where("titles.isMainTitle", "=", true)
-            .where("titles.deletedAt", "is", null)
-            .select("titles.title")
-            .limit(1)
-            .as("mediaTitle"),
-        ])
+    const { page, perPage, contentRating, mediaId } = c.var.query
+    const [rows, totalRow] = await Promise.all([
+      selectLatestChapters(db, { contentRatings: contentRating, mediaId })
         .orderBy("chapters.createdAt", "desc")
         .orderBy("chapters.id", "desc")
         .limit(perPage)
         .offset((page - 1) * perPage)
         .execute(),
-      db
-        .selectFrom("chapters")
-        .innerJoin("medias", "medias.id", "chapters.mediaId")
-        .where("chapters.deletedAt", "is", null)
-        .where("medias.deletedAt", "is", null)
+      selectVisibleChapters(db, { contentRatings: contentRating, mediaId })
         .select(db.fn.countAll().as("count"))
         .executeTakeFirstOrThrow(),
     ])
+    const mediaIds = [...new Set(rows.map((row) => row.mediaId))]
+    const [chapters, coverUrls, titles] = await Promise.all([
+      withChapterDetails(db, rows),
+      getMainCoverUrls(db, mediaIds),
+      getMainTitles(db, mediaIds),
+    ])
 
-    return c.ok(items, { page, perPage, total: Number(totalRow.count) })
+    return c.ok(
+      chapters.map((chapter) => ({
+        ...chapter,
+        mediaTitle: titles.get(chapter.mediaId) ?? null,
+        mediaCoverUrl: coverUrls.get(chapter.mediaId) ?? null,
+      })),
+      { page, perPage, total: Number(totalRow.count) },
+    )
   },
 )

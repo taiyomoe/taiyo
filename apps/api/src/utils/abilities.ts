@@ -13,6 +13,7 @@ export type Subjects =
   | "History"
   | "Library"
   | "List"
+  | "Settings"
   | "all"
 
 export type AppAbility = MongoAbility<[Actions, Subjects]>
@@ -33,6 +34,8 @@ export const defineAbilitiesFor = (user: User): AppAbility => {
   can(["create", "read", "update", "delete"], "Library")
 
   can(["create", "read", "update", "delete"], "List")
+
+  can("update", "Settings")
 
   if (user.role === "ADMIN") {
     can("manage", "all")

@@ -2,7 +2,7 @@ import { Tabs as TabsPrimitive } from "@base-ui/react/tabs"
 import * as stylex from "@stylexjs/stylex"
 import * as React from "react"
 import type { Sx } from "../../styles/sx"
-import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
+import { colors, consts, motion, radius, shadows } from "../../styles/tokens.stylex"
 import { cn } from "../../utils/cn"
 
 export type TabsVariant = "default" | "underline"
@@ -53,9 +53,12 @@ const styles = stylex.create({
   },
   indicator: {
     position: "absolute",
-    transitionDuration: "200ms",
+    transitionDuration: {
+      default: motion.springDuration,
+      "@media (prefers-reduced-motion: reduce)": "0s",
+    },
     transitionProperty: "width, translate",
-    transitionTimingFunction: "ease-in-out",
+    transitionTimingFunction: motion.spring,
     translate: "var(--active-tab-left) calc(-1 * var(--active-tab-bottom))",
     bottom: 0,
     height: "var(--active-tab-height)",

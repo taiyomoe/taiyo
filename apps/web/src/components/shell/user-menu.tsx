@@ -1,6 +1,6 @@
 import * as stylex from "@stylexjs/stylex"
 import { authClient } from "@taiyomoe/auth/client"
-import { Logout, Monitor, Moon, Sun } from "@taiyomoe/ui/components/icons"
+import { Eye, Logout, Monitor, Moon, Sun } from "@taiyomoe/ui/components/icons"
 import { Avatar, AvatarFallback, AvatarImage } from "@taiyomoe/ui/components/ui/avatar"
 import {
   Menu,
@@ -20,6 +20,7 @@ import { useRouter } from "@tanstack/react-router"
 import UnitedStatesFlag from "country-flag-icons/react/3x2/US"
 import { use } from "react"
 import { filter, isTruthy, join, map, pipe, take } from "remeda"
+import { ContentFilterItems } from "@/components/settings/content-filter"
 import { type Session, sessionQueryOptions } from "@/lib/queries/session"
 import { ThemeContext } from "@/lib/theme"
 import { m } from "@/paraglide/messages"
@@ -60,6 +61,9 @@ const styles = stylex.create({
   },
   subPopup: {
     minWidth: "10rem",
+  },
+  contentFilterPopup: {
+    minWidth: "12.5rem",
   },
   radioLabel: {
     gap: "0.625rem",
@@ -134,6 +138,15 @@ export function UserMenu({ user }: { user: Session["user"] }) {
                 </MenuRadioItem>
               ))}
             </MenuRadioGroup>
+          </MenuSubPopup>
+        </MenuSub>
+        <MenuSub>
+          <MenuSubTrigger>
+            <Eye />
+            {m.content_filter()}
+          </MenuSubTrigger>
+          <MenuSubPopup sx={styles.contentFilterPopup}>
+            <ContentFilterItems />
           </MenuSubPopup>
         </MenuSub>
         <MenuItem disabled>

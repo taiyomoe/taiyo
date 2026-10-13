@@ -24,11 +24,12 @@ export const config = {
     },
   },
   settings: {
-    contentRating: ["NORMAL", "SUGGESTIVE", "NSFL"],
+    contentRating: ["NORMAL", "SUGGESTIVE"],
     preferredTitles: "en",
     showFollowing: true,
     showLibrary: true,
     homeLayout: "ROWS",
+    latestUpdatesLayout: "LIST",
   } satisfies Required<UserSettings>,
   images: {
     maxSizeBytes: 10 * 1024 * 1024,

@@ -2,6 +2,10 @@ export const CONTENT_RATINGS = ["NORMAL", "SUGGESTIVE", "NSFW", "NSFL"] as const
 
 export type ContentRating = (typeof CONTENT_RATINGS)[number]
 
+export const LATEST_UPDATES_LAYOUTS = ["LIST", "GRID", "COMPACT"] as const
+
+export type LatestUpdatesLayout = (typeof LATEST_UPDATES_LAYOUTS)[number]
+
 export const FLAGS = ["OK", "STAFF_ONLY", "VIP_ONLY", "LOCKED"] as const
 
 export type Flag = (typeof FLAGS)[number]

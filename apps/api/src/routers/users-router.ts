@@ -10,6 +10,7 @@ import { listMyLibraryHandler } from "../handlers/list-my-library-handler"
 import { listMyListsHandler } from "../handlers/list-my-lists-handler"
 import { removeLibraryEntryHandler } from "../handlers/remove-library-entry-handler"
 import { unfollowUserHandler } from "../handlers/unfollow-user-handler"
+import { updateMySettingsHandler } from "../handlers/update-my-settings-handler"
 import { upsertLibraryEntryHandler } from "../handlers/upsert-library-entry-handler"
 
 export const usersRouter = new Hono()
@@ -25,3 +26,4 @@ export const usersRouter = new Hono()
   .route("/", listMyFeedHandler)
   .route("/", createListHandler)
   .route("/", listMyListsHandler)
+  .route("/", updateMySettingsHandler)

@@ -1,13 +1,14 @@
 import * as stylex from "@stylexjs/stylex"
-import { colors, font, radius, text } from "@taiyomoe/ui/styles/tokens.stylex"
+import { colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { CatchBoundary } from "@tanstack/react-router"
 import { Suspense } from "react"
 import { range } from "remeda"
 import type { Session } from "@/lib/queries/session"
 import { FeaturedCarousel, FeaturedCarouselSkeleton } from "@/components/home/featured-carousel"
+import { LatestUpdates } from "@/components/home/latest-updates"
 import { AppShell } from "@/components/shell/app-shell"
-import { m } from "@/paraglide/messages"
 
+const SHELVES = range(0, 5)
 const PLACEHOLDERS = range(0, 6)
 const styles = stylex.create({
   page: {
@@ -19,14 +20,6 @@ const styles = stylex.create({
     },
     display: "flex",
     flexDirection: "column",
-  },
-  heading: {
-    margin: 0,
-    color: colors.foreground,
-    fontFamily: font.heading,
-    fontSize: text.xxxl,
-    fontWeight: font.weightBold,
-    letterSpacing: "-0.02em",
   },
   shelf: {
     gap: "1rem",
@@ -63,8 +56,8 @@ export function HomePage({ user }: { user: Session["user"] }) {
         </Suspense>
       </CatchBoundary>
       <div sx={styles.page}>
-        <h1 sx={styles.heading}>{m.home_greeting({ name: user.name })}</h1>
-        {PLACEHOLDERS.map((shelf) => (
+        <LatestUpdates />
+        {SHELVES.map((shelf) => (
           <section key={shelf} sx={styles.shelf}>
             <div sx={styles.shelfTitle} />
             <div sx={styles.covers}>

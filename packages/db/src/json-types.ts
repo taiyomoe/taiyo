@@ -1,4 +1,11 @@
-import type { ContentRating, Language, MediaLink, MediaLinkNumberKey, StaffLink } from "./constants"
+import type {
+  ContentRating,
+  Language,
+  LatestUpdatesLayout,
+  MediaLink,
+  MediaLinkNumberKey,
+  StaffLink,
+} from "./constants"
 
 export type LocalizedText = Partial<Record<Language, string>>
 
@@ -23,4 +30,5 @@ export type UserSettings = {
   showFollowing?: boolean
   showLibrary?: boolean
   homeLayout?: "ROWS" | "COLUMNS"
+  latestUpdatesLayout?: LatestUpdatesLayout
 }

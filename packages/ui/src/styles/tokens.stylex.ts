@@ -42,6 +42,10 @@ export const colors = stylex.defineVars({
   chart3: palette.violet500,
   chart4: palette.pink500,
   chart5: palette.amber500,
+  contentSuggestive: palette.amber700,
+  contentNsfw: palette.pink700,
+  contentNsfl: palette.crimson700,
+  contentNsfwShine: palette.violet500,
   sidebar: surface.lightSidebar,
   sidebarForeground: `color-mix(in srgb, ${palette.neutral900} 64%, ${surface.lightSidebar})`,
   sidebarPrimary: palette.brand,
@@ -103,6 +107,9 @@ export const motion = stylex.defineConsts({
   enterLarge: "240ms",
   exitLarge: "160ms",
   slide: "300ms",
+  spring:
+    "linear(0, 0.045 4.2%, 0.153 8.3%, 0.291 12.5%, 0.434 16.7%, 0.569 20.8%, 0.688 25%, 0.787 29.2%, 0.866 33.3%, 0.925 37.5%, 0.968 41.7%, 0.996 45.8%, 1.014 50%, 1.024 54.2%, 1.028 58.3%, 1.028 62.5%, 1.026 66.7%, 1.022 70.8%, 1.018 75%, 1.014 79.2%, 1.01 83.3%, 1.007 87.5%, 1.005 91.7%, 1.003 95.8%, 1)",
+  springDuration: "550ms",
 })
 
 export const font = stylex.defineVars({

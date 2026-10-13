@@ -5,6 +5,7 @@ import type { CSSVariables, Sx } from "../../styles/sx"
 import { surface, transitions } from "../../styles/recipes"
 import { colors, motion, radius, shadows } from "../../styles/tokens.stylex"
 import { cn } from "../../utils/cn"
+import { PopupArrowSvg, popupArrowStyles, withArrowOffset } from "./popup-arrow"
 
 const styles = stylex.create({
   positioner: {
@@ -42,6 +43,11 @@ const styles = stylex.create({
     height: "var(--popup-height, auto)",
     width: "var(--popup-width, auto)",
   },
+  popupWithArrow: {
+    justifyContent: "center",
+    textAlign: "center",
+    minWidth: "2.75rem",
+  },
   viewport: {
     overflow: "clip",
     paddingBlock: "0.25rem",
@@ -75,6 +81,7 @@ export function TooltipPopup({
   anchor,
   children,
   portalProps,
+  arrow = false,
   sx,
   ...props
 }: TooltipPrimitive.Popup.Props & {
@@ -83,10 +90,17 @@ export function TooltipPopup({
   sideOffset?: TooltipPrimitive.Positioner.Props["sideOffset"]
   anchor?: TooltipPrimitive.Positioner.Props["anchor"]
   portalProps?: TooltipPrimitive.Portal.Props
+  arrow?: boolean
   sx?: Sx
 }): React.ReactElement {
   const positionerProps = stylex.props(styles.positioner)
-  const popupProps = stylex.props(transitions.popup, surface.raisedEdge, styles.popup, sx)
+  const popupProps = stylex.props(
+    transitions.popup,
+    surface.raisedEdge,
+    styles.popup,
+    arrow && styles.popupWithArrow,
+    sx,
+  )
   const viewportProps = stylex.props(styles.viewport)
   const viewportStyle: CSSVariables = {
     ...viewportProps.style,
@@ -98,10 +112,11 @@ export function TooltipPopup({
       <TooltipPrimitive.Positioner
         align={align}
         anchor={anchor}
+        arrowPadding={arrow ? 12 : undefined}
         className={positionerProps.className}
         data-slot="tooltip-positioner"
         side={side}
-        sideOffset={sideOffset}
+        sideOffset={withArrowOffset(sideOffset, arrow)}
         style={positionerProps.style}
       >
         <TooltipPrimitive.Popup
@@ -110,6 +125,11 @@ export function TooltipPopup({
           style={popupProps.style}
           {...props}
         >
+          {arrow ? (
+            <TooltipPrimitive.Arrow {...stylex.props(popupArrowStyles.arrow)}>
+              <PopupArrowSvg />
+            </TooltipPrimitive.Arrow>
+          ) : null}
           <TooltipPrimitive.Viewport
             className={viewportProps.className}
             data-slot="tooltip-viewport"

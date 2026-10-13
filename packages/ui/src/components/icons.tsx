@@ -5,11 +5,14 @@ import {
   Book02Icon,
   Bookmark02Icon,
   BubbleChatIcon,
+  Clock01Icon,
+  GridViewIcon,
   FireIcon,
   HistoryIcon,
   Home01Icon,
   LeftToRightListBulletIcon,
   Logout01Icon,
+  Menu02Icon,
   Menu01Icon,
   ShuffleIcon,
   SlidersHorizontalIcon,
@@ -17,9 +20,12 @@ import {
   Sun03Icon,
   UserGroupIcon,
   UserIcon,
+  ViewIcon,
   ArrowDown01Icon,
   ArrowLeft01Icon,
+  ArrowLeft02Icon,
   ArrowRight01Icon,
+  ArrowRight02Icon,
   ArrowUp01Icon,
   Cancel01Icon,
   ComputerIcon,
@@ -144,3 +150,15 @@ export const Sun: (props: IconProps) => React.ReactElement = icon(Sun03Icon)
 export const Moon: (props: IconProps) => React.ReactElement = icon(Moon02Icon)
 
 export const Monitor: (props: IconProps) => React.ReactElement = icon(ComputerIcon)
+
+export const ArrowLeft: (props: IconProps) => React.ReactElement = icon(ArrowLeft02Icon)
+
+export const ArrowRight: (props: IconProps) => React.ReactElement = icon(ArrowRight02Icon)
+
+export const Clock: (props: IconProps) => React.ReactElement = icon(Clock01Icon)
+
+export const Grid: (props: IconProps) => React.ReactElement = icon(GridViewIcon)
+
+export const Rows: (props: IconProps) => React.ReactElement = icon(Menu02Icon)
+
+export const Eye: (props: IconProps) => React.ReactElement = icon(ViewIcon)

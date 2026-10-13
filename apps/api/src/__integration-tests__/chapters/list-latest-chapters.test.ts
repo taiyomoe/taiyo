@@ -7,11 +7,24 @@ type FeedRow = {
   id: string
   number: number
   language: string
+  contentRating: string
   createdAt: string
   mediaId: string
   mediaTitle: string | null
+  mediaCoverUrl: string | null
+  groups: Array<{ id: string; name: string }>
+  uploader: { id: string; username: string; displayUsername: string; image: string | null }
 }
 
+const listIds = async (app: Parameters<typeof api>[0], query: string) => {
+  const res = await api<FeedRow[]>(app, `/chapters/latest?perPage=100&${query}`)
+
+  if (!res.body.success) {
+    throw new Error(`Expected success: ${JSON.stringify(res.body)}`)
+  }
+
+  return { ids: res.body.data.map((row) => row.id), total: getTotal(res.body.meta) }
+}
 const isDescending = (rows: FeedRow[]) =>
   rows.every((row, index) => {
     if (index === 0) {
@@ -170,5 +183,131 @@ describe("GET /chapters/latest", () => {
     }
 
     expect(res.body.code).toBe("VALIDATION_ERROR")
+  })
+
+  test("returns the cover, groups and uploader of each chapter", async ({ app, services }) => {
+    const credited = await services.db
+      .selectFrom("chapterGroups")
+      .innerJoin("chapters", "chapters.id", "chapterGroups.chapterId")
+      .innerJoin("groups", "groups.id", "chapterGroups.groupId")
+      .select(["chapters.id", "chapters.mediaId", "chapters.uploaderId", "groups.name"])
+      .executeTakeFirstOrThrow()
+    const res = await api<FeedRow[]>(
+      app,
+      `/chapters/latest?perPage=100&mediaId=${credited.mediaId}`,
+    )
+
+    if (!res.body.success) {
+      throw new Error("Expected success")
+    }
+
+    const row = defined(res.body.data.find((chapter) => chapter.id === credited.id))
+
+    expect(row.groups.map((group) => group.name)).toContain(credited.name)
+    expect(row.uploader.id).toBe(credited.uploaderId)
+    expect(row.uploader.username).toEqual(expect.any(String))
+    expect(row.mediaCoverUrl).toContain(`/medias/${credited.mediaId}/covers/`)
+  })
+
+  test("filters by media", async ({ app, services }) => {
+    const { mediaId } = await services.db
+      .selectFrom("chapters")
+      .select("mediaId")
+      .where("deletedAt", "is", null)
+      .executeTakeFirstOrThrow()
+    const res = await api<FeedRow[]>(app, `/chapters/latest?perPage=100&mediaId=${mediaId}`)
+
+    if (!res.body.success) {
+      throw new Error("Expected success")
+    }
+
+    expect(res.body.data.length).toBeGreaterThan(0)
+    expect(res.body.data.every((row) => row.mediaId === mediaId)).toBe(true)
+  })
+
+  test("defaults to normal and suggestive chapters", async ({ app, services }) => {
+    const { mediaId } = await services.db
+      .selectFrom("chapters")
+      .select("mediaId")
+      .where("deletedAt", "is", null)
+      .executeTakeFirstOrThrow()
+
+    await services.db
+      .updateTable("medias")
+      .set({ contentRating: "NSFW" })
+      .where("id", "=", mediaId)
+      .execute()
+
+    const defaults = await listIds(app, `mediaId=${mediaId}`)
+    const nsfw = await listIds(app, `mediaId=${mediaId}&contentRating=NSFW`)
+
+    expect(defaults.total).toBe(0)
+    expect(nsfw.total).toBeGreaterThan(0)
+  })
+
+  test("rates a chapter as the stricter of itself and its media", async ({ app, services }) => {
+    const [normalChapter, nsfwChapter] = await services.db
+      .selectFrom("chapters")
+      .select(["id", "mediaId"])
+      .where("deletedAt", "is", null)
+      .orderBy("createdAt", "desc")
+      .orderBy("id", "desc")
+      .limit(2)
+      .execute()
+    const media = defined(normalChapter).mediaId
+
+    await services.db
+      .updateTable("medias")
+      .set({ contentRating: "NORMAL" })
+      .where("id", "=", media)
+      .execute()
+    await services.db
+      .updateTable("chapters")
+      .set({ contentRating: "NORMAL" })
+      .where("mediaId", "=", media)
+      .execute()
+    await services.db
+      .updateTable("chapters")
+      .set({ contentRating: "NSFW" })
+      .where("id", "=", defined(nsfwChapter).id)
+      .execute()
+
+    const normal = await listIds(app, `mediaId=${media}&contentRating=NORMAL`)
+    const nsfw = await listIds(app, `mediaId=${media}&contentRating=NSFW`)
+
+    expect(normal.ids).not.toContain(defined(nsfwChapter).id)
+    expect(nsfw.ids).toContain(defined(nsfwChapter).id)
+
+    await services.db
+      .updateTable("medias")
+      .set({ contentRating: "NSFW" })
+      .where("id", "=", media)
+      .execute()
+
+    const nsfwMedia = await listIds(app, `mediaId=${media}&contentRating=NSFW`)
+    const normalOnly = await listIds(app, `mediaId=${media}&contentRating=NORMAL`)
+
+    expect(nsfwMedia.ids).toContain(defined(normalChapter).id)
+    expect(normalOnly.total).toBe(0)
+  })
+
+  test("combines several content ratings", async ({ app }) => {
+    const normal = await listIds(app, "contentRating=NORMAL")
+    const nsfw = await listIds(app, "contentRating=NSFW")
+    const both = await listIds(app, "contentRating=NSFW,NORMAL")
+
+    expect(both.total).toBe(normal.total + nsfw.total)
+  })
+
+  test("returns VALIDATION_ERROR for a page past the cap", async ({ app }) => {
+    const res = await api(app, `/chapters/latest?page=100000000000000000000`)
+
+    expect(res.status).toBe(422)
+  })
+
+  test("returns VALIDATION_ERROR for an unknown content rating", async ({ app }) => {
+    const res = await api(app, `/chapters/latest?contentRating=NORMAL,SPICY`)
+
+    expect(res.status).toBe(422)
   })
 })
