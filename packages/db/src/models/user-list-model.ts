@@ -1,6 +1,6 @@
 import type { Generated, Insertable } from "kysely"
 import type { UserListVisibility } from "../constants"
-import type { Timestamp } from "../types"
+import type { GeneratedTimestamp, Timestamp } from "../types"
 
 export type UserList = {
   id: Generated<string>
@@ -8,8 +8,8 @@ export type UserList = {
   name: string
   description: string | null
   visibility: Generated<UserListVisibility>
-  createdAt: Generated<Timestamp>
-  updatedAt: Generated<Timestamp>
+  createdAt: GeneratedTimestamp
+  updatedAt: GeneratedTimestamp
   deletedAt: Timestamp | null
 }
 

@@ -1,8 +1,8 @@
 import type { Generated } from "kysely"
-import type { Timestamp } from "../types"
+import type { GeneratedTimestamp } from "../types"
 
 export type SearchOutboxEntry = {
   id: Generated<string>
   mediaId: string
-  createdAt: Generated<Timestamp>
+  createdAt: GeneratedTimestamp
 }

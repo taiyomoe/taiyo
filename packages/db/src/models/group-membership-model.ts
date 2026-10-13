@@ -1,12 +1,12 @@
-import type { Generated, Insertable } from "kysely"
+import type { Insertable } from "kysely"
 import type { GroupMembershipRole } from "../constants"
-import type { Timestamp } from "../types"
+import type { GeneratedTimestamp } from "../types"
 
 export type GroupMembership = {
   userId: string
   groupId: string
   role: GroupMembershipRole
-  createdAt: Generated<Timestamp>
+  createdAt: GeneratedTimestamp
   addedBy: string
 }
 

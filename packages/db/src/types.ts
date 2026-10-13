@@ -2,6 +2,8 @@ import type { ColumnType } from "kysely"
 
 export type Timestamp = ColumnType<Date, Date | string, Date | string>
 
+export type GeneratedTimestamp = ColumnType<Date, Date | string | undefined, Date | string>
+
 export type JsonPrimitive = boolean | number | string | null
 
 export type JsonObject = {

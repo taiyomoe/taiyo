@@ -1,10 +1,10 @@
 import type { Generated, Insertable } from "kysely"
-import type { Timestamp } from "../types"
+import type { GeneratedTimestamp, Timestamp } from "../types"
 
 export type Account = {
   id: Generated<string>
-  createdAt: Generated<Timestamp>
-  updatedAt: Generated<Timestamp>
+  createdAt: GeneratedTimestamp
+  updatedAt: GeneratedTimestamp
   providerId: string
   accountId: string
   userId: string

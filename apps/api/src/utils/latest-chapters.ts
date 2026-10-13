@@ -31,7 +31,7 @@ export const selectLatestChapters = (db: Kysely<DB>, filters: ChapterFilters) =>
       "chapters.volume",
       "chapters.language",
       "chapters.contentRating",
-      sql<Date>`${sql.ref("chapters.createdAt")}`.as("createdAt"),
+      "chapters.createdAt",
       "chapters.mediaId",
       "users.id as uploaderId",
       "users.username as uploaderUsername",

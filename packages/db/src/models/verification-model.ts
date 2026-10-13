@@ -1,10 +1,10 @@
 import type { Generated, Insertable } from "kysely"
-import type { Timestamp } from "../types"
+import type { GeneratedTimestamp, Timestamp } from "../types"
 
 export type Verification = {
   id: Generated<string>
-  createdAt: Generated<Timestamp>
-  updatedAt: Generated<Timestamp>
+  createdAt: GeneratedTimestamp
+  updatedAt: GeneratedTimestamp
   identifier: string
   value: string
   expiresAt: Timestamp

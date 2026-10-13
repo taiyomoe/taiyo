@@ -1,11 +1,11 @@
 import type { Generated, Insertable } from "kysely"
 import type { LocalizedText, StaffLinks } from "../json-types"
-import type { Timestamp } from "../types"
+import type { GeneratedTimestamp, Timestamp } from "../types"
 
 export type Staff = {
   id: Generated<string>
-  createdAt: Generated<Timestamp>
-  updatedAt: Generated<Timestamp>
+  createdAt: GeneratedTimestamp
+  updatedAt: GeneratedTimestamp
   deletedAt: Timestamp | null
   name: string
   bio: Generated<LocalizedText>

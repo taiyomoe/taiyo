@@ -9,12 +9,12 @@ import type {
   MediaType,
 } from "../constants"
 import type { LocalizedText, MediaLinks, MediaTags } from "../json-types"
-import type { ArrayType, Timestamp } from "../types"
+import type { ArrayType, GeneratedTimestamp, Timestamp } from "../types"
 
 export type Media = {
   id: Generated<string>
-  createdAt: Generated<Timestamp>
-  updatedAt: Generated<Timestamp>
+  createdAt: GeneratedTimestamp
+  updatedAt: GeneratedTimestamp
   deletedAt: Timestamp | null
   startDate: Timestamp | null
   endDate: Timestamp | null

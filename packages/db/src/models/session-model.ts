@@ -1,10 +1,10 @@
 import type { Generated, Insertable } from "kysely"
-import type { Timestamp } from "../types"
+import type { GeneratedTimestamp, Timestamp } from "../types"
 
 export type Session = {
   id: Generated<string>
-  createdAt: Generated<Timestamp>
-  updatedAt: Generated<Timestamp>
+  createdAt: GeneratedTimestamp
+  updatedAt: GeneratedTimestamp
   userId: string
   token: string
   expiresAt: Timestamp

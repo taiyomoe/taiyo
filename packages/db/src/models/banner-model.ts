@@ -1,11 +1,11 @@
 import type { Generated, Insertable } from "kysely"
 import type { ContentRating } from "../constants"
-import type { Timestamp } from "../types"
+import type { GeneratedTimestamp, Timestamp } from "../types"
 
 export type Banner = {
   id: Generated<string>
-  createdAt: Generated<Timestamp>
-  updatedAt: Generated<Timestamp>
+  createdAt: GeneratedTimestamp
+  updatedAt: GeneratedTimestamp
   deletedAt: Timestamp | null
   contentRating: Generated<ContentRating>
   extension: Generated<"gif" | "jpg">

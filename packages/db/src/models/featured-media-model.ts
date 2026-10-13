@@ -1,11 +1,11 @@
-import type { Generated, Insertable } from "kysely"
-import type { Timestamp } from "../types"
+import type { Insertable } from "kysely"
+import type { GeneratedTimestamp } from "../types"
 
 export type FeaturedMedia = {
   mediaId: string
   position: number
-  createdAt: Generated<Timestamp>
-  updatedAt: Generated<Timestamp>
+  createdAt: GeneratedTimestamp
+  updatedAt: GeneratedTimestamp
 }
 
 export type NewFeaturedMedia = Insertable<FeaturedMedia>

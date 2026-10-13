@@ -1,13 +1,13 @@
 import type { Generated, Insertable } from "kysely"
-import type { Timestamp } from "../types"
+import type { GeneratedTimestamp } from "../types"
 
 export type UserHistory = {
   userId: string
   chapterId: string
   pageId: string | null
   completed: Generated<boolean>
-  createdAt: Generated<Timestamp>
-  updatedAt: Generated<Timestamp>
+  createdAt: GeneratedTimestamp
+  updatedAt: GeneratedTimestamp
 }
 
 export type NewUserHistory = Insertable<UserHistory>

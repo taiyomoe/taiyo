@@ -1,6 +1,6 @@
 import type { Generated, Insertable } from "kysely"
 import type { GroupOwnershipRequestStatus } from "../constants"
-import type { Timestamp } from "../types"
+import type { GeneratedTimestamp } from "../types"
 
 export type GroupOwnershipRequest = {
   id: Generated<string>
@@ -10,8 +10,8 @@ export type GroupOwnershipRequest = {
   message: string | null
   reviewerId: string | null
   reviewerNote: string | null
-  createdAt: Generated<Timestamp>
-  updatedAt: Generated<Timestamp>
+  createdAt: GeneratedTimestamp
+  updatedAt: GeneratedTimestamp
 }
 
 export type NewGroupOwnershipRequest = Insertable<GroupOwnershipRequest>
