@@ -1,6 +1,5 @@
 import { config } from "@taiyomoe/config"
 import { CONTENT_RATINGS, FLAGS } from "@taiyomoe/db"
-import { syncMedia } from "@taiyomoe/search"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
@@ -85,13 +84,6 @@ export const updateChapterHandler = new Hono().patch(
     }
 
     await db.updateTable("chapters").set(updates).where("id", "=", chapter.id).execute()
-
-    c.var.afterCommit(() =>
-      syncMedia(
-        { db: c.var.db, meili: c.var.meili, mediasIndex: c.var.mediasIndex },
-        chapter.mediaId,
-      ),
-    )
 
     return c.ok({ id: chapter.id })
   },

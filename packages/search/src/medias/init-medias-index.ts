@@ -1,4 +1,4 @@
-import type { DB, Kysely } from "@taiyomoe/db"
+import { type DB, type Kysely, sql } from "@taiyomoe/db"
 import type { Meilisearch } from "meilisearch"
 import { isNullish } from "radashi"
 import { INDEXES_BATCH_SIZE } from "../utils/constants"
@@ -88,10 +88,13 @@ export const initMediasIndex = async ({
     })
     .waitTask()
 
+  const coveredOutboxIds = await db.selectFrom("searchOutbox").select("id").execute()
   const ids = await db.selectFrom("medias").select("id").where("deletedAt", "is", null).execute()
 
   // oxlint-disable-next-line no-console
   console.log(`Reindexing ${ids.length} medias in batches of ${INDEXES_BATCH_SIZE}...`)
+
+  const pushedIds: string[] = []
 
   for (let i = 0; i < ids.length; i += INDEXES_BATCH_SIZE) {
     const batch = ids.slice(i, i + INDEXES_BATCH_SIZE)
@@ -99,8 +102,15 @@ export const initMediasIndex = async ({
     const filtered = rawDocuments.filter((doc) => !isNullish(doc))
 
     await meili.index(mediasIndex).addDocuments(filtered)
+    pushedIds.push(...filtered.map((doc) => doc.id))
 
     // oxlint-disable-next-line no-console
     console.log(`  pushed ${i + batch.length} / ${ids.length}`)
   }
+
+  await db
+    .deleteFrom("searchOutbox")
+    .where(sql<boolean>`id = any(${coveredOutboxIds.map((row) => row.id)}::bigint[])`)
+    .where(sql<boolean>`"mediaId" = any(${pushedIds}::uuid[])`)
+    .execute()
 }

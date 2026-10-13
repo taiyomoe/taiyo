@@ -1,14 +1,12 @@
 import { describe, expect } from "vitest"
 import { signInAs } from "../helpers/auth"
 import { api } from "../helpers/request"
-import { waitForMeiliMediaDoc } from "../helpers/wait"
 import { test } from "../setup"
 
-const SEEDED_MEDIA_ID = "4e26b80f-6661-4f5f-93b4-6dfed052bbed"
 const SEEDED_NON_MAIN_COVER_ID = "7bfc322a-cd61-4546-b1e5-aaabdaf7524c"
 
 describe("PATCH /covers/:id", () => {
-  test("updates a cover (DB + Meili)", async ({ app, services }) => {
+  test("updates a cover (DB)", async ({ app, services }) => {
     const { headers } = await signInAs(services, { role: "ADMIN" })
     const res = await api<{ id: string }>(app, `/covers/${SEEDED_NON_MAIN_COVER_ID}`, {
       method: "PATCH",
@@ -31,10 +29,6 @@ describe("PATCH /covers/:id", () => {
       .executeTakeFirst()
 
     expect(row?.contentRating).toBe("SUGGESTIVE")
-
-    const meiliDoc = await waitForMeiliMediaDoc(services, SEEDED_MEDIA_ID)
-
-    expect(meiliDoc).not.toBeNull()
   }, 30_000)
 
   test("rejects unauthenticated requests with UNAUTHORIZED", async ({ app }) => {

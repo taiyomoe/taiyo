@@ -1,18 +1,22 @@
+import type { MediaDocument } from "@taiyomoe/search"
 import type { Services } from "../../services"
 
-export const waitForMeiliMediaDoc = async (
+export const waitForMediaDoc = async (
   { meili, mediasIndex }: Services,
   mediaId: string,
+  until: (doc: MediaDocument | null) => boolean,
   { attempts = 100, intervalMs = 100 } = {},
 ) => {
+  let last: MediaDocument | null = null
+
   for (let i = 0; i < attempts; i++) {
-    const doc = await meili
-      .index(mediasIndex)
+    last = await meili
+      .index<MediaDocument>(mediasIndex)
       .getDocument(mediaId)
       .catch(() => null)
 
-    if (doc) {
-      return doc
+    if (until(last)) {
+      return last
     }
 
     await new Promise<void>((r) => {
@@ -20,5 +24,5 @@ export const waitForMeiliMediaDoc = async (
     })
   }
 
-  return null
+  throw new Error(`Media document ${mediaId} never settled; last seen: ${JSON.stringify(last)}`)
 }

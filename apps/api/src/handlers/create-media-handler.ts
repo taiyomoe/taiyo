@@ -11,7 +11,6 @@ import {
 } from "@taiyomoe/db"
 import { config } from "@taiyomoe/config"
 import { getBannerKey, getCoverKey } from "@taiyomoe/s3"
-import { syncMedia } from "@taiyomoe/search"
 import { extensionForMimeType } from "@taiyomoe/utils"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
@@ -362,10 +361,6 @@ export const createMediaHandler = new Hono().post(
 
       await db.insertInto("banners").values(bannerRows).execute()
     }
-
-    c.var.afterCommit(() =>
-      syncMedia({ db: c.var.db, meili: c.var.meili, mediasIndex: c.var.mediasIndex }, mediaId),
-    )
 
     return c.ok({ id: mediaId })
   },

@@ -6,7 +6,6 @@ import { defined } from "../helpers/assert"
 import { signInAs } from "../helpers/auth"
 import { invalidImage, jpegWithExif, tinyPng } from "../helpers/fixtures"
 import { api } from "../helpers/request"
-import { waitForMeiliMediaDoc } from "../helpers/wait"
 import { test } from "../setup"
 
 const getForm = async (overrides?: Partial<{ skipTitle: boolean }>) => {
@@ -35,7 +34,7 @@ const getForm = async (overrides?: Partial<{ skipTitle: boolean }>) => {
 }
 
 describe("POST /medias", () => {
-  test("creates a media with cover (DB + S3 + Meili)", async ({ app, services }) => {
+  test("creates a media with cover (DB + S3)", async ({ app, services }) => {
     const { headers } = await signInAs(services, { role: "ADMIN" })
     const form = await getForm()
     const res = await api<{ id: string }>(app, "/medias", { method: "POST", headers, form })
@@ -80,10 +79,6 @@ describe("POST /medias", () => {
     )
 
     expect(s3Listing.Contents).toHaveLength(1)
-
-    const meiliDoc = await waitForMeiliMediaDoc(services, mediaId)
-
-    expect(meiliDoc).not.toBeNull()
   }, 30_000)
 
   test("rejects unauthenticated requests with UNAUTHORIZED", async ({ app }) => {

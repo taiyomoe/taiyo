@@ -1,5 +1,4 @@
 import { STAFF_ROLES } from "@taiyomoe/db"
-import { syncMedia } from "@taiyomoe/search"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
@@ -64,10 +63,6 @@ export const unlinkMediaStaffHandler = new Hono().delete(
     if (!deleted) {
       return c.fail("MEDIA_STAFF_NOT_FOUND")
     }
-
-    c.var.afterCommit(() =>
-      syncMedia({ db: c.var.db, meili: c.var.meili, mediasIndex: c.var.mediasIndex }, media.id),
-    )
 
     return c.ok({ mediaId: media.id, staffId, role })
   },

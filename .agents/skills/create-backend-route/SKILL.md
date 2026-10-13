@@ -182,7 +182,7 @@ test("does the thing", async ({ app, services }) => {
 - `signInAs(services, { role?, banned?, email? })` — inserts a user + session row and returns `{ userId, headers: { Cookie } }` with a signed cookie. Default role is `"USER"`.
 - `api(app, path, { method?, headers?, json?, form? })` — wraps `app.request` and parses the envelope. Returns `{ status, body }`. Always use this; do not call `app.request` directly.
 - `getPng()`, `invalidImage()`, `oversizedImage()` from `helpers/fixtures.ts` — real `File` objects for multipart routes.
-- `waitForMeiliMediaDoc(services, id)` — polls until a doc is indexed (Meili indexing is async). Use it after routes that schedule a search sync via `c.var.afterCommit(...)`.
+- `waitForMediaDoc(services, id, until)` — polls the media document until `until(doc)` holds (Meili indexing is async). Routes never sync search themselves: Postgres triggers enqueue the media and `withTransaction` drains after commit.
 
 ### Using seeded data
 
@@ -202,7 +202,6 @@ The template DB is pre-seeded — your test starts with whatever the kysely seed
 - **Happy path** — drive the route to success and assert end-state on **every** surface it touches:
   - DB rows: `services.db.selectFrom(...).executeTakeFirst()`.
   - S3 objects (for uploads): `services.s3.send(new ListObjectsV2Command({ Bucket: services.s3Bucket, Prefix: ... }))`.
-  - Search docs (when the route schedules `syncMedia` via `afterCommit`): `await waitForMeiliMediaDoc(services, id)` and assert it's not null.
 - **One test per `c.fail("…")` code** listed in `getOpenApiResponses`. If you declared `409: "…"` in the OpenAPI spec, there must be a test that triggers that 409.
 - **Rollback** — for any route wrapping mutations in `withTransaction` that also uploads files: force a mid-handler failure (a `c.fail` from a pre-check that runs after the upload) and assert nothing leaked — no DB row, no S3 object.
 
@@ -254,7 +253,7 @@ expect(after).toHaveLength(before.length + 1)  // or +0 for rollback
 - [ ] Test file at `src/__integration-tests__/<resource>/<verb>-<resource>.test.ts`, importing `test` from `../setup`.
 - [ ] Baseline auth cases: 401 unauthenticated, 403 banned, 403 too-weak-role (when applicable).
 - [ ] One representative 422 `VALIDATION_ERROR` case.
-- [ ] Happy path asserts end-state on every surface the route touches (DB, S3, Meili).
+- [ ] Happy path asserts end-state on every surface the route touches (DB, S3).
 - [ ] One test per `c.fail` code declared in `getOpenApiResponses`.
 - [ ] Rollback test for any `withTransaction` route that uploads files.
 - [ ] No runtime imports from `@taiyomoe/*` packages or `../services` in the test — only `services` + `app` from the fixture.

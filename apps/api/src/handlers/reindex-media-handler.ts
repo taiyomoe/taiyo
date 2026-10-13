@@ -1,4 +1,4 @@
-import { syncMedia } from "@taiyomoe/search"
+import { drainSearchOutbox } from "@taiyomoe/search"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
@@ -43,7 +43,8 @@ export const reindexMediaHandler = new Hono().post(
   async (c) => {
     const { db, meili, mediasIndex, media } = c.var
 
-    await syncMedia({ db, meili, mediasIndex }, media.id)
+    await db.insertInto("searchOutbox").values({ mediaId: media.id }).execute()
+    await drainSearchOutbox({ db, meili, mediasIndex }, { limit: Number.POSITIVE_INFINITY })
 
     return c.ok({ id: media.id })
   },

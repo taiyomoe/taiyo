@@ -1,10 +1,8 @@
 import { describe, expect } from "vitest"
 import { signInAs } from "../helpers/auth"
 import { api } from "../helpers/request"
-import { waitForMeiliMediaDoc } from "../helpers/wait"
 import { test } from "../setup"
 
-const SEEDED_MEDIA_ID = "4e26b80f-6661-4f5f-93b4-6dfed052bbed"
 const SEEDED_MAIN_COVER_ID = "a56cc54d-7776-4787-9b21-97a4674b80bc"
 const SEEDED_NON_MAIN_COVER_ID = "7bfc322a-cd61-4546-b1e5-aaabdaf7524c"
 
@@ -31,10 +29,6 @@ describe("POST /covers/:id/set-main", () => {
 
     expect(byId[SEEDED_NON_MAIN_COVER_ID]).toBe(true)
     expect(byId[SEEDED_MAIN_COVER_ID]).toBe(false)
-
-    const meiliDoc = await waitForMeiliMediaDoc(services, SEEDED_MEDIA_ID)
-
-    expect(meiliDoc).not.toBeNull()
   }, 30_000)
 
   test("rejects unauthenticated requests with UNAUTHORIZED", async ({ app }) => {

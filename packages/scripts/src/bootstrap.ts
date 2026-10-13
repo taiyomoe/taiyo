@@ -207,6 +207,8 @@ const syncAppEnvs = () => {
     DATABASE_URL: databaseUrl,
     DRAGONFLY_URL: `redis://localhost:${get("DRAGONFLY_PORT")}`,
     ...s3(current),
+    MEILISEARCH_HOST: localUrl(get("MEILISEARCH_PORT")),
+    MEILISEARCH_API_KEY: get("MEILISEARCH_MASTER_KEY"),
   }))
   syncAppEnv("web", () => ({
     PORT: get("WEB_PORT"),
