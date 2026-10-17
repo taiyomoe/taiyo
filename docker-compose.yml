@@ -25,6 +25,7 @@ services:
     environment:
       - DFLY_cluster_mode=emulated
       - DFLY_lock_on_hashtags=1
+      - DFLY_default_lua_flags=allow-undeclared-keys
     ports:
       - "127.0.0.1:$DRAGONFLY_PORT:6379"
     volumes:

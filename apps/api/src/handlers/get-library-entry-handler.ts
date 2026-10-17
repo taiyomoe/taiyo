@@ -1,4 +1,4 @@
-import { USER_LIBRARY_STATUSES, sql } from "@taiyomoe/db"
+import { USER_LIBRARY_STATUSES } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
@@ -43,12 +43,7 @@ export const getLibraryEntryHandler = new Hono().get(
     const { mediaId } = c.var.param
     const entry = await db
       .selectFrom("userLibraryEntries")
-      .select([
-        "mediaId",
-        "status",
-        sql<Date>`${sql.ref("createdAt")}`.as("createdAt"),
-        sql<Date>`${sql.ref("updatedAt")}`.as("updatedAt"),
-      ])
+      .select(["mediaId", "status", "createdAt", "updatedAt"])
       .where("userId", "=", user.id)
       .where("mediaId", "=", mediaId)
       .executeTakeFirst()

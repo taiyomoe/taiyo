@@ -1,6 +1,6 @@
-import type { Generated, Insertable } from "kysely"
+import type { Insertable } from "kysely"
 import type { UserListVisibility } from "../constants"
-import type { Timestamp } from "../types"
+import type { Generated, Timestamp } from "../types"
 
 export type UserList = {
   id: Generated<string>

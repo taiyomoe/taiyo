@@ -78,7 +78,7 @@ export const getReadingProgressHandler = new Hono().get(
       visible
         .innerJoin("userHistories", "userHistories.chapterId", "chapters.id")
         .where("userHistories.userId", "=", user.id)
-        .select([...chapterRef, sql<Date>`${sql.ref("userHistories.updatedAt")}`.as("readAt")])
+        .select([...chapterRef, "userHistories.updatedAt as readAt"])
         .orderBy("userHistories.updatedAt", "desc")
         .orderBy("chapters.id", "desc")
         .limit(1)

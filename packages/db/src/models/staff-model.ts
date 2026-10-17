@@ -1,6 +1,6 @@
-import type { Generated, Insertable } from "kysely"
+import type { Insertable } from "kysely"
 import type { LocalizedText, StaffLinks } from "../json-types"
-import type { Timestamp } from "../types"
+import type { Generated, Timestamp } from "../types"
 
 export type Staff = {
   id: Generated<string>

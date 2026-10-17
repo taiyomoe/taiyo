@@ -8,7 +8,7 @@ import { cors } from "hono/cors"
 import { secureHeaders } from "hono/secure-headers"
 import type { Services } from "./services"
 import packageJson from "../package.json"
-import { env } from "./env"
+import { corsAllowedOrigins, env } from "./env"
 import {
   type AppContext,
   type AppContextVariables,
@@ -32,10 +32,6 @@ declare module "hono" {
   interface ContextVariableMap extends AppContextVariables {}
 }
 
-const corsOrigins = (env.CORS_ALLOWED_ORIGINS ?? "")
-  .split(",")
-  .map((origin) => origin.trim())
-  .filter(Boolean)
 const hyperdxEndpoint = env.HYPERDX_ENDPOINT ?? ""
 const hyperdxIngestionKey = env.HYPERDX_INGESTION_KEY ?? ""
 
@@ -56,8 +52,8 @@ export const createApp = (services: Services) => {
     .use(secureHeaders())
     .use(
       cors({
-        origin: corsOrigins.length > 0 ? corsOrigins : [],
-        credentials: corsOrigins.length > 0,
+        origin: corsAllowedOrigins.length > 0 ? corsAllowedOrigins : [],
+        credentials: corsAllowedOrigins.length > 0,
         allowMethods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
         allowHeaders: ["Content-Type", "Authorization", "Cookie"],
         maxAge: 600,

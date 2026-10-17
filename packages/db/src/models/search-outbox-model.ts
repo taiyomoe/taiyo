@@ -1,5 +1,4 @@
-import type { Generated } from "kysely"
-import type { Timestamp } from "../types"
+import type { Generated, Timestamp } from "../types"
 
 export type SearchOutboxEntry = {
   id: Generated<string>

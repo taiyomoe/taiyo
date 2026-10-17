@@ -109,7 +109,7 @@ export const listChaptersHandler = new Hono().get(
         "chapters.language",
         "chapters.contentRating",
         "chapters.flag",
-        sql<Date>`${sql.ref("chapters.createdAt")}`.as("createdAt"),
+        "chapters.createdAt",
         "users.id as uploaderId",
         "users.username as uploaderUsername",
         "users.displayUsername as uploaderDisplayUsername",

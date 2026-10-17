@@ -25,3 +25,9 @@
 **Stored image**: a cover, banner or staff image, as written by `putImage`. It is always a `gif` (animated uploads) or a `jpg` (everything else); the extension is decided while transcoding and stored with the row, never re-derived.
 
 **Replacement**: storing a new image in place of an existing one (today only staff images). The new image gets a fresh key; the old object is deleted only once the transaction commits.
+
+## Accounts
+
+**Session**: the signed-in user as the web app's root route loads it. It is cached with `staleTime: "static"`, so it never refetches on its own; an auth action that changes who is signed in (sign-in, sign-out) must drop it and re-run the router. That rule lives in `createAuthActions` (`apps/web/src/lib/auth.ts`), the only module the web app uses to change who is signed in. Settings updates (`useUpdateSettings`) patch the cached session in place instead, since the user stays the same.
+
+**Auth error**: a failed auth action, reported to the user through a fixed message chosen from Better Auth's error code (or the 429 status). Server-provided error text is never shown.

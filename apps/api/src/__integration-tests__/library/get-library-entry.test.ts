@@ -1,7 +1,6 @@
 import { describe, expect } from "vitest"
 import { signInAs } from "../helpers/auth"
 import { api } from "../helpers/request"
-import { timestamp } from "../helpers/seed"
 import { test } from "../setup"
 
 const SEEDED_MEDIA_ID = "4e26b80f-6661-4f5f-93b4-6dfed052bbed"
@@ -27,8 +26,8 @@ describe("GET /users/me/library/:mediaId", () => {
           userId,
           mediaId: SEEDED_MEDIA_ID,
           status: "ON_HOLD",
-          createdAt: timestamp(createdAt),
-          updatedAt: timestamp(updatedAt),
+          createdAt,
+          updatedAt,
         },
         { userId, mediaId: OTHER_MEDIA_ID, status: "COMPLETED" },
       ])

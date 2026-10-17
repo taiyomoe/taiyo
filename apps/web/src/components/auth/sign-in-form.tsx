@@ -7,10 +7,7 @@ import { HugeiconsIcon } from "@hugeicons/react"
 // stops applying. See packages/ui/STYLEX.md.
 // oxlint-disable-next-line no-unused-vars
 import * as stylex from "@stylexjs/stylex"
-import { authClient } from "@taiyomoe/auth/client"
 import { Form } from "@taiyomoe/ui/components/ui/form"
-import { useQueryClient } from "@tanstack/react-query"
-import { useNavigate } from "@tanstack/react-router"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { AuthAlert } from "@/components/auth/auth-alert"
@@ -21,7 +18,6 @@ import { AuthSwitchLink } from "@/components/auth/auth-switch-link"
 import { useAuthForm } from "@/components/auth/use-auth-form"
 import { SunButton } from "@/components/buttons/sun-button"
 import { CheckboxField, InputField, PasswordField } from "@/components/fields/form-field"
-import { sessionQueryOptions } from "@/lib/queries/session"
 import { m } from "@/paraglide/messages"
 
 const signInSchema = z.object({
@@ -31,8 +27,6 @@ const signInSchema = z.object({
 })
 
 export const SignInForm = () => {
-  const navigate = useNavigate()
-  const queryClient = useQueryClient()
   const auth = useAuthForm()
   const form = useForm({
     resolver: zodResolver(signInSchema),
@@ -43,25 +37,7 @@ export const SignInForm = () => {
   const isSubmitting = form.formState.isSubmitting
   const isBusy = isSubmitting || auth.disabled
   const onSubmit = form.handleSubmit(async (values) => {
-    auth.setError(null)
-
-    await authClient.signIn.email(
-      {
-        email: values.email,
-        password: values.password,
-        rememberMe: values.rememberMe,
-        callbackURL: auth.callbackURL,
-      },
-      {
-        onError: ({ error }) => {
-          auth.setError(error.message || m.auth_error_generic())
-        },
-        onSuccess: async () => {
-          queryClient.removeQueries({ queryKey: sessionQueryOptions.queryKey })
-          await navigate({ href: auth.callbackURL })
-        },
-      },
-    )
+    await auth.signIn(values)
   })
 
   return (

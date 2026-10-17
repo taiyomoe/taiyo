@@ -1,8 +1,6 @@
-import { type ContentRating, type Language, sql, type Timestamp } from "@taiyomoe/db"
+import type { ContentRating, Language } from "@taiyomoe/db"
 import { randomUUID } from "node:crypto"
 import type { Services } from "../../services"
-
-export const timestamp = (date: Date) => sql<Timestamp>`${date}`
 
 export const seedMedia = async (
   { db }: Services,
@@ -63,7 +61,7 @@ export const seedChapter = async (
 
   await db
     .insertInto("chapters")
-    .values({ id, language, volume, title, createdAt: timestamp(createdAt), ...chapter })
+    .values({ id, language, volume, title, createdAt, ...chapter })
     .execute()
 
   if (groupIds.length > 0) {
@@ -82,8 +80,5 @@ export const seedHistory = async (
   chapterId: string,
   updatedAt = new Date(),
 ) => {
-  await db
-    .insertInto("userHistories")
-    .values({ userId, chapterId, updatedAt: timestamp(updatedAt) })
-    .execute()
+  await db.insertInto("userHistories").values({ userId, chapterId, updatedAt }).execute()
 }
