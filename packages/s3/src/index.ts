@@ -4,6 +4,7 @@ import {
   GetObjectCommand,
   ListObjectsV2Command,
   PutBucketLifecycleConfigurationCommand,
+  PutBucketPolicyCommand,
   PutObjectCommand,
   S3Client,
 } from "@aws-sdk/client-s3"
@@ -29,6 +30,7 @@ export {
   GetObjectCommand,
   ListObjectsV2Command,
   PutBucketLifecycleConfigurationCommand,
+  PutBucketPolicyCommand,
   PutObjectCommand,
   S3Client,
 }

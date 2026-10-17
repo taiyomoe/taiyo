@@ -13,4 +13,9 @@ export default defineConfig({
   seeds: {
     seedFolder: "src/seeds",
   },
+  $test: {
+    seeds: {
+      seedFolder: "src/fixtures",
+    },
+  },
 })

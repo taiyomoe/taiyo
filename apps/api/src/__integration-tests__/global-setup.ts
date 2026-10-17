@@ -23,7 +23,7 @@ export default async () => {
   const childEnv = { ...process.env, DATABASE_URL: getDbUrl(TEMPLATE_DB) }
 
   execSync("pnpm -F db kysely migrate latest", { stdio: "pipe", env: childEnv })
-  execSync("pnpm -F db kysely seed run", { stdio: "pipe", env: childEnv })
+  execSync("pnpm -F db kysely seed run --environment test", { stdio: "pipe", env: childEnv })
 
   return async () => {
     const cleanupClient = new pg.Client({ connectionString: getDbUrl("postgres") })

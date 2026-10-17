@@ -21,6 +21,7 @@ const PORT_KEYS = [
   "MEILISEARCH_PORT",
   "RUSTFS_PORT",
   "RUSTFS_CONSOLE_PORT",
+  "IMAGES_PORT",
 ] as const
 const SLOT_STRIDE = 10
 const SLOT_COUNT = 10
@@ -193,7 +194,7 @@ const syncAppEnvs = () => {
       S3_ENDPOINT: s3Endpoint,
       S3_ACCESS_KEY_ID: get("RUSTFS_ACCESS_KEY"),
       S3_SECRET_ACCESS_KEY: get("RUSTFS_SECRET_KEY"),
-      S3_PUBLIC_URL: `${s3Endpoint}/${bucket === undefined || bucket === "" ? "taiyo" : bucket}`,
+      S3_PUBLIC_URL: `${localUrl(get("IMAGES_PORT"))}/${bucket === undefined || bucket === "" ? "taiyo" : bucket}`,
     }
   }
 
