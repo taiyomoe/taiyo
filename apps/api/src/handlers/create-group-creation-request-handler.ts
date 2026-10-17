@@ -1,8 +1,10 @@
+import { groupCreationAudit } from "@taiyomoe/audit"
 import { config } from "@taiyomoe/config"
 import { GROUP_OWNERSHIP_REQUEST_STATUSES } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
 import { rateLimit } from "../middlewares/rate-limit-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
@@ -60,6 +62,7 @@ export const createGroupCreationRequestHandler = new Hono().post(
       }),
     },
   }),
+  audited(groupCreationAudit.REQUEST_CREATE),
   withAuth("groupCreationRequest.create"),
   rateLimit({ prefix: "group-creation-request", windowMs: 60_000, limit: 10 }),
   validateJson(createSchema),
@@ -100,6 +103,8 @@ export const createGroupCreationRequestHandler = new Hono().post(
       })
       .returning(["id", "status"])
       .executeTakeFirstOrThrow()
+
+    c.var.audit.set({ target: { id: row.id, name } })
 
     return c.ok({ id: row.id, status: row.status })
   },

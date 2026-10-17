@@ -262,7 +262,7 @@ describe("group membership", () => {
           userId: manager,
           permissions: ["EDIT_CHAPTERS"],
         }),
-      ).toEqual({ ok: true })
+      ).toEqual({ ok: true, previous: ["MANAGE_MEMBERS", "EDIT_CHAPTERS"] })
       expect(
         await removeGroupMember(services.db, { actor: staleActor, groupId, userId: member }),
       ).toEqual({ ok: false, error: "FORBIDDEN" })
@@ -301,7 +301,7 @@ describe("group membership", () => {
           userId: member,
           permissions: ["UPLOAD_CHAPTERS"],
         }),
-      ).toEqual({ ok: true })
+      ).toEqual({ ok: true, previous: [] })
       expect(await getPermissions(services, groupId, member)).toEqual(["UPLOAD_CHAPTERS"])
     })
 

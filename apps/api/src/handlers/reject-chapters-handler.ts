@@ -1,8 +1,10 @@
+import { chapterReviewAudit } from "@taiyomoe/audit"
 import { sql } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
 import { deleteChapterPages } from "../chapter-pages"
+import { audited } from "../middlewares/audited-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
@@ -47,6 +49,7 @@ export const rejectChaptersHandler = new Hono().post(
       ...getOpenApiResponses({ 422: "The request data failed validation." }),
     },
   }),
+  audited(chapterReviewAudit.REJECT_MANY),
   withAuth("chapter.review"),
   validateJson(rejectSchema),
   withTransaction,
@@ -87,6 +90,11 @@ export const rejectChaptersHandler = new Hono().post(
         }
       })
     }
+
+    c.var.audit.set({
+      reason: c.var.json.reason,
+      changes: { after: { chapterIds: rejected.map((chapter) => chapter.id) } },
+    })
 
     return c.ok({ rejected: rejected.map((chapter) => chapter.id), skipped })
   },

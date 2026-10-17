@@ -1,7 +1,9 @@
+import { mediaAudit } from "@taiyomoe/audit"
 import { drainSearchOutbox } from "@taiyomoe/search"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
 import { checkMedia } from "../middlewares/check-media-middleware"
 import { rateLimit } from "../middlewares/rate-limit-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
@@ -37,6 +39,7 @@ export const reindexMediaHandler = new Hono().post(
       }),
     },
   }),
+  audited(mediaAudit.REINDEX),
   withAuth("media.reindex"),
   rateLimit({ prefix: "reindex-media", windowMs: 60_000, limit: 30 }),
   checkMedia(),

@@ -1,6 +1,8 @@
+import { groupInvitationAudit } from "@taiyomoe/audit"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
 import { validateParam } from "../middlewares/validate-param-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
@@ -29,6 +31,7 @@ export const declineGroupInvitationHandler = new Hono().post(
       }),
     },
   }),
+  audited(groupInvitationAudit.DECLINE),
   withAuth(),
   validateParam(paramSchema),
   withTransaction,
@@ -37,7 +40,7 @@ export const declineGroupInvitationHandler = new Hono().post(
     const { id } = c.var.param
     const invitation = await db
       .selectFrom("groupInvitations")
-      .select("status")
+      .select(["status", "groupId"])
       .where("id", "=", id)
       .where("inviteeId", "=", user.id)
       .forUpdate()
@@ -46,6 +49,8 @@ export const declineGroupInvitationHandler = new Hono().post(
     if (invitation === undefined) {
       return c.fail("GROUP_INVITATION_NOT_FOUND")
     }
+
+    c.var.audit.set({ target: { groupId: invitation.groupId } })
 
     if (invitation.status !== "PENDING") {
       return c.fail("GROUP_INVITATION_NOT_PENDING")

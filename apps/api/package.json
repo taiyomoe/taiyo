@@ -17,6 +17,7 @@
     "@hono/node-server": "^2.1.5",
     "@scalar/hono-api-reference": "^0.12.13",
     "@t3-oss/env-core": "^0.13.11",
+    "@taiyomoe/audit": "workspace:^",
     "@taiyomoe/auth": "workspace:^",
     "@taiyomoe/cache": "workspace:^",
     "@taiyomoe/config": "workspace:^",

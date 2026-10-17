@@ -64,6 +64,7 @@ export type AppContextVariables = EvlogVariables["Variables"] & {
   chapterUploadQueue: ChapterUploadProducer
   mailer: Mailer
   cacheNamespace: string
+  errorCode?: ErrorCode
 }
 
 export const createContextMiddleware = (services: Services) =>
@@ -105,6 +106,7 @@ export const createContextMiddleware = (services: Services) =>
     c.fail = (errorCode: ErrorCode, details?: unknown) => {
       const error = errors[errorCode]
 
+      c.set("errorCode", errorCode)
       c.status(error.code)
 
       const response: {

@@ -1,3 +1,4 @@
+import { chapterAudit } from "@taiyomoe/audit"
 import { config } from "@taiyomoe/config"
 import {
   CHAPTER_STATUSES,
@@ -9,6 +10,7 @@ import {
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
 import { checkMedia } from "../middlewares/check-media-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
@@ -91,6 +93,7 @@ export const createChapterHandler = new Hono().post(
       }),
     },
   }),
+  audited(chapterAudit.CREATE, (c) => ({ mediaId: c.req.param("id") })),
   withAuth(),
   validateJson(createChapterSchema),
   checkMedia(),
@@ -187,6 +190,8 @@ export const createChapterHandler = new Hono().post(
         .values(groupIds.map((groupId) => ({ chapterId: id, groupId })))
         .execute()
     }
+
+    c.var.audit.set({ target: { id, number: body.number, language: body.language } })
 
     return c.ok({ id, status: values.status ?? "PUBLISHED" })
   },

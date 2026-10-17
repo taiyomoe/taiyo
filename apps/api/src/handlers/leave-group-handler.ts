@@ -1,7 +1,9 @@
+import { groupMemberAudit } from "@taiyomoe/audit"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
 import { leaveGroup } from "../group-membership"
+import { audited } from "../middlewares/audited-middleware"
 import { checkGroup } from "../middlewares/check-group-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
@@ -31,6 +33,7 @@ export const leaveGroupHandler = new Hono().post(
       }),
     },
   }),
+  audited(groupMemberAudit.LEAVE),
   withAuth(),
   checkGroup(),
   withTransaction,

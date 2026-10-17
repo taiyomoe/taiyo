@@ -1,7 +1,9 @@
+import { chapterUploadAudit } from "@taiyomoe/audit"
 import { chapterUploadManifestSchema } from "@taiyomoe/queue"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
 import { authorizeChapter } from "../middlewares/authorize-chapter-middleware"
 import { checkChapter } from "../middlewares/check-chapter-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
@@ -50,6 +52,7 @@ export const finalizeChapterUploadHandler = new Hono().post(
       }),
     },
   }),
+  audited(chapterUploadAudit.FINALIZE),
   withAuth(),
   validateJson(finalizeChapterUploadSchema),
   checkChapter({ unpublished: true }),
@@ -58,6 +61,9 @@ export const finalizeChapterUploadHandler = new Hono().post(
   async (c) => {
     const { db, chapter, chapterUploadQueue } = c.var
     const { taskId } = c.var.json
+
+    c.var.audit.set({ target: { mediaId: chapter.mediaId, taskId } })
+
     const task = await db
       .selectFrom("tasks")
       .selectAll()

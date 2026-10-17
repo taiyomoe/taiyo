@@ -11,12 +11,14 @@
   },
   "dependencies": {
     "@t3-oss/env-core": "^0.13.11",
+    "@taiyomoe/audit": "workspace:^",
     "@taiyomoe/config": "workspace:^",
     "@taiyomoe/db": "workspace:^",
     "@taiyomoe/queue": "workspace:^",
     "@taiyomoe/s3": "workspace:^",
     "@taiyomoe/search": "workspace:^",
     "bullmq": "^6.3.16",
+    "evlog": "^2.33.0",
     "zod": "^4.6.7"
   },
   "devDependencies": {

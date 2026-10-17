@@ -31,3 +31,11 @@
 **Session**: the signed-in user as the web app's root route loads it. It is cached with `staleTime: "static"`, so it never refetches on its own; an auth action that changes who is signed in (sign-in, sign-out) must drop it and re-run the router. That rule lives in `createAuthActions` (`apps/web/src/lib/auth.ts`), the only module the web app uses to change who is signed in. Settings updates (`useUpdateSettings`) patch the cached session in place instead, since the user stays the same.
 
 **Auth error**: a failed auth action, reported to the user through a fixed message chosen from Better Auth's error code (or the 429 status). Server-provided error text is never shown.
+
+## Audit
+
+**Audit log**: the `auditLogs` table, one row per action: who did it (the actor), what they did (an action from the catalogs in `@taiyomoe/audit`), to which resource (the target), whether it succeeded, failed or was denied, and from where (IP, user agent, request id). Rows are append-only: a trigger rejects UPDATE, DELETE and TRUNCATE. Each row keeps the whole wide event in `event`, and HyperDX receives the same event as a second copy.
+
+**Audited route**: an API route that passes `audited(action)`. It records the action once the response is known, so failures and denials are logged along with successes. Every POST, PUT, PATCH and DELETE route must be audited; the `taiyo/require-audited-route` lint rule enforces it. Better Auth's routes are recorded by `auditAuthRequest`.
+
+**Actor**: the signed-in user who made the request, or `anonymous` for a signed-out one. An admin impersonating a user is the actor of what they do, with the impersonated user kept in `impersonating`. Worker jobs act as named `system` actors.

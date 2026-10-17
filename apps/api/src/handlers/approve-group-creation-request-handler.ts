@@ -1,6 +1,8 @@
+import { groupCreationAudit } from "@taiyomoe/audit"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
 import { checkGroupCreationRequest } from "../middlewares/check-group-creation-request-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
@@ -31,6 +33,7 @@ export const approveGroupCreationRequestHandler = new Hono().post(
       }),
     },
   }),
+  audited(groupCreationAudit.REQUEST_APPROVE),
   withAuth("groupCreationRequest.review"),
   checkGroupCreationRequest(),
   withTransaction,
@@ -54,6 +57,7 @@ export const approveGroupCreationRequestHandler = new Hono().post(
     const groupId = crypto.randomUUID()
 
     log.set({ group: { id: groupId } })
+    c.var.audit.set({ target: { groupId, userId: request.userId, name: request.name } })
 
     await db
       .insertInto("groups")

@@ -186,5 +186,8 @@ export const buildRules = (actor: Actor | null) => {
       setPassword: actsForUser,
       manageSessions: actsForUser,
     },
+    auditLog: {
+      read: is("ADMIN"),
+    },
   })
 }

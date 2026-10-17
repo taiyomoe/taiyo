@@ -1,6 +1,8 @@
+import { groupCreationAudit } from "@taiyomoe/audit"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
 import { checkGroupCreationRequest } from "../middlewares/check-group-creation-request-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
@@ -36,12 +38,16 @@ export const rejectGroupCreationRequestHandler = new Hono().post(
       }),
     },
   }),
+  audited(groupCreationAudit.REQUEST_REJECT),
   withAuth("groupCreationRequest.review"),
   validateJson(rejectSchema),
   checkGroupCreationRequest(),
   withTransaction,
   async (c) => {
     const { db, groupCreationRequest, user } = c.var
+
+    c.var.audit.set({ reason: c.var.json.note })
+
     const transitioned = await db
       .updateTable("groupCreationRequests")
       .set({ status: "REJECTED", reviewerId: user.id, reviewerNote: c.var.json.note })

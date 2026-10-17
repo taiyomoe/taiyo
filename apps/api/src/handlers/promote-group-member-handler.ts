@@ -1,7 +1,9 @@
+import { groupMemberAudit } from "@taiyomoe/audit"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
 import { promoteGroupMember } from "../group-membership"
+import { audited } from "../middlewares/audited-middleware"
 import { authorizeGroup } from "../middlewares/authorize-group-middleware"
 import { checkGroup } from "../middlewares/check-group-middleware"
 import { validateParam } from "../middlewares/validate-param-middleware"
@@ -34,6 +36,10 @@ export const promoteGroupMemberHandler = new Hono().post(
       }),
     },
   }),
+  audited(groupMemberAudit.PROMOTE, (c) => ({
+    id: c.req.param("id"),
+    userId: c.req.param("userId"),
+  })),
   withAuth(),
   validateParam(paramSchema),
   checkGroup(),

@@ -1,14 +1,17 @@
+import { groupMemberAudit } from "@taiyomoe/audit"
 import { GROUP_PERMISSIONS } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
 import { normalizeGroupPermissions, updateGroupMemberPermissions } from "../group-membership"
+import { audited } from "../middlewares/audited-middleware"
 import { authorizeGroup } from "../middlewares/authorize-group-middleware"
 import { checkGroup } from "../middlewares/check-group-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { validateParam } from "../middlewares/validate-param-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
+import { auditChanges } from "../utils/audit"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
@@ -56,6 +59,10 @@ export const updateGroupMemberHandler = new Hono().patch(
       }),
     },
   }),
+  audited(groupMemberAudit.UPDATE, (c) => ({
+    id: c.req.param("id"),
+    userId: c.req.param("userId"),
+  })),
   withAuth(),
   validateParam(paramSchema),
   validateJson(updateMemberSchema),
@@ -76,6 +83,10 @@ export const updateGroupMemberHandler = new Hono().patch(
     if (!result.ok) {
       return c.fail(result.error)
     }
+
+    c.var.audit.set({
+      changes: auditChanges({ permissions: result.previous }, { permissions }),
+    })
 
     return c.ok({ groupId: group.id, userId, permissions })
   },

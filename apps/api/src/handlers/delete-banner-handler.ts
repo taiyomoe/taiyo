@@ -1,6 +1,8 @@
+import { bannerAudit } from "@taiyomoe/audit"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
 import { checkBanner } from "../middlewares/check-banner-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
@@ -35,11 +37,14 @@ export const deleteBannerHandler = new Hono().delete(
       }),
     },
   }),
+  audited(bannerAudit.DELETE),
   withAuth("media.update"),
   checkBanner(),
   withTransaction,
   async (c) => {
     const { db, banner, user } = c.var
+
+    c.var.audit.set({ target: { mediaId: banner.mediaId } })
 
     await db
       .updateTable("banners")

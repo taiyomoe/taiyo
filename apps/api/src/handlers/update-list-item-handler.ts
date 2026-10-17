@@ -1,6 +1,8 @@
+import { listAudit } from "@taiyomoe/audit"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
 import { checkList } from "../middlewares/check-list-middleware"
 import { requireListOwner } from "../middlewares/require-list-owner-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
@@ -44,6 +46,10 @@ export const updateListItemHandler = new Hono().patch(
       }),
     },
   }),
+  audited(listAudit.ITEM_MOVE, (c) => ({
+    id: c.req.param("id"),
+    mediaId: c.req.param("mediaId"),
+  })),
   withAuth(),
   validateParam(paramSchema),
   validateJson(bodySchema),
@@ -54,6 +60,9 @@ export const updateListItemHandler = new Hono().patch(
     const { db, list } = c.var
     const { mediaId } = c.var.param
     const { position } = c.var.json
+
+    c.var.audit.set({ target: { position } })
+
     const result = await db
       .updateTable("userListItems")
       .set({ position })
