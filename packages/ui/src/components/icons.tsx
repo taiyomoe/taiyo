@@ -40,6 +40,23 @@ import {
   PlusSignIcon,
   Search01Icon,
   SidebarLeft01Icon,
+  CloudUploadIcon,
+  Comment01Icon,
+  DashboardSquare01Icon,
+  Flag02Icon,
+  Image01Icon,
+  ImageCompositionIcon,
+  LeftToRightListNumberIcon,
+  LibraryIcon,
+  MaskTheater01Icon,
+  Notification01Icon,
+  PenTool02Icon,
+  Settings01Icon,
+  Shield01Icon,
+  Tag01Icon,
+  Upload04Icon,
+  UserAdd01Icon,
+  UserCheck01Icon,
 } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react"
 import * as stylex from "@stylexjs/stylex"
@@ -165,3 +182,68 @@ export const Rows: (props: IconProps) => React.ReactElement = icon(Menu02Icon)
 export const Eye: (props: IconProps) => React.ReactElement = icon(ViewIcon)
 
 export const Languages: (props: IconProps) => React.ReactElement = icon(LanguageSkillIcon)
+
+export const Dashboard: (props: IconProps) => React.ReactElement = icon(DashboardSquare01Icon)
+
+export const Library: (props: IconProps) => React.ReactElement = icon(LibraryIcon)
+
+export const ListNumbered: (props: IconProps) => React.ReactElement =
+  icon(LeftToRightListNumberIcon)
+
+export const CloudUpload: (props: IconProps) => React.ReactElement = icon(CloudUploadIcon)
+
+export const Image: (props: IconProps) => React.ReactElement = icon(Image01Icon)
+
+export const Banner: (props: IconProps) => React.ReactElement = icon(ImageCompositionIcon)
+
+export const Tag: (props: IconProps) => React.ReactElement = icon(Tag01Icon)
+
+export const PenTool: (props: IconProps) => React.ReactElement = icon(PenTool02Icon)
+
+export const Mask: (props: IconProps) => React.ReactElement = icon(MaskTheater01Icon)
+
+export const Comment: (props: IconProps) => React.ReactElement = icon(Comment01Icon)
+
+export const Flag: (props: IconProps) => React.ReactElement = icon(Flag02Icon)
+
+export const Shield: (props: IconProps) => React.ReactElement = icon(Shield01Icon)
+
+export const Settings: (props: IconProps) => React.ReactElement = icon(Settings01Icon)
+
+export const Bell: (props: IconProps) => React.ReactElement = icon(Notification01Icon)
+
+export const Upload: (props: IconProps) => React.ReactElement = icon(Upload04Icon)
+
+export const UserAdd: (props: IconProps) => React.ReactElement = icon(UserAdd01Icon)
+
+export const UserCheck: (props: IconProps) => React.ReactElement = icon(UserCheck01Icon)
+
+function caret(
+  path: string,
+): (props: React.ComponentProps<"svg"> & { sx?: Sx }) => React.ReactElement {
+  return function Caret({ className, style, sx, ...props }): React.ReactElement {
+    const styleProps = stylex.props(sx)
+
+    return (
+      <svg
+        aria-hidden="true"
+        className={cn(styleProps.className, className)}
+        fill="currentColor"
+        height="24"
+        style={{ ...styleProps.style, ...style }}
+        viewBox="0 0 24 24"
+        width="24"
+        xmlns="http://www.w3.org/2000/svg"
+        {...props}
+      >
+        <path d={path} />
+      </svg>
+    )
+  }
+}
+
+export const CaretUp: (props: React.ComponentProps<"svg"> & { sx?: Sx }) => React.ReactElement =
+  caret("M12 5.5 21 18.5H3z")
+
+export const CaretDown: (props: React.ComponentProps<"svg"> & { sx?: Sx }) => React.ReactElement =
+  caret("M12 18.5 3 5.5h18z")

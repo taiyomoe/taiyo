@@ -4,7 +4,7 @@ import { SidebarInset, SidebarProvider } from "@taiyomoe/ui/components/ui/sideba
 import { useRouteContext } from "@tanstack/react-router"
 import type { Session } from "@/lib/queries/session"
 import { AppNavbar } from "@/components/shell/app-navbar"
-import { AppSidebar } from "@/components/shell/app-sidebar"
+import { type AppSidebarSection, AppSidebar } from "@/components/shell/app-sidebar"
 
 const styles = stylex.create({
   provider: {
@@ -25,10 +25,11 @@ const styles = stylex.create({
 type AppShellProps = {
   user: Session["user"] | null
   overlayNavbar?: boolean
+  sections?: readonly AppSidebarSection[]
   children: ReactNode
 }
 
-export function AppShell({ user, overlayNavbar = false, children }: AppShellProps) {
+export function AppShell({ user, overlayNavbar = false, sections, children }: AppShellProps) {
   const { sidebarPrefs } = useRouteContext({ from: "__root__" })
 
   return (
@@ -40,7 +41,7 @@ export function AppShell({ user, overlayNavbar = false, children }: AppShellProp
     >
       <AppNavbar overlay={overlayNavbar} user={user} />
       <div sx={styles.body}>
-        <AppSidebar />
+        <AppSidebar sections={sections} />
         <SidebarInset sx={styles.inset}>{children}</SidebarInset>
       </div>
     </SidebarProvider>

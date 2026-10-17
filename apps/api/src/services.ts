@@ -15,6 +15,7 @@ export type Services = {
   mediasIndex: string
   auth: Auth
   chapterUploadQueue: ChapterUploadProducer
+  cacheNamespace: string
 }
 
 export const createServices = (): Services => {
@@ -28,5 +29,6 @@ export const createServices = (): Services => {
     mediasIndex: SEARCH_INDEXES.MEDIAS,
     auth: createAuth({ db, trustedOrigins: corsAllowedOrigins }),
     chapterUploadQueue: getChapterUploadProducer(),
+    cacheNamespace: "",
   }
 }

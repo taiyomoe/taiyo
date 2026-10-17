@@ -36,5 +36,12 @@ export const cacheClient = {
       get: (id: string) => parseCache<Date>(client.get(`users:verification-email-sent-at:${id}`)),
     },
   },
+  dashboard: {
+    overview: {
+      set: (key: string, value: unknown, ttl: number) =>
+        client.setex(`dashboard:overview:${key}`, ttl, SuperJSON.stringify(value)),
+      get: <T>(key: string) => parseCache<T>(client.get(`dashboard:overview:${key}`)),
+    },
+  },
   clear: () => client.flushdb(),
 }

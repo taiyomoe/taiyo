@@ -59,6 +59,7 @@ export type AppContextVariables = EvlogVariables["Variables"] & {
   user?: User
   session?: Session["session"]
   chapterUploadQueue: ChapterUploadProducer
+  cacheNamespace: string
 }
 
 export const createContextMiddleware = (services: Services) =>
@@ -75,6 +76,7 @@ export const createContextMiddleware = (services: Services) =>
     c.set("mediasIndex", services.mediasIndex)
     c.set("auth", services.auth)
     c.set("chapterUploadQueue", services.chapterUploadQueue)
+    c.set("cacheNamespace", services.cacheNamespace)
 
     function ok<T>(data: T): JsonResponse<SuccessEnvelope<T>, 200 | 201>
     function ok<T, M extends Record<string, unknown>>(
