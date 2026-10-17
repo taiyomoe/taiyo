@@ -464,7 +464,7 @@ export async function up(db: Kysely<MigrationDb>): Promise<void> {
   /**
    * Phase 1: Convert synopsis from TEXT to JSONB.
    */
-  await sql`ALTER TABLE "Media" ALTER COLUMN "synopsis" TYPE JSONB USING CASE WHEN "synopsis" IS NOT NULL THEN jsonb_build_object('pt-br', "synopsis") ELSE '{}' END`.execute(
+  await sql`ALTER TABLE "Media" ALTER COLUMN "synopsis" TYPE JSONB USING CASE WHEN "synopsis" IS NOT NULL THEN jsonb_build_object('pt_br', "synopsis") ELSE '{}' END`.execute(
     db,
   )
   await db.schema

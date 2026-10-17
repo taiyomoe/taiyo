@@ -252,7 +252,7 @@ export async function up(db: Kysely<MigrationDb>): Promise<void> {
   /**
    * Phase 5: Convert about (text) to jsonb in UserProfile table.
    */
-  await sql`ALTER TABLE "UserProfile" ALTER COLUMN "about" TYPE JSONB USING CASE WHEN "about" IS NOT NULL THEN jsonb_build_object('pt-br', "about") ELSE '{}' END`.execute(
+  await sql`ALTER TABLE "UserProfile" ALTER COLUMN "about" TYPE JSONB USING CASE WHEN "about" IS NOT NULL THEN jsonb_build_object('pt_br', "about") ELSE '{}' END`.execute(
     db,
   )
   await db.schema

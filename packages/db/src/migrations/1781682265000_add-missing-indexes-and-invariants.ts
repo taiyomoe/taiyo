@@ -20,7 +20,22 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .execute()
 
   // Exactly one main cover per media. set-main-cover's read-then-write race
-  // can otherwise leave two covers flagged as main.
+  // can otherwise leave two covers flagged as main, and production already has
+  // such pairs: keep the newest one as main before enforcing it.
+  await sql`
+    UPDATE "covers" c
+    SET "isMainCover" = false
+    WHERE c."isMainCover"
+      AND c."deletedAt" IS NULL
+      AND EXISTS (
+        SELECT 1 FROM "covers" o
+        WHERE o."mediaId" = c."mediaId"
+          AND o."isMainCover"
+          AND o."deletedAt" IS NULL
+          AND (o."createdAt", o.id) > (c."createdAt", c.id)
+      )
+  `.execute(db)
+
   await sql`
     CREATE UNIQUE INDEX "covers_mediaId_main_unique"
       ON "covers" ("mediaId")

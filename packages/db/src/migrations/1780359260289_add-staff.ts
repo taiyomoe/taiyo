@@ -28,6 +28,31 @@ type MigrationDb = {
   }
 }
 
+const MANGADEX_ATTEMPTS = 6
+const isMissingOnMangaDex = (error: unknown) =>
+  error instanceof Error && error.name === "APIResponseError" && /\((400|404),/.test(error.message)
+// Only a 400/404 means the entry is gone. Rate limits and network errors are
+// retried, and a persistent one fails the migration instead of dropping links.
+const fetchFromMangaDex = async <T>(request: () => Promise<T>, attempt = 1): Promise<T | null> => {
+  try {
+    return await request()
+  } catch (error) {
+    if (isMissingOnMangaDex(error)) {
+      return null
+    }
+
+    if (attempt === MANGADEX_ATTEMPTS) {
+      throw error
+    }
+
+    await new Promise((r) => {
+      setTimeout(r, 2 ** attempt * 1000)
+    })
+
+    return fetchFromMangaDex(request, attempt + 1)
+  }
+}
+
 export async function up(db: Kysely<MigrationDb>): Promise<void> {
   await db.schema.createType("StaffRole").asEnum(["AUTHOR", "ARTIST"]).execute()
 
@@ -91,7 +116,7 @@ export async function up(db: Kysely<MigrationDb>): Promise<void> {
       continue
     }
 
-    const manga = await Manga.get(mdId).catch(() => null)
+    const manga = await fetchFromMangaDex(() => Manga.get(mdId))
 
     if (!manga) {
       // oxlint-disable-next-line no-console
@@ -122,7 +147,7 @@ export async function up(db: Kysely<MigrationDb>): Promise<void> {
       let staffId = staffCache.get(mdStaffId)
 
       if (staffId === undefined || staffId === "") {
-        const relation = await s.resolve().catch(() => null)
+        const relation = await fetchFromMangaDex(() => s.resolve())
 
         if (!relation) {
           continue
