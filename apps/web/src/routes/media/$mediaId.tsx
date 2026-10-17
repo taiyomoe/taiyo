@@ -1,34 +1,92 @@
-import * as stylex from "@stylexjs/stylex"
-import { colors, font } from "@taiyomoe/ui/styles/tokens.stylex"
-import { noop, useSuspenseQuery } from "@tanstack/react-query"
-import { createFileRoute, getRouteApi } from "@tanstack/react-router"
+import { noop } from "@tanstack/react-query"
+import { createFileRoute } from "@tanstack/react-router"
+import { z } from "zod"
+import { CHAPTERS_PER_PAGE } from "@/components/media/media-chapters"
+import { getMainTitle } from "@/components/media/media-labels"
+import { MEDIA_TABS, MediaPage } from "@/components/media/media-page"
+import {
+  CHAPTER_SORTS,
+  mediaChapterFacetsQueryOptions,
+  mediaChaptersQueryOptions,
+} from "@/lib/queries/chapters"
+import { libraryEntryQueryOptions, readingProgressQueryOptions } from "@/lib/queries/library"
 import { mediaQueryOptions } from "@/lib/queries/medias"
+import { getContentRatings } from "@/lib/settings"
+import { m } from "@/paraglide/messages"
+
+const searchSchema = z.object({
+  tab: z.enum(MEDIA_TABS).optional().catch(undefined),
+  page: z.coerce.number().int().min(1).max(100_000).optional().catch(undefined),
+  sort: z.enum(CHAPTER_SORTS).optional().catch(undefined),
+  lang: z
+    .string()
+    .regex(/^[a-z]{2}(?:_[a-z]{2})?$/)
+    .optional()
+    .catch(undefined),
+  volume: z.string().trim().min(1).max(32).optional().catch(undefined),
+  q: z.string().trim().min(1).max(100).optional().catch(undefined),
+  unread: z.boolean().optional().catch(undefined),
+})
 
 export const Route = createFileRoute("/media/$mediaId")({
-  context: ({ params }) => ({ mediaQueryOptions: mediaQueryOptions(params.mediaId) }),
-  loader: ({ context }) => {
-    void context.queryClient.query(context.mediaQueryOptions).catch(noop)
+  validateSearch: searchSchema,
+  loaderDeps: ({ search }) => search,
+  loader: async ({ context, params: { mediaId }, deps }) => {
+    const contentRatings = getContentRatings(context.session)
+    const filters = { contentRatings, language: deps.lang }
+    const media = context.queryClient.query(mediaQueryOptions(mediaId))
+    const prefetch = Promise.all(
+      [
+        context.queryClient.query(mediaChapterFacetsQueryOptions(mediaId, filters)),
+        ...((deps.tab ?? "chapters") === "chapters"
+          ? [
+              context.queryClient.query(
+                mediaChaptersQueryOptions(mediaId, {
+                  ...filters,
+                  page: deps.page ?? 1,
+                  perPage: CHAPTERS_PER_PAGE,
+                  sort: deps.sort ?? "newest",
+                  volume: deps.volume,
+                  search: deps.q,
+                  unread: context.session !== null && deps.unread === true,
+                }),
+              ),
+            ]
+          : []),
+        ...(context.session === null
+          ? []
+          : [
+              context.queryClient.query(libraryEntryQueryOptions(mediaId)),
+              context.queryClient.query(readingProgressQueryOptions(mediaId, contentRatings)),
+            ]),
+      ].map((query) => query.catch(noop)),
+    )
+
+    if (import.meta.env.SSR) {
+      await prefetch
+    }
+
+    const title = await media.then((data) => getMainTitle(data.titles)).catch(() => null)
+
+    return { title }
   },
-  component: MediaPage,
+  head: ({ loaderData }) => {
+    const title = loaderData?.title ?? null
+
+    return {
+      meta: [
+        {
+          title: title === null ? m.media_meta_title_fallback() : m.media_meta_title({ title }),
+        },
+      ],
+    }
+  },
+  component: Media,
 })
 
-const routeApi = getRouteApi("/media/$mediaId")
-const styles = stylex.create({
-  json: {
-    margin: 0,
-    padding: "2rem",
-    overflow: "auto",
-    color: colors.foreground,
-    fontFamily: font.mono,
-    fontSize: "0.8125rem",
-    whiteSpace: "pre-wrap",
-    wordBreak: "break-word",
-  },
-})
+function Media() {
+  const { session } = Route.useRouteContext()
+  const { mediaId } = Route.useParams()
 
-function MediaPage() {
-  const { mediaQueryOptions: options } = routeApi.useRouteContext()
-  const { data } = useSuspenseQuery(options)
-
-  return <pre sx={styles.json}>{JSON.stringify(data, null, 2)}</pre>
+  return <MediaPage mediaId={mediaId} user={session?.user ?? null} />
 }

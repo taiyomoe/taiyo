@@ -175,25 +175,27 @@ export const chapterFeedItemSchema = z.object({
   }),
 })
 
-const latestChapterSchema = chapterFeedItemSchema.omit({ mediaId: true, mediaTitle: true }).extend({
-  groups: z
-    .object({
-      id: z.uuid().meta({ description: "The ID of the group." }),
-      name: z.string().meta({ description: "The name of the group.", example: "Sunray Scans" }),
-    })
-    .array()
-    .meta({ description: "The groups credited on the chapter." }),
-  uploader: z
-    .object({
-      id: z.uuid().meta({ description: "The ID of the user." }),
-      username: z.string().meta({ description: "The username of the user.", example: "kaito" }),
-      displayUsername: z
-        .string()
-        .meta({ description: "The display name of the user.", example: "Kaito" }),
-      image: z.string().nullable().meta({ description: "URL of the user's avatar, if any." }),
-    })
-    .meta({ description: "The user who uploaded the chapter." }),
-})
+export const latestChapterSchema = chapterFeedItemSchema
+  .omit({ mediaId: true, mediaTitle: true })
+  .extend({
+    groups: z
+      .object({
+        id: z.uuid().meta({ description: "The ID of the group." }),
+        name: z.string().meta({ description: "The name of the group.", example: "Sunray Scans" }),
+      })
+      .array()
+      .meta({ description: "The groups credited on the chapter." }),
+    uploader: z
+      .object({
+        id: z.uuid().meta({ description: "The ID of the user." }),
+        username: z.string().meta({ description: "The username of the user.", example: "kaito" }),
+        displayUsername: z
+          .string()
+          .meta({ description: "The display name of the user.", example: "Kaito" }),
+        image: z.string().nullable().meta({ description: "URL of the user's avatar, if any." }),
+      })
+      .meta({ description: "The user who uploaded the chapter." }),
+  })
 
 export const latestChapterFeedItemSchema = latestChapterSchema.extend({
   mediaId: chapterFeedItemSchema.shape.mediaId,

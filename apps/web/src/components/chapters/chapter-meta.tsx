@@ -19,6 +19,7 @@ const UNITS = [
   { unit: "minute", seconds: 60 },
 ] as const
 const TIME_ACTIVE_COLOR = `color-mix(in srgb, ${colors.mutedForeground} 60%, ${colors.foreground})`
+const MORE_GROUPS_ACTIVE_BACKGROUND = `color-mix(in srgb, ${colors.foreground} 14%, transparent)`
 const styles = stylex.create({
   time: {
     color: {
@@ -122,14 +123,60 @@ const styles = stylex.create({
     paddingRight: "0.125em",
   },
   moreGroups: {
+    margin: 0,
     borderRadius: radius.full,
+    borderWidth: 0,
+    paddingBlock: 0,
     paddingInline: "0.375rem",
-    backgroundColor: `color-mix(in srgb, ${colors.foreground} 8%, transparent)`,
-    color: colors.mutedForeground,
+    backgroundColor: {
+      "[data-popup-open]": MORE_GROUPS_ACTIVE_BACKGROUND,
+      default: `color-mix(in srgb, ${colors.foreground} 8%, transparent)`,
+      ":hover": MORE_GROUPS_ACTIVE_BACKGROUND,
+    },
+    color: {
+      "[data-popup-open]": colors.foreground,
+      default: colors.mutedForeground,
+      ":hover": colors.foreground,
+    },
+    cursor: "default",
     flexShrink: 0,
+    fontFamily: "inherit",
     fontSize: "0.6875rem",
     fontWeight: 600,
     lineHeight: "1.125rem",
+    outlineColor: colors.ring,
+    outlineOffset: 2,
+    outlineStyle: { default: "none", ":focus-visible": "solid" },
+    outlineWidth: 2,
+    transitionDuration: "150ms",
+    transitionProperty: "background-color, color",
+    transitionTimingFunction: motion.easeOut,
+  },
+  moreGroupsList: {
+    margin: 0,
+    gap: "0.5rem",
+    listStyle: "none",
+    paddingInline: "1rem",
+    display: "flex",
+    flexDirection: "column",
+    maxHeight: "min(16rem, 50vh)",
+    maxWidth: "min(18rem, calc(100vw - 2rem))",
+    overflowY: "auto",
+  },
+  moreGroupsItem: {
+    gap: "0.5rem",
+    alignItems: "flex-start",
+    color: colors.foreground,
+    display: "flex",
+    fontSize: "0.8125rem",
+    fontWeight: 500,
+    lineHeight: 1.4,
+    overflowWrap: "anywhere",
+  },
+  moreGroupsIcon: {
+    color: colors.mutedForeground,
+    flexShrink: 0,
+    marginTop: "0.0625rem",
   },
   uploader: {
     gap: "0.5rem",
@@ -254,13 +301,35 @@ export function ChapterGroups({ groups, max = 1, wrap = false, sx }: ChapterGrou
             </span>
           ))
         )}
-        {hidden.length > 0 ? (
-          <span sx={styles.moreGroups} title={hidden.map((group) => group.name).join(", ")}>
-            {m.chapter_more_groups({ count: hidden.length })}
-          </span>
-        ) : null}
+        {hidden.length > 0 ? <MoreGroups groups={hidden} /> : null}
       </span>
     </span>
+  )
+}
+
+function MoreGroups({ groups }: { groups: LatestChapter["groups"] }) {
+  const hover = useHoverPopover()
+
+  return (
+    <Popover onOpenChange={hover.onOpenChange} open={hover.open}>
+      <PopoverTrigger
+        {...hover.triggerProps}
+        aria-label={m.chapter_more_groups_label({ count: groups.length })}
+        sx={styles.moreGroups}
+      >
+        {m.chapter_more_groups({ count: groups.length })}
+      </PopoverTrigger>
+      <PopoverPopup {...hover.popupProps} arrow side="top">
+        <ul sx={styles.moreGroupsList}>
+          {groups.map((group) => (
+            <li key={group.id} sx={styles.moreGroupsItem}>
+              <Users size={14} {...stylex.props(styles.moreGroupsIcon)} />
+              {group.name}
+            </li>
+          ))}
+        </ul>
+      </PopoverPopup>
+    </Popover>
   )
 }
 

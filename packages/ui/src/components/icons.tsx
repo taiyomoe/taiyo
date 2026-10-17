@@ -3,6 +3,7 @@ import {
   Alert02Icon,
   AlertCircleIcon,
   Book02Icon,
+  LanguageSkillIcon,
   Bookmark02Icon,
   BubbleChatIcon,
   Clock01Icon,
@@ -162,3 +163,5 @@ export const Grid: (props: IconProps) => React.ReactElement = icon(GridViewIcon)
 export const Rows: (props: IconProps) => React.ReactElement = icon(Menu02Icon)
 
 export const Eye: (props: IconProps) => React.ReactElement = icon(ViewIcon)
+
+export const Languages: (props: IconProps) => React.ReactElement = icon(LanguageSkillIcon)

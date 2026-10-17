@@ -87,7 +87,12 @@ export const SignUpForm = () => {
       auth.setError(null)
 
       await authClient.signUp.email(
-        { name: values.name, email: values.email, password: values.password, callbackURL: "/" },
+        {
+          name: values.name,
+          email: values.email,
+          password: values.password,
+          callbackURL: auth.callbackURL,
+        },
         {
           ...(captchaToken !== null && captchaToken !== ""
             ? { headers: { "x-captcha-response": captchaToken } }

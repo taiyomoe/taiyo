@@ -23,7 +23,7 @@ const styles = stylex.create({
 })
 
 type AppShellProps = {
-  user: Session["user"]
+  user: Session["user"] | null
   overlayNavbar?: boolean
   children: ReactNode
 }

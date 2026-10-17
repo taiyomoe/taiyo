@@ -50,7 +50,7 @@ export const SignInForm = () => {
         email: values.email,
         password: values.password,
         rememberMe: values.rememberMe,
-        callbackURL: "/",
+        callbackURL: auth.callbackURL,
       },
       {
         onError: ({ error }) => {
@@ -58,7 +58,7 @@ export const SignInForm = () => {
         },
         onSuccess: async () => {
           queryClient.removeQueries({ queryKey: sessionQueryOptions.queryKey })
-          await navigate({ to: "/" })
+          await navigate({ href: auth.callbackURL })
         },
       },
     )
