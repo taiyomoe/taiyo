@@ -1,8 +1,10 @@
+import { mediaSuggestionAudit } from "@taiyomoe/audit"
 import { config } from "@taiyomoe/config"
 import { sql } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
 import { checkMedia } from "../middlewares/check-media-middleware"
 import { rateLimit } from "../middlewares/rate-limit-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
@@ -48,6 +50,7 @@ export const createMediaSuggestionHandler = new Hono().post(
       }),
     },
   }),
+  audited(mediaSuggestionAudit.CREATE, (c) => ({ mediaId: c.req.param("id") })),
   withAuth("media.suggest"),
   rateLimit({ prefix: "media-suggestion", windowMs: 60_000, limit: 20 }),
   validateJson(mediaSuggestionBodySchema),
@@ -86,6 +89,8 @@ export const createMediaSuggestionHandler = new Hono().post(
     const changes = diffMediaEdit(current, normalizeMediaEdit(body.changes))
     const fields = editedFields(changes)
 
+    c.var.audit.set({ target: { fields } })
+
     if (fields.length === 0) {
       return c.fail("MEDIA_SUGGESTION_EMPTY")
     }
@@ -111,6 +116,8 @@ export const createMediaSuggestionHandler = new Hono().post(
       })
       .returning("id")
       .executeTakeFirstOrThrow()
+
+    c.var.audit.set({ target: { id } })
 
     return c.ok({ id })
   },

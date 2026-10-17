@@ -1,7 +1,9 @@
+import { groupInvitationAudit } from "@taiyomoe/audit"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
 import { getLockedPermissions, withGroupLock } from "../group-membership"
+import { audited } from "../middlewares/audited-middleware"
 import { checkGroup } from "../middlewares/check-group-middleware"
 import { validateParam } from "../middlewares/validate-param-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
@@ -32,6 +34,10 @@ export const cancelGroupInvitationHandler = new Hono().delete(
       }),
     },
   }),
+  audited(groupInvitationAudit.CANCEL, (c) => ({
+    id: c.req.param("invitationId"),
+    groupId: c.req.param("id"),
+  })),
   withAuth(),
   validateParam(paramSchema),
   checkGroup(),

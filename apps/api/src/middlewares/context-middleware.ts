@@ -63,4 +63,5 @@ export type AppContextVariables = EvlogVariables["Variables"] & {
   chapterUploadQueue: ChapterUploadProducer
   mailer: Mailer
   cacheNamespace: string
+  errorCode?: ErrorCode
 }

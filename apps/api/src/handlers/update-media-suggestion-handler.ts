@@ -1,6 +1,8 @@
+import { mediaSuggestionAudit } from "@taiyomoe/audit"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
 import { checkMediaSuggestion } from "../middlewares/check-media-suggestion-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
@@ -46,6 +48,7 @@ export const updateMediaSuggestionHandler = new Hono().patch(
       }),
     },
   }),
+  audited(mediaSuggestionAudit.UPDATE),
   withAuth(),
   validateJson(mediaSuggestionBodySchema),
   checkMediaSuggestion(),
@@ -73,6 +76,8 @@ export const updateMediaSuggestionHandler = new Hono().patch(
     const current = await readMediaEdit(db, mediaSuggestion.mediaId)
     const changes = diffMediaEdit(current, normalizeMediaEdit(body.changes))
     const fields = editedFields(changes)
+
+    c.var.audit.set({ target: { mediaId: mediaSuggestion.mediaId, fields } })
 
     if (fields.length === 0) {
       return c.fail("MEDIA_SUGGESTION_EMPTY")

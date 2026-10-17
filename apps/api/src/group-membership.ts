@@ -100,7 +100,7 @@ export const updateGroupMemberPermissions = (
       .where("userId", "=", userId)
       .execute()
 
-    return { ok: true } as const
+    return { ok: true, previous: member.permissions } as const
   })
 
 export const promoteGroupMember = (

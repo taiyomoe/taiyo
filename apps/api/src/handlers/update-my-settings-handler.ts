@@ -1,9 +1,12 @@
+import { userAudit } from "@taiyomoe/audit"
 import { CONTENT_RATINGS, LATEST_UPDATES_LAYOUTS, sql } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
+import { auditChanges } from "../utils/audit"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
@@ -54,10 +57,14 @@ export const updateMySettingsHandler = new Hono().patch(
       }),
     },
   }),
+  audited(userAudit.SETTINGS_UPDATE, (c) => ({ id: c.var.user?.id })),
   withAuth(),
   validateJson(bodySchema),
   async (c) => {
     const { auth, db, user } = c.var
+
+    c.var.audit.set({ changes: auditChanges(user.settings, c.var.json) })
+
     const { settings } = await db
       .updateTable("users")
       .set({

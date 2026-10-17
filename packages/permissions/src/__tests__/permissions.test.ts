@@ -66,6 +66,7 @@ const STATIC_MATRIX: Record<StaticPermissionPath, readonly Role[]> = {
   "groupCreationRequest.review": ["ADMIN"],
   "comment.delete": ["MODERATOR", "ADMIN"],
   "user.list": ["MODERATOR", "ADMIN"],
+  "auditLog.read": ["ADMIN"],
 }
 const leaves = (node: object, prefix = ""): Array<[string, unknown]> =>
   Object.entries(node).flatMap(([key, value]: [string, unknown]): Array<[string, unknown]> =>

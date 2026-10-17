@@ -1,9 +1,11 @@
+import { groupInvitationAudit } from "@taiyomoe/audit"
 import { sql } from "@taiyomoe/db"
 import { createPermissions, toRole } from "@taiyomoe/permissions"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
 import { getMembership, normalizeGroupPermissions, withGroupLock } from "../group-membership"
+import { audited } from "../middlewares/audited-middleware"
 import { validateParam } from "../middlewares/validate-param-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
@@ -35,6 +37,7 @@ export const acceptGroupInvitationHandler = new Hono().post(
       }),
     },
   }),
+  audited(groupInvitationAudit.ACCEPT),
   withAuth(),
   validateParam(paramSchema),
   withTransaction,
@@ -53,6 +56,9 @@ export const acceptGroupInvitationHandler = new Hono().post(
     }
 
     const { groupId } = found
+
+    c.var.audit.set({ target: { groupId } })
+
     const result = await withGroupLock(db, groupId, async (trx) => {
       const invitation = await trx
         .selectFrom("groupInvitations")

@@ -1,13 +1,17 @@
+import { chapterAudit } from "@taiyomoe/audit"
 import { config } from "@taiyomoe/config"
 import { CONTENT_RATINGS, FLAGS, sql } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
+import { omit } from "radashi"
 import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
 import { authorizeChapter } from "../middlewares/authorize-chapter-middleware"
 import { checkChapter } from "../middlewares/check-chapter-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
+import { auditChanges } from "../utils/audit"
 import { externalUrlSchema, isFuture, publishAtSchema, toPublishAt } from "../utils/chapter-release"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope, languageSchema } from "../utils/schemas"
@@ -71,6 +75,7 @@ export const updateChapterHandler = new Hono().patch(
       }),
     },
   }),
+  audited(chapterAudit.UPDATE),
   withAuth(),
   validateJson(updateChapterSchema),
   checkChapter({ unpublished: true }),
@@ -121,6 +126,11 @@ export const updateChapterHandler = new Hono().patch(
         updates.createdAt = sql<Date>`CURRENT_TIMESTAMP`
       }
     }
+
+    c.var.audit.set({
+      target: { mediaId: chapter.mediaId },
+      changes: auditChanges(chapter, omit(updates, ["createdAt"])),
+    })
 
     if (Object.keys(updates).length > 0) {
       await db.updateTable("chapters").set(updates).where("id", "=", chapter.id).execute()

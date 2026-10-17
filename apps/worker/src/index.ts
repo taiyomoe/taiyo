@@ -1,3 +1,4 @@
+import { chapterAudit, chapterUploadAudit, createAuditLogDrain, systemActor } from "@taiyomoe/audit"
 import { config } from "@taiyomoe/config"
 import { getDb } from "@taiyomoe/db"
 import {
@@ -11,6 +12,7 @@ import {
 import { getS3Bucket, getS3Client, PutBucketLifecycleConfigurationCommand } from "@taiyomoe/s3"
 import { drainSearchOutbox, getMeiliClient, SEARCH_INDEXES } from "@taiyomoe/search"
 import { Queue, Worker } from "bullmq"
+import { audit, auditRedactPreset, initLogger } from "evlog"
 import { env } from "./env"
 
 const CHAPTER_MAINTENANCE_QUEUE = "chapter-maintenance"
@@ -18,8 +20,16 @@ const REAP_JOB = "reap-stale-uploads"
 const PUBLISH_JOB = "publish-scheduled-chapters"
 const SEARCH_MAINTENANCE_QUEUE = "search-maintenance"
 const DRAIN_JOB = "drain-search-outbox"
+const chapterUploadActor = systemActor("chapter-upload-worker")
+const maintenanceActor = systemActor("chapter-maintenance-worker")
 const deps = { db: getDb(), s3: getS3Client(), s3Bucket: getS3Bucket() }
 const searchDeps = { db: deps.db, meili: getMeiliClient(), mediasIndex: SEARCH_INDEXES.MEDIAS }
+
+initLogger({
+  env: { service: "worker" },
+  drain: createAuditLogDrain(deps.db),
+  redact: { ...auditRedactPreset, builtins: false },
+})
 
 await deps.s3
   .send(
@@ -44,19 +54,75 @@ await deps.s3
 
 const chapterWorker = new Worker<ChapterUploadJobData>(
   CHAPTER_UPLOAD_QUEUE,
-  async (job) => processChapterUpload(deps, job.data),
+  async (job) => {
+    try {
+      const processed = await processChapterUpload(deps, job.data)
+
+      if (processed !== undefined) {
+        audit(
+          chapterUploadAudit.PROCESS({
+            actor: chapterUploadActor,
+            target: { id: job.data.taskId, ...processed },
+            outcome: "success",
+          }),
+        )
+      }
+    } catch (err) {
+      audit(
+        chapterUploadAudit.PROCESS({
+          actor: chapterUploadActor,
+          target: { id: job.data.taskId },
+          outcome: "failure",
+          reason: err instanceof Error ? err.message : String(err),
+        }),
+      )
+
+      throw err
+    }
+  },
   { connection: createBullConnection(), concurrency: env.CHAPTER_PROCESSING_CONCURRENCY },
 )
 const maintenanceWorker = new Worker(
   CHAPTER_MAINTENANCE_QUEUE,
   async (job) => {
     if (job.name === PUBLISH_JOB) {
-      await publishScheduledChapters(deps)
+      const { chapters } = await publishScheduledChapters(deps)
+
+      for (const { id, mediaId } of chapters) {
+        audit(
+          chapterAudit.PUBLISH({
+            actor: maintenanceActor,
+            target: { id, mediaId },
+            outcome: "success",
+          }),
+        )
+      }
 
       return
     }
 
-    await reapStaleChapterUploads(deps)
+    const { abandonedChapters, tasks } = await reapStaleChapterUploads(deps)
+
+    for (const { id, mediaId } of abandonedChapters) {
+      audit(
+        chapterUploadAudit.ABANDON({
+          actor: maintenanceActor,
+          target: { id, mediaId },
+          outcome: "success",
+          reason: "PAGES_MISSING",
+        }),
+      )
+    }
+
+    for (const { id, ...task } of tasks) {
+      audit(
+        chapterUploadAudit.REAP({
+          actor: maintenanceActor,
+          target: { id, ...task },
+          outcome: "success",
+        }),
+      )
+    }
   },
   { connection: createBullConnection(), concurrency: 1 },
 )

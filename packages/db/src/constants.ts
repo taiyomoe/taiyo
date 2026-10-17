@@ -18,6 +18,18 @@ export const ROLES = ["USER", "MODERATOR", "UPLOADER_INTERN", "UPLOADER", "ADMIN
 
 export type Role = (typeof ROLES)[number]
 
+export const AUDIT_OUTCOMES = ["success", "failure", "denied"] as const
+
+export type AuditOutcome = (typeof AUDIT_OUTCOMES)[number]
+
+export const AUDIT_ACTOR_TYPES = ["user", "system", "api", "agent"] as const
+
+export type AuditActorType = (typeof AUDIT_ACTOR_TYPES)[number]
+
+export const AUDIT_SEVERITIES = ["low", "medium", "high", "critical"] as const
+
+export type AuditSeverity = (typeof AUDIT_SEVERITIES)[number]
+
 export const STAFF_ROLES = ["AUTHOR", "ARTIST"] as const
 
 export type StaffRole = (typeof STAFF_ROLES)[number]

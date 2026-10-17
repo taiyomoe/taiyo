@@ -124,6 +124,49 @@ const noInlineQueries: Rule = {
     }
   },
 }
+const MUTATING_METHODS = new Set(["post", "put", "patch", "delete"])
+const requireAuditedRoute: Rule = {
+  meta: {
+    type: "problem",
+    messages: {
+      unaudited:
+        "`.{{method}}()` routes change state, so they must pass `audited(...)` to land in the audit log.",
+    },
+  },
+  create(context) {
+    return {
+      CallExpression(node) {
+        const { callee } = node
+
+        if (
+          callee.type !== "MemberExpression" ||
+          callee.property.type !== "Identifier" ||
+          !MUTATING_METHODS.has(callee.property.name) ||
+          callee.object.type !== "NewExpression" ||
+          callee.object.callee.type !== "Identifier" ||
+          callee.object.callee.name !== "Hono"
+        ) {
+          return
+        }
+
+        const isAudited = node.arguments.some(
+          (argument) =>
+            argument.type === "CallExpression" &&
+            argument.callee.type === "Identifier" &&
+            argument.callee.name === "audited",
+        )
+
+        if (!isAudited) {
+          context.report({
+            node: callee.property,
+            messageId: "unaudited",
+            data: { method: callee.property.name },
+          })
+        }
+      },
+    }
+  },
+}
 
 export default {
   meta: { name: "taiyo" },
@@ -131,5 +174,6 @@ export default {
     "no-sx-on-third-party": noSxOnThirdParty,
     "sx-requires-stylex-import": sxRequiresStylexImport,
     "no-inline-queries": noInlineQueries,
+    "require-audited-route": requireAuditedRoute,
   },
 }
