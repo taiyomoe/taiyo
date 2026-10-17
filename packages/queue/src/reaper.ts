@@ -1,6 +1,6 @@
 import type { DB } from "@taiyomoe/db"
 import { config } from "@taiyomoe/config"
-import { DeleteObjectsCommand, type S3Client } from "@taiyomoe/s3"
+import { DeleteObjectsCommand, getChapterPageKey, type S3Client } from "@taiyomoe/s3"
 import { sql, type Kysely } from "kysely"
 import { chapterUploadManifestSchema } from "./types"
 
@@ -19,6 +19,7 @@ export const reapStaleChapterUploads = async (
       sql<boolean>`(
         (status = 'PENDING' AND "createdAt" < ${cutoff}::timestamptz)
         OR (status = 'FAILED' AND "updatedAt" < ${cutoff}::timestamptz)
+        OR (status = 'DOWNLOADING' AND "updatedAt" < ${cutoff}::timestamptz)
       )`,
     )
     .execute()
@@ -27,9 +28,28 @@ export const reapStaleChapterUploads = async (
     return { reaped: 0 }
   }
 
-  const keys = stale.flatMap((t) =>
-    chapterUploadManifestSchema.parse(t.payload).pages.map((p) => ({ Key: p.stagingKey })),
+  const manifests = stale.map((t) => chapterUploadManifestSchema.parse(t.payload))
+  const chapters = await db
+    .selectFrom("chapters")
+    .select(["id", "pages"])
+    .where("id", "in", [...new Set(manifests.map((m) => m.chapterId))])
+    .execute()
+  const referencedPageIds = new Map(
+    chapters.map((c) => [c.id, new Set((c.pages ?? []).map((p) => p.id))]),
   )
+  const keys = manifests.flatMap((m) => {
+    const stagingKeys = m.pages.map((p) => ({ Key: p.stagingKey }))
+    const referenced = referencedPageIds.get(m.chapterId) ?? new Set<string>()
+
+    if (m.pages.some((p) => referenced.has(p.pageId))) {
+      return stagingKeys
+    }
+
+    return [
+      ...stagingKeys,
+      ...m.pages.map((p) => ({ Key: getChapterPageKey(m.mediaId, m.chapterId, p.pageId) })),
+    ]
+  })
 
   // DeleteObjects caps at 1000 keys/call; chunk. Deleting absent keys is a no-op.
   for (let i = 0; i < keys.length; i += 1000) {
