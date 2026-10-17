@@ -13,7 +13,7 @@ export const AuthSwitchLink = ({
 }) => (
   <p sx={sx.footer}>
     {prompt}{" "}
-    <Link to={to} {...stylex.props(sx.link)}>
+    <Link search to={to} {...stylex.props(sx.link)}>
       {label}
     </Link>
   </p>

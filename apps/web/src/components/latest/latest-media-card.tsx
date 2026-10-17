@@ -1,20 +1,13 @@
 import * as stylex from "@stylexjs/stylex"
-import { Clock } from "@taiyomoe/ui/components/icons"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { Skeleton } from "@taiyomoe/ui/components/ui/skeleton"
 import { colors, font, motion, radius, shadows } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useQuery } from "@tanstack/react-query"
 import { Link } from "@tanstack/react-router"
 import { useState } from "react"
-import { range } from "remeda"
 import type { ContentRating } from "@/lib/settings"
-import {
-  ChapterGroups,
-  TimeAgo,
-  Uploader,
-  getChapterLabel,
-} from "@/components/chapters/chapter-meta"
-import { CountryFlag, LanguageFlag, getLanguageCode } from "@/components/chapters/flags"
+import { ChapterList, ChapterListSkeleton } from "@/components/chapters/chapter-list"
+import { CountryFlag } from "@/components/chapters/flags"
 import { Cover, CoverSkeleton } from "@/components/media/cover"
 import { type LatestMediaUpdate, mediaLatestChaptersQueryOptions } from "@/lib/queries/chapters"
 import { m } from "@/paraglide/messages"
@@ -97,75 +90,6 @@ const styles = stylex.create({
     outlineWidth: 2,
     textDecorationLine: "none",
   },
-  chapters: {
-    margin: 0,
-    padding: 0,
-    listStyle: "none",
-  },
-  chapter: {
-    gridTemplateAreas: {
-      [DESKTOP]: '"label time" "groups uploader"',
-      default: '"label time" "groups groups" "uploader uploader"',
-    },
-    paddingBlock: "0.625rem",
-    columnGap: "1.5rem",
-    display: "grid",
-    gridTemplateColumns: { [DESKTOP]: "minmax(0, 1fr) auto", default: "minmax(0, 1fr) auto" },
-    rowGap: "0.375rem",
-    borderTopColor: { default: colors.border, ":first-child": "transparent" },
-    borderTopStyle: "solid",
-    borderTopWidth: 1,
-  },
-  label: {
-    gap: "0.5rem",
-    alignItems: "center",
-    color: colors.foreground,
-    display: "flex",
-    fontSize: "0.875rem",
-    fontWeight: 600,
-    gridColumnEnd: "label",
-    gridColumnStart: "label",
-    gridRowEnd: "label",
-    gridRowStart: "label",
-    minWidth: 0,
-  },
-  labelText: {
-    overflow: "hidden",
-    textOverflow: "ellipsis",
-    whiteSpace: "nowrap",
-  },
-  chapterTitle: {
-    color: `color-mix(in srgb, ${colors.foreground} 72%, transparent)`,
-    fontWeight: 500,
-  },
-  groups: {
-    gridColumnEnd: "groups",
-    gridColumnStart: "groups",
-    gridRowEnd: "groups",
-    gridRowStart: "groups",
-  },
-  time: {
-    gap: "0.5rem",
-    alignItems: "center",
-    color: colors.mutedForeground,
-    display: "flex",
-    gridColumnEnd: "time",
-    gridColumnStart: "time",
-    gridRowEnd: "time",
-    gridRowStart: "time",
-    justifySelf: "end",
-  },
-  timeIcon: {
-    flexShrink: 0,
-  },
-  uploader: {
-    gridColumnEnd: "uploader",
-    gridColumnStart: "uploader",
-    gridRowEnd: "uploader",
-    gridRowStart: "uploader",
-    justifySelf: { [DESKTOP]: "end", default: "start" },
-    maxWidth: { [DESKTOP]: "14rem", default: "100%" },
-  },
   untitled: {
     color: colors.mutedForeground,
     fontStyle: "italic",
@@ -179,22 +103,6 @@ const styles = stylex.create({
   skeletonTitle: {
     height: "1.125rem",
     width: "min(18rem, 70%)",
-  },
-  skeletonLabel: {
-    gridColumnEnd: "label",
-    gridColumnStart: "label",
-    gridRowEnd: "label",
-    gridRowStart: "label",
-    height: "0.875rem",
-    width: "min(16rem, 80%)",
-  },
-  skeletonMeta: {
-    gridColumnEnd: "groups",
-    gridColumnStart: "groups",
-    gridRowEnd: "groups",
-    gridRowStart: "groups",
-    height: "0.75rem",
-    width: "min(9rem, 50%)",
   },
 })
 
@@ -236,27 +144,7 @@ export function LatestMediaCard({ media, contentRatings }: LatestMediaCardProps)
             </Link>
           </h2>
         </div>
-        <ul sx={styles.chapters}>
-          {chapters.map((chapter) => (
-            <li key={chapter.id} sx={styles.chapter}>
-              <span sx={styles.label}>
-                <LanguageFlag language={chapter.language} />
-                <span sx={styles.labelText} title={getLanguageCode(chapter.language)}>
-                  {getChapterLabel(chapter)}
-                  {chapter.title === null ? null : (
-                    <span sx={styles.chapterTitle}> – {chapter.title}</span>
-                  )}
-                </span>
-              </span>
-              <span sx={styles.time}>
-                <Clock size={16} {...stylex.props(styles.timeIcon)} />
-                <TimeAgo date={chapter.createdAt} />
-              </span>
-              <ChapterGroups groups={chapter.groups} max={3} sx={styles.groups} wrap />
-              <Uploader sx={styles.uploader} uploader={chapter.uploader} />
-            </li>
-          ))}
-        </ul>
+        <ChapterList chapters={chapters} />
         {hasMore ? (
           <div sx={styles.footer}>
             <Button
@@ -286,14 +174,7 @@ export function LatestMediaCardSkeleton() {
         <div sx={styles.header}>
           <Skeleton sx={styles.skeletonTitle} />
         </div>
-        <ul sx={styles.chapters}>
-          {range(0, 3).map((index) => (
-            <li key={index} sx={styles.chapter}>
-              <Skeleton sx={styles.skeletonLabel} />
-              <Skeleton sx={styles.skeletonMeta} />
-            </li>
-          ))}
-        </ul>
+        <ChapterListSkeleton count={3} />
       </div>
     </div>
   )

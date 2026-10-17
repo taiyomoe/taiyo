@@ -41,3 +41,5 @@ export const mediaQueryOptions = (mediaId: string) =>
       return (await unwrapEnvelope<Awaited<ReturnType<typeof response.json>>>(response)).data
     },
   })
+
+export type Media = InferResponseType<(typeof api.medias)[":id"]["$get"], 200>["data"]

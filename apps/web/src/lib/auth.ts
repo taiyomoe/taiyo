@@ -29,7 +29,7 @@ export type AuthClient = {
 
 export type AuthRouter = {
   invalidate: () => Promise<void>
-  navigate: (options: { to: "/" }) => Promise<void>
+  navigate: (options: { href: string }) => Promise<void>
 }
 
 export type AuthResult = { ok: true } | { ok: false; message: string }
@@ -60,10 +60,12 @@ export const createAuthActions = ({
   client,
   queryClient,
   router,
+  callbackURL = "/",
 }: {
   client: AuthClient
   queryClient: QueryClient
   router: AuthRouter
+  callbackURL?: string | undefined
 }) => {
   const refreshSession = async () => {
     queryClient.removeQueries({ queryKey: sessionQueryOptions.queryKey })
@@ -72,11 +74,11 @@ export const createAuthActions = ({
 
   return {
     signIn: async (values: { email: string; password: string; rememberMe: boolean }) => {
-      const result = toResult(await client.signIn.email({ ...values, callbackURL: "/" }))
+      const result = toResult(await client.signIn.email({ ...values, callbackURL }))
 
       if (result.ok) {
         await refreshSession()
-        await router.navigate({ to: "/" })
+        await router.navigate({ href: callbackURL })
       }
 
       return result
@@ -87,7 +89,7 @@ export const createAuthActions = ({
     ) =>
       toResult(
         await client.signUp.email(
-          { ...values, callbackURL: "/" },
+          { ...values, callbackURL },
           {
             headers:
               captchaToken !== null && captchaToken !== ""
@@ -97,7 +99,7 @@ export const createAuthActions = ({
         ),
       ),
     signInSocial: async (provider: SocialProvider) =>
-      toResult(await client.signIn.social({ provider, callbackURL: "/" })),
+      toResult(await client.signIn.social({ provider, callbackURL })),
     signOut: async () => {
       const result = toResult(await client.signOut())
 

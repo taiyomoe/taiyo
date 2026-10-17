@@ -4,7 +4,7 @@ import { m } from "../../paraglide/messages"
 import { type AuthClient, type AuthError, createAuthActions, getAuthErrorMessage } from "../auth"
 import { sessionQueryOptions } from "../queries/session"
 
-const setup = (error: AuthError | null = null) => {
+const setup = (error: AuthError | null = null, callbackURL?: string) => {
   const calls: Array<{ method: string; args: unknown[] }> = []
   const navigation: string[] = []
   const respond =
@@ -32,12 +32,13 @@ const setup = (error: AuthError | null = null) => {
 
         return Promise.resolve()
       },
-      navigate: ({ to }) => {
-        navigation.push(`navigate ${to}`)
+      navigate: ({ href }) => {
+        navigation.push(`navigate ${href}`)
 
         return Promise.resolve()
       },
     },
+    callbackURL,
   })
   const hasCachedSession = () =>
     queryClient.getQueryState(sessionQueryOptions.queryKey) !== undefined
@@ -56,6 +57,18 @@ describe("createAuthActions", () => {
     ])
     expect(hasCachedSession()).toBe(false)
     expect(navigation).toEqual(["invalidate", "navigate /"])
+  })
+
+  it("comes back to the given page after signing in", async () => {
+    const { actions, calls, navigation } = setup(null, "/media/1?tab=chapters")
+
+    expect(await actions.signIn(credentials)).toEqual({ ok: true })
+    expect(await actions.signInSocial("google")).toEqual({ ok: true })
+    expect(calls.map((call) => call.args[0])).toEqual([
+      { ...credentials, callbackURL: "/media/1?tab=chapters" },
+      { provider: "google", callbackURL: "/media/1?tab=chapters" },
+    ])
+    expect(navigation).toEqual(["invalidate", "navigate /media/1?tab=chapters"])
   })
 
   it("leaves the session alone when sign-in fails", async () => {

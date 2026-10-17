@@ -13,6 +13,7 @@ import { colors, consts, motion } from "@taiyomoe/ui/styles/tokens.stylex"
 import { Link } from "@tanstack/react-router"
 import { useEffect, useRef } from "react"
 import type { Session } from "@/lib/queries/session"
+import { useCurrentHref } from "@/components/auth/use-auth-redirect"
 import { sceneFont } from "@/components/scene/scene.stylex"
 import { UserMenu } from "@/components/shell/user-menu"
 import { useWindowScrolled } from "@/lib/use-window-scrolled"
@@ -162,7 +163,7 @@ const styles = stylex.create({
 })
 
 type AppNavbarProps = {
-  user: Session["user"]
+  user: Session["user"] | null
   overlay?: boolean
 }
 
@@ -224,8 +225,18 @@ export function AppNavbar({ user, overlay = false }: AppNavbarProps) {
             </InputGroupAddon>
           </InputGroup>
         </div>
-        <UserMenu user={user} />
+        {user === null ? <SignInButton /> : <UserMenu user={user} />}
       </div>
     </header>
+  )
+}
+
+function SignInButton() {
+  const href = useCurrentHref()
+
+  return (
+    <Button render={<Link search={{ redirect: href }} to="/auth/sign-in" />}>
+      {m.auth_sign_in()}
+    </Button>
   )
 }

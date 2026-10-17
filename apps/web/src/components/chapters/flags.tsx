@@ -35,6 +35,8 @@ import UA from "country-flag-icons/react/3x2/UA"
 import US from "country-flag-icons/react/3x2/US"
 import VN from "country-flag-icons/react/3x2/VN"
 import type { LatestChapter, LatestMediaUpdate } from "@/lib/queries/chapters"
+import { m } from "@/paraglide/messages"
+import { getLocale } from "@/paraglide/runtime"
 
 type Flag = FlagComponent
 
@@ -118,6 +120,26 @@ const styles = stylex.create({
 
 export const getLanguageCode = (language: LatestChapter["language"]) =>
   language.replace("_", "-").toUpperCase()
+
+const DISPLAY_CODES: Partial<Record<LatestChapter["language"], string>> = { es_la: "es-419" }
+const ROMANIZED_SUFFIX = "_ro"
+const getDisplayName = (code: string) => {
+  try {
+    return new Intl.DisplayNames([getLocale()], { type: "language" }).of(code)
+  } catch {
+    return undefined
+  }
+}
+
+export const getLanguageName = (language: LatestChapter["language"]) => {
+  const romanized = language.endsWith(ROMANIZED_SUFFIX)
+  const code = romanized
+    ? language.slice(0, -ROMANIZED_SUFFIX.length)
+    : (DISPLAY_CODES[language] ?? language.replace("_", "-"))
+  const name = getDisplayName(code) ?? getLanguageCode(language)
+
+  return romanized ? m.language_romanized({ name }) : name
+}
 
 function FlagIcon({ flag: Icon, sx }: { flag: Flag | undefined; sx?: Sx }) {
   return Icon === undefined ? null : (

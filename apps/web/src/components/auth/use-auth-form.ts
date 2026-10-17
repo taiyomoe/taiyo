@@ -1,9 +1,10 @@
 import { useState } from "react"
 import type { AuthResult, SocialProvider } from "@/lib/auth"
+import { useAuthRedirect } from "@/components/auth/use-auth-redirect"
 import { useAuthActions } from "@/lib/use-auth-actions"
 
 export const useAuthForm = () => {
-  const actions = useAuthActions()
+  const actions = useAuthActions(useAuthRedirect())
   const [error, setError] = useState<string | null>(null)
   const [socialPending, setSocialPending] = useState<SocialProvider | null>(null)
   const run = async (action: () => Promise<AuthResult>) => {
