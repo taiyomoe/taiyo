@@ -155,6 +155,11 @@ const ensureRootEnv = async () => {
   console.log(`.env ${exists ? "moved to" : "created on"} port slot ${slot}`)
 }
 const localUrl = (port: string) => `http://localhost:${port}`
+const isHyperdxEnabled = (root: EnvValues) =>
+  (process.env.COMPOSE_PROFILES ?? root.COMPOSE_PROFILES ?? "")
+    .split(",")
+    .map((profile) => profile.trim())
+    .includes("hyperdx")
 const syncAppEnv = (app: string, derive: (current: EnvValues) => EnvValues) => {
   const path = join(repoRoot, "apps", app, ".env")
   const created = !existsSync(path)
@@ -196,7 +201,7 @@ const syncAppEnvs = () => {
     PORT: get("API_PORT"),
     DATABASE_URL: databaseUrl,
     DRAGONFLY_URL: `redis://localhost:${get("DRAGONFLY_PORT")}`,
-    HYPERDX_ENDPOINT: localUrl(get("HYPERDX_OTLP_PORT")),
+    HYPERDX_ENDPOINT: isHyperdxEnabled(root) ? localUrl(get("HYPERDX_OTLP_PORT")) : "",
     ...s3(current),
     MEILISEARCH_HOST: localUrl(get("MEILISEARCH_PORT")),
     MEILISEARCH_API_KEY: get("MEILISEARCH_MASTER_KEY"),
@@ -267,8 +272,7 @@ const printSummary = (sessions: Array<{ username: string; cookie: string }>) => 
 
   Web            ${url("WEB_PORT")}
   API docs       ${url("API_PORT")}/docs
-  HyperDX        ${url("HYPERDX_PORT")}
-  RustFS console ${url("RUSTFS_CONSOLE_PORT")}
+${isHyperdxEnabled(root) ? `  HyperDX        ${url("HYPERDX_PORT")}\n` : ""}  RustFS console ${url("RUSTFS_CONSOLE_PORT")}
 
   Sign in as user@gmail.com or admin@gmail.com, password "password123".
 

@@ -142,9 +142,11 @@ and one serves the API docs. The web app reaches the API through its own origin
 (`/_api` and `/api/auth` are proxied by Vite), so sign-in cookies work over the
 tunnel too. The URLs change on every run and are never written to disk.
 
-**HyperDX** runs locally, but its collector only accepts logs after you sign up
-in its UI. Copy the ingestion key into `HYPERDX_INGESTION_KEY` in
-`apps/api/.env` to turn log shipping on; until then the API logs to stdout only.
+**HyperDX** is what production ships logs to, but locally it is opt-in: set
+`COMPOSE_PROFILES="hyperdx"` in the root `.env` and rerun `pnpm bootstrap`. Its
+collector only accepts logs after you sign up in its UI; copy the ingestion key
+into `HYPERDX_INGESTION_KEY` in `apps/api/.env` to turn log shipping on. Without
+the profile, or until then, the API logs to stdout only.
 
 ## 📝 Available scripts
 

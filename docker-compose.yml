@@ -38,6 +38,7 @@ services:
 
   hyperdx:
     image: "docker.hyperdx.io/hyperdx/hyperdx-all-in-one"
+    profiles: ["hyperdx"]
     restart: unless-stopped
     ports:
       - "127.0.0.1:$HYPERDX_PORT:8080"
