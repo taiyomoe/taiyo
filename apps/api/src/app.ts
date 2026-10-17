@@ -18,6 +18,7 @@ import { errorHandler } from "./middlewares/error-handler-middleware"
 import { bannersRouter } from "./routers/banners-router"
 import { chaptersRouter } from "./routers/chapters-router"
 import { coversRouter } from "./routers/covers-router"
+import { dashboardRouter } from "./routers/dashboard-router"
 import { groupsRouter } from "./routers/groups-router"
 import { listsRouter } from "./routers/lists-router"
 import { mediasRouter } from "./routers/medias-router"
@@ -73,6 +74,7 @@ export const createApp = (services: Services) => {
     .route("/ownership-requests", ownershipRequestsRouter)
     .route("/users", usersRouter)
     .route("/lists", listsRouter)
+    .route("/dashboard", dashboardRouter)
 
   app
     .get(
@@ -157,6 +159,11 @@ export const createApp = (services: Services) => {
               name: "Custom lists",
               description:
                 "User-created reading lists. Each list is owned by one user, has a PUBLIC or PRIVATE visibility, and contains an ordered set of medias.",
+            },
+            {
+              name: "Dashboard",
+              description:
+                "Admin dashboard data for moderators and admins: activity metrics, reading breakdowns and pending moderation work.",
             },
           ],
         },

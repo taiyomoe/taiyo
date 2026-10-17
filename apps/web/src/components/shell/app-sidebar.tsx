@@ -1,3 +1,5 @@
+import type { IconProps } from "@taiyomoe/ui/components/icons"
+import type { ReactElement } from "react"
 import * as stylex from "@stylexjs/stylex"
 import {
   Bookmark,
@@ -25,14 +27,23 @@ import {
   useSidebar,
 } from "@taiyomoe/ui/components/ui/sidebar"
 import { colors, font, radius } from "@taiyomoe/ui/styles/tokens.stylex"
-import { Link, useMatchRoute } from "@tanstack/react-router"
+import { Link, type LinkProps, useMatchRoute } from "@tanstack/react-router"
 import { m } from "@/paraglide/messages"
 
-const SECTIONS = [
+export type AppSidebarSection = {
+  label?: () => string
+  items: ReadonlyArray<{
+    label: () => string
+    icon: (props: IconProps) => ReactElement
+    to?: LinkProps["to"]
+  }>
+}
+
+const SECTIONS: AppSidebarSection[] = [
   {
     label: m.shell_nav_browse,
     items: [
-      { label: m.shell_nav_home, icon: Home, to: "/" as const },
+      { label: m.shell_nav_home, icon: Home, to: "/" },
       { label: m.shell_nav_advanced_search, icon: Sliders },
       { label: m.shell_nav_recently_added, icon: Sparkles },
       { label: m.shell_nav_popular_titles, icon: Flame },
@@ -112,16 +123,22 @@ const styles = stylex.create({
   },
 })
 
-export function AppSidebar() {
+export function AppSidebar({
+  sections = SECTIONS,
+}: {
+  sections?: readonly AppSidebarSection[] | undefined
+}) {
   const matchRoute = useMatchRoute()
   const { setOpenMobile } = useSidebar()
 
   return (
     <Sidebar sx={styles.container}>
       <SidebarContent sx={styles.content}>
-        {SECTIONS.map((section) => (
-          <SidebarGroup key={section.label()} sx={styles.group}>
-            <SidebarGroupLabel sx={styles.groupLabel}>{section.label()}</SidebarGroupLabel>
+        {sections.map((section, index) => (
+          <SidebarGroup key={section.label?.() ?? index} sx={styles.group}>
+            {section.label === undefined ? null : (
+              <SidebarGroupLabel sx={styles.groupLabel}>{section.label()}</SidebarGroupLabel>
+            )}
             <SidebarGroupContent>
               <SidebarMenu sx={styles.menu}>
                 {section.items.map(({ label, icon: Icon, to }) => {

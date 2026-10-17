@@ -1,5 +1,5 @@
 import * as stylex from "@stylexjs/stylex"
-import { Eye, Logout, Monitor, Moon, Sun } from "@taiyomoe/ui/components/icons"
+import { Dashboard, Eye, Logout, Monitor, Moon, Sun } from "@taiyomoe/ui/components/icons"
 import { Avatar, AvatarFallback, AvatarImage } from "@taiyomoe/ui/components/ui/avatar"
 import {
   Menu,
@@ -15,11 +15,13 @@ import {
 } from "@taiyomoe/ui/components/ui/menu"
 import { colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useMutation } from "@tanstack/react-query"
+import { Link } from "@tanstack/react-router"
 import UnitedStatesFlag from "country-flag-icons/react/3x2/US"
 import { use } from "react"
 import { filter, isTruthy, join, map, pipe, take } from "remeda"
 import type { Session } from "@/lib/queries/session"
 import { ContentFilterItems } from "@/components/settings/content-filter"
+import { canOpenDashboard } from "@/lib/dashboard"
 import { ThemeContext } from "@/lib/theme"
 import { useAuthActions } from "@/lib/use-auth-actions"
 import { m } from "@/paraglide/messages"
@@ -116,6 +118,15 @@ export function UserMenu({ user }: { user: Session["user"] }) {
         </Avatar>
       </MenuTrigger>
       <MenuPopup align="end" sideOffset={8} sx={styles.popup}>
+        {canOpenDashboard(user) ? (
+          <>
+            <MenuItem render={<Link to="/dashboard" />}>
+              <Dashboard />
+              {m.dashboard_name()}
+            </MenuItem>
+            <MenuSeparator />
+          </>
+        ) : null}
         <MenuSub>
           <MenuSubTrigger>
             <ThemeIcon />

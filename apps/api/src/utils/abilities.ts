@@ -14,6 +14,7 @@ export type Subjects =
   | "Library"
   | "List"
   | "Settings"
+  | "Dashboard"
   | "all"
 
 export type AppAbility = MongoAbility<[Actions, Subjects]>
@@ -43,6 +44,7 @@ export const defineAbilitiesFor = (user: User): AppAbility => {
 
   if (user.role === "MODERATOR") {
     can("manage", ["Media", "Staff", "Chapter", "Group", "OwnershipRequest"])
+    can("read", "Dashboard")
   }
 
   if (user.role === "UPLOADER" || user.role === "UPLOADER_INTERN") {

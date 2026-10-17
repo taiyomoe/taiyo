@@ -67,6 +67,7 @@ export const test = baseTest.extend<Fixtures>({
       mediasIndex,
       auth: createAuth({ db }),
       chapterUploadQueue: { enqueue: async () => {} },
+      cacheNamespace: `${crypto.randomUUID()}:`,
     }
 
     await use(services)
