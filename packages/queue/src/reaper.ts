@@ -24,12 +24,15 @@ export const reapStaleChapterUploads = async (
     .execute()
 
   if (stale.length === 0) {
-    return { reaped: 0 }
+    return { reaped: 0, tasks: [] }
   }
 
-  const keys = stale.flatMap((t) =>
-    chapterUploadManifestSchema.parse(t.payload).pages.map((p) => ({ Key: p.stagingKey })),
-  )
+  const tasks = stale.map((t) => ({
+    id: t.id,
+    status: t.status,
+    manifest: chapterUploadManifestSchema.parse(t.payload),
+  }))
+  const keys = tasks.flatMap((t) => t.manifest.pages.map((p) => ({ Key: p.stagingKey })))
 
   // DeleteObjects caps at 1000 keys/call; chunk. Deleting absent keys is a no-op.
   for (let i = 0; i < keys.length; i += 1000) {
@@ -52,5 +55,13 @@ export const reapStaleChapterUploads = async (
     )
     .execute()
 
-  return { reaped: stale.length }
+  return {
+    reaped: stale.length,
+    tasks: tasks.map((t) => ({
+      id: t.id,
+      status: t.status,
+      chapterId: t.manifest.chapterId,
+      mediaId: t.manifest.mediaId,
+    })),
+  }
 }

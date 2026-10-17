@@ -1,7 +1,9 @@
+import { historyAudit } from "@taiyomoe/audit"
 import { sql } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
 import { checkChapter } from "../middlewares/check-chapter-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
@@ -32,6 +34,7 @@ export const openChapterHandler = new Hono().post(
       }),
     },
   }),
+  audited(historyAudit.CHAPTER_OPEN),
   withAuth("create", "History"),
   checkChapter(),
   withTransaction,

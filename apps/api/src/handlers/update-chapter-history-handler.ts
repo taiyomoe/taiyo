@@ -1,6 +1,8 @@
+import { historyAudit } from "@taiyomoe/audit"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
 import { checkChapter } from "../middlewares/check-chapter-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
@@ -48,6 +50,7 @@ export const updateChapterHistoryHandler = new Hono().patch(
       }),
     },
   }),
+  audited(historyAudit.PROGRESS_UPDATE),
   withAuth("update", "History"),
   validateJson(updateHistorySchema),
   checkChapter(),
@@ -64,6 +67,8 @@ export const updateChapterHistoryHandler = new Hono().patch(
     if (body.completed !== undefined) {
       updates.completed = body.completed
     }
+
+    c.var.audit.set({ target: { pageId: body.pageId, completed: body.completed } })
 
     const result = await db
       .updateTable("userHistories")

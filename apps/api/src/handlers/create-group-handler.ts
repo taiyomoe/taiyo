@@ -1,8 +1,10 @@
 import type { NewGroup } from "@taiyomoe/db"
+import { groupAudit } from "@taiyomoe/audit"
 import { config } from "@taiyomoe/config"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
@@ -68,6 +70,7 @@ export const createGroupHandler = new Hono().post(
       ...getOpenApiResponses({ 422: "The request data failed validation." }),
     },
   }),
+  audited(groupAudit.CREATE),
   withAuth("create", "Group"),
   validateJson(createGroupSchema),
   withTransaction,
@@ -99,6 +102,8 @@ export const createGroupHandler = new Hono().post(
     }
 
     await db.insertInto("groups").values(values).execute()
+
+    c.var.audit.set({ target: { id, name: body.name } })
 
     return c.ok({ id })
   },

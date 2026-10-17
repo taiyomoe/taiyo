@@ -1,10 +1,13 @@
+import { coverAudit } from "@taiyomoe/audit"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
 import { checkCover } from "../middlewares/check-cover-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
+import { auditChanges } from "../utils/audit"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope, contentRatingSchema, languageSchema } from "../utils/schemas"
 
@@ -54,6 +57,7 @@ export const updateCoverHandler = new Hono().patch(
       }),
     },
   }),
+  audited(coverAudit.UPDATE),
   withAuth("update", "Media"),
   validateJson(updateCoverSchema),
   checkCover(),
@@ -74,6 +78,8 @@ export const updateCoverHandler = new Hono().patch(
     if (body.volume !== undefined) {
       updates.volume = body.volume === null ? null : String(body.volume)
     }
+
+    c.var.audit.set({ target: { mediaId: cover.mediaId }, changes: auditChanges(cover, updates) })
 
     await db.updateTable("covers").set(updates).where("id", "=", cover.id).execute()
 

@@ -1,3 +1,4 @@
+import { mediaAudit } from "@taiyomoe/audit"
 import {
   MEDIA_COUNTRIES_OF_ORIGIN,
   MEDIA_DEMOGRAPHIES,
@@ -9,10 +10,12 @@ import {
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
 import { checkMedia } from "../middlewares/check-media-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
+import { auditChanges } from "../utils/audit"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import {
   apiSuccessEnvelope,
@@ -92,6 +95,7 @@ export const updateMediaHandler = new Hono().patch(
       }),
     },
   }),
+  audited(mediaAudit.UPDATE),
   withAuth("update", "Media"),
   validateJson(updateMediaSchema),
   checkMedia(),
@@ -152,6 +156,8 @@ export const updateMediaHandler = new Hono().patch(
     if (body.endDate !== undefined) {
       updates.endDate = body.endDate === null ? null : new Date(body.endDate)
     }
+
+    c.var.audit.set({ changes: auditChanges(media, updates) })
 
     await db.updateTable("medias").set(updates).where("id", "=", media.id).execute()
 

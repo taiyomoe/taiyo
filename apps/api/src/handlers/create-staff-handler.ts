@@ -1,9 +1,11 @@
 import type { NewStaff } from "@taiyomoe/db"
+import { staffAudit } from "@taiyomoe/audit"
 import { config } from "@taiyomoe/config"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
 import { putImage } from "../image-store"
+import { audited } from "../middlewares/audited-middleware"
 import { checkImages } from "../middlewares/check-images-middleware"
 import { rateLimit } from "../middlewares/rate-limit-middleware"
 import { validateFormData } from "../middlewares/validate-form-data-middleware"
@@ -60,6 +62,7 @@ export const createStaffHandler = new Hono().post(
       }),
     },
   }),
+  audited(staffAudit.CREATE),
   withAuth("create", "Staff"),
   rateLimit({ prefix: "create-staff", windowMs: 60_000, limit: 30 }),
   validateFormData(createStaffSchema),
@@ -99,6 +102,7 @@ export const createStaffHandler = new Hono().post(
       .executeTakeFirstOrThrow()
 
     log.set({ staff })
+    c.var.audit.set({ target: { id: staff.id, name: staff.name } })
 
     return c.ok({ id: staff.id })
   },

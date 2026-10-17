@@ -1,12 +1,15 @@
+import { groupAudit } from "@taiyomoe/audit"
 import { config } from "@taiyomoe/config"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
 import { checkGroup } from "../middlewares/check-group-middleware"
 import { requireGroupAccess } from "../middlewares/require-group-access-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
+import { auditChanges } from "../utils/audit"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
@@ -61,6 +64,7 @@ export const updateGroupHandler = new Hono().patch(
       }),
     },
   }),
+  audited(groupAudit.UPDATE),
   withAuth("read", "OwnershipRequest"),
   validateJson(updateGroupSchema),
   checkGroup(),
@@ -89,6 +93,8 @@ export const updateGroupHandler = new Hono().patch(
         updates[key] = body[key]
       }
     }
+
+    c.var.audit.set({ changes: auditChanges(group, updates) })
 
     await db.updateTable("groups").set(updates).where("id", "=", group.id).execute()
 

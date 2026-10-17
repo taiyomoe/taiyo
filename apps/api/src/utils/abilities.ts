@@ -14,6 +14,7 @@ export type Subjects =
   | "Library"
   | "List"
   | "Settings"
+  | "AuditLog"
   | "all"
 
 export type AppAbility = MongoAbility<[Actions, Subjects]>

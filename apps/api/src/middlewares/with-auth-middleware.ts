@@ -12,14 +12,14 @@ export const withAuth = (action: Actions, subject: Subjects) =>
       return c.fail("UNAUTHORIZED")
     }
 
+    c.set("user", result.user)
+    c.set("session", result.session)
+
     const ability = defineAbilitiesFor(result.user)
 
     if (ability.cannot(action, subject)) {
       return c.fail("FORBIDDEN")
     }
-
-    c.set("user", result.user)
-    c.set("session", result.session)
 
     return next()
   })
