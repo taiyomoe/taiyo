@@ -1,6 +1,8 @@
+import { listAudit } from "@taiyomoe/audit"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
 import { checkList } from "../middlewares/check-list-middleware"
 import { requireListOwner } from "../middlewares/require-list-owner-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
@@ -30,6 +32,7 @@ export const deleteListHandler = new Hono().delete(
       }),
     },
   }),
+  audited(listAudit.DELETE),
   withAuth("delete", "List"),
   checkList(),
   requireListOwner,

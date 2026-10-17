@@ -1,6 +1,8 @@
+import { groupOwnershipAudit } from "@taiyomoe/audit"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
 import { checkOwnershipRequest } from "../middlewares/check-ownership-request-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
@@ -40,6 +42,7 @@ export const rejectOwnershipRequestHandler = new Hono().post(
       }),
     },
   }),
+  audited(groupOwnershipAudit.REQUEST_REJECT),
   withAuth("manage", "OwnershipRequest"),
   validateJson(rejectSchema),
   checkOwnershipRequest(),
@@ -47,6 +50,12 @@ export const rejectOwnershipRequestHandler = new Hono().post(
   async (c) => {
     const { db, ownershipRequest, user } = c.var
     const { note } = c.var.json
+
+    c.var.audit.set({
+      target: { groupId: ownershipRequest.groupId, userId: ownershipRequest.userId },
+      ...(note === null || note === undefined ? {} : { reason: note }),
+    })
+
     const transitioned = await db
       .updateTable("groupOwnershipRequests")
       .set({ status: "REJECTED", reviewerId: user.id, reviewerNote: note ?? null })

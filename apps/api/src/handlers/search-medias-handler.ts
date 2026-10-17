@@ -82,6 +82,7 @@ const mediaHitSchema = z.object({
     .meta({ description: "How many chapters this media has.", example: 214 }),
 })
 
+// oxlint-disable-next-line taiyo/require-audited-route
 export const searchMediasHandler = new Hono().post(
   "/search",
   describeRoute({

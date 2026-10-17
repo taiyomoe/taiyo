@@ -1,6 +1,8 @@
+import { chapterAudit } from "@taiyomoe/audit"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
 import { checkChapter } from "../middlewares/check-chapter-middleware"
 import { requireChapterAccess } from "../middlewares/require-chapter-access-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
@@ -36,12 +38,15 @@ export const deleteChapterHandler = new Hono().delete(
       }),
     },
   }),
+  audited(chapterAudit.DELETE),
   withAuth("read", "OwnershipRequest"),
   checkChapter(),
   requireChapterAccess,
   withTransaction,
   async (c) => {
     const { db, chapter, user } = c.var
+
+    c.var.audit.set({ target: { mediaId: chapter.mediaId } })
 
     await db
       .updateTable("chapters")

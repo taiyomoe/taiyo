@@ -1,8 +1,10 @@
+import { groupMemberAudit } from "@taiyomoe/audit"
 import { GROUP_MEMBERSHIP_ROLES } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
 import { addGroupMember } from "../group-membership"
+import { audited } from "../middlewares/audited-middleware"
 import { checkGroup } from "../middlewares/check-group-middleware"
 import { requireGroupOwnerOrMod } from "../middlewares/require-group-owner-or-mod-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
@@ -50,6 +52,7 @@ export const addGroupMemberHandler = new Hono().post(
       }),
     },
   }),
+  audited(groupMemberAudit.ADD),
   withAuth("read", "OwnershipRequest"),
   validateJson(addMemberSchema),
   checkGroup(),
@@ -58,6 +61,9 @@ export const addGroupMemberHandler = new Hono().post(
   async (c) => {
     const { db, group, user } = c.var
     const { userId, role } = c.var.json
+
+    c.var.audit.set({ target: { userId, role } })
+
     const target = await db
       .selectFrom("users")
       .select("id")

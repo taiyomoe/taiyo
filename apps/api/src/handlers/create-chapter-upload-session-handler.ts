@@ -1,9 +1,11 @@
+import { chapterUploadAudit } from "@taiyomoe/audit"
 import { config } from "@taiyomoe/config"
 import { IMAGE_MIME_TYPES } from "@taiyomoe/db"
 import { getChapterStagingKey, getPresignedUploadUrl } from "@taiyomoe/s3"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
 import { checkChapter } from "../middlewares/check-chapter-middleware"
 import { rateLimit } from "../middlewares/rate-limit-middleware"
 import { requireChapterAccess } from "../middlewares/require-chapter-access-middleware"
@@ -80,6 +82,7 @@ export const createChapterUploadSessionHandler = new Hono().post(
       }),
     },
   }),
+  audited(chapterUploadAudit.START),
   withAuth("read", "OwnershipRequest"),
   rateLimit({ prefix: "chapter-upload-session", windowMs: 60_000, limit: 60 }),
   validateJson(createChapterUploadSessionSchema),
@@ -129,6 +132,10 @@ export const createChapterUploadSessionHandler = new Hono().post(
         },
       })
       .execute()
+
+    c.var.audit.set({
+      target: { mediaId: chapter.mediaId, taskId, pageCount: body.pages.length },
+    })
 
     return c.ok({ taskId, pages: responsePages })
   },

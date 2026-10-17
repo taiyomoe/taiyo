@@ -1,6 +1,8 @@
+import { chapterGroupAudit } from "@taiyomoe/audit"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
 import { checkChapter } from "../middlewares/check-chapter-middleware"
 import { requireChapterAccess } from "../middlewares/require-chapter-access-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
@@ -41,6 +43,7 @@ export const linkChapterGroupHandler = new Hono().post(
       }),
     },
   }),
+  audited(chapterGroupAudit.LINK),
   withAuth("read", "OwnershipRequest"),
   validateJson(linkChapterGroupSchema),
   checkChapter(),
@@ -49,6 +52,9 @@ export const linkChapterGroupHandler = new Hono().post(
   async (c) => {
     const { db, chapter } = c.var
     const { groupId } = c.var.json
+
+    c.var.audit.set({ target: { groupId } })
+
     const group = await db
       .selectFrom("groups")
       .select("id")

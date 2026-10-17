@@ -1,7 +1,9 @@
+import { groupOwnershipAudit } from "@taiyomoe/audit"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
 import { claimGroup } from "../group-membership"
+import { audited } from "../middlewares/audited-middleware"
 import { checkOwnershipRequest } from "../middlewares/check-ownership-request-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
@@ -33,11 +35,17 @@ export const approveOwnershipRequestHandler = new Hono().post(
       }),
     },
   }),
+  audited(groupOwnershipAudit.REQUEST_APPROVE),
   withAuth("manage", "OwnershipRequest"),
   checkOwnershipRequest(),
   withTransaction,
   async (c) => {
     const { db, ownershipRequest, user } = c.var
+
+    c.var.audit.set({
+      target: { groupId: ownershipRequest.groupId, userId: ownershipRequest.userId },
+    })
+
     const result = await claimGroup(db, {
       groupId: ownershipRequest.groupId,
       userId: ownershipRequest.userId,

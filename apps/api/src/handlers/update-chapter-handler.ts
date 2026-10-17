@@ -1,13 +1,16 @@
+import { chapterAudit } from "@taiyomoe/audit"
 import { config } from "@taiyomoe/config"
 import { CONTENT_RATINGS, FLAGS } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
 import { checkChapter } from "../middlewares/check-chapter-middleware"
 import { requireChapterAccess } from "../middlewares/require-chapter-access-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
+import { auditChanges } from "../utils/audit"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope, languageSchema } from "../utils/schemas"
 
@@ -67,6 +70,7 @@ export const updateChapterHandler = new Hono().patch(
       }),
     },
   }),
+  audited(chapterAudit.UPDATE),
   withAuth("read", "OwnershipRequest"),
   validateJson(updateChapterSchema),
   checkChapter(),
@@ -82,6 +86,11 @@ export const updateChapterHandler = new Hono().patch(
         updates[key] = body[key]
       }
     }
+
+    c.var.audit.set({
+      target: { mediaId: chapter.mediaId },
+      changes: auditChanges(chapter, updates),
+    })
 
     await db.updateTable("chapters").set(updates).where("id", "=", chapter.id).execute()
 

@@ -1,12 +1,20 @@
+import { createAuditLogDrain } from "@taiyomoe/audit"
 import { config } from "@taiyomoe/config"
 import { getDb } from "@taiyomoe/db"
 import { ensureStagingLifecycle, getS3Bucket, getS3Client } from "@taiyomoe/s3"
 import { getMeiliClient, SEARCH_INDEXES } from "@taiyomoe/search"
+import { auditRedactPreset, initLogger } from "evlog"
 import { scheduleChapterMaintenance, startChapterMaintenanceWorker } from "./maintenance"
 import { scheduleSearchMaintenance, startSearchMaintenanceWorker } from "./search-maintenance"
 import { startChapterProcessingWorker } from "./worker"
 
 const deps = { db: getDb(), s3: getS3Client(), s3Bucket: getS3Bucket() }
+
+initLogger({
+  env: { service: "worker" },
+  drain: createAuditLogDrain(deps.db),
+  redact: { ...auditRedactPreset, builtins: false },
+})
 
 await ensureStagingLifecycle(deps.s3, deps.s3Bucket, config.images.stagingExpiryDays).catch(
   (err: unknown) => {
