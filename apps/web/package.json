@@ -20,6 +20,7 @@
     "@marsidev/react-turnstile": "^1.6.1",
     "@stylexjs/stylex": "^0.19.1",
     "@t3-oss/env-core": "^0.13.11",
+    "@taiyomoe/audit": "workspace:^",
     "@taiyomoe/auth": "workspace:^",
     "@taiyomoe/config": "workspace:^",
     "@taiyomoe/ui": "workspace:^",

@@ -39,3 +39,5 @@
 **Audited route**: an API route that passes `audited(action)`. It records the action once the response is known, so failures and denials are logged along with successes. Every POST, PUT, PATCH and DELETE route must be audited; the `taiyo/require-audited-route` lint rule enforces it. Better Auth's routes are recorded by `auditAuthRequest`.
 
 **Actor**: the signed-in user who made the request, or `anonymous` for a signed-out one. An admin impersonating a user is the actor of what they do, with the impersonated user kept in `impersonating`. Worker jobs act as named `system` actors.
+
+**Activity log**: the admin dashboard page over the audit log. It searches with KQL, which `@taiyomoe/audit/query` parses and validates on both sides and the API compiles to SQL. It also has filter pills and Kibana-style date math (`now-24h`, `now/d`). Reading the audit log is itself recorded, so a default `NOT category: audit` pill hides those reads until it is removed.

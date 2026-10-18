@@ -14,7 +14,7 @@ export const createAuditLogDrain = (db: Kysely<DB>): DrainFn =>
       await db
         .insertInto("auditLogs")
         .values({
-          createdAt: new Date(event.timestamp),
+          createdAt: sql<Date>`(${event.timestamp}::timestamptz at time zone 'UTC')`,
           action: audit.action,
           outcome: audit.outcome,
           severity: getAuditSeverity(audit.action),
