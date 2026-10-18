@@ -14,25 +14,25 @@ const meta = preview.meta({
 })
 
 function SingleCalendar() {
-  const [selected, setSelected] = useState<Date | undefined>(new Date())
+  const [selected, setSelected] = useState<Date | undefined>(() => new Date())
 
   return <Calendar mode="single" onSelect={setSelected} selected={selected} />
 }
 
 function MultipleCalendar() {
-  const [selected, setSelected] = useState<Date[] | undefined>([new Date()])
+  const [selected, setSelected] = useState<Date[] | undefined>(() => [new Date()])
 
   return <Calendar mode="multiple" onSelect={setSelected} selected={selected} />
 }
 
 function RangeCalendar() {
-  const today = new Date()
-  const inAWeek = new Date(today)
+  const [selected, setSelected] = useState<DateRange | undefined>(() => {
+    const from = new Date()
+    const to = new Date(from)
 
-  inAWeek.setDate(today.getDate() + 6)
-  const [selected, setSelected] = useState<DateRange | undefined>({
-    from: today,
-    to: inAWeek,
+    to.setDate(from.getDate() + 6)
+
+    return { from, to }
   })
 
   return <Calendar mode="range" onSelect={setSelected} selected={selected} />
