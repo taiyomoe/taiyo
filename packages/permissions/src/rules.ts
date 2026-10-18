@@ -1,6 +1,11 @@
 import { GROUP_PERMISSIONS, type GroupPermission, ROLES, type Role } from "@taiyomoe/db/constants"
-import { createRules } from "permix"
-import type { Actor, ChapterTarget, PermissionsDefinition } from "./definition"
+import { createRules, type Rules } from "permix"
+import type {
+  Actor,
+  ChapterTarget,
+  MediaSuggestionTarget,
+  PermissionsDefinition,
+} from "./definition"
 
 const NO_PERMISSIONS: ReadonlySet<GroupPermission> = new Set()
 const ALL_PERMISSIONS: ReadonlySet<GroupPermission> = new Set(GROUP_PERMISSIONS)
@@ -28,6 +33,9 @@ export const buildRules = (actor: Actor | null) => {
   const isOwner = (groupId: string) => memberships.get(groupId)?.role === "OWNER"
   const managesChapters = is("UPLOADER", "MODERATOR", "ADMIN")
   const reviewsChapters = is("UPLOADER", "ADMIN")
+  const reviewsSuggestions = is("UPLOADER", "MODERATOR", "ADMIN")
+  const isOwnPendingSuggestion = (suggestion: MediaSuggestionTarget) =>
+    suggestion.status === "PENDING" && isSelf(suggestion.authorId)
   const isOwnPending = (chapter: ChapterTarget) =>
     chapter.status === "PENDING" && isSelf(chapter.uploaderId)
   const canManage = (groupId: string, permissions: readonly GroupPermission[]) => {
@@ -48,10 +56,17 @@ export const buildRules = (actor: Actor | null) => {
     media: {
       create: is("UPLOADER_INTERN", "UPLOADER", "ADMIN"),
       update: is("UPLOADER_INTERN", "UPLOADER", "MODERATOR", "ADMIN"),
+      suggest: active !== null,
       delete: is("UPLOADER", "ADMIN"),
       restore: is("ADMIN"),
       flag: is("MODERATOR", "ADMIN"),
       reindex: is("ADMIN"),
+    },
+    mediaSuggestion: {
+      review: reviewsSuggestions,
+      view: (suggestion) => reviewsSuggestions || isSelf(suggestion.authorId),
+      update: isOwnPendingSuggestion,
+      withdraw: isOwnPendingSuggestion,
     },
     staff: {
       create: is("UPLOADER_INTERN", "UPLOADER", "ADMIN"),

@@ -53,9 +53,10 @@ function RouteComponent() {
               <p sx={prose.p}>
                 <strong sx={prose.strong}>Content you submit.</strong> Your library entries and
                 reading progress, the custom lists you create and the titles you add to them, the
-                users you follow, the chapter pages you upload, the groups you belong to and the
-                permissions you hold in them, the invitations you send and receive, and the message
-                and links you provide when you ask to take ownership of a group or to create one.
+                users you follow, the chapter pages you upload, the edits you suggest to a title and
+                the note you attach to them, the groups you belong to and the permissions you hold
+                in them, the invitations you send and receive, and the message and links you provide
+                when you ask to take ownership of a group or to create one.
               </p>
               <p sx={prose.p}>
                 <strong sx={prose.strong}>Technical information.</strong> Your IP address, browser

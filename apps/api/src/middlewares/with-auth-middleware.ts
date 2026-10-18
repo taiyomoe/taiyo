@@ -1,6 +1,7 @@
 import type { Session, User } from "@taiyomoe/auth/server"
 import {
   type Actor,
+  allows,
   createPermissions,
   type Permissions,
   type StaticPermissionPath,
@@ -24,16 +25,14 @@ export const withAuth = (path?: StaticPermissionPath) =>
       return c.fail("UNAUTHORIZED")
     }
 
-    const can = createPermissions(actor)
-
-    if (actor.banned || (path !== undefined && !can(path))) {
+    if (actor.banned || (path !== undefined && !allows(actor, path))) {
       return c.fail("FORBIDDEN")
     }
 
     c.set("user", result.user)
     c.set("session", result.session)
     c.set("actor", actor)
-    c.set("can", can)
+    c.set("can", createPermissions(actor))
 
     return next()
   })

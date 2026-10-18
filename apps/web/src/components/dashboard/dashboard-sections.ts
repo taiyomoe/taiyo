@@ -6,6 +6,7 @@ import {
   CloudUpload,
   Comment,
   Dashboard,
+  FileEdit,
   Flag,
   History,
   Image,
@@ -13,6 +14,7 @@ import {
   Mail,
   ListNumbered,
   Mask,
+  NoteEdit,
   PenTool,
   Settings,
   Shield,
@@ -94,6 +96,18 @@ export const DASHBOARD_SECTIONS: DashboardSection[] = [
   {
     label: m.dashboard_nav_catalog,
     items: [
+      {
+        label: m.dashboard_nav_my_suggestions,
+        icon: NoteEdit,
+        to: "/dashboard/my-suggestions",
+        visible: (can) => can("media.suggest"),
+      },
+      {
+        label: m.dashboard_nav_review_suggestions,
+        icon: FileEdit,
+        to: "/dashboard/suggestions",
+        visible: (can) => can("mediaSuggestion.review"),
+      },
       { label: m.dashboard_nav_media, icon: Library, visible: (can) => can("media.update") },
       {
         label: m.dashboard_nav_chapters,

@@ -3,11 +3,13 @@ import { describe, expect, it } from "vitest"
 import {
   type Actor,
   type ActorMembership,
+  allows,
   type ChapterTarget,
   buildRules,
   createPermissions,
   GROUP_PERMISSIONS,
   type GroupPermission,
+  type MediaSuggestionTarget,
   type MemberTarget,
   ROLES,
   type Role,
@@ -43,6 +45,8 @@ const STATIC_MATRIX: Record<StaticPermissionPath, readonly Role[]> = {
   "dashboard.viewStats": ["MODERATOR", "ADMIN"],
   "media.create": ["UPLOADER_INTERN", "UPLOADER", "ADMIN"],
   "media.update": ["UPLOADER_INTERN", "UPLOADER", "MODERATOR", "ADMIN"],
+  "media.suggest": ROLES,
+  "mediaSuggestion.review": ["UPLOADER", "MODERATOR", "ADMIN"],
   "media.delete": ["UPLOADER", "ADMIN"],
   "media.restore": ["ADMIN"],
   "media.flag": ["MODERATOR", "ADMIN"],
@@ -83,54 +87,66 @@ describe("role matrix", () => {
   })
 
   describe.each(ROLES)("%s", (role) => {
-    const can = createPermissions(actor(role))
-
     for (const path of STATIC_PATHS) {
       const expected = STATIC_MATRIX[path].includes(role)
 
       it(`${expected ? "can" : "cannot"} ${path}`, () => {
-        expect(can(path)).toBe(expected)
+        expect(allows(actor(role), path)).toBe(expected)
       })
     }
   })
 
   it("lets admins do everything that takes no data", () => {
-    const can = createPermissions(actor("ADMIN"))
+    expect(STATIC_PATHS.every((path) => allows(actor("ADMIN"), path))).toBe(true)
+  })
 
-    expect(STATIC_PATHS.every((path) => can(path))).toBe(true)
+  it("agrees with the checker on every path that takes no data", () => {
+    const can = createPermissions(actor("UPLOADER"))
+
+    expect(allows(actor("UPLOADER"), "media.delete")).toBe(can("media.delete"))
+    expect(allows(actor("UPLOADER"), "user.list")).toBe(can("user.list"))
+    expect(allows(actor("USER", [], true), "media.suggest")).toBe(false)
+    expect(allows(null, "dashboard.open")).toBe(false)
   })
 })
 
 describe("signed-out and banned users", () => {
-  const everything = (can: ReturnType<typeof createPermissions>) => [
-    ...STATIC_PATHS.map((path) => can(path)),
-    can("chapter.view", chapter([GROUP_A], ACTOR_ID, "PENDING")),
-    can("chapter.update", chapter([GROUP_A])),
-    can("chapter.withdraw", chapter([GROUP_A], ACTOR_ID, "PENDING")),
-    can("chapter.delete", chapter([GROUP_A])),
-    can("chapter.credit", { chapter: chapter([GROUP_A]), groupId: GROUP_B }),
-    can("chapter.uncredit", { chapter: chapter([GROUP_A]), groupId: GROUP_A }),
-    can("group.update", { id: GROUP_A }),
-    can("group.uploadChapters", { id: GROUP_A }),
-    can("group.manageMembers", { id: GROUP_A }),
-    can("group.transferOwnership", { id: GROUP_A }),
-    can("group.inviteMember", { groupId: GROUP_A, permissions: [] }),
-    can("group.updateMember", { member: target(), permissions: ["EDIT_CHAPTERS"] }),
-    can("group.removeMember", target()),
-    can("group.promoteMember", target()),
-    can("group.demoteMember", target({ role: "OWNER", userId: ACTOR_ID })),
-    can("user.ban", { id: OTHER_ID, role: "USER" }),
-    can("user.setRole", { id: OTHER_ID, role: "USER" }),
-  ]
+  const everything = (subject: Actor | null) => {
+    const can = createPermissions(subject)
+
+    return [
+      ...STATIC_PATHS.map((path) => allows(subject, path)),
+      can("mediaSuggestion.view", { authorId: ACTOR_ID, status: "PENDING" }),
+      can("mediaSuggestion.update", { authorId: ACTOR_ID, status: "PENDING" }),
+      can("mediaSuggestion.withdraw", { authorId: ACTOR_ID, status: "PENDING" }),
+      can("chapter.view", chapter([GROUP_A], ACTOR_ID, "PENDING")),
+      can("chapter.update", chapter([GROUP_A])),
+      can("chapter.withdraw", chapter([GROUP_A], ACTOR_ID, "PENDING")),
+      can("chapter.delete", chapter([GROUP_A])),
+      can("chapter.credit", { chapter: chapter([GROUP_A]), groupId: GROUP_B }),
+      can("chapter.uncredit", { chapter: chapter([GROUP_A]), groupId: GROUP_A }),
+      can("group.update", { id: GROUP_A }),
+      can("group.uploadChapters", { id: GROUP_A }),
+      can("group.manageMembers", { id: GROUP_A }),
+      can("group.transferOwnership", { id: GROUP_A }),
+      can("group.inviteMember", { groupId: GROUP_A, permissions: [] }),
+      can("group.updateMember", { member: target(), permissions: ["EDIT_CHAPTERS"] }),
+      can("group.removeMember", target()),
+      can("group.promoteMember", target()),
+      can("group.demoteMember", target({ role: "OWNER", userId: ACTOR_ID })),
+      can("user.ban", { id: OTHER_ID, role: "USER" }),
+      can("user.setRole", { id: OTHER_ID, role: "USER" }),
+    ]
+  }
 
   it("denies everything when signed out", () => {
-    expect(everything(createPermissions(null)).some(Boolean)).toBe(false)
+    expect(everything(null).some(Boolean)).toBe(false)
   })
 
   it("denies everything to a banned admin who owns the group", () => {
-    const can = createPermissions(actor("ADMIN", [owner(GROUP_A), owner(GROUP_B)], true))
-
-    expect(everything(can).some(Boolean)).toBe(false)
+    expect(everything(actor("ADMIN", [owner(GROUP_A), owner(GROUP_B)], true)).some(Boolean)).toBe(
+      false,
+    )
   })
 
   it("denies every permission tree query when signed out", () => {
@@ -578,6 +594,41 @@ describe("users", () => {
   it("does not let users ban anyone", () => {
     for (const role of ["USER", "UPLOADER_INTERN", "UPLOADER"] as const) {
       expect(createPermissions(actor(role))("user.ban", { id: OTHER_ID, role: "USER" })).toBe(false)
+    }
+  })
+})
+
+describe("media suggestions", () => {
+  const suggestion = (
+    authorId = OTHER_ID,
+    status: MediaSuggestionTarget["status"] = "PENDING",
+  ): MediaSuggestionTarget => ({ authorId, status })
+
+  it("shows a suggestion to its author and to reviewers only", () => {
+    expect(createPermissions(null)("mediaSuggestion.view", suggestion())).toBe(false)
+    expect(createPermissions(actor("USER"))("mediaSuggestion.view", suggestion())).toBe(false)
+    expect(createPermissions(actor("UPLOADER_INTERN"))("mediaSuggestion.view", suggestion())).toBe(
+      false,
+    )
+    expect(createPermissions(actor("USER"))("mediaSuggestion.view", suggestion(ACTOR_ID))).toBe(
+      true,
+    )
+
+    for (const role of ["UPLOADER", "MODERATOR", "ADMIN"] as const) {
+      expect(createPermissions(actor(role))("mediaSuggestion.view", suggestion())).toBe(true)
+    }
+  })
+
+  it("lets only the author edit or withdraw, and only while pending", () => {
+    for (const action of ["mediaSuggestion.update", "mediaSuggestion.withdraw"] as const) {
+      expect(createPermissions(actor("USER"))(action, suggestion(ACTOR_ID))).toBe(true)
+      expect(createPermissions(actor("USER"))(action, suggestion(ACTOR_ID, "ACCEPTED"))).toBe(false)
+      expect(createPermissions(actor("USER"))(action, suggestion(ACTOR_ID, "REJECTED"))).toBe(false)
+      expect(createPermissions(actor("USER"))(action, suggestion(ACTOR_ID, "WITHDRAWN"))).toBe(
+        false,
+      )
+      expect(createPermissions(actor("ADMIN"))(action, suggestion())).toBe(false)
+      expect(createPermissions(actor("USER", [], true))(action, suggestion(ACTOR_ID))).toBe(false)
     }
   })
 })

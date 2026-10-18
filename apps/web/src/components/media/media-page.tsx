@@ -21,6 +21,7 @@ import {
 import { ReadingActions } from "@/components/media/media-sidebar"
 import { sceneFont } from "@/components/scene/scene.stylex"
 import { AppShell } from "@/components/shell/app-shell"
+import { getPermissions } from "@/lib/permissions"
 import { mediaChapterFacetsQueryOptions } from "@/lib/queries/chapters"
 import { type Media, mediaQueryOptions } from "@/lib/queries/medias"
 import { useSettings } from "@/lib/settings"
@@ -225,13 +226,25 @@ export function MediaPage({ mediaId, user }: MediaPageProps) {
   return (
     <AppShell user={user}>
       <Suspense fallback={<MediaPageSkeleton />}>
-        <MediaPageContent mediaId={mediaId} signedIn={user !== null} />
+        <MediaPageContent
+          canEdit={user !== null && getPermissions(user)("media.update")}
+          mediaId={mediaId}
+          signedIn={user !== null}
+        />
       </Suspense>
     </AppShell>
   )
 }
 
-function MediaPageContent({ mediaId, signedIn }: { mediaId: string; signedIn: boolean }) {
+function MediaPageContent({
+  mediaId,
+  signedIn,
+  canEdit,
+}: {
+  mediaId: string
+  signedIn: boolean
+  canEdit: boolean
+}) {
   const { data: media } = useSuspenseQuery(mediaQueryOptions(mediaId))
   const contentRatings = useDeferredValue(useSettings().contentRatings)
   const backdrop =
@@ -258,7 +271,7 @@ function MediaPageContent({ mediaId, signedIn }: { mediaId: string; signedIn: bo
             />
           </div>
           <div sx={styles.actionsSlot}>
-            <ReadingActions mediaId={mediaId} signedIn={signedIn} />
+            <ReadingActions canEdit={canEdit} mediaId={mediaId} signedIn={signedIn} />
           </div>
         </aside>
         <div sx={styles.main}>

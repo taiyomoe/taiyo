@@ -26,6 +26,28 @@ export const CHAPTER_STATUSES = ["PENDING", "PUBLISHED", "REJECTED"] as const
 
 export type ChapterStatus = (typeof CHAPTER_STATUSES)[number]
 
+export const MEDIA_SUGGESTION_STATUSES = ["PENDING", "ACCEPTED", "REJECTED", "WITHDRAWN"] as const
+
+export type MediaSuggestionStatus = (typeof MEDIA_SUGGESTION_STATUSES)[number]
+
+export const MEDIA_EDIT_FIELDS = [
+  "titles",
+  "synopsis",
+  "type",
+  "status",
+  "source",
+  "demography",
+  "countryOfOrigin",
+  "contentRating",
+  "startDate",
+  "endDate",
+  "tags",
+  "links",
+  "staffs",
+] as const
+
+export type MediaEditField = (typeof MEDIA_EDIT_FIELDS)[number]
+
 export const GROUP_MEMBERSHIP_ROLES = ["OWNER", "MEMBER"] as const
 
 export type GroupMembershipRole = (typeof GROUP_MEMBERSHIP_ROLES)[number]

@@ -137,6 +137,33 @@ const groupErrors = {
     code: 409,
   },
 } as const
+const mediaSuggestionErrors = {
+  MEDIA_SUGGESTION_NOT_FOUND: {
+    message: "The requested media suggestion was not found.",
+    code: 404,
+  },
+  MEDIA_SUGGESTION_EXISTS: {
+    message: "You already have a pending suggestion for this media. Edit it instead.",
+    code: 409,
+  },
+  MEDIA_SUGGESTION_NOT_PENDING: {
+    message: "This suggestion was already reviewed or withdrawn.",
+    code: 409,
+  },
+  MEDIA_SUGGESTION_LIMIT: {
+    message:
+      "You have too many suggestions waiting for review. Wait for them to be reviewed before sending more.",
+    code: 409,
+  },
+  MEDIA_SUGGESTION_EMPTY: {
+    message: "The suggestion does not change anything.",
+    code: 422,
+  },
+  MEDIA_SUGGESTION_UNKNOWN_FIELDS: {
+    message: "Only fields changed by the suggestion can be accepted.",
+    code: 422,
+  },
+} as const
 const mediaStaffErrors = {
   MEDIA_STAFF_EXISTS: {
     message: "This staff is already linked to the media with that role.",
@@ -280,6 +307,7 @@ export const errors = {
   ...staffErrors,
   ...chapterErrors,
   ...groupErrors,
+  ...mediaSuggestionErrors,
   ...mediaStaffErrors,
   ...chapterGroupErrors,
   ...ownershipErrors,

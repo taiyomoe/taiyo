@@ -14,6 +14,7 @@ type Route = {
 
 const id = randomUUID()
 const MEDIA_EDITORS = ["UPLOADER_INTERN", "UPLOADER", "MODERATOR", "ADMIN"] as const
+const SUGGESTION_REVIEWERS = ["UPLOADER", "MODERATOR", "ADMIN"] as const
 const ROUTES: Route[] = [
   {
     method: "POST",
@@ -62,6 +63,21 @@ const ROUTES: Route[] = [
   { method: "POST", path: `/chapters/${id}/approve`, body: "json", allowed: ["UPLOADER", "ADMIN"] },
   { method: "POST", path: `/chapters/${id}/reject`, body: "json", allowed: ["UPLOADER", "ADMIN"] },
   { method: "GET", path: "/dashboard/overview?range=forever", allowed: ["MODERATOR", "ADMIN"] },
+  { method: "GET", path: `/medias/${id}/edit`, allowed: ROLES },
+  { method: "POST", path: `/medias/${id}/suggestions`, body: "json", allowed: ROLES },
+  { method: "GET", path: "/media-suggestions?page=0", allowed: SUGGESTION_REVIEWERS },
+  {
+    method: "POST",
+    path: `/media-suggestions/${id}/accept`,
+    body: "json",
+    allowed: SUGGESTION_REVIEWERS,
+  },
+  {
+    method: "POST",
+    path: `/media-suggestions/${id}/reject`,
+    body: "json",
+    allowed: SUGGESTION_REVIEWERS,
+  },
 ]
 const send = (app: Parameters<typeof api>[0], route: Route, headers?: Record<string, string>) =>
   api(app, route.path, {
