@@ -41,6 +41,7 @@ export const listMyFeedHandler = new Hono().get(
         .innerJoin("medias", "medias.id", "chapters.mediaId")
         .where("userLibraryEntries.userId", "=", user.id)
         .where("chapters.deletedAt", "is", null)
+        .where("chapters.status", "=", "PUBLISHED")
         .where("medias.deletedAt", "is", null)
         .select((eb) => [
           "chapters.id",
@@ -71,6 +72,7 @@ export const listMyFeedHandler = new Hono().get(
         .innerJoin("medias", "medias.id", "chapters.mediaId")
         .where("userLibraryEntries.userId", "=", user.id)
         .where("chapters.deletedAt", "is", null)
+        .where("chapters.status", "=", "PUBLISHED")
         .where("medias.deletedAt", "is", null)
         .select(db.fn.countAll().as("count"))
         .executeTakeFirstOrThrow(),

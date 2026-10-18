@@ -220,6 +220,7 @@ const countPerRange = (db: Kysely<DB>, frame: DashboardFrame) =>
         eb
           .selectFrom("chapters")
           .where("chapters.deletedAt", "is", null)
+          .where("chapters.status", "=", "PUBLISHED")
           .where("chapters.createdAt", ">=", from)
           .where("chapters.createdAt", "<", to)
           .select((cb) => cb.fn.countAll<string>().as("count"))
@@ -365,6 +366,7 @@ const getTopUploaders = async (db: Kysely<DB>, frame: DashboardFrame) => {
       db
         .selectFrom("chapters")
         .where("chapters.deletedAt", "is", null)
+        .where("chapters.status", "=", "PUBLISHED")
         .where((eb) => frame.inEither(eb.ref("chapters.createdAt")))
         .select((eb) => [
           "chapters.uploaderId",
@@ -476,6 +478,7 @@ export const getRecentActivity = async (db: Kysely<DB>) => {
   const events = db
     .selectFrom("chapters")
     .where("chapters.deletedAt", "is", null)
+    .where("chapters.status", "=", "PUBLISHED")
     .where("chapters.createdAt", ">=", sql<Date>`${since.chapters}::timestamp`)
     .select([
       sql.lit<DashboardActivityKind>("CHAPTERS_UPLOADED").as("kind"),

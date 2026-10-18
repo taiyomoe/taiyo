@@ -232,6 +232,9 @@ importers:
       '@taiyomoe/config':
         specifier: workspace:^
         version: link:../../packages/config
+      '@taiyomoe/db':
+        specifier: workspace:^
+        version: link:../../packages/db
       '@taiyomoe/permissions':
         specifier: workspace:^
         version: link:../../packages/permissions

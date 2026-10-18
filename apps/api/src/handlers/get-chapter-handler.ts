@@ -1,9 +1,11 @@
-import { CONTENT_RATINGS, FLAGS, LANGUAGES } from "@taiyomoe/db"
+import { CHAPTER_STATUSES, CONTENT_RATINGS, FLAGS, LANGUAGES } from "@taiyomoe/db"
 import { getChapterPageUrl } from "@taiyomoe/s3"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { authorizeChapterView } from "../middlewares/authorize-chapter-view-middleware"
 import { checkChapter } from "../middlewares/check-chapter-middleware"
+import { withOptionalAuth } from "../middlewares/with-auth-middleware"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
@@ -16,6 +18,9 @@ const chapterDetailSchema = z.object({
   language: z.enum(LANGUAGES).meta({ description: "Language of the chapter." }),
   contentRating: z.enum(CONTENT_RATINGS).meta({ description: "Content rating." }),
   flag: z.enum(FLAGS).meta({ description: "Visibility flag." }),
+  status: z
+    .enum(CHAPTER_STATUSES)
+    .meta({ description: "PUBLISHED, or PENDING / REJECTED for chapters in review." }),
   pages: z
     .object({
       id: z.uuid().meta({
@@ -55,7 +60,9 @@ export const getChapterHandler = new Hono().get(
       }),
     },
   }),
-  checkChapter(),
+  withOptionalAuth,
+  checkChapter({ unpublished: true }),
+  authorizeChapterView,
   (c) => {
     const { chapter } = c.var
 
@@ -68,6 +75,7 @@ export const getChapterHandler = new Hono().get(
       language: chapter.language,
       contentRating: chapter.contentRating,
       flag: chapter.flag,
+      status: chapter.status,
       pages:
         chapter.pages?.map((page) => ({
           id: page.id,

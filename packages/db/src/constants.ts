@@ -22,6 +22,10 @@ export const STAFF_ROLES = ["AUTHOR", "ARTIST"] as const
 
 export type StaffRole = (typeof STAFF_ROLES)[number]
 
+export const CHAPTER_STATUSES = ["PENDING", "PUBLISHED", "REJECTED"] as const
+
+export type ChapterStatus = (typeof CHAPTER_STATUSES)[number]
+
 export const GROUP_MEMBERSHIP_ROLES = ["OWNER", "MEMBER"] as const
 
 export type GroupMembershipRole = (typeof GROUP_MEMBERSHIP_ROLES)[number]

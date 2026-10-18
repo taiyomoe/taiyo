@@ -1,6 +1,6 @@
 import { GROUP_PERMISSIONS, type GroupPermission, ROLES, type Role } from "@taiyomoe/db/constants"
-import { createRules } from "permix"
-import type { Actor, PermissionsDefinition } from "./definition"
+import { createRules, type Rules } from "permix"
+import type { Actor, ChapterTarget, PermissionsDefinition } from "./definition"
 
 const NO_PERMISSIONS: ReadonlySet<GroupPermission> = new Set()
 const ALL_PERMISSIONS: ReadonlySet<GroupPermission> = new Set(GROUP_PERMISSIONS)
@@ -27,6 +27,9 @@ export const buildRules = (actor: Actor | null) => {
     groupIds.some((groupId) => holds(groupId, permission))
   const isOwner = (groupId: string) => memberships.get(groupId)?.role === "OWNER"
   const managesChapters = is("UPLOADER", "MODERATOR", "ADMIN")
+  const reviewsChapters = is("UPLOADER", "ADMIN")
+  const isOwnPending = (chapter: ChapterTarget) =>
+    chapter.status === "PENDING" && isSelf(chapter.uploaderId)
   const canManage = (groupId: string, permissions: readonly GroupPermission[]) => {
     if (!holds(groupId, "MANAGE_MEMBERS") || permissions.includes("MANAGE_MEMBERS")) {
       return false
@@ -57,12 +60,29 @@ export const buildRules = (actor: Actor | null) => {
     },
     chapter: {
       publish: is("UPLOADER", "ADMIN"),
+      submit: active !== null,
+      review: reviewsChapters,
       flag: managesChapters,
-      update: (chapter) => managesChapters || holdsInAny(chapter.groupIds, "EDIT_CHAPTERS"),
-      delete: (chapter) => managesChapters || holdsInAny(chapter.groupIds, "DELETE_CHAPTERS"),
-      credit: ({ chapter }) => managesChapters || holdsInAny(chapter.groupIds, "EDIT_CHAPTERS"),
+      view: (chapter) =>
+        chapter.status === "PUBLISHED" || reviewsChapters || isSelf(chapter.uploaderId),
+      update: (chapter) =>
+        chapter.status === "PUBLISHED"
+          ? managesChapters || holdsInAny(chapter.groupIds, "EDIT_CHAPTERS")
+          : reviewsChapters || isOwnPending(chapter),
+      withdraw: (chapter) => isOwnPending(chapter),
+      delete: (chapter) =>
+        chapter.status === "PUBLISHED"
+          ? managesChapters || holdsInAny(chapter.groupIds, "DELETE_CHAPTERS")
+          : reviewsChapters,
+      credit: ({ chapter }) =>
+        chapter.status === "PUBLISHED"
+          ? managesChapters || holdsInAny(chapter.groupIds, "EDIT_CHAPTERS")
+          : reviewsChapters || isOwnPending(chapter),
       uncredit: ({ chapter, groupId }) =>
-        managesChapters || (chapter.groupIds.includes(groupId) && holds(groupId, "EDIT_CHAPTERS")),
+        chapter.status === "PUBLISHED"
+          ? managesChapters ||
+            (chapter.groupIds.includes(groupId) && holds(groupId, "EDIT_CHAPTERS"))
+          : reviewsChapters || isOwnPending(chapter),
     },
     group: {
       create: is("UPLOADER", "ADMIN"),

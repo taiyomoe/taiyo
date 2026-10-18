@@ -1,5 +1,5 @@
 import { config } from "@taiyomoe/config"
-import { CONTENT_RATINGS, FLAGS, type NewChapter } from "@taiyomoe/db"
+import { CHAPTER_STATUSES, CONTENT_RATINGS, FLAGS, type NewChapter } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
@@ -43,8 +43,7 @@ export const createChapterHandler = new Hono().post(
   "/:id/chapters",
   describeRoute({
     summary: "Create a chapter",
-    description:
-      "Creates a chapter under a media and credits the given groups. Pages must be uploaded through a dedicated route later. Uploaders and admins can credit any groups or none. Anyone else must credit at least one group where they hold `UPLOAD_CHAPTERS`, and may credit other groups alongside it. Setting `flag` requires the uploader, moderator or admin role.\n\n**Authentication:** uploader, admin — or a member with `UPLOAD_CHAPTERS` in one of the credited groups.",
+    description: `Creates a chapter under a media and credits the given groups. Pages must be uploaded through a dedicated route later. The chapter goes live right away when the uploader is an uploader or an admin, or when it credits a group where the uploader holds \`UPLOAD_CHAPTERS\`. Otherwise it waits for review, hidden from everyone but its uploader and the reviewers; a user can have at most ${config.input.maxPendingChapters} chapters waiting. Setting \`flag\` requires the uploader, moderator or admin role.\n\n**Authentication:** any signed-in user.`,
     tags: ["Chapters"],
     requestBody: {
       content: { "application/json": await resolver(createChapterSchema).toOpenAPISchema() },
@@ -58,6 +57,9 @@ export const createChapterHandler = new Hono().post(
               apiSuccessEnvelope(
                 z.object({
                   id: z.uuid().meta({ description: "The ID of the newly created chapter." }),
+                  status: z.enum(CHAPTER_STATUSES).meta({
+                    description: "PUBLISHED when it went live, PENDING when it waits for review.",
+                  }),
                 }),
               ),
             ),
@@ -79,11 +81,11 @@ export const createChapterHandler = new Hono().post(
     const body = c.var.json
     const groupIds = [...new Set(body.groupIds)]
     const id = crypto.randomUUID()
+    const publishes =
+      can("chapter.publish") ||
+      groupIds.some((groupId) => can("group.uploadChapters", { id: groupId }))
 
-    if (
-      !can("chapter.publish") &&
-      !groupIds.some((groupId) => can("group.uploadChapters", { id: groupId }))
-    ) {
+    if (!publishes && !can("chapter.submit")) {
       return c.fail("FORBIDDEN")
     }
 
@@ -105,6 +107,22 @@ export const createChapterHandler = new Hono().post(
       return c.fail("GROUP_NOT_FOUND")
     }
 
+    if (!publishes) {
+      await db.selectFrom("users").select("id").where("id", "=", user.id).forUpdate().execute()
+
+      const pending = await db
+        .selectFrom("chapters")
+        .select(db.fn.countAll<string>().as("count"))
+        .where("uploaderId", "=", user.id)
+        .where("status", "=", "PENDING")
+        .where("deletedAt", "is", null)
+        .executeTakeFirstOrThrow()
+
+      if (Number(pending.count) >= config.input.maxPendingChapters) {
+        return c.fail("CHAPTER_SUBMISSION_LIMIT")
+      }
+    }
+
     log.set({ chapter: { id } })
 
     const values: NewChapter = {
@@ -115,6 +133,7 @@ export const createChapterHandler = new Hono().post(
       number: body.number,
       volume: body.volume ?? null,
       language: body.language,
+      status: publishes ? "PUBLISHED" : "PENDING",
     }
 
     if (body.contentRating !== undefined) {
@@ -134,6 +153,6 @@ export const createChapterHandler = new Hono().post(
         .execute()
     }
 
-    return c.ok({ id })
+    return c.ok({ id, status: values.status ?? "PUBLISHED" })
   },
 )

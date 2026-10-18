@@ -54,7 +54,7 @@ export const getChapterUploadStatusHandler = new Hono().get(
   }),
   withAuth(),
   validateQuery(getChapterUploadStatusQuerySchema),
-  checkChapter(),
+  checkChapter({ unpublished: true }),
   authorizeChapter("update"),
   async (c) => {
     const { db, chapter } = c.var

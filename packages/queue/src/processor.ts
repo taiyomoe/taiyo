@@ -74,11 +74,27 @@ export const processChapterUpload = async (
       )
     }
 
-    await db
+    const attached = await db
       .updateTable("chapters")
       .set({ pages: manifest.pages.map(({ pageId }) => ({ id: pageId })) })
       .where("id", "=", manifest.chapterId)
-      .execute()
+      .where("deletedAt", "is", null)
+      .where("status", "!=", "REJECTED")
+      .returning("id")
+      .executeTakeFirst()
+
+    if (attached === undefined) {
+      await s3.send(
+        new DeleteObjectsCommand({
+          Bucket: s3Bucket,
+          Delete: {
+            Objects: manifest.pages.map(({ pageId }) => ({
+              Key: getChapterPageKey(manifest.mediaId, manifest.chapterId, pageId),
+            })),
+          },
+        }),
+      )
+    }
 
     await db
       .updateTable("tasks")
