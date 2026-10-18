@@ -423,8 +423,8 @@ importers:
   packages/db:
     dependencies:
       '@better-auth/utils':
-        specifier: ^0.4.2
-        version: 0.4.2
+        specifier: ^0.5.0
+        version: 0.5.0
       '@faker-js/faker':
         specifier: ^10.6.0
         version: 10.6.0
