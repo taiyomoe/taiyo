@@ -130,7 +130,7 @@ hook `hc` reads request types from — it is the same mechanism
 The three are not typed the same way, on purpose:
 
 - **JSON** declares `{ in: { json: z.input<TSchema> }; out: { json:
-z.output<TSchema> } }`. Hono types `ValidationTargets.json` as `any`, so a
+  z.output<TSchema> } }`. Hono types `ValidationTargets.json` as `any`, so a
   Zod input type can be declared there without fighting a constraint. JSON
   bodies are therefore fully typed on the client.
 - **Query** declares `in` as `Record<string, string | string[]>` and **param**

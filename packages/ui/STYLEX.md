@@ -197,7 +197,7 @@ same as looking the same:
   `when` key under `default`) fails `valid-styles` with "Keys must be strings".
   When a `when`-driven property also needs a breakpoint, hoist the breakpoint
   into a CSS custom property on the ancestor (`"--thumb-size": { default: …,
-[consts.sm]: … }`) and have the descendant read `var(--thumb-size)`.
+  [consts.sm]: … }`) and have the descendant read `var(--thumb-size)`.
   `consts.*` keys are exempt and work at any depth.
 - **`stylex.createTheme()` is all-or-nothing, even with a partial override.**
   The types accept `createTheme(colors, { ring: gold })`, but the class it
@@ -243,7 +243,7 @@ same as looking the same:
   one sets.
 - **The cascade is three declared layers, identical in both apps.** Each app's
   `stylex.vite()` names them with `useCSSLayers: { before: ["base",
-"structural"] }`, which emits `@layer base, structural, priority1, …`:
+  "structural"] }`, which emits `@layer base, structural, priority1, …`:
   - `base` — `reset.css` and the document defaults in `globals.css`. It has to
     lose to everything: an unlayered `* { margin: 0; padding: 0 }` would
     outrank every padding a component declares and the system would render as
