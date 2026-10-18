@@ -6,7 +6,7 @@ const paramSchema = z.object({
   id: z.uuid(),
 })
 
-export const checkUser = () =>
+export const checkUser = (opts: { includeBanned?: boolean } = {}) =>
   createMiddleware<{
     Variables: { targetUser: Selectable<User> }
   }>(async (c, next) => {
@@ -21,12 +21,12 @@ export const checkUser = () =>
 
     log.set({ targetUser: { id } })
 
-    const targetUser = await db
-      .selectFrom("users")
-      .selectAll()
-      .where("id", "=", id)
-      .where((eb) => eb.or([eb("banned", "is", null), eb("banned", "=", false)]))
-      .executeTakeFirst()
+    const base = db.selectFrom("users").selectAll().where("id", "=", id)
+    const targetUser = await (
+      opts.includeBanned === true
+        ? base
+        : base.where((eb) => eb.or([eb("banned", "is", null), eb("banned", "=", false)]))
+    ).executeTakeFirst()
 
     if (!targetUser) {
       return c.fail("USER_NOT_FOUND")

@@ -17,7 +17,6 @@ import {
   NoteEdit,
   PenTool,
   Settings,
-  Shield,
   Tag,
   Upload,
   User,
@@ -134,7 +133,12 @@ export const DASHBOARD_SECTIONS: DashboardSection[] = [
   {
     label: m.dashboard_nav_community,
     items: [
-      { label: m.dashboard_nav_users, icon: User, visible: (can) => can("user.list") },
+      {
+        label: m.dashboard_nav_users,
+        icon: User,
+        to: "/dashboard/users",
+        visible: (can) => can("user.list"),
+      },
       { label: m.dashboard_nav_comments, icon: Comment, visible: (can) => can("comment.delete") },
       { label: m.dashboard_nav_reports, icon: Flag, visible: (can) => can("comment.delete") },
     ],
@@ -142,11 +146,6 @@ export const DASHBOARD_SECTIONS: DashboardSection[] = [
   {
     label: m.dashboard_nav_system,
     items: [
-      {
-        label: m.dashboard_nav_roles,
-        icon: Shield,
-        visible: (can) => can("user.setRole", ANOTHER_USER),
-      },
       {
         label: m.dashboard_nav_settings,
         icon: Settings,
