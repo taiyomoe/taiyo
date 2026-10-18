@@ -139,18 +139,18 @@ The app reads `apps/api` through **Hono RPC**, not `fetch` and not an
 OpenAPI-generated client.
 
 - **The client** is `src/lib/api.ts`: `hc<AppType>(env.VITE_API_URL, { init: {
-credentials: "include" } })`, where `AppType` comes from
+  credentials: "include" } })`, where `AppType` comes from
   `@taiyomoe/api/app`. `@taiyomoe/api` is a **devDependency** and must only ever
   be reached with `import type` — importing it as a value would pull a module
   containing a live `serve()` call into the client graph.
 - **Every response is an envelope.** Success is `{ success: true, data, timestamp,
-requestId }` plus `meta` on paginated routes; failure is `{ success: false,
-code, message, … }`. `unwrap(res)` in the same file narrows that union, returns
+  requestId }` plus `meta` on paginated routes; failure is `{ success: false,
+  code, message, … }`. `unwrap(res)` in the same file narrows that union, returns
   `data`, and throws an `ApiError` carrying the API's own `code` and HTTP
   `status` otherwise. Route loaders and query functions call `unwrap`; they do
   not narrow by hand.
 - **`apps/api`'s `ok`/`fail` must keep returning `Response &
-TypedResponse<…>`, and the validators must keep declaring their `Input`
+  TypedResponse<…>`, and the validators must keep declaring their `Input`
   generic.** If either is simplified away, this whole client silently degrades to
   `any` and no test in the repo fails. The full rationale is in
   `docs/engineering-notes.md`.
