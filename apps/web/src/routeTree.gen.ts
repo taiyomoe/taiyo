@@ -20,6 +20,7 @@ import { Route as TitlesRouteImport } from './routes/titles'
 import { Route as AuthSignInRouteImport } from './routes/auth/sign-in'
 import { Route as AuthSignUpRouteImport } from './routes/auth/sign-up'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
+import { Route as DashboardActivityLogRouteImport } from './routes/dashboard/activity-log'
 import { Route as MediaMediaIdRouteImport } from './routes/media/$mediaId'
 
 const IndexRoute = IndexRouteImport.update({
@@ -77,6 +78,11 @@ const DashboardIndexRoute = DashboardIndexRouteImport.update({
   path: '/',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
+const DashboardActivityLogRoute = DashboardActivityLogRouteImport.update({
+  id: '/activity-log',
+  path: '/activity-log',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
 const MediaMediaIdRoute = MediaMediaIdRouteImport.update({
   id: '/media/$mediaId',
   path: '/media/$mediaId',
@@ -94,6 +100,7 @@ export interface FileRoutesByFullPath {
   '/titles': typeof TitlesRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
+  '/dashboard/activity-log': typeof DashboardActivityLogRoute
   '/media/$mediaId': typeof MediaMediaIdRoute
   '/dashboard/': typeof DashboardIndexRoute
 }
@@ -107,6 +114,7 @@ export interface FileRoutesByTo {
   '/titles': typeof TitlesRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
+  '/dashboard/activity-log': typeof DashboardActivityLogRoute
   '/media/$mediaId': typeof MediaMediaIdRoute
   '/dashboard': typeof DashboardIndexRoute
 }
@@ -122,6 +130,7 @@ export interface FileRoutesById {
   '/titles': typeof TitlesRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
+  '/dashboard/activity-log': typeof DashboardActivityLogRoute
   '/media/$mediaId': typeof MediaMediaIdRoute
   '/dashboard/': typeof DashboardIndexRoute
 }
@@ -138,6 +147,7 @@ export interface FileRouteTypes {
     | '/titles'
     | '/auth/sign-in'
     | '/auth/sign-up'
+    | '/dashboard/activity-log'
     | '/media/$mediaId'
     | '/dashboard/'
   fileRoutesByTo: FileRoutesByTo
@@ -151,6 +161,7 @@ export interface FileRouteTypes {
     | '/titles'
     | '/auth/sign-in'
     | '/auth/sign-up'
+    | '/dashboard/activity-log'
     | '/media/$mediaId'
     | '/dashboard'
   id:
@@ -165,6 +176,7 @@ export interface FileRouteTypes {
     | '/titles'
     | '/auth/sign-in'
     | '/auth/sign-up'
+    | '/dashboard/activity-log'
     | '/media/$mediaId'
     | '/dashboard/'
   fileRoutesById: FileRoutesById
@@ -260,6 +272,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardIndexRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
+    '/dashboard/activity-log': {
+      id: '/dashboard/activity-log'
+      path: '/activity-log'
+      fullPath: '/dashboard/activity-log'
+      preLoaderRoute: typeof DashboardActivityLogRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
     '/media/$mediaId': {
       id: '/media/$mediaId'
       path: '/media/$mediaId'
@@ -285,10 +304,12 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
 )
 
 interface DashboardRouteRouteChildren {
+  DashboardActivityLogRoute: typeof DashboardActivityLogRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
 }
 
 const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
+  DashboardActivityLogRoute: DashboardActivityLogRoute,
   DashboardIndexRoute: DashboardIndexRoute,
 }
 

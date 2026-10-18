@@ -1,6 +1,8 @@
+import { libraryAudit } from "@taiyomoe/audit"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
 import { validateParam } from "../middlewares/validate-param-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
@@ -31,6 +33,7 @@ export const removeLibraryEntryHandler = new Hono().delete(
       }),
     },
   }),
+  audited(libraryAudit.ENTRY_REMOVE, (c) => ({ id: c.req.param("mediaId") })),
   withAuth("delete", "Library"),
   validateParam(paramSchema),
   withTransaction,

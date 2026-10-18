@@ -1,9 +1,11 @@
 import type { NewCover } from "@taiyomoe/db"
+import { coverAudit } from "@taiyomoe/audit"
 import { config } from "@taiyomoe/config"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
 import { putImage } from "../image-store"
+import { audited } from "../middlewares/audited-middleware"
 import { checkImages } from "../middlewares/check-images-middleware"
 import { checkMedia } from "../middlewares/check-media-middleware"
 import { rateLimit } from "../middlewares/rate-limit-middleware"
@@ -90,6 +92,7 @@ export const createCoversHandler = new Hono().post(
       }),
     },
   }),
+  audited(coverAudit.CREATE),
   withAuth("update", "Media"),
   rateLimit({ prefix: "create-covers", windowMs: 60_000, limit: 10 }),
   validateFormData(createCoversSchema),
@@ -131,6 +134,8 @@ export const createCoversHandler = new Hono().post(
     }
 
     await db.insertInto("covers").values(coverRows).execute()
+
+    c.var.audit.set({ target: { coverIds: coverRows.map((row) => row.id) } })
 
     return c.ok({ ids: coverRows.map((row) => row.id) })
   },

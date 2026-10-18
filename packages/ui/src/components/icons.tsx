@@ -57,6 +57,13 @@ import {
   Upload04Icon,
   UserAdd01Icon,
   UserCheck01Icon,
+  ArrowUpDownIcon,
+  Calendar03Icon,
+  Copy01Icon,
+  RefreshIcon,
+  Robot01Icon,
+  SearchAddIcon,
+  SearchMinusIcon,
 } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react"
 import * as stylex from "@stylexjs/stylex"
@@ -247,3 +254,17 @@ export const CaretUp: (props: React.ComponentProps<"svg"> & { sx?: Sx }) => Reac
 
 export const CaretDown: (props: React.ComponentProps<"svg"> & { sx?: Sx }) => React.ReactElement =
   caret("M12 18.5 3 5.5h18z")
+
+export const Calendar: (props: IconProps) => React.ReactElement = icon(Calendar03Icon)
+
+export const Refresh: (props: IconProps) => React.ReactElement = icon(RefreshIcon)
+
+export const Copy: (props: IconProps) => React.ReactElement = icon(Copy01Icon)
+
+export const FilterIn: (props: IconProps) => React.ReactElement = icon(SearchAddIcon)
+
+export const FilterOut: (props: IconProps) => React.ReactElement = icon(SearchMinusIcon)
+
+export const ArrowUpDown: (props: IconProps) => React.ReactElement = icon(ArrowUpDownIcon)
+
+export const Robot: (props: IconProps) => React.ReactElement = icon(Robot01Icon)

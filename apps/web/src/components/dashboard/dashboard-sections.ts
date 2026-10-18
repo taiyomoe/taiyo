@@ -17,13 +17,15 @@ import {
   Users,
 } from "@taiyomoe/ui/components/icons"
 import type { AppSidebarSection } from "@/components/shell/app-sidebar"
+import type { Session } from "@/lib/queries/session"
+import { canReadActivityLog } from "@/lib/activity-log"
 import { m } from "@/paraglide/messages"
 
-export const DASHBOARD_SECTIONS: AppSidebarSection[] = [
+const DASHBOARD_SECTIONS: AppSidebarSection[] = [
   {
     items: [
       { label: m.dashboard_nav_overview, icon: Dashboard, to: "/dashboard" },
-      { label: m.dashboard_nav_activity_log, icon: History },
+      { label: m.dashboard_nav_activity_log, icon: History, to: "/dashboard/activity-log" },
     ],
   },
   {
@@ -61,3 +63,11 @@ export const DASHBOARD_SECTIONS: AppSidebarSection[] = [
     ],
   },
 ]
+
+export const getDashboardSections = (user: Session["user"]): AppSidebarSection[] =>
+  canReadActivityLog(user)
+    ? DASHBOARD_SECTIONS
+    : DASHBOARD_SECTIONS.map((section) => ({
+        ...section,
+        items: section.items.filter((item) => item.to !== "/dashboard/activity-log"),
+      }))

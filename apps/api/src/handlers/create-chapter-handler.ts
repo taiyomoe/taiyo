@@ -1,8 +1,10 @@
+import { chapterAudit } from "@taiyomoe/audit"
 import { config } from "@taiyomoe/config"
 import { CONTENT_RATINGS, FLAGS, type NewChapter } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
 import { checkMedia } from "../middlewares/check-media-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
@@ -65,6 +67,7 @@ export const createChapterHandler = new Hono().post(
       }),
     },
   }),
+  audited(chapterAudit.CREATE, (c) => ({ mediaId: c.req.param("id") })),
   withAuth("create", "Chapter"),
   validateJson(createChapterSchema),
   checkMedia(),
@@ -95,6 +98,8 @@ export const createChapterHandler = new Hono().post(
     }
 
     await db.insertInto("chapters").values(values).execute()
+
+    c.var.audit.set({ target: { id, number: body.number, language: body.language } })
 
     return c.ok({ id })
   },

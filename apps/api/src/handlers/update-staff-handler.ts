@@ -1,13 +1,16 @@
+import { staffAudit } from "@taiyomoe/audit"
 import { config } from "@taiyomoe/config"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
 import { putImage } from "../image-store"
+import { audited } from "../middlewares/audited-middleware"
 import { checkImages } from "../middlewares/check-images-middleware"
 import { checkStaff } from "../middlewares/check-staff-middleware"
 import { validateFormData } from "../middlewares/validate-form-data-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
+import { auditChanges } from "../utils/audit"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import {
   apiSuccessEnvelope,
@@ -65,6 +68,7 @@ export const updateStaffHandler = new Hono().patch(
       }),
     },
   }),
+  audited(staffAudit.UPDATE),
   withAuth("update", "Staff"),
   validateFormData(updateStaffSchema),
   checkImages(),
@@ -114,6 +118,8 @@ export const updateStaffHandler = new Hono().patch(
 
       updates.links = Object.fromEntries(merged)
     }
+
+    c.var.audit.set({ changes: auditChanges(staff, updates) })
 
     await db.updateTable("staffs").set(updates).where("id", "=", staff.id).execute()
 

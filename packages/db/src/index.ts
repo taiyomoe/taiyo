@@ -20,6 +20,8 @@ export * from "./json-types"
 
 export * from "./models/account-model"
 
+export * from "./models/audit-log-model"
+
 export * from "./models/banner-model"
 
 export * from "./models/chapter-group-model"

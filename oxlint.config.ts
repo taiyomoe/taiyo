@@ -55,7 +55,10 @@ export default defineConfig({
     "func-style": ["error", "declaration", { allowArrowFunctions: true }],
     "guard-for-in": "error",
     "max-nested-callbacks": ["error", 3],
-    "new-cap": ["error", { capIsNewExceptions: ["Scalar"] }],
+    "new-cap": [
+      "error",
+      { capIsNewExceptions: ["Scalar"], capIsNewExceptionPattern: "^\\w+Audit\\." },
+    ],
     "no-alert": "error",
     "no-case-declarations": "error",
     "no-console": "warn",
@@ -184,6 +187,7 @@ export default defineConfig({
     "@stylexjs/sort-keys": "error",
 
     "taiyo/no-sx-on-third-party": "error",
+    "taiyo/require-audited-route": "error",
 
     "import/first": "error",
     "import/namespace": ["error", { allowComputed: true }],

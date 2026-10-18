@@ -17,16 +17,8 @@ import {
   type WindowedOverview,
 } from "../utils/dashboard-overview"
 import { getOpenApiResponses } from "../utils/openapi-helper"
-import { apiSuccessEnvelope, languageSchema } from "../utils/schemas"
+import { apiSuccessEnvelope, languageSchema, timeZoneSchema } from "../utils/schemas"
 
-const TIME_ZONES = new Set(["UTC", ...Intl.supportedValuesOf("timeZone")])
-const canonicalTimeZone = (value: string) => {
-  try {
-    return new Intl.DateTimeFormat("en", { timeZone: value }).resolvedOptions().timeZone
-  } catch {
-    return value
-  }
-}
 const CACHE_TTL_SECONDS: Record<DashboardRange, number> = {
   "24h": 60,
   "7d": 300,
@@ -75,15 +67,10 @@ const querySchema = z.object({
       "The period to report on: 24 hourly, 7 or 30 daily, 13 weekly or 12 monthly buckets. Default: 30d.",
     example: "30d",
   }),
-  tz: z
-    .string()
-    .transform(canonicalTimeZone)
-    .refine((value) => TIME_ZONES.has(value), "Unknown time zone.")
-    .default("UTC")
-    .meta({
-      description: "IANA time zone the buckets and reading hours follow. Default: UTC.",
-      example: "America/Sao_Paulo",
-    }),
+  tz: timeZoneSchema.meta({
+    description: "IANA time zone the buckets and reading hours follow. Default: UTC.",
+    example: "America/Sao_Paulo",
+  }),
 })
 const metricSchema = z.object({
   total: z.int().meta({ description: "The total over the current window.", example: 1280 }),

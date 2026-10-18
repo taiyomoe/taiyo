@@ -1,6 +1,8 @@
+import { mediaAudit } from "@taiyomoe/audit"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
 import { checkMedia } from "../middlewares/check-media-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
@@ -36,6 +38,7 @@ export const deleteMediaHandler = new Hono().delete(
       }),
     },
   }),
+  audited(mediaAudit.DELETE),
   withAuth("delete", "Media"),
   checkMedia({ includeDeleted: true }),
   withTransaction,

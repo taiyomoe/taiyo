@@ -71,6 +71,9 @@ export const getBannerUrl = (mediaId: string, bannerId: string, extension: strin
 
 export const getStaffImageUrl = (key: string) => `${publicBase}/${key}`
 
+export const getGroupImageUrl = (key: string) =>
+  /^https?:\/\//.test(key) ? key : `${publicBase}/${key}`
+
 export const getChapterStagingKey = (chapterId: string, uploadId: string, index: number) =>
   `staging/chapters/${chapterId}/${uploadId}/${index}`
 

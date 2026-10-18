@@ -1,4 +1,5 @@
 import type { Account } from "./models/account-model"
+import type { AuditLog } from "./models/audit-log-model"
 import type { Banner } from "./models/banner-model"
 import type { ChapterGroup } from "./models/chapter-group-model"
 import type { Chapter } from "./models/chapter-model"
@@ -25,6 +26,7 @@ import type { Verification } from "./models/verification-model"
 
 export type DB = {
   accounts: Account
+  auditLogs: AuditLog
   banners: Banner
   chapterGroups: ChapterGroup
   chapters: Chapter

@@ -1,6 +1,8 @@
+import { userAudit } from "@taiyomoe/audit"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
 import { checkUser } from "../middlewares/check-user-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
@@ -32,6 +34,7 @@ export const followUserHandler = new Hono().post(
       }),
     },
   }),
+  audited(userAudit.FOLLOW),
   withAuth("create", "Follow"),
   checkUser(),
   withTransaction,

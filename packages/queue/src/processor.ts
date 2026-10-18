@@ -26,7 +26,7 @@ export const processChapterUpload = async (
     .executeTakeFirst()
 
   if (!task) {
-    return
+    return undefined
   }
 
   try {
@@ -94,6 +94,12 @@ export const processChapterUpload = async (
         }),
       )
       .catch(() => {})
+
+    return {
+      chapterId: manifest.chapterId,
+      mediaId: manifest.mediaId,
+      pageCount: manifest.pages.length,
+    }
   } catch (err) {
     await db
       .updateTable("tasks")

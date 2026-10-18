@@ -1,9 +1,11 @@
 import type { NewBanner } from "@taiyomoe/db"
+import { bannerAudit } from "@taiyomoe/audit"
 import { config } from "@taiyomoe/config"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
 import { putImage } from "../image-store"
+import { audited } from "../middlewares/audited-middleware"
 import { checkImages } from "../middlewares/check-images-middleware"
 import { checkMedia } from "../middlewares/check-media-middleware"
 import { rateLimit } from "../middlewares/rate-limit-middleware"
@@ -64,6 +66,7 @@ export const createBannersHandler = new Hono().post(
       }),
     },
   }),
+  audited(bannerAudit.CREATE),
   withAuth("update", "Media"),
   rateLimit({ prefix: "create-banners", windowMs: 60_000, limit: 10 }),
   validateFormData(createBannersSchema),
@@ -93,6 +96,8 @@ export const createBannersHandler = new Hono().post(
     )
 
     await db.insertInto("banners").values(bannerRows).execute()
+
+    c.var.audit.set({ target: { bannerIds: bannerRows.map((row) => row.id) } })
 
     return c.ok({ ids: bannerRows.map((row) => row.id) })
   },
