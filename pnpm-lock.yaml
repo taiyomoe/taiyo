@@ -260,8 +260,8 @@ importers:
         specifier: ^1.6.20
         version: 1.6.20
       embla-carousel-react:
-        specifier: 9.0.0-rc03
-        version: 9.0.0-rc03(react@19.3.0)
+        specifier: 9.0.0-rc04
+        version: 9.0.0-rc04(react@19.3.0)
       hono:
         specifier: ^4.13.13
         version: 4.13.13
@@ -4723,18 +4723,18 @@ packages:
   electron-to-chromium@1.5.364:
     resolution: {integrity: sha512-G/dYE3+AYhyHwzTwg8UbnXf7zqMERYh7l2jJ3QujhFsH8agSYwtnGAR2aZ7f0AakIKJXd5En/Hre4igIUrdlYw==}
 
-  embla-carousel-react@9.0.0-rc03:
-    resolution: {integrity: sha512-9+WG2RjzdapJe9m/v6n8XTVbJE6Ed5e/ZmuNM0GzNh5hnhJ31HSwZrjXSkvh3x57yi6q2AeQglPqEb9K+i1RsA==}
+  embla-carousel-react@9.0.0-rc04:
+    resolution: {integrity: sha512-qdqNfM7bGmOPG50uo9ldaL8Yz6ODCN/IzNYzO+8Sux10a1D6FwAq95qOW9ZCXG+kueAAlLQOhF4uVIW35M0Bsg==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.1 || ^18.0.0 || ^19.0.0 || ^19.0.0-rc
 
-  embla-carousel-reactive-utils@9.0.0-rc03:
-    resolution: {integrity: sha512-NxACWnzteTmmpZJpvoi4mKxyTyw+B4uBV0sfjJYC4PXaO20e7hjBa05wE4s37lr5ZBgBDrl54PLWZhap3U3r1Q==}
+  embla-carousel-reactive-utils@9.0.0-rc04:
+    resolution: {integrity: sha512-38m/mPUs/VAqANCRlMzqz9mAY+vm4tOWHmqOu2cegO+Otm4PMZlt/yuZua8CH3z0kNFLS23hAkq7WAXNkYC1pA==}
     peerDependencies:
-      embla-carousel: 9.0.0-rc03
+      embla-carousel: 9.0.0-rc04
 
-  embla-carousel@9.0.0-rc03:
-    resolution: {integrity: sha512-f36OvPQVCJl54m4nEWfPRd2fe3NQNGY671RzWvvaz9Uai1dpNWO2A8YRUL4fj2KgcYizaO3Wxhu9p0dDPh8Mug==}
+  embla-carousel@9.0.0-rc04:
+    resolution: {integrity: sha512-17JjAySlf/Sj0AawBmusMjap+SgGa+Yw0HpNCSnNs2v3Mj/wXNUdzpBAGv9uBizyYR/QcxG+pjXbHHg7xoE/iA==}
 
   empathic@2.0.1:
     resolution: {integrity: sha512-YGRs8knHhKHVShLkFET/rWAU8kmHbOV5LwN938RHI0pljAJ1Gf6SzXsSmRaEzcXTtOOmVqJ5+WtQPL5uigY50Q==}
@@ -9732,17 +9732,17 @@ snapshots:
 
   electron-to-chromium@1.5.364: {}
 
-  embla-carousel-react@9.0.0-rc03(react@19.3.0):
+  embla-carousel-react@9.0.0-rc04(react@19.3.0):
     dependencies:
-      embla-carousel: 9.0.0-rc03
-      embla-carousel-reactive-utils: 9.0.0-rc03(embla-carousel@9.0.0-rc03)
+      embla-carousel: 9.0.0-rc04
+      embla-carousel-reactive-utils: 9.0.0-rc04(embla-carousel@9.0.0-rc04)
       react: 19.3.0
 
-  embla-carousel-reactive-utils@9.0.0-rc03(embla-carousel@9.0.0-rc03):
+  embla-carousel-reactive-utils@9.0.0-rc04(embla-carousel@9.0.0-rc04):
     dependencies:
-      embla-carousel: 9.0.0-rc03
+      embla-carousel: 9.0.0-rc04
 
-  embla-carousel@9.0.0-rc03: {}
+  embla-carousel@9.0.0-rc04: {}
 
   empathic@2.0.1: {}
 
