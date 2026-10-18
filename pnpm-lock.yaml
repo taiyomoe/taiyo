@@ -233,8 +233,8 @@ importers:
         specifier: workspace:^
         version: link:../../packages/ui
       '@tanstack/charts':
-        specifier: ^1.0.0
-        version: 1.0.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(solid-js@1.9.15)
+        specifier: ^1.1.0
+        version: 1.1.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(solid-js@1.9.15)
       '@tanstack/react-devtools':
         specifier: ^0.10.13
         version: 0.10.13(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(csstype@3.2.3)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(solid-js@1.9.15)
@@ -3593,8 +3593,8 @@ packages:
       zod:
         optional: true
 
-  '@tanstack/charts@1.0.0':
-    resolution: {integrity: sha512-4U+zbn5jzQF8MNDsvjMG7TE4Fv68mfIIiFlFmrWiBIHor8zCX+7W8gpyDcT1SYJYvOIZXv3uxbK/IjwGY40Sig==}
+  '@tanstack/charts@1.1.0':
+    resolution: {integrity: sha512-0mb05yZMrBUzjHBohcKtK1XcTKJH9b8LS2uT0iYjDiLU+QR2jo0hrUJramAgg/AfBLMu2DY5fOgKe5bsqd6z4Q==}
     peerDependencies:
       '@angular/core': '>=19'
       '@angular/platform-browser': '>=19'
@@ -8624,7 +8624,7 @@ snapshots:
       valibot: 1.5.0(typescript@7.0.2)
       zod: 4.6.5
 
-  '@tanstack/charts@1.0.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(solid-js@1.9.15)':
+  '@tanstack/charts@1.1.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(solid-js@1.9.15)':
     dependencies:
       '@types/d3-force': 3.0.10
       '@types/d3-geo': 3.1.1
