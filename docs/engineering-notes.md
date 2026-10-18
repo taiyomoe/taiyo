@@ -38,6 +38,22 @@ the search document builder in `packages/search` is one of them.
 seeds a pending chapter and checks every public read path for it. A new
 endpoint that reads chapters belongs in that test.
 
+## Media edits are compared in one canonical form
+
+`PATCH /medias/:id` and media suggestions both go through
+`apps/api/src/utils/media-edit.ts`. `readMediaEdits` reads a media in the same
+shape the request schema accepts, and `normalizeMediaEdit` puts both sides in a
+canonical form before `diffMediaEdit` compares them: titles main first, then by
+language in the order given, synopsis entries trimmed and empty ones dropped,
+staff credits sorted, dates as UTC ISO strings. Only the fields that differ are
+stored in a suggestion or written to the media.
+
+A field added to the edit shape needs the same treatment on both sides, or
+every suggestion will report it as changed and conflict detection will flag it
+on every pending suggestion. The web form keeps a matching comparison in
+`apps/web/src/components/media-edit/media-edit-model.ts` so it only sends the
+fields the user touched.
+
 ## The two chapter feeds share one row shape
 
 `GET /chapters/latest` and `GET /users/me/feed` return the same row shape, so

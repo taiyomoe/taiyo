@@ -8,7 +8,15 @@ import { validateQuery } from "../middlewares/validate-query-middleware"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
-const querySchema = paginationQuerySchema
+const querySchema = paginationQuerySchema.extend({
+  search: z
+    .string()
+    .trim()
+    .min(1)
+    .max(100)
+    .optional()
+    .meta({ description: "Only list staffs whose name contains this text." }),
+})
 const staffListItemSchema = z.object({
   id: z.uuid().meta({ description: "The ID of the staff." }),
   name: z.string().meta({ description: "Name of the staff.", example: "Kishimoto Masashi" }),
@@ -22,7 +30,8 @@ export const listStaffsHandler = new Hono().get(
   "/",
   describeRoute({
     summary: "List staffs",
-    description: "Lists staffs alphabetically by name.\n\n**Authentication:** none.",
+    description:
+      "Lists staffs alphabetically by name, optionally filtered by name.\n\n**Authentication:** none.",
     tags: ["Staffs"],
     responses: {
       200: {
@@ -39,21 +48,23 @@ export const listStaffsHandler = new Hono().get(
   validateQuery(querySchema),
   async (c) => {
     const { db } = c.var
-    const { page, perPage } = c.var.query
+    const { page, perPage, search } = c.var.query
+    const base = db
+      .selectFrom("staffs")
+      .where("deletedAt", "is", null)
+      .where((eb) =>
+        search === undefined
+          ? eb.and([])
+          : eb("name", "ilike", `%${search.replace(/[\\%_]/g, "\\$&")}%`),
+      )
     const [items, totalRow] = await Promise.all([
-      db
-        .selectFrom("staffs")
+      base
         .select(["id", "name", "image"])
-        .where("deletedAt", "is", null)
         .orderBy("name", "asc")
         .limit(perPage)
         .offset((page - 1) * perPage)
         .execute(),
-      db
-        .selectFrom("staffs")
-        .select(sql<string>`count(*)`.as("count"))
-        .where("deletedAt", "is", null)
-        .executeTakeFirstOrThrow(),
+      base.select(sql<string>`count(*)`.as("count")).executeTakeFirstOrThrow(),
     ])
 
     return c.ok(

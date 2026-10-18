@@ -23,6 +23,7 @@ import { groupCreationRequestsRouter } from "./routers/group-creation-requests-r
 import { groupInvitationsRouter } from "./routers/group-invitations-router"
 import { groupsRouter } from "./routers/groups-router"
 import { listsRouter } from "./routers/lists-router"
+import { mediaSuggestionsRouter } from "./routers/media-suggestions-router"
 import { mediasRouter } from "./routers/medias-router"
 import { ownershipRequestsRouter } from "./routers/ownership-requests-router"
 import { staffsRouter } from "./routers/staffs-router"
@@ -76,6 +77,7 @@ export const createApp = (services: Services) => {
     .route("/ownership-requests", ownershipRequestsRouter)
     .route("/group-invitations", groupInvitationsRouter)
     .route("/group-creation-requests", groupCreationRequestsRouter)
+    .route("/media-suggestions", mediaSuggestionsRouter)
     .route("/users", usersRouter)
     .route("/lists", listsRouter)
     .route("/dashboard", dashboardRouter)
@@ -149,6 +151,11 @@ export const createApp = (services: Services) => {
               name: "Group creation requests",
               description:
                 "Workflow for users to ask for a new group they will own: request, approval, rejection, cancellation.",
+            },
+            {
+              name: "Media suggestions",
+              description:
+                "Edits to a media suggested by any signed-in user and reviewed field by field by uploaders, moderators and admins.",
             },
             {
               name: "Follows",

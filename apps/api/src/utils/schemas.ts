@@ -68,36 +68,37 @@ export const mediaTagsSchema = z
     ],
   })
 
+const httpUrlSchema = z.url({ protocol: /^https?$/ }).max(config.input.maxUrlLength)
+
 export const mediaLinksSchema = z
   .object({
-    mangaDex: z.uuid().optional().meta({ description: "MangaDex series UUID." }),
-    anilist: z.int().positive().optional().meta({ description: "AniList numeric media ID." }),
+    mangaDex: z.uuid().exactOptional().meta({ description: "MangaDex series UUID." }),
+    anilist: z.int().positive().exactOptional().meta({ description: "AniList numeric media ID." }),
     myAnimeList: z
       .int()
       .positive()
-      .optional()
+      .exactOptional()
       .meta({ description: "MyAnimeList numeric media ID." }),
-    animePlanet: z.url().optional().meta({ description: "Anime-Planet URL." }),
-    bookWalker: z.url().optional().meta({ description: "BookWalker series URL." }),
-    mangaUpdates: z.url().optional().meta({ description: "MangaUpdates series URL." }),
-    novelUpdates: z.url().optional().meta({ description: "NovelUpdates series URL." }),
-    kitsu: z.url().optional().meta({ description: "Kitsu manga URL." }),
-    amazon: z.url().optional().meta({ description: "Amazon product URL." }),
-    eBookJapan: z.url().optional().meta({ description: "eBookJapan product URL." }),
-    raw: z.url().optional().meta({ description: "URL to the original raw publication." }),
-    officialENTranslation: z
-      .url()
-      .optional()
+    animePlanet: httpUrlSchema.exactOptional().meta({ description: "Anime-Planet URL." }),
+    bookWalker: httpUrlSchema.exactOptional().meta({ description: "BookWalker series URL." }),
+    mangaUpdates: httpUrlSchema.exactOptional().meta({ description: "MangaUpdates series URL." }),
+    novelUpdates: httpUrlSchema.exactOptional().meta({ description: "NovelUpdates series URL." }),
+    kitsu: httpUrlSchema.exactOptional().meta({ description: "Kitsu manga URL." }),
+    amazon: httpUrlSchema.exactOptional().meta({ description: "Amazon product URL." }),
+    eBookJapan: httpUrlSchema.exactOptional().meta({ description: "eBookJapan product URL." }),
+    raw: httpUrlSchema
+      .exactOptional()
+      .meta({ description: "URL to the original raw publication." }),
+    officialENTranslation: httpUrlSchema
+      .exactOptional()
       .meta({ description: "URL to the official English translation." }),
-    officialFRTranslation: z
-      .url()
-      .optional()
+    officialFRTranslation: httpUrlSchema
+      .exactOptional()
       .meta({ description: "URL to the official French translation." }),
-    officialPTBRTranslation: z
-      .url()
-      .optional()
+    officialPTBRTranslation: httpUrlSchema
+      .exactOptional()
       .meta({ description: "URL to the official Brazilian Portuguese translation." }),
-    cdJapan: z.url().optional().meta({ description: "CDJapan product URL." }),
+    cdJapan: httpUrlSchema.exactOptional().meta({ description: "CDJapan product URL." }),
   })
   .meta({
     description: "External references for this media.",
@@ -275,7 +276,6 @@ export const groupSummarySchema = z.object({
 })
 
 const emptyToNull = z.literal("").transform(() => null)
-const httpUrlSchema = z.url({ protocol: /^https?$/ }).max(config.input.maxUrlLength)
 
 export const groupLinkSchema = (description: string) =>
   z.union([httpUrlSchema, emptyToNull]).nullable().optional().meta({ description })

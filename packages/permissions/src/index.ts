@@ -21,6 +21,13 @@ export type StaticPermissionPath = {
 export const createPermissions = (actor: Actor | null) =>
   createCheck<PermissionsDefinition>(buildRules(actor))
 
+export const allows = (actor: Actor | null, path: StaticPermissionPath): boolean => {
+  const rules: Partial<Record<string, Partial<Record<string, unknown>>>> = buildRules(actor)
+  const [entity = "", action = ""] = path.split(".")
+
+  return rules[entity]?.[action] === true
+}
+
 export { GROUP_MEMBERSHIP_ROLES, GROUP_PERMISSIONS, ROLES }
 
 export type { GroupMembershipRole, GroupPermission, Role }
