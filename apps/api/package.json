@@ -13,7 +13,6 @@
     "dev": "tsx watch --env-file-if-exists=.env src/index.ts"
   },
   "dependencies": {
-    "@casl/ability": "^7.0.1",
     "@hono-rate-limiter/redis": "^0.1.4",
     "@hono/node-server": "^2.1.4",
     "@scalar/hono-api-reference": "^0.12.11",
@@ -22,6 +21,7 @@
     "@taiyomoe/cache": "workspace:^",
     "@taiyomoe/config": "workspace:^",
     "@taiyomoe/db": "workspace:^",
+    "@taiyomoe/permissions": "workspace:^",
     "@taiyomoe/queue": "workspace:^",
     "@taiyomoe/s3": "workspace:^",
     "@taiyomoe/schemas": "workspace:^",

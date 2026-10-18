@@ -97,6 +97,7 @@ describe("DELETE /chapters/:id", () => {
         userId,
         groupId: linked.groupId,
         role: "MEMBER",
+        permissions: ["DELETE_CHAPTERS"],
         addedBy: userId,
       })
       .execute()
@@ -106,7 +107,7 @@ describe("DELETE /chapters/:id", () => {
     expect(res.status).toBe(200)
   })
 
-  test("a member of a soft-deleted linked group cannot delete the chapter", async ({
+  test("a member with DELETE_CHAPTERS in a soft-deleted linked group cannot delete the chapter", async ({
     app,
     services,
   }) => {
@@ -123,6 +124,7 @@ describe("DELETE /chapters/:id", () => {
         userId,
         groupId: linked.groupId,
         role: "MEMBER",
+        permissions: ["DELETE_CHAPTERS"],
         addedBy: userId,
       })
       .execute()

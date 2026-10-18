@@ -32,7 +32,7 @@ export const rateLimit = ({
   rateLimiter({
     store: new RedisStore({ client: adapter, prefix: `rl:${prefix}:` }),
     windowMs,
-    limit: (c) => (c.var.user?.role === "ADMIN" ? Number.POSITIVE_INFINITY : limit),
+    limit: (c) => (c.var.actor?.role === "ADMIN" ? Number.POSITIVE_INFINITY : limit),
     standardHeaders: "draft-7",
     keyGenerator: (c) =>
       c.var.user?.id ??

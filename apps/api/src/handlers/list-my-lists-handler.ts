@@ -37,7 +37,7 @@ export const listMyListsHandler = new Hono().get(
       ...getOpenApiResponses({ 422: "The query parameters failed validation." }),
     },
   }),
-  withAuth("read", "List"),
+  withAuth(),
   validateQuery(paginationQuerySchema),
   async (c) => {
     const { db, user } = c.var

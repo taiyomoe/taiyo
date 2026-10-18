@@ -44,7 +44,7 @@ export const updateListItemHandler = new Hono().patch(
       }),
     },
   }),
-  withAuth("update", "List"),
+  withAuth(),
   validateParam(paramSchema),
   validateJson(bodySchema),
   checkList(),

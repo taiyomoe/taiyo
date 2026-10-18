@@ -2,7 +2,15 @@ import { getDb } from "@taiyomoe/db"
 import { defineCommand } from "citty"
 import { createHmac, randomBytes } from "node:crypto"
 
-const DEV_ACCOUNTS = ["user@gmail.com", "admin@gmail.com"]
+const DEV_ACCOUNTS = [
+  "user@gmail.com",
+  "admin@gmail.com",
+  "moderator@gmail.com",
+  "uploader@gmail.com",
+  "intern@gmail.com",
+  "owner@gmail.com",
+  "member@gmail.com",
+]
 const USER_AGENT = "pnpm bootstrap"
 const LIFETIME_MS = 30 * 24 * 60 * 60 * 1000
 const MIN_REMAINING_MS = 24 * 60 * 60 * 1000

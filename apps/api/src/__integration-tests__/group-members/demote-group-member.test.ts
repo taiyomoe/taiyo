@@ -17,20 +17,20 @@ const seedGroup = async (services: Services, creatorId: string) => {
 }
 
 describe("POST /groups/:id/members/:userId/demote", () => {
-  test("demotes an OWNER to MEMBER when other owners remain", async ({ app, services }) => {
+  test("an owner can step down when other owners remain", async ({ app, services }) => {
     const { headers, userId: ownerId } = await signInAs(services)
-    const { userId: targetId } = await signInAs(services)
+    const { userId: coOwnerId } = await signInAs(services)
     const groupId = await seedGroup(services, ownerId)
 
     await services.db
       .insertInto("groupMemberships")
       .values([
         { userId: ownerId, groupId, role: "OWNER", addedBy: ownerId },
-        { userId: targetId, groupId, role: "OWNER", addedBy: ownerId },
+        { userId: coOwnerId, groupId, role: "OWNER", addedBy: ownerId },
       ])
       .execute()
 
-    const res = await api(app, `/groups/${groupId}/members/${targetId}/demote`, {
+    const res = await api(app, `/groups/${groupId}/members/${ownerId}/demote`, {
       method: "POST",
       headers,
     })
@@ -41,10 +41,49 @@ describe("POST /groups/:id/members/:userId/demote", () => {
       .selectFrom("groupMemberships")
       .select("role")
       .where("groupId", "=", groupId)
-      .where("userId", "=", targetId)
+      .where("userId", "=", ownerId)
       .executeTakeFirst()
 
     expect(row?.role).toBe("MEMBER")
+  })
+
+  test("an owner cannot demote another owner", async ({ app, services }) => {
+    const { headers, userId: ownerId } = await signInAs(services)
+    const { userId: coOwnerId } = await signInAs(services)
+    const groupId = await seedGroup(services, ownerId)
+
+    await services.db
+      .insertInto("groupMemberships")
+      .values([
+        { userId: ownerId, groupId, role: "OWNER", addedBy: ownerId },
+        { userId: coOwnerId, groupId, role: "OWNER", addedBy: ownerId },
+      ])
+      .execute()
+
+    const res = await api(app, `/groups/${groupId}/members/${coOwnerId}/demote`, {
+      method: "POST",
+      headers,
+    })
+
+    expect(res.status).toBe(403)
+  })
+
+  test("an admin can demote any owner", async ({ app, services }) => {
+    const { headers } = await signInAs(services, { role: "ADMIN" })
+    const { userId: ownerId } = await signInAs(services)
+    const groupId = await seedGroup(services, ownerId)
+
+    await services.db
+      .insertInto("groupMemberships")
+      .values({ userId: ownerId, groupId, role: "OWNER", addedBy: ownerId })
+      .execute()
+
+    const res = await api(app, `/groups/${groupId}/members/${ownerId}/demote`, {
+      method: "POST",
+      headers,
+    })
+
+    expect(res.status).toBe(201)
   })
 
   test("returns GROUP_LAST_OWNER when target is the only owner", async ({ app, services }) => {
@@ -74,7 +113,7 @@ describe("POST /groups/:id/members/:userId/demote", () => {
     app,
     services,
   }) => {
-    const { headers, userId: ownerId } = await signInAs(services, { role: "MODERATOR" })
+    const { headers, userId: ownerId } = await signInAs(services, { role: "ADMIN" })
     const groupId = await seedGroup(services, ownerId)
     const res = await api(app, `/groups/${groupId}/members/${randomUUID()}/demote`, {
       method: "POST",

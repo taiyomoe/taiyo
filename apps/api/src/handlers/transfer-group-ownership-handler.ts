@@ -18,7 +18,7 @@ export const transferGroupOwnershipHandler = new Hono().post(
   describeRoute({
     summary: "Transfer group ownership",
     description:
-      "Makes another member of the group an OWNER and demotes you to MEMBER in one step.\n\n**Authentication:** group OWNER.",
+      "Makes another member of the group an OWNER and demotes you to MEMBER in one step.\n\n**Authentication:** group owner.",
     tags: ["Group members"],
     requestBody: {
       content: { "application/json": await resolver(transferSchema).toOpenAPISchema() },
@@ -43,12 +43,12 @@ export const transferGroupOwnershipHandler = new Hono().post(
       }),
     },
   }),
-  withAuth("read", "OwnershipRequest"),
+  withAuth(),
   validateJson(transferSchema),
   checkGroup(),
   withTransaction,
   async (c) => {
-    const { db, group, user } = c.var
+    const { actor, db, group, user } = c.var
     const { toUserId } = c.var.json
 
     if (toUserId === user.id) {
@@ -61,11 +61,7 @@ export const transferGroupOwnershipHandler = new Hono().post(
       ])
     }
 
-    const result = await transferGroupOwnership(db, {
-      groupId: group.id,
-      fromUserId: user.id,
-      toUserId,
-    })
+    const result = await transferGroupOwnership(db, { actor, groupId: group.id, toUserId })
 
     if (!result.ok) {
       return c.fail(result.error)

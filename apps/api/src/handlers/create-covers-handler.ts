@@ -58,7 +58,7 @@ export const createCoversHandler = new Hono().post(
   describeRoute({
     summary: "Add covers to a media",
     description:
-      "Adds one or more covers to a media. At most one of the uploaded covers may be marked as the new main cover; if so, it replaces the previous main cover.\n\n**Required roles:** uploader, moderator, admin.",
+      "Adds one or more covers to a media. At most one of the uploaded covers may be marked as the new main cover; if so, it replaces the previous main cover.\n\n**Required roles:** uploader intern, uploader, moderator, admin.",
     tags: ["Covers"],
     requestBody: {
       content: {
@@ -90,7 +90,7 @@ export const createCoversHandler = new Hono().post(
       }),
     },
   }),
-  withAuth("update", "Media"),
+  withAuth("media.update"),
   rateLimit({ prefix: "create-covers", windowMs: 60_000, limit: 10 }),
   validateFormData(createCoversSchema),
   checkImages(),

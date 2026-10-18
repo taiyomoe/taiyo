@@ -330,6 +330,7 @@
   "dashboard_greeting_afternoon": "Good afternoon, {name}",
   "dashboard_greeting_evening": "Good evening, {name}",
   "dashboard_overview_subtitle": "Here’s how Taiyō is doing.",
+  "dashboard_personal_subtitle": "Everything you can do on Taiyō is in the sidebar.",
   "dashboard_compare": "Compare to previous",
   "dashboard_range_label": "Time range",
   "dashboard_range_24h": "24h",

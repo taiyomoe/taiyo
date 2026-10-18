@@ -54,5 +54,6 @@ export const config = {
     maxUrlLength: 500,
     maxDescriptionLength: 5000,
     maxSynopsisLength: 10000,
+    maxChapterGroups: 10,
   },
 } as const

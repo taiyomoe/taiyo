@@ -18,6 +18,51 @@ const ACCOUNTS = [
     username: "admin",
     role: "ADMIN",
   },
+  {
+    id: "5b0d2f9e-6c1a-4f43-9d7e-1a8c3b2e4f60",
+    name: "Test Moderator",
+    email: "moderator@gmail.com",
+    username: "moderator",
+    role: "MODERATOR",
+  },
+  {
+    id: "8e4a6c21-3b7d-4e95-a0f2-6d1c9b8e7a43",
+    name: "Test Uploader",
+    email: "uploader@gmail.com",
+    username: "uploader",
+    role: "UPLOADER",
+  },
+  {
+    id: "c3f19a7e-52d8-4b06-8e4c-7a2d1f6b9e05",
+    name: "Test Intern",
+    email: "intern@gmail.com",
+    username: "intern",
+    role: "UPLOADER_INTERN",
+  },
+  {
+    id: "2a7e5d93-8f1c-4b6a-9e30-c4d8b1f2a7e6",
+    name: "Test Group Owner",
+    email: "owner@gmail.com",
+    username: "owner",
+    role: "USER",
+  },
+  {
+    id: "f6b8c2d4-1e3a-4c57-b9d0-8a2e6f4c1b37",
+    name: "Test Group Member",
+    email: "member@gmail.com",
+    username: "member",
+    role: "USER",
+  },
+] as const
+const ADMIN_ID = "33bf8ad7-0052-4241-9468-da2b2ef6c389"
+const DEV_GROUP_ID = "9d3e7b1a-4c6f-4a28-b5e9-2f8c1d7a6b40"
+const MEMBERSHIPS = [
+  { userId: "2a7e5d93-8f1c-4b6a-9e30-c4d8b1f2a7e6", role: "OWNER", permissions: [] },
+  {
+    userId: "f6b8c2d4-1e3a-4c57-b9d0-8a2e6f4c1b37",
+    role: "MEMBER",
+    permissions: ["UPLOAD_CHAPTERS", "EDIT_CHAPTERS"],
+  },
 ] as const
 
 export async function seed(db: Kysely<DB>): Promise<void> {
@@ -56,5 +101,24 @@ export async function seed(db: Kysely<DB>): Promise<void> {
       ),
     )
     .onConflict((oc) => oc.columns(["accountId", "providerId", "userId"]).doNothing())
+    .execute()
+
+  await db
+    .insertInto("groups")
+    .values({ id: DEV_GROUP_ID, name: "Taiyō Dev Scans", creatorId: ADMIN_ID })
+    .onConflict((oc) => oc.column("id").doNothing())
+    .execute()
+
+  await db
+    .insertInto("groupMemberships")
+    .values(
+      MEMBERSHIPS.map((membership) => ({
+        ...membership,
+        permissions: [...membership.permissions],
+        groupId: DEV_GROUP_ID,
+        addedBy: ADMIN_ID,
+      })),
+    )
+    .onConflict((oc) => oc.columns(["userId", "groupId"]).doNothing())
     .execute()
 }

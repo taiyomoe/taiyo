@@ -38,8 +38,8 @@ describe("DELETE /groups/:id", () => {
     expect(res.status).toBe(404)
   })
 
-  test("a USER who is a member of the group can delete it", async ({ app, services }) => {
-    const { headers, userId } = await signInAs(services)
+  test("only admins can delete a group, not even its owner", async ({ app, services }) => {
+    const { headers: ownerHeaders, userId } = await signInAs(services)
 
     await services.db
       .insertInto("groupMemberships")
@@ -51,9 +51,25 @@ describe("DELETE /groups/:id", () => {
       })
       .execute()
 
-    const res = await api(app, `/groups/${SEEDED_GROUP_ID}`, { method: "DELETE", headers })
+    const staffHeaders = await Promise.all(
+      (["UPLOADER_INTERN", "UPLOADER", "MODERATOR"] as const).map(
+        async (role) => (await signInAs(services, { role })).headers,
+      ),
+    )
 
-    expect(res.status).toBe(200)
+    for (const headers of [ownerHeaders, ...staffHeaders]) {
+      const res = await api(app, `/groups/${SEEDED_GROUP_ID}`, { method: "DELETE", headers })
+
+      expect(res.status).toBe(403)
+    }
+
+    const row = await services.db
+      .selectFrom("groups")
+      .select("deletedAt")
+      .where("id", "=", SEEDED_GROUP_ID)
+      .executeTakeFirstOrThrow()
+
+    expect(row.deletedAt).toBeNull()
   })
 
   test("a USER who is not a member is FORBIDDEN", async ({ app, services }) => {

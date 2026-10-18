@@ -12,7 +12,7 @@ export const deleteMediaHandler = new Hono().delete(
   describeRoute({
     summary: "Delete a media",
     description:
-      "Removes a media from listings, search results, and detail endpoints. The media can be restored later.\n\n**Required roles:** uploader, moderator, admin.",
+      "Removes a media from listings, search results, and detail endpoints. The media can be restored later.\n\n**Required roles:** uploader, admin.",
     tags: ["Medias"],
     responses: {
       200: {
@@ -36,7 +36,7 @@ export const deleteMediaHandler = new Hono().delete(
       }),
     },
   }),
-  withAuth("delete", "Media"),
+  withAuth("media.delete"),
   checkMedia({ includeDeleted: true }),
   withTransaction,
   async (c) => {

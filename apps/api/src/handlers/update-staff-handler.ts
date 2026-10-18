@@ -65,7 +65,7 @@ export const updateStaffHandler = new Hono().patch(
       }),
     },
   }),
-  withAuth("update", "Staff"),
+  withAuth("staff.update"),
   validateFormData(updateStaffSchema),
   checkImages(),
   checkStaff(),

@@ -4,9 +4,9 @@ import { getChapterStagingKey, getPresignedUploadUrl } from "@taiyomoe/s3"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { authorizeChapter } from "../middlewares/authorize-chapter-middleware"
 import { checkChapter } from "../middlewares/check-chapter-middleware"
 import { rateLimit } from "../middlewares/rate-limit-middleware"
-import { requireChapterAccess } from "../middlewares/require-chapter-access-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
@@ -38,7 +38,7 @@ export const createChapterUploadSessionHandler = new Hono().post(
   describeRoute({
     summary: "Open a chapter page upload session",
     description:
-      "Opens an upload session for a chapter's pages. Returns one-time upload URLs for each page; upload each page to its URL, then call finalize. Sessions expire after 10 minutes.\n\n**Authentication:** uploader intern, uploader, moderator, admin — or any signed-in member of a group linked to the chapter.",
+      "Opens an upload session for a chapter's pages. Returns one-time upload URLs for each page; upload each page to its URL, then call finalize. Sessions expire after 10 minutes.\n\n**Authentication:** uploader, moderator, admin — or a member with `EDIT_CHAPTERS` in a group credited on the chapter.",
     tags: ["Chapters"],
     requestBody: {
       content: {
@@ -80,11 +80,11 @@ export const createChapterUploadSessionHandler = new Hono().post(
       }),
     },
   }),
-  withAuth("read", "OwnershipRequest"),
+  withAuth(),
   rateLimit({ prefix: "chapter-upload-session", windowMs: 60_000, limit: 60 }),
   validateJson(createChapterUploadSessionSchema),
   checkChapter(),
-  requireChapterAccess,
+  authorizeChapter("update"),
   withTransaction,
   async (c) => {
     const { db, s3, s3Bucket, chapter } = c.var

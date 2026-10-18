@@ -32,7 +32,7 @@ export const createBannersHandler = new Hono().post(
   describeRoute({
     summary: "Add banners to a media",
     description:
-      "Adds one or more banners to a media.\n\n**Required roles:** uploader, moderator, admin.",
+      "Adds one or more banners to a media.\n\n**Required roles:** uploader intern, uploader, moderator, admin.",
     tags: ["Banners"],
     requestBody: {
       content: {
@@ -64,7 +64,7 @@ export const createBannersHandler = new Hono().post(
       }),
     },
   }),
-  withAuth("update", "Media"),
+  withAuth("media.update"),
   rateLimit({ prefix: "create-banners", windowMs: 60_000, limit: 10 }),
   validateFormData(createBannersSchema),
   checkImages(),

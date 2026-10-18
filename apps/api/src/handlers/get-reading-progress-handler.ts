@@ -51,7 +51,7 @@ export const getReadingProgressHandler = new Hono().get(
       }),
     },
   }),
-  withAuth("read", "History"),
+  withAuth(),
   validateParam(paramSchema),
   validateQuery(querySchema),
   async (c) => {

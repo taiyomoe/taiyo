@@ -52,7 +52,7 @@ export const flagMediaHandler = new Hono().post(
       }),
     },
   }),
-  withAuth("manage", "Media"),
+  withAuth("media.flag"),
   validateJson(flagMediaSchema),
   checkMedia(),
   withTransaction,

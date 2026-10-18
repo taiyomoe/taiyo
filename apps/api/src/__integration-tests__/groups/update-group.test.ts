@@ -82,7 +82,36 @@ describe("PATCH /groups/:id", () => {
     expect(res.status).toBe(404)
   })
 
-  test("a USER who is a member of the group can update it", async ({ app, services }) => {
+  test("an owner and a member with EDIT_GROUP can update it", async ({ app, services }) => {
+    const owner = await signInAs(services)
+    const editor = await signInAs(services)
+
+    await services.db
+      .insertInto("groupMemberships")
+      .values([
+        { userId: owner.userId, groupId: SEEDED_GROUP_ID, role: "OWNER", addedBy: owner.userId },
+        {
+          userId: editor.userId,
+          groupId: SEEDED_GROUP_ID,
+          role: "MEMBER",
+          permissions: ["EDIT_GROUP"],
+          addedBy: owner.userId,
+        },
+      ])
+      .execute()
+
+    for (const { headers } of [owner, editor]) {
+      const res = await api(app, `/groups/${SEEDED_GROUP_ID}`, {
+        method: "PATCH",
+        headers,
+        json: { description: "Updated by the group" },
+      })
+
+      expect(res.status).toBe(200)
+    }
+  })
+
+  test("a member without EDIT_GROUP is FORBIDDEN", async ({ app, services }) => {
     const { headers, userId } = await signInAs(services)
 
     await services.db
@@ -91,6 +120,7 @@ describe("PATCH /groups/:id", () => {
         userId,
         groupId: SEEDED_GROUP_ID,
         role: "MEMBER",
+        permissions: ["UPLOAD_CHAPTERS", "EDIT_CHAPTERS", "DELETE_CHAPTERS", "MANAGE_MEMBERS"],
         addedBy: userId,
       })
       .execute()
@@ -98,10 +128,30 @@ describe("PATCH /groups/:id", () => {
     const res = await api(app, `/groups/${SEEDED_GROUP_ID}`, {
       method: "PATCH",
       headers,
-      json: { description: "Updated by member" },
+      json: { description: "x" },
     })
 
-    expect(res.status).toBe(200)
+    expect(res.status).toBe(403)
+  })
+
+  test("uploaders and moderators can update any group, interns cannot", async ({
+    app,
+    services,
+  }) => {
+    for (const [role, status] of [
+      ["UPLOADER", 200],
+      ["MODERATOR", 200],
+      ["UPLOADER_INTERN", 403],
+    ] as const) {
+      const { headers } = await signInAs(services, { role })
+      const res = await api(app, `/groups/${SEEDED_GROUP_ID}`, {
+        method: "PATCH",
+        headers,
+        json: { description: `By ${role}` },
+      })
+
+      expect(res.status).toBe(status)
+    }
   })
 
   test("a USER who is not a member is FORBIDDEN", async ({ app, services }) => {

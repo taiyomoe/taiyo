@@ -31,7 +31,7 @@ export const deleteChapterHistoryHandler = new Hono().delete(
       }),
     },
   }),
-  withAuth("delete", "History"),
+  withAuth(),
   validateParam(paramSchema),
   withTransaction,
   async (c) => {

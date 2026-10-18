@@ -1,9 +1,9 @@
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
-import { setGroupMemberRole } from "../group-membership"
+import { promoteGroupMember } from "../group-membership"
+import { authorizeGroup } from "../middlewares/authorize-group-middleware"
 import { checkGroup } from "../middlewares/check-group-middleware"
-import { requireGroupOwnerOrMod } from "../middlewares/require-group-owner-or-mod-middleware"
 import { validateParam } from "../middlewares/validate-param-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
@@ -17,7 +17,7 @@ export const promoteGroupMemberHandler = new Hono().post(
   describeRoute({
     summary: "Promote a member to OWNER",
     description:
-      "Changes a member's role from MEMBER to OWNER.\n\n**Authentication:** group OWNER, moderator, admin.",
+      "Changes a member's role from MEMBER to OWNER. The member keeps their stored permissions, which apply again if they are demoted later.\n\n**Authentication:** group owner, admin.",
     tags: ["Group members"],
     responses: {
       201: {
@@ -34,15 +34,15 @@ export const promoteGroupMemberHandler = new Hono().post(
       }),
     },
   }),
-  withAuth("read", "OwnershipRequest"),
+  withAuth(),
   validateParam(paramSchema),
   checkGroup(),
-  requireGroupOwnerOrMod,
+  authorizeGroup("manageMembers"),
   withTransaction,
   async (c) => {
-    const { db, group } = c.var
+    const { actor, db, group } = c.var
     const { userId } = c.var.param
-    const result = await setGroupMemberRole(db, { groupId: group.id, userId, role: "OWNER" })
+    const result = await promoteGroupMember(db, { actor, groupId: group.id, userId })
 
     if (!result.ok) {
       return c.fail(result.error)

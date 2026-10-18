@@ -49,7 +49,7 @@ export const addListItemHandler = new Hono().post(
       }),
     },
   }),
-  withAuth("update", "List"),
+  withAuth(),
   validateJson(addItemSchema),
   checkList(),
   requireListOwner,

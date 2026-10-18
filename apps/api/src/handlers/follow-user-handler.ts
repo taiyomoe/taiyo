@@ -32,7 +32,7 @@ export const followUserHandler = new Hono().post(
       }),
     },
   }),
-  withAuth("create", "Follow"),
+  withAuth(),
   checkUser(),
   withTransaction,
   async (c) => {

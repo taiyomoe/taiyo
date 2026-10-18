@@ -12,7 +12,7 @@ export const deleteStaffHandler = new Hono().delete(
   describeRoute({
     summary: "Delete a staff",
     description:
-      "Removes a staff. The staff can be restored later.\n\n**Required roles:** uploader intern, uploader, moderator, admin.",
+      "Removes a staff. The staff can be restored later.\n\n**Required roles:** uploader, admin.",
     tags: ["Staffs"],
     responses: {
       200: {
@@ -35,7 +35,7 @@ export const deleteStaffHandler = new Hono().delete(
       }),
     },
   }),
-  withAuth("delete", "Staff"),
+  withAuth("staff.delete"),
   checkStaff(),
   withTransaction,
   async (c) => {

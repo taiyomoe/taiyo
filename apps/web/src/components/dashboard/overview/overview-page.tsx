@@ -9,6 +9,7 @@ import { useQuery } from "@tanstack/react-query"
 import { useNavigate } from "@tanstack/react-router"
 import type { DashboardOverview, dashboardOverviewQueryOptions } from "@/lib/queries/dashboard"
 import type { Session } from "@/lib/queries/session"
+import { DashboardIntro } from "@/components/dashboard/dashboard-intro"
 import { AttentionList } from "@/components/dashboard/overview/attention-list"
 import { CatalogMix } from "@/components/dashboard/overview/catalog-mix"
 import { ChaptersChart } from "@/components/dashboard/overview/chapters-chart"
@@ -28,9 +29,7 @@ import { RecentActivity } from "@/components/dashboard/overview/recent-activity"
 import { TopMedias } from "@/components/dashboard/overview/top-medias"
 import { TopUploaders } from "@/components/dashboard/overview/top-uploaders"
 import { TrendChart } from "@/components/dashboard/overview/trend-chart"
-import { sceneFont } from "@/components/scene/scene.stylex"
 import { DEFAULT_DASHBOARD_RANGE, DASHBOARD_RANGES, type DashboardRange } from "@/lib/dashboard"
-import { useClientValue } from "@/lib/use-client-value"
 import { m } from "@/paraglide/messages"
 
 const RANGES: Record<
@@ -84,28 +83,6 @@ const styles = stylex.create({
     flexDirection: "column",
     paddingBottom: "3rem",
     paddingTop: "2rem",
-  },
-  intro: {
-    gap: "0.5rem",
-    display: "flex",
-    flexDirection: "column",
-  },
-  title: {
-    margin: 0,
-    fontFamily: sceneFont.display,
-    fontSize: {
-      default: "2rem",
-      "@media (width >= 48rem)": "2.75rem",
-    },
-    fontWeight: 700,
-    letterSpacing: "-0.02em",
-    lineHeight: 1.1,
-  },
-  subtitle: {
-    margin: 0,
-    color: colors.mutedForeground,
-    fontSize: "1.0625rem",
-    lineHeight: 1.5,
   },
   controls: {
     gap: "1rem",
@@ -214,19 +191,6 @@ const styles = stylex.create({
     color: colors.mutedForeground,
   },
 })
-const getGreeting = (hour: number | null, name: string) => {
-  if (hour === null) {
-    return m.dashboard_greeting({ name })
-  }
-
-  if (hour >= 5 && hour < 12) {
-    return m.dashboard_greeting_morning({ name })
-  }
-
-  return hour >= 12 && hour < 18
-    ? m.dashboard_greeting_afternoon({ name })
-    : m.dashboard_greeting_evening({ name })
-}
 const isRange = (value: unknown): value is DashboardRange =>
   DASHBOARD_RANGES.some((range) => range === value)
 
@@ -239,7 +203,6 @@ type OverviewPageProps = {
 
 export function OverviewPage({ user, range, compare, queryOptions }: OverviewPageProps) {
   const navigate = useNavigate({ from: "/dashboard/" })
-  const hour = useClientValue(() => new Date().getHours())
   const query = useQuery(queryOptions)
   const overview = query.data
   const { period, unit } = RANGES[range]
@@ -255,10 +218,7 @@ export function OverviewPage({ user, range, compare, queryOptions }: OverviewPag
 
   return (
     <div sx={styles.page}>
-      <div sx={styles.intro}>
-        <h1 sx={styles.title}>{getGreeting(hour, user.name)}</h1>
-        <p sx={styles.subtitle}>{m.dashboard_overview_subtitle()}</p>
-      </div>
+      <DashboardIntro name={user.name} subtitle={m.dashboard_overview_subtitle()} />
       <div sx={styles.controls}>
         <label sx={styles.compare}>
           <Switch

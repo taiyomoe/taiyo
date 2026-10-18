@@ -28,7 +28,7 @@ export const updateCoverHandler = new Hono().patch(
   describeRoute({
     summary: "Update a cover",
     description:
-      "Updates the metadata of a cover. Omitted fields are kept as-is. Send `null` explicitly to clear `volume`. Promoting a cover to main is done through the dedicated set-main endpoint.\n\n**Required roles:** uploader, moderator, admin.",
+      "Updates the metadata of a cover. Omitted fields are kept as-is. Send `null` explicitly to clear `volume`. Promoting a cover to main is done through the dedicated set-main endpoint.\n\n**Required roles:** uploader intern, uploader, moderator, admin.",
     tags: ["Covers"],
     requestBody: {
       content: { "application/json": await resolver(updateCoverSchema).toOpenAPISchema() },
@@ -54,7 +54,7 @@ export const updateCoverHandler = new Hono().patch(
       }),
     },
   }),
-  withAuth("update", "Media"),
+  withAuth("media.update"),
   validateJson(updateCoverSchema),
   checkCover(),
   withTransaction,

@@ -2,8 +2,8 @@ import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
 import { removeGroupMember } from "../group-membership"
+import { authorizeGroup } from "../middlewares/authorize-group-middleware"
 import { checkGroup } from "../middlewares/check-group-middleware"
-import { requireGroupOwnerOrMod } from "../middlewares/require-group-owner-or-mod-middleware"
 import { validateParam } from "../middlewares/validate-param-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
@@ -17,7 +17,7 @@ export const removeGroupMemberHandler = new Hono().delete(
   describeRoute({
     summary: "Remove a member from a group",
     description:
-      "Removes a user from the group. Refuses if removing the user would leave the group with no owners; promote another member first.\n\n**Authentication:** group OWNER, moderator, admin.",
+      "Removes a member from the group. Owners can remove members, and members with `MANAGE_MEMBERS` can remove members whose permissions they all hold, except other managers. Nobody but an admin can remove an owner, and only admins can remove the last one. Use leave to remove yourself.\n\n**Authentication:** group owner, member with `MANAGE_MEMBERS`, admin.",
     tags: ["Group members"],
     responses: {
       200: {
@@ -35,15 +35,15 @@ export const removeGroupMemberHandler = new Hono().delete(
       }),
     },
   }),
-  withAuth("read", "OwnershipRequest"),
+  withAuth(),
   validateParam(paramSchema),
   checkGroup(),
-  requireGroupOwnerOrMod,
+  authorizeGroup("manageMembers"),
   withTransaction,
   async (c) => {
-    const { db, group } = c.var
+    const { actor, db, group } = c.var
     const { userId } = c.var.param
-    const result = await removeGroupMember(db, { groupId: group.id, userId })
+    const result = await removeGroupMember(db, { actor, groupId: group.id, userId })
 
     if (!result.ok) {
       return c.fail(result.error)

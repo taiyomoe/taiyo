@@ -41,7 +41,7 @@ export const listMyLibraryHandler = new Hono().get(
       }),
     },
   }),
-  withAuth("read", "Library"),
+  withAuth(),
   validateQuery(querySchema),
   async (c) => {
     const { db, user } = c.var

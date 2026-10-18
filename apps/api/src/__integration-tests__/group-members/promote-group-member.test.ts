@@ -47,11 +47,63 @@ describe("POST /groups/:id/members/:userId/promote", () => {
     expect(row?.role).toBe("OWNER")
   })
 
+  test("managers, moderators and uploaders cannot promote", async ({ app, services }) => {
+    const { headers: managerHeaders, userId: managerId } = await signInAs(services)
+    const { userId: targetId } = await signInAs(services)
+    const groupId = await seedGroup(services, managerId)
+
+    await services.db
+      .insertInto("groupMemberships")
+      .values([
+        {
+          userId: managerId,
+          groupId,
+          role: "MEMBER",
+          permissions: [
+            "MANAGE_MEMBERS",
+            "UPLOAD_CHAPTERS",
+            "EDIT_CHAPTERS",
+            "DELETE_CHAPTERS",
+            "EDIT_GROUP",
+          ],
+          addedBy: managerId,
+        },
+        { userId: targetId, groupId, role: "MEMBER", addedBy: managerId },
+      ])
+      .execute()
+
+    const staffHeaders = await Promise.all(
+      (["MODERATOR", "UPLOADER"] as const).map(
+        async (role) => (await signInAs(services, { role })).headers,
+      ),
+    )
+
+    for (const headers of [managerHeaders, ...staffHeaders]) {
+      const res = await api(app, `/groups/${groupId}/members/${targetId}/promote`, {
+        method: "POST",
+        headers,
+      })
+
+      expect(res.status).toBe(403)
+    }
+
+    for (const userId of [managerId, targetId]) {
+      const row = await services.db
+        .selectFrom("groupMemberships")
+        .select("role")
+        .where("groupId", "=", groupId)
+        .where("userId", "=", userId)
+        .executeTakeFirstOrThrow()
+
+      expect(row.role).toBe("MEMBER")
+    }
+  })
+
   test("returns GROUP_MEMBER_NOT_FOUND when the target has no membership", async ({
     app,
     services,
   }) => {
-    const { headers, userId: ownerId } = await signInAs(services, { role: "MODERATOR" })
+    const { headers, userId: ownerId } = await signInAs(services, { role: "ADMIN" })
     const groupId = await seedGroup(services, ownerId)
     const res = await api(app, `/groups/${groupId}/members/${randomUUID()}/promote`, {
       method: "POST",
@@ -100,7 +152,7 @@ describe("POST /groups/:id/members/:userId/promote", () => {
   })
 
   test("returns VALIDATION_ERROR for a non-UUID userId", async ({ app, services }) => {
-    const { headers, userId: ownerId } = await signInAs(services, { role: "MODERATOR" })
+    const { headers, userId: ownerId } = await signInAs(services, { role: "ADMIN" })
     const groupId = await seedGroup(services, ownerId)
     const res = await api(app, `/groups/${groupId}/members/not-a-uuid/promote`, {
       method: "POST",

@@ -12,7 +12,7 @@ export const setMainCoverHandler = new Hono().post(
   describeRoute({
     summary: "Set the main cover",
     description:
-      "Makes the given cover the main cover for its media, replacing any previous main cover.\n\n**Required roles:** uploader, moderator, admin.",
+      "Makes the given cover the main cover for its media, replacing any previous main cover.\n\n**Required roles:** uploader intern, uploader, moderator, admin.",
     tags: ["Covers"],
     responses: {
       200: {
@@ -35,7 +35,7 @@ export const setMainCoverHandler = new Hono().post(
       }),
     },
   }),
-  withAuth("update", "Media"),
+  withAuth("media.update"),
   checkCover(),
   withTransaction,
   async (c) => {

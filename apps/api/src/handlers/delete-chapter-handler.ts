@@ -1,8 +1,8 @@
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { authorizeChapter } from "../middlewares/authorize-chapter-middleware"
 import { checkChapter } from "../middlewares/check-chapter-middleware"
-import { requireChapterAccess } from "../middlewares/require-chapter-access-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
 import { getOpenApiResponses } from "../utils/openapi-helper"
@@ -13,7 +13,7 @@ export const deleteChapterHandler = new Hono().delete(
   describeRoute({
     summary: "Delete a chapter",
     description:
-      "Removes a chapter. The chapter can be restored later.\n\n**Authentication:** uploader intern, uploader, moderator, admin — or any signed-in member of a group linked to the chapter.",
+      "Removes a chapter. The chapter can be restored later.\n\n**Authentication:** uploader, moderator, admin — or a member with `DELETE_CHAPTERS` in a group credited on the chapter.",
     tags: ["Chapters"],
     responses: {
       200: {
@@ -36,9 +36,9 @@ export const deleteChapterHandler = new Hono().delete(
       }),
     },
   }),
-  withAuth("read", "OwnershipRequest"),
+  withAuth(),
   checkChapter(),
-  requireChapterAccess,
+  authorizeChapter("delete"),
   withTransaction,
   async (c) => {
     const { db, chapter, user } = c.var

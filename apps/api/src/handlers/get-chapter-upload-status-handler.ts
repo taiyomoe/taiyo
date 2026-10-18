@@ -3,8 +3,8 @@ import { chapterUploadManifestSchema } from "@taiyomoe/queue"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { authorizeChapter } from "../middlewares/authorize-chapter-middleware"
 import { checkChapter } from "../middlewares/check-chapter-middleware"
-import { requireChapterAccess } from "../middlewares/require-chapter-access-middleware"
 import { validateQuery } from "../middlewares/validate-query-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { getOpenApiResponses } from "../utils/openapi-helper"
@@ -22,7 +22,7 @@ export const getChapterUploadStatusHandler = new Hono().get(
   describeRoute({
     summary: "Get chapter upload status",
     description:
-      "Returns the current status of a chapter page upload task.\n\n**Authentication:** uploader intern, uploader, moderator, admin — or any signed-in member of a group linked to the chapter.",
+      "Returns the current status of a chapter page upload task.\n\n**Authentication:** uploader, moderator, admin — or a member with `EDIT_CHAPTERS` in a group credited on the chapter.",
     tags: ["Chapters"],
     responses: {
       200: {
@@ -52,10 +52,10 @@ export const getChapterUploadStatusHandler = new Hono().get(
       }),
     },
   }),
-  withAuth("read", "OwnershipRequest"),
+  withAuth(),
   validateQuery(getChapterUploadStatusQuerySchema),
   checkChapter(),
-  requireChapterAccess,
+  authorizeChapter("update"),
   async (c) => {
     const { db, chapter } = c.var
     const { taskId } = c.var.query

@@ -21,7 +21,7 @@ export const linkMediaStaffHandler = new Hono().post(
   describeRoute({
     summary: "Link a staff to a media",
     description:
-      "Adds a staff to a media with the given role.\n\n**Required roles:** uploader, moderator, admin.",
+      "Adds a staff to a media with the given role.\n\n**Required roles:** uploader intern, uploader, moderator, admin.",
     tags: ["Media staff"],
     requestBody: {
       content: { "application/json": await resolver(linkMediaStaffSchema).toOpenAPISchema() },
@@ -50,7 +50,7 @@ export const linkMediaStaffHandler = new Hono().post(
       }),
     },
   }),
-  withAuth("update", "Media"),
+  withAuth("media.update"),
   validateJson(linkMediaStaffSchema),
   checkMedia(),
   withTransaction,

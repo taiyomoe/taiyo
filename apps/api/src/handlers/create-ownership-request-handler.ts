@@ -11,7 +11,7 @@ import { apiSuccessEnvelope } from "../utils/schemas"
 
 const createOwnershipRequestSchema = z.object({
   message: z.string().min(1).max(2000).nullable().optional().meta({
-    description: "Optional pitch from the requester for the reviewing moderator.",
+    description: "Optional pitch from the requester for the reviewing admin.",
     example: "I've been translating this group's releases for two years.",
   }),
 })
@@ -21,7 +21,7 @@ export const createOwnershipRequestHandler = new Hono().post(
   describeRoute({
     summary: "Request ownership of a group",
     description:
-      "Files a claim on an unowned group. A moderator will review and approve or reject.\n\n**Authentication:** any signed-in user.",
+      "Files a claim on an unowned group. An admin will review and approve or reject.\n\n**Authentication:** any signed-in user.",
     tags: ["Group ownership"],
     requestBody: {
       content: {
@@ -51,7 +51,7 @@ export const createOwnershipRequestHandler = new Hono().post(
       }),
     },
   }),
-  withAuth("create", "OwnershipRequest"),
+  withAuth("ownershipRequest.create"),
   validateJson(createOwnershipRequestSchema),
   checkGroup(),
   withTransaction,

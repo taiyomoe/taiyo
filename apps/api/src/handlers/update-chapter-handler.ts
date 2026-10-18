@@ -3,8 +3,8 @@ import { CONTENT_RATINGS, FLAGS } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { authorizeChapter } from "../middlewares/authorize-chapter-middleware"
 import { checkChapter } from "../middlewares/check-chapter-middleware"
-import { requireChapterAccess } from "../middlewares/require-chapter-access-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
@@ -41,7 +41,7 @@ export const updateChapterHandler = new Hono().patch(
   describeRoute({
     summary: "Update a chapter",
     description:
-      "Updates the metadata of a chapter. Omitted fields are kept as-is. Send `null` for `title` or `volume` to clear them.\n\n**Authentication:** uploader intern, uploader, moderator, admin — or any signed-in member of a group linked to the chapter.",
+      "Updates the metadata of a chapter. Omitted fields are kept as-is. Send `null` for `title` or `volume` to clear them.\n\nChanging `flag` requires the uploader, moderator or admin role.\n\n**Authentication:** uploader, moderator, admin — or a member with `EDIT_CHAPTERS` in a group credited on the chapter.",
     tags: ["Chapters"],
     requestBody: {
       content: { "application/json": await resolver(updateChapterSchema).toOpenAPISchema() },
@@ -67,14 +67,19 @@ export const updateChapterHandler = new Hono().patch(
       }),
     },
   }),
-  withAuth("read", "OwnershipRequest"),
+  withAuth(),
   validateJson(updateChapterSchema),
   checkChapter(),
-  requireChapterAccess,
+  authorizeChapter("update"),
   withTransaction,
   async (c) => {
-    const { db, chapter } = c.var
+    const { can, db, chapter } = c.var
     const body = c.var.json
+
+    if (body.flag !== undefined && !can("chapter.flag")) {
+      return c.fail("FORBIDDEN")
+    }
+
     const updates: Record<string, unknown> = {}
 
     for (const key of ["title", "number", "volume", "language", "contentRating", "flag"] as const) {

@@ -1,6 +1,7 @@
 import type { S3Client } from "@aws-sdk/client-s3"
 import type { Auth, Session, User } from "@taiyomoe/auth/server"
 import type { DB } from "@taiyomoe/db"
+import type { Actor, Permissions } from "@taiyomoe/permissions"
 import type { ChapterUploadProducer } from "@taiyomoe/queue"
 import type { Meilisearch } from "@taiyomoe/search"
 import type { EvlogVariables } from "evlog/hono"
@@ -58,6 +59,8 @@ export type AppContextVariables = EvlogVariables["Variables"] & {
   auth: Auth
   user?: User
   session?: Session["session"]
+  actor?: Actor
+  can?: Permissions
   chapterUploadQueue: ChapterUploadProducer
   cacheNamespace: string
 }

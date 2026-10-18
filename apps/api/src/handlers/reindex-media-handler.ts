@@ -13,7 +13,7 @@ export const reindexMediaHandler = new Hono().post(
   describeRoute({
     summary: "Refresh a media in search",
     description:
-      "Refreshes the media's representation in search so that results reflect its current state.\n\n**Required roles:** uploader, moderator, admin.",
+      "Refreshes the media's representation in search so that results reflect its current state.\n\n**Required roles:** admin.",
     tags: ["Medias"],
     responses: {
       200: {
@@ -37,7 +37,7 @@ export const reindexMediaHandler = new Hono().post(
       }),
     },
   }),
-  withAuth("update", "Media"),
+  withAuth("media.reindex"),
   rateLimit({ prefix: "reindex-media", windowMs: 60_000, limit: 30 }),
   checkMedia(),
   async (c) => {

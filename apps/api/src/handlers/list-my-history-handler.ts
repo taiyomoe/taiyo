@@ -40,7 +40,7 @@ export const listMyHistoryHandler = new Hono().get(
       }),
     },
   }),
-  withAuth("read", "History"),
+  withAuth(),
   validateQuery(paginationQuerySchema),
   async (c) => {
     const { db, user } = c.var

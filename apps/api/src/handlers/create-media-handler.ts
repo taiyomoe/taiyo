@@ -193,7 +193,7 @@ export const createMediaHandler = new Hono().post(
   describeRoute({
     summary: "Create a media",
     description:
-      "Creates a new media with its titles, covers, banners, tags, external links, and staff credits.\n\n**Required roles:** uploader, moderator, admin.",
+      "Creates a new media with its titles, covers, banners, tags, external links, and staff credits.\n\n**Required roles:** uploader intern, uploader, admin.",
     tags: ["Medias"],
     requestBody: {
       content: {
@@ -223,7 +223,7 @@ export const createMediaHandler = new Hono().post(
       }),
     },
   }),
-  withAuth("create", "Media"),
+  withAuth("media.create"),
   rateLimit({ prefix: "create-media", windowMs: 60_000, limit: 10 }),
   validateFormData(createMediaSchema),
   checkImages(),

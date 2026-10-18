@@ -53,9 +53,6 @@ importers:
 
   apps/api:
     dependencies:
-      '@casl/ability':
-        specifier: ^7.0.1
-        version: 7.0.1
       '@hono-rate-limiter/redis':
         specifier: ^0.1.4
         version: 0.1.4(hono-rate-limiter@0.5.4(hono@4.13.13))
@@ -80,6 +77,9 @@ importers:
       '@taiyomoe/db':
         specifier: workspace:^
         version: link:../../packages/db
+      '@taiyomoe/permissions':
+        specifier: workspace:^
+        version: link:../../packages/permissions
       '@taiyomoe/queue':
         specifier: workspace:^
         version: link:../../packages/queue
@@ -229,6 +229,9 @@ importers:
       '@taiyomoe/config':
         specifier: workspace:^
         version: link:../../packages/config
+      '@taiyomoe/permissions':
+        specifier: workspace:^
+        version: link:../../packages/permissions
       '@taiyomoe/ui':
         specifier: workspace:^
         version: link:../../packages/ui
@@ -496,6 +499,15 @@ importers:
       '@types/react-dom':
         specifier: ^19.3.0
         version: 19.3.0(@types/react@19.3.0)
+
+  packages/permissions:
+    dependencies:
+      '@taiyomoe/db':
+        specifier: workspace:^
+        version: link:../db
+      permix:
+        specifier: ^4.4.0
+        version: 4.4.0(@tanstack/react-start@1.168.61(esbuild@0.28.2)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(rolldown@1.2.13)(vite@8.3.4(@types/node@26.6.5)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1)))(hono@4.13.13)(next@16.3.3(@babel/core@8.0.1)(@types/node@26.6.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(solid-js@1.9.15)
 
   packages/queue:
     dependencies:
@@ -1088,9 +1100,6 @@ packages:
 
   '@bytecodealliance/preview3-shim@0.6.1':
     resolution: {integrity: sha512-61mEfjfgGmZhEMA0H3waawPKvYd3za9y0vJ7pmQz/9yvm4FR6Ef+cmqhnxDE7ezsM07MY1btP92ymmgsgFwxmg==}
-
-  '@casl/ability@7.0.1':
-    resolution: {integrity: sha512-krOW1zQGEie5lH6fpryrcsPvc5r2pe5Vn5xbthuzc5X9gwzHIyZgGGgw9dMoSLHXdjB4BIVxGG/HBkG+1NuyZQ==}
 
   '@corvu/utils@0.4.2':
     resolution: {integrity: sha512-Ox2kYyxy7NoXdKWdHeDEjZxClwzO4SKM8plAaVwmAJPxHMqA0rLOoAsa+hBDwRLpctf+ZRnAd/ykguuJidnaTA==}
@@ -4098,18 +4107,6 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@ucast/core@2.0.0':
-    resolution: {integrity: sha512-4XVx6LzPXZGvnZO5jp39cm/G4UvuwvEdtmg+9+4+zl6uFkCcB7UJacvtMYeBE56GJVT99Zqy6Pii7dGJq3Kz9Q==}
-
-  '@ucast/js@4.0.1':
-    resolution: {integrity: sha512-9O5xPBvwEWQk2WvO69Eh2WJB8QljVZ2vRVdFvfnKjlZwWXcYxp1lqLBhwXBU1AtuSgCvKhJPkXdjKJggUmAmQQ==}
-
-  '@ucast/mongo2js@2.0.0':
-    resolution: {integrity: sha512-vNBZzRnsfLr/TSxEoxz6W6hHQ5tmWsfEeC0nCq5z8RezC1AqIRy3cfHm8AGvlGtcn+cTSFQcZremfqnz6wm+nQ==}
-
-  '@ucast/mongo@3.0.0':
-    resolution: {integrity: sha512-kwuSH+kdB4GCR0LGhy/PEDm4PCflur89AlK82kNiYD0FvsA8A/p+0sx7m+/R8mMFAlmlkAd3VXp7sM/cLLYWYg==}
-
   '@vitejs/plugin-react@6.1.2':
     resolution: {integrity: sha512-fhJNGUdscQa4HkI0xFxwonWyhnVReCPDbXI7FH7jmzpnVCrFQI7PRrhWecO263610vOrs9tr2Y4xcf8uAdFxbw==}
     engines: {node: ^20.19.0 || >=22.12.0}
@@ -5595,6 +5592,69 @@ packages:
   perfect-debounce@2.1.0:
     resolution: {integrity: sha512-LjgdTytVFXeUgtHZr9WYViYSM/g8MkcTPYDlPa3cDqMirHjKiSZPYd6DoL7pK8AJQr+uWkQvCjHNdiMqsrJs+g==}
 
+  permix@4.4.0:
+    resolution: {integrity: sha512-Oo1LcC9yE5cH29DXtKkAEPFHJqFVU/AoGllHZZWV9EBB4gyKW0O5lXPjUGgVibIE8SJmRWx2OFXleQL1ICnwng==}
+    engines: {node: '>=22'}
+    peerDependencies:
+      '@nestjs/common': '>=10'
+      '@nestjs/core': '>=10'
+      '@orpc/server': '>=1'
+      '@tanstack/react-start': '>=1'
+      '@trpc/server': '>=11'
+      drizzle-orm: '>=0.30.0 || >=1.0.0-rc.3'
+      effect: '>=3'
+      elysia: '>=1'
+      express: '>=4'
+      fastify: '>=5'
+      fastify-plugin: '>=5'
+      hono: '>=4'
+      next: '>=14'
+      react: '>=18'
+      react-dom: '>=18'
+      reflect-metadata: '>=0.1.13'
+      solid-js: '>=1'
+      svelte: '>=5'
+      vue: '>=3'
+    peerDependenciesMeta:
+      '@nestjs/common':
+        optional: true
+      '@nestjs/core':
+        optional: true
+      '@orpc/server':
+        optional: true
+      '@tanstack/react-start':
+        optional: true
+      '@trpc/server':
+        optional: true
+      drizzle-orm:
+        optional: true
+      effect:
+        optional: true
+      elysia:
+        optional: true
+      express:
+        optional: true
+      fastify:
+        optional: true
+      fastify-plugin:
+        optional: true
+      hono:
+        optional: true
+      next:
+        optional: true
+      react:
+        optional: true
+      react-dom:
+        optional: true
+      reflect-metadata:
+        optional: true
+      solid-js:
+        optional: true
+      svelte:
+        optional: true
+      vue:
+        optional: true
+
   pg-cloudflare@1.4.1:
     resolution: {integrity: sha512-6PQbsFWZcp9EmJEwy5cGQ2La+AMWpP46lgbb8X+U/XsHIUweYDNCpeuKck5RxL2MdVFi7krbbEi5nX4Zh7JhrQ==}
 
@@ -6926,10 +6986,6 @@ snapshots:
     dependencies:
       '@bytecodealliance/jco-node-fs': 0.3.2
       '@bytecodealliance/preview2-shim': 0.25.0
-
-  '@casl/ability@7.0.1':
-    dependencies:
-      '@ucast/mongo2js': 2.0.0
 
   '@corvu/utils@0.4.2(solid-js@1.9.15)':
     dependencies:
@@ -9144,22 +9200,6 @@ snapshots:
   '@typescript/typescript-win32-x64@7.0.2':
     optional: true
 
-  '@ucast/core@2.0.0': {}
-
-  '@ucast/js@4.0.1':
-    dependencies:
-      '@ucast/core': 2.0.0
-
-  '@ucast/mongo2js@2.0.0':
-    dependencies:
-      '@ucast/core': 2.0.0
-      '@ucast/js': 4.0.1
-      '@ucast/mongo': 3.0.0
-
-  '@ucast/mongo@3.0.0':
-    dependencies:
-      '@ucast/core': 2.0.0
-
   '@vitejs/plugin-react@6.1.2(@rolldown/plugin-babel@0.2.3(@babel/core@7.29.7)(@babel/runtime@8.0.7)(rolldown@1.2.13)(vite@8.3.4(@types/node@26.6.5)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1)))(babel-plugin-react-compiler@1.0.0)(oxc-transform-react@0.152.0)(vite@8.3.4(@types/node@26.6.5)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))':
     dependencies:
       '@rolldown/pluginutils': 1.0.1
@@ -10661,6 +10701,15 @@ snapshots:
   peberminta@0.9.0: {}
 
   perfect-debounce@2.1.0: {}
+
+  permix@4.4.0(@tanstack/react-start@1.168.61(esbuild@0.28.2)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(rolldown@1.2.13)(vite@8.3.4(@types/node@26.6.5)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1)))(hono@4.13.13)(next@16.3.3(@babel/core@8.0.1)(@types/node@26.6.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(solid-js@1.9.15):
+    optionalDependencies:
+      '@tanstack/react-start': 1.168.61(esbuild@0.28.2)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(rolldown@1.2.13)(vite@8.3.4(@types/node@26.6.5)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
+      hono: 4.13.13
+      next: 16.3.3(@babel/core@8.0.1)(@types/node@26.6.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      react: 19.3.0
+      react-dom: 19.3.0(react@19.3.0)
+      solid-js: 1.9.15
 
   pg-cloudflare@1.4.1:
     optional: true

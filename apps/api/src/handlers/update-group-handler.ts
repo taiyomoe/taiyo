@@ -2,8 +2,8 @@ import { config } from "@taiyomoe/config"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { authorizeGroup } from "../middlewares/authorize-group-middleware"
 import { checkGroup } from "../middlewares/check-group-middleware"
-import { requireGroupAccess } from "../middlewares/require-group-access-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
@@ -35,7 +35,7 @@ export const updateGroupHandler = new Hono().patch(
   describeRoute({
     summary: "Update a group",
     description:
-      "Updates a group. Omitted fields are kept as-is. Send `null` to clear a nullable field.\n\n**Authentication:** uploader intern, uploader, moderator, admin — or any signed-in member of the group.",
+      "Updates a group. Omitted fields are kept as-is. Send `null` to clear a nullable field.\n\n**Authentication:** uploader, moderator, admin — or a group owner or member with `EDIT_GROUP`.",
     tags: ["Groups"],
     requestBody: {
       content: { "application/json": await resolver(updateGroupSchema).toOpenAPISchema() },
@@ -61,10 +61,10 @@ export const updateGroupHandler = new Hono().patch(
       }),
     },
   }),
-  withAuth("read", "OwnershipRequest"),
+  withAuth(),
   validateJson(updateGroupSchema),
   checkGroup(),
-  requireGroupAccess,
+  authorizeGroup("update"),
   withTransaction,
   async (c) => {
     const { db, group } = c.var

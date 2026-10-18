@@ -2,10 +2,10 @@ import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
 import { checkChapter } from "../middlewares/check-chapter-middleware"
-import { requireChapterAccess } from "../middlewares/require-chapter-access-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
+import { getChapterTarget } from "../utils/chapter-target"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
@@ -18,7 +18,7 @@ export const linkChapterGroupHandler = new Hono().post(
   describeRoute({
     summary: "Link a group to a chapter",
     description:
-      "Adds a group to a chapter.\n\n**Authentication:** uploader intern, uploader, moderator, admin — or any signed-in member of a group already linked to the chapter.",
+      "Credits a group on a chapter. Anyone who can edit the chapter can credit any group.\n\n**Authentication:** uploader, moderator, admin — or a member with `EDIT_CHAPTERS` in a group credited on the chapter.",
     tags: ["Chapter groups"],
     requestBody: {
       content: { "application/json": await resolver(linkChapterGroupSchema).toOpenAPISchema() },
@@ -41,14 +41,18 @@ export const linkChapterGroupHandler = new Hono().post(
       }),
     },
   }),
-  withAuth("read", "OwnershipRequest"),
+  withAuth(),
   validateJson(linkChapterGroupSchema),
   checkChapter(),
-  requireChapterAccess,
   withTransaction,
   async (c) => {
-    const { db, chapter } = c.var
+    const { can, db, chapter } = c.var
     const { groupId } = c.var.json
+
+    if (!can("chapter.credit", { chapter: await getChapterTarget(db, chapter), groupId })) {
+      return c.fail("FORBIDDEN")
+    }
+
     const group = await db
       .selectFrom("groups")
       .select("id")

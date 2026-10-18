@@ -1,10 +1,9 @@
-import { GROUP_MEMBERSHIP_ROLES } from "@taiyomoe/db"
+import { GROUP_MEMBERSHIP_ROLES, GROUP_PERMISSIONS } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
 import { addGroupMember } from "../group-membership"
 import { checkGroup } from "../middlewares/check-group-middleware"
-import { requireGroupOwnerOrMod } from "../middlewares/require-group-owner-or-mod-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
@@ -14,6 +13,9 @@ import { apiSuccessEnvelope } from "../utils/schemas"
 const addMemberSchema = z.object({
   userId: z.uuid().meta({ description: "The ID of the user to add." }),
   role: z.enum(GROUP_MEMBERSHIP_ROLES).meta({ description: "OWNER or MEMBER.", example: "MEMBER" }),
+  permissions: z.array(z.enum(GROUP_PERMISSIONS)).max(GROUP_PERMISSIONS.length).default([]).meta({
+    description: "Group permissions granted to the member. Owners hold every permission.",
+  }),
 })
 
 export const addGroupMemberHandler = new Hono().post(
@@ -21,7 +23,7 @@ export const addGroupMemberHandler = new Hono().post(
   describeRoute({
     summary: "Add a member to a group",
     description:
-      "Adds a user to the group with the given role. Only existing owners of the group and moderators / admins may call this.\n\n**Authentication:** group OWNER, moderator, admin.",
+      "Adds a user to the group directly with the given role and permissions, without an invitation.\n\n**Authentication:** admin.",
     tags: ["Group members"],
     requestBody: {
       content: { "application/json": await resolver(addMemberSchema).toOpenAPISchema() },
@@ -50,14 +52,13 @@ export const addGroupMemberHandler = new Hono().post(
       }),
     },
   }),
-  withAuth("read", "OwnershipRequest"),
+  withAuth("group.addMember"),
   validateJson(addMemberSchema),
   checkGroup(),
-  requireGroupOwnerOrMod,
   withTransaction,
   async (c) => {
     const { db, group, user } = c.var
-    const { userId, role } = c.var.json
+    const { userId, role, permissions } = c.var.json
     const target = await db
       .selectFrom("users")
       .select("id")
@@ -68,7 +69,13 @@ export const addGroupMemberHandler = new Hono().post(
       return c.fail("NOT_FOUND", { resource: "user", id: userId })
     }
 
-    const result = await addGroupMember(db, { groupId: group.id, userId, role, addedBy: user.id })
+    const result = await addGroupMember(db, {
+      groupId: group.id,
+      userId,
+      role,
+      permissions,
+      addedBy: user.id,
+    })
 
     if (!result.ok) {
       return c.fail(result.error)
