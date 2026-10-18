@@ -14,6 +14,7 @@ import {
   InputGroupInput,
 } from "@taiyomoe/ui/components/ui/input-group"
 import { PasswordInput, type PasswordInputProps } from "@taiyomoe/ui/components/ui/password-input"
+import { Textarea } from "@taiyomoe/ui/components/ui/textarea"
 import { Controller } from "react-hook-form"
 import { m } from "@/paraglide/messages"
 
@@ -50,13 +51,13 @@ const BoundField = <TFieldValues extends FieldValues, TName extends FieldPath<TF
     name={name}
     control={control}
     render={({ field, fieldState, formState }) => (
-      <Field>
+      <Field invalid={fieldState.invalid}>
         {label !== undefined && label !== "" ? <FieldLabel>{label}</FieldLabel> : null}
         {children(toControlProps(field, fieldState, formState))}
         {description !== undefined && description !== "" ? (
           <FieldDescription>{description}</FieldDescription>
         ) : null}
-        {fieldState.error ? <FieldError>{fieldState.error.message}</FieldError> : null}
+        {fieldState.error ? <FieldError match>{fieldState.error.message}</FieldError> : null}
       </Field>
     )}
   />
@@ -90,6 +91,21 @@ export const InputField = <
         ) : null}
       </InputGroup>
     )}
+  </BoundField>
+)
+
+export const TextareaField = <
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+>({
+  name,
+  control,
+  label,
+  description,
+  ...props
+}: Omit<ComponentProps<typeof Textarea>, "name"> & Bound<TFieldValues, TName>) => (
+  <BoundField name={name} control={control} label={label} description={description}>
+    {(field) => <Textarea {...field} {...props} />}
   </BoundField>
 )
 
@@ -144,7 +160,7 @@ export const CheckboxField = <
           />
           {label}
         </FieldLabel>
-        {fieldState.error ? <FieldError>{fieldState.error.message}</FieldError> : null}
+        {fieldState.error ? <FieldError match>{fieldState.error.message}</FieldError> : null}
       </Field>
     )}
   />

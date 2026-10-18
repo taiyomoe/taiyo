@@ -8,7 +8,12 @@ import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
 import { getOpenApiResponses } from "../utils/openapi-helper"
-import { apiSuccessEnvelope } from "../utils/schemas"
+import {
+  apiSuccessEnvelope,
+  groupDiscordSchema,
+  groupEmailSchema,
+  groupLinkSchema,
+} from "../utils/schemas"
 
 const urlField = () => z.string().max(config.input.maxUrlLength).nullable().optional()
 const updateGroupSchema = z
@@ -17,14 +22,14 @@ const updateGroupSchema = z
     description: z.string().max(config.input.maxDescriptionLength).nullable().optional(),
     logo: urlField(),
     banner: urlField(),
-    website: urlField(),
-    discord: urlField(),
-    x: urlField(),
-    facebook: urlField(),
-    instagram: urlField(),
-    telegram: urlField(),
-    youtube: urlField(),
-    email: urlField(),
+    website: groupLinkSchema("Website URL."),
+    discord: groupDiscordSchema,
+    x: groupLinkSchema("X / Twitter URL."),
+    facebook: groupLinkSchema("Facebook URL."),
+    instagram: groupLinkSchema("Instagram URL."),
+    telegram: groupLinkSchema("Telegram URL."),
+    youtube: groupLinkSchema("YouTube URL."),
+    email: groupEmailSchema,
   })
   .refine((data) => Object.keys(data).length > 0, {
     message: "At least one field must be provided.",

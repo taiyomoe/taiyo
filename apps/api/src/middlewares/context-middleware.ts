@@ -10,7 +10,7 @@ import type { ContentfulStatusCode } from "hono/utils/http-status"
 import type { JSONParsed } from "hono/utils/types"
 import type { Kysely } from "kysely"
 import { createMiddleware } from "hono/factory"
-import type { Services } from "../services"
+import type { Mailer, Services } from "../services"
 import { type ErrorCode, errors } from "../utils/errors"
 
 type SuccessEnvelope<T> = {
@@ -62,6 +62,7 @@ export type AppContextVariables = EvlogVariables["Variables"] & {
   actor?: Actor
   can?: Permissions
   chapterUploadQueue: ChapterUploadProducer
+  mailer: Mailer
   cacheNamespace: string
 }
 
@@ -79,6 +80,7 @@ export const createContextMiddleware = (services: Services) =>
     c.set("mediasIndex", services.mediasIndex)
     c.set("auth", services.auth)
     c.set("chapterUploadQueue", services.chapterUploadQueue)
+    c.set("mailer", services.mailer)
     c.set("cacheNamespace", services.cacheNamespace)
 
     function ok<T>(data: T): JsonResponse<SuccessEnvelope<T>, 200 | 201>

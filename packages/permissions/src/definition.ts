@@ -27,6 +27,8 @@ export type MemberTarget = {
   permissions: readonly GroupPermission[]
 }
 
+export type GrantTarget = { groupId: string; permissions: readonly GroupPermission[] }
+
 export type MemberPermissionsTarget = {
   member: MemberTarget
   permissions: readonly GroupPermission[]
@@ -53,12 +55,14 @@ export type PermissionsDefinition = ValidateDefinition<{
     { name: "uploadChapters"; type: GroupTarget; required: true },
     { name: "manageMembers"; type: GroupTarget; required: true },
     { name: "transferOwnership"; type: GroupTarget; required: true },
+    { name: "inviteMember"; type: GrantTarget; required: true },
     { name: "updateMember"; type: MemberPermissionsTarget; required: true },
     { name: "removeMember"; type: MemberTarget; required: true },
     { name: "promoteMember"; type: MemberTarget; required: true },
     { name: "demoteMember"; type: MemberTarget; required: true },
   ]
   ownershipRequest: ["create", "review"]
+  groupCreationRequest: ["create", "review"]
   comment: ["delete"]
   user: [
     "list",

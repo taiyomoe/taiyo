@@ -53,6 +53,12 @@ export const unwrap = async <TBody extends SuccessBody | FailureBody>(
   response: EnvelopeResponse<TBody>,
 ): Promise<Extract<TBody, { success: true }>["data"]> => (await unwrapEnvelope(response)).data
 
+export const ensureSuccess = async (
+  response: EnvelopeResponse<SuccessBody | FailureBody>,
+): Promise<void> => {
+  await unwrapEnvelope(response)
+}
+
 export const getApiErrorCode = (error: unknown): string | undefined => {
   if (typeof error !== "object" || error === null) {
     return undefined

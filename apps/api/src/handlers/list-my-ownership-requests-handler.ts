@@ -5,7 +5,7 @@ import z from "zod"
 import { validateQuery } from "../middlewares/validate-query-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { getOpenApiResponses } from "../utils/openapi-helper"
-import { apiSuccessEnvelope } from "../utils/schemas"
+import { apiSuccessEnvelope, groupSummarySchema } from "../utils/schemas"
 
 const querySchema = z.object({
   status: z.enum(GROUP_OWNERSHIP_REQUEST_STATUSES).optional(),
@@ -13,8 +13,10 @@ const querySchema = z.object({
 const itemSchema = z.object({
   id: z.uuid(),
   groupId: z.uuid(),
+  group: groupSummarySchema,
   status: z.enum(GROUP_OWNERSHIP_REQUEST_STATUSES),
   message: z.string().nullable(),
+  proofLinks: z.url().array(),
   reviewerNote: z.string().nullable(),
   createdAt: z.iso.datetime(),
   updatedAt: z.iso.datetime(),
@@ -44,15 +46,32 @@ export const listMyOwnershipRequestsHandler = new Hono().get(
     const { status } = c.var.query
     let query = db
       .selectFrom("groupOwnershipRequests")
-      .select(["id", "groupId", "status", "message", "reviewerNote", "createdAt", "updatedAt"])
-      .where("userId", "=", user.id)
+      .innerJoin("groups", "groups.id", "groupOwnershipRequests.groupId")
+      .select([
+        "groupOwnershipRequests.id",
+        "groupOwnershipRequests.groupId",
+        "groupOwnershipRequests.status",
+        "groupOwnershipRequests.message",
+        "groupOwnershipRequests.proofLinks",
+        "groupOwnershipRequests.reviewerNote",
+        "groupOwnershipRequests.createdAt",
+        "groupOwnershipRequests.updatedAt",
+        "groups.name as groupName",
+        "groups.logo as groupLogo",
+      ])
+      .where("groupOwnershipRequests.userId", "=", user.id)
 
     if (status) {
-      query = query.where("status", "=", status)
+      query = query.where("groupOwnershipRequests.status", "=", status)
     }
 
-    const rows = await query.orderBy("createdAt", "desc").execute()
+    const rows = await query.orderBy("groupOwnershipRequests.createdAt", "desc").execute()
 
-    return c.ok(rows)
+    return c.ok(
+      rows.map(({ groupName, groupLogo, ...row }) => ({
+        ...row,
+        group: { id: row.groupId, name: groupName, logo: groupLogo },
+      })),
+    )
   },
 )

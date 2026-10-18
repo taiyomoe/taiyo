@@ -20,7 +20,13 @@ import { Route as TitlesRouteImport } from './routes/titles'
 import { Route as AuthSignInRouteImport } from './routes/auth/sign-in'
 import { Route as AuthSignUpRouteImport } from './routes/auth/sign-up'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
+import { Route as DashboardGroupRequestsRouteImport } from './routes/dashboard/group-requests'
+import { Route as DashboardInvitationsRouteImport } from './routes/dashboard/invitations'
+import { Route as GroupsIndexRouteImport } from './routes/groups/index'
+import { Route as GroupsGroupIdRouteImport } from './routes/groups/$groupId'
 import { Route as MediaMediaIdRouteImport } from './routes/media/$mediaId'
+import { Route as DashboardGroupsIndexRouteImport } from './routes/dashboard/groups/index'
+import { Route as DashboardGroupsGroupIdRouteImport } from './routes/dashboard/groups/$groupId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -77,10 +83,40 @@ const DashboardIndexRoute = DashboardIndexRouteImport.update({
   path: '/',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
+const DashboardGroupRequestsRoute = DashboardGroupRequestsRouteImport.update({
+  id: '/group-requests',
+  path: '/group-requests',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardInvitationsRoute = DashboardInvitationsRouteImport.update({
+  id: '/invitations',
+  path: '/invitations',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const GroupsIndexRoute = GroupsIndexRouteImport.update({
+  id: '/groups/',
+  path: '/groups/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GroupsGroupIdRoute = GroupsGroupIdRouteImport.update({
+  id: '/groups/$groupId',
+  path: '/groups/$groupId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MediaMediaIdRoute = MediaMediaIdRouteImport.update({
   id: '/media/$mediaId',
   path: '/media/$mediaId',
   getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardGroupsIndexRoute = DashboardGroupsIndexRouteImport.update({
+  id: '/groups/',
+  path: '/groups/',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardGroupsGroupIdRoute = DashboardGroupsGroupIdRouteImport.update({
+  id: '/groups/$groupId',
+  path: '/groups/$groupId',
+  getParentRoute: () => DashboardRouteRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -94,8 +130,14 @@ export interface FileRoutesByFullPath {
   '/titles': typeof TitlesRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
+  '/dashboard/group-requests': typeof DashboardGroupRequestsRoute
+  '/dashboard/invitations': typeof DashboardInvitationsRoute
+  '/groups/$groupId': typeof GroupsGroupIdRoute
   '/media/$mediaId': typeof MediaMediaIdRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/groups/': typeof GroupsIndexRoute
+  '/dashboard/groups/$groupId': typeof DashboardGroupsGroupIdRoute
+  '/dashboard/groups/': typeof DashboardGroupsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -107,8 +149,14 @@ export interface FileRoutesByTo {
   '/titles': typeof TitlesRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
+  '/dashboard/group-requests': typeof DashboardGroupRequestsRoute
+  '/dashboard/invitations': typeof DashboardInvitationsRoute
+  '/groups/$groupId': typeof GroupsGroupIdRoute
   '/media/$mediaId': typeof MediaMediaIdRoute
   '/dashboard': typeof DashboardIndexRoute
+  '/groups': typeof GroupsIndexRoute
+  '/dashboard/groups/$groupId': typeof DashboardGroupsGroupIdRoute
+  '/dashboard/groups': typeof DashboardGroupsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -122,8 +170,14 @@ export interface FileRoutesById {
   '/titles': typeof TitlesRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
+  '/dashboard/group-requests': typeof DashboardGroupRequestsRoute
+  '/dashboard/invitations': typeof DashboardInvitationsRoute
+  '/groups/$groupId': typeof GroupsGroupIdRoute
   '/media/$mediaId': typeof MediaMediaIdRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/groups/': typeof GroupsIndexRoute
+  '/dashboard/groups/$groupId': typeof DashboardGroupsGroupIdRoute
+  '/dashboard/groups/': typeof DashboardGroupsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -138,8 +192,14 @@ export interface FileRouteTypes {
     | '/titles'
     | '/auth/sign-in'
     | '/auth/sign-up'
+    | '/dashboard/group-requests'
+    | '/dashboard/invitations'
+    | '/groups/$groupId'
     | '/media/$mediaId'
     | '/dashboard/'
+    | '/groups/'
+    | '/dashboard/groups/$groupId'
+    | '/dashboard/groups/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -151,8 +211,14 @@ export interface FileRouteTypes {
     | '/titles'
     | '/auth/sign-in'
     | '/auth/sign-up'
+    | '/dashboard/group-requests'
+    | '/dashboard/invitations'
+    | '/groups/$groupId'
     | '/media/$mediaId'
     | '/dashboard'
+    | '/groups'
+    | '/dashboard/groups/$groupId'
+    | '/dashboard/groups'
   id:
     | '__root__'
     | '/'
@@ -165,8 +231,14 @@ export interface FileRouteTypes {
     | '/titles'
     | '/auth/sign-in'
     | '/auth/sign-up'
+    | '/dashboard/group-requests'
+    | '/dashboard/invitations'
+    | '/groups/$groupId'
     | '/media/$mediaId'
     | '/dashboard/'
+    | '/groups/'
+    | '/dashboard/groups/$groupId'
+    | '/dashboard/groups/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -178,7 +250,9 @@ export interface RootRouteChildren {
   PrivacyRoute: typeof PrivacyRoute
   TermsRoute: typeof TermsRoute
   TitlesRoute: typeof TitlesRoute
+  GroupsGroupIdRoute: typeof GroupsGroupIdRoute
   MediaMediaIdRoute: typeof MediaMediaIdRoute
+  GroupsIndexRoute: typeof GroupsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -260,12 +334,54 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardIndexRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
+    '/dashboard/group-requests': {
+      id: '/dashboard/group-requests'
+      path: '/group-requests'
+      fullPath: '/dashboard/group-requests'
+      preLoaderRoute: typeof DashboardGroupRequestsRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/invitations': {
+      id: '/dashboard/invitations'
+      path: '/invitations'
+      fullPath: '/dashboard/invitations'
+      preLoaderRoute: typeof DashboardInvitationsRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/groups/': {
+      id: '/groups/'
+      path: '/groups'
+      fullPath: '/groups/'
+      preLoaderRoute: typeof GroupsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/groups/$groupId': {
+      id: '/groups/$groupId'
+      path: '/groups/$groupId'
+      fullPath: '/groups/$groupId'
+      preLoaderRoute: typeof GroupsGroupIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/media/$mediaId': {
       id: '/media/$mediaId'
       path: '/media/$mediaId'
       fullPath: '/media/$mediaId'
       preLoaderRoute: typeof MediaMediaIdRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/groups/': {
+      id: '/dashboard/groups/'
+      path: '/groups'
+      fullPath: '/dashboard/groups/'
+      preLoaderRoute: typeof DashboardGroupsIndexRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/groups/$groupId': {
+      id: '/dashboard/groups/$groupId'
+      path: '/groups/$groupId'
+      fullPath: '/dashboard/groups/$groupId'
+      preLoaderRoute: typeof DashboardGroupsGroupIdRouteImport
+      parentRoute: typeof DashboardRouteRoute
     }
   }
 }
@@ -285,11 +401,19 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
 )
 
 interface DashboardRouteRouteChildren {
+  DashboardGroupRequestsRoute: typeof DashboardGroupRequestsRoute
+  DashboardInvitationsRoute: typeof DashboardInvitationsRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
+  DashboardGroupsGroupIdRoute: typeof DashboardGroupsGroupIdRoute
+  DashboardGroupsIndexRoute: typeof DashboardGroupsIndexRoute
 }
 
 const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
+  DashboardGroupRequestsRoute: DashboardGroupRequestsRoute,
+  DashboardInvitationsRoute: DashboardInvitationsRoute,
   DashboardIndexRoute: DashboardIndexRoute,
+  DashboardGroupsGroupIdRoute: DashboardGroupsGroupIdRoute,
+  DashboardGroupsIndexRoute: DashboardGroupsIndexRoute,
 }
 
 const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(
@@ -305,7 +429,9 @@ const rootRouteChildren: RootRouteChildren = {
   PrivacyRoute: PrivacyRoute,
   TermsRoute: TermsRoute,
   TitlesRoute: TitlesRoute,
+  GroupsGroupIdRoute: GroupsGroupIdRoute,
   MediaMediaIdRoute: MediaMediaIdRoute,
+  GroupsIndexRoute: GroupsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

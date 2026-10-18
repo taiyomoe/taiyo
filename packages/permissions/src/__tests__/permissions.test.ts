@@ -50,6 +50,8 @@ const STATIC_MATRIX: Record<StaticPermissionPath, readonly Role[]> = {
   "group.delete": ["ADMIN"],
   "ownershipRequest.create": ROLES,
   "ownershipRequest.review": ["ADMIN"],
+  "groupCreationRequest.create": ROLES,
+  "groupCreationRequest.review": ["ADMIN"],
   "comment.delete": ["MODERATOR", "ADMIN"],
   "user.list": ["MODERATOR", "ADMIN"],
 }
@@ -102,6 +104,7 @@ describe("signed-out and banned users", () => {
     can("group.uploadChapters", { id: GROUP_A }),
     can("group.manageMembers", { id: GROUP_A }),
     can("group.transferOwnership", { id: GROUP_A }),
+    can("group.inviteMember", { groupId: GROUP_A, permissions: [] }),
     can("group.updateMember", { member: target(), permissions: ["EDIT_CHAPTERS"] }),
     can("group.removeMember", target()),
     can("group.promoteMember", target()),
@@ -311,6 +314,47 @@ describe("groups", () => {
       expect(can("group.updateMember", { member: elsewhere, permissions: [] })).toBe(false)
       expect(can("group.removeMember", elsewhere)).toBe(false)
       expect(can("group.promoteMember", elsewhere)).toBe(false)
+    })
+  })
+
+  describe("invitations", () => {
+    it("lets owners and admins invite with any permissions", () => {
+      for (const can of [
+        createPermissions(actor("USER", [owner(GROUP_A)])),
+        createPermissions(actor("ADMIN")),
+      ]) {
+        expect(
+          can("group.inviteMember", { groupId: GROUP_A, permissions: [...GROUP_PERMISSIONS] }),
+        ).toBe(true)
+      }
+    })
+
+    it("lets managers invite with permissions they hold, except MANAGE_MEMBERS", () => {
+      const can = createPermissions(
+        actor("USER", [member(GROUP_A, ["MANAGE_MEMBERS", "UPLOAD_CHAPTERS"])]),
+      )
+
+      expect(can("group.inviteMember", { groupId: GROUP_A, permissions: [] })).toBe(true)
+      expect(
+        can("group.inviteMember", { groupId: GROUP_A, permissions: ["UPLOAD_CHAPTERS"] }),
+      ).toBe(true)
+      expect(
+        can("group.inviteMember", { groupId: GROUP_A, permissions: ["DELETE_CHAPTERS"] }),
+      ).toBe(false)
+      expect(can("group.inviteMember", { groupId: GROUP_A, permissions: ["MANAGE_MEMBERS"] })).toBe(
+        false,
+      )
+      expect(can("group.inviteMember", { groupId: GROUP_B, permissions: [] })).toBe(false)
+    })
+
+    it("does not let other members or staff invite", () => {
+      for (const can of [
+        createPermissions(actor("USER", [member(GROUP_A, ["UPLOAD_CHAPTERS", "EDIT_GROUP"])])),
+        createPermissions(actor("MODERATOR")),
+        createPermissions(actor("UPLOADER")),
+      ]) {
+        expect(can("group.inviteMember", { groupId: GROUP_A, permissions: [] })).toBe(false)
+      }
     })
   })
 

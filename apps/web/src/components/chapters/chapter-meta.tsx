@@ -4,6 +4,7 @@ import { Users } from "@taiyomoe/ui/components/icons"
 import { Avatar, AvatarFallback, AvatarImage } from "@taiyomoe/ui/components/ui/avatar"
 import { Popover, PopoverPopup, PopoverTrigger } from "@taiyomoe/ui/components/ui/popover"
 import { colors, font, motion, radius } from "@taiyomoe/ui/styles/tokens.stylex"
+import { Link } from "@tanstack/react-router"
 import type { LatestChapter } from "@/lib/queries/chapters"
 import { useHoverPopover } from "@/lib/use-hover-popover"
 import { useNow } from "@/lib/use-now"
@@ -110,9 +111,15 @@ const styles = stylex.create({
   },
   group: {
     overflow: "hidden",
-    color: `color-mix(in srgb, ${colors.foreground} 82%, transparent)`,
+    textDecoration: "none",
+    color: {
+      default: `color-mix(in srgb, ${colors.foreground} 82%, transparent)`,
+      ":hover": `color-mix(in srgb, ${colors.foreground} 62%, transparent)`,
+    },
     fontWeight: 500,
     textOverflow: "ellipsis",
+    transitionDuration: motion.enter,
+    transitionProperty: "color",
     whiteSpace: "nowrap",
     maxWidth: "100%",
     minWidth: 0,
@@ -296,9 +303,15 @@ export function ChapterGroups({ groups, max = 1, wrap = false, sx }: ChapterGrou
           <span sx={[styles.group, styles.noGroup]}>{m.chapter_no_group()}</span>
         ) : (
           groups.slice(0, max).map((group) => (
-            <span key={group.id} sx={styles.group} title={group.name}>
+            <Link
+              key={group.id}
+              params={{ groupId: group.id }}
+              title={group.name}
+              to="/groups/$groupId"
+              {...stylex.props(styles.group)}
+            >
               {group.name}
-            </span>
+            </Link>
           ))
         )}
         {hidden.length > 0 ? <MoreGroups groups={hidden} /> : null}
@@ -324,7 +337,13 @@ function MoreGroups({ groups }: { groups: LatestChapter["groups"] }) {
           {groups.map((group) => (
             <li key={group.id} sx={styles.moreGroupsItem}>
               <Users size={14} {...stylex.props(styles.moreGroupsIcon)} />
-              {group.name}
+              <Link
+                params={{ groupId: group.id }}
+                to="/groups/$groupId"
+                {...stylex.props(styles.group)}
+              >
+                {group.name}
+              </Link>
             </li>
           ))}
         </ul>

@@ -48,6 +48,16 @@ const ROUTES: Route[] = [
   { method: "POST", path: `/groups/${id}/ownership-requests`, body: "json", allowed: ROLES },
   { method: "POST", path: `/ownership-requests/${id}/approve`, allowed: ["ADMIN"] },
   { method: "POST", path: `/ownership-requests/${id}/reject`, body: "json", allowed: ["ADMIN"] },
+  { method: "GET", path: "/ownership-requests?status=bogus", allowed: ["ADMIN"] },
+  { method: "GET", path: "/group-creation-requests?status=bogus", allowed: ["ADMIN"] },
+  { method: "POST", path: `/group-creation-requests/${id}/approve`, allowed: ["ADMIN"] },
+  {
+    method: "POST",
+    path: `/group-creation-requests/${id}/reject`,
+    body: "json",
+    allowed: ["ADMIN"],
+  },
+  { method: "POST", path: "/group-creation-requests", body: "json", allowed: ROLES },
   { method: "GET", path: "/dashboard/overview?range=forever", allowed: ["MODERATOR", "ADMIN"] },
 ]
 const send = (app: Parameters<typeof api>[0], route: Route, headers?: Record<string, string>) =>

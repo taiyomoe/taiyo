@@ -7,11 +7,12 @@ const effectiveContentRating = sql<ContentRating>`greatest(${sql.ref("medias.con
 type ChapterFilters = {
   contentRatings: ContentRating[]
   mediaId?: string | undefined
+  groupId?: string | undefined
 }
 
 export const selectVisibleChapters = (
   db: Kysely<DB>,
-  { contentRatings, mediaId }: ChapterFilters,
+  { contentRatings, mediaId, groupId }: ChapterFilters,
 ) =>
   db
     .selectFrom("chapters")
@@ -20,6 +21,17 @@ export const selectVisibleChapters = (
     .where("medias.deletedAt", "is", null)
     .where(effectiveContentRating, "in", contentRatings)
     .where((eb) => (mediaId === undefined ? eb.and([]) : eb("chapters.mediaId", "=", mediaId)))
+    .where((eb) =>
+      groupId === undefined
+        ? eb.and([])
+        : eb.exists(
+            eb
+              .selectFrom("chapterGroups")
+              .select("chapterGroups.groupId")
+              .whereRef("chapterGroups.chapterId", "=", "chapters.id")
+              .where("chapterGroups.groupId", "=", groupId),
+          ),
+    )
 
 export const selectLatestChapters = (db: Kysely<DB>, filters: ChapterFilters) =>
   selectVisibleChapters(db, filters)

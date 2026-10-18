@@ -7,7 +7,12 @@ import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
 import { getOpenApiResponses } from "../utils/openapi-helper"
-import { apiSuccessEnvelope } from "../utils/schemas"
+import {
+  apiSuccessEnvelope,
+  groupDiscordSchema,
+  groupEmailSchema,
+  groupLinkSchema,
+} from "../utils/schemas"
 
 const urlField = (description: string) =>
   z.string().max(config.input.maxUrlLength).nullable().optional().meta({ description })
@@ -25,19 +30,14 @@ const createGroupSchema = z.object({
     .meta({ description: "Description of the group." }),
   logo: urlField("Storage key of the group logo."),
   banner: urlField("Storage key of the group banner."),
-  website: urlField("Website URL."),
-  discord: urlField("Discord invite or server URL."),
-  x: urlField("X / Twitter URL."),
-  facebook: urlField("Facebook URL."),
-  instagram: urlField("Instagram URL."),
-  telegram: urlField("Telegram URL."),
-  youtube: urlField("YouTube URL."),
-  email: z
-    .string()
-    .max(config.input.maxUrlLength)
-    .nullable()
-    .optional()
-    .meta({ description: "Contact email." }),
+  website: groupLinkSchema("Website URL."),
+  discord: groupDiscordSchema,
+  x: groupLinkSchema("X / Twitter URL."),
+  facebook: groupLinkSchema("Facebook URL."),
+  instagram: groupLinkSchema("Instagram URL."),
+  telegram: groupLinkSchema("Telegram URL."),
+  youtube: groupLinkSchema("YouTube URL."),
+  email: groupEmailSchema,
 })
 
 export const createGroupHandler = new Hono().post(

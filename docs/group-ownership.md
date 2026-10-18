@@ -107,14 +107,15 @@ Members hold a subset of `UPLOAD_CHAPTERS`, `EDIT_CHAPTERS`, `DELETE_CHAPTERS`,
 
 ### Ownership requests
 
-| Method | Path                              | Auth                           | Notes                                                                             |
-| ------ | --------------------------------- | ------------------------------ | --------------------------------------------------------------------------------- |
-| POST   | `/groups/:id/ownership-requests`  | any signed-in user, not banned | body `{ message? }`. Fails if group is already owned or pending exists.           |
-| GET    | `/groups/:id/ownership-requests`  | admin, or the requester        | list (filtered by status optional).                                               |
-| GET    | `/users/me/ownership-requests`    | self                           | requester's own requests across groups.                                           |
-| DELETE | `/ownership-requests/:id`         | the requester                  | cancel a pending request.                                                         |
-| POST   | `/ownership-requests/:id/approve` | admin                          | creates OWNER membership; auto-cancels other pending requests for the same group. |
-| POST   | `/ownership-requests/:id/reject`  | admin                          | body `{ note }`.                                                                  |
+| Method | Path                              | Auth                           | Notes                                                                              |
+| ------ | --------------------------------- | ------------------------------ | ---------------------------------------------------------------------------------- |
+| POST   | `/groups/:id/ownership-requests`  | any signed-in user, not banned | body `{ message, proofLinks }`. Fails if group is already owned or pending exists. |
+| GET    | `/groups/:id/ownership-requests`  | admin, or the requester        | list (filtered by status optional).                                                |
+| GET    | `/users/me/ownership-requests`    | self                           | requester's own requests across groups.                                            |
+| DELETE | `/ownership-requests/:id`         | the requester                  | cancel a pending request.                                                          |
+| POST   | `/ownership-requests/:id/approve` | admin                          | creates OWNER membership; auto-cancels other pending requests for the same group.  |
+| POST   | `/ownership-requests/:id/reject`  | admin                          | body `{ note }`, required.                                                         |
+| GET    | `/ownership-requests`             | admin                          | the review queue across groups.                                                    |
 
 ### Memberships
 
@@ -127,6 +128,30 @@ Members hold a subset of `UPLOAD_CHAPTERS`, `EDIT_CHAPTERS`, `DELETE_CHAPTERS`,
 | POST   | `/groups/:id/members/:userId/demote`  | the owner themselves, admin    | OWNER → MEMBER. Refuses last-owner unless an admin does it. |
 | POST   | `/groups/:id/leave`                   | self                           | refuses last-owner case (must promote / transfer first).    |
 | POST   | `/groups/:id/transfer`                | owner                          | body `{ toUserId }`. Atomic promote-target + demote-self.   |
+
+### Invitations
+
+Owners and members with `MANAGE_MEMBERS` invite people by username with a set of
+permissions; the same anti-escalation rules as editing a member apply. The
+invitee accepts or declines from their dashboard and gets an email if they have
+a verified address. Invitations expire after 7 days. Accepting re-checks, under
+the group lock, that the inviter can still grant the invited permissions, so an
+invitation sent by a manager who lost the right is void.
+
+| Method | Path                                         | Auth                                   | Notes                             |
+| ------ | -------------------------------------------- | -------------------------------------- | --------------------------------- |
+| POST   | `/groups/:id/invitations`                    | owner, `MANAGE_MEMBERS`, admin         | body `{ username, permissions }`. |
+| GET    | `/groups/:id/invitations`                    | owner, `MANAGE_MEMBERS`, admin         | pending, unexpired invitations.   |
+| DELETE | `/groups/:id/invitations/:invitationId`      | the inviter, or anyone able to send it | cancels a pending invitation.     |
+| GET    | `/users/me/group-invitations`                | self                                   | pending, unexpired invitations.   |
+| POST   | `/group-invitations/:id/accept` / `/decline` | the invitee                            |                                   |
+
+### Group creation requests
+
+A user whose group is not on Taiyō yet asks for it with a name, a message and
+proof links. Names of existing groups are refused, since those should be
+claimed instead. An admin approves, which creates the group with the requester
+as its owner, or rejects with a note. A user can have three pending requests.
 
 ### Where the ownership rules are enforced
 

@@ -77,6 +77,9 @@ importers:
       '@taiyomoe/db':
         specifier: workspace:^
         version: link:../../packages/db
+      '@taiyomoe/email':
+        specifier: workspace:^
+        version: link:../../packages/email
       '@taiyomoe/permissions':
         specifier: workspace:^
         version: link:../../packages/permissions

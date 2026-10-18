@@ -20,6 +20,10 @@ import {
 const querySchema = paginationQuerySchema.extend({
   contentRating: contentRatingsQuerySchema,
   mediaId: z.uuid().optional().meta({ description: "Only list the chapters of this media." }),
+  groupId: z
+    .uuid()
+    .optional()
+    .meta({ description: "Only list the chapters credited to this group." }),
 })
 
 export const listLatestChaptersHandler = new Hono().get(
@@ -48,15 +52,15 @@ export const listLatestChaptersHandler = new Hono().get(
   validateQuery(querySchema),
   async (c) => {
     const { db } = c.var
-    const { page, perPage, contentRating, mediaId } = c.var.query
+    const { page, perPage, contentRating, mediaId, groupId } = c.var.query
     const [rows, totalRow] = await Promise.all([
-      selectLatestChapters(db, { contentRatings: contentRating, mediaId })
+      selectLatestChapters(db, { contentRatings: contentRating, mediaId, groupId })
         .orderBy("chapters.createdAt", "desc")
         .orderBy("chapters.id", "desc")
         .limit(perPage)
         .offset((page - 1) * perPage)
         .execute(),
-      selectVisibleChapters(db, { contentRatings: contentRating, mediaId })
+      selectVisibleChapters(db, { contentRatings: contentRating, mediaId, groupId })
         .select(db.fn.countAll().as("count"))
         .executeTakeFirstOrThrow(),
     ])

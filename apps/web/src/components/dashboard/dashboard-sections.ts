@@ -8,6 +8,7 @@ import {
   History,
   Image,
   Library,
+  Mail,
   ListNumbered,
   Mask,
   PenTool,
@@ -15,6 +16,7 @@ import {
   Shield,
   Tag,
   User,
+  UserCheck,
   Users,
 } from "@taiyomoe/ui/components/icons"
 import type { AppSidebarSection } from "@/components/shell/app-sidebar"
@@ -27,7 +29,6 @@ type DashboardItem = AppSidebarSection["items"][number] & {
 type DashboardSection = Omit<AppSidebarSection, "items"> & { items: DashboardItem[] }
 
 const ANY_CHAPTER = { uploaderId: "", groupIds: [] }
-const ANY_GROUP = { id: "" }
 const ANOTHER_USER = { id: "", role: "USER" } as const
 
 export const DASHBOARD_SECTIONS: DashboardSection[] = [
@@ -38,6 +39,29 @@ export const DASHBOARD_SECTIONS: DashboardSection[] = [
         label: m.dashboard_nav_activity_log,
         icon: History,
         visible: (can) => can("dashboard.viewStats"),
+      },
+    ],
+  },
+  {
+    label: m.dashboard_nav_groups,
+    items: [
+      {
+        label: m.dashboard_nav_my_groups,
+        icon: Users,
+        to: "/dashboard/groups",
+        visible: () => true,
+      },
+      {
+        label: m.dashboard_nav_invitations,
+        icon: Mail,
+        to: "/dashboard/invitations",
+        visible: () => true,
+      },
+      {
+        label: m.dashboard_nav_ownership_requests,
+        icon: UserCheck,
+        to: "/dashboard/group-requests",
+        visible: (can) => can("ownershipRequest.review"),
       },
     ],
   },
@@ -65,11 +89,6 @@ export const DASHBOARD_SECTIONS: DashboardSection[] = [
     items: [
       { label: m.dashboard_nav_staff, icon: PenTool, visible: (can) => can("staff.update") },
       { label: m.dashboard_nav_characters, icon: Mask, visible: (can) => can("media.update") },
-      {
-        label: m.dashboard_nav_scan_groups,
-        icon: Users,
-        visible: (can) => can("group.update", ANY_GROUP),
-      },
     ],
   },
   {

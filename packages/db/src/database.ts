@@ -4,6 +4,8 @@ import type { ChapterGroup } from "./models/chapter-group-model"
 import type { Chapter } from "./models/chapter-model"
 import type { Cover } from "./models/cover-model"
 import type { FeaturedMedia } from "./models/featured-media-model"
+import type { GroupCreationRequest } from "./models/group-creation-request-model"
+import type { GroupInvitation } from "./models/group-invitation-model"
 import type { GroupMembership } from "./models/group-membership-model"
 import type { Group } from "./models/group-model"
 import type { GroupOwnershipRequest } from "./models/group-ownership-request-model"
@@ -30,6 +32,8 @@ export type DB = {
   chapters: Chapter
   covers: Cover
   featuredMedias: FeaturedMedia
+  groupCreationRequests: GroupCreationRequest
+  groupInvitations: GroupInvitation
   groupMemberships: GroupMembership
   groupOwnershipRequests: GroupOwnershipRequest
   groups: Group

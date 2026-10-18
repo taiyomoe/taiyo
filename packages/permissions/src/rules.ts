@@ -71,6 +71,8 @@ export const buildRules = (actor: Actor | null) => {
       uploadChapters: (group) => holds(group.id, "UPLOAD_CHAPTERS"),
       manageMembers: (group) => is("ADMIN") || holds(group.id, "MANAGE_MEMBERS"),
       transferOwnership: (group) => isOwner(group.id),
+      inviteMember: ({ groupId, permissions }) =>
+        is("ADMIN") || isOwner(groupId) || canManage(groupId, permissions),
       updateMember: ({ member, permissions }) => {
         if (is("ADMIN")) {
           return true
@@ -113,6 +115,10 @@ export const buildRules = (actor: Actor | null) => {
         (is("ADMIN") || (isOwner(member.groupId) && isSelf(member.userId))),
     },
     ownershipRequest: {
+      create: active !== null,
+      review: is("ADMIN"),
+    },
+    groupCreationRequest: {
       create: active !== null,
       review: is("ADMIN"),
     },
