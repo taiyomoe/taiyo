@@ -41,7 +41,8 @@ export const DASHBOARD_SECTIONS: DashboardSection[] = [
       {
         label: m.dashboard_nav_activity_log,
         icon: History,
-        visible: (can) => can("dashboard.viewStats"),
+        to: "/dashboard/activity-log",
+        visible: (can) => can("auditLog.read"),
       },
     ],
   },

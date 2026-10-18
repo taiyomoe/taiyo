@@ -5,6 +5,7 @@ import z from "zod"
 import { audited } from "../middlewares/audited-middleware"
 import { validateParam } from "../middlewares/validate-param-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
+import { withPreviews } from "../utils/audit-log-previews"
 import { auditLogSchema, fromAuditLogs, selectAuditLogs, toAuditLog } from "../utils/audit-logs"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
@@ -43,6 +44,8 @@ export const getAuditLogHandler = new Hono().get(
       return c.fail("AUDIT_LOG_NOT_FOUND")
     }
 
-    return c.ok(toAuditLog(row))
+    const [entry] = await withPreviews(c.var.db, [toAuditLog(row)])
+
+    return entry === undefined ? c.fail("AUDIT_LOG_NOT_FOUND") : c.ok(entry)
   },
 )
