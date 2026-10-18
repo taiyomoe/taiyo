@@ -64,6 +64,7 @@ const ROUTES: Route[] = [
   { method: "POST", path: `/chapters/${id}/reject`, body: "json", allowed: ["UPLOADER", "ADMIN"] },
   { method: "GET", path: "/dashboard/overview?range=forever", allowed: ["MODERATOR", "ADMIN"] },
   { method: "GET", path: `/medias/${id}/edit`, allowed: ROLES },
+  { method: "GET", path: "/users?page=0", allowed: ["MODERATOR", "ADMIN"] },
   { method: "POST", path: `/medias/${id}/suggestions`, body: "json", allowed: ROLES },
   { method: "GET", path: "/media-suggestions?page=0", allowed: SUGGESTION_REVIEWERS },
   {
