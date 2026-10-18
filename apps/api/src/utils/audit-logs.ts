@@ -1,13 +1,49 @@
 import type { AuditChanges, AuditTarget } from "evlog"
+import { KQL_MAX_LENGTH } from "@taiyomoe/audit/query"
 import {
   AUDIT_ACTOR_TYPES,
   AUDIT_OUTCOMES,
   AUDIT_SEVERITIES,
   type DB,
   type Kysely,
+  type RawBuilder,
   sql,
+  type SqlBool,
 } from "@taiyomoe/db"
 import z from "zod"
+import { type AuditLogQueryError, compileAuditLogQuery } from "./audit-log-query"
+
+const filterField = (description: string) =>
+  z.string().min(1).max(200).optional().meta({ description })
+
+export const auditLogFilterSchema = z.object({
+  q: z.string().max(KQL_MAX_LENGTH, { error: "The query is too long." }).optional().meta({
+    description:
+      "A KQL query, e.g. `category: media and not outcome: success`. Fields: action, category, outcome, severity, actor, actor.id, actor.type, actor.impersonating, target, target.type, target.<field>, changed, reason, ip, userAgent, requestId, method, path, status, timestamp, id.",
+    example: "actor: admin and severity >= high",
+  }),
+  actorId: filterField("Only entries performed by this actor (a user id, `anonymous`, or a job)."),
+  actorType: z.enum(AUDIT_ACTOR_TYPES).optional().meta({ description: "Only this kind of actor." }),
+  action: filterField("Only entries with this exact action, e.g. `media.CREATE`."),
+  actionPrefix: filterField("Only entries whose action starts with this, e.g. `media.`."),
+  targetType: filterField("Only entries performed on this kind of resource, e.g. `media`."),
+  targetId: filterField("Only entries performed on the resource with this id."),
+  outcome: z.enum(AUDIT_OUTCOMES).optional().meta({ description: "Only this outcome." }),
+  severity: z.enum(AUDIT_SEVERITIES).optional().meta({ description: "Only this severity." }),
+  from: z.iso.datetime().optional().meta({ description: "Only entries recorded at or after." }),
+  to: z.iso.datetime().optional().meta({ description: "Only entries recorded before." }),
+})
+
+export type AuditLogFilters = z.output<typeof auditLogFilterSchema>
+
+const toUtcTimestamp = (iso: string) => sql<Date>`(${iso}::timestamptz at time zone 'UTC')`
+
+export const toIsoString = (timestamp: RawBuilder<unknown>) =>
+  sql<string>`to_char(${timestamp}, 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"')`
+
+export const toQueryIssues = ({ message, start, end }: AuditLogQueryError) => [
+  { code: "invalid_query", path: ["q"], message, start, end },
+]
 
 export const auditLogSchema = z.object({
   id: z.uuid().meta({ description: "The ID of the audit log entry." }),
@@ -29,6 +65,10 @@ export const auditLogSchema = z.object({
       .string()
       .nullable()
       .meta({ description: "The actor's display name when the action was recorded." }),
+    impersonating: z
+      .string()
+      .nullable()
+      .meta({ description: "The user an admin was impersonating, if any." }),
     user: z
       .object({
         id: z.uuid(),
@@ -75,6 +115,18 @@ export const auditLogSchema = z.object({
     })
     .nullable()
     .meta({ description: "The HTTP request that performed the action, if any." }),
+  preview: z
+    .object({
+      kind: z.enum(["media", "group", "staff", "user"]),
+      id: z.uuid(),
+      label: z.string().nullable(),
+      image: z.url().nullable(),
+    })
+    .nullable()
+    .meta({
+      description:
+        "The media, group, staff member or user the entry is about, with its cover, logo, photo or avatar, for display.",
+    }),
 })
 
 export const fromAuditLogs = (db: Kysely<DB>) =>
@@ -84,10 +136,42 @@ export const fromAuditLogs = (db: Kysely<DB>) =>
       join.on(sql<boolean>`${sql.ref("users.id")}::text = ${sql.ref("auditLogs.actorId")}`),
     )
 
+export const filterAuditLogs = (
+  query: ReturnType<typeof fromAuditLogs>,
+  filters: AuditLogFilters,
+) => {
+  const compiled = filters.q === undefined ? null : compileAuditLogQuery(filters.q)
+  const equals = (column: string, value: string | undefined) =>
+    value === undefined ? [] : [sql<SqlBool>`${sql.ref(column)} = ${value}`]
+  const conditions: Array<RawBuilder<SqlBool>> = [
+    ...(compiled === null ? [] : [compiled]),
+    ...equals("auditLogs.actorId", filters.actorId),
+    ...equals("auditLogs.actorType", filters.actorType),
+    ...equals("auditLogs.action", filters.action),
+    ...equals("auditLogs.targetType", filters.targetType),
+    ...equals("auditLogs.targetId", filters.targetId),
+    ...equals("auditLogs.outcome", filters.outcome),
+    ...equals("auditLogs.severity", filters.severity),
+    ...(filters.actionPrefix === undefined
+      ? []
+      : [sql<SqlBool>`${sql.ref("auditLogs.action")} ^@ ${filters.actionPrefix}`]),
+    ...(filters.from === undefined
+      ? []
+      : [sql<SqlBool>`${sql.ref("auditLogs.createdAt")} >= ${toUtcTimestamp(filters.from)}`]),
+    ...(filters.to === undefined
+      ? []
+      : [sql<SqlBool>`${sql.ref("auditLogs.createdAt")} < ${toUtcTimestamp(filters.to)}`]),
+  ]
+
+  return conditions.length === 0
+    ? query
+    : query.where(sql<SqlBool>`${sql.join(conditions, sql` and `)}`)
+}
+
 export const selectAuditLogs = (query: ReturnType<typeof fromAuditLogs>) =>
   query.select([
     "auditLogs.id",
-    "auditLogs.createdAt",
+    toIsoString(sql.ref("auditLogs.createdAt")).as("createdAt"),
     "auditLogs.action",
     "auditLogs.outcome",
     "auditLogs.severity",
@@ -101,6 +185,9 @@ export const selectAuditLogs = (query: ReturnType<typeof fromAuditLogs>) =>
     "users.displayUsername as actorDisplayUsername",
     "users.image as actorImage",
     sql<string | null>`"auditLogs".event->'audit'->'actor'->>'displayName'`.as("actorDisplayName"),
+    sql<string | null>`"auditLogs".event->'audit'->'actor'->>'impersonating'`.as(
+      "actorImpersonating",
+    ),
     sql<AuditTarget | null>`"auditLogs".event->'audit'->'target'`.as("target"),
     sql<AuditChanges | null>`"auditLogs".event->'audit'->'changes'`.as("changes"),
     sql<string | null>`"auditLogs".event->>'method'`.as("method"),
@@ -121,6 +208,7 @@ export const toAuditLog = (row: AuditLogRow) => ({
     type: row.actorType,
     id: row.actorId,
     displayName: row.actorDisplayName,
+    impersonating: row.actorImpersonating,
     user:
       row.actorUsername === null || row.actorDisplayUsername === null
         ? null
