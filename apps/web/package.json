@@ -23,7 +23,7 @@
     "@taiyomoe/auth": "workspace:^",
     "@taiyomoe/config": "workspace:^",
     "@taiyomoe/ui": "workspace:^",
-    "@tanstack/charts": "^1.0.0",
+    "@tanstack/charts": "^1.1.0",
     "@tanstack/react-devtools": "^0.10.13",
     "@tanstack/react-query": "^5.104.1",
     "@tanstack/react-query-devtools": "^5.104.1",
@@ -32,7 +32,7 @@
     "@tanstack/react-router-ssr-query": "^1.167.3",
     "@tanstack/react-start": "^1.168.60",
     "country-flag-icons": "^1.6.20",
-    "embla-carousel-react": "9.0.0-rc03",
+    "embla-carousel-react": "9.0.0-rc04",
     "hono": "^4.13.13",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
@@ -41,7 +41,7 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@inlang/paraglide-js": "^2.25.4",
+    "@inlang/paraglide-js": "^2.27.0",
     "@stylexjs/unplugin": "^0.19.1",
     "@taiyomoe/api": "workspace:^",
     "@tanstack/devtools-vite": "^0.8.5",
