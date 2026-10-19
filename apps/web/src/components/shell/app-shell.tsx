@@ -5,6 +5,7 @@ import { useRouteContext } from "@tanstack/react-router"
 import type { Session } from "@/lib/queries/session"
 import { AppNavbar } from "@/components/shell/app-navbar"
 import { type AppSidebarSection, AppSidebar } from "@/components/shell/app-sidebar"
+import { UploadTray } from "@/components/uploads/upload-tray"
 
 const styles = stylex.create({
   provider: {
@@ -44,6 +45,7 @@ export function AppShell({ user, overlayNavbar = false, sections, children }: Ap
         <AppSidebar sections={sections} />
         <SidebarInset sx={styles.inset}>{children}</SidebarInset>
       </div>
+      <UploadTray />
     </SidebarProvider>
   )
 }
