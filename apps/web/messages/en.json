@@ -639,6 +639,7 @@
   "submissions_subtitle": "Chapters you sent to review, and what happened to them.",
   "submissions_empty_title": "No submissions yet",
   "submissions_empty_description": "Chapters you upload that need a review show up here.",
+  "submission_status_uploading": "Uploading",
   "submission_status_pending": "In review",
   "submission_status_published": "Published",
   "submission_status_rejected": "Rejected",

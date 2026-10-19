@@ -14,6 +14,7 @@ const SUBMISSION_STATUS: Record<
   ChapterSubmission["status"],
   { label: () => string; variant: BadgeVariant }
 > = {
+  UPLOADING: { label: m.submission_status_uploading, variant: "info" },
   PENDING: { label: m.submission_status_pending, variant: "warning" },
   PUBLISHED: { label: m.submission_status_published, variant: "success" },
   REJECTED: { label: m.submission_status_rejected, variant: "error" },
