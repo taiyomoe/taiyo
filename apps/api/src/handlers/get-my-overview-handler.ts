@@ -103,6 +103,7 @@ export const getMyOverviewHandler = new Hono().get(
             .innerJoin("medias", "medias.id", "chapters.mediaId")
             .select(total)
             .where("chapters.status", "=", "PENDING")
+            .where(sql<boolean>`coalesce(cardinality("chapters"."pages"), 0) > 0`)
             .where("chapters.deletedAt", "is", null)
             .where("medias.deletedAt", "is", null)
             .executeTakeFirst()

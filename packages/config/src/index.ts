@@ -56,6 +56,7 @@ export const config = {
     maxSynopsisLength: 10000,
     maxChapterGroups: 10,
     maxPendingChapters: 100,
+    maxReviewBatch: 100,
     maxReviewNoteLength: 2000,
     maxMediaTitles: 50,
     maxMediaTags: 100,

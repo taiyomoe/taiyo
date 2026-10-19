@@ -86,7 +86,7 @@ export const banUserHandler = new Hono().post(
       .selectFrom("chapters")
       .select(["id", "mediaId", "pages"])
       .where("uploaderId", "=", targetUser.id)
-      .where("status", "=", "PENDING")
+      .where("status", "in", ["PENDING", "UPLOADING"])
       .where("deletedAt", "is", null)
       .forUpdate()
       .execute()

@@ -51,7 +51,9 @@ export const withdrawChapterHandler = new Hono().post(
       .executeTakeFirstOrThrow()
 
     if (!can("chapter.withdraw", { ...target, status: locked.status })) {
-      return locked.status === "PENDING" ? c.fail("FORBIDDEN") : c.fail("CHAPTER_NOT_PENDING")
+      return locked.status === "PENDING" || locked.status === "UPLOADING"
+        ? c.fail("FORBIDDEN")
+        : c.fail("CHAPTER_NOT_PENDING")
     }
 
     await db

@@ -11,6 +11,15 @@ export const reapStaleChapterUploads = async (
   now = new Date(),
 ) => {
   const cutoff = new Date(now.getTime() - config.images.staleUploadReapHours * 60 * 60 * 1000)
+  const abandoned = await db
+    .updateTable("chapters")
+    .set({ deletedAt: sql<Date>`CURRENT_TIMESTAMP`, deleterId: sql.ref("uploaderId") })
+    .where("status", "in", ["UPLOADING", "PENDING"])
+    .where("pages", "is", null)
+    .where("deletedAt", "is", null)
+    .where(sql<boolean>`"createdAt" < ${cutoff}::timestamptz`)
+    .returning("id")
+    .execute()
   const stale = await db
     .selectFrom("tasks")
     .selectAll()
@@ -24,7 +33,7 @@ export const reapStaleChapterUploads = async (
     .execute()
 
   if (stale.length === 0) {
-    return { reaped: 0 }
+    return { reaped: 0, abandoned: abandoned.length }
   }
 
   const keys = stale.flatMap((t) =>
@@ -52,5 +61,5 @@ export const reapStaleChapterUploads = async (
     )
     .execute()
 
-  return { reaped: stale.length }
+  return { reaped: stale.length, abandoned: abandoned.length }
 }

@@ -213,7 +213,13 @@ describe("GET /users/me/overview", () => {
     const user = await signInAs(services)
     const mediaId = await seedMedia(services, reviewer.userId)
 
-    await seedChapter(services, { mediaId, uploaderId: user.userId, number: 1, status: "PENDING" })
+    await seedChapter(services, {
+      mediaId,
+      uploaderId: user.userId,
+      number: 1,
+      status: "PENDING",
+      pages: [{ id: "00000000-0000-4000-8000-000000000002" }],
+    })
     await seedChapter(services, { mediaId, uploaderId: user.userId, number: 2, status: "REJECTED" })
 
     const mine = await api(app, "/users/me/overview", { headers: user.headers })
