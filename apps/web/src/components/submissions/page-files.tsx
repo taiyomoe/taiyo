@@ -1,8 +1,28 @@
 import type { ImageMimeType } from "@taiyomoe/db/constants"
+import {
+  type Announcements,
+  closestCenter,
+  DndContext,
+  KeyboardSensor,
+  MouseSensor,
+  TouchSensor,
+  type UniqueIdentifier,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core"
+import {
+  arrayMove,
+  rectSortingStrategy,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+} from "@dnd-kit/sortable"
+import { CSS } from "@dnd-kit/utilities"
 import * as stylex from "@stylexjs/stylex"
-import { ChevronDown, ChevronUp, Close, Image } from "@taiyomoe/ui/components/icons"
+import { Close, Image } from "@taiyomoe/ui/components/icons"
 import { Button } from "@taiyomoe/ui/components/ui/button"
-import { colors, motion, radius } from "@taiyomoe/ui/styles/tokens.stylex"
+import { focus } from "@taiyomoe/ui/styles/recipes"
+import { colors, motion, radius, shadows } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useId, useState } from "react"
 import { isUploadablePage } from "@/lib/queries/submissions"
 import { m } from "@/paraglide/messages"
@@ -59,9 +79,25 @@ const styles = stylex.create({
     borderWidth: 1,
     overflow: "hidden",
     backgroundColor: colors.card,
+    cursor: "grab",
     display: "flex",
     flexDirection: "column",
+    position: "relative",
+    userSelect: "none",
   },
+  pageDragging: {
+    borderColor: colors.ring,
+    boxShadow: shadows.overlay,
+    cursor: "grabbing",
+    zIndex: 10,
+  },
+  pageDisabled: {
+    cursor: "default",
+  },
+  moving: (transform: string, transition: string) => ({
+    transition,
+    transform,
+  }),
   thumb: {
     aspectRatio: "3 / 4",
     backgroundColor: colors.muted,
@@ -74,13 +110,13 @@ const styles = stylex.create({
     gap: "0.125rem",
     alignItems: "center",
     display: "flex",
+    paddingInlineStart: "0.625rem",
   },
   index: {
     color: colors.mutedForeground,
     flexGrow: 1,
     fontSize: "0.75rem",
     fontVariantNumeric: "tabular-nums",
-    paddingInlineStart: "0.25rem",
   },
   skipped: {
     margin: 0,
@@ -91,6 +127,62 @@ const styles = stylex.create({
 })
 const byName = (a: PageFile, b: PageFile) =>
   a.file.name.localeCompare(b.file.name, undefined, { numeric: true, sensitivity: "base" })
+
+function SortablePage({
+  page,
+  index,
+  disabled,
+  onRemove,
+}: {
+  page: PageFile
+  index: number
+  disabled: boolean
+  onRemove: () => void
+}) {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id: page.key,
+    disabled,
+  })
+
+  return (
+    <li
+      aria-label={m.upload_page_label({ index: index + 1 })}
+      ref={setNodeRef}
+      sx={[
+        styles.page,
+        focus.control,
+        isDragging && styles.pageDragging,
+        disabled && styles.pageDisabled,
+        transform === null
+          ? null
+          : styles.moving(CSS.Transform.toString(transform) ?? "none", transition ?? "none"),
+      ]}
+      {...attributes}
+      {...listeners}
+    >
+      <img alt="" draggable={false} src={page.url} sx={styles.thumb} />
+      <div sx={styles.meta}>
+        <span sx={styles.index}>{index + 1}</span>
+        <Button
+          aria-label={m.upload_page_remove()}
+          disabled={disabled}
+          onClick={onRemove}
+          onKeyDown={(event) => {
+            event.stopPropagation()
+          }}
+          onPointerDown={(event) => {
+            event.stopPropagation()
+          }}
+          size="icon-xs"
+          type="button"
+          variant="ghost"
+        >
+          <Close />
+        </Button>
+      </div>
+    </li>
+  )
+}
 
 export function PageFiles({
   value,
@@ -120,14 +212,24 @@ export function PageFiles({
       ].sort(byName),
     )
   }
-  const move = (index: number, offset: number) => {
-    const next = [...value]
-    const [item] = next.splice(index, 1)
-
-    if (item !== undefined) {
-      next.splice(index + offset, 0, item)
-      onChange(next)
-    }
+  const dndId = useId()
+  const sensors = useSensors(
+    useSensor(MouseSensor, { activationConstraint: { distance: 4 } }),
+    useSensor(TouchSensor, { activationConstraint: { delay: 180, tolerance: 6 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
+  )
+  const position = (id: UniqueIdentifier) => value.findIndex((page) => page.key === id) + 1
+  const announcements: Announcements = {
+    onDragStart: ({ active }) => m.upload_pages_drag_start({ page: position(active.id) }),
+    onDragOver: ({ active, over }) =>
+      over === null
+        ? undefined
+        : m.upload_pages_drag_over({ page: position(active.id), position: position(over.id) }),
+    onDragEnd: ({ active, over }) =>
+      over === null
+        ? undefined
+        : m.upload_pages_drag_end({ page: position(active.id), position: position(over.id) }),
+    onDragCancel: ({ active }) => m.upload_pages_drag_cancel({ page: position(active.id) }),
   }
 
   return (
@@ -171,53 +273,37 @@ export function PageFiles({
         <p sx={styles.skipped}>{m.upload_pages_skipped({ count: skipped })}</p>
       )}
       {value.length === 0 ? null : (
-        <ol sx={styles.list}>
-          {value.map((page, index) => (
-            <li key={page.key} sx={styles.page}>
-              <img alt="" src={page.url} sx={styles.thumb} />
-              <div sx={styles.meta}>
-                <span sx={styles.index}>{index + 1}</span>
-                <Button
-                  aria-label={m.upload_page_earlier()}
-                  disabled={disabled || index === 0}
-                  onClick={() => {
-                    move(index, -1)
-                  }}
-                  size="icon-xs"
-                  type="button"
-                  variant="ghost"
-                >
-                  <ChevronUp />
-                </Button>
-                <Button
-                  aria-label={m.upload_page_later()}
-                  disabled={disabled || index === value.length - 1}
-                  onClick={() => {
-                    move(index, 1)
-                  }}
-                  size="icon-xs"
-                  type="button"
-                  variant="ghost"
-                >
-                  <ChevronDown />
-                </Button>
-                <Button
-                  aria-label={m.upload_page_remove()}
+        <DndContext
+          accessibility={{
+            announcements,
+            screenReaderInstructions: { draggable: m.upload_pages_drag_instructions() },
+          }}
+          collisionDetection={closestCenter}
+          id={dndId}
+          onDragEnd={({ active, over }) => {
+            if (over !== null && active.id !== over.id) {
+              onChange(arrayMove(value, position(active.id) - 1, position(over.id) - 1))
+            }
+          }}
+          sensors={sensors}
+        >
+          <SortableContext items={value.map((page) => page.key)} strategy={rectSortingStrategy}>
+            <ol sx={styles.list}>
+              {value.map((page, index) => (
+                <SortablePage
                   disabled={disabled}
-                  onClick={() => {
+                  index={index}
+                  key={page.key}
+                  onRemove={() => {
                     URL.revokeObjectURL(page.url)
                     onChange(value.filter((item) => item.key !== page.key))
                   }}
-                  size="icon-xs"
-                  type="button"
-                  variant="ghost"
-                >
-                  <Close />
-                </Button>
-              </div>
-            </li>
-          ))}
-        </ol>
+                  page={page}
+                />
+              ))}
+            </ol>
+          </SortableContext>
+        </DndContext>
       )}
     </div>
   )
