@@ -235,6 +235,10 @@ const styles = stylex.create({
     },
     textAlign: "center",
   },
+  listScrollArea: {
+    display: "flex",
+    flexDirection: "column",
+  },
   list: {
     padding: {
       default: "0.375rem",
@@ -675,7 +679,7 @@ export function ComboboxList({
   const styleProps = stylex.props(styles.list, sx)
 
   return (
-    <ScrollArea scrollbarGutter scrollFade>
+    <ScrollArea scrollbarGutter scrollFade sx={styles.listScrollArea}>
       <ComboboxPrimitive.List
         className={cn(styleProps.className, className)}
         data-slot="combobox-list"

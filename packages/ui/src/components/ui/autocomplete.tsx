@@ -192,6 +192,10 @@ const styles = stylex.create({
     },
     textAlign: "center",
   },
+  listScrollArea: {
+    display: "flex",
+    flexDirection: "column",
+  },
   list: {
     padding: {
       default: "0.375rem",
@@ -468,7 +472,7 @@ export function AutocompleteList({
   const styleProps = stylex.props(styles.list, sx)
 
   return (
-    <ScrollArea scrollbarGutter scrollFade>
+    <ScrollArea scrollbarGutter scrollFade sx={styles.listScrollArea}>
       <AutocompletePrimitive.List
         className={cn(styleProps.className, className)}
         data-slot="autocomplete-list"

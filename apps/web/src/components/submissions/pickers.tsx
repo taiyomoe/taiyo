@@ -132,7 +132,10 @@ export function LanguagePicker({
       }}
       value={selected}
     >
-      <ComboboxInput placeholder={m.upload_language_placeholder()} />
+      <ComboboxInput
+        placeholder={m.upload_language_placeholder()}
+        startAddon={selected === null ? null : <LanguageFlag language={selected.code} />}
+      />
       <ComboboxPopup>
         <ComboboxList>
           {(item: (typeof LANGUAGE_OPTIONS)[number]) => (
