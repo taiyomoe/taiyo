@@ -181,29 +181,6 @@ function OverviewCard({
   )
 }
 
-function QueueCard({
-  icon,
-  label,
-  count,
-  to,
-}: {
-  icon: ReactNode
-  label: string
-  count: number
-  to: "/dashboard/chapter-reviews" | "/dashboard/suggestions" | "/dashboard/group-requests"
-}) {
-  return (
-    <Card render={<Link to={to} />} sx={styles.queue}>
-      <span sx={styles.icon}>{icon}</span>
-      <span sx={styles.queueText}>
-        <span sx={styles.statValue}>{count}</span>
-        <span sx={styles.queueLabel}>{label}</span>
-      </span>
-      {count > 0 ? <Badge variant="warning">{m.home_overview_waiting()}</Badge> : null}
-    </Card>
-  )
-}
-
 export function DashboardHome({ name }: { name: string }) {
   const { data } = useQuery(myOverviewQueryOptions)
   const queues =
@@ -241,13 +218,16 @@ export function DashboardHome({ name }: { name: string }) {
           <h2 sx={styles.sectionTitle}>{m.home_overview_queues()}</h2>
           <div sx={styles.grid}>
             {queues.map((queue) => (
-              <QueueCard
-                count={queue.count}
-                icon={queue.icon}
-                key={queue.key}
-                label={queue.label}
-                to={queue.to}
-              />
+              <Card key={queue.key} render={<Link to={queue.to} />} sx={styles.queue}>
+                <span sx={styles.icon}>{queue.icon}</span>
+                <span sx={styles.queueText}>
+                  <span sx={styles.statValue}>{queue.count}</span>
+                  <span sx={styles.queueLabel}>{queue.label}</span>
+                </span>
+                {queue.count > 0 ? (
+                  <Badge variant="warning">{m.home_overview_waiting()}</Badge>
+                ) : null}
+              </Card>
             ))}
           </div>
         </section>
