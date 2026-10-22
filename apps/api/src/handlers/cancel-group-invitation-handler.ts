@@ -1,7 +1,7 @@
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
-import { cancelGroupInvitation } from "../group-membership"
+import { getLockedPermissions, withGroupLock } from "../group-membership"
 import { checkGroup } from "../middlewares/check-group-middleware"
 import { validateParam } from "../middlewares/validate-param-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
@@ -39,7 +39,45 @@ export const cancelGroupInvitationHandler = new Hono().delete(
   async (c) => {
     const { actor, db, group } = c.var
     const { invitationId } = c.var.param
-    const result = await cancelGroupInvitation(db, { actor, groupId: group.id, invitationId })
+    const result = await withGroupLock<
+      | { ok: true }
+      | {
+          ok: false
+          error: "GROUP_INVITATION_NOT_FOUND" | "GROUP_INVITATION_NOT_PENDING" | "FORBIDDEN"
+        }
+    >(db, group.id, async (trx) => {
+      const invitation = await trx
+        .selectFrom("groupInvitations")
+        .select(["inviterId", "permissions", "status"])
+        .where("id", "=", invitationId)
+        .where("groupId", "=", group.id)
+        .executeTakeFirst()
+
+      if (invitation === undefined) {
+        return { ok: false, error: "GROUP_INVITATION_NOT_FOUND" }
+      }
+
+      const can = await getLockedPermissions(trx, actor, group.id)
+
+      if (
+        invitation.inviterId !== actor.id &&
+        !can("group.inviteMember", { groupId: group.id, permissions: invitation.permissions })
+      ) {
+        return { ok: false, error: "FORBIDDEN" }
+      }
+
+      if (invitation.status !== "PENDING") {
+        return { ok: false, error: "GROUP_INVITATION_NOT_PENDING" }
+      }
+
+      await trx
+        .updateTable("groupInvitations")
+        .set({ status: "CANCELLED" })
+        .where("id", "=", invitationId)
+        .execute()
+
+      return { ok: true }
+    })
 
     if (!result.ok) {
       return c.fail(result.error)

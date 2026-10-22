@@ -3,12 +3,15 @@ import * as stylex from "@stylexjs/stylex"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { Form } from "@taiyomoe/ui/components/ui/form"
 import { colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
+import type { Group, GroupUpdateInput } from "@/lib/queries/groups"
 import { AuthAlert } from "@/components/auth/auth-alert"
 import { InputField, TextareaField } from "@/components/fields/form-field"
+import { api } from "@/lib/api"
+import { ensureSuccess } from "@/lib/envelope"
 import { getErrorMessage } from "@/lib/errors"
-import { type Group, useUpdateGroup } from "@/lib/queries/groups"
 import { m } from "@/paraglide/messages"
 
 const link = z.union([
@@ -78,7 +81,16 @@ const styles = stylex.create({
 })
 
 export function GroupSettingsPanel({ group }: { group: Group }) {
-  const update = useUpdateGroup(group.id)
+  const queryClient = useQueryClient()
+  const update = useMutation({
+    mutationFn: async (json: GroupUpdateInput) =>
+      ensureSuccess(await api.groups[":id"].$patch({ param: { id: group.id }, json })),
+    onSuccess: () =>
+      Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["groups"] }),
+        queryClient.invalidateQueries({ queryKey: ["me", "groups"] }),
+      ]),
+  })
   const form = useForm({
     resolver: zodResolver(settingsSchema),
     mode: "onSubmit",

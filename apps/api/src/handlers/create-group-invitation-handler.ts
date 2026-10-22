@@ -1,12 +1,15 @@
 import { config } from "@taiyomoe/config"
+import { sql } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
 import { corsAllowedOrigins } from "../env"
 import {
+  getLockedPermissions,
+  getMembership,
   INVITATION_LIFETIME_DAYS,
-  inviteGroupMember,
   normalizeGroupPermissions,
+  withGroupLock,
 } from "../group-membership"
 import { checkGroup } from "../middlewares/check-group-middleware"
 import { rateLimit } from "../middlewares/rate-limit-middleware"
@@ -76,11 +79,54 @@ export const createGroupInvitationHandler = new Hono().post(
       return c.fail("USER_NOT_FOUND")
     }
 
-    const result = await inviteGroupMember(db, {
-      actor,
-      groupId: group.id,
-      inviteeId: invitee.id,
-      permissions,
+    const result = await withGroupLock<
+      | { ok: true; id: string }
+      | { ok: false; error: "FORBIDDEN" | "GROUP_MEMBER_EXISTS" | "GROUP_INVITATION_EXISTS" }
+    >(db, group.id, async (trx) => {
+      const locked = await getLockedPermissions(trx, actor, group.id)
+
+      if (!locked("group.inviteMember", { groupId: group.id, permissions })) {
+        return { ok: false, error: "FORBIDDEN" }
+      }
+
+      if ((await getMembership(trx, group.id, invitee.id)) !== undefined) {
+        return { ok: false, error: "GROUP_MEMBER_EXISTS" }
+      }
+
+      await trx
+        .updateTable("groupInvitations")
+        .set({ status: "EXPIRED" })
+        .where("groupId", "=", group.id)
+        .where("inviteeId", "=", invitee.id)
+        .where("status", "=", "PENDING")
+        .where("expiresAt", "<=", sql<Date>`CURRENT_TIMESTAMP`)
+        .execute()
+
+      const pending = await trx
+        .selectFrom("groupInvitations")
+        .select("id")
+        .where("groupId", "=", group.id)
+        .where("inviteeId", "=", invitee.id)
+        .where("status", "=", "PENDING")
+        .executeTakeFirst()
+
+      if (pending !== undefined) {
+        return { ok: false, error: "GROUP_INVITATION_EXISTS" }
+      }
+
+      const row = await trx
+        .insertInto("groupInvitations")
+        .values({
+          groupId: group.id,
+          inviteeId: invitee.id,
+          inviterId: actor.id,
+          permissions,
+          expiresAt: sql<Date>`CURRENT_TIMESTAMP + ${sql.raw(`interval '${INVITATION_LIFETIME_DAYS} days'`)}`,
+        })
+        .returning("id")
+        .executeTakeFirstOrThrow()
+
+      return { ok: true, id: row.id }
     })
 
     if (!result.ok) {

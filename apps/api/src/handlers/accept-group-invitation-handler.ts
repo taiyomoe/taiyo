@@ -1,7 +1,9 @@
+import { sql } from "@taiyomoe/db"
+import { createPermissions, toRole } from "@taiyomoe/permissions"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
-import { acceptGroupInvitation } from "../group-membership"
+import { getMembership, normalizeGroupPermissions, withGroupLock } from "../group-membership"
 import { validateParam } from "../middlewares/validate-param-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
@@ -39,12 +41,97 @@ export const acceptGroupInvitationHandler = new Hono().post(
   async (c) => {
     const { db, user } = c.var
     const { id } = c.var.param
-    const result = await acceptGroupInvitation(db, { userId: user.id, invitationId: id })
+    const found = await db
+      .selectFrom("groupInvitations")
+      .select("groupId")
+      .where("id", "=", id)
+      .where("inviteeId", "=", user.id)
+      .executeTakeFirst()
+
+    if (found === undefined) {
+      return c.fail("GROUP_INVITATION_NOT_FOUND")
+    }
+
+    const { groupId } = found
+    const result = await withGroupLock<
+      | { ok: true }
+      | {
+          ok: false
+          error:
+            | "GROUP_INVITATION_NOT_PENDING"
+            | "GROUP_INVITATION_EXPIRED"
+            | "GROUP_INVITATION_INVALID"
+            | "GROUP_MEMBER_EXISTS"
+        }
+    >(db, groupId, async (trx) => {
+      const invitation = await trx
+        .selectFrom("groupInvitations")
+        .select([
+          "inviterId",
+          "permissions",
+          "status",
+          sql<boolean>`"expiresAt" <= CURRENT_TIMESTAMP`.as("expired"),
+        ])
+        .where("id", "=", id)
+        .executeTakeFirstOrThrow()
+
+      if (invitation.status !== "PENDING") {
+        return { ok: false, error: "GROUP_INVITATION_NOT_PENDING" }
+      }
+
+      if (invitation.expired) {
+        return { ok: false, error: "GROUP_INVITATION_EXPIRED" }
+      }
+
+      const [inviter, inviterMembership] = await Promise.all([
+        trx
+          .selectFrom("users")
+          .select(["role", "banned"])
+          .where("id", "=", invitation.inviterId)
+          .executeTakeFirst(),
+        getMembership(trx, groupId, invitation.inviterId),
+      ])
+
+      if (
+        inviter === undefined ||
+        !createPermissions({
+          id: invitation.inviterId,
+          role: toRole(inviter.role),
+          banned: inviter.banned === true,
+          memberships: inviterMembership === undefined ? [] : [inviterMembership],
+        })("group.inviteMember", { groupId, permissions: invitation.permissions })
+      ) {
+        return { ok: false, error: "GROUP_INVITATION_INVALID" }
+      }
+
+      if ((await getMembership(trx, groupId, user.id)) !== undefined) {
+        return { ok: false, error: "GROUP_MEMBER_EXISTS" }
+      }
+
+      await trx
+        .insertInto("groupMemberships")
+        .values({
+          groupId,
+          userId: user.id,
+          role: "MEMBER",
+          permissions: normalizeGroupPermissions(invitation.permissions),
+          addedBy: invitation.inviterId,
+        })
+        .execute()
+
+      await trx
+        .updateTable("groupInvitations")
+        .set({ status: "ACCEPTED" })
+        .where("id", "=", id)
+        .execute()
+
+      return { ok: true }
+    })
 
     if (!result.ok) {
       return c.fail(result.error)
     }
 
-    return c.ok({ id, groupId: result.groupId })
+    return c.ok({ id, groupId })
   },
 )

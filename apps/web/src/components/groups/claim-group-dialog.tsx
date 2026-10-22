@@ -14,14 +14,17 @@ import {
   DialogTrigger,
 } from "@taiyomoe/ui/components/ui/dialog"
 import { Form } from "@taiyomoe/ui/components/ui/form"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useState } from "react"
 import { FormProvider, useForm } from "react-hook-form"
 import { z } from "zod"
+import type { ClaimInput } from "@/lib/queries/groups"
 import { AuthAlert } from "@/components/auth/auth-alert"
 import { TextareaField } from "@/components/fields/form-field"
 import { ProofLinksFields, proofLinksSchema } from "@/components/groups/proof-links-fields"
+import { api } from "@/lib/api"
+import { ensureSuccess } from "@/lib/envelope"
 import { getErrorMessage } from "@/lib/errors"
-import { useClaimGroup } from "@/lib/queries/groups"
 import { m } from "@/paraglide/messages"
 
 const claimSchema = z.object({
@@ -50,7 +53,14 @@ type ClaimGroupDialogProps = {
 
 export function ClaimGroupDialog({ group, trigger, onClaimed }: ClaimGroupDialogProps) {
   const [open, setOpen] = useState(false)
-  const claim = useClaimGroup(group.id)
+  const queryClient = useQueryClient()
+  const claim = useMutation({
+    mutationFn: async (json: ClaimInput) =>
+      ensureSuccess(
+        await api.groups[":id"]["ownership-requests"].$post({ param: { id: group.id }, json }),
+      ),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["me", "ownership-requests"] }),
+  })
   const form = useForm({
     resolver: zodResolver(claimSchema),
     mode: "onSubmit",

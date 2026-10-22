@@ -43,8 +43,6 @@ const idOf = (res: Awaited<ReturnType<typeof invite>>) => {
 
   return res.body.data.id
 }
-const byNumber = (a: number, b: number) => a - b
-const idsOf = (items: Array<{ id: string }>) => items.map((item) => item.id)
 const getMembership = ({ db }: Services, groupId: string, userId: string) =>
   db
     .selectFrom("groupMemberships")
@@ -369,7 +367,7 @@ describe("group invitations", () => {
       })
       const statuses = [(await accept).status, (await acceptAgain).status]
 
-      expect(statuses.sort(byNumber)).toEqual([201, 409])
+      expect(new Set(statuses)).toEqual(new Set([201, 409]))
     })
   })
 
@@ -445,7 +443,7 @@ describe("group invitations", () => {
         throw new Error(`Expected success: ${JSON.stringify(res.body)}`)
       }
 
-      expect(idsOf(res.body.data)).toEqual([pending])
+      expect(res.body.data).toEqual([expect.objectContaining({ id: pending })])
       expect(res.body.data[0]?.group.id).toBe(groupId)
     })
 

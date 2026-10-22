@@ -38,13 +38,6 @@ const styles = stylex.create({
 })
 const toneFor = (id: string) =>
   TONES[Number.parseInt(id.replace(/-/g, "").slice(0, 8), 16) % TONES.length] ?? colors.primary
-const initialsOf = (name: string) =>
-  name
-    .split(/\s+/)
-    .filter((word) => word !== "")
-    .slice(0, 2)
-    .map((word) => word.charAt(0).toUpperCase())
-    .join("")
 
 export function GroupAvatar({
   id,
@@ -66,7 +59,12 @@ export function GroupAvatar({
       }}
       sx={[styles.tile, size === "sm" ? styles.sm : styles.lg]}
     >
-      {initialsOf(name)}
+      {name
+        .split(/\s+/)
+        .filter((word) => word !== "")
+        .slice(0, 2)
+        .map((word) => word.charAt(0).toUpperCase())
+        .join("")}
     </span>
   )
 }

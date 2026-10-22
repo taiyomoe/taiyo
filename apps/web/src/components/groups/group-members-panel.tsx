@@ -21,7 +21,7 @@ import {
   MenuTrigger,
 } from "@taiyomoe/ui/components/ui/menu"
 import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
-import { useSuspenseQuery } from "@tanstack/react-query"
+import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query"
 import { useNavigate } from "@tanstack/react-router"
 import { useState } from "react"
 import { AuthAlert } from "@/components/auth/auth-alert"
@@ -33,15 +33,10 @@ import {
   PermissionChecklist,
   RoleBadge,
 } from "@/components/groups/group-permissions"
+import { api } from "@/lib/api"
+import { ensureSuccess } from "@/lib/envelope"
 import { getErrorMessage } from "@/lib/errors"
-import {
-  type Group,
-  type GroupMember,
-  groupMembersQueryOptions,
-  useLeaveGroup,
-  useMemberAction,
-  useUpdateMemberPermissions,
-} from "@/lib/queries/groups"
+import { type Group, type GroupMember, groupMembersQueryOptions } from "@/lib/queries/groups"
 import { m } from "@/paraglide/messages"
 
 const styles = stylex.create({
@@ -71,10 +66,6 @@ const styles = stylex.create({
     fontSize: "0.875rem",
   },
 })
-const toggled = (permissions: readonly GroupPermission[], permission: GroupPermission) =>
-  permissions.includes(permission)
-    ? permissions.filter((item) => item !== permission)
-    : [...permissions, permission]
 
 type GroupMembersPanelProps = {
   group: Group
@@ -84,8 +75,39 @@ type GroupMembersPanelProps = {
 
 export function GroupMembersPanel({ group, userId, can }: GroupMembersPanelProps) {
   const { data: members } = useSuspenseQuery(groupMembersQueryOptions(group.id))
-  const action = useMemberAction(group.id)
-  const leave = useLeaveGroup(group.id)
+  const queryClient = useQueryClient()
+  const invalidate = () =>
+    Promise.all([
+      queryClient.invalidateQueries({ queryKey: ["groups", group.id] }),
+      queryClient.invalidateQueries({ queryKey: ["me", "groups"] }),
+    ])
+  const action = useMutation({
+    mutationFn: async ({
+      userId: memberId,
+      action: kind,
+    }: {
+      userId: string
+      action: "remove" | "promote" | "demote"
+    }) => {
+      const param = { id: group.id, userId: memberId }
+
+      if (kind === "remove") {
+        return ensureSuccess(await api.groups[":id"].members[":userId"].$delete({ param }))
+      }
+
+      return ensureSuccess(
+        kind === "promote"
+          ? await api.groups[":id"].members[":userId"].promote.$post({ param })
+          : await api.groups[":id"].members[":userId"].demote.$post({ param }),
+      )
+    },
+    onSuccess: invalidate,
+  })
+  const leave = useMutation({
+    mutationFn: async () =>
+      ensureSuccess(await api.groups[":id"].leave.$post({ param: { id: group.id } })),
+    onSuccess: invalidate,
+  })
   const navigate = useNavigate()
   const [confirmation, setConfirmation] = useState<Confirmation | null>(null)
   const [editing, setEditing] = useState<GroupMember | null>(null)
@@ -258,41 +280,28 @@ export function GroupMembersPanel({ group, userId, can }: GroupMembersPanelProps
         }}
         pending={action.isPending || leave.isPending}
       />
-      <PermissionsDialog
-        can={can}
-        groupId={group.id}
-        member={editing}
-        onClose={() => {
-          setEditing(null)
+      <Dialog
+        onOpenChange={(open) => {
+          if (!open) {
+            setEditing(null)
+          }
         }}
-      />
+        open={editing !== null}
+      >
+        <DialogPopup>
+          {editing === null ? null : (
+            <PermissionsForm
+              can={can}
+              groupId={group.id}
+              member={editing}
+              onDone={() => {
+                setEditing(null)
+              }}
+            />
+          )}
+        </DialogPopup>
+      </Dialog>
     </>
-  )
-}
-
-type PermissionsDialogProps = {
-  groupId: string
-  member: GroupMember | null
-  can: Permissions
-  onClose: () => void
-}
-
-function PermissionsDialog({ groupId, member, can, onClose }: PermissionsDialogProps) {
-  return (
-    <Dialog
-      onOpenChange={(open) => {
-        if (!open) {
-          onClose()
-        }
-      }}
-      open={member !== null}
-    >
-      <DialogPopup>
-        {member === null ? null : (
-          <PermissionsForm can={can} groupId={groupId} member={member} onDone={onClose} />
-        )}
-      </DialogPopup>
-    </Dialog>
   )
 }
 
@@ -307,7 +316,27 @@ function PermissionsForm({
   can: Permissions
   onDone: () => void
 }) {
-  const update = useUpdateMemberPermissions(groupId)
+  const queryClient = useQueryClient()
+  const update = useMutation({
+    mutationFn: async ({
+      userId,
+      permissions,
+    }: {
+      userId: string
+      permissions: GroupPermission[]
+    }) =>
+      ensureSuccess(
+        await api.groups[":id"].members[":userId"].$patch({
+          param: { id: groupId, userId },
+          json: { permissions },
+        }),
+      ),
+    onSuccess: () =>
+      Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["groups", groupId] }),
+        queryClient.invalidateQueries({ queryKey: ["me", "groups"] }),
+      ]),
+  })
   const initial = member.permissions ?? []
   const [value, setValue] = useState<GroupPermission[]>(initial)
   const target: MemberTarget = {
@@ -331,7 +360,9 @@ function PermissionsForm({
           canToggle={(permission) =>
             can("group.updateMember", {
               member: target,
-              permissions: toggled(initial, permission),
+              permissions: initial.includes(permission)
+                ? initial.filter((item) => item !== permission)
+                : [...initial, permission],
             })
           }
           onChange={setValue}
