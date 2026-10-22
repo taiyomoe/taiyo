@@ -22,5 +22,10 @@ export const loadActor = async (db: Kysely<DB>, userId: string) => {
     return null
   }
 
-  return { id: userId, role: toRole(user.role), banned: user.banned, memberships }
+  return {
+    id: userId,
+    role: toRole(user.role),
+    banned: user.banned,
+    memberships,
+  } satisfies Actor
 }
