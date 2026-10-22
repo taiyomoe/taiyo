@@ -3,6 +3,7 @@ import { cacheClient } from "@taiyomoe/cache"
 import { APIError, createAuthMiddleware } from "better-auth/api"
 import { DateTime } from "luxon"
 import { z } from "zod"
+import { authorizeAdminAction, isAdminAction } from "./authorize-admin-action"
 
 const signInBodySchema = z.object({
   email: z.string().optional(),
@@ -17,6 +18,12 @@ const createInvalidCredsError = (isEmail: boolean) =>
 
 export const createBeforeHook = ({ db }: { db: Kysely<DB> }) =>
   createAuthMiddleware(async (ctx) => {
+    if (isAdminAction(ctx.path)) {
+      await authorizeAdminAction(db, ctx.path, ctx)
+
+      return
+    }
+
     if (ctx.path === "/sign-in/email" || ctx.path === "/sign-in/username") {
       const body = signInBodySchema.safeParse(ctx.body)
 

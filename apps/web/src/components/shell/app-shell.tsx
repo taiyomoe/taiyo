@@ -20,6 +20,7 @@ import { ChapterNumber } from "@/components/chapters/chapter-meta"
 import { LanguageFlag } from "@/components/chapters/flags"
 import { AppNavbar } from "@/components/shell/app-navbar"
 import { type AppSidebarSection, AppSidebar } from "@/components/shell/app-sidebar"
+import { ImpersonationBar } from "@/components/shell/impersonation-bar"
 import {
   type JobOutcome,
   type JobState,
@@ -376,6 +377,7 @@ export function AppShell({ user, overlayNavbar = false, sections, children }: Ap
           ) : null}
         </aside>
       )}
+      <ImpersonationBar />
     </SidebarProvider>
   )
 }

@@ -136,6 +136,9 @@ describe("signed-out and banned users", () => {
       can("group.demoteMember", target({ role: "OWNER", userId: ACTOR_ID })),
       can("user.ban", { id: OTHER_ID, role: "USER" }),
       can("user.setRole", { id: OTHER_ID, role: "USER" }),
+      can("user.impersonate", { id: OTHER_ID, role: "USER" }),
+      can("user.setPassword", { id: OTHER_ID, role: "USER" }),
+      can("user.manageSessions", { id: OTHER_ID, role: "USER" }),
     ]
   }
 
@@ -588,6 +591,24 @@ describe("users", () => {
       expect(createPermissions(actor(role))("user.setRole", { id: OTHER_ID, role: "USER" })).toBe(
         false,
       )
+    }
+  })
+
+  it("lets only admins impersonate, set passwords and manage sessions, never for admins", () => {
+    const actions = ["user.impersonate", "user.setPassword", "user.manageSessions"] as const
+    const admin = createPermissions(actor("ADMIN"))
+
+    for (const action of actions) {
+      for (const role of ["USER", "UPLOADER_INTERN", "UPLOADER", "MODERATOR"] as const) {
+        expect(admin(action, { id: OTHER_ID, role })).toBe(true)
+
+        for (const actorRole of ["USER", "UPLOADER_INTERN", "UPLOADER", "MODERATOR"] as const) {
+          expect(createPermissions(actor(actorRole))(action, { id: OTHER_ID, role })).toBe(false)
+        }
+      }
+
+      expect(admin(action, { id: OTHER_ID, role: "ADMIN" })).toBe(false)
+      expect(admin(action, { id: ACTOR_ID, role: "ADMIN" })).toBe(false)
     }
   })
 
