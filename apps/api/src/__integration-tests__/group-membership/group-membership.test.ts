@@ -4,7 +4,6 @@ import { randomUUID } from "node:crypto"
 import { describe, expect } from "vitest"
 import type { Services } from "../../services"
 import {
-  addGroupMember,
   claimGroup,
   demoteGroupMember,
   leaveGroup,
@@ -241,46 +240,6 @@ describe("group membership", () => {
       ok: false,
       error: "GROUP_NOT_FOUND",
     })
-  })
-
-  test("adding the same user twice at the same time adds them once", async ({ services }) => {
-    const groupId = await seedGroup(services, [])
-    const user = await newUser(services)
-    const input = {
-      groupId,
-      userId: user,
-      role: "MEMBER" as const,
-      permissions: [],
-      addedBy: user,
-    }
-    const results = await Promise.all([
-      addGroupMember(services.db, input),
-      addGroupMember(services.db, input),
-    ])
-
-    expect(results).toContainEqual({ ok: true })
-    expect(results).toContainEqual({ ok: false, error: "GROUP_MEMBER_EXISTS" })
-    expect(await getRoles(services, groupId)).toEqual({ [user]: "MEMBER" })
-  })
-
-  test("adding a member stores their permissions in a stable order without duplicates", async ({
-    services,
-  }) => {
-    const groupId = await seedGroup(services, [])
-    const user = await newUser(services)
-
-    await addGroupMember(services.db, {
-      groupId,
-      userId: user,
-      role: "MEMBER",
-      permissions: ["MANAGE_MEMBERS", "UPLOAD_CHAPTERS", "MANAGE_MEMBERS"],
-      addedBy: user,
-    })
-
-    expect(await getPermissions(services, groupId, user)).toEqual([
-      "UPLOAD_CHAPTERS",
-      "MANAGE_MEMBERS",
-    ])
   })
 
   describe("permissions", () => {

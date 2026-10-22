@@ -45,7 +45,6 @@ const ROUTES: Route[] = [
   { method: "DELETE", path: `/staffs/${id}`, allowed: ["UPLOADER", "ADMIN"] },
   { method: "POST", path: "/groups", body: "json", allowed: ["UPLOADER", "ADMIN"] },
   { method: "DELETE", path: `/groups/${id}`, allowed: ["ADMIN"] },
-  { method: "POST", path: `/groups/${id}/members`, body: "json", allowed: ["ADMIN"] },
   { method: "POST", path: `/groups/${id}/ownership-requests`, body: "json", allowed: ROLES },
   { method: "POST", path: `/ownership-requests/${id}/approve`, allowed: ["ADMIN"] },
   { method: "POST", path: `/ownership-requests/${id}/reject`, body: "json", allowed: ["ADMIN"] },

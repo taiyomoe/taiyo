@@ -74,7 +74,6 @@ export const buildRules = (actor: Actor | null): Rules<PermissionsDefinition> =>
     group: {
       create: is("UPLOADER", "ADMIN"),
       delete: is("ADMIN"),
-      addMember: is("ADMIN"),
       update: (group) => is("UPLOADER", "MODERATOR", "ADMIN") || holds(group.id, "EDIT_GROUP"),
       uploadChapters: (group) => holds(group.id, "UPLOAD_CHAPTERS"),
       manageMembers: (group) => is("ADMIN") || holds(group.id, "MANAGE_MEMBERS"),

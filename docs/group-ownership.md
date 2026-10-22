@@ -121,7 +121,6 @@ Members hold a subset of `UPLOAD_CHAPTERS`, `EDIT_CHAPTERS`, `DELETE_CHAPTERS`,
 | Method | Path                                  | Auth                           | Notes                                                       |
 | ------ | ------------------------------------- | ------------------------------ | ----------------------------------------------------------- |
 | GET    | `/groups/:id/members`                 | public                         | list owners + members.                                      |
-| POST   | `/groups/:id/members`                 | admin                          | body `{ userId, role, permissions? }`. No invitation.       |
 | PATCH  | `/groups/:id/members/:userId`         | owner, `MANAGE_MEMBERS`, admin | body `{ permissions }`. Replaces the member's permissions.  |
 | DELETE | `/groups/:id/members/:userId`         | owner, `MANAGE_MEMBERS`, admin | refuses last-owner case unless an admin does it.            |
 | POST   | `/groups/:id/members/:userId/promote` | owner, admin                   | MEMBER → OWNER.                                             |

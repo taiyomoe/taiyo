@@ -67,41 +67,6 @@ const updateRole = async (
 export const normalizeGroupPermissions = (permissions: readonly GroupPermission[]) =>
   GROUP_PERMISSIONS.filter((permission) => permissions.includes(permission))
 
-export const addGroupMember = (
-  db: Kysely<DB>,
-  {
-    groupId,
-    userId,
-    role,
-    permissions,
-    addedBy,
-  }: {
-    groupId: string
-    userId: string
-    role: GroupMembershipRole
-    permissions: readonly GroupPermission[]
-    addedBy: string
-  },
-): Promise<Result<"GROUP_NOT_FOUND" | "GROUP_MEMBER_EXISTS">> =>
-  withGroupLock(db, groupId, async (trx) => {
-    if ((await getMembership(trx, groupId, userId)) !== undefined) {
-      return { ok: false, error: "GROUP_MEMBER_EXISTS" }
-    }
-
-    await trx
-      .insertInto("groupMemberships")
-      .values({
-        groupId,
-        userId,
-        role,
-        permissions: normalizeGroupPermissions(permissions),
-        addedBy,
-      })
-      .execute()
-
-    return { ok: true }
-  })
-
 export const updateGroupMemberPermissions = (
   db: Kysely<DB>,
   {

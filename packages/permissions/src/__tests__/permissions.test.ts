@@ -53,7 +53,6 @@ const STATIC_MATRIX: Record<StaticPermissionPath, readonly Role[]> = {
   "chapter.flag": ["UPLOADER", "MODERATOR", "ADMIN"],
   "group.create": ["UPLOADER", "ADMIN"],
   "group.delete": ["ADMIN"],
-  "group.addMember": ["ADMIN"],
   "ownershipRequest.create": ROLES,
   "ownershipRequest.review": ["ADMIN"],
   "comment.delete": ["MODERATOR", "ADMIN"],
