@@ -8,7 +8,7 @@ import { validateQuery } from "../middlewares/validate-query-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
-import { isBannedSql, managedUserSchema, selectManagedUsers } from "../utils/user-moderation"
+import { isBannedSql, managedUserSchema } from "../utils/user-moderation"
 
 const querySchema = paginationQuerySchema.extend({
   search: z
@@ -51,7 +51,22 @@ export const listUsersHandler = new Hono().get(
     const { actor, db } = c.var
     const { page, perPage, search, role, banned } = c.var.query
     const pattern = search === undefined ? null : `%${search.replace(/[\\%_]/g, "\\$&")}%`
-    const base = selectManagedUsers(db)
+    const base = db
+      .selectFrom("users")
+      .select([
+        "users.id",
+        "users.username",
+        "users.displayUsername",
+        "users.image",
+        "users.role",
+        "users.banReason",
+        "users.email",
+        "users.createdAt",
+        isBannedSql.as("banned"),
+        sql<string | null>`to_char("users"."banExpires", 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"')`.as(
+          "banExpires",
+        ),
+      ])
       .where((eb) =>
         pattern === null
           ? eb.and([])

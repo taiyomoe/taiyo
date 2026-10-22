@@ -9,8 +9,8 @@ import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope, reviewNoteSchema } from "../utils/schemas"
-import { closePendingWork } from "../utils/user-moderation"
 
+const BAN_NOTE = "This account was banned."
 const banSchema = z.object({
   reason: reviewNoteSchema.meta({ description: "Why the user is banned. They see it." }),
   days: z
@@ -81,7 +81,61 @@ export const banUserHandler = new Hono().post(
       .where("id", "=", targetUser.id)
       .execute()
 
-    const chapters = await closePendingWork(db, { userId: targetUser.id, reviewerId: user.id })
+    const reviewedAt = sql<Date>`CURRENT_TIMESTAMP`
+    const chapters = await db
+      .selectFrom("chapters")
+      .select(["id", "mediaId", "pages"])
+      .where("uploaderId", "=", targetUser.id)
+      .where("status", "=", "PENDING")
+      .where("deletedAt", "is", null)
+      .forUpdate()
+      .execute()
+
+    if (chapters.length > 0) {
+      await db
+        .updateTable("chapters")
+        .set({
+          status: "REJECTED",
+          rejectionReason: BAN_NOTE,
+          reviewerId: user.id,
+          reviewedAt,
+          pages: null,
+        })
+        .where(
+          "id",
+          "in",
+          chapters.map((chapter) => chapter.id),
+        )
+        .execute()
+    }
+
+    await Promise.all([
+      db
+        .updateTable("mediaSuggestions")
+        .set({ status: "REJECTED", reviewerId: user.id, reviewerNote: BAN_NOTE, reviewedAt })
+        .where("authorId", "=", targetUser.id)
+        .where("status", "=", "PENDING")
+        .execute(),
+      db
+        .updateTable("groupOwnershipRequests")
+        .set({ status: "REJECTED", reviewerId: user.id, reviewerNote: BAN_NOTE })
+        .where("userId", "=", targetUser.id)
+        .where("status", "=", "PENDING")
+        .execute(),
+      db
+        .updateTable("groupCreationRequests")
+        .set({ status: "REJECTED", reviewerId: user.id, reviewerNote: BAN_NOTE })
+        .where("userId", "=", targetUser.id)
+        .where("status", "=", "PENDING")
+        .execute(),
+      db
+        .updateTable("groupInvitations")
+        .set({ status: "CANCELLED" })
+        .where("inviterId", "=", targetUser.id)
+        .where("status", "=", "PENDING")
+        .execute(),
+      db.deleteFrom("sessions").where("userId", "=", targetUser.id).execute(),
+    ])
 
     c.var.afterCommit(async () => {
       for (const chapter of chapters) {
