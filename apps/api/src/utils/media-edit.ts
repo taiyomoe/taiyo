@@ -116,11 +116,11 @@ export const mediaEditViewSchema = mediaEditSchema.extend({
 
 export const mediaEditFieldSchema = z.enum(MEDIA_EDIT_FIELDS)
 
-export type MediaEditView = Omit<MediaEdit, "staffs"> & {
+type MediaEditView = Omit<MediaEdit, "staffs"> & {
   staffs?: Array<MediaEditStaff & { name: string }>
 }
 
-const compactSynopsis = (synopsis: LocalizedText): LocalizedText =>
+const compactSynopsis = (synopsis: LocalizedText) =>
   Object.fromEntries(
     LANGUAGES.flatMap((language) => {
       const text = synopsis[language]?.trim()
@@ -151,7 +151,7 @@ const sortStaffs = (staffs: MediaEditStaff[]) =>
     .map(([, staff]) => ({ staffId: staff.staffId, role: staff.role }))
 const toIsoDate = (value: string | null) => (value === null ? null : new Date(value).toISOString())
 
-export const normalizeMediaEdit = (edit: MediaEdit): MediaEdit => {
+export const normalizeMediaEdit = (edit: MediaEdit) => {
   const normalized: MediaEdit = { ...edit }
 
   if (edit.titles !== undefined) {
@@ -203,10 +203,13 @@ export const sameValue = (a: unknown, b: unknown) =>
 export const editedFields = (edit: MediaEdit) =>
   MEDIA_EDIT_FIELDS.filter((field) => edit[field] !== undefined)
 
-export const pickFields = (edit: MediaEdit, fields: readonly MediaEditField[]): MediaEdit =>
-  Object.fromEntries(fields.map((field) => [field, edit[field]]))
+export const pickFields = (edit: MediaEdit, fields: readonly MediaEditField[]) => {
+  const picked: MediaEdit = Object.fromEntries(fields.map((field) => [field, edit[field]]))
 
-export const diffMediaEdit = (current: MediaEdit, proposed: MediaEdit): MediaEdit =>
+  return picked
+}
+
+export const diffMediaEdit = (current: MediaEdit, proposed: MediaEdit) =>
   pickFields(
     proposed,
     editedFields(proposed).filter((field) => !sameValue(current[field], proposed[field])),
@@ -259,24 +262,27 @@ export const readMediaEdits = async (db: Kysely<DB>, mediaIds: readonly string[]
   ])
 
   return new Map(
-    medias.map((media): [string, Required<MediaEdit>] => [
-      media.id,
-      {
-        titles: rankTitles(titles.filter((title) => title.mediaId === media.id)),
-        synopsis: compactSynopsis(media.synopsis),
-        type: media.type,
-        status: media.status,
-        source: media.source,
-        demography: media.demography,
-        countryOfOrigin: media.countryOfOrigin,
-        contentRating: media.contentRating,
-        startDate: media.startDate,
-        endDate: media.endDate,
-        tags: normalizeTags(media.tags ?? []),
-        links: media.links,
-        staffs: sortStaffs(staffs.filter((staff) => staff.mediaId === media.id)),
-      },
-    ]),
+    medias.map(
+      (media) =>
+        [
+          media.id,
+          {
+            titles: rankTitles(titles.filter((title) => title.mediaId === media.id)),
+            synopsis: compactSynopsis(media.synopsis),
+            type: media.type,
+            status: media.status,
+            source: media.source,
+            demography: media.demography,
+            countryOfOrigin: media.countryOfOrigin,
+            contentRating: media.contentRating,
+            startDate: media.startDate,
+            endDate: media.endDate,
+            tags: normalizeTags(media.tags ?? []),
+            links: media.links,
+            staffs: sortStaffs(staffs.filter((staff) => staff.mediaId === media.id)),
+          },
+        ] satisfies [string, Required<MediaEdit>],
+    ),
   )
 }
 
@@ -298,13 +304,16 @@ export const withStaffNames = async (db: Kysely<DB>, edits: MediaEdit[]) => {
       : await db.selectFrom("staffs").select(["id", "name"]).where("id", "in", staffIds).execute()
   const names = new Map(rows.map((row) => [row.id, row.name]))
 
-  return edits.map(({ staffs, ...rest }): MediaEditView =>
-    staffs === undefined
-      ? rest
-      : {
-          ...rest,
-          staffs: staffs.map((staff) => ({ ...staff, name: names.get(staff.staffId) ?? "" })),
-        },
+  return edits.map(
+    ({ staffs, ...rest }) =>
+      ({
+        ...rest,
+        ...(staffs === undefined
+          ? {}
+          : {
+              staffs: staffs.map((staff) => ({ ...staff, name: names.get(staff.staffId) ?? "" })),
+            }),
+      }) satisfies MediaEditView,
   )
 }
 
@@ -317,18 +326,14 @@ export const lockMedia = (db: Kysely<DB>, mediaId: string) =>
     .forUpdate()
     .executeTakeFirst()
 
-export type MediaEditError =
+type MediaEditError =
   | { code: "STAFF_NOT_FOUND" }
   | {
       code: "MEDIA_LINK_CONFLICT"
       details: { conflictingMediaId: string; providedLinks: MediaLinks }
     }
 
-export const checkMediaEdit = async (
-  db: Kysely<DB>,
-  mediaId: string,
-  edit: MediaEdit,
-): Promise<MediaEditError | null> => {
+export const checkMediaEdit = async (db: Kysely<DB>, mediaId: string, edit: MediaEdit) => {
   if (edit.staffs !== undefined && edit.staffs.length > 0) {
     const staffIds = [...new Set(edit.staffs.map((staff) => staff.staffId))]
     const found = await db
@@ -339,7 +344,7 @@ export const checkMediaEdit = async (
       .execute()
 
     if (found.length !== staffIds.length) {
-      return { code: "STAFF_NOT_FOUND" }
+      return { code: "STAFF_NOT_FOUND" } satisfies MediaEditError
     }
   }
 
@@ -364,7 +369,7 @@ export const checkMediaEdit = async (
       return {
         code: "MEDIA_LINK_CONFLICT",
         details: { conflictingMediaId: existing.id, providedLinks: Object.fromEntries(links) },
-      }
+      } satisfies MediaEditError
     }
   }
 

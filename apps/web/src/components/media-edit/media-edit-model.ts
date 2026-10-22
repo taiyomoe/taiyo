@@ -24,21 +24,22 @@ export const FIELD_LABELS: Record<MediaEditField, () => string> = {
   staffs: m.media_edit_field_staffs,
 }
 
-export const toDraft = (view: MediaEditView): MediaEditDraft => ({
-  titles: view.titles ?? [],
-  synopsis: view.synopsis ?? {},
-  type: view.type ?? "MANGA",
-  status: view.status ?? "RELEASING",
-  source: view.source ?? "ORIGINAL",
-  demography: view.demography ?? "SHOUNEN",
-  countryOfOrigin: view.countryOfOrigin ?? "JAPAN",
-  contentRating: view.contentRating ?? "NORMAL",
-  startDate: view.startDate ?? null,
-  endDate: view.endDate ?? null,
-  tags: view.tags ?? [],
-  links: view.links ?? {},
-  staffs: view.staffs ?? [],
-})
+export const toDraft = (view: MediaEditView) =>
+  ({
+    titles: view.titles ?? [],
+    synopsis: view.synopsis ?? {},
+    type: view.type ?? "MANGA",
+    status: view.status ?? "RELEASING",
+    source: view.source ?? "ORIGINAL",
+    demography: view.demography ?? "SHOUNEN",
+    countryOfOrigin: view.countryOfOrigin ?? "JAPAN",
+    contentRating: view.contentRating ?? "NORMAL",
+    startDate: view.startDate ?? null,
+    endDate: view.endDate ?? null,
+    tags: view.tags ?? [],
+    links: view.links ?? {},
+    staffs: view.staffs ?? [],
+  }) satisfies MediaEditDraft
 
 const cleanSynopsis = (synopsis: MediaEditDraft["synopsis"]) =>
   Object.fromEntries(
@@ -50,7 +51,7 @@ const cleanLinks = (links: MediaEditDraft["links"]) =>
   Object.fromEntries(
     Object.entries(links).filter(([, value]) => value !== undefined && value !== ""),
   )
-const comparable = (field: MediaEditField, draft: MediaEditDraft): unknown => {
+const comparable = (field: MediaEditField, draft: MediaEditDraft) => {
   if (field === "titles") {
     return draft.titles.map((title) => ({ ...title, title: title.title.trim() }))
   }
@@ -88,10 +89,7 @@ const stable = (value: unknown): unknown => {
 export const sameField = (field: MediaEditField, a: MediaEditDraft, b: MediaEditDraft) =>
   JSON.stringify(stable(comparable(field, a))) === JSON.stringify(stable(comparable(field, b)))
 
-export const toChanges = (
-  draft: MediaEditDraft,
-  fields: readonly MediaEditField[],
-): MediaEditChanges => {
+export const toChanges = (draft: MediaEditDraft, fields: readonly MediaEditField[]) => {
   const has = (field: MediaEditField) => fields.includes(field)
 
   return {
@@ -112,7 +110,7 @@ export const toChanges = (
     ...(has("staffs")
       ? { staffs: draft.staffs.map(({ staffId, role }) => ({ staffId, role })) }
       : {}),
-  }
+  } satisfies MediaEditChanges
 }
 
 export const getTitlesError = (titles: readonly MediaEditTitle[]) => {
