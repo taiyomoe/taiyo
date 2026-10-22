@@ -30,14 +30,6 @@ const patch = (
   headers: Record<string, string>,
   json: unknown,
 ) => api(app, `/medias/${mediaId}`, { method: "PATCH", headers, json })
-const titlesOf = ({ db }: Services, mediaId: string) =>
-  db
-    .selectFrom("titles")
-    .select(["id", "title", "language", "priority", "isMainTitle", "isAcronym"])
-    .where("mediaId", "=", mediaId)
-    .orderBy("language")
-    .orderBy("priority")
-    .execute()
 
 describe("PATCH /medias/:id", () => {
   test("replaces titles, keeping the ids of the ones that stay", async ({ app, services }) => {
@@ -50,7 +42,13 @@ describe("PATCH /medias/:id", () => {
         { title: "メイン", language: "ja" },
       ],
     })
-    const titles = await titlesOf(services, mediaId)
+    const titles = await services.db
+      .selectFrom("titles")
+      .select(["id", "title", "language", "priority", "isMainTitle", "isAcronym"])
+      .where("mediaId", "=", mediaId)
+      .orderBy("language")
+      .orderBy("priority")
+      .execute()
 
     expect(res.status).toBe(200)
     expect(titles).toEqual([

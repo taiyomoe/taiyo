@@ -91,35 +91,11 @@ const styles = stylex.create({
 const Empty = () => <p sx={styles.empty}>{m.media_edit_preview_empty()}</p>
 const formatDate = (value: string | null) => (value === null ? null : value.slice(0, 10))
 
-function SynopsisPreview({ synopsis }: { synopsis: MediaEditDraft["synopsis"] }) {
-  const entries = Object.entries(synopsis).filter(
-    (entry): entry is [Language, string] => entry[1] !== undefined && entry[1].trim() !== "",
-  )
-
-  if (entries.length === 0) {
-    return <Empty />
-  }
-
-  return (
-    <ul sx={styles.list}>
-      {entries.map(([language, text]) => (
-        <li key={language}>
-          <div sx={styles.language}>
-            <LanguageFlag language={language} />
-            {getLanguageName(language)}
-          </div>
-          <p sx={styles.synopsis}>{text}</p>
-        </li>
-      ))}
-    </ul>
-  )
-}
-
 function Text({ value }: { value: string | null }) {
   return value === null ? <Empty /> : <p sx={styles.text}>{value}</p>
 }
 
-const PREVIEWS: Record<MediaEditField, (draft: MediaEditDraft) => ReactNode> = {
+export const FIELD_PREVIEWS: Record<MediaEditField, (draft: MediaEditDraft) => ReactNode> = {
   titles: (draft) =>
     draft.titles.length === 0 ? (
       <Empty />
@@ -139,7 +115,27 @@ const PREVIEWS: Record<MediaEditField, (draft: MediaEditDraft) => ReactNode> = {
         ))}
       </ul>
     ),
-  synopsis: (draft) => <SynopsisPreview synopsis={draft.synopsis} />,
+  synopsis: (draft) => {
+    const entries = Object.entries(draft.synopsis).filter(
+      (entry): entry is [Language, string] => entry[1] !== undefined && entry[1].trim() !== "",
+    )
+
+    return entries.length === 0 ? (
+      <Empty />
+    ) : (
+      <ul sx={styles.list}>
+        {entries.map(([language, text]) => (
+          <li key={language}>
+            <div sx={styles.language}>
+              <LanguageFlag language={language} />
+              {getLanguageName(language)}
+            </div>
+            <p sx={styles.synopsis}>{text}</p>
+          </li>
+        ))}
+      </ul>
+    )
+  },
   type: (draft) => <Text value={MEDIA_TYPE_LABELS[draft.type]()} />,
   status: (draft) => <Text value={MEDIA_STATUS_LABELS[draft.status]()} />,
   source: (draft) => <Text value={MEDIA_SOURCE_LABELS[draft.source]()} />,
@@ -190,8 +186,4 @@ const PREVIEWS: Record<MediaEditField, (draft: MediaEditDraft) => ReactNode> = {
         ))}
       </ul>
     ),
-}
-
-export function FieldPreview({ field, draft }: { field: MediaEditField; draft: MediaEditDraft }) {
-  return PREVIEWS[field](draft)
 }

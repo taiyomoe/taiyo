@@ -196,7 +196,8 @@ const stable = (value: unknown): unknown => {
 
   return value
 }
-const sameValue = (a: unknown, b: unknown) =>
+
+export const sameValue = (a: unknown, b: unknown) =>
   JSON.stringify(stable(a) ?? null) === JSON.stringify(stable(b) ?? null)
 
 export const editedFields = (edit: MediaEdit) =>
@@ -210,9 +211,6 @@ export const diffMediaEdit = (current: MediaEdit, proposed: MediaEdit): MediaEdi
     proposed,
     editedFields(proposed).filter((field) => !sameValue(current[field], proposed[field])),
   )
-
-export const conflictingFields = (base: MediaEdit, current: MediaEdit) =>
-  editedFields(base).filter((field) => !sameValue(base[field], current[field]))
 
 const isoTimestamp = (column: "startDate" | "endDate") =>
   sql<string | null>`to_char(${sql.ref(`medias.${column}`)}, 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"')`.as(
@@ -375,73 +373,6 @@ export const checkMediaEdit = async (
 
 const toTimestamp = (value: string | null) =>
   value === null ? null : sql<Date>`${value}::timestamptz at time zone 'UTC'`
-const replaceTitles = async (
-  db: Kysely<DB>,
-  mediaId: string,
-  actorId: string,
-  titles: MediaEditTitle[],
-) => {
-  const existing = await db
-    .selectFrom("titles")
-    .select(["id", "title", "language", "creatorId", "createdAt"])
-    .where("mediaId", "=", mediaId)
-    .where("deletedAt", "is", null)
-    .execute()
-  const reserved = await db
-    .selectFrom("titles")
-    .select(["language", sql<number>`max(priority)`.as("priority")])
-    .where("mediaId", "=", mediaId)
-    .where("deletedAt", "is not", null)
-    .groupBy("language")
-    .execute()
-  const kept = new Map(existing.map((title) => [titleKey(title), title]))
-  const ranks = new Map(reserved.map((row) => [row.language, row.priority]))
-
-  await db
-    .deleteFrom("titles")
-    .where("mediaId", "=", mediaId)
-    .where("deletedAt", "is", null)
-    .execute()
-
-  await db
-    .insertInto("titles")
-    .values(
-      rankTitles(titles).map((title) => {
-        const priority = (ranks.get(title.language) ?? 0) + 1
-        const previous = kept.get(titleKey(title))
-
-        ranks.set(title.language, priority)
-
-        return {
-          ...(previous === undefined
-            ? { creatorId: actorId }
-            : { id: previous.id, creatorId: previous.creatorId, createdAt: previous.createdAt }),
-          mediaId,
-          title: title.title,
-          language: title.language,
-          isAcronym: title.isAcronym,
-          isMainTitle: title.isMainTitle,
-          priority,
-        }
-      }),
-    )
-    .execute()
-}
-const replaceStaffs = async (db: Kysely<DB>, mediaId: string, staffs: MediaEditStaff[]) => {
-  await db
-    .deleteFrom("mediaStaffs")
-    .where("mediaId", "=", mediaId)
-    .where("staffId", "in", db.selectFrom("staffs").select("id").where("deletedAt", "is", null))
-    .execute()
-
-  if (staffs.length > 0) {
-    await db
-      .insertInto("mediaStaffs")
-      .values(sortStaffs(staffs).map((staff) => ({ mediaId, ...staff })))
-      .onConflict((oc) => oc.doNothing())
-      .execute()
-  }
-}
 
 export const applyMediaEdit = async (
   db: Kysely<DB>,
@@ -466,10 +397,66 @@ export const applyMediaEdit = async (
   }
 
   if (edit.titles !== undefined) {
-    await replaceTitles(db, mediaId, actorId, edit.titles)
+    const existing = await db
+      .selectFrom("titles")
+      .select(["id", "title", "language", "creatorId", "createdAt"])
+      .where("mediaId", "=", mediaId)
+      .where("deletedAt", "is", null)
+      .execute()
+    const reserved = await db
+      .selectFrom("titles")
+      .select(["language", sql<number>`max(priority)`.as("priority")])
+      .where("mediaId", "=", mediaId)
+      .where("deletedAt", "is not", null)
+      .groupBy("language")
+      .execute()
+    const kept = new Map(existing.map((title) => [titleKey(title), title]))
+    const ranks = new Map(reserved.map((row) => [row.language, row.priority]))
+
+    await db
+      .deleteFrom("titles")
+      .where("mediaId", "=", mediaId)
+      .where("deletedAt", "is", null)
+      .execute()
+
+    await db
+      .insertInto("titles")
+      .values(
+        rankTitles(edit.titles).map((title) => {
+          const priority = (ranks.get(title.language) ?? 0) + 1
+          const previous = kept.get(titleKey(title))
+
+          ranks.set(title.language, priority)
+
+          return {
+            ...(previous === undefined
+              ? { creatorId: actorId }
+              : { id: previous.id, creatorId: previous.creatorId, createdAt: previous.createdAt }),
+            mediaId,
+            title: title.title,
+            language: title.language,
+            isAcronym: title.isAcronym,
+            isMainTitle: title.isMainTitle,
+            priority,
+          }
+        }),
+      )
+      .execute()
   }
 
   if (edit.staffs !== undefined) {
-    await replaceStaffs(db, mediaId, edit.staffs)
+    await db
+      .deleteFrom("mediaStaffs")
+      .where("mediaId", "=", mediaId)
+      .where("staffId", "in", db.selectFrom("staffs").select("id").where("deletedAt", "is", null))
+      .execute()
+
+    if (edit.staffs.length > 0) {
+      await db
+        .insertInto("mediaStaffs")
+        .values(sortStaffs(edit.staffs).map((staff) => ({ mediaId, ...staff })))
+        .onConflict((oc) => oc.doNothing())
+        .execute()
+    }
   }
 }

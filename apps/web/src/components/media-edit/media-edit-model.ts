@@ -1,4 +1,4 @@
-import { MEDIA_EDIT_FIELDS, type MediaEditField } from "@taiyomoe/db/constants"
+import type { MediaEditField } from "@taiyomoe/db/constants"
 import type { MediaEditChanges, MediaEditView } from "@/lib/queries/media-edit"
 import { m } from "@/paraglide/messages"
 
@@ -87,9 +87,6 @@ const stable = (value: unknown): unknown => {
 
 export const sameField = (field: MediaEditField, a: MediaEditDraft, b: MediaEditDraft) =>
   JSON.stringify(stable(comparable(field, a))) === JSON.stringify(stable(comparable(field, b)))
-
-export const changedFields = (draft: MediaEditDraft, base: MediaEditDraft) =>
-  MEDIA_EDIT_FIELDS.filter((field) => !sameField(field, draft, base))
 
 export const toChanges = (
   draft: MediaEditDraft,

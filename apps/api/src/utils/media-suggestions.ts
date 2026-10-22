@@ -9,14 +9,12 @@ import {
 import z from "zod"
 import { getMainCoverUrls, getMainTitles } from "./latest-chapters"
 import {
-  conflictingFields,
   editedFields,
   mediaEditFieldSchema,
   mediaEditSchema,
   mediaEditViewSchema,
-  pickFields,
   readMediaEdits,
-  withStaffNames,
+  sameValue,
 } from "./media-edit"
 import { userSummarySchema } from "./schemas"
 
@@ -98,7 +96,7 @@ export const selectSuggestionColumns = (query: ReturnType<typeof selectSuggestio
 
 type SuggestionRow = Awaited<ReturnType<ReturnType<typeof selectSuggestionColumns>["execute"]>>
 
-const summarize = (
+export const summarize = (
   row: SuggestionRow[number],
   conflicts: MediaEditField[],
   titles: Map<string, string>,
@@ -126,9 +124,17 @@ const summarize = (
     image: row.authorImage,
   },
 })
-const conflictsOf = (row: SuggestionRow[number], current: MediaEdit | undefined) =>
-  row.status === "PENDING" && current !== undefined ? conflictingFields(row.base, current) : []
-const loadContext = async (db: Kysely<DB>, rows: SuggestionRow, mediaIdsToRead: string[]) => {
+
+export const conflictsOf = (row: SuggestionRow[number], current: MediaEdit | undefined) =>
+  row.status === "PENDING" && current !== undefined
+    ? editedFields(row.base).filter((field) => !sameValue(row.base[field], current[field]))
+    : []
+
+export const loadContext = async (
+  db: Kysely<DB>,
+  rows: SuggestionRow,
+  mediaIdsToRead: string[],
+) => {
   const mediaIds = [...new Set(rows.map((row) => row.mediaId))]
   const [current, titles, covers] = await Promise.all([
     readMediaEdits(db, [...new Set(mediaIdsToRead)]),
@@ -149,32 +155,4 @@ export const toSuggestionSummaries = async (db: Kysely<DB>, rows: SuggestionRow)
   return rows.map((row) =>
     summarize(row, conflictsOf(row, current.get(row.mediaId)), titles, covers),
   )
-}
-
-export const toSuggestionDetail = async (db: Kysely<DB>, row: SuggestionRow[number]) => {
-  const { current, titles, covers } = await loadContext(db, [row], [row.mediaId])
-  const now = current.get(row.mediaId)
-  const [changes, base, currentValues] = await withStaffNames(db, [
-    row.changes,
-    row.base,
-    now === undefined ? {} : pickFields(now, editedFields(row.changes)),
-  ])
-
-  return {
-    ...summarize(row, conflictsOf(row, now), titles, covers),
-    changes: changes ?? {},
-    base: base ?? {},
-    current: currentValues ?? {},
-    reviewer:
-      row.reviewerId === null ||
-      row.reviewerUsername === null ||
-      row.reviewerDisplayUsername === null
-        ? null
-        : {
-            id: row.reviewerId,
-            username: row.reviewerUsername,
-            displayUsername: row.reviewerDisplayUsername,
-            image: row.reviewerImage,
-          },
-  }
 }
