@@ -29,7 +29,8 @@ type DashboardSection = Omit<AppSidebarSection, "items"> & { items: DashboardIte
 const ANY_CHAPTER = { uploaderId: "", groupIds: [] }
 const ANY_GROUP = { id: "" }
 const ANOTHER_USER = { id: "", role: "USER" } as const
-const SECTIONS: DashboardSection[] = [
+
+export const DASHBOARD_SECTIONS: DashboardSection[] = [
   {
     items: [
       { label: m.dashboard_nav_overview, icon: Dashboard, to: "/dashboard", visible: () => true },
@@ -95,9 +96,3 @@ const SECTIONS: DashboardSection[] = [
     ],
   },
 ]
-
-export const getDashboardSections = (can: Permissions): AppSidebarSection[] =>
-  SECTIONS.map(({ items, ...section }) => ({
-    ...section,
-    items: items.filter((item) => item.visible(can)),
-  })).filter((section) => section.items.length > 0)

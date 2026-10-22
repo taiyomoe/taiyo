@@ -12,29 +12,34 @@ const setup = async (services: Services) => {
   const mediaId = await seedMedia(services, admin.userId)
   const groupA = await seedGroup(services, admin.userId, `A ${randomUUID()}`)
   const groupB = await seedGroup(services, admin.userId, `B ${randomUUID()}`)
-  const chapterOf = (groupIds: string[]) =>
-    seedChapter(services, {
-      mediaId,
-      uploaderId: admin.userId,
-      number: Math.random() * 1000,
-      groupIds,
-    })
-  const memberOf = async (groupId: string, permissions: GroupPermission[] = []) => {
-    const user = await signInAs(services)
 
-    await seedMembership(services, { groupId, userId: user.userId, permissions })
+  return {
+    admin,
+    mediaId,
+    groupA,
+    groupB,
+    chapterOf: (groupIds: string[]) =>
+      seedChapter(services, {
+        mediaId,
+        uploaderId: admin.userId,
+        number: Math.random() * 1000,
+        groupIds,
+      }),
+    memberOf: async (groupId: string, permissions: GroupPermission[] = []) => {
+      const user = await signInAs(services)
 
-    return user
+      await seedMembership(services, { groupId, userId: user.userId, permissions })
+
+      return user
+    },
+    ownerOf: async (groupId: string) => {
+      const user = await signInAs(services)
+
+      await seedMembership(services, { groupId, userId: user.userId, role: "OWNER" })
+
+      return user
+    },
   }
-  const ownerOf = async (groupId: string) => {
-    const user = await signInAs(services)
-
-    await seedMembership(services, { groupId, userId: user.userId, role: "OWNER" })
-
-    return user
-  }
-
-  return { admin, mediaId, groupA, groupB, chapterOf, memberOf, ownerOf }
 }
 const getCredits = async ({ db }: Services, chapterId: string) =>
   (

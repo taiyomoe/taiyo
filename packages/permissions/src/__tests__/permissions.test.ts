@@ -64,9 +64,9 @@ const leaves = (node: object, prefix = ""): Array<[string, unknown]> =>
       ? leaves(value, `${prefix}${key}.`)
       : [[`${prefix}${key}`, value]],
   )
-const isStaticPath = (path: string): path is StaticPermissionPath =>
-  Object.hasOwn(STATIC_MATRIX, path)
-const STATIC_PATHS = Object.keys(STATIC_MATRIX).filter(isStaticPath)
+const STATIC_PATHS = Object.keys(STATIC_MATRIX).filter((path): path is StaticPermissionPath =>
+  Object.hasOwn(STATIC_MATRIX, path),
+)
 
 describe("role matrix", () => {
   it("covers every permission that takes no data", () => {

@@ -1,33 +1,26 @@
 import { GROUP_PERMISSIONS, type GroupPermission, ROLES, type Role } from "@taiyomoe/db/constants"
 import { createRules, type Rules } from "permix"
-import type { Actor, ActorMembership, PermissionsDefinition } from "./definition"
+import type { Actor, PermissionsDefinition } from "./definition"
 
 const NO_PERMISSIONS: ReadonlySet<GroupPermission> = new Set()
 const ALL_PERMISSIONS: ReadonlySet<GroupPermission> = new Set(GROUP_PERMISSIONS)
 
 export const toRole = (value: unknown): Role => ROLES.find((role) => role === value) ?? "USER"
 
-export const groupPermissionsOf = (
-  membership: Pick<ActorMembership, "role" | "permissions"> | undefined,
-): ReadonlySet<GroupPermission> => {
-  if (membership === undefined) {
-    return NO_PERMISSIONS
-  }
-
-  return membership.role === "OWNER" ? ALL_PERMISSIONS : new Set(membership.permissions)
-}
-
-const changedPermissions = (
-  before: readonly GroupPermission[],
-  after: readonly GroupPermission[],
-) => GROUP_PERMISSIONS.filter((p) => before.includes(p) !== after.includes(p))
-
 export const buildRules = (actor: Actor | null): Rules<PermissionsDefinition> => {
   const active = actor?.banned === false ? actor : null
   const is = (...roles: Role[]) => active !== null && roles.includes(active.role)
   const isSelf = (userId: string) => active?.id === userId
   const memberships = new Map(active?.memberships.map((m) => [m.groupId, m]))
-  const permissionsIn = (groupId: string) => groupPermissionsOf(memberships.get(groupId))
+  const permissionsIn = (groupId: string): ReadonlySet<GroupPermission> => {
+    const membership = memberships.get(groupId)
+
+    if (membership === undefined) {
+      return NO_PERMISSIONS
+    }
+
+    return membership.role === "OWNER" ? ALL_PERMISSIONS : new Set(membership.permissions)
+  }
   const holds = (groupId: string, permission: GroupPermission) =>
     permissionsIn(groupId).has(permission)
   const holdsInAny = (groupIds: readonly string[], permission: GroupPermission) =>
@@ -94,7 +87,12 @@ export const buildRules = (actor: Actor | null): Rules<PermissionsDefinition> =>
         return (
           !isSelf(member.userId) &&
           canManage(member.groupId, member.permissions) &&
-          canManage(member.groupId, changedPermissions(member.permissions, permissions))
+          canManage(
+            member.groupId,
+            GROUP_PERMISSIONS.filter(
+              (p) => member.permissions.includes(p) !== permissions.includes(p),
+            ),
+          )
         )
       },
       removeMember: (member) => {

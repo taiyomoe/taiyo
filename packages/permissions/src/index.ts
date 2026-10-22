@@ -8,7 +8,7 @@ import {
 } from "@taiyomoe/db/constants"
 import { createCheck, type DataAtPath, type RulesPaths } from "permix"
 import type { Actor, PermissionsDefinition } from "./definition"
-import { buildRules, groupPermissionsOf, toRole } from "./rules"
+import { buildRules, toRole } from "./rules"
 
 export type Permissions = ReturnType<typeof createCheck<PermissionsDefinition>>
 
@@ -27,4 +27,4 @@ export type { GroupMembershipRole, GroupPermission, Role }
 
 export type * from "./definition"
 
-export { buildRules, groupPermissionsOf, toRole }
+export { buildRules, toRole }

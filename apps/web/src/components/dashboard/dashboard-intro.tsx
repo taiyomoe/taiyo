@@ -28,19 +28,6 @@ const styles = stylex.create({
     lineHeight: 1.5,
   },
 })
-const getGreeting = (hour: number | null, name: string) => {
-  if (hour === null) {
-    return m.dashboard_greeting({ name })
-  }
-
-  if (hour >= 5 && hour < 12) {
-    return m.dashboard_greeting_morning({ name })
-  }
-
-  return hour >= 12 && hour < 18
-    ? m.dashboard_greeting_afternoon({ name })
-    : m.dashboard_greeting_evening({ name })
-}
 
 type DashboardIntroProps = {
   name: string
@@ -49,10 +36,19 @@ type DashboardIntroProps = {
 
 export function DashboardIntro({ name, subtitle }: DashboardIntroProps) {
   const hour = useClientValue(() => new Date().getHours())
+  let greeting = m.dashboard_greeting({ name })
+
+  if (hour !== null && hour >= 5 && hour < 12) {
+    greeting = m.dashboard_greeting_morning({ name })
+  } else if (hour !== null && hour >= 12 && hour < 18) {
+    greeting = m.dashboard_greeting_afternoon({ name })
+  } else if (hour !== null) {
+    greeting = m.dashboard_greeting_evening({ name })
+  }
 
   return (
     <div sx={styles.intro}>
-      <h1 sx={styles.title}>{getGreeting(hour, name)}</h1>
+      <h1 sx={styles.title}>{greeting}</h1>
       <p sx={styles.subtitle}>{subtitle}</p>
     </div>
   )
