@@ -604,8 +604,6 @@
   "upload_groups_description": "The groups that worked on these chapters. Crediting a group where you can upload chapters publishes them right away.",
   "upload_group_publishes": "You publish",
   "upload_pages": "Pages",
-  "upload_page_earlier": "Move page earlier",
-  "upload_page_later": "Move page later",
   "upload_page_remove": "Remove page",
   "upload_page_label": "Page {index}",
   "upload_pages_drag_instructions": "To move a page, press space or enter to pick it up, use the arrow keys to move it, then press space or enter to drop it. Press escape to cancel.",
@@ -877,5 +875,6 @@
   "upload_will_review_scheduled_description": "An uploader checks each chapter first. Approved chapters go live at their release time, or right away if it has passed.",
   "media_upcoming_more": "Show {count} more",
   "media_upcoming_less": "Show less",
-  "review_chapter_external": "This chapter is only on the group's site. Check the link before approving."
+  "review_chapter_external": "This chapter is only on the group's site. Check the link before approving.",
+  "group_chapter_pages_hint": "Drag pages to reorder them."
 }
