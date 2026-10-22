@@ -1,6 +1,4 @@
-import { LANGUAGES, type Language } from "@taiyomoe/db"
-
-const isLanguage = (s: string): s is Language => (LANGUAGES as readonly string[]).includes(s)
+import { LANGUAGES } from "@taiyomoe/db"
 
 export const toLanguage = (input?: string | null) => {
   switch (input) {
@@ -30,10 +28,13 @@ export const toLanguage = (input?: string | null) => {
     case undefined:
       break
 
-    default:
-      if (isLanguage(input)) {
-        return input
+    default: {
+      const language = LANGUAGES.find((candidate) => candidate === input)
+
+      if (language !== undefined) {
+        return language
       }
+    }
   }
 
   // oxlint-disable-next-line no-console

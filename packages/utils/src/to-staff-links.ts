@@ -1,4 +1,4 @@
-import { isStaffLink, type StaffLinks } from "@taiyomoe/db"
+import { STAFF_LINK_KEYS, type StaffLinks } from "@taiyomoe/db"
 
 export const toStaffLinks = (input: Record<string, unknown>): StaffLinks => {
   const links: StaffLinks = {}
@@ -14,8 +14,10 @@ export const toStaffLinks = (input: Record<string, unknown>): StaffLinks => {
       continue
     }
 
-    if (isStaffLink(key)) {
-      links[key] = value
+    const link = STAFF_LINK_KEYS.find((candidate) => candidate === key)
+
+    if (link !== undefined) {
+      links[link] = value
 
       continue
     }
