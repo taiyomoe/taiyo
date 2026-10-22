@@ -21,7 +21,7 @@ export type StaticPermissionPath = {
 export const createPermissions = (actor: Actor | null) =>
   createCheck<PermissionsDefinition>(buildRules(actor))
 
-export const allows = (actor: Actor | null, path: StaticPermissionPath): boolean => {
+export const allows = (actor: Actor | null, path: StaticPermissionPath) => {
   const rules: Partial<Record<string, Partial<Record<string, unknown>>>> = buildRules(actor)
   const [entity = "", action = ""] = path.split(".")
 

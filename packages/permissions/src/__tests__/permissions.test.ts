@@ -599,10 +599,8 @@ describe("users", () => {
 })
 
 describe("media suggestions", () => {
-  const suggestion = (
-    authorId = OTHER_ID,
-    status: MediaSuggestionTarget["status"] = "PENDING",
-  ): MediaSuggestionTarget => ({ authorId, status })
+  const suggestion = (authorId = OTHER_ID, status: MediaSuggestionTarget["status"] = "PENDING") =>
+    ({ authorId, status }) satisfies MediaSuggestionTarget
 
   it("shows a suggestion to its author and to reviewers only", () => {
     expect(createPermissions(null)("mediaSuggestion.view", suggestion())).toBe(false)

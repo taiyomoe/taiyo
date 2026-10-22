@@ -1,6 +1,6 @@
 import { type Kysely, sql } from "kysely"
 
-export async function up(db: Kysely<unknown>): Promise<void> {
+export async function up(db: Kysely<unknown>) {
   await db.schema
     .createType("MediaSuggestionStatus")
     .asEnum(["PENDING", "ACCEPTED", "REJECTED", "WITHDRAWN"])
@@ -55,7 +55,7 @@ export async function up(db: Kysely<unknown>): Promise<void> {
   `.execute(db)
 }
 
-export async function down(db: Kysely<unknown>): Promise<void> {
+export async function down(db: Kysely<unknown>) {
   await db.schema.dropTable("mediaSuggestions").execute()
   await db.schema.dropType("MediaSuggestionStatus").execute()
 }
