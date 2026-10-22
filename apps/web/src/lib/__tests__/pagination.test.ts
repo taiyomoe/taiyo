@@ -1,18 +1,8 @@
-import { range } from "remeda"
 import { describe, expect, it } from "vitest"
 import { getPageItems, parsePage } from "../pagination"
 
 const render = (page: number, pageCount: number) =>
   getPageItems(page, pageCount).map((item) => (typeof item === "number" ? item : "…"))
-const getHiddenRuns = (page: number, pageCount: number) => {
-  const items = getPageItems(page, pageCount)
-
-  return items.flatMap((item, index) =>
-    typeof item === "number" ? [] : [Number(items[index + 1]) - Number(items[index - 1]) - 1],
-  )
-}
-const getAllHiddenRuns = (pageCount: number) =>
-  range(1, pageCount + 1).flatMap((page) => getHiddenRuns(page, pageCount))
 
 describe("getPageItems", () => {
   it("lists every page when they all fit", () => {
@@ -39,7 +29,21 @@ describe("getPageItems", () => {
   })
 
   it("never hides a single page behind an ellipsis", () => {
-    const runs = range(1, 31).flatMap(getAllHiddenRuns)
+    const runs: number[] = []
+
+    for (let pageCount = 1; pageCount <= 30; pageCount++) {
+      for (let page = 1; page <= pageCount; page++) {
+        const items = getPageItems(page, pageCount)
+
+        runs.push(
+          ...items.flatMap((item, index) =>
+            typeof item === "number"
+              ? []
+              : [Number(items[index + 1]) - Number(items[index - 1]) - 1],
+          ),
+        )
+      }
+    }
 
     expect(runs.length).toBeGreaterThan(0)
     expect(runs.every((hidden) => hidden >= 2)).toBe(true)

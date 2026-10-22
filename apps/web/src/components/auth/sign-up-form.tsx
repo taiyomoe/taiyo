@@ -14,7 +14,7 @@ import { config } from "@taiyomoe/config"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { Form } from "@taiyomoe/ui/components/ui/form"
 import { Link } from "@tanstack/react-router"
-import { type ReactNode, type SubmitEvent, useRef, useState } from "react"
+import { type ReactNode, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { AuthAlert } from "@/components/auth/auth-alert"
@@ -78,24 +78,6 @@ export const SignUpForm = () => {
   })
   const isSubmitting = form.formState.isSubmitting
   const isBusy = isSubmitting || auth.disabled
-  // handleSubmit() is invoked at event time rather than during render: its
-  // callback reads turnstileRef.current, and the React Compiler must assume a
-  // function passed to a call made during render may itself run during render.
-  const onSubmit = (event: SubmitEvent<HTMLFormElement>) => {
-    void form.handleSubmit(async (values) => {
-      const result = await auth.signUp(
-        { name: values.name, email: values.email, password: values.password },
-        { captchaToken },
-      )
-
-      if (result.ok) {
-        setPendingEmail(values.email)
-      } else {
-        turnstileRef.current?.reset()
-        setCaptchaToken(null)
-      }
-    })(event)
-  }
 
   if (pendingEmail !== null && pendingEmail !== "") {
     return (
@@ -139,7 +121,29 @@ export const SignUpForm = () => {
           disabled={isBusy}
           onSelect={auth.onSocial}
         />
-        <Form data-auth-fields sx={sx.fields} onSubmit={onSubmit} noValidate>
+        <Form
+          data-auth-fields
+          sx={sx.fields}
+          // handleSubmit() is invoked at event time rather than during render: its
+          // callback reads turnstileRef.current, and the React Compiler must assume a
+          // function passed to a call made during render may itself run during render.
+          onSubmit={(event) => {
+            void form.handleSubmit(async (values) => {
+              const result = await auth.signUp(
+                { name: values.name, email: values.email, password: values.password },
+                { captchaToken },
+              )
+
+              if (result.ok) {
+                setPendingEmail(values.email)
+              } else {
+                turnstileRef.current?.reset()
+                setCaptchaToken(null)
+              }
+            })(event)
+          }}
+          noValidate
+        >
           <InputField
             name="name"
             control={form.control}

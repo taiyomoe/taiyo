@@ -28,31 +28,31 @@ const styles = stylex.create({
     width: "0.625rem",
   },
 })
-const getTrend = (value: number) => {
-  const percent = formatPercent(Math.abs(value), 1)
-
-  if (value > 0) {
-    return { label: m.dashboard_delta_up({ percent }), tone: styles.up, Caret: CaretUp }
-  }
-
-  if (value < 0) {
-    return { label: m.dashboard_delta_down({ percent }), tone: styles.down, Caret: CaretDown }
-  }
-
-  return { label: m.dashboard_delta_flat(), tone: styles.flat, Caret: null }
-}
 
 export function Delta({ value, sx }: { value: number | null; sx?: Sx }) {
   if (value === null) {
     return null
   }
 
-  const { label, tone, Caret } = getTrend(value)
+  const percent = formatPercent(Math.abs(value), 1)
+  let label = m.dashboard_delta_flat()
+  let tone = styles.flat
+  let Caret: typeof CaretUp | null = null
+
+  if (value > 0) {
+    label = m.dashboard_delta_up({ percent })
+    tone = styles.up
+    Caret = CaretUp
+  } else if (value < 0) {
+    label = m.dashboard_delta_down({ percent })
+    tone = styles.down
+    Caret = CaretDown
+  }
 
   return (
     <span aria-label={label} sx={[styles.delta, tone, sx]}>
       {Caret === null ? null : <Caret {...stylex.props(styles.caret)} />}
-      <span aria-hidden>{formatPercent(Math.abs(value), 1)}</span>
+      <span aria-hidden>{percent}</span>
     </span>
   )
 }

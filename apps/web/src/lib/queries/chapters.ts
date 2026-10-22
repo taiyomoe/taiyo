@@ -5,8 +5,6 @@ import type { ContentRating } from "@/lib/settings"
 import { api } from "@/lib/api"
 import { unwrapEnvelope } from "@/lib/envelope"
 
-const MAX_PER_PAGE = 100
-
 export const latestChaptersQueryOptions = (
   contentRatings: readonly ContentRating[],
   perPage: number,
@@ -52,39 +50,6 @@ export type LatestMediaUpdate = InferResponseType<
   typeof api.chapters.latest.medias.$get,
   200
 >["data"][number]
-
-export const mediaLatestChaptersQueryOptions = (
-  mediaId: string,
-  contentRatings: readonly ContentRating[],
-) =>
-  queryOptions({
-    queryKey: ["chapters", "latest", { mediaId, contentRatings }],
-    queryFn: async ({ signal }) => {
-      const chapters: LatestChapter[] = []
-
-      for (let page = 1; ; page++) {
-        const { data, meta } = await unwrapEnvelope(
-          await api.chapters.latest.$get(
-            {
-              query: {
-                contentRating: contentRatings.join(","),
-                mediaId,
-                page: String(page),
-                perPage: String(MAX_PER_PAGE),
-              },
-            },
-            { init: { signal } },
-          ),
-        )
-
-        chapters.push(...data)
-
-        if (chapters.length >= meta.total || data.length === 0) {
-          return chapters
-        }
-      }
-    },
-  })
 
 export const CHAPTER_SORTS = ["newest", "oldest", "uploaded"] as const
 
@@ -170,8 +135,3 @@ export const mediaChapterFacetsQueryOptions = (
         )
       ).data,
   })
-
-export type MediaChapterFacets = InferResponseType<
-  (typeof api.medias)[":id"]["chapters"]["facets"]["$get"],
-  200
->["data"]

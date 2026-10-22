@@ -8,17 +8,14 @@ import { useMemo } from "react"
 import type { DashboardOverview } from "@/lib/queries/dashboard"
 import { ChartFrame, chartTheme } from "@/components/dashboard/overview/chart-frame"
 import { CardNote } from "@/components/dashboard/overview/dashboard-card"
-import {
-  formatCompact,
-  formatLanguage,
-  formatNumber,
-  formatPercent,
-} from "@/components/dashboard/overview/format"
+import { formatCompact, formatNumber, formatPercent } from "@/components/dashboard/overview/format"
 import { m } from "@/paraglide/messages"
+import { getLocale } from "@/paraglide/runtime"
 
 const TONES = [colors.chart1, colors.chart3, colors.chart2, colors.chart5, colors.chart4]
 const OTHER_TONE = `color-mix(in srgb, ${colors.mutedForeground} 45%, ${colors.card})`
 const SIZE = 208
+const LANGUAGE_REGIONS: Record<string, string> = { la: "419", ro: "Latn" }
 const styles = stylex.create({
   body: {
     gap: "1.5rem",
@@ -97,12 +94,22 @@ export function LanguageDonut({
   const slices = useMemo(
     () =>
       [
-        ...readsByLanguage.map(({ language, reads }, index) => ({
-          id: language,
-          label: formatLanguage(language),
-          reads,
-          tone: TONES[index] ?? OTHER_TONE,
-        })),
+        ...readsByLanguage.map(({ language, reads }, index) => {
+          const [base = language, region] = language.split("_")
+          const tag =
+            region === undefined
+              ? base
+              : `${base}-${LANGUAGE_REGIONS[region] ?? region.toUpperCase()}`
+          let label: string
+
+          try {
+            label = new Intl.DisplayNames(getLocale(), { type: "language" }).of(tag) ?? language
+          } catch {
+            label = language
+          }
+
+          return { id: language, label, reads, tone: TONES[index] ?? OTHER_TONE }
+        }),
         {
           id: "other",
           label: m.dashboard_languages_other(),

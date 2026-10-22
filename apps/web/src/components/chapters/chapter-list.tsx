@@ -121,42 +121,38 @@ export type ChapterListItem = Pick<
 export function ChapterList({ chapters, sx }: { chapters: ChapterListItem[]; sx?: Sx }) {
   return (
     <ul sx={[styles.chapters, sx]}>
-      {chapters.map((chapter) => (
-        <ChapterListRow key={chapter.id} chapter={chapter} />
-      ))}
-    </ul>
-  )
-}
+      {chapters.map((chapter) => {
+        const read = chapter.read === true
 
-function ChapterListRow({ chapter }: { chapter: ChapterListItem }) {
-  const read = chapter.read === true
-
-  return (
-    <li sx={styles.chapter}>
-      <span sx={[styles.label, read && styles.labelRead]}>
-        <LanguageFlag language={chapter.language} />
-        <span sx={styles.labelText} title={getLanguageCode(chapter.language)}>
-          {getChapterLabel(chapter)}
-          {chapter.title === null ? null : (
-            <span sx={[styles.chapterTitle, read && styles.chapterTitleRead]}>
-              {" "}
-              – {chapter.title}
+        return (
+          <li key={chapter.id} sx={styles.chapter}>
+            <span sx={[styles.label, read && styles.labelRead]}>
+              <LanguageFlag language={chapter.language} />
+              <span sx={styles.labelText} title={getLanguageCode(chapter.language)}>
+                {getChapterLabel(chapter)}
+                {chapter.title === null ? null : (
+                  <span sx={[styles.chapterTitle, read && styles.chapterTitleRead]}>
+                    {" "}
+                    – {chapter.title}
+                  </span>
+                )}
+              </span>
+              {read ? (
+                <span title={m.media_chapter_read()}>
+                  <Check height={14} sx={styles.readIcon} width={14} />
+                </span>
+              ) : null}
             </span>
-          )}
-        </span>
-        {read ? (
-          <span title={m.media_chapter_read()}>
-            <Check height={14} sx={styles.readIcon} width={14} />
-          </span>
-        ) : null}
-      </span>
-      <span sx={styles.time}>
-        <Clock size={16} {...stylex.props(styles.timeIcon)} />
-        <TimeAgo date={chapter.createdAt} />
-      </span>
-      <ChapterGroups groups={chapter.groups} max={3} sx={styles.groups} wrap />
-      <Uploader sx={styles.uploader} uploader={chapter.uploader} />
-    </li>
+            <span sx={styles.time}>
+              <Clock size={16} {...stylex.props(styles.timeIcon)} />
+              <TimeAgo date={chapter.createdAt} />
+            </span>
+            <ChapterGroups groups={chapter.groups} max={3} sx={styles.groups} wrap />
+            <Uploader sx={styles.uploader} uploader={chapter.uploader} />
+          </li>
+        )
+      })}
+    </ul>
   )
 }
 

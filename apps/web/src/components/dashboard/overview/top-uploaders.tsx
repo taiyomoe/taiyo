@@ -29,8 +29,6 @@ export function TopUploaders({
 }: TopUploadersProps) {
   const definition = useMemo(() => {
     const names = new Map(topUploaders.map((uploader) => [uploader.id, uploader.displayUsername]))
-    const reach = (uploader: (typeof topUploaders)[number]) =>
-      compare ? Math.max(uploader.chapters, uploader.previousChapters) : uploader.chapters
 
     return defineChart({
       marks: [
@@ -56,7 +54,8 @@ export function TopUploaders({
           : []),
         decorative(
           text(topUploaders, {
-            x: reach,
+            x: (uploader) =>
+              compare ? Math.max(uploader.chapters, uploader.previousChapters) : uploader.chapters,
             y: "id",
             text: (uploader) => formatCompact(uploader.chapters),
             anchor: "start",

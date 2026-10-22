@@ -27,20 +27,18 @@ export const Route = createFileRoute("/dashboard/")({
       void context.queryClient.query(context.overviewQueryOptions).catch(noop)
     }
   },
-  component: Overview,
+  component: function Overview() {
+    const { session, overviewQueryOptions } = Route.useRouteContext()
+    const { range } = Route.useLoaderDeps()
+    const { compare = true } = Route.useSearch()
+
+    return (
+      <OverviewPage
+        compare={compare}
+        queryOptions={overviewQueryOptions}
+        range={range}
+        user={session.user}
+      />
+    )
+  },
 })
-
-function Overview() {
-  const { session, overviewQueryOptions } = Route.useRouteContext()
-  const { range } = Route.useLoaderDeps()
-  const { compare = true } = Route.useSearch()
-
-  return (
-    <OverviewPage
-      compare={compare}
-      queryOptions={overviewQueryOptions}
-      range={range}
-      user={session.user}
-    />
-  )
-}

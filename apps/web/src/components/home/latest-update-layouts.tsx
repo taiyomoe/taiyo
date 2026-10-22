@@ -1,18 +1,17 @@
 import type { Sx } from "@taiyomoe/ui/styles/sx"
 import * as stylex from "@stylexjs/stylex"
-import { Skeleton } from "@taiyomoe/ui/components/ui/skeleton"
 import { colors, font, motion, radius, shadows } from "@taiyomoe/ui/styles/tokens.stylex"
 import { Link } from "@tanstack/react-router"
-import { range } from "remeda"
 import type { LatestChapter } from "@/lib/queries/chapters"
 import { ChapterGroups, ChapterNumber, TimeAgo, Uploader } from "@/components/chapters/chapter-meta"
-import { LanguageChip, LanguageFlag } from "@/components/chapters/flags"
-import { Cover, CoverSkeleton } from "@/components/media/cover"
+import { LanguageChip } from "@/components/chapters/flags"
+import { Cover } from "@/components/media/cover"
 import { m } from "@/paraglide/messages"
 
 const DESKTOP = "@media (width >= 64rem)"
 const TABLET = "@media (width >= 40rem)"
-const styles = stylex.create({
+
+export const layoutStyles = stylex.create({
   list: {
     margin: 0,
     padding: 0,
@@ -263,145 +262,47 @@ const styles = stylex.create({
   },
 })
 
-function MediaTitleLink({ chapter, sx }: { chapter: LatestChapter; sx?: Sx }) {
+export function MediaTitleLink({ chapter, sx }: { chapter: LatestChapter; sx?: Sx }) {
   return (
     <Link
       params={{ mediaId: chapter.mediaId }}
       to="/media/$mediaId"
-      {...stylex.props(styles.title, sx)}
+      {...stylex.props(layoutStyles.title, sx)}
     >
-      {chapter.mediaTitle ?? <span sx={styles.untitled}>{m.media_untitled()}</span>}
+      {chapter.mediaTitle ?? <span sx={layoutStyles.untitled}>{m.media_untitled()}</span>}
     </Link>
   )
 }
 
 export function LatestList({ chapters }: { chapters: LatestChapter[] }) {
   return (
-    <ul sx={styles.list}>
+    <ul sx={layoutStyles.list}>
       {chapters.map((chapter) => (
-        <li key={chapter.id} sx={styles.row}>
+        <li key={chapter.id} sx={layoutStyles.row}>
           <Link
             aria-label={chapter.mediaTitle ?? m.media_untitled()}
             params={{ mediaId: chapter.mediaId }}
             tabIndex={-1}
             to="/media/$mediaId"
-            {...stylex.props(styles.rowCover)}
+            {...stylex.props(layoutStyles.rowCover)}
           >
-            <Cover src={chapter.mediaCoverUrl} sx={styles.rowCoverImage} />
+            <Cover src={chapter.mediaCoverUrl} sx={layoutStyles.rowCoverImage} />
           </Link>
-          <div sx={[styles.inline, styles.rowMain]}>
+          <div sx={[layoutStyles.inline, layoutStyles.rowMain]}>
             <MediaTitleLink chapter={chapter} />
             <ChapterNumber number={chapter.number} />
-            {chapter.title === null ? null : <span sx={styles.chapterTitle}>{chapter.title}</span>}
+            {chapter.title === null ? null : (
+              <span sx={layoutStyles.chapterTitle}>{chapter.title}</span>
+            )}
           </div>
-          <div sx={styles.rowMeta}>
-            <ChapterGroups groups={chapter.groups} sx={styles.rowGroups} />
-            <Uploader sx={styles.rowUploader} uploader={chapter.uploader} />
-            <span sx={styles.rowLanguage}>
+          <div sx={layoutStyles.rowMeta}>
+            <ChapterGroups groups={chapter.groups} sx={layoutStyles.rowGroups} />
+            <Uploader sx={layoutStyles.rowUploader} uploader={chapter.uploader} />
+            <span sx={layoutStyles.rowLanguage}>
               <LanguageChip language={chapter.language} />
             </span>
           </div>
-          <TimeAgo date={chapter.createdAt} sx={styles.rowTime} />
-        </li>
-      ))}
-    </ul>
-  )
-}
-
-export function LatestGrid({ chapters }: { chapters: LatestChapter[] }) {
-  return (
-    <ul sx={styles.grid}>
-      {chapters.map((chapter) => (
-        <li key={chapter.id} sx={styles.card}>
-          <Link
-            aria-label={chapter.mediaTitle ?? m.media_untitled()}
-            params={{ mediaId: chapter.mediaId }}
-            tabIndex={-1}
-            to="/media/$mediaId"
-            {...stylex.props(styles.cardCoverLink)}
-          >
-            <Cover src={chapter.mediaCoverUrl} sx={styles.cardCover} />
-            <span sx={styles.cardLanguage}>
-              <LanguageChip language={chapter.language} />
-            </span>
-          </Link>
-          <div sx={styles.cardBody}>
-            <MediaTitleLink chapter={chapter} sx={styles.cardTitle} />
-            <div sx={styles.cardMeta}>
-              <ChapterNumber number={chapter.number} />
-              <TimeAgo date={chapter.createdAt} />
-            </div>
-          </div>
-        </li>
-      ))}
-    </ul>
-  )
-}
-
-export function LatestCompact({ chapters }: { chapters: LatestChapter[] }) {
-  return (
-    <ul sx={styles.compact}>
-      {chapters.map((chapter) => (
-        <li key={chapter.id} sx={styles.compactRow}>
-          <span sx={styles.compactFlag}>
-            <LanguageFlag language={chapter.language} />
-          </span>
-          <div sx={styles.inline}>
-            <MediaTitleLink chapter={chapter} />
-            <ChapterNumber number={chapter.number} />
-            {chapter.title === null ? null : <span sx={styles.chapterTitle}>{chapter.title}</span>}
-          </div>
-          <ChapterGroups groups={chapter.groups} sx={styles.compactGroups} />
-          <TimeAgo date={chapter.createdAt} sx={styles.compactTime} />
-        </li>
-      ))}
-    </ul>
-  )
-}
-
-export function LatestListSkeleton({ count }: { count: number }) {
-  return (
-    <ul aria-hidden sx={styles.list}>
-      {range(0, count).map((index) => (
-        <li key={index} sx={styles.row}>
-          <CoverSkeleton sx={[styles.rowCover, styles.rowCoverImage]} />
-          <div sx={[styles.inline, styles.rowMain]}>
-            <Skeleton sx={styles.skeletonTitle} />
-          </div>
-          <div sx={styles.rowMeta}>
-            <Skeleton sx={styles.skeletonMeta} />
-          </div>
-          <Skeleton sx={[styles.rowTime, styles.skeletonTime]} />
-        </li>
-      ))}
-    </ul>
-  )
-}
-
-export function LatestGridSkeleton({ count }: { count: number }) {
-  return (
-    <ul aria-hidden sx={styles.grid}>
-      {range(0, count).map((index) => (
-        <li key={index} sx={styles.card}>
-          <CoverSkeleton sx={styles.cardCover} />
-          <div sx={styles.cardBody}>
-            <Skeleton sx={styles.skeletonCardTitle} />
-            <Skeleton sx={styles.skeletonCardMeta} />
-          </div>
-        </li>
-      ))}
-    </ul>
-  )
-}
-
-export function LatestCompactSkeleton({ count }: { count: number }) {
-  return (
-    <ul aria-hidden sx={styles.compact}>
-      {range(0, count).map((index) => (
-        <li key={index} sx={styles.compactRow}>
-          <span />
-          <Skeleton sx={styles.skeletonTitle} />
-          <Skeleton sx={styles.skeletonTime} />
+          <TimeAgo date={chapter.createdAt} sx={layoutStyles.rowTime} />
         </li>
       ))}
     </ul>

@@ -11,14 +11,20 @@ import { Kbd, KbdGroup } from "@taiyomoe/ui/components/ui/kbd"
 import { useSidebar } from "@taiyomoe/ui/components/ui/sidebar"
 import { colors, consts, motion } from "@taiyomoe/ui/styles/tokens.stylex"
 import { Link } from "@tanstack/react-router"
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useSyncExternalStore } from "react"
 import type { Session } from "@/lib/queries/session"
 import { useCurrentHref } from "@/components/auth/use-auth-redirect"
 import { sceneFont } from "@/components/scene/scene.stylex"
 import { UserMenu } from "@/components/shell/user-menu"
-import { useWindowScrolled } from "@/lib/use-window-scrolled"
 import { m } from "@/paraglide/messages"
 
+const subscribeToScroll = (onChange: () => void) => {
+  window.addEventListener("scroll", onChange, { passive: true })
+
+  return () => {
+    window.removeEventListener("scroll", onChange)
+  }
+}
 const styles = stylex.create({
   header: {
     insetInline: 0,
@@ -171,7 +177,11 @@ export function AppNavbar({ user, overlay = false }: AppNavbarProps) {
   const { isMobile, open, resizing, toggleSidebar } = useSidebar()
   const toggleHidden = open && !isMobile
   const searchRef = useRef<HTMLInputElement>(null)
-  const scrolled = useWindowScrolled()
+  const scrolled = useSyncExternalStore(
+    subscribeToScroll,
+    () => window.scrollY > 0,
+    () => false,
+  )
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {

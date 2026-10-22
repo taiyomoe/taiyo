@@ -4,9 +4,7 @@ import { m } from "@/paraglide/messages"
 
 export const Route = createFileRoute("/auth/sign-up")({
   head: () => ({ meta: [{ title: m.auth_sign_up_meta_title() }] }),
-  component: RouteComponent,
+  component: function SignUp() {
+    return <AuthForm type="sign-up" />
+  },
 })
-
-function RouteComponent() {
-  return <AuthForm type="sign-up" />
-}

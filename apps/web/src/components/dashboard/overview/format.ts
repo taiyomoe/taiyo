@@ -15,7 +15,6 @@ const TITLE_FORMATS: Record<Unit, Intl.DateTimeFormatOptions> = {
   week: { month: "short", day: "numeric", year: "numeric" },
   month: { month: "long", year: "numeric" },
 }
-const LANGUAGE_REGIONS: Record<string, string> = { la: "419", ro: "Latn" }
 
 export const formatCompact = (value: number) =>
   new Intl.NumberFormat(getLocale(), { notation: "compact", maximumFractionDigits: 1 }).format(
@@ -35,30 +34,6 @@ export const formatBucketTick = (iso: string, unit: Unit) =>
 
 export const formatBucketTitle = (iso: string, unit: Unit) =>
   new Intl.DateTimeFormat(getLocale(), TITLE_FORMATS[unit]).format(new Date(iso))
-
-export const formatTime = (iso: string, now: number) => {
-  const date = new Date(iso)
-  const sameDay = new Date(now).toDateString() === date.toDateString()
-
-  return new Intl.DateTimeFormat(
-    getLocale(),
-    sameDay
-      ? { hour: "2-digit", minute: "2-digit", hourCycle: "h23" }
-      : { month: "short", day: "numeric" },
-  ).format(date)
-}
-
-export const formatLanguage = (language: string) => {
-  const [base = language, region] = language.split("_")
-  const tag =
-    region === undefined ? base : `${base}-${LANGUAGE_REGIONS[region] ?? region.toUpperCase()}`
-
-  try {
-    return new Intl.DisplayNames(getLocale(), { type: "language" }).of(tag) ?? language
-  } catch {
-    return language
-  }
-}
 
 export const pickTicks = <T>(values: readonly T[], count: number) => {
   if (values.length <= count + 1) {

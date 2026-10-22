@@ -89,36 +89,34 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     ],
     scripts: import.meta.env.DEV ? [{ type: "module", src: "/@id/virtual:stylex:runtime" }] : [],
   }),
-  shellComponent: RootDocument,
+  shellComponent: function RootDocument({ children }: { children: React.ReactNode }) {
+    const { themePreference } = Route.useRouteContext()
+    const theme = useThemeState(themePreference)
+
+    return (
+      <html
+        className={theme.dark ? darkThemeClassName : undefined}
+        lang="en"
+        suppressHydrationWarning
+      >
+        <head>
+          {theme.preference === "system" ? (
+            <script dangerouslySetInnerHTML={{ __html: systemThemeScript }} />
+          ) : null}
+          <HeadContent />
+        </head>
+        <body>
+          <ThemeContext value={theme}>{children}</ThemeContext>
+          <TanStackDevtools
+            config={{ position: "bottom-right" }}
+            plugins={[
+              { name: "Tanstack Router", render: <TanStackRouterDevtoolsPanel /> },
+              { name: "Tanstack Query", render: <ReactQueryDevtoolsPanel /> },
+            ]}
+          />
+          <Scripts />
+        </body>
+      </html>
+    )
+  },
 })
-
-function RootDocument({ children }: { children: React.ReactNode }) {
-  const { themePreference } = Route.useRouteContext()
-  const theme = useThemeState(themePreference)
-
-  return (
-    <html
-      className={theme.dark ? darkThemeClassName : undefined}
-      lang="en"
-      suppressHydrationWarning
-    >
-      <head>
-        {theme.preference === "system" ? (
-          <script dangerouslySetInnerHTML={{ __html: systemThemeScript }} />
-        ) : null}
-        <HeadContent />
-      </head>
-      <body>
-        <ThemeContext value={theme}>{children}</ThemeContext>
-        <TanStackDevtools
-          config={{ position: "bottom-right" }}
-          plugins={[
-            { name: "Tanstack Router", render: <TanStackRouterDevtoolsPanel /> },
-            { name: "Tanstack Query", render: <ReactQueryDevtoolsPanel /> },
-          ]}
-        />
-        <Scripts />
-      </body>
-    </html>
-  )
-}

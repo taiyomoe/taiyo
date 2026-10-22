@@ -15,15 +15,13 @@ export const Route = createFileRoute("/dashboard")({
 
     return { session: context.session }
   },
-  component: Dashboard,
+  component: function Dashboard() {
+    const { session } = Route.useRouteContext()
+
+    return (
+      <AppShell sections={DASHBOARD_SECTIONS} user={session.user}>
+        <Outlet />
+      </AppShell>
+    )
+  },
 })
-
-function Dashboard() {
-  const { session } = Route.useRouteContext()
-
-  return (
-    <AppShell sections={DASHBOARD_SECTIONS} user={session.user}>
-      <Outlet />
-    </AppShell>
-  )
-}

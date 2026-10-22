@@ -1,33 +1,47 @@
-import type { ReactNode } from "react"
+import type { IconProps } from "@taiyomoe/ui/components/icons"
+import type { ReactElement, ReactNode } from "react"
 import * as stylex from "@stylexjs/stylex"
+import {
+  AlertTriangle,
+  Bookmark,
+  Comment,
+  Eye,
+  Upload,
+  UserAdd,
+  UserCheck,
+  Users,
+} from "@taiyomoe/ui/components/icons"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { Card } from "@taiyomoe/ui/components/ui/card"
+import { Skeleton } from "@taiyomoe/ui/components/ui/skeleton"
 import { Switch } from "@taiyomoe/ui/components/ui/switch"
 import { Tabs, TabsList, TabsTab } from "@taiyomoe/ui/components/ui/tabs"
-import { colors, motion } from "@taiyomoe/ui/styles/tokens.stylex"
+import { colors, font, motion, radius, shadows } from "@taiyomoe/ui/styles/tokens.stylex"
+import { defineChart, lineY } from "@tanstack/charts"
+import { Chart } from "@tanstack/charts/react"
+import { scaleLinear } from "@tanstack/charts/scales/linear"
 import { useQuery } from "@tanstack/react-query"
-import { useNavigate } from "@tanstack/react-router"
+import { Link, useNavigate } from "@tanstack/react-router"
+import { useMemo } from "react"
 import type { DashboardOverview, dashboardOverviewQueryOptions } from "@/lib/queries/dashboard"
 import type { Session } from "@/lib/queries/session"
-import { AttentionList } from "@/components/dashboard/overview/attention-list"
 import { CatalogMix } from "@/components/dashboard/overview/catalog-mix"
 import { ChaptersChart } from "@/components/dashboard/overview/chapters-chart"
+import { chartTheme } from "@/components/dashboard/overview/chart-frame"
 import {
-  CardFigure,
   CardNote,
   CardSkeleton,
   DashboardCard,
 } from "@/components/dashboard/overview/dashboard-card"
 import { Delta } from "@/components/dashboard/overview/delta"
-import { formatCompact, getDelta } from "@/components/dashboard/overview/format"
-import { KpiTiles } from "@/components/dashboard/overview/kpi-tiles"
+import { formatCompact, formatNumber, getDelta } from "@/components/dashboard/overview/format"
 import { LanguageDonut } from "@/components/dashboard/overview/language-donut"
 import { PeriodLegend } from "@/components/dashboard/overview/period-legend"
 import { ReadingHeatmap } from "@/components/dashboard/overview/reading-heatmap"
 import { RecentActivity } from "@/components/dashboard/overview/recent-activity"
-import { TopMedias } from "@/components/dashboard/overview/top-medias"
 import { TopUploaders } from "@/components/dashboard/overview/top-uploaders"
 import { TrendChart } from "@/components/dashboard/overview/trend-chart"
+import { Cover } from "@/components/media/cover"
 import { sceneFont } from "@/components/scene/scene.stylex"
 import { DEFAULT_DASHBOARD_RANGE, DASHBOARD_RANGES, type DashboardRange } from "@/lib/dashboard"
 import { useClientValue } from "@/lib/use-client-value"
@@ -68,6 +82,25 @@ const RANGES: Record<
     unit: m.dashboard_unit_month,
   },
 }
+const KPIS = [
+  { key: "reads", label: m.dashboard_kpi_reads, icon: Eye },
+  { key: "uniqueReaders", label: m.dashboard_kpi_unique_readers, icon: Users },
+  { key: "libraryAdds", label: m.dashboard_kpi_library_adds, icon: Bookmark },
+  { key: "chaptersUploaded", label: m.dashboard_kpi_chapters_uploaded, icon: Upload },
+  { key: "newAccounts", label: m.dashboard_kpi_new_accounts, icon: UserAdd },
+] as const
+const ATTENTION_ITEMS: ReadonlyArray<{
+  key: keyof DashboardOverview["attention"]
+  label: () => string
+  icon: (props: IconProps) => ReactElement
+}> = [
+  {
+    key: "pendingOwnershipRequests",
+    label: m.dashboard_attention_ownership_requests,
+    icon: UserCheck,
+  },
+  { key: "failedUploads", label: m.dashboard_attention_failed_uploads, icon: AlertTriangle },
+]
 const SIGN_UPS_TONE = colors.chart3
 const CHAPTERS_TONE = colors.chart5
 const PREVIOUS_BAR_TONE = `color-mix(in srgb, ${colors.mutedForeground} 45%, ${colors.card})`
@@ -213,6 +246,193 @@ const styles = stylex.create({
     margin: 0,
     color: colors.mutedForeground,
   },
+  figure: {
+    gap: "0.125rem",
+    alignItems: "flex-end",
+    display: "flex",
+    flexDirection: "column",
+    flexShrink: 0,
+  },
+  figureValue: {
+    fontSize: "1.75rem",
+    fontWeight: 700,
+    letterSpacing: "-0.02em",
+    lineHeight: 1,
+  },
+})
+const kpiStyles = stylex.create({
+  row: {
+    gap: "1rem",
+    display: "grid",
+    gridColumnEnd: "-1",
+    gridColumnStart: "1",
+    gridTemplateColumns: {
+      default: "repeat(2, minmax(0, 1fr))",
+      "@container (36rem <= width < 62rem)": "repeat(3, minmax(0, 1fr))",
+      "@container (width >= 62rem)": "repeat(6, minmax(0, 1fr))",
+    },
+  },
+  tile: {
+    padding: "1.25rem",
+    gap: "0.75rem",
+    minWidth: 0,
+  },
+  label: {
+    gap: "0.5rem",
+    alignItems: "flex-start",
+    color: colors.mutedForeground,
+    display: "flex",
+    fontSize: "0.875rem",
+    fontWeight: 500,
+    lineHeight: "1.125rem",
+    minHeight: "2.25rem",
+  },
+  icon: {
+    flexShrink: 0,
+    marginTop: "0.0625rem",
+  },
+  value: {
+    fontSize: "2rem",
+    fontWeight: 700,
+    letterSpacing: "-0.02em",
+    lineHeight: 1,
+  },
+  meta: {
+    alignItems: "center",
+    display: "flex",
+    minHeight: "1.25rem",
+  },
+  untracked: {
+    color: colors.mutedForeground,
+    fontSize: "0.8125rem",
+  },
+  spark: {
+    height: "2.5rem",
+    marginTop: "auto",
+  },
+  valueSkeleton: {
+    borderRadius: radius.md,
+    height: "2rem",
+    width: "60%",
+  },
+})
+const topMediaStyles = stylex.create({
+  list: {
+    margin: 0,
+    padding: 0,
+    gap: "0.875rem",
+    listStyle: "none",
+    display: "flex",
+    flexDirection: "column",
+  },
+  row: {
+    gap: "1rem",
+    alignItems: "center",
+    display: "grid",
+    gridTemplateColumns: "1rem 2rem minmax(0, 1fr) auto",
+  },
+  rank: {
+    color: colors.mutedForeground,
+    fontFamily: font.mono,
+    fontSize: "0.8125rem",
+    textAlign: "center",
+  },
+  cover: {
+    borderRadius: radius.sm,
+    width: "2rem",
+  },
+  main: {
+    gap: "0.5rem",
+    display: "flex",
+    flexDirection: "column",
+    minWidth: 0,
+  },
+  title: {
+    overflow: "hidden",
+    color: {
+      default: colors.foreground,
+      ":hover": `color-mix(in srgb, ${colors.foreground} 72%, ${colors.background})`,
+    },
+    fontSize: "0.9375rem",
+    fontWeight: 600,
+    textDecorationLine: "none",
+    textOverflow: "ellipsis",
+    transitionDuration: "150ms",
+    transitionProperty: "color",
+    whiteSpace: "nowrap",
+  },
+  track: {
+    borderRadius: radius.full,
+    overflow: "hidden",
+    backgroundColor: colors.well,
+    height: "0.375rem",
+  },
+  fill: {
+    borderRadius: radius.full,
+    backgroundColor: colors.primary,
+    height: "100%",
+  },
+  value: {
+    fontFamily: font.mono,
+    fontSize: "0.875rem",
+    fontVariantNumeric: "tabular-nums",
+    fontWeight: 600,
+    textAlign: "end",
+    minWidth: "3rem",
+  },
+})
+const attentionStyles = stylex.create({
+  list: {
+    margin: 0,
+    padding: 0,
+    gap: "0.625rem",
+    listStyle: "none",
+    display: "flex",
+    flexDirection: "column",
+  },
+  row: {
+    borderColor: colors.border,
+    borderRadius: radius.xl,
+    borderStyle: "solid",
+    borderWidth: 1,
+    gap: "0.875rem",
+    paddingBlock: "0.75rem",
+    alignItems: "center",
+    backgroundColor: colors.well,
+    display: "flex",
+    paddingInlineEnd: "1.125rem",
+    paddingInlineStart: "0.75rem",
+  },
+  chip: {
+    borderRadius: radius.full,
+    alignItems: "center",
+    backgroundColor: colors.wellRaised,
+    boxShadow: shadows.chip,
+    color: colors.primary,
+    display: "flex",
+    flexShrink: 0,
+    justifyContent: "center",
+    height: "2.5rem",
+    width: "2.5rem",
+  },
+  chipIdle: {
+    color: colors.mutedForeground,
+  },
+  label: {
+    flex: "1",
+    fontSize: "0.9375rem",
+    fontWeight: 600,
+    lineHeight: "1.25rem",
+  },
+  count: {
+    fontFamily: font.mono,
+    fontSize: "1rem",
+    fontVariantNumeric: "tabular-nums",
+    fontWeight: 600,
+  },
+  countIdle: {
+    color: colors.mutedForeground,
+  },
 })
 const getGreeting = (hour: number | null, name: string) => {
   if (hour === null) {
@@ -227,8 +447,6 @@ const getGreeting = (hour: number | null, name: string) => {
     ? m.dashboard_greeting_afternoon({ name })
     : m.dashboard_greeting_evening({ name })
 }
-const isRange = (value: unknown): value is DashboardRange =>
-  DASHBOARD_RANGES.some((range) => range === value)
 
 type OverviewPageProps = {
   user: Session["user"]
@@ -252,6 +470,7 @@ export function OverviewPage({ user, range, compare, queryOptions }: OverviewPag
     period: period(),
     detail: m.dashboard_detail_chapters(),
   })
+  const maxMediaReads = Math.max(1, ...(overview?.topMedias.map(({ reads }) => reads) ?? []))
 
   return (
     <div sx={styles.page}>
@@ -274,11 +493,13 @@ export function OverviewPage({ user, range, compare, queryOptions }: OverviewPag
         </label>
         <Tabs
           onValueChange={(value) => {
-            if (isRange(value)) {
+            const nextRange = DASHBOARD_RANGES.find((option) => option === value)
+
+            if (nextRange !== undefined) {
               void navigate({
                 search: (previous) => ({
                   ...previous,
-                  range: value === DEFAULT_DASHBOARD_RANGE ? undefined : value,
+                  range: nextRange === DEFAULT_DASHBOARD_RANGE ? undefined : nextRange,
                 }),
                 resetScroll: false,
               })
@@ -314,7 +535,23 @@ export function OverviewPage({ user, range, compare, queryOptions }: OverviewPag
           aria-busy={query.isPlaceholderData}
           sx={[styles.grid, query.isPlaceholderData && styles.stale]}
         >
-          <KpiTiles compare={compare} overview={overview} />
+          <div sx={kpiStyles.row}>
+            {KPIS.map(({ key, label, icon }) => (
+              <KpiTile
+                compare={compare}
+                icon={icon}
+                key={key}
+                label={label()}
+                metric={overview === undefined ? undefined : overview.metrics[key]}
+              />
+            ))}
+            <KpiTile
+              compare={compare}
+              icon={Comment}
+              label={m.dashboard_kpi_comments()}
+              metric={null}
+            />
+          </div>
           <DashboardCard
             figure={<MetricFigure compare={compare} metric={overview?.metrics.reads} />}
             subtitle={byUnit}
@@ -400,7 +637,42 @@ export function OverviewPage({ user, range, compare, queryOptions }: OverviewPag
             sx={styles.ranking}
             title={m.dashboard_top_media_title()}
           >
-            {overview === undefined ? <CardSkeleton /> : <TopMedias overview={overview} />}
+            {overview === undefined ? <CardSkeleton /> : null}
+            {overview?.topMedias.length === 0 ? (
+              <CardNote>{m.dashboard_empty_reads()}</CardNote>
+            ) : null}
+            {overview !== undefined && overview.topMedias.length > 0 ? (
+              <ol sx={topMediaStyles.list}>
+                {overview.topMedias.map((media, index) => (
+                  <li key={media.id} sx={topMediaStyles.row}>
+                    <span sx={topMediaStyles.rank}>{index + 1}</span>
+                    <Cover src={media.coverUrl} sx={topMediaStyles.cover} />
+                    <div sx={topMediaStyles.main}>
+                      <Link
+                        params={{ mediaId: media.id }}
+                        to="/media/$mediaId"
+                        {...stylex.props(topMediaStyles.title)}
+                      >
+                        {media.title ?? m.media_untitled()}
+                      </Link>
+                      <div
+                        aria-label={m.dashboard_top_media_reads({
+                          reads: formatNumber(media.reads),
+                        })}
+                        role="img"
+                        sx={topMediaStyles.track}
+                      >
+                        <div
+                          style={{ width: `${(media.reads / maxMediaReads) * 100}%` }}
+                          sx={topMediaStyles.fill}
+                        />
+                      </div>
+                    </div>
+                    <span sx={topMediaStyles.value}>{formatCompact(media.reads)}</span>
+                  </li>
+                ))}
+              </ol>
+            ) : null}
           </DashboardCard>
           <DashboardCard
             figure={<MetricFigure compare={compare} metric={overview?.metrics.newAccounts} />}
@@ -441,7 +713,33 @@ export function OverviewPage({ user, range, compare, queryOptions }: OverviewPag
             sx={styles.half}
             title={m.dashboard_attention_title()}
           >
-            {overview === undefined ? <CardSkeleton /> : <AttentionList overview={overview} />}
+            {overview === undefined ? (
+              <CardSkeleton />
+            ) : (
+              <ul sx={attentionStyles.list}>
+                {ATTENTION_ITEMS.map(({ key, label, icon: Icon }) => (
+                  <li key={key} sx={attentionStyles.row}>
+                    <span
+                      sx={[
+                        attentionStyles.chip,
+                        overview.attention[key] === 0 && attentionStyles.chipIdle,
+                      ]}
+                    >
+                      <Icon size={18} />
+                    </span>
+                    <span sx={attentionStyles.label}>{label()}</span>
+                    <span
+                      sx={[
+                        attentionStyles.count,
+                        overview.attention[key] === 0 && attentionStyles.countIdle,
+                      ]}
+                    >
+                      {formatNumber(overview.attention[key])}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
           </DashboardCard>
           <DashboardCard subtitle={byReads} sx={styles.primary} title={m.dashboard_heatmap_title()}>
             {overview === undefined ? <CardSkeleton /> : <ReadingHeatmap overview={overview} />}
@@ -484,8 +782,94 @@ function MetricFigure({
   }
 
   return (
-    <CardFigure value={formatCompact(metric.total)}>
+    <div sx={styles.figure}>
+      <span sx={styles.figureValue}>{formatCompact(metric.total)}</span>
       {compare ? <Delta value={getDelta(metric.total, metric.previousTotal)} /> : null}
-    </CardFigure>
+    </div>
   )
+}
+
+type KpiTileProps = {
+  label: string
+  icon: (props: IconProps) => ReactElement
+  metric: DashboardOverview["metrics"]["reads"] | null | undefined
+  compare: boolean
+}
+
+function KpiTile({ label, icon: Icon, metric, compare }: KpiTileProps) {
+  const delta = metric && compare ? getDelta(metric.total, metric.previousTotal) : null
+
+  return (
+    <Card render={<article />} sx={kpiStyles.tile}>
+      <div sx={kpiStyles.label}>
+        <Icon {...stylex.props(kpiStyles.icon)} size={16} />
+        <span>{label}</span>
+      </div>
+      {metric === undefined ? (
+        <Skeleton sx={kpiStyles.valueSkeleton} />
+      ) : (
+        <div sx={kpiStyles.value}>{metric === null ? "—" : formatCompact(metric.total)}</div>
+      )}
+      <div sx={kpiStyles.meta}>
+        {metric === null ? (
+          <span sx={kpiStyles.untracked}>{m.dashboard_kpi_not_tracked()}</span>
+        ) : (
+          <Delta value={delta} />
+        )}
+      </div>
+      <div sx={kpiStyles.spark}>
+        {metric ? (
+          <Sparkline
+            label={m.dashboard_kpi_trend({ label })}
+            tone={
+              metric.total === 0 || (delta !== null && delta < 0)
+                ? colors.mutedForeground
+                : colors.primary
+            }
+            values={metric.current}
+          />
+        ) : null}
+      </div>
+    </Card>
+  )
+}
+
+function Sparkline({
+  values,
+  tone,
+  label,
+}: {
+  values: readonly number[]
+  tone: string
+  label: string
+}) {
+  const definition = useMemo(() => {
+    const min = Math.min(...values)
+    const max = Math.max(...values)
+
+    return defineChart({
+      marks: [
+        lineY(
+          values.map((value, index) => ({ index, value })),
+          { x: "index", y: "value", stroke: tone, strokeWidth: 2 },
+        ),
+      ],
+      scales: {
+        x: { scale: scaleLinear },
+        y: {
+          scale: scaleLinear().domain(
+            min === max ? [Math.min(min, 0), Math.max(max, 1)] : [min, max],
+          ),
+        },
+      },
+      guides: false,
+      margin: 3,
+      focus: false,
+      pointer: false,
+      keyboard: false,
+      theme: chartTheme,
+    })
+  }, [values, tone])
+
+  return <Chart ariaLabel={label} definition={definition} height={40} initialWidth={160} />
 }

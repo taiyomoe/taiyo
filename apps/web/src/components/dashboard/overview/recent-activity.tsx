@@ -3,11 +3,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@taiyomoe/ui/components/ui/
 import { colors, font } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { DashboardOverview } from "@/lib/queries/dashboard"
 import { CardNote } from "@/components/dashboard/overview/dashboard-card"
-import { formatTime } from "@/components/dashboard/overview/format"
 import { useNow } from "@/lib/use-now"
 import { m } from "@/paraglide/messages"
-
-type Activity = DashboardOverview["recentActivity"][number]
+import { getLocale } from "@/paraglide/runtime"
 
 const TONES = [colors.chart1, colors.chart5, colors.chart3, colors.chart2, colors.chart4]
 const styles = stylex.create({
@@ -52,25 +50,6 @@ const styles = stylex.create({
     whiteSpace: "nowrap",
   },
 })
-const describe = ({ kind, count, media }: Activity) => {
-  const title = media.title ?? m.media_untitled()
-
-  if (kind === "MEDIA_CREATED") {
-    return m.dashboard_activity_media_created({ title })
-  }
-
-  if (kind === "COVERS_UPLOADED") {
-    return count === 1
-      ? m.dashboard_activity_cover_uploaded({ title })
-      : m.dashboard_activity_covers_uploaded({ count, title })
-  }
-
-  return count === 1
-    ? m.dashboard_activity_chapter_uploaded({ title })
-    : m.dashboard_activity_chapters_uploaded({ count, title })
-}
-const toneFor = (id: string) =>
-  TONES[Number.parseInt(id.slice(0, 8), 16) % TONES.length] ?? colors.primary
 
 export function RecentActivity({ overview: { recentActivity } }: { overview: DashboardOverview }) {
   const now = useNow()
@@ -81,27 +60,54 @@ export function RecentActivity({ overview: { recentActivity } }: { overview: Das
 
   return (
     <ol sx={styles.list}>
-      {recentActivity.map((activity) => (
-        <li key={`${activity.kind}-${activity.actor.id}-${activity.at}`} sx={styles.row}>
-          <Avatar sx={styles.avatar}>
-            {activity.actor.image === null || activity.actor.image === "" ? null : (
-              <AvatarImage alt="" src={activity.actor.image} />
-            )}
-            <AvatarFallback
-              style={{ backgroundColor: toneFor(activity.actor.id) }}
-              sx={styles.fallback}
-            >
-              {activity.actor.displayUsername.charAt(0).toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
-          <p sx={styles.text}>
-            <span sx={styles.actor}>{activity.actor.displayUsername}</span> {describe(activity)}
-          </p>
-          <time dateTime={activity.at} sx={styles.time}>
-            {formatTime(activity.at, now)}
-          </time>
-        </li>
-      ))}
+      {recentActivity.map((activity) => {
+        const title = activity.media.title ?? m.media_untitled()
+        const date = new Date(activity.at)
+        let description =
+          activity.count === 1
+            ? m.dashboard_activity_chapter_uploaded({ title })
+            : m.dashboard_activity_chapters_uploaded({ count: activity.count, title })
+
+        if (activity.kind === "MEDIA_CREATED") {
+          description = m.dashboard_activity_media_created({ title })
+        } else if (activity.kind === "COVERS_UPLOADED") {
+          description =
+            activity.count === 1
+              ? m.dashboard_activity_cover_uploaded({ title })
+              : m.dashboard_activity_covers_uploaded({ count: activity.count, title })
+        }
+
+        return (
+          <li key={`${activity.kind}-${activity.actor.id}-${activity.at}`} sx={styles.row}>
+            <Avatar sx={styles.avatar}>
+              {activity.actor.image === null || activity.actor.image === "" ? null : (
+                <AvatarImage alt="" src={activity.actor.image} />
+              )}
+              <AvatarFallback
+                style={{
+                  backgroundColor:
+                    TONES[Number.parseInt(activity.actor.id.slice(0, 8), 16) % TONES.length] ??
+                    colors.primary,
+                }}
+                sx={styles.fallback}
+              >
+                {activity.actor.displayUsername.charAt(0).toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+            <p sx={styles.text}>
+              <span sx={styles.actor}>{activity.actor.displayUsername}</span> {description}
+            </p>
+            <time dateTime={activity.at} sx={styles.time}>
+              {new Intl.DateTimeFormat(
+                getLocale(),
+                new Date(now).toDateString() === date.toDateString()
+                  ? { hour: "2-digit", minute: "2-digit", hourCycle: "h23" }
+                  : { month: "short", day: "numeric" },
+              ).format(date)}
+            </time>
+          </li>
+        )
+      })}
     </ol>
   )
 }

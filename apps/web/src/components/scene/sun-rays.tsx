@@ -4,28 +4,6 @@ import { Animated } from "./animated"
 import { lerp, rand, round } from "./deterministic"
 import { scene } from "./scene.stylex"
 
-const build = (
-  count: number,
-  minReach: number,
-  maxReach: number,
-  minWidth: number,
-  maxWidth: number,
-) =>
-  Array.from({ length: count }).map((_, i) => {
-    const seed = i * 8
-
-    return {
-      id: i,
-      deg: round((360 / count) * i),
-      width: lerp(minWidth, maxWidth, rand(seed + 1)),
-      reach: lerp(minReach, maxReach, rand(seed + 2)),
-      rest: lerp(0.72, 0.92, rand(seed + 3)),
-      peak: lerp(1.04, 1.28, rand(seed + 4)),
-      duration: lerp(2.8, 7.2, rand(seed + 5)),
-      delay: lerp(0, 6, rand(seed + 6)),
-      gold: rand(seed + 7) > 0.38,
-    }
-  })
 const OVERLAP = 20
 const styles = stylex.create({
   field: {
@@ -76,7 +54,22 @@ export const SunRays = ({
   spinSeconds = 120,
 }: SunRaysProps) => {
   const rays = useMemo(
-    () => build(count, minReach, maxReach, minWidth, maxWidth),
+    () =>
+      Array.from({ length: count }).map((_, i) => {
+        const seed = i * 8
+
+        return {
+          id: i,
+          deg: round((360 / count) * i),
+          width: lerp(minWidth, maxWidth, rand(seed + 1)),
+          reach: lerp(minReach, maxReach, rand(seed + 2)),
+          rest: lerp(0.72, 0.92, rand(seed + 3)),
+          peak: lerp(1.04, 1.28, rand(seed + 4)),
+          duration: lerp(2.8, 7.2, rand(seed + 5)),
+          delay: lerp(0, 6, rand(seed + 6)),
+          gold: rand(seed + 7) > 0.38,
+        }
+      }),
     [count, minReach, maxReach, minWidth, maxWidth],
   )
 

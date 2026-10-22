@@ -3,7 +3,7 @@ import * as stylex from "@stylexjs/stylex"
 import { Book } from "@taiyomoe/ui/components/icons"
 import { Skeleton } from "@taiyomoe/ui/components/ui/skeleton"
 import { colors, motion, radius } from "@taiyomoe/ui/styles/tokens.stylex"
-import { useImageLoaded } from "@/lib/use-image-loaded"
+import { useCallback, useState } from "react"
 
 const styles = stylex.create({
   frame: {
@@ -99,19 +99,30 @@ function CoverImage({
   alt: string
   priority: CoverProps["priority"]
 }) {
-  const { loaded, failed, ref, onLoad, onError } = useImageLoaded()
+  const [status, setStatus] = useState<"loading" | "loaded" | "failed">("loading")
+  const imageRef = useCallback((node: HTMLImageElement | null) => {
+    if (node?.complete === true) {
+      setStatus(node.naturalWidth > 0 ? "loaded" : "failed")
+    }
+  }, [])
+  const onLoad = useCallback(() => {
+    setStatus("loaded")
+  }, [])
+  const onError = useCallback(() => {
+    setStatus("failed")
+  }, [])
 
-  if (failed) {
+  if (status === "failed") {
     return <CoverPlaceholder />
   }
 
   return (
     <>
-      {loaded ? null : <Skeleton sx={styles.fill} />}
+      {status === "loaded" ? null : <Skeleton sx={styles.fill} />}
       <img
-        ref={ref}
+        ref={imageRef}
         alt={alt}
-        data-loaded={loaded ? "" : undefined}
+        data-loaded={status === "loaded" ? "" : undefined}
         decoding={priority === "high" ? "sync" : "async"}
         draggable={false}
         fetchPriority={priority}

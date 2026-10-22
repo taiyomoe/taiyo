@@ -2,21 +2,7 @@ import * as stylex from "@stylexjs/stylex"
 import { type CSSProperties, useMemo } from "react"
 import { rand, round } from "./deterministic"
 import { scene } from "./scene.stylex"
-const build = (count: number) =>
-  Array.from({ length: count }).map((_, i) => {
-    const size = round(2 + rand(i + 100) * 4)
 
-    return {
-      id: i,
-      left: round(rand(i) * 100),
-      size,
-      delay: round(rand(i + 200) * 9),
-      dur: round(9 + rand(i + 300) * 9),
-      drift: `${round(rand(i + 400) * 120 - 60)}px`,
-      glow: round(size * 3),
-      gold: rand(i + 500) > 0.5,
-    }
-  })
 const styles = stylex.create({
   field: {
     inset: 0,
@@ -36,7 +22,24 @@ type EmbersProps = {
 }
 
 export const Embers = ({ count = 26 }: EmbersProps) => {
-  const embers = useMemo(() => build(count), [count])
+  const embers = useMemo(
+    () =>
+      Array.from({ length: count }).map((_, i) => {
+        const size = round(2 + rand(i + 100) * 4)
+
+        return {
+          id: i,
+          left: round(rand(i) * 100),
+          size,
+          delay: round(rand(i + 200) * 9),
+          dur: round(9 + rand(i + 300) * 9),
+          drift: `${round(rand(i + 400) * 120 - 60)}px`,
+          glow: round(size * 3),
+          gold: rand(i + 500) > 0.5,
+        }
+      }),
+    [count],
+  )
   const emberProps = stylex.props(styles.ember)
 
   return (

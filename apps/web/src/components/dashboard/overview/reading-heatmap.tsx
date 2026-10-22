@@ -52,15 +52,14 @@ const styles = stylex.create({
     width: "0.75rem",
   },
 })
-const getWeekdays = () => {
-  const format = new Intl.DateTimeFormat(getLocale(), { weekday: "short", timeZone: "UTC" })
-
-  return range(0, 7).map((day) => format.format(Date.UTC(2024, 0, 1 + day)))
-}
 const toHour = (hour: number) => String(hour).padStart(2, "0")
 const useHeatmapDefinition = (readingHours: DashboardOverview["readingHours"], span: number) =>
   useMemo(() => {
-    const weekdays = getWeekdays()
+    const weekdayFormat = new Intl.DateTimeFormat(getLocale(), {
+      weekday: "short",
+      timeZone: "UTC",
+    })
+    const weekdays = range(0, 7).map((day) => weekdayFormat.format(Date.UTC(2024, 0, 1 + day)))
     const slots = range(0, 24 / span).map((slot) => toHour(slot * span))
     const days = readingHours.map((hours) => chunk(hours, span).map((block) => sum(block)))
     const max = Math.max(0, ...days.flat())

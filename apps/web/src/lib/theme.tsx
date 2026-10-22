@@ -30,32 +30,31 @@ export function useThemeState(initial: ThemePreference) {
     () => matchMedia(DARK_QUERY).matches,
     () => false,
   )
-  const setPreference = (next: ThemePreference) => {
-    const freeze = document.createElement("style")
-
-    freeze.textContent = "*,*::before,*::after{transition:none!important}"
-    document.head.append(freeze)
-    setPreferenceState(next)
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        freeze.remove()
-      })
-    })
-
-    if (typeof cookieStore !== "undefined") {
-      void cookieStore.set({
-        expires: Date.now() + 1000 * 60 * 60 * 24 * 365,
-        name: THEME_COOKIE,
-        path: "/",
-        value: next,
-      })
-    }
-  }
 
   return {
     dark: preference === "dark" || (preference === "system" && systemDark),
     preference,
-    setPreference,
+    setPreference: (next: ThemePreference) => {
+      const freeze = document.createElement("style")
+
+      freeze.textContent = "*,*::before,*::after{transition:none!important}"
+      document.head.append(freeze)
+      setPreferenceState(next)
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          freeze.remove()
+        })
+      })
+
+      if (typeof cookieStore !== "undefined") {
+        void cookieStore.set({
+          expires: Date.now() + 1000 * 60 * 60 * 24 * 365,
+          name: THEME_COOKIE,
+          path: "/",
+          value: next,
+        })
+      }
+    },
   }
 }
 
