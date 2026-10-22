@@ -3,6 +3,7 @@ import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
 import { withAuth } from "../middlewares/with-auth-middleware"
+import { hasContent } from "../utils/chapter-release"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
@@ -103,7 +104,7 @@ export const getMyOverviewHandler = new Hono().get(
             .innerJoin("medias", "medias.id", "chapters.mediaId")
             .select(total)
             .where("chapters.status", "=", "PENDING")
-            .where(sql<boolean>`coalesce(cardinality("chapters"."pages"), 0) > 0`)
+            .where(hasContent)
             .where("chapters.deletedAt", "is", null)
             .where("medias.deletedAt", "is", null)
             .executeTakeFirst()

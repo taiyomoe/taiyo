@@ -21,7 +21,13 @@ export const lockReviewableChapters = async (db: Kysely<DB>, ids: readonly strin
   const rows = await db
     .selectFrom("chapters")
     .innerJoin("medias", "medias.id", "chapters.mediaId")
-    .select(["chapters.id", "chapters.mediaId", "chapters.status", "chapters.pages"])
+    .select([
+      "chapters.id",
+      "chapters.mediaId",
+      "chapters.status",
+      "chapters.pages",
+      "chapters.isExternal",
+    ])
     .where("chapters.id", "in", ids)
     .where("chapters.deletedAt", "is", null)
     .where("medias.deletedAt", "is", null)
