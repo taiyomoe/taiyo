@@ -18,7 +18,7 @@ export type StaticPermissionPath = {
   [P in PermissionPath]: DataAtPath<PermissionsDefinition, P> extends [] ? P : never
 }[PermissionPath]
 
-export const createPermissions = (actor: Actor | null): Permissions =>
+export const createPermissions = (actor: Actor | null) =>
   createCheck<PermissionsDefinition>(buildRules(actor))
 
 export { GROUP_MEMBERSHIP_ROLES, GROUP_PERMISSIONS, ROLES }

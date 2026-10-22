@@ -4,7 +4,7 @@ import type { ChapterTarget } from "@taiyomoe/permissions"
 export const getChapterTarget = async (
   db: Kysely<DB>,
   chapter: Pick<Selectable<Chapter>, "id" | "uploaderId">,
-): Promise<ChapterTarget> => {
+) => {
   const rows = await db
     .selectFrom("chapterGroups")
     .innerJoin("groups", "groups.id", "chapterGroups.groupId")
@@ -13,5 +13,8 @@ export const getChapterTarget = async (
     .where("groups.deletedAt", "is", null)
     .execute()
 
-  return { uploaderId: chapter.uploaderId, groupIds: rows.map((row) => row.groupId) }
+  return {
+    uploaderId: chapter.uploaderId,
+    groupIds: rows.map((row) => row.groupId),
+  } satisfies ChapterTarget
 }

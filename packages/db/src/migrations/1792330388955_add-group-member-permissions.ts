@@ -8,7 +8,7 @@ const PERMISSIONS = [
   "MANAGE_MEMBERS",
 ]
 
-export async function up(db: Kysely<unknown>): Promise<void> {
+export async function up(db: Kysely<unknown>) {
   await db.schema
     .alterTable("groupMemberships")
     .addColumn("permissions", sql`text[]`, (c) => c.notNull().defaultTo(sql`'{}'::text[]`))
@@ -23,6 +23,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .execute()
 }
 
-export async function down(db: Kysely<unknown>): Promise<void> {
+export async function down(db: Kysely<unknown>) {
   await db.schema.alterTable("groupMemberships").dropColumn("permissions").execute()
 }

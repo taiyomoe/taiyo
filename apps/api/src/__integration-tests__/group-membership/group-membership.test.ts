@@ -44,12 +44,8 @@ const seedGroup = async (services: Services, members: SeedMember[]) => {
   return groupId
 }
 const newUser = async (services: Services) => (await signInAs(services)).userId
-const actorOf = (id: string, role: Role = "USER"): Actor => ({
-  id,
-  role,
-  banned: false,
-  memberships: [],
-})
+const actorOf = (id: string, role: Role = "USER") =>
+  ({ id, role, banned: false, memberships: [] }) satisfies Actor
 const getRoles = async ({ db }: Services, groupId: string) => {
   const rows = await db
     .selectFrom("groupMemberships")

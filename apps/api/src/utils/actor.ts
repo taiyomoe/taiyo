@@ -1,7 +1,7 @@
 import type { DB, Kysely } from "@taiyomoe/db"
 import { type Actor, toRole } from "@taiyomoe/permissions"
 
-export const loadActor = async (db: Kysely<DB>, userId: string): Promise<Actor | null> => {
+export const loadActor = async (db: Kysely<DB>, userId: string) => {
   const [user, memberships] = await Promise.all([
     db.selectFrom("users").select(["role", "banned"]).where("id", "=", userId).executeTakeFirst(),
     db
@@ -17,5 +17,10 @@ export const loadActor = async (db: Kysely<DB>, userId: string): Promise<Actor |
     return null
   }
 
-  return { id: userId, role: toRole(user.role), banned: user.banned === true, memberships }
+  return {
+    id: userId,
+    role: toRole(user.role),
+    banned: user.banned === true,
+    memberships,
+  } satisfies Actor
 }

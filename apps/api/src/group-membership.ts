@@ -1,13 +1,7 @@
 import type { DB, GroupMembershipRole, GroupPermission, Kysely } from "@taiyomoe/db"
 import { type Actor, createPermissions, GROUP_PERMISSIONS } from "@taiyomoe/permissions"
 
-type Result<E extends string> = { ok: true } | { ok: false; error: E }
-
-const withGroupLock = <T>(
-  db: Kysely<DB>,
-  groupId: string,
-  fn: (trx: Kysely<DB>) => Promise<T>,
-): Promise<T | { ok: false; error: "GROUP_NOT_FOUND" }> => {
+const withGroupLock = <T>(db: Kysely<DB>, groupId: string, fn: (trx: Kysely<DB>) => Promise<T>) => {
   const run = async (trx: Kysely<DB>) => {
     const group = await trx
       .selectFrom("groups")
@@ -18,7 +12,7 @@ const withGroupLock = <T>(
       .executeTakeFirst()
 
     if (group === undefined) {
-      return { ok: false as const, error: "GROUP_NOT_FOUND" as const }
+      return { ok: false, error: "GROUP_NOT_FOUND" } as const
     }
 
     return fn(trx)
@@ -75,19 +69,19 @@ export const updateGroupMemberPermissions = (
     userId,
     permissions,
   }: { actor: Actor; groupId: string; userId: string; permissions: readonly GroupPermission[] },
-): Promise<Result<"GROUP_NOT_FOUND" | "GROUP_MEMBER_NOT_FOUND" | "FORBIDDEN">> =>
+) =>
   withGroupLock(db, groupId, async (trx) => {
     const member = await getMembership(trx, groupId, userId)
 
     if (member === undefined) {
-      return { ok: false, error: "GROUP_MEMBER_NOT_FOUND" }
+      return { ok: false, error: "GROUP_MEMBER_NOT_FOUND" } as const
     }
 
     const can = await getLockedPermissions(trx, actor, groupId)
     const next = normalizeGroupPermissions(permissions)
 
     if (!can("group.updateMember", { member, permissions: next })) {
-      return { ok: false, error: "FORBIDDEN" }
+      return { ok: false, error: "FORBIDDEN" } as const
     }
 
     await trx
@@ -97,84 +91,80 @@ export const updateGroupMemberPermissions = (
       .where("userId", "=", userId)
       .execute()
 
-    return { ok: true }
+    return { ok: true } as const
   })
 
 export const promoteGroupMember = (
   db: Kysely<DB>,
   { actor, groupId, userId }: { actor: Actor; groupId: string; userId: string },
-): Promise<Result<"GROUP_NOT_FOUND" | "GROUP_MEMBER_NOT_FOUND" | "FORBIDDEN">> =>
+) =>
   withGroupLock(db, groupId, async (trx) => {
     const member = await getMembership(trx, groupId, userId)
 
     if (member === undefined) {
-      return { ok: false, error: "GROUP_MEMBER_NOT_FOUND" }
+      return { ok: false, error: "GROUP_MEMBER_NOT_FOUND" } as const
     }
 
     if (member.role === "OWNER") {
-      return { ok: true }
+      return { ok: true } as const
     }
 
     const can = await getLockedPermissions(trx, actor, groupId)
 
     if (!can("group.promoteMember", member)) {
-      return { ok: false, error: "FORBIDDEN" }
+      return { ok: false, error: "FORBIDDEN" } as const
     }
 
     await updateRole(trx, groupId, userId, "OWNER")
 
-    return { ok: true }
+    return { ok: true } as const
   })
 
 export const demoteGroupMember = (
   db: Kysely<DB>,
   { actor, groupId, userId }: { actor: Actor; groupId: string; userId: string },
-): Promise<
-  Result<"GROUP_NOT_FOUND" | "GROUP_MEMBER_NOT_FOUND" | "GROUP_LAST_OWNER" | "FORBIDDEN">
-> =>
+) =>
   withGroupLock(db, groupId, async (trx) => {
     const member = await getMembership(trx, groupId, userId)
 
     if (member === undefined) {
-      return { ok: false, error: "GROUP_MEMBER_NOT_FOUND" }
+      return { ok: false, error: "GROUP_MEMBER_NOT_FOUND" } as const
     }
 
     if (member.role === "MEMBER") {
-      return { ok: true }
+      return { ok: true } as const
     }
 
     const can = await getLockedPermissions(trx, actor, groupId)
 
     if (!can("group.demoteMember", member)) {
-      return { ok: false, error: "FORBIDDEN" }
+      return { ok: false, error: "FORBIDDEN" } as const
     }
 
     if (actor.role !== "ADMIN" && !(await hasOtherOwner(trx, groupId, userId))) {
-      return { ok: false, error: "GROUP_LAST_OWNER" }
+      return { ok: false, error: "GROUP_LAST_OWNER" } as const
     }
 
     await updateRole(trx, groupId, userId, "MEMBER")
 
-    return { ok: true }
+    return { ok: true } as const
   })
 
 export const removeGroupMember = (
   db: Kysely<DB>,
   { actor, groupId, userId }: { actor: Actor; groupId: string; userId: string },
-): Promise<
-  Result<"GROUP_NOT_FOUND" | "GROUP_MEMBER_NOT_FOUND" | "GROUP_LAST_OWNER" | "FORBIDDEN">
-> =>
+) =>
   withGroupLock(db, groupId, async (trx) => {
     const member = await getMembership(trx, groupId, userId)
 
     if (member === undefined) {
-      return { ok: false, error: "GROUP_MEMBER_NOT_FOUND" }
+      return { ok: false, error: "GROUP_MEMBER_NOT_FOUND" } as const
     }
 
     const can = await getLockedPermissions(trx, actor, groupId)
 
     if (!can("group.removeMember", member)) {
-      return { ok: false, error: "FORBIDDEN" }
+      return { ok: false, error: "FORBIDDEN" } as const
     }
 
     if (
@@ -182,7 +172,7 @@ export const removeGroupMember = (
       actor.role !== "ADMIN" &&
       !(await hasOtherOwner(trx, groupId, userId))
     ) {
-      return { ok: false, error: "GROUP_LAST_OWNER" }
+      return { ok: false, error: "GROUP_LAST_OWNER" } as const
     }
 
     await trx
@@ -191,22 +181,22 @@ export const removeGroupMember = (
       .where("userId", "=", userId)
       .execute()
 
-    return { ok: true }
+    return { ok: true } as const
   })
 
 export const leaveGroup = (
   db: Kysely<DB>,
   { groupId, userId }: { groupId: string; userId: string },
-): Promise<Result<"GROUP_NOT_FOUND" | "GROUP_MEMBER_NOT_FOUND" | "GROUP_LAST_OWNER">> =>
+) =>
   withGroupLock(db, groupId, async (trx) => {
     const member = await getMembership(trx, groupId, userId)
 
     if (member === undefined) {
-      return { ok: false, error: "GROUP_MEMBER_NOT_FOUND" }
+      return { ok: false, error: "GROUP_MEMBER_NOT_FOUND" } as const
     }
 
     if (member.role === "OWNER" && !(await hasOtherOwner(trx, groupId, userId))) {
-      return { ok: false, error: "GROUP_LAST_OWNER" }
+      return { ok: false, error: "GROUP_LAST_OWNER" } as const
     }
 
     await trx
@@ -215,28 +205,28 @@ export const leaveGroup = (
       .where("userId", "=", userId)
       .execute()
 
-    return { ok: true }
+    return { ok: true } as const
   })
 
 export const transferGroupOwnership = (
   db: Kysely<DB>,
   { actor, groupId, toUserId }: { actor: Actor; groupId: string; toUserId: string },
-): Promise<Result<"GROUP_NOT_FOUND" | "FORBIDDEN" | "GROUP_MEMBER_NOT_FOUND">> =>
+) =>
   withGroupLock(db, groupId, async (trx) => {
     const can = await getLockedPermissions(trx, actor, groupId)
 
     if (!can("group.transferOwnership", { id: groupId })) {
-      return { ok: false, error: "FORBIDDEN" }
+      return { ok: false, error: "FORBIDDEN" } as const
     }
 
     if (actor.id === toUserId) {
-      return { ok: true }
+      return { ok: true } as const
     }
 
     const target = await getMembership(trx, groupId, toUserId)
 
     if (target === undefined) {
-      return { ok: false, error: "GROUP_MEMBER_NOT_FOUND" }
+      return { ok: false, error: "GROUP_MEMBER_NOT_FOUND" } as const
     }
 
     if (target.role !== "OWNER") {
@@ -245,13 +235,13 @@ export const transferGroupOwnership = (
 
     await updateRole(trx, groupId, actor.id, "MEMBER")
 
-    return { ok: true }
+    return { ok: true } as const
   })
 
 export const claimGroup = (
   db: Kysely<DB>,
   { groupId, userId, addedBy }: { groupId: string; userId: string; addedBy: string },
-): Promise<Result<"GROUP_NOT_FOUND" | "GROUP_ALREADY_OWNED">> =>
+) =>
   withGroupLock(db, groupId, async (trx) => {
     const owner = await trx
       .selectFrom("groupMemberships")
@@ -262,7 +252,7 @@ export const claimGroup = (
       .executeTakeFirst()
 
     if (owner !== undefined) {
-      return { ok: false, error: "GROUP_ALREADY_OWNED" }
+      return { ok: false, error: "GROUP_ALREADY_OWNED" } as const
     }
 
     await trx
@@ -271,5 +261,5 @@ export const claimGroup = (
       .onConflict((oc) => oc.columns(["userId", "groupId"]).doUpdateSet({ role: "OWNER" }))
       .execute()
 
-    return { ok: true }
+    return { ok: true } as const
   })

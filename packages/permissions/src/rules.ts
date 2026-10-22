@@ -1,18 +1,18 @@
 import { GROUP_PERMISSIONS, type GroupPermission, ROLES, type Role } from "@taiyomoe/db/constants"
-import { createRules, type Rules } from "permix"
+import { createRules } from "permix"
 import type { Actor, PermissionsDefinition } from "./definition"
 
 const NO_PERMISSIONS: ReadonlySet<GroupPermission> = new Set()
 const ALL_PERMISSIONS: ReadonlySet<GroupPermission> = new Set(GROUP_PERMISSIONS)
 
-export const toRole = (value: unknown): Role => ROLES.find((role) => role === value) ?? "USER"
+export const toRole = (value: unknown) => ROLES.find((role) => role === value) ?? "USER"
 
-export const buildRules = (actor: Actor | null): Rules<PermissionsDefinition> => {
+export const buildRules = (actor: Actor | null) => {
   const active = actor?.banned === false ? actor : null
   const is = (...roles: Role[]) => active !== null && roles.includes(active.role)
   const isSelf = (userId: string) => active?.id === userId
   const memberships = new Map(active?.memberships.map((m) => [m.groupId, m]))
-  const permissionsIn = (groupId: string): ReadonlySet<GroupPermission> => {
+  const permissionsIn = (groupId: string) => {
     const membership = memberships.get(groupId)
 
     if (membership === undefined) {

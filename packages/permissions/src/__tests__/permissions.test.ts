@@ -17,25 +17,20 @@ const GROUP_A = "00000000-0000-4000-8000-00000000000a"
 const GROUP_B = "00000000-0000-4000-8000-00000000000b"
 const ACTOR_ID = "00000000-0000-4000-8000-000000000001"
 const OTHER_ID = "00000000-0000-4000-8000-000000000002"
-const actor = (role: Role, memberships: ActorMembership[] = [], banned = false): Actor => ({
-  id: ACTOR_ID,
-  role,
-  banned,
-  memberships,
-})
-const member = (groupId: string, permissions: GroupPermission[] = []): ActorMembership => ({
-  groupId,
-  role: "MEMBER",
-  permissions,
-})
-const owner = (groupId: string): ActorMembership => ({ groupId, role: "OWNER", permissions: [] })
-const target = (overrides: Partial<MemberTarget> = {}): MemberTarget => ({
-  groupId: GROUP_A,
-  userId: OTHER_ID,
-  role: "MEMBER",
-  permissions: [],
-  ...overrides,
-})
+const actor = (role: Role, memberships: ActorMembership[] = [], banned = false) =>
+  ({ id: ACTOR_ID, role, banned, memberships }) satisfies Actor
+const member = (groupId: string, permissions: GroupPermission[] = []) =>
+  ({ groupId, role: "MEMBER", permissions }) satisfies ActorMembership
+const owner = (groupId: string) =>
+  ({ groupId, role: "OWNER", permissions: [] }) satisfies ActorMembership
+const target = (overrides: Partial<MemberTarget> = {}) =>
+  ({
+    groupId: GROUP_A,
+    userId: OTHER_ID,
+    role: "MEMBER",
+    permissions: [],
+    ...overrides,
+  }) satisfies MemberTarget
 const chapter = (groupIds: string[] = [], uploaderId = OTHER_ID) => ({ uploaderId, groupIds })
 const STATIC_MATRIX: Record<StaticPermissionPath, readonly Role[]> = {
   "dashboard.open": ROLES,
