@@ -1,5 +1,6 @@
 import type { ReactNode } from "react"
 import * as stylex from "@stylexjs/stylex"
+import { authClient } from "@taiyomoe/auth/client"
 import {
   AlertCircle,
   CheckCircle,
@@ -7,26 +8,27 @@ import {
   ChevronUp,
   Close,
   CloudUpload,
+  Eye,
 } from "@taiyomoe/ui/components/icons"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { Progress } from "@taiyomoe/ui/components/ui/progress"
 import { SidebarInset, SidebarProvider } from "@taiyomoe/ui/components/ui/sidebar"
 import { colors, radius, shadows } from "@taiyomoe/ui/styles/tokens.stylex"
-import { useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useRouteContext } from "@tanstack/react-router"
 import { useEffect, useSyncExternalStore } from "react"
-import type { Session } from "@/lib/queries/session"
 import { ChapterNumber } from "@/components/chapters/chapter-meta"
 import { LanguageFlag } from "@/components/chapters/flags"
 import { AppNavbar } from "@/components/shell/app-navbar"
 import { type AppSidebarSection, AppSidebar } from "@/components/shell/app-sidebar"
-import { ImpersonationBar } from "@/components/shell/impersonation-bar"
 import {
   type JobOutcome,
   type JobState,
   summarize,
   uploadStore,
 } from "@/lib/chapter-batch/upload-store"
+import { type Session, sessionQueryOptions } from "@/lib/queries/session"
+import { unwrapAuth } from "@/lib/queries/user-admin"
 import { m } from "@/paraglide/messages"
 
 const styles = stylex.create({
@@ -196,6 +198,38 @@ const OUTCOME_LABELS: Record<JobOutcome, () => string> = {
   scheduled: m.uploads_state_scheduled,
   review: m.uploads_state_review,
 }
+const barStyles = stylex.create({
+  bar: {
+    padding: "0.375rem",
+    borderColor: `color-mix(in srgb, ${colors.warning} 45%, ${colors.border})`,
+    borderRadius: radius.full,
+    borderStyle: "solid",
+    borderWidth: 1,
+    gap: "0.625rem",
+    alignItems: "center",
+    backgroundColor: `color-mix(in srgb, ${colors.warning} 14%, ${colors.popover})`,
+    boxShadow: shadows.overlay,
+    color: colors.foreground,
+    display: "flex",
+    fontSize: "0.875rem",
+    fontWeight: 500,
+    paddingInlineStart: "0.875rem",
+    position: "fixed",
+    zIndex: 45,
+    bottom: "1rem",
+    left: "1rem",
+    maxWidth: "calc(100vw - 2rem)",
+  },
+  icon: {
+    color: colors.warning,
+    flexShrink: 0,
+  },
+  name: {
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap",
+  },
+})
 
 type AppShellProps = {
   user: Session["user"] | null
@@ -213,6 +247,13 @@ export function AppShell({ user, overlayNavbar = false, sections, children }: Ap
   )
   const open = useSyncExternalStore(expandedStore.subscribe, expandedStore.get, () => false)
   const queryClient = useQueryClient()
+  const { data: current } = useQuery(sessionQueryOptions)
+  const stopImpersonating = useMutation({
+    mutationFn: () => unwrapAuth(authClient.admin.stopImpersonating()),
+    onSuccess: () => {
+      window.location.assign("/dashboard/users")
+    },
+  })
 
   useEffect(() => {
     uploadStore.connect(queryClient)
@@ -377,7 +418,24 @@ export function AppShell({ user, overlayNavbar = false, sections, children }: Ap
           ) : null}
         </aside>
       )}
-      <ImpersonationBar />
+      {typeof current?.session.impersonatedBy === "string" ? (
+        <div role="status" sx={barStyles.bar}>
+          <Eye size={16} {...stylex.props(barStyles.icon)} />
+          <span sx={barStyles.name}>
+            {m.impersonation_active({ name: current.user.displayUsername ?? current.user.name })}
+          </span>
+          <Button
+            disabled={stopImpersonating.isPending}
+            onClick={() => {
+              stopImpersonating.mutate()
+            }}
+            size="xs"
+            variant="outline"
+          >
+            {m.impersonation_stop()}
+          </Button>
+        </div>
+      ) : null}
     </SidebarProvider>
   )
 }
