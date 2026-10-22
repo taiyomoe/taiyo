@@ -10,10 +10,12 @@ import {
 } from "@taiyomoe/ui/components/ui/empty"
 import { useSuspenseQuery } from "@tanstack/react-query"
 import { Link, useNavigate } from "@tanstack/react-router"
+import { ScheduleActions } from "@/components/chapters/schedule-actions"
 import { DashboardPage, ListCard } from "@/components/dashboard/dashboard-page"
 import { PagePagination } from "@/components/pagination/page-pagination"
 import { SubmissionRow } from "@/components/submissions/submission-row"
 import {
+  type ChapterSubmission,
   mySubmissionsQueryOptions,
   SUBMISSIONS_PER_PAGE,
   useWithdrawChapter,
@@ -23,6 +25,24 @@ import { m } from "@/paraglide/messages"
 export function MySubmissionsPage({ page }: { page: number }) {
   const { data } = useSuspenseQuery(mySubmissionsQueryOptions(page))
   const withdraw = useWithdrawChapter()
+  const submissionActions = ({ id, number, status, publishAt }: ChapterSubmission) => {
+    if (status === "SCHEDULED" && publishAt !== null) {
+      return <ScheduleActions chapter={{ id, number, publishAt }} />
+    }
+
+    return status === "PENDING" ? (
+      <Button
+        disabled={withdraw.isPending}
+        onClick={() => {
+          withdraw.mutate(id)
+        }}
+        size="sm"
+        variant="ghost"
+      >
+        {m.submission_withdraw()}
+      </Button>
+    ) : undefined
+  }
   const navigate = useNavigate({ from: "/dashboard/submissions" })
 
   return (
@@ -56,20 +76,7 @@ export function MySubmissionsPage({ page }: { page: number }) {
           <ListCard>
             {data.data.map((submission) => (
               <SubmissionRow
-                actions={
-                  submission.status === "PENDING" ? (
-                    <Button
-                      disabled={withdraw.isPending}
-                      onClick={() => {
-                        withdraw.mutate(submission.id)
-                      }}
-                      size="sm"
-                      variant="ghost"
-                    >
-                      {m.submission_withdraw()}
-                    </Button>
-                  ) : undefined
-                }
+                actions={submissionActions(submission)}
                 key={submission.id}
                 submission={submission}
               />

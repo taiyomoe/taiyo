@@ -10,11 +10,13 @@ import {
 import { getErrorMessage } from "@/lib/errors"
 import { m } from "@/paraglide/messages"
 
+export type JobOutcome = "published" | "scheduled" | "review"
+
 export type JobState =
   | { kind: "queued" }
   | { kind: "uploading"; done: number; total: number }
   | { kind: "processing" }
-  | { kind: "done"; published: boolean }
+  | { kind: "done"; outcome: JobOutcome }
   | { kind: "failed"; message: string }
   | { kind: "cancelled" }
 
@@ -23,8 +25,10 @@ export type UploadJob = {
   number: number
   volume: string | null
   title: string | null
-  source: ChapterSource
+  source: ChapterSource | null
   pageKeys: string[]
+  publishAt: string | null
+  externalUrl: string | null
   state: JobState
 }
 
@@ -45,7 +49,8 @@ type Processing = {
   batchId: string
   chapterId: string
   taskId: string
-  published: boolean
+  review: boolean
+  publishAt: string | null
   since: number
 }
 
@@ -59,6 +64,15 @@ let pollTimer: ReturnType<typeof setInterval> | null = null
 const listeners = new Set<() => void>()
 const controllers = new Map<string, AbortController>()
 const processing = new Map<string, Processing>()
+const outcomeOf = (review: boolean, publishAt: string | null): JobOutcome => {
+  if (review) {
+    return "review"
+  }
+
+  return publishAt !== null && new Date(publishAt).getTime() > Date.now()
+    ? "scheduled"
+    : "published"
+}
 const isActive = (state: JobState) => state.kind === "queued" || state.kind === "uploading"
 const isBusy = (state: JobState) => isActive(state) || state.kind === "processing"
 const preventUnload = (event: BeforeUnloadEvent) => {
@@ -102,7 +116,7 @@ const poll = async () => {
 
       if (status === "FINISHED") {
         processing.delete(jobKey)
-        setJobState(jobKey, { kind: "done", published: entry.published })
+        setJobState(jobKey, { kind: "done", outcome: outcomeOf(entry.review, entry.publishAt) })
 
         if (batch !== undefined) {
           refreshQueries(batch.mediaId)
@@ -130,6 +144,21 @@ const ensurePolling = () => {
     void poll()
   }, POLL_INTERVAL_MS)
 }
+const readPages = async (source: ChapterSource, pageKeys: string[]) => {
+  const blobs = await source.open()
+  const types = new Map(source.pages.map((page) => [page.key, page.type]))
+
+  return pageKeys.map((key) => {
+    const blob = blobs.get(key)
+    const type = types.get(key)
+
+    if (blob === undefined || type === undefined) {
+      throw new Error(m.upload_failed_missing_page())
+    }
+
+    return { blob, type }
+  })
+}
 const runJob = async (batch: UploadBatch, job: UploadJob) => {
   const controller = new AbortController()
   const total = job.pageKeys.length
@@ -139,18 +168,7 @@ const runJob = async (batch: UploadBatch, job: UploadJob) => {
   setJobState(job.key, { kind: "uploading", done: 0, total })
 
   try {
-    const blobs = await job.source.open()
-    const types = new Map(job.source.pages.map((page) => [page.key, page.type]))
-    const pages = job.pageKeys.map((key) => {
-      const blob = blobs.get(key)
-      const type = types.get(key)
-
-      if (blob === undefined || type === undefined) {
-        throw new Error(m.upload_failed_missing_page())
-      }
-
-      return { blob, type }
-    })
+    const pages = job.source === null ? [] : await readPages(job.source, job.pageKeys)
     const created = await createChapter(
       {
         mediaId: batch.mediaId,
@@ -159,9 +177,22 @@ const runJob = async (batch: UploadBatch, job: UploadJob) => {
         title: job.title,
         language: batch.language,
         groupIds: batch.groupIds,
+        publishAt: job.publishAt,
+        externalUrl: job.externalUrl,
+        isExternal: job.source === null,
       },
       controller.signal,
     )
+
+    if (job.source === null) {
+      setJobState(job.key, {
+        kind: "done",
+        outcome: outcomeOf(created.status === "PENDING", job.publishAt),
+      })
+      refreshQueries(batch.mediaId)
+
+      return
+    }
 
     chapterId = created.id
 
@@ -178,7 +209,8 @@ const runJob = async (batch: UploadBatch, job: UploadJob) => {
       batchId: batch.id,
       chapterId: created.id,
       taskId,
-      published: created.status !== "PENDING",
+      review: created.status === "PENDING",
+      publishAt: job.publishAt,
       since: Date.now(),
     })
     setJobState(job.key, { kind: "processing" })
@@ -279,8 +311,7 @@ export const summarize = (jobs: readonly UploadJob[]) => {
     processing: count("processing"),
     failed: count("failed"),
     cancelled: count("cancelled"),
-    published: jobs.filter((job) => job.state.kind === "done" && job.state.published).length,
-    inReview: jobs.filter((job) => job.state.kind === "done" && !job.state.published).length,
+    done: jobs.filter((job) => job.state.kind === "done").length,
     busy: jobs.some((job) => isBusy(job.state)),
   }
 }

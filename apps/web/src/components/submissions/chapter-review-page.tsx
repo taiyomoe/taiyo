@@ -1,7 +1,7 @@
 import type { Language } from "@taiyomoe/db/constants"
 import type { Permissions } from "@taiyomoe/permissions"
 import * as stylex from "@stylexjs/stylex"
-import { CheckCircle } from "@taiyomoe/ui/components/icons"
+import { CheckCircle, Globe } from "@taiyomoe/ui/components/icons"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { Checkbox } from "@taiyomoe/ui/components/ui/checkbox"
 import {
@@ -112,6 +112,19 @@ const styles = stylex.create({
   muted: {
     margin: 0,
     color: colors.mutedForeground,
+  },
+  external: {
+    gap: "0.5rem",
+    display: "flex",
+    flexDirection: "column",
+  },
+  externalLink: {
+    gap: "0.5rem",
+    alignItems: "center",
+    color: colors.foreground,
+    display: "flex",
+    fontWeight: 500,
+    overflowWrap: "anywhere",
   },
   bulkBar: {
     gap: "0.75rem",
@@ -433,7 +446,22 @@ function ReviewForm({
       </DialogHeader>
       <DialogPanel>
         <div sx={styles.body}>
-          <PagePreviews pageCount={submission.pageCount} pages={chapter.data?.pages} />
+          {submission.isExternal && submission.externalUrl !== null ? (
+            <div sx={styles.external}>
+              <p sx={styles.muted}>{m.review_chapter_external()}</p>
+              <a
+                href={submission.externalUrl}
+                rel="noopener noreferrer nofollow ugc"
+                sx={styles.externalLink}
+                target="_blank"
+              >
+                <Globe size={16} />
+                {submission.externalUrl}
+              </a>
+            </div>
+          ) : (
+            <PagePreviews pageCount={submission.pageCount} pages={chapter.data?.pages} />
+          )}
           <div sx={styles.fields}>
             <AuthAlert message={review.isError ? getErrorMessage(review.error) : null} />
             {rejecting ? (

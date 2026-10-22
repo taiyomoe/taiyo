@@ -1,7 +1,18 @@
 import type { Language } from "@taiyomoe/db/constants"
 import * as stylex from "@stylexjs/stylex"
 import { config } from "@taiyomoe/config"
-import { CheckCircle, Close, CloudUpload, Image, Info, Upload } from "@taiyomoe/ui/components/icons"
+import {
+  CalendarClock,
+  CheckCircle,
+  Close,
+  CloudUpload,
+  Globe,
+  Image,
+  Info,
+  Link as LinkIcon,
+  Plus,
+  Upload,
+} from "@taiyomoe/ui/components/icons"
 import { Alert, AlertDescription, AlertTitle } from "@taiyomoe/ui/components/ui/alert"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { Field, FieldDescription, FieldError, FieldLabel } from "@taiyomoe/ui/components/ui/field"
@@ -12,6 +23,7 @@ import { useQuery } from "@tanstack/react-query"
 import { useState } from "react"
 import type { Session } from "@/lib/queries/session"
 import { DashboardPage } from "@/components/dashboard/dashboard-page"
+import { formatDateTime } from "@/components/fields/date-time-picker"
 import { ChapterPagesDialog } from "@/components/submissions/chapter-pages-dialog"
 import {
   type GroupOption,
@@ -20,7 +32,10 @@ import {
   type MediaOption,
   MediaPicker,
 } from "@/components/submissions/pickers"
+import { ReleaseField } from "@/components/submissions/release-field"
+import { hostOf, isWebUrl, NUMBER_TOKEN, resolveLink } from "@/lib/chapter-batch/links"
 import { parseChapterName } from "@/lib/chapter-batch/parse-chapter-name"
+import { DEFAULT_RELEASE, planRelease, type ReleaseSettings } from "@/lib/chapter-batch/release"
 import {
   type ChapterSource,
   type DroppedFile,
@@ -32,15 +47,18 @@ import { chapterNumbersQueryKey, fetchChapterNumbers } from "@/lib/chapter-batch
 import { uploadStore } from "@/lib/chapter-batch/upload-store"
 import { usePermissions } from "@/lib/permissions"
 import { pendingSubmissionsCountQueryOptions } from "@/lib/queries/submissions"
+import { useNow } from "@/lib/use-now"
 import { m } from "@/paraglide/messages"
 
 type Row = {
   key: string
-  source: ChapterSource
+  source: ChapterSource | null
   number: string
   volume: string
   title: string
   pageKeys: string[]
+  link: string
+  linkOpen: boolean
 }
 
 const styles = stylex.create({
@@ -161,7 +179,7 @@ const styles = stylex.create({
     display: { default: "none", "@media (width >= 48rem)": "grid" },
     fontSize: "0.75rem",
     fontWeight: 600,
-    gridTemplateColumns: "6rem 5.5rem minmax(0, 1fr) 5.5rem 2rem",
+    gridTemplateColumns: "6rem 5.5rem minmax(0, 1fr) 6rem 2rem 2rem",
     letterSpacing: "0.04em",
     textTransform: "uppercase",
     paddingBottom: "0.5rem",
@@ -181,7 +199,7 @@ const styles = stylex.create({
     display: "grid",
     gridTemplateColumns: {
       default: "6rem 5.5rem minmax(0, 1fr)",
-      "@media (width >= 48rem)": "6rem 5.5rem minmax(0, 1fr) 5.5rem 2rem",
+      "@media (width >= 48rem)": "6rem 5.5rem minmax(0, 1fr) 6rem 2rem 2rem",
     },
   },
   rowMeta: {
@@ -196,6 +214,25 @@ const styles = stylex.create({
     textOverflow: "ellipsis",
     whiteSpace: "nowrap",
     maxWidth: "24rem",
+  },
+  metaItem: {
+    gap: "0.375rem",
+    alignItems: "center",
+    display: "inline-flex",
+    minWidth: 0,
+  },
+  metaIcon: {
+    flexShrink: 0,
+  },
+  linkOnly: {
+    gap: "0.375rem",
+    alignItems: "center",
+    color: colors.mutedForeground,
+    display: "inline-flex",
+    fontSize: "0.8125rem",
+    fontWeight: 500,
+    justifyContent: "center",
+    whiteSpace: "nowrap",
   },
   warning: {
     color: colors.warning,
@@ -231,6 +268,15 @@ const styles = stylex.create({
     fontSize: "0.875rem",
   },
 })
+const PUBLISH_TITLES: Record<ReleaseSettings["mode"], () => string> = {
+  now: m.upload_will_publish,
+  date: m.uploads_state_scheduled,
+  delay: m.uploads_state_scheduled,
+}
+const publishDescription = (scheduled: boolean) =>
+  scheduled ? m.upload_will_schedule_description() : m.upload_will_publish_description()
+const reviewDescription = (scheduled: boolean) =>
+  scheduled ? m.upload_will_review_scheduled_description() : m.upload_will_review_description()
 const parseNumber = (value: string) => {
   const number = Number(value.replace(",", "."))
 
@@ -239,8 +285,9 @@ const parseNumber = (value: string) => {
 const byNumber = (a: Row, b: Row) =>
   (parseNumber(a.number) ?? Number.POSITIVE_INFINITY) -
     (parseNumber(b.number) ?? Number.POSITIVE_INFINITY) ||
-  a.source.name.localeCompare(b.source.name, undefined, { numeric: true })
-const toRow = (source: ChapterSource) => {
+  (a.source?.name ?? "").localeCompare(b.source?.name ?? "", undefined, { numeric: true })
+const linkNumber = (row: Row) => String(parseNumber(row.number) ?? row.number)
+const toRow = (source: ChapterSource): Row => {
   const parsed = parseChapterName(source.path)
 
   return {
@@ -250,18 +297,22 @@ const toRow = (source: ChapterSource) => {
     volume: parsed.volume ?? "",
     title: parsed.title ?? "",
     pageKeys: source.pages.map((page) => page.key),
-  } satisfies Row
+    link: "",
+    linkOpen: false,
+  }
 }
 
 type RowIssues = { errors: string[]; warnings: string[] }
 
-const getIssues = (row: Row, counts: Map<number, number>, existing: ReadonlySet<number>) => {
+const getIssues = (
+  row: Row,
+  counts: Map<number, number>,
+  existing: ReadonlySet<number>,
+  template: string,
+) => {
   const issues: RowIssues = { errors: [], warnings: [] }
   const number = parseNumber(row.number)
-  const sizes = new Map(row.source.pages.map((page) => [page.key, page.size]))
-  const oversized = row.pageKeys.filter(
-    (key) => (sizes.get(key) ?? 0) > config.images.maxChapterPageSizeBytes,
-  ).length
+  const link = resolveLink(row.link, template, linkNumber(row))
 
   if (number === null) {
     issues.errors.push(m.upload_warning_number())
@@ -270,6 +321,21 @@ const getIssues = (row: Row, counts: Map<number, number>, existing: ReadonlySet<
   } else if (existing.has(number)) {
     issues.warnings.push(m.upload_warning_exists())
   }
+
+  if (row.source === null && link === null) {
+    issues.errors.push(m.upload_warning_link_required())
+  } else if (row.link.trim() !== "" && !isWebUrl(row.link.trim())) {
+    issues.errors.push(m.upload_link_invalid())
+  }
+
+  if (row.source === null) {
+    return issues
+  }
+
+  const sizes = new Map(row.source.pages.map((page) => [page.key, page.size]))
+  const oversized = row.pageKeys.filter(
+    (key) => (sizes.get(key) ?? 0) > config.images.maxChapterPageSizeBytes,
+  ).length
 
   if (row.pageKeys.length === 0) {
     issues.errors.push(m.upload_warning_no_pages())
@@ -290,10 +356,12 @@ function DropZone({
   disabled,
   reading,
   onFiles,
+  onAddLinkOnly,
 }: {
   disabled: boolean
   reading: boolean
   onFiles: (files: Promise<DroppedFile[]>) => void
+  onAddLinkOnly: () => void
 }) {
   const [over, setOver] = useState(false)
 
@@ -356,6 +424,10 @@ function DropZone({
               type="file"
             />
           </Button>
+          <Button disabled={disabled} onClick={onAddLinkOnly} variant="ghost">
+            <Plus />
+            {m.upload_add_link_only()}
+          </Button>
         </div>
       )}
     </div>
@@ -366,6 +438,8 @@ function ChapterRow({
   row,
   issues,
   showErrors,
+  template,
+  releaseAt,
   onChange,
   onRemove,
   onOpenPages,
@@ -373,10 +447,19 @@ function ChapterRow({
   row: Row
   issues: RowIssues
   showErrors: boolean
+  template: string
+  releaseAt: Date | null
   onChange: (patch: Partial<Row>) => void
   onRemove: () => void
   onOpenPages: () => void
 }) {
+  const fromTemplate = resolveLink("", template, linkNumber(row))
+  const link = resolveLink(row.link, template, linkNumber(row))
+  const linkVisible = row.source === null || row.linkOpen || row.link !== ""
+  const linkInvalid =
+    (row.link.trim() !== "" && !isWebUrl(row.link.trim())) ||
+    (showErrors && row.source === null && link === null)
+
   return (
     <li sx={styles.row}>
       <div sx={styles.rowFields}>
@@ -409,15 +492,37 @@ function ChapterRow({
           size="sm"
           value={row.title}
         />
-        <Button
-          aria-label={m.upload_pages_button({ number: row.number || "?" })}
-          onClick={onOpenPages}
-          size="sm"
-          variant="outline"
-        >
-          <Image />
-          {row.pageKeys.length}
-        </Button>
+        {row.source === null ? (
+          <span sx={styles.linkOnly}>
+            <Globe size={14} />
+            {m.upload_link_only()}
+          </span>
+        ) : (
+          <Button
+            aria-label={m.upload_pages_button({ number: row.number || "?" })}
+            onClick={onOpenPages}
+            size="sm"
+            variant="outline"
+          >
+            <Image />
+            {row.pageKeys.length}
+          </Button>
+        )}
+        {row.source === null ? (
+          <span />
+        ) : (
+          <Button
+            aria-label={m.upload_row_link_toggle()}
+            aria-pressed={linkVisible}
+            onClick={() => {
+              onChange(linkVisible ? { link: "", linkOpen: false } : { linkOpen: true })
+            }}
+            size="icon-sm"
+            variant="ghost"
+          >
+            <LinkIcon />
+          </Button>
+        )}
         <Button
           aria-label={m.upload_remove_chapter()}
           onClick={onRemove}
@@ -427,10 +532,37 @@ function ChapterRow({
           <Close />
         </Button>
       </div>
+      {linkVisible ? (
+        <Field invalid={linkInvalid}>
+          <Input
+            aria-label={m.upload_row_link({ number: row.number || "?" })}
+            maxLength={config.input.maxUrlLength}
+            onChange={(event) => {
+              onChange({ link: event.target.value })
+            }}
+            placeholder={fromTemplate ?? "https://"}
+            size="sm"
+            type="url"
+            value={row.link}
+          />
+        </Field>
+      ) : null}
       <div sx={styles.rowMeta}>
-        <span sx={styles.source} title={row.source.name}>
-          {row.source.name || "—"}
+        <span sx={styles.source} title={row.source?.name}>
+          {row.source === null ? m.upload_link_only_source() : row.source.name || "—"}
         </span>
+        {link !== null && !linkVisible && isWebUrl(link) ? (
+          <span sx={[styles.metaItem, styles.source]} title={link}>
+            <LinkIcon size={12} {...stylex.props(styles.metaIcon)} />
+            {hostOf(link)}
+          </span>
+        ) : null}
+        {releaseAt === null ? null : (
+          <span sx={styles.metaItem}>
+            <CalendarClock size={12} {...stylex.props(styles.metaIcon)} />
+            {m.chapter_goes_live({ time: formatDateTime(releaseAt) })}
+          </span>
+        )}
         {issues.warnings.map((warning) => (
           <span key={warning} sx={styles.warning}>
             {warning}
@@ -459,6 +591,15 @@ export function UploadChapterPage({ user }: { user: Session["user"] }) {
   const [attempted, setAttempted] = useState(false)
   const [started, setStarted] = useState(false)
   const [editing, setEditing] = useState<string | null>(null)
+  const [release, setRelease] = useState<ReleaseSettings>(DEFAULT_RELEASE)
+  const [template, setTemplate] = useState("")
+  const now = useNow()
+  const plan = planRelease(release, now)
+  const scheduled = release.mode !== "now"
+  const templateLink = resolveLink("", template, "1")
+  const templateInvalid = templateLink !== null && !isWebUrl(templateLink)
+  const releaseError =
+    release.mode === "date" && release.date === null && !attempted ? null : plan.error
   const publishes =
     can("chapter.publish") || groups.some((group) => can("group.uploadChapters", { id: group.id }))
   const pending = useQuery({ ...pendingSubmissionsCountQueryOptions, enabled: !publishes })
@@ -478,13 +619,46 @@ export function UploadChapterPage({ user }: { user: Session["user"] }) {
     }
   }
 
-  const issues = new Map(rows.map((row) => [row.key, getIssues(row, counts, existingNumbers)]))
-  const blocked = [...issues.values()].some((issue) => issue.errors.length > 0)
+  const issues = new Map(
+    rows.map((row) => [row.key, getIssues(row, counts, existingNumbers, template)]),
+  )
+  const order = new Map([...rows].sort(byNumber).map((row, index) => [row.key, index]))
+  const blocked =
+    [...issues.values()].some((issue) => issue.errors.length > 0) ||
+    plan.error !== null ||
+    templateInvalid
   const slotsLeft = Math.max(config.input.maxPendingChapters - (pending.data ?? 0), 0)
   const overCap = !publishes && pending.data !== undefined && rows.length > slotsLeft
-  const editingRow = rows.find((row) => row.key === editing) ?? null
+  const editingRow = rows.find((row) => row.key === editing)
+  const editingChapter =
+    editingRow?.source === undefined || editingRow.source === null
+      ? null
+      : { number: editingRow.number, source: editingRow.source, pageKeys: editingRow.pageKeys }
   const updateRow = (key: string, patch: Partial<Row>) => {
     setRows((current) => current.map((row) => (row.key === key ? { ...row, ...patch } : row)))
+  }
+  const addLinkOnly = () => {
+    const numbers = rows.flatMap((row) => {
+      const number = parseNumber(row.number)
+
+      return number === null ? [] : [number]
+    })
+    const next = Math.floor(Math.max(0, ...numbers, ...existingNumbers)) + 1
+
+    setStarted(false)
+    setRows((current) => [
+      ...current,
+      {
+        key: `link:${crypto.randomUUID()}`,
+        source: null,
+        number: String(next),
+        volume: "",
+        title: "",
+        pageKeys: [],
+        link: "",
+        linkOpen: true,
+      },
+    ])
   }
   const addFiles = (files: Promise<DroppedFile[]>) => {
     setReading(true)
@@ -521,11 +695,37 @@ export function UploadChapterPage({ user }: { user: Session["user"] }) {
             <GroupPicker can={can} onChange={setGroups} value={groups} />
             <FieldDescription>{m.upload_groups_description()}</FieldDescription>
           </Field>
+          <ReleaseField
+            chapters={rows.length}
+            error={releaseError}
+            onChange={(patch) => {
+              setRelease((current) => ({ ...current, ...patch }))
+            }}
+            value={release}
+          />
+          <Field invalid={templateInvalid}>
+            <FieldLabel>{m.upload_link()}</FieldLabel>
+            <Input
+              maxLength={config.input.maxUrlLength}
+              onChange={(event) => {
+                setTemplate(event.target.value)
+              }}
+              placeholder={m.upload_link_placeholder({ token: NUMBER_TOKEN })}
+              type="url"
+              value={template}
+            />
+            <FieldDescription>
+              {m.upload_link_description({ token: NUMBER_TOKEN })}
+            </FieldDescription>
+            {templateInvalid ? <FieldError match>{m.upload_link_invalid()}</FieldError> : null}
+          </Field>
           <Alert variant={publishes ? "success" : "info"}>
             {publishes ? <CheckCircle /> : <Info />}
-            <AlertTitle>{publishes ? m.upload_will_publish() : m.upload_will_review()}</AlertTitle>
+            <AlertTitle>
+              {publishes ? PUBLISH_TITLES[release.mode]() : m.upload_will_review()}
+            </AlertTitle>
             <AlertDescription>
-              {publishes ? m.upload_will_publish_description() : m.upload_will_review_description()}
+              {publishes ? publishDescription(scheduled) : reviewDescription(scheduled)}
               {publishes || pending.data === undefined
                 ? null
                 : ` ${m.upload_slots_left({ count: slotsLeft, max: config.input.maxPendingChapters })}`}
@@ -539,7 +739,12 @@ export function UploadChapterPage({ user }: { user: Session["user"] }) {
               <AlertTitle>{m.upload_started()}</AlertTitle>
             </Alert>
           ) : null}
-          <DropZone disabled={reading} onFiles={addFiles} reading={reading} />
+          <DropZone
+            disabled={reading}
+            onAddLinkOnly={addLinkOnly}
+            onFiles={addFiles}
+            reading={reading}
+          />
           {unsupported.length === 0 ? null : (
             <p sx={styles.note}>{m.upload_unsupported({ names: unsupported.join(", ") })}</p>
           )}
@@ -568,6 +773,7 @@ export function UploadChapterPage({ user }: { user: Session["user"] }) {
                   <span>{m.upload_chapter_title()}</span>
                   <span>{m.upload_pages()}</span>
                   <span />
+                  <span />
                 </li>
                 {rows.map((row) => (
                   <ChapterRow
@@ -582,8 +788,10 @@ export function UploadChapterPage({ user }: { user: Session["user"] }) {
                     onRemove={() => {
                       setRows((current) => current.filter((item) => item.key !== row.key))
                     }}
+                    releaseAt={plan.at(order.get(row.key) ?? 0)}
                     row={row}
                     showErrors={attempted}
+                    template={template}
                   />
                 ))}
               </ol>
@@ -602,7 +810,9 @@ export function UploadChapterPage({ user }: { user: Session["user"] }) {
                 onClick={() => {
                   setAttempted(true)
 
-                  if (media === null || blocked || overCap) {
+                  const startPlan = planRelease(release, Date.now())
+
+                  if (media === null || blocked || overCap || startPlan.error !== null) {
                     return
                   }
 
@@ -618,6 +828,8 @@ export function UploadChapterPage({ user }: { user: Session["user"] }) {
                       title: row.title.trim() === "" ? null : row.title.trim(),
                       source: row.source,
                       pageKeys: row.pageKeys,
+                      publishAt: startPlan.at(order.get(row.key) ?? 0)?.toISOString() ?? null,
+                      externalUrl: resolveLink(row.link, template, linkNumber(row)),
                     })),
                   })
                   setRows([])
@@ -634,9 +846,9 @@ export function UploadChapterPage({ user }: { user: Session["user"] }) {
         </div>
       </div>
       <ChapterPagesDialog
-        chapter={editingRow}
+        chapter={editingChapter}
         onChange={(pageKeys) => {
-          if (editingRow !== null) {
+          if (editingRow !== undefined) {
             updateRow(editingRow.key, { pageKeys })
           }
         }}
