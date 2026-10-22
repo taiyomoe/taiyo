@@ -5,16 +5,18 @@ import { createHyperDXDrain } from "evlog/hyperdx"
 import { Hono } from "hono"
 import { openAPIRouteHandler } from "hono-openapi"
 import { cors } from "hono/cors"
+import { createMiddleware } from "hono/factory"
 import { secureHeaders } from "hono/secure-headers"
+import type {
+  AppContext,
+  AppContextVariables,
+  JsonResponse,
+  PaginatedEnvelope,
+  SuccessEnvelope,
+} from "./middlewares/context-middleware"
 import type { Services } from "./services"
 import packageJson from "../package.json"
 import { corsAllowedOrigins, env } from "./env"
-import {
-  type AppContext,
-  type AppContextVariables,
-  createContextMiddleware,
-} from "./middlewares/context-middleware"
-import { errorHandler } from "./middlewares/error-handler-middleware"
 import { bannersRouter } from "./routers/banners-router"
 import { chaptersRouter } from "./routers/chapters-router"
 import { coversRouter } from "./routers/covers-router"
@@ -28,6 +30,7 @@ import { mediasRouter } from "./routers/medias-router"
 import { ownershipRequestsRouter } from "./routers/ownership-requests-router"
 import { staffsRouter } from "./routers/staffs-router"
 import { usersRouter } from "./routers/users-router"
+import { type ErrorCode, errors } from "./utils/errors"
 
 declare module "hono" {
   // oxlint-disable-next-line typescript/consistent-type-definitions
@@ -63,9 +66,85 @@ export const createApp = (services: Services) => {
         maxAge: 600,
       }),
     )
-    .use(createContextMiddleware(services))
+    .use(
+      createMiddleware(async (c, next) => {
+        const timestamp = new Date().toISOString()
+        const logRequestId = c.get("log").getContext().requestId
+        const requestId =
+          typeof logRequestId === "string" && logRequestId !== ""
+            ? logRequestId
+            : crypto.randomUUID()
+
+        c.set("db", services.db)
+        c.set("s3", services.s3)
+        c.set("s3Bucket", services.s3Bucket)
+        c.set("meili", services.meili)
+        c.set("mediasIndex", services.mediasIndex)
+        c.set("auth", services.auth)
+        c.set("chapterUploadQueue", services.chapterUploadQueue)
+        c.set("mailer", services.mailer)
+        c.set("cacheNamespace", services.cacheNamespace)
+
+        function ok<T>(data: T): JsonResponse<SuccessEnvelope<T>, 200 | 201>
+        function ok<T, M extends Record<string, unknown>>(
+          data: T,
+          meta: M,
+        ): JsonResponse<PaginatedEnvelope<T, M>, 200 | 201>
+        function ok(data: unknown, meta?: Record<string, unknown>) {
+          c.status(c.req.method === "POST" ? 201 : 200)
+
+          return c.json({
+            success: true,
+            data,
+            ...(meta !== undefined ? { meta } : {}),
+            timestamp,
+            requestId,
+          })
+        }
+
+        c.ok = ok
+
+        c.fail = (errorCode: ErrorCode, details?: unknown) => {
+          const error = errors[errorCode]
+
+          c.status(error.code)
+
+          const response: {
+            success: false
+            message: string
+            code: ErrorCode
+            timestamp: string
+            requestId: string
+            details?: unknown
+          } = {
+            success: false,
+            code: errorCode,
+            message: error.message,
+            timestamp,
+            requestId,
+          }
+
+          if (details !== undefined) {
+            response.details = details
+          }
+
+          return c.json(response)
+        }
+
+        await next()
+      }),
+    )
     .notFound((c) => c.fail("NOT_FOUND"))
-    .onError(errorHandler)
+    .onError((err, c) => {
+      c.get("log").error(err)
+
+      return c.fail(
+        "INTERNAL_SERVER_ERROR",
+        process.env.NODE_ENV === "production"
+          ? undefined
+          : { error: err.message, stack: err.stack },
+      )
+    })
     .on(["GET", "POST"], "/api/auth/*", (c) => services.auth.handler(c.req.raw))
     .get("/ping", (c) => c.json({ version: packageJson.version }))
     .route("/medias", mediasRouter)

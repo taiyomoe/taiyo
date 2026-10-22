@@ -17,19 +17,6 @@ type FeedRow = {
   mediaTitle: string | null
 }
 
-const isDescending = (rows: FeedRow[]) =>
-  rows.every((row, index) => {
-    if (index === 0) {
-      return true
-    }
-
-    const previous = defined(rows[index - 1])
-
-    return previous.createdAt === row.createdAt
-      ? previous.id > row.id
-      : previous.createdAt > row.createdAt
-  })
-
 describe("GET /users/me/feed", () => {
   test("returns the chapters of the medias in the library", async ({ app, services }) => {
     const { headers, userId } = await signInAs(services)
@@ -97,7 +84,19 @@ describe("GET /users/me/feed", () => {
       throw new Error("Expected success")
     }
 
-    expect(isDescending(res.body.data)).toBe(true)
+    expect(
+      res.body.data.every((row, index, rows) => {
+        if (index === 0) {
+          return true
+        }
+
+        const previous = defined(rows[index - 1])
+
+        return previous.createdAt === row.createdAt
+          ? previous.id > row.id
+          : previous.createdAt > row.createdAt
+      }),
+    ).toBe(true)
   })
 
   test("excludes deleted chapters", async ({ app, services }) => {

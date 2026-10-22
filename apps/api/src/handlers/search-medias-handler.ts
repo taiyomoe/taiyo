@@ -8,7 +8,7 @@ import {
   MEDIA_TYPES,
 } from "@taiyomoe/db"
 import { paginationMetaSchema } from "@taiyomoe/schemas"
-import { searchMedias, searchMediasInputSchema } from "@taiyomoe/search"
+import { type MediaDocument, type MediaSort, searchMediasInputSchema } from "@taiyomoe/search"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
@@ -21,6 +21,71 @@ import {
   languageSchema,
 } from "../utils/schemas"
 
+const quote = (value: string) => `"${value.replace(/"/g, '\\"')}"`
+const enumOpsSchema = z.object({
+  eq: z.string().optional(),
+  neq: z.string().optional(),
+  in: z.string().array().optional(),
+  notIn: z.string().array().optional(),
+})
+const arrayOpsSchema = z.object({
+  hasAll: z.string().array().optional(),
+  hasAny: z.string().array().optional(),
+  hasNone: z.string().array().optional(),
+})
+const dateOpsSchema = z.object({
+  before: z.string().optional(),
+  after: z.string().optional(),
+  between: z.tuple([z.string(), z.string()]).optional(),
+  isNull: z.boolean().optional(),
+})
+const countOpsSchema = z.object({
+  eq: z.number().optional(),
+  gte: z.number().optional(),
+  lte: z.number().optional(),
+  between: z.tuple([z.number(), z.number()]).optional(),
+})
+
+type FilterSpec<TDocument> = Record<
+  string,
+  | { kind: "enum"; attr: keyof TDocument }
+  | { kind: "array"; attr: keyof TDocument }
+  | { kind: "date"; attr: keyof TDocument }
+  | { kind: "count"; attr: keyof TDocument }
+>
+
+const sortFieldToAttribute = {
+  createdAt: "createdAt",
+  updatedAt: "updatedAt",
+  startDate: "startDate",
+  endDate: "endDate",
+  mainTitle: "_sortMainTitle",
+  libraryCount: "libraryCount",
+  chapterCount: "chapterCount",
+} satisfies Record<MediaSort[number]["field"], string>
+const mediaFilterSpec = {
+  type: { kind: "enum", attr: "type" },
+  status: { kind: "enum", attr: "status" },
+  source: { kind: "enum", attr: "source" },
+  demography: { kind: "enum", attr: "demography" },
+  countryOfOrigin: { kind: "enum", attr: "countryOfOrigin" },
+  contentRating: { kind: "enum", attr: "contentRating" },
+  flag: { kind: "enum", attr: "flag" },
+  tags: { kind: "array", attr: "tagKeys" },
+  spoilerTags: { kind: "array", attr: "spoilerTagKeys" },
+  linkProviders: { kind: "array", attr: "linkProviders" },
+  titleLanguages: { kind: "array", attr: "titleLanguages" },
+  chapterLanguages: { kind: "array", attr: "chapterLanguages" },
+  coverLanguages: { kind: "array", attr: "coverLanguages" },
+  authors: { kind: "array", attr: "authorIds" },
+  artists: { kind: "array", attr: "artistIds" },
+  createdAt: { kind: "date", attr: "createdAt" },
+  updatedAt: { kind: "date", attr: "updatedAt" },
+  startDate: { kind: "date", attr: "startDate" },
+  endDate: { kind: "date", attr: "endDate" },
+  libraryCount: { kind: "count", attr: "libraryCount" },
+  chapterCount: { kind: "count", attr: "chapterCount" },
+} satisfies FilterSpec<MediaDocument>
 const mediaHitSchema = z.object({
   id: z.uuid().meta({ description: "The ID of the media." }),
   type: z.enum(MEDIA_TYPES).meta({ description: "The type of the media." }),
@@ -120,11 +185,126 @@ export const searchMediasHandler = new Hono().post(
   rateLimit({ prefix: "search-medias", windowMs: 60_000, limit: 60 }),
   validateJson(searchMediasInputSchema),
   async (c) => {
-    const { hits, page, perPage, total } = await searchMedias(
-      { meili: c.var.meili, mediasIndex: c.var.mediasIndex },
-      c.var.json,
-    )
+    const input = c.var.json
+    const filters: Record<string, unknown> = input.filter
+    const clauses: string[] = []
 
-    return c.ok(hits, { page, perPage, total })
+    for (const [field, fieldSpec] of Object.entries(mediaFilterSpec)) {
+      const raw = filters[field]
+
+      if (raw === undefined) {
+        continue
+      }
+
+      const { attr } = fieldSpec
+
+      switch (fieldSpec.kind) {
+        case "enum": {
+          const ops = enumOpsSchema.parse(raw)
+
+          if (ops.eq !== undefined) {
+            clauses.push(`${attr} = ${quote(ops.eq)}`)
+          }
+
+          if (ops.neq !== undefined) {
+            clauses.push(`${attr} != ${quote(ops.neq)}`)
+          }
+
+          if (ops.in !== undefined && ops.in.length > 0) {
+            clauses.push(`${attr} IN [${ops.in.map(quote).join(", ")}]`)
+          }
+
+          if (ops.notIn !== undefined && ops.notIn.length > 0) {
+            clauses.push(`${attr} NOT IN [${ops.notIn.map(quote).join(", ")}]`)
+          }
+
+          break
+        }
+
+        case "array": {
+          const ops = arrayOpsSchema.parse(raw)
+
+          // hasAll → one equality per value; Meilisearch matches each against any
+          // element of the array, so chaining with AND enforces "contains every".
+          if (ops.hasAll !== undefined && ops.hasAll.length > 0) {
+            for (const value of ops.hasAll) {
+              clauses.push(`${attr} = ${quote(value)}`)
+            }
+          }
+
+          if (ops.hasAny !== undefined && ops.hasAny.length > 0) {
+            clauses.push(`${attr} IN [${ops.hasAny.map(quote).join(", ")}]`)
+          }
+
+          if (ops.hasNone !== undefined && ops.hasNone.length > 0) {
+            clauses.push(`${attr} NOT IN [${ops.hasNone.map(quote).join(", ")}]`)
+          }
+
+          break
+        }
+
+        case "date": {
+          const ops = dateOpsSchema.parse(raw)
+          const ts = (iso: string) => new Date(iso).getTime()
+
+          if (ops.before !== undefined) {
+            clauses.push(`${attr} < ${ts(ops.before)}`)
+          }
+
+          if (ops.after !== undefined) {
+            clauses.push(`${attr} > ${ts(ops.after)}`)
+          }
+
+          if (ops.between !== undefined) {
+            clauses.push(`${attr} ${ts(ops.between[0])} TO ${ts(ops.between[1])}`)
+          }
+
+          if (ops.isNull === true) {
+            clauses.push(`${attr} IS NULL`)
+          }
+
+          if (ops.isNull === false) {
+            clauses.push(`${attr} IS NOT NULL`)
+          }
+
+          break
+        }
+
+        case "count": {
+          const ops = countOpsSchema.parse(raw)
+
+          if (ops.eq !== undefined) {
+            clauses.push(`${attr} = ${ops.eq}`)
+          }
+
+          if (ops.gte !== undefined) {
+            clauses.push(`${attr} >= ${ops.gte}`)
+          }
+
+          if (ops.lte !== undefined) {
+            clauses.push(`${attr} <= ${ops.lte}`)
+          }
+
+          if (ops.between !== undefined) {
+            clauses.push(`${attr} ${ops.between[0]} TO ${ops.between[1]}`)
+          }
+
+          break
+        }
+      }
+    }
+
+    const result = await c.var.meili.index<MediaDocument>(c.var.mediasIndex).search(input.q, {
+      ...(clauses.length === 0 ? {} : { filter: clauses.join(" AND ") }),
+      sort: input.sort.map((s) => `${sortFieldToAttribute[s.field]}:${s.direction}`),
+      page: input.page,
+      hitsPerPage: input.perPage,
+    })
+
+    return c.ok(result.hits, {
+      page: result.page,
+      perPage: result.hitsPerPage,
+      total: result.totalHits,
+    })
   },
 )

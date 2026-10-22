@@ -15,8 +15,6 @@ export * from "./medias/init-medias-index"
 
 export * from "./medias/media-search-schemas"
 
-export * from "./medias/search-medias"
-
 export const indexInitializers = [
   {
     name: SEARCH_INDEXES.MEDIAS,
