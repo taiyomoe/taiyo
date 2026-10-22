@@ -43,9 +43,6 @@ export const getCoverKey = (mediaId: string, fileName: string) =>
 export const getBannerKey = (mediaId: string, fileName: string) =>
   `medias/${mediaId}/banners/${fileName}`
 
-export const getStaffImageKey = (staffId: string, fileName: string) =>
-  `staffs/${staffId}/${fileName}`
-
 export const getPresignedUploadUrl = (
   s3: S3Client,
   bucket: string,
@@ -60,35 +57,12 @@ export const getPresignedUploadUrl = (
 export const getChapterPageKey = (mediaId: string, chapterId: string, pageId: string) =>
   `medias/${mediaId}/chapters/${chapterId}/${pageId}.jpg`
 
-const publicBase = env.S3_PUBLIC_URL.replace(/\/+$/, "")
-
-export const getChapterPageUrl = (mediaId: string, chapterId: string, pageId: string) =>
-  `${publicBase}/${getChapterPageKey(mediaId, chapterId, pageId)}`
+export const S3_PUBLIC_BASE = env.S3_PUBLIC_URL.replace(/\/+$/, "")
 
 export const getCoverUrl = (mediaId: string, coverId: string, extension: string) =>
-  `${publicBase}/${getCoverKey(mediaId, `${coverId}.${extension}`)}`
+  `${S3_PUBLIC_BASE}/${getCoverKey(mediaId, `${coverId}.${extension}`)}`
 
 export const getBannerUrl = (mediaId: string, bannerId: string, extension: string) =>
-  `${publicBase}/${getBannerKey(mediaId, `${bannerId}.${extension}`)}`
+  `${S3_PUBLIC_BASE}/${getBannerKey(mediaId, `${bannerId}.${extension}`)}`
 
-export const getStaffImageUrl = (key: string) => `${publicBase}/${key}`
-
-export const getChapterStagingKey = (chapterId: string, uploadId: string, index: number) =>
-  `staging/chapters/${chapterId}/${uploadId}/${index}`
-
-export const ensureStagingLifecycle = (s3: S3Client, bucket: string, expiryDays: number) =>
-  s3.send(
-    new PutBucketLifecycleConfigurationCommand({
-      Bucket: bucket,
-      LifecycleConfiguration: {
-        Rules: [
-          {
-            ID: "expire-staging",
-            Status: "Enabled",
-            Filter: { Prefix: "staging/" },
-            Expiration: { Days: expiryDays },
-          },
-        ],
-      },
-    }),
-  )
+export const getStaffImageUrl = (key: string) => `${S3_PUBLIC_BASE}/${key}`

@@ -1,26 +1,17 @@
 import sharp from "sharp"
 
 const cache = new Map<string, Buffer>()
-const getPng = async (size: number) => {
-  const cached = cache.get(`png:${size}`)
-
-  if (cached) {
-    return cached
-  }
-
-  const buf = await sharp({
-    create: { width: size, height: size, channels: 3, background: { r: 200, g: 80, b: 80 } },
-  })
-    .png()
-    .toBuffer()
-
-  cache.set(`png:${size}`, buf)
-
-  return buf
-}
 
 export const tinyPng = async (name = "tiny.png"): Promise<File> => {
-  const buf = await getPng(2)
+  const buf =
+    cache.get("png") ??
+    (await sharp({
+      create: { width: 2, height: 2, channels: 3, background: { r: 200, g: 80, b: 80 } },
+    })
+      .png()
+      .toBuffer())
+
+  cache.set("png", buf)
 
   return new File([new Uint8Array(buf)], name, { type: "image/png" })
 }
@@ -42,24 +33,6 @@ export const tinyGif = async (name = "tiny.gif"): Promise<File> => {
 
 export const invalidImage = (name = "fake.png"): File =>
   new File([new Uint8Array([0xff, 0xfe, 0xfd, 0xfc])], name, { type: "image/png" })
-
-export const jpegWithExif = async (name = "with-exif.jpg"): Promise<File> => {
-  const cached = cache.get("jpeg-exif")
-  const buf =
-    cached ??
-    (await sharp({
-      create: { width: 4, height: 4, channels: 3, background: { r: 30, g: 30, b: 200 } },
-    })
-      .withExif({
-        IFD0: { Copyright: "advisor-test", Make: "TestCam", Model: "TestModel" },
-      })
-      .jpeg()
-      .toBuffer())
-
-  cache.set("jpeg-exif", buf)
-
-  return new File([new Uint8Array(buf)], name, { type: "image/jpeg" })
-}
 
 export const fakeImageOfSize = (bytes: number, name = "sized.jpg"): File =>
   new File([new Uint8Array(bytes)], name, { type: "image/jpeg" })

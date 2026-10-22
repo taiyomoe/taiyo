@@ -1,5 +1,5 @@
 import { cacheClient } from "@taiyomoe/cache"
-import { type DB, type Kysely, MEDIA_TYPES } from "@taiyomoe/db"
+import { MEDIA_TYPES, sql } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
@@ -10,23 +10,14 @@ import {
   DASHBOARD_RANGES,
   DASHBOARD_UNITS,
   type DashboardRange,
-  getAttention,
-  getCatalogMix,
-  getRecentActivity,
   getWindowedOverview,
   type WindowedOverview,
 } from "../utils/dashboard-overview"
+import { getMainTitles } from "../utils/latest-chapters"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope, languageSchema } from "../utils/schemas"
 
 const TIME_ZONES = new Set(["UTC", ...Intl.supportedValuesOf("timeZone")])
-const canonicalTimeZone = (value: string) => {
-  try {
-    return new Intl.DateTimeFormat("en", { timeZone: value }).resolvedOptions().timeZone
-  } catch {
-    return value
-  }
-}
 const CACHE_TTL_SECONDS: Record<DashboardRange, number> = {
   "24h": 60,
   "7d": 300,
@@ -35,40 +26,12 @@ const CACHE_TTL_SECONDS: Record<DashboardRange, number> = {
   "12m": 900,
 }
 const inFlight = new Map<string, Promise<WindowedOverview>>()
-const computeWindowedOverview = async (
-  db: Kysely<DB>,
-  range: DashboardRange,
-  timeZone: string,
-  cacheKey: string,
-) => {
-  const windowed = await getWindowedOverview(db, range, timeZone)
+const RECENT_ACTIVITY_ROWS = 100
+const recentSince = (table: "chapters" | "covers" | "medias") =>
+  sql<string>`coalesce((select date_trunc('hour', ${sql.ref(`${table}.createdAt`)}) from ${sql.table(table)} order by ${sql.ref(`${table}.createdAt`)} desc offset ${sql.lit(RECENT_ACTIVITY_ROWS - 1)} limit 1), '-infinity')::text`
 
-  await cacheClient.dashboard.overview.set(cacheKey, windowed, CACHE_TTL_SECONDS[range])
+type DashboardActivityKind = (typeof DASHBOARD_ACTIVITY_KINDS)[number]
 
-  return windowed
-}
-const getCachedWindowedOverview = async (
-  db: Kysely<DB>,
-  range: DashboardRange,
-  timeZone: string,
-  cacheKey: string,
-) => {
-  const cached = await cacheClient.dashboard.overview.get<WindowedOverview>(cacheKey)
-
-  if (cached) {
-    return cached
-  }
-
-  const pending =
-    inFlight.get(cacheKey) ??
-    computeWindowedOverview(db, range, timeZone, cacheKey).finally(() => {
-      inFlight.delete(cacheKey)
-    })
-
-  inFlight.set(cacheKey, pending)
-
-  return pending
-}
 const querySchema = z.object({
   range: z.enum(DASHBOARD_RANGES).default("30d").meta({
     description:
@@ -77,7 +40,13 @@ const querySchema = z.object({
   }),
   tz: z
     .string()
-    .transform(canonicalTimeZone)
+    .transform((value) => {
+      try {
+        return new Intl.DateTimeFormat("en", { timeZone: value }).resolvedOptions().timeZone
+      } catch {
+        return value
+      }
+    })
     .refine((value) => TIME_ZONES.has(value), "Unknown time zone.")
     .default("UTC")
     .meta({
@@ -257,10 +226,141 @@ export const getDashboardOverviewHandler = new Hono().get(
     const { range, tz } = c.var.query
     const cacheKey = `${cacheNamespace}${range}:${tz}`
     const [windowed, catalogMix, attention, recentActivity] = await Promise.all([
-      getCachedWindowedOverview(db, range, tz, cacheKey),
-      getCatalogMix(db),
-      getAttention(db),
-      getRecentActivity(db),
+      cacheClient.dashboard.overview.get<WindowedOverview>(cacheKey).then((cached) => {
+        if (cached) {
+          return cached
+        }
+
+        const pending =
+          inFlight.get(cacheKey) ??
+          getWindowedOverview(db, range, tz)
+            .then(async (fresh) => {
+              await cacheClient.dashboard.overview.set(cacheKey, fresh, CACHE_TTL_SECONDS[range])
+
+              return fresh
+            })
+            .finally(() => {
+              inFlight.delete(cacheKey)
+            })
+
+        inFlight.set(cacheKey, pending)
+
+        return pending
+      }),
+      db
+        .selectFrom("medias")
+        .where("medias.deletedAt", "is", null)
+        .select((eb) => ["medias.type", eb.fn.countAll<string>().as("count")])
+        .groupBy("medias.type")
+        .execute()
+        .then((rows) => {
+          const counts = new Map(rows.map((row) => [row.type, Number(row.count)]))
+
+          return MEDIA_TYPES.map((type) => ({ type, count: counts.get(type) ?? 0 }))
+        }),
+      db
+        .selectNoFrom((eb) => [
+          eb
+            .selectFrom("groupOwnershipRequests")
+            .innerJoin("groups", "groups.id", "groupOwnershipRequests.groupId")
+            .where("groupOwnershipRequests.status", "=", "PENDING")
+            .where("groups.deletedAt", "is", null)
+            .select((e) => e.fn.countAll<string>().as("count"))
+            .as("pendingOwnershipRequests"),
+          eb
+            .selectFrom("tasks")
+            .where("tasks.status", "=", "FAILED")
+            .select((e) => e.fn.countAll<string>().as("count"))
+            .as("failedUploads"),
+        ])
+        .executeTakeFirstOrThrow()
+        .then((row) => ({
+          pendingOwnershipRequests: Number(row.pendingOwnershipRequests),
+          failedUploads: Number(row.failedUploads),
+        })),
+      db
+        .selectNoFrom([
+          recentSince("chapters").as("chapters"),
+          recentSince("covers").as("covers"),
+          recentSince("medias").as("medias"),
+        ])
+        .executeTakeFirstOrThrow()
+        .then(async (since) => {
+          const events = db
+            .selectFrom("chapters")
+            .where("chapters.deletedAt", "is", null)
+            .where("chapters.createdAt", ">=", sql<Date>`${since.chapters}::timestamp`)
+            .select([
+              sql.lit<DashboardActivityKind>("CHAPTERS_UPLOADED").as("kind"),
+              "chapters.uploaderId as actorId",
+              "chapters.mediaId",
+              "chapters.createdAt",
+            ])
+            .unionAll(
+              db
+                .selectFrom("covers")
+                .where("covers.deletedAt", "is", null)
+                .where("covers.createdAt", ">=", sql<Date>`${since.covers}::timestamp`)
+                .select([
+                  sql.lit<DashboardActivityKind>("COVERS_UPLOADED").as("kind"),
+                  "covers.uploaderId as actorId",
+                  "covers.mediaId",
+                  "covers.createdAt",
+                ]),
+            )
+            .unionAll(
+              db
+                .selectFrom("medias")
+                .where("medias.createdAt", ">=", sql<Date>`${since.medias}::timestamp`)
+                .select([
+                  sql.lit<DashboardActivityKind>("MEDIA_CREATED").as("kind"),
+                  "medias.creatorId as actorId",
+                  "medias.id as mediaId",
+                  "medias.createdAt",
+                ]),
+            )
+          const rows = await db
+            .selectFrom(events.as("event"))
+            .innerJoin("medias", "medias.id", "event.mediaId")
+            .innerJoin("users", "users.id", "event.actorId")
+            .where("medias.deletedAt", "is", null)
+            .select((eb) => [
+              "event.kind",
+              "event.mediaId",
+              "users.id as actorId",
+              "users.username as actorUsername",
+              "users.displayUsername as actorDisplayUsername",
+              "users.image as actorImage",
+              sql<Date>`max(${eb.ref("event.createdAt")}) at time zone 'UTC'`.as("at"),
+              eb.fn.countAll<string>().as("count"),
+            ])
+            .groupBy([
+              "event.kind",
+              "users.id",
+              "event.mediaId",
+              sql`date_trunc('hour', ${sql.ref("event.createdAt")})`,
+            ])
+            .orderBy("at", "desc")
+            .limit(6)
+            .execute()
+          const titles = await getMainTitles(
+            db,
+            rows.map((row) => row.mediaId),
+          )
+
+          return rows.map((row) => ({
+            kind: row.kind,
+            at: row.at,
+            count: Number(row.count),
+            actor: {
+              id: row.actorId,
+              username: row.actorUsername,
+              displayUsername: row.actorDisplayUsername,
+              image: row.actorImage,
+            },
+            media: { id: row.mediaId, title: titles.get(row.mediaId) ?? null },
+          }))
+        }),
     ])
 
     return c.ok({

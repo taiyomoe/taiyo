@@ -1,5 +1,5 @@
 import { CONTENT_RATINGS, FLAGS, LANGUAGES } from "@taiyomoe/db"
-import { getChapterPageUrl } from "@taiyomoe/s3"
+import { getChapterPageKey, S3_PUBLIC_BASE } from "@taiyomoe/s3"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
@@ -71,7 +71,7 @@ export const getChapterHandler = new Hono().get(
       pages:
         chapter.pages?.map((page) => ({
           id: page.id,
-          url: getChapterPageUrl(chapter.mediaId, chapter.id, page.id),
+          url: `${S3_PUBLIC_BASE}/${getChapterPageKey(chapter.mediaId, chapter.id, page.id)}`,
         })) ?? null,
       createdAt: chapter.createdAt,
       updatedAt: chapter.updatedAt,
