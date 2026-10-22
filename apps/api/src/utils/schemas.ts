@@ -180,6 +180,13 @@ export const chapterFeedItemSchema = z.object({
     description: "The main title of the media the chapter belongs to.",
     example: "Boruto: Naruto Next Generations",
   }),
+  externalUrl: z.string().nullable().meta({
+    description: "Link to the chapter on the group's own site, if any.",
+    example: "https://sunray-scans.com/boruto/112",
+  }),
+  isExternal: z.boolean().meta({
+    description: "Whether the chapter is only hosted on the group's site, at `externalUrl`.",
+  }),
 })
 
 export const latestChapterSchema = chapterFeedItemSchema
@@ -297,4 +304,8 @@ export const chapterSubmissionSchema = latestChapterFeedItemSchema.extend({
   rejectionReason: z.string().nullable().meta({ description: "Why the chapter was rejected." }),
   reviewedAt: z.iso.datetime().nullable().meta({ description: "When the chapter was reviewed." }),
   pageCount: z.int().meta({ description: "How many processed pages the chapter has." }),
+  publishAt: z.iso
+    .datetime()
+    .nullable()
+    .meta({ description: "When the chapter goes live, if it was scheduled." }),
 })

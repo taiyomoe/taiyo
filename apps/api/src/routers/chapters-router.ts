@@ -11,6 +11,7 @@ import { listChapterGroupsHandler } from "../handlers/list-chapter-groups-handle
 import { listChapterReviewQueueHandler } from "../handlers/list-chapter-review-queue-handler"
 import { listLatestChaptersHandler } from "../handlers/list-latest-chapters-handler"
 import { listLatestMediaUpdatesHandler } from "../handlers/list-latest-media-updates-handler"
+import { listUpcomingChaptersHandler } from "../handlers/list-upcoming-chapters-handler"
 import { openChapterHandler } from "../handlers/open-chapter-handler"
 import { rejectChapterHandler } from "../handlers/reject-chapter-handler"
 import { rejectChaptersHandler } from "../handlers/reject-chapters-handler"
@@ -23,6 +24,7 @@ import { withdrawChapterHandler } from "../handlers/withdraw-chapter-handler"
 export const chaptersRouter = new Hono()
   .route("/", listLatestChaptersHandler)
   .route("/", listLatestMediaUpdatesHandler)
+  .route("/", listUpcomingChaptersHandler)
   .route("/", listChapterReviewQueueHandler)
   .route("/", getChapterHandler)
   .route("/", updateChapterHandler)

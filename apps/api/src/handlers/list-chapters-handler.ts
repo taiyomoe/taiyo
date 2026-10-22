@@ -110,6 +110,8 @@ export const listChaptersHandler = new Hono().get(
         "chapters.contentRating",
         "chapters.flag",
         "chapters.createdAt",
+        "chapters.externalUrl",
+        "chapters.isExternal",
         "users.id as uploaderId",
         "users.username as uploaderUsername",
         "users.displayUsername as uploaderDisplayUsername",

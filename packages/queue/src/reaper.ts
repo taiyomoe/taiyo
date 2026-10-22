@@ -16,6 +16,7 @@ export const reapStaleChapterUploads = async (
     .set({ deletedAt: sql<Date>`CURRENT_TIMESTAMP`, deleterId: sql.ref("uploaderId") })
     .where("status", "in", ["UPLOADING", "PENDING"])
     .where("pages", "is", null)
+    .where("isExternal", "=", false)
     .where("deletedAt", "is", null)
     .where(sql<boolean>`"createdAt" < ${cutoff}::timestamptz`)
     .returning("id")

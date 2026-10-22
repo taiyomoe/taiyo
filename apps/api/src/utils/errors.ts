@@ -180,6 +180,18 @@ const chapterGroupErrors = {
       "You have too many chapters waiting for review. Wait for them to be reviewed before submitting more.",
     code: 409,
   },
+  CHAPTER_EXTERNAL: {
+    message: "This chapter is hosted on the group's site and has no pages on Taiyō.",
+    code: 409,
+  },
+  CHAPTER_EXTERNAL_LINK_REQUIRED: {
+    message: "An external chapter needs a link to the group's site.",
+    code: 422,
+  },
+  CHAPTER_ALREADY_RELEASED: {
+    message: "This chapter is already out and cannot be scheduled again.",
+    code: 409,
+  },
   CHAPTER_NOT_PENDING: {
     message: "This chapter is not waiting for review.",
     code: 409,
