@@ -1,17 +1,90 @@
 import { ListObjectsV2Command, PutObjectCommand } from "@aws-sdk/client-s3"
+import { config } from "@taiyomoe/config"
 import { processChapterUpload } from "@taiyomoe/queue"
+import { GetObjectCommand, getChapterPageKey, HeadObjectCommand } from "@taiyomoe/s3"
 import sharp from "sharp"
-import { describe, expect } from "vitest"
+import { describe, expect, vi } from "vitest"
+import type { Services } from "../../services"
 import { test } from "../setup"
 
 const SEEDED_MEDIA_ID = "4e26b80f-6661-4f5f-93b4-6dfed052bbed"
 const SEEDED_UPLOADER_ID = "db852a04-7406-4a6a-87f2-1b494e810a29"
+const SEEDED_CHAPTER_WITH_PAGES_ID = "13548c83-8d1a-4163-8830-c8f16fcd2eb7"
 const makeTinyJpeg = async () =>
   sharp({
     create: { width: 4, height: 4, channels: 3, background: { r: 100, g: 150, b: 200 } },
   })
     .jpeg()
     .toBuffer()
+const seedStagedUpload = async ({ db, s3, s3Bucket }: Services, number: number) => {
+  const chapterId = crypto.randomUUID()
+  const uploadId = crypto.randomUUID()
+  const taskId = crypto.randomUUID()
+  const pageId = crypto.randomUUID()
+  const stagingKey = `staging/chapters/${chapterId}/${uploadId}/0`
+
+  await db
+    .insertInto("chapters")
+    .values({
+      id: chapterId,
+      mediaId: SEEDED_MEDIA_ID,
+      number,
+      language: "en",
+      uploaderId: SEEDED_UPLOADER_ID,
+    })
+    .execute()
+
+  await s3.send(
+    new PutObjectCommand({
+      Bucket: s3Bucket,
+      Key: stagingKey,
+      Body: await makeTinyJpeg(),
+      ContentType: "image/jpeg",
+    }),
+  )
+
+  await db
+    .insertInto("tasks")
+    .values({
+      id: taskId,
+      type: "UPLOAD_CHAPTER",
+      status: "PENDING",
+      sessionId: uploadId,
+      payload: {
+        chapterId,
+        mediaId: SEEDED_MEDIA_ID,
+        uploadId,
+        pages: [{ pageId, stagingKey }],
+      },
+    })
+    .execute()
+
+  return {
+    chapterId,
+    taskId,
+    pageId,
+    stagingKey,
+    pageKey: getChapterPageKey(SEEDED_MEDIA_ID, chapterId, pageId),
+  }
+}
+const readUploadState = async (
+  { db, s3, s3Bucket }: Services,
+  { chapterId, taskId, pageKey }: { chapterId: string; taskId: string; pageKey: string },
+) => {
+  const task = await db
+    .selectFrom("tasks")
+    .select(["status"])
+    .where("id", "=", taskId)
+    .executeTakeFirstOrThrow()
+  const chapter = await db
+    .selectFrom("chapters")
+    .select(["pages"])
+    .where("id", "=", chapterId)
+    .executeTakeFirstOrThrow()
+  const listed = await s3.send(new ListObjectsV2Command({ Bucket: s3Bucket, Prefix: pageKey }))
+
+  return { status: task.status, pages: chapter.pages, pageObjects: listed.Contents ?? [] }
+}
 
 describe("processChapterUpload", () => {
   test("downloads staged pages, compresses them, writes final objects, and marks task FINISHED", async ({
@@ -132,6 +205,326 @@ describe("processChapterUpload", () => {
       .executeTakeFirstOrThrow()
 
     expect(task.status).toBe("FAILED")
+  })
+
+  test("leaves status untouched and rethrows on a non-final attempt", async ({ services }) => {
+    const { db, s3, s3Bucket } = services
+    const chapterId = crypto.randomUUID()
+    const uploadId = crypto.randomUUID()
+    const taskId = crypto.randomUUID()
+    const pageId = crypto.randomUUID()
+
+    await db
+      .insertInto("chapters")
+      .values({
+        id: chapterId,
+        mediaId: SEEDED_MEDIA_ID,
+        number: 96_003,
+        language: "en",
+        uploaderId: SEEDED_UPLOADER_ID,
+      })
+      .execute()
+
+    await db
+      .insertInto("tasks")
+      .values({
+        id: taskId,
+        type: "UPLOAD_CHAPTER",
+        status: "PENDING",
+        sessionId: uploadId,
+        payload: {
+          chapterId,
+          mediaId: SEEDED_MEDIA_ID,
+          uploadId,
+          pages: [{ pageId, stagingKey: `staging/chapters/${chapterId}/${uploadId}/missing` }],
+        },
+      })
+      .execute()
+
+    await expect(
+      processChapterUpload({ db, s3, s3Bucket }, { taskId }, { isFinalAttempt: false }),
+    ).rejects.toThrow(Error)
+
+    const task = await db
+      .selectFrom("tasks")
+      .select(["status"])
+      .where("id", "=", taskId)
+      .executeTakeFirstOrThrow()
+
+    expect(task.status).toBe("DOWNLOADING")
+  })
+
+  test("deletes already-processed pages when the final attempt fails", async ({ services }) => {
+    const { db, s3, s3Bucket } = services
+    const chapterId = crypto.randomUUID()
+    const uploadId = crypto.randomUUID()
+    const taskId = crypto.randomUUID()
+    const stagingKey = `staging/chapters/${chapterId}/${uploadId}/0`
+
+    await db
+      .insertInto("chapters")
+      .values({
+        id: chapterId,
+        mediaId: SEEDED_MEDIA_ID,
+        number: 96_004,
+        language: "en",
+        uploaderId: SEEDED_UPLOADER_ID,
+      })
+      .execute()
+
+    await s3.send(
+      new PutObjectCommand({
+        Bucket: s3Bucket,
+        Key: stagingKey,
+        Body: await makeTinyJpeg(),
+        ContentType: "image/jpeg",
+      }),
+    )
+
+    await db
+      .insertInto("tasks")
+      .values({
+        id: taskId,
+        type: "UPLOAD_CHAPTER",
+        status: "PENDING",
+        sessionId: uploadId,
+        payload: {
+          chapterId,
+          mediaId: SEEDED_MEDIA_ID,
+          uploadId,
+          pages: [
+            { pageId: crypto.randomUUID(), stagingKey },
+            {
+              pageId: crypto.randomUUID(),
+              stagingKey: `staging/chapters/${chapterId}/${uploadId}/missing`,
+            },
+          ],
+        },
+      })
+      .execute()
+
+    await expect(processChapterUpload({ db, s3, s3Bucket }, { taskId })).rejects.toThrow(Error)
+
+    const listed = await s3.send(
+      new ListObjectsV2Command({
+        Bucket: s3Bucket,
+        Prefix: `medias/${SEEDED_MEDIA_ID}/chapters/${chapterId}/`,
+      }),
+    )
+
+    expect(listed.Contents ?? []).toHaveLength(0)
+
+    const chapter = await db
+      .selectFrom("chapters")
+      .select(["pages"])
+      .where("id", "=", chapterId)
+      .executeTakeFirstOrThrow()
+
+    expect(chapter.pages).toBeNull()
+  })
+
+  test(
+    "fails without downloading when a staged page is over the size limit",
+    { timeout: 30_000 },
+    async ({ services }) => {
+      const { db, s3, s3Bucket } = services
+      const chapterId = crypto.randomUUID()
+      const uploadId = crypto.randomUUID()
+      const taskId = crypto.randomUUID()
+      const pageId = crypto.randomUUID()
+      const stagingKey = `staging/chapters/${chapterId}/${uploadId}/0`
+
+      await db
+        .insertInto("chapters")
+        .values({
+          id: chapterId,
+          mediaId: SEEDED_MEDIA_ID,
+          number: 96_005,
+          language: "en",
+          uploaderId: SEEDED_UPLOADER_ID,
+        })
+        .execute()
+
+      await s3.send(
+        new PutObjectCommand({
+          Bucket: s3Bucket,
+          Key: stagingKey,
+          Body: Buffer.alloc(config.images.maxChapterPageSizeBytes + 1),
+          ContentType: "image/jpeg",
+        }),
+      )
+
+      await db
+        .insertInto("tasks")
+        .values({
+          id: taskId,
+          type: "UPLOAD_CHAPTER",
+          status: "PENDING",
+          sessionId: uploadId,
+          payload: {
+            chapterId,
+            mediaId: SEEDED_MEDIA_ID,
+            uploadId,
+            pages: [{ pageId, stagingKey }],
+          },
+        })
+        .execute()
+
+      const send = vi.spyOn(s3, "send")
+
+      try {
+        await expect(processChapterUpload({ db, s3, s3Bucket }, { taskId })).rejects.toThrow(
+          "exceeds max size",
+        )
+
+        const sentFor = (command: typeof GetObjectCommand | typeof HeadObjectCommand) =>
+          send.mock.calls.filter(
+            ([sent]) =>
+              sent instanceof command &&
+              sent.input.Bucket === s3Bucket &&
+              sent.input.Key === stagingKey,
+          )
+
+        expect(sentFor(HeadObjectCommand)).toHaveLength(1)
+        expect(sentFor(GetObjectCommand)).toHaveLength(0)
+      } finally {
+        send.mockRestore()
+      }
+
+      const task = await db
+        .selectFrom("tasks")
+        .select(["status"])
+        .where("id", "=", taskId)
+        .executeTakeFirstOrThrow()
+
+      expect(task.status).toBe("FAILED")
+    },
+  )
+
+  test("does not overwrite pages written by another upload", async ({ services }) => {
+    const { db, s3, s3Bucket } = services
+    const chapterId = SEEDED_CHAPTER_WITH_PAGES_ID
+    const uploadId = crypto.randomUUID()
+    const taskId = crypto.randomUUID()
+    const pageId = crypto.randomUUID()
+    const stagingKey = `staging/chapters/${chapterId}/${uploadId}/0`
+    const before = await db
+      .selectFrom("chapters")
+      .select(["mediaId", "pages"])
+      .where("id", "=", chapterId)
+      .executeTakeFirstOrThrow()
+
+    await s3.send(
+      new PutObjectCommand({
+        Bucket: s3Bucket,
+        Key: stagingKey,
+        Body: await makeTinyJpeg(),
+        ContentType: "image/jpeg",
+      }),
+    )
+
+    await db
+      .insertInto("tasks")
+      .values({
+        id: taskId,
+        type: "UPLOAD_CHAPTER",
+        status: "PENDING",
+        sessionId: uploadId,
+        payload: {
+          chapterId,
+          mediaId: before.mediaId,
+          uploadId,
+          pages: [{ pageId, stagingKey }],
+        },
+      })
+      .execute()
+
+    await expect(processChapterUpload({ db, s3, s3Bucket }, { taskId })).rejects.toThrow(
+      "already has pages",
+    )
+
+    const after = await db
+      .selectFrom("chapters")
+      .select(["pages"])
+      .where("id", "=", chapterId)
+      .executeTakeFirstOrThrow()
+
+    expect(after.pages).toEqual(before.pages)
+
+    const listed = await s3.send(
+      new ListObjectsV2Command({
+        Bucket: s3Bucket,
+        Prefix: getChapterPageKey(before.mediaId, chapterId, pageId),
+      }),
+    )
+
+    expect(listed.Contents ?? []).toHaveLength(0)
+  })
+
+  test("keeps committed pages when a finished task is redelivered", async ({ services }) => {
+    const { db, s3, s3Bucket } = services
+    const upload = await seedStagedUpload(services, 96_006)
+
+    await processChapterUpload({ db, s3, s3Bucket }, { taskId: upload.taskId })
+    await processChapterUpload({ db, s3, s3Bucket }, { taskId: upload.taskId })
+
+    const state = await readUploadState(services, upload)
+
+    expect(state.status).toBe("FINISHED")
+    expect(state.pages).toEqual([{ id: upload.pageId }])
+    expect(state.pageObjects).toHaveLength(1)
+  })
+
+  test("finishes when an earlier attempt committed the pages but never marked the task FINISHED", async ({
+    services,
+  }) => {
+    const { db, s3, s3Bucket } = services
+    const upload = await seedStagedUpload(services, 96_007)
+
+    await processChapterUpload({ db, s3, s3Bucket }, { taskId: upload.taskId })
+    await db
+      .updateTable("tasks")
+      .set({ status: "DOWNLOADING" })
+      .where("id", "=", upload.taskId)
+      .execute()
+    await s3.send(
+      new PutObjectCommand({
+        Bucket: s3Bucket,
+        Key: upload.stagingKey,
+        Body: await makeTinyJpeg(),
+        ContentType: "image/jpeg",
+      }),
+    )
+
+    await processChapterUpload({ db, s3, s3Bucket }, { taskId: upload.taskId })
+
+    const state = await readUploadState(services, upload)
+
+    expect(state.status).toBe("FINISHED")
+    expect(state.pages).toEqual([{ id: upload.pageId }])
+    expect(state.pageObjects).toHaveLength(1)
+  })
+
+  test("keeps committed pages when a redelivered final attempt fails", async ({ services }) => {
+    const { db, s3, s3Bucket } = services
+    const upload = await seedStagedUpload(services, 96_008)
+
+    await processChapterUpload({ db, s3, s3Bucket }, { taskId: upload.taskId })
+    await db
+      .updateTable("tasks")
+      .set({ status: "DOWNLOADING" })
+      .where("id", "=", upload.taskId)
+      .execute()
+
+    await expect(
+      processChapterUpload({ db, s3, s3Bucket }, { taskId: upload.taskId }),
+    ).rejects.toThrow(Error)
+
+    const state = await readUploadState(services, upload)
+
+    expect(state.status).toBe("FAILED")
+    expect(state.pages).toEqual([{ id: upload.pageId }])
+    expect(state.pageObjects).toHaveLength(1)
   })
 
   test("returns silently when task does not exist", async ({ services }) => {

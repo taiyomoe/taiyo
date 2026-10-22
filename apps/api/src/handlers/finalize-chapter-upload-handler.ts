@@ -3,6 +3,7 @@ import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
 import { checkChapter } from "../middlewares/check-chapter-middleware"
+import { rateLimit } from "../middlewares/rate-limit-middleware"
 import { requireChapterAccess } from "../middlewares/require-chapter-access-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
@@ -51,6 +52,7 @@ export const finalizeChapterUploadHandler = new Hono().post(
     },
   }),
   withAuth("read", "OwnershipRequest"),
+  rateLimit({ prefix: "chapter-upload-finalize", windowMs: 60_000, limit: 60 }),
   validateJson(finalizeChapterUploadSchema),
   checkChapter(),
   requireChapterAccess,
@@ -75,9 +77,7 @@ export const finalizeChapterUploadHandler = new Hono().post(
       return c.fail("CHAPTER_UPLOAD_SESSION_NOT_FOUND")
     }
 
-    c.var.afterCommit(async () => {
-      await chapterUploadQueue.enqueue({ taskId })
-    })
+    await chapterUploadQueue.enqueue({ taskId })
 
     return c.ok({ taskId })
   },
