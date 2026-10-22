@@ -24,8 +24,8 @@ const EXTENSION_TYPES = new Map<string, ImageMimeType>([
 ])
 const ARCHIVE = /\.(?:zip|cbz)$/i
 const IGNORED = /(?:^|\/)(?:__MACOSX|\.[^/]*|thumbs\.db|desktop\.ini)(?:\/|$)/i
-const extensionOf = (name: string) => name.slice(name.lastIndexOf(".") + 1).toLowerCase()
-const imageType = (name: string) => EXTENSION_TYPES.get(extensionOf(name))
+const imageType = (name: string) =>
+  EXTENSION_TYPES.get(name.slice(name.lastIndexOf(".") + 1).toLowerCase())
 const dirname = (path: string) => path.slice(0, Math.max(path.lastIndexOf("/"), 0))
 const basename = (path: string) => path.slice(path.lastIndexOf("/") + 1)
 const naturally = (a: string, b: string) =>
@@ -45,17 +45,20 @@ const readEntries = (reader: FileSystemDirectoryReader) =>
   new Promise<FileSystemEntry[]>((resolve, reject) => {
     reader.readEntries(resolve, reject)
   })
-const readFile = (entry: FileSystemFileEntry) =>
-  new Promise<File>((resolve, reject) => {
-    entry.file(resolve, reject)
-  })
 const isDirectory = (entry: FileSystemEntry): entry is FileSystemDirectoryEntry => entry.isDirectory
 const isFile = (entry: FileSystemEntry): entry is FileSystemFileEntry => entry.isFile
 const walk = async (entry: FileSystemEntry, prefix: string): Promise<DroppedFile[]> => {
   const path = prefix === "" ? entry.name : `${prefix}/${entry.name}`
 
   if (isFile(entry)) {
-    return [{ path, file: await readFile(entry) }]
+    return [
+      {
+        path,
+        file: await new Promise<File>((resolve, reject) => {
+          entry.file(resolve, reject)
+        }),
+      },
+    ]
   }
 
   if (!isDirectory(entry)) {
@@ -85,75 +88,6 @@ export const filesFromDrop = async (items: DataTransferItemList) => {
 export const filesFromInput = (files: FileList | null): DroppedFile[] =>
   [...(files ?? [])].map((file) => ({ path: file.webkitRelativePath || file.name, file }))
 
-const folderChapters = (images: DroppedFile[]): ChapterSource[] =>
-  groupBy(images, (image) => dirname(image.path)).map(([directory, files]) => {
-    const pages = [...files]
-      .sort((a, b) => naturally(a.path, b.path))
-      .map(({ path, file }) => ({
-        key: path,
-        name: basename(path),
-        size: file.size,
-        type: imageType(path) ?? "image/jpeg",
-        file,
-      }))
-
-    return {
-      key: `folder:${directory}:${crypto.randomUUID()}`,
-      name: basename(directory),
-      path: directory,
-      pages: pages.map(({ file: _file, ...page }) => page),
-      open: () => Promise.resolve(new Map(pages.map((page) => [page.key, page.file]))),
-    }
-  })
-const archiveChapters = async ({ path, file }: DroppedFile): Promise<ChapterSource[]> => {
-  const listed: Array<{ name: string; size: number }> = []
-
-  unzipSync(new Uint8Array(await file.arrayBuffer()), {
-    filter: (entry) => {
-      if (!entry.name.endsWith("/") && !IGNORED.test(entry.name) && imageType(entry.name)) {
-        listed.push({ name: entry.name, size: entry.originalSize })
-      }
-
-      return false
-    },
-  })
-
-  const groups = groupBy(listed, (entry) => dirname(entry.name))
-  const archiveName = basename(path).replace(ARCHIVE, "")
-
-  return groups.map(([directory, entries]) => {
-    const pages = [...entries]
-      .sort((a, b) => naturally(a.name, b.name))
-      .map((entry) => ({
-        key: entry.name,
-        name: basename(entry.name),
-        size: entry.size,
-        type: imageType(entry.name) ?? "image/jpeg",
-      }))
-    const wanted = new Set(pages.map((page) => page.key))
-
-    return {
-      key: `archive:${path}:${directory}:${crypto.randomUUID()}`,
-      name: groups.length > 1 && directory !== "" ? basename(directory) : archiveName,
-      path: directory === "" ? archiveName : `${archiveName}/${directory}`,
-      pages,
-      open: async () => {
-        const files = unzipSync(new Uint8Array(await file.arrayBuffer()), {
-          filter: (entry) => wanted.has(entry.name),
-        })
-
-        return new Map(
-          pages.flatMap((page) => {
-            const data = files[page.key]
-
-            return data === undefined ? [] : [[page.key, new Blob([data], { type: page.type })]]
-          }),
-        )
-      },
-    }
-  })
-}
-
 export const readChapterSources = async (dropped: DroppedFile[]): Promise<ReadResult> => {
   const visible = dropped.filter(({ path }) => !IGNORED.test(path))
   const archives = visible.filter(({ path }) => ARCHIVE.test(path))
@@ -162,17 +96,87 @@ export const readChapterSources = async (dropped: DroppedFile[]): Promise<ReadRe
     .filter(({ path }) => !ARCHIVE.test(path) && imageType(path) === undefined)
     .map(({ path }) => basename(path))
   const fromArchives = await Promise.all(
-    archives.map((archive) =>
-      archiveChapters(archive).catch(() => {
-        unsupported.push(basename(archive.path))
+    archives.map(async ({ path, file }) => {
+      try {
+        const listed: Array<{ name: string; size: number }> = []
+
+        unzipSync(new Uint8Array(await file.arrayBuffer()), {
+          filter: (entry) => {
+            if (!entry.name.endsWith("/") && !IGNORED.test(entry.name) && imageType(entry.name)) {
+              listed.push({ name: entry.name, size: entry.originalSize })
+            }
+
+            return false
+          },
+        })
+
+        const groups = groupBy(listed, (entry) => dirname(entry.name))
+        const archiveName = basename(path).replace(ARCHIVE, "")
+
+        return groups.map(([directory, entries]) => {
+          const pages = [...entries]
+            .sort((a, b) => naturally(a.name, b.name))
+            .map((entry) => ({
+              key: entry.name,
+              name: basename(entry.name),
+              size: entry.size,
+              type: imageType(entry.name) ?? "image/jpeg",
+            }))
+          const wanted = new Set(pages.map((page) => page.key))
+
+          return {
+            key: `archive:${path}:${directory}:${crypto.randomUUID()}`,
+            name: groups.length > 1 && directory !== "" ? basename(directory) : archiveName,
+            path: directory === "" ? archiveName : `${archiveName}/${directory}`,
+            pages,
+            open: async () => {
+              const files = unzipSync(new Uint8Array(await file.arrayBuffer()), {
+                filter: (entry) => wanted.has(entry.name),
+              })
+
+              return new Map(
+                pages.flatMap((page) => {
+                  const data = files[page.key]
+
+                  return data === undefined
+                    ? []
+                    : [[page.key, new Blob([data], { type: page.type })]]
+                }),
+              )
+            },
+          }
+        })
+      } catch {
+        unsupported.push(basename(path))
 
         return []
-      }),
-    ),
+      }
+    }),
   )
 
   return {
-    chapters: [...folderChapters(images), ...fromArchives.flat()],
+    chapters: [
+      ...groupBy(images, (image) => dirname(image.path)).map(([directory, files]) => {
+        const pages = [...files]
+          .sort((a, b) => naturally(a.path, b.path))
+          .map(({ path, file }) => ({
+            key: path,
+            name: basename(path),
+            size: file.size,
+            type: imageType(path) ?? "image/jpeg",
+            file,
+          }))
+
+        return {
+          key: `folder:${directory}:${crypto.randomUUID()}`,
+          name: basename(directory),
+          path: directory,
+          pages: pages.map(({ file: _file, ...page }) => page),
+          open: () => Promise.resolve(new Map(pages.map((page) => [page.key, page.file]))),
+        }
+      }),
+      ...fromArchives.flat(),
+    ],
     unsupported,
   }
 }

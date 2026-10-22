@@ -10,20 +10,24 @@ const setup = async (services: Services) => {
   const reviewer = await signInAs(services, { role: "UPLOADER" })
   const submitter = await signInAs(services)
   const mediaId = await seedMedia(services, reviewer.userId)
-  const seed = (
-    number: number,
-    overrides: Parameters<typeof seedChapter>[1] extends infer T ? Partial<T> : never,
-  ) =>
-    seedChapter(services, {
-      mediaId,
-      uploaderId: submitter.userId,
-      number,
-      status: "PENDING",
-      pages: [{ id: randomUUID() }],
-      ...overrides,
-    })
 
-  return { reviewer, submitter, mediaId, seed }
+  return {
+    reviewer,
+    submitter,
+    mediaId,
+    seed: (
+      number: number,
+      overrides: Parameters<typeof seedChapter>[1] extends infer T ? Partial<T> : never,
+    ) =>
+      seedChapter(services, {
+        mediaId,
+        uploaderId: submitter.userId,
+        number,
+        status: "PENDING",
+        pages: [{ id: randomUUID() }],
+        ...overrides,
+      }),
+  }
 }
 const statusesOf = ({ db }: Services, ids: string[]) =>
   db
