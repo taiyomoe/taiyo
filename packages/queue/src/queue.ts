@@ -26,6 +26,6 @@ const getQueue = () => {
 export const getChapterUploadProducer = () =>
   ({
     enqueue: async (data) => {
-      await getQueue().add("process", data, { jobId: `chapter-upload:${data.taskId}` })
+      await getQueue().add("process", data, { jobId: data.taskId })
     },
   }) satisfies ChapterUploadProducer
