@@ -73,17 +73,6 @@ const styles = stylex.create({
     flexShrink: 0,
   },
 })
-const fieldVariant = (suggestion: MediaSuggestion, field: MediaSuggestion["fields"][number]) => {
-  if (suggestion.conflicts.includes(field)) {
-    return "warning"
-  }
-
-  if (suggestion.status === "ACCEPTED") {
-    return suggestion.acceptedFields.includes(field) ? "success" : "secondary"
-  }
-
-  return "outline"
-}
 
 export function SuggestionRow({
   suggestion,
@@ -112,11 +101,21 @@ export function SuggestionRow({
           </Badge>
         </div>
         <div sx={styles.fields}>
-          {suggestion.fields.map((field) => (
-            <Badge key={field} variant={fieldVariant(suggestion, field)}>
-              {FIELD_LABELS[field]()}
-            </Badge>
-          ))}
+          {suggestion.fields.map((field) => {
+            let variant: BadgeVariant = "outline"
+
+            if (suggestion.conflicts.includes(field)) {
+              variant = "warning"
+            } else if (suggestion.status === "ACCEPTED") {
+              variant = suggestion.acceptedFields.includes(field) ? "success" : "secondary"
+            }
+
+            return (
+              <Badge key={field} variant={variant}>
+                {FIELD_LABELS[field]()}
+              </Badge>
+            )
+          })}
         </div>
         <div sx={styles.meta}>
           {showAuthor ? <Uploader uploader={suggestion.author} /> : null}

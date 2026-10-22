@@ -1,6 +1,5 @@
-import type { MediaEditField } from "@taiyomoe/db/constants"
-import type { ReactNode } from "react"
 import * as stylex from "@stylexjs/stylex"
+import { MEDIA_EDIT_FIELDS, type MediaEditField } from "@taiyomoe/db/constants"
 import { ArrowLeft, CheckCircle, Info } from "@taiyomoe/ui/components/icons"
 import { Alert, AlertAction, AlertDescription, AlertTitle } from "@taiyomoe/ui/components/ui/alert"
 import { Badge } from "@taiyomoe/ui/components/ui/badge"
@@ -16,7 +15,7 @@ import {
 import { Field, FieldDescription, FieldLabel } from "@taiyomoe/ui/components/ui/field"
 import { Textarea } from "@taiyomoe/ui/components/ui/textarea"
 import { colors, radius, shadows } from "@taiyomoe/ui/styles/tokens.stylex"
-import { useSuspenseQuery } from "@tanstack/react-query"
+import { useMutation, useSuspenseQuery } from "@tanstack/react-query"
 import { Link, useNavigate } from "@tanstack/react-router"
 import { useState } from "react"
 import type { Session } from "@/lib/queries/session"
@@ -24,21 +23,21 @@ import { AuthAlert } from "@/components/auth/auth-alert"
 import { DashboardPage } from "@/components/dashboard/dashboard-page"
 import { FieldEditor } from "@/components/media-edit/media-edit-fields"
 import {
-  changedFields,
   FIELD_LABELS,
   getFieldsError,
-  type MediaEditDraft,
+  sameField,
   toChanges,
   toDraft,
 } from "@/components/media-edit/media-edit-model"
 import { getMainTitle } from "@/components/media/media-labels"
+import { api } from "@/lib/api"
+import { ensureSuccess } from "@/lib/envelope"
 import { getErrorMessage } from "@/lib/errors"
 import { getPermissions } from "@/lib/permissions"
 import {
+  type MediaEditChanges,
   mediaEditQueryOptions,
-  useSaveMediaEdit,
-  useSuggestMediaEdit,
-  useWithdrawSuggestion,
+  useInvalidateMedia,
 } from "@/lib/queries/media-edit"
 import { mediaQueryOptions } from "@/lib/queries/medias"
 import { m } from "@/paraglide/messages"
@@ -137,85 +136,6 @@ const styles = stylex.create({
   },
 })
 
-function Section({
-  title,
-  changed,
-  children,
-}: {
-  title: string
-  changed: boolean
-  children: ReactNode
-}) {
-  return (
-    <section sx={styles.card}>
-      <div sx={styles.cardHeader}>
-        <h2 sx={styles.cardTitle}>{title}</h2>
-        {changed ? <Badge variant="info">{m.media_edit_changed()}</Badge> : null}
-      </div>
-      {children}
-    </section>
-  )
-}
-
-function MediaEditForm({
-  draft,
-  onChange,
-  changed,
-}: {
-  draft: MediaEditDraft
-  onChange: (draft: MediaEditDraft) => void
-  changed: readonly MediaEditField[]
-}) {
-  return (
-    <div sx={styles.sections}>
-      {SECTIONS.map((section) => (
-        <Section
-          changed={section.fields.some((field) => changed.includes(field))}
-          key={section.fields.join()}
-          title={section.title()}
-        >
-          {section.fields.length === 1 ? (
-            <FieldEditor draft={draft} field={section.fields[0] ?? "titles"} onChange={onChange} />
-          ) : (
-            <div sx={styles.details}>
-              {section.fields.map((field) => (
-                <Field key={field}>
-                  <FieldLabel>{FIELD_LABELS[field]()}</FieldLabel>
-                  <FieldEditor draft={draft} field={field} onChange={onChange} />
-                </Field>
-              ))}
-            </div>
-          )}
-        </Section>
-      ))}
-    </div>
-  )
-}
-
-function SuggestionSent({ mediaId }: { mediaId: string }) {
-  return (
-    <Empty>
-      <EmptyHeader>
-        <EmptyMedia variant="icon">
-          <CheckCircle />
-        </EmptyMedia>
-        <EmptyTitle>{m.media_edit_sent_title()}</EmptyTitle>
-        <EmptyDescription>{m.media_edit_sent_description()}</EmptyDescription>
-      </EmptyHeader>
-      <EmptyContent>
-        <Button
-          render={<Link params={{ mediaId }} search={{ tab: "info" }} to="/media/$mediaId" />}
-        >
-          {m.media_edit_back()}
-        </Button>
-        <Button render={<Link to="/dashboard/my-suggestions" />} variant="outline">
-          {m.dashboard_nav_my_suggestions()}
-        </Button>
-      </EmptyContent>
-    </Empty>
-  )
-}
-
 export function MediaEditPage({ mediaId, user }: { mediaId: string; user: Session["user"] }) {
   const { data } = useSuspenseQuery(mediaEditQueryOptions(mediaId))
   const { data: media } = useSuspenseQuery(mediaQueryOptions(mediaId))
@@ -225,19 +145,70 @@ export function MediaEditPage({ mediaId, user }: { mediaId: string; user: Sessio
   const [draft, setDraft] = useState(() => toDraft({ ...data.current, ...suggestion?.changes }))
   const [note, setNote] = useState(suggestion?.note ?? "")
   const [sent, setSent] = useState(false)
-  const save = useSaveMediaEdit()
-  const suggest = useSuggestMediaEdit()
-  const withdraw = useWithdrawSuggestion()
+  const invalidate = useInvalidateMedia()
+  const save = useMutation({
+    mutationFn: async ({ changes }: { changes: MediaEditChanges }) =>
+      ensureSuccess(await api.medias[":id"].$patch({ param: { id: mediaId }, json: changes })),
+    onSuccess: invalidate,
+  })
+  const suggest = useMutation({
+    mutationFn: async ({
+      suggestionId,
+      changes,
+      note: message,
+    }: {
+      suggestionId: string | null
+      changes: MediaEditChanges
+      note: string
+    }) =>
+      ensureSuccess(
+        suggestionId === null
+          ? await api.medias[":id"].suggestions.$post({
+              param: { id: mediaId },
+              json: { changes, note: message },
+            })
+          : await api["media-suggestions"][":id"].$patch({
+              param: { id: suggestionId },
+              json: { changes, note: message },
+            }),
+      ),
+    onSuccess: invalidate,
+  })
+  const withdraw = useMutation({
+    mutationFn: async (suggestionId: string) =>
+      ensureSuccess(
+        await api["media-suggestions"][":id"].withdraw.$post({ param: { id: suggestionId } }),
+      ),
+    onSuccess: invalidate,
+  })
   const navigate = useNavigate()
   const mutation = direct ? save : suggest
-  const changed = changedFields(draft, base)
+  const changed = MEDIA_EDIT_FIELDS.filter((field) => !sameField(field, draft, base))
   const error = getFieldsError(draft, changed)
   const title = getMainTitle(media.titles) ?? m.media_untitled()
 
   if (sent) {
     return (
       <DashboardPage title={m.media_edit_suggest_title()}>
-        <SuggestionSent mediaId={mediaId} />
+        <Empty>
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              <CheckCircle />
+            </EmptyMedia>
+            <EmptyTitle>{m.media_edit_sent_title()}</EmptyTitle>
+            <EmptyDescription>{m.media_edit_sent_description()}</EmptyDescription>
+          </EmptyHeader>
+          <EmptyContent>
+            <Button
+              render={<Link params={{ mediaId }} search={{ tab: "info" }} to="/media/$mediaId" />}
+            >
+              {m.media_edit_back()}
+            </Button>
+            <Button render={<Link to="/dashboard/my-suggestions" />} variant="outline">
+              {m.dashboard_nav_my_suggestions()}
+            </Button>
+          </EmptyContent>
+        </Empty>
       </DashboardPage>
     )
   }
@@ -286,7 +257,34 @@ export function MediaEditPage({ mediaId, user }: { mediaId: string; user: Sessio
         </Alert>
       )}
       <AuthAlert message={mutation.isError ? getErrorMessage(mutation.error) : null} />
-      <MediaEditForm changed={changed} draft={draft} onChange={setDraft} />
+      <div sx={styles.sections}>
+        {SECTIONS.map((section) => (
+          <section key={section.fields.join()} sx={styles.card}>
+            <div sx={styles.cardHeader}>
+              <h2 sx={styles.cardTitle}>{section.title()}</h2>
+              {section.fields.some((field) => changed.includes(field)) ? (
+                <Badge variant="info">{m.media_edit_changed()}</Badge>
+              ) : null}
+            </div>
+            {section.fields.length === 1 ? (
+              <FieldEditor
+                draft={draft}
+                field={section.fields[0] ?? "titles"}
+                onChange={setDraft}
+              />
+            ) : (
+              <div sx={styles.details}>
+                {section.fields.map((field) => (
+                  <Field key={field}>
+                    <FieldLabel>{FIELD_LABELS[field]()}</FieldLabel>
+                    <FieldEditor draft={draft} field={field} onChange={setDraft} />
+                  </Field>
+                ))}
+              </div>
+            )}
+          </section>
+        ))}
+      </div>
       {direct ? null : (
         <section sx={styles.card}>
           <Field>
@@ -325,7 +323,7 @@ export function MediaEditPage({ mediaId, user }: { mediaId: string; user: Sessio
 
               if (direct) {
                 save.mutate(
-                  { mediaId, changes },
+                  { changes },
                   {
                     onSuccess: () => {
                       void navigate({
@@ -338,7 +336,7 @@ export function MediaEditPage({ mediaId, user }: { mediaId: string; user: Sessio
                 )
               } else {
                 suggest.mutate(
-                  { mediaId, suggestionId: suggestion?.id ?? null, changes, note: note.trim() },
+                  { suggestionId: suggestion?.id ?? null, changes, note: note.trim() },
                   {
                     onSuccess: () => {
                       setSent(true)

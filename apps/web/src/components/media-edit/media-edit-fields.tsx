@@ -57,7 +57,8 @@ import {
   MEDIA_TYPE_LABELS,
 } from "@/components/media/media-labels"
 import { LanguagePicker } from "@/components/submissions/pickers"
-import { staffSearchQueryOptions } from "@/lib/queries/media-edit"
+import { api } from "@/lib/api"
+import { unwrap } from "@/lib/envelope"
 import { m } from "@/paraglide/messages"
 
 const styles = stylex.create({
@@ -209,219 +210,9 @@ const useRowKeys = (length: number) => {
     },
   }
 }
-
-function TitlesEditor({ value, onChange }: Editor<MediaEditTitle[]>) {
-  const rows = useRowKeys(value.length)
-  const error = getTitlesError(value)
-  const update = (index: number, patch: Partial<MediaEditTitle>) => {
-    onChange(value.map((title, i) => (i === index ? { ...title, ...patch } : title)))
-  }
-
-  return (
-    <div sx={styles.stack}>
-      {value.map((title, index) => (
-        <div key={rows.keys[index]} sx={styles.titleRow}>
-          <Button
-            aria-label={m.media_edit_title_main()}
-            aria-pressed={title.isMainTitle}
-            onClick={() => {
-              onChange(value.map((item, i) => ({ ...item, isMainTitle: i === index })))
-            }}
-            size="icon-sm"
-            title={m.media_edit_title_main()}
-            variant="ghost"
-          >
-            <Crown {...stylex.props(title.isMainTitle ? styles.mainOn : styles.mainOff)} />
-          </Button>
-          <Input
-            aria-label={m.media_edit_field_titles()}
-            onChange={(event) => {
-              update(index, { title: event.target.value })
-            }}
-            value={title.title}
-          />
-          <div sx={styles.titleLanguage}>
-            <LanguagePicker
-              onChange={(language) => {
-                update(index, { language })
-              }}
-              value={title.language}
-            />
-          </div>
-          <Toggle
-            onPressedChange={(isAcronym) => {
-              update(index, { isAcronym })
-            }}
-            pressed={title.isAcronym}
-            size="sm"
-            variant="outline"
-          >
-            {m.media_edit_title_acronym()}
-          </Toggle>
-          <div sx={styles.rowActions}>
-            <Button
-              aria-label={m.media_edit_move_up()}
-              disabled={index === 0}
-              onClick={() => {
-                rows.move(index, -1)
-                onChange(move(value, index, -1))
-              }}
-              size="icon-sm"
-              variant="ghost"
-            >
-              <ChevronUp />
-            </Button>
-            <Button
-              aria-label={m.media_edit_move_down()}
-              disabled={index === value.length - 1}
-              onClick={() => {
-                rows.move(index, 1)
-                onChange(move(value, index, 1))
-              }}
-              size="icon-sm"
-              variant="ghost"
-            >
-              <ChevronDown />
-            </Button>
-            <Button
-              aria-label={m.media_edit_remove()}
-              onClick={() => {
-                rows.remove(index)
-                onChange(value.filter((_, i) => i !== index))
-              }}
-              size="icon-sm"
-              variant="ghost"
-            >
-              <Close />
-            </Button>
-          </div>
-        </div>
-      ))}
-      {error === null ? null : (
-        <Field invalid>
-          <FieldError match>{error}</FieldError>
-        </Field>
-      )}
-      <div sx={styles.addRow}>
-        <Button
-          onClick={() => {
-            rows.add()
-            onChange([
-              ...value,
-              { title: "", language: "en", isAcronym: false, isMainTitle: value.length === 0 },
-            ])
-          }}
-          size="sm"
-          variant="outline"
-        >
-          <Plus />
-          {m.media_edit_title_add()}
-        </Button>
-      </div>
-    </div>
-  )
-}
-
 const LANGUAGE_OPTIONS = [...LANGUAGES]
   .map((code) => ({ code, name: getLanguageName(code) }))
   .sort((a, b) => a.name.localeCompare(b.name))
-
-function LanguageAdder({
-  exclude,
-  onAdd,
-}: {
-  exclude: readonly Language[]
-  onAdd: (language: Language) => void
-}) {
-  return (
-    <div sx={styles.addPicker}>
-      <Combobox<(typeof LANGUAGE_OPTIONS)[number]>
-        isItemEqualToValue={(a, b) => a.code === b.code}
-        itemToStringLabel={(item) => item.name}
-        items={LANGUAGE_OPTIONS.filter((option) => !exclude.includes(option.code))}
-        onValueChange={(next) => {
-          if (next !== null) {
-            onAdd(next.code)
-          }
-        }}
-        value={null}
-      >
-        <ComboboxInput placeholder={m.media_edit_synopsis_add()} size="sm" />
-        <ComboboxPopup>
-          <ComboboxList>
-            {(item: (typeof LANGUAGE_OPTIONS)[number]) => (
-              <ComboboxItem key={item.code} value={item}>
-                <span sx={styles.option}>
-                  <LanguageFlag language={item.code} />
-                  {item.name}
-                </span>
-              </ComboboxItem>
-            )}
-          </ComboboxList>
-          <ComboboxEmpty>{m.upload_language_empty()}</ComboboxEmpty>
-        </ComboboxPopup>
-      </Combobox>
-    </div>
-  )
-}
-
-const isLanguage = (value: string): value is Language =>
-  (LANGUAGES as readonly string[]).includes(value)
-
-function SynopsisEditor({ value, onChange }: Editor<MediaEditDraft["synopsis"]>) {
-  const [extra, setExtra] = useState<Language[]>([])
-  const languages = [
-    ...Object.keys(value).filter(isLanguage),
-    ...extra.filter((language) => !(language in value)),
-  ]
-
-  return (
-    <div sx={styles.stack}>
-      {languages.length === 0 ? <p sx={styles.muted}>{m.media_info_no_synopsis()}</p> : null}
-      {languages.map((language) => (
-        <Field key={language}>
-          <div sx={styles.synopsisLabel}>
-            <FieldLabel>
-              <span sx={styles.languageName}>
-                <LanguageFlag language={language} />
-                {getLanguageName(language)}
-              </span>
-            </FieldLabel>
-            <Button
-              aria-label={m.media_edit_remove()}
-              onClick={() => {
-                const { [language]: _removed, ...rest } = value
-
-                setExtra(extra.filter((item) => item !== language))
-                onChange(rest)
-              }}
-              size="icon-sm"
-              variant="ghost"
-            >
-              <Close />
-            </Button>
-          </div>
-          <Textarea
-            maxLength={config.input.maxSynopsisLength}
-            onChange={(event) => {
-              onChange({ ...value, [language]: event.target.value })
-            }}
-            rows={6}
-            value={value[language] ?? ""}
-          />
-        </Field>
-      ))}
-      <div sx={styles.addRow}>
-        <LanguageAdder
-          exclude={languages}
-          onAdd={(language) => {
-            setExtra([...extra, language])
-          }}
-        />
-      </div>
-    </div>
-  )
-}
 
 function EnumSelect<T extends string>({
   value,
@@ -457,101 +248,12 @@ function EnumSelect<T extends string>({
   )
 }
 
-function DateInput({ value, onChange, label }: Editor<string | null> & { label: string }) {
-  return (
-    <Input
-      aria-label={label}
-      onChange={(event) => {
-        onChange(event.target.value === "" ? null : `${event.target.value}T00:00:00.000Z`)
-      }}
-      type="date"
-      value={value?.slice(0, 10) ?? ""}
-    />
-  )
-}
-
 const TAG_OPTIONS = Object.entries(config.tags)
   .map(([key, tag]) => ({ key, name: tag.name.en, category: tag.category }))
   .sort((a, b) => a.name.localeCompare(b.name))
 const TAG_NAMES = new Map(TAG_OPTIONS.map((tag) => [tag.key, tag.name]))
 
 export const getTagName = (key: string) => TAG_NAMES.get(key) ?? key
-
-function TagsEditor({ value, onChange }: Editor<MediaEditDraft["tags"]>) {
-  const [input, setInput] = useState("")
-
-  return (
-    <div sx={styles.stack}>
-      {value.length === 0 ? (
-        <p sx={styles.muted}>{m.media_edit_tags_empty()}</p>
-      ) : (
-        <ul sx={styles.chips}>
-          {value.map((tag) => (
-            <li key={tag.key} sx={styles.chip}>
-              <span sx={[styles.chipLabel, tag.isSpoiler && styles.chipSpoiler]}>
-                {getTagName(tag.key)}
-              </span>
-              <Toggle
-                aria-label={m.media_edit_tag_spoiler()}
-                onPressedChange={(isSpoiler) => {
-                  onChange(
-                    value.map((item) => (item.key === tag.key ? { ...item, isSpoiler } : item)),
-                  )
-                }}
-                pressed={tag.isSpoiler}
-                size="sm"
-                sx={styles.spoilerToggle}
-              >
-                {m.media_edit_tag_spoiler()}
-              </Toggle>
-              <Button
-                aria-label={m.media_edit_remove()}
-                onClick={() => {
-                  onChange(value.filter((item) => item.key !== tag.key))
-                }}
-                size="icon-xs"
-                variant="ghost"
-              >
-                <Close />
-              </Button>
-            </li>
-          ))}
-        </ul>
-      )}
-      <div sx={styles.addPicker}>
-        <Combobox<(typeof TAG_OPTIONS)[number]>
-          inputValue={input}
-          isItemEqualToValue={(a, b) => a.key === b.key}
-          itemToStringLabel={(item) => item.name}
-          items={TAG_OPTIONS.filter((option) => !value.some((tag) => tag.key === option.key))}
-          onInputValueChange={setInput}
-          onValueChange={(next) => {
-            if (next !== null) {
-              onChange([...value, { key: next.key, isSpoiler: false }])
-              setInput("")
-            }
-          }}
-          value={null}
-        >
-          <ComboboxInput placeholder={m.media_edit_tags_add()} size="sm" />
-          <ComboboxPopup>
-            <ComboboxList>
-              {(item: (typeof TAG_OPTIONS)[number]) => (
-                <ComboboxItem key={item.key} value={item}>
-                  <span sx={styles.option}>
-                    {item.name}
-                    <span sx={styles.muted}>{item.category}</span>
-                  </span>
-                </ComboboxItem>
-              )}
-            </ComboboxList>
-            <ComboboxEmpty>{m.media_edit_tags_none()}</ComboboxEmpty>
-          </ComboboxPopup>
-        </Combobox>
-      </div>
-    </div>
-  )
-}
 
 const isNumberKey = (key: string) => (MEDIA_LINK_NUMBER_KEYS as readonly string[]).includes(key)
 const LINK_PLACEHOLDERS: Partial<Record<string, string>> = {
@@ -560,131 +262,12 @@ const LINK_PLACEHOLDERS: Partial<Record<string, string>> = {
   myAnimeList: "1224",
 }
 
-function LinksEditor({ value, onChange }: Editor<MediaEditDraft["links"]>) {
-  return (
-    <div sx={styles.grid}>
-      {MEDIA_LINK_KEYS.map((key) => {
-        const current = value[key]
-        const error = getLinkError(key, current)
-
-        return (
-          <Field invalid={error !== null} key={key}>
-            <FieldLabel>{MEDIA_LINKS[key]?.label ?? key}</FieldLabel>
-            <Input
-              inputMode={isNumberKey(key) ? "numeric" : "url"}
-              onChange={(event) => {
-                const { [key]: _previous, ...rest } = value
-                const text = isNumberKey(key)
-                  ? event.target.value.replace(/\D/g, "")
-                  : event.target.value.trim()
-
-                if (text === "") {
-                  onChange(rest)
-                } else {
-                  onChange({ ...rest, [key]: isNumberKey(key) ? Number(text) : text })
-                }
-              }}
-              placeholder={LINK_PLACEHOLDERS[key] ?? "https://"}
-              value={current === undefined ? "" : String(current)}
-            />
-            {error === null ? null : <FieldError match>{error}</FieldError>}
-          </Field>
-        )
-      })}
-    </div>
-  )
-}
-
 export const STAFF_ROLE_LABELS: Record<StaffRole, () => string> = {
   AUTHOR: m.media_info_authors,
   ARTIST: m.media_info_artists,
 }
 
 type StaffOption = { id: string; name: string }
-
-function StaffPicker({ onPick }: { onPick: (staff: StaffOption) => void }) {
-  const [input, setInput] = useState("")
-  const query = useDeferredValue(input.trim())
-  const { data, isFetching } = useQuery({
-    ...staffSearchQueryOptions(query),
-    enabled: query.length > 0,
-  })
-
-  return (
-    <Combobox<StaffOption>
-      filter={null}
-      inputValue={input}
-      isItemEqualToValue={(a, b) => a.id === b.id}
-      itemToStringLabel={(item) => item.name}
-      items={(data ?? []).map(({ id, name }) => ({ id, name }))}
-      onInputValueChange={setInput}
-      onValueChange={(next) => {
-        if (next !== null) {
-          onPick(next)
-          setInput("")
-        }
-      }}
-      value={null}
-    >
-      <ComboboxInput placeholder={m.media_edit_staff_search()} size="sm" />
-      <ComboboxPopup>
-        <ComboboxList>
-          {(item: StaffOption) => (
-            <ComboboxItem key={item.id} value={item}>
-              {item.name}
-            </ComboboxItem>
-          )}
-        </ComboboxList>
-        <ComboboxEmpty>
-          {isFetching ? m.upload_searching() : m.media_edit_staff_none()}
-        </ComboboxEmpty>
-      </ComboboxPopup>
-    </Combobox>
-  )
-}
-
-function StaffsEditor({ value, onChange }: Editor<MediaEditStaff[]>) {
-  const rows = useRowKeys(value.length)
-
-  return (
-    <div sx={styles.stack}>
-      {value.length === 0 ? <p sx={styles.muted}>{m.media_edit_staff_empty()}</p> : null}
-      {value.map((staff, index) => (
-        <div key={rows.keys[index]} sx={styles.staffRow}>
-          <span sx={styles.staffName}>{staff.name}</span>
-          <EnumSelect
-            label={m.media_edit_staff_role()}
-            labels={STAFF_ROLE_LABELS}
-            onChange={(role) => {
-              onChange(value.map((item, i) => (i === index ? { ...item, role } : item)))
-            }}
-            options={STAFF_ROLES}
-            value={staff.role}
-          />
-          <Button
-            aria-label={m.media_edit_remove()}
-            onClick={() => {
-              rows.remove(index)
-              onChange(value.filter((_, i) => i !== index))
-            }}
-            size="icon-sm"
-            variant="ghost"
-          >
-            <Close />
-          </Button>
-        </div>
-      ))}
-      <div sx={styles.addPicker}>
-        <StaffPicker
-          onPick={(staff) => {
-            rows.add()
-            onChange([...value, { staffId: staff.id, name: staff.name, role: "AUTHOR" }])
-          }}
-        />
-      </div>
-    </div>
-  )
-}
 
 type EditorProps = { draft: MediaEditDraft; onChange: (draft: MediaEditDraft) => void }
 
@@ -709,31 +292,216 @@ const enumEditor =
 const dateEditor =
   (key: "startDate" | "endDate", label: () => string) =>
   ({ draft, onChange }: EditorProps) => (
-    <DateInput
-      label={label()}
-      onChange={(next) => {
-        onChange({ ...draft, [key]: next })
+    <Input
+      aria-label={label()}
+      onChange={(event) => {
+        onChange({
+          ...draft,
+          [key]: event.target.value === "" ? null : `${event.target.value}T00:00:00.000Z`,
+        })
       }}
-      value={draft[key]}
+      type="date"
+      value={draft[key]?.slice(0, 10) ?? ""}
     />
   )
 const EDITORS: Record<MediaEditField, (props: EditorProps) => ReactNode> = {
-  titles: ({ draft, onChange }) => (
-    <TitlesEditor
-      onChange={(titles) => {
-        onChange({ ...draft, titles })
-      }}
-      value={draft.titles}
-    />
-  ),
-  synopsis: ({ draft, onChange }) => (
-    <SynopsisEditor
-      onChange={(synopsis) => {
-        onChange({ ...draft, synopsis })
-      }}
-      value={draft.synopsis}
-    />
-  ),
+  titles: function TitlesEditor({ draft, onChange: change }: EditorProps) {
+    const value = draft.titles
+    const onChange = (next: MediaEditTitle[]) => {
+      change({ ...draft, titles: next })
+    }
+    const rows = useRowKeys(value.length)
+    const error = getTitlesError(value)
+    const update = (index: number, patch: Partial<MediaEditTitle>) => {
+      onChange(value.map((title, i) => (i === index ? { ...title, ...patch } : title)))
+    }
+
+    return (
+      <div sx={styles.stack}>
+        {value.map((title, index) => (
+          <div key={rows.keys[index]} sx={styles.titleRow}>
+            <Button
+              aria-label={m.media_edit_title_main()}
+              aria-pressed={title.isMainTitle}
+              onClick={() => {
+                onChange(value.map((item, i) => ({ ...item, isMainTitle: i === index })))
+              }}
+              size="icon-sm"
+              title={m.media_edit_title_main()}
+              variant="ghost"
+            >
+              <Crown {...stylex.props(title.isMainTitle ? styles.mainOn : styles.mainOff)} />
+            </Button>
+            <Input
+              aria-label={m.media_edit_field_titles()}
+              onChange={(event) => {
+                update(index, { title: event.target.value })
+              }}
+              value={title.title}
+            />
+            <div sx={styles.titleLanguage}>
+              <LanguagePicker
+                onChange={(language) => {
+                  update(index, { language })
+                }}
+                value={title.language}
+              />
+            </div>
+            <Toggle
+              onPressedChange={(isAcronym) => {
+                update(index, { isAcronym })
+              }}
+              pressed={title.isAcronym}
+              size="sm"
+              variant="outline"
+            >
+              {m.media_edit_title_acronym()}
+            </Toggle>
+            <div sx={styles.rowActions}>
+              <Button
+                aria-label={m.media_edit_move_up()}
+                disabled={index === 0}
+                onClick={() => {
+                  rows.move(index, -1)
+                  onChange(move(value, index, -1))
+                }}
+                size="icon-sm"
+                variant="ghost"
+              >
+                <ChevronUp />
+              </Button>
+              <Button
+                aria-label={m.media_edit_move_down()}
+                disabled={index === value.length - 1}
+                onClick={() => {
+                  rows.move(index, 1)
+                  onChange(move(value, index, 1))
+                }}
+                size="icon-sm"
+                variant="ghost"
+              >
+                <ChevronDown />
+              </Button>
+              <Button
+                aria-label={m.media_edit_remove()}
+                onClick={() => {
+                  rows.remove(index)
+                  onChange(value.filter((_, i) => i !== index))
+                }}
+                size="icon-sm"
+                variant="ghost"
+              >
+                <Close />
+              </Button>
+            </div>
+          </div>
+        ))}
+        {error === null ? null : (
+          <Field invalid>
+            <FieldError match>{error}</FieldError>
+          </Field>
+        )}
+        <div sx={styles.addRow}>
+          <Button
+            onClick={() => {
+              rows.add()
+              onChange([
+                ...value,
+                { title: "", language: "en", isAcronym: false, isMainTitle: value.length === 0 },
+              ])
+            }}
+            size="sm"
+            variant="outline"
+          >
+            <Plus />
+            {m.media_edit_title_add()}
+          </Button>
+        </div>
+      </div>
+    )
+  },
+  synopsis: function SynopsisEditor({ draft, onChange: change }: EditorProps) {
+    const value = draft.synopsis
+    const onChange = (next: MediaEditDraft["synopsis"]) => {
+      change({ ...draft, synopsis: next })
+    }
+    const [extra, setExtra] = useState<Language[]>([])
+    const languages = [
+      ...Object.keys(value).filter((key): key is Language =>
+        (LANGUAGES as readonly string[]).includes(key),
+      ),
+      ...extra.filter((language) => !(language in value)),
+    ]
+
+    return (
+      <div sx={styles.stack}>
+        {languages.length === 0 ? <p sx={styles.muted}>{m.media_info_no_synopsis()}</p> : null}
+        {languages.map((language) => (
+          <Field key={language}>
+            <div sx={styles.synopsisLabel}>
+              <FieldLabel>
+                <span sx={styles.languageName}>
+                  <LanguageFlag language={language} />
+                  {getLanguageName(language)}
+                </span>
+              </FieldLabel>
+              <Button
+                aria-label={m.media_edit_remove()}
+                onClick={() => {
+                  const { [language]: _removed, ...rest } = value
+
+                  setExtra(extra.filter((item) => item !== language))
+                  onChange(rest)
+                }}
+                size="icon-sm"
+                variant="ghost"
+              >
+                <Close />
+              </Button>
+            </div>
+            <Textarea
+              maxLength={config.input.maxSynopsisLength}
+              onChange={(event) => {
+                onChange({ ...value, [language]: event.target.value })
+              }}
+              rows={6}
+              value={value[language] ?? ""}
+            />
+          </Field>
+        ))}
+        <div sx={styles.addRow}>
+          <div sx={styles.addPicker}>
+            <Combobox<(typeof LANGUAGE_OPTIONS)[number]>
+              isItemEqualToValue={(a, b) => a.code === b.code}
+              itemToStringLabel={(item) => item.name}
+              items={LANGUAGE_OPTIONS.filter((option) => !languages.includes(option.code))}
+              onValueChange={(next) => {
+                if (next !== null) {
+                  setExtra([...extra, next.code])
+                }
+              }}
+              value={null}
+            >
+              <ComboboxInput placeholder={m.media_edit_synopsis_add()} size="sm" />
+              <ComboboxPopup>
+                <ComboboxList>
+                  {(item: (typeof LANGUAGE_OPTIONS)[number]) => (
+                    <ComboboxItem key={item.code} value={item}>
+                      <span sx={styles.option}>
+                        <LanguageFlag language={item.code} />
+                        {item.name}
+                      </span>
+                    </ComboboxItem>
+                  )}
+                </ComboboxList>
+                <ComboboxEmpty>{m.upload_language_empty()}</ComboboxEmpty>
+              </ComboboxPopup>
+            </Combobox>
+          </div>
+        </div>
+      </div>
+    )
+  },
   type: enumEditor("type", MEDIA_TYPES, MEDIA_TYPE_LABELS, m.media_info_type),
   status: enumEditor("status", MEDIA_STATUSES, MEDIA_STATUS_LABELS, m.media_info_status),
   source: enumEditor("source", MEDIA_SOURCES, MEDIA_SOURCE_LABELS, m.media_info_source),
@@ -757,30 +525,207 @@ const EDITORS: Record<MediaEditField, (props: EditorProps) => ReactNode> = {
   ),
   startDate: dateEditor("startDate", m.media_edit_field_start_date),
   endDate: dateEditor("endDate", m.media_edit_field_end_date),
-  tags: ({ draft, onChange }) => (
-    <TagsEditor
-      onChange={(tags) => {
-        onChange({ ...draft, tags })
-      }}
-      value={draft.tags}
-    />
-  ),
-  links: ({ draft, onChange }) => (
-    <LinksEditor
-      onChange={(links) => {
-        onChange({ ...draft, links })
-      }}
-      value={draft.links}
-    />
-  ),
-  staffs: ({ draft, onChange }) => (
-    <StaffsEditor
-      onChange={(staffs) => {
-        onChange({ ...draft, staffs })
-      }}
-      value={draft.staffs}
-    />
-  ),
+  tags: function TagsEditor({ draft, onChange: change }: EditorProps) {
+    const value = draft.tags
+    const onChange = (next: MediaEditDraft["tags"]) => {
+      change({ ...draft, tags: next })
+    }
+    const [input, setInput] = useState("")
+
+    return (
+      <div sx={styles.stack}>
+        {value.length === 0 ? (
+          <p sx={styles.muted}>{m.media_edit_tags_empty()}</p>
+        ) : (
+          <ul sx={styles.chips}>
+            {value.map((tag) => (
+              <li key={tag.key} sx={styles.chip}>
+                <span sx={[styles.chipLabel, tag.isSpoiler && styles.chipSpoiler]}>
+                  {getTagName(tag.key)}
+                </span>
+                <Toggle
+                  aria-label={m.media_edit_tag_spoiler()}
+                  onPressedChange={(isSpoiler) => {
+                    onChange(
+                      value.map((item) => (item.key === tag.key ? { ...item, isSpoiler } : item)),
+                    )
+                  }}
+                  pressed={tag.isSpoiler}
+                  size="sm"
+                  sx={styles.spoilerToggle}
+                >
+                  {m.media_edit_tag_spoiler()}
+                </Toggle>
+                <Button
+                  aria-label={m.media_edit_remove()}
+                  onClick={() => {
+                    onChange(value.filter((item) => item.key !== tag.key))
+                  }}
+                  size="icon-xs"
+                  variant="ghost"
+                >
+                  <Close />
+                </Button>
+              </li>
+            ))}
+          </ul>
+        )}
+        <div sx={styles.addPicker}>
+          <Combobox<(typeof TAG_OPTIONS)[number]>
+            inputValue={input}
+            isItemEqualToValue={(a, b) => a.key === b.key}
+            itemToStringLabel={(item) => item.name}
+            items={TAG_OPTIONS.filter((option) => !value.some((tag) => tag.key === option.key))}
+            onInputValueChange={setInput}
+            onValueChange={(next) => {
+              if (next !== null) {
+                onChange([...value, { key: next.key, isSpoiler: false }])
+                setInput("")
+              }
+            }}
+            value={null}
+          >
+            <ComboboxInput placeholder={m.media_edit_tags_add()} size="sm" />
+            <ComboboxPopup>
+              <ComboboxList>
+                {(item: (typeof TAG_OPTIONS)[number]) => (
+                  <ComboboxItem key={item.key} value={item}>
+                    <span sx={styles.option}>
+                      {item.name}
+                      <span sx={styles.muted}>{item.category}</span>
+                    </span>
+                  </ComboboxItem>
+                )}
+              </ComboboxList>
+              <ComboboxEmpty>{m.media_edit_tags_none()}</ComboboxEmpty>
+            </ComboboxPopup>
+          </Combobox>
+        </div>
+      </div>
+    )
+  },
+  links: ({ draft, onChange: change }: EditorProps) => {
+    const value = draft.links
+    const onChange = (next: MediaEditDraft["links"]) => {
+      change({ ...draft, links: next })
+    }
+
+    return (
+      <div sx={styles.grid}>
+        {MEDIA_LINK_KEYS.map((key) => {
+          const current = value[key]
+          const error = getLinkError(key, current)
+
+          return (
+            <Field invalid={error !== null} key={key}>
+              <FieldLabel>{MEDIA_LINKS[key]?.label ?? key}</FieldLabel>
+              <Input
+                inputMode={isNumberKey(key) ? "numeric" : "url"}
+                onChange={(event) => {
+                  const { [key]: _previous, ...rest } = value
+                  const text = isNumberKey(key)
+                    ? event.target.value.replace(/\D/g, "")
+                    : event.target.value.trim()
+
+                  if (text === "") {
+                    onChange(rest)
+                  } else {
+                    onChange({ ...rest, [key]: isNumberKey(key) ? Number(text) : text })
+                  }
+                }}
+                placeholder={LINK_PLACEHOLDERS[key] ?? "https://"}
+                value={current === undefined ? "" : String(current)}
+              />
+              {error === null ? null : <FieldError match>{error}</FieldError>}
+            </Field>
+          )
+        })}
+      </div>
+    )
+  },
+  staffs: function StaffsEditor({ draft, onChange: change }: EditorProps) {
+    const value = draft.staffs
+    const onChange = (next: MediaEditStaff[]) => {
+      change({ ...draft, staffs: next })
+    }
+    const rows = useRowKeys(value.length)
+    const [input, setInput] = useState("")
+    const query = useDeferredValue(input.trim())
+    const { data, isFetching } = useQuery({
+      queryKey: ["staffs", "search", query],
+      queryFn: async ({ signal }) =>
+        unwrap(
+          await api.staffs.$get(
+            { query: { search: query, page: "1", perPage: "10" } },
+            { init: { signal } },
+          ),
+        ),
+      enabled: query.length > 0,
+    })
+
+    return (
+      <div sx={styles.stack}>
+        {value.length === 0 ? <p sx={styles.muted}>{m.media_edit_staff_empty()}</p> : null}
+        {value.map((staff, index) => (
+          <div key={rows.keys[index]} sx={styles.staffRow}>
+            <span sx={styles.staffName}>{staff.name}</span>
+            <EnumSelect
+              label={m.media_edit_staff_role()}
+              labels={STAFF_ROLE_LABELS}
+              onChange={(role) => {
+                onChange(value.map((item, i) => (i === index ? { ...item, role } : item)))
+              }}
+              options={STAFF_ROLES}
+              value={staff.role}
+            />
+            <Button
+              aria-label={m.media_edit_remove()}
+              onClick={() => {
+                rows.remove(index)
+                onChange(value.filter((_, i) => i !== index))
+              }}
+              size="icon-sm"
+              variant="ghost"
+            >
+              <Close />
+            </Button>
+          </div>
+        ))}
+        <div sx={styles.addPicker}>
+          <Combobox<StaffOption>
+            filter={null}
+            inputValue={input}
+            isItemEqualToValue={(a, b) => a.id === b.id}
+            itemToStringLabel={(item) => item.name}
+            items={(data ?? []).map(({ id, name }) => ({ id, name }))}
+            onInputValueChange={setInput}
+            onValueChange={(next) => {
+              if (next !== null) {
+                rows.add()
+                onChange([...value, { staffId: next.id, name: next.name, role: "AUTHOR" }])
+                setInput("")
+              }
+            }}
+            value={null}
+          >
+            <ComboboxInput placeholder={m.media_edit_staff_search()} size="sm" />
+            <ComboboxPopup>
+              <ComboboxList>
+                {(item: StaffOption) => (
+                  <ComboboxItem key={item.id} value={item}>
+                    {item.name}
+                  </ComboboxItem>
+                )}
+              </ComboboxList>
+              <ComboboxEmpty>
+                {isFetching ? m.upload_searching() : m.media_edit_staff_none()}
+              </ComboboxEmpty>
+            </ComboboxPopup>
+          </Combobox>
+        </div>
+      </div>
+    )
+  },
 }
 
 export function FieldEditor({ field, ...props }: EditorProps & { field: MediaEditField }) {

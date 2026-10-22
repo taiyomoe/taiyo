@@ -45,18 +45,16 @@ export const Route = createFileRoute("/media/$mediaId_/edit")({
       },
     ],
   }),
-  component: MediaEdit,
+  component: function MediaEdit() {
+    const { session } = Route.useRouteContext()
+    const { mediaId } = Route.useParams()
+
+    return (
+      <AppShell user={session.user}>
+        <Suspense>
+          <MediaEditPage mediaId={mediaId} user={session.user} />
+        </Suspense>
+      </AppShell>
+    )
+  },
 })
-
-function MediaEdit() {
-  const { session } = Route.useRouteContext()
-  const { mediaId } = Route.useParams()
-
-  return (
-    <AppShell user={session.user}>
-      <Suspense>
-        <MediaEditPage mediaId={mediaId} user={session.user} />
-      </Suspense>
-    </AppShell>
-  )
-}

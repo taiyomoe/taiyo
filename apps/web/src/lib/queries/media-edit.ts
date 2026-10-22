@@ -1,7 +1,7 @@
 import type { InferRequestType, InferResponseType } from "hono/client"
-import { queryOptions, useMutation, useQueryClient } from "@tanstack/react-query"
+import { queryOptions, useQueryClient } from "@tanstack/react-query"
 import { api } from "@/lib/api"
-import { ensureSuccess, unwrap, unwrapEnvelope } from "@/lib/envelope"
+import { unwrap, unwrapEnvelope } from "@/lib/envelope"
 
 export const SUGGESTIONS_PER_PAGE = 20
 
@@ -65,19 +65,7 @@ export type MediaSuggestionDetail = InferResponseType<
   200
 >["data"]
 
-export const staffSearchQueryOptions = (search: string) =>
-  queryOptions({
-    queryKey: ["staffs", "search", search],
-    queryFn: async ({ signal }) =>
-      unwrap(
-        await api.staffs.$get(
-          { query: { search, page: "1", perPage: "10" } },
-          { init: { signal } },
-        ),
-      ),
-  })
-
-const useInvalidateMedia = () => {
+export const useInvalidateMedia = () => {
   const queryClient = useQueryClient()
 
   return () =>
@@ -85,84 +73,4 @@ const useInvalidateMedia = () => {
       queryClient.invalidateQueries({ queryKey: ["medias"] }),
       queryClient.invalidateQueries({ queryKey: ["media-suggestions"] }),
     ])
-}
-
-export function useSaveMediaEdit() {
-  const invalidate = useInvalidateMedia()
-
-  return useMutation({
-    mutationFn: async ({ mediaId, changes }: { mediaId: string; changes: MediaEditChanges }) =>
-      ensureSuccess(await api.medias[":id"].$patch({ param: { id: mediaId }, json: changes })),
-    onSuccess: invalidate,
-  })
-}
-
-export function useSuggestMediaEdit() {
-  const invalidate = useInvalidateMedia()
-
-  return useMutation({
-    mutationFn: async ({
-      mediaId,
-      suggestionId,
-      changes,
-      note,
-    }: {
-      mediaId: string
-      suggestionId: string | null
-      changes: MediaEditChanges
-      note: string
-    }) =>
-      ensureSuccess(
-        suggestionId === null
-          ? await api.medias[":id"].suggestions.$post({
-              param: { id: mediaId },
-              json: { changes, note },
-            })
-          : await api["media-suggestions"][":id"].$patch({
-              param: { id: suggestionId },
-              json: { changes, note },
-            }),
-      ),
-    onSuccess: invalidate,
-  })
-}
-
-export function useWithdrawSuggestion() {
-  const invalidate = useInvalidateMedia()
-
-  return useMutation({
-    mutationFn: async (suggestionId: string) =>
-      ensureSuccess(
-        await api["media-suggestions"][":id"].withdraw.$post({ param: { id: suggestionId } }),
-      ),
-    onSuccess: invalidate,
-  })
-}
-
-export function useReviewSuggestion() {
-  const invalidate = useInvalidateMedia()
-
-  return useMutation({
-    mutationFn: async ({
-      suggestionId,
-      accept,
-      note,
-    }: {
-      suggestionId: string
-      accept: MediaEditChanges | null
-      note: string
-    }) =>
-      ensureSuccess(
-        accept === null
-          ? await api["media-suggestions"][":id"].reject.$post({
-              param: { id: suggestionId },
-              json: { note },
-            })
-          : await api["media-suggestions"][":id"].accept.$post({
-              param: { id: suggestionId },
-              json: { changes: accept, note },
-            }),
-      ),
-    onSuccess: invalidate,
-  })
 }
