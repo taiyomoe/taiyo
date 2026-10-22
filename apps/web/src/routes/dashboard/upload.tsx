@@ -545,7 +545,7 @@ export const Route = createFileRoute("/dashboard/upload")({
       void files
         .then(readChapterSources)
         .then((result) => {
-          const added = result.chapters.map((source): Row => {
+          const added = result.chapters.map((source) => {
             const parsed = parseChapterName(source.path)
 
             return {
@@ -557,7 +557,7 @@ export const Route = createFileRoute("/dashboard/upload")({
               pageKeys: source.pages.map((page) => page.key),
               link: "",
               linkOpen: false,
-            }
+            } satisfies Row
           })
 
           setUnsupported(result.unsupported)

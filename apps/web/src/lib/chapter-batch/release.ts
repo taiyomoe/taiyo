@@ -37,9 +37,9 @@ const amountOf = (value: string) => {
 
   return value.trim() !== "" && Number.isFinite(amount) && amount > 0 ? amount : null
 }
-const failed = (error: string): ReleasePlan => ({ error, at: () => null })
+const failed = (error: string) => ({ error, at: () => null }) satisfies ReleasePlan
 
-export const planRelease = (settings: ReleaseSettings, now: number): ReleasePlan => {
+export const planRelease = (settings: ReleaseSettings, now: number) => {
   if (settings.mode === "now") {
     return RIGHT_AWAY
   }
@@ -67,5 +67,5 @@ export const planRelease = (settings: ReleaseSettings, now: number): ReleasePlan
   return {
     error: null,
     at: (index) => new Date(start + index * spacing * UNIT_MS[settings.spacingUnit]),
-  }
+  } satisfies ReleasePlan
 }
