@@ -53,9 +53,7 @@ export const unwrap = async <TBody extends SuccessBody | FailureBody>(
   response: EnvelopeResponse<TBody>,
 ): Promise<Extract<TBody, { success: true }>["data"]> => (await unwrapEnvelope(response)).data
 
-export const ensureSuccess = async (
-  response: EnvelopeResponse<SuccessBody | FailureBody>,
-): Promise<void> => {
+export const ensureSuccess = async (response: EnvelopeResponse<SuccessBody | FailureBody>) => {
   await unwrapEnvelope(response)
 }
 

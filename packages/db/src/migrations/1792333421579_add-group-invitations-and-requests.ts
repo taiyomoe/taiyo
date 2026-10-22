@@ -8,7 +8,7 @@ const PERMISSIONS = [
   "MANAGE_MEMBERS",
 ]
 
-export async function up(db: Kysely<unknown>): Promise<void> {
+export async function up(db: Kysely<unknown>) {
   await db.schema
     .createType("GroupInvitationStatus")
     .asEnum(["PENDING", "ACCEPTED", "DECLINED", "CANCELLED", "EXPIRED"])
@@ -111,7 +111,7 @@ export async function up(db: Kysely<unknown>): Promise<void> {
   `.execute(db)
 }
 
-export async function down(db: Kysely<unknown>): Promise<void> {
+export async function down(db: Kysely<unknown>) {
   await db.schema.dropTable("groupCreationRequests").execute()
   await db.schema.dropIndex("groupOwnershipRequests_status_createdAt_idx").execute()
   await db.schema.alterTable("groupOwnershipRequests").dropColumn("proofLinks").execute()

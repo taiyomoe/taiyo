@@ -79,18 +79,15 @@ export const createGroupInvitationHandler = new Hono().post(
       return c.fail("USER_NOT_FOUND")
     }
 
-    const result = await withGroupLock<
-      | { ok: true; id: string }
-      | { ok: false; error: "FORBIDDEN" | "GROUP_MEMBER_EXISTS" | "GROUP_INVITATION_EXISTS" }
-    >(db, group.id, async (trx) => {
+    const result = await withGroupLock(db, group.id, async (trx) => {
       const locked = await getLockedPermissions(trx, actor, group.id)
 
       if (!locked("group.inviteMember", { groupId: group.id, permissions })) {
-        return { ok: false, error: "FORBIDDEN" }
+        return { ok: false, error: "FORBIDDEN" } as const
       }
 
       if ((await getMembership(trx, group.id, invitee.id)) !== undefined) {
-        return { ok: false, error: "GROUP_MEMBER_EXISTS" }
+        return { ok: false, error: "GROUP_MEMBER_EXISTS" } as const
       }
 
       await trx
@@ -111,7 +108,7 @@ export const createGroupInvitationHandler = new Hono().post(
         .executeTakeFirst()
 
       if (pending !== undefined) {
-        return { ok: false, error: "GROUP_INVITATION_EXISTS" }
+        return { ok: false, error: "GROUP_INVITATION_EXISTS" } as const
       }
 
       const row = await trx
@@ -126,7 +123,7 @@ export const createGroupInvitationHandler = new Hono().post(
         .returning("id")
         .executeTakeFirstOrThrow()
 
-      return { ok: true, id: row.id }
+      return { ok: true, id: row.id } as const
     })
 
     if (!result.ok) {

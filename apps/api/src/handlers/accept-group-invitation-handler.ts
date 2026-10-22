@@ -53,17 +53,7 @@ export const acceptGroupInvitationHandler = new Hono().post(
     }
 
     const { groupId } = found
-    const result = await withGroupLock<
-      | { ok: true }
-      | {
-          ok: false
-          error:
-            | "GROUP_INVITATION_NOT_PENDING"
-            | "GROUP_INVITATION_EXPIRED"
-            | "GROUP_INVITATION_INVALID"
-            | "GROUP_MEMBER_EXISTS"
-        }
-    >(db, groupId, async (trx) => {
+    const result = await withGroupLock(db, groupId, async (trx) => {
       const invitation = await trx
         .selectFrom("groupInvitations")
         .select([
@@ -76,11 +66,11 @@ export const acceptGroupInvitationHandler = new Hono().post(
         .executeTakeFirstOrThrow()
 
       if (invitation.status !== "PENDING") {
-        return { ok: false, error: "GROUP_INVITATION_NOT_PENDING" }
+        return { ok: false, error: "GROUP_INVITATION_NOT_PENDING" } as const
       }
 
       if (invitation.expired) {
-        return { ok: false, error: "GROUP_INVITATION_EXPIRED" }
+        return { ok: false, error: "GROUP_INVITATION_EXPIRED" } as const
       }
 
       const [inviter, inviterMembership] = await Promise.all([
@@ -101,11 +91,11 @@ export const acceptGroupInvitationHandler = new Hono().post(
           memberships: inviterMembership === undefined ? [] : [inviterMembership],
         })("group.inviteMember", { groupId, permissions: invitation.permissions })
       ) {
-        return { ok: false, error: "GROUP_INVITATION_INVALID" }
+        return { ok: false, error: "GROUP_INVITATION_INVALID" } as const
       }
 
       if ((await getMembership(trx, groupId, user.id)) !== undefined) {
-        return { ok: false, error: "GROUP_MEMBER_EXISTS" }
+        return { ok: false, error: "GROUP_MEMBER_EXISTS" } as const
       }
 
       await trx
@@ -125,7 +115,7 @@ export const acceptGroupInvitationHandler = new Hono().post(
         .where("id", "=", id)
         .execute()
 
-      return { ok: true }
+      return { ok: true } as const
     })
 
     if (!result.ok) {
