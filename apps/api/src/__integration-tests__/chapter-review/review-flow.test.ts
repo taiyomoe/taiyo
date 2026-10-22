@@ -35,11 +35,6 @@ const getChapter = ({ db }: Services, id: string) =>
     ])
     .where("id", "=", id)
     .executeTakeFirstOrThrow()
-const objectExists = ({ s3, s3Bucket }: Services, key: string) =>
-  s3
-    .send(new HeadObjectCommand({ Bucket: s3Bucket, Key: key }))
-    .then(() => true)
-    .catch(() => false)
 const setup = async (services: Services) => {
   const admin = await signInAs(services, { role: "ADMIN" })
   const reviewer = await signInAs(services, { role: "UPLOADER" })
@@ -289,7 +284,20 @@ describe("rejecting", () => {
       json: { reason: "Pages are blurry." },
     })
     const exists = await Promise.all(
-      pageIds.map((pageId) => objectExists(services, getChapterPageKey(mediaId, pending, pageId))),
+      pageIds.map(async (pageId) => {
+        try {
+          await services.s3.send(
+            new HeadObjectCommand({
+              Bucket: services.s3Bucket,
+              Key: getChapterPageKey(mediaId, pending, pageId),
+            }),
+          )
+
+          return true
+        } catch {
+          return false
+        }
+      }),
     )
     const mine = await api<Array<{ id: string; status: string; rejectionReason: string }>>(
       app,

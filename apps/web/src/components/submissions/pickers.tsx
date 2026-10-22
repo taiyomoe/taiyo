@@ -46,13 +46,6 @@ const styles = stylex.create({
     fontSize: "0.8125rem",
   },
 })
-const emptyMessage = (query: string, fetching: boolean) => {
-  if (query.length === 0) {
-    return m.upload_media_hint()
-  }
-
-  return fetching ? m.upload_searching() : m.upload_media_empty()
-}
 
 export function MediaPicker({
   value,
@@ -72,6 +65,11 @@ export function MediaPicker({
   const items: MediaOption[] = (data?.data ?? []).flatMap((hit) =>
     hit.mainTitle === null ? [] : [{ id: hit.id, title: hit.mainTitle.title, type: hit.type }],
   )
+  let emptyMessage = isFetching ? m.upload_searching() : m.upload_media_empty()
+
+  if (query.length === 0) {
+    emptyMessage = m.upload_media_hint()
+  }
 
   return (
     <Combobox<MediaOption>
@@ -101,7 +99,7 @@ export function MediaPicker({
             </ComboboxItem>
           )}
         </ComboboxList>
-        <ComboboxEmpty>{emptyMessage(query, isFetching)}</ComboboxEmpty>
+        <ComboboxEmpty>{emptyMessage}</ComboboxEmpty>
       </ComboboxPopup>
     </Combobox>
   )
