@@ -26,9 +26,6 @@ const getDbUrl = (name: string) => {
   return url.toString()
 }
 const sanitize = (raw: string) => raw.replace(/[^a-z0-9]/gi, "_").toLowerCase()
-const getDbName = (taskId: string) => `integration_${sanitize(taskId)}`
-const getBucketName = (taskId: string) => `taiyo-test-${sanitize(taskId).replace(/_/g, "-")}`
-const getMediasIndex = (taskId: string) => `medias_${sanitize(taskId)}`
 const adminClient = new pg.Client({ connectionString: getDbUrl("postgres") })
 const adminClientReady = adminClient.connect()
 const sharedS3 = getS3Client()
@@ -47,9 +44,9 @@ export const test = baseTest.extend<Fixtures>({
   services: async ({ task }, use) => {
     await adminClientReady
 
-    const dbName = getDbName(task.id)
-    const bucketName = getBucketName(task.id)
-    const mediasIndex = getMediasIndex(task.id)
+    const dbName = `integration_${sanitize(task.id)}`
+    const bucketName = `taiyo-test-${sanitize(task.id).replace(/_/g, "-")}`
+    const mediasIndex = `medias_${sanitize(task.id)}`
 
     await adminClient.query(`DROP DATABASE IF EXISTS "${dbName}"`)
     await adminClient.query(`CREATE DATABASE "${dbName}" WITH TEMPLATE "${TEMPLATE_DB}"`)

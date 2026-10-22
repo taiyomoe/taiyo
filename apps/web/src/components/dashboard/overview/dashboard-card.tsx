@@ -42,19 +42,6 @@ const styles = stylex.create({
     fontSize: "0.875rem",
     lineHeight: "1.25rem",
   },
-  figure: {
-    gap: "0.125rem",
-    alignItems: "flex-end",
-    display: "flex",
-    flexDirection: "column",
-    flexShrink: 0,
-  },
-  figureValue: {
-    fontSize: "1.75rem",
-    fontWeight: 700,
-    letterSpacing: "-0.02em",
-    lineHeight: 1,
-  },
   settings: {
     color: colors.mutedForeground,
     flexShrink: 0,
@@ -115,15 +102,6 @@ export function DashboardCard({
       </header>
       {children}
     </Card>
-  )
-}
-
-export function CardFigure({ value, children }: { value: string; children?: ReactNode }) {
-  return (
-    <div sx={styles.figure}>
-      <span sx={styles.figureValue}>{value}</span>
-      {children}
-    </div>
   )
 }
 

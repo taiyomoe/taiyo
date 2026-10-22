@@ -1,26 +1,19 @@
 import { randomUUID } from "node:crypto"
 import { describe, expect } from "vitest"
-import type { Services } from "../../services"
 import { signInAs } from "../helpers/auth"
 import { api } from "../helpers/request"
 import { test } from "../setup"
-
-const seedGroup = async (services: Services, creatorId: string) => {
-  const id = randomUUID()
-
-  await services.db
-    .insertInto("groups")
-    .values({ id, name: `Group ${id}`, creatorId })
-    .execute()
-
-  return id
-}
 
 describe("GET /groups/:id/members", () => {
   test("lists every member of the group with their role", async ({ app, services }) => {
     const { userId: ownerId } = await signInAs(services)
     const { userId: memberId } = await signInAs(services)
-    const groupId = await seedGroup(services, ownerId)
+    const groupId = randomUUID()
+
+    await services.db
+      .insertInto("groups")
+      .values({ id: groupId, name: `Group ${groupId}`, creatorId: ownerId })
+      .execute()
 
     await services.db
       .insertInto("groupMemberships")

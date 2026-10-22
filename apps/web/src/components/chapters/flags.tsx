@@ -123,20 +123,21 @@ export const getLanguageCode = (language: LatestChapter["language"]) =>
 
 const DISPLAY_CODES: Partial<Record<LatestChapter["language"], string>> = { es_la: "es-419" }
 const ROMANIZED_SUFFIX = "_ro"
-const getDisplayName = (code: string) => {
-  try {
-    return new Intl.DisplayNames([getLocale()], { type: "language" }).of(code)
-  } catch {
-    return undefined
-  }
-}
 
 export const getLanguageName = (language: LatestChapter["language"]) => {
   const romanized = language.endsWith(ROMANIZED_SUFFIX)
   const code = romanized
     ? language.slice(0, -ROMANIZED_SUFFIX.length)
     : (DISPLAY_CODES[language] ?? language.replace("_", "-"))
-  const name = getDisplayName(code) ?? getLanguageCode(language)
+  let name: string
+
+  try {
+    name =
+      new Intl.DisplayNames([getLocale()], { type: "language" }).of(code) ??
+      getLanguageCode(language)
+  } catch {
+    name = getLanguageCode(language)
+  }
 
   return romanized ? m.language_romanized({ name }) : name
 }

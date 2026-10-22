@@ -5,20 +5,6 @@ import type { DB } from "../database"
 // Inlined to keep @taiyomoe/db a leaf package (no workspace cycle with @taiyomoe/utils).
 const USERNAME = { minLength: 3, maxLength: 30 }
 const DISPLAY_NAME = { minLength: 3, maxLength: 30 }
-const normalizeUsername = (input: string) => {
-  const normalized = input
-    .slice(0, USERNAME.maxLength)
-    .replaceAll(" ", "_")
-    .replace(/[^a-zA-Z0-9_.]/g, "")
-    .toLowerCase()
-
-  return normalized.length < USERNAME.minLength ? faker.internet.username() : normalized
-}
-const normalizeDisplayName = (input: string) => {
-  const normalized = input.slice(0, DISPLAY_NAME.maxLength).replace(/[^a-zA-Z0-9_.\s]/g, "")
-
-  return normalized.length < DISPLAY_NAME.minLength ? faker.internet.username() : normalized
-}
 const LANGUAGES = [
   "en",
   "pt_br",
@@ -182,25 +168,39 @@ export async function seed(db: Kysely<DB>): Promise<void> {
   await db
     .insertInto("users")
     .values(
-      USERS.map((u) => ({
-        id: u.id,
-        name: u.name,
-        email: u.email,
-        username: normalizeUsername(u.name),
-        displayUsername: normalizeDisplayName(u.name),
-        emailVerified: true,
-        image: faker.datatype.boolean({ probability: 0.7 }) ? null : faker.image.avatarGitHub(),
-        settings: {
-          contentRating: faker.helpers.weightedArrayElement([
-            { value: ["NORMAL", "SUGGESTIVE"], weight: 70 },
-            { value: ["NORMAL", "SUGGESTIVE", "NSFW"], weight: 15 },
-            { value: ["NORMAL", "SUGGESTIVE", "NSFW", "NSFL"], weight: 15 },
-          ]),
-          preferredTitles: faker.helpers.arrayElement(LANGUAGES),
-          showFollowing: faker.datatype.boolean({ probability: 0.7 }),
-          showLibrary: faker.datatype.boolean({ probability: 0.7 }),
-        },
-      })),
+      USERS.map((u) => {
+        const username = u.name
+          .slice(0, USERNAME.maxLength)
+          .replaceAll(" ", "_")
+          .replace(/[^a-zA-Z0-9_.]/g, "")
+          .toLowerCase()
+        const displayUsername = u.name
+          .slice(0, DISPLAY_NAME.maxLength)
+          .replace(/[^a-zA-Z0-9_.\s]/g, "")
+
+        return {
+          id: u.id,
+          name: u.name,
+          email: u.email,
+          username: username.length < USERNAME.minLength ? faker.internet.username() : username,
+          displayUsername:
+            displayUsername.length < DISPLAY_NAME.minLength
+              ? faker.internet.username()
+              : displayUsername,
+          emailVerified: true,
+          image: faker.datatype.boolean({ probability: 0.7 }) ? null : faker.image.avatarGitHub(),
+          settings: {
+            contentRating: faker.helpers.weightedArrayElement([
+              { value: ["NORMAL", "SUGGESTIVE"], weight: 70 },
+              { value: ["NORMAL", "SUGGESTIVE", "NSFW"], weight: 15 },
+              { value: ["NORMAL", "SUGGESTIVE", "NSFW", "NSFL"], weight: 15 },
+            ]),
+            preferredTitles: faker.helpers.arrayElement(LANGUAGES),
+            showFollowing: faker.datatype.boolean({ probability: 0.7 }),
+            showLibrary: faker.datatype.boolean({ probability: 0.7 }),
+          },
+        }
+      }),
     )
     .execute()
 

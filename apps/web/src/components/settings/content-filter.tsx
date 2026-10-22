@@ -11,7 +11,8 @@ import {
   EmptyTitle,
 } from "@taiyomoe/ui/components/ui/empty"
 import { Menu, MenuCheckboxItem, MenuPopup, MenuTrigger } from "@taiyomoe/ui/components/ui/menu"
-import { ContentRatingLabel, contentRatingItemSx } from "@/components/settings/content-rating-label"
+import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
+import { ContentRatingLabel } from "@/components/settings/content-rating-label"
 import { type ContentRating, useSettings, useUpdateSettings } from "@/lib/settings"
 import { m } from "@/paraglide/messages"
 
@@ -25,6 +26,38 @@ const CONTENT_RATING_LABELS: Record<ContentRating, () => string> = {
 const styles = stylex.create({
   popup: {
     minWidth: "12.5rem",
+  },
+})
+const itemStyles = stylex.create({
+  SUGGESTIVE: {
+    backgroundColor: {
+      "[data-highlighted]": `color-mix(in srgb, ${colors.contentSuggestive} 14%, transparent)`,
+      default: null,
+    },
+    color: {
+      "[data-highlighted]": `color-mix(in srgb, ${colors.contentSuggestive} 70%, ${colors.foreground})`,
+      default: colors.contentSuggestive,
+    },
+  },
+  NSFW: {
+    backgroundColor: {
+      "[data-highlighted]": `color-mix(in srgb, ${colors.contentNsfw} 15%, transparent)`,
+      default: null,
+    },
+    color: {
+      "[data-highlighted]": `color-mix(in srgb, ${colors.contentNsfw} 70%, ${colors.foreground})`,
+      default: colors.contentNsfw,
+    },
+  },
+  NSFL: {
+    backgroundColor: {
+      "[data-highlighted]": `color-mix(in srgb, ${colors.contentNsfl} 16%, transparent)`,
+      default: null,
+    },
+    color: {
+      "[data-highlighted]": `color-mix(in srgb, ${colors.contentNsfl} 70%, ${colors.foreground})`,
+      default: colors.contentNsfl,
+    },
   },
 })
 
@@ -42,7 +75,7 @@ export function ContentFilterItems() {
         checked={checked}
         closeOnClick={false}
         disabled={last}
-        sx={contentRatingItemSx(rating)}
+        sx={rating === "NORMAL" ? undefined : itemStyles[rating]}
         onCheckedChange={(next) => {
           updateSettings.mutate({
             contentRating: CONTENT_RATINGS.filter((candidate) =>

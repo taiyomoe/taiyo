@@ -11,25 +11,6 @@ const FIRST_PAGE = 1
 const searchSchema = z.object({
   page: z.coerce.number().int().min(FIRST_PAGE).optional(),
 })
-
-export const Route = createFileRoute("/titles")({
-  head: () => ({
-    meta: [
-      { title: m.titles_meta_title() },
-      { name: "description", content: m.titles_meta_description() },
-    ],
-  }),
-  validateSearch: searchSchema,
-  loaderDeps: ({ search: { page } }) => ({ page }),
-  context: ({ deps: { page } }) => ({
-    titlesQueryOptions: searchMediasQueryOptions({ page: page ?? FIRST_PAGE, perPage: PER_PAGE }),
-  }),
-  loader: ({ context }) => {
-    void context.queryClient.query(context.titlesQueryOptions).catch(noop)
-  },
-  component: Titles,
-})
-
 const routeApi = getRouteApi("/titles")
 const styles = stylex.create({
   page: {
@@ -70,25 +51,41 @@ const styles = stylex.create({
   },
 })
 
-function Titles() {
-  const { titlesQueryOptions } = routeApi.useRouteContext()
-  const { data } = useSuspenseQuery(titlesQueryOptions)
+export const Route = createFileRoute("/titles")({
+  head: () => ({
+    meta: [
+      { title: m.titles_meta_title() },
+      { name: "description", content: m.titles_meta_description() },
+    ],
+  }),
+  validateSearch: searchSchema,
+  loaderDeps: ({ search: { page } }) => ({ page }),
+  context: ({ deps: { page } }) => ({
+    titlesQueryOptions: searchMediasQueryOptions({ page: page ?? FIRST_PAGE, perPage: PER_PAGE }),
+  }),
+  loader: ({ context }) => {
+    void context.queryClient.query(context.titlesQueryOptions).catch(noop)
+  },
+  component: function Titles() {
+    const { titlesQueryOptions } = routeApi.useRouteContext()
+    const { data } = useSuspenseQuery(titlesQueryOptions)
 
-  return (
-    <div sx={styles.page}>
-      <h1 sx={styles.heading}>{m.titles_heading()}</h1>
-      <p sx={styles.count}>{m.titles_count({ count: data.meta.total })}</p>
-      {data.data.length === 0 ? (
-        <p sx={styles.count}>{m.titles_empty()}</p>
-      ) : (
-        <ul sx={styles.list}>
-          {data.data.map((hit) => (
-            <li key={hit.id} sx={styles.item}>
-              {hit.mainTitle?.title ?? hit.id}
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
-  )
-}
+    return (
+      <div sx={styles.page}>
+        <h1 sx={styles.heading}>{m.titles_heading()}</h1>
+        <p sx={styles.count}>{m.titles_count({ count: data.meta.total })}</p>
+        {data.data.length === 0 ? (
+          <p sx={styles.count}>{m.titles_empty()}</p>
+        ) : (
+          <ul sx={styles.list}>
+            {data.data.map((hit) => (
+              <li key={hit.id} sx={styles.item}>
+                {hit.mainTitle?.title ?? hit.id}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    )
+  },
+})

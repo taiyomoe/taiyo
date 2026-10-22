@@ -40,10 +40,13 @@ const setup = (error: AuthError | null = null, callbackURL?: string) => {
     },
     callbackURL,
   })
-  const hasCachedSession = () =>
-    queryClient.getQueryState(sessionQueryOptions.queryKey) !== undefined
 
-  return { actions, calls, navigation, hasCachedSession }
+  return {
+    actions,
+    calls,
+    navigation,
+    hasCachedSession: () => queryClient.getQueryState(sessionQueryOptions.queryKey) !== undefined,
+  }
 }
 const credentials = { email: "reader@taiyo.moe", password: "hunter22", rememberMe: true }
 

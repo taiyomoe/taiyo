@@ -49,19 +49,6 @@ const run = (command: string, args: string[]) => {
 }
 const capture = (command: string, args: string[]) =>
   execFileSync(command, args, { cwd: repoRoot, encoding: "utf8" }).trim()
-const isPortFree = (port: number) =>
-  new Promise<boolean>((resolvePort) => {
-    const server = createServer()
-
-    server.once("error", () => {
-      resolvePort(false)
-    })
-    server.listen(port, "127.0.0.1", () => {
-      server.close(() => {
-        resolvePort(true)
-      })
-    })
-  })
 const slotPorts = (base: EnvValues, slot: number) =>
   Object.fromEntries(
     PORT_KEYS.map((key) => [
@@ -69,7 +56,7 @@ const slotPorts = (base: EnvValues, slot: number) =>
       String(Number(requireEnvValue(base, key, rootExamplePath)) + slot * SLOT_STRIDE),
     ]),
   )
-const portsClaimedByOtherCheckouts = () => {
+const findFreeSlot = async (base: EnvValues) => {
   const claimed = new Set<string>()
   const worktrees = capture("git", ["worktree", "list", "--porcelain"])
     .split("\n")
@@ -89,11 +76,6 @@ const portsClaimedByOtherCheckouts = () => {
     }
   }
 
-  return claimed
-}
-const findFreeSlot = async (base: EnvValues) => {
-  const claimed = portsClaimedByOtherCheckouts()
-
   for (let slot = 0; slot < SLOT_COUNT; slot++) {
     const ports = Object.values(slotPorts(base, slot))
 
@@ -101,7 +83,23 @@ const findFreeSlot = async (base: EnvValues) => {
       continue
     }
 
-    const free = await Promise.all(ports.map((port) => isPortFree(Number(port))))
+    const free = await Promise.all(
+      ports.map(
+        (port) =>
+          new Promise<boolean>((resolvePort) => {
+            const server = createServer()
+
+            server.once("error", () => {
+              resolvePort(false)
+            })
+            server.listen(Number(port), "127.0.0.1", () => {
+              server.close(() => {
+                resolvePort(true)
+              })
+            })
+          }),
+      ),
+    )
 
     if (free.every(Boolean)) {
       return slot
@@ -111,49 +109,6 @@ const findFreeSlot = async (base: EnvValues) => {
   throw new Error(
     `Every port slot from 0 to ${SLOT_COUNT - 1} is taken. Free one, or pass --slot explicitly.`,
   )
-}
-const ensureRootEnv = async () => {
-  const base = readEnvFile(rootExamplePath)
-  const exists = existsSync(rootEnvPath)
-
-  if (exists && flags.slot === undefined) {
-    const current = readEnvFile(rootEnvPath)
-    const missing = PORT_KEYS.filter((key) => current[key] === undefined || current[key] === "")
-
-    if (missing.length === 0) {
-      console.log(".env exists, keeping its ports")
-
-      return
-    }
-
-    const offset =
-      Number(current.DATABASE_PORT) -
-      Number(requireEnvValue(base, "DATABASE_PORT", rootExamplePath))
-    const inferred = offset / SLOT_STRIDE
-    const slot =
-      Number.isInteger(inferred) && inferred >= 0 && inferred < SLOT_COUNT
-        ? inferred
-        : await findFreeSlot(base)
-    const ports = slotPorts(base, slot)
-
-    writeEnvValues(rootEnvPath, Object.fromEntries(missing.map((key) => [key, ports[key] ?? ""])))
-    console.log(`.env exists, added ${missing.join(", ")} from port slot ${slot}`)
-
-    return
-  }
-
-  const slot = flags.slot === undefined ? await findFreeSlot(base) : Number(flags.slot)
-
-  if (!Number.isInteger(slot) || slot < 0 || slot >= SLOT_COUNT) {
-    throw new Error(`--slot must be an integer from 0 to ${SLOT_COUNT - 1}`)
-  }
-
-  if (!exists) {
-    copyFileSync(rootExamplePath, rootEnvPath)
-  }
-
-  writeEnvValues(rootEnvPath, slotPorts(base, slot))
-  console.log(`.env ${exists ? "moved to" : "created on"} port slot ${slot}`)
 }
 const localUrl = (port: string) => `http://localhost:${port}`
 const isHyperdxEnabled = (root: EnvValues) =>
@@ -180,7 +135,44 @@ const syncAppEnv = (app: string, derive: (current: EnvValues) => EnvValues) => {
     console.log(`${label} already in sync`)
   }
 }
-const syncAppEnvs = () => {
+
+try {
+  step("Env files")
+  const base = readEnvFile(rootExamplePath)
+  const exists = existsSync(rootEnvPath)
+  const existing = exists ? readEnvFile(rootEnvPath) : {}
+  const missing = PORT_KEYS.filter((key) => existing[key] === undefined || existing[key] === "")
+
+  if (exists && flags.slot === undefined && missing.length === 0) {
+    console.log(".env exists, keeping its ports")
+  } else if (exists && flags.slot === undefined) {
+    const offset =
+      Number(existing.DATABASE_PORT) -
+      Number(requireEnvValue(base, "DATABASE_PORT", rootExamplePath))
+    const inferred = offset / SLOT_STRIDE
+    const slot =
+      Number.isInteger(inferred) && inferred >= 0 && inferred < SLOT_COUNT
+        ? inferred
+        : await findFreeSlot(base)
+    const ports = slotPorts(base, slot)
+
+    writeEnvValues(rootEnvPath, Object.fromEntries(missing.map((key) => [key, ports[key] ?? ""])))
+    console.log(`.env exists, added ${missing.join(", ")} from port slot ${slot}`)
+  } else {
+    const slot = flags.slot === undefined ? await findFreeSlot(base) : Number(flags.slot)
+
+    if (!Number.isInteger(slot) || slot < 0 || slot >= SLOT_COUNT) {
+      throw new Error(`--slot must be an integer from 0 to ${SLOT_COUNT - 1}`)
+    }
+
+    if (!exists) {
+      copyFileSync(rootExamplePath, rootEnvPath)
+    }
+
+    writeEnvValues(rootEnvPath, slotPorts(base, slot))
+    console.log(`.env ${exists ? "moved to" : "created on"} port slot ${slot}`)
+  }
+
   const root = readEnvFile(rootEnvPath)
   const get = (key: string) => requireEnvValue(root, key, rootEnvPath)
   const credentials = `${encodeURIComponent(get("DATABASE_USERNAME"))}:${encodeURIComponent(get("DATABASE_PASSWORD"))}`
@@ -222,53 +214,76 @@ const syncAppEnvs = () => {
     VITE_API_URL: apiUrl,
     VITE_BETTER_AUTH_URL: apiUrl,
   }))
-}
-const databaseIsEmpty = () => {
-  const root = readEnvFile(rootEnvPath)
-  const count = capture("docker", [
-    "compose",
-    "exec",
-    "-T",
-    "postgres",
-    "psql",
-    "-U",
-    requireEnvValue(root, "DATABASE_USERNAME", rootEnvPath),
-    "-d",
-    requireEnvValue(root, "DATABASE_NAME", rootEnvPath),
-    "-tAc",
-    "select count(*) from users",
-  ])
 
-  return count === "0"
-}
-const createDevSessions = () =>
-  capture("pnpm", ["--silent", "-F", "@taiyomoe/scripts", "cli", "dev-sessions"])
-    .split("\n")
-    .filter((line) => line.startsWith("{"))
-    .map((line) => {
-      const session: unknown = JSON.parse(line)
+  if (!flags["env-only"]) {
+    if (!existsSync(join(repoRoot, "node_modules"))) {
+      step("Installing dependencies")
+      run("pnpm", ["install"])
+    }
 
-      if (
-        typeof session !== "object" ||
-        session === null ||
-        !("username" in session) ||
-        !("cookie" in session) ||
-        typeof session.username !== "string" ||
-        typeof session.cookie !== "string"
-      ) {
-        throw new Error(`Unexpected dev-sessions output: ${line}`)
+    step("Starting infrastructure")
+    run("docker", ["compose", "up", "-d", "--wait"])
+
+    step("Creating the S3 bucket")
+    run("pnpm", ["-F", "@taiyomoe/scripts", "cli", "init-s3"])
+
+    step("Migrating the database")
+    run("pnpm", ["-F", "@taiyomoe/db", "kysely", "migrate", "latest"])
+
+    const userCount = capture("docker", [
+      "compose",
+      "exec",
+      "-T",
+      "postgres",
+      "psql",
+      "-U",
+      requireEnvValue(root, "DATABASE_USERNAME", rootEnvPath),
+      "-d",
+      requireEnvValue(root, "DATABASE_NAME", rootEnvPath),
+      "-tAc",
+      "select count(*) from users",
+    ])
+
+    if (userCount === "0") {
+      step("Seeding the database")
+      run("pnpm", ["-F", "@taiyomoe/db", "kysely", "seed", "run"])
+    } else {
+      step("Database already has data, seeding only the dev accounts and featured medias")
+
+      for (const seed of ["1780056748390_dev-accounts", "1791888129084_featured-medias"]) {
+        run("pnpm", ["-F", "@taiyomoe/db", "kysely", "seed", "run", "--specific", seed])
       }
+    }
 
-      return { username: session.username, cookie: session.cookie }
-    })
-const printSummary = (sessions: Array<{ username: string; cookie: string }>) => {
-  const root = readEnvFile(rootEnvPath)
-  const url = (key: string) => localUrl(requireEnvValue(root, key, rootEnvPath))
-  const cookies = sessions
-    .map(({ username, cookie }) => `    ${username.padEnd(6)} ${cookie}`)
-    .join("\n")
+    step("Indexing medias in Meilisearch")
+    run("pnpm", ["-F", "@taiyomoe/scripts", "cli", "init-meilisearch"])
 
-  console.log(`
+    step("Creating dev sign-in sessions")
+    const sessions = capture("pnpm", ["--silent", "-F", "@taiyomoe/scripts", "cli", "dev-sessions"])
+      .split("\n")
+      .filter((line) => line.startsWith("{"))
+      .map((line) => {
+        const session: unknown = JSON.parse(line)
+
+        if (
+          typeof session !== "object" ||
+          session === null ||
+          !("username" in session) ||
+          !("cookie" in session) ||
+          typeof session.username !== "string" ||
+          typeof session.cookie !== "string"
+        ) {
+          throw new Error(`Unexpected dev-sessions output: ${line}`)
+        }
+
+        return { username: session.username, cookie: session.cookie }
+      })
+    const url = (key: string) => localUrl(requireEnvValue(root, key, rootEnvPath))
+    const cookies = sessions
+      .map(({ username, cookie }) => `    ${username.padEnd(6)} ${cookie}`)
+      .join("\n")
+
+    console.log(`
 \u001B[1mReady.\u001B[0m Start the apps with \`pnpm dev\`, or \`pnpm dev:tunnel\` for public URLs.
 
   Web            ${url("WEB_PORT")}
@@ -281,51 +296,8 @@ ${isHyperdxEnabled(root) ? `  HyperDX        ${url("HYPERDX_PORT")}\n` : ""}  Ru
   later runs). Under \`pnpm dev:tunnel\`, name it __Secure-better-auth.session_token.
 ${cookies}
 `)
-}
-const main = async () => {
-  step("Env files")
-  await ensureRootEnv()
-  syncAppEnvs()
-
-  if (flags["env-only"]) {
-    return
   }
-
-  if (!existsSync(join(repoRoot, "node_modules"))) {
-    step("Installing dependencies")
-    run("pnpm", ["install"])
-  }
-
-  step("Starting infrastructure")
-  run("docker", ["compose", "up", "-d", "--wait"])
-
-  step("Creating the S3 bucket")
-  run("pnpm", ["-F", "@taiyomoe/scripts", "cli", "init-s3"])
-
-  step("Migrating the database")
-  run("pnpm", ["-F", "@taiyomoe/db", "kysely", "migrate", "latest"])
-
-  if (databaseIsEmpty()) {
-    step("Seeding the database")
-    run("pnpm", ["-F", "@taiyomoe/db", "kysely", "seed", "run"])
-  } else {
-    step("Database already has data, seeding only the dev accounts and featured medias")
-
-    for (const seed of ["1780056748390_dev-accounts", "1791888129084_featured-medias"]) {
-      run("pnpm", ["-F", "@taiyomoe/db", "kysely", "seed", "run", "--specific", seed])
-    }
-  }
-
-  step("Indexing medias in Meilisearch")
-  run("pnpm", ["-F", "@taiyomoe/scripts", "cli", "init-meilisearch"])
-
-  step("Creating dev sign-in sessions")
-  const sessions = createDevSessions()
-
-  printSummary(sessions)
-}
-
-main().catch((error: unknown) => {
+} catch (error: unknown) {
   console.error(`\n\u001B[31m${error instanceof Error ? error.message : String(error)}\u001B[0m`)
   process.exit(1)
-})
+}

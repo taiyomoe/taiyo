@@ -1,5 +1,5 @@
 import type { InferRequestType, InferResponseType } from "hono/client"
-import { queryOptions, useMutation, useQueryClient } from "@tanstack/react-query"
+import { queryOptions } from "@tanstack/react-query"
 import type { ContentRating } from "@/lib/settings"
 import { api } from "@/lib/api"
 import { unwrap } from "@/lib/envelope"
@@ -36,49 +36,3 @@ export const readingProgressQueryOptions = (
         ),
       ),
   })
-
-export function useSetLibraryStatus(mediaId: string) {
-  const queryClient = useQueryClient()
-  const { queryKey } = libraryEntryQueryOptions(mediaId)
-
-  return useMutation({
-    mutationFn: async (status: LibraryStatus | null) => {
-      if (status === null) {
-        const response = await api.users.me.library[":mediaId"].$delete({ param: { mediaId } })
-
-        return unwrap<Awaited<ReturnType<typeof response.json>>>(response)
-      }
-
-      const response = await api.users.me.library[":mediaId"].$put({
-        param: { mediaId },
-        json: { status },
-      })
-
-      return unwrap<Awaited<ReturnType<typeof response.json>>>(response)
-    },
-    onMutate: async (status) => {
-      await queryClient.cancelQueries({ queryKey })
-
-      const previous = queryClient.getQueryData(queryKey)
-      const now = new Date().toISOString()
-
-      queryClient.setQueryData(
-        queryKey,
-        status === null
-          ? null
-          : {
-              mediaId,
-              status,
-              createdAt: previous?.createdAt ?? now,
-              updatedAt: now,
-            },
-      )
-
-      return { previous }
-    },
-    onError: (_error, _status, context) => {
-      queryClient.setQueryData(queryKey, context?.previous)
-    },
-    onSettled: () => queryClient.invalidateQueries({ queryKey }),
-  })
-}

@@ -1,9 +1,11 @@
 import * as stylex from "@stylexjs/stylex"
+import { DiscordLogo } from "@taiyomoe/ui/components/logos/discord-logo"
+import { GoogleLogo } from "@taiyomoe/ui/components/logos/google-logo"
+import { Button } from "@taiyomoe/ui/components/ui/button"
 import { text } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { SocialProvider } from "@/lib/auth"
-import { DiscordButton } from "@/components/buttons/discord-button"
-import { GoogleButton } from "@/components/buttons/google-button"
 import { scene } from "@/components/scene/scene.stylex"
+import { m } from "@/paraglide/messages"
 
 const styles = stylex.create({
   root: {
@@ -21,6 +23,10 @@ const styles = stylex.create({
     fontSize: text.lg,
     fontWeight: 500,
     height: "3rem",
+  },
+  logo: {
+    height: "1.25rem",
+    width: "1.25rem",
   },
   divider: {
     gap: "0.875rem",
@@ -54,22 +60,32 @@ export const AuthSocialButtons = ({
 }) => (
   <div sx={styles.root}>
     <div sx={styles.providers}>
-      <GoogleButton
+      <Button
+        type="button"
+        variant="outline"
         sx={styles.provider}
         loading={pending === "google"}
         disabled={disabled}
         onClick={() => {
           onSelect("google")
         }}
-      />
-      <DiscordButton
+      >
+        <GoogleLogo {...stylex.props(styles.logo)} />
+        {m.global_google()}
+      </Button>
+      <Button
+        type="button"
+        variant="outline"
         sx={styles.provider}
         loading={pending === "discord"}
         disabled={disabled}
         onClick={() => {
           onSelect("discord")
         }}
-      />
+      >
+        <DiscordLogo {...stylex.props(styles.logo)} />
+        {m.global_discord()}
+      </Button>
     </div>
     <div sx={styles.divider}>
       <span sx={styles.rule} />

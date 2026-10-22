@@ -35,7 +35,6 @@ import {
   CHAPTER_SORTS,
   type ChapterSort,
   type MediaChapter,
-  type MediaChapterFacets,
   mediaChapterFacetsQueryOptions,
   mediaChaptersQueryOptions,
 } from "@/lib/queries/chapters"
@@ -306,6 +305,7 @@ export function MediaChapters({ mediaId, signedIn }: { mediaId: string; signedIn
   const filtered =
     search.lang !== undefined || search.volume !== undefined || search.q !== undefined || unread
   const languages = facets.data?.languages ?? []
+  const selectedLanguage = languages.find((entry) => entry.language === search.lang)
 
   if (facets.data?.total === 0 && search.lang === undefined) {
     return (
@@ -326,13 +326,48 @@ export function MediaChapters({ mediaId, signedIn }: { mediaId: string; signedIn
           value={search.q ?? ""}
         />
         {languages.length >= MIN_LANGUAGES_FOR_FILTER || search.lang !== undefined ? (
-          <LanguageSelect
-            languages={languages}
-            onChange={(lang) => {
-              update({ lang })
+          <Select
+            onValueChange={(next) => {
+              update({ lang: next === null || next === ALL_LANGUAGES ? undefined : next })
             }}
-            value={search.lang}
-          />
+            value={search.lang ?? ALL_LANGUAGES}
+          >
+            <SelectTrigger aria-label={m.media_chapters_language()} sx={styles.trigger}>
+              <SelectValue>
+                {() => (
+                  <span sx={styles.triggerValue}>
+                    {selectedLanguage === undefined ? (
+                      <Languages size={16} {...stylex.props(styles.triggerIcon)} />
+                    ) : (
+                      <LanguageFlag language={selectedLanguage.language} />
+                    )}
+                    <span sx={styles.triggerText}>
+                      {selectedLanguage === undefined
+                        ? m.media_chapters_all_languages()
+                        : getLanguageName(selectedLanguage.language)}
+                    </span>
+                  </span>
+                )}
+              </SelectValue>
+            </SelectTrigger>
+            <SelectPopup>
+              <SelectItem value={ALL_LANGUAGES}>
+                <span sx={styles.item}>
+                  <Languages size={16} {...stylex.props(styles.triggerIcon)} />
+                  {m.media_chapters_all_languages()}
+                </span>
+              </SelectItem>
+              {languages.map((entry) => (
+                <SelectItem key={entry.language} value={entry.language}>
+                  <span sx={styles.item}>
+                    <LanguageFlag language={entry.language} />
+                    {getLanguageName(entry.language)}
+                    <span sx={styles.itemCount}>{entry.count}</span>
+                  </span>
+                </SelectItem>
+              ))}
+            </SelectPopup>
+          </Select>
         ) : null}
         <Tabs
           onValueChange={(value: ChapterSort) => {
@@ -362,13 +397,42 @@ export function MediaChapters({ mediaId, signedIn }: { mediaId: string; signedIn
       </div>
       <div sx={styles.body}>
         {facets.data !== undefined && facets.data.volumes.some(({ volume }) => volume !== null) ? (
-          <VolumeRail
-            facets={facets.data}
-            onSelect={(volume) => {
-              update({ volume })
-            }}
-            selected={search.volume}
-          />
+          <nav aria-label={m.media_chapters_volumes()}>
+            <ul sx={styles.rail}>
+              <VolumeItem
+                active={search.volume === undefined}
+                count={facets.data.total}
+                name={m.media_chapters_all()}
+                onClick={() => {
+                  update({ volume: undefined })
+                }}
+                range={
+                  facets.data.total === 0
+                    ? null
+                    : getRange(
+                        Math.min(...facets.data.volumes.map((volume) => volume.firstNumber)),
+                        Math.max(...facets.data.volumes.map((volume) => volume.lastNumber)),
+                      )
+                }
+              />
+              {facets.data.volumes.map((volume) => {
+                const value = volume.volume ?? NO_VOLUME
+
+                return (
+                  <VolumeItem
+                    key={value}
+                    active={search.volume === value}
+                    count={volume.count}
+                    name={getVolumeName(volume.volume)}
+                    onClick={() => {
+                      update({ volume: value })
+                    }}
+                    range={getRange(volume.firstNumber, volume.lastNumber)}
+                  />
+                )
+              })}
+            </ul>
+          </nav>
         ) : null}
         <MediaChapterList
           chapters={chapters.data?.data}
@@ -444,104 +508,6 @@ function ChapterSearchField({
   )
 }
 
-type LanguageSelectProps = {
-  languages: MediaChapterFacets["languages"]
-  value: string | undefined
-  onChange: (language: string | undefined) => void
-}
-
-function LanguageSelect({ languages, value, onChange }: LanguageSelectProps) {
-  const selected = languages.find((entry) => entry.language === value)
-
-  return (
-    <Select
-      onValueChange={(next) => {
-        onChange(next === null || next === ALL_LANGUAGES ? undefined : next)
-      }}
-      value={value ?? ALL_LANGUAGES}
-    >
-      <SelectTrigger aria-label={m.media_chapters_language()} sx={styles.trigger}>
-        <SelectValue>
-          {() => (
-            <span sx={styles.triggerValue}>
-              {selected === undefined ? (
-                <Languages size={16} {...stylex.props(styles.triggerIcon)} />
-              ) : (
-                <LanguageFlag language={selected.language} />
-              )}
-              <span sx={styles.triggerText}>
-                {selected === undefined
-                  ? m.media_chapters_all_languages()
-                  : getLanguageName(selected.language)}
-              </span>
-            </span>
-          )}
-        </SelectValue>
-      </SelectTrigger>
-      <SelectPopup>
-        <SelectItem value={ALL_LANGUAGES}>
-          <span sx={styles.item}>
-            <Languages size={16} {...stylex.props(styles.triggerIcon)} />
-            {m.media_chapters_all_languages()}
-          </span>
-        </SelectItem>
-        {languages.map((entry) => (
-          <SelectItem key={entry.language} value={entry.language}>
-            <span sx={styles.item}>
-              <LanguageFlag language={entry.language} />
-              {getLanguageName(entry.language)}
-              <span sx={styles.itemCount}>{entry.count}</span>
-            </span>
-          </SelectItem>
-        ))}
-      </SelectPopup>
-    </Select>
-  )
-}
-
-type VolumeRailProps = {
-  facets: MediaChapterFacets
-  selected: string | undefined
-  onSelect: (volume: string | undefined) => void
-}
-
-function VolumeRail({ facets, selected, onSelect }: VolumeRailProps) {
-  const first = Math.min(...facets.volumes.map((volume) => volume.firstNumber))
-  const last = Math.max(...facets.volumes.map((volume) => volume.lastNumber))
-
-  return (
-    <nav aria-label={m.media_chapters_volumes()}>
-      <ul sx={styles.rail}>
-        <VolumeItem
-          active={selected === undefined}
-          count={facets.total}
-          name={m.media_chapters_all()}
-          onClick={() => {
-            onSelect(undefined)
-          }}
-          range={facets.total === 0 ? null : getRange(first, last)}
-        />
-        {facets.volumes.map((volume) => {
-          const value = volume.volume ?? NO_VOLUME
-
-          return (
-            <VolumeItem
-              key={value}
-              active={selected === value}
-              count={volume.count}
-              name={getVolumeName(volume.volume)}
-              onClick={() => {
-                onSelect(value)
-              }}
-              range={getRange(volume.firstNumber, volume.lastNumber)}
-            />
-          )
-        })}
-      </ul>
-    </nav>
-  )
-}
-
 type VolumeItemProps = {
   name: string
   range: string | null
@@ -598,6 +564,31 @@ function MediaChapterList({
     previousPage.current = page
   }, [page])
 
+  let body = <ChapterListSkeleton count={6} />
+
+  if (chapters?.length === 0) {
+    body = (
+      <Empty sx={styles.empty}>
+        <EmptyHeader>
+          <EmptyMedia variant="icon">
+            <Search size={18} />
+          </EmptyMedia>
+          <EmptyTitle>{m.media_chapters_empty_title()}</EmptyTitle>
+          <EmptyDescription>{m.media_chapters_empty_description()}</EmptyDescription>
+        </EmptyHeader>
+        {filtered ? (
+          <EmptyContent>
+            <Button onClick={onClear} size="sm" variant="outline">
+              {m.media_chapters_clear()}
+            </Button>
+          </EmptyContent>
+        ) : null}
+      </Empty>
+    )
+  } else if (chapters !== undefined) {
+    body = <ChapterList chapters={chapters} sx={stale && styles.stale} />
+  }
+
   return (
     <section aria-labelledby="media-chapters-title" ref={ref} sx={styles.list}>
       <div sx={styles.card}>
@@ -611,12 +602,7 @@ function MediaChapterList({
             </span>
           )}
         </div>
-        <MediaChapterListBody
-          chapters={chapters}
-          filtered={filtered}
-          onClear={onClear}
-          stale={stale}
-        />
+        {body}
       </div>
       <PagePagination
         onJump={(target) => {
@@ -637,38 +623,4 @@ function MediaChapterList({
       />
     </section>
   )
-}
-
-type MediaChapterListBodyProps = Pick<
-  MediaChapterListProps,
-  "chapters" | "stale" | "filtered" | "onClear"
->
-
-function MediaChapterListBody({ chapters, stale, filtered, onClear }: MediaChapterListBodyProps) {
-  if (chapters === undefined) {
-    return <ChapterListSkeleton count={6} />
-  }
-
-  if (chapters.length === 0) {
-    return (
-      <Empty sx={styles.empty}>
-        <EmptyHeader>
-          <EmptyMedia variant="icon">
-            <Search size={18} />
-          </EmptyMedia>
-          <EmptyTitle>{m.media_chapters_empty_title()}</EmptyTitle>
-          <EmptyDescription>{m.media_chapters_empty_description()}</EmptyDescription>
-        </EmptyHeader>
-        {filtered ? (
-          <EmptyContent>
-            <Button onClick={onClear} size="sm" variant="outline">
-              {m.media_chapters_clear()}
-            </Button>
-          </EmptyContent>
-        ) : null}
-      </Empty>
-    )
-  }
-
-  return <ChapterList chapters={chapters} sx={stale && styles.stale} />
 }

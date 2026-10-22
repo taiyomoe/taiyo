@@ -1,10 +1,10 @@
+import { useSearch } from "@tanstack/react-router"
 import { useState } from "react"
 import type { AuthResult, SocialProvider } from "@/lib/auth"
-import { useAuthRedirect } from "@/components/auth/use-auth-redirect"
 import { useAuthActions } from "@/lib/use-auth-actions"
 
 export const useAuthForm = () => {
-  const actions = useAuthActions(useAuthRedirect())
+  const actions = useAuthActions(useSearch({ from: "/auth" }).redirect ?? "/")
   const [error, setError] = useState<string | null>(null)
   const [socialPending, setSocialPending] = useState<SocialProvider | null>(null)
   const run = async (action: () => Promise<AuthResult>) => {
@@ -18,14 +18,6 @@ export const useAuthForm = () => {
 
     return result
   }
-  const onSocial = (provider: SocialProvider) => {
-    setSocialPending(provider)
-    void run(() => actions.signInSocial(provider)).then((result) => {
-      if (!result.ok) {
-        setSocialPending(null)
-      }
-    })
-  }
 
   return {
     error,
@@ -33,7 +25,14 @@ export const useAuthForm = () => {
       setError(null)
     },
     socialPending,
-    onSocial,
+    onSocial: (provider: SocialProvider) => {
+      setSocialPending(provider)
+      void run(() => actions.signInSocial(provider)).then((result) => {
+        if (!result.ok) {
+          setSocialPending(null)
+        }
+      })
+    },
     disabled: socialPending !== null,
     signIn: (values: Parameters<typeof actions.signIn>[0]) => run(() => actions.signIn(values)),
     signUp: (...args: Parameters<typeof actions.signUp>) => run(() => actions.signUp(...args)),

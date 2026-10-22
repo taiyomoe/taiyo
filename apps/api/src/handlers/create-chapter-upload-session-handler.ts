@@ -1,6 +1,6 @@
 import { config } from "@taiyomoe/config"
 import { IMAGE_MIME_TYPES } from "@taiyomoe/db"
-import { getChapterStagingKey, getPresignedUploadUrl } from "@taiyomoe/s3"
+import { getPresignedUploadUrl } from "@taiyomoe/s3"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
@@ -101,7 +101,7 @@ export const createChapterUploadSessionHandler = new Hono().post(
 
     for (const [i, page] of body.pages.entries()) {
       const pageId = crypto.randomUUID()
-      const stagingKey = getChapterStagingKey(chapter.id, uploadId, i)
+      const stagingKey = `staging/chapters/${chapter.id}/${uploadId}/${i}`
       const uploadUrl = await getPresignedUploadUrl(
         s3,
         s3Bucket,
