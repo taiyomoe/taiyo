@@ -1,11 +1,17 @@
-import { CreateBucketCommand, getS3Bucket, getS3Client, PutBucketPolicyCommand } from "@taiyomoe/s3"
+import {
+  CreateBucketCommand,
+  getS3Bucket,
+  getS3Client,
+  PutBucketCorsCommand,
+  PutBucketPolicyCommand,
+} from "@taiyomoe/s3"
 import { defineCommand } from "citty"
 
 export default defineCommand({
   meta: {
     name: "init-s3",
     description:
-      "Create the configured S3 bucket if it does not exist, and let anonymous clients read its objects.",
+      "Create the configured S3 bucket if it does not exist, let anonymous clients read its objects, and let the web app upload chapter pages to it.",
   },
   run: async () => {
     const s3 = getS3Client()
@@ -43,6 +49,30 @@ export default defineCommand({
       }),
     )
     console.log("Objects are publicly readable.")
+
+    const origins = (process.env.CORS_ALLOWED_ORIGINS ?? "")
+      .split(",")
+      .map((origin) => origin.trim())
+      .filter(Boolean)
+
+    if (origins.length > 0) {
+      await s3.send(
+        new PutBucketCorsCommand({
+          Bucket: bucket,
+          CORSConfiguration: {
+            CORSRules: [
+              {
+                AllowedOrigins: origins,
+                AllowedMethods: ["PUT"],
+                AllowedHeaders: ["content-type"],
+                MaxAgeSeconds: 3600,
+              },
+            ],
+          },
+        }),
+      )
+      console.log(`Browser uploads allowed from ${origins.join(", ")}.`)
+    }
 
     process.exit(0)
   },
