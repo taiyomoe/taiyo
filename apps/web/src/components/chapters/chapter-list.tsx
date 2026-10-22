@@ -1,8 +1,9 @@
 import type { Sx } from "@taiyomoe/ui/styles/sx"
 import * as stylex from "@stylexjs/stylex"
-import { Check, Clock } from "@taiyomoe/ui/components/icons"
+import { Check, Clock, ExternalLink, Globe } from "@taiyomoe/ui/components/icons"
 import { Skeleton } from "@taiyomoe/ui/components/ui/skeleton"
-import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
+import { colors, motion } from "@taiyomoe/ui/styles/tokens.stylex"
+import { Link } from "@tanstack/react-router"
 import { range } from "remeda"
 import type { LatestChapter } from "@/lib/queries/chapters"
 import {
@@ -48,8 +49,28 @@ const styles = stylex.create({
     gridRowStart: "label",
     minWidth: 0,
   },
+  labelLink: {
+    textDecoration: "none",
+    color: {
+      default: colors.foreground,
+      ":hover": `color-mix(in srgb, ${colors.foreground} 72%, transparent)`,
+    },
+    transitionDuration: motion.enter,
+    transitionProperty: "color",
+  },
   labelRead: {
     color: colors.mutedForeground,
+  },
+  sourceLink: {
+    alignItems: "center",
+    color: {
+      default: colors.mutedForeground,
+      ":hover": `color-mix(in srgb, ${colors.mutedForeground} 60%, ${colors.foreground})`,
+    },
+    display: "inline-flex",
+    flexShrink: 0,
+    transitionDuration: motion.enter,
+    transitionProperty: "color",
   },
   labelText: {
     overflow: "hidden",
@@ -115,7 +136,16 @@ const styles = stylex.create({
 
 export type ChapterListItem = Pick<
   LatestChapter,
-  "id" | "title" | "number" | "volume" | "language" | "createdAt" | "groups" | "uploader"
+  | "id"
+  | "title"
+  | "number"
+  | "volume"
+  | "language"
+  | "createdAt"
+  | "groups"
+  | "uploader"
+  | "externalUrl"
+  | "isExternal"
 > & { read?: boolean }
 
 export function ChapterList({ chapters, sx }: { chapters: ChapterListItem[]; sx?: Sx }) {
@@ -130,26 +160,54 @@ export function ChapterList({ chapters, sx }: { chapters: ChapterListItem[]; sx?
 
 function ChapterListRow({ chapter }: { chapter: ChapterListItem }) {
   const read = chapter.read === true
+  const label = (
+    <>
+      <LanguageFlag language={chapter.language} />
+      <span sx={styles.labelText} title={getLanguageCode(chapter.language)}>
+        {getChapterLabel(chapter)}
+        {chapter.title === null ? null : (
+          <span sx={[styles.chapterTitle, read && styles.chapterTitleRead]}>
+            {" "}
+            – {chapter.title}
+          </span>
+        )}
+      </span>
+      {read ? (
+        <span title={m.media_chapter_read()}>
+          <Check height={14} sx={styles.readIcon} width={14} />
+        </span>
+      ) : null}
+    </>
+  )
 
   return (
     <li sx={styles.chapter}>
-      <span sx={[styles.label, read && styles.labelRead]}>
-        <LanguageFlag language={chapter.language} />
-        <span sx={styles.labelText} title={getLanguageCode(chapter.language)}>
-          {getChapterLabel(chapter)}
-          {chapter.title === null ? null : (
-            <span sx={[styles.chapterTitle, read && styles.chapterTitleRead]}>
-              {" "}
-              – {chapter.title}
-            </span>
+      {chapter.isExternal ? (
+        <Link
+          params={{ chapterId: chapter.id }}
+          title={m.chapter_external()}
+          to="/chapters/$chapterId/source"
+          {...stylex.props(styles.label, styles.labelLink, read && styles.labelRead)}
+        >
+          {label}
+          <Globe size={14} {...stylex.props(styles.readIcon)} />
+        </Link>
+      ) : (
+        <span sx={[styles.label, read && styles.labelRead]}>
+          {label}
+          {chapter.externalUrl === null ? null : (
+            <Link
+              aria-label={m.chapter_source_link()}
+              params={{ chapterId: chapter.id }}
+              title={m.chapter_source_link()}
+              to="/chapters/$chapterId/source"
+              {...stylex.props(styles.sourceLink)}
+            >
+              <ExternalLink size={14} />
+            </Link>
           )}
         </span>
-        {read ? (
-          <span title={m.media_chapter_read()}>
-            <Check height={14} sx={styles.readIcon} width={14} />
-          </span>
-        ) : null}
-      </span>
+      )}
       <span sx={styles.time}>
         <Clock size={16} {...stylex.props(styles.timeIcon)} />
         <TimeAgo date={chapter.createdAt} />

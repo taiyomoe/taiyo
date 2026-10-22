@@ -15,6 +15,7 @@ import { useEffect, useSyncExternalStore } from "react"
 import { ChapterNumber } from "@/components/chapters/chapter-meta"
 import { LanguageFlag } from "@/components/chapters/flags"
 import {
+  type JobOutcome,
   type JobState,
   jobProgress,
   summarize,
@@ -170,13 +171,18 @@ const SIMPLE_LABELS: Record<Exclude<JobState["kind"], "uploading" | "done">, () 
   failed: m.uploads_state_failed,
   cancelled: m.uploads_state_cancelled,
 }
+const OUTCOME_LABELS: Record<JobOutcome, () => string> = {
+  published: m.uploads_state_published,
+  scheduled: m.uploads_state_scheduled,
+  review: m.uploads_state_review,
+}
 const stateLabel = (state: JobState) => {
   if (state.kind === "uploading") {
     return m.uploads_state_uploading({ done: state.done, total: state.total })
   }
 
   if (state.kind === "done") {
-    return state.published ? m.uploads_state_published() : m.uploads_state_review()
+    return OUTCOME_LABELS[state.outcome]()
   }
 
   return SIMPLE_LABELS[state.kind]()
@@ -265,7 +271,6 @@ export function UploadTray() {
 
   const jobs = batches.flatMap((batch) => batch.jobs)
   const summary = summarize(jobs)
-  const done = summary.published + summary.inReview
   const progress =
     (jobs.reduce((sum, job) => sum + jobProgress(job.state), 0) / Math.max(jobs.length, 1)) * 100
 
@@ -282,7 +287,7 @@ export function UploadTray() {
             {summary.busy ? m.uploads_title_active() : m.uploads_title_done()}
           </span>
           <span sx={styles.headerMeta}>
-            <span>{m.uploads_progress({ done, total: summary.total })}</span>
+            <span>{m.uploads_progress({ done: summary.done, total: summary.total })}</span>
             {summary.failed > 0 ? (
               <span sx={styles.failed}>
                 <AlertCircle size={12} /> {m.uploads_failed({ count: summary.failed })}

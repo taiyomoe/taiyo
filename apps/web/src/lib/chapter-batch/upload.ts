@@ -9,6 +9,9 @@ export type ChapterDraft = {
   title: string | null
   language: Language
   groupIds: string[]
+  publishAt: string | null
+  externalUrl: string | null
+  isExternal: boolean
 }
 
 export type UploadPage = { blob: Blob; type: ImageMimeType }

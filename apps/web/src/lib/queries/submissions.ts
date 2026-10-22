@@ -148,6 +148,21 @@ export function useEditChapter() {
   })
 }
 
+export function useScheduleChapter() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async ({ id, publishAt }: { id: string; publishAt: string | null }) =>
+      ensureSuccess(await api.chapters[":id"].$patch({ param: { id }, json: { publishAt } })),
+    onSuccess: () =>
+      Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["chapter-review"] }),
+        queryClient.invalidateQueries({ queryKey: ["chapters"] }),
+        queryClient.invalidateQueries({ queryKey: ["medias"] }),
+      ]),
+  })
+}
+
 export function useDeleteChapter() {
   const invalidate = useInvalidateReview()
 
