@@ -61,7 +61,7 @@ let pollTimer: ReturnType<typeof setInterval> | null = null
 const listeners = new Set<() => void>()
 const controllers = new Map<string, AbortController>()
 const processing = new Map<string, Processing>()
-const outcomeOf = (review: boolean, publishAt: string | null): JobOutcome => {
+const outcomeOf = (review: boolean, publishAt: string | null) => {
   if (review) {
     return "review"
   }

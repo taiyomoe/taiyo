@@ -76,7 +76,7 @@ export const walk = async (entry: FileSystemEntry, prefix: string): Promise<Drop
   return (await Promise.all(children.map((child) => walk(child, path)))).flat()
 }
 
-export const filesFromInput = (files: FileList | null): DroppedFile[] =>
+export const filesFromInput = (files: FileList | null) =>
   [...(files ?? [])].map((file) => ({ path: file.webkitRelativePath || file.name, file }))
 
 export const readChapterSources = async (dropped: DroppedFile[]) => {
