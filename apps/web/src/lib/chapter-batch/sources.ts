@@ -47,7 +47,8 @@ const readEntries = (reader: FileSystemDirectoryReader) =>
   })
 const isDirectory = (entry: FileSystemEntry): entry is FileSystemDirectoryEntry => entry.isDirectory
 const isFile = (entry: FileSystemEntry): entry is FileSystemFileEntry => entry.isFile
-const walk = async (entry: FileSystemEntry, prefix: string): Promise<DroppedFile[]> => {
+
+export const walk = async (entry: FileSystemEntry, prefix: string): Promise<DroppedFile[]> => {
   const path = prefix === "" ? entry.name : `${prefix}/${entry.name}`
 
   if (isFile(entry)) {
@@ -75,17 +76,7 @@ const walk = async (entry: FileSystemEntry, prefix: string): Promise<DroppedFile
   return (await Promise.all(children.map((child) => walk(child, path)))).flat()
 }
 
-export const filesFromDrop = async (items: DataTransferItemList) => {
-  const entries = [...items].flatMap((item) => {
-    const entry = item.webkitGetAsEntry()
-
-    return entry === null ? [] : [entry]
-  })
-
-  return (await Promise.all(entries.map((entry) => walk(entry, "")))).flat()
-}
-
-export const filesFromInput = (files: FileList | null) =>
+export const filesFromInput = (files: FileList | null): DroppedFile[] =>
   [...(files ?? [])].map((file) => ({ path: file.webkitRelativePath || file.name, file }))
 
 export const readChapterSources = async (dropped: DroppedFile[]) => {

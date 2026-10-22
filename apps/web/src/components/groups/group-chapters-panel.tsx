@@ -16,7 +16,7 @@ import {
 import { Field, FieldDescription, FieldError, FieldLabel } from "@taiyomoe/ui/components/ui/field"
 import { Input } from "@taiyomoe/ui/components/ui/input"
 import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
-import { useQuery, useSuspenseQuery } from "@tanstack/react-query"
+import { useMutation, useQuery, useSuspenseQuery } from "@tanstack/react-query"
 import { Link } from "@tanstack/react-router"
 import { useState } from "react"
 import { AuthAlert } from "@/components/auth/auth-alert"
@@ -29,15 +29,17 @@ import { Cover } from "@/components/media/cover"
 import { PagePagination } from "@/components/pagination/page-pagination"
 import { LanguagePicker } from "@/components/submissions/pickers"
 import { SortablePageGrid } from "@/components/submissions/sortable-page-grid"
+import { api } from "@/lib/api"
 import { isWebUrl } from "@/lib/chapter-batch/links"
+import { ensureSuccess } from "@/lib/envelope"
 import { getErrorMessage } from "@/lib/errors"
-import {
-  type LatestChapter,
-  type UpcomingChapter,
-  upcomingChaptersQueryOptions,
-} from "@/lib/queries/chapters"
+import { type LatestChapter, upcomingChaptersQueryOptions } from "@/lib/queries/chapters"
 import { groupChaptersQueryOptions } from "@/lib/queries/groups"
-import { chapterQueryOptions, useDeleteChapter, useEditChapter } from "@/lib/queries/submissions"
+import {
+  type ChapterUpdate,
+  chapterQueryOptions,
+  useInvalidateReview,
+} from "@/lib/queries/submissions"
 import { m } from "@/paraglide/messages"
 
 const PER_PAGE = 20
@@ -145,7 +147,12 @@ export function GroupChaptersPanel({ groupId, can }: { groupId: string; can: Per
   const [page, setPage] = useState(1)
   const { data } = useSuspenseQuery(groupChaptersQueryOptions(groupId, ALL_RATINGS, page, PER_PAGE))
   const upcoming = useQuery(upcomingChaptersQueryOptions({ contentRatings: ALL_RATINGS, groupId }))
-  const remove = useDeleteChapter()
+  const invalidate = useInvalidateReview()
+  const remove = useMutation({
+    mutationFn: async (id: string) =>
+      ensureSuccess(await api.chapters[":id"].$delete({ param: { id } })),
+    onSuccess: invalidate,
+  })
   const [editing, setEditing] = useState<EditableChapter | null>(null)
   const [confirmation, setConfirmation] = useState<Confirmation | null>(null)
   const scheduled = upcoming.data ?? []
@@ -173,19 +180,62 @@ export function GroupChaptersPanel({ groupId, can }: { groupId: string; can: Per
           </h3>
           <ListCard>
             {scheduled.map((chapter) => (
-              <UpcomingRow
-                canDelete={can("chapter.delete", targetOf(chapter, "SCHEDULED"))}
-                canEdit={can("chapter.update", targetOf(chapter, "PUBLISHED"))}
-                canRelease={can("chapter.update", targetOf(chapter, "SCHEDULED"))}
-                chapter={chapter}
-                key={chapter.id}
-                onDelete={() => {
-                  confirmDelete(chapter.id)
-                }}
-                onEdit={() => {
-                  setEditing(chapter)
-                }}
-              />
+              <ListRow key={chapter.id}>
+                <Cover src={chapter.mediaCoverUrl} sx={styles.cover} />
+                <div sx={styles.main}>
+                  <div sx={styles.titleLine}>
+                    <Link
+                      params={{ mediaId: chapter.mediaId }}
+                      to="/media/$mediaId"
+                      {...stylex.props(styles.media)}
+                    >
+                      {chapter.mediaTitle ?? m.media_untitled()}
+                    </Link>
+                    <ChapterNumber number={chapter.number} />
+                  </div>
+                  <div sx={styles.meta}>
+                    <LanguageChip language={chapter.language} />
+                    {chapter.title === null ? null : <span>{chapter.title}</span>}
+                    {chapter.isExternal ? (
+                      <span sx={styles.goesLive}>
+                        <Globe size={14} />
+                        {m.submission_link_only()}
+                      </span>
+                    ) : null}
+                    <span sx={styles.goesLive}>
+                      <CalendarClock size={14} />
+                      <TimeAgo date={chapter.publishAt} future />
+                    </span>
+                  </div>
+                </div>
+                <div sx={styles.actions}>
+                  {can("chapter.update", targetOf(chapter, "SCHEDULED")) ? (
+                    <ScheduleActions chapter={chapter} />
+                  ) : null}
+                  {can("chapter.update", targetOf(chapter, "PUBLISHED")) ? (
+                    <Button
+                      onClick={() => {
+                        setEditing(chapter)
+                      }}
+                      size="sm"
+                      variant="ghost"
+                    >
+                      {m.group_chapter_edit()}
+                    </Button>
+                  ) : null}
+                  {can("chapter.delete", targetOf(chapter, "SCHEDULED")) ? (
+                    <Button
+                      onClick={() => {
+                        confirmDelete(chapter.id)
+                      }}
+                      size="sm"
+                      variant="ghost"
+                    >
+                      {m.group_chapter_delete()}
+                    </Button>
+                  ) : null}
+                </div>
+              </ListRow>
             ))}
           </ListCard>
         </section>
@@ -193,12 +243,54 @@ export function GroupChaptersPanel({ groupId, can }: { groupId: string; can: Per
       {data.data.length === 0 ? null : (
         <section sx={styles.section}>
           {scheduled.length === 0 ? null : <h3 sx={styles.sectionTitle}>{m.group_chapters()}</h3>}
-          <PublishedChapters
-            can={can}
-            chapters={data.data}
-            onDelete={confirmDelete}
-            onEdit={setEditing}
-          />
+          <ListCard>
+            {data.data.map((chapter) => (
+              <ListRow key={chapter.id}>
+                <Cover src={chapter.mediaCoverUrl} sx={styles.cover} />
+                <div sx={styles.main}>
+                  <div sx={styles.titleLine}>
+                    <Link
+                      params={{ mediaId: chapter.mediaId }}
+                      to="/media/$mediaId"
+                      {...stylex.props(styles.media)}
+                    >
+                      {chapter.mediaTitle ?? m.media_untitled()}
+                    </Link>
+                    <ChapterNumber number={chapter.number} />
+                  </div>
+                  <div sx={styles.meta}>
+                    <LanguageChip language={chapter.language} />
+                    {chapter.title === null ? null : <span>{chapter.title}</span>}
+                    <TimeAgo date={chapter.createdAt} />
+                  </div>
+                </div>
+                <div sx={styles.actions}>
+                  {can("chapter.update", targetOf(chapter, "PUBLISHED")) ? (
+                    <Button
+                      onClick={() => {
+                        setEditing(chapter)
+                      }}
+                      size="sm"
+                      variant="ghost"
+                    >
+                      {m.group_chapter_edit()}
+                    </Button>
+                  ) : null}
+                  {can("chapter.delete", targetOf(chapter, "PUBLISHED")) ? (
+                    <Button
+                      onClick={() => {
+                        confirmDelete(chapter.id)
+                      }}
+                      size="sm"
+                      variant="ghost"
+                    >
+                      {m.group_chapter_delete()}
+                    </Button>
+                  ) : null}
+                </div>
+              </ListRow>
+            ))}
+          </ListCard>
           <PagePagination
             onJump={setPage}
             page={page}
@@ -246,133 +338,31 @@ export function GroupChaptersPanel({ groupId, can }: { groupId: string; can: Per
   )
 }
 
-function UpcomingRow({
-  chapter,
-  canRelease,
-  canEdit,
-  canDelete,
-  onEdit,
-  onDelete,
-}: {
-  chapter: UpcomingChapter
-  canRelease: boolean
-  canEdit: boolean
-  canDelete: boolean
-  onEdit: () => void
-  onDelete: () => void
-}) {
-  return (
-    <ListRow>
-      <Cover src={chapter.mediaCoverUrl} sx={styles.cover} />
-      <div sx={styles.main}>
-        <div sx={styles.titleLine}>
-          <Link
-            params={{ mediaId: chapter.mediaId }}
-            to="/media/$mediaId"
-            {...stylex.props(styles.media)}
-          >
-            {chapter.mediaTitle ?? m.media_untitled()}
-          </Link>
-          <ChapterNumber number={chapter.number} />
-        </div>
-        <div sx={styles.meta}>
-          <LanguageChip language={chapter.language} />
-          {chapter.title === null ? null : <span>{chapter.title}</span>}
-          {chapter.isExternal ? (
-            <span sx={styles.goesLive}>
-              <Globe size={14} />
-              {m.submission_link_only()}
-            </span>
-          ) : null}
-          <span sx={styles.goesLive}>
-            <CalendarClock size={14} />
-            <TimeAgo date={chapter.publishAt} future />
-          </span>
-        </div>
-      </div>
-      <div sx={styles.actions}>
-        {canRelease ? <ScheduleActions chapter={chapter} /> : null}
-        {canEdit ? (
-          <Button onClick={onEdit} size="sm" variant="ghost">
-            {m.group_chapter_edit()}
-          </Button>
-        ) : null}
-        {canDelete ? (
-          <Button onClick={onDelete} size="sm" variant="ghost">
-            {m.group_chapter_delete()}
-          </Button>
-        ) : null}
-      </div>
-    </ListRow>
-  )
-}
-
-function PublishedChapters({
-  chapters,
-  can,
-  onEdit,
-  onDelete,
-}: {
-  chapters: LatestChapter[]
-  can: Permissions
-  onEdit: (chapter: LatestChapter) => void
-  onDelete: (chapterId: string) => void
-}) {
-  return (
-    <ListCard>
-      {chapters.map((chapter) => (
-        <ListRow key={chapter.id}>
-          <Cover src={chapter.mediaCoverUrl} sx={styles.cover} />
-          <div sx={styles.main}>
-            <div sx={styles.titleLine}>
-              <Link
-                params={{ mediaId: chapter.mediaId }}
-                to="/media/$mediaId"
-                {...stylex.props(styles.media)}
-              >
-                {chapter.mediaTitle ?? m.media_untitled()}
-              </Link>
-              <ChapterNumber number={chapter.number} />
-            </div>
-            <div sx={styles.meta}>
-              <LanguageChip language={chapter.language} />
-              {chapter.title === null ? null : <span>{chapter.title}</span>}
-              <TimeAgo date={chapter.createdAt} />
-            </div>
-          </div>
-          <div sx={styles.actions}>
-            {can("chapter.update", targetOf(chapter, "PUBLISHED")) ? (
-              <Button
-                onClick={() => {
-                  onEdit(chapter)
-                }}
-                size="sm"
-                variant="ghost"
-              >
-                {m.group_chapter_edit()}
-              </Button>
-            ) : null}
-            {can("chapter.delete", targetOf(chapter, "PUBLISHED")) ? (
-              <Button
-                onClick={() => {
-                  onDelete(chapter.id)
-                }}
-                size="sm"
-                variant="ghost"
-              >
-                {m.group_chapter_delete()}
-              </Button>
-            ) : null}
-          </div>
-        </ListRow>
-      ))}
-    </ListCard>
-  )
-}
-
 function EditChapterForm({ chapter, onDone }: { chapter: EditableChapter; onDone: () => void }) {
   const details = useQuery(chapterQueryOptions(chapter.id))
-  const edit = useEditChapter()
+  const invalidate = useInvalidateReview()
+  const edit = useMutation({
+    mutationFn: async ({
+      id,
+      details: changes,
+      pageIds: reordered,
+    }: {
+      id: string
+      details: ChapterUpdate | null
+      pageIds: string[] | null
+    }) => {
+      if (changes !== null) {
+        await ensureSuccess(await api.chapters[":id"].$patch({ param: { id }, json: changes }))
+      }
+
+      if (reordered !== null) {
+        await ensureSuccess(
+          await api.chapters[":id"].pages.$patch({ param: { id }, json: { pageIds: reordered } }),
+        )
+      }
+    },
+    onSuccess: invalidate,
+  })
   const [number, setNumber] = useState(String(chapter.number))
   const [volume, setVolume] = useState(chapter.volume ?? "")
   const [title, setTitle] = useState(chapter.title ?? "")

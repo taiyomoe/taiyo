@@ -1,12 +1,8 @@
-import type { Language } from "@taiyomoe/db/constants"
+import type { ImageMimeType, Language } from "@taiyomoe/db/constants"
 import type { QueryClient } from "@tanstack/react-query"
 import type { ChapterSource } from "@/lib/chapter-batch/sources"
-import {
-  createChapter,
-  getUploadStatus,
-  uploadPages,
-  withdrawChapter,
-} from "@/lib/chapter-batch/upload"
+import { api } from "@/lib/api"
+import { ensureSuccess, unwrap } from "@/lib/envelope"
 import { getErrorMessage } from "@/lib/errors"
 import { m } from "@/paraglide/messages"
 
@@ -32,7 +28,7 @@ export type UploadJob = {
   state: JobState
 }
 
-export type UploadBatch = {
+type UploadBatch = {
   id: string
   mediaId: string
   mediaTitle: string
@@ -55,6 +51,7 @@ type Processing = {
 }
 
 const CHAPTERS_AT_ONCE = 2
+const PARALLEL_UPLOADS = 4
 const POLL_INTERVAL_MS = 2000
 const PROCESSING_TIMEOUT_MS = 20 * 60 * 1000
 const EMPTY: UploadBatch[] = []
@@ -102,6 +99,9 @@ const setJobState = (jobKey: string, state: JobState) => {
   )
   emit()
 }
+const withdrawChapter = async (chapterId: string) => {
+  await ensureSuccess(await api.chapters[":id"].withdraw.$post({ param: { id: chapterId } }))
+}
 const refreshQueries = (mediaId: string) => {
   void queryClient?.invalidateQueries({ queryKey: ["chapter-review"] })
   void queryClient?.invalidateQueries({ queryKey: ["chapters"] })
@@ -112,7 +112,11 @@ const poll = async () => {
     const batch = batches.find((item) => item.id === entry.batchId)
 
     try {
-      const status = await getUploadStatus(entry.chapterId, entry.taskId)
+      const response = await api.chapters[":id"].pages.status.$get({
+        param: { id: entry.chapterId },
+        query: { taskId: entry.taskId },
+      })
+      const { status } = await unwrap<Awaited<ReturnType<typeof response.json>>>(response)
 
       if (status === "FINISHED") {
         processing.delete(jobKey)
@@ -139,98 +143,6 @@ const poll = async () => {
     pollTimer = null
   }
 }
-const ensurePolling = () => {
-  pollTimer ??= setInterval(() => {
-    void poll()
-  }, POLL_INTERVAL_MS)
-}
-const readPages = async (source: ChapterSource, pageKeys: string[]) => {
-  const blobs = await source.open()
-  const types = new Map(source.pages.map((page) => [page.key, page.type]))
-
-  return pageKeys.map((key) => {
-    const blob = blobs.get(key)
-    const type = types.get(key)
-
-    if (blob === undefined || type === undefined) {
-      throw new Error(m.upload_failed_missing_page())
-    }
-
-    return { blob, type }
-  })
-}
-const runJob = async (batch: UploadBatch, job: UploadJob) => {
-  const controller = new AbortController()
-  const total = job.pageKeys.length
-  let chapterId: string | null = null
-
-  controllers.set(job.key, controller)
-  setJobState(job.key, { kind: "uploading", done: 0, total })
-
-  try {
-    const pages = job.source === null ? [] : await readPages(job.source, job.pageKeys)
-    const created = await createChapter(
-      {
-        mediaId: batch.mediaId,
-        number: job.number,
-        volume: job.volume,
-        title: job.title,
-        language: batch.language,
-        groupIds: batch.groupIds,
-        publishAt: job.publishAt,
-        externalUrl: job.externalUrl,
-        isExternal: job.source === null,
-      },
-      controller.signal,
-    )
-
-    if (job.source === null) {
-      setJobState(job.key, {
-        kind: "done",
-        outcome: outcomeOf(created.status === "PENDING", job.publishAt),
-      })
-      refreshQueries(batch.mediaId)
-
-      return
-    }
-
-    chapterId = created.id
-
-    const taskId = await uploadPages(
-      created.id,
-      pages,
-      (done) => {
-        setJobState(job.key, { kind: "uploading", done, total })
-      },
-      controller.signal,
-    )
-
-    processing.set(job.key, {
-      batchId: batch.id,
-      chapterId: created.id,
-      taskId,
-      review: created.status === "PENDING",
-      publishAt: job.publishAt,
-      since: Date.now(),
-    })
-    setJobState(job.key, { kind: "processing" })
-    ensurePolling()
-  } catch (error) {
-    if (chapterId !== null) {
-      void withdrawChapter(chapterId).catch(() => undefined)
-    }
-
-    setJobState(
-      job.key,
-      controller.signal.aborted
-        ? { kind: "cancelled" }
-        : { kind: "failed", message: getErrorMessage(error) },
-    )
-  } finally {
-    controllers.delete(job.key)
-    pump()
-  }
-}
 const pump = () => {
   const running = batches.flatMap((batch) =>
     batch.jobs.filter((job) => job.state.kind === "uploading"),
@@ -241,9 +153,140 @@ const pump = () => {
     )
     .slice(0, Math.max(CHAPTERS_AT_ONCE - running, 0))
 
-  for (const { batch, job } of next) {
-    void runJob(batch, job)
-  }
+  void Promise.all(
+    next.map(async ({ batch, job }) => {
+      const controller = new AbortController()
+      const total = job.pageKeys.length
+      let chapterId: string | null = null
+
+      controllers.set(job.key, controller)
+      setJobState(job.key, { kind: "uploading", done: 0, total })
+
+      try {
+        let pages: Array<{ blob: Blob; type: ImageMimeType }> = []
+
+        if (job.source !== null) {
+          const blobs = await job.source.open()
+          const types = new Map(job.source.pages.map((page) => [page.key, page.type]))
+
+          pages = job.pageKeys.map((key) => {
+            const blob = blobs.get(key)
+            const type = types.get(key)
+
+            if (blob === undefined || type === undefined) {
+              throw new Error(m.upload_failed_missing_page())
+            }
+
+            return { blob, type }
+          })
+        }
+
+        const createResponse = await api.medias[":id"].chapters.$post(
+          {
+            param: { id: batch.mediaId },
+            json: {
+              number: job.number,
+              volume: job.volume,
+              title: job.title,
+              language: batch.language,
+              publishAt: job.publishAt,
+              externalUrl: job.externalUrl,
+              isExternal: job.source === null,
+              groupIds: batch.groupIds,
+            },
+          },
+          { init: { signal: controller.signal } },
+        )
+        const created =
+          await unwrap<Awaited<ReturnType<typeof createResponse.json>>>(createResponse)
+
+        if (job.source === null) {
+          setJobState(job.key, {
+            kind: "done",
+            outcome: outcomeOf(created.status === "PENDING", job.publishAt),
+          })
+          refreshQueries(batch.mediaId)
+
+          return
+        }
+
+        chapterId = created.id
+
+        const sessionResponse = await api.chapters[":id"].pages["upload-session"].$post(
+          {
+            param: { id: created.id },
+            json: {
+              pages: pages.map((page) => ({ contentType: page.type, size: page.blob.size })),
+            },
+          },
+          { init: { signal: controller.signal } },
+        )
+        const session =
+          await unwrap<Awaited<ReturnType<typeof sessionResponse.json>>>(sessionResponse)
+        const queue = [...session.pages]
+        let done = 0
+
+        await Promise.all(
+          Array.from({ length: PARALLEL_UPLOADS }, async () => {
+            for (let slot = queue.shift(); slot !== undefined; slot = queue.shift()) {
+              const page = pages[slot.index]
+
+              if (page === undefined) {
+                throw new Error("Missing page")
+              }
+
+              const response = await fetch(slot.uploadUrl, {
+                method: "PUT",
+                body: page.blob,
+                headers: { "content-type": page.type },
+                signal: controller.signal,
+              })
+
+              if (!response.ok) {
+                throw new Error(`Upload failed with ${response.status}`)
+              }
+
+              done += 1
+              setJobState(job.key, { kind: "uploading", done, total })
+            }
+          }),
+        )
+        await ensureSuccess(
+          await api.chapters[":id"].pages.finalize.$post(
+            { param: { id: created.id }, json: { taskId: session.taskId } },
+            { init: { signal: controller.signal } },
+          ),
+        )
+
+        processing.set(job.key, {
+          batchId: batch.id,
+          chapterId: created.id,
+          taskId: session.taskId,
+          review: created.status === "PENDING",
+          publishAt: job.publishAt,
+          since: Date.now(),
+        })
+        setJobState(job.key, { kind: "processing" })
+        pollTimer ??= setInterval(() => {
+          void poll()
+        }, POLL_INTERVAL_MS)
+      } catch (error) {
+        if (chapterId !== null) {
+          void withdrawChapter(chapterId).catch(() => undefined)
+        }
+
+        setJobState(
+          job.key,
+          controller.signal.aborted
+            ? { kind: "cancelled" }
+            : { kind: "failed", message: getErrorMessage(error) },
+        )
+      } finally {
+        controllers.delete(job.key)
+        pump()
+      }
+    }),
+  )
 }
 
 export const uploadStore = {
@@ -314,12 +357,4 @@ export const summarize = (jobs: readonly UploadJob[]) => {
     done: jobs.filter((job) => job.state.kind === "done").length,
     busy: jobs.some((job) => isBusy(job.state)),
   }
-}
-
-export const jobProgress = (state: JobState) => {
-  if (state.kind === "uploading") {
-    return state.total === 0 ? 0 : state.done / state.total
-  }
-
-  return state.kind === "queued" ? 0 : 1
 }

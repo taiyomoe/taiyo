@@ -14,12 +14,10 @@ import {
   ComboboxPopup,
   ComboboxValue,
 } from "@taiyomoe/ui/components/ui/combobox"
-import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useQuery } from "@tanstack/react-query"
 import { useDeferredValue, useState } from "react"
 import { getLanguageName, LanguageFlag } from "@/components/chapters/flags"
 import { groupsQueryOptions, myGroupsQueryOptions } from "@/lib/queries/groups"
-import { searchMediasQueryOptions } from "@/lib/queries/medias"
 import { m } from "@/paraglide/messages"
 
 export type MediaOption = { id: string; title: string; type: string }
@@ -41,70 +39,7 @@ const styles = stylex.create({
     whiteSpace: "nowrap",
     minWidth: 0,
   },
-  muted: {
-    color: colors.mutedForeground,
-    fontSize: "0.8125rem",
-  },
 })
-
-export function MediaPicker({
-  value,
-  onChange,
-  invalid,
-}: {
-  value: MediaOption | null
-  onChange: (value: MediaOption | null) => void
-  invalid: boolean
-}) {
-  const [input, setInput] = useState("")
-  const query = useDeferredValue(input.trim())
-  const { data, isFetching } = useQuery({
-    ...searchMediasQueryOptions({ q: query, page: 1, perPage: 10 }),
-    enabled: query.length > 0,
-  })
-  const items: MediaOption[] = (data?.data ?? []).flatMap((hit) =>
-    hit.mainTitle === null ? [] : [{ id: hit.id, title: hit.mainTitle.title, type: hit.type }],
-  )
-  let emptyMessage = isFetching ? m.upload_searching() : m.upload_media_empty()
-
-  if (query.length === 0) {
-    emptyMessage = m.upload_media_hint()
-  }
-
-  return (
-    <Combobox<MediaOption>
-      filter={null}
-      inputValue={input}
-      isItemEqualToValue={(a, b) => a.id === b.id}
-      itemToStringLabel={(item) => item.title}
-      items={
-        value === null || items.some((item) => item.id === value.id) ? items : [value, ...items]
-      }
-      onInputValueChange={setInput}
-      onValueChange={onChange}
-      value={value}
-    >
-      <ComboboxInput
-        aria-invalid={invalid || undefined}
-        placeholder={m.upload_media_placeholder()}
-      />
-      <ComboboxPopup>
-        <ComboboxList>
-          {(item: MediaOption) => (
-            <ComboboxItem key={item.id} value={item}>
-              <span sx={styles.option}>
-                <span sx={styles.optionLabel}>{item.title}</span>
-                <span sx={styles.muted}>{item.type}</span>
-              </span>
-            </ComboboxItem>
-          )}
-        </ComboboxList>
-        <ComboboxEmpty>{emptyMessage}</ComboboxEmpty>
-      </ComboboxPopup>
-    </Combobox>
-  )
-}
-
 const LANGUAGE_OPTIONS = [...LANGUAGES]
   .map((code) => ({ code, name: getLanguageName(code) }))
   .sort((a, b) => a.name.localeCompare(b.name))

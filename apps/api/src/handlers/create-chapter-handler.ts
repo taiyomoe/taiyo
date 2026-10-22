@@ -56,21 +56,6 @@ const createChapterSchema = z
     message: "An external chapter needs an externalUrl.",
     path: ["externalUrl"],
   })
-const releaseStatus = (
-  publishes: boolean,
-  isExternal: boolean,
-  publishAt: string | null | undefined,
-): ChapterStatus => {
-  if (!publishes) {
-    return "PENDING"
-  }
-
-  if (!isExternal) {
-    return "UPLOADING"
-  }
-
-  return isFuture(publishAt) ? "SCHEDULED" : "PUBLISHED"
-}
 
 export const createChapterHandler = new Hono().post(
   "/:id/chapters",
@@ -159,6 +144,14 @@ export const createChapterHandler = new Hono().post(
 
     log.set({ chapter: { id } })
 
+    let status: ChapterStatus = "PENDING"
+
+    if (publishes && !body.isExternal) {
+      status = "UPLOADING"
+    } else if (publishes) {
+      status = isFuture(body.publishAt) ? "SCHEDULED" : "PUBLISHED"
+    }
+
     const values: NewChapter = {
       id,
       mediaId: media.id,
@@ -167,7 +160,7 @@ export const createChapterHandler = new Hono().post(
       number: body.number,
       volume: body.volume ?? null,
       language: body.language,
-      status: releaseStatus(publishes, body.isExternal, body.publishAt),
+      status,
       externalUrl: body.externalUrl ?? null,
       isExternal: body.isExternal,
     }
