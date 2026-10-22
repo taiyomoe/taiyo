@@ -1,7 +1,7 @@
 import type { Permissions } from "@taiyomoe/permissions"
 import * as stylex from "@stylexjs/stylex"
 import { CONTENT_RATINGS, type Language } from "@taiyomoe/db/constants"
-import { CalendarClock, ChevronLeft, ChevronRight, Globe } from "@taiyomoe/ui/components/icons"
+import { CalendarClock, Globe } from "@taiyomoe/ui/components/icons"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import {
   Dialog,
@@ -13,9 +13,9 @@ import {
   DialogPopup,
   DialogTitle,
 } from "@taiyomoe/ui/components/ui/dialog"
-import { Field, FieldError, FieldLabel } from "@taiyomoe/ui/components/ui/field"
+import { Field, FieldDescription, FieldError, FieldLabel } from "@taiyomoe/ui/components/ui/field"
 import { Input } from "@taiyomoe/ui/components/ui/input"
-import { colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
+import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query"
 import { Link } from "@tanstack/react-router"
 import { useState } from "react"
@@ -28,6 +28,7 @@ import { ListCard, ListRow } from "@/components/dashboard/dashboard-page"
 import { Cover } from "@/components/media/cover"
 import { PagePagination } from "@/components/pagination/page-pagination"
 import { LanguagePicker } from "@/components/submissions/pickers"
+import { SortablePageGrid } from "@/components/submissions/sortable-page-grid"
 import { isWebUrl } from "@/lib/chapter-batch/links"
 import { getErrorMessage } from "@/lib/errors"
 import {
@@ -123,43 +124,6 @@ const styles = stylex.create({
     gap: "0.75rem",
     display: "grid",
     gridTemplateColumns: "1fr 1fr 2fr",
-  },
-  pages: {
-    margin: 0,
-    padding: 0,
-    gap: "0.5rem",
-    listStyle: "none",
-    alignContent: "start",
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fill, minmax(6rem, 1fr))",
-    maxHeight: "22rem",
-    overflowY: "auto",
-  },
-  page: {
-    borderColor: colors.border,
-    borderRadius: radius.lg,
-    borderStyle: "solid",
-    borderWidth: 1,
-    overflow: "hidden",
-    backgroundColor: colors.card,
-    display: "flex",
-    flexDirection: "column",
-  },
-  pageImage: {
-    aspectRatio: "3 / 4",
-    backgroundColor: colors.muted,
-    display: "block",
-    objectFit: "cover",
-    width: "100%",
-  },
-  pageControls: {
-    padding: "0.25rem",
-    alignItems: "center",
-    color: colors.mutedForeground,
-    display: "flex",
-    fontSize: "0.75rem",
-    fontVariantNumeric: "tabular-nums",
-    justifyContent: "space-between",
   },
 })
 
@@ -424,15 +388,6 @@ function EditChapterForm({ chapter, onDone }: { chapter: EditableChapter; onDone
   const urls = new Map(pages.map((page) => [page.id, page.url]))
   const parsedNumber = Number(number)
   const numberInvalid = number.trim() === "" || !Number.isFinite(parsedNumber) || parsedNumber < 0
-  const move = (index: number, offset: number) => {
-    const next = [...pageIds]
-    const [item] = next.splice(index, 1)
-
-    if (item !== undefined) {
-      next.splice(index + offset, 0, item)
-      setOrder(next)
-    }
-  }
 
   return (
     <>
@@ -503,40 +458,15 @@ function EditChapterForm({ chapter, onDone }: { chapter: EditableChapter; onDone
           {details.data?.isExternal === true ? null : (
             <Field>
               <FieldLabel>{m.upload_pages()}</FieldLabel>
-              <ol sx={styles.pages}>
-                {pageIds.map((id, index) => (
-                  <li key={id} sx={styles.page}>
-                    <img alt="" loading="lazy" src={urls.get(id)} sx={styles.pageImage} />
-                    <div sx={styles.pageControls}>
-                      <Button
-                        aria-label={m.upload_page_earlier()}
-                        disabled={index === 0}
-                        onClick={() => {
-                          move(index, -1)
-                        }}
-                        size="icon-xs"
-                        type="button"
-                        variant="ghost"
-                      >
-                        <ChevronLeft />
-                      </Button>
-                      <span>{index + 1}</span>
-                      <Button
-                        aria-label={m.upload_page_later()}
-                        disabled={index === pageIds.length - 1}
-                        onClick={() => {
-                          move(index, 1)
-                        }}
-                        size="icon-xs"
-                        type="button"
-                        variant="ghost"
-                      >
-                        <ChevronRight />
-                      </Button>
-                    </div>
-                  </li>
-                ))}
-              </ol>
+              <FieldDescription>{m.group_chapter_pages_hint()}</FieldDescription>
+              {details.data === undefined ? (
+                <p sx={styles.empty}>{m.upload_pages_loading()}</p>
+              ) : (
+                <SortablePageGrid
+                  onReorder={setOrder}
+                  pages={pageIds.map((id) => ({ key: id, url: urls.get(id) ?? null }))}
+                />
+              )}
             </Field>
           )}
         </div>
