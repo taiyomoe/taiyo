@@ -11,7 +11,7 @@ const INDEXES = [
   },
 ]
 
-export async function up(db: Kysely<unknown>): Promise<void> {
+export async function up(db: Kysely<unknown>) {
   await db.schema.createType("ChapterStatus").asEnum(["PENDING", "PUBLISHED", "REJECTED"]).execute()
 
   await db.schema
@@ -34,7 +34,7 @@ export async function up(db: Kysely<unknown>): Promise<void> {
   await sql`BEGIN`.execute(db)
 }
 
-export async function down(db: Kysely<unknown>): Promise<void> {
+export async function down(db: Kysely<unknown>) {
   for (const { name } of INDEXES) {
     await db.schema.dropIndex(name).ifExists().execute()
   }

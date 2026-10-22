@@ -1,5 +1,5 @@
 import { GROUP_PERMISSIONS, type GroupPermission, ROLES, type Role } from "@taiyomoe/db/constants"
-import { createRules, type Rules } from "permix"
+import { createRules } from "permix"
 import type { Actor, ChapterTarget, PermissionsDefinition } from "./definition"
 
 const NO_PERMISSIONS: ReadonlySet<GroupPermission> = new Set()

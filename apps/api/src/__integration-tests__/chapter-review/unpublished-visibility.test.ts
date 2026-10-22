@@ -43,7 +43,7 @@ const setup = async (services: Services) => {
 
   return { submitter, admin, mediaId, groupId, published, pending, rejected }
 }
-const idsIn = (body: unknown): string[] => {
+const idsIn = (body: unknown) => {
   const found: string[] = []
   const visit = (value: unknown) => {
     if (Array.isArray(value)) {
