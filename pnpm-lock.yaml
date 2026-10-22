@@ -387,6 +387,9 @@ importers:
       '@taiyomoe/email':
         specifier: workspace:^
         version: link:../email
+      '@taiyomoe/permissions':
+        specifier: workspace:^
+        version: link:../permissions
       '@taiyomoe/utils':
         specifier: workspace:^
         version: link:../utils

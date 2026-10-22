@@ -44,6 +44,7 @@ import { TimeAgo } from "@/components/chapters/chapter-meta"
 import { DashboardPage, ListCard, ListRow } from "@/components/dashboard/dashboard-page"
 import { PersonAvatar } from "@/components/groups/group-avatar"
 import { PagePagination } from "@/components/pagination/page-pagination"
+import { UserAdminActions } from "@/components/users/user-admin-actions"
 import { api } from "@/lib/api"
 import { ensureSuccess, unwrapEnvelope } from "@/lib/envelope"
 import { getErrorMessage } from "@/lib/errors"
@@ -128,6 +129,11 @@ const styles = stylex.create({
     display: "flex",
     justifyContent: "flex-end",
     width: "5.5rem",
+  },
+  moreSlot: {
+    display: "flex",
+    justifyContent: "flex-end",
+    width: "2rem",
   },
   dialogBody: {
     gap: "1rem",
@@ -521,6 +527,9 @@ function UserRow({
               {m.users_ban()}
             </Button>
           ) : null}
+        </div>
+        <div sx={styles.moreSlot}>
+          <UserAdminActions can={can} user={user} />
         </div>
       </div>
     </ListRow>

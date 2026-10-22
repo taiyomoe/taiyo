@@ -5,6 +5,7 @@ import type {
   ChapterTarget,
   MediaSuggestionTarget,
   PermissionsDefinition,
+  UserTarget,
 } from "./definition"
 
 const NO_PERMISSIONS: ReadonlySet<GroupPermission> = new Set()
@@ -16,6 +17,8 @@ export const buildRules = (actor: Actor | null) => {
   const active = actor?.banned === false ? actor : null
   const is = (...roles: Role[]) => active !== null && roles.includes(active.role)
   const isSelf = (userId: string) => active?.id === userId
+  const actsForUser = (target: UserTarget) =>
+    is("ADMIN") && !isSelf(target.id) && target.role !== "ADMIN"
   const memberships = new Map(active?.memberships.map((m) => [m.groupId, m]))
   const permissionsIn = (groupId: string) => {
     const membership = memberships.get(groupId)
@@ -179,6 +182,9 @@ export const buildRules = (actor: Actor | null) => {
       ban: (target) =>
         !isSelf(target.id) && (is("ADMIN") || (is("MODERATOR") && target.role === "USER")),
       setRole: (target) => is("ADMIN") && !isSelf(target.id),
+      impersonate: actsForUser,
+      setPassword: actsForUser,
+      manageSessions: actsForUser,
     },
   })
 }
