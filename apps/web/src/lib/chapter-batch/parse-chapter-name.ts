@@ -1,4 +1,4 @@
-export type ParsedChapterName = {
+type ParsedChapterName = {
   number: number | null
   volume: string | null
   title: string | null
@@ -27,7 +27,7 @@ const toTitle = (rest: string) => {
   return title === undefined || title === "" ? null : title
 }
 
-export const parseChapterName = (raw: string): ParsedChapterName => {
+export const parseChapterName = (raw: string) => {
   const name = raw
     .split("/")
     .map((segment) => segment.replace(/\.(?:zip|cbz)$/i, ""))
@@ -43,7 +43,7 @@ export const parseChapterName = (raw: string): ParsedChapterName => {
       number: toNumber(chapterMatch[1]),
       volume,
       title: toTitle(name.slice(chapterMatch.index + chapterMatch[0].length).split("/")[0] ?? ""),
-    }
+    } satisfies ParsedChapterName
   }
 
   const withoutVolume = volumeMatch === null ? name : name.replace(volumeMatch[0], " ")
@@ -51,12 +51,12 @@ export const parseChapterName = (raw: string): ParsedChapterName => {
   const last = [...cleaned.matchAll(STANDALONE_NUMBER)].at(-1)
 
   if (last === undefined) {
-    return { number: null, volume, title: null }
+    return { number: null, volume, title: null } satisfies ParsedChapterName
   }
 
   return {
     number: toNumber(last[1]),
     volume,
     title: toTitle(withoutVolume.slice(last.index + last[0].length).split("/")[0] ?? ""),
-  }
+  } satisfies ParsedChapterName
 }

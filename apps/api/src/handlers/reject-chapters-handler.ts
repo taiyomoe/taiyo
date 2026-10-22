@@ -54,13 +54,15 @@ export const rejectChaptersHandler = new Hono().post(
     const { db, s3, s3Bucket, user } = c.var
     const chapters = await lockReviewableChapters(db, c.var.json.chapterIds)
     const rejected = chapters.flatMap(({ row }) => (row?.status === "PENDING" ? [row] : []))
-    const skipped = chapters.flatMap(({ id, row }): Array<z.infer<typeof skippedChapterSchema>> => {
-      if (row === undefined) {
-        return [{ id, reason: "NOT_FOUND" }]
-      }
-
-      return row.status === "PENDING" ? [] : [{ id, reason: "NOT_PENDING" }]
-    })
+    const skipped = chapters.flatMap(({ id, row }) =>
+      row?.status === "PENDING"
+        ? []
+        : [
+            { id, reason: row === undefined ? "NOT_FOUND" : "NOT_PENDING" } satisfies z.infer<
+              typeof skippedChapterSchema
+            >,
+          ],
+    )
 
     if (rejected.length > 0) {
       await db
