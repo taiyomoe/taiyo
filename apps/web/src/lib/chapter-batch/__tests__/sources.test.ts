@@ -3,10 +3,6 @@ import { describe, expect, it } from "vitest"
 import { readChapterSources } from "../sources"
 
 const image = (name: string, size = 3) => new File([new Uint8Array(size)], name)
-const pageNames = (chapter: { path: string; pages: Array<{ name: string }> }) => [
-  chapter.path,
-  chapter.pages.map((page) => page.name),
-]
 const archive = (name: string, entries: Record<string, number>) =>
   new File(
     [
@@ -29,9 +25,9 @@ describe("readChapterSources", () => {
       { path: "Series/notes.txt", file: image("notes.txt") },
     ])
 
-    expect(chapters.map(pageNames)).toEqual([
-      ["Series/Ch 9", ["1.jpg"]],
-      ["Series/Ch 10", ["2.png", "10.png"]],
+    expect(chapters).toMatchObject([
+      { path: "Series/Ch 9", pages: [{ name: "1.jpg" }] },
+      { path: "Series/Ch 10", pages: [{ name: "2.png" }, { name: "10.png" }] },
     ])
     expect(chapters[0]?.pages[0]?.type).toBe("image/jpeg")
     expect(unsupported).toEqual(["notes.txt"])
