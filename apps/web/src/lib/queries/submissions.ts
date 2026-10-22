@@ -58,7 +58,7 @@ export type ApproveFixes = InferRequestType<
   (typeof api.chapters)[":id"]["approve"]["$post"]
 >["json"]
 
-const useInvalidateReview = () => {
+export const useInvalidateReview = () => {
   const queryClient = useQueryClient()
 
   return () =>
@@ -68,85 +68,7 @@ const useInvalidateReview = () => {
     ])
 }
 
-export function useBulkReview() {
-  const invalidate = useInvalidateReview()
-
-  return useMutation({
-    mutationFn: async ({ chapterIds, reason }: { chapterIds: string[]; reason?: string }) => {
-      if (reason === undefined) {
-        const response = await api.chapters.approve.$post({ json: { chapterIds } })
-
-        return (await unwrap<Awaited<ReturnType<typeof response.json>>>(response)).skipped.length
-      }
-
-      const response = await api.chapters.reject.$post({ json: { chapterIds, reason } })
-
-      return (await unwrap<Awaited<ReturnType<typeof response.json>>>(response)).skipped.length
-    },
-    onSuccess: invalidate,
-  })
-}
-
-export function useReviewChapter() {
-  const invalidate = useInvalidateReview()
-
-  return useMutation({
-    mutationFn: async ({
-      id,
-      fixes,
-      reason,
-    }: {
-      id: string
-      fixes?: ApproveFixes
-      reason?: string
-    }) =>
-      ensureSuccess(
-        reason === undefined
-          ? await api.chapters[":id"].approve.$post({ param: { id }, json: fixes ?? {} })
-          : await api.chapters[":id"].reject.$post({ param: { id }, json: { reason } }),
-      ),
-    onSuccess: invalidate,
-  })
-}
-
-export function useWithdrawChapter() {
-  const invalidate = useInvalidateReview()
-
-  return useMutation({
-    mutationFn: async (id: string) =>
-      ensureSuccess(await api.chapters[":id"].withdraw.$post({ param: { id } })),
-    onSuccess: invalidate,
-  })
-}
-
 export type ChapterUpdate = InferRequestType<(typeof api.chapters)[":id"]["$patch"]>["json"]
-
-export function useEditChapter() {
-  const invalidate = useInvalidateReview()
-
-  return useMutation({
-    mutationFn: async ({
-      id,
-      details,
-      pageIds,
-    }: {
-      id: string
-      details: ChapterUpdate | null
-      pageIds: string[] | null
-    }) => {
-      if (details !== null) {
-        await ensureSuccess(await api.chapters[":id"].$patch({ param: { id }, json: details }))
-      }
-
-      if (pageIds !== null) {
-        await ensureSuccess(
-          await api.chapters[":id"].pages.$patch({ param: { id }, json: { pageIds } }),
-        )
-      }
-    },
-    onSuccess: invalidate,
-  })
-}
 
 export function useScheduleChapter() {
   const queryClient = useQueryClient()
@@ -160,15 +82,5 @@ export function useScheduleChapter() {
         queryClient.invalidateQueries({ queryKey: ["chapters"] }),
         queryClient.invalidateQueries({ queryKey: ["medias"] }),
       ]),
-  })
-}
-
-export function useDeleteChapter() {
-  const invalidate = useInvalidateReview()
-
-  return useMutation({
-    mutationFn: async (id: string) =>
-      ensureSuccess(await api.chapters[":id"].$delete({ param: { id } })),
-    onSuccess: invalidate,
   })
 }

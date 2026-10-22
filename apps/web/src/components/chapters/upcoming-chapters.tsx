@@ -9,7 +9,7 @@ import { ChapterGroups, TimeAgo, getChapterLabel } from "@/components/chapters/c
 import { LanguageFlag } from "@/components/chapters/flags"
 import { ScheduleActions } from "@/components/chapters/schedule-actions"
 import { usePermissions } from "@/lib/permissions"
-import { type UpcomingChapter, upcomingChaptersQueryOptions } from "@/lib/queries/chapters"
+import { upcomingChaptersQueryOptions } from "@/lib/queries/chapters"
 import { useSettings } from "@/lib/settings"
 import { m } from "@/paraglide/messages"
 
@@ -125,11 +125,6 @@ const styles = stylex.create({
     alignSelf: "center",
   },
 })
-const targetOf = (chapter: UpcomingChapter) => ({
-  uploaderId: chapter.uploader.id,
-  status: "SCHEDULED" as const,
-  groupIds: chapter.groups.map((group) => group.id),
-})
 
 export function UpcomingChapters({
   mediaId,
@@ -182,7 +177,11 @@ export function UpcomingChapters({
               <TimeAgo date={chapter.publishAt} future />
             </span>
             <ChapterGroups groups={chapter.groups} max={3} wrap />
-            {can("chapter.update", targetOf(chapter)) ? (
+            {can("chapter.update", {
+              uploaderId: chapter.uploader.id,
+              status: "SCHEDULED",
+              groupIds: chapter.groups.map((group) => group.id),
+            }) ? (
               <div sx={styles.actions}>
                 <ScheduleActions chapter={chapter} />
               </div>

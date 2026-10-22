@@ -5,6 +5,7 @@ import { Input } from "@taiyomoe/ui/components/ui/input"
 import { Popover, PopoverPopup, PopoverTrigger } from "@taiyomoe/ui/components/ui/popover"
 import { SelectButton } from "@taiyomoe/ui/components/ui/select"
 import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
+import { useNow } from "@/lib/use-now"
 import { m } from "@/paraglide/messages"
 import { getLocale } from "@/paraglide/runtime"
 
@@ -44,7 +45,6 @@ const styles = stylex.create({
   },
 })
 const pad = (value: number) => String(value).padStart(2, "0")
-const timeOf = (date: Date) => `${pad(date.getHours())}:${pad(date.getMinutes())}`
 const nextHour = () => {
   const date = new Date()
 
@@ -59,13 +59,6 @@ const withTime = (day: Date, time: string) => {
   next.setHours(hours, minutes, 0, 0)
 
   return next
-}
-const startOfToday = () => {
-  const date = new Date()
-
-  date.setHours(0, 0, 0, 0)
-
-  return date
 }
 
 export const formatDateTime = (date: Date) =>
@@ -82,7 +75,9 @@ export function DateTimePicker({
   invalid?: boolean
   label: string
 }) {
-  const time = timeOf(value ?? nextHour())
+  const now = useNow()
+  const shown = value ?? nextHour()
+  const time = `${pad(shown.getHours())}:${pad(shown.getMinutes())}`
 
   return (
     <Popover>
@@ -104,7 +99,7 @@ export function DateTimePicker({
         <div sx={styles.popup}>
           <Calendar
             {...(value === null ? {} : { defaultMonth: value, selected: value })}
-            disabled={{ before: startOfToday() }}
+            disabled={{ before: new Date(new Date(now).setHours(0, 0, 0, 0)) }}
             mode="single"
             onSelect={(day) => {
               if (day !== undefined) {
