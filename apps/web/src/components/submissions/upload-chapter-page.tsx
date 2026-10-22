@@ -240,7 +240,7 @@ const byNumber = (a: Row, b: Row) =>
   (parseNumber(a.number) ?? Number.POSITIVE_INFINITY) -
     (parseNumber(b.number) ?? Number.POSITIVE_INFINITY) ||
   a.source.name.localeCompare(b.source.name, undefined, { numeric: true })
-const toRow = (source: ChapterSource): Row => {
+const toRow = (source: ChapterSource) => {
   const parsed = parseChapterName(source.path)
 
   return {
@@ -250,7 +250,7 @@ const toRow = (source: ChapterSource): Row => {
     volume: parsed.volume ?? "",
     title: parsed.title ?? "",
     pageKeys: source.pages.map((page) => page.key),
-  }
+  } satisfies Row
 }
 
 type RowIssues = { errors: string[]; warnings: string[] }

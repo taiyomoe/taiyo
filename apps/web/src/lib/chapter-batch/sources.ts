@@ -13,7 +13,7 @@ export type ChapterSource = {
 
 export type DroppedFile = { path: string; file: File }
 
-export type ReadResult = { chapters: ChapterSource[]; unsupported: string[] }
+type ReadResult = { chapters: ChapterSource[]; unsupported: string[] }
 
 const EXTENSION_TYPES = new Map<string, ImageMimeType>([
   ["jpg", "image/jpeg"],
@@ -85,10 +85,10 @@ export const filesFromDrop = async (items: DataTransferItemList) => {
   return (await Promise.all(entries.map((entry) => walk(entry, "")))).flat()
 }
 
-export const filesFromInput = (files: FileList | null): DroppedFile[] =>
+export const filesFromInput = (files: FileList | null) =>
   [...(files ?? [])].map((file) => ({ path: file.webkitRelativePath || file.name, file }))
 
-export const readChapterSources = async (dropped: DroppedFile[]): Promise<ReadResult> => {
+export const readChapterSources = async (dropped: DroppedFile[]) => {
   const visible = dropped.filter(({ path }) => !IGNORED.test(path))
   const archives = visible.filter(({ path }) => ARCHIVE.test(path))
   const images = visible.filter(({ path }) => imageType(path) !== undefined)
@@ -178,5 +178,5 @@ export const readChapterSources = async (dropped: DroppedFile[]): Promise<ReadRe
       ...fromArchives.flat(),
     ],
     unsupported,
-  }
+  } satisfies ReadResult
 }
