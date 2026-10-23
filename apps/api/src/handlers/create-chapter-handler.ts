@@ -32,6 +32,11 @@ const createChapterSchema = z.object({
     .optional()
     .meta({ description: "Content rating.", example: "NORMAL" }),
   flag: z.enum(FLAGS).optional().meta({ description: "Visibility flag.", example: "OK" }),
+  groupIds: z
+    .array(z.uuid())
+    .max(config.input.maxChapterGroups)
+    .default([])
+    .meta({ description: "Groups credited on the chapter.", example: [crypto.randomUUID()] }),
 })
 
 export const createChapterHandler = new Hono().post(
@@ -39,7 +44,7 @@ export const createChapterHandler = new Hono().post(
   describeRoute({
     summary: "Create a chapter",
     description:
-      "Creates a chapter under a media. Pages must be uploaded through a dedicated route later.\n\n**Required roles:** uploader intern, uploader, moderator, admin.",
+      "Creates a chapter under a media and credits the given groups. Pages must be uploaded through a dedicated route later. Uploaders and admins can credit any groups or none. Anyone else must credit at least one group where they hold `UPLOAD_CHAPTERS`, and may credit other groups alongside it. Setting `flag` requires the uploader, moderator or admin role.\n\n**Authentication:** uploader, admin — or a member with `UPLOAD_CHAPTERS` in one of the credited groups.",
     tags: ["Chapters"],
     requestBody: {
       content: { "application/json": await resolver(createChapterSchema).toOpenAPISchema() },
@@ -60,19 +65,45 @@ export const createChapterHandler = new Hono().post(
         },
       },
       ...getOpenApiResponses({
-        404: "No media with the given id exists.",
+        404: "No media with the given id exists, or one of the groups does not exist.",
         422: "The request data failed validation.",
       }),
     },
   }),
-  withAuth("create", "Chapter"),
+  withAuth(),
   validateJson(createChapterSchema),
   checkMedia(),
   withTransaction,
   async (c) => {
-    const { db, log, media, user } = c.var
+    const { can, db, log, media, user } = c.var
     const body = c.var.json
+    const groupIds = [...new Set(body.groupIds)]
     const id = crypto.randomUUID()
+
+    if (
+      !can("chapter.publish") &&
+      !groupIds.some((groupId) => can("group.uploadChapters", { id: groupId }))
+    ) {
+      return c.fail("FORBIDDEN")
+    }
+
+    if (body.flag !== undefined && !can("chapter.flag")) {
+      return c.fail("FORBIDDEN")
+    }
+
+    const groups =
+      groupIds.length === 0
+        ? []
+        : await db
+            .selectFrom("groups")
+            .select("id")
+            .where("id", "in", groupIds)
+            .where("deletedAt", "is", null)
+            .execute()
+
+    if (groups.length !== groupIds.length) {
+      return c.fail("GROUP_NOT_FOUND")
+    }
 
     log.set({ chapter: { id } })
 
@@ -95,6 +126,13 @@ export const createChapterHandler = new Hono().post(
     }
 
     await db.insertInto("chapters").values(values).execute()
+
+    if (groupIds.length > 0) {
+      await db
+        .insertInto("chapterGroups")
+        .values(groupIds.map((groupId) => ({ chapterId: id, groupId })))
+        .execute()
+    }
 
     return c.ok({ id })
   },

@@ -264,8 +264,9 @@ const createDevSessions = () =>
 const printSummary = (sessions: Array<{ username: string; cookie: string }>) => {
   const root = readEnvFile(rootEnvPath)
   const url = (key: string) => localUrl(requireEnvValue(root, key, rootEnvPath))
+  const width = Math.max(...sessions.map(({ username }) => username.length))
   const cookies = sessions
-    .map(({ username, cookie }) => `    ${username.padEnd(6)} ${cookie}`)
+    .map(({ username, cookie }) => `    ${username.padEnd(width)} ${cookie}`)
     .join("\n")
 
   console.log(`
@@ -275,7 +276,7 @@ const printSummary = (sessions: Array<{ username: string; cookie: string }>) => 
   API docs       ${url("API_PORT")}/docs
 ${isHyperdxEnabled(root) ? `  HyperDX        ${url("HYPERDX_PORT")}\n` : ""}  RustFS console ${url("RUSTFS_CONSOLE_PORT")}
 
-  Sign in as user@gmail.com or admin@gmail.com, password "password123".
+  Sign in with any dev account below at <username>@gmail.com, password "password123".
 
   Or skip the form with a ready-made session cookie (valid 30 days, reused on
   later runs). Under \`pnpm dev:tunnel\`, name it __Secure-better-auth.session_token.

@@ -22,6 +22,7 @@
     "@t3-oss/env-core": "^0.13.11",
     "@taiyomoe/auth": "workspace:^",
     "@taiyomoe/config": "workspace:^",
+    "@taiyomoe/permissions": "workspace:^",
     "@taiyomoe/ui": "workspace:^",
     "@tanstack/charts": "^1.1.0",
     "@tanstack/react-devtools": "^0.10.13",

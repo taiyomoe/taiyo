@@ -114,9 +114,12 @@ sync. It prints the local URLs when it finishes. For the first checkout these ar
 - API: <http://localhost:3002> (`/docs` for the OpenAPI viewer, `/ping` for a health check)
 - Storybook (run separately): `pnpm -F storybook dev` → <http://localhost:6006>
 
-**Dev accounts.** The seed creates `user@gmail.com` (role `USER`) and
-`admin@gmail.com` (role `ADMIN`), both with the password `password123`. The
-other seeded users have no password and cannot sign in. `pnpm bootstrap` also
+**Dev accounts.** The seed creates one account per role, all with the password
+`password123`: `user@gmail.com` (`USER`), `intern@gmail.com` (`UPLOADER_INTERN`),
+`uploader@gmail.com` (`UPLOADER`), `moderator@gmail.com` (`MODERATOR`) and
+`admin@gmail.com` (`ADMIN`). It also creates the group "Taiyō Dev Scans", owned by
+`owner@gmail.com`, with `member@gmail.com` as a member allowed to upload and edit
+its chapters. The other seeded users have no password and cannot sign in. `pnpm bootstrap` also
 prints a ready-made session cookie for each, valid for 30 days and reused on
 later runs, to skip the sign-in form in scripts and headless browsers. Under
 `pnpm dev:tunnel`, send it as `__Secure-better-auth.session_token`.

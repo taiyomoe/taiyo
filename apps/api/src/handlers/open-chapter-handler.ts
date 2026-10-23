@@ -32,7 +32,7 @@ export const openChapterHandler = new Hono().post(
       }),
     },
   }),
-  withAuth("create", "History"),
+  withAuth(),
   checkChapter(),
   withTransaction,
   async (c) => {

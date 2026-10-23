@@ -26,6 +26,16 @@ export const GROUP_MEMBERSHIP_ROLES = ["OWNER", "MEMBER"] as const
 
 export type GroupMembershipRole = (typeof GROUP_MEMBERSHIP_ROLES)[number]
 
+export const GROUP_PERMISSIONS = [
+  "UPLOAD_CHAPTERS",
+  "EDIT_CHAPTERS",
+  "DELETE_CHAPTERS",
+  "EDIT_GROUP",
+  "MANAGE_MEMBERS",
+] as const
+
+export type GroupPermission = (typeof GROUP_PERMISSIONS)[number]
+
 export const GROUP_OWNERSHIP_REQUEST_STATUSES = [
   "PENDING",
   "APPROVED",

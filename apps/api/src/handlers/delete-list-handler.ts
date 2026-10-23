@@ -30,7 +30,7 @@ export const deleteListHandler = new Hono().delete(
       }),
     },
   }),
-  withAuth("delete", "List"),
+  withAuth(),
   checkList(),
   requireListOwner,
   withTransaction,

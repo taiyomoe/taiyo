@@ -36,7 +36,7 @@ export const getLibraryEntryHandler = new Hono().get(
       }),
     },
   }),
-  withAuth("read", "Library"),
+  withAuth(),
   validateParam(paramSchema),
   async (c) => {
     const { db, user } = c.var

@@ -1,4 +1,4 @@
-import type { ContentRating, Language } from "@taiyomoe/db"
+import type { ContentRating, GroupMembershipRole, GroupPermission, Language } from "@taiyomoe/db"
 import { randomUUID } from "node:crypto"
 import type { Services } from "../../services"
 
@@ -81,4 +81,24 @@ export const seedHistory = async (
   updatedAt = new Date(),
 ) => {
   await db.insertInto("userHistories").values({ userId, chapterId, updatedAt }).execute()
+}
+
+export const seedMembership = async (
+  { db }: Services,
+  {
+    groupId,
+    userId,
+    role = "MEMBER",
+    permissions = [],
+  }: {
+    groupId: string
+    userId: string
+    role?: GroupMembershipRole
+    permissions?: GroupPermission[]
+  },
+) => {
+  await db
+    .insertInto("groupMemberships")
+    .values({ groupId, userId, role, permissions, addedBy: userId })
+    .execute()
 }

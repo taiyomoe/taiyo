@@ -17,7 +17,7 @@ export const updateBannerHandler = new Hono().patch(
   describeRoute({
     summary: "Update a banner",
     description:
-      "Updates the content rating of a banner.\n\n**Required roles:** uploader, moderator, admin.",
+      "Updates the content rating of a banner.\n\n**Required roles:** uploader intern, uploader, moderator, admin.",
     tags: ["Banners"],
     requestBody: {
       content: { "application/json": await resolver(updateBannerSchema).toOpenAPISchema() },
@@ -43,7 +43,7 @@ export const updateBannerHandler = new Hono().patch(
       }),
     },
   }),
-  withAuth("update", "Media"),
+  withAuth("media.update"),
   validateJson(updateBannerSchema),
   checkBanner(),
   withTransaction,

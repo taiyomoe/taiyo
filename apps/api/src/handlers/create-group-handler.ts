@@ -44,8 +44,7 @@ export const createGroupHandler = new Hono().post(
   "/",
   describeRoute({
     summary: "Create a group",
-    description:
-      "Creates a group.\n\n**Required roles:** uploader intern, uploader, moderator, admin.",
+    description: "Creates a group.\n\n**Required roles:** uploader, admin.",
     tags: ["Groups"],
     requestBody: {
       content: { "application/json": await resolver(createGroupSchema).toOpenAPISchema() },
@@ -68,7 +67,7 @@ export const createGroupHandler = new Hono().post(
       ...getOpenApiResponses({ 422: "The request data failed validation." }),
     },
   }),
-  withAuth("create", "Group"),
+  withAuth("group.create"),
   validateJson(createGroupSchema),
   withTransaction,
   async (c) => {

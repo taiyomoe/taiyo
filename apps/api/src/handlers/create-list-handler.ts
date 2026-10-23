@@ -56,7 +56,7 @@ export const createListHandler = new Hono().post(
       ...getOpenApiResponses({ 422: "The request data failed validation." }),
     },
   }),
-  withAuth("create", "List"),
+  withAuth(),
   validateJson(createListSchema),
   withTransaction,
   async (c) => {

@@ -12,7 +12,7 @@ export const deleteBannerHandler = new Hono().delete(
   describeRoute({
     summary: "Delete a banner",
     description:
-      "Removes a banner. The banner can be restored later.\n\n**Required roles:** uploader, moderator, admin.",
+      "Removes a banner. The banner can be restored later.\n\n**Required roles:** uploader intern, uploader, moderator, admin.",
     tags: ["Banners"],
     responses: {
       200: {
@@ -35,7 +35,7 @@ export const deleteBannerHandler = new Hono().delete(
       }),
     },
   }),
-  withAuth("delete", "Media"),
+  withAuth("media.update"),
   checkBanner(),
   withTransaction,
   async (c) => {

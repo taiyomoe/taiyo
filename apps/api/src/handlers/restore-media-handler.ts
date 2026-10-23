@@ -12,7 +12,7 @@ export const restoreMediaHandler = new Hono().post(
   describeRoute({
     summary: "Restore a deleted media",
     description:
-      "Restores a previously deleted media so that it appears in listings, search results, and detail endpoints again.\n\n**Required roles:** moderator, admin.",
+      "Restores a previously deleted media so that it appears in listings, search results, and detail endpoints again.\n\n**Required roles:** admin.",
     tags: ["Medias"],
     responses: {
       200: {
@@ -36,7 +36,7 @@ export const restoreMediaHandler = new Hono().post(
       }),
     },
   }),
-  withAuth("manage", "Media"),
+  withAuth("media.restore"),
   checkMedia({ includeDeleted: true }),
   withTransaction,
   async (c) => {

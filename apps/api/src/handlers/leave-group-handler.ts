@@ -1,7 +1,7 @@
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
-import { removeGroupMember } from "../group-membership"
+import { leaveGroup } from "../group-membership"
 import { checkGroup } from "../middlewares/check-group-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
@@ -31,12 +31,12 @@ export const leaveGroupHandler = new Hono().post(
       }),
     },
   }),
-  withAuth("read", "OwnershipRequest"),
+  withAuth(),
   checkGroup(),
   withTransaction,
   async (c) => {
     const { db, group, user } = c.var
-    const result = await removeGroupMember(db, { groupId: group.id, userId: user.id })
+    const result = await leaveGroup(db, { groupId: group.id, userId: user.id })
 
     if (!result.ok) {
       return c.fail(result.error)

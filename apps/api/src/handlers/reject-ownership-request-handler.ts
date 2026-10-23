@@ -19,7 +19,7 @@ export const rejectOwnershipRequestHandler = new Hono().post(
   "/:id/reject",
   describeRoute({
     summary: "Reject an ownership request",
-    description: "Rejects a pending ownership request.\n\n**Required roles:** moderator, admin.",
+    description: "Rejects a pending ownership request.\n\n**Required roles:** admin.",
     tags: ["Group ownership"],
     requestBody: {
       content: { "application/json": await resolver(rejectSchema).toOpenAPISchema() },
@@ -40,7 +40,7 @@ export const rejectOwnershipRequestHandler = new Hono().post(
       }),
     },
   }),
-  withAuth("manage", "OwnershipRequest"),
+  withAuth("ownershipRequest.review"),
   validateJson(rejectSchema),
   checkOwnershipRequest(),
   withTransaction,

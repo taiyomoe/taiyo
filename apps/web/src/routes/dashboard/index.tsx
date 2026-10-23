@@ -2,8 +2,10 @@ import { noop } from "@tanstack/react-query"
 import { createFileRoute } from "@tanstack/react-router"
 import { createIsomorphicFn } from "@tanstack/react-start"
 import { z } from "zod"
+import { DashboardHome } from "@/components/dashboard/dashboard-home"
 import { OverviewPage } from "@/components/dashboard/overview/overview-page"
 import { DEFAULT_DASHBOARD_RANGE, DASHBOARD_RANGES } from "@/lib/dashboard"
+import { getPermissions } from "@/lib/permissions"
 import { dashboardOverviewQueryOptions } from "@/lib/queries/dashboard"
 import { m } from "@/paraglide/messages"
 
@@ -23,7 +25,7 @@ export const Route = createFileRoute("/dashboard/")({
     overviewQueryOptions: dashboardOverviewQueryOptions(deps.range, getTimeZone()),
   }),
   loader: ({ context }) => {
-    if (!import.meta.env.SSR) {
+    if (!import.meta.env.SSR && getPermissions(context.session.user)("dashboard.viewStats")) {
       void context.queryClient.query(context.overviewQueryOptions).catch(noop)
     }
   },
@@ -34,6 +36,10 @@ function Overview() {
   const { session, overviewQueryOptions } = Route.useRouteContext()
   const { range } = Route.useLoaderDeps()
   const { compare = true } = Route.useSearch()
+
+  if (!getPermissions(session.user)("dashboard.viewStats")) {
+    return <DashboardHome name={session.user.name} />
+  }
 
   return (
     <OverviewPage

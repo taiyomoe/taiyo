@@ -12,7 +12,7 @@ export const deleteCoverHandler = new Hono().delete(
   describeRoute({
     summary: "Delete a cover",
     description:
-      "Removes a cover. The cover can be restored later. The main cover cannot be deleted — promote another cover to main first.\n\n**Required roles:** uploader, moderator, admin.",
+      "Removes a cover. The cover can be restored later. The main cover cannot be deleted — promote another cover to main first.\n\n**Required roles:** uploader intern, uploader, moderator, admin.",
     tags: ["Covers"],
     responses: {
       200: {
@@ -36,7 +36,7 @@ export const deleteCoverHandler = new Hono().delete(
       }),
     },
   }),
-  withAuth("delete", "Media"),
+  withAuth("media.update"),
   checkCover(),
   withTransaction,
   async (c) => {

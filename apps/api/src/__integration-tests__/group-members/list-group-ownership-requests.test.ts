@@ -17,11 +17,11 @@ const seedGroup = async (services: Services, creatorId: string) => {
 }
 
 describe("GET /groups/:id/ownership-requests", () => {
-  test("a moderator sees every request on the group", async ({ app, services }) => {
-    const { headers, userId: modId } = await signInAs(services, { role: "MODERATOR" })
+  test("an admin sees every request on the group", async ({ app, services }) => {
+    const { headers, userId: adminId } = await signInAs(services, { role: "ADMIN" })
     const { userId: u1 } = await signInAs(services)
     const { userId: u2 } = await signInAs(services)
-    const groupId = await seedGroup(services, modId)
+    const groupId = await seedGroup(services, adminId)
 
     await services.db
       .insertInto("groupOwnershipRequests")
@@ -42,6 +42,27 @@ describe("GET /groups/:id/ownership-requests", () => {
     }
 
     expect(res.body.data).toHaveLength(2)
+  })
+
+  test("a moderator only sees their own requests", async ({ app, services }) => {
+    const { headers, userId } = await signInAs(services, { role: "MODERATOR" })
+    const { userId: otherId } = await signInAs(services)
+    const groupId = await seedGroup(services, userId)
+
+    await services.db
+      .insertInto("groupOwnershipRequests")
+      .values({ userId: otherId, groupId, message: null })
+      .execute()
+
+    const res = await api<Array<{ userId: string }>>(app, `/groups/${groupId}/ownership-requests`, {
+      headers,
+    })
+
+    if (!res.body.success) {
+      throw new Error(`Expected success: ${JSON.stringify(res.body)}`)
+    }
+
+    expect(res.body.data).toEqual([])
   })
 
   test("a regular user only sees their own request", async ({ app, services }) => {

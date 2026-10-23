@@ -1,9 +1,9 @@
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
-import { setGroupMemberRole } from "../group-membership"
+import { demoteGroupMember } from "../group-membership"
+import { authorizeGroup } from "../middlewares/authorize-group-middleware"
 import { checkGroup } from "../middlewares/check-group-middleware"
-import { requireGroupOwnerOrMod } from "../middlewares/require-group-owner-or-mod-middleware"
 import { validateParam } from "../middlewares/validate-param-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
@@ -17,7 +17,7 @@ export const demoteGroupMemberHandler = new Hono().post(
   describeRoute({
     summary: "Demote an OWNER to MEMBER",
     description:
-      "Changes a member's role from OWNER to MEMBER. Refuses if this would leave the group with no owners.\n\n**Authentication:** group OWNER, moderator, admin.",
+      "Changes a member's role from OWNER to MEMBER. Owners can only demote themselves; admins can demote anyone. Refuses if this would leave the group with no owners, unless an admin does it.\n\n**Authentication:** group owner (self only), admin.",
     tags: ["Group members"],
     responses: {
       201: {
@@ -35,15 +35,15 @@ export const demoteGroupMemberHandler = new Hono().post(
       }),
     },
   }),
-  withAuth("read", "OwnershipRequest"),
+  withAuth(),
   validateParam(paramSchema),
   checkGroup(),
-  requireGroupOwnerOrMod,
+  authorizeGroup("manageMembers"),
   withTransaction,
   async (c) => {
-    const { db, group } = c.var
+    const { actor, db, group } = c.var
     const { userId } = c.var.param
-    const result = await setGroupMemberRole(db, { groupId: group.id, userId, role: "MEMBER" })
+    const result = await demoteGroupMember(db, { actor, groupId: group.id, userId })
 
     if (!result.ok) {
       return c.fail(result.error)

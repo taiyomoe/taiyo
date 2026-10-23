@@ -39,7 +39,7 @@ const seedRequest = async (
 
 describe("POST /ownership-requests/:id/reject", () => {
   test("rejects a pending request and stores the note", async ({ app, services }) => {
-    const { headers, userId: reviewerId } = await signInAs(services, { role: "MODERATOR" })
+    const { headers, userId: reviewerId } = await signInAs(services, { role: "ADMIN" })
     const { userId: requesterId } = await signInAs(services)
     const groupId = await seedGroup(services, requesterId)
     const requestId = await seedRequest(services, { userId: requesterId, groupId })
@@ -63,7 +63,7 @@ describe("POST /ownership-requests/:id/reject", () => {
   })
 
   test("returns OWNERSHIP_REQUEST_NOT_FOUND for an unknown id", async ({ app, services }) => {
-    const { headers } = await signInAs(services, { role: "MODERATOR" })
+    const { headers } = await signInAs(services, { role: "ADMIN" })
     const res = await api(app, `/ownership-requests/${randomUUID()}/reject`, {
       method: "POST",
       headers,
@@ -80,7 +80,7 @@ describe("POST /ownership-requests/:id/reject", () => {
   })
 
   test("returns OWNERSHIP_REQUEST_NOT_PENDING for a closed request", async ({ app, services }) => {
-    const { headers } = await signInAs(services, { role: "MODERATOR" })
+    const { headers } = await signInAs(services, { role: "ADMIN" })
     const { userId: requesterId } = await signInAs(services)
     const groupId = await seedGroup(services, requesterId)
     const requestId = await seedRequest(services, {
@@ -112,6 +112,37 @@ describe("POST /ownership-requests/:id/reject", () => {
     expect(res.status).toBe(401)
   })
 
+  test("only admins can reject requests", async ({ app, services }) => {
+    const { userId: requesterId } = await signInAs(services)
+    const groupId = await seedGroup(services, requesterId)
+    const requestId = await seedRequest(services, { userId: requesterId, groupId })
+
+    for (const role of ["MODERATOR", "UPLOADER", "UPLOADER_INTERN"] as const) {
+      const { headers } = await signInAs(services, { role })
+      const res = await api(app, `/ownership-requests/${requestId}/reject`, {
+        method: "POST",
+        headers,
+        json: { note: "No." },
+      })
+
+      expect(res.status).toBe(403)
+    }
+
+    const request = await services.db
+      .selectFrom("groupOwnershipRequests")
+      .select("status")
+      .where("id", "=", requestId)
+      .executeTakeFirstOrThrow()
+    const memberships = await services.db
+      .selectFrom("groupMemberships")
+      .select("userId")
+      .where("groupId", "=", groupId)
+      .execute()
+
+    expect(request.status).toBe("PENDING")
+    expect(memberships).toEqual([])
+  })
+
   test("rejects USER role with FORBIDDEN", async ({ app, services }) => {
     const { headers } = await signInAs(services)
     const res = await api(app, `/ownership-requests/${randomUUID()}/reject`, {
@@ -124,7 +155,7 @@ describe("POST /ownership-requests/:id/reject", () => {
   })
 
   test("returns VALIDATION_ERROR for an over-long note", async ({ app, services }) => {
-    const { headers } = await signInAs(services, { role: "MODERATOR" })
+    const { headers } = await signInAs(services, { role: "ADMIN" })
     const res = await api(app, `/ownership-requests/${randomUUID()}/reject`, {
       method: "POST",
       headers,
@@ -135,7 +166,7 @@ describe("POST /ownership-requests/:id/reject", () => {
   })
 
   test("concurrent approve and reject: exactly one wins", async ({ app, services }) => {
-    const { headers, userId: reviewerId } = await signInAs(services, { role: "MODERATOR" })
+    const { headers, userId: reviewerId } = await signInAs(services, { role: "ADMIN" })
     const { userId: requesterId } = await signInAs(services)
     const groupId = await seedGroup(services, reviewerId)
     const requestId = await seedRequest(services, { userId: requesterId, groupId })

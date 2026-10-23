@@ -250,7 +250,7 @@ export const getDashboardOverviewHandler = new Hono().get(
       }),
     },
   }),
-  withAuth("read", "Dashboard"),
+  withAuth("dashboard.viewStats"),
   validateQuery(querySchema),
   async (c) => {
     const { db, cacheNamespace } = c.var

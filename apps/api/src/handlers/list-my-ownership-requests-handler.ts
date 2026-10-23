@@ -37,7 +37,7 @@ export const listMyOwnershipRequestsHandler = new Hono().get(
       ...getOpenApiResponses({ 422: "The query parameters failed validation." }),
     },
   }),
-  withAuth("read", "OwnershipRequest"),
+  withAuth(),
   validateQuery(querySchema),
   async (c) => {
     const { db, user } = c.var

@@ -39,7 +39,7 @@ const seedRequest = async (
 
 describe("POST /ownership-requests/:id/approve", () => {
   test("grants OWNER membership and approves the request", async ({ app, services }) => {
-    const { headers } = await signInAs(services, { role: "MODERATOR" })
+    const { headers } = await signInAs(services, { role: "ADMIN" })
     const { userId: requesterId } = await signInAs(services)
     const groupId = await seedGroup(services, requesterId)
     const requestId = await seedRequest(services, { userId: requesterId, groupId })
@@ -67,7 +67,7 @@ describe("POST /ownership-requests/:id/approve", () => {
   })
 
   test("auto-cancels other pending requests on the same group", async ({ app, services }) => {
-    const { headers } = await signInAs(services, { role: "MODERATOR" })
+    const { headers } = await signInAs(services, { role: "ADMIN" })
     const { userId: winnerId } = await signInAs(services)
     const { userId: loserId } = await signInAs(services)
     const groupId = await seedGroup(services, winnerId)
@@ -89,7 +89,7 @@ describe("POST /ownership-requests/:id/approve", () => {
   })
 
   test("returns OWNERSHIP_REQUEST_NOT_FOUND for an unknown id", async ({ app, services }) => {
-    const { headers } = await signInAs(services, { role: "MODERATOR" })
+    const { headers } = await signInAs(services, { role: "ADMIN" })
     const res = await api(app, `/ownership-requests/${randomUUID()}/approve`, {
       method: "POST",
       headers,
@@ -108,7 +108,7 @@ describe("POST /ownership-requests/:id/approve", () => {
     app,
     services,
   }) => {
-    const { headers } = await signInAs(services, { role: "MODERATOR" })
+    const { headers } = await signInAs(services, { role: "ADMIN" })
     const { userId: requesterId } = await signInAs(services)
     const groupId = await seedGroup(services, requesterId)
     const requestId = await seedRequest(services, {
@@ -140,14 +140,14 @@ describe("POST /ownership-requests/:id/approve", () => {
   })
 
   test("returns GROUP_ALREADY_OWNED when an OWNER already exists", async ({ app, services }) => {
-    const { headers, userId: modId } = await signInAs(services, { role: "MODERATOR" })
+    const { headers, userId: adminId } = await signInAs(services, { role: "ADMIN" })
     const { userId: existingOwnerId } = await signInAs(services)
     const { userId: requesterId } = await signInAs(services)
-    const groupId = await seedGroup(services, modId)
+    const groupId = await seedGroup(services, adminId)
 
     await services.db
       .insertInto("groupMemberships")
-      .values({ userId: existingOwnerId, groupId, role: "OWNER", addedBy: modId })
+      .values({ userId: existingOwnerId, groupId, role: "OWNER", addedBy: adminId })
       .execute()
 
     const requestId = await seedRequest(services, { userId: requesterId, groupId })
@@ -171,6 +171,36 @@ describe("POST /ownership-requests/:id/approve", () => {
     expect(res.status).toBe(401)
   })
 
+  test("only admins can approve requests", async ({ app, services }) => {
+    const { userId: requesterId } = await signInAs(services)
+    const groupId = await seedGroup(services, requesterId)
+    const requestId = await seedRequest(services, { userId: requesterId, groupId })
+
+    for (const role of ["MODERATOR", "UPLOADER", "UPLOADER_INTERN"] as const) {
+      const { headers } = await signInAs(services, { role })
+      const res = await api(app, `/ownership-requests/${requestId}/approve`, {
+        method: "POST",
+        headers,
+      })
+
+      expect(res.status).toBe(403)
+    }
+
+    const request = await services.db
+      .selectFrom("groupOwnershipRequests")
+      .select("status")
+      .where("id", "=", requestId)
+      .executeTakeFirstOrThrow()
+    const memberships = await services.db
+      .selectFrom("groupMemberships")
+      .select("userId")
+      .where("groupId", "=", groupId)
+      .execute()
+
+    expect(request.status).toBe("PENDING")
+    expect(memberships).toEqual([])
+  })
+
   test("rejects USER role with FORBIDDEN", async ({ app, services }) => {
     const { headers } = await signInAs(services)
     const res = await api(app, `/ownership-requests/${randomUUID()}/approve`, {
@@ -185,7 +215,7 @@ describe("POST /ownership-requests/:id/approve", () => {
     app,
     services,
   }) => {
-    const { headers } = await signInAs(services, { role: "MODERATOR" })
+    const { headers } = await signInAs(services, { role: "ADMIN" })
     const { userId: userA } = await signInAs(services)
     const { userId: userB } = await signInAs(services)
     const groupId = await seedGroup(services, userA)

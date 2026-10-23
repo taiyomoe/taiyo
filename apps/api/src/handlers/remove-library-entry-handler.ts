@@ -31,7 +31,7 @@ export const removeLibraryEntryHandler = new Hono().delete(
       }),
     },
   }),
-  withAuth("delete", "Library"),
+  withAuth(),
   validateParam(paramSchema),
   withTransaction,
   async (c) => {

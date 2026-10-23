@@ -68,7 +68,7 @@ describe("DELETE /chapters/:id/groups/:groupId", () => {
     expect(res.status).toBe(401)
   })
 
-  test("a USER who is a member of a linked group can unlink another group", async ({
+  test("a member with EDIT_CHAPTERS can remove their own group's credit", async ({
     app,
     services,
   }) => {
@@ -80,6 +80,7 @@ describe("DELETE /chapters/:id/groups/:groupId", () => {
         userId,
         groupId: SEEDED_GROUP_ID,
         role: "MEMBER",
+        permissions: ["EDIT_CHAPTERS"],
         addedBy: userId,
       })
       .execute()

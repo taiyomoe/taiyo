@@ -54,7 +54,7 @@ export const updateMySettingsHandler = new Hono().patch(
       }),
     },
   }),
-  withAuth("update", "Settings"),
+  withAuth(),
   validateJson(bodySchema),
   async (c) => {
     const { auth, db, user } = c.var

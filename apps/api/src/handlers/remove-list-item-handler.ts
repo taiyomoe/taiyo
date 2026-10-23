@@ -32,7 +32,7 @@ export const removeListItemHandler = new Hono().delete(
       }),
     },
   }),
-  withAuth("update", "List"),
+  withAuth(),
   validateParam(paramSchema),
   checkList(),
   requireListOwner,

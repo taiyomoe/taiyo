@@ -20,7 +20,7 @@ export const unlinkMediaStaffHandler = new Hono().delete(
   describeRoute({
     summary: "Unlink a staff from a media",
     description:
-      "Removes a single (staff, role) link from the media. Other roles for the same staff are unaffected.\n\n**Required roles:** uploader, moderator, admin.",
+      "Removes a single (staff, role) link from the media. Other roles for the same staff are unaffected.\n\n**Required roles:** uploader intern, uploader, moderator, admin.",
     tags: ["Media staff"],
     responses: {
       200: {
@@ -45,7 +45,7 @@ export const unlinkMediaStaffHandler = new Hono().delete(
       }),
     },
   }),
-  withAuth("update", "Media"),
+  withAuth("media.update"),
   validateParam(paramSchema),
   checkMedia(),
   withTransaction,

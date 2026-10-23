@@ -50,7 +50,7 @@ export const upsertLibraryEntryHandler = new Hono().put(
       }),
     },
   }),
-  withAuth("create", "Library"),
+  withAuth(),
   validateParam(paramSchema),
   validateJson(bodySchema),
   withTransaction,

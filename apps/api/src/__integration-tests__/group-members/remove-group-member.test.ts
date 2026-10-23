@@ -51,7 +51,7 @@ describe("DELETE /groups/:id/members/:userId", () => {
     app,
     services,
   }) => {
-    const { headers, userId: ownerId } = await signInAs(services, { role: "MODERATOR" })
+    const { headers, userId: ownerId } = await signInAs(services, { role: "ADMIN" })
     const groupId = await seedGroup(services, ownerId)
     const res = await api(app, `/groups/${groupId}/members/${randomUUID()}`, {
       method: "DELETE",
@@ -67,7 +67,7 @@ describe("DELETE /groups/:id/members/:userId", () => {
     expect(res.body.code).toBe("GROUP_MEMBER_NOT_FOUND")
   })
 
-  test("returns GROUP_LAST_OWNER when removing the only owner", async ({ app, services }) => {
+  test("an owner cannot remove themselves through this route", async ({ app, services }) => {
     const { headers, userId: ownerId } = await signInAs(services)
     const groupId = await seedGroup(services, ownerId)
 
@@ -81,13 +81,116 @@ describe("DELETE /groups/:id/members/:userId", () => {
       headers,
     })
 
-    expect(res.status).toBe(409)
+    expect(res.status).toBe(403)
+  })
 
-    if (res.body.success) {
-      throw new Error("Expected failure")
+  test("an owner cannot remove another owner", async ({ app, services }) => {
+    const { headers, userId: ownerId } = await signInAs(services)
+    const { userId: coOwnerId } = await signInAs(services)
+    const groupId = await seedGroup(services, ownerId)
+
+    await services.db
+      .insertInto("groupMemberships")
+      .values([
+        { userId: ownerId, groupId, role: "OWNER", addedBy: ownerId },
+        { userId: coOwnerId, groupId, role: "OWNER", addedBy: ownerId },
+      ])
+      .execute()
+
+    const res = await api(app, `/groups/${groupId}/members/${coOwnerId}`, {
+      method: "DELETE",
+      headers,
+    })
+
+    expect(res.status).toBe(403)
+  })
+
+  test("an admin can remove the only owner", async ({ app, services }) => {
+    const { headers } = await signInAs(services, { role: "ADMIN" })
+    const { userId: ownerId } = await signInAs(services)
+    const groupId = await seedGroup(services, ownerId)
+
+    await services.db
+      .insertInto("groupMemberships")
+      .values({ userId: ownerId, groupId, role: "OWNER", addedBy: ownerId })
+      .execute()
+
+    const res = await api(app, `/groups/${groupId}/members/${ownerId}`, {
+      method: "DELETE",
+      headers,
+    })
+
+    expect(res.status).toBe(200)
+  })
+
+  test("a manager can remove a member whose permissions they hold", async ({ app, services }) => {
+    const { headers, userId: managerId } = await signInAs(services)
+    const { userId: targetId } = await signInAs(services)
+    const { userId: strongerId } = await signInAs(services)
+    const groupId = await seedGroup(services, managerId)
+
+    await services.db
+      .insertInto("groupMemberships")
+      .values([
+        {
+          userId: managerId,
+          groupId,
+          role: "MEMBER",
+          permissions: ["MANAGE_MEMBERS", "EDIT_CHAPTERS"],
+          addedBy: managerId,
+        },
+        {
+          userId: targetId,
+          groupId,
+          role: "MEMBER",
+          permissions: ["EDIT_CHAPTERS"],
+          addedBy: managerId,
+        },
+        {
+          userId: strongerId,
+          groupId,
+          role: "MEMBER",
+          permissions: ["DELETE_CHAPTERS"],
+          addedBy: managerId,
+        },
+      ])
+      .execute()
+
+    const removed = await api(app, `/groups/${groupId}/members/${targetId}`, {
+      method: "DELETE",
+      headers,
+    })
+    const refused = await api(app, `/groups/${groupId}/members/${strongerId}`, {
+      method: "DELETE",
+      headers,
+    })
+
+    expect(removed.status).toBe(200)
+    expect(refused.status).toBe(403)
+  })
+
+  test("moderators and uploaders cannot remove members", async ({ app, services }) => {
+    const { userId: ownerId } = await signInAs(services)
+    const { userId: targetId } = await signInAs(services)
+    const groupId = await seedGroup(services, ownerId)
+
+    await services.db
+      .insertInto("groupMemberships")
+      .values([
+        { userId: ownerId, groupId, role: "OWNER", addedBy: ownerId },
+        { userId: targetId, groupId, role: "MEMBER", addedBy: ownerId },
+      ])
+      .execute()
+
+    for (const role of ["MODERATOR", "UPLOADER"] as const) {
+      const { headers } = await signInAs(services, { role })
+      const res = await api(app, `/groups/${groupId}/members/${targetId}`, {
+        method: "DELETE",
+        headers,
+      })
+
+      expect(res.status).toBe(403)
     }
-
-    expect(res.body.code).toBe("GROUP_LAST_OWNER")
   })
 
   test("returns FORBIDDEN for a non-owner USER", async ({ app, services }) => {
@@ -121,7 +224,7 @@ describe("DELETE /groups/:id/members/:userId", () => {
   })
 
   test("returns VALIDATION_ERROR for a non-UUID userId", async ({ app, services }) => {
-    const { headers, userId: ownerId } = await signInAs(services, { role: "MODERATOR" })
+    const { headers, userId: ownerId } = await signInAs(services, { role: "ADMIN" })
     const groupId = await seedGroup(services, ownerId)
     const res = await api(app, `/groups/${groupId}/members/not-a-uuid`, {
       method: "DELETE",

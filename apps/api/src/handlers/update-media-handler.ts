@@ -65,7 +65,7 @@ export const updateMediaHandler = new Hono().patch(
   describeRoute({
     summary: "Update a media",
     description:
-      "Updates the metadata of a media. Omitted fields are kept as-is. Send `null` explicitly to clear `startDate` or `endDate`.\n\n**Required roles:** uploader, moderator, admin.",
+      "Updates the metadata of a media. Omitted fields are kept as-is. Send `null` explicitly to clear `startDate` or `endDate`.\n\n**Required roles:** uploader intern, uploader, moderator, admin.",
     tags: ["Medias"],
     requestBody: {
       content: { "application/json": await resolver(updateMediaSchema).toOpenAPISchema() },
@@ -92,7 +92,7 @@ export const updateMediaHandler = new Hono().patch(
       }),
     },
   }),
-  withAuth("update", "Media"),
+  withAuth("media.update"),
   validateJson(updateMediaSchema),
   checkMedia(),
   withTransaction,

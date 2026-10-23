@@ -31,8 +31,7 @@ export const createStaffHandler = new Hono().post(
   "/",
   describeRoute({
     summary: "Create a staff",
-    description:
-      "Creates a staff member.\n\n**Required roles:** uploader intern, uploader, moderator, admin.",
+    description: "Creates a staff member.\n\n**Required roles:** uploader intern, uploader, admin.",
     tags: ["Staffs"],
     requestBody: {
       content: {
@@ -60,7 +59,7 @@ export const createStaffHandler = new Hono().post(
       }),
     },
   }),
-  withAuth("create", "Staff"),
+  withAuth("staff.create"),
   rateLimit({ prefix: "create-staff", windowMs: 60_000, limit: 30 }),
   validateFormData(createStaffSchema),
   checkImages(),

@@ -30,7 +30,7 @@ export const cancelOwnershipRequestHandler = new Hono().delete(
       }),
     },
   }),
-  withAuth("delete", "OwnershipRequest"),
+  withAuth(),
   checkOwnershipRequest(),
   withTransaction,
   async (c) => {

@@ -123,7 +123,7 @@ describe("DELETE /ownership-requests/:id", () => {
 
   test("concurrent approve and cancel: exactly one wins", async ({ app, services }) => {
     const { headers: reviewerHeaders, userId: reviewerId } = await signInAs(services, {
-      role: "MODERATOR",
+      role: "ADMIN",
     })
     const { headers: requesterHeaders, userId: requesterId } = await signInAs(services)
     const groupId = await seedGroup(services, reviewerId)

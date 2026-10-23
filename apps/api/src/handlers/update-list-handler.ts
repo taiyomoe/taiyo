@@ -46,7 +46,7 @@ export const updateListHandler = new Hono().patch(
       }),
     },
   }),
-  withAuth("update", "List"),
+  withAuth(),
   validateJson(updateListSchema),
   checkList(),
   requireListOwner,

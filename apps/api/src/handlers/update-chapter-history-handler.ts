@@ -48,7 +48,7 @@ export const updateChapterHistoryHandler = new Hono().patch(
       }),
     },
   }),
-  withAuth("update", "History"),
+  withAuth(),
   validateJson(updateHistorySchema),
   checkChapter(),
   withTransaction,

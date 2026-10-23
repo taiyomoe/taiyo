@@ -13,7 +13,7 @@ export const approveOwnershipRequestHandler = new Hono().post(
   describeRoute({
     summary: "Approve an ownership request",
     description:
-      "Grants the requester OWNER membership on the group, and auto-cancels every other pending request on the same group.\n\n**Required roles:** moderator, admin.",
+      "Grants the requester OWNER membership on the group, and auto-cancels every other pending request on the same group.\n\n**Required roles:** admin.",
     tags: ["Group ownership"],
     responses: {
       201: {
@@ -33,7 +33,7 @@ export const approveOwnershipRequestHandler = new Hono().post(
       }),
     },
   }),
-  withAuth("manage", "OwnershipRequest"),
+  withAuth("ownershipRequest.review"),
   checkOwnershipRequest(),
   withTransaction,
   async (c) => {

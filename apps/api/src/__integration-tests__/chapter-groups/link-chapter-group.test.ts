@@ -95,7 +95,7 @@ describe("POST /chapters/:id/groups", () => {
     expect(res.status).toBe(401)
   })
 
-  test("a USER who is a member of a linked group can add another group", async ({
+  test("a member with EDIT_CHAPTERS in a credited group can credit another group", async ({
     app,
     services,
   }) => {
@@ -107,6 +107,7 @@ describe("POST /chapters/:id/groups", () => {
         userId,
         groupId: SEEDED_LINKED_GROUP_ID,
         role: "MEMBER",
+        permissions: ["EDIT_CHAPTERS"],
         addedBy: userId,
       })
       .execute()

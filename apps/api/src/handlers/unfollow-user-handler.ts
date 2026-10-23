@@ -31,7 +31,7 @@ export const unfollowUserHandler = new Hono().delete(
       }),
     },
   }),
-  withAuth("delete", "Follow"),
+  withAuth(),
   checkUser(),
   withTransaction,
   async (c) => {

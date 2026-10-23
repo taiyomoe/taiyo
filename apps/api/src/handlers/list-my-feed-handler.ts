@@ -29,7 +29,7 @@ export const listMyFeedHandler = new Hono().get(
       }),
     },
   }),
-  withAuth("read", "Library"),
+  withAuth(),
   validateQuery(paginationQuerySchema),
   async (c) => {
     const { db, user } = c.var

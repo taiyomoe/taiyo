@@ -129,6 +129,7 @@ describe("PATCH /chapters/:id", () => {
         userId,
         groupId: linked.groupId,
         role: "MEMBER",
+        permissions: ["EDIT_CHAPTERS"],
         addedBy: userId,
       })
       .execute()

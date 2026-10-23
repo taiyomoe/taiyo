@@ -30,7 +30,7 @@ export const listGroupOwnershipRequestsHandler = new Hono().get(
   describeRoute({
     summary: "List ownership requests for a group",
     description:
-      "Moderators see every request on the group. Everyone else sees only their own.\n\n**Authentication:** signed-in user.",
+      "Admins see every request on the group. Everyone else sees only their own.\n\n**Authentication:** signed-in user.",
     tags: ["Group ownership"],
     responses: {
       200: {
@@ -47,16 +47,15 @@ export const listGroupOwnershipRequestsHandler = new Hono().get(
       }),
     },
   }),
-  withAuth("read", "OwnershipRequest"),
+  withAuth(),
   validateQuery(querySchema),
   checkGroup(),
   async (c) => {
-    const { db, group, user } = c.var
+    const { can, db, group, user } = c.var
     const { status } = c.var.query
-    const isModerator = user.role === "ADMIN" || user.role === "MODERATOR"
     let query = db.selectFrom("groupOwnershipRequests").selectAll().where("groupId", "=", group.id)
 
-    if (!isModerator) {
+    if (!can("ownershipRequest.review")) {
       query = query.where("userId", "=", user.id)
     }
 
