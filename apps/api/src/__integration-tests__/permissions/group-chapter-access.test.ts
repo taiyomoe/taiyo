@@ -96,7 +96,7 @@ describe("group chapter access", () => {
       expect(res.status).toBe(201)
     })
 
-    test("crediting only groups the uploader cannot publish for is refused", async ({
+    test("crediting only groups the uploader cannot publish for sends the chapter to review", async ({
       app,
       services,
     }) => {
@@ -115,11 +115,11 @@ describe("group chapter access", () => {
           json: { number: 1, language: "en", groupIds },
         })
 
-        expect(res.status).toBe(403)
+        expect(res.body).toMatchObject({ data: { status: "PENDING" } })
       }
     })
 
-    test("a member of a deleted group cannot publish for it", async ({ app, services }) => {
+    test("a deleted group cannot be credited", async ({ app, services }) => {
       const { mediaId, groupA, memberOf } = await setup(services)
       const { headers } = await memberOf(groupA, ["UPLOAD_CHAPTERS"])
 
@@ -135,7 +135,7 @@ describe("group chapter access", () => {
         json: { number: 1, language: "en", groupIds: [groupA] },
       })
 
-      expect(res.status).toBe(403)
+      expect(res.body).toMatchObject({ code: "GROUP_NOT_FOUND" })
     })
 
     test("uploaders and admins publish with any groups or none", async ({ app, services }) => {
@@ -156,7 +156,10 @@ describe("group chapter access", () => {
       }
     })
 
-    test("moderators and interns cannot publish without a group", async ({ app, services }) => {
+    test("moderators, interns and users send chapters without a group to review", async ({
+      app,
+      services,
+    }) => {
       const { mediaId } = await setup(services)
 
       for (const role of ["MODERATOR", "UPLOADER_INTERN", "USER"] as const) {
@@ -167,7 +170,7 @@ describe("group chapter access", () => {
           json: { number: 1, language: "en" },
         })
 
-        expect(res.status).toBe(403)
+        expect(res.body).toMatchObject({ data: { status: "PENDING" } })
       }
     })
 

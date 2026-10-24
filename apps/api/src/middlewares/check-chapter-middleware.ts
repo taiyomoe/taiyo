@@ -6,7 +6,7 @@ const paramSchema = z.object({
   id: z.uuid(),
 })
 
-export const checkChapter = (opts: { includeDeleted?: boolean } = {}) =>
+export const checkChapter = (opts: { includeDeleted?: boolean; unpublished?: boolean } = {}) =>
   createMiddleware<{
     Variables: { chapter: Selectable<Chapter> }
   }>(async (c, next) => {
@@ -22,7 +22,8 @@ export const checkChapter = (opts: { includeDeleted?: boolean } = {}) =>
     log.set({ chapter: { id } })
 
     const base = db.selectFrom("chapters").selectAll().where("id", "=", id)
-    const query = opts.includeDeleted === true ? base : base.where("deletedAt", "is", null)
+    const visible = opts.unpublished === true ? base : base.where("status", "=", "PUBLISHED")
+    const query = opts.includeDeleted === true ? visible : visible.where("deletedAt", "is", null)
     const chapter = await query.executeTakeFirst()
 
     if (!chapter) {

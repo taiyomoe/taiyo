@@ -18,6 +18,7 @@ export const selectVisibleChapters = (
     .selectFrom("chapters")
     .innerJoin("medias", "medias.id", "chapters.mediaId")
     .where("chapters.deletedAt", "is", null)
+    .where("chapters.status", "=", "PUBLISHED")
     .where("medias.deletedAt", "is", null)
     .where(effectiveContentRating, "in", contentRatings)
     .where((eb) => (mediaId === undefined ? eb.and([]) : eb("chapters.mediaId", "=", mediaId)))

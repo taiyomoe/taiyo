@@ -148,6 +148,23 @@ const mediaStaffErrors = {
   },
 } as const
 const chapterGroupErrors = {
+  CHAPTER_SUBMISSION_LIMIT: {
+    message:
+      "You have too many chapters waiting for review. Wait for them to be reviewed before submitting more.",
+    code: 409,
+  },
+  CHAPTER_NOT_PENDING: {
+    message: "This chapter is not waiting for review.",
+    code: 409,
+  },
+  CHAPTER_PAGES_MISSING: {
+    message: "This chapter has no processed pages yet.",
+    code: 409,
+  },
+  CHAPTER_PAGES_MISMATCH: {
+    message: "The page order must list every page of the chapter exactly once.",
+    code: 422,
+  },
   CHAPTER_GROUP_EXISTS: {
     message: "This group is already linked to the chapter.",
     code: 409,

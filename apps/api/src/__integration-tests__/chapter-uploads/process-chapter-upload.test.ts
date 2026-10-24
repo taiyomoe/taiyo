@@ -87,6 +87,76 @@ describe("processChapterUpload", () => {
     expect(listed.Contents).toHaveLength(1)
   })
 
+  test("leaves rejected and withdrawn chapters without pages and removes the processed files", async ({
+    services,
+  }) => {
+    const { db, s3, s3Bucket } = services
+
+    for (const state of ["REJECTED", "WITHDRAWN"] as const) {
+      const chapterId = crypto.randomUUID()
+      const uploadId = crypto.randomUUID()
+      const taskId = crypto.randomUUID()
+      const pageId = crypto.randomUUID()
+      const stagingKey = `staging/chapters/${chapterId}/${uploadId}/0`
+
+      await db
+        .insertInto("chapters")
+        .values({
+          id: chapterId,
+          mediaId: SEEDED_MEDIA_ID,
+          number: 96_002,
+          language: "en",
+          uploaderId: SEEDED_UPLOADER_ID,
+          status: state === "REJECTED" ? "REJECTED" : "PENDING",
+          deletedAt: state === "WITHDRAWN" ? new Date() : null,
+        })
+        .execute()
+      await s3.send(
+        new PutObjectCommand({
+          Bucket: s3Bucket,
+          Key: stagingKey,
+          Body: await makeTinyJpeg(),
+          ContentType: "image/jpeg",
+        }),
+      )
+      await db
+        .insertInto("tasks")
+        .values({
+          id: taskId,
+          type: "UPLOAD_CHAPTER",
+          status: "PENDING",
+          sessionId: uploadId,
+          payload: {
+            chapterId,
+            mediaId: SEEDED_MEDIA_ID,
+            uploadId,
+            pages: [{ pageId, stagingKey }],
+          },
+        })
+        .execute()
+
+      await processChapterUpload({ db, s3, s3Bucket }, { taskId })
+
+      const chapter = await db
+        .selectFrom("chapters")
+        .select(["pages"])
+        .where("id", "=", chapterId)
+        .executeTakeFirstOrThrow()
+      const listed = await s3.send(
+        new ListObjectsV2Command({
+          Bucket: s3Bucket,
+          Prefix: `medias/${SEEDED_MEDIA_ID}/chapters/${chapterId}/`,
+        }),
+      )
+
+      expect({ state, pages: chapter.pages, files: listed.Contents ?? [] }).toEqual({
+        state,
+        pages: null,
+        files: [],
+      })
+    }
+  })
+
   test("marks task FAILED and rethrows when a staged page is missing from S3", async ({
     services,
   }) => {

@@ -3,7 +3,7 @@ import type { ChapterTarget } from "@taiyomoe/permissions"
 
 export const getChapterTarget = async (
   db: Kysely<DB>,
-  chapter: Pick<Selectable<Chapter>, "id" | "uploaderId">,
+  chapter: Pick<Selectable<Chapter>, "id" | "uploaderId" | "status">,
 ) => {
   const rows = await db
     .selectFrom("chapterGroups")
@@ -15,6 +15,7 @@ export const getChapterTarget = async (
 
   return {
     uploaderId: chapter.uploaderId,
+    status: chapter.status,
     groupIds: rows.map((row) => row.groupId),
   } satisfies ChapterTarget
 }

@@ -58,6 +58,9 @@ const ROUTES: Route[] = [
     allowed: ["ADMIN"],
   },
   { method: "POST", path: "/group-creation-requests", body: "json", allowed: ROLES },
+  { method: "GET", path: "/chapters/review-queue?page=0", allowed: ["UPLOADER", "ADMIN"] },
+  { method: "POST", path: `/chapters/${id}/approve`, body: "json", allowed: ["UPLOADER", "ADMIN"] },
+  { method: "POST", path: `/chapters/${id}/reject`, body: "json", allowed: ["UPLOADER", "ADMIN"] },
   { method: "GET", path: "/dashboard/overview?range=forever", allowed: ["MODERATOR", "ADMIN"] },
 ]
 const send = (app: Parameters<typeof api>[0], route: Route, headers?: Record<string, string>) =>

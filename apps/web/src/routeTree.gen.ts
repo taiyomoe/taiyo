@@ -20,8 +20,11 @@ import { Route as TitlesRouteImport } from './routes/titles'
 import { Route as AuthSignInRouteImport } from './routes/auth/sign-in'
 import { Route as AuthSignUpRouteImport } from './routes/auth/sign-up'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
+import { Route as DashboardChapterReviewsRouteImport } from './routes/dashboard/chapter-reviews'
 import { Route as DashboardGroupRequestsRouteImport } from './routes/dashboard/group-requests'
 import { Route as DashboardInvitationsRouteImport } from './routes/dashboard/invitations'
+import { Route as DashboardSubmissionsRouteImport } from './routes/dashboard/submissions'
+import { Route as DashboardUploadRouteImport } from './routes/dashboard/upload'
 import { Route as GroupsIndexRouteImport } from './routes/groups/index'
 import { Route as GroupsGroupIdRouteImport } from './routes/groups/$groupId'
 import { Route as MediaMediaIdRouteImport } from './routes/media/$mediaId'
@@ -83,6 +86,11 @@ const DashboardIndexRoute = DashboardIndexRouteImport.update({
   path: '/',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
+const DashboardChapterReviewsRoute = DashboardChapterReviewsRouteImport.update({
+  id: '/chapter-reviews',
+  path: '/chapter-reviews',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
 const DashboardGroupRequestsRoute = DashboardGroupRequestsRouteImport.update({
   id: '/group-requests',
   path: '/group-requests',
@@ -91,6 +99,16 @@ const DashboardGroupRequestsRoute = DashboardGroupRequestsRouteImport.update({
 const DashboardInvitationsRoute = DashboardInvitationsRouteImport.update({
   id: '/invitations',
   path: '/invitations',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardSubmissionsRoute = DashboardSubmissionsRouteImport.update({
+  id: '/submissions',
+  path: '/submissions',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardUploadRoute = DashboardUploadRouteImport.update({
+  id: '/upload',
+  path: '/upload',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
 const GroupsIndexRoute = GroupsIndexRouteImport.update({
@@ -130,8 +148,11 @@ export interface FileRoutesByFullPath {
   '/titles': typeof TitlesRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
+  '/dashboard/chapter-reviews': typeof DashboardChapterReviewsRoute
   '/dashboard/group-requests': typeof DashboardGroupRequestsRoute
   '/dashboard/invitations': typeof DashboardInvitationsRoute
+  '/dashboard/submissions': typeof DashboardSubmissionsRoute
+  '/dashboard/upload': typeof DashboardUploadRoute
   '/groups/$groupId': typeof GroupsGroupIdRoute
   '/media/$mediaId': typeof MediaMediaIdRoute
   '/dashboard/': typeof DashboardIndexRoute
@@ -149,8 +170,11 @@ export interface FileRoutesByTo {
   '/titles': typeof TitlesRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
+  '/dashboard/chapter-reviews': typeof DashboardChapterReviewsRoute
   '/dashboard/group-requests': typeof DashboardGroupRequestsRoute
   '/dashboard/invitations': typeof DashboardInvitationsRoute
+  '/dashboard/submissions': typeof DashboardSubmissionsRoute
+  '/dashboard/upload': typeof DashboardUploadRoute
   '/groups/$groupId': typeof GroupsGroupIdRoute
   '/media/$mediaId': typeof MediaMediaIdRoute
   '/dashboard': typeof DashboardIndexRoute
@@ -170,8 +194,11 @@ export interface FileRoutesById {
   '/titles': typeof TitlesRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
+  '/dashboard/chapter-reviews': typeof DashboardChapterReviewsRoute
   '/dashboard/group-requests': typeof DashboardGroupRequestsRoute
   '/dashboard/invitations': typeof DashboardInvitationsRoute
+  '/dashboard/submissions': typeof DashboardSubmissionsRoute
+  '/dashboard/upload': typeof DashboardUploadRoute
   '/groups/$groupId': typeof GroupsGroupIdRoute
   '/media/$mediaId': typeof MediaMediaIdRoute
   '/dashboard/': typeof DashboardIndexRoute
@@ -192,8 +219,11 @@ export interface FileRouteTypes {
     | '/titles'
     | '/auth/sign-in'
     | '/auth/sign-up'
+    | '/dashboard/chapter-reviews'
     | '/dashboard/group-requests'
     | '/dashboard/invitations'
+    | '/dashboard/submissions'
+    | '/dashboard/upload'
     | '/groups/$groupId'
     | '/media/$mediaId'
     | '/dashboard/'
@@ -211,8 +241,11 @@ export interface FileRouteTypes {
     | '/titles'
     | '/auth/sign-in'
     | '/auth/sign-up'
+    | '/dashboard/chapter-reviews'
     | '/dashboard/group-requests'
     | '/dashboard/invitations'
+    | '/dashboard/submissions'
+    | '/dashboard/upload'
     | '/groups/$groupId'
     | '/media/$mediaId'
     | '/dashboard'
@@ -231,8 +264,11 @@ export interface FileRouteTypes {
     | '/titles'
     | '/auth/sign-in'
     | '/auth/sign-up'
+    | '/dashboard/chapter-reviews'
     | '/dashboard/group-requests'
     | '/dashboard/invitations'
+    | '/dashboard/submissions'
+    | '/dashboard/upload'
     | '/groups/$groupId'
     | '/media/$mediaId'
     | '/dashboard/'
@@ -334,6 +370,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardIndexRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
+    '/dashboard/chapter-reviews': {
+      id: '/dashboard/chapter-reviews'
+      path: '/chapter-reviews'
+      fullPath: '/dashboard/chapter-reviews'
+      preLoaderRoute: typeof DashboardChapterReviewsRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
     '/dashboard/group-requests': {
       id: '/dashboard/group-requests'
       path: '/group-requests'
@@ -346,6 +389,20 @@ declare module '@tanstack/react-router' {
       path: '/invitations'
       fullPath: '/dashboard/invitations'
       preLoaderRoute: typeof DashboardInvitationsRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/submissions': {
+      id: '/dashboard/submissions'
+      path: '/submissions'
+      fullPath: '/dashboard/submissions'
+      preLoaderRoute: typeof DashboardSubmissionsRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/upload': {
+      id: '/dashboard/upload'
+      path: '/upload'
+      fullPath: '/dashboard/upload'
+      preLoaderRoute: typeof DashboardUploadRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
     '/groups/': {
@@ -401,16 +458,22 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
 )
 
 interface DashboardRouteRouteChildren {
+  DashboardChapterReviewsRoute: typeof DashboardChapterReviewsRoute
   DashboardGroupRequestsRoute: typeof DashboardGroupRequestsRoute
   DashboardInvitationsRoute: typeof DashboardInvitationsRoute
+  DashboardSubmissionsRoute: typeof DashboardSubmissionsRoute
+  DashboardUploadRoute: typeof DashboardUploadRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
   DashboardGroupsGroupIdRoute: typeof DashboardGroupsGroupIdRoute
   DashboardGroupsIndexRoute: typeof DashboardGroupsIndexRoute
 }
 
 const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
+  DashboardChapterReviewsRoute: DashboardChapterReviewsRoute,
   DashboardGroupRequestsRoute: DashboardGroupRequestsRoute,
   DashboardInvitationsRoute: DashboardInvitationsRoute,
+  DashboardSubmissionsRoute: DashboardSubmissionsRoute,
+  DashboardUploadRoute: DashboardUploadRoute,
   DashboardIndexRoute: DashboardIndexRoute,
   DashboardGroupsGroupIdRoute: DashboardGroupsGroupIdRoute,
   DashboardGroupsIndexRoute: DashboardGroupsIndexRoute,

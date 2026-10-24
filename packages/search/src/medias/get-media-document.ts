@@ -83,6 +83,7 @@ export const getMediaDocument = async (db: Kysely<DB>, mediaId: string) => {
       .select("language")
       .where("mediaId", "=", mediaId)
       .where("deletedAt", "is", null)
+      .where("status", "=", "PUBLISHED")
       .execute(),
     db
       .selectFrom("userLibraryEntries")

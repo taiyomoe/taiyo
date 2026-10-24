@@ -1,7 +1,9 @@
+import type { ChapterStatus } from "@taiyomoe/db/constants"
 import { describe, expect, it } from "vitest"
 import {
   type Actor,
   type ActorMembership,
+  type ChapterTarget,
   buildRules,
   createPermissions,
   GROUP_PERMISSIONS,
@@ -31,7 +33,11 @@ const target = (overrides: Partial<MemberTarget> = {}) =>
     permissions: [],
     ...overrides,
   }) satisfies MemberTarget
-const chapter = (groupIds: string[] = [], uploaderId = OTHER_ID) => ({ uploaderId, groupIds })
+const chapter = (
+  groupIds: string[] = [],
+  uploaderId = OTHER_ID,
+  status: ChapterStatus = "PUBLISHED",
+) => ({ uploaderId, status, groupIds }) satisfies ChapterTarget
 const STATIC_MATRIX: Record<StaticPermissionPath, readonly Role[]> = {
   "dashboard.open": ROLES,
   "dashboard.viewStats": ["MODERATOR", "ADMIN"],
@@ -45,6 +51,8 @@ const STATIC_MATRIX: Record<StaticPermissionPath, readonly Role[]> = {
   "staff.update": ["UPLOADER_INTERN", "UPLOADER", "MODERATOR", "ADMIN"],
   "staff.delete": ["UPLOADER", "ADMIN"],
   "chapter.publish": ["UPLOADER", "ADMIN"],
+  "chapter.submit": ROLES,
+  "chapter.review": ["UPLOADER", "ADMIN"],
   "chapter.flag": ["UPLOADER", "MODERATOR", "ADMIN"],
   "group.create": ["UPLOADER", "ADMIN"],
   "group.delete": ["ADMIN"],
@@ -96,7 +104,9 @@ describe("role matrix", () => {
 describe("signed-out and banned users", () => {
   const everything = (can: ReturnType<typeof createPermissions>) => [
     ...STATIC_PATHS.map((path) => can(path)),
+    can("chapter.view", chapter([GROUP_A], ACTOR_ID, "PENDING")),
     can("chapter.update", chapter([GROUP_A])),
+    can("chapter.withdraw", chapter([GROUP_A], ACTOR_ID, "PENDING")),
     can("chapter.delete", chapter([GROUP_A])),
     can("chapter.credit", { chapter: chapter([GROUP_A]), groupId: GROUP_B }),
     can("chapter.uncredit", { chapter: chapter([GROUP_A]), groupId: GROUP_A }),
@@ -220,6 +230,71 @@ describe("chapters", () => {
     expect(can("chapter.update", chapter([GROUP_B]))).toBe(false)
     expect(can("group.uploadChapters", { id: GROUP_B })).toBe(false)
     expect(can("group.update", { id: GROUP_B })).toBe(false)
+  })
+})
+
+describe("submissions", () => {
+  const pending = (uploaderId = OTHER_ID, groupIds: string[] = [GROUP_A]) =>
+    chapter(groupIds, uploaderId, "PENDING")
+  const rejected = (uploaderId = OTHER_ID) => chapter([GROUP_A], uploaderId, "REJECTED")
+
+  it("shows published chapters to everyone, signed in or not", () => {
+    expect(createPermissions(null)("chapter.view", chapter())).toBe(true)
+    expect(createPermissions(actor("USER"))("chapter.view", chapter())).toBe(true)
+  })
+
+  it("only shows unpublished chapters to their submitter and to reviewers", () => {
+    for (const unpublished of [pending(), rejected()]) {
+      expect(createPermissions(null)("chapter.view", unpublished)).toBe(false)
+      expect(createPermissions(actor("USER", [owner(GROUP_A)]))("chapter.view", unpublished)).toBe(
+        false,
+      )
+      expect(createPermissions(actor("MODERATOR"))("chapter.view", unpublished)).toBe(false)
+      expect(createPermissions(actor("UPLOADER_INTERN"))("chapter.view", unpublished)).toBe(false)
+      expect(createPermissions(actor("UPLOADER"))("chapter.view", unpublished)).toBe(true)
+      expect(createPermissions(actor("ADMIN"))("chapter.view", unpublished)).toBe(true)
+    }
+
+    expect(createPermissions(actor("USER"))("chapter.view", pending(ACTOR_ID))).toBe(true)
+    expect(createPermissions(actor("USER"))("chapter.view", rejected(ACTOR_ID))).toBe(true)
+  })
+
+  it("lets the submitter edit and withdraw only while pending", () => {
+    const can = createPermissions(actor("USER"))
+
+    expect(can("chapter.update", pending(ACTOR_ID))).toBe(true)
+    expect(can("chapter.withdraw", pending(ACTOR_ID))).toBe(true)
+    expect(can("chapter.credit", { chapter: pending(ACTOR_ID), groupId: GROUP_B })).toBe(true)
+    expect(can("chapter.uncredit", { chapter: pending(ACTOR_ID), groupId: GROUP_A })).toBe(true)
+    expect(can("chapter.update", rejected(ACTOR_ID))).toBe(false)
+    expect(can("chapter.withdraw", rejected(ACTOR_ID))).toBe(false)
+    expect(can("chapter.update", chapter([], ACTOR_ID))).toBe(false)
+    expect(can("chapter.withdraw", chapter([], ACTOR_ID))).toBe(false)
+    expect(can("chapter.delete", pending(ACTOR_ID))).toBe(false)
+  })
+
+  it("gives group permissions no hold over a submission that credits the group", () => {
+    const can = createPermissions(actor("USER", [owner(GROUP_A)]))
+
+    expect(can("chapter.update", pending())).toBe(false)
+    expect(can("chapter.delete", pending())).toBe(false)
+    expect(can("chapter.withdraw", pending())).toBe(false)
+    expect(can("chapter.uncredit", { chapter: pending(), groupId: GROUP_A })).toBe(false)
+  })
+
+  it("lets reviewers edit and delete submissions, not moderators", () => {
+    for (const role of ["UPLOADER", "ADMIN"] as const) {
+      const can = createPermissions(actor(role))
+
+      expect(can("chapter.update", pending())).toBe(true)
+      expect(can("chapter.delete", rejected())).toBe(true)
+      expect(can("chapter.withdraw", pending())).toBe(false)
+    }
+
+    const moderator = createPermissions(actor("MODERATOR"))
+
+    expect(moderator("chapter.update", pending())).toBe(false)
+    expect(moderator("chapter.delete", pending())).toBe(false)
   })
 })
 

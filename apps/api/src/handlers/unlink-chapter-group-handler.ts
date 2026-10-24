@@ -40,7 +40,7 @@ export const unlinkChapterGroupHandler = new Hono().delete(
   }),
   withAuth(),
   validateParam(paramSchema),
-  checkChapter(),
+  checkChapter({ unpublished: true }),
   withTransaction,
   async (c) => {
     const { can, db, chapter } = c.var

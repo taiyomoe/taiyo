@@ -49,5 +49,6 @@ export const selectReadChapterNumber = (db: Kysely<DB>, userId: string) =>
     .select(sql.lit(1).as("one"))
     .where("userHistories.userId", "=", userId)
     .where("read.deletedAt", "is", null)
+    .where("read.status", "=", "PUBLISHED")
     .where("read.mediaId", "=", sql.ref<string>("chapters.mediaId"))
     .where("read.number", "=", sql.ref<number>("chapters.number"))

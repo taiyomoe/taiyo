@@ -43,7 +43,7 @@ export const linkChapterGroupHandler = new Hono().post(
   }),
   withAuth(),
   validateJson(linkChapterGroupSchema),
-  checkChapter(),
+  checkChapter({ unpublished: true }),
   withTransaction,
   async (c) => {
     const { can, db, chapter } = c.var

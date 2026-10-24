@@ -6,6 +6,7 @@ import { getLibraryEntryHandler } from "../handlers/get-library-entry-handler"
 import { getReadingProgressHandler } from "../handlers/get-reading-progress-handler"
 import { listFollowersHandler } from "../handlers/list-followers-handler"
 import { listFollowingHandler } from "../handlers/list-following-handler"
+import { listMyChapterSubmissionsHandler } from "../handlers/list-my-chapter-submissions-handler"
 import { listMyFeedHandler } from "../handlers/list-my-feed-handler"
 import { listMyGroupCreationRequestsHandler } from "../handlers/list-my-group-creation-requests-handler"
 import { listMyGroupInvitationsHandler } from "../handlers/list-my-group-invitations-handler"
@@ -37,3 +38,4 @@ export const usersRouter = new Hono()
   .route("/", listMyGroupsHandler)
   .route("/", listMyGroupInvitationsHandler)
   .route("/", listMyGroupCreationRequestsHandler)
+  .route("/", listMyChapterSubmissionsHandler)

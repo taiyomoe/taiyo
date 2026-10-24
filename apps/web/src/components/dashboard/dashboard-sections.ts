@@ -1,6 +1,8 @@
 import type { Permissions } from "@taiyomoe/permissions"
 import {
   Banner,
+  CheckCircle,
+  Clock,
   CloudUpload,
   Comment,
   Dashboard,
@@ -15,6 +17,7 @@ import {
   Settings,
   Shield,
   Tag,
+  Upload,
   User,
   UserCheck,
   Users,
@@ -28,7 +31,7 @@ type DashboardItem = AppSidebarSection["items"][number] & {
 
 type DashboardSection = Omit<AppSidebarSection, "items"> & { items: DashboardItem[] }
 
-const ANY_CHAPTER = { uploaderId: "", groupIds: [] }
+const ANY_CHAPTER = { uploaderId: "", status: "PUBLISHED", groupIds: [] } as const
 const ANOTHER_USER = { id: "", role: "USER" } as const
 
 export const DASHBOARD_SECTIONS: DashboardSection[] = [
@@ -39,6 +42,29 @@ export const DASHBOARD_SECTIONS: DashboardSection[] = [
         label: m.dashboard_nav_activity_log,
         icon: History,
         visible: (can) => can("dashboard.viewStats"),
+      },
+    ],
+  },
+  {
+    label: m.dashboard_nav_chapters_section,
+    items: [
+      {
+        label: m.dashboard_nav_upload,
+        icon: Upload,
+        to: "/dashboard/upload",
+        visible: (can) => can("chapter.submit"),
+      },
+      {
+        label: m.dashboard_nav_submissions,
+        icon: Clock,
+        to: "/dashboard/submissions",
+        visible: (can) => can("chapter.submit"),
+      },
+      {
+        label: m.dashboard_nav_chapter_reviews,
+        icon: CheckCircle,
+        to: "/dashboard/chapter-reviews",
+        visible: (can) => can("chapter.review"),
       },
     ],
   },
