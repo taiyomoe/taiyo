@@ -229,7 +229,7 @@ export function MediaPage({ mediaId, user }: MediaPageProps) {
         <MediaPageContent
           canEdit={user !== null && getPermissions(user)("media.update")}
           mediaId={mediaId}
-          signedIn={user !== null}
+          user={user}
         />
       </Suspense>
     </AppShell>
@@ -238,13 +238,14 @@ export function MediaPage({ mediaId, user }: MediaPageProps) {
 
 function MediaPageContent({
   mediaId,
-  signedIn,
+  user,
   canEdit,
 }: {
   mediaId: string
-  signedIn: boolean
+  user: Session["user"] | null
   canEdit: boolean
 }) {
+  const signedIn = user !== null
   const { data: media } = useSuspenseQuery(mediaQueryOptions(mediaId))
   const contentRatings = useDeferredValue(useSettings().contentRatings)
   const backdrop =
@@ -276,7 +277,7 @@ function MediaPageContent({
         </aside>
         <div sx={styles.main}>
           <MediaHeader media={media} />
-          <MediaTabs media={media} signedIn={signedIn} />
+          <MediaTabs media={media} user={user} />
         </div>
       </div>
     </div>
@@ -314,7 +315,7 @@ function MediaHeader({ media }: { media: Media }) {
   )
 }
 
-function MediaTabs({ media, signedIn }: { media: Media; signedIn: boolean }) {
+function MediaTabs({ media, user }: { media: Media; user: Session["user"] | null }) {
   const { tab = "chapters", lang } = routeApi.useSearch()
   const navigate = routeApi.useNavigate()
   const contentRatings = useDeferredValue(useSettings().contentRatings)
@@ -358,7 +359,7 @@ function MediaTabs({ media, signedIn }: { media: Media; signedIn: boolean }) {
         <MediaInfo media={media} />
       </TabsPanel>
       <TabsPanel value="chapters">
-        <MediaChapters mediaId={media.id} signedIn={signedIn} />
+        <MediaChapters mediaId={media.id} user={user} />
       </TabsPanel>
     </Tabs>
   )

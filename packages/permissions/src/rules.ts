@@ -36,6 +36,8 @@ export const buildRules = (actor: Actor | null) => {
   const reviewsSuggestions = is("UPLOADER", "MODERATOR", "ADMIN")
   const isOwnPendingSuggestion = (suggestion: MediaSuggestionTarget) =>
     suggestion.status === "PENDING" && isSelf(suggestion.authorId)
+  const isLive = (chapter: ChapterTarget) =>
+    chapter.status === "PUBLISHED" || chapter.status === "SCHEDULED"
   const isOwnUnpublished = (chapter: ChapterTarget) =>
     (chapter.status === "PENDING" || chapter.status === "UPLOADING") && isSelf(chapter.uploaderId)
   const canManage = (groupId: string, permissions: readonly GroupPermission[]) => {
@@ -78,23 +80,35 @@ export const buildRules = (actor: Actor | null) => {
       submit: active !== null,
       review: reviewsChapters,
       flag: managesChapters,
-      view: (chapter) =>
-        chapter.status === "PUBLISHED" || reviewsChapters || isSelf(chapter.uploaderId),
+      view: (chapter) => {
+        if (chapter.status === "PUBLISHED") {
+          return true
+        }
+
+        return (
+          reviewsChapters ||
+          isSelf(chapter.uploaderId) ||
+          (chapter.status === "SCHEDULED" &&
+            (managesChapters || holdsInAny(chapter.groupIds, "EDIT_CHAPTERS")))
+        )
+      },
       update: (chapter) =>
-        chapter.status === "PUBLISHED"
-          ? managesChapters || holdsInAny(chapter.groupIds, "EDIT_CHAPTERS")
+        isLive(chapter)
+          ? managesChapters ||
+            holdsInAny(chapter.groupIds, "EDIT_CHAPTERS") ||
+            (chapter.status === "SCHEDULED" && isSelf(chapter.uploaderId))
           : reviewsChapters || isOwnUnpublished(chapter),
       withdraw: (chapter) => isOwnUnpublished(chapter),
       delete: (chapter) =>
-        chapter.status === "PUBLISHED"
+        isLive(chapter)
           ? managesChapters || holdsInAny(chapter.groupIds, "DELETE_CHAPTERS")
           : reviewsChapters,
       credit: ({ chapter }) =>
-        chapter.status === "PUBLISHED"
+        isLive(chapter)
           ? managesChapters || holdsInAny(chapter.groupIds, "EDIT_CHAPTERS")
           : reviewsChapters || isOwnUnpublished(chapter),
       uncredit: ({ chapter, groupId }) =>
-        chapter.status === "PUBLISHED"
+        isLive(chapter)
           ? managesChapters ||
             (chapter.groupIds.includes(groupId) && holds(groupId, "EDIT_CHAPTERS"))
           : reviewsChapters || isOwnUnpublished(chapter),

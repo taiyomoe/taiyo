@@ -6,6 +6,7 @@ import z from "zod"
 import { authorizeChapterView } from "../middlewares/authorize-chapter-view-middleware"
 import { checkChapter } from "../middlewares/check-chapter-middleware"
 import { withOptionalAuth } from "../middlewares/with-auth-middleware"
+import { publishAtIso } from "../utils/chapter-release"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
@@ -18,9 +19,10 @@ const chapterDetailSchema = z.object({
   language: z.enum(LANGUAGES).meta({ description: "Language of the chapter." }),
   contentRating: z.enum(CONTENT_RATINGS).meta({ description: "Content rating." }),
   flag: z.enum(FLAGS).meta({ description: "Visibility flag." }),
-  status: z
-    .enum(CHAPTER_STATUSES)
-    .meta({ description: "PUBLISHED, or PENDING / REJECTED for chapters in review." }),
+  status: z.enum(CHAPTER_STATUSES).meta({
+    description:
+      "PUBLISHED, SCHEDULED until its release, UPLOADING while its pages are processed, or PENDING / REJECTED for chapters in review.",
+  }),
   pages: z
     .object({
       id: z.uuid().meta({
@@ -36,6 +38,17 @@ const chapterDetailSchema = z.object({
     .array()
     .nullable()
     .meta({ description: "The pages of the chapter, in reading order." }),
+  publishAt: z.iso
+    .datetime()
+    .nullable()
+    .meta({ description: "When the chapter goes live, if it was scheduled." }),
+  externalUrl: z
+    .string()
+    .nullable()
+    .meta({ description: "Link to the chapter on the group's own site, if any." }),
+  isExternal: z
+    .boolean()
+    .meta({ description: "Whether the chapter is only hosted on the group's site." }),
   createdAt: z.iso.datetime().meta({ description: "When the chapter was created." }),
   updatedAt: z.iso.datetime().meta({ description: "When the chapter was last updated." }),
 })
@@ -63,8 +76,13 @@ export const getChapterHandler = new Hono().get(
   withOptionalAuth,
   checkChapter({ unpublished: true }),
   authorizeChapterView,
-  (c) => {
-    const { chapter } = c.var
+  async (c) => {
+    const { chapter, db } = c.var
+    const { publishAt } = await db
+      .selectFrom("chapters")
+      .select(publishAtIso.as("publishAt"))
+      .where("id", "=", chapter.id)
+      .executeTakeFirstOrThrow()
 
     return c.ok({
       id: chapter.id,
@@ -81,6 +99,9 @@ export const getChapterHandler = new Hono().get(
           id: page.id,
           url: getChapterPageUrl(chapter.mediaId, chapter.id, page.id),
         })) ?? null,
+      publishAt,
+      externalUrl: chapter.externalUrl,
+      isExternal: chapter.isExternal,
       createdAt: chapter.createdAt,
       updatedAt: chapter.updatedAt,
     })

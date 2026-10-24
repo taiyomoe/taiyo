@@ -88,11 +88,11 @@ describe("processChapterUpload", () => {
     expect(listed.Contents).toHaveLength(1)
   })
 
-  test("publishes an uploading chapter as just released, and keeps a submission pending", async ({
+  test("publishes an uploading chapter as just released, schedules it, or keeps a submission pending", async ({
     services,
   }) => {
     const { db, s3, s3Bucket } = services
-    const stage = async (status: "UPLOADING" | "PENDING", number: number) => {
+    const stage = async (status: "UPLOADING" | "PENDING", number: number, scheduled = false) => {
       const chapterId = crypto.randomUUID()
       const uploadId = crypto.randomUUID()
       const taskId = crypto.randomUUID()
@@ -108,6 +108,7 @@ describe("processChapterUpload", () => {
           uploaderId: SEEDED_UPLOADER_ID,
           status,
           createdAt: sql<Date>`now() at time zone 'UTC' - interval '1 day'`,
+          publishAt: scheduled ? sql<Date>`now() at time zone 'UTC' + interval '1 day'` : null,
         })
         .execute()
       await s3.send(
@@ -147,6 +148,8 @@ describe("processChapterUpload", () => {
 
     expect(await stage("UPLOADING", 96_101)).toEqual({ status: "PUBLISHED", fresh: true })
     expect(await stage("PENDING", 96_102)).toEqual({ status: "PENDING", fresh: false })
+    expect(await stage("UPLOADING", 96_103, true)).toEqual({ status: "SCHEDULED", fresh: false })
+    expect(await stage("PENDING", 96_104, true)).toEqual({ status: "PENDING", fresh: false })
   })
 
   test("leaves rejected and withdrawn chapters without pages and removes the processed files", async ({

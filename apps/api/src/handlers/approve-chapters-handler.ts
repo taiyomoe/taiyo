@@ -10,6 +10,7 @@ import {
   lockReviewableChapters,
   skippedChapterSchema,
 } from "../utils/chapter-batches"
+import { readyCreatedAt, readyStatus } from "../utils/chapter-release"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
@@ -55,7 +56,7 @@ export const approveChaptersHandler = new Hono().post(
         skipped.push({ id, reason: "NOT_FOUND" })
       } else if (row.status !== "PENDING") {
         skipped.push({ id, reason: "NOT_PENDING" })
-      } else if (row.pages === null || row.pages.length === 0) {
+      } else if (!row.isExternal && (row.pages === null || row.pages.length === 0)) {
         skipped.push({ id, reason: "PAGES_MISSING" })
       } else {
         approved.push(id)
@@ -66,10 +67,10 @@ export const approveChaptersHandler = new Hono().post(
       await db
         .updateTable("chapters")
         .set({
-          status: "PUBLISHED",
+          status: readyStatus,
           reviewerId: user.id,
           reviewedAt: sql<Date>`CURRENT_TIMESTAMP`,
-          createdAt: sql<Date>`CURRENT_TIMESTAMP`,
+          createdAt: readyCreatedAt,
         })
         .where("id", "in", approved)
         .execute()

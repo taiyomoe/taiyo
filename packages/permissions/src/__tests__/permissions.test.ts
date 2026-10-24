@@ -621,6 +621,34 @@ describe("uploading chapters", () => {
   })
 })
 
+describe("scheduled chapters", () => {
+  const scheduled = (uploaderId = OTHER_ID) => chapter([GROUP_A], uploaderId, "SCHEDULED")
+
+  it("are only visible to the people who manage them", () => {
+    expect(createPermissions(null)("chapter.view", scheduled())).toBe(false)
+    expect(createPermissions(actor("USER"))("chapter.view", scheduled())).toBe(false)
+    expect(createPermissions(actor("USER"))("chapter.view", scheduled(ACTOR_ID))).toBe(true)
+    expect(
+      createPermissions(actor("USER", [member(GROUP_A, ["EDIT_CHAPTERS"])]))(
+        "chapter.view",
+        scheduled(),
+      ),
+    ).toBe(true)
+    expect(createPermissions(actor("MODERATOR"))("chapter.view", scheduled())).toBe(true)
+  })
+
+  it("can be rescheduled by their uploader and group editors, and deleted like published ones", () => {
+    const editor = createPermissions(actor("USER", [member(GROUP_A, ["EDIT_CHAPTERS"])]))
+    const uploader = createPermissions(actor("USER"))
+
+    expect(editor("chapter.update", scheduled())).toBe(true)
+    expect(editor("chapter.delete", scheduled())).toBe(false)
+    expect(uploader("chapter.update", scheduled(ACTOR_ID))).toBe(true)
+    expect(uploader("chapter.withdraw", scheduled(ACTOR_ID))).toBe(false)
+    expect(createPermissions(actor("MODERATOR"))("chapter.delete", scheduled())).toBe(true)
+  })
+})
+
 describe("media suggestions", () => {
   const suggestion = (authorId = OTHER_ID, status: MediaSuggestionTarget["status"] = "PENDING") =>
     ({ authorId, status }) satisfies MediaSuggestionTarget

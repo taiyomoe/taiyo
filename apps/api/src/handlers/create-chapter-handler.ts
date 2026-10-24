@@ -1,5 +1,11 @@
 import { config } from "@taiyomoe/config"
-import { CHAPTER_STATUSES, CONTENT_RATINGS, FLAGS, type NewChapter } from "@taiyomoe/db"
+import {
+  CHAPTER_STATUSES,
+  type ChapterStatus,
+  CONTENT_RATINGS,
+  FLAGS,
+  type NewChapter,
+} from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
@@ -7,43 +13,55 @@ import { checkMedia } from "../middlewares/check-media-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
+import { externalUrlSchema, isFuture, publishAtSchema, toPublishAt } from "../utils/chapter-release"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope, languageSchema } from "../utils/schemas"
 
-const createChapterSchema = z.object({
-  title: z
-    .string()
-    .min(1)
-    .max(config.input.maxChapterTitleLength)
-    .nullable()
-    .optional()
-    .meta({ description: "Title of the chapter, if any.", example: "The Beginning" }),
-  number: z.number().nonnegative().meta({ description: "Chapter number.", example: 1 }),
-  volume: z
-    .string()
-    .min(1)
-    .max(config.input.maxVolumeLength)
-    .nullable()
-    .optional()
-    .meta({ description: "Volume of the chapter, if any.", example: "1" }),
-  language: languageSchema("Language of the chapter."),
-  contentRating: z
-    .enum(CONTENT_RATINGS)
-    .optional()
-    .meta({ description: "Content rating.", example: "NORMAL" }),
-  flag: z.enum(FLAGS).optional().meta({ description: "Visibility flag.", example: "OK" }),
-  groupIds: z
-    .array(z.uuid())
-    .max(config.input.maxChapterGroups)
-    .default([])
-    .meta({ description: "Groups credited on the chapter.", example: [crypto.randomUUID()] }),
-})
+const createChapterSchema = z
+  .object({
+    title: z
+      .string()
+      .min(1)
+      .max(config.input.maxChapterTitleLength)
+      .nullable()
+      .optional()
+      .meta({ description: "Title of the chapter, if any.", example: "The Beginning" }),
+    number: z.number().nonnegative().meta({ description: "Chapter number.", example: 1 }),
+    volume: z
+      .string()
+      .min(1)
+      .max(config.input.maxVolumeLength)
+      .nullable()
+      .optional()
+      .meta({ description: "Volume of the chapter, if any.", example: "1" }),
+    language: languageSchema("Language of the chapter."),
+    contentRating: z
+      .enum(CONTENT_RATINGS)
+      .optional()
+      .meta({ description: "Content rating.", example: "NORMAL" }),
+    flag: z.enum(FLAGS).optional().meta({ description: "Visibility flag.", example: "OK" }),
+    groupIds: z
+      .array(z.uuid())
+      .max(config.input.maxChapterGroups)
+      .default([])
+      .meta({ description: "Groups credited on the chapter.", example: [crypto.randomUUID()] }),
+    publishAt: publishAtSchema,
+    externalUrl: externalUrlSchema,
+    isExternal: z.boolean().default(false).meta({
+      description:
+        "Whether the chapter is only hosted on the group's site. It then has no pages on Taiyō and needs `externalUrl`.",
+    }),
+  })
+  .refine((data) => !data.isExternal || typeof data.externalUrl === "string", {
+    message: "An external chapter needs an externalUrl.",
+    path: ["externalUrl"],
+  })
 
 export const createChapterHandler = new Hono().post(
   "/:id/chapters",
   describeRoute({
     summary: "Create a chapter",
-    description: `Creates a chapter under a media and credits the given groups. Pages must be uploaded through a dedicated route later. The chapter goes live right away when the uploader is an uploader or an admin, or when it credits a group where the uploader holds \`UPLOAD_CHAPTERS\`. Otherwise it waits for review, hidden from everyone but its uploader and the reviewers; a user can have at most ${config.input.maxPendingChapters} chapters waiting. Setting \`flag\` requires the uploader, moderator or admin role.\n\n**Authentication:** any signed-in user.`,
+    description: `Creates a chapter under a media and credits the given groups. Pages are uploaded through a dedicated route afterwards, unless \`isExternal\` is set: an external chapter only links to \`externalUrl\`.\n\nWhen the uploader is an uploader or an admin, or credits a group where they hold \`UPLOAD_CHAPTERS\`, the chapter is published as soon as its pages are processed, or right away when it is external. With a future \`publishAt\` it is scheduled instead and goes live at that time. Otherwise it waits for review, hidden from everyone but its uploader and the reviewers; a user can have at most ${config.input.maxPendingChapters} chapters waiting. Setting \`flag\` requires the uploader, moderator or admin role.\n\n**Authentication:** any signed-in user.`,
     tags: ["Chapters"],
     requestBody: {
       content: { "application/json": await resolver(createChapterSchema).toOpenAPISchema() },
@@ -58,7 +76,8 @@ export const createChapterHandler = new Hono().post(
                 z.object({
                   id: z.uuid().meta({ description: "The ID of the newly created chapter." }),
                   status: z.enum(CHAPTER_STATUSES).meta({
-                    description: "PUBLISHED when it went live, PENDING when it waits for review.",
+                    description:
+                      "UPLOADING until its pages are processed, PUBLISHED or SCHEDULED for an external chapter, or PENDING when it waits for review.",
                   }),
                 }),
               ),
@@ -125,6 +144,14 @@ export const createChapterHandler = new Hono().post(
 
     log.set({ chapter: { id } })
 
+    let status: ChapterStatus = "PENDING"
+
+    if (publishes && !body.isExternal) {
+      status = "UPLOADING"
+    } else if (publishes) {
+      status = isFuture(body.publishAt) ? "SCHEDULED" : "PUBLISHED"
+    }
+
     const values: NewChapter = {
       id,
       mediaId: media.id,
@@ -133,7 +160,9 @@ export const createChapterHandler = new Hono().post(
       number: body.number,
       volume: body.volume ?? null,
       language: body.language,
-      status: publishes ? "UPLOADING" : "PENDING",
+      status,
+      externalUrl: body.externalUrl ?? null,
+      isExternal: body.isExternal,
     }
 
     if (body.contentRating !== undefined) {
@@ -144,7 +173,13 @@ export const createChapterHandler = new Hono().post(
       values.flag = body.flag
     }
 
-    await db.insertInto("chapters").values(values).execute()
+    await db
+      .insertInto("chapters")
+      .values({
+        ...values,
+        publishAt: toPublishAt(isFuture(body.publishAt) ? (body.publishAt ?? null) : null),
+      })
+      .execute()
 
     if (groupIds.length > 0) {
       await db

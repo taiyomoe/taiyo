@@ -1,5 +1,6 @@
 import type { ReactNode } from "react"
 import * as stylex from "@stylexjs/stylex"
+import { CalendarClock, Globe, Link as LinkIcon } from "@taiyomoe/ui/components/icons"
 import { Badge, type BadgeVariant } from "@taiyomoe/ui/components/ui/badge"
 import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
 import { Link } from "@tanstack/react-router"
@@ -7,7 +8,9 @@ import type { ChapterSubmission } from "@/lib/queries/submissions"
 import { ChapterGroups, ChapterNumber, TimeAgo, Uploader } from "@/components/chapters/chapter-meta"
 import { LanguageChip } from "@/components/chapters/flags"
 import { ListRow } from "@/components/dashboard/dashboard-page"
+import { formatDateTime } from "@/components/fields/date-time-picker"
 import { Cover } from "@/components/media/cover"
+import { hostOf } from "@/lib/chapter-batch/links"
 import { m } from "@/paraglide/messages"
 
 const SUBMISSION_STATUS: Record<
@@ -16,6 +19,7 @@ const SUBMISSION_STATUS: Record<
 > = {
   UPLOADING: { label: m.submission_status_uploading, variant: "info" },
   PENDING: { label: m.submission_status_pending, variant: "warning" },
+  SCHEDULED: { label: m.submission_status_scheduled, variant: "info" },
   PUBLISHED: { label: m.submission_status_published, variant: "success" },
   REJECTED: { label: m.submission_status_rejected, variant: "error" },
 }
@@ -56,6 +60,18 @@ const styles = stylex.create({
     display: "flex",
     flexWrap: "wrap",
     fontSize: "0.875rem",
+  },
+  metaItem: {
+    gap: "0.375rem",
+    alignItems: "center",
+    display: "inline-flex",
+    minWidth: 0,
+  },
+  link: {
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap",
+    maxWidth: "16rem",
   },
   reason: {
     margin: 0,
@@ -107,7 +123,26 @@ export function SubmissionRow({
           <LanguageChip language={submission.language} />
           <ChapterGroups groups={submission.groups} max={2} />
           {showUploader ? <Uploader uploader={submission.uploader} /> : null}
-          <span>{m.submission_pages({ count: submission.pageCount })}</span>
+          {submission.isExternal ? (
+            <span sx={styles.metaItem}>
+              <Globe size={14} />
+              {m.submission_link_only()}
+            </span>
+          ) : (
+            <span>{m.submission_pages({ count: submission.pageCount })}</span>
+          )}
+          {submission.externalUrl === null ? null : (
+            <span sx={[styles.metaItem, styles.link]} title={submission.externalUrl}>
+              <LinkIcon size={14} />
+              {hostOf(submission.externalUrl)}
+            </span>
+          )}
+          {submission.publishAt === null || submission.status === "PUBLISHED" ? null : (
+            <span sx={styles.metaItem}>
+              <CalendarClock size={14} />
+              {m.chapter_goes_live({ time: formatDateTime(new Date(submission.publishAt)) })}
+            </span>
+          )}
           <TimeAgo date={submission.createdAt} />
         </div>
         {submission.rejectionReason === null ? null : (

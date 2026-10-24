@@ -75,7 +75,7 @@ export const createChapterUploadSessionHandler = new Hono().post(
       },
       ...getOpenApiResponses({
         404: "No chapter with the given id exists.",
-        409: "This chapter already has pages.",
+        409: "This chapter already has pages, or is only hosted on the group's site.",
         422: "The request data failed validation.",
       }),
     },
@@ -89,6 +89,10 @@ export const createChapterUploadSessionHandler = new Hono().post(
   async (c) => {
     const { db, s3, s3Bucket, chapter } = c.var
     const body = c.var.json
+
+    if (chapter.isExternal) {
+      return c.fail("CHAPTER_EXTERNAL")
+    }
 
     if (chapter.pages !== null && chapter.pages.length > 0) {
       return c.fail("CHAPTER_PAGES_ALREADY_UPLOADED")

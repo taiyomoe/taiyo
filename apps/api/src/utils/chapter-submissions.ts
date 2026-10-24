@@ -1,4 +1,5 @@
 import { type DB, type Kysely, sql } from "@taiyomoe/db"
+import { publishAtIso } from "./chapter-release"
 import { getMainCoverUrls, getMainTitles, withChapterDetails } from "./latest-chapters"
 
 export const selectSubmissions = (db: Kysely<DB>) =>
@@ -22,6 +23,9 @@ export const selectSubmissionColumns = (query: ReturnType<typeof selectSubmissio
     "chapters.status",
     "chapters.rejectionReason",
     "chapters.reviewedAt",
+    "chapters.externalUrl",
+    "chapters.isExternal",
+    publishAtIso.as("publishAt"),
     sql<number>`coalesce(cardinality("chapters"."pages"), 0)`.as("pageCount"),
     "users.id as uploaderId",
     "users.username as uploaderUsername",

@@ -210,16 +210,24 @@ const styles = stylex.create({
     whiteSpace: "nowrap",
   },
 })
-const formatTimeAgo = (date: Date, now: number, style: Intl.RelativeTimeFormatStyle) => {
-  const elapsed = Math.max(0, (now - date.getTime()) / 1000)
+const formatTimeAgo = (
+  date: Date,
+  now: number,
+  style: Intl.RelativeTimeFormatStyle,
+  future = false,
+) => {
+  const direction = future ? 1 : -1
+  const elapsed = Math.max(0, (direction * (date.getTime() - now)) / 1000)
   const match = UNITS.find(({ seconds }) => elapsed >= seconds)
 
-  return match === undefined
-    ? m.time_just_now()
-    : new Intl.RelativeTimeFormat(getLocale(), { style }).format(
-        -Math.floor(elapsed / match.seconds),
-        match.unit,
-      )
+  if (match === undefined) {
+    return future ? m.time_any_moment() : m.time_just_now()
+  }
+
+  return new Intl.RelativeTimeFormat(getLocale(), { style }).format(
+    direction * Math.floor(elapsed / match.seconds),
+    match.unit,
+  )
 }
 
 export const getChapterLabel = (chapter: Pick<LatestChapter, "number" | "volume">) =>
@@ -230,7 +238,7 @@ export const getChapterLabel = (chapter: Pick<LatestChapter, "number" | "volume"
     .filter((part) => part !== null)
     .join(" ")
 
-export function TimeAgo({ date, sx }: { date: string; sx?: Sx }) {
+export function TimeAgo({ date, future = false, sx }: { date: string; future?: boolean; sx?: Sx }) {
   const parsed = new Date(date)
   const now = useNow()
   const hover = useHoverPopover()
@@ -244,22 +252,22 @@ export function TimeAgo({ date, sx }: { date: string; sx?: Sx }) {
         style={hover.open ? { color: TIME_ACTIVE_COLOR } : undefined}
         sx={[styles.time, sx]}
       >
-        {formatTimeAgo(parsed, now, "narrow")}
+        {formatTimeAgo(parsed, now, "narrow", future)}
       </PopoverTrigger>
       <PopoverPopup {...hover.popupProps} arrow side="top">
-        <TimeDetails date={parsed} now={now} />
+        <TimeDetails date={parsed} future={future} now={now} />
       </PopoverPopup>
     </Popover>
   )
 }
 
-function TimeDetails({ date, now }: { date: Date; now: number }) {
+function TimeDetails({ date, future, now }: { date: Date; future: boolean; now: number }) {
   const locale = getLocale()
   const { timeZone } = new Intl.DateTimeFormat().resolvedOptions()
 
   return (
     <div sx={styles.timeDetails}>
-      <p sx={styles.timeRelative}>{formatTimeAgo(date, now, "long")}</p>
+      <p sx={styles.timeRelative}>{formatTimeAgo(date, now, "long", future)}</p>
       <dl sx={styles.timeList}>
         <dt sx={styles.timeLabel}>{m.time_local()}</dt>
         <dd sx={styles.timeValue}>

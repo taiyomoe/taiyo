@@ -65,6 +65,8 @@ import {
   Link01Icon,
   Mail01Icon,
   UserRemove01Icon,
+  CalendarClockIcon,
+  Globe02Icon,
 } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react"
 import * as stylex from "@stylexjs/stylex"
@@ -271,3 +273,7 @@ export const NoteEdit: (props: IconProps) => React.ReactElement = icon(NoteEditI
 export const ExternalLink: (props: IconProps) => React.ReactElement = icon(ArrowUpRight01Icon)
 
 export const UserRemove: (props: IconProps) => React.ReactElement = icon(UserRemove01Icon)
+
+export const CalendarClock: (props: IconProps) => React.ReactElement = icon(CalendarClockIcon)
+
+export const Globe: (props: IconProps) => React.ReactElement = icon(Globe02Icon)
