@@ -2,9 +2,15 @@ import type {
   ContentRating,
   Language,
   LatestUpdatesLayout,
+  MediaCountryOfOrigin,
+  MediaDemography,
   MediaLink,
   MediaLinkNumberKey,
+  MediaSource,
+  MediaStatus,
+  MediaType,
   StaffLink,
+  StaffRole,
 } from "./constants"
 
 export type LocalizedText = Partial<Record<Language, string>>
@@ -20,6 +26,34 @@ export type MediaTags = {
 
 export type MediaLinks = Partial<{
   [K in MediaLink]: K extends MediaLinkNumberKey ? number : string
+}>
+
+export type MediaEditTitle = {
+  title: string
+  language: Language
+  isAcronym: boolean
+  isMainTitle: boolean
+}
+
+export type MediaEditStaff = {
+  staffId: string
+  role: StaffRole
+}
+
+export type MediaEdit = Partial<{
+  titles: MediaEditTitle[]
+  synopsis: LocalizedText
+  type: MediaType
+  status: MediaStatus
+  source: MediaSource
+  demography: MediaDemography
+  countryOfOrigin: MediaCountryOfOrigin
+  contentRating: ContentRating
+  startDate: string | null
+  endDate: string | null
+  tags: MediaTags[]
+  links: MediaLinks
+  staffs: MediaEditStaff[]
 }>
 
 export type StaffLinks = Partial<Record<StaffLink, string>>

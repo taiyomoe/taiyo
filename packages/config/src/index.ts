@@ -57,5 +57,9 @@ export const config = {
     maxChapterGroups: 10,
     maxPendingChapters: 100,
     maxReviewNoteLength: 2000,
+    maxMediaTitles: 50,
+    maxMediaTags: 100,
+    maxMediaStaffs: 50,
+    maxPendingSuggestions: 100,
   },
 } as const

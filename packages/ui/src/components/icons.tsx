@@ -60,6 +60,8 @@ import {
   ArrowUpRight01Icon,
   CrownIcon,
   Edit02Icon,
+  FileEditIcon,
+  NoteEditIcon,
   Link01Icon,
   Mail01Icon,
   UserRemove01Icon,
@@ -261,6 +263,10 @@ export const Mail: (props: IconProps) => React.ReactElement = icon(Mail01Icon)
 export const Crown: (props: IconProps) => React.ReactElement = icon(CrownIcon)
 
 export const Edit: (props: IconProps) => React.ReactElement = icon(Edit02Icon)
+
+export const FileEdit: (props: IconProps) => React.ReactElement = icon(FileEditIcon)
+
+export const NoteEdit: (props: IconProps) => React.ReactElement = icon(NoteEditIcon)
 
 export const ExternalLink: (props: IconProps) => React.ReactElement = icon(ArrowUpRight01Icon)
 

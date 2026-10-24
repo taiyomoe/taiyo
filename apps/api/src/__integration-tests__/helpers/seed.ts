@@ -110,3 +110,40 @@ export const seedMembership = async (
     .values({ groupId, userId, role, permissions, addedBy: userId })
     .execute()
 }
+
+export const seedTitle = async (
+  { db }: Services,
+  {
+    mediaId,
+    creatorId,
+    title,
+    language = "en",
+    priority = 1,
+    isMainTitle = false,
+  }: {
+    mediaId: string
+    creatorId: string
+    title: string
+    language?: Language
+    priority?: number
+    isMainTitle?: boolean
+  },
+) => {
+  const { id } = await db
+    .insertInto("titles")
+    .values({ mediaId, creatorId, title, language, priority, isMainTitle })
+    .returning("id")
+    .executeTakeFirstOrThrow()
+
+  return id
+}
+
+export const seedStaff = async ({ db }: Services, creatorId: string, name: string) => {
+  const { id } = await db
+    .insertInto("staffs")
+    .values({ creatorId, name })
+    .returning("id")
+    .executeTakeFirstOrThrow()
+
+  return id
+}

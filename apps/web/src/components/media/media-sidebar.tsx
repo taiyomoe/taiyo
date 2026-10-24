@@ -1,5 +1,5 @@
 import * as stylex from "@stylexjs/stylex"
-import { Book, Bookmark, Check } from "@taiyomoe/ui/components/icons"
+import { Book, Bookmark, Check, Edit } from "@taiyomoe/ui/components/icons"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import {
   Menu,
@@ -127,8 +127,16 @@ const styles = stylex.create({
   },
 })
 
-export function ReadingActions({ mediaId, signedIn }: { mediaId: string; signedIn: boolean }) {
-  return signedIn ? <SignedInActions mediaId={mediaId} /> : <SignedOutActions />
+export function ReadingActions({
+  mediaId,
+  signedIn,
+  canEdit,
+}: {
+  mediaId: string
+  signedIn: boolean
+  canEdit: boolean
+}) {
+  return signedIn ? <SignedInActions canEdit={canEdit} mediaId={mediaId} /> : <SignedOutActions />
 }
 
 function SignedOutActions() {
@@ -167,7 +175,7 @@ function SignedOutActions() {
   )
 }
 
-function SignedInActions({ mediaId }: { mediaId: string }) {
+function SignedInActions({ mediaId, canEdit }: { mediaId: string; canEdit: boolean }) {
   const contentRatings = useDeferredValue(useSettings().contentRatings)
   const progress = useQuery(readingProgressQueryOptions(mediaId, contentRatings))
   const entry = useQuery(libraryEntryQueryOptions(mediaId))
@@ -187,6 +195,14 @@ function SignedInActions({ mediaId }: { mediaId: string }) {
       {progress.data === undefined || progress.data.lastRead === null ? null : (
         <ProgressCard progress={progress.data} />
       )}
+      <Button
+        render={<Link params={{ mediaId }} to="/media/$mediaId/edit" />}
+        sx={styles.library}
+        variant="ghost"
+      >
+        <Edit />
+        {canEdit ? m.media_edit() : m.media_suggest_edit()}
+      </Button>
     </div>
   )
 }

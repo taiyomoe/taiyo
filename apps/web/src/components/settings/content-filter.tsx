@@ -11,17 +11,12 @@ import {
   EmptyTitle,
 } from "@taiyomoe/ui/components/ui/empty"
 import { Menu, MenuCheckboxItem, MenuPopup, MenuTrigger } from "@taiyomoe/ui/components/ui/menu"
+import { CONTENT_RATING_LABELS } from "@/components/media/media-labels"
 import { ContentRatingLabel, contentRatingItemSx } from "@/components/settings/content-rating-label"
 import { type ContentRating, useSettings, useUpdateSettings } from "@/lib/settings"
 import { m } from "@/paraglide/messages"
 
 const CONTENT_RATINGS = ["NORMAL", "SUGGESTIVE", "NSFW", "NSFL"] as const satisfies ContentRating[]
-const CONTENT_RATING_LABELS: Record<ContentRating, () => string> = {
-  NORMAL: m.content_rating_normal,
-  SUGGESTIVE: m.content_rating_suggestive,
-  NSFW: m.content_rating_nsfw,
-  NSFL: m.content_rating_nsfl,
-}
 const styles = stylex.create({
   popup: {
     minWidth: "12.5rem",

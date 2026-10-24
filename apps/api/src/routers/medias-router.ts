@@ -3,8 +3,10 @@ import { createBannersHandler } from "../handlers/create-banners-handler"
 import { createChapterHandler } from "../handlers/create-chapter-handler"
 import { createCoversHandler } from "../handlers/create-covers-handler"
 import { createMediaHandler } from "../handlers/create-media-handler"
+import { createMediaSuggestionHandler } from "../handlers/create-media-suggestion-handler"
 import { deleteMediaHandler } from "../handlers/delete-media-handler"
 import { flagMediaHandler } from "../handlers/flag-media-handler"
+import { getMediaEditHandler } from "../handlers/get-media-edit-handler"
 import { getMediaHandler } from "../handlers/get-media-handler"
 import { linkMediaStaffHandler } from "../handlers/link-media-staff-handler"
 import { listBannersHandler } from "../handlers/list-banners-handler"
@@ -25,6 +27,8 @@ export const mediasRouter = new Hono()
   .route("/", getMediaHandler)
   .route("/", searchMediasHandler)
   .route("/", updateMediaHandler)
+  .route("/", getMediaEditHandler)
+  .route("/", createMediaSuggestionHandler)
   .route("/", deleteMediaHandler)
   .route("/", restoreMediaHandler)
   .route("/", flagMediaHandler)
