@@ -1,5 +1,5 @@
 import { config } from "@taiyomoe/config"
-import { type DB, IMAGE_MIME_TYPES } from "@taiyomoe/db"
+import { type ChapterStatus, type DB, IMAGE_MIME_TYPES } from "@taiyomoe/db"
 import {
   DeleteObjectsCommand,
   GetObjectCommand,
@@ -76,7 +76,11 @@ export const processChapterUpload = async (
 
     const attached = await db
       .updateTable("chapters")
-      .set({ pages: manifest.pages.map(({ pageId }) => ({ id: pageId })) })
+      .set({
+        pages: manifest.pages.map(({ pageId }) => ({ id: pageId })),
+        status: sql<ChapterStatus>`case when "status" = 'UPLOADING' then 'PUBLISHED'::"ChapterStatus" else "status" end`,
+        createdAt: sql<Date>`case when "status" = 'UPLOADING' then CURRENT_TIMESTAMP else "createdAt" end`,
+      })
       .where("id", "=", manifest.chapterId)
       .where("deletedAt", "is", null)
       .where("status", "!=", "REJECTED")

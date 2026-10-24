@@ -133,7 +133,7 @@ export const createChapterHandler = new Hono().post(
       number: body.number,
       volume: body.volume ?? null,
       language: body.language,
-      status: publishes ? "PUBLISHED" : "PENDING",
+      status: publishes ? "UPLOADING" : "PENDING",
     }
 
     if (body.contentRating !== undefined) {

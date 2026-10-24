@@ -1,4 +1,5 @@
 import { ListObjectsV2Command, PutObjectCommand } from "@aws-sdk/client-s3"
+import { sql } from "@taiyomoe/db"
 import { processChapterUpload } from "@taiyomoe/queue"
 import sharp from "sharp"
 import { describe, expect } from "vitest"
@@ -85,6 +86,67 @@ describe("processChapterUpload", () => {
     const listed = await s3.send(new ListObjectsV2Command({ Bucket: s3Bucket, Prefix: finalKey }))
 
     expect(listed.Contents).toHaveLength(1)
+  })
+
+  test("publishes an uploading chapter as just released, and keeps a submission pending", async ({
+    services,
+  }) => {
+    const { db, s3, s3Bucket } = services
+    const stage = async (status: "UPLOADING" | "PENDING", number: number) => {
+      const chapterId = crypto.randomUUID()
+      const uploadId = crypto.randomUUID()
+      const taskId = crypto.randomUUID()
+      const stagingKey = `staging/chapters/${chapterId}/${uploadId}/0`
+
+      await db
+        .insertInto("chapters")
+        .values({
+          id: chapterId,
+          mediaId: SEEDED_MEDIA_ID,
+          number,
+          language: "en",
+          uploaderId: SEEDED_UPLOADER_ID,
+          status,
+          createdAt: sql<Date>`now() at time zone 'UTC' - interval '1 day'`,
+        })
+        .execute()
+      await s3.send(
+        new PutObjectCommand({
+          Bucket: s3Bucket,
+          Key: stagingKey,
+          Body: await makeTinyJpeg(),
+          ContentType: "image/jpeg",
+        }),
+      )
+      await db
+        .insertInto("tasks")
+        .values({
+          id: taskId,
+          type: "UPLOAD_CHAPTER",
+          status: "PENDING",
+          sessionId: uploadId,
+          payload: {
+            chapterId,
+            mediaId: SEEDED_MEDIA_ID,
+            uploadId,
+            pages: [{ pageId: crypto.randomUUID(), stagingKey }],
+          },
+        })
+        .execute()
+      await processChapterUpload({ db, s3, s3Bucket }, { taskId })
+
+      return db
+        .selectFrom("chapters")
+        .select([
+          "status",
+          sql<boolean>`"createdAt" > now() at time zone 'UTC' - interval '1 hour'`.as("fresh"),
+        ])
+        .where("id", "=", chapterId)
+        .executeTakeFirstOrThrow()
+    }
+
+    expect(await stage("UPLOADING", 96_101)).toEqual({ status: "PUBLISHED", fresh: true })
+    expect(await stage("PENDING", 96_102)).toEqual({ status: "PENDING", fresh: false })
   })
 
   test("leaves rejected and withdrawn chapters without pages and removes the processed files", async ({

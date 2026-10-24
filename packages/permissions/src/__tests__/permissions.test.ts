@@ -598,6 +598,29 @@ describe("users", () => {
   })
 })
 
+describe("uploading chapters", () => {
+  const uploading = (uploaderId = OTHER_ID) => chapter([GROUP_A], uploaderId, "UPLOADING")
+
+  it("are only visible to their uploader and to reviewers", () => {
+    expect(createPermissions(null)("chapter.view", uploading())).toBe(false)
+    expect(createPermissions(actor("USER", [owner(GROUP_A)]))("chapter.view", uploading())).toBe(
+      false,
+    )
+    expect(createPermissions(actor("MODERATOR"))("chapter.view", uploading())).toBe(false)
+    expect(createPermissions(actor("UPLOADER"))("chapter.view", uploading())).toBe(true)
+    expect(createPermissions(actor("USER"))("chapter.view", uploading(ACTOR_ID))).toBe(true)
+  })
+
+  it("can be edited and withdrawn by their uploader", () => {
+    const can = createPermissions(actor("USER", [member(GROUP_A, ["UPLOAD_CHAPTERS"])]))
+
+    expect(can("chapter.update", uploading(ACTOR_ID))).toBe(true)
+    expect(can("chapter.withdraw", uploading(ACTOR_ID))).toBe(true)
+    expect(can("chapter.withdraw", uploading())).toBe(false)
+    expect(can("chapter.update", uploading())).toBe(false)
+  })
+})
+
 describe("media suggestions", () => {
   const suggestion = (authorId = OTHER_ID, status: MediaSuggestionTarget["status"] = "PENDING") =>
     ({ authorId, status }) satisfies MediaSuggestionTarget

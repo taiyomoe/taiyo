@@ -147,6 +147,43 @@ describe("reapStaleChapterUploads", () => {
     expect(remaining).toBeDefined()
   })
 
+  test("deletes chapters that never got their pages", async ({ services }) => {
+    const { db } = services
+    const seed = (
+      status: "UPLOADING" | "PENDING" | "PUBLISHED",
+      pages: Array<{ id: string }> | null,
+    ) =>
+      db
+        .insertInto("chapters")
+        .values({
+          mediaId: SEEDED_MEDIA_ID,
+          number: 95_100 + Math.random(),
+          language: "en",
+          uploaderId: SEEDED_UPLOADER_ID,
+          status,
+          pages,
+        })
+        .returning("id")
+        .executeTakeFirstOrThrow()
+        .then((row) => row.id)
+    const uploading = await seed("UPLOADING", null)
+    const pending = await seed("PENDING", null)
+    const processed = await seed("PENDING", [{ id: crypto.randomUUID() }])
+    const published = await seed("PUBLISHED", null)
+    const recent = await reapStaleChapterUploads(services)
+    const later = await reapStaleChapterUploads(services, futureNow())
+    const rows = await db
+      .selectFrom("chapters")
+      .select(["id", "deletedAt"])
+      .where("id", "in", [uploading, pending, processed, published])
+      .execute()
+    const deleted = new Set(rows.filter((row) => row.deletedAt !== null).map((row) => row.id))
+
+    expect(recent.abandoned).toBe(0)
+    expect(later.abandoned).toBeGreaterThanOrEqual(2)
+    expect([...deleted].sort()).toEqual([uploading, pending].sort())
+  })
+
   test("returns reaped: 0 when there is nothing to reap", async ({ services }) => {
     const { db, s3, s3Bucket } = services
     const result = await reapStaleChapterUploads({ db, s3, s3Bucket }, new Date())

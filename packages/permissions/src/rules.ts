@@ -36,8 +36,8 @@ export const buildRules = (actor: Actor | null) => {
   const reviewsSuggestions = is("UPLOADER", "MODERATOR", "ADMIN")
   const isOwnPendingSuggestion = (suggestion: MediaSuggestionTarget) =>
     suggestion.status === "PENDING" && isSelf(suggestion.authorId)
-  const isOwnPending = (chapter: ChapterTarget) =>
-    chapter.status === "PENDING" && isSelf(chapter.uploaderId)
+  const isOwnUnpublished = (chapter: ChapterTarget) =>
+    (chapter.status === "PENDING" || chapter.status === "UPLOADING") && isSelf(chapter.uploaderId)
   const canManage = (groupId: string, permissions: readonly GroupPermission[]) => {
     if (!holds(groupId, "MANAGE_MEMBERS") || permissions.includes("MANAGE_MEMBERS")) {
       return false
@@ -83,8 +83,8 @@ export const buildRules = (actor: Actor | null) => {
       update: (chapter) =>
         chapter.status === "PUBLISHED"
           ? managesChapters || holdsInAny(chapter.groupIds, "EDIT_CHAPTERS")
-          : reviewsChapters || isOwnPending(chapter),
-      withdraw: (chapter) => isOwnPending(chapter),
+          : reviewsChapters || isOwnUnpublished(chapter),
+      withdraw: (chapter) => isOwnUnpublished(chapter),
       delete: (chapter) =>
         chapter.status === "PUBLISHED"
           ? managesChapters || holdsInAny(chapter.groupIds, "DELETE_CHAPTERS")
@@ -92,12 +92,12 @@ export const buildRules = (actor: Actor | null) => {
       credit: ({ chapter }) =>
         chapter.status === "PUBLISHED"
           ? managesChapters || holdsInAny(chapter.groupIds, "EDIT_CHAPTERS")
-          : reviewsChapters || isOwnPending(chapter),
+          : reviewsChapters || isOwnUnpublished(chapter),
       uncredit: ({ chapter, groupId }) =>
         chapter.status === "PUBLISHED"
           ? managesChapters ||
             (chapter.groupIds.includes(groupId) && holds(groupId, "EDIT_CHAPTERS"))
-          : reviewsChapters || isOwnPending(chapter),
+          : reviewsChapters || isOwnUnpublished(chapter),
     },
     group: {
       create: is("UPLOADER", "ADMIN"),
