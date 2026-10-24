@@ -165,3 +165,42 @@ describe("PATCH /groups/:id", () => {
     expect(res.status).toBe(403)
   })
 })
+
+describe("PATCH /groups/:id links", () => {
+  test("only accepts http(s) links, Discord codes and emails", async ({ app, services }) => {
+    const { headers } = await signInAs(services, { role: "ADMIN" })
+    const script = ["javascript", "alert(1)"].join(":")
+
+    for (const json of [
+      { website: script },
+      { x: "data:text/html,hi" },
+      { discord: script },
+      { email: "not-an-email" },
+      { youtube: "ftp://example.com" },
+    ]) {
+      const res = await api(app, `/groups/${SEEDED_GROUP_ID}`, { method: "PATCH", headers, json })
+
+      expect({ json, status: res.status }).toEqual({ json, status: 422 })
+    }
+
+    for (const json of [
+      { website: "https://example.com" },
+      { discord: "yWvfgM7" },
+      { discord: "https://discord.gg/abc" },
+      { email: "team@example.com" },
+      { website: "" },
+    ]) {
+      const res = await api(app, `/groups/${SEEDED_GROUP_ID}`, { method: "PATCH", headers, json })
+
+      expect({ json, status: res.status }).toEqual({ json, status: 200 })
+    }
+
+    const row = await services.db
+      .selectFrom("groups")
+      .select("website")
+      .where("id", "=", SEEDED_GROUP_ID)
+      .executeTakeFirstOrThrow()
+
+    expect(row.website).toBeNull()
+  })
+})

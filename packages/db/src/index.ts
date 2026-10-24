@@ -30,6 +30,10 @@ export * from "./models/cover-model"
 
 export * from "./models/featured-media-model"
 
+export * from "./models/group-creation-request-model"
+
+export * from "./models/group-invitation-model"
+
 export * from "./models/group-membership-model"
 
 export * from "./models/group-model"

@@ -53,8 +53,9 @@ function RouteComponent() {
               <p sx={prose.p}>
                 <strong sx={prose.strong}>Content you submit.</strong> Your library entries and
                 reading progress, the custom lists you create and the titles you add to them, the
-                users you follow, the chapter pages you upload, and the message you write when you
-                ask to take ownership of a group.
+                users you follow, the chapter pages you upload, the groups you belong to and the
+                permissions you hold in them, the invitations you send and receive, and the message
+                and links you provide when you ask to take ownership of a group or to create one.
               </p>
               <p sx={prose.p}>
                 <strong sx={prose.strong}>Technical information.</strong> Your IP address, browser
@@ -90,8 +91,9 @@ function RouteComponent() {
                 </li>
                 <li>
                   <strong sx={prose.strong}>To communicate with you</strong> — verification emails,
-                  password resets, and notices about material changes. Legal basis: performance of
-                  our contract, and our legitimate interest in keeping you informed.
+                  password resets, group invitations, and notices about material changes. Legal
+                  basis: performance of our contract, and our legitimate interest in keeping you
+                  informed.
                 </li>
                 <li>
                   <strong sx={prose.strong}>To meet legal obligations</strong> — responding to valid
@@ -131,7 +133,10 @@ function RouteComponent() {
                 <li>our hosting and storage providers, who run the servers and store uploads;</li>
                 <li>Cloudflare, for network protection and bot detection;</li>
                 <li>our logging and monitoring provider, which receives our server logs;</li>
-                <li>our transactional email provider, for verification and password-reset mail;</li>
+                <li>
+                  our transactional email provider, for verification, password-reset and group
+                  invitation mail;
+                </li>
                 <li>Google and Discord, if and only if you choose to sign in with one of them.</li>
               </ul>
               <p sx={prose.p}>

@@ -1,10 +1,13 @@
 import { Hono } from "hono"
+import { cancelGroupInvitationHandler } from "../handlers/cancel-group-invitation-handler"
 import { createGroupHandler } from "../handlers/create-group-handler"
+import { createGroupInvitationHandler } from "../handlers/create-group-invitation-handler"
 import { createOwnershipRequestHandler } from "../handlers/create-ownership-request-handler"
 import { deleteGroupHandler } from "../handlers/delete-group-handler"
 import { demoteGroupMemberHandler } from "../handlers/demote-group-member-handler"
 import { getGroupHandler } from "../handlers/get-group-handler"
 import { leaveGroupHandler } from "../handlers/leave-group-handler"
+import { listGroupInvitationsHandler } from "../handlers/list-group-invitations-handler"
 import { listGroupMembersHandler } from "../handlers/list-group-members-handler"
 import { listGroupOwnershipRequestsHandler } from "../handlers/list-group-ownership-requests-handler"
 import { listGroupsHandler } from "../handlers/list-groups-handler"
@@ -29,3 +32,6 @@ export const groupsRouter = new Hono()
   .route("/", demoteGroupMemberHandler)
   .route("/", leaveGroupHandler)
   .route("/", transferGroupOwnershipHandler)
+  .route("/", createGroupInvitationHandler)
+  .route("/", listGroupInvitationsHandler)
+  .route("/", cancelGroupInvitationHandler)

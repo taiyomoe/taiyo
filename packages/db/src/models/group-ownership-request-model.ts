@@ -8,6 +8,7 @@ export type GroupOwnershipRequest = {
   groupId: string
   status: Generated<GroupOwnershipRequestStatus>
   message: string | null
+  proofLinks: Generated<string[]>
   reviewerId: string | null
   reviewerNote: string | null
   createdAt: Generated<Timestamp>

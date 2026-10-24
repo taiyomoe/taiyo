@@ -7,13 +7,11 @@ import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
 import { getOpenApiResponses } from "../utils/openapi-helper"
-import { apiSuccessEnvelope } from "../utils/schemas"
+import { apiSuccessEnvelope, proofLinksSchema, requestMessageSchema } from "../utils/schemas"
 
 const createOwnershipRequestSchema = z.object({
-  message: z.string().min(1).max(2000).nullable().optional().meta({
-    description: "Optional pitch from the requester for the reviewing admin.",
-    example: "I've been translating this group's releases for two years.",
-  }),
+  message: requestMessageSchema,
+  proofLinks: proofLinksSchema,
 })
 
 export const createOwnershipRequestHandler = new Hono().post(
@@ -21,7 +19,7 @@ export const createOwnershipRequestHandler = new Hono().post(
   describeRoute({
     summary: "Request ownership of a group",
     description:
-      "Files a claim on an unowned group. An admin will review and approve or reject.\n\n**Authentication:** any signed-in user.",
+      "Files a claim on an unowned group, with a message and at least one public link proving the requester runs it. An admin will review and approve or reject.\n\n**Authentication:** any signed-in user.",
     tags: ["Group ownership"],
     requestBody: {
       content: {
@@ -57,7 +55,7 @@ export const createOwnershipRequestHandler = new Hono().post(
   withTransaction,
   async (c) => {
     const { db, group, user } = c.var
-    const { message } = c.var.json
+    const { message, proofLinks } = c.var.json
     const owned = await db
       .selectFrom("groupMemberships")
       .select("userId")
@@ -87,7 +85,8 @@ export const createOwnershipRequestHandler = new Hono().post(
       .values({
         userId: user.id,
         groupId: group.id,
-        message: message ?? null,
+        message,
+        proofLinks,
       })
       .returning(["id", "status"])
       .executeTakeFirstOrThrow()

@@ -1,5 +1,10 @@
 import { config } from "@taiyomoe/config"
-import { CONTENT_RATINGS, LANGUAGES, MEDIA_COUNTRIES_OF_ORIGIN } from "@taiyomoe/db"
+import {
+  CONTENT_RATINGS,
+  GROUP_PERMISSIONS,
+  LANGUAGES,
+  MEDIA_COUNTRIES_OF_ORIGIN,
+} from "@taiyomoe/db"
 import z from "zod"
 
 export const apiSuccessEnvelope = <T extends z.ZodType, M extends z.ZodType = z.ZodNever>(
@@ -222,3 +227,66 @@ export const latestMediaUpdateSchema = z.object({
     .array()
     .meta({ description: "The most recent matching chapters of the media, newest first." }),
 })
+
+export const groupPermissionsSchema = z
+  .enum(GROUP_PERMISSIONS)
+  .array()
+  .max(GROUP_PERMISSIONS.length)
+  .meta({ description: "Group permissions.", example: ["UPLOAD_CHAPTERS", "EDIT_CHAPTERS"] })
+
+export const proofLinksSchema = z
+  .url({ protocol: /^https?$/, normalize: true })
+  .max(config.input.maxUrlLength)
+  .array()
+  .min(1)
+  .max(5)
+  .transform((links) => [...new Set(links)])
+  .meta({
+    description: "Public links proving the claim, such as the group's site or announcement posts.",
+    example: ["https://discord.gg/akira-scans"],
+  })
+
+export const requestMessageSchema = z
+  .string()
+  .trim()
+  .min(1)
+  .max(2000)
+  .meta({ description: "Who you are and why the request should be approved." })
+
+export const reviewNoteSchema = z
+  .string()
+  .trim()
+  .min(1)
+  .max(2000)
+  .meta({ description: "Explanation shown to the requester.", example: "No proof of ownership." })
+
+export const userSummarySchema = z.object({
+  id: z.uuid(),
+  username: z.string(),
+  displayUsername: z.string(),
+  image: z.string().nullable(),
+})
+
+export const groupSummarySchema = z.object({
+  id: z.uuid(),
+  name: z.string(),
+  logo: z.string().nullable(),
+})
+
+const emptyToNull = z.literal("").transform(() => null)
+const httpUrlSchema = z.url({ protocol: /^https?$/ }).max(config.input.maxUrlLength)
+
+export const groupLinkSchema = (description: string) =>
+  z.union([httpUrlSchema, emptyToNull]).nullable().optional().meta({ description })
+
+export const groupDiscordSchema = z
+  .union([httpUrlSchema, z.string().regex(/^(\/invite\/)?[A-Za-z0-9-]{2,64}$/), emptyToNull])
+  .nullable()
+  .optional()
+  .meta({ description: "Discord invite link or code." })
+
+export const groupEmailSchema = z
+  .union([z.email().max(config.input.maxUrlLength), emptyToNull])
+  .nullable()
+  .optional()
+  .meta({ description: "Contact email." })

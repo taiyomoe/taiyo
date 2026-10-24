@@ -67,7 +67,7 @@ describe("POST /ownership-requests/:id/reject", () => {
     const res = await api(app, `/ownership-requests/${randomUUID()}/reject`, {
       method: "POST",
       headers,
-      json: {},
+      json: { note: "No proof." },
     })
 
     expect(res.status).toBe(404)
@@ -91,7 +91,7 @@ describe("POST /ownership-requests/:id/reject", () => {
     const res = await api(app, `/ownership-requests/${requestId}/reject`, {
       method: "POST",
       headers,
-      json: {},
+      json: { note: "No proof." },
     })
 
     expect(res.status).toBe(409)
@@ -106,7 +106,7 @@ describe("POST /ownership-requests/:id/reject", () => {
   test("rejects unauthenticated requests with UNAUTHORIZED", async ({ app }) => {
     const res = await api(app, `/ownership-requests/${randomUUID()}/reject`, {
       method: "POST",
-      json: {},
+      json: { note: "No proof." },
     })
 
     expect(res.status).toBe(401)
@@ -148,10 +148,27 @@ describe("POST /ownership-requests/:id/reject", () => {
     const res = await api(app, `/ownership-requests/${randomUUID()}/reject`, {
       method: "POST",
       headers,
-      json: {},
+      json: { note: "No proof." },
     })
 
     expect(res.status).toBe(403)
+  })
+
+  test("requires a note", async ({ app, services }) => {
+    const { headers } = await signInAs(services, { role: "ADMIN" })
+    const { userId: requesterId } = await signInAs(services)
+    const groupId = await seedGroup(services, requesterId)
+    const requestId = await seedRequest(services, { userId: requesterId, groupId })
+
+    for (const json of [{}, { note: "" }, { note: "   " }]) {
+      const res = await api(app, `/ownership-requests/${requestId}/reject`, {
+        method: "POST",
+        headers,
+        json,
+      })
+
+      expect(res.status).toBe(422)
+    }
   })
 
   test("returns VALIDATION_ERROR for an over-long note", async ({ app, services }) => {
@@ -172,7 +189,11 @@ describe("POST /ownership-requests/:id/reject", () => {
     const requestId = await seedRequest(services, { userId: requesterId, groupId })
     const [approveRes, rejectRes] = await Promise.all([
       api(app, `/ownership-requests/${requestId}/approve`, { method: "POST", headers }),
-      api(app, `/ownership-requests/${requestId}/reject`, { method: "POST", headers, json: {} }),
+      api(app, `/ownership-requests/${requestId}/reject`, {
+        method: "POST",
+        headers,
+        json: { note: "No proof." },
+      }),
     ])
     const statuses = [approveRes.status, rejectRes.status].sort((a, b) => a - b)
 

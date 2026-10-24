@@ -16,6 +16,10 @@ const getUnownedGroup = async (services: Services, creatorId: string) => {
 
   return id
 }
+const CLAIM = {
+  message: "I run this group on Discord.",
+  proofLinks: ["https://discord.gg/example"],
+}
 
 describe("POST /groups/:id/ownership-requests", () => {
   test("creates a pending ownership request", async ({ app, services }) => {
@@ -24,7 +28,7 @@ describe("POST /groups/:id/ownership-requests", () => {
     const res = await api<{ id: string; status: string }>(
       app,
       `/groups/${groupId}/ownership-requests`,
-      { method: "POST", headers, json: { message: "I run this group on Discord." } },
+      { method: "POST", headers, json: CLAIM },
     )
 
     expect(res.status).toBe(201)
@@ -51,7 +55,7 @@ describe("POST /groups/:id/ownership-requests", () => {
     const res = await api(app, `/groups/${randomUUID()}/ownership-requests`, {
       method: "POST",
       headers,
-      json: {},
+      json: CLAIM,
     })
 
     expect(res.status).toBe(404)
@@ -89,7 +93,7 @@ describe("POST /groups/:id/ownership-requests", () => {
     const res = await api(app, `/groups/${groupId}/ownership-requests`, {
       method: "POST",
       headers,
-      json: {},
+      json: CLAIM,
     })
 
     expect(res.status).toBe(409)
@@ -116,7 +120,7 @@ describe("POST /groups/:id/ownership-requests", () => {
     const res = await api(app, `/groups/${groupId}/ownership-requests`, {
       method: "POST",
       headers,
-      json: {},
+      json: CLAIM,
     })
 
     expect(res.status).toBe(409)
@@ -131,7 +135,7 @@ describe("POST /groups/:id/ownership-requests", () => {
   test("rejects unauthenticated requests with UNAUTHORIZED", async ({ app }) => {
     const res = await api(app, `/groups/${SEEDED_GROUP_ID}/ownership-requests`, {
       method: "POST",
-      json: {},
+      json: CLAIM,
     })
 
     expect(res.status).toBe(401)
@@ -142,7 +146,7 @@ describe("POST /groups/:id/ownership-requests", () => {
     const res = await api(app, `/groups/${SEEDED_GROUP_ID}/ownership-requests`, {
       method: "POST",
       headers,
-      json: {},
+      json: CLAIM,
     })
 
     expect(res.status).toBe(403)
@@ -153,9 +157,81 @@ describe("POST /groups/:id/ownership-requests", () => {
     const res = await api(app, `/groups/${SEEDED_GROUP_ID}/ownership-requests`, {
       method: "POST",
       headers,
-      json: { message: "x".repeat(2001) },
+      json: { ...CLAIM, message: "x".repeat(2001) },
     })
 
     expect(res.status).toBe(422)
+  })
+
+  test("stores the message and the proof links", async ({ app, services }) => {
+    const { headers, userId } = await signInAs(services)
+    const groupId = await getUnownedGroup(services, userId)
+    const res = await api<{ id: string }>(app, `/groups/${groupId}/ownership-requests`, {
+      method: "POST",
+      headers,
+      json: {
+        message: "  I lead the group.  ",
+        proofLinks: ["https://example.com/about", "https://example.com/about", "https://x.com/g"],
+      },
+    })
+
+    if (!res.body.success) {
+      throw new Error(`Expected success: ${JSON.stringify(res.body)}`)
+    }
+
+    const row = await services.db
+      .selectFrom("groupOwnershipRequests")
+      .select(["message", "proofLinks"])
+      .where("id", "=", res.body.data.id)
+      .executeTakeFirstOrThrow()
+
+    expect(row).toEqual({
+      message: "I lead the group.",
+      proofLinks: ["https://example.com/about", "https://x.com/g"],
+    })
+  })
+
+  test("requires a message and at least one proof link", async ({ app, services }) => {
+    const { headers, userId } = await signInAs(services)
+    const groupId = await getUnownedGroup(services, userId)
+
+    for (const json of [
+      { proofLinks: CLAIM.proofLinks },
+      { message: "   ", proofLinks: CLAIM.proofLinks },
+      { message: CLAIM.message },
+      { message: CLAIM.message, proofLinks: [] },
+      {
+        message: CLAIM.message,
+        proofLinks: Array.from({ length: 6 }, (_, i) => `https://a.b/${i}`),
+      },
+    ]) {
+      const res = await api(app, `/groups/${groupId}/ownership-requests`, {
+        method: "POST",
+        headers,
+        json,
+      })
+
+      expect(res.status).toBe(422)
+    }
+  })
+
+  test("only accepts http and https proof links", async ({ app, services }) => {
+    const { headers, userId } = await signInAs(services)
+    const groupId = await getUnownedGroup(services, userId)
+
+    for (const link of [
+      ["javascript", "alert(1)"].join(":"),
+      "data:text/html,<script>alert(1)</script>",
+      "ftp://example.com/file",
+      "not a url",
+    ]) {
+      const res = await api(app, `/groups/${groupId}/ownership-requests`, {
+        method: "POST",
+        headers,
+        json: { message: CLAIM.message, proofLinks: [link] },
+      })
+
+      expect({ link, status: res.status }).toEqual({ link, status: 422 })
+    }
   })
 })

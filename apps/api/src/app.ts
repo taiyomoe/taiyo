@@ -19,6 +19,8 @@ import { bannersRouter } from "./routers/banners-router"
 import { chaptersRouter } from "./routers/chapters-router"
 import { coversRouter } from "./routers/covers-router"
 import { dashboardRouter } from "./routers/dashboard-router"
+import { groupCreationRequestsRouter } from "./routers/group-creation-requests-router"
+import { groupInvitationsRouter } from "./routers/group-invitations-router"
 import { groupsRouter } from "./routers/groups-router"
 import { listsRouter } from "./routers/lists-router"
 import { mediasRouter } from "./routers/medias-router"
@@ -72,6 +74,8 @@ export const createApp = (services: Services) => {
     .route("/chapters", chaptersRouter)
     .route("/groups", groupsRouter)
     .route("/ownership-requests", ownershipRequestsRouter)
+    .route("/group-invitations", groupInvitationsRouter)
+    .route("/group-creation-requests", groupCreationRequestsRouter)
     .route("/users", usersRouter)
     .route("/lists", listsRouter)
     .route("/dashboard", dashboardRouter)
@@ -134,7 +138,12 @@ export const createApp = (services: Services) => {
             {
               name: "Group members",
               description:
-                "Managing the membership of a group: list, add, remove, promote/demote, leave.",
+                "Managing the membership of a group: invitations, permissions, removal, promotion, leaving.",
+            },
+            {
+              name: "Group creation requests",
+              description:
+                "Workflow for users to ask for a new group they will own: request, approval, rejection, cancellation.",
             },
             {
               name: "Follows",

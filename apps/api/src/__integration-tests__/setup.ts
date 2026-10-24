@@ -1,4 +1,5 @@
 import "./setup-env"
+import type { GroupInvitationMail } from "@taiyomoe/email"
 import type { Hono } from "hono"
 import {
   CreateBucketCommand,
@@ -41,7 +42,10 @@ afterAll(async () => {
 type Fixtures = {
   services: Services
   app: Hono
+  mails: GroupInvitationMail[]
 }
+
+const sentMails = new WeakMap<Services, GroupInvitationMail[]>()
 
 export const test = baseTest.extend<Fixtures>({
   services: async ({ task }, use) => {
@@ -59,6 +63,7 @@ export const test = baseTest.extend<Fixtures>({
     await sharedS3.send(new CreateBucketCommand({ Bucket: bucketName }))
     await initMediasIndex({ db, meili: sharedMeili, mediasIndex })
 
+    const mails: GroupInvitationMail[] = []
     const services: Services = {
       db,
       s3: sharedS3,
@@ -67,8 +72,17 @@ export const test = baseTest.extend<Fixtures>({
       mediasIndex,
       auth: createAuth({ db }),
       chapterUploadQueue: { enqueue: async () => {} },
+      mailer: {
+        sendGroupInvitation: (mail) => {
+          mails.push(mail)
+
+          return Promise.resolve()
+        },
+      },
       cacheNamespace: `${crypto.randomUUID()}:`,
     }
+
+    sentMails.set(services, mails)
 
     await use(services)
 
@@ -91,5 +105,8 @@ export const test = baseTest.extend<Fixtures>({
   },
   app: async ({ services }, use) => {
     await use(createApp(services))
+  },
+  mails: async ({ services }, use) => {
+    await use(sentMails.get(services) ?? [])
   },
 })

@@ -1,7 +1,11 @@
 import type { DB, GroupMembershipRole, GroupPermission, Kysely } from "@taiyomoe/db"
 import { type Actor, createPermissions, GROUP_PERMISSIONS } from "@taiyomoe/permissions"
 
-const withGroupLock = <T>(db: Kysely<DB>, groupId: string, fn: (trx: Kysely<DB>) => Promise<T>) => {
+export const withGroupLock = <T>(
+  db: Kysely<DB>,
+  groupId: string,
+  fn: (trx: Kysely<DB>) => Promise<T>,
+) => {
   const run = async (trx: Kysely<DB>) => {
     const group = await trx
       .selectFrom("groups")
@@ -20,18 +24,21 @@ const withGroupLock = <T>(db: Kysely<DB>, groupId: string, fn: (trx: Kysely<DB>)
 
   return db.isTransaction ? run(db) : db.transaction().execute(run)
 }
-const getMembership = (trx: Kysely<DB>, groupId: string, userId: string) =>
+
+export const getMembership = (trx: Kysely<DB>, groupId: string, userId: string) =>
   trx
     .selectFrom("groupMemberships")
     .select(["groupId", "userId", "role", "permissions"])
     .where("groupId", "=", groupId)
     .where("userId", "=", userId)
     .executeTakeFirst()
-const getLockedPermissions = async (trx: Kysely<DB>, actor: Actor, groupId: string) => {
+
+export const getLockedPermissions = async (trx: Kysely<DB>, actor: Actor, groupId: string) => {
   const own = await getMembership(trx, groupId, actor.id)
 
   return createPermissions({ ...actor, memberships: own === undefined ? [] : [own] })
 }
+
 const hasOtherOwner = async (trx: Kysely<DB>, groupId: string, userId: string) => {
   const row = await trx
     .selectFrom("groupMemberships")
@@ -57,6 +64,8 @@ const updateRole = async (
     .where("userId", "=", userId)
     .execute()
 }
+
+export const INVITATION_LIFETIME_DAYS = 7
 
 export const normalizeGroupPermissions = (permissions: readonly GroupPermission[]) =>
   GROUP_PERMISSIONS.filter((permission) => permissions.includes(permission))

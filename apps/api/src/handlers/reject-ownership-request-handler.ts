@@ -6,13 +6,10 @@ import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
 import { getOpenApiResponses } from "../utils/openapi-helper"
-import { apiSuccessEnvelope } from "../utils/schemas"
+import { apiSuccessEnvelope, reviewNoteSchema } from "../utils/schemas"
 
 const rejectSchema = z.object({
-  note: z.string().min(1).max(2000).nullable().optional().meta({
-    description: "Optional explanation shown to the requester.",
-    example: "Already in talks with another applicant.",
-  }),
+  note: reviewNoteSchema,
 })
 
 export const rejectOwnershipRequestHandler = new Hono().post(
@@ -49,7 +46,7 @@ export const rejectOwnershipRequestHandler = new Hono().post(
     const { note } = c.var.json
     const transitioned = await db
       .updateTable("groupOwnershipRequests")
-      .set({ status: "REJECTED", reviewerId: user.id, reviewerNote: note ?? null })
+      .set({ status: "REJECTED", reviewerId: user.id, reviewerNote: note })
       .where("id", "=", ownershipRequest.id)
       .where("status", "=", "PENDING")
       .returning("id")

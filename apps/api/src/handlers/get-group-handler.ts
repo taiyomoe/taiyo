@@ -19,6 +19,7 @@ const groupDetailSchema = z.object({
   telegram: z.string().nullable(),
   youtube: z.string().nullable(),
   email: z.string().nullable(),
+  owned: z.boolean().meta({ description: "Whether the group has an owner." }),
   createdAt: z.iso.datetime(),
   updatedAt: z.iso.datetime(),
 })
@@ -43,8 +44,15 @@ export const getGroupHandler = new Hono().get(
     },
   }),
   checkGroup(),
-  (c) => {
-    const { group } = c.var
+  async (c) => {
+    const { db, group } = c.var
+    const owner = await db
+      .selectFrom("groupMemberships")
+      .select("userId")
+      .where("groupId", "=", group.id)
+      .where("role", "=", "OWNER")
+      .limit(1)
+      .executeTakeFirst()
 
     return c.ok({
       id: group.id,
@@ -60,6 +68,7 @@ export const getGroupHandler = new Hono().get(
       telegram: group.telegram,
       youtube: group.youtube,
       email: group.email,
+      owned: owner !== undefined,
       createdAt: group.createdAt,
       updatedAt: group.updatedAt,
     })

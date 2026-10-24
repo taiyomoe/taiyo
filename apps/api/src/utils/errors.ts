@@ -96,6 +96,46 @@ const groupErrors = {
     message: "The requested group was not found.",
     code: 404,
   },
+  GROUP_NAME_TAKEN: {
+    message: "A group with this name already exists. Claim it instead of requesting a new one.",
+    code: 409,
+  },
+  GROUP_INVITATION_NOT_FOUND: {
+    message: "The requested invitation was not found.",
+    code: 404,
+  },
+  GROUP_INVITATION_EXISTS: {
+    message: "This user already has a pending invitation to the group.",
+    code: 409,
+  },
+  GROUP_INVITATION_NOT_PENDING: {
+    message: "This invitation was already answered or cancelled.",
+    code: 409,
+  },
+  GROUP_INVITATION_EXPIRED: {
+    message: "This invitation has expired.",
+    code: 409,
+  },
+  GROUP_INVITATION_INVALID: {
+    message: "The person who sent this invitation can no longer grant these permissions.",
+    code: 409,
+  },
+  GROUP_CREATION_REQUEST_NOT_FOUND: {
+    message: "The requested group creation request was not found.",
+    code: 404,
+  },
+  GROUP_CREATION_REQUEST_NOT_PENDING: {
+    message: "This group creation request was already reviewed or cancelled.",
+    code: 409,
+  },
+  GROUP_CREATION_REQUEST_EXISTS: {
+    message: "You already have a pending request for a group with this name.",
+    code: 409,
+  },
+  GROUP_CREATION_REQUEST_LIMIT: {
+    message: "You have too many pending group creation requests. Wait for them to be reviewed.",
+    code: 409,
+  },
 } as const
 const mediaStaffErrors = {
   MEDIA_STAFF_EXISTS: {

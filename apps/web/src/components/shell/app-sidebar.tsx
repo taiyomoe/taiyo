@@ -61,7 +61,7 @@ const SECTIONS: AppSidebarSection[] = [
   {
     label: m.shell_nav_community,
     items: [
-      { label: m.shell_nav_groups, icon: Users },
+      { label: m.shell_nav_groups, icon: Users, to: "/groups" },
       { label: m.shell_nav_forums, icon: Forum },
       { label: m.shell_nav_users, icon: User },
     ],

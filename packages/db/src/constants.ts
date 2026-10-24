@@ -45,6 +45,16 @@ export const GROUP_OWNERSHIP_REQUEST_STATUSES = [
 
 export type GroupOwnershipRequestStatus = (typeof GROUP_OWNERSHIP_REQUEST_STATUSES)[number]
 
+export const GROUP_INVITATION_STATUSES = [
+  "PENDING",
+  "ACCEPTED",
+  "DECLINED",
+  "CANCELLED",
+  "EXPIRED",
+] as const
+
+export type GroupInvitationStatus = (typeof GROUP_INVITATION_STATUSES)[number]
+
 export const USER_LIBRARY_STATUSES = [
   "READING",
   "REREADING",

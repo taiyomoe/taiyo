@@ -37,3 +37,15 @@ export const withAuth = (path?: StaticPermissionPath) =>
 
     return next()
   })
+
+export const withOptionalAuth = createMiddleware<{
+  Variables: { viewer: Actor | null; can: Permissions }
+}>(async (c, next) => {
+  const result = await c.var.auth.api.getSession({ headers: c.req.raw.headers })
+  const viewer = result ? await loadActor(c.var.db, result.user.id) : null
+
+  c.set("viewer", viewer)
+  c.set("can", createPermissions(viewer))
+
+  return next()
+})
