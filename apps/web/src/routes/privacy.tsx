@@ -141,6 +141,12 @@ function RouteComponent() {
                 <li>Google and Discord, if and only if you choose to sign in with one of them.</li>
               </ul>
               <p sx={prose.p}>
+                Within Taiyō, administrators can see your account details and where you are signed
+                in, including the device and IP address of each session, and can sign those sessions
+                out. They can also sign in as you for up to an hour, for example to look into a
+                problem. Each of those sessions records which administrator opened it.
+              </p>
+              <p sx={prose.p}>
                 We may also disclose information where we are legally required to, or where it is
                 necessary to establish or defend legal claims. If Taiyō is ever transferred to
                 another operator, information would move with it, and we would tell you first.

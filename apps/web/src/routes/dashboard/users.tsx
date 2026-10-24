@@ -1,8 +1,11 @@
 import * as stylex from "@stylexjs/stylex"
+import { authClient } from "@taiyomoe/auth/client"
+import { config } from "@taiyomoe/config"
 import { type Permissions, ROLES, type Role } from "@taiyomoe/permissions"
-import { Search, User } from "@taiyomoe/ui/components/icons"
+import { Ellipsis, Eye, Key, Monitor, Search, User } from "@taiyomoe/ui/components/icons"
 import { Badge } from "@taiyomoe/ui/components/ui/badge"
 import { Button } from "@taiyomoe/ui/components/ui/button"
+import { Checkbox } from "@taiyomoe/ui/components/ui/checkbox"
 import {
   Dialog,
   DialogClose,
@@ -26,6 +29,8 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@taiyomoe/ui/components/ui/input-group"
+import { Menu, MenuItem, MenuPopup, MenuTrigger } from "@taiyomoe/ui/components/ui/menu"
+import { PasswordInput } from "@taiyomoe/ui/components/ui/password-input"
 import {
   Select,
   SelectItem,
@@ -34,13 +39,14 @@ import {
   SelectValue,
 } from "@taiyomoe/ui/components/ui/select"
 import { Textarea } from "@taiyomoe/ui/components/ui/textarea"
-import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
+import { colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { createFileRoute, Link, redirect, useNavigate } from "@tanstack/react-router"
 import { useDeferredValue, useState } from "react"
 import { z } from "zod"
 import { AuthAlert } from "@/components/auth/auth-alert"
 import { TimeAgo } from "@/components/chapters/chapter-meta"
+import { ConfirmDialog } from "@/components/dashboard/confirm-dialog"
 import { DashboardPage, ListCard, ListRow } from "@/components/dashboard/dashboard-page"
 import { PersonAvatar } from "@/components/groups/group-avatar"
 import { PagePagination } from "@/components/pagination/page-pagination"
@@ -48,7 +54,10 @@ import { api } from "@/lib/api"
 import { ensureSuccess, unwrapEnvelope } from "@/lib/envelope"
 import { getErrorMessage } from "@/lib/errors"
 import { getPermissions } from "@/lib/permissions"
+import { sessionsKey, unwrapAuth, userSessionsQueryOptions } from "@/lib/queries/user-admin"
 import { type ManagedUser, USERS_PER_PAGE, type UsersFilter } from "@/lib/queries/users"
+import { useNow } from "@/lib/use-now"
+import { describeUserAgent } from "@/lib/user-agent"
 import { m } from "@/paraglide/messages"
 
 const ROLE_LABELS: Record<Role, () => string> = {
@@ -129,12 +138,81 @@ const styles = stylex.create({
     justifyContent: "flex-end",
     width: "5.5rem",
   },
+  moreSlot: {
+    display: "flex",
+    justifyContent: "flex-end",
+    width: "2rem",
+  },
   dialogBody: {
     gap: "1rem",
     display: "flex",
     flexDirection: "column",
   },
 })
+const adminStyles = stylex.create({
+  sessions: {
+    margin: 0,
+    padding: 0,
+    gap: "0.5rem",
+    listStyle: "none",
+    display: "flex",
+    flexDirection: "column",
+  },
+  session: {
+    padding: "0.75rem",
+    borderColor: colors.border,
+    borderRadius: radius.lg,
+    borderStyle: "solid",
+    borderWidth: 1,
+    gap: "0.75rem",
+    alignItems: "center",
+    display: "flex",
+  },
+  sessionIcon: {
+    color: colors.mutedForeground,
+    flexShrink: 0,
+  },
+  sessionMain: {
+    gap: "0.25rem",
+    display: "flex",
+    flexDirection: "column",
+    flexGrow: 1,
+    minWidth: 0,
+  },
+  sessionTitle: {
+    gap: "0.5rem",
+    alignItems: "center",
+    display: "flex",
+    flexWrap: "wrap",
+    fontWeight: 600,
+  },
+  sessionMeta: {
+    gap: "0.75rem",
+    color: colors.mutedForeground,
+    display: "flex",
+    flexWrap: "wrap",
+    fontSize: "0.8125rem",
+  },
+  muted: {
+    margin: 0,
+    color: colors.mutedForeground,
+  },
+  form: {
+    gap: "1rem",
+    display: "flex",
+    flexDirection: "column",
+  },
+  check: {
+    gap: "0.625rem",
+    alignItems: "center",
+    display: "flex",
+    fontSize: "0.875rem",
+  },
+})
+const iso = (value: string | Date) => new Date(value).toISOString()
+
+type Dialogs = "impersonate" | "sessions" | "password" | null
+
 const searchSchema = z.object({
   q: z.string().trim().min(1).max(100).optional().catch(undefined),
   role: z.enum(ROLES).optional().catch(undefined),
@@ -442,6 +520,20 @@ function UserRow({
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["users"] }),
   })
   const canBan = can("user.ban", { id: user.id, role: user.role })
+  const impersonate = useMutation({
+    mutationFn: (userId: string) => unwrapAuth(authClient.admin.impersonateUser({ userId })),
+    onSuccess: () => {
+      window.location.assign("/")
+    },
+  })
+  const [open, setOpen] = useState<Dialogs>(null)
+  const target = { id: user.id, role: user.role }
+  const canImpersonate = can("user.impersonate", target) && !user.banned
+  const canManageSessions = can("user.manageSessions", target)
+  const canSetPassword = can("user.setPassword", target)
+  const close = () => {
+    setOpen(null)
+  }
 
   return (
     <ListRow>
@@ -522,7 +614,283 @@ function UserRow({
             </Button>
           ) : null}
         </div>
+        <div sx={styles.moreSlot}>
+          {canImpersonate || canManageSessions || canSetPassword ? (
+            <>
+              <Menu>
+                <MenuTrigger
+                  render={
+                    <Button
+                      aria-label={m.user_admin_more({ name: user.displayUsername })}
+                      size="icon-sm"
+                      variant="ghost"
+                    />
+                  }
+                >
+                  <Ellipsis />
+                </MenuTrigger>
+                <MenuPopup align="end">
+                  {canImpersonate ? (
+                    <MenuItem
+                      onClick={() => {
+                        setOpen("impersonate")
+                      }}
+                    >
+                      <Eye />
+                      {m.user_admin_impersonate()}
+                    </MenuItem>
+                  ) : null}
+                  {canManageSessions ? (
+                    <MenuItem
+                      onClick={() => {
+                        setOpen("sessions")
+                      }}
+                    >
+                      <Monitor />
+                      {m.user_admin_sessions()}
+                    </MenuItem>
+                  ) : null}
+                  {canSetPassword ? (
+                    <MenuItem
+                      onClick={() => {
+                        setOpen("password")
+                      }}
+                    >
+                      <Key />
+                      {m.user_admin_set_password()}
+                    </MenuItem>
+                  ) : null}
+                </MenuPopup>
+              </Menu>
+              <ConfirmDialog
+                confirmation={
+                  open === "impersonate"
+                    ? {
+                        title: m.impersonate_title({ name: user.displayUsername }),
+                        description: m.impersonate_description(),
+                        confirmLabel: m.impersonate_confirm({ name: user.displayUsername }),
+                        run: () => impersonate.mutateAsync(user.id),
+                      }
+                    : null
+                }
+                error={impersonate.isError ? getErrorMessage(impersonate.error) : null}
+                onClose={() => {
+                  close()
+                  impersonate.reset()
+                }}
+                pending={impersonate.isPending}
+              />
+              {open === "sessions" ? <SessionsDialog onClose={close} user={user} /> : null}
+              {open === "password" ? <SetPasswordDialog onClose={close} user={user} /> : null}
+            </>
+          ) : null}
+        </div>
       </div>
     </ListRow>
+  )
+}
+
+function SessionsDialog({ user, onClose }: { user: ManagedUser; onClose: () => void }) {
+  const sessions = useQuery(userSessionsQueryOptions(user.id))
+  const queryClient = useQueryClient()
+  const revoke = useMutation({
+    mutationFn: (sessionToken: string | null) =>
+      unwrapAuth(
+        sessionToken === null
+          ? authClient.admin.revokeUserSessions({ userId: user.id })
+          : authClient.admin.revokeUserSession({ sessionToken }),
+      ),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: sessionsKey(user.id) }),
+  })
+  const now = useNow()
+  const active = (sessions.data ?? []).filter(
+    (session) => new Date(session.expiresAt).getTime() > now,
+  )
+
+  return (
+    <Dialog
+      onOpenChange={(open) => {
+        if (!open) {
+          onClose()
+        }
+      }}
+      open
+    >
+      <DialogPopup>
+        <DialogHeader>
+          <DialogTitle>{m.sessions_title({ name: user.displayUsername })}</DialogTitle>
+          <DialogDescription>{m.sessions_description()}</DialogDescription>
+        </DialogHeader>
+        <DialogPanel>
+          <div sx={adminStyles.form}>
+            <AuthAlert
+              message={
+                sessions.isError || revoke.isError
+                  ? getErrorMessage(sessions.error ?? revoke.error)
+                  : null
+              }
+            />
+            {sessions.data === undefined ? (
+              <p sx={adminStyles.muted}>{m.sessions_loading()}</p>
+            ) : null}
+            {sessions.data !== undefined && active.length === 0 ? (
+              <p sx={adminStyles.muted}>{m.sessions_empty()}</p>
+            ) : null}
+            {active.length > 0 ? (
+              <ul sx={adminStyles.sessions}>
+                {active.map((session) => {
+                  const device = describeUserAgent(session.userAgent)
+
+                  return (
+                    <li key={session.id} sx={adminStyles.session}>
+                      <Monitor size={20} {...stylex.props(adminStyles.sessionIcon)} />
+                      <div sx={adminStyles.sessionMain}>
+                        <span sx={adminStyles.sessionTitle}>
+                          {device === null
+                            ? m.sessions_unknown_device()
+                            : m.sessions_device(device)}
+                          {typeof session.impersonatedBy === "string" ? (
+                            <Badge variant="warning">{m.sessions_impersonation()}</Badge>
+                          ) : null}
+                        </span>
+                        <span sx={adminStyles.sessionMeta}>
+                          {session.ipAddress === null || session.ipAddress === undefined ? null : (
+                            <span>{session.ipAddress}</span>
+                          )}
+                          <span>
+                            {m.sessions_signed_in()} <TimeAgo date={iso(session.createdAt)} />
+                          </span>
+                          <span>
+                            {m.sessions_expires()} <TimeAgo date={iso(session.expiresAt)} future />
+                          </span>
+                        </span>
+                      </div>
+                      <Button
+                        disabled={revoke.isPending}
+                        onClick={() => {
+                          revoke.mutate(session.token)
+                        }}
+                        size="sm"
+                        variant="outline"
+                      >
+                        {m.sessions_revoke()}
+                      </Button>
+                    </li>
+                  )
+                })}
+              </ul>
+            ) : null}
+          </div>
+        </DialogPanel>
+        <DialogFooter>
+          <DialogClose render={<Button variant="outline" />}>{m.cancel()}</DialogClose>
+          <Button
+            disabled={revoke.isPending || active.length === 0}
+            onClick={() => {
+              revoke.mutate(null)
+            }}
+            variant="destructive"
+          >
+            {m.sessions_revoke_all()}
+          </Button>
+        </DialogFooter>
+      </DialogPopup>
+    </Dialog>
+  )
+}
+
+function SetPasswordDialog({ user, onClose }: { user: ManagedUser; onClose: () => void }) {
+  const queryClient = useQueryClient()
+  const setPassword = useMutation({
+    mutationFn: async ({
+      userId,
+      newPassword,
+      signOut: revokeSessions,
+    }: {
+      userId: string
+      newPassword: string
+      signOut: boolean
+    }) => {
+      await unwrapAuth(authClient.admin.setUserPassword({ userId, newPassword }))
+
+      if (revokeSessions) {
+        await unwrapAuth(authClient.admin.revokeUserSessions({ userId }))
+      }
+    },
+    onSuccess: (_data, { userId }) =>
+      queryClient.invalidateQueries({ queryKey: sessionsKey(userId) }),
+  })
+  const [password, setPasswordValue] = useState("")
+  const [signOut, setSignOut] = useState(true)
+  const [touched, setTouched] = useState(false)
+  const { minLength, maxLength } = config.auth.password
+  const tooShort = password.length < minLength
+  const invalid = touched && tooShort
+
+  return (
+    <Dialog
+      onOpenChange={(open) => {
+        if (!open) {
+          onClose()
+        }
+      }}
+      open
+    >
+      <DialogPopup>
+        <DialogHeader>
+          <DialogTitle>{m.set_password_title({ name: user.displayUsername })}</DialogTitle>
+          <DialogDescription>{m.set_password_description()}</DialogDescription>
+        </DialogHeader>
+        <DialogPanel>
+          <div sx={adminStyles.form}>
+            <AuthAlert message={setPassword.isError ? getErrorMessage(setPassword.error) : null} />
+            <Field invalid={invalid}>
+              <FieldLabel>{m.set_password_label()}</FieldLabel>
+              <PasswordInput
+                autoComplete="new-password"
+                maxLength={maxLength}
+                onBlur={() => {
+                  setTouched(true)
+                }}
+                onChange={(event) => {
+                  setPasswordValue(event.target.value)
+                }}
+                value={password}
+              />
+              {invalid ? (
+                <FieldError match>{m.user_admin_password_short({ min: minLength })}</FieldError>
+              ) : null}
+            </Field>
+            <label sx={adminStyles.check}>
+              <Checkbox
+                checked={signOut}
+                onCheckedChange={(checked) => {
+                  setSignOut(checked)
+                }}
+              />
+              {m.set_password_sign_out()}
+            </label>
+          </div>
+        </DialogPanel>
+        <DialogFooter>
+          <DialogClose render={<Button variant="outline" />}>{m.cancel()}</DialogClose>
+          <Button
+            disabled={setPassword.isPending}
+            onClick={() => {
+              setTouched(true)
+
+              if (!tooShort) {
+                setPassword.mutate(
+                  { userId: user.id, newPassword: password, signOut },
+                  { onSuccess: onClose },
+                )
+              }
+            }}
+          >
+            {m.set_password_submit()}
+          </Button>
+        </DialogFooter>
+      </DialogPopup>
+    </Dialog>
   )
 }
