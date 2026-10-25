@@ -36,6 +36,7 @@ const sharedS3 = getS3Client()
 const sharedMeili = getMeiliClient()
 
 afterAll(async () => {
+  await adminClientReady
   await adminClient.end()
 })
 
