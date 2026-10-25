@@ -3,6 +3,7 @@ import type { Permissions } from "@taiyomoe/permissions"
 import * as stylex from "@stylexjs/stylex"
 import { CheckCircle } from "@taiyomoe/ui/components/icons"
 import { Button } from "@taiyomoe/ui/components/ui/button"
+import { Checkbox } from "@taiyomoe/ui/components/ui/checkbox"
 import {
   Dialog,
   DialogClose,
@@ -42,6 +43,7 @@ import {
   chapterQueryOptions,
   reviewQueueQueryOptions,
   SUBMISSIONS_PER_PAGE,
+  useBulkReview,
   useReviewChapter,
 } from "@/lib/queries/submissions"
 import { m } from "@/paraglide/messages"
@@ -111,6 +113,26 @@ const styles = stylex.create({
     margin: 0,
     color: colors.mutedForeground,
   },
+  bulkBar: {
+    gap: "0.75rem",
+    paddingInline: "1.25rem",
+    alignItems: "center",
+    display: "flex",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+  },
+  bulkSelect: {
+    gap: "0.75rem",
+    alignItems: "center",
+    color: colors.mutedForeground,
+    cursor: "pointer",
+    display: "flex",
+    fontSize: "0.875rem",
+  },
+  bulkActions: {
+    gap: "0.5rem",
+    display: "flex",
+  },
 })
 
 export function ChapterReviewPage({ page, user }: { page: number; user: Session["user"] }) {
@@ -118,6 +140,9 @@ export function ChapterReviewPage({ page, user }: { page: number; user: Session[
   const can = usePermissions(user)
   const navigate = useNavigate({ from: "/dashboard/chapter-reviews" })
   const [reviewing, setReviewing] = useState<ChapterSubmission | null>(null)
+  const [selected, setSelected] = useState<string[]>([])
+  const pageIds = data.data.map((submission) => submission.id)
+  const selection = selected.filter((id) => pageIds.includes(id))
 
   return (
     <DashboardPage subtitle={m.review_chapters_subtitle()} title={m.review_chapters_title()}>
@@ -133,9 +158,35 @@ export function ChapterReviewPage({ page, user }: { page: number; user: Session[
         </Empty>
       ) : (
         <>
+          <BulkBar
+            allSelected={selection.length === pageIds.length}
+            onClear={() => {
+              setSelected([])
+            }}
+            onToggleAll={(checked) => {
+              setSelected(checked ? pageIds : [])
+            }}
+            selection={selection}
+          />
           <ListCard>
             {data.data.map((submission) => (
               <SubmissionRow
+                leading={
+                  <Checkbox
+                    aria-label={m.review_chapter_title({
+                      media: submission.mediaTitle ?? m.media_untitled(),
+                      number: submission.number,
+                    })}
+                    checked={selection.includes(submission.id)}
+                    onCheckedChange={(checked) => {
+                      setSelected((current) =>
+                        checked
+                          ? [...current, submission.id]
+                          : current.filter((id) => id !== submission.id),
+                      )
+                    }}
+                  />
+                }
                 actions={
                   <Button
                     onClick={() => {
@@ -188,6 +239,123 @@ export function ChapterReviewPage({ page, user }: { page: number; user: Session[
         </DialogPopup>
       </Dialog>
     </DashboardPage>
+  )
+}
+
+function BulkBar({
+  selection,
+  allSelected,
+  onToggleAll,
+  onClear,
+}: {
+  selection: string[]
+  allSelected: boolean
+  onToggleAll: (checked: boolean) => void
+  onClear: () => void
+}) {
+  const review = useBulkReview()
+  const [rejecting, setRejecting] = useState(false)
+  const [reason, setReason] = useState("")
+  const [touched, setTouched] = useState(false)
+  const [skipped, setSkipped] = useState<number | null>(null)
+  const run = (chapterIds: string[], rejectReason?: string) => {
+    review.mutate(
+      rejectReason === undefined ? { chapterIds } : { chapterIds, reason: rejectReason },
+      {
+        onSuccess: (count) => {
+          setSkipped(count)
+          setRejecting(false)
+          setReason("")
+          setTouched(false)
+          onClear()
+        },
+      },
+    )
+  }
+
+  return (
+    <>
+      <div sx={styles.bulkBar}>
+        <label sx={styles.bulkSelect}>
+          <Checkbox checked={allSelected} onCheckedChange={onToggleAll} />
+          {selection.length === 0
+            ? m.review_select_all()
+            : m.review_selected({ count: selection.length })}
+        </label>
+        <div sx={styles.bulkActions}>
+          <Button
+            disabled={selection.length === 0 || review.isPending}
+            onClick={() => {
+              setRejecting(true)
+            }}
+            size="sm"
+            variant="outline"
+          >
+            {m.review_reject_selected()}
+          </Button>
+          <Button
+            disabled={selection.length === 0 || review.isPending}
+            onClick={() => {
+              run(selection)
+            }}
+            size="sm"
+          >
+            {m.review_approve_selected()}
+          </Button>
+        </div>
+      </div>
+      <AuthAlert message={review.isError ? getErrorMessage(review.error) : null} />
+      {skipped === null || skipped === 0 ? null : (
+        <p sx={styles.muted}>{m.review_bulk_skipped({ count: skipped })}</p>
+      )}
+      <Dialog
+        onOpenChange={(open) => {
+          if (!open) {
+            setRejecting(false)
+          }
+        }}
+        open={rejecting}
+      >
+        <DialogPopup>
+          <DialogHeader>
+            <DialogTitle>{m.review_bulk_reject_title()}</DialogTitle>
+            <DialogDescription>{m.review_bulk_reject_description()}</DialogDescription>
+          </DialogHeader>
+          <DialogPanel>
+            <Field invalid={touched && reason.trim() === ""}>
+              <FieldLabel>{m.review_reject_note()}</FieldLabel>
+              <Textarea
+                onChange={(event) => {
+                  setReason(event.target.value)
+                }}
+                placeholder={m.review_chapter_reason_placeholder()}
+                rows={4}
+                value={reason}
+              />
+              {touched && reason.trim() === "" ? (
+                <FieldError match>{m.review_reject_note_required()}</FieldError>
+              ) : null}
+            </Field>
+          </DialogPanel>
+          <DialogFooter>
+            <DialogClose render={<Button variant="outline" />}>{m.cancel()}</DialogClose>
+            <Button
+              disabled={review.isPending}
+              onClick={() => {
+                setTouched(true)
+
+                if (reason.trim() !== "") {
+                  run(selection, reason.trim())
+                }
+              }}
+              variant="destructive"
+            >
+              {m.review_reject_selected()}
+            </Button>
+          </DialogFooter>
+        </DialogPopup>
+      </Dialog>
+    </>
   )
 }
 

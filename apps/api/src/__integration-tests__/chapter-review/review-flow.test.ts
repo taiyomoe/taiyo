@@ -70,7 +70,7 @@ describe("submitting", () => {
     }
   })
 
-  test("uploaders, admins and members publishing for their group go live", async ({
+  test("uploaders, admins and members publishing for their group upload straight to publication", async ({
     app,
     services,
   }) => {
@@ -85,13 +85,13 @@ describe("submitting", () => {
 
     for (const headers of [admin.headers, reviewer.headers]) {
       expect((await create(app, mediaId, headers)).body).toMatchObject({
-        data: { status: "PUBLISHED" },
+        data: { status: "UPLOADING" },
       })
     }
 
     expect(
       (await create(app, mediaId, member.headers, { groupIds: [groupId] })).body,
-    ).toMatchObject({ data: { status: "PUBLISHED" } })
+    ).toMatchObject({ data: { status: "UPLOADING" } })
   })
 
   test("a member can still submit a chapter without their group", async ({ app, services }) => {
@@ -463,7 +463,7 @@ describe("pages", () => {
 })
 
 describe("queue", () => {
-  test("lists pending chapters oldest first, without published or withdrawn ones", async ({
+  test("lists pending chapters oldest first, without published, withdrawn or unprocessed ones", async ({
     app,
     services,
   }) => {
@@ -473,7 +473,16 @@ describe("queue", () => {
       uploaderId: submitter.userId,
       number: 9,
       status: "PENDING",
+      pages: [{ id: randomUUID() }],
       createdAt: new Date("2026-02-01T00:00:00Z"),
+    })
+
+    await seedChapter(services, {
+      mediaId,
+      uploaderId: submitter.userId,
+      number: 11,
+      status: "PENDING",
+      createdAt: new Date("2025-06-01T00:00:00Z"),
     })
 
     await seedChapter(services, {

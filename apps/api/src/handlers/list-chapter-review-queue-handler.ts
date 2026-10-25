@@ -38,7 +38,9 @@ export const listChapterReviewQueueHandler = new Hono().get(
   async (c) => {
     const { db } = c.var
     const { page, perPage } = c.var.query
-    const base = selectSubmissions(db).where("chapters.status", "=", "PENDING")
+    const base = selectSubmissions(db)
+      .where("chapters.status", "=", "PENDING")
+      .where(sql<boolean>`coalesce(cardinality("chapters"."pages"), 0) > 0`)
     const [rows, totalRow] = await Promise.all([
       selectSubmissionColumns(base)
         .orderBy("chapters.createdAt", "asc")

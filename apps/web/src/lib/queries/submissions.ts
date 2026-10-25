@@ -1,5 +1,4 @@
 import type { InferRequestType, InferResponseType } from "hono/client"
-import { IMAGE_MIME_TYPES, type ImageMimeType } from "@taiyomoe/db/constants"
 import { queryOptions, useMutation, useQueryClient } from "@tanstack/react-query"
 import { api } from "@/lib/api"
 import { ensureSuccess, unwrap, unwrapEnvelope } from "@/lib/envelope"
@@ -35,6 +34,19 @@ export const mySubmissionsQueryOptions = (page: number) =>
       ),
   })
 
+export const pendingSubmissionsCountQueryOptions = queryOptions({
+  queryKey: ["chapter-review", "mine", "pending-count"],
+  queryFn: async ({ signal }) =>
+    (
+      await unwrapEnvelope(
+        await api.users.me["chapter-submissions"].$get(
+          { query: { status: "PENDING", page: "1", perPage: "1" } },
+          { init: { signal } },
+        ),
+      )
+    ).meta.total,
+})
+
 export const chapterQueryOptions = (chapterId: string) =>
   queryOptions({
     queryKey: ["chapters", chapterId],
@@ -54,6 +66,25 @@ const useInvalidateReview = () => {
       queryClient.invalidateQueries({ queryKey: ["chapter-review"] }),
       queryClient.invalidateQueries({ queryKey: ["chapters"] }),
     ])
+}
+
+export function useBulkReview() {
+  const invalidate = useInvalidateReview()
+
+  return useMutation({
+    mutationFn: async ({ chapterIds, reason }: { chapterIds: string[]; reason?: string }) => {
+      if (reason === undefined) {
+        const response = await api.chapters.approve.$post({ json: { chapterIds } })
+
+        return (await unwrap<Awaited<ReturnType<typeof response.json>>>(response)).skipped.length
+      }
+
+      const response = await api.chapters.reject.$post({ json: { chapterIds, reason } })
+
+      return (await unwrap<Awaited<ReturnType<typeof response.json>>>(response)).skipped.length
+    },
+    onSuccess: invalidate,
+  })
 }
 
 export function useReviewChapter() {
@@ -86,103 +117,6 @@ export function useWithdrawChapter() {
       ensureSuccess(await api.chapters[":id"].withdraw.$post({ param: { id } })),
     onSuccess: invalidate,
   })
-}
-
-export const isUploadablePage = (file: File): file is File & { type: ImageMimeType } =>
-  Object.hasOwn(IMAGE_MIME_TYPES, file.type)
-
-export type ChapterUploadInput = {
-  mediaId: string
-  details: Omit<
-    InferRequestType<(typeof api.medias)[":id"]["chapters"]["$post"]>["json"],
-    "groupIds"
-  >
-  groupIds: string[]
-  pages: Array<File & { type: ImageMimeType }>
-}
-
-export type UploadProgress =
-  | { step: "creating" }
-  | { step: "uploading"; done: number; total: number }
-  | { step: "processing" }
-
-const POLL_INTERVAL_MS = 1500
-const PARALLEL_UPLOADS = 4
-const wait = (ms: number) =>
-  new Promise((resolve) => {
-    setTimeout(resolve, ms)
-  })
-
-export const uploadChapter = async (
-  { mediaId, details, groupIds, pages }: ChapterUploadInput,
-  onProgress: (progress: UploadProgress) => void,
-) => {
-  onProgress({ step: "creating" })
-
-  const createdResponse = await api.medias[":id"].chapters.$post({
-    param: { id: mediaId },
-    json: { ...details, groupIds },
-  })
-  const created = await unwrap<Awaited<ReturnType<typeof createdResponse.json>>>(createdResponse)
-  const sessionResponse = await api.chapters[":id"].pages["upload-session"].$post({
-    param: { id: created.id },
-    json: { pages: pages.map((page) => ({ contentType: page.type, size: page.size })) },
-  })
-  const session = await unwrap<Awaited<ReturnType<typeof sessionResponse.json>>>(sessionResponse)
-  let done = 0
-
-  onProgress({ step: "uploading", done, total: pages.length })
-
-  const queue = [...session.pages]
-  const worker = async () => {
-    for (let next = queue.shift(); next !== undefined; next = queue.shift()) {
-      const page = pages[next.index]
-
-      if (page === undefined) {
-        throw new Error("Missing page")
-      }
-
-      const response = await fetch(next.uploadUrl, {
-        method: "PUT",
-        body: page,
-        headers: { "content-type": page.type },
-      })
-
-      if (!response.ok) {
-        throw new Error(`Upload failed with ${response.status}`)
-      }
-
-      done += 1
-      onProgress({ step: "uploading", done, total: pages.length })
-    }
-  }
-
-  await Promise.all(Array.from({ length: PARALLEL_UPLOADS }, worker))
-  await ensureSuccess(
-    await api.chapters[":id"].pages.finalize.$post({
-      param: { id: created.id },
-      json: { taskId: session.taskId },
-    }),
-  )
-  onProgress({ step: "processing" })
-
-  for (;;) {
-    const statusResponse = await api.chapters[":id"].pages.status.$get({
-      param: { id: created.id },
-      query: { taskId: session.taskId },
-    })
-    const status = await unwrap<Awaited<ReturnType<typeof statusResponse.json>>>(statusResponse)
-
-    if (status.status === "FINISHED") {
-      return created
-    }
-
-    if (status.status === "FAILED") {
-      throw new Error("Processing failed")
-    }
-
-    await wait(POLL_INTERVAL_MS)
-  }
 }
 
 export type ChapterUpdate = InferRequestType<(typeof api.chapters)[":id"]["$patch"]>["json"]

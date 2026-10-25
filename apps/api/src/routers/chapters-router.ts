@@ -1,5 +1,6 @@
 import { Hono } from "hono"
 import { approveChapterHandler } from "../handlers/approve-chapter-handler"
+import { approveChaptersHandler } from "../handlers/approve-chapters-handler"
 import { createChapterUploadSessionHandler } from "../handlers/create-chapter-upload-session-handler"
 import { deleteChapterHandler } from "../handlers/delete-chapter-handler"
 import { finalizeChapterUploadHandler } from "../handlers/finalize-chapter-upload-handler"
@@ -12,6 +13,7 @@ import { listLatestChaptersHandler } from "../handlers/list-latest-chapters-hand
 import { listLatestMediaUpdatesHandler } from "../handlers/list-latest-media-updates-handler"
 import { openChapterHandler } from "../handlers/open-chapter-handler"
 import { rejectChapterHandler } from "../handlers/reject-chapter-handler"
+import { rejectChaptersHandler } from "../handlers/reject-chapters-handler"
 import { reorderChapterPagesHandler } from "../handlers/reorder-chapter-pages-handler"
 import { unlinkChapterGroupHandler } from "../handlers/unlink-chapter-group-handler"
 import { updateChapterHandler } from "../handlers/update-chapter-handler"
@@ -33,6 +35,8 @@ export const chaptersRouter = new Hono()
   .route("/", createChapterUploadSessionHandler)
   .route("/", finalizeChapterUploadHandler)
   .route("/", getChapterUploadStatusHandler)
+  .route("/", approveChaptersHandler)
+  .route("/", rejectChaptersHandler)
   .route("/", approveChapterHandler)
   .route("/", rejectChapterHandler)
   .route("/", withdrawChapterHandler)

@@ -14,6 +14,7 @@ const SUBMISSION_STATUS: Record<
   ChapterSubmission["status"],
   { label: () => string; variant: BadgeVariant }
 > = {
+  UPLOADING: { label: m.submission_status_uploading, variant: "info" },
   PENDING: { label: m.submission_status_pending, variant: "warning" },
   PUBLISHED: { label: m.submission_status_published, variant: "success" },
   REJECTED: { label: m.submission_status_rejected, variant: "error" },
@@ -73,14 +74,17 @@ const styles = stylex.create({
 export function SubmissionRow({
   submission,
   showUploader = false,
+  leading,
   actions,
 }: {
   submission: ChapterSubmission
   showUploader?: boolean
+  leading?: ReactNode
   actions?: ReactNode
 }) {
   return (
     <ListRow>
+      {leading}
       <Cover src={submission.mediaCoverUrl} sx={styles.cover} />
       <div sx={styles.main}>
         <div sx={styles.titleLine}>

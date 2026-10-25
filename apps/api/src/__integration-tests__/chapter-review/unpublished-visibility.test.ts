@@ -40,8 +40,16 @@ const setup = async (services: Services) => {
     groupIds: [groupId],
     status: "REJECTED",
   })
+  const uploading = await seedChapter(services, {
+    mediaId,
+    uploaderId: submitter.userId,
+    number: 4,
+    language: "it",
+    groupIds: [groupId],
+    status: "UPLOADING",
+  })
 
-  return { submitter, admin, mediaId, groupId, published, pending, rejected }
+  return { submitter, admin, mediaId, groupId, published, pending, rejected, uploading }
 }
 const idsIn = (body: unknown) => {
   const found: string[] = []
@@ -68,7 +76,8 @@ const idsIn = (body: unknown) => {
 
 describe("unpublished chapters", () => {
   test("never show up in public chapter lists", async ({ app, services }) => {
-    const { submitter, mediaId, groupId, published, pending, rejected } = await setup(services)
+    const { submitter, mediaId, groupId, published, pending, rejected, uploading } =
+      await setup(services)
     const viewers = [
       undefined,
       submitter.headers,
@@ -92,7 +101,10 @@ describe("unpublished chapters", () => {
 
         const ids = idsIn(res.body)
 
-        expect({ path, leaked: ids.filter((id) => id === pending || id === rejected) }).toEqual({
+        expect({
+          path,
+          leaked: ids.filter((id) => id === pending || id === rejected || id === uploading),
+        }).toEqual({
           path,
           leaked: [],
         })
@@ -127,24 +139,28 @@ describe("unpublished chapters", () => {
 
   test("are left out of the search index until published", async ({ services }) => {
     const { userId } = await signInAs(services)
-    const chapterId = await seedChapter(services, {
-      mediaId: SEEDED_MEDIA_ID,
-      uploaderId: userId,
-      number: 9999,
-      language: "zu",
-      status: "PENDING",
-    })
+    const chapterIds = await Promise.all(
+      (
+        [
+          { number: 9999, language: "zu", status: "PENDING" },
+          { number: 9998, language: "xh", status: "UPLOADING" },
+        ] as const
+      ).map((chapter) =>
+        seedChapter(services, { mediaId: SEEDED_MEDIA_ID, uploaderId: userId, ...chapter }),
+      ),
+    )
 
     await drainSearchOutbox(services)
 
     const hidden = await waitForMediaDoc(services, SEEDED_MEDIA_ID, (doc) => doc !== null)
 
     expect(hidden?.chapterLanguages).not.toContain("zu")
+    expect(hidden?.chapterLanguages).not.toContain("xh")
 
     await services.db
       .updateTable("chapters")
       .set({ status: "PUBLISHED" })
-      .where("id", "=", chapterId)
+      .where("id", "in", chapterIds)
       .execute()
     await drainSearchOutbox(services)
 
@@ -154,11 +170,11 @@ describe("unpublished chapters", () => {
       (doc) => doc?.chapterLanguages.includes("zu") === true,
     )
 
-    expect(shown?.chapterLanguages).toContain("zu")
+    expect(shown?.chapterLanguages).toEqual(expect.arrayContaining(["zu", "xh"]))
   }, 30_000)
 
   test("are left out of the feed and reading progress", async ({ app, services }) => {
-    const { submitter, mediaId, pending, rejected } = await setup(services)
+    const { submitter, mediaId, pending, rejected, uploading } = await setup(services)
 
     await services.db
       .insertInto("userLibraryEntries")
@@ -172,17 +188,18 @@ describe("unpublished chapters", () => {
       expect(res.status).toBe(200)
       expect(ids).not.toContain(pending)
       expect(ids).not.toContain(rejected)
+      expect(ids).not.toContain(uploading)
     }
   })
 
   test("can only be read by their submitter and reviewers", async ({ app, services }) => {
-    const { submitter, admin, pending, rejected } = await setup(services)
+    const { submitter, admin, pending, rejected, uploading } = await setup(services)
     const uploader = await signInAs(services, { role: "UPLOADER" })
     const moderator = await signInAs(services, { role: "MODERATOR" })
     const intern = await signInAs(services, { role: "UPLOADER_INTERN" })
     const stranger = await signInAs(services)
 
-    for (const chapterId of [pending, rejected]) {
+    for (const chapterId of [pending, rejected, uploading]) {
       for (const path of [`/chapters/${chapterId}`, `/chapters/${chapterId}/groups`]) {
         for (const headers of [undefined, stranger.headers, moderator.headers, intern.headers]) {
           const res = await api(app, path, headers === undefined ? {} : { headers })
