@@ -10,15 +10,15 @@
   "dependencies": {
     "@hugeicons/core-free-icons": "^4.3.5",
     "@hugeicons/react": "^1.1.10",
-    "@storybook/addon-a11y": "^10.6.1",
-    "@storybook/addon-docs": "^10.6.1",
-    "@storybook/addon-themes": "^10.6.1",
-    "@storybook/react-vite": "^10.6.1",
+    "@storybook/addon-a11y": "^10.6.2",
+    "@storybook/addon-docs": "^10.6.2",
+    "@storybook/addon-themes": "^10.6.2",
+    "@storybook/react-vite": "^10.6.2",
     "@taiyomoe/ui": "workspace:^",
     "@vitejs/plugin-react": "^6.1.1",
-    "react": "^19.3.0",
-    "react-dom": "^19.3.0",
-    "storybook": "^10.6.1",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "storybook": "^10.6.2",
     "vite": "^8.3.4"
   },
   "devDependencies": {
