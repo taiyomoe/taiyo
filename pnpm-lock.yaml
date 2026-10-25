@@ -99,8 +99,8 @@ importers:
         specifier: workspace:^
         version: link:../../packages/utils
       evlog:
-        specifier: ^2.30.1
-        version: 2.30.1(@tanstack/start-client-core@1.170.35)(hono@4.13.13)(ofetch@1.5.1)(react@19.3.0)(vite@8.3.4(@types/node@26.6.5)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
+        specifier: ^2.33.0
+        version: 2.33.0(@tanstack/start-client-core@1.170.35)(hono@4.13.13)(ofetch@1.5.1)(react@19.3.0)(vite@8.3.4(@types/node@26.6.5)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
       hono:
         specifier: ^4.13.13
         version: 4.13.13
@@ -4799,16 +4799,18 @@ packages:
     resolution: {integrity: sha512-kVscqXk4OCp68SZ0dkgEKVi6/8ij300KBWTJq32P/dYeWTSwK41WyTxalN1eRmA5Z9UU/LX9D7FWSmV9SAYx6g==}
     engines: {node: '>=0.10.0'}
 
-  evlog@2.30.1:
-    resolution: {integrity: sha512-LPVl9TlX/RBnQttBjuoXk5N5vc2UYYcvZwA9lIvJkuCwiyd2dBTan7FSBGBoJSSnSl8ukYNeKH4SMZl06LeK7g==}
+  evlog@2.33.0:
+    resolution: {integrity: sha512-QXu0QCrkY3jw+Wr8s6Pj0W0HLtXXDCnSjNMeYxi4WX6IXuyJqeT9iKp9zn6lJBUGm4a+pFjNccL7eAQq/UrM3A==}
     engines: {node: '>=18.0.0'}
     hasBin: true
     peerDependencies:
       '@nestjs/common': '>=11.2.7'
+      '@nestjs/core': '>=11.2.7'
       '@nuxt/kit': ^4.4.2
       '@orpc/server': '>=1.15.4'
       '@tanstack/start-client-core': ^1.170.34
       ai: '>=6.0.168 <8.0.0'
+      effect: ^4.0.0
       elysia: '>=1.4.30'
       eve: '>=0.30.0'
       express: '>=5.2.1'
@@ -4825,6 +4827,8 @@ packages:
     peerDependenciesMeta:
       '@nestjs/common':
         optional: true
+      '@nestjs/core':
+        optional: true
       '@nuxt/kit':
         optional: true
       '@orpc/server':
@@ -4832,6 +4836,8 @@ packages:
       '@tanstack/start-client-core':
         optional: true
       ai:
+        optional: true
+      effect:
         optional: true
       elysia:
         optional: true
@@ -9880,7 +9886,7 @@ snapshots:
 
   esutils@2.0.3: {}
 
-  evlog@2.30.1(@tanstack/start-client-core@1.170.35)(hono@4.13.13)(ofetch@1.5.1)(react@19.3.0)(vite@8.3.4(@types/node@26.6.5)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1)):
+  evlog@2.33.0(@tanstack/start-client-core@1.170.35)(hono@4.13.13)(ofetch@1.5.1)(react@19.3.0)(vite@8.3.4(@types/node@26.6.5)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1)):
     optionalDependencies:
       '@tanstack/start-client-core': 1.170.35
       hono: 4.13.13
