@@ -8,6 +8,7 @@ import { test } from "../setup"
 
 const ORIGIN = "http://localhost"
 const NON_ADMIN_ROLES = ["USER", "UPLOADER_INTERN", "UPLOADER", "MODERATOR"] as const
+const NOT_ALLOWED: unknown = expect.stringMatching(/^YOU_ARE_NOT_ALLOWED_TO_/)
 const auth = async (
   app: Hono,
   path: string,
@@ -88,7 +89,12 @@ describe("Better Auth admin plugin", () => {
       ] as const) {
         const res = await auth(app, path, admin.headers.Cookie, { json })
 
-        expect({ path, userId, status: res.status }).toEqual({ path, userId, status: 403 })
+        expect({ path, userId, ...res }).toMatchObject({
+          path,
+          userId,
+          status: 403,
+          body: { code: "FORBIDDEN_TARGET" },
+        })
       }
     }
 
@@ -97,7 +103,7 @@ describe("Better Auth admin plugin", () => {
       json: { sessionToken: otherSession?.token },
     })
 
-    expect(revoke.status).toBe(403)
+    expect(revoke).toMatchObject({ status: 403, body: { code: "FORBIDDEN_TARGET" } })
     expect(await sessionsOf(services, other.userId)).toHaveLength(1)
   })
 
@@ -115,7 +121,12 @@ describe("Better Auth admin plugin", () => {
       ] as const) {
         const res = await auth(app, path, actor.headers.Cookie, { json })
 
-        expect({ role, path, status: res.status }).toEqual({ role, path, status: 403 })
+        expect({ role, path, ...res }).toMatchObject({
+          role,
+          path,
+          status: 403,
+          body: { code: "FORBIDDEN_TARGET" },
+        })
       }
     }
 
@@ -185,13 +196,21 @@ describe("Better Auth admin plugin", () => {
     ] as const) {
       const res = await auth(app, path, admin.headers.Cookie, { json })
 
-      expect({ path, status: res.status }).toEqual({ path, status: 403 })
+      expect({ path, ...res }).toMatchObject({
+        path,
+        status: 403,
+        body: { code: NOT_ALLOWED },
+      })
     }
 
     for (const path of ["/admin/list-users", `/admin/get-user?id=${target.userId}`]) {
       const res = await auth(app, path, admin.headers.Cookie, { method: "GET" })
 
-      expect({ path, status: res.status }).toEqual({ path, status: 403 })
+      expect({ path, ...res }).toMatchObject({
+        path,
+        status: 403,
+        body: { code: NOT_ALLOWED },
+      })
     }
 
     const row = await services.db
