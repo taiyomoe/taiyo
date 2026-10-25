@@ -63,7 +63,7 @@ describe("POST /medias/:id/chapters", () => {
     expect(res.body.code).toBe("FORBIDDEN")
   })
 
-  test("rejects USER role with FORBIDDEN", async ({ app, services }) => {
+  test("sends a USER's chapter to review", async ({ app, services }) => {
     const { headers } = await signInAs(services, { role: "USER" })
     const res = await api(app, `/medias/${SEEDED_MEDIA_ID}/chapters`, {
       method: "POST",
@@ -71,13 +71,8 @@ describe("POST /medias/:id/chapters", () => {
       json: { number: 1, language: "en" },
     })
 
-    expect(res.status).toBe(403)
-
-    if (res.body.success) {
-      throw new Error("Expected failure")
-    }
-
-    expect(res.body.code).toBe("FORBIDDEN")
+    expect(res.status).toBe(201)
+    expect(res.body).toMatchObject({ data: { status: "PENDING" } })
   })
 
   test("returns VALIDATION_ERROR when number is missing", async ({ app, services }) => {

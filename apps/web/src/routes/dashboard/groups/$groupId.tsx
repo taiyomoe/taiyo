@@ -9,6 +9,7 @@ import { createFileRoute, Link } from "@tanstack/react-router"
 import { Suspense } from "react"
 import { DashboardPage } from "@/components/dashboard/dashboard-page"
 import { GroupAvatar } from "@/components/groups/group-avatar"
+import { GroupChaptersPanel } from "@/components/groups/group-chapters-panel"
 import { GroupInvitationsPanel } from "@/components/groups/group-invitations-panel"
 import { GroupMembersPanel } from "@/components/groups/group-members-panel"
 import { GroupSettingsPanel } from "@/components/groups/group-settings-panel"
@@ -77,6 +78,9 @@ export const Route = createFileRoute("/dashboard/groups/$groupId")({
     const can = usePermissions(user)
     const canInvite = can("group.inviteMember", { groupId, permissions: [] })
     const canEdit = can("group.update", { id: groupId })
+    const groupChapter = { uploaderId: "", status: "PUBLISHED" as const, groupIds: [groupId] }
+    const canManageChapters =
+      can("chapter.update", groupChapter) || can("chapter.delete", groupChapter)
 
     return (
       <DashboardPage
@@ -96,6 +100,9 @@ export const Route = createFileRoute("/dashboard/groups/$groupId")({
         <Tabs defaultValue="members" sx={styles.tabs}>
           <TabsList variant="underline">
             <TabsTab value="members">{m.manage_tab_members()}</TabsTab>
+            {canManageChapters ? (
+              <TabsTab value="chapters">{m.manage_tab_chapters()}</TabsTab>
+            ) : null}
             {canInvite ? <TabsTab value="invitations">{m.manage_tab_invitations()}</TabsTab> : null}
             {canEdit ? <TabsTab value="settings">{m.manage_tab_settings()}</TabsTab> : null}
           </TabsList>
@@ -104,6 +111,13 @@ export const Route = createFileRoute("/dashboard/groups/$groupId")({
               <GroupMembersPanel can={can} group={group} userId={user.id} />
             </Suspense>
           </TabsPanel>
+          {canManageChapters ? (
+            <TabsPanel sx={styles.panel} value="chapters">
+              <Suspense fallback={<Skeleton sx={styles.skeleton} />}>
+                <GroupChaptersPanel can={can} groupId={groupId} />
+              </Suspense>
+            </TabsPanel>
+          ) : null}
           {canInvite ? (
             <TabsPanel sx={styles.panel} value="invitations">
               <Suspense fallback={<Skeleton sx={styles.skeleton} />}>

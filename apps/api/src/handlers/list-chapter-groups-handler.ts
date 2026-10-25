@@ -1,7 +1,9 @@
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { authorizeChapterView } from "../middlewares/authorize-chapter-view-middleware"
 import { checkChapter } from "../middlewares/check-chapter-middleware"
+import { withOptionalAuth } from "../middlewares/with-auth-middleware"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope } from "../utils/schemas"
 
@@ -32,7 +34,9 @@ export const listChapterGroupsHandler = new Hono().get(
       }),
     },
   }),
-  checkChapter(),
+  withOptionalAuth,
+  checkChapter({ unpublished: true }),
+  authorizeChapterView,
   async (c) => {
     const { db, chapter } = c.var
     const rows = await db

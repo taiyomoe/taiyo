@@ -1,4 +1,9 @@
-import type { GroupMembershipRole, GroupPermission, Role } from "@taiyomoe/db/constants"
+import type {
+  ChapterStatus,
+  GroupMembershipRole,
+  GroupPermission,
+  Role,
+} from "@taiyomoe/db/constants"
 import type { ValidateDefinition } from "permix"
 
 export type ActorMembership = {
@@ -16,7 +21,11 @@ export type Actor = {
 
 export type GroupTarget = { id: string }
 
-export type ChapterTarget = { uploaderId: string; groupIds: readonly string[] }
+export type ChapterTarget = {
+  uploaderId: string
+  status: ChapterStatus
+  groupIds: readonly string[]
+}
 
 export type ChapterCreditTarget = { chapter: ChapterTarget; groupId: string }
 
@@ -42,8 +51,12 @@ export type PermissionsDefinition = ValidateDefinition<{
   staff: ["create", "update", "delete"]
   chapter: [
     "publish",
+    "submit",
+    "review",
     "flag",
+    { name: "view"; type: ChapterTarget; required: true },
     { name: "update"; type: ChapterTarget; required: true },
+    { name: "withdraw"; type: ChapterTarget; required: true },
     { name: "delete"; type: ChapterTarget; required: true },
     { name: "credit"; type: ChapterCreditTarget; required: true },
     { name: "uncredit"; type: ChapterCreditTarget; required: true },

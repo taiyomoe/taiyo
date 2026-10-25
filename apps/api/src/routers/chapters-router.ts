@@ -1,4 +1,5 @@
 import { Hono } from "hono"
+import { approveChapterHandler } from "../handlers/approve-chapter-handler"
 import { createChapterUploadSessionHandler } from "../handlers/create-chapter-upload-session-handler"
 import { deleteChapterHandler } from "../handlers/delete-chapter-handler"
 import { finalizeChapterUploadHandler } from "../handlers/finalize-chapter-upload-handler"
@@ -6,16 +7,21 @@ import { getChapterHandler } from "../handlers/get-chapter-handler"
 import { getChapterUploadStatusHandler } from "../handlers/get-chapter-upload-status-handler"
 import { linkChapterGroupHandler } from "../handlers/link-chapter-group-handler"
 import { listChapterGroupsHandler } from "../handlers/list-chapter-groups-handler"
+import { listChapterReviewQueueHandler } from "../handlers/list-chapter-review-queue-handler"
 import { listLatestChaptersHandler } from "../handlers/list-latest-chapters-handler"
 import { listLatestMediaUpdatesHandler } from "../handlers/list-latest-media-updates-handler"
 import { openChapterHandler } from "../handlers/open-chapter-handler"
+import { rejectChapterHandler } from "../handlers/reject-chapter-handler"
+import { reorderChapterPagesHandler } from "../handlers/reorder-chapter-pages-handler"
 import { unlinkChapterGroupHandler } from "../handlers/unlink-chapter-group-handler"
 import { updateChapterHandler } from "../handlers/update-chapter-handler"
 import { updateChapterHistoryHandler } from "../handlers/update-chapter-history-handler"
+import { withdrawChapterHandler } from "../handlers/withdraw-chapter-handler"
 
 export const chaptersRouter = new Hono()
   .route("/", listLatestChaptersHandler)
   .route("/", listLatestMediaUpdatesHandler)
+  .route("/", listChapterReviewQueueHandler)
   .route("/", getChapterHandler)
   .route("/", updateChapterHandler)
   .route("/", deleteChapterHandler)
@@ -27,3 +33,7 @@ export const chaptersRouter = new Hono()
   .route("/", createChapterUploadSessionHandler)
   .route("/", finalizeChapterUploadHandler)
   .route("/", getChapterUploadStatusHandler)
+  .route("/", approveChapterHandler)
+  .route("/", rejectChapterHandler)
+  .route("/", withdrawChapterHandler)
+  .route("/", reorderChapterPagesHandler)

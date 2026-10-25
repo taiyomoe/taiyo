@@ -1,5 +1,5 @@
 import type { Insertable } from "kysely"
-import type { ContentRating, Flag, Language } from "../constants"
+import type { ChapterStatus, ContentRating, Flag, Language } from "../constants"
 import type { ChapterPage } from "../json-types"
 import type { ArrayType, Generated, Timestamp } from "../types"
 
@@ -18,6 +18,10 @@ export type Chapter = {
   mediaId: string
   uploaderId: string
   deleterId: string | null
+  status: Generated<ChapterStatus>
+  reviewerId: string | null
+  reviewedAt: Timestamp | null
+  rejectionReason: string | null
 }
 
 export type NewChapter = Insertable<Chapter>

@@ -1,4 +1,10 @@
-import type { ContentRating, GroupMembershipRole, GroupPermission, Language } from "@taiyomoe/db"
+import type {
+  ChapterStatus,
+  ContentRating,
+  GroupMembershipRole,
+  GroupPermission,
+  Language,
+} from "@taiyomoe/db"
 import { randomUUID } from "node:crypto"
 import type { Services } from "../../services"
 
@@ -44,6 +50,8 @@ type ChapterSeed = {
   contentRating?: ContentRating
   createdAt?: Date
   groupIds?: string[]
+  status?: ChapterStatus
+  pages?: Array<{ id: string }> | null
 }
 
 export const seedChapter = async (

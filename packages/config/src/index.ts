@@ -55,5 +55,7 @@ export const config = {
     maxDescriptionLength: 5000,
     maxSynopsisLength: 10000,
     maxChapterGroups: 10,
+    maxPendingChapters: 100,
+    maxReviewNoteLength: 2000,
   },
 } as const

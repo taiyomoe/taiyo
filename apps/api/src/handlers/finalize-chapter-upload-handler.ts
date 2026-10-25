@@ -52,7 +52,7 @@ export const finalizeChapterUploadHandler = new Hono().post(
   }),
   withAuth(),
   validateJson(finalizeChapterUploadSchema),
-  checkChapter(),
+  checkChapter({ unpublished: true }),
   authorizeChapter("update"),
   withTransaction,
   async (c) => {

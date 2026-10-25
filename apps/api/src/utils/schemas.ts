@@ -1,5 +1,6 @@
 import { config } from "@taiyomoe/config"
 import {
+  CHAPTER_STATUSES,
   CONTENT_RATINGS,
   GROUP_PERMISSIONS,
   LANGUAGES,
@@ -290,3 +291,10 @@ export const groupEmailSchema = z
   .nullable()
   .optional()
   .meta({ description: "Contact email." })
+
+export const chapterSubmissionSchema = latestChapterFeedItemSchema.extend({
+  status: z.enum(CHAPTER_STATUSES).meta({ description: "Where the chapter is in review." }),
+  rejectionReason: z.string().nullable().meta({ description: "Why the chapter was rejected." }),
+  reviewedAt: z.iso.datetime().nullable().meta({ description: "When the chapter was reviewed." }),
+  pageCount: z.int().meta({ description: "How many processed pages the chapter has." }),
+})

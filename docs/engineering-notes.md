@@ -8,7 +8,8 @@ for the web app.
 
 `apps/api/src/routers/chapters-router.ts` registers
 `listLatestChaptersHandler` as its first `.route("/", …)` call, above
-`getChapterHandler`. The ordering is load-bearing: `getChapterHandler`
+`getChapterHandler`, and `GET /chapters/review-queue` sits between them for the
+same reason. The ordering is load-bearing: `getChapterHandler`
 registers `GET /:id`, so if it were registered first a request to
 `GET /chapters/latest` would match `/:id` with `id = "latest"` and
 `checkChapter()` would reject it with a 422 "not a valid UUID" before the
@@ -18,6 +19,24 @@ Nothing in the type system or the linter protects this. A future cleanup that
 sorts the imports and the `.route(...)` calls alphabetically would silently
 break the route. The only thing that catches a regression is the integration
 test `apps/api/src/__integration-tests__/chapters/list-latest-chapters.test.ts`.
+
+## Every chapter read filters on `status`
+
+A chapter uploaded by someone who cannot publish directly is stored with
+`status = 'PENDING'` and stays in `chapters`, with its pages, until a reviewer
+approves it. A rejected one keeps its row with `pages = null`. Neither may
+surface anywhere public: not in search, the latest feeds, a media's chapter
+list, reading progress or any count.
+
+`checkChapter()` fails closed and only loads published chapters unless a route
+passes `{ unpublished: true }`, which the submitter's and reviewers' routes do
+before running the `chapter.view` check. Queries that join or count `chapters`
+directly have no such default and must add `status = 'PUBLISHED'` themselves;
+the search document builder in `packages/search` is one of them.
+
+`apps/api/src/__integration-tests__/chapter-review/unpublished-visibility.test.ts`
+seeds a pending chapter and checks every public read path for it. A new
+endpoint that reads chapters belongs in that test.
 
 ## The two chapter feeds share one row shape
 

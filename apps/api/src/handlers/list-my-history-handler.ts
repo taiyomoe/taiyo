@@ -51,6 +51,7 @@ export const listMyHistoryHandler = new Hono().get(
         .innerJoin("chapters", "chapters.id", "userHistories.chapterId")
         .where("userHistories.userId", "=", user.id)
         .where("chapters.deletedAt", "is", null)
+        .where("chapters.status", "=", "PUBLISHED")
         .select([
           "userHistories.chapterId",
           "chapters.number as chapterNumber",
@@ -70,6 +71,7 @@ export const listMyHistoryHandler = new Hono().get(
         .innerJoin("chapters", "chapters.id", "userHistories.chapterId")
         .where("userHistories.userId", "=", user.id)
         .where("chapters.deletedAt", "is", null)
+        .where("chapters.status", "=", "PUBLISHED")
         .select(db.fn.countAll().as("count"))
         .executeTakeFirstOrThrow(),
     ])

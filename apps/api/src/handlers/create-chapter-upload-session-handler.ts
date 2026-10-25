@@ -83,7 +83,7 @@ export const createChapterUploadSessionHandler = new Hono().post(
   withAuth(),
   rateLimit({ prefix: "chapter-upload-session", windowMs: 60_000, limit: 60 }),
   validateJson(createChapterUploadSessionSchema),
-  checkChapter(),
+  checkChapter({ unpublished: true }),
   authorizeChapter("update"),
   withTransaction,
   async (c) => {

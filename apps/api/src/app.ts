@@ -127,6 +127,11 @@ export const createApp = (services: Services) => {
                 "Translation / scanlation groups. Top-level resource that can be linked to chapters via `chapterGroups`.",
             },
             {
+              name: "Chapter review",
+              description:
+                "Chapters uploaded by users who cannot publish directly wait for review here. Uploaders and admins approve or reject them.",
+            },
+            {
               name: "Chapter groups",
               description: "Links between a chapter and the groups that worked on it.",
             },

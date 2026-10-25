@@ -37,7 +37,7 @@ export const deleteChapterHandler = new Hono().delete(
     },
   }),
   withAuth(),
-  checkChapter(),
+  checkChapter({ unpublished: true }),
   authorizeChapter("delete"),
   withTransaction,
   async (c) => {

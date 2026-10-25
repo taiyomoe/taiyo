@@ -69,7 +69,7 @@ export const updateChapterHandler = new Hono().patch(
   }),
   withAuth(),
   validateJson(updateChapterSchema),
-  checkChapter(),
+  checkChapter({ unpublished: true }),
   authorizeChapter("update"),
   withTransaction,
   async (c) => {
