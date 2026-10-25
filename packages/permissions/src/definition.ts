@@ -90,5 +90,8 @@ export type PermissionsDefinition = ValidateDefinition<{
     "list",
     { name: "ban"; type: UserTarget; required: true },
     { name: "setRole"; type: UserTarget; required: true },
+    { name: "impersonate"; type: UserTarget; required: true },
+    { name: "setPassword"; type: UserTarget; required: true },
+    { name: "manageSessions"; type: UserTarget; required: true },
   ]
 }>

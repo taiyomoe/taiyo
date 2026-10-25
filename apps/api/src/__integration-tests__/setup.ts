@@ -71,7 +71,7 @@ export const test = baseTest.extend<Fixtures>({
       s3Bucket: bucketName,
       meili: sharedMeili,
       mediasIndex,
-      auth: createAuth({ db }),
+      auth: createAuth({ db, trustedOrigins: ["http://localhost"] }),
       chapterUploadQueue: { enqueue: async () => {} },
       mailer: {
         sendGroupInvitation: (mail) => {

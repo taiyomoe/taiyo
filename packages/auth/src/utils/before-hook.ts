@@ -1,9 +1,25 @@
 import type { DB, Kysely } from "@taiyomoe/db"
 import { cacheClient } from "@taiyomoe/cache"
+import { createPermissions, toRole } from "@taiyomoe/permissions"
 import { APIError, createAuthMiddleware } from "better-auth/api"
 import { DateTime } from "luxon"
 import { z } from "zod"
+import { getSessionFromHeaders } from "./get-session-from-headers"
 
+const ADMIN_ACTIONS = new Map(
+  Object.entries({
+    "/admin/impersonate-user": "user.impersonate",
+    "/admin/set-user-password": "user.setPassword",
+    "/admin/list-user-sessions": "user.manageSessions",
+    "/admin/revoke-user-sessions": "user.manageSessions",
+    "/admin/revoke-user-session": "user.manageSessions",
+  } as const),
+)
+const adminBodySchema = z.object({
+  userId: z.uuid().optional(),
+  sessionToken: z.string().optional(),
+})
+const actorSchema = z.object({ id: z.string(), role: z.unknown(), banned: z.boolean().nullish() })
 const signInBodySchema = z.object({
   email: z.string().optional(),
   username: z.string().optional(),
@@ -17,6 +33,56 @@ const createInvalidCredsError = (isEmail: boolean) =>
 
 export const createBeforeHook = ({ db }: { db: Kysely<DB> }) =>
   createAuthMiddleware(async (ctx) => {
+    const action = ADMIN_ACTIONS.get(ctx.path)
+
+    if (action !== undefined) {
+      const session = await getSessionFromHeaders(ctx)
+      const actor = actorSchema.safeParse(session?.user)
+      const body = adminBodySchema.safeParse(ctx.body)
+
+      if (!actor.success) {
+        return
+      }
+
+      if (!body.success) {
+        throw new APIError("BAD_REQUEST", { code: "INVALID_USER_ID", message: "Invalid user id" })
+      }
+
+      const targetId =
+        body.data.userId ??
+        (body.data.sessionToken === undefined
+          ? undefined
+          : (await ctx.context.internalAdapter.findSession(body.data.sessionToken))?.session.userId)
+      const target =
+        targetId === undefined
+          ? undefined
+          : await db
+              .selectFrom("users")
+              .select(["id", "role"])
+              .where("id", "=", targetId)
+              .executeTakeFirst()
+
+      if (target === undefined) {
+        return
+      }
+
+      const can = createPermissions({
+        id: actor.data.id,
+        role: toRole(actor.data.role),
+        banned: actor.data.banned === true,
+        memberships: [],
+      })
+
+      if (!can(action, target)) {
+        throw new APIError("FORBIDDEN", {
+          code: "FORBIDDEN_TARGET",
+          message: "You can't do this for this user",
+        })
+      }
+
+      return
+    }
+
     if (ctx.path === "/sign-in/email" || ctx.path === "/sign-in/username") {
       const body = signInBodySchema.safeParse(ctx.body)
 

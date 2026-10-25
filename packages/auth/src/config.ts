@@ -5,6 +5,7 @@ import { config } from "@taiyomoe/config"
 import { betterAuth } from "better-auth"
 import { emailHarmony } from "better-auth-harmony"
 import { admin, captcha, customSession, magicLink, username } from "better-auth/plugins"
+import { adminPluginRoles } from "./admin-roles"
 import { clientEnv } from "./env/client"
 import { serverEnv } from "./env/server"
 import { afterHook } from "./utils/after-hook"
@@ -99,7 +100,7 @@ export const createAuth = ({
         secretKey: serverEnv.TURNSTILE_SECRET_KEY,
         endpoints: captchaEndpoints,
       }),
-      admin({ defaultRole: "USER" }),
+      admin({ defaultRole: "USER", adminRoles: ["ADMIN"], roles: adminPluginRoles }),
       customSession(({ session, user }) =>
         Promise.resolve({
           session,
