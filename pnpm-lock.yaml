@@ -281,8 +281,8 @@ importers:
         specifier: ^7.89.0
         version: 7.89.0(@types/react@19.3.0)(react@19.3.0)
       remeda:
-        specifier: ^2.51.0
-        version: 2.51.0
+        specifier: ^2.52.0
+        version: 2.52.0
       zod:
         specifier: ^4.4.3
         version: 4.6.5
@@ -663,8 +663,8 @@ importers:
         specifier: ^19.3.0
         version: 19.3.0(react@19.3.0)
       remeda:
-        specifier: ^2.51.0
-        version: 2.51.0
+        specifier: ^2.52.0
+        version: 2.52.0
     devDependencies:
       '@types/react':
         specifier: ^19.3.0
@@ -5840,8 +5840,8 @@ packages:
     resolution: {integrity: sha512-1qny3OExCf0UvUV/5wpYKf2YwPcOqXzkwKKSmKHiE6ZMQs5heeE/c8eXK+PNllPvmjgAbfnsbpkGZWy8cBpn9w==}
     engines: {node: '>=4'}
 
-  remeda@2.51.0:
-    resolution: {integrity: sha512-4X/oHoc10jkt1w1V8yG/8tS8jYYj7vaNZs3nrvuDVRE1+nDqRAnX/L0PbwL4wOKcXSLHnkXyOQOinSBGQdJ35A==}
+  remeda@2.52.0:
+    resolution: {integrity: sha512-PReYy2iQJbKq7t/4grlsew2rUKRgZYMRQOVjlxsl9+j8yQWfEdyuzJFPSF4kDmO11KoHSanilyHnG4xSBA21nQ==}
     engines: {node: '>=18.0.0'}
 
   remove-accents@0.5.0:
@@ -10907,7 +10907,7 @@ snapshots:
 
   redis-errors@1.2.0: {}
 
-  remeda@2.51.0: {}
+  remeda@2.52.0: {}
 
   remove-accents@0.5.0: {}
 
