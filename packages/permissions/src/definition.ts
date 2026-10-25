@@ -2,6 +2,7 @@ import type {
   ChapterStatus,
   GroupMembershipRole,
   GroupPermission,
+  MediaSuggestionStatus,
   Role,
 } from "@taiyomoe/db/constants"
 import type { ValidateDefinition } from "permix"
@@ -43,11 +44,19 @@ export type MemberPermissionsTarget = {
   permissions: readonly GroupPermission[]
 }
 
+export type MediaSuggestionTarget = { authorId: string; status: MediaSuggestionStatus }
+
 export type UserTarget = { id: string; role: Role }
 
 export type PermissionsDefinition = ValidateDefinition<{
   dashboard: ["open", "viewStats"]
-  media: ["create", "update", "delete", "restore", "flag", "reindex"]
+  media: ["create", "update", "suggest", "delete", "restore", "flag", "reindex"]
+  mediaSuggestion: [
+    "review",
+    { name: "view"; type: MediaSuggestionTarget; required: true },
+    { name: "update"; type: MediaSuggestionTarget; required: true },
+    { name: "withdraw"; type: MediaSuggestionTarget; required: true },
+  ]
   staff: ["create", "update", "delete"]
   chapter: [
     "publish",

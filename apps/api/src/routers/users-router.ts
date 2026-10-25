@@ -14,6 +14,7 @@ import { listMyGroupsHandler } from "../handlers/list-my-groups-handler"
 import { listMyHistoryHandler } from "../handlers/list-my-history-handler"
 import { listMyLibraryHandler } from "../handlers/list-my-library-handler"
 import { listMyListsHandler } from "../handlers/list-my-lists-handler"
+import { listMyMediaSuggestionsHandler } from "../handlers/list-my-media-suggestions-handler"
 import { removeLibraryEntryHandler } from "../handlers/remove-library-entry-handler"
 import { unfollowUserHandler } from "../handlers/unfollow-user-handler"
 import { updateMySettingsHandler } from "../handlers/update-my-settings-handler"
@@ -39,3 +40,4 @@ export const usersRouter = new Hono()
   .route("/", listMyGroupInvitationsHandler)
   .route("/", listMyGroupCreationRequestsHandler)
   .route("/", listMyChapterSubmissionsHandler)
+  .route("/", listMyMediaSuggestionsHandler)

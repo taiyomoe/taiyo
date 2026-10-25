@@ -55,6 +55,13 @@ export const MEDIA_COUNTRY_LABELS: Record<Media["countryOfOrigin"], Label> = {
   BRAZIL: m.media_country_brazil,
 }
 
+export const CONTENT_RATING_LABELS: Record<Media["contentRating"], Label> = {
+  NORMAL: m.content_rating_normal,
+  SUGGESTIVE: m.content_rating_suggestive,
+  NSFW: m.content_rating_nsfw,
+  NSFL: m.content_rating_nsfl,
+}
+
 export const LIBRARY_STATUSES = [
   "READING",
   "PLAN_TO_READ",
@@ -73,7 +80,7 @@ export const LIBRARY_STATUS_LABELS: Record<LibraryStatus, Label> = {
   DROPPED: m.library_status_dropped,
 }
 
-const LINKS: Record<string, { label: string; href: (value: string) => string }> = {
+export const MEDIA_LINKS: Record<string, { label: string; href: (value: string) => string }> = {
   mangaDex: { label: "MangaDex", href: (id) => `https://mangadex.org/title/${id}` },
   anilist: { label: "AniList", href: (id) => `https://anilist.co/manga/${id}` },
   myAnimeList: { label: "MyAnimeList", href: (id) => `https://myanimelist.net/manga/${id}` },
@@ -96,9 +103,12 @@ const LINKS: Record<string, { label: string; href: (value: string) => string }> 
 
 export const getMediaLinks = (links: Media["links"]) =>
   Object.entries(links).flatMap(([key, value]) => {
-    const link = LINKS[key]
+    const link = MEDIA_LINKS[key]
+    const href = link?.href(String(value))
 
-    return link === undefined ? [] : [{ key, label: link.label, href: link.href(String(value)) }]
+    return link === undefined || href === undefined || !/^https?:\/\//.test(href)
+      ? []
+      : [{ key, label: link.label, href }]
   })
 
 const isTagKey = (key: string): key is keyof typeof config.tags => key in config.tags
