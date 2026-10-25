@@ -42,7 +42,7 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@inlang/paraglide-js": "^2.27.0",
+    "@inlang/paraglide-js": "^2.29.0",
     "@stylexjs/unplugin": "^0.19.1",
     "@taiyomoe/api": "workspace:^",
     "@tanstack/devtools-vite": "^0.8.5",
