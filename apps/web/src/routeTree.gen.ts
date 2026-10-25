@@ -26,6 +26,7 @@ import { Route as DashboardInvitationsRouteImport } from './routes/dashboard/inv
 import { Route as DashboardMySuggestionsRouteImport } from './routes/dashboard/my-suggestions'
 import { Route as DashboardSubmissionsRouteImport } from './routes/dashboard/submissions'
 import { Route as DashboardUploadRouteImport } from './routes/dashboard/upload'
+import { Route as DashboardUsersRouteImport } from './routes/dashboard/users'
 import { Route as GroupsIndexRouteImport } from './routes/groups/index'
 import { Route as GroupsGroupIdRouteImport } from './routes/groups/$groupId'
 import { Route as MediaMediaIdRouteImport } from './routes/media/$mediaId'
@@ -120,6 +121,11 @@ const DashboardUploadRoute = DashboardUploadRouteImport.update({
   path: '/upload',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
+const DashboardUsersRoute = DashboardUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
 const GroupsIndexRoute = GroupsIndexRouteImport.update({
   id: '/groups/',
   path: '/groups/',
@@ -180,6 +186,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/my-suggestions': typeof DashboardMySuggestionsRoute
   '/dashboard/submissions': typeof DashboardSubmissionsRoute
   '/dashboard/upload': typeof DashboardUploadRoute
+  '/dashboard/users': typeof DashboardUsersRoute
   '/groups/$groupId': typeof GroupsGroupIdRoute
   '/media/$mediaId': typeof MediaMediaIdRoute
   '/dashboard/': typeof DashboardIndexRoute
@@ -206,6 +213,7 @@ export interface FileRoutesByTo {
   '/dashboard/my-suggestions': typeof DashboardMySuggestionsRoute
   '/dashboard/submissions': typeof DashboardSubmissionsRoute
   '/dashboard/upload': typeof DashboardUploadRoute
+  '/dashboard/users': typeof DashboardUsersRoute
   '/groups/$groupId': typeof GroupsGroupIdRoute
   '/media/$mediaId': typeof MediaMediaIdRoute
   '/dashboard': typeof DashboardIndexRoute
@@ -234,6 +242,7 @@ export interface FileRoutesById {
   '/dashboard/my-suggestions': typeof DashboardMySuggestionsRoute
   '/dashboard/submissions': typeof DashboardSubmissionsRoute
   '/dashboard/upload': typeof DashboardUploadRoute
+  '/dashboard/users': typeof DashboardUsersRoute
   '/groups/$groupId': typeof GroupsGroupIdRoute
   '/media/$mediaId': typeof MediaMediaIdRoute
   '/dashboard/': typeof DashboardIndexRoute
@@ -263,6 +272,7 @@ export interface FileRouteTypes {
     | '/dashboard/my-suggestions'
     | '/dashboard/submissions'
     | '/dashboard/upload'
+    | '/dashboard/users'
     | '/groups/$groupId'
     | '/media/$mediaId'
     | '/dashboard/'
@@ -289,6 +299,7 @@ export interface FileRouteTypes {
     | '/dashboard/my-suggestions'
     | '/dashboard/submissions'
     | '/dashboard/upload'
+    | '/dashboard/users'
     | '/groups/$groupId'
     | '/media/$mediaId'
     | '/dashboard'
@@ -316,6 +327,7 @@ export interface FileRouteTypes {
     | '/dashboard/my-suggestions'
     | '/dashboard/submissions'
     | '/dashboard/upload'
+    | '/dashboard/users'
     | '/groups/$groupId'
     | '/media/$mediaId'
     | '/dashboard/'
@@ -463,6 +475,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardUploadRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
+    '/dashboard/users': {
+      id: '/dashboard/users'
+      path: '/users'
+      fullPath: '/dashboard/users'
+      preLoaderRoute: typeof DashboardUsersRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
     '/groups/': {
       id: '/groups/'
       path: '/groups'
@@ -543,6 +562,7 @@ interface DashboardRouteRouteChildren {
   DashboardMySuggestionsRoute: typeof DashboardMySuggestionsRoute
   DashboardSubmissionsRoute: typeof DashboardSubmissionsRoute
   DashboardUploadRoute: typeof DashboardUploadRoute
+  DashboardUsersRoute: typeof DashboardUsersRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
   DashboardGroupsGroupIdRoute: typeof DashboardGroupsGroupIdRoute
   DashboardSuggestionsSuggestionIdRoute: typeof DashboardSuggestionsSuggestionIdRoute
@@ -557,6 +577,7 @@ const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardMySuggestionsRoute: DashboardMySuggestionsRoute,
   DashboardSubmissionsRoute: DashboardSubmissionsRoute,
   DashboardUploadRoute: DashboardUploadRoute,
+  DashboardUsersRoute: DashboardUsersRoute,
   DashboardIndexRoute: DashboardIndexRoute,
   DashboardGroupsGroupIdRoute: DashboardGroupsGroupIdRoute,
   DashboardSuggestionsSuggestionIdRoute: DashboardSuggestionsSuggestionIdRoute,
