@@ -16,7 +16,7 @@
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
     "react-email": "^6.11.1",
-    "resend": "^6.32.1",
+    "resend": "^6.34.1",
     "zod": "^4.4.3"
   },
   "devDependencies": {
