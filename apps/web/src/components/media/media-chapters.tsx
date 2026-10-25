@@ -27,8 +27,10 @@ import { colors, font, motion, radius, shadows } from "@taiyomoe/ui/styles/token
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import { Link, getRouteApi } from "@tanstack/react-router"
 import { useDeferredValue, useEffect, useEffectEvent, useRef, useState } from "react"
+import type { Session } from "@/lib/queries/session"
 import { ChapterList, ChapterListSkeleton } from "@/components/chapters/chapter-list"
 import { LanguageFlag, getLanguageName } from "@/components/chapters/flags"
+import { UpcomingChapters } from "@/components/chapters/upcoming-chapters"
 import { PagePagination } from "@/components/pagination/page-pagination"
 import { ContentFilterEmpty } from "@/components/settings/content-filter"
 import {
@@ -272,7 +274,14 @@ const getVolumeName = (volume: string | null) => {
 const getRange = (first: number, last: number) =>
   first === last ? m.chapter_number({ number: first }) : m.media_chapters_range({ first, last })
 
-export function MediaChapters({ mediaId, signedIn }: { mediaId: string; signedIn: boolean }) {
+export function MediaChapters({
+  mediaId,
+  user,
+}: {
+  mediaId: string
+  user: Session["user"] | null
+}) {
+  const signedIn = user !== null
   const search = routeApi.useSearch()
   const navigate = routeApi.useNavigate()
   const contentRatings = useDeferredValue(useSettings().contentRatings)
@@ -306,18 +315,23 @@ export function MediaChapters({ mediaId, signedIn }: { mediaId: string; signedIn
   const filtered =
     search.lang !== undefined || search.volume !== undefined || search.q !== undefined || unread
   const languages = facets.data?.languages ?? []
+  const upcoming = <UpcomingChapters mediaId={mediaId} user={user} />
 
   if (facets.data?.total === 0 && search.lang === undefined) {
     return (
-      <ContentFilterEmpty
-        description={m.media_chapters_none_description()}
-        title={m.media_chapters_none_title()}
-      />
+      <div sx={styles.root}>
+        {upcoming}
+        <ContentFilterEmpty
+          description={m.media_chapters_none_description()}
+          title={m.media_chapters_none_title()}
+        />
+      </div>
     )
   }
 
   return (
     <div sx={styles.root}>
+      {upcoming}
       <div sx={styles.toolbar}>
         <ChapterSearchField
           onSearch={(q) => {

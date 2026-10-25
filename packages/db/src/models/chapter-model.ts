@@ -22,6 +22,9 @@ export type Chapter = {
   reviewerId: string | null
   reviewedAt: Timestamp | null
   rejectionReason: string | null
+  publishAt: Timestamp | null
+  externalUrl: string | null
+  isExternal: Generated<boolean>
 }
 
 export type NewChapter = Insertable<Chapter>

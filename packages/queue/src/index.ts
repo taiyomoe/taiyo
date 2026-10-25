@@ -1,5 +1,6 @@
 import { createBullConnection } from "./connection"
 import { processChapterUpload, type ProcessorDeps } from "./processor"
+import { publishScheduledChapters, type PublisherDeps } from "./publisher"
 import { CHAPTER_UPLOAD_QUEUE, type ChapterUploadProducer, getChapterUploadProducer } from "./queue"
 import { reapStaleChapterUploads, type ReaperDeps } from "./reaper"
 import {
@@ -14,6 +15,7 @@ export {
   createBullConnection,
   getChapterUploadProducer,
   processChapterUpload,
+  publishScheduledChapters,
   reapStaleChapterUploads,
 }
 
@@ -22,5 +24,6 @@ export type {
   ChapterUploadManifest,
   ChapterUploadProducer,
   ProcessorDeps,
+  PublisherDeps,
   ReaperDeps,
 }

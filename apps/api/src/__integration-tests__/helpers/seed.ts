@@ -5,6 +5,7 @@ import type {
   GroupPermission,
   Language,
 } from "@taiyomoe/db"
+import { sql } from "@taiyomoe/db"
 import { randomUUID } from "node:crypto"
 import type { Services } from "../../services"
 
@@ -52,6 +53,9 @@ type ChapterSeed = {
   groupIds?: string[]
   status?: ChapterStatus
   pages?: Array<{ id: string }> | null
+  publishInHours?: number
+  externalUrl?: string | null
+  isExternal?: boolean
 }
 
 export const seedChapter = async (
@@ -62,14 +66,19 @@ export const seedChapter = async (
     volume = null,
     title = null,
     createdAt = new Date(),
+    publishInHours,
     ...chapter
   }: ChapterSeed,
 ) => {
   const id = randomUUID()
+  const publishAt =
+    publishInHours === undefined
+      ? null
+      : sql<Date>`(CURRENT_TIMESTAMP at time zone 'UTC') + make_interval(hours => ${publishInHours})`
 
   await db
     .insertInto("chapters")
-    .values({ id, language, volume, title, createdAt, ...chapter })
+    .values({ id, language, volume, title, createdAt, publishAt, ...chapter })
     .execute()
 
   if (groupIds.length > 0) {

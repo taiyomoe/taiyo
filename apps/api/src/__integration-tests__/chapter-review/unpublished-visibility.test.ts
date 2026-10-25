@@ -48,8 +48,28 @@ const setup = async (services: Services) => {
     groupIds: [groupId],
     status: "UPLOADING",
   })
+  const scheduled = await seedChapter(services, {
+    mediaId,
+    uploaderId: submitter.userId,
+    number: 5,
+    language: "es",
+    groupIds: [groupId],
+    status: "SCHEDULED",
+    pages: [{ id: randomUUID() }],
+    publishInHours: 24,
+  })
 
-  return { submitter, admin, mediaId, groupId, published, pending, rejected, uploading }
+  return {
+    submitter,
+    admin,
+    mediaId,
+    groupId,
+    published,
+    pending,
+    rejected,
+    uploading,
+    scheduled,
+  }
 }
 const idsIn = (body: unknown) => {
   const found: string[] = []
@@ -76,8 +96,9 @@ const idsIn = (body: unknown) => {
 
 describe("unpublished chapters", () => {
   test("never show up in public chapter lists", async ({ app, services }) => {
-    const { submitter, mediaId, groupId, published, pending, rejected, uploading } =
+    const { submitter, mediaId, groupId, published, pending, rejected, uploading, scheduled } =
       await setup(services)
+    const hidden = new Set<string>([pending, rejected, uploading, scheduled])
     const viewers = [
       undefined,
       submitter.headers,
@@ -103,7 +124,7 @@ describe("unpublished chapters", () => {
 
         expect({
           path,
-          leaked: ids.filter((id) => id === pending || id === rejected || id === uploading),
+          leaked: ids.filter((id) => hidden.has(id)),
         }).toEqual({
           path,
           leaked: [],
@@ -114,6 +135,20 @@ describe("unpublished chapters", () => {
           found: !path.includes("language=fr"),
         })
       }
+
+      const upcoming = idsIn(
+        (
+          await api(
+            app,
+            `/chapters/upcoming?mediaId=${mediaId}`,
+            headers === undefined ? {} : { headers },
+          )
+        ).body,
+      )
+
+      expect(upcoming).toContain(scheduled)
+      expect(upcoming.filter((id) => id !== scheduled && hidden.has(id))).toEqual([])
+      expect(upcoming).not.toContain(published)
     }
   })
 
@@ -174,7 +209,7 @@ describe("unpublished chapters", () => {
   }, 30_000)
 
   test("are left out of the feed and reading progress", async ({ app, services }) => {
-    const { submitter, mediaId, pending, rejected, uploading } = await setup(services)
+    const { submitter, mediaId, pending, rejected, uploading, scheduled } = await setup(services)
 
     await services.db
       .insertInto("userLibraryEntries")
@@ -189,19 +224,22 @@ describe("unpublished chapters", () => {
       expect(ids).not.toContain(pending)
       expect(ids).not.toContain(rejected)
       expect(ids).not.toContain(uploading)
+      expect(ids).not.toContain(scheduled)
     }
   })
 
   test("can only be read by their submitter and reviewers", async ({ app, services }) => {
-    const { submitter, admin, pending, rejected, uploading } = await setup(services)
+    const { submitter, admin, pending, rejected, uploading, scheduled } = await setup(services)
     const uploader = await signInAs(services, { role: "UPLOADER" })
     const moderator = await signInAs(services, { role: "MODERATOR" })
     const intern = await signInAs(services, { role: "UPLOADER_INTERN" })
     const stranger = await signInAs(services)
 
-    for (const chapterId of [pending, rejected, uploading]) {
+    for (const chapterId of [pending, rejected, uploading, scheduled]) {
       for (const path of [`/chapters/${chapterId}`, `/chapters/${chapterId}/groups`]) {
-        for (const headers of [undefined, stranger.headers, moderator.headers, intern.headers]) {
+        const blocked = [undefined, stranger.headers, intern.headers]
+
+        for (const headers of chapterId === scheduled ? blocked : [...blocked, moderator.headers]) {
           const res = await api(app, path, headers === undefined ? {} : { headers })
 
           expect({ path, status: res.status }).toEqual({ path, status: 404 })
@@ -217,19 +255,22 @@ describe("unpublished chapters", () => {
   })
 
   test("cannot be opened or tracked in the reading history", async ({ app, services }) => {
-    const { submitter, pending } = await setup(services)
-    const open = await api(app, `/chapters/${pending}/open`, {
-      method: "POST",
-      headers: submitter.headers,
-    })
-    const track = await api(app, `/chapters/${pending}/history`, {
-      method: "PATCH",
-      headers: submitter.headers,
-      json: { lastPage: 1, totalPages: 1 },
-    })
+    const { submitter, pending, scheduled } = await setup(services)
 
-    expect(open.status).toBe(404)
-    expect([404, 422]).toContain(track.status)
+    for (const chapterId of [pending, scheduled]) {
+      const open = await api(app, `/chapters/${chapterId}/open`, {
+        method: "POST",
+        headers: submitter.headers,
+      })
+      const track = await api(app, `/chapters/${chapterId}/history`, {
+        method: "PATCH",
+        headers: submitter.headers,
+        json: { lastPage: 1, totalPages: 1 },
+      })
+
+      expect(open.status).toBe(404)
+      expect([404, 422]).toContain(track.status)
+    }
   })
 
   test("do not count as uploads in the dashboard", async ({ app, services }) => {

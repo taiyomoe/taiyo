@@ -78,8 +78,16 @@ export const processChapterUpload = async (
       .updateTable("chapters")
       .set({
         pages: manifest.pages.map(({ pageId }) => ({ id: pageId })),
-        status: sql<ChapterStatus>`case when "status" = 'UPLOADING' then 'PUBLISHED'::"ChapterStatus" else "status" end`,
-        createdAt: sql<Date>`case when "status" = 'UPLOADING' then CURRENT_TIMESTAMP else "createdAt" end`,
+        status: sql<ChapterStatus>`case
+          when "status" <> 'UPLOADING' then "status"
+          when "publishAt" > (CURRENT_TIMESTAMP at time zone 'UTC') then 'SCHEDULED'::"ChapterStatus"
+          else 'PUBLISHED'::"ChapterStatus"
+        end`,
+        createdAt: sql<Date>`case
+          when "status" = 'UPLOADING' and "publishAt" > (CURRENT_TIMESTAMP at time zone 'UTC') then "createdAt"
+          when "status" = 'UPLOADING' then CURRENT_TIMESTAMP
+          else "createdAt"
+        end`,
       })
       .where("id", "=", manifest.chapterId)
       .where("deletedAt", "is", null)

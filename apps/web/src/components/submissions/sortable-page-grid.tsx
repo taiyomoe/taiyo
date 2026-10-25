@@ -99,7 +99,7 @@ function SortablePage({
   page: GridPage
   index: number
   disabled: boolean
-  onRemove: () => void
+  onRemove: (() => void) | undefined
 }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: page.key,
@@ -129,22 +129,24 @@ function SortablePage({
       )}
       <div sx={styles.meta}>
         <span sx={styles.index}>{index + 1}</span>
-        <Button
-          aria-label={m.upload_page_remove()}
-          disabled={disabled}
-          onClick={onRemove}
-          onKeyDown={(event) => {
-            event.stopPropagation()
-          }}
-          onPointerDown={(event) => {
-            event.stopPropagation()
-          }}
-          size="icon-xs"
-          type="button"
-          variant="ghost"
-        >
-          <Close />
-        </Button>
+        {onRemove === undefined ? null : (
+          <Button
+            aria-label={m.upload_page_remove()}
+            disabled={disabled}
+            onClick={onRemove}
+            onKeyDown={(event) => {
+              event.stopPropagation()
+            }}
+            onPointerDown={(event) => {
+              event.stopPropagation()
+            }}
+            size="icon-xs"
+            type="button"
+            variant="ghost"
+          >
+            <Close />
+          </Button>
+        )}
       </div>
     </li>
   )
@@ -159,7 +161,7 @@ export function SortablePageGrid({
   pages: GridPage[]
   disabled?: boolean
   onReorder: (keys: string[]) => void
-  onRemove: (key: string) => void
+  onRemove?: (key: string) => void
 }) {
   const dndId = useId()
   const sensors = useSensors(
@@ -204,9 +206,13 @@ export function SortablePageGrid({
               disabled={disabled}
               index={index}
               key={page.key}
-              onRemove={() => {
-                onRemove(page.key)
-              }}
+              onRemove={
+                onRemove === undefined
+                  ? undefined
+                  : () => {
+                      onRemove(page.key)
+                    }
+              }
               page={page}
             />
           ))}

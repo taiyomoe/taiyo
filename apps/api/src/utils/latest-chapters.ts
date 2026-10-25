@@ -8,17 +8,18 @@ type ChapterFilters = {
   contentRatings: ContentRating[]
   mediaId?: string | undefined
   groupId?: string | undefined
+  status?: "PUBLISHED" | "SCHEDULED"
 }
 
 export const selectVisibleChapters = (
   db: Kysely<DB>,
-  { contentRatings, mediaId, groupId }: ChapterFilters,
+  { contentRatings, mediaId, groupId, status = "PUBLISHED" }: ChapterFilters,
 ) =>
   db
     .selectFrom("chapters")
     .innerJoin("medias", "medias.id", "chapters.mediaId")
     .where("chapters.deletedAt", "is", null)
-    .where("chapters.status", "=", "PUBLISHED")
+    .where("chapters.status", "=", status)
     .where("medias.deletedAt", "is", null)
     .where(effectiveContentRating, "in", contentRatings)
     .where((eb) => (mediaId === undefined ? eb.and([]) : eb("chapters.mediaId", "=", mediaId)))
@@ -46,6 +47,8 @@ export const selectLatestChapters = (db: Kysely<DB>, filters: ChapterFilters) =>
       "chapters.contentRating",
       "chapters.createdAt",
       "chapters.mediaId",
+      "chapters.externalUrl",
+      "chapters.isExternal",
       "users.id as uploaderId",
       "users.username as uploaderUsername",
       "users.displayUsername as uploaderDisplayUsername",

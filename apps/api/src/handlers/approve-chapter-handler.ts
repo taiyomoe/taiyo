@@ -7,6 +7,7 @@ import { checkChapter } from "../middlewares/check-chapter-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
+import { readyCreatedAt, readyStatus } from "../utils/chapter-release"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope, languageSchema } from "../utils/schemas"
 
@@ -71,7 +72,7 @@ export const approveChapterHandler = new Hono().post(
     const body = c.var.json
     const locked = await db
       .selectFrom("chapters")
-      .select(["status", "pages"])
+      .select(["status", "pages", "isExternal"])
       .where("id", "=", chapter.id)
       .forUpdate()
       .executeTakeFirstOrThrow()
@@ -80,7 +81,7 @@ export const approveChapterHandler = new Hono().post(
       return c.fail("CHAPTER_NOT_PENDING")
     }
 
-    if (locked.pages === null || locked.pages.length === 0) {
+    if (!locked.isExternal && (locked.pages === null || locked.pages.length === 0)) {
       return c.fail("CHAPTER_PAGES_MISSING")
     }
 
@@ -117,10 +118,10 @@ export const approveChapterHandler = new Hono().post(
         ...(body.number === undefined ? {} : { number: body.number }),
         ...(body.volume === undefined ? {} : { volume: body.volume }),
         ...(body.language === undefined ? {} : { language: body.language }),
-        status: "PUBLISHED",
+        status: readyStatus,
         reviewerId: user.id,
         reviewedAt: sql<Date>`CURRENT_TIMESTAMP`,
-        createdAt: sql<Date>`CURRENT_TIMESTAMP`,
+        createdAt: readyCreatedAt,
       })
       .where("id", "=", chapter.id)
       .execute()

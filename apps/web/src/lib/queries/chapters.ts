@@ -175,3 +175,41 @@ export type MediaChapterFacets = InferResponseType<
   (typeof api.medias)[":id"]["chapters"]["facets"]["$get"],
   200
 >["data"]
+
+export const upcomingChaptersQueryOptions = ({
+  contentRatings,
+  mediaId,
+  groupId,
+}: {
+  contentRatings: readonly ContentRating[]
+  mediaId?: string
+  groupId?: string
+}) =>
+  queryOptions({
+    queryKey: ["chapters", "upcoming", { contentRatings, mediaId, groupId }],
+    queryFn: async ({ signal }) =>
+      (
+        await unwrapEnvelope(
+          await api.chapters.upcoming.$get(
+            {
+              query: pickBy(
+                { contentRating: contentRatings.join(","), mediaId, groupId },
+                isDefined,
+              ),
+            },
+            { init: { signal } },
+          ),
+        )
+      ).data,
+  })
+
+export const chapterGroupsQueryOptions = (chapterId: string) =>
+  queryOptions({
+    queryKey: ["chapters", chapterId, "groups"],
+    queryFn: async ({ signal }) =>
+      (
+        await unwrapEnvelope(
+          await api.chapters[":id"].groups.$get({ param: { id: chapterId } }, { init: { signal } }),
+        )
+      ).data,
+  })

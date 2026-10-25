@@ -4,6 +4,7 @@ import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import { validateQuery } from "../middlewares/validate-query-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
+import { hasContent } from "../utils/chapter-release"
 import {
   selectSubmissionColumns,
   selectSubmissions,
@@ -38,9 +39,7 @@ export const listChapterReviewQueueHandler = new Hono().get(
   async (c) => {
     const { db } = c.var
     const { page, perPage } = c.var.query
-    const base = selectSubmissions(db)
-      .where("chapters.status", "=", "PENDING")
-      .where(sql<boolean>`coalesce(cardinality("chapters"."pages"), 0) > 0`)
+    const base = selectSubmissions(db).where("chapters.status", "=", "PENDING").where(hasContent)
     const [rows, totalRow] = await Promise.all([
       selectSubmissionColumns(base)
         .orderBy("chapters.createdAt", "asc")
