@@ -166,12 +166,17 @@ describe("Better Auth admin plugin", () => {
     const sessions = z
       .object({ sessions: z.array(z.object({ token: z.string(), userId: z.string() })) })
       .parse(listed.body).sessions
+    const signedIn = sessions.find((session) => targetCookie.includes(session.token))
+    const rows = await sessionsOf(services, target.userId)
 
     expect(listed.status).toBe(200)
-    expect(sessions.map((session) => session.userId)).toEqual([target.userId])
+    expect(new Set(sessions.map((session) => session.token))).toEqual(
+      new Set(rows.map((row) => row.token)),
+    )
+    expect(signedIn).toBeDefined()
 
     const revoked = await auth(app, "/admin/revoke-user-session", admin.headers.Cookie, {
-      json: { sessionToken: sessions[0]?.token },
+      json: { sessionToken: signedIn?.token },
     })
     const after = await auth(app, "/get-session", targetCookie, { method: "GET" })
 
