@@ -8,12 +8,10 @@ import type { ChapterSubmission } from "@/features/uploads/api/submissions"
 import { formatDateTime } from "@/components/fields/date-time-picker"
 import { LanguageChip } from "@/components/flags/flags"
 import { ListRow } from "@/components/layout/dashboard-page"
-import {
-  ChapterGroups,
-  ChapterNumber,
-  TimeAgo,
-  Uploader,
-} from "@/features/chapters/components/chapter-meta"
+import { TimeAgo } from "@/components/time/time-ago"
+import { ChapterGroups } from "@/features/chapters/components/chapter-groups"
+import { ChapterNumber } from "@/features/chapters/components/chapter-number"
+import { Uploader } from "@/features/chapters/components/uploader"
 import { Cover } from "@/features/media/components/cover"
 import { hostOf } from "@/features/uploads/lib/chapter-batch/links"
 import { m } from "@/paraglide/messages"

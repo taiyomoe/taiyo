@@ -17,11 +17,15 @@ import { latestChaptersQueryOptions } from "@/features/chapters/api/chapters"
 import {
   LatestCompact,
   LatestCompactSkeleton,
+} from "@/features/chapters/components/latest-updates/latest-compact"
+import {
   LatestGrid,
   LatestGridSkeleton,
+} from "@/features/chapters/components/latest-updates/latest-grid"
+import {
   LatestList,
   LatestListSkeleton,
-} from "@/features/chapters/components/latest-update-layouts"
+} from "@/features/chapters/components/latest-updates/latest-list"
 import { ContentFilterEmpty } from "@/features/settings/components/content-filter"
 import { type LatestUpdatesLayout, useSettings, useUpdateSettings } from "@/lib/settings"
 import { m } from "@/paraglide/messages"

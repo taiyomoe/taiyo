@@ -7,12 +7,10 @@ import { Link } from "@tanstack/react-router"
 import { range } from "remeda"
 import type { LatestChapter } from "@/features/chapters/api/chapters"
 import { LanguageFlag, getLanguageCode } from "@/components/flags/flags"
-import {
-  ChapterGroups,
-  TimeAgo,
-  Uploader,
-  getChapterLabel,
-} from "@/features/chapters/components/chapter-meta"
+import { TimeAgo } from "@/components/time/time-ago"
+import { ChapterGroups } from "@/features/chapters/components/chapter-groups"
+import { Uploader } from "@/features/chapters/components/uploader"
+import { getChapterLabel } from "@/features/chapters/lib/chapter-label"
 import { m } from "@/paraglide/messages"
 
 const DESKTOP = "@media (width >= 48rem)"

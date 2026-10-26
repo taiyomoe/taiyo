@@ -8,7 +8,7 @@ import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-q
 import { useState } from "react"
 import { ErrorAlert } from "@/components/feedback/error-alert"
 import { DashboardSection, ListCard, ListRow } from "@/components/layout/dashboard-page"
-import { TimeAgo } from "@/features/chapters/components/chapter-meta"
+import { TimeAgo } from "@/components/time/time-ago"
 import { PersonAvatar } from "@/features/groups/components/group-avatar"
 import {
   PermissionChecklist,

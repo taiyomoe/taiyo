@@ -14,7 +14,7 @@ import type { Session } from "@/lib/session"
 import { PagePagination } from "@/components/pagination/page-pagination"
 import { sceneFont } from "@/components/scene/scene.stylex"
 import { AppShell } from "@/components/shell/app-shell"
-import { LatestList } from "@/features/chapters/components/latest-update-layouts"
+import { LatestList } from "@/features/chapters/components/latest-updates/latest-list"
 import {
   groupChaptersQueryOptions,
   groupMembersQueryOptions,

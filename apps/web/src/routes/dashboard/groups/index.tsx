@@ -37,7 +37,7 @@ import {
   ListCard,
   ListRow,
 } from "@/components/layout/dashboard-page"
-import { TimeAgo } from "@/features/chapters/components/chapter-meta"
+import { TimeAgo } from "@/components/time/time-ago"
 import {
   type GroupCreationInput,
   type MyOwnershipRequest,
