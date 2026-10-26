@@ -13,7 +13,8 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router"
 import { useState } from "react"
 import { ErrorAlert } from "@/components/feedback/error-alert"
 import { DashboardPage } from "@/components/layout/dashboard-page"
-import { TimeAgo, Uploader } from "@/features/chapters/components/chapter-meta"
+import { TimeAgo } from "@/components/time/time-ago"
+import { Uploader } from "@/features/chapters/components/uploader"
 import {
   type MediaEditChanges,
   type MediaSuggestionDetail,

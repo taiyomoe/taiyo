@@ -6,13 +6,11 @@ import { useQuery } from "@tanstack/react-query"
 import { useDeferredValue, useState } from "react"
 import type { Session } from "@/lib/session"
 import { LanguageFlag } from "@/components/flags/flags"
+import { TimeAgo } from "@/components/time/time-ago"
 import { upcomingChaptersQueryOptions } from "@/features/chapters/api/chapters"
-import {
-  ChapterGroups,
-  TimeAgo,
-  getChapterLabel,
-} from "@/features/chapters/components/chapter-meta"
+import { ChapterGroups } from "@/features/chapters/components/chapter-groups"
 import { ScheduleActions } from "@/features/chapters/components/schedule-actions"
+import { getChapterLabel } from "@/features/chapters/lib/chapter-label"
 import { usePermissions } from "@/lib/permissions"
 import { useSettings } from "@/lib/settings"
 import { m } from "@/paraglide/messages"

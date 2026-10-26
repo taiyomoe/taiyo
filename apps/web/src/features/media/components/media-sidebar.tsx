@@ -23,7 +23,7 @@ import { colors, font, radius, shadows } from "@taiyomoe/ui/styles/tokens.stylex
 import { useQuery } from "@tanstack/react-query"
 import { Link } from "@tanstack/react-router"
 import { useDeferredValue } from "react"
-import { TimeAgo } from "@/features/chapters/components/chapter-meta"
+import { TimeAgo } from "@/components/time/time-ago"
 import {
   type LibraryStatus,
   type ReadingProgress,

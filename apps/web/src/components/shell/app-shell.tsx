@@ -20,7 +20,7 @@ import { useEffect, useSyncExternalStore } from "react"
 import { LanguageFlag } from "@/components/flags/flags"
 import { AppNavbar } from "@/components/shell/app-navbar"
 import { type AppSidebarSection, AppSidebar } from "@/components/shell/app-sidebar"
-import { ChapterNumber } from "@/features/chapters/components/chapter-meta"
+import { ChapterNumber } from "@/features/chapters/components/chapter-number"
 import {
   type JobOutcome,
   type JobState,

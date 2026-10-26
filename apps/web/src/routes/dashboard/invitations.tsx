@@ -13,7 +13,7 @@ import { noop, useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/r
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router"
 import { ErrorAlert } from "@/components/feedback/error-alert"
 import { DashboardPage } from "@/components/layout/dashboard-page"
-import { TimeAgo } from "@/features/chapters/components/chapter-meta"
+import { TimeAgo } from "@/components/time/time-ago"
 import {
   type MyGroupInvitation,
   myGroupInvitationsQueryOptions,
