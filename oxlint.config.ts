@@ -184,6 +184,7 @@ export default defineConfig({
     "@stylexjs/sort-keys": "error",
 
     "taiyo/no-sx-on-third-party": "error",
+    "taiyo/sx-requires-stylex-import": "error",
 
     "import/first": "error",
     "import/namespace": ["error", { allowComputed: true }],
