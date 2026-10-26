@@ -8,9 +8,9 @@ import {
 } from "@/features/chapters/api/chapters"
 import { libraryEntryQueryOptions, readingProgressQueryOptions } from "@/features/media/api/library"
 import { mediaQueryOptions } from "@/features/media/api/medias"
-import { CHAPTERS_PER_PAGE } from "@/features/media/components/media-chapters"
-import { MEDIA_TABS, MediaPage } from "@/features/media/components/media-page"
+import { MediaPage } from "@/features/media/components/media-page/media-page"
 import { getMainTitle } from "@/features/media/lib/media-labels"
+import { CHAPTERS_PER_PAGE, MEDIA_TABS } from "@/features/media/lib/media-page"
 import { getContentRatings } from "@/lib/settings"
 import { m } from "@/paraglide/messages"
 
@@ -81,12 +81,5 @@ export const Route = createFileRoute("/media/$mediaId")({
       ],
     }
   },
-  component: Media,
+  component: MediaPage,
 })
-
-function Media() {
-  const { session } = Route.useRouteContext()
-  const { mediaId } = Route.useParams()
-
-  return <MediaPage mediaId={mediaId} user={session?.user ?? null} />
-}

@@ -3,9 +3,9 @@ import { HugeiconsIcon } from "@hugeicons/react"
 import * as stylex from "@stylexjs/stylex"
 import { font, radius, text } from "@taiyomoe/ui/styles/tokens.stylex"
 import { GhostAnchor } from "@/components/buttons/ghost-anchor"
-import { SunLink } from "@/components/buttons/sun-button"
+import { SunLink } from "@/components/buttons/sun-link"
 import { scene, sceneFont } from "@/components/scene/scene.stylex"
-import { Eyebrow } from "@/features/landing/components/landing-atoms"
+import { Eyebrow } from "@/features/landing/components/eyebrow"
 import { m } from "@/paraglide/messages"
 
 const styles = stylex.create({

@@ -6,8 +6,8 @@ import { Chart } from "@tanstack/charts/react"
 import { tooltip } from "@tanstack/charts/tooltip"
 import { useMemo } from "react"
 import type { DashboardOverview } from "@/features/dashboard/api/overview"
+import { CardNote } from "@/features/dashboard/components/overview/card-note"
 import { ChartFrame, chartTheme } from "@/features/dashboard/components/overview/chart-frame"
-import { CardNote } from "@/features/dashboard/components/overview/dashboard-card"
 import {
   formatCompact,
   formatLanguage,

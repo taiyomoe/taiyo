@@ -1,7 +1,8 @@
 import * as stylex from "@stylexjs/stylex"
 import { font } from "@taiyomoe/ui/styles/tokens.stylex"
 import { scene, sceneFont } from "@/components/scene/scene.stylex"
-import { Reveal, Section } from "@/features/landing/components/landing-atoms"
+import { Reveal } from "@/features/landing/components/reveal"
+import { Section } from "@/features/landing/components/section"
 import { STATS } from "@/features/landing/lib/landing-data"
 
 const styles = stylex.create({

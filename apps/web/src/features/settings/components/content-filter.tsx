@@ -11,11 +11,9 @@ import {
   EmptyTitle,
 } from "@taiyomoe/ui/components/ui/empty"
 import { Menu, MenuCheckboxItem, MenuPopup, MenuTrigger } from "@taiyomoe/ui/components/ui/menu"
+import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
 import { CONTENT_RATING_LABELS } from "@/features/media/lib/media-labels"
-import {
-  ContentRatingLabel,
-  contentRatingItemSx,
-} from "@/features/settings/components/content-rating-label"
+import { ContentRatingLabel } from "@/features/settings/components/content-rating-label"
 import { type ContentRating, useSettings, useUpdateSettings } from "@/lib/settings"
 import { m } from "@/paraglide/messages"
 
@@ -23,6 +21,38 @@ const CONTENT_RATINGS = ["NORMAL", "SUGGESTIVE", "NSFW", "NSFL"] as const satisf
 const styles = stylex.create({
   popup: {
     minWidth: "12.5rem",
+  },
+})
+const itemStyles = stylex.create({
+  SUGGESTIVE: {
+    backgroundColor: {
+      "[data-highlighted]": `color-mix(in srgb, ${colors.contentSuggestive} 14%, transparent)`,
+      default: null,
+    },
+    color: {
+      "[data-highlighted]": `color-mix(in srgb, ${colors.contentSuggestive} 70%, ${colors.foreground})`,
+      default: colors.contentSuggestive,
+    },
+  },
+  NSFW: {
+    backgroundColor: {
+      "[data-highlighted]": `color-mix(in srgb, ${colors.contentNsfw} 15%, transparent)`,
+      default: null,
+    },
+    color: {
+      "[data-highlighted]": `color-mix(in srgb, ${colors.contentNsfw} 70%, ${colors.foreground})`,
+      default: colors.contentNsfw,
+    },
+  },
+  NSFL: {
+    backgroundColor: {
+      "[data-highlighted]": `color-mix(in srgb, ${colors.contentNsfl} 16%, transparent)`,
+      default: null,
+    },
+    color: {
+      "[data-highlighted]": `color-mix(in srgb, ${colors.contentNsfl} 70%, ${colors.foreground})`,
+      default: colors.contentNsfl,
+    },
   },
 })
 
@@ -40,7 +70,7 @@ export function ContentFilterItems() {
         checked={checked}
         closeOnClick={false}
         disabled={last}
-        sx={contentRatingItemSx(rating)}
+        sx={rating === "NORMAL" ? undefined : itemStyles[rating]}
         onCheckedChange={(next) => {
           updateSettings.mutate({
             contentRating: CONTENT_RATINGS.filter((candidate) =>
@@ -56,15 +86,13 @@ export function ContentFilterItems() {
   })
 }
 
-export function ContentFilterEmpty({
-  title,
-  description,
-  sx,
-}: {
+type ContentFilterEmptyProps = {
   title: string
   description: string
   sx?: Sx
-}) {
+}
+
+export function ContentFilterEmpty({ title, description, sx }: ContentFilterEmptyProps) {
   return (
     <Empty sx={sx}>
       <EmptyHeader>

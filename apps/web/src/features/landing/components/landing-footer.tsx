@@ -3,7 +3,7 @@ import { TaiyoLogoLockup } from "@taiyomoe/ui/components/logos/taiyo-logo-lockup
 import { font } from "@taiyomoe/ui/styles/tokens.stylex"
 import { Link } from "@tanstack/react-router"
 import { scene, sceneFont } from "@/components/scene/scene.stylex"
-import { Section } from "@/features/landing/components/landing-atoms"
+import { Section } from "@/features/landing/components/section"
 import { m } from "@/paraglide/messages"
 
 const COLUMNS = [

@@ -1,7 +1,7 @@
 import type { InferRequestType, InferResponseType } from "hono/client"
-import { queryOptions, useQueryClient } from "@tanstack/react-query"
+import { queryOptions, useMutation, useQueryClient } from "@tanstack/react-query"
 import { api } from "@/lib/api"
-import { unwrap, unwrapEnvelope } from "@/lib/envelope"
+import { ensureSuccess, unwrap, unwrapEnvelope } from "@/lib/envelope"
 
 export const SUGGESTIONS_PER_PAGE = 20
 
@@ -65,7 +65,7 @@ export type MediaSuggestionDetail = InferResponseType<
   200
 >["data"]
 
-export const useInvalidateMedia = () => {
+const useInvalidateMedia = () => {
   const queryClient = useQueryClient()
 
   return () =>
@@ -73,4 +73,65 @@ export const useInvalidateMedia = () => {
       queryClient.invalidateQueries({ queryKey: ["medias"] }),
       queryClient.invalidateQueries({ queryKey: ["media-suggestions"] }),
     ])
+}
+
+export const useMediaEditMutations = (mediaId: string) => {
+  const invalidate = useInvalidateMedia()
+  const save = useMutation({
+    mutationFn: async ({ changes }: { changes: MediaEditChanges }) =>
+      ensureSuccess(await api.medias[":id"].$patch({ param: { id: mediaId }, json: changes })),
+    onSuccess: invalidate,
+  })
+  const suggest = useMutation({
+    mutationFn: async ({
+      suggestionId,
+      changes,
+      note: message,
+    }: {
+      suggestionId: string | null
+      changes: MediaEditChanges
+      note: string
+    }) =>
+      ensureSuccess(
+        suggestionId === null
+          ? await api.medias[":id"].suggestions.$post({
+              param: { id: mediaId },
+              json: { changes, note: message },
+            })
+          : await api["media-suggestions"][":id"].$patch({
+              param: { id: suggestionId },
+              json: { changes, note: message },
+            }),
+      ),
+    onSuccess: invalidate,
+  })
+  const withdraw = useMutation({
+    mutationFn: async (suggestionId: string) =>
+      ensureSuccess(
+        await api["media-suggestions"][":id"].withdraw.$post({ param: { id: suggestionId } }),
+      ),
+    onSuccess: invalidate,
+  })
+
+  return { save, suggest, withdraw }
+}
+
+export const useReviewSuggestion = (suggestionId: string) => {
+  const invalidate = useInvalidateMedia()
+
+  return useMutation({
+    mutationFn: async ({ accept, note }: { accept: MediaEditChanges | null; note: string }) =>
+      ensureSuccess(
+        accept === null
+          ? await api["media-suggestions"][":id"].reject.$post({
+              param: { id: suggestionId },
+              json: { note },
+            })
+          : await api["media-suggestions"][":id"].accept.$post({
+              param: { id: suggestionId },
+              json: { changes: accept, note },
+            }),
+      ),
+    onSuccess: invalidate,
+  })
 }

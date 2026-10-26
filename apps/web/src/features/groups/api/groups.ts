@@ -113,6 +113,11 @@ export const myGroupCreationRequestsQueryOptions = queryOptions({
     unwrap(await api.users.me["group-creation-requests"].$get(undefined, { init: { signal } })),
 })
 
+export type MyGroupCreationRequest = InferResponseType<
+  (typeof api.users.me)["group-creation-requests"]["$get"],
+  200
+>["data"][number]
+
 export type OwnershipRequest = InferResponseType<
   (typeof api)["ownership-requests"]["$get"],
   200

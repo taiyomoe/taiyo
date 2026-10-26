@@ -8,18 +8,9 @@ import { ListRow } from "@/components/layout/dashboard-page"
 import { TimeAgo } from "@/components/time/time-ago"
 import { Uploader } from "@/features/chapters/components/uploader"
 import { FIELD_LABELS } from "@/features/media-suggestions/lib/media-edit-model"
+import { SUGGESTION_STATUS } from "@/features/media-suggestions/lib/suggestion-status"
 import { Cover } from "@/features/media/components/cover"
 import { m } from "@/paraglide/messages"
-
-export const SUGGESTION_STATUS: Record<
-  MediaSuggestion["status"],
-  { label: () => string; variant: BadgeVariant }
-> = {
-  PENDING: { label: m.submission_status_pending, variant: "warning" },
-  ACCEPTED: { label: m.suggestion_status_accepted, variant: "success" },
-  REJECTED: { label: m.submission_status_rejected, variant: "error" },
-  WITHDRAWN: { label: m.suggestion_status_withdrawn, variant: "secondary" },
-}
 
 const styles = stylex.create({
   cover: {
@@ -75,15 +66,13 @@ const styles = stylex.create({
   },
 })
 
-export function SuggestionRow({
-  suggestion,
-  showAuthor = false,
-  actions,
-}: {
+type SuggestionRowProps = {
   suggestion: MediaSuggestion
   showAuthor?: boolean
   actions?: ReactNode
-}) {
+}
+
+export function SuggestionRow({ suggestion, showAuthor = false, actions }: SuggestionRowProps) {
   return (
     <ListRow>
       <Cover src={suggestion.media.coverUrl} sx={styles.cover} />

@@ -203,6 +203,11 @@ export const upcomingChaptersQueryOptions = ({
       ).data,
   })
 
+export type UpcomingChapter = InferResponseType<
+  typeof api.chapters.upcoming.$get,
+  200
+>["data"][number]
+
 export const chapterGroupsQueryOptions = (chapterId: string) =>
   queryOptions({
     queryKey: ["chapters", chapterId, "groups"],
