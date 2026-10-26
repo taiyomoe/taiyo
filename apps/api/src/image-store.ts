@@ -3,7 +3,6 @@ import {
   DeleteObjectsCommand,
   getBannerKey,
   getCoverKey,
-  getStaffImageKey,
   PutObjectCommand,
   type S3Client,
 } from "@taiyomoe/s3"
@@ -23,35 +22,6 @@ export type ImageStoreDeps = {
   onRollback: (cb: () => Promise<void>) => void
 }
 
-const transcode = async (file: File) => {
-  const input = Buffer.from(await file.arrayBuffer())
-  const { format } = await sharp(input).metadata()
-
-  if (format === "gif") {
-    return {
-      body: await sharp(input, { animated: true }).gif().toBuffer(),
-      contentType: "image/gif",
-      extension: "gif" as const,
-    }
-  }
-
-  return {
-    body: await sharp(input).rotate().jpeg({ quality: config.images.quality }).toBuffer(),
-    contentType: "image/jpeg",
-    extension: "jpg" as const,
-  }
-}
-const getKey = (target: ImageTarget, extension: ImageExtension) => {
-  if (target.kind === "staff") {
-    return getStaffImageKey(target.staffId, `${crypto.randomUUID()}.${extension}`)
-  }
-
-  const fileName = `${target.id}.${extension}`
-
-  return target.kind === "cover"
-    ? getCoverKey(target.mediaId, fileName)
-    : getBannerKey(target.mediaId, fileName)
-}
 const deleteKeys = async ({ s3, s3Bucket }: ImageStoreDeps, keys: string[]) => {
   await s3.send(
     new DeleteObjectsCommand({
@@ -67,8 +37,29 @@ export const putImage = async (
   file: File,
   { replaces }: { replaces?: string | null } = {},
 ): Promise<{ key: string; extension: ImageExtension }> => {
-  const { body, contentType, extension } = await transcode(file)
-  const key = getKey(target, extension)
+  const input = Buffer.from(await file.arrayBuffer())
+  const { format } = await sharp(input).metadata()
+  const { body, contentType, extension } =
+    format === "gif"
+      ? {
+          body: await sharp(input, { animated: true }).gif().toBuffer(),
+          contentType: "image/gif",
+          extension: "gif" as const,
+        }
+      : {
+          body: await sharp(input).rotate().jpeg({ quality: config.images.quality }).toBuffer(),
+          contentType: "image/jpeg",
+          extension: "jpg" as const,
+        }
+  let key: string
+
+  if (target.kind === "staff") {
+    key = `staffs/${target.staffId}/${crypto.randomUUID()}.${extension}`
+  } else if (target.kind === "cover") {
+    key = getCoverKey(target.mediaId, `${target.id}.${extension}`)
+  } else {
+    key = getBannerKey(target.mediaId, `${target.id}.${extension}`)
+  }
 
   await deps.s3.send(
     new PutObjectCommand({ Bucket: deps.s3Bucket, Key: key, Body: body, ContentType: contentType }),

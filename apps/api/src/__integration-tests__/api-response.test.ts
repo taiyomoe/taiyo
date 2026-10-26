@@ -28,7 +28,6 @@ const getTestApp = (app: Hono): Hono =>
       },
     )
 const anyInstanceOf = (type: unknown): unknown => expect.any(type)
-const arrayContaining = (items: unknown[]): unknown => expect.arrayContaining(items)
 
 describe("API Response Standardization", () => {
   beforeEach(({ task }) => {
@@ -200,10 +199,10 @@ describe("API Response Standardization", () => {
         success: false,
         code: "VALIDATION_ERROR",
         message: "The request data failed validation.",
-        details: arrayContaining([
+        details: expect.arrayContaining([
           expect.objectContaining({ path: ["name"], code: "too_small" }),
           expect.objectContaining({ path: ["email"], code: "invalid_format" }),
-        ]),
+        ]) as unknown,
       })
     })
   })

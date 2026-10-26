@@ -1,12 +1,10 @@
 import type { S3Client } from "@aws-sdk/client-s3"
+import type { Auth } from "@taiyomoe/auth/server"
+import type { DB } from "@taiyomoe/db"
+import type { GroupInvitationMail } from "@taiyomoe/email"
+import type { ChapterUploadProducer } from "@taiyomoe/queue"
+import type { Meilisearch } from "@taiyomoe/search"
 import type { Kysely } from "kysely"
-import { type Auth, createAuth } from "@taiyomoe/auth/server"
-import { type DB, getDb } from "@taiyomoe/db"
-import { type GroupInvitationMail, sendGroupInvitationEmail } from "@taiyomoe/email"
-import { getChapterUploadProducer, type ChapterUploadProducer } from "@taiyomoe/queue"
-import { getS3Bucket, getS3Client } from "@taiyomoe/s3"
-import { getMeiliClient, type Meilisearch, SEARCH_INDEXES } from "@taiyomoe/search"
-import { corsAllowedOrigins } from "./env"
 
 export type Mailer = {
   sendGroupInvitation: (mail: GroupInvitationMail) => Promise<void>
@@ -22,23 +20,4 @@ export type Services = {
   chapterUploadQueue: ChapterUploadProducer
   mailer: Mailer
   cacheNamespace: string
-}
-
-export const createServices = (): Services => {
-  const db = getDb()
-
-  return {
-    db,
-    s3: getS3Client(),
-    s3Bucket: getS3Bucket(),
-    meili: getMeiliClient(),
-    mediasIndex: SEARCH_INDEXES.MEDIAS,
-    auth: createAuth({ db, trustedOrigins: corsAllowedOrigins }),
-    chapterUploadQueue: getChapterUploadProducer(),
-    mailer: {
-      sendGroupInvitation:
-        process.env.NODE_ENV === "production" ? sendGroupInvitationEmail : () => Promise.resolve(),
-    },
-    cacheNamespace: "",
-  }
 }
