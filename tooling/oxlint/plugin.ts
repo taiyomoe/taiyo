@@ -58,8 +58,47 @@ const noSxOnThirdParty: Rule = {
     }
   },
 }
+const sxRequiresStylexImport: Rule = {
+  meta: {
+    type: "problem",
+    messages: {
+      missingImport:
+        "`sx` on <{{element}}> is left uncompiled: StyleX only compiles files that import `@stylexjs/stylex`. Import it, even if unused.",
+    },
+  },
+  create(context) {
+    let importsStylex = false
+
+    return {
+      ImportDeclaration(node) {
+        if (node.source.value === "@stylexjs/stylex") {
+          importsStylex = true
+        }
+      },
+      JSXAttribute(node) {
+        const element = node.parent
+
+        if (
+          importsStylex ||
+          node.name.type !== "JSXIdentifier" ||
+          node.name.name !== "sx" ||
+          element.type !== "JSXOpeningElement" ||
+          element.name.type !== "JSXIdentifier" ||
+          !/^[a-z]/.test(element.name.name)
+        ) {
+          return
+        }
+
+        context.report({ node, messageId: "missingImport", data: { element: element.name.name } })
+      },
+    }
+  },
+}
 
 export default {
   meta: { name: "taiyo" },
-  rules: { "no-sx-on-third-party": noSxOnThirdParty },
+  rules: {
+    "no-sx-on-third-party": noSxOnThirdParty,
+    "sx-requires-stylex-import": sxRequiresStylexImport,
+  },
 }
