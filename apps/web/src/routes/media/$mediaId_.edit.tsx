@@ -1,9 +1,7 @@
 import { noop } from "@tanstack/react-query"
 import { createFileRoute, redirect } from "@tanstack/react-router"
-import { Suspense } from "react"
-import { AppShell } from "@/components/shell/app-shell"
 import { mediaEditQueryOptions } from "@/features/media-suggestions/api/media-suggestions"
-import { MediaEditPage } from "@/features/media-suggestions/components/media-edit-page"
+import { MediaEditPage } from "@/features/media-suggestions/components/media-edit/media-edit-page"
 import { mediaQueryOptions } from "@/features/media/api/medias"
 import { getMainTitle } from "@/features/media/lib/media-labels"
 import { getPermissions } from "@/lib/permissions"
@@ -45,16 +43,5 @@ export const Route = createFileRoute("/media/$mediaId_/edit")({
       },
     ],
   }),
-  component: function MediaEdit() {
-    const { session } = Route.useRouteContext()
-    const { mediaId } = Route.useParams()
-
-    return (
-      <AppShell user={session.user}>
-        <Suspense>
-          <MediaEditPage mediaId={mediaId} user={session.user} />
-        </Suspense>
-      </AppShell>
-    )
-  },
+  component: MediaEditPage,
 })

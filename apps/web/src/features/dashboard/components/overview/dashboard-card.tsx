@@ -4,8 +4,7 @@ import * as stylex from "@stylexjs/stylex"
 import { Sliders } from "@taiyomoe/ui/components/icons"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { Card } from "@taiyomoe/ui/components/ui/card"
-import { Skeleton } from "@taiyomoe/ui/components/ui/skeleton"
-import { colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
+import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useId } from "react"
 import { sceneFont } from "@/components/scene/scene.stylex"
 import { m } from "@/paraglide/messages"
@@ -42,34 +41,9 @@ const styles = stylex.create({
     fontSize: "0.875rem",
     lineHeight: "1.25rem",
   },
-  figure: {
-    gap: "0.125rem",
-    alignItems: "flex-end",
-    display: "flex",
-    flexDirection: "column",
-    flexShrink: 0,
-  },
-  figureValue: {
-    fontSize: "1.75rem",
-    fontWeight: 700,
-    letterSpacing: "-0.02em",
-    lineHeight: 1,
-  },
   settings: {
     color: colors.mutedForeground,
     flexShrink: 0,
-  },
-  skeleton: {
-    borderRadius: radius.lg,
-    flex: "1",
-    minHeight: "12rem",
-  },
-  note: {
-    margin: 0,
-    paddingBlock: "2rem",
-    color: colors.mutedForeground,
-    fontSize: "0.875rem",
-    textAlign: "center",
   },
 })
 
@@ -116,21 +90,4 @@ export function DashboardCard({
       {children}
     </Card>
   )
-}
-
-export function CardFigure({ value, children }: { value: string; children?: ReactNode }) {
-  return (
-    <div sx={styles.figure}>
-      <span sx={styles.figureValue}>{value}</span>
-      {children}
-    </div>
-  )
-}
-
-export function CardSkeleton({ sx }: { sx?: Sx }) {
-  return <Skeleton sx={[styles.skeleton, sx]} />
-}
-
-export function CardNote({ children }: { children: ReactNode }) {
-  return <p sx={styles.note}>{children}</p>
 }

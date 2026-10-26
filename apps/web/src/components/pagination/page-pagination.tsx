@@ -1,8 +1,5 @@
 import type { ReactElement } from "react"
 import * as stylex from "@stylexjs/stylex"
-import { Ellipsis } from "@taiyomoe/ui/components/icons"
-import { Button } from "@taiyomoe/ui/components/ui/button"
-import { Input } from "@taiyomoe/ui/components/ui/input"
 import {
   Pagination,
   PaginationContent,
@@ -11,23 +8,15 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@taiyomoe/ui/components/ui/pagination"
-import { Popover, PopoverPopup, PopoverTrigger } from "@taiyomoe/ui/components/ui/popover"
-import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
-import { useId, useRef, useState } from "react"
-import { getPageItems, parsePage } from "@/lib/pagination"
+import { PageJump } from "@/components/pagination/page-jump"
+import { paginationStyles } from "@/components/pagination/pagination-styles"
+import { getPageItems } from "@/lib/pagination"
 import { m } from "@/paraglide/messages"
 
 const styles = stylex.create({
   content: {
     gap: { default: "0.125rem", "@media (width >= 40rem)": "0.25rem" },
     justifyContent: "center",
-  },
-  page: {
-    paddingInline: "0.375rem",
-    fontVariantNumeric: "tabular-nums",
-    height: { default: null, "@media (width < 40rem)": "2rem" },
-    minWidth: { default: "2.25rem", "@media (width < 40rem)": "2rem" },
-    width: "auto",
   },
   edge: {
     height: { default: null, "@media (width < 40rem)": "2rem" },
@@ -36,33 +25,6 @@ const styles = stylex.create({
   disabled: {
     opacity: 0.4,
     pointerEvents: "none",
-  },
-  form: {
-    gap: "0.625rem",
-    display: "flex",
-    flexDirection: "column",
-    width: "13rem",
-  },
-  label: {
-    color: colors.foreground,
-    fontSize: "0.875rem",
-    fontWeight: 600,
-  },
-  row: {
-    gap: "0.5rem",
-    display: "flex",
-  },
-  field: {
-    flexGrow: 1,
-    minWidth: 0,
-  },
-  hint: {
-    margin: 0,
-    color: colors.mutedForeground,
-    fontSize: "0.75rem",
-  },
-  error: {
-    color: colors.destructiveForeground,
   },
 })
 
@@ -95,7 +57,7 @@ export function PagePagination({ page, pageCount, renderLink, onJump }: PagePagi
                 aria-label={m.pagination_page({ page: item })}
                 isActive={item === page}
                 render={renderLink(item)}
-                sx={styles.page}
+                sx={paginationStyles.page}
               >
                 {item}
               </PaginationLink>
@@ -115,79 +77,5 @@ export function PagePagination({ page, pageCount, renderLink, onJump }: PagePagi
         </PaginationItem>
       </PaginationContent>
     </Pagination>
-  )
-}
-
-function PageJump({ pageCount, onJump }: { pageCount: number; onJump: (page: number) => void }) {
-  const [open, setOpen] = useState(false)
-  const [input, setInput] = useState("")
-  const inputRef = useRef<HTMLInputElement>(null)
-  const id = useId()
-  const target = parsePage(input, pageCount)
-  const invalid = input !== "" && target === null
-
-  return (
-    <Popover
-      onOpenChange={(next) => {
-        setOpen(next)
-
-        if (next) {
-          setInput("")
-        }
-      }}
-      open={open}
-    >
-      <PopoverTrigger
-        render={
-          <Button aria-label={m.pagination_jump()} size="icon" sx={styles.page} variant="ghost" />
-        }
-      >
-        <Ellipsis />
-      </PopoverTrigger>
-      <PopoverPopup arrow initialFocus={inputRef} side="top">
-        <form
-          noValidate
-          onSubmit={(event) => {
-            event.preventDefault()
-
-            if (target !== null) {
-              setOpen(false)
-              onJump(target)
-            }
-          }}
-          sx={styles.form}
-        >
-          <label htmlFor={id} sx={styles.label}>
-            {m.pagination_jump()}
-          </label>
-          <div sx={styles.row}>
-            <Input
-              ref={inputRef}
-              aria-describedby={`${id}-hint`}
-              aria-invalid={invalid || undefined}
-              autoComplete="off"
-              enterKeyHint="go"
-              id={id}
-              inputMode="numeric"
-              maxLength={String(pageCount).length}
-              nativeInput
-              onChange={(event) => {
-                setInput(event.target.value.replace(/\D/g, "").replace(/^0+/, ""))
-              }}
-              placeholder={`1–${pageCount}`}
-              size="sm"
-              sx={styles.field}
-              value={input}
-            />
-            <Button disabled={target === null} size="sm" type="submit">
-              {m.pagination_jump_go()}
-            </Button>
-          </div>
-          <p id={`${id}-hint`} sx={[styles.hint, invalid && styles.error]}>
-            {m.pagination_jump_hint({ count: pageCount })}
-          </p>
-        </form>
-      </PopoverPopup>
-    </Popover>
   )
 }

@@ -1,0 +1,1 @@
+export const LATEST_MEDIAS_PER_PAGE = 10

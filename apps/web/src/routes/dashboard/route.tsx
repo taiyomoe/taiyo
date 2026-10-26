@@ -1,8 +1,6 @@
-import { Outlet, createFileRoute, redirect } from "@tanstack/react-router"
-import { AppShell } from "@/components/shell/app-shell"
+import { createFileRoute, redirect } from "@tanstack/react-router"
+import { DashboardLayout } from "@/features/dashboard/components/dashboard-layout"
 import { canOpenDashboard } from "@/features/dashboard/lib/dashboard"
-import { DASHBOARD_SECTIONS } from "@/features/dashboard/lib/dashboard-sections"
-import { getPermissions } from "@/lib/permissions"
 
 export const Route = createFileRoute("/dashboard")({
   beforeLoad: ({ context }) => {
@@ -16,22 +14,5 @@ export const Route = createFileRoute("/dashboard")({
 
     return { session: context.session }
   },
-  component: Dashboard,
+  component: DashboardLayout,
 })
-
-function Dashboard() {
-  const { session } = Route.useRouteContext()
-  const can = getPermissions(session.user)
-
-  return (
-    <AppShell
-      sections={DASHBOARD_SECTIONS.map(({ items, ...section }) => ({
-        ...section,
-        items: items.filter((item) => item.visible(can)),
-      })).filter((section) => section.items.length > 0)}
-      user={session.user}
-    >
-      <Outlet />
-    </AppShell>
-  )
-}

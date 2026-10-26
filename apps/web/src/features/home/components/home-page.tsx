@@ -8,8 +8,8 @@ import { AppShell } from "@/components/shell/app-shell"
 import {
   FeaturedCarousel,
   FeaturedCarouselSkeleton,
-} from "@/features/home/components/featured-carousel"
-import { LatestUpdates } from "@/features/home/components/latest-updates"
+} from "@/features/home/components/featured/featured-carousel"
+import { LatestUpdates } from "@/features/home/components/latest-updates/latest-updates"
 
 const SHELVES = range(0, 5)
 const PLACEHOLDERS = range(0, 6)

@@ -1,10 +1,10 @@
 import { QuoteDownIcon } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 import * as stylex from "@stylexjs/stylex"
-import { font, radius, text } from "@taiyomoe/ui/styles/tokens.stylex"
+import { radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useEffect, useState } from "react"
 import { scene } from "@/components/scene/scene.stylex"
-import { Stars } from "@/components/scene/stars"
+import { AuthCitation } from "@/features/auth/components/scene/auth-citation"
 import { m } from "@/paraglide/messages"
 
 type Citation = {
@@ -59,50 +59,6 @@ const styles = stylex.create({
   badgeIcon: {
     height: "0.875rem",
     width: "0.875rem",
-  },
-  slide: {
-    textShadow: "0 2px 18px rgba(10,5,3,0.7)",
-    minHeight: "11.75rem",
-  },
-  quote: {
-    color: scene.paper,
-    fontFamily: font.heading,
-    fontSize: "clamp(24px, 2.4vw, 34px)",
-    fontStyle: "italic",
-    fontWeight: 700,
-    lineHeight: 1.22,
-    textWrap: "balance",
-    marginBottom: "1.375rem",
-    marginTop: "1rem",
-  },
-  author: {
-    gap: "0.75rem",
-    alignItems: "center",
-    display: "flex",
-  },
-  avatar: {
-    borderRadius: radius.full,
-    alignItems: "center",
-    backgroundImage: `linear-gradient(140deg, ${scene.brand}, ${scene.gold})`,
-    color: scene.ink,
-    display: "inline-flex",
-    flexShrink: 0,
-    fontFamily: font.heading,
-    fontSize: text.lg,
-    fontWeight: 700,
-    justifyContent: "center",
-    height: "2.625rem",
-    width: "2.625rem",
-  },
-  identity: {
-    lineHeight: 1.25,
-  },
-  who: {
-    fontWeight: 700,
-  },
-  role: {
-    color: `color-mix(in srgb, ${scene.paper} 55%, transparent)`,
-    fontSize: "13px",
   },
   dots: {
     gap: "0.4375rem",
@@ -165,17 +121,13 @@ export const AuthCitations = () => {
         <HugeiconsIcon icon={QuoteDownIcon} {...stylex.props(styles.badgeIcon)} />
         {m.auth_reviews_badge()}
       </div>
-      <div key={index} sx={styles.slide}>
-        <Stars filled={citation.rating} />
-        <p sx={styles.quote}>{`“${citation.quote()}”`}</p>
-        <div sx={styles.author}>
-          <span sx={styles.avatar}>{citation.who.charAt(0).toUpperCase()}</span>
-          <div sx={styles.identity}>
-            <div sx={styles.who}>{citation.who}</div>
-            <div sx={styles.role}>{citation.role()}</div>
-          </div>
-        </div>
-      </div>
+      <AuthCitation
+        key={index}
+        quote={citation.quote()}
+        rating={citation.rating}
+        role={citation.role()}
+        who={citation.who}
+      />
       <div sx={styles.dots}>
         {CITATIONS.map((item, dot) => (
           <button

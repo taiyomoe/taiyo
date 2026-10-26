@@ -1,20 +1,13 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import {
-  ArrowLeft01Icon,
-  LockPasswordIcon,
-  Mail01Icon,
-  MailValidation01Icon,
-  UserAccountIcon,
-} from "@hugeicons/core-free-icons"
+import { LockPasswordIcon, Mail01Icon, UserAccountIcon } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { ParaglideMessage } from "@inlang/paraglide-js-react"
 import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile"
+// StyleX only compiles the `sx` props of files that import it.
+// oxlint-disable-next-line no-unused-vars
 import * as stylex from "@stylexjs/stylex"
 import { config } from "@taiyomoe/config"
-import { Button } from "@taiyomoe/ui/components/ui/button"
 import { Form } from "@taiyomoe/ui/components/ui/form"
-import { Link } from "@tanstack/react-router"
-import { type ReactNode, type SubmitEvent, useRef, useState } from "react"
+import { type SubmitEvent, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { SunButton } from "@/components/buttons/sun-button"
@@ -25,6 +18,8 @@ import { authFormStyles as sx } from "@/features/auth/components/auth-form-style
 import { AuthHeading } from "@/features/auth/components/auth-heading"
 import { AuthSocialButtons } from "@/features/auth/components/auth-social-buttons"
 import { AuthSwitchLink } from "@/features/auth/components/auth-switch-link"
+import { SignUpAgreeLabel } from "@/features/auth/components/sign-up-agree-label"
+import { SignUpConfirmation } from "@/features/auth/components/sign-up-confirmation"
 import { useAuthForm } from "@/features/auth/hooks/use-auth-form"
 import { m } from "@/paraglide/messages"
 
@@ -54,16 +49,6 @@ const signUpSchema = z.object({
     ),
   agree: z.boolean().refine((value) => value, m.auth_accept_terms()),
 })
-const TermsLink = ({ children }: { children?: ReactNode }) => (
-  <Link to="/terms" {...stylex.props(sx.link)}>
-    {children}
-  </Link>
-)
-const PrivacyLink = ({ children }: { children?: ReactNode }) => (
-  <Link to="/privacy" {...stylex.props(sx.link)}>
-    {children}
-  </Link>
-)
 
 export const SignUpForm = () => {
   const auth = useAuthForm()
@@ -99,32 +84,13 @@ export const SignUpForm = () => {
 
   if (pendingEmail !== null && pendingEmail !== "") {
     return (
-      <>
-        <AuthHeading title={m.auth_check_inbox_title()} subtitle={m.auth_check_inbox_subtitle()} />
-        <div sx={sx.confirmation}>
-          <div sx={sx.confirmationBadge}>
-            <HugeiconsIcon icon={MailValidation01Icon} {...stylex.props(sx.confirmationIcon)} />
-          </div>
-          <p sx={sx.confirmationText}>{m.auth_verification_sent({ email: pendingEmail })}</p>
-          <Button
-            type="button"
-            variant="outline"
-            sx={sx.confirmationAction}
-            onClick={() => {
-              setPendingEmail(null)
-              auth.clearError()
-            }}
-          >
-            <HugeiconsIcon icon={ArrowLeft01Icon} />
-            {m.auth_back_to_sign_up()}
-          </Button>
-        </div>
-        <AuthSwitchLink
-          prompt={m.auth_footer_have_account()}
-          label={m.auth_sign_in()}
-          to="/auth/sign-in"
-        />
-      </>
+      <SignUpConfirmation
+        email={pendingEmail}
+        onBack={() => {
+          setPendingEmail(null)
+          auth.clearError()
+        }}
+      />
     )
   }
 
@@ -167,17 +133,7 @@ export const SignUpForm = () => {
             placeholder="••••••••"
             autoComplete="new-password"
           />
-          <CheckboxField
-            control={form.control}
-            name="agree"
-            label={
-              <ParaglideMessage
-                message={m.auth_agree}
-                inputs={{}}
-                markup={{ terms: TermsLink, privacy: PrivacyLink }}
-              />
-            }
-          />
+          <CheckboxField control={form.control} name="agree" label={<SignUpAgreeLabel />} />
 
           <div sx={sx.captchaGroup}>
             <Turnstile

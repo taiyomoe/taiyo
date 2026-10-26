@@ -1,113 +1,21 @@
 import type { Sx } from "@taiyomoe/ui/styles/sx"
-import type { ComponentProps, ReactNode } from "react"
+import type { ComponentProps } from "react"
 import * as stylex from "@stylexjs/stylex"
-import { Spinner } from "@taiyomoe/ui/components/ui/spinner"
-import { font, radius, text } from "@taiyomoe/ui/styles/tokens.stylex"
 import { cn } from "@taiyomoe/ui/utils/cn"
-import { Link } from "@tanstack/react-router"
-import { scene } from "@/components/scene/scene.stylex"
+import { SunBody } from "@/components/buttons/sun-body"
+import { sunStyles } from "@/components/buttons/sun-styles"
 
-const sheenSweep = stylex.keyframes({
-  "0%": { transform: "translateX(-130%) skewX(-18deg)" },
-  "26%, 100%": { transform: "translateX(330%) skewX(-18deg)" },
-})
 const styles = stylex.create({
-  base: {
-    borderRadius: radius.full,
-    borderStyle: "none",
-    overflow: "hidden",
-    backgroundImage: `linear-gradient(95deg, ${scene.brand} 0%, #ff8a3d 50%, ${scene.gold} 100%)`,
-    boxShadow: {
-      default: `0 6px 18px color-mix(in srgb, ${scene.brand} 32%, transparent)`,
-      ":disabled": `0 6px 18px color-mix(in srgb, ${scene.brand} 32%, transparent)`,
-      ":hover": `0 10px 30px color-mix(in srgb, ${scene.brand} 50%, transparent)`,
-    },
-    color: scene.ink,
-    cursor: { default: "pointer", ":disabled": "not-allowed" },
-    fontFamily: font.sans,
-    fontWeight: 800,
-    opacity: { default: 1, ":disabled": 0.7 },
-    position: "relative",
-    transform: { default: null, ":active": "scale(0.98)" },
-    transitionDuration: "200ms",
-    transitionProperty: "transform, box-shadow",
-    whiteSpace: "nowrap",
-  },
   disabled: {
     transform: null,
   },
-  md: {
-    paddingInline: "1.5rem",
-    fontSize: text.base,
-    height: "3.375rem",
-  },
-  lg: {
-    paddingInline: "2.125rem",
-    fontSize: text.lg,
-    height: "3.625rem",
-  },
-  block: {
-    width: "100%",
-  },
-  link: {
-    alignItems: "center",
-    display: "inline-flex",
-    justifyContent: "center",
-    textDecorationLine: "none",
-  },
-  label: {
-    gap: "0.5rem",
-    alignItems: "center",
-    display: "inline-flex",
-    justifyContent: "center",
-    position: "relative",
-    zIndex: 2,
-  },
-  labelLoading: {
-    opacity: 0,
-  },
-  loader: {
-    inset: 0,
-    alignItems: "center",
-    display: "inline-flex",
-    justifyContent: "center",
-    position: "absolute",
-    zIndex: 2,
-  },
-  sheen: {
-    animationDuration: "5s",
-    animationFillMode: "backwards",
-    animationIterationCount: "infinite",
-    animationName: sheenSweep,
-    animationTimingFunction: "ease-in-out",
-    backgroundImage: "linear-gradient(90deg, transparent, rgba(255,249,236,0.55), transparent)",
-    pointerEvents: "none",
-    position: "absolute",
-    zIndex: 1,
-    bottom: 0,
-    left: 0,
-    top: 0,
-    width: "33.3333%",
-  },
 })
 
-type SunSkinProps = {
+export type SunSkinProps = {
   size?: "md" | "lg"
   block?: boolean
   sx?: Sx
 }
-
-const SunBody = ({ children, loading }: { children: ReactNode; loading?: boolean }) => (
-  <>
-    <span sx={[styles.label, loading === true && styles.labelLoading]}>{children}</span>
-    {loading === true ? (
-      <span sx={styles.loader}>
-        <Spinner />
-      </span>
-    ) : null}
-    <span aria-hidden sx={styles.sheen} />
-  </>
-)
 
 export type SunButtonProps = ComponentProps<"button"> &
   SunSkinProps & {
@@ -128,9 +36,9 @@ export const SunButton = ({
 }: SunButtonProps) => {
   const isDisabled = disabled === true || loading
   const styleProps = stylex.props(
-    styles.base,
-    styles[size],
-    block && styles.block,
+    sunStyles.base,
+    sunStyles[size],
+    block && sunStyles.block,
     isDisabled && styles.disabled,
     sx,
   )
@@ -145,32 +53,5 @@ export const SunButton = ({
     >
       <SunBody loading={loading}>{children}</SunBody>
     </button>
-  )
-}
-
-export type SunLinkProps = Omit<ComponentProps<typeof Link>, "children"> &
-  SunSkinProps & {
-    children?: ReactNode
-  }
-
-export const SunLink = ({
-  className,
-  children,
-  size = "lg",
-  block = false,
-  style,
-  sx,
-  ...props
-}: SunLinkProps) => {
-  const styleProps = stylex.props(styles.base, styles.link, styles[size], block && styles.block, sx)
-
-  return (
-    <Link
-      className={cn(styleProps.className, className)}
-      style={{ ...styleProps.style, ...style }}
-      {...props}
-    >
-      <SunBody>{children}</SunBody>
-    </Link>
   )
 }
