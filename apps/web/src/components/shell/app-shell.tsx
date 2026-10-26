@@ -17,18 +17,18 @@ import { colors, radius, shadows } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useRouteContext } from "@tanstack/react-router"
 import { useEffect, useSyncExternalStore } from "react"
-import { ChapterNumber } from "@/components/chapters/chapter-meta"
-import { LanguageFlag } from "@/components/chapters/flags"
+import { LanguageFlag } from "@/components/flags/flags"
 import { AppNavbar } from "@/components/shell/app-navbar"
 import { type AppSidebarSection, AppSidebar } from "@/components/shell/app-sidebar"
+import { ChapterNumber } from "@/features/chapters/components/chapter-meta"
 import {
   type JobOutcome,
   type JobState,
   summarize,
   uploadStore,
-} from "@/lib/chapter-batch/upload-store"
-import { type Session, sessionQueryOptions } from "@/lib/queries/session"
-import { unwrapAuth } from "@/lib/queries/user-admin"
+} from "@/features/uploads/lib/chapter-batch/upload-store"
+import { unwrapAuth } from "@/features/users/api/user-admin"
+import { type Session, sessionQueryOptions } from "@/lib/session"
 import { m } from "@/paraglide/messages"
 
 const styles = stylex.create({

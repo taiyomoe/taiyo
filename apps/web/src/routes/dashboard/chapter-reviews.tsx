@@ -31,15 +31,11 @@ import { createFileRoute, Link, redirect, useNavigate } from "@tanstack/react-ro
 import { type ReactNode, useState } from "react"
 import { range } from "remeda"
 import { z } from "zod"
-import { AuthAlert } from "@/components/auth/auth-alert"
-import { DashboardPage, ListCard } from "@/components/dashboard/dashboard-page"
+import { ErrorAlert } from "@/components/feedback/error-alert"
+import { LanguagePicker } from "@/components/fields/language-picker"
+import { DashboardPage, ListCard } from "@/components/layout/dashboard-page"
 import { PagePagination } from "@/components/pagination/page-pagination"
-import { type GroupOption, GroupPicker, LanguagePicker } from "@/components/submissions/pickers"
-import { SubmissionRow } from "@/components/submissions/submission-row"
-import { api } from "@/lib/api"
-import { ensureSuccess, unwrap } from "@/lib/envelope"
-import { getErrorMessage } from "@/lib/errors"
-import { getPermissions, usePermissions } from "@/lib/permissions"
+import { type GroupOption, GroupPicker } from "@/features/groups/components/group-picker"
 import {
   type ApproveFixes,
   type ChapterSubmission,
@@ -47,7 +43,12 @@ import {
   reviewQueueQueryOptions,
   SUBMISSIONS_PER_PAGE,
   useInvalidateReview,
-} from "@/lib/queries/submissions"
+} from "@/features/uploads/api/submissions"
+import { SubmissionRow } from "@/features/uploads/components/submission-row"
+import { api } from "@/lib/api"
+import { ensureSuccess, unwrap } from "@/lib/envelope"
+import { getErrorMessage } from "@/lib/errors"
+import { getPermissions, usePermissions } from "@/lib/permissions"
 import { m } from "@/paraglide/messages"
 
 const styles = stylex.create({
@@ -356,7 +357,7 @@ function BulkBar({
           </Button>
         </div>
       </div>
-      <AuthAlert message={review.isError ? getErrorMessage(review.error) : null} />
+      <ErrorAlert message={review.isError ? getErrorMessage(review.error) : null} />
       {skipped === null || skipped === 0 ? null : (
         <p sx={styles.muted}>{m.review_bulk_skipped({ count: skipped })}</p>
       )}
@@ -509,7 +510,7 @@ function ReviewForm({
             previews
           )}
           <div sx={styles.fields}>
-            <AuthAlert message={review.isError ? getErrorMessage(review.error) : null} />
+            <ErrorAlert message={review.isError ? getErrorMessage(review.error) : null} />
             {rejecting ? (
               <Field invalid={touched && reason.trim() === ""}>
                 <FieldLabel>{m.review_reject_note()}</FieldLabel>

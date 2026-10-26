@@ -5,7 +5,7 @@ import { Input } from "@taiyomoe/ui/components/ui/input"
 import { Popover, PopoverPopup, PopoverTrigger } from "@taiyomoe/ui/components/ui/popover"
 import { SelectButton } from "@taiyomoe/ui/components/ui/select"
 import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
-import { useNow } from "@/lib/use-now"
+import { useNow } from "@/hooks/use-now"
 import { m } from "@/paraglide/messages"
 import { getLocale } from "@/paraglide/runtime"
 

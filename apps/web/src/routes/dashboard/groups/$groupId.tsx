@@ -7,18 +7,18 @@ import { radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { noop, useSuspenseQuery } from "@tanstack/react-query"
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { Suspense } from "react"
-import { DashboardPage } from "@/components/dashboard/dashboard-page"
-import { GroupAvatar } from "@/components/groups/group-avatar"
-import { GroupChaptersPanel } from "@/components/groups/group-chapters-panel"
-import { GroupInvitationsPanel } from "@/components/groups/group-invitations-panel"
-import { GroupMembersPanel } from "@/components/groups/group-members-panel"
-import { GroupSettingsPanel } from "@/components/groups/group-settings-panel"
-import { usePermissions } from "@/lib/permissions"
+import { DashboardPage } from "@/components/layout/dashboard-page"
 import {
   groupMembersQueryOptions,
   groupQueryOptions,
   myGroupsQueryOptions,
-} from "@/lib/queries/groups"
+} from "@/features/groups/api/groups"
+import { GroupAvatar } from "@/features/groups/components/group-avatar"
+import { GroupChaptersPanel } from "@/features/groups/components/group-chapters-panel"
+import { GroupInvitationsPanel } from "@/features/groups/components/group-invitations-panel"
+import { GroupMembersPanel } from "@/features/groups/components/group-members-panel"
+import { GroupSettingsPanel } from "@/features/groups/components/group-settings-panel"
+import { usePermissions } from "@/lib/permissions"
 import { m } from "@/paraglide/messages"
 
 const styles = stylex.create({

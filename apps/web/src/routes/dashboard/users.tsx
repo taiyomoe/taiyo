@@ -44,20 +44,20 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { createFileRoute, Link, redirect, useNavigate } from "@tanstack/react-router"
 import { useDeferredValue, useState } from "react"
 import { z } from "zod"
-import { AuthAlert } from "@/components/auth/auth-alert"
-import { TimeAgo } from "@/components/chapters/chapter-meta"
-import { ConfirmDialog } from "@/components/dashboard/confirm-dialog"
-import { DashboardPage, ListCard, ListRow } from "@/components/dashboard/dashboard-page"
-import { PersonAvatar } from "@/components/groups/group-avatar"
+import { ConfirmDialog } from "@/components/dialogs/confirm-dialog"
+import { ErrorAlert } from "@/components/feedback/error-alert"
+import { DashboardPage, ListCard, ListRow } from "@/components/layout/dashboard-page"
 import { PagePagination } from "@/components/pagination/page-pagination"
+import { TimeAgo } from "@/features/chapters/components/chapter-meta"
+import { PersonAvatar } from "@/features/groups/components/group-avatar"
+import { sessionsKey, unwrapAuth, userSessionsQueryOptions } from "@/features/users/api/user-admin"
+import { type ManagedUser, USERS_PER_PAGE, type UsersFilter } from "@/features/users/api/users"
+import { describeUserAgent } from "@/features/users/lib/user-agent"
+import { useNow } from "@/hooks/use-now"
 import { api } from "@/lib/api"
 import { ensureSuccess, unwrapEnvelope } from "@/lib/envelope"
 import { getErrorMessage } from "@/lib/errors"
 import { getPermissions } from "@/lib/permissions"
-import { sessionsKey, unwrapAuth, userSessionsQueryOptions } from "@/lib/queries/user-admin"
-import { type ManagedUser, USERS_PER_PAGE, type UsersFilter } from "@/lib/queries/users"
-import { useNow } from "@/lib/use-now"
-import { describeUserAgent } from "@/lib/user-agent"
 import { m } from "@/paraglide/messages"
 
 const ROLE_LABELS: Record<Role, () => string> = {
@@ -431,7 +431,7 @@ export const Route = createFileRoute("/dashboard/users")({
             </DialogHeader>
             <DialogPanel>
               <div sx={styles.dialogBody}>
-                <AuthAlert message={ban.isError ? getErrorMessage(ban.error) : null} />
+                <ErrorAlert message={ban.isError ? getErrorMessage(ban.error) : null} />
                 <Field invalid={touched && reason.trim() === ""}>
                   <FieldLabel>{m.users_ban_reason()}</FieldLabel>
                   <Textarea
@@ -723,7 +723,7 @@ function SessionsDialog({ user, onClose }: { user: ManagedUser; onClose: () => v
         </DialogHeader>
         <DialogPanel>
           <div sx={adminStyles.form}>
-            <AuthAlert
+            <ErrorAlert
               message={
                 sessions.isError || revoke.isError
                   ? getErrorMessage(sessions.error ?? revoke.error)
@@ -843,7 +843,7 @@ function SetPasswordDialog({ user, onClose }: { user: ManagedUser; onClose: () =
         </DialogHeader>
         <DialogPanel>
           <div sx={adminStyles.form}>
-            <AuthAlert message={setPassword.isError ? getErrorMessage(setPassword.error) : null} />
+            <ErrorAlert message={setPassword.isError ? getErrorMessage(setPassword.error) : null} />
             <Field invalid={invalid}>
               <FieldLabel>{m.set_password_label()}</FieldLabel>
               <PasswordInput

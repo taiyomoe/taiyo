@@ -29,28 +29,28 @@ import { createFileRoute, Link } from "@tanstack/react-router"
 import { useState } from "react"
 import { FormProvider, useForm } from "react-hook-form"
 import { z } from "zod"
-import { AuthAlert } from "@/components/auth/auth-alert"
-import { TimeAgo } from "@/components/chapters/chapter-meta"
+import { ErrorAlert } from "@/components/feedback/error-alert"
+import { InputField, TextareaField } from "@/components/fields/form-field"
 import {
   DashboardPage,
   DashboardSection,
   ListCard,
   ListRow,
-} from "@/components/dashboard/dashboard-page"
-import { InputField, TextareaField } from "@/components/fields/form-field"
-import { GroupAvatar } from "@/components/groups/group-avatar"
-import { MemberPermissions, RoleBadge } from "@/components/groups/group-permissions"
-import { ProofLinksFields, proofLinksSchema } from "@/components/groups/proof-links-fields"
-import { api } from "@/lib/api"
-import { ensureSuccess } from "@/lib/envelope"
-import { getErrorMessage } from "@/lib/errors"
+} from "@/components/layout/dashboard-page"
+import { TimeAgo } from "@/features/chapters/components/chapter-meta"
 import {
   type GroupCreationInput,
   type MyOwnershipRequest,
   myGroupCreationRequestsQueryOptions,
   myGroupsQueryOptions,
   myOwnershipRequestsQueryOptions,
-} from "@/lib/queries/groups"
+} from "@/features/groups/api/groups"
+import { GroupAvatar } from "@/features/groups/components/group-avatar"
+import { MemberPermissions, RoleBadge } from "@/features/groups/components/group-permissions"
+import { ProofLinksFields, proofLinksSchema } from "@/features/groups/components/proof-links-fields"
+import { api } from "@/lib/api"
+import { ensureSuccess } from "@/lib/envelope"
+import { getErrorMessage } from "@/lib/errors"
 import { m } from "@/paraglide/messages"
 
 const requestSchema = z.object({
@@ -236,7 +236,7 @@ export const Route = createFileRoute("/dashboard/groups/")({
                     </DialogHeader>
                     <DialogPanel>
                       <div sx={styles.fields}>
-                        <AuthAlert
+                        <ErrorAlert
                           message={request.isError ? getErrorMessage(request.error) : null}
                         />
                         <InputField

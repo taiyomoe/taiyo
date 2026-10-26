@@ -11,15 +11,18 @@ import {
 import { colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { noop, useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query"
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router"
-import { AuthAlert } from "@/components/auth/auth-alert"
-import { TimeAgo } from "@/components/chapters/chapter-meta"
-import { DashboardPage } from "@/components/dashboard/dashboard-page"
-import { GroupAvatar } from "@/components/groups/group-avatar"
-import { GROUP_PERMISSION_LABELS } from "@/components/groups/group-permissions"
+import { ErrorAlert } from "@/components/feedback/error-alert"
+import { DashboardPage } from "@/components/layout/dashboard-page"
+import { TimeAgo } from "@/features/chapters/components/chapter-meta"
+import {
+  type MyGroupInvitation,
+  myGroupInvitationsQueryOptions,
+} from "@/features/groups/api/groups"
+import { GroupAvatar } from "@/features/groups/components/group-avatar"
+import { GROUP_PERMISSION_LABELS } from "@/features/groups/components/group-permissions"
 import { api } from "@/lib/api"
 import { ensureSuccess } from "@/lib/envelope"
 import { getErrorMessage } from "@/lib/errors"
-import { type MyGroupInvitation, myGroupInvitationsQueryOptions } from "@/lib/queries/groups"
 import { m } from "@/paraglide/messages"
 
 const styles = stylex.create({
@@ -211,7 +214,7 @@ function InvitationCard({ invitation }: { invitation: MyGroupInvitation }) {
           </>
         )}
       </div>
-      <AuthAlert message={answer.isError ? getErrorMessage(answer.error, ERRORS) : null} />
+      <ErrorAlert message={answer.isError ? getErrorMessage(answer.error, ERRORS) : null} />
       <div sx={styles.actions}>
         <Button
           disabled={answer.isPending}

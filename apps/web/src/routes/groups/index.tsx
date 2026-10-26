@@ -20,11 +20,11 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router"
 import { Suspense, useState } from "react"
 import { range } from "remeda"
 import { z } from "zod"
-import { GroupAvatar } from "@/components/groups/group-avatar"
 import { PagePagination } from "@/components/pagination/page-pagination"
 import { sceneFont } from "@/components/scene/scene.stylex"
 import { AppShell } from "@/components/shell/app-shell"
-import { GROUPS_PER_PAGE, groupsQueryOptions } from "@/lib/queries/groups"
+import { GROUPS_PER_PAGE, groupsQueryOptions } from "@/features/groups/api/groups"
+import { GroupAvatar } from "@/features/groups/components/group-avatar"
 import { m } from "@/paraglide/messages"
 
 const styles = stylex.create({
