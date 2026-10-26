@@ -1,12 +1,12 @@
 import { noop } from "@tanstack/react-query"
 import { createFileRoute, redirect } from "@tanstack/react-router"
 import { Suspense } from "react"
-import { MediaEditPage } from "@/components/media-edit/media-edit-page"
-import { getMainTitle } from "@/components/media/media-labels"
 import { AppShell } from "@/components/shell/app-shell"
+import { mediaEditQueryOptions } from "@/features/media-suggestions/api/media-suggestions"
+import { MediaEditPage } from "@/features/media-suggestions/components/media-edit-page"
+import { mediaQueryOptions } from "@/features/media/api/medias"
+import { getMainTitle } from "@/features/media/lib/media-labels"
 import { getPermissions } from "@/lib/permissions"
-import { mediaEditQueryOptions } from "@/lib/queries/media-edit"
-import { mediaQueryOptions } from "@/lib/queries/medias"
 import { m } from "@/paraglide/messages"
 
 export const Route = createFileRoute("/media/$mediaId_/edit")({

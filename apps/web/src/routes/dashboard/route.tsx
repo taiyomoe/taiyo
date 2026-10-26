@@ -1,7 +1,7 @@
 import { Outlet, createFileRoute, redirect } from "@tanstack/react-router"
-import { DASHBOARD_SECTIONS } from "@/components/dashboard/dashboard-sections"
 import { AppShell } from "@/components/shell/app-shell"
-import { canOpenDashboard } from "@/lib/dashboard"
+import { canOpenDashboard } from "@/features/dashboard/lib/dashboard"
+import { DASHBOARD_SECTIONS } from "@/features/dashboard/lib/dashboard-sections"
 import { getPermissions } from "@/lib/permissions"
 
 export const Route = createFileRoute("/dashboard")({

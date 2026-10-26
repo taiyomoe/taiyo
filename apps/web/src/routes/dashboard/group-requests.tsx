@@ -32,11 +32,11 @@ import { colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { createFileRoute, Link, redirect } from "@tanstack/react-router"
 import { useState } from "react"
-import type { GroupCreationRequest, OwnershipRequest } from "@/lib/queries/groups"
-import { AuthAlert } from "@/components/auth/auth-alert"
-import { TimeAgo } from "@/components/chapters/chapter-meta"
-import { DashboardPage } from "@/components/dashboard/dashboard-page"
-import { GroupAvatar, PersonAvatar } from "@/components/groups/group-avatar"
+import type { GroupCreationRequest, OwnershipRequest } from "@/features/groups/api/groups"
+import { ErrorAlert } from "@/components/feedback/error-alert"
+import { DashboardPage } from "@/components/layout/dashboard-page"
+import { TimeAgo } from "@/features/chapters/components/chapter-meta"
+import { GroupAvatar, PersonAvatar } from "@/features/groups/components/group-avatar"
 import { api } from "@/lib/api"
 import { ensureSuccess, unwrapEnvelope } from "@/lib/envelope"
 import { getErrorMessage } from "@/lib/errors"
@@ -435,7 +435,7 @@ function ReviewActions({
 
   return (
     <>
-      {rejecting ? null : <AuthAlert message={error} />}
+      {rejecting ? null : <ErrorAlert message={error} />}
       <div sx={styles.actions}>
         <Button
           disabled={pending}
@@ -462,7 +462,7 @@ function ReviewActions({
             <DialogDescription>{m.review_reject_description()}</DialogDescription>
           </DialogHeader>
           <DialogPanel>
-            <AuthAlert message={error} />
+            <ErrorAlert message={error} />
             <Field invalid={touched && missingNote}>
               <FieldLabel>{m.review_reject_note()}</FieldLabel>
               <Textarea

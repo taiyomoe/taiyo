@@ -12,17 +12,17 @@ import {
 import { noop, useMutation, useSuspenseQuery } from "@tanstack/react-query"
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router"
 import { z } from "zod"
-import { ScheduleActions } from "@/components/chapters/schedule-actions"
-import { DashboardPage, ListCard } from "@/components/dashboard/dashboard-page"
+import { DashboardPage, ListCard } from "@/components/layout/dashboard-page"
 import { PagePagination } from "@/components/pagination/page-pagination"
-import { SubmissionRow } from "@/components/submissions/submission-row"
-import { api } from "@/lib/api"
-import { ensureSuccess } from "@/lib/envelope"
+import { ScheduleActions } from "@/features/chapters/components/schedule-actions"
 import {
   mySubmissionsQueryOptions,
   SUBMISSIONS_PER_PAGE,
   useInvalidateReview,
-} from "@/lib/queries/submissions"
+} from "@/features/uploads/api/submissions"
+import { SubmissionRow } from "@/features/uploads/components/submission-row"
+import { api } from "@/lib/api"
+import { ensureSuccess } from "@/lib/envelope"
 import { m } from "@/paraglide/messages"
 
 const searchSchema = z.object({

@@ -3,7 +3,7 @@ import { colors, font, radius, text } from "@taiyomoe/ui/styles/tokens.stylex"
 import { noop, useSuspenseQuery } from "@tanstack/react-query"
 import { createFileRoute, getRouteApi } from "@tanstack/react-router"
 import { z } from "zod"
-import { searchMediasQueryOptions } from "@/lib/queries/medias"
+import { searchMediasQueryOptions } from "@/features/media/api/medias"
 import { m } from "@/paraglide/messages"
 
 const PER_PAGE = 20

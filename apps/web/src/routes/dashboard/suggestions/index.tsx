@@ -10,11 +10,14 @@ import {
 import { noop, useSuspenseQuery } from "@tanstack/react-query"
 import { createFileRoute, Link, redirect, useNavigate } from "@tanstack/react-router"
 import { z } from "zod"
-import { DashboardPage, ListCard } from "@/components/dashboard/dashboard-page"
-import { SuggestionRow } from "@/components/media-edit/suggestion-row"
+import { DashboardPage, ListCard } from "@/components/layout/dashboard-page"
 import { PagePagination } from "@/components/pagination/page-pagination"
+import {
+  suggestionQueueQueryOptions,
+  SUGGESTIONS_PER_PAGE,
+} from "@/features/media-suggestions/api/media-suggestions"
+import { SuggestionRow } from "@/features/media-suggestions/components/suggestion-row"
 import { getPermissions } from "@/lib/permissions"
-import { suggestionQueueQueryOptions, SUGGESTIONS_PER_PAGE } from "@/lib/queries/media-edit"
 import { m } from "@/paraglide/messages"
 
 const searchSchema = z.object({

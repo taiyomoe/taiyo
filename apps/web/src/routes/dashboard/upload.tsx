@@ -49,18 +49,20 @@ import { colors, motion, radius, shadows } from "@taiyomoe/ui/styles/tokens.styl
 import { useQuery } from "@tanstack/react-query"
 import { createFileRoute } from "@tanstack/react-router"
 import { useDeferredValue, useEffect, useMemo, useState } from "react"
-import { DashboardPage } from "@/components/dashboard/dashboard-page"
 import { DateTimePicker, formatDateTime } from "@/components/fields/date-time-picker"
+import { LanguagePicker } from "@/components/fields/language-picker"
+import { DashboardPage } from "@/components/layout/dashboard-page"
+import { type GroupOption, GroupPicker } from "@/features/groups/components/group-picker"
+import { searchMediasQueryOptions } from "@/features/media/api/medias"
+import { pendingSubmissionsCountQueryOptions } from "@/features/uploads/api/submissions"
+import { SortablePageGrid } from "@/features/uploads/components/sortable-page-grid"
 import {
-  type GroupOption,
-  GroupPicker,
-  LanguagePicker,
-  type MediaOption,
-} from "@/components/submissions/pickers"
-import { SortablePageGrid } from "@/components/submissions/sortable-page-grid"
-import { api } from "@/lib/api"
-import { hostOf, isWebUrl, NUMBER_TOKEN, resolveLink } from "@/lib/chapter-batch/links"
-import { parseChapterName } from "@/lib/chapter-batch/parse-chapter-name"
+  hostOf,
+  isWebUrl,
+  NUMBER_TOKEN,
+  resolveLink,
+} from "@/features/uploads/lib/chapter-batch/links"
+import { parseChapterName } from "@/features/uploads/lib/chapter-batch/parse-chapter-name"
 import {
   DEFAULT_RELEASE,
   planRelease,
@@ -69,21 +71,22 @@ import {
   type ReleaseMode,
   type ReleaseSettings,
   type ReleaseUnit,
-} from "@/lib/chapter-batch/release"
+} from "@/features/uploads/lib/chapter-batch/release"
 import {
   type ChapterSource,
   type DroppedFile,
   filesFromInput,
   readChapterSources,
   walk,
-} from "@/lib/chapter-batch/sources"
-import { uploadStore } from "@/lib/chapter-batch/upload-store"
+} from "@/features/uploads/lib/chapter-batch/sources"
+import { uploadStore } from "@/features/uploads/lib/chapter-batch/upload-store"
+import { useNow } from "@/hooks/use-now"
+import { api } from "@/lib/api"
 import { unwrap } from "@/lib/envelope"
 import { usePermissions } from "@/lib/permissions"
-import { searchMediasQueryOptions } from "@/lib/queries/medias"
-import { pendingSubmissionsCountQueryOptions } from "@/lib/queries/submissions"
-import { useNow } from "@/lib/use-now"
 import { m } from "@/paraglide/messages"
+
+type MediaOption = { id: string; title: string; type: string }
 
 type Row = {
   key: string

@@ -11,10 +11,18 @@ import { colors, radius, shadows } from "@taiyomoe/ui/styles/tokens.stylex"
 import { noop, useMutation, useSuspenseQuery } from "@tanstack/react-query"
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router"
 import { useState } from "react"
-import { AuthAlert } from "@/components/auth/auth-alert"
-import { TimeAgo, Uploader } from "@/components/chapters/chapter-meta"
-import { DashboardPage } from "@/components/dashboard/dashboard-page"
-import { FieldEditor } from "@/components/media-edit/media-edit-fields"
+import { ErrorAlert } from "@/components/feedback/error-alert"
+import { DashboardPage } from "@/components/layout/dashboard-page"
+import { TimeAgo, Uploader } from "@/features/chapters/components/chapter-meta"
+import {
+  type MediaEditChanges,
+  type MediaSuggestionDetail,
+  suggestionQueryOptions,
+  useInvalidateMedia,
+} from "@/features/media-suggestions/api/media-suggestions"
+import { FieldEditor } from "@/features/media-suggestions/components/media-edit-fields"
+import { FIELD_PREVIEWS } from "@/features/media-suggestions/components/media-edit-preview"
+import { SUGGESTION_STATUS } from "@/features/media-suggestions/components/suggestion-row"
 import {
   FIELD_LABELS,
   getFieldsError,
@@ -22,19 +30,11 @@ import {
   sameField,
   toChanges,
   toDraft,
-} from "@/components/media-edit/media-edit-model"
-import { FIELD_PREVIEWS } from "@/components/media-edit/media-edit-preview"
-import { SUGGESTION_STATUS } from "@/components/media-edit/suggestion-row"
+} from "@/features/media-suggestions/lib/media-edit-model"
 import { api } from "@/lib/api"
 import { ensureSuccess } from "@/lib/envelope"
 import { getErrorMessage } from "@/lib/errors"
 import { getPermissions } from "@/lib/permissions"
-import {
-  type MediaEditChanges,
-  type MediaSuggestionDetail,
-  suggestionQueryOptions,
-  useInvalidateMedia,
-} from "@/lib/queries/media-edit"
 import { m } from "@/paraglide/messages"
 
 const styles = stylex.create({
@@ -387,7 +387,7 @@ export const Route = createFileRoute("/dashboard/suggestions/$suggestionId")({
         </div>
         {reviewing ? (
           <div sx={styles.footer}>
-            <AuthAlert message={review.isError ? getErrorMessage(review.error) : null} />
+            <ErrorAlert message={review.isError ? getErrorMessage(review.error) : null} />
             <Field invalid={noteRequired && note.trim() === ""}>
               <FieldLabel>{m.suggestion_review_note()}</FieldLabel>
               <Textarea

@@ -9,21 +9,21 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router"
 import { Suspense, useDeferredValue } from "react"
 import { range } from "remeda"
 import { z } from "zod"
-import type { Group } from "@/lib/queries/groups"
-import type { Session } from "@/lib/queries/session"
-import { ClaimGroupDialog } from "@/components/groups/claim-group-dialog"
-import { GroupAvatar, PersonAvatar } from "@/components/groups/group-avatar"
-import { LatestList } from "@/components/home/latest-update-layouts"
+import type { Group } from "@/features/groups/api/groups"
+import type { Session } from "@/lib/session"
 import { PagePagination } from "@/components/pagination/page-pagination"
 import { sceneFont } from "@/components/scene/scene.stylex"
 import { AppShell } from "@/components/shell/app-shell"
-import { usePermissions } from "@/lib/permissions"
+import { LatestList } from "@/features/chapters/components/latest-update-layouts"
 import {
   groupChaptersQueryOptions,
   groupMembersQueryOptions,
   groupQueryOptions,
   myOwnershipRequestsQueryOptions,
-} from "@/lib/queries/groups"
+} from "@/features/groups/api/groups"
+import { ClaimGroupDialog } from "@/features/groups/components/claim-group-dialog"
+import { GroupAvatar, PersonAvatar } from "@/features/groups/components/group-avatar"
+import { usePermissions } from "@/lib/permissions"
 import { getContentRatings, useSettings } from "@/lib/settings"
 import { m } from "@/paraglide/messages"
 

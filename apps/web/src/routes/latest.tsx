@@ -1,8 +1,8 @@
 import { noop } from "@tanstack/react-query"
 import { createFileRoute, redirect } from "@tanstack/react-router"
 import { z } from "zod"
-import { LATEST_MEDIAS_PER_PAGE, LatestPage } from "@/components/latest/latest-page"
-import { latestMediaUpdatesQueryOptions } from "@/lib/queries/chapters"
+import { latestMediaUpdatesQueryOptions } from "@/features/chapters/api/chapters"
+import { LATEST_MEDIAS_PER_PAGE, LatestPage } from "@/features/latest/components/latest-page"
 import { getContentRatings } from "@/lib/settings"
 import { m } from "@/paraglide/messages"
 

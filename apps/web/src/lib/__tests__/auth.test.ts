@@ -2,7 +2,7 @@ import { QueryClient } from "@tanstack/react-query"
 import { describe, expect, it } from "vitest"
 import { m } from "../../paraglide/messages"
 import { type AuthClient, type AuthError, createAuthActions, getAuthErrorMessage } from "../auth"
-import { sessionQueryOptions } from "../queries/session"
+import { sessionQueryOptions } from "../session"
 
 const setup = (error: AuthError | null = null, callbackURL?: string) => {
   const calls: Array<{ method: string; args: unknown[] }> = []
