@@ -154,9 +154,10 @@ OpenAPI-generated client.
   generic.** If either is simplified away, this whole client silently degrades to
   `any` and no test in the repo fails. The full rationale is in
   `docs/engineering-notes.md`.
-- **Query options live in `src/lib/queries/`**, one `queryOptions` factory per
-  endpoint, and are handed to routes through the route's `context` function —
-  never duplicated between a loader and a component. See **Router, query and
+- **Query options live in their feature's `api/` folder**
+  (`src/features/<feature>/api/`), one `queryOptions` factory per endpoint, and
+  are handed to routes through the route's `context` function — never
+  duplicated between a loader and a component. See **Router, query and
   prefetching** below.
 - **CORS.** The API only honours `credentials: "include"` for origins listed in
   its `CORS_ALLOWED_ORIGINS`, which `pnpm bootstrap` points at this checkout's
@@ -196,7 +197,7 @@ OpenAPI-generated client.
     loaderDeps: ({ search }) => ({ page: search.page }),
     context: ({ deps }) => ({ titlesQueryOptions: titlesQueryOptions(deps) }),
     loader: ({ context }) => context.queryClient.ensureQueryData(context.titlesQueryOptions),
-    component: Titles,
+    component: TitlesPage,
   })
   ```
 
