@@ -4,10 +4,11 @@ import { notFound } from "next/navigation"
 import { UpdateMediaTabs } from "./_components/UpdateMediaTabs"
 
 type Props = {
-  params: { mediaId: string }
+  params: Promise<{ mediaId: string }>
 }
 
-export default async function Page({ params }: Props) {
+export default async function Page(props: Props) {
+  const params = await props.params
   const media = await db.media.findFirst({
     include: {
       covers: { where: { deletedAt: null } },

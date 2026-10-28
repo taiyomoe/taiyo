@@ -7,6 +7,8 @@ const withNextIntl = createNextIntlPlugin()
 // Import env files to validate at build time. Use jiti so we can load .ts files in here.
 createJiti(fileURLToPath(import.meta.url))("./src/env")
 
+const cdnUrl = new URL(process.env.NEXT_PUBLIC_CDN_URL)
+
 /** @type {import("next").NextConfig} */
 const config = {
   reactStrictMode: true,
@@ -19,8 +21,8 @@ const config = {
         pathname: "/**",
       },
       {
-        protocol: "https",
-        hostname: "pub-**.r2.dev",
+        protocol: cdnUrl.protocol.slice(0, -1),
+        hostname: cdnUrl.hostname,
         pathname: "/**",
       },
       {
@@ -76,8 +78,7 @@ const config = {
     "@taiyomoe/utils",
   ],
 
-  /** We already do linting and typechecking as separate tasks in CI */
-  eslint: { ignoreDuringBuilds: true },
+  /** We already do typechecking as a separate task in CI */
   typescript: { ignoreBuildErrors: true },
 }
 

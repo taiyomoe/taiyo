@@ -1,6 +1,7 @@
 import { DatePicker as BaseDatePicker } from "@nextui-org/date-picker"
 import { extendVariants } from "@nextui-org/react"
 
+// extendVariants types `ref` as Ref<ReactElement>, which rejects react-hook-form refs under React 19
 export const DatePicker = extendVariants(BaseDatePicker, {
   variants: {
     labelPlacement: {
@@ -19,4 +20,4 @@ export const DatePicker = extendVariants(BaseDatePicker, {
       },
     },
   },
-})
+}) as typeof BaseDatePicker

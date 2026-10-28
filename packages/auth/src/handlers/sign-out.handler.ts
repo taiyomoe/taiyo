@@ -14,7 +14,7 @@ export const signOutHandler: NonNullable<NextAuthConfig["events"]>["signOut"] =
 
     await logsClient.users.auth.insert({
       type: "signedOut",
-      ip: getIp(),
+      ip: await getIp(),
       userId: message.session.userId,
     })
   }

@@ -1,6 +1,7 @@
 import { Textarea as BaseTextArea } from "@nextui-org/input"
 import { extendVariants } from "@nextui-org/react"
 
+// extendVariants types `ref` as Ref<ReactElement>, which rejects react-hook-form refs under React 19
 export const TextArea = extendVariants(BaseTextArea, {
   variants: {
     labelPlacement: {
@@ -22,4 +23,4 @@ export const TextArea = extendVariants(BaseTextArea, {
   defaultVariants: {
     labelPlacement: "outside",
   },
-})
+}) as typeof BaseTextArea

@@ -64,7 +64,7 @@ export const ChaptersListStoreProvider = ({
   children,
   value,
 }: { children: ReactNode; value: Props }) => {
-  const storeRef = useRef<Store>()
+  const storeRef = useRef<Store>(null)
 
   if (!storeRef.current) {
     storeRef.current = chaptersListStore(value)

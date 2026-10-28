@@ -9,12 +9,12 @@ import { scansSearchParamsCache } from "./_components/scans-search-params"
 import { ScansTable } from "./_components/scans-table"
 
 type Props = {
-  searchParams: SearchParams
+  searchParams: Promise<SearchParams>
 }
 
 export default async function Page(props: Props) {
   const searchParams = sanitizeSearchParams(
-    props.searchParams,
+    await props.searchParams,
     scansSearchParamsCache,
     getScansListSchema,
   )

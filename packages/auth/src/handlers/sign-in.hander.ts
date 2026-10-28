@@ -10,7 +10,7 @@ export const signInHandler: NonNullable<NextAuthConfig["events"]>["signIn"] =
 
     await logsClient.users.auth.insert({
       type: "signedIn",
-      ip: getIp(),
+      ip: await getIp(),
       userId: user.id,
     })
   }

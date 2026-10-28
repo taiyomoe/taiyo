@@ -3,10 +3,11 @@ import { notFound } from "next/navigation"
 import { UpdateScanForm } from "~/components/forms/scans/update/update-scan-form"
 
 type Props = {
-  params: { scanId: string }
+  params: Promise<{ scanId: string }>
 }
 
-export default async function Page({ params }: Props) {
+export default async function Page(props: Props) {
+  const params = await props.params
   const scan = await db.scan.findFirst({
     omit: {
       createdAt: true,

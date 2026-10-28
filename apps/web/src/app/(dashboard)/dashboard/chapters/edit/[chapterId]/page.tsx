@@ -3,10 +3,11 @@ import { notFound } from "next/navigation"
 import { UpdateChapterForm } from "~/components/forms/chapters/update/update-chapter-form"
 
 type Props = {
-  params: { chapterId: string }
+  params: Promise<{ chapterId: string }>
 }
 
-export default async function Page({ params }: Props) {
+export default async function Page(props: Props) {
+  const params = await props.params
   const chapter = await db.mediaChapter.findFirst({
     include: { scans: true },
     where: { id: params.chapterId, deletedAt: null },

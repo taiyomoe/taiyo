@@ -22,7 +22,7 @@
     "pino-loki": "^2.4.0",
     "pino-pretty": "^13.0.0",
     "superjson": "^2.2.2",
-    "tsx": "^4.19.2",
+    "tsx": "^4.23.15",
     "zod": "^3.24.1"
   },
   "devDependencies": {

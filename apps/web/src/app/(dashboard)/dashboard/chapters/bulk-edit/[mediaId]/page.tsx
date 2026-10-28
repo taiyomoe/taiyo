@@ -3,10 +3,11 @@ import { notFound } from "next/navigation"
 import { BulkUpdateChaptersActionsTabs } from "./_components/bulk-update-chapters-actions-tabs"
 
 type Props = {
-  params: { mediaId: string }
+  params: Promise<{ mediaId: string }>
 }
 
-export default async function Page({ params }: Props) {
+export default async function Page(props: Props) {
+  const params = await props.params
   const media = await db.media.findUnique({
     select: { id: true },
     where: { id: params.mediaId, deletedAt: null },

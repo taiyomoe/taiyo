@@ -1,6 +1,7 @@
 import { Input as BaseInput } from "@nextui-org/input"
 import { extendVariants } from "@nextui-org/react"
 
+// extendVariants types `ref` as Ref<ReactElement>, which rejects react-hook-form refs under React 19
 export const Input = extendVariants(BaseInput, {
   variants: {
     labelPlacement: {
@@ -19,4 +20,4 @@ export const Input = extendVariants(BaseInput, {
       },
     },
   },
-})
+}) as typeof BaseInput

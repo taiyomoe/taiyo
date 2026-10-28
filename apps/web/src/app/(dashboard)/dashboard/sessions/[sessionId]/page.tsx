@@ -5,10 +5,11 @@ import Link from "next/link"
 import { DisplayTasks } from "./_components/display-tasks"
 
 type Props = {
-  params: { sessionId: string }
+  params: Promise<{ sessionId: string }>
 }
 
-export default async function Page({ params }: Props) {
+export default async function Page(props: Props) {
+  const params = await props.params
   const result = await db.task.findMany({
     where: { sessionId: params.sessionId },
   })

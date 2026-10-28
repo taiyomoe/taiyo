@@ -4,7 +4,7 @@ export const ImportMediaFormWarning = () => (
   <Alert
     className="space-y-2"
     color="warning"
-    title={
+    description={
       <div className="space-y-2">
         <p>
           Importar é uma ação que pode levar algum tempo dependendo da

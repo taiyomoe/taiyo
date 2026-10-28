@@ -16,7 +16,7 @@ export const createUserHandler: NonNullable<
   await db.userLibrary.create({ data: { userId: user.id } })
   await logsClient.users.auth.insert({
     type: "registered",
-    ip: getIp(),
+    ip: await getIp(),
     userId: user.id,
   })
   await UsersIndexService.sync(db, [user.id])

@@ -9,12 +9,12 @@ import { mediasSearchParamsCache } from "./_components/medias-search-params"
 import { MediasTable } from "./_components/medias-table"
 
 type Props = {
-  searchParams: SearchParams
+  searchParams: Promise<SearchParams>
 }
 
 export default async function Page(props: Props) {
   const searchParams = sanitizeSearchParams(
-    props.searchParams,
+    await props.searchParams,
     mediasSearchParamsCache,
     getMediasListSchema,
   )

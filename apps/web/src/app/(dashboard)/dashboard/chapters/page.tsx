@@ -9,12 +9,12 @@ import { chaptersSearchParamsCache } from "./_components/chapters-search-params"
 import { ChaptersTable } from "./_components/chapters-table"
 
 type Props = {
-  searchParams: SearchParams
+  searchParams: Promise<SearchParams>
 }
 
 export default async function Page(props: Props) {
   const searchParams = sanitizeSearchParams(
-    props.searchParams,
+    await props.searchParams,
     chaptersSearchParamsCache,
     getChaptersListSchema,
   )
