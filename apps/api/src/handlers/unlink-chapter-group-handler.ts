@@ -1,6 +1,8 @@
+import { chapterGroupAudit } from "@taiyomoe/audit"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
 import { checkChapter } from "../middlewares/check-chapter-middleware"
 import { validateParam } from "../middlewares/validate-param-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
@@ -38,6 +40,10 @@ export const unlinkChapterGroupHandler = new Hono().delete(
       }),
     },
   }),
+  audited(chapterGroupAudit.UNLINK, (c) => ({
+    id: c.req.param("id"),
+    groupId: c.req.param("groupId"),
+  })),
   withAuth(),
   validateParam(paramSchema),
   checkChapter({ unpublished: true }),

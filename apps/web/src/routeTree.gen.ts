@@ -20,6 +20,7 @@ import { Route as TitlesRouteImport } from './routes/titles'
 import { Route as AuthSignInRouteImport } from './routes/auth/sign-in'
 import { Route as AuthSignUpRouteImport } from './routes/auth/sign-up'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
+import { Route as DashboardActivityLogRouteImport } from './routes/dashboard/activity-log'
 import { Route as DashboardChapterReviewsRouteImport } from './routes/dashboard/chapter-reviews'
 import { Route as DashboardGroupRequestsRouteImport } from './routes/dashboard/group-requests'
 import { Route as DashboardInvitationsRouteImport } from './routes/dashboard/invitations'
@@ -90,6 +91,11 @@ const AuthSignUpRoute = AuthSignUpRouteImport.update({
 const DashboardIndexRoute = DashboardIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardActivityLogRoute = DashboardActivityLogRouteImport.update({
+  id: '/activity-log',
+  path: '/activity-log',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
 const DashboardChapterReviewsRoute = DashboardChapterReviewsRouteImport.update({
@@ -186,6 +192,7 @@ export interface FileRoutesByFullPath {
   '/titles': typeof TitlesRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
+  '/dashboard/activity-log': typeof DashboardActivityLogRoute
   '/dashboard/chapter-reviews': typeof DashboardChapterReviewsRoute
   '/dashboard/group-requests': typeof DashboardGroupRequestsRoute
   '/dashboard/invitations': typeof DashboardInvitationsRoute
@@ -214,6 +221,7 @@ export interface FileRoutesByTo {
   '/titles': typeof TitlesRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
+  '/dashboard/activity-log': typeof DashboardActivityLogRoute
   '/dashboard/chapter-reviews': typeof DashboardChapterReviewsRoute
   '/dashboard/group-requests': typeof DashboardGroupRequestsRoute
   '/dashboard/invitations': typeof DashboardInvitationsRoute
@@ -244,6 +252,7 @@ export interface FileRoutesById {
   '/titles': typeof TitlesRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
+  '/dashboard/activity-log': typeof DashboardActivityLogRoute
   '/dashboard/chapter-reviews': typeof DashboardChapterReviewsRoute
   '/dashboard/group-requests': typeof DashboardGroupRequestsRoute
   '/dashboard/invitations': typeof DashboardInvitationsRoute
@@ -275,6 +284,7 @@ export interface FileRouteTypes {
     | '/titles'
     | '/auth/sign-in'
     | '/auth/sign-up'
+    | '/dashboard/activity-log'
     | '/dashboard/chapter-reviews'
     | '/dashboard/group-requests'
     | '/dashboard/invitations'
@@ -303,6 +313,7 @@ export interface FileRouteTypes {
     | '/titles'
     | '/auth/sign-in'
     | '/auth/sign-up'
+    | '/dashboard/activity-log'
     | '/dashboard/chapter-reviews'
     | '/dashboard/group-requests'
     | '/dashboard/invitations'
@@ -332,6 +343,7 @@ export interface FileRouteTypes {
     | '/titles'
     | '/auth/sign-in'
     | '/auth/sign-up'
+    | '/dashboard/activity-log'
     | '/dashboard/chapter-reviews'
     | '/dashboard/group-requests'
     | '/dashboard/invitations'
@@ -444,6 +456,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/dashboard/'
       preLoaderRoute: typeof DashboardIndexRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/activity-log': {
+      id: '/dashboard/activity-log'
+      path: '/activity-log'
+      fullPath: '/dashboard/activity-log'
+      preLoaderRoute: typeof DashboardActivityLogRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
     '/dashboard/chapter-reviews': {
@@ -576,6 +595,7 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
 )
 
 interface DashboardRouteRouteChildren {
+  DashboardActivityLogRoute: typeof DashboardActivityLogRoute
   DashboardChapterReviewsRoute: typeof DashboardChapterReviewsRoute
   DashboardGroupRequestsRoute: typeof DashboardGroupRequestsRoute
   DashboardInvitationsRoute: typeof DashboardInvitationsRoute
@@ -591,6 +611,7 @@ interface DashboardRouteRouteChildren {
 }
 
 const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
+  DashboardActivityLogRoute: DashboardActivityLogRoute,
   DashboardChapterReviewsRoute: DashboardChapterReviewsRoute,
   DashboardGroupRequestsRoute: DashboardGroupRequestsRoute,
   DashboardInvitationsRoute: DashboardInvitationsRoute,

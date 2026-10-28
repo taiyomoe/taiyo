@@ -1,3 +1,4 @@
+import { mediaAudit } from "@taiyomoe/audit"
 import { config } from "@taiyomoe/config"
 import {
   MEDIA_COUNTRIES_OF_ORIGIN,
@@ -15,6 +16,7 @@ import { describeRoute, resolver } from "hono-openapi"
 import { pick } from "radashi"
 import z from "zod"
 import { putImage } from "../image-store"
+import { audited } from "../middlewares/audited-middleware"
 import { checkImages } from "../middlewares/check-images-middleware"
 import { rateLimit } from "../middlewares/rate-limit-middleware"
 import { validateFormData } from "../middlewares/validate-form-data-middleware"
@@ -223,6 +225,7 @@ export const createMediaHandler = new Hono().post(
       }),
     },
   }),
+  audited(mediaAudit.CREATE),
   withAuth("media.create"),
   rateLimit({ prefix: "create-media", windowMs: 60_000, limit: 10 }),
   validateFormData(createMediaSchema),
@@ -347,6 +350,10 @@ export const createMediaHandler = new Hono().post(
 
       await db.insertInto("banners").values(bannerRows).execute()
     }
+
+    c.var.audit.set({
+      target: { id: mediaId, title: body.titles.find((title) => title.main)?.title },
+    })
 
     return c.ok({ id: mediaId })
   },

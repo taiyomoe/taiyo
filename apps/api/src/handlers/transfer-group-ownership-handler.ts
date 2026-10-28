@@ -1,7 +1,9 @@
+import { groupOwnershipAudit } from "@taiyomoe/audit"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
 import { transferGroupOwnership } from "../group-membership"
+import { audited } from "../middlewares/audited-middleware"
 import { checkGroup } from "../middlewares/check-group-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
@@ -43,6 +45,7 @@ export const transferGroupOwnershipHandler = new Hono().post(
       }),
     },
   }),
+  audited(groupOwnershipAudit.TRANSFER),
   withAuth(),
   validateJson(transferSchema),
   checkGroup(),
@@ -50,6 +53,8 @@ export const transferGroupOwnershipHandler = new Hono().post(
   async (c) => {
     const { actor, db, group, user } = c.var
     const { toUserId } = c.var.json
+
+    c.var.audit.set({ target: { toUserId } })
 
     if (toUserId === user.id) {
       return c.fail("VALIDATION_ERROR", [

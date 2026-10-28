@@ -1,6 +1,8 @@
+import { groupOwnershipAudit } from "@taiyomoe/audit"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
 import { checkOwnershipRequest } from "../middlewares/check-ownership-request-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
@@ -30,11 +32,14 @@ export const cancelOwnershipRequestHandler = new Hono().delete(
       }),
     },
   }),
+  audited(groupOwnershipAudit.REQUEST_CANCEL),
   withAuth(),
   checkOwnershipRequest(),
   withTransaction,
   async (c) => {
     const { db, ownershipRequest, user } = c.var
+
+    c.var.audit.set({ target: { groupId: ownershipRequest.groupId } })
 
     if (ownershipRequest.userId !== user.id) {
       return c.fail("FORBIDDEN")

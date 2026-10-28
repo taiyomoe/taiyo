@@ -1,12 +1,15 @@
+import { chapterReviewAudit } from "@taiyomoe/audit"
 import { config } from "@taiyomoe/config"
 import { sql } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
 import { checkChapter } from "../middlewares/check-chapter-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
+import { auditChanges } from "../utils/audit"
 import { readyCreatedAt, readyStatus } from "../utils/chapter-release"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope, languageSchema } from "../utils/schemas"
@@ -63,6 +66,7 @@ export const approveChapterHandler = new Hono().post(
       }),
     },
   }),
+  audited(chapterReviewAudit.APPROVE),
   withAuth("chapter.review"),
   validateJson(approveSchema),
   checkChapter({ unpublished: true }),
@@ -70,6 +74,15 @@ export const approveChapterHandler = new Hono().post(
   async (c) => {
     const { chapter, db, user } = c.var
     const body = c.var.json
+    const edits = {
+      ...(body.title === undefined ? {} : { title: body.title }),
+      ...(body.number === undefined ? {} : { number: body.number }),
+      ...(body.volume === undefined ? {} : { volume: body.volume }),
+      ...(body.language === undefined ? {} : { language: body.language }),
+    }
+
+    c.var.audit.set({ target: { mediaId: chapter.mediaId } })
+
     const locked = await db
       .selectFrom("chapters")
       .select(["status", "pages", "isExternal"])
@@ -111,13 +124,12 @@ export const approveChapterHandler = new Hono().post(
       }
     }
 
+    c.var.audit.set({ changes: auditChanges(chapter, edits) })
+
     await db
       .updateTable("chapters")
       .set({
-        ...(body.title === undefined ? {} : { title: body.title }),
-        ...(body.number === undefined ? {} : { number: body.number }),
-        ...(body.volume === undefined ? {} : { volume: body.volume }),
-        ...(body.language === undefined ? {} : { language: body.language }),
+        ...edits,
         status: readyStatus,
         reviewerId: user.id,
         reviewedAt: sql<Date>`CURRENT_TIMESTAMP`,

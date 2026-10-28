@@ -1,7 +1,9 @@
+import { chapterAudit } from "@taiyomoe/audit"
 import { config } from "@taiyomoe/config"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
 import { authorizeChapter } from "../middlewares/authorize-chapter-middleware"
 import { checkChapter } from "../middlewares/check-chapter-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
@@ -44,6 +46,7 @@ export const reorderChapterPagesHandler = new Hono().patch(
       }),
     },
   }),
+  audited(chapterAudit.PAGES_REORDER),
   withAuth(),
   validateJson(reorderSchema),
   checkChapter({ unpublished: true }),
@@ -52,6 +55,9 @@ export const reorderChapterPagesHandler = new Hono().patch(
   async (c) => {
     const { chapter, db } = c.var
     const { pageIds } = c.var.json
+
+    c.var.audit.set({ target: { mediaId: chapter.mediaId } })
+
     const locked = await db
       .selectFrom("chapters")
       .select("pages")

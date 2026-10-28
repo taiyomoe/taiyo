@@ -10,8 +10,8 @@ export const publishScheduledChapters = async ({ db }: PublisherDeps) => {
     .where("status", "=", "SCHEDULED")
     .where("deletedAt", "is", null)
     .where(sql<boolean>`"publishAt" <= (CURRENT_TIMESTAMP at time zone 'UTC')`)
-    .returning("id")
+    .returning(["id", "mediaId"])
     .execute()
 
-  return { published: published.length }
+  return { published: published.length, chapters: published }
 }

@@ -19,7 +19,7 @@ export const reapStaleChapterUploads = async (
     .where("isExternal", "=", false)
     .where("deletedAt", "is", null)
     .where(sql<boolean>`"createdAt" < ${cutoff}::timestamptz`)
-    .returning("id")
+    .returning(["id", "mediaId"])
     .execute()
   const stale = await db
     .selectFrom("tasks")
@@ -34,12 +34,15 @@ export const reapStaleChapterUploads = async (
     .execute()
 
   if (stale.length === 0) {
-    return { reaped: 0, abandoned: abandoned.length }
+    return { reaped: 0, abandoned: abandoned.length, abandonedChapters: abandoned, tasks: [] }
   }
 
-  const keys = stale.flatMap((t) =>
-    chapterUploadManifestSchema.parse(t.payload).pages.map((p) => ({ Key: p.stagingKey })),
-  )
+  const tasks = stale.map((t) => ({
+    id: t.id,
+    status: t.status,
+    manifest: chapterUploadManifestSchema.parse(t.payload),
+  }))
+  const keys = tasks.flatMap((t) => t.manifest.pages.map((p) => ({ Key: p.stagingKey })))
 
   // DeleteObjects caps at 1000 keys/call; chunk. Deleting absent keys is a no-op.
   for (let i = 0; i < keys.length; i += 1000) {
@@ -62,5 +65,15 @@ export const reapStaleChapterUploads = async (
     )
     .execute()
 
-  return { reaped: stale.length, abandoned: abandoned.length }
+  return {
+    reaped: stale.length,
+    abandoned: abandoned.length,
+    abandonedChapters: abandoned,
+    tasks: tasks.map((t) => ({
+      id: t.id,
+      status: t.status,
+      chapterId: t.manifest.chapterId,
+      mediaId: t.manifest.mediaId,
+    })),
+  }
 }

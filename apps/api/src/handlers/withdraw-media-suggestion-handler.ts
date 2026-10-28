@@ -1,6 +1,8 @@
+import { mediaSuggestionAudit } from "@taiyomoe/audit"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
 import { checkMediaSuggestion } from "../middlewares/check-media-suggestion-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
@@ -30,11 +32,15 @@ export const withdrawMediaSuggestionHandler = new Hono().post(
       }),
     },
   }),
+  audited(mediaSuggestionAudit.WITHDRAW),
   withAuth(),
   checkMediaSuggestion(),
   withTransaction,
   async (c) => {
     const { can, db, mediaSuggestion, user } = c.var
+
+    c.var.audit.set({ target: { mediaId: mediaSuggestion.mediaId } })
+
     const locked = await db
       .selectFrom("mediaSuggestions")
       .select(["authorId", "status"])

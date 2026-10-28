@@ -1,12 +1,15 @@
+import { adminAudit } from "@taiyomoe/audit"
 import { sql } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
 import { deleteChapterPages } from "../chapter-pages"
+import { audited } from "../middlewares/audited-middleware"
 import { checkUser } from "../middlewares/check-user-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
+import { auditChanges } from "../utils/audit"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope, reviewNoteSchema } from "../utils/schemas"
 
@@ -56,6 +59,7 @@ export const banUserHandler = new Hono().post(
       }),
     },
   }),
+  audited(adminAudit.USER_BAN),
   withAuth(),
   validateJson(banSchema),
   checkUser({ includeBanned: true }),
@@ -68,7 +72,7 @@ export const banUserHandler = new Hono().post(
       return c.fail("FORBIDDEN")
     }
 
-    await db
+    const banned = await db
       .updateTable("users")
       .set({
         banned: true,
@@ -79,7 +83,10 @@ export const banUserHandler = new Hono().post(
             : sql<Date>`(CURRENT_TIMESTAMP at time zone 'UTC') + make_interval(days => ${days})`,
       })
       .where("id", "=", targetUser.id)
-      .execute()
+      .returning(["banned", "banReason", "banExpires"])
+      .executeTakeFirstOrThrow()
+
+    c.var.audit.set({ reason, changes: auditChanges(targetUser, banned) })
 
     const reviewedAt = sql<Date>`CURRENT_TIMESTAMP`
     const chapters = await db

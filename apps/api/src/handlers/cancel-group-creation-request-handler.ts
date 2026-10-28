@@ -1,6 +1,8 @@
+import { groupCreationAudit } from "@taiyomoe/audit"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
 import { checkGroupCreationRequest } from "../middlewares/check-group-creation-request-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
@@ -28,6 +30,7 @@ export const cancelGroupCreationRequestHandler = new Hono().delete(
       }),
     },
   }),
+  audited(groupCreationAudit.REQUEST_CANCEL),
   withAuth(),
   checkGroupCreationRequest(),
   withTransaction,

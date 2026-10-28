@@ -1,10 +1,13 @@
+import { bannerAudit } from "@taiyomoe/audit"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
 import { checkBanner } from "../middlewares/check-banner-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
+import { auditChanges } from "../utils/audit"
 import { getOpenApiResponses } from "../utils/openapi-helper"
 import { apiSuccessEnvelope, contentRatingSchema } from "../utils/schemas"
 
@@ -43,6 +46,7 @@ export const updateBannerHandler = new Hono().patch(
       }),
     },
   }),
+  audited(bannerAudit.UPDATE),
   withAuth("media.update"),
   validateJson(updateBannerSchema),
   checkBanner(),
@@ -50,6 +54,11 @@ export const updateBannerHandler = new Hono().patch(
   async (c) => {
     const { db, banner } = c.var
     const { contentRating } = c.var.json
+
+    c.var.audit.set({
+      target: { mediaId: banner.mediaId },
+      changes: auditChanges(banner, { contentRating }),
+    })
 
     await db.updateTable("banners").set({ contentRating }).where("id", "=", banner.id).execute()
 

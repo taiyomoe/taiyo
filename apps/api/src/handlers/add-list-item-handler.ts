@@ -1,6 +1,8 @@
+import { listAudit } from "@taiyomoe/audit"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
 import { checkList } from "../middlewares/check-list-middleware"
 import { requireListOwner } from "../middlewares/require-list-owner-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
@@ -49,6 +51,7 @@ export const addListItemHandler = new Hono().post(
       }),
     },
   }),
+  audited(listAudit.ITEM_ADD),
   withAuth(),
   validateJson(addItemSchema),
   checkList(),
@@ -92,6 +95,8 @@ export const addListItemHandler = new Hono().post(
 
       throw err
     }
+
+    c.var.audit.set({ target: { mediaId, position: finalPosition } })
 
     return c.ok({ listId: list.id, mediaId, position: finalPosition })
   },

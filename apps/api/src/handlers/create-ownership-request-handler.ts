@@ -1,7 +1,9 @@
+import { groupOwnershipAudit } from "@taiyomoe/audit"
 import { GROUP_OWNERSHIP_REQUEST_STATUSES } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
 import { checkGroup } from "../middlewares/check-group-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
@@ -49,6 +51,7 @@ export const createOwnershipRequestHandler = new Hono().post(
       }),
     },
   }),
+  audited(groupOwnershipAudit.REQUEST_CREATE, (c) => ({ groupId: c.req.param("id") })),
   withAuth("ownershipRequest.create"),
   validateJson(createOwnershipRequestSchema),
   checkGroup(),
@@ -90,6 +93,8 @@ export const createOwnershipRequestHandler = new Hono().post(
       })
       .returning(["id", "status"])
       .executeTakeFirstOrThrow()
+
+    c.var.audit.set({ target: { id: row.id } })
 
     return c.ok({ id: row.id, status: row.status })
   },

@@ -1,6 +1,8 @@
+import { listAudit } from "@taiyomoe/audit"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
 import { checkList } from "../middlewares/check-list-middleware"
 import { requireListOwner } from "../middlewares/require-list-owner-middleware"
 import { validateParam } from "../middlewares/validate-param-middleware"
@@ -32,6 +34,10 @@ export const removeListItemHandler = new Hono().delete(
       }),
     },
   }),
+  audited(listAudit.ITEM_REMOVE, (c) => ({
+    id: c.req.param("id"),
+    mediaId: c.req.param("mediaId"),
+  })),
   withAuth(),
   validateParam(paramSchema),
   checkList(),

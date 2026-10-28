@@ -1,7 +1,9 @@
+import { chapterAudit } from "@taiyomoe/audit"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
 import { deleteChapterPages } from "../chapter-pages"
+import { audited } from "../middlewares/audited-middleware"
 import { checkChapter } from "../middlewares/check-chapter-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
 import { withTransaction } from "../middlewares/with-transaction-middleware"
@@ -32,11 +34,15 @@ export const withdrawChapterHandler = new Hono().post(
       }),
     },
   }),
+  audited(chapterAudit.WITHDRAW),
   withAuth(),
   checkChapter({ unpublished: true }),
   withTransaction,
   async (c) => {
     const { can, chapter, db, s3, s3Bucket, user } = c.var
+
+    c.var.audit.set({ target: { mediaId: chapter.mediaId } })
+
     const target = await getChapterTarget(db, chapter)
 
     if (!can("chapter.view", target)) {

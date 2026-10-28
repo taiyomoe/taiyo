@@ -1,7 +1,9 @@
+import { mediaStaffAudit } from "@taiyomoe/audit"
 import { STAFF_ROLES } from "@taiyomoe/db"
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import z from "zod"
+import { audited } from "../middlewares/audited-middleware"
 import { checkMedia } from "../middlewares/check-media-middleware"
 import { validateJson } from "../middlewares/validate-json-middleware"
 import { withAuth } from "../middlewares/with-auth-middleware"
@@ -50,6 +52,7 @@ export const linkMediaStaffHandler = new Hono().post(
       }),
     },
   }),
+  audited(mediaStaffAudit.LINK),
   withAuth("media.update"),
   validateJson(linkMediaStaffSchema),
   checkMedia(),
@@ -57,6 +60,9 @@ export const linkMediaStaffHandler = new Hono().post(
   async (c) => {
     const { db, media } = c.var
     const { staffId, role } = c.var.json
+
+    c.var.audit.set({ target: { staffId, role } })
+
     const staff = await db
       .selectFrom("staffs")
       .select("id")
