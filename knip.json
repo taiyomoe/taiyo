@@ -2,6 +2,11 @@
   "$schema": "https://unpkg.com/knip@5/schema.json",
   "ignoreBinaries": ["infisical"],
   "ignoreWorkspaces": ["./packages/db"],
+  "workspaces": {
+    "apps/web": {
+      "entry": ["src/proxy.ts"]
+    }
+  },
   "ignoreDependencies": [
     "@taiyomoe/messages",
     "@types/global-types",
