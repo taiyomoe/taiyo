@@ -1,7 +1,13 @@
 import * as stylex from "@stylexjs/stylex"
-import { colors, font, motion, radius, shadows } from "@taiyomoe/ui/styles/tokens.stylex"
+import {
+  breakpoints,
+  colors,
+  font,
+  motion,
+  radius,
+  shadows,
+} from "@taiyomoe/ui/styles/tokens.stylex"
 
-const WIDE = "@media (width >= 72rem)"
 const styles = stylex.create({
   volumeItem: {
     flexShrink: 0,
@@ -32,7 +38,7 @@ const styles = stylex.create({
     transitionDuration: "150ms",
     transitionProperty: "background-color, box-shadow",
     transitionTimingFunction: motion.easeOut,
-    width: { [WIDE]: "100%", default: "auto" },
+    width: { [breakpoints.xl]: "100%", default: "auto" },
   },
   volumeName: {
     overflow: "hidden",
@@ -40,7 +46,7 @@ const styles = stylex.create({
     fontWeight: 600,
     textOverflow: "ellipsis",
     whiteSpace: "nowrap",
-    maxWidth: { [WIDE]: null, default: "14rem" },
+    maxWidth: { [breakpoints.xl]: null, default: "14rem" },
   },
   volumeNameActive: {
     color: colors.primary,

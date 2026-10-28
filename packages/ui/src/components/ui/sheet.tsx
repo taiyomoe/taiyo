@@ -4,7 +4,15 @@ import { mergeProps } from "@base-ui/react/merge-props"
 import { useRender } from "@base-ui/react/use-render"
 import * as stylex from "@stylexjs/stylex"
 import type { Sx } from "../../styles/sx"
-import { colors, consts, font, motion, radius, shadows, text } from "../../styles/tokens.stylex"
+import {
+  breakpoints,
+  colors,
+  font,
+  motion,
+  radius,
+  shadows,
+  text,
+} from "../../styles/tokens.stylex"
 import { cn } from "../../utils/cn"
 import { Close } from "../icons"
 import { Button } from "./button"
@@ -69,7 +77,7 @@ const styles = stylex.create({
       content: '""',
       display: {
         default: null,
-        "@media (width < 40rem)": "none",
+        [breakpoints.maxSm]: "none",
       },
       pointerEvents: "none",
       position: "absolute",
@@ -87,7 +95,7 @@ const styles = stylex.create({
     flexDirection: "column",
     paddingBottom: {
       default: "1rem",
-      [consts.sm]: "1.5rem",
+      [breakpoints.sm]: "1.5rem",
     },
   },
   footer: {
@@ -96,11 +104,11 @@ const styles = stylex.create({
     display: "flex",
     flexDirection: {
       default: "column-reverse",
-      [consts.sm]: "row",
+      [breakpoints.sm]: "row",
     },
     justifyContent: {
       default: null,
-      [consts.sm]: "flex-end",
+      [breakpoints.sm]: "flex-end",
     },
   },
   footerDefault: {
@@ -153,7 +161,7 @@ const viewportVariantStyles = stylex.create({
   inset: {
     padding: {
       default: null,
-      [consts.sm]: "1rem",
+      [breakpoints.sm]: "1rem",
     },
   },
 })
@@ -209,19 +217,19 @@ const popupVariantStyles = stylex.create({
   inset: {
     borderColor: {
       default: null,
-      [consts.sm]: colors.border,
+      [breakpoints.sm]: colors.border,
     },
     borderRadius: {
       default: null,
-      [consts.sm]: radius.xxl,
+      [breakpoints.sm]: radius.xxl,
     },
     borderStyle: {
       default: null,
-      [consts.sm]: "solid",
+      [breakpoints.sm]: "solid",
     },
     borderWidth: {
       default: null,
-      [consts.sm]: 1,
+      [breakpoints.sm]: 1,
     },
     "::before": {
       display: "none",

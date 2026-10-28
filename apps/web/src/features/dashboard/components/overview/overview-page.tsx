@@ -1,4 +1,5 @@
 import * as stylex from "@stylexjs/stylex"
+import { breakpoints } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useQuery } from "@tanstack/react-query"
 import type { dashboardOverviewQueryOptions } from "@/features/dashboard/api/overview"
 import type { DashboardRange } from "@/features/dashboard/lib/dashboard"
@@ -14,7 +15,7 @@ const styles = stylex.create({
     gap: "1.5rem",
     paddingInline: {
       default: "1.25rem",
-      "@media (width >= 48rem)": "2rem",
+      [breakpoints.md]: "2rem",
     },
     containerType: "inline-size",
     display: "flex",

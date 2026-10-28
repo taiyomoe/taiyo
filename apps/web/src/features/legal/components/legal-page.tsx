@@ -1,6 +1,6 @@
 import type { ReactNode } from "react"
 import * as stylex from "@stylexjs/stylex"
-import { font, radius } from "@taiyomoe/ui/styles/tokens.stylex"
+import { breakpoints, font, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { scene, sceneFont } from "@/components/scene/scene.stylex"
 import { LandingFooter } from "@/features/landing/components/landing-footer"
 import { LandingNav } from "@/features/landing/components/landing-nav"
@@ -24,7 +24,7 @@ const styles = stylex.create({
     gap: "clamp(2.5rem,5vw,4rem)",
     alignItems: "start",
     display: "grid",
-    gridTemplateColumns: { default: "1fr", "@media (width >= 64rem)": "16rem 1fr" },
+    gridTemplateColumns: { default: "1fr", [breakpoints.lg]: "16rem 1fr" },
     paddingBottom: "clamp(5rem,9vw,7.5rem)",
     paddingTop: "clamp(2.5rem,5vw,3.75rem)",
   },

@@ -3,7 +3,7 @@ import { Field as FieldPrimitive } from "@base-ui/react/field"
 import { mergeProps } from "@base-ui/react/merge-props"
 import * as stylex from "@stylexjs/stylex"
 import type { Sx } from "../../styles/sx"
-import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
+import { breakpoints, colors, radius, shadows } from "../../styles/tokens.stylex"
 import { cn } from "../../utils/cn"
 
 const styles = stylex.create({
@@ -25,7 +25,7 @@ const styles = stylex.create({
     display: "inline-flex",
     fontSize: {
       default: "1rem",
-      [consts.sm]: "0.875rem",
+      [breakpoints.sm]: "0.875rem",
     },
     outlineColor: `color-mix(in srgb, ${colors.ring} 24%, transparent)`,
     outlineOffset: 0,
@@ -70,7 +70,7 @@ const styles = stylex.create({
     outlineStyle: "none",
     minHeight: {
       default: "5.125rem",
-      [consts.sm]: "4.375rem",
+      [breakpoints.sm]: "4.375rem",
     },
     width: "100%",
     "::placeholder": {
@@ -82,14 +82,14 @@ const styles = stylex.create({
     paddingInline: "calc(0.625rem - 1px)",
     minHeight: {
       default: "4.875rem",
-      [consts.sm]: "4.125rem",
+      [breakpoints.sm]: "4.125rem",
     },
   },
   textareaLg: {
     paddingBlock: "calc(0.5rem - 1px)",
     minHeight: {
       default: "5.375rem",
-      [consts.sm]: "4.625rem",
+      [breakpoints.sm]: "4.625rem",
     },
   },
 })

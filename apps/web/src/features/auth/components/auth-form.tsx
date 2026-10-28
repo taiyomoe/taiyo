@@ -1,18 +1,18 @@
 import * as stylex from "@stylexjs/stylex"
+import { breakpoints } from "@taiyomoe/ui/styles/tokens.stylex"
 import { scene } from "@/components/scene/scene.stylex"
 import { AuthTabs } from "@/features/auth/components/auth-tabs"
 import { AuthScene } from "@/features/auth/components/scene/auth-scene"
 import { SignInForm } from "@/features/auth/components/sign-in-form"
 import { SignUpForm } from "@/features/auth/components/sign-up-form"
 
-const LG = "@media (width >= 64rem)"
 const styles = stylex.create({
   screen: {
     overflow: "hidden",
     backgroundColor: scene.night,
     color: scene.paper,
     display: "grid",
-    gridTemplateColumns: { [LG]: "1.05fr 0.95fr", default: null },
+    gridTemplateColumns: { [breakpoints.lg]: "1.05fr 0.95fr", default: null },
     height: "100svh",
   },
   panel: {

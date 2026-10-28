@@ -1,7 +1,5 @@
 import * as stylex from "@stylexjs/stylex"
-import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
-
-const TABLET = "@media (width >= 40rem)"
+import { breakpoints, colors } from "@taiyomoe/ui/styles/tokens.stylex"
 
 export const latestStyles = stylex.create({
   inline: {
@@ -13,7 +11,7 @@ export const latestStyles = stylex.create({
   chapterTitle: {
     overflow: "hidden",
     color: colors.mutedForeground,
-    display: { [TABLET]: "block", default: "none" },
+    display: { [breakpoints.sm]: "block", default: "none" },
     flexShrink: 100,
     fontSize: "0.8125rem",
     textOverflow: "ellipsis",

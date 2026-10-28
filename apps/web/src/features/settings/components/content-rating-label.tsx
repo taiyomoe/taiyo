@@ -1,5 +1,5 @@
 import * as stylex from "@stylexjs/stylex"
-import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
+import { colors, consts } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { ContentRating } from "@/lib/settings"
 import { mascotStyles } from "@/features/settings/components/mascot-styles"
 import { NsflMascot } from "@/features/settings/components/nsfl-mascot"
@@ -21,7 +21,7 @@ const styles = stylex.create({
   shimmer: {
     WebkitBackgroundClip: "text",
     backgroundPosition: "150% 0",
-    animationDuration: { default: "3.2s", "@media (prefers-reduced-motion: reduce)": "0s" },
+    animationDuration: { default: "3.2s", [consts.reducedMotion]: "0s" },
     animationIterationCount: "infinite",
     animationName: sweep,
     animationTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",

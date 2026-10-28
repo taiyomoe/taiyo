@@ -1,12 +1,12 @@
 import * as stylex from "@stylexjs/stylex"
 import { Skeleton } from "@taiyomoe/ui/components/ui/skeleton"
+import { breakpoints } from "@taiyomoe/ui/styles/tokens.stylex"
 import { CoverSkeleton } from "@/features/media/components/cover"
 import { mediaPageStyles } from "@/features/media/components/media-page/media-page-styles"
 
-const DESKTOP = "@media (width >= 64rem)"
 const styles = stylex.create({
   skeletonTitle: {
-    height: { [DESKTOP]: "3rem", default: "1.75rem" },
+    height: { [breakpoints.lg]: "3rem", default: "1.75rem" },
     width: "min(28rem, 80%)",
   },
   skeletonBadges: {

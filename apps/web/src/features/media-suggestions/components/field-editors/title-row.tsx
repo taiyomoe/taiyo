@@ -3,7 +3,7 @@ import { ChevronDown, ChevronUp, Close, Crown } from "@taiyomoe/ui/components/ic
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { Input } from "@taiyomoe/ui/components/ui/input"
 import { Toggle } from "@taiyomoe/ui/components/ui/toggle"
-import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
+import { breakpoints, colors } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { MediaEditTitle } from "@/features/media-suggestions/lib/media-edit-model"
 import { LanguagePicker } from "@/components/fields/language-picker"
 import { m } from "@/paraglide/messages"
@@ -15,11 +15,11 @@ const styles = stylex.create({
     display: "grid",
     gridTemplateColumns: {
       default: "auto minmax(0, 1fr) auto",
-      "@media (width >= 48rem)": "auto minmax(0, 1fr) 13rem auto auto",
+      [breakpoints.md]: "auto minmax(0, 1fr) 13rem auto auto",
     },
   },
   titleLanguage: {
-    gridColumn: { default: "2 / -1", "@media (width >= 48rem)": "auto" },
+    gridColumn: { default: "2 / -1", [breakpoints.md]: "auto" },
   },
   rowActions: {
     gap: "0.125rem",

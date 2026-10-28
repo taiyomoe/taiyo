@@ -6,13 +6,13 @@ import {
   InputGroupInput,
 } from "@taiyomoe/ui/components/ui/input-group"
 import { Kbd, KbdGroup } from "@taiyomoe/ui/components/ui/kbd"
-import { consts } from "@taiyomoe/ui/styles/tokens.stylex"
+import { breakpoints } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useEffect, useRef } from "react"
 import { m } from "@/paraglide/messages"
 
 const styles = stylex.create({
   search: {
-    display: { default: "none", [consts.sm]: "flex" },
+    display: { default: "none", [breakpoints.sm]: "flex" },
     flexBasis: "22rem",
     flexGrow: "0",
     flexShrink: "1",

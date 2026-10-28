@@ -1,4 +1,5 @@
 import * as stylex from "@stylexjs/stylex"
+import { breakpoints } from "@taiyomoe/ui/styles/tokens.stylex"
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import { getRouteApi } from "@tanstack/react-router"
 import { useDeferredValue } from "react"
@@ -17,7 +18,6 @@ import { ContentFilterEmpty } from "@/features/settings/components/content-filte
 import { useSettings } from "@/lib/settings"
 import { m } from "@/paraglide/messages"
 
-const WIDE = "@media (width >= 72rem)"
 const routeApi = getRouteApi("/media/$mediaId")
 const styles = stylex.create({
   root: {
@@ -29,7 +29,7 @@ const styles = stylex.create({
     gap: "1.25rem",
     alignItems: "start",
     display: "grid",
-    gridTemplateColumns: { [WIDE]: "15rem minmax(0, 1fr)", default: "minmax(0, 1fr)" },
+    gridTemplateColumns: { [breakpoints.xl]: "15rem minmax(0, 1fr)", default: "minmax(0, 1fr)" },
   },
 })
 

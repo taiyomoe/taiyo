@@ -1,6 +1,6 @@
 import * as stylex from "@stylexjs/stylex"
 import { Skeleton } from "@taiyomoe/ui/components/ui/skeleton"
-import { colors, radius, shadows } from "@taiyomoe/ui/styles/tokens.stylex"
+import { breakpoints, colors, radius, shadows } from "@taiyomoe/ui/styles/tokens.stylex"
 import { range } from "remeda"
 import type { LatestChapter } from "@/features/chapters/api/chapters"
 import { LanguageFlag } from "@/components/flags/flags"
@@ -10,7 +10,6 @@ import { ChapterNumber } from "@/features/chapters/components/chapter-number"
 import { latestStyles } from "@/features/chapters/components/latest-updates/latest-styles"
 import { MediaTitleLink } from "@/features/chapters/components/latest-updates/media-title-link"
 
-const DESKTOP = "@media (width >= 64rem)"
 const styles = stylex.create({
   compactFlag: {
     display: "flex",
@@ -37,7 +36,7 @@ const styles = stylex.create({
     columnGap: "0.875rem",
     display: "grid",
     gridTemplateColumns: {
-      [DESKTOP]: "1.125rem minmax(0, 1fr) minmax(0, 16rem) 4rem",
+      [breakpoints.lg]: "1.125rem minmax(0, 1fr) minmax(0, 16rem) 4rem",
       default: "1.125rem minmax(0, 1fr) auto",
     },
     borderTopColor: { default: colors.border, ":first-child": "transparent" },
@@ -46,7 +45,7 @@ const styles = stylex.create({
     height: "2.625rem",
   },
   compactGroups: {
-    display: { [DESKTOP]: "flex", default: "none" },
+    display: { [breakpoints.lg]: "flex", default: "none" },
   },
 })
 

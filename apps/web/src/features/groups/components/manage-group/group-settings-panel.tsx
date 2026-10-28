@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import * as stylex from "@stylexjs/stylex"
 import { Button } from "@taiyomoe/ui/components/ui/button"
 import { Form } from "@taiyomoe/ui/components/ui/form"
-import { colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
+import { breakpoints, colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -66,7 +66,7 @@ const styles = stylex.create({
   links: {
     gap: "1rem",
     display: "grid",
-    gridTemplateColumns: { default: "1fr", "@media (width >= 48rem)": "1fr 1fr" },
+    gridTemplateColumns: { default: "1fr", [breakpoints.md]: "1fr 1fr" },
   },
   footer: {
     gap: "0.75rem",

@@ -2,7 +2,7 @@ import * as stylex from "@stylexjs/stylex"
 import { Settings } from "@taiyomoe/ui/components/icons"
 import { Badge } from "@taiyomoe/ui/components/ui/badge"
 import { Button } from "@taiyomoe/ui/components/ui/button"
-import { font } from "@taiyomoe/ui/styles/tokens.stylex"
+import { breakpoints, font } from "@taiyomoe/ui/styles/tokens.stylex"
 import { Link } from "@tanstack/react-router"
 import type { Group } from "@/features/groups/api/groups"
 import type { Session } from "@/lib/session"
@@ -11,13 +11,12 @@ import { GroupAvatar } from "@/features/groups/components/group-avatar"
 import { ClaimAction } from "@/features/groups/components/group/claim-action"
 import { m } from "@/paraglide/messages"
 
-const DESKTOP = "@media (width >= 64rem)"
 const styles = stylex.create({
   header: {
     gap: "1.5rem",
-    alignItems: { [DESKTOP]: "center", default: "flex-start" },
+    alignItems: { [breakpoints.lg]: "center", default: "flex-start" },
     display: "flex",
-    flexDirection: { [DESKTOP]: "row", default: "column" },
+    flexDirection: { [breakpoints.lg]: "row", default: "column" },
   },
   identity: {
     gap: "1.25rem",
@@ -35,7 +34,7 @@ const styles = stylex.create({
   name: {
     margin: 0,
     fontFamily: sceneFont.display,
-    fontSize: { default: "2rem", "@media (width >= 48rem)": "2.75rem" },
+    fontSize: { default: "2rem", [breakpoints.md]: "2.75rem" },
     fontWeight: font.weightBold,
     letterSpacing: "-0.02em",
     lineHeight: 1.1,

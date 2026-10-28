@@ -2,6 +2,7 @@ import type { Language } from "@taiyomoe/db/constants"
 import * as stylex from "@stylexjs/stylex"
 import { CheckCircle } from "@taiyomoe/ui/components/icons"
 import { Alert, AlertTitle } from "@taiyomoe/ui/components/ui/alert"
+import { breakpoints } from "@taiyomoe/ui/styles/tokens.stylex"
 import { getRouteApi } from "@tanstack/react-router"
 import { useState } from "react"
 import type { GroupOption } from "@/features/groups/components/group-picker"
@@ -35,7 +36,7 @@ const styles = stylex.create({
     display: "grid",
     gridTemplateColumns: {
       default: "minmax(0, 1fr)",
-      "@media (width >= 64rem)": "22rem minmax(0, 1fr)",
+      [breakpoints.lg]: "22rem minmax(0, 1fr)",
     },
   },
   column: {

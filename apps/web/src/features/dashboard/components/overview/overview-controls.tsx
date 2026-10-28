@@ -1,7 +1,7 @@
 import * as stylex from "@stylexjs/stylex"
 import { Switch } from "@taiyomoe/ui/components/ui/switch"
 import { Tabs, TabsList, TabsTab } from "@taiyomoe/ui/components/ui/tabs"
-import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
+import { colors, containers } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useNavigate } from "@tanstack/react-router"
 import {
   DASHBOARD_RANGE_LABELS,
@@ -43,13 +43,13 @@ const styles = stylex.create({
   rangeLong: {
     display: {
       default: "none",
-      "@container (width >= 30rem)": "inline",
+      [containers.lg]: "inline",
     },
   },
   rangeShort: {
     display: {
       default: "inline",
-      "@container (width >= 30rem)": "none",
+      [containers.lg]: "none",
     },
   },
 })

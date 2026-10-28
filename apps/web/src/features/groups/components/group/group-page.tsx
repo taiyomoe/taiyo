@@ -1,6 +1,6 @@
 import * as stylex from "@stylexjs/stylex"
 import { Skeleton } from "@taiyomoe/ui/components/ui/skeleton"
-import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
+import { breakpoints, colors } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useSuspenseQuery } from "@tanstack/react-query"
 import { getRouteApi } from "@tanstack/react-router"
 import { Suspense } from "react"
@@ -21,7 +21,7 @@ const styles = stylex.create({
     gap: "2rem",
     marginInline: "auto",
     paddingBlock: "2.5rem",
-    paddingInline: { default: "1.25rem", "@media (width >= 48rem)": "2rem" },
+    paddingInline: { default: "1.25rem", [breakpoints.md]: "2rem" },
     display: "flex",
     flexDirection: "column",
     maxWidth: "88rem",

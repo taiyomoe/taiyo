@@ -185,6 +185,7 @@ export default defineConfig({
 
     "taiyo/no-sx-on-third-party": "error",
     "taiyo/sx-requires-stylex-import": "error",
+    "taiyo/no-inline-queries": "error",
 
     "import/first": "error",
     "import/namespace": ["error", { allowComputed: true }],

@@ -1,6 +1,6 @@
 import * as stylex from "@stylexjs/stylex"
 import { Check, Clock, ExternalLink, Globe } from "@taiyomoe/ui/components/icons"
-import { colors, motion } from "@taiyomoe/ui/styles/tokens.stylex"
+import { breakpoints, colors, motion } from "@taiyomoe/ui/styles/tokens.stylex"
 import { Link } from "@tanstack/react-router"
 import type { LatestChapter } from "@/features/chapters/api/chapters"
 import { LanguageFlag, getLanguageCode } from "@/components/flags/flags"
@@ -11,7 +11,6 @@ import { Uploader } from "@/features/chapters/components/uploader"
 import { getChapterLabel } from "@/features/chapters/lib/chapter-label"
 import { m } from "@/paraglide/messages"
 
-const DESKTOP = "@media (width >= 48rem)"
 const styles = stylex.create({
   label: {
     gap: "0.5rem",
@@ -90,8 +89,8 @@ const styles = stylex.create({
     gridColumnStart: "uploader",
     gridRowEnd: "uploader",
     gridRowStart: "uploader",
-    justifySelf: { [DESKTOP]: "end", default: "start" },
-    maxWidth: { [DESKTOP]: "14rem", default: "100%" },
+    justifySelf: { [breakpoints.md]: "end", default: "start" },
+    maxWidth: { [breakpoints.md]: "14rem", default: "100%" },
   },
 })
 

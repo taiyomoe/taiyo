@@ -3,7 +3,7 @@ import { Autocomplete as AutocompletePrimitive } from "@base-ui/react/autocomple
 import * as stylex from "@stylexjs/stylex"
 import type { Sx } from "../../styles/sx"
 import { surface, transitions } from "../../styles/recipes"
-import { colors, consts, radius, shadows } from "../../styles/tokens.stylex"
+import { breakpoints, colors, consts, radius, shadows } from "../../styles/tokens.stylex"
 import { cn } from "../../utils/cn"
 import { ChevronsUpDown, Close } from "../icons"
 import { Input } from "./input"
@@ -35,13 +35,13 @@ const styles = stylex.create({
   inputWithStartAddon: {
     paddingLeft: {
       default: "calc(2.125rem - 1px)",
-      [consts.sm]: "calc(2rem - 1px)",
+      [breakpoints.sm]: "calc(2rem - 1px)",
     },
   },
   inputWithStartAddonSm: {
     paddingLeft: {
       default: "calc(1.875rem - 1px)",
-      [consts.sm]: "calc(1.75rem - 1px)",
+      [breakpoints.sm]: "calc(1.75rem - 1px)",
     },
   },
   inputWithEndButton: {
@@ -70,13 +70,13 @@ const styles = stylex.create({
     translate: "0 -50%",
     height: {
       default: "2rem",
-      [consts.sm]: "1.75rem",
+      [breakpoints.sm]: "1.75rem",
     },
     right: "0.125rem",
     top: "50%",
     width: {
       default: "2rem",
-      [consts.sm]: "1.75rem",
+      [breakpoints.sm]: "1.75rem",
     },
     "::after": {
       content: {
@@ -97,11 +97,11 @@ const styles = stylex.create({
     pointerEvents: "none",
     height: {
       default: "0.875rem",
-      [consts.sm]: "0.75rem",
+      [breakpoints.sm]: "0.75rem",
     },
     width: {
       default: "0.875rem",
-      [consts.sm]: "0.75rem",
+      [breakpoints.sm]: "0.75rem",
     },
   },
   positioner: {
@@ -145,7 +145,7 @@ const styles = stylex.create({
     display: "flex",
     fontSize: {
       default: "1rem",
-      [consts.sm]: "0.875rem",
+      [breakpoints.sm]: "0.875rem",
     },
     opacity: {
       "[data-disabled]": 0.64,
@@ -159,7 +159,7 @@ const styles = stylex.create({
     userSelect: "none",
     minHeight: {
       default: "2.5rem",
-      [consts.sm]: "2.25rem",
+      [breakpoints.sm]: "2.25rem",
     },
   },
   separator: {
@@ -188,7 +188,7 @@ const styles = stylex.create({
     color: colors.mutedForeground,
     fontSize: {
       default: "1rem",
-      [consts.sm]: "0.875rem",
+      [breakpoints.sm]: "0.875rem",
     },
     textAlign: "center",
   },

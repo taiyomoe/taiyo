@@ -1,5 +1,5 @@
 import * as stylex from "@stylexjs/stylex"
-import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
+import { breakpoints, colors } from "@taiyomoe/ui/styles/tokens.stylex"
 import { sceneFont } from "@/components/scene/scene.stylex"
 import { useClientValue } from "@/hooks/use-client-value"
 import { m } from "@/paraglide/messages"
@@ -15,7 +15,7 @@ const styles = stylex.create({
     fontFamily: sceneFont.display,
     fontSize: {
       default: "2rem",
-      "@media (width >= 48rem)": "2.75rem",
+      [breakpoints.md]: "2.75rem",
     },
     fontWeight: 700,
     letterSpacing: "-0.02em",

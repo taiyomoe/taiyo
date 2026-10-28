@@ -1,4 +1,5 @@
 import * as stylex from "@stylexjs/stylex"
+import { breakpoints } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useQuery } from "@tanstack/react-query"
 import { myOverviewQueryOptions } from "@/features/dashboard/api/my-overview"
 import { DashboardIntro } from "@/features/dashboard/components/dashboard-intro"
@@ -11,7 +12,7 @@ const styles = stylex.create({
     gap: "2.5rem",
     paddingInline: {
       default: "1.25rem",
-      "@media (width >= 48rem)": "2rem",
+      [breakpoints.md]: "2rem",
     },
     display: "flex",
     flexDirection: "column",

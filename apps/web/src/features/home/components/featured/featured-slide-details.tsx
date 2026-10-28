@@ -1,14 +1,15 @@
 import * as stylex from "@stylexjs/stylex"
 import { config } from "@taiyomoe/config"
-import { colors, font, motion, radius, text } from "@taiyomoe/ui/styles/tokens.stylex"
+import { breakpoints, colors, font, motion, radius, text } from "@taiyomoe/ui/styles/tokens.stylex"
 import { Link } from "@tanstack/react-router"
 import type { FeaturedMedia } from "@/features/media/api/medias"
+import { synopsisLines } from "@/features/home/components/featured/synopsis-lines.stylex"
 import { getLocale } from "@/paraglide/runtime"
 
 const MAX_GENRES = 8
 const styles = stylex.create({
   details: {
-    gap: { default: "0.375rem", "@media (width >= 48rem)": "0.75rem" },
+    gap: { default: "0.375rem", [breakpoints.md]: "0.75rem" },
     display: "flex",
     flexDirection: "column",
     flexGrow: 1,
@@ -27,7 +28,7 @@ const styles = stylex.create({
     display: "-webkit-box",
     flexShrink: 0,
     fontFamily: font.heading,
-    fontSize: { default: text.xl, "@media (width >= 48rem)": "2.5rem" },
+    fontSize: { default: text.xl, [breakpoints.md]: "2.5rem" },
     fontWeight: font.weightBold,
     letterSpacing: "-0.02em",
     lineHeight: 1.2,
@@ -50,7 +51,7 @@ const styles = stylex.create({
     overflow: "hidden",
     color: `color-mix(in srgb, ${colors.foreground} 85%, transparent)`,
     flexShrink: 0,
-    fontSize: { default: "0.875rem", "@media (width >= 48rem)": text.base },
+    fontSize: { default: "0.875rem", [breakpoints.md]: text.base },
     fontWeight: 600,
     textOverflow: "ellipsis",
     whiteSpace: "nowrap",
@@ -61,7 +62,7 @@ const styles = stylex.create({
     gap: "0.375rem",
     listStyle: "none",
     overflow: "hidden",
-    display: { default: "none", "@media (width >= 48rem)": "flex" },
+    display: { default: "none", [breakpoints.md]: "flex" },
     flexShrink: 0,
     flexWrap: "wrap",
     maxHeight: "1.5rem",
@@ -87,7 +88,7 @@ const styles = stylex.create({
     containerType: "size",
     flexBasis: 0,
     flexGrow: 1,
-    fontSize: { default: "0.875rem", "@media (width >= 48rem)": text.lg },
+    fontSize: { default: "0.875rem", [breakpoints.md]: text.lg },
     lineHeight: 1.6,
     minHeight: 0,
   },
@@ -97,11 +98,11 @@ const styles = stylex.create({
     WebkitBoxOrient: "vertical",
     WebkitLineClamp: {
       default: 1,
-      "@container (height >= 3.2em)": 2,
-      "@container (height >= 4.8em)": 3,
-      "@container (height >= 6.4em)": 4,
-      "@container (height >= 8em)": 5,
-      "@container (height >= 9.6em)": 6,
+      [synopsisLines.two]: 2,
+      [synopsisLines.three]: 3,
+      [synopsisLines.four]: 4,
+      [synopsisLines.five]: 5,
+      [synopsisLines.six]: 6,
     },
     color: `color-mix(in srgb, ${colors.foreground} 80%, transparent)`,
     display: "-webkit-box",

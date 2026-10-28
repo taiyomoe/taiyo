@@ -1,5 +1,5 @@
 import * as stylex from "@stylexjs/stylex"
-import { colors, font, radius, shadows } from "@taiyomoe/ui/styles/tokens.stylex"
+import { breakpoints, colors, font, radius, shadows } from "@taiyomoe/ui/styles/tokens.stylex"
 import { Link, getRouteApi } from "@tanstack/react-router"
 import { useEffect, useRef } from "react"
 import type { MediaChapter } from "@/features/chapters/api/chapters"
@@ -8,7 +8,6 @@ import { MediaChapterListBody } from "@/features/media/components/media-chapters
 import { CHAPTERS_PER_PAGE } from "@/features/media/lib/media-page"
 import { m } from "@/paraglide/messages"
 
-const DESKTOP = "@media (width >= 48rem)"
 const routeApi = getRouteApi("/media/$mediaId")
 const styles = stylex.create({
   list: {
@@ -19,7 +18,7 @@ const styles = stylex.create({
     scrollMarginTop: "calc(var(--navbar-height) + 1rem)",
   },
   card: {
-    padding: { [DESKTOP]: "0.875rem", default: "0.625rem" },
+    padding: { [breakpoints.md]: "0.875rem", default: "0.625rem" },
     borderColor: colors.border,
     borderRadius: radius.xl,
     borderStyle: "solid",
@@ -47,7 +46,7 @@ const styles = stylex.create({
     overflow: "hidden",
     color: colors.foreground,
     fontFamily: font.heading,
-    fontSize: { [DESKTOP]: "1.125rem", default: "1rem" },
+    fontSize: { [breakpoints.md]: "1.125rem", default: "1rem" },
     fontWeight: font.weightBold,
     letterSpacing: "-0.01em",
     textOverflow: "ellipsis",

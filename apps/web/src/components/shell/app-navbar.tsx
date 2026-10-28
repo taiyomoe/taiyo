@@ -1,6 +1,6 @@
 import * as stylex from "@stylexjs/stylex"
 import { Button } from "@taiyomoe/ui/components/ui/button"
-import { colors, motion } from "@taiyomoe/ui/styles/tokens.stylex"
+import { breakpoints, colors, consts, motion } from "@taiyomoe/ui/styles/tokens.stylex"
 import { Link } from "@tanstack/react-router"
 import type { Session } from "@/lib/session"
 import { AppNavbarBrand } from "@/components/shell/app-navbar-brand"
@@ -20,7 +20,7 @@ const styles = stylex.create({
     position: "fixed",
     transitionDuration: {
       default: motion.enterLarge,
-      "@media (prefers-reduced-motion: reduce)": "0s",
+      [consts.reducedMotion]: "0s",
     },
     transitionProperty: "background-color, border-color, backdrop-filter",
     transitionTimingFunction: motion.easeOut,
@@ -34,15 +34,15 @@ const styles = stylex.create({
   headerOverlay: {
     backdropFilter: {
       default: "blur(0px) saturate(100%)",
-      "@media (width >= 50rem)": "blur(16px) saturate(180%)",
+      [breakpoints.md]: "blur(16px) saturate(180%)",
     },
     backgroundColor: {
       default: "transparent",
-      "@media (width >= 50rem)": `color-mix(in srgb, ${colors.background} 72%, transparent)`,
+      [breakpoints.md]: `color-mix(in srgb, ${colors.background} 72%, transparent)`,
     },
     borderBottomColor: {
       default: "transparent",
-      "@media (width >= 50rem)": colors.sidebarBorder,
+      [breakpoints.md]: colors.sidebarBorder,
     },
   },
   actions: {

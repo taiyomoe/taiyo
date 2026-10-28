@@ -4,7 +4,7 @@ import * as stylex from "@stylexjs/stylex"
 import type { Sx } from "../../styles/sx"
 import { menuPopupMarker, menuSwitchItemMarker } from "../../styles/markers.stylex"
 import { focus, surface, transitions } from "../../styles/recipes"
-import { colors, consts, font, radius, shadows } from "../../styles/tokens.stylex"
+import { breakpoints, colors, font, radius, shadows } from "../../styles/tokens.stylex"
 import { cn } from "../../utils/cn"
 import { Check, ChevronRight } from "../icons"
 import { KbdSurface } from "./kbd"
@@ -51,11 +51,11 @@ const styles = stylex.create({
     display: "flex",
     fontSize: {
       default: "1rem",
-      [consts.sm]: "0.875rem",
+      [breakpoints.sm]: "0.875rem",
     },
     lineHeight: {
       default: "1.5rem",
-      [consts.sm]: "1.25rem",
+      [breakpoints.sm]: "1.25rem",
     },
     opacity: {
       "[data-disabled]": 0.64,
@@ -69,7 +69,7 @@ const styles = stylex.create({
     userSelect: "none",
     minHeight: {
       default: "2.5rem",
-      [consts.sm]: "2.25rem",
+      [breakpoints.sm]: "2.25rem",
     },
     paddingLeft: {
       "[data-inset]": "2.25rem",
@@ -94,11 +94,11 @@ const styles = stylex.create({
     display: "grid",
     fontSize: {
       default: "1rem",
-      [consts.sm]: "0.875rem",
+      [breakpoints.sm]: "0.875rem",
     },
     lineHeight: {
       default: "1.5rem",
-      [consts.sm]: "1.25rem",
+      [breakpoints.sm]: "1.25rem",
     },
     opacity: {
       "[data-disabled]": 0.64,
@@ -111,7 +111,7 @@ const styles = stylex.create({
     },
     minHeight: {
       default: "2.5rem",
-      [consts.sm]: "2.25rem",
+      [breakpoints.sm]: "2.25rem",
     },
     minWidth: {
       default: null,
@@ -145,7 +145,7 @@ const styles = stylex.create({
   switchTrack: {
     "--thumb-size": {
       default: "1rem",
-      [consts.sm]: "0.75rem",
+      [breakpoints.sm]: "0.75rem",
     },
     padding: "1px",
     borderRadius: radius.full,
@@ -209,7 +209,7 @@ const styles = stylex.create({
     paddingLeft: {
       "[data-inset]": {
         default: "2.25rem",
-        [consts.sm]: "2rem",
+        [breakpoints.sm]: "2rem",
       },
       default: "0.75rem",
     },
@@ -251,11 +251,11 @@ const styles = stylex.create({
     display: "flex",
     fontSize: {
       default: "1rem",
-      [consts.sm]: "0.875rem",
+      [breakpoints.sm]: "0.875rem",
     },
     lineHeight: {
       default: "1.5rem",
-      [consts.sm]: "1.25rem",
+      [breakpoints.sm]: "1.25rem",
     },
     opacity: {
       "[data-disabled]": 0.64,
@@ -268,7 +268,7 @@ const styles = stylex.create({
     },
     minHeight: {
       default: "2.5rem",
-      [consts.sm]: "2.25rem",
+      [breakpoints.sm]: "2.25rem",
     },
     paddingLeft: {
       "[data-inset]": "2.25rem",

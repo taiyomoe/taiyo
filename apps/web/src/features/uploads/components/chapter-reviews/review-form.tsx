@@ -7,6 +7,7 @@ import {
   DialogPanel,
   DialogTitle,
 } from "@taiyomoe/ui/components/ui/dialog"
+import { breakpoints } from "@taiyomoe/ui/styles/tokens.stylex"
 import { useMutation } from "@tanstack/react-query"
 import { useState } from "react"
 import type { GroupOption } from "@/features/groups/components/group-picker"
@@ -37,7 +38,7 @@ const styles = stylex.create({
     display: "grid",
     gridTemplateColumns: {
       default: "minmax(0, 1fr)",
-      "@media (width >= 48rem)": "minmax(0, 1fr) 18rem",
+      [breakpoints.md]: "minmax(0, 1fr) 18rem",
     },
   },
   fields: {

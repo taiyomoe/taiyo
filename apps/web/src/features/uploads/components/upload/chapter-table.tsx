@@ -1,6 +1,6 @@
 import * as stylex from "@stylexjs/stylex"
 import { Button } from "@taiyomoe/ui/components/ui/button"
-import { colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
+import { breakpoints, colors, radius } from "@taiyomoe/ui/styles/tokens.stylex"
 import type { ReleasePlan } from "@/features/uploads/lib/chapter-batch/release"
 import type { RowIssues, UploadRow } from "@/features/uploads/lib/chapter-batch/upload-rows"
 import { ChapterTableRow } from "@/features/uploads/components/upload/chapter-table-row"
@@ -45,7 +45,7 @@ const styles = stylex.create({
   tableHead: {
     gap: "0.75rem",
     color: colors.mutedForeground,
-    display: { default: "none", "@media (width >= 48rem)": "grid" },
+    display: { default: "none", [breakpoints.md]: "grid" },
     fontSize: "0.75rem",
     fontWeight: 600,
     gridTemplateColumns: "6rem 5.5rem minmax(0, 1fr) 6rem 2rem 2rem",

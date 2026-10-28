@@ -4,7 +4,7 @@ import { useRender } from "@base-ui/react/use-render"
 import * as stylex from "@stylexjs/stylex"
 import type { Sx } from "../../styles/sx"
 import { a11y } from "../../styles/recipes"
-import { colors, consts } from "../../styles/tokens.stylex"
+import { breakpoints, colors } from "../../styles/tokens.stylex"
 import { cn } from "../../utils/cn"
 import { ChevronRight, Ellipsis } from "../icons"
 
@@ -12,7 +12,7 @@ const styles = stylex.create({
   list: {
     gap: {
       default: "0.375rem",
-      [consts.sm]: "0.625rem",
+      [breakpoints.sm]: "0.625rem",
     },
     alignItems: "center",
     color: colors.mutedForeground,

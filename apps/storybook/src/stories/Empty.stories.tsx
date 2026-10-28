@@ -10,7 +10,7 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@taiyomoe/ui/components/ui/empty"
-import { colors } from "@taiyomoe/ui/styles/tokens.stylex"
+import { breakpoints, colors } from "@taiyomoe/ui/styles/tokens.stylex"
 import { fn } from "storybook/test"
 import preview from "@/storybook/preview"
 
@@ -20,7 +20,7 @@ const styles = stylex.create({
     display: "grid",
     gridTemplateColumns: {
       default: "repeat(1, minmax(0, 1fr))",
-      "@media (width >= 48rem)": "repeat(2, minmax(0, 1fr))",
+      [breakpoints.md]: "repeat(2, minmax(0, 1fr))",
     },
   },
   box: {
